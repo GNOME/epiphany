@@ -260,6 +260,7 @@ struct EphyEmbedClass
 					    gboolean wrap_around);
 	gresult	  (* find_next)	           (EphyEmbed *embed,
 					    gboolean backwards);
+	gresult   (* activate)             (EphyEmbed *embed);
 	gresult   (* print)                (EphyEmbed *embed,
 				            EmbedPrintInfo *info);
 	gresult	  (* print_preview_close)  (EphyEmbed *embed);
@@ -389,6 +390,8 @@ gresult	      ephy_embed_find_next	      (EphyEmbed *embed,
 
 gresult       ephy_embed_set_encoding         (EphyEmbed *embed,
 					       const char *encoding);
+
+gresult       ephy_embed_activate             (EphyEmbed *embed);
 
 /* Printing */
 

@@ -558,6 +558,13 @@ ephy_embed_find_next (EphyEmbed *embed,
 }
 
 gresult
+ephy_embed_activate (EphyEmbed *embed)
+{
+	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
+        return klass->activate (embed);
+}
+
+gresult
 ephy_embed_set_encoding (EphyEmbed *embed,
 			 const char *encoding)
 {

@@ -309,6 +309,16 @@ impl_find_next (EphyEmbed *embed,
 }
 
 static gresult
+impl_activate (EphyEmbed *embed) 
+{
+	g_return_val_if_fail (IS_EPHY_EMBED (embed), G_FAILED);
+
+	gtk_widget_grab_focus (GTK_BIN (embed)->child);
+	
+	return G_OK;
+}
+
+static gresult
 impl_find_set_properties (EphyEmbed *embed, 
                           char *search_string,
 	                  gboolean case_sensitive,
@@ -363,6 +373,7 @@ ephy_embed_init (EphyEmbedClass *embed_class)
 	embed_class->shistory_copy = impl_shistory_copy;
 	embed_class->get_security_level = impl_get_security_level;
 	embed_class->find_next = impl_find_next;
+	embed_class->activate = impl_activate;
 	embed_class->find_set_properties = impl_find_set_properties;
 	embed_class->set_encoding = impl_set_encoding;
 	embed_class->select_all = impl_select_all;

@@ -1,3 +1,18 @@
+2003-08-19  Marco Pesenti Gritti  <marco@.gnome.org>
+
+	* embed/ephy-embed.c: (ephy_embed_activate):
+	* embed/ephy-embed.h:
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Add activate api.
+
+	* src/window-commands.c: (window_cmd_go_back), (window_cmd_go_up),
+	(window_cmd_go_forward), (window_cmd_view_stop),
+	(window_cmd_view_reload):
+
+	Activate on navigation commands. It seem like a better
+	beahvior and it avoid some mozilla focus craziness.
+
 2003-08-17  Marco Pesenti Gritti  <marco@.gnome.org>
 
 	* embed/mozilla/EphyWrapper.cpp:
