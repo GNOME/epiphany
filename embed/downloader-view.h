@@ -39,8 +39,6 @@ typedef struct DownloaderViewClass DownloaderViewClass;
 
 typedef struct DownloaderViewPrivate DownloaderViewPrivate;
 
-#define CONF_DOWNLOADING_KEEP_OPEN "/apps/epiphany/downloader/keep_open"
-
 typedef enum
 {
 	DOWNLOAD_STATUS_DOWNLOADING,
