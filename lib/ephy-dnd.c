@@ -117,7 +117,7 @@ ephy_dnd_node_list_extract_nodes (const char *node_list)
 
 	nodes = g_strsplit (node_list, ";", -1);
 
-	for (i = 0; nodes[i] != NULL; i = i + 2)
+	for (i = 0; nodes[i] != NULL && nodes[i+1] != NULL; i = i + 2)
 	{
 		gulong id;
 		EphyNodeDb *db;
@@ -131,9 +131,13 @@ ephy_dnd_node_list_extract_nodes (const char *node_list)
 
 			node = ephy_node_db_get_node_from_id (db, id);
 			g_return_val_if_fail (node != NULL, NULL);
-			result = g_list_append (result, node);
+			result = g_list_prepend (result, node);
 		}
 	}
+
+	result = g_list_reverse (result);
+
+	g_strfreev (nodes);
 
 	return result;
 }
