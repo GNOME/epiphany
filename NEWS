@@ -2,11 +2,39 @@
 Epiphany 1.2.7
 ==============
 
+
+Code changes
+
+	* Adapt to mozilla API changes (Christian)
+	* Use nsIDOMWindow2 to get the root event target on 
+	  mozilla >= 1.7rc3 (Christian)
+
 Bug fixes
 
 	* Work around mozilla bug #246392 which causes reloads of framed pages to
 	  go back to original URI (backported from HEAD) (Christian) [#115800]
+	* Escape markup in string in the duplicate bookmarks dialogue
+	  and topics menu (Christian)
 	* Escape markup in strings in the NSS dialogues (Crispin Flowerday)
+	* Work aroung mozilla bug #246392 which causes reload of framed pages to go
+	  back to initial frameset (Christian, Crispin Flowerday) [#115800]
+	* Don't show redirected and non-toplevel pages in history (Christian) [#142143]
+	* Allow importing of Epiphany bookmarks format too (Christian) [#144699]
+	* Fix crash with corrupted toolbars file (Christian) [#144698]
+	* Fix prefs persistence with non-existent or bogus initial values (Christian)
+	* Unescape mailto: addresses (Christian) [#144462]
+	* Fix filename encoding for print-to-file (Christian)
+	* Depend on libgnomeui >= 2.6.0 (Christian) [#145776]
+	* Make print and print setup go trough nsIPrintingPromptService (Christian,
+	  backported from HEAD)
+	* Fix print-to-file filechooser modality (Christian) [#147628]
+	* Fix mem leaks in gtk NSS dialogues (Christian, ported from galeon)
+	* Gracefully handle failure to create downloads directory (Marco) [#146902]
+	* Fix single observer ownership and reference counting (Christian) [#146873, #146461]
+	* Fix downloader crash on shutdown (Marco) [#141928]
+	* Fix build with old mozilla versions (1.4.x, 1.5) (Christian)
+	* Use nsACString instead of nsCString in a few places in EphyWrapper (Christian)
+	* Fix crash on screen size change after using fullscreen (Christian)
 
 New translations
 
@@ -15,8 +43,9 @@ New translations
 Updated translations
 
 	* Владимир Петков (bg)
+	* Xavier Conde Rueda (ca)
 	* Trịnh Minh Thanh (vi)
- 
+
 
 ==============
 Epiphany 1.2.6
