@@ -28,13 +28,12 @@ G_BEGIN_DECLS
 gboolean	 ephy_string_to_int			(const char *string,
 							 gulong *integer);
 
-char		*ephy_string_strip_chr			(const char *source,
-							 char remove_this);
+char		*ephy_string_blank_chr			(char *source);
 
-char		*ephy_string_shorten			(const gchar *str,
-							 gint target_length);
+char		*ephy_string_shorten			(const char *str,
+							 int target_length);
 
-char		*ephy_string_elide_underscores		(const gchar *original);
+char		*ephy_string_elide_underscores		(const char *original);
 
 char            *ephy_string_double_underscores         (const char *string);
 

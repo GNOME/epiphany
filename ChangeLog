@@ -1,5 +1,15 @@
 2003-12-13  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-string.c: (ephy_string_shorten), (ephy_string_to_int),
+	(ephy_string_blank_chr), (ephy_string_elide_underscores),
+	(ephy_string_double_underscores):
+	* lib/ephy-string.h:
+	* src/ephy-tab.c: (ephy_tab_set_link_message):
+
+	Convert control chars to blanks.
+
+2003-12-13  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/print-dialog.c: (ephy_print_setup_dialog_new):
 	* lib/ephy-stock-icons.c: (ephy_stock_icons_init):
 	* lib/ephy-stock-icons.h:

@@ -17,7 +17,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "ephy-string.h"
@@ -39,9 +39,9 @@
  * it can still split a sequence of combining characters
  */
 char *
-ephy_string_shorten (const gchar *str, gint target_length)
+ephy_string_shorten (const char *str, int target_length)
 {
-	gchar *new_str;
+	char *new_str;
 	glong actual_length;
 	gulong bytes;
 
@@ -71,7 +71,8 @@ ephy_string_to_int (const char *string, gulong *integer)
 	char *parse_end;
 
 	/* Check for the case of an empty string. */
-	if (string == NULL || *string == '\0') {
+	if (string == NULL || *string == '\0')
+	{
 		return FALSE;
 	}
 
@@ -80,13 +81,16 @@ ephy_string_to_int (const char *string, gulong *integer)
 	result = strtol (string, &parse_end, 0);
 
 	/* Check that the result is in range. */
-	if ((result == G_MINLONG || result == G_MAXLONG) && errno == ERANGE) {
+	if ((result == G_MINLONG || result == G_MAXLONG) && errno == ERANGE)
+	{
 		return FALSE;
 	}
 
 	/* Check that all the trailing characters are spaces. */
-	while (*parse_end != '\0') {
-		if (!g_ascii_isspace (*parse_end++)) {
+	while (*parse_end != '\0')
+	{
+		if (!g_ascii_isspace (*parse_end++))
+		{
 			return FALSE;
 		}
 	}
@@ -107,33 +111,34 @@ ephy_string_to_int (const char *string, gulong *integer)
  * of @remove_this.
  */
 char *
-ephy_string_strip_chr (const char *source, char remove_this)
+ephy_string_blank_chr (char *source)
 {
-	char *result, *out;
-	const char *in;
+	char *p;
 
-        if (source == NULL) {
+        if (source == NULL)
+	{
 		return NULL;
 	}
 
-	result = g_new (char, strlen (source) + 1);
-	in = source;
-	out = result;
-	do {
-		if (*in != remove_this) {
-			*out++ = *in;
+	p = source;
+	while (*p != '\0')
+	{
+		if ((guchar) *p < 0x20)
+		{
+			*p = ' ';
 		}
-	} while (*in++ != '\0');
+		p++;
+	}
 
-        return result;
+        return source;
 }
 
 /* copied from egg-toolbar-editor.c */
 char *
-ephy_string_elide_underscores (const gchar *original)
+ephy_string_elide_underscores (const char *original)
 {
-	gchar *q, *result;
-	const gchar *p;
+	char *q, *result;
+	const char *p;
 	gboolean last_underscore;
 
 	q = result = g_malloc (strlen (original) + 1);
@@ -194,4 +199,3 @@ ephy_string_double_underscores (const char *string)
                                                                                                                              
 	return escaped;
 }
-

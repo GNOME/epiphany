@@ -450,18 +450,10 @@ ephy_tab_get_load_status (EphyTab *tab)
 static void
 ephy_tab_set_link_message (EphyTab *tab, char *message)
 {
-	char *tmp1, *tmp2;
-
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
-	tmp1 = ephy_string_strip_chr (message, '\r');
-	tmp2 = ephy_string_strip_chr (tmp1, '\n');
-
 	g_free (tab->priv->link_message);
-	tab->priv->link_message = tmp2;
-
-	g_free (tmp1);
-	g_free (message);
+	tab->priv->link_message = ephy_string_blank_chr (message);
 
 	g_object_notify (G_OBJECT (tab), "message");
 }
