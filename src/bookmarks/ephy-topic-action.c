@@ -280,13 +280,11 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 
 		node_list = g_list_sort (node_list, (GCompareFunc)sort_bookmarks);
 
-		for (l = g_list_first (node_list); l != NULL; l = g_list_next (l))
+		for (l = node_list; l != NULL; l = l->next)
 		{
-			EphyNode *kid;
+			EphyNode *kid = (EphyNode*) l->data;
 			const char *icon_location;
 			const char *title;
-
-			kid = (EphyNode*)l->data;
 
 			icon_location = ephy_node_get_property_string
 				(kid, EPHY_NODE_BMK_PROP_ICON);
@@ -334,24 +332,34 @@ open_in_tabs_activate_cb (GtkWidget *item, EphyTopicAction *action)
 	EphyNode *node;
 	GPtrArray *children;
 	EphyTab *tab = NULL;
+	GList *node_list = NULL, *l;
 	int i;
 
 	node = g_object_get_data (G_OBJECT (item), TOPIC_NODE_DATA_KEY);
 	g_return_if_fail (node != NULL);
 
 	children = ephy_node_get_children (node);
-	for (i = 0; i < children->len; i++)
+	for (i = 0; i < children->len; ++i)
 	{
-		const char *address;
-		EphyNode *child;
+		node_list = g_list_prepend (node_list,
+					    g_ptr_array_index (children, i));
+	}
 
-		child = g_ptr_array_index (children, i);
+	node_list = g_list_sort (node_list, (GCompareFunc) sort_bookmarks);
+
+	for (l = node_list; l != NULL; l = l->next)
+	{
+		EphyNode *child = (EphyNode *) l->data;
+		const char *address;
+
 		address = ephy_node_get_property_string
 			(child, EPHY_NODE_BMK_PROP_LOCATION);
 
 		tab = ephy_link_open (EPHY_LINK (action), address, tab,
 				      tab ? EPHY_LINK_NEW_TAB : EPHY_LINK_NEW_WINDOW);
 	}
+
+	g_list_free (node_list);
 }
 
 static int
