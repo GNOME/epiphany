@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2001 Philip Langdale
+ *  Copyright (C) 2001, 2004 Philip Langdale
+ *  Copyright (C) 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,9 +26,17 @@
 #include "ephy-embed-shell.h"
 
 #include "GlobalHistory.h"
-#include "nsString.h"
 
-NS_IMPL_ISUPPORTS2(MozGlobalHistory, nsIGlobalHistory, nsIBrowserHistory)
+#include <nsString.h>
+#include <nsIURI.h>
+
+NS_IMPL_ISUPPORTS2(MozGlobalHistory,
+#if MOZILLA_SNAPSHOT > 13
+		   nsIGlobalHistory2,
+#else
+		   nsIGlobalHistory,
+#endif
+		   nsIBrowserHistory)
 
 MozGlobalHistory::MozGlobalHistory ()
 {
@@ -37,6 +46,52 @@ MozGlobalHistory::MozGlobalHistory ()
 MozGlobalHistory::~MozGlobalHistory ()
 {
 }
+
+#if MOZILLA_SNAPSHOT > 13
+
+/* void addURI (in nsIURI aURI, in boolean aRedirect, in boolean aToplevel); */
+NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aToplevel)
+{
+	nsCAutoString spec;
+	aURI->GetSpec(spec);
+
+	ephy_history_add_page (mGlobalHistory, spec.get());
+	
+	return NS_OK;
+}
+
+//* boolean isVisited (in nsIURI aURI); */
+NS_IMETHODIMP MozGlobalHistory::IsVisited(nsIURI *aURI, PRBool *_retval)
+{
+	nsCAutoString spec;
+	aURI->GetSpec(spec);
+
+	*_retval = ephy_history_is_page_visited (mGlobalHistory, spec.get());
+	
+	return NS_OK;
+}
+
+/* void setPageTitle (in nsIURI aURI, in AString aTitle); */
+NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI, const nsAString & aTitle)
+{
+	const nsACString &title = NS_ConvertUTF16toUTF8(aTitle);
+
+	nsCAutoString spec;
+	aURI->GetSpec(spec);
+	
+	ephy_history_set_page_title (mGlobalHistory, spec.get(),
+				     PromiseFlatCString(title).get());
+	
+	return NS_OK;
+}
+
+/* void hidePage (in nsIURI url); */
+NS_IMETHODIMP MozGlobalHistory::HidePage(nsIURI *url)
+{
+	return NS_ERROR_NOT_IMPLEMENTED;
+}
+
+#else
 
 /* void addPage (in string aURL); */
 NS_IMETHODIMP MozGlobalHistory::AddPage (const char *aURL)
@@ -66,6 +121,13 @@ NS_IMETHODIMP MozGlobalHistory::SetPageTitle (const char *aURL,
 	return NS_OK;
 }
 
+NS_IMETHODIMP MozGlobalHistory::HidePage(const char *url)
+{
+	return NS_ERROR_NOT_IMPLEMENTED;
+
+}
+#endif /* MOZILLA_SNAPSHOT > 13 */
+
 /* void removePage (in string aURL); */
 NS_IMETHODIMP MozGlobalHistory::RemovePage(const char *aURL)
 {
@@ -74,7 +136,7 @@ NS_IMETHODIMP MozGlobalHistory::RemovePage(const char *aURL)
 
 /* void removePagesFromHost (in string aHost, in boolean aEntireDomain); */
 NS_IMETHODIMP MozGlobalHistory::RemovePagesFromHost(const char *aHost, 
-						 PRBool aEntireDomain)
+						    PRBool aEntireDomain)
 {
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
@@ -91,18 +153,12 @@ NS_IMETHODIMP MozGlobalHistory::GetLastPageVisited(char **aLastPageVisited)
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-#if MOZILLA_SNAPSHOT > 8
+#if MOZILLA_SNAPSHOT <= 13
 NS_IMETHODIMP MozGlobalHistory::SetLastPageVisited(const char *aLastPageVisited)
 {
         return NS_ERROR_NOT_IMPLEMENTED;
 }
 #endif
-
-NS_IMETHODIMP MozGlobalHistory::HidePage(const char *url)
-{
-	return NS_ERROR_NOT_IMPLEMENTED;
-
-}
 
 /* readonly attribute PRUint32 count; */
 NS_IMETHODIMP MozGlobalHistory::GetCount(PRUint32 *aCount)
@@ -115,4 +171,3 @@ NS_IMETHODIMP MozGlobalHistory::MarkPageAsTyped(const char *url)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
-

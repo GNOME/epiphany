@@ -39,11 +39,17 @@
 #include "GtkNSSKeyPairDialogs.h"
 #endif
 
+#if MOZILLA_SNAPSHOT > 13
+#include <nsDocShellCID.h>
+#endif
 #include <nsIGenericFactory.h>
 #include <nsIComponentRegistrar.h>
 #include <nsCOMPtr.h>
 #include <nsILocalFile.h>
 #include <nsNetCID.h>
+#if MOZILLA_SNAPSHOT > 13
+#include <nsDocShellCID.h>
+#endif
 
 #include <glib.h>
 
@@ -125,7 +131,11 @@ static const nsModuleComponentInfo sAppComps[] = {
 	{
 		EPHY_GLOBALHISTORY_CLASSNAME,
 		EPHY_GLOBALHISTORY_CID,
+#if MOZILLA_SNAPSHOT > 13
+		NS_GLOBALHISTORY2_CONTRACTID,
+#else
 		NS_GLOBALHISTORY_CONTRACTID,
+#endif
 		MozGlobalHistoryConstructor
 	},
 	{
