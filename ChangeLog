@@ -1,5 +1,15 @@
 2004-07-22  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* doc/reference/tmpl/ephy-embed.sgml:
+	* embed/mozilla/MozDownload.cpp:
+	* lib/ephy-file-helpers.c: (ephy_ensure_dir_exists):
+	* lib/ephy-file-helpers.h:
+
+	Handle the case where the downloads dir cannot be
+	created gracefully. Fix #146902
+
+2004-07-22  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* src/bookmarks/ephy-bookmarks-import.c:
 	(ephy_bookmarks_import_mozilla):
 

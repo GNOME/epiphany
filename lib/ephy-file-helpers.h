@@ -40,7 +40,7 @@ const char *ephy_file_tmp_dir	 	 (void);
 char       *ephy_file_tmp_filename	 (const char *base,
 					  const char *extension);
 
-void	    ephy_ensure_dir_exists       (const char *dir);
+gboolean    ephy_ensure_dir_exists       (const char *dir);
 
 GSList     *ephy_file_find               (const char *path,
 				          const char *fname,

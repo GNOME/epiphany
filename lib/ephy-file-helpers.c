@@ -224,17 +224,25 @@ ephy_file_helpers_shutdown (void)
 	dot_dir = NULL;
 }
 
-void
+gboolean
 ephy_ensure_dir_exists (const char *dir)
 {
 	if (g_file_test (dir, G_FILE_TEST_IS_DIR) == FALSE)
 	{
 		if (g_file_test (dir, G_FILE_TEST_EXISTS) == TRUE)
-			g_error (_("%s exists, please move it out of the way."), dir);
+		{
+			g_warning (_("%s exists, please move it out of the way."), dir);
+			return FALSE;
+		}
 
 		if (mkdir (dir, 488) != 0)
-			g_error (_("Failed to create directory %s."), dir);
+		{
+			g_warning (_("Failed to create directory %s."), dir);
+			return FALSE;
+		}
 	}
+
+	return TRUE;
 }
 
 static void

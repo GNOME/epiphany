@@ -581,44 +581,42 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 static char*
 GetFilePath (const char *filename)
 {
-	char *path = NULL;
-	char *download_dir, *converted_dp, *expanded;
+	char *path = NULL, *download_dir, *expanded;
 
 	download_dir = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
 
-	if (!download_dir)
+	if (download_dir && strcmp (download_dir, "Downloads") == 0)
+	{
+		g_free (download_dir);
+		download_dir = ephy_file_downloads_dir ();
+	}
+	else if (download_dir)
+	{
+		char *converted_dp;
+
+		converted_dp = g_filename_from_utf8 (download_dir, -1, NULL, NULL, NULL);
+		g_free (download_dir);
+		download_dir = converted_dp;
+	}
+
+	if (download_dir == NULL)
 	{
 		/* Emergency download destination */
-		return g_build_filename (g_get_home_dir (), filename, NULL);
+		download_dir = g_strdup (g_get_home_dir ());
 	}
 
-	if (g_utf8_collate (download_dir, "Downloads") == 0)
+	g_return_val_if_fail (download_dir != NULL, FALSE);
+
+	expanded = gnome_vfs_expand_initial_tilde (download_dir);
+	if (ephy_ensure_dir_exists (expanded))
 	{
-		const char *default_dir;
-
-		g_free (download_dir);
-
-		default_dir = ephy_file_downloads_dir ();
-		ephy_ensure_dir_exists (default_dir);
-
-		return g_build_filename (default_dir, filename, NULL);
-	}
-
-	converted_dp = g_filename_from_utf8 (download_dir, -1, NULL, NULL, NULL);
-	g_free (download_dir);
-
-	if (converted_dp)
-	{
-		expanded = gnome_vfs_expand_initial_tilde (converted_dp);
-		ephy_ensure_dir_exists (expanded);
 		path = g_build_filename (expanded, filename, NULL);
-
-		g_free (expanded);
-		g_free (converted_dp);
 	}
-	else
+	g_free (expanded);
+	g_free (download_dir);
+	
+	if (path == NULL)
 	{
-		/* Fallback, see FIXME above too */
 		path = g_build_filename (g_get_home_dir (), filename, NULL);
 	}
 
