@@ -291,6 +291,7 @@ create_toolbar (EggEditableToolbar *t)
 
   toolbar = egg_toolbar_new ();
   egg_toolbar_set_show_arrow (EGG_TOOLBAR (toolbar), TRUE);
+  gtk_widget_set_sensitive (toolbar, TRUE);
   gtk_widget_show (toolbar);
   gtk_drag_dest_set (toolbar, GTK_DEST_DEFAULT_DROP,
 		     dest_drag_types, n_dest_drag_types,
@@ -602,9 +603,27 @@ egg_editable_toolbar_set_edit_mode (EggEditableToolbar *etoolbar,
       for (l = 0; l < n_items; l++)
         {
 	  EggToolItem *item;
+	  const char *action_name;
+          gboolean is_separator;
+
+          action_name = egg_toolbars_model_item_nth
+		(etoolbar->priv->model, i, l,
+		 &is_separator);
 
 	  item = egg_toolbar_get_nth_item (EGG_TOOLBAR (toolbar), l);
 	  egg_tool_item_set_use_drag_window (item, mode);
+
+          if (mode)
+	    {
+	      gtk_widget_set_sensitive (GTK_WIDGET (item), TRUE);
+            }
+	  else if (!is_separator)
+            {
+              EggAction *action;
+
+	      action = find_action (etoolbar, action_name);
+	      g_object_notify (G_OBJECT (action), "sensitive");
+	    }
         }
     }
 }

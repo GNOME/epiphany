@@ -36,6 +36,9 @@
 #include <gdk/gdkkeysyms.h>
 #include "eggmarshalers.h"
 #include <gtk/gtkmain.h>
+#include <gtk/gtkstock.h>
+#include <gtk/gtklabel.h>
+#include <string.h>
 
 #define DEFAULT_IPADDING 1
 #define DEFAULT_SPACE_SIZE  5
@@ -922,7 +925,7 @@ egg_toolbar_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
   gint i;
   gboolean need_arrow;
   gint n_expand_items;
-  gint border_width;
+  gint border_width, internal_padding;
   gint available_size;
   gint n_items;
   gint needed_size;
@@ -932,9 +935,8 @@ egg_toolbar_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
   widget->allocation = *allocation;
 
   space_size = get_space_size (toolbar);
-  
-  gtk_widget_style_get (widget, "internal_padding", &border_width, NULL);
-  border_width += GTK_CONTAINER (toolbar)->border_width;
+
+  border_width = GTK_CONTAINER (toolbar)->border_width;
 
   if (GTK_WIDGET_REALIZED (widget))
     {
@@ -944,6 +946,9 @@ egg_toolbar_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
                               allocation->width - border_width * 2,
                               allocation->height - border_width * 2);
     }
+  
+  gtk_widget_style_get (widget, "internal_padding", &internal_padding, NULL);
+  border_width += internal_padding;
   
   gtk_widget_get_child_requisition (GTK_WIDGET (priv->arrow_button),
 				    &arrow_requisition);
@@ -2460,6 +2465,32 @@ egg_toolbar_insert_element (EggToolbar          *toolbar,
 					      icon, callback, user_data, position, FALSE);
 }
 
+static gchar *
+elide_underscores (const gchar *original)
+{
+  gchar *q, *result;
+  const gchar *p;
+  gboolean last_underscore;
+
+  q = result = g_malloc (strlen (original) + 1);
+  last_underscore = FALSE;
+  
+  for (p = original; *p; p++)
+    {
+      if (!last_underscore && *p == '_')
+	last_underscore = TRUE;
+      else
+	{
+	  last_underscore = FALSE;
+	  *q++ = *p;
+	}
+    }
+  
+  *q = '\0';
+  
+  return result;
+}
+
 static GtkWidget *
 egg_toolbar_internal_insert_element (EggToolbar          *toolbar,
 				     EggToolbarChildType  type,
@@ -2526,12 +2557,23 @@ egg_toolbar_internal_insert_element (EggToolbar          *toolbar,
     {
       if (text)
 	{
-	  child->label = EGG_TOOL_BUTTON (item)->label;
-
 	  if (use_stock)
-	    g_object_set (G_OBJECT (item), "stock_id", text, NULL);
+	    {
+	      GtkStockItem stock_item;
+	      gchar *label_text;
+
+	      egg_tool_button_set_stock_id (EGG_TOOL_BUTTON (item), text);
+
+	      gtk_stock_lookup (text, &stock_item);
+	      label_text = elide_underscores (stock_item.label);
+	      child->label = GTK_WIDGET (gtk_label_new (label_text));
+	      g_free (label_text);
+	    }
 	  else
-	    egg_tool_button_set_label (EGG_TOOL_BUTTON (item), text);	    
+	    {
+	      child->label = gtk_label_new (text);
+	    }
+	  egg_tool_button_set_label_widget (EGG_TOOL_BUTTON (item), child->label);
 	}
 
       if (icon)

@@ -124,9 +124,9 @@ static GtkWidget *
 egg_toggle_tool_button_create_menu_proxy (EggToolItem *item)
 {
   EggToggleToolButton *button = EGG_TOGGLE_TOOL_BUTTON (item);
-  const char *label;
+  gchar *label;
 
-  label = gtk_label_get_text (GTK_LABEL (EGG_TOOL_BUTTON (button)->label));
+  label = _egg_tool_button_get_label_text (EGG_TOOL_BUTTON (item));
 
   if (button->menu_item)
     g_object_remove_weak_pointer (G_OBJECT (button->menu_item),
@@ -142,6 +142,8 @@ egg_toggle_tool_button_create_menu_proxy (EggToolItem *item)
   g_object_add_weak_pointer (G_OBJECT (button->menu_item),
 			     (gpointer *)&(button->menu_item));
 
+  g_free (label);
+  
   return button->menu_item;
 }
 

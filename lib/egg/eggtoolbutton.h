@@ -42,13 +42,14 @@ struct _EggToolButton
 
   /*< private >*/
   GtkWidget *button;
-  GtkWidget *box;
-  GtkWidget *label;
-  GtkWidget *icon;
 
   gchar *stock_id;
-  guint label_set : 1;
-  guint icon_set : 1;
+  gchar *label_text;
+  GtkWidget *label_widget;
+  GtkWidget *icon_widget;
+  GtkIconSet *icon_set;
+  
+  guint use_underline : 1;
 };
 
 struct _EggToolButtonClass
@@ -82,6 +83,12 @@ void                  egg_tool_button_set_icon_widget (EggToolButton *button,
 						       GtkWidget     *icon);
 GtkWidget *           egg_tool_button_get_icon_widget (EggToolButton *button);
 
+void                  egg_tool_button_set_label_widget (EggToolButton *button,
+							GtkWidget     *label_widget);
+GtkWidget *           egg_tool_button_get_label_widget (EggToolButton *button);
+
+/* internal function */
+gchar *              _egg_tool_button_get_label_text  (EggToolButton *button);
 
 G_END_DECLS
 
