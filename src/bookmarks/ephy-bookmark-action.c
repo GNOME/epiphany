@@ -17,7 +17,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include <glib/gi18n.h>
@@ -31,7 +31,7 @@
 #include "ephy-string.h"
 #include "ephy-debug.h"
 
-#define MAX_LABEL_LENGTH 30
+#define MAX_LABEL_LENGTH 32
 
 static void ephy_bookmark_action_init       (EphyBookmarkAction *action);
 static void ephy_bookmark_action_class_init (EphyBookmarkActionClass *class);
@@ -50,6 +50,7 @@ enum
 {
 	PROP_0,
 	PROP_BOOKMARK_ID,
+	PROP_TOOLTIP,
 	PROP_LOCATION,
 	PROP_SMART_URL,
 	PROP_ICON
@@ -70,7 +71,7 @@ ephy_bookmark_action_get_type (void)
 {
 	static GType type = 0;
 
-	if (!type)
+	if (type == 0)
 	{
 		static const GTypeInfo type_info =
 		{
@@ -372,6 +373,7 @@ ephy_bookmark_action_set_property (GObject *object,
 		case PROP_BOOKMARK_ID:
 			bmk->priv->bookmark_id = g_value_get_int (value);
 			break;
+		case PROP_TOOLTIP:
 		case PROP_LOCATION:
 			g_free (bmk->priv->location);
 			bmk->priv->location = g_strdup (g_value_get_string (value));
@@ -382,7 +384,7 @@ ephy_bookmark_action_set_property (GObject *object,
 			break;
 		case PROP_ICON:
 			g_free (bmk->priv->icon);
-			bmk->priv->icon = g_strdup (g_value_get_string (value));
+			bmk->priv->icon = g_value_dup_string (value);
 			g_object_notify (object, "icon");
 			break;
 	}
@@ -402,6 +404,16 @@ ephy_bookmark_action_get_property (GObject *object,
 	{
 		case PROP_BOOKMARK_ID:
 			g_value_set_boolean (value, bmk->priv->bookmark_id);
+			break;
+		case PROP_TOOLTIP:
+		case PROP_LOCATION:
+			g_value_set_string (value, bmk->priv->location);
+			break;
+		case PROP_SMART_URL:
+			g_value_set_boolean (value, bmk->priv->smart_url);
+			break;
+		case PROP_ICON:
+			g_value_set_string (value, bmk->priv->icon);
 			break;
 	}
 }
@@ -456,6 +468,13 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 							   G_MAXINT,
                                                            0,
                                                            G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+                                         PROP_LOCATION,
+                                         g_param_spec_string  ("tooltip",
+                                                               "Tooltip",
+                                                               "Tooltip",
+                                                               NULL,
+                                                               G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
                                          PROP_LOCATION,
                                          g_param_spec_string  ("location",
