@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003-2004 Marco Pesenti Gritti
+ *  Copyright (C) 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,6 +15,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifndef EGG_EDITABLE_TOOLBAR_H
@@ -24,6 +27,7 @@
 #include <gtk/gtkuimanager.h>
 #include <gtk/gtkselection.h>
 #include <gtk/gtkvbox.h>
+#include <gtk/gtktoolitem.h>
 #include <gtk/gtktoolbar.h>
 
 G_BEGIN_DECLS
@@ -58,7 +62,10 @@ struct EggEditableToolbarClass
 };
 
 GType               egg_editable_toolbar_get_type        (void);
-GtkWidget	   *egg_editable_toolbar_new		 (GtkUIManager         *merge,
+GtkWidget	   *egg_editable_toolbar_new		 (GtkUIManager         *merge);
+GtkWidget	   *egg_editable_toolbar_new_with_model	 (GtkUIManager         *merge,
+							  EggToolbarsModel     *model);
+void		    egg_editable_toolbar_set_model       (EggEditableToolbar   *etoolbar,
 							  EggToolbarsModel     *model);
 EggToolbarsModel   *egg_editable_toolbar_get_model       (EggEditableToolbar   *etoolbar);
 void		    egg_editable_toolbar_set_edit_mode	 (EggEditableToolbar   *etoolbar,
@@ -72,8 +79,8 @@ void		    egg_editable_toolbar_set_drag_dest   (EggEditableToolbar   *etoolbar,
 							  const GtkTargetEntry *targets,
 							  gint                  n_targets,
 							  const char           *toolbar_name);
-GtkToolbar	   *egg_editable_toolbar_set_fixed       (EggEditableToolbar   *etoolbar,
-							  GtkWidget            *fixed);
+void		    egg_editable_toolbar_set_fixed       (EggEditableToolbar   *etoolbar,
+							  GtkToolItem          *fixed);
 
 
 /* Private Functions */

@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003-2004 Marco Pesenti Gritti
+ *  Copyright (C) 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -78,6 +79,7 @@ struct EggEditableToolbarPrivate
   EggToolbarsModel *model;
   gboolean edit_mode;
   GtkWidget *selected_toolbar;
+  GtkToolItem *fixed;
   GtkWidget *fixed_toolbar;
 
   gboolean pending;
@@ -949,37 +951,9 @@ egg_editable_toolbar_construct (EggEditableToolbar *t)
 }
 
 static void
-egg_editable_toolbar_realize (GtkWidget *widget)
+egg_editable_toolbar_disconnect_model (EggEditableToolbar *toolbar)
 {
-  EggEditableToolbar *toolbar = EGG_EDITABLE_TOOLBAR (widget);
   EggToolbarsModel *model = toolbar->priv->model;
-
-  GTK_WIDGET_CLASS (parent_class)->realize (widget);
-
-  g_return_if_fail (model != NULL);
-
-  egg_editable_toolbar_construct (toolbar);
-
-  g_signal_connect (model, "item_added",
-		    G_CALLBACK (item_added_cb), toolbar);
-  g_signal_connect (model, "item_removed",
-		    G_CALLBACK (item_removed_cb), toolbar);
-  g_signal_connect (model, "toolbar_added",
-		    G_CALLBACK (toolbar_added_cb), toolbar);
-  g_signal_connect (model, "toolbar_removed",
-		    G_CALLBACK (toolbar_removed_cb), toolbar);
-  g_signal_connect (model, "toolbar_changed",
-		    G_CALLBACK (toolbar_changed_cb), toolbar);
-}
-
-static void
-egg_editable_toolbar_unrealize (GtkWidget *widget)
-{
-  EggEditableToolbar *toolbar = EGG_EDITABLE_TOOLBAR (widget);
-  EggToolbarsModel *model = toolbar->priv->model;
-  GList *children, *l;
-
-  g_return_if_fail (model != NULL);
 
   g_signal_handlers_disconnect_by_func
     (model, G_CALLBACK (item_added_cb), toolbar);
@@ -991,6 +965,15 @@ egg_editable_toolbar_unrealize (GtkWidget *widget)
     (model, G_CALLBACK (toolbar_removed_cb), toolbar);
   g_signal_handlers_disconnect_by_func
     (model, G_CALLBACK (toolbar_changed_cb), toolbar);
+}
+
+static void
+egg_editable_toolbar_deconstruct (EggEditableToolbar *toolbar)
+{
+  EggToolbarsModel *model = toolbar->priv->model;
+  GList *children, *l;
+
+  g_return_if_fail (model != NULL);
 
   if (toolbar->priv->fixed_toolbar)
     {
@@ -1006,11 +989,9 @@ egg_editable_toolbar_unrealize (GtkWidget *widget)
     }
 
   g_list_free (children);
-
-  GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
 }
 
-static void
+void
 egg_editable_toolbar_set_model (EggEditableToolbar *toolbar,
 				EggToolbarsModel   *model)
 {
@@ -1018,25 +999,32 @@ egg_editable_toolbar_set_model (EggEditableToolbar *toolbar,
 
   g_return_if_fail (EGG_IS_TOOLBARS_MODEL (model));
   g_return_if_fail (EGG_IS_EDITABLE_TOOLBAR (toolbar));
+  g_return_if_fail (toolbar->priv->merge);
 
   if (toolbar->priv->model == model) return;
 
-  if (GTK_WIDGET_VISIBLE (widget))
-    {
-       gtk_widget_hide (widget);
-    }
-
-  if(GTK_WIDGET_REALIZED (widget))
-    {
-     gtk_widget_unrealize (widget);
-    }
-
   if (toolbar->priv->model)
     {
+      egg_editable_toolbar_disconnect_model (toolbar);
+      egg_editable_toolbar_deconstruct (toolbar);
+
       g_object_unref (toolbar->priv->model);
     }
 
   toolbar->priv->model = g_object_ref (model);
+
+  egg_editable_toolbar_construct (toolbar);
+
+  g_signal_connect (model, "item_added",
+		    G_CALLBACK (item_added_cb), toolbar);
+  g_signal_connect (model, "item_removed",
+		    G_CALLBACK (item_removed_cb), toolbar);
+  g_signal_connect (model, "toolbar_added",
+		    G_CALLBACK (toolbar_added_cb), toolbar);
+  g_signal_connect (model, "toolbar_removed",
+		    G_CALLBACK (toolbar_removed_cb), toolbar);
+  g_signal_connect (model, "toolbar_changed",
+		    G_CALLBACK (toolbar_changed_cb), toolbar);
 }
 
 static void
@@ -1097,16 +1085,12 @@ static void
 egg_editable_toolbar_class_init (EggEditableToolbarClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = egg_editable_toolbar_finalize;
   object_class->set_property = egg_editable_toolbar_set_property;
   object_class->get_property = egg_editable_toolbar_get_property;
-
-  widget_class->realize = egg_editable_toolbar_realize;
-  widget_class->unrealize = egg_editable_toolbar_unrealize;
 
   egg_editable_toolbar_signals[ACTION_REQUEST] =
     g_signal_new ("action_request",
@@ -1157,6 +1141,7 @@ egg_editable_toolbar_finalize (GObject *object)
 
   if (t->priv->model)
     {
+      egg_editable_toolbar_disconnect_model (t);
       g_object_unref (t->priv->model);
     }
 
@@ -1164,15 +1149,22 @@ egg_editable_toolbar_finalize (GObject *object)
 }
 
 GtkWidget *
-egg_editable_toolbar_new (GtkUIManager     *merge,
-			  EggToolbarsModel *model)
+egg_editable_toolbar_new (GtkUIManager     *merge)
 {
   return GTK_WIDGET (g_object_new (EGG_TYPE_EDITABLE_TOOLBAR,
-				   "ToolbarsModel", model,
 				   "MenuMerge", merge,
 				   NULL));
 }
 
+GtkWidget *
+egg_editable_toolbar_new_with_model (GtkUIManager     *merge,
+				     EggToolbarsModel *model)
+{
+  return GTK_WIDGET (g_object_new (EGG_TYPE_EDITABLE_TOOLBAR,
+				   "MenuMerge", merge,
+				   "ToolbarsModel", model,
+				   NULL));
+}
 gboolean
 egg_editable_toolbar_get_edit_mode (EggEditableToolbar *etoolbar)
 {
@@ -1273,26 +1265,37 @@ egg_editable_toolbar_hide (EggEditableToolbar *etoolbar,
     }
 }
 
-GtkToolbar *
-egg_editable_toolbar_set_fixed (EggEditableToolbar *etoolbar,
-				GtkWidget          *fixed)
+void
+egg_editable_toolbar_set_fixed (EggEditableToolbar *toolbar,
+				GtkToolItem        *fixed)
 {
-  GtkWidget *fixed_item;
+  g_return_if_fail (EGG_IS_EDITABLE_TOOLBAR (toolbar));
+  g_return_if_fail (!fixed || GTK_IS_TOOL_ITEM (fixed));
 
-  etoolbar->priv->fixed_toolbar = gtk_toolbar_new ();
-  gtk_toolbar_set_show_arrow (GTK_TOOLBAR (etoolbar->priv->fixed_toolbar), FALSE);
-  g_object_ref (etoolbar->priv->fixed_toolbar);
-  gtk_object_sink (GTK_OBJECT (etoolbar->priv->fixed_toolbar));
+  if (!toolbar->priv->fixed_toolbar)
+    {
+      toolbar->priv->fixed_toolbar = gtk_toolbar_new ();
+      gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar->priv->fixed_toolbar), FALSE);
+      g_object_ref (toolbar->priv->fixed_toolbar);
+      gtk_object_sink (GTK_OBJECT (toolbar->priv->fixed_toolbar));
+    }
 
-  fixed_item = GTK_WIDGET (gtk_tool_item_new ());
-  gtk_toolbar_insert (GTK_TOOLBAR (etoolbar->priv->fixed_toolbar),
-                      GTK_TOOL_ITEM (fixed_item), 0);
+  if (toolbar->priv->fixed)
+    {
+      gtk_container_remove (GTK_CONTAINER (toolbar->priv->fixed_toolbar),
+	    		    GTK_WIDGET (toolbar->priv->fixed));
+      g_object_unref (toolbar->priv->fixed);
+    }
 
-  gtk_container_add (GTK_CONTAINER (fixed_item), fixed);
+  toolbar->priv->fixed = fixed;
 
-  update_fixed (etoolbar);
+  if (fixed)
+    {
+      g_object_ref (fixed);
+      gtk_object_sink (GTK_OBJECT (fixed));
 
-  return GTK_TOOLBAR (etoolbar->priv->fixed_toolbar);
+      gtk_toolbar_insert (GTK_TOOLBAR (toolbar->priv->fixed_toolbar), fixed, 0);
+    }
 }
 
 void

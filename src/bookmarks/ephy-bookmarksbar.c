@@ -274,10 +274,12 @@ toolbar_added_cb (EggToolbarsModel *model,
 
 static void
 ephy_bookmarksbar_set_window (EphyBookmarksBar *toolbar,
-				   EphyWindow *window)
+			      EphyWindow *window)
 {
+	EggEditableToolbar *eggtoolbar = EGG_EDITABLE_TOOLBAR (toolbar);
 	EggToolbarsModel *model = toolbar->priv->toolbars_model;
 	GtkUIManager *manager = GTK_UI_MANAGER (window->ui_merge);
+	int i, n_toolbars;
 
 	g_return_if_fail (toolbar->priv->window == NULL);
 	g_return_if_fail (model != NULL);
@@ -294,17 +296,6 @@ ephy_bookmarksbar_set_window (EphyBookmarksBar *toolbar,
 		      "MenuMerge", manager,
 		      "ToolbarsModel", model,
 		      NULL);
-}
-
-static void
-ephy_bookmarksbar_realize (GtkWidget *widget)
-{
-	EggEditableToolbar *eggtoolbar = EGG_EDITABLE_TOOLBAR (widget);
-	EphyBookmarksBar *toolbar = EPHY_BOOKMARKSBAR (widget);
-	EggToolbarsModel *model = toolbar->priv->toolbars_model;
-	int i, n_toolbars;
-
-	GTK_WIDGET_CLASS (parent_class)->realize (widget);
 
 	g_signal_connect (model, "toolbar_added",
 			  G_CALLBACK (toolbar_added_cb), toolbar);
@@ -321,18 +312,6 @@ ephy_bookmarksbar_realize (GtkWidget *widget)
 		egg_editable_toolbar_set_drag_dest
 			(eggtoolbar, drag_targets, n_drag_targets, t_name);
 	}	
-}
-
-static void
-ephy_bookmarksbar_unrealize (GtkWidget *widget)
-{
-	EphyBookmarksBar *toolbar = EPHY_BOOKMARKSBAR (widget);
-	EggToolbarsModel *model = toolbar->priv->toolbars_model;
-
-	g_signal_handlers_disconnect_by_func
-		(model, G_CALLBACK (toolbar_added_cb), toolbar);
-
-	GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
 }
 
 static void
@@ -393,7 +372,6 @@ static void
 ephy_bookmarksbar_class_init (EphyBookmarksBarClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 	EggEditableToolbarClass *eet_class = EGG_EDITABLE_TOOLBAR_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
@@ -401,9 +379,6 @@ ephy_bookmarksbar_class_init (EphyBookmarksBarClass *klass)
 	object_class->finalize = ephy_bookmarksbar_finalize;
 	object_class->set_property = ephy_bookmarksbar_set_property;
 	object_class->get_property = ephy_bookmarksbar_get_property;
-
-	widget_class->realize = ephy_bookmarksbar_realize;
-	widget_class->unrealize = ephy_bookmarksbar_unrealize;
 
 	eet_class->action_request = ephy_bookmarksbar_action_request;
 

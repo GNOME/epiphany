@@ -547,8 +547,10 @@ ephy_window_fullscreen (EphyWindow *window)
                           "size-changed", G_CALLBACK (size_changed_cb),
 			  window);
 
-	g_object_set (G_OBJECT (window->priv->toolbar), "ToolbarsModel",
-		      ephy_shell_get_toolbars_model (ephy_shell, TRUE), NULL);
+	egg_editable_toolbar_set_model
+		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
+		 EGG_TOOLBARS_MODEL (
+		 	ephy_shell_get_toolbars_model (ephy_shell, TRUE)));
 
 	sync_chromes_visibility (window);
 }
@@ -565,8 +567,10 @@ ephy_window_unfullscreen (EphyWindow *window)
 	gtk_widget_destroy (window->priv->exit_fullscreen_popup);
 	window->priv->exit_fullscreen_popup = NULL;
 
-	g_object_set (G_OBJECT (window->priv->toolbar), "ToolbarsModel",
-		      ephy_shell_get_toolbars_model (ephy_shell, FALSE), NULL);
+	egg_editable_toolbar_set_model
+		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
+		 EGG_TOOLBARS_MODEL (
+		 	ephy_shell_get_toolbars_model (ephy_shell, FALSE)));
 
 	sync_chromes_visibility (window);
 }
@@ -1987,6 +1991,15 @@ ephy_window_init (EphyWindow *window)
 	/* Once the window is sufficiently created let the extensions attach to it */
 	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
 	ephy_extension_attach_window (manager, window);
+
+	/* We only set the model now after attaching the extensions, so that
+	 * extensions already have created their actions which may be on
+	 * the toolbar
+	 */
+	egg_editable_toolbar_set_model
+		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
+		 EGG_TOOLBARS_MODEL
+			 (ephy_shell_get_toolbars_model (ephy_shell, FALSE)));
 
 	g_signal_connect (window, "window-state-event",
 			  G_CALLBACK (ephy_window_state_event_cb),

@@ -1,3 +1,25 @@
+2004-06-16  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/egg/egg-editable-toolbar.c:
+	(egg_editable_toolbar_disconnect_model),
+	(egg_editable_toolbar_deconstruct),
+	(egg_editable_toolbar_set_model),
+	(egg_editable_toolbar_class_init), (egg_editable_toolbar_finalize),
+	(egg_editable_toolbar_new), (egg_editable_toolbar_new_with_model),
+	(egg_editable_toolbar_set_fixed):
+	* lib/egg/egg-editable-toolbar.h:
+	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_get_flags),
+	(parse_toolbars):
+	* src/bookmarks/ephy-bookmarksbar.c:
+	(ephy_bookmarksbar_set_window), (ephy_bookmarksbar_class_init):
+	* src/ephy-window.c: (ephy_window_fullscreen),
+	(ephy_window_unfullscreen), (ephy_window_init):
+	* src/toolbar.c: (toolbar_style_changed_cb), (parent_set_cb),
+	(toolbar_init), (toolbar_finalize), (toolbar_new):
+
+	Go back to construction the toolbar when the model is set, fixes
+	bug #144191.
+
 2004-06-15  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* data/bme.desktop.in:

@@ -399,9 +399,9 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 }
 
 static void
-toolbar_style_sync (GtkToolbar *toolbar,
-		    GtkToolbarStyle style,
-		    GtkWidget *spinner)
+toolbar_style_changed_cb (GtkToolbar *toolbar,
+			  GtkToolbarStyle style,
+			  GtkWidget *spinner)
 {
 	gboolean small;
 
@@ -411,29 +411,51 @@ toolbar_style_sync (GtkToolbar *toolbar,
 }
 
 static void
-create_spinner (Toolbar *t)
+parent_set_cb (GtkWidget *item,
+	       GtkObject *old_parent,
+	       GtkWidget *spinner)
 {
-	GtkWidget *spinner;
-	GtkToolbar *toolbar;
+	if (old_parent != NULL)
+	{
+		g_return_if_fail (GTK_IS_TOOLBAR (old_parent));
 
-	spinner = ephy_spinner_new ();
-	gtk_widget_show (spinner);
-	t->priv->spinner = spinner;
+		g_signal_handlers_disconnect_by_func
+			(old_parent, G_CALLBACK (toolbar_style_changed_cb),
+			 spinner);
+	}
 
-	toolbar = egg_editable_toolbar_set_fixed
-		(EGG_EDITABLE_TOOLBAR (t), spinner);
+	if (item->parent)
+	{
+		g_return_if_fail (GTK_IS_TOOLBAR (item->parent));
 
-	g_signal_connect (toolbar, "style_changed",
-			  G_CALLBACK (toolbar_style_sync),
-			  spinner);
+		g_signal_connect (item->parent, "style_changed",
+				  G_CALLBACK (toolbar_style_changed_cb),
+				  spinner);
+	}
 }
 
 static void
 toolbar_init (Toolbar *t)
 {
+	GtkWidget *spinner;
+	GtkToolItem *item;
+
 	t->priv = EPHY_TOOLBAR_GET_PRIVATE (t);
 
-	create_spinner (t);
+	spinner = ephy_spinner_new ();
+	t->priv->spinner = spinner;
+	g_object_ref (spinner);
+	gtk_object_sink (GTK_OBJECT (spinner));
+	gtk_widget_show (spinner);
+
+	item = gtk_tool_item_new ();
+	gtk_container_add (GTK_CONTAINER (item), spinner);
+	gtk_widget_show (GTK_WIDGET (item));
+
+	g_signal_connect (item, "parent_set",
+			  G_CALLBACK (parent_set_cb), spinner);
+
+	egg_editable_toolbar_set_fixed (EGG_EDITABLE_TOOLBAR (t), item);
 }
 
 static void
@@ -449,6 +471,8 @@ toolbar_finalize (GObject *object)
 		(egg_editable_toolbar_get_model (eggtoolbar),
 		 G_CALLBACK (toolbar_added_cb), t);
 
+	g_object_unref (t->priv->spinner);
+
 	g_object_unref (t->priv->action_group);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -462,7 +486,6 @@ toolbar_new (EphyWindow *window)
 	return EPHY_TOOLBAR (g_object_new (EPHY_TYPE_TOOLBAR,
 					   "window", window,
 					   "MenuMerge", window->ui_merge,
-					   "ToolbarsModel", ephy_shell_get_toolbars_model (ephy_shell, FALSE),
 					   NULL));
 }
 
