@@ -214,7 +214,7 @@ ephy_favicon_action_set_property (GObject *object,
 			break;
 		case PROP_ICON:
 			g_free (fav->priv->icon);
-			fav->priv->icon = g_strdup (g_value_get_string (value));
+			fav->priv->icon = g_value_dup_string (value);
 			g_object_notify(object, "icon");
 			break;
 	}
@@ -236,7 +236,7 @@ ephy_favicon_action_get_property (GObject *object,
 			g_value_set_object (value, fav->priv->window);
 			break;
 		case PROP_ICON:
-			g_value_set_object (value, fav->priv->icon);
+			g_value_set_string (value, fav->priv->icon);
 			break;
 	}
 }
