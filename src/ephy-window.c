@@ -552,6 +552,7 @@ ephy_window_state_event_cb (GtkWidget *widget, GdkEventWindowState *event, EphyW
 {
 	if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
 	{
+		GtkActionGroup *action_group;
 		GtkAction *action;
 		gboolean fullscreen;
 
@@ -566,9 +567,13 @@ ephy_window_state_event_cb (GtkWidget *widget, GdkEventWindowState *event, EphyW
 			ephy_window_unfullscreen (window);
 		}
 
-		action = gtk_action_group_get_action (window->priv->action_group,
-						      "ViewFullscreen");
+		action_group = window->priv->action_group;
+
+		action = gtk_action_group_get_action (action_group, "ViewFullscreen");
 		gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), fullscreen);
+
+		action = gtk_action_group_get_action (action_group, "EditToolbar");
+		g_object_set (action, "sensitive", !fullscreen, NULL);
 	}
 
 	return FALSE;

@@ -346,7 +346,6 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
         if (NS_FAILED(rv))
         {
                 g_warning ("failed to read user preferences, error: %x", rv);
-		return FALSE;
         }
 
         nsCOMPtr<nsIPrefBranch> pref;
