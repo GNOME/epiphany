@@ -1313,7 +1313,7 @@ ephy_tab_set_load_percent (EphyTab *tab, int percent)
  *
  * Returns the page load percentage (displayed in the progressbar).
  *
- * Return value: a percentage from 0 to 100
+ * Return value: a percentage from 0 to 100, or -1 for indeterminate.
  **/
 int
 ephy_tab_get_load_percent (EphyTab *tab)
@@ -1354,8 +1354,6 @@ ephy_tab_update_navigation_flags (EphyTab *tab, EphyEmbed *embed)
 /**
  * ephy_tab_get_navigation_flags:
  * @tab: an #EphyTab
- *
- * DO NOT USE
  *
  * Returns @tab's navigation flags.
  *

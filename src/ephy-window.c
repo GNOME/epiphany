@@ -2387,7 +2387,7 @@ ephy_window_get_active_embed (EphyWindow *window)
  *
  * Returns the list of #EphyTab:s in the window.
  *
- * Return value: a list of #EphyTab:s
+ * Return value: a newly-allocated list of #EphyTab:s
  */
 GList *
 ephy_window_get_tabs (EphyWindow *window)
