@@ -265,6 +265,7 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 
 	empty = g_object_new (EGG_TYPE_ACTION,
 			      "name", EMPTY_ACTION_NAME,
+			      /* This is the adjective, not the verb */
 			      "label", _("Empty"),
 			      "sensitive", FALSE,
 			      NULL);

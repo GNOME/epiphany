@@ -205,6 +205,7 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 
 	if (children->len < 1 && show_empty)
 	{
+		/* This is the adjective, not the verb */
 		item = gtk_menu_item_new_with_label (_("Empty"));
 		gtk_widget_set_sensitive (item, FALSE);
 		gtk_widget_show (item);
