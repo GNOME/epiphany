@@ -1,5 +1,19 @@
 2004-10-22  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-navigation-action.c: (set_tooltip_cb), (connect_proxy),
+	(ephy_navigation_action_finalize),
+	(ephy_navigation_action_set_property),
+	(ephy_navigation_action_get_property),
+	(ephy_navigation_action_class_init):
+	* src/ephy-navigation-action.h:
+	* src/toolbar.c: (toolbar_setup_actions):
+
+	Add tooltips on the arrows, and fix the tooltip on the "Up" button
+	to be consistent with nautilus. Thanks to spark for the string review;
+	fixes bug #155825.
+
+2004-10-22  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-extensions-manager.c:
 	(ephy_extensions_manager_register):
 

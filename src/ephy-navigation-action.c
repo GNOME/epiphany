@@ -36,21 +36,24 @@
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenutoolbutton.h>
+#include <gtk/gtktoolbar.h>
 
 #define NTH_DATA_KEY	"GoNTh"
 #define URL_DATA_KEY	"GoURL"
 
 #define EPHY_NAVIGATION_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NAVIGATION_ACTION, EphyNavigationActionPrivate))
 
-struct EphyNavigationActionPrivate
+struct _EphyNavigationActionPrivate
 {
 	EphyWindow *window;
 	EphyNavigationDirection direction;
+	char *arrow_tooltip;
 };
 
 enum
 {
 	PROP_0,
+	PROP_ARROW_TOOLTIP,
 	PROP_DIRECTION,
 	PROP_WINDOW
 };
@@ -291,6 +294,21 @@ menu_activated_cb (GtkMenuToolButton *button,
 	gtk_menu_tool_button_set_menu (button, menu);
 }
 
+static gboolean
+set_tooltip_cb (GtkMenuToolButton *proxy,
+		GtkTooltips *tooltips,
+		const char *tip,
+		const char *tip_private,
+		EphyNavigationAction *action)
+{
+	gtk_menu_tool_button_set_arrow_tooltip (proxy, tooltips,
+						action->priv->arrow_tooltip,
+						NULL);
+
+	/* don't stop emission */
+	return FALSE;
+}
+
 static void
 connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
@@ -306,6 +324,9 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 
 		g_signal_connect (proxy, "show-menu",
 				  G_CALLBACK (menu_activated_cb), action);
+
+		g_signal_connect (proxy, "set-tooltip",
+				  G_CALLBACK (set_tooltip_cb), action);
 	}
 
 	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
@@ -318,17 +339,29 @@ ephy_navigation_action_init (EphyNavigationAction *action)
 }
 
 static void
+ephy_navigation_action_finalize (GObject *object)
+{
+	EphyNavigationAction *action = EPHY_NAVIGATION_ACTION (object);
+
+	g_free (action->priv->arrow_tooltip);
+
+	parent_class->finalize (object);
+}
+
+static void
 ephy_navigation_action_set_property (GObject *object,
 				     guint prop_id,
 				     const GValue *value,
 				     GParamSpec *pspec)
 {
-	EphyNavigationAction *nav;
-
-	nav = EPHY_NAVIGATION_ACTION (object);
+	EphyNavigationAction *nav = EPHY_NAVIGATION_ACTION (object);
 
 	switch (prop_id)
 	{
+		case PROP_ARROW_TOOLTIP:
+			nav->priv->arrow_tooltip = g_value_dup_string (value);
+			g_object_notify (object, "tooltip");
+			break;
 		case PROP_DIRECTION:
 			nav->priv->direction = g_value_get_int (value);
 			break;
@@ -344,12 +377,13 @@ ephy_navigation_action_get_property (GObject *object,
 				     GValue *value,
 				     GParamSpec *pspec)
 {
-	EphyNavigationAction *nav;
-
-	nav = EPHY_NAVIGATION_ACTION (object);
+	EphyNavigationAction *nav = EPHY_NAVIGATION_ACTION (object);
 
 	switch (prop_id)
 	{
+		case PROP_ARROW_TOOLTIP:
+			g_value_set_string (value, nav->priv->arrow_tooltip);
+			break;
 		case PROP_DIRECTION:
 			g_value_set_int (value, nav->priv->direction);
 			break;
@@ -365,6 +399,7 @@ ephy_navigation_action_class_init (EphyNavigationActionClass *class)
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
 
+	object_class->finalize = ephy_navigation_action_finalize;
 	object_class->set_property = ephy_navigation_action_set_property;
 	object_class->get_property = ephy_navigation_action_get_property;
 
@@ -372,6 +407,14 @@ ephy_navigation_action_class_init (EphyNavigationActionClass *class)
 
 	action_class->toolbar_item_type = GTK_TYPE_MENU_TOOL_BUTTON;
 	action_class->connect_proxy = connect_proxy;
+
+	g_object_class_install_property (object_class,
+					 PROP_ARROW_TOOLTIP,
+					 g_param_spec_string ("arrow-tooltip",
+							      "Arrow Tooltip",
+							      "Arrow Tooltip",
+							      NULL,
+							      G_PARAM_READWRITE));
 
 	g_object_class_install_property (object_class,
 					 PROP_DIRECTION,

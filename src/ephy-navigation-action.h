@@ -30,9 +30,9 @@
 #define EPHY_IS_NAVIGATION_ACTION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), EPHY_TYPE_NAVIGATION_ACTION))
 #define EPHY_NAVIGATION_ACTION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_NAVIGATION_ACTION, EphyNavigationActionClass))
 
-typedef struct _EphyNavigationAction       EphyNavigationAction;
-typedef struct _EphyNavigationActionClass  EphyNavigationActionClass;
-typedef struct EphyNavigationActionPrivate EphyNavigationActionPrivate;
+typedef struct _EphyNavigationAction		EphyNavigationAction;
+typedef struct _EphyNavigationActionClass	EphyNavigationActionClass;
+typedef struct _EphyNavigationActionPrivate	EphyNavigationActionPrivate;
 
 typedef enum
 {
