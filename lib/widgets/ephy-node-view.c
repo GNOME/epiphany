@@ -968,7 +968,8 @@ ephy_node_view_select_node (EphyNodeView *view,
 	gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT (view->priv->sortmodel),
 							&iter, &iter2);
 
-	gtk_tree_selection_select_iter (gtk_tree_view_get_selection (view), &iter);
+	gtk_tree_selection_select_iter (gtk_tree_view_get_selection (GTK_TREE_VIEW (view)),
+					&iter);
 }
 
 void
