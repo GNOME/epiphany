@@ -320,7 +320,11 @@ ephy_bookmarks_load (EphyBookmarks *eb)
 		return FALSE;
 
 	doc = xmlParseFile (eb->priv->xml_file);
-	g_return_val_if_fail (doc != NULL, FALSE);
+	if (doc == NULL)
+	{
+		g_warning ("Failed to load bookmarks file %s!\n", eb->priv->xml_file);
+		return FALSE;
+	}
 
 	root = xmlDocGetRootElement (doc);
 	child = root->children;

@@ -209,7 +209,11 @@ ephy_history_load (EphyHistory *eb)
 		return;
 
 	doc = xmlParseFile (eb->priv->xml_file);
-	g_return_if_fail (doc != NULL);
+	if (doc == NULL)
+	{
+		g_warning ("Failed to load history from %s!\n", eb->priv->xml_file);
+		return;
+	}
 
 	root = xmlDocGetRootElement (doc);
 
