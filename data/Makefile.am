@@ -54,7 +54,7 @@ EXTRA_DIST = $(NAUTILUS_VIEW_SERVER)	\
 	     $(about_DATA)		\
 	     $(applications_DATA)	\
 	     $(pkgconfig_DATA)		\
-	     check_mime.py
+	     check-mime.py
 
 DISTCLEANFILES = \
 	$(nautilus_server_DATA) \
