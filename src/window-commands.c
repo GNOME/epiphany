@@ -931,8 +931,7 @@ window_cmd_help_about (GtkAction *action,
 	GtkWidget** ptr;
 	const char *icon_path;
 	GdkPixbuf *icon = NULL;
-	GtkIconTheme *icon_theme;
-	GtkIconInfo *icon_info;
+	int size = 48;
 
 	static char *authors[] = {
 		"Marco Pesenti Gritti <marco@gnome.org>",
@@ -956,22 +955,11 @@ window_cmd_help_about (GtkAction *action,
 		return;
 	}
 
+	gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &size, NULL);
 	/* FIXME multihead: use the icon theme for the correct screen, not for the default screen */
-	icon_theme = gtk_icon_theme_get_default ();
-	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "web-browser", -1, 0);
-
-	if (icon_info != NULL)
-	{
-		icon_path = gtk_icon_info_get_filename (icon_info);
-
-		if (icon_path != NULL)
-		{
-			icon = gdk_pixbuf_new_from_file (icon_path, NULL);
-		}
-
-		gtk_icon_info_free (icon_info);
-	}
-	else
+	icon = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
+					 "web-browser", size, 0 , NULL);
+	if (icon == NULL)
 	{
 		g_warning ("Web browser gnome icon not found");
 	}
