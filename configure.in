@@ -236,10 +236,12 @@ AC_COMPILE_IFELSE(
 		  nsISupports *arg4;
 		  p->ShouldLoad(0,nsnull,nsnull,arg4,nsEmbedCString(),nsnull,nsnull);]]
 	)],
-	[AC_DEFINE([MOZ_NSICONTENTPOLICY_VARIANT_2],[1],[dummy]) result=2],
-	[AC_DEFINE([MOZ_NSICONTENTPOLICY_VARIANT_1],[1],[dummy]) result=1])
+	[variant=2],
+	[variant=1])
 
-AC_MSG_RESULT([variant $result])
+AC_DEFINE_UNQUOTED([MOZ_NSICONTENTPOLICY_VARIANT], [$variant], [Define the nsIContentPolicy API variant])
+
+AC_MSG_RESULT([variant $variant])
 
 dnl Changed from char* to nsIURI* in 1.7.4 on 1.7 branch,
 dnl in 1.8a3 on trunk and on aviary branch
