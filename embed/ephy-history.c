@@ -434,6 +434,24 @@ page_removed_from_host_cb (EphyNode *node,
 }
 
 static void
+remove_pages_from_host_cb (EphyNode *host,
+			   EphyHistory *eh)
+{
+	GPtrArray *children;
+	EphyNode *site;
+	int i;
+
+	children = ephy_node_get_children (host);
+
+	for (i = (int) children->len - 1; i >= 0; i--)
+	{
+		site = g_ptr_array_index (children, i);
+
+		ephy_node_unref (site);
+	}
+}
+
+static void
 connect_page_removed_from_host (char *url,
                                 EphyNode *node,
                                 EphyHistory *eb)
@@ -443,6 +461,10 @@ connect_page_removed_from_host (char *url,
 	ephy_node_signal_connect_object (node,
 					 EPHY_NODE_CHILD_REMOVED,
 				         (EphyNodeCallback) page_removed_from_host_cb,
+					 G_OBJECT (eb));
+	ephy_node_signal_connect_object (node,
+					 EPHY_NODE_DESTROY,
+					 (EphyNodeCallback) remove_pages_from_host_cb,
 					 G_OBJECT (eb));
 }
 
@@ -703,6 +725,10 @@ ephy_history_get_host (EphyHistory *eh, const char *url)
 		ephy_node_signal_connect_object (host,
 						 EPHY_NODE_CHILD_REMOVED,
 					         (EphyNodeCallback) page_removed_from_host_cb,
+						 G_OBJECT (eh));
+		ephy_node_signal_connect_object (host,
+						 EPHY_NODE_DESTROY,
+						 (EphyNodeCallback) remove_pages_from_host_cb,
 						 G_OBJECT (eh));
 
 		g_value_init (&value, G_TYPE_STRING);

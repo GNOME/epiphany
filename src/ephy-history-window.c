@@ -65,6 +65,9 @@
 #include "ephy-session.h"
 #include "ephy-favicon-cache.h"
 #include "eel-gconf-extensions.h"
+#include "ephy-node.h"
+#include "ephy-node-common.h"
+#include "ephy-node-view.h"
 
 static GtkTargetEntry page_drag_types [] =
 {
@@ -447,6 +450,23 @@ cmd_delete (GtkAction *action,
 	if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->pages_view)))
 	{
 		ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->pages_view));
+	}
+	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->sites_view)))
+	{
+		EphyNodePriority priority;
+		GList *selected;
+		EphyNode *node;
+
+		selected = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->sites_view));
+		node = selected->data;
+		priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+
+		if (priority == -1) priority = EPHY_NODE_NORMAL_PRIORITY;
+
+		if (priority == EPHY_NODE_NORMAL_PRIORITY)
+		{
+			ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->sites_view));
+		}
 	}
 }
 
@@ -1258,6 +1278,10 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	g_signal_connect (G_OBJECT (sites_view),
 			  "node_selected",
 			  G_CALLBACK (site_node_selected_cb),
+			  editor);
+	g_signal_connect (G_OBJECT (sites_view),
+			  "key_press_event",
+			  G_CALLBACK (key_pressed_cb),
 			  editor);
 	g_signal_connect (G_OBJECT (selection),
 			  "changed",

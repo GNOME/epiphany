@@ -1,5 +1,15 @@
 2004-11-11  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-history.c: (remove_pages_from_host_cb),
+	(connect_page_removed_from_host), (ephy_history_get_host):
+	* src/ephy-history-window.c: (cmd_delete),
+	(ephy_history_window_construct):
+	* src/ephy-window.c: (ephy_window_fullscreen):
+
+	Implement history deletion on per-site basis. Fixes bug #116609.
+
+2004-11-11  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/prefs-dialog.c:
 
 	Change column order for the languages list in the code.
