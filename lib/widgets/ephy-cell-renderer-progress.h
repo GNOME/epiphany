@@ -1,4 +1,4 @@
-/* cellrenderer.h
+/* ephy-cell-renderer-progress.h
  * Copyright (C) 2002 Naba Kumar <kh_naba@users.sourceforge.net>
  * modified by Jörgen Scheibengruber <mfcn@gmx.de>
  *
@@ -16,12 +16,16 @@
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
- *
- * $Id$
+ */
+/*
+ * Modified by the GTK+ Team and others 1997-2004.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef EPHY_CELL_RENDERER_PROGRESS_H
-#define EPHY_CELL_RENDERER_PROGRESS_H
+#ifndef __EPHY_CELL_RENDERER_PROGRESS_H__
+#define __EPHY_CELL_RENDERER_PROGRESS_H__
 
 #include <gtk/gtkcellrenderer.h>
 
@@ -29,6 +33,10 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_CELL_RENDERER_PROGRESS (ephy_cell_renderer_progress_get_type ())
 #define EPHY_CELL_RENDERER_PROGRESS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_CELL_RENDERER_PROGRESS, EphyCellRendererProgress))
+#define EPHY_CELL_RENDERER_PROGRESS_CLASS(klass)	  (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_CELL_RENDERER_PROGRESS, EphyCellRendererProgressClass))
+#define EPHY_IS_CELL_RENDERER_PROGRESS(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_CELL_RENDERER_PROGRESS))
+#define EPHY_IS_CELL_RENDERER_PROGRESS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_TYPE_CELL_RENDERER_PROGRESS))
+#define EPHY_CELL_RENDERER_PROGRESS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_TYPE_CELL_RENDERER_PROGRESS, EphyCellRendererProgressClass))
 
 typedef struct _EphyCellRendererProgress         EphyCellRendererProgress;
 typedef struct _EphyCellRendererProgressClass    EphyCellRendererProgressClass;
@@ -36,26 +44,32 @@ typedef struct _EphyCellRendererProgressPrivate  EphyCellRendererProgressPrivate
 
 enum
 {
-	EPHY_PROGRESS_CELL_UNKNOWN = -1,
-	EPHY_PROGRESS_CELL_FAILED = -2
+  EPHY_PROGRESS_CELL_UNKNOWN = -1,
+  EPHY_PROGRESS_CELL_FAILED = -2
 };
 
 struct _EphyCellRendererProgress
 {
-	GtkCellRenderer parent_instance;
-
-	/*< private >*/
-	EphyCellRendererProgressPrivate *priv;
+  GtkCellRenderer parent_instance;
+  
+  /*< private >*/
+  EphyCellRendererProgressPrivate *priv;
 };
 
 struct _EphyCellRendererProgressClass
 {
-	GtkCellRendererClass parent_class;
+  GtkCellRendererClass parent_class;
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
-GtkType		 ephy_cell_renderer_progress_get_type (void);
+GType		 ephy_cell_renderer_progress_get_type (void);
 GtkCellRenderer* ephy_cell_renderer_progress_new      (void);
 
 G_END_DECLS
 
-#endif
+#endif  /* __EPHY_CELL_RENDERER_PROGRESS_H__ */
