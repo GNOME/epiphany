@@ -504,6 +504,7 @@ nsresult EphyWrapper::FindSetProperties (const PRUnichar *search_string,
 	
 	finder->SetSearchString (search_string);
 	finder->SetMatchCase (case_sensitive);
+	finder->SetWrapFind (wrap_around);
 
 	return NS_OK;
 }
