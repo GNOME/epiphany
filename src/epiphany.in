@@ -10,7 +10,7 @@ if [ -z "$MOZ_PLUGIN_PATH" ]; then
 fi
 
 # Migration
-if [ ! -e $HOME/.gnome2/epiphany/mozilla/epiphany -a -d $HOME/.galeon/mozilla/galeon ]; then
+if [ ! -d $HOME/.gnome2/epiphany/mozilla/epiphany -a -d $HOME/.galeon/mozilla/galeon ]; then
     mkdir -p $HOME/.gnome2/epiphany/mozilla/epiphany && \
 	cp $HOME/.galeon/mozilla/galeon/*.s \
 	$HOME/.galeon/mozilla/galeon/*.w \
