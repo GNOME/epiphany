@@ -24,6 +24,8 @@
 #include "ephy-embed.h"
 #include "ephy-window.h"
 #include "session.h"
+#include "ephy-bookmarks.h"
+#include "ephy-bookmarks-import.h"
 
 #include <string.h>
 #include <bonobo/bonobo-generic-factory.h>
@@ -34,6 +36,10 @@ static void
 impl_ephy_automation_add_bookmark (PortableServer_Servant _servant,
 				   const CORBA_char * url,
 				   CORBA_Environment * ev);
+static void
+impl_ephy_automation_import_bookmarks (PortableServer_Servant _servant,
+				       const CORBA_char * filename,
+				       CORBA_Environment * ev);
 static void
 impl_ephy_automation_quit (PortableServer_Servant _servant,
                            const CORBA_boolean disableServer,
@@ -149,6 +155,17 @@ impl_ephy_automation_add_bookmark (PortableServer_Servant _servant,
 				   const CORBA_char * url,
 				   CORBA_Environment * ev)
 {
+	ephy_bookmarks_add (ephy_shell_get_bookmarks (ephy_shell),
+			    url /* title */, url);
+}
+
+static void
+impl_ephy_automation_import_bookmarks (PortableServer_Servant _servant,
+				       const CORBA_char * filename,
+				       CORBA_Environment * ev)
+{
+	ephy_bookmarks_import (ephy_shell_get_bookmarks (ephy_shell),
+			       filename);
 }
 
 static void
@@ -194,6 +211,7 @@ ephy_automation_class_init (EphyAutomationClass *klass)
         /* connect implementation callbacks */
         epv->loadurl = impl_ephy_automation_loadurl;
 	epv->addBookmark = impl_ephy_automation_add_bookmark;
+	epv->importBookmarks = impl_ephy_automation_import_bookmarks;
 	epv->quit = impl_ephy_automation_quit;
 	epv->loadSession = impl_ephy_automation_load_session;
 	epv->openBookmarksEditor = impl_ephy_automation_open_bookmarks_editor;

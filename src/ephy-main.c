@@ -52,6 +52,7 @@ static gboolean open_in_new_window    = FALSE;  /* force open in a new window?  
 static gboolean open_fullscreen       = FALSE;  /* open ephy in full screen ? */
 static gchar   *session_filename      = NULL;   /* the session filename         */
 static gchar   *bookmark_url          = NULL;   /* the temp bookmark to add     */
+static gchar   *bookmarks_file        = NULL;   /* the bookmarks file to import */
 static gboolean close_option          = FALSE;  /* --close                      */
 static gboolean quit_option           = FALSE;  /* --quit                       */
 static gboolean ephy_server_mode    = FALSE;
@@ -93,6 +94,9 @@ static struct poptOption popt_options[] =
 	{ "add-bookmark", 't', POPT_ARG_STRING, &bookmark_url,
 	  0, N_("Add a bookmark (don't open any window)"),
 	  N_("URL")},
+	{ "import-bookmarks", '\0', POPT_ARG_STRING, &bookmarks_file,
+	  0, N_("Import bookmarks from the given file"),
+	  N_("FILE") },
 	{ "close", 'c', POPT_ARG_NONE, &close_option, 0,
 	  N_("Close all Epiphany windows"),
 	  NULL },
@@ -226,6 +230,12 @@ ephy_main_start (gpointer data)
 	{
 		GNOME_EphyAutomation_loadSession
 			(gaserver, session_filename, &corba_env);
+	}
+	/* if we're given a bookmarks file to import... */
+	else if (bookmarks_file != NULL)
+	{
+		GNOME_EphyAutomation_importBookmarks
+			(gaserver, bookmarks_file, &corba_env);
 	}
 	/* if found and we're given a bookmark to add... */
 	else if (bookmark_url != NULL)
