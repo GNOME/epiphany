@@ -930,6 +930,7 @@ window_cmd_help_about (GtkAction *action,
 	char *documenters[] = {
 		"Patanjali Somayaji <patanjali@codito.com>",
 		"David Bordoley <bordoley@msu.edu>",
+		"Piers Cornwell", 
 		NULL
 	};
 
