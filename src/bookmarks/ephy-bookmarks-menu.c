@@ -32,7 +32,6 @@
 #include <bonobo/bonobo-i18n.h>
 #include <gtk/gtkuimanager.h>
 
-#define EMPTY_ACTION_NAME "GoBookmarkEmpty"
 #define BOOKMARKS_MENU_PATH "/menubar/BookmarksMenu"
 
 /**
@@ -189,28 +188,19 @@ add_bookmarks_menu (EphyBookmarksMenu *menu, EphyNode *node, const char *path)
 {
 	GPtrArray *children;
 	EphyBookmarksMenuPrivate *p = menu->priv;
+	GList *node_list = NULL, *l;
+	int i;
 
 	children = ephy_node_get_children (node);
-
-	if (children->len < 1)
+	for (i = 0; i < children->len; ++i)
 	{
-		gtk_ui_manager_add_ui (p->merge, p->ui_id, path,
-				       EMPTY_ACTION_NAME"Menu", EMPTY_ACTION_NAME,
-				       GTK_UI_MANAGER_MENUITEM, FALSE);
+		node_list = g_list_prepend (node_list,
+					    g_ptr_array_index (children, i));
 	}
-	else
+
+	if (node_list != NULL)
 	{
-		GList *node_list = NULL, *l;
-		int i;
-
-		for (i = 0; i < children->len; ++i)
-		{
-			node_list = g_list_prepend (node_list,
-						    g_ptr_array_index (children, i));
-		}
-
 		node_list = g_list_sort (node_list, (GCompareFunc)sort_bookmarks);
-
 		for (l = node_list; l != NULL; l = l->next)
 		{
 			GtkAction *action;
@@ -233,7 +223,6 @@ add_bookmarks_menu (EphyBookmarksMenu *menu, EphyNode *node, const char *path)
 					       name, verb,
 					       GTK_UI_MANAGER_MENUITEM, FALSE);
 		}
-
 		g_list_free (node_list);
 	}
 
@@ -249,7 +238,6 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 	EphyNode *not_categorized;
 	GPtrArray *children;
 	GList *node_list = NULL, *l;
-	GtkAction *empty;
 
 	LOG ("Rebuilding bookmarks menu")
 
@@ -265,15 +253,6 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 
 	p->action_group = gtk_action_group_new ("BookmarksActions");
 	gtk_ui_manager_insert_action_group (p->merge, p->action_group, 0);
-
-	empty = g_object_new (GTK_TYPE_ACTION,
-			      "name", EMPTY_ACTION_NAME,
-			      /* This is the adjective, not the verb */
-			      "label", _("Empty"),
-			      "sensitive", FALSE,
-			      NULL);
-	gtk_action_group_add_action (p->action_group, empty);
-	g_object_unref (empty);
 
 	for (i = 0; i < children->len; ++i)
 	{
@@ -314,6 +293,7 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 		action = g_object_new (GTK_TYPE_ACTION,
 				       "name", verb,
 				       "label", title,
+				       "hide_if_empty", FALSE,
 				       NULL);
 		gtk_action_group_add_action (p->action_group, action);
 		g_object_unref (action);
