@@ -277,60 +277,9 @@ ephy_gui_help (GtkWindow *parent,
 }
 
 gboolean
-ephy_gui_select_row_by_key (GtkTreeView *treeview, gint column, guint32 unicode)
-{
-	GtkTreeModel *model;
-	GtkTreeIter iter, last_iter;
-	GtkTreePath *path;
-	GValue value = {0, };
-	char *string;
-	char *event_string;
-	gboolean found = FALSE;
-	char outbuf[6];
-	int length;
-
-	model = gtk_tree_view_get_model (treeview);
-
-	length = g_unichar_to_utf8 (unicode, outbuf);
-	event_string = g_utf8_casefold (outbuf, length);
-
-	if (!gtk_tree_model_get_iter_first (model, &iter))
-	{
-		g_free (event_string);
-		return FALSE;
-	}
-
-	do
-	{
-		last_iter = iter;
-		gtk_tree_model_get_value (model, &iter, column, &value);
-
-		string = g_utf8_casefold (g_value_get_string (&value), -1);
-		g_utf8_strncpy (string, string, 1);
-		found = (g_utf8_collate (string, event_string) == 0);
-
-		g_free (string);
-		g_value_unset (&value);
-	}
-	while (!found && gtk_tree_model_iter_next (model, &iter));
-
-	if (!found)
-	{
-		iter = last_iter;
-	}
-
-	path = gtk_tree_model_get_path (model, &iter);
-	gtk_tree_view_set_cursor (GTK_TREE_VIEW (treeview), path, NULL, FALSE);
-	gtk_tree_path_free (path);
-	g_free (event_string);
-
-	return TRUE;
-}
-
-gboolean
 ephy_gui_is_middle_click (void)
 {
-	gboolean new_tab = FALSE;
+	gboolean is_middle_click = FALSE;
 	GdkEvent *event;
 
 	event = gtk_get_current_event ();
@@ -348,14 +297,14 @@ ephy_gui_is_middle_click (void)
 			if ((button == 1 && ((state & modifiers) == GDK_CONTROL_MASK)) ||
 			    (button == 2))
 			{
-				new_tab = TRUE;
+				is_middle_click = TRUE;
 			}
 		}
 
 		gdk_event_free (event);
 	}
 
-	return new_tab;
+	return is_middle_click;
 }
 
 void

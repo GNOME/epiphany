@@ -57,10 +57,6 @@ GtkWindowGroup *ephy_gui_ensure_window_group		 (GtkWindow *window);
 
 gboolean	ephy_gui_is_middle_click		 (void);
 
-gboolean	ephy_gui_select_row_by_key		 (GtkTreeView *treeview,
-							  gint column,
-							  guint32 unicode);
-
 gboolean	ephy_gui_confirm_overwrite_file	         (GtkWidget *parent,
 							  const char *filename);
 

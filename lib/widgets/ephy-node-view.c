@@ -69,8 +69,6 @@ struct _EphyNodeViewPrivate
 	gboolean remove_if_cancelled;
 	int editable_property;
 
-	int searchable_data_column;
-
 	gboolean drag_started;
 	int drag_button;
 	int drag_x;
@@ -567,9 +565,7 @@ ephy_node_view_key_press_cb (GtkTreeView *treeview,
 			     GdkEventKey *event,
 			     EphyNodeView *view)
 {
-	guint32 unicode;
-
-	unicode = gdk_keyval_to_unicode (event->keyval);
+	gboolean handled = FALSE;
 
 	if (event->keyval == GDK_space ||
 	    event->keyval == GDK_Return ||
@@ -582,15 +578,11 @@ ephy_node_view_key_press_cb (GtkTreeView *treeview,
 			selection = gtk_tree_view_get_selection (treeview);
 			gtk_tree_selection_selected_foreach
 					(selection, path_toggled, view);
+			handled = TRUE;
 		}
 	}
-	else if (view->priv->searchable_data_column != -1 && unicode)
-	{
-		return ephy_gui_select_row_by_key
-			(treeview, view->priv->searchable_data_column, unicode);
-	}
 
-	return FALSE;
+	return handled;
 }
 
 static void
@@ -1205,12 +1197,6 @@ ephy_node_view_add_column (EphyNodeView *view,
 				  G_CALLBACK (renderer_editing_canceled_cb), view);
 	}
 
-	if ((flags & EPHY_NODE_VIEW_SEARCHABLE) &&
-	    (view->priv->searchable_data_column == -1))
-	{
-		view->priv->searchable_data_column = column;
-	}
-
 	gtk_tree_view_column_pack_start (gcolumn, renderer, TRUE);
 	gtk_tree_view_column_set_attributes (gcolumn, renderer,
 					     "text", column,
@@ -1235,6 +1221,12 @@ ephy_node_view_add_column (EphyNodeView *view,
 	if (flags & EPHY_NODE_VIEW_SORTABLE)
 	{
 		gtk_tree_view_column_set_sort_column_id (gcolumn, column);
+	}
+
+	if (flags & EPHY_NODE_VIEW_SEARCHABLE)
+	{
+		gtk_tree_view_set_search_column (GTK_TREE_VIEW (view), column);
+		gtk_tree_view_set_enable_search (GTK_TREE_VIEW (view), TRUE);
 	}
 
 	if (ret != NULL)
@@ -1283,7 +1275,6 @@ ephy_node_view_init (EphyNodeView *view)
 	view->priv = EPHY_NODE_VIEW_GET_PRIVATE (view);
 
 	view->priv->toggle_column = -1;
-	view->priv->searchable_data_column = -1;
 	view->priv->priority_column = -1;
 	view->priv->priority_prop_id = 0;
 	view->priv->sort_column = -1;

@@ -1,3 +1,13 @@
+2005-03-14  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-gui.c: (ephy_gui_is_middle_click):
+	* lib/ephy-gui.h:
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_key_press_cb),
+	(ephy_node_view_add_column), (ephy_node_view_init):
+
+	Remove custom search, and use gtktreeview typeaheadfind. Fixes bug
+	#118107.
+
 2005-03-13  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.ac:
