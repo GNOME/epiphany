@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-18 10:37-0400\n"
-"PO-Revision-Date: 2004-10-18 21:35-0400\n"
+"POT-Creation-Date: 2004-10-22 16:15-0400\n"
+"PO-Revision-Date: 2004-10-22 21:35-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -1029,15 +1029,15 @@ msgid_plural "%d downloads"
 msgstr[0] "%d download"
 msgstr[1] "%d downloads"
 
-#: embed/downloader-view.c:594 src/bookmarks/ephy-bookmarks-editor.c:675
+#: embed/downloader-view.c:597 src/bookmarks/ephy-bookmarks-editor.c:675
 msgid "File"
 msgstr "File"
 
-#: embed/downloader-view.c:616
+#: embed/downloader-view.c:619
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:627
+#: embed/downloader-view.c:630
 msgid "Remaining"
 msgstr "Remaining"
 
@@ -1831,7 +1831,7 @@ msgid "All supported types"
 msgstr "All supported types"
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:78 src/prefs-dialog.c:1109
+#: lib/ephy-file-helpers.c:78 src/prefs-dialog.c:1110
 msgid "Downloads"
 msgstr "Downloads"
 
@@ -1949,7 +1949,7 @@ msgstr "History"
 msgid "Bookmarks"
 msgstr "Bookmarks"
 
-#: lib/ephy-stock-icons.c:61 src/toolbar.c:338
+#: lib/ephy-stock-icons.c:61 src/toolbar.c:341
 msgid "Address Entry"
 msgstr "Address Entry"
 
@@ -2381,7 +2381,7 @@ msgstr "Other encodings"
 msgid "_Automatic"
 msgstr "_Automatic"
 
-#: src/ephy-go-action.c:73 src/toolbar.c:374
+#: src/ephy-go-action.c:73 src/toolbar.c:378
 msgid "Go"
 msgstr "Go"
 
@@ -2505,6 +2505,10 @@ msgstr "Launch the bookmarks editor"
 #: src/ephy-main.c:108
 msgid "Ephy"
 msgstr "Ephy"
+
+#: src/ephy-notebook.c:872
+msgid "Close tab"
+msgstr "Close tab"
 
 #: src/ephy-session.c:374
 msgid "Crash Recovery"
@@ -2831,7 +2835,7 @@ msgstr "_Forward"
 msgid "Go to the next visited page"
 msgstr "Go to the next visited page"
 
-#: src/ephy-window.c:209
+#: src/ephy-window.c:209 src/toolbar.c:326
 msgid "Go up one level"
 msgstr "Go up one level"
 
@@ -3182,35 +3186,35 @@ msgstr "Host"
 msgid "User Name"
 msgstr "User Name"
 
-#: src/pdm-dialog.c:905
+#: src/pdm-dialog.c:907
 msgid "Cookie Properties"
 msgstr "Cookie Properties"
 
-#: src/pdm-dialog.c:921
+#: src/pdm-dialog.c:923
 msgid "Content:"
 msgstr "Content:"
 
-#: src/pdm-dialog.c:936
+#: src/pdm-dialog.c:938
 msgid "Path:"
 msgstr "Path:"
 
-#: src/pdm-dialog.c:951
+#: src/pdm-dialog.c:953
 msgid "Send for:"
 msgstr "Send for:"
 
-#: src/pdm-dialog.c:960
+#: src/pdm-dialog.c:962
 msgid "Encrypted connections only"
 msgstr "Encrypted connections only"
 
-#: src/pdm-dialog.c:960
+#: src/pdm-dialog.c:962
 msgid "Any type of connection"
 msgstr "Any type of connection"
 
-#: src/pdm-dialog.c:966
+#: src/pdm-dialog.c:968
 msgid "Expires:"
 msgstr "Expires:"
 
-#: src/pdm-dialog.c:977
+#: src/pdm-dialog.c:979
 msgid "End of current session"
 msgstr "End of current session"
 
@@ -3457,7 +3461,7 @@ msgstr "Vietnamese"
 msgid "Walloon"
 msgstr "Walloon"
 
-#: src/prefs-dialog.c:1059
+#: src/prefs-dialog.c:1060
 #, c-format
 msgid "Custom [%s]"
 msgstr "Custom [%s]"
@@ -3466,15 +3470,15 @@ msgstr "Custom [%s]"
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1104
+#: src/prefs-dialog.c:1105
 msgid "Home"
 msgstr "Home"
 
-#: src/prefs-dialog.c:1113 src/prefs-dialog.c:1117
+#: src/prefs-dialog.c:1114 src/prefs-dialog.c:1118
 msgid "Desktop"
 msgstr "Desktop"
 
-#: src/prefs-dialog.c:1317
+#: src/prefs-dialog.c:1323
 msgid "Select a directory"
 msgstr "Select a directory"
 
@@ -3486,39 +3490,51 @@ msgstr "Back"
 msgid "Go back"
 msgstr "Go back"
 
-#: src/toolbar.c:309
+#: src/toolbar.c:298
+msgid "Back history"
+msgstr "Back history"
+
+#: src/toolbar.c:310
 msgid "Forward"
 msgstr "Forward"
 
-#: src/toolbar.c:311
+#: src/toolbar.c:312
 msgid "Go forward"
 msgstr "Go forward"
 
-#: src/toolbar.c:322
+#: src/toolbar.c:313
+msgid "Forward history"
+msgstr "Forward history"
+
+#: src/toolbar.c:324
 msgid "Up"
 msgstr "Up"
 
-#: src/toolbar.c:324
-msgid "Go up"
-msgstr "Go up"
+#: src/toolbar.c:327
+msgid "List of upper levels"
+msgstr "List of upper levels"
 
-#: src/toolbar.c:340
+#: src/toolbar.c:343
 msgid "Enter a web address to open, or a phrase to search for on the web"
 msgstr "Enter a web address to open, or a phrase to search for on the web"
 
-#: src/toolbar.c:353
+#: src/toolbar.c:356
 msgid "Zoom"
 msgstr "Zoom"
 
-#: src/toolbar.c:355
+#: src/toolbar.c:358
 msgid "Adjust the text size"
 msgstr "Adjust the text size"
 
-#: src/toolbar.c:365
+#: src/toolbar.c:368
 msgid "Favicon"
 msgstr "Favicon"
 
-#: src/toolbar.c:376
+#: src/toolbar.c:369
+msgid "Drag and drop this icon to create a link to this page"
+msgstr "Drag and drop this icon to create a link to this page"
+
+#: src/toolbar.c:380
 msgid "Go to the address entered in the address entry"
 msgstr "Go to the address entered in the address entry"
 
