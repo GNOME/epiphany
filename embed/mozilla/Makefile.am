@@ -3,6 +3,7 @@ INCLUDES = \
 	-I$(top_srcdir)/embed	    			\
 	-I$(top_srcdir)		    			\
 	$(MOZILLA_COMPONENT_CFLAGS)			\
+	-I$(MOZILLA_INCLUDE_ROOT)			\
 	-I$(MOZILLA_INCLUDE_ROOT)/chardet		\
 	-I$(MOZILLA_INCLUDE_ROOT)/chrome		\
 	-I$(MOZILLA_INCLUDE_ROOT)/content		\
