@@ -425,7 +425,6 @@ downloader_view_build_ui (DownloaderView *dv)
 	GtkListStore *liststore;
 	GtkTreeViewColumn *column;
 	GtkCellRenderer *renderer;
-	GtkTreeSelection *selection;
 	GdkPixbuf *icon;
 	EphyDialog *d = EPHY_DIALOG (dv);
 
@@ -464,6 +463,7 @@ downloader_view_build_ui (DownloaderView *dv)
 						     NULL);
 	column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview), 0);
         gtk_tree_view_column_set_reorderable (column, TRUE);
+	gtk_tree_view_column_set_resizable (column, TRUE);
         gtk_tree_view_column_set_sort_column_id (column, COL_PERCENT);
 
 	renderer = gtk_cell_renderer_text_new ();
@@ -476,6 +476,7 @@ downloader_view_build_ui (DownloaderView *dv)
 					   COL_FILE);
         gtk_tree_view_column_set_expand (column, TRUE);
         gtk_tree_view_column_set_reorderable (column, TRUE);
+	gtk_tree_view_column_set_resizable (column, TRUE);
         gtk_tree_view_column_set_sort_column_id (column, COL_FILE);
 
 	renderer = gtk_cell_renderer_text_new ();
@@ -488,10 +489,8 @@ downloader_view_build_ui (DownloaderView *dv)
 	column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview),
 					   COL_REMAINING);
         gtk_tree_view_column_set_reorderable (column, TRUE);
+	gtk_tree_view_column_set_resizable (column, TRUE);
         gtk_tree_view_column_set_sort_column_id (column, COL_REMAINING);
-
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(priv->treeview));
-	gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
 
 	priv->model = GTK_TREE_MODEL (liststore);
 
