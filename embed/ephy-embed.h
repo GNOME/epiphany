@@ -37,6 +37,8 @@ G_BEGIN_DECLS
 #define EPHY_IS_EMBED_IFACE(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED))
 #define EPHY_EMBED_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EMBED, EphyEmbedIface))
 
+#define EPHY_TYPE_EMBED_CHROME_MASK     (ephy_embed_chrome_get_type ())
+
 typedef struct EphyEmbed	EphyEmbed;
 typedef struct EphyEmbedIface	EphyEmbedIface;
 
@@ -57,21 +59,11 @@ typedef enum
 
 typedef enum
 {
-	EMBED_CHROME_NONE			= 0,
-	EMBED_CHROME_DEFAULT			= 1 << 0,
-	EMBED_CHROME_MENUBARON			= 1 << 1,
-	EMBED_CHROME_TOOLBARON			= 1 << 2,
-	EMBED_CHROME_BOOKMARKSBARON		= 1 << 3,
-	EMBED_CHROME_BOOKMARKSBAR_DEFAULT	= 1 << 4,
-	EMBED_CHROME_STATUSBARON		= 1 << 5,
-	EMBED_CHROME_WINDOWRAISED		= 1 << 6,
-	EMBED_CHROME_WINDOWLOWERED		= 1 << 7,
-	EMBED_CHROME_CENTERSCREEN		= 1 << 8,
-	EMBED_CHROME_OPENASDIALOG		= 1 << 9,
-	EMBED_CHROME_OPENASCHROME		= 1 << 10,
-	EMBED_CHROME_OPENASPOPUP		= 1 << 11,
-	EMBED_CHROME_PPVIEWTOOLBARON		= 1 << 12
-} EmbedChromeMask;
+	EPHY_EMBED_CHROME_DEFAULT = 1 << 0,
+	EPHY_EMBED_CHROME_MENUBAR = 1 << 1,
+	EPHY_EMBED_CHROME_TOOLBAR = 1 << 2,
+	EPHY_EMBED_CHROME_STATUSBAR = 1 << 3
+} EphyEmbedChrome;
 
 typedef enum
 {
@@ -164,7 +156,7 @@ struct EphyEmbedIface
 					 EmbedState state);
 	void	 (* new_window)		(EphyEmbed *embed,
 					 EphyEmbed **new_embed,
-					 EmbedChromeMask chromemask);
+					 EphyEmbedChrome chromemask);
 	gboolean (* dom_mouse_click)	(EphyEmbed *embed,
 					 EphyEmbedEvent *event);
 	gboolean (* dom_mouse_down)	(EphyEmbed *embed,
@@ -230,6 +222,8 @@ struct EphyEmbedIface
 	gboolean	   (* has_modified_forms)	(EphyEmbed *embed);
 };
 
+GType		  ephy_embed_chrome_get_type		(void);
+
 GType		  ephy_embed_get_type			(void);
 
 /* Base */
@@ -280,7 +274,7 @@ void		  ephy_embed_shistory_go_nth		(EphyEmbed *embed,
 
 void		  ephy_embed_get_security_level		(EphyEmbed *embed,
 							 EmbedSecurityLevel *level,
-						 	char **description);
+						 	 char **description);
 
 /* Zoom */
 void		  ephy_embed_zoom_set			(EphyEmbed *embed,

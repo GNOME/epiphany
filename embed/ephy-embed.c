@@ -31,6 +31,28 @@
 static void ephy_embed_base_init (gpointer g_class);
 
 GType
+ephy_embed_chrome_get_type (void)
+{
+	static GType etype = 0;
+
+	if (etype == 0)
+	{
+		static const GFlagsValue values[] =
+		{
+		{ EPHY_EMBED_CHROME_DEFAULT, "EPHY_EMBED_CHROME_DEFAULT", "default" },
+		{ EPHY_EMBED_CHROME_MENUBAR, "EPHY_EMBED_CHROME_MENUBARON", "menubar" },
+		{ EPHY_EMBED_CHROME_TOOLBAR, "EPHY_EMBED_CHROME_TOOLBARON", "toolbar" },
+		{ EPHY_EMBED_CHROME_STATUSBAR, "EPHY_EMBED_CHROME_STATUSBARON", "statusbar" },
+		{ 0, NULL, NULL }
+		};
+
+		etype = g_flags_register_static ("EphyEmbedChrome", values);
+	}
+
+	return etype;
+}
+
+GType
 ephy_embed_get_type (void)
 {
 	static GType ephy_embed_type = 0;

@@ -57,12 +57,6 @@ struct EphyWindowClass
         GtkWindowClass parent_class;
 };
 
-typedef enum
-{
-	NormalMode,
-	FullscreenMode
-} EphyWindowMode;
-
 /* Include the header down here to resolve circular dependency */
 #include "ephy-tab.h"
 #include "ephy-notebook.h"
@@ -71,8 +65,7 @@ GType		  ephy_window_get_type		  (void);
 
 EphyWindow	 *ephy_window_new		  (void);
 
-void		  ephy_window_request_chrome	  (EphyWindow *window,
-						   EmbedChromeMask chrome_flags);
+EphyWindow	 *ephy_window_new_with_chrome	  (EphyEmbedChrome chrome);
 
 void		  ephy_window_set_print_preview	  (EphyWindow *window,
 						   gboolean enabled);
