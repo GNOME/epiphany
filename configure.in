@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(epiphany, 1.2.2.90,
+AC_INIT([epiphany], [1.2.3],
        [http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany])
 
 EPIPHANY_MAJOR=1.2
@@ -62,9 +62,6 @@ AC_ARG_ENABLE(nautilus-view, [  --enable-nautilus-view  (auto,yes,no)
 			  Enable Nautilus View Epiphany Component])
 
 AC_MSG_CHECKING(if NautilusView Epiphany component is wanted)
-if test "x$enable_nautilus_view" = "x" ; then
-  enable_nautilus_view=auto
-fi
 if test "x$enable_nautilus_view" = "xauto"; then
   temptest=`pkg-config --cflags libnautilus 2> /dev/null`
   if test "x$temptest" = "x" ; then
