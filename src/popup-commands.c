@@ -374,7 +374,7 @@ popup_cmd_set_image_as_background (GtkAction *action,
 {
 	EphyEmbedEvent *info;
 	const char *location;
-	char *dest, *base;
+	char *dest, *base, *base_converted;
 	const GValue *value;
 	EphyEmbedPersist *persist;
 	EphyEmbed *embed;
@@ -390,7 +390,8 @@ popup_cmd_set_image_as_background (GtkAction *action,
 		(ephy_embed_factory_new_object ("EphyEmbedPersist"));
 
 	base = g_path_get_basename (location);
-	dest = g_build_filename (ephy_dot_dir (), base, NULL);
+	base_converted = g_filename_from_utf8 (base, -1, NULL, NULL, NULL);
+	dest = g_build_filename (ephy_dot_dir (), base_converted, NULL);
 
 	ephy_embed_persist_set_embed (persist, embed);
 	ephy_embed_persist_set_dest (persist, dest);
@@ -405,6 +406,7 @@ popup_cmd_set_image_as_background (GtkAction *action,
 
 	g_free (dest);
 	g_free (base);
+	g_free (base_converted);
 }
 
 void

@@ -24,6 +24,7 @@
 #endif
 
 #include "ephy-file-chooser.h"
+#include "ephy-file-helpers.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-state.h"
 #include "ephy-debug.h"
@@ -132,22 +133,22 @@ ephy_file_chooser_set_persist_key (EphyFileChooser *dialog, const char *key)
 		converted = g_filename_from_utf8
 			(dir, -1, NULL, NULL, NULL);
 
-		expanded = gnome_vfs_expand_initial_tilde (converted);
-
-		if (expanded != NULL)
+		if (converted != NULL)
 		{
+			expanded = gnome_vfs_expand_initial_tilde (converted);
+
 			gtk_file_chooser_set_current_folder
 				(GTK_FILE_CHOOSER (dialog), expanded);
+
+			g_free (expanded);
+			g_free (converted);
 		}
 
-		g_free (expanded);
-		g_free (converted);
 		g_free (dir);
 	}
 
 	g_signal_connect (dialog, "current-folder-changed",
 			  G_CALLBACK (current_folder_changed_cb), dialog);
-
 }
 
 const char *

@@ -501,7 +501,7 @@ save_url (EphyEmbedPopupControl *popup,
 	ephy_embed_persist_set_flags
 		(persist, ask_dest ? EMBED_PERSIST_ASK_DESTINATION : 0);
 	ephy_embed_persist_set_persist_key
-		(persist, CONF_STATE_DOWNLOAD_DIR);
+		(persist, CONF_STATE_SAVE_DIR);
 	ephy_embed_persist_set_source (persist, location);
 
 	ephy_embed_persist_save (persist);
@@ -591,7 +591,7 @@ embed_popup_set_image_as_background_cmd (BonoboUIComponent *uic,
 {
 	EphyEmbedEvent *info;
 	const char *location;
-	char *dest, *base;
+	char *dest, *base, *base_converted;
 	const GValue *value;
 	EphyEmbedPersist *persist;
 
@@ -603,7 +603,8 @@ embed_popup_set_image_as_background_cmd (BonoboUIComponent *uic,
 		(ephy_embed_factory_new_object ("EphyEmbedPersist"));
 
 	base = g_path_get_basename (location);
-	dest = g_build_filename (ephy_dot_dir (), base, NULL);
+	base_converted = g_filename_from_utf8 (base, -1, NULL, NULL, NULL);
+	dest = g_build_filename (ephy_dot_dir (), base_converted, NULL);
 
 	ephy_embed_persist_set_dest (persist, dest);
 	ephy_embed_persist_set_flags (persist, EMBED_PERSIST_NO_VIEW);
@@ -617,6 +618,7 @@ embed_popup_set_image_as_background_cmd (BonoboUIComponent *uic,
 
 	g_free (dest);
 	g_free (base);
+	g_free (base_converted);
 }
 
 static void

@@ -1,3 +1,30 @@
+2004-02-12  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-embed-popup-control.c: (save_url),
+	(embed_popup_set_image_as_background_cmd):
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_get_type),
+	(ephy_favicon_cache_class_init), (favicon_name_build),
+	(favicon_download_completed_cb), (ephy_favicon_cache_get):
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/MozDownload.cpp:
+	* lib/ephy-file-chooser.c: (ephy_file_chooser_set_persist_key):
+	* lib/ephy-file-helpers.c: (ephy_file_downloads_dir):
+	* src/popup-commands.c: (popup_cmd_set_image_as_background):
+	* src/prefs-dialog.c: (get_download_button_label),
+	(download_path_response_cb):
+
+	Fix numerous places where we weren't properly converting between UTF-8
+	and filename encoding.
+
+	* embed/ephy-favicon-cache.c:
+
+	Bump favicon cache xml version.
+
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+
+	Fix mem leak, and use CONF_STATE_SAVE_DIR instead of the download dir
+	key for directory persistence.
+
 2004-02-12  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* data/glade/prefs-dialog.glade:

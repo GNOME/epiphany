@@ -540,27 +540,45 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 static char*
 GetFilePath (const char *filename)
 {
-	char *path, *download_dir, *expanded, *tmp;
+	char *path = NULL;
+	char *download_dir, *converted_dp, *expanded, *tmp;
 
 	download_dir = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
 
 	if (!download_dir)
 	{
 		/* Emergency download destination */
-		download_dir = g_strdup (g_get_home_dir ());
+		/* FIXME !! prefs-dialog.c::get_download_button_label()
+		 * claims that fallback for key == NULL is the
+		 * downloads dir, not the home dir !
+		 */
+		return g_build_filename (g_get_home_dir (), filename, NULL);
 	}
-	else if (g_utf8_collate (download_dir, "Downloads") == 0)
+
+	if (g_utf8_collate (download_dir, "Downloads") == 0)
 	{
-		tmp = ephy_file_downloads_dir ();
 		g_free (download_dir);
-		download_dir = tmp;
+
+		return g_build_filename (ephy_file_downloads_dir (),
+					 filename, NULL);
 	}
 
-	expanded = gnome_vfs_expand_initial_tilde (download_dir);
-	path = g_build_filename (expanded, filename, NULL);
-	g_free (expanded);
-
+	converted_dp = g_filename_from_utf8 (download_dir, -1, NULL, NULL, NULL);
 	g_free (download_dir);
+
+	if (converted_dp)
+	{
+		expanded = gnome_vfs_expand_initial_tilde (converted_dp);
+		path = g_build_filename (expanded, filename, NULL);
+
+		g_free (expanded);
+		g_free (converted_dp);
+	}
+	else
+	{
+		/* Fallback, see FIXME above too */
+		path = g_build_filename (g_get_home_dir (), filename, NULL);
+	}
 
 	return path;
 }

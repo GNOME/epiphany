@@ -19,6 +19,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <libgnomevfs/gnome-vfs-ops.h>
 #include <string.h>
 #include <time.h>
@@ -33,13 +37,13 @@
 #include "ephy-debug.h"
 
 #define EPHY_FAVICON_CACHE_XML_ROOT    "ephy_favicons_cache"
-#define EPHY_FAVICON_CACHE_XML_VERSION "1.0"
+#define EPHY_FAVICON_CACHE_XML_VERSION "1.1"
 
 #define EPHY_FAVICON_CACHE_OBSOLETE_DAYS 30
 
 static void ephy_favicon_cache_class_init (EphyFaviconCacheClass *klass);
-static void ephy_favicon_cache_init (EphyFaviconCache *ma);
-static void ephy_favicon_cache_finalize (GObject *object);
+static void ephy_favicon_cache_init	  (EphyFaviconCache *ma);
+static void ephy_favicon_cache_finalize	  (GObject *object);
 
 #define EPHY_FAVICON_CACHE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FAVICON_CACHE, EphyFaviconCachePrivate))
 
@@ -59,16 +63,16 @@ enum
 	LAST_SIGNAL
 };
 
-static guint ephy_favicon_cache_signals[LAST_SIGNAL] = { 0 };
+static guint signals[LAST_SIGNAL] = { 0 };
 
 static GObjectClass *parent_class = NULL;
 
 GType
 ephy_favicon_cache_get_type (void)
 {
-	static GType ephy_favicon_cache_type = 0;
+	static GType type = 0;
 
-	if (ephy_favicon_cache_type == 0)
+	if (type == 0)
 	{
 		static const GTypeInfo our_info =
 		{
@@ -83,12 +87,12 @@ ephy_favicon_cache_get_type (void)
 			(GInstanceInitFunc) ephy_favicon_cache_init
 		};
 
-		ephy_favicon_cache_type = g_type_register_static (G_TYPE_OBJECT,
-								    "EphyFaviconCache",
-								     &our_info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT,
+					       "EphyFaviconCache",
+					       &our_info, 0);
 	}
 
-	return ephy_favicon_cache_type;
+	return type;
 }
 
 static void
@@ -100,7 +104,7 @@ ephy_favicon_cache_class_init (EphyFaviconCacheClass *klass)
 
 	object_class->finalize = ephy_favicon_cache_finalize;
 
-	ephy_favicon_cache_signals[CHANGED] =
+	signals[CHANGED] =
 		g_signal_new ("changed",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_LAST,
@@ -298,15 +302,21 @@ ephy_favicon_cache_finalize (GObject *object)
 static char *
 favicon_name_build (const char *url)
 {
-	char *res;
-	char *slashpos;
+	char *result, *slashpos;
 
-	res = g_strdup (url);
+	result = g_filename_from_utf8 (url, -1, NULL, NULL, NULL);
 
-	while ((slashpos = strstr (res, "/")) != NULL)
+	if (result == NULL)
+	{
+		return NULL;
+	}
+
+	while ((slashpos = strstr (result, "/")) != NULL)
+	{
 		*slashpos = '_';
+	}
 
-	return res;
+	return result;
 }
 
 static void
@@ -320,7 +330,7 @@ favicon_download_completed_cb (EphyEmbedPersist *persist,
 
 	g_hash_table_remove (cache->priv->downloads_hash, url);
 
-	g_signal_emit (G_OBJECT (cache), ephy_favicon_cache_signals[CHANGED], 0, url);
+	g_signal_emit (G_OBJECT (cache), signals[CHANGED], 0, url);
 
 	g_object_unref (persist);
 }
@@ -383,6 +393,10 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 		char *filename;
 
 		filename = favicon_name_build (url);
+		if (filename == NULL)
+		{
+			return NULL;
+		}
 
 		icon = ephy_node_new (cache->priv->db);
 		g_value_init (&value, G_TYPE_STRING);

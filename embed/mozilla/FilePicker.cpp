@@ -202,7 +202,8 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
 	if (filename != NULL)
 	{
 		converted = g_filename_to_utf8(filename, -1, NULL, NULL, NULL);
-	
+
+		/* FIXME: when can depend on moz >= 1.6, use CopyUTF8toUCS2 here */
 		*aDefaultString = ToNewUnicode (NS_ConvertUTF8toUCS2 (converted));
 	
 		g_free (filename);

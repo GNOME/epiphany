@@ -216,6 +216,8 @@ filechooser_response_cb (EphyFileChooser *dialog, gint response, EphyHeaderSniff
 				sniffer->InitiateDownload (destFile);
 			}
 		}
+
+		g_free (filename);
 	}
 
 	// FIXME how to inform user of failed save ?
@@ -314,7 +316,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		dialog = ephy_file_chooser_new (title ? title: _("Save"),
 						GTK_WIDGET (window),
 						GTK_FILE_CHOOSER_ACTION_SAVE,
-						key ? key : CONF_STATE_DOWNLOAD_DIR);
+						key ? key : CONF_STATE_SAVE_DIR);
 
 		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
 						   NS_ConvertUCS2toUTF8 (defaultFileName).get());

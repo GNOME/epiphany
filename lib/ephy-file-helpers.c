@@ -66,12 +66,18 @@ char *
 ephy_file_downloads_dir (void)
 {
 	const char *translated_folder;
+	char *converted, *downloads_dir;
 
 	/* The name of the default downloads folder */
 	translated_folder = _("Downloads");
 
-	return g_build_filename (g_get_home_dir (), "Desktop",
-				 translated_folder, NULL);
+	converted = g_filename_from_utf8 (translated_folder, -1, NULL, 
+					  NULL, NULL);
+	downloads_dir = g_build_filename (g_get_home_dir (), "Desktop",
+					  converted, NULL);
+	g_free (converted);
+
+	return downloads_dir;
 }
 
 char *
