@@ -23,6 +23,7 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/pipnss		\
 	-I$(MOZILLA_INCLUDE_ROOT)/shistory		\
 	-I$(MOZILLA_INCLUDE_ROOT)/uriloader		\
+	-I$(MOZILLA_INCLUDE_ROOT)/uconv			\
 	-I$(MOZILLA_INCLUDE_ROOT)/webbrowserpersist	\
 	-I$(MOZILLA_INCLUDE_ROOT)/webbrwsr		\
 	-I$(MOZILLA_INCLUDE_ROOT)/widget		\
