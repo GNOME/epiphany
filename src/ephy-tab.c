@@ -913,13 +913,13 @@ ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 			tab->priv->cur_requests = 0;
 			ensure_page_info (tab, embed, uri);
 
-			ephy_tab_set_load_percent (tab, 0);
+			ephy_tab_set_load_percent (tab, -1);
 			ephy_tab_set_load_status (tab, TRUE);
 			ephy_tab_update_navigation_flags (tab, embed);
 		}
 		else if (state & EMBED_STATE_STOP)
 		{
-			ephy_tab_set_load_percent (tab, 0);
+			ephy_tab_set_load_percent (tab, 100);
 			ephy_tab_set_load_status (tab, FALSE);
 			ephy_tab_update_navigation_flags (tab, embed);
 			tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;

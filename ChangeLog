@@ -1,3 +1,14 @@
+2004-05-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-statusbar.c: (create_statusbar_security_icon),
+	(create_statusbar_progress), (sync_shadow_type),
+	(ephy_statusbar_init), (ephy_statusbar_set_progress),
+	(ephy_statusbar_add_widget):
+	* src/ephy-tab.c: (ephy_tab_net_state_cb):
+
+	Statusbar re-design: Move lock icon to left; hide progress bar
+	when no activity. Part of bug #137845.
+
 2004-05-09  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-window.c:

@@ -33,6 +33,7 @@
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkframe.h>
+#include <gtk/gtkwidget.h>
 
 static void ephy_statusbar_class_init	(EphyStatusbarClass *klass);
 static void ephy_statusbar_init		(EphyStatusbar *t);
@@ -44,6 +45,8 @@ static GObjectClass *parent_class = NULL;
 
 struct EphyStatusbarPrivate
 {
+	GtkWidget *icon_container;
+
 	GtkWidget *security_icon;
 	GtkWidget *progressbar;
 	GtkWidget *security_evbox;
@@ -109,9 +112,9 @@ create_statusbar_security_icon (EphyStatusbar *s)
 
 	gtk_widget_show_all (s->security_frame);
 
-	gtk_box_pack_end (GTK_BOX (s),
-			  GTK_WIDGET (s->security_frame),
-			  FALSE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (s->priv->icon_container),
+			    GTK_WIDGET (s->security_frame),
+			    FALSE, TRUE, 0);
 }
 
 static void
@@ -120,9 +123,32 @@ create_statusbar_progress (EphyStatusbar *s)
 	s->priv->progressbar = gtk_progress_bar_new ();
 	gtk_widget_show_all (s->priv->progressbar);
 
-	gtk_box_pack_start (GTK_BOX (s),
-			    GTK_WIDGET (s->priv->progressbar),
-			    FALSE, TRUE, 0);
+	gtk_box_pack_end (GTK_BOX (s),
+			  GTK_WIDGET (s->priv->progressbar),
+			  FALSE, TRUE, 0);
+}
+
+static void
+sync_shadow_type (EphyStatusbar *statusbar,
+		  GParamSpec *pspec,
+		  gpointer dummy)
+{
+	GtkShadowType shadow;
+	GList *children, *l;
+
+	gtk_widget_style_get (GTK_WIDGET (statusbar), "shadow-type",
+			      &shadow, NULL);
+
+	children = gtk_container_get_children
+		(GTK_CONTAINER (statusbar->priv->icon_container));
+	for (l = children; l != NULL; l = l->next)
+	{
+		if (GTK_IS_FRAME (l->data))
+		{
+			gtk_frame_set_shadow_type (GTK_FRAME (l->data), shadow);
+		}
+	}
+	g_list_free (children);
 }
 
 static void
@@ -134,10 +160,21 @@ ephy_statusbar_init (EphyStatusbar *t)
 	g_object_ref (G_OBJECT (t->tooltips));
 	gtk_object_sink (GTK_OBJECT (t->tooltips));
 
+	t->priv->icon_container = gtk_hbox_new (FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (t), t->priv->icon_container, FALSE, FALSE, 0);
+	gtk_box_reorder_child (GTK_BOX (t), t->priv->icon_container, 0);
+	gtk_widget_show (t->priv->icon_container);
+
+	/* FIXME: enable this when gtk+ bug 73359 is fixed */
 	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (t), FALSE);
 
 	create_statusbar_progress (t);
 	create_statusbar_security_icon (t);
+
+	/* FIXME: is this the right way ? */
+	sync_shadow_type (t, NULL, NULL);
+	g_signal_connect (t, "notify::shadow-type",
+			  G_CALLBACK (sync_shadow_type), NULL);
 }
 
 static void
@@ -205,10 +242,17 @@ ephy_statusbar_set_progress (EphyStatusbar *statusbar,
 	}
 	else
 	{
-		float fraction;
-		fraction = (float)(progress) / 100;
 		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (statusbar->priv->progressbar),
-					       fraction);
+					       (float) (progress) / 100.0);
+	}
+
+	if (progress < 100)
+	{
+		gtk_widget_show (statusbar->priv->progressbar);
+	}
+	else
+	{
+		gtk_widget_hide (statusbar->priv->progressbar);
 	}
 }
 
@@ -228,5 +272,15 @@ ephy_statusbar_add_widget (EphyStatusbar *statusbar,
 	g_return_if_fail (EPHY_IS_STATUSBAR (statusbar));
 	g_return_if_fail (GTK_IS_WIDGET (widget));
 
-	gtk_box_pack_start (GTK_BOX (statusbar), widget, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (statusbar->priv->icon_container),
+			    widget, FALSE, FALSE, 0);
+
+	if (GTK_IS_FRAME (widget))
+	{
+		GtkShadowType shadow;
+
+		gtk_widget_style_get (GTK_WIDGET (statusbar), "shadow-type",
+				      &shadow, NULL);
+		gtk_frame_set_shadow_type (GTK_FRAME (widget), shadow);
+	}
 }
