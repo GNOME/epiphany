@@ -194,6 +194,8 @@ ephy_tab_init (EphyTab *tab)
         tab->priv = g_new0 (EphyTabPrivate, 1);
 
 	tab->priv->embed = ephy_embed_new (G_OBJECT(single));
+	ephy_embed_shell_add_embed (EPHY_EMBED_SHELL (ephy_shell),
+				    tab->priv->embed);
 
 	tab->priv->window = NULL;
 	tab->priv->event = NULL;
@@ -768,6 +770,9 @@ ephy_tab_destroy_brsr_cb (EphyEmbed *embed, EphyTab *tab)
 	window = ephy_tab_get_window (tab);
 
 	ephy_window_remove_tab (window, tab);
+
+	ephy_embed_shell_remove_embed (EPHY_EMBED_SHELL (ephy_shell),
+				       tab->priv->embed);
 }
 
 static gint

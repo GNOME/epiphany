@@ -106,6 +106,16 @@ ephy_embed_dialog_init (EphyEmbedDialog *dialog)
 }
 
 static void
+unset_embed (EphyEmbedDialog *dialog)
+{
+	if (dialog->priv->embed != NULL)
+	{
+		g_object_remove_weak_pointer (G_OBJECT (dialog->priv->embed),
+					      (gpointer *)&dialog->priv->embed);
+	}
+}
+
+static void
 ephy_embed_dialog_finalize (GObject *object)
 {
         EphyEmbedDialog *dialog;
@@ -116,6 +126,8 @@ ephy_embed_dialog_finalize (GObject *object)
         dialog = EPHY_EMBED_DIALOG (object);
 
         g_return_if_fail (dialog->priv != NULL);
+
+	unset_embed (dialog);
 
         g_free (dialog->priv);
 
@@ -175,9 +187,12 @@ ephy_embed_dialog_new_with_parent (GtkWidget *parent_window,
 
 void
 ephy_embed_dialog_set_embed (EphyEmbedDialog *dialog,
-			       EphyEmbed *embed)
+			     EphyEmbed *embed)
 {
+	unset_embed (dialog);
 	dialog->priv->embed = embed;
+	g_object_add_weak_pointer (G_OBJECT (dialog->priv->embed),
+				   (gpointer *)&dialog->priv->embed);
 }
 
 EphyEmbed *
