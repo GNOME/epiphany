@@ -287,10 +287,10 @@ GtkNSSDialogs::ConfirmMismatchDomain (nsIInterfaceRequestor *ctx,
 
 	cert->GetCommonName (commonName);
 
- 	ttTargetUrl = g_strdup_printf ("\"<tt>%s</tt>\"", 
+ 	ttTargetUrl = g_markup_printf_escaped ("\"<tt>%s</tt>\"", 
                                         PromiseFlatCString(targetURL).get());
 
-	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
+	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"", 
                                          NS_ConvertUCS2toUTF8(commonName).get());
 
         first = g_strdup_printf (_("The site %s returned security information for "
@@ -332,7 +332,7 @@ GtkNSSDialogs::ConfirmUnknownIssuer (nsIInterfaceRequestor *ctx,
 
 	cert->GetCommonName (commonName);
 
-	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
+	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"", 
 					NS_ConvertUCS2toUTF8(commonName).get());
 
 	secondary = g_strdup_printf
@@ -436,7 +436,7 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 		  localtime_r (&t, &tm));
 	fdate = g_locale_to_utf8 (formattedDate, -1, NULL, NULL, NULL);
 
-	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
+	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"", 
                                         NS_ConvertUCS2toUTF8(commonName).get());
 
 	secondary = g_strdup_printf (text, ttCommonName, fdate);
@@ -482,10 +482,10 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 
 	cert->GetCommonName (commonName);
 
-	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
+	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"", 
 					NS_ConvertUCS2toUTF8(commonName).get());
 
-	ttTargetUrl = g_strdup_printf ("\"<tt>%s</tt>\"", 
+	ttTargetUrl = g_markup_printf_escaped ("\"<tt>%s</tt>\"", 
 				       PromiseFlatCString(targetURL).get());
 
 	primary = g_strdup_printf (_("Cannot establish connection to %s."),
@@ -544,7 +544,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 
 	nsAutoString commonName;
 	cert->GetCommonName (commonName);
-	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
+	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"", 
 					 NS_ConvertUCS2toUTF8(commonName).get());
 
 	tertiary = g_strdup_printf (_("Trust %s to identify:"), ttCommonName );
