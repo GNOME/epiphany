@@ -154,13 +154,13 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_view_page_source), NULL },
 
 	/* Go menu */
-	{ "GoBack", N_("_Back"), GTK_STOCK_GO_BACK, "<alt>leftarrow",
+	{ "GoBack", N_("_Back"), GTK_STOCK_GO_BACK, "<alt>Left",
 	  N_("Go to the previous visited page"),
 	  G_CALLBACK (window_cmd_go_back), NULL },
-	{ "GoForward", N_("_Forward"), GTK_STOCK_GO_FORWARD, "<alt>rightarrow",
+	{ "GoForward", N_("_Forward"), GTK_STOCK_GO_FORWARD, "<alt>Right",
 	  N_("Go to the next visited page"),
 	  G_CALLBACK (window_cmd_go_forward), NULL },
-	{ "GoUp", N_("_Up"), GTK_STOCK_GO_UP, "<alt>uparrow",
+	{ "GoUp", N_("_Up"), GTK_STOCK_GO_UP, "<alt>Up",
 	  N_("Go up one level"),
 	  G_CALLBACK (window_cmd_go_up), NULL },
 	{ "GoHome", N_("_Home"), GTK_STOCK_HOME, "<alt>Home",
