@@ -323,8 +323,16 @@ create_item_from_action (EggEditableToolbar *t,
     {
       g_signal_emit (G_OBJECT (t), egg_editable_toolbar_signals[ACTION_REQUEST],
 		     0, action_name);
+
       action = find_action (t, action_name);
-      item = gtk_action_create_tool_item (action);
+      if (action)
+        {
+          item = gtk_action_create_tool_item (action);
+        }
+      else
+        {
+          return NULL;
+        }  
     }
 
   gtk_widget_show (item);
@@ -748,8 +756,17 @@ egg_editable_toolbar_construct (EggEditableToolbar *t)
           GtkWidget *item;
 
           item = create_item (t, model, i, l);
-	  gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
-			      GTK_TOOL_ITEM (item), l);
+          if (item)
+            {
+	      gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
+			          GTK_TOOL_ITEM (item), l);
+            }
+          else
+            {
+              egg_toolbars_model_remove_item (model, i, l);
+              l--;
+              n_items--;
+            }
         }
 
       if (n_items == 0)
