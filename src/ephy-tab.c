@@ -400,25 +400,17 @@ ephy_tab_finalize (GObject *object)
 static gboolean
 address_has_web_scheme (const char *address)
 {
-	GnomeVFSURI *uri;
-	const char *scheme;
-	gboolean has_web_scheme = FALSE;
+	gboolean has_web_scheme;
 
-	uri = gnome_vfs_uri_new (address);
-	if (uri != NULL)
-	{
-		scheme = gnome_vfs_uri_get_scheme (uri);
+	if (address == NULL) return FALSE;
 
-		has_web_scheme = (strcmp (scheme, "http") == 0 ||
-				  strcmp (scheme, "https") == 0 ||
-				  strcmp (scheme, "ftp") == 0 ||
-				  strcmp (scheme, "file") == 0 ||
-				  strcmp (scheme, "data") == 0 ||
-				  strcmp (scheme, "about") == 0 ||
-				  strcmp (scheme, "gopher") == 0);
-
-		gnome_vfs_uri_unref (uri);
-	}
+	has_web_scheme = (g_str_has_prefix (address, "http:") ||
+			  g_str_has_prefix (address, "https:") ||
+			  g_str_has_prefix (address, "ftp:") ||
+			  g_str_has_prefix (address, "file:") ||
+			  g_str_has_prefix (address, "data:") ||
+			  g_str_has_prefix (address, "about:") ||
+			  g_str_has_prefix (address, "gopher:"));
 
 	return has_web_scheme;
 }

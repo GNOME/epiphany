@@ -1,3 +1,10 @@
+2004-02-24  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* src/ephy-tab.c: (address_has_web_scheme):
+
+	Do not use gnome vfs to check the scheme because
+	it can handle only supported methods.
+
 2004-02-21  Christian Persch  <chpe@cvs.gnome.org>
 
 	* doc/reference/Makefile.am:
