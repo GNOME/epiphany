@@ -190,7 +190,7 @@ each_property_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 
 		LOG ("Data get %s", svalue)
 
-		iteratee (svalue, -1, -1, -1, -1, data);
+		iteratee (svalue, NULL, data);
 
 		gtk_tree_path_free (path);
 		g_value_unset (&value);

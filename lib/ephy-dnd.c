@@ -31,18 +31,24 @@
  * GMC also fails to do this as well.
  */
 static void
-add_one_netscape_url (const char *url, int x, int y, int w, int h, gpointer data)
+add_one_netscape_url (const char *url, const char *title, gpointer data)
 {
         GString *result;
 
         result = (GString *) data;
-        if (result->len == 0) {
+        if (result->len == 0)
+	{
                 g_string_append (result, url);
+		if (title)
+		{
+			g_string_append (result, "\n");
+	                g_string_append (result, title);
+		}
         }
 }
 
 static void
-add_one_uri (const char *uri, int x, int y, int w, int h, gpointer data)
+add_one_uri (const char *uri, const char *title, gpointer data)
 {
         GString *result;
 
@@ -53,7 +59,7 @@ add_one_uri (const char *uri, int x, int y, int w, int h, gpointer data)
 }
 
 static void
-add_one_topic (const char *uri, int x, int y, int w, int h, gpointer data)
+add_one_topic (const char *uri, const char *title, gpointer data)
 {
         GString *result;
 
