@@ -67,6 +67,7 @@
 #include <nsIDOMHTMLDocument.h>
 #include <nsIDownload.h>
 #include <nsIMIMEHeaderParam.h>
+#include <nsIWindowWatcher.h>
 
 #ifdef ALLOW_PRIVATE_STRINGS
 #include <nsReadableUtils.h>
@@ -82,9 +83,13 @@ EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmb
 , mDocument(aDocument)
 , mPostData(aPostData)
 {
-	mPrompt = do_GetService("@mozilla.org/embedcomp/prompt-service;1");
+        LOG ("EphyHeaderSniffer ctor (%p)", this)
 
-	LOG ("EphyHeaderSniffer ctor (%p)", this)
+        nsCOMPtr<nsIWindowWatcher> watcher
+                (do_GetService("@mozilla.org/embedcomp/window-watcher;1"));
+	if (!watcher) return;
+
+	watcher->GetNewAuthPrompter (nsnull, getter_AddRefs (mAuthPrompt));
 }
 
 EphyHeaderSniffer::~EphyHeaderSniffer()
@@ -343,7 +348,8 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		dialog = ephy_file_chooser_new (title ? title: _("Save"),
 						GTK_WIDGET (window),
 						GTK_FILE_CHOOSER_ACTION_SAVE,
-						key ? key : CONF_STATE_SAVE_DIR);
+						key ? key : CONF_STATE_SAVE_DIR,
+						TRUE);
 
 		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
                                                    filename);
@@ -373,34 +379,4 @@ nsresult EphyHeaderSniffer::InitiateDownload (nsILocalFile *aDestFile)
 	return InitiateMozillaDownload (mDocument, mURL, aDestFile,
 					mContentType.get(), mOriginalURI, mEmbedPersist,
 					mPostData, nsnull, -1);
-}
-
-NS_IMETHODIMP EphyHeaderSniffer::Prompt (const PRUnichar *dialogTitle, const PRUnichar *text,
-				         const PRUnichar *passwordRealm, PRUint32 savePassword,
-				         const PRUnichar *defaultText, PRUnichar **result, PRBool *_retval)
-{
-	if (defaultText) *result = ToNewUnicode(nsDependentString(defaultText));
-
-	return mPrompt->Prompt (nsnull, dialogTitle, text, result,
-				nsnull, nsnull, _retval);
-}                                                                                                                            
-
-NS_IMETHODIMP EphyHeaderSniffer::PromptUsernameAndPassword (const PRUnichar *dialogTitle, const PRUnichar *text,
-						            const PRUnichar *passwordRealm, PRUint32 savePassword,
-						            PRUnichar **user, PRUnichar **pwd, PRBool *_retval)
-{
-	*_retval = savePassword;
-
-	return mPrompt->PromptUsernameAndPassword (nsnull, dialogTitle, text, user, pwd,
-						   nsnull, nsnull, _retval);
-}
-
-NS_IMETHODIMP EphyHeaderSniffer::PromptPassword (const PRUnichar *dialogTitle, const PRUnichar *text,
-					         const PRUnichar *passwordRealm, PRUint32 savePassword,
-					         PRUnichar **pwd, PRBool *_retval)
-{
-	*_retval = savePassword;
-
-	return mPrompt->PromptPassword (nsnull, dialogTitle, text, pwd,
-					nsnull, nsnull, _retval);
 }
