@@ -202,7 +202,6 @@ ephy_statusbar_init (EphyStatusbar *t)
 	create_statusbar_security_icon (t);
 	create_statusbar_popups_manager_icon (t);
 
-	/* FIXME: is this the right way ? */
 	sync_shadow_type (t, NULL, NULL);
 	g_signal_connect (t, "style-set", G_CALLBACK (sync_shadow_type), NULL);
 }
