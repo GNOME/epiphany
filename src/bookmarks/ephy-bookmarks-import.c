@@ -27,7 +27,7 @@
 #include <libxml/HTMLtree.h>
 #include <libxml/xmlreader.h>
 #include <string.h>
-#include <libgnomevfs/gnome-vfs-mime-utils.h>
+#include <libgnomevfs/gnome-vfs-mime.h>
 
 #include <glib/gi18n.h>
 
@@ -69,11 +69,13 @@ gboolean
 ephy_bookmarks_import (EphyBookmarks *bookmarks,
 		       const char *filename)
 {
-	char *type;
+	GnomeVFSURI *uri;
+	const char *type;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
 
-	type = gnome_vfs_get_mime_type (filename);
+	uri = gnome_vfs_uri_new (filename);
+	type = gnome_vfs_get_mime_type_common (uri);
 
 	LOG ("Importing bookmarks of type %s", type)
 
@@ -102,6 +104,8 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 	{
 		return ephy_bookmarks_import_xbel (bookmarks, filename);
 	}
+
+	gnome_vfs_uri_unref (uri);
 
 	return FALSE;
 }
@@ -256,12 +260,10 @@ xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader, EphyNode **ret_
 }
 
 static int
-xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, GList **ret_list)
+xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, char *parent_folder)
 {
 	EphyXBELImporterState state = STATE_FOLDER;
-	EphyNode *keyword;
-	GList *list = NULL, *l;
-	xmlChar *title = NULL;
+	char *folder = NULL;
 	int ret;
 
 	ret = xmlTextReaderRead (reader);
@@ -280,9 +282,23 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, GList **ret_list)
 		}
 		else if (xmlStrEqual (tag, "#text"))
 		{
-			if (state == STATE_TITLE && title == NULL)
+			if (state == STATE_TITLE && folder == NULL)
 			{
+				char *title;
+
 				title = xmlTextReaderValue (reader);
+
+				if (!parent_folder)
+				{
+					folder = g_strdup (title);
+				}
+				else
+				{
+					folder = g_strconcat (parent_folder, "/",
+							      title, NULL);
+				}
+
+				g_free (title);
 			}
 			else
 			{
@@ -291,13 +307,20 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, GList **ret_list)
 		}
 		else if (xmlStrEqual (tag, "bookmark") && type == 1 && state == STATE_FOLDER)
 		{
-			EphyNode *node = NULL;
+			EphyNode *node = NULL, *keyword;
 
 			ret = xbel_parse_bookmark (eb, reader, &node);
 
-			if (EPHY_IS_NODE (node))
+			keyword = ephy_bookmarks_find_keyword (eb, folder, FALSE);
+			
+			if (keyword == NULL)
 			{
-				list = g_list_prepend (list, node);
+				keyword = ephy_bookmarks_add_keyword (eb, folder);
+			}
+
+			if (node != NULL && keyword != NULL)
+			{
+				ephy_bookmarks_set_keyword (eb, keyword, node);
 			}
 
 			if (ret != 1) break;
@@ -307,11 +330,7 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, GList **ret_list)
 		{
 			if (type == XML_READER_TYPE_ELEMENT)
 			{
-				GList *sublist = NULL;
-
-				ret = xbel_parse_folder (eb, reader, &sublist);
-
-				list = g_list_concat (list, sublist);
+				ret = xbel_parse_folder (eb, reader, folder);
 				
 				if (ret != 1) break;
 			}
@@ -364,36 +383,7 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, GList **ret_list)
 		ret = xmlTextReaderRead (reader);
 	}
 
-	/* tag all bookmarks in the list with keyword %title */
-	if (title == NULL || title[0] == '\0')
-	{
-		*ret_list = list;
-		return ret;
-	}
-
-	keyword = ephy_bookmarks_find_keyword (eb, title, FALSE);
-
-	if (keyword == NULL)
-	{
-		keyword = ephy_bookmarks_add_keyword (eb, title);
-	}
-
-	xmlFree (title);
-
-	if (keyword == NULL)
-	{
-		*ret_list = list;
-		return ret;
-	}
-
-	for (l = list; l != NULL; l = l->next)
-	{
-		EphyNode *node = (EphyNode *) l->data;
-
-		ephy_bookmarks_set_keyword (eb, keyword, node);
-	}
-
-	*ret_list = list;
+	g_free (folder);
 
 	return ret;
 }
@@ -431,12 +421,8 @@ xbel_parse_xbel (EphyBookmarks *eb, xmlTextReaderPtr reader)
 		else if (xmlStrEqual (tag, "folder") && type == XML_READER_TYPE_ELEMENT
 			 && state == STATE_XBEL)
 		{
-			GList *list = NULL;
-
 			/* this will eat the </folder> too */
-			ret = xbel_parse_folder (eb, reader, &list);
-
-			g_list_free (list);
+			ret = xbel_parse_folder (eb, reader, NULL);
 
 			if (ret != 1) break;
 		}
