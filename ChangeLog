@@ -1,3 +1,19 @@
+2003-07-01  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/widgets/ephy-autocompletion-window.c:
+	(ephy_autocompletion_window_finalize_impl),
+	(ephy_autocompletion_window_show),
+	(ephy_autocompletion_window_hide):
+
+	Hide only when necessary. Remove gdk_ungrab stuff
+	that doesnt seem to be necessary.
+
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_autocompletion_show_alternatives):
+
+	Reset entry->button when showing autocompletion, the grab
+	get gtk crazy otherwise.
+
 2003-06-30  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/ephy-embed-dialog.c: (ephy_embed_dialog_get_embed):

@@ -209,9 +209,6 @@ ephy_autocompletion_window_finalize_impl (GObject *o)
 	g_free (p->selected);
 	g_free (p);
 
-	gdk_pointer_ungrab (GDK_CURRENT_TIME);
-	gdk_keyboard_ungrab (GDK_CURRENT_TIME);
-
 	G_OBJECT_CLASS (g_object_class)->finalize (o);
 }
 
@@ -572,11 +569,6 @@ ephy_autocompletion_window_show (EphyAutocompletionWindow *aw)
 	{
 		gtk_widget_show (p->window);
 
-		gdk_pointer_grab (p->parent->window, TRUE,
-				  GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK |
-				  GDK_BUTTON_RELEASE_MASK,
-				  NULL, NULL, GDK_CURRENT_TIME);
-		gdk_keyboard_grab (p->parent->window, TRUE, GDK_CURRENT_TIME);\
 		gtk_grab_add (p->window);
 
 		g_signal_connect (p->window, "button-press-event",
@@ -820,12 +812,10 @@ ephy_autocompletion_window_key_press_cb (GtkWidget *widget,
 void
 ephy_autocompletion_window_hide (EphyAutocompletionWindow *aw)
 {
-	if (aw->priv->window)
+	if (aw->priv->window && aw->priv->shown)
 	{
 		gtk_widget_hide (aw->priv->window);
 		gtk_grab_remove (aw->priv->window);
-		gdk_pointer_ungrab (GDK_CURRENT_TIME);
-		gdk_keyboard_ungrab (GDK_CURRENT_TIME);
 		ephy_autocompletion_window_unselect (aw);
 		g_signal_emit (aw, EphyAutocompletionWindowSignals[EPHY_AUTOCOMPLETION_WINDOW_HIDDEN], 0);
 	}

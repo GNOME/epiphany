@@ -343,6 +343,13 @@ static void
 ephy_location_entry_autocompletion_show_alternatives (EphyLocationEntry *w)
 {
 	EphyLocationEntryPrivate *p = w->priv;
+
+	/* Reset it because if we do a grab on click (like when pasting
+	   text in the location entry, the entry will lose the release
+	   event and will not reset it. It's what gtk does for the entry
+	   popup */
+	GTK_ENTRY (w)->button = 0;
+
 	if (p->autocompletion_window)
 	{
 		ephy_autocompletion_window_show (p->autocompletion_window);
