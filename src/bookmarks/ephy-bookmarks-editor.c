@@ -1259,15 +1259,12 @@ node_dropped_cb (EphyNodeView *view, EphyNode *node,
 
 	for (l = nodes; l != NULL; l = l->next)
 	{
-		GnomeVFSURI *uri = l->data;
-		char *url;
+		const char *url = (const char *) l->data;
 		EphyNode *bmk;
 
-		url = gnome_vfs_uri_to_string (uri, GNOME_VFS_URI_HIDE_NONE);
 		bmk = ephy_bookmarks_find_bookmark (editor->priv->bookmarks, url);
-		g_free (url);
 
-		if (bmk)
+		if (bmk != NULL)
 		{
 			ephy_bookmarks_set_keyword (editor->priv->bookmarks, node, bmk);
 		}

@@ -67,7 +67,7 @@ typedef struct
 
 	void (*node_activated)      (EphyNodeView *view, EphyNode *node);
 	void (*node_selected)       (EphyNodeView *view, EphyNode *node);
-	void (*node_dropped)        (EphyNodeView *view, EphyNode *node, GList *nodes);
+	void (*node_dropped)        (EphyNodeView *view, EphyNode *node, GList *uris);
 	void (*show_popup)          (EphyNodeView *view);
 } EphyNodeViewClass;
 

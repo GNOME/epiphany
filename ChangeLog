@@ -1,5 +1,18 @@
 2004-03-03  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/widgets/ephy-node-view.c: (uri_list_parse),
+	(drag_data_received_cb):
+
+	Copy and modify gnome_vfs_uri_list_parse() so that we get a list
+	of string uris instead of GnomeVFSURIs. Change signature of
+	::node-dropped accordingly. Fixes bug #120231.
+
+	* src/bookmarks/ephy-bookmarks-editor.c: (node_dropped_cb):
+
+	Adapt to the changed ::node-dropped signal signature.
+	
+2004-03-03  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/downloader-view.c: (download_dialog_pause_cb),
 	(download_dialog_abort_cb):
 
