@@ -1,4 +1,55 @@
 ==============
+Epiphany 1.3.4
+==============
+
+Code changes
+
+	* Add mime types to .desktop file (Xan)
+	* Simplify proxy PAC handling (Christian)
+	* Reworked node views (Marco)
+	* Adapt to mozilla API change (Christian)
+	* Don't use -include which isn't portable (Christian) [#143094]
+	* Fix signedness warnings with gcc 3.5 (Jon Oberheide)
+	* Misc popup blocker code cleanup (Adam)
+
+Bug Fixes
+
+	* Fix downloader crash on shutdown (Marco) [#141928]
+	* Fix mem leaks in gtk NSS dialogues (Christian, ported from galeon)
+	* Fix crash when importing bookmarks from mozilla (Marco) [#145611]
+	* Gracefully handle inability to create downloads directory
+	  (Marco) [#146902]
+	* Fix profiler output for times > 1 s (Christian, ported from galeon)
+	* Fix crash in the new bookmark dialogue with deleted topics
+	  (Marco) [#144770]
+	* Use our stock icon for the downloader icon in tray (Christian)
+	* Fix dialogue title of Save Link As filechooser (Christian) [#138208]
+	* Correctly update toolbar's not-removable flag (Christian)
+	* Fix mem leak from toolbars model (Christian)
+	* Fix non-ascii topic titles in the bookmarks menu (Christian) [#147469]
+	* Fix download directory chooser initial directory (Christian) [#146055]
+	* Confirm overwriting file from content handler (Christian) [#143501]
+	* Fix crash when screen size changes after using fullscreen (Christian)
+
+New and updated translations:
+
+	* Владимир Петков (bg)
+	* Miloslav Trmač (cs)
+	* Christian Neumair (de)
+	* Francisco Javier F. Serrador (es)
+	* Νίκος Χαρωνιτάκης (el)
+	* Gareth Owen (en_GB)
+	* रविशंकर श्रीवास्तव (hi)
+	* 相花 毅 (ja)
+	* Changwoo Ryu (ko)
+	* Žygimantas Beručka (lt)
+	* Kjartan Maraas (no)
+	* GNOME PL Team (pl)
+	* Duarte Loreto (pt)
+	* Laurent Dhima (sq)
+
+
+==============
 Epiphany 1.3.3
 ==============
 
