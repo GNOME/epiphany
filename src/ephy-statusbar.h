@@ -65,6 +65,9 @@ void          ephy_statusbar_set_security_state		(EphyStatusbar *statusbar,
 void          ephy_statusbar_set_progress		(EphyStatusbar *statusbar,
 							 int progress);
 
+void	      ephy_statusbar_add_widget			(EphyStatusbar *statusbar,
+							 GtkWidget *widget);
+
 G_END_DECLS
 
 #endif

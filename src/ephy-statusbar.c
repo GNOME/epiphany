@@ -111,9 +111,9 @@ create_statusbar_security_icon (EphyStatusbar *s)
 
 	gtk_widget_show_all (s->security_frame);
 
-	gtk_box_pack_start (GTK_BOX (s),
-			    GTK_WIDGET (s->security_frame),
-			    FALSE, TRUE, 0);
+	gtk_box_pack_end (GTK_BOX (s),
+			  GTK_WIDGET (s->security_frame),
+			  FALSE, TRUE, 0);
 }
 
 static void
@@ -189,4 +189,14 @@ ephy_statusbar_set_progress (EphyStatusbar *t,
 		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(t->priv->progressbar),
 					       fraction);
 	}
+}
+
+void
+ephy_statusbar_add_widget (EphyStatusbar *statusbar,
+			   GtkWidget *widget)
+{
+	g_return_if_fail (EPHY_IS_STATUSBAR (statusbar));
+	g_return_if_fail (GTK_IS_WIDGET (widget));
+
+	gtk_box_pack_start (GTK_BOX (statusbar), widget, FALSE, FALSE, 0);
 }
