@@ -116,7 +116,7 @@ static void
 impl_cancel (EphyEmbedPersist *persist)
 {
 	nsCOMPtr<nsIWebBrowserPersist> bpersist =
-	MOZILLA_EMBED_PERSIST (persist)->priv->mPersist;
+		MOZILLA_EMBED_PERSIST (persist)->priv->mPersist;
 	if (bpersist)
 	{
 		bpersist->CancelSave ();
@@ -155,17 +155,21 @@ impl_save (EphyEmbedPersist *persist)
 	if (embed)
 	{
 	        browser = (EphyBrowser *) _mozilla_embed_get_ephy_browser (MOZILLA_EMBED(embed));
-		g_return_val_if_fail (browser != NULL, FALSE);
+		NS_ENSURE_TRUE (browser, FALSE);
 	}
 
 	/* we must have one of uri or browser */
 	g_assert (browser != NULL || uri != NULL);
 
 	/* Get a temp filename to save to */
-	nsCOMPtr<nsIProperties> dirService(do_GetService(NS_DIRECTORY_SERVICE_CONTRACTID, &rv));
-	if (!dirService) return FALSE;
+	nsCOMPtr<nsIProperties> dirService(do_GetService(NS_DIRECTORY_SERVICE_CONTRACTID));
+	NS_ENSURE_TRUE (dirService, FALSE);
+
 	nsCOMPtr<nsIFile> tmpFile;
 	dirService->Get("TmpD", NS_GET_IID(nsIFile), getter_AddRefs(tmpFile));
+	if (!tmpFile) return FALSE;
+
+	/* FIXME: make this filename non-guessable */
 	static short unsigned int tmpRandom = 0;
 	nsAutoString tmpNo;
 	tmpNo.AppendInt(tmpRandom++);
@@ -184,10 +188,10 @@ impl_save (EphyEmbedPersist *persist)
 	else
 	{
 		rv = browser->GetDocumentUrl (sURI);
-		if (NS_FAILED(rv)) return FALSE;
+		NS_ENSURE_SUCCESS (rv, FALSE);
 	}
-      	rv = NS_NewURI(getter_AddRefs(inURI), sURI);
-	if (NS_FAILED(rv) || !inURI) return FALSE;
+      	NS_NewURI(getter_AddRefs(inURI), sURI);
+	if (!inURI) return FALSE;
 
 	/* Get post data */
 	nsCOMPtr<nsIInputStream> postData;
@@ -214,13 +218,13 @@ impl_save (EphyEmbedPersist *persist)
 	{		
 		if (flags & EMBED_PERSIST_MAINDOC)
 		{
-                	rv = browser->GetDocument (getter_AddRefs(DOMDocument));
+                	browser->GetDocument (getter_AddRefs(DOMDocument));
 		}
         	else
 		{
-                	rv = browser->GetTargetDocument (getter_AddRefs(DOMDocument));
+                	browser->GetTargetDocument (getter_AddRefs(DOMDocument));
 		}
-        	if (NS_FAILED(rv) || !DOMDocument) return FALSE;
+        	NS_ENSURE_TRUE (DOMDocument, FALSE);
 	}
 
 
@@ -228,7 +232,8 @@ impl_save (EphyEmbedPersist *persist)
 	nsCOMPtr<nsISupports> pageDescriptor;
 	if (flags & EMBED_PERSIST_COPY_PAGE)
 	{
-	        rv = browser->GetPageDescriptor(getter_AddRefs(pageDescriptor));
+	        browser->GetPageDescriptor(getter_AddRefs(pageDescriptor));
+		NS_ENSURE_TRUE (pageDescriptor, FALSE);
 	}
 
 	if (filename == NULL)
@@ -236,7 +241,7 @@ impl_save (EphyEmbedPersist *persist)
 		/* Create an header sniffer and do the save */
 		nsCOMPtr<nsIWebBrowserPersist> webPersist =
 			MOZILLA_EMBED_PERSIST (persist)->priv->mPersist;
-		if (!webPersist) return FALSE;
+		NS_ENSURE_TRUE (webPersist, FALSE);
 
 		EphyHeaderSniffer* sniffer = new EphyHeaderSniffer
 			(webPersist, MOZILLA_EMBED_PERSIST (persist),
@@ -251,9 +256,9 @@ impl_save (EphyEmbedPersist *persist)
 	{
 		/* Filename to save to */
 		nsCOMPtr<nsILocalFile> destFile;
-		rv = NS_NewNativeLocalFile (nsDependentCString(filename),
-				            PR_TRUE, getter_AddRefs(destFile));
-	        if (NS_FAILED(rv) || !destFile) return FALSE;
+		NS_NewNativeLocalFile (nsDependentCString(filename),
+				       PR_TRUE, getter_AddRefs(destFile));
+	        NS_ENSURE_TRUE (destFile, FALSE);
 
 		rv =  InitiateMozillaDownload (DOMDocument, inURI, destFile,
 					       nsnull, inURI, MOZILLA_EMBED_PERSIST (persist),

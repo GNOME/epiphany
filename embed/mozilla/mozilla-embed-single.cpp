@@ -186,15 +186,14 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	nsCOMPtr<nsIPrefService> prefService;
 
         prefService = do_GetService (NS_PREFSERVICE_CONTRACTID);
-	if (prefService == NULL) return FALSE;
+	NS_ENSURE_TRUE (prefService, FALSE);
 
         /* read our predefined default prefs */
         nsresult rv;
         nsCOMPtr<nsILocalFile> file;
-        rv = NS_NewNativeLocalFile(
-                NS_LITERAL_CSTRING(DEFAULT_PROFILE_FILE),
-                PR_TRUE, getter_AddRefs(file));
-        if (NS_FAILED (rv)) return FALSE;
+        NS_NewNativeLocalFile(NS_LITERAL_CSTRING(DEFAULT_PROFILE_FILE),
+			      PR_TRUE, getter_AddRefs(file));
+	if (!file) return FALSE;
 
         rv = prefService->ReadUserPrefs (file);                                                                              
         if (NS_FAILED(rv))
@@ -214,7 +213,7 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 
         nsCOMPtr<nsIPrefBranch> pref;
         prefService->GetBranch ("", getter_AddRefs(pref));
-	if (pref == NULL) return FALSE;
+	NS_ENSURE_TRUE (pref, FALSE);
 
 	/* FIXME We need to do this because mozilla doesnt set product
 	sub for embedding apps */
@@ -228,9 +227,9 @@ static char *
 color_to_string (GdkColor color)
 {
 	return g_strdup_printf ("#%.2x%.2x%.2x",
-			       color.red >> 8,
-			       color.green >> 8,
-			       color.blue >> 8);
+				color.red >> 8,
+				color.green >> 8,
+				color.blue >> 8);
 }
 
 static void
@@ -243,11 +242,11 @@ mozilla_update_colors (GtkWidget *window,
 	char *str;
 
         prefService = do_GetService (NS_PREFSERVICE_CONTRACTID);
-	g_return_if_fail (prefService != NULL);
+	if (!prefService) return;
 
         nsCOMPtr<nsIPrefBranch> pref;
         prefService->GetBranch ("", getter_AddRefs(pref));
-	g_return_if_fail (pref != NULL);
+	if (!pref) return;
 
 	/* Set the bg color to the text bg color*/
 	color = window->style->base[GTK_STATE_NORMAL];
@@ -409,27 +408,21 @@ mozilla_init_chrome (void)
 	nsresult result;
 	nsAutoString uiLang;
 
-	nsCOMPtr<nsIXULChromeRegistry> chromeRegistry = do_GetService (NS_CHROMEREGISTRY_CONTRACTID, &result);
-	if (NS_FAILED (result) || !chromeRegistry)
-	{
-		g_warning ("Could not get the chrome registry!\n");
-		return NS_ERROR_FAILURE;
-	}
+	nsCOMPtr<nsIXULChromeRegistry> chromeRegistry = do_GetService (NS_CHROMEREGISTRY_CONTRACTID);
+	NS_ENSURE_TRUE (chromeRegistry, NS_ERROR_FAILURE);
 
 	// Set skin to 'classic' so we get native scrollbars.
 	result = chromeRegistry->SelectSkin (NS_LITERAL_CSTRING("classic/1.0"), PR_FALSE);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
 
 	// set locale
-	chromeRegistry->SetRuntimeProvider(PR_TRUE);
+	result = chromeRegistry->SetRuntimeProvider(PR_TRUE);
+	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
 
 	result = getUILang(uiLang);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
 
-	result = chromeRegistry->SelectLocale (NS_ConvertUCS2toUTF8(uiLang), PR_FALSE);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
-
-	return NS_OK;
+	return chromeRegistry->SelectLocale (NS_ConvertUCS2toUTF8(uiLang), PR_FALSE);
 }
 
 static void
@@ -538,38 +531,31 @@ mozilla_embed_single_finalize (GObject *object)
 static void
 impl_clear_cache (EphyEmbedSingle *shell)
 {
-	nsresult rv;
-	nsCOMPtr<nsICacheService> CacheService =
-                        do_GetService (NS_CACHESERVICE_CONTRACTID, &rv);
-	if (NS_SUCCEEDED (rv))
-	{
-		CacheService->EvictEntries (nsICache::STORE_ANYWHERE);
-	}
+	nsCOMPtr<nsICacheService> cacheService =
+                        do_GetService (NS_CACHESERVICE_CONTRACTID);
+	if (!cacheService) return;
+
+	cacheService->EvictEntries (nsICache::STORE_ANYWHERE);
 }
 
 static void
 impl_clear_auth_cache (EphyEmbedSingle *shell)
 {
-	nsresult rv;
-	nsCOMPtr<nsIHttpAuthManager> AuthManager =
-			do_GetService (NS_HTTPAUTHMANAGER_CONTRACTID, &rv);
-	if (NS_SUCCEEDED (rv))
-	{
-		AuthManager->ClearAll();
-	}
+	nsCOMPtr<nsIHttpAuthManager> authManager =
+			do_GetService (NS_HTTPAUTHMANAGER_CONTRACTID);
+	if (!authManager) return;
+
+	authManager->ClearAll();
 }
 
 static void
 impl_set_offline_mode (EphyEmbedSingle *shell,
 		       gboolean offline)
 {
-	nsresult rv;
+	nsCOMPtr<nsIIOService> io = do_GetService(NS_IOSERVICE_CONTRACTID);
+	if (!io) return;
 
-	nsCOMPtr<nsIIOService> io = do_GetService(NS_IOSERVICE_CONTRACTID, &rv);
-	if (NS_SUCCEEDED (rv))
-	{
-		io->SetOffline(offline);
-	}
+	io->SetOffline(offline);
 }
 
 static void
@@ -578,14 +564,11 @@ impl_load_proxy_autoconf (EphyEmbedSingle *shell,
 {
 	g_assert (url != NULL);
 
-	nsresult rv;
         nsCOMPtr<nsIProtocolProxyService> pps =
-                do_GetService ("@mozilla.org/network/protocol-proxy-service;1",
-                               &rv);
-	if (NS_SUCCEEDED (rv))
-	{
-		pps->ConfigureFromPAC (url);
-	}
+                do_GetService ("@mozilla.org/network/protocol-proxy-service;1");
+	if (!pps) return;
+
+	pps->ConfigureFromPAC (url);
 }
 
 static GList *
@@ -598,18 +581,18 @@ impl_get_font_list (EphyEmbedSingle *shell,
 	GList *l = NULL;
 
 	nsCOMPtr<nsIFontEnumerator> mozFontEnumerator;
-	mozFontEnumerator = do_CreateInstance("@mozilla.org/gfx/fontenumerator;1", &rv);
-	if(NS_FAILED(rv)) return NULL;
+	mozFontEnumerator = do_CreateInstance("@mozilla.org/gfx/fontenumerator;1");
+	NS_ENSURE_TRUE (mozFontEnumerator, NULL);
 
 	rv = mozFontEnumerator->EnumerateFonts (nsnull, nsnull,
 					        &fontCount, &fontArray);
-	if (NS_FAILED (rv)) return NULL;
+	NS_ENSURE_SUCCESS (rv, NULL);
 
 	for (PRUint32 i = 0; i < fontCount; i++)
 	{
 		char *gFontString;
 
-		gFontString = g_strdup(NS_ConvertUCS2toUTF8 (fontArray[i]).get());
+		gFontString = g_strdup (NS_ConvertUCS2toUTF8 (fontArray[i]).get());
 		l = g_list_prepend (l, gFontString);
 		nsMemory::Free (fontArray[i]);
 	}
@@ -627,10 +610,12 @@ impl_list_cookies (EphyCookieManager *manager)
 	
 	nsCOMPtr<nsICookieManager> cookieManager = 
 			do_GetService (NS_COOKIEMANAGER_CONTRACTID);
+	if (!cookieManager) return NULL;
+
 	nsCOMPtr<nsISimpleEnumerator> cookieEnumerator;
-	result = cookieManager->GetEnumerator (getter_AddRefs(cookieEnumerator));
-	if (NS_FAILED(result) || !cookieEnumerator) return NULL;
-	
+	cookieManager->GetEnumerator (getter_AddRefs(cookieEnumerator));
+	NS_ENSURE_TRUE (cookieEnumerator, NULL);
+
 	PRBool enumResult;
 	for (cookieEnumerator->HasMoreElements(&enumResult) ;
 	     enumResult == PR_TRUE ;
@@ -644,7 +629,7 @@ impl_list_cookies (EphyCookieManager *manager)
 
 		cookies = g_list_prepend (cookies, cookie);
 	}       
-	
+
 	return cookies;
 }
 
@@ -652,10 +637,9 @@ static void
 impl_remove_cookie (EphyCookieManager *manager,
 		    const EphyCookie *cookie)
 {
-	nsresult rv;
 	nsCOMPtr<nsICookieManager> cookieManager =
-		do_GetService (NS_COOKIEMANAGER_CONTRACTID, &rv);
-	if (NS_FAILED (rv) || !cookieManager) return;
+		do_GetService (NS_COOKIEMANAGER_CONTRACTID);
+	if (!cookieManager) return;
 
 	cookieManager->Remove (nsDependentCString(cookie->domain),
 			       nsDependentCString(cookie->name),
@@ -666,29 +650,26 @@ impl_remove_cookie (EphyCookieManager *manager,
 static void
 impl_clear_cookies (EphyCookieManager *manager)
 {
-	nsresult rv;
 	nsCOMPtr<nsICookieManager> cookieManager =
-		do_GetService (NS_COOKIEMANAGER_CONTRACTID, &rv);
-	if (NS_SUCCEEDED (rv))
-	{
-		cookieManager->RemoveAll ();
-	}
+		do_GetService (NS_COOKIEMANAGER_CONTRACTID);
+	if (!cookieManager) return;
+
+	cookieManager->RemoveAll ();
 }
 	
 static GList *
 impl_list_passwords (EphyPasswordManager *manager)
 {
 	GList *passwords = NULL;
+	nsresult rv;
 
-	nsresult result;
 	nsCOMPtr<nsIPasswordManager> passwordManager =
 			do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
 	if (!passwordManager) return NULL;
 
 	nsCOMPtr<nsISimpleEnumerator> passwordEnumerator;
-	result = passwordManager->GetEnumerator 
-				(getter_AddRefs(passwordEnumerator));
-	if (NS_FAILED(result) || !passwordEnumerator) return NULL;      
+	passwordManager->GetEnumerator (getter_AddRefs(passwordEnumerator));
+	NS_ENSURE_TRUE (passwordEnumerator, NULL);
 
 	PRBool enumResult;
 	for (passwordEnumerator->HasMoreElements(&enumResult) ;
@@ -696,25 +677,26 @@ impl_list_passwords (EphyPasswordManager *manager)
 	     passwordEnumerator->HasMoreElements(&enumResult))
 	{
 		nsCOMPtr<nsIPassword> nsPassword;
-		result = passwordEnumerator->GetNext 
-					(getter_AddRefs(nsPassword));
-		if (NS_FAILED(result) || !nsPassword) continue;
+		passwordEnumerator->GetNext (getter_AddRefs(nsPassword));
+		if (!nsPassword) continue;
+
+		nsCAutoString transfer;
+		rv = nsPassword->GetHost (transfer);
+		if (NS_FAILED (rv)) continue;
+
+		nsAutoString unicodeName;
+		rv = nsPassword->GetUser (unicodeName);
+		if (NS_FAILED (rv)) continue;
 
 		EphyPasswordInfo *p = g_new0 (EphyPasswordInfo, 1);
 
-		nsCAutoString transfer;
-		nsPassword->GetHost (transfer);
 		p->host = g_strdup (transfer.get());
-
-		nsAutoString unicodeName;
-		nsPassword->GetUser (unicodeName);
 		p->username = g_strdup(NS_ConvertUCS2toUTF8(unicodeName).get());
-
 		p->password = NULL;
 
 		passwords = g_list_prepend (passwords, p);
-	}       
-	
+	}
+
 	return passwords;
 }
 
@@ -724,11 +706,10 @@ impl_remove_password (EphyPasswordManager *manager,
 {
         nsCOMPtr<nsIPasswordManager> pm =
                         do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
-	if (pm)
-	{
-		pm->RemoveUser (nsDependentCString(info->host),
-				NS_ConvertUTF8toUCS2(nsDependentCString(info->username)));
-	}
+	if (!pm) return;
+
+	pm->RemoveUser (nsDependentCString(info->host),
+			NS_ConvertUTF8toUCS2(nsDependentCString(info->username)));
 }
 
 static const char *permission_type_string [] =
@@ -747,14 +728,13 @@ impl_permission_manager_add (EphyPermissionManager *manager,
 	/* can only set allow or deny */
 	g_return_if_fail (permission != EPHY_PERMISSION_DEFAULT);
 
-	nsresult result;
         nsCOMPtr<nsIPermissionManager> pm
-		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID, &result));
-	if (NS_FAILED (result) || !pm) return;
+		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID));
+	if (!pm) return;
 
 	nsCOMPtr<nsIURI> uri;
-        result = NS_NewURI(getter_AddRefs(uri), host);
-        if (NS_FAILED(result) || !uri) return;
+        NS_NewURI(getter_AddRefs(uri), host);
+	if (!uri) return;
 
 	gboolean allow = (permission == EPHY_PERMISSION_ALLOWED);
 
@@ -773,29 +753,25 @@ impl_permission_manager_remove (EphyPermissionManager *manager,
 				const char *host,
 				EphyPermissionType type)
 {
-	nsresult result;
         nsCOMPtr<nsIPermissionManager> pm
-		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID, &result));
-	if (NS_SUCCEEDED (result))
-	{
+		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID));
+	if (!pm) return;
+
 #if MOZILLA_SNAPSHOT >= 10
-		pm->Remove (nsDependentCString (host), permission_type_string [type]);
+	pm->Remove (nsDependentCString (host), permission_type_string [type]);
 #else
-		pm->Remove (nsDependentCString (host), type);
+	pm->Remove (nsDependentCString (host), type);
 #endif
-	}
 }
 
 void
 impl_permission_manager_clear (EphyPermissionManager *manager)
 {
-	nsresult result;
         nsCOMPtr<nsIPermissionManager> pm
-		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID, &result));
-	if (NS_SUCCEEDED (result))
-	{
-		pm->RemoveAll ();
-	}
+		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID));
+	if (!pm) return;
+
+	pm->RemoveAll ();
 }
 
 EphyPermission
@@ -803,22 +779,22 @@ impl_permission_manager_test (EphyPermissionManager *manager,
 			      const char *host,
 			      EphyPermissionType type)
 {
-	nsresult result;
         nsCOMPtr<nsIPermissionManager> pm
-		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID, &result));
-	if (NS_FAILED (result) || !pm) return EPHY_PERMISSION_DEFAULT;
+		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID));
+	if (!pm) return EPHY_PERMISSION_DEFAULT;
 
 	nsCOMPtr<nsIURI> uri;
-        result = NS_NewURI(getter_AddRefs(uri), host);
-        if (NS_FAILED(result) || !uri) return EPHY_PERMISSION_DEFAULT;
+        NS_NewURI(getter_AddRefs(uri), host);
+        if (!uri) return EPHY_PERMISSION_DEFAULT;
 
+	nsresult rv;
 	PRUint32 action;
 #if MOZILLA_SNAPSHOT >= 10
-	result = pm->TestPermission (uri, permission_type_string [type], &action);
+	rv = pm->TestPermission (uri, permission_type_string [type], &action);
 #else
-	result = pm->TestPermission (uri, type, &action);
+	rv = pm->TestPermission (uri, type, &action);
 #endif
-	if (NS_FAILED (result)) return EPHY_PERMISSION_DEFAULT;
+	NS_ENSURE_SUCCESS (rv, EPHY_PERMISSION_DEFAULT);
 
 	EphyPermission permission;
 
@@ -845,32 +821,32 @@ impl_permission_manager_list (EphyPermissionManager *manager,
 {
 	GList *list = NULL;
 
-	nsresult result;
         nsCOMPtr<nsIPermissionManager> pm
-		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID, &result));
-	if (NS_FAILED (result) || !pm) return NULL;
+		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID));
+	if (!pm) return NULL;
 
 	nsCOMPtr<nsISimpleEnumerator> pe;
-	result = pm->GetEnumerator(getter_AddRefs(pe));
-	if (NS_FAILED(result) || !pe) return NULL;
+	pm->GetEnumerator(getter_AddRefs(pe));
+	NS_ENSURE_TRUE (pe, NULL);
 	
 	PRBool more;
 	for (pe->HasMoreElements (&more); more == PR_TRUE; pe->HasMoreElements (&more))
 	{
 		nsCOMPtr<nsIPermission> perm;
-		result = pe->GetNext(getter_AddRefs(perm));
-		if (NS_FAILED(result) || !perm) continue;
+		pe->GetNext(getter_AddRefs(perm));
+		if (!perm) continue;
 
+		nsresult rv;
 #if MOZILLA_SNAPSHOT >= 10
 		nsCAutoString str;
-		result = perm->GetType(str);
-		if (NS_FAILED (result)) continue;
+		rv = perm->GetType(str);
+		if (NS_FAILED (rv)) continue;
 
 		if (str.Equals(permission_type_string[type]))
 #else
 		PRUint32 num;
-		result = perm->GetType(&num);
-		if (NS_FAILED (result)) continue;
+		rv = perm->GetType(&num);
+		if (NS_FAILED (rv)) continue;
 
 		if ((PRUint32) num == (PRUint32) type)
 #endif
