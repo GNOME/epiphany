@@ -576,6 +576,7 @@ cmd_bookmarks_import (GtkAction *action,
 	GtkCellRenderer *cell;
 	GtkListStore *store;
 	GtkTreeIter iter;
+	GtkTreeModel *sortmodel;
 
 	dialog = gtk_dialog_new_with_buttons (_("Import Bookmarks"),
 					     GTK_WINDOW (editor),
@@ -583,7 +584,7 @@ cmd_bookmarks_import (GtkAction *action,
 					     GTK_DIALOG_NO_SEPARATOR,
 					     GTK_STOCK_CANCEL,
 					     GTK_RESPONSE_CANCEL,
-					     GTK_STOCK_OK,
+					     _("I_mport"),
 					     GTK_RESPONSE_OK,
 					     NULL);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
@@ -597,15 +598,20 @@ cmd_bookmarks_import (GtkAction *action,
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), vbox,
 			    TRUE, TRUE, 0);
 
-	label = gtk_label_new (_("Choose the bookmarks source:"));
+	label = gtk_label_new (_("Import bookmarks from:"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
 	gtk_widget_show (label);
 
         store = GTK_LIST_STORE (gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING));
-	combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
-	gtk_widget_show (combo); 
+
+	sortmodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sortmodel), 0, GTK_SORT_ASCENDING);
+
+	combo = gtk_combo_box_new ();
+	gtk_combo_box_set_model(GTK_COMBO_BOX (combo), sortmodel);
+	gtk_widget_show (combo);
 	g_object_set_data (G_OBJECT (dialog), "combo_box", combo);
 	g_object_unref (store);
 
@@ -615,19 +621,19 @@ cmd_bookmarks_import (GtkAction *action,
                                         "text", 0,
                                         NULL);
 
-	add_bookmarks_source (store, _("Mozilla bookmarks"),
-			      MOZILLA_BOOKMARKS_DIR, "bookmarks.html", 4);
-	add_bookmarks_source (store, _("Firebird bookmarks"),
+	add_bookmarks_source (store, _("Firebird"),
 			      FIREBIRD_BOOKMARKS_DIR, "bookmarks.html", 4);
-	add_bookmarks_source (store, _("Firefox bookmarks"),
+	add_bookmarks_source (store, _("Firefox"),
                               FIREFOX_BOOKMARKS_DIR, "bookmarks.html", 4);
-	add_bookmarks_source (store, _("Galeon bookmarks"),
+	add_bookmarks_source (store, _("Galeon"),
 			      GALEON_BOOKMARKS_DIR, "bookmarks.xbel", 0);
-	add_bookmarks_source (store, _("Konqueror bookmarks"),
+	add_bookmarks_source (store, _("Konqueror"),
 			      KDE_BOOKMARKS_DIR, "bookmarks.xml", 0);
+	add_bookmarks_source (store, _("Mozilla"),
+			      MOZILLA_BOOKMARKS_DIR, "bookmarks.html", 4);
 
 	gtk_list_store_append (store, &iter);
-	gtk_list_store_set (store, &iter, 0, _("Import from a file"), 1, NULL, -1);
+	gtk_list_store_set (store, &iter, 0, _("File"), 1, NULL, -1);
 
 	gtk_box_pack_start (GTK_BOX (vbox), combo, TRUE, TRUE, 0);
 	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
