@@ -311,8 +311,9 @@ gnv_embed_dom_mouse_click_cb (EphyEmbed *embed,
 
 		g_return_val_if_fail (url, FALSE);
 
-		nautilus_view_open_location_force_new_window (NAUTILUS_VIEW (view),
-							      url, NULL);
+		nautilus_view_open_location (NAUTILUS_VIEW (view), url,
+				             Nautilus_ViewFrame_OPEN_IN_NAVIGATION,
+				             0, NULL);
 	}
 
 	return FALSE;
@@ -460,8 +461,10 @@ gnv_popup_cmd_new_window (BonoboUIComponent *uic,
 	
 	ephy_embed_event_get_property (info, "link", &value);
 
-	nautilus_view_open_location_force_new_window (NAUTILUS_VIEW (view),
-						      g_value_get_string (value), NULL);
+	nautilus_view_open_location (NAUTILUS_VIEW (view),
+				     g_value_get_string (value),
+				     Nautilus_ViewFrame_OPEN_IN_NAVIGATION,
+				     0, NULL);
 }
 
 static void 
@@ -479,8 +482,10 @@ gnv_popup_cmd_image_in_new_window (BonoboUIComponent *uic,
 	
 	ephy_embed_event_get_property (info, "image", &value);
 
-	nautilus_view_open_location_force_new_window (NAUTILUS_VIEW (view),
-						      g_value_get_string (value), NULL);
+	nautilus_view_open_location (NAUTILUS_VIEW (view),
+				     g_value_get_string (value),
+				     Nautilus_ViewFrame_OPEN_IN_NAVIGATION,
+				     0, NULL);
 }
 
 static void 
@@ -498,8 +503,11 @@ gnv_popup_cmd_frame_in_new_window (BonoboUIComponent *uic,
 	
 	ephy_embed_get_location (view->priv->embed, FALSE, &location);
 
-	nautilus_view_open_location_force_new_window (NAUTILUS_VIEW (view),
-						      location, NULL);
+	nautilus_view_open_location (NAUTILUS_VIEW (view),
+				     location,
+				     Nautilus_ViewFrame_OPEN_IN_NAVIGATION,
+				     0, NULL);
+	
 	g_free (location);
 }
 
