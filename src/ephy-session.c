@@ -518,16 +518,16 @@ write_window_geometry (xmlTextWriterPtr writer,
 	gtk_window_get_position (window, &x, &y);
 
 	/* set window properties */
-	ret = xmlTextWriterWriteFormatAttribute (writer, (xmlChar *) "x", "%d", x);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "x", "%d", x);
 	if (ret < 0) return ret;
 
-	ret = xmlTextWriterWriteFormatAttribute (writer, (xmlChar *) "y", "%d", y);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "y", "%d", y);
 	if (ret < 0) return ret;
 
-	ret = xmlTextWriterWriteFormatAttribute (writer, (xmlChar *) "width", "%d", width);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "width", "%d", width);
 	if (ret < 0) return ret;
 
-	ret = xmlTextWriterWriteFormatAttribute (writer, (xmlChar *) "height", "%d", height);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *) "height", "%d", height);
 	return ret;
 }
 
@@ -551,10 +551,10 @@ write_tool_window (xmlTextWriterPtr writer,
 		g_return_val_if_reached (-1);
 	}
 
-	ret = xmlTextWriterStartElement (writer, (xmlChar *) "toolwindow");
+	ret = xmlTextWriterStartElement (writer, (const xmlChar *) "toolwindow");
 	if (ret < 0) return ret;
 
-	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "id", id);
+	ret = xmlTextWriterWriteAttribute (writer, (const xmlChar *) "id", id);
 	if (ret < 0) return ret;
 
 	ret = write_window_geometry (writer, window);
@@ -755,18 +755,18 @@ ephy_session_load (EphySession *session,
 		{
 			xmlChar *id;
 
-			id = xmlGetProp (child, (xmlChar *) "id");
+			id = xmlGetProp (child, (const xmlChar *) "id");
 
-			if (id && xmlStrEqual ((xmlChar *) BOOKMARKS_EDITOR_ID, id))
+			if (id && xmlStrEqual ((const xmlChar *) BOOKMARKS_EDITOR_ID, id))
 			{
 				if (!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING))
 				{
 					widget = ephy_shell_get_bookmarks_editor (ephy_shell);
 				}
 			}
-			else if (id && xmlStrEqual ((xmlChar *) HISTORY_WINDOW_ID, id))
+			else if (id && xmlStrEqual ((const xmlChar *) HISTORY_WINDOW_ID, id))
 			{
-				if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY))
+				if (!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY))
 				{
 					widget = ephy_shell_get_history_window (ephy_shell);
 				}
