@@ -258,7 +258,7 @@ ephy_favicon_action_class_init (EphyFaviconActionClass *class)
 	parent_class = g_type_class_peek_parent (class);
 	action_class = GTK_ACTION_CLASS (class);
 
-	action_class->toolbar_item_type = GTK_TYPE_IMAGE;
+	action_class->toolbar_item_type = GTK_TYPE_TOOL_ITEM;
 	action_class->create_tool_item = create_tool_item;
 	action_class->connect_proxy = connect_proxy;
 
