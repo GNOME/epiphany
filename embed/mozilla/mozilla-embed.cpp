@@ -540,21 +540,23 @@ impl_can_go_forward (EphyEmbed *embed)
 static gresult 
 impl_can_go_up (EphyEmbed *embed)
 {
-	char *location;
+	char *location = NULL;
 	char *s;
-	gresult result;
+	gresult result = G_FAILED;
 
 	if (ephy_embed_get_location (embed, TRUE, &location) != G_OK)
-	  return G_FAILED;
+	{
+		g_free (location);
+
+		return G_FAILED;
+	}
+
 	g_return_val_if_fail (location != NULL, G_FAILED);
+
 	if ((s = mozilla_embed_get_uri_parent (location)) != NULL)
 	{
 		g_free (s);
 		result = G_OK;
-	}
-	else
-	{
-		result = G_FAILED;
 	}
 
 	g_free (location);
@@ -565,14 +567,20 @@ impl_can_go_up (EphyEmbed *embed)
 static gresult
 impl_get_go_up_list (EphyEmbed *embed, GSList **l)
 {
-	char *location;
+	char *location = NULL;
 	char *s;
 	
+	*l = NULL;
+
 	if (ephy_embed_get_location (embed, TRUE, &location) != G_OK)
+	{
+		g_free (location);
+
 		return G_FAILED;
+	}
+
 	g_return_val_if_fail (location != NULL, G_FAILED);
 	
-	*l = NULL;
 	s = location;
 	while ((s = mozilla_embed_get_uri_parent (s)) != NULL)
 	{
@@ -580,6 +588,7 @@ impl_get_go_up_list (EphyEmbed *embed, GSList **l)
 	}				
 
 	g_free (location);
+
 	*l = g_slist_reverse (*l);
 
 	return G_OK;
@@ -604,15 +613,25 @@ impl_go_forward (EphyEmbed *embed)
 static gresult
 impl_go_up (EphyEmbed *embed)
 {
-	char *uri;
+	char *uri = NULL;
 	char *parent_uri;
-	
-	ephy_embed_get_location (embed, TRUE, &uri);
+
+	if (ephy_embed_get_location (embed, TRUE, &uri) != G_OK)
+	{
+		g_free (uri);
+
+		return G_FAILED;
+	}
+
 	g_return_val_if_fail (uri != NULL, G_FAILED);
 	
 	parent_uri = mozilla_embed_get_uri_parent (uri);
 	g_free (uri);
-	g_return_val_if_fail (parent_uri != NULL, G_FAILED);
+
+	if (parent_uri == NULL)
+	{
+		return G_FAILED;
+	}
 	
 	ephy_embed_load_url (embed, parent_uri);
 

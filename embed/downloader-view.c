@@ -1076,7 +1076,7 @@ open_selection_foreach (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *ite
 	if (details->status != DOWNLOAD_STATUS_COMPLETED) return;
 
 	mime = gnome_vfs_get_mime_type (details->dest);
-	g_return_if_fail (mime != NULL);
+	if (mime == NULL) return;
 
 	app = gnome_vfs_mime_get_default_application (mime);
 	if (app)
@@ -1084,6 +1084,8 @@ open_selection_foreach (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *ite
 		ephy_file_launch_application (app->command,
 					      details->dest,
 					      app->requires_terminal);
+
+		gnome_vfs_mime_application_free(app);
 	}
 	else
 	{
