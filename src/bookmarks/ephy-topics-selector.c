@@ -239,12 +239,10 @@ fill_model (EphyTopicsSelector *editor)
 }
 
 static void
-topic_toggled (GtkCellRendererToggle *cell,
-               char *path_str,
+topic_toggled (GtkTreePath *path,
                EphyTopicsSelector *selector)
 {
 	GtkTreeModel *model = selector->priv->model;
-	GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
 	GtkTreeIter iter;
 	gboolean has_topic;
 
@@ -318,9 +316,8 @@ topic_clicked (GtkTreeView *tree_view,
 					   &path, NULL,
 					   NULL, NULL))
 	{
-		gchar *path_str = gtk_tree_path_to_string (path);
-		topic_toggled (NULL, path_str, selector);
-		g_free(path_str);
+		topic_toggled (path, selector);
+
 		gtk_tree_path_free (path);
 	}
 
@@ -334,8 +331,7 @@ topic_key_pressed (GtkTreeView *tree_view,
 {
 	GtkTreeSelection *sel = NULL;
 	GtkTreeIter iter;
-	GtkTreePath *path = NULL;
-	gchar *path_str;
+	GtkTreePath *path;
 
 	switch (event->keyval)
 	{
@@ -347,9 +343,9 @@ topic_key_pressed (GtkTreeView *tree_view,
 		if (gtk_tree_selection_get_selected (sel, NULL, &iter))
 		{
 			path = gtk_tree_model_get_path (selector->priv->model, &iter);
-			path_str = gtk_tree_path_to_string (path);
-			topic_toggled (NULL, path_str, selector);
-			g_free(path_str);
+
+			topic_toggled (path, selector);
+
 			gtk_tree_path_free (path);
 		}
 		return TRUE;
