@@ -1,3 +1,18 @@
+2003-10-21  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/egg/egg-editable-toolbar.c: (drag_begin_cb), (drag_end_cb),
+	(set_drag_cursor), (unset_drag_cursor), (create_item_from_action),
+	(create_item), (data_is_separator), (set_status_pending),
+	(get_status_pending), (drag_data_received_cb), (remove_toolbar_cb),
+	(popup_toolbar_context_menu_cb), (free_dragged_item),
+	(toolbar_drag_drop_cb), (toolbar_drag_motion_cb),
+	(toolbar_drag_leave_cb), (create_toolbar), (item_removed_cb),
+	(egg_editable_toolbar_set_drag_dest):
+	* lib/egg/egg-toolbar-editor.c: (drag_begin_cb), (drag_end_cb),
+	(editor_create_item):
+
+	Use new api for highlighting and make it pick up and drop behavior
+
 2003-10-20  Christian Persch  <chpe@cvs.gnome.org>
 
 	Encoding menu improvements, Episode V:

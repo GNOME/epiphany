@@ -73,6 +73,7 @@ struct EggEditableToolbarPrivate
   EggToolbarsModel *model;
   gboolean edit_mode;
   GtkWidget *selected_toolbar;
+  GtkWidget *dragged_item;
 };
 
 GType
@@ -167,45 +168,6 @@ find_action (EggEditableToolbar *t,
 }
 
 static void
-drag_data_received_cb (GtkWidget          *widget,
-		       GdkDragContext     *context,
-		       gint                x,
-		       gint                y,
-		       GtkSelectionData   *selection_data,
-		       guint               info,
-		       guint               time_,
-		       EggEditableToolbar *etoolbar)
-{
-  int pos, toolbar_pos;
-
-  g_return_if_fail (IS_EGG_EDITABLE_TOOLBAR (etoolbar));
-
-  pos = gtk_toolbar_get_drop_index (GTK_TOOLBAR (widget), x, y);
-  toolbar_pos = get_toolbar_position (etoolbar, widget);
-
-  if (strcmp (selection_data->data, "separator") == 0)
-    {
-      egg_toolbars_model_add_separator (etoolbar->priv->model,
-					toolbar_pos, pos);
-    }
-  else
-    {
-      GdkAtom target;
-      char *type;
-      char *id;
-
-      target = gtk_drag_dest_find_target (widget, context, NULL);
-      type = egg_toolbars_model_get_item_type (etoolbar->priv->model, target);
-      id = egg_toolbars_model_get_item_id (etoolbar->priv->model, type,
-					   selection_data->data);
-      egg_toolbars_model_add_item (etoolbar->priv->model,
-			           toolbar_pos, pos, id, type);
-      g_free (type);
-      g_free (id);
-    }
-}
-
-static void
 drag_data_delete_cb (GtkWidget          *widget,
 		     GdkDragContext     *context,
 		     EggEditableToolbar *etoolbar)
@@ -220,6 +182,22 @@ drag_data_delete_cb (GtkWidget          *widget,
 
   egg_toolbars_model_remove_item (etoolbar->priv->model,
 			          toolbar_pos, pos);
+}
+
+static void
+drag_begin_cb (GtkWidget          *widget,
+	       GdkDragContext     *context,
+	       EggEditableToolbar *etoolbar)
+{
+	gtk_widget_hide (widget);
+}
+
+static void
+drag_end_cb (GtkWidget          *widget,
+	     GdkDragContext     *context,
+	     EggEditableToolbar *etoolbar)
+{
+	gtk_widget_show (widget);
 }
 
 static void
@@ -248,6 +226,197 @@ drag_data_get_cb (GtkWidget          *widget,
 
   gtk_selection_data_set (selection_data,
 			  selection_data->target, 8, target, strlen (target));
+}
+
+static void
+set_drag_cursor (GtkWidget *widget)
+{
+  if (widget->window)
+    {
+      GdkCursor *cursor;
+      GdkPixbuf *pixbuf;
+
+      pixbuf = gdk_pixbuf_new_from_file (CURSOR_DIR "/art/hand-open.png", NULL);
+      cursor = gdk_cursor_new_from_pixbuf (gdk_display_get_default (),
+					   pixbuf, 0, 0);
+      gdk_window_set_cursor (widget->window, cursor);
+      gdk_cursor_unref (cursor);
+      g_object_unref (pixbuf);
+    }
+}
+
+static void
+unset_drag_cursor (GtkWidget *widget)
+{
+  if (widget->window)
+    {
+      gdk_window_set_cursor (widget->window, NULL);
+    }
+}
+
+static void
+set_item_drag_source (GtkWidget *item,
+		      GtkAction *action,
+		      gboolean   is_separator)
+{
+  gtk_drag_source_set (item, GDK_BUTTON1_MASK,
+		       source_drag_types, n_source_drag_types,
+		       GDK_ACTION_MOVE);
+
+  if (is_separator)
+    {
+      GtkWidget *icon;
+      GdkPixbuf *pixbuf;
+
+      icon = _egg_editable_toolbar_new_separator_image ();
+      pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (icon));
+      gtk_drag_source_set_icon_pixbuf (item, pixbuf);
+    }
+  else
+    {
+      const char *stock_id;
+      GValue value = { 0, };
+                                                                                                                             
+      g_value_init (&value, G_TYPE_STRING);
+      g_object_get_property (G_OBJECT (action), "stock_id", &value);
+                                                                                                                             
+      stock_id = g_value_get_string (&value);
+      gtk_drag_source_set_icon_stock
+	(item, stock_id ? stock_id : GTK_STOCK_DND);
+      g_value_unset (&value);
+    }
+}
+
+static GtkWidget *
+create_item_from_action (EggEditableToolbar *t,
+			 const char *action_name,
+			 gboolean is_separator)
+{
+  GtkWidget *item;
+  GtkAction *action;
+
+  if (is_separator)
+    {
+      item = GTK_WIDGET (gtk_separator_tool_item_new ());
+      action = NULL;
+    }
+  else
+    {
+      g_signal_emit (G_OBJECT (t), egg_editable_toolbar_signals[ACTION_REQUEST],
+		     0, action_name);
+      action = find_action (t, action_name);
+      item = gtk_action_create_tool_item (action);
+    }
+
+  gtk_widget_show (item);
+
+  g_signal_connect (item, "drag_begin",
+		    G_CALLBACK (drag_begin_cb), t);
+  g_signal_connect (item, "drag_end",
+		    G_CALLBACK (drag_end_cb), t);
+  g_signal_connect (item, "drag_data_get",
+		    G_CALLBACK (drag_data_get_cb), t);
+  g_signal_connect (item, "drag_data_delete",
+		    G_CALLBACK (drag_data_delete_cb), t);
+
+  if (t->priv->edit_mode)
+    {
+      set_drag_cursor (item);
+      gtk_widget_set_sensitive (item, TRUE);
+      set_item_drag_source (item, action, is_separator);
+      gtk_tool_item_set_use_drag_window (GTK_TOOL_ITEM (item), TRUE);
+    }
+
+  return item;
+}
+
+static GtkWidget *
+create_item (EggEditableToolbar *t,
+	     EggToolbarsModel   *model,
+	     int                 toolbar_position,
+	     int                 position)
+{
+  const char *action_name;
+  gboolean is_separator;
+
+  action_name = egg_toolbars_model_item_nth
+		(model, toolbar_position, position,
+		 &is_separator);
+  return create_item_from_action (t, action_name, is_separator);
+}
+
+static gboolean
+data_is_separator (const char *data)
+{
+  return strcmp (data, "separator") == 0;
+}
+
+static void
+set_status_pending (GdkDragContext *context,
+                    GdkDragAction   suggested_action)
+{
+  g_object_set_data (G_OBJECT (context),
+                     "gtk-calendar-status-pending",
+                     GINT_TO_POINTER (suggested_action));
+}
+                                                                                                                             
+static GdkDragAction
+get_status_pending (GdkDragContext *context)
+{
+  return GPOINTER_TO_INT (g_object_get_data (G_OBJECT (context),
+                                             "gtk-calendar-status-pending"));
+}
+
+static void
+drag_data_received_cb (GtkWidget          *widget,
+		       GdkDragContext     *context,
+		       gint                x,
+		       gint                y,
+		       GtkSelectionData   *selection_data,
+		       guint               info,
+		       guint               time,
+		       EggEditableToolbar *etoolbar)
+{
+  GdkDragAction suggested_action;
+  int pos, toolbar_pos;
+
+  suggested_action = get_status_pending (context);
+
+  if (suggested_action)
+    {
+      set_status_pending (context, 0);
+      etoolbar->priv->dragged_item =
+        create_item_from_action (etoolbar, selection_data->data,
+				 data_is_separator (selection_data->data));
+      gdk_drag_status (context, suggested_action, time);
+      return;
+    }
+
+   pos = gtk_toolbar_get_drop_index (GTK_TOOLBAR (widget), x, y);
+   toolbar_pos = get_toolbar_position (etoolbar, widget);
+
+   if (data_is_separator (selection_data->data))
+     {
+       egg_toolbars_model_add_separator (etoolbar->priv->model,
+	  				 toolbar_pos, pos);
+     }
+     else
+     {
+       GdkAtom target;
+       char *type;
+       char *id;
+
+       target = gtk_drag_dest_find_target (widget, context, NULL);
+       type = egg_toolbars_model_get_item_type (etoolbar->priv->model, target);
+       id = egg_toolbars_model_get_item_id (etoolbar->priv->model, type,
+					    selection_data->data);
+       egg_toolbars_model_add_item (etoolbar->priv->model,
+			            toolbar_pos, pos, id, type);
+       g_free (type);
+       g_free (id);
+    }
+
+    gtk_drag_finish (context, TRUE, context->action == GDK_ACTION_MOVE, time);
 }
 
 static void
@@ -302,6 +471,79 @@ popup_toolbar_context_menu_cb (GtkWidget          *toolbar,
     }
 }
 
+static void
+free_dragged_item (EggEditableToolbar *etoolbar)
+{
+  if (etoolbar->priv->dragged_item)
+  {	
+    gtk_widget_destroy (etoolbar->priv->dragged_item);
+    etoolbar->priv->dragged_item = NULL;
+  }
+}
+
+static gboolean
+toolbar_drag_drop_cb (GtkWidget          *widget,
+		      GdkDragContext     *context,
+		      gint                x,
+		      gint                y,
+		      guint               time,
+		      EggEditableToolbar *etoolbar)
+{
+  GdkAtom target;
+
+  free_dragged_item (etoolbar);
+  
+  target = gtk_drag_dest_find_target (widget, context, NULL);
+  if (target != GDK_NONE)
+    {
+      gtk_drag_get_data (widget, context,
+                         target,
+                         time);
+      return TRUE;
+    }
+  
+  return FALSE;
+}
+
+static gboolean
+toolbar_drag_motion_cb (GtkWidget          *widget,
+		        GdkDragContext     *context,
+		        gint                x,
+		        gint                y,
+		        guint               time,
+		        EggEditableToolbar *etoolbar)
+{
+  GdkAtom target;
+  GtkRequisition req;
+
+  target = gtk_drag_dest_find_target (widget, context, NULL);
+  if (target == GDK_NONE)
+    {
+      gdk_drag_status (context, 0, time);
+    }
+  else
+    {
+      set_status_pending (context, context->suggested_action);
+      gtk_drag_get_data (widget, context, target, time);
+    }
+
+  gtk_widget_size_request (etoolbar->priv->dragged_item, &req);
+  gtk_toolbar_highlight_drop_location (GTK_TOOLBAR (widget), x, y,
+				       req.width, req.height);
+
+  return TRUE;
+}
+
+static void
+toolbar_drag_leave_cb (GtkToolbar         *toolbar,
+		       GdkDragContext     *context,
+		       guint               time,
+		       EggEditableToolbar *etoolbar)
+{
+  free_dragged_item (etoolbar);
+  gtk_toolbar_unhighlight_drop_location (toolbar);
+}
+
 static GtkWidget *
 create_toolbar (EggEditableToolbar *t)
 {
@@ -311,120 +553,23 @@ create_toolbar (EggEditableToolbar *t)
   gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), TRUE);
 
   gtk_widget_show (toolbar);
-  gtk_drag_dest_set (toolbar, GTK_DEST_DEFAULT_DROP,
+  gtk_drag_dest_set (toolbar, 0,
 		     dest_drag_types, n_dest_drag_types,
 		     GDK_ACTION_MOVE | GDK_ACTION_COPY);
+ 
+  g_signal_connect (toolbar, "drag_drop",
+		    G_CALLBACK (toolbar_drag_drop_cb), t); 
+  g_signal_connect (toolbar, "drag_motion",
+		    G_CALLBACK (toolbar_drag_motion_cb), t);
+  g_signal_connect (toolbar, "drag_leave",
+		    G_CALLBACK (toolbar_drag_leave_cb), t);
+
   g_signal_connect (toolbar, "drag_data_received",
 		    G_CALLBACK (drag_data_received_cb), t);
   g_signal_connect (toolbar, "popup_context_menu",
 		    G_CALLBACK (popup_toolbar_context_menu_cb), t);
 
   return toolbar;
-}
-
-static void
-set_item_drag_source (GtkWidget *item,
-		      GtkAction *action,
-		      gboolean   is_separator)
-{
-  gtk_drag_source_set (item, GDK_BUTTON1_MASK,
-		       source_drag_types, n_source_drag_types,
-		       GDK_ACTION_MOVE);
-
-  if (is_separator)
-    {
-      GtkWidget *icon;
-      GdkPixbuf *pixbuf;
-
-      icon = _egg_editable_toolbar_new_separator_image ();
-      pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (icon));
-      gtk_drag_source_set_icon_pixbuf (item, pixbuf);
-    }
-  else
-    {
-      const char *stock_id;
-      GValue value = { 0, };
-                                                                                                                             
-      g_value_init (&value, G_TYPE_STRING);
-      g_object_get_property (G_OBJECT (action), "stock_id", &value);
-                                                                                                                             
-      stock_id = g_value_get_string (&value);
-      gtk_drag_source_set_icon_stock
-	(item, stock_id ? stock_id : GTK_STOCK_DND);
-      g_value_unset (&value);
-    }
-}
-
-static void
-set_drag_cursor (GtkWidget *widget)
-{
-  if (widget->window)
-    {
-      GdkCursor *cursor;
-      GdkPixbuf *pixbuf;
-
-      pixbuf = gdk_pixbuf_new_from_file (CURSOR_DIR "/art/hand-open.png", NULL);
-      cursor = gdk_cursor_new_from_pixbuf (gdk_display_get_default (),
-					   pixbuf, 0, 0);
-      gdk_window_set_cursor (widget->window, cursor);
-      gdk_cursor_unref (cursor);
-      g_object_unref (pixbuf);
-    }
-}
-
-static void
-unset_drag_cursor (GtkWidget *widget)
-{
-  if (widget->window)
-    {
-      gdk_window_set_cursor (widget->window, NULL);
-    }
-}
-
-static GtkWidget *
-create_item (EggEditableToolbar *t,
-	     EggToolbarsModel   *model,
-	     int                 toolbar_position,
-	     int                 position)
-{
-  GtkWidget *item;
-  const char *action_name;
-  gboolean is_separator;
-  GtkAction *action;
-
-  action_name = egg_toolbars_model_item_nth
-		(model, toolbar_position, position,
-		 &is_separator);
-
-  if (is_separator)
-    {
-      item = GTK_WIDGET (gtk_separator_tool_item_new ());
-      action = NULL;
-    }
-  else
-    {
-      g_signal_emit (G_OBJECT (t), egg_editable_toolbar_signals[ACTION_REQUEST],
-		     0, action_name);
-      action = find_action (t, action_name);
-      item = gtk_action_create_tool_item (action);
-    }
-
-  gtk_widget_show (item);
-
-  g_signal_connect (item, "drag_data_get",
-		    G_CALLBACK (drag_data_get_cb), t);
-  g_signal_connect (item, "drag_data_delete",
-		    G_CALLBACK (drag_data_delete_cb), t);
-
-  if (t->priv->edit_mode)
-    {
-      set_drag_cursor (item);
-      gtk_widget_set_sensitive (item, TRUE);
-      set_item_drag_source (item, action, is_separator);
-      gtk_tool_item_set_use_drag_window (GTK_TOOL_ITEM (item), TRUE);
-    }
-
-  return item;
 }
 
 static void
@@ -501,6 +646,7 @@ item_removed_cb (EggToolbarsModel   *model,
   toolbar = get_toolbar_nth (t, toolbar_position);
   item = GTK_WIDGET (gtk_toolbar_get_nth_item
 	(GTK_TOOLBAR (toolbar), position));
+  g_return_if_fail (item != NULL);
   gtk_container_remove (GTK_CONTAINER (toolbar), item);
 
   if (egg_toolbars_model_n_items (model, toolbar_position) == 0)
@@ -836,7 +982,7 @@ egg_editable_toolbar_set_drag_dest (EggEditableToolbar   *etoolbar,
         GtkWidget *widget = get_toolbar_nth (etoolbar, i);
 
         gtk_drag_dest_unset (widget);
-        gtk_drag_dest_set (widget, GTK_DEST_DEFAULT_DROP,
+        gtk_drag_dest_set (widget, 0,
                            targets, n_targets,
                            GDK_ACTION_MOVE | GDK_ACTION_COPY);
       }

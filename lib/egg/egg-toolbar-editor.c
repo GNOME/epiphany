@@ -232,6 +232,20 @@ egg_toolbar_editor_new (GtkUIManager *merge,
 }
 
 static void
+drag_begin_cb (GtkWidget          *widget,
+	       GdkDragContext     *context)
+{
+	gtk_widget_hide (widget);
+}
+
+static void
+drag_end_cb (GtkWidget          *widget,
+	     GdkDragContext     *context)
+{
+	gtk_widget_show (widget);
+}
+
+static void
 editor_drag_data_received_cb (GtkWidget          *widget,
 			      GdkDragContext     *context,
 			      gint                x,
@@ -345,6 +359,10 @@ editor_create_item (EggToolbarEditor *editor,
   gtk_drag_source_set (event_box,
 		       GDK_BUTTON1_MASK,
 		       source_drag_types, n_source_drag_types, action);
+  g_signal_connect (event_box, "drag_begin",
+		    G_CALLBACK (drag_begin_cb), NULL);
+  g_signal_connect (event_box, "drag_end",
+		    G_CALLBACK (drag_end_cb), NULL);
   g_signal_connect (event_box, "drag_data_get",
 		    G_CALLBACK (drag_data_get_cb), editor);
   g_signal_connect (event_box, "drag_data_delete",
