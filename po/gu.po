@@ -6,15 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-06 11:08+0200\n"
-"PO-Revision-Date: 2004-08-06 19:27+0530\n"
+"POT-Creation-Date: 2004-08-09 03:04+0200\n"
+"PO-Revision-Date: 2004-08-09 12:59+0530\n"
 "Last-Translator: Ankit Patel <ankit@redhat.com>\n"
-"<magnet@magnet-i.com>\n"
 "Language-Team: Gujarati\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"<magnet@magnet-i.com>\n"
 "Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "X-Generator: KBabel 1.3.1\n"
 
 #: data/GNOME_Epiphany_Automation.server.in.h:1
@@ -1024,7 +1025,7 @@ msgid_plural "%d downloads"
 msgstr[0] "%d ડાઉનલોડ"
 msgstr[1] "%d ડાઉનલોડ"
 
-#: embed/downloader-view.c:558 src/bookmarks/ephy-bookmarks-editor.c:691
+#: embed/downloader-view.c:558 src/bookmarks/ephy-bookmarks-editor.c:690
 msgid "File"
 msgstr "ફાઇલ"
 
@@ -1356,7 +1357,7 @@ msgstr "યુનીકોડ (UTF-3_2 LE)"
 msgid "Off"
 msgstr "બંધ"
 
-#: embed/ephy-encodings.c:147 src/prefs-dialog.c:118
+#: embed/ephy-encodings.c:147 src/prefs-dialog.c:119
 msgid "Chinese"
 msgstr "ચીની"
 
@@ -1372,15 +1373,15 @@ msgstr "ચીની સાંસ્કૃતિક"
 msgid "East Asian"
 msgstr "પૂર્વીય એશિયાવાસી"
 
-#: embed/ephy-encodings.c:151 lib/ephy-langs.c:38 src/prefs-dialog.c:138
+#: embed/ephy-encodings.c:151 lib/ephy-langs.c:38 src/prefs-dialog.c:139
 msgid "Japanese"
 msgstr "જાપાની"
 
-#: embed/ephy-encodings.c:152 lib/ephy-langs.c:39 src/prefs-dialog.c:139
+#: embed/ephy-encodings.c:152 lib/ephy-langs.c:39 src/prefs-dialog.c:140
 msgid "Korean"
 msgstr "કોરીયાઇ"
 
-#: embed/ephy-encodings.c:153 src/prefs-dialog.c:151
+#: embed/ephy-encodings.c:153 src/prefs-dialog.c:152
 msgid "Russian"
 msgstr "રુસી"
 
@@ -1388,7 +1389,7 @@ msgstr "રુસી"
 msgid "Universal"
 msgstr "સાર્વત્રિક"
 
-#: embed/ephy-encodings.c:155 src/prefs-dialog.c:160
+#: embed/ephy-encodings.c:155 src/prefs-dialog.c:161
 msgid "Ukrainian"
 msgstr "યુક્રેનિયન"
 
@@ -1464,7 +1465,7 @@ msgid "Untitled"
 msgstr "શીર્ષક વગરનું"
 
 #: embed/mozilla/FilePicker.cpp:145 embed/print-dialog.c:272
-#: lib/ephy-file-chooser.c:376 src/bookmarks/ephy-bookmarks-editor.c:601
+#: lib/ephy-file-chooser.c:376 src/bookmarks/ephy-bookmarks-editor.c:600
 msgid "All files"
 msgstr "બધી ફાઇલો"
 
@@ -1750,7 +1751,21 @@ msgstr ""
 msgid "Files"
 msgstr "ફાઇલો"
 
-#: embed/mozilla/mozilla-embed-single.cpp:494
+#. We do this before reading the user pref file so that the user
+#. * still can overwrite this pref.
+#. * We don't use the default-prefs.js file since that cannot be
+#. * localised (see bug #144909).
+#.
+#. translators: this is the URL that searches from the location
+#. * entry get directed to. The search terms will be _appended_ to it,
+#. * in url-escaped UTF-8; that means that if you're choosing google,
+#. * the 'q=' part needs to come last.
+#.
+#: embed/mozilla/mozilla-embed-single.cpp:222
+msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
+msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
+
+#: embed/mozilla/mozilla-embed-single.cpp:507
 msgid ""
 "Epiphany can't be used now. Mozilla initialization failed. Check your "
 "MOZILLA_FIVE_HOME environmental variable."
@@ -1811,7 +1826,7 @@ msgid "All supported types"
 msgstr "બધા આધારભૂત પ્રકારો"
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:79 src/prefs-dialog.c:1109
+#: lib/ephy-file-helpers.c:79 src/prefs-dialog.c:1110
 msgid "Downloads"
 msgstr "ડાઉનલોડ"
 
@@ -1852,7 +1867,7 @@ msgstr "ના પર ફરીથી લખો (_O)"
 msgid "Could not display help: %s"
 msgstr "મદદ પ્રદર્શિત કરી શકાતી નથી: %s"
 
-#: lib/ephy-langs.c:31 src/prefs-dialog.c:109
+#: lib/ephy-langs.c:31 src/prefs-dialog.c:110
 msgid "Arabic"
 msgstr "અરબી"
 
@@ -1872,19 +1887,19 @@ msgstr "સીરિલીક"
 msgid "Devanagari"
 msgstr "દેવનાગરી"
 
-#: lib/ephy-langs.c:36 src/prefs-dialog.c:131
+#: lib/ephy-langs.c:36 src/prefs-dialog.c:132
 msgid "Greek"
 msgstr "ગ્રીક"
 
-#: lib/ephy-langs.c:37 src/prefs-dialog.c:132
+#: lib/ephy-langs.c:37 src/prefs-dialog.c:133
 msgid "Hebrew"
 msgstr "હિબ્રુ"
 
-#: lib/ephy-langs.c:40 src/prefs-dialog.c:116
+#: lib/ephy-langs.c:40 src/prefs-dialog.c:117
 msgid "Simplified Chinese"
 msgstr "સરળ કરેલુ ચીની"
 
-#: lib/ephy-langs.c:41 src/prefs-dialog.c:158
+#: lib/ephy-langs.c:41 src/prefs-dialog.c:159
 msgid "Tamil"
 msgstr "તમિલ"
 
@@ -1892,7 +1907,7 @@ msgstr "તમિલ"
 msgid "Thai"
 msgstr "થાઇ"
 
-#: lib/ephy-langs.c:43 src/prefs-dialog.c:117
+#: lib/ephy-langs.c:43 src/prefs-dialog.c:118
 msgid "Traditional Chinese"
 msgstr "પારમ્પરિક ચીની"
 
@@ -1900,7 +1915,7 @@ msgstr "પારમ્પરિક ચીની"
 msgid "Traditional Chinese (Hong Kong)"
 msgstr "પારમ્પરિક ચીની"
 
-#: lib/ephy-langs.c:45 src/prefs-dialog.c:159
+#: lib/ephy-langs.c:45 src/prefs-dialog.c:160
 msgid "Turkish"
 msgstr "તુર્કીશ"
 
@@ -1928,7 +1943,7 @@ msgstr "પોપ-અપ વિન્ડો"
 msgid "History"
 msgstr "ઇતિહાસ"
 
-#: lib/ephy-stock-icons.c:58 src/bookmarks/ephy-bookmarks-editor.c:1417
+#: lib/ephy-stock-icons.c:58 src/bookmarks/ephy-bookmarks-editor.c:1416
 #: src/bookmarks/ephy-topic-action.c:985 src/ephy-window.c:1122
 msgid "Bookmarks"
 msgstr "બુકમાર્ક"
@@ -1991,14 +2006,22 @@ msgstr "નિષ્ફળ ગયુ"
 msgid "%d %%"
 msgstr "%d %%"
 
+#: lib/widgets/ephy-label.c:3419
+msgid "Select All"
+msgstr "બધુ પસંદ કરો"
+
+#: lib/widgets/ephy-label.c:3429
+msgid "Input Methods"
+msgstr "ઈનપુટ પદ્ધતિઓ"
+
 #: src/bookmarks/ephy-bookmark-action.c:277
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
 #: src/bookmarks/ephy-bookmark-action.c:533
-#: src/bookmarks/ephy-bookmarks-editor.c:182
-#: src/bookmarks/ephy-bookmarks-editor.c:1041 src/ephy-history-window.c:169
+#: src/bookmarks/ephy-bookmarks-editor.c:181
+#: src/bookmarks/ephy-bookmarks-editor.c:1040 src/ephy-history-window.c:169
 #: src/ephy-history-window.c:747
 msgid "Open in New _Tab"
 msgstr "નવા ટૅબમાં ખોલો (_T)"
@@ -2037,257 +2060,257 @@ msgid "_Show in bookmarks bar"
 msgstr "બુકમાર્ક પટ્ટીમાં બતાવો (_S)"
 
 #. Toplevel
-#: src/bookmarks/ephy-bookmarks-editor.c:169 src/ephy-history-window.c:159
+#: src/bookmarks/ephy-bookmarks-editor.c:168 src/ephy-history-window.c:159
 #: src/ephy-window.c:90
 msgid "_File"
 msgstr "ફાઇલ (_F)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:170 src/ephy-history-window.c:160
+#: src/bookmarks/ephy-bookmarks-editor.c:169 src/ephy-history-window.c:160
 #: src/ephy-window.c:91
 msgid "_Edit"
 msgstr "ફેરફાર કરો (_E)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:171 src/ephy-history-window.c:161
+#: src/bookmarks/ephy-bookmarks-editor.c:170 src/ephy-history-window.c:161
 #: src/ephy-window.c:92
 msgid "_View"
 msgstr "જુઓ (_V)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:172 src/ephy-history-window.c:162
+#: src/bookmarks/ephy-bookmarks-editor.c:171 src/ephy-history-window.c:162
 #: src/ephy-window.c:97
 msgid "_Help"
 msgstr "મદદ (_H)"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:176
+#: src/bookmarks/ephy-bookmarks-editor.c:175
 #: src/bookmarks/ephy-new-bookmark.c:298
 msgid "_New Topic"
 msgstr "નવો મુદ્દો (_N)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:177
+#: src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Create a new topic"
 msgstr "નવો મુદ્દો બનાવો"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:179
-#: src/bookmarks/ephy-bookmarks-editor.c:1040 src/ephy-history-window.c:166
+#: src/bookmarks/ephy-bookmarks-editor.c:178
+#: src/bookmarks/ephy-bookmarks-editor.c:1039 src/ephy-history-window.c:166
 #: src/ephy-history-window.c:746
 msgid "_Open in New Window"
 msgstr "નવી વિન્ડોમાં ખોલો: (_O)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:180
+#: src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Open the selected bookmark in a new window"
 msgstr "પસંદ કરેલ બુકમાર્કને નવી વિન્ડોમાં ખોલો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:183
+#: src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "Open the selected bookmark in a new tab"
 msgstr "પસંદ કરેલ બુકમાર્કને નવા ટૅબમાં ખોલો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:185
+#: src/bookmarks/ephy-bookmarks-editor.c:184
 msgid "_Rename..."
 msgstr "ફરીથી નામ આપો... (_R)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:186
+#: src/bookmarks/ephy-bookmarks-editor.c:185
 msgid "Rename the selected bookmark or topic"
 msgstr "પસંદ કરેલ બુકમાર્ક અથવા મુદ્દાને નવું નામ આપો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:187 src/ephy-history-window.c:172
+#: src/bookmarks/ephy-bookmarks-editor.c:186 src/ephy-history-window.c:172
 msgid "_Delete"
 msgstr "કાઢી નાખો (_D)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:188
+#: src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "Delete the selected bookmark or topic"
 msgstr "પસંદ કરેલ બુકમાર્ક અથવા મુદ્દાને કાઢી નાખો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:190
+#: src/bookmarks/ephy-bookmarks-editor.c:189
 msgid "_Properties"
 msgstr "ગુણધર્મો (_P)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:191
+#: src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "View or modify the properties of the selected bookmark"
 msgstr "પસંદ કરાયેલ બુકમાર્કના ગુણધર્મો જુઓ અથવા બદલો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:193
+#: src/bookmarks/ephy-bookmarks-editor.c:192
 msgid "_Import Bookmarks..."
 msgstr "બુકમાર્ક આયાત કરો... (_I)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:194
+#: src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "બુકમાર્કને બીજા કોઇક બ્રાઉઝર અથવા બુકમાર્ક ફાઇલમાંથી આયાત કરો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:196 src/ephy-history-window.c:178
+#: src/bookmarks/ephy-bookmarks-editor.c:195 src/ephy-history-window.c:178
 #: src/ephy-window.c:128
 msgid "_Close"
 msgstr "બંધ કરો (_C)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:197
+#: src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "Close the bookmarks window"
 msgstr "બુકમાર્ક વિન્ડો બંધ કરો"
 
 #. Edit Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:201 src/ephy-history-window.c:183
+#: src/bookmarks/ephy-bookmarks-editor.c:200 src/ephy-history-window.c:183
 #: src/ephy-window.c:139
 msgid "Cu_t"
 msgstr "કાપો (_t)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:202 src/ephy-history-window.c:184
+#: src/bookmarks/ephy-bookmarks-editor.c:201 src/ephy-history-window.c:184
 #: src/ephy-window.c:140
 msgid "Cut the selection"
 msgstr "પસંદ કરાયેલને કાપો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:204
-#: src/bookmarks/ephy-bookmarks-editor.c:1050 src/ephy-history-window.c:186
+#: src/bookmarks/ephy-bookmarks-editor.c:203
+#: src/bookmarks/ephy-bookmarks-editor.c:1049 src/ephy-history-window.c:186
 #: src/ephy-history-window.c:756 src/ephy-window.c:142
 msgid "_Copy"
 msgstr "નકલ કરો (_C)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:205 src/ephy-history-window.c:187
+#: src/bookmarks/ephy-bookmarks-editor.c:204 src/ephy-history-window.c:187
 #: src/ephy-window.c:143
 msgid "Copy the selection"
 msgstr "પસંદ કરાયેલની નકલ કરો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:189
+#: src/bookmarks/ephy-bookmarks-editor.c:206 src/ephy-history-window.c:189
 #: src/ephy-window.c:145
 msgid "_Paste"
 msgstr "ચોંટાડો (_P)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:208 src/ephy-history-window.c:190
+#: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:190
 msgid "Paste the clipboard"
 msgstr "ક્લિપબાૅર્ડને ચોંટાડો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:210 src/ephy-history-window.c:192
+#: src/bookmarks/ephy-bookmarks-editor.c:209 src/ephy-history-window.c:192
 #: src/ephy-window.c:148
 msgid "Select _All"
 msgstr "બધુ પસંદ કરો (_A)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:211
+#: src/bookmarks/ephy-bookmarks-editor.c:210
 msgid "Select all bookmarks or text"
 msgstr "બધા જ બુકમાર્ક અથવા લખાણને પસંદ કરો"
 
 #. Help Menu
 #. Help menu
-#: src/bookmarks/ephy-bookmarks-editor.c:215 src/ephy-history-window.c:200
+#: src/bookmarks/ephy-bookmarks-editor.c:214 src/ephy-history-window.c:200
 #: src/ephy-window.c:239
 msgid "_Contents"
 msgstr "સમાવિષ્ટ વસ્તુઓ (_C)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:216
+#: src/bookmarks/ephy-bookmarks-editor.c:215
 msgid "Display bookmarks help"
 msgstr "બુકમાર્ક માટેની મદદ દેખાડો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:218 src/ephy-history-window.c:203
+#: src/bookmarks/ephy-bookmarks-editor.c:217 src/ephy-history-window.c:203
 #: src/ephy-window.c:242
 msgid "_About"
 msgstr "વિશે: (_A)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:219 src/ephy-history-window.c:204
+#: src/bookmarks/ephy-bookmarks-editor.c:218 src/ephy-history-window.c:204
 #: src/ephy-window.c:243
 msgid "Display credits for the web browser creators"
 msgstr "વેબ બ્રાઉઝર બનાવનારનો યશ પ્રદર્શિત કરો"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:227
+#: src/bookmarks/ephy-bookmarks-editor.c:226
 msgid "_Show in Bookmarks Bar"
 msgstr "બુકમાર્ક પટ્ટીમાં દેખાડો (_S)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:228
+#: src/bookmarks/ephy-bookmarks-editor.c:227
 msgid "Show the selected bookmark or topic in the bookmarks bar"
 msgstr "પસંદ કરેલ બુકમાર્ક અથવા મુદ્દાને બુકમાર્ક પટ્ટીમાં દેખાડો"
 
 #. View Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:242 src/ephy-history-window.c:219
+#: src/bookmarks/ephy-bookmarks-editor.c:241 src/ephy-history-window.c:219
 msgid "_Title"
 msgstr "શીર્ષક (_T)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:243 src/ephy-history-window.c:220
+#: src/bookmarks/ephy-bookmarks-editor.c:242 src/ephy-history-window.c:220
 msgid "Show only the title column"
 msgstr "ફક્ત શીર્ષકના ખાના દેખાડો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:244 src/ephy-history-window.c:223
+#: src/bookmarks/ephy-bookmarks-editor.c:243 src/ephy-history-window.c:223
 msgid "T_itle and Address"
 msgstr "શીર્ષક અને સરનામું (_i)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:245 src/ephy-history-window.c:224
+#: src/bookmarks/ephy-bookmarks-editor.c:244 src/ephy-history-window.c:224
 msgid "Show both the title and address columns"
 msgstr "શીર્ષક અને સરનામાના ખાના દેખાડો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:287
-#: src/bookmarks/ephy-topics-selector.c:292
+#: src/bookmarks/ephy-bookmarks-editor.c:286
+#: src/bookmarks/ephy-topics-selector.c:294
 msgid "Type a topic"
 msgstr "મુદ્દ્ો છાપો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:582
+#: src/bookmarks/ephy-bookmarks-editor.c:581
 msgid "Import bookmarks from file"
 msgstr "બુકમાર્ક આયાત કરો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:589
+#: src/bookmarks/ephy-bookmarks-editor.c:588
 msgid "Firefox/Firebird/Mozilla bookmarks"
 msgstr "ફાયરફોક્સ/ફાયરબર્ડ/મોઝિલા બુકમાર્કો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:593
+#: src/bookmarks/ephy-bookmarks-editor.c:592
 msgid "Galeon/Konqueror bookmarks"
 msgstr "ગેલિયન/કોન્કરર બુકમાર્કો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:597
+#: src/bookmarks/ephy-bookmarks-editor.c:596
 msgid "Epiphany bookmarks"
 msgstr "એપિફની બુકમાર્કો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:636
+#: src/bookmarks/ephy-bookmarks-editor.c:635
 msgid "Import Bookmarks"
 msgstr "બુકમાર્ક આયાત કરો"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:642
+#: src/bookmarks/ephy-bookmarks-editor.c:641
 msgid "I_mport"
 msgstr "આયાત કરો (_m)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:656
+#: src/bookmarks/ephy-bookmarks-editor.c:655
 msgid "Import bookmarks from:"
 msgstr "આમાંથી બુકમાર્ક આયાત કરો:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:679
+#: src/bookmarks/ephy-bookmarks-editor.c:678
 msgid "Firebird"
 msgstr "ફાયરબર્ડ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:681
+#: src/bookmarks/ephy-bookmarks-editor.c:680
 msgid "Firefox"
 msgstr "ફાયરફોક્સ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:683
+#: src/bookmarks/ephy-bookmarks-editor.c:682
 msgid "Galeon"
 msgstr "ગેલિયન"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:685
+#: src/bookmarks/ephy-bookmarks-editor.c:684
 msgid "Konqueror"
 msgstr "કાૅનકરર"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:687
+#: src/bookmarks/ephy-bookmarks-editor.c:686
 msgid "Mozilla"
 msgstr "મોઝિલા"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1035 src/ephy-history-window.c:741
+#: src/bookmarks/ephy-bookmarks-editor.c:1034 src/ephy-history-window.c:741
 msgid "_Open in New Windows"
 msgstr "નવી વિન્ડોમાં ખોલો (_O)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1036 src/ephy-history-window.c:742
+#: src/bookmarks/ephy-bookmarks-editor.c:1035 src/ephy-history-window.c:742
 msgid "Open in New _Tabs"
 msgstr "નવા ટૅબમાં ખોલો (_T)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1046 src/ephy-history-window.c:752
+#: src/bookmarks/ephy-bookmarks-editor.c:1045 src/ephy-history-window.c:752
 msgid "_Copy Address"
 msgstr "સરનામાની નકલ કરો (_C)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1287 src/ephy-history-window.c:1046
+#: src/bookmarks/ephy-bookmarks-editor.c:1286 src/ephy-history-window.c:1046
 msgid "_Search:"
 msgstr "શોધો: (_S)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1500
+#: src/bookmarks/ephy-bookmarks-editor.c:1499
 msgid "Topics"
 msgstr "મુદ્દાઓ"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1565 src/ephy-history-window.c:1330
+#: src/bookmarks/ephy-bookmarks-editor.c:1564 src/ephy-history-window.c:1330
 msgid "Title"
 msgstr "શીર્ષક"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1571 src/ephy-history-window.c:1336
+#: src/bookmarks/ephy-bookmarks-editor.c:1570 src/ephy-history-window.c:1336
 msgid "Address"
 msgstr "સરનામું"
 
@@ -2506,23 +2529,23 @@ msgstr "બોનોબો ઈન્ટરફેસ દ્વારા આંત
 msgid "Ephy"
 msgstr "અૅફી"
 
-#: src/ephy-session.c:367
+#: src/ephy-session.c:374
 msgid "Crash Recovery"
 msgstr "ભંગાણમાંથી પાછા આવો"
 
-#: src/ephy-session.c:369
+#: src/ephy-session.c:376
 msgid "_Don't Recover"
 msgstr "પાછું ન લાવો: (_D)"
 
-#: src/ephy-session.c:370
+#: src/ephy-session.c:377
 msgid "_Recover"
 msgstr "પાછું લાવો: (_R)"
 
-#: src/ephy-session.c:401
+#: src/ephy-session.c:408
 msgid "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr "એવું લાગે છે કે છેલ્લી વખતે જ્યારે અૅપીફની ચલાવાયું ત્યારે ભાંગી પડ્યુ હશે અથવા મૃત કરાયુ હશે."
 
-#: src/ephy-session.c:407
+#: src/ephy-session.c:414
 msgid "You can recover the opened tabs and windows."
 msgstr "તમે ખૂલેલા ટૅબ અને વિન્ડો પાછી મેળવી શકો છો."
 
@@ -3082,7 +3105,7 @@ msgid_plural "%d hidden popup windows"
 msgstr[0] "%d છુપી પોપ-અપ વિન્ડો"
 msgstr[1] "%d છુપી પોપ-અપ વિન્ડો"
 
-#: src/pdm-dialog.c:416
+#: src/pdm-dialog.c:417
 msgid "Domain"
 msgstr "પ્રદેશ"
 
@@ -3094,47 +3117,47 @@ msgstr "પ્રદેશ"
 # #-#-#-#-#  libgnomeprintui.gnome-2-2.hi.po (libgnomeprintui )  #-#-#-#-#
 # libgnomeprintui/gpaui/add-printer-dialog.c:106
 # libgnomeprintui/gpaui/config-dialog.c:106
-#: src/pdm-dialog.c:428
+#: src/pdm-dialog.c:429
 msgid "Name"
 msgstr "નામ"
 
-#: src/pdm-dialog.c:669
+#: src/pdm-dialog.c:670
 msgid "Host"
 msgstr "યજમાન "
 
-#: src/pdm-dialog.c:681
+#: src/pdm-dialog.c:682
 msgid "User Name"
 msgstr "વપરાશકર્તાનું નામ"
 
-#: src/pdm-dialog.c:874
+#: src/pdm-dialog.c:875
 msgid "Cookie Properties"
 msgstr "કુકીના ગુણધર્મો"
 
-#: src/pdm-dialog.c:889
+#: src/pdm-dialog.c:890
 msgid "Content:"
 msgstr "સમાવિષ્ટ વસ્તુઓઃ "
 
-#: src/pdm-dialog.c:904
+#: src/pdm-dialog.c:905
 msgid "Path:"
 msgstr "પથ:"
 
-#: src/pdm-dialog.c:919
+#: src/pdm-dialog.c:920
 msgid "Send for:"
 msgstr "માટે મોકલો:"
 
-#: src/pdm-dialog.c:928
+#: src/pdm-dialog.c:929
 msgid "Encrypted connections only"
 msgstr "એનક્રિપ્ટ થયેલ જોડાણો માત્ર"
 
-#: src/pdm-dialog.c:928
+#: src/pdm-dialog.c:929
 msgid "Any type of connection"
 msgstr "કોઈપણ પ્રકારનું જોડાણ"
 
-#: src/pdm-dialog.c:934
+#: src/pdm-dialog.c:935
 msgid "Expires:"
 msgstr "મુદત પૂરી થઇઃ "
 
-#: src/pdm-dialog.c:945
+#: src/pdm-dialog.c:946
 msgid "End of current session"
 msgstr "વર્તમાન સત્રની સમાપ્તિ"
 
@@ -3201,187 +3224,187 @@ msgstr "છાપવા માટેનું પૂર્વદર્શન બ
 #. * "en_AU" translation: "English, Australia (System setting)" or
 #. *                      "Australian English (System setting)"
 #.
-#: src/prefs-dialog.c:106
+#: src/prefs-dialog.c:107
 msgid "System language"
 msgstr "સિસ્ટમની ભાષા"
 
-#: src/prefs-dialog.c:107
+#: src/prefs-dialog.c:108
 msgid "Afrikaans"
 msgstr "આફ્રિકી"
 
-#: src/prefs-dialog.c:108
+#: src/prefs-dialog.c:109
 msgid "Albanian"
 msgstr "અલબાનિયાઈ"
 
-#: src/prefs-dialog.c:110
+#: src/prefs-dialog.c:111
 msgid "Azerbaijani"
 msgstr "અઝરબાયજાની"
 
-#: src/prefs-dialog.c:111
+#: src/prefs-dialog.c:112
 msgid "Basque"
 msgstr "બાસ્ક"
 
-#: src/prefs-dialog.c:112
+#: src/prefs-dialog.c:113
 msgid "Breton"
 msgstr "બ્રિટન"
 
-#: src/prefs-dialog.c:113
+#: src/prefs-dialog.c:114
 msgid "Bulgarian"
 msgstr "બલ્ગેરીયન"
 
-#: src/prefs-dialog.c:114
+#: src/prefs-dialog.c:115
 msgid "Byelorussian"
 msgstr "બાયલોરશિયન"
 
-#: src/prefs-dialog.c:115
+#: src/prefs-dialog.c:116
 msgid "Catalan"
 msgstr "કેટેલન"
 
-#: src/prefs-dialog.c:119
+#: src/prefs-dialog.c:120
 msgid "Croatian"
 msgstr "ક્રોએશિયાઇ"
 
-#: src/prefs-dialog.c:120
+#: src/prefs-dialog.c:121
 msgid "Czech"
 msgstr "ચેક"
 
-#: src/prefs-dialog.c:121
+#: src/prefs-dialog.c:122
 msgid "Danish"
 msgstr "ડેનિશ"
 
-#: src/prefs-dialog.c:122
+#: src/prefs-dialog.c:123
 msgid "Dutch"
 msgstr "ડચ"
 
-#: src/prefs-dialog.c:123
+#: src/prefs-dialog.c:124
 msgid "English"
 msgstr "અંગ્રેજી"
 
-#: src/prefs-dialog.c:124
+#: src/prefs-dialog.c:125
 msgid "Esperanto"
 msgstr "એસ્પરેન્ટો"
 
-#: src/prefs-dialog.c:125
+#: src/prefs-dialog.c:126
 msgid "Estonian"
 msgstr "એસ્ટોનિયાઇ"
 
-#: src/prefs-dialog.c:126
+#: src/prefs-dialog.c:127
 msgid "Faeroese"
 msgstr "ફેરોઇ"
 
-#: src/prefs-dialog.c:127
+#: src/prefs-dialog.c:128
 msgid "Finnish"
 msgstr "ફિન્નિશ"
 
-#: src/prefs-dialog.c:128
+#: src/prefs-dialog.c:129
 msgid "French"
 msgstr "ફ્રેંચ"
 
-#: src/prefs-dialog.c:129
+#: src/prefs-dialog.c:130
 msgid "Galician"
 msgstr "ગેલેશીયાઇ"
 
-#: src/prefs-dialog.c:130
+#: src/prefs-dialog.c:131
 msgid "German"
 msgstr "જર્મન"
 
-#: src/prefs-dialog.c:133
+#: src/prefs-dialog.c:134
 msgid "Hungarian"
 msgstr "હંગેરીયાઇ"
 
-#: src/prefs-dialog.c:134
+#: src/prefs-dialog.c:135
 msgid "Icelandic"
 msgstr "આઇસલેંડીક"
 
-#: src/prefs-dialog.c:135
+#: src/prefs-dialog.c:136
 msgid "Indonesian"
 msgstr "ઇંડોનેશીયાઇ"
 
-#: src/prefs-dialog.c:136
+#: src/prefs-dialog.c:137
 msgid "Irish"
 msgstr "આયરીશ"
 
-#: src/prefs-dialog.c:137
+#: src/prefs-dialog.c:138
 msgid "Italian"
 msgstr "ઇટાલી"
 
-#: src/prefs-dialog.c:140
+#: src/prefs-dialog.c:141
 msgid "Latvian"
 msgstr "લાટવી"
 
-#: src/prefs-dialog.c:141
+#: src/prefs-dialog.c:142
 msgid "Lithuanian"
 msgstr "લિથુઆની"
 
-#: src/prefs-dialog.c:142
+#: src/prefs-dialog.c:143
 msgid "Macedonian"
 msgstr "મૅસેડોનિયન"
 
-#: src/prefs-dialog.c:143
+#: src/prefs-dialog.c:144
 msgid "Malay"
 msgstr "મલય"
 
-#: src/prefs-dialog.c:144
+#: src/prefs-dialog.c:145
 msgid "Norwegian/Nynorsk"
 msgstr "નાેર્વેજિયન/નાયનોર્સ્ક"
 
-#: src/prefs-dialog.c:145
+#: src/prefs-dialog.c:146
 msgid "Norwegian/Bokmal"
 msgstr "નાેર્વેજિયન/બોકમાલ"
 
-#: src/prefs-dialog.c:146
+#: src/prefs-dialog.c:147
 msgid "Norwegian"
 msgstr "નાેર્વેજિયન"
 
-#: src/prefs-dialog.c:147
+#: src/prefs-dialog.c:148
 msgid "Polish"
 msgstr "પાેલિશ"
 
-#: src/prefs-dialog.c:148
+#: src/prefs-dialog.c:149
 msgid "Portuguese"
 msgstr "પોર્ટુગી"
 
-#: src/prefs-dialog.c:149
+#: src/prefs-dialog.c:150
 msgid "Portuguese of Brazil"
 msgstr "બ્રાઝીલના પોર્ટુગી"
 
-#: src/prefs-dialog.c:150
+#: src/prefs-dialog.c:151
 msgid "Romanian"
 msgstr "રોમાનિ"
 
-#: src/prefs-dialog.c:152
+#: src/prefs-dialog.c:153
 msgid "Scottish"
 msgstr "સ્કોટિશ"
 
-#: src/prefs-dialog.c:153
+#: src/prefs-dialog.c:154
 msgid "Serbian"
 msgstr "સર્બિયાઇ"
 
-#: src/prefs-dialog.c:154
+#: src/prefs-dialog.c:155
 msgid "Slovak"
 msgstr "સ્લોવાક"
 
-#: src/prefs-dialog.c:155
+#: src/prefs-dialog.c:156
 msgid "Slovenian"
 msgstr "સ્લોવેન્યાઇ"
 
-#: src/prefs-dialog.c:156
+#: src/prefs-dialog.c:157
 msgid "Spanish"
 msgstr "સ્પેનિશ"
 
-#: src/prefs-dialog.c:157
+#: src/prefs-dialog.c:158
 msgid "Swedish"
 msgstr "સ્વીડીશ"
 
-#: src/prefs-dialog.c:161
+#: src/prefs-dialog.c:162
 msgid "Vietnamese"
 msgstr "વિયેટનામી"
 
-#: src/prefs-dialog.c:162
+#: src/prefs-dialog.c:163
 msgid "Walloon"
 msgstr "વાલૂન"
 
-#: src/prefs-dialog.c:1059
+#: src/prefs-dialog.c:1060
 #, c-format
 msgid "Custom [%s]"
 msgstr "કસ્ટમ [%s]"
@@ -3390,15 +3413,15 @@ msgstr "કસ્ટમ [%s]"
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1104
+#: src/prefs-dialog.c:1105
 msgid "Home"
 msgstr "ઘર"
 
-#: src/prefs-dialog.c:1113
+#: src/prefs-dialog.c:1114
 msgid "Desktop"
 msgstr "ડેસ્કટોપ"
 
-#: src/prefs-dialog.c:1322
+#: src/prefs-dialog.c:1321
 msgid "Select a directory"
 msgstr "ડિરેક્ટરી પસંદ કરો"
 
