@@ -387,8 +387,7 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 {
 	GConfClient *client = eel_gconf_client_get_global ();
 	guint i;
-	guint n_fonts_languages;
-	const FontsLanguageInfo *fonts_language;
+	GList *codes, *l;
 
 	for (i = 0; conversion_table[i].gconf_key != NULL; i++)
 	{
@@ -426,10 +425,10 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 	}
 
 	/* fonts notifiers */
-	n_fonts_languages = ephy_langs_get_n_font_languages ();
-	fonts_language = ephy_langs_get_font_languages ();
-	for (i = 0; i < n_fonts_languages; i++)
+	codes = ephy_font_langs_get_codes_list ();
+	for (l = codes; l != NULL; l = l->next)
 	{
+		const char *code = (char*) l->data;
 		guint k;
 		char *types [] = { "variable", "monospace" };
 		char key[255];
@@ -437,52 +436,46 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 		
 		for (k = 0; k < G_N_ELEMENTS (types); k++)
 		{
-			info = g_strconcat (types[k], ".", fonts_language[i].code, NULL);
+			info = g_strconcat (types[k], ".", code, NULL);
 			
 			g_snprintf (key, 255, "%s_%s_%s", CONF_RENDERING_FONT, 
-			 	    types[k], 
-                 	 	    fonts_language[i].code);
+			 	    types[k], code);
 			add_notification_and_notify (client, key,
 						     (GConfClientNotifyFunc)mozilla_font_notifier,
 						     info);
-			font_infos = g_list_append (font_infos, info);
+			font_infos = g_list_prepend (font_infos, info);
 		}
 
-		g_snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_MIN_SIZE, fonts_language[i].code);
-		info = g_strconcat ("minimum-size", ".", fonts_language[i].code, NULL);
+		g_snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_MIN_SIZE, code);
+		info = g_strconcat ("minimum-size", ".", code, NULL);
 		add_notification_and_notify (client, key,
 					     (GConfClientNotifyFunc)mozilla_font_size_notifier,
 					     info);
-		font_infos = g_list_append (font_infos, info);
+		font_infos = g_list_prepend (font_infos, info);
 
-		g_snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_FIXED_SIZE, fonts_language[i].code);
-		info = g_strconcat ("size.fixed", ".", fonts_language[i].code, NULL);
+		g_snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_FIXED_SIZE, code);
+		info = g_strconcat ("size.fixed", ".", code, NULL);
 		add_notification_and_notify (client, key,
 					     (GConfClientNotifyFunc)mozilla_font_size_notifier,
 					     info);
-		font_infos = g_list_append (font_infos, info);
+		font_infos = g_list_prepend (font_infos, info);
 
-		g_snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_VAR_SIZE, fonts_language[i].code);
-		info = g_strconcat ("size.variable", ".", fonts_language[i].code, NULL);
+		g_snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_VAR_SIZE, code);
+		info = g_strconcat ("size.variable", ".", code, NULL);
 		add_notification_and_notify (client, key,
 					     (GConfClientNotifyFunc)mozilla_font_size_notifier,
 					     info);
-		font_infos = g_list_append (font_infos, info);		
+		font_infos = g_list_prepend (font_infos, info);		
 	}
+	g_list_free (codes);
 }
 
 void 
 mozilla_notifiers_free (void)
 {
-	GList *l;
-	
 	ephy_notification_remove (&mozilla_notifiers);
 
-	for (l = font_infos; l != NULL; l = l->next)
-	{
-		g_free (l->data);
-	}
-	
+	g_list_foreach (font_infos, (GFunc) g_free, NULL);
 	g_list_free (font_infos);
 }
 

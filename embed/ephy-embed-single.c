@@ -18,7 +18,9 @@
  *  $Id$
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "ephy-embed-shell.h"
 #include "ephy-marshal.h"
@@ -34,7 +36,6 @@ enum
 	NEW_WINDOW,
 	LAST_SIGNAL
 };
-
 
 #define EPHY_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSinglePrivate))
 
@@ -136,24 +137,6 @@ ephy_embed_single_load_proxy_autoconf (EphyEmbedSingle *shell,
 {
 	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
         return klass->load_proxy_autoconf (shell, url);
-}
-
-gresult
-ephy_embed_single_get_encodings (EphyEmbedSingle *shell,
-				 LanguageGroup group,
-				 gboolean elide_underscores,
-				 GList **encodings)
-{
-	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
-	return klass->get_encodings (shell, group, elide_underscores, encodings);
-}
-
-gresult
-ephy_embed_single_get_language_groups (EphyEmbedSingle *shell,
-			              GList **groups)
-{
-	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
-	return klass->get_language_groups (shell, groups);
 }
 
 gresult
@@ -277,4 +260,3 @@ ephy_embed_single_free_passwords (EphyEmbedSingle *shell,
 
 	return G_OK;
 }
-

@@ -1,6 +1,7 @@
 /*
- *  Copyright (C) 2000 Marco Pesenti Gritti
- *
+ *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Christian Persch
+ *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2, or (at your option)
@@ -14,60 +15,30 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
-#ifndef EPHY_LANGS_H
-#define EPHY_LANGS_H
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#ifndef EPHY_ENCODINGS_H
+#define EPHY_ENCODINGS_H
 
 #include <glib.h>
+#include "ephy-langs.h"
 
 G_BEGIN_DECLS
 
-/* language groups */
-typedef enum
-{
-	LG_ARABIC,
-	LG_BALTIC,
-	LG_CENTRAL_EUROPEAN,
-	LG_CHINESE,
-	LG_CYRILLIC,
-	LG_GREEK,
-	LG_HEBREW,
-	LG_INDIAN,
-	LG_JAPANESE,
-	LG_KOREAN,
-	LG_TURKISH,
-	LG_UNICODE,
-	LG_VIETNAMESE,
-	LG_WESTERN,
-	LG_OTHER,
-	LG_ALL
-} EphyLanguageGroup;
-
 typedef struct
 {
+	char *encoding;
 	EphyLanguageGroup group;
 	char *title;
 	char *key;
-} EphyLanguageGroupInfo;
+} EphyEncodingInfo;
 
-typedef struct
-{
-	char *title;
-	char *code;
-} FontsLanguageInfo;
+GList	*ephy_encodings_get_list	(EphyLanguageGroup group,
+					 gboolean elide_underscores);
 
-GList	*ephy_font_langs_get_list	(void);
-
-GList	*ephy_font_langs_get_codes_list	(void);
-
-GList	*ephy_lang_get_group_list	(void);
-
-void	 ephy_lang_group_info_free	(EphyLanguageGroupInfo *info);
+void	 ephy_encoding_info_free	(EphyEncodingInfo *info);
 
 G_END_DECLS
 

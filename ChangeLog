@@ -1,3 +1,32 @@
+2003-10-13  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-embed-single.c: (ephy_embed_single_free_passwords):
+	* embed/ephy-embed-single.h:
+	* embed/ephy-embed-utils.c:
+	(ephy_embed_utils_build_encodings_submenu):
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* lib/Makefile.am:
+	* lib/ephy-encodings.c: (ephy_encoding_info_free),
+	(encodings_info_cmp), (ephy_encodings_get_list):
+	* lib/ephy-encodings.h:
+	* lib/ephy-langs.c: (ephy_lang_group_info_free),
+	(lang_group_info_cmp), (ephy_lang_get_group_list),
+	(fonts_language_info_cmp), (ephy_font_langs_get_codes_list),
+	(ephy_font_langs_get_list):
+	* lib/ephy-langs.h:
+	* po/POTFILES.in:
+	* src/ephy-encoding-menu.c: (ephy_encoding_menu_set_window),
+	(ephy_encoding_menu_rebuild):
+	* src/prefs-dialog.c: (prefs_dialog_finalize),
+	(get_current_language_code), (create_fonts_language_menu),
+	(default_encoding_menu_changed_cb), (find_encoding_in_list_cmp),
+	(create_default_encoding_menu):
+
+	Encodings menu improvements, part 3: Refactored the encodings
+	list; it no longer is neccessary to have it in the embed single.
+	Ported all callers to new infrastructure.
+
 2003-10-13  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* data/art/Makefile.am:

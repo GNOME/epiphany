@@ -25,8 +25,9 @@
 #endif
 
 #include "ephy-encoding-menu.h"
+#include "ephy-langs.h"
+#include "ephy-encodings.h"
 #include "ephy-string.h"
-#include "ephy-shell.h"
 #include "ephy-debug.h"
 
 #include <bonobo/bonobo-i18n.h>
@@ -174,7 +175,6 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 static void
 ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
 {
-	EphyEmbedSingle *single;
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	GList *encodings, *groups, *l;
@@ -188,14 +188,10 @@ ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
 	action_group = gtk_action_group_new ("EncodingActions");
 	menu->priv->action_group = action_group;
 
-	single = ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (ephy_shell));
-	g_return_if_fail (single != NULL);
-
-	ephy_embed_single_get_encodings (single, LG_ALL, FALSE, &encodings);
-
+	encodings = ephy_encodings_get_list (LG_ALL, FALSE);
 	for (l = encodings; l != NULL; l = l->next)
 	{
-		const EncodingInfo *info = (EncodingInfo *) l->data;
+		const EphyEncodingInfo *info = (EphyEncodingInfo *) l->data;
 		char name[32];
 
 		g_snprintf (name, 32, "Encoding%s", info->encoding);
@@ -215,14 +211,13 @@ ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
 		g_object_unref (action);
 	}
 	
-	g_list_foreach (encodings, (GFunc) encoding_info_free, NULL);
+	g_list_foreach (encodings, (GFunc) ephy_encoding_info_free, NULL);
 	g_list_free (encodings);
 
-	ephy_embed_single_get_language_groups (single, &groups);
-
+	groups = ephy_lang_get_group_list ();
 	for (l = groups; l != NULL; l = l->next)
 	{
-		const LanguageGroupInfo *info = (LanguageGroupInfo *) l->data;
+		const EphyLanguageGroupInfo *info = (EphyLanguageGroupInfo *) l->data;
 		char name[32];
 
 		g_snprintf (name, 32, "EncodingGroup%d", info->group);
@@ -235,7 +230,7 @@ ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
 		g_object_unref (action);
 	}
 
-	g_list_foreach (groups, (GFunc) language_group_info_free, NULL);
+	g_list_foreach (groups, (GFunc) ephy_lang_group_info_free, NULL);
 	g_list_free (groups);
 
 	gtk_ui_manager_insert_action_group (menu->priv->manager,
@@ -319,12 +314,8 @@ ephy_encoding_menu_new (EphyWindow *window)
 static void
 ephy_encoding_menu_rebuild (EphyEncodingMenu *menu)
 {
-	EphyEmbedSingle *single;
 	EphyEncodingMenuPrivate *p = menu->priv;
-	GList *encodings, *groups, *l;
-
-	single = ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (ephy_shell));
-	ephy_embed_single_get_language_groups (single, &groups);
+	GList *groups, *l;
 
 	if (p->merge_id > 0)
 	{
@@ -338,11 +329,12 @@ ephy_encoding_menu_rebuild (EphyEncodingMenu *menu)
 			       "ViewEncodingMenu", "ViewEncoding",
 			       GTK_UI_MANAGER_MENU, FALSE);
 
+	groups = ephy_lang_get_group_list ();
 	for (l = groups; l != NULL; l = l->next)
 	{
-		const LanguageGroupInfo *info = (LanguageGroupInfo *) l->data;
+		const EphyLanguageGroupInfo *info = (EphyLanguageGroupInfo *) l->data;
 		char name[32], action[36], path[128];
-		GList *enc;
+		GList *encodings, *enc;
 
 		g_snprintf (action, 32, "EncodingGroup%d", info->group);
 		g_snprintf (name, 36, "%sMenu", action);
@@ -353,12 +345,10 @@ ephy_encoding_menu_rebuild (EphyEncodingMenu *menu)
 				       name, action,
 				       GTK_UI_MANAGER_MENU, FALSE);
 
-		ephy_embed_single_get_encodings (single, info->group,
-						 FALSE, &encodings);
-
+		encodings = ephy_encodings_get_list (info->group, FALSE);
 		for (enc = encodings; enc != NULL; enc = enc->next)
 		{
-			const EncodingInfo *info = (EncodingInfo *) enc->data;
+			const EphyEncodingInfo *info = (EphyEncodingInfo *) enc->data;
 
 			g_snprintf (action, 32, "Encoding%s", info->encoding);
 			g_snprintf (name, 36, "%sItem", action);
@@ -368,10 +358,10 @@ ephy_encoding_menu_rebuild (EphyEncodingMenu *menu)
 					       GTK_UI_MANAGER_MENUITEM, FALSE);
 		}
 
-		g_list_foreach (encodings, (GFunc) encoding_info_free, NULL);
+		g_list_foreach (encodings, (GFunc) ephy_encoding_info_free, NULL);
 		g_list_free (encodings);
 	}
 
-	g_list_foreach (groups, (GFunc) language_group_info_free, NULL);
+	g_list_foreach (groups, (GFunc) ephy_lang_group_info_free, NULL);
 	g_list_free (groups);
 }

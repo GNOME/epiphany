@@ -119,12 +119,6 @@ struct EphyEmbedSingleClass
 					         const char* url);
 	gresult         (* show_java_console)   (EphyEmbedSingle *shell);
 	gresult         (* show_js_console)     (EphyEmbedSingle *shell);
-	gresult		(* get_language_groups) (EphyEmbedSingle *shell,
-						 GList **groups);
-	gresult         (* get_encodings)	(EphyEmbedSingle *shell,
-						 LanguageGroup group,
-						 gboolean elide_underscores,
-						 GList **encodings);
 	gresult		(* get_font_list)	(EphyEmbedSingle *shell,
 						 const char *langGroup,
 						 GList **fontList);
@@ -158,15 +152,6 @@ gresult           ephy_embed_single_set_offline_mode    (EphyEmbedSingle *shell,
 
 gresult           ephy_embed_single_load_proxy_autoconf (EphyEmbedSingle *shell,
 							 const char* url);
-
-/* Encodings */
-gresult		  ephy_embed_single_get_language_groups (EphyEmbedSingle *shell,
-							 GList **groups);
-
-gresult           ephy_embed_single_get_encodings	(EphyEmbedSingle *shell,
-							 LanguageGroup group,
-							 gboolean elide_underscores,
-							 GList **encodings);
 
 gresult           ephy_embed_single_get_font_list       (EphyEmbedSingle *shell,
 							 const char *langGroup,

@@ -32,6 +32,7 @@
 #include "eel-gconf-extensions.h"
 #include "language-editor.h"
 #include "ephy-langs.h"
+#include "ephy-encodings.h"
 
 #include <bonobo/bonobo-i18n.h>
 #include <gtk/gtkframe.h>
@@ -382,7 +383,7 @@ prefs_dialog_finalize (GObject *object)
 	g_list_foreach (pd->priv->langs, (GFunc) free_lang_item, NULL);
 	g_list_free (pd->priv->langs);
 
-	g_list_foreach (pd->priv->encodings, (GFunc) encoding_info_free, NULL);
+	g_list_foreach (pd->priv->encodings, (GFunc) ephy_encoding_info_free, NULL);
 	g_list_free (pd->priv->encodings);
 
 	g_list_foreach (pd->priv->autodetectors, (GFunc) g_free, NULL);
@@ -418,7 +419,7 @@ static const gchar *
 get_current_language_code (PrefsDialog *dialog)
 {
 	GList *lang;
-	FontsLanguageInfo *info;
+	const FontsLanguageInfo *info;
 
 	lang = g_list_nth (dialog->priv->fonts_languages, dialog->priv->language);
 	g_assert (lang != NULL);
@@ -629,12 +630,6 @@ setup_size_controls (PrefsDialog *dialog)
 	setup_size_control (dialog, CONF_RENDERING_FONT_MIN_SIZE, 7, spin);
 }
 
-static gint
-fonts_language_info_cmp (const FontsLanguageInfo *i1, const FontsLanguageInfo *i2)
-{
-	return g_utf8_collate (i1->title, i2->title);
-}
-
 static void
 setup_fonts (PrefsDialog *dialog)
 {
@@ -658,33 +653,16 @@ create_fonts_language_menu (PrefsDialog *dialog)
 {
 	GtkWidget *optionmenu, *menu;
 	GList *l = NULL;
-	guint i;
-	guint n_fonts_languages;
-	const FontsLanguageInfo *fonts_language;
+	guint n_fonts_languages, i = 0;
 	char **lang_codes;
-
-	n_fonts_languages = ephy_langs_get_n_font_languages ();
-	fonts_language = ephy_langs_get_font_languages ();
-
-	for (i = 0; i < n_fonts_languages; i++)
-	{
-		FontsLanguageInfo *info;
-
-		info = g_new0 (FontsLanguageInfo, 1);
-		info->title = _(fonts_language[i].title);
-		info->code = fonts_language[i].code;
-
-		l = g_list_prepend (l, info);
-	}
-
-	l = g_list_sort (l, (GCompareFunc) fonts_language_info_cmp);
-	dialog->priv->fonts_languages = l;
 
 	optionmenu = ephy_dialog_get_control (EPHY_DIALOG (dialog),
 					      FONTS_LANGUAGE_PROP);
 
 	menu = gtk_menu_new ();
 
+	dialog->priv->fonts_languages = ephy_font_langs_get_list ();
+	n_fonts_languages = g_list_length (dialog->priv->fonts_languages);
 	for (l = dialog->priv->fonts_languages; l != NULL; l = l->next)
 	{
 		FontsLanguageInfo *info = (FontsLanguageInfo *) l->data;
@@ -698,7 +676,6 @@ create_fonts_language_menu (PrefsDialog *dialog)
 	gtk_option_menu_set_menu (GTK_OPTION_MENU(optionmenu), menu);
 
 	lang_codes = g_new0 (char *, n_fonts_languages);
-	i = 0;
 	for (l = dialog->priv->fonts_languages; l != NULL; l = l->next)
 	{
 		FontsLanguageInfo *info = (FontsLanguageInfo *) l->data;
@@ -709,6 +686,7 @@ create_fonts_language_menu (PrefsDialog *dialog)
 	}
 	ephy_dialog_add_enum (EPHY_DIALOG (dialog), FONTS_LANGUAGE_PROP,
 			      n_fonts_languages, (const char **) lang_codes);
+	/* the entries themselves are const, so don't use g_strfreev here */
 	g_free (lang_codes);
 
 	dialog->priv->language =
@@ -725,18 +703,18 @@ default_encoding_menu_changed_cb (GtkOptionMenu *option_menu,
 {
 	GList *encoding;
 	gint i;
-	EncodingInfo *info;
+	const EphyEncodingInfo *info;
 
 	i = gtk_option_menu_get_history (option_menu);
 	encoding = g_list_nth (dialog->priv->encodings, i);
 	g_assert (encoding != NULL);
 
-	info = (EncodingInfo *) encoding->data;
+	info = (EphyEncodingInfo *) encoding->data;
 	eel_gconf_set_string (CONF_LANGUAGE_DEFAULT_ENCODING, info->encoding);
 }
 
 static gint
-find_encoding_in_list_cmp (const EncodingInfo *info, const gchar *encoding)
+find_encoding_in_list_cmp (const EphyEncodingInfo *info, const char *encoding)
 {
 	return strcmp (info->encoding, encoding);
 }
@@ -747,22 +725,16 @@ create_default_encoding_menu (PrefsDialog *dialog)
 	GList *l;
 	GtkWidget *menu, *optionmenu;
 	gchar *encoding;
-	EphyEmbedSingle *single;
-
-	single = ephy_embed_shell_get_embed_single
-		(EPHY_EMBED_SHELL (ephy_shell));
-
-	ephy_embed_single_get_encodings (single, LG_ALL, TRUE,
-					 &dialog->priv->encodings);
 
 	menu = gtk_menu_new ();
 
 	optionmenu = ephy_dialog_get_control (EPHY_DIALOG (dialog),
 					      DEFAULT_ENCODING_PROP);
 
+	dialog->priv->encodings = ephy_encodings_get_list (LG_ALL, TRUE);
 	for (l = dialog->priv->encodings; l != NULL; l = l->next)
 	{
-		EncodingInfo *info = (EncodingInfo *) l->data;
+		const EphyEncodingInfo *info = (EphyEncodingInfo *) l->data;
 		GtkWidget *item;
 
 		item = gtk_menu_item_new_with_label (info->title);
