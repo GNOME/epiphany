@@ -406,6 +406,12 @@ MozDownload::OnSecurityChange (nsIWebProgress *aWebProgress, nsIRequest *aReques
 void
 MozDownload::Cancel()
 {
+	if (mDownloadState != EPHY_DOWNLOAD_DOWNLOADING &&
+	    mDownloadState != EPHY_DOWNLOAD_PAUSED)
+	{
+		return;
+	}
+	
 	if (mWebPersist)
 	{
 		mWebPersist->CancelSave ();
