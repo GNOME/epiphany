@@ -335,12 +335,11 @@ AC_COMPILE_IFELSE(
 	[AC_LANG_PROGRAM(
 		[[#include <nsIURI.h>
 		  #include <nsIGlobalHistory.h>
-		  #include <docshell/nsIGlobalHistory2.h>
-		  #include <history/nsIBrowserHistory.h>]],
-		[[nsIBrowserHistory *p;
+		  #include <docshell/nsIGlobalHistory2.h>]],
+		[[nsIGlobalHistory2 *p;
 		  p->AddURI(nsnull,PR_FALSE,PR_FALSE,nsnull);]]
 	)],
-	[AC_DEFINE([MOZ_NSIBROWSERHISTORY_ADDURI_WITH_REFERRER],[1],[Define if nsIGlobalHistory2::AddURI takes a referrer]) result=yes],
+	[AC_DEFINE([MOZ_NSIGLOBALHISTORY2_ADDURI_WITH_REFERRER],[1],[Define if nsIGlobalHistory2::AddURI takes a referrer]) result=yes],
 	[result=no])
 
 AC_MSG_RESULT([$result])

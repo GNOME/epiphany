@@ -46,7 +46,7 @@ MozGlobalHistory::~MozGlobalHistory ()
 {
 }
 
-#ifdef MOZ_NSIBROWSERHISTORY_ADDURI_WITH_REFERRER
+#ifdef MOZ_NSIGLOBALHISTORY2_ADDURI_WITH_REFERRER
 /* void addURI (in nsIURI aURI, in boolean aRedirect, in boolean aToplevel, in nsIURI aReferrer); */
 NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aToplevel, nsIURI *aReferrer)
 #else
