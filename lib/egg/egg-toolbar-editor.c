@@ -99,9 +99,12 @@ egg_toolbar_editor_get_type (void)
   return egg_toolbar_editor_type;
 }
 
-static int
-compare_func (GtkAction *a, GtkAction *b)
+static gint
+compare_actions (gconstpointer a, gconstpointer b)
 {
+  g_return_val_if_fail (GTK_IS_ACTION (a), 0);
+  g_return_val_if_fail (GTK_IS_ACTION (b), 0);
+
   GValue value_a = { 0, }, value_b = { 0, };
   const char *short_label_a, *short_label_b;
   int ret;
@@ -120,13 +123,6 @@ compare_func (GtkAction *a, GtkAction *b)
   g_value_unset (&value_b);
 
   return ret;
-}
-
-static void
-sort_list (EggToolbarEditor *editor)
-{
-  editor->priv->actions_list = g_list_sort (editor->priv->actions_list,
-					    (GCompareFunc) compare_func);
 }
 
 static GtkAction *
@@ -325,10 +321,9 @@ editor_drag_data_received_cb (GtkWidget          *widget,
 
   if (g_list_find (editor->priv->default_actions_list, action))
     {
-      editor->priv->actions_list = g_list_append
-	    (editor->priv->actions_list, action);
+      editor->priv->actions_list = g_list_insert_sorted
+	    (editor->priv->actions_list, action, compare_actions);
     }
-  sort_list (editor);
 
   update_editor_sheet (editor);
 }
@@ -347,7 +342,6 @@ editor_drag_data_delete_cb (GtkWidget          *widget,
       editor->priv->actions_list = g_list_remove
 	    (editor->priv->actions_list, action);
     }
-  sort_list (editor);
 
   update_editor_sheet (editor);
 }
@@ -618,10 +612,8 @@ egg_toolbar_editor_add_action (EggToolbarEditor *editor,
 	action = find_action (editor, action_name);
 	g_return_if_fail (action != NULL);
 
-	editor->priv->default_actions_list = g_list_append
-		(editor->priv->default_actions_list, action);
-
-	sort_list (editor);
+	editor->priv->default_actions_list = g_list_insert_sorted
+		(editor->priv->default_actions_list, action, compare_actions);
 }
 
 static void
@@ -683,12 +675,10 @@ update_actions_list (EggToolbarEditor *editor)
 
       if (!model_has_action (editor->priv->model, action))
         {
-          editor->priv->actions_list = g_list_prepend
-		(editor->priv->actions_list, action);
+          editor->priv->actions_list = g_list_insert_sorted
+		(editor->priv->actions_list, action, compare_actions);
         }
     }
-
-  sort_list (editor);
 }
 
 void
