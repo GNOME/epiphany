@@ -65,7 +65,8 @@ class GFilePicker : public nsIFilePicker
 	PRInt16 mSelectedFileFormat;
 
   private:
-	NS_METHOD HandleFilePickerResult(PRInt16 *retval);
+	NS_METHOD HandleFilePickerResult();
+	NS_METHOD ValidateFilePickerResult(PRInt16 *retval);
 
 	nsCOMPtr<nsIDOMWindow> mParent;
 

@@ -284,14 +284,17 @@ NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 
 	gint retVal = gtk_dialog_run(GTK_DIALOG(mFileSelector));
 	
-	HandleFilePickerResult(_retval);
+	HandleFilePickerResult();
 
 	if (retVal != GTK_RESPONSE_OK)
 	{
 		*_retval = returnCancel;
 	}
+	else
+	{	
+		ValidateFilePickerResult(_retval);
+	}
 
-	gtk_widget_hide(mFileSelector);
 	gtk_widget_destroy(mFileSelector);
 
 	return NS_OK;
@@ -407,23 +410,11 @@ NS_METHOD GFilePicker::SanityCheck (PRBool *retIsSane)
 // begin local private methods impl
 ////////////////////////////////////////////////////////////////////////////////
 
-NS_METHOD GFilePicker::HandleFilePickerResult(PRInt16 *retval)
+NS_METHOD GFilePicker::HandleFilePickerResult()
 {
-	*retval = returnCancel;
-	nsresult rv;
-
 	const char *fileName = gtk_file_selection_get_filename(GTK_FILE_SELECTION(mFileSelector));
 
 	if (!fileName || strlen(fileName) == 0) return NS_ERROR_FAILURE;
-
-	if (mMode == nsIFilePicker::modeSave)
-	{
-		if (!ephy_gui_confirm_overwrite_file (mFileSelector,
-					              fileName))
-		{
-			return NS_OK;
-		}
-	}
 
 	const nsACString &cFileName = nsDependentCString(fileName);
 	mFile->InitWithNativePath(cFileName);
@@ -440,10 +431,6 @@ NS_METHOD GFilePicker::HandleFilePickerResult(PRInt16 *retval)
 		mDisplayDirectory = do_QueryInterface(directory);
 		mFile->GetNativeLeafName(mDefaultString);
 	}
-
-	PRBool passesSanityCheck;
-	rv = SanityCheck(&passesSanityCheck);
-	if (NS_SUCCEEDED(rv) && !passesSanityCheck) return NS_ERROR_FAILURE;
 
 	if (mFormatChooser)
 	{
@@ -463,9 +450,30 @@ NS_METHOD GFilePicker::HandleFilePickerResult(PRInt16 *retval)
 		}
 	}
 
+	return NS_OK;
+}
+
+NS_METHOD GFilePicker::ValidateFilePickerResult(PRInt16 *retval)
+{
+	nsresult rv;
+	const char *fileName = gtk_file_selection_get_filename(GTK_FILE_SELECTION(mFileSelector));
+
+	*retval = returnCancel;
+
+	PRBool passesSanityCheck;
+	rv = SanityCheck(&passesSanityCheck);
+	if (NS_SUCCEEDED(rv) && !passesSanityCheck) return NS_ERROR_FAILURE;
+
+	if (mMode == nsIFilePicker::modeSave)
+	{
+		if (!ephy_gui_confirm_overwrite_file (mFileSelector,
+					              fileName))
+		{
+			return NS_OK;
+		}
+	}
+
 	*retval = returnOK;
 
 	return NS_OK;
 }
-
-
