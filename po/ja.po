@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 17:46+0900\n"
-"PO-Revision-Date: 2004-07-10 17:45+0900\n"
+"POT-Creation-Date: 2004-07-20 22:33+0900\n"
+"PO-Revision-Date: 2004-07-20 22:20+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -647,7 +647,7 @@ msgstr "クッキー"
 msgid "Download Manager"
 msgstr "ダウンロード・マネージャ"
 
-#: data/glade/epiphany.glade.h:8 src/ephy-window.c:1094
+#: data/glade/epiphany.glade.h:8 src/ephy-window.c:1111
 msgid "Find"
 msgstr "検索"
 
@@ -717,7 +717,7 @@ msgstr "<b>言語</b>"
 
 #: data/glade/prefs-dialog.glade.h:10
 msgid "<b>Temporary Files</b>"
-msgstr "<b>ディスク・キャッシュ:</b>"
+msgstr "<b>ディスク・キャッシュ</b>"
 
 #: data/glade/prefs-dialog.glade.h:11
 msgid "<b>Web Content</b>"
@@ -826,7 +826,7 @@ msgstr "下へ"
 
 #: data/glade/prefs-dialog.glade.h:38
 msgid "_Download folder:"
-msgstr "ダウンロード・フォルダ(_D)"
+msgstr "ダウンロード・フォルダ(_D):"
 
 #: data/glade/prefs-dialog.glade.h:39
 msgid "_Fixed width:"
@@ -928,7 +928,7 @@ msgstr "ページ番号(_N)"
 msgid "Paper"
 msgstr "用紙"
 
-#: data/glade/print.glade.h:23 src/ephy-window.c:1090
+#: data/glade/print.glade.h:23 src/ephy-window.c:1107
 msgid "Print"
 msgstr "印刷"
 
@@ -1013,7 +1013,7 @@ msgstr "再開(_R)"
 #. Translator hint: this is a label on progress bars inside a tree view.
 #.
 #: embed/downloader-view.c:355 lib/widgets/ephy-cell-renderer-progress.c:246
-#: lib/widgets/ephy-cell-renderer-progress.c:306 src/ephy-window.c:1275
+#: lib/widgets/ephy-cell-renderer-progress.c:306 src/ephy-window.c:1292
 msgid "Unknown"
 msgstr "不明"
 
@@ -1296,7 +1296,7 @@ msgstr "トルコ語 (Windows-1254)(_W)"
 
 #: embed/ephy-encodings.c:124
 msgid "Unicode (UTF-_8)"
-msgstr "Unicode (UTF-8)(_8)"
+msgstr "Unicode (UTF-_8)"
 
 #: embed/ephy-encodings.c:125
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
@@ -1351,19 +1351,19 @@ msgstr "英語 (US-ASCII)(_U)"
 
 #: embed/ephy-encodings.c:141
 msgid "Unicode (UTF-_16 BE)"
-msgstr "Unicode (UTF-16BE)(_1)"
+msgstr "Unicode (UTF-_16 BE)"
 
 #: embed/ephy-encodings.c:142
 msgid "Unicode (UTF-1_6 LE)"
-msgstr "Unicode (UTF-16LE)(_6)"
+msgstr "Unicode (UTF-1_6 LE)"
 
 #: embed/ephy-encodings.c:143
 msgid "Unicode (UTF-_32 BE)"
-msgstr "Unicode (UTF-32BE)(_3)"
+msgstr "Unicode (UTF-_32 BE)"
 
 #: embed/ephy-encodings.c:144
 msgid "Unicode (UTF-3_2 LE)"
-msgstr "Unicode (UTF-32LE)(_2)"
+msgstr "Unicode (UTF-3_2 LE)"
 
 #: embed/ephy-encodings.c:146
 msgid "Off"
@@ -1932,7 +1932,7 @@ msgstr "西欧"
 msgid "Secure"
 msgstr "セキュア"
 
-#: lib/ephy-stock-icons.c:55 src/ephy-window.c:1278
+#: lib/ephy-stock-icons.c:55 src/ephy-window.c:1295
 msgid "Insecure"
 msgstr "セキュアでない"
 
@@ -1945,7 +1945,7 @@ msgid "History"
 msgstr "履歴"
 
 #: lib/ephy-stock-icons.c:58 src/bookmarks/ephy-bookmarks-editor.c:1417
-#: src/bookmarks/ephy-topic-action.c:774 src/ephy-window.c:1096
+#: src/bookmarks/ephy-topic-action.c:985 src/ephy-window.c:1113
 msgid "Bookmarks"
 msgstr "ブックマーク"
 
@@ -2007,22 +2007,31 @@ msgstr "失敗"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: src/bookmarks/ephy-bookmark-action.c:274
+#: src/bookmarks/ephy-bookmark-action.c:277
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: src/bookmarks/ephy-bookmark-action.c:459
-msgid "_Open in New Tab"
-msgstr "新しいタブで開く(_O)"
+#: src/bookmarks/ephy-bookmark-action.c:533
+#: src/bookmarks/ephy-bookmarks-editor.c:182
+#: src/bookmarks/ephy-bookmarks-editor.c:1041 src/ephy-history-window.c:169
+#: src/ephy-history-window.c:747
+msgid "Open in New _Tab"
+msgstr "新しいタブで開く(_T)"
 
-#. File Menu
-#: src/bookmarks/ephy-bookmark-action.c:465
-#: src/bookmarks/ephy-bookmarks-editor.c:179
-#: src/bookmarks/ephy-bookmarks-editor.c:1040 src/ephy-history-window.c:166
-#: src/ephy-history-window.c:746
-msgid "_Open in New Window"
-msgstr "新しいウィンドウで開く(_O)"
+#: src/bookmarks/ephy-bookmark-action.c:539
+msgid "Open in New _Window"
+msgstr "新しいウィンドウで開く(_W)"
+
+#: src/bookmarks/ephy-bookmark-action.c:570
+#: src/bookmarks/ephy-topic-action.c:742
+msgid "Move _Left"
+msgstr "左へ移動(_L)"
+
+#: src/bookmarks/ephy-bookmark-action.c:577
+#: src/bookmarks/ephy-topic-action.c:749
+msgid "Move Ri_ght"
+msgstr "右へ移動(_R)"
 
 #: src/bookmarks/ephy-bookmark-properties.c:232
 #, c-format
@@ -2074,15 +2083,16 @@ msgstr "新しいトピック(_N)"
 msgid "Create a new topic"
 msgstr "新しいトピックを作成します"
 
+#. File Menu
+#: src/bookmarks/ephy-bookmarks-editor.c:179
+#: src/bookmarks/ephy-bookmarks-editor.c:1040 src/ephy-history-window.c:166
+#: src/ephy-history-window.c:746
+msgid "_Open in New Window"
+msgstr "新しいウィンドウで開く(_O)"
+
 #: src/bookmarks/ephy-bookmarks-editor.c:180
 msgid "Open the selected bookmark in a new window"
 msgstr "選択したブックマークを新しいウインドウで開きます"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:182
-#: src/bookmarks/ephy-bookmarks-editor.c:1041 src/ephy-history-window.c:169
-#: src/ephy-history-window.c:747
-msgid "Open in New _Tab"
-msgstr "新しいタブで開く(_T)"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "Open the selected bookmark in a new tab"
@@ -2291,11 +2301,11 @@ msgstr "検索(_S):"
 msgid "Topics"
 msgstr "トピック"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1562 src/ephy-history-window.c:1326
+#: src/bookmarks/ephy-bookmarks-editor.c:1565 src/ephy-history-window.c:1330
 msgid "Title"
 msgstr "タイトル"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1569 src/ephy-history-window.c:1332
+#: src/bookmarks/ephy-bookmarks-editor.c:1571 src/ephy-history-window.c:1336
 msgid "Address"
 msgstr "アドレス"
 
@@ -2362,11 +2372,11 @@ msgid "A bookmark titled %s already exists for this page."
 msgstr "タイトル %s のブックマークが既に存在しています。"
 
 #. This is the adjective, not the verb
-#: src/bookmarks/ephy-topic-action.c:258
+#: src/bookmarks/ephy-topic-action.c:273
 msgid "Empty"
 msgstr "空"
 
-#: src/bookmarks/ephy-topic-action.c:377
+#: src/bookmarks/ephy-topic-action.c:444
 msgid "_Open in Tabs"
 msgstr "タブで開く(_O)"
 
@@ -3024,51 +3034,51 @@ msgstr "画像を背景として使用(_U)"
 msgid "Copy I_mage Address"
 msgstr "画像のアドレスをコピー(_M)"
 
-#: src/ephy-window.c:557
+#: src/ephy-window.c:565
 msgid "Exit Fullscreen"
 msgstr "フルスクリーン表示の終了"
 
-#: src/ephy-window.c:645
+#: src/ephy-window.c:654
 msgid "Close _Document"
 msgstr "ドキュメントを閉じる(_D)"
 
-#: src/ephy-window.c:673
+#: src/ephy-window.c:682
 msgid "There are unsubmitted changes to form elements."
 msgstr "フォームに提出されていない変更点があります。"
 
-#: src/ephy-window.c:674
+#: src/ephy-window.c:683
 msgid "If you close the document anyway, you will lose that information."
 msgstr "いずれにしろドキュメントを閉じると、その情報は失われます。"
 
-#: src/ephy-window.c:1086 src/window-commands.c:397
+#: src/ephy-window.c:1103 src/window-commands.c:397
 msgid "Open"
 msgstr "開く"
 
-#: src/ephy-window.c:1088 src/window-commands.c:423
+#: src/ephy-window.c:1105 src/window-commands.c:423
 msgid "Save As"
 msgstr "別名で保存(_A)..."
 
-#: src/ephy-window.c:1092
+#: src/ephy-window.c:1109
 msgid "Bookmark"
 msgstr "ブックマーク"
 
-#: src/ephy-window.c:1281
+#: src/ephy-window.c:1298
 msgid "Broken"
 msgstr "壊れています"
 
-#: src/ephy-window.c:1284
+#: src/ephy-window.c:1301
 msgid "Medium"
 msgstr "中"
 
-#: src/ephy-window.c:1288
+#: src/ephy-window.c:1305
 msgid "Low"
 msgstr "低"
 
-#: src/ephy-window.c:1292
+#: src/ephy-window.c:1309
 msgid "High"
 msgstr "高"
 
-#: src/ephy-window.c:1302
+#: src/ephy-window.c:1319
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3077,12 +3087,12 @@ msgstr ""
 "セキュリティのレベル: %s\n"
 "%s"
 
-#: src/ephy-window.c:1308
+#: src/ephy-window.c:1325
 #, c-format
 msgid "Security level: %s"
 msgstr "セキュリティのレベル: %s"
 
-#: src/ephy-window.c:1332
+#: src/ephy-window.c:1349
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
@@ -3444,16 +3454,16 @@ msgstr "アドレス・エントリに入力されたアドレスに移動しま
 msgid "Check this out!"
 msgstr "Check this out!"
 
-#: src/window-commands.c:868
+#: src/window-commands.c:874
 msgid "Toolbar Editor"
 msgstr "ツールバー・エディタ"
 
-#: src/window-commands.c:887
+#: src/window-commands.c:893
 msgid "_Add a New Toolbar"
 msgstr "新しいツールバーの追加(_A)"
 
 #. Translator credits
-#: src/window-commands.c:940
+#: src/window-commands.c:946
 msgid "translator-credits"
 msgstr ""
 "相花 毅 <aihana@gnome.gr.jp>\n"
@@ -3463,6 +3473,6 @@ msgstr ""
 "Yukihiro Nakai <nakai@gnome.gr.jp>\n"
 "日本GNOMEユーザー会 <http://www.gnome.gr.jp>"
 
-#: src/window-commands.c:970
+#: src/window-commands.c:976
 msgid "A GNOME browser based on Mozilla"
 msgstr "Mozilla ベースの GNOME ブラウザです"
