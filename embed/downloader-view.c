@@ -371,7 +371,7 @@ downloader_view_update_controls (DownloaderViewPrivate *priv)
 	{
 		gtk_button_set_label (GTK_BUTTON (priv->pause_button), _("_Pause"));
 	}
-	
+
 	g_free (info);
 }
 
@@ -489,13 +489,17 @@ downloader_view_set_download_info (DownloaderViewPrivate *priv,
 		details->download_started = TRUE;
 		downloader_view_update_controls (priv);
 	}
-		
+
 	/* Progress */
 	if (details->status == DOWNLOAD_STATUS_COMPLETED)
 	{
 		details->progress = 1;
+		if (details->size_total > 0)
+		{
+			details->size_done = details->size_total;
+		}
 	}
-	
+
 	sprintf (buffer, "%.1f%%",
 		 details->progress > 0 ?
 		 details->progress * 100.0 :
@@ -533,10 +537,10 @@ downloader_view_set_download_info (DownloaderViewPrivate *priv,
 	{
 		sprintf (buffer,
 			 details->progress > 0 ?
-		 	 _("00.00") :
-		 	 _("Unknown"));
+			 _("00.00") :
+			 _("Unknown"));
 	}
-	
+
 	gtk_list_store_set (GTK_LIST_STORE (priv->model),
 			    iter,
 			    COL_REMAINING, buffer,
