@@ -45,7 +45,6 @@ GtkWidget *MozillaFindEmbed (nsIDOMWindow *aDOMWindow)
         result = window->GetSiteWindow ((void **)&mozembed);
 	NS_ENSURE_SUCCESS (result, nsnull);
 
-	g_print ("returning %p\n", mozembed);
 	return mozembed;
 }
 
