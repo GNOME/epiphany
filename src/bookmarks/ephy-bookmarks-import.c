@@ -35,6 +35,22 @@ build_keyword (const char *folder)
 	return ephy_str_replace_substring (folder, " ", "_");
 }
 
+static EphyNode *
+set_folder (EphyBookmarks *bookmarks,
+	    EphyNode *bookmark,
+	    const char *name)
+{
+	EphyNode *topic;
+
+	topic = ephy_bookmarks_find_keyword (bookmarks, name, FALSE);
+	if (topic == NULL)
+	{
+		topic = ephy_bookmarks_add_keyword (bookmarks, name);
+	}
+
+	ephy_bookmarks_set_keyword (bookmarks, topic, bookmark);
+}
+
 static void
 mozilla_parse_bookmarks (EphyBookmarks *bookmarks,
 		         htmlNodePtr node,
@@ -56,13 +72,15 @@ mozilla_parse_bookmarks (EphyBookmarks *bookmarks,
 		else if (xmlStrEqual (child->name, "a"))
 		{
 			xmlChar *title, *url;
+			EphyNode *bmk;
 
 			title = xmlNodeGetContent (child);
 			url = xmlGetProp (child, "href");
-			ephy_bookmarks_add (bookmarks,
-					    title,
-					    url,
-					    NULL);
+			bmk = ephy_bookmarks_add (bookmarks,
+					          title,
+					          url,
+					          NULL);
+			set_folder (bookmarks, bmk, *keyword);
 			xmlFree (title);
 			xmlFree (url);
 		}
@@ -132,6 +150,7 @@ xbel_parse_folder (EphyBookmarks *bookmarks,
 		{
 			XbelInfo *xbel;
 			xmlChar *url;
+			EphyNode *bmk;
 
 			xbel = g_new0 (XbelInfo, 1);
 			xbel->title = NULL;
@@ -143,10 +162,11 @@ xbel_parse_folder (EphyBookmarks *bookmarks,
 						    child->children,
 						    xbel);
 
-			ephy_bookmarks_add (bookmarks,
-					    xbel->title,
-					    url,
-					    xbel->smarturl);
+			bmk = ephy_bookmarks_add (bookmarks,
+					          xbel->title,
+					          url,
+					          xbel->smarturl);
+			set_folder (bookmarks, bmk, keyword);
 
 			if (url)
 				xmlFree (url);
