@@ -63,6 +63,8 @@ struct EphyNodeViewPrivate
 
 	GtkTargetList *drag_targets;
 
+	EphyNode *selected_node;
+
 	gboolean editing;
 };
 
@@ -239,6 +241,8 @@ ephy_node_view_selection_changed_cb (GtkTreeSelection *selection,
 	GList *list;
 	EphyNode *node = NULL;
 
+	view->priv->selected_node = NULL;
+
 	list = ephy_node_view_get_selection (view);
 	if (list)
 	{
@@ -269,6 +273,22 @@ ephy_node_view_row_activated_cb (GtkTreeView *treeview,
 	g_signal_emit (G_OBJECT (view), ephy_node_view_signals[NODE_ACTIVATED], 0, node);
 }
 
+static EphyNode *
+get_node_from_path (EphyNodeView *view, GtkTreePath *path)
+{
+	EphyNode *node;
+	GtkTreeIter iter, iter2;
+
+	gtk_tree_model_get_iter (view->priv->sortmodel, &iter, path);
+	gtk_tree_model_sort_convert_iter_to_child_iter
+		(GTK_TREE_MODEL_SORT (view->priv->sortmodel), &iter2, &iter);
+	egg_tree_model_filter_convert_iter_to_child_iter
+		(EGG_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
+	node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, &iter);
+
+	return node;
+}
+
 static gboolean
 ephy_node_view_button_press_cb (GtkTreeView *treeview,
 			        GdkEventButton *event,
@@ -276,10 +296,10 @@ ephy_node_view_button_press_cb (GtkTreeView *treeview,
 {
 	GtkTreePath *path;
 	GtkTreeSelection *selection;
+	gboolean result = FALSE;
 
 	if (event->button == 3)
 	{
-		g_signal_emit (G_OBJECT (view), ephy_node_view_signals[SHOW_POPUP], 0);
 		if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (treeview),
 						   event->x,
 						   event->y,
@@ -292,12 +312,18 @@ ephy_node_view_button_press_cb (GtkTreeView *treeview,
 				/* We handle the event (so the view won't be
 				 * changed by the user click) because the user
 				 * clicked on an already selected element */
-				return TRUE;
+				result = TRUE;
 			}
+			else
+			{
+				view->priv->selected_node = get_node_from_path (view, path);
+			}
+
+			g_signal_emit (G_OBJECT (view), ephy_node_view_signals[SHOW_POPUP], 0);
 		}
 	}
 
-	return FALSE;
+	return result;
 }
 
 static void
@@ -627,6 +653,7 @@ ephy_node_view_init (EphyNodeView *view)
 	view->priv = g_new0 (EphyNodeViewPrivate, 1);
 	view->priv->editable_renderer = NULL;
 	view->priv->editing = TRUE;
+	view->priv->selected_node = NULL;
 }
 
 static void
@@ -661,12 +688,20 @@ ephy_node_view_get_selection (EphyNodeView *view)
 	GList *list = NULL;
 	GtkTreeSelection *selection;
 
-	selection = gtk_tree_view_get_selection
-		(GTK_TREE_VIEW (view));
+	if (view->priv->selected_node)
+	{
+		list = g_list_append (list, view->priv->selected_node);
+	}
+	else
+	{
+		selection = gtk_tree_view_get_selection
+			(GTK_TREE_VIEW (view));
 
-	gtk_tree_selection_selected_foreach (selection,
-					     (GtkTreeSelectionForeachFunc) get_selection,
-					     (void **) &list);
+		gtk_tree_selection_selected_foreach
+			(selection,
+			 (GtkTreeSelectionForeachFunc) get_selection,
+			 (void **) &list);
+	}
 
 	return list;
 }
@@ -717,22 +752,6 @@ ephy_node_view_select_node (EphyNodeView *view,
 	gtk_tree_view_set_cursor (GTK_TREE_VIEW (view),
 				  path, NULL, FALSE);
 	gtk_tree_path_free (path);
-}
-
-static EphyNode *
-get_node_from_path (EphyNodeView *view, GtkTreePath *path)
-{
-	EphyNode *node;
-	GtkTreeIter iter, iter2;
-
-	gtk_tree_model_get_iter (view->priv->sortmodel, &iter, path);
-	gtk_tree_model_sort_convert_iter_to_child_iter
-		(GTK_TREE_MODEL_SORT (view->priv->sortmodel), &iter2, &iter);
-	egg_tree_model_filter_convert_iter_to_child_iter
-		(EGG_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
-	node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, &iter);
-
-	return node;
 }
 
 static gboolean
@@ -923,10 +942,17 @@ ephy_node_view_has_selection (EphyNodeView *view, gboolean *multiple)
 	GtkTreeSelection *selection;
 	int rows;
 
-	selection = gtk_tree_view_get_selection
-		(GTK_TREE_VIEW (view));
+	if (view->priv->selected_node)
+	{
+		rows = 1;
+	}
+	else
+	{
+		selection = gtk_tree_view_get_selection
+			(GTK_TREE_VIEW (view));
 
-	rows = gtk_tree_selection_count_selected_rows (selection);
+		rows = gtk_tree_selection_count_selected_rows (selection);
+	}
 
 	if (multiple)
 	{

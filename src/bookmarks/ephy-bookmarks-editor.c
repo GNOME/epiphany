@@ -454,18 +454,6 @@ ephy_bookmarks_editor_finalize (GObject *object)
 }
 
 static void
-ephy_bookmarks_editor_show_popup_cb (GtkWidget *view,
-				     EphyBookmarksEditor *editor)
-{
-	GtkWidget *widget;
-
-	widget = egg_menu_merge_get_widget (editor->priv->ui_merge,
-					    "/popups/EphyBookmarkEditorPopup");
-	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
-			gtk_get_current_event_time ());
-}
-
-static void
 ephy_bookmarks_editor_node_activated_cb (GtkWidget *view,
 				         EphyNode *node,
 					 EphyBookmarksEditor *editor)
@@ -493,7 +481,8 @@ ephy_bookmarks_editor_node_activated_cb (GtkWidget *view,
 }
 
 static void
-ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
+ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor,
+				   GtkWidget *selected_view)
 {
 	gboolean open_in_window, open_in_tab,
 		 rename, delete, properties;
@@ -508,11 +497,19 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	GList *selected;
 	GtkWidget *focus_widget;
 
-	bmk_focus = gtk_widget_is_focus (editor->priv->bm_view);
-	key_focus = gtk_widget_is_focus (editor->priv->key_view);
-	
+	if (selected_view)
+	{
+		bmk_focus = (selected_view == editor->priv->bm_view);
+		key_focus = (selected_view == editor->priv->key_view);
+	}
+	else
+	{
+		bmk_focus = gtk_widget_is_focus (editor->priv->bm_view);
+		key_focus = gtk_widget_is_focus (editor->priv->key_view);
+	}
+
 	focus_widget = gtk_window_get_focus (GTK_WINDOW (editor));
-	
+
 	if (GTK_IS_EDITABLE (focus_widget))
 	{
 		gboolean has_selection;
@@ -539,7 +536,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		(EPHY_NODE_VIEW (editor->priv->key_view), NULL);
 
 	selected = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->key_view));
-	if (selected)
+	if (key_focus && selected)
 	{
 		EphyNode *node = EPHY_NODE (selected->data);
 		EphyBookmarksKeywordPriority priority;;
@@ -591,6 +588,19 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	g_object_set (action, "sensitive", paste, NULL);
 	action = egg_action_group_get_action (action_group, "SelectAll");
 	g_object_set (action, "sensitive", select_all, NULL);
+}
+
+static void
+ephy_bookmarks_editor_show_popup_cb (GtkWidget *view,
+				     EphyBookmarksEditor *editor)
+{
+	GtkWidget *widget;
+
+	widget = egg_menu_merge_get_widget (editor->priv->ui_merge,
+					    "/popups/EphyBookmarkEditorPopup");
+	ephy_bookmarks_editor_update_menu (editor, view);
+	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
+			gtk_get_current_event_time ());
 }
 
 static void
@@ -706,7 +716,7 @@ keyword_node_show_popup_cb (GtkWidget *view, EphyBookmarksEditor *editor)
 
 	widget = egg_menu_merge_get_widget (editor->priv->ui_merge,
 					   "/popups/EphyBookmarkKeywordPopup");
-	ephy_bookmarks_editor_update_menu (editor);
+	ephy_bookmarks_editor_update_menu (editor, view);
 	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
 			gtk_get_current_event_time ());
 }
@@ -821,7 +831,7 @@ static void
 menu_activate_cb (EphyNodeView *view,
 	          EphyBookmarksEditor *editor)
 {
-	ephy_bookmarks_editor_update_menu (editor);
+	ephy_bookmarks_editor_update_menu (editor, NULL);
 }
 
 static void
