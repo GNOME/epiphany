@@ -106,6 +106,8 @@ GType		ephy_shell_get_type			(void);
 
 GQuark		ephy_shell_error_quark			(void);
 
+EphyShell      *ephy_shell_get_default			(void);
+
 EphyShell      *ephy_shell_new				(void);
 
 gboolean	ephy_shell_startup			(EphyShell *shell,

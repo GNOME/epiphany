@@ -499,6 +499,20 @@ ephy_shell_finalize (GObject *object)
 	LOG ("Ephy shell finalized")
 }
 
+
+/**
+ * ephy_shell_get_default:
+ *
+ * Retrieve the default #EphyShell object
+ *
+ * ReturnValue: the default #EphyShell
+ **/
+EphyShell *
+ephy_shell_get_default (void)
+{
+   return ephy_shell;
+}
+
 EphyShell *
 ephy_shell_new (void)
 {
