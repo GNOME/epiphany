@@ -1,4 +1,4 @@
-/*
+ /*
  *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -57,6 +57,17 @@ ephy_embed_single_class_init (gpointer g_class)
 
 	if (initialised == FALSE)
 	{
+	/**
+	 * EphyEmbedSingle::handle_content
+	 * @single: the #EphyEmbedSingle
+	 * @mime_type: the mime type of the content
+	 * @address: the address of the content
+	 *
+	 * The handle_content signal is emitted when encountering content
+	 * of a mime type Epiphany is unable to handle itself.
+	 *
+	 * Returning TRUE will stop the signal emission.
+	 **/
 	g_signal_new ("handle_content",
 		      EPHY_TYPE_EMBED_SINGLE,
 		      G_SIGNAL_RUN_LAST,
@@ -72,6 +83,12 @@ ephy_embed_single_class_init (gpointer g_class)
 	}
 }
 
+/**
+ * ephy_embed_single_clear_cache:
+ * @single: the #EphyEmbedSingle
+ * 
+ * Clears the mozilla cache.
+ **/
 void
 ephy_embed_single_clear_cache (EphyEmbedSingle *single)
 {
@@ -79,6 +96,13 @@ ephy_embed_single_clear_cache (EphyEmbedSingle *single)
 	klass->clear_cache (single);
 }
 
+/**
+ * ephy_embed_single_set_offline_mode:
+ * @single: the #EphyEmbedSingle
+ * @offline: whether being off-line
+ * 
+ * Sets the state of the net connection.
+ **/
 void
 ephy_embed_single_set_offline_mode (EphyEmbedSingle *single,
 				    gboolean offline)
@@ -87,14 +111,31 @@ ephy_embed_single_set_offline_mode (EphyEmbedSingle *single,
 	klass->set_offline_mode (single, offline);
 }
 
+/**
+ * ephy_embed_single_load_proxy_autoconf:
+ * @single: the #EphyEmbedSingle
+ * @address: the address of the PAC file
+ * 
+ * Sets the address of the PAC file, and loads the proxy configuration from it.
+ **/
 void
 ephy_embed_single_load_proxy_autoconf (EphyEmbedSingle *single,
-				       const char* url)
+				       const char* address)
 {
 	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (single);
-	klass->load_proxy_autoconf (single, url);
+	klass->load_proxy_autoconf (single, address);
 }
 
+/**
+ * ephy_embed_single_get_font_list:
+ * @single: the #EphyEmbedSingle
+ * @langGroup: a mozilla font language group name, or NULL
+ * 
+ * Returns the list of fonts matching @langGroup, or all fonts if @langGroup is
+ * NULL.
+ * 
+ * Return value: a list of font names
+ **/
 GList *
 ephy_embed_single_get_font_list (EphyEmbedSingle *single,
 				 const char *langGroup)
