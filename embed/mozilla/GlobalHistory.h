@@ -22,10 +22,6 @@
 #ifndef EPHY_GLOBAL_HISTORY_H
 #define EPHY_GLOBAL_HISTORY_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ephy-history.h"
 
 #include <nsIBrowserHistory.h>

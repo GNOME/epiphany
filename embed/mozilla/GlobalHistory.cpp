@@ -131,6 +131,20 @@ NS_IMETHODIMP MozGlobalHistory::HidePage(nsIURI *aURI)
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
+/* void removePage (in nsIURI aURI); */
+NS_IMETHODIMP MozGlobalHistory::RemovePage(nsIURI *aURI)
+{
+	return NS_ERROR_NOT_IMPLEMENTED;
+}
+
+/* void removePagesFromHost (in AUTF8String aHost, in boolean aEntireDomain); */
+NS_IMETHODIMP MozGlobalHistory::RemovePagesFromHost(const nsACString &aHost, 
+						    PRBool aEntireDomain)
+{
+	return NS_ERROR_NOT_IMPLEMENTED;
+}
+#else
 /* void removePage (in string aURL); */
 NS_IMETHODIMP MozGlobalHistory::RemovePage(const char *aURL)
 {
@@ -143,6 +157,7 @@ NS_IMETHODIMP MozGlobalHistory::RemovePagesFromHost(const char *aHost,
 {
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
+#endif
 
 /* void removeAllPages (); */
 NS_IMETHODIMP MozGlobalHistory::RemoveAllPages()
@@ -162,8 +177,16 @@ NS_IMETHODIMP MozGlobalHistory::GetCount(PRUint32 *aCount)
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
+/* void markPageAsTyped (in AUTF8String aURI) */
+NS_IMETHODIMP MozGlobalHistory::MarkPageAsTyped(nsIURI *aURI)
+{
+    return NS_ERROR_NOT_IMPLEMENTED;
+}
+#else
 /* void markPageAsTyped (in string url); */
 NS_IMETHODIMP MozGlobalHistory::MarkPageAsTyped(const char *url)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
+#endif
