@@ -7,17 +7,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany 0.5.0\n"
+"Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-03 04:26+0100\n"
-"PO-Revision-Date: 2003-12-03 04:28+0100\n"
+"POT-Creation-Date: 2003-12-04 04:34+0100\n"
+"PO-Revision-Date: 2003-12-04 04:35+0100\n"
 "Last-Translator: Danilo Segan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: data/GNOME_Epiphany_Automation.server.in.h:1
 msgid "Epiphany automation"
@@ -55,7 +54,9 @@ msgstr "Obeleživači"
 msgid ""
 "A list of protocols to be considered safe in addition to the default, when "
 "disable_unsafe_protocols is enabled."
-msgstr "Spisak protokola koji se smatraju bezbednim pored podrazumevanih, kada je uključeno disable_unsafe_protocols."
+msgstr ""
+"Spisak protokola koji se smatraju bezbednim pored podrazumevanih, kada je "
+"uključeno disable_unsafe_protocols."
 
 #: data/epiphany-lockdown.schemas.in.h:2
 msgid "Additional safe protocols"
@@ -78,7 +79,9 @@ msgstr "Isključi nebezbedne protokole"
 msgid ""
 "Disables loading of content from unsafe protocols. Safe protocols are http: "
 "and https:."
-msgstr "Isključuje učitavanje sadržaja preko nebezbednih protokola. Bezbedni protokoli su http: i https:."
+msgstr ""
+"Isključuje učitavanje sadržaja preko nebezbednih protokola. Bezbedni protokoli "
+"su http: i https:."
 
 #: data/epiphany-lockdown.schemas.in.h:7
 msgid "Hide menubar by default"
@@ -1516,31 +1519,31 @@ msgstr "XML datoteke"
 msgid "XUL files"
 msgstr "XUL datoteke"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:133
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:183
 msgid "_Select Certificate"
 msgstr "_Izaberi sertifikat"
 
 # bug: no translation needed
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:169
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:219
 #, c-format
 msgid "\"<tt>%s</tt>\""
 msgstr "\"<tt>%s</tt>\""
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:172
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:222
 #, c-format
 msgid "Choose a certificate to present as identification to %s."
 msgstr "Izaberite sertifikat koji da koristim za identifikaciju na %s."
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:175
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:225
 msgid "Select a certificate to identify yourself."
 msgstr "Izaberite sertifikat za vašu identifikaciju."
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:200
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:275
 msgid "Certificate _Details"
 msgstr "_Detalji sertifikata"
 
 #. Add the buttons
-#: embed/mozilla/GtkNSSDialogs.cpp:221 embed/mozilla/GtkNSSDialogs.cpp:529
+#: embed/mozilla/GtkNSSDialogs.cpp:221 embed/mozilla/GtkNSSDialogs.cpp:532
 msgid "_View Certificate"
 msgstr "_Pogledaj sertifikat"
 
@@ -1596,20 +1599,20 @@ msgstr "_Ne prikazuj više ovu poruku za ovu stranicu"
 msgid "Co_nnect"
 msgstr "Po_veži se"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:412
+#: embed/mozilla/GtkNSSDialogs.cpp:413
 msgid "Accept expired security information?"
 msgstr "Prihvati istekle bezbednosne podatke?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:413
+#: embed/mozilla/GtkNSSDialogs.cpp:414
 #, c-format
 msgid "The security information for %s expired on %s."
 msgstr "Bezbednosni podaci za %s su istekli u %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:419
+#: embed/mozilla/GtkNSSDialogs.cpp:420
 msgid "Accept not yet valid security information?"
 msgstr "Prihvati još uvek nevažeće bezbednosne podatke?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:420
+#: embed/mozilla/GtkNSSDialogs.cpp:421
 #, c-format
 msgid "The security information for %s isn't valid until %s."
 msgstr "Bezbednosni podaci za %s nisu važeći do %s."
@@ -1617,42 +1620,42 @@ msgstr "Bezbednosni podaci za %s nisu važeći do %s."
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: embed/mozilla/GtkNSSDialogs.cpp:431
+#: embed/mozilla/GtkNSSDialogs.cpp:432
 msgid "%a %d %b %Y"
 msgstr "%a, %d. %b %Y."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:441
+#: embed/mozilla/GtkNSSDialogs.cpp:443
 msgid "You should ensure that your computer's time is correct."
 msgstr "Proverite da li je časovnik vašeg računara ispravan."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:485
+#: embed/mozilla/GtkNSSDialogs.cpp:488
 #, c-format
 msgid "Cannot establish connection to %s."
 msgstr "Ne mogu da uspostavim vezu sa %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:488
+#: embed/mozilla/GtkNSSDialogs.cpp:491
 #, c-format
 msgid "The certificate revocation list (CRL) from %s needs to be updated."
 msgstr "Spisak povučenih sertifikata (CRL) sa %s je potrebno osvežiti."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:493
+#: embed/mozilla/GtkNSSDialogs.cpp:496
 msgid "Please ask your system administrator for assistance."
 msgstr "Zatražite pomoć od administratora vašeg sistema."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:532
+#: embed/mozilla/GtkNSSDialogs.cpp:535
 msgid "_Trust CA"
 msgstr "_Veruj izdavaču"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:544
+#: embed/mozilla/GtkNSSDialogs.cpp:547
 #, c-format
 msgid "Trust %s to identify:"
 msgstr "Veruj %s radi identifikacije:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:548
+#: embed/mozilla/GtkNSSDialogs.cpp:551
 msgid "Trust new Certificate Authority?"
 msgstr "Verovati novom izdavaču sertifikata?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:549
+#: embed/mozilla/GtkNSSDialogs.cpp:552
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1660,118 +1663,118 @@ msgstr ""
 "Pre ukazivanja poverenja izdavaču sertifikata, treba da proverite da li je "
 "sertifikat autentičan."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:559
+#: embed/mozilla/GtkNSSDialogs.cpp:562
 msgid "_Web sites"
 msgstr "_Veb stranice"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:564
+#: embed/mozilla/GtkNSSDialogs.cpp:567
 msgid "_Software developers"
 msgstr "_Programeri"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:630
+#: embed/mozilla/GtkNSSDialogs.cpp:633
 msgid "Certificate already exists."
 msgstr "Ovaj sertifikat već postoji."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:631
+#: embed/mozilla/GtkNSSDialogs.cpp:634
 msgid "The certificate has already been imported."
 msgstr "Ovaj sertifikat je već uvežen."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:750
+#: embed/mozilla/GtkNSSDialogs.cpp:753
 msgid "_Backup Certificate"
 msgstr "_Rezervna kopija sertifikata"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:757
+#: embed/mozilla/GtkNSSDialogs.cpp:760
 msgid "Select password."
 msgstr "Izaberite lozinku."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:758
+#: embed/mozilla/GtkNSSDialogs.cpp:761
 msgid "Select a password to protect this certificate."
 msgstr "Izaberite lozinku radi zaštite ovog sertifikata."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:770 embed/mozilla/GtkNSSDialogs.cpp:872
+#: embed/mozilla/GtkNSSDialogs.cpp:773 embed/mozilla/GtkNSSDialogs.cpp:875
 msgid "_Password:"
 msgstr "_Lozinka:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:784
+#: embed/mozilla/GtkNSSDialogs.cpp:787
 msgid "Con_firm password:"
 msgstr "Po_tvrdite lozinku:"
 
 #. TODO: We need a better password quality meter
-#: embed/mozilla/GtkNSSDialogs.cpp:796
+#: embed/mozilla/GtkNSSDialogs.cpp:799
 msgid "Password quality:"
 msgstr "Kvalitet lozinke:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:853
+#: embed/mozilla/GtkNSSDialogs.cpp:856
 msgid "I_mport Certificate"
 msgstr "U_vezi sertifikat"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:861
+#: embed/mozilla/GtkNSSDialogs.cpp:864
 msgid "Password required."
 msgstr "Lozinka je obavezna."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:862
+#: embed/mozilla/GtkNSSDialogs.cpp:865
 msgid "Enter the password for this certificate."
 msgstr "Unesite lozinku za ovaj sertifikat."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:940
+#: embed/mozilla/GtkNSSDialogs.cpp:943
 msgid "Certificate Revocation list successfully imported."
 msgstr "Spisak povučenih sertifikata je uspešno uvežen."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:941
+#: embed/mozilla/GtkNSSDialogs.cpp:944
 msgid "Certificate Revocation list (CRL) imported:"
 msgstr "Spisak povučenih sertifikata (CRL) uvežen:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:960
+#: embed/mozilla/GtkNSSDialogs.cpp:963
 msgid "Organization:"
 msgstr "Organizacija:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:963
+#: embed/mozilla/GtkNSSDialogs.cpp:966
 msgid "Unit:"
 msgstr "Jedinica:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:966
+#: embed/mozilla/GtkNSSDialogs.cpp:969
 msgid "Next Update:"
 msgstr "Sledeće osvežavanje:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:993
+#: embed/mozilla/GtkNSSDialogs.cpp:996
 msgid "Not part of certificate"
 msgstr "Nije deo sertifikata"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1261
+#: embed/mozilla/GtkNSSDialogs.cpp:1264
 msgid "Certificate Properties"
 msgstr "Osobine sertifikata"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1283
+#: embed/mozilla/GtkNSSDialogs.cpp:1286
 msgid "This certificate has been verified for the following uses:"
 msgstr "Ovaj sertifikat je odobren za sledeću upotrebu:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1286
+#: embed/mozilla/GtkNSSDialogs.cpp:1289
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Ne mogu da odobrim ovaj sertifikat zato što je povučen."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1289
+#: embed/mozilla/GtkNSSDialogs.cpp:1292
 msgid "Could not verify this certificate because it has expired."
 msgstr "Ne mogu da odobrim ovaj sertifikat zato što je istekao."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1292
+#: embed/mozilla/GtkNSSDialogs.cpp:1295
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Ne mogu da odobrim ovaj sertifikat zato što nemam poverenja u njega."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1295
+#: embed/mozilla/GtkNSSDialogs.cpp:1298
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr "Ne mogu da odobrim ovaj sertifikat zato što nemam poverenja u izdavača."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1298
+#: embed/mozilla/GtkNSSDialogs.cpp:1301
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "Ne mogu da odobrim ovaj sertifikat zato što izdavač nije poznat."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1301
+#: embed/mozilla/GtkNSSDialogs.cpp:1304
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 "Ne mogu da odobrim ovaj sertifikat zato što je CA sertifikat neispravan."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1306
+#: embed/mozilla/GtkNSSDialogs.cpp:1309
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Ne mogu da odobrim ovaj sertifikat iz nepoznatih razloga."
 
@@ -2999,51 +3002,51 @@ msgstr ""
 msgid "Security level: %s"
 msgstr "Nivo bezbednosti: %s"
 
-#: src/pdm-dialog.c:414
+#: src/pdm-dialog.c:421
 msgid "Domain"
 msgstr "Domen"
 
-#: src/pdm-dialog.c:426
+#: src/pdm-dialog.c:433
 msgid "Name"
 msgstr "Ime"
 
-#: src/pdm-dialog.c:667
+#: src/pdm-dialog.c:674
 msgid "Host"
 msgstr "Server"
 
-#: src/pdm-dialog.c:679
+#: src/pdm-dialog.c:686
 msgid "User Name"
 msgstr "Korisničko ime"
 
-#: src/pdm-dialog.c:867
+#: src/pdm-dialog.c:874
 msgid "Cookie Properties"
 msgstr "Osobine kolačića"
 
-#: src/pdm-dialog.c:880
-msgid "Value:"
-msgstr "Vrednost:"
+#: src/pdm-dialog.c:889
+msgid "Content:"
+msgstr "Sadržaj:"
 
-#: src/pdm-dialog.c:894
+#: src/pdm-dialog.c:904
 msgid "Path:"
 msgstr "Putanja:"
 
-#: src/pdm-dialog.c:908
+#: src/pdm-dialog.c:919
 msgid "Secure:"
 msgstr "Bezbedan:"
 
-#: src/pdm-dialog.c:917
+#: src/pdm-dialog.c:928
 msgid "Yes"
 msgstr "Da"
 
-#: src/pdm-dialog.c:917
+#: src/pdm-dialog.c:928
 msgid "No"
 msgstr "Ne"
 
-#: src/pdm-dialog.c:922
-msgid "Expire:"
+#: src/pdm-dialog.c:934
+msgid "Expires:"
 msgstr "Ističe:"
 
-#: src/pdm-dialog.c:933
+#: src/pdm-dialog.c:945
 msgid "End of current session"
 msgstr "Kraj tekuće sesije"
 
@@ -3348,6 +3351,9 @@ msgstr ""
 #: src/window-commands.c:938
 msgid "A GNOME browser based on Mozilla"
 msgstr "Gnom veb čitač zasnovan na Mozili"
+
+#~ msgid "Value:"
+#~ msgstr "Vrednost:"
 
 #~ msgid "  "
 #~ msgstr "  "
