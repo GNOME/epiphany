@@ -1,3 +1,24 @@
+2003-07-18  Marco Pesenti Gritti  <marco@it.gnome.org>
+	    Christian Persch  <chpe@cvs.gnome.org>
+
+
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init),
+	(ephy_bookmarks_find_bookmark):
+	* src/ephy-toolbars-model.c: (ephy_toolbars_model_get_action_name),
+	(topic_destroy_cb), (bookmark_destroy_cb), (setup_item),
+	(impl_add_item), (ephy_toolbars_model_set_bookmarks),
+	(ephy_toolbars_model_init), (get_toolbar_pos),
+	(get_toolbar_and_item_pos), (ephy_toolbars_model_remove_bookmark),
+	(ephy_toolbars_model_add_bookmark),
+	(ephy_toolbars_model_has_bookmark):
+	* src/ephy-toolbars-model.h:
+	* src/toolbar.c: (topic_destroy_cb), (bookmark_destroy_cb):
+
+	Remove bookmarks also if they are not on the bookmarks toolbar.
+	Deal with bookmarks/model sync inside the model not in the toolbar.
+	If there are invalid bookmarks in the toolbar configuration
+	when loading it, emit a warning and drop them.
+
 2003-07-17  Xan Lopez  <xan@masilla.org>
 
 	* embed/ephy-history.c: (ephy_history_get_icon):

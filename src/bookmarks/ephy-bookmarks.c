@@ -668,6 +668,8 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	GValue value = { 0, };
 	EphyNodeDb *db;
 
+	LOG ("Init");
+
         eb->priv = g_new0 (EphyBookmarksPrivate, 1);
 	eb->priv->toolbars_model = NULL;
 
@@ -884,13 +886,15 @@ ephy_bookmarks_set_address (EphyBookmarks *eb,
 	update_has_smart_address (bookmark, address);
 }
 
-EphyNode*
+EphyNode *
 ephy_bookmarks_find_bookmark (EphyBookmarks *eb,
 			      const char *url)
 {
 	GPtrArray *children;
 	int i;
 
+	g_return_val_if_fail (IS_EPHY_BOOKMARKS (eb), NULL);
+	g_return_val_if_fail (eb->priv->bookmarks != NULL, NULL);
 	g_return_val_if_fail (url != NULL, NULL);
 
 	children = ephy_node_get_children (eb->priv->bookmarks);
@@ -902,6 +906,7 @@ ephy_bookmarks_find_bookmark (EphyBookmarks *eb,
 		kid = g_ptr_array_index (children, i);
 		location = ephy_node_get_property_string
 			(kid, EPHY_NODE_BMK_PROP_LOCATION);
+
 		if (location != NULL && strcmp (url, location) == 0)
 		{
 			ephy_node_thaw (eb->priv->bookmarks);

@@ -25,6 +25,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
+#include "ephy-string.h"
 
 #include <string.h>
 
@@ -95,6 +96,8 @@ ephy_toolbars_model_get_action_name (EphyToolbarsModel *model,
 	EphyNodePriority priority;
 
 	node = ephy_bookmarks_get_from_id (model->priv->bookmarks, id);
+	g_return_val_if_fail (node != NULL, NULL);
+
 	priority = ephy_node_get_property_int
 		(node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 
@@ -121,6 +124,93 @@ ephy_toolbars_model_get_action_name (EphyToolbarsModel *model,
 	return action_name;
 }
 
+static void
+topic_destroy_cb (EphyNode *node,
+		  EphyToolbarsModel *model)
+{
+	long id;
+
+	id = ephy_node_get_id (node);
+	ephy_toolbars_model_remove_bookmark (model, TRUE, id);
+}
+
+static void
+bookmark_destroy_cb (EphyNode *node,
+		     EphyToolbarsModel *model)
+{
+	long id;
+
+	id = ephy_node_get_id (node);
+	ephy_toolbars_model_remove_bookmark (model, FALSE, id);
+}
+
+static gboolean
+setup_item (EphyToolbarsModel *model,
+	    const char *name,
+	    gboolean *is_bookmark,
+	    gboolean *is_topic,
+	    long *id)
+{
+	EphyBookmarks *bookmarks = model->priv->bookmarks;
+	EphyNode *node = NULL;
+
+	*is_topic = FALSE;
+
+	if (g_str_has_prefix (name, "GoBookmark-"))
+	{
+		node = ephy_bookmarks_find_bookmark
+			(bookmarks, name + strlen ("GoBookmark-"));
+		if (node == NULL) return FALSE;
+
+		ephy_node_signal_connect_object (node,
+					         EPHY_NODE_DESTROY,
+					         (EphyNodeCallback) bookmark_destroy_cb,
+					         G_OBJECT (model));
+	}
+	else if (g_str_has_prefix (name, "GoTopic-"))
+	{
+		EphyNode *node;
+
+		node = ephy_bookmarks_find_keyword
+			(bookmarks, name + strlen ("GoTopic-"), FALSE);
+		if (node == NULL) return FALSE;
+
+		ephy_node_signal_connect_object (node,
+					         EPHY_NODE_DESTROY,
+					         (EphyNodeCallback) topic_destroy_cb,
+					         G_OBJECT (model));
+		*is_topic = TRUE;
+	}
+	else if (g_str_has_prefix (name, "GoSpecialTopic-"))
+	{
+		EphyNode *node;
+		long id;
+
+		if (!ephy_string_to_int (name + strlen ("GoSpecialTopic-"), &id))
+		{
+			return FALSE;
+		}
+
+		node = ephy_bookmarks_get_from_id (bookmarks, id);
+		if (node == NULL) return FALSE;
+
+		ephy_node_signal_connect_object (node,
+					         EPHY_NODE_DESTROY,
+					         (EphyNodeCallback) topic_destroy_cb,
+					         G_OBJECT (model));
+
+		*is_topic = TRUE;
+	}
+
+	if (node)
+	{
+		*is_bookmark = TRUE;
+		*id = ephy_node_get_id (node);
+	}
+
+	return TRUE;
+}
+
 static const char *
 impl_add_item (EggToolbarsModel *t,
 	       int toolbar_position,
@@ -130,7 +220,7 @@ impl_add_item (EggToolbarsModel *t,
 {
 	char *action_name = NULL;
 	const char *res;
-	gboolean topic = FALSE, normal_item = FALSE;
+	gboolean valid, duped_bookmark = FALSE, is_bookmark, is_topic;
 	long id = -1;
 
 	LOG ("Add item %s", name)
@@ -139,7 +229,6 @@ impl_add_item (EggToolbarsModel *t,
 	{
 		GList *nodes;
 
-		topic = TRUE;
 		nodes = ephy_dnd_node_list_extract_nodes (name);
 		id = ephy_node_get_id (nodes->data);
 		action_name = ephy_toolbars_model_get_action_name
@@ -161,10 +250,10 @@ impl_add_item (EggToolbarsModel *t,
 		EphyNode *node = NULL;
 		EphyBookmarks *bookmarks;
 		gchar **netscape_url;
-		
+
 		netscape_url = g_strsplit (name, "\n", 2);
 		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-		node = ephy_bookmarks_find_bookmark (bookmarks, netscape_url[URL]); 
+		node = ephy_bookmarks_find_bookmark (bookmarks, netscape_url[URL]);
 
 		if (!node)
 		{
@@ -177,7 +266,7 @@ impl_add_item (EggToolbarsModel *t,
 
 			gh = ephy_embed_shell_get_global_history (EPHY_EMBED_SHELL (ephy_shell));
 			icon = ephy_history_get_icon (gh, netscape_url[URL]);
-		
+
 			if (icon)
 			{
 				ephy_bookmarks_set_icon (bookmarks, netscape_url[URL], icon);
@@ -189,15 +278,23 @@ impl_add_item (EggToolbarsModel *t,
 			(EPHY_TOOLBARS_MODEL (t), FALSE, id);
 		g_strfreev (netscape_url);
 	}
-	else
-	{
-		normal_item = TRUE;
-	}
 
 	res = action_name ? action_name : name;
 
-	if (normal_item ||
-	    !ephy_toolbars_model_has_bookmark (EPHY_TOOLBARS_MODEL (t), topic, id))
+	valid = setup_item (EPHY_TOOLBARS_MODEL (t), res, &is_bookmark, &is_topic, &id);
+	if (!valid)
+	{
+		g_warning ("Invalid bookmark in the toolbar. Removed.");
+		return NULL;
+	}
+
+	if (is_bookmark)
+	{
+		duped_bookmark = ephy_toolbars_model_has_bookmark
+			(EPHY_TOOLBARS_MODEL (t), is_topic, id);
+	}
+
+	if (!duped_bookmark)
 	{
 		EGG_TOOLBARS_MODEL_CLASS (parent_class)->add_item
 			(t, toolbar_position, position, type, res);
@@ -209,8 +306,23 @@ impl_add_item (EggToolbarsModel *t,
 static void
 ephy_toolbars_model_set_bookmarks (EphyToolbarsModel *model, EphyBookmarks *bookmarks)
 {
+	EggToolbarsModel *egg_model = EGG_TOOLBARS_MODEL (model);
+
 	model->priv->bookmarks = bookmarks;
 	g_object_ref (model->priv->bookmarks);
+
+	if (g_file_test (model->priv->xml_file, G_FILE_TEST_EXISTS))
+	{
+		egg_toolbars_model_load (egg_model,
+					 model->priv->xml_file);
+	}
+	else
+	{
+		const char *default_xml;
+
+		default_xml = ephy_file ("epiphany-toolbar.xml");
+		egg_toolbars_model_load (egg_model, default_xml);
+	}
 }
 
 static void
@@ -305,27 +417,12 @@ toolbar_removed (EphyToolbarsModel *model, int position)
 static void
 ephy_toolbars_model_init (EphyToolbarsModel *t)
 {
-	EggToolbarsModel *egg_model = EGG_TOOLBARS_MODEL (t);
-
 	t->priv = g_new0 (EphyToolbarsModelPrivate, 1);
 	t->priv->bookmarks = NULL;
 
 	t->priv->xml_file = g_build_filename (ephy_dot_dir (),
                                               "ephy-toolbars.xml",
                                               NULL);
-
-	if (g_file_test (t->priv->xml_file, G_FILE_TEST_EXISTS))
-	{
-		egg_toolbars_model_load (egg_model,
-					 t->priv->xml_file);
-	}
-	else
-	{
-		const char *default_xml;
-
-		default_xml = ephy_file ("epiphany-toolbar.xml");
-		egg_toolbars_model_load (egg_model, default_xml);
-	}
 
 	g_signal_connect (t, "item_added", G_CALLBACK (item_added), NULL);
 	g_signal_connect (t, "item_removed", G_CALLBACK (item_removed), NULL);
@@ -365,33 +462,6 @@ ephy_toolbars_model_new (EphyBookmarks *bookmarks)
 }
 
 static int
-get_item_pos (EphyToolbarsModel *model,
-	      int toolbar_pos,
-	      const char *name)
-{
-	int i, n_items;
-
-	n_items = egg_toolbars_model_n_items
-		(EGG_TOOLBARS_MODEL (model), toolbar_pos);
-
-	for (i = 0; i < n_items; i++)
-	{
-		const char *i_name;
-		gboolean is_separator;
-
-		i_name = egg_toolbars_model_item_nth
-			(EGG_TOOLBARS_MODEL (model), toolbar_pos, i,
-			 &is_separator);
-		if (!is_separator && strcmp (name, i_name) == 0)
-		{
-			return i;
-		}
-	}
-
-	return -1;
-}
-
-static int
 get_toolbar_pos (EphyToolbarsModel *model,
 		 const char *name)
 {
@@ -415,23 +485,61 @@ get_toolbar_pos (EphyToolbarsModel *model,
 	return -1;
 }
 
+static gboolean
+get_toolbar_and_item_pos (EphyToolbarsModel *model,
+			  const char *action_name,
+			  int *toolbar,
+			  int *position)
+{
+	int n_toolbars, n_items;
+	int t,i;
+
+	n_toolbars = egg_toolbars_model_n_toolbars (EGG_TOOLBARS_MODEL (model));
+
+	for (t = 0; t < n_toolbars; t++)
+	{
+		n_items = egg_toolbars_model_n_items
+				(EGG_TOOLBARS_MODEL (model), t);
+
+		for (i = 0; i < n_items; i++)
+		{
+			const char *i_name;
+			gboolean is_separator;
+
+			i_name = egg_toolbars_model_item_nth
+					(EGG_TOOLBARS_MODEL (model), t, i,
+					 &is_separator);
+			g_return_val_if_fail (i_name != NULL, FALSE);
+
+			if (strcmp (i_name, action_name) == 0)
+			{
+				*toolbar = t;
+				*position = i;
+
+				return TRUE;
+			}
+		}
+	}
+
+	return FALSE;
+}
+
 void
 ephy_toolbars_model_remove_bookmark (EphyToolbarsModel *model,
 				     gboolean topic,
 				     long id)
 {
 	char *action_name;
-	int toolbar_position, position;
+	int toolbar, position;
 
 	action_name = ephy_toolbars_model_get_action_name (model, topic, id);
+	g_return_if_fail (action_name != NULL);
 
-	toolbar_position = get_toolbar_pos (model, "BookmarksBar");
-	g_return_if_fail (toolbar_position != -1);
-
-	position = get_item_pos (model, toolbar_position, action_name);
-
-	egg_toolbars_model_remove_item (EGG_TOOLBARS_MODEL (model),
-				        toolbar_position, position);
+	if (get_toolbar_and_item_pos (model, action_name, &toolbar, &position))
+	{
+		egg_toolbars_model_remove_item (EGG_TOOLBARS_MODEL (model),
+					        toolbar, position);
+	}
 
 	g_free (action_name);
 }
@@ -445,6 +553,7 @@ ephy_toolbars_model_add_bookmark (EphyToolbarsModel *model,
 	int toolbar_position;
 
 	action_name = ephy_toolbars_model_get_action_name (model, topic, id);
+	g_return_if_fail (action_name != NULL);
 
 	toolbar_position = get_toolbar_pos (model, "BookmarksBar");
 	g_return_if_fail (toolbar_position != -1);
@@ -462,17 +571,17 @@ ephy_toolbars_model_has_bookmark (EphyToolbarsModel *model,
 				  long id)
 {
 	char *action_name;
-	int toolbar_position, position;
+	gboolean found;
+	int toolbar, pos;
 
 	action_name = ephy_toolbars_model_get_action_name (model, topic, id);
+	g_return_val_if_fail (action_name != NULL, FALSE);
 
-	toolbar_position = get_toolbar_pos (model, "BookmarksBar");
-	g_return_val_if_fail (toolbar_position != -1, FALSE);
-	position = get_item_pos (model, toolbar_position, action_name);
+	found = get_toolbar_and_item_pos (model, action_name, &toolbar, &pos);
 
 	g_free (action_name);
 
-	return (position != -1);
+	return found;
 }
 
 void

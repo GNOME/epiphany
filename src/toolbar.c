@@ -150,7 +150,6 @@ topic_destroy_cb (EphyNode *node,
 	action = egg_action_group_get_action (t->priv->action_group, name);
 	if (action)
 	{
-		ephy_toolbars_model_remove_bookmark (model, TRUE, id);
 		egg_action_group_remove_action (t->priv->action_group, action);
 	}
 
@@ -174,7 +173,6 @@ bookmark_destroy_cb (EphyNode *node,
 	action = egg_action_group_get_action (t->priv->action_group, name);
 	if (action)
 	{
-		ephy_toolbars_model_remove_bookmark (model, FALSE, id);
 		egg_action_group_remove_action (t->priv->action_group, action);
 	}
 
