@@ -205,14 +205,18 @@ add_bookmarks_menu (EphyBookmarksMenu *menu, EphyNode *node, const char *path)
 			GtkAction *action;
 			EphyNode *child;
 			long id;
-			char verb[30], name[30];
+			char verb[30], name[30], accel_path[60];
 
 			child = l->data;
 			id = ephy_node_get_id (child);
-			g_sprintf (verb, "OpenTopic%ld", ephy_node_get_id (child));
-			g_sprintf (name, "%sName", verb);
+			g_snprintf (verb, sizeof (verb), 
+				    "OpenBmk%ld", ephy_node_get_id (child));
+			g_snprintf (name, sizeof (name), "%sName", verb);
+			g_snprintf (accel_path, sizeof (accel_path),
+				    "<Actions>/BookmarksActions/%s", verb);
 
 			action = ephy_bookmark_action_new (verb, id);
+			gtk_action_set_accel_path (action, accel_path);
 			gtk_action_group_add_action (p->action_group, action);
 			g_object_unref (action);
 			g_signal_connect (action, "go_location",
@@ -271,7 +275,7 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 
 	for (l = node_list; l != NULL; l = l->next)
 	{
-		char verb[30], name[30], path[60];
+		char verb[30], name[30], path[60], accel_path[60];
 		const char *tmp;
 		char *title;
 		EphyNode *child;
@@ -282,15 +286,20 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 		tmp = ephy_node_get_property_string (child, EPHY_NODE_KEYWORD_PROP_NAME);
 		title = ephy_string_double_underscores (tmp);
 		
-		g_sprintf (verb, "OpenTopic%ld", ephy_node_get_id (child));
-		g_sprintf (name, "%sName", verb);
-		g_sprintf (path, "%s/%s", BOOKMARKS_MENU_PATH, name);
+		g_snprintf (verb, sizeof (verb),
+			    "OpenTopic%ld", ephy_node_get_id (child));
+		g_snprintf (name, sizeof (name), "%sName", verb);
+		g_snprintf (path, sizeof (path),
+			    BOOKMARKS_MENU_PATH "/%s", name);
+		g_snprintf (accel_path, sizeof (accel_path),
+			    "<Actions>/BookmarksActions/%s", verb);
 
 		action = g_object_new (GTK_TYPE_ACTION,
 				       "name", verb,
 				       "label", title,
 				       "hide_if_empty", FALSE,
 				       NULL);
+		gtk_action_set_accel_path (action, accel_path);
 		gtk_action_group_add_action (p->action_group, action);
 		g_object_unref (action);
 		g_free (title);

@@ -88,10 +88,16 @@ static void
 tab_added_cb (EphyNotebook *notebook, EphyTab *tab, EphyTabsMenu *menu)
 {
 	GtkAction *action;
+	char accel_path[40];
 
         g_return_if_fail (EPHY_IS_TAB (tab));
 
 	action = GTK_ACTION (ephy_tab_get_action (tab));
+
+	g_snprintf (accel_path, sizeof (accel_path),
+		    "<Actions>/TabsActions/%s", gtk_action_get_name (action));
+	gtk_action_set_accel_path (action, accel_path);
+
 	gtk_action_group_add_action (menu->priv->action_group, action);
 
 	ephy_tabs_menu_update (menu);

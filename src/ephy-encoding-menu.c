@@ -338,7 +338,8 @@ add_action (EphyNode *encodings, EphyNode *node, EphyEncodingMenu *menu)
 			  G_CALLBACK (encoding_activate_cb),
 			  menu);
 
-	gtk_action_group_add_action (menu->priv->action_group, action);
+	gtk_action_group_add_action_with_accel
+		(menu->priv->action_group, action, NULL);
 	g_object_unref (action);
 }
 
