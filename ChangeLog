@@ -1,4 +1,11 @@
 2003-07-04  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-favicon-cache.c: (favicon_download_completed_cb):
+
+	Remove the persist object from the hash table before emitting the
+	changed signal. Fixes bug 116673.
+
+2003-07-04  Christian Persch  <chpe@cvs.gnome.org>
 	
 	* data/epiphany.schemas.in:
 

@@ -388,13 +388,15 @@ favicon_download_completed_cb (EphyEmbedPersist *persist,
 {
 	char *url;
 
-	url = g_object_get_data (G_OBJECT (persist), "url");
+	url = g_strdup ((char *) g_object_get_data (G_OBJECT (persist), "url"));
 	g_return_if_fail (url != NULL);
-
-	g_signal_emit (G_OBJECT (cache), ephy_favicon_cache_signals[CHANGED], 0, url);
 
 	g_hash_table_remove (cache->priv->downloads_hash, url);
 	g_object_unref (persist);
+
+	g_signal_emit (G_OBJECT (cache), ephy_favicon_cache_signals[CHANGED], 0, url);
+
+	g_free (url);
 }
 
 static void
