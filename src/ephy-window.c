@@ -2452,13 +2452,13 @@ ephy_window_init (EphyWindow *window)
 
 	LOG ("EphyWindow initialising %p", window)
 
+	g_object_ref (ephy_shell);
+
 	window->priv = EPHY_WINDOW_GET_PRIVATE (window);
 
 	window->priv->chrome = EPHY_EMBED_CHROME_ALL;
 
-	g_object_ref (ephy_shell);
-
-	ensure_window_group (window);
+	ephy_gui_ensure_window_group (GTK_WINDOW (window));
 
 	/* Setup the UI manager and connect verbs */
 	setup_ui_manager (window);

@@ -53,6 +53,8 @@ void		ephy_gui_menu_position_on_panel		 (GtkMenu *menu,
 							  gboolean  *push_in,
 							  gpointer  user_data);
 
+GtkWindowGroup *ephy_gui_ensure_window_group		 (GtkWindow *window);
+
 gboolean	ephy_gui_is_middle_click		 (void);
 
 gboolean	ephy_gui_select_row_by_key		 (GtkTreeView *treeview,

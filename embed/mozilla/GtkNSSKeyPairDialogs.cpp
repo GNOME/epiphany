@@ -66,6 +66,7 @@
 #include <glib/gi18n.h>
 
 #include "GtkNSSKeyPairDialogs.h"
+#include "ephy-gui.h"
 #include "ephy-debug.h"
 
 GtkNSSKeyPairDialogs::GtkNSSKeyPairDialogs ()
@@ -198,13 +199,20 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
-	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
+	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
 
-	dialog = gtk_dialog_new_with_buttons ("", GTK_WINDOW (gparent),
-					      GTK_DIALOG_NO_SEPARATOR, NULL);
+	dialog = gtk_dialog_new_with_buttons ("", gparent,
+					      GTK_DIALOG_DESTROY_WITH_PARENT, NULL);
+
+	if (gparent)
+	{
+		gtk_window_group_add_window (ephy_gui_ensure_window_group (gparent),
+					     GTK_WINDOW (dialog));
+	}
 
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
+	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 

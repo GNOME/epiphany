@@ -900,8 +900,8 @@ show_cookies_properties (PdmDialog *dialog,
 
 	gdialog = gtk_dialog_new_with_buttons
 		 (_("Cookie Properties"),
-		  GTK_WINDOW(parent),
-		  GTK_DIALOG_MODAL,
+		  GTK_WINDOW (parent),
+		  GTK_DIALOG_DESTROY_WITH_PARENT,
 		  GTK_STOCK_CLOSE, 0, NULL);
 	ephy_state_add_window (GTK_WIDGET (gdialog), "cookie_properties", 
 			       -1, -1, FALSE,
@@ -993,7 +993,10 @@ show_cookies_properties (PdmDialog *dialog,
 			    table,
 			    FALSE, FALSE, 0);
 
-	gtk_dialog_run (GTK_DIALOG(gdialog));
+	gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (parent)),
+				     GTK_WINDOW (gdialog));
+
+	gtk_dialog_run (GTK_DIALOG (gdialog));
 
 	gtk_widget_destroy (gdialog);
 }

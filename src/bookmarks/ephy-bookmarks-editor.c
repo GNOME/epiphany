@@ -454,10 +454,10 @@ cmd_open_bookmarks_in_browser (GtkAction *action,
 }
 
 static GtkWidget*
-delete_topic_dialog_construct (GtkWindow *parent, const char *topic)
+delete_topic_dialog_construct (GtkWindow *parent,
+			       const char *topic)
 {
 	GtkWidget *dialog;
-	GtkWindowGroup *group;
 	char *str;
 
 	str = g_strdup_printf (_("Delete topic %s?"), topic);
@@ -478,16 +478,7 @@ delete_topic_dialog_construct (GtkWindow *parent, const char *topic)
 	gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Delete Topic"), GTK_RESPONSE_ACCEPT);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
-	group = GTK_WINDOW (parent)->group;
-
-	if (group == NULL)
-	{
-		group = gtk_window_group_new ();
-		gtk_window_group_add_window (group, GTK_WINDOW (parent));
-		g_object_unref (group);
-	}
-
-	gtk_window_group_add_window (group, GTK_WINDOW (dialog));
+	gtk_window_group_add_window (GTK_WINDOW (parent)->group, GTK_WINDOW (dialog));
 
         return dialog;
 }
@@ -1542,17 +1533,9 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	EphyNode *node;
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
-	GtkWindowGroup *group;
 	int col_id, details_value;
 
-	/* ensure window group */	
-	group = GTK_WINDOW (editor)->group;
-	if (group == NULL)
-	{
-		group = gtk_window_group_new ();
-		gtk_window_group_add_window (group, GTK_WINDOW (editor));
-		g_object_unref (group);
-	}
+	ephy_gui_ensure_window_group (GTK_WINDOW (editor));
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
 	gtk_window_set_icon_name (GTK_WINDOW (editor), EPHY_STOCK_BOOKMARKS);

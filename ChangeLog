@@ -1,5 +1,23 @@
 2004-12-18  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
+	* embed/mozilla/GtkNSSDialogs.cpp:
+	* embed/mozilla/GtkNSSKeyPairDialogs.cpp:
+	* lib/ephy-file-chooser.c: (ephy_file_chooser_new):
+	* lib/ephy-gui.c: (ephy_gui_ensure_window_group),
+	(ephy_gui_confirm_overwrite_file):
+	* lib/ephy-gui.h:
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(delete_topic_dialog_construct), (ephy_bookmarks_editor_construct):
+	* src/ephy-window.c: (ephy_window_init):
+	* src/pdm-dialog.c: (show_cookies_properties):
+
+	Make sure we don't have any app-modal dialogues. Fixes bug #110479.
+
+2004-12-18  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-window.c: (update_print_actions),
 	(update_actions_sensitivity), (sync_tab_load_status):
 

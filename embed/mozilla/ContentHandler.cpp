@@ -149,6 +149,12 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 					EPHY_FILE_FILTER_ALL);
 	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), defaultFile.get());
 
+	if (parentWindow)
+	{
+		gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (parentWindow)),
+					     GTK_WINDOW (dialog));
+	}
+
 	/* FIXME: modal -- mozilla sucks! */
 	do
 	{

@@ -168,8 +168,25 @@ ephy_gui_menu_position_on_panel (GtkMenu *menu,
 	ephy_gui_sanitise_popup_position (menu, widget, x, y);
 }
 
+GtkWindowGroup *
+ephy_gui_ensure_window_group (GtkWindow *window)
+{
+	GtkWindowGroup *group;
+
+	group = window->group;
+	if (group == NULL)
+	{
+		group = gtk_window_group_new ();
+		gtk_window_group_add_window (group, window);
+		g_object_unref (group);
+	}
+
+	return group;
+}
+
 gboolean
-ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
+ephy_gui_confirm_overwrite_file (GtkWidget *parent,
+				 const char *filename)
 {
 	GtkWidget *dialog;
 	char *display_name;
@@ -186,7 +203,7 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 
 	dialog = gtk_message_dialog_new
 		(parent ? GTK_WINDOW (parent) : NULL,
-		 GTK_DIALOG_MODAL,
+		 GTK_DIALOG_DESTROY_WITH_PARENT,
 		 GTK_MESSAGE_WARNING,
 		 GTK_BUTTONS_CANCEL,
 		 _("A file %s already exists."), display_name);
@@ -203,6 +220,12 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+
+	if (parent != NULL)
+	{
+		gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (parent)),
+					     GTK_WINDOW (dialog));
+	}
 
 	retval = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT);
 

@@ -117,6 +117,13 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 					 CONF_STATE_UPLOAD_DIR,
 					 EPHY_FILE_FILTER_NONE);
 
+	if (parent)
+	{
+		gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (gtkparent)),
+					     GTK_WINDOW (mDialog));
+		gtk_dialog_set_destroy_with_parent (GTK_DIALOG (mDialog), TRUE);
+	}
+
 	if (mode == nsIFilePicker::modeOpenMultiple)
 	{
 		gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (mDialog), TRUE);

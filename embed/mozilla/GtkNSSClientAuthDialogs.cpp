@@ -57,6 +57,7 @@
 
 #include "GtkNSSClientAuthDialogs.h"
 
+#include "ephy-gui.h"
 #include "ephy-state.h"
 #include "ephy-debug.h"
 
@@ -144,7 +145,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	PRUint32 i;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
-	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
+	GtkWindow *gparent = GTK_WINDOW (EphyUtils::FindGtkParent (parent));
 
 	dialog = gtk_dialog_new_with_buttons ("",
 					      GTK_WINDOW (gparent),
@@ -154,7 +155,13 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 					      _("_Select Certificate"),
 					      GTK_RESPONSE_OK,
 					      NULL);
-	
+
+	if (gparent)
+	{
+		gtk_window_group_add_window (ephy_gui_ensure_window_group (gparent),
+					     GTK_WINDOW (dialog));
+	}
+
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
