@@ -64,6 +64,8 @@
 
 #endif
 
+#define AUTOMATION_IID "OAFIID:GNOME_Epiphany_Automation"
+
 #define EPHY_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHELL, EphyShellPrivate))
 
 struct EphyShellPrivate
@@ -85,8 +87,6 @@ static void
 ephy_shell_init (EphyShell *gs);
 static void
 ephy_shell_finalize (GObject *object);
-static void
-ephy_init_services (EphyShell *gs);
 
 #ifdef ENABLE_NAUTILUS_VIEW
 
@@ -102,6 +102,19 @@ ephy_nautilus_view_new (BonoboGenericFactory *factory,
 static GObjectClass *parent_class = NULL;
 
 EphyShell *ephy_shell;
+
+GQuark
+ephy_shell_error_quark (void)
+{
+	static GQuark q = 0;
+
+	if (q == 0)
+	{
+		q = g_quark_from_static_string ("ephy-shell-error-quark");
+	}
+
+	return q;
+}
 
 GType
 ephy_shell_get_type (void)
@@ -147,11 +160,7 @@ ephy_shell_class_init (EphyShellClass *klass)
 static void
 ephy_shell_init (EphyShell *gs)
 {
-	EphyEmbedSingle *single;
 	EphyShell **ptr = &ephy_shell;
-	GtkIconTheme *icon_theme;
-	GtkIconInfo *icon_info;
-	const char *icon_file;
 
 	gs->priv = EPHY_SHELL_GET_PRIVATE (gs);
 
@@ -166,6 +175,18 @@ ephy_shell_init (EphyShell *gs)
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
 				   (gpointer *)ptr);
 
+	/* Instantiate the automation factory */
+	gs->priv->automation_factory = ephy_automation_factory_new ();
+}
+
+static void
+init_services (EphyShell *gs, GError **error)
+{
+	GtkIconTheme *icon_theme;
+	GtkIconInfo *icon_info;
+	const char *icon_file;
+	EphyEmbedSingle *single;
+
 	gnome_vfs_init ();
 	glade_gnome_init ();
 	ephy_debug_init ();
@@ -174,27 +195,20 @@ ephy_shell_init (EphyShell *gs)
 	ephy_stock_icons_init ();
 	ephy_ensure_dir_exists (ephy_dot_dir ());
 
+	/* preload the prefs */
+	/* it also enables notifiers support */
+	eel_gconf_monitor_add ("/apps/epiphany");
+	eel_gconf_monitor_add ("/system/proxy");
+
 	/* This ensures mozilla is fired up */
 	single = ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (gs));
-	if (single != NULL)
+	if (single == NULL)
 	{
-		ephy_init_services (gs);
-	}
-	else
-	{
-		GtkWidget *dialog;
-
-		dialog = gtk_message_dialog_new
-			(NULL,
-                         GTK_DIALOG_MODAL,
-                         GTK_MESSAGE_ERROR,
-                         GTK_BUTTONS_CLOSE,
-                         _("Epiphany can't be used now. "
-                         "Mozilla initialization failed. Check your "
-                         "MOZILLA_FIVE_HOME environmental variable."));
-		gtk_dialog_run (GTK_DIALOG (dialog));
-
-		exit (0);
+		g_set_error (error, EPHY_SHELL_ERROR,
+			     EPHY_SHELL_ERROR_MOZILLA_REG_FAILED,
+			     _("Epiphany can't be used now. "
+                               "Mozilla initialization failed. Check your "
+                               "MOZILLA_FIVE_HOME environmental variable."));
 	}
 
 	/* FIXME listen on icon changes */
@@ -225,9 +239,132 @@ ephy_shell_init (EphyShell *gs)
 	gs->priv->session =
 		EPHY_SESSION (ephy_extensions_manager_add
 			(gs->priv->extensions_manager, EPHY_TYPE_SESSION));
+}
 
-	/* Instantiate the automation factory */
-	gs->priv->automation_factory = ephy_automation_factory_new ();
+static void
+open_urls (GNOME_EphyAutomation automation,
+	   const char **args, CORBA_Environment *ev,
+	   gboolean new_tab, gboolean existing_window,
+	   gboolean fullscreen)
+{
+	int i;
+
+	if (args == NULL)
+	{
+		/* Homepage or resume */
+		GNOME_EphyAutomation_loadurl
+			(automation, "", fullscreen,
+			 existing_window, new_tab, ev);
+	}
+	else
+	{
+		for (i = 0; args[i] != NULL; i++)
+		{
+			GNOME_EphyAutomation_loadurl
+				(automation, args[i], fullscreen,
+				 existing_window, new_tab, ev);
+		}
+	}
+}
+
+gboolean
+ephy_shell_startup (EphyShell *gs,
+		    EphyShellStartupFlags flags,
+		    const char **args,
+		    const char *string_arg,
+		    GError **error)
+{
+	CORBA_Environment ev;
+	GNOME_EphyAutomation automation;
+	Bonobo_RegistrationResult result;
+
+#ifdef ENABLE_NAUTILUS_VIEW
+	ephy_nautilus_view_init_factory (gs);
+#endif
+
+	CORBA_exception_init (&ev);
+
+	result = bonobo_activation_register_active_server
+		(AUTOMATION_FACTORY_IID, BONOBO_OBJREF (gs->priv->automation_factory), NULL);
+
+	switch (result)
+	{
+		case Bonobo_ACTIVATION_REG_SUCCESS:
+			init_services (gs, error);
+			if (*error != NULL) return TRUE;
+			break;
+		case Bonobo_ACTIVATION_REG_ALREADY_ACTIVE:
+			break;
+		case Bonobo_ACTIVATION_REG_NOT_LISTED:
+			g_set_error (error, EPHY_SHELL_ERROR,
+				     EPHY_SHELL_ERROR_MISSING_SERVER,
+				     _("Bonobo couldn't locate the GNOME_Epiphany_Automation.server "
+				       "file. You can use bonobo-activation-sysconf to configure "
+				       "the search path for bonobo server files."));
+			break;
+		case Bonobo_ACTIVATION_REG_ERROR:
+			g_set_error (error, EPHY_SHELL_ERROR,
+				     EPHY_SHELL_ERROR_FACTORY_REG_FAILED,
+				     _("Epiphany can't be used now, due to an unexpected error "
+				       "from Bonobo when attempting to register the automation "
+				       "server"));
+			break;
+		default:
+			g_assert_not_reached ();
+	}
+
+	if (result == Bonobo_ACTIVATION_REG_SUCCESS ||
+            result == Bonobo_ACTIVATION_REG_ALREADY_ACTIVE)
+	{
+		automation = bonobo_activation_activate_from_id (AUTOMATION_IID,
+						                 0, NULL, &ev);
+		if (CORBA_Object_is_nil (automation, &ev))
+		{
+			g_set_error (error, EPHY_SHELL_ERROR,
+				     EPHY_SHELL_ERROR_OBJECT_REG_FAILED,
+				     _("Epiphany can't be used now, due to an unexpected error "
+				       "from Bonobo when attempting to locate the automation "
+				       "object."));
+			automation = NULL;
+		}
+		else if (flags & EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR)
+		{
+			GNOME_EphyAutomation_openBookmarksEditor
+				(automation, &ev);
+		}
+		else if (flags & EPHY_SHELL_STARTUP_SESSION)
+		{
+			GNOME_EphyAutomation_loadSession
+				(automation, string_arg, &ev);
+		}
+		else if (flags & EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS)
+		{
+			GNOME_EphyAutomation_importBookmarks
+				(automation, string_arg, &ev);
+		}
+		else if (flags & EPHY_SHELL_STARTUP_ADD_BOOKMARK)
+		{
+			GNOME_EphyAutomation_addBookmark
+				(automation, string_arg, &ev);
+		}
+		else
+		{
+			open_urls (automation, args, &ev,
+				   flags & EPHY_SHELL_STARTUP_TABS,
+				   flags & EPHY_SHELL_STARTUP_EXISTING_WINDOW,
+				   flags & EPHY_SHELL_STARTUP_FULLSCREEN);
+		}
+
+		if (automation)
+		{
+			bonobo_object_release_unref (automation, &ev);
+		}
+	}
+
+	CORBA_exception_free (&ev);
+	gdk_notify_startup_complete ();
+
+	return !(result == Bonobo_ACTIVATION_REG_ALREADY_ACTIVE);
 }
 
 static void
@@ -296,32 +433,12 @@ ephy_shell_finalize (GObject *object)
 	}
 
 	LOG ("Ephy shell finalized")
-
-	bonobo_main_quit ();
-
-	LOG ("Bonobo quit done")
 }
 
 EphyShell *
 ephy_shell_new (void)
 {
 	return EPHY_SHELL (g_object_new (EPHY_TYPE_SHELL, NULL));
-}
-
-static void
-ephy_init_services (EphyShell *gs)
-{
-	/* preload the prefs */
-	/* it also enables notifiers support */
-	eel_gconf_monitor_add ("/apps/epiphany");
-	eel_gconf_monitor_add ("/system/proxy");
-
-#ifdef ENABLE_NAUTILUS_VIEW
-
-	ephy_nautilus_view_init_factory (gs);
-
-#endif
-
 }
 
 static void

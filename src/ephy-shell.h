@@ -49,6 +49,28 @@ typedef struct EphyShellPrivate EphyShellPrivate;
 
 extern EphyShell *ephy_shell;
 
+#define EPHY_SHELL_ERROR ephy_shell_error_quark ()
+
+typedef enum
+{
+	EPHY_SHELL_ERROR_MISSING_SERVER,
+	EPHY_SHELL_ERROR_OBJECT_REG_FAILED,
+	EPHY_SHELL_ERROR_FACTORY_REG_FAILED,
+	EPHY_SHELL_ERROR_MOZILLA_REG_FAILED
+} EphyShellError;
+
+typedef enum
+{
+	EPHY_SHELL_STARTUP_TABS = 1 << 0,
+	EPHY_SHELL_STARTUP_EXISTING_WINDOW = 1 << 2,
+	EPHY_SHELL_STARTUP_FULLSCREEN = 1 << 3,
+	EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR = 1 << 4,
+	EPHY_SHELL_STARTUP_NAUTILUS_VIEW = 1 << 5,
+	EPHY_SHELL_STARTUP_SESSION = 1 << 6,
+	EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS = 1 << 7,
+	EPHY_SHELL_STARTUP_ADD_BOOKMARK = 1 << 8
+} EphyShellStartupFlags;
+
 typedef enum
 {
 	/* Page types */
@@ -79,9 +101,17 @@ struct EphyShellClass
 	EphyEmbedShellClass parent_class;
 };
 
+GQuark          ephy_shell_error_quark			(void);
+
 GType		ephy_shell_get_type			(void);
 
 EphyShell      *ephy_shell_new				(void);
+
+gboolean	ephy_shell_startup			(EphyShell *gs,
+							 EphyShellStartupFlags flags,
+							 const char **args,
+							 const char *string_arg,
+							 GError **error);
 
 EphyWindow     *ephy_shell_get_active_window		(EphyShell *gs);
 

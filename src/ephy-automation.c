@@ -36,12 +36,10 @@ static void ephy_automation_class_init (EphyAutomationClass *klass);
 
 static GObjectClass *parent_class = NULL;
 
-#define EPHY_FACTORY_OAFIID "OAFIID:GNOME_Epiphany_Automation_Factory"
-
 static BonoboObject *
-ephy_automation_factory (BonoboGenericFactory *this_factory,
-			 const char *iid,
-			 gpointer user_data)
+ephy_automation_factory_cb (BonoboGenericFactory *this_factory,
+			    const char *iid,
+			    gpointer user_data)
 {
 	return BONOBO_OBJECT (g_object_new (EPHY_TYPE_AUTOMATION, NULL));
 }
@@ -50,38 +48,38 @@ BonoboGenericFactory *
 ephy_automation_factory_new (void)
 {
 	BonoboGenericFactory *factory;
+	GClosure *factory_closure;
 
-	factory = bonobo_generic_factory_new (EPHY_FACTORY_OAFIID,
-					      ephy_automation_factory,
-					      NULL);
-	if (factory == NULL)
-	{
-		g_warning ("Could not initialize EphyAutomation factory\n");
-	}
+	factory = g_object_new (bonobo_generic_factory_get_type (), NULL);
+
+	factory_closure = g_cclosure_new
+		(G_CALLBACK (ephy_automation_factory_cb), NULL, NULL);
+
+	bonobo_generic_factory_construct_noreg
+		(factory, AUTOMATION_FACTORY_IID, factory_closure);
 
 	return factory;
 }
 
 static void
 impl_ephy_automation_loadurl (PortableServer_Servant _servant,
-			      const CORBA_char * url,
+			      const CORBA_char *url,
 			      const CORBA_boolean fullscreen,
 			      const CORBA_boolean open_in_existing_tab,
-			      const CORBA_boolean open_in_new_window,
 			      const CORBA_boolean open_in_new_tab,
-			      const CORBA_boolean raise,
-                              CORBA_Environment * ev)
+                              CORBA_Environment *ev)
 {
 	EphyNewTabFlags flags = 0;
 	EphyWindow *window;
 	EphySession *session;
 
 	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+	g_return_if_fail (session != NULL);
 
 	if (ephy_session_autoresume (session) && *url == '\0')
 	{
 		/* no need to open the homepage,
-		 * we did already open session windows */
+		* we did already open session windows */
 		return;
 	}
 

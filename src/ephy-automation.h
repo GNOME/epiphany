@@ -32,11 +32,15 @@ G_BEGIN_DECLS
 #define EPHY_IS_AUTOMATION_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_AUTOMATION))
 #define EPHY_AUTOMATION_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_AUTOMATION, EphyAutomationClass))
 
-typedef struct {
+#define AUTOMATION_FACTORY_IID "OAFIID:GNOME_Epiphany_Automation_Factory"
+
+typedef struct
+{
         BonoboObject parent;
 } EphyAutomation;
 
-typedef struct {
+typedef struct
+{
         BonoboObjectClass parent_class;
 
         POA_GNOME_EphyAutomation__epv epv;
