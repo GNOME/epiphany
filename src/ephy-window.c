@@ -968,7 +968,8 @@ ephy_window_show (GtkWidget *widget)
 	{
 		ephy_state_add_window (widget,
 				       "main_window",
-			               600, 500);
+			               600, 500,
+				       EPHY_STATE_WINDOW_SAVE_SIZE);
 	}
 
 	if ((window->priv->chrome_mask & EMBED_CHROME_OPENASPOPUP) &&

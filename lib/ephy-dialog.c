@@ -841,7 +841,8 @@ static void
 setup_default_size (EphyDialog *dialog)
 {
 	ephy_state_add_window (dialog->priv->dialog,
-			       dialog->priv->name, -1, -1);
+			       dialog->priv->name, -1, -1,
+			       EPHY_STATE_WINDOW_SAVE_SIZE);
 }
 
 static gint

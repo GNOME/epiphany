@@ -303,7 +303,8 @@ void
 ephy_state_add_window (GtkWidget *window,
 		       const char *name,
 		       int default_width,
-		       int default_height)
+		       int default_height,
+		       EphyStateWindowFlags flags)
 {
 	EphyNode *node;
 
@@ -358,8 +359,15 @@ ephy_state_add_window (GtkWidget *window,
 		g_value_unset (&value);
 	}
 
-	ephy_state_window_set_size (window, node);
-	ephy_state_window_set_position (window, node);
+	if (flags & EPHY_STATE_WINDOW_SAVE_SIZE)
+	{
+		ephy_state_window_set_size (window, node);
+	}
+
+	if (flags & EPHY_STATE_WINDOW_SAVE_POSITION)
+	{
+		ephy_state_window_set_position (window, node);
+	}
 
 	g_signal_connect_object (window, "configure_event",
 			         G_CALLBACK (window_configure_event_cb), node, 0);

@@ -26,10 +26,17 @@
 
 G_BEGIN_DECLS
 
+typedef enum
+{
+	EPHY_STATE_WINDOW_SAVE_SIZE = 1 << 0,
+	EPHY_STATE_WINDOW_SAVE_POSITION = 1 << 1
+} EphyStateWindowFlags;
+	
 void ephy_state_add_window	(GtkWidget *window,
 				 const char *name,
 				 int default_width,
-				 int default_heigth);
+				 int default_heigth,
+				 EphyStateWindowFlags flags);
 
 void ephy_state_add_paned	(GtkWidget *paned,
 				 const char *name,

@@ -1,3 +1,25 @@
+2003-05-14  David Bordoley <bordoley@msu.edu>
+
+	* lib/ephy-state.c: (ephy_state_add_window):
+	* lib/ephy-state.h: (EphyStateWindowFlags):
+
+	Add some flags so that we can choose to save
+	position or size or both.
+
+	* lib/ephy-dialog.c: (setup_default_size):
+	* src/ephy-window.c: (ephy_window_show):
+	* src/window-commands.c: (window_cmd_edit_toolbar):
+	* src/bookmarks/ephy-bookmark-properties.c: (build_ui):
+	* src/bookmarks/ephy-new-bookmark.c: (ephy_new_bookmark_construct):
+
+	Only save size for dialogs and main windows.
+
+	* src/ephy-history-window.c: (ephy_history_window_construct):
+	* src/bookmarks/ephy-bookmarks-editor.c: 
+	(ephy_bookmarks_editor_construct):
+
+	Save size and position.	
+
 2003-05-14  Xan Lopez  <xan@masilla.org>
 
 	* src/bookmarks/ephy-new-bookmark.c: (duplicate_dialog_construct):
