@@ -44,7 +44,9 @@ enum
 	PROP_0,
 	PROP_PARENT_WINDOW,
 	PROP_MODAL,
-	PROP_PERSIST_POSITION
+	PROP_PERSIST_POSITION,
+	PROP_DEFAULT_WIDTH,
+	PROP_DEFAULT_HEIGHT
 };
 
 typedef enum
@@ -86,6 +88,8 @@ struct EphyDialogPrivate
 	gboolean disposing;
 	gboolean initialized;
 	gboolean persist_position;
+	int default_width;
+	int default_height;
 };
 
 #define SPIN_DELAY 0.20
@@ -977,7 +981,9 @@ setup_default_size (EphyDialog *dialog)
 		}
 
 		ephy_state_add_window (dialog->priv->dialog,
-				       dialog->priv->name, -1, -1,
+				       dialog->priv->name,
+				       dialog->priv->default_width,
+				       dialog->priv->default_height,
 				       flags);
 
 		dialog->priv->has_default_size = TRUE;
@@ -1174,50 +1180,11 @@ ephy_dialog_hide (EphyDialog *dialog)
 	gtk_widget_hide (dialog->priv->dialog);
 }
 
-#if 0
-static void
-run_response_cb (GtkWidget *dialog,
-		 int response,
-		 int *result)
-{
-	*result = response;
-
-	gtk_grab_remove (dialog);
-	LOG ("run_response_cb: leaving gtk level %d", gtk_main_level())
-	gtk_main_quit();
-}
-#endif
-
 int
 ephy_dialog_run (EphyDialog *dialog)
 {
 	ephy_dialog_show (dialog);
 
-#if 0
-	if (dialog->priv->parent != NULL && dialog->priv->modal == FALSE)
-	{
-		GtkWindowGroup *group;
-		int response = 0;
-
-		group = GTK_WINDOW (dialog->priv->parent)->group;
-		if (group == NULL)
-		{
-			group = gtk_window_group_new ();
-			gtk_window_group_add_window (group, GTK_WINDOW (dialog->priv->parent));
-			g_object_unref (group);
-		}
-
-		gtk_window_group_add_window (group, GTK_WINDOW (dialog->priv->dialog));
-		g_signal_connect(dialog->priv->dialog, "response",
-				 G_CALLBACK (run_response_cb), &response);
-		gtk_grab_add (dialog->priv->dialog);
-		LOG ("ephy_dialog_run before main(): level %d", gtk_main_level())
-		gtk_main ();
-		LOG ("ephy_dialog_run after main(): level %d", gtk_main_level())
-
-		return response;
-	}
-#endif
 	return gtk_dialog_run (GTK_DIALOG (dialog->priv->dialog));
 }
 
@@ -1285,6 +1252,8 @@ ephy_dialog_init (EphyDialog *dialog)
 	dialog->priv->has_default_size = FALSE;
 	dialog->priv->disposing = FALSE;
 	dialog->priv->persist_position = FALSE;
+	dialog->priv->default_width = -1;
+	dialog->priv->default_height = -1;
 
 	dialog->priv->props = g_hash_table_new_full 
 		(g_str_hash, g_str_equal, NULL, (GDestroyNotify) free_prop_info);
@@ -1343,6 +1312,12 @@ ephy_dialog_set_property (GObject *object,
 		case PROP_PERSIST_POSITION:
 			dialog->priv->persist_position = g_value_get_boolean (value);
 			break;
+		case PROP_DEFAULT_WIDTH:
+			dialog->priv->default_width = g_value_get_int (value);
+			break;
+		case PROP_DEFAULT_HEIGHT:
+			dialog->priv->default_height = g_value_get_int (value);
+			break;
 	}
 }
 
@@ -1364,6 +1339,12 @@ ephy_dialog_get_property (GObject *object,
 			break;
 		case PROP_PERSIST_POSITION:
 			g_value_set_boolean (value, dialog->priv->persist_position);
+			break;
+		case PROP_DEFAULT_WIDTH:
+			g_value_set_int (value, dialog->priv->default_width);
+			break;
+		case PROP_DEFAULT_HEIGHT:
+			g_value_set_int (value, dialog->priv->default_height);
 			break;
 	}
 }
@@ -1416,7 +1397,30 @@ ephy_dialog_class_init (EphyDialogClass *klass)
 							       "Persist position",
 							       "Persist dialog position",
 							       FALSE,
-							       G_PARAM_READWRITE));
+							       G_PARAM_READWRITE |
+							       G_PARAM_CONSTRUCT_ONLY));
+
+	g_object_class_install_property (object_class,
+					 PROP_DEFAULT_WIDTH,
+					 g_param_spec_int ("default-width",
+							   "Default width",
+							   "Default dialog width",
+							   -1,
+							   G_MAXINT,
+							   -1,
+							   G_PARAM_READWRITE |
+							   G_PARAM_CONSTRUCT_ONLY));
+
+	g_object_class_install_property (object_class,
+					 PROP_DEFAULT_HEIGHT,
+					 g_param_spec_int ("default-height",
+							   "Default height",
+							   "Default dialog height",
+							   -1,
+							   G_MAXINT,
+							   -1,
+							   G_PARAM_READWRITE |
+							   G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (EphyDialogPrivate));
 }

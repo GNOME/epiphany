@@ -377,7 +377,11 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	{
 		LaunchHelperApp ();
 	}
-	else if (mAction != CONTENT_ACTION_NONE)
+	else if (mAction == CONTENT_ACTION_NONE)
+	{
+		mLauncher->Cancel ();
+	}
+	else
 	{
 		mLauncher->SaveToDisk (nsnull,PR_FALSE);
 	}
