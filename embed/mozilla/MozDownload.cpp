@@ -530,7 +530,8 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 
 	PRInt32 flags = nsIWebBrowserPersist::PERSIST_FLAGS_REPLACE_EXISTING_FILES;
 
-	if (!domDocument && !isHTML && !(ephy_flags & EMBED_PERSIST_COPY_PAGE))
+	if (!domDocument && !isHTML && !(ephy_flags & EMBED_PERSIST_COPY_PAGE) &&
+	    !(ephy_flags & EMBED_PERSIST_DO_CONVERSION))
 	{
 		flags |= nsIWebBrowserPersist::PERSIST_FLAGS_NO_CONVERSION;
 	}
