@@ -77,9 +77,9 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	NS_METHOD CheckAppSupportScheme ();
 
 	nsCOMPtr<nsIHelperAppLauncher> mLauncher;
-
 	nsCOMPtr<nsIURI> mUri;
 	nsCOMPtr<nsIFile> mTempFile;
+	nsCOMPtr<nsISupports> mContext;
 
 	char *mMimeType;	
 	PRBool mAppSupportScheme;

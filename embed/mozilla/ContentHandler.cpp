@@ -89,6 +89,7 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 	EphyEmbedSingle *single;
 	gboolean handled = FALSE;
 
+	mContext = aContext;
 	mLauncher = aLauncher;
 	rv = Init ();
 	NS_ENSURE_SUCCESS (rv, rv);
@@ -129,7 +130,10 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 					  _retval);
 	}
 
-	dialog = ephy_file_chooser_new (_("Save"), NULL,
+	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_QueryInterface (aWindowContext);
+	GtkWidget *parentWindow = GTK_WIDGET (MozillaFindGtkParent (parentDOMWindow));
+
+	dialog = ephy_file_chooser_new (_("Save"), parentWindow,
 					GTK_FILE_CHOOSER_ACTION_SAVE,
 					CONF_STATE_DOWNLOAD_DIR);
 	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
@@ -250,13 +254,17 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 	char *text;
 	int response;
 
+	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_QueryInterface (mContext);
+	GtkWindow *parentWindow = GTK_WINDOW (MozillaFindGtkParent(parentDOMWindow));
+
 	dialog = gtk_dialog_new_with_buttons
-		("", NULL, GTK_DIALOG_NO_SEPARATOR,
+		("", parentWindow, GTK_DIALOG_NO_SEPARATOR,
 		 _("_Save As..."), CONTENT_ACTION_SAVEAS,
 		 GTK_STOCK_CANCEL, CONTENT_ACTION_NONE,
 		 mAction == CONTENT_ACTION_OPEN ?
 		 _("_Open") : _("_Download"), mAction,
 		 NULL);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), (guint)mAction);
 	
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
