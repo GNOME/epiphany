@@ -107,15 +107,6 @@ ephy_embed_base_init (gpointer g_class)
 			      2,
 			      G_TYPE_STRING,
 			      G_TYPE_INT);
-		g_signal_new ("ge_open_uri",
-			      EPHY_TYPE_EMBED,
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyEmbedClass, open_uri),
-			      NULL, NULL,
-			      ephy_marshal_INT__STRING,
-			      G_TYPE_INT,
-			      1,
-			      G_TYPE_STRING);
 		g_signal_new ("ge_dom_mouse_click",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_LAST,

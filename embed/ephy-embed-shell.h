@@ -38,17 +38,17 @@ G_BEGIN_DECLS
 #define EPHY_IS_EMBED_SHELL_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_SHELL))
 #define EPHY_EMBED_SHELL_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellClass))
 
-typedef struct EphyEmbedShellClass EphyEmbedShellClass;
-typedef struct EphyEmbedShell EphyEmbedShell;
-typedef struct EphyEmbedShellPrivate EphyEmbedShellPrivate;
+typedef struct EphyEmbedShellClass	EphyEmbedShellClass;
+typedef struct EphyEmbedShell		EphyEmbedShell;
+typedef struct EphyEmbedShellPrivate	EphyEmbedShellPrivate;
 
 extern EphyEmbedShell *embed_shell;
 
 typedef enum
 {
-	EPHY_MIME_PERMISSION_SAFE = 1,
-	EPHY_MIME_PERMISSION_UNSAFE = 2,
-	EPHY_MIME_PERMISSION_UNKNOWN = 3
+	EPHY_MIME_PERMISSION_SAFE	= 1,
+	EPHY_MIME_PERMISSION_UNSAFE	= 2,
+	EPHY_MIME_PERMISSION_UNKNOWN	= 3
 } EphyMimePermission;
 
 struct EphyEmbedShell
@@ -61,31 +61,27 @@ struct EphyEmbedShell
 
 struct EphyEmbedShellClass
 {
-        GObjectClass parent_class;
+	GObjectClass parent_class;
 
 	/* Methods */
-	EphyHistory * (* get_global_history)  (EphyEmbedShell *shell);
-	GObject     * (* get_downloader_view) (EphyEmbedShell *shell);
+	EphyHistory *	(* get_global_history)	(EphyEmbedShell *shell);
+	GObject     *	(* get_downloader_view)	(EphyEmbedShell *shell);
 };
 
-GType               ephy_embed_shell_get_type            (void);
+GType		   ephy_embed_shell_get_type		(void);
 
-GType               ephy_embed_shell_get_impl            (void);
+GObject		  *ephy_embed_shell_get_favicon_cache	   (EphyEmbedShell *ges);
 
-EphyEmbedShell     *ephy_embed_shell_new                 (const char *type);
+EphyHistory	  *ephy_embed_shell_get_global_history	   (EphyEmbedShell *shell);
 
-GObject            *ephy_embed_shell_get_favicon_cache   (EphyEmbedShell *ges);
+GObject		  *ephy_embed_shell_get_downloader_view	   (EphyEmbedShell *shell);
 
-EphyHistory        *ephy_embed_shell_get_global_history  (EphyEmbedShell *shell);
+GObject		  *ephy_embed_shell_get_encodings	   (EphyEmbedShell *shell);
 
-GObject            *ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell);
+EphyEmbedSingle	  *ephy_embed_shell_get_embed_single	   (EphyEmbedShell *shell);
 
-GObject		   *ephy_embed_shell_get_encodings       (EphyEmbedShell *shell);
-
-EphyEmbedSingle    *ephy_embed_shell_get_embed_single    (EphyEmbedShell *shell);
-
-EphyMimePermission  ephy_embed_shell_check_mime          (EphyEmbedShell *shell,
-							  const char *mime_type);
+EphyMimePermission ephy_embed_shell_check_mime		   (EphyEmbedShell *shell,
+							    const char *mime_type);
 
 G_END_DECLS
 

@@ -911,16 +911,6 @@ ephy_tab_destroy_brsr_cb (EphyEmbed *embed, EphyTab *tab)
 	ephy_window_remove_tab (tab->priv->window, tab);
 }
 
-static gint
-ephy_tab_open_uri_cb (EphyEmbed *embed, const char *uri,
-		      EphyTab *tab)
-{
-	LOG ("ephy_tab_open_uri_cb %s", uri)
-
-	/* FIXME: what is this function supposed to do ? */
-	return FALSE;
-}
-
 static void
 ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 		     EphyTab *tab)
@@ -1111,9 +1101,6 @@ ephy_tab_init (EphyTab *tab)
 			  tab);
 	g_signal_connect (embed, "destroy_browser",
 			  G_CALLBACK (ephy_tab_destroy_brsr_cb),
-			  tab);
-	g_signal_connect (embed, "ge_open_uri",
-			  G_CALLBACK (ephy_tab_open_uri_cb),
 			  tab);
 	g_signal_connect (embed, "size_to",
 			  G_CALLBACK (ephy_tab_size_to_cb),

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,7 +18,9 @@
  *  $Id$
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "ephy-embed-shell.h"
 #include "ephy-embed-factory.h"
@@ -30,8 +32,8 @@
 #include "ephy-encodings.h"
 #include "ephy-debug.h"
 
-#include <string.h>
 #include <libxml/xmlreader.h>
+#include <string.h>
 
 #define EPHY_EMBED_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellPrivate))
 
@@ -45,163 +47,119 @@ struct EphyEmbedShellPrivate
 	GHashTable *mime_table;
 };
 
-static void
-ephy_embed_shell_class_init (EphyEmbedShellClass *klass);
-static void
-ephy_embed_shell_init (EphyEmbedShell *ges);
-static void
-ephy_embed_shell_finalize (GObject *object);
+static void ephy_embed_shell_class_init	(EphyEmbedShellClass *klass);
+static void ephy_embed_shell_init	(EphyEmbedShell *shell);
 
-static EphyHistory *
-impl_get_global_history (EphyEmbedShell *shell);
-static GObject *
-impl_get_downloader_view (EphyEmbedShell *shell);
+EphyEmbedShell *embed_shell = NULL;
 
 static GObjectClass *parent_class = NULL;
-
-EphyEmbedShell *embed_shell;
 
 GType
 ephy_embed_shell_get_type (void)
 {
-       static GType ephy_embed_shell_type = 0;
+       static GType type = 0;
 
-        if (ephy_embed_shell_type == 0)
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (EphyEmbedShellClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) ephy_embed_shell_class_init,
-                        NULL, /* class_finalize */
-                        NULL, /* class_data */
-                        sizeof (EphyEmbedShell),
-                        0,    /* n_preallocs */
-                        (GInstanceInitFunc) ephy_embed_shell_init
-                };
+	if (type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyEmbedShellClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			(GClassInitFunc) ephy_embed_shell_class_init,
+			NULL, /* class_finalize */
+			NULL, /* class_data */
+			sizeof (EphyEmbedShell),
+			0,    /* n_preallocs */
+			(GInstanceInitFunc) ephy_embed_shell_init
+		};
 
-                ephy_embed_shell_type = g_type_register_static (G_TYPE_OBJECT,
-								"EphyEmbedShell",
-								&our_info, 0);
-        }
+		type = g_type_register_static (G_TYPE_OBJECT,
+					       "EphyEmbedShell",
+					       &our_info, 0);
+	}
 
-        return ephy_embed_shell_type;
-}
-
-static void
-ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
-
-        object_class->finalize = ephy_embed_shell_finalize;
-
-	klass->get_downloader_view = impl_get_downloader_view;
-	klass->get_global_history = impl_get_global_history;
-
-	g_type_class_add_private (object_class, sizeof(EphyEmbedShellPrivate));
-}
-
-static void
-ephy_embed_shell_init (EphyEmbedShell *ges)
-{
-	/* Singleton, globally accessible */
-	embed_shell = ges;
-
-	ges->priv = EPHY_EMBED_SHELL_GET_PRIVATE (ges);
-
-	ges->priv->global_history = NULL;
-	ges->priv->downloader_view = NULL;
-	ges->priv->favicon_cache = NULL;
-	ges->priv->encodings = NULL;
-	ges->priv->mime_table = NULL;
+	return type;
 }
 
 static void
 ephy_embed_shell_finalize (GObject *object)
 {
-	EphyEmbedShell *ges = EPHY_EMBED_SHELL (object);
+	EphyEmbedShell *shell = EPHY_EMBED_SHELL (object);
 
 	LOG ("Unref history")
-	if (ges->priv->global_history)
+	if (shell->priv->global_history)
 	{
-		g_object_unref (ges->priv->global_history);
+		g_object_unref (shell->priv->global_history);
 	}
 
 	LOG ("Unref downloader")
-	if (ges->priv->downloader_view)
+	if (shell->priv->downloader_view)
 	{
 		g_object_remove_weak_pointer
-			(G_OBJECT(ges->priv->downloader_view),
-			 (gpointer *)&ges->priv->downloader_view);
-		g_object_unref (ges->priv->downloader_view);
+			(G_OBJECT(shell->priv->downloader_view),
+			 (gpointer *) &shell->priv->downloader_view);
+		g_object_unref (shell->priv->downloader_view);
 	}
 
 	LOG ("Unref favicon cache")
-	if (ges->priv->favicon_cache)
+	if (shell->priv->favicon_cache)
 	{
-		g_object_unref (G_OBJECT (ges->priv->favicon_cache));
+		g_object_unref (G_OBJECT (shell->priv->favicon_cache));
 	}
 
 	LOG ("Unref encodings")
-	if (ges->priv->encodings)
+	if (shell->priv->encodings)
 	{
-		g_object_unref (G_OBJECT (ges->priv->encodings));
+		g_object_unref (G_OBJECT (shell->priv->encodings));
 	}
 
 	LOG ("Unref embed single")
-	if (ges->priv->embed_single)
+	if (shell->priv->embed_single)
 	{
-		g_object_unref (G_OBJECT (ges->priv->embed_single));
+		g_object_unref (G_OBJECT (shell->priv->embed_single));
 	}
 
-	if (ges->priv->mime_table)
+	LOG ("Destroying mime type hashtable")
+	if (shell->priv->mime_table)
 	{
-		g_hash_table_destroy (ges->priv->mime_table);
+		g_hash_table_destroy (shell->priv->mime_table);
 	}
 
-        G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-EphyEmbedShell *
-ephy_embed_shell_new (const char *type)
-{
-	return g_object_new (EPHY_TYPE_EMBED_SHELL, NULL);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /**
  * ephy_embed_shell_get_favicon_cache:
- * @gs: a #EphyShell
+ * @shell: the #EphyEmbedShell
  *
  * Returns the favicons cache.
  *
  * Return value: the favicons cache
  **/
 GObject *
-ephy_embed_shell_get_favicon_cache (EphyEmbedShell *ees)
+ephy_embed_shell_get_favicon_cache (EphyEmbedShell *shell)
 {
-	if (ees->priv->favicon_cache == NULL)
+	if (shell->priv->favicon_cache == NULL)
 	{
-		ees->priv->favicon_cache = ephy_favicon_cache_new ();
+		shell->priv->favicon_cache = ephy_favicon_cache_new ();
 	}
 
-	return G_OBJECT (ees->priv->favicon_cache);
+	return G_OBJECT (shell->priv->favicon_cache);
 }
 
 EphyHistory *
 ephy_embed_shell_get_global_history (EphyEmbedShell *shell)
 {
 	EphyEmbedShellClass *klass = EPHY_EMBED_SHELL_GET_CLASS (shell);
-        return klass->get_global_history (shell);
+	return klass->get_global_history (shell);
 }
 
 GObject *
 ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell)
 {
 	EphyEmbedShellClass *klass = EPHY_EMBED_SHELL_GET_CLASS (shell);
-        return klass->get_downloader_view (shell);
+	return klass->get_downloader_view (shell);
 }
 
 EphyEmbedSingle *
@@ -270,10 +228,10 @@ load_mime_from_xml (EphyEmbedShell *shell)
 	ret = xmlTextReaderRead (reader);
 	while (ret == 1)
 	{
-		xmlChar *tag;
+		const xmlChar *tag;
 		xmlReaderTypes type;
 
-		tag = xmlTextReaderName (reader);
+		tag = xmlTextReaderConstName (reader);
 		type = xmlTextReaderNodeType (reader);
 
 		if (xmlStrEqual (tag, "safe") && type == XML_READER_TYPE_ELEMENT)
@@ -292,8 +250,6 @@ load_mime_from_xml (EphyEmbedShell *shell)
 			g_hash_table_insert (shell->priv->mime_table,
 					     type, GINT_TO_POINTER (permission));
 		}
-
-		xmlFree (tag);
 
 		ret = xmlTextReaderRead (reader);
 	}
@@ -325,4 +281,35 @@ ephy_embed_shell_check_mime (EphyEmbedShell *shell, const char *mime_type)
 	}
 
 	return permission;
+}
+
+static void
+ephy_embed_shell_init (EphyEmbedShell *shell)
+{
+	shell->priv = EPHY_EMBED_SHELL_GET_PRIVATE (shell);
+
+	/* globally accessible singleton */
+	g_assert (embed_shell == NULL);
+	embed_shell = shell;
+
+	shell->priv->global_history = NULL;
+	shell->priv->downloader_view = NULL;
+	shell->priv->favicon_cache = NULL;
+	shell->priv->encodings = NULL;
+	shell->priv->mime_table = NULL;
+}
+
+static void
+ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
+
+	object_class->finalize = ephy_embed_shell_finalize;
+
+	klass->get_downloader_view = impl_get_downloader_view;
+	klass->get_global_history = impl_get_global_history;
+
+	g_type_class_add_private (object_class, sizeof (EphyEmbedShellPrivate));
 }

@@ -37,56 +37,45 @@ G_BEGIN_DECLS
 #define EPHY_IS_EMBED_CLASS(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED))
 #define EPHY_EMBED_GET_CLASS(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EMBED, EphyEmbedClass))
 
-typedef struct EphyEmbedClass EphyEmbedClass;
-typedef struct _EphyEmbed EphyEmbed;
+typedef struct EphyEmbedClass	EphyEmbedClass;
+typedef struct _EphyEmbed	EphyEmbed;
 
 typedef enum
 {
-	EMBED_STATE_UNKNOWN = 0,
-	EMBED_STATE_START = 1 << 0,
-	EMBED_STATE_REDIRECTING = 1 << 1,
-	EMBED_STATE_TRANSFERRING = 1 << 2,
-	EMBED_STATE_NEGOTIATING = 1 << 3,
-	EMBED_STATE_STOP = 1 << 4,
+	EMBED_STATE_UNKNOWN		= 0,
+	EMBED_STATE_START		= 1 << 0,
+	EMBED_STATE_REDIRECTING		= 1 << 1,
+	EMBED_STATE_TRANSFERRING	= 1 << 2,
+	EMBED_STATE_NEGOTIATING		= 1 << 3,
+	EMBED_STATE_STOP		= 1 << 4,
 
-	EMBED_STATE_IS_REQUEST = 1 << 5,
-	EMBED_STATE_IS_DOCUMENT = 1 << 6,
-	EMBED_STATE_IS_NETWORK = 1 << 7,
-	EMBED_STATE_IS_WINDOW = 1 << 8
+	EMBED_STATE_IS_REQUEST		= 1 << 5,
+	EMBED_STATE_IS_DOCUMENT		= 1 << 6,
+	EMBED_STATE_IS_NETWORK		= 1 << 7,
+	EMBED_STATE_IS_WINDOW		= 1 << 8
 } EmbedState;
 
 typedef enum
 {
-	EMBED_CHROME_NONE = 0,
-	EMBED_CHROME_DEFAULT = 1 << 0,
-	EMBED_CHROME_MENUBARON = 1 << 1,
-	EMBED_CHROME_TOOLBARON = 1 << 2,
-	EMBED_CHROME_BOOKMARKSBARON = 1 << 3,
-	EMBED_CHROME_BOOKMARKSBAR_DEFAULT = 1 << 4,
-	EMBED_CHROME_STATUSBARON = 1 << 5,
-	EMBED_CHROME_WINDOWRAISED = 1 << 6,
-	EMBED_CHROME_WINDOWLOWERED = 1 << 7,
-	EMBED_CHROME_CENTERSCREEN = 1 << 8,
-	EMBED_CHROME_OPENASDIALOG = 1 << 9,
-	EMBED_CHROME_OPENASCHROME = 1 << 10,
-	EMBED_CHROME_OPENASPOPUP = 1 << 11,
-	EMBED_CHROME_PPVIEWTOOLBARON = 1 << 12
+	EMBED_CHROME_NONE			= 0,
+	EMBED_CHROME_DEFAULT			= 1 << 0,
+	EMBED_CHROME_MENUBARON			= 1 << 1,
+	EMBED_CHROME_TOOLBARON			= 1 << 2,
+	EMBED_CHROME_BOOKMARKSBARON		= 1 << 3,
+	EMBED_CHROME_BOOKMARKSBAR_DEFAULT	= 1 << 4,
+	EMBED_CHROME_STATUSBARON		= 1 << 5,
+	EMBED_CHROME_WINDOWRAISED		= 1 << 6,
+	EMBED_CHROME_WINDOWLOWERED		= 1 << 7,
+	EMBED_CHROME_CENTERSCREEN		= 1 << 8,
+	EMBED_CHROME_OPENASDIALOG		= 1 << 9,
+	EMBED_CHROME_OPENASCHROME		= 1 << 10,
+	EMBED_CHROME_OPENASPOPUP		= 1 << 11,
+	EMBED_CHROME_PPVIEWTOOLBARON		= 1 << 12
 } EmbedChromeMask;
-
-typedef struct
-{
-	char *modification_date;
-
-	/* lists of hashtables with gvalues */
-	GList *images;      /* url, alt, title, width, height */
-	GList *forms;       /* action, type */
-	GList *links;       /* url, title, type */
-	GList *stylesheets; /* url, title */
-} EmbedPageInfo;
 
 typedef enum
 {
-	EMBED_RELOAD_NORMAL = 1 << 1,
+	EMBED_RELOAD_NORMAL	 = 1 << 1,
 	EMBED_RELOAD_BYPASSCACHE = 1 << 2,
 	EMBED_RELOAD_BYPASSPROXY = 1 << 3
 } EmbedReloadFlags;
@@ -94,21 +83,22 @@ typedef enum
 typedef struct
 {
 	gboolean print_to_file;
-	gchar *printer;
-	gchar *file;
-	gchar *paper;
-	gint top_margin;
-	gint bottom_margin;
-	gint left_margin;
-	gint right_margin;
-	gint pages;
-	gint from_page;
-	gint to_page;
-	gint frame_type;
-	gint orientation;
+	char *printer;
+	char *file;
+	char *paper;
+	int top_margin;
+	int bottom_margin;
+	int left_margin;
+	int right_margin;
+	int pages;
+	int from_page;
+	int to_page;
+	int frame_type;
+	int orientation;
 	gboolean print_color;
+	gboolean preview;
 
-	 /*
+	/*
 	 * &T - title
 	 * &U - Document URL
 	 * &D - Date/Time
@@ -118,24 +108,22 @@ typedef struct
 	 * So, if headerLeftStr = "&T" the title and the document URL
 	 * will be printed out on the top left-hand side of each page.
 	 */
-	gchar *header_left_string;
-	gchar *header_center_string;
-	gchar *header_right_string;
-	gchar *footer_left_string;
-	gchar *footer_center_string;
-	gchar *footer_right_string;
-
-	gboolean preview;
+	char *header_left_string;
+	char *header_center_string;
+	char *header_right_string;
+	char *footer_left_string;
+	char *footer_center_string;
+	char *footer_right_string;
 }
 EmbedPrintInfo;
 
 typedef enum
 {
-	PRINTPREVIEW_GOTO_PAGENUM = 0,
-	PRINTPREVIEW_PREV_PAGE = 1,
-	PRINTPREVIEW_NEXT_PAGE = 2,
-	PRINTPREVIEW_HOME = 3,
-	PRINTPREVIEW_END = 4
+	PRINTPREVIEW_GOTO_PAGENUM	= 0,
+	PRINTPREVIEW_PREV_PAGE		= 1,
+	PRINTPREVIEW_NEXT_PAGE		= 2,
+	PRINTPREVIEW_HOME		= 3,
+	PRINTPREVIEW_END		= 4
 } EmbedPrintPreviewNavType;
 
 typedef enum
@@ -160,32 +148,32 @@ struct EphyEmbedClass
 	 *			  gboolean visibility);
 	 * void (* destroy_brsr) (EphyEmbed *embed);
 	 * void (* size_to)      (EphyEmbed *embed,
-	 *			  gint width,
-	 *			  gint height);
+	 *			  int width,
+	 *			  int height);
+	 * gint (* open_uri)	 (EphyEmbed *embed,
+	 *			  const char *url);
 	 */	
 
-	gint (* context_menu)	 (EphyEmbed *embed,
-				  EphyEmbedEvent *event);
-	void (* favicon)	 (EphyEmbed *embed,
-				  const char *location);
-	void (* location)        (EphyEmbed *embed,
-				  const char *location);
-	void (* net_state)       (EphyEmbed *embed,
-				  const char *uri,
-				  EmbedState state);
-	void (* new_window)      (EphyEmbed *embed,
-				  EphyEmbed **new_embed,
-				  EmbedChromeMask chromemask);
-	gint (* open_uri)        (EphyEmbed *embed,
-				  const char *uri);
-	gint (* dom_mouse_click) (EphyEmbed *embed,
-				  EphyEmbedEvent *event);
-	gint (* dom_mouse_down)  (EphyEmbed *embed,
-				  EphyEmbedEvent *event);
-	void (* security_change) (EphyEmbed *embed,
-				  EmbedSecurityLevel level);
-	void (* zoom_change)	 (EphyEmbed *embed,
-				  guint new_zoom);
+	int	 (* context_menu)	(EphyEmbed *embed,
+					 EphyEmbedEvent *event);
+	void	 (* favicon)		(EphyEmbed *embed,
+					 const char *location);
+	void	 (* location)		(EphyEmbed *embed,
+					 const char *location);
+	void	 (* net_state)		(EphyEmbed *embed,
+					 const char *uri,
+					 EmbedState state);
+	void	 (* new_window)		(EphyEmbed *embed,
+					 EphyEmbed **new_embed,
+					 EmbedChromeMask chromemask);
+	gboolean (* dom_mouse_click)	(EphyEmbed *embed,
+					 EphyEmbedEvent *event);
+	gboolean (* dom_mouse_down)	(EphyEmbed *embed,
+					 EphyEmbedEvent *event);
+	void	 (* security_change)	(EphyEmbed *embed,
+					 EmbedSecurityLevel level);
+	void	 (* zoom_change)	(EphyEmbed *embed,
+					 float new_zoom);
 
 	/* Methods  */
 	void		   (* load_url)			(EphyEmbed *embed,
