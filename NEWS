@@ -1,4 +1,88 @@
 ==============
+Epiphany 1.5.2
+==============
+
+Interface improvements
+
+	* When popping up the context menu with keyboard, select the first item[#154907]
+	* Don't detach the tab when releasing the mouse button while still over
+	  the same window [#143954]
+	* Better wording for the crash recovery dialogue (Piers, Christian)
+	* Make the "duplicate bookmark" dialogue not modal
+	* Better wording for the accept cert dialogue [#127234]
+	* Add short-time filter in history window
+	* Better positioning for the context menu popup in a treeview (Crispin Flowerday)
+	* Add resize grip [#137845]
+	* Warn before deleting a topic (Xan) [#149294]
+	* Implement history deletion on per-site basis [#116609]
+	* Add shortcut to Send To menuitem, as per HIG [#148655]
+	* Make content handler dialogue not modal
+
+Code changes
+
+	* Bring the window to the foreground when showing a modal alert
+	* Show language code in the string in languages editor [#115355]
+	* More porting to GtkMessageDialog
+	* Don't hardcode "epiphany" as argv[0], use g_get_prgname() instead [#118427]
+	* Size-allocate the embed if it's not mapped but has never been
+	  size-allocated before [#156854]
+	* Fixes for mozilla API changes
+	* Don't save session_crashed.xml while shutting down
+	* Check favicon urls with script sec manager and content policy
+	* Simplify the gconf -> mozilla prefs bridge
+	* Add a way to show the cert info dialogue for the page's certificate
+	* Disallow favicon links from subframes
+	* Add --disable-filepicker to use when the mozilla build itself has a native gtk+ filepicker
+	* Remove generic 'site' hostname fallback (Mikhail Zabaluev) [#155442]
+	* If the iso-codes package is available, use that to translate
+	  language names and offer a wider variety of languages [#155498]
+	* Don't use deprecated gnome vfs APIs (Marco)
+
+Bug fixes
+
+	* Show tooltips for zoom control again[#155826]
+	* Make tooltips on zoom control work for Ctrl-F1
+	* Fix a mem leak (Adam)
+	* Sanitise the embed popup position [#157162]
+	* Fix button sensitivity setting in language editor
+	* Fix check for nsIPassword.h header to look in the right place [#157743]
+	* Fix time filter in history window for time zones != GMT
+	* Fix signed/unsigned int confusion
+	* Fix opening content with external content handlers (Marco)
+	* Portability fix for 64 bit systems (James Henstridge)
+	* Fix hang after --import-bookmarks [#136170]
+	* Fix crash when getting the "die" signal from session manager
+	* Don't access freed memory [#158202]
+	* Fix wrong certificate shown [galeon #158453]
+	* Fix opening of content when not downloading automatically [#158466]
+	* Fix build without PSM
+	* Fix tabs menu ordering with tab-groups extension
+	* Fix some string comparision bugs in event context
+	* Fix out-of-srcdir build (Marco, Christian)
+	* Don't raise window on --new-tab [#158923]
+
+Documentation updates
+
+	* Added manual translation into Finnish, by Pauli Virtanen.
+
+Translation updates
+
+	* Jordi Mallach (ca)
+	* Miloslav Trmac (cs)
+	* Hendrik Richter (de)
+	* Adam Weinberger (en_CA)
+	* David Lodge (en_GB)
+	* (es)
+	* Takeshi AIHANA (ja)
+	* Žygimantas Beručka (lt)
+	* Kjartan Maraas (nb)
+	* Reinout van Schouwen (nl)
+	* Gustavo Noronha Silva (pt_BR)
+	* Marcel Telka (sk)
+	* Laurent Dhima (sq)
+
+
+==============
 Epiphany 1.5.1
 ==============
 
