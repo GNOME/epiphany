@@ -163,7 +163,6 @@ NS_IMETHODIMP
 EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 {
 	nsCOMPtr<nsIDOMEventTarget> eventTarget;
-
 	aDOMEvent->GetTarget(getter_AddRefs(eventTarget));
 
 	nsCOMPtr<nsIDOMNode> node = do_QueryInterface(eventTarget);
@@ -177,19 +176,17 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 NS_IMETHODIMP
 EphyPopupBlockEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 {
-	nsresult rv;
-
 	NS_ENSURE_TRUE (mOwner != NULL, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDOMPopupBlockedEvent> popupEvent =
-		do_QueryInterface (aDOMEvent, &rv);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+		do_QueryInterface (aDOMEvent);
+	NS_ENSURE_TRUE (popupEvent, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIURI> popupWindowURI;
-	rv = popupEvent->GetPopupWindowURI (getter_AddRefs (popupWindowURI));
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-	NS_ENSURE_SUCCESS (popupWindowURI != NULL, NS_ERROR_FAILURE);
+	popupEvent->GetPopupWindowURI (getter_AddRefs (popupWindowURI));
+	NS_ENSURE_TRUE (popupWindowURI, NS_ERROR_FAILURE);
 
+	nsresult rv;
 	nsEmbedCString popupWindowURIString;
 	rv = popupWindowURI->GetSpec (popupWindowURIString);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
@@ -215,16 +212,16 @@ EphyBrowser::EphyBrowser ()
 , mPopupBlockEventListener(nsnull)
 , mInitialized(PR_FALSE)
 {
+	LOG ("EphyBrowser ctor (%p)", this)
 }
 
 EphyBrowser::~EphyBrowser ()
 {
+	LOG ("EphyBrowser dtor (%p)", this)
 }
 
 nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 {
-	nsresult rv;
-
 	if (mInitialized) return NS_OK;
 
 	gtk_moz_embed_get_nsIWebBrowser (mozembed,
@@ -235,6 +232,7 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 	NS_ENSURE_TRUE (mDOMWindow, NS_ERROR_FAILURE);
 
 	/* This will instantiate an about:blank doc if necessary */
+	nsresult rv;
 	nsCOMPtr<nsIDOMDocument> domDocument;
 	rv = mDOMWindow->GetDocument (getter_AddRefs (domDocument));
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
