@@ -294,6 +294,8 @@ ephy_favicon_action_finalize (GObject *object)
 {
         EphyFaviconAction *action = EPHY_FAVICON_ACTION (object);
 
+	g_free (action->priv->icon);
+
 	g_object_unref (action->priv->cache);
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
