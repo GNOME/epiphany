@@ -85,7 +85,11 @@ handle_email (GtkAboutDialog *about,
 	      const char *link,
 	      gpointer data)
 {
-	gnome_vfs_url_show (link);
+	char *address;
+
+	address = g_strdup_printf ("mailto:%s\n", link);
+	gnome_vfs_url_show (address);
+	g_free (address);
 }
 
 static void
