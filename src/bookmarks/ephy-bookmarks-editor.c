@@ -535,12 +535,11 @@ cmd_bookmarks_import (EggAction *action,
 	gtk_widget_show (menu);
 
 	add_bookmarks_source_menu (menu, _("Mozilla bookmarks"),
-				   ".mozilla", "bookmarks.html");
+				   MOZILLA_BOOKMARKS_DIR, "bookmarks.html");
 	add_bookmarks_source_menu (menu, _("Galeon bookmarks"),
-				   ".galeon", "bookmarks.xbel");
+				   GALEON_BOOKMARKS_DIR, "bookmarks.xbel");
 	add_bookmarks_source_menu (menu, _("Konqueror bookmarks"),
-				   ".kde/share/apps/konqueror",
-				   "bookmarks.xml");
+				   KDE_BOOKMARKS_DIR, "bookmarks.xml");
 
 	option_menu = gtk_option_menu_new ();
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);

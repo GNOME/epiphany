@@ -77,10 +77,21 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 	{
 		return ephy_bookmarks_import_mozilla (bookmarks, filename);
 	}
-	else
+	else if (strcmp (type, "application/xbel") == 0)
 	{
 		return ephy_bookmarks_import_xbel (bookmarks, filename);
 	}
+	else if (strstr (filename, MOZILLA_BOOKMARKS_DIR) != NULL)
+	{
+		return ephy_bookmarks_import_mozilla (bookmarks, filename);
+	}
+	else if (strstr (filename, GALEON_BOOKMARKS_DIR) != NULL ||
+		 strstr (filename, KDE_BOOKMARKS_DIR) != NULL)
+	{
+		return ephy_bookmarks_import_xbel (bookmarks, filename);
+	}
+
+	return FALSE;
 }
 
 static void

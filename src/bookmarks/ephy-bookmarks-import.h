@@ -23,6 +23,10 @@
 
 G_BEGIN_DECLS
 
+#define MOZILLA_BOOKMARKS_DIR ".mozilla"
+#define GALEON_BOOKMARKS_DIR ".galeon"
+#define KDE_BOOKMARKS_DIR ".kde/share/apps/konqueror"
+
 gboolean ephy_bookmarks_import         (EphyBookmarks *bookmarks,
 					const char *filename);
 
