@@ -73,6 +73,23 @@ libephymisc_la_CFLAGS = \
         $(EPIPHANY_DEPENDENCY_CFLAGS)	\
 	$(AM_CFLAGS)
 
+libephymisc_la_LIBADD =
+
+if ENABLE_DBUS
+INST_H_FILES += \
+	ephy-dbus.h
+
+TYPES_H_FILES += \
+	ephy-dbus.h
+
+libephymisc_la_SOURCES += \
+	ephy-dbus.c
+
+libephymisc_la_CFLAGS += $(DBUS_CFLAGS)
+
+libephymisc_la_LIBADD += $(DBUS_LIBS)
+endif
+
 BUILT_SOURCES = \
 	ephy-lib-type-builtins.c	\
 	ephy-lib-type-builtins.h	\

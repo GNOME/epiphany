@@ -44,6 +44,10 @@
 #include "ephy-automation.h"
 #include "print-dialog.h"
 
+#ifdef ENABLE_DBUS
+#include "ephy-dbus.h"
+#endif
+
 #include <string.h>
 #include <bonobo/bonobo-main.h>
 #include <glib/gi18n.h>
@@ -67,6 +71,7 @@ struct _EphyShellPrivate
 	EggToolbarsModel *toolbars_model;
 	EggToolbarsModel *fs_toolbars_model;
 	EphyExtensionsManager *extensions_manager;
+	GObject *dbus_service;
 	GtkWidget *bme;
 	GtkWidget *history_window;
 	GObject *pdm_dialog;
@@ -412,6 +417,14 @@ ephy_shell_finalize (GObject *object)
 	{
 		g_object_unref (shell->priv->extensions_manager);
 	}
+
+#ifdef ENABLE_DBUS
+	LOG ("Shutting down DBUS service")
+	if (shell->priv->dbus_service)
+	{
+		g_object_unref (shell->priv->dbus_service);
+	}
+#endif
 
 	LOG ("Unref session manager")
 	if (shell->priv->session)
@@ -805,3 +818,19 @@ ephy_shell_get_print_setup_dialog (EphyShell *shell)
 
 	return shell->priv->print_setup_dialog;
 }
+
+#ifdef ENABLE_DBUS
+GObject	*
+ephy_shell_get_dbus_service (EphyShell *shell)
+{
+	g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+	if (shell->priv->dbus_service == NULL)
+	{
+		shell->priv->dbus_service = g_object_new (EPHY_TYPE_DBUS, NULL);
+		ephy_dbus_startup (EPHY_DBUS (shell->priv->dbus_service));
+	}
+
+	return G_OBJECT (shell->priv->dbus_service);
+}
+#endif

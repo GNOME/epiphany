@@ -1,3 +1,18 @@
+2005-01-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.ac:
+	* lib/Makefile.am:
+	A lib/ephy-dbus.c:
+	A lib/ephy-dbus.h:
+	* lib/ephy-marshal.list:
+	* src/Makefile.am:
+	* src/ephy-shell.c: (ephy_shell_finalize),
+	(ephy_shell_get_dbus_service):
+	* src/ephy-shell.h:
+
+	Add experimental dbus service, disabled by default. Configure with
+	--enable-dbus to enable.
+
 2005-01-09  Piers Cornwell  <piers@gnome.org>
 
 	* data/epiphany.desktop.in

@@ -106,6 +106,10 @@ libephymain_la_CFLAGS = \
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
 	$(AM_CFLAGS)
 
+if ENABLE_DBUS
+libephymain_la_CFLAGS += $(DBUS_CFLAGS)
+endif
+
 epiphany_SOURCES = ephy-main.c
 
 epiphany_CPPFLAGS = \
@@ -134,6 +138,10 @@ epiphany_LDADD = \
 	$(MOZILLA_COMPONENT_LIBS)	\
 	$(EPIPHANY_DEPENDENCY_LIBS) \
 	$(INTLLIBS)
+
+if ENABLE_DBUS
+epiphany_LDADD += $(DBUS_LIBS)
+endif
 
 BUILT_SOURCES =	\
 	$(CORBA_SOURCE)	\

@@ -471,7 +471,7 @@ fi
 
 AC_MSG_CHECKING([whether to enable native gtk+ filepicker])
 AC_ARG_ENABLE([filepicker],
-	AS_HELP_STRING([--enable-filepicker],[Whether to enable the gtk+ native filepicker; not neede when the mozilla build itself has native gtk+ filepicker enabled (default:enabled)]),
+	AS_HELP_STRING([--enable-filepicker],[Whether to enable the gtk+ native filepicker; not needed when the mozilla build itself has native gtk+ filepicker enabled (default:enabled)]),
 	[filepicker=$enableval],
 	[filepicker=yes])
 AC_MSG_RESULT([$filepicker])
@@ -486,6 +486,31 @@ dnl Multimedia keys
 dnl ***************
 
 AC_CHECK_HEADERS([X11/XF86keysym.h])
+
+dnl ***********************************
+dnl Check for DBUS and DBUS net monitor
+dnl ***********************************
+
+AC_MSG_CHECKING([whether DBUS support is requested])
+
+enable_dbus=no
+AC_ARG_ENABLE([dbus],
+	AS_HELP_STRING([--enable-dbus],[Enable DBUS (default=no)]),
+	[enable_dbus=yes],
+	[enable_dbus=no])
+
+DBUS_REQUIRED=0.22
+DBUS_GLIB_REQUIRED=0.22
+
+if test x"$enable_dbus" = "xyes" ; then
+	AC_DEFINE([ENABLE_DBUS],[1],[Define if DBUS support is enabled (default=disabled)])
+
+	PKG_CHECK_MODULES([DBUS], [dbus-1 >= $DBUS_REQUIRED dbus-glib-1 >= $DBUS_GLIB_REQUIRED])
+fi
+
+AM_CONDITIONAL([ENABLE_DBUS], [test "x$enable_dbus" = "xyes"])
+
+AC_MSG_RESULT([$enable_dbus])
 
 dnl *******************************
 dnl Add warning flags
