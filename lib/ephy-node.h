@@ -96,7 +96,7 @@ char       *ephy_node_get_property_time     (EphyNode *node,
 					     guint property_id);
 
 /* xml storage */
-void          ephy_node_save_to_xml         (EphyNode *node,
+void          ephy_node_to_xml              (EphyNode *node,
 					     xmlNodePtr parent_xml_node);
 EphyNode     *ephy_node_new_from_xml        (EphyNodeDb *db,
 					     xmlNodePtr xml_node);

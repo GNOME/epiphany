@@ -54,12 +54,22 @@ GType         ephy_node_db_get_type		(void);
 
 EphyNodeDb   *ephy_node_db_get_by_name		(const char *name);
 
-EphyNodeDb   *ephy_node_db_new			(const char *name);
+EphyNodeDb   *ephy_node_db_new			(const char *name,
+						 const char *version);
 
 const char   *ephy_node_db_get_name		(EphyNodeDb *db);
 
 EphyNode     *ephy_node_db_get_node_from_id	(EphyNodeDb *db,
 						 long id);
+
+EphyNode     *ephy_node_db_get_root_from_id     (EphyNodeDb *db,
+						 long id);
+
+gboolean      ephy_node_db_load_from_xml        (EphyNodeDb *db,
+						 const char *xml_file);
+
+gboolean      ephy_node_db_save_to_xml          (EphyNodeDb *db,
+						 const char *xml_file);
 
 long	      _ephy_node_db_new_id		(EphyNodeDb *db);
 

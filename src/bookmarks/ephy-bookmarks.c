@@ -265,82 +265,15 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 static gboolean
 ephy_bookmarks_load (EphyBookmarks *eb)
 {
-	xmlDocPtr doc;
-	xmlNodePtr root, child;
-	char *tmp;
-
-	if (g_file_test (eb->priv->xml_file, G_FILE_TEST_EXISTS) == FALSE)
-		return FALSE;
-
-	doc = xmlParseFile (eb->priv->xml_file);
-	g_return_val_if_fail (doc != NULL, FALSE);
-
-	root = xmlDocGetRootElement (doc);
-
-	tmp = xmlGetProp (root, "version");
-	g_assert (tmp != NULL && strcmp (tmp, EPHY_BOOKMARKS_XML_VERSION) == 0);
-	g_free (tmp);
-
-	for (child = root->children; child != NULL; child = child->next)
-	{
-		EphyNode *node;
-
-		node = ephy_node_new_from_xml (eb->priv->db, child);
-	}
-
-	xmlFreeDoc (doc);
-
-	return TRUE;
+	return ephy_node_db_load_from_xml (eb->priv->db, eb->priv->xml_file);
 }
 
 void
 ephy_bookmarks_save (EphyBookmarks *eb)
 {
-	xmlDocPtr doc;
-	xmlNodePtr root;
-	GPtrArray *children;
-	int i;
 	char *rdf_file;
 
-	LOG ("Saving bookmarks")
-
-	/* save nodes to xml */
-	xmlIndentTreeOutput = TRUE;
-	doc = xmlNewDoc ("1.0");
-
-	root = xmlNewDocNode (doc, NULL, "ephy_bookmarks", NULL);
-	xmlSetProp (root, "version", EPHY_BOOKMARKS_XML_VERSION);
-	xmlDocSetRootElement (doc, root);
-
-	children = ephy_node_get_children (eb->priv->keywords);
-	for (i = 0; i < children->len; i++)
-	{
-		EphyNode *kid;
-
-		kid = g_ptr_array_index (children, i);
-
-		if (kid != eb->priv->bookmarks &&
-		    kid != eb->priv->favorites &&
-		    kid != eb->priv->notcategorized)
-		{
-			ephy_node_save_to_xml (kid, root);
-		}
-	}
-	ephy_node_thaw (eb->priv->keywords);
-
-	children = ephy_node_get_children (eb->priv->bookmarks);
-	for (i = 0; i < children->len; i++)
-	{
-		EphyNode *kid;
-
-		kid = g_ptr_array_index (children, i);
-
-		ephy_node_save_to_xml (kid, root);
-	}
-	ephy_node_thaw (eb->priv->bookmarks);
-
-	xmlSaveFormatFile (eb->priv->xml_file, doc, 1);
-	xmlFreeDoc(doc);
+	ephy_node_db_save_to_xml (eb->priv->db, eb->priv->xml_file);
 
 	/* Export bookmarks in rdf */
 	rdf_file = g_build_filename (ephy_dot_dir (),
@@ -586,7 +519,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 
         eb->priv = g_new0 (EphyBookmarksPrivate, 1);
 
-	db = ephy_node_db_new ("EphyBookmarks");
+	db = ephy_node_db_new ("EphyBookmarks", EPHY_BOOKMARKS_XML_VERSION);
 	eb->priv->db = db;
 
 	eb->priv->xml_file = g_build_filename (ephy_dot_dir (),
@@ -690,6 +623,8 @@ ephy_bookmarks_finalize (GObject *object)
 	ephy_node_unref (eb->priv->keywords);
 	ephy_node_unref (eb->priv->favorites);
 	ephy_node_unref (eb->priv->notcategorized);
+
+	g_object_unref (eb->priv->db);
 
         g_free (eb->priv);
 

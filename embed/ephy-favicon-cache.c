@@ -122,30 +122,7 @@ ephy_favicon_cache_new (void)
 static void
 ephy_favicon_cache_load (EphyFaviconCache *eb)
 {
-	xmlDocPtr doc;
-	xmlNodePtr root, child;
-	char *tmp;
-
-	if (g_file_test (eb->priv->xml_file, G_FILE_TEST_EXISTS) == FALSE)
-		return;
-
-	doc = xmlParseFile (eb->priv->xml_file);
-	g_assert (doc != NULL);
-
-	root = xmlDocGetRootElement (doc);
-
-	tmp = xmlGetProp (root, "version");
-	g_assert (tmp != NULL && strcmp (tmp, EPHY_FAVICON_CACHE_XML_VERSION) == 0);
-	g_free (tmp);
-
-	for (child = root->children; child != NULL; child = child->next)
-	{
-		EphyNode *node;
-
-		node = ephy_node_new_from_xml (eb->priv->db, child);
-	}
-
-	xmlFreeDoc (doc);
+	ephy_node_db_load_from_xml (eb->priv->db, eb->priv->xml_file);
 }
 
 static gboolean
@@ -229,33 +206,7 @@ remove_obsolete_icons (EphyFaviconCache *eb)
 static void
 ephy_favicon_cache_save (EphyFaviconCache *eb)
 {
-	xmlDocPtr doc;
-	xmlNodePtr root;
-	GPtrArray *children;
-	int i;
-
-	/* save nodes to xml */
-	xmlIndentTreeOutput = TRUE;
-	doc = xmlNewDoc ("1.0");
-
-	root = xmlNewDocNode (doc, NULL, "ephy_favicons_cache", NULL);
-	xmlSetProp (root, "version", EPHY_FAVICON_CACHE_XML_VERSION);
-	xmlDocSetRootElement (doc, root);
-
-	children = ephy_node_get_children (eb->priv->icons);
-	for (i = 0; i < children->len; i++)
-	{
-		EphyNode *kid;
-
-		kid = g_ptr_array_index (children, i);
-
-		ephy_node_save_to_xml (kid, root);
-	}
-	ephy_node_thaw (eb->priv->icons);
-
-	xmlSaveFormatFile (eb->priv->xml_file, doc, 1);
-
-	xmlFreeDoc (doc);
+	ephy_node_db_save_to_xml (eb->priv->db, eb->priv->xml_file);
 }
 
 static void
@@ -265,7 +216,7 @@ ephy_favicon_cache_init (EphyFaviconCache *cache)
 
 	cache->priv = g_new0 (EphyFaviconCachePrivate, 1);
 
-	db = ephy_node_db_new ("EphyFaviconCache");
+	db = ephy_node_db_new ("EphyFaviconCache", EPHY_FAVICON_CACHE_XML_VERSION);
 	cache->priv->db = db;
 
 	cache->priv->xml_file = g_build_filename (ephy_dot_dir (),
@@ -351,17 +302,16 @@ ephy_favicon_cache_finalize (GObject *object)
 
 	g_return_if_fail (cache->priv != NULL);
 
-	g_object_unref (cache->priv->db);
-
+	ephy_favicon_cache_save (cache);
 	cleanup_downloads_hash (cache);
 	remove_obsolete_icons (cache);
-	ephy_favicon_cache_save (cache);
 
 	g_free (cache->priv->xml_file);
 	g_free (cache->priv->directory);
 	g_hash_table_destroy (cache->priv->icons_hash);
 	g_static_rw_lock_free (cache->priv->icons_hash_lock);
 	g_hash_table_destroy (cache->priv->downloads_hash);
+	g_object_unref (cache->priv->db);
 
 	g_free (cache->priv);
 

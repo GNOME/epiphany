@@ -719,8 +719,8 @@ save_parent (gulong id,
 }
 
 void
-ephy_node_save_to_xml (EphyNode *node,
-		       xmlNodePtr parent_xml_node)
+ephy_node_to_xml (EphyNode *node,
+		  xmlNodePtr parent_xml_node)
 {
 	xmlNodePtr xml_node;
 	char *xml;
@@ -735,8 +735,6 @@ ephy_node_save_to_xml (EphyNode *node,
 	xml = g_strdup_printf ("%ld", node->id);
 	xmlSetProp (xml_node, "id", xml);
 	g_free (xml);
-
-	xmlSetProp (xml_node, "type", G_OBJECT_TYPE_NAME (node));
 
 	for (i = 0; i < node->properties->len; i++) {
 		GValue *value;
