@@ -118,9 +118,9 @@ protected:
 	PRInt32                 mCurrentProgress;
 
 	bool                    mGotFirstStateChange, mIsNetworkTransfer;
-	bool                    mUserCanceled;
 	nsresult                mStatus;
-   
+
+	nsCOMPtr<nsIObserver>		mObserver;   
 	nsCOMPtr<nsIWebBrowserPersist>  mWebPersist;
 	nsCOMPtr<nsIRequest>		mRequest;
 	EphyDownload                   *mEphyDownload;

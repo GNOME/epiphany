@@ -58,7 +58,6 @@ const char* const persistContractID = "@mozilla.org/embedding/browser/nsWebBrows
 
 MozDownload::MozDownload() :
 	mGotFirstStateChange(false), mIsNetworkTransfer(false),
-	mUserCanceled(false),
 	mStatus(NS_OK),
 	mEmbedPersist(nsnull),
 	mDownloadState(EPHY_DOWNLOAD_DOWNLOADING)
@@ -251,7 +250,9 @@ MozDownload::GetObserver(nsIObserver **aObserver)
 NS_IMETHODIMP
 MozDownload::SetObserver(nsIObserver *aObserver)
 {
-	return NS_ERROR_NOT_IMPLEMENTED;
+	mObserver = aObserver;
+
+	return NS_OK;
 }
 
 NS_IMETHODIMP 
@@ -320,15 +321,6 @@ MozDownload::OnProgressChange(nsIWebProgress *aWebProgress, nsIRequest *aRequest
 
 	mLastUpdate = now;
 
-	if (mUserCanceled)
-	{
-	        if (aRequest)
-		{
-	            aRequest->Cancel(NS_BINDING_ABORTED);
-		}
-	        mUserCanceled = false;
-	}
-
 	if (aMaxTotalProgress == -1)
 	{
             mPercentComplete = -1;
@@ -371,11 +363,15 @@ MozDownload::OnSecurityChange (nsIWebProgress *aWebProgress, nsIRequest *aReques
 void
 MozDownload::Cancel()
 {
-	mUserCanceled = true;
-	/* nsWebBrowserPersist does the right thing: After canceling, next time through
-	 * OnStateChange(), aStatus != NS_OK. This isn't the case with nsExternalHelperAppService.*/
-	if (!mWebPersist)
-		mStatus = NS_ERROR_ABORT;
+	if (mWebPersist)
+	{
+		mWebPersist->CancelSave ();
+	}
+
+	if (mObserver)
+	{
+		mObserver->Observe (nsnull, "oncancel", nsnull);
+	}	
 }
 
 void
