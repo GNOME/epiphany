@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "ephy-node-common.h"
@@ -170,11 +172,9 @@ sort_bookmarks (gconstpointer a, gconstpointer b)
 static GtkWidget *
 build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 {
+        EphyFaviconCache *cache;
 	GtkWidget *menu, *item;
 	GPtrArray *children;
-	int i;
-        EphyFaviconCache *cache;
-	GList *node_list = NULL, *l = NULL;
 
 	menu = gtk_menu_new ();
 
@@ -183,64 +183,69 @@ build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 
 	children = ephy_node_get_children (node);
 
-	for (i = 0; i < children->len; ++i)
-	{
-		node_list = g_list_append (node_list,
-					   g_ptr_array_index (children, i));
-	}
-	
-	g_list_sort (node_list, (GCompareFunc)sort_bookmarks);
-
-	/* Show an insensitive "Empty" sub-menu if the topic has no children */
 	if (children->len < 1)
 	{
-
 		item = gtk_menu_item_new_with_label (_("Empty"));
 		gtk_widget_set_sensitive (item, FALSE);
 		gtk_widget_show (item);
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	}
-
-	for (l = g_list_first (node_list); l != NULL; l = g_list_next (l))
+	else
 	{
-		EphyNode *kid;
-                const char *icon_location;
-		const char *title;
-
-		kid = (EphyNode*)l->data;
-
-		icon_location = ephy_node_get_property_string
-			(kid, EPHY_NODE_BMK_PROP_ICON);
-		title = ephy_node_get_property_string
-			(kid, EPHY_NODE_BMK_PROP_TITLE);
-		if (title == NULL) continue;
-		LOG ("Create menu for bookmark %s", title)
-
-		item = gtk_image_menu_item_new_with_label (title);
-		if (icon_location)
+		GList *node_list = NULL, *l;
+		int i;
+		
+		for (i = 0; i < children->len; ++i)
 		{
-			GdkPixbuf *icon;
-			GtkWidget *image;
-
-			icon = ephy_favicon_cache_get (cache, icon_location);
-			if (icon != NULL)
+			node_list = g_list_append (node_list,
+						   g_ptr_array_index (children, i));
+		}
+		
+		g_list_sort (node_list, (GCompareFunc)sort_bookmarks);
+	
+		for (l = g_list_first (node_list); l != NULL; l = g_list_next (l))
+		{
+			EphyNode *kid;
+                	const char *icon_location;
+			const char *title;
+	
+			kid = (EphyNode*)l->data;
+	
+			icon_location = ephy_node_get_property_string
+				(kid, EPHY_NODE_BMK_PROP_ICON);
+			title = ephy_node_get_property_string
+				(kid, EPHY_NODE_BMK_PROP_TITLE);
+			if (title == NULL) continue;
+			LOG ("Create menu for bookmark %s", title)
+	
+			item = gtk_image_menu_item_new_with_label (title);
+			if (icon_location)
 			{
-				image = gtk_image_new_from_pixbuf (icon);
-				gtk_widget_show (image);
-				gtk_image_menu_item_set_image
-					(GTK_IMAGE_MENU_ITEM (item), image);
-				g_object_unref (icon);
+				GdkPixbuf *icon;
+				GtkWidget *image;
+	
+				icon = ephy_favicon_cache_get (cache, icon_location);
+				if (icon != NULL)
+				{
+					image = gtk_image_new_from_pixbuf (icon);
+					gtk_widget_show (image);
+					gtk_image_menu_item_set_image
+						(GTK_IMAGE_MENU_ITEM (item), image);
+					g_object_unref (icon);
+				}
 			}
+
+			g_object_set_data (G_OBJECT (item), "node", kid);
+			g_signal_connect (item, "activate",
+					  G_CALLBACK (menu_activate_cb), action);
+			gtk_widget_show (item);
+			gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 		}
 
-		g_object_set_data (G_OBJECT (item), "node", kid);
-		g_signal_connect (item, "activate",
-				  G_CALLBACK (menu_activate_cb), action);
-		gtk_widget_show (item);
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+		g_list_free (node_list);
 	}
+	
 	ephy_node_thaw (node);
-	g_list_free (node_list);
 
 	return menu;
 }
