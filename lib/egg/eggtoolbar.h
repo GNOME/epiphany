@@ -102,6 +102,7 @@ struct _EggToolbarClass
 				GtkOrientation   orientation);
   void (* style_changed)       (EggToolbar      *toolbar,
 				GtkToolbarStyle  style);
+  void (* popup_context_menu)  (EggToolbar      *toolbar);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

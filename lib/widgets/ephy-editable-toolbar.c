@@ -21,6 +21,7 @@
 #include "ephy-toolbars-group.h"
 #include "ephy-debug.h"
 #include "ephy-dnd.h"
+#include "ephy-file-helpers.h"
 #include "eggtoolitem.h"
 #include "eggtoolbar.h"
 #include "eggseparatortoolitem.h"
@@ -60,6 +61,22 @@ static void	setup_editor			 (EphyEditableToolbar *etoolbar,
 						  GtkWidget *window);
 static void	update_editor_sheet		 (EphyEditableToolbar *etoolbar);
 
+static void     ephy_editable_toolbar_remove_cb  (EggAction *action, EphyEditableToolbar *etoolbar);
+static void     ephy_editable_toolbar_edit_cb    (EggAction *action, EphyEditableToolbar *etoolbar);
+
+static EggActionGroupEntry ephy_toolbar_popups [] = {
+	/* Toplevel */
+	{ "FakeToplevel", (""), NULL, NULL, NULL, NULL, NULL },
+
+	/* Popups */
+	{ "RemoveToolbarPopup", N_("_Remove"), GTK_STOCK_REMOVE, NULL,
+	  NULL, G_CALLBACK (ephy_editable_toolbar_remove_cb), NULL },
+	{ "EditToolbarPopup", N_("_Edit"), GTK_STOCK_PREFERENCES, NULL,
+	  NULL, G_CALLBACK (ephy_editable_toolbar_edit_cb), NULL },
+};
+
+static guint ephy_toolbar_popups_n_entries = G_N_ELEMENTS (ephy_toolbar_popups);
+
 enum
 {
 	PROP_0,
@@ -87,8 +104,16 @@ struct EphyEditableToolbarPrivate
 
 	EphyToolbarsGroup *group;
 
+	EggMenuMerge *popup_merge;
+	EggActionGroup *popup_action_group;
+
 	GList *actions_list;
 };
+
+typedef struct {
+	EphyEditableToolbar *etoolbar;
+	EphyToolbarsToolbar *t;
+} ContextMenuData;
 
 GType
 ephy_editable_toolbar_get_type (void)
@@ -283,6 +308,24 @@ drag_data_get_cb (GtkWidget *widget,
 				8, target, strlen (target));
 }
 
+static void
+ephy_editable_toolbar_remove_cb  (EggAction *action,
+				  EphyEditableToolbar *etoolbar)
+{
+	EphyToolbarsToolbar *t;
+
+	t = g_object_get_data (G_OBJECT (etoolbar), "popup_toolbar");
+
+	ephy_toolbars_group_remove_toolbar (etoolbar->priv->group, t);
+}
+
+static void
+ephy_editable_toolbar_edit_cb (EggAction *action,
+			       EphyEditableToolbar *etoolbar)
+{
+	ephy_editable_toolbar_edit (etoolbar, NULL);
+}
+
 static GtkWidget *
 get_item_widget (EphyEditableToolbar *t, gpointer data)
 {
@@ -347,9 +390,28 @@ disconnect_item_drag_source (EphyToolbarsItem *item, EphyEditableToolbar *etoolb
 }
 
 static void
+popup_toolbar_context_menu (EggToolbar *toolbar, ContextMenuData *data)
+{
+	GtkWidget *widget;
+	
+	widget = egg_menu_merge_get_widget (data->etoolbar->priv->popup_merge,
+					    "/popups/EphyToolbarPopup");
+
+	g_object_set_data (G_OBJECT (data->etoolbar),
+			   "popup_toolbar", data->t);
+
+	g_return_if_fail (widget != NULL);
+
+	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
+			gtk_get_current_event_time ());
+}
+
+static void
 setup_toolbar (EphyToolbarsToolbar *toolbar, EphyEditableToolbar *etoolbar)
 {
 	GtkWidget *widget;
+	ContextMenuData *data;
+	int signal_id;
 
 	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
 	g_return_if_fail (toolbar != NULL);
@@ -368,6 +430,21 @@ setup_toolbar (EphyToolbarsToolbar *toolbar, EphyEditableToolbar *etoolbar)
 		g_signal_connect (widget, "drag_data_received",
 				  G_CALLBACK (drag_data_received_cb),
 				  etoolbar);
+	}
+
+	if (!g_object_get_data (G_OBJECT (widget), "popup_signal_id"))
+	{
+		data = g_new0 (ContextMenuData, 1);
+		data->etoolbar = etoolbar;
+		data->t = toolbar;
+
+		signal_id = g_signal_connect_data (widget,
+					"popup_context_menu",
+					G_CALLBACK (popup_toolbar_context_menu),
+					data, (GClosureNotify)g_free, 0);
+
+		g_object_set_data (G_OBJECT (widget), "popup_signal_id",
+				   GINT_TO_POINTER (signal_id));
 	}
 
 	etoolbar->priv->last_toolbar = widget;
@@ -598,6 +675,8 @@ ephy_editable_toolbar_class_init (EphyEditableToolbarClass *klass)
 static void
 ephy_editable_toolbar_init (EphyEditableToolbar *t)
 {
+	int i;
+
         t->priv = g_new0 (EphyEditableToolbarPrivate, 1);
 
 	t->priv->merge = NULL;
@@ -607,6 +686,23 @@ ephy_editable_toolbar_init (EphyEditableToolbar *t)
 	t->priv->editor_sheet_dirty = FALSE;
 	t->priv->edit_mode = FALSE;
 	t->priv->actions_list = NULL;
+
+	for (i = 0; i < ephy_toolbar_popups_n_entries; i++)
+	{
+		ephy_toolbar_popups[i].user_data = t;
+	}
+		
+	t->priv->popup_merge = egg_menu_merge_new ();
+	
+	t->priv->popup_action_group = egg_action_group_new ("ToolbarPopupActions");
+	egg_action_group_add_actions (t->priv->popup_action_group,
+				      ephy_toolbar_popups,
+				      ephy_toolbar_popups_n_entries);
+	egg_menu_merge_insert_action_group (t->priv->popup_merge,
+					    t->priv->popup_action_group, 0);
+	egg_menu_merge_add_ui_from_file (t->priv->popup_merge,
+				ephy_file ("epiphany-toolbar-popup-ui.xml"),
+				NULL);
 }
 
 static void
@@ -621,6 +717,11 @@ ephy_editable_toolbar_finalize (GObject *object)
 	{
 		gtk_widget_destroy (t->priv->editor);
 	}
+
+	g_object_unref (t->priv->popup_action_group);
+	egg_menu_merge_remove_action_group (t->priv->popup_merge,
+					    t->priv->popup_action_group);
+	g_object_unref (t->priv->popup_merge);
 
         g_free (t->priv);
 
@@ -887,8 +988,15 @@ button_press_cb (GtkWidget *w,
 
 	widget = gtk_get_event_widget (event);
 	toolitem = gtk_widget_get_ancestor (widget, EGG_TYPE_TOOL_ITEM);
-
-	if (toolitem == NULL) return FALSE;
+			
+	if (toolitem == NULL &&
+	    event->type == GDK_BUTTON_PRESS &&
+	    EGG_IS_TOOLBAR (widget))
+	{
+		gtk_widget_event (widget, event);
+		return FALSE;
+	}
+	else if (toolitem == NULL) return FALSE;
 
 	switch (event->type)
 	{
