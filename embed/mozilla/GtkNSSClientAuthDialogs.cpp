@@ -170,7 +170,6 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 #endif
 	char *msg, *tt_cn, *markup_text;
 	PRUint32 i;
-	gboolean showDetails;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWidget *gparent = MozillaFindGtkParent (parent);
