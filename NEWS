@@ -6,28 +6,29 @@ New features
 
 	* Load extensions from ~/.gnome2/epiphany/extensions too (Ross Burton) [#143835]
 	* Allow importing of our own bookmarks format (Christian) [#144699]
-	* Support off-line networking (Christian)
+	* Support for working offline (Christian)
+	* Integrated popup blocking (Adam)
 
 Removed features
 
 	* Removed support for mozilla 1.6 (Marco)
 
-Interface improvements
+Interface changes
 
 	* Append new tabs to the end instead of grouping them (Marco)
-	* Make tab labels 1/n-th of window size (n = # of tabs), with a minimum
-	  size so they don't get too small (Christian)
 	* Add "New Topic" button to the New Bookmark dialogue (Marco) [#110640]
 	* Improved import and presentation of hierarchical bookmarks (Marco)
 	* Implemented "Open in tabs" from toolbar topics (Marco) [#108143]
-
-Interface deteriorations
-
-	* New tab loading animation from FF winstripe (Marco)
+	* New tab load animation (Christian)
+	* Reordering of bookmarks on toolbar by DND (Marco)
+	* Add Open In Tabs to toolbar topics (Marco)
+	* Add context menus for bookmarks and topics on toolbars (Marco)
+	* Use Blank Page icon as default icon (Marco)
+	* Add mim-type icon in downloader (Xan)
 
 Code changes
 
-	* Ported to mozilla embed strings (Marco)
+	* Ported to mozilla embed strings (Marco, Christian, Xan)
 	* Moved external protocol handler prefs to js file (Marco)
 	* Disabe xpinstall by default (Christian) [#144035]
 	* Separate bookmarks from other toolbars (Christian, Marco)
@@ -36,6 +37,7 @@ Code changes
 	* Allow custom types in the permissions manager (Christian)
 	* EphyNode ID cleanups (Marco)
 	* Simplify printing code (Marco)
+	* Track mozilla trunk API changes (Christian)
 
 Bug fixes
 
@@ -54,7 +56,9 @@ Bug fixes
 	* Hide non-toplevel urls from history (Christian) [#142143]
 	* Fix crash with confused toolbars file (Christian) [#144698]
 	* Fix toolbar visibility after fullscreen (Christian) [#144785]
-
+	* Fix serials on files with 2 extensions (.tar.gz) (Xan)
+	* Always show menubar on F10 (Christian) [#141999]
+	* Fix context menu on form elements (Christian) [#143942]
 Documentation translations
 
 	* New translation of documentation into spanish
@@ -62,22 +66,22 @@ Documentation translations
 
 Translations
 
-	* Alexander Winston (en_CA)
+	* Mətin Əmirov (az)
+	* Владимир Петков (bg)
+	* Miloslav Trmač (cs)
 	* Christian Neumair (de)
-	* Данило Шеган  (sr, st@Latn)
-	* Estêvão Samuel Procópio (pt_BR)
+	* Ole Laursen (da)
+	* Νίκος Χαρωνιτάκης (el)
+	* Alexander Winston (en_CA)
 	* Gareth Owen (en_GB)
+	* 相花 毅  (ja)
+	* Reinout van Schouwen (nl)
 	* GNOME PL Team (pl)
+	* Estêvão Samuel Procópio (pt_BR)
+	* Marcel Telka (sk)
+	* Данило Шеган  (sr, st@Latn)
 	* Laurent Dhima (sq)
 	* Liu Songhe (zh_CN)
-	* Marcel Telka (sk)
-	* Miloslav Trmač (cs)
-	* Mətin Əmirov (az)
-	* Nikos Charonitakis (el)
-	* Ole Laursen (da)
-	* Reinout van Schouwen (nl)
-	* 相花 毅  (ja)
-	* Владимир Петков (bg)
 
 
 ==============
