@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-06 19:34+0100\n"
-"PO-Revision-Date: 2004-10-06 19:34+0100\n"
+"POT-Creation-Date: 2004-10-13 22:01+0100\n"
+"PO-Revision-Date: 2004-10-13 22:02+0100\n"
 "Last-Translator: David Lodge <dave@cirt.net>\n"
 "Language-Team: English/GB <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -536,7 +536,7 @@ msgid "Download Manager"
 msgstr "Download Manager"
 
 #: data/glade/epiphany.glade.h:8
-#: src/ephy-window.c:1154
+#: src/ephy-window.c:1159
 msgid "Find"
 msgstr "Find"
 
@@ -822,7 +822,7 @@ msgid "Paper"
 msgstr "Paper"
 
 #: data/glade/print.glade.h:23
-#: src/ephy-window.c:1150
+#: src/ephy-window.c:1155
 msgid "Print"
 msgstr "Print"
 
@@ -886,10 +886,6 @@ msgstr "_to:"
 msgid "fr_om:"
 msgstr "fr_om:"
 
-#: data/glade/print.glade.h:39
-msgid "lpr"
-msgstr "lpr"
-
 #: embed/downloader-view.c:238
 #, c-format
 msgid "%u:%02u.%02u"
@@ -905,7 +901,7 @@ msgid "_Resume"
 msgstr "_Resume"
 
 #: embed/downloader-view.c:350
-#: src/ephy-window.c:1327
+#: src/ephy-window.c:1332
 msgid "Unknown"
 msgstr "Unknown"
 
@@ -1323,7 +1319,7 @@ msgid "Local files"
 msgstr "Local files"
 
 #: embed/mozilla/ContentHandler.cpp:148
-#: embed/mozilla/EphyHeaderSniffer.cpp:360
+#: embed/mozilla/EphyHeaderSniffer.cpp:359
 msgid "Save"
 msgstr "Save"
 
@@ -1355,7 +1351,7 @@ msgstr "Download the file?"
 msgid "It's not possible to view this file because there is no application installed that can open it. You can save it instead."
 msgstr "It is not possible to view this file because there is no application installed that can open it. You can save it instead."
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:323
+#: embed/mozilla/EphyHeaderSniffer.cpp:322
 #: src/bookmarks/ephy-bookmarks-import.c:252
 #: src/bookmarks/ephy-bookmarksbar-model.c:349
 #: src/window-commands.c:344
@@ -1363,7 +1359,7 @@ msgid "Untitled"
 msgstr "Untitled"
 
 #: embed/mozilla/FilePicker.cpp:143
-#: embed/print-dialog.c:328
+#: embed/print-dialog.c:339
 #: lib/ephy-file-chooser.c:378
 #: src/bookmarks/ephy-bookmarks-editor.c:600
 msgid "All files"
@@ -1643,7 +1639,7 @@ msgstr "Files"
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.co.uk/search?ie=UTF-8&oe=UTF-8&q="
 
-#: embed/mozilla/mozilla-embed-single.cpp:525
+#: embed/mozilla/mozilla-embed-single.cpp:543
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphany can't be used now. Mozilla initialisation failed."
 
@@ -1655,11 +1651,11 @@ msgstr "Epiphany can't be used now. Mozilla initialisation failed."
 msgid "system-language"
 msgstr "en-gb,en"
 
-#: embed/print-dialog.c:320
+#: embed/print-dialog.c:331
 msgid "Print to"
 msgstr "Print to"
 
-#: embed/print-dialog.c:325
+#: embed/print-dialog.c:336
 msgid "Postscript files"
 msgstr "Postscript files"
 
@@ -1814,7 +1810,7 @@ msgstr "History"
 #: lib/ephy-stock-icons.c:60
 #: src/bookmarks/ephy-bookmarks-editor.c:1418
 #: src/bookmarks/ephy-topic-action.c:990
-#: src/ephy-window.c:1156
+#: src/ephy-window.c:1161
 msgid "Bookmarks"
 msgstr "Bookmarks"
 
@@ -2854,112 +2850,132 @@ msgstr "Add Boo_kmark..."
 msgid "_Open Frame"
 msgstr "_Open Frame"
 
+#: src/ephy-window.c:287
+msgid "Open frame in this window"
+msgstr "Open frame in this window"
+
 #. Links
-#: src/ephy-window.c:290
+#: src/ephy-window.c:291
 msgid "_Open Link"
 msgstr "_Open Link"
 
 #: src/ephy-window.c:292
+msgid "Open link in this window"
+msgstr "Open link in this window"
+
+#: src/ephy-window.c:294
 msgid "Open Link in _New Window"
 msgstr "Open Link in _New Window"
 
-#: src/ephy-window.c:294
+#: src/ephy-window.c:295
+msgid "Open link in a new window"
+msgstr "Open link in a new window"
+
+#: src/ephy-window.c:297
 msgid "Open Link in New _Tab"
 msgstr "Open Link in New _Tab"
 
-#: src/ephy-window.c:296
+#: src/ephy-window.c:298
+msgid "Open link in a new tab"
+msgstr "Open link in a new tab"
+
+#: src/ephy-window.c:300
 msgid "_Download Link"
 msgstr "_Download Link"
 
-#: src/ephy-window.c:298
+#: src/ephy-window.c:302
 msgid "_Save Link As..."
 msgstr "_Save Link As..."
 
-#: src/ephy-window.c:300
+#: src/ephy-window.c:303
+msgid "Save link with a different name"
+msgstr "Save link with a different name"
+
+#: src/ephy-window.c:305
 msgid "_Bookmark Link..."
 msgstr "_Bookmark Link..."
 
-#: src/ephy-window.c:302
+#: src/ephy-window.c:307
 msgid "_Copy Link Address"
 msgstr "_Copy Link Address"
 
 #. Email links
-#: src/ephy-window.c:306
+#: src/ephy-window.c:311
 msgid "_Send Email..."
 msgstr "_Send Email..."
 
-#: src/ephy-window.c:308
+#: src/ephy-window.c:313
 msgid "_Copy Email Address"
 msgstr "_Copy Email Address"
 
 #. Images
-#: src/ephy-window.c:312
+#: src/ephy-window.c:317
 msgid "Open _Image"
 msgstr "Open _Image"
 
-#: src/ephy-window.c:314
+#: src/ephy-window.c:319
 msgid "_Save Image As..."
 msgstr "_Save Image As..."
 
-#: src/ephy-window.c:316
+#: src/ephy-window.c:321
 msgid "_Use Image As Background"
 msgstr "_Use Image As Background"
 
-#: src/ephy-window.c:318
+#: src/ephy-window.c:323
 msgid "Copy I_mage Address"
 msgstr "Copy I_mage Address"
 
-#: src/ephy-window.c:589
+#: src/ephy-window.c:594
 msgid "Exit Fullscreen"
 msgstr "Exit Full Screen"
 
-#: src/ephy-window.c:674
+#: src/ephy-window.c:679
 msgid "Close _Document"
 msgstr "Close _Document"
 
-#: src/ephy-window.c:704
+#: src/ephy-window.c:709
 msgid "There are unsubmitted changes to form elements."
 msgstr "There are unsubmitted changes to form elements."
 
-#: src/ephy-window.c:705
+#: src/ephy-window.c:710
 msgid "If you close the document anyway, you will lose that information."
 msgstr "If you close the document anyway, you will lose that information."
 
-#: src/ephy-window.c:1146
+#: src/ephy-window.c:1151
 #: src/window-commands.c:397
 msgid "Open"
 msgstr "Open"
 
-#: src/ephy-window.c:1148
+#: src/ephy-window.c:1153
 #: src/window-commands.c:423
 msgid "Save As"
 msgstr "Save As"
 
-#: src/ephy-window.c:1152
+#: src/ephy-window.c:1157
 msgid "Bookmark"
 msgstr "Bookmark"
 
-#: src/ephy-window.c:1330
+#: src/ephy-window.c:1335
 msgid "Insecure"
 msgstr "Insecure"
 
-#: src/ephy-window.c:1333
+#: src/ephy-window.c:1338
 msgid "Broken"
 msgstr "Broken"
 
-#: src/ephy-window.c:1337
+#: src/ephy-window.c:1342
 msgid "Medium"
 msgstr "Medium"
 
-#: src/ephy-window.c:1341
+#: src/ephy-window.c:1346
 msgid "Low"
 msgstr "Low"
 
-#: src/ephy-window.c:1345
+#: src/ephy-window.c:1350
 msgid "High"
 msgstr "High"
 
-#: src/ephy-window.c:1355
+#: src/ephy-window.c:1360
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2968,17 +2984,67 @@ msgstr ""
 "Security level: %s\n"
 "%s"
 
-#: src/ephy-window.c:1361
+#: src/ephy-window.c:1366
 #, c-format
 msgid "Security level: %s"
 msgstr "Security level: %s"
 
-#: src/ephy-window.c:1385
+#: src/ephy-window.c:1390
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d hidden popup window"
 msgstr[1] "%d hidden popup windows"
+
+#: src/ephy-window.c:1609
+#, c-format
+msgid "Save background image '%s'"
+msgstr "Save background image '%s'"
+
+#: src/ephy-window.c:1623
+#, c-format
+msgid "Open image '%s'"
+msgstr "Open image '%s'"
+
+#: src/ephy-window.c:1628
+#, c-format
+msgid "Use as desktop background '%s'"
+msgstr "Use as desktop background '%s'"
+
+#: src/ephy-window.c:1633
+#, c-format
+msgid "Save image '%s'"
+msgstr "Save image '%s'"
+
+#: src/ephy-window.c:1638
+#, c-format
+msgid "Copy image address '%s'"
+msgstr "Copy image address '%s'"
+
+#: src/ephy-window.c:1651
+#, c-format
+msgid "Send email to address '%s'"
+msgstr "Send email to address '%s'"
+
+#: src/ephy-window.c:1657
+#, c-format
+msgid "Copy email address '%s'"
+msgstr "Copy email address '%s'"
+
+#: src/ephy-window.c:1669
+#, c-format
+msgid "Save link '%s'"
+msgstr "Save link '%s'"
+
+#: src/ephy-window.c:1675
+#, c-format
+msgid "Bookmark link '%s'"
+msgstr "Bookmark link '%s'"
+
+#: src/ephy-window.c:1681
+#, c-format
+msgid "Copy link's address '%s'"
+msgstr "Copy link's address '%s'"
 
 #: src/pdm-dialog.c:416
 msgid "Domain"
@@ -3000,31 +3066,31 @@ msgstr "User Name"
 msgid "Cookie Properties"
 msgstr "Cookie Properties"
 
-#: src/pdm-dialog.c:920
+#: src/pdm-dialog.c:921
 msgid "Content:"
 msgstr "Content:"
 
-#: src/pdm-dialog.c:935
+#: src/pdm-dialog.c:936
 msgid "Path:"
 msgstr "Path:"
 
-#: src/pdm-dialog.c:950
+#: src/pdm-dialog.c:951
 msgid "Send for:"
 msgstr "Send for:"
 
-#: src/pdm-dialog.c:959
+#: src/pdm-dialog.c:960
 msgid "Encrypted connections only"
 msgstr "Encrypted connections only"
 
-#: src/pdm-dialog.c:959
+#: src/pdm-dialog.c:960
 msgid "Any type of connection"
 msgstr "Any type of connection"
 
-#: src/pdm-dialog.c:965
+#: src/pdm-dialog.c:966
 msgid "Expires:"
 msgstr "Expires:"
 
-#: src/pdm-dialog.c:976
+#: src/pdm-dialog.c:977
 msgid "End of current session"
 msgstr "End of current session"
 
@@ -3343,11 +3409,11 @@ msgstr "Toolbar Editor"
 msgid "_Add a New Toolbar"
 msgstr "_Add a New Toolbar"
 
-#: src/window-commands.c:968
+#: src/window-commands.c:967
 msgid "Epiphany"
 msgstr "Epiphany"
 
-#: src/window-commands.c:973
+#: src/window-commands.c:972
 msgid "translator-credits"
 msgstr ""
 "Christian Persch <chpe@gnome.org>\n"
