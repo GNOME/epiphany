@@ -1,5 +1,26 @@
 2003-08-31  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* data/ui/epiphany-history-window-ui.xml.in:
+	* data/ui/epiphany-ui.xml.in:
+	* lib/widgets/ephy-node-view.c: (get_selection):
+	* src/bookmarks/ephy-bookmarks-editor.c: (add_widget),
+	(ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-bookmarks-menu.c: (add_bookmarks_menu),
+	(ephy_bookmarks_menu_rebuild):
+	* src/ephy-encoding-menu.c: (build_group), (build_encoding),
+	(ephy_encoding_menu_rebuild):
+	* src/ephy-favorites-menu.c: (ephy_favorites_menu_rebuild):
+	* src/ephy-history-window.c: (add_widget),
+	(ephy_history_window_construct):
+	* src/ephy-tabs-menu.c: (ephy_tabs_menu_clean),
+	(ephy_tabs_menu_update):
+	* src/ephy-window.c: (setup_window), (ephy_window_init):
+
+	Fix problems with EphyNodeView, bookmarks and history
+	dialogs and update dynamic menus to the new xml format.
+
+2003-08-31  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* src/ephy-window.c: (add_widget), (update_chromes_visibility),
 	(setup_window), (show_embed_popup):
 	* src/toolbar.c: (toolbar_setup_actions):

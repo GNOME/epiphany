@@ -223,7 +223,7 @@ build_group (GtkActionGroup *action_group,
 	gtk_action_group_add_action (action_group, action);
 	g_object_unref (action);
 
-	tmp = g_strdup_printf ("<submenu name=\"%sItem\" verb=\"%s\">\n",
+	tmp = g_strdup_printf ("<menu name=\"%sItem\" action=\"%s\">\n",
 			       verb, verb);
 	xml_string = g_string_append (xml_string, tmp);
 	g_free (tmp);
@@ -252,7 +252,7 @@ build_encoding (EphyEncodingMenu *menu,
 	gtk_action_group_add_action (action_group, action);
 	g_object_unref (action);
 
-	tmp = g_strdup_printf ("<menuitem name=\"%sItem\" verb=\"%s\"/>\n",
+	tmp = g_strdup_printf ("<menuitem name=\"%sItem\" action=\"%s\"/>\n",
 			       verb, verb);
 	xml_string = g_string_append (xml_string, tmp);
 
@@ -279,9 +279,9 @@ ephy_encoding_menu_rebuild (EphyEncodingMenu *wrhm)
 	ephy_embed_single_get_language_groups (single, &groups);
 
 	xml = g_string_new (NULL);
-	g_string_append (xml, "<Root><menu><submenu name=\"ViewMenu\">"
+	g_string_append (xml, "<ui><menubar><menu name=\"ViewMenu\">"
 			      "<placeholder name=\"ViewEncodingsPlaceholder\">"
-			      "<submenu name=\"ViewEncodingMenu\" verb=\"ViewEncoding\">");
+			      "<menu name=\"ViewEncodingMenu\" action=\"ViewEncoding\">");
 
 	p->action_group = gtk_action_group_new ("EncodingActions");
 	gtk_ui_manager_insert_action_group (merge, p->action_group, 0);
@@ -305,13 +305,13 @@ ephy_encoding_menu_rebuild (EphyEncodingMenu *wrhm)
 		g_list_foreach (encodings, (GFunc) encoding_info_free, NULL);
 		g_list_free (encodings);
 		
-		g_string_append (xml, "</submenu>");
+		g_string_append (xml, "</menu>");
 	}
 
 	g_list_foreach (groups, (GFunc) language_group_info_free, NULL);
 	g_list_free (groups);
 
-	g_string_append (xml, "</submenu></placeholder></submenu></menu></Root>");
+	g_string_append (xml, "</menu></placeholder></menu></menubar></ui>");
 
 	gtk_ui_manager_add_ui_from_string (merge, xml->str, -1, NULL);
 

@@ -126,7 +126,7 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 	children = ephy_node_get_children (fav);
 
 	xml = g_string_new (NULL);
-	g_string_append (xml, "<Root><menu><submenu name=\"GoMenu\">"
+	g_string_append (xml, "<ui><menubar><menu name=\"GoMenu\">"
 			      "<placeholder name=\"GoFavorites\">"
 			      "<separator name=\"GoSep3\"/>");
 
@@ -153,7 +153,7 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 		g_string_append (xml, "<menuitem name=\"");
 		g_string_append (xml, verb);
 		g_string_append (xml, "Menu");
-		g_string_append (xml, "\" verb=\"");
+		g_string_append (xml, "\" action=\"");
 		g_string_append (xml, verb);
 		g_string_append (xml, "\"/>\n");
 
@@ -161,7 +161,7 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 	}
 	ephy_node_thaw (fav);
 
-	g_string_append (xml, "</placeholder></submenu></menu></Root>");
+	g_string_append (xml, "</placeholder></menu></menubar></ui>");
 
 	if (children->len > 0)
 	{

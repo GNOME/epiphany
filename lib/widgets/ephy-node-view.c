@@ -1320,7 +1320,7 @@ get_selection (GtkTreeModel *model,
 	       gpointer *data)
 {
 	GList **list = data[0];
-	EphyNodeView *view = EPHY_NODE_VIEW (data);
+	EphyNodeView *view = EPHY_NODE_VIEW (data[1]);
 	EphyNode *node;
 
 	node = get_node_from_path (view, path);

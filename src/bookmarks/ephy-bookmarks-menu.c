@@ -193,7 +193,7 @@ add_bookmarks_menu (EphyBookmarksMenu *menu, EphyNode *node, GString *xml)
 		g_string_append (xml, "<menuitem name=\"");
 		g_string_append (xml, EMPTY_ACTION_NAME"Menu");
 		g_string_append (xml, "Menu");
-		g_string_append (xml, "\" verb=\"");
+		g_string_append (xml, "\" action=\"");
 		g_string_append (xml, EMPTY_ACTION_NAME);
 		g_string_append (xml, "\"/>\n");
 	}
@@ -230,7 +230,7 @@ add_bookmarks_menu (EphyBookmarksMenu *menu, EphyNode *node, GString *xml)
 			g_string_append (xml, "<menuitem name=\"");
 			g_string_append (xml, verb);
 			g_string_append (xml, "Menu");
-			g_string_append (xml, "\" verb=\"");
+			g_string_append (xml, "\" action=\"");
 			g_string_append (xml, verb);
 			g_string_append (xml, "\"/>\n");
 
@@ -267,7 +267,7 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 	children = ephy_node_get_children (topics);
 
 	xml = g_string_new (NULL);
-	g_string_append (xml, "<Root><menu><submenu name=\"BookmarksMenu\">"
+	g_string_append (xml, "<ui><menubar><menu name=\"BookmarksMenu\">"
 			      "<placeholder name=\"BookmarksTree\">"
 			      "<separator name=\"BookmarksSep1\"/>");
 
@@ -320,16 +320,16 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 		gtk_action_group_add_action (p->action_group, action);
 		g_object_unref (action);
 
-		g_string_append (xml, "<submenu name=\"");
+		g_string_append (xml, "<menu name=\"");
 		g_string_append (xml, verb);
 		g_string_append (xml, "Menu");
-		g_string_append (xml, "\" verb=\"");
+		g_string_append (xml, "\" action=\"");
 		g_string_append (xml, verb);
 		g_string_append (xml, "\">\n");
 
 		add_bookmarks_menu (menu, child, xml);
 
-		g_string_append (xml, "</submenu>");
+		g_string_append (xml, "</menu>");
 
 		g_free (verb);
 	}
@@ -339,7 +339,7 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 		add_bookmarks_menu (menu, not_categorized, xml);
 	}
 
-	g_string_append (xml, "</placeholder></submenu></menu></Root>");
+	g_string_append (xml, "</placeholder></menu></menubar></ui>");
 
 	if (children->len > 0)
 	{

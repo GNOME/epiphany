@@ -104,7 +104,7 @@ struct EphyHistoryWindowPrivate
 	GtkWidget *pages_view;
 	EphyNodeFilter *pages_filter;
 	GtkWidget *search_entry;
-	GtkWidget *menu_dock;
+	GtkWidget *main_vbox;
 	GtkWidget *window;
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
@@ -125,6 +125,7 @@ static GtkActionEntry ephy_history_ui_entries [] = {
 	{ "Edit", NULL, N_("_Edit") },
 	{ "View", NULL, N_("_View") },
 	{ "Help", NULL, N_("_Help") },
+	{ "PopupAction", NULL, "" },
 
 	/* File Menu */
 	{ "OpenInWindow", GTK_STOCK_OPEN, N_("_Open in New Window"), "<control>O",
@@ -890,7 +891,7 @@ build_search_box (EphyHistoryWindow *editor)
 static void
 add_widget (GtkUIManager *merge, GtkWidget *widget, EphyHistoryWindow *editor)
 {
-	gtk_box_pack_start (GTK_BOX (editor->priv->menu_dock),
+	gtk_box_pack_start (GTK_BOX (editor->priv->main_vbox),
 			    widget, FALSE, FALSE, 0);
 	gtk_widget_show (widget);
 }
@@ -943,7 +944,6 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	EphyNode *node;
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
-	GtkAction *action;
 	GdkPixbuf *icon;
 	int col_id;
 
@@ -958,12 +958,14 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	g_signal_connect (editor, "delete_event",
 			  G_CALLBACK (delete_event_cb), NULL);
 
-	editor->priv->menu_dock = gtk_vbox_new (FALSE, 0);
-	gtk_widget_show (editor->priv->menu_dock);
-	gtk_container_add (GTK_CONTAINER (editor), editor->priv->menu_dock);
+	editor->priv->main_vbox = gtk_vbox_new (FALSE, 0);
+	gtk_widget_show (editor->priv->main_vbox);
+	gtk_container_add (GTK_CONTAINER (editor), editor->priv->main_vbox);
 
 	ui_merge = gtk_ui_manager_new ();
 	g_signal_connect (ui_merge, "add_widget", G_CALLBACK (add_widget), editor);
+	gtk_window_add_accel_group (GTK_WINDOW (editor),
+				    gtk_ui_manager_get_accel_group (ui_merge));
 	action_group = gtk_action_group_new ("PopupActions");
 	gtk_action_group_add_actions (action_group, ephy_history_ui_entries,
 				      ephy_history_ui_n_entries, editor);
@@ -972,19 +974,17 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	gtk_ui_manager_add_ui_from_file (ui_merge,
 				         ephy_file ("epiphany-history-window-ui.xml"),
 				         NULL);
-	gtk_window_add_accel_group (GTK_WINDOW (editor),
-				    gtk_ui_manager_get_accel_group (ui_merge));
-	/* FIXME gtk_ui_manager_ensure_update (ui_merge);*/
 	editor->priv->ui_merge = ui_merge;
 	editor->priv->action_group = action_group;
 
 	/* Fixme: We should implement gconf prefs for monitoring this setting */
-	action = gtk_action_group_get_action (action_group, "ViewTitle");
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+/*	action = gtk_action_group_get_action (action_group, "ViewTitle");
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);*/
 
 	hpaned = gtk_hpaned_new ();
 	gtk_container_set_border_width (GTK_CONTAINER (hpaned), 0);
-	gtk_container_add (GTK_CONTAINER (editor->priv->menu_dock), hpaned);
+	gtk_box_pack_end (GTK_BOX (editor->priv->main_vbox), hpaned,
+			  TRUE, TRUE, 0);
 	gtk_widget_show (hpaned);
 
 	g_assert (editor->priv->history);

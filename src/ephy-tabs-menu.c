@@ -167,7 +167,6 @@ ephy_tabs_menu_clean (EphyTabsMenu *menu)
 	if (p->ui_id > 0)
 	{
 		gtk_ui_manager_remove_ui (merge, p->ui_id);
-/* FIXME		gtk_ui_manager_ensure_update (merge); */
 		p->ui_id = 0;
 	}
 
@@ -279,7 +278,7 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 	/* it's faster to preallocate, MIN is sanity check */
 	xml = g_string_sized_new (44 * MIN (num, 64) + 105);
 
-	g_string_append (xml, "<Root><menu><submenu name=\"TabsMenu\">"
+	g_string_append (xml, "<ui><menubar><menu name=\"TabsMenu\">"
 			      "<placeholder name=\"TabsOpen\">");
 
 	for (l = tabs; l != NULL; l = l->next)
@@ -296,7 +295,7 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 
 		g_string_append (xml, "<menuitem name=\"");
 		g_string_append (xml, action_name);
-		g_string_append (xml, "Menu\" verb=\"");
+		g_string_append (xml, "Menu\" action=\"");
 		g_string_append (xml, action_name);
 		g_string_append (xml, "\"/>\n");
 
@@ -305,7 +304,7 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 
 	g_list_free (tabs);
 
-	g_string_append (xml, "</placeholder></submenu></menu></Root>");
+	g_string_append (xml, "</placeholder></menu></menubar></ui>");
 
 	gtk_ui_manager_insert_action_group (merge, p->action_group, 0);
 	p->ui_id = gtk_ui_manager_add_ui_from_string
