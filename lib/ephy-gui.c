@@ -78,18 +78,23 @@ ephy_gui_menu_position_under_widget (GtkMenu   *menu,
 gboolean
 ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 {
-	char *question;
+	char *question, *converted;
 	GtkWidget *dialog;
 	gboolean res;
+
+	if (filename == NULL) return FALSE;
 
 	if (!g_file_test (filename, G_FILE_TEST_EXISTS))
 	{
 		return TRUE;
 	}
 
+	converted = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+	if (converted == NULL) return FALSE;
+
 	question = g_strdup_printf (_("File %s will be overwritten.\n"
 				    "If you choose yes, the contents will be lost.\n\n"
-				    "Do you want to continue?"), filename);
+				    "Do you want to continue?"), converted);
 	dialog = gtk_message_dialog_new (parent ? GTK_WINDOW(parent) : NULL,
 			                 GTK_DIALOG_MODAL,
 				         GTK_MESSAGE_QUESTION,
@@ -98,6 +103,7 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 	res = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_YES);
 	gtk_widget_destroy (dialog);
 	g_free (question);
+	g_free (converted);
 
 	return res;
 }

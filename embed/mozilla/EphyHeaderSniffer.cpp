@@ -206,18 +206,18 @@ filechooser_response_cb (EphyFileChooser *dialog, gint response, EphyHeaderSniff
 
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 
-		LOG ("Filename %s", filename)
-
-		if (filename &&
-		    ephy_gui_confirm_overwrite_file (parent, filename) == TRUE)
+		if (ephy_gui_confirm_overwrite_file (parent, filename) == FALSE)
 		{
-			nsCOMPtr<nsILocalFile> destFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
-			if (destFile)
-			{
-				destFile->InitWithNativePath (nsDependentCString (filename));
-			
-				sniffer->InitiateDownload (destFile);
-			}
+			g_free (filename);
+			return;
+		}
+
+		nsCOMPtr<nsILocalFile> destFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
+		if (destFile)
+		{
+			destFile->InitWithNativePath (nsDependentCString (filename));
+
+			sniffer->InitiateDownload (destFile);
 		}
 
 		g_free (filename);

@@ -379,30 +379,29 @@ NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 
 	gtk_widget_show (GTK_WIDGET (mDialog));
 
-	int response = gtk_dialog_run (GTK_DIALOG (mDialog));
+	int response;
+	char *filename = NULL;
 
-	LOG ("GFilePicker::Show response=%d", response)
-
-	switch (response)
+	do
 	{
-		case GTK_RESPONSE_ACCEPT:
-			*_retval = nsIFilePicker::returnOK;
-			break;
-		default:
-			*_retval = nsIFilePicker::returnCancel;
-			break;
+		response = gtk_dialog_run (GTK_DIALOG (mDialog));
+
+		g_free (filename);
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (mDialog));
+
+		LOG ("GFilePicker::Show response=%d, filename=%s", response, filename)
 	}
+	while (response == GTK_RESPONSE_ACCEPT &&
+	       mMode == nsIFilePicker::modeSave &&
+	       !ephy_gui_confirm_overwrite_file (GTK_WIDGET (mDialog), filename));
 
 	gtk_widget_hide (GTK_WIDGET (mDialog));
-	
-	char *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (mDialog));
 
-	if (filename == NULL)
+	if (response == GTK_RESPONSE_ACCEPT && filename != NULL)
 	{
-		*_retval = nsIFilePicker::returnCancel;
+		*_retval = nsIFilePicker::returnOK;
 	}
-	else if (mMode == nsIFilePicker::modeSave
-		 && ephy_gui_confirm_overwrite_file (GTK_WIDGET (mDialog), filename) == FALSE)
+	else
 	{
 		*_retval = nsIFilePicker::returnCancel;
 	}
