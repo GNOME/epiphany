@@ -188,15 +188,18 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 		/* disallow subframes to set favicon */
 		if (domWinAsISupports != topDomWinAsISupports) return NS_OK;
 
-		nsCOMPtr<nsIDOM3Document> doc = do_QueryInterface (domDoc);
+		nsCOMPtr<nsIDOM3Document> doc (do_QueryInterface (domDoc));
 		NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
 
 		nsEmbedString spec;
 		rv = doc->GetDocumentURI (spec);
 		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
+                nsEmbedCString encoding;
+                mOwner->GetEncoding (encoding);
+
 		nsCOMPtr<nsIURI> docUri;
-		EphyUtils::NewURI (getter_AddRefs(docUri), spec);
+		EphyUtils::NewURI (getter_AddRefs(docUri), spec, encoding.get());
 		NS_ENSURE_TRUE (docUri, NS_ERROR_FAILURE);
 
 		nsEmbedCString faviconUrl;
@@ -497,9 +500,42 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 	 * but we cannot get to it!
 	 * See https://bugzilla.mozilla.org/show_bug.cgi?id=94974
 	 */
-	mSecurityInfo = do_CreateInstance(NS_SECURE_BROWSER_UI_CONTRACTID, &rv);
-	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && mSecurityInfo, NS_ERROR_FAILURE);
-	mSecurityInfo->Init (mDOMWindow);
+	/* First try GI */
+	mSecurityInfo = do_GetInterface (mWebBrowser);
+	/* Try to instantiate it under the re-registered contract ID */
+	if (!mSecurityInfo)
+	{
+		/* This will cause all security warning dialogs to be shown
+		 * twice (once by this instance, and another time by nsWebBrowser's
+		 * instance of nsSecurityBrowserUIImpl), but there appears to be
+		 * no other way :-(
+		 */
+		mSecurityInfo = do_CreateInstance("@gnome.org/project/epiphany/hacks/secure-browser-ui;1", &rv);
+		if (NS_SUCCEEDED (rv) && mSecurityInfo)
+		{
+			rv = mSecurityInfo->Init (mDOMWindow);
+			NS_ENSURE_SUCCESS (rv, rv);
+		}
+	}
+	/* Try the original contract ID */
+	if (!mSecurityInfo)
+	{
+		/* This will cause all security warning dialogs to be shown
+		 * twice (once by this instance, and another time by nsWebBrowser's
+		 * instance of nsSecurityBrowserUIImpl), but there appears to be
+		 * no other way :-(
+		 */
+		mSecurityInfo = do_CreateInstance(NS_SECURE_BROWSER_UI_CONTRACTID, &rv);
+		if (NS_SUCCEEDED (rv) && mSecurityInfo)
+		{
+			rv = mSecurityInfo->Init (mDOMWindow);
+			NS_ENSURE_SUCCESS (rv, rv);
+		}
+	}
+	if (!mSecurityInfo)
+	{
+		g_warning ("Failed to instantiate nsISecureBrowserUI!\n");
+ 	}
 #endif
 
 	mInitialized = PR_TRUE;
