@@ -1,3 +1,10 @@
+2004-11-12  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-tab.c: (ephy_tab_size_allocate), (ephy_tab_map):
+
+	Size-allocate the embed if it's not mapped but has never been
+	size-allocated before. Fixes bug #156854.
+
 2004-11-11  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-session.c: (ephy_session_close):

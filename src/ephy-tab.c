@@ -262,14 +262,18 @@ ephy_tab_size_allocate (GtkWidget *widget,
 			GtkAllocation *allocation)
 {
 	GtkWidget *child;
+	GtkAllocation invalid = { -1, -1, 1, 1 };
 
 	widget->allocation = *allocation;
 
 	child = GTK_BIN (widget)->child;
 	g_return_if_fail (child != NULL);
 
-	/* only resize if we're mapped (which means we're drawable) */
-	if (GTK_WIDGET_MAPPED (child))
+	/* only resize if we're mapped (bug #128191),
+	 * or if this is the initial size-allocate (bug #156854).
+	 */
+	if (GTK_WIDGET_MAPPED (child) ||
+	    memcmp (&child->allocation, &invalid, sizeof (GtkAllocation)) == 0)
 	{
 		gtk_widget_size_allocate (child, allocation);
 	}
@@ -287,8 +291,13 @@ ephy_tab_map (GtkWidget *widget)
 
 	/* we do this since the window might have been resized while this
 	 * tab wasn't mapped (i.e. was a non-active tab during the resize).
+	 * See bug #156854.
 	 */
-	gtk_widget_size_allocate (child, &widget->allocation);
+	if (memcmp (&widget->allocation, &child->allocation,
+	    sizeof (GtkAllocation)) != 0)
+	{
+		gtk_widget_size_allocate (child, &widget->allocation);
+	}
 
 	GTK_WIDGET_CLASS (parent_class)->map (widget);	
 }
