@@ -414,18 +414,21 @@ mozilla_init_chrome (void)
 static void
 mozilla_init_observer (MozillaEmbedSingle *single)
 {
-	EphySingle *observer;
+	EphySingle *es;
 
-	observer = new EphySingle ();
+	es = new EphySingle ();
+	nsCOMPtr<nsIObserver> guard = NS_STATIC_CAST (nsIObserver *, es);
+	if (!guard) return;
 
-	if (observer)
+	nsresult rv;
+	rv = es->Init (EPHY_EMBED_SINGLE (single));
+	if (NS_FAILED (rv))
 	{
-		nsresult rv;
-		rv = observer->Init (EPHY_EMBED_SINGLE (single));
-		if (NS_FAILED (rv)) return;
-
-		NS_ADDREF (single->priv->mSingleObserver = observer);
+		g_warning ("Failed to initialise EphySingle!\n");
+		return;
 	}
+
+	NS_ADDREF (single->priv->mSingleObserver = es);
 }
 
 static gboolean
@@ -506,6 +509,7 @@ mozilla_embed_single_dispose (GObject *object)
 	{
 		single->priv->mSingleObserver->Detach ();
 		NS_RELEASE (single->priv->mSingleObserver);
+		delete single->priv->mSingleObserver;
 		single->priv->mSingleObserver = nsnull;
 	}
 }

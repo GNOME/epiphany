@@ -29,10 +29,12 @@
 #include <nsCOMPtr.h>
 #include <nsIObserver.h>
 #include <nsIObserverService.h>
+#include <nsWeakReference.h>
 #include <nsICookie.h>
 #include <nsIPermission.h>
 
-class EphySingle : public nsIObserver
+class EphySingle : public nsIObserver,
+		   public nsSupportsWeakReference
 {
 public:
 	NS_DECL_ISUPPORTS

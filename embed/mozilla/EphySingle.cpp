@@ -34,7 +34,7 @@
 #include <nsIServiceManager.h>
 #include <nsICookie2.h>
 
-NS_IMPL_ISUPPORTS1(EphySingle, nsIObserver)
+NS_IMPL_ISUPPORTS2(EphySingle, nsIObserver, nsISupportsWeakReference)
 
 EphySingle::EphySingle()
 : mOwner(nsnull)
@@ -45,8 +45,6 @@ EphySingle::EphySingle()
 nsresult
 EphySingle::Init (EphyEmbedSingle *aOwner)
 {
-	LOG ("EphySingle::Init")
-
 	mObserverService = do_GetService ("@mozilla.org/observer-service;1");
 	NS_ENSURE_TRUE (mObserverService, NS_ERROR_FAILURE);
 
@@ -58,6 +56,8 @@ EphySingle::Init (EphyEmbedSingle *aOwner)
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	mOwner = aOwner;
+
+	LOG ("EphySingle::Init")
 
 	return NS_OK;
 }
@@ -128,6 +128,8 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 				  const PRUnichar *aData)
 {
 	nsresult rv = NS_OK;
+
+	LOG ("EphySingle::Observe topic %s", aTopic)
 
 	if (strcmp (aTopic, "cookie-changed") == 0)
 	{
@@ -220,6 +222,8 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 		g_warning ("EphySingle observed unknown topic '%s'!\n", aTopic);
 		rv = NS_ERROR_FAILURE;
 	}
+
+	LOG ("EphySingle::Observe %s", NS_SUCCEEDED (rv) ? "success" : "FAILURE")
 
 	return rv;
 }
