@@ -479,6 +479,7 @@ ephy_shell_new_tab (EphyShell *shell,
 	EphyTab *tab;
 	EphyEmbed *embed;
 	gboolean in_new_window;
+	gboolean grouped = FALSE;
 	gboolean jump_to;
 	EphyEmbed *previous_embed = NULL;
 
@@ -506,11 +507,17 @@ ephy_shell_new_tab (EphyShell *shell,
 		previous_embed = ephy_tab_get_embed (previous_tab);
 	}
 
+	if (url != NULL || flags & EPHY_NEW_TAB_IS_A_COPY ||
+	    flags & EPHY_NEW_TAB_VIEW_SOURCE)
+	{
+		grouped = TRUE;
+	}
+	
 	tab = ephy_tab_new ();
 	embed = ephy_tab_get_embed (tab);
 	gtk_widget_show (GTK_WIDGET(embed));
 	ephy_window_add_tab (window, tab,
-			     url != NULL,
+			     grouped,
 			     jump_to);
 	gtk_widget_show (GTK_WIDGET(window));
 
@@ -535,9 +542,8 @@ ephy_shell_new_tab (EphyShell *shell,
 		EmbedDisplayType display_type =
 			(flags & EPHY_NEW_TAB_VIEW_SOURCE) ?
 			 DISPLAY_AS_SOURCE : DISPLAY_NORMAL;
-		EphyEmbed *source = ephy_tab_get_embed(previous_tab);
 		ephy_embed_load_url (embed, "about:blank");
-		ephy_embed_copy_page (embed, source, display_type);
+		ephy_embed_copy_page (embed, previous_embed, display_type);
 	}
 	else if (url)
 	{
