@@ -272,8 +272,11 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 }
 
 /* nsILocalFile promptForSaveToFile (in nsISupports aWindowContext, in wstring aDefaultFile, in wstring aSuggestedFileExtension); */
-NS_IMETHODIMP GContentHandler::
-		PromptForSaveToFile(nsISupports *aWindowContext,
+NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
+#if MOZILLA_SNAPSHOT > 9
+				    nsIHelperAppLauncher *aLauncher,
+#endif				    
+				    nsISupports *aWindowContext,
 				    const PRUnichar *aDefaultFile,
 				    const PRUnichar *aSuggestedFileExtension,
 				    nsILocalFile **_retval)
