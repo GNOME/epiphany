@@ -61,6 +61,8 @@ char         *toolbar_get_location              (Toolbar *t);
 void          toolbar_set_location              (Toolbar *t,
 						 const char *location);
 
+void	      toolbar_edit_location		(Toolbar *t);
+
 void	      toolbar_activate_location		(Toolbar *t);
 
 void	      toolbar_clear_location_history	(Toolbar *t);

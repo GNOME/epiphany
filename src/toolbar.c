@@ -405,6 +405,22 @@ toolbar_new (EphyWindow *window)
 }
 
 void
+toolbar_edit_location (Toolbar *t)
+{
+	EggAction *action;
+	GtkWidget *location;
+
+	action = egg_action_group_get_action
+		(t->priv->action_group, "Location");
+	location = ephy_location_action_get_widget
+		(EPHY_LOCATION_ACTION (action));
+	g_return_if_fail (location != NULL);
+
+	ephy_location_entry_edit
+		(EPHY_LOCATION_ENTRY(location));
+}
+
+void
 toolbar_activate_location (Toolbar *t)
 {
 	EggAction *action;

@@ -60,7 +60,9 @@ struct _EphyAutocompletionWindowClass
 	void		(*activated)			(EphyAutocompletionWindow *aw,
 							 const char *target,
 							 int action);
-
+	void		(*selected)			(EphyAutocompletionWindow *aw,
+							 const char *target,
+							 int action);
 };
 
 /* Remember: fields are public read-only */

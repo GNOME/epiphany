@@ -1,3 +1,36 @@
+2003-02-23  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/widgets/ephy-autocompletion-window.c:
+	(ephy_autocompletion_window_class_init),
+	(ephy_autocompletion_window_key_press_hack):
+	* lib/widgets/ephy-autocompletion-window.h:
+	* lib/widgets/ephy-editable-toolbar.c: (drag_data_delete_cb),
+	(drag_data_get_cb), (connect_toolbar_drag_source),
+	(disconnect_toolbar_drag_source), (do_merge), (editor_close_cb),
+	(button_press_cb), (ephy_editable_toolbar_edit):
+	* lib/widgets/ephy-location-entry.c: (location_focus_out_cb),
+	(ephy_location_entry_init), (real_entry_set_location),
+	(ephy_location_entry_key_press_event_cb),
+	(ephy_location_entry_activate_cb),
+	(ephy_location_entry_set_location),
+	(ephy_location_entry_autocompletion_window_url_selected_cb),
+	(ephy_location_entry_set_autocompletion),
+	(ephy_location_entry_autocompletion_window_url_activated_cb),
+	(ephy_location_entry_autocompletion_window_hidden_cb),
+	(ephy_location_entry_edit):
+	* lib/widgets/ephy-location-entry.h:
+	* src/ephy-shell.c: (ephy_shell_new_tab):
+	* src/ephy-window.c: (add_widget):
+	* src/toolbar.c: (toolbar_edit_location):
+	* src/toolbar.h:
+
+	Update location entry with the urls selected on the drop down.
+	Implement editing mode in location entry == when the user is typing
+	an url try to do not disturb (mozilla still grab the focus damnit).
+	Dont put the homepage url in the location. I'm not sure if this is
+	a good behavior for normal urls (I dont see problems, but please
+	prove me wrong), but for about:blank it's needed.
+
 2003-02-22  James Willcox  <jwillcox@gnome.org>
 
 	* embed/mozilla/GlobalHistory.cpp:

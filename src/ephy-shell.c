@@ -31,6 +31,7 @@
 #include "ephy-thread-helpers.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-debug.h"
+#include "toolbar.h"
 
 #include <string.h>
 #include <libgnomeui/gnome-client.h>
@@ -448,10 +449,10 @@ ephy_shell_get_active_window (EphyShell *gs)
  **/
 EphyTab *
 ephy_shell_new_tab (EphyShell *shell,
-		      EphyWindow *parent_window,
-		      EphyTab *previous_tab,
-		      const char *url,
-		      EphyNewTabFlags flags)
+		    EphyWindow *parent_window,
+		    EphyTab *previous_tab,
+		    const char *url,
+		    EphyNewTabFlags flags)
 {
 	EphyWindow *window;
 	EphyTab *tab;
@@ -493,10 +494,14 @@ ephy_shell_new_tab (EphyShell *shell,
 
 	if (flags & EPHY_NEW_TAB_HOMEPAGE)
 	{
+		Toolbar *toolbar;
 		char *homepage;
 
 		homepage = build_homepage_url (shell, previous_embed);
 		g_assert (homepage != NULL);
+
+		toolbar = ephy_window_get_toolbar (window);
+		toolbar_edit_location (toolbar);
 
 		ephy_embed_load_url (embed, homepage);
 

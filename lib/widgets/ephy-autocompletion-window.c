@@ -95,6 +95,7 @@ static gpointer g_object_class;
 
 enum EphyAutocompletionWindowSignalsEnum {
 	ACTIVATED,
+	SELECTED,
 	EPHY_AUTOCOMPLETION_WINDOW_HIDDEN,
 	EPHY_AUTOCOMPLETION_WINDOW_LAST_SIGNAL
 };
@@ -118,6 +119,17 @@ ephy_autocompletion_window_class_init (EphyAutocompletionWindowClass *klass)
 		"activated", G_OBJECT_CLASS_TYPE (klass),
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST | G_SIGNAL_RUN_CLEANUP,
                 G_STRUCT_OFFSET (EphyAutocompletionWindowClass, activated),
+		NULL, NULL,
+		ephy_marshal_VOID__STRING_INT,
+		G_TYPE_NONE,
+		2,
+		G_TYPE_STRING,
+		G_TYPE_INT);
+
+	EphyAutocompletionWindowSignals[SELECTED] = g_signal_new (
+		"selected", G_OBJECT_CLASS_TYPE (klass),
+		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST | G_SIGNAL_RUN_CLEANUP,
+                G_STRUCT_OFFSET (EphyAutocompletionWindowClass, selected),
 		NULL, NULL,
 		ephy_marshal_VOID__STRING_INT,
 		G_TYPE_NONE,
@@ -718,6 +730,23 @@ ephy_autocompletion_window_key_press_hack (EphyAutocompletionWindow *aw,
 		g_warning ("Unexpected keyval");
 		break;
 	}
+
+	switch (keyval)
+	{
+	case GDK_Up:
+	case GDK_Down:
+	case GDK_Page_Down:
+	case GDK_Page_Up:
+		if (aw->priv->selected)
+		{
+			g_signal_emit (aw, EphyAutocompletionWindowSignals
+				       [SELECTED], 0, aw->priv->selected, action);
+		}
+		break;
+	default:
+		break;
+	}
+
 	return TRUE;
 }
 
