@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-24 21:04-0500\n"
-"PO-Revision-Date: 2004-11-24 21:35-0400\n"
+"POT-Creation-Date: 2004-11-26 18:43-0500\n"
+"PO-Revision-Date: 2004-11-26 21:35-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -1346,7 +1346,7 @@ msgstr "Unicode (UTF-3_2 LE)"
 msgid "Off"
 msgstr "Off"
 
-#: embed/ephy-encodings.c:145 src/prefs-dialog.c:150
+#: embed/ephy-encodings.c:145 src/prefs-dialog.c:334
 msgid "Chinese"
 msgstr "Chinese"
 
@@ -1362,15 +1362,15 @@ msgstr "Chinese Traditional"
 msgid "East Asian"
 msgstr "East Asian"
 
-#: embed/ephy-encodings.c:149 lib/ephy-langs.c:38 src/prefs-dialog.c:125
+#: embed/ephy-encodings.c:149 lib/ephy-langs.c:44 src/prefs-dialog.c:309
 msgid "Japanese"
 msgstr "Japanese"
 
-#: embed/ephy-encodings.c:150 lib/ephy-langs.c:39 src/prefs-dialog.c:126
+#: embed/ephy-encodings.c:150 lib/ephy-langs.c:45 src/prefs-dialog.c:310
 msgid "Korean"
 msgstr "Korean"
 
-#: embed/ephy-encodings.c:151 src/prefs-dialog.c:139
+#: embed/ephy-encodings.c:151 src/prefs-dialog.c:323
 msgid "Russian"
 msgstr "Russian"
 
@@ -1378,7 +1378,7 @@ msgstr "Russian"
 msgid "Universal"
 msgstr "Universal"
 
-#: embed/ephy-encodings.c:153 src/prefs-dialog.c:147
+#: embed/ephy-encodings.c:153 src/prefs-dialog.c:331
 msgid "Ukrainian"
 msgstr "Ukrainian"
 
@@ -1802,7 +1802,7 @@ msgid "All supported types"
 msgstr "All supported types"
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:76 src/prefs-dialog.c:1139
+#: lib/ephy-file-helpers.c:76 src/prefs-dialog.c:1441
 msgid "Downloads"
 msgstr "Downloads"
 
@@ -1843,63 +1843,63 @@ msgstr "Overwrite File"
 msgid "Could not display help: %s"
 msgstr "Could not display help: %s"
 
-#: lib/ephy-langs.c:31 src/prefs-dialog.c:98
+#: lib/ephy-langs.c:37 src/prefs-dialog.c:282
 msgid "Arabic"
 msgstr "Arabic"
 
-#: lib/ephy-langs.c:32
+#: lib/ephy-langs.c:38
 msgid "Baltic"
 msgstr "Baltic"
 
-#: lib/ephy-langs.c:33
+#: lib/ephy-langs.c:39
 msgid "Central European"
 msgstr "Central European"
 
-#: lib/ephy-langs.c:34
+#: lib/ephy-langs.c:40
 msgid "Cyrillic"
 msgstr "Cyrillic"
 
-#: lib/ephy-langs.c:35
+#: lib/ephy-langs.c:41
 msgid "Devanagari"
 msgstr "Devanagari"
 
-#: lib/ephy-langs.c:36 src/prefs-dialog.c:108
+#: lib/ephy-langs.c:42 src/prefs-dialog.c:292
 msgid "Greek"
 msgstr "Greek"
 
-#: lib/ephy-langs.c:37 src/prefs-dialog.c:119
+#: lib/ephy-langs.c:43 src/prefs-dialog.c:303
 msgid "Hebrew"
 msgstr "Hebrew"
 
-#: lib/ephy-langs.c:40 src/prefs-dialog.c:151
+#: lib/ephy-langs.c:46 src/prefs-dialog.c:335
 msgid "Simplified Chinese"
 msgstr "Simplified Chinese"
 
-#: lib/ephy-langs.c:41 src/prefs-dialog.c:145
+#: lib/ephy-langs.c:47 src/prefs-dialog.c:329
 msgid "Tamil"
 msgstr "Tamil"
 
-#: lib/ephy-langs.c:42
+#: lib/ephy-langs.c:48
 msgid "Thai"
 msgstr "Thai"
 
-#: lib/ephy-langs.c:43 src/prefs-dialog.c:152
+#: lib/ephy-langs.c:49 src/prefs-dialog.c:336
 msgid "Traditional Chinese"
 msgstr "Traditional Chinese"
 
-#: lib/ephy-langs.c:44
+#: lib/ephy-langs.c:50
 msgid "Traditional Chinese (Hong Kong)"
 msgstr "Traditional Chinese (Hong Kong)"
 
-#: lib/ephy-langs.c:45 src/prefs-dialog.c:146
+#: lib/ephy-langs.c:51 src/prefs-dialog.c:330
 msgid "Turkish"
 msgstr "Turkish"
 
-#: lib/ephy-langs.c:46
+#: lib/ephy-langs.c:52
 msgid "Unicode"
 msgstr "Unicode"
 
-#: lib/ephy-langs.c:47
+#: lib/ephy-langs.c:53
 msgid "Western"
 msgstr "Western"
 
@@ -1914,7 +1914,7 @@ msgstr "Western"
 #. * "zh_CN" translation: "zh-cn,zh"
 #. * "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
 #.
-#: lib/ephy-langs.c:155
+#: lib/ephy-langs.c:161
 msgid "system-language"
 msgstr "en-ca,en-gb,en-us,en"
 
@@ -3279,207 +3279,202 @@ msgstr "Close"
 msgid "Close print preview"
 msgstr "Close print preview"
 
-#: src/prefs-dialog.c:97
+#: src/prefs-dialog.c:281
 msgid "Afrikaans"
 msgstr "Afrikaans"
 
-#: src/prefs-dialog.c:99
+#: src/prefs-dialog.c:283
 msgid "Azerbaijani"
 msgstr "Azerbaijani"
 
-#: src/prefs-dialog.c:100
+#: src/prefs-dialog.c:284
 msgid "Byelorussian"
 msgstr "Byelorussian"
 
-#: src/prefs-dialog.c:101
+#: src/prefs-dialog.c:285
 msgid "Bulgarian"
 msgstr "Bulgarian"
 
-#: src/prefs-dialog.c:102
+#: src/prefs-dialog.c:286
 msgid "Breton"
 msgstr "Breton"
 
-#: src/prefs-dialog.c:103
+#: src/prefs-dialog.c:287
 msgid "Catalan"
 msgstr "Catalan"
 
-#: src/prefs-dialog.c:104
+#: src/prefs-dialog.c:288
 msgid "Czech"
 msgstr "Czech"
 
-#: src/prefs-dialog.c:105
+#: src/prefs-dialog.c:289
 msgid "Danish"
 msgstr "Danish"
 
-#: src/prefs-dialog.c:106
+#: src/prefs-dialog.c:290
 msgid "German"
 msgstr "German"
 
-#: src/prefs-dialog.c:107
+#: src/prefs-dialog.c:291
 msgid "English"
 msgstr "English"
 
-#: src/prefs-dialog.c:109
+#: src/prefs-dialog.c:293
 msgid "Esperanto"
 msgstr "Esperanto"
 
-#: src/prefs-dialog.c:110
+#: src/prefs-dialog.c:294
 msgid "Spanish"
 msgstr "Spanish"
 
-#: src/prefs-dialog.c:111
+#: src/prefs-dialog.c:295
 msgid "Estonian"
 msgstr "Estonian"
 
-#: src/prefs-dialog.c:112
+#: src/prefs-dialog.c:296
 msgid "Basque"
 msgstr "Basque"
 
-#: src/prefs-dialog.c:113
+#: src/prefs-dialog.c:297
 msgid "Finnish"
 msgstr "Finnish"
 
-#: src/prefs-dialog.c:114
+#: src/prefs-dialog.c:298
 msgid "Faeroese"
 msgstr "Faeroese"
 
-#: src/prefs-dialog.c:115
+#: src/prefs-dialog.c:299
 msgid "French"
 msgstr "French"
 
-#: src/prefs-dialog.c:116
+#: src/prefs-dialog.c:300
 msgid "Irish"
 msgstr "Irish"
 
-#: src/prefs-dialog.c:117
+#: src/prefs-dialog.c:301
 msgid "Scottish"
 msgstr "Scottish"
 
-#: src/prefs-dialog.c:118
+#: src/prefs-dialog.c:302
 msgid "Galician"
 msgstr "Galician"
 
-#: src/prefs-dialog.c:120
+#: src/prefs-dialog.c:304
 msgid "Croatian"
 msgstr "Croatian"
 
-#: src/prefs-dialog.c:121
+#: src/prefs-dialog.c:305
 msgid "Hungarian"
 msgstr "Hungarian"
 
-#: src/prefs-dialog.c:122
+#: src/prefs-dialog.c:306
 msgid "Indonesian"
 msgstr "Indonesian"
 
-#: src/prefs-dialog.c:123
+#: src/prefs-dialog.c:307
 msgid "Icelandic"
 msgstr "Icelandic"
 
-#: src/prefs-dialog.c:124
+#: src/prefs-dialog.c:308
 msgid "Italian"
 msgstr "Italian"
 
-#: src/prefs-dialog.c:127
+#: src/prefs-dialog.c:311
 msgid "Lithuanian"
 msgstr "Lithuanian"
 
-#: src/prefs-dialog.c:128
+#: src/prefs-dialog.c:312
 msgid "Latvian"
 msgstr "Latvian"
 
-#: src/prefs-dialog.c:129
+#: src/prefs-dialog.c:313
 msgid "Macedonian"
 msgstr "Macedonian"
 
-#: src/prefs-dialog.c:130
+#: src/prefs-dialog.c:314
 msgid "Malay"
 msgstr "Malay"
 
-#: src/prefs-dialog.c:131
+#: src/prefs-dialog.c:315
 msgid "Dutch"
 msgstr "Dutch"
 
-#: src/prefs-dialog.c:132
+#: src/prefs-dialog.c:316
 msgid "Norwegian/Bokmal"
 msgstr "Norwegian/Bokmal"
 
-#: src/prefs-dialog.c:133
+#: src/prefs-dialog.c:317
 msgid "Norwegian/Nynorsk"
 msgstr "Norwegian/Nynorsk"
 
-#: src/prefs-dialog.c:134
+#: src/prefs-dialog.c:318
 msgid "Norwegian"
 msgstr "Norwegian"
 
-#: src/prefs-dialog.c:135
+#: src/prefs-dialog.c:319
 msgid "Polish"
 msgstr "Polish"
 
-#: src/prefs-dialog.c:136
+#: src/prefs-dialog.c:320
 msgid "Portuguese"
 msgstr "Portuguese"
 
-#: src/prefs-dialog.c:137
+#: src/prefs-dialog.c:321
 msgid "Portuguese of Brazil"
 msgstr "Portuguese of Brazil"
 
-#: src/prefs-dialog.c:138
+#: src/prefs-dialog.c:322
 msgid "Romanian"
 msgstr "Romanian"
 
-#: src/prefs-dialog.c:140
+#: src/prefs-dialog.c:324
 msgid "Slovak"
 msgstr "Slovak"
 
-#: src/prefs-dialog.c:141
+#: src/prefs-dialog.c:325
 msgid "Slovenian"
 msgstr "Slovenian"
 
-#: src/prefs-dialog.c:142
+#: src/prefs-dialog.c:326
 msgid "Albanian"
 msgstr "Albanian"
 
-#: src/prefs-dialog.c:143
+#: src/prefs-dialog.c:327
 msgid "Serbian"
 msgstr "Serbian"
 
-#: src/prefs-dialog.c:144
+#: src/prefs-dialog.c:328
 msgid "Swedish"
 msgstr "Swedish"
 
-#: src/prefs-dialog.c:148
+#: src/prefs-dialog.c:332
 msgid "Vietnamese"
 msgstr "Vietnamese"
 
-#: src/prefs-dialog.c:149
+#: src/prefs-dialog.c:333
 msgid "Walloon"
 msgstr "Walloon"
 
-#: src/prefs-dialog.c:787
+#: src/prefs-dialog.c:1049
 #, c-format
-msgid "System language [%s]"
-msgid_plural "System languages [%s]"
-msgstr[0] "System language [%s]"
-msgstr[1] "System languages [%s]"
-
-#: src/prefs-dialog.c:1083
-#, c-format
-msgid "Custom [%s]"
-msgstr "Custom [%s]"
+msgid "System language (%s)"
+msgid_plural "System languages (%s)"
+msgstr[0] "System language (%s)"
+msgstr[1] "System languages (%s)"
 
 #. Note that this does NOT refer to the home page but to a
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1134
+#: src/prefs-dialog.c:1436
 msgid "Home"
 msgstr "Home"
 
-#: src/prefs-dialog.c:1143 src/prefs-dialog.c:1147
+#: src/prefs-dialog.c:1445 src/prefs-dialog.c:1449
 msgid "Desktop"
 msgstr "Desktop"
 
-#: src/prefs-dialog.c:1352
+#: src/prefs-dialog.c:1654
 msgid "Select a directory"
 msgstr "Select a directory"
 
@@ -3543,19 +3538,19 @@ msgstr "Go to the address entered in the address entry"
 msgid "Check this out!"
 msgstr "Check this out!"
 
-#: src/window-commands.c:879
+#: src/window-commands.c:833
 msgid "Toolbar Editor"
 msgstr "Toolbar Editor"
 
-#: src/window-commands.c:899
+#: src/window-commands.c:853
 msgid "_Add a New Toolbar"
 msgstr "_Add a New Toolbar"
 
-#: src/window-commands.c:955
+#: src/window-commands.c:909
 msgid "Epiphany"
 msgstr "Epiphany"
 
-#: src/window-commands.c:960
+#: src/window-commands.c:914
 msgid "translator-credits"
 msgstr ""
 "Maintainer: Adam Weinberger <adamw@gnome.org>\n"
