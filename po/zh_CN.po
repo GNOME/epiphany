@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 2.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-03 12:34+0100\n"
-"PO-Revision-Date: 2005-02-02 17:36+0800\n"
+"POT-Creation-Date: 2005-02-12 04:40+0100\n"
+"PO-Revision-Date: 2005-02-12 16:15+0800\n"
 "Last-Translator: Liu Songhe <jackliu9999@263.net>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -631,7 +631,7 @@ msgstr "Cookies"
 msgid "Download Manager"
 msgstr "下载管理器"
 
-#: data/glade/epiphany.glade.h:6 src/ephy-window.c:1142
+#: data/glade/epiphany.glade.h:6 src/ephy-window.c:1114
 msgid "Find"
 msgstr "查找"
 
@@ -739,7 +739,7 @@ msgstr "选择语言(_A)："
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: data/glade/prefs-dialog.glade.h:17 lib/widgets/ephy-location-entry.c:424
+#: data/glade/prefs-dialog.glade.h:17 lib/widgets/ephy-location-entry.c:425
 #: src/ephy-history-window.c:264
 msgid "Cl_ear"
 msgstr "清除(_E)"
@@ -901,7 +901,7 @@ msgstr "页号(_N)"
 msgid "Paper"
 msgstr "纸张"
 
-#: data/glade/print.glade.h:21 src/ephy-window.c:1138
+#: data/glade/print.glade.h:21 src/ephy-window.c:1110
 msgid "Print"
 msgstr "打印"
 
@@ -994,7 +994,7 @@ msgstr ""
 "%s\n"
 "%s，共%s"
 
-#: embed/downloader-view.c:372 src/ephy-window.c:1336
+#: embed/downloader-view.c:372 src/ephy-window.c:1308
 msgid "Unknown"
 msgstr "未知"
 
@@ -1838,7 +1838,7 @@ msgstr "文件"
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 
-#: embed/mozilla/mozilla-embed-single.cpp:559
+#: embed/mozilla/mozilla-embed-single.cpp:561
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "现在无法使用 Epiphany。Mozilla 初始化失败。"
 
@@ -2031,11 +2031,11 @@ msgstr "历史"
 
 #: lib/ephy-stock-icons.c:59 src/bookmarks/ephy-bookmarks-editor.c:757
 #: src/bookmarks/ephy-bookmarks-editor.c:1619
-#: src/bookmarks/ephy-topic-action.c:930 src/ephy-window.c:1144
+#: src/bookmarks/ephy-topic-action.c:930 src/ephy-window.c:1116
 msgid "Bookmarks"
 msgstr "书签"
 
-#: lib/ephy-stock-icons.c:60 src/ephy-toolbar.c:350
+#: lib/ephy-stock-icons.c:60 src/ephy-toolbar.c:357
 msgid "Address Entry"
 msgstr "地址输入项"
 
@@ -2079,7 +2079,7 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
-#: lib/widgets/ephy-location-entry.c:540
+#: lib/widgets/ephy-location-entry.c:556
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "拖曳此图标克创建到此页面的链接"
 
@@ -2565,11 +2565,11 @@ msgstr "其它编码"
 msgid "_Automatic"
 msgstr "自动(_A)"
 
-#: src/ephy-fullscreen-popup.c:301 src/ephy-toolbar.c:657
+#: src/ephy-fullscreen-popup.c:301 src/ephy-toolbar.c:666
 msgid "Leave Fullscreen"
 msgstr "保持全屏"
 
-#: src/ephy-go-action.c:71 src/ephy-toolbar.c:379
+#: src/ephy-go-action.c:71 src/ephy-toolbar.c:388
 msgid "Go"
 msgstr "转到"
 
@@ -2717,19 +2717,19 @@ msgstr "复原(_R)"
 msgid "Crash Recovery"
 msgstr "崩溃复原"
 
-#: src/ephy-shell.c:212
+#: src/ephy-shell.c:210
 msgid "Sidebar extension required"
 msgstr "需要侧边栏扩展"
 
-#: src/ephy-shell.c:214
+#: src/ephy-shell.c:212
 msgid "Sidebar Extension Required"
 msgstr "需要侧边栏扩展"
 
-#: src/ephy-shell.c:218
+#: src/ephy-shell.c:216
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "您单击的链接需要安装侧边栏扩展。"
 
-#: src/ephy-shell.c:449
+#: src/ephy-shell.c:447
 msgid ""
 "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
 "use bonobo-activation-sysconf to configure the search path for bonobo server "
@@ -2738,112 +2738,47 @@ msgstr ""
 "Bonobo 无法定位 GNOME_Epiphany_Automation.server 文件。您可以使用 bonobo-"
 "activation-sysconf 配置 bonobo 服务器文件的搜索路径。"
 
-#: src/ephy-shell.c:456
+#: src/ephy-shell.c:454
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to register the automation server"
 msgstr ""
 "Epiphany 目前不可用，这是由于试图注册自动化服务器时一个 Bonobo 的意外错误。"
 
-#: src/ephy-shell.c:473
+#: src/ephy-shell.c:471
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
 msgstr ""
 "Epiphany 现在不可用，这是由于试图定位自动化对象时一个 Bonobo 的意外错误。"
 
-#: src/ephy-tab.c:455 src/ephy-tab.c:1630 src/ephy-tab.c:1847
+#: src/ephy-tab.c:434 src/ephy-tab.c:1811
 msgid "Blank page"
 msgstr "空白页"
 
-#: src/ephy-tab.c:1215
+#: src/ephy-tab.c:1187
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "正在重定向到 %s..."
 
-#: src/ephy-tab.c:1219
+#: src/ephy-tab.c:1191
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "正在从 %s 传送数据..."
 
-#: src/ephy-tab.c:1223
+#: src/ephy-tab.c:1195
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "正在等待来自 %s 的认证..."
 
-#: src/ephy-tab.c:1231
+#: src/ephy-tab.c:1203
 #, c-format
 msgid "Loading %s..."
 msgstr "正在装入 %s...."
 
-#: src/ephy-toolbar.c:290
-msgid "Back"
-msgstr "后退"
-
-#: src/ephy-toolbar.c:292
-msgid "Go back"
-msgstr "后退"
-
-#. this is the tooltip on the Back button's drop-down arrow, which will show
-#. * a menu with all sites you can go 'back' to
-#.
-#: src/ephy-toolbar.c:296
-msgid "Back history"
-msgstr "后退历史"
-
-#: src/ephy-toolbar.c:309
-msgid "Forward"
-msgstr "前进"
-
-#: src/ephy-toolbar.c:311
-msgid "Go forward"
-msgstr "前进"
-
-#. this is the tooltip on the Forward button's drop-down arrow, which will show
-#. * a menu with all sites you can go 'forward' to
-#.
-#: src/ephy-toolbar.c:315
-msgid "Forward history"
-msgstr "前进历史"
-
-#: src/ephy-toolbar.c:327
-msgid "Up"
-msgstr "向上"
-
-#: src/ephy-toolbar.c:329 src/ephy-window.c:233
-msgid "Go up one level"
-msgstr "向上一级"
-
-#. this is the tooltip on the Up button's drop-down arrow, which will show
-#. * a menu with al sites you can go 'up' to
-#.
-#: src/ephy-toolbar.c:333
-msgid "List of upper levels"
-msgstr "列出上一级"
-
-#: src/ephy-toolbar.c:352
-msgid "Enter a web address to open, or a phrase to search for on the web"
-msgstr "输入要打开的网址，或者要在网上搜索的短语"
-
-#: src/ephy-toolbar.c:367
-msgid "Zoom"
-msgstr "缩放"
-
-#: src/ephy-toolbar.c:369
-msgid "Adjust the text size"
-msgstr "调整文本大小"
-
-#: src/ephy-toolbar.c:381
-msgid "Go to the address entered in the address entry"
-msgstr "转到在地址输入项中输入的地址"
-
-#: src/ephy-toolbar.c:390
-msgid "_Home"
-msgstr "主页(_H)"
-
-#: src/ephy-toolbar.c:392
-msgid "Go to the home page"
-msgstr "转到主页"
+#: src/ephy-tabs-menu.c:148
+msgid "Switch to this tab"
+msgstr "切换到此标签"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -2892,6 +2827,75 @@ msgstr "工具栏按钮标签(_B)："
 #: src/ephy-toolbar-editor.c:281
 msgid "_Add a New Toolbar"
 msgstr "添加新工具栏(_A)"
+
+#: src/ephy-toolbar.c:297
+msgid "Back"
+msgstr "后退"
+
+#: src/ephy-toolbar.c:299
+msgid "Go back"
+msgstr "后退"
+
+#. this is the tooltip on the Back button's drop-down arrow, which will show
+#. * a menu with all sites you can go 'back' to
+#.
+#: src/ephy-toolbar.c:303
+msgid "Back history"
+msgstr "后退历史"
+
+#: src/ephy-toolbar.c:316
+msgid "Forward"
+msgstr "前进"
+
+#: src/ephy-toolbar.c:318
+msgid "Go forward"
+msgstr "前进"
+
+#. this is the tooltip on the Forward button's drop-down arrow, which will show
+#. * a menu with all sites you can go 'forward' to
+#.
+#: src/ephy-toolbar.c:322
+msgid "Forward history"
+msgstr "前进历史"
+
+#: src/ephy-toolbar.c:334
+msgid "Up"
+msgstr "向上"
+
+#: src/ephy-toolbar.c:336 src/ephy-window.c:233
+msgid "Go up one level"
+msgstr "向上一级"
+
+#. this is the tooltip on the Up button's drop-down arrow, which will show
+#. * a menu with al sites you can go 'up' to
+#.
+#: src/ephy-toolbar.c:340
+msgid "List of upper levels"
+msgstr "列出上一级"
+
+#: src/ephy-toolbar.c:359
+msgid "Enter a web address to open, or a phrase to search for on the web"
+msgstr "输入要打开的网址，或者要在网上搜索的短语"
+
+#: src/ephy-toolbar.c:376
+msgid "Zoom"
+msgstr "缩放"
+
+#: src/ephy-toolbar.c:378
+msgid "Adjust the text size"
+msgstr "调整文本大小"
+
+#: src/ephy-toolbar.c:390
+msgid "Go to the address entered in the address entry"
+msgstr "转到在地址输入项中输入的地址"
+
+#: src/ephy-toolbar.c:399
+msgid "_Home"
+msgstr "主页(_H)"
+
+#: src/ephy-toolbar.c:401
+msgid "Go to the home page"
+msgstr "转到主页"
 
 #: src/ephy-window.c:111
 msgid "_Bookmarks"
@@ -3351,103 +3355,103 @@ msgstr "使用图像作为背景(_U)"
 msgid "Copy I_mage Address"
 msgstr "复制图像地址(_M)"
 
-#: src/ephy-window.c:671
+#: src/ephy-window.c:643
 msgid "There are unsubmitted changes to form elements"
 msgstr "对窗体元素而言有未提交的改变"
 
-#: src/ephy-window.c:675
+#: src/ephy-window.c:647
 msgid "If you close the document anyway, you will lose that information."
 msgstr "如果您无论如何都要关闭该文档，您将丢失那些信息。"
 
-#: src/ephy-window.c:679
+#: src/ephy-window.c:651
 msgid "Close _Document"
 msgstr "关闭文档(_D)"
 
-#: src/ephy-window.c:1134 src/window-commands.c:369
+#: src/ephy-window.c:1106 src/window-commands.c:369
 msgid "Open"
 msgstr "打开"
 
-#: src/ephy-window.c:1136 src/window-commands.c:395
+#: src/ephy-window.c:1108 src/window-commands.c:395
 msgid "Save As"
 msgstr "另存为"
 
-#: src/ephy-window.c:1140
+#: src/ephy-window.c:1112
 msgid "Bookmark"
 msgstr "书签"
 
-#: src/ephy-window.c:1339
+#: src/ephy-window.c:1311
 msgid "Insecure"
 msgstr "不安全"
 
-#: src/ephy-window.c:1344
+#: src/ephy-window.c:1316
 msgid "Broken"
 msgstr "破碎"
 
-#: src/ephy-window.c:1352
+#: src/ephy-window.c:1324
 msgid "Low"
 msgstr "低"
 
-#: src/ephy-window.c:1359
+#: src/ephy-window.c:1331
 msgid "High"
 msgstr "高"
 
-#: src/ephy-window.c:1368
+#: src/ephy-window.c:1340
 #, c-format
 msgid "Security level: %s"
 msgstr "安全级别：%s"
 
-#: src/ephy-window.c:1408
+#: src/ephy-window.c:1380
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d 个隐藏的弹出窗口"
 
-#: src/ephy-window.c:1640
+#: src/ephy-window.c:1612
 #, c-format
 msgid "Save background image '%s'"
 msgstr "保存背景图像“%s”"
 
-#: src/ephy-window.c:1654
+#: src/ephy-window.c:1626
 #, c-format
 msgid "Open image '%s'"
 msgstr "打开图像“%s”"
 
-#: src/ephy-window.c:1659
+#: src/ephy-window.c:1631
 #, c-format
 msgid "Use as desktop background '%s'"
 msgstr "用作桌面背景“%s”"
 
-#: src/ephy-window.c:1664
+#: src/ephy-window.c:1636
 #, c-format
 msgid "Save image '%s'"
 msgstr "保存图像“%s”"
 
-#: src/ephy-window.c:1669
+#: src/ephy-window.c:1641
 #, c-format
 msgid "Copy image address '%s'"
 msgstr "复制图像地址“%s”"
 
-#: src/ephy-window.c:1682
+#: src/ephy-window.c:1654
 #, c-format
 msgid "Send email to address '%s'"
 msgstr "给地址“%s”发送电子邮件"
 
-#: src/ephy-window.c:1688
+#: src/ephy-window.c:1660
 #, c-format
 msgid "Copy email address '%s'"
 msgstr "复制电子邮件地址“%s”"
 
-#: src/ephy-window.c:1700
+#: src/ephy-window.c:1672
 #, c-format
 msgid "Save link '%s'"
 msgstr "保存链接“%s”"
 
-#: src/ephy-window.c:1706
+#: src/ephy-window.c:1678
 #, c-format
 msgid "Bookmark link '%s'"
 msgstr "将链接“%s”加为书签"
 
-#: src/ephy-window.c:1712
+#: src/ephy-window.c:1684
 #, c-format
 msgid "Copy link's address '%s'"
 msgstr "复制链接地址“%s”"
@@ -3841,5 +3845,3 @@ msgstr "Epiphany"
 msgid "translator-credits"
 msgstr "开源软件国际化简体中文组(http://i18n.linux.net.cn),Funda Wang"
 
-#~ msgid "Hide the menubar."
-#~ msgstr "隐藏菜单栏。"
