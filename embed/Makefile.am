@@ -1,4 +1,4 @@
-SUBDIRS = mozilla 
+SUBDIRS = mozilla
 
 noinst_LTLIBRARIES = libephyembed.la libephyembedfactory.la
 
@@ -84,7 +84,7 @@ BUILT_SOURCES = \
 	ephy-embed-type-builtins.c	\
 	ephy-embed-type-builtins.h
 
-CLEANFILES = $(BUILT_SOURCES)
+CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 

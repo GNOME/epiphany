@@ -108,6 +108,6 @@ EGGDIR=$(srcdir)/../../../libegg/libegg
 regenerate-built-sources:
 	EGGFILES="$(EGGFILES) eggmarshalers.list" EGGDIR="$(EGGDIR)" $(srcdir)/update-from-egg.sh
 
-CLEANFILES = $(BUILT_SOURCES)
+CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
