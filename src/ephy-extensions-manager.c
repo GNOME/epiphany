@@ -687,6 +687,7 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 	ephy_extensions_manager_load_string (manager, identifier, xml);
 
 	g_free (identifier);
+	g_free (xml);
 }
 
 static int
@@ -945,7 +946,10 @@ load_file_from_monitor (EphyExtensionsManager *manager,
 		return;
 	}
 
-	if (len == 0) return;
+	if (len == 0) {
+		g_free (xml);
+		return;
+	}
 
 	identifier = path_to_identifier (path);
 	g_return_if_fail (identifier != NULL);
@@ -954,12 +958,14 @@ load_file_from_monitor (EphyExtensionsManager *manager,
 				(GCompareFunc) find_extension_info) != NULL)
 	{
 		g_free (identifier);
+		g_free (xml);
 		return;
 	}
 
 	ephy_extensions_manager_load_string (manager, identifier, xml);
 
 	g_free (identifier);
+	g_free (xml);
 
 	sync_loaded_extensions (manager);
 }

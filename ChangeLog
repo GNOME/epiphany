@@ -1,3 +1,10 @@
+2004-11-03  Adam Hooper  <adamh@cvs.gnome.org>
+
+	* src/ephy-extensions-manager.c:
+	(ephy_extensions_manager_load_file), (load_file_from_monitor):
+
+	Free XML data after parsing it. Noticed by jfr. I'm an idiot.
+
 2004-11-02  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/downloader-view.c:
