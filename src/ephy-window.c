@@ -334,7 +334,6 @@ struct EphyWindowPrivate
 	GtkNotebook *notebook;
 	EphyTab *active_tab;
 	EphyDialog *find_dialog;
-	EphyDialog *print_dialog;
 	gboolean closing;
 	gboolean has_size;
 	guint num_tabs;
@@ -688,7 +687,7 @@ ephy_window_delete_event_cb (GtkWidget *widget, GdkEvent *event, EphyWindow *win
 		EphyEmbed *embed;
 
 		embed = ephy_window_get_active_embed (window);
-		ephy_embed_print_preview_close (embed);
+		ephy_embed_set_print_preview_mode (embed, FALSE);
 
 		ephy_window_set_print_preview (window, FALSE);
 	}
@@ -2084,11 +2083,6 @@ ephy_window_finalize (GObject *object)
 		g_object_unref (G_OBJECT (window->priv->find_dialog));
 	}
 
-	if (window->priv->print_dialog)
-	{
-		g_object_unref (G_OBJECT (window->priv->print_dialog));
-	}
-
 	g_object_unref (window->priv->fav_menu);
 	g_object_unref (window->priv->enc_menu);
 	g_object_unref (window->priv->tabs_menu);
@@ -2467,7 +2461,6 @@ update_embed_dialogs (EphyWindow *window,
 {
 	EphyEmbed *embed;
 	EphyDialog *find_dialog = window->priv->find_dialog;
-	EphyDialog *print_dialog = window->priv->print_dialog;
 
 	embed = ephy_tab_get_embed (tab);
 
@@ -2475,13 +2468,6 @@ update_embed_dialogs (EphyWindow *window,
 	{
 		ephy_embed_dialog_set_embed
 			(EPHY_EMBED_DIALOG(find_dialog),
-			 embed);
-	}
-
-	if (print_dialog)
-	{
-		ephy_embed_dialog_set_embed
-			(EPHY_EMBED_DIALOG(print_dialog),
 			 embed);
 	}
 }
@@ -2535,54 +2521,6 @@ ephy_window_find (EphyWindow *window)
 	}
 
 	ephy_dialog_show (window->priv->find_dialog);
-}
-
-/**
- * ephy_window_print:
- * @window: an #EphyWindow
- *
- * Displays @window's Print dialog.
- **/
-void
-ephy_window_print (EphyWindow *window)
-{
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINTING))
-	{
-		return;
-	}
-
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP) ||
-	    eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_COMMAND_LINE))
-	{
-		EphyEmbed *embed;
-		EmbedPrintInfo *info;
-
-		info = ephy_print_get_print_info ();
-
-		embed = ephy_window_get_active_embed (window);
-		g_return_if_fail (EPHY_IS_EMBED (embed));
-
-		ephy_embed_print (embed, info);
-
-		ephy_print_info_free (info);
-
-		return;
-	}
-
-	if (window->priv->print_dialog == NULL)
-	{
-		EphyDialog *dialog;
-		EphyEmbed *embed;
-
-		embed = ephy_window_get_active_embed (window);
-		dialog = ephy_print_dialog_new  (GTK_WIDGET (window), embed, FALSE);
-
-		window->priv->print_dialog = dialog;
-		g_object_add_weak_pointer(G_OBJECT (dialog),
-					  (gpointer *) &window->priv->print_dialog);
-	}
-
-	ephy_dialog_show (window->priv->print_dialog);
 }
 
 /**

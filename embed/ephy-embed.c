@@ -736,32 +736,30 @@ ephy_embed_has_automatic_encoding (EphyEmbed *embed)
 /**
  * ephy_embed_print:
  * @embed: an #EphyEmbed
- * @info: an #EmbedPrintInfo with all printing settings
  *
  * Sends a document to the printer.
  *
- * Normally one would use ephy_window_print() to display the print dialog, which
- * will build its own #EmbedPrintInfo and then call this function.
  **/
 void
-ephy_embed_print (EphyEmbed *embed,
-		  EmbedPrintInfo *info)
+ephy_embed_print (EphyEmbed *embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->print (embed, info);
+	iface->print (embed);
 }
 
 /**
- * ephy_embed_print_preview_close:
+ * ephy_embed_set_print_preview_mode:
  * @embed: an #EphyEmbed
+ * @preview_mode: Whether the print preview mode is enabled.
  *
- * Closes @embed's print preview dialog.
+ * Enable and disable the print preview mode.
  **/
 void
-ephy_embed_print_preview_close (EphyEmbed *embed)
+ephy_embed_set_print_preview_mode (EphyEmbed *embed,
+				   gboolean preview_mode)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->print_preview_close (embed);
+	iface->set_print_preview_mode (embed, preview_mode);
 }
 
 /**

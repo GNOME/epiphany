@@ -71,7 +71,7 @@ NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIW
 		GtkWidget *gtkParent = MozillaFindGtkParent(parent);
 		NS_ENSURE_TRUE (gtkParent, NS_ERROR_FAILURE);
 
-		dialog = ephy_print_dialog_new (gtkParent, embed, TRUE);
+		dialog = ephy_print_dialog_new (gtkParent, embed);
 		ephy_dialog_set_modal (dialog, TRUE);
 
 		int ret = ephy_dialog_run (dialog);

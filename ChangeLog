@@ -1,3 +1,25 @@
+2004-06-25  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/ephy-embed.c: (ephy_embed_print),
+	(ephy_embed_set_print_preview_mode):
+	* embed/ephy-embed.h:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/PrintingPromptService.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* embed/print-dialog.c: (ephy_print_dialog_response_cb),
+	(ephy_print_dialog_new):
+	* embed/print-dialog.h:
+	* src/ephy-window.c: (ephy_window_delete_event_cb),
+	(ephy_window_finalize), (update_embed_dialogs), (ephy_window_find):
+	* src/ppview-toolbar.c: (toolbar_cmd_ppv_close):
+	* src/window-commands.c: (window_cmd_file_print_preview),
+	(window_cmd_file_print):
+
+	Simplify print code. Now there is only one case to deal with,
+	the mozilla prompt dialog.
+	This should help with xprint.
+
 2004-06-24  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* lib/ephy-node.c: (ephy_node_new_with_id), (ephy_node_get_id),

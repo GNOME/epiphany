@@ -214,9 +214,9 @@ struct _EphyEmbedIface
 	gboolean	   (* has_automatic_encoding)	(EphyEmbed *embed);
 	void		   (* set_encoding)		(EphyEmbed *embed,
 							 const char *encoding);
-	void		   (* print)			(EphyEmbed *embed,
-							 EmbedPrintInfo *info);
-	void		   (* print_preview_close)	(EphyEmbed *embed);
+	void		   (* print)			(EphyEmbed *embed);
+	void		   (* set_print_preview_mode)	(EphyEmbed *embed,
+							 gboolean mode);
 	int		   (* print_preview_n_pages)	(EphyEmbed *embed);
 	void		   (* print_preview_navigate)	(EphyEmbed *embed,
 							 EmbedPrintPreviewNavType type,
@@ -303,10 +303,10 @@ void		  ephy_embed_set_encoding		(EphyEmbed *embed,
 							 const char *encoding);
 
 /* Print */
-void		  ephy_embed_print			(EphyEmbed *embed,
-							 EmbedPrintInfo *info);
+void		  ephy_embed_print			(EphyEmbed *embed);
 
-void		  ephy_embed_print_preview_close	(EphyEmbed *embed);
+void		  ephy_embed_set_print_preview_mode	(EphyEmbed *embed,
+							 gboolean preview_mode);
 
 int		  ephy_embed_print_preview_n_pages	(EphyEmbed *embed);
 

@@ -32,8 +32,7 @@
 G_BEGIN_DECLS
 
 EphyDialog	*ephy_print_dialog_new		(GtkWidget *parent,
-						 EphyEmbed *embed,
-						 gboolean only_collect_info);
+						 EphyEmbed *embed);
 
 EphyDialog	*ephy_print_setup_dialog_new	(void);
 

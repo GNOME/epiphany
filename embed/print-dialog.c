@@ -218,39 +218,14 @@ ephy_print_dialog_response_cb (GtkWidget *widget,
 			       int response,
 			       EphyDialog *dialog)
 {
-	EphyEmbed *embed;
-	EmbedPrintInfo *info;
-	gboolean only_collect_info;
-
-	only_collect_info = GPOINTER_TO_INT
-		(g_object_get_data (G_OBJECT (dialog), "only-collect-info"));
-
-	if (only_collect_info)
-	{
-		return;
-	}
-
 	switch (response)
 	{
-		case GTK_RESPONSE_OK:
-			info = ephy_print_get_print_info ();
-	
-			embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
-			g_return_if_fail (EPHY_IS_EMBED (embed));
-	
-			ephy_embed_print (embed, info);
-	
-			ephy_print_info_free (info);
-
-			break;
 		case GTK_RESPONSE_HELP:
 			ephy_gui_help (GTK_WINDOW (widget), "epiphany", "to-print-page");
 			return;
 		default:
 			break;
 	}
-
-	g_object_unref (dialog);
 }
 
 static void
@@ -326,8 +301,7 @@ ephy_print_setup_dialog_help_button_cb (GtkWidget *widget,
 
 EphyDialog *
 ephy_print_dialog_new (GtkWidget *parent,
-		       EphyEmbed *embed,
-		       gboolean only_collect_info)
+		       EphyEmbed *embed)
 {
 	EphyDialog *dialog;
 	GtkWidget *window, *button;
@@ -358,9 +332,6 @@ ephy_print_dialog_new (GtkWidget *parent,
 
 	button = ephy_dialog_get_control (dialog, print_props[BROWSE_PROP].id);
 	gtk_widget_set_sensitive (button, eel_gconf_key_is_writable (CONF_PRINT_FILE));
-
-	g_object_set_data (G_OBJECT (dialog), "only-collect-info",
-			   GINT_TO_POINTER (only_collect_info));
 
 	return dialog;
 }

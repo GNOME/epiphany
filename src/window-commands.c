@@ -88,18 +88,11 @@ window_cmd_file_print_preview (GtkAction *action,
 			       EphyWindow *window)
 {
 	EphyEmbed *embed;
-	EmbedPrintInfo *info;
 
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	info = ephy_print_get_print_info ();
-	info->preview = TRUE;
-
-	ephy_embed_print (embed, info);
-
-	ephy_print_info_free (info);
-
+	ephy_embed_set_print_preview_mode (embed, TRUE);
 	ephy_window_set_print_preview (window, TRUE);
 }
 
@@ -107,7 +100,12 @@ void
 window_cmd_file_print (GtkAction *action,
 		       EphyWindow *window)
 {
-	ephy_window_print (window);
+	EphyEmbed *embed;
+
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (EPHY_IS_EMBED (embed));
+
+	ephy_embed_print (embed);
 }
 
 void
