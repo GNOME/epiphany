@@ -42,7 +42,7 @@
 #include "ephy-state.h"
 #include "ephy-gui.h"
 #include "ephy-zoom.h"
-#include "ephy-toolbars-model.h"
+#include "egg-toolbars-model.h"
 #include "egg-editable-toolbar.h"
 #include "egg-toolbar-editor.h"
 
@@ -592,6 +592,9 @@ void
 window_cmd_view_fullscreen (GtkAction *action,
 			    EphyWindow *window)
 {
+	/* Otherwise the other toolbar layout shows briefly while switching */
+	gtk_widget_hide (ephy_window_get_toolbar (window));
+
 	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)))
 	{
 		gtk_window_fullscreen (GTK_WINDOW (window));
@@ -806,30 +809,26 @@ window_cmd_edit_prefs (GtkAction *action,
 
 static void
 toolbar_editor_destroy_cb (GtkWidget *tbe,
-			   Toolbar *t)
+			   EphyWindow *window)
 {
-	egg_editable_toolbar_set_edit_mode (EGG_EDITABLE_TOOLBAR (t), FALSE);
+	egg_editable_toolbar_set_edit_mode (EGG_EDITABLE_TOOLBAR
+		(ephy_window_get_toolbar (window)), FALSE);
+	egg_editable_toolbar_set_edit_mode (EGG_EDITABLE_TOOLBAR
+		(ephy_window_get_bookmarksbar (window)), FALSE);
 }
 
 static void
 toolbar_editor_response_cb (GtkDialog  *dialog,
 			    gint response_id,
-			    gpointer data)
+			    EggToolbarsModel *model)
 {
-	EphyToolbarsModel *model;
-	int n;
-
 	switch (response_id)
 	{
 	case GTK_RESPONSE_CLOSE:
 		gtk_widget_destroy (GTK_WIDGET (dialog));
 		break;
 	case RESPONSE_ADD_TOOLBAR:
-		model = EPHY_TOOLBARS_MODEL
-			(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
-		n = egg_toolbars_model_n_toolbars (EGG_TOOLBARS_MODEL (model));
-		egg_toolbars_model_add_toolbar (EGG_TOOLBARS_MODEL (model),
-						n - 1, "UserCreated");
+		egg_toolbars_model_add_toolbar (model, -1, "UserCreated");
 		break;
 	case GTK_RESPONSE_HELP:
 		ephy_gui_help (GTK_WINDOW (dialog), "epiphany", "to-edit-toolbars");
@@ -842,31 +841,28 @@ window_cmd_edit_toolbar (GtkAction *action,
 			 EphyWindow *window)
 {
 	GtkWidget *editor;
-	EphyToolbarsModel *model;
+	EggToolbarsModel *model;
 	GtkWidget *t;
 	GtkWidget *dialog;
 
-	model = EPHY_TOOLBARS_MODEL
+	model = EGG_TOOLBARS_MODEL
 		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
 	t = ephy_window_get_toolbar (window);
 
 	dialog = gtk_dialog_new ();
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Toolbar Editor"));
-        gtk_window_set_transient_for (GTK_WINDOW (dialog),
-				      GTK_WINDOW (window));
+        gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
+	gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 
-	editor = egg_toolbar_editor_new
-		(GTK_UI_MANAGER (window->ui_merge),
-		 EGG_TOOLBARS_MODEL (model));
+	editor = egg_toolbar_editor_new (GTK_UI_MANAGER (window->ui_merge), model);
 	egg_toolbar_editor_load_actions (EGG_TOOLBAR_EDITOR (editor),
 					 ephy_file ("epiphany-toolbar.xml"));
 	gtk_container_set_border_width (GTK_CONTAINER (EGG_TOOLBAR_EDITOR (editor)), 5);
 	gtk_box_set_spacing (GTK_BOX (EGG_TOOLBAR_EDITOR (editor)), 5);
 	gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), editor);
 	g_signal_connect (editor, "destroy",
-			  G_CALLBACK (toolbar_editor_destroy_cb),
-			  t);
+			  G_CALLBACK (toolbar_editor_destroy_cb), window);
 	gtk_widget_show (editor);
 	
 	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 2);
@@ -881,7 +877,7 @@ window_cmd_edit_toolbar (GtkAction *action,
 			       GTK_STOCK_HELP, GTK_RESPONSE_HELP);
 	
 	g_signal_connect (G_OBJECT (dialog), "response",
-			  G_CALLBACK (toolbar_editor_response_cb), NULL);
+			  G_CALLBACK (toolbar_editor_response_cb), model);
 	ephy_state_add_window (dialog,
 			       "toolbar_editor",
 		               500, 330,
@@ -889,6 +885,8 @@ window_cmd_edit_toolbar (GtkAction *action,
 	gtk_widget_show (dialog);
 
 	egg_editable_toolbar_set_edit_mode (EGG_EDITABLE_TOOLBAR (t), TRUE);
+	egg_editable_toolbar_set_edit_mode
+		(EGG_EDITABLE_TOOLBAR (ephy_window_get_bookmarksbar (window)), TRUE);
 }
 
 void

@@ -1,6 +1,8 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen
- *
+ *  Copyright (C) 2003-2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003-2004 Christian Persch
+ * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2, or (at your option)
@@ -77,10 +79,6 @@ void	      toolbar_update_navigation_actions (Toolbar *t,
 
 void	      toolbar_update_zoom		(Toolbar *t,
 						 float zoom);
-
-void	      toolbar_set_visibility		(Toolbar *t,
-						 gboolean normal_toolbars,
-						 gboolean bmk_toolbars);
 
 G_END_DECLS
 

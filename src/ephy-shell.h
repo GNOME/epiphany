@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2000-2003 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -117,11 +118,11 @@ EphyTab	       *ephy_shell_new_tab			(EphyShell *shell,
 							 const char *url,
 							 EphyNewTabFlags flags);
 
-GObject	      *ephy_shell_get_session			(EphyShell *shell);
+GObject	       *ephy_shell_get_session			(EphyShell *shell);
 
 EphyBookmarks  *ephy_shell_get_bookmarks		(EphyShell *shell);
 
-GObject	      *ephy_shell_get_toolbars_model		(EphyShell *shell,
+GObject	       *ephy_shell_get_toolbars_model		(EphyShell *shell,
 							 gboolean fullscreen);
 
 GObject	       *ephy_shell_get_extensions_manager	(EphyShell *shell);

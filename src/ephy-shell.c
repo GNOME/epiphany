@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2000-2003 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,6 +40,7 @@
 #include "toolbar.h"
 #include "ephy-session.h"
 #include "downloader-view.h"
+#include "egg-toolbars-model.h"
 #include "ephy-toolbars-model.h"
 #include "ephy-automation.h"
 #include "print-dialog.h"
@@ -63,7 +65,7 @@ struct EphyShellPrivate
 	BonoboGenericFactory *automation_factory;
 	EphySession *session;
 	EphyBookmarks *bookmarks;
-	EphyToolbarsModel *toolbars_model;
+	EggToolbarsModel *toolbars_model;
 	EggToolbarsModel *fs_toolbars_model;
 	EphyExtensionsManager *extensions_manager;
 	GtkWidget *bme;
@@ -664,11 +666,16 @@ ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
 	{
 		if (shell->priv->fs_toolbars_model == NULL)
 		{
+			gboolean success;
 			const char *xml;
 
 			shell->priv->fs_toolbars_model = egg_toolbars_model_new ();
 			xml = ephy_file ("epiphany-fs-toolbar.xml");
-			egg_toolbars_model_load (shell->priv->fs_toolbars_model, xml);
+			g_return_val_if_fail (xml != NULL, NULL);
+
+			success = egg_toolbars_model_load
+				(shell->priv->fs_toolbars_model, xml);
+			g_return_val_if_fail (success, NULL);
 		}
 
 		return G_OBJECT (shell->priv->fs_toolbars_model);
@@ -678,15 +685,21 @@ ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
 		if (shell->priv->toolbars_model == NULL)
 		{
 			EphyBookmarks *bookmarks;
+			EggToolbarsModel *bookmarksbar_model;
 
+			shell->priv->toolbars_model = ephy_toolbars_model_new ();
+
+			/* get the bookmarks toolbars model. we have to do this
+			 * before loading the toolbars model from disk, since
+			 * this will connect the get_item_* signals
+			 */
 			bookmarks = ephy_shell_get_bookmarks (shell);
+			bookmarksbar_model = ephy_bookmarks_get_toolbars_model (bookmarks);
 
-			shell->priv->toolbars_model = ephy_toolbars_model_new (bookmarks);
-
-			g_object_set (bookmarks, "toolbars_model",
-				      shell->priv->toolbars_model, NULL);
+			/* ok, now we can load the model */
+			ephy_toolbars_model_load
+			(EPHY_TOOLBARS_MODEL (shell->priv->toolbars_model));
 		}
-
 
 		return G_OBJECT (shell->priv->toolbars_model);
 	}

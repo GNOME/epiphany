@@ -35,6 +35,9 @@ enum
   TOOLBAR_ADDED,
   TOOLBAR_CHANGED,
   TOOLBAR_REMOVED,
+  GET_ITEM_TYPE,
+  GET_ITEM_ID,
+  GET_ITEM_DATA,
   LAST_SIGNAL
 };
 
@@ -442,6 +445,8 @@ egg_toolbars_model_load (EggToolbarsModel *t,
 
   g_return_val_if_fail (EGG_IS_TOOLBARS_MODEL (t), FALSE);
 
+  if (!xml_file || !g_file_test (xml_file, G_FILE_TEST_EXISTS)) return FALSE;
+
   doc = xmlParseFile (xml_file);
   if (doc == NULL)
   {
@@ -450,7 +455,6 @@ egg_toolbars_model_load (EggToolbarsModel *t,
   }
   root = xmlDocGetRootElement (doc);
 
-  t->priv->toolbars = g_node_new (NULL);
   parse_toolbars (t, root->children);
 
   xmlFreeDoc (doc);
@@ -495,6 +499,23 @@ impl_get_item_type (EggToolbarsModel *t,
 
   return NULL;
 }
+
+static gboolean
+_egg_accumulator_STRING (GSignalInvocationHint *ihint,
+                         GValue                *return_accu,
+                         const GValue          *handler_return,
+                         gpointer               dummy)
+{
+  gboolean continue_emission;
+  const char *retval;
+
+  retval = g_value_get_string (handler_return);
+  g_value_set_string (return_accu, retval);
+  continue_emission = !retval || !retval[0];
+  
+  return continue_emission;
+}
+
 
 static void
 egg_toolbars_model_class_init (EggToolbarsModelClass *klass)
@@ -545,6 +566,30 @@ egg_toolbars_model_class_init (EggToolbarsModelClass *klass)
 		  G_STRUCT_OFFSET (EggToolbarsModelClass, toolbar_changed),
 		  NULL, NULL, g_cclosure_marshal_VOID__INT,
 		  G_TYPE_NONE, 1, G_TYPE_INT);
+  egg_toolbars_model_signals[GET_ITEM_TYPE] =
+    g_signal_new ("get_item_type",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (EggToolbarsModelClass, get_item_type),
+		  _egg_accumulator_STRING, NULL,
+		  _egg_marshal_STRING__POINTER,
+		  G_TYPE_STRING, 1, G_TYPE_POINTER);
+  egg_toolbars_model_signals[GET_ITEM_ID] =
+    g_signal_new ("get_item_id",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (EggToolbarsModelClass, get_item_id),
+		  _egg_accumulator_STRING, NULL,
+		  _egg_marshal_STRING__STRING_STRING,
+		  G_TYPE_STRING, 2, G_TYPE_STRING, G_TYPE_STRING);
+  egg_toolbars_model_signals[GET_ITEM_DATA] =
+    g_signal_new ("get_item_data",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (EggToolbarsModelClass, get_item_data),
+		  _egg_accumulator_STRING, NULL,
+		  _egg_marshal_STRING__STRING_STRING,
+		  G_TYPE_STRING, 2, G_TYPE_STRING, G_TYPE_STRING);
 
   g_type_class_add_private (object_class, sizeof (EggToolbarsModelPrivate));
 }
@@ -554,7 +599,7 @@ egg_toolbars_model_init (EggToolbarsModel *t)
 {
   t->priv =EGG_TOOLBARS_MODEL_GET_PRIVATE (t);
 
-  t->priv->toolbars = NULL;
+  t->priv->toolbars = g_node_new (NULL);
 }
 
 static void
@@ -702,8 +747,11 @@ egg_toolbars_model_get_item_id (EggToolbarsModel *t,
 			        const char       *type,
 			        const char       *name)
 {
-  EggToolbarsModelClass *klass = EGG_TOOLBARS_MODEL_GET_CLASS (t);
-  return klass->get_item_id (t, type, name);
+  char *retval;
+
+  g_signal_emit (t, egg_toolbars_model_signals[GET_ITEM_ID], 0, type, name, &retval);
+
+  return retval;
 }
 
 char *
@@ -711,14 +759,20 @@ egg_toolbars_model_get_item_data (EggToolbarsModel *t,
 				  const char       *type,
 			          const char       *id)
 {
-  EggToolbarsModelClass *klass = EGG_TOOLBARS_MODEL_GET_CLASS (t);
-  return klass->get_item_data (t, type, id);
+  char *retval;
+
+  g_signal_emit (t, egg_toolbars_model_signals[GET_ITEM_DATA], 0, type, id, &retval);
+
+  return retval;
 }
 
 char *
 egg_toolbars_model_get_item_type (EggToolbarsModel *t,
 				  GdkAtom type)
 {
-  EggToolbarsModelClass *klass = EGG_TOOLBARS_MODEL_GET_CLASS (t);
-  return klass->get_item_type (t, type);
+  char *retval;
+
+  g_signal_emit (t, egg_toolbars_model_signals[GET_ITEM_TYPE], 0, type, &retval);
+
+  return retval;
 }

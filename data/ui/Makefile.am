@@ -1,5 +1,6 @@
 xmldir = $(pkgdatadir)
 xml_DATA = \
+	epiphany-bookmarksbar.xml	\
 	epiphany-fs-toolbar.xml		\
 	epiphany-bookmark-editor-ui.xml	\
 	epiphany-ui.xml			\

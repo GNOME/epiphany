@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- *  Copyright (C) 2000, 2001, 2002, 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2000, 2001, 2002, 2003, 2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,7 +41,9 @@
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-statusbar.h"
+#include "egg-editable-toolbar.h"
 #include "toolbar.h"
+#include "ephy-bookmarksbar.h"
 #include "popup-commands.h"
 #include "ephy-encoding-menu.h"
 #include "ephy-tabs-menu.h"
@@ -318,6 +321,7 @@ struct EphyWindowPrivate
 	GtkWidget *menu_dock;
 	GtkWidget *exit_fullscreen_popup;
 	Toolbar *toolbar;
+	GtkWidget *bookmarksbar;
 	GtkWidget *statusbar;
 	GtkActionGroup *action_group;
 	GtkActionGroup *popups_action_group;
@@ -472,13 +476,13 @@ get_chromes_visibility (EphyWindow *window, gboolean *show_menubar,
 	switch (window->priv->mode)
 	{
 		case EPHY_WINDOW_MODE_NORMAL:
-			*show_menubar = flags & EPHY_EMBED_CHROME_MENUBAR;
-			*show_statusbar = flags & EPHY_EMBED_CHROME_STATUSBAR;
-			*show_toolbar = flags & EPHY_EMBED_CHROME_TOOLBAR;
-			*show_bookmarksbar = flags & EPHY_EMBED_CHROME_BOOKMARKSBAR;
+			*show_menubar = (flags & EPHY_EMBED_CHROME_MENUBAR) != 0;
+			*show_statusbar = (flags & EPHY_EMBED_CHROME_STATUSBAR) != 0;
+			*show_toolbar = (flags & EPHY_EMBED_CHROME_TOOLBAR) != 0;
+			*show_bookmarksbar = (flags & EPHY_EMBED_CHROME_BOOKMARKSBAR) != 0;
 			break;
 		case EPHY_WINDOW_MODE_FULLSCREEN:
-			*show_toolbar = flags & EPHY_EMBED_CHROME_TOOLBAR;
+			*show_toolbar = (flags & EPHY_EMBED_CHROME_TOOLBAR) != 0;
 			*show_menubar = *show_statusbar = *show_bookmarksbar = FALSE;
 			break;
 		default:
@@ -500,27 +504,10 @@ sync_chromes_visibility (EphyWindow *window)
 		(GTK_UI_MANAGER (window->ui_merge), "/menubar");
 	g_assert (menubar != NULL);
 
-	if (show_menubar)
-	{
-		gtk_widget_show (menubar);
-	}
-	else
-	{
-		gtk_widget_hide (menubar);
-	}
-
-	toolbar_set_visibility (window->priv->toolbar, show_toolbar,
-				show_bookmarksbar);
-
-
-	if (show_statusbar)
-	{
-		gtk_widget_show (window->priv->statusbar);
-	}
-	else
-	{
-		gtk_widget_hide (window->priv->statusbar);
-	}
+	g_object_set (G_OBJECT (menubar), "visible", show_menubar, NULL);
+	g_object_set (G_OBJECT (window->priv->toolbar), "visible", show_toolbar, NULL);
+	g_object_set (G_OBJECT (window->priv->bookmarksbar), "visible", show_bookmarksbar, NULL);
+	g_object_set (G_OBJECT (window->priv->statusbar), "visible", show_statusbar, NULL);
 }
 
 static void
@@ -560,6 +547,9 @@ ephy_window_fullscreen (EphyWindow *window)
                           "size-changed", G_CALLBACK (size_changed_cb),
 			  window);
 
+	g_object_set (G_OBJECT (window->priv->toolbar), "ToolbarsModel",
+		      ephy_shell_get_toolbars_model (ephy_shell, TRUE), NULL);
+
 	sync_chromes_visibility (window);
 }
 
@@ -574,6 +564,9 @@ ephy_window_unfullscreen (EphyWindow *window)
 
 	gtk_widget_destroy (window->priv->exit_fullscreen_popup);
 	window->priv->exit_fullscreen_popup = NULL;
+
+	g_object_set (G_OBJECT (window->priv->toolbar), "ToolbarsModel",
+		      ephy_shell_get_toolbars_model (ephy_shell, FALSE), NULL);
 
 	sync_chromes_visibility (window);
 }
@@ -1917,6 +1910,14 @@ browse_with_caret_notifier (GConfClient *client,
 }
 
 static void
+action_request_forward_cb (GObject *toolbar,
+			   const char *name,
+                	   GObject *bookmarksbar)
+{
+	g_signal_emit_by_name (bookmarksbar, "action_request", name);
+}
+
+static void
 ephy_window_init (EphyWindow *window)
 {
 	EphyExtension *manager;
@@ -1945,6 +1946,7 @@ ephy_window_init (EphyWindow *window)
 	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
 			    GTK_WIDGET (window->priv->notebook),
 			    TRUE, TRUE, 0);
+	gtk_widget_show (GTK_WIDGET (window->priv->notebook));
 
 	window->priv->statusbar = ephy_statusbar_new ();
 	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
@@ -1961,8 +1963,21 @@ ephy_window_init (EphyWindow *window)
 	window->priv->enc_menu = ephy_encoding_menu_new (window);
 	window->priv->bmk_menu = ephy_bookmarks_menu_new (window);
 
-	/* create the toolbar */
+	/* create the toolbars */
 	window->priv->toolbar = toolbar_new (window);
+	window->priv->bookmarksbar = ephy_bookmarksbar_new (window);
+
+	/* forward the toolbar's action_request signal to the bookmarks toolbar,
+	 * so the user can also have bookmarks on the normal toolbar
+	 */
+	g_signal_connect (window->priv->toolbar, "action_request",
+			  G_CALLBACK (action_request_forward_cb),
+			  window->priv->bookmarksbar);
+
+	/* Add the toolbars to the window */
+	gtk_box_pack_end (GTK_BOX (window->priv->menu_dock),
+			  window->priv->bookmarksbar,
+			  FALSE, FALSE, 0);
 	gtk_box_pack_end (GTK_BOX (window->priv->menu_dock),
 			  GTK_WIDGET (window->priv->toolbar),
 			  FALSE, FALSE, 0);
@@ -1972,10 +1987,6 @@ ephy_window_init (EphyWindow *window)
 	/* Once the window is sufficiently created let the extensions attach to it */
 	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
 	ephy_extension_attach_window (manager, window);
-
-	/* show widgets */
-	gtk_widget_show (GTK_WIDGET (window->priv->toolbar));
-	gtk_widget_show (GTK_WIDGET (window->priv->notebook));
 
 	g_signal_connect (window, "window-state-event",
 			  G_CALLBACK (ephy_window_state_event_cb),
@@ -2150,9 +2161,7 @@ ephy_window_set_print_preview (EphyWindow *window, gboolean enabled)
  * ephy_window_get_toolbar:
  * @window: an #EphyWindow
  *
- * Returns this window's toolbar as an #EggEditableToolbar. Note that this
- * toolbar is uneditable outside of Epiphany itself (i.e., extensions should not
- * access it).
+ * Returns this window's toolbar as an #EggEditableToolbar.
  *
  * Return value: an #EggEditableToolbar
  **/
@@ -2162,6 +2171,22 @@ ephy_window_get_toolbar (EphyWindow *window)
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
 	return GTK_WIDGET (window->priv->toolbar);
+}
+
+/**
+ * ephy_window_get_bookmarksbar:
+ * @window: an #EphyWindow
+ *
+ * Returns this window's bookmarks toolbar, which is an #EggEditableToolbar.
+ *
+ * Return value: an #EggEditableToolbar
+ **/
+GtkWidget *
+ephy_window_get_bookmarksbar (EphyWindow *window)
+{
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+
+	return GTK_WIDGET (window->priv->bookmarksbar);
 }
 
 /**

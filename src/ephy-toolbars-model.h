@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,9 +34,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_TOOLBARS_MODEL_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TOOLBARS_MODEL))
 #define EPHY_TOOLBARS_MODEL_GET_CLASS(o)(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TOOLBARS_MODEL, EphyToolbarsModelClass))
 
-typedef struct EphyToolbarsModelClass EphyToolbarsModelClass;
-typedef struct EphyToolbarsModel EphyToolbarsModel;
-typedef struct EphyToolbarsModelPrivate EphyToolbarsModelPrivate;
+typedef struct EphyToolbarsModelClass	EphyToolbarsModelClass;
+typedef struct EphyToolbarsModel	EphyToolbarsModel;
+typedef struct EphyToolbarsModelPrivate	EphyToolbarsModelPrivate;
 
 struct EphyToolbarsModel
 {
@@ -50,25 +51,11 @@ struct EphyToolbarsModelClass
 	EggToolbarsModelClass parent_class;
 };
 
-GType		   ephy_toolbars_model_get_type        (void);
+GType		  ephy_toolbars_model_get_type	(void);
 
-EphyToolbarsModel *ephy_toolbars_model_new	       (EphyBookmarks *bookmarks);
+EggToolbarsModel *ephy_toolbars_model_new	(void);
 
-void		   ephy_toolbars_model_add_bookmark    (EphyToolbarsModel *model,
-							gboolean topic,
-				                        long id);
-
-gboolean	   ephy_toolbars_model_has_bookmark    (EphyToolbarsModel *model,
-				                        long id);
-
-void		   ephy_toolbars_model_remove_bookmark (EphyToolbarsModel *model,
-							long id);
-
-char              *ephy_toolbars_model_get_action_name (EphyToolbarsModel *model,
-							long id);
-
-EphyNode	  *ephy_toolbars_model_get_node        (EphyToolbarsModel *model,
-			                                const char *action_name);
+void		  ephy_toolbars_model_load	(EphyToolbarsModel *model);
 
 G_END_DECLS
 

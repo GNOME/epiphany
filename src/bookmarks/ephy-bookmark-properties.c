@@ -22,7 +22,7 @@
 #include "config.h"
 #endif
 
-#include "ephy-toolbars-model.h"
+#include "ephy-bookmarksbar-model.h"
 #include "ephy-bookmark-properties.h"
 #include "ephy-topics-selector.h"
 #include "ephy-debug.h"
@@ -64,7 +64,7 @@ struct EphyBookmarkPropertiesPrivate
 	GtkWidget *location_entry;
 	GtkWidget *topics_selector;
 
-	EphyToolbarsModel *tb_model;
+	EphyBookmarksBarModel *tb_model;
 };
 
 enum
@@ -155,6 +155,8 @@ ephy_bookmark_properties_set_property (GObject *object,
 	{
 	case PROP_BOOKMARKS:
 		selector->priv->bookmarks = g_value_get_object (value);
+		selector->priv->tb_model = EPHY_BOOKMARKSBAR_MODEL
+			(ephy_bookmarks_get_toolbars_model (selector->priv->bookmarks));
 		break;
 	case PROP_BOOKMARK:
 		ephy_bookmark_properties_set_bookmark
@@ -260,12 +262,12 @@ toolbar_checkbox_changed_cb (GtkWidget *checkbox, EphyBookmarkProperties *props)
 
 	if (state)
 	{
-		ephy_toolbars_model_add_bookmark
+		ephy_bookmarksbar_model_add_bookmark
 			(props->priv->tb_model, FALSE, id);
 	}
 	else
 	{
-		ephy_toolbars_model_remove_bookmark
+		ephy_bookmarksbar_model_remove_bookmark
 			(props->priv->tb_model, id);
 	}
 }
@@ -402,7 +404,7 @@ build_ui (EphyBookmarkProperties *editor)
 
 	checkbox = gtk_check_button_new_with_mnemonic (_("_Show in bookmarks bar"));
 	id = ephy_node_get_id (editor->priv->bookmark);
-	state = ephy_toolbars_model_has_bookmark (editor->priv->tb_model, id);
+	state = ephy_bookmarksbar_model_has_bookmark (editor->priv->tb_model, id);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbox), state);
 	g_signal_connect (checkbox, "toggled",
 			  G_CALLBACK (toolbar_checkbox_changed_cb), editor);
@@ -427,8 +429,6 @@ ephy_bookmark_properties_init (EphyBookmarkProperties *editor)
 	editor->priv = EPHY_BOOKMARK_PROPERTIES_GET_PRIVATE (editor);
 
 	editor->priv->bookmark = NULL;
-	editor->priv->tb_model = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
 }
 
 GtkWidget *

@@ -94,7 +94,6 @@ libephymain_la_SOURCES =				\
 	ephy-tab.h					\
 	ephy-tabs-menu.c				\
 	ephy-toolbars-model.c				\
-	ephy-toolbars-model.h				\
 	ephy-window.c					\
 	pdm-dialog.c					\
 	popup-commands.c				\

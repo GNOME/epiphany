@@ -41,11 +41,12 @@ typedef struct EggToolbarsModelPrivate EggToolbarsModelPrivate;
 
 typedef enum
 {
-  EGG_TB_MODEL_NOT_REMOVABLE	= 1 << 0,
-  EGG_TB_MODEL_ICONS_ONLY	= 1 << 1,
-  EGG_TB_MODEL_TEXT_ONLY	= 1 << 2,
-  EGG_TB_MODEL_ICONS_TEXT	= 1 << 3,
-  EGG_TB_MODEL_ICONS_TEXT_HORIZ	= 1 << 4,
+  EGG_TB_MODEL_NOT_REMOVABLE	 = 1 << 0,
+  EGG_TB_MODEL_ICONS_ONLY	 = 1 << 1,
+  EGG_TB_MODEL_TEXT_ONLY	 = 1 << 2,
+  EGG_TB_MODEL_ICONS_TEXT	 = 1 << 3,
+  EGG_TB_MODEL_ICONS_TEXT_HORIZ	 = 1 << 4,
+  EGG_TB_MODEL_ACCEPT_ITEMS_ONLY = 1 << 5
 } EggTbModelFlags;
 
 struct EggToolbarsModel
@@ -73,6 +74,14 @@ struct EggToolbarsModelClass
 			    int position);
   void (* toolbar_removed) (EggToolbarsModel *group,
 			    int position);
+  char * (* get_item_type) (EggToolbarsModel *model,
+			    GdkAtom           dnd_type);
+  char * (* get_item_id)   (EggToolbarsModel *model,
+			    const char       *type,
+			    const char       *data);
+  char * (* get_item_data) (EggToolbarsModel *model,
+			    const char       *type,
+			    const char       *id);
 
   /* Virtual Table */
   gboolean (* add_item)    (EggToolbarsModel *t,
@@ -80,14 +89,6 @@ struct EggToolbarsModelClass
 			    int               position,
 			    const char       *id,
 			    const char       *type);
-  char * (* get_item_type) (EggToolbarsModel *t,
-			    GdkAtom           dnd_type);
-  char * (* get_item_id)   (EggToolbarsModel *t,
-			    const char       *type,
-			    const char       *data);
-  char * (* get_item_data) (EggToolbarsModel *t,
-			    const char       *type,
-			    const char       *id);
 };
 
 GType		  egg_toolbars_model_get_type       (void);

@@ -42,9 +42,8 @@
 
 static GtkTargetEntry drag_targets[] =
 {
-	{ EGG_TOOLBAR_ITEM_TYPE,	0,	0 },
-	{ EPHY_DND_TOPIC_TYPE,		0,	1 },
-	{ EPHY_DND_URL_TYPE,		0,	2 }
+	{ EPHY_DND_TOPIC_TYPE,		0,	0 },
+	{ EPHY_DND_URL_TYPE,		0,	1 }
 };
 static int n_drag_targets = G_N_ELEMENTS (drag_targets);
 
@@ -145,30 +144,73 @@ go_location_cb (GtkAction *action,
 	}
 }
 
+static gboolean
+remove_action_from_model (EggToolbarsModel *model, const char *name)
+{
+	int n_toolbars, n_items, t, i;
+
+	n_toolbars = egg_toolbars_model_n_toolbars (model);
+
+	for (t = 0; t < n_toolbars; t++)
+	{
+		n_items = egg_toolbars_model_n_items (model, t);
+
+		for (i = 0; i < n_items; i++)
+		{
+			const char *i_name;
+			gboolean is_separator;
+
+			egg_toolbars_model_item_nth (model, t , i, &is_separator,
+						     &i_name, NULL);
+			g_return_val_if_fail (i_name != NULL, FALSE);
+
+			if (strcmp (i_name, name) == 0)
+			{
+				egg_toolbars_model_remove_item (model, t, i);
+				
+				if (!remove_action_from_model (model, name))
+				{
+					return FALSE;
+				}
+			}
+		}
+	}
+
+	return FALSE;
+}
+
 static void
 bookmark_destroy_cb (EphyNode *node,
 		     EphyBookmarksBar *toolbar)
 {
+	EggToolbarsModel *model;
 	GtkAction *action;
 	char *name;
 	long id;
+	
 
+	model = toolbar->priv->toolbars_model;
 	id = ephy_node_get_id (node);
 	name = ephy_bookmarksbar_model_get_action_name
-		(EPHY_BOOKMARKSBAR_MODEL (toolbar->priv->toolbars_model),
-		 id);
+				(EPHY_BOOKMARKSBAR_MODEL (model), id);
+	remove_action_from_model (model, name);
+
+	model = EGG_TOOLBARS_MODEL (ephy_shell_get_toolbars_model
+						(ephy_shell, FALSE));
+	remove_action_from_model (model, name);
 
 	action = gtk_action_group_get_action (toolbar->priv->action_group, name);
-	g_return_if_fail (action != NULL);
-
-	gtk_action_group_remove_action (toolbar->priv->action_group, action);
+	if (action)
+	{
+		gtk_action_group_remove_action (toolbar->priv->action_group, action);
+	}
 
 	g_free (name);
 }
 
 static void
 ephy_bookmarksbar_action_request (EggEditableToolbar *eggtoolbar,
-				       const char *name)
+				  const char *name)
 {
 	EphyBookmarksBar *toolbar = EPHY_BOOKMARKSBAR (eggtoolbar);
 	GtkAction *action = NULL;

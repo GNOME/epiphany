@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2002-2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,7 +31,7 @@
 #include "ephy-debug.h"
 #include "ephy-tree-model-node.h"
 #include "ephy-node-common.h"
-#include "ephy-toolbars-model.h"
+#include "ephy-bookmarksbar-model.h"
 #include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-prefs.h"
@@ -50,7 +51,7 @@
 
 struct EphyBookmarksPrivate
 {
-	EphyToolbarsModel *toolbars_model;
+	EphyBookmarksBarModel *toolbars_model;
 	gboolean init_defaults;
 	gboolean dirty;
 	guint save_timeout_id;
@@ -160,22 +161,84 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 
 		bmk = ephy_bookmarks_add (eb, _(default_bookmarks[i].title),
 				          _(default_bookmarks[i].location));
-		ephy_toolbars_model_add_bookmark (eb->priv->toolbars_model, FALSE,
-						  ephy_node_get_id (bmk));
+		ephy_bookmarksbar_model_add_bookmark (eb->priv->toolbars_model, FALSE,
+							    ephy_node_get_id (bmk));
 	}
 }
 
-static void
-ephy_bookmarks_set_toolbars_model (EphyBookmarks *eb, EphyToolbarsModel *model)
+static char *
+get_item_type_forward_cb (EggToolbarsModel *model,
+			  GdkAtom type,
+			  EggToolbarsModel *bookmarksbar_model)
 {
-	eb->priv->toolbars_model = model;
-	g_object_add_weak_pointer (G_OBJECT(eb->priv->toolbars_model),
-				   (gpointer *)&eb->priv->toolbars_model);
+	char *retval;
 
-	if (eb->priv->init_defaults)
+	g_signal_emit_by_name (bookmarksbar_model, "get_item_type",
+			       type, &retval);
+
+	return retval;
+}
+
+static char *
+get_item_id_forward_cb (EggToolbarsModel *model,
+			const char *type,
+			const char *name,
+			EggToolbarsModel *bookmarksbar_model)
+{
+	char *retval;
+
+	g_signal_emit_by_name (bookmarksbar_model, "get_item_id",
+			       type, name, &retval);
+
+	return retval;
+}
+
+static char *
+get_item_data_forward_cb (EggToolbarsModel *model,
+			  const char *type,
+			  const char *id,
+			  EggToolbarsModel *bookmarksbar_model)
+{
+	char *retval;
+
+	g_signal_emit_by_name (bookmarksbar_model, "get_item_data",
+			       type, id, &retval);
+
+	return retval;
+}
+
+EggToolbarsModel *
+ephy_bookmarks_get_toolbars_model (EphyBookmarks *eb)
+{
+	g_return_val_if_fail (EPHY_IS_BOOKMARKS (eb), NULL);
+
+	if (eb->priv->toolbars_model == NULL)
 	{
-		ephy_bookmarks_init_defaults (eb);
+		GObject *toolbars_model;
+
+		eb->priv->toolbars_model = EPHY_BOOKMARKSBAR_MODEL
+			(ephy_bookmarksbar_model_new (eb));
+
+		/* forward those signals, so that bookmarks can also be on the main model */
+		toolbars_model = ephy_shell_get_toolbars_model (ephy_shell, FALSE);
+
+		g_signal_connect_after (toolbars_model, "get_item_type",
+					G_CALLBACK (get_item_type_forward_cb),
+					eb->priv->toolbars_model);
+		g_signal_connect_after (toolbars_model, "get_item_id",
+					G_CALLBACK (get_item_id_forward_cb),
+					eb->priv->toolbars_model);
+		g_signal_connect_after (toolbars_model, "get_item_data",
+					G_CALLBACK (get_item_data_forward_cb),
+					eb->priv->toolbars_model);
+
+		if (eb->priv->init_defaults)
+		{
+			ephy_bookmarks_init_defaults (eb);
+		}
 	}
+
+	return EGG_TOOLBARS_MODEL (eb->priv->toolbars_model);
 }
 
 static void
@@ -184,16 +247,8 @@ ephy_bookmarks_set_property (GObject *object,
                              const GValue *value,
                              GParamSpec *pspec)
 {
-	EphyBookmarks *eb;
-
-	eb = EPHY_BOOKMARKS (object);
-
-	switch (prop_id)
-	{
-		case PROP_TOOLBARS_MODEL:
-			ephy_bookmarks_set_toolbars_model (eb, g_value_get_object (value));
-			break;
-	}
+	/* no writable properties */
+	g_assert_not_reached ();
 }
 
 static void
@@ -202,14 +257,12 @@ ephy_bookmarks_get_property (GObject *object,
                              GValue *value,
                              GParamSpec *pspec)
 {
-	EphyBookmarks *eb;
-
-	eb = EPHY_BOOKMARKS (object);
+	EphyBookmarks *eb = EPHY_BOOKMARKS (object);
 
 	switch (prop_id)
 	{
 		case PROP_TOOLBARS_MODEL:
-			g_value_set_object (value, eb->priv->toolbars_model);
+			g_value_set_object (value, ephy_bookmarks_get_toolbars_model (eb));
 			break;
 	}
 }
@@ -238,11 +291,11 @@ ephy_bookmarks_class_init (EphyBookmarksClass *klass)
 
 	g_object_class_install_property (object_class,
                                          PROP_TOOLBARS_MODEL,
-                                         g_param_spec_object ("toolbars_model",
+                                         g_param_spec_object ("toolbars-model",
                                                               "Toolbars model",
                                                               "Toolbars model",
-                                                              EPHY_TYPE_TOOLBARS_MODEL,
-                                                              G_PARAM_READWRITE));
+                                                              EPHY_TYPE_BOOKMARKSBAR_MODEL,
+                                                              G_PARAM_READABLE));
 
 	g_type_class_add_private (object_class, sizeof(EphyBookmarksPrivate));
 }
@@ -763,10 +816,10 @@ ephy_bookmarks_finalize (GObject *object)
 
 	g_object_unref (eb->priv->db);
 
-	if (eb->priv->toolbars_model)
+	LOG ("Unref bookmarks toolbars model")
+	if (eb->priv->toolbars_model != NULL)
 	{
-		g_object_remove_weak_pointer (G_OBJECT(eb->priv->toolbars_model),
-					      (gpointer *)&eb->priv->toolbars_model);
+		g_object_unref (eb->priv->toolbars_model);
 	}
 
 	g_free (eb->priv->xml_file);

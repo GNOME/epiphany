@@ -71,6 +71,8 @@ void		  ephy_window_set_print_preview	  (EphyWindow *window,
 
 GtkWidget	 *ephy_window_get_toolbar	  (EphyWindow *window);
 
+GtkWidget	 *ephy_window_get_bookmarksbar	  (EphyWindow *window);
+
 GtkWidget	 *ephy_window_get_notebook	  (EphyWindow *window);
 
 GtkWidget	 *ephy_window_get_statusbar	  (EphyWindow *window);

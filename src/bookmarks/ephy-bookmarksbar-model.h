@@ -51,25 +51,25 @@ struct EphyBookmarksBarModelClass
 	EggToolbarsModelClass parent_class;
 };
 
-GType		  ephy_bookmarksbar_model_get_type	(void);
+GType		  ephy_bookmarksbar_model_get_type	  (void);
 
-EggToolbarsModel *ephy_bookmarksbar_model_new		(EphyBookmarks *bookmarks);
+EggToolbarsModel *ephy_bookmarksbar_model_new		  (EphyBookmarks *bookmarks);
 
-char		 *ephy_bookmarksbar_model_get_action_name	(EphyBookmarksBarModel *model,
-								 long id);
+char		 *ephy_bookmarksbar_model_get_action_name (EphyBookmarksBarModel *model,
+							   long id);
 
-EphyNode	 *ephy_bookmarksbar_model_get_node	(EphyBookmarksBarModel *model,
-								 const char *action_name);
+EphyNode	 *ephy_bookmarksbar_model_get_node	  (EphyBookmarksBarModel *model,
+							   const char *action_name);
 
-void		  ephy_bookmarksbar_model_add_bookmark	(EphyBookmarksBarModel *model,
-								 gboolean topic,
-								 long id);
+void		  ephy_bookmarksbar_model_add_bookmark	  (EphyBookmarksBarModel *model,
+							   gboolean topic,
+							   long id);
 
-void		  ephy_bookmarksbar_model_remove_bookmark	(EphyBookmarksBarModel *model,
-								 long id);
+void		  ephy_bookmarksbar_model_remove_bookmark (EphyBookmarksBarModel *model,
+							   long id);
 
-gboolean	  ephy_bookmarksbar_model_has_bookmark	(EphyBookmarksBarModel *model,
-								 long id);
+gboolean	  ephy_bookmarksbar_model_has_bookmark	  (EphyBookmarksBarModel *model,
+							   long id);
 
 G_END_DECLS
 

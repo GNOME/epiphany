@@ -1,3 +1,218 @@
+2004-06-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	Merging bookmarksbar-separation branch.
+
+2004-06-09  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/egg/egg-editable-toolbar.c: (drag_data_get_cb),
+	(set_item_drag_source):
+	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_to_xml),
+	(impl_get_item_id), (impl_get_item_data),
+	(egg_toolbars_model_class_init),
+	(egg_toolbars_model_get_item_data):
+	* lib/egg/egg-toolbars-model.h:
+	* src/ephy-toolbars-model.c: (impl_get_item_data),
+	(impl_get_item_id), (ephy_toolbars_model_class_init):
+
+	s/get_item_name/get_item_data
+
+	Do not assume data isnt changing, use the id
+	and convert later instead.
+
+2004-06-09  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/egg/egg-editable-toolbar.c: (drag_data_get_cb),
+	(set_item_drag_source), (create_item_from_action), (create_item),
+	(drag_data_received_cb), (egg_editable_toolbar_set_edit_mode):
+	* lib/egg/egg-toolbar-editor.c: (model_has_action):
+	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_item_nth):
+	* lib/egg/egg-toolbars-model.h:
+	* src/ephy-toolbars-model.c: (get_toolbar_and_item_pos),
+	(ephy_toolbars_model_class_init), (item_added):
+
+	Retain custom types when moving items around
+
+2004-06-10  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(toolbar_items_changed_cb), (cmd_show_in_bookmarks_bar),
+
+	Block the signal when removing bookmarks from toolbars.
+
+	(ephy_bookmarks_editor_get_property):
+	* src/bookmarks/ephy-bookmarksbar-model.c:
+	(ephy_bookmarksbar_model_remove_bookmark):
+
+	Remove all copy of a bookmark from toolbar, not just one
+	of them.
+
+2004-06-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/bookmarks/ephy-bookmarksbar-model.c:
+	(ephy_bookmarksbar_model_finalize):
+	* src/ephy-toolbars-model.c: (ephy_toolbars_model_finalize):
+
+	Save models on exit.
+
+2004-06-10  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* src/bookmarks/ephy-bookmarksbar-model.c: (item_added_cb):
+	* src/bookmarks/ephy-bookmarksbar.c: (remove_action_from_model),
+	(bookmark_destroy_cb), (ephy_bookmarksbar_action_request):
+
+	Cleanup the toolbars model when destroying a bookmark
+	action. Remove the cleanup code from the model.
+
+2004-06-10  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/egg/egg-editable-toolbar.c: (toolbar_drag_motion_cb),
+	(egg_editable_toolbar_get_model):
+	* lib/egg/egg-editable-toolbar.h:
+	* lib/egg/egg-toolbars-model.h:
+
+	Add a getter for the model.
+	Add a flag to accept only tool items as source.
+
+	* src/bookmarks/ephy-bookmarksbar.c:
+	* src/ephy-toolbars-model.c: (update_flags_and_save_changes):
+	* src/toolbar.c: (toolbar_added_cb), (toolbar_realize),
+	(toolbar_unrealize), (toolbar_class_init), (toolbar_finalize):
+
+	Fixup dnd targets and use the new flag for main toolbar.
+
+2004-06-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_class_init):
+	* src/bookmarks/ephy-bookmarks.c: (get_item_type_forward_cb),
+	(get_item_id_forward_cb), (get_item_data_forward_cb),
+	(ephy_bookmarks_get_toolbars_model):
+	* src/ephy-shell.c: (ephy_shell_get_toolbars_model):
+	* src/ephy-toolbars-model.c: (ephy_toolbars_model_load),
+	(ephy_toolbars_model_init):
+	* src/ephy-toolbars-model.h:
+
+	Forward get_item_[type|id|data] from toolbars model to
+	bookmarksbar model. That way we can have bookmarks/topics also
+	on the main toolbar.
+
+2004-06-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/egg/egg-toolbars-model.c: (_egg_accumulator_STRING),
+	(egg_toolbars_model_class_init), (egg_toolbars_model_get_item_id),
+	(egg_toolbars_model_get_item_data),
+	(egg_toolbars_model_get_item_type):
+	* lib/egg/egg-toolbars-model.h:
+	* lib/egg/eggmarshalers.c:
+	(_egg_marshal_BOOLEAN__OBJECT_STRING_STRING),
+	(_egg_marshal_STRING__POINTER),
+	(_egg_marshal_STRING__STRING_STRING):
+	* lib/egg/eggmarshalers.h:
+	* lib/egg/eggmarshalers.list:
+
+	Make get_item_[type|id|data] signals.
+
+2004-06-08  Christian Persch  <chpe@cvs.gnome.org>
+
+        * lib/egg/egg-editable-toolbar.c: (find_action), (create_item),
+        (egg_editable_toolbar_construct), (egg_editable_toolbar_realize),
+        (egg_editable_toolbar_unrealize), (egg_editable_toolbar_set_model),
+        (egg_editable_toolbar_set_merge),
+        (egg_editable_toolbar_set_property),
+        (egg_editable_toolbar_get_property),
+        (egg_editable_toolbar_class_init), (egg_editable_toolbar_init),
+        (egg_editable_toolbar_set_edit_mode):
+        * lib/egg/egg-editable-toolbar.h:
+        * lib/egg/egg-toolbars-model.c: (egg_toolbars_model_load),
+        (egg_toolbars_model_init):
+
+        Only construct the toolbar on realize. When setting a different model,
+        unrealize the toolbar. Connect to model only while realized, fixes
+        crashes when setting flags on the toolbars model.
+
+        * data/ui/epiphany-bookmarksbar.xml:
+        * data/ui/epiphany-fs-toolbar.xml:
+        * data/ui/epiphany-toolbar.xml:
+
+        Separated. Fix root name to be "toolbars" which is the name we
+        save the model with.
+
+        * src/bookmarks/ephy-bookmarksbar-model.c:
+        (ephy_bookmarksbar_model_get_type), (get_toolbar_and_item_pos),
+        (get_toolbar_pos), (ephy_bookmarksbar_model_get_action_name),
+        (ephy_bookmarksbar_model_get_node),
+        (ephy_bookmarksbar_model_add_bookmark),
+        (ephy_bookmarksbar_model_remove_bookmark),
+        (ephy_bookmarksbar_model_has_bookmark), (save_changes_idle),
+        (save_changes), (update_flags_and_save_changes),
+        (bookmark_destroy_cb), (item_added_cb), (impl_add_item),
+        (impl_get_item_id), (impl_get_item_type), (load_toolbars),
+        (ephy_bookmarksbar_model_init), (ephy_bookmarksbar_model_finalize),
+        (ephy_bookmarksbar_model_set_property),
+        (ephy_bookmarksbar_model_get_property),
+        (ephy_bookmarksbar_model_class_init),
+        (ephy_bookmarksbar_model_new):
+        * src/bookmarks/ephy-bookmarksbar-model.h:
+        * src/ephy-toolbars-model.c: (save_changes_idle), (save_changes),
+        (update_flags_and_save_changes), (get_toolbar_pos),
+        (load_toolbars), (ephy_toolbars_model_init),
+        (ephy_toolbars_model_finalize), (ephy_toolbars_model_class_init),
+        (ephy_toolbars_model_new):
+        * src/ephy-toolbars-model.h:
+
+        Split toolbars model in bookmarks and non-bookmarks parts.
+
+        * src/bookmarks/ephy-bookmarksbar.c: (ephy_bookmarksbar_get_type),
+        (go_location_cb), (bookmark_destroy_cb),
+        (ephy_bookmarksbar_action_request), (toolbar_added_cb),
+        (ephy_bookmarksbar_set_window), (ephy_bookmarksbar_realize),
+        (ephy_bookmarksbar_unrealize), (ephy_bookmarksbar_init),
+        (ephy_bookmarksbar_finalize), (ephy_bookmarksbar_set_property),
+        (ephy_bookmarksbar_get_property), (ephy_bookmarksbar_class_init),
+        (ephy_bookmarksbar_new):
+        * src/bookmarks/ephy-bookmarksbar.h:
+        * src/toolbar.c: (go_location_cb), (toolbar_set_property),
+        (toolbar_get_property), (toolbar_class_init), (toolbar_set_window),
+        (toolbar_init), (toolbar_new), (toolbar_set_location),
+        (toolbar_update_navigation_actions):
+        * src/toolbar.h:
+        * src/ephy-window.c: (get_chromes_visibility),
+        (sync_chromes_visibility), (ephy_window_fullscreen),
+        (ephy_window_unfullscreen), (action_request_forward_cb),
+        (ephy_window_init), (ephy_window_get_toolbar),
+        (ephy_window_get_bookmarksbar):
+        * src/ephy-window.h:
+        * src/window-commands.c: (window_cmd_view_fullscreen),
+        (toolbar_editor_destroy_cb), (toolbar_editor_response_cb),
+        (window_cmd_edit_toolbar):
+
+        Split toolbars in bookmarks and non-bookmarks toolbars.
+
+        * src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init_defaults),
+        (ephy_bookmarks_get_toolbars_model), (ephy_bookmarks_set_property),
+        (ephy_bookmarks_get_property), (ephy_bookmarks_class_init),
+        (ephy_bookmarks_finalize):
+        * src/bookmarks/ephy-bookmarks.h:
+        * src/ephy-shell.c: (ephy_shell_get_toolbars_model):
+        * src/ephy-shell.h:
+
+        Made bookmarksbar toolbars model a service of EphyBookmarks.
+
+        * src/bookmarks/ephy-bookmark-properties.c:
+        (ephy_bookmark_properties_set_property),
+        (toolbar_checkbox_changed_cb), (build_ui),
+        (ephy_bookmark_properties_init):
+        * src/bookmarks/ephy-bookmarks-editor.c:
+        (cmd_show_in_bookmarks_bar), (ephy_bookmarks_editor_update_menu),
+        (toolbar_items_changed_cb), (ephy_bookmarks_editor_init):
+
+        Adapt to changes above.
+
+        * data/ui/Makefile.am:
+        * src/Makefile.am:
+        * src/bookmarks/Makefile.am:
+
+        Makefile changes.
+
 2004-06-09  Christian Persch  <chpe@cvs.gnome.org>
 
 	* data/default-prefs.js:

@@ -1,6 +1,7 @@
 /*
- *  Copyright (C) 2000 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2004 Marco Pesenti Gritti
  *  Copyright (C) 2001, 2002 Jorn Baayen
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,57 +25,42 @@
 #endif
 
 #include "toolbar.h"
-#include "ephy-file-helpers.h"
-#include "ephy-shell.h"
-#include "ephy-location-entry.h"
-#include "ephy-dnd.h"
-#include "ephy-spinner.h"
-#include "ephy-location-action.h"
 #include "ephy-favicon-action.h"
-#include "ephy-topic-action.h"
 #include "ephy-go-action.h"
+#include "ephy-location-entry.h"
+#include "ephy-location-action.h"
 #include "ephy-navigation-action.h"
-#include "ephy-bookmark-action.h"
+#include "ephy-spinner.h"
+#include "ephy-dnd.h"
+#include "ephy-topic-action.h"
 #include "ephy-zoom-action.h"
-#include "window-commands.h"
-#include "ephy-string.h"
-#include "ephy-debug.h"
-#include "ephy-new-bookmark.h"
+#include "ephy-shell.h"
 #include "ephy-stock-icons.h"
-#include "ephy-toolbars-model.h"
+#include "window-commands.h"
 #include "eel-gconf-extensions.h"
+#include "ephy-debug.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
 #include <gtk/gtkuimanager.h>
-#include <gtk/gtktoolbar.h>
 
 static void toolbar_class_init (ToolbarClass *klass);
 static void toolbar_init (Toolbar *t);
 static void toolbar_finalize (GObject *object);
 static void toolbar_set_window (Toolbar *t, EphyWindow *window);
-static void
-toolbar_set_property (GObject *object,
-                      guint prop_id,
-                      const GValue *value,
-                      GParamSpec *pspec);
-static void
-toolbar_get_property (GObject *object,
-                      guint prop_id,
-                      GValue *value,
-                      GParamSpec *pspec);
 
-static GtkTargetEntry drag_targets[] = {
-  { EGG_TOOLBAR_ITEM_TYPE, 0, 0 },
-  { EPHY_DND_TOPIC_TYPE, 0, 1 },
-  { EPHY_DND_URL_TYPE, 0, 2 },
+static GtkTargetEntry drag_targets[] =
+{
+	{ EGG_TOOLBAR_ITEM_TYPE,	0,	0 },
+	{ EPHY_DND_TOPIC_TYPE,		0,	1 },
+	{ EPHY_DND_URL_TYPE,		0,	2 }
 };
 static int n_drag_targets = G_N_ELEMENTS (drag_targets);
 
 enum
 {
 	PROP_0,
-	PROP_EPHY_WINDOW
+	PROP_WINDOW
 };
 
 static GObjectClass *parent_class = NULL;
@@ -86,13 +72,9 @@ static GObjectClass *parent_class = NULL;
 struct ToolbarPrivate
 {
 	EphyWindow *window;
-	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
-	gboolean visibility;
 	gboolean updating_address;
 	GtkWidget *spinner;
-	GtkWidget *favicon;
-	GtkWidget *go;
 	guint disable_arbitrary_url_notifier_id;
 };
 
@@ -166,142 +148,13 @@ arbitrary_url_notifier (GConfClient *client,
 static void
 go_location_cb (GtkAction *action, char *location, EphyWindow *window)
 {
-	GdkEvent *event;
-	gboolean new_tab = FALSE;
-
-	event = gtk_get_current_event ();
-	if (event != NULL)
-	{
-		if (event->type == GDK_BUTTON_RELEASE)
-		{
-			guint modifiers, button, state;
-
-			modifiers = gtk_accelerator_get_default_mod_mask ();
-			button = event->button.button;
-			state = event->button.state;
-
-			/* middle-click or control-click */
-			if ((button == 1 && ((state & modifiers) == GDK_CONTROL_MASK)) ||
-			    (button == 2))
-			{
-				new_tab = TRUE;
-			}
-		}
-
-		gdk_event_free (event);
-	}
-
-	if (new_tab)
-	{
-		ephy_shell_new_tab (ephy_shell, window,
-				    ephy_window_get_active_tab (window),
-				    location,
-				    EPHY_NEW_TAB_OPEN_PAGE |
-				    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
-	}
-	else
-	{
-		ephy_window_load_url (window, location);
-	}
+	ephy_window_load_url (window, location);
 }
 
 static void
 zoom_to_level_cb (GtkAction *action, float zoom, EphyWindow *window)
 {
 	ephy_window_set_zoom (window, zoom);
-}
-
-static void
-bookmark_destroy_cb (EphyNode *node,
-		     Toolbar *t)
-{
-	GtkAction *action;
-	char *name;
-	EphyToolbarsModel *model;
-	long id;
-
-	model = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
-
-	id = ephy_node_get_id (node);
-	name = ephy_toolbars_model_get_action_name (model, id);
-	action = gtk_action_group_get_action (t->priv->action_group, name);
-	if (action)
-	{
-		gtk_action_group_remove_action (t->priv->action_group, action);
-	}
-
-	g_free (name);
-}
-
-static void
-toolbar_ensure_action (Toolbar *t,
-		       const char *name)
-{
-	GtkAction *action = NULL;
-	EphyToolbarsModel *model;
-	EphyBookmarks *bookmarks;
-	EphyNode *bmks, *topics;
-
-	model = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	bmks = ephy_bookmarks_get_bookmarks (bookmarks);
-	topics = ephy_bookmarks_get_keywords (bookmarks);
-
-	LOG ("Ensure action %s", name)
-
-	if (g_str_has_prefix (name, "GoBookmark-"))
-	{
-		EphyNode *node;
-
-		node = ephy_toolbars_model_get_node (model,name);
-		g_return_if_fail (node != NULL);
-
-		if (ephy_node_has_child (topics, node))
-		{
-			action = ephy_topic_action_new (name, ephy_node_get_id (node));
-		}
-		else if (ephy_node_has_child (bmks, node))
-		{
-			action = ephy_bookmark_action_new (name, ephy_node_get_id (node));
-		}
-
-		g_return_if_fail (action != NULL);
-
-		g_signal_connect (action, "go_location",
-				  G_CALLBACK (go_location_cb), t->priv->window);
-		gtk_action_group_add_action (t->priv->action_group, action);
-		g_object_unref (action);
-
-		ephy_node_signal_connect_object (node,
-					         EPHY_NODE_DESTROY,
-					         (EphyNodeCallback) bookmark_destroy_cb,
-					         G_OBJECT (t));
-	}
-}
-
-static void
-toolbar_class_init (ToolbarClass *klass)
-{
-        GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-        parent_class = g_type_class_peek_parent (klass);
-
-        object_class->finalize = toolbar_finalize;
-	object_class->set_property = toolbar_set_property;
-	object_class->get_property = toolbar_get_property;
-
-	g_object_class_install_property (object_class,
-                                         PROP_EPHY_WINDOW,
-                                         g_param_spec_object ("window",
-                                                              "Window",
-                                                              "Parent window",
-							      EPHY_TYPE_WINDOW,
-							      G_PARAM_READWRITE |
-							      G_PARAM_CONSTRUCT_ONLY));
-
-	g_type_class_add_private (object_class, sizeof(ToolbarPrivate));
 }
 
 static void
@@ -314,7 +167,7 @@ toolbar_set_property (GObject *object,
 
         switch (prop_id)
         {
-		case PROP_EPHY_WINDOW:
+		case PROP_WINDOW:
 			toolbar_set_window (t, g_value_get_object (value));
 			break;
         }
@@ -326,14 +179,88 @@ toolbar_get_property (GObject *object,
                       GValue *value,
                       GParamSpec *pspec)
 {
-        Toolbar *t = EPHY_TOOLBAR (object);
+	/* no readable properties */
+	g_assert_not_reached ();
+}
 
-        switch (prop_id)
-        {
-                case PROP_EPHY_WINDOW:
-                        g_value_set_object (value, t->priv->window);
-                        break;
-        }
+static void
+toolbar_added_cb (EggToolbarsModel *model,
+		  int position,
+		  EggEditableToolbar *toolbar)
+{
+	const char *t_name;
+
+	t_name = egg_toolbars_model_toolbar_nth (model, position);
+	g_return_if_fail (t_name != NULL);
+
+	egg_editable_toolbar_set_drag_dest
+		(toolbar, drag_targets, n_drag_targets, t_name);
+}
+
+static void
+toolbar_realize (GtkWidget *widget)
+{
+	EggEditableToolbar *eggtoolbar = EGG_EDITABLE_TOOLBAR (widget);
+	Toolbar *toolbar = EPHY_TOOLBAR (widget);
+	EggToolbarsModel *model = egg_editable_toolbar_get_model (eggtoolbar);
+	int i, n_toolbars;
+
+	GTK_WIDGET_CLASS (parent_class)->realize (widget);
+
+	g_signal_connect (model, "toolbar_added",
+			  G_CALLBACK (toolbar_added_cb), toolbar);
+
+	/* now that the toolbar has been constructed, set drag dests */
+	n_toolbars = egg_toolbars_model_n_toolbars (model);
+	for (i = 0; i < n_toolbars; i++)
+	{
+		const char *t_name;
+
+		t_name = egg_toolbars_model_toolbar_nth (model, i);
+		g_return_if_fail (t_name != NULL);
+
+		egg_editable_toolbar_set_drag_dest
+			(eggtoolbar, drag_targets, n_drag_targets, t_name);
+	}	
+}
+
+static void
+toolbar_unrealize (GtkWidget *widget)
+{
+	EggEditableToolbar *eggtoolbar = EGG_EDITABLE_TOOLBAR (widget);
+	Toolbar *toolbar = EPHY_TOOLBAR (widget);
+	EggToolbarsModel *model = egg_editable_toolbar_get_model (eggtoolbar);
+
+	g_signal_handlers_disconnect_by_func
+		(model, G_CALLBACK (toolbar_added_cb), toolbar);
+
+	GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
+}
+
+static void
+toolbar_class_init (ToolbarClass *klass)
+{
+        GObjectClass *object_class = G_OBJECT_CLASS (klass);
+        GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+        parent_class = g_type_class_peek_parent (klass);
+
+        object_class->finalize = toolbar_finalize;
+	object_class->set_property = toolbar_set_property;
+	object_class->get_property = toolbar_get_property;
+	widget_class->realize = toolbar_realize;
+	widget_class->unrealize = toolbar_unrealize;
+
+	g_object_class_install_property (object_class,
+                                         PROP_WINDOW,
+                                         g_param_spec_object ("window",
+                                                              "Window",
+                                                              "Parent window",
+							      EPHY_TYPE_WINDOW,
+							      G_PARAM_WRITABLE |
+							      G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof(ToolbarPrivate));
 }
 
 static void
@@ -453,120 +380,22 @@ toolbar_setup_actions (Toolbar *t)
 }
 
 static void
-action_request_cb (EggEditableToolbar *etoolbar,
-		   char *action_name,
-		   gpointer data)
-{
-	toolbar_ensure_action (EPHY_TOOLBAR (etoolbar), action_name);
-}
-
-static void
-init_bookmarks_toolbar (Toolbar *t)
-{
-	EphyToolbarsModel *model;
-	int i, n_toolbars;
-
-	model = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
-	n_toolbars = egg_toolbars_model_n_toolbars
-		(EGG_TOOLBARS_MODEL (model));
-
-	for (i = 0; i < n_toolbars; i++)
-	{
-		const char *t_name;
-
-		t_name = egg_toolbars_model_toolbar_nth
-			(EGG_TOOLBARS_MODEL (model), i);
-		g_return_if_fail (t_name != NULL);
-
-		if (strcmp (t_name, "BookmarksBar") == 0)
-		{
-			egg_editable_toolbar_set_drag_dest
-				(EGG_EDITABLE_TOOLBAR (t),
-				 drag_targets, n_drag_targets,
-				 t_name);
-			egg_toolbars_model_set_flags
-				(EGG_TOOLBARS_MODEL (model),
-				 EGG_TB_MODEL_NOT_REMOVABLE, i);
-		}
-	}
-}
-
-static void
-init_normal_mode (Toolbar *t)
-{
-	EphyToolbarsModel *model;
-
-	model = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
-
-	g_object_set (G_OBJECT (t),
-		      "ToolbarsModel", model,
-		      NULL);
-	init_bookmarks_toolbar (t);
-}
-
-static void
-init_fullscreen_mode (Toolbar *t)
-{
-	EggToolbarsModel *model;
-	
-	model = EGG_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell, TRUE));
-
-	g_object_set (G_OBJECT (t),
-		      "ToolbarsModel", model,
-		      NULL);
-}
-
-static gboolean
-window_state_event_cb (GtkWidget *widget, GdkEventWindowState *event, Toolbar *t)
-{
-	if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
-	{
-		gboolean fullscreen;
-
-		fullscreen = event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN;
-		if (fullscreen)
-		{
-			init_fullscreen_mode (t);
-		}
-		else
-		{
-			init_normal_mode (t);
-		}
-	}
-
-	return FALSE;
-}
-
-static void
 toolbar_set_window (Toolbar *t, EphyWindow *window)
 {
+	GtkUIManager *manager;
+
 	g_return_if_fail (t->priv->window == NULL);
 
 	t->priv->window = window;
-	t->priv->ui_merge = GTK_UI_MANAGER (window->ui_merge);
+	manager = GTK_UI_MANAGER (window->ui_merge);
 
 	toolbar_setup_actions (t);
-	gtk_ui_manager_insert_action_group (t->priv->ui_merge,
+	gtk_ui_manager_insert_action_group (manager,
 					    t->priv->action_group, 1);
-	g_signal_connect (t, "action_request",
-			  G_CALLBACK (action_request_cb),
-			  NULL);
-	g_signal_connect_object (window, "window-state-event",
-			         G_CALLBACK (window_state_event_cb),
-			         t, 0);
 
 	t->priv->disable_arbitrary_url_notifier_id = eel_gconf_notification_add
 		(CONF_LOCKDOWN_DISABLE_ARBITRARY_URL,
 		 (GConfClientNotifyFunc)arbitrary_url_notifier, t);
-
-	g_object_set (G_OBJECT (t),
-		      "MenuMerge", t->priv->ui_merge,
-		      NULL);
-
-	init_normal_mode (t);
 }
 
 static void
@@ -604,11 +433,6 @@ toolbar_init (Toolbar *t)
 {
 	t->priv = EPHY_TOOLBAR_GET_PRIVATE (t);
 
-	t->priv->window = NULL;
-	t->priv->ui_merge = NULL;
-	t->priv->visibility = TRUE;
-	t->priv->updating_address = FALSE;
-
 	create_spinner (t);
 }
 
@@ -616,9 +440,14 @@ static void
 toolbar_finalize (GObject *object)
 {
 	Toolbar *t = EPHY_TOOLBAR (object);
+	EggEditableToolbar *eggtoolbar = EGG_EDITABLE_TOOLBAR (object);
 
 	eel_gconf_notification_remove
 		(t->priv->disable_arbitrary_url_notifier_id);
+
+	g_signal_handlers_disconnect_by_func
+		(egg_editable_toolbar_get_model (eggtoolbar),
+		 G_CALLBACK (toolbar_added_cb), t);
 
 	g_object_unref (t->priv->action_group);
 
@@ -632,6 +461,8 @@ toolbar_new (EphyWindow *window)
 {
 	return EPHY_TOOLBAR (g_object_new (EPHY_TYPE_TOOLBAR,
 					   "window", window,
+					   "MenuMerge", window->ui_merge,
+					   "ToolbarsModel", ephy_shell_get_toolbars_model (ephy_shell, FALSE),
 					   NULL));
 }
 
@@ -665,9 +496,6 @@ toolbar_set_location (Toolbar *t,
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
-
-	LOG ("toolbar set location %s", address)
-	LOG ("updating is %d", t->priv->updating_address)
 
 	if (t->priv->updating_address) return;
 
@@ -719,55 +547,6 @@ toolbar_update_navigation_actions (Toolbar *t, gboolean back, gboolean forward, 
 	g_object_set (action, "sensitive", forward, NULL);
 	action = gtk_action_group_get_action (action_group, "NavigationUp");
 	g_object_set (action, "sensitive", up, NULL);
-}
-
-void
-toolbar_set_visibility (Toolbar *t,
-			gboolean normal_toolbars,
-			gboolean bmk_toolbars)
-{
-	EphyToolbarsModel *model;
-	int i, n_toolbars;
-
-	model = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
-	n_toolbars = egg_toolbars_model_n_toolbars
-		(EGG_TOOLBARS_MODEL (model));
-
-	for (i = 0; i < n_toolbars; i++)
-	{
-		const char *t_name;
-
-		t_name = egg_toolbars_model_toolbar_nth
-			(EGG_TOOLBARS_MODEL (model), i);
-		g_return_if_fail (t_name != NULL);
-		if (strcmp (t_name, "BookmarksBar") == 0)
-		{
-			if (bmk_toolbars)
-			{
-				egg_editable_toolbar_show
-					(EGG_EDITABLE_TOOLBAR (t), t_name);
-			}
-			else
-			{
-				egg_editable_toolbar_hide
-					(EGG_EDITABLE_TOOLBAR (t), t_name);
-			}
-		}
-		else
-		{
-			if (normal_toolbars)
-			{
-				egg_editable_toolbar_show
-					(EGG_EDITABLE_TOOLBAR (t), t_name);
-			}
-			else
-			{
-				egg_editable_toolbar_hide
-					(EGG_EDITABLE_TOOLBAR (t), t_name);
-			}
-		}
-	}
 }
 
 void
