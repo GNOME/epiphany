@@ -36,10 +36,6 @@
 #include <gtk/gtkmain.h>
 #include <gtk/gtktreeselection.h>
 
-/* Styles for tab labels */
-GtkStyle *loading_text_style = NULL;
-GtkStyle *new_text_style = NULL;
-
 void
 ephy_gui_sanitise_popup_position (GtkMenu *menu,
 				  GtkWidget *widget,
@@ -76,11 +72,16 @@ ephy_gui_menu_position_tree_selection (GtkMenu   *menu,
 	GtkTreeView *tree_view = GTK_TREE_VIEW (user_data);
 	GtkWidget *widget = GTK_WIDGET (user_data);
 	GtkRequisition req;
+	GdkRectangle visible;
 
 	gtk_widget_size_request (GTK_WIDGET (menu), &req);
 	gdk_window_get_origin (widget->window, x, y);
 
 	*x += (widget->allocation.width - req.width) / 2;
+
+	/* Add on height for the treeview title */
+	gtk_tree_view_get_visible_rect (tree_view, &visible);
+	*y += widget->allocation.height - visible.height;
 
 	selection = gtk_tree_view_get_selection (tree_view);
 	selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
@@ -91,7 +92,7 @@ ephy_gui_menu_position_tree_selection (GtkMenu   *menu,
 		gtk_tree_view_get_cell_area (tree_view, selected_rows->data,
 					     NULL, &cell_rect);
 
-		*y += CLAMP (cell_rect.y + cell_rect.height, 0, widget->allocation.height);
+		*y += CLAMP (cell_rect.y + cell_rect.height, 0, visible.height);
 
 		g_list_foreach (selected_rows, (GFunc)gtk_tree_path_free, NULL);
 		g_list_free (selected_rows);
@@ -101,7 +102,7 @@ ephy_gui_menu_position_tree_selection (GtkMenu   *menu,
 }
 
 /**
- * gul_gui_menu_position_under_widget:
+ * ephy_gui_menu_position_under_widget:
  */
 void
 ephy_gui_menu_position_under_widget (GtkMenu   *menu,
