@@ -258,6 +258,8 @@ find_get_info (EphyDialog *dialog)
 	GValue wrap = {0, };
 	FindDialog *find_dialog = FIND_DIALOG(dialog);
 
+	if (find_dialog->priv->constructed == FALSE) return;
+
         /* get the search string from the entry field */
 	ephy_dialog_get_value (dialog, WORD_PROP, &word);
         search_string = g_strdup(g_value_get_string (&word));

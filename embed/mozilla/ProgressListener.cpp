@@ -27,7 +27,6 @@
 #include "ephy-file-helpers.h"
 #include "mozilla-embed-persist.h"
 
-#include <unistd.h>
 #include <libgnome/gnome-exec.h>
 #include <libgnome/gnome-i18n.h>
 
@@ -108,11 +107,8 @@ NS_METHOD GProgressListener::PrivateInit (void)
 	PRInt64 now          = PR_Now ();
 	mLastUpdate          = now;
 
-//	mStartTime           = (mTimeDownloadStarted != 0 ? 
-//				mTimeDownloadStarted : now);
 	mStartTime           = now; //Stupid mozilla race condition
-
-	mElapsed             = now - mStartTime;
+	mElapsed             = 0;
 
 	if (!mNoDialog)
 	{
@@ -403,9 +399,9 @@ NS_IMETHODIMP GProgressListener::
 	{
 		return NS_OK;
 	}
+	mLastUpdate = now;
 
 	/* compute elapsed time */
-	mLastUpdate = now;
 	mElapsed = now - mStartTime;
 
 	/* compute size done */
@@ -427,47 +423,42 @@ NS_IMETHODIMP GProgressListener::
 	PRInt64 currentRate;
 	if (mElapsed)
 	{
-		currentRate = ((PRInt64)(aCurTotalProgress)) * 1000000 / 
-			mElapsed;
+		currentRate = ((PRInt64)(aCurTotalProgress)) * 1000000 / mElapsed;
 	}
 	else
 	{
 		currentRate = 0;
 	}		
 
-	if (!mIsPaused)
+	if (!mIsPaused && currentRate)
 	{
-		if (currentRate)
+		PRFloat64 currentKRate = ((PRFloat64)currentRate)/1024;
+		if (currentKRate != mPriorKRate)
 		{
-			PRFloat64 currentKRate = ((PRFloat64)currentRate)/1024;
-			if (currentKRate != mPriorKRate)
+			if (mRateChanges++ == mRateChangeLimit)
 			{
-				if (mRateChanges++ == mRateChangeLimit)
-				{
-					mPriorKRate = currentKRate;
-					mRateChanges = 0;
-				}
-				else
-				{
-					currentKRate = mPriorKRate;
-				}
+				mPriorKRate = currentKRate;
+				mRateChanges = 0;
 			}
 			else
 			{
-				mRateChanges = 0;
+				currentKRate = mPriorKRate;
 			}
-			
-			 speed = currentKRate;
 		}
+		else
+		{
+			mRateChanges = 0;
+		}
+		
+		 speed = currentKRate;
 	}
 	
 	/* compute time remaining */
 	gint remaining = -1;
 	if (currentRate && (aMaxTotalProgress > 0))
-	 {
-		 remaining = 
-			 (gint)((aMaxTotalProgress - aCurTotalProgress)
-				/currentRate +.5);
+	{
+		 remaining = (gint)((aMaxTotalProgress - aCurTotalProgress)
+				 /currentRate + 0.5);
 	}
 
 	downloader_view_set_download_progress (mDownloaderView,
@@ -608,7 +599,7 @@ nsresult GProgressListener::Abort (void)
 	notify = (mAction == ACTION_OBJECT_NOTIFY);
         mAction = ACTION_NONE;
 
-        if (mIsPaused)
+      	if (mIsPaused)
         {
                 Resume ();
         }
