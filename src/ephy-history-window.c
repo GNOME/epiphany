@@ -609,7 +609,7 @@ ephy_history_window_node_activated_cb (GtkWidget *view,
 
 	window = EPHY_WINDOW (get_target_window (editor));
 	
-	ephy_shell_new_tab (ephy_shell, NULL, NULL, location,
+	ephy_shell_new_tab (ephy_shell, window, NULL, location,
 			    EPHY_NEW_TAB_OPEN_PAGE);
 }
 
