@@ -74,3 +74,8 @@ pref("font.size.variable.tr", 11);
 pref("font.size.variable.x-unicode", 11);
 pref("font.size.variable.x-western", 11);
 
+// protocols
+pref("network.protocol-handler.external.news", true);
+pref("network.protocol-handler.external.mailto", true);
+pref("network.protocol-handler.external.irc", true);
+pref("network.protocol-handler.external.webcal", true);
