@@ -49,6 +49,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-file-chooser.h"
 #include "ephy-stock-icons.h"
+#include "ephy-gui.h"
 #include "ephy-debug.h"
 #include "eel-gconf-extensions.h"
 
@@ -130,7 +131,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 {
 	EphyFileChooser *dialog;
 	gint response;
-	char *filename;
+	char *filename = NULL;
 	nsEmbedCString defaultFile;
 
 	NS_UTF16ToCString (nsEmbedString (aDefaultFile),
@@ -149,13 +150,20 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 					CONF_STATE_SAVE_DIR,
 					EPHY_FILE_FILTER_ALL);
 	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), defaultFile.get());
-	response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+	do
+	{
+		g_free (filename);
+		response = gtk_dialog_run (GTK_DIALOG (dialog));
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+	} while (response == GTK_RESPONSE_ACCEPT
+		 && !ephy_gui_confirm_overwrite_file (GTK_WIDGET (dialog), filename));
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-
 		nsCOMPtr <nsILocalFile> destFile (do_CreateInstance(NS_LOCAL_FILE_CONTRACTID));
+		NS_ENSURE_TRUE (destFile, NS_ERROR_FAILURE);
+
 		destFile->InitWithNativePath (nsEmbedCString (filename));
 		g_free (filename);
 
