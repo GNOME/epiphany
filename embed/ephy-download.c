@@ -219,6 +219,13 @@ ephy_download_get_state (EphyDownload *download)
 	return klass->get_state (download);
 }
 
+char *
+ephy_download_get_mime (EphyDownload *download)
+{
+        EphyDownloadClass *klass = EPHY_DOWNLOAD_GET_CLASS (download);
+        return klass->get_mime (download);
+}
+
 void
 ephy_download_cancel (EphyDownload *download)
 {

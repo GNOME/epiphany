@@ -59,6 +59,7 @@ struct EphyDownloadClass
 
 	char * 		  (* get_source)           (EphyDownload *download);
 	char * 		  (* get_target)           (EphyDownload *download);
+	char * 		  (* get_mime)             (EphyDownload *download);
 	int    		  (* get_percent)          (EphyDownload *download);
 	long   		  (* get_current_progress) (EphyDownload *download);
 	long   		  (* get_total_progress)   (EphyDownload *download);
@@ -83,6 +84,8 @@ char	          *ephy_download_get_name	      (EphyDownload *download);
 char	          *ephy_download_get_source	      (EphyDownload *download);
 
 char              *ephy_download_get_target           (EphyDownload *download);
+
+char              *ephy_download_get_mime             (EphyDownload *download);
 
 int                ephy_download_get_percent          (EphyDownload *download);
 

@@ -253,7 +253,10 @@ MozDownload::GetElapsedTime(PRInt64 *aElapsedTime)
 NS_IMETHODIMP
 MozDownload::GetMIMEInfo(nsIMIMEInfo **aMIMEInfo)
 {
-	return NS_ERROR_NOT_IMPLEMENTED;
+        NS_ENSURE_ARG_POINTER(aMIMEInfo);
+	*aMIMEInfo = mMIMEInfo;
+
+	return NS_OK;
 }
 
 NS_IMETHODIMP

@@ -1,3 +1,25 @@
+2004-07-04  Xan Lopez  <xan@gnome.org>
+
+	* embed/downloader-view.c: (downloader_view_get_type),
+	(downloader_view_class_init), (downloader_view_init),
+	(downloader_view_finalize), (format_interval),
+	(downloader_view_add_download), (downloader_view_build_ui),
+	(downloader_view_remove_download):
+
+        Add a MIME icon in the File column. Some indent fixes.
+        
+	* embed/ephy-download.c: (ephy_download_get_mime):
+	* embed/ephy-download.h:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/mozilla-download.cpp:
+
+        Implement the method to get the MIME of a download and
+        port to nsEmbedString.
+
+	* embed/mozilla/PrintingPromptService.cpp:
+
+        Remove bogus nsString.h header.
+
 2004-07-03  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/bookmarks/ephy-topic-action.c: (can_open_in_tabs),

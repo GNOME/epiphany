@@ -36,18 +36,29 @@
 #include <gtk/gtkliststore.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtkcellrendererpixbuf.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktreeviewcolumn.h>
+#include <gtk/gtkicontheme.h>
+#include <libgnomeui/gnome-icon-lookup.h>
 #include <glib/gi18n.h>
 
 #define CONF_DOWNLOADING_SHOW_DETAILS "/apps/epiphany/dialogs/downloader_show_details"
 
 enum
 {
-	COL_PERCENT,
+	COL_IMAGE,
 	COL_FILE,
+	COL_PERCENT,
 	COL_REMAINING,
 	COL_DOWNLOAD_OBJECT
+};
+
+enum
+{
+	FILE_COL_POS,
+	PERCENT_COL_POS,
+	REMAINING_COL_POS
 };
 
 #define EPHY_DOWNLOADER_VIEW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_DOWNLOADER_VIEW, DownloaderViewPrivate))
@@ -86,11 +97,11 @@ static const
 EphyDialogProperty properties [] =
 {
 	{ "download_manager_dialog",	NULL, PT_NORMAL, 0 },
-        { "clist",			NULL, PT_NORMAL, 0 },
+	{ "clist",			NULL, PT_NORMAL, 0 },
 	{ "pause_button",		NULL, PT_NORMAL, 0 },
 	{ "abort_button",		NULL, PT_NORMAL, 0 },
 
-        { NULL }
+	{ NULL }
 };
 
 static void
@@ -118,27 +129,27 @@ downloader_view_get_type (void)
 {
        static GType downloader_view_type = 0;
 
-        if (downloader_view_type == 0)
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (DownloaderViewClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) downloader_view_class_init,
-                        NULL, /* class_finalize */
-                        NULL, /* class_data */
-                        sizeof (DownloaderView),
-                        0,    /* n_preallocs */
-                        (GInstanceInitFunc) downloader_view_init
-                };
+	if (downloader_view_type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (DownloaderViewClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			(GClassInitFunc) downloader_view_class_init,
+			NULL, /* class_finalize */
+			NULL, /* class_data */
+			sizeof (DownloaderView),
+			0,    /* n_preallocs */
+			(GInstanceInitFunc) downloader_view_init
+		};
 
-                downloader_view_type = g_type_register_static (EPHY_TYPE_DIALOG,
-                                                               "DownloaderView",
-                                                               &our_info, 0);
-        }
+		downloader_view_type = g_type_register_static (EPHY_TYPE_DIALOG,
+							       "DownloaderView",
+							       &our_info, 0);
+	}
 
-        return downloader_view_type;
+	return downloader_view_type;
 }
 
 static void
@@ -146,9 +157,9 @@ downloader_view_class_init (DownloaderViewClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-        parent_class = g_type_class_peek_parent (klass);
+	parent_class = g_type_class_peek_parent (klass);
 
-        object_class->finalize = downloader_view_finalize;
+	object_class->finalize = downloader_view_finalize;
 
 	g_type_class_add_private (object_class, sizeof(DownloaderViewPrivate));
 }
@@ -175,7 +186,7 @@ show_status_icon (DownloaderView *dv)
 static void
 downloader_view_init (DownloaderView *dv)
 {
-        dv->priv = EPHY_DOWNLOADER_VIEW_GET_PRIVATE (dv);
+	dv->priv = EPHY_DOWNLOADER_VIEW_GET_PRIVATE (dv);
 
 	dv->priv->downloads_hash = g_hash_table_new_full
 		(g_direct_hash, g_direct_equal, NULL,
@@ -197,7 +208,7 @@ downloader_view_finalize (GObject *object)
 	g_hash_table_destroy (dv->priv->downloads_hash);
 	g_object_unref (embed_shell);
 
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 DownloaderView *
@@ -213,7 +224,7 @@ downloader_view_new (void)
 static char *
 format_interval (long interval)
 {
-	int secs, hours, mins;                                                                                                                     
+	int secs, hours, mins;														     
 	secs = (int)(interval + .5);
 	hours = secs / 3600;
 	secs -= hours * 3600;
@@ -221,11 +232,11 @@ format_interval (long interval)
 	secs -= mins * 60;
 
 	if (hours)
-        {
+	{
 		return g_strdup_printf (_("%u:%02u.%02u"), hours, mins, secs);
-        }
-        else
-        {
+	}
+	else
+	{
 		return g_strdup_printf (_("%02u.%02u"), mins, secs);
 	}
 }
@@ -436,6 +447,9 @@ downloader_view_add_download (DownloaderView *dv,
 	GtkTreeIter iter;
 	GtkTreeSelection *selection;
 	GtkTreePath *path;
+	GtkIconTheme *theme;
+	GdkPixbuf *pixbuf;
+	char *mime, *icon_name;
 
 	g_object_ref (download);
 
@@ -463,6 +477,33 @@ downloader_view_add_download (DownloaderView *dv,
 	g_signal_connect_object (download, "changed",
 				 G_CALLBACK (download_changed_cb), dv, 0);
 
+	mime =  ephy_download_get_mime (download);
+	g_return_if_fail (mime != NULL);
+	theme = gtk_icon_theme_get_default ();
+	icon_name = gnome_icon_lookup (theme, NULL, NULL, NULL, NULL,
+				       mime, GNOME_ICON_LOOKUP_FLAGS_NONE, NULL);
+	g_free (mime);
+	
+	if (!g_path_is_absolute (icon_name))
+	{
+		GtkIconInfo *icon_info;
+
+		icon_info = gtk_icon_theme_lookup_icon (theme, icon_name, 0, 0);
+		g_free (icon_name);
+
+		g_return_if_fail (icon_info != NULL);
+
+		icon_name = g_strdup (gtk_icon_info_get_filename (icon_info));
+		gtk_icon_info_free (icon_info);
+	}
+	
+	pixbuf = gdk_pixbuf_new_from_file (icon_name, NULL);
+	g_free (icon_name);
+        g_return_if_fail (pixbuf != NULL);
+	gtk_list_store_set (GTK_LIST_STORE (dv->priv->model),
+			    &iter, COL_IMAGE, pixbuf, -1);
+	g_object_unref (pixbuf);
+
 	ephy_dialog_show (EPHY_DIALOG (dv));
 }
 
@@ -484,9 +525,9 @@ downloader_view_build_ui (DownloaderView *dv)
 	GtkTreeSelection *selection;
 
 	ephy_dialog_construct (d,
-                               properties,
+			       properties,
 			       ephy_file ("epiphany.glade"),
-                               "download_manager_dialog",
+			       "download_manager_dialog",
 			       NULL);
 
 	/* lookup needed widgets */
@@ -498,9 +539,10 @@ downloader_view_build_ui (DownloaderView *dv)
 	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview)),
 				     GTK_SELECTION_BROWSE);
 
-	liststore = gtk_list_store_new (4,
-					G_TYPE_INT,
+	liststore = gtk_list_store_new (5,
+					GDK_TYPE_PIXBUF,
 					G_TYPE_STRING,
+					G_TYPE_INT,
 					G_TYPE_STRING,
 					G_TYPE_OBJECT);
 
@@ -509,43 +551,56 @@ downloader_view_build_ui (DownloaderView *dv)
 	g_object_unref (liststore);
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(priv->treeview),
 					   TRUE);
-
-	renderer = ephy_cell_renderer_progress_new ();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW(priv->treeview),
-						     0, _("%"),
-						     renderer,
-						     "value", 0,
-						     NULL);
-	column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview), 0);
-        gtk_tree_view_column_set_reorderable (column, TRUE);
-	gtk_tree_view_column_set_resizable (column, TRUE);
-        gtk_tree_view_column_set_sort_column_id (column, COL_PERCENT);
-
+	/* Icon and filename column*/
+	column = gtk_tree_view_column_new ();
+	gtk_tree_view_column_set_title (column, _("File"));
+	renderer = gtk_cell_renderer_pixbuf_new ();
+	g_object_set (renderer, "xpad", 3, "ypad", 3, NULL);
+	gtk_tree_view_column_pack_start (column, renderer, FALSE);
+	gtk_tree_view_column_set_attributes (column, renderer,
+					    "pixbuf", COL_IMAGE,
+					    NULL);
 	renderer = gtk_cell_renderer_text_new ();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW(priv->treeview),
-						     COL_FILE, _("File"),
-						     renderer,
-						     "text", COL_FILE,
-						     NULL);
-	column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview),
-					   COL_FILE);
-        gtk_tree_view_column_set_expand (column, TRUE);
-        gtk_tree_view_column_set_reorderable (column, TRUE);
+	gtk_tree_view_column_pack_start (column, renderer, TRUE);
+	gtk_tree_view_column_set_attributes (column, renderer,
+					     "text", COL_FILE,
+					     NULL);
+	gtk_tree_view_insert_column (GTK_TREE_VIEW (priv->treeview), column, FILE_COL_POS);
+	gtk_tree_view_column_set_expand (column, TRUE);
+	gtk_tree_view_column_set_reorderable (column, TRUE);
 	gtk_tree_view_column_set_resizable (column, TRUE);
-        gtk_tree_view_column_set_sort_column_id (column, COL_FILE);
+	gtk_tree_view_column_set_sort_column_id (column, COL_FILE);
+	gtk_tree_view_column_set_spacing (column, 3);
 
+	/* Percent column */
+	renderer = ephy_cell_renderer_progress_new ();
+	g_object_set (renderer, "xalign", 0.5, NULL);
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW(priv->treeview),
+						     PERCENT_COL_POS, _("%"),
+						     renderer,
+						     "value", COL_PERCENT,
+						     NULL);
+	column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview), PERCENT_COL_POS);
+	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
+	gtk_tree_view_column_set_fixed_width (column, 200);
+	gtk_tree_view_column_set_reorderable (column, TRUE);
+	gtk_tree_view_column_set_resizable (column, TRUE);
+	gtk_tree_view_column_set_sort_column_id (column, COL_PERCENT);
+
+	/* Remainng time column */
 	renderer = gtk_cell_renderer_text_new ();
 	g_object_set (renderer, "xalign", 0.5, NULL);
 	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW(priv->treeview),
-						     COL_REMAINING, _("Remaining"),
+						     REMAINING_COL_POS, _("Remaining"),
 						     renderer,
 						     "text", COL_REMAINING,
 						     NULL);
+
 	column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview),
-					   COL_REMAINING);
-        gtk_tree_view_column_set_reorderable (column, TRUE);
+					   REMAINING_COL_POS);
+	gtk_tree_view_column_set_reorderable (column, TRUE);
 	gtk_tree_view_column_set_resizable (column, TRUE);
-        gtk_tree_view_column_set_sort_column_id (column, COL_REMAINING);
+	gtk_tree_view_column_set_sort_column_id (column, COL_REMAINING);
 
 	priv->model = GTK_TREE_MODEL (liststore);
 
@@ -610,18 +665,18 @@ downloader_view_remove_download (DownloaderView *dv, EphyDownload *download)
 	gtk_tree_path_free (path);
 
 	row_ref = NULL;
-        iter2 = iter;			 
+	iter2 = iter;			 
 	if (gtk_tree_model_iter_next (GTK_TREE_MODEL (dv->priv->model), &iter))
-        {
-        	path = gtk_tree_model_get_path  (GTK_TREE_MODEL (dv->priv->model), &iter);
-        	row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (dv->priv->model), path);
-        }
-        else
-        {
-        	path = gtk_tree_model_get_path (GTK_TREE_MODEL (dv->priv->model), &iter2);
-        	if (gtk_tree_path_prev (path))
-        	{
-        		row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (dv->priv->model),
+	{
+		path = gtk_tree_model_get_path  (GTK_TREE_MODEL (dv->priv->model), &iter);
+		row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (dv->priv->model), path);
+	}
+	else
+	{
+		path = gtk_tree_model_get_path (GTK_TREE_MODEL (dv->priv->model), &iter2);
+		if (gtk_tree_path_prev (path))
+		{
+			row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (dv->priv->model),
 							      path);
 		}
 	}
@@ -642,7 +697,7 @@ downloader_view_remove_download (DownloaderView *dv, EphyDownload *download)
 		if (path != NULL)
 		{
 			gtk_tree_view_set_cursor (GTK_TREE_VIEW (dv->priv->treeview),
-					          path, NULL, FALSE);
+						  path, NULL, FALSE);
 			gtk_tree_path_free (path);
 		}
 		gtk_tree_row_reference_free (row_ref);

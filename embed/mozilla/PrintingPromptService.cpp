@@ -36,7 +36,6 @@
 
 #include <nsIPrintSettings.h>
 #include <nsCOMPtr.h>
-#include <nsString.h>
 #include <nsIServiceManager.h>
 
 /* Implementation file */

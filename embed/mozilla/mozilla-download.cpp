@@ -26,7 +26,7 @@
 
 #include "ephy-debug.h"
 
-#include "nsString.h"
+#include <nsEmbedString.h>
 
 static void
 mozilla_download_class_init (MozillaDownloadClass *klass);
@@ -89,7 +89,7 @@ impl_get_target (EphyDownload *download)
 
 	mozDownload->GetTargetFile (getter_AddRefs (targetFile));
 
-	nsCAutoString tempPathStr;
+	nsEmbedCString tempPathStr;
 	targetFile->GetNativePath (tempPathStr);
 
 	return g_strdup (tempPathStr.get ());
@@ -100,7 +100,7 @@ impl_get_source (EphyDownload *download)
 {
 	nsCOMPtr<nsIURI> uri;
 	MozDownload *mozDownload;
-	nsCString spec;
+	nsEmbedCString spec;
 
 	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
 
@@ -173,6 +173,22 @@ impl_get_elapsed_time (EphyDownload *download)
 	mozDownload->GetElapsedTime (&elapsed);
 
 	return elapsed / 1000000;
+}
+
+static char*
+impl_get_mime (EphyDownload *download)
+{
+	MozDownload *mozDownload;
+	nsCOMPtr<nsIMIMEInfo> mime;
+        nsEmbedCString mimeType;
+
+	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
+
+	mozDownload->GetMIMEInfo (getter_AddRefs(mime));
+        if (mime == nsnull) return NULL;
+        mime->GetMIMEType(mimeType);
+
+	return g_strdup (mimeType.get());
 }
 
 static void 
@@ -260,6 +276,7 @@ mozilla_download_class_init (MozillaDownloadClass *klass)
 	download_class->get_target = impl_get_target;
 	download_class->get_source = impl_get_source;
 	download_class->get_state = impl_get_state;
+        download_class->get_mime = impl_get_mime;
 	download_class->cancel = impl_cancel;
 	download_class->pause = impl_pause;
 	download_class->resume = impl_resume;
