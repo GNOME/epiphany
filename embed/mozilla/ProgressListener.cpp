@@ -594,15 +594,8 @@ nsresult GProgressListener::Resume (void)
 nsresult GProgressListener::Abort (void)
 {
 	PRBool notify;
-	
 	notify = (mAction == ACTION_OBJECT_NOTIFY);
         mAction = ACTION_NONE;
-
-      	if (mIsPaused)
-        {
-                Resume ();
-        }
-
         mAbort = PR_TRUE;
 
         if (mObserver)
