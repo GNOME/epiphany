@@ -355,6 +355,26 @@ set_item_drag_source (GtkWidget *item,
     }
 }
 
+static gboolean
+enter_notify_cb (GtkWidget *widget, GdkEventCrossing *event)
+{
+	GdkCursor *cursor;
+
+	cursor = gdk_cursor_new (GDK_FLEUR);
+	gdk_window_set_cursor (widget->window, cursor);
+	gdk_cursor_unref (cursor);
+
+	return TRUE;
+}
+
+static gboolean
+leave_notify_cb (GtkWidget *widget, GdkEventCrossing *event)
+{
+	gdk_window_set_cursor (widget->window, NULL);
+
+	return TRUE;
+}
+
 static GtkWidget *
 create_item (EggEditableToolbar *t,
 	     EggToolbarsModel   *model,
@@ -384,6 +404,10 @@ create_item (EggEditableToolbar *t,
     }
 
   gtk_widget_show (item);
+  g_signal_connect (item, "enter_notify_event",
+		    G_CALLBACK (enter_notify_cb), t);
+  g_signal_connect (item, "leave_notify_event",
+		    G_CALLBACK (leave_notify_cb), t);
   g_signal_connect (item, "drag_data_get",
 		    G_CALLBACK (drag_data_get_cb), t);
   g_signal_connect (item, "drag_data_delete",
