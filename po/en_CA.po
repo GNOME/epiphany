@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-07 21:58-0500\n"
-"PO-Revision-Date: 2004-12-07777777-0400\n"
+"POT-Creation-Date: 2004-12-12 02:32-0500\n"
+"PO-Revision-Date: 2004-12-12-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -1014,6 +1014,14 @@ msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d download"
 msgstr[1] "%d downloads"
+
+#: embed/downloader-view.c:487 embed/downloader-view.c:496
+msgid "download status|Unknown"
+msgstr "download status|Unknown"
+
+#: embed/downloader-view.c:490
+msgid "download status|Failed"
+msgstr "download status|Failed"
 
 #: embed/downloader-view.c:550 src/bookmarks/ephy-bookmarks-editor.c:804
 msgid "File"
@@ -3481,6 +3489,23 @@ msgstr "Vietnamese"
 #: src/prefs-dialog.c:333
 msgid "Walloon"
 msgstr "Walloon"
+
+#. translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#: src/prefs-dialog.c:1011 src/prefs-dialog.c:1017
+#, c-format
+msgid "language|%s (%s)"
+msgstr "language|%s (%s)"
+
+#. translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: src/prefs-dialog.c:1026 src/prefs-dialog.c:1384
+#, c-format
+msgid "language|User defined (%s)"
+msgstr "language|User defined (%s)"
 
 #: src/prefs-dialog.c:1049
 #, c-format
