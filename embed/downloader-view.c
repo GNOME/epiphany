@@ -588,6 +588,7 @@ downloader_view_add_download (DownloaderView *dv,
 	GtkTreeIter iter;
 	DownloadDetails *details;
 	GtkTreeSelection *selection;
+	GtkTreePath *path;
 
 	details = g_new0 (DownloadDetails, 1);
 	details->filename = g_strdup (filename);
@@ -609,10 +610,10 @@ downloader_view_add_download (DownloaderView *dv,
 	gtk_list_store_append (GTK_LIST_STORE (dv->priv->model),
 			       &iter);
 
+	path =  gtk_tree_model_get_path (GTK_TREE_MODEL (dv->priv->model), &iter);
 	details->ref = gtk_tree_row_reference_new
-		(GTK_TREE_MODEL (dv->priv->model),
-		 gtk_tree_model_get_path
-		 (GTK_TREE_MODEL (dv->priv->model), &iter));
+				(GTK_TREE_MODEL (dv->priv->model),path);
+	gtk_tree_path_free (path);
 
 	gtk_list_store_set (GTK_LIST_STORE (dv->priv->model),
 			    &iter,
