@@ -1,5 +1,14 @@
 2004-03-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmark-action.c: (smart_child_added_cb),
+	(smart_child_removed_cb), (ephy_bookmark_action_init):
+
+	Correctly sync the smarturl property of EphyBookmarksAction when
+	it changes. Fixes incorrect show/hide of the entry on the bookmarks
+	toolbar.
+
+2004-03-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-bookmarks.c: (update_has_smart_address):
 
 	When changing a bookmark address and it was a smart bookmark but

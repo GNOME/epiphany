@@ -525,6 +525,29 @@ bookmarks_child_changed_cb (EphyNode *node,
 }
 
 static void
+smart_child_added_cb (EphyNode *smart_bmks,
+		      EphyNode *child,
+		      EphyBookmarkAction *action)
+{
+	if (action->priv->bookmark_id == ephy_node_get_id (child))
+	{
+		g_object_set (action, "smarturl", TRUE, NULL);
+	}
+}
+
+static void
+smart_child_removed_cb (EphyNode *smart_bmks,
+			EphyNode *child,
+			guint old_index,
+			EphyBookmarkAction *action)
+{
+	if (action->priv->bookmark_id == ephy_node_get_id (child))
+	{
+		g_object_set (action, "smarturl", FALSE, NULL);
+	}
+}
+
+static void
 ephy_bookmark_action_init (EphyBookmarkAction *action)
 {
 	EphyBookmarks *bookmarks;
@@ -540,6 +563,13 @@ ephy_bookmark_action_init (EphyBookmarkAction *action)
 	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_CHANGED,
 				         (EphyNodeCallback) bookmarks_child_changed_cb,
 				         G_OBJECT (action));
+	node = ephy_bookmarks_get_smart_bookmarks (bookmarks);
+	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_ADDED,
+					 (EphyNodeCallback) smart_child_added_cb,
+					 G_OBJECT (action));
+	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_REMOVED,
+					 (EphyNodeCallback) smart_child_removed_cb,
+					 G_OBJECT (action));
 }
 
 GtkAction *
