@@ -77,6 +77,9 @@ enum
 };
 
 static void
+ephy_tab_set_favicon (EphyTab *tab,
+		      GdkPixbuf *favicon);
+static void
 ephy_tab_favicon_cb (EphyEmbed *embed,
 		     const char *url,
 		     EphyTab *tab);
@@ -447,7 +450,7 @@ ephy_tab_set_visibility (EphyTab *tab,
 	tab->priv->visibility = visible;
 }
 
-void
+static void
 ephy_tab_set_favicon (EphyTab *tab, 
 		      GdkPixbuf *favicon)
 {
