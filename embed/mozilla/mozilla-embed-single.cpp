@@ -330,7 +330,7 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	/* set default search engine */
 	pref->SetCharPref ("keyword.URL", "http://www.google.com/search?q=");
 	pref->SetBoolPref ("keyword.enabled", PR_TRUE);
-	pref->SetBoolPref ("security.checkloaduri", PR_FALSE);
+	pref->SetBoolPref ("security.checkloaduri", PR_TRUE);
 
 	/* dont allow xpi installs from epiphany, there are crashes */
 	pref->SetBoolPref ("xpinstall.enabled", PR_FALSE);
