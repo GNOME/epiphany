@@ -34,6 +34,7 @@ libephy_la_SOURCES = \
 	ephy-gobject-misc.h			\
 	ephy-gui.c				\
 	ephy-gui.h				\
+	ephy-langs.h				\
 	ephy-marshal.c				\
 	ephy-marshal.h				\
 	ephy-node.c				\

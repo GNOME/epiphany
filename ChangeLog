@@ -1,5 +1,17 @@
 2003-05-26  Christian Persch  <chpe@cvs.gnome.org>
 
+* embed/mozilla/mozilla-i18n.h:
+* embed/mozilla/mozilla-i18n.c:
+* embed/mozilla/mozilla-embed-single.c: (fill_charsets_list),
+(impl_get_charset_titles):
+* embed/mozilla/mozilla-notifiers.c: (mozilla_notifiers_init):
+* lib/ephy-langs.h:
+* src/prefs-dialog.c: (setup_font_menu):
+
+Refactored the charset and language groups strings.
+
+2003-05-26  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/prefs-dialog.c: (free_lang_item), (prefs_dialog_finalize),
 	(compare_lang_items), (find_lang_code), (create_languages_list),
 	(general_prefs_new_language_menu), (language_menu_changed_cb),

@@ -27,7 +27,8 @@
 #include "MozRegisterComponents.h"
 #include "ephy-prefs.h"
 #include "ephy-embed-prefs.h"
-#include "mozilla-i18n.h"
+#include "ephy-langs.h"
+#include "ephy-debug.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -348,7 +349,7 @@ void
 mozilla_notifiers_init(EphyEmbedSingle *single) 
 {
 	GConfClient *client = eel_gconf_client_get_global ();
-	int i;
+	guint i;
 
 	for (i = 0; conversion_table[i].gconf_key != NULL; i++)
 	{
@@ -386,14 +387,14 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 	}
 
 	/* fonts notifiers */
-	for (i = 0; i < LANG_ENC_NUM; i++)
+	for (i = 0; i < n_lang_encode_items; i++)
 	{
-		int k;
+		guint k;
 		char *types [] = { "serif", "sans-serif", "cursive", "fantasy", "monospace" };
 		char key[255];
 		char *info;
 		
-		for (k = 0; k < 5; k++)
+		for (k = 0; k < G_N_ELEMENTS (types); k++)
 		{
 			info = g_strconcat (types[k], ".", lang_encode_item[i], NULL);
 			

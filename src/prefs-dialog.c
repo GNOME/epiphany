@@ -28,6 +28,7 @@
 #include "ephy-gui.h"
 #include "eel-gconf-extensions.h"
 #include "language-editor.h"
+#include "ephy-langs.h"
 
 #include <bonobo/bonobo-i18n.h>
 #include <gtk/gtkframe.h>
@@ -70,26 +71,6 @@ prefs_homepage_blank_button_clicked_cb (GtkWidget *button,
 void
 prefs_language_more_button_clicked_cb (GtkWidget *button,
 				       EphyDialog *dialog);
-
-/* FIXME duped in mozilla/ */
-const
-char *lang_encode[] =
-{
-        "x-western",
-        "x-central-euro",
-        "ja",
-        "zh-TW",
-        "zh-CN",
-        "ko",
-        "x-cyrillic",
-        "x-baltic",
-        "el",
-        "tr",
-        "x-unicode",
-        "th",
-        "he",
-        "ar"
-};
 
 static const
 struct
@@ -399,12 +380,12 @@ setup_font_menu (PrefsDialog *dialog,
 		(EPHY_EMBED_SHELL (ephy_shell));
 
 	ephy_embed_single_get_font_list (single,
-					 lang_encode[dialog->priv->language],
+					 lang_encode_item[dialog->priv->language],
 					 type, &fonts, &default_font);
 
 	/* Get the default font */
 	sprintf (key, "%s_%s_%s", CONF_RENDERING_FONT, type,
-		 lang_encode[dialog->priv->language]);
+		 lang_encode_item[dialog->priv->language]);
 	name = eel_gconf_get_string (key);
 	if (name == NULL)
 	{
@@ -454,7 +435,7 @@ save_font_menu (PrefsDialog *dialog,
 
 	sprintf (key, "%s_%s_%s", CONF_RENDERING_FONT,
 		 fonts_types[type],
-		 lang_encode[dialog->priv->language]);
+		 lang_encode_item[dialog->priv->language]);
 	eel_gconf_set_string (key, name);
 	g_free (name);
 }
@@ -510,7 +491,7 @@ size_spinbutton_changed_cb (GtkWidget *spin, PrefsDialog *dialog)
 
 	sprintf (key, "%s_%s",
 		 size_prefs[type],
-		 lang_encode[dialog->priv->language]);
+		 lang_encode_item[dialog->priv->language]);
 	eel_gconf_set_integer (key, gtk_spin_button_get_value (GTK_SPIN_BUTTON (spin)));
 }
 
@@ -554,7 +535,7 @@ setup_size_control (PrefsDialog *dialog,
 	int size;
 
 	sprintf (key, "%s_%s", pref,
-		 lang_encode[dialog->priv->language]);
+		 lang_encode_item[dialog->priv->language]);
 	size = eel_gconf_get_integer (key);
 
 	if (size == 0) size = default_size;

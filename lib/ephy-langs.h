@@ -16,45 +16,32 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <glib.h>
 
 G_BEGIN_DECLS
 
-#define LANG_ENC_NUM 14
-
-typedef enum {
-	LG_ARABIC,
-	LG_BALTIC,
-	LG_CENTRAL_EUROPEAN,
-	LG_CHINESE,
-	LG_CYRILLIC,
-	LG_GREEK,
-	LG_HEBREW,
-	LG_INDIAN,
-	LG_JAPANESE, 
-	LG_KOREAN,
-	LG_TURKISH,
-	LG_UNICODE,
-	LG_VIETNAMESE,
-	LG_WESTERN,
-	LG_OTHER
-} LanguageGroup;
-
-typedef struct {
-	char *charset_title;
-	char *charset_name;
-	LanguageGroup lgroup;
-} CharsetInfoPriv;
-
-/* language groups names */
-extern const char *lgroups[];
-/* translated charset titles */
-extern const CharsetInfoPriv charset_trans_array[];
-
-/* FIXME */
-extern const char *lang_encode_name[LANG_ENC_NUM];
-extern const char *lang_encode_item[LANG_ENC_NUM];
-
-gint get_translated_cscount (void);
+/* language encoding groups */
+static const gchar *lang_encode_item[] =
+{
+	"x-western",
+	"x-central-euro",
+	"ja",
+	"zh-TW",
+	"zh-CN",
+	"ko",
+	"x-cyrillic",
+	"x-baltic",
+	"el",
+	"tr",
+	"x-unicode",
+	"th",
+	"he",
+	"ar"
+};
+static const guint n_lang_encode_items = G_N_ELEMENTS (lang_encode_item);
 
 G_END_DECLS
