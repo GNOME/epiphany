@@ -782,7 +782,9 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	/* Bookmarks */
 	eb->priv->bookmarks = ephy_node_new_with_id (db, BOOKMARKS_NODE_ID);
 	g_value_init (&value, G_TYPE_STRING);
-	/* translators: this topic contains all bookmarks */
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
+	/* Translators: this topic contains all bookmarks */
 	g_value_set_string (&value, Q_("bookmarks|All"));
 	ephy_node_set_property (eb->priv->bookmarks,
 			        EPHY_NODE_KEYWORD_PROP_NAME,
@@ -816,7 +818,9 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	/* Favorites */
 	eb->priv->favorites = ephy_node_new_with_id (db, FAVORITES_NODE_ID);
 	g_value_init (&value, G_TYPE_STRING);
-	/* translators: this topic contains the most used bookmarks */
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
+	/* Translators: this topic contains the most used bookmarks */
 	g_value_set_string (&value, Q_("bookmarks|Most Visited"));
 	ephy_node_set_property (eb->priv->favorites,
 			        EPHY_NODE_KEYWORD_PROP_NAME,
@@ -833,7 +837,9 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	/* Not categorized */
 	eb->priv->notcategorized = ephy_node_new_with_id (db, BMKS_NOTCATEGORIZED_NODE_ID);
 	g_value_init (&value, G_TYPE_STRING);
-	/* translators: this topic contains the not categorized bookmarks */
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
+	/* Translators: this topic contains the not categorized bookmarks */
 	g_value_set_string (&value, Q_("bookmarks|Not Categorized"));
 	ephy_node_set_property (eb->priv->notcategorized,
 			        EPHY_NODE_KEYWORD_PROP_NAME,
