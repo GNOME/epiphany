@@ -670,7 +670,7 @@ toolbar_update_favicon (Toolbar *t)
 	if (t->priv->favicon)
 	{
 		ephy_embed_favicon_set_embed (EPHY_EMBED_FAVICON (t->priv->favicon),
-						ephy_window_get_active_embed (t->priv->window));
+				              ephy_window_get_active_embed (t->priv->window));
 	}
 }
 

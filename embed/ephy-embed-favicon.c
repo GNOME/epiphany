@@ -119,15 +119,25 @@ ephy_embed_favicon_finalize (GObject *object)
 }
 
 static void
-location_changed_cb (EphyEmbed *embed,
-	             EphyEmbedFavicon *favicon)
+update_url (EphyEmbedFavicon *favicon)
 {
 	char *location;
 
-	ephy_embed_get_location (embed, TRUE, &location);
-	ephy_favicon_set_url (EPHY_FAVICON (favicon), location);
+	ephy_embed_get_location (favicon->priv->embed,
+				 TRUE, &location);
 
-	g_free (location);
+	if (location)
+	{
+		ephy_favicon_set_url (EPHY_FAVICON (favicon), location);
+		g_free (location);
+	}
+}
+
+static void
+location_changed_cb (EphyEmbed *embed,
+	             EphyEmbedFavicon *favicon)
+{
+	update_url (favicon);
 }
 
 static void
@@ -181,6 +191,7 @@ ephy_embed_favicon_set_property (GObject *object,
 					         G_CALLBACK (location_changed_cb),
 					         favicon,
 						 0);
+			update_url (favicon);
 		}
 		break;
 	default:
