@@ -1,5 +1,22 @@
 2003-07-06  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* embed/mozilla/ExternalProtocolHandlers.cpp:
+	* embed/mozilla/ExternalProtocolHandlers.h:
+	* embed/mozilla/FtpProtocolHandler.cpp:
+	* embed/mozilla/FtpProtocolHandler.h:
+	* embed/mozilla/IRCProtocolHandler.cpp:
+	* embed/mozilla/IRCProtocolHandler.h:
+	* embed/mozilla/MailtoProtocolHandler.cpp:
+	* embed/mozilla/MailtoProtocolHandler.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozRegisterComponents.cpp:
+
+	Merge external protocols in one file (implementation
+	is just one macro).
+	Add a news:// handler.
+
+2003-07-06  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* lib/egg/eggtreemodelfilter.c:
 
 	Patch by kris to speed it up.

@@ -16,8 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "IRCProtocolHandler.h"
+#include "ExternalProtocolHandlers.h"
 
-/* Implementation file */
 NS_IMPL_ISUPPORTS2 (GIRCProtocolHandler, nsIProtocolHandler, nsIContentHandler)
-
+NS_IMPL_ISUPPORTS2 (GFtpProtocolHandler, nsIProtocolHandler, nsIContentHandler)
+NS_IMPL_ISUPPORTS2 (GMailtoProtocolHandler, nsIProtocolHandler, nsIContentHandler)
+NS_IMPL_ISUPPORTS2 (GNewsProtocolHandler, nsIProtocolHandler, nsIContentHandler)

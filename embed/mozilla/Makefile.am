@@ -56,18 +56,14 @@ libephymozillaembed_la_SOURCES = 	\
 	EphyWrapper.h	                \
 	EventContext.cpp                \
 	EventContext.h                  \
+	ExternalProtocolHandlers.cpp	\
+	ExternalProtocolHandlers.h	\
 	ExternalProtocolService.cpp     \
 	ExternalProtocolService.h	\
 	FilePicker.cpp			\
 	FilePicker.h                    \
-	FtpProtocolHandler.cpp          \
-	FtpProtocolHandler.h            \
 	GlobalHistory.cpp               \
 	GlobalHistory.h                 \
-	IRCProtocolHandler.cpp          \
-	IRCProtocolHandler.h            \
-	MailtoProtocolHandler.cpp       \
-	MailtoProtocolHandler.h         \
 	MozillaPrivate.cpp		\
 	MozillaPrivate.h		\
 	MozRegisterComponents.cpp       \

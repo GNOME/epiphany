@@ -22,10 +22,8 @@
 
 #include "ContentHandler.h"
 #include "FilePicker.h"
-#include "FtpProtocolHandler.h"
 #include "GlobalHistory.h"
-#include "IRCProtocolHandler.h"
-#include "MailtoProtocolHandler.h"
+#include "ExternalProtocolHandlers.h"
 #include "PrintingPromptService.h"
 #include "ProgressListener.h"
 #include "ExternalProtocolService.h"
@@ -46,6 +44,7 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(MozGlobalHistory)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GPrintingPromptService)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GIRCProtocolHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GFtpProtocolHandler)
+NS_GENERIC_FACTORY_CONSTRUCTOR(GNewsProtocolHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GExternalProtocolService)
 
 static const nsModuleComponentInfo sAppComps[] = {
@@ -102,6 +101,18 @@ static const nsModuleComponentInfo sAppComps[] = {
 		G_IRC_PROTOCOL_CID,
 		G_IRC_CONTENT_CONTRACTID,
 		GIRCProtocolHandlerConstructor
+	},
+	{
+		G_NEWS_PROTOCOL_CLASSNAME,
+		G_NEWS_PROTOCOL_CID,
+		G_NEWS_PROTOCOL_CONTRACTID,
+		GNewsProtocolHandlerConstructor
+	},
+	{
+		G_NEWS_CONTENT_CLASSNAME,
+		G_NEWS_PROTOCOL_CID,
+		G_NEWS_CONTENT_CONTRACTID,
+		GNewsProtocolHandlerConstructor
 	},
 	{
 		G_FTP_CONTENT_CLASSNAME,
