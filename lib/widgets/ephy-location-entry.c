@@ -559,7 +559,8 @@ ephy_location_entry_autocompletion_sources_changed_cb (EphyAutocompletion *aw,
 	LOG ("in ephy_location_entry_autocompletion_sources_changed_cb")
 
         if (p->show_alternatives_timeout == 0
-	    && p->autocompletion_window_visible)
+	    && p->autocompletion_window_visible
+	    && GTK_WIDGET_VISIBLE (p->autocompletion_window))
 	{
 		p->show_alternatives_timeout = g_timeout_add
 			(SHOW_ALTERNATIVES_DELAY,
