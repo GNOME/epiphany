@@ -42,7 +42,8 @@ static void
 impl_destruct (EphyDialog *dialog);
 static void
 impl_show (EphyDialog *dialog);
-
+static void
+find_get_info (EphyDialog *dialog);
 
 /* Glade callbacks */
 void find_close_button_clicked_cb (GtkWidget *button, EphyDialog *dialog);
@@ -209,6 +210,8 @@ sync_embed (FindDialog *dialog, GParamSpec *pspec, gpointer data)
 	LOG ("EphyEmbed changed")
 
 	set_navigation_flags (dialog, FIND_CAN_GO_PREV | FIND_CAN_GO_NEXT);
+
+	find_get_info (EPHY_DIALOG (dialog));
 }
 
 static void
@@ -217,7 +220,7 @@ find_dialog_init (FindDialog *dialog)
 	dialog->priv = g_new0 (FindDialogPrivate, 1);
 
 	dialog->priv->properties = NULL;
-	dialog->priv->nav_flags = FIND_CAN_GO_PREV | FIND_CAN_GO_NEXT;
+	dialog->priv->nav_flags = 0;
 	dialog->priv->constructed = FALSE;
 
 	g_signal_connect_object (dialog, "notify::embed",
