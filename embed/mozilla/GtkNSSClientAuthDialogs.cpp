@@ -157,6 +157,8 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 					      GTK_RESPONSE_OK,
 					      NULL);
 	
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);

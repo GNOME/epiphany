@@ -219,6 +219,8 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      NULL);
 
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
 	higgy_setup_dialog (GTK_DIALOG (dialog), 
 			    GTK_STOCK_DIALOG_WARNING, &label, &vbox);
 
@@ -487,6 +489,8 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 					      GTK_RESPONSE_OK,
 					      NULL);
 
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
 	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_ERROR,
 			    &label, NULL);
 
@@ -551,6 +555,8 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					      _("_Trust CA"),	GTK_RESPONSE_ACCEPT,
 					      NULL);
+
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_WARNING,
 			    &label, &content_vbox);
@@ -646,6 +652,8 @@ GtkNSSDialogs::NotifyCACertExists (nsIInterfaceRequestor *ctx)
 					      GTK_STOCK_OK,
 					      GTK_RESPONSE_OK,
 					      NULL);
+
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_ERROR,
 			    &label, NULL);
@@ -768,6 +776,8 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 					      GTK_RESPONSE_CANCEL,
 					      NULL);
 
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
 	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_QUESTION,
 			    &label, &vbox);
 
@@ -878,6 +888,8 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 					      _("I_mport Certificate"), GTK_RESPONSE_OK,
 					      NULL);
 
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
 	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_QUESTION,
 			    &label, &vbox);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
@@ -958,6 +970,8 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      GTK_STOCK_OK, GTK_RESPONSE_OK,
 					      NULL);
+
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_INFO,
 			    &label, &vbox);
@@ -1300,6 +1314,8 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 	GtkWidget *gparent = MozillaFindGtkParent (parent);
 	gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(gparent));
 	gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Certificate Properties"));
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);

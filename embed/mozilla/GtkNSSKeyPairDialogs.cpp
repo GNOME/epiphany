@@ -174,6 +174,8 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 	dialog = gtk_dialog_new_with_buttons ("", GTK_WINDOW (gparent),
 					      GTK_DIALOG_NO_SEPARATOR, NULL);
 
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
