@@ -129,7 +129,11 @@ ephy_favicon_cache_load (EphyFaviconCache *eb)
 		return;
 
 	doc = xmlParseFile (eb->priv->xml_file);
-	g_assert (doc != NULL);
+	if (doc == NULL)
+	{
+		g_warning ("Failed to load favicon cache.\n");
+		return;
+	}
 
 	root = xmlDocGetRootElement (doc);
 
