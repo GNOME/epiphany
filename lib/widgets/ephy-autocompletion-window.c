@@ -57,6 +57,7 @@ struct _EphyAutocompletionWindowPrivate {
 	GtkTreeView *action_tree_view;
 	GtkTreeViewColumn *action_col1;
 	int sel_index;
+	gboolean action;
 
 	char *selected;
 
@@ -616,7 +617,7 @@ ephy_autocompletion_window_button_press_event_cb (GtkWidget *widget,
 }
 
 static void
-move_selection (EphyAutocompletionWindow *aw, int dir, gboolean *action)
+move_selection (EphyAutocompletionWindow *aw, int dir)
 {
 	int new_index;
 	int n_compl, n_actions, n_items;
@@ -669,7 +670,7 @@ move_selection (EphyAutocompletionWindow *aw, int dir, gboolean *action)
 					      path, NULL, FALSE, 0, 0);
 		gtk_tree_path_free (path);
 
-		*action = TRUE;
+		aw->priv->action = TRUE;
 	}
 	else if (new_index <= n_compl)
 	{
@@ -686,7 +687,7 @@ move_selection (EphyAutocompletionWindow *aw, int dir, gboolean *action)
 					      path, NULL, FALSE, 0, 0);
 		gtk_tree_path_free (path);
 
-		*action = FALSE;
+		aw->priv->action = FALSE;
 	}
 	else
 	{
@@ -700,28 +701,27 @@ static gboolean
 ephy_autocompletion_window_key_press_hack (EphyAutocompletionWindow *aw,
 					   guint keyval)
 {
-	gboolean action = FALSE;
-
 	switch (keyval)
 	{
 	case GDK_Up:
-		move_selection (aw, -1, &action);
+		move_selection (aw, -1);
 		break;
 	case GDK_Down:
-		move_selection (aw, +1, &action);
+		move_selection (aw, +1);
 		break;
 	case GDK_Page_Down:
-		move_selection (aw, +5, &action);
+		move_selection (aw, +5);
 		break;
 	case GDK_Page_Up:
-		move_selection (aw, -5, &action);
+		move_selection (aw, -5);
 		break;
 	case GDK_Return:
 	case GDK_space:
 		if (aw->priv->selected)
 		{
 			g_signal_emit (aw, EphyAutocompletionWindowSignals
-				       [ACTIVATED], 0, aw->priv->selected, action);
+				       [ACTIVATED], 0, aw->priv->selected,
+				       aw->priv->action);
 		}
 		break;
 	}
@@ -735,7 +735,8 @@ ephy_autocompletion_window_key_press_hack (EphyAutocompletionWindow *aw,
 		if (aw->priv->selected)
 		{
 			g_signal_emit (aw, EphyAutocompletionWindowSignals
-				       [SELECTED], 0, aw->priv->selected, action);
+				       [SELECTED], 0, aw->priv->selected,
+				       aw->priv->action);
 		}
 		break;
 	default:
@@ -780,6 +781,7 @@ ephy_autocompletion_window_hide (EphyAutocompletionWindow *aw)
 		ephy_autocompletion_window_unselect (aw);
 		g_signal_emit (aw, EphyAutocompletionWindowSignals[EPHY_AUTOCOMPLETION_WINDOW_HIDDEN], 0);
 		aw->priv->sel_index = 0;
+		aw->priv->action = FALSE;
 	}
 	g_free (aw->priv->selected);
 	aw->priv->selected = NULL;

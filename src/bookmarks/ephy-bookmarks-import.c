@@ -524,6 +524,11 @@ parse_rdf_item (EphyBookmarks *bookmarks,
 		{
 			parse_rdf_subjects (child, &subjects);
 		}
+		else if (xmlStrEqual (child->name, "smartlink"))
+		{
+			if (link) xmlFree (link);
+			link = xmlNodeGetContent (child);
+		}
 
 		child = child->next;
 	}
