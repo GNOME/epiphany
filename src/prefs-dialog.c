@@ -131,7 +131,7 @@ languages [] =
 	{ N_("Tamil"), "ta" },
 	{ N_("Turkish"), "tr" },
 	{ N_("Ukrainian"), "uk" },
-	{ N_("Vietnamian"), "vi" },
+	{ N_("Vietnamese"), "vi" },
 	{ N_("Walloon"), "wa" }
 };
 static guint n_languages = G_N_ELEMENTS (languages);
@@ -146,7 +146,7 @@ static EncodingAutodetectorInfo encoding_autodetector[] =
 {
 	{ N_("Off"),			"" },
 	{ N_("Chinese"),		"zh_parallel_state_machine" },
-	{ N_("East asian"),		"cjk_parallel_state_machine" },
+	{ N_("East Asian"),		"cjk_parallel_state_machine" },
 	{ N_("Japanese"),		"ja_parallel_state_machine" },
 	{ N_("Korean"),			"ko_parallel_state_machine" },
 	{ N_("Russian"),		"ruprob" },

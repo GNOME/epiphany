@@ -107,10 +107,10 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	  N_("Find a string"),
 	  G_CALLBACK (window_cmd_edit_find), NULL },
 	{ "EditFindNext", N_("Find Ne_xt"), NULL, "<control>G",
-	  N_("Find next occurence of the string"),
+	  N_("Find next occurrence of the string"),
 	  G_CALLBACK (window_cmd_edit_find_next), NULL },
 	{ "EditFindPrev", N_("Find Pre_vious"), NULL, "<shift><control>G",
-	  N_("Find previous occurence of the string"),
+	  N_("Find previous occurrence of the string"),
 	  G_CALLBACK (window_cmd_edit_find_prev), NULL },
 	{ "EditPersonalData", N_("P_ersonal Data"), NULL, NULL,
 	  N_("View and remove cookies and passwords"),
@@ -242,7 +242,7 @@ static EggActionGroupEntry ephy_popups_entries [] = {
 	  NULL, G_CALLBACK (popup_cmd_bookmark_link), NULL },
 	{ "CopyLinkLocation", N_("_Copy Link Address"), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_link_location), NULL },
-	{ "CopyEmail", N_("Copy _Email"), NULL, NULL,
+	{ "CopyEmail", N_("Copy _Email Address"), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_email), NULL },
 
 	/* Images */
