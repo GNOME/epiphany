@@ -233,10 +233,7 @@ cmd_open_bookmarks_in_tabs (EggAction *action,
 			EPHY_NEW_TAB_APPEND|EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 	}
 
-	if (selection)
-	{
-		g_list_free (selection);
-	}
+	g_list_free (selection);
 }
 
 static void
@@ -262,10 +259,7 @@ cmd_open_bookmarks_in_browser (EggAction *action,
 				    EPHY_NEW_TAB_IN_NEW_WINDOW);
 	}
 
-	if (selection)
-	{
-		g_list_free (selection);
-	}
+	g_list_free (selection);
 }
 
 static void
@@ -299,10 +293,7 @@ cmd_bookmark_properties (EggAction *action,
 		gtk_widget_show (GTK_WIDGET (dialog));
 	}
 
-	if (selection)
-	{
-		g_list_free (selection);
-	}
+	g_list_free (selection);
 }
 
 static void
@@ -513,11 +504,14 @@ ephy_bookmarks_editor_node_activated_cb (GtkWidget *view,
 }
 
 static void
-ephy_bookmarks_editor_node_selected_cb (GtkWidget *view,
+ephy_bookmarks_editor_node_selected_cb (EphyNodeView *view,
 				        EphyNode *node,
 					EphyBookmarksEditor *editor)
 {
-	ephy_bookmarks_editor_update_menu (editor, node, EPHY_NODE_VIEW (view));
+	if (node != NULL)
+	{
+		ephy_bookmarks_editor_update_menu (editor, node, view);
+	}
 }
 
 static void
@@ -554,19 +548,19 @@ keyword_node_selected_cb (EphyNodeView *view,
 			  EphyNode *node,
 			  EphyBookmarksEditor *editor)
 {
+	EphyNode *bookmarks;
+	
 	if (node == NULL)
 	{
-		ephy_node_view_select_node
-			(editor->priv->key_view,
-			 ephy_bookmarks_get_bookmarks
-			 (editor->priv->bookmarks));
+		bookmarks = ephy_bookmarks_get_bookmarks (editor->priv->bookmarks);
+		ephy_node_view_select_node (editor->priv->key_view, bookmarks);
 	}
 	else
 	{
 		bookmarks_filter (editor, node);
+		ephy_bookmarks_editor_update_menu (editor, node, view);
 	}
 
-	ephy_bookmarks_editor_update_menu (editor, node, view);
 }
 
 static void
