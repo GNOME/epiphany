@@ -142,6 +142,44 @@ static guint	popup_blocker_n_hidden		(EphyTab *tab);
 static gboolean	ephy_tab_get_popups_allowed	(EphyTab *tab);
 static void	ephy_tab_set_popups_allowed	(EphyTab *tab,
 						 gboolean allowed);
+GType
+ephy_tab_address_expire_get_type (void)
+{
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GEnumValue values[] = 
+                {
+                   { TAB_ADDRESS_EXPIRE_NOW, "TAB_ADDRESS_EXPIRE_NOW", "expire-now" },
+                   { TAB_ADDRESS_EXPIRE_NEXT, "TAB_ADDRESS_EXPIRE_NEXT", "expire-next" },
+                   { TAB_ADDRESS_EXPIRE_CURRENT, "TAB_ADDRESS_EXPIRE_CURRENT", "expire-current" },
+                   { 0, NULL, NULL }
+                };
+		type = g_enum_register_static ("TabAddressExpire", values);
+	}
+	return type;
+}
+
+GType
+ephy_tab_navigation_flags_get_type (void)
+{
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GFlagsValue values[] = 
+                {
+                   { TAB_NAV_UP, "TAB_NAV_UP", "up" },
+                   { TAB_NAV_BACK, "TAB_NAV_BACK", "back" },
+                   { TAB_NAV_FORWARD, "TAB_NAV_FORWARD", "forward" },
+                   { 0, NULL, NULL }
+                };
+		type = g_flags_register_static ("TabNavigationFlags", values);
+	}
+	return type;
+}
+
 
 /* Class functions */
 

@@ -94,6 +94,96 @@ ephy_shell_error_quark (void)
 	return q;
 }
 
+
+GType
+ephy_shell_error_get_type (void)
+{
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GEnumValue values[] =
+		{
+		{ EPHY_SHELL_ERROR_MISSING_SERVER, 
+		  "EPHY_SHELL_ERROR_MISSING_SERVER", "missing-server" },
+		{ EPHY_SHELL_ERROR_OBJECT_REG_FAILED, 
+		  "EPHY_SHELL_ERROR_OBJECT_REG_FAILED", "object-reg-failed" },
+		{ EPHY_SHELL_ERROR_FACTORY_REG_FAILED, 
+		  "EPHY_SHELL_ERROR_FACTORY_REG_FAILED", "factory-reg-failed" },
+		{ 0, NULL, NULL }
+		};
+		type = g_enum_register_static ("EphyShellError", values);
+	}
+	return type;
+}
+
+GType
+ephy_shell_startup_flags_get_type (void)
+{
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GFlagsValue values[] = 
+		{
+		{ EPHY_SHELL_STARTUP_TABS, "EPHY_SHELL_STARTUP_TABS",
+		  "tabs" },
+		{ EPHY_SHELL_STARTUP_EXISTING_WINDOW, "EPHY_SHELL_STARTUP_EXISTING_WINDOW",
+		  "existing-window" },
+		{ EPHY_SHELL_STARTUP_FULLSCREEN, "EPHY_SHELL_STARTUP_FULLSCREEN",
+		  "fullscreen" },
+		{ EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR, "EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR",
+		  "bookmarks-editor" },	
+		{ EPHY_SHELL_STARTUP_SESSION, "EPHY_SHELL_STARTUP_SESSION",
+		  "session" },		
+		{ EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS, "EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS",
+		  "import-bookmarks" },	
+		{ EPHY_SHELL_STARTUP_ADD_BOOKMARK, "EPHY_SHELL_STARTUP_ADD_BOOKMARK", 
+		  "add-bookmark" },
+		{ 0, NULL, NULL }
+		};
+		type = g_flags_register_static ("EphyShellStartupFlags", values);
+	}
+	return type;
+}
+
+
+GType
+ephy_new_tab_flags_get_type (void)
+{
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GFlagsValue values[] =
+		{
+		{ EPHY_NEW_TAB_HOME_PAGE, "EPHY_NEW_TAB_HOME_PAGE",
+		  "home-page" },	       
+		{ EPHY_NEW_TAB_NEW_PAGE, "EPHY_NEW_TAB_NEW_PAGE",
+		  "new-page" },	       
+		{ EPHY_NEW_TAB_OPEN_PAGE, "EPHY_NEW_TAB_OPEN_PAGE",
+		  "open-page" },	       
+		{ EPHY_NEW_TAB_FULLSCREEN_MODE, "EPHY_NEW_TAB_FULLSCREEN_MODE",
+		  "fullscreen-mode" },   
+		{ EPHY_NEW_TAB_APPEND_LAST, "EPHY_NEW_TAB_APPEND_LAST",
+		  "append-last" },       
+		{ EPHY_NEW_TAB_APPEND_AFTER, "EPHY_NEW_TAB_APPEND_AFTER",
+		  "append-after" },      
+		{ EPHY_NEW_TAB_JUMP, "EPHY_NEW_TAB_JUMP",
+		  "jump" },	       
+		{ EPHY_NEW_TAB_IN_NEW_WINDOW, "EPHY_NEW_TAB_IN_NEW_WINDOW",
+		  "new-window" },     
+		{ EPHY_NEW_TAB_IN_EXISTING_WINDOW, "EPHY_NEW_TAB_IN_EXISTING_WINDOW", 
+		  "existing-window" },
+		{ 0, NULL, NULL }
+		};
+		type = g_flags_register_static ("EphyNewTabFlags", values);
+	}
+	return type;
+}
+
+
+
 GType
 ephy_shell_get_type (void)
 {
