@@ -292,7 +292,7 @@ static GtkActionEntry ephy_popups_entries [] = {
 	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
 
 	/* Images */
-	{ "OpenImage", GTK_STOCK_OPEN, N_("Open _Image"), GTK_STOCK_OPEN,
+	{ "OpenImage", GTK_STOCK_OPEN, N_("Open _Image"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_open_image) },
 	{ "SaveImageAs", GTK_STOCK_SAVE_AS, N_("_Save Image As..."), NULL,
 	  NULL, G_CALLBACK (popup_cmd_save_image_as) },
