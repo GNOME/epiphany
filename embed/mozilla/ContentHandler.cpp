@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2001 Philip Langdale
+ *  		  2003 Marco Pesenti Gritti, Xan Lopez
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,133 +19,6 @@
  *  $Id$
  */
 
-/*
- * The functioning of the download architecture, as described by Philip
- * on 28 May 2001 and updated on 28 June 2001:
- * 
- * When mozilla runs into a file it cannot render internally or that it
- * does not have a plugin for, it calls the
- * nsIExternalHelperAppService. This service will then either attempt to
- * save the file or run it with a helper app depending on what the
- * mozilla mime database returns.
- * 
- * nsIExternalHelperAppService then calls out to the nsIHelperAppDialog
- * interface which handles the UI for the service. This is the interface
- * which we have reimplemented. Therefore, with a major caveat, we have
- * put a GNOME/GTK frontend on an unmodified mozilla backend.
- * 
- * Now for the caveat. With respect to saving files to disk, the mozilla
- * backend works exactly the same as it does in
- * mozilla-the-browser. However, for dealing with helper apps, we do not
- * use the mozilla backend at all. This is because we want to use the
- * gnome-vfs database to retrieve helper-app info, rather than the
- * mozilla helper app database.
- * 
- * How it works:
- * 
- * a) The user clicks on a link or follows a redirect to a file of a type
- * that mozilla cannot handle. Mozilla passes the link to the
- * ExternalHelperAppService which in turn calls the Show() method of
- * nsIHelperAppDialog.
- * 
- * b) In our implementation of Show() we first compare the passed mime
- * type to epiphany's mime list. If the mime type is in the list, we then
- * lookup the Action associated with the mime type. Currently, the
- * possible mime-actions are:
- * 
- * Save to Disk
- * Run with Helper App
- * Ask User
- * 
- * The default action is Ask User, and if the mime-type is not in our
- * list, this is what will be assumed.
- * 
- * c) If Ask User is the chosen action, a dialog will be shown to the
- * user allowing the user to choose from the other two possible actions
- * as well as a checkbox to let the user set the default action to the
- * chosen action for the future.
- * 
- * d-1) The "Save to Disk" action. We first check epiphany preferences to
- * see if the user wants to use the built-in mozilla downloader, gtm or
- * a command-line executed downloader.
- *
- * d-2a) The built-in downloader.  This action is handled by the mozilla
- * backend. Our nsIHelperAppDialog does the same thing that the
- * mozilla-the-browser one does, which is to call the SaveToDisk() method
- * of nsIExternalHelperAppService. This in turn calls the
- * PromptForSaveToFile() method of nsIHelperAppDialog putting the ball
- * back in our court.
- * 
- * d-2b) Now, if epiphany is configured to always ask for a download
- * directory, it will pop up a file selector so that the user can select
- * the directory and filename to save the file to.  Otherwise, it will
- * use epiphany's default download directory and proceed without
- * interaction.
- * 
- * d-2c) When PromptForSaveToFile() returns, nsIExternalHelperAppService
- * will then call the ShowProgressDialog() method of
- * nsIHelperAppDialog. This progress dialog, obviously, tracks the
- * progress of the download. It is worth noting that mozilla starts the
- * actual download as soon as the user clicks on the link or follows the
- * redirect. While the user is deciding what action to take, the file is
- * downloading. Often, for small files, the file is already downloaded
- * when the user decides what directory to put it in. The progress dialog
- * does not appear in these cases. Also, we currently have a small
- * problem where our progress dialog times the download from the point
- * the dialog appears, not from the time the download starts. This is due
- * to the timestamp that is passed to us is just plain weird, and I
- * haven't worked out how to turn it into a useable time. The fact that
- * the download starts early means that the file is actually downloaded
- * to a temp file and only at the end is it moved to it's final location.
- * 
- * d-3a) The two external downloader options.  These options are
- * handled completely by epiphany. The first thing that we do is call the
- * Cancel() method of nsIExternalHelperAppService to cancel the mozilla
- * download. We then pass the url to our own LaunchExternalDownloader()
- * method. This method will ask for a download directory as appropriate
- * as with the "Save to disk" action.
- * 
- * d-3b) Finally, depending on whether GTM or a command line handler was
- * selected in prefs, the external handler will be called with the url
- * passed and the directory selected.
- * 
- * e-1) The "Run with Helper App" action.  This action is currently only
- * working with a minimal implementation.  First, we explicitly call
- * ShowProgressDialog() so the user knows that the file is being
- * downloaded. We also need this so that we only run the helper after the
- * file is completely downloaded. The file will download to temp location
- * that it would be moved from if the action was "Save to Disk".  We have
- * to call ShowProgressDialog() ourselves because we are not using
- * mozilla's helper mechanism which would usually make the call for us.
- * 
- * e-2) If there is a default helper app in our mime database and alwaysAsk
- * is false, epiphany will run the default helper automatically. Otherwise it
- * will pop up a helper chooser dialog which lists the helpers that gnome-vfs
- * knows about as well as providing a GnomeFileEntry to allow the user to
- * select and arbitrary application. The default value of the GnomeFileEntry
- * is the helper stored in our database if one exits.
- * 
- * f) General notes.  We cannot use this infrastructure to override
- * native mozilla types. mozilla will attempt to render these types and
- * never call out to us. We are at the end of the chain as the handler of
- * last resort, so native and plugin types will never reach us. This also
- * means that a file with an incorrect mime-type ( eg: .tar.bz2 marked as
- * text/plain ) will be incorrectly rendered by mozilla. We cannot help
- * this.
- * 
- * Despite the apparent user-side similarity with explicit downloads by
- * a shift-click or context-menu item, there is actually none at all.
- * Explicit downloads are handled by the nsIStreamTransfer manager which
- * we use as is. Currently the progress dialog for the stream transfer
- * manager is un-overridable, so it appears in XUL. This will change in
- * due course.
- * 
- * Matt would like the modifiy the progress dialog so each file currently
- * being downloaded becomes a clist entry in a master dialog rather than
- * causing a separate progress dialog. a lot of progress dialogs gets
- * really messy.
- */
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -153,76 +27,26 @@
 #include "MozillaPrivate.h"
 
 #include "nsCOMPtr.h"
-#include "nsISupportsArray.h"
-#include "nsIServiceManager.h"
-
 #include "nsString.h"
 #include "nsIURI.h"
 #include "nsIURL.h"
-#include "nsIChannel.h"
 #include "nsILocalFile.h"
-#include "nsIPrefService.h"
-#include "nsIDOMWindow.h"
-#include "nsIDOMWindowInternal.h"
 #include "nsIMIMEInfo.h"
 
-#include "ephy-embed-shell.h"
 #include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
-#include "ephy-glade.h"
-#include "ephy-string.h"
-#include "ephy-gui.h"
-#include "ephy-file-helpers.h"
 
-#include <gtk/gtkentry.h>
-#include <gtk/gtktogglebutton.h>
-#include <gtk/gtkprogress.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkdialog.h>
-#include <gtk/gtkmessagedialog.h>
-#include <libgnome/gnome-exec.h>
-#include <libgnome/gnome-i18n.h>
-#include <libgnome/gnome-config.h>
-#include <libgnome/gnome-util.h>
 #include <libgnomevfs/gnome-vfs-mime.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <bonobo/bonobo-i18n.h>
 
 class GContentHandler;
-struct MimeAskActionDialog;
-struct HelperAppChooserDialog;
-
-enum
-{
-	RESPONSE_SAVE = 1,
-	RESPONSE_OPEN = 2
-};
-
-/*
- * MimeAskActionDialog: the representation of dialogs used to ask
- * about actions on MIME types
- */
-struct MimeAskActionDialog
-{
-	MimeAskActionDialog(GContentHandler *aContentHandler,
-			    GtkWidget *aParentWidget,
-			    const char *aMimeType);
-	~MimeAskActionDialog();
-
-	GContentHandler *mContentHandler;
-	GladeXML *mGXml;
-	GtkWidget *mParent;
-	GtkWidget *mAppMenu;
-	
-	GnomeVFSMimeApplication *mDefaultApp;
-};
 
 /* Implementation file */
 NS_IMPL_ISUPPORTS1(GContentHandler, nsIHelperAppLauncherDialog)
 
 GContentHandler::GContentHandler() : mUri(nsnull),
-				     mMimeType(nsnull),
-				     mDownloadCanceled(PR_FALSE)
+				     mMimeType(nsnull)
 {
 	NS_INIT_ISUPPORTS();
 	/* member initializers and constructor code */
@@ -258,6 +82,7 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 	mLauncher = aLauncher;
 	mContext = aContext;
 	rv = Init ();
+	if (NS_FAILED (rv)) return rv;
 	
 	MIMEAskAction ();
 
@@ -338,13 +163,13 @@ NS_METHOD GContentHandler::FindHelperApp (void)
 	}
 	else
 	{
-		if (NS_SUCCEEDED(SynchroniseMIMEInfo()))
+		if (NS_SUCCEEDED (SynchroniseMIMEInfo()))
 		{
-			return mLauncher->LaunchWithApplication(nsnull, PR_FALSE);
+			return mLauncher->LaunchWithApplication (nsnull, PR_FALSE);
 		}
 		else
 		{
-				return NS_ERROR_FAILURE;
+			return NS_ERROR_FAILURE;
 		}
 	}
 }
@@ -359,7 +184,7 @@ NS_METHOD GContentHandler::LaunchHelperApp (void)
 
 		nsCOMPtr<nsPIExternalAppLauncher> appLauncher =
 			do_QueryInterface (helperService, &rv);
-		if (NS_SUCCEEDED(rv))
+		if (NS_SUCCEEDED (rv))
 		{
 			appLauncher->DeleteTemporaryFileOnExit(mTempFile);
 		}
@@ -371,7 +196,6 @@ NS_METHOD GContentHandler::LaunchHelperApp (void)
 		const nsCString &document = (mUrlHelper) ? mUrl : aFileName;
 
 		char *param = g_strdup (document.get());
-
 		GList *params = NULL;
 		params = g_list_append (params, param);
 		gnome_vfs_mime_application_launch (mHelperApp, params);
@@ -394,12 +218,6 @@ NS_METHOD GContentHandler::GetLauncher (nsIHelperAppLauncher * *_retval)
 	return NS_OK;
 }
 
-NS_METHOD GContentHandler::GetContext (nsISupports * *_retval)
-{
-	NS_IF_ADDREF (*_retval = mContext);
-	return NS_OK;
-}
-
 static gboolean 
 application_support_scheme (GnomeVFSMimeApplication *app, const nsCString &aScheme)
 {
@@ -415,7 +233,7 @@ application_support_scheme (GnomeVFSMimeApplication *app, const nsCString &aSche
 	{
 		char *uri_scheme = (char *)l->data;
 		g_return_val_if_fail (uri_scheme != NULL, FALSE);
-		if (aScheme.Equals(uri_scheme)) return TRUE;
+		if (aScheme.Equals (uri_scheme)) return TRUE;
 	}
 
 	return FALSE;
@@ -437,19 +255,19 @@ NS_METHOD GContentHandler::SynchroniseMIMEInfo (void)
 
 	nsCOMPtr<nsIMIMEInfo> mimeInfo;
 	rv = mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
-	if(NS_FAILED(rv)) return NS_ERROR_FAILURE;
+	if(NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
 	command_with_path = g_find_program_in_path (mHelperApp->command);
 	if (command_with_path == NULL) return NS_ERROR_FAILURE;
 	nsCOMPtr<nsILocalFile> helperFile;
-	rv = NS_NewNativeLocalFile(nsDependentCString(command_with_path),
+	rv = NS_NewNativeLocalFile (nsDependentCString(command_with_path),
 				   PR_TRUE,
 				   getter_AddRefs(helperFile));
-	if(NS_FAILED(rv)) return NS_ERROR_FAILURE;
+	if(NS_FAILED (rv)) return NS_ERROR_FAILURE;
 	g_free (command_with_path);
 
 	rv = mimeInfo->SetPreferredApplicationHandler(helperFile);
-	if(NS_FAILED(rv)) return NS_ERROR_FAILURE;	
+	if(NS_FAILED (rv)) return NS_ERROR_FAILURE;	
 
 	nsMIMEInfoHandleAction mimeInfoAction;
 	mimeInfoAction = nsIMIMEInfo::useHelperApp;
@@ -458,11 +276,11 @@ NS_METHOD GContentHandler::SynchroniseMIMEInfo (void)
 	{
 		rv = mimeInfo->SetApplicationDescription
 				(NS_LITERAL_STRING("runInTerminal").get());
-		if(NS_FAILED(rv)) return NS_ERROR_FAILURE;
+		if(NS_FAILED (rv)) return NS_ERROR_FAILURE;
 	}
 
 	rv = mimeInfo->SetPreferredAction(mimeInfoAction);
-	if(NS_FAILED(rv)) return NS_ERROR_FAILURE;
+	if(NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
 	return NS_OK;
 }
@@ -479,10 +297,10 @@ NS_METHOD GContentHandler::Init (void)
 	rv = MIMEInfo->GetMIMEType (&mMimeType);
 
 #if MOZILLA_SNAPSHOT > 11
-	rv = mLauncher->GetSource(getter_AddRefs(mUri));
-	rv = mLauncher->GetTargetFile(getter_AddRefs(mTempFile));
+	rv = mLauncher->GetSource (getter_AddRefs(mUri));
+	rv = mLauncher->GetTargetFile (getter_AddRefs(mTempFile));
 #else
-	rv = mLauncher->GetDownloadInfo(getter_AddRefs(mUri),
+	rv = mLauncher->GetDownloadInfo (getter_AddRefs(mUri),
 					&mTimeDownloadStarted,
 					getter_AddRefs(mTempFile));
 #endif
@@ -511,7 +329,9 @@ NS_METHOD GContentHandler::ProcessMimeInfo (void)
 						(uriFileName.get()));
 		}
 		else
+		{
 			mMimeType = g_strdup ("application/octet-stream");
+		}
 	}
 
 	return NS_OK;
@@ -519,150 +339,29 @@ NS_METHOD GContentHandler::ProcessMimeInfo (void)
 
 NS_METHOD GContentHandler::MIMEAskAction (void)
 {
-	nsCOMPtr<nsIDOMWindow> parent = do_QueryInterface (mContext);
-	GtkWidget *parentWidget = MozillaFindGtkParent (parent);
+	nsresult rv;
+	gboolean auto_open;
 
-	new MimeAskActionDialog(this, parentWidget, mMimeType);
-
-	return NS_OK;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// begin MIMEAskActionDialog methods.
-////////////////////////////////////////////////////////////////////////////////
-
-MimeAskActionDialog::MimeAskActionDialog(GContentHandler *aContentHandler,
-					 GtkWidget *aParentWidget,
-					 const char *aMimeType) :
-					 mContentHandler(aContentHandler),
-					 mParent(aParentWidget)
-{
-	GdkPixbuf *mime_icon;
-	GtkWidget *label;
-	GtkWidget *dialogWidget;
-	const char *description;
-	char *ltext;
-
-	mGXml = ephy_glade_widget_new ("epiphany.glade", "mime_ask_action_dialog", 
-				      &dialogWidget, this);
-	mAppMenu = glade_xml_get_widget (mGXml, "mime_ask_dialog_app_menu");
-
-	mDefaultApp = gnome_vfs_mime_get_default_application(aMimeType);
-
-	GtkWidget *aMimeIcon = glade_xml_get_widget (mGXml,
-						     "mime_ask_action_icon");
-	mime_icon = ephy_gui_get_pixbuf_from_mime_type (aMimeType, 32);
-	if (mime_icon != NULL)
+	auto_open = eel_gconf_get_boolean (CONF_AUTO_OPEN_DOWNLOADS);
+	GContentHandler *mContentHandler = this;
+	GnomeVFSMimeApplication *DefaultApp = gnome_vfs_mime_get_default_application(mMimeType);
+	
+	if (!auto_open || !DefaultApp)
 	{
-		gtk_image_set_from_pixbuf (GTK_IMAGE(aMimeIcon), mime_icon);
-		g_object_unref (mime_icon);
-	}
-
-	description = gnome_vfs_mime_get_description (aMimeType);
-	if (!description) description = aMimeType;
-	
-	ltext = g_strdup_printf ("<b>%s</b>", description);
-	label = glade_xml_get_widget (mGXml, "mime_ask_action_description");
-	gtk_label_set_markup (GTK_LABEL (label), ltext);
-	g_free (ltext);
-
-	gtk_window_set_transient_for (GTK_WINDOW (dialogWidget), 
-				      GTK_WINDOW (aParentWidget));
-
-	gtk_widget_show(dialogWidget);
-}
-
-MimeAskActionDialog::~MimeAskActionDialog()
-{
-#if 0
-	if(mApps)
-		gnome_vfs_mime_application_list_free(mApps);
-#endif
-
-	gtk_widget_destroy(glade_xml_get_widget(mGXml, "mime_ask_action_dialog"));
-	g_object_unref(G_OBJECT(mGXml));
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// begin MIMEAskActionDialog callbacks.
-////////////////////////////////////////////////////////////////////////////////
-
-static void
-mime_ask_dialog_save (MimeAskActionDialog *dialog)
-{
-	gtk_widget_hide (glade_xml_get_widget (dialog->mGXml, 
-					       "mime_ask_action_dialog"));
-
-	nsresult rv;
-	nsCOMPtr<nsIHelperAppLauncher> launcher;
-	rv = dialog->mContentHandler->GetLauncher (getter_AddRefs(launcher));
-	
-	launcher->SaveToDisk (nsnull,PR_FALSE);
-	
-	delete dialog;
-}
-
-static void
-mime_ask_dialog_cancel (MimeAskActionDialog *dialog)
-{
-	nsresult rv;
-	nsCOMPtr<nsIHelperAppLauncher> launcher;
-	rv = dialog->mContentHandler->GetLauncher (getter_AddRefs(launcher));
-
-	launcher->Cancel ();
-
-	delete dialog;
-}
-
-static void
-mime_ask_dialog_open (MimeAskActionDialog *dialog)
-{
-	nsresult rv;
-	nsCOMPtr<nsIHelperAppLauncher> launcher;
-	rv = dialog->mContentHandler->GetLauncher (getter_AddRefs(launcher));
-	GnomeVFSMimeApplication *app = dialog->mDefaultApp;
-
-	if (app)
-	{
-		dialog->mContentHandler->SetHelperApp (app, FALSE);
-		dialog->mContentHandler->FindHelperApp ();
-		delete dialog;
+		nsCOMPtr<nsIHelperAppLauncher> launcher;
+		
+		rv = mContentHandler->GetLauncher (getter_AddRefs(launcher));
+		if (NS_FAILED (rv)) return rv;
+		launcher->SaveToDisk (nsnull,PR_FALSE);
 	}
 	else
 	{
-		GtkWidget *message_dialog;
+		rv = mContentHandler->SetHelperApp (DefaultApp, FALSE);
+		if (NS_FAILED (rv)) return rv;
+		rv = mContentHandler->FindHelperApp ();
+		if (NS_FAILED (rv)) return rv;
 		
-		mime_ask_dialog_cancel (dialog);
-
-		/* FIXME mime db shortcut */
-
-		message_dialog = gtk_message_dialog_new 
-				(GTK_WINDOW (dialog->mParent), 
-				 GTK_DIALOG_MODAL,
-				 GTK_MESSAGE_ERROR,
-				 GTK_BUTTONS_OK,
-				 _("No available applications to open "
-				   "the specified file."));
-		gtk_dialog_run (GTK_DIALOG (message_dialog));
-		gtk_widget_destroy (message_dialog);
-
-		/* FIXME where is dialog deleted ? */
 	}
-}
 
-extern "C" void
-mime_ask_dialog_response_cb (GtkDialog *gtkdialog, int response, MimeAskActionDialog *dialog)
-{
-	switch (response)
-	{
-		case RESPONSE_SAVE:
-			mime_ask_dialog_save (dialog);
-			break;
-		case RESPONSE_OPEN:
-			mime_ask_dialog_open (dialog);
-			break;
-		default:
-			mime_ask_dialog_cancel (dialog);
-			break;
-	}
+	return NS_OK;
 }

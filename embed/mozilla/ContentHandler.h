@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti, Xan Lopez
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,13 +40,6 @@
 #include "nsISupports.h"
 #include "nsError.h"
 
-typedef enum
-{
-        ACTION_NONE,
-        ACTION_SAVEFORHELPER,
-        ACTION_OBJECT_NOTIFY
-} DownloadAction;
-
 #define G_CONTENTHANDLER_CID			     \
 { /* 16072c4a-23a6-4996-9beb-9335c06bbeae */         \
     0x16072c4a,                                      \
@@ -70,7 +63,6 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	NS_METHOD LaunchHelperApp (void);
 
 	NS_METHOD GetLauncher (nsIHelperAppLauncher * *_retval);
-	NS_METHOD GetContext (nsISupports * *_retval);
 	NS_METHOD SetHelperApp(GnomeVFSMimeApplication *mHelperApp,
 			       PRBool alwaysUse);
 	NS_METHOD SynchroniseMIMEInfo (void);
@@ -94,10 +86,6 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	
 	nsCString mUrl;
 	nsCString mScheme;
-
-	PRBool mDownloadCanceled;
-	
-	nsCOMPtr<nsIWebProgressListener> mListener;
 };
 
 extern nsresult NS_NewContentHandlerFactory(nsIFactory** aFactory);
