@@ -299,16 +299,22 @@ parse_item_list (EggToolbarsModel *t,
 }
 
 int
-egg_toolbars_model_add_toolbar (EggToolbarsModel *t, const char *name)
+egg_toolbars_model_add_toolbar (EggToolbarsModel *t,
+				int               position,
+				const char       *name)
 {
   GNode *node;
+  int real_position;
 
   g_return_val_if_fail (IS_EGG_TOOLBARS_MODEL (t), -1);
 
   node = g_node_new (toolbars_toolbar_new (name));
-  g_node_insert (t->priv->toolbars, -1, node);
+  g_node_insert (t->priv->toolbars, position, node);
 
-  g_signal_emit (G_OBJECT (t), egg_toolbars_model_signals[TOOLBAR_ADDED], 0);
+  real_position = g_node_child_position (t->priv->toolbars, node);
+
+  g_signal_emit (G_OBJECT (t), egg_toolbars_model_signals[TOOLBAR_ADDED],
+		 0, real_position);
 
   return g_node_child_position (t->priv->toolbars, node);
 }
@@ -325,7 +331,7 @@ parse_toolbars (EggToolbarsModel *t,
 	  int position;
 
 	  name = xmlGetProp (child, "name");
-	  position = egg_toolbars_model_add_toolbar (t, name);
+	  position = egg_toolbars_model_add_toolbar (t, -1, name);
 	  xmlFree (name);
 
 	  parse_item_list (t, child->children, position);

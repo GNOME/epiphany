@@ -80,6 +80,7 @@ void              egg_toolbars_model_load           (EggToolbarsModel *t,
 void              egg_toolbars_model_save           (EggToolbarsModel *t,
 						     const char *xml_file);
 int               egg_toolbars_model_add_toolbar    (EggToolbarsModel *t,
+						     int               position,
 						     const char       *name);
 EggTbModelFlags   egg_toolbars_model_get_flags      (EggToolbarsModel *t,
 						     int               toolbar_position);

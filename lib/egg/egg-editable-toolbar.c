@@ -279,8 +279,6 @@ popup_toolbar_context_menu_cb (GtkWidget          *toolbar,
 
       gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 2,
 		      gtk_get_current_event_time ());
-
-      t->priv->selected_toolbar = NULL;
     }
 }
 
@@ -378,7 +376,7 @@ toolbar_added_cb (EggToolbarsModel   *model,
   gtk_widget_set_size_request (toolbar, -1, MIN_TOOLBAR_HEIGHT);
   gtk_box_pack_start (GTK_BOX (t), toolbar, FALSE, FALSE, 0);
 
-  /* FIXME reorder to match position */
+  gtk_box_reorder_child (GTK_BOX (t), toolbar, position);
 }
 
 static void

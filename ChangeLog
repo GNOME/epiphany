@@ -1,3 +1,19 @@
+2003-05-05  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/egg/egg-editable-toolbar.c:
+	* lib/egg/egg-toolbar-editor.c:
+	* lib/egg/egg-toolbar-editor.h:
+	* lib/egg/egg-toolbars-model.c:
+	* lib/egg/egg-toolbars-model.h:
+
+	Update (removing toolbars with context menu works again).
+
+	* src/window-commands.c: (toolbar_editor_help_cb),
+	(window_cmd_edit_toolbar):
+
+	Build the tbe dialog, update for new egg api.
+	Fix position of new toolbars to be before bookmarks toolbar.
+
 2003-05-02  Jon Svendsen  <jon-sven@frisurf.no>
 
 	* src/ephy-history-window.c: (cmd_clear), (cmd_close),

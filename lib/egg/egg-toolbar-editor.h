@@ -19,7 +19,7 @@
 #ifndef EGG_TOOLBAR_EDITOR_H
 #define EGG_TOOLBAR_EDITOR_H
 
-#include <gtk/gtkdialog.h>
+#include <gtk/gtkvbox.h>
 
 #include "egg-menu-merge.h"
 #include "egg-toolbars-model.h"
@@ -41,19 +41,18 @@ typedef struct EggToolbarEditorPrivate EggToolbarEditorPrivate;
 
 struct EggToolbarEditor
 {
-  GtkDialog parent_object;
+  GtkVBox parent_object;
   EggToolbarEditorPrivate *priv;
 };
 
 struct EggToolbarEditorClass
 {
-  GtkDialogClass parent_class;
+  GtkVBoxClass parent_class;
 };
 
 
 GType             egg_toolbar_editor_get_type     (void);
-GtkWidget        *egg_toolbar_editor_new          (GtkWindow *parent,
-						   EggMenuMerge *merge,
+GtkWidget        *egg_toolbar_editor_new          (EggMenuMerge *merge,
 						   EggToolbarsModel *model);
 void              egg_toolbar_editor_load_actions (EggToolbarEditor *editor,
 						   const char       *xml_file);

@@ -40,11 +40,6 @@ static void update_editor_sheet                 (EggToolbarEditor *editor);
 
 enum
 {
-  RESPONSE_ADD_TOOLBAR
-};
-
-enum
-{
   PROP_0,
   PROP_MENU_MERGE,
   PROP_TOOLBARS_MODEL
@@ -83,7 +78,7 @@ egg_toolbar_editor_get_type (void)
 	(GInstanceInitFunc) egg_toolbar_editor_init
       };
 
-      egg_toolbar_editor_type = g_type_register_static (GTK_TYPE_DIALOG,
+      egg_toolbar_editor_type = g_type_register_static (GTK_TYPE_VBOX,
 							"EggToolbarEditor",
 							&our_info, 0);
     }
@@ -211,8 +206,7 @@ egg_toolbar_editor_finalize (GObject *object)
 }
 
 GtkWidget *
-egg_toolbar_editor_new (GtkWindow *parent,
-			EggMenuMerge *merge,
+egg_toolbar_editor_new (EggMenuMerge *merge,
 			EggToolbarsModel *model)
 {
   EggToolbarEditor *t;
@@ -221,10 +215,6 @@ egg_toolbar_editor_new (GtkWindow *parent,
 					"MenuMerge", merge,
 					"ToolbarsModel", model,
 					NULL));
-  if (parent != NULL)
-    {
-      gtk_window_set_transient_for (GTK_WINDOW (t), parent);
-    }
 
   g_return_val_if_fail (t->priv != NULL, NULL);
 
@@ -300,37 +290,6 @@ drag_data_get_cb (GtkWidget          *widget,
 
   gtk_selection_data_set (selection_data,
 			  selection_data->target, 8, target, strlen (target));
-}
-
-static void
-editor_close (EggToolbarEditor *editor)
-{
-  g_return_if_fail (IS_EGG_TOOLBAR_EDITOR (editor));
-  gtk_widget_destroy (GTK_WIDGET (editor));
-}
-
-static void
-editor_add_toolbar (EggToolbarEditor *editor)
-{
-  g_return_if_fail (IS_EGG_TOOLBAR_EDITOR (editor));
-
-  egg_toolbars_model_add_toolbar (editor->priv->model, "UserCreated");
-}
-
-static void
-dialog_response_cb (GtkDialog          *dialog,
-		    gint                response_id,
-		    EggToolbarEditor *editor)
-{
-  switch (response_id)
-    {
-    case RESPONSE_ADD_TOOLBAR:
-      editor_add_toolbar (editor);
-      break;
-    case GTK_RESPONSE_CLOSE:
-      editor_close (editor);
-      break;
-    }
 }
 
 static gchar *
@@ -475,29 +434,22 @@ static void
 setup_editor (EggToolbarEditor *editor)
 {
   GtkWidget *scrolled_window;
-  GtkWidget *vbox;
   GtkWidget *label_hbox;
   GtkWidget *image;
   GtkWidget *label;
 
   g_return_if_fail (IS_EGG_TOOLBAR_EDITOR (editor));
 
-  gtk_dialog_set_has_separator (GTK_DIALOG (editor), FALSE);
-  gtk_window_set_title (GTK_WINDOW (editor), "Toolbar editor");
-
-  vbox = gtk_vbox_new (FALSE, 12);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
-  gtk_widget_show (vbox);
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (editor)->vbox), vbox);
+  gtk_container_set_border_width (GTK_CONTAINER (editor), 12);
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   editor->priv->scrolled_window = scrolled_window;
   gtk_widget_show (scrolled_window);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (editor), scrolled_window, TRUE, TRUE, 0);
   label_hbox = gtk_hbox_new (FALSE, 6);
   gtk_widget_show (label_hbox);
-  gtk_box_pack_start (GTK_BOX (vbox), label_hbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (editor), label_hbox, FALSE, FALSE, 0);
   image =
     gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
   gtk_widget_show (image);
@@ -507,14 +459,6 @@ setup_editor (EggToolbarEditor *editor)
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
   gtk_widget_show (label);
   gtk_box_pack_start (GTK_BOX (label_hbox), label, FALSE, TRUE, 0);
-
-  gtk_dialog_add_button (GTK_DIALOG (editor),
-			 _("_Add a New Toolbar"), RESPONSE_ADD_TOOLBAR);
-  gtk_dialog_add_button (GTK_DIALOG (editor),
-			 GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
-
-  g_signal_connect (editor, "response",
-		    G_CALLBACK (dialog_response_cb), editor);
 }
 
 static void

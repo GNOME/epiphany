@@ -52,6 +52,11 @@
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkeditable.h>
 
+enum
+{
+	RESPONSE_ADD_TOOLBAR
+};
+
 void
 window_cmd_edit_find (EggAction *action,
 		      EphyWindow *window)
@@ -658,12 +663,23 @@ toolbar_editor_destroy_cb (GtkWidget *tbe,
 
 static void
 toolbar_editor_help_cb (GtkDialog          *dialog,
-		    	gint                response_id,
-		    	EggToolbarEditor   *editor)
+			gint                response_id,
+			gpointer	    data)
 {
+	EphyToolbarsModel *model;
+	int n;
+
 	switch (response_id)
 	{
-    	case GTK_RESPONSE_HELP:
+	case GTK_RESPONSE_CLOSE:
+		gtk_widget_destroy (GTK_WIDGET (dialog));
+	case RESPONSE_ADD_TOOLBAR:
+		model = ephy_shell_get_toolbars_model (ephy_shell);
+		n = egg_toolbars_model_n_toolbars (EGG_TOOLBARS_MODEL (model));
+		egg_toolbars_model_add_toolbar (EGG_TOOLBARS_MODEL (model),
+						n - 1, "UserCreated");
+		break;
+	case GTK_RESPONSE_HELP:
 		/* FIXME: Connect toolbar editor help */
 		break;
 	}
@@ -676,28 +692,40 @@ window_cmd_edit_toolbar (EggAction *action,
 	GtkWidget *editor;
 	EphyToolbarsModel *model;
 	Toolbar *t;
+	GtkWidget *dialog;
 
 	model = ephy_shell_get_toolbars_model (ephy_shell);
 	t = ephy_window_get_toolbar (window);
 
+	dialog = gtk_dialog_new ();
+	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
+	gtk_window_set_title (GTK_WINDOW (dialog), _("Toolbar editor"));
+        gtk_window_set_transient_for (GTK_WINDOW (dialog),
+				      GTK_WINDOW (window));
+
 	editor = egg_toolbar_editor_new
-		(GTK_WINDOW (window),
-		 EGG_MENU_MERGE (window->ui_merge),
+		(EGG_MENU_MERGE (window->ui_merge),
 		 EGG_TOOLBARS_MODEL (model));
-	gtk_dialog_add_button (GTK_DIALOG (editor),
-			       GTK_STOCK_HELP, GTK_RESPONSE_HELP);
-	ephy_state_add_window (editor,
-			       "toolbar_editor",
-		               500, 330);
+	egg_toolbar_editor_load_actions (EGG_TOOLBAR_EDITOR (editor),
+					 ephy_file ("epiphany-toolbar.xml"));
+	gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), editor);
 	g_signal_connect (editor, "destroy",
 			  G_CALLBACK (toolbar_editor_destroy_cb),
 			  t);
-	g_signal_connect (G_OBJECT (editor), "response",
-			  G_CALLBACK (toolbar_editor_help_cb),
-			  editor);
-	egg_toolbar_editor_load_actions (EGG_TOOLBAR_EDITOR (editor),
-					 ephy_file ("epiphany-toolbar.xml"));
 	gtk_widget_show (editor);
+
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       _("_Add a New Toolbar"), RESPONSE_ADD_TOOLBAR);
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       GTK_STOCK_HELP, GTK_RESPONSE_HELP);
+	g_signal_connect (G_OBJECT (dialog), "response",
+			  G_CALLBACK (toolbar_editor_help_cb), NULL);
+	ephy_state_add_window (dialog,
+			       "toolbar_editor",
+		               500, 330);
+	gtk_widget_show (dialog);
 
 	egg_editable_toolbar_set_edit_mode (EGG_EDITABLE_TOOLBAR (t), TRUE);
 }
