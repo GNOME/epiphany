@@ -21,6 +21,7 @@
 #include "ephy-topics-selector.h"
 #include "ephy-debug.h"
 #include "ephy-shell.h"
+#include "ephy-state.h"
 
 #include <gtk/gtkstock.h>
 #include <gtk/gtkentry.h>
