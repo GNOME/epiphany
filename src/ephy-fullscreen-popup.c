@@ -29,7 +29,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkimage.h>
-#include <gtk/gtkhseparator.h>
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtktooltips.h>
 #include <gtk/gtkenums.h>
@@ -46,7 +45,6 @@ struct _EphyFullscreenPopupPrivate
 {
 	EphyWindow *window;
 	GtkTooltips *tooltips;
-	GtkWidget *sep;
 	GtkWidget *frame;
 	EphySpinner *spinner;
 	GtkWidget *lock;
@@ -100,14 +98,12 @@ static void
 ephy_fullscreen_popup_update_visibility (EphyFullscreenPopup *popup)
 {
 	EphyFullscreenPopupPrivate *priv = popup->priv;
-	gboolean show_frame, show_sep;
+	gboolean show_frame;
 
 	show_frame = priv->spinning || priv->show_lock;
-	show_sep = show_frame && priv->show_button;
 
 	g_object_set (priv->button, "visible", priv->show_button,
 				    "sensitive", priv->show_button, NULL);
-	g_object_set (priv->sep, "visible", show_sep, NULL);
 	g_object_set (priv->frame, "visible", show_frame, NULL);
 	g_object_set (priv->spinner, "visible", priv->spinning, NULL);
 	g_object_set (priv->lock_ebox, "visible", priv->show_lock, NULL);
@@ -247,7 +243,7 @@ ephy_fullscreen_popup_constructor (GType type,
 	g_object_ref (G_OBJECT (priv->tooltips));
 	gtk_object_sink (GTK_OBJECT (priv->tooltips));
 
-	hbox = gtk_hbox_new (FALSE, 0);
+	hbox = gtk_hbox_new (FALSE, 2);
 	gtk_container_add (GTK_CONTAINER (window), hbox);
 	gtk_widget_show (hbox);
 
@@ -277,11 +273,6 @@ ephy_fullscreen_popup_constructor (GType type,
 	gtk_container_add (GTK_CONTAINER (priv->lock_ebox), priv->lock);
 	gtk_box_pack_start (GTK_BOX (frame_hbox), priv->lock_ebox, FALSE, FALSE, 0);
 	gtk_widget_show (priv->lock_ebox);
-
-	/* separator */
-	priv->sep = gtk_hseparator_new ();
-	gtk_box_pack_start (GTK_BOX (hbox), priv->sep, FALSE, FALSE, 0);
-	gtk_widget_show (priv->sep);
 
 	/* exit button */
 	priv->button = gtk_button_new ();
