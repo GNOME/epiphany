@@ -841,7 +841,7 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
                                                            0,
                                                            G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
-                                         PROP_LOCATION,
+                                         PROP_TOOLTIP,
                                          g_param_spec_string  ("tooltip",
                                                                "Tooltip",
                                                                "Tooltip",
