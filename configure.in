@@ -304,22 +304,6 @@ AC_COMPILE_IFELSE(
 
 AC_MSG_RESULT([$result])
 
-dnl Changed from char* to nsACString& in mozilla 1.8a2
-
-AC_MSG_CHECKING([whether nsIProtocolProxyService::ConfigureFromPAC expects nsACString&])
-
-AC_COMPILE_IFELSE(
-	[AC_LANG_PROGRAM(
-		[[#include <nsEmbedString.h>
-		  #include <necko/nsIProtocolProxyService.h>]],
-		[[nsIProtocolProxyService *p;
-		  p->ConfigureFromPAC (nsEmbedCString());]]
-	)],
-	[AC_DEFINE([MOZ_NSIPROTOCOLPROXYSERVICE_NSACSTRING_],[1],[dummy]) result=yes],
-	[result=no])
-
-AC_MSG_RESULT([$result])
-
 dnl Firefox doesn't have this API (?)
 
 AC_MSG_CHECKING([for nsIXULChromeRegistry API])
