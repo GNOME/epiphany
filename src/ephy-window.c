@@ -292,6 +292,7 @@ static guint ephy_popups_n_entries = G_N_ELEMENTS (ephy_popups_entries);
 
 #define CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME  "/apps/epiphany/lockdown/disable_javascript_chrome"
 #define CONF_LOCKDOWN_HIDE_MENUBAR "/apps/epiphany/lockdown/hide_menubar"
+#define CONF_DESKTOP_BG_PICTURE "/desktop/gnome/background/picture_filename"
 
 #define EPHY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WINDOW, EphyWindowPrivate))
 
