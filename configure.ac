@@ -52,6 +52,7 @@ LIBGLADE_REQUIRED=2.3.1
 LIBGNOMEVFS_REQUIRED=2.9.2
 LIBGNOMEUI_REQUIRED=2.6.0
 GNOME_DESKTOP_REQUIRED=2.9.91
+LIBSTARTUP_NOTIFICATION_REQUIRED=0.5
 
 AC_ENABLE_SHARED([yes])
 AC_ENABLE_STATIC([no])
@@ -71,6 +72,16 @@ GNOME_DEBUG_CHECK
 GNOME_COMPILE_WARNINGS([maximum])
 dnl GNOME_CXX_WARNINGS
 
+AC_PATH_PROG([PKG_CONFIG], [pkg-config], [no])
+if $PKG_CONFIG --atleast-version $LIBSTARTUP_NOTIFICATION_REQUIRED libstartup-notification-1.0; then
+	echo "Building with libstartup-notification"
+	AC_DEFINE([HAVE_STARTUP_NOTIFICATION],[1],[Define to enable startup notification support])
+	STARTUP_NOTIFICATION_PACKAGE=libstartup-notification-1.0
+else
+	echo "***** WARNING: Building without libstartup-notification"
+	STARTUP_NOTIFICATION_PACKAGE=
+fi
+
 PKG_CHECK_MODULES([EPIPHANY_DEPENDENCY], [\
 		  glib-2.0 >= $GLIB_REQUIRED \
 		  pango >= $PANGO_REQUIRED \
@@ -86,6 +97,7 @@ PKG_CHECK_MODULES([EPIPHANY_DEPENDENCY], [\
 		  gnome-vfs-module-2.0 \
 		  gconf-2.0 \
 		  gnome-desktop-2.0 >= $GNOME_DESKTOP_REQUIRED \
+		  $STARTUP_NOTIFICATION_PACKAGE \
 		  ])
 AC_SUBST([EPIPHANY_DEPENDENCY_CFLAGS])
 AC_SUBST([EPIPHANY_DEPENDENCY_LIBS])

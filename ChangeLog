@@ -1,3 +1,15 @@
+2005-03-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.ac:
+	* lib/ephy-file-helpers.c:
+	(my_gdk_spawn_make_environment_for_screen), (sn_error_trap_push),
+	(sn_error_trap_pop), (make_spawn_environment_for_sn_context),
+	(free_startup_timeout), (startup_timeout), (add_startup_timeout),
+	(ephy_file_launch_application), (ephy_file_launch_desktop_file):
+
+	Use libstartup-notification, not gnome-desktop to launch apps.
+	Fixes bug #169039.
+
 2005-03-07  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.ac:
