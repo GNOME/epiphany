@@ -264,17 +264,14 @@ build_menu (EphyTopicAction *action)
 	}
 }
 
-static gboolean
-button_press_cb (GtkWidget *button,
-		 GdkEventButton *event,
-		 EphyTopicAction *action)
+static void
+button_toggled_cb (GtkWidget *button,
+		   EphyTopicAction *action)
 {
-	if (event->button == 1)
+	GtkWidget *menu;
+
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
 	{
-		GtkWidget *menu;
-
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-
 		menu = build_menu (action);
 		g_signal_connect (menu, "deactivate",
 				  G_CALLBACK (menu_deactivate_cb), button);
@@ -283,7 +280,6 @@ button_press_cb (GtkWidget *button,
 				button, 1, gtk_get_current_event_time ());
 	}
 
-	return FALSE;
 }
 
 static void
@@ -298,8 +294,8 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
 			         G_CALLBACK (ephy_topic_action_sync_label), proxy, 0);
 
 	button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
-	g_signal_connect (button, "button_press_event",
-			  G_CALLBACK (button_press_cb), action);
+	g_signal_connect (button, "toggled",
+			  G_CALLBACK (button_toggled_cb), action);
 }
 
 static void

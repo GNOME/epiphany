@@ -1,4 +1,12 @@
 2003-04-25  David Bordoley <bordoley@msu.edu>
+	
+	* src/bookmarks/ephy-topic-action.c: (button_toggled_cb),
+	(connect_proxy):
+	
+	Connect to the "toggled" signal instead of "button_press_event"
+	so that keynav works.
+
+2003-04-25  David Bordoley <bordoley@msu.edu>
 
 	* src/toolbar.c:
 	
