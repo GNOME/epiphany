@@ -24,7 +24,6 @@
 #include "ephy-encodings.h"
 
 #include "nsIDocShell.h"
-//#include "ProgressListener.h"
 #include "nsIWebNavigation.h"
 #include "nsIWebPageDescriptor.h"
 #include "nsISHistory.h"
