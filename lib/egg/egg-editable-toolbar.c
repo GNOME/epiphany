@@ -980,7 +980,7 @@ static void
 egg_editable_toolbar_deconstruct (EggEditableToolbar *toolbar)
 {
   EggToolbarsModel *model = toolbar->priv->model;
-  GList *children, *l;
+  GList *children;
 
   g_return_if_fail (model != NULL);
 
@@ -991,12 +991,7 @@ egg_editable_toolbar_deconstruct (EggEditableToolbar *toolbar)
     }
 
   children = gtk_container_get_children (GTK_CONTAINER (toolbar));
-
-  for (l = children; l != NULL; l = l->next)
-    {
-      gtk_widget_destroy (GTK_WIDGET (l->data));
-    }
-
+  g_list_foreach (children, (GFunc) gtk_widget_destroy, NULL);
   g_list_free (children);
 }
 
