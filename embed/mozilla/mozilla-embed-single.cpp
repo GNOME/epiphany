@@ -506,16 +506,13 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 	{
 		GtkWidget *dialog;
 
-		/* FIXME Kill references to MOZILLA_FIVE_HOME
-		   when string freeze is over */
 		dialog = gtk_message_dialog_new
 			(NULL,
                          GTK_DIALOG_MODAL,
                          GTK_MESSAGE_ERROR,
                          GTK_BUTTONS_CLOSE,
                          _("Epiphany can't be used now. "
-                         "Mozilla initialization failed. Check your "
-                         "MOZILLA_FIVE_HOME environmental variable."));
+                         "Mozilla initialization failed."));
 		gtk_dialog_run (GTK_DIALOG (dialog));
 
 		exit (0);
