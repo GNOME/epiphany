@@ -296,7 +296,7 @@ duplicate_dialog_construct (GtkWindow *parent,
 {
 	GtkWidget *dialog;
 	GtkWidget *hbox, *vbox, *label, *image;
-	char *str;
+	char *str, *tmp_str, *tmp_title;
 
 	/* FIXME: We "should" use gtk_message dialog here
 	 * but it doesn't support markup of text yet
@@ -331,9 +331,13 @@ duplicate_dialog_construct (GtkWindow *parent,
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-	str = g_strconcat ("<big>",_("A bookmark titled "), "<b>", title, "</b>",
-			   _(" already exists for this address."), "</big>",NULL);
+	tmp_title = g_strconcat ("<b>", title, "</b>", NULL);
+	tmp_str = g_strdup_printf (_("A bookmark titled %s already exists for this address"),
+			           tmp_title);
+	str = g_strconcat ("<big>", tmp_str, "</big>", NULL);
 	gtk_label_set_markup (GTK_LABEL (label), str);
+	g_free (tmp_title);
+	g_free (tmp_str);
 	g_free (str);
 	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
 	gtk_widget_show (label);
