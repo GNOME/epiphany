@@ -1184,8 +1184,6 @@ search_entry_search_cb (GtkWidget *entry, const char *search_text, EphyBookmarks
 		 G_CALLBACK (keyword_node_selected_cb),
 		 editor);
 
-	search_text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
-
 	ephy_node_filter_empty (editor->priv->bookmarks_filter);
 	ephy_node_filter_add_expression (editor->priv->bookmarks_filter,
 				         ephy_node_filter_expression_new (EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_CONTAINS,
@@ -1337,6 +1335,7 @@ get_details_value (EphyBookmarksEditor *editor)
 		value = VIEW_TITLE;
 	}
 
+	g_slist_foreach (svalues, (GFunc) g_free, NULL);
 	g_slist_free (svalues);
 
 	return value;
