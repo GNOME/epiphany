@@ -86,6 +86,10 @@
 #include "MozillaPrivate.h"
 #include "print-dialog.h"
 
+#if MOZILLA_SNAPSHOT >= 17
+#include "nsIDOMWindow2.h"
+#endif
+
 EphyEventListener::EphyEventListener(void)
 : mOwner(nsnull)
 {
@@ -244,7 +248,16 @@ EphyBrowser::GetListener (void)
 
   	nsCOMPtr<nsIDOMWindow> domWindowExternal;
   	mWebBrowser->GetContentDOMWindow(getter_AddRefs(domWindowExternal));
-  
+
+#if MOZILLA_SNAPSHOT >= 17
+	nsCOMPtr<nsIDOMWindow2> domWindow (do_QueryInterface (domWindowExternal));
+	NS_ENSURE_TRUE (domWindow, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsIDOMEventTarget> rootWindow;
+	domWindow->GetWindowRoot (getter_AddRefs (rootWindow));
+
+	mEventReceiver = do_QueryInterface (rootWindow);
+#else
   	nsCOMPtr<nsIDOMWindowInternal> domWindow;
         domWindow = do_QueryInterface(domWindowExternal);
 	
@@ -255,6 +268,8 @@ EphyBrowser::GetListener (void)
   	piWin->GetChromeEventHandler(getter_AddRefs(chromeHandler));
 
   	mEventReceiver = do_QueryInterface(chromeHandler);
+#endif /* MOZILLA_SNAPSHOT >= 17 */
+
 	NS_ENSURE_TRUE (mEventReceiver, NS_ERROR_FAILURE);
 
 	return NS_OK;
