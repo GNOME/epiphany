@@ -693,57 +693,6 @@ ephy_window_get_chrome (EphyWindow *window)
 }
 
 static void
-wmspec_change_state (gboolean   add,
-                     GdkWindow *window,
-                     GdkAtom    state1,
-                     GdkAtom    state2)
-{
-	XEvent xev;
-
-	#define _NET_WM_STATE_REMOVE        0    /* remove/unset property */
-	#define _NET_WM_STATE_ADD           1    /* add/set property */
-	#define _NET_WM_STATE_TOGGLE        2    /* toggle property  */
-
-	xev.xclient.type = ClientMessage;
-	xev.xclient.serial = 0;
-	xev.xclient.send_event = True;
-	xev.xclient.display = gdk_display;
-	xev.xclient.window = GDK_WINDOW_XID (window);
-	xev.xclient.message_type = gdk_x11_get_xatom_by_name ("_NET_WM_STATE");
-	xev.xclient.format = 32;
-	xev.xclient.data.l[0] = add ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE;
-	xev.xclient.data.l[1] = gdk_x11_atom_to_xatom (state1);
-	xev.xclient.data.l[2] = gdk_x11_atom_to_xatom (state2);
-
-	XSendEvent (gdk_display, GDK_WINDOW_XID (gdk_get_default_root_window ()),
-                    False,
-                    SubstructureRedirectMask | SubstructureNotifyMask,
-                    &xev);
-}
-
-static void
-window_set_fullscreen_mode (EphyWindow *window, gboolean active)
-{
-        GdkWindow *gdk_window;
-
-        gdk_window = GTK_WIDGET(window)->window;
-
-        if (gdk_net_wm_supports (gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN",
-                                                  FALSE)))
-        {
-                wmspec_change_state (active,
-                                     gdk_window,
-                                     gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN",
-                                                      FALSE),
-                                     GDK_NONE);
-        }
-        else
-        {
-                g_warning ("NET_WM_STATE_FULLSCREEN not supported");
-	}
-}
-
-static void
 translate_default_chrome (EmbedChromeMask *chrome_mask)
 {
 	/* keep only not layout flags */
@@ -852,8 +801,14 @@ ephy_window_set_chrome (EphyWindow *window,
 	    (flags & EMBED_CHROME_OPENASFULLSCREEN))
 	{
 		save_window_chrome (window);
-		window_set_fullscreen_mode (window,
-					    flags & EMBED_CHROME_OPENASFULLSCREEN);
+		if (flags & EMBED_CHROME_OPENASFULLSCREEN)
+		{
+			gtk_window_fullscreen (GTK_WINDOW (window));
+		}
+		else
+		{
+			gtk_window_unfullscreen (GTK_WINDOW (window));
+		}
 	}
 
 	window->priv->chrome_mask = flags;
