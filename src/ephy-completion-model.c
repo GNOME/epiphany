@@ -346,23 +346,58 @@ init_keywords_col (GValue *value, EphyNode *node, int group)
 	g_value_set_string (value, text);
 }
 
+static gboolean
+is_base_address (const char *address)
+{
+	int slashes = 0;
+
+	if (address == NULL) return FALSE;
+
+	while (*address != '\0')
+	{
+		if (*address == '/') slashes++;
+
+		/* Base uris has 3 slashes like http://www.gnome.org/ */
+		if (slashes == 4) return FALSE;
+
+		address++;
+	}
+
+	return TRUE;
+}
+
 static void
 init_relevance_col (GValue *value, EphyNode *node, int group)
 {
-	int relevance, visits;
+	int relevance = 0;
 
-	switch (group)
+	/* We have three ordered groups: history's base
+	   addresses, bookmarks, deep history addresses */
+
+	if (group == BOOKMARKS_GROUP)
 	{
-		case HISTORY_GROUP:
-			visits = ephy_node_get_property_int
-				(node, EPHY_NODE_PAGE_PROP_VISITS);
+		relevance = 1 << 5;
+	}
+	else if (group == HISTORY_GROUP)
+	{
+		const char *address;
+		int visits;
+	
+		visits = ephy_node_get_property_int
+			(node, EPHY_NODE_PAGE_PROP_VISITS);
+		address = ephy_node_get_property_string
+			(node, EPHY_NODE_PAGE_PROP_LOCATION);
+
+		visits = MAX (visits, (1 << 5) - 1);
+
+		if (is_base_address (address))
+		{
+			relevance = visits << 10;
+		}
+		else
+		{
 			relevance = visits;
-			break;
-		case BOOKMARKS_GROUP:
-			relevance = 2000;
-			break;
-		default:
-			relevance = 0;
+		}
 	}
 	
 	g_value_set_int (value, relevance);

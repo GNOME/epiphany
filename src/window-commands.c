@@ -950,7 +950,7 @@ window_cmd_help_about (GtkAction *action,
 	};
 
 	/* Translator credits */
-	char *translator_credits = _("translator_credits");
+	char *translator_credits = _("translator-credits");
 
 	if (about != NULL)
 	{
@@ -983,7 +983,7 @@ window_cmd_help_about (GtkAction *action,
 		       _("A GNOME browser based on Mozilla"),
 		       (const char **)authors,
 		       (const char **)documenters,
-		       strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,
+		       strcmp (translator_credits, "translator-credits") != 0 ? translator_credits : NULL,
 		       logo);
 
 	if (logo != NULL)
