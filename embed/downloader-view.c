@@ -522,6 +522,7 @@ progress_cell_data_func (GtkTreeViewColumn *col,
 			 gpointer           user_data)
 {
 	EphyDownloadState state;
+	const char *text = NULL;
 	int percent;
 
 	gtk_tree_model_get (model, iter,
@@ -532,18 +533,24 @@ progress_cell_data_func (GtkTreeViewColumn *col,
 	switch (state)
 	{
 		case EPHY_DOWNLOAD_INITIALISING:
-			g_object_set (renderer, "text", Q_("download status|Unknown"), NULL);
+			text = Q_("download status|Unknown");
 			break;
 		case EPHY_DOWNLOAD_FAILED:
-			g_object_set (renderer, "text", Q_("download status|Failed"), NULL);
+			text = Q_("download status|Failed");
 			break;
 		case EPHY_DOWNLOAD_DOWNLOADING:
 		case EPHY_DOWNLOAD_PAUSED:
-			g_object_set (renderer, "text", NULL, "value", percent, NULL);
+			if (percent == -1)
+			{
+				text = Q_("download status|Unknown");
+				percent = 0;
+			}
 			break;
 		default:
 			g_return_if_reached ();
 	}
+
+	g_object_set (renderer, "text", text, "value", percent, NULL);
 }
 
 static void

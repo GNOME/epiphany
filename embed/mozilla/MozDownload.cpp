@@ -298,6 +298,16 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 	if (NS_FAILED(aStatus) && NS_SUCCEEDED(mStatus))
         	mStatus = aStatus;
 
+	if (aStateFlags & STATE_START)
+	{
+		mDownloadState = EPHY_DOWNLOAD_DOWNLOADING;
+
+		if (mEphyDownload)
+		{
+			g_signal_emit_by_name (mEphyDownload, "changed");
+		}
+	}
+
 	/* We will get this even in the event of a cancel */
 	if (aStateFlags & STATE_STOP)
 	{
