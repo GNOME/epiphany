@@ -23,6 +23,9 @@
 
 #include "ephy-toolbars-model.h"
 #include "ephy-file-helpers.h"
+#include "ephy-prefs.h"
+#include "eel-gconf-extensions.h"
+#include "eggtypebuiltins.h"
 #include "ephy-debug.h"
 
 #include <string.h>
@@ -35,7 +38,9 @@
 struct _EphyToolbarsModelPrivate
 {
 	char *xml_file;
+	EggTbModelFlags style;
 	guint timeout;
+	guint style_notifier_id;
 };
 
 static void ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass);
@@ -97,7 +102,7 @@ save_changes (EphyToolbarsModel *model)
 }
 
 static void
-update_flags_and_save_changes (EphyToolbarsModel *model)
+update_flags (EphyToolbarsModel *model)
 {
 	EggToolbarsModel *eggmodel = EGG_TOOLBARS_MODEL (model);
 	int i, n_toolbars;
@@ -119,11 +124,17 @@ update_flags_and_save_changes (EphyToolbarsModel *model)
 		g_return_if_fail (t_name != NULL);
 
 		flags = egg_toolbars_model_get_flags (eggmodel, i);
-		flags &= ~EGG_TB_MODEL_NOT_REMOVABLE;
+		flags &= ~(EGG_TB_MODEL_NOT_REMOVABLE | EGG_TB_MODEL_STYLES_MASK);
 		flags |= flag;
+		flags |= model->priv->style;
 		egg_toolbars_model_set_flags (eggmodel, i, flags);
 	}
+}
 
+static void
+update_flags_and_save_changes (EphyToolbarsModel *model)
+{
+	update_flags (model);
 	save_changes (model);
 }
 
@@ -148,6 +159,43 @@ get_toolbar_pos (EggToolbarsModel *model,
 	}
 
 	return -1;
+}
+
+static EggTbModelFlags
+get_toolbar_style (void)
+{
+	GFlagsClass *flags_class;
+	const GFlagsValue *value;
+	EggTbModelFlags flags = 0;
+	char *pref;
+
+	pref = eel_gconf_get_string (CONF_INTERFACE_TOOLBAR_STYLE);
+	if (pref != NULL)
+	{
+		flags_class = g_type_class_ref (EGG_TYPE_TB_MODEL_FLAGS);
+		value = g_flags_get_value_by_nick (flags_class, pref);
+		if (value != NULL)
+		{
+			flags = value->value;
+		}
+		g_type_class_unref (flags_class);
+	}
+	flags &= EGG_TB_MODEL_STYLES_MASK;
+
+	g_free (pref);
+
+	return flags;
+}
+
+static void
+toolbar_style_notifier (GConfClient *client,
+			guint cnxn_id,
+			GConfEntry *entry,
+			EphyToolbarsModel *model)
+{
+	model->priv->style = get_toolbar_style ();
+
+	update_flags (model);
 }
 
 void
@@ -203,12 +251,19 @@ ephy_toolbars_model_load (EphyToolbarsModel *model)
 static void
 ephy_toolbars_model_init (EphyToolbarsModel *model)
 {
-	model->priv = EPHY_TOOLBARS_MODEL_GET_PRIVATE (model);
+	EphyToolbarsModelPrivate *priv;
 
-	model->priv->xml_file = g_build_filename (ephy_dot_dir (),
-						  EPHY_TOOLBARS_XML_FILE,
-						  NULL);
+	priv = model->priv = EPHY_TOOLBARS_MODEL_GET_PRIVATE (model);
 
+	priv->xml_file = g_build_filename (ephy_dot_dir (),
+					   EPHY_TOOLBARS_XML_FILE,
+					   NULL);
+
+	priv->style = get_toolbar_style ();
+	priv->style_notifier_id = eel_gconf_notification_add
+		(CONF_INTERFACE_TOOLBAR_STYLE,
+		 (GConfClientNotifyFunc) toolbar_style_notifier, model);
+	
 	g_signal_connect_after (model, "item_added",
 				G_CALLBACK (save_changes), NULL);
 	g_signal_connect_after (model, "item_removed",
@@ -233,14 +288,19 @@ static void
 ephy_toolbars_model_finalize (GObject *object)
 {
 	EphyToolbarsModel *model = EPHY_TOOLBARS_MODEL (object);
+	EphyToolbarsModelPrivate *priv = model->priv;
 
-	if (model->priv->timeout != 0)
+	if (priv->style_notifier_id != 0)
 	{
-		g_source_remove (model->priv->timeout);
-		model->priv->timeout = 0;
+		eel_gconf_notification_remove (priv->style_notifier_id);
 	}
 
-	g_free (model->priv->xml_file);
+	if (priv->timeout != 0)
+	{
+		g_source_remove (priv->timeout);
+	}
+
+	g_free (priv->xml_file);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

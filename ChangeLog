@@ -1,5 +1,17 @@
 2005-02-09  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-shell.c: (ephy_shell_finalize),
+	(ephy_shell_get_toolbars_model):
+	* src/ephy-toolbars-model.c: (update_flags),
+	(update_flags_and_save_changes), (get_toolbar_style),
+	(toolbar_style_notifier), (ephy_toolbars_model_init),
+	(ephy_toolbars_model_finalize):
+
+	Move style notifier to ephy-toolbars-model, and also apply
+	the flags to newly added toolbars.
+
+2005-02-09  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/MozDownload.cpp:
 
 	Implement nsIWebProgressListener. Fixes bug #165328.
