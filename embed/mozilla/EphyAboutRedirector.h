@@ -40,7 +40,6 @@
 #define EphyAboutRedirector_h__
 
 #include "nsIAboutModule.h"
-#include "nsXPComFactory.h"
 
 class EphyAboutRedirector : public nsIAboutModule
 {
@@ -70,7 +69,5 @@ protected:
 #define EPHY_ABOUT_REDIRECTOR_CONSPIRACY_CONTRACTID NS_ABOUT_MODULE_CONTRACTID_PREFIX "conspiracy"
 #define EPHY_ABOUT_REDIRECTOR_MARCO_CONTRACTID NS_ABOUT_MODULE_CONTRACTID_PREFIX "marco"
 #define EPHY_ABOUT_REDIRECTOR_CLASSNAME "Epiphany's about redirector"
-
-nsresult NS_NewEphyAboutRedirectorFactory(nsIFactory** aFactory);
 
 #endif // EphyAboutRedirector_h__
