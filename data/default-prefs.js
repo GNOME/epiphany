@@ -85,3 +85,7 @@ pref("network.protocol-handler.external.webcal", true);
 
 // disable xpinstall
 pref("xpinstall.enabled", false);
+
+// disable SSLv2, it has security issues
+pref("security.enable_ssl2", false);
+
