@@ -362,23 +362,26 @@ window_cmd_file_bookmark_page (GtkAction *action,
 }
 
 static void
-open_response_cb (GtkDialog *dialog, gint response, EphyWindow *window)
+open_response_cb (GtkDialog *dialog, int response, EphyWindow *window)
 {
 	if (response == EPHY_RESPONSE_OPEN)
 	{
 		char *uri, *converted;
 
 		uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
-		converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
-
-		if (converted != NULL)
+		if (uri != NULL)
 		{
-			ephy_window_load_url(window, converted);
-		}
-
-		g_free (converted);
-		g_free (uri);
-        }
+			converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
+	
+			if (converted != NULL)
+			{
+				ephy_window_load_url (window, converted);
+			}
+	
+			g_free (converted);
+			g_free (uri);
+	        }
+	}
 
 	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
