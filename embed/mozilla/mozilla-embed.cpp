@@ -124,9 +124,6 @@ impl_shistory_get_pos (EphyEmbed *embed,
 static gresult
 impl_shistory_go_nth (EphyEmbed *embed, 
                       int nth);
-static gboolean
-impl_shistory_copy (EphyEmbed *source,
-                    EphyEmbed *dest);
 static gresult
 impl_get_security_level (EphyEmbed *embed, 
                          EmbedSecurityLevel *level,
@@ -402,7 +399,6 @@ ephy_embed_init (EphyEmbedClass *embed_class)
 	embed_class->shistory_get_nth = impl_shistory_get_nth;
 	embed_class->shistory_get_pos = impl_shistory_get_pos;
 	embed_class->shistory_go_nth = impl_shistory_go_nth;
-	embed_class->shistory_copy = impl_shistory_copy;
 	embed_class->get_security_level = impl_get_security_level;
 	embed_class->find_next = impl_find_next;
 	embed_class->activate = impl_activate;
@@ -765,13 +761,13 @@ impl_get_location (EphyEmbed *embed,
 	
 	if (toplevel)
 	{
-		rv = wrapper->GetMainDocumentUrl (url);
+		rv = wrapper->GetDocumentUrl (url);
 		l = (NS_SUCCEEDED (rv) && !url.IsEmpty()) ?
 		     g_strdup (url.get()) : NULL;	   	
 	}
 	else
 	{
-		rv = wrapper->GetDocumentUrl (url);
+		rv = wrapper->GetTargetDocumentUrl (url);
 		l = (NS_SUCCEEDED (rv) && !url.IsEmpty()) ?
 		     g_strdup (url.get()) : NULL;	   	
 	}
@@ -977,25 +973,6 @@ impl_shistory_go_nth (EphyEmbed *embed,
 	g_return_val_if_fail (wrapper != NULL, G_FAILED);
 	
 	rv = wrapper->GoToHistoryIndex (nth);
-
-	return NS_SUCCEEDED(rv) ? G_OK : G_FAILED;
-}
-
-static gboolean
-impl_shistory_copy (EphyEmbed *source,
-                    EphyEmbed *dest)
-{
-	nsresult rv;
-	EphyWrapper *s_wrapper;
-	EphyWrapper *d_wrapper;
-	
-	s_wrapper = MOZILLA_EMBED(source)->priv->wrapper;
-	g_return_val_if_fail (s_wrapper != NULL, G_FAILED);
-
-	d_wrapper = MOZILLA_EMBED(dest)->priv->wrapper;
-	g_return_val_if_fail (d_wrapper != NULL, G_FAILED);
-
-	rv = s_wrapper->CopyHistoryTo (d_wrapper);
 
 	return NS_SUCCEEDED(rv) ? G_OK : G_FAILED;
 }
@@ -1264,22 +1241,6 @@ mozilla_embed_visibility_cb (GtkMozEmbed *embed, gboolean visibility,
 			     MozillaEmbed *membed)
 {
 	g_signal_emit_by_name (membed, "ge_visibility", visibility); 
-
-	nsresult rv;
-	nsCOMPtr<nsIWindowWatcher> wwatch
-		(do_GetService(WINDOWWATCHER_CONTRACTID, &rv));
-	if (NS_FAILED(rv) || !wwatch) return;
-
-	EphyWrapper *wrapper = membed->priv->wrapper;
-
-	if (wrapper)
-	{
-		nsCOMPtr<nsIDOMWindow> domWindow;
-		rv = wrapper->GetDOMWindow(getter_AddRefs(domWindow));
-		if(NS_FAILED(rv) || !domWindow) return;
-
-		rv = wwatch->SetActiveWindow(domWindow);
-	}
 }
 
 static gint

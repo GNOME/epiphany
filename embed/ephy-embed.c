@@ -475,14 +475,6 @@ ephy_embed_shistory_go_nth (EphyEmbed *embed,
         return klass->shistory_go_nth (embed, nth);
 }
 
-gboolean
-ephy_embed_shistory_copy (EphyEmbed *source,
-                          EphyEmbed *dest)
-{
-	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (source);
-        return klass->shistory_copy (source, dest);
-}
-
 gresult
 ephy_embed_get_security_level (EphyEmbed *embed,
                                EmbedSecurityLevel *level,

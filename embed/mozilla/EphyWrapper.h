@@ -65,35 +65,28 @@ public:
 	nsresult Find (PRBool bacwards,
 		       PRBool *didFind);
 
-	nsresult GetMainDocumentUrl (nsCString &url);
-	nsresult GetDocumentUrl (nsCString &url);
-
 	nsresult LoadDocument(nsISupports *aPageDescriptor, PRUint32 aDisplayType);
 	nsresult GetPageDescriptor(nsISupports **aPageDescriptor);
 
 	nsresult GetSHInfo (PRInt32 *count, PRInt32 *index);
 	nsresult GetSHTitleAtIndex (PRInt32 index, PRUnichar **title);
 	nsresult GetSHUrlAtIndex (PRInt32 index, nsCString &url);
-
-	nsresult CopyHistoryTo (EphyWrapper *embed);
-
 	nsresult GoToHistoryIndex (PRInt16 index);
 
 	nsresult ForceEncoding (const char *encoding);
 
 	nsresult GetEncodingInfo (EphyEncodingInfo **infoptr);
 
-	nsresult GetMainDOMDocument (nsIDOMDocument **aDOMDocument);
-
 	nsresult PushTargetDocument (nsIDOMDocument *domDoc);
 	nsresult PopTargetDocument ();
 
-	nsresult GetDOMDocument (nsIDOMDocument **aDOMDocument);
-	nsresult GetDOMWindow (nsIDOMWindow **aDOMWindow);
+	nsresult GetDocument (nsIDOMDocument **aDOMDocument);
+	nsresult GetTargetDocument (nsIDOMDocument **aDOMDocument);
+	nsresult GetDocumentUrl (nsCString &url);
+	nsresult GetTargetDocumentUrl (nsCString &url);
 
-	nsCOMPtr<nsIWebBrowser>           mWebBrowser;
-
-	nsCOMPtr<nsIWebNavigation>        mChromeNav;
+	nsCOMPtr<nsIWebBrowser> mWebBrowser;
+	nsCOMPtr<nsIDOMWindow> mDOMWindow;
 
 	GtkMozEmbed *mGtkMozEmbed;
 private:
@@ -108,10 +101,10 @@ private:
 	nsresult SetZoomOnDocshell (float aZoom, nsIDocShell *DocShell);
 	nsresult GetDocShell (nsIDocShell **aDocShell);
 	nsresult GetCSSBackground (nsIDOMNode *node, nsAutoString& url);
-	nsresult GetFocusedDOMWindow (nsIDOMWindow **aDOMWindow);
 	nsresult GetSHistory (nsISHistory **aSHistory);
 	nsresult GetPIDOMWindow(nsPIDOMWindow **aPIWin);
 	nsresult GetWebNavigation(nsIWebNavigation **aWebNavigation);
+	nsresult GetContentViewer (nsIContentViewer **aViewer);
 };
 
 #endif

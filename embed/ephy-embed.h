@@ -242,8 +242,6 @@ struct EphyEmbedClass
 				            int *pos);
 	gresult   (* shistory_go_nth)      (EphyEmbed *embed,
 					    int nth);
-	gboolean  (* shistory_copy)        (EphyEmbed *source,
-				            EphyEmbed *dest);
 	gresult   (* get_security_level)   (EphyEmbed *embed,
 					    EmbedSecurityLevel *level,
 					    char **description);
@@ -350,9 +348,6 @@ gresult       ephy_embed_shistory_get_pos     (EphyEmbed *embed,
 
 gresult       ephy_embed_shistory_go_nth      (EphyEmbed *embed,
 					       int nth);
-
-gboolean      ephy_embed_shistory_copy        (EphyEmbed *source,
-				               EphyEmbed *dest);
 
 /* Utils */
 

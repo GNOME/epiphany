@@ -235,11 +235,11 @@ impl_save (EphyEmbedPersist *persist)
 	{		
 		if (flags & EMBED_PERSIST_MAINDOC)
 		{
-                	rv = wrapper->GetMainDOMDocument (getter_AddRefs(DOMDocument));
+                	rv = wrapper->GetDocument (getter_AddRefs(DOMDocument));
 		}
         	else
 		{
-                	rv = wrapper->GetDOMDocument (getter_AddRefs(DOMDocument));
+                	rv = wrapper->GetTargetDocument (getter_AddRefs(DOMDocument));
 		}
         	if (NS_FAILED(rv) || !DOMDocument) return G_FAILED;
 	}

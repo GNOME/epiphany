@@ -771,7 +771,7 @@ nsresult EventContext::IsPageFramed (nsIDOMNode *node, PRBool *Framed)
 	nsresult result;
 	
 	nsCOMPtr<nsIDOMDocument> mainDocument;
-	result = mWrapper->GetMainDOMDocument (getter_AddRefs(mainDocument));
+	result = mWrapper->GetDocument (getter_AddRefs(mainDocument));
 	if (NS_FAILED(result) || !mainDocument) return NS_ERROR_FAILURE;
 	
 	nsCOMPtr<nsIDOMDocument> nodeDocument;

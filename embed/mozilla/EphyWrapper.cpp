@@ -30,6 +30,7 @@
 #include <gtkmozembed_internal.h>
 #include <unistd.h>
 
+#include "nsIDocCharset.h"
 #include "nsICommandManager.h"
 #include "nsIContentViewer.h"
 #include "nsIGlobalHistory.h"
@@ -89,28 +90,21 @@ EphyWrapper::~EphyWrapper ()
 
 nsresult EphyWrapper::Init (GtkMozEmbed *mozembed)
 {
-	nsresult result;
+	nsresult rv;
 
 	gtk_moz_embed_get_nsIWebBrowser (mozembed,
 					 getter_AddRefs(mWebBrowser));
 	if (!mWebBrowser) return NS_ERROR_FAILURE;
 
-	nsCOMPtr<nsIDocShell> DocShell;
-	result = GetDocShell (getter_AddRefs(DocShell));
-	if (NS_FAILED(result) || !DocShell) return NS_ERROR_FAILURE;
-
-	nsCOMPtr<nsIDocShellHistory> dsHistory = do_QueryInterface (DocShell);
-	if (!dsHistory) return NS_ERROR_FAILURE;
+	rv = mWebBrowser->GetContentDOMWindow (getter_AddRefs (mDOMWindow));
+	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
 	mEventListener = new EphyEventListener();
 	mEventListener->Init (EPHY_EMBED (mozembed));
  	GetListener();
 	AttachListeners();
 
-	nsCOMPtr<nsIGlobalHistory> inst =  
-	do_GetService(NS_GLOBALHISTORY_CONTRACTID, &result);
-
-	return dsHistory->SetGlobalHistory(inst);
+	return NS_OK;
 }
 
 nsresult
@@ -160,33 +154,6 @@ EphyWrapper::DetachListeners(void)
 					   mEventListener, PR_FALSE);
 }
 
-nsresult EphyWrapper::GetDocShell (nsIDocShell **aDocShell)
-{
-        nsCOMPtr<nsIDocShellTreeItem> browserAsItem;
-        browserAsItem = do_QueryInterface(mWebBrowser);
-        if (!browserAsItem) return NS_ERROR_FAILURE;
-
-        // get the owner for that item
-        nsCOMPtr<nsIDocShellTreeOwner> treeOwner;
-        browserAsItem->GetTreeOwner(getter_AddRefs(treeOwner));
-        if (!treeOwner) return NS_ERROR_FAILURE;
-
-        // get the primary content shell as an item
-        nsCOMPtr<nsIDocShellTreeItem> contentItem;
-        treeOwner->GetPrimaryContentShell(getter_AddRefs(contentItem));
-        if (!contentItem) return NS_ERROR_FAILURE;
-
-        // QI that back to a docshell
-        nsCOMPtr<nsIDocShell> DocShell;
-        DocShell = do_QueryInterface(contentItem);
-        if (!DocShell) return NS_ERROR_FAILURE;
-
-        *aDocShell = DocShell.get();
-
-        NS_IF_ADDREF(*aDocShell);
-        
-        return NS_OK;
-}
 nsresult EphyWrapper::Print (nsIPrintSettings *options, PRBool preview)
 {
 	nsresult result;
@@ -262,12 +229,7 @@ nsresult EphyWrapper::GetSHistory (nsISHistory **aSHistory)
 {
 	nsresult result;
 
-	nsCOMPtr<nsIDocShell> DocShell;
-	result = GetDocShell (getter_AddRefs(DocShell));
-	if (NS_FAILED(result) || !DocShell) return NS_ERROR_FAILURE;
-
-	nsCOMPtr<nsIWebNavigation> ContentNav = do_QueryInterface (DocShell,
-								   &result);
+	nsCOMPtr<nsIWebNavigation> ContentNav = do_QueryInterface (mWebBrowser);
 	if (!ContentNav) return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsISHistory> SessionHistory;
@@ -285,7 +247,6 @@ nsresult EphyWrapper::Destroy ()
 	DetachListeners ();
 
       	mWebBrowser = nsnull;
-	mChromeNav = nsnull;
 	
 	return NS_OK;
 }
@@ -294,12 +255,7 @@ nsresult EphyWrapper::GoToHistoryIndex (PRInt16 index)
 {
 	nsresult result;
 
-	nsCOMPtr<nsIDocShell> DocShell;
-	result = GetDocShell (getter_AddRefs(DocShell));
-	if (NS_FAILED(result) || !DocShell) return NS_ERROR_FAILURE;
-
-	nsCOMPtr<nsIWebNavigation> ContentNav = do_QueryInterface (DocShell,
-								   &result);
+	nsCOMPtr<nsIWebNavigation> ContentNav = do_QueryInterface (mWebBrowser);
 	if (!ContentNav) return NS_ERROR_FAILURE;
 
 	return  ContentNav->GotoIndex (index);
@@ -309,14 +265,10 @@ nsresult EphyWrapper::SetZoom (float aZoom, PRBool reflow)
 {
 	nsresult result;
 
-	nsCOMPtr<nsIDocShell> DocShell;
-	result = GetDocShell (getter_AddRefs(DocShell));
-	if (NS_FAILED(result) || !DocShell) return NS_ERROR_FAILURE;
-
 	if (reflow)
 	{
 		nsCOMPtr<nsIContentViewer> contentViewer;	
-		result = DocShell->GetContentViewer (getter_AddRefs(contentViewer));
+		result = GetContentViewer (getter_AddRefs(contentViewer));
 		if (!NS_SUCCEEDED (result) || !contentViewer) return NS_ERROR_FAILURE;
 
 		nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer,
@@ -327,6 +279,10 @@ nsresult EphyWrapper::SetZoom (float aZoom, PRBool reflow)
 	}
 	else
 	{
+		nsCOMPtr<nsIDocShell> DocShell;
+		DocShell = do_GetInterface (mWebBrowser);
+		if (!DocShell) return NS_ERROR_FAILURE;
+
 		SetZoomOnDocshell (aZoom, DocShell);
 
 		nsCOMPtr<nsIDocShellTreeNode> docShellNode(do_QueryInterface(DocShell));
@@ -366,16 +322,19 @@ nsresult EphyWrapper::SetZoomOnDocshell (float aZoom, nsIDocShell *DocShell)
 	return DeviceContext->SetTextZoom (aZoom);
 }
 
+nsresult EphyWrapper::GetContentViewer (nsIContentViewer **aViewer)
+{
+	nsCOMPtr<nsIDocShell> ourDocShell(do_GetInterface(mWebBrowser));
+	NS_ENSURE_TRUE(ourDocShell, NS_ERROR_FAILURE);
+	return ourDocShell->GetContentViewer(aViewer);
+}
+
 nsresult EphyWrapper::GetZoom (float *aZoom)
 {
 	nsresult result;
 
-	nsCOMPtr<nsIDocShell> DocShell;
-	result = GetDocShell (getter_AddRefs(DocShell));
-	if (NS_FAILED(result) || !DocShell) return NS_ERROR_FAILURE;
-
 	nsCOMPtr<nsIContentViewer> contentViewer;	
-	result = DocShell->GetContentViewer (getter_AddRefs(contentViewer));
+	result = GetContentViewer (getter_AddRefs(contentViewer));
 	if (!NS_SUCCEEDED (result) || !contentViewer) return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer,
@@ -385,29 +344,12 @@ nsresult EphyWrapper::GetZoom (float *aZoom)
 	return mdv->GetTextZoom (aZoom);
 }
 
-nsresult EphyWrapper::GetFocusedDOMWindow (nsIDOMWindow **aDOMWindow)
+nsresult EphyWrapper::GetDocument (nsIDOMDocument **aDOMDocument)
 {
-	nsresult rv;
-	
-	nsCOMPtr<nsIWebBrowserFocus> focus = do_GetInterface(mWebBrowser, &rv);
-	if (NS_FAILED(rv) || !focus) return NS_ERROR_FAILURE;
-
-	rv = focus->GetFocusedWindow (aDOMWindow);
-	if (NS_FAILED(rv))
-		rv = mWebBrowser->GetContentDOMWindow (aDOMWindow);
-	return rv;
+	return mDOMWindow->GetDocument (aDOMDocument);
 }
 
-nsresult EphyWrapper::GetDOMWindow (nsIDOMWindow **aDOMWindow)
-{
-	nsresult rv;
-	
-	rv = mWebBrowser->GetContentDOMWindow (aDOMWindow);
-	
-	return rv;
-}
-
-nsresult EphyWrapper::GetDOMDocument (nsIDOMDocument **aDOMDocument)
+nsresult EphyWrapper::GetTargetDocument (nsIDOMDocument **aDOMDocument)
 {
 	nsresult result;
 
@@ -422,30 +364,19 @@ nsresult EphyWrapper::GetDOMDocument (nsIDOMDocument **aDOMDocument)
 	}
 
 	/* Use the focused document */
+	nsCOMPtr<nsIWebBrowserFocus> webBrowserFocus;
+	webBrowserFocus = do_QueryInterface (mWebBrowser);
+	if (!webBrowserFocus) return NS_ERROR_FAILURE;
+
 	nsCOMPtr<nsIDOMWindow> DOMWindow;
-	result = GetFocusedDOMWindow (getter_AddRefs(DOMWindow));
+	result = webBrowserFocus->GetFocusedWindow (getter_AddRefs(DOMWindow));
 	if (NS_SUCCEEDED(result) && DOMWindow)
 	{
 		return DOMWindow->GetDocument (aDOMDocument);
 	}
 
 	/* Use the main document */
-	return GetMainDOMDocument (aDOMDocument);
-}
-
-nsresult EphyWrapper::GetMainDOMDocument (nsIDOMDocument **aDOMDocument)
-{
-	nsresult result;
-
-	nsCOMPtr<nsIDocShell> DocShell;
-	result = GetDocShell (getter_AddRefs(DocShell));
-	if (NS_FAILED(result) || !DocShell) return NS_ERROR_FAILURE;
-
-	nsCOMPtr<nsIContentViewer> contentViewer;	
-	result = DocShell->GetContentViewer (getter_AddRefs(contentViewer));
-	if (!NS_SUCCEEDED (result) || !contentViewer) return NS_ERROR_FAILURE;
-
-	return contentViewer->GetDOMDocument (aDOMDocument);
+	return mDOMWindow->GetDocument (aDOMDocument);
 }
 
 nsresult EphyWrapper::GetSHInfo (PRInt32 *count, PRInt32 *index)
@@ -527,36 +458,14 @@ nsresult EphyWrapper::Find (PRBool backwards,
 	return finder->FindNext(didFind);
 }
 
-nsresult EphyWrapper::GetWebNavigation(nsIWebNavigation **aWebNavigation)
-{
-	nsresult result;
-
-	nsCOMPtr<nsIDOMWindow> DOMWindow;
-	result = GetFocusedDOMWindow (getter_AddRefs(DOMWindow));
-	if (NS_FAILED(result) || !DOMWindow) return NS_ERROR_FAILURE;
-
-	nsCOMPtr<nsIScriptGlobalObject> scriptGlobal = do_QueryInterface(DOMWindow);
-	if (!scriptGlobal) return NS_ERROR_FAILURE;
-
-	nsCOMPtr<nsIDocShell> docshell;
-	if (NS_FAILED(scriptGlobal->GetDocShell(getter_AddRefs(docshell))))
-        return NS_ERROR_FAILURE;
-
-	nsCOMPtr<nsIWebNavigation> wn = do_QueryInterface (docshell, &result);
-	if (!wn || !NS_SUCCEEDED (result)) return NS_ERROR_FAILURE;
-
-	NS_IF_ADDREF(*aWebNavigation = wn);
-	return NS_OK;
-}
-
 nsresult EphyWrapper::LoadDocument(nsISupports *aPageDescriptor,
 				     PRUint32 aDisplayType)
 {
 	nsresult rv;
 
 	nsCOMPtr<nsIWebNavigation> wn;
-	rv = GetWebNavigation(getter_AddRefs(wn));
-	if (!wn || !NS_SUCCEEDED(rv)) return NS_ERROR_FAILURE;
+	wn = do_QueryInterface (mWebBrowser);
+	if (!wn) return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIWebPageDescriptor> wpd = do_QueryInterface(wn, &rv);
 	if (!wpd || !NS_SUCCEEDED(rv)) return NS_ERROR_FAILURE;
@@ -569,8 +478,8 @@ nsresult EphyWrapper::GetPageDescriptor(nsISupports **aPageDescriptor)
 	nsresult rv;
 
 	nsCOMPtr<nsIWebNavigation> wn;
-	rv = GetWebNavigation(getter_AddRefs(wn));
-	if (!wn || !NS_SUCCEEDED(rv)) return NS_ERROR_FAILURE;
+	wn = do_QueryInterface (mWebBrowser);
+	if (!wn) return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIWebPageDescriptor> wpd = do_QueryInterface(wn, &rv);
 	if (!wpd || !NS_SUCCEEDED(rv)) return NS_ERROR_FAILURE;
@@ -578,13 +487,13 @@ nsresult EphyWrapper::GetPageDescriptor(nsISupports **aPageDescriptor)
 	return wpd->GetCurrentDescriptor(aPageDescriptor);
 }
 
-nsresult EphyWrapper::GetMainDocumentUrl (nsCString &url)
+nsresult EphyWrapper::GetDocumentUrl (nsCString &url)
 {
 	nsresult result;
 
 	nsCOMPtr<nsIDOMDocument> DOMDocument;
 
-	result = GetMainDOMDocument (getter_AddRefs(DOMDocument));
+	result = mDOMWindow->GetDocument (getter_AddRefs(DOMDocument));
 	if (NS_FAILED(result) || !DOMDocument) return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIDocument> doc = do_QueryInterface(DOMDocument);
@@ -601,13 +510,13 @@ nsresult EphyWrapper::GetMainDocumentUrl (nsCString &url)
 	return uri->GetSpec (url);
 }
 
-nsresult EphyWrapper::GetDocumentUrl (nsCString &url)
+nsresult EphyWrapper::GetTargetDocumentUrl (nsCString &url)
 {
         nsresult result;
 
         nsCOMPtr<nsIDOMDocument> DOMDocument;
 
-        result = GetDOMDocument (getter_AddRefs(DOMDocument));
+        result = GetTargetDocument (getter_AddRefs(DOMDocument));
         if (NS_FAILED(result) || !DOMDocument) return NS_ERROR_FAILURE;
 
         nsCOMPtr<nsIDocument> doc = do_QueryInterface(DOMDocument);
@@ -626,88 +535,18 @@ nsresult EphyWrapper::GetDocumentUrl (nsCString &url)
         return NS_OK;
 }
 
-nsresult  EphyWrapper::CopyHistoryTo (EphyWrapper *dest)
-{
-	nsresult result;
-	int count,index;
-
-	nsCOMPtr<nsIDocShell> DocShell;
-	result = GetDocShell (getter_AddRefs(DocShell));
-	if (NS_FAILED(result) || !DocShell) return NS_ERROR_FAILURE;
-
-	nsCOMPtr<nsIWebNavigation> wn_src = do_QueryInterface (DocShell,
-							       &result);
-	if (!wn_src) return NS_ERROR_FAILURE;
-	
-	nsCOMPtr<nsISHistory> h_src;
-	result = wn_src->GetSessionHistory (getter_AddRefs (h_src));
-	if (!NS_SUCCEEDED(result) || (!h_src)) return NS_ERROR_FAILURE;
-
-	nsCOMPtr<nsIDocShell> destDocShell;
-	result = dest->GetDocShell (getter_AddRefs(destDocShell));
-	if (NS_FAILED(result) || !DocShell) return NS_ERROR_FAILURE;
-
-	nsCOMPtr<nsIWebNavigation> wn_dest = do_QueryInterface (destDocShell,
-								&result);
-	if (!wn_dest) return NS_ERROR_FAILURE;
-	
-	nsCOMPtr<nsISHistory> h_dest;
-	result = wn_dest->GetSessionHistory (getter_AddRefs (h_dest));
-	if (!NS_SUCCEEDED (result) || (!h_dest)) return NS_ERROR_FAILURE;
-
-	nsCOMPtr<nsISHistoryInternal> hi_dest = do_QueryInterface (h_dest);
-	if (!hi_dest) return NS_ERROR_FAILURE;
-
-	h_src->GetCount (&count);
-	h_src->GetIndex (&index);
-
-	if (count) {
-		nsCOMPtr<nsIHistoryEntry> he;
-		nsCOMPtr<nsISHEntry> she;
-
-		for (PRInt32 i = 0; i < count; i++) {
-
-			result = h_src->GetEntryAtIndex (i, PR_FALSE,
-							 getter_AddRefs (he));
-			if (!NS_SUCCEEDED(result) || (!he))
-				return NS_ERROR_FAILURE;
-
-			she = do_QueryInterface (he);
-			if (!she) return NS_ERROR_FAILURE;
-
-			result = hi_dest->AddEntry (she, PR_TRUE);
-			if (!NS_SUCCEEDED(result) || (!she))
-				return NS_ERROR_FAILURE;
-		}
-
-		result = wn_dest->GotoIndex(index);
-		if (!NS_SUCCEEDED(result)) return NS_ERROR_FAILURE;
-	}
-
-	return NS_OK;
-}
-
 nsresult EphyWrapper::ForceEncoding (const char *encoding) 
 {
 	nsresult result;
 
-	nsCOMPtr<nsIDocShell> DocShell;
-	result = GetDocShell (getter_AddRefs(DocShell));
-	if (NS_FAILED(result) || !DocShell) return NS_ERROR_FAILURE;
+	nsCOMPtr<nsIDocShell> docShell;
+	docShell = do_GetInterface (mWebBrowser);
+	if (!docShell) return NS_ERROR_FAILURE;
 
-	nsCOMPtr<nsIContentViewer> contentViewer;	
-	result = DocShell->GetContentViewer (getter_AddRefs(contentViewer));
-	if (!NS_SUCCEEDED (result) || !contentViewer) return NS_ERROR_FAILURE;
+	nsCOMPtr<nsIDocCharset> docCharset;
+	docCharset = do_QueryInterface (docShell);
 
-	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer,
-								  &result);
-	if (NS_FAILED(result) || !mdv) return NS_ERROR_FAILURE;
-
-#if MOZILLA_SNAPSHOT > 9 
-	result = mdv->SetForceCharacterSet (nsDependentCString(encoding));
-#else
-	result = mdv->SetForceCharacterSet (NS_ConvertUTF8toUCS2(encoding).get());
-#endif
+	result = docCharset->SetCharset (encoding);
 
 	return result;
 }
@@ -732,7 +571,7 @@ nsresult EphyWrapper::GetEncodingInfo (EphyEncodingInfo **infoptr)
 	EphyEncodingInfo *info;
 
 	nsCOMPtr<nsIDOMDocument> domDoc;
-	result = GetDOMDocument (getter_AddRefs(domDoc));
+	result = GetTargetDocument (getter_AddRefs(domDoc));
 	if (NS_FAILED (result) || !domDoc) return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIDocument> doc = do_QueryInterface(domDoc, &result);
@@ -751,8 +590,8 @@ nsresult EphyWrapper::GetEncodingInfo (EphyEncodingInfo **infoptr)
 	info->encoding_source = (EphyEncodingSource) source;
 
 	nsCOMPtr<nsIDocShell> ds;
-	result = GetDocShell (getter_AddRefs(ds));
-	if (NS_FAILED(result) || !ds) return NS_ERROR_FAILURE;
+	ds = do_GetInterface (mWebBrowser);
+	if (!ds) return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIDocumentCharsetInfo> ci;
 	result = ds->GetDocumentCharsetInfo (getter_AddRefs (ci));
