@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include <config.h>
@@ -119,17 +121,17 @@ void
 window_cmd_file_send_to	(EggAction *action,
 			 EphyWindow *window)
 {
-	char *url;
 	EphyTab *tab;
 	EphyEmbed *embed;
+	char *url;
 	char *location;
 	char *title;
 
 	tab = ephy_window_get_active_tab (window);
-	g_return_if_fail (tab);
+	g_return_if_fail (tab != NULL);
 
 	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (tab);
+	g_return_if_fail (embed != NULL);
 
 	location = gnome_vfs_escape_string (ephy_tab_get_location (tab));
 	if (ephy_embed_get_title (embed, &title) == G_OK)
@@ -246,6 +248,7 @@ window_cmd_file_new_window (EggAction *action,
 	EphyTab *tab;
 
 	tab = ephy_window_get_active_tab (window);
+	g_return_if_fail (tab != NULL);
 
 	ephy_shell_new_tab (ephy_shell, NULL, tab, NULL,
 			    EPHY_NEW_TAB_NEW_PAGE |
@@ -259,11 +262,12 @@ window_cmd_file_new_tab (EggAction *action,
 	EphyTab *tab;
 
 	tab = ephy_window_get_active_tab (window);
+	g_return_if_fail (tab != NULL);
 
 	ephy_shell_new_tab (ephy_shell, window, tab, NULL,
-			      EPHY_NEW_TAB_NEW_PAGE |
-			      EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-			      EPHY_NEW_TAB_JUMP);
+			    EPHY_NEW_TAB_NEW_PAGE |
+			    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+			    EPHY_NEW_TAB_JUMP);
 }
 
 void
@@ -286,10 +290,10 @@ window_cmd_file_bookmark_page (EggAction *action,
 	char *title = NULL;
 
 	tab = ephy_window_get_active_tab (window);
-	g_return_if_fail (tab);
+	g_return_if_fail (tab != NULL);
 
 	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (tab);
+	g_return_if_fail (embed != NULL);
 
 	location = ephy_tab_get_location (tab);
 	if (ephy_embed_get_title (embed, &title) != G_OK)
@@ -378,7 +382,7 @@ window_cmd_file_save_as (EggAction *action,
 
 	persist = ephy_embed_persist_new (embed);
 	ephy_embed_persist_set_flags (persist,
-					EMBED_PERSIST_MAINDOC);
+				      EMBED_PERSIST_MAINDOC);
 
 	ephy_embed_utils_save (GTK_WIDGET(window),
 			       CONF_STATE_SAVE_DIR,
@@ -391,7 +395,7 @@ window_cmd_file_save_as (EggAction *action,
 
 void
 window_cmd_file_close_window (EggAction *action,
-		               EphyWindow *window)
+		              EphyWindow *window)
 {
 	EphyTab *tab;
 
