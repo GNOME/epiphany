@@ -1,3 +1,13 @@
+2003-09-16  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_autocompletion_hide_alternatives),
+	(insert_text_cb),
+	(ephy_location_entry_autocompletion_window_hidden_cb):
+
+	Make sure to remove show_timeout also when
+	the window is still not visible.
+
 2003-09-16  Christopher James Lahey  <clahey@ximian.com>
 
 	* src/epiphany.in: Added MOZ_PLUGIN_PATH default.
