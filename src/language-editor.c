@@ -21,6 +21,7 @@
 #include "language-editor.h"
 #include "ephy-gui.h"
 #include "eel-gconf-extensions.h"
+#include "ephy-debug.h"
 
 #include <gtk/gtklabel.h>
 #include <gtk/gtkoptionmenu.h>
@@ -31,30 +32,31 @@
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtkliststore.h>
 #include <gtk/gtkcellrenderertext.h>
+#include <glib/gi18n.h>
 
 enum
 {
-        COL_DESCRIPTION,
-        COL_DATA
+	COL_DESCRIPTION,
+	COL_DATA
 };
 
 enum
 {
-        TREEVIEW_PROP,
-        ADD_PROP,
-        REMOVE_PROP,
-        LANGUAGE_PROP
+	TREEVIEW_PROP,
+	ADD_PROP,
+	REMOVE_PROP,
+	LANGUAGE_PROP
 };
 
 static const
 EphyDialogProperty properties [] =
 {
-	{ TREEVIEW_PROP, "languages_treeview", NULL, PT_NORMAL, NULL },
-	{ ADD_PROP, "add_button", NULL, PT_NORMAL, NULL },
-	{ REMOVE_PROP, "remove_button", NULL, PT_NORMAL, NULL },
-        { LANGUAGE_PROP, "languages_optionmenu", NULL, PT_NORMAL, NULL },
+	{ "languages_treeview",	NULL, PT_NORMAL, 0 },
+	{ "add_button",		NULL, PT_NORMAL, 0 },
+	{ "remove_button",	NULL, PT_NORMAL, 0 },
+	{ "languages_combo",	NULL, PT_NORMAL, 0 },
 
-        { -1, NULL, NULL }
+	{ NULL }
 };
 
 #define EPHY_LANGUAGE_EDITOR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LANGUAGE_EDITOR, LanguageEditorPrivate))
@@ -63,8 +65,15 @@ struct LanguageEditorPrivate
 {
 	GtkWidget *treeview;
 	GtkTreeModel *model;
-	GtkWidget *optionmenu;
 };
+
+static void language_editor_class_init	(LanguageEditorClass *klass);
+static void language_editor_init	(LanguageEditor *ge);
+
+/* Glade callbacks */
+
+void language_editor_close_button_cb	(GtkWidget *button, 
+					 EphyDialog *dialog);
 
 enum
 {
@@ -72,66 +81,55 @@ enum
 	LAST_SIGNAL
 };
 
-static void
-language_editor_class_init (LanguageEditorClass *klass);
-static void
-language_editor_init (LanguageEditor *ge);
-
-/* Glade callbacks */
-
-void
-language_editor_close_button_cb (GtkWidget *button, EphyDialog *dialog);
+static gint signals[LAST_SIGNAL];
 
 static GObjectClass *parent_class = NULL;
-
-static gint signals[LAST_SIGNAL];
 
 GType
 language_editor_get_type (void)
 {
-        static GType language_editor_type = 0;
+	static GType type = 0;
 
-        if (language_editor_type == 0)
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (LanguageEditorClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) language_editor_class_init,
-                        NULL,
-                        NULL, /* class_data */
-                        sizeof (LanguageEditor),
-                        0, /* n_preallocs */
-                        (GInstanceInitFunc) language_editor_init
-                };
+	if (type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (LanguageEditorClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			(GClassInitFunc) language_editor_class_init,
+			NULL,
+			NULL, /* class_data */
+			sizeof (LanguageEditor),
+			0, /* n_preallocs */
+			(GInstanceInitFunc) language_editor_init
+		};
 
-		language_editor_type = g_type_register_static (EPHY_TYPE_DIALOG,
-							       "LanguageEditor",
-							       &our_info, 0);
-        }
+		type = g_type_register_static (EPHY_TYPE_DIALOG,
+					       "LanguageEditor",
+					       &our_info, 0);
+	}
 
-        return language_editor_type;
-
+	return type;
 }
 
 static void
 language_editor_class_init (LanguageEditorClass *klass)
 {
-        GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-        parent_class = g_type_class_peek_parent (klass);
+	parent_class = g_type_class_peek_parent (klass);
 
 	signals[CHANGED] =
 		g_signal_new ("changed",
 			      G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_FIRST,
-                              G_STRUCT_OFFSET (LanguageEditorClass, changed),
-                              NULL, NULL,
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (LanguageEditorClass, changed),
+			      NULL, NULL,
 			      g_cclosure_marshal_VOID__POINTER,
-                              G_TYPE_NONE,
-                              1,
-                              G_TYPE_POINTER);
+			      G_TYPE_NONE,
+			      1,
+			      G_TYPE_POINTER);
 
 	g_type_class_add_private (object_class, sizeof(LanguageEditorPrivate));
 }
@@ -140,8 +138,7 @@ static void
 language_editor_update_pref (LanguageEditor *editor)
 {
 	GtkTreeIter iter;
-	int index;
-	GSList *strings = NULL;
+	GSList *codes = NULL;
 
 	if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (editor->priv->model), &iter))
 	{
@@ -150,46 +147,49 @@ language_editor_update_pref (LanguageEditor *editor)
 
 	do
 	{
-		GValue val = {0, };
-		gtk_tree_model_get_value (GTK_TREE_MODEL (editor->priv->model),
-					  &iter, COL_DATA, &val);
-		index = g_value_get_int (&val);
-		g_value_unset (&val);
+		GValue value = {0, };
 
-		strings = g_slist_append(strings, GINT_TO_POINTER(index));
+		gtk_tree_model_get_value (GTK_TREE_MODEL (editor->priv->model),
+					  &iter, COL_DATA, &value);
+
+		codes = g_slist_append (codes, g_value_dup_string (&value));
+
+		g_value_unset (&value);
 	}
 	while (gtk_tree_model_iter_next (GTK_TREE_MODEL (editor->priv->model), &iter));
 
-	g_signal_emit (editor, signals[CHANGED], 0, strings);
+	g_signal_emit (editor, signals[CHANGED], 0, codes);
 
-        g_slist_free (strings);
+	g_slist_foreach (codes, (GFunc) g_free, NULL);
+	g_slist_free (codes);
 }
 
 static void
 language_editor_add_button_clicked_cb (GtkButton *button,
 				       LanguageEditor *editor)
 {
-	const char *description;
+	GtkWidget *combo;
+	GtkTreeModel *model;
 	GtkTreeIter iter;
-	GtkWidget *menu;
-	GtkWidget *item;
-	int history;
+	char *code = NULL, *desc = NULL;
+	int index;
 
-	history = gtk_option_menu_get_history (GTK_OPTION_MENU(editor->priv->optionmenu));
-	menu = gtk_option_menu_get_menu (GTK_OPTION_MENU(editor->priv->optionmenu));
-	item = gtk_menu_get_active (GTK_MENU(menu));
-	description = (const char *) g_object_get_data (G_OBJECT(item), "desc");
+	combo = ephy_dialog_get_control (EPHY_DIALOG (editor), properties[LANGUAGE_PROP].id);
+	model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
+	index = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
 
-	g_return_if_fail (description != NULL);
+	if (gtk_tree_model_iter_nth_child (model, &iter, NULL, index))
+	{
+		gtk_tree_model_get (model, &iter,
+				    0, &desc,
+				    1, &code,
+				    -1);
 
-	gtk_list_store_append (GTK_LIST_STORE (editor->priv->model),
-			       &iter);
+		language_editor_add (editor, code, desc);
 
-	gtk_list_store_set (GTK_LIST_STORE (editor->priv->model),
-			    &iter,
-			    COL_DESCRIPTION, description,
-			    COL_DATA, history,
-			    -1);
+		g_free (desc);
+		g_free (code);
+	}
 
 	language_editor_update_pref (editor);
 }
@@ -245,63 +245,59 @@ static void
 language_editor_set_view (LanguageEditor *ge,
 			  GtkWidget *treeview,
 			  GtkWidget *add_button,
-			  GtkWidget *remove_button,
-			  GtkWidget *optionmenu)
+			  GtkWidget *remove_button)
 {
 	GtkTreeViewColumn *column;
-        GtkCellRenderer *renderer;
+	GtkCellRenderer *renderer;
 	GtkListStore *liststore;
 	GtkTreeSelection *selection;
 
 	ge->priv->treeview = treeview;
-	ge->priv->optionmenu = optionmenu;
 
 	gtk_tree_view_set_reorderable (GTK_TREE_VIEW(ge->priv->treeview), TRUE);
 
-	liststore = gtk_list_store_new (2,
-					G_TYPE_STRING,
-					G_TYPE_INT);
+	liststore = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
 	ge->priv->model = GTK_TREE_MODEL (liststore);
 
-        gtk_tree_view_set_model (GTK_TREE_VIEW(ge->priv->treeview),
-                                 ge->priv->model);
+	gtk_tree_view_set_model (GTK_TREE_VIEW(ge->priv->treeview),
+				 ge->priv->model);
 	g_object_unref (ge->priv->model);
-        gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(ge->priv->treeview),
-                                           FALSE);
+	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(ge->priv->treeview),
+					   FALSE);
 
-        renderer = gtk_cell_renderer_text_new ();
+	renderer = gtk_cell_renderer_text_new ();
 
-        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW(ge->priv->treeview),
-                                                     0, "Language",
-                                                     renderer,
-                                                     "text", 0,
-                                                     NULL);
-        column = gtk_tree_view_get_column (GTK_TREE_VIEW(ge->priv->treeview), 0);
-        gtk_tree_view_column_set_resizable (column, TRUE);
-        gtk_tree_view_column_set_sort_column_id (column, COL_DESCRIPTION);
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW(ge->priv->treeview),
+						     0, "Language",
+						     renderer,
+						     "text", 0,
+						     NULL);
+	column = gtk_tree_view_get_column (GTK_TREE_VIEW(ge->priv->treeview), 0);
+	gtk_tree_view_column_set_resizable (column, TRUE);
+	gtk_tree_view_column_set_sort_column_id (column, COL_DESCRIPTION);
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(ge->priv->treeview));
-        gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 
 	/* Connect treeview signals */
 	g_signal_connect
-                (G_OBJECT (ge->priv->treeview),
+		(G_OBJECT (ge->priv->treeview),
 		 "drag_end",
-                 G_CALLBACK(language_editor_treeview_drag_end_cb),
+		 G_CALLBACK (language_editor_treeview_drag_end_cb),
 		 ge);
 
 	/* Connect buttons signals */
 	g_signal_connect
-                (G_OBJECT (add_button),
+		(G_OBJECT (add_button),
 		 "clicked",
-                 G_CALLBACK(language_editor_add_button_clicked_cb),
+		 G_CALLBACK (language_editor_add_button_clicked_cb),
 		 ge);
 
 	g_signal_connect
-                (G_OBJECT (remove_button),
+		(G_OBJECT (remove_button),
 		 "clicked",
-                 G_CALLBACK(language_editor_remove_button_clicked_cb),
+		 G_CALLBACK (language_editor_remove_button_clicked_cb),
 		 ge);
 }
 
@@ -309,60 +305,67 @@ static void
 language_editor_init (LanguageEditor *le)
 {
 	GtkWidget *treeview;
-	GtkWidget *optionmenu;
 	GtkWidget *add_button;
 	GtkWidget *remove_button;
 
 	le->priv = EPHY_LANGUAGE_EDITOR_GET_PRIVATE (le);
 
 	ephy_dialog_construct (EPHY_DIALOG(le),
-                                 properties,
-                                 "prefs-dialog.glade",
-                                 "languages_dialog");
+			       properties,
+			       "prefs-dialog.glade",
+			       "languages_dialog");
 
-	treeview = ephy_dialog_get_control (EPHY_DIALOG(le),
-					    TREEVIEW_PROP);
-	add_button = ephy_dialog_get_control (EPHY_DIALOG(le),
-					      ADD_PROP);
-	remove_button = ephy_dialog_get_control (EPHY_DIALOG(le),
-					         REMOVE_PROP);
-	optionmenu = ephy_dialog_get_control (EPHY_DIALOG(le),
-					      LANGUAGE_PROP);
+	treeview = ephy_dialog_get_control (EPHY_DIALOG(le), properties[TREEVIEW_PROP].id);
+	add_button = ephy_dialog_get_control (EPHY_DIALOG(le), properties[ADD_PROP].id);
+	remove_button = ephy_dialog_get_control (EPHY_DIALOG(le), properties[REMOVE_PROP].id);
 
-	language_editor_set_view (le, treeview, add_button, remove_button,
-				  optionmenu);
+	language_editor_set_view (le, treeview, add_button, remove_button);
 }
 
 LanguageEditor *
 language_editor_new (GtkWidget *parent)
 {
 	return EPHY_LANGUAGE_EDITOR (g_object_new (EPHY_TYPE_LANGUAGE_EDITOR,
-				  		   "ParentWindow", parent,
-				  		   NULL));
+						   "parent-window", parent,
+						   NULL));
 }
 
 void
-language_editor_set_menu (LanguageEditor *editor,
-			  GtkWidget *menu)
+language_editor_set_model (LanguageEditor *editor,
+			   GtkTreeModel *model)
 {
-	gtk_option_menu_set_menu (GTK_OPTION_MENU(editor->priv->optionmenu),
-				  menu);
+	GtkWidget *combo;
+	GtkCellRenderer *renderer;
+
+	combo = ephy_dialog_get_control (EPHY_DIALOG (editor), properties[LANGUAGE_PROP].id);
+
+	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), model);
+
+        renderer = gtk_cell_renderer_text_new ();
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo),
+                                    renderer,
+                                    TRUE);
+        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
+                                        "text", COL_DESCRIPTION,
+                                        NULL);
+
+	ephy_dialog_set_data_column (EPHY_DIALOG (editor), properties[LANGUAGE_PROP].id, COL_DATA);
+
+	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 }
 
 void
-language_editor_add (LanguageEditor *ge,
-		     const char *language,
-		     int id)
+language_editor_add (LanguageEditor *editor,
+		     const char *code,
+		     const char *desc)
 {
 	GtkTreeIter iter;
 
-	gtk_list_store_append (GTK_LIST_STORE (ge->priv->model),
-			       &iter);
+	gtk_list_store_append (GTK_LIST_STORE (editor->priv->model), &iter);
 
-	gtk_list_store_set (GTK_LIST_STORE (ge->priv->model),
-			    &iter,
-			    COL_DESCRIPTION, language,
-			    COL_DATA, id,
+	gtk_list_store_set (GTK_LIST_STORE (editor->priv->model), &iter,
+			    COL_DESCRIPTION, desc,
+			    COL_DATA, code,
 			    -1);
 }
 

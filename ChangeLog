@@ -1,3 +1,84 @@
+2003-11-30  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.in:
+	* data/glade/epiphany.glade:
+	* data/glade/prefs-dialog.glade:
+	* embed/downloader-view.c: (downloader_view_build_ui):
+	* embed/ephy-embed-dialog.c: (ephy_embed_dialog_new_with_parent):
+	* embed/ephy-encodings.c: (ephy_encodings_get_detectors):
+	* embed/ephy-encodings.h:
+	* embed/find-dialog.c: (update_navigation_controls),
+	(set_properties), (impl_show), (find_dialog_class_init),
+	(find_dialog_init), (find_dialog_new_with_parent):
+	* embed/print-dialog.c: (impl_show), (print_dialog_init),
+	(print_dialog_new_with_parent), (print_get_info):
+	* lib/ephy-dialog.c: (ephy_dialog_get_type), (lookup_info),
+	(set_sensitivity), (set_value_from_pref), (set_pref_from_value),
+	(set_value_from_editable), (set_value_from_optionmenu),
+	(set_value_from_combobox), (get_radio_button_active_index),
+	(set_value_from_radiobuttongroup), (set_value_from_spin_button),
+	(set_value_from_togglebutton), (set_value_from_info),
+	(set_editable_from_value), (get_index_from_value),
+	(set_optionmenu_from_value), (compare_values),
+	(set_combo_box_from_value), (set_radiobuttongroup_from_value),
+	(set_spin_button_from_value), (set_togglebutton_from_value),
+	(set_info_from_value), (set_pref_from_info),
+	(togglebutton_clicked_cb), (radiobutton_clicked_cb),
+	(spinbutton_timeout_cb), (spinbutton_changed_cb), (changed_cb),
+	(set_info_from_pref), (connect_signals), (disconnect_signals),
+	(init_props), (load_info), (save_info), (setup_default_size),
+	(dialog_destroy_cb), (impl_construct), (impl_show),
+	(ephy_dialog_set_modal), (ephy_dialog_add_enum),
+	(ephy_dialog_set_data_column), (ephy_dialog_set_pref),
+	(ephy_dialog_set_size_group), (ephy_dialog_construct),
+	(ephy_dialog_show), (ephy_dialog_run), (ephy_dialog_get_control),
+	(ephy_dialog_get_value), (ephy_dialog_set_value), (free_prop_info),
+	(ephy_dialog_init), (ephy_dialog_dispose), (ephy_dialog_finalize),
+	(ephy_dialog_set_parent), (ephy_dialog_set_property),
+	(ephy_dialog_get_property), (ephy_dialog_class_init),
+	(ephy_dialog_new), (ephy_dialog_new_with_parent):
+	* lib/ephy-dialog.h:
+	* lib/ephy-file-chooser.c: (ephy_file_chooser_new):
+	* src/ephy-encoding-dialog.c: (sync_embed_cb),
+	(sync_parent_window_cb), (activate_choice),
+	(view_node_selected_cb), (view_node_activated_cb),
+	(ephy_encoding_dialog_init), (ephy_encoding_dialog_new):
+	* src/ephy-shell.c: (ephy_shell_finalize),
+	(ephy_shell_get_pdm_dialog), (ephy_shell_get_prefs_dialog):
+	* src/ephy-shell.h:
+	* src/language-editor.c: (language_editor_get_type),
+	(language_editor_class_init), (language_editor_update_pref),
+	(language_editor_add_button_clicked_cb),
+	(language_editor_set_view), (language_editor_init),
+	(language_editor_new), (language_editor_set_model),
+	(language_editor_add):
+	* src/language-editor.h:
+	* src/pdm-dialog.c: (pdm_dialog_show_help),
+	(action_treeview_selection_changed_cb), (setup_action),
+	(cookies_treeview_selection_changed_cb),
+	(pdm_dialog_cookies_construct), (pdm_dialog_passwords_construct),
+	(pdm_dialog_init), (show_cookies_properties):
+	* src/prefs-dialog.c: (prefs_dialog_get_type),
+	(prefs_dialog_class_init), (prefs_dialog_show_help),
+	(setup_font_combo), (fonts_language_combo_changed_cb),
+	(create_fonts_language_menu), (create_node_combo),
+	(language_combo_changed_cb), (create_language_menu),
+	(get_download_button_label), (create_download_path_label),
+	(prefs_dialog_init), (prefs_dialog_response_cb),
+	(set_homepage_entry), (prefs_homepage_current_button_clicked_cb),
+	(prefs_homepage_blank_button_clicked_cb),
+	(language_dialog_changed_cb),
+	(prefs_language_more_button_clicked_cb),
+	(download_path_response_cb),
+	(prefs_download_path_button_clicked_cb):
+	* src/prefs-dialog.h:
+	* src/window-commands.c: (window_cmd_edit_prefs):
+
+	Improved API and implementation of EphyDialog. Add support for
+	new combo box, and removed optionmenu.
+
+	Port all dialogues to new API and use combobox instead of optionmenus.
+
 2003-11-30 Chris Lahey <clahey@ximian.com>
 	   Marco Pesenti Gritti  <marco@gnome.org>
 

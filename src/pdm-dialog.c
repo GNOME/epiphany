@@ -74,18 +74,6 @@ struct PdmDialogPrivate
 
 enum
 {
-	PROP_WINDOW,
-	PROP_NOTEBOOK,
-	PROP_COOKIES_TREEVIEW,
-	PROP_COOKIES_REMOVE,
-	PROP_PASSWORDS_TREEVIEW,
-	PROP_PASSWORDS_REMOVE,
-	PROP_DIALOG,
-	PROP_COOKIES_PROPERTIES
-};
-
-enum
-{
 	COL_COOKIES_HOST,
 	COL_COOKIES_NAME,
 	COL_COOKIES_PATH,
@@ -99,21 +87,40 @@ enum
 	COL_PASSWORDS_DATA
 };
 
+enum
+{
+	PROP_WINDOW,
+	PROP_NOTEBOOK,
+	PROP_COOKIES_TREEVIEW,
+	PROP_COOKIES_REMOVE,
+	PROP_COOKIES_PROPERTIES,
+	PROP_PASSWORDS_TREEVIEW,
+	PROP_PASSWORDS_REMOVE
+};
+
 static const
 EphyDialogProperty properties [] =
 {
-	{ PROP_WINDOW, "pdm_dialog", NULL, PT_NORMAL, NULL },
-	{ PROP_NOTEBOOK, "pdm_notebook", NULL, PT_NORMAL, NULL },
+	{ "pdm_dialog",			NULL, PT_NORMAL, 0 },
+	{ "pdm_notebook",		NULL, PT_NORMAL, 0 },
 
-	{ PROP_COOKIES_TREEVIEW, "cookies_treeview", NULL, PT_NORMAL, NULL },
-	{ PROP_COOKIES_REMOVE, "cookies_remove_button", NULL, PT_NORMAL, NULL },
-	{ PROP_PASSWORDS_TREEVIEW, "passwords_treeview", NULL, PT_NORMAL, NULL },
-	{ PROP_PASSWORDS_REMOVE, "passwords_remove_button", NULL, PT_NORMAL, NULL },
-	{ PROP_DIALOG, "pdm_dialog", NULL, PT_NORMAL, NULL },
-	{ PROP_COOKIES_PROPERTIES, "cookies_properties_button", NULL, PT_NORMAL, NULL },
+	{ "cookies_treeview",		NULL, PT_NORMAL, 0 },
+	{ "cookies_remove_button",	NULL, PT_NORMAL, 0 },
+	{ "cookies_properties_button",	NULL, PT_NORMAL, 0 },
+	{ "passwords_treeview",		NULL, PT_NORMAL, 0 },
+	{ "passwords_remove_button",	NULL, PT_NORMAL, 0 },
 
-	{ -1, NULL, NULL }
+	{ NULL }
 };
+
+static const
+char *size_group [] =
+{
+	"cookies_remove_button",
+	"cookies_properties_button",
+	"passwords_remove_button"
+};
+const guint n_size_group = G_N_ELEMENTS (size_group);
 
 static void pdm_dialog_class_init	(PdmDialogClass *klass);
 static void pdm_dialog_init		(PdmDialog *dialog);
@@ -178,20 +185,20 @@ static void
 pdm_dialog_show_help (PdmDialog *pd)
 {
 	GtkWidget *notebook, *window;
-	gint id;
+	int id;
 
 	/* FIXME: Once we actually have documentation we
 	 * should point these at the correct links.
 	 */
-	gchar *help_preferences[] = {
+	char *help_preferences[] = {
 		"pdm",
 		"pdm"
 	};
 
-	window = ephy_dialog_get_control (EPHY_DIALOG (pd), PROP_WINDOW);
+	window = ephy_dialog_get_control (EPHY_DIALOG (pd), properties[PROP_WINDOW].id);
 	g_return_if_fail (GTK_IS_WINDOW (window));
 
-	notebook = ephy_dialog_get_control (EPHY_DIALOG (pd), PROP_NOTEBOOK);
+	notebook = ephy_dialog_get_control (EPHY_DIALOG (pd), properties[PROP_NOTEBOOK].id);
 	g_return_if_fail (notebook != NULL);
 
 	id = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
@@ -210,7 +217,7 @@ action_treeview_selection_changed_cb (GtkTreeSelection *selection,
 
 	has_selection = gtk_tree_selection_count_selected_rows (selection) > 0;
 
-	widget = ephy_dialog_get_control (d, action->remove_id);
+	widget = ephy_dialog_get_control (d, properties[action->remove_id].id);
 	gtk_widget_set_sensitive (widget, has_selection);
 }
 
@@ -332,7 +339,7 @@ setup_action (PdmActionInfo *action)
 	GtkTreeSelection *selection;
 
 	widget = ephy_dialog_get_control (EPHY_DIALOG(action->dialog),
-					  action->remove_id);
+					  properties[action->remove_id].id);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (pdm_dialog_remove_button_clicked_cb),
 			  action);
@@ -361,7 +368,7 @@ cookies_treeview_selection_changed_cb (GtkTreeSelection *selection,
 
 	has_selection = gtk_tree_selection_count_selected_rows (selection) == 1;
 
-	widget = ephy_dialog_get_control (d, PROP_COOKIES_PROPERTIES);
+	widget = ephy_dialog_get_control (d, properties[PROP_COOKIES_PROPERTIES].id);
 	gtk_widget_set_sensitive (widget, has_selection);
 }
 
@@ -378,7 +385,7 @@ pdm_dialog_cookies_construct (PdmActionInfo *info)
 	LOG ("pdm_dialog_cookies_construct")
 
 	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
-			(EPHY_DIALOG (dialog), PROP_COOKIES_TREEVIEW));
+			(EPHY_DIALOG (dialog), properties[PROP_COOKIES_TREEVIEW].id));
 
 	/* set tree model */
 	liststore = gtk_list_store_new (4,
@@ -636,7 +643,7 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 	LOG ("pdm_dialog_passwords_construct")
 
 	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
-			(EPHY_DIALOG(dialog), PROP_PASSWORDS_TREEVIEW));
+			(EPHY_DIALOG(dialog), properties[PROP_PASSWORDS_TREEVIEW].id));
 
 	/* set tree model */
 	liststore = gtk_list_store_new (3,
@@ -775,14 +782,6 @@ pdm_dialog_init (PdmDialog *dialog)
 	PdmActionInfo *cookies, *passwords;
 	GtkWidget *notebook;
 
-	const int props[] =
-	{
-		PROP_COOKIES_REMOVE,
-		PROP_COOKIES_PROPERTIES,
-		PROP_PASSWORDS_REMOVE
-	};
-	const guint n_props = G_N_ELEMENTS (props);
-
 	dialog->priv = EPHY_PDM_DIALOG_GET_PRIVATE (dialog);
 
 	dialog->priv->cookies = NULL;
@@ -798,7 +797,7 @@ pdm_dialog_init (PdmDialog *dialog)
 	 * avoid the little jerk you get otherwise when switching pages because
 	 * one set of buttons is wider than another.
 	 */
-	ephy_dialog_set_size_group (EPHY_DIALOG (dialog), (int*) props, n_props);
+	ephy_dialog_set_size_group (EPHY_DIALOG (dialog), size_group, n_size_group);
 
 	cookies = g_new0 (PdmActionInfo, 1);
 	cookies->construct = pdm_dialog_cookies_construct;
@@ -830,7 +829,7 @@ pdm_dialog_init (PdmDialog *dialog)
 	cookies->construct (cookies);
 	passwords->construct (passwords);
 
-	notebook = ephy_dialog_get_control (EPHY_DIALOG (dialog), PROP_NOTEBOOK);
+	notebook = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[PROP_NOTEBOOK].id);
 	sync_notebook_tab (notebook, NULL, 0, dialog);
 	g_signal_connect (G_OBJECT (notebook), "switch_page",
 			  G_CALLBACK (sync_notebook_tab), dialog);
@@ -862,7 +861,7 @@ show_cookies_properties (PdmDialog *dialog,
 	char *str;
 
 	parent = ephy_dialog_get_control (EPHY_DIALOG(dialog),
-					  PROP_DIALOG);
+					  properties[PROP_WINDOW].id);
 
 	gdialog = gtk_dialog_new_with_buttons
 		 (_("Cookie Properties"),

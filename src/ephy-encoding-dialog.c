@@ -51,11 +51,11 @@ enum
 static const
 EphyDialogProperty properties [] =
 {
-	{ SCROLLED_WINDOW_PROP,	"scrolled_window",	NULL, PT_NORMAL, NULL },
-	{ AUTOMATIC_PROP,	"automatic_button",	NULL, PT_NORMAL, NULL },
-	{ AUTOMATIC_PROP,	"manual_button",	NULL, PT_NORMAL, NULL },
+	{ "scrolled_window",	NULL, PT_NORMAL, 0 },
+	{ "automatic_button",	NULL, PT_NORMAL, 0 },
+	{ "manual_button",	NULL, PT_NORMAL, 0 },
 
-	{ -1, NULL, NULL }
+	{ NULL }
 };
 
 #define EPHY_ENCODING_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODING_DIALOG, EphyEncodingDialogPrivate))
@@ -161,7 +161,7 @@ sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 
 	is_automatic = encoding_is_automatic (info);
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), AUTOMATIC_PROP);
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[AUTOMATIC_PROP].id);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), is_automatic);
 
 	ephy_encoding_info_free (info);
@@ -188,7 +188,7 @@ sync_parent_window_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer d
 	g_return_if_fail (dialog->priv->window == NULL);
 
 	g_value_init (&value, GTK_TYPE_WIDGET);
-	g_object_get_property (G_OBJECT (dialog), "ParentWindow", &value);
+	g_object_get_property (G_OBJECT (dialog), "parent-window", &value);
 	window = EPHY_WINDOW (g_value_get_object (&value));
 	g_value_unset (&value);
 
@@ -215,7 +215,7 @@ activate_choice (EphyEncodingDialog *dialog)
 	info = ephy_embed_get_encoding_info (embed);
 	if (info == NULL) return;
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), AUTOMATIC_PROP);
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[AUTOMATIC_PROP].id);
 	is_automatic = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
 	if (is_automatic)
@@ -265,7 +265,7 @@ view_node_selected_cb (EphyNodeView *view,
 
 	if (dialog->priv->update_tag) return;
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), MANUAL_PROP);
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[MANUAL_PROP].id);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 
 	activate_choice (dialog);
@@ -282,7 +282,7 @@ view_node_activated_cb (GtkWidget *view,
 
 	if (dialog->priv->update_tag) return;
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), MANUAL_PROP);
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[MANUAL_PROP].id);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 
 	activate_choice (dialog);
@@ -350,20 +350,20 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 	gtk_widget_show (treeview);
 
 	scroller = ephy_dialog_get_control
-			(EPHY_DIALOG (dialog), SCROLLED_WINDOW_PROP);
+			(EPHY_DIALOG (dialog), properties[SCROLLED_WINDOW_PROP].id);
 	gtk_container_add (GTK_CONTAINER (scroller), treeview);
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), AUTOMATIC_PROP);
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[AUTOMATIC_PROP].id);
 	gtk_label_set_use_markup (GTK_LABEL (GTK_BIN (button)->child), TRUE);
 	g_signal_connect (button, "toggled",
 			  G_CALLBACK (automatic_toggled_cb), dialog);
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), MANUAL_PROP);
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[MANUAL_PROP].id);
 	gtk_label_set_use_markup (GTK_LABEL (GTK_BIN (button)->child), TRUE);
 
 	dialog->priv->enc_view = treeview;
 
-	g_signal_connect (G_OBJECT (dialog), "notify::ParentWindow",
+	g_signal_connect (G_OBJECT (dialog), "notify::parent-window",
 			  G_CALLBACK (sync_parent_window_cb), NULL);
 	g_signal_connect (G_OBJECT (dialog), "notify::embed",
 			  G_CALLBACK (sync_embed_cb), NULL);
@@ -402,6 +402,6 @@ EphyEncodingDialog *
 ephy_encoding_dialog_new (EphyWindow *parent)
 {
 	return g_object_new (EPHY_TYPE_ENCODING_DIALOG,
-			     "ParentWindow", parent,
+			     "parent-window", parent,
 			     NULL);
 }

@@ -100,28 +100,28 @@ enum
 static const
 EphyDialogProperty properties [] =
 {
-	{ WINDOW_PROP, "print_dialog", NULL, PT_NORMAL, NULL },
-	{ PRINTON_PROP, "printer_radiobutton", CONF_PRINT_PRINTON, PT_NORMAL, NULL },
-	{ PRINTER_PROP, "printer_entry", CONF_PRINT_PRINTER, PT_NORMAL, NULL },
-	{ FILE_PROP, "file_entry", CONF_PRINT_FILE, PT_NORMAL, NULL },
-	{ PAPER_PROP,"A4_radiobutton", CONF_PRINT_PAPER, PT_NORMAL, NULL },
-	{ TOP_PROP, "top_spinbutton", CONF_PRINT_TOP_MARGIN, PT_NORMAL, NULL },
-        { BOTTOM_PROP, "bottom_spinbutton", CONF_PRINT_BOTTOM_MARGIN, PT_NORMAL, NULL },
-	{ LEFT_PROP,"left_spinbutton", CONF_PRINT_LEFT_MARGIN, PT_NORMAL, NULL },
-	{ RIGHT_PROP, "right_spinbutton", CONF_PRINT_RIGHT_MARGIN, PT_NORMAL, NULL },
-	{ PAGE_TITLE_PROP, "print_page_title_checkbutton", CONF_PRINT_PAGE_TITLE, PT_NORMAL, NULL },
-	{ PAGE_URL_PROP, "print_page_url_checkbutton", CONF_PRINT_PAGE_URL, PT_NORMAL, NULL },
-	{ PAGE_NUMBERS_PROP, "print_page_numbers_checkbutton", CONF_PRINT_PAGE_NUMBERS, PT_NORMAL, NULL },
-	{ DATE_PROP, "print_date_checkbutton", CONF_PRINT_DATE, PT_NORMAL, NULL },
-	{ ALL_PAGES_PROP, "all_pages_radiobutton", CONF_PRINT_ALL_PAGES, PT_NORMAL, NULL },
-	{ TO_PROP, "to_spinbutton", NULL, PT_NORMAL, NULL },
-	{ FROM_PROP, "from_spinbutton", NULL, PT_NORMAL, NULL },
-	{ COLOR_PROP, "print_color_radiobutton", CONF_PRINT_COLOR, PT_NORMAL, NULL },
-	{ ORIENTATION_PROP, "orient_p_radiobutton", CONF_PRINT_ORIENTATION, PT_NORMAL, NULL },
-	{ PREVIEW_PROP, "preview_button", NULL, PT_NORMAL, NULL },
-	{ SELECTION_PROP, "selection_radiobutton", NULL, PT_NORMAL, NULL},
+	{ "print_dialog",			NULL,			  PT_NORMAL, 0 },
+	{ "printer_radiobutton",		CONF_PRINT_PRINTON,	  PT_NORMAL, 0 },
+	{ "printer_entry",			CONF_PRINT_PRINTER,	  PT_NORMAL, 0 },
+	{ "file_entry",				CONF_PRINT_FILE,	  PT_NORMAL, 0 },
+	{ "A4_radiobutton",			CONF_PRINT_PAPER,	  PT_NORMAL, G_TYPE_STRING },
+	{ "top_spinbutton",			CONF_PRINT_TOP_MARGIN,	  PT_NORMAL, 0 },
+        { "bottom_spinbutton",			CONF_PRINT_BOTTOM_MARGIN, PT_NORMAL, 0 },
+	{ "left_spinbutton",			CONF_PRINT_LEFT_MARGIN,	  PT_NORMAL, 0 },
+	{ "right_spinbutton",			CONF_PRINT_RIGHT_MARGIN,  PT_NORMAL, 0 },
+	{ "print_page_title_checkbutton",	CONF_PRINT_PAGE_TITLE,	  PT_NORMAL, 0 },
+	{ "print_page_url_checkbutton",		CONF_PRINT_PAGE_URL,	  PT_NORMAL, 0 },
+	{ "print_page_numbers_checkbutton",	CONF_PRINT_PAGE_NUMBERS,  PT_NORMAL, 0 },
+	{ "print_date_checkbutton",		CONF_PRINT_DATE,	  PT_NORMAL, 0 },
+	{ "all_pages_radiobutton",		CONF_PRINT_ALL_PAGES,	  PT_NORMAL, 0 },
+	{ "to_spinbutton",			NULL,			  PT_NORMAL, 0 },
+	{ "from_spinbutton",			NULL,			  PT_NORMAL, 0 },
+	{ "print_color_radiobutton",		CONF_PRINT_COLOR,	  PT_NORMAL, 0 },
+	{ "orient_p_radiobutton",		CONF_PRINT_ORIENTATION,	  PT_NORMAL, 0 },
+	{ "preview_button",			NULL,			  PT_NORMAL, 0 },
+	{ "selection_radiobutton",		NULL,			  PT_NORMAL, 0 },
 
-	{ -1, NULL, NULL }
+	{ NULL }
 };
 
 static const
@@ -176,7 +176,7 @@ impl_show (EphyDialog *dialog)
 
 		/* disappear preview button  */
 		button = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-						  PREVIEW_PROP);
+						  properties[PREVIEW_PROP].id);
 		gtk_widget_hide (button);
 	}
 
@@ -187,7 +187,7 @@ impl_show (EphyDialog *dialog)
 
 		/* Make selection button disabled */
 		widget = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-						  SELECTION_PROP);
+						  properties[SELECTION_PROP].id);
 
 		gtk_widget_set_sensitive (widget, FALSE);
 
@@ -195,7 +195,7 @@ impl_show (EphyDialog *dialog)
 		{
 			GtkWidget *all_pages;
 			all_pages = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-							     ALL_PAGES_PROP);
+							     properties[ALL_PAGES_PROP].id);
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (all_pages), TRUE);
 		}
 	}
@@ -237,9 +237,10 @@ print_dialog_init (PrintDialog *dialog)
 				 properties,
 				 "print.glade", "print_dialog");
 
-	dialog->priv->window = ephy_dialog_get_control (EPHY_DIALOG(dialog), WINDOW_PROP);
+	dialog->priv->window = ephy_dialog_get_control (EPHY_DIALOG(dialog),
+							properties[WINDOW_PROP].id);
 
-	ephy_dialog_add_enum (EPHY_DIALOG (dialog), PAPER_PROP,
+	ephy_dialog_add_enum (EPHY_DIALOG (dialog), properties[PAPER_PROP].id,
 			      n_paper_format_enum, paper_format_enum);
 	
 	icon = gtk_widget_render_icon (dialog->priv->window, 
@@ -278,7 +279,7 @@ print_dialog_new_with_parent (GtkWidget *window,
 
 	dialog = EPHY_PRINT_DIALOG (g_object_new (EPHY_TYPE_PRINT_DIALOG,
 						  "embed", embed,
-						  "ParentWindow", window,
+						  "parent-window", window,
 						  NULL));
 
 	if (ret_info != NULL)
@@ -330,15 +331,15 @@ print_get_info (EphyDialog *dialog)
 
 	info = g_new0 (EmbedPrintInfo, 1);
 
-	ephy_dialog_get_value (dialog, PRINTON_PROP, &print_to_file);
+	ephy_dialog_get_value (dialog, properties[PRINTON_PROP].id, &print_to_file);
 	info->print_to_file = g_value_get_int (&print_to_file);
 	g_value_unset (&print_to_file);
 
-	ephy_dialog_get_value (dialog, PRINTER_PROP, &printer);
+	ephy_dialog_get_value (dialog, properties[PRINTER_PROP].id, &printer);
 	info->printer = g_strdup (g_value_get_string (&printer));
 	g_value_unset (&printer);
 
-	ephy_dialog_get_value (dialog, FILE_PROP, &file);
+	ephy_dialog_get_value (dialog, properties[FILE_PROP].id, &file);
 	filename = g_value_get_string (&file);
 	if (filename != NULL)
 	{
@@ -350,64 +351,64 @@ print_get_info (EphyDialog *dialog)
 	}
 	g_value_unset (&file);
 
-	ephy_dialog_get_value (dialog, BOTTOM_PROP, &bottom_margin);
+	ephy_dialog_get_value (dialog, properties[BOTTOM_PROP].id, &bottom_margin);
 	info->bottom_margin = g_value_get_float (&bottom_margin);
 	g_value_unset (&bottom_margin);
 
-	ephy_dialog_get_value (dialog, LEFT_PROP, &left_margin);
+	ephy_dialog_get_value (dialog, properties[LEFT_PROP].id, &left_margin);
 	info->left_margin = g_value_get_float (&left_margin);
 	g_value_unset (&left_margin);
 
-	ephy_dialog_get_value (dialog, TOP_PROP, &top_margin);
+	ephy_dialog_get_value (dialog, properties[TOP_PROP].id, &top_margin);
 	info->top_margin = g_value_get_float (&top_margin);
 	g_value_unset (&top_margin);
 
-	ephy_dialog_get_value (dialog, RIGHT_PROP, &right_margin);
+	ephy_dialog_get_value (dialog, properties[RIGHT_PROP].id, &right_margin);
 	info->right_margin = g_value_get_float (&right_margin);
 	g_value_unset (&right_margin);
 
-	ephy_dialog_get_value (dialog, FROM_PROP, &from_page);
+	ephy_dialog_get_value (dialog, properties[FROM_PROP].id, &from_page);
 	info->from_page = g_value_get_float (&from_page);
 	g_value_unset (&from_page);
 
-	ephy_dialog_get_value (dialog, TO_PROP, &to_page);
+	ephy_dialog_get_value (dialog, properties[TO_PROP].id, &to_page);
 	info->to_page = g_value_get_float (&to_page);
 	g_value_unset (&to_page);
 
-	ephy_dialog_get_value (dialog, PAPER_PROP, &paper);
+	ephy_dialog_get_value (dialog, properties[PAPER_PROP].id, &paper);
 	info->paper = g_strdup (paper_format_enum[g_value_get_int (&paper)]);
 	g_value_unset (&paper);
 
-	ephy_dialog_get_value (dialog, ALL_PAGES_PROP, &pages);
+	ephy_dialog_get_value (dialog, properties[ALL_PAGES_PROP].id, &pages);
 	info->pages = g_value_get_int (&pages);
 	g_value_unset (&pages);
 
-	ephy_dialog_get_value (dialog, COLOR_PROP, &print_color);
+	ephy_dialog_get_value (dialog, properties[COLOR_PROP].id, &print_color);
 	info->print_color = !g_value_get_int (&print_color);
 	g_value_unset (&print_color);
 
-	ephy_dialog_get_value (dialog, ORIENTATION_PROP, &orientation);
+	ephy_dialog_get_value (dialog, properties[ORIENTATION_PROP].id, &orientation);
 	info->orientation = g_value_get_int (&orientation);
 	g_value_unset (&orientation);
 
 	info->frame_type = 0;
 
-	ephy_dialog_get_value (dialog, PAGE_TITLE_PROP, &page_title);
+	ephy_dialog_get_value (dialog, properties[PAGE_TITLE_PROP].id, &page_title);
 	info->header_left_string = g_value_get_boolean (&page_title) ?
 				   g_strdup ("&T") : g_strdup ("");
 	g_value_unset (&page_title);
 
-	ephy_dialog_get_value (dialog, PAGE_URL_PROP, &page_url);
+	ephy_dialog_get_value (dialog, properties[PAGE_URL_PROP].id, &page_url);
 	info->header_right_string = g_value_get_boolean (&page_url) ?
 				    g_strdup ("&U") : g_strdup ("");
 	g_value_unset (&page_url);
 
-	ephy_dialog_get_value (dialog, PAGE_NUMBERS_PROP, &page_numbers);
+	ephy_dialog_get_value (dialog, properties[PAGE_NUMBERS_PROP].id, &page_numbers);
 	info->footer_left_string = g_value_get_boolean (&page_numbers) ?
 				   g_strdup ("&PT") : g_strdup ("");
 	g_value_unset (&page_numbers);
 
-	ephy_dialog_get_value (dialog, DATE_PROP, &date);
+	ephy_dialog_get_value (dialog, properties[DATE_PROP].id, &date);
 	info->footer_right_string = g_value_get_boolean (&date) ?
 				    g_strdup ("&D") : g_strdup ("");
 	g_value_unset (&date);

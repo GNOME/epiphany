@@ -33,9 +33,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_PREFS_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_PREFS_DIALOG))
 #define EPHY_PREFS_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_PREFS_DIALOG, PrefsDialogClass))
 
-typedef struct PrefsDialog PrefsDialog;
-typedef struct PrefsDialogClass PrefsDialogClass;
-typedef struct PrefsDialogPrivate PrefsDialogPrivate;
+typedef struct PrefsDialog		PrefsDialog;
+typedef struct PrefsDialogClass		PrefsDialogClass;
+typedef struct PrefsDialogPrivate	PrefsDialogPrivate;
 
 struct PrefsDialog
 {
@@ -51,8 +51,6 @@ struct PrefsDialogClass
 };
 
 GType         prefs_dialog_get_type           (void);
-
-EphyDialog   *prefs_dialog_new		      (GtkWidget *parent);
 
 G_END_DECLS
 

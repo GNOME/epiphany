@@ -33,6 +33,7 @@
 #include "ephy-bookmarks-editor.h"
 #include "ephy-history-window.h"
 #include "pdm-dialog.h"
+#include "prefs-dialog.h"
 #include "ephy-debug.h"
 #include "ephy-extensions-manager.h"
 #include "toolbar.h"
@@ -73,6 +74,7 @@ struct EphyShellPrivate
 	GtkWidget *bme;
 	GtkWidget *history_window;
 	GObject *pdm_dialog;
+	GObject *prefs_dialog;
 	GList *del_on_exit;
 	guint server_timeout;
 };
@@ -503,6 +505,12 @@ ephy_shell_finalize (GObject *object)
 		g_object_unref (gs->priv->pdm_dialog);
 	}
 
+	LOG ("Unref prefs dialog")
+	if (gs->priv->prefs_dialog)
+	{
+		g_object_unref (gs->priv->prefs_dialog);
+	}
+
 	LOG ("Unref bookmarks")
 	if (gs->priv->bookmarks)
 	{
@@ -808,6 +816,20 @@ ephy_shell_get_pdm_dialog (EphyShell *shell)
 	}
 
 	return shell->priv->pdm_dialog;
+}
+
+GObject *
+ephy_shell_get_prefs_dialog (EphyShell *shell)
+{
+	if (shell->priv->prefs_dialog == NULL)
+	{
+		shell->priv->prefs_dialog = g_object_new (EPHY_TYPE_PREFS_DIALOG, NULL);
+
+		g_object_add_weak_pointer (shell->priv->prefs_dialog,
+					   (gpointer *) &shell->priv->prefs_dialog);
+	}
+
+	return shell->priv->prefs_dialog;
 }
 
 void

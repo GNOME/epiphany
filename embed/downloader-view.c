@@ -84,12 +84,12 @@ enum
 static const
 EphyDialogProperty properties [] =
 {
-	{ PROP_WINDOW, "download_manager_dialog", NULL, PT_NORMAL, NULL},
-        { PROP_TREEVIEW, "clist", NULL, PT_NORMAL, NULL },
-	{ PROP_PAUSE_BUTTON, "pause_button", NULL, PT_NORMAL, NULL },
-	{ PROP_ABORT_BUTTON, "abort_button", NULL, PT_NORMAL, NULL },
+	{ "download_manager_dialog",	NULL, PT_NORMAL, 0 },
+        { "clist",			NULL, PT_NORMAL, 0 },
+	{ "pause_button",		NULL, PT_NORMAL, 0 },
+	{ "abort_button",		NULL, PT_NORMAL, 0 },
 
-        { -1, NULL, NULL }
+        { NULL }
 };
 
 static void
@@ -409,10 +409,10 @@ downloader_view_build_ui (DownloaderView *dv)
                                "download_manager_dialog");
 
 	/* lookup needed widgets */
-	priv->window = ephy_dialog_get_control(d, PROP_WINDOW);
-	priv->treeview = ephy_dialog_get_control (d, PROP_TREEVIEW);
-	priv->pause_button = ephy_dialog_get_control (d, PROP_PAUSE_BUTTON);
-	priv->abort_button = ephy_dialog_get_control (d, PROP_ABORT_BUTTON);
+	priv->window = ephy_dialog_get_control(d, properties[PROP_WINDOW].id);
+	priv->treeview = ephy_dialog_get_control (d, properties[PROP_TREEVIEW].id);
+	priv->pause_button = ephy_dialog_get_control (d, properties[PROP_PAUSE_BUTTON].id);
+	priv->abort_button = ephy_dialog_get_control (d, properties[PROP_ABORT_BUTTON].id);
 
 	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview)),
 				     GTK_SELECTION_SINGLE);

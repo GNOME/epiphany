@@ -22,6 +22,7 @@
 #include "ephy-dialog.h"
 
 #include <gtk/gtkwidget.h>
+#include <gtk/gtktreemodel.h>
 #include <glib-object.h>
 #include <glib.h>
 
@@ -34,9 +35,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_LANGUAGE_EDITOR_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_LANGUAGE_EDITOR))
 #define EPHY_LANGUAGE_EDITOR_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_LANGUAGE_EDITOR, LanguageEditorClass))
 
-typedef struct LanguageEditor LanguageEditor;
-typedef struct LanguageEditorClass LanguageEditorClass;
-typedef struct LanguageEditorPrivate LanguageEditorPrivate;
+typedef struct LanguageEditor		LanguageEditor;
+typedef struct LanguageEditorClass	LanguageEditorClass;
+typedef struct LanguageEditorPrivate	LanguageEditorPrivate;
 
 struct LanguageEditor
 {
@@ -50,19 +51,19 @@ struct LanguageEditorClass
 {
         EphyDialogClass parent_class;
 
-	void (* changed) (GSList *languages);
+	void (* changed) (GSList *codes);
 };
 
 GType           language_editor_get_type	(void);
 
 LanguageEditor *language_editor_new		(GtkWidget *parent);
 
-void		language_editor_set_menu	(LanguageEditor *editor,
-						 GtkWidget *menu);
+void		language_editor_set_model	(LanguageEditor *editor,
+						 GtkTreeModel *model);
 
 void		language_editor_add		(LanguageEditor *editor,
-						 const char *language,
-						 int id);
+						 const char *code,
+						 const char *desc);
 
 G_END_DECLS
 

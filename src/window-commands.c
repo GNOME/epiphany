@@ -41,7 +41,6 @@
 #include "ephy-state.h"
 #include "ephy-gui.h"
 #include "ephy-zoom.h"
-#include "prefs-dialog.h"
 #include "ephy-toolbars-model.h"
 #include "egg-editable-toolbar.h"
 #include "egg-toolbar-editor.h"
@@ -780,7 +779,8 @@ window_cmd_edit_prefs (GtkAction *action,
 {
 	EphyDialog *dialog;
 
-	dialog = prefs_dialog_new (GTK_WIDGET (window));
+	dialog = EPHY_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell));
+
 	ephy_dialog_show (dialog);
 }
 
