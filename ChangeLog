@@ -1,5 +1,13 @@
 2004-12-18  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-window.c: (update_print_actions),
+	(update_actions_sensitivity), (sync_tab_load_status):
+
+	Disable Print and Print Preview while still loading the page.
+	Fixes bug #116344.
+
+2004-12-18  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-embed.c: (ephy_embed_chrome_get_type),
 	(ephy_embed_document_type_get_type), (ephy_embed_base_init):
 	* embed/ephy-embed.h:

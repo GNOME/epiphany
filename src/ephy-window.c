@@ -1044,13 +1044,33 @@ update_chromes_actions (EphyWindow *window)
 }
 
 static void
+update_print_actions (EphyWindow *window,
+		      gboolean enable)
+{
+	GtkActionGroup *action_group = window->priv->action_group;
+	GtkAction *action;
+	gboolean printing, print_setup;
+
+	printing = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINTING);
+	print_setup = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP) &&
+		!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_COMMAND_LINE);
+
+	action = gtk_action_group_get_action (action_group, "FilePrintSetup");
+	g_object_set (action, "sensitive", printing && print_setup, NULL);
+	action = gtk_action_group_get_action (action_group, "FilePrintPreview");
+	g_object_set (action, "sensitive", enable && printing && print_setup, NULL);
+	action = gtk_action_group_get_action (action_group, "FilePrint");
+	g_object_set (action, "sensitive", enable && printing, NULL);
+
+}
+
+static void
 update_actions_sensitivity (EphyWindow *window)
 {
 	GtkActionGroup *action_group = window->priv->action_group;
 	GtkActionGroup *popups_action_group = window->priv->popups_action_group;
 	GtkAction *action;
-	gboolean bookmarks_editable, save_to_disk;
-	gboolean printing, print_setup, fullscreen;
+	gboolean bookmarks_editable, save_to_disk, fullscreen;
 
 	action = gtk_action_group_get_action (action_group, "ViewToolbar");
 	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_TOOLBARS), NULL);
@@ -1088,17 +1108,6 @@ update_actions_sensitivity (EphyWindow *window)
 	g_object_set (action, "sensitive", save_to_disk, NULL);
 	action = gtk_action_group_get_action (popups_action_group, "SaveImageAs");
 	g_object_set (action, "sensitive", save_to_disk, NULL);
-
-	printing = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINTING);
-	print_setup = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP) &&
-		!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_COMMAND_LINE);
-	action = gtk_action_group_get_action (action_group, "FilePrintSetup");
-	g_object_set (action, "sensitive", printing && print_setup, NULL);
-	action = gtk_action_group_get_action (action_group, "FilePrintPreview");
-	g_object_set (action, "sensitive", printing && print_setup, NULL);
-	action = gtk_action_group_get_action (action_group, "FilePrint");
-	g_object_set (action, "sensitive", printing, NULL);
-
 	action = gtk_action_group_get_action (popups_action_group, "SetImageAsBackground");
 	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_DESKTOP_BG_PICTURE), NULL);
 
@@ -1112,6 +1121,8 @@ update_actions_sensitivity (EphyWindow *window)
 	g_object_set (action, "sensitive", !fullscreen, NULL);
 	action = gtk_action_group_get_action (action_group, "TabsDetach");
 	g_object_set (action, "sensitive", !fullscreen, NULL);
+
+	update_print_actions (window, TRUE);
 }
 
 static void
@@ -1476,6 +1487,9 @@ sync_tab_load_status (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 
 	status = ephy_tab_get_load_status (tab);
 	g_object_set (action, "sensitive", status, NULL);
+
+	/* disable print while loading, see bug #116344 */
+	update_print_actions (window, !status);
 
 	if (status)
 	{
