@@ -559,7 +559,8 @@ toolbar_drag_motion_cb (GtkWidget          *widget,
   if (etoolbar->priv->target_toolbar != toolbar)
     {
       if (etoolbar->priv->target_toolbar)
-	gtk_toolbar_set_drop_highlight_item (toolbar, NULL, 0);
+	gtk_toolbar_set_drop_highlight_item
+		(etoolbar->priv->target_toolbar, NULL, 0);
       
       free_dragged_item (etoolbar);
       etoolbar->priv->pending = TRUE;
