@@ -34,7 +34,10 @@
  * the provisions above, a recipient may use your version of this file under
  * the terms of any one of the NPL, the GPL or the LGPL.
  *
- * ***** END LICENSE BLOCK ***** */
+ * ***** END LICENSE BLOCK *****
+ *
+ * $Id$
+ */
 
 #ifndef EphyAboutRedirector_h__
 #define EphyAboutRedirector_h__

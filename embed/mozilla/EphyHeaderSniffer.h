@@ -36,7 +36,7 @@
  *
  * ***** END LICENSE BLOCK *****
  *
- * $id$
+ * $Id$
  */
 
 #include "mozilla-embed-persist.h"

@@ -21,6 +21,8 @@
 
    Author: John Sullivan <sullivan@eazel.com>,
 	   Marco Pesenti Gritti <marco@it.gnome.org> Markup support
+
+  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

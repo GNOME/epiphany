@@ -26,6 +26,8 @@
 
    Authors: John Sullivan <sullivan@eazel.com>
             Darin Adler <darin@bentspoon.com>
+
+   $Id$
 */
 
 #ifdef HAVE_CONFIG_H

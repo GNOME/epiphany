@@ -24,6 +24,7 @@
  * 
  * This is the spinner (for busy feedback) for the location bar
  *
+ * $Id$
  */
 
 #ifdef HAVE_CONFIG_H

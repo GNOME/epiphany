@@ -20,6 +20,8 @@
    Boston, MA 02111-1307, USA.
 
    Authors: Ramiro Estrugo <ramiro@eazel.com>
+
+   $Id$
 */
 
 #ifndef EEL_GCONF_EXTENSIONS_H
