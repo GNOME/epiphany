@@ -14,7 +14,8 @@ EXTRA_DIST = 			\
 	omf.make		\
 	COPYING.README		\
 	MAINTAINERS		\
-	ChangeLog-20030925
+	ChangeLog-20030925	\
+	ChangeLog-20040912
 
 DISTCLEANFILES = 		\
 	intltool-extract 	\
