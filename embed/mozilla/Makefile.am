@@ -1,10 +1,10 @@
+# Remove appcomps dir when 1.4 is deprecated
 INCLUDES = \
 	-I$(top_srcdir)/lib	    			\
 	-I$(top_srcdir)/embed	    			\
 	-I$(top_srcdir)		    			\
 	$(WARN_CFLAGS)					\
 	$(MOZILLA_COMPONENT_CFLAGS)			\
-	# FIXME Remove appcomps dir when we deprecate Mozilla 1.4
 	-I$(MOZILLA_INCLUDE_ROOT)/appcomps		\
 	-I$(MOZILLA_INCLUDE_ROOT)/chrome		\
 	-I$(MOZILLA_INCLUDE_ROOT)/content		\
