@@ -619,6 +619,8 @@ cmd_bookmarks_import (GtkAction *action,
 			      MOZILLA_BOOKMARKS_DIR, "bookmarks.html", 4);
 	add_bookmarks_source (store, _("Firebird bookmarks"),
 			      FIREBIRD_BOOKMARKS_DIR, "bookmarks.html", 4);
+	add_bookmarks_source (store, _("Firefox bookmarks"),
+                              FIREFOX_BOOKMARKS_DIR, "bookmarks.html", 4);
 	add_bookmarks_source (store, _("Galeon bookmarks"),
 			      GALEON_BOOKMARKS_DIR, "bookmarks.xbel", 0);
 	add_bookmarks_source (store, _("Konqueror bookmarks"),
