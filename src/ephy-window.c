@@ -349,25 +349,13 @@ ephy_window_selection_received_cb (GtkWidget *widget,
 				   guint time, EphyWindow *window)
 {
 	EphyTab *tab;
-	const char *location;
 
 	if (selection_data->length <= 0 || selection_data->data == NULL)
 		return;
 
 	tab = ephy_window_get_active_tab (window);
-	location = ephy_tab_get_location(tab);
 
-	/* If this tab is not empty... */
-	if (location != NULL && strcmp (location, "about:blank") != 0)
-	{
-		ephy_shell_new_tab (ephy_shell, window, tab,
-					selection_data->data, 
-					EPHY_NEW_TAB_OPEN_PAGE);
-	}
-	else
-	{
-		ephy_embed_load_url (ephy_tab_get_embed (tab), selection_data->data);
-	}
+	ephy_embed_load_url (ephy_tab_get_embed (tab), selection_data->data);
 }
 
 static void
@@ -386,6 +374,9 @@ static void
 menu_activate_cb (GtkWidget *widget,
 	          EphyWindow *window)
 {
+/* FIXME we need to be notified by mozilla on selection
+   changes to do this properly */
+#if 0
 	gboolean cut, copy, paste, select_all;
 	EggActionGroup *action_group;
 	EggAction *action;
@@ -435,6 +426,7 @@ menu_activate_cb (GtkWidget *widget,
 	g_object_set (action, "sensitive", paste, NULL);
 	action = egg_action_group_get_action (action_group, "EditSelectAll");
 	g_object_set (action, "sensitive", select_all, NULL);
+#endif
 }
 
 static void

@@ -1,3 +1,17 @@
+2003-06-12  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/egg/eggtreemodelfilter.c:
+
+	Update.
+
+	* src/ephy-window.c: (ephy_window_selection_received_cb),
+	(menu_activate_cb):
+
+	Do not set clipboard items sensitivity, because there is
+	not a good way to do it atm.
+	Open url on middle click (on the page) in the same
+	tab.
+
 2003-06-12  Xan Lopez  <xan@masilla.org>
 
 	* src/bookmarks/ephy-bookmarks-menu.c:
