@@ -686,7 +686,7 @@ window_cmd_edit_toolbar (EggAction *action,
 
 	dialog = gtk_dialog_new ();
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
-	gtk_window_set_title (GTK_WINDOW (dialog), _("Toolbar editor"));
+	gtk_window_set_title (GTK_WINDOW (dialog), _("Toolbar Editor"));
         gtk_window_set_transient_for (GTK_WINDOW (dialog),
 				      GTK_WINDOW (window));
 
