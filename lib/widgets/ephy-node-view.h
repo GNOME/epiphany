@@ -55,10 +55,10 @@ typedef enum
 
 typedef enum
 {
-	EPHY_NODE_VIEW_AUTO_SORT = 1,
-	EPHY_NODE_VIEW_USER_SORT = 2,
-	EPHY_NODE_VIEW_EDITABLE = 4,
-	EPHY_NODE_VIEW_SEARCHABLE = 8
+	EPHY_NODE_VIEW_SHOW_PRIORITY = 1 << 0,
+	EPHY_NODE_VIEW_SORTABLE = 1 << 1,
+	EPHY_NODE_VIEW_EDITABLE = 1 << 2,
+	EPHY_NODE_VIEW_SEARCHABLE = 1 << 3
 } EphyNodeViewFlags;
 
 typedef struct
@@ -81,16 +81,23 @@ void	           ephy_node_view_enable_dnd	      (EphyNodeView *view);
 GtkTreeViewColumn *ephy_node_view_add_column	      (EphyNodeView *view,
 						       const char  *title,
 						       GType value_type,
-						       int prop_id,
-						       int priority_prop_id,
+						       guint prop_id,
 						       EphyNodeViewFlags flags,
 						       EphyTreeModelNodeValueFunc icon_func);
 
 int		   ephy_node_view_add_data_column     (EphyNodeView *view,
 			                               GType value_type,
-						       int prop_id,
+						       guint prop_id,
 			                               EphyTreeModelNodeValueFunc func,
 						       gpointer data);
+
+void		   ephy_node_view_set_sort            (EphyNodeView *view,
+			                               GType value_type,
+						       guint prop_id,
+						       GtkSortType sort_type);
+
+void		   ephy_node_view_set_priority        (EphyNodeView *view,
+						       guint priority_prop_id);
 
 void		   ephy_node_view_remove              (EphyNodeView *view);
 

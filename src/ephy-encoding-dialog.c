@@ -315,10 +315,12 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 	ephy_node_view_add_column (EPHY_NODE_VIEW (treeview), _("Encodings"),
 				   G_TYPE_STRING,
 				   EPHY_NODE_ENCODING_PROP_TITLE_ELIDED,
-				   -1,
-				   EPHY_NODE_VIEW_AUTO_SORT |
 				   EPHY_NODE_VIEW_SEARCHABLE,
 				   NULL);
+
+	ephy_node_view_set_sort (EPHY_NODE_VIEW (treeview), G_TYPE_STRING,
+				 EPHY_NODE_ENCODING_PROP_TITLE_ELIDED,
+				 GTK_SORT_ASCENDING);
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);

@@ -1,3 +1,20 @@
+2004-07-14  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-node-view.c: (compare_string_values),
+	(ephy_node_view_sort_func), (ephy_node_view_add_data_column),
+	(ephy_node_view_add_column), (ephy_node_view_set_priority),
+	(ephy_node_view_set_sort), (ephy_node_view_init):
+	* lib/widgets/ephy-node-view.h:
+
+	Improve sort/priority API.
+
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_construct):
+	* src/ephy-encoding-dialog.c: (ephy_encoding_dialog_init):
+	* src/ephy-history-window.c: (ephy_history_window_construct):
+
+	Sort history items by last visit
+
 2004-07-12  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/bookmarks/ephy-bookmark-action.c: (properties_activate_cb),

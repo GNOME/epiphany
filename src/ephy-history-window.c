@@ -1272,10 +1272,14 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	ephy_node_view_add_column (EPHY_NODE_VIEW (sites_view), _("Sites"),
 				   G_TYPE_STRING,
 				   EPHY_NODE_PAGE_PROP_TITLE,
-				   EPHY_NODE_PAGE_PROP_PRIORITY,
-				   EPHY_NODE_VIEW_AUTO_SORT |
-				   EPHY_NODE_VIEW_SEARCHABLE,
+				   EPHY_NODE_VIEW_SEARCHABLE |
+				   EPHY_NODE_VIEW_SHOW_PRIORITY,
 				   provide_favicon);
+	ephy_node_view_set_priority (EPHY_NODE_VIEW (sites_view),
+				     EPHY_NODE_PAGE_PROP_PRIORITY);
+	ephy_node_view_set_sort (EPHY_NODE_VIEW (sites_view), G_TYPE_STRING,
+				 EPHY_NODE_PAGE_PROP_TITLE,
+				 GTK_SORT_ASCENDING);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), sites_view);
 	gtk_widget_show (sites_view);
 	editor->priv->sites_view = sites_view;
@@ -1325,15 +1329,18 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 				           n_page_drag_types, col_id);
 	col = ephy_node_view_add_column (EPHY_NODE_VIEW (pages_view), _("Title"),
 				         G_TYPE_STRING, EPHY_NODE_PAGE_PROP_TITLE,
-				         -1, EPHY_NODE_VIEW_USER_SORT |
+				         EPHY_NODE_VIEW_SORTABLE |
 					 EPHY_NODE_VIEW_SEARCHABLE, NULL);
 	gtk_tree_view_column_set_max_width (col, 250);
 	editor->priv->title_col = col;
 	col = ephy_node_view_add_column (EPHY_NODE_VIEW (pages_view), _("Address"),
 				         G_TYPE_STRING, EPHY_NODE_PAGE_PROP_LOCATION,
-				         -1, EPHY_NODE_VIEW_USER_SORT, NULL);
+				         EPHY_NODE_VIEW_SORTABLE, NULL);
 	gtk_tree_view_column_set_max_width (col, 200);
 	editor->priv->address_col = col;
+	ephy_node_view_set_sort (EPHY_NODE_VIEW (pages_view), G_TYPE_INT,
+				 EPHY_NODE_PAGE_PROP_LAST_VISIT,
+				 GTK_SORT_DESCENDING);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), pages_view);
 	gtk_widget_show (pages_view);
 	editor->priv->pages_view = pages_view;
