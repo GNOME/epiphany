@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"POT-Creation-Date: 2003-03-10 22:11+0100\n"
-"PO-Revision-Date: 2003-03-10 22:12+0100\n"
+"POT-Creation-Date: 2003-03-27 02:36+0100\n"
+"PO-Revision-Date: 2003-03-27 02:37+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -52,7 +52,7 @@ msgstr "Webbsidevisare"
 msgid "Browse the web"
 msgstr "Surfa på nätet"
 
-#: data/epiphany.desktop.in.h:2
+#: data/epiphany.desktop.in.h:2 src/ephy-main.c:127
 msgid "Epiphany Web Browser"
 msgstr "Webbläsaren Epiphany"
 
@@ -496,7 +496,7 @@ msgid "  "
 msgstr "  "
 
 #: data/glade/epiphany.glade.h:2 data/glade/prefs-dialog.glade.h:2
-#: data/glade/print.glade.h:2 data/glade/prompts.glade.h:1
+#: data/glade/print.glade.h:2
 msgid "*"
 msgstr "*"
 
@@ -551,7 +551,7 @@ msgstr "Välj filtypsåtgärden"
 msgid "Cookies"
 msgstr "Kakor"
 
-#: data/glade/epiphany.glade.h:16 data/glade/prompts.glade.h:2
+#: data/glade/epiphany.glade.h:16
 msgid "DYNAMIC"
 msgstr "DYNAMISK"
 
@@ -1056,7 +1056,7 @@ msgstr "_Datum"
 # Arkiv Arkiv Arkiv Arkiv Arkiv Arkiv Arkiv och inget annat än Arkiv!
 #. Toplevel
 #: data/glade/print.glade.h:31 data/ui/nautilus-epiphany-view.xml.in.h:35
-#: src/ephy-window.c:58
+#: src/bookmarks/ephy-bookmarks-editor.c:111 src/ephy-window.c:58
 msgid "_File"
 msgstr "_Arkiv"
 
@@ -1091,14 +1091,6 @@ msgstr "lpr"
 #: data/glade/print.glade.h:39
 msgid "to:"
 msgstr "till:"
-
-#: data/glade/prompts.glade.h:3
-msgid "Password"
-msgstr "Lösenord"
-
-#: data/glade/prompts.glade.h:4
-msgid "Username"
-msgstr "Användarnamn"
 
 #: data/starthere/index.xml.in.h:1
 msgid "Getting started"
@@ -1295,7 +1287,8 @@ msgstr "Markera hela dokumentet"
 msgid "Use Image As Background"
 msgstr "Använd bild som bakgrund"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:34 src/ephy-window.c:59
+#: data/ui/nautilus-epiphany-view.xml.in.h:34
+#: src/bookmarks/ephy-bookmarks-editor.c:112 src/ephy-window.c:59
 msgid "_Edit"
 msgstr "_Redigera"
 
@@ -1307,55 +1300,55 @@ msgstr "_Sök..."
 msgid "_Print..."
 msgstr "Skriv _ut..."
 
-#: embed/downloader-view.c:383
+#: embed/downloader-view.c:386
 #, c-format
 msgid "%.1f of %.1f MB"
 msgstr "%.1f av %.1f MB"
 
-#: embed/downloader-view.c:389
+#: embed/downloader-view.c:392
 #, c-format
 msgid "%d of %d KB"
 msgstr "%d av %d kB"
 
-#: embed/downloader-view.c:395
+#: embed/downloader-view.c:398
 #, c-format
 msgid "%d KB"
 msgstr "%d kB"
 
-#: embed/downloader-view.c:499 embed/downloader-view.c:517
-#: src/ephy-window.c:1041
+#: embed/downloader-view.c:502 embed/downloader-view.c:520
+#: src/ephy-window.c:1017
 msgid "Unknown"
 msgstr "Okänd"
 
-#: embed/downloader-view.c:516
+#: embed/downloader-view.c:519
 msgid "00.00"
 msgstr "00.00"
 
-#: embed/downloader-view.c:759
+#: embed/downloader-view.c:764
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:769
+#: embed/downloader-view.c:774
 msgid "Filename"
 msgstr "Filnamn"
 
-#: embed/downloader-view.c:780
+#: embed/downloader-view.c:785
 msgid "Size"
 msgstr "Storlek"
 
-#: embed/downloader-view.c:791
+#: embed/downloader-view.c:796
 msgid "Remaining"
 msgstr "Återstår"
 
-#: embed/downloader-view.c:1011
+#: embed/downloader-view.c:1019
 msgid "Cancel all pending downloads?"
 msgstr "Avbryt alla återstående hämtningar?"
 
-#: embed/ephy-embed-utils.c:132 embed/mozilla/ContentHandler.cpp:302
+#: embed/ephy-embed-utils.c:133 embed/mozilla/ContentHandler.cpp:302
 msgid "Select the destination filename"
 msgstr "Välj ett destinationsfilnamn"
 
-#: embed/ephy-embed-utils.c:316
+#: embed/ephy-embed-utils.c:317
 msgid "No available applications to open the specified file."
 msgstr "Inga tillgängliga program för att öppna den angivna filen."
 
@@ -1400,22 +1393,6 @@ msgstr "En fil valdes när en mapp förväntades."
 #: embed/mozilla/FilePicker.cpp:400
 msgid "A folder was selected when a file was expected."
 msgstr "En mapp valdes när en fil förväntades."
-
-#: embed/mozilla/PromptService.cpp:248
-msgid "Save"
-msgstr "Spara"
-
-#: embed/mozilla/PromptService.cpp:251
-msgid "Revert"
-msgstr "Återgå"
-
-#: embed/mozilla/PromptService.cpp:254
-msgid "Don't save"
-msgstr "Spara inte"
-
-#: embed/mozilla/PromptService.cpp:661
-msgid "Epiphany"
-msgstr "Epiphany"
 
 #: embed/mozilla/mozilla-embed-single.cpp:760
 msgid "Yes"
@@ -1843,15 +1820,15 @@ msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
 #. Popups
-#: lib/widgets/ephy-editable-toolbar.c:72
+#: lib/widgets/ephy-editable-toolbar.c:66
 msgid "_Remove Toolbar"
 msgstr "_Ta bort verktygsrad"
 
-#: lib/widgets/ephy-editable-toolbar.c:74
+#: lib/widgets/ephy-editable-toolbar.c:68
 msgid "_Edit Toolbars..."
 msgstr "_Redigera verktygsrader..."
 
-#: lib/widgets/ephy-editable-toolbar.c:984
+#: lib/widgets/ephy-editable-toolbar.c:1001
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
@@ -1859,62 +1836,88 @@ msgstr ""
 "Dra ett objekt till verktygsraderna ovan för att lägga till det, från "
 "verktygsraderna i objekttabellen för att ta bort det."
 
-#: lib/widgets/ephy-editable-toolbar.c:991
+#: lib/widgets/ephy-editable-toolbar.c:1008
 msgid "Add Toolbar"
 msgstr "Lägg till verktygsrad"
 
 #. setup label
 #: lib/widgets/ephy-notebook.c:714 src/ephy-tab.c:521 src/ephy-tab.c:985
-#: src/window-commands.c:269
+#: src/window-commands.c:306
 msgid "Untitled"
 msgstr "Namnlös"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:96
-msgid "Open In _New Window"
-msgstr "Öppna i _nytt fönster"
+#: src/bookmarks/ephy-bookmarks-editor.c:115
+msgid "_New Topic"
+msgstr "_Nytt ämne"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:99
+#: src/bookmarks/ephy-bookmarks-editor.c:118
+msgid "_Open In New Window"
+msgstr "_Öppna i nytt fönster"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:121
 msgid "Open In New _Tab"
 msgstr "Öppna i ny _flik"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:102
-msgid "_Remove"
-msgstr "_Ta bort"
+#: src/bookmarks/ephy-bookmarks-editor.c:124
+msgid "_Rename Bookmark"
+msgstr "_Byt namn på bokmärke"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:497
-#: src/bookmarks/ephy-new-bookmark.c:195
-msgid "Title:"
-msgstr "Titel:"
+#: src/bookmarks/ephy-bookmarks-editor.c:127
+msgid "R_ename Topic"
+msgstr "B_yt namn på ämne"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:514
-msgid "Location:"
-msgstr "Adress:"
+#: src/bookmarks/ephy-bookmarks-editor.c:130
+msgid "_Delete Bookmark"
+msgstr "_Ta bort bokmärke"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:531
-#: src/bookmarks/ephy-new-bookmark.c:209
-msgid "Topics:"
-msgstr "Ämnen:"
+#: src/bookmarks/ephy-bookmarks-editor.c:133
+msgid "D_elete Topic"
+msgstr "T_a bort ämne"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:623
+#: src/bookmarks/ephy-bookmarks-editor.c:136
+msgid "_Properties"
+msgstr "_Egenskaper"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:139 src/ephy-window.c:87
+msgid "_Close"
+msgstr "S_täng"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:151
+msgid "Type a topic"
+msgstr "Ange ett ämne"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:532
 msgid "Search:"
 msgstr "Sök:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:672
-#: src/bookmarks/ephy-bookmarks-editor.c:722
+#: src/bookmarks/ephy-bookmarks-editor.c:584
+#: src/bookmarks/ephy-bookmarks-editor.c:660
 msgid "Bookmarks"
 msgstr "Bokmärken"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:695
+#: src/bookmarks/ephy-bookmarks-editor.c:632
 msgid "Topics"
 msgstr "Ämnen"
 
-#: src/bookmarks/ephy-bookmarks.c:465
+#: src/bookmarks/ephy-bookmarks.c:395
 msgid "All"
 msgstr "Allt"
 
-#: src/bookmarks/ephy-new-bookmark.c:231
-msgid "Add bookmark"
-msgstr "Lägg till bokmärke"
+#: src/bookmarks/ephy-bookmarks.c:428
+msgid "Most Visited"
+msgstr "Mest besökta"
+
+#: src/bookmarks/ephy-new-bookmark.c:200
+msgid "Title:"
+msgstr "Titel:"
+
+#: src/bookmarks/ephy-new-bookmark.c:214
+msgid "Topics:"
+msgstr "Ämnen:"
+
+#: src/bookmarks/ephy-new-bookmark.c:240
+msgid "New Bookmark"
+msgstr "Nytt bokmärke"
 
 #: src/ephy-go-action.c:74
 msgid "Go"
@@ -1988,11 +1991,11 @@ msgstr "Samma som --close, men avslutar även serverläge"
 msgid "Used internally by the nautilus view"
 msgstr "Används internt av nautilusvyn"
 
-#: src/ephy-main.c:131
+#: src/ephy-main.c:132
 msgid "Ephy"
 msgstr "Epiphany"
 
-#: src/ephy-main.c:291
+#: src/ephy-main.c:292
 msgid "Ephy already running, using existing process"
 msgstr "Epiphany kör redan, använder befintlig process"
 
@@ -2004,35 +2007,35 @@ msgstr "namn på ikon för mozillavyn"
 msgid "mozilla summary info"
 msgstr "mozilla-sammanfattningsinformation"
 
-#: src/ephy-shell.c:150
+#: src/ephy-shell.c:151
 msgid "Mozilla bookmarks imported successfully."
 msgstr "Import av Mozilla-bokmärken lyckades."
 
-#: src/ephy-shell.c:159
+#: src/ephy-shell.c:160
 msgid "Importing Mozilla bookmarks failed."
 msgstr "Import av Mozilla-bokmärken misslyckades."
 
-#: src/ephy-shell.c:167
+#: src/ephy-shell.c:168
 msgid "Galeon"
 msgstr "Galeon"
 
-#: src/ephy-shell.c:174
+#: src/ephy-shell.c:175
 msgid "Galeon bookmarks imported successfully."
 msgstr "Import av Galeon-bokmärken lyckades."
 
-#: src/ephy-shell.c:183
+#: src/ephy-shell.c:184
 msgid "Importing Galeon bookmarks failed."
 msgstr "Import av Galeon-bokmärken misslyckades."
 
-#: src/ephy-shell.c:191
+#: src/ephy-shell.c:192
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: src/ephy-shell.c:198
+#: src/ephy-shell.c:199
 msgid "Konqueror bookmarks imported successfully."
 msgstr "Import av Konqueror-bokmärken lyckades."
 
-#: src/ephy-shell.c:207
+#: src/ephy-shell.c:208
 msgid "Importing Konqueror bookmarks failed."
 msgstr "Import av Konqueror-bokmärken misslyckades."
 
@@ -2132,10 +2135,6 @@ msgstr "Lägg till bo_kmärke för sidan..."
 #: src/ephy-window.c:85
 msgid "Add a bookmark for the current page"
 msgstr "Lägg till bokmärke för den aktuella sidan"
-
-#: src/ephy-window.c:87
-msgid "_Close"
-msgstr "S_täng"
 
 #: src/ephy-window.c:88
 msgid "Close this window"
@@ -2486,27 +2485,27 @@ msgstr "Använd bild som _bakgrund"
 msgid "_Copy Image Location"
 msgstr "_Kopiera bildadress"
 
-#: src/ephy-window.c:1044
+#: src/ephy-window.c:1020
 msgid "Insecure"
 msgstr "Osäker"
 
-#: src/ephy-window.c:1047
+#: src/ephy-window.c:1023
 msgid "Broken"
 msgstr "Trasig"
 
-#: src/ephy-window.c:1050
+#: src/ephy-window.c:1026
 msgid "Medium"
 msgstr "Mellan"
 
-#: src/ephy-window.c:1054
+#: src/ephy-window.c:1030
 msgid "Low"
 msgstr "Låg"
 
-#: src/ephy-window.c:1058
+#: src/ephy-window.c:1034
 msgid "High"
 msgstr "Hög"
 
-#: src/ephy-window.c:1068
+#: src/ephy-window.c:1044
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2515,7 +2514,7 @@ msgstr ""
 "Säkerhetsnivå: %s\n"
 "%s"
 
-#: src/ephy-window.c:1074
+#: src/ephy-window.c:1050
 #, c-format
 msgid "Security level: %s"
 msgstr "Säkerhetsnivå: %s"
@@ -2700,15 +2699,15 @@ msgstr "Vietnamesiska"
 msgid "Walloon"
 msgstr "Vallonska"
 
-#: src/history-dialog.c:288
+#: src/history-dialog.c:295
 msgid "Title"
 msgstr "Titel"
 
-#: src/history-dialog.c:289
+#: src/history-dialog.c:296
 msgid "Location"
 msgstr "Adress"
 
-#: src/history-dialog.c:290
+#: src/history-dialog.c:297
 msgid "Last Visit"
 msgstr "Senaste besök"
 
@@ -2728,23 +2727,23 @@ msgstr "Domän"
 msgid "Name"
 msgstr "Namn"
 
-#: src/pdm-dialog.c:572
+#: src/pdm-dialog.c:599
 msgid "Cookie properties"
 msgstr "Kakegenskaper"
 
-#: src/pdm-dialog.c:585
+#: src/pdm-dialog.c:612
 msgid "Value"
 msgstr "Värde"
 
-#: src/pdm-dialog.c:599
+#: src/pdm-dialog.c:626
 msgid "Path"
 msgstr "Sökväg"
 
-#: src/pdm-dialog.c:613
+#: src/pdm-dialog.c:640
 msgid "Secure"
 msgstr "Säker"
 
-#: src/pdm-dialog.c:627
+#: src/pdm-dialog.c:654
 msgid "Expire"
 msgstr "Utgår"
 
@@ -2780,7 +2779,7 @@ msgstr "Användargränssnitt"
 msgid "Advanced"
 msgstr "Avancerat"
 
-#: src/prefs-dialog.c:316
+#: src/prefs-dialog.c:307
 msgid "Preferences"
 msgstr "Inställningar"
 
@@ -2806,37 +2805,93 @@ msgstr ""
 msgid "You can recover the opened tabs and windows."
 msgstr "Du kan återställa de öppnade flikarna och fönstren."
 
-#: src/toolbar.c:272
+#: src/toolbar.c:307
 msgid "Back"
 msgstr "Bakåt"
 
-#: src/toolbar.c:284
+#: src/toolbar.c:319
 msgid "Forward"
 msgstr "Framåt"
 
-#: src/toolbar.c:296
+#: src/toolbar.c:331
 msgid "Up"
 msgstr "Upp"
 
-#: src/window-commands.c:132
+#: src/window-commands.c:139
 msgid "Check this out!"
 msgstr "Kolla här!"
 
-#: src/window-commands.c:309
+#: src/window-commands.c:346
 msgid "Select the file to open"
 msgstr "Välj en fil att öppna"
 
+#: src/window-commands.c:686
+#, c-format
+msgid "Could not display help: %s"
+msgstr "Kunde inte visa hjälp: %s"
+
 #. Translator credits
-#: src/window-commands.c:656
+#: src/window-commands.c:715
 msgid "translator_credits"
 msgstr ""
 "Christian Rose\n"
 "Dennis Persson\n"
 "Skicka synpunkter på översättningen till sv@li.org"
 
-#: src/window-commands.c:668
+#: src/window-commands.c:727
 msgid "A GNOME browser based on Mozilla"
 msgstr "En GNOME-webbläsare, baserad på Mozilla"
+
+#~ msgid "New Topic"
+#~ msgstr "Nytt ämne"
+
+#~ msgid "Open In New Window"
+#~ msgstr "Öppna i nytt fönster"
+
+#~ msgid "Rename Bookmark"
+#~ msgstr "Byt namn på bokmärke"
+
+#~ msgid "Rename Topic"
+#~ msgstr "Byt namn på ämne"
+
+#~ msgid "Delete Bookmark"
+#~ msgstr "Ta bort bokmärke"
+
+#~ msgid "Delete Topic"
+#~ msgstr "Ta bort ämne"
+
+#~ msgid "Properties"
+#~ msgstr "Egenskaper"
+
+#~ msgid "Password"
+#~ msgstr "Lösenord"
+
+#~ msgid "Username"
+#~ msgstr "Användarnamn"
+
+#~ msgid "Save"
+#~ msgstr "Spara"
+
+#~ msgid "Revert"
+#~ msgstr "Återgå"
+
+#~ msgid "Don't save"
+#~ msgstr "Spara inte"
+
+#~ msgid "Epiphany"
+#~ msgstr "Epiphany"
+
+#~ msgid "Open In _New Window"
+#~ msgstr "Öppna i _nytt fönster"
+
+#~ msgid "_Remove"
+#~ msgstr "_Ta bort"
+
+#~ msgid "Location:"
+#~ msgstr "Adress:"
+
+#~ msgid "Add bookmark"
+#~ msgstr "Lägg till bokmärke"
 
 #~ msgid "_Compare page:"
 #~ msgstr "_Jämför sida:"
@@ -2858,9 +2913,6 @@ msgstr "En GNOME-webbläsare, baserad på Mozilla"
 
 #~ msgid "Topic:"
 #~ msgstr "Ämne:"
-
-#~ msgid "Topic"
-#~ msgstr "Ämne"
 
 #~ msgid "   "
 #~ msgstr "   "
@@ -2908,9 +2960,6 @@ msgstr "En GNOME-webbläsare, baserad på Mozilla"
 
 #~ msgid "Toolbar"
 #~ msgstr "Verktygsrad"
-
-#~ msgid "Open In New Window"
-#~ msgstr "Öppna i nytt fönster"
 
 #~ msgid "Open In New Tab"
 #~ msgstr "Öppna i ny flik"
@@ -3439,9 +3488,6 @@ msgstr "En GNOME-webbläsare, baserad på Mozilla"
 
 #~ msgid "Personal Toolbar Folder"
 #~ msgstr "Personlig verktygsradsmapp"
-
-#~ msgid "Could not open file: %s"
-#~ msgstr "Kunde inte öppna filen: %s"
 
 #~ msgid "Netscape bookmarks format"
 #~ msgstr "Netscape-bokmärkesformat"
@@ -4393,9 +4439,6 @@ msgstr "En GNOME-webbläsare, baserad på Mozilla"
 #~ msgid "Remove"
 #~ msgstr "Ta bort"
 
-#~ msgid "Remove bookmark"
-#~ msgstr "Ta bort bokmärke"
-
 #~ msgid "Set size of smart bookmark entry"
 #~ msgstr "Ställ in storlek på smarta bokmärken"
 
@@ -4477,9 +4520,6 @@ msgstr "En GNOME-webbläsare, baserad på Mozilla"
 
 #~ msgid "Create a new site"
 #~ msgstr "Skapa en ny webbplats"
-
-#~ msgid "Delete"
-#~ msgstr "Ta bort"
 
 #~ msgid "Delete selected bookmarks"
 #~ msgstr "Ta bort markerade bokmärken"
@@ -4584,9 +4624,6 @@ msgstr "En GNOME-webbläsare, baserad på Mozilla"
 #~ msgid "New Boo_kmark"
 #~ msgstr "Nytt bo_kmärke"
 
-#~ msgid "New Bookmark"
-#~ msgstr "Nytt bokmärke"
-
 #~ msgid "New Folder"
 #~ msgstr "Ny mapp"
 
@@ -4601,9 +4638,6 @@ msgstr "En GNOME-webbläsare, baserad på Mozilla"
 
 #~ msgid "P_roperties"
 #~ msgstr "E_genskaper"
-
-#~ msgid "Properties"
-#~ msgstr "Egenskaper"
 
 #~ msgid "Rec_ursively (folders first)"
 #~ msgstr "Rek_ursivt (mappar först)"
@@ -8109,9 +8143,6 @@ msgstr "En GNOME-webbläsare, baserad på Mozilla"
 
 #~ msgid "Cookie Manager..."
 #~ msgstr "Kakhanterare..."
-
-#~ msgid "Select Bookmark File"
-#~ msgstr "Välj bokmärkesfil"
 
 #~ msgid "Title "
 #~ msgstr "Titel "
