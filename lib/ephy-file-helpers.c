@@ -72,8 +72,7 @@ char *
 ephy_file_downloads_dir (void)
 {
 	const char *translated_folder;
-	char *converted, *downloads_dir;
-	gboolean desktop_is_home;
+	char *desktop_dir, *converted, *downloads_dir;
 
 	/* The name of the default downloads folder */
 	translated_folder = _("Downloads");
@@ -81,20 +80,32 @@ ephy_file_downloads_dir (void)
 	converted = g_filename_from_utf8 (translated_folder, -1, NULL, 
 					  NULL, NULL);
 
+	desktop_dir = ephy_file_desktop_dir ();
+	downloads_dir = g_build_filename (desktop_dir, converted, NULL);
+
+	g_free (desktop_dir);
+	g_free (converted);
+
+	return downloads_dir;
+}
+
+char *
+ephy_file_desktop_dir (void)
+{
+	char *downloads_dir;
+	gboolean desktop_is_home;
+
 	desktop_is_home = eel_gconf_get_boolean (CONF_DESKTOP_IS_HOME_DIR);
 
 	if (desktop_is_home)
 	{
-		downloads_dir = g_build_filename
-			(g_get_home_dir (), converted, NULL);
+		downloads_dir = g_strdup (g_get_home_dir ()); 
 	}
 	else
 	{
 		downloads_dir = g_build_filename
-			(g_get_home_dir (), "Desktop", converted, NULL);
+			(g_get_home_dir (), "Desktop", NULL);
 	}
-
-	g_free (converted);
 
 	return downloads_dir;
 }

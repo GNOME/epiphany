@@ -590,6 +590,11 @@ GetFilePath (const char *filename)
 		g_free (download_dir);
 		download_dir = ephy_file_downloads_dir ();
 	}
+  	else if (download_dir && strcmp (download_dir, "Desktop") == 0)
+	{
+		g_free (download_dir);
+		download_dir = ephy_file_desktop_dir ();
+	}  
 	else if (download_dir)
 	{
 		char *converted_dp;
