@@ -134,6 +134,8 @@ ephy_download_get_name (EphyDownload *download)
 		result = g_strdup ("Unknown");
 	}
 
+	g_free (target);
+
 	return result;
 }
 
