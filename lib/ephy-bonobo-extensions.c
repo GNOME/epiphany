@@ -28,7 +28,9 @@
             Darin Adler <darin@bentspoon.com>
 */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "ephy-bonobo-extensions.h"
 #include "ephy-string.h"

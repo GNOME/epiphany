@@ -19,6 +19,10 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "ephy-state.h"
 #include "ephy-file-helpers.h"
 #include "ephy-node-db.h"

@@ -19,6 +19,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "ephy-bookmarks-export.h"
 #include "ephy-node-common.h"
 #include "ephy-file-helpers.h"

@@ -18,6 +18,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "ephy-arrow-toolbutton.h"
 #include "ephy-marshal.h"
 #include "ephy-gui.h"

@@ -18,6 +18,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "ephy-favicon-action.h"
 #include "ephy-window.h"
 #include "ephy-tab.h"

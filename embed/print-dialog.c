@@ -19,6 +19,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "print-dialog.h"
 #include "ephy-embed-dialog.h"
 #include "ephy-file-chooser.h"

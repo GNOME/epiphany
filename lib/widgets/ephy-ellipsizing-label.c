@@ -23,6 +23,10 @@
 	   Marco Pesenti Gritti <marco@it.gnome.org> Markup support
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "ephy-ellipsizing-label.h"
 
 #include <string.h>

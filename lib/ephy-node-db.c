@@ -20,6 +20,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "ephy-node-db.h"
 #include "ephy-file-helpers.h"
 #include "ephy-debug.h"

@@ -1,5 +1,48 @@
 2004-03-08  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/downloader-view.c:
+	* embed/ephy-download.c:
+	* embed/ephy-embed-dialog.c:
+	* embed/ephy-embed-event.c:
+	* embed/ephy-embed-factory.c:
+	* embed/find-dialog.c:
+	* embed/print-dialog.c:
+	* lib/ephy-bonobo-extensions.c:
+	* lib/ephy-debug.c:
+	* lib/ephy-dnd.c:
+	* lib/ephy-glade.c:
+	* lib/ephy-node-db.c:
+	* lib/ephy-node-filter.c:
+	* lib/ephy-state.c:
+	* lib/ephy-stock-icons.c:
+	* lib/ephy-zoom.c:
+	* lib/widgets/ephy-arrow-toolbutton.c:
+	* lib/widgets/ephy-cell-renderer-progress.c:
+	* lib/widgets/ephy-ellipsizing-label.c:
+	* lib/widgets/ephy-location-entry.c:
+	* lib/widgets/ephy-node-view.c:
+	* lib/widgets/ephy-search-entry.c:
+	* lib/widgets/ephy-tree-model-node.c:
+	* lib/widgets/ephy-tree-model-sort.c:
+	* src/bookmarks/ephy-bookmark-properties.c:
+	* src/bookmarks/ephy-bookmarks-export.c:
+	* src/bookmarks/ephy-new-bookmark.c:
+	* src/bookmarks/ephy-topics-selector.c:
+	* src/ephy-automation.c:
+	* src/ephy-completion-model.c:
+	* src/ephy-extension.c:
+	* src/ephy-favicon-action.c:
+	* src/ephy-history-window.c:
+	* src/ephy-location-action.c:
+	* src/ephy-navigation-action.c:
+	* src/ephy-toolbars-model.c:
+	* src/ppview-toolbar.c:
+
+	Include "config.h" everywhere, and s/<config.h>/"config.h". Guard
+	with #if HAVE_CONFIG_H.
+
+2004-03-08  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/ContentHandler.cpp:
 	* embed/mozilla/EphyBrowser.cpp:
 	* embed/mozilla/EphyHeaderSniffer.cpp:
