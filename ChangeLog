@@ -1,5 +1,13 @@
 2004-09-16  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* src/ephy-window.c: (ephy_window_focus_in_event),
+	(ephy_window_focus_out_event), (ephy_window_class_init):
+
+	Show the fullscreen button only when the window is active.
+	Fix #115296.
+
+2004-09-16  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* src/ephy-window.c: (update_fullscreen_popup),
 	(screen_size_changed_cb), (fullscreen_popup_size_request_cb),
 	(ephy_window_fullscreen):

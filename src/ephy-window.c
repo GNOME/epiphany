@@ -2026,6 +2026,32 @@ ephy_window_get_property (GObject *object,
 	}
 }
 
+static gboolean
+ephy_window_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
+{
+	EphyWindow *window = EPHY_WINDOW (widget);
+
+	if (window->priv->exit_fullscreen_popup)
+	{
+		gtk_widget_show (window->priv->exit_fullscreen_popup);
+	}
+
+	return GTK_WIDGET_CLASS (parent_class)->focus_in_event (widget, event);
+}
+
+static gboolean
+ephy_window_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
+{
+	EphyWindow *window = EPHY_WINDOW (widget);
+
+	if (window->priv->exit_fullscreen_popup)
+	{
+		gtk_widget_hide (window->priv->exit_fullscreen_popup);
+	}
+
+	return GTK_WIDGET_CLASS (parent_class)->focus_out_event (widget, event);
+}
+
 static void
 ephy_window_class_init (EphyWindowClass *klass)
 {
@@ -2043,6 +2069,8 @@ ephy_window_class_init (EphyWindowClass *klass)
 
 	widget_class->show = ephy_window_show;
 	widget_class->key_press_event = ephy_window_key_press_event;
+	widget_class->focus_in_event = ephy_window_focus_in_event;
+	widget_class->focus_out_event = ephy_window_focus_out_event;
 
 	g_object_class_install_property (object_class,
 					 PROP_ACTIVE_TAB,
