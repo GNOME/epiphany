@@ -83,7 +83,6 @@ ephy_automation_new (void)
 static void
 impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 			      const CORBA_char * url,
-			      const CORBA_char * geometry,
 			      const CORBA_boolean fullscreen,
 			      const CORBA_boolean open_in_existing_tab,
 			      const CORBA_boolean open_in_new_window,

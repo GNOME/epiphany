@@ -50,7 +50,6 @@ static gboolean noraise               = FALSE;  /* no raise                     
 static gboolean open_in_new_window    = FALSE;  /* force open in a new window?  */
 static gboolean open_fullscreen       = FALSE;  /* open ephy in full screen ? */
 static gchar   *session_filename      = NULL;   /* the session filename         */
-static gchar   *geometry_string       = NULL;   /* the geometry string          */
 static gchar   *bookmark_url          = NULL;   /* the temp bookmark to add     */
 static gboolean close_option          = FALSE;  /* --close                      */
 static gboolean quit_option           = FALSE;  /* --quit                       */
@@ -93,10 +92,6 @@ static struct poptOption popt_options[] =
 	{ "add-bookmark", 't', POPT_ARG_STRING, &bookmark_url,
 	  0, N_("Add a bookmark (don't open any window)"),
 	  N_("URL")},
-	{ "geometry", 'g', POPT_ARG_STRING, &geometry_string,
-	  0, N_("Create the initial window with the given geometry.\n"
-		"see X(1) for the GEOMETRY format"),
-	  N_("GEOMETRY")},
 	{ "close", 'c', POPT_ARG_NONE, &close_option, 0,
 	  N_("Close all Ephy windows"),
 	  NULL },
@@ -236,8 +231,6 @@ ephy_main_start (gpointer data)
 		/* no, open a default window */
 		GNOME_EphyAutomation_loadurl
 			(gaserver, "",
-			 geometry_string ?
-			 geometry_string : "",
 			 open_fullscreen,
 			 open_in_existing,
 			 open_in_new_window,
@@ -252,8 +245,6 @@ ephy_main_start (gpointer data)
 		{
 			GNOME_EphyAutomation_loadurl
 				(gaserver, url[i],
-				 geometry_string ?
-				 geometry_string : "",
 				 open_fullscreen,
 				 open_in_existing,
 				 open_in_new_window,

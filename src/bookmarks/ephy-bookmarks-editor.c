@@ -361,6 +361,7 @@ cmd_delete (EggAction *action,
 		{
 			ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->key_view));
 		}
+		g_list_free (selected);
 	}
 }
 
