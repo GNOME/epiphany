@@ -1,5 +1,19 @@
 2004-06-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* doc/reference/tmpl/ephy-permission-manager.sgml:
+	* embed/ephy-permission-manager.c: (ephy_permission_info_new),
+	(ephy_permission_info_copy), (ephy_permission_manager_add),
+	(ephy_permission_manager_remove), (ephy_permission_manager_test),
+	(ephy_permission_manager_list):
+	* embed/ephy-permission-manager.h:
+	* embed/mozilla/EphySingle.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	Make the permission type a string instead of an enum, that way
+	we can support more than just the hardcoded 3 types.
+
+2004-06-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-window.c: (ephy_window_get_tabs):
 
 	Simply use gtk_container_get_children().
