@@ -382,6 +382,7 @@ have_gnome_url_handler (const gchar *protocol)
 	return rv;
 }
 
+#if defined(MOZ_NSIXULCHROMEREGISTRY_SELECTSKIN) || defined(HAVE_CHROME_NSICHROMEREGISTRYSEA_H)
 static nsresult
 getUILang (nsAString& aUILang)
 {
@@ -404,6 +405,7 @@ getUILang (nsAString& aUILang)
 
 	return NS_OK;
 }
+#endif
 
 static nsresult
 mozilla_init_chrome (void)
