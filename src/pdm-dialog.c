@@ -926,6 +926,7 @@ show_cookies_properties (PdmDialog *dialog,
 
 	label = gtk_label_new (info->value);
 	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 0, 1);
@@ -941,6 +942,7 @@ show_cookies_properties (PdmDialog *dialog,
 
 	label = gtk_label_new (info->path);
 	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 1, 2);
