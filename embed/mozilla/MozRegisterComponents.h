@@ -23,10 +23,4 @@
 
 gboolean mozilla_register_components		(void);
 
-gboolean mozilla_register_FtpProtocolHandler	(void);
-
-gboolean mozilla_unregister_FtpProtocolHandler	(void);
-
-gboolean mozilla_register_MailtoProtocolHandler (void);
-
 #endif /* MOZREGISTERCOMPONENTS_H */

@@ -26,7 +26,6 @@
 #include "ContentHandler.h"
 #include "FilePicker.h"
 #include "GlobalHistory.h"
-#include "ExternalProtocolHandlers.h"
 #include "PrintingPromptService.h"
 #include "MozDownload.h"
 #include "EphyAboutRedirector.h"
@@ -56,10 +55,6 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GFilePicker)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GContentHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(MozGlobalHistory)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GPrintingPromptService)
-NS_GENERIC_FACTORY_CONSTRUCTOR(GIRCProtocolHandler)
-NS_GENERIC_FACTORY_CONSTRUCTOR(GFtpProtocolHandler)
-NS_GENERIC_FACTORY_CONSTRUCTOR(GNewsProtocolHandler)
-NS_GENERIC_FACTORY_CONSTRUCTOR(GMailtoProtocolHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyContentPolicy)
 
 #ifdef HAVE_MOZILLA_PSM
@@ -146,36 +141,6 @@ static const nsModuleComponentInfo sAppComps[] = {
 		GPrintingPromptServiceConstructor
 	},
 	{
-		G_IRC_PROTOCOL_CLASSNAME,
-		G_IRC_PROTOCOL_CID,
-		G_IRC_PROTOCOL_CONTRACTID,
-		GIRCProtocolHandlerConstructor
-	},
-	{
-		G_IRC_CONTENT_CLASSNAME,
-		G_IRC_PROTOCOL_CID,
-		G_IRC_CONTENT_CONTRACTID,
-		GIRCProtocolHandlerConstructor
-	},
-	{
-		G_NEWS_PROTOCOL_CLASSNAME,
-		G_NEWS_PROTOCOL_CID,
-		G_NEWS_PROTOCOL_CONTRACTID,
-		GNewsProtocolHandlerConstructor
-	},
-	{
-		G_NEWS_CONTENT_CLASSNAME,
-		G_NEWS_PROTOCOL_CID,
-		G_NEWS_CONTENT_CONTRACTID,
-		GNewsProtocolHandlerConstructor
-	},
-	{
-		G_FTP_CONTENT_CLASSNAME,
-		G_FTP_PROTOCOL_CID,
-		G_FTP_CONTENT_CONTRACTID,
-		GFtpProtocolHandlerConstructor
-	},
-	{
 		EPHY_ABOUT_REDIRECTOR_CLASSNAME,
 		EPHY_ABOUT_REDIRECTOR_CID,
 		EPHY_ABOUT_REDIRECTOR_EPIPHANY_CONTRACTID,
@@ -194,18 +159,6 @@ static const nsModuleComponentInfo sAppComps[] = {
 		EphyAboutRedirectorConstructor
 	},
 	{
-		G_MAILTO_PROTOCOL_CLASSNAME,
-		G_MAILTO_PROTOCOL_CID,
-		G_MAILTO_PROTOCOL_CONTRACTID,
-		GMailtoProtocolHandlerConstructor
-	},
-	{
-		G_MAILTO_CONTENT_CLASSNAME,
-		G_MAILTO_PROTOCOL_CID,
-		G_MAILTO_CONTENT_CONTRACTID,
-		GMailtoProtocolHandlerConstructor
-	},
-	{
 		EPHY_CONTENT_POLICY_CLASSNAME,
 		EPHY_CONTENT_POLICY_CID,
 		EPHY_CONTENT_POLICY_CONTRACTID,
@@ -214,18 +167,6 @@ static const nsModuleComponentInfo sAppComps[] = {
 	},
 };
 
-static const nsModuleComponentInfo sFtpComps = {
-	G_FTP_PROTOCOL_CLASSNAME,
-	G_FTP_PROTOCOL_CID,
-	G_FTP_PROTOCOL_CONTRACTID,
-	GFtpProtocolHandlerConstructor
-};
-
-static NS_DEFINE_CID(knsFtpProtocolHandlerCID, NS_FTPPROTOCOLHANDLER_CID);
-
-/* Annoying globals to track the mozilla ftp handler so it can be restored. */
-static PRBool ftpRegistered = PR_FALSE;
-static nsCOMPtr<nsIFactory> nsFtpFactory;
 
 gboolean
 mozilla_register_components (void)
@@ -280,64 +221,4 @@ mozilla_register_components (void)
 	return ret;
 }
 
-/**
- * mozilla_register_FtpProtocolHandler: Register Ftp Protocol Handler
- */
-gboolean
-mozilla_register_FtpProtocolHandler (void)
-{
-	if (ftpRegistered == PR_TRUE) return TRUE;
 
-	nsresult rv;
-
-	nsCOMPtr<nsIComponentManager> cm;
-	NS_GetComponentManager(getter_AddRefs(cm));
-	NS_ENSURE_TRUE (cm, FALSE);
-
-	rv = cm->GetClassObject(knsFtpProtocolHandlerCID,
-				NS_GET_IID(nsIFactory),
-				getter_AddRefs(nsFtpFactory));
-	if (NS_FAILED (rv)) return FALSE;
-
-	nsCOMPtr<nsIGenericFactory> ftpFactory;
-	NS_NewGenericFactory(getter_AddRefs(ftpFactory), &sFtpComps);
-	NS_ENSURE_TRUE (ftpFactory, FALSE);
-
-	nsCOMPtr<nsIComponentRegistrar> cr;
-	NS_GetComponentRegistrar(getter_AddRefs(cr));
-	NS_ENSURE_TRUE (cr, FALSE);
-
-	rv = cr->RegisterFactory(sFtpComps.mCID,
-				 sFtpComps.mDescription,
-				 sFtpComps.mContractID,
-				 ftpFactory);  
-	NS_ENSURE_SUCCESS (rv, FALSE);
-
-	ftpRegistered = PR_TRUE;
-
-	return TRUE;
-}
-
-/**
- * mozilla_unregister_FtpProtocolHandler: Unregister Ftp Protocol Handler
- */
-gboolean
-mozilla_unregister_FtpProtocolHandler (void)
-{
-	if (ftpRegistered == PR_FALSE) return FALSE;
-        
-        nsresult rv;
-	nsCOMPtr<nsIComponentRegistrar> cr;
-	NS_GetComponentRegistrar(getter_AddRefs(cr));
-	NS_ENSURE_TRUE (cr, FALSE);
-
-	rv = cr->RegisterFactory(knsFtpProtocolHandlerCID,
-				 NS_FTPPROTOCOLHANDLER_CLASSNAME,
-				 G_FTP_PROTOCOL_CONTRACTID,
-				 nsFtpFactory);
-	NS_ENSURE_SUCCESS (rv, FALSE);
-
-	ftpRegistered = PR_FALSE;
-
-        return TRUE;
-}

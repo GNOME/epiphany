@@ -90,10 +90,9 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 {
 	LOG ("GFilePicker::Init")
 
-	nsCOMPtr<nsIDOMWindow> dw = do_QueryInterface (parent);
-	if (dw)
+	if (parent)
 	{
-		GtkWidget *pwin = MozillaFindGtkParent (dw);
+		GtkWidget *pwin = MozillaFindGtkParent (parent);
 
 		gtk_window_set_transient_for (GTK_WINDOW (mDialog), GTK_WINDOW (pwin));
 	}
