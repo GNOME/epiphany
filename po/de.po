@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany HEAD\n"
-"POT-Creation-Date: 2003-02-15 21:04+0100\n"
-"PO-Revision-Date: 2003-02-15 21:03+0100\n"
+"POT-Creation-Date: 2003-02-20 15:00+0100\n"
+"PO-Revision-Date: 2003-02-20 15:00+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1363,7 +1363,7 @@ msgid "%d KB"
 msgstr "%d KB"
 
 #: embed/downloader-view.c:499 embed/downloader-view.c:517
-#: src/ephy-window.c:1048
+#: src/ephy-window.c:1046
 msgid "Unknown"
 msgstr "Unbekannt"
 
@@ -1897,22 +1897,22 @@ msgid "Add Toolbar"
 msgstr "Werkzeugleiste hinzufügen"
 
 #. setup label
-#: lib/widgets/ephy-notebook.c:714 src/ephy-tab.c:524 src/ephy-tab.c:992
-#: src/window-commands.c:286
+#: lib/widgets/ephy-notebook.c:714 src/ephy-tab.c:524 src/ephy-tab.c:985
+#: src/window-commands.c:269
 msgid "Untitled"
 msgstr "Unbenannt"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:95
-msgid "Open In New Tab..."
-msgstr "In neuem Reiter öffnen..."
+msgid "Open In _New Window"
+msgstr "In _neuem Fenster öffnen"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:98
-msgid "Open In New Browser..."
-msgstr "In neuem Browser öffnen..."
+msgid "Open In New _Tab"
+msgstr "In neuem _Reiter öffnen"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:101
-msgid "Remove..."
-msgstr "Entfernen..."
+msgid "_Remove"
+msgstr "_Entfernen"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:476
 #: src/bookmarks/ephy-new-bookmark.c:195
@@ -2120,12 +2120,12 @@ msgstr "_Hilfe"
 
 #. File menu
 #: src/ephy-window.c:66
-msgid "_New Browser"
-msgstr "_Neuer Browser"
+msgid "_New Window"
+msgstr "_Neues Fenster"
 
 #: src/ephy-window.c:67
-msgid "Create a new browser"
-msgstr "Einen neuen Browser öffnen"
+msgid "Create a new window"
+msgstr "Ein neues Fenster öffnen"
 
 #: src/ephy-window.c:69
 msgid "New _Tab"
@@ -2176,8 +2176,8 @@ msgid "_Close"
 msgstr "S_chließen"
 
 #: src/ephy-window.c:88
-msgid "Close this browser"
-msgstr "Diesen Browser schließen"
+msgid "Close this window"
+msgstr "Dieses Fenster schließen"
 
 #. Edit menu
 #: src/ephy-window.c:92
@@ -2387,7 +2387,7 @@ msgid "Go to an already visited page"
 msgstr "Zu einer bereits besuchten Seite gehen"
 
 #: src/ephy-window.c:172
-msgid "_Bookmarks"
+msgid "Boo_kmarks"
 msgstr "_Lesezeichen"
 
 #: src/ephy-window.c:173
@@ -2463,98 +2463,94 @@ msgstr ""
 msgid "_Save Background As..."
 msgstr "Hintergrund _speichern unter..."
 
-#: src/ephy-window.c:215
-msgid "_Copy Page Location"
-msgstr "Seitenadresse _kopieren"
-
 #. Framed document
-#: src/ephy-window.c:219
+#: src/ephy-window.c:217
 msgid "_Open Frame"
 msgstr "Frame ö_ffnen"
 
-#: src/ephy-window.c:221
-msgid "Open Frame in _New Browser"
-msgstr "Frame in _neuem Browser öffnen"
+#: src/ephy-window.c:219
+msgid "Open Frame in _New Window"
+msgstr "Frame in _neuem Fenster öffnen"
 
-#: src/ephy-window.c:223
+#: src/ephy-window.c:221
 msgid "Open Frame in New _Tab"
 msgstr "Frame in neuem _Reiter öffnen"
 
 #. Links
-#: src/ephy-window.c:227
+#: src/ephy-window.c:225
 msgid "_Open Link"
 msgstr "Link ö_ffnen"
 
-#: src/ephy-window.c:229
-msgid "Open Link in _New Browser"
-msgstr "Link in _neuem Browser öffnen"
+#: src/ephy-window.c:227
+msgid "Open Link in _New Window"
+msgstr "In _neuem Fenster öffnen"
 
-#: src/ephy-window.c:231
+#: src/ephy-window.c:229
 msgid "Open Link in New _Tab"
 msgstr "Link in neuem _Reiter öffnen"
 
-#: src/ephy-window.c:233
+#: src/ephy-window.c:231
 msgid "_Download Link"
 msgstr "_Inhalt herunterladen"
 
-#: src/ephy-window.c:235
+#: src/ephy-window.c:233
 msgid "_Bookmark Link..."
 msgstr "Link zu Lesezeichen _hinzufügen..."
 
-#: src/ephy-window.c:237
+#: src/ephy-window.c:235
 msgid "_Copy Link Location"
 msgstr "Zieladresse _kopieren"
 
-#: src/ephy-window.c:239
+#: src/ephy-window.c:237
 msgid "Copy _Email"
 msgstr "_E-Mail-Adresse kopieren"
 
 #. Images
-#: src/ephy-window.c:243
+#: src/ephy-window.c:241
 msgid "_Open Image"
 msgstr "Bild ö_ffnen"
 
-#: src/ephy-window.c:245
-msgid "Open Image in _New Browser"
-msgstr "Bild in _neuem Browser öffnen"
+#: src/ephy-window.c:243
+msgid "Open Image in _New Window"
+msgstr "Bild in _neuem Fenster öffnen"
 
-#: src/ephy-window.c:247
+#: src/ephy-window.c:245
 msgid "Open Image in New _Tab"
 msgstr "Bild in neuem _Reiter öffnen"
 
-#: src/ephy-window.c:249
+#: src/ephy-window.c:247
 msgid "_Save Image As..."
 msgstr "Bild _speichern unter..."
 
-#: src/ephy-window.c:251
+#: src/ephy-window.c:249
 msgid "Use Image As _Background"
 msgstr "Als _Hintergrundbild verwenden"
 
-#: src/ephy-window.c:253
+#: src/ephy-window.c:251
 msgid "_Copy Image Location"
 msgstr "Quelladresse des Bildes _kopieren"
 
-#: src/ephy-window.c:1051
+#: src/ephy-window.c:1049
 msgid "Insecure"
 msgstr "Ungeschützt"
 
-#: src/ephy-window.c:1054
+#: src/ephy-window.c:1052
 msgid "Broken"
 msgstr "Defekt"
 
-#: src/ephy-window.c:1057
+#: src/ephy-window.c:1055
 msgid "Medium"
 msgstr "Mittel"
 
-#: src/ephy-window.c:1061
+#: src/ephy-window.c:1059
 msgid "Low"
 msgstr "Niedrig"
 
-#: src/ephy-window.c:1065
+#: src/ephy-window.c:1063
 msgid "High"
 msgstr "Hoch"
 
-#: src/ephy-window.c:1075
+#: src/ephy-window.c:1073
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2563,7 +2559,7 @@ msgstr ""
 "Sicherheitsstufe: %s\n"
 "%s"
 
-#: src/ephy-window.c:1081
+#: src/ephy-window.c:1079
 #, c-format
 msgid "Security level: %s"
 msgstr "Sicherheitsstufe: %s"
@@ -2863,16 +2859,16 @@ msgid "Up"
 msgstr "Rauf"
 
 # CHECK
-#: src/window-commands.c:149
+#: src/window-commands.c:132
 msgid "Check this out!"
 msgstr "Schauen Sie sich das an!"
 
-#: src/window-commands.c:326
+#: src/window-commands.c:309
 msgid "Select the file to open"
 msgstr "Bitte wählen Sie die zu öffnende Datei"
 
 #. Translator credits
-#: src/window-commands.c:672
+#: src/window-commands.c:655
 msgid "translator_credits"
 msgstr ""
 "Walter Muellner <walter.muellner@telering.at>\n"
@@ -2880,9 +2876,36 @@ msgstr ""
 "Christian Neumair <chris@gnome-de.org>\n"
 "Benjamin Greiner <nadaschauher@gmx.de>"
 
-#: src/window-commands.c:684
+#: src/window-commands.c:667
 msgid "A GNOME browser based on Mozilla"
 msgstr "Ein auf Mozilla basierender GNOME-Browser"
+
+#~ msgid "Open In New Browser..."
+#~ msgstr "In neuem Browser öffnen..."
+
+#~ msgid "Remove..."
+#~ msgstr "Entfernen..."
+
+#~ msgid "_Copy Page Location"
+#~ msgstr "Seitenadresse _kopieren"
+
+#~ msgid "_New Browser"
+#~ msgstr "_Neuer Browser"
+
+#~ msgid "Create a new browser"
+#~ msgstr "Einen neuen Browser öffnen"
+
+#~ msgid "_Bookmarks"
+#~ msgstr "_Lesezeichen"
+
+#~ msgid "Open Frame in _New Browser"
+#~ msgstr "Frame in _neuem Browser öffnen"
+
+#~ msgid "Open Link in _New Browser"
+#~ msgstr "Link in _neuem Browser öffnen"
+
+#~ msgid "Open Image in _New Browser"
+#~ msgstr "Bild in _neuem Browser öffnen"
 
 #~ msgid "_History"
 #~ msgstr "_Chronik"
@@ -2901,12 +2924,6 @@ msgstr "Ein auf Mozilla basierender GNOME-Browser"
 
 #~ msgid "configuration dialog"
 #~ msgstr "Konfigurationsdialog"
-
-#~ msgid "_New Window"
-#~ msgstr "_Neues Fenster"
-
-#~ msgid "Create a new window"
-#~ msgstr "Ein neues Fenster öffnen"
 
 #~ msgid "Close _Window"
 #~ msgstr "_Fenster schließen"
