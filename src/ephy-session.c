@@ -541,7 +541,6 @@ static int
 write_ephy_window (xmlTextWriterPtr writer,
 		   EphyWindow *window)
 {
-	EmbedChromeMask chrome;
 	GList *tabs, *l;
 	int ret;
 
@@ -551,10 +550,6 @@ write_ephy_window (xmlTextWriterPtr writer,
 	 * This only happens when the window was newly opened.
 	 */
 	if (tabs == NULL) return 0;
-
-	/* skip if it's a XUL dialog */
-	chrome = ephy_window_get_chrome (window);
-	if (chrome & EMBED_CHROME_OPENASCHROME) return 0;
 
 	ret = xmlTextWriterStartElement (writer, "window");
 	if (ret < 0) return ret;

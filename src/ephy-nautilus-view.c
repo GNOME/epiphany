@@ -409,12 +409,6 @@ gnv_embed_new_window_cb (EphyEmbed *embed, EphyEmbed **new_embed,
 	EphyWindow *window;
 	
 	window = ephy_window_new ();
-	if (!(chromemask & EMBED_CHROME_OPENASCHROME))
-	{
-		ephy_window_set_chrome (window, 
-					  chromemask | 
-					  EMBED_CHROME_OPENASPOPUP);
-	}
 	new_tab = ephy_tab_new ();
 	ephy_window_add_tab (window, new_tab, EPHY_NOTEBOOK_INSERT_LAST, FALSE);
 

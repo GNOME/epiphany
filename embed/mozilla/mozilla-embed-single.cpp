@@ -25,6 +25,7 @@
 #include "glib.h"
 #include "ephy-debug.h"
 #include "gtkmozembed.h"
+#include "mozilla-embed.h"
 #include "mozilla-embed-single.h"
 #include "ephy-file-helpers.h"
 #include "mozilla-notifiers.h"
@@ -231,43 +232,9 @@ mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *embed,
 					  guint chrome_mask,
                            		  EphyEmbedSingle *shell)
 {
-	/* FIXME conversion duped in mozilla_embed */
-	EphyEmbed *new_embed;
-	int i;
-        EmbedChromeMask mask = EMBED_CHROME_OPENASPOPUP;
-        
-        struct
-        {
-                guint chromemask;
-                EmbedChromeMask embed_mask;
-        }
-        conversion_map [] =
-        {
-                { GTK_MOZ_EMBED_FLAG_DEFAULTCHROME, EMBED_CHROME_DEFAULT },
-                { GTK_MOZ_EMBED_FLAG_MENUBARON, EMBED_CHROME_MENUBARON },
-                { GTK_MOZ_EMBED_FLAG_TOOLBARON, EMBED_CHROME_TOOLBARON },
-                { GTK_MOZ_EMBED_FLAG_STATUSBARON, EMBED_CHROME_STATUSBARON },
-                { GTK_MOZ_EMBED_FLAG_WINDOWRAISED, EMBED_CHROME_WINDOWRAISED },
-                { GTK_MOZ_EMBED_FLAG_WINDOWLOWERED, EMBED_CHROME_WINDOWLOWERED },
-                { GTK_MOZ_EMBED_FLAG_CENTERSCREEN, EMBED_CHROME_CENTERSCREEN },
-                { GTK_MOZ_EMBED_FLAG_OPENASDIALOG, EMBED_CHROME_OPENASDIALOG },
-                { GTK_MOZ_EMBED_FLAG_OPENASCHROME, EMBED_CHROME_OPENASCHROME },
-                { 0, EMBED_CHROME_NONE }
-        };
+ 	g_assert (chrome_mask && GTK_MOZ_EMBED_FLAG_OPENASCHROME);
 
-        for (i = 0; conversion_map[i].chromemask != 0; i++)
-        {
-                if (chrome_mask & conversion_map[i].chromemask)
-                {
-                        mask = (EmbedChromeMask) (mask | conversion_map[i].embed_mask); 
-                }
-        }
-       
-	g_signal_emit_by_name (shell, "new_window_orphan", &new_embed, mask);
-
-	g_assert (new_embed != NULL);
-	
-	*retval = GTK_MOZ_EMBED(EPHY_EMBED(new_embed));
+	*retval = _mozilla_embed_new_xul_dialog ();
 }
 
 static void

@@ -145,25 +145,6 @@ ephy_shell_class_init (EphyShellClass *klass)
 }
 
 static void
-ephy_shell_new_window_cb (EphyEmbedShell *shell,
-			  EphyEmbed **new_embed,
-                          EmbedChromeMask chromemask,
-			  gpointer data)
-{
-	EphyTab *new_tab;
-        EphyWindow *window;
-
-	g_assert (new_embed != NULL);
-
-	window = ephy_window_new ();
-	ephy_window_set_chrome (window, chromemask);
-
-	new_tab = ephy_tab_new ();
-	ephy_window_add_tab (window, new_tab, EPHY_NOTEBOOK_INSERT_GROUPED, FALSE);
-	*new_embed = ephy_tab_get_embed (new_tab);
-}
-
-static void
 ephy_shell_init (EphyShell *gs)
 {
 	EphyEmbedSingle *single;
@@ -197,11 +178,6 @@ ephy_shell_init (EphyShell *gs)
 	single = ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (gs));
 	if (single != NULL)
 	{
-		g_signal_connect (G_OBJECT (single),
-				  "new_window_orphan",
-				  G_CALLBACK(ephy_shell_new_window_cb),
-				  NULL);
-
 		ephy_init_services (gs);
 	}
 	else

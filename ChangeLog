@@ -1,3 +1,20 @@
+2003-11-11  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/ephy-embed-single.c: (ephy_embed_single_class_init):
+	* embed/ephy-embed-single.h:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* embed/mozilla/mozilla-embed.h:
+	* src/ephy-nautilus-view.c: (gnv_embed_new_window_cb):
+	* src/ephy-session.c: (write_ephy_window):
+	* src/ephy-shell.c: (ephy_shell_init):
+	* src/ephy-tab.c: (ephy_tab_size_to_cb):
+	* src/ephy-window.c: (translate_default_chrome):
+
+	Build xul dialogs using GtkWindow+GtkMozEmbed.
+	Make src code simpler and fix a pair of bugs.
+
 2003-11-10  Christian Persch  <chpe@cvs.gnome.org>
 
 	* data/glade/Makefile.am:

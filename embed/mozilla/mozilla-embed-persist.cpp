@@ -154,7 +154,7 @@ impl_save (EphyEmbedPersist *persist)
 	EphyBrowser *browser = NULL;
 	if (embed)
 	{
-	        browser = (EphyBrowser *) mozilla_embed_get_ephy_browser (MOZILLA_EMBED(embed));
+	        browser = (EphyBrowser *) _mozilla_embed_get_ephy_browser (MOZILLA_EMBED(embed));
 		g_return_val_if_fail (browser != NULL, FALSE);
 	}
 

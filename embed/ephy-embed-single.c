@@ -31,12 +31,6 @@
 
 #include <string.h>
 
-enum
-{
-	NEW_WINDOW,
-	LAST_SIGNAL
-};
-
 #define EPHY_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSinglePrivate))
 
 struct EphyEmbedSinglePrivate
@@ -52,8 +46,6 @@ static void
 ephy_embed_single_init (EphyEmbedSingle *ges);
 
 static GObjectClass *parent_class = NULL;
-
-static guint ephy_embed_single_signals[LAST_SIGNAL] = { 0 };
 
 GType
 ephy_embed_single_get_type (void)
@@ -89,18 +81,6 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
-
-	ephy_embed_single_signals[NEW_WINDOW] =
-		g_signal_new ("new_window_orphan",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyEmbedSingleClass, new_window),
-			      NULL, NULL,
-			      ephy_marshal_VOID__POINTER_INT,
-			      G_TYPE_NONE,
-			      2,
-			      G_TYPE_POINTER,
-			      G_TYPE_INT);
 
 	g_type_class_add_private (object_class, sizeof(EphyEmbedSinglePrivate));
 }

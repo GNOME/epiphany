@@ -107,13 +107,6 @@ struct EphyEmbedSingleClass
 {
 	GObjectClass parent_class;
 
-	/* Signals */
-	void		(* new_window)          (EphyEmbedSingle *shell,
-						 EphyEmbed **new_embed,
-						 EmbedChromeMask chromemask);
-
-	/* Methods */
-
 	void	(* clear_cache)         (EphyEmbedSingle *shell);
 	void	(* set_offline_mode)    (EphyEmbedSingle *shell,
 					 gboolean offline);

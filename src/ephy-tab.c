@@ -952,13 +952,8 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 		 * has been resized. It appears to be the only way
 		 * to have the window sized according to embed
 		 * size correctly.
-		 * We dont do it for XUL dialogs because in that case
-		 * a "forced" requisition appear correct.
 		 */
-		if (!(chromemask & EMBED_CHROME_OPENASCHROME))
-		{
-			g_idle_add (let_me_resize_hack, embed);
-		}
+		g_idle_add (let_me_resize_hack, embed);
 	}
 }
 

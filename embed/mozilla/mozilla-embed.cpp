@@ -277,7 +277,7 @@ mozilla_embed_init (MozillaEmbed *embed)
 }
 
 gpointer
-mozilla_embed_get_ephy_browser (MozillaEmbed *embed)
+_mozilla_embed_get_ephy_browser (MozillaEmbed *embed)
 {
 	g_return_val_if_fail (embed->priv->browser != NULL, NULL);
 	
@@ -1015,10 +1015,14 @@ mozilla_embed_new_window_cb (GtkMozEmbed *embed,
 		{ GTK_MOZ_EMBED_FLAG_WINDOWRAISED, EMBED_CHROME_WINDOWRAISED },
 		{ GTK_MOZ_EMBED_FLAG_WINDOWLOWERED, EMBED_CHROME_WINDOWLOWERED },
 		{ GTK_MOZ_EMBED_FLAG_CENTERSCREEN, EMBED_CHROME_CENTERSCREEN },
-		{ GTK_MOZ_EMBED_FLAG_OPENASDIALOG, EMBED_CHROME_OPENASDIALOG },
-		{ GTK_MOZ_EMBED_FLAG_OPENASCHROME, EMBED_CHROME_OPENASCHROME },
 		{ 0, EMBED_CHROME_NONE }
 	};
+
+	if (chromemask && GTK_MOZ_EMBED_FLAG_OPENASCHROME)
+	{
+		*newEmbed = _mozilla_embed_new_xul_dialog ();
+		return;
+	}
 
 	for (i = 0; conversion_map[i].chromemask != 0; i++)
 	{
@@ -1113,4 +1117,43 @@ ephy_embed_init (EphyEmbedClass *embed_class)
 	embed_class->print_preview_close = impl_print_preview_close;
 	embed_class->print_preview_n_pages = impl_print_preview_n_pages;
 	embed_class->print_preview_navigate = impl_print_preview_navigate;
+}
+
+void
+xul_visibility_cb (GtkWidget *embed, gboolean visibility, GtkWidget *window)
+{
+	if (visibility)
+	{
+		gtk_widget_show (window);
+	}
+	else
+	{
+		gtk_widget_hide (window);
+	}
+}
+
+void
+xul_size_to_cb (GtkWidget *embed, gint width, gint height)
+{
+	gtk_widget_set_size_request (embed, width, height);
+}
+
+GtkMozEmbed *
+_mozilla_embed_new_xul_dialog (void)
+{
+	GtkWidget *window, *embed;
+
+	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	embed = gtk_moz_embed_new ();
+	gtk_widget_show (embed);
+	gtk_container_add (GTK_CONTAINER (window), embed);
+
+	g_signal_connect_swapped (embed, "destroy_browser",
+				  G_CALLBACK (gtk_widget_destroy), window);
+	g_signal_connect (embed, "visibility",
+			  G_CALLBACK (xul_visibility_cb), window);
+	g_signal_connect (embed, "size_to",
+			  G_CALLBACK (xul_size_to_cb), NULL);
+
+	return GTK_MOZ_EMBED (embed);
 }

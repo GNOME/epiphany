@@ -1573,7 +1573,6 @@ translate_default_chrome (EmbedChromeMask *chrome_mask)
 			 EMBED_CHROME_WINDOWLOWERED |
 			 EMBED_CHROME_CENTERSCREEN |
 			 EMBED_CHROME_OPENASDIALOG |
-			 EMBED_CHROME_OPENASCHROME |
 			 EMBED_CHROME_OPENASPOPUP);
 
 	/* Load defaults */
