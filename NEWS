@@ -1,4 +1,86 @@
 ==============
+Epiphany 1.3.1
+==============
+
+New features
+
+	* Load extensions from ~/.gnome2/epiphany/extensions too (Ross Burton) [#143835]
+	* Allow importing of our own bookmarks format (Christian) [#144699]
+	* Support off-line networking (Christian)
+
+Removed features
+
+	* Removed support for mozilla 1.6 (Marco)
+
+Interface improvements
+
+	* Append new tabs to the end instead of grouping them (Marco)
+	* Make tab labels 1/n-th of window size (n = # of tabs), with a minimum
+	  size so they don't get too small (Christian)
+	* Add "New Topic" button to the New Bookmark dialogue (Marco) [#110640]
+	* Improved import and presentation of hierarchical bookmarks (Marco)
+	* Implemented "Open in tabs" from toolbar topics (Marco) [#108143]
+
+Interface deteriorations
+
+	* New tab loading animation from FF winstripe (Marco)
+
+Code changes
+
+	* Ported to mozilla embed strings (Marco)
+	* Moved external protocol handler prefs to js file (Marco)
+	* Disabe xpinstall by default (Christian) [#144035]
+	* Separate bookmarks from other toolbars (Christian, Marco)
+	* Implement popup-blocked signals (Adam) [part of #111930]
+	* Includes cleanup (Marco)
+	* Allow custom types in the permissions manager (Christian)
+	* EphyNode ID cleanups (Marco)
+	* Simplify printing code (Marco)
+
+Bug fixes
+
+	* Fixed "Exit Fullscreen" popup position in RTL locales (Christian) [#140828]
+	* Fix filechooser default name in !modeSave mode (Christian)
+	* Fix webcal: uris (Marco) [#143899]
+	* Don't hide clipboard actions on input context (Marco) [#139040]
+	* Fix CSS background context menu (Crispin Flowerday) [#143602]
+	* Retain custom data when moving toolbar items around (Marco)
+	* Fix spinner in gradient themes (Crispin Flowerday) [#134686]
+	* Escape some strings when using them in labels with markup
+	  (Crispin Flowerday, Christian)
+	* Fix reload of framed pages not to go to top url (Christian) [#115800]
+	* Use generic name in .desktop file (Marco) [#144284]
+	* Fix Control-L location bar activation (Christian) [#144191]
+	* Hide non-toplevel urls from history (Christian) [#142143]
+	* Fix crash with confused toolbars file (Christian) [#144698]
+	* Fix toolbar visibility after fullscreen (Christian) [#144785]
+
+Documentation translations
+
+	* New translation of documentation into spanish
+	  by Francisco Javier F. Serrador
+
+Translations
+
+	* Alexander Winston (en_CA)
+	* Christian Neumair (de)
+	* Данило Шеган  (sr, st@Latn)
+	* Estêvão Samuel Procópio (pt_BR)
+	* Gareth Owen (en_GB)
+	* GNOME PL Team (pl)
+	* Laurent Dhima (sq)
+	* Liu Songhe (zh_CN)
+	* Marcel Telka (sk)
+	* Miloslav Trmač (cs)
+	* Mətin Əmirov (az)
+	* Nikos Charonitakis (el)
+	* Ole Laursen (da)
+	* Reinout van Schouwen (nl)
+	* 相花 毅  (ja)
+	* Владимир Петков (bg)
+
+
+==============
 Epiphany 1.3.0
 ==============
 
