@@ -54,15 +54,15 @@ struct EphyNotebookClass
         GtkNotebookClass parent_class;
 
 	/* Signals */
-	void (* tab_added)      (EphyNotebook *notebook,
-				 EphyTab *tab);
-	void (* tab_removed)    (EphyNotebook *notebook,
-				 EphyTab *tab);
-	void (* tab_detached)   (EphyNotebook *notebook,
-				 EphyTab *tab);
-	void (* tabs_reordered) (EphyNotebook *notebook);
-	void (* tab_delete)	(EphyNotebook *notebook,
-				 EphyTab *tab);
+	void	 (* tab_added)      (EphyNotebook *notebook,
+				     EphyTab *tab);
+	void	 (* tab_removed)    (EphyNotebook *notebook,
+				     EphyTab *tab);
+	void	 (* tab_detached)   (EphyNotebook *notebook,
+				     EphyTab *tab);
+	void	 (* tabs_reordered) (EphyNotebook *notebook);
+	gboolean (* tab_delete)	    (EphyNotebook *notebook,
+				     EphyTab *tab);
 };
 
 GType		ephy_notebook_get_type		(void);
