@@ -276,7 +276,7 @@ AC_COMPILE_IFELSE(
 		  p->RemovePage(arg1);]]
 	)],
 	[AC_DEFINE([MOZ_NSIGLOBALHISTORY_NSIURIP],[1],[dummy]) result=yes],
-	[AC_DEFINE([MOZ_NSIGLOBALHISTORY_CHARP],[1],[dummy]) result=no])
+	[result=no])
 
 AC_MSG_RESULT([$result])
 
