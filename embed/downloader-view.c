@@ -174,11 +174,8 @@ status_icon_activated (EggStatusIcon *icon, DownloaderView *dv)
 static void
 show_status_icon (DownloaderView *dv)
 {
-	GdkPixbuf *pixbuf;
-
-	pixbuf = gdk_pixbuf_new_from_file (ephy_file ("epiphany-download.png"), NULL);
-	dv->priv->status_icon = egg_status_icon_new_from_pixbuf (pixbuf);
-	g_object_unref (pixbuf);
+	dv->priv->status_icon =
+		egg_status_icon_new_from_stock (EPHY_STOCK_DOWNLOAD);
 
 	g_signal_connect (dv->priv->status_icon, "activate",
 			  G_CALLBACK (status_icon_activated), dv);
