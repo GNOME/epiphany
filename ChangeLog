@@ -1,8 +1,16 @@
 2004-04-18  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/EphyContentPolicy.h:
+	* embed/mozilla/MozRegisterComponents.cpp:
+
+        Don't override nsWebBrowserContentPolicy contract ID, just register our own
+        content policy with the category manager.
+
+2004-04-18  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/MozDownload.cpp:
 
-	Don't gunzip downloads (backported from HEAD).
+	Don't gunzip downloads (backported from HEAD), fixes bug #131778. 
 
 2004-04-16  Christian Persch  <chpe@cvs.gnome.org>
 
