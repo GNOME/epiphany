@@ -1,4 +1,80 @@
 ==============
+Epiphany 1.1.2
+==============
+
+Code changes
+
+	* Reformat spinner code to conform to epiphany coding style. (Christian)
+	* Allow plugins to access the statusbar (Adam Hooper)
+	* Use statusbar api directly instead of wrapping it around, so that
+	  we can have different groups of messages (Marco)
+	* No need to have EphyNode thread safe since we never use
+	  it in threads anyway (Marco)
+	* Brought toolbar editor code type macros in line with the
+	  rest of libegg; use gobject instance private data (Christian)
+
+New features
+
+	* Lockdown: set buttons insensitive when their
+          pref key is not writable. (Christian)
+	* Allow to move languages up and down in language editor (Christian)
+
+Interface improvements
+
+	* Make ctrl-click equivalent of middle click on links. Make shift-click
+          save the link. (Christian)
+	* Sort the list of fonts alphabetically (Christian)
+	* Make toolbar editing drag icons use the same icon size as the
+          actual toolbar icons (Jorn Baayen)
+	* In history show only site title by default (Marco)
+	* Make print dialogue spacing HIG-compliant (Christian)
+	* Use stock icon for print setup (Christian)
+	* Better way of mapping hierarchy to topics when importing
+          bookmarks from mozilla (Christian)
+	* In-line the language editor in the prefs dialog (Christian)
+	* Use favicons in the back/forward menus (Christian)
+	* Set the download folder selection label to "Home" if download folder
+          is home folder (Christian Neumair)
+
+Bugfixes
+
+	* Fix several mem leaks (Christian)
+	* Depend on automake 1.7, fix compilation from
+	  cvs on systems with 1.6 installed (Marco)
+	* Restore tabs menu shortcut keys ALT-1 .. ALT-0 (Christian)
+	* Don't try to save the submit button image instead of submitting
+          the form
+	* Destroy file chooser with its parent window; fixes crashes (Christian)
+	* Fix coordinates of under widgets popup in RTL mode (Christian)
+	* Do not try to pickup already set MOZILLA_FIVE_HOME,
+          hopefully fix crashes oepning links from thunderbird (Marco)
+	* Re-implement Pause/Resume in downloader (Xan)
+	* Correctly cancel the download instead of just
+          cancelling the request. (Marco)
+
+Documentation
+
+	* Updated printing docs (Piers Cornwell)
+	* GDK_Meta_L is a keycode, not a modifier code.
+          Map meta to GDK_MOD2_MASK. (Christian)
+
+Translations
+
+	* ar (Arafat Medini)
+	* be (Ales Nyakhaychyk)
+	* cs (Miloslav Trmac)
+	* de (Christian Neumair)
+	* el (Kostas Papadimas)
+	* en_GB (Christian Persch)
+	* es (Francisco F. Serrador)
+	* nl (Vincent van Adrighem)
+	* no (Kjartan Maraas)
+	* pt_BR (Gustavo Noronha Silva)
+	* sr (Danilo Šegan)
+	* sr@Latn (Danilo Šegan)
+	* sq (Laurent Dhima)
+
+==============
 Epiphany 1.1.1
 ==============
 
