@@ -1011,16 +1011,11 @@ key_pressed_cb (EphyNodeView *view,
 		GdkEventKey *event,
 		EphyBookmarksEditor *editor)
 {
-	switch (event->keyval)
+	if (event->keyval == GDK_Delete || event->keyval == GDK_KP_Delete)
 	{
-	case GDK_Delete:
-	case GDK_KP_Delete:
 		cmd_delete (NULL, editor);
 		return TRUE;
-
-	default:
-		break;
-	}
+	} 
 
 	return FALSE;
 }
@@ -1280,7 +1275,8 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 				   EPHY_NODE_KEYWORD_PROP_NAME,
 				   EPHY_NODE_KEYWORD_PROP_PRIORITY,
 				   EPHY_NODE_VIEW_AUTO_SORT |
-				   EPHY_NODE_VIEW_EDITABLE, NULL);
+				   EPHY_NODE_VIEW_EDITABLE |
+				   EPHY_NODE_VIEW_SEARCHABLE, NULL);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), key_view);
 	gtk_widget_set_size_request (key_view, 130, -1);
 	gtk_widget_show (key_view);
@@ -1334,7 +1330,8 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	ephy_node_view_add_column (EPHY_NODE_VIEW (bm_view), _("Title"),
 				   G_TYPE_STRING, EPHY_NODE_BMK_PROP_TITLE, -1,
 				   EPHY_NODE_VIEW_AUTO_SORT |
-				   EPHY_NODE_VIEW_EDITABLE,
+				   EPHY_NODE_VIEW_EDITABLE |
+				   EPHY_NODE_VIEW_SEARCHABLE,
 				   provide_favicon);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), bm_view);
 	gtk_widget_show (bm_view);

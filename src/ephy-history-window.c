@@ -1025,7 +1025,8 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 				   G_TYPE_STRING,
 				   EPHY_NODE_PAGE_PROP_TITLE,
 				   EPHY_NODE_PAGE_PROP_PRIORITY,
-				   EPHY_NODE_VIEW_AUTO_SORT,
+				   EPHY_NODE_VIEW_AUTO_SORT |
+				   EPHY_NODE_VIEW_SEARCHABLE,
 				   provide_favicon);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), sites_view);
 	gtk_widget_show (sites_view);
@@ -1069,7 +1070,8 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 					   EPHY_NODE_PAGE_PROP_LOCATION);
 	col = ephy_node_view_add_column (EPHY_NODE_VIEW (pages_view), _("Title"),
 				         G_TYPE_STRING, EPHY_NODE_PAGE_PROP_TITLE,
-				         -1, EPHY_NODE_VIEW_USER_SORT, NULL);
+				         -1, EPHY_NODE_VIEW_USER_SORT |
+					 EPHY_NODE_VIEW_SEARCHABLE, NULL);
 	gtk_tree_view_column_set_max_width (col, 250);
 	col = ephy_node_view_add_column (EPHY_NODE_VIEW (pages_view), _("Address"),
 				         G_TYPE_STRING, EPHY_NODE_PAGE_PROP_LOCATION,

@@ -1,3 +1,20 @@
+2003-07-12  Xan Lopez  <xan@masilla.org>
+
+	* lib/widgets/ephy-node-view.c:
+	(ephy_node_view_select_node_by_key), (ephy_node_view_key_press_cb),
+	(ephy_node_view_construct), (ephy_node_view_add_column),
+	(ephy_node_view_init):
+	* lib/widgets/ephy-node-view.h:
+	* src/bookmarks/ephy-bookmarks-editor.c: (key_pressed_cb),
+	(ephy_bookmarks_editor_construct):
+	* src/ephy-history-window.c: (ephy_history_window_construct):
+
+	A "fast search" implementation for all node views. Pressing any valid
+	unicode character will make ephy select the first entry begining with
+	that key, or the nearest match (with previous or posterior letters).
+	Fixes bug #116744 (http://bugzilla.gnome.org/show_bug.cgi?id=116744).
+	
+
 2003-07-12  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* configure.in:

@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
+ *  $Id$
  */
 
 #include <gtk/gtktreeselection.h>
@@ -66,6 +67,8 @@ struct EphyNodeViewPrivate
 
 	gboolean editing;
 	int editable_property;
+
+	int searchable_data_column;
 };
 
 enum
@@ -414,6 +417,54 @@ ephy_node_view_row_activated_cb (GtkTreeView *treeview,
 	g_signal_emit (G_OBJECT (view), ephy_node_view_signals[NODE_ACTIVATED], 0, node);
 }
 
+
+static gboolean
+ephy_node_view_select_node_by_key (EphyNodeView *view, GdkEventKey *event)
+{
+	GtkTreeIter iter, last_iter;
+	GtkTreePath *path;
+	GValue value = {0, };
+	gchar *string;
+	gchar *event_string;
+	gboolean found = FALSE;
+	
+	event_string = g_utf8_casefold (event->string, -1);
+
+	if (!gtk_tree_model_get_iter_first (view->priv->sortmodel, &iter))
+	{
+		g_free (event_string);
+		return FALSE;
+	}
+
+	do
+	{
+		last_iter = iter;
+		gtk_tree_model_get_value (view->priv->sortmodel, &iter,
+					  view->priv->searchable_data_column,
+					  &value);
+
+		string = g_utf8_casefold (g_value_get_string (&value), -1);
+		g_utf8_strncpy (string, string, 1);
+		found = (g_utf8_collate (string, event_string) >= 0);
+
+		g_free (string);
+		g_value_unset (&value);
+	}
+	while (!found && gtk_tree_model_iter_next (view->priv->sortmodel, &iter));
+
+	if (!found)
+	{
+		iter = last_iter;
+	}
+	
+	path = gtk_tree_model_get_path (view->priv->sortmodel, &iter);
+	gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), path, NULL, FALSE);
+	gtk_tree_path_free (path);
+	g_free (event_string);
+
+	return TRUE;
+}
+
 static gboolean
 ephy_node_view_key_press_cb (GtkTreeView *treeview,
 			     GdkEventKey *event,
@@ -425,6 +476,11 @@ ephy_node_view_key_press_cb (GtkTreeView *treeview,
 		g_signal_emit (G_OBJECT (view), ephy_node_view_signals[SHOW_POPUP], 0);
 
 		return TRUE;
+	}
+	else if (view->priv->searchable_data_column != -1 &&
+		 gdk_keyval_to_unicode (event->keyval))
+	{
+		return ephy_node_view_select_node_by_key (view, event);
 	}
 
 	return FALSE;
@@ -563,11 +619,10 @@ ephy_node_view_construct (EphyNodeView *view)
 			         G_CALLBACK (ephy_node_view_button_press_cb),
 			         view,
 				 0);
-	g_signal_connect_object (G_OBJECT (view),
+	g_signal_connect_after (G_OBJECT (view),
 			         "key_press_event",
 			         G_CALLBACK (ephy_node_view_key_press_cb),
-			         view,
-				 0);
+			         view);
 	g_signal_connect_object (G_OBJECT (view),
 			         "row_activated",
 			         G_CALLBACK (ephy_node_view_row_activated_cb),
@@ -778,6 +833,12 @@ ephy_node_view_add_column (EphyNodeView *view,
 		g_signal_connect (renderer, "edited", G_CALLBACK (cell_renderer_edited), view);
 	}
 
+	if ((flags & EPHY_NODE_VIEW_SEARCHABLE) &&
+	    (view->priv->searchable_data_column == -1))
+	{
+		view->priv->searchable_data_column = column;
+	}
+
 	gtk_tree_view_column_pack_start (gcolumn, renderer, TRUE);
 	gtk_tree_view_column_set_attributes (gcolumn, renderer,
 					     "text", column,
@@ -847,6 +908,7 @@ ephy_node_view_init (EphyNodeView *view)
 	view->priv->editable_renderer = NULL;
 	view->priv->editing = TRUE;
 	view->priv->selected_node = NULL;
+	view->priv->searchable_data_column = -1;
 
 	gtk_tree_view_set_enable_search (GTK_TREE_VIEW (view), FALSE);
 }
@@ -1070,3 +1132,4 @@ ephy_node_view_has_selection (EphyNodeView *view, gboolean *multiple)
 
 	return rows > 0;
 }
+
