@@ -1169,6 +1169,7 @@ get_details_value (void)
 		value = VIEW_TITLE_AND_ADDRESS;
 	}
 
+	g_slist_foreach (svalues, (GFunc) g_free, NULL);
 	g_slist_free (svalues);
 
 	return value;
