@@ -575,7 +575,7 @@ import_dialog_response_cb (GtkDialog *dialog, gint response,
 				 "text/rdf", NULL);
 
 			filter = ephy_file_chooser_add_pattern_filter (dialog,
-							      _("All Files"),
+							      _("All files"),
 							      "*", NULL);
 
 			gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog),
