@@ -36,6 +36,10 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "MozillaPrivate.h"
 
 #include "MozDownload.h"
@@ -52,6 +56,8 @@
 #include "nsIMIMEInfo.h"
 #include "nsIDOMHTMLDocument.h"
 #include "nsIDownload.h"
+
+#include <bonobo/bonobo-i18n.h>
 
 EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,
 		nsIFile* aFile, nsIURI* aURL, nsIDOMDocument* aDocument, nsIInputStream* aPostData,
@@ -209,10 +215,10 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		defaultFileName = NS_ConvertUTF8toUCS2(hostName);
 	}
     
-	/* 5 One last case to handle about:blank and other fruity untitled pages. */
+	/* 5 One last case to handle about:blank and other untitled pages. */
 	if (defaultFileName.IsEmpty())
 	{
-		defaultFileName.AssignWithConversion("untitled");
+		defaultFileName.AssignWithConversion(_("Untitled"));
 	}
         
 	/* Validate the file name to ensure legality. */
