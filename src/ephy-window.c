@@ -1528,9 +1528,16 @@ static void
 popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
 		      gpointer user_data)
 {
-	EphyEmbedEvent *event = (EphyEmbedEvent *) user_data;
+	GtkWidget *window = GTK_WIDGET (user_data);
+	EphyEmbedEvent *event;
+
+	event = g_object_get_data (G_OBJECT (window), "context_event");
+	g_return_if_fail (event != NULL);
 
 	ephy_embed_event_get_coords (event, x, y);
+
+	/* FIXME: better position the popup within the window bounds? */
+	ephy_gui_sanitise_popup_position (menu, window, x, y);
 
 	*push_in = TRUE;
 }
@@ -1623,7 +1630,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	if (type == EPHY_EMBED_EVENT_KEY)
 	{
 		gtk_menu_popup (GTK_MENU (widget), NULL, NULL,
-				popup_menu_at_coords, event, 0,
+				popup_menu_at_coords, window, 0,
 				gtk_get_current_event_time ());
 		gtk_menu_shell_select_first (GTK_MENU_SHELL (widget), FALSE);
 	}

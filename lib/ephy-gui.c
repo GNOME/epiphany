@@ -45,13 +45,18 @@
 GtkStyle *loading_text_style = NULL;
 GtkStyle *new_text_style = NULL;
 
-static void
-sanitize_popup_position (GtkWidget *widget, GtkMenu *menu, gint *x, gint *y)
+void
+ephy_gui_sanitise_popup_position (GtkMenu *menu,
+				  GtkWidget *widget,
+				  gint *x,
+				  gint *y)
 {
 	GdkScreen *screen = gtk_widget_get_screen (widget);
 	gint monitor_num;
 	GdkRectangle monitor;
 	GtkRequisition req;
+
+	g_return_if_fail (widget != NULL);
 
 	gtk_widget_size_request (GTK_WIDGET (menu), &req);
 
@@ -97,7 +102,7 @@ ephy_gui_menu_position_tree_selection (GtkMenu   *menu,
 		g_list_free (selected_rows);
 	}
 
-	sanitize_popup_position (widget, menu, x, y);
+	ephy_gui_sanitise_popup_position (menu, widget, x, y);
 }
 
 /**
@@ -130,7 +135,7 @@ ephy_gui_menu_position_under_widget (GtkMenu   *menu,
 
 	*y += w->allocation.y + w->allocation.height;
 
-	sanitize_popup_position (w, menu, x, y);
+	ephy_gui_sanitise_popup_position (menu, w, x, y);
 }
 
 gboolean

@@ -30,6 +30,11 @@
 
 G_BEGIN_DECLS
 
+void		ephy_gui_sanitise_popup_position	 (GtkMenu *menu,
+							  GtkWidget *parent_widget,
+							  gint *x,
+							  gint *y);
+
 void		ephy_gui_menu_position_tree_selection    (GtkMenu   *menu,
 							  gint      *x,
 							  gint      *y,
