@@ -597,16 +597,24 @@ ephy_tab_title_cb (EphyEmbed *embed, EphyTab *tab)
 }
 
 static int
-build_load_percent (int bytes_loaded, int max_bytes_loaded)
+build_load_percent (int requests_done, int requests_total)
 {
-	if (max_bytes_loaded > 0)
+	int percent;
+
+	if (requests_total > 0)
 	{
-		return (bytes_loaded * 100) / max_bytes_loaded;
+		percent = (requests_done * 100) / requests_total;
+
+		/* Mozilla sometimes report more done requests than
+		   total requests. Their progress widget clamp the value */
+		percent = CLAMP (percent, 0, 100);
 	}
 	else
 	{
-		return -1;
+		percent = -1;
 	}
+
+	return percent;
 }
 
 static char *

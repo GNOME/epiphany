@@ -1,5 +1,13 @@
 2003-08-07  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* src/ephy-tab.c: (build_load_percent):
+
+	Clamp the values to 0/100, mozilla sometimes report
+	more done requests than total requests, but their
+	progress widget clamp them.
+
+2003-08-07  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* embed/mozilla/mozilla-notifiers.cpp:
 
 	Dont set font prefs in mozilla when they are unset in
