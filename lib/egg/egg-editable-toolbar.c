@@ -313,9 +313,10 @@ set_item_drag_source (GtkWidget *item,
   if (is_separator)
     {
       GtkWidget *icon;
+      GdkPixbuf *pixbuf;
 
       icon = _egg_editable_toolbar_new_separator_image ();
-      GdkPixbuf *pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (icon));
+      pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (icon));
       gtk_drag_source_set_icon_pixbuf (item, pixbuf);
     }
   else
@@ -339,8 +340,6 @@ create_item (EggEditableToolbar *t,
   action_name = egg_toolbars_model_item_nth
 		(model, toolbar_position, position,
 		 &is_separator);
-  g_signal_emit (G_OBJECT (t), egg_editable_toolbar_signals[ACTION_REQUEST],
-		 0, action_name);
   action = find_action (t, action_name);
 
   if (is_separator)
@@ -349,6 +348,8 @@ create_item (EggEditableToolbar *t,
     }
   else
     {
+      g_signal_emit (G_OBJECT (t), egg_editable_toolbar_signals[ACTION_REQUEST],
+		     0, action_name);
       item = egg_action_create_tool_item (action);
       gtk_widget_set_sensitive (item, TRUE);
     }
