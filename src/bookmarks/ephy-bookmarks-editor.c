@@ -19,7 +19,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include <gtk/gtktable.h>
@@ -547,11 +547,6 @@ import_dialog_response_cb (GtkDialog *dialog, gint response,
 			/* FIXME: set up some filters perhaps ? */
 			g_signal_connect (dialog, "response",
 					  G_CALLBACK (import_from_file_response_cb), editor);
-
-			gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-						GTK_STOCK_OPEN, GTK_RESPONSE_OK,
-						NULL);
 
 			gtk_widget_show (GTK_WIDGET (dialog));
 		}
