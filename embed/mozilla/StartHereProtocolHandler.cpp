@@ -127,7 +127,7 @@ NS_IMETHODIMP GStartHereProtocolHandler::NewChannel(nsIURI *aURI,
 	if (g_str_has_prefix (path.get(), "import-mozilla-bookmarks"))
 	{
 		g_signal_emit_by_name (embed_shell, "command", "import-mozilla-bookmarks",
-				       path.get() + strlen ("import-bookmarks?"));
+				       path.get() + strlen ("import-mozilla-bookmarks?"));
 		return NS_ERROR_FAILURE;
 	}
 	else if (g_str_has_prefix (path.get(), "import-galeon-bookmarks"))
