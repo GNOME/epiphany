@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany\n"
-"POT-Creation-Date: 2003-02-15 03:40+0100\n"
-"PO-Revision-Date: 2003-02-13 13:31--100\n"
+"POT-Creation-Date: 2003-02-18 03:40+0100\n"
+"PO-Revision-Date: 2003-02-18 12:32--100\n"
 "Last-Translator: Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -231,11 +231,11 @@ msgstr "Spring naar nieuwe tabbladen."
 
 #: data/epiphany.schemas.in.h:36
 msgid "Keep downloader open after all downloads have finished."
-msgstr "Houd downloadvenster open nadat alle downloads klaar zijn."
+msgstr "Downloadvenster open houden nadat alle downloads klaar zijn."
 
 #: data/epiphany.schemas.in.h:37
 msgid "Keep downloader open after download finished"
-msgstr "Houd downloadvenster open nadat download klaar is"
+msgstr "Downloadvenster open houden nadat download klaar is"
 
 # src/prefs.c:397
 # ui/preferences.glade.h:103
@@ -1624,7 +1624,7 @@ msgstr "%d KB"
 # src/prefs_callbacks.c:237
 # src/prefs_callbacks.c:407
 #: embed/downloader-view.c:499 embed/downloader-view.c:517
-#: src/ephy-window.c:1045
+#: src/ephy-window.c:1048
 msgid "Unknown"
 msgstr "Onbekend"
 
@@ -2282,7 +2282,7 @@ msgstr "Werkbalk toevoegen"
 # src/mozcallbacks.c:225
 # src/window.c:2279
 #. setup label
-#: lib/widgets/ephy-notebook.c:714 src/ephy-tab.c:524 src/ephy-tab.c:982
+#: lib/widgets/ephy-notebook.c:714 src/ephy-tab.c:524 src/ephy-tab.c:992
 #: src/window-commands.c:286
 msgid "Untitled"
 msgstr "Naamloos"
@@ -2534,7 +2534,7 @@ msgstr "B_eeld"
 
 # src/menubar.c:570
 #. Toolbar only
-#: src/ephy-window.c:61 src/ephy-window.c:199
+#: src/ephy-window.c:61 src/ephy-window.c:202
 msgid "_Go"
 msgstr "Ga _naar"
 
@@ -2548,17 +2548,16 @@ msgstr "_Tabbladen"
 msgid "_Help"
 msgstr "_Hulp"
 
-# GNOME_epiphany_Automation.oaf.in.h:1
-# epiphany.desktop.in.h:2
+# src/context.c:60
 #. File menu
 #: src/ephy-window.c:66
-msgid "_New Browser"
-msgstr "_Nieuwe webbrowser"
+msgid "_New Window"
+msgstr "_Nieuw venster"
 
 # ui/bookmarks.glade.h:7
 #: src/ephy-window.c:67
-msgid "Create a new browser"
-msgstr "Nieuwe webbrowser maken"
+msgid "Create a new window"
+msgstr "Nieuw venster aanmaken"
 
 # src/menubar.c:54
 #: src/ephy-window.c:69
@@ -2627,8 +2626,8 @@ msgstr "Sl_uiten"
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
 #: src/ephy-window.c:88
-msgid "Close this browser"
-msgstr "Deze webbrowser sluiten"
+msgid "Close this window"
+msgstr "Dit venster sluiten"
 
 # src/context.c:81
 # src/window_callbacks.c:1145
@@ -2880,7 +2879,7 @@ msgstr "Ga naar een bepaalde lokatie"
 # ui/epiphany.glade.h:78
 # ui/preferences.glade.h:88
 #: src/ephy-window.c:169
-msgid "_History"
+msgid "H_istory"
 msgstr "_Geschiedenis"
 
 #: src/ephy-window.c:170
@@ -2889,8 +2888,8 @@ msgstr "Ga naar een reeds bezochte pagina"
 
 # src/menubar.c:571
 #: src/ephy-window.c:172
-msgid "_Bookmarks"
-msgstr "Bla_dwijzers"
+msgid "Boo_kmarks"
+msgstr "Blad_wijzers"
 
 # src/bookmarks_editor.c:1029
 #: src/ephy-window.c:173
@@ -2944,74 +2943,84 @@ msgstr "Tabblad los_scheuren"
 msgid "Detach current tab"
 msgstr "Huidige tabblad losscheuren"
 
-# src/menubar.c:43
 #. Help menu
 #: src/ephy-window.c:194
+msgid "_Contents"
+msgstr "_Inhoud"
+
+# GNOME_epiphany_Automation.oaf.in.h:1
+# epiphany.desktop.in.h:2
+#: src/ephy-window.c:195
+msgid "Display web browser help"
+msgstr "Hulp voor webbrowser weergeven"
+
+# src/menubar.c:43
+#: src/ephy-window.c:197
 msgid "_About"
 msgstr "_Info"
 
-#: src/ephy-window.c:195
+#: src/ephy-window.c:198
 msgid "Display credits for the web browser creators"
 msgstr "Credits weergeven voor de makers van de webbrowser"
 
-#: src/ephy-window.c:200
+#: src/ephy-window.c:203
 msgid "Type a web address or a word in the field on the left, then click Go"
 msgstr "Type een webadres of een woord in het veld hier links en klik op Ga"
 
 # src/context.c:80
 #. Document
-#: src/ephy-window.c:210
+#: src/ephy-window.c:213
 msgid "_Save Background As..."
 msgstr "Achtergrond _opslaan als..."
 
 # src/context.c:69
-#: src/ephy-window.c:212
+#: src/ephy-window.c:215
 msgid "_Copy Page Location"
 msgstr "Paginalokatie _kopiëren"
 
 # src/menubar.c:34
 #. Framed document
-#: src/ephy-window.c:216
+#: src/ephy-window.c:219
 msgid "_Open Frame"
 msgstr "Frame _openen"
 
 # src/context.c:71
-#: src/ephy-window.c:218
-msgid "Open Frame in _New Browser"
-msgstr "Frame openen in een _nieuwe browser"
+#: src/ephy-window.c:221
+msgid "Open Frame in _New Window"
+msgstr "Frame in een _nieuw venster openen"
 
 # src/context.c:72
-#: src/ephy-window.c:220
+#: src/ephy-window.c:223
 msgid "Open Frame in New _Tab"
 msgstr "Frame openen in een nieuw _tabblad"
 
 # ui/epiphany.glade.h:91
 #. Links
-#: src/ephy-window.c:224
+#: src/ephy-window.c:227
 msgid "_Open Link"
 msgstr "Verwijzing _openen"
 
 # src/context.c:60
-#: src/ephy-window.c:226
-msgid "Open Link in _New Browser"
-msgstr "Verwijzing openen in een _nieuwe browser"
+#: src/ephy-window.c:229
+msgid "Open Link in _New Window"
+msgstr "Verwijzing in _nieuw venster openen"
 
 # src/context.c:61
-#: src/ephy-window.c:228
+#: src/ephy-window.c:231
 msgid "Open Link in New _Tab"
 msgstr "Verwijzing openen in een nieuw _tabblad"
 
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: src/ephy-window.c:230
+#: src/ephy-window.c:233
 msgid "_Download Link"
 msgstr "Verwijzing _downloaden"
 
 # src/context.c:64
 # src/history_callbacks.c:165
 # src/misc_callbacks.c:412
-#: src/ephy-window.c:232
+#: src/ephy-window.c:235
 msgid "_Bookmark Link..."
 msgstr "Bl_adwijzer maken van verwijzing..."
 
@@ -3019,70 +3028,70 @@ msgstr "Bl_adwijzer maken van verwijzing..."
 # src/context.c:63
 # src/history_callbacks.c:162
 # src/misc_callbacks.c:410
-#: src/ephy-window.c:234
+#: src/ephy-window.c:237
 msgid "_Copy Link Location"
 msgstr "Verwijzing _kopiëren"
 
-#: src/ephy-window.c:236
+#: src/ephy-window.c:239
 msgid "Copy _Email"
 msgstr "_E-mail kopiëren"
 
 # src/context.c:1075
 #. Images
-#: src/ephy-window.c:240
+#: src/ephy-window.c:243
 msgid "_Open Image"
 msgstr "Afbeelding _openen"
 
 # src/context.c:65
-#: src/ephy-window.c:242
-msgid "Open Image in _New Browser"
-msgstr "Afbeelding openen in _nieuwe browser"
+#: src/ephy-window.c:245
+msgid "Open Image in _New Window"
+msgstr "Afbeelding in _nieuw venster openen"
 
 # src/context.c:66
-#: src/ephy-window.c:244
+#: src/ephy-window.c:247
 msgid "Open Image in New _Tab"
 msgstr "Afbeelding openen in nieuw _tabblad"
 
 # src/context.c:67
-#: src/ephy-window.c:246
+#: src/ephy-window.c:249
 msgid "_Save Image As..."
 msgstr "Afbeelding _opslaan als..."
 
 # src/context.c:68
-#: src/ephy-window.c:248
+#: src/ephy-window.c:251
 msgid "Use Image As _Background"
 msgstr "Afbeelding gebruiken als a_chtergrond"
 
 # src/context.c:69
-#: src/ephy-window.c:250
+#: src/ephy-window.c:253
 msgid "_Copy Image Location"
 msgstr "Afbeeldingslokatie _kopiëren"
 
-#: src/ephy-window.c:1048
+#: src/ephy-window.c:1051
 msgid "Insecure"
 msgstr "Onveilig"
 
 # src/mozilla/mozilla.cpp:996
 # src/persistent_data_manager.c:374
 # src/persistent_data_manager.c:609
-#: src/ephy-window.c:1051
+#: src/ephy-window.c:1054
 msgid "Broken"
 msgstr "Gebroken"
 
-#: src/ephy-window.c:1054
+#: src/ephy-window.c:1057
 msgid "Medium"
 msgstr "Gemiddeld"
 
-#: src/ephy-window.c:1058
+#: src/ephy-window.c:1061
 msgid "Low"
 msgstr "Laag"
 
 # src/mozilla/mozilla.cpp:1982
-#: src/ephy-window.c:1062
+#: src/ephy-window.c:1065
 msgid "High"
 msgstr "Hoog"
 
-#: src/ephy-window.c:1072
+#: src/ephy-window.c:1075
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3091,7 +3100,7 @@ msgstr ""
 "Beveiligingsniveau: %s\n"
 "%s"
 
-#: src/ephy-window.c:1078
+#: src/ephy-window.c:1081
 #, c-format
 msgid "Security level: %s"
 msgstr "Beveiligingsniveau: %s"
@@ -3460,19 +3469,13 @@ msgid "Select the file to open"
 msgstr "Selecteer het te openen bestand"
 
 #. Translator credits
-#: src/window-commands.c:665
+#: src/window-commands.c:672
 msgid "translator_credits"
 msgstr ""
 "Vincent van Adrighem\n"
 "  <V.vanAdrighem@dirck.mine.nu>."
 
 # src/menu_callbacks.c:428
-#: src/window-commands.c:677
+#: src/window-commands.c:684
 msgid "A GNOME browser based on Mozilla"
 msgstr "Een uitgebreide GNOME browser gebaseerd op Mozilla"
-
-# src/context.c:64
-# src/history_callbacks.c:165
-# src/misc_callbacks.c:412
-#~ msgid "Add Bookmark"
-#~ msgstr "Bladwijzer toevoegen"
