@@ -300,6 +300,20 @@ ephy_bookmark_action_sync_label (GtkAction *action, GParamSpec *pspec, GtkWidget
 }
 
 static void
+open_in_tab_activate_cb (GtkWidget *widget, EphyBookmarkAction *action)
+{
+	g_signal_emit (action, signals[OPEN_IN_TAB], 0,
+		       action->priv->location, FALSE);
+}
+
+static void
+open_in_window_activate_cb (GtkWidget *widget, EphyBookmarkAction *action)
+{
+	g_signal_emit (action, signals[OPEN_IN_TAB], 0,
+		       action->priv->location, TRUE);
+}
+
+static void
 activate_cb (GtkWidget *widget, GtkAction *action)
 {
 	char *location = NULL;
@@ -382,8 +396,7 @@ drag_data_get_cb (GtkWidget *widget, GdkDragContext *context,
 }
 
 static void
-drag_data_delete_cb (GtkWidget *widget, GdkDragContext *context,
-		     EphyBookmarkAction *action)
+remove_from_model (GtkWidget *widget)
 {
 	EphyBookmarks *bookmarks;
 	EggToolbarsModel *model;
@@ -404,6 +417,13 @@ drag_data_delete_cb (GtkWidget *widget, GdkDragContext *context,
 	egg_toolbars_model_remove_item (model, 0, pos);
 }
 
+static void
+drag_data_delete_cb (GtkWidget *widget, GdkDragContext *context,
+		     EphyBookmarkAction *action)
+{
+	remove_from_model (widget);
+}
+
 static gboolean
 drag_motion_cb (GtkWidget *widget, GdkEventMotion *event, EphyBookmarkAction *action)
 {
@@ -421,12 +441,57 @@ drag_motion_cb (GtkWidget *widget, GdkEventMotion *event, EphyBookmarkAction *ac
 	return TRUE;
 }
 
+static void
+remove_activate_cb (GtkWidget *menu, GtkWidget *proxy)
+{
+	remove_from_model (proxy);
+}
+
+static void
+show_context_menu (EphyBookmarkAction *action, GtkWidget *proxy)
+{
+	GtkWidget *menu, *item;
+
+	menu = gtk_menu_new ();
+
+	item = gtk_menu_item_new_with_mnemonic (_("_Open in New Tab"));
+	gtk_widget_show (item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	g_signal_connect (item, "activate",
+			  G_CALLBACK (open_in_tab_activate_cb), action);
+
+	item = gtk_menu_item_new_with_mnemonic (_("_Open in New Window"));
+	gtk_widget_show (item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	g_signal_connect (item, "activate",
+			  G_CALLBACK (open_in_window_activate_cb), action);
+
+	item = gtk_separator_menu_item_new ();
+	gtk_widget_show (item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	item = gtk_image_menu_item_new_from_stock (GTK_STOCK_REMOVE, NULL);
+	gtk_widget_show (item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	g_signal_connect (item, "activate",
+			  G_CALLBACK (remove_activate_cb), proxy);
+
+	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 3,
+			gtk_get_current_event_time ());
+}
+
 static gboolean
 button_press_cb (GtkWidget *widget,
 		 GdkEventButton *event,
 		 EphyBookmarkAction *action)
 {
-	if (event->button == 2)	
+	if (event->button == 3 &&
+	    gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))	
+	{
+		show_context_menu (action, widget);
+		return TRUE;
+	}
+	else if (event->button == 2)	
 	{
 		gtk_button_pressed (GTK_BUTTON (widget));
 	}
