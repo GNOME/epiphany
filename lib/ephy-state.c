@@ -126,7 +126,7 @@ ephy_state_window_set_size (GtkWidget *window, EphyNode *node)
 {
 	int width, height, w = -1, h = -1;
 	gboolean maximize, size;
-g_print("ephy-state!\n");
+
 	width = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_WIDTH);
 	height = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_HEIGHT);
 	maximize = ephy_node_get_property_boolean (node, EPHY_NODE_STATE_PROP_MAXIMIZE);

@@ -740,7 +740,7 @@ restore_geometry (GtkWindow *window,
 	xmlChar *tmp;
 	int x = 0, y = 0, width = -1, height = -1;
 	gboolean success = TRUE;
-g_print ("restore geometry!\n");
+
 	g_return_if_fail (window != NULL);
 
 	tmp = xmlGetProp (node, (xmlChar *) "x");
