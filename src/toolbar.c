@@ -628,7 +628,8 @@ toolbar_set_location (Toolbar *t,
 	g_return_if_fail (location != NULL);
 
 	ephy_location_entry_set_location
-		(EPHY_LOCATION_ENTRY (location), alocation);
+		(EPHY_LOCATION_ENTRY (location),
+		 alocation ? alocation : "");
 }
 
 void
