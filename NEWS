@@ -1,6 +1,109 @@
-0.4.3
+=============
+Version 0.5.0
+=============
 
-- Rewrite toolbars/menus using EggMenu
-  (Because of this the toolbar editor
-   is temporarily removed)
-- Several bugfixes
+Code changes
+
+	* Port to EggMenu API
+	* Make GaleonShell subclass GaleonEmbedShell.
+	  Now also embed services like downloader
+	  are able to reference it. (Marco)
+	* Use mozilla prompts dialogs implementation.
+	  (This means you will see XUL dialogs with older
+	   mozilla versions) (Marco)
+	* Fix embed persist lifetime issues to avoid leaks (Marco)
+	* Reimplement ephy-state using xml (Marco)
+	* Add to EphyNode the ability to specifiy reserved id for nodes,
+	  useful for toplevel nodes (Marco)
+	* Rework drag and drop api to deal with more than the urls types (Marco)
+	* Autoupdate EggX. Use the toolbar editor stuff from libegg. (Marco)
+	* Use the latest suggested way to initialize mozilla services.
+	  (Marco, from galeon)
+
+New features
+
+	* Ability to drag bookmarks, smart bookmarks and topics
+	  to the toolbar (Marco)
+	* Optional Go button (Dave Bordoley)
+	* Help support (Patanjali Somayaji) 
+
+Interface improvements
+
+	* Site icons in topics menus (Johan Dahlin)	
+	* Site icons on tabs (Christian Persch)
+	* Set icons for History, Find, Bookmarks, Preferences dialogs
+	  (Dave Bordoley)
+	* Bookmarks editor redesign: better interface to assign multiple
+	  topics, better editor interface using a toplevel window with a
+	  menubar, file manager like editing capabilities, ability to open
+	  the editor indipendentlyi, "most used" special topic.
+	  (Marco, Dave Bordoley, Xan Lopez)
+	* Properly save maximized/unmaximized state of the main window (Marco)
+	* Remove spinner configuration and default to Gnome spinner,
+	  this should be part of gnome icon theme at some point. (Marco)
+	* Remove bookmarks with delete key (Xan Lopez)
+	* Alphabetical sort of topics and bookmarks in the editor (Xan Lopez)
+	* Remove tab autocompletion to avoid accessibility issues (Marco)	
+	* Focus the location entry when opening a new window and do not
+	  put the url in it, so the user can more easiliy insert
+	  the location he wants to load.
+	  Try to not disturb the user when he is editing the url with
+	  focus removals.
+	  All these works more or less well depending on mozilla versions :/
+	  (Marco)
+	* Make the start-here: page use the theme colors. (James Willcox)
+	* Tab load notification, using an animated image (James Willcox)
+	* Several improvements to the main menubar layout and labels
+	  (Dave Bordoley)
+	* Add "Go to" button to the history (Xan Lopez)
+	* Have just one Close menu item and make it behave like
+          other gnome apps, closing document by document (Marco)
+	* More clear buttons labels on resume dialog (Lee Willis)
+	* Make the bookmarks editor remember the last selected keyword
+	  (James Willcox)
+	* Spinner is no more a button, like in Nautilus (Marco)
+	* Ability to import galeon and konqueror
+	  bookmarks (James Willcox)
+	* Use the title instead of url in Back/Forward history
+	  and in the history dialog (Marco)
+	* Use favorites icons in bookmarks (Marco)
+	* More usable toolbar editor based on drag and drop (Marco)
+	* Enable startup feedback (Marco)
+	* Disable annoying security dialogs (Marco)
+
+Bugfixes
+
+	* fix incorrect figures on small files downloads (Rob Clews)
+	* do not leak the history xml every 5 minutes (Lee Willis)
+	* Error handling in Mozilla bookmarks import (Xan Lopez)
+	* Make nautilus view actually work (Marco)
+	* Fix session saving (Lee Willis)
+	* Fix casting on big-endian. Context menus are now working
+	  on PPC (from Galeon)
+	* Compile fix for gcc 2.95 (Dan Damian)
+	* Properly autocomplete when topics have national characters
+	  (Xan Lopez)
+	* Use default widget color for smart bookmarks background
+	  (Dan Damian)
+
+Translations
+
+	* de (Christian Neumair)
+	no (Kjartan Maraas)
+	nl (Vincent van Adrighem),
+	am (Daniel Yacob)
+	es (Javier Fernandez)
+	tr (Fatih Demir)
+	zh_TW (Abel Cheung)
+	fr (Christophe Fergeau, Laurent Richard)
+	ja (Takayuki KUSANO)
+	ca (Pablo Saratxaga)
+	sv (Christian Rose)
+	da (Ole Laursen)
+	ru (Dmitry G. Mastrukov)
+	el (Kostas Papadimas)
+	pl (Zbigniew Chyla),
+	ko (Kang Jeong-Hee)
+	pt (Duarte Loreto)
+	pt_BR (Evandro Fernandes Giovanini)
+	  
