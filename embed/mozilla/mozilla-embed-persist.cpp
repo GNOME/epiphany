@@ -169,8 +169,8 @@ impl_save (EphyEmbedPersist *persist)
 	char *tmp_filename, *base;
 	base = g_build_filename (g_get_tmp_dir (), "sav-XXXXXX", NULL);
 	tmp_filename = ephy_file_tmp_filename (base, "html");
-	if (tmp_filename == NULL) return FALSE;
 	g_free (base);
+	if (tmp_filename == NULL) return FALSE;
 
 	nsCOMPtr<nsILocalFile> tmpFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
 	tmpFile->InitWithNativePath (nsDependentCString (tmp_filename));
