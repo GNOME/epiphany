@@ -1110,7 +1110,7 @@ ephy_bookmarks_solve_smart_url (EphyBookmarks *eb,
 
 	smarturl_only = get_smarturl_only (smart_url);
 
-	s = g_string_new ("");
+	s = g_string_new (NULL);
 
 	encoding = smart_url_options_get (smart_url, "encoding");
 	if (!encoding)

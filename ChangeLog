@@ -1,5 +1,11 @@
 2004-08-06  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_solve_smart_url):
+
+	Use s/""/NULL/ in g_string_new().
+
+2004-08-06  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-session.c: (ephy_session_init), (ephy_session_finalize),
 	(ephy_session_set_property), (ephy_session_class_init),
 	(ephy_session_close), (write_tool_window), (ephy_session_save),
