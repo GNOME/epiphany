@@ -361,32 +361,78 @@ open_in_tabs_activate_cb (GtkWidget *menu, EphyTopicAction *action)
 	g_list_free (uri_list);
 }
 
+static int
+get_item_position (GtkWidget *widget, gboolean *last)
+{
+	GtkWidget *item, *toolbar;
+	int index;
+
+	item = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM);
+	g_return_val_if_fail (item != NULL, -1);
+
+	toolbar = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOLBAR);
+	g_return_val_if_fail (toolbar != NULL, -1);
+
+	index = gtk_toolbar_get_item_index (GTK_TOOLBAR (toolbar),
+				            GTK_TOOL_ITEM (item));
+	if (last)
+	{
+		int n_items;
+
+		n_items = gtk_toolbar_get_n_items (GTK_TOOLBAR (toolbar));
+		*last = (index == n_items - 1);
+	}
+
+	return index;
+}
+
 static void
 remove_from_model (GtkWidget *widget)
 {
 	EphyBookmarks *bookmarks;
 	EggToolbarsModel *model;
-	GtkWidget *item, *toolbar;
 	int pos;
 
-	item = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM);
-	g_return_if_fail (item != NULL);
-
-	toolbar = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOLBAR);
-	g_return_if_fail (toolbar != NULL);
-
-	pos = gtk_toolbar_get_item_index (GTK_TOOLBAR (toolbar),
-				          GTK_TOOL_ITEM (item));
+	pos = get_item_position (widget, NULL);
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	model = ephy_bookmarks_get_toolbars_model (bookmarks);
+
 	egg_toolbars_model_remove_item (model, 0, pos);
+}
+
+static void
+move_in_model (GtkWidget *widget, int direction)
+{
+	EphyBookmarks *bookmarks;
+	EggToolbarsModel *model;
+	int pos, new_pos;
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	model = ephy_bookmarks_get_toolbars_model (bookmarks);
+
+	pos = get_item_position (widget, NULL);
+	new_pos = MAX (0, pos + direction);
+
+	egg_toolbars_model_move_item (model, 0, pos, 0, new_pos);
 }
 
 static void
 remove_activate_cb (GtkWidget *menu, GtkWidget *proxy)
 {
 	remove_from_model (proxy);
+}
+
+static void
+move_left_activate_cb (GtkWidget *menu, GtkWidget *proxy)
+{
+	move_in_model (proxy, -1);
+}
+
+static void
+move_right_activate_cb (GtkWidget *menu, GtkWidget *proxy)
+{
+	move_in_model (proxy, +1);
 }
 
 static GtkWidget *
@@ -694,6 +740,7 @@ show_context_menu (EphyTopicAction *action, GtkWidget *proxy,
 		   GtkMenuPositionFunc func)
 {
 	GtkWidget *menu, *item;
+	gboolean last;
 
 	menu = gtk_menu_new ();
 
@@ -709,6 +756,25 @@ show_context_menu (EphyTopicAction *action, GtkWidget *proxy,
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (remove_activate_cb), proxy);
+
+	item = gtk_separator_menu_item_new ();
+	gtk_widget_show (item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	item = gtk_menu_item_new_with_mnemonic (_("Move _Left"));
+	gtk_widget_set_sensitive (item, get_item_position (proxy, NULL) > 0);
+	gtk_widget_show (item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	g_signal_connect (item, "activate",
+			  G_CALLBACK (move_left_activate_cb), proxy);
+
+	item = gtk_menu_item_new_with_mnemonic (_("Move Ri_ght"));
+	get_item_position (proxy, &last);
+	gtk_widget_set_sensitive (item, !last);
+	gtk_widget_show (item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	g_signal_connect (item, "activate",
+			  G_CALLBACK (move_right_activate_cb), proxy);
 
 	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, func, proxy, 3,
 			gtk_get_current_event_time ());

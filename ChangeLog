@@ -1,5 +1,21 @@
 2004-07-11  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_move_item):
+	* lib/egg/egg-toolbars-model.h:
+
+	Add api to move items.
+
+	* src/bookmarks/ephy-bookmark-action.c: (get_item_position),
+	(remove_from_model), (move_in_model), (move_left_activate_cb),
+	(move_right_activate_cb), (show_context_menu):
+	* src/bookmarks/ephy-topic-action.c: (get_item_position),
+	(remove_from_model), (move_in_model), (move_left_activate_cb),
+	(move_right_activate_cb), (show_context_menu):
+
+	Add Move Left/Move Right context menus.
+
+2004-07-11  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* src/bookmarks/ephy-bookmark-action.c: (drag_begin_cb),
 	(drag_end_cb), (connect_proxy):
 	* src/bookmarks/ephy-topic-action.c: (drag_begin_cb),

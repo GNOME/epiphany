@@ -127,6 +127,11 @@ void		  egg_toolbars_model_remove_toolbar (EggToolbarsModel *t,
 void		  egg_toolbars_model_remove_item    (EggToolbarsModel *t,
 						     int               toolbar_position,
 						     int               position);
+void		  egg_toolbars_model_move_item      (EggToolbarsModel *t,
+						     int               toolbar_position,
+						     int               position,
+						     int	       new_toolbar_position,
+						     int               new_position);
 int		  egg_toolbars_model_n_items	    (EggToolbarsModel *t,
 						     int               toolbar_position);
 void	 	  egg_toolbars_model_item_nth	    (EggToolbarsModel *t,

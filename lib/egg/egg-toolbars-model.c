@@ -668,6 +668,37 @@ egg_toolbars_model_remove_item (EggToolbarsModel *t,
 		 toolbar_position, position);
 }
 
+void
+egg_toolbars_model_move_item (EggToolbarsModel *t,
+			      int               toolbar_position,
+			      int               position,
+			      int		new_toolbar_position,
+			      int		new_position)
+{
+  GNode *node, *toolbar, *new_toolbar;
+
+  g_return_if_fail (EGG_IS_TOOLBARS_MODEL (t));
+
+  toolbar = g_node_nth_child (t->priv->toolbars, toolbar_position);
+  g_return_if_fail (toolbar != NULL);
+
+  new_toolbar = g_node_nth_child (t->priv->toolbars, new_toolbar_position);
+  g_return_if_fail (new_toolbar != NULL);
+
+  node = g_node_nth_child (toolbar, position);
+  g_return_if_fail (node != NULL);
+
+  g_node_unlink (node);
+
+  g_signal_emit (G_OBJECT (t), egg_toolbars_model_signals[ITEM_REMOVED], 0,
+		 toolbar_position, position);
+
+  g_node_insert (new_toolbar, new_position, node);
+
+  g_signal_emit (G_OBJECT (t), egg_toolbars_model_signals[ITEM_ADDED], 0,
+		 new_toolbar_position, new_position);
+}
+
 int
 egg_toolbars_model_n_items (EggToolbarsModel *t,
 			    int               toolbar_position)
