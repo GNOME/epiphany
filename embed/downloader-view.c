@@ -205,6 +205,8 @@ downloader_view_new (void)
 {
 	return EPHY_DOWNLOADER_VIEW (g_object_new (EPHY_TYPE_DOWNLOADER_VIEW,
 			 			   "persist-position", TRUE,
+						   "default-width", 420,
+						   "default-height", 250,
 			 			   NULL));
 }
 

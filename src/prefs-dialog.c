@@ -793,6 +793,8 @@ setup_add_language_dialog (PrefsDialog *pd)
 
 	dialog =  EPHY_DIALOG (g_object_new (EPHY_TYPE_DIALOG,
 					     "parent-window", window,
+					     "default-width", 260,
+					     "default-height", 230,
 					     NULL));
 
 	ephy_dialog_construct (dialog, 
