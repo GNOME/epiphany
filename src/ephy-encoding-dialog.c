@@ -107,14 +107,6 @@ ephy_encoding_dialog_get_type (void)
 	return ephy_type_encoding_dialog;
 }
 
-static gboolean
-encoding_is_automatic (EphyEncodingInfo *info)
-{
-	g_return_val_if_fail (info != NULL, FALSE);
-	
-	return (info->encoding_source < EMBED_ENCODING_PARENT_FORCED);
-}
-
 static void
 sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 {
@@ -159,7 +151,7 @@ sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 		g_list_free (rows);
 	}
 
-	is_automatic = encoding_is_automatic (info);
+	is_automatic = ephy_encoding_info_is_automatic (info);
 
 	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[AUTOMATIC_PROP].id);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), is_automatic);

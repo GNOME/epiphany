@@ -200,7 +200,7 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
 
 	/* check if encoding was overridden */
-	is_automatic = (info->encoding_source < EMBED_ENCODING_PARENT_FORCED);
+	is_automatic = ephy_encoding_info_is_automatic (info);
 
 	action = gtk_action_group_get_action (p->action_group,
 					      "ViewEncodingAutomatic");

@@ -457,6 +457,15 @@ ephy_encoding_info_free (EphyEncodingInfo *info)
 	}
 }
 
+gboolean
+ephy_encoding_info_is_automatic (EphyEncodingInfo *info)
+{
+	g_return_val_if_fail (info != NULL, FALSE);
+
+	return (info->encoding_source < EMBED_ENCODING_PARENT_FORCED)
+		&& (info->forced_encoding == NULL || info->forced_encoding[0] == '\0');
+}
+
 EphyEncodings *
 ephy_encodings_new (void)
 {
