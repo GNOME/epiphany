@@ -52,9 +52,9 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_file_chooser_get_type (void)
 {
-	static GType ephy_file_chooser_type = 0;
+	static GType type = 0;
 
-	if (ephy_file_chooser_type == 0)
+	if (type == 0)
 	{
 		static const GTypeInfo our_info =
 		{
@@ -69,32 +69,26 @@ ephy_file_chooser_get_type (void)
 			(GInstanceInitFunc) ephy_file_chooser_init
 		};
 
-		ephy_file_chooser_type = g_type_register_static (GTK_TYPE_FILE_CHOOSER_DIALOG,
-								 "EphyFileChooser",
-								 &our_info, 0);
+		type = g_type_register_static (GTK_TYPE_FILE_CHOOSER_DIALOG,
+					       "EphyFileChooser",
+					       &our_info, 0);
 	}
 
-	return ephy_file_chooser_type;
+	return type;
 }
 
 static void
 current_folder_changed_cb (GtkFileChooser *chooser, EphyFileChooser *dialog)
 {
-	if (dialog->priv->persist_key)
+	if (dialog->priv->persist_key != NULL)
 	{
-		char *dir, *converted;
+		char *dir;
 
 		dir = gtk_file_chooser_get_current_folder (chooser);
 
-		if (dir != NULL)
-		{
-			converted = g_filename_to_utf8 (dir, -1, NULL, NULL, NULL);
+		eel_gconf_set_path (dialog->priv->persist_key, dir);
 
-			eel_gconf_set_string (dialog->priv->persist_key, dir);
-
-			g_free (converted);
-			g_free (dir);
-		}
+		g_free (dir);
 	}
 }
 
