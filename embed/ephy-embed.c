@@ -85,7 +85,7 @@ ephy_embed_base_init (gpointer g_class)
 {
 	static gboolean initialized = FALSE;
 
-	if (! initialized)
+	if (!initialized)
 	{
 	ephy_embed_signals[NEW_WINDOW] =
                 g_signal_new ("ge_new_window",
@@ -249,6 +249,7 @@ ephy_embed_base_init (gpointer g_class)
                               G_TYPE_NONE,
                               1,
 			      G_TYPE_INT);
+	initialized = TRUE;
 	}
 }
 
