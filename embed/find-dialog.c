@@ -60,6 +60,7 @@ struct FindDialogPrivate
 	GtkWidget *window;
 	gboolean constructed;
 	FindNavigationFlags nav_flags;
+	EphyEmbed *old_embed;
 };
 
 enum
@@ -205,13 +206,59 @@ ensure_constructed (FindDialog *dialog)
 }
 
 static void
-sync_embed (FindDialog *dialog, GParamSpec *pspec, gpointer data)
+sync_page_change (EphyEmbed *embed, FindDialog *dialog)
 {
-	LOG ("EphyEmbed changed")
+	g_return_if_fail (IS_EPHY_EMBED (embed));
+
+	if (dialog->priv->constructed == FALSE) return;
 
 	set_navigation_flags (dialog, FIND_CAN_GO_PREV | FIND_CAN_GO_NEXT);
 
 	find_get_info (EPHY_DIALOG (dialog));
+}
+
+static void
+unset_old_embed (FindDialog *dialog)
+{
+	if (dialog->priv->old_embed != NULL)
+	{
+		g_signal_handlers_disconnect_by_func (dialog->priv->old_embed,
+						      G_CALLBACK (sync_page_change),
+						      dialog);
+		g_object_remove_weak_pointer (G_OBJECT (dialog->priv->old_embed),
+					      (gpointer *)&dialog->priv->old_embed);
+
+		dialog->priv->old_embed = NULL;
+	}
+}
+
+static void
+sync_embed (FindDialog *dialog, GParamSpec *pspec, gpointer data)
+{
+	EphyEmbed *embed;
+
+	unset_old_embed (dialog);
+
+	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
+	g_return_if_fail (IS_EPHY_EMBED (embed));
+	dialog->priv->old_embed = embed;
+
+	g_signal_connect (G_OBJECT (embed), "ge_location",
+			  G_CALLBACK (sync_page_change), dialog);
+
+	g_object_add_weak_pointer (G_OBJECT (embed),
+				   (gpointer *)&dialog->priv->old_embed);
+
+	if (dialog->priv->constructed)
+	{
+		set_navigation_flags (dialog, FIND_CAN_GO_PREV | FIND_CAN_GO_NEXT);
+	
+		find_get_info (EPHY_DIALOG (dialog));
+	}
+	else
+	{
+		set_navigation_flags (dialog, 0);
+	}
 }
 
 static void
@@ -222,6 +269,7 @@ find_dialog_init (FindDialog *dialog)
 	dialog->priv->properties = NULL;
 	dialog->priv->nav_flags = 0;
 	dialog->priv->constructed = FALSE;
+	dialog->priv->old_embed = NULL;
 
 	g_signal_connect_object (dialog, "notify::embed",
 				 G_CALLBACK (sync_embed), NULL, 0);
@@ -334,6 +382,8 @@ find_dialog_finalize (GObject *object)
 	g_signal_handlers_disconnect_by_func (dialog, G_CALLBACK (sync_embed), NULL);
 
         g_return_if_fail (dialog->priv != NULL);
+
+	unset_old_embed (dialog);
 
         g_free (dialog->priv);
 
