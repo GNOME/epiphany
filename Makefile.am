@@ -14,7 +14,8 @@ EXTRA_DIST = 			\
 	omf.make		\
 	COPYING.README
 
-DISTCLEANFILES = 		\
-	intltool-extract 	\
-	intltool-merge 		\
+DISTCLEANFILES = 			\
+	po/.intltool-merge-cache	\
+	intltool-extract 		\
+	intltool-merge 			\
 	intltool-update
