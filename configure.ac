@@ -419,6 +419,26 @@ AC_COMPILE_IFELSE(
 
 AC_MSG_RESULT([$result])
 
+dnl Changed from PRBool to PRUin32 in 1.8b2
+
+AC_MSG_CHECKING([for nsIHelperAppLauncherDialog::Show arguments])
+
+AC_COMPILE_IFELSE(
+	[AC_LANG_SOURCE(
+		[[#include <exthandler/nsIHelperAppLauncherDialog.h>
+
+		  class Test : public nsIHelperAppLauncherDialog
+		  	{ public: NS_DECL_NSIHELPERAPPLAUNCHERDIALOG };
+
+		  NS_IMETHODIMP Test::Show(nsIHelperAppLauncher *aLauncher, nsISupports *aContext, PRUint32 aReason)
+		  { return NS_ERROR_NOT_IMPLEMENTED; }
+		]]
+	)],
+	[AC_DEFINE([MOZ_NSIHELPERAPPLAUNCHERDIALOG_UNSIGNED],[1],[Define if nsIHelperAppLauncherDialog::Show takes unsigned integer]) result=unsigned],
+	[result=signed])
+
+AC_MSG_RESULT([$result])
+
 dnl exists since 1.8a6
 
 AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsITransfer.h],
@@ -574,6 +594,8 @@ fi
 if test "x$have_iso_codes" = "xyes"; then
 	AC_DEFINE_UNQUOTED([ISO_CODES_PREFIX],["`$PKG_CONFIG --variable=prefix iso-codes`"],[ISO codes prefix])
 	AC_DEFINE([HAVE_ISO_CODES],[1],[Define if you have the iso-codes package])
+else
+	AC_MSG_ERROR([iso-codes is required])
 fi
 
 dnl Translators: new languages must be added to the po/LINGUAS file
