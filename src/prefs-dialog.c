@@ -447,7 +447,6 @@ setup_font_menu (PrefsDialog *dialog,
 	GList *fonts;
 	gchar *name;
 	char key[255];
-	int pos;
 	GtkWidget *entry = GTK_COMBO(combo)->entry;
 	EphyEmbedSingle *single;
 
@@ -478,6 +477,8 @@ setup_font_menu (PrefsDialog *dialog,
 	/* set the default value */
 	if (name != NULL)
 	{
+		int pos = 0;
+
 		gtk_editable_delete_text (GTK_EDITABLE(entry), 0, -1);
 		gtk_editable_insert_text (GTK_EDITABLE(entry),
 					  name, g_utf8_strlen (name, -1),

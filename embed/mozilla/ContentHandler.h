@@ -63,7 +63,6 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 
 	NS_METHOD FindHelperApp (void);
 	NS_METHOD LaunchHelperApp (void);
-	NS_METHOD ShowHelperProgressDialog (void);
 
 	NS_METHOD GetLauncher (nsIHelperAppLauncher * *_retval);
 	NS_METHOD GetContext (nsISupports * *_retval);

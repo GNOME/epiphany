@@ -246,10 +246,20 @@ GContentHandler::~GContentHandler()
 // begin nsIHelperAppLauncher impl
 ////////////////////////////////////////////////////////////////////////////////
 
+#if MOZILLA_SNAPSHOT > 8
 /* void show (in nsIHelperAppLauncher aLauncher, in nsISupports aContext); */
 NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
+				    nsISupports *aContext,
+				    PRBool aForced)
+#else
+NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 				    nsISupports *aContext)
+#endif
 {
+	/* aForced reflects if the content being sent is normally viewable
+	 * in mozilla or not. That fact doesn't affect us, so ignore it
+         */
+
 	nsresult rv;
 
 	mLauncher = aLauncher;
@@ -398,11 +408,6 @@ NS_METHOD GContentHandler::LaunchHelperApp (void)
 	}
 
 	return NS_OK;
-}
-
-NS_METHOD GContentHandler::ShowHelperProgressDialog (void)
-{
-	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 NS_METHOD GContentHandler::GetLauncher (nsIHelperAppLauncher * *_retval)
