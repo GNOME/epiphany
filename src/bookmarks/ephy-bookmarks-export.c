@@ -178,7 +178,7 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 		}
 
 		ret = xmlTextWriterWriteAttributeNS
-			(writer, "rdf", "about", NULL, link ? link : url);
+			(writer, "rdf", "resource", NULL, link ? link : url);
 		g_free (link);
 		if (ret < 0) break;
 
