@@ -575,7 +575,6 @@ download_dialog_pause_cb (GtkButton *button, DownloaderView *dv)
 
 	gtk_tree_model_get_value (model, &iter, COL_DOWNLOAD_OBJECT, &val);
 	download = g_value_get_object (&val);
-	g_value_unset (&val);
 
 	state = ephy_download_get_state (download);
 
@@ -587,6 +586,9 @@ download_dialog_pause_cb (GtkButton *button, DownloaderView *dv)
 	{
 		ephy_download_resume (download);
 	}
+
+	g_value_unset (&val);
+
 	update_buttons (dv);
 }
 
@@ -670,11 +672,12 @@ download_dialog_abort_cb (GtkButton *button, DownloaderView *dv)
 	gtk_tree_model_get_value (model, &iter, COL_DOWNLOAD_OBJECT, &val);
 	
 	download = g_value_get_object (&val);
-	g_value_unset (&val);
 	g_return_if_fail (download != NULL);
-	
+
 	ephy_download_cancel ((EphyDownload*)download);
 	downloader_view_remove_download (dv, download);
+
+	g_value_unset (&val);
 }
 
 gboolean

@@ -1,5 +1,21 @@
 2004-03-03  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/downloader-view.c: (download_dialog_pause_cb),
+	(download_dialog_abort_cb):
+
+	Unset the GValue after we're done using what it contained.
+
+	* embed/mozilla/MozDownload.cpp:
+
+	Weak ref mEphyDownload, and assert that is has been finalised by the time
+	we get to ~MozDownload.
+
+	* embed/mozilla/mozilla-download.cpp:
+
+	Debug output in _init and _finalize.
+
+2004-03-03  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-bookmark-action.c: (favicon_cache_changed_cb),
 	(ephy_bookmark_action_sync_icon), (ephy_bookmark_action_init):
 

@@ -76,6 +76,8 @@ MozDownload::MozDownload() :
 MozDownload::~MozDownload()
 {
 	LOG ("MozDownload dtor (%p)", (void *) this)
+
+	NS_ASSERTION (!mEphyDownload, "MozillaDownload still alive!");
 }
 
 NS_IMPL_ISUPPORTS2(MozDownload, nsIDownload, nsIWebProgressListener)
@@ -129,6 +131,8 @@ MozDownload::Init(nsIURI *aSource, nsILocalFile *aTarget, const PRUnichar *aDisp
 		dview = EPHY_DOWNLOADER_VIEW
 			(ephy_embed_shell_get_downloader_view (embed_shell));
 		mEphyDownload = mozilla_download_new (this);
+		g_object_add_weak_pointer (G_OBJECT (mEphyDownload),
+					   (gpointer *) &mEphyDownload);
 		downloader_view_add_download (dview, mEphyDownload);
 		g_object_unref (mEphyDownload);
 	}
