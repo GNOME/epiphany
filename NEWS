@@ -1,4 +1,54 @@
 ==============
+Epiphany 1.5.4
+==============
+
+New features
+
+	* Make extensions loading extensible
+	* Add dbus backend (diabled by default; used by net-monitor extension)
+
+Interface improvements
+
+	* Open the bookmarks in the new tabs in the same order as they in the menu
+	* Make "Open Image" open the image in the default application [#138396]
+	* Better tab sizing [#153725]
+	* Select first row when tabbing to the topics selector [#162331]
+	* Don't allow focus on the tab close buttons [#119461]
+	* Unify some strings
+	* Add context menu on notebook [#132989]
+	* Open the GNOME background properties capplet when setting the background [#161215]
+	* Improved security warning dialogues [#163278]
+	* Implement toolbar style overriding as per HIG [#102520]
+
+Code changes
+
+	* Add context to ambiguous strings [#113932]
+	* Remove about: redirections
+	* Add sidebar backend
+	* Change C_lear to Cl_ear [#162706]
+	* Add GTypes for all flags and enums in public headers
+	* Adapt to mozilla API changes
+	* Display open lock for low 'secure' sites too [#151709]
+	* Unify the location and favicon actions
+	* Don't show the description for no-secure and broken sites
+	* Add more categories to desktop file [#162973]
+
+Bug fixes
+
+	* Don't destroy the filepicker dialogue with the parent [#156816]
+	* Fix some mem leaks
+	* Don't store more than 5 hidden popups [#160863]
+
+Contributors to this release:
+Piers Cornwell, Crispin Flowerday, Adam Hooper, Jean-François Rameau
+
+and the translators: Vladimir Petkov (bg), Miloslav Trmac (cs), [unknown] (el),
+Adam Weinberger (en_CA), Francisco Javier F. Serrador (es), Takeshi AIHANA (ja), 
+Žygimantas Beručka (lt), Kjartan Maraas (nb), Reinout van Schouwen (nl),
+Leonid Kanter (ru), Marcel Telka (sk), Laurent Dhima (sq)
+
+
+==============
 Epiphany 1.5.3
 ==============
 
