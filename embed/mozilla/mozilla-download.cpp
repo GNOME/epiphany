@@ -264,6 +264,8 @@ mozilla_download_class_init (MozillaDownloadClass *klass)
 	download_class->pause = impl_pause;
 	download_class->resume = impl_resume;
 
+	g_type_class_add_private (klass, sizeof (MozillaDownloadPrivate));
+
 	g_object_class_install_property (object_class,
 					 PROP_MOZDOWNLOAD,
 					 g_param_spec_pointer ("mozilla-download",
