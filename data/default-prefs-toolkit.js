@@ -8,3 +8,6 @@ pref("intl.locale.matchOS", true);
 pref("accessibility.typeaheadfindsea", true);
 pref("accessibility.typeaheadfindsea.autostart", true);
 
+// disable image resizing
+pref("browser.enable_automatic_image_resizing", false);
+
