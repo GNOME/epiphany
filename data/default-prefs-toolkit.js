@@ -6,4 +6,5 @@ pref("intl.locale.matchOS", true);
 
 // enable fixed-up typeaheadfind extension
 pref("accessibility.typeaheadfindsea", true);
+pref("accessibility.typeaheadfindsea.autostart", true);
 
