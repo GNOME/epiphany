@@ -152,3 +152,6 @@ void window_cmd_tabs_move_right (EggAction *action,
 void window_cmd_tabs_detach     (EggAction *action,
 				 EphyWindow *window);
 
+void window_cmd_load_location   (EggAction *action,
+				 EphyWindow *window);
+

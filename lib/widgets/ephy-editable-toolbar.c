@@ -224,6 +224,8 @@ add_action (EphyEditableToolbar *t,
 	ItemNode *item;
 	GNode *node;
 
+	LOG ("Add action, type %s, name %s", type, name)
+
 	separator = (strcmp (name, "separator") == 0);
 	if (!separator)
 	{

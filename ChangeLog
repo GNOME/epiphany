@@ -1,5 +1,21 @@
 2003-02-08  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* data/ui/epiphany-toolbar.xml.in:
+	* lib/widgets/ephy-editable-toolbar.c: (add_action):
+	* src/ephy-window.c:
+	* src/window-commands.c: (window_cmd_load_location):
+	* src/window-commands.h:
+
+	Add a go button to the toolbar editor. The icon is duped
+	with default favicon. Would be nice to find something better
+	for one of them (I'm not sure if the concept of jump to is good
+	for favicon actually).
+
+	Rename FileNewWindow to FileNewBrowser also in toolbar configuration
+	file.
+
+2003-02-08  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* lib/egg/eggtoolbar.c: (egg_toolbar_init):
 	* src/session.c: (crashed_resume_dialog):
 

@@ -30,6 +30,7 @@
 #include "ephy-new-bookmark.h"
 #include "egg-toggle-action.h"
 #include "ephy-editable-toolbar.h"
+#include "toolbar.h"
 
 #include <string.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
@@ -768,3 +769,21 @@ window_cmd_tabs_detach  (EggAction *action,
 	ephy_tab_set_window (tab, new_win);
 	gtk_widget_show (GTK_WIDGET (new_win));
 }
+
+void
+window_cmd_load_location (EggAction *action,
+			  EphyWindow *window)
+{
+	Toolbar *toolbar;
+	char *location;
+
+	toolbar = ephy_window_get_toolbar (window);
+	location = toolbar_get_location (toolbar);
+
+	if (location)
+	{
+		ephy_window_load_url (window, location);
+		g_free (location);
+	}
+}
+
