@@ -926,16 +926,6 @@ update_tabs_visibility (EphyNotebook *nb, gboolean before_inserting)
 	gtk_notebook_set_show_tabs (GTK_NOTEBOOK (nb), show_tabs);
 }
 
-static void
-child_realize_cb (GtkWidget *child, EphyNotebook *nb)
-{
-	g_signal_connect (GTK_BIN (child)->child, "drag_data_received",
-			  G_CALLBACK(notebook_drag_data_received_cb), child);
-	gtk_drag_dest_set (GTK_BIN (child)->child, GTK_DEST_DEFAULT_ALL,
-			   url_drag_types,n_url_drag_types,
-			   GDK_ACTION_MOVE | GDK_ACTION_COPY);
-}
-
 void
 ephy_notebook_insert_page (EphyNotebook *nb,
 			   GtkWidget *child,
@@ -980,10 +970,6 @@ ephy_notebook_insert_page (EphyNotebook *nb,
 	gtk_drag_dest_set (tab_hbox, GTK_DEST_DEFAULT_ALL,
 			   url_drag_types,n_url_drag_types,
 			   GDK_ACTION_MOVE | GDK_ACTION_COPY);
-
-	/* embed->child is setup on widget realize */
-	g_signal_connect_object (child, "realize",
-				 G_CALLBACK (child_realize_cb), nb, 0);
 
 	if (jump_to)
 	{
