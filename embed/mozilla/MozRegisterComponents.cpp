@@ -31,6 +31,7 @@
 
 #ifdef HAVE_MOZILLA_PSM
 #include "GtkNSSDialogs.h"
+#include "GtkNSSKeyPairDialogs.h"
 #endif
 
 #include <nsIGenericFactory.h>
@@ -53,6 +54,7 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GExternalProtocolService)
 
 #ifdef HAVE_MOZILLA_PSM
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSDialogs)
+NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSKeyPairDialogs)
 #endif
 
 static const nsModuleComponentInfo sAppComps[] = {
@@ -80,6 +82,18 @@ static const nsModuleComponentInfo sAppComps[] = {
 		GTK_NSSDIALOGS_CID,
 		NS_BADCERTLISTENER_CONTRACTID,
 		GtkNSSDialogsConstructor
+	},
+	{
+		GTK_NSSDIALOGS_CLASSNAME,
+		GTK_NSSDIALOGS_CID,
+		NS_CERTIFICATEDIALOGS_CONTRACTID,
+		GtkNSSDialogsConstructor
+	},
+	{
+		GTK_NSSKEYPAIRDIALOGS_CLASSNAME,
+		GTK_NSSKEYPAIRDIALOGS_CID,
+		NS_GENERATINGKEYPAIRINFODIALOGS_CONTRACTID,
+		GtkNSSKeyPairDialogsConstructor
 	},
 #endif
 	{

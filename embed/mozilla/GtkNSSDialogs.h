@@ -10,6 +10,7 @@
 
 #include <nsError.h>
 #include "nsIBadCertListener.h"
+#include "nsICertificateDialogs.h"
 
 // 7a50a10d-9425-4e12-84b1-5822edacd8ce
 #define GTK_NSSDIALOGS_CID	\
@@ -17,11 +18,14 @@
 
 #define GTK_NSSDIALOGS_CLASSNAME  "Gtk NSS Dialogs"
 
-class GtkNSSDialogs : public nsIBadCertListener
+class GtkNSSDialogs
+: public nsIBadCertListener,
+  public nsICertificateDialogs
 {
 public:
   NS_DECL_ISUPPORTS
   NS_DECL_NSIBADCERTLISTENER
+  NS_DECL_NSICERTIFICATEDIALOGS
 
   GtkNSSDialogs();
   virtual ~GtkNSSDialogs();

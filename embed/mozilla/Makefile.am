@@ -72,6 +72,8 @@ libephymozillaembed_la_SOURCES = 	\
 	GlobalHistory.h                 \
 	GtkNSSDialogs.cpp		\
 	GtkNSSDialogs.h			\
+	GtkNSSKeyPairDialogs.cpp	\
+	GtkNSSKeyPairDialogs.h		\
 	MozDownload.cpp			\
 	MozDownload.h			\
 	MozillaPrivate.cpp		\
