@@ -26,7 +26,6 @@
 #include "downloader-view.h"
 #include "ephy-file-helpers.h"
 #include "ephy-embed-shell.h"
-#include "ephy-cell-renderer-progress.h"
 #include "ephy-stock-icons.h"
 
 #include <libgnomevfs/gnome-vfs-utils.h>
@@ -37,6 +36,7 @@
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkcellrendererpixbuf.h>
+#include <gtk/gtkcellrendererprogress.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtkicontheme.h>
@@ -48,6 +48,7 @@
 
 enum
 {
+	COL_STATE,
 	COL_PERCENT,
 	COL_IMAGE,
 	COL_FILE,
@@ -57,7 +58,7 @@ enum
 
 enum
 {
-	PERCENT_COL_POS,
+	PROGRESS_COL_POS,
 	FILE_COL_POS,
 	REMAINING_COL_POS
 };
@@ -296,10 +297,10 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 	GtkTreePath *path;
 	GtkTreeIter iter;
 	EphyDownloadState state;
-	long total, current, remaining_secs;
+	long total, current, remaining_secs = 0;
 	char *remaining, *file, *cur_progress, *name;
 	struct tm;
-	int percent;
+	int percent = 0;
 
 	row_ref = get_row_from_download (dv, download);
 	g_return_if_fail (row_ref != NULL);
@@ -308,21 +309,15 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 	state = ephy_download_get_state (download);
 	switch (state)
 	{
-	case EPHY_DOWNLOAD_FAILED:
-		percent = -2;
-		remaining_secs = 0;	
-		break;
 	case EPHY_DOWNLOAD_COMPLETED:
 		downloader_view_remove_download (dv, download);
 		return;
+	case EPHY_DOWNLOAD_PAUSED:
 	case EPHY_DOWNLOAD_DOWNLOADING:
-	case EPHY_DOWNLOAD_PAUSED:	
 		percent = ephy_download_get_percent (download);
 		remaining_secs = ephy_download_get_remaining_time (download);
 		break;
 	default:
-		percent = 0;
-		remaining_secs = 0;
 		break;
 	}
 
@@ -360,6 +355,7 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 	gtk_tree_model_get_iter (dv->priv->model, &iter, path);
 	gtk_list_store_set (GTK_LIST_STORE (dv->priv->model),
 			    &iter,
+			    COL_STATE, state,
 			    COL_PERCENT, percent,
 			    COL_FILE, file,
 			    COL_REMAINING, remaining,
@@ -516,6 +512,38 @@ selection_changed (GtkTreeSelection *selection, DownloaderView *dv)
 }
 
 static void
+progress_cell_data_func (GtkTreeViewColumn *col,
+			 GtkCellRenderer   *renderer,
+			 GtkTreeModel      *model,
+			 GtkTreeIter       *iter,
+			 gpointer           user_data)
+{
+	EphyDownloadState state;
+	int percent;
+
+	gtk_tree_model_get (model, iter,
+			    COL_STATE, &state,
+			    COL_PERCENT, &percent,
+			    -1);
+
+	switch (state)
+	{
+		case EPHY_DOWNLOAD_INITIALISING:
+			g_object_set (renderer, "text", Q_("download status|Unknown"), NULL);
+			break;
+		case EPHY_DOWNLOAD_FAILED:
+			g_object_set (renderer, "text", Q_("download status|Failed"), NULL);
+			break;
+		case EPHY_DOWNLOAD_DOWNLOADING:
+		case EPHY_DOWNLOAD_PAUSED:
+			g_object_set (renderer, "text", NULL, "value", percent, NULL);
+			break;
+		default:
+			g_return_if_reached ();
+	}
+}
+
+static void
 downloader_view_build_ui (DownloaderView *dv)
 {
 	DownloaderViewPrivate *priv = dv->priv;
@@ -541,7 +569,8 @@ downloader_view_build_ui (DownloaderView *dv)
 	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview)),
 				     GTK_SELECTION_BROWSE);
 
-	liststore = gtk_list_store_new (5,
+	liststore = gtk_list_store_new (6,
+					G_TYPE_INT,
 					G_TYPE_INT,
 					GDK_TYPE_PIXBUF,
 					G_TYPE_STRING,
@@ -573,15 +602,15 @@ downloader_view_build_ui (DownloaderView *dv)
 	gtk_tree_view_column_set_sort_column_id (column, COL_FILE);
 	gtk_tree_view_column_set_spacing (column, 3);
 
-	/* Percent column */
-	renderer = ephy_cell_renderer_progress_new ();
+	/* Progress column */
+	renderer = gtk_cell_renderer_progress_new ();
 	g_object_set (renderer, "xalign", 0.5, NULL);
 	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW(priv->treeview),
-						     PERCENT_COL_POS, _("%"),
+						     PROGRESS_COL_POS, _("%"),
 						     renderer,
-						     "value", COL_PERCENT,
 						     NULL);
-	column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview), PERCENT_COL_POS);
+	column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview), PROGRESS_COL_POS);
+	gtk_tree_view_column_set_cell_data_func(column, renderer, progress_cell_data_func, NULL, NULL);
 	gtk_tree_view_column_set_sort_column_id (column, COL_PERCENT);
 
 	/* Remainng time column */

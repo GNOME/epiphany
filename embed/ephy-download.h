@@ -39,6 +39,7 @@ typedef struct EphyDownloadPrivate EphyDownloadPrivate;
 
 typedef enum
 {
+	EPHY_DOWNLOAD_INITIALISING,
 	EPHY_DOWNLOAD_DOWNLOADING,
 	EPHY_DOWNLOAD_PAUSED,
 	EPHY_DOWNLOAD_COMPLETED,
