@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2002  Ricardo Fernández Pascual
+ *  Copyright (C) 2003  Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,10 +24,13 @@
 #include "ephy-prefs.h"
 #include "ephy-debug.h"
 
+#include <glib-object.h>
+#include <gtk/gtkhbox.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkwindow.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtkmain.h>
+#include <gtk/gtktooltips.h>
 #include <libgnomeui/gnome-entry.h>
 #include <string.h>
 
@@ -36,7 +40,7 @@
 struct _EphyLocationEntryPrivate {
 	GtkWidget *combo;
 	GtkWidget *entry;
-	gchar *before_completion;
+	char *before_completion;
 	EphyAutocompletion *autocompletion;
 	EphyAutocompletionWindow *autocompletion_window;
 	gboolean autocompletion_window_visible;
@@ -46,8 +50,7 @@ struct _EphyLocationEntryPrivate {
 	gboolean going_to_site;
 	gboolean user_changed;
 
-	gchar *autocompletion_key;
-	gchar *last_completion;
+	char *autocompletion_key;
 	char *last_action_target;
 };
 
@@ -57,32 +60,34 @@ struct _EphyLocationEntryPrivate {
 /**
  * Private functions, only availble from this file
  */
-static void		ephy_location_entry_class_init		(EphyLocationEntryClass *klass);
-static void		ephy_location_entry_init		(EphyLocationEntry *w);
-static void		ephy_location_entry_finalize_impl	(GObject *o);
-static void		ephy_location_entry_build		(EphyLocationEntry *w);
-static gboolean		ephy_location_entry_key_press_event_cb  (GtkWidget *entry, GdkEventKey *event,
-								 EphyLocationEntry *w);
-static void		ephy_location_entry_activate_cb		(GtkEntry *entry,
-								 EphyLocationEntry *w);
-static void		ephy_location_entry_autocompletion_sources_changed_cb (EphyAutocompletion *aw,
-									       EphyLocationEntry *w);
-static gint		ephy_location_entry_autocompletion_show_alternatives_to (EphyLocationEntry *w);
-static void		ephy_location_entry_autocompletion_window_url_activated_cb
-/***/								(EphyAutocompletionWindow *aw,
-								 const gchar *target,
-								 int action,
-								 EphyLocationEntry *w);
-static void		ephy_location_entry_list_event_after_cb (GtkWidget *list,
-								 GdkEvent *event,
-								 EphyLocationEntry *e);
-static void		ephy_location_entry_editable_changed_cb (GtkEditable *editable,
-								 EphyLocationEntry *e);
-static void		ephy_location_entry_set_autocompletion_key (EphyLocationEntry *e);
-static void		ephy_location_entry_autocompletion_show_alternatives (EphyLocationEntry *w);
-static void		ephy_location_entry_autocompletion_hide_alternatives (EphyLocationEntry *w);
-static void		ephy_location_entry_autocompletion_window_hidden_cb (EphyAutocompletionWindow *aw,
-									     EphyLocationEntry *w);
+static void	ephy_location_entry_class_init		(EphyLocationEntryClass *klass);
+static void	ephy_location_entry_init		(EphyLocationEntry *w);
+static void	ephy_location_entry_finalize_impl	(GObject *o);
+static void	ephy_location_entry_construct_contents	(EphyLocationEntry *w);
+static gboolean	ephy_location_entry_key_press_event_cb  (GtkWidget *entry, GdkEventKey *event,
+							 EphyLocationEntry *w);
+static void	ephy_location_entry_activate_cb		(GtkEntry *entry,
+							 EphyLocationEntry *w);
+static void	ephy_location_entry_autocompletion_sources_changed_cb
+							(EphyAutocompletion *aw,
+							 EphyLocationEntry *w);
+static gint	ephy_location_entry_autocompletion_show_alternatives_to (EphyLocationEntry *w);
+static void	ephy_location_entry_autocompletion_window_url_activated_cb
+							(EphyAutocompletionWindow *aw,
+							 const gchar *target,
+							 int action,
+							 EphyLocationEntry *w);
+static void	ephy_location_entry_list_event_after_cb (GtkWidget *list,
+							 GdkEvent *event,
+							 EphyLocationEntry *e);
+static void	ephy_location_entry_editable_changed_cb (GtkEditable *editable,
+							 EphyLocationEntry *e);
+static void	ephy_location_entry_set_autocompletion_key (EphyLocationEntry *e);
+static void	ephy_location_entry_autocompletion_show_alternatives (EphyLocationEntry *w);
+static void	ephy_location_entry_autocompletion_hide_alternatives (EphyLocationEntry *w);
+static void	ephy_location_entry_autocompletion_window_hidden_cb
+							(EphyAutocompletionWindow *aw,
+							 EphyLocationEntry *w);
 static void
 insert_text_cb (GtkWidget *editable,
 		char *new_text,
@@ -95,7 +100,7 @@ delete_text_cb (GtkWidget *editable,
                 int end_pos,
 		EphyLocationEntry *w);
 
-static gpointer gtk_hbox_class;
+static GObjectClass *parent_class = NULL;
 
 /**
  * Signals enums and ids
@@ -107,6 +112,8 @@ enum EphyLocationEntrySignalsEnum {
 	LAST_SIGNAL
 };
 static gint EphyLocationEntrySignals[LAST_SIGNAL];
+
+#define MENU_ID "ephy-location-entry-menu-id"
 
 GType
 ephy_location_entry_get_type (void)
@@ -128,7 +135,7 @@ ephy_location_entry_get_type (void)
 			(GInstanceInitFunc) ephy_location_entry_init
 		};
 
-		ephy_location_entry_type = g_type_register_static (GTK_TYPE_HBOX,
+		ephy_location_entry_type = g_type_register_static (EGG_TYPE_TOOL_ITEM,
 							           "EphyLocationEntry",
 							           &our_info, 0);
 	}
@@ -136,11 +143,32 @@ ephy_location_entry_get_type (void)
 	return ephy_location_entry_type;
 }
 
+static gboolean
+ephy_location_entry_set_tooltip (EggToolItem *tool_item,
+				 GtkTooltips *tooltips,
+				 const char *tip_text,
+				 const char *tip_private)
+{
+	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (tool_item);
+
+	g_return_val_if_fail (EPHY_IS_LOCATION_ENTRY (entry), FALSE);
+
+	gtk_tooltips_set_tip (tooltips, entry->priv->entry, tip_text, tip_private);
+
+	return TRUE;
+}
+
 static void
 ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 {
-	G_OBJECT_CLASS (klass)->finalize = ephy_location_entry_finalize_impl;
-	gtk_hbox_class = g_type_class_peek_parent (klass);
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	EggToolItemClass *tool_item_class = EGG_TOOL_ITEM_CLASS (klass);
+
+	parent_class = g_type_class_peek_parent (klass);
+
+	object_class->finalize = ephy_location_entry_finalize_impl;
+
+	tool_item_class->set_tooltip = ephy_location_entry_set_tooltip;
 
 	EphyLocationEntrySignals[ACTIVATED] = g_signal_new (
 		"activated", G_OBJECT_CLASS_TYPE (klass),
@@ -183,13 +211,20 @@ location_focus_out_cb (GtkWidget *widget, GdkEventFocus *event, EphyLocationEntr
 static void
 ephy_location_entry_init (EphyLocationEntry *w)
 {
-	EphyLocationEntryPrivate *p = g_new0 (EphyLocationEntryPrivate, 1);
+	EphyLocationEntryPrivate *p;
+
+	LOG ("EphyLocationEntry initialising %p", w)
+
+	p = g_new0 (EphyLocationEntryPrivate, 1);
 	w->priv = p;
 	p->last_action_target = NULL;
 	p->before_completion = NULL;
 	p->user_changed = TRUE;
+	p->autocompletion_key = NULL;
 
-	ephy_location_entry_build (w);
+	ephy_location_entry_construct_contents (w);
+
+	egg_tool_item_set_expand (EGG_TOOL_ITEM (w), TRUE);
 
 	g_signal_connect (w->priv->entry,
 			  "focus_out_event",
@@ -218,9 +253,10 @@ ephy_location_entry_finalize_impl (GObject *o)
 	LOG ("EphyLocationEntry finalized")
 
 	g_free (p->before_completion);
+	g_free (p->autocompletion_key);
 
 	g_free (p);
-	G_OBJECT_CLASS (gtk_hbox_class)->finalize (o);
+	G_OBJECT_CLASS (parent_class)->finalize (o);
 }
 
 GtkWidget *
@@ -242,15 +278,21 @@ ephy_location_entry_button_press_event_cb (GtkWidget *entry, GdkEventButton *eve
 }
 
 static void
-ephy_location_entry_build (EphyLocationEntry *w)
+ephy_location_entry_construct_contents (EphyLocationEntry *w)
 {
 	EphyLocationEntryPrivate *p = w->priv;
-	GtkWidget *list;
+	GtkWidget *hbox, *list;
+
+	LOG ("EphyLocationEntry constructing contents %p", w)
+
+	hbox = gtk_hbox_new (FALSE, 0);
+	gtk_container_add (GTK_CONTAINER (w), hbox);
+	gtk_widget_show (hbox);
 
 	p->combo = gnome_entry_new ("ephy-url-history");
 	p->entry = GTK_COMBO (p->combo)->entry;
 	gtk_widget_show (p->combo);
-	gtk_box_pack_start (GTK_BOX (w), p->combo, TRUE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (hbox), p->combo, TRUE, TRUE, 0);
 
 	g_signal_connect (p->entry, "key-press-event",
 			  G_CALLBACK (ephy_location_entry_key_press_event_cb), w);

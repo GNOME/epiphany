@@ -549,10 +549,6 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
       g_signal_connect_object (action, "notify::short_label",
 			       G_CALLBACK (egg_action_sync_short_label),
 			       proxy, 0);
-      egg_action_sync_tooltip (action, NULL, proxy);
-      g_signal_connect_object (action, "notify::tooltip",
-			       G_CALLBACK (egg_action_sync_tooltip),
-			       proxy, 0);
 
       g_object_set (G_OBJECT (proxy), "stock_id", action->stock_id, NULL);
       g_signal_connect_object (action, "notify::stock_id",
@@ -565,6 +561,14 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
       g_signal_connect_object (proxy, "clicked",
 			       G_CALLBACK (egg_action_activate), action,
 			       G_CONNECT_SWAPPED);
+    }
+
+    if (EGG_IS_TOOL_ITEM (proxy))
+    {
+      egg_action_sync_tooltip (action, NULL, proxy);
+      g_signal_connect_object (action, "notify::tooltip",
+			       G_CALLBACK (egg_action_sync_tooltip),
+			       proxy, 0);
     }
 }
 
@@ -596,6 +600,10 @@ disconnect_proxy (EggAction *action, GtkWidget *proxy)
 
   g_signal_handlers_disconnect_by_func (action,
 				G_CALLBACK (egg_action_sync_stock_id), proxy);
+
+  g_signal_handlers_disconnect_by_func (proxy,
+					G_CALLBACK (egg_action_sync_tooltip),
+					action);			
 
   /* menu item specific synchronisers ... */
   g_signal_handlers_disconnect_by_func (action,

@@ -211,8 +211,15 @@ egg_tool_button_size_request (GtkWidget      *widget,
 {
   GtkWidget *child = GTK_BIN (widget)->child;
 
-  if (child)
-    gtk_widget_size_request (child, requisition);
+  if (child && GTK_WIDGET_VISIBLE (child))
+    {
+      gtk_widget_size_request (child, requisition);
+    }
+  else
+    {
+      requisition->width = 0;
+      requisition->height = 0;
+    }
   
   requisition->width += GTK_CONTAINER (widget)->border_width * 2;
   requisition->height += GTK_CONTAINER (widget)->border_width * 2;  
@@ -617,19 +624,19 @@ void
 egg_tool_button_set_label (EggToolButton *button,
 			   const gchar   *label)
 {
+  gchar *old_label;
+  
   g_return_if_fail (EGG_IS_TOOL_BUTTON (button));
 
-  if (label != button->label_text)
-    {
-      if (button->label_text)
-	g_free (button->label_text);
-      
-      button->label_text = g_strdup (label);
+  old_label = button->label_text;
 
-      egg_tool_button_construct_contents (EGG_TOOL_ITEM (button));
+  button->label_text = g_strdup (label);
+  egg_tool_button_construct_contents (EGG_TOOL_ITEM (button));
       
-      g_object_notify (G_OBJECT (button), "label");
-    }
+  g_object_notify (G_OBJECT (button), "label");
+
+  if (old_label)
+    g_free (old_label);
 }
 
 G_CONST_RETURN gchar *
@@ -670,19 +677,18 @@ void
 egg_tool_button_set_stock_id (EggToolButton *button,
 			      const gchar   *stock_id)
 {
+  gchar *old_stock_id;
+  
   g_return_if_fail (EGG_IS_TOOL_BUTTON (button));
 
-  if (button->stock_id != stock_id)
-    {
-      if (button->stock_id)
-	g_free (button->stock_id);
+  old_stock_id = button->stock_id;
 
-      button->stock_id = g_strdup (stock_id);
-      
-      egg_tool_button_construct_contents (EGG_TOOL_ITEM (button));
+  button->stock_id = g_strdup (stock_id);
+  egg_tool_button_construct_contents (EGG_TOOL_ITEM (button));
+  
+  g_object_notify (G_OBJECT (button), "stock_id");
 
-      g_object_notify (G_OBJECT (button), "stock_id");
-    }
+  g_free (old_stock_id);
 }
 
 G_CONST_RETURN gchar *

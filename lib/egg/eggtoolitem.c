@@ -362,8 +362,15 @@ egg_tool_item_size_request (GtkWidget      *widget,
   gint xthickness = widget->style->xthickness;
   gint ythickness = widget->style->ythickness;
 
-  if (child)
-    gtk_widget_size_request (child, requisition);
+  if (child && GTK_WIDGET_VISIBLE (child))
+    {
+      gtk_widget_size_request (child, requisition);
+    }
+  else
+    {
+      requisition->height = 0;
+      requisition->width = 0;
+    }
   
   requisition->width += (xthickness + GTK_CONTAINER (widget)->border_width) * 2;
   requisition->height += (ythickness + GTK_CONTAINER (widget)->border_width) * 2;  
@@ -405,14 +412,18 @@ egg_tool_item_size_allocate (GtkWidget     *widget,
 static gboolean
 egg_tool_item_create_menu_proxy (EggToolItem *item)
 {
-  GtkWidget *menu_item = NULL;
-
   if (!GTK_BIN (item)->child)
-    menu_item = gtk_separator_menu_item_new();
+    {
+      GtkWidget *menu_item = NULL;
 
-  egg_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
+      menu_item = gtk_separator_menu_item_new();
+
+      egg_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
+
+      return TRUE;
+    }
   
-  return TRUE;
+  return FALSE;
 }
 
 EggToolItem *
@@ -543,9 +554,12 @@ egg_tool_item_real_set_tooltip (EggToolItem *tool_item,
 				const gchar *tip_text,
 				const gchar *tip_private)
 {
-  GtkBin *bin = GTK_BIN (tool_item);
+  GtkWidget *child = GTK_BIN (tool_item)->child;
 
-  gtk_tooltips_set_tip (tooltips, bin->child, tip_text, tip_private);
+  if (!child)
+    return FALSE;
+
+  gtk_tooltips_set_tip (tooltips, child, tip_text, tip_private);
 
   return TRUE;
 }
@@ -678,19 +692,22 @@ egg_tool_item_set_proxy_menu_item (EggToolItem *tool_item,
   g_return_if_fail (menu_item == NULL || GTK_IS_MENU_ITEM (menu_item));
   g_return_if_fail (menu_item_id != NULL);
 
-  if (tool_item->menu_item)
-    g_object_unref (G_OBJECT (tool_item->menu_item));
-
   if (tool_item->menu_item_id)
     g_free (tool_item->menu_item_id);
-
-  if (menu_item)
-    {
-      g_object_ref (menu_item);
-      gtk_object_sink (GTK_OBJECT (menu_item));
-    }
-  
-  tool_item->menu_item = menu_item;
-  
+      
   tool_item->menu_item_id = g_strdup (menu_item_id);
+
+  if (tool_item->menu_item != menu_item)
+    {
+      if (tool_item->menu_item)
+	g_object_unref (G_OBJECT (tool_item->menu_item));
+      
+      if (menu_item)
+	{
+	  g_object_ref (menu_item);
+	  gtk_object_sink (GTK_OBJECT (menu_item));
+	}
+      
+      tool_item->menu_item = menu_item;
+    }
 }

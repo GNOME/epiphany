@@ -38,7 +38,6 @@ enum {
 
 static void egg_toggle_tool_button_init       (EggToggleToolButton      *button);
 static void egg_toggle_tool_button_class_init (EggToggleToolButtonClass *klass);
-static void egg_toggle_tool_button_finalize   (GObject                  *object);
 
 static gboolean egg_toggle_tool_button_create_menu_proxy (EggToolItem *button);
 
@@ -90,7 +89,6 @@ egg_toggle_tool_button_class_init (EggToggleToolButtonClass *klass)
   toolitem_class = (EggToolItemClass *)klass;
   toolbutton_class = (EggToolButtonClass *)klass;
 
-  object_class->finalize = egg_toggle_tool_button_finalize;
   toolitem_class->create_menu_proxy = egg_toggle_tool_button_create_menu_proxy;
   toolbutton_class->button_type = GTK_TYPE_TOGGLE_BUTTON;
   
@@ -109,18 +107,6 @@ egg_toggle_tool_button_init (EggToggleToolButton *button)
 {
   g_signal_connect_object (EGG_TOOL_BUTTON (button)->button, "toggled",
 			   G_CALLBACK (button_toggled), button, 0);
-}
-
-static void
-egg_toggle_tool_button_finalize (GObject *object)
-{
-  EggToggleToolButton *button = EGG_TOGGLE_TOOL_BUTTON (object);
-  
-  if (button->menu_item)
-    g_object_remove_weak_pointer (G_OBJECT (button->menu_item),
-				  (gpointer *)&(button->menu_item));
-
-  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static gboolean
@@ -162,6 +148,18 @@ egg_toggle_tool_button_create_menu_proxy (EggToolItem *item)
   return TRUE;
 }
 
+/* There are two activatable widgets, a toggle button and a menu item.
+ *
+ * If a widget is activated and the state of the tool button is the same as
+ * the new state of the activated widget, then the other widget was the one
+ * that was activated by the user and updated the tool button's state.
+ *
+ * If the state of the tool button is not the same as the new state of the
+ * activated widget, then the activation was activated by the user, and the
+ * widget needs to make sure the tool button is updated before the other
+ * widget is activated. This will make sure the other widget a tool button
+ * in a state that matches its own new state.
+ */
 static void
 menu_item_activated (GtkWidget           *menu_item,
 		     EggToggleToolButton *toggle_tool_button)

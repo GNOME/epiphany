@@ -1,3 +1,29 @@
+2003-07-01  Christian Persch  <chpe@cvs.gnome.org>
+ 
+	* lib/widgets/ephy-location-entry.h:
+	* lib/widgets/ephy-location-entry.c: (ephy_location_entry_set_tooltip),
+	(ephy_location_entry_construct_contents),
+	(ephy_location_entry_class_init), (ephy_location_entry_init),
+	(ephy_location_entry_finalize):
+
+	Make the location entry an EggToolItem, and provide a custom
+	tooptip setter. Fix mem leak.
+
+	* src/ephy-location-action.c: (create_tool_item),
+	(ephy_location_action_class_init), (connect_proxy):
+
+ 	Use the location entry EggToolItem instead of constructing it
+ 	explicitly.
+ 
+ 	* src/toolbar.c: (toolbar_setup_action):
+ 
+ 	Set tooltip for location entry.
+ 
+ 	* lib/egg/egg-action.c: (connect_proxy), (disconnect_proxy):
+ 
+ 	Connect the tooltip sync'er on any EggToolItem, not just EggTollButton:s.
+ 	Disconnect the tooltip sync func on disconnect, too.
+
 2003-07-01  David Bordoley  <bordoley@msu.edu>
 
 	* src/ephy-window.c: (setup_window):

@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2002  Ricardo Fern·ndez Pascual
+ *  Copyright (C) 2002  Ricardo Fern√°ndez Pascual
+ *  Copyright (C) 2003  Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,9 +20,7 @@
 #ifndef EPHY_LOCATION_ENTRY_H
 #define EPHY_LOCATION_ENTRY_H
 
-#include <glib-object.h>
-#include <gtk/gtkhbox.h>
-
+#include "eggtoolitem.h"
 #include "ephy-autocompletion.h"
 
 /* object forward declarations */
@@ -31,7 +30,7 @@ typedef struct _EphyLocationEntryClass EphyLocationEntryClass;
 typedef struct _EphyLocationEntryPrivate EphyLocationEntryPrivate;
 
 /**
- * EphyFolderTbWidget object
+ * EphyLocationEntry object
  */
 
 #define EPHY_TYPE_LOCATION_ENTRY		(ephy_location_entry_get_type())
@@ -46,7 +45,7 @@ typedef struct _EphyLocationEntryPrivate EphyLocationEntryPrivate;
 
 struct _EphyLocationEntryClass
 {
-	GtkHBoxClass parent_class;
+	EggToolItemClass parent_class;
 
 	/* signals */
 	void		(*activated)	(EphyLocationEntry *w,
@@ -61,7 +60,7 @@ struct _EphyLocationEntryClass
 /* Remember: fields are public read-only */
 struct _EphyLocationEntry
 {
-	GtkHBox parent_object;
+	EggToolItem parent_object;
 
 	EphyLocationEntryPrivate *priv;
 };

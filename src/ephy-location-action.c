@@ -20,7 +20,6 @@
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
-#include "eggtoolitem.h"
 
 static void ephy_location_action_init       (EphyLocationAction *action);
 static void ephy_location_action_class_init (EphyLocationActionClass *class);
@@ -62,25 +61,6 @@ ephy_location_action_get_type (void)
 	return type;
 }
 
-static GtkWidget *
-create_tool_item (EggAction *action)
-{
-	GtkWidget *item;
-	GtkWidget *location;
-
-	LOG ("Create location toolitem")
-
-	item = GTK_WIDGET (egg_tool_item_new ());
-	location = ephy_location_entry_new ();
-	gtk_container_add (GTK_CONTAINER (item), location);
-	egg_tool_item_set_expand (EGG_TOOL_ITEM (item), TRUE);
-	gtk_widget_show (location);
-
-	LOG ("Create location toolitem: Done.")
-
-	return item;
-}
-
 static void
 location_url_activate_cb (EphyLocationEntry *entry,
 			  const char *content,
@@ -119,11 +99,12 @@ static void
 connect_proxy (EggAction *action, GtkWidget *proxy)
 {
 	EphyAutocompletion *ac = ephy_shell_get_autocompletion (ephy_shell);
-	EphyLocationEntry *e;
+	EphyLocationEntry *e = EPHY_LOCATION_ENTRY (proxy);
 
 	LOG ("Connect location proxy")
 
-	e = EPHY_LOCATION_ENTRY (GTK_BIN (proxy)->child);
+	g_return_if_fail (EPHY_IS_LOCATION_ENTRY (e));
+
 	ephy_location_entry_set_autocompletion (e, ac);
 
 	g_signal_connect (e, "activated",
@@ -143,7 +124,6 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 	action_class = EGG_ACTION_CLASS (class);
 
 	action_class->toolbar_item_type = EPHY_TYPE_LOCATION_ENTRY;
-	action_class->create_tool_item = create_tool_item;
 	action_class->connect_proxy = connect_proxy;
 
 	ephy_location_action_signals[GO_LOCATION] =
@@ -172,7 +152,7 @@ ephy_location_action_get_widget (EphyLocationAction *action)
 
 	if (slist)
 	{
-		return GTK_BIN (slist->data)->child;
+		return GTK_WIDGET (slist->data);
 	}
 	else
 	{

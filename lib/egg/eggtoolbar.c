@@ -151,9 +151,8 @@ static gboolean egg_toolbar_move_focus     (EggToolbar       *toolbar,
 static gboolean egg_toolbar_focus_ends     (EggToolbar       *toolbar,
 					    gboolean	       home);
 
-static gboolean             egg_toolbar_button_press         (GtkWidget      *button,
-							      GdkEventButton *event,
-							      EggToolbar     *toolbar);
+static gboolean             egg_toolbar_button_press         (GtkWidget      *toolbar,
+							      GdkEventButton *event);
 static gboolean             egg_toolbar_arrow_button_press (GtkWidget      *button,
 							      GdkEventButton *event,
 							      EggToolbar     *toolbar);
@@ -285,6 +284,7 @@ egg_toolbar_class_init (EggToolbarClass *klass)
   gobject_class->set_property = egg_toolbar_set_property;
   gobject_class->get_property = egg_toolbar_get_property;
 
+  widget_class->button_press_event = egg_toolbar_button_press;
   widget_class->expose_event = egg_toolbar_expose;
   widget_class->size_request = egg_toolbar_size_request;
   widget_class->size_allocate = egg_toolbar_size_allocate;
@@ -526,9 +526,6 @@ egg_toolbar_init (EggToolbar *toolbar)
   gtk_container_add (GTK_CONTAINER (priv->arrow_button), priv->arrow);
   
   gtk_widget_set_parent (priv->arrow_button, GTK_WIDGET (toolbar));
-
-  g_signal_connect (GTK_WIDGET (toolbar), "button_press_event",
-      		    G_CALLBACK (egg_toolbar_button_press), toolbar);
 
   /* which child position a drop will occur at */
   priv->drop_index = -1;
@@ -878,9 +875,14 @@ egg_toolbar_size_request (GtkWidget      *widget,
       gtk_widget_size_request (priv->arrow_button, &arrow_requisition);
       
       if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-	long_req = pack_end_size + MIN (pack_front_size, arrow_requisition.width);
+	long_req = arrow_requisition.width;
       else
-	long_req = pack_end_size + MIN (pack_front_size, arrow_requisition.height);
+	long_req = arrow_requisition.height;
+
+      /* There is no point requesting space for the arrow if that would take
+       * up more space than all the items combined
+       */
+      long_req = MIN (long_req, pack_front_size + pack_end_size);
     }
   else
     {
@@ -1305,16 +1307,19 @@ egg_toolbar_focus_ends (EggToolbar *toolbar,
 			gboolean    home)
 {
   GList *children, *list;
-  GtkTextDirection direction = gtk_widget_get_direction (GTK_WIDGET (toolbar));
+  GtkDirectionType dir = home? GTK_DIR_RIGHT : GTK_DIR_LEFT;
 
-  if (direction == GTK_TEXT_DIR_RTL)
-    children = egg_toolbar_list_children_in_focus_order (toolbar, GTK_DIR_RIGHT);
-  else
-    children = egg_toolbar_list_children_in_focus_order (toolbar, GTK_DIR_LEFT);
+  children = egg_toolbar_list_children_in_focus_order (toolbar, dir);
 
-  if (home)
-    children = g_list_reverse (children);
-  
+  if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_RTL)
+    {
+      children = g_list_reverse (children);
+      if (dir == GTK_DIR_RIGHT)
+	dir = GTK_DIR_LEFT;
+      else
+	dir = GTK_DIR_RIGHT;
+    }
+
   for (list = children; list != NULL; list = list->next)
     {
       GtkWidget *child = list->data;
@@ -1322,7 +1327,7 @@ egg_toolbar_focus_ends (EggToolbar *toolbar,
       if (GTK_CONTAINER (toolbar)->focus_child == child)
 	break;
 
-      if (GTK_WIDGET_MAPPED (child) && gtk_widget_child_focus (child, GTK_DIR_RIGHT))
+      if (GTK_WIDGET_MAPPED (child) && gtk_widget_child_focus (child, dir))
 	break;
     }
 
@@ -1355,14 +1360,21 @@ egg_toolbar_move_focus (EggToolbar       *toolbar,
   return TRUE;
 }
 
+/* The focus handler for the toolbar. It called when the user presses TAB or otherwise
+ * tries to focus the toolbar.
+ */
 static gboolean
 egg_toolbar_focus (GtkWidget        *widget,
 		   GtkDirectionType  dir)
 {
   EggToolbar *toolbar = EGG_TOOLBAR (widget);
   GList *children, *list;
-  gboolean retval = FALSE;
-
+ 
+  /* if focus is already somewhere inside the toolbar then return FALSE.
+   * The only way focus can stay inside the toolbar is when the user presses
+   * arrow keys or Ctrl TAB (both of which are handled by the
+   * egg_toolbar_move_focus() keybinding function.
+   */
   if (GTK_CONTAINER (widget)->focus_child)
     return FALSE;
 
@@ -1372,16 +1384,13 @@ egg_toolbar_focus (GtkWidget        *widget,
     {
       GtkWidget *child = list->data;
       
-      if (GTK_WIDGET_MAPPED (child))
-	{
-	  retval = gtk_widget_child_focus (child, dir);
-	  break;
-	}
+      if (GTK_WIDGET_MAPPED (child) && gtk_widget_child_focus (child, dir))
+	return TRUE;
     }
 
   g_list_free (children);
   
-  return retval;
+  return FALSE;
 }
 
 static void
@@ -1927,7 +1936,8 @@ egg_toolbar_arrow_button_clicked (GtkWidget  *button,
       (!priv->menu || !GTK_WIDGET_VISIBLE (GTK_WIDGET (priv->menu))))
     {
       /* We only get here when the button is clicked with the keybaord,
-       * because mouse button presses result in the menu being shown.
+       * because mouse button presses result in the menu being shown so
+       * that priv->menu would be non-NULL and visible.
        */
       show_menu (toolbar, NULL);
       gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->menu), FALSE);
@@ -1946,15 +1956,11 @@ egg_toolbar_arrow_button_press (GtkWidget      *button,
 }
 
 static gboolean
-egg_toolbar_button_press (GtkWidget      *button,
-    			  GdkEventButton *event,
-			  EggToolbar     *toolbar)
+egg_toolbar_button_press (GtkWidget      *toolbar,
+    			  GdkEventButton *event)
 {
   if (event->button == 3)
-    {
-      g_signal_emit (toolbar, toolbar_signals[POPUP_CONTEXT_MENU], 0, NULL);
-      return FALSE;
-    }
+    g_signal_emit (toolbar, toolbar_signals[POPUP_CONTEXT_MENU], 0, NULL);
 
   return FALSE;
 }
@@ -2164,6 +2170,8 @@ egg_toolbar_set_style (EggToolbar      *toolbar,
 
   toolbar->style_set = TRUE;  
   g_signal_emit (toolbar, toolbar_signals[STYLE_CHANGED], 0, style);
+
+  
 }
 
 GtkToolbarStyle

@@ -78,8 +78,6 @@ G_CONST_RETURN gchar *egg_tool_button_get_stock_id      (EggToolButton *button);
 void		      egg_tool_button_set_icon_set      (EggToolButton *button,
 							 GtkIconSet    *icon_set);
 GtkIconSet *          egg_tool_button_get_icon_set      (EggToolButton *button);
-void                  egg_tool_button_set_icon_set      (EggToolButton *button,
-							 GtkIconSet    *icon_set);
 void                  egg_tool_button_set_icon_widget (EggToolButton *button,
 						       GtkWidget     *icon);
 GtkWidget *           egg_tool_button_get_icon_widget (EggToolButton *button);
