@@ -199,8 +199,9 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar 
 	     NS_ConvertUTF16toUTF8 (title).get(),
 	     NS_ConvertUTF16toUTF8 (filter).get())
 
-	nsCAutoString pattern = NS_ConvertUTF16toUTF8 (filter);
+	NS_ConvertUTF16toUTF8 pattern(filter);
 	pattern.StripWhitespace();
+	if (pattern.IsEmpty()) return NS_ERROR_FAILURE;
 
 	char **patterns = g_strsplit (pattern.get(), ";", -1);
 
@@ -231,7 +232,6 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
 	{
 		converted = g_filename_to_utf8(filename, -1, NULL, NULL, NULL);
 
-		/* FIXME: when can depend on moz >= 1.6, use CopyUTF8toUTF16 here */
 		*aDefaultString = ToNewUnicode (NS_ConvertUTF8toUTF16 (converted));
 	
 		g_free (filename);

@@ -833,7 +833,7 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	else
 	{
 		gchar * text = gtk_editable_get_chars (GTK_EDITABLE (entry1), 0, -1);
-		_password = NS_ConvertUTF8toUTF16 (text);
+		CopyUTF8toUTF16 (text, _password);
 		g_free (text);
 		*_retval = PR_TRUE;
 	}
@@ -893,7 +893,7 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	else
 	{
 		gchar * text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
-		_password = NS_ConvertUTF8toUTF16 (text);
+		CopyUTF8toUTF16 (text, _password);
 		g_free (text);
 		*_retval = PR_TRUE;
 	}
