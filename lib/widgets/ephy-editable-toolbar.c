@@ -82,6 +82,7 @@ struct EphyEditableToolbarPrivate
 	gboolean toolbars_dirty;
 	gboolean editor_pos_dirty;
 	gboolean editor_sheet_dirty;
+	gboolean edit_mode;
 };
 
 typedef struct
@@ -93,6 +94,7 @@ typedef struct
 {
 	gboolean separator;
 	EggAction *action;
+	GtkWidget *widget;
 } ItemNode;
 
 GType
@@ -143,6 +145,7 @@ item_node_new (EggAction *action, gboolean separator)
 	item = g_new0 (ItemNode, 1);
 	item->action = action;
 	item->separator = separator;
+	item->widget = NULL;
 
 	return item;
 }
@@ -544,6 +547,68 @@ drag_data_get_cb (GtkWidget *widget,
 }
 
 static void
+connect_drag_sources (EphyEditableToolbar *etoolbar, GNode *toolbars)
+{
+	GNode *l1, *l2;
+
+	for (l1 = toolbars->children; l1 != NULL; l1 = l1->next)
+	{
+		for (l2 = l1->children; l2 != NULL; l2 = l2->next)
+		{
+			ItemNode *node = (ItemNode *) (l2->data);
+			GtkWidget *toolitem;
+
+			toolitem = node->widget;
+
+			if (!g_object_get_data (G_OBJECT (toolitem), "drag_source_set"))
+			{
+				g_object_set_data (G_OBJECT (toolitem), "drag_source_set",
+						   GINT_TO_POINTER (TRUE));
+
+				g_signal_connect (toolitem, "drag_data_get",
+						  G_CALLBACK (drag_data_get_cb),
+						  etoolbar);
+				g_signal_connect (toolitem, "drag_data_delete",
+						  G_CALLBACK (drag_data_delete_cb),
+						  etoolbar);
+			}
+		}
+	}
+}
+
+static void
+disconnect_drag_sources (EphyEditableToolbar *etoolbar, GNode *toolbars)
+{
+	GNode *l1, *l2;
+
+	for (l1 = toolbars->children; l1 != NULL; l1 = l1->next)
+	{
+		for (l2 = l1->children; l2 != NULL; l2 = l2->next)
+		{
+			ItemNode *node = (ItemNode *) (l2->data);
+			GtkWidget *toolitem;
+
+			toolitem = node->widget;
+
+			if (g_object_get_data (G_OBJECT (toolitem), "drag_source_set"))
+			{
+				g_object_set_data (G_OBJECT (toolitem), "drag_source_set",
+						   GINT_TO_POINTER (FALSE));
+
+				g_signal_handlers_disconnect_by_func
+					(toolitem,
+					 G_CALLBACK (drag_data_get_cb),
+					 etoolbar);
+				g_signal_handlers_disconnect_by_func
+					(toolitem,
+					 G_CALLBACK (drag_data_delete_cb),
+					 etoolbar);
+			}
+		}
+	}
+}
+
+static void
 setup_toolbars (EphyEditableToolbar *etoolbar, GNode *toolbars)
 {
 	GNode *l1, *l2;
@@ -592,6 +657,7 @@ setup_toolbars (EphyEditableToolbar *etoolbar, GNode *toolbars)
 			sprintf (path, "/Toolbar%d/PlaceHolder%d/%s", k, i, type);
 
 			toolitem = egg_menu_merge_get_widget (etoolbar->priv->merge, path);
+			node->widget = toolitem;
 
 			g_object_set_data (G_OBJECT (toolitem), "item_node", l2);
 
@@ -606,13 +672,6 @@ setup_toolbars (EphyEditableToolbar *etoolbar, GNode *toolbars)
 						   GDK_ACTION_COPY | GDK_ACTION_MOVE);
 				g_signal_connect (toolitem, "drag_data_received",
 						  G_CALLBACK (drag_data_received_cb),
-						  etoolbar);
-
-				g_signal_connect (toolitem, "drag_data_get",
-						  G_CALLBACK (drag_data_get_cb),
-						  etoolbar);
-				g_signal_connect (toolitem, "drag_data_delete",
-						  G_CALLBACK (drag_data_delete_cb),
 						  etoolbar);
 			}
 
@@ -686,6 +745,11 @@ do_merge (EphyEditableToolbar *t)
 	egg_menu_merge_ensure_update (t->priv->merge);
 
 	setup_toolbars (t, t->priv->toolbars);
+
+	if (t->priv->edit_mode)
+	{
+		connect_drag_sources (t, t->priv->toolbars);
+	}
 
 	ensure_toolbars_min_size (t);
 
@@ -774,6 +838,7 @@ ephy_editable_toolbar_init (EphyEditableToolbar *t)
 	t->priv->toolbars_dirty = FALSE;
 	t->priv->editor_pos_dirty = FALSE;
 	t->priv->editor_sheet_dirty = FALSE;
+	t->priv->edit_mode = FALSE;
 }
 
 static void
@@ -915,6 +980,8 @@ hide_editor (EphyEditableToolbar *etoolbar)
 static void
 editor_close_cb (GtkWidget *button, EphyEditableToolbar *etoolbar)
 {
+	etoolbar->priv->edit_mode = FALSE;
+	disconnect_drag_sources (etoolbar, etoolbar->priv->toolbars);
 	hide_editor (etoolbar);
 }
 
@@ -1189,6 +1256,9 @@ set_all_actions_sensitive (EphyEditableToolbar *etoolbar)
 void
 ephy_editable_toolbar_edit (EphyEditableToolbar *etoolbar)
 {
+	etoolbar->priv->edit_mode = TRUE;
+
+	connect_drag_sources (etoolbar, etoolbar->priv->toolbars);
 	set_all_actions_sensitive (etoolbar);
 	setup_editor (etoolbar);
 	show_editor (etoolbar);

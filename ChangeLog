@@ -1,5 +1,18 @@
 2003-02-04  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/widgets/ephy-editable-toolbar.c: (item_node_new),
+	(connect_drag_sources), (disconnect_drag_sources),
+	(setup_toolbars), (do_merge), (ephy_editable_toolbar_init),
+	(editor_close_cb), (ephy_editable_toolbar_edit):
+	* src/ephy-favicon-action.c: (connect_proxy):
+	* src/ephy-window.c:
+	
+	Fix several menu accels I borked when porting to egg.
+	Connect drag source on toolbar buttons only when necessary,
+	fix favicon drag.
+
+2003-02-04  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* data/starthere/index.xml.in:
 	
 	Change xml to have translations merged properly.

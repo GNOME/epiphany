@@ -157,7 +157,7 @@ static void
 connect_proxy (EggAction *action, GtkWidget *proxy)
 {
 	ephy_dnd_url_drag_source_set (proxy);
-
+	ephy_favicon_action_sync_icon (action, NULL, proxy);
 	g_signal_connect (proxy,
 			  "drag_data_get",
 			  G_CALLBACK (favicon_drag_data_get_cb),
