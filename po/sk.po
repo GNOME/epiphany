@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-28 00:36+0100\n"
-"PO-Revision-Date: 2004-12-28 00:59+0100\n"
+"POT-Creation-Date: 2004-12-31 17:41+0100\n"
+"PO-Revision-Date: 2004-12-31 17:45+0100\n"
 "Last-Translator: Marcel Telka <marcel@telka.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -1011,15 +1011,15 @@ msgstr[0] "%d stiahnutí"
 msgstr[1] "%d stiahnutie"
 msgstr[2] "%d stiahnutia"
 
-#: embed/downloader-view.c:582 src/bookmarks/ephy-bookmarks-editor.c:795
+#: embed/downloader-view.c:588 src/bookmarks/ephy-bookmarks-editor.c:795
 msgid "File"
 msgstr "Súbor"
 
-#: embed/downloader-view.c:604
+#: embed/downloader-view.c:610
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:615
+#: embed/downloader-view.c:621
 msgid "Remaining"
 msgstr "Zostáva"
 
@@ -1338,50 +1338,70 @@ msgstr "Unicode (UTF-_32 BE)"
 msgid "Unicode (UTF-3_2 LE)"
 msgstr "Unicode (UTF-3_2 LE)"
 
-#: embed/ephy-encodings.c:143
-msgid "autodetectors|Off"
-msgstr "automatická detekcia|Vypnutá"
-
-#: embed/ephy-encodings.c:144
-msgid "automatically detect ... character encodings|Chinese"
-msgstr "automaticky detekovať ... kódovanie znakov|Čínske"
-
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/ephy-encodings.c:145
-msgid "automatically detect ... character encodings|Simplified Chinese"
-msgstr "automaticky detekovať ... kódovanie znakov|Zjednodušené čínske"
+msgid "autodetectors|Off"
+msgstr "Vypnutá"
 
-#: embed/ephy-encodings.c:146
-msgid "automatically detect ... character encodings|Traditional Chinese"
-msgstr "automaticky detekovať ... kódovanie znakov|Tradičné čínske"
-
-#: embed/ephy-encodings.c:147
-msgid "automatically detect ... character encodings|East Asian"
-msgstr "automaticky detekovať ... kódovanie znakov|Východoázijské"
-
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/ephy-encodings.c:148
-msgid "automatically detect ... character encodings|Japanese"
-msgstr "automaticky detekovať ... kódovanie znakov|Japonské"
+msgid "automatically detect ... character encodings|Chinese"
+msgstr "Čínske"
 
-#: embed/ephy-encodings.c:149
-msgid "automatically detect ... character encodings|Korean"
-msgstr "automaticky detekovať ... kódovanie znakov|Kórejské"
-
-#: embed/ephy-encodings.c:150
-msgid "automatically detect ... character encodings|Russian"
-msgstr "automaticky detekovať ... kódovanie znakov|Ruské"
-
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/ephy-encodings.c:151
-msgid "automatically detect ... character encodings|Universal"
-msgstr "automaticky detekovať ... kódovanie znakov|Univerzálne"
+msgid "automatically detect ... character encodings|Simplified Chinese"
+msgstr "Zjednodušené čínske"
 
-#: embed/ephy-encodings.c:152
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: embed/ephy-encodings.c:154
+msgid "automatically detect ... character encodings|Traditional Chinese"
+msgstr "Tradičné čínske"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: embed/ephy-encodings.c:157
+msgid "automatically detect ... character encodings|East Asian"
+msgstr "Východoázijské"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: embed/ephy-encodings.c:160
+msgid "automatically detect ... character encodings|Japanese"
+msgstr "Japonské"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: embed/ephy-encodings.c:163
+msgid "automatically detect ... character encodings|Korean"
+msgstr "Kórejské"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: embed/ephy-encodings.c:166
+msgid "automatically detect ... character encodings|Russian"
+msgstr "Ruské"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: embed/ephy-encodings.c:169
+msgid "automatically detect ... character encodings|Universal"
+msgstr "Univerzálne"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: embed/ephy-encodings.c:172
 msgid "automatically detect ... character encodings|Ukrainian"
-msgstr "automaticky detekovať ... kódovanie znakov|Ukrajinské"
+msgstr "Ukrajinské"
 
 #. translators: this is the title that an unknown encoding will
 #. * be displayed as.
 #.
-#: embed/ephy-encodings.c:344
+#: embed/ephy-encodings.c:364
 #, c-format
 msgid "Unknown (%s)"
 msgstr "Neznáme (%s)"
@@ -1398,16 +1418,16 @@ msgstr "Ostatné"
 msgid "Local files"
 msgstr "Miestne súbory"
 
-#: embed/mozilla/ContentHandler.cpp:146
+#: embed/mozilla/ContentHandler.cpp:147
 #: embed/mozilla/EphyHeaderSniffer.cpp:357
 msgid "Save"
 msgstr "Uložiť"
 
-#: embed/mozilla/ContentHandler.cpp:257
+#: embed/mozilla/ContentHandler.cpp:258
 msgid "Download the unsafe file?"
 msgstr "Stiahnuť súbor, ktorý nie je bezpečný?"
 
-#: embed/mozilla/ContentHandler.cpp:260
+#: embed/mozilla/ContentHandler.cpp:261
 msgid ""
 "This type of file could potentially damage your documents or invade your "
 "privacy. It's not safe to open it directly. You can save it instead."
@@ -1417,13 +1437,13 @@ msgstr ""
 "uložiť."
 
 #. translators: %s is the name of the application
-#: embed/mozilla/ContentHandler.cpp:271
+#: embed/mozilla/ContentHandler.cpp:272
 #, c-format
 msgid "Open this file with \"%s\"?"
 msgstr "Otvoriť tento súbor pomocou \"%s\"?"
 
 #. translators: %s is the name of the application
-#: embed/mozilla/ContentHandler.cpp:276
+#: embed/mozilla/ContentHandler.cpp:277
 #, c-format
 msgid ""
 "It's not possible to view this file type directly in the browser. You can "
@@ -1432,11 +1452,11 @@ msgstr ""
 "Nie je možné zobraziť tento typ súboru priamo v prehliadači. Môžete ho "
 "otvoriť pomocou \"%s\", alebo ho môžete uložiť."
 
-#: embed/mozilla/ContentHandler.cpp:286
+#: embed/mozilla/ContentHandler.cpp:287
 msgid "Download the file?"
 msgstr "Stiahnuť súbor?"
 
-#: embed/mozilla/ContentHandler.cpp:289
+#: embed/mozilla/ContentHandler.cpp:290
 msgid ""
 "It's not possible to view this file because there is no application "
 "installed that can open it. You can save it instead."
@@ -1444,7 +1464,7 @@ msgstr ""
 "Nie je možné zobraziť tento súbor, pretože nemáte nainštalovanú aplikáciu, "
 "ktorá ho môže otvoriť. Môžete ho namiesto toho uložiť."
 
-#: embed/mozilla/ContentHandler.cpp:294
+#: embed/mozilla/ContentHandler.cpp:295
 msgid "_Save As..."
 msgstr "Uložiť _ako..."
 
@@ -1795,21 +1815,21 @@ msgid "All supported types"
 msgstr "Všetky podporované typy"
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:76 src/prefs-dialog.c:1439
+#: lib/ephy-file-helpers.c:81 src/prefs-dialog.c:1445
 msgid "Downloads"
 msgstr "Sťahovania"
 
-#: lib/ephy-file-helpers.c:177
+#: lib/ephy-file-helpers.c:182
 #, c-format
 msgid "Failed to find %s"
 msgstr "Hľadanie %s zlyhalo"
 
-#: lib/ephy-file-helpers.c:243
+#: lib/ephy-file-helpers.c:255
 #, c-format
 msgid "%s exists, please move it out of the way."
 msgstr "%s existuje. Prosím, presunte ho preč."
 
-#: lib/ephy-file-helpers.c:249
+#: lib/ephy-file-helpers.c:261
 #, c-format
 msgid "Failed to create directory %s."
 msgstr "Vytváranie priečinka %s zlyhalo."
@@ -3255,19 +3275,19 @@ msgstr "Ukončí platnosť:"
 msgid "End of current session"
 msgstr "Koniec aktuálneho sedenia"
 
-#: src/popup-commands.c:241
+#: src/popup-commands.c:245
 msgid "Download Link"
 msgstr "Stiahnuť odkaz"
 
-#: src/popup-commands.c:249
+#: src/popup-commands.c:253
 msgid "Save Link As"
 msgstr "Uložiť odkaz ako"
 
-#: src/popup-commands.c:256
+#: src/popup-commands.c:260
 msgid "Save Image As"
 msgstr "Uložiť obrázok ako"
 
-#: src/popup-commands.c:342
+#: src/popup-commands.c:346
 msgid "Save Background As"
 msgstr "Uložiť pozadie ako"
 
@@ -3535,7 +3555,7 @@ msgstr "Zjednodušené čínske"
 msgid "Traditional Chinese"
 msgstr "Tradičné čínske"
 
-#: src/prefs-dialog.c:1051
+#: src/prefs-dialog.c:1057
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -3543,15 +3563,15 @@ msgstr[0] "Systémové jazyky (%s)"
 msgstr[1] "Systémový jazyk (%s)"
 msgstr[2] "Systémové jazyky (%s)"
 
-#: src/prefs-dialog.c:1434
+#: src/prefs-dialog.c:1440
 msgid "Home"
 msgstr "Domovský priečinok"
 
-#: src/prefs-dialog.c:1444
+#: src/prefs-dialog.c:1450
 msgid "Desktop"
 msgstr "Pracovná plocha"
 
-#: src/prefs-dialog.c:1644
+#: src/prefs-dialog.c:1650
 msgid "Select a directory"
 msgstr "Vybrať priečinok"
 
