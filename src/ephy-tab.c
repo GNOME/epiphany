@@ -903,15 +903,9 @@ ephy_tab_new_window_cb (EphyEmbed *embed, EphyEmbed **new_embed,
 }
 
 static gboolean
-let_me_resize_hack (gpointer *tab_ptr)
+let_me_resize_hack (GtkWidget *tab)
 {
-	if (*tab_ptr != NULL)
-	{
-		g_object_remove_weak_pointer (G_OBJECT (*tab_ptr), tab_ptr);
-		gtk_widget_set_size_request (GTK_WIDGET (*tab_ptr), -1, -1);
-
-		g_free (tab_ptr);
-	}
+	gtk_widget_set_size_request (tab, -1, -1);
 
 	return FALSE;
 }
@@ -947,7 +941,6 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 {
 	GtkWidget *notebook;
 	EphyWindow *window;
-	gpointer *tab_ptr;
 
 	tab->priv->width = width;
 	tab->priv->height = height;
@@ -971,10 +964,7 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 		 * size correctly.
 		 */
 
-		tab_ptr = g_new (gpointer, 1);
-		*tab_ptr = tab;
-		g_object_add_weak_pointer (G_OBJECT (tab), tab_ptr);
-		g_idle_add ((GSourceFunc) let_me_resize_hack, tab_ptr);
+		g_idle_add ((GSourceFunc) let_me_resize_hack, tab);
 	}
 }
 

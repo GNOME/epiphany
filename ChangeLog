@@ -1,3 +1,10 @@
+2004-02-24  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-tab.c: (let_me_resize_hack), (ephy_tab_size_to_cb):
+
+	Change this back to simply do g_idle_add(), accidentally forgot to
+	revert my change.
+
 2004-02-24  Xan Lopez  <xan@gnome.org>
 
 	* embed/mozilla/EphyHeaderSniffer.cpp:
