@@ -35,6 +35,10 @@
       <year>2003</year>
       <holder>David Bordoley</holder>
     </copyright>
+    <copyright>
+      <year>2003</year>
+      <holder>Piers Cornwell</holder>
+    </copyright>
 
 <!-- translators: uncomment this:
 
@@ -72,6 +76,14 @@
 	  <address> <email>bordoley@msu.edu</email> </address> 
 	</affiliation> 
       </author> 
+      <author> 
+	<firstname>Piers</firstname> 
+	<surname>Cornwell</surname> 
+	<affiliation> 
+	  <orgname>Epiphany Development Team</orgname> 
+	  <address> <email>piers@myrealbox.com</email> </address> 
+	</affiliation> 
+      </author>
     </authorgroup>
 
 
@@ -90,8 +102,8 @@
     <primary>Browser</primary> 
   </indexterm>
 
-<!-- ============= Document Body ============================= -->
-<!-- ============= Introduction ============================== -->
+<!-- ============= Document Body ================================== -->
+<!-- ============= Introduction =================================== -->
 <!-- Use the Introduction section to give a brief overview of what
      the application is and what it does. -->
   <sect1 id="fr-introduction"> 
@@ -102,92 +114,101 @@
    </para>
   </sect1>
 
-<!-- ============= Getting Started =========================== -->
+<!-- ============= Getting Started ================================ -->
   <sect1 id="ephy-getting-started">
-      <title>Getting Started</title>
+    <title>Getting Started</title>
 
-        <sect2 id="ephy-to-open-browser-window">
-          <title>To Open a Browser Window</title>
-          <para>
-            You can open a browser window in the following ways:
-          </para>
-          <variablelist>
-            <varlistentry>
-              <term><guimenu>Applications</guimenu> menu</term>
-              <listitem>
-                <para>
-                  Choose <menuchoice> <guisubmenu>Internet</guisubmenu>
-    		  <guimenuitem>Web Browser</guimenuitem> </menuchoice>.
-                </para>
-              </listitem>
-            </varlistentry>
-            <varlistentry>
-    	      <term>Command line</term>
-              <listitem>
-                <para>
-                  Type <command>epiphany</command>, then press 
-                  <keycap>Return</keycap>.
-                </para>
-              </listitem>
-            </varlistentry>
-          </variablelist>
-        </sect2>
-        <sect2 id="ephy-to-open-bookmarks">
-          <title>To Open the Bookmarks Window</title>
-                <para>You can open the bookmarks window in the following ways:</para>
-		<variablelist>
-    		
-                <varlistentry>
-    		<term><guimenu>Applications</guimenu> menu</term>
-    		<listitem>
-    		<para>Choose 
-    		<menuchoice>
-    		<guisubmenu>Internet</guisubmenu>
-    		<guimenuitem>Web Bookmarks</guimenuitem>
-    		</menuchoice>. 
-                </para>
-    		</listitem>
-    		</varlistentry>
-    		
-                <varlistentry>
-    		<term>Command line</term>
-    		<listitem>
-    		<para>Type <command>epiphany -b</command>, then press <keycap>Return</keycap>.</para>
-    		</listitem>
-    		</varlistentry>
+      <sect2 id="ephy-to-open-browser-window">
+        <title>To Open a Browser Window</title>
+        <para>
+          You can open a browser window in the following ways:
+        </para>
+        <variablelist>
+          <varlistentry>
+            <term><guimenu>Applications</guimenu> menu</term>
+            <listitem>
+              <para>
+                Choose <menuchoice> <guisubmenu>Internet</guisubmenu>
+                <guimenuitem>Web Browser</guimenuitem> </menuchoice>.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>Command line</term>
+            <listitem>
+              <para>
+                Type <command>epiphany</command>, then press 
+                <keycap>Return</keycap>.
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </sect2>
+      <sect2 id="ephy-to-open-bookmarks">
+        <title>To Open the Bookmarks Window</title>
+        <para>
+          You can open the bookmarks window in the following ways:
+        </para>
+        <variablelist>
+          <varlistentry>
+            <term>
+              <guimenu>Applications</guimenu> menu
+            </term>
+            <listitem>
+   	      <para>
+                Choose <menuchoice> <guisubmenu>Internet</guisubmenu>
+                <guimenuitem>Web Bookmarks</guimenuitem> </menuchoice>. 
+              </para>
+            </listitem>
+          </varlistentry>
+	
+          <varlistentry>
+            <term>
+              Command line
+            </term>
+            <listitem>
+              <para>
+               Type <command>epiphany -b</command>, then press <keycap>Return</keycap>.
+              </para>
+            </listitem>
+          </varlistentry>
 
- 
-                <varlistentry>
-                <term>From the <guimenu>Bookmarks</guimenu> menu</term>
-                <listitem>
-                <para>Choose <menuchoice>
-                  <guimenu>Bookmarks</guimenu>
-                  <guimenuitem>Edit Bookmarks</guimenuitem>
-                  </menuchoice> from the &fr; main window. 
-                </para>
-                </listitem>
-                </varlistentry>
+          <varlistentry>
+            <term>
+              From the <guimenu>Bookmarks</guimenu> menu
+            </term>
+            <listitem>
+              <para>
+                Choose <menuchoice> <guimenu>Bookmarks</guimenu>
+                <guimenuitem>Edit Bookmarks</guimenuitem>
+                </menuchoice> from the &fr; main window. 
+              </para>
+            </listitem>
+          </varlistentry>
 
-                <varlistentry>
-                <term>From the &fr; toolbar</term>
-                <listitem>
-                <para>
+          <varlistentry>
+            <term>
+              From the &fr; toolbar
+            </term>
+            <listitem>
+              <para>
                 Click on the Bookmarks button in the toolbar of the
                 main window. 
-                </para>
-                </listitem>
-                </varlistentry>
-                </variablelist>
-        </sect2>
-
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </sect2>
   </sect1>
 
 <!-- ============= Browser Windows ============================ -->
   <sect1 id="ephy-browser-windows">
-      <title>Browser Windows</title>
-      <para>Browser windows enable you to browse between web pages. 
-<xref linkend="ephy-screenshot"/> shows a browser window displaying the 
-home page.</para>
+    <title>Browser Windows</title>
+    <para>
+      Browser windows enable you to browse between web pages. 
+      <xref linkend="ephy-screenshot"/> shows a browser window displaying the 
+      home page.
+    </para>
     <figure id="ephy-screenshot">
       <title>Browser window displaying the home page</title>
       <screenshot>
@@ -201,7 +222,9 @@ home page.</para>
         </mediaobject>
       </screenshot>
     </figure>
-    <para><xref linkend="epiphany-TBL-1"/> describes the components of a browser window.</para>
+    <para>
+      <xref linkend="epiphany-TBL-1"/> describes the components of a browser window.
+    </para>
     <table frame="topbot" id="epiphany-TBL-1">
       <title>Browser Window Components</title>
       <tgroup cols="2" colsep="0" rowsep="0">
@@ -210,71 +233,103 @@ home page.</para>
         <thead>
           <row rowsep="1">
             <entry valign="top">
-              <para>Component</para>
+              <para>
+                Component
+              </para>
             </entry>
             <entry valign="top">
-              <para>Description </para>
+              <para>
+                Description
+              </para>
             </entry>
           </row>
         </thead>
         <tbody>
           <row>
             <entry valign="top">
-              <para>Menubar</para>
+              <para>
+                Menubar
+              </para>
             </entry>
             <entry valign="top">
-              <para>Contains menus that you use to perform tasks in a browser window.</para>
+              <para>
+                Contains menus that you use to perform tasks in a browser window.
+              </para>
             </entry>
           </row>
           <row>
             <entry valign="top">
-              <para>Toolbar</para>
+              <para>
+                Toolbar
+              </para>
             </entry>
             <entry valign="top">
-              <para>Contains buttons that you use to perform tasks in a browser window.</para>
-            </entry>
-          </row>
-          <row>
-            <entry colname="colspec0" valign="top">
-              <para>Address entry</para>
-            </entry>
-            <entry colname="colspec1" valign="top">
-              <para>Drop-down combination box that you use to enter web addresses or search terms.</para>
-            </entry>
-          </row>
-	<row>
-            <entry colname="colspec0" valign="top">
-              <para>Bookmarks bar</para>
-            </entry>
-            <entry colname="colspec1" valign="top">
-              <para>Contains menus, buttons and text fields that you use for highspeed access to bookmarks and web searches.</para>
-            </entry>
-          </row>
-          <row>
-            <entry valign="top">
-              <para>View pane</para>
-            </entry>
-            <entry valign="top">
-              <para>Displays the contents of the viewed page.</para>
+              <para>
+                Contains buttons that you use to perform tasks in a browser window.
+              </para>
             </entry>
           </row>
           <row>
             <entry colname="colspec0" valign="top">
-              <para>Statusbar</para>
+              <para>
+                Address entry
+              </para>
             </entry>
             <entry colname="colspec1" valign="top">
-              <para>Displays status information.</para>
+              <para>
+                Drop-down combination box that you use to enter web addresses or 
+                search terms.
+              </para>
+            </entry>
+          </row>
+	  <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                Bookmarks bar
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Contains menus, buttons and text fields that you use for highspeed 
+                access to bookmarks and web searches.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                View pane
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Displays the contents of the viewed page.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                Statusbar
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Displays status information.
+              </para>
             </entry>
           </row>
         </tbody>
       </tgroup>
     </table>
-    <para>You can also open a popup menu from browser
-windows. To open this popup menu right-click in a browser
-window. The items in this menu depend on where you right-click. For example,
-when you right-click on a link, you can choose items related to
-the link. When you right-click on the web page itself,
-you can choose items related to the display of the web page.</para>
+    <para>
+      You can also open a popup menu from browser windows. To open 
+      this popup menu right-click in a browser window. The items in 
+      this menu depend on where you right-click. For example, when 
+      you right-click on a link, you can choose items related to the 
+      link. When you right-click on the web page itself, you can 
+      choose items related to the display of the web page.
+    </para>
   </sect1>
 
 <!-- ============= Browsing the Web =========================== -->
@@ -486,6 +541,10 @@ you can choose items related to the display of the web page.</para>
             Web pages contain links to other web pages, often (but not always)
             indicated by an underline. To follow a link, left click it.
           </para>
+          <note>
+            The web page defines whether the link opens in the current or a new 
+            window.
+          </note>
         </sect2>
 	<sect2 id="to-open-link-in-window">
           <title>To Open a Link in a New window</title>
@@ -500,16 +559,29 @@ you can choose items related to the display of the web page.</para>
             To open a link in a new tab, right click it and select 
             <guimenuitem>Open Link in New Tab</guimenuitem>.
           </para>
+          <tip>
+            You can also open a link in a new tab by middle clicking it, if you 
+            have a three button mouse, or clicking with both buttons, if you 
+            have a two button mouse.
+          </tip>
         </sect2>
 	<sect2 id="to-download-link">
           <title>To Download a Link</title>
           <para>
             To save the target of a link, right click it and select 
-            <guimenuitem>Download Link</guimenuitem>.
+            <guimenuitem>Download Link</guimenuitem>. The linked file or 
+            document will be saved to your download folder which you can 
+            set in <xref linkend="general-preferences"/>.
           </para>
         </sect2>
-	<sect2 id="to-switch-between-tab">
+	<sect2 id="to-switch-between-tabs">
           <title>To Switch in Between Tabs</title>
+          <para>
+            Click the header of a tab to switch to it.
+          </para>
+        </sect2>
+	<sect2 id="to-move-tabs">
+          <title>To Move Tabs</title>
           <para>
             To rearrange tabs in the current window, select <menuchoice>
             <guimenu>Tabs</guimenu> <guimenuitem>Move Tab Left</guimenuitem>
@@ -521,11 +593,6 @@ you can choose items related to the display of the web page.</para>
             To move the current tab to a new window choose <menuchoice> 
             <guimenu>Tabs</guimenu> <guimenuitem>Detach Tab</guimenuitem>
             </menuchoice>.
-          </para>
-        </sect2>
-	<sect2 id="to-move-tabs">
-          <title>To Move Tabs</title>
-          <para>
           </para>
         </sect2>
   </sect1>
@@ -746,22 +813,27 @@ Click on the bookmark that you want to select.</para>
 	<sect2 id="to-open-bookmark">
           <title>To Open a Bookmark in a New Window or Tab</title>
           <variablelist>
-    		<varlistentry>
-    			<term>To open a bookmark in a new window perform the following steps:</term>
-    				<listitem>
-				<orderedlist>
-        			<listitem>
-          			<para>Select the bookmark that you want to open.</para>
-        			</listitem>
-        			<listitem>
-          			<para>Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Open in New 						Window</guimenuitem></menuchoice>. 
-					Alternatively, right-click on the bookmark, then choose 					<menuchoice><guimenuitem>Open in New Window</guimenuitem>
-					</menuchoice>.</para>
-        			</listitem>
-				</orderedlist>
-				</listitem>
-		</varlistentry>
-		<varlistentry>
+            <varlistentry>
+              <term>To open a bookmark in a new window perform the following steps:</term>
+              <listitem>
+                <orderedlist>
+                  <listitem>
+                    <para>
+                       Select the bookmark that you want to open.
+                    </para>
+                  </listitem>
+                 <listitem>
+                   <para>
+                      Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Open in 
+                      New Window</guimenuitem></menuchoice>. Alternatively, right-click 
+                      on the bookmark, then choose <menuchoice><guimenuitem>Open in New 
+                      Window</guimenuitem></menuchoice>.
+                   </para>
+                 </listitem>
+               </orderedlist>
+             </listitem>
+           </varlistentry>
+           <varlistentry>
 			<term>To open a bookmark in a new tab perform the following steps:</term>
 				<listitem>
 				<orderedlist>
@@ -781,42 +853,56 @@ Click on the bookmark that you want to select.</para>
 	<sect2 id="to-create-new-topic">
           <title>To Create a New Topic</title>
           <para>
-            To create a new topic, choose 
-            <menuchoice>
-              <guimenu>File</guimenu>
-              <guimenuitem>New Topic</guimenuitem>
-            </menuchoice>
-            in the Bookmark window. A new topic is created, you can
-            now enter the name of the topic. 
+            To create a new topic, choose <menuchoice> <guimenu>File</guimenu>
+            <guimenuitem>New Topic</guimenuitem></menuchoice> in the Bookmark 
+            window. A new topic is created, you can now enter the name of the 
+            topic. The topics will appear as submenus in the <guimenu>Bookmarks
+            </guimenu> menu.
           </para>
         </sect2>
 	<sect2 id="to-add-bookmark-to-topic">
           <title>To Add a Bookmark to a Topic</title>
           <para>
+            To add a bookmark to a topic, right-click its entry in the bookmarks 
+            window and choose <guimenuitem>Properties</guimenuitem>. From the 
+            <guilabel>Topics</guilabel> list, select each topic to add this 
+            bookmark to, and click <guibutton>Close</guibutton>.
           </para>
         </sect2>
 	<sect2 id="to-remove-bookmark-from-topic">
           <title>To Remove a Bookmark From a Topic</title>
           <para>
+            To remove a bookmark from a topic, right-click its entry in the bookmarks 
+            window and choose <guimenuitem>Properties</guimenuitem>. From the 
+            <guilabel>Topics</guilabel> list, deselect each topic from which you 
+            wish to remove this bookmark, then click <guibutton>Close</guibutton>.
           </para>
         </sect2>
 	<sect2 id="to-rename-bookmark-or-topic">
           <title>To Rename a Bookmark or Topic</title>
-          <para>To rename a bookmark or Topic perform the following steps:</para>
-      		<orderedlist>
-        	<listitem>
-          	<para>Select the bookmark or topic that you want to rename in the bookmarks window.</para>
-        	</listitem>
-        	<listitem>
-          	<para>Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Rename...</guimenuitem>
+          <para>
+            To rename a bookmark or topic perform the following steps:
+          </para>
+          <orderedlist>
+            <listitem>
+              <para>
+                Select the bookmark or topic that you want to rename in the bookmarks window.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Rename...</guimenuitem>
 		</menuchoice>. Alternatively, right-click on the bookmark
 		or topic in the view pane, then choose <guimenuitem>Rename...</guimenuitem>.
           	The name of the bookmark or topic is selected.</para>
-        	</listitem>
-        	<listitem>
-          	<para>Type a new name for the topic or bookmark, then press <keycap>Return</keycap>.</para>
-        	</listitem>
-      		</orderedlist>
+              </listitem>
+              <listitem>
+                <para>
+                  Type a new name for the topic or bookmark, then press 
+                  <keycap>Return</keycap>.
+                </para>
+              </listitem>
+           </orderedlist>
         </sect2>
 	<sect2 id="to-delete-bookmark-or-topic">
           <title>To Delete a Bookmark or Topic</title>
@@ -920,11 +1006,20 @@ bookmark, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
 	<sect2 id="smart-bookmarks">
           <title>Smart Bookmarks</title>
           <para>
+            Smart bookmarks are a special kind of bookmark that can take one or 
+            more arguments. If you add a smart bookmark to a toolbar, you will 
+            see its name and a text box. You can enter text into the box and press 
+            enter to perform the function of the smart bookmark.
+          </para>
+          <para>
+            To add a smart bookmark, go to the 
+            <ulink url="http://galeon.sourceforge.net/bookmarks/browse.php" type="http">
+            Smart Bookmarks archive</ulink> and follow the instructions there.
           </para>
         </sect2>
   </sect1>
 
-<!-- ============= Managing Your History Links ================ -->
+<!-- ============= Managing Your History Links ==================== -->
   <sect1 id="ephy-managing-history">
       <title>Managing Your History Links</title>
       <para>
@@ -1058,21 +1153,141 @@ history link, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
         </sect2>
   </sect1>
 
-<!-- ============= Managing Your Passwords and Cookies ==== -->
+<!-- ============= Managing Your Passwords and Cookies ============ -->
   <sect1 id="ephy-managing-passwords-cookies">
-      <title>Managing Your Passwords and Cookies</title>
+    <title>Managing Your Passwords and Cookies</title>
+    <para>
+      &fr; stores your cookies and passwords in the Personal Data Manager
+      which can be accessed by clicking <menuchoice> <guimenu>Edit</guimenu> 
+      <guisubmenu>Personal Data</guisubmenu> </menuchoice>.
+    </para>
+    <sect2 id="managing-cookies">
+      <title>Managing Cookies</title>
       <para>
+        Cookies allow web pages to store pieces of information which can then be accessed 
+        by the site when you next visit.
       </para>
+      <para>
+        In Personal Data Manager, you can view the cookies stored on your 
+        computer and the details contained within them. You can also delete cookies.
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            To view the contents of a cookie, select its entry in the list and click 
+            <guibutton>Properties</guibutton>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            To delete cookies, select all the cookies you want to delete, and click the 
+            <guibutton>Delete</guibutton> button.
+          </para>
+        </listitem>
+      </itemizedlist>
+      <para>
+        The cookies properties window shows you the following details:
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>Value</term>
+          <listitem>
+            <para>
+              The content of the cookie.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Path</term>
+          <listitem>
+            <para>
+              The folder within the domain for which the cookies is valid.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Secure</term>
+          <listitem>
+            <para>
+              Whether the cookie originates from a secure or insecure server.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Expire</term>
+          <listitem>
+            <para>
+              The date and time at which the cookie is no longer valid.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>          
+    </sect2>
+    <sect2 id="managing-passwords">
+      <title>Managing Passwords</title>
+      <para>
+        Many web sites require you to log in using a username and password to gain access 
+        to some or all of the site. &fr; can remember the passwords for you so that you 
+        can quickly login in future.
+      </para>
+      <para>
+        In Personal Data Manager, you can view the sites for which passwords
+        have been stored, and delete them.
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            To delete passwords, select all the entries you want to delete, and click the 
+            <guibutton>Delete</guibutton> button.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
   </sect1>
 
-<!-- ============= Using the Download Manager ==== -->
+<!-- ============= Using the Download Manager ===================== -->
   <sect1 id="ephy-download-manager">
       <title>Using the Download Manager</title>
       <para>
+        When you are downloading files, the download manager provides you with details of the 
+        current downloads:
       </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            The <guilabel>%</guilabel> column shows the progress of each download.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            The <guilabel>Filename</guilabel> is the name of the downloading file. The folder 
+            which the file is downloaded to can be specified in <xref linkend="general-preferences"/>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <guilabel>Size</guilabel> shows how big the file is. 
+            1MB is equivilent to 1024kB.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <guilabel>Remaining</guilabel> gives an estimation of the amount of time to completion.
+            This is a best guess and, depending on the reliability of your connection, this value may 
+            vary in accuracy.
+          </para>
+        </listitem>
+      </itemizedlist>
+      <para>
+        To cancel a download, select its entry in the download manager and click <guibutton>
+        Stop</guibutton>. 
+      </para>
+      <note>
+        Once all downloads have finished, or been cancelled, the download manager will close.
+      </note>
   </sect1>
 
-<!-- ============= Customizing Epiphany ==== -->
+<!-- ============= Customizing Epiphany =========================== -->
   <sect1 id="ephy-customize">
       <title>Customizing &fr;</title>
       <para>
@@ -1080,7 +1295,158 @@ history link, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
 	<sect2 id="setting-preferences">
           <title>Setting Your Preferences</title>
           <para>
+            You can customize &fr; to suit your personal needs by using the Preferences 
+            dialog which can be accessed by selecting <menuchoice> <guimenu>Edit</guimenu> 
+            <guimenuitem>Preferences</guimenuitem> </menuchoice>.
           </para>
+          <sect3 id="general-preferences">
+            <title>General Preferences</title>
+            <para>
+            </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  Choose the page displayed when the <guibutton>Home</guibutton>
+                  button on the toolbar is clicked, and also when &fr; is launched, by 
+                  entering an address in the <guilabel>Home page</guilabel> section.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Choose the folder for downloaded files by clicking the <guilabel>
+                  Download folder</guilabel> button and selecting a folder.
+                </para>
+              </listitem>
+            </itemizedlist>
+          </sect3>
+          <sect3 id="fonts-and-colors-preferences">
+            <title>Fonts and Colors Preferences</title>
+            <para>
+              This section allows you to configure the style of text and the colors used
+              on web pages.
+            </para>
+            <para>
+              You can choose different font styles and sizes depending on the language 
+              that a page is written in. First select the language you want to configure 
+              from the <guilabel>For language</guilabel> drop down combination box. To 
+              set the font for standard text, where the width of characters varies, 
+              use the <guilabel>Variable width</guilabel> drop down combination box 
+              and spin box. To set the font for fixed width text, where the width of 
+              characters is always the same, use the <guilabel>Fixed width</guilabel> 
+              drop down combination box and spin box.
+            </para>
+            <para>
+              You can also set a minimum size for web page fonts by using the <guilabel>
+              Minimum size</guilabel> spin box. Fonts smaller than this value will be 
+              increased to this size.
+            </para>
+            <para>
+              Web pages often specify their own font styles and sizes. You can make &fr; 
+              only use the fonts that you have chosen by selecting the <guilabel>Always 
+              use these fonts</guilabel> option.
+            </para>
+            <para>
+              Web pages may also specify their own colors for the background and for 
+              fonts. You can make &fr; always use the colors specifed by your current 
+              desktop theme by selecting the <guilabel>Always use the desktop theme 
+              colors</guilabel> option.
+            </para>
+          </sect3>
+          <sect3 id="privacy-preferences">
+            <title>Privacy Preferences</title>
+            <para>
+              &fr; allows you to configure a number of features which allow you to 
+              restrict what web pages can do:
+            </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  Select <guilabel>Allow popup windows</guilabel> if you want web pages 
+                  to be able to launch content in new windows automatically.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Select <guilabel>Enable Java</guilabel> to allow pages to load Java 
+                  applets - programs which run inside web pages.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Select <guilabel>Enable JavaScript</guilabel> to give web pages the
+                  capability to use the more advanced programming techniques of the 
+                  JavaScript language.
+                </para>
+              </listitem>
+            </itemizedlist>
+            <note>
+              Disabling these features may cause some pages to display incorrectly or
+              cause some loss of functionility. For Java to work, you need to install 
+              the Java plugin.
+            </note>
+            <para>
+              You can also configure how cookies are handled:
+            </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  Select <guilabel>Always accept</guilabel> to allow any site to set 
+                  cookies.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Select <guilabel>Only from sites you visit</guilabel> to only allow 
+                  cookies to be set for sites which you have navigated to.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Select <guilabel>Never accept</guilabel> to prevent sites from setting 
+                  cookies.
+                </para>
+              </listitem>
+            </itemizedlist>
+            <note>
+              Disabling or restricting cookies may disable access to parts of some sites or 
+              disable some of their features.
+            </note>
+            <para>
+              &fr; stores some of the content of web pages in temporary files to allow 
+              faster loading of the content when you next view them. The <guilabel>Disk 
+              space</guilabel> spin box allows you to specify the maximum amount of space 
+              &fr; can use for these files. Setting this value to zero will cause &fr; to 
+              never store temporary files. These temporary files can be removed by clicking 
+              the <guibutton>Clear</guibutton> button.
+            </para>
+          </sect3>
+          <sect3 id="language-preferences">
+            <title>Language Preferences</title>
+            <para>
+              The encoding of a page specifies the set of characters that are used in it.
+              The <guilabel>Encodings</guilabel> section configures how &fr; identifies
+              this set. The <guilabel>Default</guilabel> drop down combination box allows 
+              you to set an encoding to fall back to when the page doesn't specify one.
+            </para>
+            <para>
+              The <guilabel>Autodetect</guilabel> drop down combination box allows you to 
+              select a group of encodings from which &fr; will try to select to right 
+              encoding for the page if one is not specified. For example, if you normally 
+              visit Chinese pages, for which these may be several different encodings, 
+              you might set this to <guilabel>Chinese</guilabel>. To stop &fr; from 
+              trying to guess an encoding, select <guilabel>Off</guilabel>.
+            </para>
+            <para>
+              Some web sites have pages which are available in a number of different 
+              languages. You can set your prefered language by selecting an entry from
+              the <guilabel>Language</guilabel> drop down combination box. If you would
+              like to set one or more fall back languages, in case your prefered 
+              language isn't available, click <guibutton>More</guibutton> and add 
+              your back up languages to the list. Entries are listed in the order 
+              they will be checked with your prefered language at the top. You can 
+              reorder entries by dragging them.
+            </para>
+          </sect3>
         </sect2>
 	<sect2 id="to-show-hide-window-components">
           <title>To Show and Hide Browser Window Components</title>
@@ -1119,6 +1485,10 @@ history link, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
                 </para>
               </listitem> 
            </itemizedlist>
+           <tip>
+             You can use fullscreen mode to make &fr; hide most of the window 
+             components. For details, see <xref linkend="using-fullscreen-mode"/>.
+           </tip>
         </sect2>
 	<sect2 id="to-edit-toolbars">
           <title>To Edit Your Toolbars</title>
@@ -1146,23 +1516,33 @@ history link, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
                 toolbar will then automatically be removed.
               </para>
             </listitem>
+            <listitem>
+              <para>
+                Drag buttons, including bookmarks, to rearrange 
+                them either on the same toolbar 
+                or between different toolbars.
+              </para>
+             </listitem>
            </itemizedlist>
         </sect2>
   </sect1>
 
-<!-- ============= About ================================== -->
-  <sect1 id="fr-about"> 
-    <title>About &fr;</title> 
+<!-- ============= About ========================================== -->
+  <sect1 id="fr-about">
+    <title>About &fr;</title>
 
-    <para> &fr; was written by Marco Presenti Gritti 
+    <para>
+      &fr; was written by Marco Presenti Gritti 
       (<email>marco@it.gnome.org</email>). To find more information
       about &fr;, please visit the <ulink
-      url="http://epiphany.mozdev.org" type="http">Epiphany 
+      url="http://www.gnome.org/projects/epiphany/" type="http">Epiphany 
       Web page</ulink>. 
     </para>
+
     <para>
       This manual was written by David Bordoley 
-      (<email>bordoley@msu.edu</email>) and Patanjali Somayaji 
+      (<email>bordoley@msu.edu</email>), Piers Cornwell 
+      (<email>piers@myrealbox.com</email>) and Patanjali Somayaji 
       (<email>patanjali@codito.com</email>). 
     </para>
 
