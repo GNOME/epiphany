@@ -51,6 +51,7 @@ ephy_stock_icons_init (void)
 
 	static const GtkStockItem items[] =
 	{
+		{ EPHY_STOCK_CLOSE_TAB, "Close Tab",	        0, 0, NULL },
 		{ EPHY_STOCK_SECURE,	N_("Secure"),		0, 0, NULL },
 		{ EPHY_STOCK_UNSECURE,	N_("Insecure"),		0, 0, NULL },
 		{ EPHY_STOCK_POPUPS,	N_("Popup Windows"),	0, 0, NULL },

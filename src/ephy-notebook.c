@@ -39,6 +39,7 @@
 #include "ephy-label.h"
 #include "ephy-spinner.h"
 #include "ephy-string.h"
+#include "ephy-stock-icons.h"
 
 #include <glib-object.h>
 #include <gtk/gtkeventbox.h>
