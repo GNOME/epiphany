@@ -1,5 +1,14 @@
 2004-01-04  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-window.c: (confirm_close_with_modified_forms):
+
+	Daveb will hate me for this, but making the confirm dialogue only
+	window-modal will make menus not work after cancelling the close.
+	Removing this for the time being since it's a nasty regression,
+	until I find the bug.
+
+2004-01-04  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-embed.c: (ephy_embed_has_modified_forms):
 	* embed/ephy-embed.h:
 	* embed/mozilla/EphyBrowser.cpp:

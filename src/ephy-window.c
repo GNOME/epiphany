@@ -643,7 +643,6 @@ confirm_close_with_modified_forms (EphyWindow *window)
 {
 	GtkWidget *dialog;
 	GtkWidget *hbox, *vbox, *label, *image;
-	GtkWindowGroup *group;
 	char *text;
 	int response;
 
@@ -685,16 +684,6 @@ confirm_close_with_modified_forms (EphyWindow *window)
 
 	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
 	gtk_widget_show (label);
-
-	group = GTK_WINDOW (window)->group;
-	if (group == NULL)
-	{
-		group = gtk_window_group_new ();
-		gtk_window_group_add_window (group, GTK_WINDOW (window));
-		g_object_unref (group);
-	}
-	
-	gtk_window_group_add_window (group, GTK_WINDOW (dialog));
 
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 
