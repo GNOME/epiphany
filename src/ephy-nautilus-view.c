@@ -543,14 +543,7 @@ gnv_cmd_file_print (BonoboUIComponent *uic,
 		    EphyNautilusView *view, 
 		    const char* verbname)
 {
-	EphyDialog *dialog;
-	EphyNautilusViewPrivate *p = view->priv;
-	
-	dialog = ephy_print_dialog_new (NULL, p->embed, FALSE);
-
-	ephy_dialog_set_modal (dialog, TRUE);
-	ephy_dialog_run (dialog);
-	g_object_unref (dialog);
+        ephy_embed_print (view->priv->embed);
 }
 
 static void
