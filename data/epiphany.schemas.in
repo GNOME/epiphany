@@ -137,14 +137,30 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/rendering/default_charset</key>
-        <applyto>/apps/epiphany/rendering/default_charset</applyto>
+        <key>/schemas/apps/epiphany/rendering/default_encoding</key>
+        <applyto>/apps/epiphany/rendering/default_encoding</applyto>
         <owner>epiphany</owner>
         <type>string</type>
-        <default>Western (ISO-8859-1)</default>
+        <default>ISO-8859-1</default>
         <locale name="C">
-        <short>Default charset</short>
-        <long>Default charset.</long>
+        <short>Default encoding</short>
+        <long>Default encoding. Accepted values are: armscii-8, Big5,
+	Big5-HKSCS, EUC-JP, EUC-KR, gb18030, GB2312, geostd8, HZ-GB-2312,
+	IBM850, IBM852, IBM855, IBM857, IBM862, IBM864, IBM864i, IBM866,
+	ISO-2022-CN, ISO-2022-JP, ISO-2022-KR, ISO-8859-1, ISO-8859-10,
+	ISO-8859-13, ISO-8859-14, ISO-8859-15, ISO-8859-16, ISO-8859-2,
+	ISO-8859-3, ISO-8859-4, ISO-8859-5, ISO-8859-6, ISO-8859-6-E,
+	ISO-8859-6-I, ISO-8859-7, ISO-8859-8, ISO-8859-8-E, ISO-8859-8-I,
+	ISO-8859-9, ISO-IR-111, KOI8-R, KOI8-U, Shift_JIS, T.61-8bit, TIS-620,
+	us-ascii, UTF-16BE, UTF-16LE, UTF-32BE, UTF-32LE, UTF-7, UTF-8, VISCII,
+	windows-1250, windows-1251, windows-1252, windows-1253, windows-1254,
+	windows-1255, windows-1256, windows-1257, windows-1258, windows-936,
+	x-euc-tw, x-gbk, x-imap4-modified-utf7, x-johab, x-mac-arabic, x-mac-ce,
+	x-mac-croatian, x-mac-cyrillic, x-mac-devanagari, x-mac-farsi,
+	x-mac-greek, x-mac-gujarati, x-mac-gurmukhi, x-mac-hebrew,
+	x-mac-icelandic, x-mac-roman, x-mac-romanian, x-mac-turkish,
+	x-mac-ukrainian, x-u-escaped, x-user-defined, x-viet-tcvn5712,
+	x-viet-vps and x-windows-949.</long>
         </locale>
       </schema>
      <schema>
@@ -398,8 +414,8 @@
         </locale>
       </schema>
      <schema>
-        <key>/schemas/apps/epiphany/rendering/autodetect_charset</key>
-        <applyto>/apps/epiphany/rendering/autodetect_charset</applyto>
+        <key>/schemas/apps/epiphany/rendering/autodetect_encoding</key>
+        <applyto>/apps/epiphany/rendering/autodetect_encoding</applyto>
         <owner>epiphany</owner>
         <type>int</type>
         <default>0</default>

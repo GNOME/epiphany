@@ -1,3 +1,49 @@
+2003-05-28  Christian Persch  <chpe@cvs.gnome.org>
+
+	The "s/charset/encoding/" mega patch :)
+
+	* *, */*, */*/*:
+	
+	s/charset/encoding/
+
+	* embed/mozilla/mozilla-embed-single.c: (impl_get_charsets),
+	(impl_get_language_groups), (control_charsets_list),
+	(mozilla_embed_single_init), (fill_charset_lists):
+	* embed/ephy-embed-single.h:
+	* embed/ephy-embed-single.c:
+	
+	Sort the returned list of charsets resp. language groups according
+	to the localised strings in the current locale. Allow for underscore
+	eliding to be able to use the list in both menus (underscore -> accel)
+	and in the prefs option menu (no accels).
+	
+	* lib/ephy-string.h:
+	* lib/ephy-string.c: (ephy_str_elide_underscores):
+	
+	New helper function for eliding underscores.
+
+	* lib/ephy-langs.h:
+ 	* lib/ephy-langs.c:
+	
+	A few more common lang/encoding related defines and struct, as well
+	as helper functions to free them in one go.
+	
+	* embed/ephy-embed-utils.h:
+	* embed/ephy-embed-utils.c: (ephy_embed_utils_build_charsets_submenu):
+	* src/ephy-encoding-menu.c: (ephy_encoding_menu_verb_cb),
+	(build_group), (build_charset), (ephy_encoding_menu_rebuild):
+	* src/ephy-nautilus-view.c: (gnv_cmd_set_charset):
+	* src/prefs-dialog.c: (prefs_dialog_init),
+	(default_charset_menu_changed_cb), (find_charset_in_list_cmp),
+	(create_default_charset_menu), (prefs_dialog_finalize):
+
+	Show the list of charsets and language groups sorted in the current
+	locale.
+
+	* data/epiphany.schemas.in:
+	
+	Document the possible charset values.
+
 2003-05-28  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* configure.in:
