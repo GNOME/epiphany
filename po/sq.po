@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 11:30+0100\n"
-"PO-Revision-Date: 2005-01-08 18:18+0100\n"
+"POT-Creation-Date: 2005-01-14 11:36+0100\n"
+"PO-Revision-Date: 2005-01-14 12:27+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -471,26 +471,40 @@ msgid "The path of the folder where downloads are saved."
 msgstr "Pozicioni i kartelës ku ruhen shkarkimet."
 
 #: data/epiphany.schemas.in.h:63
+msgid "Toolbar style"
+msgstr "Stili i panelit të instrumentëve"
+
+#: data/epiphany.schemas.in.h:64
+msgid ""
+"Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
+"\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
+"\"text\"."
+msgstr ""
+"Stili i panelit. Vlerat e lejuara janë \"\" (përdor stilin e prezgjedhur të GNOME), \"së bashku"
+"\" (tekst dhe ikona), \"së bashku-horiz\" (tekst krahas ikonave), \"ikona\", dhe "
+"\"tekst\"."
+
+#: data/epiphany.schemas.in.h:65
 msgid "Use caret browsing mode."
 msgstr "Përdor modalitetin eksplorim me vizore (kursor në formë vizore)."
 
-#: data/epiphany.schemas.in.h:64
+#: data/epiphany.schemas.in.h:66
 msgid "Use own colors"
 msgstr "Përdor ngjyrat e personalizuara"
 
-#: data/epiphany.schemas.in.h:65
+#: data/epiphany.schemas.in.h:67
 msgid "Use own fonts"
 msgstr "Përdor gërma të personalizuara"
 
-#: data/epiphany.schemas.in.h:66
+#: data/epiphany.schemas.in.h:68
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Përdor ngjyrat e personalizuara në vend të ngjyrave që kërkon faqja."
 
-#: data/epiphany.schemas.in.h:67
+#: data/epiphany.schemas.in.h:69
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Përdor gërmat e personalizuara në vend të gërmave që kërkon faqja."
 
-#: data/epiphany.schemas.in.h:68
+#: data/epiphany.schemas.in.h:70
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -498,7 +512,7 @@ msgstr ""
 "Kur files nuk mund të hapen nga shfletuesi automatikisht do të shkarkohen "
 "tek kartela e shkarkimeve dhe do të hapen me programin e duhur."
 
-#: data/epiphany.schemas.in.h:69
+#: data/epiphany.schemas.in.h:71
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -506,39 +520,39 @@ msgstr ""
 "Tregon se nga duhen pranuar cookies. Vlerat e mundëshme janë \"anywhere\", "
 "\"current site\" dhe \"nowhere\"."
 
-#: data/epiphany.schemas.in.h:70
+#: data/epiphany.schemas.in.h:72
 msgid "Whether to print the date in the footer"
 msgstr "Tregon nëse duhet printuar data në fund të faqes"
 
-#: data/epiphany.schemas.in.h:71
+#: data/epiphany.schemas.in.h:73
 msgid "Whether to print the date in the footer."
 msgstr "Tregon nëse duhet printuar data në fund të faqes."
 
-#: data/epiphany.schemas.in.h:72
+#: data/epiphany.schemas.in.h:74
 msgid "Whether to print the page address in the header"
 msgstr "Tregon nëse duhet printuar adresa e faqes në krye"
 
-#: data/epiphany.schemas.in.h:73
+#: data/epiphany.schemas.in.h:75
 msgid "Whether to print the page address in the header."
 msgstr "Tregon nëse duhet printuar adresa e faqes në krye."
 
-#: data/epiphany.schemas.in.h:74
+#: data/epiphany.schemas.in.h:76
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "Tregon nëse duhet printuar numri i faqes (x nga gjithsej) në fund të faqes"
 
-#: data/epiphany.schemas.in.h:75
+#: data/epiphany.schemas.in.h:77
 msgid "Whether to print the page numbers (x of total) in the footer."
 msgstr "Tregon nëse duhet printuar numri i faqes (x nga gjithsej) në fund të faqes."
 
-#: data/epiphany.schemas.in.h:76
+#: data/epiphany.schemas.in.h:78
 msgid "Whether to print the page title in the header"
 msgstr "Tregon nëse duhet printuar titulli i faqes në krye"
 
-#: data/epiphany.schemas.in.h:77
+#: data/epiphany.schemas.in.h:79
 msgid "Whether to print the page title in the header."
 msgstr "Tregon nëse duhet printuar titulli i faqes në krye."
 
-#: data/epiphany.schemas.in.h:78
+#: data/epiphany.schemas.in.h:80
 msgid "x-western"
 msgstr "x-western"
 
@@ -636,7 +650,7 @@ msgstr "Cookies"
 msgid "Download Manager"
 msgstr "Organizuesi i shkarkimeve"
 
-#: data/glade/epiphany.glade.h:6 src/ephy-window.c:1172
+#: data/glade/epiphany.glade.h:6 src/ephy-window.c:1131
 msgid "Find"
 msgstr "Gjej"
 
@@ -744,8 +758,8 @@ msgstr "Zgjidh një _gjuhë:"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: data/glade/prefs-dialog.glade.h:17 lib/widgets/ephy-location-entry.c:365
-#: src/ephy-history-window.c:265
+#: data/glade/prefs-dialog.glade.h:17 lib/widgets/ephy-location-entry.c:423
+#: src/ephy-history-window.c:264
 msgid "Cl_ear"
 msgstr "Pa_stro"
 
@@ -906,7 +920,7 @@ msgstr "Num_rat e faqes"
 msgid "Paper"
 msgstr "Letra"
 
-#: data/glade/print.glade.h:21 src/ephy-window.c:1168
+#: data/glade/print.glade.h:21 src/ephy-window.c:1127
 msgid "Print"
 msgstr "Printo"
 
@@ -999,7 +1013,7 @@ msgstr ""
 "%s\n"
 "%s në %s"
 
-#: embed/downloader-view.c:372 src/ephy-window.c:1365
+#: embed/downloader-view.c:372 src/ephy-window.c:1325
 msgid "Unknown"
 msgstr "Nuk njihet"
 
@@ -1480,11 +1494,11 @@ msgstr "_Ruaje si..."
 
 #: embed/mozilla/EphyHeaderSniffer.cpp:320
 #: src/bookmarks/ephy-bookmarks-import.c:250
-#: src/bookmarks/ephy-bookmarksbar-model.c:350 src/window-commands.c:323
+#: src/bookmarks/ephy-bookmarksbar-model.c:350 src/window-commands.c:316
 msgid "Untitled"
 msgstr "Pa titull"
 
-#: embed/mozilla/FilePicker.cpp:148 embed/print-dialog.c:336
+#: embed/mozilla/FilePicker.cpp:148 embed/print-dialog.c:337
 #: lib/ephy-file-chooser.c:371 src/bookmarks/ephy-bookmarks-editor.c:634
 msgid "All files"
 msgstr "Të gjithë files"
@@ -1771,6 +1785,81 @@ msgstr ""
 "Ju lutem durim derisa çelsi i ri privat të jetë krijuar. Ky proces mund të "
 "zgjasë disa minuta."
 
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:92
+msgid "Security Notice"
+msgstr "Lajmërim sigurie"
+
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:93
+msgid "This page is loaded over a secure connection"
+msgstr "Kjo faqe është ngarkuar me anë të një lidhje të sigurt"
+
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:94
+msgid ""
+"You can always see the security status of a page from the padlock icon on "
+"the statusbar."
+msgstr ""
+"Mund të kontrollosh gjithmonë gjendjen e sigurisë së një faqeje nga ikona e drynit "
+"tek paneli i gjendjes."
+
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:158
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:178
+msgid "Security Warning"
+msgstr "Paralajmërim në lidhje me sigurinë"
+
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
+msgid "This page is loaded over a low security connection"
+msgstr "Kjo faqe është ngarkuar me anë të një lidhje me siguri të ulët"
+
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
+msgid ""
+"Any information you see or enter on this page could easily be intercepted by "
+"a third party."
+msgstr ""
+"Çdo informacion që lexon apo shkruan tek kjo faqe mund të kontrollohet me lehtësi "
+"nga të padëshiruar."
+
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
+msgid "Some parts of this page are loaded over an insecure connection"
+msgstr "Pjesë të kësaj faqeje janë ngarkuar me anë të një lidhje të pasigurt"
+
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
+msgid ""
+"Some information you see or enter will be sent over an insecure connection, "
+"and could easily be intercepted by a third party."
+msgstr ""
+"Disa nga informacionet që lexon apo shkruan do të përcillen me anë të një lidhjeje "
+"të pasigurt dhe mund të kontrollohen me lehtësi nga të padëshiruar."
+
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
+msgid "Send this information over an insecure connection?"
+msgstr "Dërgon informacionet duke përdorur lidhjen e pasigurt?"
+
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
+msgid ""
+"The information you have entered will be sent over an insecure connection, "
+"and could easily be intercepted by a third party."
+msgstr ""
+"Informacioni që keni shkruar do të përcillet me anë të një lidhje të pasigurt, "
+"dhe mund të kontrollohet me lehtësi nga të padëshiruar."
+
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
+msgid "_Send"
+msgstr "_Dërgo"
+
+#: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:180
+msgid ""
+"Although this page was loaded over a secure connection, the information you "
+"have entered will be sent over an insecure connection, and could easily be "
+"intercepted by a third party."
+msgstr ""
+"Megjithëse kjo faqe është ngarkuar nga një lidhje e sigurt, informacionet që kenishkruar "
+"do të përcillen me anë të një lidhje të pasigurt, dhe mund të kontrollohen me lehtësi "
+"nga të padëshiruar."
+
 #: embed/mozilla/MozDownload.cpp:604
 msgid "Files"
 msgstr "Files"
@@ -1793,11 +1882,11 @@ msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "Epiphany nuk mund të përdoret tani. Nisja e Mozilla ka dështuar."
 
-#: embed/print-dialog.c:328
+#: embed/print-dialog.c:329
 msgid "Print to"
 msgstr "Printo në"
 
-#: embed/print-dialog.c:333
+#: embed/print-dialog.c:334
 msgid "Postscript files"
 msgstr "Files postscript"
 
@@ -1810,7 +1899,7 @@ msgstr ""
 "Gabim i GConf:\n"
 "  %s"
 
-#: lib/egg/egg-editable-toolbar.c:534
+#: lib/egg/egg-editable-toolbar.c:533
 msgid "_Remove Toolbar"
 msgstr "_Hiq panelin e instrumentëve"
 
@@ -1823,7 +1912,7 @@ msgid "All supported types"
 msgstr "Të gjitha llojet e suportuara"
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:81 src/prefs-dialog.c:1445
+#: lib/ephy-file-helpers.c:81 src/prefs-dialog.c:1446
 msgid "Downloads"
 msgstr "Shkarkime"
 
@@ -1940,17 +2029,17 @@ msgstr "Mbyll skedën"
 msgid "Popup Windows"
 msgstr "Dritaret Popup"
 
-#: lib/ephy-stock-icons.c:57 src/ephy-history-window.c:1195
+#: lib/ephy-stock-icons.c:57 src/ephy-history-window.c:1194
 msgid "History"
 msgstr "Kronollogjia"
 
 #: lib/ephy-stock-icons.c:58 src/bookmarks/ephy-bookmarks-editor.c:674
 #: src/bookmarks/ephy-bookmarks-editor.c:1535
-#: src/bookmarks/ephy-topic-action.c:927 src/ephy-window.c:1174
+#: src/bookmarks/ephy-topic-action.c:930 src/ephy-window.c:1133
 msgid "Bookmarks"
 msgstr "Libërshënues"
 
-#: lib/ephy-stock-icons.c:59 src/toolbar.c:375
+#: lib/ephy-stock-icons.c:59 src/ephy-toolbar.c:348
 msgid "Address Entry"
 msgstr "Dhënia e adresës"
 
@@ -1994,31 +2083,40 @@ msgstr "300%"
 msgid "400%"
 msgstr "400%"
 
+#: lib/widgets/ephy-location-entry.c:537
+msgid "Drag and drop this icon to create a link to this page"
+msgstr "Zgjidh dhe tërhiq këtë ikonë për të krijuar një lidhje me këtë faqe"
+
 #: src/bookmarks/ephy-bookmark-action.c:296
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: src/bookmarks/ephy-bookmark-action.c:544
+#: src/bookmarks/ephy-bookmark-action.c:545
 #: src/bookmarks/ephy-bookmarks-editor.c:181
-#: src/bookmarks/ephy-bookmarks-editor.c:1155 src/ephy-history-window.c:175
-#: src/ephy-history-window.c:715
+#: src/bookmarks/ephy-bookmarks-editor.c:1155 src/ephy-history-window.c:174
+#: src/ephy-history-window.c:714
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Hape në një _skedë të re"
 msgstr[1] "Hape në _skeda të reja"
 
-#: src/bookmarks/ephy-bookmark-action.c:550
+#: src/bookmarks/ephy-bookmark-action.c:551
 msgid "Open in New _Window"
 msgstr "Hape në _Dritare të Re"
 
-#: src/bookmarks/ephy-bookmark-action.c:581
-#: src/bookmarks/ephy-topic-action.c:780
+#: src/bookmarks/ephy-bookmark-action.c:572
+#: src/bookmarks/ephy-topic-action.c:770
+msgid "_Remove from Toolbar"
+msgstr "_Hiq nga paneli i instrumentëve"
+
+#: src/bookmarks/ephy-bookmark-action.c:585
+#: src/bookmarks/ephy-topic-action.c:783
 msgid "Move _Left"
 msgstr "Lëvize _Majtas"
 
-#: src/bookmarks/ephy-bookmark-action.c:588
-#: src/bookmarks/ephy-topic-action.c:787
+#: src/bookmarks/ephy-bookmark-action.c:592
+#: src/bookmarks/ephy-topic-action.c:790
 msgid "Move Ri_ght"
 msgstr "Lëvize _Djathtas"
 
@@ -2042,23 +2140,23 @@ msgid "_Show in bookmarks bar"
 msgstr "_Shfaqe tek paneli i libërshënuesit"
 
 #. Toplevel
-#: src/bookmarks/ephy-bookmarks-editor.c:168 src/ephy-history-window.c:165
-#: src/ephy-window.c:96
+#: src/bookmarks/ephy-bookmarks-editor.c:168 src/ephy-history-window.c:164
+#: src/ephy-window.c:104
 msgid "_File"
 msgstr "_File"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:169 src/ephy-history-window.c:166
-#: src/ephy-window.c:97
+#: src/bookmarks/ephy-bookmarks-editor.c:169 src/ephy-history-window.c:165
+#: src/ephy-window.c:105
 msgid "_Edit"
 msgstr "_Ndrysho"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:170 src/ephy-history-window.c:167
-#: src/ephy-window.c:98
+#: src/bookmarks/ephy-bookmarks-editor.c:170 src/ephy-history-window.c:166
+#: src/ephy-window.c:106
 msgid "_View"
 msgstr "_Shfaq"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:171 src/ephy-history-window.c:168
-#: src/ephy-window.c:103
+#: src/bookmarks/ephy-bookmarks-editor.c:171 src/ephy-history-window.c:167
+#: src/ephy-window.c:111
 msgid "_Help"
 msgstr "_Ndihmë"
 
@@ -2074,8 +2172,8 @@ msgstr "Krijo një argument të ri"
 
 #. File Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:178
-#: src/bookmarks/ephy-bookmarks-editor.c:1152 src/ephy-history-window.c:172
-#: src/ephy-history-window.c:712
+#: src/bookmarks/ephy-bookmarks-editor.c:1152 src/ephy-history-window.c:171
+#: src/ephy-history-window.c:711
 msgid "_Open in New Window"
 msgid_plural "_Open in New Windows"
 msgstr[0] "_Hape në një dritare të re"
@@ -2097,7 +2195,7 @@ msgstr "_Riemërto..."
 msgid "Rename the selected bookmark or topic"
 msgstr "Riemërto libërshënuesin apo argumentin e zgjedhur"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:186 src/ephy-history-window.c:178
+#: src/bookmarks/ephy-bookmarks-editor.c:186 src/ephy-history-window.c:177
 msgid "_Delete"
 msgstr "_Elemino"
 
@@ -2129,8 +2227,8 @@ msgstr "_Eksporto libërshënues..."
 msgid "Export bookmarks to a file"
 msgstr "Eksporto libërshënues në një file"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:198 src/ephy-history-window.c:184
-#: src/ephy-window.c:136
+#: src/bookmarks/ephy-bookmarks-editor.c:198 src/ephy-history-window.c:183
+#: src/ephy-window.c:144
 msgid "_Close"
 msgstr "_Mbyll"
 
@@ -2139,38 +2237,38 @@ msgid "Close the bookmarks window"
 msgstr "Mbylle dritaren e libërshënuesve"
 
 #. Edit Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:203 src/ephy-history-window.c:189
-#: src/ephy-window.c:148
+#: src/bookmarks/ephy-bookmarks-editor.c:203 src/ephy-history-window.c:188
+#: src/ephy-window.c:156
 msgid "Cu_t"
 msgstr "Pre_je"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:204 src/ephy-history-window.c:190
-#: src/ephy-window.c:149
+#: src/bookmarks/ephy-bookmarks-editor.c:204 src/ephy-history-window.c:189
+#: src/ephy-window.c:157
 msgid "Cut the selection"
 msgstr "Preje pjesën e zgjedhur"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:206
-#: src/bookmarks/ephy-bookmarks-editor.c:1165 src/ephy-history-window.c:192
-#: src/ephy-history-window.c:725 src/ephy-window.c:151
+#: src/bookmarks/ephy-bookmarks-editor.c:1165 src/ephy-history-window.c:191
+#: src/ephy-history-window.c:724 src/ephy-window.c:159
 msgid "_Copy"
 msgstr "_Kopjo"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:193
-#: src/ephy-window.c:152
+#: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:192
+#: src/ephy-window.c:160
 msgid "Copy the selection"
 msgstr "Kopjo pjesën e zgjedhur"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:209 src/ephy-history-window.c:195
-#: src/ephy-window.c:154
+#: src/bookmarks/ephy-bookmarks-editor.c:209 src/ephy-history-window.c:194
+#: src/ephy-window.c:162
 msgid "_Paste"
 msgstr "_Ngjite"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:210 src/ephy-history-window.c:196
+#: src/bookmarks/ephy-bookmarks-editor.c:210 src/ephy-history-window.c:195
 msgid "Paste the clipboard"
 msgstr "Ngjit nga shënimet"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:212 src/ephy-history-window.c:198
-#: src/ephy-window.c:157
+#: src/bookmarks/ephy-bookmarks-editor.c:212 src/ephy-history-window.c:197
+#: src/ephy-window.c:165
 msgid "Select _All"
 msgstr "Zgjidh _gjithçka"
 
@@ -2180,8 +2278,8 @@ msgstr "Zgjidh të gjithë libërshënuesit apo të gjithë tekstin"
 
 #. Help Menu
 #. Help menu
-#: src/bookmarks/ephy-bookmarks-editor.c:217 src/ephy-history-window.c:206
-#: src/ephy-window.c:250
+#: src/bookmarks/ephy-bookmarks-editor.c:217 src/ephy-history-window.c:205
+#: src/ephy-window.c:258
 msgid "_Contents"
 msgstr "_Përmbajtja"
 
@@ -2189,13 +2287,13 @@ msgstr "_Përmbajtja"
 msgid "Display bookmarks help"
 msgstr "Hap ndihmën në lidhje me libërshënuesin"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:220 src/ephy-history-window.c:209
-#: src/ephy-window.c:253
+#: src/bookmarks/ephy-bookmarks-editor.c:220 src/ephy-history-window.c:208
+#: src/ephy-window.c:261
 msgid "_About"
 msgstr "_Informacione"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:221 src/ephy-history-window.c:210
-#: src/ephy-window.c:254
+#: src/bookmarks/ephy-bookmarks-editor.c:221 src/ephy-history-window.c:209
+#: src/ephy-window.c:262
 msgid "Display credits for the web browser creators"
 msgstr "Shfaq falenderimet për krijuesit e shfletuesit web"
 
@@ -2209,19 +2307,19 @@ msgid "Show the selected bookmark or topic in the bookmarks bar"
 msgstr "Shfaq libërshënuesin apo argumentin e zgjedhur tek paneli i libërshënuesit"
 
 #. View Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:244 src/ephy-history-window.c:225
+#: src/bookmarks/ephy-bookmarks-editor.c:244 src/ephy-history-window.c:224
 msgid "_Title"
 msgstr "_Titulli"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:245 src/ephy-history-window.c:226
+#: src/bookmarks/ephy-bookmarks-editor.c:245 src/ephy-history-window.c:225
 msgid "Show only the title column"
 msgstr "Shfaq vetëm kollonën e titullit"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:246 src/ephy-history-window.c:229
+#: src/bookmarks/ephy-bookmarks-editor.c:246 src/ephy-history-window.c:228
 msgid "T_itle and Address"
 msgstr "T_itulli dhe adresa"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:247 src/ephy-history-window.c:230
+#: src/bookmarks/ephy-bookmarks-editor.c:247 src/ephy-history-window.c:229
 msgid "Show both the title and address columns"
 msgstr "Shfaq së bashku kollonat e titullit dhe adresës"
 
@@ -2317,11 +2415,11 @@ msgstr "Konqueror"
 msgid "Mozilla"
 msgstr "Mozilla"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1161 src/ephy-history-window.c:721
+#: src/bookmarks/ephy-bookmarks-editor.c:1161 src/ephy-history-window.c:720
 msgid "_Copy Address"
 msgstr "_Kopjo adresën"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1402 src/ephy-history-window.c:1037
+#: src/bookmarks/ephy-bookmarks-editor.c:1402 src/ephy-history-window.c:1036
 msgid "_Search:"
 msgstr "_Kërko:"
 
@@ -2330,11 +2428,11 @@ msgstr "_Kërko:"
 msgid "Topics"
 msgstr "Argumente"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1678 src/ephy-history-window.c:1324
+#: src/bookmarks/ephy-bookmarks-editor.c:1678 src/ephy-history-window.c:1323
 msgid "Title"
 msgstr "Titulli"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1684 src/ephy-history-window.c:1330
+#: src/bookmarks/ephy-bookmarks-editor.c:1684 src/ephy-history-window.c:1329
 msgid "Address"
 msgstr "Adresa"
 
@@ -2464,63 +2562,67 @@ msgstr "Kodifikime të tjera"
 msgid "_Automatic"
 msgstr "_Automatik"
 
-#: src/ephy-go-action.c:71 src/toolbar.c:412
+#: src/ephy-fullscreen-popup.c:282 src/ephy-toolbar.c:655
+msgid "Leave Fullscreen"
+msgstr "Largohu nga ekrani i plotë"
+
+#: src/ephy-go-action.c:71 src/ephy-toolbar.c:377
 msgid "Go"
 msgstr "Shko"
 
-#: src/ephy-history-window.c:173
+#: src/ephy-history-window.c:172
 msgid "Open the selected history link in a new window"
 msgstr "Hap në një dritare të re lidhjen e zgjedhur tek historiku"
 
-#: src/ephy-history-window.c:176
+#: src/ephy-history-window.c:175
 msgid "Open the selected history link in a new tab"
 msgstr "Hap në një skedë të re lidhjen e zgjedhur tek historiku"
 
-#: src/ephy-history-window.c:179
+#: src/ephy-history-window.c:178
 msgid "Delete the selected history link"
 msgstr "Hiq lidhjen e zgjedhur"
 
-#: src/ephy-history-window.c:181
+#: src/ephy-history-window.c:180
 msgid "Add _Bookmark..."
 msgstr "Shto _libërshënues..."
 
-#: src/ephy-history-window.c:182
+#: src/ephy-history-window.c:181
 msgid "Bookmark the selected history link"
 msgstr "Shto libërshënues për lidhjen e zgjedhur në kronollogji"
 
-#: src/ephy-history-window.c:185
+#: src/ephy-history-window.c:184
 msgid "Close the history window"
 msgstr "Mbylle dritaren e kronollogjisë"
 
-#: src/ephy-history-window.c:199
+#: src/ephy-history-window.c:198
 msgid "Select all history links or text"
 msgstr "Zgjidh të gjithë lidhjet apo të gjithë tekstin e historikut"
 
-#: src/ephy-history-window.c:201
+#: src/ephy-history-window.c:200
 msgid "Clear _History"
 msgstr "Pastro _historikun"
 
-#: src/ephy-history-window.c:202
+#: src/ephy-history-window.c:201
 msgid "Clear your browsing history"
 msgstr "Pastro kronollogjinë e lundrimeve tuaja"
 
-#: src/ephy-history-window.c:207
+#: src/ephy-history-window.c:206
 msgid "Display history help"
 msgstr "Shfaq ndihmën në lidhje me historikun"
 
-#: src/ephy-history-window.c:227
+#: src/ephy-history-window.c:226
 msgid "_Address"
 msgstr "_Adresa"
 
-#: src/ephy-history-window.c:228
+#: src/ephy-history-window.c:227
 msgid "Show only the address column"
 msgstr "Shfaq vetëm kollonën e adresës"
 
-#: src/ephy-history-window.c:258
+#: src/ephy-history-window.c:257
 msgid "Clear browsing history?"
 msgstr "Pastroj kronollogjinë e lundrimeve?"
 
-#: src/ephy-history-window.c:262
+#: src/ephy-history-window.c:261
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2528,28 +2630,28 @@ msgstr ""
 "Duke pastruar kronollogjinë e lundrimeve të gjitha lidhjet ekzistuese në "
 "historik do të fshihen përgjithmonë."
 
-#: src/ephy-history-window.c:274
+#: src/ephy-history-window.c:273
 msgid "Clear History"
 msgstr "Pastro kronollogjinë"
 
-#: src/ephy-history-window.c:1046
+#: src/ephy-history-window.c:1045
 msgid "Last 30 Minutes"
 msgstr "30 minutat e fundit"
 
-#: src/ephy-history-window.c:1047
+#: src/ephy-history-window.c:1046
 msgid "Today"
 msgstr "Sot"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: src/ephy-history-window.c:1048 src/ephy-history-window.c:1051
-#: src/ephy-history-window.c:1055
+#: src/ephy-history-window.c:1047 src/ephy-history-window.c:1050
+#: src/ephy-history-window.c:1054
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "%d ditën e fundit"
 msgstr[1] "%d ditët e fundit"
 
-#: src/ephy-history-window.c:1262
+#: src/ephy-history-window.c:1261
 msgid "Sites"
 msgstr "Site"
 
@@ -2589,7 +2691,7 @@ msgstr "Hap dritaren e ndryshimit të libërshënuesve"
 msgid "Ephy"
 msgstr "Ephy"
 
-#: src/ephy-notebook.c:885
+#: src/ephy-notebook.c:882
 msgid "Close tab"
 msgstr "Mbyll skedën"
 
@@ -2618,7 +2720,7 @@ msgstr "_Rekupero"
 msgid "Crash Recovery"
 msgstr "Rekuperimi i crash"
 
-#: src/ephy-shell.c:330
+#: src/ephy-shell.c:338
 msgid ""
 "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
 "use bonobo-activation-sysconf to configure the search path for bonobo server "
@@ -2628,7 +2730,7 @@ msgstr ""
 "përdorësh bonobo-activation-sysconf për të konfiguruar pozicionin e kërkimit "
 "për files e server-it bonobo."
 
-#: src/ephy-shell.c:337
+#: src/ephy-shell.c:345
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to register the automation server"
@@ -2636,7 +2738,7 @@ msgstr ""
 "Epiphany nuk mund të përdoret tani, për shkak të një difekti të papritur nga "
 "Bonobo gjatë përpjekjes për të regjistruar server-in automatizues."
 
-#: src/ephy-shell.c:354
+#: src/ephy-shell.c:362
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
@@ -2644,603 +2746,705 @@ msgstr ""
 "Epiphany nuk mund të përdoret tani, për shkak të një difekti të papritur nga "
 "Bonobo gjatë përpjekjes për të gjetur objektin automatizues."
 
-#: src/ephy-tab.c:455 src/ephy-tab.c:1628 src/ephy-tab.c:1845
+#: src/ephy-tab.c:457 src/ephy-tab.c:1648 src/ephy-tab.c:1865
 msgid "Blank page"
 msgstr "Faqe bosh"
 
-#: src/ephy-tab.c:1197
+#: src/ephy-tab.c:1217
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Duke u ridrejtuar tek %s..."
 
-#: src/ephy-tab.c:1201
+#: src/ephy-tab.c:1221
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Duke transferuar të dhënat nga %s..."
 
-#: src/ephy-tab.c:1205
+#: src/ephy-tab.c:1225
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Në pritje të autorizimit nga %s..."
 
-#: src/ephy-tab.c:1213
+#: src/ephy-tab.c:1233
 #, c-format
 msgid "Loading %s..."
 msgstr "Duke ngarkuar %s..."
 
-#: src/ephy-window.c:99
+#: src/ephy-toolbar.c:288
+msgid "Back"
+msgstr "Mbrapa"
+
+#: src/ephy-toolbar.c:290
+msgid "Go back"
+msgstr "Kthehu mbrapa"
+
+#. this is the tooltip on the Back button's drop-down arrow, which will show
+#. * a menu with all sites you can go 'back' to
+#.
+#: src/ephy-toolbar.c:294
+msgid "Back history"
+msgstr "Kronollogjia mbrapa"
+
+#: src/ephy-toolbar.c:307
+msgid "Forward"
+msgstr "Vazhdo"
+
+#: src/ephy-toolbar.c:309
+msgid "Go forward"
+msgstr "Shko përpara"
+
+#. this is the tooltip on the Forward button's drop-down arrow, which will show
+#. * a menu with all sites you can go 'forward' to
+#.
+#: src/ephy-toolbar.c:313
+msgid "Forward history"
+msgstr "Kronollogjia në vazhdim"
+
+#: src/ephy-toolbar.c:325
+msgid "Up"
+msgstr "Sipër"
+
+#: src/ephy-toolbar.c:327 src/ephy-window.c:229
+msgid "Go up one level"
+msgstr "Ngjitu një nivel më lart"
+
+#. this is the tooltip on the Up button's drop-down arrow, which will show
+#. * a menu with al sites you can go 'up' to
+#.
+#: src/ephy-toolbar.c:331
+msgid "List of upper levels"
+msgstr "Lista me nivelët e mësipërm"
+
+#: src/ephy-toolbar.c:350
+msgid "Enter a web address to open, or a phrase to search for on the web"
+msgstr ""
+"Shkruaj adresën web që dëshiron të hapësh, ose një frazë për ta kërkuar në "
+"web"
+
+#: src/ephy-toolbar.c:365
+msgid "Zoom"
+msgstr "Shkalla e zmadhimit"
+
+#: src/ephy-toolbar.c:367
+msgid "Adjust the text size"
+msgstr "Rregullo madhësinë e tekstit"
+
+#: src/ephy-toolbar.c:379
+msgid "Go to the address entered in the address entry"
+msgstr "Shko tek adresa e shkruar"
+
+#: src/ephy-toolbar.c:388
+msgid "_Home"
+msgstr "_Shtëpia"
+
+#: src/ephy-toolbar.c:390
+msgid "Go to the home page"
+msgstr "Shko tek faqja e nisjes"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: src/ephy-toolbar-editor.c:80
+msgid "toolbar style|Default"
+msgstr "stili i panelit|I zakonshmi"
+
+#. separator row
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string. *
+#. * Translators: translate the same as in gnome-control-center
+#: src/ephy-toolbar-editor.c:85
+msgid "toolbar style|Text below icons"
+msgstr "stili i panelit|Tekst nën ikona"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string. *
+#. * Translators: translate the same as in gnome-control-center
+#: src/ephy-toolbar-editor.c:89
+msgid "toolbar style|Text beside icons"
+msgstr "stili i panelit|Tekst anash ikonave"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string. *
+#. * Translators: translate the same as in gnome-control-center
+#: src/ephy-toolbar-editor.c:93
+msgid "toolbar style|Icons only"
+msgstr "stili i panelit|Vetëm ikona"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string. *
+#. * Translators: translate the same as in gnome-control-center
+#: src/ephy-toolbar-editor.c:97
+msgid "toolbar style|Text only"
+msgstr "stili i panelit|Vetëm tekst"
+
+#: src/ephy-toolbar-editor.c:205
+msgid "Toolbar Editor"
+msgstr "Ndryshuesi i panelit të instrumentëve"
+
+#. translators: translate the same as in gnome-control-center
+#: src/ephy-toolbar-editor.c:223
+msgid "Toolbar _button labels:"
+msgstr "Etiketat e _butonëve të panelit:"
+
+#: src/ephy-toolbar-editor.c:281
+msgid "_Add a New Toolbar"
+msgstr "_Shto një panel të ri instrumentësh"
+
+#: src/ephy-window.c:107
 msgid "_Bookmarks"
 msgstr "_Libërshënues"
 
-#: src/ephy-window.c:100
+#: src/ephy-window.c:108
 msgid "_Go"
 msgstr "_Shko"
 
-#: src/ephy-window.c:101
+#: src/ephy-window.c:109
 msgid "T_ools"
 msgstr "Instru_mente"
 
-#: src/ephy-window.c:102
+#: src/ephy-window.c:110
 msgid "_Tabs"
 msgstr "_Skedat"
 
 #. File menu
-#: src/ephy-window.c:109
+#: src/ephy-window.c:117
 msgid "_New Window"
 msgstr "_Dritare e re"
 
-#: src/ephy-window.c:110
+#: src/ephy-window.c:118
 msgid "Open a new window"
 msgstr "Hap një dritare të re"
 
-#: src/ephy-window.c:112
+#: src/ephy-window.c:120
 msgid "New _Tab"
 msgstr "_Skedë e re"
 
-#: src/ephy-window.c:113
+#: src/ephy-window.c:121
 msgid "Open a new tab"
 msgstr "Hap një skedë të re"
 
-#: src/ephy-window.c:115
+#: src/ephy-window.c:123
 msgid "_Open..."
 msgstr "_Hap..."
 
-#: src/ephy-window.c:116
+#: src/ephy-window.c:124
 msgid "Open a file"
 msgstr "Hap një file"
 
-#: src/ephy-window.c:118 src/ephy-window.c:121
+#: src/ephy-window.c:126 src/ephy-window.c:129
 msgid "Save _As..."
 msgstr "Ruaje _Si..."
 
-#: src/ephy-window.c:119 src/ephy-window.c:122
+#: src/ephy-window.c:127 src/ephy-window.c:130
 msgid "Save the current page"
 msgstr "Ruaj faqen aktuale"
 
-#: src/ephy-window.c:124
+#: src/ephy-window.c:132
 msgid "Print Set_up..."
 msgstr "Konfig_urimi i printimit"
 
-#: src/ephy-window.c:125
+#: src/ephy-window.c:133
 msgid "Setup the page settings for printing"
 msgstr "Konfiguro rregullimet e faqes për printim"
 
-#: src/ephy-window.c:127
+#: src/ephy-window.c:135
 msgid "Print Pre_view"
 msgstr "Pamja e _parë e printimit"
 
-#: src/ephy-window.c:128
+#: src/ephy-window.c:136
 msgid "Print preview"
 msgstr "Pamja e parë e printimit"
 
-#: src/ephy-window.c:130
+#: src/ephy-window.c:138
 msgid "_Print..."
 msgstr "_Printim..."
 
-#: src/ephy-window.c:131
+#: src/ephy-window.c:139
 msgid "Print the current page"
 msgstr "Printo faqen aktuale"
 
-#: src/ephy-window.c:133
+#: src/ephy-window.c:141
 msgid "S_end To..."
 msgstr "Dërgoj_e tek..."
 
-#: src/ephy-window.c:134
+#: src/ephy-window.c:142
 msgid "Send a link of the current page"
 msgstr "Dërgo një lidhje nga faqja aktuale"
 
-#: src/ephy-window.c:137
+#: src/ephy-window.c:145
 msgid "Close this tab"
 msgstr "Mbylle këtë skedë"
 
 #. Edit menu
-#: src/ephy-window.c:142
+#: src/ephy-window.c:150
 msgid "_Undo"
 msgstr "_Anullo"
 
-#: src/ephy-window.c:143
+#: src/ephy-window.c:151
 msgid "Undo the last action"
 msgstr "Anullo veprimin e fundit"
 
-#: src/ephy-window.c:145
+#: src/ephy-window.c:153
 msgid "Re_do"
 msgstr "Ri_kthe"
 
-#: src/ephy-window.c:146
+#: src/ephy-window.c:154
 msgid "Redo the last undone action"
 msgstr "Rikthe veprimin e fundit të anulluar"
 
-#: src/ephy-window.c:155
+#: src/ephy-window.c:163
 msgid "Paste clipboard"
 msgstr "Ngjit shënimet"
 
-#: src/ephy-window.c:158
+#: src/ephy-window.c:166
 msgid "Select the entire page"
 msgstr "Zgjidhe të gjithë faqen"
 
-#: src/ephy-window.c:160
+#: src/ephy-window.c:168
 msgid "_Find..."
 msgstr "_Gjej..."
 
-#: src/ephy-window.c:161
+#: src/ephy-window.c:169
 msgid "Find a word or phrase in the page"
 msgstr "Gjej një frazë apo fjalë në faqe"
 
-#: src/ephy-window.c:163
+#: src/ephy-window.c:171
 msgid "Find Ne_xt"
 msgstr "Gjej në va_zhdim"
 
-#: src/ephy-window.c:164
+#: src/ephy-window.c:172
 msgid "Find next occurrence of the word or phrase"
 msgstr "Gjej korrispondimin në vazhdim të fjalës apo frazës"
 
-#: src/ephy-window.c:166
+#: src/ephy-window.c:174
 msgid "Find Pre_vious"
 msgstr "Gjej para_ardhësen"
 
-#: src/ephy-window.c:167
+#: src/ephy-window.c:175
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Gjej korrispondimin paraardhës të fjalës apo frazës"
 
-#: src/ephy-window.c:169
+#: src/ephy-window.c:177
 msgid "P_ersonal Data"
 msgstr "Të dhëna p_ersonale"
 
-#: src/ephy-window.c:170
+#: src/ephy-window.c:178
 msgid "View and remove cookies and passwords"
 msgstr "Shiko dhe fshi cookies dhe passwords"
 
-#: src/ephy-window.c:172
+#: src/ephy-window.c:180
 msgid "T_oolbars"
 msgstr "Panelët e instru_mentëve"
 
-#: src/ephy-window.c:173
+#: src/ephy-window.c:181
 msgid "Customize toolbars"
 msgstr "Personalizo panelët"
 
-#: src/ephy-window.c:175
+#: src/ephy-window.c:183
 msgid "P_references"
 msgstr "P_referimet"
 
-#: src/ephy-window.c:176
+#: src/ephy-window.c:184
 msgid "Configure the web browser"
 msgstr "Konfiguro shfletuesin web"
 
 #. View menu
-#: src/ephy-window.c:181
+#: src/ephy-window.c:189
 msgid "_Stop"
 msgstr "_Ndalo"
 
-#: src/ephy-window.c:182
+#: src/ephy-window.c:190
 msgid "Stop current data transfer"
 msgstr "Ndalo transferimin aktual të të dhënave"
 
-#: src/ephy-window.c:184
+#: src/ephy-window.c:192
 msgid "_Reload"
 msgstr "_Rilexo"
 
-#: src/ephy-window.c:185
+#: src/ephy-window.c:193
 msgid "Display the latest content of the current page"
 msgstr "Shfaq përmbajtjen më të freskët të faqes aktuale"
 
-#: src/ephy-window.c:187
+#: src/ephy-window.c:195
 msgid "Zoom _In"
 msgstr "Z_madho"
 
-#: src/ephy-window.c:188
+#: src/ephy-window.c:196
 msgid "Increase the text size"
 msgstr "Rrit madhësinë e tekstit"
 
-#: src/ephy-window.c:190
+#: src/ephy-window.c:198
 msgid "Zoom _Out"
 msgstr "Z_vogëlo"
 
-#: src/ephy-window.c:191
+#: src/ephy-window.c:199
 msgid "Decrease the text size"
 msgstr "Zvogëlo madhësinë e tekstit"
 
-#: src/ephy-window.c:193
+#: src/ephy-window.c:201
 msgid "_Normal Size"
 msgstr "Madhësia _Normale"
 
-#: src/ephy-window.c:194
+#: src/ephy-window.c:202
 msgid "Use the normal text size"
 msgstr "Përdor madhësinë normale të tekstit"
 
-#: src/ephy-window.c:196
+#: src/ephy-window.c:204
 msgid "Text _Encoding"
 msgstr "_Kodifikimi i tekstit"
 
-#: src/ephy-window.c:197
+#: src/ephy-window.c:205
 msgid "Change the text encoding"
 msgstr "Ndrysho kodifikimin e tekstit"
 
-#: src/ephy-window.c:199
+#: src/ephy-window.c:207
 msgid "_Page Source"
 msgstr "_Buruesi i faqes"
 
-#: src/ephy-window.c:200
+#: src/ephy-window.c:208
 msgid "View the source code of the page"
 msgstr "Shiko kodin burues të faqes"
 
 #. Bookmarks menu
-#: src/ephy-window.c:205
+#: src/ephy-window.c:213
 msgid "_Add Bookmark..."
 msgstr "_Shto libërshënues..."
 
-#: src/ephy-window.c:206 src/ephy-window.c:296
+#: src/ephy-window.c:214 src/ephy-window.c:304
 msgid "Add a bookmark for the current page"
 msgstr "Shto një libërshënues për faqen aktuale"
 
-#: src/ephy-window.c:208
+#: src/ephy-window.c:216
 msgid "_Edit Bookmarks"
 msgstr "_Ndrysho Libërshënuesit"
 
-#: src/ephy-window.c:209
+#: src/ephy-window.c:217
 msgid "Open the bookmarks window"
 msgstr "Hap dritaren e libërshënuesve"
 
 #. Go menu
-#: src/ephy-window.c:214
+#: src/ephy-window.c:222
 msgid "_Back"
 msgstr "_Mbrapa"
 
-#: src/ephy-window.c:215
+#: src/ephy-window.c:223
 msgid "Go to the previous visited page"
 msgstr "Shko tek faqja paraardhëse e vizituar"
 
-#: src/ephy-window.c:217
+#: src/ephy-window.c:225
 msgid "_Forward"
 msgstr "_Vazhdo"
 
-#: src/ephy-window.c:218
+#: src/ephy-window.c:226
 msgid "Go to the next visited page"
 msgstr "Shko tek faqja pasardhëse e vizituar"
 
-#: src/ephy-window.c:220
+#: src/ephy-window.c:228
 msgid "_Up"
 msgstr "_Sipër"
 
-#: src/ephy-window.c:221 src/toolbar.c:355
-msgid "Go up one level"
-msgstr "Ngjitu një nivel më lart"
-
-#: src/ephy-window.c:223
+#: src/ephy-window.c:231
 msgid "_Location..."
 msgstr "_Pozicioni..."
 
-#: src/ephy-window.c:224
+#: src/ephy-window.c:232
 msgid "Go to a specified location"
 msgstr "Shko tek pozicioni i specifikuar"
 
-#: src/ephy-window.c:226
+#: src/ephy-window.c:234
 msgid "H_istory"
 msgstr "H_istoriku"
 
-#: src/ephy-window.c:227
+#: src/ephy-window.c:235
 msgid "Open the history window"
 msgstr "Hap dritaren e kronollogjisë"
 
 #. Tabs menu
-#: src/ephy-window.c:232
+#: src/ephy-window.c:240
 msgid "_Previous Tab"
 msgstr "Skeda _Paraardhëse"
 
-#: src/ephy-window.c:233
+#: src/ephy-window.c:241
 msgid "Activate previous tab"
 msgstr "Aktivo skedën paraardhëse"
 
-#: src/ephy-window.c:235
+#: src/ephy-window.c:243
 msgid "_Next Tab"
 msgstr "Skeda në _Vazhdim"
 
-#: src/ephy-window.c:236
+#: src/ephy-window.c:244
 msgid "Activate next tab"
 msgstr "Aktivo skedën pasardhëse"
 
-#: src/ephy-window.c:238
+#: src/ephy-window.c:246
 msgid "Move Tab _Left"
 msgstr "Lëviz skedën _majtas"
 
-#: src/ephy-window.c:239
+#: src/ephy-window.c:247
 msgid "Move current tab to left"
 msgstr "Lëviz skedën aktuale majtas"
 
-#: src/ephy-window.c:241
+#: src/ephy-window.c:249
 msgid "Move Tab _Right"
 msgstr "Lëviz skedën _djathtas"
 
-#: src/ephy-window.c:242
+#: src/ephy-window.c:250
 msgid "Move current tab to right"
 msgstr "Lëviz skedën aktuale djathtas"
 
-#: src/ephy-window.c:244
+#: src/ephy-window.c:252
 msgid "_Detach Tab"
 msgstr "_Shkëpute skedën"
 
-#: src/ephy-window.c:245
+#: src/ephy-window.c:253
 msgid "Detach current tab"
 msgstr "Shkëput skedën aktuale"
 
-#: src/ephy-window.c:251
+#: src/ephy-window.c:259
 msgid "Display web browser help"
 msgstr "Hap udhëzuesin e shfletuesit web"
 
 #. File Menu
-#: src/ephy-window.c:263
+#: src/ephy-window.c:271
 msgid "_Work Offline"
 msgstr "_Puno Jashtë Linje"
 
-#: src/ephy-window.c:264
+#: src/ephy-window.c:272
 msgid "Toggle network status"
 msgstr "Hiq gjendjen e rrjetit"
 
 #. View Menu
-#: src/ephy-window.c:269
+#: src/ephy-window.c:277
 msgid "_Toolbar"
 msgstr "_Paneli i instrumentëve"
 
-#: src/ephy-window.c:270
+#: src/ephy-window.c:278
 msgid "Show or hide toolbar"
 msgstr "Shfaq ose fshih panelin e instrumentëve"
 
-#: src/ephy-window.c:272
+#: src/ephy-window.c:280
 msgid "_Bookmarks Bar"
 msgstr "_Paneli i libërshënuesve"
 
-#: src/ephy-window.c:273
+#: src/ephy-window.c:281
 msgid "Show or hide bookmarks bar"
 msgstr "Shfaq apo fshih panelin e libërshënuesve"
 
-#: src/ephy-window.c:275
+#: src/ephy-window.c:283
 msgid "St_atusbar"
 msgstr "Paneli i gj_endjes"
 
-#: src/ephy-window.c:276
+#: src/ephy-window.c:284
 msgid "Show or hide statusbar"
 msgstr "Shfaq apo fshih panelin e gjendjes"
 
-#: src/ephy-window.c:278
+#: src/ephy-window.c:286
 msgid "_Fullscreen"
 msgstr "_Ekran i plotë"
 
-#: src/ephy-window.c:279
+#: src/ephy-window.c:287
 msgid "Browse at full screen"
 msgstr "Lundro me ekran të plotë"
 
-#: src/ephy-window.c:281
+#: src/ephy-window.c:289
 msgid "Popup _Windows"
 msgstr "_Dritaret Popup"
 
-#: src/ephy-window.c:282
+#: src/ephy-window.c:290
 msgid "Show or hide unrequested popup windows from this site"
 msgstr "Shfaq ose fshih dritaret e pakërkuara popup nga ky sit"
 
-#: src/ephy-window.c:284
+#: src/ephy-window.c:292
 msgid "Selection Caret"
 msgstr "Zgjedhja e vizores"
 
 #. Document
-#: src/ephy-window.c:293
+#: src/ephy-window.c:301
 msgid "_Save Background As..."
 msgstr "_Ruaj sfondin si..."
 
-#: src/ephy-window.c:295
+#: src/ephy-window.c:303
 msgid "Add Boo_kmark..."
 msgstr "Shto libërshë_nues..."
 
 #. Framed document
-#: src/ephy-window.c:301
+#: src/ephy-window.c:309
 msgid "Show Only This _Frame"
 msgstr "Shfaq vetëm këtë _kornizë"
 
-#: src/ephy-window.c:302
+#: src/ephy-window.c:310
 msgid "Show only this frame in this window"
 msgstr "Shfaq vetëm këtë kornizë në këtë dritare"
 
 #. Links
-#: src/ephy-window.c:307
+#: src/ephy-window.c:315
 msgid "_Open Link"
 msgstr "_Hap adresën"
 
-#: src/ephy-window.c:308
+#: src/ephy-window.c:316
 msgid "Open link in this window"
 msgstr "Hap adresën në këtë dritare"
 
-#: src/ephy-window.c:310
+#: src/ephy-window.c:318
 msgid "Open Link in _New Window"
 msgstr "Hap adresën në një dritare të _re"
 
-#: src/ephy-window.c:311
+#: src/ephy-window.c:319
 msgid "Open link in a new window"
 msgstr "Hap adresën në një dritare të re"
 
-#: src/ephy-window.c:313
+#: src/ephy-window.c:321
 msgid "Open Link in New _Tab"
 msgstr "Hap adresën në një _skedë re"
 
-#: src/ephy-window.c:314
+#: src/ephy-window.c:322
 msgid "Open link in a new tab"
 msgstr "Hap adresën në një skedë të re"
 
-#: src/ephy-window.c:316
+#: src/ephy-window.c:324
 msgid "_Download Link"
 msgstr "_Shkarko nga adresa"
 
-#: src/ephy-window.c:318
+#: src/ephy-window.c:326
 msgid "_Save Link As..."
 msgstr "_Ruaje adresën si..."
 
-#: src/ephy-window.c:319
+#: src/ephy-window.c:327
 msgid "Save link with a different name"
 msgstr "Ruaj me një emër tjetër lidhjen"
 
-#: src/ephy-window.c:321
+#: src/ephy-window.c:329
 msgid "_Bookmark Link..."
 msgstr "Shto li_bërshënues..."
 
-#: src/ephy-window.c:323
+#: src/ephy-window.c:331
 msgid "_Copy Link Address"
 msgstr "_Kopjo adresën e lidhjes"
 
 #. Email links
 #. This is on the context menu on a mailto: link and opens the mail program
-#: src/ephy-window.c:329
+#: src/ephy-window.c:337
 msgid "_Send Email..."
 msgstr "_Dërgo Email..."
 
-#: src/ephy-window.c:331
+#: src/ephy-window.c:339
 msgid "_Copy Email Address"
 msgstr "_Kopjo adresën e postës"
 
 #. Images
-#: src/ephy-window.c:336
+#: src/ephy-window.c:344
 msgid "Open _Image"
 msgstr "Hape _Figurën"
 
-#: src/ephy-window.c:338
+#: src/ephy-window.c:346
 msgid "_Save Image As..."
 msgstr "_Ruaje figurën si..."
 
-#: src/ephy-window.c:340
+#: src/ephy-window.c:348
 msgid "_Use Image As Background"
 msgstr "_Përdore figurën si sfond"
 
-#: src/ephy-window.c:342
+#: src/ephy-window.c:350
 msgid "Copy I_mage Address"
 msgstr "Kopjo adresën e f_igurës"
 
-#: src/ephy-window.c:619
-msgid "Exit Fullscreen"
-msgstr "Dil nga modaliteti me ekran të plotë"
-
-#: src/ephy-window.c:703
+#: src/ephy-window.c:662
 msgid "There are unsubmitted changes to form elements."
 msgstr "Ka akoma ndryshime të pa dorëzuara tek elementët e formularit."
 
-#: src/ephy-window.c:707
+#: src/ephy-window.c:666
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Nëse këmbëngulni në mbylljen e dokumentit, ai informacion do të humbasë."
 
-#: src/ephy-window.c:711
+#: src/ephy-window.c:670
 msgid "Close _Document"
 msgstr "Mbylle _Dokumentin"
 
-#: src/ephy-window.c:1164 src/window-commands.c:376
+#: src/ephy-window.c:1123 src/window-commands.c:369
 msgid "Open"
 msgstr "Hap"
 
-#: src/ephy-window.c:1166 src/window-commands.c:402
+#: src/ephy-window.c:1125 src/window-commands.c:395
 msgid "Save As"
 msgstr "Ruaj si"
 
-#: src/ephy-window.c:1170
+#: src/ephy-window.c:1129
 msgid "Bookmark"
 msgstr "Libërshënues"
 
-#: src/ephy-window.c:1368
+#: src/ephy-window.c:1328
 msgid "Insecure"
 msgstr "I pasigurtë"
 
-#: src/ephy-window.c:1371
+#: src/ephy-window.c:1333
 msgid "Broken"
 msgstr "E shkëputur"
 
-#: src/ephy-window.c:1376
+#: src/ephy-window.c:1341
 msgid "Low"
 msgstr "E ulët"
 
-#: src/ephy-window.c:1380
+#: src/ephy-window.c:1348
 msgid "High"
 msgstr "E lartë"
 
-#: src/ephy-window.c:1390
-#, c-format
-msgid ""
-"Security level: %s\n"
-"%s"
-msgstr ""
-"Niveli i sigurisë: %s\n"
-"%s"
-
-#: src/ephy-window.c:1396
+#: src/ephy-window.c:1357
 #, c-format
 msgid "Security level: %s"
 msgstr "Niveli i sigurisë: %s"
 
-#: src/ephy-window.c:1420
+#: src/ephy-window.c:1397
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d dritare e fshehur popup"
 msgstr[1] "%d dritare të fshehura popup"
 
-#: src/ephy-window.c:1652
+#: src/ephy-window.c:1629
 #, c-format
 msgid "Save background image '%s'"
 msgstr "Ruaj figurën e sfondit '%s'"
 
-#: src/ephy-window.c:1666
+#: src/ephy-window.c:1643
 #, c-format
 msgid "Open image '%s'"
 msgstr "Hap figurën '%s'"
 
-#: src/ephy-window.c:1671
+#: src/ephy-window.c:1648
 #, c-format
 msgid "Use as desktop background '%s'"
 msgstr "Përdore figurën '%s' si sfond"
 
-#: src/ephy-window.c:1676
+#: src/ephy-window.c:1653
 #, c-format
 msgid "Save image '%s'"
 msgstr "Ruaj figurën '%s'"
 
-#: src/ephy-window.c:1681
+#: src/ephy-window.c:1658
 #, c-format
 msgid "Copy image address '%s'"
 msgstr "Kopjo adresën e figurës '%s'"
 
-#: src/ephy-window.c:1694
+#: src/ephy-window.c:1671
 #, c-format
 msgid "Send email to address '%s'"
 msgstr "Dërgo email tek adresa '%s'"
 
-#: src/ephy-window.c:1700
+#: src/ephy-window.c:1677
 #, c-format
 msgid "Copy email address '%s'"
 msgstr "Kopjo adresën email '%s'"
 
-#: src/ephy-window.c:1712
+#: src/ephy-window.c:1689
 #, c-format
 msgid "Save link '%s'"
 msgstr "Ruaj lidhjen '%s'"
 
-#: src/ephy-window.c:1718
+#: src/ephy-window.c:1695
 #, c-format
 msgid "Bookmark link '%s'"
 msgstr "Shtoje lidhjen '%s' në libërshënues"
 
-#: src/ephy-window.c:1724
+#: src/ephy-window.c:1701
 #, c-format
 msgid "Copy link's address '%s'"
 msgstr "Kopjo adresën e lidhjes '%s'"
@@ -3349,227 +3553,227 @@ msgstr "Mbyll"
 msgid "Close print preview"
 msgstr "Mbyll pamjen e parë të printimit"
 
-#: src/prefs-dialog.c:280
+#: src/prefs-dialog.c:281
 msgid "Afrikaans"
 msgstr "Afrikane"
 
-#: src/prefs-dialog.c:281
+#: src/prefs-dialog.c:282
 msgid "Arabic"
 msgstr "Arabe"
 
-#: src/prefs-dialog.c:282
+#: src/prefs-dialog.c:283
 msgid "Azerbaijani"
 msgstr "Azerbaijani"
 
-#: src/prefs-dialog.c:283
+#: src/prefs-dialog.c:284
 msgid "Byelorussian"
 msgstr "Bielloruse"
 
-#: src/prefs-dialog.c:284
+#: src/prefs-dialog.c:285
 msgid "Bulgarian"
 msgstr "Bullgarisht"
 
-#: src/prefs-dialog.c:285
+#: src/prefs-dialog.c:286
 msgid "Breton"
 msgstr "Bretone"
 
-#: src/prefs-dialog.c:286
+#: src/prefs-dialog.c:287
 msgid "Catalan"
 msgstr "Katalane"
 
-#: src/prefs-dialog.c:287
+#: src/prefs-dialog.c:288
 msgid "Czech"
 msgstr "Çekisht"
 
-#: src/prefs-dialog.c:288
+#: src/prefs-dialog.c:289
 msgid "Danish"
 msgstr "Danisht"
 
-#: src/prefs-dialog.c:289
+#: src/prefs-dialog.c:290
 msgid "German"
 msgstr "Gjermanisht"
 
-#: src/prefs-dialog.c:290
+#: src/prefs-dialog.c:291
 msgid "English"
 msgstr "Anglisht"
 
-#: src/prefs-dialog.c:291
+#: src/prefs-dialog.c:292
 msgid "Greek"
 msgstr "Greqisht"
 
-#: src/prefs-dialog.c:292
+#: src/prefs-dialog.c:293
 msgid "Esperanto"
 msgstr "Esperanto"
 
-#: src/prefs-dialog.c:293
+#: src/prefs-dialog.c:294
 msgid "Spanish"
 msgstr "Spanjisht"
 
-#: src/prefs-dialog.c:294
+#: src/prefs-dialog.c:295
 msgid "Estonian"
 msgstr "Estonisht"
 
-#: src/prefs-dialog.c:295
+#: src/prefs-dialog.c:296
 msgid "Basque"
 msgstr "Baske"
 
-#: src/prefs-dialog.c:296
+#: src/prefs-dialog.c:297
 msgid "Finnish"
 msgstr "Finlandeze"
 
-#: src/prefs-dialog.c:297
+#: src/prefs-dialog.c:298
 msgid "Faeroese"
 msgstr "Faeroese"
 
-#: src/prefs-dialog.c:298
+#: src/prefs-dialog.c:299
 msgid "French"
 msgstr "Frengjisht"
 
-#: src/prefs-dialog.c:299
+#: src/prefs-dialog.c:300
 msgid "Irish"
 msgstr "Irlandeze"
 
-#: src/prefs-dialog.c:300
+#: src/prefs-dialog.c:301
 msgid "Scots Gaelic"
 msgstr "Scots Gaelic"
 
-#: src/prefs-dialog.c:301
+#: src/prefs-dialog.c:302
 msgid "Galician"
 msgstr "Galician"
 
-#: src/prefs-dialog.c:302
+#: src/prefs-dialog.c:303
 msgid "Hebrew"
 msgstr "Hebraike"
 
-#: src/prefs-dialog.c:303
+#: src/prefs-dialog.c:304
 msgid "Croatian"
 msgstr "Kroate"
 
-#: src/prefs-dialog.c:304
+#: src/prefs-dialog.c:305
 msgid "Hungarian"
 msgstr "Hungarisht"
 
-#: src/prefs-dialog.c:305
+#: src/prefs-dialog.c:306
 msgid "Indonesian"
 msgstr "Indoneziane"
 
-#: src/prefs-dialog.c:306
+#: src/prefs-dialog.c:307
 msgid "Icelandic"
 msgstr "Islandeze"
 
-#: src/prefs-dialog.c:307
+#: src/prefs-dialog.c:308
 msgid "Italian"
 msgstr "Italisht"
 
-#: src/prefs-dialog.c:308
+#: src/prefs-dialog.c:309
 msgid "Japanese"
 msgstr "Japonisht"
 
-#: src/prefs-dialog.c:309
+#: src/prefs-dialog.c:310
 msgid "Korean"
 msgstr "Koreane"
 
-#: src/prefs-dialog.c:310
+#: src/prefs-dialog.c:311
 msgid "Lithuanian"
 msgstr "Lituaniane"
 
-#: src/prefs-dialog.c:311
+#: src/prefs-dialog.c:312
 msgid "Latvian"
 msgstr "Letonisht"
 
-#: src/prefs-dialog.c:312
+#: src/prefs-dialog.c:313
 msgid "Macedonian"
 msgstr "Maqedonisht"
 
-#: src/prefs-dialog.c:313
+#: src/prefs-dialog.c:314
 msgid "Malay"
 msgstr "Malay"
 
-#: src/prefs-dialog.c:314
+#: src/prefs-dialog.c:315
 msgid "Dutch"
 msgstr "Hollandeze"
 
-#: src/prefs-dialog.c:315
+#: src/prefs-dialog.c:316
 msgid "Norwegian/Bokmal"
 msgstr "Norvegjisht/Bokmal"
 
-#: src/prefs-dialog.c:316
+#: src/prefs-dialog.c:317
 msgid "Norwegian/Nynorsk"
 msgstr "Norvegjisht/Nynorsk"
 
-#: src/prefs-dialog.c:317
+#: src/prefs-dialog.c:318
 msgid "Norwegian"
 msgstr "Norvegjeze"
 
-#: src/prefs-dialog.c:318
+#: src/prefs-dialog.c:319
 msgid "Polish"
 msgstr "Polonisht"
 
-#: src/prefs-dialog.c:319
+#: src/prefs-dialog.c:320
 msgid "Portuguese"
 msgstr "Portugeze"
 
-#: src/prefs-dialog.c:320
+#: src/prefs-dialog.c:321
 msgid "Portuguese of Brazil"
 msgstr "Portugeze e Brazilit"
 
-#: src/prefs-dialog.c:321
+#: src/prefs-dialog.c:322
 msgid "Romanian"
 msgstr "Rumanisht"
 
-#: src/prefs-dialog.c:322
+#: src/prefs-dialog.c:323
 msgid "Russian"
 msgstr "Rusisht"
 
-#: src/prefs-dialog.c:323
+#: src/prefs-dialog.c:324
 msgid "Slovak"
 msgstr "Sllovake"
 
-#: src/prefs-dialog.c:324
+#: src/prefs-dialog.c:325
 msgid "Slovenian"
 msgstr "Sllovene"
 
-#: src/prefs-dialog.c:325
+#: src/prefs-dialog.c:326
 msgid "Albanian"
 msgstr "Shqip"
 
-#: src/prefs-dialog.c:326
+#: src/prefs-dialog.c:327
 msgid "Serbian"
 msgstr "Sërbisht"
 
-#: src/prefs-dialog.c:327
+#: src/prefs-dialog.c:328
 msgid "Swedish"
 msgstr "Suedisht"
 
-#: src/prefs-dialog.c:328
+#: src/prefs-dialog.c:329
 msgid "Tamil"
 msgstr "Tamil"
 
-#: src/prefs-dialog.c:329
+#: src/prefs-dialog.c:330
 msgid "Turkish"
 msgstr "Turqisht"
 
-#: src/prefs-dialog.c:330
+#: src/prefs-dialog.c:331
 msgid "Ukrainian"
 msgstr "Ukrahinase"
 
-#: src/prefs-dialog.c:331
+#: src/prefs-dialog.c:332
 msgid "Vietnamese"
 msgstr "Vietnameze"
 
-#: src/prefs-dialog.c:332
+#: src/prefs-dialog.c:333
 msgid "Walloon"
 msgstr "Walloon"
 
-#: src/prefs-dialog.c:333
+#: src/prefs-dialog.c:334
 msgid "Chinese"
 msgstr "Kineze"
 
-#: src/prefs-dialog.c:334
+#: src/prefs-dialog.c:335
 msgid "Simplified Chinese"
 msgstr "Kineze e thjeshtëzuar"
 
-#: src/prefs-dialog.c:335
+#: src/prefs-dialog.c:336
 msgid "Traditional Chinese"
 msgstr "Kineze tradicionale"
 
@@ -3581,7 +3785,7 @@ msgstr "Kineze tradicionale"
 #.
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
-#: src/prefs-dialog.c:1015 src/prefs-dialog.c:1023
+#: src/prefs-dialog.c:1016 src/prefs-dialog.c:1024
 #, c-format
 msgid "language|%s (%s)"
 msgstr "gjuha|%s (%s)"
@@ -3591,122 +3795,47 @@ msgstr "gjuha|%s (%s)"
 #. * Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: src/prefs-dialog.c:1034 src/prefs-dialog.c:1392
+#: src/prefs-dialog.c:1035 src/prefs-dialog.c:1393
 #, c-format
 msgid "language|User defined (%s)"
 msgstr "gjuha|Përcaktuar nga përdoruesi (%s)"
 
-#: src/prefs-dialog.c:1057
+#: src/prefs-dialog.c:1058
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Gjuha e sistemit (%s)"
 msgstr[1] "Gjuhët e sistemit (%s)"
 
-#: src/prefs-dialog.c:1440
+#: src/prefs-dialog.c:1441
 msgid "Home"
 msgstr "Shtëpia"
 
-#: src/prefs-dialog.c:1450
+#: src/prefs-dialog.c:1451
 msgid "Desktop"
 msgstr "Hapësira e Punës"
 
-#: src/prefs-dialog.c:1650
+#: src/prefs-dialog.c:1651
 msgid "Select a directory"
 msgstr "Zgjidh një directory"
 
-#: src/toolbar.c:318
-msgid "Back"
-msgstr "Mbrapa"
-
-#: src/toolbar.c:320
-msgid "Go back"
-msgstr "Kthehu mbrapa"
-
-#. this is the tooltip on the Back button's drop-down arrow, which will show
-#. * a menu with all sites you can go 'back' to
-#.
-#: src/toolbar.c:324
-msgid "Back history"
-msgstr "Kronollogjia mbrapa"
-
-#: src/toolbar.c:336
-msgid "Forward"
-msgstr "Vazhdo"
-
-#: src/toolbar.c:338
-msgid "Go forward"
-msgstr "Shko përpara"
-
-#. this is the tooltip on the Forward button's drop-down arrow, which will show
-#. * a menu with all sites you can go 'forward' to
-#.
-#: src/toolbar.c:342
-msgid "Forward history"
-msgstr "Kronollogjia në vazhdim"
-
-#: src/toolbar.c:353
-msgid "Up"
-msgstr "Sipër"
-
-#. this is the tooltip on the Up button's drop-down arrow, which will show
-#. * a menu with al sites you can go 'up' to
-#.
-#: src/toolbar.c:359
-msgid "List of upper levels"
-msgstr "Lista me nivelët e mësipërm"
-
-#: src/toolbar.c:377
-msgid "Enter a web address to open, or a phrase to search for on the web"
-msgstr ""
-"Shkruaj adresën web që dëshiron të hapësh, ose një frazë për ta kërkuar në "
-"web"
-
-#: src/toolbar.c:390
-msgid "Zoom"
-msgstr "Shkalla e zmadhimit"
-
-#: src/toolbar.c:392
-msgid "Adjust the text size"
-msgstr "Rregullo madhësinë e tekstit"
-
-#: src/toolbar.c:402
-msgid "Favicon"
-msgstr "Favicon"
-
-#: src/toolbar.c:403
-msgid "Drag and drop this icon to create a link to this page"
-msgstr "Zgjidh dhe tërhiq këtë ikonë për të krijuar një lidhje me këtë faqe"
-
-#: src/toolbar.c:414
-msgid "Go to the address entered in the address entry"
-msgstr "Shko tek adresa e shkruar"
-
-#: src/toolbar.c:423
-msgid "_Home"
-msgstr "_Shtëpia"
-
-#: src/toolbar.c:425
-msgid "Go to the home page"
-msgstr "Shko tek faqja e nisjes"
-
-#: src/window-commands.c:170
+#: src/window-commands.c:163
 msgid "Check this out!"
 msgstr "Kontrollo mirë!"
 
-#: src/window-commands.c:821
-msgid "Toolbar Editor"
-msgstr "Ndryshuesi i panelit të instrumentëve"
-
-#: src/window-commands.c:841
-msgid "_Add a New Toolbar"
-msgstr "_Shto një panel të ri instrumentësh"
-
-#: src/window-commands.c:888
+#: src/window-commands.c:797
 msgid "Epiphany"
 msgstr "Epiphany"
 
-#: src/window-commands.c:893
+#. Translators: This is a special message that shouldn't be translated
+#. * literally. It is used in the about box to give credits to
+#. * the translators.
+#. * Thus, you should translate it to your name and email address.
+#. * You should also include other translators who have contributed to
+#. * this translation; in that case, please write each of them on a separate
+#. * line seperated by newlines (\n).
+#.
+#: src/window-commands.c:810
 msgid "translator-credits"
 msgstr "Laurent Dhima <laurenti@alblinux.net>"
 
