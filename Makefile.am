@@ -5,4 +5,5 @@ SUBDIRS = lib embed src data po
 EXTRA_DIST = 			\
 	intltool-merge.in	\
 	intltool-update.in	\
-	intltool-extract.in
+	intltool-extract.in	\
+	COPYING.README
