@@ -1,3 +1,19 @@
+2004-09-15  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_add_toggle),
+	(ephy_node_view_popup):
+	* lib/widgets/ephy-node-view.h:
+
+	Add api to show a context menu. Useful to make distinction
+	between key and mouse events.
+
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_show_popup_cb),
+	(keyword_node_show_popup_cb):
+	* src/ephy-history-window.c: (ephy_history_window_show_popup_cb):
+
+	Use it. Fix #152431
+
 2004-09-13  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* lib/ephy-guy.c:

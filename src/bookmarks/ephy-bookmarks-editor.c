@@ -1137,9 +1137,7 @@ ephy_bookmarks_editor_show_popup_cb (GtkWidget *view,
 
 	widget = gtk_ui_manager_get_widget (editor->priv->ui_merge,
 					    "/EphyBookmarkEditorPopup");
-	gtk_menu_popup (GTK_MENU (widget), NULL, NULL,
-			ephy_gui_menu_position_tree_selection, view, 2,
-			gtk_get_current_event_time ());
+	ephy_node_view_popup (EPHY_NODE_VIEW (view), widget);
 
 	return TRUE;
 }
@@ -1229,9 +1227,7 @@ keyword_node_show_popup_cb (GtkWidget *view, EphyBookmarksEditor *editor)
 
 	widget = gtk_ui_manager_get_widget (editor->priv->ui_merge,
 					   "/EphyBookmarkKeywordPopup");
-	gtk_menu_popup (GTK_MENU (widget), NULL, NULL,
-			ephy_gui_menu_position_tree_selection, view, 2,
-			gtk_get_current_event_time ());
+	ephy_node_view_popup (EPHY_NODE_VIEW (view), widget);
 
 	return TRUE;
 }

@@ -128,6 +128,9 @@ void		   ephy_node_view_edit		      (EphyNodeView *view,
 
 gboolean	   ephy_node_view_is_target	      (EphyNodeView *view);
 
+void		   ephy_node_view_popup		      (EphyNodeView *view,
+						       GtkWidget *menu);
+
 G_END_DECLS
 
 #endif /* EPHY_NODE_VIEW_H */
