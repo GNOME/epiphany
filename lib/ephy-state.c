@@ -130,8 +130,16 @@ ephy_state_window_set_size (GtkWidget *window, EphyNode *node)
 
 	if (size)
 	{
-		gtk_window_set_default_size
-			(GTK_WINDOW (window), width, height);
+		GdkScreen *screen;
+		int screen_width, screen_height;
+
+		screen = gdk_screen_get_default ();
+		screen_width = gdk_screen_get_width (screen);
+		screen_height = gdk_screen_get_height (screen);
+
+		gtk_window_set_default_size (GTK_WINDOW (window),
+					     MIN (width, screen_width),
+					     MIN (height, screen_height));
 	}
 
 	if (maximize)

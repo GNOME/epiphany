@@ -124,7 +124,6 @@ protected:
 	PRInt32                 mCurrentProgress;
 	PRInt32			mMaxSize;
 
-	bool                    mGotFirstStateChange, mIsNetworkTransfer;
 	nsresult                mStatus;
 
 	nsCOMPtr<nsIObserver>		mObserver;   

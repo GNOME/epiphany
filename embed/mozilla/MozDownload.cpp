@@ -64,8 +64,6 @@ const char* const persistContractID = "@mozilla.org/embedding/browser/nsWebBrows
 
 MozDownload::MozDownload() :
 	mMaxSize(-1),
-	mGotFirstStateChange(false),
-	mIsNetworkTransfer(false),
 	mStatus(NS_OK),
 	mEmbedPersist(nsnull),
 	mDownloadState(EPHY_DOWNLOAD_DOWNLOADING)
@@ -272,19 +270,11 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 {
 	nsresult rv;
 
-	/* For a file download via the external helper app service, we will never get a start
-           notification. The helper app service has gotten that notification before it created us. */
-	if (!mGotFirstStateChange)
-	{
-        	mIsNetworkTransfer = ((aStateFlags & STATE_IS_NETWORK) != 0);
-	        mGotFirstStateChange = PR_TRUE;
-	}
-
 	if (NS_FAILED(aStatus) && NS_SUCCEEDED(mStatus))
         	mStatus = aStatus;
   
 	/* We will get this even in the event of a cancel */
-	if ((aStateFlags & STATE_STOP) && (!mIsNetworkTransfer || (aStateFlags & STATE_IS_NETWORK)))
+	if (aStateFlags & STATE_STOP)
 	{
 		/* Keep us alive */
 		nsCOMPtr<nsIDownload> kungFuDeathGrip(this);
