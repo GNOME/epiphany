@@ -32,7 +32,6 @@ TYPES_H_FILES = \
 INST_H_FILES = \
 	ephy-dialog.h				\
 	ephy-loader.h				\
-	ephy-lib-type-builtins.h		\
 	ephy-node.h				\
 	ephy-node-db.h				\
 	ephy-state.h
