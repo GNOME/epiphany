@@ -357,15 +357,16 @@ session_init (Session *session)
 void
 session_close (Session *session)
 {
-	GList *l;
+	GList *l, *windows;
 
 	/* close all windows */
-	l = g_list_copy (session->priv->windows);
-	for (; l != NULL; l = l->next)
+	windows	= g_list_copy (session->priv->windows);
+	for (l = windows; l != NULL; l = l->next)
 	{
 		EphyWindow *window = EPHY_WINDOW(l->data);
 		gtk_widget_destroy (GTK_WIDGET(window));
 	}
+	g_list_free (windows);
 }
 
 static void
@@ -474,7 +475,7 @@ void
 session_save (Session *session,
 	      const char *filename)
 {
-	GList *w;
+	const GList *w;
         xmlNodePtr root_node;
         xmlNodePtr window_node;
         xmlDocPtr doc;
@@ -494,7 +495,7 @@ session_save (Session *session,
         /* iterate through all the windows */
         for (; w != NULL; w = w->next)
         {
-		const GList *tabs;
+		GList *tabs, *l;
 		int x = 0, y = 0, width = 0, height = 0;
 		EphyWindow *window = EPHY_WINDOW(w->data);
 		GtkWidget *wmain;
@@ -521,11 +522,12 @@ session_save (Session *session,
                 snprintf(buffer, 32, "%d", height);
                 xmlSetProp (window_node, "height", buffer);
 
-		for (; tabs != NULL; tabs = tabs->next)
+		for (l = tabs; l != NULL; l = l->next)
 	        {
 			EphyTab *tab = EPHY_TAB(tabs->data);
 			save_tab (window, tab, doc, window_node);
 		}
+		g_list_free (tabs);
 
 		xmlAddChild (root_node, window_node);
         }
@@ -637,7 +639,7 @@ session_load (Session *session,
 	g_free (save_to);
 }
 
-GList *
+const GList *
 session_get_windows (Session *session)
 {
 	g_return_val_if_fail (IS_SESSION (session), NULL);

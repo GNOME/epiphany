@@ -89,7 +89,7 @@ void		  ephy_embed_event_set_property		(EphyEmbedEvent *event,
 
 void		  ephy_embed_event_get_property		(EphyEmbedEvent *event,
 							 const char *name,
-							 GValue **value);
+							 const GValue **value);
 
 gboolean	  ephy_embed_event_has_property		(EphyEmbedEvent *event,
 							 const char *name);

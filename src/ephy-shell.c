@@ -355,7 +355,7 @@ EphyWindow *
 ephy_shell_get_active_window (EphyShell *gs)
 {
 	Session *session;
-	GList *windows;
+	const GList *windows;
 
 	session = ephy_shell_get_session (gs);
 	windows = session_get_windows (session);

@@ -31,7 +31,7 @@ void popup_cmd_new_window (BonoboUIComponent *uic,
 {
 	EphyEmbedEvent *info;
 	EphyTab *tab;
-	GValue *value;
+	const GValue *value;
 
 	tab = ephy_window_get_active_tab (get_window_from_popup (popup));
 
@@ -51,7 +51,7 @@ void popup_cmd_new_tab (BonoboUIComponent *uic,
 	EphyEmbedEvent *info;
 	EphyTab *tab;
 	EphyWindow *window;
-	GValue *value;
+	const GValue *value;
 
 	window = get_window_from_popup (popup);
 	g_return_if_fail (window != NULL);
@@ -74,7 +74,7 @@ void popup_cmd_image_in_new_tab (BonoboUIComponent *uic,
 	EphyEmbedEvent *info;
 	EphyTab *tab;
 	EphyWindow *window;
-	GValue *value;
+	const GValue *value;
 
 	window = get_window_from_popup (popup);
 	g_return_if_fail (window != NULL);
@@ -96,7 +96,7 @@ void popup_cmd_image_in_new_window (BonoboUIComponent *uic,
 {
 	EphyEmbedEvent *info;
 	EphyTab *tab;
-	GValue *value;
+	const GValue *value;
 
 	tab = ephy_window_get_active_tab (get_window_from_popup (popup));
 
@@ -118,10 +118,10 @@ void popup_cmd_add_bookmark (BonoboUIComponent *uic,
 	EphyEmbedEvent *info = ephy_embed_popup_get_event (popup);
 	EphyEmbed *embed;
 	GtkWidget *window;
-	GValue *link_title;
-	GValue *link_rel;
-	GValue *link;
-	GValue *link_is_smart;
+	const GValue *link_title;
+	const GValue *link_rel;
+	const GValue *link;
+	const GValue *link_is_smart;
 	const char *title;
 	const char *location;
 	const char *rel;

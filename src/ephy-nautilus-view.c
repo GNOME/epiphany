@@ -346,7 +346,7 @@ gnv_embed_dom_mouse_down_cb (EphyEmbed *embed,
 	else if (button == 1
 		 && (context & EMBED_CONTEXT_LINK))
 	{
-		GValue *value;
+		const GValue *value;
 		const gchar *url;
 		ephy_embed_event_get_property (event, "link", &value);
 		url = g_value_get_string (value);
@@ -501,7 +501,7 @@ gnv_popup_cmd_new_window (BonoboUIComponent *uic,
 {
 	EphyEmbedEvent *info;
 	EphyNautilusView *view;
-	GValue *value;
+	const GValue *value;
 
 	view = gnv_view_from_popup (popup);
 	
@@ -520,7 +520,7 @@ gnv_popup_cmd_image_in_new_window (BonoboUIComponent *uic,
 {
 	EphyEmbedEvent *info;
 	EphyNautilusView *view;
-	GValue *value;
+	const GValue *value;
 
 	view = gnv_view_from_popup (popup);
 	

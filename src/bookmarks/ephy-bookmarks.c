@@ -363,7 +363,7 @@ static void
 update_favorites_menus ()
 {
 	Session *session;
-	GList *l;
+	const GList *l;
 
 	session = ephy_shell_get_session (ephy_shell);
 	l = session_get_windows (session);

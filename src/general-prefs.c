@@ -444,21 +444,22 @@ language_dialog_changed_cb (LanguageEditor *le,
 			    GeneralPrefs *dialog)
 {
 	GtkWidget *optionmenu;
-	GSList *l = list;
+	const GSList *l;
 	GSList *langs = NULL;
 
 	optionmenu = ephy_dialog_get_control (EPHY_DIALOG (dialog),
 						LANGUAGE_PROP);
 	gtk_option_menu_set_history (GTK_OPTION_MENU(optionmenu),
-				     (int)(l->data));
+				     GPOINTER_TO_INT(list->data));
 
-	for (; l != NULL; l = l->next)
+	for (l = list; l != NULL; l = l->next)
 	{
-		int i = (int)l->data;
+		int i = GPOINTER_TO_INT (l->data);
 		langs = g_slist_append (langs, languages[i].code);
 	}
 
 	eel_gconf_set_string_list (CONF_RENDERING_LANGUAGE, langs);
+	g_slist_free (langs);
 }
 
 void

@@ -1,3 +1,33 @@
+2003-01-20  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/ephy-embed-event.c: (free_g_value),
+	(ephy_embed_event_init), (ephy_embed_event_get_property):
+	* embed/ephy-embed-event.h:
+	* embed/ephy-embed-popup.c: (setup_document_menu),
+	(embed_popup_copy_email_cmd), (embed_popup_copy_link_location_cmd),
+	(save_property_url), (embed_popup_open_link_cmd),
+	(embed_popup_set_image_as_background_cmd),
+	(embed_popup_copy_image_location_cmd),
+	(embed_popup_open_image_cmd):
+	* embed/ephy-embed-utils.c: (build_charset),
+	(ephy_embed_utils_build_charsets_submenu):
+	* embed/mozilla/FilePicker.cpp:
+	* src/bookmarks/ephy-bookmarks.c: (update_favorites_menus):
+	* src/ephy-nautilus-view.c: (gnv_embed_dom_mouse_down_cb),
+	(gnv_popup_cmd_new_window), (gnv_popup_cmd_image_in_new_window):
+	* src/ephy-shell.c: (ephy_shell_get_active_window):
+	* src/ephy-tab.c: (ephy_tab_dom_mouse_down_cb):
+	* src/ephy-window.c: (update_window_visibility),
+	(update_spinner_control):
+	* src/general-prefs.c: (language_dialog_changed_cb):
+	* src/popup-commands.c: (popup_cmd_new_window),
+	(popup_cmd_new_tab), (popup_cmd_image_in_new_tab),
+	(popup_cmd_image_in_new_window), (popup_cmd_add_bookmark):
+	* src/session.c: (session_close), (session_save):
+	* src/session.h:
+
+	Port several leaks fixes from galeon.
+
 2003-01-17  Lee Willis <lwillis@plus.net>
 
 	* embed/ephy-history.c: Don't leak history xml every 5 minutes

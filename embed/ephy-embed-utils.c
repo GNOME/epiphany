@@ -176,7 +176,7 @@ build_group (GString *xml_string, const char *group, int index)
 }
 
 static void
-build_charset (GString *xml_string, CharsetInfo *info, int index)
+build_charset (GString *xml_string, const CharsetInfo *info, int index)
 {
 	char *tmp;
 	char *verb;
@@ -227,7 +227,7 @@ ephy_embed_utils_build_charsets_submenu (BonoboUIComponent *ui_component,
 					 BonoboUIVerbFn fn,
 					 gpointer data)
 {
-	GList *groups;
+	GList *groups, *gl;
 	GString *xml_string;
 	GList *verbs = NULL;
 	int group_index = 0;
@@ -241,9 +241,9 @@ ephy_embed_utils_build_charsets_submenu (BonoboUIComponent *ui_component,
 	xml_string = g_string_new (NULL);
 	g_string_append (xml_string, "<submenu name=\"Encoding\" _label=\"_Encoding\">");
 
-	for (; groups != NULL; groups = groups->next)
+	for (gl = groups; gl != NULL; gl = gl->next)
         {
-		GList *charsets;
+		GList *charsets, *cl;
 		const char *group = (const char *)groups->data;
 
 		build_group (xml_string, group, group_index);
@@ -252,9 +252,9 @@ ephy_embed_utils_build_charsets_submenu (BonoboUIComponent *ui_component,
                                                      group,
                                                      &charsets);
 
-		for (; charsets != NULL; charsets = charsets->next)
+		for (cl = charsets; cl != NULL; cl = cl->next)
                 {
-			CharsetInfo *info = (CharsetInfo *) charsets->data;
+			const CharsetInfo *info = cl->data;
 			EncodingMenuData *edata;
 
 			edata = g_new0 (EncodingMenuData, 1);

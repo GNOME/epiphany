@@ -851,7 +851,7 @@ ephy_tab_dom_mouse_down_cb  (EphyEmbed *embed,
 	else if (button == 1
 		 && (context & EMBED_CONTEXT_LINK))
 	{
-		GValue *value;
+		const GValue *value;
 
 		ephy_embed_event_get_property (event, "link", &value);
 		ephy_shell_new_tab (ephy_shell, window, tab,

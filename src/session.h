@@ -69,7 +69,7 @@ void	      session_save		(Session *session,
 
 gboolean      session_autoresume	(Session *session);
 
-GList        *session_get_windows	(Session *session);
+const GList  *session_get_windows	(Session *session);
 
 void          session_add_window	(Session *session,
 					 EphyWindow *window);

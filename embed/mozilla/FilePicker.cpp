@@ -339,21 +339,29 @@ NS_METHOD GFilePicker::InitWithGtkWidget (GtkWidget *aParentWidget,
 NS_METHOD GFilePicker::SanityCheck (PRBool *retIsSane)
 {
 	*retIsSane = PR_TRUE;
-
+	
+	nsresult rv;
 	PRBool dirExists, fileExists = PR_TRUE;
 
 	if (mDisplayDirectory)
 	{
-		mDisplayDirectory->Exists (&dirExists);
+		rv = mDisplayDirectory->Exists (&dirExists);
+		g_return_val_if_fail (NS_SUCCEEDED(rv), rv);
 	}
 	else
 	{
 		dirExists = PR_FALSE;
 	}
 
-	if (mMode == nsIFilePicker::modeOpen)
+	if (mMode != nsIFilePicker::modeGetFolder)
 	{
-		mFile->Exists (&fileExists);
+		rv = mFile->Exists (&fileExists);
+		g_return_val_if_fail (NS_SUCCEEDED(rv), rv);
+	}
+
+	if (mMode == nsIFilePicker::modeSave && !fileExists)
+	{
+		return NS_OK;
 	}
 	
 	if (!dirExists || !fileExists)
@@ -380,13 +388,15 @@ NS_METHOD GFilePicker::SanityCheck (PRBool *retIsSane)
 	char *errorText;
 	if (mMode == nsIFilePicker::modeGetFolder)
 	{
-		mDisplayDirectory->IsDirectory (&correctType);
+		rv = mDisplayDirectory->IsDirectory (&correctType);
+		g_return_val_if_fail (NS_SUCCEEDED(rv), rv);
 		errorText = g_strdup (_("A file was selected when a "
 					"folder was expected."));
 	}
 	else
 	{
-		mFile->IsFile (&correctType);
+		rv = mFile->IsFile (&correctType);
+		g_return_val_if_fail (NS_SUCCEEDED(rv), rv);
 		errorText = g_strdup (_("A folder was selected when a "
 				        "file was expected."));
 	}

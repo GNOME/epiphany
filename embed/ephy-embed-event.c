@@ -75,11 +75,19 @@ ephy_embed_event_class_init (EphyEmbedEventClass *klass)
 }
 
 static void
+free_g_value (gpointer value)
+{
+	g_value_unset (value);
+	g_free (value);
+}
+
+static void
 ephy_embed_event_init (EphyEmbedEvent *event)
 {
         event->priv = g_new0 (EphyEmbedEventPrivate, 1);
 
-	event->priv->props = g_hash_table_new (g_str_hash, g_str_equal);
+	event->priv->props = g_hash_table_new_full (g_str_hash, g_str_equal,
+						    g_free, free_g_value);
 }
 
 static void
@@ -161,7 +169,7 @@ ephy_embed_event_set_property (EphyEmbedEvent *event,
 void
 ephy_embed_event_get_property	(EphyEmbedEvent *event,
 				 const char *name,
-				 GValue **value)
+				 const GValue **value)
 {
 	*value = g_hash_table_lookup (event->priv->props, name);
 }

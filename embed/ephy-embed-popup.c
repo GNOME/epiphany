@@ -243,7 +243,7 @@ static void
 setup_document_menu (EphyEmbedPopup *p)
 {
 	gboolean is_framed;
-	GValue *value;
+	const GValue *value;
 	gboolean has_background;
 
 	ephy_embed_event_get_property (p->priv->event,
@@ -354,7 +354,7 @@ embed_popup_copy_email_cmd (BonoboUIComponent *uic,
 {
 	EphyEmbedEvent *info;
 	const char *location;
-	GValue *value;
+	const GValue *value;
 
 	info = ephy_embed_popup_get_event (popup);
 	ephy_embed_event_get_property (info, "email", &value);
@@ -369,7 +369,7 @@ embed_popup_copy_link_location_cmd (BonoboUIComponent *uic,
 {
 	EphyEmbedEvent *info;
 	const char *location;
-	GValue *value;
+	const GValue *value;
 
 	info = ephy_embed_popup_get_event (popup);
 	ephy_embed_event_get_property (info, "link", &value);
@@ -385,7 +385,7 @@ save_property_url (EphyEmbedPopup *popup,
 {
 	EphyEmbedEvent *info;
 	const char *location;
-	GValue *value;
+	const GValue *value;
 	GtkWidget *widget;
 	GtkWidget *window;
 	EphyEmbedPersist *persist;
@@ -444,7 +444,7 @@ embed_popup_open_link_cmd (BonoboUIComponent *uic,
 {
 	EphyEmbedEvent *info;
 	const char *location;
-	GValue *value;
+	const GValue *value;
 
 	info = ephy_embed_popup_get_event (popup);
 	ephy_embed_event_get_property (info, "link", &value);
@@ -505,7 +505,7 @@ embed_popup_set_image_as_background_cmd (BonoboUIComponent *uic,
 	EphyEmbedEvent *info;
 	const char *location;
 	char *dest, *base;
-	GValue *value;
+	const GValue *value;
 	EphyEmbedPersist *persist;
 
 	info = ephy_embed_popup_get_event (popup);
@@ -538,7 +538,7 @@ embed_popup_copy_image_location_cmd (BonoboUIComponent *uic,
 {
 	EphyEmbedEvent *info;
 	const char *location;
-	GValue *value;
+	const GValue *value;
 
 	info = ephy_embed_popup_get_event (popup);
 	ephy_embed_event_get_property (info, "image", &value);
@@ -624,7 +624,7 @@ embed_popup_open_image_cmd (BonoboUIComponent *uic,
 {
 	EphyEmbedEvent *info;
 	const char *location;
-	GValue *value;
+	const GValue *value;
 
 	info = ephy_embed_popup_get_event (popup);
 	ephy_embed_event_get_property (info, "image", &value);

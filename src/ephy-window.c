@@ -1119,10 +1119,10 @@ update_find_control (EphyWindow *window)
 static void
 update_window_visibility (EphyWindow *window)
 {
-	GList *l;
+	GList *l, *tabs;
 
-	l = ephy_window_get_tabs (window);
-	for (; l != NULL; l = l->next)
+	tabs = ephy_window_get_tabs (window);
+	for (l = tabs; l != NULL; l = l->next)
 	{
 		EphyTab *tab = EPHY_TAB(l->data);
 		g_return_if_fail (IS_EPHY_TAB(tab));
@@ -1133,7 +1133,7 @@ update_window_visibility (EphyWindow *window)
 			return;
 		}
 	}
-	g_list_free (l);
+	g_list_free (tabs);
 
 	if (GTK_WIDGET_VISIBLE (GTK_WIDGET (window)))
 	{
@@ -1144,10 +1144,10 @@ update_window_visibility (EphyWindow *window)
 static void
 update_spinner_control (EphyWindow *window)
 {
-	GList *l;
+	GList *l, *tabs;
 
-	l = ephy_window_get_tabs (window);
-	for (; l != NULL; l = l->next)
+	tabs = ephy_window_get_tabs (window);
+	for (l = tabs; l != NULL; l = l->next)
 	{
 		EphyTab *tab = EPHY_TAB(l->data);
 		g_return_if_fail (IS_EPHY_TAB(tab));
@@ -1158,7 +1158,7 @@ update_spinner_control (EphyWindow *window)
 			return;
 		}
 	}
-	g_list_free (l);
+	g_list_free (tabs);
 
 	toolbar_spinner_stop (window->priv->toolbar);
 }
