@@ -177,13 +177,15 @@ remove_obsolete_icons (EphyFaviconCache *eb)
 		if (icon_is_obsolete (kid, &current_date))
 		{
 			const char *filename;
-			const char *path;
+			char *path;
 
 			filename = ephy_node_get_property_string
 				(kid, EPHY_NODE_FAVICON_PROP_FILENAME);
 			path = g_build_filename (eb->priv->directory,
 						 filename, NULL);
 			gnome_vfs_unlink (path);
+
+			g_free (path);
 			ephy_node_unref (kid);
 		}
 	}
