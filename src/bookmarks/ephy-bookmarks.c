@@ -64,7 +64,6 @@ typedef struct
 {
 	const char *title;
 	const char *location;
-	const char *smart_url;
 } EphyBookmarksBookmarkInfo;
 
 static const EphyBookmarksBookmarkInfo default_bookmarks [] =
@@ -214,15 +213,15 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 
 	for (i = 0; i < n_default_topics; i++)
 	{
-		ephy_bookmarks_add_keyword (eb, default_topics[i]);
+		ephy_bookmarks_add_keyword (eb, _(default_topics[i]));
 	}
 
 	for (i = 0; i < n_default_bookmarks; i++)
 	{
 		EphyNode *bmk;
 
-		bmk = ephy_bookmarks_add (eb, default_bookmarks[i].title,
-				          default_bookmarks[i].location);
+		bmk = ephy_bookmarks_add (eb, _(default_bookmarks[i].title),
+				          _(default_bookmarks[i].location));
 		ephy_toolbars_model_add_bookmark (eb->priv->toolbars_model, FALSE,
 						  ephy_node_get_id (bmk));
 	}
