@@ -94,58 +94,86 @@ ephy_completion_model_class_init (EphyCompletionModelClass *klass)
 	g_type_class_add_private (object_class, sizeof (EphyCompletionModelPrivate));
 }
 
-static void
-root_child_removed_cb (EphyNode *node,
-		       EphyNode *child,
-		       guint old_index,
-		       EphyCompletionModel *tree_model)
-{
-	EphyCompletionModel *model = EPHY_COMPLETION_MODEL (tree_model);
-	GtkTreePath *path;
-	int real_index;
-
-	real_index = old_index;
-
-	if (node == model->priv->bookmarks)
-	{
-		real_index += ephy_node_get_n_children (model->priv->history);
-	}
-
-	path = gtk_tree_path_new ();
-	gtk_tree_path_append_index (path, real_index);
-	gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
-	gtk_tree_path_free (path);
-}
-
-static void
-node_iter_from_node (EphyCompletionModel *model,
-		     EphyNode *node,
-		     GtkTreeIter *iter)
-{
-	iter->stamp = model->priv->stamp;
-	iter->user_data = node;
-}
-
-static inline GtkTreePath *
+static GtkTreePath *
 get_path_real (EphyCompletionModel *model,
-	       EphyNode *node)
+	       EphyNode *root,
+	       EphyNode *child)
 {
 	GtkTreePath *retval;
 	int index;
 
 	retval = gtk_tree_path_new ();
+	index = ephy_node_get_child_index (root, child);
 
-	index = ephy_node_get_child_index (model->priv->bookmarks, node);
-	if (index < 0)
+	if (root == model->priv->bookmarks)
 	{
-		index = ephy_node_get_child_index (model->priv->history, node);
+		index += ephy_node_get_n_children (model->priv->history);
 	}
-
-	g_return_val_if_fail (index >= 0, NULL);
 
 	gtk_tree_path_append_index (retval, index);
 
 	return retval;
+}
+
+static void
+node_iter_from_node (EphyCompletionModel *model,
+		     EphyNode *root,
+		     EphyNode *child,
+		     GtkTreeIter *iter)
+{
+	iter->stamp = model->priv->stamp;
+	iter->user_data = child;
+	iter->user_data2 = root;
+}
+
+static EphyNode *
+get_index_root (EphyCompletionModel *model, int *index)
+{
+	int children;
+
+	children = ephy_node_get_n_children (model->priv->history);
+
+	if (*index >= children)
+	{
+		*index = *index - children;
+
+		if (*index < ephy_node_get_n_children (model->priv->bookmarks))
+		{
+			return model->priv->bookmarks;
+		}
+		else
+		{
+			return NULL;
+		}
+	}
+	else
+	{
+		return model->priv->history;
+	}
+}
+
+static void
+root_child_removed_cb (EphyNode *node,
+		       EphyNode *child,
+		       guint old_index,
+		       EphyCompletionModel *model)
+{
+	GtkTreePath *path;
+	guint index;
+
+	path = gtk_tree_path_new ();
+
+	index = old_index;
+	g_print ("Node index %d\n", index);
+	if (node == model->priv->bookmarks)
+	{
+		index += ephy_node_get_n_children (model->priv->history);
+	}
+	g_print ("List index %d\n", index);
+	gtk_tree_path_append_index (path, index);
+
+	gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
+	gtk_tree_path_free (path);
 }
 
 static void
@@ -156,9 +184,9 @@ root_child_added_cb (EphyNode *node,
 	GtkTreePath *path;
 	GtkTreeIter iter;
 
-	node_iter_from_node (model, child, &iter);
+	node_iter_from_node (model, node, child, &iter);
 
-	path = get_path_real (model, child);
+	path = get_path_real (model, node, child);
 	gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
 	gtk_tree_path_free (path);
 }
@@ -171,9 +199,9 @@ root_child_changed_cb (EphyNode *node,
 	GtkTreePath *path;
 	GtkTreeIter iter;
 
-	node_iter_from_node (model, node, &iter);
+	node_iter_from_node (model, node, child, &iter);
 
-	path = get_path_real (model, child);
+	path = get_path_real (model, node, child);
 	gtk_tree_model_row_changed (GTK_TREE_MODEL (model), path, &iter);
 	gtk_tree_path_free (path);
 }
@@ -342,50 +370,6 @@ init_relevance_col (GValue *value, EphyNode *node, int group)
 	g_value_set_int (value, relevance);
 }
 
-static EphyNode *
-get_node_root (EphyCompletionModel *model, EphyNode *node)
-{
-	if (ephy_node_has_child (model->priv->bookmarks, node))
-	{
-		return model->priv->bookmarks;
-	}
-	else
-	{
-		return model->priv->history;
-	}
-}
-
-static int
-get_node_group (EphyCompletionModel *model, EphyNode *node)
-{
-	if (ephy_node_has_child (model->priv->bookmarks, node))
-	{
-		return BOOKMARKS_GROUP;
-	}
-	else
-	{
-		return HISTORY_GROUP;
-	}
-}
-
-static EphyNode *
-get_index_root (EphyCompletionModel *model, int *index)
-{
-	int children;
-
-	children = ephy_node_get_n_children (model->priv->history);
-
-	if (*index >= children)
-	{
-		*index = *index - children;
-		return model->priv->bookmarks;
-	}
-	else
-	{
-		return model->priv->history;
-	}
-}
-
 static void
 ephy_completion_model_get_value (GtkTreeModel *tree_model,
 			         GtkTreeIter *iter,
@@ -401,7 +385,8 @@ ephy_completion_model_get_value (GtkTreeModel *tree_model,
 	g_return_if_fail (iter->stamp == model->priv->stamp);
 
 	node = iter->user_data;
-	group = get_node_group (model, node);
+	group = (iter->user_data2 == model->priv->history) ?
+		HISTORY_GROUP : BOOKMARKS_GROUP;
 
 	switch (column)
 	{
@@ -436,7 +421,7 @@ ephy_completion_model_get_iter (GtkTreeModel *tree_model,
 			        GtkTreePath *path)
 {
 	EphyCompletionModel *model = EPHY_COMPLETION_MODEL (tree_model);
-	EphyNode *root;
+	EphyNode *root, *child;
 	int i;
 
 	g_return_val_if_fail (EPHY_IS_COMPLETION_MODEL (model), FALSE);
@@ -444,87 +429,89 @@ ephy_completion_model_get_iter (GtkTreeModel *tree_model,
 
 	i = gtk_tree_path_get_indices (path)[0];
 
-	iter->stamp = model->priv->stamp;
-
 	root = get_index_root (model, &i);
-	iter->user_data = ephy_node_get_nth_child (root, i);
+	if (root == NULL) return FALSE;
 
-	if (iter->user_data == NULL)
-	{
-		iter->stamp = 0;
-		return FALSE;
-	}
+	child = ephy_node_get_nth_child (root, i);
+	g_return_val_if_fail (child != NULL, FALSE);
+
+	node_iter_from_node (model, root, child, iter);
 
 	return TRUE;
 }
 
 static GtkTreePath *
 ephy_completion_model_get_path (GtkTreeModel *tree_model,
-			       GtkTreeIter *iter)
+			        GtkTreeIter *iter)
 {
 	EphyCompletionModel *model = EPHY_COMPLETION_MODEL (tree_model);
-	EphyNode *node;
 
-	g_return_val_if_fail (EPHY_IS_COMPLETION_MODEL (tree_model), NULL);
 	g_return_val_if_fail (iter != NULL, NULL);
 	g_return_val_if_fail (iter->user_data != NULL, NULL);
+	g_return_val_if_fail (iter->user_data2 != NULL, NULL);
 	g_return_val_if_fail (iter->stamp == model->priv->stamp, NULL);
 
-	node = iter->user_data;
-
-	if (node == model->priv->history)
-		return gtk_tree_path_new ();
-
-	return get_path_real (model, node);
+	return get_path_real (model, iter->user_data2, iter->user_data);
 }
 
 static gboolean
 ephy_completion_model_iter_next (GtkTreeModel *tree_model,
-			        GtkTreeIter *iter)
+			         GtkTreeIter *iter)
 {
 	EphyCompletionModel *model = EPHY_COMPLETION_MODEL (tree_model);
 	EphyNode *node, *next, *root;
 
 	g_return_val_if_fail (iter != NULL, FALSE);
 	g_return_val_if_fail (iter->user_data != NULL, FALSE);
+	g_return_val_if_fail (iter->user_data2 != NULL, FALSE);
 	g_return_val_if_fail (iter->stamp == model->priv->stamp, FALSE);
 
 	node = iter->user_data;
+	root = iter->user_data2;
 
-	if (node == model->priv->history)
-		return FALSE;
-
-	root = get_node_root (model, node);
 	next = ephy_node_get_next_child (root, node);
-	if (next == NULL)
+
+	if (next == NULL && root == model->priv->history)
 	{
-		if (root == model->priv->history)
-		{
-			next = ephy_node_get_nth_child (model->priv->bookmarks, 0);
-		}
-		else
-		{
-			return FALSE;
-		}
+		root = model->priv->bookmarks;
+		next = ephy_node_get_nth_child (model->priv->bookmarks, 0);
 	}
 
-	iter->user_data = next;
+	if (next == NULL) return FALSE;
 
-	return (iter->user_data != NULL);
+	node_iter_from_node (model, root, next, iter);
+	
+	return TRUE;
 }
 
 static gboolean
 ephy_completion_model_iter_children (GtkTreeModel *tree_model,
-			            GtkTreeIter *iter,
-			            GtkTreeIter *parent)
+			             GtkTreeIter *iter,
+			             GtkTreeIter *parent)
 {
 	EphyCompletionModel *model = EPHY_COMPLETION_MODEL (tree_model);
+	EphyNode *root, *first_node;
 
 	if (parent != NULL)
+	{
 		return FALSE;
+	}
 
-	iter->stamp = model->priv->stamp;
-	iter->user_data = model->priv->history;
+	root = model->priv->history;
+	first_node = ephy_node_get_nth_child (root, 0);
+
+	if (first_node == NULL)
+	{
+		root = model->priv->bookmarks;
+		first_node = ephy_node_get_nth_child (root, 0);
+	}
+
+	if (first_node == NULL)
+	{
+		return FALSE;
+	}
+
+	node_iter_from_node (model, root, first_node, iter);
 
 	return TRUE;
 }
@@ -538,7 +525,7 @@ ephy_completion_model_iter_has_child (GtkTreeModel *tree_model,
 
 static int
 ephy_completion_model_iter_n_children (GtkTreeModel *tree_model,
-			              GtkTreeIter *iter)
+			               GtkTreeIter *iter)
 {
 	EphyCompletionModel *model = EPHY_COMPLETION_MODEL (tree_model);
 
@@ -557,9 +544,9 @@ ephy_completion_model_iter_n_children (GtkTreeModel *tree_model,
 
 static gboolean
 ephy_completion_model_iter_nth_child (GtkTreeModel *tree_model,
-			             GtkTreeIter *iter,
-			             GtkTreeIter *parent,
-			             int n)
+			              GtkTreeIter *iter,
+			              GtkTreeIter *parent,
+			              int n)
 {
 	EphyCompletionModel *model = EPHY_COMPLETION_MODEL (tree_model);
 	EphyNode *node, *root;
@@ -567,25 +554,24 @@ ephy_completion_model_iter_nth_child (GtkTreeModel *tree_model,
 	g_return_val_if_fail (EPHY_IS_COMPLETION_MODEL (tree_model), FALSE);
 
 	if (parent != NULL)
+	{
 		return FALSE;
+	}
 
 	root = get_index_root (model, &n);
 	node = ephy_node_get_nth_child (root, n);
 
-	if (node != NULL)
-	{
-		iter->stamp = model->priv->stamp;
-		iter->user_data = node;
-		return TRUE;
-	}
-	else
-		return FALSE;
+	if (node == NULL) return FALSE;
+
+	node_iter_from_node (model, root, node, iter);
+
+	return TRUE;
 }
 
 static gboolean
 ephy_completion_model_iter_parent (GtkTreeModel *tree_model,
-			          GtkTreeIter *iter,
-			          GtkTreeIter *child)
+			           GtkTreeIter *iter,
+			           GtkTreeIter *child)
 {
 	return FALSE;
 }
