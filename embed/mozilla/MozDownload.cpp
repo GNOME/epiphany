@@ -80,9 +80,9 @@ MozDownload::~MozDownload()
 }
 
 #ifdef HAVE_NSITRANSFER_H
-NS_IMPL_ISUPPORTS1(MozDownload, nsITransfer)
+NS_IMPL_ISUPPORTS2(MozDownload, nsIWebProgressListener, nsITransfer)
 #else
-NS_IMPL_ISUPPORTS3(MozDownload, nsIDownload, nsITransfer, nsIWebProgressListener)
+NS_IMPL_ISUPPORTS3(MozDownload, nsIWebProgressListener, nsIDownload, nsITransfer)
 #endif
 
 NS_IMETHODIMP
