@@ -1,3 +1,10 @@
+2004-12-26  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/FilePicker.cpp:
+
+	Don't destroy the dialogue with the parent, since that makes
+	gtk+ go crazy. Fixes bug #156816.
+
 2004-12-25  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/ephy-encodings.c: (ephy_encodings_init):
