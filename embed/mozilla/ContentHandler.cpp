@@ -39,6 +39,10 @@
 #include <nsIInterfaceRequestorUtils.h>
 #include <nsCExternalHandlerService.h>
 
+#ifdef ALLOW_PRIVATE_API
+#include <nsIServiceManager.h>
+#endif
+
 #include "ephy-prefs.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-shell.h"
@@ -51,10 +55,6 @@
 #include "ContentHandler.h"
 #include "MozDownload.h"
 #include "EphyUtils.h"
-
-class GContentHandler;
-
-NS_IMPL_ISUPPORTS1(GContentHandler, nsIHelperAppLauncherDialog)
 
 #ifdef MOZ_NSIMIMEINFO_NSACSTRING_
 GContentHandler::GContentHandler()
@@ -73,13 +73,14 @@ GContentHandler::~GContentHandler()
 	LOG ("GContentHandler dtor (%p)", this)
 
 #ifndef MOZ_NSIMIMEINFO_NSACSTRING_
-	nsMemory::Free (mMimeType);
+	if (mMimeType)
+	{
+		nsMemory::Free (mMimeType);
+	}
 #endif
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// begin nsIHelperAppLauncher impl
-////////////////////////////////////////////////////////////////////////////////
+NS_IMPL_ISUPPORTS1(GContentHandler, nsIHelperAppLauncherDialog)
 
 /* void show (in nsIHelperAppLauncher aLauncher, in nsISupports aContext); */
 NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
@@ -106,7 +107,7 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 
 	if (!handled)
 	{
-		MIMEDoAction ();
+		MIMEInitiateAction ();
 	}
 	else
 	{
@@ -146,6 +147,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 					EPHY_FILE_FILTER_ALL);
 	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), defaultFile.get());
 
+	/* FIXME: modal -- mozilla sucks! */
 	do
 	{
 		g_free (filename);
@@ -177,7 +179,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 	}
 }
 
-NS_METHOD GContentHandler::LaunchHelperApp (void)
+NS_METHOD GContentHandler::LaunchHelperApp ()
 {
 	nsCOMPtr<nsIExternalHelperAppService> helperService;
 
@@ -202,31 +204,7 @@ NS_METHOD GContentHandler::LaunchHelperApp (void)
 	return NS_OK;
 }
 
-NS_METHOD GContentHandler::CheckAppSupportScheme (void)
-{
-	GList *l;
-
-	mAppSupportScheme = PR_FALSE;	
-
-	if (!mHelperApp) return NS_OK;
-
-	if (mHelperApp->expects_uris != GNOME_VFS_MIME_APPLICATION_ARGUMENT_TYPE_URIS)
-		return NS_OK;
-	
-	for (l = mHelperApp->supported_uri_schemes; l != NULL; l = l->next)
-	{
-		char *uri_scheme = (char *)l->data;
-
-		if (strcmp (mScheme.get(), uri_scheme) == 0)
-		{
-			mAppSupportScheme = PR_TRUE;
-		}
-	}
-
-	return NS_OK;
-}
-
-NS_METHOD GContentHandler::Init (void)
+NS_METHOD GContentHandler::Init ()
 {
 	nsresult rv;
 
@@ -253,11 +231,36 @@ NS_METHOD GContentHandler::Init (void)
 	return NS_OK;
 }
 
+static void
+response_cb (GtkWidget *dialog,
+	     int response,
+	     GContentHandler *self)
+{
+	gtk_widget_destroy (dialog);
+
+	if (response > 0)
+	{
+		self->mAction = (ContentAction) response;
+	}
+	else
+	{
+		self->mAction = CONTENT_ACTION_NONE;
+	}
+
+	self->MIMEDoAction ();
+}
+
+static void
+release_cb (GContentHandler *data)
+{
+	NS_RELEASE (data);
+}
+
 NS_METHOD GContentHandler::MIMEConfirmAction ()
 {
 	GtkWidget *dialog;
 	const char *action_label, *primary, *secondary;
-	int response;
+	//int response;
 
 	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (mContext);
 	GtkWindow *parentWindow = GTK_WINDOW (EphyUtils::FindGtkParent(parentDOMWindow));
@@ -291,7 +294,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 
 	dialog = gtk_message_dialog_new
 		(parentWindow,
-		 GTK_DIALOG_MODAL /* FIXME mozilla sucks */,
+		 GTK_DIALOG_DESTROY_WITH_PARENT,
 		 GTK_MESSAGE_WARNING,
 		 GTK_BUTTONS_NONE,	
 		 primary);
@@ -310,23 +313,16 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), (guint) mAction);
 
-	response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-	if (response == GTK_RESPONSE_DELETE_EVENT)
-	{
-		mAction = CONTENT_ACTION_NONE;
-	}
-	else
-	{
-		mAction = (ContentAction)response;
-	}
-
-	gtk_widget_destroy (dialog);
+	NS_ADDREF (this);
+	g_signal_connect_data (dialog, "response",
+			       G_CALLBACK (response_cb), this,
+			       (GClosureNotify) release_cb, (GConnectFlags) 0);
+	gtk_window_present (GTK_WINDOW (dialog));
 
 	return NS_OK;
 }
 
-NS_METHOD GContentHandler::MIMEDoAction (void)
+NS_METHOD GContentHandler::MIMEInitiateAction (void)
 {
 	gboolean auto_downloads;
 
@@ -341,8 +337,6 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	mHelperApp = gnome_vfs_mime_get_default_application (mMimeType);
 	mPermission = ephy_embed_shell_check_mime (embed_shell, mMimeType);
 #endif
-
-	CheckAppSupportScheme ();
 
 	if (auto_downloads)
 	{
@@ -362,7 +356,16 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	{
 		MIMEConfirmAction ();
 	}
+	else
+	{
+		MIMEDoAction ();
+	}
 
+	return NS_OK;
+}
+
+NS_METHOD GContentHandler::MIMEDoAction (void)
+{
 	nsCOMPtr<nsIMIMEInfo> mimeInfo;
 	mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
 	NS_ENSURE_TRUE (mimeInfo, NS_ERROR_FAILURE);

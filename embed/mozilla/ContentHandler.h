@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2000-2003 Marco Pesenti Gritti, Xan Lopez
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti,
+ *  Copyright (C) 2003 Xan Lopez
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,27 +19,25 @@
  *  $Id$
  */
 
-#ifndef __ContentHandler_h
-#define __ContentHandler_h
+#ifndef CONTENT_HANDLER_H
+#define CONTENT_HANDLER_H
 
 #include "config.h"
 
-#include "ephy-embed-shell.h"
-
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
+#define MOZILLA_STRICT_API
+#include <nsEmbedString.h>
+#undef MOZILLA_STRICT_API
 #include <nsCOMPtr.h>
 #include <nsISupports.h>
 #include <nsIURI.h>
 #include <nsIFile.h>
-#define MOZILLA_STRICT_API
-#include <nsEmbedString.h>
-#undef MOZILLA_STRICT_API
 #include <nsIHelperAppLauncherDialog.h>
 
 typedef enum
 {
-	CONTENT_ACTION_OPEN,
+	CONTENT_ACTION_OPEN = 1,
 	CONTENT_ACTION_OPEN_TMP,
 	CONTENT_ACTION_DOWNLOAD,
 	CONTENT_ACTION_SAVEAS,
@@ -62,23 +61,22 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	GContentHandler();
 	virtual ~GContentHandler();
 
+	NS_METHOD MIMEDoAction ();
+	ContentAction mAction;
   private:
 
 	NS_METHOD Init ();
 	NS_METHOD LaunchHelperApp ();
 
+	NS_METHOD MIMEInitiateAction ();
 	NS_METHOD MIMEConfirmAction ();
-	NS_METHOD MIMEDoAction ();
-	NS_METHOD CheckAppSupportScheme ();
 
 	nsCOMPtr<nsIHelperAppLauncher> mLauncher;
 	nsCOMPtr<nsIURI> mUri;
 	nsCOMPtr<nsIFile> mTempFile;
 	nsCOMPtr<nsISupports> mContext;
 
-	PRBool mAppSupportScheme;
 	GnomeVFSMimeApplication *mHelperApp;
-	ContentAction mAction;
 	EphyMimePermission mPermission;
 
 	nsEmbedCString mUrl;
@@ -90,4 +88,4 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 #endif
 };
 
-#endif /* __ContentHandler_h */
+#endif /* CONTENT_HANDLER_H */
