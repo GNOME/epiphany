@@ -39,6 +39,7 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-file-helpers.h"
 #include "egg-action-group.h"
+#include "egg-toggle-action.h"
 #include "egg-menu-merge.h"
 #include "egg-toggle-action.h"
 #include "popup-commands.h"
@@ -136,51 +137,51 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 	/* Toplevel */
 	{ "File", N_("_File"), NULL, NULL, NULL, NULL, NULL },
 	{ "Edit", N_("_Edit"), NULL, NULL, NULL, NULL, NULL },
+	{ "View", N_("_View"), NULL, NULL, NULL, NULL, NULL },
 	{ "Help", N_("_Help"), NULL, NULL, NULL, NULL, NULL },
 	{ "FakeToplevel", (""), NULL, NULL, NULL, NULL, NULL },
 
+	/* File Menu*/
 	{ "NewTopic", N_("_New Topic"), GTK_STOCK_NEW, "<control>N",
 	  NULL, G_CALLBACK (cmd_add_topic), NULL },
-
 	{ "OpenInWindow", N_("_Open in New Window"), GTK_STOCK_OPEN, "<control>O",
 	  NULL, G_CALLBACK (cmd_open_bookmarks_in_browser), NULL },
-
 	{ "OpenInTab", N_("Open in New _Tab"), NULL, "<shift><control>O",
 	  NULL, G_CALLBACK (cmd_open_bookmarks_in_tabs), NULL },
-
-	{ "ShowInToolbar", N_("Show in the Toolbar"), NULL, NULL,
-	  NULL, G_CALLBACK (cmd_show_in_the_toolbar), NULL, TOGGLE_ACTION },
-
-	{ "Cut", N_("Cu_t"), GTK_STOCK_CUT, "<control>X",
-	  NULL, G_CALLBACK (cmd_cut), NULL },
-
-	{ "Copy", N_("_Copy"), GTK_STOCK_COPY, "<control>C",
-	  NULL, G_CALLBACK (cmd_copy), NULL },
-
-	{ "Paste", N_("_Paste"), GTK_STOCK_PASTE, "<control>V",
-	  NULL, G_CALLBACK (cmd_paste), NULL },
-
-	{ "SelectAll", N_("Select _All"), NULL, "<control>A",
-	  NULL, G_CALLBACK (cmd_select_all), NULL },
-
 	{ "Rename", N_("_Rename"), NULL, "F2",
 	  NULL, G_CALLBACK (cmd_rename), NULL },
-
 	{ "Delete", N_("_Delete"), GTK_STOCK_DELETE, NULL,
 	  NULL, G_CALLBACK (cmd_delete), NULL },
-
+	{ "ShowInToolbar", N_("_Show in the Toolbar"), NULL, NULL,
+	  NULL, G_CALLBACK (cmd_show_in_the_toolbar), NULL, TOGGLE_ACTION },
 	{ "Properties", N_("_Properties"), GTK_STOCK_PROPERTIES, "<alt>Return",
 	  NULL, G_CALLBACK (cmd_bookmark_properties), NULL },
-
 	{ "Close", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
 	  NULL, G_CALLBACK (cmd_close), NULL },
 
+	/* Edit Menu */
+	{ "Cut", N_("Cu_t"), GTK_STOCK_CUT, "<control>X",
+	  NULL, G_CALLBACK (cmd_cut), NULL },
+	{ "Copy", N_("_Copy"), GTK_STOCK_COPY, "<control>C",
+	  NULL, G_CALLBACK (cmd_copy), NULL },
+	{ "Paste", N_("_Paste"), GTK_STOCK_PASTE, "<control>V",
+	  NULL, G_CALLBACK (cmd_paste), NULL },
+	{ "SelectAll", N_("Select _All"), NULL, "<control>A",
+	  NULL, G_CALLBACK (cmd_select_all), NULL },
+	
+	/* View Menu */
+	{ "ViewTitle", N_("_Title"), NULL, NULL,
+	  NULL, NULL, NULL, RADIO_ACTION, NULL },
+	{ "ViewLocation", N_("_Location"), NULL, NULL,
+	  NULL, NULL, NULL, RADIO_ACTION, "ViewTitle" },
+	{ "ViewTitleLocation", N_("T_itle and Location"), NULL, NULL,
+	  NULL, NULL, NULL, RADIO_ACTION, "ViewTitle" },	
+
+	/* Help Menu */	
 	{ "HelpContents", N_("_Contents"), GTK_STOCK_HELP, "F1",
 	  NULL, G_CALLBACK (cmd_help_contents), NULL },
-
 	{ "HelpAbout", N_("_About"), GNOME_STOCK_ABOUT, NULL,
 	  NULL, G_CALLBACK (window_cmd_help_about), NULL },
-
 };
 static guint ephy_bookmark_popup_n_entries = G_N_ELEMENTS (ephy_bookmark_popup_entries);
 
@@ -958,6 +959,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	char *selected_id_str;
 	EggMenuMerge *ui_merge;
 	EggActionGroup *action_group;
+	EggAction *action;
 	const char *icon_path;
 	int i;
 
@@ -1003,6 +1005,10 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	g_signal_connect (menu, "activate", G_CALLBACK (menu_activate_cb), editor);
 	menu = egg_menu_merge_get_widget (ui_merge, "/menu/EditMenu");
 	g_signal_connect (menu, "activate", G_CALLBACK (menu_activate_cb), editor);
+
+	/* Fixme: We should implement gconf prefs for monitoring this setting */
+	action = egg_action_group_get_action (action_group, "ViewTitle");
+	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action), TRUE);
 
 	hbox = gtk_hbox_new (FALSE, 6);
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 6);

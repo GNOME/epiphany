@@ -1,3 +1,28 @@
+2003-04-21  David Bordoley <bordoley@msu.edu>
+
+	* data/ui/epiphany-bookmark-editor-ui.xml.in:
+	
+	Fixed a duplicate seperator. Add a view menu.
+
+	* data/ui/epiphany-history-window-ui.xml.in:
+	
+	Add a view menu.
+
+	* src/ephy-history-window.c: (ephy_history_window_construct):
+	
+	Clean up ephy_history_ui_entries[] so that it is a little more
+	organized. Add a view menu, but still needs to be hooked up.
+
+	* src/bookmarks/ephy-bookmark-properties.c: (build_ui):
+	
+	s/"Show in the bookmarks _toolbar"/"_Show in the bookmarks toolbar".
+	Fixes a mnemonic collision.
+
+	* src/bookmarks/ephy-bookmarks-editor.c: (ephy_bookmarks_editor_construct):
+	Clean up ephy_bookmark_popup_entries[] so that it is a little more
+	organized. Add a view menu, but still needs to be hooked up. Add mnemonic
+	to the "_Show in Toolbar" menu entry.
+
 2003-04-20  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* src/bookmarks/Makefile.am:
