@@ -195,8 +195,7 @@ ephy_statusbar_init (EphyStatusbar *t)
 	gtk_box_reorder_child (GTK_BOX (t), t->priv->icon_container, 0);
 	gtk_widget_show (t->priv->icon_container);
 
-	/* FIXME: enable this when gtk+ bug 73359 is fixed */
-	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (t), FALSE);
+	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (t), TRUE);
 
 	create_statusbar_progress (t);
 	create_statusbar_security_icon (t);
