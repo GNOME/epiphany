@@ -238,7 +238,20 @@ ephy_main_start (gpointer data)
 			(gaserver, quit_option, &corba_env);
 	}
 	/* provided with urls? */
-	else if (!open_as_nautilus_view)
+	else if (n_urls == 0 &&
+		 !open_as_nautilus_view)
+	{
+		/* no, open a default window */
+		GNOME_EphyAutomation_loadurl
+			(gaserver, "",
+			 open_fullscreen,
+			 open_in_existing,
+			 open_in_new_window,
+			 open_in_new_tab,
+			 !noraise,
+			 &corba_env);
+	}
+	else
 	{
 		/* open all of the urls */
 		for (i = 0; i < n_urls; i++)
@@ -254,11 +267,8 @@ ephy_main_start (gpointer data)
 		}
 	}
 
-	/* Unref so it will exit if no more used
-	 * If started with --nautilus-view, only exit when the
-	 * last view has been destroyed.
-	 */
-	if (first_instance && !open_as_nautilus_view)
+	/* Unref so it will exit if no more used */
+	if (first_instance)
 	{
 		g_object_unref (G_OBJECT(ephy_shell));
 	}
@@ -297,18 +307,6 @@ ephy_main_automation_init (void)
 	}
 }
 
-/* dummy argument to open a default window */
-static gint
-ephy_main_dummy_url_argument (gchar ***urls)
-{
-       *urls = g_new0 (gchar *, 2);
-
-       (*urls)[0] = g_strdup ("");
-       (*urls)[1] = NULL;
-
-       return 1;
-}
-
 /**
  * translate_url_arguments: gather URL arguments and expand them fully
  * with realpath if they're filenames
@@ -323,7 +321,8 @@ ephy_main_translate_url_arguments (poptContext context, gchar ***urls)
         /* any context remaining? */
         if (context == NULL)
         {
-		return ephy_main_dummy_url_argument (urls);
+                *urls = NULL;
+                return 0;
         }
 
         /* get the args and check */
@@ -331,7 +330,8 @@ ephy_main_translate_url_arguments (poptContext context, gchar ***urls)
         if (args == NULL)
         {
                 poptFreeContext (context);
-		return ephy_main_dummy_url_argument (urls);
+                *urls = NULL;
+                return 0;
         }
 
         /* count args */
