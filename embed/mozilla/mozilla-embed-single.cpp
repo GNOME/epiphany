@@ -390,7 +390,7 @@ getUILang (nsAString& aUILang)
 #else
 	nsXPIDLString uiLang;
 	result = localeService->GetLocaleComponentForUserAgent (getter_Copies(uiLang));
-	aUILang = uiLang;
+	aUILang.Assign (uiLang);
 #endif
 
 	if (NS_FAILED (result))

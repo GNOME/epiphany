@@ -1,3 +1,23 @@
+2003-12-06  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	Fix a mem leak (ported from galeon).
+
+2003-12-06  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_get_type),
+	(ephy_embed_shell_finalize), (ephy_embed_shell_get_favicon_cache),
+	(ephy_embed_shell_get_global_history),
+	(ephy_embed_shell_get_downloader_view), (load_mime_from_xml),
+	(ephy_embed_shell_init), (ephy_embed_shell_class_init):
+	* embed/ephy-embed-shell.h:
+	* embed/ephy-embed.c: (ephy_embed_base_init):
+	* embed/ephy-embed.h:
+	* src/ephy-tab.c: (ephy_tab_init):
+
+	Misc cleanups. Remove a duplicated signal from EphyEmbed.
+
 2003-12-05  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-state.c: (sync_expander_cb), (ephy_state_add_expander):
