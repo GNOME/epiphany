@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 #define EPHY_IS_HISTORY_WINDOW_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_HISTORY_WINDOW))
 #define EPHY_HISTORY_WINDOW_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_HISTORY_WINDOW, EphyHistoryWindowClass))
 
-typedef struct EphyHistoryWindowPrivate EphyHistoryWindowPrivate;
+typedef struct _EphyHistoryWindowPrivate EphyHistoryWindowPrivate;
 
 typedef struct
 {

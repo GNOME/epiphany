@@ -49,8 +49,8 @@ typedef enum
 
 typedef struct _EphyPermissionInfo		EphyPermissionInfo;
 
-typedef struct EphyPermissionManager		EphyPermissionManager;
-typedef struct EphyPermissionManagerIface	EphyPermissionManagerIface;
+typedef struct _EphyPermissionManager		EphyPermissionManager;
+typedef struct _EphyPermissionManagerIface	EphyPermissionManagerIface;
 
 struct _EphyPermissionInfo
 {
@@ -59,7 +59,7 @@ struct _EphyPermissionInfo
 	EphyPermission permission;
 };
 
-struct EphyPermissionManagerIface
+struct _EphyPermissionManagerIface
 {
 	GTypeInterface base_iface;
 

@@ -32,7 +32,7 @@
 
 #define EPHY_ENCODINGS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODINGS, EphyEncodingsPrivate))
 
-struct EphyEncodingsPrivate
+struct _EphyEncodingsPrivate
 {
 	EphyNodeDb *db;
 	EphyNode *root;

@@ -45,7 +45,7 @@ static gboolean ephy_tree_model_sort_multi_drag_data_delete (EggTreeMultiDragSou
 
 #define EPHY_TREE_MODEL_SORT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TREE_MODEL_SORT, EphyTreeModelSortPrivate))
 
-struct EphyTreeModelSortPrivate
+struct _EphyTreeModelSortPrivate
 {
 	char *str_list;
 	int drag_column_id;

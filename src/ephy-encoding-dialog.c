@@ -60,7 +60,7 @@ EphyDialogProperty properties [] =
 
 #define EPHY_ENCODING_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODING_DIALOG, EphyEncodingDialogPrivate))
 
-struct EphyEncodingDialogPrivate
+struct _EphyEncodingDialogPrivate
 {
 	EphyEncodings *encodings;
 	EphyWindow *window;

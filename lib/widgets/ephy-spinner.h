@@ -40,11 +40,11 @@ G_BEGIN_DECLS
 #define EPHY_IS_SPINNER_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_SPINNER))
 #define EPHY_SPINNER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SPINNER, EphySpinnerClass))
 
-typedef struct EphySpinner		EphySpinner;
-typedef struct EphySpinnerClass		EphySpinnerClass;
-typedef struct EphySpinnerDetails	EphySpinnerDetails;
+typedef struct _EphySpinner		EphySpinner;
+typedef struct _EphySpinnerClass		EphySpinnerClass;
+typedef struct _EphySpinnerDetails	EphySpinnerDetails;
 
-struct EphySpinner
+struct _EphySpinner
 {
 	GtkEventBox parent;
 
@@ -52,7 +52,7 @@ struct EphySpinner
 	EphySpinnerDetails *details;
 };
 
-struct EphySpinnerClass
+struct _EphySpinnerClass
 {
 	GtkEventBoxClass parent_class;
 };

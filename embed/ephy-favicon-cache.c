@@ -47,7 +47,7 @@ static void ephy_favicon_cache_finalize	  (GObject *object);
 
 #define EPHY_FAVICON_CACHE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FAVICON_CACHE, EphyFaviconCachePrivate))
 
-struct EphyFaviconCachePrivate
+struct _EphyFaviconCachePrivate
 {
 	char *directory;
 	char *xml_file;

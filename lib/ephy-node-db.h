@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 #define EPHY_NODE_DB_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_NODE_DB, EphyNodeDbClass))
 
 typedef struct _EphyNodeDb EphyNodeDb;
-typedef struct EphyNodeDbPrivate EphyNodeDbPrivate;
+typedef struct _EphyNodeDbPrivate EphyNodeDbPrivate;
 
 struct _EphyNodeDb
 {

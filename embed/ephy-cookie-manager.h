@@ -36,8 +36,8 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_COOKIE			(ephy_cookie_get_type ())
 
-typedef struct EphyCookieManager	EphyCookieManager;
-typedef struct EphyCookieManagerIface	EphyCookieManagerIface;
+typedef struct _EphyCookieManager	EphyCookieManager;
+typedef struct _EphyCookieManagerIface	EphyCookieManagerIface;
 
 typedef enum
 {
@@ -72,7 +72,7 @@ typedef struct
 	guint p3p_policy : 3;
 } EphyCookie;
 
-struct EphyCookieManagerIface
+struct _EphyCookieManagerIface
 {
 	GTypeInterface base_iface;
 

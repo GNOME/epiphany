@@ -36,7 +36,7 @@ static void ephy_tree_model_node_tree_model_init (GtkTreeModelIface *iface);
 
 #define EPHY_TREE_MODEL_NODE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TREE_MODEL_NODE, EphyTreeModelNodePrivate))
 
-struct EphyTreeModelNodePrivate
+struct _EphyTreeModelNodePrivate
 {
 	EphyNode *root;
 

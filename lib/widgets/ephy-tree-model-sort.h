@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 #define EPHY_IS_TREE_MODEL_SORT_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TREE_MODEL_SORT))
 #define EPHY_TREE_MODEL_SORT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TREE_MODEL_SORT, EphyTreeModelSortClass))
 
-typedef struct EphyTreeModelSortPrivate EphyTreeModelSortPrivate;
+typedef struct _EphyTreeModelSortPrivate EphyTreeModelSortPrivate;
 
 typedef struct
 {

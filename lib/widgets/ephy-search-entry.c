@@ -31,7 +31,7 @@ static void ephy_search_entry_init (EphySearchEntry *entry);
 
 #define EPHY_SEARCH_ENTRY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SEARCH_ENTRY, EphySearchEntryPrivate))
 
-struct EphySearchEntryPrivate
+struct _EphySearchEntryPrivate
 {
 	gboolean clearing;
 

@@ -34,11 +34,11 @@ G_BEGIN_DECLS
 #define EPHY_IS_BOOKMARKSBAR_MODEL_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_BOOKMARKSBAR_MODEL))
 #define EPHY_BOOKMARKSBAR_MODEL_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_BOOKMARKSBAR_MODEL, EphyBookmarksBarModelClass))
 
-typedef struct EphyBookmarksBarModelClass		EphyBookmarksBarModelClass;
-typedef struct EphyBookmarksBarModel		EphyBookmarksBarModel;
-typedef struct EphyBookmarksBarModelPrivate	EphyBookmarksBarModelPrivate;
+typedef struct _EphyBookmarksBarModelClass		EphyBookmarksBarModelClass;
+typedef struct _EphyBookmarksBarModel		EphyBookmarksBarModel;
+typedef struct _EphyBookmarksBarModelPrivate	EphyBookmarksBarModelPrivate;
 
-struct EphyBookmarksBarModel
+struct _EphyBookmarksBarModel
 {
 	EggToolbarsModel parent_object;
 
@@ -46,7 +46,7 @@ struct EphyBookmarksBarModel
 	EphyBookmarksBarModelPrivate *priv;
 };
 
-struct EphyBookmarksBarModelClass
+struct _EphyBookmarksBarModelClass
 {
 	EggToolbarsModelClass parent_class;
 };

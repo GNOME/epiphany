@@ -33,9 +33,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_DOWNLOAD_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_DOWNLOAD))
 #define EPHY_DOWNLOAD_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_DOWNLOAD, EphyDownloadClass))
 
-typedef struct EphyDownload EphyDownload;
-typedef struct EphyDownloadClass EphyDownloadClass;
-typedef struct EphyDownloadPrivate EphyDownloadPrivate;
+typedef struct _EphyDownload EphyDownload;
+typedef struct _EphyDownloadClass EphyDownloadClass;
+typedef struct _EphyDownloadPrivate EphyDownloadPrivate;
 
 typedef enum
 {
@@ -46,7 +46,7 @@ typedef enum
 	EPHY_DOWNLOAD_FAILED
 } EphyDownloadState;
 
-struct EphyDownload
+struct _EphyDownload
 {
         GObject parent;
 
@@ -54,7 +54,7 @@ struct EphyDownload
 	EphyDownloadPrivate *priv;
 };
 
-struct EphyDownloadClass
+struct _EphyDownloadClass
 {
         GObjectClass parent_class;
 

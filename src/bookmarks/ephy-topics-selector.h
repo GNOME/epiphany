@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 #define EPHY_IS_TOPICS_SELECTOR_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TOPICS_SELECTOR))
 #define EPHY_TOPICS_SELECTOR_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TOPICS_SELECTOR, EphyTopicsSelectorClass))
 
-typedef struct EphyTopicsSelectorPrivate EphyTopicsSelectorPrivate;
+typedef struct _EphyTopicsSelectorPrivate EphyTopicsSelectorPrivate;
 
 typedef struct
 {

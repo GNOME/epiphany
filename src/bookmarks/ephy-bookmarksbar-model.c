@@ -51,7 +51,7 @@ enum
 
 #define EPHY_BOOKMARKSBAR_MODEL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKSBAR_MODEL, EphyBookmarksBarModelPrivate))
 
-struct EphyBookmarksBarModelPrivate
+struct _EphyBookmarksBarModelPrivate
 {
 	EphyBookmarks *bookmarks;
 	char *xml_file;

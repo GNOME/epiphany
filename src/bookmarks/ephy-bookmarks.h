@@ -36,9 +36,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_BOOKMARKS_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_BOOKMARKS))
 #define EPHY_BOOKMARKS_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_BOOKMARKS, EphyBookmarksClass))
 
-typedef struct EphyBookmarksClass	EphyBookmarksClass;
-typedef struct EphyBookmarks		EphyBookmarks;
-typedef struct EphyBookmarksPrivate	EphyBookmarksPrivate;
+typedef struct _EphyBookmarksClass	EphyBookmarksClass;
+typedef struct _EphyBookmarks		EphyBookmarks;
+typedef struct _EphyBookmarksPrivate	EphyBookmarksPrivate;
 
 #define	BOOKMARKS_HIERARCHY_SEP	"->"
 
@@ -52,7 +52,7 @@ enum
 	EPHY_NODE_KEYWORD_PROP_PRIORITY	= 8
 };
 
-struct EphyBookmarks
+struct _EphyBookmarks
 {
 	GObject parent;
 
@@ -60,7 +60,7 @@ struct EphyBookmarks
 	EphyBookmarksPrivate *priv;
 };
 
-struct EphyBookmarksClass
+struct _EphyBookmarksClass
 {
 	GObjectClass parent_class;
 

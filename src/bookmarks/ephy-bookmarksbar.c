@@ -57,7 +57,7 @@ static GObjectClass *parent_class = NULL;
 
 #define EPHY_BOOKMARKSBAR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKSBAR, EphyBookmarksBarPrivate))
 
-struct EphyBookmarksBarPrivate
+struct _EphyBookmarksBarPrivate
 {
 	EphyWindow *window;
 	GtkActionGroup *action_group;

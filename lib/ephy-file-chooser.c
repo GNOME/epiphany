@@ -34,7 +34,7 @@
 
 #define EPHY_FILE_CHOOSER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FILE_CHOOSER, EphyFileChooserPrivate))
 
-struct EphyFileChooserPrivate
+struct _EphyFileChooserPrivate
 {
 	char *persist_key;
 };

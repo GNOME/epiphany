@@ -51,7 +51,7 @@
 
 #define EPHY_BOOKMARKS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKS, EphyBookmarksPrivate))
 
-struct EphyBookmarksPrivate
+struct _EphyBookmarksPrivate
 {
 	EphyBookmarksBarModel *toolbars_model;
 	gboolean init_defaults;

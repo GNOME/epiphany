@@ -47,7 +47,7 @@ enum
 
 #define EPHY_EMBED_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_DIALOG, EphyEmbedDialogPrivate))
 
-struct EphyEmbedDialogPrivate
+struct _EphyEmbedDialogPrivate
 {
 	EphyEmbed *embed;
 };

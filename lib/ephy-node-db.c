@@ -48,7 +48,7 @@ enum
 
 #define EPHY_NODE_DB_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NODE_DB, EphyNodeDbPrivate))
 
-struct EphyNodeDbPrivate
+struct _EphyNodeDbPrivate
 {
 	char *name;
 	gboolean immutable;

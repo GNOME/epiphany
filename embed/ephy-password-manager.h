@@ -36,8 +36,8 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_PASSWORD_INFO			(ephy_password_info_get_type ())
 
-typedef struct EphyPasswordManager	EphyPasswordManager;
-typedef struct EphyPasswordManagerIface	EphyPasswordManagerIface;
+typedef struct _EphyPasswordManager		EphyPasswordManager;
+typedef struct _EphyPasswordManagerIface	EphyPasswordManagerIface;
 
 typedef struct
 {
@@ -46,7 +46,7 @@ typedef struct
 	char *password;
 } EphyPasswordInfo;
 
-struct EphyPasswordManagerIface
+struct _EphyPasswordManagerIface
 {
 	GTypeInterface base_iface;
 

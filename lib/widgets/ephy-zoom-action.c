@@ -34,7 +34,7 @@
 
 #define EPHY_ZOOM_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ZOOM_ACTION, EphyZoomActionPrivate))
 
-struct EphyZoomActionPrivate
+struct _EphyZoomActionPrivate
 {
 	float zoom;
 };

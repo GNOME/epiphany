@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 #define EPHY_IS_NODE_FILTER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_NODE_FILTER))
 #define EPHY_NODE_FILTER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_NODE_FILTER, EphyNodeFilterClass))
 
-typedef struct EphyNodeFilterPrivate EphyNodeFilterPrivate;
+typedef struct _EphyNodeFilterPrivate EphyNodeFilterPrivate;
 
 typedef struct
 {
@@ -70,7 +70,7 @@ typedef enum
 	EPHY_NODE_FILTER_EXPRESSION_INT_PROP_LESS_THAN     /* args: int prop_id, int int */
 } EphyNodeFilterExpressionType;
 
-typedef struct EphyNodeFilterExpression EphyNodeFilterExpression;
+typedef struct _EphyNodeFilterExpression EphyNodeFilterExpression;
 
 /* The filter starts iterating over all expressions at level 0,
  * if one of them is TRUE it continues to level 1, etc.

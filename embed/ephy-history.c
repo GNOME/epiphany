@@ -45,7 +45,7 @@
 
 #define EPHY_HISTORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_HISTORY, EphyHistoryPrivate))
 
-struct EphyHistoryPrivate
+struct _EphyHistoryPrivate
 {
 	char *xml_file;
 	EphyNodeDb *db;

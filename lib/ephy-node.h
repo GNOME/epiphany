@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define EPHY_IS_NODE(o)	(o != NULL)
 
-typedef struct EphyNode EphyNode;
+typedef struct _EphyNode EphyNode;
 
 typedef enum
 {

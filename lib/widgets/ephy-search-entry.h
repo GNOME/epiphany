@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 #define EPHY_IS_SEARCH_ENTRY_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_SEARCH_ENTRY))
 #define EPHY_SEARCH_ENTRY_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SEARCH_ENTRY, EphySearchEntryClass))
 
-typedef struct EphySearchEntryPrivate EphySearchEntryPrivate;
+typedef struct _EphySearchEntryPrivate EphySearchEntryPrivate;
 
 typedef struct
 {

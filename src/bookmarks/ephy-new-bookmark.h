@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 #define EPHY_IS_NEW_BOOKMARK_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_NEW_BOOKMARK))
 #define EPHY_NEW_BOOKMARK_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_NEW_BOOKMARK, EphyNewBookmarkClass))
 
-typedef struct EphyNewBookmarkPrivate EphyNewBookmarkPrivate;
+typedef struct _EphyNewBookmarkPrivate EphyNewBookmarkPrivate;
 
 typedef struct
 {

@@ -54,7 +54,7 @@ typedef struct
 	guint property_id;
 } EphyNodeChange;
 
-struct EphyNode
+struct _EphyNode
 {
 	int ref_count;
 

@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 #define EPHY_IS_BOOKMARK_PROPERTIES_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_BOOKMARK_PROPERTIES))
 #define EPHY_BOOKMARK_PROPERTIES_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_BOOKMARK_PROPERTIES, EphyBookmarkPropertiesClass))
 
-typedef struct EphyBookmarkPropertiesPrivate EphyBookmarkPropertiesPrivate;
+typedef struct _EphyBookmarkPropertiesPrivate EphyBookmarkPropertiesPrivate;
 
 typedef struct
 {

@@ -63,7 +63,7 @@ enum
 	RESPONSE_NEW_TOPIC
 };
 
-struct EphyNewBookmarkPrivate
+struct _EphyNewBookmarkPrivate
 {
 	EphyBookmarks *bookmarks;
 	char *location;

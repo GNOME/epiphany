@@ -118,7 +118,7 @@ static void cmd_help_contents		  (GtkAction *action,
 #define CONF_HISTORY_DATE_FILTER "/apps/epiphany/dialogs/history_date_filter"
 #define CONF_HISTORY_VIEW_DETAILS "/apps/epiphany/dialogs/history_view_details"
 
-struct EphyHistoryWindowPrivate
+struct _EphyHistoryWindowPrivate
 {
 	EphyHistory *history;
 	GtkWidget *sites_view;

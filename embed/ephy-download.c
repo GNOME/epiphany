@@ -39,7 +39,7 @@ enum
 	LAST_SIGNAL
 };
 
-struct EphyDownloadPrivate
+struct _EphyDownloadPrivate
 {
 	long remaining_time_last_update;
 	long remaining_time;

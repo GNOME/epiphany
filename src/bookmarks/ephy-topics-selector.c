@@ -32,7 +32,7 @@ static void ephy_topics_selector_init (EphyTopicsSelector *editor);
 
 #define EPHY_TOPICS_SELECTOR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOPICS_SELECTOR, EphyTopicsSelectorPrivate))
 
-struct EphyTopicsSelectorPrivate
+struct _EphyTopicsSelectorPrivate
 {
 	EphyBookmarks *bookmarks;
 	EphyNode *bookmark;

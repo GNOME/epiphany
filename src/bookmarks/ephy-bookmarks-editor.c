@@ -137,7 +137,7 @@ static void cmd_help_contents		  (GtkAction *action,
 
 #define CONF_BOOKMARKS_VIEW_DETAILS "/apps/epiphany/dialogs/bookmarks_view_details"
 
-struct EphyBookmarksEditorPrivate
+struct _EphyBookmarksEditorPrivate
 {
 	EphyBookmarks *bookmarks;
 	GtkWidget *bm_view;

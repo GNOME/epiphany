@@ -37,11 +37,11 @@ G_BEGIN_DECLS
 #define EPHY_IS_ENCODING_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_ENCODING_DIALOG))
 #define EPHY_ENCODING_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_ENCODING_DIALOG, EphyEncodingDialogClass))
 
-typedef struct EphyEncodingDialog		EphyEncodingDialog;
-typedef struct EphyEncodingDialogClass		EphyEncodingDialogClass;
-typedef struct EphyEncodingDialogPrivate	EphyEncodingDialogPrivate;
+typedef struct _EphyEncodingDialog		EphyEncodingDialog;
+typedef struct _EphyEncodingDialogClass		EphyEncodingDialogClass;
+typedef struct _EphyEncodingDialogPrivate	EphyEncodingDialogPrivate;
 
-struct EphyEncodingDialog
+struct _EphyEncodingDialog
 {
 	EphyEmbedDialog parent;
 
@@ -49,7 +49,7 @@ struct EphyEncodingDialog
 	EphyEncodingDialogPrivate *priv;
 };
 
-struct EphyEncodingDialogClass
+struct _EphyEncodingDialogClass
 {
 	EphyEmbedDialogClass parent_class;
 };

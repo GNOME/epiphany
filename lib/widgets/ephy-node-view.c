@@ -44,7 +44,7 @@ static void ephy_node_view_finalize (GObject *object);
 
 #define EPHY_NODE_VIEW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NODE_VIEW, EphyNodeViewPrivate))
 
-struct EphyNodeViewPrivate
+struct _EphyNodeViewPrivate
 {
 	EphyNode *root;
 

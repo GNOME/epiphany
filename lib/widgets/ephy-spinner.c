@@ -453,7 +453,7 @@ ephy_spinner_cache_ref (void)
 
 #define EPHY_SPINNER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SPINNER, EphySpinnerDetails))
 
-struct EphySpinnerDetails
+struct _EphySpinnerDetails
 {
 	GtkIconTheme *icon_theme;
 	EphySpinnerCache *cache;

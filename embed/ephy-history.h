@@ -34,9 +34,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_HISTORY_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_HISTORY))
 #define EPHY_HISTORY_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_HISTORY, EphyHistoryClass))
 
-typedef struct EphyHistoryClass EphyHistoryClass;
-typedef struct EphyHistory EphyHistory;
-typedef struct EphyHistoryPrivate EphyHistoryPrivate;
+typedef struct _EphyHistoryClass	EphyHistoryClass;
+typedef struct _EphyHistory		EphyHistory;
+typedef struct _EphyHistoryPrivate	EphyHistoryPrivate;
 
 enum
 {
@@ -51,7 +51,7 @@ enum
 	EPHY_NODE_HOST_PROP_ZOOM = 10
 };
 
-struct EphyHistory
+struct _EphyHistory
 {
 	GObject parent;
 
@@ -59,7 +59,7 @@ struct EphyHistory
 	EphyHistoryPrivate *priv;
 };
 
-struct EphyHistoryClass
+struct _EphyHistoryClass
 {
         GObjectClass parent_class;
 

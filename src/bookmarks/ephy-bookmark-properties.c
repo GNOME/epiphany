@@ -53,7 +53,7 @@ static void ephy_bookmark_properties_get_property (GObject *object,
 
 #define EPHY_BOOKMARK_PROPERTIES_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARK_PROPERTIES, EphyBookmarkPropertiesPrivate))
 
-struct EphyBookmarkPropertiesPrivate
+struct _EphyBookmarkPropertiesPrivate
 {
 	EphyBookmarks *bookmarks;
 	EphyNode *bookmark;

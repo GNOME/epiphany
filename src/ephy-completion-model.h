@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 #define EPHY_IS_COMPLETION_MODEL_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_COMPLETION_MODEL))
 #define EPHY_COMPLETION_MODEL_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_COMPLETION_MODEL, EphyCompletionModelClass))
 
-typedef struct EphyCompletionModelPrivate EphyCompletionModelPrivate;
+typedef struct _EphyCompletionModelPrivate EphyCompletionModelPrivate;
 
 typedef enum
 {

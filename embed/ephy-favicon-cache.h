@@ -35,11 +35,11 @@ G_BEGIN_DECLS
 #define EPHY_IS_FAVICON_CACHE_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_FAVICON_CACHE))
 #define EPHY_FAVICON_CACHE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_FAVICON_CACHE, EphyFaviconCacheClass))
 
-typedef struct EphyFaviconCacheClass	EphyFaviconCacheClass;
-typedef struct EphyFaviconCache		EphyFaviconCache;
-typedef struct EphyFaviconCachePrivate	EphyFaviconCachePrivate;
+typedef struct _EphyFaviconCacheClass	EphyFaviconCacheClass;
+typedef struct _EphyFaviconCache	EphyFaviconCache;
+typedef struct _EphyFaviconCachePrivate	EphyFaviconCachePrivate;
 
-struct EphyFaviconCache
+struct _EphyFaviconCache
 {
 	GObject parent;
 
@@ -47,7 +47,7 @@ struct EphyFaviconCache
 	EphyFaviconCachePrivate *priv;
 };
 
-struct EphyFaviconCacheClass
+struct _EphyFaviconCacheClass
 {
 	GObjectClass parent_class;
 

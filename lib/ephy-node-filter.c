@@ -41,12 +41,12 @@ enum
 
 #define EPHY_NODE_FILTER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NODE_FILTER, EphyNodeFilterPrivate))
 
-struct EphyNodeFilterPrivate
+struct _EphyNodeFilterPrivate
 {
 	GPtrArray *levels;
 };
 
-struct EphyNodeFilterExpression
+struct _EphyNodeFilterExpression
 {
 	EphyNodeFilterExpressionType type;
 

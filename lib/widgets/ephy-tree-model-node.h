@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 
 typedef void (*EphyTreeModelNodeValueFunc) (EphyNode *node, GValue *value, gpointer user_data);
 
-typedef struct EphyTreeModelNodePrivate EphyTreeModelNodePrivate;
+typedef struct _EphyTreeModelNodePrivate EphyTreeModelNodePrivate;
 
 typedef struct
 {

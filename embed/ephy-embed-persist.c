@@ -41,7 +41,7 @@ enum
 
 #define EPHY_EMBED_PERSIST_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_PERSIST, EphyEmbedPersistPrivate))
 
-struct EphyEmbedPersistPrivate
+struct _EphyEmbedPersistPrivate
 {
 	char *dest;
 	char *source;

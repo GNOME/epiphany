@@ -31,7 +31,7 @@ static void ephy_completion_model_tree_model_init (GtkTreeModelIface *iface);
 
 #define EPHY_COMPLETION_MODEL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_COMPLETION_MODEL, EphyCompletionModelPrivate))
 
-struct EphyCompletionModelPrivate
+struct _EphyCompletionModelPrivate
 {
 	EphyNode *history;
 	EphyNode *bookmarks;

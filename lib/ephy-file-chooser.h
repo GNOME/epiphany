@@ -36,7 +36,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_FILE_CHOOSER_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_FILE_CHOOSER))
 #define EPHY_FILE_CHOOSER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_FILE_CHOOSER, EphyFileChooserClass))
 
-typedef struct EphyFileChooserPrivate EphyFileChooserPrivate;
+typedef struct _EphyFileChooser		EphyFileChooser;
+typedef struct _EphyFileChooserPrivate	EphyFileChooserPrivate;
+typedef struct _EphyFileChooserClass	EphyFileChooserClass;
 
 typedef enum
 {
@@ -48,18 +50,18 @@ typedef enum
 	EPHY_FILE_FILTER_LAST = EPHY_FILE_FILTER_NONE
 } EphyFileFilterDefault;
 
-typedef struct
+struct _EphyFileChooser
 {
 	GtkFileChooserDialog parent;
 
 	/*< private >*/
 	EphyFileChooserPrivate *priv;
-} EphyFileChooser;
+};
 
-typedef struct
+struct _EphyFileChooserClass
 {
 	GtkFileChooserDialogClass parent_class;
-} EphyFileChooserClass;
+};
 
 GType		 ephy_file_chooser_get_type		(void);
 

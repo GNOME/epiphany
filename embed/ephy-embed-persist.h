@@ -38,9 +38,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_EMBED_PERSIST_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_PERSIST))
 #define EPHY_EMBED_PERSIST_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_PERSIST, EphyEmbedPersistClass))
 
-typedef struct _EphyEmbedPersistClass EphyEmbedPersistClass;
-typedef struct _EphyEmbedPersist EphyEmbedPersist;
-typedef struct EphyEmbedPersistPrivate EphyEmbedPersistPrivate;
+typedef struct _EphyEmbedPersistClass	EphyEmbedPersistClass;
+typedef struct _EphyEmbedPersist	EphyEmbedPersist;
+typedef struct _EphyEmbedPersistPrivate	EphyEmbedPersistPrivate;
 
 typedef enum
 {

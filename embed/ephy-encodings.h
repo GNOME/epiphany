@@ -35,7 +35,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_ENCODINGS_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_ENCODINGS))
 #define EPHY_ENCODINGS_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_ENCODINGS, EphyEncodingsClass))
 
-typedef struct EphyEncodingsPrivate EphyEncodingsPrivate;
+typedef struct _EphyEncodings		EphyEncodings;
+typedef struct _EphyEncodingsPrivate	EphyEncodingsPrivate;
+typedef struct _EphyEncodingsClass	EphyEncodingsClass;
 
 typedef enum
 {
@@ -75,18 +77,18 @@ enum
 	EPHY_NODE_ENCODING_PROP_IS_AUTODETECTOR = 6
 };
 
-typedef struct
+struct _EphyEncodings
 {
 	GObject parent;
 
 	/*< private >*/
 	EphyEncodingsPrivate *priv;
-} EphyEncodings;
+};
 
-typedef struct
+struct _EphyEncodingsClass
 {
 	GObjectClass parent_class;
-} EphyEncodingsClass;
+};
 
 GType		 ephy_encodings_get_type        (void);
 

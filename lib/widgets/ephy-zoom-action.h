@@ -33,11 +33,11 @@ G_BEGIN_DECLS
 #define EPHY_IS_ZOOM_ACTION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), EPHY_TYPE_ZOOM_ACTION))
 #define EPHY_ZOOM_ACTION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_ZOOM_ACTION, EphyZoomActionClass))
 
-typedef struct EphyZoomAction		EphyZoomAction;
-typedef struct EphyZoomActionClass	EphyZoomActionClass;
-typedef struct EphyZoomActionPrivate	EphyZoomActionPrivate;
+typedef struct _EphyZoomAction		EphyZoomAction;
+typedef struct _EphyZoomActionClass	EphyZoomActionClass;
+typedef struct _EphyZoomActionPrivate	EphyZoomActionPrivate;
 
-struct EphyZoomAction
+struct _EphyZoomAction
 {
 	GtkAction parent;
 	
@@ -45,7 +45,7 @@ struct EphyZoomAction
 	EphyZoomActionPrivate *priv;
 };
 
-struct EphyZoomActionClass
+struct _EphyZoomActionClass
 {
 	GtkActionClass parent_class;
 
