@@ -1,3 +1,16 @@
+2003-02-06  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_clear_history):
+	* lib/widgets/ephy-location-entry.h:
+	* src/history-dialog.c: (history_clear_button_clicked_cb):
+	* src/toolbar.c: (toolbar_clear_location_history):
+	* src/toolbar.h:
+
+	Clear also location history when clearing history.
+	Doesnt update immediately, gtk/gnome bug, will submit
+	patches.
+
 2003-02-05  James Willcox  <jwillcox@gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-import.c: (xbel_parse_folder),

@@ -716,3 +716,9 @@ ephy_location_entry_set_autocompletion_key (EphyLocationEntry *e)
 	}
 }
 
+void
+ephy_location_entry_clear_history (EphyLocationEntry *w)
+{
+	gnome_entry_clear_history (GNOME_ENTRY (w->priv->combo));
+}
+

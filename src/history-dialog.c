@@ -27,6 +27,7 @@
 #include "eggtreemodelfilter.h"
 #include "eggtreemultidnd.h"
 #include "ephy-tree-model-sort.h"
+#include "toolbar.h"
 
 #include <gtk/gtktreeview.h>
 #include <gtk/gtktreestore.h>
@@ -474,5 +475,19 @@ void
 history_clear_button_clicked_cb (GtkWidget *button,
 			         HistoryDialog *dialog)
 {
+	const GList *windows;
+	Session *session;
+
+	session = ephy_shell_get_session (ephy_shell);
+	windows = session_get_windows (session);
+
+	for (; windows != NULL; windows = windows->next)
+	{
+		Toolbar *t;
+
+		t = ephy_window_get_toolbar (EPHY_WINDOW (windows->data));
+		toolbar_clear_location_history (t);
+	}
+
 	ephy_history_clear (dialog->priv->gh);
 }

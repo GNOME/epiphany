@@ -469,6 +469,21 @@ toolbar_get_location (Toolbar *t)
 }
 
 void
+toolbar_clear_location_history (Toolbar *t)
+{
+	EggAction *action;
+	GtkWidget *location;
+
+	action = egg_action_group_get_action
+		(t->priv->action_group, "Location");
+	location = ephy_location_action_get_widget
+		(EPHY_LOCATION_ACTION (action));
+	g_return_if_fail (location != NULL);
+
+	ephy_location_entry_clear_history (EPHY_LOCATION_ENTRY (location));
+}
+
+void
 toolbar_update_navigation_actions (Toolbar *t, gboolean back, gboolean forward, gboolean up)
 {
 	EggActionGroup *action_group;

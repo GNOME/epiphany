@@ -70,5 +70,6 @@ gchar		       *ephy_location_entry_get_location	(EphyLocationEntry *w);
 void			ephy_location_entry_set_autocompletion  (EphyLocationEntry *w,
 								 EphyAutocompletion *ac);
 void			ephy_location_entry_activate		(EphyLocationEntry *w);
+void			ephy_location_entry_clear_history	(EphyLocationEntry *w);
 
 #endif
