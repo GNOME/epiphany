@@ -1,4 +1,10 @@
 2004-05-08  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-automation.c: (impl_ephy_automation_loadurl):
+
+	Jump to new tabs created from command lines; fixes bug #141168.
+
+2004-05-08  Christian Persch  <chpe@cvs.gnome.org>
 	* lib/ephy-file-chooser.c: (ephy_file_chooser_add_pattern_filter),
 	(ephy_file_chooser_add_mime_filter), (ephy_file_chooser_new):
 	* lib/ephy-file-chooser.h:
@@ -16,7 +22,7 @@
 	* src/prefs-dialog.c: (prefs_download_path_button_clicked_cb):
 	* src/window-commands.c: (window_cmd_file_open):
 
-	Add some filters to the file chooser dialogues.
+	Add some filters to the file chooser dialogues. Fixes bug #139418.
 
 2004-05-08  Christian Persch  <chpe@cvs.gnome.org>
 
