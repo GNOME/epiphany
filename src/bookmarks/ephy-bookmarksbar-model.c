@@ -490,6 +490,16 @@ ephy_bookmarksbar_model_init (EphyBookmarksBarModel *model)
 }
 
 static void
+ephy_bookmarksbar_model_dispose (GObject *object)
+{
+	EphyBookmarksBarModel *model = EPHY_BOOKMARKSBAR_MODEL (object);
+
+	save_changes_idle (model);
+
+	G_OBJECT_CLASS (parent_class)->dispose (object);
+}
+
+static void
 ephy_bookmarksbar_model_finalize (GObject *object)
 {
 	EphyBookmarksBarModel *model = EPHY_BOOKMARKSBAR_MODEL (object);
@@ -499,9 +509,6 @@ ephy_bookmarksbar_model_finalize (GObject *object)
 		g_source_remove (model->priv->timeout);
 		model->priv->timeout = 0;
 	}
-
-	/* FIXME: instead of saving on exit, we should detect when items data changes */
-	save_changes_idle (model);
 
 	g_free (model->priv->xml_file);
 
@@ -544,6 +551,7 @@ ephy_bookmarksbar_model_class_init (EphyBookmarksBarModelClass *klass)
 
 	parent_class = g_type_class_peek_parent (klass);
 
+	object_class->dispose = ephy_bookmarksbar_model_dispose;
 	object_class->finalize = ephy_bookmarksbar_model_finalize;
 	object_class->set_property = ephy_bookmarksbar_model_set_property;
 	object_class->get_property = ephy_bookmarksbar_model_get_property;

@@ -809,18 +809,19 @@ ephy_bookmarks_finalize (GObject *object)
 
 	ephy_bookmarks_save (eb);
 
+	/* have to do this before unreffing the nodes */
+        LOG ("Unref bookmarks toolbars model")
+        if (eb->priv->toolbars_model != NULL)
+        {
+                g_object_unref (eb->priv->toolbars_model);
+        }
+
 	ephy_node_unref (eb->priv->bookmarks);
 	ephy_node_unref (eb->priv->keywords);
 	ephy_node_unref (eb->priv->favorites);
 	ephy_node_unref (eb->priv->notcategorized);
 
 	g_object_unref (eb->priv->db);
-
-	LOG ("Unref bookmarks toolbars model")
-	if (eb->priv->toolbars_model != NULL)
-	{
-		g_object_unref (eb->priv->toolbars_model);
-	}
 
 	g_free (eb->priv->xml_file);
 	g_free (eb->priv->rdf_file);

@@ -1,3 +1,17 @@
+2004-06-11  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_finalize):
+	* src/bookmarks/ephy-bookmarksbar-model.c:
+	(ephy_bookmarksbar_model_dispose),
+	(ephy_bookmarksbar_model_finalize),
+	(ephy_bookmarksbar_model_class_init):
+	* src/ephy-toolbars-model.c: (ephy_toolbars_model_dispose),
+	(ephy_toolbars_model_finalize), (ephy_toolbars_model_class_init):
+
+	Save the toolbars models from dispose, not from finalize, since you
+	cannot emit signals from the latter (the get_item_* signals are
+	emitted while saving).
+
 2004-06-11  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* configure.in:

@@ -220,6 +220,16 @@ ephy_toolbars_model_init (EphyToolbarsModel *model)
 }
 
 static void
+ephy_toolbars_model_dispose (GObject *object)
+{
+	EphyToolbarsModel *model = EPHY_TOOLBARS_MODEL (object);
+
+	save_changes_idle (model);
+
+	G_OBJECT_CLASS (parent_class)->dispose (object);
+}
+
+static void
 ephy_toolbars_model_finalize (GObject *object)
 {
 	EphyToolbarsModel *model = EPHY_TOOLBARS_MODEL (object);
@@ -229,9 +239,6 @@ ephy_toolbars_model_finalize (GObject *object)
 		g_source_remove (model->priv->timeout);
 		model->priv->timeout = 0;
 	}
-
-	/* FIXME: we should detect when item data changes, and save then instead */
-	save_changes_idle (model);
 
 	g_free (model->priv->xml_file);
 
@@ -245,6 +252,7 @@ ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass)
 
 	parent_class = g_type_class_peek_parent (klass);
 
+	object_class->dispose = ephy_toolbars_model_dispose;
 	object_class->finalize = ephy_toolbars_model_finalize;
 
 	g_type_class_add_private (object_class, sizeof (EphyToolbarsModelPrivate));
