@@ -85,6 +85,9 @@ void            ephy_history_set_page_title     (EphyHistory *gh,
 
 const char     *ephy_history_get_last_page	(EphyHistory *gh);
 
+void            ephy_history_remove             (EphyHistory *gh,
+						 EphyNode *node);
+
 void            ephy_history_clear              (EphyHistory *gh);
 
 G_END_DECLS

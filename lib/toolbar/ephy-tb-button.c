@@ -374,6 +374,30 @@ ephy_tb_button_set_image (EphyTbButton *b, GtkWidget *image)
 	ephy_tb_button_build (b);
 }
 
+static void
+button_state_changed_cb (GtkWidget *widget, GtkStateType previous_state, EphyTbButton *b)
+{
+	EphyTbButtonPrivate *p = b->priv;
+	GtkWidget *button;
+	GtkStateType state = GTK_WIDGET_STATE (widget);
+	GtkStateType other;
+
+	if (state == GTK_STATE_ACTIVE ||
+	    state == GTK_STATE_SELECTED ||
+	    state == GTK_STATE_INSENSITIVE)
+	{
+		return;
+	}
+
+	button = (widget == p->arrow_widget) ? p->button : p->arrow_widget;
+	other = GTK_WIDGET_STATE (button);
+
+	if (state != other)
+	{
+		gtk_widget_set_state (button, state);
+	}
+}
+
 void
 ephy_tb_button_set_show_arrow (EphyTbButton *b, gboolean value)
 {
@@ -402,9 +426,14 @@ ephy_tb_button_set_show_arrow (EphyTbButton *b, gboolean value)
 		g_signal_connect (p->arrow_widget, "key_press_event",
 				  G_CALLBACK (ephy_tb_button_arrow_key_press_event_cb),
 				  b);
-
 		g_signal_connect  (p->arrow_widget, "button_press_event",
 				   G_CALLBACK (ephy_tb_button_arrow_button_press_event_cb),
+				   b);
+		g_signal_connect  (p->arrow_widget, "state_changed",
+				   G_CALLBACK (button_state_changed_cb),
+				   b);
+		g_signal_connect  (p->button, "state_changed",
+				   G_CALLBACK (button_state_changed_cb),
 				   b);
 
 		gtk_widget_show_all (p->arrow_widget);
@@ -420,7 +449,7 @@ ephy_tb_button_set_enable_menu (EphyTbButton *b, gboolean value)
 	if (value && !p->menu)
 	{
 		p->menu = GTK_MENU (gtk_menu_new ());
-		g_signal_connect (p->menu, "deactivate", 
+		g_signal_connect (p->menu, "deactivate",
 				  G_CALLBACK (ephy_tb_button_menu_deactivated_cb), b);
 	}
 	else if (!value && p->menu)

@@ -311,9 +311,9 @@ get_date_filter (int filter_type,
         case 4:
                 g_date_subtract_days (&current_date, 7);
                 break;
-                /* Month */
+                /* Two weeks */
         case 5:
-                g_date_subtract_months (&current_date, 1);
+                g_date_subtract_days (&current_date, 14);
                 break;
         default:
                 break;

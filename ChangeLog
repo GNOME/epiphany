@@ -1,3 +1,20 @@
+2003-01-01  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* TODO:
+	* data/glade/epiphany.glade:
+	* embed/ephy-history.c: (page_is_obsolete),
+	(remove_obsolete_pages), (periodic_save_cb), (ephy_history_init),
+	(ephy_history_finalize), (ephy_history_clear),
+	(ephy_history_get_last_page), (ephy_history_remove):
+	* embed/ephy-history.h:
+	* lib/toolbar/ephy-tb-button.c: (button_state_changed_cb),
+	(ephy_tb_button_set_show_arrow), (ephy_tb_button_set_enable_menu):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_add):
+	* src/history-dialog.c: (get_date_filter):
+
+	Save history every 5 minutes, drop items older than 30 days,
+	fix Clear. Better prelight for navigation buttons.
+
 2002-12-31  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* configure.in:

@@ -30,6 +30,11 @@
 
 #define EPHY_HISTORY_XML_VERSION "0.1"
 
+/* how often to save the history, in milliseconds */
+#define HISTORY_SAVE_INTERVAL (60 * 5 * 1000)
+
+#define HISTORY_PAGE_OBSOLETE_DAYS 30
+
 struct EphyHistoryPrivate
 {
 	char *xml_file;
@@ -40,6 +45,7 @@ struct EphyHistoryPrivate
 	GStaticRWLock *hosts_hash_lock;
 	GHashTable *pages_hash;
 	GStaticRWLock *pages_hash_lock;
+	int autosave_timeout;
 };
 
 enum
@@ -214,6 +220,49 @@ ephy_history_load (EphyHistory *eb)
 	xmlFreeDoc (doc);
 }
 
+static gboolean
+page_is_obsolete (EphyNode *node, GDate *now)
+{
+	int last_visit;
+	GDate date;
+
+	last_visit = ephy_node_get_property_int
+		(node, EPHY_NODE_PAGE_PROP_LAST_VISIT);
+
+        g_date_clear (&date, 1);
+        g_date_set_time (&date, last_visit);
+
+	return (g_date_days_between (&date, now) >=
+		HISTORY_PAGE_OBSOLETE_DAYS);
+}
+
+static void
+remove_obsolete_pages (EphyHistory *eb)
+{
+	GPtrArray *children;
+	int i;
+	GTime now;
+	GDate current_date;
+
+	now = time (NULL);
+        g_date_clear (&current_date, 1);
+        g_date_set_time (&current_date, time (NULL));
+
+	children = ephy_node_get_children (eb->priv->pages);
+	ephy_node_thaw (eb->priv->pages);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+
+		kid = g_ptr_array_index (children, i);
+
+		if (page_is_obsolete (kid, &current_date))
+		{
+			ephy_history_remove (eb, kid);
+		}
+	}
+}
+
 static void
 ephy_history_save (EphyHistory *eb)
 {
@@ -311,6 +360,15 @@ pages_removed_cb (EphyNode *node,
 	g_static_rw_lock_writer_unlock (eb->priv->pages_hash_lock);
 }
 
+static gboolean
+periodic_save_cb (EphyHistory *eh)
+{
+	remove_obsolete_pages (eh);
+	ephy_history_save (eh);
+
+	return TRUE;
+}
+
 static void
 ephy_history_init (EphyHistory *eb)
 {
@@ -360,6 +418,12 @@ ephy_history_init (EphyHistory *eb)
 
 	ephy_history_load (eb);
 	ephy_history_emit_data_changed (eb);
+
+	/* setup the periodic history saving callback */
+	eb->priv->autosave_timeout =
+		g_timeout_add (HISTORY_SAVE_INTERVAL,
+		       (GSourceFunc)periodic_save_cb,
+		       eb);
 }
 
 static void
@@ -382,6 +446,8 @@ ephy_history_finalize (GObject *object)
 	g_static_rw_lock_free (eb->priv->pages_hash_lock);
 	g_hash_table_destroy (eb->priv->hosts_hash);
 	g_static_rw_lock_free (eb->priv->hosts_hash_lock);
+
+	g_source_remove (eb->priv->autosave_timeout);
 
         g_free (eb->priv);
 
@@ -653,7 +719,19 @@ ephy_history_set_page_title (EphyHistory *gh,
 void
 ephy_history_clear (EphyHistory *gh)
 {
-	ephy_node_unref (gh->priv->hosts);
+	GPtrArray *children;
+	int i;
+
+	children = ephy_node_get_children (gh->priv->hosts);
+	ephy_node_thaw (gh->priv->hosts);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+
+		kid = g_ptr_array_index (children, i);
+		ephy_node_unref (kid);
+	}
+
 	ephy_history_save (gh);
 }
 
@@ -676,4 +754,28 @@ ephy_history_get_last_page (EphyHistory *gh)
 
 	return ephy_node_get_property_string
 		(gh->priv->last_page, EPHY_NODE_PAGE_PROP_LOCATION);
+}
+
+void
+ephy_history_remove (EphyHistory *gh, EphyNode *node)
+{
+	EphyNode *host;
+	int host_id;
+
+	host_id = ephy_node_get_property_int (node, EPHY_NODE_PAGE_PROP_HOST_ID);
+	if (host_id < 0)
+	{
+		ephy_node_unref (node);
+		return;
+	}
+
+	host = ephy_node_get_from_id (host_id);
+	if (ephy_node_get_n_children (host) == 1)
+	{
+		ephy_node_unref (host);
+	}
+	else
+	{
+		ephy_node_unref (node);
+	}
 }

@@ -644,6 +644,7 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	ephy_node_add_child (eb->priv->bookmarks, bm);
 
 	ephy_bookmarks_emit_data_changed (eb);
+	ephy_bookmarks_save (eb);
 
 	return bm;
 }
