@@ -32,6 +32,7 @@
 
 #include "ephy-bookmarks-editor.h"
 #include "ephy-bookmark-properties.h"
+#include "ephy-node-common.h"
 #include "ephy-node-view.h"
 #include "ephy-window.h"
 #include "ephy-dnd.h"
@@ -390,7 +391,7 @@ cmd_delete (EggAction *action,
 	}
 	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->key_view)))
 	{
-		EphyNodeViewPriority priority;
+		EphyNodePriority priority;
 		GList *selected;
 		EphyNode *node;
 
@@ -398,9 +399,9 @@ cmd_delete (EggAction *action,
 		node = EPHY_NODE (selected->data);
 		priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 
-		if (priority == -1) priority = EPHY_NODE_VIEW_NORMAL_PRIORITY;
+		if (priority == -1) priority = EPHY_NODE_NORMAL_PRIORITY;
 
-		if (priority == EPHY_NODE_VIEW_NORMAL_PRIORITY)
+		if (priority == EPHY_NODE_NORMAL_PRIORITY)
 		{
 			ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->key_view));
 		}
@@ -703,7 +704,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	if (key_focus && selected)
 	{
 		EphyNode *node = EPHY_NODE (selected->data);
-		EphyNodeViewPriority priority;
+		EphyNodePriority priority;
 		gulong id;
 
 		id = ephy_node_get_id (node);
@@ -712,8 +713,8 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 
 		priority = ephy_node_get_property_int
 			(node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-		if (priority == -1) priority = EPHY_NODE_VIEW_NORMAL_PRIORITY;
-		key_normal = (priority == EPHY_NODE_VIEW_NORMAL_PRIORITY);
+		if (priority == -1) priority = EPHY_NODE_NORMAL_PRIORITY;
+		key_normal = (priority == EPHY_NODE_NORMAL_PRIORITY);
 
 		g_list_free (selected);
 	}

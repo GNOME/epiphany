@@ -23,6 +23,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-node.h"
 #include "ephy-types.h"
+#include "ephy-node-common.h"
 
 #include <string.h>
 #include <gtk/gtkwindow.h>

@@ -25,6 +25,7 @@
 #include "ephy-embed-persist.h"
 #include "ephy-file-helpers.h"
 #include "ephy-favicon-cache.h"
+#include "ephy-node-common.h"
 #include "ephy-node.h"
 #include "ephy-debug.h"
 

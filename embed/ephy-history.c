@@ -21,7 +21,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-autocompletion-source.h"
 #include "ephy-debug.h"
-#include "ephy-node-view.h"
+#include "ephy-node-common.h"
 
 #include <time.h>
 #include <string.h>
@@ -420,7 +420,7 @@ ephy_history_init (EphyHistory *eb)
 			        &value);
 	g_value_unset (&value);
 	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, EPHY_NODE_VIEW_ALL_PRIORITY);
+	g_value_set_int (&value, EPHY_NODE_ALL_PRIORITY);
 	ephy_node_set_property (eb->priv->pages,
 			        EPHY_NODE_PAGE_PROP_PRIORITY,
 			        &value);

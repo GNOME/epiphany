@@ -32,20 +32,6 @@ typedef enum
 
 #define EPHY_NODE_RESERVED_IDS 100
 
-/* Ids of the root nodes of history,
- * bookmarks and favicon cache */
-enum
-{
-	BOOKMARKS_NODE_ID = 0,
-	KEYWORDS_NODE_ID = 1,
-	FAVORITES_NODE_ID = 2,
-	BMKS_NOTCATEGORIZED_NODE_ID = 3,
-	STATES_NODE_ID = 4,
-	HOSTS_NODE_ID = 5,
-	PAGES_NODE_ID = 6,
-	ICONS_NODE_ID = 9
-};
-
 G_END_DECLS
 
 #endif
