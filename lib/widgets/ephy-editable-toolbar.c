@@ -395,6 +395,8 @@ do_merge (EphyEditableToolbar *t)
 	char *str;
 	guint ui_id;
 
+	g_return_if_fail (t != NULL);
+
 	str = ephy_toolbars_group_to_string (t->priv->group);
 
 	LOG ("Merge UI\n%s", str)
@@ -436,16 +438,21 @@ do_merge (EphyEditableToolbar *t)
 }
 
 static void
-group_changed_cb (EphyToolbarsGroup *group, EphyEditableToolbar *t)
-{
-	t->priv->toolbars_dirty = TRUE;
-	queue_ui_update (t);
-}
-
-static void
 ensure_action (EphyToolbarsItem *item, EphyEditableToolbar *t)
 {
 	ephy_editable_toolbar_get_action (t, NULL, item->action);
+}
+
+static void
+group_changed_cb (EphyToolbarsGroup *group, EphyEditableToolbar *t)
+{
+	t->priv->toolbars_dirty = TRUE;
+
+	ephy_toolbars_group_foreach_item (t->priv->group,
+					  (EphyToolbarsGroupForeachItemFunc)
+				          ensure_action, t);
+
+	queue_ui_update (t);
 }
 
 static void
