@@ -1,5 +1,13 @@
 2003-06-13  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/prefs-dialog.c: (create_language_menu):
+
+	Persist the language selected for the fonts preferences.
+	Make the initialiser of the languages menu safe for NULL list
+	from eel_gconf_get_string_list.
+
+2003-06-13  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-dialog.c: (get_index), (set_optionmenu_from_config),
 	(set_radiobuttongroup_from_config):
 

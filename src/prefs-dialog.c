@@ -243,6 +243,8 @@ enum
 	MEMORY_CACHE_PROP
 };
 
+#define CONF_FONTS_FOR_LANGUAGE	"/apps/epiphany/dialogs/preferences_fonts_for_lang"
+
 static const
 EphyDialogProperty properties [] =
 {
@@ -257,7 +259,7 @@ EphyDialogProperty properties [] =
 	{ LANGUAGE_PROP, "language_optionmenu", NULL, PT_NORMAL, NULL },
 
 	/* Appeareance */
-	{ FONTS_LANGUAGE_PROP, "fonts_language_optionmenu", NULL, PT_NORMAL, NULL },
+	{ FONTS_LANGUAGE_PROP, "fonts_language_optionmenu", CONF_FONTS_FOR_LANGUAGE, PT_AUTOAPPLY, NULL },
 	{ SERIF_PROP, "serif_combo", NULL, PT_NORMAL, NULL },
 	{ SANSSERIF_PROP, "sansserif_combo", NULL, PT_NORMAL, NULL },
 	{ MONOSPACE_PROP, "monospace_combo", NULL, PT_NORMAL, NULL },
@@ -1005,21 +1007,22 @@ create_language_menu (PrefsDialog *dialog)
 
 	/* init value from first element of the list */
 	list = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
-	g_return_if_fail (list != NULL); /* FIXME: doesn't connect the handler! */
-
-	code = (const gchar *) list->data;
-	lang = g_list_find_custom (dialog->priv->langs, code,
-				   (GCompareFunc)find_lang_code);
-
-	if (lang)
+	if (list)
 	{
-		i = g_list_position (dialog->priv->langs, lang);
+		code = (const gchar *) list->data;
+		lang = g_list_find_custom (dialog->priv->langs, code,
+					   (GCompareFunc)find_lang_code);
+
+		if (lang)
+		{
+			i = g_list_position (dialog->priv->langs, lang);
+		}
+
+		g_slist_foreach (list, (GFunc) g_free, NULL);
+		g_slist_free (list);
 	}
 
 	gtk_option_menu_set_history (GTK_OPTION_MENU(optionmenu), i);
-
-	g_slist_foreach (list, (GFunc) g_free, NULL);
-	g_slist_free (list);
 
 	g_signal_connect (optionmenu, "changed",
 			  G_CALLBACK (language_menu_changed_cb),
