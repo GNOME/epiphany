@@ -38,7 +38,7 @@ G_BEGIN_DECLS
 #define LOG(msg, args...)						\
 g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,				\
        "[ %s ] " msg,						\
-       __FILE__, ## args);
+       __FILE__ , ## args);
 #endif
 
 #ifdef DISABLE_PROFILING
