@@ -272,7 +272,7 @@ NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
 {
 	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
 
-	if (!mMode == nsIFilePicker::modeSave) return NS_ERROR_FAILURE;
+	if (mMode != nsIFilePicker::modeSave) return NS_ERROR_FAILURE;
 
 #if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 	if (aDefaultString.Length())
@@ -288,6 +288,9 @@ NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
 		NS_UTF16ToCString (nsEmbedString(aDefaultString),
 				   NS_CSTRING_ENCODING_UTF8, defaultString);
 #endif
+
+		LOG ("GFilePicker::SetDefaultString %s", defaultString.get())
+
 		/* set_current_name takes UTF-8, not a filename */
 		gtk_file_chooser_set_current_name
 			(GTK_FILE_CHOOSER (mDialog), defaultString.get());
