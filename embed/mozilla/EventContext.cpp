@@ -250,7 +250,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 	if ((nsIDOMNode::ELEMENT_NODE == type) && element)
 	{
 		nsEmbedString uTag;
-		rv = element->GetTagName(uTag);
+		rv = element->GetLocalName(uTag);
 		if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
 		nsEmbedCString tag;
@@ -379,7 +379,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 		if ((nsIDOMNode::ELEMENT_NODE == type) && element)
 		{
 			nsEmbedString uTag;
-			rv = element->GetTagName(uTag);
+			rv = element->GetLocalName(uTag);
 			if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
 			nsEmbedCString tag;
