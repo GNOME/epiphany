@@ -33,15 +33,11 @@
 #include "MozillaPrivate.h"
 
 #include "nsIX509Cert.h"
-#include "nsICertificateDialogs.h"
 #include "nsCOMPtr.h"
 #include "nsIServiceManager.h"
 #include "nsIInterfaceRequestor.h"
 #include "nsIInterfaceRequestorUtils.h"
 #include "nsIX509CertValidity.h"
-#include "nsIDialogParamBlock.h"
-#include "nsIWindowWatcher.h"
-#include "nsIDOMWindowInternal.h"
 #include "nsIX509CertDB.h"
 #include "nsIASN1Object.h"
 #include "nsIASN1Sequence.h"
@@ -72,7 +68,7 @@
 #include <gtk/gtktextview.h>
 #include <gtk/gtkprogressbar.h>
 
-#include <glib/gi18n.h>
+#include <libgnome/gnome-i18n.h>
 
 #include "GtkNSSDialogs.h"
 #include "ephy-glade.h"
@@ -148,6 +144,7 @@ higgy_setup_dialog (GtkDialog *dialog, const gchar *stock_icon,
 	g_return_if_fail (GTK_IS_DIALOG (dialog));
 	g_return_if_fail (content_label);
 
+	gtk_dialog_set_has_separator (dialog, FALSE);
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 	
@@ -165,6 +162,7 @@ higgy_setup_dialog (GtkDialog *dialog, const gchar *stock_icon,
 	label = gtk_label_new (NULL);
 	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
 	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
 
 	gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
@@ -213,7 +211,7 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 	
 	dialog = gtk_dialog_new_with_buttons ("",
 					      GTK_WINDOW (gparent),
-					      GTK_DIALOG_NO_SEPARATOR,
+					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      NULL);
 
 	higgy_setup_dialog (GTK_DIALOG (dialog), 
@@ -430,7 +428,7 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 	/* To translators: this a time format that is used while displaying the
 	 * expiry or start date of an SSL certificate, for the format see 
 	 * strftime(3) */
-	strftime (formattedDate, sizeof(formattedDate), _("%a %-d %b %Y"), 
+	strftime (formattedDate, sizeof(formattedDate), _("%a %d %b %Y"), 
 		  localtime_r (&t, &tm));
 
 	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
@@ -468,7 +466,7 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 
 	dialog = gtk_dialog_new_with_buttons ("",
 					      GTK_WINDOW (gparent),
-					      GTK_DIALOG_NO_SEPARATOR,
+					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      GTK_STOCK_OK,
 					      GTK_RESPONSE_OK,
 					      NULL);
@@ -504,8 +502,11 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 
 	gtk_widget_show_all (dialog);
 
-	gtk_dialog_run (GTK_DIALOG (dialog));
-	gtk_widget_destroy (dialog);
+	g_signal_connect (G_OBJECT (dialog),
+			  "response",
+			  (GCallback)gtk_widget_destroy, NULL);
+
+	gtk_widget_show_all (dialog);
 	return NS_OK;
 }
 
@@ -524,7 +525,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 
 	dialog = gtk_dialog_new_with_buttons ("",
 					      GTK_WINDOW (gparent),
-					      GTK_DIALOG_NO_SEPARATOR,
+					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      _("_View Certificate"),
 					      NSSDIALOG_RESPONSE_VIEW_CERT,
 					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -617,7 +618,7 @@ GtkNSSDialogs::NotifyCACertExists (nsIInterfaceRequestor *ctx)
 
 	dialog = gtk_dialog_new_with_buttons ("",
 					      GTK_WINDOW (gparent),
-					      GTK_DIALOG_NO_SEPARATOR,
+					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      GTK_STOCK_OK,
 					      GTK_RESPONSE_OK,
 					      NULL);
@@ -627,13 +628,15 @@ GtkNSSDialogs::NotifyCACertExists (nsIInterfaceRequestor *ctx)
 
 	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
 				_("Certificate already exists."),
-			       _("The Certificate has already been imported."));
+			       _("The certificate has already been imported."));
 	gtk_label_set_markup (GTK_LABEL (label), msg);
 	g_free (msg);
 
+	g_signal_connect (G_OBJECT (dialog),
+			  "response",
+			  (GCallback)gtk_widget_destroy, NULL);
+
 	gtk_widget_show_all (dialog);
-	gtk_dialog_run (GTK_DIALOG (dialog));
-	gtk_widget_destroy (dialog);
 	return NS_OK;
 }
 
@@ -736,7 +739,7 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 
 	dialog = gtk_dialog_new_with_buttons ("",
 					      GTK_WINDOW (gparent),
-					      GTK_DIALOG_NO_SEPARATOR,
+					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      GTK_STOCK_CANCEL,
 					      GTK_RESPONSE_CANCEL,
 					      NULL);
@@ -845,7 +848,7 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 
 	dialog = gtk_dialog_new_with_buttons ("",
 					      GTK_WINDOW (gparent),
-					      GTK_DIALOG_NO_SEPARATOR,
+					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					      _("I_mport Certificate"), GTK_RESPONSE_OK,
 					      NULL);
@@ -926,7 +929,7 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
 
 	dialog = gtk_dialog_new_with_buttons ("",
 					      GTK_WINDOW (gparent),
-					      GTK_DIALOG_NO_SEPARATOR,
+					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      GTK_STOCK_OK, GTK_RESPONSE_OK,
 					      NULL);
 
@@ -965,9 +968,11 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
 	gtk_box_pack_start (GTK_BOX (vbox), higgy_indent_widget (table), FALSE, FALSE, 0);
 
 	gtk_widget_show_all (dialog);
-	gtk_dialog_run (GTK_DIALOG (dialog));
-	gtk_widget_destroy (dialog);
+	g_signal_connect (G_OBJECT (dialog),
+			  "response",
+			  (GCallback)gtk_widget_destroy, NULL);
 
+	gtk_widget_show_all (dialog);
 	return NS_OK;
 }
 
@@ -1231,8 +1236,6 @@ setup_view_cert_tree (GtkWidget *dialog, GladeXML*gxml, nsIArray *certChain)
 	return fill_cert_chain_tree (GTK_TREE_VIEW (chain_tree_view), certChain);
 }
 
-
-
 /* void viewCert (in nsIX509Cert cert); */
 NS_IMETHODIMP 
 GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx, 
@@ -1253,6 +1256,7 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWidget *gparent = MozillaFindGtkParent (parent);
 	gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(gparent));
+	gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Certificate Properties"));
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
@@ -1381,10 +1385,10 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 	if (ret == FALSE) return NS_ERROR_FAILURE;
 
 	g_object_unref (gxml);
+
 	gtk_widget_show_all (dialog);
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
-
 	return NS_OK;
 }
 

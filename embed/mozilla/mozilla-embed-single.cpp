@@ -52,7 +52,11 @@
 #include <nsIPasswordManager.h>
 #include <nsIPassword.h>
 #include <nsICookie.h>
+#if MOZILLA_SNAPSHOT > 12
+#include <nsICookieManager.h>
+#else
 #include <nsCCookieManager.h>
+#endif
 #include <nsCPasswordManager.h>
 #include <nsString.h>
 #include <nsILocalFile.h>

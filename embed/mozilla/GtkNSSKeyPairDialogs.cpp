@@ -55,8 +55,9 @@
 #include "gtk/gtklabel.h"
 #include "gtk/gtkhbox.h"
 #include "gtk/gtkvbox.h"
+#include "gtk/gtkmain.h"
 
-#include <glib/gi18n.h>
+#include <libgnome/gnome-i18n.h>
 
 #include "GtkNSSKeyPairDialogs.h"
 
@@ -106,6 +107,25 @@ NS_IMETHODIMP KeyPairHelperWindow::Close()
 }
 
 /* ------------------------------------------------------------ */
+static void
+begin_busy (GtkWidget *widget)
+{
+	static GdkCursor *cursor = NULL;
+
+	if (cursor == NULL) cursor = gdk_cursor_new (GDK_WATCH);
+
+	if (!GTK_WIDGET_REALIZED (widget)) gtk_widget_realize (GTK_WIDGET(widget));
+
+	gdk_window_set_cursor (GTK_WIDGET (widget)->window, cursor);
+	while (gtk_events_pending ()) gtk_main_iteration ();
+}
+
+static void
+end_busy (GtkWidget *widget)
+{
+	gdk_window_set_cursor (GTK_WIDGET(widget)->window, NULL);
+}
+
 
 struct KeyPairInfo
 {
@@ -177,6 +197,7 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 	gtk_widget_show_all (dialog);
 	gtk_widget_hide (GTK_DIALOG (dialog)->action_area);
 
+	begin_busy (dialog);
 	runnable->StartKeyGeneration (helper);
 	int res = gtk_dialog_run (GTK_DIALOG (dialog));
 	if (res != GTK_RESPONSE_OK && helper->close_called == FALSE)
@@ -189,6 +210,7 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 	}
 
 	g_source_remove (timeout_id);
+	end_busy (dialog);
 	gtk_widget_destroy (dialog);
 	delete helper;
 	return NS_OK;
@@ -561,6 +583,7 @@ NS_IMETHODIMP KeyPairHelperWindow::UpdateCommands(const nsAString & action)
     MOZ_NOT_IMPLEMENTED
 }
 
+#if MOZILLA_SNAPSHOT <= 12
 /* DOMString escape (in DOMString str); */
 NS_IMETHODIMP KeyPairHelperWindow::Escape(const nsAString & str, nsAString & _retval)
 {
@@ -572,6 +595,7 @@ NS_IMETHODIMP KeyPairHelperWindow::Unescape(const nsAString & str, nsAString & _
 {
     MOZ_NOT_IMPLEMENTED
 }
+#endif
 
 /* [noscript] boolean find (in DOMString str, in boolean caseSensitive, in boolean backwards, in boolean wrapAround, in boolean wholeWord, in boolean searchInFrames, in boolean showDialog); */
 NS_IMETHODIMP KeyPairHelperWindow::Find(const nsAString & str, PRBool caseSensitive, PRBool backwards, PRBool wrapAround, PRBool wholeWord, PRBool searchInFrames, PRBool showDialog, PRBool *_retval)
