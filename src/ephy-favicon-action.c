@@ -38,15 +38,15 @@
 
 static GtkTargetEntry url_drag_types [] =
 {
-        { EPHY_DND_URI_LIST_TYPE,   0, 0 },
-        { EPHY_DND_TEXT_TYPE,       0, 1 },
-        { EPHY_DND_URL_TYPE,        0, 2 }
+	{ EPHY_DND_URI_LIST_TYPE,   0, 0 },
+	{ EPHY_DND_TEXT_TYPE,       0, 1 },
+	{ EPHY_DND_URL_TYPE,        0, 2 }
 };
 static int n_url_drag_types = G_N_ELEMENTS (url_drag_types);
 
 #define EPHY_FAVICON_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FAVICON_ACTION, EphyFaviconActionPrivate))
 
-struct EphyFaviconActionPrivate
+struct _EphyFaviconActionPrivate
 {
 	EphyWindow *window;
 	char *icon;
@@ -71,7 +71,7 @@ ephy_favicon_action_get_type (void)
 {
 	static GType type = 0;
 
-	if (!type)
+	if (type == 0)
 	{
 		static const GTypeInfo type_info =
 		{
@@ -115,17 +115,17 @@ each_url_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 
 static void
 favicon_drag_data_get_cb (GtkWidget *widget,
-                          GdkDragContext *context,
-                          GtkSelectionData *selection_data,
-                          guint info,
-                          guint32 time,
-                          EphyWindow *window)
+			  GdkDragContext *context,
+			  GtkSelectionData *selection_data,
+			  guint info,
+			  guint32 time,
+			  EphyWindow *window)
 {
-        g_assert (widget != NULL);
-        g_return_if_fail (context != NULL);
+	g_assert (widget != NULL);
+	g_return_if_fail (context != NULL);
 
-        ephy_dnd_drag_data_get (widget, context, selection_data,
-                time, window, each_url_get_data_binder);
+	ephy_dnd_drag_data_get (widget, context, selection_data,
+		time, window, each_url_get_data_binder);
 }
 
 static GtkWidget *
@@ -150,10 +150,10 @@ create_tool_item (GtkAction *action)
 	g_object_set_data (G_OBJECT (item), "image", image);
 
 	gtk_drag_source_set (ebox,
-                             GDK_BUTTON1_MASK,
-                             url_drag_types,
-                             n_url_drag_types,
-                             GDK_ACTION_COPY);
+			     GDK_BUTTON1_MASK,
+			     url_drag_types,
+			     n_url_drag_types,
+			     GDK_ACTION_COPY);
 	g_signal_connect (ebox,
 			  "drag_data_get",
 			  G_CALLBACK (favicon_drag_data_get_cb),
@@ -229,9 +229,9 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 
 static void
 ephy_favicon_action_set_property (GObject *object,
-                                  guint prop_id,
-                                  const GValue *value,
-                                  GParamSpec *pspec)
+				  guint prop_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
 {
 	EphyFaviconAction *fav = EPHY_FAVICON_ACTION (object);
 
@@ -249,9 +249,9 @@ ephy_favicon_action_set_property (GObject *object,
 
 static void
 ephy_favicon_action_get_property (GObject *object,
-                                  guint prop_id,
-                                  GValue *value,
-                                  GParamSpec *pspec)
+				  guint prop_id,
+				  GValue *value,
+				  GParamSpec *pspec)
 {
 	EphyFaviconAction *fav = EPHY_FAVICON_ACTION (object);
 
@@ -274,7 +274,7 @@ ephy_favicon_action_class_init (EphyFaviconActionClass *class)
 
 	object_class->set_property = ephy_favicon_action_set_property;
 	object_class->get_property = ephy_favicon_action_get_property;
-        object_class->finalize = ephy_favicon_action_finalize;
+	object_class->finalize = ephy_favicon_action_finalize;
 
 	parent_class = g_type_class_peek_parent (class);
 	action_class = GTK_ACTION_CLASS (class);
@@ -284,19 +284,19 @@ ephy_favicon_action_class_init (EphyFaviconActionClass *class)
 	action_class->connect_proxy = connect_proxy;
 
 	g_object_class_install_property (object_class,
-                                         PROP_WINDOW,
-                                         g_param_spec_object ("window",
-                                                              "Window",
-                                                              "The window",
-                                                              G_TYPE_OBJECT,
-                                                              G_PARAM_READWRITE));
+					 PROP_WINDOW,
+					 g_param_spec_object ("window",
+							      "Window",
+							      "The window",
+							      G_TYPE_OBJECT,
+							      G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
-                                         PROP_ICON,
-                                         g_param_spec_string  ("icon",
-                                                               "Icon",
-                                                               "The icon",
-                                                               NULL,
-                                                               G_PARAM_READWRITE));
+					 PROP_ICON,
+					 g_param_spec_string  ("icon",
+							       "Icon",
+							       "The icon",
+							       NULL,
+							       G_PARAM_READWRITE));
 
 	g_type_class_add_private (object_class, sizeof(EphyFaviconActionPrivate));
 }
@@ -317,11 +317,11 @@ ephy_favicon_action_init (EphyFaviconAction *action)
 static void
 ephy_favicon_action_finalize (GObject *object)
 {
-        EphyFaviconAction *action = EPHY_FAVICON_ACTION (object);
+	EphyFaviconAction *action = EPHY_FAVICON_ACTION (object);
 
 	g_free (action->priv->icon);
 
 	g_object_unref (action->priv->cache);
 
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

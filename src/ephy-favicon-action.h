@@ -23,16 +23,16 @@
 
 #include <gtk/gtkaction.h>
 
-#define EPHY_TYPE_FAVICON_ACTION            (ephy_favicon_action_get_type ())
-#define EPHY_FAVICON_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_FAVICON_ACTION, EphyFaviconAction))
-#define EPHY_FAVICON_ACTION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_FAVICON_ACTION, EphyFaviconActionClass))
-#define EPHY_IS_FAVICON_ACTION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_FAVICON_ACTION))
-#define EPHY_IS_FAVICON_ACTION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), EPHY_TYPE_FAVICON_ACTION))
-#define EPHY_FAVICON_ACTION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_FAVICON_ACTION, EphyFaviconActionClass))
+#define EPHY_TYPE_FAVICON_ACTION		(ephy_favicon_action_get_type ())
+#define EPHY_FAVICON_ACTION(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_FAVICON_ACTION, EphyFaviconAction))
+#define EPHY_FAVICON_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_FAVICON_ACTION, EphyFaviconActionClass))
+#define EPHY_IS_FAVICON_ACTION(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_FAVICON_ACTION))
+#define EPHY_IS_FAVICON_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((obj), EPHY_TYPE_FAVICON_ACTION))
+#define EPHY_FAVICON_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_FAVICON_ACTION, EphyFaviconActionClass))
 
-typedef struct _EphyFaviconAction      EphyFaviconAction;
-typedef struct _EphyFaviconActionClass EphyFaviconActionClass;
-typedef struct EphyFaviconActionPrivate EphyFaviconActionPrivate;
+typedef struct _EphyFaviconAction		EphyFaviconAction;
+typedef struct _EphyFaviconActionClass		EphyFaviconActionClass;
+typedef struct _EphyFaviconActionPrivate	EphyFaviconActionPrivate;
 
 struct _EphyFaviconAction
 {
