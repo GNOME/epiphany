@@ -98,9 +98,9 @@ ephy_langs_sanitise (GArray *array)
 	}
 
 	/* uniquify */
-	for (i = 0; i < array->len - 1; i++)
+	for (i = 0; i < (int) array->len - 1; i++)
 	{
-		for (j = array->len - 1; j > i; j--)
+		for (j = (int) array->len - 1; j > i; j--)
 		{
 			lang1 = (char *) g_array_index (array,char *, i);
 			lang2 = (char *) g_array_index (array, char *, j);
@@ -114,9 +114,9 @@ ephy_langs_sanitise (GArray *array)
 	}
 
 	/* move 'xy' code behind all 'xy-ab' codes */
-	for (i = array->len - 2; i >= 0; i--)
+	for (i = (int) array->len - 2; i >= 0; i--)
 	{
-		for (j = array->len - 1; j > i; j--)
+		for (j = (int) array->len - 1; j > i; j--)
 		{
 			lang1 = (char *) g_array_index (array, char *, i);
 			lang2 = (char *) g_array_index (array, char *, j);

@@ -1,5 +1,12 @@
 2004-11-09  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-langs.c: (ephy_langs_sanitise):
+
+	Fix signed/unsigned int confusion exposed by empty accept-lang
+	list.
+
+2004-11-09  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.ac:
 
 	Fix check for nsIPassword.h header to look in the right place.
