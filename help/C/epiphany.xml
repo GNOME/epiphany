@@ -2,9 +2,9 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
   <!ENTITY legal SYSTEM "legal.xml">
-  <!ENTITY appversion "1.0">
-  <!ENTITY manrevision "1.0">
-  <!ENTITY date "May 2003">
+  <!ENTITY appversion "1.2">
+  <!ENTITY manrevision "1.2">
+  <!ENTITY date "November 2003">
   <!ENTITY fr "<application>Epiphany</application>">
   <!-- Information about the entities
        The legal.xml file contains legal information, there is no need to edit the file. 
@@ -27,14 +27,13 @@
   <articleinfo> 
     <title>Epiphany Manual &manrevision;</title>       
 
-    <copyright> 
-      <year>2003</year> 
-
-      <holder>Patanjali Somayaji</holder> 
+    <copyright>
+      <year>2003</year>
+      <holder>Patanjali Somayaji</holder>
     </copyright>
-    <copyright> 
-      <year>2003</year> 
-      <holder>David Bordoley</holder> 
+    <copyright>
+      <year>2003</year>
+      <holder>David Bordoley</holder>
     </copyright>
 
 <!-- translators: uncomment this:
@@ -76,9 +75,10 @@
     </authorgroup>
 
 
-    <releaseinfo> This manual describes version &appversion; of &fr;.
-    </releaseinfo> 
-  </articleinfo> 
+    <releaseinfo>
+      This manual describes version &appversion; of &fr;.
+    </releaseinfo>
+  </articleinfo>
 
   <indexterm zone="index"> 
     <primary>Epiphany</primary> 
@@ -96,36 +96,41 @@
      the application is and what it does. -->
   <sect1 id="fr-introduction"> 
     <title>Introduction</title> 
-    <para>&fr; is a GNOME web browser based on the mozilla rendering 
-	engine. &fr; aims to be simple to use and standards compliant.
+    <para>
+      &fr; is the GNOME web browser. &fr; aims to be simple to use 
+      and standards compliant.
    </para>
   </sect1>
 
-<!-- ============= Getting Started =============================== -->
+<!-- ============= Getting Started =========================== -->
   <sect1 id="ephy-getting-started">
       <title>Getting Started</title>
 
         <sect2 id="ephy-to-open-browser-window">
           <title>To Open a Browser Window</title>
-          	<para>You can open a browser window in the following ways:</para>
-		<variablelist>
-    		<varlistentry>
-    		<term><guimenu>Applications</guimenu> menu</term>
-    		<listitem>
-    		<para>Choose 
-    		<menuchoice>
-    		<guisubmenu>Internet</guisubmenu>
-    		<guimenuitem>Web Browser</guimenuitem>
-    		</menuchoice>. </para>
-    		</listitem>
-    		</varlistentry>
-    		<varlistentry>
-    		<term>Command line</term>
-    		<listitem>
-    		<para>Type <command>epiphany</command>, then press <keycap>Return</keycap>.</para>
-    		</listitem>
-    		</varlistentry>
-    		</variablelist>
+          <para>
+            You can open a browser window in the following ways:
+          </para>
+          <variablelist>
+            <varlistentry>
+              <term><guimenu>Applications</guimenu> menu</term>
+              <listitem>
+                <para>
+                  Choose <menuchoice> <guisubmenu>Internet</guisubmenu>
+    		  <guimenuitem>Web Browser</guimenuitem> </menuchoice>.
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+    	      <term>Command line</term>
+              <listitem>
+                <para>
+                  Type <command>epiphany</command>, then press 
+                  <keycap>Return</keycap>.
+                </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
         </sect2>
         <sect2 id="ephy-to-open-bookmarks">
           <title>To Open the Bookmarks Window</title>
@@ -299,85 +304,148 @@ you can choose items related to the display of the web page.</para>
 	<sect2 id="using-toolbar">
           <title>Using the Toolbar</title>
           <para>
+            The toolbar contains a number of shortcuts to commonly 
+            used functions. You can use the toolbar to navigate 
+            through your web history by clicking the back and 
+            forward buttons. In addition it is possible to stop the 
+            loading of pages by clicking the stop button. Finally 
+            pages may be reloaded by clicking the reload button.
+          </para>
+          <para>
+            You can customize the buttons which appear on your 
+            toolbar by using the Toolbar Editor: for details, see 
+            <xref linkend="to-edit-toolbars"/>.
           </para>
         </sect2>
 	<sect2 id="using-bookmarks-bar">
           <title>Using the Bookmarks Bar</title>
           <para>
+            The Bookmarks Bar allows you to have links to your favorite 
+            websites on a toolbar for easy access. For details on 
+            adding bookmarks to the bookmarks bar, see <xref 
+            linkend="to-add-bookmark-or-topic-to-bookmarks-bar"/>.
           </para>
         </sect2>
 	<sect2 id="using-fullscreen-mode">
           <title>Using Fullscreen Mode</title>
           <para>
+            Fullscreen mode allows the browser to use the whole screen 
+            for its viewable area. To enter Fullscreen mode, select 
+            <menuchoice> <guimenu>View</guimenu> <guimenuitem>Fullscreen
+            </guimenuitem> </menuchoice>.
+          </para>
+          <para>
+            You can exit Fullscreen mode by clicking <guibutton>Exit 
+            Fullscreen</guibutton>.
           </para>
         </sect2>
 	<sect2 id="to-open-new-window">
           <title>To Open a New Window</title>
-          <para>To open a new window, choose 
-		  <menuchoice> <guimenu>File</guimenu> <guimenuitem>New Window</guimenuitem>
-			 </menuchoice>.
+          <para>
+            To open a new window, choose <menuchoice> <guimenu>
+            File</guimenu> <guimenuitem>New Window</guimenuitem>
+	    </menuchoice>.
 	  </para>
         </sect2>
 	<sect2 id="to-open-new-tab">
           <title>To Open a New Tab</title>
-          <para>To open a new tab, choose 
-		  <menuchoice> <guimenu>File</guimenu> <guimenuitem>New Tab</guimenuitem>
-			 </menuchoice>. The new tab will be place to the right of any existing tabs.
+          <para>
+            To open a new tab, choose <menuchoice> <guimenu>
+            File</guimenu> <guimenuitem>New Tab</guimenuitem>
+            </menuchoice>. The new tab will be place to the right of 
+            any existing tabs.
 	  </para>
 	</sect2>
 	<sect2 id="ephy-to-open-file">
           <title>To Open a File</title>
-          <para>To open a file, choose 
-		  <menuchoice> <guimenu>File</guimenu> <guimenuitem>Open...</guimenuitem>
-			 </menuchoice>
-		  to display the <guilabel>Open File</guilabel> dialog. Select the file
-		  that you want to open, then click <guibutton>OK</guibutton>. The file is
-		  displayed in the browser window. </para>
+          <para>
+            To open a file, choose <menuchoice> <guimenu>File
+            </guimenu> <guimenuitem>Open...</guimenuitem>
+            </menuchoice> to display the <guilabel>Open File</guilabel> 
+            dialog. Select the file that you want to open, then click 
+            <guibutton>OK</guibutton>. The file is displayed in the 
+            browser window.
+          </para>
         </sect2>
 	<sect2 id="to-save-page-to-file">
           <title>To Save a Page to a File</title>
-          <para>To save a page to a file, choose 
-		<menuchoice> <guimenu>File</guimenu> <guimenuitem>Save As</guimenuitem> 
-			</menuchoice>. 
-		Enter a name for the file in the <guilabel>Save
-		As</guilabel> dialog box, then click <guibutton>OK</guibutton>. </para>
+          <para>
+             To save a page to a file, choose <menuchoice> <guimenu>
+             File</guimenu> <guimenuitem>Save As</guimenuitem> 
+             </menuchoice>. Enter a name for the file in the <guilabel>
+             Save As</guilabel> dialog box, then click <guibutton>OK
+             </guibutton>.
+          </para>
         </sect2>
 	<sect2 id="to-print-page">
           <title>To Print a Page</title>
           <para>
+            To print a page, choose <menuchoice> <guimenu>File</guimenu>
+            <guimenuitem>Print</guimenuitem> </menuchoice>. Enter the 
+            name of you printer in the <guilabel>Printer</guilabel> 
+            field and click <guibutton>Print</guibutton>.
           </para>
         </sect2>
 	<sect2 id="to-find-text-in-page">
           <title>To Find Text in a Page</title>
-	  <para>To search a page for a string, perform the following steps:</para>
-		<orderedlist> 
-		  <listitem><para>Choose 
-				<menuchoice> <guimenu>Edit</guimenu>
-				  <guimenuitem>Find</guimenuitem> </menuchoice>
-				to display the <guilabel>Find</guilabel> dialog.</para>
-		  </listitem>
-		  <listitem><para>Type the string that you want to find, in the
-				<guilabel>Find</guilabel> field.</para>
-		  </listitem>
-		  <listitem><para>Select the <guilabel>Case sensitive</guilabel> option
-				to only find occurrences of the string that match the case of the text that you
-				type. </para>
-		  </listitem>
-		  <listitem><para>Select the <guilabel>Wrap around</guilabel> option to search to the end of the page and then continue the search from the beginning of the page. </para>
-		  </listitem>
-		  <listitem><para>Click <guibutton>Next</guibutton> to search the page
-				for the first occurrence of the string. If the string is found, the cursor is moved to the string, and the string is selected.</para>
-		  </listitem>
-		  <listitem><para>To find the next occurrence of the string, click
-				<guibutton>Next</guibutton>.</para>
-		  </listitem>
-		  <listitem><para>To find the previous occurrence of the string, click
-				<guibutton>Previous</guibutton>.</para>
-		  </listitem>
-		  <listitem><para>To finish the search, click
-				<guibutton>Close</guibutton>. </para>
-		  </listitem>
-		</orderedlist>
+	  <para>
+            To search a page for a string, perform the following 
+            steps:</para>
+            <orderedlist> 
+              <listitem>
+                <para>
+                  Choose <menuchoice> <guimenu>Edit</guimenu> 
+                  <guimenuitem>Find</guimenuitem> </menuchoice> to 
+                  display the <guilabel>Find</guilabel> dialog.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Type the string that you want to find, in the
+                  <guilabel>Find</guilabel> field.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Select the <guilabel>Case sensitive</guilabel> 
+                  option to only find occurrences of the string that 
+                  match the case of the text that you type.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Select the <guilabel>Wrap around</guilabel> option to 
+                  search to the end of the page and then continue the 
+                  search from the beginning of the page.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Click <guibutton>Next</guibutton> to search the page
+                  for the first occurrence of the string. If the string 
+                  is found, the cursor is moved to the string, and the 
+                  string is selected.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  To find the next occurrence of the string, click
+                  <guibutton>Next</guibutton>.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  To find the previous occurrence of the string, click
+                  <guibutton>Previous</guibutton>.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  To finish the search, click <guibutton>Close
+                  </guibutton>.
+                </para>
+              </listitem>
+            </orderedlist>
         </sect2>	
 	<sect2 id="to-change-zoom">
 	  <title>To Change the Zoom Factor</title>
@@ -406,31 +474,53 @@ you can choose items related to the display of the web page.</para>
 	<sect2 id="to-view-page-source">
           <title>To View the Source of a Page</title>
           <para>
+            To view the source code of a page, choose <menuchoice> 
+            <guimenu>View</guimenu> <guimenuitem>Page Source</guimenuitem> 
+            </menuchoice>. The source will be displayed in your default 
+            text editor.
           </para>
         </sect2>
 	<sect2 id="to-open-link">
           <title>To Open a Link</title>
           <para>
+            Web pages contain links to other web pages, often (but not always)
+            indicated by an underline. To follow a link, left click it.
           </para>
         </sect2>
 	<sect2 id="to-open-link-in-window">
           <title>To Open a Link in a New window</title>
           <para>
+            To open a link in a new window, right click it and select 
+            <guimenuitem>Open Link in New Window</guimenuitem>.
           </para>
         </sect2>
 	<sect2 id="to-open-link-in-tab">
           <title>To Open a Link in a New Tab</title>
           <para>
+            To open a link in a new tab, right click it and select 
+            <guimenuitem>Open Link in New Window</guimenuitem>.
           </para>
         </sect2>
 	<sect2 id="to-download-link">
           <title>To Download a Link</title>
           <para>
+            To save the target of a link, right click it and select 
+            <guimenuitem>Download Link</guimenuitem>.
           </para>
         </sect2>
 	<sect2 id="to-switch-between-tab">
           <title>To Switch in Between Tabs</title>
           <para>
+            To rearrange tabs in the current window, select <menuchoice>
+            <guimenu>Tabs</guimenu> <guimenuitem>Move Tab Left</guimenuitem>
+            </menuchoice> or <menuchoice> <guimenu>Tabs</guimenu> 
+            <guimenuitem>Move Tab Right</guimenuitem></menuchoice> to 
+            move the current tab. You can also drag tabs to reorder them.
+          </para>
+          <para>
+            To move the current tab to a new window choose <menuchoice> 
+            <guimenu>Tabs</guimenu> <guimenuitem>Detach Tab</guimenuitem>
+            </menuchoice>.
           </para>
         </sect2>
 	<sect2 id="to-move-tabs">
@@ -730,31 +820,48 @@ Click on the bookmark that you want to select.</para>
         </sect2>
 	<sect2 id="to-delete-bookmark-or-topic">
           <title>To Delete a Bookmark or Topic</title>
-          <para>To delete a bookmarks or topic perform the following steps:</para>
-      		<orderedlist>
-        	<listitem>
-          	<para>Select the bookmark or topic that you want to delete the bookmarks window.</para>
-        	</listitem>
-        	<listitem>
-          	<para>Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Delete</guimenuitem></menuchoice>. Alternatively, right-click on the
-bookmarks or topic in the bookmarks window, then choose <guimenuitem>Delete</guimenuitem>.</para>
-        	</listitem>
-      		</orderedlist>
+          <para>
+            To delete a bookmarks or topics perform the following steps:
+          </para>
+          <orderedlist>
+            <listitem>
+              <para>
+                Select the bookmark or topic that you want to delete 
+                from the bookmarks window.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Choose <menuchoice><guimenu>File</guimenu><guimenuitem>
+                Delete</guimenuitem></menuchoice>. Alternatively, 
+                right-click on the bookmarks or topic in the bookmarks 
+                window, then choose <guimenuitem>Delete</guimenuitem>.
+              </para>
+            </listitem>
+      	  </orderedlist>
         </sect2>
 	<sect2 id="to-edit-bookmark-properties">
 	  <title>To Edit a Bookmark's Properties</title>
           <para>
+            To edit a bookmark's properties such as it's title and address
+            right click it's entry in the bookmarks window and select 
+            <guimenuitem>Properties</guimenuitem>.
           </para>
         </sect2>
 	<sect2 id="to-search-bookmarks">
           <title>To Search Your Bookmarks</title>
           <para>
+            To search through your bookmarks, enter you search term in 
+            the <guilabel>Search</guilabel> field. &fr; will search through 
+            all your bookmarks no matter which topic is currently selected.
           </para>
         </sect2>
 	<sect2 id="to-copy-bookmark-address">
           <title>To Copy the Address of a Bookmark</title>
-          <para>To copy the address of a bookmark perform the following steps:</para>
-      		<orderedlist>
+          <para>
+            To copy the address of a bookmark perform the following steps:
+          </para>
+          <orderedlist>
         	<listitem>
           	<para>Select the bookmark.</para>
         	</listitem>
@@ -977,26 +1084,69 @@ history link, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
         </sect2>
 	<sect2 id="to-show-hide-window-components">
           <title>To Show and Hide Browser Window Components</title>
-            <para>You can show and hide browser window components as follows: </para>
+            <para>
+              You can show and hide browser window components as 
+              follows:
+            </para>
       	    <itemizedlist>
-            <listitem>
-            <para>To hide the toolbars, choose <menuchoice><guimenu>View</guimenu><guimenuitem>Toolbars</guimenuitem></menuchoice>. To display the
-toolbar again, choose <menuchoice><guimenu>View</guimenu><guimenuitem>Toolbars</guimenuitem></menuchoice> again. </para>
-            </listitem>
-            <listitem>
-            <para>To hide the bookmarks bar, choose <menuchoice><guimenu>View</guimenu><guimenuitem>Bookmarks Bar</guimenuitem></menuchoice>. To display
-the bookmarks bar again, choose <menuchoice><guimenu>View</guimenu><guimenuitem>Bookmarks Bar</guimenuitem></menuchoice> again.</para>
-            </listitem>
-            <listitem>
-            <para>To hide the statusbar, choose <menuchoice><guimenu>View</guimenu><guimenuitem>Statusbar</guimenuitem></menuchoice>. To display the
-statusbar again, choose <menuchoice><guimenu>View</guimenu><guimenuitem>Statusbar</guimenuitem></menuchoice> again. </para>
-           </listitem> 
+              <listitem>
+                <para>
+                  To hide the toolbars, choose <menuchoice>
+                  <guimenu>View</guimenu><guimenuitem>Toolbars
+                  </guimenuitem></menuchoice>. To display the
+                  toolbar again, choose <menuchoice><guimenu>
+                  View</guimenu><guimenuitem>Toolbars</guimenuitem>
+                  </menuchoice> again.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  To hide the bookmarks bar, choose <menuchoice>
+                  <guimenu>View</guimenu><guimenuitem>Bookmarks Bar
+                  </guimenuitem></menuchoice>. To display the bookmarks 
+                  bar again, choose <menuchoice><guimenu>View</guimenu>
+                  <guimenuitem>Bookmarks Bar</guimenuitem></menuchoice> 
+                  again.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  To hide the statusbar, choose <menuchoice><guimenu>
+                  View</guimenu><guimenuitem>Statusbar</guimenuitem>
+                  </menuchoice>. To display the statusbar again, choose 
+                  <menuchoice><guimenu>View</guimenu><guimenuitem>
+                  Statusbar</guimenuitem></menuchoice> again.
+                </para>
+              </listitem> 
            </itemizedlist>
         </sect2>
 	<sect2 id="to-edit-toolbars">
           <title>To Edit Your Toolbars</title>
           <para>
+            You can customize the items which appear in your toolbars:
           </para>
+          <itemizedlist>
+            <listitem>
+              <para>
+                To add or remove buttons from your toolbar, select 
+                <menuchoice><guimenu>Edit</guimenu><guimenuitem> 
+                Toolbars</guimenuitem></menuchoice>. Drag icons to and 
+                from the editor to add or remove them from your toolbar.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                To add a new toolbar, click <guibutton>Add Toolbar
+                </guibutton> in the toolbar editor.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                To remove a toolbar, remove all items from it. The 
+                toolbar will then automatically be removed.
+              </para>
+            </listitem>
+           </itemizedlist>
         </sect2>
   </sect1>
 
@@ -1011,15 +1161,18 @@ statusbar again, choose <menuchoice><guimenu>View</guimenu><guimenuitem>Statusba
       Web page</ulink>. 
     </para>
     <para>
-      This manual was written by David Bordoley (<email>bordoley@msu.edu</email>) and Patanjali Somayaji (<email>patanjali@codito.com</email>). 
+      This manual was written by David Bordoley 
+      (<email>bordoley@msu.edu</email>) and Patanjali Somayaji 
+      (<email>patanjali@codito.com</email>). 
     </para>
 
-    <para> This program is distributed under the terms of the GNU
+    <para>
+      This program is distributed under the terms of the GNU
       General Public license as published by the Free Software
       Foundation; either version 2 of the License, or (at your option)
       any later version. A copy of this license can be found at this
       <ulink url="ghelp:gpl" type="help">link</ulink>, or in the file
-      COPYING included with the source code of this program. </para>
-
+      COPYING included with the source code of this program.
+    </para>
   </sect1> 
 </article>
