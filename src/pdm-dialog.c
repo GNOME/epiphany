@@ -242,6 +242,9 @@ setup_passwords_treeview (PdmDialog *dialog)
 	selection = gtk_tree_view_get_selection (treeview);
 	gtk_tree_selection_set_mode (selection,
 				     GTK_SELECTION_MULTIPLE);
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (liststore),
+					      COL_PASSWORDS_HOST,
+					      GTK_SORT_ASCENDING);
 
         renderer = gtk_cell_renderer_text_new ();
 
@@ -295,6 +298,9 @@ setup_cookies_treeview (PdmDialog *dialog)
 	selection = gtk_tree_view_get_selection (treeview);
 	gtk_tree_selection_set_mode (selection,
 				     GTK_SELECTION_MULTIPLE);
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (liststore),
+					      COL_COOKIES_HOST,
+					      GTK_SORT_ASCENDING);
 
 	g_signal_connect (selection, "changed",
 			  G_CALLBACK(cookies_treeview_selection_changed_cb),
