@@ -784,8 +784,8 @@ add_system_language_entry (GtkListStore *store)
 	system = g_strjoinv (", ", sys_langs);
 
 	text = g_strdup_printf
-		(ngettext (_("System language [%s]"),
-			   _("System languages [%s]"), n_sys_langs), system);
+		(ngettext ("System language [%s]",
+			   "System languages [%s]", n_sys_langs), system);
 
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter,
