@@ -51,6 +51,8 @@ libephymozillaembed_la_SOURCES = 	\
 	ContentHandler.h		\
 	EphyAboutRedirector.cpp		\
 	EphyAboutRedirector.h		\
+	EphyContentPolicy.cpp		\
+	EphyContentPolicy.h		\
 	EphyEventListener.cpp		\
 	EphyEventListener.h		\
 	EphyHeaderSniffer.cpp		\

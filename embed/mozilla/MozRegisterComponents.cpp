@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2001,2002,2003 Philip Langdale
+ *  Copyright (C) 2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,10 +15,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "ContentHandler.h"
@@ -28,6 +31,7 @@
 #include "MozDownload.h"
 #include "ExternalProtocolService.h"
 #include "EphyAboutRedirector.h"
+#include "EphyContentPolicy.h"
 
 #ifdef HAVE_MOZILLA_PSM
 #include "GtkNSSClientAuthDialogs.h"
@@ -53,6 +57,7 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GIRCProtocolHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GFtpProtocolHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GNewsProtocolHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GMailtoProtocolHandler)
+NS_GENERIC_FACTORY_CONSTRUCTOR(EphyContentPolicy)
 
 #if MOZILLA_SNAPSHOT < 12
 NS_GENERIC_FACTORY_CONSTRUCTOR(GExternalProtocolService)
@@ -194,6 +199,12 @@ static const nsModuleComponentInfo sAppComps[] = {
 		G_MAILTO_PROTOCOL_CID,
 		G_MAILTO_CONTENT_CONTRACTID,
 		GMailtoProtocolHandlerConstructor
+	},
+	{
+		EPHY_CONTENT_POLICY_CLASSNAME,
+		EPHY_CONTENT_POLICY_CID,
+		EPHY_CONTENT_POLICY_CONTRACTID,
+		EphyContentPolicyConstructor
 	}
 };
 
