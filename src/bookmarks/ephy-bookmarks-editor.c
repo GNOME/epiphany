@@ -32,7 +32,12 @@
 #include "ephy-keywords-entry.h"
 #include "ephy-dnd.h"
 #include "ephy-prefs.h"
+#include "ephy-shell.h"
 #include "eel-gconf-extensions.h"
+#include "ephy-file-helpers.h"
+#include "egg-action-group.h"
+#include "egg-menu-merge.h"
+#include "popup-commands.h"
 
 static void ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass);
 static void ephy_bookmarks_editor_init (EphyBookmarksEditor *editor);
@@ -47,6 +52,13 @@ static void ephy_bookmarks_editor_get_property (GObject *object,
 						GValue *value,
 						GParamSpec *pspec);
 
+static void popup_cmd_open_bookmarks_in_tabs    (EggAction *action,
+						 EphyBookmarksEditor *editor);
+static void popup_cmd_open_bookmarks_in_browser (EggAction *action,
+						 EphyBookmarksEditor *editor);
+static void popup_cmd_remove_bookmarks          (EggAction *action,
+						 EphyBookmarksEditor *editor);
+
 struct EphyBookmarksEditorPrivate
 {
 	EphyBookmarks *bookmarks;
@@ -58,6 +70,8 @@ struct EphyBookmarksEditorPrivate
 	GtkWidget *keywords_entry;
 	GtkWidget *search_entry;
 	GtkWidget *go_button;
+	EggMenuMerge *ui_merge;
+	EggActionGroup *action_group;
 };
 
 enum
@@ -73,6 +87,87 @@ enum
 };
 
 static GObjectClass *parent_class = NULL;
+
+static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
+	/* Toplevel */
+	{ "FakeToplevel", (""), NULL, NULL, NULL, NULL, NULL },
+
+	{ "OpenInTab", N_("Open In New Tab..."), GTK_STOCK_JUMP_TO, NULL,
+	  NULL, G_CALLBACK (popup_cmd_open_bookmarks_in_tabs), NULL },
+
+	{ "OpenInWindow", N_("Open In New Browser..."), GTK_STOCK_JUMP_TO, NULL,
+	  NULL, G_CALLBACK (popup_cmd_open_bookmarks_in_browser), NULL },
+
+	{ "Remove", N_("Remove..."), GTK_STOCK_REMOVE, NULL,
+	  NULL, G_CALLBACK (popup_cmd_remove_bookmarks), NULL },
+};
+static guint ephy_bookmark_popup_n_entries = G_N_ELEMENTS (ephy_bookmark_popup_entries);
+
+
+static void
+popup_cmd_open_bookmarks_in_tabs (EggAction *action,
+				  EphyBookmarksEditor *editor)
+{
+	EphyWindow *window;
+	GList *selection;
+	GList *l;
+
+	window = EPHY_WINDOW (gtk_window_get_transient_for (GTK_WINDOW (editor)));
+	selection = ephy_node_view_get_selection (editor->priv->bm_view);
+
+	for (l = selection; l; l = l->next)
+	{
+		EphyNode *node = EPHY_NODE (l->data);
+		const char *location;
+
+		location = ephy_node_get_property_string (node,
+						EPHY_NODE_BMK_PROP_LOCATION);
+
+		ephy_shell_new_tab (ephy_shell, window, NULL, location,
+			EPHY_NEW_TAB_APPEND|EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+	}
+
+	if (selection)
+	{
+		g_list_free (selection);
+	}
+}
+
+static void
+popup_cmd_open_bookmarks_in_browser (EggAction *action,
+				    EphyBookmarksEditor *editor)
+{
+	EphyWindow *window;
+	GList *selection;
+	GList *l;
+
+	window = EPHY_WINDOW (gtk_window_get_transient_for (GTK_WINDOW (editor)));
+	selection = ephy_node_view_get_selection (editor->priv->bm_view);
+
+	for (l = selection; l; l = l->next)
+	{
+		EphyNode *node = EPHY_NODE (l->data);
+		const char *location;
+		
+		location = ephy_node_get_property_string (node,
+						EPHY_NODE_BMK_PROP_LOCATION);
+
+		ephy_shell_new_tab (ephy_shell, window, NULL, location,
+				    EPHY_NEW_TAB_IN_NEW_WINDOW);
+	}
+
+	if (selection)
+	{
+		g_list_free (selection);
+	}
+}
+
+static void
+popup_cmd_remove_bookmarks (EggAction *action,
+			    EphyBookmarksEditor *editor)
+{
+	ephy_node_view_remove (editor->priv->bm_view);
+}
 
 GType
 ephy_bookmarks_editor_get_type (void)
@@ -180,6 +275,11 @@ ephy_bookmarks_editor_finalize (GObject *object)
 
 	g_object_unref (G_OBJECT (editor->priv->bookmarks_filter));
 
+	g_object_unref (editor->priv->action_group);
+	egg_menu_merge_remove_action_group (editor->priv->ui_merge,
+					    editor->priv->action_group);
+	g_object_unref (editor->priv->ui_merge);
+
 	g_free (editor->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -225,6 +325,18 @@ ephy_bookmarks_editor_node_selected_cb (GtkWidget *view,
 		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->keywords_entry), FALSE);
 		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->location_entry), FALSE);
 	}
+}
+
+static void
+ephy_bookmarks_editor_show_popup_cb (GtkWidget *view,
+				     EphyBookmarksEditor *editor)
+{
+	GtkWidget *widget;
+	
+	widget = egg_menu_merge_get_widget (editor->priv->ui_merge, 
+					    "/popups/EphyBookmarkEditorPopup");
+	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
+			gtk_get_current_event_time ());	
 }
 
 static void
@@ -514,6 +626,27 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	long selected_id;
 	EphyNode *selected_node;
 	char *selected_id_str;
+	EggMenuMerge *ui_merge;
+	EggActionGroup *action_group;
+	int i;
+	
+	for (i = 0; i < ephy_bookmark_popup_n_entries; i++)
+	{
+		ephy_bookmark_popup_entries[i].user_data = editor;
+	}
+
+	ui_merge = egg_menu_merge_new ();
+	action_group = egg_action_group_new ("PopupActions");
+	egg_action_group_add_actions (action_group, ephy_bookmark_popup_entries,
+				      ephy_bookmark_popup_n_entries);
+	egg_menu_merge_insert_action_group (ui_merge,
+					    action_group, 0);
+	egg_menu_merge_add_ui_from_file (ui_merge,
+				ephy_file ("epiphany-bookmark-editor-ui.xml"),
+				NULL);
+	editor->priv->ui_merge = ui_merge;
+	editor->priv->action_group = action_group;
+	
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
 
@@ -573,6 +706,10 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	g_signal_connect (G_OBJECT (bm_view),
 			  "node_selected",
 			  G_CALLBACK (ephy_bookmarks_editor_node_selected_cb),
+			  editor);
+	g_signal_connect (G_OBJECT (bm_view),
+			  "show_popup",
+			  G_CALLBACK (ephy_bookmarks_editor_show_popup_cb),
 			  editor);
 
 	gtk_box_pack_start (GTK_BOX (vbox),

@@ -20,6 +20,7 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-marshal.h"
+#include "ephy-file-helpers.h"
 
 #include <gtk/gtk.h>
 #include <glib-object.h>
@@ -34,6 +35,8 @@ struct EphyNotebookPrivate
 {
 	GList *focused_pages;
 	GList *opened_tabs;
+
+	EphyNotebookPageLoadStatus current_status;
 
 	/* Used during tab drag'n'drop */
 	gulong motion_notify_handler_id;
@@ -587,6 +590,8 @@ ephy_notebook_init (EphyNotebook *notebook)
 {
 	notebook->priv = g_new (EphyNotebookPrivate, 1);
 
+	notebook->priv->current_status = EPHY_NOTEBOOK_TAB_LOAD_NORMAL;
+
 	notebook->priv->drag_in_progress = FALSE;
 	notebook->priv->motion_notify_handler_id = 0;
 	notebook->priv->src_notebook = NULL;
@@ -629,6 +634,36 @@ ephy_notebook_set_page_status (EphyNotebook *nb,
 			       GtkWidget *child,
 			       EphyNotebookPageLoadStatus status)
 {
+	GtkWidget *tab, *image;
+
+	g_return_if_fail (nb != NULL);
+
+	if (status == nb->priv->current_status)
+	{
+		return;
+	}
+
+	tab = gtk_notebook_get_tab_label (GTK_NOTEBOOK (nb), child);
+
+	g_return_if_fail (tab != NULL);
+
+	image  = g_object_get_data (G_OBJECT (tab), "loading-image");
+
+	g_return_if_fail (image != NULL);
+
+	switch (status)
+	{
+		case EPHY_NOTEBOOK_TAB_LOAD_LOADING:
+			gtk_widget_show (image);
+			break;
+
+		case EPHY_NOTEBOOK_TAB_LOAD_COMPLETED:
+		case EPHY_NOTEBOOK_TAB_LOAD_NORMAL:
+			gtk_widget_hide (image);
+			break;
+	}
+
+	nb->priv->current_status = status;
 }
 
 static void
@@ -648,6 +683,8 @@ tab_build_label (EphyNotebook *nb, GtkWidget *child)
 	int h, w;
 	GClosure *closure;
 	GtkWidget *window;
+	GtkWidget *loading_image;
+	GdkPixbufAnimation *loading_pixbuf;
 
 	window = gtk_widget_get_toplevel (GTK_WIDGET (nb));
 
@@ -666,6 +703,12 @@ tab_build_label (EphyNotebook *nb, GtkWidget *child)
 	gtk_widget_set_size_request (close_button, w, h);
 	gtk_container_add (GTK_CONTAINER (close_button),
 			   image);
+
+	/* setup load feedback image */
+	loading_pixbuf = gdk_pixbuf_animation_new_from_file (ephy_file ("epiphany-tab-loading.gif"), NULL);
+	loading_image = gtk_image_new_from_animation (loading_pixbuf);
+	g_object_unref (loading_pixbuf);
+	gtk_box_pack_start (GTK_BOX (hbox), loading_image, FALSE, FALSE, 0);
 
 	/* setup label */
         label = gtk_label_new (_("Untitled"));
@@ -698,6 +741,7 @@ tab_build_label (EphyNotebook *nb, GtkWidget *child)
 	gtk_widget_show (close_button);
 
 	g_object_set_data (G_OBJECT (hbox), "label", label);
+	g_object_set_data (G_OBJECT (hbox), "loading-image", loading_image);
 
 	return hbox;
 }
