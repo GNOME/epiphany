@@ -667,6 +667,19 @@ ephy_window_delete_event_cb (GtkWidget *widget, GdkEvent *event, EphyWindow *win
 	GList *tabs, *l;
 	gboolean modified = FALSE;
 
+	/* Workaround a crash when closing a window while in print preview mode. See
+	 * mozilla bug #241809
+	 */
+	if (window->priv->mode == EPHY_WINDOW_MODE_PRINT_PREVIEW)
+	{
+		EphyEmbed *embed;
+
+		embed = ephy_window_get_active_embed (window);
+		ephy_embed_print_preview_close (embed);
+
+		ephy_window_set_print_preview (window, FALSE);
+	}
+
 	tabs = ephy_window_get_tabs (window);
 	for (l = tabs; l != NULL; l = l->next)
 	{
