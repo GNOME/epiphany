@@ -126,7 +126,7 @@ ephy_tabs_menu_init (EphyTabsMenu *wrhm)
 	EphyTabsMenuPrivate *p = g_new0 (EphyTabsMenuPrivate, 1);
 	wrhm->priv = p;
 
-	wrhm->priv->ui_id = -1;
+	wrhm->priv->ui_id = 0;
 	wrhm->priv->action_group = NULL;
 }
 
@@ -136,10 +136,11 @@ ephy_tabs_menu_clean (EphyTabsMenu *wrhm)
 	EphyTabsMenuPrivate *p = wrhm->priv;
 	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
 
-	if (p->ui_id >= 0)
+	if (p->ui_id > 0)
 	{
 		egg_menu_merge_remove_ui (merge, p->ui_id);
 		egg_menu_merge_ensure_update (merge);
+		p->ui_id = 0;
 	}
 
 	if (p->action_group != NULL)
