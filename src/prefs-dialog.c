@@ -37,6 +37,7 @@
 #include "ephy-langs.h"
 #include "ephy-encodings.h"
 #include "ephy-debug.h"
+#include "ephy-ellipsizing-label.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtkframe.h>
@@ -75,6 +76,10 @@ prefs_homepage_blank_button_clicked_cb (GtkWidget *button,
 					EphyDialog *dialog);
 void
 prefs_language_more_button_clicked_cb (GtkWidget *button,
+				       EphyDialog *dialog);
+
+void
+prefs_download_path_button_clicked_cb (GtkWidget *button,
 				       EphyDialog *dialog);
 
 static const
@@ -194,6 +199,8 @@ enum
 
 	/* General */
 	HOMEPAGE_ENTRY_PROP,
+	AUTO_OPEN_PROP,
+	DOWNLOAD_PATH_BUTTON_PROP,
 
 	/* Fonts and Colors */
 	FONTS_LANGUAGE_PROP,
@@ -231,6 +238,8 @@ EphyDialogProperty properties [] =
 
 	/* General */
 	{ HOMEPAGE_ENTRY_PROP, "homepage_entry", CONF_GENERAL_HOMEPAGE, PT_AUTOAPPLY, NULL },
+	{ AUTO_OPEN_PROP, "auto_open_downloads_checkbutton", CONF_AUTO_OPEN_DOWNLOADS, PT_AUTOAPPLY, NULL},
+	{ DOWNLOAD_PATH_BUTTON_PROP, "download_path_button", NULL, PT_NORMAL, NULL },
 
 	/* Fonts and Colors */
 	{ FONTS_LANGUAGE_PROP, "fonts_language_optionmenu", CONF_FONTS_FOR_LANGUAGE, PT_AUTOAPPLY, NULL },
@@ -360,6 +369,11 @@ static void
 prefs_dialog_finalize (GObject *object)
 {
 	PrefsDialog *pd = EPHY_PREFS_DIALOG (object);
+	GtkWidget *button;
+
+	/* Free the ellipsizing label in the button */
+	button = ephy_dialog_get_control (EPHY_DIALOG (pd), DOWNLOAD_PATH_BUTTON_PROP);
+	gtk_widget_destroy (GTK_WIDGET (GTK_BIN (button)->child));
 
 	g_list_foreach (pd->priv->langs, (GFunc) free_lang_item, NULL);
 	g_list_free (pd->priv->langs);
@@ -987,7 +1001,46 @@ set_homepage_entry (EphyDialog *dialog,
 				  &pos);
 }
 
+static char*
+get_download_button_label ()
+{
+	char *label, *key, *desktop_path;
 
+	key = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
+	desktop_path = g_build_filename (g_get_home_dir (), "Desktop", NULL);
+
+	if (!strcmp (key, desktop_path))
+	{
+		g_free (key);
+		label = g_strdup (_("Desktop"));
+	}
+	else
+	{
+		label = key;
+	}
+
+	g_free (desktop_path);
+	return label;
+}
+	
+static void
+create_download_path_label (PrefsDialog *pd)
+{
+	char *dir;
+	GtkWidget *button, *label;
+	EphyDialog *dialog = EPHY_DIALOG (pd);
+
+	button = ephy_dialog_get_control (dialog, DOWNLOAD_PATH_BUTTON_PROP);
+	
+	dir = get_download_button_label ();
+	label = ephy_ellipsizing_label_new (dir);
+	ephy_ellipsizing_label_set_mode ((EphyEllipsizingLabel*)label,
+				          EPHY_ELLIPSIZE_START);
+	gtk_container_add (GTK_CONTAINER (button), label);
+	g_free (dir);
+	gtk_widget_show (label);
+}
+	
 static void
 prefs_dialog_init (PrefsDialog *pd)
 {
@@ -1043,6 +1096,7 @@ prefs_dialog_init (PrefsDialog *pd)
 	g_list_free (list);
 
 	create_language_menu (pd);
+	create_download_path_label (pd);
 }
 
 void
@@ -1203,4 +1257,55 @@ prefs_language_more_button_clicked_cb (GtkWidget *button,
 			  dialog);
 
 	ephy_dialog_show (EPHY_DIALOG(editor));
+}
+
+static void
+download_path_response_cb (GtkDialog *fc, gint response, EphyDialog *dialog)
+{
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		char *dir;
+
+		dir = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (fc));
+		if (dir != NULL)
+		{
+			GtkWidget *button;
+			char *label;
+
+			eel_gconf_set_string (CONF_STATE_DOWNLOAD_DIR, dir);
+			
+			button = ephy_dialog_get_control (dialog, DOWNLOAD_PATH_BUTTON_PROP);
+			label = get_download_button_label ();
+			ephy_ellipsizing_label_set_text ((EphyEllipsizingLabel*)GTK_BIN (button)->child,
+							  label);
+			g_free (dir);
+			g_free (label);
+		}
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (fc));
+}
+
+void
+prefs_download_path_button_clicked_cb (GtkWidget *button,
+				       EphyDialog *dialog)
+{
+	GtkWidget *parent, *fc;
+	parent = ephy_dialog_get_control (dialog, WINDOW_PROP);
+
+	fc = gtk_file_chooser_dialog_new (_("Select a directory"),
+					    GTK_WINDOW (parent),
+					    GTK_FILE_CHOOSER_ACTION_OPEN,
+					    GTK_STOCK_CANCEL,
+					    GTK_RESPONSE_CANCEL,
+					    GTK_STOCK_OPEN,
+					    GTK_RESPONSE_ACCEPT,
+					    NULL);
+	gtk_file_chooser_set_folder_mode (GTK_FILE_CHOOSER (fc), TRUE);
+
+	g_signal_connect (GTK_DIALOG (fc), "response",
+			    G_CALLBACK (download_path_response_cb),
+			    dialog);
+
+	gtk_widget_show (fc);
 }
