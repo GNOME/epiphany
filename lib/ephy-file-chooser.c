@@ -237,7 +237,10 @@ ephy_file_chooser_new (const char *title,
 	 * _after_ our instance_init and construct-param setters will have
 	 * run.
 	 */
-	ephy_file_chooser_set_persist_key (dialog, persist_key);
+	if (persist_key != NULL)
+	{
+		ephy_file_chooser_set_persist_key (dialog, persist_key);
+	}
 
 	if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	{

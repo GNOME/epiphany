@@ -137,7 +137,7 @@ GList		*ephy_encodings_get_encodings	(EphyEncodings *encodings,
 
 EphyNode	*ephy_encodings_get_all		(EphyEncodings *encodings);
 
-GList		*ephy_encodings_get_detectors	(EphyEncodings *encodings);
+EphyNode	*ephy_encodings_get_detectors	(EphyEncodings *encodings);
 
 void		 ephy_encodings_add_recent	(EphyEncodings *encodings,
 						 const char *code);

@@ -264,26 +264,12 @@ ephy_encodings_get_encodings (EphyEncodings *encodings,
 	return list;
 }
 
-GList *
+EphyNode *
 ephy_encodings_get_detectors (EphyEncodings *encodings)
 {
-	GList *list = NULL;
-	GPtrArray *children;
-	int i, n_items;
+	g_return_val_if_fail (EPHY_IS_ENCODINGS (encodings), NULL);
 
-	children = ephy_node_get_children (encodings->priv->detectors);
-	n_items = children->len;
-	for (i = 0; i < n_items; i++)
-	{
-		EphyNode *kid;
-															     
-		kid = g_ptr_array_index (children, i);
-
-		list = g_list_prepend (list, kid);
-	}
-	ephy_node_thaw (encodings->priv->detectors);
-
-	return list;
+	return encodings->priv->detectors;
 }
 
 EphyNode *
