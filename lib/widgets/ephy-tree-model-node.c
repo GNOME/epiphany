@@ -19,7 +19,6 @@
  */
 
 #include <config.h>
-#include <gtk/gtktreeview.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <time.h>
 #include <string.h>
@@ -185,8 +184,6 @@ ephy_tree_model_node_class_init (EphyTreeModelNodeClass *klass)
 static void
 ephy_tree_model_node_init (EphyTreeModelNode *model)
 {
-	GtkWidget *dummy;
-
 	do
 	{
 		model->stamp = g_random_int ();
@@ -194,11 +191,6 @@ ephy_tree_model_node_init (EphyTreeModelNode *model)
 	while (model->stamp == 0);
 
 	model->priv = EPHY_TREE_MODEL_NODE_GET_PRIVATE (model);
-
-	/* FIXME: huh? */
-	dummy = gtk_tree_view_new ();
-
-	gtk_widget_destroy (dummy);
 
 	model->priv->columns = g_ptr_array_new ();
 	model->priv->columns_num = EPHY_TREE_MODEL_NODE_BUILTIN_COLUMNS;
