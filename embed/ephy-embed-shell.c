@@ -220,10 +220,18 @@ load_mime_from_xml (EphyEmbedShell *shell)
 	EphyMimePermission permission = EPHY_MIME_PERMISSION_UNKNOWN;
 
 	xml_file = ephy_file ("mime-types-permissions.xml");
-	g_return_if_fail (xml_file != NULL);
+	if (xml_file == NULL)
+	{
+		g_warning ("MIME types permissions file not found!\n");
+		return;
+	}
 
 	reader = xmlNewTextReaderFilename (xml_file);
-	g_return_if_fail (reader != NULL);
+	if (reader == NULL)
+	{
+		g_warning ("Could not load MIME types permissions file!\n");
+		return;
+	}
 
 	ret = xmlTextReaderRead (reader);
 	while (ret == 1)
