@@ -57,17 +57,19 @@ ephy_embed_single_iface_init (gpointer g_class)
 
 	if (initialised == FALSE)
 	{
-	/**
-	 * EphyEmbedSingle::handle_content
-	 * @single: the #EphyEmbedSingle
-	 * @mime_type: the mime type of the content
-	 * @address: the address of the content
-	 *
-	 * The handle_content signal is emitted when encountering content
-	 * of a mime type Epiphany is unable to handle itself.
-	 *
-	 * Returning TRUE will stop the signal emission.
-	 **/
+/**
+ * EphyEmbedSingle::handle_content:
+ * @single:
+ * @mime_type: the MIME type of the content
+ * @address: the URL to the content
+ *
+ * The ::handle_content signal is emitted when encountering content of a mime
+ * type Epiphany is unable to handle itself.
+ *
+ * If a connected callback returns %TRUE, the signal will stop propagating. For
+ * example, this could be used by a download manager to prevent other
+ * ::handle_content listeners from being called.
+ **/
 	g_signal_new ("handle_content",
 		      EPHY_TYPE_EMBED_SINGLE,
 		      G_SIGNAL_RUN_LAST,
@@ -87,7 +89,7 @@ ephy_embed_single_iface_init (gpointer g_class)
  * ephy_embed_single_clear_cache:
  * @single: the #EphyEmbedSingle
  * 
- * Clears the mozilla cache.
+ * Clears the Mozilla cache (temporarily saved web pages).
  **/
 void
 ephy_embed_single_clear_cache (EphyEmbedSingle *single)
@@ -100,7 +102,15 @@ ephy_embed_single_clear_cache (EphyEmbedSingle *single)
  * ephy_embed_single_clear_auth_cache:
  * @single: the #EphyEmbedSingle
  * 
- * Clears the mozilla http authentication cache.
+ * Clears the Mozilla HTTP authentication cache.
+ *
+ * This does not clear regular website passwords; it only clears the HTTP
+ * authentication cache. Websites which use HTTP authentication require the
+ * browser to send a password along with every HTTP request; the browser will
+ * ask the user for the password once and then cache the password for subsequent
+ * HTTP requests. This function will clear the HTTP authentication cache,
+ * meaning the user will have to re-enter a username and password the next time
+ * Epiphany requests a web page secured with HTTP authentication.
  **/
 void
 ephy_embed_single_clear_auth_cache (EphyEmbedSingle *single)
@@ -112,9 +122,9 @@ ephy_embed_single_clear_auth_cache (EphyEmbedSingle *single)
 /**
  * ephy_embed_single_set_offline_mode:
  * @single: the #EphyEmbedSingle
- * @offline: whether being off-line
+ * @offline: %TRUE to disable networking
  * 
- * Sets the state of the net connection.
+ * Sets the state of the network connection.
  **/
 void
 ephy_embed_single_set_offline_mode (EphyEmbedSingle *single,
@@ -127,32 +137,35 @@ ephy_embed_single_set_offline_mode (EphyEmbedSingle *single,
 /**
  * ephy_embed_single_load_proxy_autoconf:
  * @single: the #EphyEmbedSingle
- * @address: the address of the PAC file
+ * @url: a URL to a PAC file
  * 
  * Sets the address of the PAC file, and loads the proxy configuration from it.
  **/
 void
 ephy_embed_single_load_proxy_autoconf (EphyEmbedSingle *single,
-				       const char* address)
+				       const char* url)
 {
 	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
-	iface->load_proxy_autoconf (single, address);
+	iface->load_proxy_autoconf (single, url);
 }
 
 /**
  * ephy_embed_single_get_font_list:
  * @single: the #EphyEmbedSingle
- * @langGroup: a mozilla font language group name, or NULL
+ * @lang_group: a mozilla font language group name, or %NULL
  * 
- * Returns the list of fonts matching @langGroup, or all fonts if @langGroup is
- * NULL.
+ * Returns the list of fonts matching @lang_group, or all fonts if @lang_group
+ * is %NULL.
+ *
+ * The available @lang_group arguments are listed in Epiphany's Fonts and Colors
+ * preferences.
  * 
  * Return value: a list of font names
  **/
 GList *
 ephy_embed_single_get_font_list (EphyEmbedSingle *single,
-				 const char *langGroup)
+				 const char *lang_group)
 {
 	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
-	return iface->get_font_list (single, langGroup);
+	return iface->get_font_list (single, lang_group);
 }

@@ -33,10 +33,10 @@ G_BEGIN_DECLS
 #define EPHY_IS_EMBED_SINGLE_IFACE(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_SINGLE))
 #define EPHY_EMBED_SINGLE_GET_IFACE(i)	(G_TYPE_INSTANCE_GET_INTERFACE ((i), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingleIface))
 
-typedef struct EphyEmbedSingle		EphyEmbedSingle;
-typedef struct EphyEmbedSingleIface	EphyEmbedSingleIface;
+typedef struct _EphyEmbedSingle		EphyEmbedSingle;
+typedef struct _EphyEmbedSingleIface	EphyEmbedSingleIface;
 
-struct EphyEmbedSingleIface
+struct _EphyEmbedSingleIface
 {
 	GTypeInterface base_iface;
 
@@ -60,18 +60,18 @@ struct EphyEmbedSingleIface
 
 GType	ephy_embed_single_get_type		(void);
 
-void	ephy_embed_single_clear_cache		(EphyEmbedSingle *shell);
+void	ephy_embed_single_clear_cache		(EphyEmbedSingle *single);
 
-void	ephy_embed_single_clear_auth_cache	(EphyEmbedSingle *shell);
+void	ephy_embed_single_clear_auth_cache	(EphyEmbedSingle *single);
 
-void	ephy_embed_single_set_offline_mode	(EphyEmbedSingle *shell,
+void	ephy_embed_single_set_offline_mode	(EphyEmbedSingle *single,
 						 gboolean offline);
 
-void	ephy_embed_single_load_proxy_autoconf	(EphyEmbedSingle *shell,
+void	ephy_embed_single_load_proxy_autoconf	(EphyEmbedSingle *single,
 						 const char* url);
 
-GList  *ephy_embed_single_get_font_list		(EphyEmbedSingle *shell,
-						 const char *langGroup);
+GList  *ephy_embed_single_get_font_list		(EphyEmbedSingle *single,
+						 const char *lang_group);
 
 G_END_DECLS
 

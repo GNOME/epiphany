@@ -536,7 +536,7 @@ ephy_embed_shistory_n_items  (EphyEmbed *embed)
  * @url: returned value of the history entry's URL
  * @title: returned value of the history entry's title
  *
- * Returns the @url and @title of the @nth item in @embed's session history.
+ * Fetches the @url and @title of the @nth item in @embed's session history.
  * If @is_relative is %TRUE, @nth is an offset from the browser's current
  * history position. For example, calling this function with @is_relative %TRUE
  * and @nth %0 will return the URL and title of the current page.
@@ -590,7 +590,7 @@ ephy_embed_shistory_go_nth (EphyEmbed *embed,
  * @level: return value of security level
  * @description: return value of the description of the security level
  *
- * Returns the an #EmbedSecurityLevel and a newly-allocated string description
+ * Fetches the #EmbedSecurityLevel and a newly-allocated string description
  * of the security state of @embed.
  **/
 void
