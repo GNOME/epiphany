@@ -29,6 +29,7 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/string		\
 	-I$(MOZILLA_INCLUDE_ROOT)/unicharutil		\
 	-I$(MOZILLA_INCLUDE_ROOT)/uriloader		\
+	-I$(MOZILLA_INCLUDE_ROOT)/uconv			\
 	-I$(MOZILLA_INCLUDE_ROOT)/wallet		\
 	-I$(MOZILLA_INCLUDE_ROOT)/webbrowserpersist	\
 	-I$(MOZILLA_INCLUDE_ROOT)/webbrwsr		\

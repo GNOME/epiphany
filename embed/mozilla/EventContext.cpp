@@ -24,6 +24,7 @@
 #endif
 
 #include "EventContext.h"
+#include "nsString.h"
 #include "nsIDOMEventTarget.h"
 #include "nsIDocument.h"
 #include "nsIDOMHTMLInputElement.h"
@@ -46,6 +47,9 @@
 #include <gdk/gdkkeysyms.h>
 #include "nsIPrivateDOMEvent.h"
 #include "nsIDOMNSUIEvent.h"
+#include "nsIServiceManager.h"
+#include "nsITextToSubURI.h"
+#include "nsIDocCharset.h"
 
 #define KEY_CODE 256
 
@@ -141,6 +145,38 @@ nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsString& aResult)
 	aResult = text;
 
 	return NS_OK;
+}
+
+nsresult EventContext::Unescape (const nsAString &aEscaped, nsAString &aUnescaped)
+{
+#if MOZILLA_SNAPSHOT >= 11
+        if (!aEscaped.Length()) return NS_ERROR_FAILURE;
+
+	NS_ENSURE_TRUE (mBrowser, NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (mBrowser->mWebBrowser, NS_ERROR_FAILURE);
+
+        nsCOMPtr<nsITextToSubURI> escaper
+                (do_CreateInstance ("@mozilla.org/intl/texttosuburi;1"));
+        NS_ENSURE_TRUE (escaper, NS_ERROR_FAILURE);
+
+        nsCOMPtr<nsIDocCharset> docCharset = do_GetInterface (mBrowser->mWebBrowser);
+        NS_ENSURE_TRUE (docCharset, NS_ERROR_FAILURE);
+
+	nsCAutoString encoding;
+        char *charset;
+        nsresult rv;
+        rv = docCharset->GetCharset (&charset);
+        NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+        encoding = charset;
+        if (charset) nsMemory::Free (charset);
+
+	NS_ConvertUCS2toUTF8 escaped (aEscaped);
+        return escaper->UnEscapeNonAsciiURI (encoding, escaped, aUnescaped);
+#else
+	aUnescaped = aEscaped;
+        return NS_OK;
+#endif
 }
 
 nsresult EventContext::ResolveBaseURL (nsIDocument *doc, const nsAString &relurl, nsACString &url)
@@ -405,9 +441,15 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				substr.Assign (Substring (tmp, 0, 7));
 				if (substr.EqualsIgnoreCase("mailto:"))
 				{
-					info->context |= EMBED_CONTEXT_EMAIL_LINK;
 					const nsAString &address = Substring(tmp, 7, tmp.Length()-7);
-					SetStringProperty ("email", address);
+
+					nsAutoString unescapedHref;
+					rv = Unescape (address, unescapedHref);
+					if (NS_SUCCEEDED (rv) && unescapedHref.Length())
+					{
+						SetStringProperty ("email", unescapedHref);
+						info->context |= EMBED_CONTEXT_EMAIL_LINK;
+					}
 				}
 				
 				if (anchor && !tmp.IsEmpty()) 
