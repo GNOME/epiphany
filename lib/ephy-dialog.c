@@ -968,11 +968,18 @@ setup_default_size (EphyDialog *dialog)
 {
 	if (dialog->priv->has_default_size == FALSE)
 	{
+		EphyStateWindowFlags flags;
+
+		flags = EPHY_STATE_WINDOW_SAVE_SIZE;
+
+		if (dialog->priv->persist_position)
+		{
+			flags |= EPHY_STATE_WINDOW_SAVE_POSITION;
+		}
+
 		ephy_state_add_window (dialog->priv->dialog,
 				       dialog->priv->name, -1, -1,
-				       dialog->priv->persist_position ?
-				       EPHY_STATE_WINDOW_SAVE_POSITION :
-				       EPHY_STATE_WINDOW_SAVE_SIZE);
+				       flags);
 
 		dialog->priv->has_default_size = TRUE;
 	}
