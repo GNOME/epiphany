@@ -26,7 +26,10 @@
  *
  */
 
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "ephy-spinner.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
@@ -67,11 +70,6 @@ static void ephy_spinner_remove_update_callback (EphySpinner *spinner);
 static void ephy_spinner_theme_changed     (GnomeIconTheme *icon_theme,
                                                  EphySpinner *spinner);
 
-static GList *spinner_directories = NULL;
-
-static void
-ephy_spinner_init_directory_list (void);
-
 static GObjectClass *parent_class = NULL;
 
 GType
@@ -97,8 +95,6 @@ ephy_spinner_get_type (void)
                 ephy_spinner_type = g_type_register_static (GTK_TYPE_EVENT_BOX,
                                                               "EphySpinner",
                                                               &our_info, 0);
-
-		ephy_spinner_init_directory_list ();
         }
 
         return ephy_spinner_type;
@@ -543,18 +539,4 @@ ephy_spinner_class_init (EphySpinnerClass *class)
 
 	widget_class->expose_event = ephy_spinner_expose;
 	widget_class->size_request = ephy_spinner_size_request;
-}
-
-static void
-ephy_spinner_init_directory_list (void)
-{
-	gchar *path;
-
-	path = g_build_filename (SHARE_DIR, "..", "pixmaps", "nautilus", NULL);
-	spinner_directories = g_list_append (spinner_directories, path);
-
-#ifdef NAUTILUS_PREFIX
-	path = g_build_filename (NAUTILUS_PREFIX, "share", "pixmaps", "nautilus", NULL);
-	spinner_directories = g_list_append (spinner_directories, path);
-#endif
 }
