@@ -692,7 +692,7 @@ ephy_node_view_select_node_by_key (EphyNodeView *view, GdkEventKey *event)
 
 		string = g_utf8_casefold (g_value_get_string (&value), -1);
 		g_utf8_strncpy (string, string, 1);
-		found = (g_utf8_collate (string, event_string) >= 0);
+		found = (g_utf8_collate (string, event_string) == 0);
 
 		g_free (string);
 		g_value_unset (&value);
