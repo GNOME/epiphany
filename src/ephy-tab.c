@@ -1297,9 +1297,10 @@ ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 	build_progress_from_requests (tab, state);
 }
 
-static void
-ephy_tab_new_window_cb (EphyEmbed *embed, EphyEmbed **new_embed,
-			EphyEmbedChrome chromemask, EphyTab *tab)
+static EphyEmbed *
+ephy_tab_new_window_cb (EphyEmbed *embed,
+			EphyEmbedChrome chromemask,
+			EphyTab *tab)
 {
 	EphyTab *new_tab;
 	EphyWindow *window;
@@ -1321,9 +1322,9 @@ ephy_tab_new_window_cb (EphyEmbed *embed, EphyEmbed **new_embed,
 
         ephy_window_add_tab (window, new_tab, -1, FALSE);
 
-	*new_embed = ephy_tab_get_embed (new_tab);
-
 	popups_manager_add_window (tab, window);
+
+	return ephy_tab_get_embed (new_tab);
 }
 
 static void

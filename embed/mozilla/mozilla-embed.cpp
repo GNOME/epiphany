@@ -1078,11 +1078,13 @@ mozilla_embed_new_window_cb (GtkMozEmbed *embed,
 		}
 	}
 
-	g_signal_emit_by_name (membed, "ge_new_window", &new_embed, mask);
+	g_signal_emit_by_name (membed, "ge_new_window", mask, &new_embed);
 
 	g_assert (new_embed != NULL);
-	
-	*newEmbed = GTK_MOZ_EMBED(new_embed);
+
+	gtk_moz_embed_set_chrome_mask (GTK_MOZ_EMBED (new_embed), chrome_mask);
+
+	*newEmbed = GTK_MOZ_EMBED (new_embed);
 }
 
 static void

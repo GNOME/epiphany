@@ -20,6 +20,7 @@ NOINST_H_FILES = \
 	ephy-node-common.h			\
 	ephy-prefs.h				\
 	ephy-shlib-loader.h			\
+	ephy-signal-accumulator.h		\
 	ephy-string.h				\
 	ephy-stock-icons.h			\
 	ephy-zoom.h
@@ -51,6 +52,7 @@ libephymisc_la_SOURCES = \
 	ephy-node-db.c				\
 	ephy-prefs.h				\
 	ephy-shlib-loader.c			\
+	ephy-signal-accumulator.c		\
 	ephy-state.c				\
 	ephy-string.c				\
 	ephy-stock-icons.c			\

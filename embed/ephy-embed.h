@@ -124,9 +124,6 @@ struct _EphyEmbedIface
 	void	 (* net_state)		(EphyEmbed *embed,
 					 const char *uri,
 					 EmbedState state);
-	void	 (* new_window)		(EphyEmbed *embed,
-					 EphyEmbed **new_embed,
-					 EphyEmbedChrome chromemask);
 	gboolean (* dom_mouse_click)	(EphyEmbed *embed,
 					 EphyEmbedEvent *event);
 	gboolean (* dom_mouse_down)	(EphyEmbed *embed,
@@ -144,6 +141,8 @@ struct _EphyEmbedIface
 	void	 (* modal_alert_closed)	(EphyEmbed *embed);
 	void	 (* document_type)	(EphyEmbed *embed,
 					 EmbedDocumentType type);
+	EphyEmbed * (* new_window)	(EphyEmbed *embed,
+					 EphyEmbedChrome chromemask);
 
 	/* Methods  */
 	void		   (* load_url)			(EphyEmbed *embed,
