@@ -685,9 +685,20 @@ ephy_bookmarks_editor_get_type (void)
 }
 
 static void
+ephy_bookmarks_editor_show (GtkWidget *widget)
+{
+	EphyBookmarksEditor *editor = EPHY_BOOKMARKS_EDITOR (widget);
+
+	gtk_widget_grab_focus (editor->priv->search_entry);
+
+	GTK_WIDGET_CLASS (parent_class)->show (widget);
+}
+
+static void
 ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
@@ -696,6 +707,8 @@ ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass)
 
 	object_class->set_property = ephy_bookmarks_editor_set_property;
 	object_class->get_property = ephy_bookmarks_editor_get_property;
+
+	widget_class->show = ephy_bookmarks_editor_show;
 
 	g_object_class_install_property (object_class,
 					 PROP_BOOKMARKS,
