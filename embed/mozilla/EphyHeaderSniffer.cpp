@@ -205,16 +205,17 @@ EphyHeaderSniffer::OnSecurityChange (nsIWebProgress *aWebProgress, nsIRequest *a
 }
 
 static void
-filechooser_response_cb (EphyFileChooser *dialog, gint response, EphyHeaderSniffer* sniffer)
+filechooser_response_cb (GtkWidget *dialog,
+			 gint response,	
+			 EphyHeaderSniffer* sniffer)
 {
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		char *filename;
-		GtkWidget *parent = NULL; // FIXME!
 
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 
-		if (ephy_gui_confirm_overwrite_file (parent, filename) == FALSE)
+		if (ephy_gui_confirm_overwrite_file (dialog, filename) == FALSE)
 		{
 			g_free (filename);
 			return;
