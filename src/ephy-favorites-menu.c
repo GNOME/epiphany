@@ -123,6 +123,7 @@ ephy_favorites_menu_clean (EphyFavoritesMenu *wrhm)
 	if (p->ui_id >= 0)
 	{
 		egg_menu_merge_remove_ui (merge, p->ui_id);
+		egg_menu_merge_ensure_update (merge);
 	}
 
 	if (p->action_group != NULL)
@@ -279,7 +280,7 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 	if (children->len > 0)
 	{
 		GError *error = NULL;
-
+		LOG ("Merging ui\n%s",xml->str);
 		p->ui_id = egg_menu_merge_add_ui_from_string
 			(merge, xml->str, -1, &error);
 	}

@@ -552,7 +552,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 				 G_OBJECT (eb),
 				 0);
 
-	eb->priv->favorites = ephy_node_new ();
+	eb->priv->favorites = ephy_node_new_with_id (FAVORITES_NODE_ID);
 	ephy_node_ref (eb->priv->favorites);
 	g_signal_connect_object (G_OBJECT (eb->priv->favorites),
 				 "child_added",
