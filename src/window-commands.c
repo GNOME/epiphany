@@ -308,6 +308,10 @@ window_cmd_file_open (EggAction *action,
 	GtkWidget *wmain;
 	EphyEmbedShell *embed_shell;
 	gresult result;
+	EphyEmbedSingle *single;
+
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (ephy_shell));
 
 	embed_shell = EPHY_EMBED_SHELL (ephy_shell);
 
@@ -316,8 +320,8 @@ window_cmd_file_open (EggAction *action,
 
         dir = eel_gconf_get_string (CONF_STATE_OPEN_DIR);
 
-	result = ephy_embed_shell_show_file_picker
-		(embed_shell, wmain,
+	result = ephy_embed_single_show_file_picker
+		(single, wmain,
 		 _("Select the file to open"),
                  dir, NULL, modeOpen,
                  &file, NULL, NULL, NULL);

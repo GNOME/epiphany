@@ -19,7 +19,7 @@
 #ifndef __ContentHandler_h
 #define __ContentHandler_h
 
-#include "mozilla-embed-shell.h"
+#include "ephy-embed-shell.h"
 
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 #include "nsIHelperAppLauncherDialog.h"

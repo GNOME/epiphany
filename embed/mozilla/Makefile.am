@@ -61,6 +61,8 @@ libephymozillaembed_la_SOURCES = 	\
 	BaseProtocolContentHandler.h    \
 	ContentHandler.cpp		\
 	ContentHandler.h		\
+	EphyEventListener.cpp		\
+	EphyEventListener.h		\
 	EphyWrapper.cpp                 \
 	EphyWrapper.h	                \
 	EventContext.cpp                \
@@ -91,14 +93,12 @@ libephymozillaembed_la_SOURCES = 	\
 	ProgressListener.h		\
 	StartHereProtocolHandler.cpp	\
 	StartHereProtocolHandler.h	\
-	EphyEventListener.cpp		\
-	EphyEventListener.h		\
 	mozilla-embed.cpp	        \
 	mozilla-embed.h			\
 	mozilla-embed-persist.cpp       \
 	mozilla-embed-persist.h		\
-	mozilla-embed-shell.cpp		\
-	mozilla-embed-shell.h	        \
+	mozilla-embed-single.cpp	\
+	mozilla-embed-single.h	        \
 	mozilla-i18n.c			\
 	mozilla-i18n.h			\
 	mozilla-notifiers.cpp		\
@@ -107,3 +107,8 @@ libephymozillaembed_la_SOURCES = 	\
 	mozilla-prefs.h			\
 	nsUnicharUtils.cpp		\
 	nsUnicharUtils.h
+
+mozilla_DATA = default-prefs.js
+mozilladir = $(pkgdatadir)
+
+EXTRA_DIST = $(mozilla_DATA)

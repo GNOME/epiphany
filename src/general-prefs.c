@@ -18,6 +18,7 @@
 
 #include "general-prefs.h"
 #include "ephy-shell.h"
+#include "ephy-embed-single.h"
 #include "ephy-prefs.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-shell.h"
@@ -185,8 +186,12 @@ default_charset_menu_changed_cb (GtkOptionMenu *option_menu,
 	GList *charsets;
 	int i;
 	CharsetInfo *info;
+	EphyEmbedSingle *single;
 
-	ephy_embed_shell_get_charset_titles (shell, NULL, &charsets);
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (ephy_shell));
+
+	ephy_embed_single_get_charset_titles (single, NULL, &charsets);
 
 	i = gtk_option_menu_get_history (option_menu);
 	charsets = g_list_nth (charsets, i);
@@ -211,15 +216,17 @@ find_charset_in_list_cmp (gconstpointer a,
 static void
 create_default_charset_menu (GeneralPrefs *dialog)
 {
-	EphyEmbedShell *shell;
 	GList *l;
 	GList *charsets;
 	GtkWidget *menu;
 	GtkWidget *optionmenu;
 	char *value;
+	EphyEmbedSingle *single;
 
-	shell = EPHY_EMBED_SHELL (ephy_shell);
-	ephy_embed_shell_get_charset_titles (shell, NULL, &l);
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (ephy_shell));
+
+	ephy_embed_single_get_charset_titles (single, NULL, &l);
 
 	menu = gtk_menu_new ();
 
@@ -251,7 +258,7 @@ create_default_charset_menu (GeneralPrefs *dialog)
 
 	g_signal_connect (optionmenu, "changed",
 			  G_CALLBACK (default_charset_menu_changed_cb),
-			  shell);
+			  embed_shell);
 
 	g_list_free (l);
 }

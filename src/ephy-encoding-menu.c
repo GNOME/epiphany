@@ -241,6 +241,10 @@ ephy_encoding_menu_rebuild (EphyEncodingMenu *wrhm)
 	GList *groups, *gl;
 	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
 	int group_index = 0, charset_index = 0;
+	EphyEmbedSingle *single;
+
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (ephy_shell));
 
 	LOG ("Rebuilding encoding menu")
 
@@ -252,7 +256,7 @@ ephy_encoding_menu_rebuild (EphyEncodingMenu *wrhm)
 	p->action_group = egg_action_group_new ("EncodingActions");
 	egg_menu_merge_insert_action_group (merge, p->action_group, 0);
 
-	ephy_embed_shell_get_charset_groups (embed_shell, &groups);
+	ephy_embed_single_get_charset_groups (single, &groups);
 
 	for (gl = groups; gl != NULL; gl = gl->next)
         {
@@ -261,9 +265,9 @@ ephy_encoding_menu_rebuild (EphyEncodingMenu *wrhm)
 
 		build_group (p->action_group, xml, group, group_index);
 
-		ephy_embed_shell_get_charset_titles (embed_shell,
-                                                     group,
-                                                     &charsets);
+		ephy_embed_single_get_charset_titles (single,
+                                                      group,
+                                                      &charsets);
 
 		for (cl = charsets; cl != NULL; cl = cl->next)
                 {

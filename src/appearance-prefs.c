@@ -183,10 +183,14 @@ setup_font_menu (AppearancePrefs *dialog,
 	char key[255];
 	int pos;
 	GtkWidget *entry = GTK_COMBO(combo)->entry;
+	EphyEmbedSingle *single;
 
-	ephy_embed_shell_get_font_list (EPHY_EMBED_SHELL (ephy_shell),
-					lang_encode[dialog->priv->language],
-					type, &fonts, &default_font);
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (ephy_shell));
+
+	ephy_embed_single_get_font_list (single,
+					 lang_encode[dialog->priv->language],
+					 type, &fonts, &default_font);
 
 	/* Get the default font */
 	sprintf (key, "%s_%s_%s", CONF_RENDERING_FONT, type,

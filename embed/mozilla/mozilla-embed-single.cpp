@@ -19,7 +19,7 @@
 #include "glib.h"
 #include "ephy-string.h"
 #include "gtkmozembed.h"
-#include "mozilla-embed-shell.h"
+#include "mozilla-embed-single.h"
 #include "mozilla-prefs.h"
 #include "ephy-prefs.h"
 #include "ephy-file-helpers.h"
@@ -58,53 +58,50 @@
 #define MOZILLA_PROFILE_FILE "prefs.js"
 
 static void
-mozilla_embed_shell_class_init (MozillaEmbedShellClass *klass);
+mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass);
 static void
-mozilla_embed_shell_init (MozillaEmbedShell *ges);
+mozilla_embed_single_init (MozillaEmbedSingle *ges);
 static void
-mozilla_embed_shell_finalize (GObject *object);
+mozilla_embed_single_finalize (GObject *object);
 
-static void              
-impl_get_capabilities (EphyEmbedShell *shell,
-		       EmbedShellCapabilities *caps);
 static gresult      
-impl_clear_cache (EphyEmbedShell *shell,
+impl_clear_cache (EphyEmbedSingle *shell,
 		  CacheType type);
 static gresult          
-impl_set_offline_mode (EphyEmbedShell *shell,
+impl_set_offline_mode (EphyEmbedSingle *shell,
 		       gboolean offline);
 static gresult           
-impl_load_proxy_autoconf (EphyEmbedShell *shell,
+impl_load_proxy_autoconf (EphyEmbedSingle *shell,
 			  const char* url);
 static gresult           
-impl_get_charset_titles (EphyEmbedShell *shell,
+impl_get_charset_titles (EphyEmbedSingle *shell,
 			 const char *group,
 			 GList **charsets);
 static gresult           
-impl_get_charset_groups (EphyEmbedShell *shell,
+impl_get_charset_groups (EphyEmbedSingle *shell,
 		         GList **groups);
 static gresult
-impl_get_font_list (EphyEmbedShell *shell,
+impl_get_font_list (EphyEmbedSingle *shell,
 		    const char *langGroup,
 		    const char *fontType,
 		    GList **fontList,
 		    char **default_font);
 static gresult           
-impl_list_cookies (EphyEmbedShell *shell,
+impl_list_cookies (EphyEmbedSingle *shell,
 		   GList **cookies);
 static gresult           
-impl_remove_cookies (EphyEmbedShell *shell,
+impl_remove_cookies (EphyEmbedSingle *shell,
 		     GList *cookies);
 static gresult           
-impl_list_passwords (EphyEmbedShell *shell,
+impl_list_passwords (EphyEmbedSingle *shell,
 		     PasswordType type, 
 		     GList **passwords);
 static gresult           
-impl_remove_passwords (EphyEmbedShell *shell,
+impl_remove_passwords (EphyEmbedSingle *shell,
 		       GList *passwords,
 		       PasswordType type);
 static gresult 
-impl_show_file_picker (EphyEmbedShell *shell,
+impl_show_file_picker (EphyEmbedSingle *shell,
 		       GtkWidget *parentWidget, 
 		       const char *title,
 		       const char *directory,
@@ -115,13 +112,14 @@ impl_show_file_picker (EphyEmbedShell *shell,
                        FileFormat *file_formats, 
 		       int *ret_file_format);
 
-static void mozilla_embed_shell_new_window_orphan_cb (GtkMozEmbedSingle *embed,
+static void mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *embed,
             	           		              GtkMozEmbed **retval, 
 					              guint chrome_mask,
-                           		              EphyEmbedShell *shell);
+                           		              EphyEmbedSingle *shell);
 
-struct MozillaEmbedShellPrivate
+struct MozillaEmbedSinglePrivate
 {
+	char *user_prefs;
 	GHashTable *charsets_hash;
 	GList *sorted_charsets_titles;
 };
@@ -131,45 +129,44 @@ static NS_DEFINE_CID(kJVMManagerCID, NS_JVMMANAGER_CID);
 static GObjectClass *parent_class = NULL;
 
 GType
-mozilla_embed_shell_get_type (void)
+mozilla_embed_single_get_type (void)
 {
-       static GType mozilla_embed_shell_type = 0;
+       static GType mozilla_embed_single_type = 0;
 
-        if (mozilla_embed_shell_type == 0)
+        if (mozilla_embed_single_type == 0)
         {
                 static const GTypeInfo our_info =
                 {
-                        sizeof (MozillaEmbedShellClass),
+                        sizeof (MozillaEmbedSingleClass),
                         NULL, /* base_init */
                         NULL, /* base_finalize */
-                        (GClassInitFunc) mozilla_embed_shell_class_init,
+                        (GClassInitFunc) mozilla_embed_single_class_init,
                         NULL, /* class_finalize */
                         NULL, /* class_data */
-                        sizeof (MozillaEmbedShell),
+                        sizeof (MozillaEmbedSingle),
                         0,    /* n_preallocs */
-                        (GInstanceInitFunc) mozilla_embed_shell_init
+                        (GInstanceInitFunc) mozilla_embed_single_init
                 };
 
-                mozilla_embed_shell_type = g_type_register_static (EPHY_EMBED_SHELL_TYPE,
-								   "MozillaEmbedShell",
+                mozilla_embed_single_type = g_type_register_static (EPHY_EMBED_SINGLE_TYPE,
+								   "MozillaEmbedSingle",
 								   &our_info, (GTypeFlags)0);
         }
 
-        return mozilla_embed_shell_type;
+        return mozilla_embed_single_type;
 }
 
 static void
-mozilla_embed_shell_class_init (MozillaEmbedShellClass *klass)
+mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	EphyEmbedShellClass *shell_class;
+	EphyEmbedSingleClass *shell_class;
 	
 	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
-	shell_class = EPHY_EMBED_SHELL_CLASS (klass);
+	shell_class = EPHY_EMBED_SINGLE_CLASS (klass);
 	
-        object_class->finalize = mozilla_embed_shell_finalize;
+        object_class->finalize = mozilla_embed_single_finalize;
 
-	shell_class->get_capabilities = impl_get_capabilities;
 	shell_class->clear_cache = impl_clear_cache;
 	shell_class->set_offline_mode = impl_set_offline_mode;
 	shell_class->load_proxy_autoconf = impl_load_proxy_autoconf;
@@ -184,7 +181,7 @@ mozilla_embed_shell_class_init (MozillaEmbedShellClass *klass)
 }
 
 static void
-mozilla_load_proxy_prefs (MozillaEmbedShell *shell)
+mozilla_load_proxy_prefs (MozillaEmbedSingle *shell)
 {
 	char *tmp;
 	int i, mozilla_mode = 0;
@@ -244,48 +241,20 @@ mozilla_load_proxy_prefs (MozillaEmbedShell *shell)
 	/* Autoconfiguration */
 	tmp = eel_gconf_get_string (CONF_NETWORK_PROXY_AUTO_URL);
 	g_return_if_fail (tmp != NULL);
-	ephy_embed_shell_load_proxy_autoconf 
-		(EPHY_EMBED_SHELL (shell), tmp);
+	ephy_embed_single_load_proxy_autoconf 
+		(EPHY_EMBED_SINGLE (shell), tmp);
 	g_free (tmp);
 }
 
 static void
-mozilla_set_default_prefs (void)
+mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 {
-        mozilla_prefs_set_boolean ("mozilla.widget.raise-on-setfocus",
-                                   FALSE);
-        mozilla_prefs_set_boolean ("browser.display.use_system_colors",
-                                   FALSE);
-
-        /* set default search engine */
-        mozilla_prefs_set_string ("keyword.URL",_("http://www.google.com/search?q="));
-        mozilla_prefs_set_boolean ("keyword.enabled", TRUE);
-        mozilla_prefs_set_boolean ("security.checkloaduri", FALSE); 
-
-        /* while we have no UI */
-        mozilla_prefs_set_boolean ("wallet.captureForms", FALSE);
-
-        /* deactivate mailcap and mime.types support */
-        mozilla_prefs_set_string ("helpers.global_mime_types_file", "");
-        mozilla_prefs_set_string ("helpers.global_mailcap_file", "");
-        mozilla_prefs_set_string ("helpers.private_mime_types_file", "");
-        mozilla_prefs_set_string ("helpers.private_mailcap_file", "");
-        
-        /* dont allow xpi installs from epiphany, there are crashes */
-        mozilla_prefs_set_boolean ("xpinstall.enabled", FALSE);
-
-        /* disable sucky XUL ftp view, have nice ns4-like html page instead */
-        mozilla_prefs_set_boolean ("network.dir.generate_html", TRUE);
-        
-        /* set the right accept encoding flags */
-        mozilla_prefs_set_string ("network.http.accept-encoding" ,
-                                  "gzip, deflate, compress;q=0.9");
-	
-        mozilla_prefs_save ();
+	mozilla_prefs_load (ephy_file ("default-prefs.js"));
+	mozilla_prefs_save (mes->priv->user_prefs);
 }
 
 static void
-mozilla_init_single (MozillaEmbedShell *mes)
+mozilla_init_single (MozillaEmbedSingle *mes)
 {	
 	GtkMozEmbedSingle *single;
 	
@@ -298,7 +267,7 @@ mozilla_init_single (MozillaEmbedShell *mes)
 
         /* allow creation of orphan windows */
         g_signal_connect (G_OBJECT (single), "new_window_orphan",
-                          GTK_SIGNAL_FUNC (mozilla_embed_shell_new_window_orphan_cb),
+                          GTK_SIGNAL_FUNC (mozilla_embed_single_new_window_orphan_cb),
 			  mes);
 }
 
@@ -323,20 +292,21 @@ mozilla_init_profile (void)
 }
 
 static gboolean
-is_new_build (void)
+is_new_build (MozillaEmbedSingle *mes)
 {
 	gboolean new_build = FALSE;
-	char *mozprefs, *build_test;
+	char *build_test;
+	char *prefs_file;
 	
-	mozprefs = g_build_filename (ephy_dot_dir (), 
-				     MOZILLA_PROFILE_DIR,
-				     MOZILLA_PROFILE_NAME,
-				     MOZILLA_PROFILE_FILE,
-				     NULL);
+	prefs_file = g_build_filename (ephy_dot_dir (), 
+				       MOZILLA_PROFILE_DIR,
+				       MOZILLA_PROFILE_NAME,
+				       MOZILLA_PROFILE_FILE,
+				       NULL);
 
 	/* no mozilla prefs ? or new epiphany build */
         build_test = eel_gconf_get_string ("/apps/epiphany/gconf_test");
-        if (!g_file_test(mozprefs, G_FILE_TEST_EXISTS) || 
+        if (!g_file_test(mes->priv->user_prefs, G_FILE_TEST_EXISTS) || 
             build_test == NULL ||
             strncmp (build_test, __TIME__, 8) != 0)
         {
@@ -344,16 +314,15 @@ is_new_build (void)
                 eel_gconf_set_string ("/apps/epiphany/gconf_test", __TIME__);
         }
 	
-        g_free (mozprefs);
         g_free (build_test);
 
 	return new_build;
 }
 
 static void
-mozilla_init_prefs (void)
+mozilla_init_prefs (MozillaEmbedSingle *mes)
 {
-	mozilla_set_default_prefs ();
+	mozilla_set_default_prefs (mes);
 	mozilla_notifiers_set_defaults ();
 }
 
@@ -398,19 +367,25 @@ mozilla_register_external_protocols (void)
 }
 
 static void
-mozilla_embed_shell_init (MozillaEmbedShell *mes)
+mozilla_embed_single_init (MozillaEmbedSingle *mes)
 {
 	gboolean new_build;
-
-        mes->priv = g_new0 (MozillaEmbedShellPrivate, 1);
-
+ 
+ 	mes->priv = g_new0 (MozillaEmbedSinglePrivate, 1);
 	mes->priv->charsets_hash = NULL;
 	mes->priv->sorted_charsets_titles = NULL;
 
-	new_build = is_new_build ();
+	mes->priv->user_prefs =
+		g_build_filename (ephy_dot_dir (), 
+				  MOZILLA_PROFILE_DIR,
+				  MOZILLA_PROFILE_NAME,
+				  MOZILLA_PROFILE_FILE,
+				  NULL);
+
+	new_build = is_new_build (mes);
 	
 	/* Pre initialization */
-	mozilla_notifiers_init (mes);
+	mozilla_notifiers_init (EPHY_EMBED_SINGLE (mes));
 	mozilla_init_home ();
 	mozilla_init_profile ();
 	
@@ -420,7 +395,7 @@ mozilla_embed_shell_init (MozillaEmbedShell *mes)
 	/* Post initialization */
 	if (new_build)
 	{
-		mozilla_init_prefs ();
+		mozilla_init_prefs (mes);
 	}
 
 	mozilla_load_proxy_prefs (mes);
@@ -435,10 +410,10 @@ mozilla_embed_shell_init (MozillaEmbedShell *mes)
 }
 
 static void 
-mozilla_embed_shell_new_window_orphan_cb (GtkMozEmbedSingle *embed,
+mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *embed,
                       		          GtkMozEmbed **retval, 
 					  guint chrome_mask,
-                           		  EphyEmbedShell *shell)
+                           		  EphyEmbedSingle *shell)
 {
 	/* FIXME conversion duped in mozilla_embed */
 	EphyEmbed *new_embed;
@@ -480,51 +455,34 @@ mozilla_embed_shell_new_window_orphan_cb (GtkMozEmbedSingle *embed,
 }
 
 static void
-mozilla_embed_shell_finalize (GObject *object)
+mozilla_embed_single_finalize (GObject *object)
 {
-	MozillaEmbedShell *mes;
+	MozillaEmbedSingle *mes;
 
-	/* Destroy EphyEmbedShell before because some
+	/* Destroy EphyEmbedSingle before because some
 	 * services depend on xpcom */
         G_OBJECT_CLASS (parent_class)->finalize (object);
 
         g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_MOZILLA_EMBED_SHELL (object));
+        g_return_if_fail (IS_MOZILLA_EMBED_SINGLE (object));
 
-        mes = MOZILLA_EMBED_SHELL (object);
+        mes = MOZILLA_EMBED_SINGLE (object);
 
         g_return_if_fail (mes->priv != NULL);
 
 	mozilla_notifiers_free ();
 
-	mozilla_prefs_save ();
+	mozilla_prefs_save (mes->priv->user_prefs);
 	
 	gtk_moz_embed_pop_startup ();
+
+	g_free (mes->priv->user_prefs);
 	
         g_free (mes->priv);
 }
 
-static void              
-impl_get_capabilities (EphyEmbedShell *shell,
-		       EmbedShellCapabilities *caps)
-{
-	EmbedShellCapabilities mycaps;
-	
-	mycaps = (EmbedShellCapabilities)
-	 	 (CACHE_CLEAR_CAP |
-	          OFFLINE_CAP |
-        	  PROXY_AUTOCONF_CAP |
-	          JAVA_CONSOLE_CAP |
-	          JS_CONSOLE_CAP |
-	          CHARSETS_CAP |
-	          COOKIES_CAP |
-	          PASSWORDS_CAP);
-	
-	*caps = mycaps;
-}
-
 static gresult      
-impl_clear_cache (EphyEmbedShell *shell,
+impl_clear_cache (EphyEmbedSingle *shell,
 		  CacheType type)
 {
 	nsresult rv;
@@ -539,7 +497,7 @@ impl_clear_cache (EphyEmbedShell *shell,
 }
 
 static gresult          
-impl_set_offline_mode (EphyEmbedShell *shell,
+impl_set_offline_mode (EphyEmbedSingle *shell,
 		       gboolean offline)
 {
 	nsresult rv;
@@ -555,7 +513,7 @@ impl_set_offline_mode (EphyEmbedShell *shell,
 }
 
 static gresult           
-impl_load_proxy_autoconf (EphyEmbedShell *shell,
+impl_load_proxy_autoconf (EphyEmbedSingle *shell,
 			  const char* url)
 {
 	nsresult rv;
@@ -572,7 +530,7 @@ impl_load_proxy_autoconf (EphyEmbedShell *shell,
 }
 
 static gresult
-fill_charsets_lists (MozillaEmbedShellPrivate *priv)
+fill_charsets_lists (MozillaEmbedSinglePrivate *priv)
 {
 	nsresult rv;
 	char *tmp;
@@ -650,7 +608,7 @@ fill_charsets_lists (MozillaEmbedShellPrivate *priv)
 }
 
 static void
-ensure_charsets_tables (MozillaEmbedShell *shell)
+ensure_charsets_tables (MozillaEmbedSingle *shell)
 {
 	if (!shell->priv->charsets_hash)
 	{
@@ -659,15 +617,15 @@ ensure_charsets_tables (MozillaEmbedShell *shell)
 }
 
 static gresult           
-impl_get_charset_titles (EphyEmbedShell *shell,
+impl_get_charset_titles (EphyEmbedSingle *shell,
 		         const char *group,
 			 GList **charsets)
 {
-	MozillaEmbedShell *mshell = MOZILLA_EMBED_SHELL(shell);
+	MozillaEmbedSingle *mshell = MOZILLA_EMBED_SINGLE(shell);
 	int count = get_translated_cscount ();
 	GList *l = NULL;
 	int j;
-	
+
 	ensure_charsets_tables (mshell);
 	g_return_val_if_fail (mshell->priv->charsets_hash != NULL, G_FAILED);
 
@@ -693,7 +651,7 @@ impl_get_charset_titles (EphyEmbedShell *shell,
 }
 
 static gresult           
-impl_get_charset_groups (EphyEmbedShell *shell,
+impl_get_charset_groups (EphyEmbedSingle *shell,
 		         GList **groups)
 {
 	GList *l = NULL;
@@ -710,7 +668,7 @@ impl_get_charset_groups (EphyEmbedShell *shell,
 }
 
 static gresult
-impl_get_font_list (EphyEmbedShell *shell,
+impl_get_font_list (EphyEmbedSingle *shell,
 		    const char *langGroup,
 		    const char *fontType,
 		    GList **fontList,
@@ -760,7 +718,7 @@ impl_get_font_list (EphyEmbedShell *shell,
 }
 
 static gresult           
-impl_list_cookies (EphyEmbedShell *shell,
+impl_list_cookies (EphyEmbedSingle *shell,
 		   GList **cookies)
 {
         nsresult result;
@@ -819,7 +777,7 @@ impl_list_cookies (EphyEmbedShell *shell,
 }
 
 static gresult           
-impl_remove_cookies (EphyEmbedShell *shell,
+impl_remove_cookies (EphyEmbedSingle *shell,
 		     GList *cookies)
 {
 	nsresult result;
@@ -843,7 +801,7 @@ impl_remove_cookies (EphyEmbedShell *shell,
 }
 	
 static gresult           
-impl_list_passwords (EphyEmbedShell *shell,
+impl_list_passwords (EphyEmbedSingle *shell,
 		     PasswordType type, 
 		     GList **passwords)
 {
@@ -892,7 +850,7 @@ impl_list_passwords (EphyEmbedShell *shell,
 }
 
 static gresult           
-impl_remove_passwords (EphyEmbedShell *shell,
+impl_remove_passwords (EphyEmbedSingle *shell,
 		       GList *passwords, 
 		       PasswordType type)
 {
@@ -922,7 +880,7 @@ impl_remove_passwords (EphyEmbedShell *shell,
 }
 
 static gresult 
-impl_show_file_picker (EphyEmbedShell *shell,
+impl_show_file_picker (EphyEmbedSingle *shell,
 		       GtkWidget *parentWidget, 
 		       const char *title,
 		       const char *directory,

@@ -19,9 +19,9 @@
 #ifndef MOZILLA_NOTIFIERS_H
 #define MOZILLA_NOTIFIERS_H
 
-#include "mozilla-embed-shell.h"
+#include "ephy-embed-single.h"
 
-void mozilla_notifiers_init         (MozillaEmbedShell *shell);
+void mozilla_notifiers_init         (EphyEmbedSingle *single);
 
 void mozilla_notifiers_set_defaults (void);
 

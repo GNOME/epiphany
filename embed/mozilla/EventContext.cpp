@@ -525,15 +525,11 @@ nsresult EventContext::GetCSSBackground (nsIDOMNode *node, nsAutoString& url)
 nsresult EventContext::GetMouseEventInfo (EphyEmbedEvent *info)
 {
 	nsresult result;
-	DOMTimeStamp ts;
 	nsIDOMMouseEvent *aMouseEvent = (nsIDOMMouseEvent*)mEvent;
 
 	aMouseEvent->GetButton ((PRUint16*)&info->mouse_button);
 	aMouseEvent->GetScreenX ((PRInt32*)&info->mouse_x);
 	aMouseEvent->GetScreenY ((PRInt32*)&info->mouse_y);
-
-	aMouseEvent->GetTimeStamp(&ts);
-	info->timestamp = ts;
 
 	/* be sure we are not clicking on the scroolbars */
 

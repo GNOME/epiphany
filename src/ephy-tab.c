@@ -189,13 +189,14 @@ static void
 ephy_tab_init (EphyTab *tab)
 {
 	GObject *embed, *embed_widget;
-	EphyEmbedShell *shell;
+	EphyEmbedSingle *single;
+
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (ephy_shell));
 
         tab->priv = g_new0 (EphyTabPrivate, 1);
 
-	shell = EPHY_EMBED_SHELL (ephy_shell);
-
-	tab->priv->embed = ephy_embed_new (G_OBJECT(shell));
+	tab->priv->embed = ephy_embed_new (G_OBJECT(single));
 
 	tab->priv->window = NULL;
 	tab->priv->event = NULL;

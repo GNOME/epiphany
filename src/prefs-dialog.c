@@ -318,18 +318,22 @@ void
 prefs_clear_memory_cache_button_clicked_cb (GtkWidget *button,
 					    gpointer data)
 {
-	EphyEmbedShell *shell;
+	EphyEmbedSingle *single;
 
-	shell = EPHY_EMBED_SHELL (ephy_shell);
-	ephy_embed_shell_clear_cache (shell, MEMORY_CACHE);
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (ephy_shell));
+
+	ephy_embed_single_clear_cache (single, MEMORY_CACHE);
 }
 
 void
 prefs_clear_disk_cache_button_clicked_cb (GtkWidget *button,
 					  gpointer data)
 {
-	EphyEmbedShell *shell;
+	EphyEmbedSingle *single;
 
-	shell = EPHY_EMBED_SHELL (ephy_shell);
-	ephy_embed_shell_clear_cache (shell, DISK_CACHE);
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (ephy_shell));
+
+	ephy_embed_single_clear_cache (single, DISK_CACHE);
 }

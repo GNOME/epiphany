@@ -427,53 +427,61 @@ static void
 pdm_dialog_cookie_remove (PdmActionInfo *info,
 			  GList *data)
 {
-	ephy_embed_shell_remove_cookies
-		(EPHY_EMBED_SHELL (ephy_shell), data);
+	EphyEmbedSingle *single;
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (ephy_shell));
+	ephy_embed_single_remove_cookies (single, data);
 }
 
 static void
 pdm_dialog_password_remove (PdmActionInfo *info,
 			    GList *data)
 {
-	ephy_embed_shell_remove_passwords
-		(EPHY_EMBED_SHELL (ephy_shell), data,
-		 PASSWORD_PASSWORD);
+	EphyEmbedSingle *single;
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (ephy_shell));
+
+	ephy_embed_single_remove_passwords (single, data,
+					    PASSWORD_PASSWORD);
 }
 
 static void
 pdm_dialog_cookies_free (PdmActionInfo *info,
 			 GList *data)
 {
-	EphyEmbedShell *shell;
 	GList *l;
+	EphyEmbedSingle *single;
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (ephy_shell));
 
-	shell = EPHY_EMBED_SHELL (ephy_shell);
 	l = data ? data : info->list;
-	ephy_embed_shell_free_cookies (shell, l);
+	ephy_embed_single_free_cookies (single, l);
 }
 
 static void
 pdm_dialog_passwords_free (PdmActionInfo *info,
 			   GList *data)
 {
-	EphyEmbedShell *shell;
 	GList *l;
+	EphyEmbedSingle *single;
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (ephy_shell));
 
-	shell = EPHY_EMBED_SHELL (ephy_shell);
 	l = data ? data : info->list;
-	ephy_embed_shell_free_passwords (shell, l);
+	ephy_embed_single_free_passwords (single, l);
 }
 
 static void
 pdm_dialog_init (PdmDialog *dialog)
 {
-	EphyEmbedShell *shell;
 	PdmActionInfo *cookies;
 	PdmActionInfo *passwords;
 	GtkWidget *cookies_tv;
 	GtkWidget *passwords_tv;
+	EphyEmbedSingle *single;
 
-	shell = EPHY_EMBED_SHELL (ephy_shell);
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (ephy_shell));
 
 	dialog->priv = g_new0 (PdmDialogPrivate, 1);
 	dialog->priv->cookies = NULL;
@@ -488,7 +496,7 @@ pdm_dialog_init (PdmDialog *dialog)
 	passwords_tv = setup_passwords_treeview (dialog);
 
 	cookies = g_new0 (PdmActionInfo, 1);
-	ephy_embed_shell_list_cookies (shell, &cookies->list);
+	ephy_embed_single_list_cookies (single, &cookies->list);
 	cookies->dialog = dialog;
 	cookies->remove_id = PROP_COOKIES_REMOVE;
 	cookies->add = pdm_dialog_cookie_add;
@@ -499,8 +507,8 @@ pdm_dialog_init (PdmDialog *dialog)
 	setup_action (cookies);
 
 	passwords = g_new0 (PdmActionInfo, 1);
-	ephy_embed_shell_list_passwords (shell, PASSWORD_PASSWORD,
-					   &passwords->list);
+	ephy_embed_single_list_passwords (single, PASSWORD_PASSWORD,
+					  &passwords->list);
 	passwords->dialog = dialog;
 	passwords->remove_id = PROP_PASSWORDS_REMOVE;
 	passwords->add = pdm_dialog_password_add;

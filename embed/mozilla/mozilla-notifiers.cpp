@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
 #include "mozilla-notifiers.h"
 #include "eel-gconf-extensions.h"
 #include "mozilla-prefs.h"
@@ -82,7 +83,7 @@ static void
 mozilla_autodetect_charset_notifier(GConfClient *client,
 				    guint cnxn_id,
 				    GConfEntry *entry,
-				    EphyEmbedShell *shell);
+				    EphyEmbedSingle *single);
 
 static void
 mozilla_default_font_notifier(GConfClient *client,
@@ -111,7 +112,7 @@ static void
 mozilla_default_charset_notifier (GConfClient *client,
 				  guint cnxn_id,
 				  GConfEntry *entry,
-				  EphyEmbedShell *shell);
+				  EphyEmbedSingle *single);
 static void
 mozilla_socks_version_notifier (GConfClient *client,
 				guint cnxn_id,
@@ -256,12 +257,14 @@ mozilla_proxy_autoconfig_notifier (GConfClient *client,
 		       		   GConfEntry *entry,
 		       		   char *pref)
 {
-	ephy_embed_shell_load_proxy_autoconf 
-		(embed_shell, gconf_value_get_string(entry->value));
+	EphyEmbedSingle *single;
+	single = ephy_embed_shell_get_embed_single (embed_shell);
+	ephy_embed_single_load_proxy_autoconf 
+		(single, gconf_value_get_string(entry->value));
 }
 
 void 
-mozilla_notifiers_init(MozillaEmbedShell *shell) 
+mozilla_notifiers_init(EphyEmbedSingle *single) 
 {
 	int i;
 
@@ -296,7 +299,7 @@ mozilla_notifiers_init(MozillaEmbedShell *shell)
 			ephy_notification_add(
 				custom_notifiers[i].gconf_key,
 				custom_notifiers[i].func,
-				(gpointer)shell,
+				(gpointer)single,
 				&mozilla_notifiers);
 	}
 
@@ -482,7 +485,7 @@ static void
 mozilla_default_charset_notifier(GConfClient *client,
 				 guint cnxn_id,
 				 GConfEntry *entry,
-				 EphyEmbedShell *shell)
+				 EphyEmbedSingle *single)
 {
 	/* FIXME */
 }
@@ -594,7 +597,7 @@ static void
 mozilla_autodetect_charset_notifier(GConfClient *client,
 				    guint cnxn_id,
 				    GConfEntry *entry,
-				    EphyEmbedShell *shell)
+				    EphyEmbedSingle *single)
 {
 	int charset = eel_gconf_get_integer (CONF_LANGUAGE_AUTODETECT_CHARSET);
 	if (charset < 0 || 

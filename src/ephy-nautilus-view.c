@@ -169,6 +169,10 @@ ephy_nautilus_view_instance_init (EphyNautilusView *view)
 {
 	GtkWidget *w;
 	EphyNautilusViewPrivate *p = g_new0 (EphyNautilusViewPrivate, 1);
+	EphyEmbedSingle *single;
+
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (ephy_shell));
 
 	view->priv = p;
 	view->priv->embed = ephy_embed_new (G_OBJECT (ephy_shell));

@@ -280,7 +280,7 @@ GType         ephy_embed_get_type             (void);
 
 /* Base */
 
-EphyEmbed    *ephy_embed_new                  (GObject *shell);
+EphyEmbed    *ephy_embed_new                  (GObject *single);
 
 void          ephy_embed_get_capabilities     (EphyEmbed *embed,
 					       EmbedCapabilities *caps);

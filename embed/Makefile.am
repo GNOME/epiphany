@@ -34,6 +34,8 @@ libephyembed_la_SOURCES = \
 	ephy-embed-popup-control.c	\
 	ephy-embed-popup-control.h	\
 	ephy-embed-prefs.h		\
+	ephy-embed-single.c		\
+	ephy-embed-single.h		\
 	ephy-embed-shell.c		\
 	ephy-embed-shell.h		\
 	ephy-embed-types.h		\

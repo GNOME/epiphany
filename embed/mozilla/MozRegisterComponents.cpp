@@ -34,7 +34,6 @@
 #include <nsIFactory.h>
 #include <nsIComponentManager.h>
 #include <nsCOMPtr.h>
-#include <nsILocalFile.h>
 
 #include <glib.h>
 
@@ -54,10 +53,6 @@ static NS_DEFINE_CID(kProgressDialogCID, G_PROGRESSDIALOG_CID);
 NS_METHOD RegisterFactory (nsresult (aFactoryFunc)(nsIFactory** aFactory),
 			   const nsCID & aClass, const char *aClassName,
 			   const char *aContractID, PRBool aReplace);
-
-NS_METHOD RegisterComponent (const nsCID & aClass, const char *aClassName,
-			     const char *aContractID, const char *aDLLPath,
-			     PRBool aReplace);
 
 //Annoying globals to track the mozilla ftp handler so it can be restored.
 static PRBool ftpRegistered = PR_FALSE;
@@ -141,25 +136,6 @@ NS_METHOD RegisterFactory (nsresult (aFactoryFunc)(nsIFactory** aFactory),
 	rv = nsComponentManager::RegisterFactory(aClass, aClassName,
 						 aContractID,
 						 factory, aReplace);
-	return rv;
-}
-
-NS_METHOD RegisterComponent (const nsCID & aClass, const char *aClassName,
-			     const char *aContractID, const char *aDLLPath,
-			     PRBool aReplace)
-{
-	nsresult rv = NS_OK;
-
-	nsCOMPtr<nsILocalFile> dllFile;
-	rv = NS_NewLocalFile (NS_ConvertUTF8toUCS2(aDLLPath), PR_TRUE, getter_AddRefs (dllFile));
-	if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
-
-	rv = nsComponentManager::RegisterComponentSpec (aClass,
-							aClassName,
-							aContractID,
-						 	dllFile,
-						 	aReplace,
-						 	PR_FALSE);
 	return rv;
 }
 

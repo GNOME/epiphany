@@ -22,9 +22,9 @@
 
 #include "ephy-marshal.h"
 #include "ephy-embed.h"
+#include "mozilla-embed-single.h"
 
 #include "mozilla-embed.h"
-#include "mozilla-embed-shell.h"
 
 enum
 {
@@ -254,9 +254,9 @@ ephy_embed_base_init (gpointer g_class)
 }
 
 EphyEmbed *
-ephy_embed_new (GObject *shell)
+ephy_embed_new (GObject *single)
 {
-	if (IS_MOZILLA_EMBED_SHELL (shell))
+	if (IS_MOZILLA_EMBED_SINGLE (single))
 	{
 		return EPHY_EMBED (g_object_new
 			(MOZILLA_EMBED_TYPE, NULL));

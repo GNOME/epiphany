@@ -143,6 +143,7 @@ NS_IMETHODIMP CPromptService::AlertCheck (nsIDOMWindow *parent,
 
 	set_title (dialog, dialogTitle);
 
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	get_check_button (check_button, checkValue);
 	gtk_widget_destroy (dialog);

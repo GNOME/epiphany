@@ -59,7 +59,6 @@ struct EphyEmbedEvent
 	guint modifier;
 	guint mouse_button;
 	guint context;
-	guint timestamp;
 	guint mouse_x, mouse_y;
 };
 

@@ -58,6 +58,10 @@ ephy_embed_utils_save (GtkWidget *window,
 	EphyEmbed *embed;
 	EmbedPersistFlags flags;
 	gboolean content;
+	EphyEmbedSingle *single;
+
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (embed_shell));
 
 	g_object_ref (G_OBJECT(persist));
 
@@ -123,12 +127,12 @@ ephy_embed_utils_save (GtkWidget *window,
 	if (ask_dest)
 	{
 		/* show the file picker */
-		ret = ephy_embed_shell_show_file_picker
-					(embed_shell, window,
-                                        _("Select the destination filename"),
-                                        dirName, fileName, modeSave, &retPath,
-                                        ask_content ? &content : NULL,
-                                        NULL, NULL);
+		ret = ephy_embed_single_show_file_picker
+					(single, window,
+                                         _("Select the destination filename"),
+                                         dirName, fileName, modeSave, &retPath,
+                                         ask_content ? &content : NULL,
+                                         NULL, NULL);
 	}
 
         if (ret == G_OK)
@@ -232,11 +236,15 @@ ephy_embed_utils_build_charsets_submenu (BonoboUIComponent *ui_component,
 	GList *verbs = NULL;
 	int group_index = 0;
 	int charset_index = 0;
+	EphyEmbedSingle *single;
+
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (embed_shell));
 
 	START_PROFILER ("Charsets menu")
 
 	g_return_if_fail (IS_EPHY_EMBED_SHELL (embed_shell));
-	g_return_if_fail (ephy_embed_shell_get_charset_groups (embed_shell, &groups) == G_OK);
+	g_return_if_fail (ephy_embed_single_get_charset_groups (single, &groups) == G_OK);
 
 	xml_string = g_string_new (NULL);
 	g_string_append (xml_string, "<submenu name=\"Encoding\" _label=\"_Encoding\">");
@@ -248,9 +256,9 @@ ephy_embed_utils_build_charsets_submenu (BonoboUIComponent *ui_component,
 
 		build_group (xml_string, group, group_index);
 
-		ephy_embed_shell_get_charset_titles (embed_shell,
-                                                     group,
-                                                     &charsets);
+		ephy_embed_single_get_charset_titles (single,
+                                                      group,
+                                                      &charsets);
 
 		for (cl = charsets; cl != NULL; cl = cl->next)
                 {

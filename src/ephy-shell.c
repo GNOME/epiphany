@@ -103,7 +103,7 @@ ephy_shell_get_type (void)
                         (GInstanceInitFunc) ephy_shell_init
                 };
 
-                ephy_shell_type = g_type_register_static (EPHY_EMBED_SHELL_IMPL,
+                ephy_shell_type = g_type_register_static (EPHY_EMBED_SHELL_TYPE,
 							  "EphyShell",
 							  &our_info, 0);
         }
@@ -188,6 +188,12 @@ ephy_shell_new_window_cb (EphyEmbedShell *shell,
 static void
 ephy_shell_init (EphyShell *gs)
 {
+	EphyEmbedSingle *single;
+
+        gs->priv = g_new0 (EphyShellPrivate, 1);
+	gs->priv->session = NULL;
+	gs->priv->bookmarks = NULL;
+
 	ephy_shell = gs;
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
 				   (gpointer *)&ephy_shell);
@@ -199,9 +205,8 @@ ephy_shell_init (EphyShell *gs)
 	ephy_stock_icons_init ();
 	ephy_ensure_dir_exists (ephy_dot_dir ());
 
-        gs->priv = g_new0 (EphyShellPrivate, 1);
-	gs->priv->session = NULL;
-	gs->priv->bookmarks = NULL;
+	/* This ensures mozilla is fired up */
+	single = ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (gs));
 
 	g_signal_connect (G_OBJECT (gs),
 			  "new_window_orphan",

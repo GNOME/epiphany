@@ -22,17 +22,50 @@
 #include <nsIPrefService.h>
 #include <nsIServiceManager.h>
 #include <nsMemory.h>
+#include <nsILocalFile.h>
+#include <nsString.h>
 #include <glib/gmessages.h>
 #include <glib/gstrfuncs.h>
 
-gboolean
-mozilla_prefs_save (void)
+void
+mozilla_prefs_load (const char *filename)
 {
+	nsresult rv;
+	
+	nsCOMPtr<nsILocalFile> prefsLocalFile;
+	rv = NS_NewLocalFile (NS_ConvertUTF8toUCS2(filename), PR_TRUE, getter_AddRefs (prefsLocalFile));
+	g_return_if_fail (NS_SUCCEEDED(rv));
+
+        nsCOMPtr<nsIPrefService> prefService = 
+                                 do_GetService (NS_PREFSERVICE_CONTRACTID);
+        g_return_if_fail (prefService != nsnull);
+
+	nsCOMPtr<nsIFile> prefsFile;
+	prefsLocalFile->QueryInterface(NS_GET_IID(nsIFile), (void **)&prefsFile);
+	g_return_if_fail (prefsFile != nsnull);
+
+        prefService->ReadUserPrefs (prefsFile);
+}
+
+gboolean
+mozilla_prefs_save (const char *filename)
+{
+	nsresult rv;
+	
+	nsCOMPtr<nsILocalFile> prefsLocalFile;
+	rv = NS_NewLocalFile (NS_ConvertUTF8toUCS2(filename), PR_TRUE, getter_AddRefs (prefsLocalFile));
+	g_return_val_if_fail (NS_SUCCEEDED(rv), FALSE);
+
         nsCOMPtr<nsIPrefService> prefService = 
                                  do_GetService (NS_PREFSERVICE_CONTRACTID);
         g_return_val_if_fail (prefService != nsnull, FALSE);
 
-        nsresult rv = prefService->SavePrefFile (nsnull);
+	nsCOMPtr<nsIFile> prefsFile;
+	prefsLocalFile->QueryInterface(NS_GET_IID(nsIFile), (void **)&prefsFile);
+	g_return_val_if_fail (prefsFile != nsnull, FALSE);
+
+        rv = prefService->SavePrefFile (prefsFile);
+
         return NS_SUCCEEDED (rv) ? TRUE : FALSE;
 }
 
@@ -165,21 +198,3 @@ mozilla_prefs_get_string(const char *preference_name)
         return result;
 }
 
-gboolean
-mozilla_prefs_remove (const char *preference_name)
-{
-        g_return_val_if_fail (preference_name != NULL, FALSE);
-
-        nsCOMPtr<nsIPrefService> prefService = 
-                                do_GetService (NS_PREFSERVICE_CONTRACTID);
-        nsCOMPtr<nsIPrefBranch> pref;
-        prefService->GetBranch ("", getter_AddRefs(pref));
-
-        if (pref)
-        {
-                nsresult rv = pref->ClearUserPref (preference_name);
-                return NS_SUCCEEDED (rv) ? TRUE : FALSE;
-        }
-
-        return FALSE;
-}

@@ -21,15 +21,17 @@
 
 #include "glib/gtypes.h"
 
-gboolean  mozilla_prefs_save        (void);
+void	  mozilla_prefs_load	    (const char *filename);
 
-gboolean  mozilla_prefs_set_string  (const char *preference_name, 
+gboolean  mozilla_prefs_save        (const char *filename);
+
+gboolean  mozilla_prefs_set_string  (const char *preference_name,
 				     const char *new_value);
 
 gboolean  mozilla_prefs_set_boolean (const char *preference_name,
                                      gboolean new_boolean_value);
 
-gboolean  mozilla_prefs_set_int     (const char *preference_name, 
+gboolean  mozilla_prefs_set_int     (const char *preference_name,
 				     int new_int_value);
 
 gboolean  mozilla_prefs_get_boolean (const char *preference_name,
@@ -38,7 +40,5 @@ gboolean  mozilla_prefs_get_boolean (const char *preference_name,
 int       mozilla_prefs_get_int     (const char *preference_name);
 
 gchar    *mozilla_prefs_get_string  (const char *preference_name);
-
-gboolean  mozilla_prefs_remove      (const char *preference_name);
 
 #endif
