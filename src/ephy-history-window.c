@@ -215,20 +215,45 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 	GtkWidget *vbox;
 	GtkWidget *hbox;
 	GtkWidget *image;
+	GtkWidget *button;
+	GtkWidget *align;
 	char *str;
 
 	dialog = gtk_dialog_new_with_buttons (_("Clear history"),
 					     GTK_WINDOW (editor),
 					     GTK_DIALOG_DESTROY_WITH_PARENT |
 					     GTK_DIALOG_NO_SEPARATOR,
-					     GTK_STOCK_CANCEL,
-					     GTK_RESPONSE_CANCEL,
-					     GTK_STOCK_CLEAR,
-					     GTK_RESPONSE_OK,
 					     NULL);
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 6);
 	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 12);
+
+	button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+	gtk_widget_show (button);
+	gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, GTK_RESPONSE_CANCEL);
+
+	button = gtk_button_new ();
+	gtk_widget_show (button);
+	gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, GTK_RESPONSE_OK);
+	GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+	align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+	gtk_widget_show (align);
+	gtk_container_add (GTK_CONTAINER (button), align);
+
+	hbox = gtk_hbox_new (FALSE, 2);
+	gtk_widget_show (hbox);
+	gtk_container_add (GTK_CONTAINER (align), hbox);
+
+	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_BUTTON);
+	gtk_widget_show (image);
+	gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 0);
+
+	label = gtk_label_new_with_mnemonic (_("C_lear"));
+	gtk_widget_show (label);
+	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
 	hbox = gtk_hbox_new (FALSE, 6);
 	gtk_widget_show (hbox);
