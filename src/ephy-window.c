@@ -1256,7 +1256,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	EmbedEventContext context;
 	const char *popup;
 	const GValue *value;
-	gboolean framed, has_background;
+	gboolean framed, has_background, can_open_in_new;
 	GtkWidget *widget;
 	EphyEmbedEventType type;
 	gboolean showing_edit_actions = FALSE;
@@ -1271,6 +1271,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	framed = g_value_get_int (value);
 
 	has_background = ephy_embed_event_has_property (event, "background_image");
+	can_open_in_new = ephy_embed_event_has_property (event, "link-has-web-scheme");
 
 	context = ephy_embed_event_get_context (event);
 
@@ -1310,6 +1311,10 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	action = gtk_action_group_get_action (action_group, "SaveBackgroundAs");
 	g_object_set (action, "sensitive", has_background,
 			      "visible", has_background, NULL);
+	action = gtk_action_group_get_action (action_group, "OpenLinkInNewWindow");
+	g_object_set (action, "sensitive", can_open_in_new, FALSE);
+	action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
+	g_object_set (action, "sensitive", can_open_in_new, FALSE);
 
 	if (showing_edit_actions)
 	{

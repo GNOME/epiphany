@@ -32,6 +32,7 @@
 #include "nsIDOMElement.h"
 #include "nsIDOMXULDocument.h"
 #include "nsIURI.h"
+#include "nsNetUtil.h"
 #include "nsIDOMNSDocument.h"
 #include "nsReadableUtils.h"
 #include "nsUnicharUtils.h"
@@ -389,6 +390,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				dom_elem->GetAttributeNS (nspace, localname_href, value);
 				
 				SetStringProperty ("link", value);
+				CheckLinkScheme (value);
 			}
 		}
 
@@ -432,6 +434,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					info->context |= EMBED_CONTEXT_LINK;
 
 					SetStringProperty ("link", tmp);
+					CheckLinkScheme (tmp);
 					rv = anchor->GetHreflang (tmp);
 					if (NS_SUCCEEDED(rv))
 						SetStringProperty ("link_lang", tmp);
@@ -505,6 +508,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 						return NS_ERROR_FAILURE;
 					
 					SetStringProperty ("link", href);
+					CheckLinkScheme (href);
 				}
 			}
 			else if (tag.Equals(NS_LITERAL_STRING("textarea"),
@@ -798,6 +802,29 @@ nsresult EventContext::GetTargetDocument (nsIDOMDocument **domDoc)
 	*domDoc = mDOMDocument.get();
 
 	NS_IF_ADDREF(*domDoc);
+
+	return NS_OK;
+}
+
+nsresult EventContext::CheckLinkScheme (const nsAString &link)
+{
+	nsCOMPtr<nsIURI> uri;
+	NS_NewURI (getter_AddRefs (uri), link);
+	if (!uri) return NS_ERROR_FAILURE;
+
+	nsresult rv;
+	nsCAutoString scheme;
+	rv = uri->GetScheme (scheme);
+	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+
+	if (scheme.EqualsIgnoreCase ("http") ||
+	    scheme.EqualsIgnoreCase ("https") ||
+	    scheme.EqualsIgnoreCase ("ftp") ||
+	    scheme.EqualsIgnoreCase ("file") ||
+	    scheme.EqualsIgnoreCase ("gopher"))
+	{
+		SetIntProperty ("link-has-web-scheme", TRUE);
+	}
 
 	return NS_OK;
 }
