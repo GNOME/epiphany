@@ -1,6 +1,23 @@
 2004-06-09  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* lib/egg/egg-editable-toolbar.c: (drag_data_get_cb),
+	(set_item_drag_source):
+	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_to_xml),
+	(impl_get_item_id), (impl_get_item_data),
+	(egg_toolbars_model_class_init),
+	(egg_toolbars_model_get_item_data):
+	* lib/egg/egg-toolbars-model.h:
+	* src/ephy-toolbars-model.c: (impl_get_item_data),
+	(impl_get_item_id), (ephy_toolbars_model_class_init):
+
+	s/get_item_name/get_item_data
+
+	Do not assume data isnt changing, use the id
+	and convert later instead.
+
+2004-06-09  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/egg/egg-editable-toolbar.c: (drag_data_get_cb),
 	(set_item_drag_source), (create_item_from_action), (create_item),
 	(drag_data_received_cb), (egg_editable_toolbar_set_edit_mode):
 	* lib/egg/egg-toolbar-editor.c: (model_has_action):

@@ -131,7 +131,7 @@ bookmark_destroy_cb (EphyNode *node,
 }
 
 static char *
-impl_get_item_name (EggToolbarsModel *t,
+impl_get_item_data (EggToolbarsModel *t,
 		    const char       *type,
 		    const char       *id)
 {
@@ -163,7 +163,7 @@ impl_get_item_name (EggToolbarsModel *t,
 		return g_strdup (name);
 	}
 
-	return EGG_TOOLBARS_MODEL_CLASS (parent_class)->get_item_name (t, type, id);
+	return EGG_TOOLBARS_MODEL_CLASS (parent_class)->get_item_data (t, type, id);
 }
 
 static char *
@@ -227,7 +227,7 @@ impl_get_item_id (EggToolbarsModel *t,
 			(model, ephy_node_get_id (node));
 	}
 
-	return EGG_TOOLBARS_MODEL_CLASS (parent_class)->get_item_id (t, type, name);
+	return EGG_TOOLBARS_MODEL_CLASS (parent_class)->get_item_data (t, type, name);
 }
 
 static char *
@@ -439,7 +439,7 @@ ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass)
 	object_class->get_property = ephy_toolbars_model_get_property;
 
 	etm_class->get_item_id = impl_get_item_id;
-	etm_class->get_item_name = impl_get_item_name;
+	etm_class->get_item_data = impl_get_item_data;
 	etm_class->get_item_type = impl_get_item_type;
 
 	g_object_class_install_property (object_class,

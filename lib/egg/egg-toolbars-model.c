@@ -123,13 +123,13 @@ egg_toolbars_model_to_xml (EggToolbarsModel *t)
 	    }
 	  else
 	    {
-	      char *name;
+	      char *data;
 
 	      node = xmlNewChild (tnode, NULL, "toolitem", NULL);
-	      name = egg_toolbars_model_get_item_name (t, item->type, item->id);
+	      data = egg_toolbars_model_get_item_data (t, item->type, item->id);
 	      xmlSetProp (node, "type", item->type);
-	      xmlSetProp (node, "name", name);
-	      g_free (name);
+	      xmlSetProp (node, "name", data);
+	      g_free (data);
 	    }
 	}
     }
@@ -461,18 +461,18 @@ egg_toolbars_model_load (EggToolbarsModel *t,
 static char *
 impl_get_item_id (EggToolbarsModel *t,
 		  const char       *type,
-		  const char       *name)
+		  const char       *data)
 {
   if (strcmp (type, EGG_TOOLBAR_ITEM_TYPE) == 0)
     {
-      return g_strdup (name);
+      return g_strdup (data);
     }
 
   return NULL;
 }
 
 static char *
-impl_get_item_name (EggToolbarsModel *t,
+impl_get_item_data (EggToolbarsModel *t,
 		    const char       *type,
 		    const char       *id)
 {
@@ -507,7 +507,7 @@ egg_toolbars_model_class_init (EggToolbarsModelClass *klass)
 
   klass->add_item = impl_add_item;
   klass->get_item_id = impl_get_item_id;
-  klass->get_item_name = impl_get_item_name;
+  klass->get_item_data = impl_get_item_data;
   klass->get_item_type = impl_get_item_type;
 
   egg_toolbars_model_signals[ITEM_ADDED] =
@@ -707,12 +707,12 @@ egg_toolbars_model_get_item_id (EggToolbarsModel *t,
 }
 
 char *
-egg_toolbars_model_get_item_name (EggToolbarsModel *t,
+egg_toolbars_model_get_item_data (EggToolbarsModel *t,
 				  const char       *type,
 			          const char       *id)
 {
   EggToolbarsModelClass *klass = EGG_TOOLBARS_MODEL_GET_CLASS (t);
-  return klass->get_item_name (t, type, id);
+  return klass->get_item_data (t, type, id);
 }
 
 char *

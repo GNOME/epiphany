@@ -84,8 +84,8 @@ struct EggToolbarsModelClass
 			    GdkAtom           dnd_type);
   char * (* get_item_id)   (EggToolbarsModel *t,
 			    const char       *type,
-			    const char       *name);
-  char * (* get_item_name) (EggToolbarsModel *t,
+			    const char       *data);
+  char * (* get_item_data) (EggToolbarsModel *t,
 			    const char       *type,
 			    const char       *id);
 };
@@ -113,7 +113,7 @@ char             *egg_toolbars_model_get_item_type  (EggToolbarsModel *t,
 char             *egg_toolbars_model_get_item_id    (EggToolbarsModel *t,
 						     const char       *type,
 			                             const char       *name);
-char             *egg_toolbars_model_get_item_name  (EggToolbarsModel *t,
+char             *egg_toolbars_model_get_item_data  (EggToolbarsModel *t,
 						     const char       *type,
 			                             const char       *id);
 gboolean	  egg_toolbars_model_add_item       (EggToolbarsModel *t,

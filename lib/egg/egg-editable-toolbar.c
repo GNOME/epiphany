@@ -234,14 +234,27 @@ drag_data_get_cb (GtkWidget          *widget,
 		  EggEditableToolbar *etoolbar)
 {
   GtkAction *action;
-  const char *target;
+  const char *id, *type;
+  char *target;
 
   g_return_if_fail (EGG_IS_EDITABLE_TOOLBAR (etoolbar));
 
-  target = g_object_get_data (G_OBJECT (widget), "name");
+  type = g_object_get_data (G_OBJECT (widget), "type");
+  id = g_object_get_data (G_OBJECT (widget), "id");
+  if (strcmp (id, "separator") == 0)
+    {
+      target = g_strdup (id);
+    }
+  else
+    {
+      target = egg_toolbars_model_get_item_data (etoolbar->priv->model,
+						 type, id);
+    }
 
   gtk_selection_data_set (selection_data,
 			  selection_data->target, 8, target, strlen (target));
+
+  g_free (target);
 }
 
 static void
@@ -278,7 +291,8 @@ set_item_drag_source (EggToolbarsModel *model,
 		      const char       *type)
 {
   GtkTargetEntry target_entry;
-  char *name;
+  char *data;
+  const char *id;
 
   target_entry.target = (char *)type;
   target_entry.flags = GTK_TARGET_SAME_APP;
@@ -293,7 +307,7 @@ set_item_drag_source (EggToolbarsModel *model,
       GtkWidget *icon;
       GdkPixbuf *pixbuf;
 
-      name = g_strdup ("separator");
+      id = "separator";
 
       icon = _egg_editable_toolbar_new_separator_image ();
       pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (icon));
@@ -301,13 +315,11 @@ set_item_drag_source (EggToolbarsModel *model,
     }
   else
     {
-      const char *action_name;
       const char *stock_id;
       GValue value = { 0, };
       GdkPixbuf *pixbuf;
 
-      action_name = gtk_action_get_name (action);
-      name = egg_toolbars_model_get_item_name (model, type, action_name);
+      id = gtk_action_get_name (action);
 
       g_value_init (&value, G_TYPE_STRING);
       g_object_get_property (G_OBJECT (action), "stock_id", &value);
@@ -330,8 +342,10 @@ set_item_drag_source (EggToolbarsModel *model,
       g_value_unset (&value);
     }
 
-    g_object_set_data_full (G_OBJECT (item), "name",
-                            name, g_free);
+    g_object_set_data_full (G_OBJECT (item), "id",
+                            g_strdup (id), g_free);
+    g_object_set_data_full (G_OBJECT (item), "type",
+                            g_strdup (type), g_free);
 }
 
 static GtkWidget *
