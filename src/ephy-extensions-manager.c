@@ -693,7 +693,8 @@ load_extension (EphyExtensionsManager *manager,
 	info->extension = ephy_loader_get_object (loader,
 						   &info->loader_attributes);
 
-	if (info->extension != NULL)
+	/* attach if the extension implements EphyExtensionIface */
+	if (EPHY_IS_EXTENSION (info->extension))
 	{
 		manager->priv->extensions =
 			g_list_prepend (manager->priv->extensions,
@@ -701,13 +702,17 @@ load_extension (EphyExtensionsManager *manager,
 
 		g_list_foreach (manager->priv->windows, (GFunc) attach_window,
 				info->extension);
+	}
 
+	if (info->extension != NULL)
+	{
 		info->info.active = TRUE;
 
 		g_signal_emit (manager, signals[CHANGED], 0, info);
 	}
 	else
 	{
+		info->info.active = FALSE;
 		info->load_failed = TRUE;
 	}
 }
@@ -730,11 +735,15 @@ unload_extension (EphyExtensionsManager *manager,
 
 	if (info->load_failed) return;
 
-	g_list_foreach (manager->priv->windows, (GFunc) detach_window,
-			info->extension);
+	/* detach if the extension implements EphyExtensionIface */
+	if (EPHY_IS_EXTENSION (info->extension))
+	{
+		g_list_foreach (manager->priv->windows, (GFunc) detach_window,
+				info->extension);
 
-	manager->priv->extensions =
-		g_list_remove (manager->priv->extensions, info->extension);
+		manager->priv->extensions =
+			g_list_remove (manager->priv->extensions, info->extension);
+	}
 
 	ephy_loader_release_object (info->loader, G_OBJECT (info->extension));
 	g_object_unref (info->extension);

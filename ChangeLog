@@ -1,5 +1,13 @@
 2004-10-22  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-extensions-manager.c: (load_extension),
+	(unload_extension):
+
+	Only multiplex [attach|detach]_window to extensions implementing the
+	EphyExtension interface.
+
+2004-10-22  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-string.c: (ephy_string_double_underscores):
 	* lib/ephy-string.h:
 	* lib/widgets/ephy-node-view.c: (drag_data_received_cb):
