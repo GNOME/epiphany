@@ -845,6 +845,8 @@ ephy_node_view_init (EphyNodeView *view)
 	view->priv->editable_renderer = NULL;
 	view->priv->editing = TRUE;
 	view->priv->selected_node = NULL;
+
+	gtk_tree_view_set_enable_search (GTK_TREE_VIEW (view), FALSE);
 }
 
 static void
