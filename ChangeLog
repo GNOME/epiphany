@@ -1,3 +1,12 @@
+2005-02-01  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-notebook.c: (motion_notify_cb),
+	(move_tab_to_another_notebook), (button_release_cb),
+	(ephy_notebook_finalize):
+
+	Ungrab the pointer when moving tab between notebooks.
+	Fixes bug #165797.
+
 2005-01-31  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/mozilla-embed.cpp:

@@ -77,6 +77,7 @@ static void ephy_notebook_class_init     (EphyNotebookClass *klass);
 static void ephy_notebook_finalize       (GObject *object);
 static void move_tab_to_another_notebook (EphyNotebook *src,
 			                  EphyNotebook *dest,
+					  GdkEventMotion *event,
 					  int dest_position);
 
 /* Local variables */
@@ -443,7 +444,7 @@ motion_notify_cb (EphyNotebook *notebook,
 		if (dest != notebook)
 		{
 			move_tab_to_another_notebook (notebook, dest,
-						      page_num);
+						      event, page_num);
 		}
 		else
 		{
@@ -458,10 +459,14 @@ motion_notify_cb (EphyNotebook *notebook,
 static void
 move_tab_to_another_notebook (EphyNotebook *src,
 			      EphyNotebook *dest,
+			      GdkEventMotion *event,
 			      int dest_position)
 {
 	EphyTab *tab;
 	int cur_page;
+
+	LOG ("moving tab from notebook %p to notebook %p at %d",
+	     src, dest, dest_position);
 
 	/* This is getting tricky, the tab was dragged in a notebook
 	 * in another window of the same app, we move the tab
@@ -475,7 +480,12 @@ move_tab_to_another_notebook (EphyNotebook *src,
 	tab = EPHY_TAB (gtk_notebook_get_nth_page (GTK_NOTEBOOK (src), cur_page));
 
 	/* stop drag in origin window */
+	/* ungrab the pointer if it's grabbed */
 	drag_stop (src);
+	if (gdk_pointer_is_grabbed ())
+	{
+		gdk_pointer_ungrab (event->time);
+	}
 	gtk_grab_remove (GTK_WIDGET (src));
 
 	ephy_notebook_move_tab (src, dest, tab, dest_position);
@@ -516,12 +526,14 @@ button_release_cb (EphyNotebook *notebook,
 		/* ungrab the pointer if it's grabbed */
 		if (gdk_pointer_is_grabbed ())
 		{
-			gdk_pointer_ungrab (GDK_CURRENT_TIME);
+			gdk_pointer_ungrab (event->time);
 			gtk_grab_remove (GTK_WIDGET (notebook));
 		}
 	}
+
 	/* This must be called even if a drag isn't happening */
 	drag_stop (notebook);
+
 	return FALSE;
 }
 
@@ -729,8 +741,6 @@ ephy_notebook_finalize (GObject *object)
 		g_list_free (notebook->priv->focused_pages);
 	}
 	g_object_unref (notebook->priv->title_tips);
-
-	LOG ("EphyNotebook finalised %p", object);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
