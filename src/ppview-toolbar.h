@@ -52,9 +52,9 @@ struct PPViewToolbarClass
         GObjectClass parent_class;
 };
 
-GType          ppview_toolbar_get_type			(void);
+GType		ppview_toolbar_get_type	(void);
 
-PPViewToolbar *ppview_toolbar_new			(EphyWindow *window);
+PPViewToolbar  *ppview_toolbar_new	(EphyWindow *window);
 
 G_END_DECLS
 
