@@ -35,13 +35,13 @@ typedef struct EphySpinnerActionPrivate EphySpinnerActionPrivate;
 
 struct _EphySpinnerAction
 {
-	EggAction parent;
+	GtkAction parent;
 	EphySpinnerActionPrivate *priv;
 };
 
 struct _EphySpinnerActionClass
 {
-	EggActionClass parent_class;
+	GtkActionClass parent_class;
 };
 
 GType    ephy_spinner_action_get_type   (void);
