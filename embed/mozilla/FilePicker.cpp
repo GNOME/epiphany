@@ -104,9 +104,21 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 
 	switch (mode)
 	{
-		case nsIFilePicker::modeOpen:
 		case nsIFilePicker::modeGetFolder:
+			gtk_file_chooser_set_action (GTK_FILE_CHOOSER (mDialog),
+						     GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+			
+			gtk_dialog_add_buttons (GTK_DIALOG (mDialog),
+						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+						GTK_STOCK_OPEN, EPHY_RESPONSE_OPEN,
+						NULL);
+			gtk_dialog_set_default_response (GTK_DIALOG (mDialog), EPHY_RESPONSE_OPEN);
+			break;
+
 		case nsIFilePicker::modeOpenMultiple:
+			gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (mDialog), TRUE);
+			/* fallthrough */			
+		case nsIFilePicker::modeOpen:
 			gtk_file_chooser_set_action (GTK_FILE_CHOOSER (mDialog),
 						     GTK_FILE_CHOOSER_ACTION_OPEN);
 
@@ -117,6 +129,7 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 			gtk_dialog_set_default_response (GTK_DIALOG (mDialog), EPHY_RESPONSE_OPEN);
 
 			break;
+
 		case nsIFilePicker::modeSave:
 			gtk_file_chooser_set_action (GTK_FILE_CHOOSER (mDialog),
 						     GTK_FILE_CHOOSER_ACTION_SAVE);
@@ -131,12 +144,6 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 			g_assert_not_reached ();
 			break;
 	}
-
-	gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (mDialog),
-					      mode == nsIFilePicker::modeOpenMultiple);
-
-	gtk_file_chooser_set_folder_mode (GTK_FILE_CHOOSER (mDialog),
-					  mode == nsIFilePicker::modeGetFolder);
 
 	return NS_OK;
 }

@@ -1321,9 +1321,8 @@ prefs_download_path_button_clicked_cb (GtkWidget *button,
 	
 		fc = ephy_file_chooser_new (_("Select a directory"),
 					    GTK_WIDGET (parent),
-					    GTK_FILE_CHOOSER_ACTION_OPEN,
+					    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
 					    NULL);
-		gtk_file_chooser_set_folder_mode (GTK_FILE_CHOOSER (fc), TRUE);
 	
 		g_signal_connect (GTK_DIALOG (fc), "response",
 				    G_CALLBACK (download_path_response_cb),

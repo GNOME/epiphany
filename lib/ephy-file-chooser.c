@@ -101,7 +101,7 @@ ephy_file_chooser_init (EphyFileChooser *dialog)
 	dialog->priv->persist_key = NULL;
 
 	ephy_state_add_window (GTK_WIDGET (dialog), "file_chooser",
-			       400, 300,
+			       -1,-1,
 			       EPHY_STATE_WINDOW_SAVE_SIZE |
 			       EPHY_STATE_WINDOW_SAVE_POSITION);
 }
@@ -237,7 +237,9 @@ ephy_file_chooser_new (const char *title,
 		ephy_file_chooser_set_persist_key (dialog, persist_key);
 	}
 
-	if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
+	if (action == GTK_FILE_CHOOSER_ACTION_OPEN	    ||
+	    action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+	    action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
 	{
 		gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
