@@ -47,12 +47,11 @@ EphySidebar::~EphySidebar()
 {
 }
 
-
 /* void addPanel (in wstring aTitle, in string aContentURL, in string aCustomizeURL); */
 NS_IMETHODIMP
 EphySidebar::AddPanel (const PRUnichar *aTitle,
-			 const char *aContentURL,
-			 const char *aCustomizeURL)
+		       const char *aContentURL,
+		       const char *aCustomizeURL)
 {
 	nsEmbedCString title;
 	EphyEmbedSingle *single;
@@ -74,24 +73,36 @@ EphySidebar::AddPanel (const PRUnichar *aTitle,
 /* void addPersistentPanel (in wstring aTitle, in string aContentURL, in string aCustomizeURL); */
 NS_IMETHODIMP
 EphySidebar::AddPersistentPanel (const PRUnichar *aTitle,
-				  const char *aContentURL,
-				  const char *aCustomizeURL)
+				 const char *aContentURL,
+				 const char *aCustomizeURL)
 {
-	return NS_ERROR_NOT_IMPLEMENTED;
+	return AddPanel (aTitle, aContentURL, aCustomizeURL);
 }
 
 /* void addSearchEngine (in string engineURL, in string iconURL, in wstring suggestedTitle, in wst
 ring suggestedCategory); */
 NS_IMETHODIMP
-EphySidebar::AddSearchEngine (const char *engineURL,
-			       const char *iconURL,
-			       const PRUnichar *suggestedTitle,
-			       const PRUnichar *suggestedCategory)
+EphySidebar::AddSearchEngine (const char *aEngineURL,
+			      const char *aIconURL,
+			      const PRUnichar *aSuggestedTitle,
+			      const PRUnichar *aSuggestedCategory)
 {
-	return NS_ERROR_NOT_IMPLEMENTED;
+	nsEmbedCString title;
+	EphyEmbedSingle *single;
+
+	NS_UTF16ToCString (nsEmbedString(aSuggestedTitle),
+			   NS_CSTRING_ENCODING_UTF8, title);
+
+	LOG ("Adding search engine, engineurl=%s iconurl=%s title=%s", aEngineURL, aIconURL, title.get());
+
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
+
+	gboolean result = FALSE;
+	g_signal_emit_by_name (single, "add-search-engine",
+			       aEngineURL, aIconURL, title.get(), &result);
+
+	return NS_OK;
 }
-
-
 
 //------------------------------------------------------------------------------
 //nsIClassInfo Impl.

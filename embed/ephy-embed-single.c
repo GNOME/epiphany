@@ -141,6 +141,28 @@ ephy_embed_single_iface_init (gpointer g_class)
 		      G_TYPE_STRING);
 
 /**
+ * EphyEmbedSingle::add-search-engine
+ * @single:
+ * @url: The url of the search engine definition file
+ * @icon_url: The url of the icon to use for this engine
+ * @title: The title of the search engine to be added
+ *
+ * The ::add-search-engine signal is emitted when the user clicks a javascript link that
+ * requests adding a search engine to the sidebar.
+ **/
+	g_signal_new ("add-search-engine",
+		      EPHY_TYPE_EMBED_SINGLE,
+		      G_SIGNAL_RUN_LAST,
+		      G_STRUCT_OFFSET (EphyEmbedSingleIface, add_search_engine),
+		      g_signal_accumulator_true_handled, NULL,
+		      ephy_marshal_BOOLEAN__STRING_STRING_STRING,
+		      G_TYPE_BOOLEAN,
+		      3,
+		      G_TYPE_STRING,
+		      G_TYPE_STRING,
+		      G_TYPE_STRING);
+
+/**
  * EphyEmbedSingle::check_content:
  * @single: the #EphyEmbedSingle
  * @type: the type of content (an #EphyContentCheckType)

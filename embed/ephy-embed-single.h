@@ -66,8 +66,13 @@ struct _EphyEmbedSingleIface
 
 
         gboolean (* add_sidebar)    (EphyEmbedSingle *single,
-				     const char * url,
-				     const char * title);
+				     const char *url,
+				     const char *title);
+
+        gboolean (* add_search_engine) (EphyEmbedSingle *single,
+					const char *url,
+					const char *icon_url,
+					const char *title);
 
 	gboolean (* check_content)  (EphyEmbedSingle *single,
 				     EphyContentCheckType type,
