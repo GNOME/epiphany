@@ -79,3 +79,6 @@ pref("network.protocol-handler.external.news", true);
 pref("network.protocol-handler.external.mailto", true);
 pref("network.protocol-handler.external.irc", true);
 pref("network.protocol-handler.external.webcal", true);
+
+// disable xpinstall
+pref("xpinstall.enabled", false);
