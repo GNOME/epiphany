@@ -283,7 +283,7 @@ window_cmd_file_bookmark_page (EggAction *action,
 	GtkWidget *new_bookmark;
 	const char *location;
 	const char *icon;
-	char *title;
+	char *title = NULL;
 
 	tab = ephy_window_get_active_tab (window);
 	g_return_if_fail (tab);
@@ -294,7 +294,7 @@ window_cmd_file_bookmark_page (EggAction *action,
 	location = ephy_tab_get_location (tab);
 	if (ephy_embed_get_title (embed, &title) != G_OK)
 	{
-		title = _("Untitled");
+		title = g_strdup (_("Untitled"));
 	}
 
 	icon = ephy_tab_get_favicon_url (tab);
@@ -311,6 +311,8 @@ window_cmd_file_bookmark_page (EggAction *action,
 			(EPHY_NEW_BOOKMARK (new_bookmark), icon);
 		gtk_widget_show (new_bookmark);
 	}
+
+	g_free (title);
 }
 
 void
@@ -890,13 +892,11 @@ window_cmd_tabs_detach  (EggAction *action,
 			 EphyWindow *window)
 {
 	EphyTab *tab;
-	GtkWidget *src_page;
+	GtkWidget *src_page, *nb;
 	EphyWindow *new_win;
 
-	if (g_list_length (ephy_window_get_tabs (window)) <= 1)
-	{
-		return;
-	}
+	nb = ephy_window_get_notebook (window);
+	if (gtk_notebook_get_n_pages (GTK_NOTEBOOK (nb)) <= 1) return;
 
 	tab = ephy_window_get_active_tab (window);
 	src_page = GTK_WIDGET (ephy_tab_get_embed (tab));
