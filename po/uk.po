@@ -3,13 +3,12 @@
 # This file is distributed under the same license as the epiphany package.
 # Maxim Dziumanenko <mvd@mylinux.com.ua>, 2003.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-24 13:13+0100\n"
-"PO-Revision-Date: 2004-01-29 19:06+0200\n"
+"POT-Creation-Date: 2004-03-11 22:40+0200\n"
+"PO-Revision-Date: 2004-03-11 22:45+0200\n"
 "Last-Translator: Maxim Dziumanenko <mvd@mylinux.com.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -84,15 +83,16 @@ msgstr "Заборонити керування параметрами вікн�
 
 #: data/epiphany-lockdown.schemas.in.h:8
 msgid "Disable Toolbar Editing"
-msgstr "Заборонити редагування пеналів"
+msgstr "Заборонити редагування панелей"
 
 #: data/epiphany-lockdown.schemas.in.h:9
 msgid ""
 "Disable all historical information by disabling the back button, not "
 "allowing the history dialog and hiding the most used bookmarks list."
 msgstr ""
-"Вимкнути всю інформацію про історію та вимкнути кнопку переходу назад, "
-" не дозволяти появу діалогового вікна історії та приховування списку найбільш уживаних закладок."
+"Вимкнути всю інформацію про історію та вимкнути кнопку переходу назад,  не "
+"дозволяти появу діалогового вікна історії та приховування списку найбільш "
+"уживаних закладок."
 
 #: data/epiphany-lockdown.schemas.in.h:10
 msgid "Disable the user's ability to edit their bookmarks."
@@ -100,7 +100,7 @@ msgstr "Не дозволяти користувачу редагувати за
 
 #: data/epiphany-lockdown.schemas.in.h:11
 msgid "Disable the user's ability to edit toolbars."
-msgstr "Не дозволяти користувачу редагувати пенали."
+msgstr "Не дозволяти користувачу редагувати панелі."
 
 #: data/epiphany-lockdown.schemas.in.h:12
 msgid "Disable the user's ability to type in a URL to epiphany."
@@ -115,8 +115,8 @@ msgid ""
 "Disables loading of content from unsafe protocols. Safe protocols are http: "
 "and https:."
 msgstr ""
-"Заборонити завантаження вмісту з небезпечних протоколів. Безпечними протоколами є http: "
-"та https:."
+"Заборонити завантаження вмісту з небезпечних протоколів. Безпечними "
+"протоколами є http: та https:."
 
 #: data/epiphany-lockdown.schemas.in.h:15
 msgid "Hide menubar by default"
@@ -301,7 +301,7 @@ msgstr ""
 
 #: data/epiphany.schemas.in.h:30
 msgid "Preferred languages, two letter codes."
-msgstr "Вподобані мови, двохлітерні коди."
+msgstr "Вподобані мови, дволітерні коди."
 
 #: data/epiphany.schemas.in.h:31
 msgid "Printer name"
@@ -364,12 +364,13 @@ msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
 msgstr ""
-"Показувати відвідані сторінки історії \"ever\" (завжди), \"last_two_days\" (за останні дві доби), \"last_three_days"
-"\" (за останні три доби), \"today\" (сьогодні)."
+"Показувати відвідані сторінки історії \"ever\" (завжди), \"last_two_days"
+"\" (за останні дві доби), \"last_three_days\" (за останні три доби), \"today"
+"\" (сьогодні)."
 
 #: data/epiphany.schemas.in.h:46
 msgid "Show the tab bar also when there is only one tab open."
-msgstr "Показувати панель вкладок, навіть якщо відкрита лише одна вкладка"
+msgstr "Показувати панель вкладок, навіть якщо відкрита лише одна вкладка."
 
 #: data/epiphany.schemas.in.h:47
 msgid "Show toolbars by default"
@@ -385,7 +386,7 @@ msgstr "Розмір дискового кешу"
 
 #: data/epiphany.schemas.in.h:50
 msgid "Size of disk cache, in MB."
-msgstr "Розмір дискового кешу, у Мб"
+msgstr "Розмір дискового кешу, у Мб."
 
 #: data/epiphany.schemas.in.h:51
 msgid "The bookmark informations shown in the editor view"
@@ -396,8 +397,8 @@ msgid ""
 "The bookmark informations shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
 msgstr ""
-"Інформація з закладок, що показується у редакторі. Можливі значення: "
-" \"address\" (адреса)  чи \"title\"  (заголовок)."
+"Інформація з закладок, що показується у редакторі. Можливі значення:  "
+"\"address\" (адреса)  чи \"title\"  (заголовок)."
 
 #: data/epiphany.schemas.in.h:53
 msgid "The currently selected fonts language"
@@ -424,12 +425,16 @@ msgstr ""
 "\" (девангарі)."
 
 #: data/epiphany.schemas.in.h:55
+msgid "The downloads folder"
+msgstr "Тека для завантажень"
+
+#: data/epiphany.schemas.in.h:56
 msgid "The encoding autodetector. Empty string means autodetect is off"
 msgstr ""
 "Автоматичне визначення кодової сторінки. Порожній рядок означає вимикання "
 "автоматичного визначення."
 
-#: data/epiphany.schemas.in.h:56
+#: data/epiphany.schemas.in.h:57
 msgid ""
 "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
 "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
@@ -453,39 +458,43 @@ msgstr ""
 "визначення кодувань традиційної китайської) та \"universal_charset_detector"
 "\" (автоматичне визначення більшості кодувань)."
 
-#: data/epiphany.schemas.in.h:57
+#: data/epiphany.schemas.in.h:58
 msgid "The page informations shown in the history view"
 msgstr "Інформація про сторінку, що показується у переглядачі історії"
 
-#: data/epiphany.schemas.in.h:58
+#: data/epiphany.schemas.in.h:59
 msgid ""
 "The page informations shown in the history view. Valid values in the list "
 "are \"address\", \"title\"."
 msgstr ""
-"Інформація про сторінку, що показується у переглядачі історії. Можливі значення: "
-" \"address\" (адреса), \"title\" (заголовок)."
+"Інформація про сторінку, що показується у переглядачі історії. Можливі "
+"значення:  \"address\" (адреса), \"title\" (заголовок)."
 
-#: data/epiphany.schemas.in.h:59
+#: data/epiphany.schemas.in.h:60
+msgid "The path of the folder where downloads are saved."
+msgstr "Шлях до теки, в яку зберігаються завантажені файли."
+
+#: data/epiphany.schemas.in.h:61
 msgid "Use caret browsing mode."
 msgstr "Використовувати режим перегляду символів вставки."
 
-#: data/epiphany.schemas.in.h:60
+#: data/epiphany.schemas.in.h:62
 msgid "Use own colors"
 msgstr "Використовувати власні кольори"
 
-#: data/epiphany.schemas.in.h:61
+#: data/epiphany.schemas.in.h:63
 msgid "Use own fonts"
 msgstr "Використовувати власні шрифти"
 
-#: data/epiphany.schemas.in.h:62
+#: data/epiphany.schemas.in.h:64
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Використовувати власні кольори замість кольорів сторінки."
 
-#: data/epiphany.schemas.in.h:63
+#: data/epiphany.schemas.in.h:65
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Використовувати власні шрифти замість шрифтів сторінки."
 
-#: data/epiphany.schemas.in.h:64
+#: data/epiphany.schemas.in.h:66
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -493,47 +502,47 @@ msgstr ""
 "Коли файли не можуть відкриті переглядачем, вони автоматично завантажуються "
 "у теку завантаження та відкриваються використовуючи відповідну програму."
 
-#: data/epiphany.schemas.in.h:65
+#: data/epiphany.schemas.in.h:67
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
 msgstr ""
-"Звідки приймати cookies. Можливі значення \"anywhere\" (від усюди), \"current site\" (з поточного сайту) та "
-"\"nowhere\" (нізвідки)."
+"Звідки приймати cookies. Можливі значення \"anywhere\" (від усюди), "
+"\"current site\" (з поточного сайту) та \"nowhere\" (нізвідки)."
 
-#: data/epiphany.schemas.in.h:66
+#: data/epiphany.schemas.in.h:68
 msgid "Whether to print the date in the footer"
 msgstr "Чи друкувати дату внизу сторінки"
 
-#: data/epiphany.schemas.in.h:67
+#: data/epiphany.schemas.in.h:69
 msgid "Whether to print the date in the footer."
 msgstr "Чи друкувати дату внизу сторінки."
 
-#: data/epiphany.schemas.in.h:68
+#: data/epiphany.schemas.in.h:70
 msgid "Whether to print the page address in the header"
 msgstr "Чи друкувати адресу сторінки на початку сторінки"
 
-#: data/epiphany.schemas.in.h:69
+#: data/epiphany.schemas.in.h:71
 msgid "Whether to print the page address in the header."
 msgstr "Чи друкувати адресу сторінки на початку сторінки."
 
-#: data/epiphany.schemas.in.h:70
+#: data/epiphany.schemas.in.h:72
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "Чи друкувати номери сторінок (x з загальної кількості) внизу сторінки"
 
-#: data/epiphany.schemas.in.h:71
+#: data/epiphany.schemas.in.h:73
 msgid "Whether to print the page numbers (x of total) in the footer."
 msgstr "Чи друкувати номери сторінок (x з загальної кількості) внизу сторінки."
 
-#: data/epiphany.schemas.in.h:72
+#: data/epiphany.schemas.in.h:74
 msgid "Whether to print the page title in the header"
 msgstr "Чи друкувати заголовок сторінки на початку сторінки"
 
-#: data/epiphany.schemas.in.h:73
+#: data/epiphany.schemas.in.h:75
 msgid "Whether to print the page title in the header."
 msgstr "Чи друкувати заголовок сторінки на початку сторінки."
 
-#: data/epiphany.schemas.in.h:74
+#: data/epiphany.schemas.in.h:76
 msgid "x-western"
 msgstr "x-cyrillic"
 
@@ -600,7 +609,7 @@ msgid "MD5 Fingerprint:"
 msgstr "Відбитки MD5:"
 
 #: data/glade/certificate-dialogs.glade.h:16
-#: embed/mozilla/GtkNSSDialogs.cpp:965
+#: embed/mozilla/GtkNSSDialogs.cpp:964
 msgid "Organization:"
 msgstr "Організація:"
 
@@ -646,7 +655,7 @@ msgid "Download Manager"
 msgstr "Менеджер завантажень"
 
 #: data/glade/epiphany.glade.h:8 data/ui/nautilus-epiphany-view.xml.h:11
-#: src/ephy-window.c:965
+#: src/ephy-window.c:951
 msgid "Find"
 msgstr "Знайти"
 
@@ -674,7 +683,7 @@ msgstr "Зна_йти:"
 msgid "_Next"
 msgstr "_Наступний"
 
-#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:537
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:280
 msgid "_Pause"
 msgstr "_Пауза"
 
@@ -723,28 +732,28 @@ msgid "<b>Web Content</b>"
 msgstr "<b>Web-середовище</b>"
 
 #: data/glade/prefs-dialog.glade.h:12
+msgid "A_utomatically download and open files"
+msgstr "Авт_оматично завантажувати та відкривати файли"
+
+#: data/glade/prefs-dialog.glade.h:13
 msgid "Add Language"
 msgstr "Додавання мови"
 
-#: data/glade/prefs-dialog.glade.h:13
+#: data/glade/prefs-dialog.glade.h:14
 msgid "Al_ways use the desktop theme colors"
 msgstr "Зав_жди використовувати теми кольорів"
 
-#: data/glade/prefs-dialog.glade.h:14
+#: data/glade/prefs-dialog.glade.h:15
 msgid "Allow popup _windows"
 msgstr "Дозволити _контекстні вікна"
 
-#: data/glade/prefs-dialog.glade.h:15
+#: data/glade/prefs-dialog.glade.h:16
 msgid "Always use _these fonts"
 msgstr "Завжди використовувати _ці шрифти"
 
-#: data/glade/prefs-dialog.glade.h:16
+#: data/glade/prefs-dialog.glade.h:17
 msgid "Au_todetect:"
 msgstr "_Автовизначення:"
-
-#: data/glade/prefs-dialog.glade.h:17
-msgid "Automatically download and open files"
-msgstr "Автоматично завантажувати та відкривати файли"
 
 #: data/glade/prefs-dialog.glade.h:18
 msgid "Choose a l_anguage:"
@@ -807,7 +816,7 @@ msgid "_Add..."
 msgstr "_Додати..."
 
 #: data/glade/prefs-dialog.glade.h:34
-#: src/bookmarks/ephy-bookmark-properties.c:371
+#: src/bookmarks/ephy-bookmark-properties.c:367
 msgid "_Address:"
 msgstr "_Адреса:"
 
@@ -841,9 +850,9 @@ msgstr "_Ніколи не приймати"
 
 #: data/glade/prefs-dialog.glade.h:42
 msgid "_Remove"
-msgstr "_Відалити"
+msgstr "В_идалити"
 
-#: data/glade/prefs-dialog.glade.h:43 src/ephy-window.c:190
+#: data/glade/prefs-dialog.glade.h:43 src/ephy-window.c:191
 msgid "_Up"
 msgstr "В_гору"
 
@@ -913,11 +922,11 @@ msgstr "_Портретна"
 
 #: data/glade/print.glade.h:19
 msgid "P_rinter:"
-msgstr "П_ринтер:"
+msgstr "Прин_тер:"
 
 #: data/glade/print.glade.h:20
 msgid "Pa_ges"
-msgstr "С_торінки"
+msgstr "Ст_орінки"
 
 #: data/glade/print.glade.h:21
 msgid "Page _numbers"
@@ -928,7 +937,7 @@ msgid "Paper"
 msgstr "Папір"
 
 #: data/glade/print.glade.h:23 data/ui/nautilus-epiphany-view.xml.h:23
-#: src/ephy-window.c:961
+#: src/ephy-window.c:947
 msgid "Print"
 msgstr "Друк"
 
@@ -1033,9 +1042,9 @@ msgid "Cut the Selection"
 msgstr "Вирізати вибране"
 
 #: data/ui/nautilus-epiphany-view.xml.h:10
-#: embed/ephy-embed-popup-control.c:547
+#: embed/ephy-embed-popup-control.c:551
 msgid "Download Link"
-msgstr "Звантажити посилання"
+msgstr "Завантажити посилання"
 
 #: data/ui/nautilus-epiphany-view.xml.h:12 src/ppview-toolbar.c:92
 msgid "First"
@@ -1099,7 +1108,7 @@ msgstr "Зберегти сторінку як..."
 
 #: data/ui/nautilus-epiphany-view.xml.h:28
 msgid "Search for a String"
-msgstr "Шукати рядок"
+msgstr "Знайти рядок"
 
 #: data/ui/nautilus-epiphany-view.xml.h:29
 msgid "Select All"
@@ -1121,7 +1130,7 @@ msgstr "Використовувати зображення як тло"
 #: src/bookmarks/ephy-bookmarks-editor.c:162 src/ephy-history-window.c:152
 #: src/ephy-window.c:77
 msgid "_Edit"
-msgstr "_Редагувати"
+msgstr "_Правка"
 
 #. Toplevel
 #: data/ui/nautilus-epiphany-view.xml.h:34
@@ -1130,30 +1139,34 @@ msgstr "_Редагувати"
 msgid "_File"
 msgstr "_Файл"
 
-#: data/ui/nautilus-epiphany-view.xml.h:35 src/ephy-window.c:133
+#: data/ui/nautilus-epiphany-view.xml.h:35 src/ephy-window.c:134
 msgid "_Find..."
-msgstr "_Знайти..."
+msgstr "З_найти..."
 
-#: data/ui/nautilus-epiphany-view.xml.h:36 src/ephy-window.c:104
+#: data/ui/nautilus-epiphany-view.xml.h:36 src/ephy-window.c:105
 msgid "_Print..."
-msgstr "_Друкувати..."
+msgstr "Д_рук..."
 
-#: embed/downloader-view.c:230
+#: embed/downloader-view.c:225
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: embed/downloader-view.c:234
+#: embed/downloader-view.c:229
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: embed/downloader-view.c:305 lib/widgets/ephy-cell-renderer-progress.c:35
-#: src/ephy-window.c:1146
+#: embed/downloader-view.c:280
+msgid "_Resume"
+msgstr "_Продовжити"
+
+#: embed/downloader-view.c:343 lib/widgets/ephy-cell-renderer-progress.c:35
+#: src/ephy-window.c:1132
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: embed/downloader-view.c:352
+#: embed/downloader-view.c:394
 #, c-format
 msgid "About %d second left"
 msgid_plural "About %d seconds left"
@@ -1161,7 +1174,7 @@ msgstr[0] "Залишилась %d секуда"
 msgstr[1] "Залишилось %d секуди"
 msgstr[2] "Залишилось %d секуд"
 
-#: embed/downloader-view.c:360
+#: embed/downloader-view.c:402
 #, c-format
 msgid "About %d minute left"
 msgid_plural "About %d minutes left"
@@ -1169,7 +1182,7 @@ msgstr[0] "Залишилась %d хвилина"
 msgstr[1] "Залишилось %d хвилини"
 msgstr[2] "Залишилось %d хвилин"
 
-#: embed/downloader-view.c:367
+#: embed/downloader-view.c:409
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -1177,31 +1190,27 @@ msgstr[0] "%d завантаження"
 msgstr[1] "%d завантаження"
 msgstr[2] "%d завантажень"
 
-#: embed/downloader-view.c:465
+#: embed/downloader-view.c:515
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:475
+#: embed/downloader-view.c:526
 msgid "File"
 msgstr "Файл"
 
-#: embed/downloader-view.c:488
+#: embed/downloader-view.c:540
 msgid "Remaining"
 msgstr "Залишилось"
 
-#: embed/downloader-view.c:532
-msgid "_Resume"
-msgstr "_Поновити"
-
-#: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:344
+#: embed/ephy-embed-popup-control.c:561 src/popup-commands.c:344
 msgid "Save Image As"
 msgstr "Зберегти зображення як"
 
-#: embed/ephy-embed-popup-control.c:641
+#: embed/ephy-embed-popup-control.c:647
 msgid "Save Page As"
 msgstr "Зберегти сторінку як"
 
-#: embed/ephy-embed-popup-control.c:650 src/popup-commands.c:432
+#: embed/ephy-embed-popup-control.c:656 src/popup-commands.c:434
 msgid "Save Background As"
 msgstr "Зберегти тло як"
 
@@ -1568,75 +1577,75 @@ msgstr "Українська"
 msgid "Unknown (%s)"
 msgstr "Невідоме (%s)"
 
-#: embed/ephy-history.c:485 src/bookmarks/ephy-bookmarks.c:587
+#: embed/ephy-history.c:487 src/bookmarks/ephy-bookmarks.c:645
 msgid "All"
 msgstr "Всі"
 
-#: embed/ephy-history.c:658
+#: embed/ephy-history.c:662
 msgid "Others"
 msgstr "Інші"
 
-#: embed/ephy-history.c:664
+#: embed/ephy-history.c:668
 msgid "Local files"
 msgstr "Локальні файли"
 
-#: embed/mozilla/ContentHandler.cpp:136
-#: embed/mozilla/EphyHeaderSniffer.cpp:314
+#: embed/mozilla/ContentHandler.cpp:134
+#: embed/mozilla/EphyHeaderSniffer.cpp:362
 msgid "Save"
 msgstr "Зберегти"
 
-#: embed/mozilla/ContentHandler.cpp:266
-msgid "_Save As..."
-msgstr "Зберегти _як..."
-
-#: embed/mozilla/ContentHandler.cpp:269
+#: embed/mozilla/ContentHandler.cpp:265
 msgid "_Open"
 msgstr "_Відкрити"
 
-#: embed/mozilla/ContentHandler.cpp:269
+#: embed/mozilla/ContentHandler.cpp:265
 msgid "_Download"
 msgstr "За_вантажити посилання"
 
-#: embed/mozilla/ContentHandler.cpp:285
+#: embed/mozilla/ContentHandler.cpp:269
+msgid "_Save As..."
+msgstr "Зберегти _як..."
+
+#: embed/mozilla/ContentHandler.cpp:286
 msgid "Download the unsafe file?"
 msgstr "Завантажити небезпечний файл?"
 
-#: embed/mozilla/ContentHandler.cpp:286
+#: embed/mozilla/ContentHandler.cpp:287
 msgid ""
 "This type of file could potentially damage your documents or invade your "
 "privacy. It's not safe to open it directly. You can save it instead."
 msgstr ""
-"Файл цього типу потенційно може зіпсувати ваші документи чи порушити "
-"вашу конфіденційність. Безпосередньо його відкривати - небезпечно. Натомість, можете його зберегти."
+"Файл цього типу потенційно може зіпсувати ваші документи чи порушити вашу "
+"конфіденційність. Безпосередньо його відкривати - небезпечно. Натомість, "
+"можете його зберегти."
 
-#: embed/mozilla/ContentHandler.cpp:294
+#: embed/mozilla/ContentHandler.cpp:295
 msgid "Open the file in another application?"
 msgstr "Відкрити файл у іншій програмі?"
 
-#: embed/mozilla/ContentHandler.cpp:295
+#: embed/mozilla/ContentHandler.cpp:296
 msgid ""
 "It's not possible to view this file type directly in the browser. You can "
 "open it with another application or save it."
 msgstr ""
-"Цей файл неможливо переглянути у переглядачі. Можете відкрити його іншою програмою чи "
-"зберегти його."
+"Цей файл не вдається переглянути у переглядачі. Можете відкрити його іншою "
+"програмою чи зберегти його."
 
-#: embed/mozilla/ContentHandler.cpp:302
+#: embed/mozilla/ContentHandler.cpp:303
 msgid "Download the file?"
 msgstr "Завантажити файл?"
 
-#: embed/mozilla/ContentHandler.cpp:303
+#: embed/mozilla/ContentHandler.cpp:304
 msgid ""
 "It's not possible to view this file because there is no application "
-"installed that can open it.You can save it instead."
+"installed that can open it. You can save it instead."
 msgstr ""
-"Неможливо переглянути цей файл, тому що не встановлено програму, яка "
-"здатна його відкрити. Натомість ви можете його зберегти."
+"Не вдається переглянути цей файл, тому що не встановлено програму, яка здатна "
+"його відкрити. Натомість ви можете його зберегти."
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:289
-#: src/bookmarks/ephy-bookmarks-import.c:247
-#: src/bookmarks/ephy-bookmarks-import.c:373 src/ephy-toolbars-model.c:201
-#: src/window-commands.c:340
+#: embed/mozilla/EphyHeaderSniffer.cpp:331
+#: src/bookmarks/ephy-bookmarks-import.c:252 src/ephy-toolbars-model.c:201
+#: src/window-commands.c:342
 msgid "Untitled"
 msgstr "Без заголовка"
 
@@ -1658,57 +1667,57 @@ msgstr ""
 "\n"
 "Спробувати типовий обробника середовища GNOME?"
 
-#: embed/mozilla/FilePicker.cpp:149
+#: embed/mozilla/FilePicker.cpp:163
 msgid "All files"
 msgstr "Всі файли"
 
-#: embed/mozilla/FilePicker.cpp:154
+#: embed/mozilla/FilePicker.cpp:168
 msgid "HTML files"
 msgstr "HTML файли"
 
-#: embed/mozilla/FilePicker.cpp:159
+#: embed/mozilla/FilePicker.cpp:173
 msgid "Text files"
 msgstr "Текстові файли"
 
-#: embed/mozilla/FilePicker.cpp:164
+#: embed/mozilla/FilePicker.cpp:178
 msgid "Image files"
 msgstr "Локальні файли"
 
-#: embed/mozilla/FilePicker.cpp:169
+#: embed/mozilla/FilePicker.cpp:183
 msgid "XML files"
 msgstr "XML файли"
 
-#: embed/mozilla/FilePicker.cpp:174
+#: embed/mozilla/FilePicker.cpp:188
 msgid "XUL files"
 msgstr "XUL файли"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:182
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:185
 msgid "_Select Certificate"
 msgstr "_Вибрати сертифікат"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:221
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:224
 #, c-format
 msgid "Choose a certificate to present as identification to %s."
 msgstr "Виберіть сертифікат який ідентифікує %s."
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:224
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:227
 msgid "Select a certificate to identify yourself."
 msgstr "Виберіть сертифікат для власної ідентифікації."
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:274
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:277
 msgid "Certificate _Details"
 msgstr "_Подробиці сертифікату"
 
 #. Add the buttons
-#: embed/mozilla/GtkNSSDialogs.cpp:223 embed/mozilla/GtkNSSDialogs.cpp:534
+#: embed/mozilla/GtkNSSDialogs.cpp:222 embed/mozilla/GtkNSSDialogs.cpp:533
 msgid "_View Certificate"
 msgstr "Пере_глянути сертифікат"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:231
+#: embed/mozilla/GtkNSSDialogs.cpp:230
 msgid "_Accept"
 msgstr "_Прийняти"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:295
+#: embed/mozilla/GtkNSSDialogs.cpp:294
 #, c-format
 msgid ""
 "The site %s returned security information for %s. It is possible that "
@@ -1716,61 +1725,60 @@ msgid ""
 "information."
 msgstr ""
 "Сайт %s повернув інформацію про безпеку для %s. Можливо, що хтось "
-"намагається перехопити ваше з'єднання для отримання конфіденційної інформації."
+"намагається перехопити ваше з'єднання для отримання конфіденційної "
+"інформації."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:301
+#: embed/mozilla/GtkNSSDialogs.cpp:300
 #, c-format
 msgid "You should only accept the security information if you trust %s and %s."
 msgstr "Слід прийняти інформацію про безпеку, якщо ви довіряєте %s та %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:306
+#: embed/mozilla/GtkNSSDialogs.cpp:305
 msgid "Accept incorrect security information?"
 msgstr "Прийняти некоректну інформацію про безпеку?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:338
+#: embed/mozilla/GtkNSSDialogs.cpp:337
 #, c-format
 msgid ""
 "Your browser was unable to trust %s. It is possible that someone is "
 "intercepting your communication to obtain your confidential information."
 msgstr ""
-"Переглядач не може перевірити безпечність %s. Можливо, хтось  "
-"намагається перехопити ваше з'єднання для отримання конфіденційної інформації."
+"Переглядач не може перевірити безпечність %s. Можливо, хтось  намагається "
+"перехопити ваше з'єднання для отримання конфіденційної інформації."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:344
+#: embed/mozilla/GtkNSSDialogs.cpp:343
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to %"
 "s."
-msgstr ""
-"Підключатись до сайту слід лише якщо при з'єднанні з %"
-"s."
+msgstr "Підключатись до сайту слід лише якщо при з'єднанні з %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:349
+#: embed/mozilla/GtkNSSDialogs.cpp:348
 msgid "Connect to untrusted site?"
 msgstr "Підключитись до небезпечного сайту?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:353
+#: embed/mozilla/GtkNSSDialogs.cpp:352
 msgid "_Don't show this message again for this site"
 msgstr "_Не показувати це повідомлення знову для цього сайту"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:354
+#: embed/mozilla/GtkNSSDialogs.cpp:353
 msgid "Co_nnect"
 msgstr "З'_єднатись"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:415
+#: embed/mozilla/GtkNSSDialogs.cpp:414
 msgid "Accept expired security information?"
 msgstr "Прийняти застарілу інформацію про безпеку?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:416
+#: embed/mozilla/GtkNSSDialogs.cpp:415
 #, c-format
 msgid "The security information for %s expired on %s."
 msgstr "Інформація про безпеку для %s застаріла %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:422
+#: embed/mozilla/GtkNSSDialogs.cpp:421
 msgid "Accept not yet valid security information?"
 msgstr "Прийняти ще недостовірну інформацію про безпеку?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:423
+#: embed/mozilla/GtkNSSDialogs.cpp:422
 #, c-format
 msgid "The security information for %s isn't valid until %s."
 msgstr "Інформація про безпеку для %s стане дійсною не раніше %s."
@@ -1778,42 +1786,42 @@ msgstr "Інформація про безпеку для %s стане дійс
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: embed/mozilla/GtkNSSDialogs.cpp:434
+#: embed/mozilla/GtkNSSDialogs.cpp:433
 msgid "%a %d %b %Y"
 msgstr "%a %b %d %Y"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:445
+#: embed/mozilla/GtkNSSDialogs.cpp:444
 msgid "You should ensure that your computer's time is correct."
 msgstr "Слід перевірити коректність встановленого у комп'ютері часу"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:490
+#: embed/mozilla/GtkNSSDialogs.cpp:489
 #, c-format
 msgid "Cannot establish connection to %s."
-msgstr "Неможливо встановити з'єднання з %s."
+msgstr "Не вдається встановити з'єднання з %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:493
+#: embed/mozilla/GtkNSSDialogs.cpp:492
 #, c-format
 msgid "The certificate revocation list (CRL) from %s needs to be updated."
 msgstr "Список відкликаних сертифікатів (CRL) з %s потребує оновлення."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:498
+#: embed/mozilla/GtkNSSDialogs.cpp:497
 msgid "Please ask your system administrator for assistance."
 msgstr "Зверніться до системного адміністратора за допомогою."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:537
+#: embed/mozilla/GtkNSSDialogs.cpp:536
 msgid "_Trust CA"
 msgstr "_Довіряти CA"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:549
+#: embed/mozilla/GtkNSSDialogs.cpp:548
 #, c-format
 msgid "Trust %s to identify:"
 msgstr "Довіряти %s для ідентифікації:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:553
+#: embed/mozilla/GtkNSSDialogs.cpp:552
 msgid "Trust new Certificate Authority?"
 msgstr "Довіряти новому центру сертифікації?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:554
+#: embed/mozilla/GtkNSSDialogs.cpp:553
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1821,128 +1829,128 @@ msgstr ""
 "Перед встановленням довіри центру сертифікації (CA) необхідно перевірити "
 "автентичність сертифікату."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:564
+#: embed/mozilla/GtkNSSDialogs.cpp:563
 msgid "_Web sites"
 msgstr "_WWW сайти"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:569
+#: embed/mozilla/GtkNSSDialogs.cpp:568
 msgid "_Software developers"
 msgstr "_Розробники ПЗ"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:635
+#: embed/mozilla/GtkNSSDialogs.cpp:634
 msgid "Certificate already exists."
 msgstr "Сертифікат вже існує."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:636
+#: embed/mozilla/GtkNSSDialogs.cpp:635
 msgid "The certificate has already been imported."
 msgstr "Сертифікат вже був імпортований."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:755
+#: embed/mozilla/GtkNSSDialogs.cpp:754
 msgid "_Backup Certificate"
 msgstr "По_класти сертифікат у сховище"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:762
+#: embed/mozilla/GtkNSSDialogs.cpp:761
 msgid "Select password."
 msgstr "Вибір паролю."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:763
+#: embed/mozilla/GtkNSSDialogs.cpp:762
 msgid "Select a password to protect this certificate."
 msgstr "Виберіть пароль для захисту сертифікату."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:775 embed/mozilla/GtkNSSDialogs.cpp:877
+#: embed/mozilla/GtkNSSDialogs.cpp:774 embed/mozilla/GtkNSSDialogs.cpp:876
 msgid "_Password:"
 msgstr "_Пароль:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:789
+#: embed/mozilla/GtkNSSDialogs.cpp:788
 msgid "Con_firm password:"
 msgstr "Під_твердження паролю:"
 
 #. TODO: We need a better password quality meter
-#: embed/mozilla/GtkNSSDialogs.cpp:801
+#: embed/mozilla/GtkNSSDialogs.cpp:800
 msgid "Password quality:"
 msgstr "Якість паролю:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:858
+#: embed/mozilla/GtkNSSDialogs.cpp:857
 msgid "I_mport Certificate"
 msgstr "_Імпортувати сертифікат"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:866
+#: embed/mozilla/GtkNSSDialogs.cpp:865
 msgid "Password required."
 msgstr "Потрібен пароль."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:867
+#: embed/mozilla/GtkNSSDialogs.cpp:866
 msgid "Enter the password for this certificate."
 msgstr "Введіть пароль для цього сертифіката."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:945
+#: embed/mozilla/GtkNSSDialogs.cpp:944
 msgid "Certificate Revocation list successfully imported."
 msgstr "Список відкликаних сертифікатів успішно оновлено."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:946
+#: embed/mozilla/GtkNSSDialogs.cpp:945
 msgid "Certificate Revocation list (CRL) imported:"
 msgstr "Список відкликаних сертифікатів (CRL) імпортований:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:968
+#: embed/mozilla/GtkNSSDialogs.cpp:967
 msgid "Unit:"
 msgstr "Підрозділ:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:971
+#: embed/mozilla/GtkNSSDialogs.cpp:970
 msgid "Next Update:"
 msgstr "Наступне оновлення:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:998
+#: embed/mozilla/GtkNSSDialogs.cpp:997
 msgid "Not part of certificate"
 msgstr "Не є частиною сертифіката"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1266
+#: embed/mozilla/GtkNSSDialogs.cpp:1265
 msgid "Certificate Properties"
 msgstr "Властивості сертифіката"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1288
+#: embed/mozilla/GtkNSSDialogs.cpp:1287
 msgid "This certificate has been verified for the following uses:"
 msgstr "Цей сертифікат перевірений для наступних користувачів:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1291
+#: embed/mozilla/GtkNSSDialogs.cpp:1290
 msgid "Could not verify this certificate because it has been revoked."
-msgstr "Неможливо перевірити цей сертифікат, бо він відкликаний. "
+msgstr "Не вдається перевірити цей сертифікат, бо він відкликаний. "
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1294
+#: embed/mozilla/GtkNSSDialogs.cpp:1293
 msgid "Could not verify this certificate because it has expired."
-msgstr "Неможливо перевірити цей сертифікат, бо він застарів."
+msgstr "Не вдається перевірити цей сертифікат, бо він застарів."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1297
+#: embed/mozilla/GtkNSSDialogs.cpp:1296
 msgid "Could not verify this certificate because it is not trusted."
-msgstr "Неможливо перевірити цей сертифікат, бо він не є довіреним."
+msgstr "Не вдається перевірити цей сертифікат, бо він не є довіреним."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1300
+#: embed/mozilla/GtkNSSDialogs.cpp:1299
 msgid "Could not verify this certificate because the issuer is not trusted."
-msgstr "Неможливо перевірити цей сертифікат, бо його видавець не є довіреним."
+msgstr "Не вдається перевірити цей сертифікат, бо його видавець не є довіреним."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1303
+#: embed/mozilla/GtkNSSDialogs.cpp:1302
 msgid "Could not verify this certificate because the issuer is unknown."
-msgstr "Неможливо перевірити цей сертифікат, бо його видавець невідомий."
+msgstr "Не вдається перевірити цей сертифікат, бо його видавець невідомий."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1306
+#: embed/mozilla/GtkNSSDialogs.cpp:1305
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
-"Неможливо перевірити цей сертифікат, бо цент сертифікації неправильний."
+"Не вдається перевірити цей сертифікат, бо цент сертифікації неправильний."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1311
+#: embed/mozilla/GtkNSSDialogs.cpp:1310
 msgid "Could not verify this certificate for unknown reasons."
-msgstr "Неможливо перевірити цей сертифікат з невідомої причини."
+msgstr "Не вдається перевірити цей сертифікат з невідомої причини."
 
-#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:181
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:183
 msgid "Generating Private Key."
 msgstr "Створюється приватний ключ."
 
-#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:182
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:184
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
 msgstr ""
-"Зачекайте, доки створиться новий приватний ключ. Цей процес може зайняти декілька "
-"хвилин."
+"Зачекайте, доки створиться новий приватний ключ. Цей процес може зайняти "
+"декілька хвилин."
 
 #: embed/mozilla/mozilla-embed-single.cpp:501
 msgid ""
@@ -1971,7 +1979,7 @@ msgstr "uk-ua,uk"
 msgid "Print to"
 msgstr "Друкувати на"
 
-#: lib/eel-gconf-extensions.c:79
+#: lib/eel-gconf-extensions.c:82
 #, c-format
 msgid ""
 "GConf error:\n"
@@ -1980,7 +1988,7 @@ msgstr ""
 "Помилка GConf:\n"
 "  %s"
 
-#: lib/eel-gconf-extensions.c:83
+#: lib/eel-gconf-extensions.c:86
 #, c-format
 msgid ""
 "GConf error:\n"
@@ -1991,42 +1999,47 @@ msgstr ""
 "  %s\n"
 "Всі подальші повідомлення про помилки будуть виводитись лише на терміналі"
 
-#: lib/eel-gconf-extensions.c:87
+#: lib/eel-gconf-extensions.c:90
 msgid "GConf Error"
 msgstr "Помилка GConf"
 
-#: lib/egg/egg-editable-toolbar.c:504
+#: lib/egg/egg-editable-toolbar.c:510
 msgid "_Remove Toolbar"
-msgstr "_Видалити пенал"
+msgstr "В_идалити панель"
 
-#: lib/egg/egg-toolbar-editor.c:535
+#: lib/egg/egg-toolbar-editor.c:559
 msgid "Separator"
 msgstr "Розділювач"
 
-#: lib/egg/egg-toolbar-editor.c:565
+#: lib/egg/egg-toolbar-editor.c:589
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
 msgstr ""
-"Щоб додати елемент перетягніть його вгору на панель пеналу, щоб видалити - "
+"Щоб додати елемент перетягніть його вгору на панель, щоб видалити - "
 "перетягніть його з панелі у таблицю."
 
-#: lib/ephy-file-helpers.c:126
+#. The name of the default downloads folder
+#: lib/ephy-file-helpers.c:75 src/prefs-dialog.c:1107
+msgid "Downloads"
+msgstr "Завантаження"
+
+#: lib/ephy-file-helpers.c:164
 #, c-format
 msgid "Failed to find %s"
-msgstr "Неможливо знайти %s"
+msgstr "Не вдається знайти %s"
 
-#: lib/ephy-file-helpers.c:188
+#: lib/ephy-file-helpers.c:229
 #, c-format
 msgid "%s exists, please move it out of the way."
 msgstr "%s існує, спочатку видаліть його."
 
-#: lib/ephy-file-helpers.c:191
+#: lib/ephy-file-helpers.c:232
 #, c-format
 msgid "Failed to create directory %s."
-msgstr "Неможливо створити каталог %s."
+msgstr "Не вдається створити каталог %s."
 
-#: lib/ephy-gui.c:88
+#: lib/ephy-gui.c:90
 #, c-format
 msgid ""
 "File %s will be overwritten.\n"
@@ -2039,10 +2052,10 @@ msgstr ""
 "\n"
 "Бажаєте продовжити?"
 
-#: lib/ephy-gui.c:119
+#: lib/ephy-gui.c:121
 #, c-format
 msgid "Could not display help: %s"
-msgstr "Неможливо відобразити довідку: %s"
+msgstr "Не вдається відобразити довідку: %s"
 
 #: lib/ephy-langs.c:31 src/prefs-dialog.c:108
 msgid "Arabic"
@@ -2144,11 +2157,7 @@ msgstr "400%"
 msgid "Failed"
 msgstr "Помилка"
 
-#: lib/widgets/ephy-zoom-control.c:138
-msgid "_Zoom"
-msgstr "_Масштаб"
-
-#: src/bookmarks/ephy-bookmark-action.c:219
+#: src/bookmarks/ephy-bookmark-action.c:248
 #, c-format
 msgid "%s:"
 msgstr "%s:"
@@ -2158,17 +2167,17 @@ msgstr "%s:"
 msgid "%s Properties"
 msgstr "Властивості %s"
 
-#: src/bookmarks/ephy-bookmark-properties.c:352
+#: src/bookmarks/ephy-bookmark-properties.c:348
 #: src/bookmarks/ephy-new-bookmark.c:215
 msgid "_Title:"
 msgstr "За_головок:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:394
+#: src/bookmarks/ephy-bookmark-properties.c:390
 #: src/bookmarks/ephy-new-bookmark.c:238
 msgid "To_pics:"
 msgstr "_Категорії:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:403
+#: src/bookmarks/ephy-bookmark-properties.c:399
 msgid "_Show in bookmarks bar"
 msgstr "_Показувати у стовпчику закладок"
 
@@ -2178,14 +2187,14 @@ msgid "_View"
 msgstr "_Вигляд"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:164 src/ephy-history-window.c:154
-#: src/ephy-window.c:82
+#: src/ephy-window.c:83
 msgid "_Help"
 msgstr "_Довідка"
 
 #. File Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:168
 msgid "_New Topic"
-msgstr "_Нова категорія"
+msgstr "_Створити категорію"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:169
 msgid "Create a new topic"
@@ -2222,7 +2231,7 @@ msgstr "Перейменувати вибрану закладку або кат
 
 #: src/bookmarks/ephy-bookmarks-editor.c:179 src/ephy-history-window.c:164
 msgid "_Delete"
-msgstr "Ви_далити"
+msgstr "В_идалити"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:180
 msgid "Delete the selected bookmark or topic"
@@ -2243,10 +2252,10 @@ msgstr "_Імпортувати закладки..."
 #: src/bookmarks/ephy-bookmarks-editor.c:186
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr ""
-"Імпортувати закладки з іншої програми перегляду тенет або файлу закладок"
+"Імпортувати закладки з іншої програми перегляду web або файлу закладок"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:188 src/ephy-history-window.c:170
-#: src/ephy-window.c:110
+#: src/ephy-window.c:111
 msgid "_Close"
 msgstr "_Закрити"
 
@@ -2256,63 +2265,63 @@ msgstr "Закрити вікно закладок"
 
 #. Edit Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:193 src/ephy-history-window.c:175
-#: src/ephy-window.c:121
+#: src/ephy-window.c:122
 msgid "Cu_t"
-msgstr "Ви_різати"
+msgstr "_Вирізати"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:194 src/ephy-history-window.c:176
-#: src/ephy-window.c:122
+#: src/ephy-window.c:123
 msgid "Cut the selection"
 msgstr "Вирізати вибране"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:196
 #: src/bookmarks/ephy-bookmarks-editor.c:987 src/ephy-history-window.c:178
-#: src/ephy-history-window.c:748 src/ephy-window.c:124
+#: src/ephy-history-window.c:748 src/ephy-window.c:125
 msgid "_Copy"
 msgstr "_Копіювати"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:197 src/ephy-history-window.c:179
-#: src/ephy-window.c:125
+#: src/ephy-window.c:126
 msgid "Copy the selection"
 msgstr "Копіювати вибране"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:199 src/ephy-history-window.c:181
-#: src/ephy-window.c:127
+#: src/ephy-window.c:128
 msgid "_Paste"
-msgstr "Вс_тавити"
+msgstr "Вст_авити"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:200 src/ephy-history-window.c:182
 msgid "Paste the clipboard"
 msgstr "Вставити у буфер обміну"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:202 src/ephy-history-window.c:184
-#: src/ephy-window.c:130
+#: src/ephy-window.c:131
 msgid "Select _All"
-msgstr "Вибрати _все"
+msgstr "Виді_лити все"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "Select all bookmarks or text"
-msgstr "Вибрати всі закладки або текст"
+msgstr "Виділити всі закладки або текст"
 
 #. Help Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:192
-#: src/ephy-window.c:221
+#: src/ephy-window.c:222
 msgid "_Contents"
-msgstr "В_міст"
+msgstr "_Зміст"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:208
 msgid "Display bookmarks help"
 msgstr "Відображувати вміст закладок"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:210 src/ephy-history-window.c:195
-#: src/ephy-window.c:224
+#: src/ephy-window.c:225
 msgid "_About"
-msgstr "_Про"
+msgstr "_Про програму"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:211 src/ephy-history-window.c:196
-#: src/ephy-window.c:225
+#: src/ephy-window.c:226
 msgid "Display credits for the web browser creators"
-msgstr "Показати подяки авторам переглядача тенет"
+msgstr "Показати подяки авторам web-переглядача"
 
 #. File Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:219
@@ -2386,26 +2395,26 @@ msgstr "Відкрити у новій в_кладці"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:983 src/ephy-history-window.c:744
 msgid "_Copy Address"
-msgstr "К_опіювати адресу"
+msgstr "_Копіювати адресу"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1226 src/ephy-history-window.c:1038
+#: src/bookmarks/ephy-bookmarks-editor.c:1224 src/ephy-history-window.c:1038
 msgid "_Search:"
-msgstr "_Пошук:"
+msgstr "З_найти:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1358
-#: src/bookmarks/ephy-topic-action.c:621 src/ephy-window.c:967
+#: src/bookmarks/ephy-bookmarks-editor.c:1354
+#: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:953
 msgid "Bookmarks"
 msgstr "Закладки"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1441
+#: src/bookmarks/ephy-bookmarks-editor.c:1437
 msgid "Topics"
 msgstr "Категорії"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1503 src/ephy-history-window.c:1317
+#: src/bookmarks/ephy-bookmarks-editor.c:1499 src/ephy-history-window.c:1318
 msgid "Title"
 msgstr "Заголовок"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1510 src/ephy-history-window.c:1323
+#: src/bookmarks/ephy-bookmarks-editor.c:1506 src/ephy-history-window.c:1324
 msgid "Address"
 msgstr "Адреса"
 
@@ -2413,44 +2422,44 @@ msgstr "Адреса"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: src/bookmarks/ephy-bookmarks.c:84
+#: src/bookmarks/ephy-bookmarks.c:83
 msgid "Search the web"
-msgstr "Пошук у мережі"
+msgstr "Знайти у мережі"
 
-#: src/bookmarks/ephy-bookmarks.c:84
+#: src/bookmarks/ephy-bookmarks.c:83
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: src/bookmarks/ephy-bookmarks.c:90
+#: src/bookmarks/ephy-bookmarks.c:89
 msgid "Entertainment"
 msgstr "Розваги"
 
-#: src/bookmarks/ephy-bookmarks.c:91
+#: src/bookmarks/ephy-bookmarks.c:90
 msgid "News"
 msgstr "Новини"
 
-#: src/bookmarks/ephy-bookmarks.c:92
+#: src/bookmarks/ephy-bookmarks.c:91
 msgid "Shopping"
 msgstr "Купівля"
 
-#: src/bookmarks/ephy-bookmarks.c:93
+#: src/bookmarks/ephy-bookmarks.c:92
 msgid "Sports"
 msgstr "Спорт"
 
-#: src/bookmarks/ephy-bookmarks.c:94
+#: src/bookmarks/ephy-bookmarks.c:93
 msgid "Travel"
 msgstr "Подорожі"
 
-#: src/bookmarks/ephy-bookmarks.c:95
+#: src/bookmarks/ephy-bookmarks.c:94
 msgid "Work"
 msgstr "Робота"
 
-#: src/bookmarks/ephy-bookmarks.c:622
+#: src/bookmarks/ephy-bookmarks.c:680
 msgid "Most Visited"
 msgstr "Найбільш відвідувані"
 
-#: src/bookmarks/ephy-bookmarks.c:639
+#: src/bookmarks/ephy-bookmarks.c:697
 msgid "Not Categorized"
 msgstr "Не розкладені по категоріям"
 
@@ -2492,7 +2501,7 @@ msgstr "Інші кодові сторінка"
 msgid "_Automatic"
 msgstr "_Автоматично"
 
-#: src/ephy-go-action.c:80 src/ephy-go-action.c:97 src/toolbar.c:409
+#: src/ephy-go-action.c:73 src/toolbar.c:409
 msgid "Go"
 msgstr "Перейти"
 
@@ -2538,15 +2547,15 @@ msgstr "Показати довідку з історії"
 
 #: src/ephy-history-window.c:213
 msgid "_Address"
-msgstr "_Адреса"
+msgstr "Ад_реса"
 
 #: src/ephy-history-window.c:214
 msgid "Show only the address column"
 msgstr "Показувати лише стовпчик адрес"
 
 #: src/ephy-history-window.c:246
-msgid "Clear history"
-msgstr "Очистити історію"
+msgid "Clear History"
+msgstr "Очистка історії"
 
 #: src/ephy-history-window.c:278
 msgid "C_lear"
@@ -2577,77 +2586,78 @@ msgstr[0] "Останній %d день"
 msgstr[1] "Останні %d дні"
 msgstr[2] "Останні %d днів"
 
-#: src/ephy-history-window.c:1191
+#: src/ephy-history-window.c:1192
 msgid "History"
 msgstr "Історія"
 
-#: src/ephy-history-window.c:1263
+#: src/ephy-history-window.c:1264
 msgid "Sites"
 msgstr "Сайти"
 
-#: src/ephy-main.c:52
+#: src/ephy-main.c:56
 msgid "Open a new tab in an existing Epiphany window"
 msgstr "Відкрити нову вкладку у поточному вікні Epiphany"
 
-#: src/ephy-main.c:55
+#: src/ephy-main.c:59
 msgid "Run Epiphany in full screen mode"
 msgstr "Запустити Epiphany у повноекранному режимі"
 
-#: src/ephy-main.c:58
+#: src/ephy-main.c:62
 msgid "Load the given session file"
 msgstr "Звантажити вказаний файл сеансу"
 
-#: src/ephy-main.c:59 src/ephy-main.c:65
+#: src/ephy-main.c:63 src/ephy-main.c:69
 msgid "FILE"
 msgstr "ФАЙЛ"
 
-#: src/ephy-main.c:61
+#: src/ephy-main.c:65
 msgid "Add a bookmark (don't open any window)"
 msgstr "Додати закладку (не відкриваючи ніяких вікон)"
 
-#: src/ephy-main.c:62
+#: src/ephy-main.c:66
 msgid "URL"
 msgstr "URL"
 
-#: src/ephy-main.c:64
+#: src/ephy-main.c:68
 msgid "Import bookmarks from the given file"
 msgstr "Імпортувати закладки з файлу закладок"
 
-#: src/ephy-main.c:67
+#: src/ephy-main.c:71
 msgid "Launch the bookmarks editor"
 msgstr "Запустити менеджер закладок"
 
-#: src/ephy-main.c:70
+#: src/ephy-main.c:74
 msgid "Used internally by the bonobo interface"
 msgstr "Для внутрішнього використання інтерфейсом bonobo"
 
-#: src/ephy-main.c:100
+#: src/ephy-main.c:109
 msgid "Epiphany Web Browser"
-msgstr "Переглядач тенет Epiphany"
+msgstr "Переглядач web Epiphany"
 
-#: src/ephy-main.c:104
+#: src/ephy-main.c:113
 msgid "Ephy"
 msgstr "Ephy"
 
-#: src/ephy-session.c:299
+#: src/ephy-session.c:301
 msgid "Crash Recovery"
 msgstr "Відновлення після збою"
 
-#: src/ephy-session.c:301
+#: src/ephy-session.c:303
 msgid "_Don't Recover"
 msgstr "_Не відновлювати"
 
-#: src/ephy-session.c:302
+#: src/ephy-session.c:304
 msgid "_Recover"
 msgstr "_Відновити"
 
-#: src/ephy-session.c:331
+#: src/ephy-session.c:335
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr ""
-"Здається програма Epiphany останнього разу завершилась аварійно або було знищено."
+"Здається програма Epiphany останнього разу завершилась аварійно або було "
+"знищено."
 
-#: src/ephy-session.c:337
+#: src/ephy-session.c:341
 msgid "You can recover the opened tabs and windows."
 msgstr "Ви можете відновити відкриті минулого разу вкладки та вікна."
 
@@ -2658,48 +2668,49 @@ msgid ""
 "files."
 msgstr ""
 "Bonobo не може знайти файл GNOME_Epiphany_Automation.server. Можете  "
-"скористатись bonobo-activation-sysconf для налаштовування шляху пошуку файлів bonobo серверів."
+"скористатись bonobo-activation-sysconf для налаштовування шляху пошуку "
+"файлів bonobo серверів."
 
 #: src/ephy-shell.c:364
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to register the automation server"
 msgstr ""
-"Наразі Epiphany неможливо використовувати, через несподівану помилку від Bonobo "
-"при реєстрації сервера автоматизації"
+"Наразі Epiphany не вдається використовувати, через несподівану помилку від "
+"Bonobo при реєстрації сервера автоматизації"
 
 #: src/ephy-shell.c:387
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
 msgstr ""
-"Наразі Epiphany неможливо використовувати, через несподівану помилку від Bonobo "
-"при спробі знайти об'єкт автоматизації."
+"Наразі Epiphany не вдається використовувати, через несподівану помилку від "
+"Bonobo при спробі знайти об'єкт автоматизації."
 
-#: src/ephy-tab.c:326 src/ephy-tab.c:1140 src/ephy-tab.c:1322
+#: src/ephy-tab.c:367 src/ephy-tab.c:1200 src/ephy-tab.c:1370
 msgid "Blank page"
 msgstr "Чиста сторінка"
 
-#: src/ephy-tab.c:747
+#: src/ephy-tab.c:772
 msgid "site"
 msgstr "сайт"
 
-#: src/ephy-tab.c:771
+#: src/ephy-tab.c:796
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Перехід до %s..."
 
-#: src/ephy-tab.c:775
+#: src/ephy-tab.c:800
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Перенесення даних з %s..."
 
-#: src/ephy-tab.c:779
+#: src/ephy-tab.c:804
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Очікування авторизації від %s..."
 
-#: src/ephy-tab.c:787
+#: src/ephy-tab.c:812
 #, c-format
 msgid "Loading %s..."
 msgstr "Звантаження %s..."
@@ -2713,469 +2724,473 @@ msgid "_Go"
 msgstr "Пере_йти"
 
 #: src/ephy-window.c:81
+msgid "T_ools"
+msgstr "С_ервіс"
+
+#: src/ephy-window.c:82
 msgid "_Tabs"
 msgstr "В_кладки"
 
 #. File menu
-#: src/ephy-window.c:86
-msgid "_New Window"
-msgstr "_Нове вікно"
-
 #: src/ephy-window.c:87
+msgid "_New Window"
+msgstr "_Створити вікно"
+
+#: src/ephy-window.c:88
 msgid "Open a new window"
 msgstr "Відкрити нове вікно"
 
-#: src/ephy-window.c:89
+#: src/ephy-window.c:90
 msgid "New _Tab"
 msgstr "Нова в_кладка"
 
-#: src/ephy-window.c:90
+#: src/ephy-window.c:91
 msgid "Open a new tab"
 msgstr "Відкрити у новій вкладці"
 
-#: src/ephy-window.c:92
+#: src/ephy-window.c:93
 msgid "_Open..."
 msgstr "_Відкрити..."
 
-#: src/ephy-window.c:93
+#: src/ephy-window.c:94
 msgid "Open a file"
 msgstr "Відкрити файл"
 
-#: src/ephy-window.c:95
+#: src/ephy-window.c:96
 msgid "Save _As..."
 msgstr "Зберегти _як..."
 
-#: src/ephy-window.c:96
+#: src/ephy-window.c:97
 msgid "Save the current page"
 msgstr "Зберегти поточну сторінку"
 
-#: src/ephy-window.c:98
-msgid "Print Set_up..."
-msgstr "На_лаштовування друку..."
-
 #: src/ephy-window.c:99
-msgid "Setup the page settings for printing"
-msgstr "Налаштовування параметрів сторінки для друку"
+msgid "Print Set_up..."
+msgstr "Пара_метри принтера..."
 
-#: src/ephy-window.c:101
-msgid "Print Pre_view"
-msgstr "Закрити пере_гляд друку"
+#: src/ephy-window.c:100
+msgid "Setup the page settings for printing"
+msgstr "Настройка параметрів сторінки для друку"
 
 #: src/ephy-window.c:102
-msgid "Print preview"
-msgstr "Перегляд друку"
+msgid "Print Pre_view"
+msgstr "_Попередній перегляд"
 
-#: src/ephy-window.c:105
+#: src/ephy-window.c:103
+msgid "Print preview"
+msgstr "Попередній перегляд друку"
+
+#: src/ephy-window.c:106
 msgid "Print the current page"
 msgstr "Надрукувати поточну сторінку"
 
-#: src/ephy-window.c:107
-msgid "S_end To..."
-msgstr "Наді_слати до..."
-
 #: src/ephy-window.c:108
+msgid "S_end To..."
+msgstr "_Надіслати до..."
+
+#: src/ephy-window.c:109
 msgid "Send a link of the current page"
 msgstr "Надіслати адресу поточної сторінки "
 
-#: src/ephy-window.c:111
+#: src/ephy-window.c:112
 msgid "Close this window"
 msgstr "Закрити це вікно"
 
 #. Edit menu
-#: src/ephy-window.c:115
+#: src/ephy-window.c:116
 msgid "_Undo"
 msgstr "_Скасувати"
 
-#: src/ephy-window.c:116
+#: src/ephy-window.c:117
 msgid "Undo the last action"
 msgstr "Скасувати останню дію"
 
-#: src/ephy-window.c:118
-msgid "Re_do"
-msgstr "Поверн_ути"
-
 #: src/ephy-window.c:119
+msgid "Re_do"
+msgstr "Повт_орити"
+
+#: src/ephy-window.c:120
 msgid "Redo the last undone action"
 msgstr "Повторити останню скасовану дію"
 
-#: src/ephy-window.c:128
+#: src/ephy-window.c:129
 msgid "Paste clipboard"
 msgstr "Вставити з буферу обміну"
 
-#: src/ephy-window.c:131
+#: src/ephy-window.c:132
 msgid "Select the entire page"
 msgstr "Вибрати всю сторінку"
 
-#: src/ephy-window.c:134
+#: src/ephy-window.c:135
 msgid "Find a word or phrase in the page"
 msgstr "Знайти на сторінці слово або фразу "
 
-#: src/ephy-window.c:136
-msgid "Find Ne_xt"
-msgstr "Знайти _наступне"
-
 #: src/ephy-window.c:137
+msgid "Find Ne_xt"
+msgstr "Знайти нас_тупне"
+
+#: src/ephy-window.c:138
 msgid "Find next occurrence of the word or phrase"
 msgstr "Знайти наступне місце знаходження слова чи фрази"
 
-#: src/ephy-window.c:139
-msgid "Find Pre_vious"
-msgstr "Зн_айти попереднє"
-
 #: src/ephy-window.c:140
+msgid "Find Pre_vious"
+msgstr "Знайти поп_ереднє"
+
+#: src/ephy-window.c:141
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Знайти попереднє місце знаходження слова чи фрази"
 
-#: src/ephy-window.c:142
+#: src/ephy-window.c:143
 msgid "P_ersonal Data"
 msgstr "_Особисті дані"
 
-#: src/ephy-window.c:143
+#: src/ephy-window.c:144
 msgid "View and remove cookies and passwords"
 msgstr "Переглянути чи видалити cookies та паролі"
 
-#: src/ephy-window.c:145
-msgid "T_oolbars"
-msgstr "П_енали"
-
 #: src/ephy-window.c:146
-msgid "Customize toolbars"
-msgstr "Налаштувати пенал"
+msgid "T_oolbars"
+msgstr "_Панелі"
 
-#: src/ephy-window.c:148
-msgid "P_references"
-msgstr "В_подобання"
+#: src/ephy-window.c:147
+msgid "Customize toolbars"
+msgstr "Настройка панелей"
 
 #: src/ephy-window.c:149
+msgid "P_references"
+msgstr "Н_астройка"
+
+#: src/ephy-window.c:150
 msgid "Configure the web browser"
-msgstr "Налаштувати переглядач тенет"
+msgstr "Настройка web-переглядача"
 
 #. View menu
-#: src/ephy-window.c:153
+#: src/ephy-window.c:154
 msgid "_Stop"
 msgstr "_Зупинити"
 
-#: src/ephy-window.c:154
+#: src/ephy-window.c:155
 msgid "Stop current data transfer"
 msgstr "Зупинити поточну передачу даних"
 
-#: src/ephy-window.c:156
+#: src/ephy-window.c:157
 msgid "_Reload"
 msgstr "Пере_вантажити"
 
-#: src/ephy-window.c:157
+#: src/ephy-window.c:158
 msgid "Display the latest content of the current page"
 msgstr "Показати найостанніший вміст поточної сторінки"
 
-#: src/ephy-window.c:159
+#: src/ephy-window.c:160
 msgid "Zoom _In"
 msgstr "З_більшити"
 
-#: src/ephy-window.c:160
+#: src/ephy-window.c:161
 msgid "Increase the text size"
 msgstr "Зменшити розмір тексту"
 
-#: src/ephy-window.c:162
+#: src/ephy-window.c:163
 msgid "Zoom _Out"
 msgstr "З_меншити"
 
-#: src/ephy-window.c:163
+#: src/ephy-window.c:164
 msgid "Decrease the text size"
 msgstr "Зменшити розмір тексту"
 
-#: src/ephy-window.c:165
+#: src/ephy-window.c:166
 msgid "_Normal Size"
 msgstr "Зви_чайний розмір"
 
-#: src/ephy-window.c:166
+#: src/ephy-window.c:167
 msgid "Use the normal text size"
 msgstr "Встановити звичайний розмір тексту"
 
-#: src/ephy-window.c:168
-msgid "Text _Encoding"
-msgstr "Кодування тексту"
-
 #: src/ephy-window.c:169
+msgid "Text _Encoding"
+msgstr "К_одування тексту"
+
+#: src/ephy-window.c:170
 msgid "Change the text encoding"
 msgstr "Зміна кодової сторінки тексту"
 
-#: src/ephy-window.c:171
+#: src/ephy-window.c:172
 msgid "_Page Source"
 msgstr "Вихідний текст с_торінки"
 
-#: src/ephy-window.c:172
+#: src/ephy-window.c:173
 msgid "View the source code of the page"
 msgstr "Показати вихідний текст сторінки"
 
 #. Bookmarks menu
-#: src/ephy-window.c:176
+#: src/ephy-window.c:177
 msgid "_Add Bookmark..."
 msgstr "_Додати закладку..."
 
-#: src/ephy-window.c:177 src/ephy-window.c:256
+#: src/ephy-window.c:178 src/ephy-window.c:257
 msgid "Add a bookmark for the current page"
 msgstr "Додати закладку до поточної сторінки"
 
-#: src/ephy-window.c:179
-msgid "_Edit Bookmarks"
-msgstr "Р_едагувати закладки"
-
 #: src/ephy-window.c:180
+msgid "_Edit Bookmarks"
+msgstr "_Правка закладок"
+
+#: src/ephy-window.c:181
 msgid "Open the bookmarks window"
 msgstr "Відкрити вікно редагування закладок"
 
 #. Go menu
-#: src/ephy-window.c:184
-msgid "_Back"
-msgstr "_Назад"
-
 #: src/ephy-window.c:185
+msgid "_Back"
+msgstr "Н_азад"
+
+#: src/ephy-window.c:186
 msgid "Go to the previous visited page"
 msgstr "Перейти до попередньої відвіданої сторінки"
 
-#: src/ephy-window.c:187
-msgid "_Forward"
-msgstr "_Вперед"
-
 #: src/ephy-window.c:188
+msgid "_Forward"
+msgstr "В_перед"
+
+#: src/ephy-window.c:189
 msgid "Go to the next visited page"
 msgstr "Перейти до наступної відвіданої сторінки"
 
-#: src/ephy-window.c:191
+#: src/ephy-window.c:192
 msgid "Go up one level"
 msgstr "Перейти рівнем вище"
 
-#: src/ephy-window.c:193
+#: src/ephy-window.c:194
 msgid "_Home"
 msgstr "_Додому"
 
-#: src/ephy-window.c:194
+#: src/ephy-window.c:195
 msgid "Go to the home page"
 msgstr "Перейти на домашню сторінку"
 
-#: src/ephy-window.c:196
-msgid "_Location..."
-msgstr "_Рядок вводу..."
-
 #: src/ephy-window.c:197
+msgid "_Location..."
+msgstr "_Адреса..."
+
+#: src/ephy-window.c:198
 msgid "Go to a specified location"
 msgstr "Перейти у вказане місце"
 
-#: src/ephy-window.c:199
+#: src/ephy-window.c:200
 msgid "H_istory"
 msgstr "_Історія"
 
-#: src/ephy-window.c:200
+#: src/ephy-window.c:201
 msgid "Open the history window"
 msgstr "Відкрити файл історії"
 
 #. Tabs menu
-#: src/ephy-window.c:204
+#: src/ephy-window.c:205
 msgid "_Previous Tab"
 msgstr "_Попередня вкладка"
 
-#: src/ephy-window.c:205
+#: src/ephy-window.c:206
 msgid "Activate previous tab"
 msgstr "Активувати попередню вкладку"
 
-#: src/ephy-window.c:207
+#: src/ephy-window.c:208
 msgid "_Next Tab"
 msgstr "_Наступна вкладка"
 
-#: src/ephy-window.c:208
+#: src/ephy-window.c:209
 msgid "Activate next tab"
 msgstr "Активувати наступну вкладку"
 
-#: src/ephy-window.c:210
+#: src/ephy-window.c:211
 msgid "Move Tab _Left"
 msgstr "Перемістити вкладку _ліворуч"
 
-#: src/ephy-window.c:211
+#: src/ephy-window.c:212
 msgid "Move current tab to left"
 msgstr "Перемістити поточну вкладку ліворуч"
 
-#: src/ephy-window.c:213
+#: src/ephy-window.c:214
 msgid "Move Tab _Right"
 msgstr "Перемістити вкладку п_раворуч"
 
-#: src/ephy-window.c:214
+#: src/ephy-window.c:215
 msgid "Move current tab to right"
 msgstr "Перемістити поточну вкладку праворуч"
 
-#: src/ephy-window.c:216
+#: src/ephy-window.c:217
 msgid "_Detach Tab"
 msgstr "_Відкріпити вкладку"
 
-#: src/ephy-window.c:217
+#: src/ephy-window.c:218
 msgid "Detach current tab"
 msgstr "Відкріпити поточну вкладку"
 
-#: src/ephy-window.c:222
+#: src/ephy-window.c:223
 msgid "Display web browser help"
 msgstr "Відобразити довідку переглядача"
 
 #. View Menu
-#: src/ephy-window.c:233
-msgid "_Toolbar"
-msgstr "_Пенал"
-
 #: src/ephy-window.c:234
-msgid "Show or hide toolbar"
-msgstr "Показати чи приховати пенал"
+msgid "_Toolbar"
+msgstr "_Панель"
 
-#: src/ephy-window.c:236
+#: src/ephy-window.c:235
+msgid "Show or hide toolbar"
+msgstr "Показати чи приховати панель"
+
+#: src/ephy-window.c:237
 msgid "_Bookmarks Bar"
 msgstr "Панель за_кладок"
 
-#: src/ephy-window.c:237
+#: src/ephy-window.c:238
 msgid "Show or hide bookmarks bar"
 msgstr "Показати чи приховати панель закладок"
 
-#: src/ephy-window.c:239
-msgid "St_atusbar"
-msgstr "Панель _стану"
-
 #: src/ephy-window.c:240
+msgid "St_atusbar"
+msgstr "Рядок _стану"
+
+#: src/ephy-window.c:241
 msgid "Show or hide statusbar"
 msgstr "Показати чи приховати панель стану"
 
-#: src/ephy-window.c:242
+#: src/ephy-window.c:243
 msgid "_Fullscreen"
 msgstr "_На весь екран"
 
-#: src/ephy-window.c:243
+#: src/ephy-window.c:244
 msgid "Browse at full screen"
 msgstr "Перемикнутись на повноекранний режим"
 
-#: src/ephy-window.c:245
+#: src/ephy-window.c:246
 msgid "Selection Caret"
 msgstr "Вибір знаку вставки"
 
 #. Document
-#: src/ephy-window.c:253
+#: src/ephy-window.c:254
 msgid "_Save Background As..."
-msgstr "_Зберегти тло як..."
+msgstr "З_берегти тло як..."
 
-#: src/ephy-window.c:255
+#: src/ephy-window.c:256
 msgid "Add Boo_kmark..."
 msgstr "Додати закладку..."
 
 #. Framed document
-#: src/ephy-window.c:260
+#: src/ephy-window.c:261
 msgid "_Open Frame"
 msgstr "_Відкрити кадр"
 
-#: src/ephy-window.c:262
+#: src/ephy-window.c:263
 msgid "Open Frame in _New Window"
 msgstr "Відкрити кадр у _новому вікні"
 
-#: src/ephy-window.c:264
+#: src/ephy-window.c:265
 msgid "Open Frame in New _Tab"
-msgstr "Відкрити кадр у новій вкладці"
+msgstr "Відкрити кадр у новій в_кладці"
 
 #. Links
-#: src/ephy-window.c:268
+#: src/ephy-window.c:269
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: src/ephy-window.c:270
+#: src/ephy-window.c:271
 msgid "Open Link in _New Window"
 msgstr "Відкрити посилання у _новому вікні"
 
-#: src/ephy-window.c:272
+#: src/ephy-window.c:273
 msgid "Open Link in New _Tab"
 msgstr "Відкрити посилання у новій в_кладці"
 
-#: src/ephy-window.c:274
+#: src/ephy-window.c:275
 msgid "_Download Link"
 msgstr "За_вантажити посилання"
 
-#: src/ephy-window.c:276
+#: src/ephy-window.c:277
 msgid "_Save Link As..."
 msgstr "З_берегти посилання як..."
 
-#: src/ephy-window.c:278
+#: src/ephy-window.c:279
 msgid "_Bookmark Link..."
 msgstr "Занести посилання у зак_ладки"
 
-#: src/ephy-window.c:280
+#: src/ephy-window.c:281
 msgid "_Copy Link Address"
-msgstr "К_опіювати адресу посилання"
+msgstr "_Копіювати адресу посилання"
 
 #. Images
-#: src/ephy-window.c:284
+#: src/ephy-window.c:285
 msgid "Open _Image"
 msgstr "Відкрити з_ображення"
 
-#: src/ephy-window.c:286
+#: src/ephy-window.c:287
 msgid "Open Image in New _Window"
 msgstr "Відкрити зображення у новому _вікні"
 
-#: src/ephy-window.c:288
+#: src/ephy-window.c:289
 msgid "Open Image in New T_ab"
 msgstr "Відкрити зображення у новій в_кладці"
 
-#: src/ephy-window.c:290
+#: src/ephy-window.c:291
 msgid "_Save Image As..."
-msgstr "_Зберегти зображення як..."
+msgstr "З_берегти зображення як..."
 
-#: src/ephy-window.c:292
+#: src/ephy-window.c:293
 msgid "_Use Image As Background"
 msgstr "_Використовувати зображення як тло"
 
-#: src/ephy-window.c:294
+#: src/ephy-window.c:295
 msgid "Copy I_mage Address"
 msgstr "Копіювати адресу _зображення"
 
-#: src/ephy-window.c:598
+#: src/ephy-window.c:584
 msgid "Exit Fullscreen"
 msgstr "Вийти з повноекранного режиму"
 
-#: src/ephy-window.c:672
+#: src/ephy-window.c:658
 msgid "_Close document"
 msgstr "_Закрити документ"
 
-#: src/ephy-window.c:699
+#: src/ephy-window.c:685
 msgid "There are unsubmitted changes to form elements."
 msgstr "Є не відправлені зміни у елементах форми."
 
-#: src/ephy-window.c:700
+#: src/ephy-window.c:686
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Якщо ви закриєте документ, цю інформацію буде втрачено."
 
-#: src/ephy-window.c:957 src/window-commands.c:390
+#: src/ephy-window.c:943 src/window-commands.c:395
 msgid "Open"
 msgstr "Відкрити"
 
-#: src/ephy-window.c:959 src/window-commands.c:415
+#: src/ephy-window.c:945 src/window-commands.c:420
 msgid "Save As"
 msgstr "Зберегти як"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:949
 msgid "Bookmark"
 msgstr "Закладка"
 
-#: src/ephy-window.c:1149
+#: src/ephy-window.c:1135
 msgid "Insecure"
 msgstr "Без захисту"
 
-#: src/ephy-window.c:1152
+#: src/ephy-window.c:1138
 msgid "Broken"
 msgstr "Пошкоджено"
 
-#: src/ephy-window.c:1155
+#: src/ephy-window.c:1141
 msgid "Medium"
 msgstr "Середній"
 
-#: src/ephy-window.c:1159
+#: src/ephy-window.c:1145
 msgid "Low"
 msgstr "Низький"
 
-#: src/ephy-window.c:1163
+#: src/ephy-window.c:1149
 msgid "High"
 msgstr "Високий"
 
-#: src/ephy-window.c:1173
+#: src/ephy-window.c:1159
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3184,7 +3199,7 @@ msgstr ""
 "Рівень безпеки: %s\n"
 "%s"
 
-#: src/ephy-window.c:1179
+#: src/ephy-window.c:1165
 #, c-format
 msgid "Security level: %s"
 msgstr "Рівень безпеки: %s"
@@ -3452,28 +3467,24 @@ msgstr "В'єтнамська"
 msgid "Walloon"
 msgstr "Валлонська"
 
-#: src/prefs-dialog.c:1055
+#: src/prefs-dialog.c:1057
 #, c-format
 msgid "Custom [%s]"
 msgstr "Інша [%s]"
-
-#: src/prefs-dialog.c:1091 src/prefs-dialog.c:1116
-msgid "Downloads"
-msgstr "Завантаження"
-
-#: src/prefs-dialog.c:1102
-msgid "Desktop"
-msgstr "Стільниця"
 
 #. Note that this does NOT refer to the home page but to a
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1111
+#: src/prefs-dialog.c:1102
 msgid "Home"
 msgstr "Додому"
 
-#: src/prefs-dialog.c:1325
+#: src/prefs-dialog.c:1111
+msgid "Desktop"
+msgstr "Стільниця"
+
+#: src/prefs-dialog.c:1322
 msgid "Select a directory"
 msgstr "Вибір каталогу"
 
@@ -3508,7 +3519,7 @@ msgstr "Поле вводу адреси"
 #: src/toolbar.c:377
 msgid "Enter a web address to open, or a phrase to search for on the web"
 msgstr ""
-"Введіть адресу сторінки, яку слід відкрити, або фразу для пошуку у тенетах"
+"Введіть адресу сторінки, яку слід відкрити, або фразу для пошуку у Інтернет"
 
 #: src/toolbar.c:389
 msgid "Zoom"
@@ -3520,30 +3531,30 @@ msgstr "Скоригувати розмір тексту"
 
 #: src/toolbar.c:401
 msgid "Favicon"
-msgstr "Улюбл.пікт"
+msgstr "Улюбл.значок"
 
 #: src/toolbar.c:411
 msgid "Go to the address entered in the address entry"
 msgstr "Перейти за адресою введеною у полі вводу сторінки"
 
-#: src/window-commands.c:166
+#: src/window-commands.c:168
 msgid "Check this out!"
 msgstr "Перевірте це!"
 
-#: src/window-commands.c:876
+#: src/window-commands.c:881
 msgid "Toolbar Editor"
-msgstr "Редактор пеналів"
+msgstr "Редактор панелей"
 
-#: src/window-commands.c:898
+#: src/window-commands.c:903
 msgid "_Add a New Toolbar"
-msgstr "_Додати новий пенал"
+msgstr "_Додати нову панель"
 
 #. Translator credits
-#: src/window-commands.c:950
-msgid "translator_credits"
+#: src/window-commands.c:954
+msgid "translator-credits"
 msgstr "Максим Дзюманенко <mvd@mylinux.com.ua>"
 
-#: src/window-commands.c:980
+#: src/window-commands.c:984
 msgid "A GNOME browser based on Mozilla"
-msgstr "Переглядач тенет GNOME оснований на Mozilla"
+msgstr "Переглядач web GNOME оснований на Mozilla"
 
