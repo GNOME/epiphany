@@ -51,7 +51,7 @@ MozGlobalHistory::~MozGlobalHistory ()
 NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aToplevel)
 {
 	nsresult rv;
-	NS_ENSURE_ARG_POINTER(aURI);
+	NS_ENSURE_ARG (aURI);
 
 	PRBool isJavascript;
 	rv = aURI->SchemeIs("javascript", &isJavascript);
@@ -104,7 +104,7 @@ NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aT
 /* boolean isVisited (in nsIURI aURI); */
 NS_IMETHODIMP MozGlobalHistory::IsVisited(nsIURI *aURI, PRBool *_retval)
 {
-	NS_ENSURE_ARG_POINTER(aURI);
+	NS_ENSURE_ARG (aURI);
 
 	nsCAutoString spec;
 	aURI->GetSpec(spec);
@@ -117,12 +117,14 @@ NS_IMETHODIMP MozGlobalHistory::IsVisited(nsIURI *aURI, PRBool *_retval)
 /* void setPageTitle (in nsIURI aURI, in AString aTitle); */
 NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI, const nsAString & aTitle)
 {
-	NS_ENSURE_ARG_POINTER(aURI);
+	NS_ENSURE_ARG (aURI);
 
 	const nsACString &title = NS_ConvertUTF16toUTF8(aTitle);
 
+	nsresult rv;
 	nsCAutoString spec;
-	aURI->GetSpec(spec);
+	rv = aURI->GetSpec(spec);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 	
 	ephy_history_set_page_title (mGlobalHistory, spec.get(),
 				     PromiseFlatCString(title).get());
@@ -131,9 +133,24 @@ NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI, const nsAString & aTi
 }
 
 /* void hidePage (in nsIURI url); */
-NS_IMETHODIMP MozGlobalHistory::HidePage(nsIURI *url)
+NS_IMETHODIMP MozGlobalHistory::HidePage(nsIURI *aURI)
 {
-	return NS_ERROR_NOT_IMPLEMENTED;
+        NS_ENSURE_ARG (aURI);
+
+	nsresult rv;
+        nsCAutoString spec;
+        rv = aURI->GetSpec(spec);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+	EphyNode *page;
+	page = ephy_history_get_page (mGlobalHistory, spec.get());
+
+	if (page)
+	{
+		ephy_node_unref (page);
+	}
+
+	return NS_OK;
 }
 
 #else
@@ -141,6 +158,8 @@ NS_IMETHODIMP MozGlobalHistory::HidePage(nsIURI *url)
 /* void addPage (in string aURL); */
 NS_IMETHODIMP MozGlobalHistory::AddPage (const char *aURL)
 {
+	NS_ENSURE_ARG (aURL);
+
 	ephy_history_add_page (mGlobalHistory, aURL);
 	
 	return NS_OK;
@@ -149,6 +168,8 @@ NS_IMETHODIMP MozGlobalHistory::AddPage (const char *aURL)
 /* boolean isVisited (in string aURL); */
 NS_IMETHODIMP MozGlobalHistory::IsVisited (const char *aURL, PRBool *_retval)
 {
+	NS_ENSURE_ARG (aURL);
+
 	*_retval = ephy_history_is_page_visited (mGlobalHistory, aURL);
 	
 	return NS_OK;
@@ -158,6 +179,7 @@ NS_IMETHODIMP MozGlobalHistory::IsVisited (const char *aURL, PRBool *_retval)
 NS_IMETHODIMP MozGlobalHistory::SetPageTitle (const char *aURL, 
 					      const PRUnichar *aTitle)
 {
+	NS_ENSURE_ARG (aURL);
 	const nsACString &title = NS_ConvertUCS2toUTF8 (aTitle);
 	
 	ephy_history_set_page_title (mGlobalHistory, aURL, PromiseFlatCString(title).get());
@@ -166,10 +188,19 @@ NS_IMETHODIMP MozGlobalHistory::SetPageTitle (const char *aURL,
 	return NS_OK;
 }
 
-NS_IMETHODIMP MozGlobalHistory::HidePage(const char *url)
+NS_IMETHODIMP MozGlobalHistory::HidePage(const char *aURL)
 {
-	return NS_ERROR_NOT_IMPLEMENTED;
+        NS_ENSURE_ARG (aURL);
 
+        EphyNode *page;
+        page = ephy_history_get_page (mGlobalHistory, aURL);
+
+        if (page)
+        {
+                ephy_node_unref (page);
+        }
+
+        return NS_OK;
 }
 #endif /* MOZILLA_SNAPSHOT > 13 */
 
