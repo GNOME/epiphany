@@ -1,3 +1,16 @@
+2003-03-28  Xan Lopez  <xan@masilla.org>
+
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_node_selected_cb),
+	(keyword_node_selected_cb), (ephy_bookmarks_editor_construct),
+	(ephy_bookmarks_editor_update_menu):
+
+	Makes Delete and Rename menu entries in the BME unsensitive
+	under the following conditions:
+	- Topic with priority != NORMAL selected => Delete and Rename
+	unsensitive
+	- Node selection bigger than 1 (multiple selection) => Rename unsensitive
+
 2003-03-28  Frank Belew  <frb@ximian.com>
 
 	* Makefile.am: added xmldocs.make and omf.make to EXTRA_DIST

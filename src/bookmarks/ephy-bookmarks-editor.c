@@ -53,6 +53,9 @@ static void ephy_bookmarks_editor_get_property (GObject *object,
 						guint prop_id,
 						GValue *value,
 						GParamSpec *pspec);
+static void ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor,
+					       EphyNode *node,
+					       EphyNodeView *view);
 
 static void cmd_open_bookmarks_in_tabs    (EggAction *action,
 					   EphyBookmarksEditor *editor);
@@ -494,6 +497,14 @@ ephy_bookmarks_editor_node_activated_cb (GtkWidget *view,
 }
 
 static void
+ephy_bookmarks_editor_node_selected_cb (GtkWidget *view,
+				        EphyNode *node,
+					EphyBookmarksEditor *editor)
+{
+	ephy_bookmarks_editor_update_menu (editor, node, EPHY_NODE_VIEW (view));
+}
+
+static void
 bookmarks_filter (EphyBookmarksEditor *editor,
 	          EphyNode *keyword)
 {
@@ -538,6 +549,8 @@ keyword_node_selected_cb (EphyNodeView *view,
 	{
 		bookmarks_filter (editor, node);
 	}
+
+	ephy_bookmarks_editor_update_menu (editor, node, view);
 }
 
 static void
@@ -741,6 +754,10 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			  G_CALLBACK (ephy_bookmarks_editor_node_activated_cb),
 			  editor);
 	g_signal_connect (G_OBJECT (bm_view),
+			  "node_selected",
+			  G_CALLBACK (ephy_bookmarks_editor_node_selected_cb),
+			  editor);
+	g_signal_connect (G_OBJECT (bm_view),
 			  "show_popup",
 			  G_CALLBACK (ephy_bookmarks_editor_show_popup_cb),
 			  editor);
@@ -841,3 +858,43 @@ ephy_bookmarks_editor_init (EphyBookmarksEditor *editor)
 {
 	editor->priv = g_new0 (EphyBookmarksEditorPrivate, 1);
 }
+
+static void
+ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor,
+				   EphyNode *node,
+				   EphyNodeView *view)
+{
+	int priority;
+	gresult delete, rename;
+	EggAction *action;
+	EggActionGroup *action_group;
+	GList *selection;
+	
+	g_return_if_fail (editor != NULL);
+	g_return_if_fail (node != NULL);
+	
+	priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+
+	if (priority == EPHY_BOOKMARKS_KEYWORD_ALL_PRIORITY ||
+	    priority == EPHY_BOOKMARKS_KEYWORD_SPECIAL_PRIORITY)
+	{
+		delete = rename = G_FAILED;
+	}
+	else
+	{
+		delete = G_OK;
+		selection = ephy_node_view_get_selection (editor->priv->bm_view);
+		if (g_list_length (selection) > 1)
+			rename = G_FAILED;
+		else
+			rename = G_OK;
+		g_list_free (selection);
+	}
+
+	action_group = editor->priv->action_group;
+	action = egg_action_group_get_action (action_group, "Rename");
+	g_object_set (action, "sensitive", !rename, NULL);
+	action = egg_action_group_get_action (action_group, "Delete");
+	g_object_set (action, "sensitive", !delete, NULL);
+}
+	
