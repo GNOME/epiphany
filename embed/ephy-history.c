@@ -57,6 +57,12 @@ enum
         LAST_SIGNAL
 };
 
+enum
+{
+	HOSTS_NODE_ID = 5,
+	PAGES_NODE_ID = 6
+};
+
 static void
 ephy_history_class_init (EphyHistoryClass *klass);
 static void
@@ -388,8 +394,8 @@ ephy_history_init (EphyHistory *eb)
 	eb->priv->hosts_hash_lock = g_new0 (GStaticRWLock, 1);
 	g_static_rw_lock_init (eb->priv->hosts_hash_lock);
 
-	/* Bookmarks */
-	eb->priv->pages = ephy_node_new ();
+	/* Pages */
+	eb->priv->pages = ephy_node_new_with_id (PAGES_NODE_ID);
 	ephy_node_ref (eb->priv->pages);
 	g_signal_connect_object (G_OBJECT (eb->priv->pages),
 				 "child_added",
@@ -403,7 +409,7 @@ ephy_history_init (EphyHistory *eb)
 				 0);
 
 	/* Hosts */
-	eb->priv->hosts = ephy_node_new ();
+	eb->priv->hosts = ephy_node_new_with_id (HOSTS_NODE_ID);
 	ephy_node_ref (eb->priv->hosts);
 	g_signal_connect_object (G_OBJECT (eb->priv->hosts),
 				 "child_added",

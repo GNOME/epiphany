@@ -47,6 +47,12 @@ struct EphyBookmarksPrivate
 	GStaticRWLock *keywords_hash_lock;
 };
 
+enum
+{
+	BOOKMARKS_NODE_ID = 0,
+	KEYWORDS_NODE_ID = 1
+};
+
 static void
 ephy_bookmarks_class_init (EphyBookmarksClass *klass);
 static void
@@ -517,7 +523,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	g_static_rw_lock_init (eb->priv->favorites_hash_lock);
 
 	/* Bookmarks */
-	eb->priv->bookmarks = ephy_node_new ();
+	eb->priv->bookmarks = ephy_node_new_with_id (BOOKMARKS_NODE_ID);
 	ephy_node_ref (eb->priv->bookmarks);
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, _("All"));
@@ -537,7 +543,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 				 0);
 
 	/* Keywords */
-	eb->priv->keywords = ephy_node_new ();
+	eb->priv->keywords = ephy_node_new_with_id (KEYWORDS_NODE_ID);
 	ephy_node_ref (eb->priv->keywords);
 
 	ephy_node_add_child (eb->priv->keywords,

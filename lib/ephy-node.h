@@ -62,6 +62,8 @@ GType       ephy_node_get_type              (void);
 
 EphyNode   *ephy_node_new                   (void);
 
+EphyNode   *ephy_node_new_with_id           (gulong reserved_id);
+
 /* unique node ID */
 long        ephy_node_get_id                (EphyNode *node);
 

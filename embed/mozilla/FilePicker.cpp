@@ -329,7 +329,7 @@ NS_METHOD GFilePicker::InitWithGtkWidget (GtkWidget *aParentWidget,
 
 	mTitle = nsDependentCString(aTitle);
 
-	mMode = mMode;
+	mMode = aMode;
 
 	mFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
 
