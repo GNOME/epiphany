@@ -53,6 +53,7 @@ private:
 
 	nsresult GatherTextUnder    (nsIDOMNode* aNode, nsAString& aResult);
 	nsresult ResolveBaseURL     (const nsAString &relurl, nsACString &url);
+	nsresult Unescape 	    (const nsACString &aEscaped, nsACString &aUnescaped);
 	nsresult GetEventContext    (nsIDOMEventTarget *EventTarget,
 				     MozillaEmbedEvent *info);
 	nsresult GetCSSBackground   (nsIDOMNode *node, nsAString& url);

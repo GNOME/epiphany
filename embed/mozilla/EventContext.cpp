@@ -30,6 +30,7 @@
 #include <gdk/gdkkeysyms.h>
 
 #include <nsIInterfaceRequestor.h>
+#include <nsIServiceManager.h>
 #include <nsEmbedString.h>
 #include <nsIDOMEventTarget.h>
 #include <nsIDOMHTMLInputElement.h>
@@ -51,6 +52,7 @@
 #include <nsIDOMAbstractView.h>
 
 #ifdef ALLOW_PRIVATE_API
+#include <nsITextToSubURI.h>
 #include <nsIDOMXULDocument.h>
 #include <nsIDOMNSEvent.h>
 #include <nsIDOMNSHTMLElement.h>
@@ -170,6 +172,28 @@ nsresult EventContext::ResolveBaseURL (const nsAString &relurl, nsACString &url)
 	NS_UTF16ToCString (relurl, NS_CSTRING_ENCODING_UTF8, cRelURL);	
 
 	return base->Resolve (cRelURL, url);
+}
+
+nsresult EventContext::Unescape (const nsACString &aEscaped, nsACString &aUnescaped)
+{
+	if (!aEscaped.Length()) return NS_ERROR_FAILURE;
+
+	nsCOMPtr<nsITextToSubURI> escaper
+		(do_CreateInstance ("@mozilla.org/intl/texttosuburi;1"));
+	NS_ENSURE_TRUE (escaper, NS_ERROR_FAILURE);
+
+	nsresult rv;
+	nsEmbedCString encoding;
+	rv = mBrowser->GetEncoding (encoding);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+	nsEmbedString unescaped;
+	rv = escaper->UnEscapeNonAsciiURI (encoding, aEscaped, unescaped);
+	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && unescaped.Length(), NS_ERROR_FAILURE);
+
+	NS_UTF16ToCString (unescaped, NS_CSTRING_ENCODING_UTF8, aUnescaped);
+
+	return NS_OK;
 }
 
 nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
@@ -377,9 +401,17 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 				if (g_str_has_prefix (href.get(), "mailto:"))
 				{
-					info->context |= EMBED_CONTEXT_EMAIL_LINK;
+					/* cut "mailto:" */
 					href.Cut (0, 7);
-					SetStringProperty ("email", href.get());
+					// FIXME: cut any chars after "?"
+
+					nsEmbedCString unescapedHref;
+					rv = Unescape (href, unescapedHref);
+					if (NS_SUCCEEDED (rv) && unescapedHref.Length())
+					{
+						SetStringProperty ("email", unescapedHref.get());
+						info->context |= EMBED_CONTEXT_EMAIL_LINK;
+					}
 				}
 				
 				if (anchor && tmp.Length()) 
