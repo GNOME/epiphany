@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany HEAD\n"
-"POT-Creation-Date: 2003-02-08 10:44+0100\n"
-"PO-Revision-Date: 2003-02-08 10:44+0100\n"
+"POT-Creation-Date: 2003-02-12 15:00+0100\n"
+"PO-Revision-Date: 2003-02-12 15:00+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -37,15 +37,15 @@ msgid "Epiphany content view component's factory"
 msgstr "Fabrik für die Epiphany-Komponente zur Anzeige von Inhalten"
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:5
-msgid "View as Web Page (Epiphany)"
+msgid "View as Web Page"
 msgstr "Web-Ansicht (Epiphany)"
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:6
-msgid "Web Page (Epiphany)"
+msgid "Web Page"
 msgstr "Web-Ansicht (Epiphany)"
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:7
-msgid "Web Page Viewer (Epiphany)"
+msgid "Web Page Viewer"
 msgstr "Web-Ansicht (Epiphany)"
 
 # weiß jemand was besseres?
@@ -650,7 +650,7 @@ msgstr "_Rückwärts suchen"
 
 #: data/glade/epiphany.glade.h:36
 msgid "_Resume"
-msgstr "Fo_rtsetzen"
+msgstr "_Fortsetzen"
 
 #: data/glade/epiphany.glade.h:37
 msgid "_Time:"
@@ -1141,25 +1141,23 @@ msgstr "Auf Vorgaben _zurücksetzen"
 msgid "Getting started"
 msgstr "Einführung"
 
-# "Falls Ihre Internet-Verbindung einen Proxy erfordert, müssen Sie die nötigen "
-# "Einstellungen mit Hilfe des Desktop-weiten <action id=\"configure-network\" "
-# "param=\"\">Konfigurationsdialogs</action> vornehmen."
-# ^^ IDEAL
-# NOTLSG - CHECK - BITTE VORERST NICHT AENDERN
 #: data/starthere/index.xml.in.h:2
-#, fuzzy
 msgid ""
 "If your internet connection requires it, make sure to setup your proxy in "
-"the desktop wide"
+"the desktop wide configuration dialog."
 msgstr ""
 "Falls Ihre Internet-Verbindung einen Proxy erfordert, müssen Sie die nötigen "
-"vornehmen, und zwar mit Hilfe des Desktop-weiten"
+"Einstellungen mit Hilfe des Desktop-weiten Konfigurationsdialogs vornehmen."
 
 #: data/starthere/index.xml.in.h:3
+msgid "Proxy configuration"
+msgstr "Proxy-Konfiguration"
+
+#: data/starthere/index.xml.in.h:4
 msgid "The web browser"
 msgstr "Der Webbrowser"
 
-#: data/starthere/index.xml.in.h:4
+#: data/starthere/index.xml.in.h:5
 msgid ""
 "To import bookmarks from another browser installed on your system just click "
 "on one of the links below:"
@@ -1168,7 +1166,7 @@ msgstr ""
 "Lesezeichen aus einem anderen, auf diesem System installierten Browser zu "
 "importieren:"
 
-#: data/starthere/index.xml.in.h:5
+#: data/starthere/index.xml.in.h:6
 msgid ""
 "You can start browsing web pages either by typing a location (example: www."
 "google.com) or a keyword (example: best computer shop) in the toolbar text "
@@ -1180,10 +1178,6 @@ msgstr ""
 "Adressfeld in der Werkzeugleiste eingeben und danach die Eingabetaste "
 "drücken. Sie können besuchte Webseiten als Lesezeichen ablegen oder im "
 "Chronik-Dialog die Reihenfolge der Website-Besuche nachvollziehen."
-
-#: data/starthere/index.xml.in.h:6
-msgid "configuration dialog"
-msgstr "Konfigurationsdialog"
 
 # CHECK
 #: data/starthere/smartbookmarks.xml.in.h:1
@@ -1225,15 +1219,15 @@ msgstr "Kopieren"
 msgid "Copy Email Address"
 msgstr "E-Mail-Adresse kopieren"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:4 src/ephy-window.c:248
+#: data/ui/nautilus-epiphany-view.xml.in.h:4 src/ephy-window.c:250
 msgid "Copy Image Location"
 msgstr "Quelladresse der Grafik kopieren"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:5 src/ephy-window.c:232
+#: data/ui/nautilus-epiphany-view.xml.in.h:5 src/ephy-window.c:234
 msgid "Copy Link Location"
 msgstr "Zieladresse kopieren"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:6 src/ephy-window.c:210
+#: data/ui/nautilus-epiphany-view.xml.in.h:6 src/ephy-window.c:212
 msgid "Copy Page Location"
 msgstr "Seitenadresse kopieren"
 
@@ -1249,7 +1243,7 @@ msgstr "Ausschneiden"
 msgid "Cut the Selection"
 msgstr "Den markierten Text ausschneiden"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:10 src/ephy-window.c:228
+#: data/ui/nautilus-epiphany-view.xml.in.h:10 src/ephy-window.c:230
 msgid "Download Link"
 msgstr "Inhalt herunterladen"
 
@@ -1270,7 +1264,7 @@ msgid "Next"
 msgstr "Nächster"
 
 #. Framed document
-#: data/ui/nautilus-epiphany-view.xml.in.h:15 src/ephy-window.c:214
+#: data/ui/nautilus-epiphany-view.xml.in.h:15 src/ephy-window.c:216
 msgid "Open Frame"
 msgstr "Frame öffnen"
 
@@ -1279,7 +1273,7 @@ msgid "Open Frame in New Window"
 msgstr "Frame in neuem Fenster öffnen"
 
 #. Images
-#: data/ui/nautilus-epiphany-view.xml.in.h:17 src/ephy-window.c:238
+#: data/ui/nautilus-epiphany-view.xml.in.h:17 src/ephy-window.c:240
 msgid "Open Image"
 msgstr "Grafik öffnen"
 
@@ -1316,11 +1310,11 @@ msgid "Print the Current File"
 msgstr "Die aktuelle Datei drucken"
 
 #. Document
-#: data/ui/nautilus-epiphany-view.xml.in.h:27 src/ephy-window.c:208
+#: data/ui/nautilus-epiphany-view.xml.in.h:27 src/ephy-window.c:210
 msgid "Save Background As..."
 msgstr "Hintergrund speichern unter..."
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:28 src/ephy-window.c:244
+#: data/ui/nautilus-epiphany-view.xml.in.h:28 src/ephy-window.c:246
 msgid "Save Image As..."
 msgstr "Grafik speichern unter..."
 
@@ -1340,7 +1334,7 @@ msgstr "Alles markieren"
 msgid "Select the Entire Document"
 msgstr "Das gesamte Dokument auswählen"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:33 src/ephy-window.c:246
+#: data/ui/nautilus-epiphany-view.xml.in.h:33 src/ephy-window.c:248
 msgid "Use Image as Background"
 msgstr "Grafik als Hintergrund verwenden"
 
@@ -1372,7 +1366,7 @@ msgid "%d KB"
 msgstr "%d KB"
 
 #: embed/downloader-view.c:499 embed/downloader-view.c:517
-#: src/ephy-window.c:1043
+#: src/ephy-window.c:1045
 msgid "Unknown"
 msgstr "Unbekannt"
 
@@ -1893,7 +1887,7 @@ msgstr "Lesezeichen aus dem Konqueror importieren"
 msgid "%Y-%m-%d"
 msgstr "%d.%m.%Y"
 
-#: lib/widgets/ephy-editable-toolbar.c:1060
+#: lib/widgets/ephy-editable-toolbar.c:1062
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
@@ -1901,45 +1895,45 @@ msgstr ""
 "Ziehen Sie ein Objekt auf die obigen Werkzeugleisten und legen Sie es dort "
 "ab, um es hinzuzufügen oder umgekehrt, um es zu entfernen."
 
-#: lib/widgets/ephy-editable-toolbar.c:1074
+#: lib/widgets/ephy-editable-toolbar.c:1076
 msgid "Add Toolbar"
 msgstr "Werkzeugleiste hinzufügen"
 
 #. setup label
 #: lib/widgets/ephy-notebook.c:671 src/ephy-tab.c:524 src/ephy-tab.c:982
-#: src/window-commands.c:285
+#: src/window-commands.c:286
 msgid "Untitled"
 msgstr "Unbenannt"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:318
+#: src/bookmarks/ephy-bookmarks-editor.c:335
 #: src/bookmarks/ephy-new-bookmark.c:195
 msgid "Title:"
 msgstr "Titel:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:334
+#: src/bookmarks/ephy-bookmarks-editor.c:352
+msgid "Location:"
+msgstr "Ort:"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:369
 #: src/bookmarks/ephy-new-bookmark.c:209
 msgid "Keywords:"
 msgstr "Stichwörter:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:423
+#: src/bookmarks/ephy-bookmarks-editor.c:458
 msgid "Search:"
 msgstr "Suche:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:470
+#: src/bookmarks/ephy-bookmarks-editor.c:486
+msgid "Bookmarks"
+msgstr "Lesezeichen"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:507
 msgid "Keywords"
 msgstr "Stichwörter"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:495 src/history-dialog.c:272
+#: src/bookmarks/ephy-bookmarks-editor.c:532 src/history-dialog.c:272
 msgid "Title"
 msgstr "Titel"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:497 src/history-dialog.c:273
-msgid "Location"
-msgstr "Ort"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:523
-msgid "Bookmarks"
-msgstr "Lesezeichen"
 
 #: src/bookmarks/ephy-bookmarks.c:522
 msgid "All"
@@ -2038,31 +2032,35 @@ msgstr "Name des Icons für die Mozilla-Ansicht"
 msgid "mozilla summary info"
 msgstr "Mozilla-Zusammenfassung"
 
-#: src/ephy-shell.c:145
-msgid "Bookmarks imported successfully."
-msgstr "Lesezeichen erfolgreich importiert."
+#: src/ephy-shell.c:149
+msgid "Mozilla bookmarks imported successfully."
+msgstr "Lesezeichen erfolgreich aus Mozilla importiert."
 
-#: src/ephy-shell.c:152
+#: src/ephy-shell.c:158
+msgid "Importing Mozilla bookmarks failed."
+msgstr "Import der Lesezeichen aus Galeon fehlgeschlagen."
+
+#: src/ephy-shell.c:166
 msgid "Galeon"
 msgstr "Epiphany"
 
-#: src/ephy-shell.c:159
+#: src/ephy-shell.c:173
 msgid "Galeon bookmarks imported successfully."
 msgstr "Lesezeichen erfolgreich aus Galeon importiert."
 
-#: src/ephy-shell.c:168
+#: src/ephy-shell.c:182
 msgid "Importing Galeon bookmarks failed."
 msgstr "Import der Lesezeichen aus Galeon fehlgeschlagen."
 
-#: src/ephy-shell.c:176
+#: src/ephy-shell.c:190
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: src/ephy-shell.c:183
+#: src/ephy-shell.c:197
 msgid "Konqueror bookmarks imported successfully."
 msgstr "Lesezeichen erfolgreich aus dem Konqueror importiert."
 
-#: src/ephy-shell.c:192
+#: src/ephy-shell.c:206
 msgid "Importing Konqueror bookmarks failed."
 msgstr "Import der Lesezeichen aus dem Konqueror fehlgeschlagen."
 
@@ -2098,7 +2096,8 @@ msgstr "Fertig."
 msgid "_View"
 msgstr "_Ansicht"
 
-#: src/ephy-window.c:61
+#. Toolbar only
+#: src/ephy-window.c:61 src/ephy-window.c:199
 msgid "_Go"
 msgstr "_Gehe zu"
 
@@ -2164,344 +2163,342 @@ msgid "Add a bookmark for the current page"
 msgstr "Ein Lesezeichen für die aktuelle Seite hinzufügen"
 
 #: src/ephy-window.c:87
-msgid "C_lose Tab"
-msgstr "Reiter sch_ließen"
-
-#: src/ephy-window.c:88
-msgid "Close the selected tab"
-msgstr "Den gewählten Reiter schließen"
-
-#: src/ephy-window.c:90
 msgid "_Close"
 msgstr "S_chließen"
 
-#: src/ephy-window.c:91
+#: src/ephy-window.c:88
 msgid "Close this browser"
 msgstr "Diesen Browser schließen"
 
 #. Edit menu
-#: src/ephy-window.c:95
+#: src/ephy-window.c:92
 msgid "Cu_t"
 msgstr "_Ausschneiden"
 
-#: src/ephy-window.c:96
+#: src/ephy-window.c:93
 msgid "Cut the selection"
 msgstr "Den markierten Text ausschneiden"
 
-#: src/ephy-window.c:98
+#: src/ephy-window.c:95
 msgid "_Copy"
 msgstr "_Kopieren"
 
-#: src/ephy-window.c:99
+#: src/ephy-window.c:96
 msgid "Copy the selection"
 msgstr "Den markierten Text kopieren"
 
-#: src/ephy-window.c:101
+#: src/ephy-window.c:98
 msgid "_Paste"
 msgstr "E_infügen"
 
-#: src/ephy-window.c:102
+#: src/ephy-window.c:99
 msgid "Paste clipboard"
 msgstr "Den Inhalt der Zwischenablage einfügen"
 
-#: src/ephy-window.c:104
+#: src/ephy-window.c:101
 msgid "Select _All"
 msgstr "_Alles markieren"
 
-#: src/ephy-window.c:105
+#: src/ephy-window.c:102
 msgid "Select the entire page"
 msgstr "Die gesamte Seite markieren"
 
-#: src/ephy-window.c:107
+#: src/ephy-window.c:104
 msgid "_Find"
 msgstr "_Suchen"
 
-#: src/ephy-window.c:108
+#: src/ephy-window.c:105
 msgid "Find a string"
 msgstr "Nach einer Zeichenkette suchen"
 
-#: src/ephy-window.c:110
+#: src/ephy-window.c:107
 msgid "Find Ne_xt"
 msgstr "_Weitersuchen"
 
-#: src/ephy-window.c:111
+#: src/ephy-window.c:108
 msgid "Find next occurence of the string"
 msgstr "Die nächste Stelle suchen, an der diese Zeichenkette vorkommt"
 
-#: src/ephy-window.c:113
+#: src/ephy-window.c:110
 msgid "Find Pre_vious"
 msgstr "_Rückwärts suchen"
 
-#: src/ephy-window.c:114
+#: src/ephy-window.c:111
 msgid "Find previous occurence of the string"
 msgstr "Die vorhergehende Stelle suchen, an der diese Zeichenkette vorkommt"
 
-#: src/ephy-window.c:116
+#: src/ephy-window.c:113
 msgid "P_ersonal Data"
 msgstr "_Persönliche Daten"
 
-#: src/ephy-window.c:117
+#: src/ephy-window.c:114
 msgid "View and remove cookies and passwords"
 msgstr "Cookies und Passwörter betrachten/entfernen"
 
-#: src/ephy-window.c:119
+#: src/ephy-window.c:116
 msgid "T_oolbars"
 msgstr "_Werkzeugleisten"
 
-#: src/ephy-window.c:120
+#: src/ephy-window.c:117
 msgid "Costumize toolbars"
 msgstr "Werkzeugleisten anpassen"
 
-#: src/ephy-window.c:122
+#: src/ephy-window.c:119
 msgid "P_references"
 msgstr "_Einstellungen"
 
-#: src/ephy-window.c:123
+#: src/ephy-window.c:120
 msgid "Configure the web browser"
 msgstr "Den Webbrowser konfigurieren"
 
 #. View menu
-#: src/ephy-window.c:127
+#: src/ephy-window.c:124
 msgid "_Stop"
 msgstr "_Abbrechen"
 
-#: src/ephy-window.c:128
+#: src/ephy-window.c:125
 msgid "Stop current data transfer"
 msgstr "Die aktuelle Datenübertragung abbrechen"
 
-#: src/ephy-window.c:130
+#: src/ephy-window.c:127
 msgid "_Reload"
 msgstr "A_ktualisieren"
 
-#: src/ephy-window.c:131
+#: src/ephy-window.c:128
 msgid "Display the latest content of the current page"
 msgstr "Den aktuellen Inhalt des Dokuments anzeigen"
 
-#: src/ephy-window.c:133
+#: src/ephy-window.c:130
 msgid "_Toolbar"
 msgstr "_Werkzeugleiste"
 
-#: src/ephy-window.c:134
+#: src/ephy-window.c:131
 msgid "Show or hide toolbar"
 msgstr "Werkzeugleiste anzeigen/verbergen"
 
-#: src/ephy-window.c:136
+#: src/ephy-window.c:133
 msgid "St_atusbar"
 msgstr "S_tatusleiste"
 
-#: src/ephy-window.c:137
+#: src/ephy-window.c:134
 msgid "Show or hide statusbar"
 msgstr "Statusleiste anzeigen/verbergen"
 
-#: src/ephy-window.c:139
+#: src/ephy-window.c:136
 msgid "_Fullscreen"
 msgstr "_Vollbild"
 
-#: src/ephy-window.c:140
+#: src/ephy-window.c:137
 msgid "Browse at full screen"
 msgstr "Im Vollbild-Modus browsen"
 
-#: src/ephy-window.c:142
+#: src/ephy-window.c:139
 msgid "Zoom _In"
 msgstr "Ansicht ver_größern"
 
-#: src/ephy-window.c:143
+#: src/ephy-window.c:140
 msgid "Show the contents in more detail"
 msgstr "Den Inhalt detaillierter anzeigen"
 
-#: src/ephy-window.c:145
+#: src/ephy-window.c:142
 msgid "Zoom _Out"
 msgstr "Ansicht ver_kleinern"
 
-#: src/ephy-window.c:146
+#: src/ephy-window.c:143
 msgid "Show the contents in less detail"
 msgstr "Den Inhalt weniger detailliert anzeigen"
 
-#: src/ephy-window.c:148
+#: src/ephy-window.c:145
 msgid "_Normal Size"
 msgstr "_Normale Größe"
 
-#: src/ephy-window.c:149
+#: src/ephy-window.c:146
 msgid "Show the contents at the normal size"
 msgstr "Den Inhalt in normaler Größe anzeigen"
 
-#: src/ephy-window.c:151
+#: src/ephy-window.c:148
 msgid "_Encoding"
 msgstr "_Zeichenkodierung"
 
-#: src/ephy-window.c:152
+#: src/ephy-window.c:149
 msgid "_Page Source"
 msgstr "_Quelltext der Seite"
 
-#: src/ephy-window.c:153
+#: src/ephy-window.c:150
 msgid "View the source code of the page"
 msgstr "Den Quelltext dieser Seite anzeigen"
 
 #. Go menu
-#: src/ephy-window.c:157
+#: src/ephy-window.c:154
 msgid "_Back"
 msgstr "_Zurück"
 
-#: src/ephy-window.c:158
+#: src/ephy-window.c:155
 msgid "Go to the previous visited page"
 msgstr "Zur zuvor besuchten Seite gehen"
 
-#: src/ephy-window.c:160
+#: src/ephy-window.c:157
 msgid "_Forward"
 msgstr "_Vor"
 
-#: src/ephy-window.c:161
+#: src/ephy-window.c:158
 msgid "Go to the next visited page"
 msgstr "Zur als nächstes besuchten Seite gehen"
 
-#: src/ephy-window.c:163
+#: src/ephy-window.c:160
 msgid "_Up"
 msgstr "_Rauf"
 
-#: src/ephy-window.c:164
+#: src/ephy-window.c:161
 msgid "Go up one level"
 msgstr "Eine Ebene nach oben gehen"
 
-#: src/ephy-window.c:166
+#: src/ephy-window.c:163
 msgid "_Home"
 msgstr "_Startseite"
 
-#: src/ephy-window.c:167
+#: src/ephy-window.c:164
 msgid "Go to the home page"
 msgstr "Zur Startseite gehen"
 
-#: src/ephy-window.c:169
+#: src/ephy-window.c:166
 msgid "_Location..."
 msgstr "_Ort..."
 
-#: src/ephy-window.c:170
+#: src/ephy-window.c:167
 msgid "Go to a specified location"
 msgstr "Zum angegebenen Ort gehen"
 
-#: src/ephy-window.c:172
+#: src/ephy-window.c:169
 msgid "_History"
 msgstr "_Chronik"
 
-#: src/ephy-window.c:173
+#: src/ephy-window.c:170
 msgid "Go to an already visited page"
 msgstr "Zu einer bereits besuchten Seite gehen"
 
-#: src/ephy-window.c:175
+#: src/ephy-window.c:172
 msgid "_Bookmarks"
 msgstr "_Lesezeichen"
 
-#: src/ephy-window.c:176
+#: src/ephy-window.c:173
 msgid "Go to a bookmark"
 msgstr "Zu einem Lesezeichen gehen"
 
 #. Tabs menu
-#: src/ephy-window.c:180
+#: src/ephy-window.c:177
 msgid "_Previous Tab"
 msgstr "_Vorheriger Reiter"
 
-#: src/ephy-window.c:181
+#: src/ephy-window.c:178
 msgid "Activate previous tab"
 msgstr "Den vorherigen Reiter aktivieren"
 
-#: src/ephy-window.c:183
+#: src/ephy-window.c:180
 msgid "_Next Tab"
 msgstr "_Nächster Reiter"
 
-#: src/ephy-window.c:184
+#: src/ephy-window.c:181
 msgid "Activate next tab"
 msgstr "Den nächsten Reiter aktivieren"
 
-#: src/ephy-window.c:186
+#: src/ephy-window.c:183
 msgid "Move Tab _Left"
 msgstr "Reiter nach _links verschieben"
 
-#: src/ephy-window.c:187
+#: src/ephy-window.c:184
 msgid "Move current tab to left"
 msgstr "Den aktuellen Reiter nach links verschieben"
 
-#: src/ephy-window.c:189
+#: src/ephy-window.c:186
 msgid "Move Tab _Right"
 msgstr "Reiter nach _rechts verschieben"
 
-#: src/ephy-window.c:190
+#: src/ephy-window.c:187
 msgid "Move current tab to right"
 msgstr "Den aktuellen Reiter nach rechts verschieben"
 
-#: src/ephy-window.c:192
+#: src/ephy-window.c:189
 msgid "_Detach Tab"
 msgstr "Reiter _abtrennen"
 
-#: src/ephy-window.c:193
+#: src/ephy-window.c:190
 msgid "Detach current tab"
 msgstr "Den aktuellen Reiter in einem neuen Fenster öffnen"
 
 #. Help menu
-#: src/ephy-window.c:197
+#: src/ephy-window.c:194
 msgid "_About"
 msgstr "_Info"
 
-#: src/ephy-window.c:198
+#: src/ephy-window.c:195
 msgid "Display credits for the web browser creators"
 msgstr "Die am Webbrowser Mitwirkenden anzeigen"
 
-#: src/ephy-window.c:216
+#: src/ephy-window.c:200
+msgid "Type a web address or a word in the field on the left, then click Go"
+msgstr ""
+"Geben Sie eine Internetadresse oder ein Wort im linken Feld ein und "
+"klicicken Sie dann Los an"
+
+#: src/ephy-window.c:218
 msgid "Open Frame in New Browser"
 msgstr "Frame in neuem Browser öffnen"
 
-#: src/ephy-window.c:218
+#: src/ephy-window.c:220
 msgid "Open Frame in New Tab"
 msgstr "Frame in neuem Reiter öffnen"
 
 #. Links
-#: src/ephy-window.c:222
+#: src/ephy-window.c:224
 msgid "Open Link"
 msgstr "Link öffnen"
 
-#: src/ephy-window.c:224
+#: src/ephy-window.c:226
 msgid "Open Link in New Browser"
 msgstr "Link in neuem Browser öffnen"
 
-#: src/ephy-window.c:226
+#: src/ephy-window.c:228
 msgid "Open Link in New Tab"
 msgstr "Link in neuem Reiter öffnen"
 
-#: src/ephy-window.c:230
+#: src/ephy-window.c:232
 msgid "Add Bookmark"
 msgstr "Lesezeichen hinzufügen"
 
-#: src/ephy-window.c:234
+#: src/ephy-window.c:236
 msgid "Copy Email"
 msgstr "E-Mail-Adresse kopieren"
 
-#: src/ephy-window.c:240
+#: src/ephy-window.c:242
 msgid "Open Image in New Browser"
 msgstr "Grafik in neuem Browser öffnen"
 
-#: src/ephy-window.c:242
+#: src/ephy-window.c:244
 msgid "Open Image in New Tab"
 msgstr "Grafik in neuem Reiter öffnen"
 
-#: src/ephy-window.c:1046
+#: src/ephy-window.c:1048
 msgid "Insecure"
 msgstr "Ungeschützt"
 
-#: src/ephy-window.c:1049
+#: src/ephy-window.c:1051
 msgid "Broken"
 msgstr "Defekt"
 
-#: src/ephy-window.c:1052
+#: src/ephy-window.c:1054
 msgid "Medium"
 msgstr "Mittel"
 
-#: src/ephy-window.c:1056
+#: src/ephy-window.c:1058
 msgid "Low"
 msgstr "Niedrig"
 
-#: src/ephy-window.c:1060
+#: src/ephy-window.c:1062
 msgid "High"
 msgstr "Hoch"
 
-#: src/ephy-window.c:1070
+#: src/ephy-window.c:1072
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2510,7 +2507,7 @@ msgstr ""
 "Sicherheitsstufe: %s\n"
 "%s"
 
-#: src/ephy-window.c:1076
+#: src/ephy-window.c:1078
 #, c-format
 msgid "Security level: %s"
 msgstr "Sicherheitsstufe: %s"
@@ -2695,6 +2692,10 @@ msgstr "Vietnamesisch"
 msgid "Walloon"
 msgstr "Wallonisch"
 
+#: src/history-dialog.c:273
+msgid "Location"
+msgstr "Ort"
+
 #: src/history-dialog.c:274
 msgid "Last Visit"
 msgstr "Letzter Besuch"
@@ -2806,16 +2807,16 @@ msgid "Up"
 msgstr "Rauf"
 
 # CHECK
-#: src/window-commands.c:148
+#: src/window-commands.c:149
 msgid "Check this out!"
 msgstr "Schauen Sie sich das an!"
 
-#: src/window-commands.c:325
+#: src/window-commands.c:326
 msgid "Select the file to open"
 msgstr "Bitte wählen Sie die zu öffnende Datei"
 
 #. Translator credits
-#: src/window-commands.c:671
+#: src/window-commands.c:665
 msgid "translator_credits"
 msgstr ""
 "Walter Muellner <walter.muellner@telering.at>\n"
@@ -2823,9 +2824,21 @@ msgstr ""
 "Christian Neumair <chris@gnome-de.org>\n"
 "Benjamin Greiner <nadaschauher@gmx.de>"
 
-#: src/window-commands.c:683
+#: src/window-commands.c:677
 msgid "A GNOME browser based on Mozilla"
 msgstr "Ein auf Mozilla basierender GNOME-Browser"
+
+#~ msgid "Web Page (Epiphany)"
+#~ msgstr "Web-Ansicht (Epiphany)"
+
+#~ msgid "C_lose Tab"
+#~ msgstr "Reiter sch_ließen"
+
+#~ msgid "Close the selected tab"
+#~ msgstr "Den gewählten Reiter schließen"
+
+#~ msgid "configuration dialog"
+#~ msgstr "Konfigurationsdialog"
 
 #~ msgid "_New Window"
 #~ msgstr "_Neues Fenster"
@@ -3115,9 +3128,6 @@ msgstr "Ein auf Mozilla basierender GNOME-Browser"
 
 #~ msgid "Autocompletion"
 #~ msgstr "Automatische Vervollständigung"
-
-#~ msgid "Automatic proxy configuration URL"
-#~ msgstr "Adresse zur automatischen Proxy-Konfiguration"
 
 #~ msgid "Automatic proxy configuration URL."
 #~ msgstr "Adresse zur automatischen Proxy-Konfiguration."
