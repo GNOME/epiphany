@@ -31,6 +31,7 @@
 #include "ephy-node.h"
 #include "ephy-node-view.h"
 #include "ephy-debug.h"
+#include "ephy-gui.h"
 
 #include <gtk/gtklabel.h>
 #include <gtk/gtkbutton.h>
@@ -74,7 +75,7 @@ struct EphyEncodingDialogPrivate
 static void	ephy_encoding_dialog_class_init		(EphyEncodingDialogClass *klass);
 static void	ephy_encoding_dialog_init		(EphyEncodingDialog *ge);
 void		ephy_encoding_dialog_response_cb	(GtkWidget *widget,
-							 gint response,
+							 int response,
 							 EphyEncodingDialog *dialog);
 
 static GObjectClass *parent_class = NULL;
@@ -82,9 +83,9 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_encoding_dialog_get_type (void)
 {
-	static GType ephy_type_encoding_dialog = 0;
+	static GType type = 0;
 
-	if (ephy_type_encoding_dialog == 0)
+	if (type == 0)
 	{
 		static const GTypeInfo our_info =
 		{
@@ -99,12 +100,12 @@ ephy_encoding_dialog_get_type (void)
 			(GInstanceInitFunc) ephy_encoding_dialog_init
 		};
 
-		ephy_type_encoding_dialog = g_type_register_static (EPHY_TYPE_EMBED_DIALOG,
-								    "EphyEncodingDialog",
-								    &our_info, 0);
+		type = g_type_register_static (EPHY_TYPE_EMBED_DIALOG,
+					       "EphyEncodingDialog",
+					       &our_info, 0);
 	}
 
-	return ephy_type_encoding_dialog;
+	return type;
 }
 
 static void
@@ -240,9 +241,15 @@ activate_choice (EphyEncodingDialog *dialog)
 
 void
 ephy_encoding_dialog_response_cb (GtkWidget *widget,
-				  gint response,
+				  int response,
 				  EphyEncodingDialog *dialog)
 {
+	if (response == GTK_RESPONSE_HELP)
+	{
+		ephy_gui_help (GTK_WINDOW (widget), "epiphany", "text-encoding");
+		return;
+	}
+
 	g_object_unref (dialog);
 }
 
