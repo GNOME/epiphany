@@ -24,6 +24,7 @@
 #endif
 
 #include "mozilla-embed-single.h"
+#include "mozilla-version.h"
 
 #include "ephy-cookie-manager.h"
 #include "ephy-password-manager.h"
@@ -589,7 +590,11 @@ impl_load_proxy_autoconf (EphyEmbedSingle *shell,
                 do_GetService ("@mozilla.org/network/protocol-proxy-service;1");
 	if (!pps) return;
 
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 2)
+	pps->ConfigureFromPAC (nsEmbedCString (url));
+#else
 	pps->ConfigureFromPAC (url);
+#endif
 }
 
 static GList *
