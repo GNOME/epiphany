@@ -85,7 +85,8 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 
 	if (open_in_new_tab)
 	{
-		flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
+		flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+			 EPHY_NEW_TAB_JUMP;
 	}
 	else
 	{
@@ -97,8 +98,7 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 		flags |= EPHY_NEW_TAB_FULLSCREEN_MODE;
 	}
 
-	ephy_shell_new_tab (ephy_shell, window, NULL, url,
-			    flags);
+	ephy_shell_new_tab (ephy_shell, window, NULL, url, flags);
 }
 
 static void
