@@ -342,7 +342,6 @@ struct EphyWindowPrivate
 	guint help_message_cid;
 
 	EphyEmbedChrome chrome;
-	gboolean show_bookmarksbar;
 	gboolean should_save_chrome;
 
 	guint disable_arbitrary_url_notifier_id;
@@ -461,7 +460,8 @@ exit_fullscreen_button_clicked_cb (GtkWidget *button, EphyWindow *window)
 
 static void
 get_chromes_visibility (EphyWindow *window, gboolean *show_menubar,
-			gboolean *show_statusbar, gboolean *show_toolbar)
+			gboolean *show_statusbar, gboolean *show_toolbar,
+			gboolean *show_bookmarksbar)
 {
 	EphyEmbedChrome flags = window->priv->chrome;
 
@@ -471,13 +471,14 @@ get_chromes_visibility (EphyWindow *window, gboolean *show_menubar,
 			*show_menubar = flags & EPHY_EMBED_CHROME_MENUBAR;
 			*show_statusbar = flags & EPHY_EMBED_CHROME_STATUSBAR;
 			*show_toolbar = flags & EPHY_EMBED_CHROME_TOOLBAR;
+			*show_bookmarksbar = flags & EPHY_EMBED_CHROME_BOOKMARKSBAR;
 			break;
 		case EPHY_WINDOW_MODE_FULLSCREEN:
 			*show_toolbar = flags & EPHY_EMBED_CHROME_TOOLBAR;
-			*show_menubar = *show_statusbar = FALSE;
+			*show_menubar = *show_statusbar = *show_bookmarksbar = FALSE;
 			break;
 		default:
-			*show_menubar = *show_statusbar = *show_toolbar = FALSE;
+			*show_menubar = *show_statusbar = *show_toolbar = *show_bookmarksbar = FALSE;
 	}
 }
 
@@ -485,10 +486,11 @@ static void
 sync_chromes_visibility (EphyWindow *window)
 {
 	GtkWidget *menubar;
-	gboolean show_statusbar, show_menubar, show_toolbar;
+	gboolean show_statusbar, show_menubar, show_toolbar, show_bookmarksbar;
 
 	get_chromes_visibility (window, &show_menubar,
-				&show_statusbar, &show_toolbar);
+				&show_statusbar, &show_toolbar,
+				&show_bookmarksbar);
 
 	menubar = gtk_ui_manager_get_widget
 		(GTK_UI_MANAGER (window->ui_merge), "/menubar");
@@ -504,7 +506,7 @@ sync_chromes_visibility (EphyWindow *window)
 	}
 
 	toolbar_set_visibility (window->priv->toolbar, show_toolbar,
-				window->priv->show_bookmarksbar);
+				show_bookmarksbar);
 
 
 	if (show_statusbar)
@@ -869,10 +871,11 @@ update_chromes_actions (EphyWindow *window)
 {
 	GtkActionGroup *action_group = GTK_ACTION_GROUP (window->priv->action_group);
 	GtkAction *action;
-	gboolean show_statusbar, show_menubar, show_toolbar;
+	gboolean show_statusbar, show_menubar, show_toolbar, show_bookmarksbar;
 
 	get_chromes_visibility (window, &show_menubar,
-				&show_statusbar, &show_toolbar);
+				&show_statusbar, &show_toolbar,
+				&show_bookmarksbar);
 
 	action = gtk_action_group_get_action (action_group, "ViewToolbar");
 	g_signal_handlers_block_by_func (G_OBJECT (action),
@@ -887,8 +890,7 @@ update_chromes_actions (EphyWindow *window)
 	g_signal_handlers_block_by_func (G_OBJECT (action),
 		 			 G_CALLBACK (ephy_window_view_bookmarksbar_cb),
 		 			 window);
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
-				      window->priv->show_bookmarksbar);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), show_bookmarksbar);
 	g_signal_handlers_unblock_by_func (G_OBJECT (action),
 		 			   G_CALLBACK (ephy_window_view_bookmarksbar_cb),
 		 			   window);
@@ -1745,6 +1747,11 @@ get_default_chrome (void)
 		chrome_mask |= EPHY_EMBED_CHROME_MENUBAR;
 	}
 
+	if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR))
+	{
+		chrome_mask |= EPHY_EMBED_CHROME_BOOKMARKSBAR;
+	}
+
 	return chrome_mask;
 }
 
@@ -1921,8 +1928,6 @@ ephy_window_init (EphyWindow *window)
 	window->priv->has_size = FALSE;
 	window->priv->should_save_chrome = FALSE;
 	window->priv->mode = EPHY_WINDOW_MODE_NORMAL;
-	window->priv->show_bookmarksbar =
-		eel_gconf_get_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR);
 
 	ensure_default_icon ();
 
@@ -2457,7 +2462,7 @@ sync_prefs_with_chrome (EphyWindow *window)
 	if (window->priv->should_save_chrome)
 	{
 		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR,
-				       window->priv->show_bookmarksbar);
+				       flags & EPHY_EMBED_CHROME_BOOKMARKSBAR);
 		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_TOOLBARS,
 				       flags & EPHY_EMBED_CHROME_TOOLBAR);
 		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_STATUSBAR,
@@ -2499,8 +2504,6 @@ static void
 ephy_window_view_bookmarksbar_cb (GtkAction *action,
 			          EphyWindow *window)
 {
-	window->priv->show_bookmarksbar = gtk_toggle_action_get_active
-						(GTK_TOGGLE_ACTION (action));
-	sync_chromes_visibility (window);
-	sync_prefs_with_chrome (window);
+	sync_chrome_with_view_toggle (action, window,
+				      EPHY_EMBED_CHROME_BOOKMARKSBAR);
 }

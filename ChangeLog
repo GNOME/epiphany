@@ -1,3 +1,16 @@
+2004-04-01  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-embed.c: (ephy_embed_chrome_get_type):
+	* embed/ephy-embed.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-window.c: (get_chromes_visibility),
+	(sync_chromes_visibility), (update_chromes_actions),
+	(get_default_chrome), (ephy_window_init), (sync_prefs_with_chrome),
+	(ephy_window_view_bookmarksbar_cb):
+
+	Fix bookmarks toolbar visibility in fullscreen and print preview mode, as
+	well as for javascript popups. Fixes bug #138520.
+
 2004-03-30  Piers Cornwell  <piers@gnome.org>
 
 	* src/ephy-history-window.c: (confirmation_dialog_construct):
