@@ -455,7 +455,7 @@ NS_IMETHODIMP GProgressListener::
 	}
 
 	downloader_view_set_download_progress (mDownloaderView,
-					       mElapsed,
+					       mElapsed / 1000000,
 					       remaining,
 					       speed,
 					       totalKBytes,
