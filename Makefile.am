@@ -2,7 +2,7 @@
 
 SUBDIRS = lib embed idl src data po help doc
 
-distcleancheck_listfiles = find . -type f -print | grep -v 'omf\.out'
+distcleancheck_listfiles = find . -type f -print | grep -v -e 'omf\.out' -e '\.gmo$'
 
 distuninstallcheck_listfiles = find . -type f -print | grep -v '/var/scrollkeeper'
 
