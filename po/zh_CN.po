@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 2.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-02 03:10+0200\n"
+"POT-Creation-Date: 2004-08-08 11:04+0200\n"
 "PO-Revision-Date: 2004-08-02 14:53+0800\n"
 "Last-Translator: Liu Songhe <jackliu9999@263.net>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -1003,7 +1003,7 @@ msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d 个下载"
 
-#: embed/downloader-view.c:558 src/bookmarks/ephy-bookmarks-editor.c:691
+#: embed/downloader-view.c:558 src/bookmarks/ephy-bookmarks-editor.c:690
 msgid "File"
 msgstr "文件"
 
@@ -1439,7 +1439,7 @@ msgid "Untitled"
 msgstr "无标题"
 
 #: embed/mozilla/FilePicker.cpp:145 embed/print-dialog.c:272
-#: lib/ephy-file-chooser.c:376 src/bookmarks/ephy-bookmarks-editor.c:601
+#: lib/ephy-file-chooser.c:376 src/bookmarks/ephy-bookmarks-editor.c:600
 msgid "All files"
 msgstr "全部文件"
 
@@ -1719,7 +1719,21 @@ msgstr "当一个私钥生成的时候请稍等。此过程可能花费几分钟
 msgid "Files"
 msgstr "文件"
 
-#: embed/mozilla/mozilla-embed-single.cpp:494
+#. We do this before reading the user pref file so that the user
+#. * still can overwrite this pref.
+#. * We don't use the default-prefs.js file since that cannot be
+#. * localised (see bug #144909).
+#.
+#. translators: this is the URL that searches from the location
+#. * entry get directed to. The search terms will be _appended_ to it,
+#. * in url-escaped UTF-8; that means that if you're choosing google,
+#. * the 'q=' part needs to come last.
+#.
+#: embed/mozilla/mozilla-embed-single.cpp:221
+msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
+msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
+
+#: embed/mozilla/mozilla-embed-single.cpp:506
 msgid ""
 "Epiphany can't be used now. Mozilla initialization failed. Check your "
 "MOZILLA_FIVE_HOME environmental variable."
@@ -1895,7 +1909,7 @@ msgstr "弹出窗口"
 msgid "History"
 msgstr "历史"
 
-#: lib/ephy-stock-icons.c:58 src/bookmarks/ephy-bookmarks-editor.c:1417
+#: lib/ephy-stock-icons.c:58 src/bookmarks/ephy-bookmarks-editor.c:1416
 #: src/bookmarks/ephy-topic-action.c:985 src/ephy-window.c:1122
 msgid "Bookmarks"
 msgstr "书签"
@@ -1964,8 +1978,8 @@ msgid "%s:"
 msgstr "%s："
 
 #: src/bookmarks/ephy-bookmark-action.c:533
-#: src/bookmarks/ephy-bookmarks-editor.c:182
-#: src/bookmarks/ephy-bookmarks-editor.c:1041 src/ephy-history-window.c:169
+#: src/bookmarks/ephy-bookmarks-editor.c:181
+#: src/bookmarks/ephy-bookmarks-editor.c:1040 src/ephy-history-window.c:169
 #: src/ephy-history-window.c:747
 msgid "Open in New _Tab"
 msgstr "在新标签中打开(_T)"
@@ -2004,257 +2018,257 @@ msgid "_Show in bookmarks bar"
 msgstr "在书签栏中显示(_S)"
 
 #. Toplevel
-#: src/bookmarks/ephy-bookmarks-editor.c:169 src/ephy-history-window.c:159
+#: src/bookmarks/ephy-bookmarks-editor.c:168 src/ephy-history-window.c:159
 #: src/ephy-window.c:90
 msgid "_File"
 msgstr "文件(_F)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:170 src/ephy-history-window.c:160
+#: src/bookmarks/ephy-bookmarks-editor.c:169 src/ephy-history-window.c:160
 #: src/ephy-window.c:91
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:171 src/ephy-history-window.c:161
+#: src/bookmarks/ephy-bookmarks-editor.c:170 src/ephy-history-window.c:161
 #: src/ephy-window.c:92
 msgid "_View"
 msgstr "查看(_V)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:172 src/ephy-history-window.c:162
+#: src/bookmarks/ephy-bookmarks-editor.c:171 src/ephy-history-window.c:162
 #: src/ephy-window.c:97
 msgid "_Help"
 msgstr "帮助(_H)"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:176
+#: src/bookmarks/ephy-bookmarks-editor.c:175
 #: src/bookmarks/ephy-new-bookmark.c:298
 msgid "_New Topic"
 msgstr "新建话题(_N)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:177
+#: src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Create a new topic"
 msgstr "创建新话题"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:179
-#: src/bookmarks/ephy-bookmarks-editor.c:1040 src/ephy-history-window.c:166
+#: src/bookmarks/ephy-bookmarks-editor.c:178
+#: src/bookmarks/ephy-bookmarks-editor.c:1039 src/ephy-history-window.c:166
 #: src/ephy-history-window.c:746
 msgid "_Open in New Window"
 msgstr "在新建窗口中打开(_O)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:180
+#: src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Open the selected bookmark in a new window"
 msgstr "在新窗口中打开选中书签"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:183
+#: src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "Open the selected bookmark in a new tab"
 msgstr "在新标签中打开选中书签"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:185
+#: src/bookmarks/ephy-bookmarks-editor.c:184
 msgid "_Rename..."
 msgstr "重命名(_R)..."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:186
+#: src/bookmarks/ephy-bookmarks-editor.c:185
 msgid "Rename the selected bookmark or topic"
 msgstr "重命名选中书签或话题"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:187 src/ephy-history-window.c:172
+#: src/bookmarks/ephy-bookmarks-editor.c:186 src/ephy-history-window.c:172
 msgid "_Delete"
 msgstr "删除(_D)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:188
+#: src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "Delete the selected bookmark or topic"
 msgstr "删除选中书签或话题"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:190
+#: src/bookmarks/ephy-bookmarks-editor.c:189
 msgid "_Properties"
 msgstr "属性(_P)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:191
+#: src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "View or modify the properties of the selected bookmark"
 msgstr "查看或修改选中书签的属性"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:193
+#: src/bookmarks/ephy-bookmarks-editor.c:192
 msgid "_Import Bookmarks..."
 msgstr "导入书签(_I)..."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:194
+#: src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "从其它浏览器或书签文件中导入书签"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:196 src/ephy-history-window.c:178
+#: src/bookmarks/ephy-bookmarks-editor.c:195 src/ephy-history-window.c:178
 #: src/ephy-window.c:128
 msgid "_Close"
 msgstr "关闭(_C)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:197
+#: src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "Close the bookmarks window"
 msgstr "关闭书签窗口"
 
 #. Edit Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:201 src/ephy-history-window.c:183
+#: src/bookmarks/ephy-bookmarks-editor.c:200 src/ephy-history-window.c:183
 #: src/ephy-window.c:139
 msgid "Cu_t"
 msgstr "剪切(_T)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:202 src/ephy-history-window.c:184
+#: src/bookmarks/ephy-bookmarks-editor.c:201 src/ephy-history-window.c:184
 #: src/ephy-window.c:140
 msgid "Cut the selection"
 msgstr "剪切选中范围"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:204
-#: src/bookmarks/ephy-bookmarks-editor.c:1050 src/ephy-history-window.c:186
+#: src/bookmarks/ephy-bookmarks-editor.c:203
+#: src/bookmarks/ephy-bookmarks-editor.c:1049 src/ephy-history-window.c:186
 #: src/ephy-history-window.c:756 src/ephy-window.c:142
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:205 src/ephy-history-window.c:187
+#: src/bookmarks/ephy-bookmarks-editor.c:204 src/ephy-history-window.c:187
 #: src/ephy-window.c:143
 msgid "Copy the selection"
 msgstr "复制选中范围"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:189
+#: src/bookmarks/ephy-bookmarks-editor.c:206 src/ephy-history-window.c:189
 #: src/ephy-window.c:145
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:208 src/ephy-history-window.c:190
+#: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:190
 msgid "Paste the clipboard"
 msgstr "粘贴剪贴板"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:210 src/ephy-history-window.c:192
+#: src/bookmarks/ephy-bookmarks-editor.c:209 src/ephy-history-window.c:192
 #: src/ephy-window.c:148
 msgid "Select _All"
 msgstr "全选(_A)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:211
+#: src/bookmarks/ephy-bookmarks-editor.c:210
 msgid "Select all bookmarks or text"
 msgstr "选中全部书签或文字"
 
 #. Help Menu
 #. Help menu
-#: src/bookmarks/ephy-bookmarks-editor.c:215 src/ephy-history-window.c:200
+#: src/bookmarks/ephy-bookmarks-editor.c:214 src/ephy-history-window.c:200
 #: src/ephy-window.c:239
 msgid "_Contents"
 msgstr "目录(_C)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:216
+#: src/bookmarks/ephy-bookmarks-editor.c:215
 msgid "Display bookmarks help"
 msgstr "显示书签帮助"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:218 src/ephy-history-window.c:203
+#: src/bookmarks/ephy-bookmarks-editor.c:217 src/ephy-history-window.c:203
 #: src/ephy-window.c:242
 msgid "_About"
 msgstr "关于(_A)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:219 src/ephy-history-window.c:204
+#: src/bookmarks/ephy-bookmarks-editor.c:218 src/ephy-history-window.c:204
 #: src/ephy-window.c:243
 msgid "Display credits for the web browser creators"
 msgstr "显示 Web 浏览器创建者的资料"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:227
+#: src/bookmarks/ephy-bookmarks-editor.c:226
 msgid "_Show in Bookmarks Bar"
 msgstr "在地址栏中显示(_S)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:228
+#: src/bookmarks/ephy-bookmarks-editor.c:227
 msgid "Show the selected bookmark or topic in the bookmarks bar"
 msgstr "在地址栏中显示选中书签或话题"
 
 #. View Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:242 src/ephy-history-window.c:219
+#: src/bookmarks/ephy-bookmarks-editor.c:241 src/ephy-history-window.c:219
 msgid "_Title"
 msgstr "标题(_T)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:243 src/ephy-history-window.c:220
+#: src/bookmarks/ephy-bookmarks-editor.c:242 src/ephy-history-window.c:220
 msgid "Show only the title column"
 msgstr "只显示标题列"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:244 src/ephy-history-window.c:223
+#: src/bookmarks/ephy-bookmarks-editor.c:243 src/ephy-history-window.c:223
 msgid "T_itle and Address"
 msgstr "标题和地址(_I)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:245 src/ephy-history-window.c:224
+#: src/bookmarks/ephy-bookmarks-editor.c:244 src/ephy-history-window.c:224
 msgid "Show both the title and address columns"
 msgstr "同时显示标题和地址列"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:287
+#: src/bookmarks/ephy-bookmarks-editor.c:286
 #: src/bookmarks/ephy-topics-selector.c:292
 msgid "Type a topic"
 msgstr "输入话题"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:582
+#: src/bookmarks/ephy-bookmarks-editor.c:581
 msgid "Import bookmarks from file"
 msgstr "从文件导入书签"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:589
+#: src/bookmarks/ephy-bookmarks-editor.c:588
 msgid "Firefox/Firebird/Mozilla bookmarks"
 msgstr "Firefox/Firebird/Mozilla 书签"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:593
+#: src/bookmarks/ephy-bookmarks-editor.c:592
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror 书签"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:597
+#: src/bookmarks/ephy-bookmarks-editor.c:596
 msgid "Epiphany bookmarks"
 msgstr "Epiphany 书签"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:636
+#: src/bookmarks/ephy-bookmarks-editor.c:635
 msgid "Import Bookmarks"
 msgstr "导入书签"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:642
+#: src/bookmarks/ephy-bookmarks-editor.c:641
 msgid "I_mport"
 msgstr "导入(_M)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:656
+#: src/bookmarks/ephy-bookmarks-editor.c:655
 msgid "Import bookmarks from:"
 msgstr "导入书签的来源："
 
-#: src/bookmarks/ephy-bookmarks-editor.c:679
+#: src/bookmarks/ephy-bookmarks-editor.c:678
 msgid "Firebird"
 msgstr "Firebird"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:681
+#: src/bookmarks/ephy-bookmarks-editor.c:680
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:683
+#: src/bookmarks/ephy-bookmarks-editor.c:682
 msgid "Galeon"
 msgstr "Galeon"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:685
+#: src/bookmarks/ephy-bookmarks-editor.c:684
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:687
+#: src/bookmarks/ephy-bookmarks-editor.c:686
 msgid "Mozilla"
 msgstr "Mozilla"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1035 src/ephy-history-window.c:741
+#: src/bookmarks/ephy-bookmarks-editor.c:1034 src/ephy-history-window.c:741
 msgid "_Open in New Windows"
 msgstr "在新窗口中打开(_O)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1036 src/ephy-history-window.c:742
+#: src/bookmarks/ephy-bookmarks-editor.c:1035 src/ephy-history-window.c:742
 msgid "Open in New _Tabs"
 msgstr "在新标签中打开(_T)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1046 src/ephy-history-window.c:752
+#: src/bookmarks/ephy-bookmarks-editor.c:1045 src/ephy-history-window.c:752
 msgid "_Copy Address"
 msgstr "复制地址(_C)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1287 src/ephy-history-window.c:1046
+#: src/bookmarks/ephy-bookmarks-editor.c:1286 src/ephy-history-window.c:1046
 msgid "_Search:"
 msgstr "搜索(_S)："
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1500
+#: src/bookmarks/ephy-bookmarks-editor.c:1499
 msgid "Topics"
 msgstr "话题"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1565 src/ephy-history-window.c:1330
+#: src/bookmarks/ephy-bookmarks-editor.c:1564 src/ephy-history-window.c:1330
 msgid "Title"
 msgstr "标题"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1571 src/ephy-history-window.c:1336
+#: src/bookmarks/ephy-bookmarks-editor.c:1570 src/ephy-history-window.c:1336
 msgid "Address"
 msgstr "地址"
 
@@ -2471,24 +2485,24 @@ msgstr "bonobo 接口内部使用"
 msgid "Ephy"
 msgstr "Ephy"
 
-#: src/ephy-session.c:367
+#: src/ephy-session.c:374
 msgid "Crash Recovery"
 msgstr "崩溃复原"
 
-#: src/ephy-session.c:369
+#: src/ephy-session.c:376
 msgid "_Don't Recover"
 msgstr "不复原(_R)"
 
-#: src/ephy-session.c:370
+#: src/ephy-session.c:377
 msgid "_Recover"
 msgstr "复原(_R)"
 
-#: src/ephy-session.c:401
+#: src/ephy-session.c:408
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr "Epiphany 好像上次崩溃，或者上次运行时被杀死。"
 
-#: src/ephy-session.c:407
+#: src/ephy-session.c:414
 msgid "You can recover the opened tabs and windows."
 msgstr "您可以复原打开的标签和窗口。"
 
@@ -3403,20 +3417,19 @@ msgstr "转到在地址输入项中输入的地址"
 msgid "Check this out!"
 msgstr "看看这个！"
 
-#: src/window-commands.c:874
+#: src/window-commands.c:881
 msgid "Toolbar Editor"
 msgstr "工具栏编辑器"
 
-#: src/window-commands.c:893
+#: src/window-commands.c:900
 msgid "_Add a New Toolbar"
 msgstr "添加新工具栏(_A)"
 
 #. Translator credits
-#: src/window-commands.c:946
+#: src/window-commands.c:953
 msgid "translator-credits"
 msgstr "开源软件国际化简体中文组(http://i18n.linux.net.cn),Funda Wang"
 
-#: src/window-commands.c:976
+#: src/window-commands.c:983
 msgid "A GNOME browser based on Mozilla"
 msgstr "基于 Mozilla 的 GNOME 浏览器"
-
