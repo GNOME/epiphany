@@ -65,8 +65,6 @@ static void
 mozilla_embed_js_status_cb (GtkMozEmbed *embed, MozillaEmbed *membed);
 static void
 mozilla_embed_visibility_cb (GtkMozEmbed *embed, gboolean visibility, MozillaEmbed *membed);
-static void
-mozilla_embed_destroy_brsr_cb (GtkMozEmbed *embed, MozillaEmbed *embed);
 static gint
 mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event, MozillaEmbed *membed);
 static gint

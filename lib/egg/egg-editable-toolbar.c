@@ -312,7 +312,8 @@ set_item_drag_source (GtkWidget *item,
 static GtkWidget *
 create_item_from_action (EggEditableToolbar *t,
 			 const char *action_name,
-			 gboolean is_separator)
+			 gboolean is_separator,
+			 GtkAction **ret_action)
 {
   GtkWidget *item;
   GtkAction *action;
@@ -357,6 +358,11 @@ create_item_from_action (EggEditableToolbar *t,
       gtk_tool_item_set_use_drag_window (GTK_TOOL_ITEM (item), TRUE);
     }
 
+  if (ret_action)
+    {
+      *ret_action = action;
+    }
+
   return item;
 }
 
@@ -364,15 +370,15 @@ static GtkWidget *
 create_item (EggEditableToolbar *t,
 	     EggToolbarsModel   *model,
 	     int                 toolbar_position,
-	     int                 position)
+	     int                 position,
+             GtkAction         **ret_action)
 {
   const char *action_name;
   gboolean is_separator;
 
   action_name = egg_toolbars_model_item_nth
-		(model, toolbar_position, position,
-		 &is_separator);
-  return create_item_from_action (t, action_name, is_separator);
+		(model, toolbar_position, position, &is_separator);
+  return create_item_from_action (t, action_name, is_separator, ret_action);
 }
 
 static gboolean
@@ -416,7 +422,7 @@ drag_data_received_cb (GtkWidget          *widget,
     {
       etoolbar->priv->pending = FALSE;
       etoolbar->priv->dragged_item =
-        create_item_from_action (etoolbar, id, data_is_separator (id));
+        create_item_from_action (etoolbar, id, data_is_separator (id), NULL);
     }
   else
     {
@@ -755,12 +761,19 @@ item_added_cb (EggToolbarsModel   *model,
 {
   GtkWidget *toolbar;
   GtkWidget *item;
+  GtkAction *action;
 
   toolbar = get_toolbar_nth (t, toolbar_position);
   gtk_widget_set_size_request (toolbar, -1, -1);
-  item = create_item (t, model, toolbar_position, position);
+  item = create_item (t, model, toolbar_position, position, &action);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
 		      GTK_TOOL_ITEM (item), position);
+
+  /* FIXME Hack to make tooltip work from gtk */
+  if (action)
+    {
+      g_object_notify (G_OBJECT (action), "tooltip");
+    }
 }
 
 static void
@@ -836,12 +849,18 @@ egg_editable_toolbar_construct (EggEditableToolbar *t)
       for (l = 0; l < n_items; l++)
         {
           GtkWidget *item;
+          GtkAction *action;
 
-          item = create_item (t, model, i, l);
+          item = create_item (t, model, i, l, &action);
           if (item)
             {
 	      gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
 			          GTK_TOOL_ITEM (item), l);
+              /* FIXME Hack to make tooltip work from gtk */
+              if (action)
+                {
+                  g_object_notify (G_OBJECT (action), "tooltip");
+                }
             }
           else
             {
