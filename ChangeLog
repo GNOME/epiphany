@@ -1,3 +1,21 @@
+2003-06-05  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/epiphany.schemas.in:
+	* embed/ephy-embed-popup.c: (embed_popup_download_link_cmd):
+	* embed/ephy-embed-utils.c: (ephy_embed_utils_save):
+
+	Actually add the ask for dest pref, it was using the wrong key.
+
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	Return directory also on cancel.
+
+	* lib/ephy-prefs.h:
+	* src/popup-commands.c: (popup_cmd_download_link):
+
+	Persist directory also on cancel.
+
 2003-06-04  David Bordoley  <bordoley@msu.edu>
 
 	* data/ui/epiphany-ui.xml.in:

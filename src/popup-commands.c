@@ -329,7 +329,7 @@ popup_cmd_download_link (EggAction *action,
 {
 	save_property_url (action, window,
 		           eel_gconf_get_boolean
-		           (CONF_STATE_DOWNLOADING_DIR),
+		           (CONF_ASK_DOWNLOAD_DEST),
 		           TRUE, "link");
 }
 

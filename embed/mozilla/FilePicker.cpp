@@ -280,11 +280,9 @@ NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 
 	gint retVal = gtk_dialog_run(GTK_DIALOG(mFileSelector));
 	
-	if (retVal == GTK_RESPONSE_OK)
-	{
-		HandleFilePickerResult(_retval);
-	}
-	else
+	HandleFilePickerResult(_retval);
+
+	if (retVal != GTK_RESPONSE_OK)
 	{
 		*_retval = returnCancel;
 	}

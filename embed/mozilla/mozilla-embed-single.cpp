@@ -1100,6 +1100,7 @@ impl_show_file_picker (EphyEmbedSingle *shell,
 		       int *ret_file_format)
 {
 	gchar *expanded_directory;
+	gresult result;
 
         GFilePicker *filePicker = new GFilePicker (file_formats);
 
@@ -1132,19 +1133,15 @@ impl_show_file_picker (EphyEmbedSingle *shell,
                 *ret_file_format = filePicker->mSelectedFileFormat;
         }
 
-        if (retval == nsIFilePicker::returnCancel)
-        {
-                delete filePicker;
-                return G_FAILED;
-        }
-        else
-        {
-                nsCOMPtr<nsILocalFile> file;
-                filePicker->GetFile (getter_AddRefs(file));
-		nsCAutoString tempFullPathStr;
-                file->GetNativePath (tempFullPathStr);
-                *ret_fullpath = g_strdup (tempFullPathStr.get());
-                delete filePicker;
-                return G_OK;
-        }
+        nsCOMPtr<nsILocalFile> local_file;
+	filePicker->GetFile (getter_AddRefs(local_file));
+	nsCAutoString tempFullPathStr;
+	local_file->GetNativePath (tempFullPathStr);
+	*ret_fullpath = g_strdup (tempFullPathStr.get());
+
+        result = (retval == nsIFilePicker::returnCancel) ? G_FAILED : G_OK;
+
+	delete filePicker;
+
+	return result;
 }

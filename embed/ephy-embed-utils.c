@@ -140,28 +140,30 @@ ephy_embed_utils_save (GtkWidget *window,
                                          NULL, NULL);
 	}
 
+
+	uri = gnome_vfs_uri_new (retPath);
+	g_return_if_fail (uri != NULL);
+
+        retDir = gnome_vfs_uri_extract_dirname (uri);
+
         if (ret == G_OK)
         {
-                uri = gnome_vfs_uri_new (retPath);
-		g_return_if_fail (uri != NULL);
-
-                retDir = gnome_vfs_uri_extract_dirname (uri);
-
 		if (with_content) flags |= EMBED_PERSIST_SAVE_CONTENT;
+
 		ephy_embed_persist_set_flags (persist, flags);
 
 		ephy_embed_persist_set_dest (persist, retPath);
 
 		ephy_embed_persist_save (persist);
+	}
 
-                /* set default save dir */
-                eel_gconf_set_string (default_dir_pref,
-                                     retDir);
+	/* set default save dir */
+	eel_gconf_set_string (default_dir_pref,
+                              retDir);
 
-                g_free (retDir);
-                gnome_vfs_uri_unref (uri);
-	        g_free (retPath);
-        }
+	g_free (retDir);
+	gnome_vfs_uri_unref (uri);
+	g_free (retPath);
 
 	g_object_unref (G_OBJECT(persist));
 
