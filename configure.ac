@@ -561,19 +561,29 @@ if test "x$have_iso_codes" = "xyes"; then
 	AC_DEFINE([HAVE_ISO_CODES],[1],[Define if you have the iso-codes package])
 fi
 
-dnl Add the languages which your application supports here.
-ALL_LINGUAS="am ar az be bg bn bs ca cs cy da de el en_CA en_GB es et eu fa fi fr ga gu he hi hr hu id is it ja ko li lt mi mk ml mn ms nb ne nl nn no pa pl pt pt_BR ro ru sk sl sq sr sr@Latn sv ta th tk tr uk vi wa zh_CN zh_TW"
+dnl Translators: new languages must be added to the po/LINGUAS file
+ALL_LINGUAS="`cat "$srcdir/po/LINGUAS" | grep -v '^#'`"
+
+AC_SUBST([CONFIG_STATUS_DEPENDENCIES],['$(top_srcdir)/po/LINGUAS'])
 
 GETTEXT_PACKAGE=epiphany
 AC_SUBST([GETTEXT_PACKAGE])
-AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [Gettext package])
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[Gettext package])
 AM_GLIB_GNU_GETTEXT
 AM_GLIB_DEFINE_LOCALEDIR([GNOMELOCALEDIR])
 
 dnl uninstalled share dir to search data
 AC_DEFINE_UNQUOTED([SHARE_UNINSTALLED_DIR], ["`pwd`/data"], [path to source data dir])
 
+dnl *****************
+dnl API Documentation
+dnl *****************
+
 GTK_DOC_CHECK([1.0])
+
+dnl ************
+dnl Output files
+dnl ************
 
 AC_CONFIG_FILES([
 Makefile
