@@ -49,22 +49,78 @@ NS_IMPL_ISUPPORTS1(EphyContentPolicy, nsIContentPolicy)
 
 EphyContentPolicy::EphyContentPolicy()
 {
-	LOG ("EphyContentPolicy constructor")
+	LOG ("EphyContentPolicy ctor (%p)", this)
 
 	mLocked = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_UNSAFE_PROTOCOLS);
-	mSafeProtocols = eel_gconf_get_string_list (CONF_LOCKDOWN_ADDITIONAL_SAFE_PROTOCOLS);
 
+	mSafeProtocols = eel_gconf_get_string_list (CONF_LOCKDOWN_ADDITIONAL_SAFE_PROTOCOLS);
 	mSafeProtocols = g_slist_prepend (mSafeProtocols, g_strdup ("https"));
 	mSafeProtocols = g_slist_prepend (mSafeProtocols, g_strdup ("http"));
+
 }
 
 EphyContentPolicy::~EphyContentPolicy()
 {
-	LOG ("EphyContentPolicy destructor")
+	LOG ("EphyContentPolicy dtor (%p)", this)
 
 	g_slist_foreach (mSafeProtocols, (GFunc) g_free, NULL);
 	g_slist_free (mSafeProtocols);
 }
+
+#if MOZILLA_SNAPSHOT >= 18
+NS_IMETHODIMP
+EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
+			      nsIURI *aContentLocation,
+			      nsIURI *aRequestingLocation,
+			      nsIDOMNode *aRequestingNode,
+			      const nsACString &aMimeTypeGuess,
+			      nsISupports *aExtra,
+			      PRInt16 *aDecision)
+{
+	if (!mLocked)
+	{
+		*aDecision = nsIContentPolicy::ACCEPT;
+		return NS_OK;
+	}
+
+	NS_ENSURE_TRUE (aContentLocation, NS_ERROR_FAILURE);
+
+	nsCAutoString scheme;
+	aContentLocation->GetScheme (scheme);
+
+	nsCAutoString spec;
+	aContentLocation->GetSpec (spec);
+
+	LOG ("ShouldLoad type=%d location=%s (scheme %s)", aContentType, spec.get(), scheme.get())
+
+	*aDecision = nsIContentPolicy::REJECT_REQUEST;
+
+	/* Allow the load if the protocol is in safe list, or it's about:blank */
+	if (g_slist_find_custom (mSafeProtocols, scheme.get(), (GCompareFunc) strcmp)
+	    || spec.Equals ("about:blank"))
+	{
+		*aDecision = nsIContentPolicy::ACCEPT;
+	}
+
+	LOG ("Decision: %sallowing load", *aDecision >= 0 ? "" : "DIS")
+
+	return NS_OK;
+}
+
+NS_IMETHODIMP
+EphyContentPolicy::ShouldProcess(PRUint32 aContentType,
+			         nsIURI *aContentLocation,
+			         nsIURI *aRequestingLocation,
+			         nsIDOMNode *aRequestingNode,
+			         const nsACString &aMimeType,
+			         nsISupports *aExtra,
+			         PRInt16 *aDecision)
+{
+	*aDecision = nsIContentPolicy::ACCEPT;
+	return NS_OK;
+}
+
+#else
 
 /* boolean shouldLoad (in PRInt32 contentType, in nsIURI contentLocation, in nsISupports ctxt, in nsIDOMWindow window); */
 NS_IMETHODIMP EphyContentPolicy::ShouldLoad(PRInt32 contentType,
@@ -75,10 +131,7 @@ NS_IMETHODIMP EphyContentPolicy::ShouldLoad(PRInt32 contentType,
 {
 	if (!mLocked)
 	{
-		LOG ("Not locked!")
-
 		*_retval = PR_TRUE;
-
 		return NS_OK;
 	}
 
@@ -88,8 +141,6 @@ NS_IMETHODIMP EphyContentPolicy::ShouldLoad(PRInt32 contentType,
 	nsCAutoString spec;
 	contentLocation->GetSpec (spec);
 
-	LOG ("ShouldLoad type=%d location=%s (scheme %s)", contentType, spec.get(), scheme.get())
-
 	*_retval = PR_FALSE;
 
 	/* Allow the load if the protocol is in safe list, or it's about:blank */
@@ -98,8 +149,6 @@ NS_IMETHODIMP EphyContentPolicy::ShouldLoad(PRInt32 contentType,
 	{
 		*_retval = PR_TRUE;
 	}
-
-	LOG ("Decision: %sallowing load", *_retval == PR_TRUE ? "" : "NOT ")
 
 	return NS_OK;
 }
@@ -111,11 +160,10 @@ NS_IMETHODIMP EphyContentPolicy::ShouldProcess(PRInt32 contentType,
 					       nsIDOMWindow *window,
 					       PRBool *_retval)
 {
-	/* As far as I can tell from reading mozilla code, this is never called. */
-
+	/* This is never called. */
 	LOG ("ShouldProcess: this is quite unexpected!")
 
 	*_retval = PR_TRUE;
-
 	return NS_OK;
 }
+#endif /* MOZILLA_SNAPSHOT >= 18 */
