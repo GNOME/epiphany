@@ -118,6 +118,8 @@ void        ephy_node_add_child             (EphyNode *node,
 					     EphyNode *child);
 void        ephy_node_remove_child          (EphyNode *node,
 					     EphyNode *child);
+void	    ephy_node_sort_children	    (EphyNode *node,
+					     GCompareFunc compare_func);
 gboolean    ephy_node_has_child             (EphyNode *node,
 					     EphyNode *child);
 

@@ -1237,6 +1237,77 @@ ephy_node_has_child (EphyNode *node,
 	return ret;
 }
 
+static int
+ephy_node_real_get_child_index (EphyNode *node,
+			   EphyNode *child)
+{
+	EphyNodeParent *node_info;
+	int ret;
+
+	node_info = g_hash_table_lookup (child->priv->parents,
+					 GINT_TO_POINTER (node->priv->id));
+
+	if (node_info == NULL)
+		return -1;
+
+	ret = node_info->index;
+	
+	return ret;
+}
+
+void
+ephy_node_sort_children (EphyNode *node,
+			 GCompareFunc compare_func)
+{
+	GPtrArray *newkids;
+	int i, *new_order;
+	
+	g_return_if_fail (EPHY_IS_NODE (node));
+	g_return_if_fail (compare_func != NULL);
+
+	lock_gdk ();
+
+	g_static_rw_lock_writer_lock (node->priv->lock);
+
+	newkids = g_ptr_array_new ();
+	g_ptr_array_set_size (newkids, node->priv->children->len);
+
+	/* dup the array */
+	for (i = 0; i < node->priv->children->len; i++)
+	{
+		g_ptr_array_index (newkids, i) = g_ptr_array_index (node->priv->children, i);
+	}
+	
+	g_ptr_array_sort (newkids, compare_func);
+
+	new_order = g_new (int, newkids->len);
+	memset (new_order, -1, sizeof (int) * newkids->len);
+
+	for (i = 0; i < newkids->len; i++)
+	{
+		EphyNodeParent *node_info;
+		EphyNode *child;
+
+		child = g_ptr_array_index (newkids, i);
+		new_order[ephy_node_real_get_child_index (node, child)] = i;
+		node_info = g_hash_table_lookup (child->priv->parents,
+					         GINT_TO_POINTER (node->priv->id));
+		node_info->index = i;
+	}	
+
+	g_ptr_array_free (node->priv->children, FALSE);
+	node->priv->children = newkids;
+	
+	write_lock_to_read_lock (node);
+	
+	g_signal_emit (G_OBJECT (node), ephy_node_signals[CHILDREN_REORDERED], 0, new_order);
+	g_free (new_order);
+
+	g_static_rw_lock_reader_unlock (node->priv->lock);
+
+	unlock_gdk ();
+}
+
 void
 ephy_node_reorder_children (EphyNode *node,
  			    int *new_order)
@@ -1342,11 +1413,11 @@ get_child_index_real (EphyNode *node,
 	return node_info->index;
 }
 
+
 int
 ephy_node_get_child_index (EphyNode *node,
 			   EphyNode *child)
 {
-	EphyNodeParent *node_info;
 	int ret;
 	
 	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
@@ -1355,14 +1426,8 @@ ephy_node_get_child_index (EphyNode *node,
 	g_static_rw_lock_reader_lock (node->priv->lock);
 	g_static_rw_lock_reader_lock (child->priv->lock);
 
-	node_info = g_hash_table_lookup (child->priv->parents,
-					 GINT_TO_POINTER (node->priv->id));
+	ret = ephy_node_real_get_child_index (node, child);
 
-	if (node_info == NULL)
-		return -1;
-
-	ret = node_info->index;
-	
 	g_static_rw_lock_reader_unlock (node->priv->lock);
 	g_static_rw_lock_reader_unlock (child->priv->lock);
 
