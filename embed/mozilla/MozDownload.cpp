@@ -217,6 +217,8 @@ MozDownload::GetSize(PRUint64 *aSize)
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
+#endif  /* MOZ_NSIDOWNLOAD_GETSIZE */
+
 NS_IMETHODIMP
 MozDownload::GetStartTime(PRInt64 *aStartTime)
 {
@@ -225,7 +227,6 @@ MozDownload::GetStartTime(PRInt64 *aStartTime)
 
 	return NS_OK;
 }
-#endif /* MOZ_NSIDOWNLOAD_GETSIZE */
 
 NS_IMETHODIMP
 MozDownload::GetDisplayName(PRUnichar * *aDisplayName)
