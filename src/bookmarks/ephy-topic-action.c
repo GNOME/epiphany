@@ -218,7 +218,7 @@ sort_bookmarks (gconstpointer a, gconstpointer b)
 
 #define MAX_LENGTH 32
 
-static gboolean
+static guint
 append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node, gboolean show_empty)
 {
         EphyFaviconCache *cache;
@@ -299,7 +299,7 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 		g_list_free (node_list);
 	}
 
-	return TRUE;
+	return children->len;
 }
 
 static void
@@ -312,33 +312,32 @@ open_in_tabs_activate_cb (GtkWidget *menu, EphyTopicAction *action)
 	children = ephy_node_get_children (action->priv->topic_node);
 	for (i = 0; i < children->len; i++)
 	{
-		GnomeVFSURI *uri;
 		const char *address;
 		EphyNode *child;
 
 		child = g_ptr_array_index (children, i);
 		address = ephy_node_get_property_string
 			(child, EPHY_NODE_BMK_PROP_LOCATION);
-		uri = gnome_vfs_uri_new (address);
-		uri_list = g_list_append (uri_list, uri);
+		uri_list = g_list_append (uri_list, g_strdup (address));
 	}
 
 	g_signal_emit (action, ephy_topic_action_signals[OPEN_IN_TABS],
 		       0, uri_list);
-	gnome_vfs_uri_list_free (uri_list);
+	g_list_foreach (uri_list, (GFunc)g_free, NULL);
+	g_list_free (uri_list);
 }
 
 static GtkWidget *
 build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 {
 	GtkWidget *menu;
-	gboolean empty;
+	guint n_bookmarks;
 
 	menu = gtk_menu_new ();
 
-	empty = append_bookmarks_menu (action, menu, node, TRUE);
+	n_bookmarks = append_bookmarks_menu (action, menu, node, TRUE);
 
-	if (empty)
+	if (n_bookmarks > 1)
 	{
 		GtkWidget *item;
 

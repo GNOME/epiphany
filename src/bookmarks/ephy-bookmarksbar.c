@@ -100,13 +100,26 @@ ephy_bookmarksbar_get_type (void)
 static void
 open_in_tabs_cb (GtkAction *action, GList *uri_list, EphyBookmarksBar *toolbar)
 {
-	EphyWindow *window = toolbar->priv->window;
 	EphyTab *tab;
+	EphyWindow *window;
+	GList *l = uri_list;
 
-	g_return_if_fail (EPHY_IS_WINDOW (window));
+	g_return_if_fail (l != NULL);
 
-	tab = ephy_window_get_active_tab (window);
-	ephy_window_load_in_tabs (window, tab, uri_list);
+	tab = ephy_shell_new_tab (ephy_shell, NULL, NULL, l->data,
+				  EPHY_NEW_TAB_OPEN_PAGE);
+	g_return_if_fail (tab != NULL);
+
+	window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (tab)));
+	g_return_if_fail (window != NULL);
+
+	for (l = l->next; l != NULL; l = l->next)
+	{
+		ephy_shell_new_tab (ephy_shell, window, NULL, l->data,
+				    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+				    EPHY_NEW_TAB_OPEN_PAGE |
+				    EPHY_NEW_TAB_APPEND_LAST);
+	}
 }
 
 static void
