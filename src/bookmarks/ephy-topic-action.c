@@ -758,14 +758,17 @@ show_context_menu (EphyTopicAction *action, GtkWidget *proxy,
 			gtk_get_current_event_time ());
 }
 
-static void
+static gboolean
 popup_menu_cb (GtkWidget *widget, EphyTopicAction *action)
 {
 	if (gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))
         {
                 show_context_menu (action, widget,
 				   ephy_gui_menu_position_under_widget);
+		return TRUE;
         }
+
+	return FALSE;
 }
 
 static gboolean
@@ -1049,4 +1052,3 @@ ephy_topic_action_new (const char *name, guint id)
 
 	return action;
 }
-

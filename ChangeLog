@@ -1,5 +1,12 @@
 2004-08-28  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-topic-action.c: (popup_menu_cb),
+	(ephy_topic_action_new):
+
+	popup_menu signal handler has to return gboolean, not void.
+
+2004-08-28  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-bookmark-action.c: (popup_menu_cb),
 	(ephy_bookmark_action_finalize):
 
