@@ -78,17 +78,21 @@
 </menu>
 
 <popups>
-<popup name="EphyEmbedInputPopup" verb="FakeToplevel">
+<popup name="EphyInputPopup" verb="FakeToplevel">
 	<menuitem name="EditCutIP" verb="EditCut"/> 
 	<menuitem name="EditCopyIP" verb="EditCopy"/>
 	<menuitem name="EditPasteIP" verb="EditPaste"/>
 </popup>
-
+<popup name="EphyTextPopup" verb="FakeToplevel">
+	<menuitem name="EditCopyTP" verb="EditCopy"/>
+</popup>
 <popup name="EphyDocumentPopup" verb="FakeToplevel">
 	<menuitem name="GoBackDP" verb="GoBack"/>
 	<menuitem name="GoForwardDP" verb="GoForward"/>
 	<menuitem name="GoReloadDP" verb="ViewReload"/>
 	<separator name="DPSep1"/>
+	<menuitem name="EditCutIP" verb="EditCut"/> 
+
 	<menuitem name="SavePageAsDP" verb="FileSaveAs"/>
 	<menuitem name="SaveBackgroundAsDP" verb="SaveBackgroundAs"/>
 	<menuitem name="BookmarkPageDP" verb="FileBookmarkPage"/>

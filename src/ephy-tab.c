@@ -849,11 +849,14 @@ ephy_tab_show_embed_popup (EphyTab *tab, EphyEmbedEvent *event)
 	EphyWindow *window;
 	char *path;
 	GtkWidget *widget;
+	gresult can_copy;
 
 	window = ephy_tab_get_window (tab);
 
 	ephy_embed_event_get_property (event, "framed_page", &value);
 	framed = g_value_get_int (value);
+
+	can_copy = ephy_embed_selection_can_copy (tab->priv->embed);
 
 	ephy_embed_event_get_context (event, &context);
 
@@ -870,6 +873,14 @@ ephy_tab_show_embed_popup (EphyTab *tab, EphyEmbedEvent *event)
 	{
 		popup = "EphyImagePopup";
 	}
+	else if (context & EMBED_CONTEXT_INPUT)
+	{
+		popup = "EphyInputPopup";
+	}
+	else if (can_copy == G_OK)
+	{
+		popup = "EphyTextPopup";
+	}
 	else
 	{
 		popup = framed ? "EphyFramedDocumentPopup" :
@@ -877,7 +888,6 @@ ephy_tab_show_embed_popup (EphyTab *tab, EphyEmbedEvent *event)
 	}
 
 	path = g_strconcat ("/popups/", popup, NULL);
-	g_print (path);
 	widget = egg_menu_merge_get_widget (EGG_MENU_MERGE (window->ui_merge),
 				            path);
 	g_free (path);
