@@ -42,6 +42,7 @@
 #include "ephy-embed-single.h"
 #include "ephy-shell.h"
 #include "ephy-permission-manager.h"
+#include "ephy-link.h"
 
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
@@ -162,10 +163,21 @@ ephy_tab_get_type (void)
                         0, /* n_preallocs */
                         (GInstanceInitFunc) ephy_tab_init
                 };
+		static const GInterfaceInfo link_info = 
+		{
+			NULL,
+			NULL,
+			NULL
+		};
+
 
                 type = g_type_register_static (GTK_TYPE_BIN,
 					       "EphyTab",
 					       &our_info, 0);
+
+		g_type_add_interface_static (type,
+					     EPHY_TYPE_LINK,
+					     &link_info);
         }
 
         return type;
@@ -1402,6 +1414,7 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 	}
 }
 
+
 static gboolean
 open_link_in_new_tab (EphyTab *tab,
 		      const char *link_address)
@@ -1416,13 +1429,11 @@ open_link_in_new_tab (EphyTab *tab,
 
 	if (new_tab)
 	{
-		ephy_shell_new_tab (ephy_shell, window, tab,
-				    link_address,
-				    EPHY_NEW_TAB_OPEN_PAGE |
-				    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+		return ephy_link_open (EPHY_LINK (tab), link_address,
+				       tab, EPHY_LINK_NEW_TAB) != NULL;
 	}
 
-	return new_tab;
+	return FALSE;
 }
 
 static void
@@ -1459,8 +1470,9 @@ clipboard_text_received_cb (GtkClipboard *clipboard,
 	if (*weak_ptr != NULL && text != NULL)
 	{
 		EphyEmbed *embed = (EphyEmbed *) *weak_ptr;
+		EphyTab *tab = ephy_tab_for_embed (embed);
 
-		ephy_embed_load_url (embed, text);
+		ephy_link_open (EPHY_LINK (tab), text, tab, 0);
 	}
 
 	if (*weak_ptr != NULL)

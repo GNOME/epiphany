@@ -1,3 +1,21 @@
+2005-02-24  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-link.c: (ephy_link_base_init):
+
+	Make the signal RUN_LAST.
+
+	* src/ephy-tab.c: (ephy_tab_get_type), (open_link_in_new_tab),
+	(clipboard_text_received_cb):
+
+	Make EphyTab implement EphyLink interface.
+
+	* src/ephy-window.c: (modal_alert_cb), (tab_added_cb),
+	(tab_removed_cb), (ephy_window_open_link):
+
+	Attach to link signal on EphyTab.
+	Don't switch tabs to modal alerts in ppv mode; block the alerts
+	instead.
+
 2005-02-23  Carlos Garnacho Parro  <carlos@gnome.org>
 
 	* src/ephy-session.c: don't activate startup notification with the

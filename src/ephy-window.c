@@ -1979,11 +1979,15 @@ static gboolean
 modal_alert_cb (EphyEmbed *embed,
 		EphyWindow *window)
 {
+	EphyWindowPrivate *priv = window->priv;
 	EphyTab *tab;
 	char *address;
 
 	tab = ephy_tab_for_embed (embed);
 	g_return_val_if_fail (tab != NULL, FALSE);
+
+	/* if we're in ppv mode, we cannot switch tabs, so inhibit the alert */
+	if (priv->ppv_mode) return TRUE;
 
 	/* switch the window to the tab, and bring the window to the foreground
 	 * (since the alert is modal, the user won't be able to do anything
@@ -1994,7 +1998,7 @@ modal_alert_cb (EphyEmbed *embed,
 
 	/* make sure the location entry shows the real URL of the tab's page */
 	address = ephy_embed_get_location (embed, TRUE);
-	ephy_toolbar_set_location (window->priv->toolbar, address);
+	ephy_toolbar_set_location (priv->toolbar, address);
 	g_free (address);
 
 	/* don't suppress alert */
@@ -2080,6 +2084,9 @@ tab_added_cb (EphyNotebook *notebook,
 
 	g_signal_connect_object (G_OBJECT (tab), "notify::visibility",
 				 G_CALLBACK (sync_tab_visibility), window, 0);
+	g_signal_connect_object (G_OBJECT (tab), "open-link",
+				 G_CALLBACK (ephy_link_open), window,
+				 G_CONNECT_SWAPPED);
 
 	embed = ephy_tab_get_embed (tab);
 	g_return_if_fail (embed != NULL);
@@ -2108,6 +2115,9 @@ tab_removed_cb (EphyNotebook *notebook,
 
 	g_signal_handlers_disconnect_by_func (G_OBJECT (tab),
 					      G_CALLBACK (sync_tab_visibility),
+					      window);
+	g_signal_handlers_disconnect_by_func (G_OBJECT (tab),
+					      G_CALLBACK (ephy_link_open),
 					      window);	
 
 	window->priv->num_tabs--;
@@ -2524,6 +2534,9 @@ ephy_window_open_link (EphyLink *link,
 	EphyTab *new_tab;
 
 	g_return_val_if_fail (address != NULL, NULL);
+
+	/* don't do anything in ppv mode */
+	if (window->priv->ppv_mode) return NULL;
 
 	if (tab == NULL)
 	{
