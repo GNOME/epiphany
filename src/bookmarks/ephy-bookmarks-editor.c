@@ -608,6 +608,8 @@ add_bookmarks_source (const char *file,
 
 		g_free (description);
 	}
+
+	g_strfreev (path);
 }
 
 static void
