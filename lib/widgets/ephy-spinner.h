@@ -41,13 +41,6 @@ G_BEGIN_DECLS
 
 typedef struct EphySpinnerInfo	EphySpinnerInfo;
 
-struct EphySpinnerInfo
-{
-	gchar	*name;
-	gchar	*filename;
-	gchar	*directory;
-};
-
 typedef struct EphySpinner EphySpinner;
 typedef struct EphySpinnerClass EphySpinnerClass;
 typedef struct EphySpinnerDetails EphySpinnerDetails;
@@ -67,8 +60,6 @@ void          ephy_spinner_start          (EphySpinner *throbber);
 void          ephy_spinner_stop           (EphySpinner *throbber);
 void	      ephy_spinner_set_small_mode (EphySpinner *spinner,
 					   gboolean new_mode);
-GList	     *ephy_spinner_list_spinners  (void);
-void	      ephy_spinner_info_free      (EphySpinnerInfo *info);
 
 G_END_DECLS
 

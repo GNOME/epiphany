@@ -18,6 +18,9 @@ schemadir = $(sysconfdir)/gconf/schemas
 schema_in_files = epiphany.schemas.in
 schema_DATA = epiphany.schemas
 
+aboutdir = $(pkgdatadir)
+about_DATA = epiphany.html
+
 EXTRA_DIST = $(glade_DATA)
 
 install-data-local:

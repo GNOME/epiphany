@@ -347,6 +347,7 @@ ephy_init_services (EphyShell *gs)
 	/* it also enables notifiers support */
 	eel_gconf_monitor_add ("/apps/epiphany");
 	eel_gconf_monitor_add ("/apps/nautilus/preferences");
+	eel_gconf_monitor_add ("/system/proxy");
 
 #ifdef ENABLE_NAUTILUS_VIEW
 

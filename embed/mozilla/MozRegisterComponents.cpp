@@ -20,6 +20,7 @@
 #include <config.h>
 #endif
 
+#include "EphyAboutRedirector.h"
 #include "StartHereProtocolHandler.h"
 #include "ContentHandler.h"
 #include "ExternalProtocolService.h"
@@ -41,6 +42,7 @@ static NS_DEFINE_CID(kContentHandlerCID, G_CONTENTHANDLER_CID);
 static NS_DEFINE_CID(kProtocolServiceCID, G_EXTERNALPROTOCOLSERVICE_CID);
 static NS_DEFINE_CID(kFilePickerCID, G_FILEPICKER_CID);
 static NS_DEFINE_CID(kStartHereProcotolHandlerCID, G_START_HERE_PROTOCOLHANDLER_CID);
+static NS_DEFINE_CID(kEphyAboutRedirectorCID, EPHY_ABOUT_REDIRECTOR_CID);
 static NS_DEFINE_CID(knsFtpProtocolHandlerCID, NS_FTPPROTOCOLHANDLER_CID);
 static NS_DEFINE_CID(kFtpHandlerCID, G_FTP_PROTOCOL_CID);
 static NS_DEFINE_CID(kIRCHandlerCID, G_IRC_PROTOCOL_CID);
@@ -92,6 +94,20 @@ mozilla_register_components (void)
 			      kStartHereProcotolHandlerCID,
 			      G_START_HERE_PROTOCOLHANDLER_CLASSNAME,
 			      G_START_HERE_PROTOCOLHANDLER_CONTRACTID,
+			      PR_TRUE);
+	if (NS_FAILED(rv)) ret = FALSE;
+
+	rv = RegisterFactory (NS_NewEphyAboutRedirectorFactory,
+			      kEphyAboutRedirectorCID,
+			      EPHY_ABOUT_REDIRECTOR_CLASSNAME,
+			      EPHY_ABOUT_REDIRECTOR_OPTIONS_CONTRACTID,
+			      PR_TRUE);
+	if (NS_FAILED(rv)) ret = FALSE;
+
+	rv = RegisterFactory (NS_NewEphyAboutRedirectorFactory,
+			      kEphyAboutRedirectorCID,
+			      EPHY_ABOUT_REDIRECTOR_CLASSNAME,
+			      EPHY_ABOUT_REDIRECTOR_EPIPHANY_CONTRACTID,
 			      PR_TRUE);
 	if (NS_FAILED(rv)) ret = FALSE;
 

@@ -1,3 +1,27 @@
+2003-03-04  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/Makefile.am:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozRegisterComponents.cpp:
+	* src/Makefile.am:
+
+	about:options and about:epiphany
+
+	* src/ephy-shell.c: (ephy_init_services):
+	
+	monitor proxy changes
+
+	* src/prefs-dialog.c: (create_page), (prefs_dialog_get_page):
+	* src/ui-prefs.c:
+	* src/ui-prefs.h:
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_get_theme_info),
+	(ephy_spinner_init_directory_list), (ephy_spinner_info_free),
+	(ephy_spinner_get_theme_path):
+	* lib/widgets/ephy-spinner.h:
+
+	Remove spinner configuration, this should be part of the icon theme
+	at some point.
+
 2003-03-01  Xan Lopez  <xan@masilla.org>
 
 	* src/bookmarks/ephy-bookmarks-editor.c:

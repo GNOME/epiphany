@@ -23,7 +23,6 @@
 #include "prefs-dialog.h"
 #include "general-prefs.h"
 #include "appearance-prefs.h"
-#include "ui-prefs.h"
 #include "ephy-dialog.h"
 #include "ephy-prefs.h"
 #include "ephy-embed-prefs.h"
@@ -74,6 +73,23 @@ EphyDialogProperty network_properties [] =
 	{ CACHE_COMPARE_PROP, "cache_compare_radiobutton", CONF_NETWORK_CACHE_COMPARE, PT_AUTOAPPLY, NULL },
 	{ DISK_CACHE_PROP, "disk_cache_spin", CONF_NETWORK_DISK_CACHE, PT_AUTOAPPLY, NULL },
 	{ MEMORY_CACHE_PROP, "memory_cache_spin", CONF_NETWORK_MEMORY_CACHE, PT_AUTOAPPLY, NULL },
+
+	{ -1, NULL, NULL }
+};
+
+enum
+{
+	OPEN_IN_TABS_PROP,
+	JUMP_TO_PROP,
+	POPUPS_PROP
+};
+
+static const
+EphyDialogProperty ui_properties [] =
+{
+	{ OPEN_IN_TABS_PROP, "open_in_tabs_checkbutton", CONF_TABS_TABBED, PT_AUTOAPPLY, NULL },
+	{ JUMP_TO_PROP, "jump_to_checkbutton", CONF_TABS_TABBED_AUTOJUMP, PT_AUTOAPPLY, NULL },
+	{ POPUPS_PROP, "popups_checkbutton", CONF_TABS_TABBED_POPUPS, PT_AUTOAPPLY, NULL },
 
 	{ -1, NULL, NULL }
 };
@@ -167,8 +183,6 @@ create_page (PrefsPageID id,
 		page = appearance_prefs_new ();
 		break;
 	case PREFS_PAGE_UI:
-		page = ui_prefs_new ();
-		break;
 	case PREFS_PAGE_ADVANCED:
 		page = ephy_dialog_new ();
 		ephy_dialog_construct (EPHY_DIALOG(page),
@@ -199,6 +213,7 @@ prefs_dialog_get_page (PrefsDialog *pd,
 		break;
 	case PREFS_PAGE_UI:
 		page_widget = "ui_page_box";
+		prop = ui_properties;
 		break;
 	case PREFS_PAGE_ADVANCED:
 		page_widget = "network_page_box";

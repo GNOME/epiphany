@@ -71,13 +71,17 @@ static GList *spinner_directories = NULL;
 
 static void
 ephy_spinner_init_directory_list (void);
-static void
-ephy_spinner_search_directory (const gchar *base, GList **spinner_list);
 static EphySpinnerInfo *
 ephy_spinner_get_theme_info (const gchar *base, const gchar *theme_name);
 static gchar *
 ephy_spinner_get_theme_path (const gchar *theme_name);
 
+struct EphySpinnerInfo
+{
+	char	*name;
+	char	*filename;
+	char	*directory;
+};
 
 static GObjectClass *parent_class = NULL;
 
@@ -550,38 +554,6 @@ ephy_spinner_class_init (EphySpinnerClass *class)
 	widget_class->map = ephy_spinner_map;
 }
 
-static void
-ephy_spinner_search_directory  (const gchar *base, GList **spinner_list)
-{
-	GnomeVFSResult rc;
-	GList *list, *node;
-
-	rc = gnome_vfs_directory_list_load
-		(&list, base, (GNOME_VFS_FILE_INFO_GET_MIME_TYPE |
-			       GNOME_VFS_FILE_INFO_FORCE_FAST_MIME_TYPE |
-			       GNOME_VFS_FILE_INFO_FOLLOW_LINKS));
-	if (rc != GNOME_VFS_OK) return;
-
-	for (node = list; node != NULL; node = g_list_next (node))
-	{
-		GnomeVFSFileInfo *file_info = node->data;
-		EphySpinnerInfo *info;
-
-		if (file_info->name[0] == '.')
-			continue;
-		if (file_info->type != GNOME_VFS_FILE_TYPE_DIRECTORY)
-			continue;
-
-		info = ephy_spinner_get_theme_info (base, file_info->name);
-		if (info != NULL)
-		{
-			*spinner_list = g_list_append (*spinner_list, info);
-		}
-	}
-
-	gnome_vfs_file_info_list_free (list);
-}
-
 static EphySpinnerInfo *
 ephy_spinner_get_theme_info (const gchar *base, const gchar *theme_name)
 {
@@ -589,19 +561,8 @@ ephy_spinner_get_theme_info (const gchar *base, const gchar *theme_name)
 	gchar *path;
 	gchar *icon;
 
-	path = g_build_filename (base, theme_name, NULL);
+	path = g_build_filename (base, theme_name, "throbber", NULL);
 	icon = g_build_filename (path, "rest.png", NULL);
-
-	if (!g_file_test (icon, G_FILE_TEST_EXISTS))
-	{
-		g_free (path);
-		g_free (icon);
-
-		/* handle nautilus throbbers as well */
-
-		path = g_build_filename (base, theme_name, "throbber", NULL);
-		icon = g_build_filename (path, "rest.png", NULL);
-	}
 
 	if (!g_file_test (icon, G_FILE_TEST_EXISTS))
 	{
@@ -624,12 +585,6 @@ ephy_spinner_init_directory_list (void)
 {
 	gchar *path;
 
-	path = g_build_filename (g_get_home_dir (), ephy_dot_dir (), "spinners", NULL);
-	spinner_directories = g_list_append (spinner_directories, path);
-
-	path = g_build_filename (SHARE_DIR, "spinners", NULL);
-	spinner_directories = g_list_append (spinner_directories, path);
-
 	path = g_build_filename (SHARE_DIR, "..", "pixmaps", "nautilus", NULL);
 	spinner_directories = g_list_append (spinner_directories, path);
 
@@ -639,19 +594,13 @@ ephy_spinner_init_directory_list (void)
 #endif
 }
 
-GList *
-ephy_spinner_list_spinners (void)
+static void
+ephy_spinner_info_free (EphySpinnerInfo *info)
 {
-	GList *spinner_list = NULL;
-	GList *tmp;
-
-	for (tmp = spinner_directories; tmp != NULL; tmp = g_list_next (tmp))
-	{
-		gchar *path = tmp->data;
-		ephy_spinner_search_directory (path, &spinner_list);
-	}
-
-	return spinner_list;
+	g_free (info->name);
+	g_free (info->directory);
+	g_free (info->filename);
+	g_free (info);
 }
 
 static gchar *
@@ -674,13 +623,4 @@ ephy_spinner_get_theme_path (const gchar *theme_name)
 	}
 
 	return NULL;
-}
-
-void
-ephy_spinner_info_free (EphySpinnerInfo *info)
-{
-	g_free (info->name);
-	g_free (info->directory);
-	g_free (info->filename);
-	g_free (info);
 }

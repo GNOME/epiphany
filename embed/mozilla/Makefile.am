@@ -43,7 +43,6 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/typeaheadfind \
 	$(GCONF_CFLAGS) \
 	$(EPIPHANY_DEPENDENCY_CFLAGS) \
-	-DLIB_DIR=\"$(pkglibdir)\" \
 	-DG_DISABLE_DEPRECATED          \
         -DGDK_DISABLE_DEPRECATED        \
         -DGTK_DISABLE_DEPRECATED        \
@@ -61,6 +60,8 @@ libephymozillaembed_la_SOURCES = 	\
 	BaseProtocolContentHandler.h    \
 	ContentHandler.cpp		\
 	ContentHandler.h		\
+	EphyAboutRedirector.cpp		\
+	EphyAboutRedirector.h		\
 	EphyEventListener.cpp		\
 	EphyEventListener.h		\
 	EphyWrapper.cpp                 \

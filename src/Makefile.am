@@ -87,8 +87,6 @@ epiphany_SOURCES = 				    	\
 	statusbar.h					\
 	toolbar.c					\
 	toolbar.h					\
-	ui-prefs.c					\
-	ui-prefs.h					\
 	window-commands.c				\
 	window-commands.h
 
