@@ -139,7 +139,7 @@ ephy_node_filter_finalize (GObject *object)
 
 	ephy_node_filter_empty (filter);
 
-	g_ptr_array_free (filter->priv->levels, FALSE);
+	g_ptr_array_free (filter->priv->levels, TRUE);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -147,14 +147,7 @@ ephy_node_filter_finalize (GObject *object)
 EphyNodeFilter *
 ephy_node_filter_new (void)
 {
-	EphyNodeFilter *filter;
-
-	filter = EPHY_NODE_FILTER (g_object_new (EPHY_TYPE_NODE_FILTER,
-					       NULL));
-
-	g_return_val_if_fail (filter->priv != NULL, NULL);
-
-	return filter;
+	return EPHY_NODE_FILTER (g_object_new (EPHY_TYPE_NODE_FILTER, NULL));
 }
 
 void
@@ -165,6 +158,7 @@ ephy_node_filter_add_expression (EphyNodeFilter *filter,
 	while (level >= filter->priv->levels->len)
 		g_ptr_array_add (filter->priv->levels, NULL);
 
+	/* FIXME bogosity! This only works because g_list_append (x, data) == x */
 	g_ptr_array_index (filter->priv->levels, level) =
 		g_list_append (g_ptr_array_index (filter->priv->levels, level), exp);
 }
