@@ -34,12 +34,12 @@
 #include <gtk/gtkhbox.h>
 
 static GtkTargetEntry dest_drag_types[] = {
-  {EGG_TOOLBAR_ITEM_TYPE, 0, 0},
+  {EGG_TOOLBAR_ITEM_TYPE, GTK_TARGET_SAME_APP, 0},
 };
 static int n_dest_drag_types = G_N_ELEMENTS (dest_drag_types);
 
 static GtkTargetEntry source_drag_types[] = {
-  {EGG_TOOLBAR_ITEM_TYPE, 0, 0},
+  {EGG_TOOLBAR_ITEM_TYPE, GTK_TARGET_SAME_APP, 0},
 };
 static int n_source_drag_types = G_N_ELEMENTS (source_drag_types);
 
@@ -694,7 +694,6 @@ egg_toolbar_editor_load_actions (EggToolbarEditor *editor,
   xmlDocPtr doc;
   xmlNodePtr root;
   xmlNodePtr child;
-  GList *l;
 
   doc = xmlParseFile (xml_file);
   root = xmlDocGetRootElement (doc);

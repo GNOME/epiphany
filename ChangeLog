@@ -1,3 +1,16 @@
+2004-04-03  Crispin Flowerday  <gnome@flowerday.cx>
+
+	* lib/egg/egg-editable-toolbar.c: (set_fixed_style),
+	(unset_fixed_style), (toolbar_changed_cb), (unparent_fixed),
+	(update_fixed), (toolbars_clean), (egg_editable_toolbar_construct),
+	(egg_editable_toolbar_set_model):
+	* lib/egg/egg-toolbar-editor.c: (egg_toolbar_editor_load_actions):
+	* lib/egg/egg-toolbars-model.h:
+
+	Synchronise changes from galeon, this fixes simple usage, stops
+	crashes when dragging items to and from other applications, and
+	adds the ability to override the toolbar style.
+
 2004-04-03  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-notebook.c: (notebook_drag_data_received_cb):
