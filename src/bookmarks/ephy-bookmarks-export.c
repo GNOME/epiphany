@@ -150,6 +150,9 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 
 		kid = g_ptr_array_index (children, i);
 
+		ret = xmlTextWriterStartElementNS (writer, "rdf", "li", NULL);
+		if (ret < 0) break;
+
 		smart_url = ephy_node_has_child (smart_bmks, kid);
 		url = ephy_node_get_property_string
 			(kid, EPHY_NODE_BMK_PROP_LOCATION);
@@ -170,16 +173,9 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 			}
 		}
 
-		if (link == NULL)
-		{
-			link = g_strdup (url);
-		}
-
-		ret = xmlTextWriterStartElementNS (writer, "rdf", "li", NULL);
-		if (ret < 0) break;
-
 		ret = xmlTextWriterWriteAttributeNS
-			(writer, "rdf", "about", NULL, link);
+			(writer, "rdf", "about", NULL, link ? link : url);
+		g_free (link);
 		if (ret < 0) break;
 
 		ret = xmlTextWriterEndElement (writer); /* rdf:li */
