@@ -100,7 +100,7 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 	{
 		return ephy_bookmarks_import_mozilla (bookmarks, filename);
 	}
-	else if (strcmp (type, "application/xbel") == 0)
+	else if (strcmp (type, "application/x-xbel") == 0)
 	{
 		return ephy_bookmarks_import_xbel (bookmarks, filename);
 	}
