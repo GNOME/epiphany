@@ -49,6 +49,7 @@
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkuimanager.h>
+#include <gtk/gtkradioaction.h>
 #include <string.h>
 
 #define EPHY_TAB_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TAB, EphyTabPrivate))
@@ -70,7 +71,7 @@ struct EphyTabPrivate
 	int total_requests;
 	int width;
 	int height;
-	GtkAction *action;
+	GtkRadioAction *action;
 	float zoom;
 	EmbedSecurityLevel security_level;
 	TabNavigationFlags nav_flags;
@@ -230,7 +231,11 @@ ephy_tab_action_activate_cb (GtkAction *action, EphyTab *tab)
 {
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
-	ephy_window_jump_to_tab (tab->priv->window, tab);
+	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)) &&
+	    ephy_window_get_active_tab (tab->priv->window) != tab)
+	{
+		ephy_window_jump_to_tab (tab->priv->window, tab);
+	}
 }
 
 static void
@@ -1005,10 +1010,11 @@ ephy_tab_init (EphyTab *tab)
 
 	id = g_strdup_printf ("Tab%lu", tab_id++);
 
-	tab->priv->action = g_object_new (GTK_TYPE_ACTION,
+	tab->priv->action = g_object_new (GTK_TYPE_RADIO_ACTION,
 					  "name", id,
 					  "label", _("Blank page"),
 					  NULL);
+
 	g_free (id);
 	g_signal_connect (tab->priv->action, "activate",
 			  G_CALLBACK (ephy_tab_action_activate_cb), tab);

@@ -55,6 +55,7 @@
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtkactiongroup.h>
+#include <gtk/gtktoggleaction.h>
 #include <gtk/gtkuimanager.h>
 #include <gtk/gtktoggleaction.h>
 
@@ -1128,6 +1129,8 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 
 	if (new_tab)
 	{
+		GtkToggleAction *action;
+
 		sync_tab_address	(new_tab, NULL, window);
 		sync_tab_icon		(new_tab, NULL, window);
 		sync_tab_load_progress	(new_tab, NULL, window);
@@ -1179,6 +1182,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_connect_object (embed, "ge_context_menu",
 					 G_CALLBACK (tab_context_menu_cb),
 					 window, 0);
+
+		action = GTK_TOGGLE_ACTION (ephy_tab_get_action (new_tab));
+		gtk_toggle_action_set_active (action, TRUE);
 	}
 }
 
@@ -1214,13 +1220,6 @@ update_tabs_menu_sensitivity (EphyWindow *window)
 }
 
 static void
-update_tabs_menu (EphyWindow *window)
-{
-	update_tabs_menu_sensitivity (window);
-	ephy_tabs_menu_update (window->priv->tabs_menu);
-}
-
-static void
 tab_added_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
 {
 	EphyTab *tab;
@@ -1230,7 +1229,7 @@ tab_added_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
 
 	window->priv->num_tabs++;
 
-	update_tabs_menu (window);
+	update_tabs_menu_sensitivity (window);
 
 	g_signal_connect_object (G_OBJECT (tab), "notify::visible",
 				 G_CALLBACK (sync_tab_visibility), window, 0);
@@ -1257,7 +1256,7 @@ tab_removed_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
 	}
 	else
 	{
-		update_tabs_menu (window);
+		update_tabs_menu_sensitivity (window);
 	}
 }
 
@@ -1280,7 +1279,8 @@ tab_detached_cb (EphyNotebook *notebook, GtkWidget *child,
 static void
 tabs_reordered_cb (EphyNotebook *notebook, EphyWindow *window)
 {
-	update_tabs_menu (window);
+	update_tabs_menu_sensitivity (window);
+	ephy_tabs_menu_update (window->priv->tabs_menu);
 }
 
 static GtkNotebook *

@@ -1,3 +1,21 @@
+2003-09-24  Marco Pesenti Gritti  <marco@gnome.org>
+	    Dave Bordoley <bordoley@msu.edu>
+
+	* src/ephy-tab.c: (ephy_tab_action_activate_cb), (ephy_tab_init):
+	* src/ephy-tabs-menu.c: (tab_added_cb), (tab_removed_cb),
+	(ephy_tabs_menu_set_window), (ephy_tabs_menu_set_property),
+	(ephy_tabs_menu_class_init), (ephy_tabs_menu_init),
+	(ephy_tabs_menu_clean), (ephy_tabs_menu_update):
+	* src/ephy-window.c: (ephy_window_set_active_tab), (tab_added_cb),
+	(tab_removed_cb), (tabs_reordered_cb):
+
+	Use radio buttons for tabs menu. Do not recreate the
+	action group every time but keep it synced.
+
+	* src/ephy-notebook.c: (ephy_notebook_insert_page):
+
+	Emit added signal before activating the page.
+
 2003-09-24  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/bookmarks/ephy-topic-action.c: (sync_topic_properties):

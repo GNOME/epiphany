@@ -30,6 +30,7 @@
 
 #include <gtk/gtkaccelmap.h>
 #include <gtk/gtkaction.h>
+#include <gtk/gtkradioaction.h>
 #include <gtk/gtkuimanager.h>
 #include <string.h>
 #include <stdlib.h>
@@ -47,6 +48,7 @@ struct _EphyTabsMenuPrivate
 {
 	EphyWindow *window;
 	GtkActionGroup *action_group;
+	GSList *radio_group;
 	guint ui_id;
 };
 
@@ -55,15 +57,12 @@ struct _EphyTabsMenuPrivate
  */
 static void	ephy_tabs_menu_class_init	(EphyTabsMenuClass *klass);
 static void	ephy_tabs_menu_init	  	(EphyTabsMenu *menu);
-static void	ephy_tabs_menu_finalize_impl 	(GObject *o);
 
 enum
 {
 	PROP_0,
 	PROP_WINDOW
 };
-
-static gpointer g_object_class;
 
 /**
  * EphyTabsMenu object
@@ -98,6 +97,58 @@ ephy_tabs_menu_get_type (void)
 }
 
 static void
+tab_added_cb (EphyNotebook *notebook, GtkWidget *child, EphyTabsMenu *menu)
+{
+	EphyTab *tab;
+	GtkAction *action;
+                                                                                                                             
+        g_return_if_fail (EPHY_IS_EMBED (child));
+        tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
+
+	action = GTK_ACTION (ephy_tab_get_action (tab));
+	gtk_action_group_add_action (menu->priv->action_group, action);
+
+	gtk_radio_action_set_group (GTK_RADIO_ACTION (action), menu->priv->radio_group);
+	menu->priv->radio_group = gtk_radio_action_get_group (GTK_RADIO_ACTION (action));
+
+	ephy_tabs_menu_update (menu);
+}
+
+static void
+tab_removed_cb (EphyNotebook *notebook, GtkWidget *child, EphyTabsMenu *menu)
+{
+	EphyTab *tab;
+                                                                                                                             
+	g_return_if_fail (EPHY_IS_EMBED (child));
+	tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
+                                                                                                                             
+	gtk_action_group_remove_action (menu->priv->action_group,
+					GTK_ACTION (ephy_tab_get_action (tab)));
+
+	ephy_tabs_menu_update (menu);
+}
+
+static void
+ephy_tabs_menu_set_window (EphyTabsMenu *menu, EphyWindow *window)
+{
+	GtkWidget *notebook;
+	GtkUIManager *merge;
+
+	menu->priv->window = window;
+
+	merge = GTK_UI_MANAGER (window->ui_merge);
+	menu->priv->action_group = gtk_action_group_new ("TabsActions");
+	gtk_ui_manager_insert_action_group (merge, menu->priv->action_group, 0);
+	g_object_unref (menu->priv->action_group);
+
+	notebook = ephy_window_get_notebook (window);
+	g_signal_connect_object (notebook, "tab_added",
+			         G_CALLBACK (tab_added_cb), menu, 0);
+	g_signal_connect_object (notebook, "tab_removed",
+			         G_CALLBACK (tab_removed_cb), menu, 0);
+}
+
+static void
 ephy_tabs_menu_set_property (GObject *object,
 			     guint prop_id,
 			     const GValue *value,
@@ -108,7 +159,8 @@ ephy_tabs_menu_set_property (GObject *object,
         switch (prop_id)
         {
                 case PROP_WINDOW:
-                        m->priv->window = g_value_get_object (value);
+                        ephy_tabs_menu_set_window
+				(m, EPHY_WINDOW (g_value_get_object (value)));
                         break;
         }
 }
@@ -134,9 +186,6 @@ ephy_tabs_menu_class_init (EphyTabsMenuClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	G_OBJECT_CLASS (klass)->finalize = ephy_tabs_menu_finalize_impl;
-	g_object_class = g_type_class_peek_parent (klass);
-
 	object_class->set_property = ephy_tabs_menu_set_property;
 	object_class->get_property = ephy_tabs_menu_get_property;
 
@@ -158,6 +207,7 @@ ephy_tabs_menu_init (EphyTabsMenu *menu)
 	menu->priv = EPHY_TABS_MENU_GET_PRIVATE (menu);
 
 	menu->priv->ui_id = 0;
+	menu->priv->radio_group = NULL;
 	menu->priv->action_group = NULL;
 }
 
@@ -173,28 +223,7 @@ ephy_tabs_menu_clean (EphyTabsMenu *menu)
 		gtk_ui_manager_ensure_update (merge);
 		p->ui_id = 0;
 	}
-
-	if (p->action_group != NULL)
-	{
-		gtk_ui_manager_remove_action_group (merge, p->action_group);
-		g_object_unref (p->action_group);
-	}
 }
-
-static void
-ephy_tabs_menu_finalize_impl (GObject *o)
-{
-	EphyTabsMenu *menu = EPHY_TABS_MENU (o);
-	EphyTabsMenuPrivate *p = menu->priv;
-
-	if (p->action_group != NULL)
-	{
-		g_object_unref (p->action_group);
-	}
-
-	G_OBJECT_CLASS (g_object_class)->finalize (o);
-}
-
 
 EphyTabsMenu *
 ephy_tabs_menu_new (EphyWindow *window)
@@ -270,7 +299,6 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 	num = g_list_length (tabs);
 	if (num == 0) return;
 
-	p->action_group = gtk_action_group_new ("TabsActions");
 	p->ui_id = gtk_ui_manager_new_merge_id (merge);
 
 	for (l = tabs; l != NULL; l = l->next)
@@ -286,8 +314,6 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 
 		tab_set_action_accelerator (p->action_group, action, i);
 
-		gtk_action_group_add_action (p->action_group, action);
-
 		gtk_ui_manager_add_ui (merge, p->ui_id,
 				       "/menubar/TabsMenu/TabsOpen",
 				       name, action_name,
@@ -296,8 +322,6 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 	}
 
 	g_list_free (tabs);
-
-	gtk_ui_manager_insert_action_group (merge, p->action_group, 0);
 
 	STOP_PROFILER ("Rebuilding tabs menu")
 }

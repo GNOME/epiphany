@@ -1014,6 +1014,8 @@ ephy_notebook_insert_page (EphyNotebook *nb,
 	g_signal_connect_object (tab, "notify::load-status",
 				 G_CALLBACK (sync_load_status), label, 0);
 
+	g_signal_emit (G_OBJECT (nb), signals[TAB_ADDED], 0, child);
+
 	if (jump_to)
 	{
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (nb),
@@ -1021,8 +1023,6 @@ ephy_notebook_insert_page (EphyNotebook *nb,
 		g_object_set_data (G_OBJECT (child), "jump_to",
 				   GINT_TO_POINTER (jump_to));
 	}
-
-	g_signal_emit (G_OBJECT (nb), signals[TAB_ADDED], 0, child);
 }
 
 static void
