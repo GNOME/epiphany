@@ -425,7 +425,7 @@ drag_leave_cb (GtkWidget *widget,
 	remove_scroll_timeout (view);
 }
 
-static gboolean
+static void
 drag_data_received_cb (GtkWidget *widget,
 		       GdkDragContext *context,
 		       int x,
@@ -441,7 +441,7 @@ drag_data_received_cb (GtkWidget *widget,
 
 	if (selection_data->length <= 0 || selection_data->data == NULL)
 	{
-		return FALSE;
+		return;
 	}
 	
 	on_row = gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
@@ -460,7 +460,7 @@ drag_data_received_cb (GtkWidget *widget,
 		GList *uris;
 		gboolean success = FALSE;
 
-		g_return_val_if_fail (on_row || path != NULL, FALSE);
+		g_return_if_fail (on_row && path != NULL);
 
 		node = get_node_from_path (view, path);
 
@@ -489,8 +489,6 @@ drag_data_received_cb (GtkWidget *widget,
 	 * from being called */
 	g_signal_stop_emission_by_name (GTK_TREE_VIEW (view),
 					"drag_data_received");
-
-	return TRUE;
 }
 
 static gboolean
