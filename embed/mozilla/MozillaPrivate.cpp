@@ -1,3 +1,27 @@
+/*
+ *  Copyright (C) 2003 Marco Pesenti Gritti
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2, or (at your option)
+ *  any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
+ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "MozillaPrivate.h"
 
 #include <nsIServiceManagerUtils.h>
@@ -11,8 +35,6 @@
 
 GtkWidget *MozillaFindEmbed (nsIDOMWindow *aDOMWindow)
 {
-        nsresult result;
-
         nsCOMPtr<nsIWindowWatcher> wwatch
                 (do_GetService("@mozilla.org/embedcomp/window-watcher;1"));
         NS_ENSURE_TRUE (wwatch, nsnull);
@@ -33,14 +55,13 @@ GtkWidget *MozillaFindEmbed (nsIDOMWindow *aDOMWindow)
 	NS_ENSURE_TRUE (domWindow, nsnull);
 	
         nsCOMPtr<nsIWebBrowserChrome> windowChrome;
-        result = wwatch->GetChromeForWindow (domWindow,
-                                             getter_AddRefs(windowChrome));
+        wwatch->GetChromeForWindow (domWindow, getter_AddRefs(windowChrome));
 	NS_ENSURE_TRUE (windowChrome, nsnull);
 
-        nsCOMPtr<nsIEmbeddingSiteWindow> window
-                        (do_QueryInterface(windowChrome, &result));
+        nsCOMPtr<nsIEmbeddingSiteWindow> window (do_QueryInterface(windowChrome));
 	NS_ENSURE_TRUE (window, nsnull);
 
+        nsresult result;
         GtkWidget *mozembed;
         result = window->GetSiteWindow ((void **)&mozembed);
 	NS_ENSURE_SUCCESS (result, nsnull);
@@ -51,7 +72,7 @@ GtkWidget *MozillaFindEmbed (nsIDOMWindow *aDOMWindow)
 GtkWidget *MozillaFindGtkParent (nsIDOMWindow *aDOMWindow)
 {
 	GtkWidget *embed = MozillaFindEmbed (aDOMWindow);
-	if (!embed) return nsnull;
+	NS_ENSURE_TRUE (embed, nsnull);
 
 	return gtk_widget_get_toplevel (GTK_WIDGET (embed));
 }
@@ -59,7 +80,7 @@ GtkWidget *MozillaFindGtkParent (nsIDOMWindow *aDOMWindow)
 #define MM_TO_INCH(x)		(((double) x) / 25.4)
 
 NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
-				       nsIPrintSettings *options)
+					  nsIPrintSettings *options)
 {
 	const static int frame_types[] = {
                 nsIPrintSettings::kFramesAsIs,

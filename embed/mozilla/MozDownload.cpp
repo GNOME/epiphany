@@ -41,6 +41,10 @@
  * $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "MozDownload.h"
 #include "mozilla-download.h"
 #include "eel-gconf-extensions.h"
@@ -409,7 +413,7 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 			 strcmp (contentType, "application/xhtml+xml") == 0));
 
 	nsCOMPtr<nsIWebBrowserPersist> webPersist = do_CreateInstance(persistContractID, &rv);
-	if (NS_FAILED(rv)) return rv;
+	NS_ENSURE_SUCCESS (rv, rv);
   
 	PRInt64 timeNow = PR_Now();
   
@@ -420,7 +424,7 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 	/* dlListener attaches to its progress dialog here, which gains ownership */
 	rv = downloader->InitForEmbed (inOriginalURI, inDestFile, fileDisplayName.get(),
 				       nsnull, timeNow, webPersist, embedPersist);
-	if (NS_FAILED(rv)) return rv;
+	NS_ENSURE_SUCCESS (rv, rv);
 
 	PRInt32 flags = nsIWebBrowserPersist::PERSIST_FLAGS_REPLACE_EXISTING_FILES;
 	if (ephy_flags & EMBED_PERSIST_COPY_PAGE)

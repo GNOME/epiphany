@@ -297,7 +297,8 @@ NS_IMETHODIMP GFilePicker::GetFileURL(nsIFileURL **aFileURL)
 {
 	nsCOMPtr<nsILocalFile> file;
 	GetFile (getter_AddRefs(file));
-	
+	NS_ENSURE_TRUE (file, NS_ERROR_FAILURE);
+
 	nsCOMPtr<nsIFileURL> fileURL = do_CreateInstance (NS_STANDARDURL_CONTRACTID);
 	fileURL->SetFile(file);
 	NS_IF_ADDREF(*aFileURL = fileURL);

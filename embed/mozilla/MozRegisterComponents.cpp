@@ -173,12 +173,6 @@ static const nsModuleComponentInfo sAppComps[] = {
 	{
 		EPHY_ABOUT_REDIRECTOR_CLASSNAME,
 		EPHY_ABOUT_REDIRECTOR_CID,
-		EPHY_ABOUT_REDIRECTOR_OPTIONS_CONTRACTID,
-		EphyAboutRedirectorConstructor
-	},
-	{
-		EPHY_ABOUT_REDIRECTOR_CLASSNAME,
-		EPHY_ABOUT_REDIRECTOR_CID,
 		EPHY_ABOUT_REDIRECTOR_CONSPIRACY_CONTRACTID,
 		EphyAboutRedirectorConstructor
 	},
@@ -230,16 +224,18 @@ mozilla_register_components (void)
 	nsresult rv;
 
 	nsCOMPtr<nsIComponentRegistrar> cr;
-	rv = NS_GetComponentRegistrar(getter_AddRefs(cr));
-	NS_ENSURE_SUCCESS(rv, rv);
+	NS_GetComponentRegistrar(getter_AddRefs(cr));
+	NS_ENSURE_TRUE (cr, FALSE);
 
 	for (int i = 0; i < sNumAppComps; i++)
 	{
 		nsCOMPtr<nsIGenericFactory> componentFactory;
 		rv = NS_NewGenericFactory(getter_AddRefs(componentFactory),
 					  &(sAppComps[i]));
-		if (NS_FAILED(rv))
+		if (NS_FAILED(rv) || !componentFactory)
 		{
+			g_warning ("Failed to make a factory for %s\n", sAppComps[i].mDescription);
+
 			ret = FALSE;
 			continue;  // don't abort registering other components
 		}
@@ -249,7 +245,11 @@ mozilla_register_components (void)
 					 sAppComps[i].mContractID,
 					 componentFactory);
 		if (NS_FAILED(rv))
+		{
+			g_warning ("Failed to register %s\n", sAppComps[i].mDescription);
+
 			ret = FALSE;
+		}
 	}
 
 	return ret;
@@ -263,34 +263,34 @@ mozilla_register_FtpProtocolHandler (void)
 {
 	if (ftpRegistered == PR_TRUE) return TRUE;
 
-	nsresult rv = NS_OK;
+	nsresult rv;
 
 	nsCOMPtr<nsIComponentManager> cm;
-	rv = NS_GetComponentManager(getter_AddRefs(cm));
-	if (NS_FAILED(rv) || !cm) return FALSE;
+	NS_GetComponentManager(getter_AddRefs(cm));
+	NS_ENSURE_TRUE (cm, FALSE);
 
 	rv = cm->GetClassObject(knsFtpProtocolHandlerCID,
 				NS_GET_IID(nsIFactory),
 				getter_AddRefs(nsFtpFactory));
-        if (NS_FAILED(rv)) return FALSE;
+	if (NS_FAILED (rv)) return FALSE;
 
 	nsCOMPtr<nsIGenericFactory> ftpFactory;
-	rv = NS_NewGenericFactory(getter_AddRefs(ftpFactory),
-				  &sFtpComps);
-	if (NS_FAILED(rv) || !ftpFactory) return FALSE;
+	NS_NewGenericFactory(getter_AddRefs(ftpFactory), &sFtpComps);
+	NS_ENSURE_TRUE (ftpFactory, FALSE);
 
 	nsCOMPtr<nsIComponentRegistrar> cr;
-	rv = NS_GetComponentRegistrar(getter_AddRefs(cr));
-	if (NS_FAILED(rv) || !cr) return FALSE;
+	NS_GetComponentRegistrar(getter_AddRefs(cr));
+	NS_ENSURE_TRUE (cr, FALSE);
 
 	rv = cr->RegisterFactory(sFtpComps.mCID,
 				 sFtpComps.mDescription,
 				 sFtpComps.mContractID,
 				 ftpFactory);  
-	if (NS_FAILED(rv)) return FALSE;
+	NS_ENSURE_SUCCESS (rv, FALSE);
 
 	ftpRegistered = PR_TRUE;
-	return NS_SUCCEEDED (rv) ? TRUE : FALSE;
+
+	return TRUE;
 }
 
 /**
@@ -301,17 +301,18 @@ mozilla_unregister_FtpProtocolHandler (void)
 {
 	if (ftpRegistered == PR_FALSE) return FALSE;
         
-        nsresult rv = NS_OK;
-
+        nsresult rv;
 	nsCOMPtr<nsIComponentRegistrar> cr;
-	rv = NS_GetComponentRegistrar(getter_AddRefs(cr));
-	if (NS_FAILED(rv) || !cr) return FALSE;
+	NS_GetComponentRegistrar(getter_AddRefs(cr));
+	NS_ENSURE_TRUE (cr, FALSE);
 
 	rv = cr->RegisterFactory(knsFtpProtocolHandlerCID,
 				 NS_FTPPROTOCOLHANDLER_CLASSNAME,
 				 G_FTP_PROTOCOL_CONTRACTID,
 				 nsFtpFactory);
+	NS_ENSURE_SUCCESS (rv, FALSE);
 
 	ftpRegistered = PR_FALSE;
-        return NS_SUCCEEDED (rv) ? TRUE : FALSE;
+
+        return TRUE;
 }
