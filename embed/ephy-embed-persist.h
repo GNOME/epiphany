@@ -38,6 +38,8 @@ G_BEGIN_DECLS
 #define EPHY_IS_EMBED_PERSIST_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_PERSIST))
 #define EPHY_EMBED_PERSIST_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_PERSIST, EphyEmbedPersistClass))
 
+#define EPHY_TYPE_EMBED_PERSIST_FLAGS	(ephy_embed_persist_flags_get_type ())
+
 typedef struct _EphyEmbedPersistClass EphyEmbedPersistClass;
 typedef struct _EphyEmbedPersist EphyEmbedPersist;
 typedef struct EphyEmbedPersistPrivate EphyEmbedPersistPrivate;
@@ -74,7 +76,9 @@ struct _EphyEmbedPersistClass
 	char *	 (* to_string)	(EphyEmbedPersist *persist);
 };
 
-GType			 ephy_embed_persist_get_type	(void);
+GType			 ephy_embed_persist_flags_get_type	(void);
+
+GType			 ephy_embed_persist_get_type		(void);
 
 gboolean		 ephy_embed_persist_save		(EphyEmbedPersist *persist);
 
