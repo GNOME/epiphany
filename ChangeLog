@@ -1,5 +1,14 @@
 2004-07-22  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/MozDownload.cpp:
+	* lib/ephy-file-helpers.c: (ephy_ensure_dir_exists):
+	* lib/ephy-file-helpers.h:
+
+	Handle the case where the downloads dir cannot be
+	created gracefully. Fix #146902 (backported from HEAD).
+
+2004-07-22  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/mozilla-notifiers.cpp:
 
 	Remove a unused variable.
