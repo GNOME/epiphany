@@ -688,6 +688,8 @@ session_remove_window (Session *session,
 
 	g_object_unref (window);
 
+	session_save (session, SESSION_CRASHED);
+
 	/* autodestroy of the session, necessay to avoid
 	 * conflicts with the nautilus view */
 	if (session->priv->windows == NULL)
