@@ -455,30 +455,30 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 		{
 			info = g_strconcat (types[k], ".", fonts_language[i].code, NULL);
 			
-			snprintf (key, 255, "%s_%s_%s", CONF_RENDERING_FONT, 
-			 	 types[k], 
-                 	 	 fonts_language[i].code);
+			g_snprintf (key, 255, "%s_%s_%s", CONF_RENDERING_FONT, 
+			 	    types[k], 
+                 	 	    fonts_language[i].code);
 			add_notification_and_notify (client, key,
 						     (GConfClientNotifyFunc)mozilla_font_notifier,
 						     info);
 			font_infos = g_list_append (font_infos, info);
 		}
 
-		snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_MIN_SIZE, fonts_language[i].code);
+		g_snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_MIN_SIZE, fonts_language[i].code);
 		info = g_strconcat ("minimum-size", ".", fonts_language[i].code, NULL);
 		add_notification_and_notify (client, key,
 					     (GConfClientNotifyFunc)mozilla_font_size_notifier,
 					     info);
 		font_infos = g_list_append (font_infos, info);
 
-		snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_FIXED_SIZE, fonts_language[i].code);
+		g_snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_FIXED_SIZE, fonts_language[i].code);
 		info = g_strconcat ("size.fixed", ".", fonts_language[i].code, NULL);
 		add_notification_and_notify (client, key,
 					     (GConfClientNotifyFunc)mozilla_font_size_notifier,
 					     info);
 		font_infos = g_list_append (font_infos, info);
 
-		snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_VAR_SIZE, fonts_language[i].code);
+		g_snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_VAR_SIZE, fonts_language[i].code);
 		info = g_strconcat ("size.variable", ".", fonts_language[i].code, NULL);
 		add_notification_and_notify (client, key,
 					     (GConfClientNotifyFunc)mozilla_font_size_notifier,

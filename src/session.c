@@ -519,14 +519,14 @@ session_save (Session *session,
                 gtk_window_get_position (GTK_WINDOW(wmain), &x, &y);
 
                 /* set window properties */
-                snprintf(buffer, 32, "%d", x);
+                g_snprintf(buffer, 32, "%d", x);
                 xmlSetProp (window_node, "x", buffer);
-                snprintf(buffer, 32, "%d", y);
+                g_snprintf(buffer, 32, "%d", y);
 
 		xmlSetProp (window_node, "y", buffer);
-                snprintf(buffer, 32, "%d", width);
+                g_snprintf(buffer, 32, "%d", width);
                 xmlSetProp (window_node, "width", buffer);
-                snprintf(buffer, 32, "%d", height);
+                g_snprintf(buffer, 32, "%d", height);
                 xmlSetProp (window_node, "height", buffer);
 
 		for (l = tabs; l != NULL; l = l->next)

@@ -451,8 +451,8 @@ setup_font_menu (PrefsDialog *dialog,
 					 type, &fonts, &default_font);
 
 	/* Get the default font */
-	snprintf (key, 255, "%s_%s_%s", CONF_RENDERING_FONT, type,
-		  get_current_language_code (dialog));
+	g_snprintf (key, 255, "%s_%s_%s", CONF_RENDERING_FONT, type,
+		    get_current_language_code (dialog));
 	name = eel_gconf_get_string (key);
 	if (name == NULL)
 	{
@@ -500,9 +500,9 @@ save_font_menu (PrefsDialog *dialog,
 		return;
 	}
 
-	snprintf (key, 255, "%s_%s_%s", CONF_RENDERING_FONT,
-		  fonts_types[type],
-		  get_current_language_code (dialog));
+	g_snprintf (key, 255, "%s_%s_%s", CONF_RENDERING_FONT,
+		    fonts_types[type],
+		    get_current_language_code (dialog));
 	eel_gconf_set_string (key, name);
 	g_free (name);
 }
@@ -556,9 +556,9 @@ size_spinbutton_changed_cb (GtkWidget *spin, PrefsDialog *dialog)
 
 	type = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(spin), "type"));
 
-	snprintf (key, 255, "%s_%s",
-		  size_prefs[type],
-		  get_current_language_code (dialog));
+	g_snprintf (key, 255, "%s_%s",
+		    size_prefs[type],
+		    get_current_language_code (dialog));
 	eel_gconf_set_integer (key, gtk_spin_button_get_value (GTK_SPIN_BUTTON (spin)));
 }
 
@@ -601,8 +601,8 @@ setup_size_control (PrefsDialog *dialog,
 	char key[255];
 	int size;
 
-	snprintf (key, 255, "%s_%s", pref,
-		  get_current_language_code (dialog));
+	g_snprintf (key, 255, "%s_%s", pref,
+		    get_current_language_code (dialog));
 	size = eel_gconf_get_integer (key);
 
 	if (size == 0) size = default_size;

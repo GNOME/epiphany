@@ -328,7 +328,7 @@ set_config_from_color (GtkWidget *colorpicker, const char *config_name)
 				   &r, &g, &b, &a);
 
 	/* write into string (bounded size) */
-	snprintf (color_string, 9, "#%02X%02X%02X", r, g, b);
+	g_snprintf (color_string, 9, "#%02X%02X%02X", r, g, b);
 
 	/* set the configuration value */
 	eel_gconf_set_string (config_name, color_string);
