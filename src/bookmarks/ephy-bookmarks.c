@@ -441,7 +441,6 @@ static void
 history_site_visited_cb (EphyHistory *gh, const char *url, EphyBookmarks *eb)
 {
 	EphyNode *node;
-	guint id;
 
 	node = ephy_bookmarks_find_bookmark (eb, url);
 	if (node == NULL) return;
@@ -772,7 +771,6 @@ ephy_bookmarks_set_icon	(EphyBookmarks *eb,
 {
 	EphyNode *node;
 	GValue value = { 0, };
-	guint id;
 
 	g_return_if_fail (icon != NULL);
 
