@@ -51,7 +51,9 @@
 
 #include <nsCOMPtr.h>
 #include <nsMemory.h>
+#define MOZILLA_STRICT_API
 #include <nsEmbedString.h>
+#undef MOZILLA_STRICT_API
 #include <nsIPrefService.h>
 #include <nsIServiceManager.h>
 #include <nsIWindowWatcher.h>

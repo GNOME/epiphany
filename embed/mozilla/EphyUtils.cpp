@@ -29,7 +29,9 @@
 #include "ephy-embed-single.h"
 
 #include <nsIServiceManager.h>
+#define MOZILLA_STRICT_API
 #include <nsEmbedString.h>
+#undef MOZILLA_STRICT_API
 #include <nsIWindowWatcher.h>
 #include <nsIEmbeddingSiteWindow.h>
 #include <nsIWebBrowserChrome.h>

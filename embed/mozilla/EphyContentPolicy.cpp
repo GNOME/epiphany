@@ -32,7 +32,9 @@
 
 #include <nsCOMPtr.h>
 #include <nsIURI.h>
+#define MOZILLA_STRICT_API
 #include <nsEmbedString.h>
+#undef MOZILLA_STRICT_API
 
 #define CONF_LOCKDOWN_DISABLE_UNSAFE_PROTOCOLS	"/apps/epiphany/lockdown/disable_unsafe_protocols"
 #define CONF_LOCKDOWN_ADDITIONAL_SAFE_PROTOCOLS	"/apps/epiphany/lockdown/additional_safe_protocols"

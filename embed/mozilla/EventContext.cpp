@@ -33,7 +33,9 @@
 
 #include <nsIInterfaceRequestor.h>
 #include <nsIServiceManager.h>
+#define MOZILLA_STRICT_API
 #include <nsEmbedString.h>
+#undef MOZILLA_STRICT_API
 #include <nsIDOMEventTarget.h>
 #include <nsIDOMHTMLInputElement.h>
 #include <nsIDOMHTMLObjectElement.h>

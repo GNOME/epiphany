@@ -43,7 +43,9 @@
 #include <gtk/gtksettings.h>
 
 #include <nsCOMPtr.h>
+#define MOZILLA_STRICT_API
 #include <nsEmbedString.h>
+#undef MOZILLA_STRICT_API
 #include <nsIPrefService.h>
 #include <nsIServiceManager.h>
 /* we don't use glib/gi18n.h here because we need gnome_i18n_get_language_list() */

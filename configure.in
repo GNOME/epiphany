@@ -197,7 +197,7 @@ dnl **********************************
 
 dnl FIXME find a m4/autoconf guru who can distill this into a nice macro
 
-CXXFLAGS="$_SAVE_CXXFLAGS $AM_CXXFLAGS -I$MOZILLA_INCLUDE_ROOT `pkg-config --cflags $MOZILLA-xpcom`"
+CXXFLAGS="$_SAVE_CXXFLAGS $AM_CXXFLAGS -I$MOZILLA_INCLUDE_ROOT `pkg-config --cflags $MOZILLA-xpcom` -DMOZILLA_STRICT_API"
 
 dnl Changed from PRUnichar* to nsAString& in 1.8a1 and on aviary branch
 

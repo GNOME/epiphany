@@ -33,7 +33,9 @@
 #include <nsIServiceManager.h>
 #include <nsIInterfaceRequestor.h>
 #include <nsIInterfaceRequestorUtils.h>
+#define MOZILLA_STRICT_API
 #include <nsEmbedString.h>
+#undef MOZILLA_STRICT_API
 
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkimage.h>

@@ -24,7 +24,9 @@
 
 #include <nsIFilePicker.h>
 #include <nsISupports.h>
+#define MOZILLA_STRICT_API
 #include <nsEmbedString.h>
+#undef MOZILLA_STRICT_API
 
 #include "ephy-file-chooser.h"
 

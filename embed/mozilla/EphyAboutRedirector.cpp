@@ -52,7 +52,9 @@
 #include <nsIServiceManager.h>
 #include <nsCOMPtr.h>
 #include <nsIURI.h>
+#define MOZILLA_STRICT_API
 #include <nsEmbedString.h>
+#undef MOZILLA_STRICT_API
 
 static NS_DEFINE_CID(kIOServiceCID, NS_IOSERVICE_CID);
 

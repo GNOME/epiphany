@@ -33,7 +33,9 @@
 #include <nsISupports.h>
 #include <nsIURI.h>
 #include <nsIFile.h>
+#define MOZILLA_STRICT_API
 #include <nsEmbedString.h>
+#undef MOZILLA_STRICT_API
 #include <nsIHelperAppLauncherDialog.h>
 
 typedef enum
