@@ -86,6 +86,9 @@ public:
 	NS_DECL_ISUPPORTS
 	NS_DECL_NSIDOMWINDOWINTERNAL
 	NS_DECL_NSIDOMWINDOW
+#if MOZILLA_SNAPSHOT >= 19
+	NS_DECL_NSIDOMWINDOW2
+#endif
 
 	KeyPairHelperWindow();
 	virtual ~KeyPairHelperWindow();
@@ -93,7 +96,11 @@ public:
 	gboolean close_called;
 };
 
+#if MOZILLA_SNAPSHOT >= 19
+NS_IMPL_ISUPPORTS3(KeyPairHelperWindow, nsIDOMWindowInternal, nsIDOMWindow, nsIDOMWindow2)
+#else
 NS_IMPL_ISUPPORTS2(KeyPairHelperWindow, nsIDOMWindowInternal, nsIDOMWindow)
+#endif
 
 KeyPairHelperWindow::KeyPairHelperWindow()
 {
@@ -224,7 +231,7 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
  * that arn't needed for our purposes
  *************************************************************/
 
-#define MOZ_NOT_IMPLEMENTED { g_warning ("not implemented: " G_STRLOC); \
+#define MOZ_NOT_IMPLEMENTED { g_warning ("not implemented: %s", G_STRLOC); \
                               return NS_ERROR_NOT_IMPLEMENTED; }
 
 KeyPairHelperWindow::~KeyPairHelperWindow()
@@ -236,6 +243,13 @@ NS_IMETHODIMP KeyPairHelperWindow::GetWindow(nsIDOMWindowInternal * *aWindow)
 {
     MOZ_NOT_IMPLEMENTED
 }
+
+#if MOZILLA_SNAPSHOT >= 19
+NS_IMETHODIMP KeyPairHelperWindow::GetWindowRoot(nsIDOMEventTarget * *aEvent)
+{
+    MOZ_NOT_IMPLEMENTED
+}
+#endif
 
 /* readonly attribute nsIDOMWindowInternal self; */
 NS_IMETHODIMP KeyPairHelperWindow::GetSelf(nsIDOMWindowInternal * *aSelf)
