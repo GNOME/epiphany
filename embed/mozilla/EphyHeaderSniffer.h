@@ -59,7 +59,7 @@ public:
 
 	NS_DECL_ISUPPORTS
 	NS_DECL_NSIWEBPROGRESSLISTENER
-	NS_DECL_NSIAUTHPROMPT
+	NS_FORWARD_SAFE_NSIAUTHPROMPT(mAuthPrompt)
 
 	nsresult InitiateDownload (nsILocalFile *aDestFile);
 
@@ -77,6 +77,6 @@ private:
 	nsCOMPtr<nsIInputStream>   mPostData;
 	nsCString                  mContentType;
 	nsCString                  mContentDisposition;
-	nsCOMPtr<nsIPromptService> mPrompt;
+	nsCOMPtr<nsIAuthPrompt>    mAuthPrompt;
 };
 
