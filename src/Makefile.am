@@ -10,8 +10,7 @@ INCLUDES = \
 	-DSHARE_DIR=\"$(pkgdatadir)\" 	\
 	-DEXTENSIONS_DIR=\""$(libdir)/epiphany-$(EPIPHANY_MAJOR)/extensions"\" 	\
 	-DDATADIR=\""$(datadir)"\" 	\
-	-DPIXMAP_DIR=\""$(datadir)/pixmaps"\" 		\
-	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"
+	-DPIXMAP_DIR=\""$(datadir)/pixmaps"\" 
 
 if MAINTAINER_MODE
 INCLUDES += -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED \
