@@ -1,5 +1,17 @@
 2003-01-01  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* embed/ephy-history.c: (ephy_history_clear),
+	(ephy_history_remove):
+	* src/bookmarks/ephy-bookmarks.c:
+	(ephy_bookmarks_clean_empty_keywords):
+	* src/ephy-history-model.c: (get_one_level_path_real),
+	(get_path_real), (root_child_removed_cb):
+
+	Rewrite ephy node multiple removals to actually
+	work.
+
+2003-01-01  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* TODO:
 	* data/glade/epiphany.glade:
 	* embed/ephy-history.c: (page_is_obsolete),

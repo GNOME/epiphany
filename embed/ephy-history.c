@@ -719,17 +719,16 @@ ephy_history_set_page_title (EphyHistory *gh,
 void
 ephy_history_clear (EphyHistory *gh)
 {
-	GPtrArray *children;
-	int i;
+	EphyNode *node;
 
-	children = ephy_node_get_children (gh->priv->hosts);
-	ephy_node_thaw (gh->priv->hosts);
-	for (i = 0; i < children->len; i++)
+	while ((node = ephy_node_get_nth_child (gh->priv->pages, 0)) != NULL)
 	{
-		EphyNode *kid;
+		ephy_node_unref (node);
+	}
 
-		kid = g_ptr_array_index (children, i);
-		ephy_node_unref (kid);
+	while ((node = ephy_node_get_nth_child (gh->priv->hosts, 0)) != NULL)
+	{
+		ephy_node_unref (node);
 	}
 
 	ephy_history_save (gh);
@@ -765,6 +764,11 @@ ephy_history_remove (EphyHistory *gh, EphyNode *node)
 	host_id = ephy_node_get_property_int (node, EPHY_NODE_PAGE_PROP_HOST_ID);
 	if (host_id < 0)
 	{
+		EphyNode *tmp;
+		while ((tmp = ephy_node_get_nth_child (node, 0)) != NULL)
+		{
+			ephy_node_unref (tmp);
+		}
 		ephy_node_unref (node);
 		return;
 	}

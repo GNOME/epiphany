@@ -476,6 +476,7 @@ get_one_level_path_real (EphyHistoryModel *model,
 	retval = gtk_tree_path_new ();
 
 	my_parent = get_parent_node (model, node);
+	g_return_val_if_fail (my_parent != NULL, NULL);
 
 	gtk_tree_path_append_index (retval, ephy_node_get_child_index (my_parent, node));
 
@@ -489,8 +490,10 @@ get_path_real (EphyHistoryModel *model,
 	GtkTreePath *retval;
 	EphyNode *host;
 
-	retval = gtk_tree_path_new ();
 	host = get_parent_node (model, page);
+	if (host != NULL) return NULL;
+
+	retval = gtk_tree_path_new ();
 
 	gtk_tree_path_append_index (retval, ephy_node_get_child_index (model->priv->root, host));
 	gtk_tree_path_append_index (retval, ephy_node_get_child_index (host, page));
@@ -776,8 +779,12 @@ root_child_removed_cb (EphyNode *node,
 	{
 		path = get_path_real (model, child);
 	}
-	gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
-	gtk_tree_path_free (path);
+
+	if (path)
+	{
+		gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
+		gtk_tree_path_free (path);
+	}
 }
 
 static void

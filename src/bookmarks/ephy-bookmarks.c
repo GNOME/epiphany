@@ -174,6 +174,7 @@ ephy_bookmarks_clean_empty_keywords (EphyBookmarks *eb)
 {
 	GPtrArray *children;
 	int i;
+	GList *l = NULL, *tmp;
 
 	children = ephy_node_get_children (eb->priv->keywords);
 	ephy_node_thaw (eb->priv->keywords);
@@ -185,12 +186,20 @@ ephy_bookmarks_clean_empty_keywords (EphyBookmarks *eb)
 
 		if (ephy_node_get_n_children (kid) == 0)
 		{
-			DEBUG_MSG (("Remove empty keyword: %s\n",
-				   ephy_node_get_property_string (kid,
-				   EPHY_NODE_KEYWORD_PROP_NAME)));
-			ephy_node_unref (kid);
+			l = g_list_append (l, kid);
 		}
 	}
+
+	if (l == NULL) return FALSE;
+
+	for (tmp = l; tmp != NULL; tmp = tmp->next)
+	{
+		DEBUG_MSG (("Remove empty keyword: %s\n",
+				ephy_node_get_property_string (kid,
+				   EPHY_NODE_KEYWORD_PROP_NAME)));
+		g_object_unref (EPHY_NODE (tmp->data));
+	}
+	g_list_free (l);
 
 	return FALSE;
 }
