@@ -227,8 +227,7 @@ ephy_statusbar_set_security_state (EphyStatusbar *statusbar,
 /**
  * ephy_statusbar_set_progress:
  * @statusbar: a #EphyStatusbar
- * @progress: the progress as an integer between 0 and 100, or -1 to show
- * interminate progress
+ * @progress: the progress as an integer between 0 and 100 per cent.
  * 
  * Sets the statusbar's progress.
  **/
@@ -236,15 +235,8 @@ void
 ephy_statusbar_set_progress (EphyStatusbar *statusbar,
 			     int progress)
 {
-	if (progress == -1)
-	{
-		gtk_progress_bar_pulse (GTK_PROGRESS_BAR (statusbar->priv->progressbar));
-	}
-	else
-	{
-		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (statusbar->priv->progressbar),
-					       (float) (progress) / 100.0);
-	}
+	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (statusbar->priv->progressbar),
+				       (float) (progress) / 100.0);
 
 	if (progress < 100)
 	{

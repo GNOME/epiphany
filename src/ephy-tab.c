@@ -307,7 +307,7 @@ ephy_tab_class_init (EphyTabClass *class)
 					 g_param_spec_int ("load-progress",
 							   "Load progress",
 							   "The tab's load progress in percent",
-							   -1,
+							   0,
 							   100,
 							   0,
 							   G_PARAM_READABLE));
@@ -762,7 +762,7 @@ ephy_tab_title_cb (EphyEmbed *embed, EphyTab *tab)
 static int
 build_load_percent (int requests_done, int requests_total)
 {
-	int percent;
+	int percent= 0;
 
 	if (requests_total > 0)
 	{
@@ -771,10 +771,6 @@ build_load_percent (int requests_done, int requests_total)
 		/* Mozilla sometimes report more done requests than
 		   total requests. Their progress widget clamp the value */
 		percent = CLAMP (percent, 0, 100);
-	}
-	else
-	{
-		percent = -1;
 	}
 
 	return percent;
@@ -913,7 +909,7 @@ ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 			tab->priv->cur_requests = 0;
 			ensure_page_info (tab, embed, uri);
 
-			ephy_tab_set_load_percent (tab, -1);
+			ephy_tab_set_load_percent (tab, 0);
 			ephy_tab_set_load_status (tab, TRUE);
 			ephy_tab_update_navigation_flags (tab, embed);
 		}
@@ -1322,12 +1318,12 @@ ephy_tab_set_load_percent (EphyTab *tab, int percent)
  *
  * Returns the page load percentage (displayed in the progressbar).
  *
- * Return value: a percentage from 0 to 100, or -1 for indeterminate.
+ * Return value: a percentage from 0 to 100.
  **/
 int
 ephy_tab_get_load_percent (EphyTab *tab)
 {
-	g_return_val_if_fail (EPHY_IS_TAB (tab), -1);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), 0);
 
 	return tab->priv->load_percent;
 }
