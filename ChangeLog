@@ -1,5 +1,15 @@
 2004-02-27  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-import.c: (ns_parse_bookmark_item):
+
+	Fix potential crash.
+
+	(ephy_bookmarks_import_mozilla):
+
+	Fix mem leak.
+
+2004-02-27  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-bookmarks-import.c: (ephy_bookmarks_import_mozilla):
 
 	Replace entities also in folder names, fixes bug #135440.

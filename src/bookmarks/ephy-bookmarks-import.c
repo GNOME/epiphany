@@ -490,6 +490,8 @@ ns_get_bookmark_item (FILE *f, GString *name, GString *url)
  * More info : http://www.w3.org/TR/html4/charset.html#h-5.3.2
  * NOTE : We don't support &#D or &#xH.
  * Patch courtesy of Almer S. Tigelaar <almer1@dds.nl>
+ *
+ * NOTE: The returned string must be freed.
  */
 static char *
 ns_parse_bookmark_item (GString *string)
@@ -557,7 +559,7 @@ ns_parse_bookmark_item (GString *string)
 			for (i = jump - 1; i > 0; i--)
 			{
 				iterator++;
-				if (iterator == NULL)
+				if (*iterator == '\0')
 					break;
 			}
 		}
@@ -577,7 +579,7 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 {
 	FILE *bf;  /* bookmark file */
 	GString *name;
-	gchar *parsedname;
+	char *parsedname;
 	GString *url = g_string_new (NULL);
 	GList *folders = NULL, *l;
 
@@ -636,6 +638,9 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 					ephy_bookmarks_set_keyword (bookmarks, keyword, node);
 				}
 			}
+
+			g_free (parsedname);
+
 			break;
 		default:
 			break;
