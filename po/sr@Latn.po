@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-19 16:55+0100\n"
-"PO-Revision-Date: 2003-12-19 16:56+0100\n"
+"POT-Creation-Date: 2003-12-21 09:00+0100\n"
+"PO-Revision-Date: 2003-12-21 09:01+0100\n"
 "Last-Translator: Danilo Segan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -618,7 +618,7 @@ msgstr "Upravljanje ličnim podacima"
 msgid "Text Encoding"
 msgstr "Kodiranje teksta"
 
-#: data/glade/epiphany.glade.h:12 src/ephy-encoding-menu.c:394
+#: data/glade/epiphany.glade.h:12 src/ephy-encoding-menu.c:389
 msgid "Use the encoding specified by the document"
 msgstr "Koristi kodiranje koje je naznačio dokument"
 
@@ -1882,7 +1882,7 @@ msgstr "%s već postoji, uklonite ga."
 msgid "Failed to create directory %s."
 msgstr "Ne može da napravi direktorijum %s."
 
-#: lib/ephy-gui.c:76
+#: lib/ephy-gui.c:88
 #, c-format
 msgid ""
 "File %s will be overwritten.\n"
@@ -1895,7 +1895,7 @@ msgstr ""
 "\n"
 "Želite li da nastavite?"
 
-#: lib/ephy-gui.c:107
+#: lib/ephy-gui.c:119
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Ne može da prikaže pomoć: %s"
@@ -2338,15 +2338,15 @@ msgstr "Prazno"
 msgid "Encodings"
 msgstr "Kodiranja"
 
-#: src/ephy-encoding-menu.c:385
+#: src/ephy-encoding-menu.c:380
 msgid "_Other..."
 msgstr "_Ostala..."
 
-#: src/ephy-encoding-menu.c:386
+#: src/ephy-encoding-menu.c:381
 msgid "Other encodings"
 msgstr "Ostala kodiranja"
 
-#: src/ephy-encoding-menu.c:393
+#: src/ephy-encoding-menu.c:388
 msgid "_Automatic"
 msgstr "_Samostalno"
 
@@ -3297,11 +3297,19 @@ msgstr "Valun"
 msgid "Custom [%s]"
 msgstr "Po izboru [%s]"
 
-#: src/prefs-dialog.c:1088
+#: src/prefs-dialog.c:1091
 msgid "Desktop"
 msgstr "Radna površ"
 
-#: src/prefs-dialog.c:1296
+#. Note that this does NOT refer to the home page but to a
+#. * user's home folder. It should be translated by the same
+#. * term as GTK+'s "Home" string to be consistent with the
+#. * filechooser
+#: src/prefs-dialog.c:1100
+msgid "Home"
+msgstr "Lično"
+
+#: src/prefs-dialog.c:1309
 msgid "Select a directory"
 msgstr "Izaberite direktorijum"
 
