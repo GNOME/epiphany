@@ -47,17 +47,17 @@
 
 enum
 {
+	COL_PERCENT,
 	COL_IMAGE,
 	COL_FILE,
-	COL_PERCENT,
 	COL_REMAINING,
 	COL_DOWNLOAD_OBJECT
 };
 
 enum
 {
-	FILE_COL_POS,
 	PERCENT_COL_POS,
+	FILE_COL_POS,
 	REMAINING_COL_POS
 };
 
@@ -542,9 +542,9 @@ downloader_view_build_ui (DownloaderView *dv)
 				     GTK_SELECTION_BROWSE);
 
 	liststore = gtk_list_store_new (5,
+					G_TYPE_INT,
 					GDK_TYPE_PIXBUF,
 					G_TYPE_STRING,
-					G_TYPE_INT,
 					G_TYPE_STRING,
 					G_TYPE_OBJECT);
 
@@ -557,7 +557,7 @@ downloader_view_build_ui (DownloaderView *dv)
 	column = gtk_tree_view_column_new ();
 	gtk_tree_view_column_set_title (column, _("File"));
 	renderer = gtk_cell_renderer_pixbuf_new ();
-	g_object_set (renderer, "xpad", 3, "ypad", 3, NULL);
+	g_object_set (renderer, "xpad", 3, NULL);
 	gtk_tree_view_column_pack_start (column, renderer, FALSE);
 	gtk_tree_view_column_set_attributes (column, renderer,
 					    "pixbuf", COL_IMAGE,
@@ -569,7 +569,6 @@ downloader_view_build_ui (DownloaderView *dv)
 					     NULL);
 	gtk_tree_view_insert_column (GTK_TREE_VIEW (priv->treeview), column, FILE_COL_POS);
 	gtk_tree_view_column_set_expand (column, TRUE);
-	gtk_tree_view_column_set_reorderable (column, TRUE);
 	gtk_tree_view_column_set_resizable (column, TRUE);
 	gtk_tree_view_column_set_sort_column_id (column, COL_FILE);
 	gtk_tree_view_column_set_spacing (column, 3);
@@ -583,10 +582,6 @@ downloader_view_build_ui (DownloaderView *dv)
 						     "value", COL_PERCENT,
 						     NULL);
 	column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview), PERCENT_COL_POS);
-	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
-	gtk_tree_view_column_set_fixed_width (column, 200);
-	gtk_tree_view_column_set_reorderable (column, TRUE);
-	gtk_tree_view_column_set_resizable (column, TRUE);
 	gtk_tree_view_column_set_sort_column_id (column, COL_PERCENT);
 
 	/* Remainng time column */
@@ -600,8 +595,6 @@ downloader_view_build_ui (DownloaderView *dv)
 
 	column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview),
 					   REMAINING_COL_POS);
-	gtk_tree_view_column_set_reorderable (column, TRUE);
-	gtk_tree_view_column_set_resizable (column, TRUE);
 	gtk_tree_view_column_set_sort_column_id (column, COL_REMAINING);
 
 	priv->model = GTK_TREE_MODEL (liststore);
