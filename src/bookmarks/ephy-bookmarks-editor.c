@@ -148,7 +148,7 @@ ephy_bookmarks_editor_dispose (GObject *object)
 		}
 		
 		selected_id = ephy_node_get_id (EPHY_NODE (selection->data));
-		if (selected_id > 0)
+		if (selected_id >= 0)
 		{
 			selected_id_str = g_strdup_printf ("%ld", selected_id);
 			eel_gconf_set_string (CONF_BOOKMARKS_SELECTED_NODE,
