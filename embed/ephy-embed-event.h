@@ -39,14 +39,15 @@ typedef struct _EphyEmbedEvent		EphyEmbedEvent;
 
 typedef enum
 {
-	EPHY_EMBED_CONTEXT_NONE     = 0,
-        EPHY_EMBED_CONTEXT_DEFAULT  = 1 << 1,
-        EPHY_EMBED_CONTEXT_LINK     = 1 << 2,
-        EPHY_EMBED_CONTEXT_IMAGE    = 1 << 3,
-        EPHY_EMBED_CONTEXT_DOCUMENT = 1 << 4,
-        EPHY_EMBED_CONTEXT_INPUT    = 1 << 5,
-        EPHY_EMBED_CONTEXT_XUL      = 1 << 7,
-	EPHY_EMBED_CONTEXT_EMAIL_LINK = 1 << 8
+	EPHY_EMBED_CONTEXT_NONE			= 0,
+        EPHY_EMBED_CONTEXT_DEFAULT		= 1 << 1,
+        EPHY_EMBED_CONTEXT_LINK			= 1 << 2,
+        EPHY_EMBED_CONTEXT_IMAGE		= 1 << 3,
+        EPHY_EMBED_CONTEXT_DOCUMENT		= 1 << 4,
+        EPHY_EMBED_CONTEXT_INPUT		= 1 << 5,
+	EPHY_EMBED_CONTEXT_INPUT_PASSWORD	= 1 << 6,
+        EPHY_EMBED_CONTEXT_XUL			= 1 << 7,
+	EPHY_EMBED_CONTEXT_EMAIL_LINK		= 1 << 8
 } EphyEmbedEventContext;
 
 struct _EphyEmbedEventIface

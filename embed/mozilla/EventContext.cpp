@@ -813,6 +813,11 @@ nsresult EventContext::CheckInput (nsIDOMNode *aNode)
 		 g_ascii_strcasecmp (value.get(), "checkbox") != 0)
 	{
 		mEmbedEvent->context |= EPHY_EMBED_CONTEXT_INPUT;
+
+		if (g_ascii_strcasecmp (value.get(), "password") == 0)
+		{
+			mEmbedEvent->context |= EPHY_EMBED_CONTEXT_INPUT_PASSWORD;
+		}
 	}
 
 	return NS_OK;
