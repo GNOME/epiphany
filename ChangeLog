@@ -1,5 +1,18 @@
 2003-10-27  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* embed/mozilla/EphyWrapper.cpp:
+	* embed/mozilla/EphyWrapper.h:
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Solving the wrapper mess Episode 2.
+
+	Create EphyWrapper on _init. Initialize it
+	on realize. Initialize the document part of it
+	on state changed (mozilla is full of hacks like this,
+	wouldnt have it be simpler to create an event ?;).
+
+2003-10-27  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* embed/ephy-embed.c:
 	* embed/ephy-embed.h:
 	* embed/mozilla/EphyWrapper.cpp:

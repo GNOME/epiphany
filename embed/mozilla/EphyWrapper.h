@@ -46,6 +46,7 @@ public:
 	~EphyWrapper();
 
 	nsresult Init (GtkMozEmbed *mozembed);
+	nsresult InitDocument ();
 	nsresult Destroy (void);
 
 	nsresult DoCommand (const char *command);

@@ -90,21 +90,28 @@ EphyWrapper::~EphyWrapper ()
 
 nsresult EphyWrapper::Init (GtkMozEmbed *mozembed)
 {
-	nsresult rv;
+	mGtkMozEmbed = mozembed;
 
 	gtk_moz_embed_get_nsIWebBrowser (mozembed,
 					 getter_AddRefs(mWebBrowser));
 	if (!mWebBrowser) return NS_ERROR_FAILURE;
 
-	rv = mWebBrowser->GetContentDOMWindow (getter_AddRefs (mDOMWindow));
-	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+	return mWebBrowser->GetContentDOMWindow (getter_AddRefs (mDOMWindow));
+}
+
+nsresult EphyWrapper::InitDocument ()
+{
+	nsresult rv;
 
 	mEventListener = new EphyEventListener();
-	mEventListener->Init (EPHY_EMBED (mozembed));
- 	GetListener();
-	AttachListeners();
 
-	return NS_OK;
+	rv = mEventListener->Init (EPHY_EMBED (mGtkMozEmbed));
+	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+
+ 	rv = GetListener();
+	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+
+	return AttachListeners();
 }
 
 nsresult
