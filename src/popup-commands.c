@@ -263,13 +263,14 @@ popup_cmd_save_image_as (GtkAction *action,
 
 #define CONF_DESKTOP_BG_PICTURE "/desktop/gnome/background/picture_filename"
 #define CONF_DESKTOP_BG_TYPE "/desktop/gnome/background/picture_options"
+#define GNOME_BACKGROUND_PREFERENCES "gnome-background-properties"
 
 static void
 background_download_completed (EphyEmbedPersist *persist,
 			       gpointer data)
 {
 	const char *bg;
-	char *type;
+	char *type, *path;
 
 	bg = ephy_embed_persist_get_dest (persist);
 	eel_gconf_set_string (CONF_DESKTOP_BG_PICTURE, bg);
@@ -282,6 +283,14 @@ background_download_completed (EphyEmbedPersist *persist,
 	g_free (type);
 
 	g_object_unref (persist);
+
+	/* open the "Background Properties" capplet */
+	path = g_find_program_in_path (GNOME_BACKGROUND_PREFERENCES);
+	if (path != NULL)
+	{
+		g_spawn_command_line_async (path, NULL);
+		g_free (path);
+	}
 }
 
 void
