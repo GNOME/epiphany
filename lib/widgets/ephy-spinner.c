@@ -33,6 +33,7 @@
 #endif
 
 #include "ephy-spinner.h"
+#include "ephy-debug.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gtk/gtkicontheme.h>
@@ -440,11 +441,15 @@ ephy_spinner_load_images (EphySpinner *spinner)
 
 	ephy_spinner_unload_images (spinner);
 
+	START_PROFILER ("loading spinner animation")
+
 	/* Load the animation */
 	icon_info = gtk_icon_theme_lookup_icon (spinner->details->icon_theme,
 						"gnome-spinner", -1, 0);
 	if (icon_info == NULL)
 	{
+		STOP_PROFILER ("loading spinner animation")
+
 		g_warning ("Throbber animation not found");
 		return;
 	}
@@ -485,6 +490,8 @@ ephy_spinner_load_images (EphySpinner *spinner)
 						"gnome-spinner-rest", -1, 0);
 	if (icon_info == NULL)
 	{
+		STOP_PROFILER ("loading spinner animation")
+
 		g_warning ("Throbber rest icon not found");
 		return;
 	}
@@ -498,6 +505,8 @@ ephy_spinner_load_images (EphySpinner *spinner)
 
 	g_object_unref (icon_pixbuf);
 	gtk_icon_info_free (icon_info);
+
+	STOP_PROFILER ("loading spinner animation")
 }
 
 /*
