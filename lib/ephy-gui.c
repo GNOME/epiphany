@@ -59,7 +59,6 @@ ephy_gui_menu_position_under_widget (GtkMenu   *menu,
 
 	*x = CLAMP (*x, 0, MAX (0, screen_width - requisition.width));
 	*y = CLAMP (*y, 0, MAX (0, screen_height - requisition.height));
-	g_print ("result %d\n", *y);
 }
 
 gboolean
