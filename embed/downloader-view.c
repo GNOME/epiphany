@@ -394,19 +394,19 @@ downloader_view_update_details (DownloaderViewPrivate *priv,
 	}
 	else if (details->size_total > 0)
 	{
-		sprintf (buffer, _("%d of %d KB"),
+		sprintf (buffer, _("%d of %d kB"),
 			 details->size_done,
 			 details->size_total);
 	}
 	else
 	{
-		sprintf (buffer, _("%d KB"),
+		sprintf (buffer, _("%d kB"),
 			 details->size_done);
 	}
 
 	if (details->speed > 0)
 	{
-		sprintf (buffer, _("%s at %.1f KB/s"), buffer, details->speed);
+		sprintf (buffer, _("%s at %.1f kB/s"), buffer, details->speed);
 	}
 	gtk_label_set_text (GTK_LABEL (priv->details_status),
 			    buffer);
@@ -517,7 +517,7 @@ downloader_view_set_download_info (DownloaderViewPrivate *priv,
 	}
 	else if (details->size_total > 0)
 	{
-		sprintf (buffer, "%d KB", details->size_total);
+		sprintf (buffer, "%d kB", details->size_total);
 	}
 	else
 	{
