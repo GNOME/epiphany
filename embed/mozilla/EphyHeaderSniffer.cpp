@@ -257,37 +257,28 @@ NS_IMETHODIMP EphyHeaderSniffer::Prompt (const PRUnichar *dialogTitle, const PRU
 				         const PRUnichar *passwordRealm, PRUint32 savePassword,
 				         const PRUnichar *defaultText, PRUnichar **result, PRBool *_retval)
 {
-	PRBool checkValue;
-
 	if (defaultText) *result = ToNewUnicode(nsDependentString(defaultText));
-	checkValue = savePassword;
 
 	return mPrompt->Prompt (nsnull, dialogTitle, text, result,
-				passwordRealm, &checkValue, _retval);
+				nsnull, nsnull, _retval);
 }                                                                                                                            
 
 NS_IMETHODIMP EphyHeaderSniffer::PromptUsernameAndPassword (const PRUnichar *dialogTitle, const PRUnichar *text,
 						            const PRUnichar *passwordRealm, PRUint32 savePassword,
 						            PRUnichar **user, PRUnichar **pwd, PRBool *_retval)
 {
-	PRBool checkValue;
-
 	*_retval = savePassword;
-	checkValue = savePassword;
 
 	return mPrompt->PromptUsernameAndPassword (nsnull, dialogTitle, text, user, pwd,
-						   passwordRealm, &checkValue, _retval);
+						   nsnull, nsnull, _retval);
 }
 
 NS_IMETHODIMP EphyHeaderSniffer::PromptPassword (const PRUnichar *dialogTitle, const PRUnichar *text,
 					         const PRUnichar *passwordRealm, PRUint32 savePassword,
 					         PRUnichar **pwd, PRBool *_retval)
 {
-	PRBool checkValue;
-
 	*_retval = savePassword;
-	checkValue = savePassword;
 
 	return mPrompt->PromptPassword (nsnull, dialogTitle, text, pwd,
-					passwordRealm, &checkValue, _retval);
+					nsnull, nsnull, _retval);
 }
