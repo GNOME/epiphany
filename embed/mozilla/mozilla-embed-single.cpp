@@ -646,7 +646,7 @@ impl_list_cookies (EphyCookieManager *manager)
 	GList *cookies = NULL;
 	
 	nsCOMPtr<nsICookieManager> cookieManager = 
-			do_CreateInstance (NS_COOKIEMANAGER_CONTRACTID);
+			do_GetService (NS_COOKIEMANAGER_CONTRACTID);
 	nsCOMPtr<nsISimpleEnumerator> cookieEnumerator;
 	result = cookieManager->GetEnumerator (getter_AddRefs(cookieEnumerator));
 	if (NS_FAILED(result) || !cookieEnumerator) return NULL;
@@ -679,9 +679,9 @@ impl_remove_cookie (EphyCookieManager *manager,
 {
 	nsresult rv;
 	nsCOMPtr<nsICookieManager> cookieManager =
-		do_CreateInstance (NS_COOKIEMANAGER_CONTRACTID, &rv);
+		do_GetService (NS_COOKIEMANAGER_CONTRACTID, &rv);
 	if (NS_FAILED (rv) || !cookieManager) return;
-
+g_print ("here!\n");
 	cookieManager->Remove (nsDependentCString(cookie->domain),
 			       nsDependentCString(cookie->name),
 			       nsDependentCString(cookie->path),
@@ -693,7 +693,7 @@ impl_clear_cookies (EphyCookieManager *manager)
 {
 	nsresult rv;
 	nsCOMPtr<nsICookieManager> cookieManager =
-		do_CreateInstance (NS_COOKIEMANAGER_CONTRACTID, &rv);
+		do_GetService (NS_COOKIEMANAGER_CONTRACTID, &rv);
 	if (NS_SUCCEEDED (rv))
 	{
 		cookieManager->RemoveAll ();
@@ -707,7 +707,7 @@ impl_list_passwords (EphyPasswordManager *manager)
 
 	nsresult result;
 	nsCOMPtr<nsIPasswordManager> passwordManager =
-			do_CreateInstance (NS_PASSWORDMANAGER_CONTRACTID);
+			do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
 	if (!passwordManager) return NULL;
 
 	nsCOMPtr<nsISimpleEnumerator> passwordEnumerator;
@@ -748,7 +748,7 @@ impl_remove_password (EphyPasswordManager *manager,
 		      EphyPasswordInfo *info)
 {
         nsCOMPtr<nsIPasswordManager> pm =
-                        do_CreateInstance (NS_PASSWORDMANAGER_CONTRACTID);
+                        do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
 	if (pm)
 	{
 		pm->RemoveUser (nsDependentCString(info->host),
@@ -771,7 +771,7 @@ impl_permission_manager_add (EphyPermissionManager *manager,
 {
 	nsresult result;
         nsCOMPtr<nsIPermissionManager> pm
-		(do_CreateInstance (NS_PERMISSIONMANAGER_CONTRACTID, &result));
+		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID, &result));
 	if (NS_FAILED (result) || !pm) return;
 
 	nsCOMPtr<nsIURI> uri;
@@ -795,7 +795,7 @@ impl_permission_manager_remove (EphyPermissionManager *manager,
 {
 	nsresult result;
         nsCOMPtr<nsIPermissionManager> pm
-		(do_CreateInstance (NS_PERMISSIONMANAGER_CONTRACTID, &result));
+		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID, &result));
 	if (NS_SUCCEEDED (result))
 	{
 #if MOZILLA_SNAPSHOT >= 10
@@ -811,7 +811,7 @@ impl_permission_manager_clear (EphyPermissionManager *manager)
 {
 	nsresult result;
         nsCOMPtr<nsIPermissionManager> pm
-		(do_CreateInstance (NS_PERMISSIONMANAGER_CONTRACTID, &result));
+		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID, &result));
 	if (NS_SUCCEEDED (result))
 	{
 		pm->RemoveAll ();
@@ -825,7 +825,7 @@ impl_permission_manager_test (EphyPermissionManager *manager,
 {
 	nsresult result;
         nsCOMPtr<nsIPermissionManager> pm
-		(do_CreateInstance (NS_PERMISSIONMANAGER_CONTRACTID, &result));
+		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID, &result));
 	if (NS_FAILED (result) || !pm) return FALSE;
 
 	nsCOMPtr<nsIURI> uri;
@@ -864,7 +864,7 @@ impl_permission_manager_list (EphyPermissionManager *manager,
 
 	nsresult result;
         nsCOMPtr<nsIPermissionManager> pm
-		(do_CreateInstance (NS_PERMISSIONMANAGER_CONTRACTID, &result));
+		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID, &result));
 	if (NS_FAILED (result) || !pm) return NULL;
 
 	nsCOMPtr<nsISimpleEnumerator> pe;
