@@ -21,10 +21,9 @@ libegg_la_SOURCES = \
   $(EGGSOURCES) \
   eggmarshalers.c
 
-INST_H_FILES = \
-  egg-editable-toolbar.h
+INST_H_FILES =
 
-NO_INST_H_FILES = \
+NOINST_H_FILES = \
   eggdropdowntoolbutton.h \
   eggtreemultidnd.h \
   egg-editable-toolbar.h \
@@ -58,7 +57,7 @@ egg-marshal.c: eggmarshalers.h eggmarshalers.c
 EXTRA_DIST=			\
 	eggmarshalers.list
 
-EGGFILES=$(EGGSOURCES) $(INST_H_FILES) $(NO_INST_H_FILES)
+EGGFILES=$(EGGSOURCES) $(INST_H_FILES) $(NOINST_H_FILES)
 EGGDIR=$(srcdir)/../../../libegg/libegg
 
 regenerate-built-sources:
