@@ -49,8 +49,6 @@ gboolean ephy_dnd_drag_data_get			(GtkWidget *widget,
 
 GList   *ephy_dnd_node_list_extract_nodes	(const char *node_list);
 
-GList   *ephy_dnd_uri_list_extract_uris         (const char *uri_list);
-
 G_END_DECLS
 
 #endif
