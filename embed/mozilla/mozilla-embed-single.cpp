@@ -75,6 +75,7 @@
 #include <nsILocalFile.h>
 #include <nsIURI.h>
 #include <nsNetUtil.h>
+#include <nsIHttpAuthManager.h>
 
 // FIXME: For setting the locale. hopefully gtkmozembed will do itself soon
 #include <nsIChromeRegistry.h>
@@ -538,12 +539,23 @@ static void
 impl_clear_cache (EphyEmbedSingle *shell)
 {
 	nsresult rv;
-	
 	nsCOMPtr<nsICacheService> CacheService =
                         do_GetService (NS_CACHESERVICE_CONTRACTID, &rv);
 	if (NS_SUCCEEDED (rv))
 	{
 		CacheService->EvictEntries (nsICache::STORE_ANYWHERE);
+	}
+}
+
+static void
+impl_clear_auth_cache (EphyEmbedSingle *shell)
+{
+	nsresult rv;
+	nsCOMPtr<nsIHttpAuthManager> AuthManager =
+			do_GetService (NS_HTTPAUTHMANAGER_CONTRACTID, &rv);
+	if (NS_SUCCEEDED (rv))
+	{
+		AuthManager->ClearAll();
 	}
 }
 
@@ -892,6 +904,7 @@ static void
 ephy_embed_single_iface_init (EphyEmbedSingleClass *iface)
 {
 	iface->clear_cache = impl_clear_cache;
+	iface->clear_auth_cache = impl_clear_auth_cache;
 	iface->set_offline_mode = impl_set_offline_mode;
 	iface->load_proxy_autoconf = impl_load_proxy_autoconf;
 	iface->get_font_list = impl_get_font_list;

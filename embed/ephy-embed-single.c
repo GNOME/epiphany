@@ -97,6 +97,19 @@ ephy_embed_single_clear_cache (EphyEmbedSingle *single)
 }
 
 /**
+ * ephy_embed_single_clear_auth_cache:
+ * @single: the #EphyEmbedSingle
+ * 
+ * Clears the mozilla http authentication cache.
+ **/
+void
+ephy_embed_single_clear_auth_cache (EphyEmbedSingle *single)
+{
+	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (single);
+	klass->clear_auth_cache (single);
+}
+
+/**
  * ephy_embed_single_set_offline_mode:
  * @single: the #EphyEmbedSingle
  * @offline: whether being off-line

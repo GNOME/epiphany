@@ -49,6 +49,7 @@ struct EphyEmbedSingleClass
 	/* Methods */
 
 	void	(* clear_cache)         (EphyEmbedSingle *shell);
+	void	(* clear_auth_cache)	(EphyEmbedSingle *shell);
 	void	(* set_offline_mode)    (EphyEmbedSingle *shell,
 					 gboolean offline);
 	void	(* load_proxy_autoconf) (EphyEmbedSingle *shell,
@@ -60,6 +61,8 @@ struct EphyEmbedSingleClass
 GType	ephy_embed_single_get_type		(void);
 
 void	ephy_embed_single_clear_cache		(EphyEmbedSingle *shell);
+
+void	ephy_embed_single_clear_auth_cache	(EphyEmbedSingle *shell);
 
 void	ephy_embed_single_set_offline_mode	(EphyEmbedSingle *shell,
 						 gboolean offline);
