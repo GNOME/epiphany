@@ -419,9 +419,28 @@ set_drag_cursor (GtkWidget *widget)
 }
 
 static void
-event_box_realize_cb (GtkWidget *widget)
+event_box_realize_cb (GtkWidget *widget, GtkImage *icon)
 {
-	set_drag_cursor (widget);
+  GtkImageType type;
+
+  set_drag_cursor (widget);
+
+  type = gtk_image_get_storage_type (icon);
+  if (type == GTK_IMAGE_STOCK)
+    {
+      gchar *stock_id;
+      GdkPixbuf *pixbuf;
+      gtk_image_get_stock (icon, &stock_id, NULL);
+      pixbuf = gtk_widget_render_icon (widget, stock_id,
+	                               GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
+      gtk_drag_source_set_icon_pixbuf (widget, pixbuf);
+      g_object_unref (pixbuf);
+    }
+  else if (type == GTK_IMAGE_PIXBUF)
+    {
+      GdkPixbuf *pixbuf = gtk_image_get_pixbuf (icon);
+      gtk_drag_source_set_icon_pixbuf (widget, pixbuf);
+    }
 }
 
 static GtkWidget *
@@ -434,7 +453,6 @@ editor_create_item (EggToolbarEditor *editor,
   GtkWidget *vbox;
   GtkWidget *label;
   gchar *label_no_mnemonic = NULL;
-  GtkImageType type;
 
   event_box = gtk_event_box_new ();
   gtk_event_box_set_visible_window (GTK_EVENT_BOX (event_box), FALSE);
@@ -447,7 +465,7 @@ editor_create_item (EggToolbarEditor *editor,
   g_signal_connect (event_box, "drag_data_delete",
 		    G_CALLBACK (editor_drag_data_delete_cb), editor);
   g_signal_connect_after (event_box, "realize",
-		          G_CALLBACK (event_box_realize_cb), NULL);
+		          G_CALLBACK (event_box_realize_cb), icon);
 
   if (action == GDK_ACTION_MOVE)
     {
@@ -455,23 +473,6 @@ editor_create_item (EggToolbarEditor *editor,
 		        G_CALLBACK (drag_begin_cb), NULL);
       g_signal_connect (event_box, "drag_end",
 		        G_CALLBACK (drag_end_cb), NULL);
-    }
-
-  type = gtk_image_get_storage_type (icon);
-  if (type == GTK_IMAGE_STOCK)
-    {
-      gchar *stock_id;
-      GdkPixbuf *pixbuf;
-      gtk_image_get_stock (icon, &stock_id, NULL);
-      pixbuf = gtk_widget_render_icon (event_box, stock_id,
-	                               GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
-      gtk_drag_source_set_icon_pixbuf (event_box, pixbuf);
-      g_object_unref (pixbuf);
-    }
-  else if (type == GTK_IMAGE_PIXBUF)
-    {
-      GdkPixbuf *pixbuf = gtk_image_get_pixbuf (icon);
-      gtk_drag_source_set_icon_pixbuf (event_box, pixbuf);
     }
 
   vbox = gtk_vbox_new (0, FALSE);

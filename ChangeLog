@@ -1,3 +1,12 @@
+2004-05-22  Crispin Flowerday  <gnome@flowerday.cx>
+
+        * libegg/toolbareditor/egg-toolbar-editor.c
+        (event_box_realize_cb), (editor_create_item):
+
+        Set the drag icon on
+        realize, otherwise the current icon theme isn't used, and it falls
+        back to the default theme.
+
 2004-05-22  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.in:
