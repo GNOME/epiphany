@@ -1,5 +1,7 @@
 /*
  *  Copyright (C) 2002  Ricardo Fernández Pascual
+ *  Copyright (C) 2003  Marco Pesenti Gritti
+ *  Copyright (C) 2003  Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,44 +30,35 @@
 #include "ephy-debug.h"
 
 #include <bonobo/bonobo-i18n.h>
+#include <gtk/gtkaction.h>
 #include <gtk/gtkuimanager.h>
 #include <string.h>
-
-/**
- * Private data
- */
 
 #define EPHY_ENCODING_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODING_MENU, EphyEncodingMenuPrivate))
 
 struct _EphyEncodingMenuPrivate
 {
 	EphyWindow *window;
+	GtkUIManager *manager;
 	GtkActionGroup *action_group;
+	gboolean update_tag;
+	guint merge_id;
 };
 
-/**
- * Private functions, only availble from this file
- */
-static void	ephy_encoding_menu_class_init	  (EphyEncodingMenuClass *klass);
-static void	ephy_encoding_menu_init	  (EphyEncodingMenu *wrhm);
-static void	ephy_encoding_menu_finalize_impl (GObject *o);
-static void	ephy_encoding_menu_rebuild	  (EphyEncodingMenu *wrhm);
-static void     ephy_encoding_menu_set_property  (GObject *object,
-						   guint prop_id,
-						   const GValue *value,
-						   GParamSpec *pspec);
-static void	ephy_encoding_menu_get_property  (GObject *object,
-						   guint prop_id,
-						   GValue *value,
-						   GParamSpec *pspec);
+#define ENCODING_PLACEHOLDER_PATH	"/menubar/ViewMenu/ViewEncodingsPlaceholder"
+#define ENCODING_MENU_PATH		"/menubar/ViewMenu/ViewEncodingsPlaceholder/ViewEncodingMenu"
+
+static void	ephy_encoding_menu_class_init	(EphyEncodingMenuClass *klass);
+static void	ephy_encoding_menu_init		(EphyEncodingMenu *menu);
+static void	ephy_encoding_menu_rebuild	(EphyEncodingMenu *menu);
 
 enum
 {
 	PROP_0,
-	PROP_EPHY_WINDOW
+	PROP_WINDOW
 };
 
-static gpointer g_object_class;
+static GObjectClass *parent_class = NULL;
 
 GType
 ephy_encoding_menu_get_type (void)
@@ -88,112 +81,23 @@ ephy_encoding_menu_get_type (void)
 		};
 
 		ephy_encoding_menu_type = g_type_register_static (G_TYPE_OBJECT,
-							          "EphyEncodingMenu",
-							          &our_info, 0);
+								  "EphyEncodingMenu",
+								  &our_info, 0);
 	}
 
 	return ephy_encoding_menu_type;
-}
-static void
-ephy_encoding_menu_class_init (EphyEncodingMenuClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	G_OBJECT_CLASS (klass)->finalize = ephy_encoding_menu_finalize_impl;
-	g_object_class = g_type_class_peek_parent (klass);
-
-	object_class->set_property = ephy_encoding_menu_set_property;
-	object_class->get_property = ephy_encoding_menu_get_property;
-
-	g_object_class_install_property (object_class,
-                                         PROP_EPHY_WINDOW,
-                                         g_param_spec_object ("EphyWindow",
-                                                              "EphyWindow",
-                                                              "Parent window",
-                                                              EPHY_TYPE_WINDOW,
-                                                              G_PARAM_READWRITE |
-							      G_PARAM_CONSTRUCT_ONLY));
-
-	g_type_class_add_private (object_class, sizeof(EphyEncodingMenuPrivate));
-}
-
-static void
-ephy_encoding_menu_init (EphyEncodingMenu *wrhm)
-{
-	EphyEncodingMenuPrivate *p = EPHY_ENCODING_MENU_GET_PRIVATE (wrhm);
-	wrhm->priv = p;
-
-	wrhm->priv->action_group = NULL;
-}
-
-static void
-ephy_encoding_menu_finalize_impl (GObject *o)
-{
-	EphyEncodingMenu *wrhm = EPHY_ENCODING_MENU (o);
-	EphyEncodingMenuPrivate *p = wrhm->priv;
-
-	if (p->action_group != NULL)
-	{
-		g_object_unref (p->action_group);
-	}
-
-	G_OBJECT_CLASS (g_object_class)->finalize (o);
-}
-
-static void
-ephy_encoding_menu_set_property (GObject *object,
-				  guint prop_id,
-				  const GValue *value,
-				  GParamSpec *pspec)
-{
-        EphyEncodingMenu *m = EPHY_ENCODING_MENU (object);
-
-        switch (prop_id)
-        {
-                case PROP_EPHY_WINDOW:
-                        m->priv->window = g_value_get_object (value);
-			ephy_encoding_menu_rebuild (m);
-                        break;
-        }
-}
-
-static void
-ephy_encoding_menu_get_property (GObject *object,
-                                  guint prop_id,
-                                  GValue *value,
-                                  GParamSpec *pspec)
-{
-        EphyEncodingMenu *m = EPHY_ENCODING_MENU (object);
-
-        switch (prop_id)
-        {
-                case PROP_EPHY_WINDOW:
-                        g_value_set_object (value, m->priv->window);
-                        break;
-        }
-}
-
-EphyEncodingMenu *
-ephy_encoding_menu_new (EphyWindow *window)
-{
-	EphyEncodingMenu *ret = g_object_new (EPHY_TYPE_ENCODING_MENU,
-					       "EphyWindow", window,
-					       NULL);
-	return ret;
 }
 
 static void
 ephy_encoding_menu_verb_cb (GtkAction *action,
 			    EphyEncodingMenu *menu)
 {
-	EphyWindow *window;
 	EphyEmbed *embed;
 	const char *encoding;
 	const char *action_name;
 
-	window = menu->priv->window;
-
-	embed = ephy_window_get_active_embed (window);
+	
+	embed = ephy_window_get_active_embed (menu->priv->window);
 	g_return_if_fail (embed != NULL);
 
 	action_name = gtk_action_get_name (action);
@@ -209,114 +113,204 @@ ephy_encoding_menu_verb_cb (GtkAction *action,
 }
 
 static void
-build_group (GtkActionGroup *action_group,
-	     GString *xml_string,
-	     const LanguageGroupInfo *info)
+ephy_encoding_menu_init (EphyEncodingMenu *menu)
 {
-	gchar *tmp;
-	gchar *verb;
-	GtkAction *action;
+	menu->priv = EPHY_ENCODING_MENU_GET_PRIVATE (menu);
 
-	verb = g_strdup_printf ("EncodingGroup%d", info->group);
-
-	action = g_object_new (GTK_TYPE_ACTION,
-			       "name", verb,
-			       "label", info->title,
-			       NULL);
-	gtk_action_group_add_action (action_group, action);
-	g_object_unref (action);
-
-	tmp = g_strdup_printf ("<menu name=\"%sItem\" action=\"%s\">\n",
-			       verb, verb);
-	xml_string = g_string_append (xml_string, tmp);
-	g_free (tmp);
-	g_free (verb);
+	menu->priv->update_tag = FALSE;
+	menu->priv->action_group = NULL;
+	menu->priv->merge_id = 0;
 }
 
 static void
-build_encoding (EphyEncodingMenu *menu,
-		GtkActionGroup *action_group,
-		GString *xml_string,
-		const EncodingInfo *info)
-{
-	char *tmp;
-	char *verb;
-	GtkAction *action;
-
-	verb = g_strdup_printf ("Encoding%s", info->encoding);
-	action = g_object_new (GTK_TYPE_ACTION,
-			       "name", verb,
-			       "label", info->title,
-			       NULL);
-	g_signal_connect (action, "activate",
-			  G_CALLBACK (ephy_encoding_menu_verb_cb),
-			  menu);
-
-	gtk_action_group_add_action (action_group, action);
-	g_object_unref (action);
-
-	tmp = g_strdup_printf ("<menuitem name=\"%sItem\" action=\"%s\"/>\n",
-			       verb, verb);
-	xml_string = g_string_append (xml_string, tmp);
-
-	g_free (tmp);
-	g_free (verb);
-}
-
-static void
-ephy_encoding_menu_rebuild (EphyEncodingMenu *wrhm)
+ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
 {
 	EphyEmbedSingle *single;
-	EphyEncodingMenuPrivate *p = wrhm->priv;
-	GtkUIManager *merge = GTK_UI_MANAGER (p->window->ui_merge);
-	GString *xml;
-	GList *groups, *lg, *encodings, *enc;
+	GtkActionGroup *action_group;
+	GList *encodings, *groups, *l;
 
-	p->action_group = NULL;
+	g_return_if_fail (EPHY_IS_WINDOW (window));
 
-	LOG ("Rebuilding encoding menu")
+	menu->priv->window = window;
+	menu->priv->manager = GTK_UI_MANAGER (window->ui_merge);
+
+	action_group = gtk_action_group_new ("EncodingActions");
+	menu->priv->action_group = action_group;
 
 	single = ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (ephy_shell));
 	g_return_if_fail (single != NULL);
 
+	ephy_embed_single_get_encodings (single, LG_ALL, FALSE, &encodings);
+
+	for (l = encodings; l != NULL; l = l->next)
+	{
+		const EncodingInfo *info = (EncodingInfo *) l->data;
+		GtkAction *action;
+		char name[32];
+
+		g_snprintf (name, 32, "Encoding%s", info->encoding);
+		action = g_object_new (GTK_TYPE_ACTION,
+				       "name", name,
+				       "label", info->title,
+				       NULL);
+
+		g_signal_connect (action, "activate",
+				  G_CALLBACK (ephy_encoding_menu_verb_cb),
+				  menu);
+	
+		gtk_action_group_add_action (menu->priv->action_group, action);
+		g_object_unref (action);
+	}
+	
+	g_list_foreach (encodings, (GFunc) encoding_info_free, NULL);
+	g_list_free (encodings);
+
 	ephy_embed_single_get_language_groups (single, &groups);
 
-	xml = g_string_new (NULL);
-	g_string_append (xml, "<ui><menubar><menu name=\"ViewMenu\" action=\"View\">"
-			      "<placeholder name=\"ViewEncodingsPlaceholder\">"
-			      "<menu name=\"ViewEncodingMenu\" action=\"ViewEncoding\">");
+	for (l = groups; l != NULL; l = l->next)
+	{
+		const LanguageGroupInfo *info = (LanguageGroupInfo *) l->data;
+		GtkAction *action;
+		char name[32];
 
-	p->action_group = gtk_action_group_new ("EncodingActions");
-	gtk_ui_manager_insert_action_group (merge, p->action_group, 0);
-
-	for (lg = groups; lg != NULL; lg = lg->next)
-        {
-		const LanguageGroupInfo *lang_info = (LanguageGroupInfo *) lg->data;
-
-		build_group (p->action_group, xml, lang_info);
-
-		ephy_embed_single_get_encodings (single, lang_info->group,
-						FALSE, &encodings);
-
-		for (enc = encodings; enc != NULL; enc = enc->next)
-                {
-			const EncodingInfo *info = (EncodingInfo *) enc->data;
-
-			build_encoding (wrhm, p->action_group, xml, info);
-		}
-
-		g_list_foreach (encodings, (GFunc) encoding_info_free, NULL);
-		g_list_free (encodings);
-		
-		g_string_append (xml, "</menu>");
+		g_snprintf (name, 32, "EncodingGroup%d", info->group);
+	
+		action = g_object_new (GTK_TYPE_ACTION,
+				       "name", name,
+				       "label", info->title,
+				       NULL);
+		gtk_action_group_add_action (menu->priv->action_group, action);
+		g_object_unref (action);
 	}
 
 	g_list_foreach (groups, (GFunc) language_group_info_free, NULL);
 	g_list_free (groups);
 
-	g_string_append (xml, "</menu></placeholder></menu></menubar></ui>");
+	gtk_ui_manager_insert_action_group (menu->priv->manager,
+					    action_group, 0);
+	g_object_unref (action_group);
 
-	gtk_ui_manager_add_ui_from_string (merge, xml->str, -1, NULL);
+	ephy_encoding_menu_rebuild (menu);
+}
 
-	g_string_free (xml, TRUE);
+static void
+ephy_encoding_menu_set_property (GObject *object,
+				 guint prop_id,
+				 const GValue *value,
+				 GParamSpec *pspec)
+{
+	EphyEncodingMenu *menu = EPHY_ENCODING_MENU (object);
+
+	switch (prop_id)
+	{
+		case PROP_WINDOW:
+			ephy_encoding_menu_set_window (menu, g_value_get_object (value));
+			break;
+	}
+}
+
+static void
+ephy_encoding_menu_get_property (GObject *object,
+				 guint prop_id,
+				 GValue *value,
+				 GParamSpec *pspec)
+{
+	EphyEncodingMenu *menu = EPHY_ENCODING_MENU (object);
+
+	switch (prop_id)
+	{
+		case PROP_WINDOW:
+			g_value_set_object (value, menu->priv->window);
+			break;
+	}
+}
+
+static void
+ephy_encoding_menu_class_init (EphyEncodingMenuClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	parent_class = g_type_class_peek_parent (klass);
+
+	object_class->set_property = ephy_encoding_menu_set_property;
+	object_class->get_property = ephy_encoding_menu_get_property;
+
+	g_object_class_install_property (object_class,
+					 PROP_WINDOW,
+					 g_param_spec_object ("window",
+							      "Window",
+							      "Parent window",
+							      EPHY_TYPE_WINDOW,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof(EphyEncodingMenuPrivate));
+}
+
+EphyEncodingMenu *
+ephy_encoding_menu_new (EphyWindow *window)
+{
+	return g_object_new (EPHY_TYPE_ENCODING_MENU,
+			     "window", window,
+			     NULL);
+}
+
+static void
+ephy_encoding_menu_rebuild (EphyEncodingMenu *menu)
+{
+	EphyEmbedSingle *single;
+	EphyEncodingMenuPrivate *p = menu->priv;
+	GList *encodings, *groups, *l;
+
+	single = ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (ephy_shell));
+	ephy_embed_single_get_language_groups (single, &groups);
+
+	if (p->merge_id > 0)
+	{
+		gtk_ui_manager_remove_ui (p->manager, p->merge_id);
+		gtk_ui_manager_ensure_update (p->manager);
+	}
+
+	p->merge_id = gtk_ui_manager_new_merge_id (p->manager);
+
+	gtk_ui_manager_add_ui (p->manager, p->merge_id, ENCODING_PLACEHOLDER_PATH,
+			       "ViewEncodingMenu", "ViewEncoding",
+			       GTK_UI_MANAGER_MENU, FALSE);
+
+	for (l = groups; l != NULL; l = l->next)
+	{
+		const LanguageGroupInfo *info = (LanguageGroupInfo *) l->data;
+		char name[32], action[36], path[128];
+		GList *enc;
+
+		g_snprintf (action, 32, "EncodingGroup%d", info->group);
+		g_snprintf (name, 36, "%sMenu", action);
+		g_snprintf (path, 128, "%s/%s", ENCODING_MENU_PATH, name);
+
+		gtk_ui_manager_add_ui (p->manager, p->merge_id,
+				       ENCODING_MENU_PATH,
+				       name, action,
+				       GTK_UI_MANAGER_MENU, FALSE);
+
+		ephy_embed_single_get_encodings (single, info->group,
+						 FALSE, &encodings);
+
+		for (enc = encodings; enc != NULL; enc = enc->next)
+		{
+			const EncodingInfo *info = (EncodingInfo *) enc->data;
+
+			g_snprintf (action, 32, "Encoding%s", info->encoding);
+			g_snprintf (name, 36, "%sItem", action);
+
+			gtk_ui_manager_add_ui (p->manager, p->merge_id, path,
+					       name, action,
+					       GTK_UI_MANAGER_MENUITEM, FALSE);
+		}
+
+		g_list_foreach (encodings, (GFunc) encoding_info_free, NULL);
+		g_list_free (encodings);
+	}
+
+	g_list_foreach (groups, (GFunc) language_group_info_free, NULL);
+	g_list_free (groups);
 }
