@@ -279,7 +279,7 @@ ephy_fullscreen_popup_constructor (GType type,
 	gtk_box_pack_start (GTK_BOX (button_hbox), icon, FALSE, FALSE, 0);
 	gtk_widget_show (icon);
 
-	label = gtk_label_new (_("Exit Fullscreen"));
+	label = gtk_label_new (_("Leave Fullscreen"));
 	gtk_box_pack_start (GTK_BOX (button_hbox), label, FALSE, FALSE, 0);
 	gtk_widget_show (label);
 

@@ -1,3 +1,29 @@
+2005-01-14  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_set_tooltip), (ephy_location_entry_finalize),
+	(ephy_location_entry_class_init), (modify_background),
+	(entry_style_set_cb), (entry_realize_cb),
+	(ephy_location_entry_construct_contents),
+	(ephy_location_entry_init), (ephy_location_entry_set_favicon),
+	(ephy_location_entry_set_show_lock),
+	(ephy_location_entry_set_lock_stock),
+	(ephy_location_entry_set_lock_tooltip):
+	* lib/widgets/ephy-location-entry.h:
+	* src/ephy-fullscreen-popup.c: (ephy_fullscreen_popup_constructor):
+	* src/ephy-location-action.c: (sync_icon), (sync_lock_stock_id),
+	(sync_lock_tooltip), (sync_show_lock), (connect_proxy),
+	(ephy_location_action_set_property),
+	(ephy_location_action_get_property),
+	(ephy_location_action_class_init), (ephy_location_action_finalize):
+	* src/ephy-toolbar.c: (ephy_toolbar_set_security_state),
+	(ephy_toolbar_set_lock_visibility), (ephy_toolbar_constructor):
+	* src/ephy-toolbar.h:
+	* src/ephy-window.c: (sync_chromes_visibility):
+
+	Add favicon and lock icon to the entry. Fixes bug #116482 and bug #149506.
+	Change "Exit Fullscreen" to "Leave Fullscreen" as per HIG, part of bug #153270.
+
 2005-01-12  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/Makefile.am:

@@ -43,8 +43,11 @@
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtkbox.h>
 #include <gtk/gtkhbox.h>
+#include <gtk/gtkvbox.h>
 #include <gtk/gtkimagemenuitem.h>
 #include <gtk/gtkseparatormenuitem.h>
+#include <gtk/gtkframe.h>
+#include <gtk/gtkalignment.h>
 
 #include <string.h>
 
@@ -52,9 +55,14 @@
 
 struct _EphyLocationEntryPrivate
 {
+	GtkTooltips *tips;
+	GtkWidget *ebox;
 	GtkWidget *entry;
 	GtkWidget *icon_ebox;
 	GtkWidget *icon;
+	GtkWidget *lock_ebox;
+	GtkWidget *lock;
+
 	char *before_completion;
 	gboolean user_changed;
 
@@ -149,12 +157,22 @@ ephy_location_entry_set_tooltip (GtkToolItem *tool_item,
 				 const char *tip_private)
 {
 	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (tool_item);
+	EphyLocationEntryPrivate *priv = entry->priv;
 
-	gtk_tooltips_set_tip (tooltips, entry->priv->entry, tip_text, tip_private);
-	gtk_tooltips_set_tip (tooltips, entry->priv->icon_ebox,
-			      _("Drag and drop this icon to create a link to this page"), NULL);
+	gtk_tooltips_set_tip (tooltips, priv->entry, tip_text, tip_private);
 
 	return TRUE;
+}
+
+static void
+ephy_location_entry_finalize (GObject *object)
+{
+	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
+	EphyLocationEntryPrivate *priv = entry->priv;
+
+	g_object_unref (priv->tips);
+
+	parent_class->finalize (object);
 }
 
 static void
@@ -164,6 +182,8 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 	GtkToolItemClass *tool_item_class = GTK_TOOL_ITEM_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
+
+	object_class->finalize = ephy_location_entry_finalize;
 
 	tool_item_class->set_tooltip = ephy_location_entry_set_tooltip;
 
@@ -453,31 +473,95 @@ favicon_drag_data_get_cb (GtkWidget *widget,
 }
 
 static void
+modify_background (EphyLocationEntry *entry)
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+
+	if (priv->entry->style == NULL || !GTK_WIDGET_REALIZED (priv->ebox)) return;
+
+	gtk_widget_modify_bg (priv->ebox, GTK_STATE_NORMAL,
+			      &priv->entry->style->base[GTK_STATE_NORMAL]);
+}
+
+static void
+entry_style_set_cb (GtkWidget *widget,
+		    GtkStyle *previous_style,
+		    EphyLocationEntry *entry)
+{
+	LOG ("entry_style_set_cb")
+
+	modify_background (entry);
+}
+
+static void
+entry_realize_cb (GtkWidget *widget,
+		  EphyLocationEntry *entry)
+{
+	LOG ("entry_realize_cb")
+
+	modify_background (entry);
+}
+
+static void
 ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 {
 	EphyLocationEntryPrivate *priv = entry->priv;
-	GtkWidget *hbox;
+	GtkWidget *alignment, *frame, *hbox;
 
 	LOG ("EphyLocationEntry constructing contents %p", entry)
 
-	hbox = gtk_hbox_new (FALSE, 3); /* FIXME themeable spacing? */
-	gtk_container_add (GTK_CONTAINER (entry), hbox);
+	alignment = gtk_alignment_new (0.0, 0.5, 1.0, 0.0);
+	gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 1, 1);
+	gtk_container_add (GTK_CONTAINER (entry), alignment);
+
+	frame = gtk_frame_new (NULL);
+	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
+	gtk_container_add (GTK_CONTAINER (alignment), frame);
+
+	priv->ebox = gtk_event_box_new ();
+	gtk_container_set_border_width (GTK_CONTAINER (priv->ebox), 0);
+	gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->ebox), TRUE);
+	gtk_container_add (GTK_CONTAINER (frame), priv->ebox);
+
+	hbox = gtk_hbox_new (FALSE, 0);
+	gtk_container_add (GTK_CONTAINER (priv->ebox), hbox);
 
 	priv->icon_ebox = gtk_event_box_new ();
 	gtk_container_set_border_width (GTK_CONTAINER (priv->icon_ebox), 2);
 	gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->icon_ebox), FALSE);
-	gtk_box_pack_start (GTK_BOX (hbox), priv->icon_ebox, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (hbox), priv->icon_ebox, FALSE, FALSE, 2);
 	gtk_drag_source_set (priv->icon_ebox, GDK_BUTTON1_MASK,
 			     url_drag_types, n_url_drag_types,
 			     GDK_ACTION_COPY);
+	gtk_tooltips_set_tip (priv->tips, priv->icon_ebox,
+			      _("Drag and drop this icon to create a link to this page"), NULL);
 
 	priv->icon = gtk_image_new ();
 	gtk_container_add (GTK_CONTAINER (priv->icon_ebox), priv->icon);
 
 	priv->entry = gtk_entry_new ();
+	gtk_entry_set_has_frame (GTK_ENTRY (priv->entry), FALSE);
 	gtk_box_pack_start (GTK_BOX (hbox), priv->entry, TRUE, TRUE, 0);
 
-	gtk_widget_show_all (hbox);
+	priv->lock_ebox = gtk_event_box_new ();
+	gtk_container_set_border_width (GTK_CONTAINER (priv->lock_ebox), 2);
+	gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->lock_ebox), FALSE);
+	gtk_box_pack_end (GTK_BOX (hbox), priv->lock_ebox, FALSE, FALSE, 2);
+	gtk_drag_source_set (priv->lock_ebox, GDK_BUTTON1_MASK,
+			     url_drag_types, n_url_drag_types,
+			     GDK_ACTION_COPY);
+
+	//priv->lock = gtk_image_new ();
+	priv->lock = gtk_image_new_from_stock (GTK_STOCK_QUIT, GTK_ICON_SIZE_MENU);
+	gtk_container_add (GTK_CONTAINER (priv->lock_ebox), priv->lock);
+
+	gtk_widget_show_all (alignment);
+
+	/* monitor entry style so we can set the background behind the icons */
+	g_signal_connect_after (priv->entry, "style-set",
+				G_CALLBACK (entry_style_set_cb), entry);
+	g_signal_connect_after (priv->entry, "realize",
+				G_CALLBACK (entry_realize_cb), entry);
 
 	g_signal_connect (priv->icon_ebox, "drag_data_get",
 			  G_CALLBACK (favicon_drag_data_get_cb), entry);
@@ -504,6 +588,10 @@ ephy_location_entry_init (EphyLocationEntry *le)
 	le->priv = p;
 
 	p->user_changed = TRUE;
+
+	p->tips = gtk_tooltips_new ();
+	g_object_ref (p->tips);
+	gtk_object_sink (GTK_OBJECT (p->tips));
 
 	ephy_location_entry_construct_contents (le);
 
@@ -613,8 +701,47 @@ ephy_location_entry_get_entry (EphyLocationEntry *entry)
 	return entry->priv->entry;
 }
 
-GtkWidget *
-ephy_location_entry_get_image (EphyLocationEntry *entry)
+void
+ephy_location_entry_set_favicon (EphyLocationEntry *entry,
+				 GdkPixbuf *pixbuf)
 {
-	return entry->priv->icon;
+	GtkImage *image = GTK_IMAGE (entry->priv->icon);
+
+	if (pixbuf != NULL)
+	{
+		gtk_image_set_from_pixbuf (image, pixbuf);
+	}
+	else
+	{
+		gtk_image_set_from_stock (image,
+					  GTK_STOCK_NEW,
+					  GTK_ICON_SIZE_MENU);
+	}
+}
+
+void
+ephy_location_entry_set_show_lock (EphyLocationEntry *entry,
+				   gboolean show_lock)
+{
+	g_object_set (entry->priv->lock_ebox, "visible", show_lock, NULL);
+}
+
+void
+ephy_location_entry_set_lock_stock (EphyLocationEntry *entry,
+				    const char *stock_id)
+
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+
+	gtk_image_set_from_stock (GTK_IMAGE (priv->lock), stock_id,
+				  GTK_ICON_SIZE_MENU);
+}
+
+void
+ephy_location_entry_set_lock_tooltip (EphyLocationEntry *entry,
+				      const char *tooltip)
+{
+	EphyLocationEntryPrivate *priv = entry->priv;
+
+	gtk_tooltips_set_tip (priv->tips, priv->lock_ebox, tooltip, NULL);
 }

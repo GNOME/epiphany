@@ -46,6 +46,9 @@ struct _EphyLocationActionPrivate
 	EphyBookmarks *bookmarks;
 	char *icon;
 	EphyFaviconCache *cache;
+	char *lock_stock_id;
+	char *lock_tooltip;
+	gboolean show_lock;
 };
 
 static void ephy_location_action_init       (EphyLocationAction *action);
@@ -63,6 +66,9 @@ enum
 	PROP_ADDRESS,
 	PROP_EDITABLE,
 	PROP_ICON,
+	PROP_LOCK_STOCK,
+	PROP_LOCK_TOOLTIP,
+	PROP_SHOW_LOCK,
 	PROP_WINDOW
 };
 
@@ -191,23 +197,52 @@ sync_icon (GtkAction *gaction,
 	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
 	EphyLocationActionPrivate *priv = action->priv;
 	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (proxy);
-	GtkWidget *image;
 	GdkPixbuf *pixbuf;
 
-	image = ephy_location_entry_get_image (entry);
 	pixbuf = ephy_favicon_cache_get (priv->cache, priv->icon);
+
+	ephy_location_entry_set_favicon (entry, pixbuf);
 
 	if (pixbuf != NULL)
 	{
-		gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
 		g_object_unref (pixbuf);
 	}
-	else
-	{
-		gtk_image_set_from_stock (GTK_IMAGE (image),
-					  GTK_STOCK_NEW,
-					  GTK_ICON_SIZE_MENU);
-	}
+}
+
+static void
+sync_lock_stock_id (GtkAction *gaction,
+		    GParamSpec *pspec,
+		    GtkWidget *proxy)
+{
+	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
+	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (proxy);
+
+	ephy_location_entry_set_lock_stock (entry, priv->lock_stock_id);
+}
+
+static void
+sync_lock_tooltip (GtkAction *gaction,
+		   GParamSpec *pspec,
+		   GtkWidget *proxy)
+{
+	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
+	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (proxy);
+
+	ephy_location_entry_set_lock_tooltip (entry, priv->lock_tooltip);
+}
+
+static void
+sync_show_lock (GtkAction *gaction,
+	        GParamSpec *pspec,
+	        GtkWidget *proxy)
+{
+	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
+	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (proxy);
+
+	ephy_location_entry_set_show_lock (entry, priv->show_lock);
 }
 
 static char *
@@ -311,6 +346,15 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 		sync_icon (action, NULL, proxy);
 		g_signal_connect_object (action, "notify::icon",
 					 G_CALLBACK (sync_icon), proxy, 0);
+		sync_lock_stock_id (action, NULL, proxy);
+		g_signal_connect_object (action, "notify::lock-stock-id",
+					 G_CALLBACK (sync_lock_stock_id), proxy, 0);
+		sync_lock_tooltip (action, NULL, proxy);
+		g_signal_connect_object (action, "notify::lock-tooltip",
+					 G_CALLBACK (sync_lock_tooltip), proxy, 0);
+		sync_show_lock (action, NULL, proxy);
+		g_signal_connect_object (action, "notify::show-lock",
+					 G_CALLBACK (sync_show_lock), proxy, 0);
 
 		entry = ephy_location_entry_get_entry (lentry);
 		g_signal_connect_object (entry, "activate",
@@ -368,6 +412,17 @@ ephy_location_action_set_property (GObject *object,
 			g_free (action->priv->icon);
 			action->priv->icon = g_value_dup_string (value);
 			break;
+		case PROP_LOCK_STOCK:
+			g_free (action->priv->lock_stock_id);
+			action->priv->lock_stock_id = g_value_dup_string (value);
+			break;
+		case PROP_LOCK_TOOLTIP:
+			g_free (action->priv->lock_tooltip);
+			action->priv->lock_tooltip = g_value_dup_string (value);
+			break;
+		case PROP_SHOW_LOCK:
+			action->priv->show_lock = g_value_get_boolean (value);
+			break;
 		case PROP_WINDOW:
 			action->priv->window = EPHY_WINDOW (g_value_get_object (value));
 			break;
@@ -392,6 +447,15 @@ ephy_location_action_get_property (GObject *object,
 			break;
 		case PROP_ICON:
 			g_value_set_string (value, action->priv->icon);
+			break;
+		case PROP_LOCK_STOCK:
+			g_value_set_string (value, action->priv->lock_stock_id);
+			break;
+		case PROP_LOCK_TOOLTIP:
+			g_value_set_string (value, action->priv->lock_tooltip);
+			break;
+		case PROP_SHOW_LOCK:
+			g_value_set_boolean (value, action->priv->show_lock);
 			break;
 		case PROP_WINDOW:
 			/* not readable */
@@ -436,6 +500,30 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							       "Icon",
 							       "The icon",
 							       NULL,
+							       G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_LOCK_STOCK,
+					 g_param_spec_string  ("lock-stock-id",
+							       "Lock Stock ID",
+							       "Lock Stock ID",
+							       NULL,
+							       G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_LOCK_TOOLTIP,
+					 g_param_spec_string  ("lock-tooltip",
+							       "Lock Tooltip",
+							       "The icon",
+							       NULL,
+							       G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_SHOW_LOCK,
+					 g_param_spec_boolean ("show-lock",
+							       "Show Lock",
+							       "Show Lock",
+							       FALSE,
 							       G_PARAM_READWRITE));
 
 	g_object_class_install_property (object_class,
@@ -593,7 +681,9 @@ ephy_location_action_finalize (GObject *object)
 
 	g_list_free (priv->actions);
 	g_free (priv->address);
-	g_free (action->priv->icon);
+	g_free (priv->icon);
+	g_free (priv->lock_stock_id);
+	g_free (priv->lock_tooltip);
 	g_object_unref (priv->cache);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);

@@ -73,6 +73,8 @@ struct _EphyToolbarPrivate
 	GtkToolItem *exit_button;
 	guint disable_arbitrary_url_notifier_id;
 	gulong set_focus_handler;
+	gboolean show_lock;
+	gboolean lock_visible;
 	gboolean fullscreen;
 	gboolean spinning;
 };
@@ -498,17 +500,30 @@ ephy_toolbar_set_security_state (EphyToolbar *toolbar,
 				 const char *stock_id,
 				 const char *tooltip)
 {
-#if 0
 	EphyToolbarPrivate *priv = toolbar->priv;
 
+	priv->show_lock = show_lock;
+
 	g_object_set (priv->actions[LOCATION_ACTION],
-		      "lock-show", show_lock,
 		      "lock-stock-id", stock_id,
 		      "lock-tooltip", tooltip,
+		      "show-lock", priv->lock_visible && priv->show_lock,
 		      NULL);
-#endif
 }
 
+void
+ephy_toolbar_set_lock_visibility (EphyToolbar *toolbar,
+				  gboolean visible)
+{
+	EphyToolbarPrivate *priv = toolbar->priv;
+
+	priv->lock_visible = visible;
+
+	g_object_set (priv->actions[LOCATION_ACTION],
+		      "show-lock", priv->lock_visible && priv->show_lock,
+		      NULL);
+}
+			    
 void
 ephy_toolbar_set_spinning (EphyToolbar *toolbar,
 			   gboolean spinning)
@@ -637,7 +652,7 @@ ephy_toolbar_constructor (GType type,
 	gtk_toolbar_insert (gtoolbar, priv->sep_item, -1);
 
 	priv->exit_button = gtk_tool_button_new_from_stock (GTK_STOCK_QUIT);
-	gtk_tool_button_set_label (GTK_TOOL_BUTTON (priv->exit_button), _("Exit Fullscreen"));
+	gtk_tool_button_set_label (GTK_TOOL_BUTTON (priv->exit_button), _("Leave Fullscreen"));
 	gtk_tool_item_set_is_important (priv->exit_button, TRUE);
 	g_signal_connect (priv->exit_button, "clicked",
 			  G_CALLBACK (exit_button_clicked_cb), toolbar);

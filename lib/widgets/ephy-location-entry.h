@@ -81,7 +81,17 @@ void		ephy_location_entry_activate		(EphyLocationEntry *le);
 
 GtkWidget      *ephy_location_entry_get_entry		(EphyLocationEntry *entry);
 
-GtkWidget      *ephy_location_entry_get_image		(EphyLocationEntry *entry);
+void		ephy_location_entry_set_favicon		(EphyLocationEntry *entry,
+							 GdkPixbuf *pixbuf);
+
+void		ephy_location_entry_set_show_lock	(EphyLocationEntry *entry,
+							 gboolean show_lock);
+
+void		ephy_location_entry_set_lock_stock	(EphyLocationEntry *entry,
+							 const char *stock_id);
+
+void		ephy_location_entry_set_lock_tooltip	(EphyLocationEntry *entry,
+							 const char *tooltip);
 
 G_END_DECLS
 

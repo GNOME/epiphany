@@ -548,6 +548,8 @@ sync_chromes_visibility (EphyWindow *window)
 	g_object_set (priv->bookmarksbar, "visible", show_bookmarksbar, NULL);
 	g_object_set (priv->statusbar, "visible", show_statusbar, NULL);
 
+	ephy_toolbar_set_lock_visibility (priv->toolbar, !show_statusbar);
+
 	if (priv->fullscreen_popup != NULL)
 	{
 		g_object_set (priv->fullscreen_popup, "visible", !show_toolbar, NULL);
