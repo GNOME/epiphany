@@ -16,43 +16,69 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "ephy-embed-popup.h"
-#include "ephy-new-bookmark.h"
+#include "egg-action.h"
+#include "ephy-window.h"
 
-#include <bonobo/bonobo-ui-component.h>
+void popup_cmd_link_in_new_window	(EggAction *action,
+					 EphyWindow *window);
 
-void popup_cmd_new_window 	  (BonoboUIComponent *uic, 
-			    	   EphyEmbedPopup *popup, 
-			    	   const char* verbname);
+void popup_cmd_link_in_new_tab		(EggAction *action,
+					 EphyWindow *window);
 
-void popup_cmd_new_tab	 	   (BonoboUIComponent *uic, 
-			    	    EphyEmbedPopup *popup, 
-			    	    const char* verbname);
+void popup_cmd_image_in_new_tab		(EggAction *action,
+					 EphyWindow *window);
 
-void popup_cmd_image_in_new_tab    (BonoboUIComponent *uic, 
-			            EphyEmbedPopup *popup, 
-			            const char* verbname);
+void popup_cmd_image_in_new_window	(EggAction *action,
+					 EphyWindow *window);
 
-void popup_cmd_image_in_new_window (BonoboUIComponent *uic, 
-			            EphyEmbedPopup *popup, 
-			            const char* verbname);
+void popup_cmd_add_link_bookmark	(EggAction *action,
+					 EphyWindow *window);
 
-void popup_cmd_add_bookmark    	   (BonoboUIComponent *uic, 
-			            EphyEmbedPopup *popup, 
-			            const char* verbname);
+void popup_cmd_frame_in_new_tab		(EggAction *action,
+					 EphyWindow *window);
 
-void popup_cmd_frame_in_new_tab    (BonoboUIComponent *uic, 
-			            EphyEmbedPopup *popup, 
-			            const char* verbname);
+void popup_cmd_frame_in_new_window	(EggAction *action,
+					 EphyWindow *window);
 
-void popup_cmd_frame_in_new_window (BonoboUIComponent *uic, 
-			            EphyEmbedPopup *popup, 
-			            const char* verbname);
+void popup_cmd_add_frame_bookmark	(EggAction *action,
+					 EphyWindow *window);
 
-void popup_cmd_add_frame_bookmark  (BonoboUIComponent *uic, 
-			            EphyEmbedPopup *popup, 
-			            const char* verbname);
+void popup_cmd_view_source		(EggAction *action,
+					 EphyWindow *window);
 
-void popup_cmd_view_source  	   (BonoboUIComponent *uic, 
-			            EphyEmbedPopup *popup, 
-			            const char* verbname);
+void popup_cmd_copy_page_location       (EggAction *action,
+					 EphyWindow *window);
+
+void popup_cmd_copy_email		(EggAction *action,
+					 EphyWindow *window);
+
+void popup_cmd_copy_link_location       (EggAction *action,
+					 EphyWindow *window);
+
+void popup_cmd_open_link		(EggAction *action,
+					 EphyWindow *window);
+
+void popup_cmd_download_link		(EggAction *action,
+					 EphyWindow *window);
+
+void popup_cmd_set_image_as_background  (EggAction *action,
+					 EphyWindow *window);
+
+void popup_cmd_copy_image_location	(EggAction *action,
+					 EphyWindow *window);
+
+void popup_cmd_save_background_as	(EggAction *action,
+					 EphyWindow *window);
+
+void popup_cmd_open_frame		(EggAction *action,
+					 EphyWindow *window);
+
+void popup_cmd_open_image		(EggAction *action,
+					 EphyWindow *window);
+
+void popup_cmd_download_link		(EggAction *action,
+					 EphyWindow *window);
+
+void popup_cmd_save_image_as		(EggAction *action,
+					 EphyWindow *window);
+

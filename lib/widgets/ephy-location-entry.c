@@ -158,10 +158,10 @@ ephy_location_entry_finalize_impl (GObject *o)
 	G_OBJECT_CLASS (gtk_hbox_class)->finalize (o);
 }
 
-EphyLocationEntry *
+GtkWidget *
 ephy_location_entry_new (void)
 {
-	return EPHY_LOCATION_ENTRY (g_object_new (EPHY_TYPE_LOCATION_ENTRY, NULL));
+	return GTK_WIDGET (g_object_new (EPHY_TYPE_LOCATION_ENTRY, NULL));
 }
 
 static void

@@ -1,458 +1,150 @@
 <Root>
-
-<commands>
-        <cmd name="FileOpen" _label="Open"
-	_tip="Open a file" pixtype="stock" pixname="gtk-open" accel="*Control*O"/>
-	
-        <cmd name="FileSaveAs" _label="Save As"
-        _tip="Save the current file with a different name"
-	pixtype="stock" pixname="gtk-save-as"
-	accel="*Shift**Control*S"/>
-
-        <cmd name="FilePrint" _label="Print"
-	_tip="Print the current file" pixtype="stock" pixname="gtk-print"
-	accel="*Control*P"/>
-	
-        <cmd name="FileCloseTab" _tip="Close the current tab" 
-	pixtype="stock" pixname="gtk-close"/>
-
-	<cmd name="FileCloseWindow" _tip="Close the current window"/>
-
-        <cmd name="EditCut" _label="Cut" _tip="Cut the selection"
-        pixtype="stock" pixname="gtk-cut"/>
-	
-        <cmd name="EditCopy" _label="Copy"
-	_tip="Copy the selection" pixtype="stock" pixname="gtk-copy"/>
-	
-        <cmd name="EditPaste" _label="Paste"
-	_tip="Paste the clipboard" pixtype="stock" pixname="gtk-paste"/>
-	
-	<cmd name="EditSelectAll" _label="Select All" _tip="Select the entire document"
-	accel="*Control*A"/>     
-
-	<cmd name="EditFind" _label="Find" _tip="Search for a string"
-        pixtype="stock" pixname="gtk-find" accel="*Control*F"/>
-
-	<cmd name="Zoom In" _label="Zoom In"
-         _tip="Show the contents in more detail"/>
-        <cmd name="Zoom Out" _label="Zoom Out"
-         _tip="Show the contents in less detail"/>
-        <cmd name="Zoom Normal" _label="Normal Size"
-         _tip="Show the contents at the normal size"/>
-
-        <cmd name="SettingsPreferences" _label="Preferences" _tip="Configure the application"
-	  pixtype="stock" pixname="gtk-preferences"/>
-
-        <cmd name="SettingsToolbarEditor" _label="Toolbar" _tip="Edit the main toolbar"/>
-	
-	<cmd name="HelpContents" _label="Contents" _tip="Open the Epiphany manual"
-	accel="F1"/>
-
-        <cmd name="About" _label="About..." _tip="About this application"
-	pixtype="stock" pixname="About"/>
-
-	<cmd name="BookmarksAddDefault" _label="Add bookmark"
-	     _tip="Add a bookmark to the default folder"/>
-
-	<cmd name="BookmarksEdit" _label="Edit bookmarks"
-	     _tip="Open a bookmarks editor"/>
-
-	<cmd name="GoBack" _label="_Back"
-	     sensitive="0"/>
-
-	<cmd name="GoUp" _label="_Up"
-	     sensitive="0"/>
-
- 	<cmd name="GoHome" _label="_Home"/>
-	
-	<cmd name="GoMyportal" _label="_My portal"/>
-
-	<cmd name="GoForward" _label="_Forward"
-	     sensitive="0"/>
-
-	<cmd name="GoStop" _label="_Stop"
-	     sensitive="0"
-	     _tip="Stop current data transfer"/>
-	
-	<cmd name="GoReload" _label="_Reload"
-	     _tip="Display the latest content of the current page"/>
-	
-	<cmd name="GoGo" _label="_Go"
-	     _tip="Load the URL in the location entry"/>
-	
-	<cmd name="EPOpenLink" _label="Open"/>
-
-	<cmd name="EPOpenInNewWindow" _label="Open in New Window"/>
-	
-	<cmd name="EPOpenInNewTab" _label="Open in New Tab"/>
-	
-	<cmd name="EPCopyLinkLocation" _label="Copy Link Location"/>
-
-	<cmd name="EPCopyEmail" _label="Copy Email Address"/>
-
-	<cmd name="EPDownloadLink" _label="Download Link"/>
-
-	<cmd name="EPAddBookmark" _label="Add Bookmark"/>
-
-	<cmd name="EPOpenImage" _label="Open Image"/>
-
-	<cmd name="EPOpenImageInNewWindow" _label="Open Image in New Window"/>
-	
-	<cmd name="EPOpenImageInNewTab" _label="Open Image in New Tab"/>
-	
-	<cmd name="EPSaveImageAs" _label="Save Image As..."/>
-	
-	<cmd name="EPSetImageAsBackground" _label="Use Image as Background"/>
-	
-	<cmd name="EPCopyImageLocation" _label="Copy Image Location"/>
-
-	<cmd name="DPCopyLocation" _label="Copy Page location"/>
-
-	<cmd name="DPOpenFrame" _label="Open Frame"/>
-	
-	<cmd name="DPOpenFrameInNewWindow" _label="Open Frame in New Window"/>
-	
-	<cmd name="DPOpenFrameInNewTab" _label="Open Frame in New Tab"/>
-	
-	<cmd name="DPReloadFrame" _label="Reload Frame"/>
-	
-	<cmd name="DPAddFrameBookmark" _label="Add Bookmark for Frame"/>
-
-	<cmd name="DPSavePageAs" _label="Save Page As..."/>
-	
-	<cmd name="DPSaveBackgroundAs" _label="Save Background As..."/>
-	
-	<cmd name="DPAddPageBookmark" verb="Add Bookmark"/>
-
-	<cmd name="PPVGotoFirst" _label="First"/>
-	
-	<cmd name="PPVGotoLast" _label="Last"/>
-	
-	<cmd name="PPVGoBack" _label="Previous"/>
-
-	<cmd name="PPVGoForward" _label="Next"/>
-        
-</commands>
-
-<keybindings>
-	<accel name="*Control*S" verb="FileSaveAs"/>
-</keybindings>
-
 <menu>
-
-<submenu name="File" _label="_File">
-        
-        <menuitem name="FileNewWindow" verb="" 
-	 _label="_New Window" 
-	 pixtype="stock" pixname="gtk-new" 
-	 accel="*Control*n"/>
-
-	<menuitem name="FileNewTab" verb="" _label="New _Tab" accel="*Control*t"/>
-        
-        <menuitem name="FileOpen" verb="" _label="_Open..."/>
-
-	<separator/>	
-
-        <menuitem name="FileSaveAs" verb="" _label="Save _As..."/>
-	
-	<separator/>
-
-	<menuitem name="FilePrint" verb="" _label="_Print..."/>
-	<menuitem name="FileSendTo" verb="" 
-	 pixtype="stock" pixname="epiphany-send-link"
-	 _label="S_end To..."/>
-
-	<separator/>
-	
-	<menuitem name="BookmarksAddDefault" verb="" _label="_Add Bookmark" 
-	 _tip="Add a bookmark for the current location to the default folder"
-	 pixtype="stock" pixname="gtk-add" accel="*Control*d"/>
-	
-	<separator/>
-
-        <menuitem name="FileCloseTab" verb="" _label="_Close Tab" accel="*Control*W"/>
-
-	<menuitem name="FileCloseWindow" verb="" _label="Close _Window" accel="*Shift**Control*W"/>
-
+<submenu name="FileMenu" verb="File">  
+        <menuitem name="FileNewWindowMenu" verb="FileNewWindow"/>
+	<menuitem name="FileNewTabMenu" verb="FileNewTab"/>
+        <menuitem name="FileOpenMenu" verb="FileOpen"/>
+	<separator name="FileSep1"/>	
+        <menuitem name="FileSaveAsMenu" verb="FileSaveAs"/>
+	<separator name="FileSep2"/>
+	<menuitem name="FilePrintMenu" verb="FilePrint"/>
+	<menuitem name="FileSendToMenu" verb="FileSendTo"/>
+	<separator name="FileSep3"/>
+	<menuitem name="FileAddBookmarkMenu" verb="FileAddBookmark"/>
+	<separator name="FileSep4"/>
+        <menuitem name="FileCloseTabMenu" verb="FileCloseTab"/>
+	<menuitem name="FileCloseWindowMenu" verb="FileCloseWindow"/>
 </submenu>
 
-<submenu name="Edit" _label="_Edit">
-
-        <menuitem name="EditCut" verb="" _label="Cu_t" accel="*Control*X"/>
-	
-        <menuitem name="EditCopy" verb="" _label="_Copy" accel="*Control*c"/>
-	
-        <menuitem name="EditPaste" verb="" _label="_Paste" accel="*Control*v"/>
-	
-	<separator/> 
-
-        <menuitem name="EditSelectAll" verb="" _label="Select _All"/>
-
-	<separator/>
-
-	<menuitem name="EditFind" verb="" _label="_Find..."/>
-	<menuitem name="EditFindNext" verb="" 
-	 accel="*Control*G" _label="Find Ne_xt"/>
-	<menuitem name="EditFindPrev" verb="" 
-	 accel="*Shift**Control*G" _label="Find Pre_vious"/>
-
-	<separator/>
-
-	<menuitem name="PDM" verb="ToolsPDM" _label="P_ersonal Data"/>
-
-	<menuitem name="EditToolbar"
-	 _label="T_oolbar"
-         verb="SettingsToolbarEditor"/>
-
-	<menuitem name="EditPrefs" 
-         _label="P_references" 
-         _tip="Edit Ephy preferences"
-         pixtype="stock" pixname="gtk-preferences" 
-         verb="EditPrefs"/>
+<submenu name="EditMenu" verb="Edit">
+        <menuitem name="EditCutMenu" verb="EditCut"/>
+        <menuitem name="EditCopyMenu" verb="EditCopy"/>
+        <menuitem name="EditPasteMenu" verb="EditPaste"/>
+	<separator name="EditSep1"/> 
+        <menuitem name="EditSelectAllMenu" verb="EditSelectAll"/>
+	<separator name="EditSep2"/>
+	<menuitem name="EditFindMenu" verb="EditFind"/>
+	<menuitem name="EditFindNextMenu" verb="EditFindNext"/> 
+	<menuitem name="EditFindPrevMenu" verb="EditFindPrev"/>
+	<separator name="EditSep3"/>
+	<menuitem name="EditPersonalDataMenu" verb="EditPersonalData"/>
+	<menuitem name="EditToolbarMenu" verb="EditToolbar"/>
+	<menuitem name="EditPrefsMenu" verb="EditPrefs"/> 
 </submenu>
 
-<submenu name="View" _label="_View">
-	
-	<menuitem name="GoStop" 
-	 pixtype="stock" pixname="gtk-stop"
-	 verb="" accel="Escape"/>
-
-	<menuitem name="GoReload" 
-	 pixtype="stock" pixname="gtk-refresh"
-	 verb="" accel="*Control*R"/>
-
-	<separator/>
-
-	<menuitem name="View Toolbar" id="View Toolbar" type="toggle" 
-	_label="_Toolbar" verb="" accel="*Shift**Control*T"/> 
-	
-	<menuitem name="View Statusbar" id="View Statusbar" 
-	type="toggle" _label="St_atusbar" verb=""/>
-	
-	<menuitem name="View Fullscreen" id="View Fullscreen" 
-	type="toggle" _label="_Fullscreen" verb="" accel="F11"/>
-
-	<separator/>
-
-	<menuitem name="Zoom In"
-         _label="Zoom _In" accel="*Control*plus"
-         pixtype="stock" pixname="zoom-in"
-         verb="Zoom In"/>
-
-	<menuitem name="Zoom Out"
-         _label="Zoom _Out" accel="*Control*minus"
-         pixtype="stock" pixname="zoom-out"
-         verb="Zoom Out"/>
-
-	<menuitem name="Zoom Normal"
-         _label="_Normal Size"
-         pixtype="stock" pixname="zoom-100"
-         verb="Zoom Normal"/>
-
-	<separator/>
-
-	<placeholder name="EncodingMenuPlaceholder"/>
-
-	<menuitem name="Page Source"
-         _label="_Page Source"
-         verb="ViewPageSource"/>
-	
+<submenu name="ViewMenu" verb="View">
+	<menuitem name="ViewStopMenu" verb="ViewStop"/> 
+	<menuitem name="ViewReloadMenu" verb="ViewReload"/> 
+	<separator name="ViewSep1"/>
+	<menuitem name="ViewStatusbarMenu" verb="ViewStatusbar"/>
+	<menuitem name="ViewFullscreenMenu" verb="ViewFullscreen"/>
+	<separator name="ViewSep2"/>
+	<menuitem name="ViewZoomInMenu" verb="ViewZoomIn"/>
+	<menuitem name="ViewZoomOutMenu" verb="ViewZoomOut"/>
+	<menuitem name="ViewZoomNormalMenu" verb="ViewZoomNormal"/>
+	<separator name="ViewSep3"/>
+	<placeholder name="ViewEncodingPlaceholder"/>
+	<menuitem name="ViewPageSourceMenu" verb="ViewPageSource"/>
 </submenu>
 
-<submenu name="Go" _label="_Go">
-	<menuitem name="GoBack"
-	 pixtype="stock" pixname="gtk-go-back"
- 	 verb="" accel="*Alt*Left"/>
-
-	<menuitem name="GoForward"
-	 pixtype="stock" pixname="gtk-go-forward"
-	 verb="" accel="*Alt*Right"/>
-
-	<menuitem name="GoUp"
-	 pixtype="stock" pixname="gtk-go-up"
-	 verb="" accel="*Alt*Up"/>
-
-	<separator/>
-
-	<menuitem name="GoHome" 
-	 pixtype="stock" pixname="gtk-home"
-	 verb="" accel="*Alt*Home"/>
-
-	<menuitem name="GoLocation" _label="_Location..."
-	 verb="" accel="*Ctrl*l"/>
-
-	<separator/>
-
-	<menuitem name="History" verb="ToolsHistory"
-	 _label="_History" accel="*Control*H"/>
-
-	<menuitem name="BookmarksEdit" verb="" _label="_Bookmarks" 
-	 accel="*Control*b"/>
-
-	<placeholder name="Favorites" delimit="top"/>
+<submenu name="GoMenu" verb="Go">
+	<menuitem name="GoBackMenu" verb="GoBack"/>
+	<menuitem name="GoForwardMenu" verb="GoForward"/>
+	<menuitem name="GoUpMenu" verb="GoUp"/>
+	<separator name="GoSep1"/>
+	<menuitem name="GoHomeMenu" verb="GoHome"/>
+	<menuitem name="GoLocationMenu" verb="GoLocation"/>
+	<separator name="GoSep2"/>
+	<menuitem name="GoHistoryMenu" verb="GoHistory"/>
+	<menuitem name="GoBookmarksMenu" verb="GoBookmarks"/>
+	<placeholder name="GoFavorites">
+	<separator name="GoSep3"/>
+	</placeholder>
 </submenu>
 
-<submenu name="Tabs" _label="_Tabs">
-	<menuitem name="Previous Tab" verb="TabsPrevious" _label="_Previous Tab"
-	accel="*Control*Page_Up"/>
-	<menuitem name="Next Tab" verb="TabsNext" _label="_Next Tab"
-	accel="*Control*Page_Down"/>
-	<separator/>
-	<menuitem name="Tab Left" verb="TabsMoveLeft" _label="Move Tab _Left"
-	accel="*Shift**Control*Page_Up"/>
-	<menuitem name="Tab Right" verb="TabsMoveRight" _label="Move Tab _Right"
-	accel="*Shift**Control*Page_Down"/>
-        <menuitem name="Move Tab to New Window" verb="TabsDetach" _label="_Detach Tab"
-	accel="*Shift**Control*m"/>
+<submenu name="TabsMenu" verb="Tabs">
+	<menuitem name="TabsPreviousMenu" verb="TabsPrevious"/>
+	<menuitem name="TabsNextMenu" verb="TabsNext"/>
+	<separator name="TabsSep1"/>
+	<menuitem name="TabsMoveLeftMenu" verb="TabsMoveLeft"/>
+	<menuitem name="TabsMoveRightMenu" verb="TabsMoveRight"/>
+        <menuitem name="TabsDetachMenu" verb="TabsDetach"/>
 </submenu>
 
-<submenu name="Help" _label="_Help">
-
-	<menuitem name="HelpContents" verb="" 
-	 pixtype="stock" pixname="gtk-help" 
-	 _label="_Contents"/>
-	
-        <menuitem name="About" verb="" _label="_About"/>
-
+<submenu name="HelpMenu" verb="Help">
+        <menuitem name="HelpAboutMenu" verb="HelpAbout"/>
 </submenu>
-
 </menu>
 
 <popups>
+<popup name="EphyEmbedInputPopup" verb="FakeToplevel">
+	<menuitem name="EditCutIP" verb="EditCut"/> 
+	<menuitem name="EditCopyIP" verb="EditCopy"/>
+	<menuitem name="EditPasteIP" verb="EditPaste"/>
+</popup>
 
-	<popup name="EphyEmbedInputPopup">
-		<menuitem name="EditCut" 
-		 pixtype="stock" pixname="gtk-cut"
-		 verb=""/>
-		<menuitem name="EditCopy" 
-		 pixtype="stock" pixname="gtk-copy"
-		 verb=""/>
-		<menuitem name="EditPaste" 
-		 pixtype="stock" pixname="gtk-paste"
-		 verb=""/>
-	</popup>
+<popup name="EphyDocumentPopup" verb="FakeToplevel">
+	<menuitem name="GoBackDP" verb="GoBack"/>
+	<menuitem name="GoForwardDP" verb="GoForward"/>
+	<menuitem name="GoReloadDP" verb="ViewReload"/>
+	<separator name="DPSep1"/>
+	<menuitem name="SavePageAsDP" verb="FileSaveAs"/>
+	<menuitem name="SaveBackgroundAsDP" verb="SaveBackgroundAs"/>
+	<menuitem name="AddPageBookmarkDP" verb="FileAddBookmark"/>
+	<menuitem name="CopyPageLocationDP" verb="CopyPageLocation"/>
+</popup>
 
-        <popup name="EphyEmbedDocumentPopup">
-		<placeholder name="NavigationItems">
-			<menuitem name="GoBack" 
-			 pixtype="stock" pixname="gtk-go-back"
-			 verb=""/>
+<popup name="EphyFramedDocumentPopup" verb="FakeToplevel">
+	<menuitem name="GoBackFDP" verb="GoBack"/>
+	<menuitem name="GoForwardFDP" verb="GoForward"/>
+	<menuitem name="GoReloadFDP" verb="ViewReload"/>
+	<separator name="FDPSep1"/>
+	<menuitem name="SavePageAsFDP" verb="FileSaveAs"/>
+	<menuitem name="SaveBackgroundAsFDP" verb="SaveBackgroundAs"/>
+	<menuitem name="AddPageBookmarkFDP" verb="FileAddBookmark"/>
+	<menuitem name="CopyPageLocationFDP" verb="CopyPageLocation"/>
+	<separator name="FDBSep2"/>
+	<menuitem name="OpenFrameFDP" verb="OpenFrame"/>
+	<menuitem name="OpenFrameInNewWindowFDP" verb="OpenFrameInNewWindow"/>
+	<menuitem name="OpenFrameInNewTabFDP" verb="OpenFrameInNewTab"/>
+</popup>
 
-			<menuitem name="GoForward" 
-			 pixtype="stock" pixname="gtk-go-forward"
-			 verb=""/>
+<popup name="EphyLinkPopup" verb="FakeToplevel">
+	<menuitem name="OpenLinkLP" verb="OpenLink"/>
+        <menuitem name="OpenLinkInNewWindowLP" verb="OpenLinkInNewWindow"/>
+	<menuitem name="OpenLinkInNewTabLP" verb="OpenLinkInNewTab"/>
+	<menuitem name="DownloadLinkLP" verb="DownloadLink"/>
+	<menuitem name="AddLinkBookmarkLP" verb="AddLinkBookmark"/>
+	<menuitem name="CopyLinkLocationLP" verb="CopyLinkLocation"/>
+	<menuitem name="CopyEmailLinkLP" verb="CopyEmail"/>
+</popup>
 
-			<menuitem name="GoReload" 
-			 pixtype="stock" pixname="gtk-refresh"
-			 verb=""/>
+<popup name="EphyImagePopup" verb="FakeToplevel">
+	<menuitem name="OpenImageIP" verb="OpenImage"/>
+	<menuitem name="OpenImageInNewWindowIP" verb="OpenImageInNewWindow"/>
+	<menuitem name="OpenImageInNewTabIP" verb="OpenImageInNewTab"/>
+	<menuitem name="SaveImageAsIP" verb="SaveImageAs"/>
+	<menuitem name="SetImageAsBackgroundIP" verb="SetImageAsBackground"/>
+	<menuitem name="CopyImageLocationIP" verb="CopyImageLocation"/>
+</popup>
 
-			<separator/>
-		</placeholder>
+<popup name="EphyImageLinkPopup" verb="FakeToplevel">
+	<menuitem name="OpenLinkILP" verb="OpenLink"/>
+        <menuitem name="OpenLinkInNewWindowILP" verb="OpenLinkInNewWindow"/>
+	<menuitem name="OpenLinkInNewTabILP" verb="OpenLinkInNewTab"/>
+	<menuitem name="DownloadLinkILP" verb="DownloadLink"/>
+	<menuitem name="AddLinkBookmarkILP" verb="AddLinkBookmark"/>
+	<menuitem name="CopyLinkLocationILP" verb="CopyLinkLocation"/>
+	<menuitem name="CopyEmailLinkILP" verb="CopyEmail"/>
+	<separator name="LPSep1"/>
+	<menuitem name="OpenImageILP" verb="OpenImage"/>
+	<menuitem name="OpenImageInNewWindowILP" verb="OpenImageInNewWindow"/>
+	<menuitem name="OpenImageInNewTabILP" verb="OpenImageInNewTab"/>
+	<menuitem name="SaveImageAsILP" verb="SaveImageAs"/>
+	<menuitem name="SetImageAsBackgroundILP" verb="SetImageAsBackground"/>
+	<menuitem name="CopyImageLocationILP" verb="CopyImageLocation"/>
+</popup>
 
-		<menuitem name="DPSavePageAs" 
-		 pixtype="stock" pixname="gtk-save"
-		 verb=""/>
-		
-		<menuitem name="DPSaveBackgroundAs" verb=""/>
-		
-		<menuitem name="DPViewSource" _label="Page Source"
-		 verb="ViewPageSource"/>
-
-		<menuitem name="DPAddPageBookmark" 
-		 verb=""/>
-        	
-		<menuitem name="DPCopyLocation" 
-		 pixtype="stock" pixname="gtk-copy"
-		 verb=""/>
-
-		<placeholder name="FrameItems">
-			<separator/>
-			<menuitem name="DPOpenFrame" verb=""/>
-			<menuitem name="DPOpenFrameInNewWindow" verb=""/>
-			<menuitem name="DPOpenFrameInNewTab" verb=""/>
-			<menuitem name="DPReloadFrame" verb=""/>
-			<menuitem name="DPAddFrameBookmark" verb=""/>
-		</placeholder>
-	</popup>
-	
-	<popup name="EphyEmbedElementPopup">
-		<placeholder name="LinkItems">
-        		<menuitem name="EPOpenLink" 
-			 pixtype="stock" pixname="gtk-open"
-			 verb=""/>
-
-        		<menuitem name="EPOpenInNewWindow" verb=""/>
-
-			<menuitem name="EPOpenInNewTab" verb=""/>
-	
-			<menuitem name="EPDownloadLink" verb=""/>
-			
-			<menuitem name="EPAddBookmark" 
-			 pixtype="stock" pixname="gtk-add"
-			 verb=""/>
-
-			<menuitem name="EPCopyLinkLocation" 
-			 pixtype="stock" pixname="gtk-copy"	
-			 verb=""/>
-			</placeholder>
-		<placeholder name="EmailLinkItems">
-			<menuitem name="EPCopyEmail" 
-			 pixtype="stock" pixname="gtk-copy"	
-			 verb=""/>
-		</placeholder>
-		<placeholder name="BetweenElements1">
-			<separator/>
-		</placeholder>
-
-		<placeholder name="ImageItems">
-			<menuitem name="EPOpenImage" 
-			 pixtype="stock" pixname="gtk-open"
-			 verb=""/>
-
-			<menuitem name="EPOpenImageInNewWindow" verb=""/>
-			<menuitem name="EPOpenImageInNewTab" verb=""/>
-
-			<menuitem name="EPSaveImageAs" 
-			 pixtype="stock" pixname="gtk-save"
-			 verb=""/>
-
-			<menuitem name="EPSetImageAsBackground" verb=""/>
-
-			<menuitem name="EPCopyImageLocation" 
-			 pixtype="stock" pixname="gtk-copy"
-			 verb=""/>
-		</placeholder>
-	</popup>
 </popups>
-
-<dockitem name="Toolbar" behavior="exclusive" config="0">
-</dockitem>
-
-<dockitem name="PrintPreview" behavior="exclusive">
-	<toolitem name="PPVGotoFirst"
-                  pixtype="stock" pixname="gtk-goto-first"
-                  verb="PPVGotoFirst"/> 
-	<toolitem name="PPVGoBack"
-                  pixtype="stock" pixname="gtk-go-back"
-                  verb="PPVGoBack"/> 
-	<toolitem name="PPVGoForward"
-                  pixtype="stock" pixname="gtk-go-forward"
-		  priority="1"
-                  verb="PPVGoForward"/> 
-	<toolitem name="PPVGotoLast"
-                  pixtype="stock" pixname="gtk-goto-last"
-                  verb="PPVGotoLast"/>
-	<toolitem name="Close" _label="Close"
-                  pixtype="stock" pixname="gtk-close"
-		  priority="1"
-                  verb="PPVClose"/>
-</dockitem>
-
-<status resize_grip="0">
-	<item name="main"/>
-	<control name="SecurityIconWrapper"/>
-	<control name="ProgressWrapper"/>
-</status>
-
 </Root>
 

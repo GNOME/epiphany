@@ -59,8 +59,5 @@ EphyFavoritesMenu *ephy_favorites_menu_new		(EphyWindow *window);
 
 void		   ephy_favorites_menu_update		(EphyFavoritesMenu *wrhm);
 
-void		   ephy_favorites_menu_set_path		(EphyFavoritesMenu *wrhm,
-							 const gchar *path);
-
 #endif
 

@@ -102,6 +102,8 @@ void	      ephy_tab_get_size			(EphyTab *tab,
 void	      ephy_tab_update_control		(EphyTab *tab,
 						 TabControlID id);
 
+EphyEmbedEvent *ephy_tab_get_event		(EphyTab *tab);
+
 G_END_DECLS
 
 #endif

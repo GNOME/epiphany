@@ -1,4 +1,4 @@
-SUBDIRS = widgets toolbar
+SUBDIRS = widgets egg
 
 INCLUDES = \
 	$(WARN_CFLAGS)			\
@@ -59,7 +59,7 @@ libephy_la_SOURCES = \
 
 libephy_la_LIBADD = \
 	$(top_builddir)/lib/widgets/libephywidgets.la	\
-	$(top_builddir)/lib/toolbar/libephytoolbar.la
+	$(top_builddir)/lib/egg/libegg.la
 
 BUILT_SOURCES=ephy-marshal.c ephy-marshal.h
 

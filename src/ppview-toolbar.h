@@ -52,12 +52,6 @@ GType          ppview_toolbar_get_type			(void);
 
 PPViewToolbar *ppview_toolbar_new			(EphyWindow *window);
 
-void           ppview_toolbar_set_visibility		(PPViewToolbar *t,
-						         gboolean visibility);
-
-void           ppview_toolbar_set_old_chrome		(PPViewToolbar *t,
-							 EmbedChromeMask chrome);
-
 G_END_DECLS
 
 #endif

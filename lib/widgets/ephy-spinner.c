@@ -396,8 +396,8 @@ ephy_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
 	height = gdk_pixbuf_get_height (pixbuf);
 
 	/* Compute the offsets for the image centered on our allocation */
-	x_offset = widget->allocation.x + (widget->allocation.width - width) / 2;
-	y_offset = widget->allocation.y + (widget->allocation.height - height) / 2;
+	x_offset = (widget->allocation.width - width) / 2;
+	y_offset = (widget->allocation.height - height) / 2;
 
 	pix_area.x = x_offset;
 	pix_area.y = y_offset;

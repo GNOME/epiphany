@@ -23,7 +23,7 @@
 #include "ephy-favorites-menu.h"
 #include "ephy-gobject-misc.h"
 #include "ephy-string.h"
-#include "ephy-bonobo-extensions.h"
+#include "egg-menu-merge.h"
 #include "ephy-marshal.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
@@ -39,9 +39,10 @@
  */
 struct _EphyFavoritesMenuPrivate
 {
-	gchar *path;
 	EphyWindow *window;
 	EphyBookmarks *bookmarks;
+	EggActionGroup *action_group;
+	guint ui_id;
 };
 
 typedef struct
@@ -109,6 +110,26 @@ ephy_favorites_menu_init (EphyFavoritesMenu *wrhm)
 	wrhm->priv = p;
 
 	wrhm->priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	wrhm->priv->ui_id = -1;
+	wrhm->priv->action_group = NULL;
+}
+
+static void
+ephy_favorites_menu_clean (EphyFavoritesMenu *wrhm)
+{
+	EphyFavoritesMenuPrivate *p = wrhm->priv;
+	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
+
+	if (p->ui_id >= 0)
+	{
+		egg_menu_merge_remove_ui (merge, p->ui_id);
+	}
+
+	if (p->action_group != NULL)
+	{
+		egg_menu_merge_remove_action_group (merge, p->action_group);
+		g_object_unref (p->action_group);
+	}
 }
 
 static void
@@ -117,10 +138,7 @@ ephy_favorites_menu_finalize_impl (GObject *o)
 	EphyFavoritesMenu *wrhm = EPHY_FAVORITES_MENU (o);
 	EphyFavoritesMenuPrivate *p = wrhm->priv;
 
-	if (p->path)
-	{
-		g_free (p->path);
-	}
+	ephy_favorites_menu_clean (wrhm);
 
 	g_free (p);
 
@@ -139,6 +157,7 @@ ephy_favorites_menu_set_property (GObject *object,
         {
                 case PROP_EPHY_WINDOW:
                         m->priv->window = g_value_get_object (value);
+			ephy_favorites_menu_rebuild (m);
                         break;
         }
 }
@@ -168,26 +187,6 @@ ephy_favorites_menu_new (EphyWindow *window)
 	return ret;
 }
 
-void
-ephy_favorites_menu_set_path (EphyFavoritesMenu *wrhm,
-			      const gchar *path)
-{
-	EphyFavoritesMenuPrivate *p;
-
-	g_return_if_fail (EPHY_IS_FAVORITES_MENU (wrhm));
-	g_return_if_fail (path != NULL);
-
-	p = wrhm->priv;
-
-	if (p->path)
-	{
-		g_free (p->path);
-	}
-	p->path = g_strdup (path);
-
-	ephy_favorites_menu_update (wrhm);
-}
-
 static void
 ephy_favorites_menu_verb_cb (BonoboUIComponent *uic,
 			     FavoriteData *data,
@@ -204,11 +203,7 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 	gint i;
 	EphyNode *fav;
 	GPtrArray *children;
-	BonoboUIComponent *uic = BONOBO_UI_COMPONENT (p->window->ui_component);
-
-	if (!p->path) return;
-
-	ephy_bonobo_clear_path (uic, p->path);
+	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
 
 	LOG ("Rebuilding recent history menu")
 
@@ -216,17 +211,22 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 	children = ephy_node_get_children (fav);
 
 	xml = g_string_new (NULL);
-	g_string_append_printf (xml, "<placeholder name=\"wrhm%x\">\n", (guint) wrhm);
+	g_string_append (xml, "<Root><menu><submenu name=\"GoMenu\">"
+			      "<placeholder name=\"GoFavorites\">");
+
+	p->action_group = egg_action_group_new ("FavoritesActions");
+	egg_menu_merge_insert_action_group (merge, p->action_group, 0);
 
 	for (i = 0; i < children->len; i++)
 	{
-		char *verb = g_strdup_printf ("Wrhm%xn%d", (guint) wrhm, i);
+		char *verb = g_strdup_printf ("GoFav%d", i);
 		char *title_s;
 		const char *title;
 		const char *url;
 		xmlChar *label_x;
 		EphyNode *child;
 		FavoriteData *data;
+		EggAction *action;
 
 		child = g_ptr_array_index (children, i);
 		title = ephy_node_get_property_string (child, EPHY_NODE_BMK_PROP_TITLE);
@@ -234,20 +234,31 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 		title_s = ephy_string_shorten (title, MAX_LABEL_LENGTH);
 		label_x = xmlEncodeSpecialChars (NULL, title_s);
 
-		g_string_append (xml, "<menuitem name=\"");
-		g_string_append (xml, verb);
-		g_string_append (xml, "\" label=\"");
-		g_string_append (xml, label_x);
-		g_string_append (xml, "\" verb=\"");
-		g_string_append (xml, verb);
-		g_string_append (xml, "\"/>\n");
-
 		data = g_new0 (FavoriteData, 1);
 		data->window = wrhm->priv->window;
 		data->url = url;
-		bonobo_ui_component_add_verb_full (uic, verb, g_cclosure_new
-				(G_CALLBACK (ephy_favorites_menu_verb_cb), data,
-				(GClosureNotify)g_free));
+
+		action = g_object_new (EGG_TYPE_ACTION,
+				       "name", verb,
+				       "label", label_x,
+				       "tooltip", "Hello",
+				       "stock_id", NULL,
+				       NULL);
+		g_signal_connect_closure
+			(action, "activate",
+			 g_cclosure_new (G_CALLBACK (ephy_favorites_menu_verb_cb),
+					 data,
+					 (GClosureNotify)g_free),
+			 FALSE);
+		egg_action_group_add_action (p->action_group, action);
+		g_object_unref (action);
+
+		g_string_append (xml, "<menuitem name=\"");
+		g_string_append (xml, verb);
+		g_string_append (xml, "Menu");
+		g_string_append (xml, "\" verb=\"");
+		g_string_append (xml, verb);
+		g_string_append (xml, "\"/>\n");
 
 		xmlFree (label_x);
 		g_free (title_s);
@@ -256,13 +267,16 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 
 	ephy_node_thaw (fav);
 
-	g_string_append (xml, "</placeholder>\n");
+	g_string_append (xml, "</placeholder></submenu></menu></Root>");
 
 	if (children->len > 0)
 	{
-		bonobo_ui_component_set (uic, p->path,
-					 xml->str, NULL);
+		GError *error = NULL;
+
+		p->ui_id = egg_menu_merge_add_ui_from_string
+			(merge, xml->str, -1, &error);
 	}
+
 	g_string_free (xml, TRUE);
 }
 

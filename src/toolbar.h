@@ -22,7 +22,6 @@
 #include "ephy-window.h"
 #include <glib-object.h>
 #include <glib.h>
-#include "ephy-toolbar.h"
 
 G_BEGIN_DECLS
 
@@ -36,23 +35,15 @@ typedef struct ToolbarClass ToolbarClass;
 
 typedef struct ToolbarPrivate ToolbarPrivate;
 
-typedef enum
-{
-	TOOLBAR_BACK_BUTTON,
-	TOOLBAR_FORWARD_BUTTON,
-	TOOLBAR_STOP_BUTTON,
-	TOOLBAR_UP_BUTTON
-} ToolbarButtonID;
-
 struct Toolbar
 {
-        EphyToolbar parent_object;
+        GObject parent_object;
         ToolbarPrivate *priv;
 };
 
 struct ToolbarClass
 {
-        EphyToolbarClass parent_class;
+        GObjectClass parent_class;
 };
 
 GType         toolbar_get_type			(void);
@@ -61,10 +52,6 @@ Toolbar      *toolbar_new			(EphyWindow *window);
 
 void          toolbar_set_visibility		(Toolbar *t,
 						 gboolean visibility);
-
-void	      toolbar_button_set_sensitive	(Toolbar *t,
-						 ToolbarButtonID id,
-						 gboolean sensitivity);
 
 void          toolbar_spinner_start		(Toolbar *t);
 
@@ -75,13 +62,14 @@ char         *toolbar_get_location              (Toolbar *t);
 void          toolbar_set_location              (Toolbar *t,
 						 const char *location);
 
-gint	      toolbar_get_zoom			(Toolbar *t);
-
-void	      toolbar_set_zoom			(Toolbar *t, gint zoom);
-
 void	      toolbar_activate_location		(Toolbar *t);
 
 void          toolbar_update_favicon            (Toolbar *t);
+
+void	      toolbar_update_navigation_actions (Toolbar *t,
+						 gboolean back,
+						 gboolean forward,
+						 gboolean up);
 
 G_END_DECLS
 

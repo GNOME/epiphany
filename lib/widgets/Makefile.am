@@ -1,5 +1,6 @@
 INCLUDES = \
 	-I$(top_srcdir)/lib		\
+	-I$(top_srcdir)/lib/egg		\
 	$(WARN_CFLAGS)			\
 	$(EPIPHANY_DEPENDENCY_CFLAGS)	\
 	-DSHARE_DIR=\"$(pkgdatadir)\"	\
@@ -16,6 +17,8 @@ libephywidgets_la_SOURCES = \
 	eggtreemodelfilter.h			\
 	eggtreemultidnd.c			\
 	eggtreemultidnd.h			\
+	ephy-arrow-toolbutton.c			\
+	ephy-arrow-toolbutton.h			\
 	ephy-autocompletion-window.c		\
 	ephy-autocompletion-window.h		\
 	ephy-ellipsizing-label.c		\

@@ -39,13 +39,12 @@ ephy_gui_menu_position_under_widget (GtkMenu   *menu,
 				     gpointer	user_data)
 {
 	GtkWidget *w = GTK_WIDGET (user_data);
-	gint width, height;
 	gint screen_width, screen_height;
 	GtkRequisition requisition;
 
-	gdk_drawable_get_size (w->window, &width, &height);
 	gdk_window_get_origin (w->window, x, y);
-	*y = *y + height;
+	*x += w->allocation.x;
+	*y += w->allocation.y + w->allocation.height;
 
 	gtk_widget_size_request (GTK_WIDGET (menu), &requisition);
 
@@ -54,6 +53,7 @@ ephy_gui_menu_position_under_widget (GtkMenu   *menu,
 
 	*x = CLAMP (*x, 0, MAX (0, screen_width - requisition.width));
 	*y = CLAMP (*y, 0, MAX (0, screen_height - requisition.height));
+	g_print ("result %d\n", *y);
 }
 
 /**

@@ -63,10 +63,10 @@ struct _EphyLocationEntry
 };
 
 GType			ephy_location_entry_get_type		(void);
-EphyLocationEntry *	ephy_location_entry_new			(void);
+GtkWidget              *ephy_location_entry_new			(void);
 void			ephy_location_entry_set_location	(EphyLocationEntry *w,
 								 const gchar *new_location);
-gchar *			ephy_location_entry_get_location	(EphyLocationEntry *w);
+gchar		       *ephy_location_entry_get_location	(EphyLocationEntry *w);
 void			ephy_location_entry_set_autocompletion  (EphyLocationEntry *w,
 								 EphyAutocompletion *ac);
 void			ephy_location_entry_activate		(EphyLocationEntry *w);

@@ -26,8 +26,6 @@
 #include "ephy-prefs.h"
 #include "ephy-embed-utils.h"
 #include "pdm-dialog.h"
-#include "toolbar.h"
-#include "ephy-toolbar-editor.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-new-bookmark.h"
 
@@ -58,9 +56,8 @@
 	"separator;"
 
 void
-window_cmd_edit_find (BonoboUIComponent *uic,
-		      EphyWindow *window,
-		      const char* verbname)
+window_cmd_edit_find (EggAction *action,
+		      EphyWindow *window)
 {
 	EphyDialog *dialog;
 	dialog = ephy_window_get_find_dialog (window);
@@ -78,9 +75,8 @@ print_dialog_preview_cb (PrintDialog *dialog,
 }
 
 void
-window_cmd_file_print (BonoboUIComponent *uic,
-		       EphyWindow *window,
-		       const char* verbname)
+window_cmd_file_print (EggAction *action,
+		       EphyWindow *window)
 {
 	EphyDialog *dialog;
 	EphyEmbed *embed;
@@ -99,9 +95,8 @@ window_cmd_file_print (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_go_back (BonoboUIComponent *uic,
-		    EphyWindow *window,
-		    const char* verbname)
+window_cmd_go_back (EggAction *action,
+		    EphyWindow *window)
 {
 	EphyEmbed *embed;
 
@@ -112,9 +107,8 @@ window_cmd_go_back (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_go_up (BonoboUIComponent *uic,
-		  EphyWindow *window,
-		  const char* verbname)
+window_cmd_go_up (EggAction *action,
+		  EphyWindow *window)
 {
 	EphyEmbed *embed;
 
@@ -125,9 +119,8 @@ window_cmd_go_up (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_file_send_to	(BonoboUIComponent *uic,
-			 EphyWindow *window,
-			 const char* verbname)
+window_cmd_file_send_to	(EggAction *action,
+			 EphyWindow *window)
 {
 	char *url;
 	EphyTab *tab;
@@ -165,9 +158,8 @@ window_cmd_file_send_to	(BonoboUIComponent *uic,
 }
 
 void
-window_cmd_go_forward (BonoboUIComponent *uic,
-		       EphyWindow *window,
-		       const char* verbname)
+window_cmd_go_forward (EggAction *action,
+		       EphyWindow *window)
 {
 	EphyEmbed *embed;
 
@@ -178,28 +170,8 @@ window_cmd_go_forward (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_go_go (BonoboUIComponent *uic,
-		  EphyWindow *window,
-		  const char* verbname)
-{
-	Toolbar *tb;
-
-	g_return_if_fail (IS_EPHY_WINDOW (window));
-
-	tb = ephy_window_get_toolbar (window);
-
-	if (tb)
-	{
-		char *location = toolbar_get_location (tb);
-		ephy_window_load_url (window, location);
-		g_free (location);
-	}
-}
-
-void
-window_cmd_go_home (BonoboUIComponent *uic,
-		    EphyWindow *window,
-		    const char* verbname)
+window_cmd_go_home (EggAction *action,
+		    EphyWindow *window)
 {
 	EphyEmbed *embed;
 	char *location;
@@ -216,30 +188,15 @@ window_cmd_go_home (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_go_myportal (BonoboUIComponent *uic,
-		        EphyWindow *window,
-		        const char* verbname)
-{
-	EphyEmbed *embed;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	ephy_embed_load_url (embed, "myportal:");
-}
-
-void
-window_cmd_go_location (BonoboUIComponent *uic,
-		        EphyWindow *window,
-		        const char* verbname)
+window_cmd_go_location (EggAction *action,
+		        EphyWindow *window)
 {
 	ephy_window_activate_location (window);
 }
 
 void
-window_cmd_go_stop (BonoboUIComponent *uic,
-		    EphyWindow *window,
-		    const char* verbname)
+window_cmd_view_stop (EggAction *action,
+		      EphyWindow *window)
 {
 	EphyEmbed *embed;
 
@@ -250,9 +207,8 @@ window_cmd_go_stop (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_go_reload (BonoboUIComponent *uic,
-		      EphyWindow *window,
-		      const char* verbname)
+window_cmd_view_reload (EggAction *action,
+		        EphyWindow *window)
 {
 	EphyEmbed *embed;
 
@@ -263,23 +219,8 @@ window_cmd_go_reload (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_new (BonoboUIComponent *uic,
-		EphyWindow *window,
-		const char* verbname)
-{
-	EphyTab *tab;
-
-	tab = ephy_window_get_active_tab (window);
-
-	ephy_shell_new_tab (ephy_shell, window, tab, NULL,
-			    EPHY_NEW_TAB_HOMEPAGE |
-			    EPHY_NEW_TAB_JUMP);
-}
-
-void
-window_cmd_new_window (BonoboUIComponent *uic,
-		       EphyWindow *window,
-		       const char* verbname)
+window_cmd_file_new_window (EggAction *action,
+		            EphyWindow *window)
 {
 	EphyTab *tab;
 
@@ -292,9 +233,8 @@ window_cmd_new_window (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_new_tab (BonoboUIComponent *uic,
-		    EphyWindow *window,
-		    const char* verbname)
+window_cmd_file_new_tab (EggAction *action,
+		         EphyWindow *window)
 {
 	EphyTab *tab;
 
@@ -307,9 +247,8 @@ window_cmd_new_tab (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_bookmarks_edit (BonoboUIComponent *uic,
-			   EphyWindow *window,
-			   const char* verbname)
+window_cmd_go_bookmarks (EggAction *action,
+			 EphyWindow *window)
 {
 	GtkWidget *dialog;
 	EphyBookmarks *bookmarks;
@@ -321,9 +260,8 @@ window_cmd_bookmarks_edit (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_bookmarks_add_default (BonoboUIComponent *uic,
-				  EphyWindow *window,
-				  const char* verbname)
+window_cmd_file_add_bookmark (EggAction *action,
+			      EphyWindow *window)
 {
 	EphyTab *tab;
 	EphyEmbed *embed;
@@ -358,9 +296,8 @@ window_cmd_bookmarks_add_default (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_file_open (BonoboUIComponent *uic,
-		      EphyWindow *window,
-		      const char* verbname)
+window_cmd_file_open (EggAction *action,
+		      EphyWindow *window)
 {
 	gchar *dir, *retDir;
         gchar *file = NULL;
@@ -406,9 +343,8 @@ window_cmd_file_open (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_file_save_as (BonoboUIComponent *uic,
-			 EphyWindow *window,
-		         const char* verbname)
+window_cmd_file_save_as (EggAction *action,
+			 EphyWindow *window)
 {
 	EphyEmbed *embed;
 	EphyEmbedPersist *persist;
@@ -430,9 +366,8 @@ window_cmd_file_save_as (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_file_close_tab (BonoboUIComponent *uic,
-		           EphyWindow *window,
-		           const char* verbname)
+window_cmd_file_close_tab (EggAction *action,
+		           EphyWindow *window)
 {
 	EphyTab *tab;
 
@@ -443,17 +378,15 @@ window_cmd_file_close_tab (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_file_close_window (BonoboUIComponent *uic,
-		              EphyWindow *window,
-		              const char* verbname)
+window_cmd_file_close_window (EggAction *action,
+		              EphyWindow *window)
 {
 	gtk_widget_destroy (GTK_WIDGET(window));
 }
 
 void
-window_cmd_edit_cut (BonoboUIComponent *uic,
-		     EphyWindow *window,
-		     const char* verbname)
+window_cmd_edit_cut (EggAction *action,
+		     EphyWindow *window)
 {
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
 
@@ -472,9 +405,8 @@ window_cmd_edit_cut (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_edit_copy (BonoboUIComponent *uic,
-		      EphyWindow *window,
-		      const char* verbname)
+window_cmd_edit_copy (EggAction *action,
+		      EphyWindow *window)
 {
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
 
@@ -494,9 +426,8 @@ window_cmd_edit_copy (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_edit_paste (BonoboUIComponent *uic,
-		       EphyWindow *window,
-		       const char* verbname)
+window_cmd_edit_paste (EggAction *action,
+		       EphyWindow *window)
 {
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
 
@@ -516,9 +447,8 @@ window_cmd_edit_paste (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_edit_select_all (BonoboUIComponent *uic,
-			    EphyWindow *window,
-			    const char* verbname)
+window_cmd_edit_select_all (EggAction *action,
+			    EphyWindow *window)
 {
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
 
@@ -538,9 +468,8 @@ window_cmd_edit_select_all (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_edit_find_next (BonoboUIComponent *uic,
-			   EphyWindow *window,
-			   const char* verbname)
+window_cmd_edit_find_next (EggAction *action,
+			   EphyWindow *window)
 {
 	EphyDialog *dialog;
 
@@ -552,9 +481,8 @@ window_cmd_edit_find_next (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_edit_find_prev (BonoboUIComponent *uic,
-			   EphyWindow *window,
-			   const char* verbname)
+window_cmd_edit_find_prev (EggAction *action,
+			   EphyWindow *window)
 {
 	EphyDialog *dialog;
 
@@ -566,9 +494,20 @@ window_cmd_edit_find_prev (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_view_zoom_in	(BonoboUIComponent *uic,
-			 EphyWindow *window,
-			 const char *verbname)
+window_cmd_view_statusbar (EggAction *action,
+			   EphyWindow *window)
+{
+}
+
+void
+window_cmd_view_fullscreen (EggAction *action,
+			    EphyWindow *window)
+{
+}
+
+void
+window_cmd_view_zoom_in	(EggAction *action,
+			 EphyWindow *window)
 {
 	EphyEmbed *embed;
 	int zoom;
@@ -581,9 +520,8 @@ window_cmd_view_zoom_in	(BonoboUIComponent *uic,
 }
 
 void
-window_cmd_view_zoom_out (BonoboUIComponent *uic,
-			  EphyWindow *window,
-		          const char* verbname)
+window_cmd_view_zoom_out (EggAction *action,
+			  EphyWindow *window)
 {
 	EphyEmbed *embed;
 	int zoom;
@@ -599,17 +537,15 @@ window_cmd_view_zoom_out (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_view_zoom_normal (BonoboUIComponent *uic,
-			     EphyWindow *window,
-			     const char* verbname)
+window_cmd_view_zoom_normal (EggAction *action,
+			     EphyWindow *window)
 {
 	ephy_window_set_zoom (window, 100);
 }
 
 void
-window_cmd_view_page_source (BonoboUIComponent *uic,
-			     EphyWindow *window,
-			     const char* verbname)
+window_cmd_view_page_source (EggAction *action,
+			     EphyWindow *window)
 {
 	EphyTab *tab;
 
@@ -621,17 +557,15 @@ window_cmd_view_page_source (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_tools_history (BonoboUIComponent *uic,
-			  EphyWindow *window,
-			  const char* verbname)
+window_cmd_go_history (EggAction *action,
+		       EphyWindow *window)
 {
 	ephy_window_show_history (window);
 }
 
 void
-window_cmd_tools_pdm (BonoboUIComponent *uic,
-		      EphyWindow *window,
-		      const char* verbname)
+window_cmd_edit_personal_data (EggAction *action,
+		               EphyWindow *window)
 {
 	EphyDialog *dialog;
 
@@ -641,9 +575,8 @@ window_cmd_tools_pdm (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_edit_prefs (BonoboUIComponent *uic,
-		       EphyWindow *window,
-		       const char* verbname)
+window_cmd_edit_prefs (EggAction *action,
+		       EphyWindow *window)
 {
 	GtkDialog *dialog;
 
@@ -655,101 +588,15 @@ window_cmd_edit_prefs (BonoboUIComponent *uic,
 	gtk_widget_show (GTK_WIDGET(dialog));
 }
 
-static void
-window_cmd_settings_toolbar_editor_revert_clicked_cb (GtkButton *b, EphyTbEditor *tbe)
+void
+window_cmd_edit_toolbar (EggAction *action,
+			 EphyWindow *window)
 {
-	gchar *def;
-
-	g_return_if_fail (EPHY_IS_TB_EDITOR (tbe));
-
-	eel_gconf_unset (CONF_TOOLBAR_SETUP);
-	def = eel_gconf_get_string (CONF_TOOLBAR_SETUP);
-	if (def)
-	{
-		EphyToolbar *current;
-		EphyToolbar *avail;
-		current = ephy_tb_editor_get_toolbar (tbe);
-		ephy_toolbar_parse (current, def);
-		g_free (def);
-
-		avail = ephy_tb_editor_get_available (tbe);
-		g_object_ref (avail);
-		ephy_toolbar_parse (avail, AVAILABLE_TOOLBAR_ITEMS);
-		ephy_tb_editor_set_available (tbe, avail);
-		g_object_unref (avail);
-	}
-
-}
-
-static void
-window_cmd_settings_toolbar_editor_current_changed_cb (EphyToolbar *tb, gpointer data)
-{
-	gchar *current_str;
-
-	g_return_if_fail (EPHY_IS_TOOLBAR (tb));
-
-	current_str = ephy_toolbar_to_string (tb);
-	eel_gconf_set_string (CONF_TOOLBAR_SETUP, current_str);
-	g_free (current_str);
 }
 
 void
-window_cmd_settings_toolbar_editor (BonoboUIComponent *uic,
-				    EphyWindow *window,
-				    const char* verbname)
-{
-	static EphyTbEditor *tbe = NULL;
-	EphyToolbar *avail;
-	EphyToolbar *current;
-	gchar *current_str;
-	GtkButton *revert_button;
-
-	avail = ephy_toolbar_new ();
-	ephy_toolbar_parse (avail, AVAILABLE_TOOLBAR_ITEMS);
-
-	current_str = eel_gconf_get_string (CONF_TOOLBAR_SETUP);
-	current = ephy_toolbar_new ();
-	if (current_str)
-	{
-		ephy_toolbar_parse (current, current_str);
-		g_free (current_str);
-	}
-
-	if (!tbe)
-	{
-		tbe = ephy_tb_editor_new ();
-		g_object_add_weak_pointer (G_OBJECT (tbe),
-                                           (void **)&tbe);
-		ephy_tb_editor_set_parent (tbe,
-					  GTK_WIDGET(window));
-	}
-	else
-	{
-		ephy_tb_editor_show (tbe);
-                return;
-	}
-
-	ephy_tb_editor_set_toolbar (tbe, current);
-	ephy_tb_editor_set_available (tbe, avail);
-	g_object_unref (avail);
-	g_object_unref (current);
-
-	g_signal_connect (current, "changed",
-			  G_CALLBACK (window_cmd_settings_toolbar_editor_current_changed_cb), NULL);
-
-	revert_button = ephy_tb_editor_get_revert_button (tbe);
-	gtk_widget_show (GTK_WIDGET (revert_button));
-
-	g_signal_connect (revert_button, "clicked",
-			  G_CALLBACK (window_cmd_settings_toolbar_editor_revert_clicked_cb), tbe);
-
-	ephy_tb_editor_show (tbe);
-}
-
-void
-window_cmd_help_about (BonoboUIComponent *uic,
-		       EphyWindow *window,
-		       const char* verbname)
+window_cmd_help_about (EggAction *action,
+		       EphyWindow *window)
 {
 	static GtkWidget *about = NULL;
 
@@ -792,23 +639,8 @@ window_cmd_help_about (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_set_charset (BonoboUIComponent *uic,
-			EncodingMenuData *data,
-			const char* verbname)
-{
-	EphyWindow *window = data->data;
-	EphyEmbed *embed;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	ephy_embed_set_charset (embed, data->encoding);
-}
-
-void
-window_cmd_tabs_next (BonoboUIComponent *uic,
-		      EphyWindow *window,
-		      const char* verbname)
+window_cmd_tabs_next (EggAction *action,
+		      EphyWindow *window)
 {
 	GList *tabs;
 	EphyTab *tab;
@@ -829,9 +661,8 @@ window_cmd_tabs_next (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_tabs_previous (BonoboUIComponent *uic,
-			  EphyWindow *window,
-			  const char* verbname)
+window_cmd_tabs_previous (EggAction *action,
+			  EphyWindow *window)
 {
 	GList *tabs;
 	EphyTab *tab;
@@ -852,22 +683,19 @@ window_cmd_tabs_previous (BonoboUIComponent *uic,
 }
 
 void
-window_cmd_tabs_move_left  (BonoboUIComponent *uic,
-			    EphyWindow *window,
-			    const char* verbname)
+window_cmd_tabs_move_left  (EggAction *action,
+			    EphyWindow *window)
 {
 }
 
-void window_cmd_tabs_move_right (BonoboUIComponent *uic,
-				 EphyWindow *window,
-				 const char* verbname)
+void window_cmd_tabs_move_right (EggAction *action,
+				 EphyWindow *window)
 {
 }
 
 void
-window_cmd_tabs_detach  (BonoboUIComponent *uic,
-			 EphyWindow *window,
-			 const char* verbname)
+window_cmd_tabs_detach  (EggAction *action,
+			 EphyWindow *window)
 {
 	EphyTab *tab;
 	GtkWidget *src_page;
@@ -885,33 +713,4 @@ window_cmd_tabs_detach  (BonoboUIComponent *uic,
 				src_page, 0);
 	ephy_tab_set_window (tab, new_win);
 	gtk_widget_show (GTK_WIDGET (new_win));
-}
-
-void
-window_cmd_help_manual (BonoboUIComponent *uic,
-			char *filename,
-			const char* verbname)
-{
-	GError *error;
-	GtkWidget *dialog;
-
-	error = NULL;
-	gnome_help_display ("Ephy.xml", NULL, &error);
-
-	if (error)
-	{
-		dialog = gtk_message_dialog_new (NULL,
-						 GTK_DIALOG_MODAL,
-						 GTK_MESSAGE_ERROR,
-						 GTK_BUTTONS_CLOSE,
-						 _("There was an error displaying help: \n%s"),
-						 error->message);
-		g_signal_connect (G_OBJECT (dialog), "response",
-				  G_CALLBACK (gtk_widget_destroy),
-				  NULL);
-
-		gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-		gtk_widget_show (dialog);
-		g_error_free (error);
-	}
 }

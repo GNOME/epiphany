@@ -22,11 +22,11 @@
 
 #include "ephy-tab.h"
 #include "ephy-shell.h"
-#include "ephy-embed-popup-bw.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-debug.h"
+#include "egg-menu-merge.h"
 
 #include <bonobo/bonobo-i18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
@@ -39,12 +39,15 @@
 #include <gtk/gtkiconfactory.h>
 #include <gtk/gtkstyle.h>
 #include <gtk/gtkselection.h>
+#include <gtk/gtkmain.h>
+#include <gtk/gtkmenu.h>
 #include <string.h>
 
 struct EphyTabPrivate
 {
 	EphyEmbed *embed;
 	EphyWindow *window;
+	EphyEmbedEvent *event;
 	gboolean is_active;
 	TabLoadStatus load_status;
 	char status_message[255];
@@ -195,6 +198,7 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->embed = ephy_embed_new (G_OBJECT(shell));
 
 	tab->priv->window = NULL;
+	tab->priv->event = NULL;
 	tab->priv->is_active = FALSE;
 	*tab->priv->status_message = '\0';
 	*tab->priv->link_message = '\0';
@@ -280,6 +284,11 @@ ephy_tab_finalize (GObject *object)
 
 	g_idle_remove_by_data (tab->priv->embed);
 
+	if (tab->priv->event)
+	{
+		g_object_unref (tab->priv->event);
+	}
+
         g_free (tab->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -344,6 +353,12 @@ ephy_tab_get_window (EphyTab *tab)
 	g_return_val_if_fail (IS_EPHY_TAB (G_OBJECT (tab)), NULL);
 
 	return tab->priv->window;
+}
+
+EphyEmbedEvent *
+ephy_tab_get_event (EphyTab *tab)
+{
+	return tab->priv->event;
 }
 
 static void
@@ -813,24 +828,68 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 }
 
 static void
+ephy_tab_set_event (EphyTab *tab,
+		    EphyEmbedEvent *event)
+{
+	if (tab->priv->event) g_object_unref (tab->priv->event);
+	g_object_ref (event);
+	tab->priv->event = event;
+}
+
+static void
 ephy_tab_show_embed_popup (EphyTab *tab, EphyEmbedEvent *event)
 {
-	EphyEmbedPopup *popup;
+	EmbedEventContext context;
+	const char *popup;
+	const GValue *value;
+	gboolean framed;
 	EphyWindow *window;
-	EphyEmbed *embed;
+	char *path;
+	GtkWidget *widget;
 
 	window = ephy_tab_get_window (tab);
-	embed = ephy_tab_get_embed (tab);
 
-	popup = EPHY_EMBED_POPUP (ephy_window_get_popup_factory (window));
-	ephy_embed_popup_set_event (popup, event);
-	ephy_embed_popup_show (popup, embed);
+	ephy_embed_event_get_property (event, "framed_page", &value);
+	framed = g_value_get_int (value);
+
+	ephy_embed_event_get_context (event, &context);
+
+	if ((context & EMBED_CONTEXT_LINK) &&
+	    (context & EMBED_CONTEXT_IMAGE))
+	{
+		popup = "EphyImageLinkPopup";
+	}
+	else if (context & EMBED_CONTEXT_LINK)
+	{
+		popup = "EphyLinkPopup";
+	}
+	else if (context & EMBED_CONTEXT_IMAGE)
+	{
+		popup = "EphyImagePopup";
+	}
+	else
+	{
+		popup = framed ? "EphyFramedDocumentPopup" :
+				 "EphyDocumentPopup";
+	}
+
+	path = g_strconcat ("/popups/", popup, NULL);
+	g_print (path);
+	widget = egg_menu_merge_get_widget (EGG_MENU_MERGE (window->ui_merge),
+				            path);
+	g_free (path);
+
+	g_return_if_fail (widget != NULL);
+
+	ephy_tab_set_event (tab, event);
+	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
+			gtk_get_current_event_time ());
 }
 
 static gint
 ephy_tab_dom_mouse_down_cb  (EphyEmbed *embed,
-			       EphyEmbedEvent *event,
-			       EphyTab *tab)
+			     EphyEmbedEvent *event,
+			     EphyTab *tab)
 {
 	EphyWindow *window;
 	int button;

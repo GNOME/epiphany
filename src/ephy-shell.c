@@ -509,6 +509,7 @@ ephy_shell_get_autocompletion (EphyShell *gs)
 		};
 
 		EphyHistory *gh = ephy_embed_shell_get_global_history (EPHY_EMBED_SHELL (gs));
+		EphyBookmarks *bmk = ephy_shell_get_bookmarks (gs);
 		EphyFilesystemAutocompletion *fa = ephy_filesystem_autocompletion_new ();
 		p->autocompletion = ephy_autocompletion_new ();
 		ephy_autocompletion_set_prefixes (p->autocompletion, prefixes);
@@ -518,7 +519,7 @@ ephy_shell_get_autocompletion (EphyShell *gs)
 		ephy_autocompletion_add_source (p->autocompletion,
 						EPHY_AUTOCOMPLETION_SOURCE (fa));
 		ephy_autocompletion_add_source (p->autocompletion,
-						EPHY_AUTOCOMPLETION_SOURCE (gs->priv->bookmarks));
+						EPHY_AUTOCOMPLETION_SOURCE (bmk));
 
 		g_object_unref (gh);
 		g_object_unref (fa);

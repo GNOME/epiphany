@@ -19,12 +19,9 @@
 #ifndef STATUSBAR_H
 #define STATUSBAR_H
 
-#include "ephy-window.h"
+#include <gtk/gtkstatusbar.h>
 
 G_BEGIN_DECLS
-
-#include <glib-object.h>
-#include <glib.h>
 
 typedef struct Statusbar Statusbar;
 typedef struct StatusbarClass StatusbarClass;
@@ -39,21 +36,18 @@ typedef struct StatusbarPrivate StatusbarPrivate;
 
 struct Statusbar
 {
-        GObject parent;
+        GtkStatusbar parent;
         StatusbarPrivate *priv;
 };
 
 struct StatusbarClass
 {
-        GObjectClass parent_class;
+        GtkStatusbarClass parent_class;
 };
 
 GType         statusbar_get_type             (void);
 
-Statusbar    *statusbar_new                  (EphyWindow *window);
-
-void          statusbar_set_visibility       (Statusbar *s,
-					      gboolean visibility);
+GtkWidget    *statusbar_new                  (void);
 
 void          statusbar_set_security_state   (Statusbar *s,
 					      gboolean state,

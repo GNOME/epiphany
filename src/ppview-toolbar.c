@@ -22,6 +22,7 @@
 #include "ephy-bonobo-extensions.h"
 #include "ephy-string.h"
 #include "ephy-gui.h"
+#include "egg-menu-merge.h"
 
 #include <string.h>
 #include <bonobo/bonobo-i18n.h>
@@ -63,48 +64,68 @@ static GObjectClass *parent_class = NULL;
 struct PPViewToolbarPrivate
 {
 	EphyWindow *window;
-	BonoboUIComponent *ui_component;
-	gboolean visibility;
-	EmbedChromeMask old_chrome;
+	EggMenuMerge *ui_merge;
+	EggActionGroup *action_group;
+	guint ui_id;
 	int current_page;
 };
 
 static void
-toolbar_cmd_ppv_goto_first (BonoboUIComponent *uic,
-			    PPViewToolbar *t,
-			    const char* verbname);
+toolbar_cmd_ppv_goto_first (EggMenuMerge *merge,
+			    PPViewToolbar *t);
 
 static void
-toolbar_cmd_ppv_goto_last (BonoboUIComponent *uic,
-			   PPViewToolbar *t,
-			   const char* verbname);
+toolbar_cmd_ppv_goto_last (EggMenuMerge *merge,
+			   PPViewToolbar *t);
 
 static void
-toolbar_cmd_ppv_go_back (BonoboUIComponent *uic,
-			 PPViewToolbar *t,
-			 const char* verbname);
+toolbar_cmd_ppv_go_back (EggMenuMerge *merge,
+			 PPViewToolbar *t);
 
 static void
-toolbar_cmd_ppv_go_forward (BonoboUIComponent *uic,
-			    PPViewToolbar *t,
-			    const char* verbname);
+toolbar_cmd_ppv_go_forward (EggMenuMerge *merge,
+			    PPViewToolbar *t);
 
 static void
-toolbar_cmd_ppv_close (BonoboUIComponent *uic,
-		       PPViewToolbar *t,
-		       const char* verbname);
+toolbar_cmd_ppv_close (EggMenuMerge *merge,
+		       PPViewToolbar *t);
 
-BonoboUIVerb ppview_toolbar_verbs [] = {
-        BONOBO_UI_VERB ("PPVGotoFirst", (BonoboUIVerbFn)toolbar_cmd_ppv_goto_first),
-        BONOBO_UI_VERB ("PPVGotoLast", (BonoboUIVerbFn)toolbar_cmd_ppv_goto_last),
-	BONOBO_UI_VERB ("PPVGoBack", (BonoboUIVerbFn)toolbar_cmd_ppv_go_back),
-	BONOBO_UI_VERB ("PPVGoForward", (BonoboUIVerbFn)toolbar_cmd_ppv_go_forward),
-	BONOBO_UI_VERB ("PPVClose", (BonoboUIVerbFn)toolbar_cmd_ppv_close),
-
-        BONOBO_UI_VERB_END
+static EggActionGroupEntry entries [] = {
+	{ "PPVGotoFirst", N_("First"),
+	  GTK_STOCK_GOTO_FIRST, NULL,
+	  N_("Go to the first page"),
+	  (GCallback)toolbar_cmd_ppv_goto_first, NULL },
+	{ "PPVGotoLast", N_("Last"),
+	  GTK_STOCK_GOTO_LAST, NULL,
+	  N_("Go to the last page"),
+	  (GCallback)toolbar_cmd_ppv_goto_last, NULL },
+	{ "PPVGoBack", N_("Previous"),
+	  GTK_STOCK_GO_BACK, NULL,
+	  N_("Go to the previous page"),
+	  (GCallback)toolbar_cmd_ppv_go_back, NULL },
+	{ "PPVGoForward", N_("Next"),
+	  GTK_STOCK_GO_FORWARD, NULL,
+	  N_("Go to next page"),
+	  (GCallback)toolbar_cmd_ppv_go_forward, NULL },
+	{ "PPVClose", N_("Close"),
+	  GTK_STOCK_CLOSE, NULL,
+	  N_("Close print preview"),
+	  (GCallback)toolbar_cmd_ppv_close, NULL },
 };
+static guint n_entries = G_N_ELEMENTS (entries);
 
-GType 
+static const gchar *ui_info =
+"<Root>\n"
+"  <dockitem name=\"PPViewToolbar\">\n"
+"    <toolitem name=\"PPVGotoFirstItem\" verb=\"PPVGotoFirst\" />\n"
+"    <toolitem name=\"PPVGotoLastItem\" verb=\"PPVGotoLast\" />\n"
+"    <toolitem name=\"PPVGoBackItem\"verb=\"PPVGoBack\" />\n"
+"    <toolitem name=\"PPVGoForwardItem\" verb=\"PPVGoForward\" />\n"
+"    <toolitem name=\"PPVClose\" verb=\"PPVClose\" />\n"
+"  </dockitem>\n"
+"</Root>\n";
+
+GType
 ppview_toolbar_get_type (void)
 {
         static GType ppview_toolbar_type = 0;
@@ -192,22 +213,30 @@ ppview_toolbar_set_window (PPViewToolbar *t, EphyWindow *window)
 	g_return_if_fail (t->priv->window == NULL);
 
 	t->priv->window = window;
-	t->priv->ui_component = BONOBO_UI_COMPONENT
-				(t->priv->window->ui_component);
+	t->priv->ui_merge = EGG_MENU_MERGE (t->priv->window->ui_merge);
 
-	bonobo_ui_component_add_verb_list_with_data (t->priv->ui_component,
-                                                     ppview_toolbar_verbs,
-                                                     t);
+	t->priv->action_group = egg_action_group_new ("PPViewActions");
+	egg_action_group_add_actions (t->priv->action_group, entries, n_entries);
+	egg_menu_merge_insert_action_group (t->priv->ui_merge,
+					    t->priv->action_group, 0);
+	t->priv->ui_id = egg_menu_merge_add_ui_from_string
+		(t->priv->ui_merge, ui_info, -1, NULL);
 }
 
 static void
 ppview_toolbar_init (PPViewToolbar *t)
 {
+	int i;
+
         t->priv = g_new0 (PPViewToolbarPrivate, 1);
 
 	t->priv->window = NULL;
-	t->priv->ui_component = NULL;
-	t->priv->visibility = TRUE;
+	t->priv->ui_merge = NULL;
+
+	for (i = 0; i < n_entries; i++)
+	{
+		entries[i].user_data = t;
+	}
 }
 
 static void
@@ -221,6 +250,8 @@ ppview_toolbar_finalize (GObject *object)
 	t = PPVIEW_TOOLBAR (object);
 
         g_return_if_fail (t->priv != NULL);
+	egg_menu_merge_remove_ui (t->priv->ui_merge, t->priv->ui_id);
+	g_object_unref (t->priv->action_group);
 
         g_free (t->priv);
 
@@ -241,13 +272,6 @@ ppview_toolbar_new (EphyWindow *window)
 	return t;
 }
 
-void
-ppview_toolbar_set_old_chrome (PPViewToolbar *t,
-			       EmbedChromeMask chrome)
-{
-	t->priv->old_chrome = chrome;
-}
-
 static void
 toolbar_update_sensitivity (PPViewToolbar *t)
 {
@@ -260,7 +284,7 @@ toolbar_update_sensitivity (PPViewToolbar *t)
 
 	ephy_embed_print_preview_num_pages (embed, &pages);
 	c_page = t->priv->current_page;
-
+/*
 	ephy_bonobo_set_sensitive (t->priv->ui_component,
 				  PPV_GO_BACK_PATH, c_page > 1);
 	ephy_bonobo_set_sensitive (t->priv->ui_component,
@@ -269,30 +293,12 @@ toolbar_update_sensitivity (PPViewToolbar *t)
 				  PPV_GO_FORWARD_PATH, c_page < pages);
 	ephy_bonobo_set_sensitive (t->priv->ui_component,
 				  PPV_GOTO_LAST_PATH, c_page < pages);
-}
-
-void
-ppview_toolbar_set_visibility (PPViewToolbar *t, gboolean visibility)
-{
-	if (visibility == t->priv->visibility) return;
-
-	t->priv->visibility = visibility;
-
-	if (visibility)
-	{
-		t->priv->current_page = 1;
-		toolbar_update_sensitivity (t);
-	}
-
-	ephy_bonobo_set_hidden (BONOBO_UI_COMPONENT(t->priv->ui_component),
-                               "/PrintPreview",
-                               !visibility);
+				  */
 }
 
 static void
-toolbar_cmd_ppv_goto_first (BonoboUIComponent *uic,
-			    PPViewToolbar *t,
-			    const char* verbname)
+toolbar_cmd_ppv_goto_first (EggMenuMerge *merge,
+			    PPViewToolbar *t)
 {
 	EphyWindow *window = t->priv->window;
 	EphyEmbed *embed;
@@ -308,9 +314,8 @@ toolbar_cmd_ppv_goto_first (BonoboUIComponent *uic,
 }
 
 static void
-toolbar_cmd_ppv_goto_last  (BonoboUIComponent *uic,
-			    PPViewToolbar *t,
-			    const char* verbname)
+toolbar_cmd_ppv_goto_last  (EggMenuMerge *merge,
+			    PPViewToolbar *t)
 {
 	EphyWindow *window = t->priv->window;
 	EphyEmbed *embed;
@@ -329,9 +334,8 @@ toolbar_cmd_ppv_goto_last  (BonoboUIComponent *uic,
 }
 
 static void
-toolbar_cmd_ppv_go_back  (BonoboUIComponent *uic,
-			  PPViewToolbar *t,
-			  const char* verbname)
+toolbar_cmd_ppv_go_back  (EggMenuMerge *merge,
+			  PPViewToolbar *t)
 {
 	EphyWindow *window = t->priv->window;
 	EphyEmbed *embed;
@@ -349,9 +353,8 @@ toolbar_cmd_ppv_go_back  (BonoboUIComponent *uic,
 }
 
 static void
-toolbar_cmd_ppv_go_forward (BonoboUIComponent *uic,
-			    PPViewToolbar *t,
-			    const char* verbname)
+toolbar_cmd_ppv_go_forward (EggMenuMerge *merge,
+			    PPViewToolbar *t)
 {
 	EphyWindow *window = t->priv->window;
 	EphyEmbed *embed;
@@ -369,20 +372,8 @@ toolbar_cmd_ppv_go_forward (BonoboUIComponent *uic,
 }
 
 static void
-toolbar_cmd_ppv_close (BonoboUIComponent *uic,
-		       PPViewToolbar *t,
-		       const char* verbname)
+toolbar_cmd_ppv_close (EggMenuMerge *merge,
+		       PPViewToolbar *t)
 {
-	EphyWindow *window = t->priv->window;
-	EphyEmbed *embed;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	ephy_window_set_chrome (window, t->priv->old_chrome);
-
-	ephy_embed_print_preview_close (embed);
-
-	toolbar_update_sensitivity (t);
 }
 

@@ -1,5 +1,9 @@
 2003-01-20  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* Merge eog-menu-api branch
+
+2003-01-20  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* embed/ephy-embed-event.c: (free_g_value),
 	(ephy_embed_event_init), (ephy_embed_event_get_property):
 	* embed/ephy-embed-event.h:
@@ -39,6 +43,168 @@
 2003-01-16  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/mozilla/FilePicker.cpp: Api change
+
+2003-01-20  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/ui/epiphany-ui.xml.in:
+	* src/ephy-spinner-action.c: (create_tool_item):
+	* src/ephy-tab.c: (ephy_tab_init), (ephy_tab_finalize),
+	(ephy_tab_get_event), (ephy_tab_set_event),
+	(ephy_tab_show_embed_popup), (ephy_tab_dom_mouse_down_cb):
+	* src/ephy-tab.h:
+	* src/ephy-window.c: (setup_window), (ephy_window_init),
+	(ephy_window_finalize), (ephy_window_get_active_embed):
+	* src/ephy-window.h:
+	* src/popup-commands.c: (get_event_info),
+	(popup_cmd_link_in_new_window), (popup_cmd_link_in_new_tab),
+	(popup_cmd_image_in_new_tab), (popup_cmd_image_in_new_window),
+	(popup_cmd_add_link_bookmark), (popup_cmd_frame_in_new_tab),
+	(popup_cmd_frame_in_new_window), (popup_cmd_copy_to_clipboard),
+	(popup_cmd_copy_page_location), (popup_cmd_copy_email),
+	(popup_cmd_copy_link_location), (save_property_url),
+	(popup_cmd_open_link), (popup_cmd_download_link),
+	(popup_cmd_save_image_as), (background_download_completed),
+	(popup_cmd_set_image_as_background),
+	(popup_cmd_copy_image_location), (popup_cmd_save_background_as),
+	(popup_cmd_open_frame), (popup_cmd_open_image):
+	* src/popup-commands.h:
+
+	Implement context menus
+
+2003-01-19  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_expose):
+	* src/ephy-favicon-action.c: (create_tool_item),
+	(each_url_get_data_binder), (favicon_drag_data_get_cb),
+	(ephy_favicon_action_sync_icon), (connect_proxy),
+	(ephy_favicon_action_set_property),
+	(ephy_favicon_action_get_property),
+	(ephy_favicon_action_class_init), (ephy_favicon_action_init):
+	* src/ephy-favicon-action.h:
+	* src/ephy-location-action.c: (ephy_location_action_get_widget):
+	* src/ephy-location-action.h:
+	* src/ephy-navigation-action.c:
+	* src/ephy-spinner-action.c: (ephy_spinner_action_sync_throbbing),
+	(create_tool_item), (connect_proxy),
+	(ephy_spinner_action_set_property),
+	(ephy_spinner_action_get_property),
+	(ephy_spinner_action_class_init), (ephy_spinner_action_init):
+	* src/ephy-spinner-action.h:
+	* src/ephy-window.c: (setup_window), (update_nav_control):
+	* src/toolbar.c: (toolbar_setup_actions),
+	(toolbar_activate_location), (toolbar_spinner_start),
+	(toolbar_spinner_stop), (toolbar_set_location),
+	(toolbar_update_favicon), (toolbar_get_location),
+	(toolbar_update_navigation_actions):
+	* src/toolbar.h:
+
+	Complete toolbar implementation.
+
+2003-01-18  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/ephy-gui.c: (ephy_gui_menu_position_under_widget):
+	* lib/widgets/ephy-arrow-toolbutton.c: (popup_menu_under_arrow):
+	* src/ephy-location-action.c: (create_tool_item),
+	(location_url_activate_cb), (connect_proxy),
+	(ephy_location_action_class_init):
+	* src/ephy-location-action.h:
+	* src/ephy-shell.c: (ephy_shell_get_autocompletion):
+	* src/ephy-spinner-action.c: (create_tool_item):
+	* src/toolbar.c: (toolbar_setup_widgets), (go_location_cb),
+	(toolbar_setup_actions):
+	
+	Make location and navigation buttons works correctly.
+
+2003-01-18  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/ui/Makefile.am:
+	* lib/widgets/Makefile.am:
+	* lib/widgets/ephy-arrow-toolbutton.c:
+	(ephy_arrow_toolbutton_get_type),
+	(ephy_arrow_toolbutton_class_init), (button_state_changed_cb),
+	(popup_menu_under_arrow), (menu_deactivated_cb),
+	(arrow_button_press_event_cb), (arrow_key_press_event_cb),
+	(ephy_arrow_toolbutton_init), (ephy_arrow_toolbutton_finalize),
+	(ephy_arrow_toolbutton_get_menu):
+	* lib/widgets/ephy-arrow-toolbutton.h:
+	* src/Makefile.am:
+	* src/ephy-navigation-action.c: (ephy_navigation_action_get_type),
+	(new_history_menu_item), (activate_back_or_forward_menu_item_cb),
+	(activate_up_menu_item_cb), (setup_back_or_forward_menu),
+	(setup_up_menu), (menu_activated_cb), (connect_proxy),
+	(ephy_navigation_action_set_property),
+	(ephy_navigation_action_get_property),
+	(ephy_navigation_action_class_init), (ephy_navigation_action_init):
+	* src/ephy-navigation-action.h:
+	* src/ephy-window.c: (ephy_window_init):
+	* src/toolbar.c: (toolbar_setup_actions), (toolbar_set_window),
+	(toolbar_init):
+
+	Implement back/forward
+
+2003-01-17  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/ui/Makefile.am:
+	* data/ui/epiphany-ui.xml.in:
+	* src/Makefile.am:
+	* src/ephy-window.c: (add_widget), (setup_window),
+	(ephy_window_init), (ephy_window_set_chrome):
+	* src/toolbar.c: (toolbar_setup_widgets), (add_widget),
+	(toolbar_set_window), (toolbar_setup_actions), (toolbar_init),
+	(toolbar_finalize), (toolbar_set_visibility):
+
+	Make some toolbar widgets work again
+
+2003-01-16  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* configure.in:
+	* data/ui/Makefile.am:
+	* data/ui/epiphany-ui.xml.in:
+	* embed/mozilla/GlobalHistory.cpp:
+	* lib/Makefile.am:
+	* src/Makefile.am:
+	* src/ephy-favorites-menu.c: (ephy_favorites_menu_init),
+	(ephy_favorites_menu_clean), (ephy_favorites_menu_finalize_impl),
+	(ephy_favorites_menu_set_property), (ephy_favorites_menu_rebuild):
+	* src/ephy-favorites-menu.h:
+	* src/ephy-nautilus-view.c: (gnv_bonobo_control_activate_cb),
+	(gnv_popup_cmd_frame_in_new_window):
+	* src/ephy-window.c: (add_widget), (setup_window),
+	(setup_popup_factory), (ephy_window_init), (ephy_window_finalize),
+	(ephy_window_set_chrome), (ephy_window_activate_location),
+	(update_status_message), (update_progress), (update_security),
+	(update_nav_control), (update_location_control),
+	(update_favicon_control), (update_spinner_control),
+	(save_old_embed_status), (ephy_window_get_toolbar):
+	* src/ppview-toolbar.c: (ppview_toolbar_set_window),
+	(ppview_toolbar_init), (ppview_toolbar_finalize),
+	(toolbar_update_sensitivity), (toolbar_cmd_ppv_goto_first),
+	(toolbar_cmd_ppv_goto_last), (toolbar_cmd_ppv_go_back),
+	(toolbar_cmd_ppv_go_forward), (toolbar_cmd_ppv_close):
+	* src/ppview-toolbar.h:
+	* src/statusbar.c: (statusbar_get_type), (statusbar_class_init),
+	(create_statusbar_security_icon), (create_statusbar_progress),
+	(statusbar_init), (statusbar_new), (statusbar_set_message):
+	* src/statusbar.h:
+	* src/toolbar.c: (toolbar_get_type), (toolbar_class_init),
+	(toolbar_setup_favicon), (toolbar_setup_location_entry),
+	(toolbar_set_window), (toolbar_init), (toolbar_finalize),
+	(toolbar_set_visibility), (toolbar_button_set_sensitive),
+	(toolbar_get_location):
+	* src/toolbar.h:
+	* src/window-commands.c:
+	* src/window-commands.h:
+
+	More menu work ...
+
+2003-01-14  Marco Pesenti Gritti  <marco@it.gnome.org>
+	
+	* src/ephy-window.c:
+	* src/ephy-window.h:
+	* src/window-commands.c:
+	* src/window-commands.h:
+
+	Some work on the new menu stuff
 
 2003-01-13  Marco Pesenti Gritti  <marco@it.gnome.org>
 
