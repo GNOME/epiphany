@@ -8,7 +8,7 @@ INCLUDES = \
 	-I$(top_srcdir)/src/bookmarks   \
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
 	-DSHARE_DIR=\"$(pkgdatadir)\" 	\
-	-DEXTENSIONS_DIR=\""$(libdir)/epiphany/extensions"\" 	\
+	-DEXTENSIONS_DIR=\""$(libdir)/epiphany-$(EPIPHANY_MAJOR)/extensions"\" 	\
 	-DDATADIR=\""$(datadir)"\" 	\
 	-DPIXMAP_DIR=\""$(datadir)/pixmaps"\" 		\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"

@@ -38,7 +38,7 @@ mimepermissiondir = $(pkgdatadir)
 mimepermission_DATA = mime-types-permissions.xml
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = epiphany-1.2.pc
+pkgconfig_DATA = epiphany-1.4.pc
 
 install-data-local:
 if GCONF_SCHEMAS_INSTALL
