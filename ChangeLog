@@ -1,5 +1,15 @@
 2003-09-24  Christian Persch  <chpe@cvs.gnome.org>
 
+	* idl/EphyAutomation.idl:
+	* src/ephy-automation.c: (impl_ephy_automation_quit):
+	* src/ephy-main.c: (ephy_main_start):
+
+	Remove --server mode. It was a dirty hack anyway, and had a
+	crasher when loggin out from gnome-session. Sort of fixes bug #123047.
+	Flames will be redirected > /dev/null .
+
+2003-09-24  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-shell.c: (ephy_shell_finalize),
 	(ephy_shell_get_session):
 	* src/session.c: (session_new), (save_tab), (parse_embed),

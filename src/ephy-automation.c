@@ -41,7 +41,6 @@ impl_ephy_automation_import_bookmarks (PortableServer_Servant _servant,
 				       CORBA_Environment * ev);
 static void
 impl_ephy_automation_quit (PortableServer_Servant _servant,
-                           const CORBA_boolean disableServer,
                            CORBA_Environment * ev);
 static void
 impl_ephy_automation_load_session (PortableServer_Servant _servant,
@@ -171,7 +170,6 @@ impl_ephy_automation_import_bookmarks (PortableServer_Servant _servant,
 
 static void
 impl_ephy_automation_quit (PortableServer_Servant _servant,
-                           const CORBA_boolean disableServer,
                            CORBA_Environment * ev)
 {
 	Session *session;

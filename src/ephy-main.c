@@ -49,8 +49,6 @@ static gchar   *session_filename      = NULL;   /* the session filename         
 static gchar   *bookmark_url          = NULL;   /* the temp bookmark to add     */
 static gchar   *bookmarks_file        = NULL;   /* the bookmarks file to import */
 static gboolean close_option          = FALSE;  /* --close                      */
-static gboolean quit_option           = FALSE;  /* --quit                       */
-static gboolean ephy_server_mode    = FALSE;
 static gboolean open_as_bookmarks_editor = FALSE; /* --bookmarks-editor	*/
 static gboolean open_as_nautilus_view = FALSE;
 
@@ -81,10 +79,6 @@ static struct poptOption popt_options[] =
 	{ "load-session", 'l', POPT_ARG_STRING, &session_filename, 0,
 	  N_("Load the given session file"),
 	  N_("FILE") },
-	{ "server", 's', POPT_ARG_NONE, &ephy_server_mode, 0,
-	  N_("Don't open any windows; instead act as a server "
-	     "for quick startup of new Epiphany instances"),
-	  NULL },
 	{ "add-bookmark", 't', POPT_ARG_STRING, &bookmark_url,
 	  0, N_("Add a bookmark (don't open any window)"),
 	  N_("URL")},
@@ -93,9 +87,6 @@ static struct poptOption popt_options[] =
 	  N_("FILE") },
 	{ "close", 'c', POPT_ARG_NONE, &close_option, 0,
 	  N_("Close all Epiphany windows"),
-	  NULL },
-	{ "quit", 'q', POPT_ARG_NONE, &quit_option, 0,
-	  N_("Same as --close, but exits server mode too"),
 	  NULL },
 	{ "nautilus-view", 'v', POPT_ARG_NONE, &open_as_nautilus_view, 0,
 	  N_("Used internally by the nautilus view"),
@@ -194,12 +185,6 @@ ephy_main_start (gpointer data)
 		gtk_dialog_run (GTK_DIALOG (dialog));
 
 	}
-	/* FIXME ephy --server doesnt work when not first istance */
-	/* Server mode */
-	else if (ephy_server_mode)
-	{
-		g_object_ref (G_OBJECT(ephy_shell));
-	}
 	/* Launch the bookmarks editor */
 	else if (open_as_bookmarks_editor)
 	{
@@ -224,10 +209,10 @@ ephy_main_start (gpointer data)
 		GNOME_EphyAutomation_addBookmark
 			(gaserver, bookmark_url, &corba_env);
 	}
-	else if (close_option || quit_option)
+	else if (close_option)
 	{
 		GNOME_EphyAutomation_quit
-			(gaserver, quit_option, &corba_env);
+			(gaserver, &corba_env);
 	}
 	/* provided with urls? */
 	else if (n_urls == 0 &&
