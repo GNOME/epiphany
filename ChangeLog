@@ -1,5 +1,18 @@
 2003-04-27  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-editor.c: (view_focus_cb),
+	(add_focus_monitor), (remove_focus_monitor),
+	(ephy_bookmarks_editor_show_popup_cb),
+	(ephy_bookmarks_editor_dispose), (keyword_node_show_popup_cb),
+	(search_selection_changed_cb), (build_search_box),
+	(ephy_bookmarks_editor_construct):
+
+	Change the way sensitivity is updated once again.
+	We need to test this really really well and then port it
+	to the history dialog.
+
+2003-04-27  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* lib/egg/egg-editable-toolbar.c:
 	* lib/egg/egg-editable-toolbar.h:
 	* lib/egg/egg-toolbar-editor.c:
