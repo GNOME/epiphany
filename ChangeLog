@@ -1,3 +1,16 @@
+2005-01-07  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/egg/egg-toolbars-model.c: (register_type):
+	* lib/ephy-state.c: (register_type):
+	* lib/ephy-state.h:
+
+	Add dummy functions to call some get_types funcs, otherwise
+	they don't get exported.
+
+	* src/Makefile.am:
+
+	Remove unused defines.
+
 2005-01-06  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/Makefile.am:

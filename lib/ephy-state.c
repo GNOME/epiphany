@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "ephy-state.h"
+#include "ephy-lib-type-builtins.h"
 #include "ephy-file-helpers.h"
 #include "ephy-node-db.h"
 #include "ephy-node-common.h"
@@ -512,4 +513,10 @@ ephy_state_save (void)
 		states = NULL;
 		states_db = NULL;
 	}
+}
+
+G_GNUC_UNUSED static void
+register_type (void)
+{
+	ephy_state_window_flags_get_type ();
 }

@@ -827,3 +827,9 @@ egg_toolbars_model_get_item_type (EggToolbarsModel *t,
 
   return retval;
 }
+
+G_GNUC_UNUSED static void
+register_type (void)
+{
+	egg_tb_model_flags_get_type ();
+}

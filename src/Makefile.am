@@ -99,11 +99,9 @@ libephymain_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/egg		\
 	-I$(top_srcdir)/lib/widgets   	\
 	-I$(top_srcdir)/src/bookmarks   \
-	-DSHARE_DIR=\"$(pkgdatadir)\" 	\
 	-DEXTENSIONS_DIR=\""$(libdir)/epiphany-$(EPIPHANY_MAJOR)/extensions"\" 	\
 	-DLOADER_DIR=\""$(libdir)/epiphany-$(EPIPHANY_MAJOR)/loaders"\"		\
 	-DDATADIR=\""$(datadir)"\" 	\
-	-DPIXMAP_DIR=\""$(datadir)/pixmaps"\"	\
 	$(AM_CPPFLAGS)
 
 libephymain_la_CFLAGS = \
