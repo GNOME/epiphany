@@ -50,9 +50,6 @@
 #include <libgnomevfs/gnome-vfs-uri.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <gtk/gtk.h>
-#include <X11/X.h>
-#include <X11/Xlib.h>
-#include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtkactiongroup.h>
 #include <gtk/gtktoggleaction.h>
