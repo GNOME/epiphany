@@ -1,3 +1,14 @@
+2004-07-31  Adam Hooper  <adamh@cvs.gnome.org>
+
+	* src/ephy-tab.c: (ephy_tab_set_property), (ephy_tab_get_property),
+	(ephy_tab_class_init), (ephy_tab_get_popups_allowed),
+	(ephy_tab_set_popups_allowed), (ephy_tab_address_cb),
+	(ephy_tab_content_change_cb):
+
+	Rename property to "popups-allowed" consistently. Move page change
+	code from address_cb to content_change_cb so that the location from
+	the embed is the one of the loaded page.
+
 2004-07-31  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/ContentHandler.cpp:

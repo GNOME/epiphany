@@ -104,7 +104,7 @@ enum
 	PROP_NAVIGATION,
 	PROP_SECURITY,
 	PROP_HIDDEN_POPUP_COUNT,
-	PROP_DISPLAY_POPUPS,
+	PROP_POPUPS_ALLOWED,
 	PROP_TITLE,
 	PROP_VISIBLE,
 	PROP_ZOOM
@@ -139,8 +139,8 @@ static void	ephy_tab_set_title		(EphyTab *tab,
 static void	ephy_tab_set_zoom		(EphyTab *tab,
 						 float zoom);
 static guint	popup_blocker_n_hidden		(EphyTab *tab);
-static gboolean	ephy_tab_get_popups_displayed	(EphyTab *tab);
-static void	ephy_tab_set_popups_displayed	(EphyTab *tab,
+static gboolean	ephy_tab_get_popups_allowed	(EphyTab *tab);
+static void	ephy_tab_set_popups_allowed	(EphyTab *tab,
 						 gboolean allowed);
 
 /* Class functions */
@@ -188,8 +188,8 @@ ephy_tab_set_property (GObject *object,
 			ephy_tab_set_location (tab, g_value_get_string (value),
 					       TAB_ADDRESS_EXPIRE_NOW);
 			break;
-		case PROP_DISPLAY_POPUPS:
-			ephy_tab_set_popups_displayed
+		case PROP_POPUPS_ALLOWED:
+			ephy_tab_set_popups_allowed
 				(tab, g_value_get_boolean (value));
 			break;
 		case PROP_ICON:
@@ -241,9 +241,9 @@ ephy_tab_get_property (GObject *object,
 		case PROP_HIDDEN_POPUP_COUNT:
 			g_value_set_int (value, popup_blocker_n_hidden (tab));
 			break;
-		case PROP_DISPLAY_POPUPS:
+		case PROP_POPUPS_ALLOWED:
 			g_value_set_boolean
-				(value, ephy_tab_get_popups_displayed (tab));
+				(value, ephy_tab_get_popups_allowed (tab));
 			break;
 		case PROP_TITLE:
 			g_value_set_string (value, tab->priv->title);
@@ -390,7 +390,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							    G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
-					 PROP_DISPLAY_POPUPS,
+					 PROP_POPUPS_ALLOWED,
 					 g_param_spec_boolean ("popups-allowed",
 						 	       "Popups Allowed",
 							       "Whether popup windows are to be displayed",
@@ -493,7 +493,7 @@ popups_manager_add_window (EphyTab *tab,
 }
 
 static gboolean
-ephy_tab_get_popups_displayed (EphyTab *tab)
+ephy_tab_get_popups_allowed (EphyTab *tab)
 {
 	EphyPermissionManager *permission_manager;
 	EphyPermission response;
@@ -534,7 +534,7 @@ ephy_tab_get_popups_displayed (EphyTab *tab)
 
 	g_free (location);
 
-	LOG ("ephy_tab_get_popups_displayed: tab %p, allowed: %d", tab, allow)
+	LOG ("ephy_tab_get_popups_allowed: tab %p, allowed: %d", tab, allow)
 
 	return allow;
 }
@@ -626,8 +626,8 @@ popups_manager_hide_all (EphyTab *tab)
 }
 
 static void
-ephy_tab_set_popups_displayed (EphyTab *tab,
-			       gboolean allowed)
+ephy_tab_set_popups_allowed (EphyTab *tab,
+			     gboolean allowed)
 {
 	char *location;
 	EphyEmbed *embed;
@@ -984,8 +984,6 @@ ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 	ephy_tab_set_link_message (tab, NULL);
 	ephy_tab_set_icon_address (tab, NULL);
 	ephy_tab_update_navigation_flags (tab, embed);
-	popups_manager_reset (tab);
-	g_object_notify (G_OBJECT (tab), "popups-allowed");
 }
 
 static void
@@ -1018,6 +1016,9 @@ ephy_tab_content_change_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 			tab->priv->setting_zoom = FALSE;
 		}
 	}
+
+	popups_manager_reset (tab);
+	g_object_notify (G_OBJECT (tab), "popups-allowed");
 }
 
 static void
