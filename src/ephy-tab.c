@@ -271,7 +271,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							      G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
-					 PROP_LOAD_STATUS,
+					 PROP_LOAD_PROGRESS,
 					 g_param_spec_int ("load-progress",
 							   "Load progress",
 							   "The tab's load progress in percent",
