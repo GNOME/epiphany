@@ -89,5 +89,4 @@ pref("xpinstall.enabled", false);
 
 // enable typeahead find
 pref("accessibility.typeaheadfind", true);
-// see bug #141963
-pref("accessibility.typeaheadfind.autostart", false);
+
