@@ -366,6 +366,7 @@ toolbar_setup_actions (Toolbar *t)
 	action = g_object_new (EPHY_TYPE_FAVICON_ACTION,
 			       "name", "Favicon",
 			       "label", _("Favicon"),
+			       "tooltip", _("Drag and drop this icon to create a link to this page"),
 			       "window", t->priv->window,
 			       "visible-overflown", FALSE,
 			       NULL);

@@ -34,6 +34,7 @@
 #include <gtk/gtkimage.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkeventbox.h>
+#include <gtk/gtktooltips.h>
 
 static GtkTargetEntry url_drag_types [] =
 {
@@ -145,6 +146,7 @@ create_tool_item (GtkAction *action)
 	gtk_widget_show (image);
 	gtk_widget_show (ebox);
 
+	g_object_set_data (G_OBJECT (item), "ebox", ebox);
 	g_object_set_data (G_OBJECT (item), "image", image);
 
 	gtk_drag_source_set (ebox,
@@ -190,15 +192,39 @@ ephy_favicon_action_sync_icon (GtkAction *action, GParamSpec *pspec,
 	}
 }
 
+static gboolean
+set_tooltip_cb (GtkToolItem *item,
+		GtkTooltips *tooltips,
+		const char *tip,
+		const char *tip_private,
+		EphyFaviconAction *action)
+{
+	GtkWidget *ebox;
+
+	ebox = g_object_get_data (G_OBJECT (item), "ebox");
+	g_return_val_if_fail (ebox != NULL, FALSE);
+
+	gtk_tooltips_set_tip (tooltips, ebox, tip, tip_private);
+
+	return TRUE;
+}
+
 static void
 connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
-	ephy_favicon_action_sync_icon (action, NULL, proxy);
-	g_signal_connect_object (action, "notify::icon",
-				 G_CALLBACK (ephy_favicon_action_sync_icon),
-				 proxy, 0);
+	if (GTK_IS_TOOL_ITEM (proxy))
+	{
+		ephy_favicon_action_sync_icon (action, NULL, proxy);
+		g_signal_connect_object (action, "notify::icon",
+					 G_CALLBACK (ephy_favicon_action_sync_icon),
+					 proxy, 0);
 
-	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
+	       g_signal_connect (proxy, "set-tooltip",
+				 G_CALLBACK (set_tooltip_cb), action);
+
+	}
+
+	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
 }
 
 static void
@@ -207,9 +233,7 @@ ephy_favicon_action_set_property (GObject *object,
                                   const GValue *value,
                                   GParamSpec *pspec)
 {
-	EphyFaviconAction *fav;
-
-	fav = EPHY_FAVICON_ACTION (object);
+	EphyFaviconAction *fav = EPHY_FAVICON_ACTION (object);
 
 	switch (prop_id)
 	{
@@ -229,9 +253,7 @@ ephy_favicon_action_get_property (GObject *object,
                                   GValue *value,
                                   GParamSpec *pspec)
 {
-	EphyFaviconAction *fav;
-
-	fav = EPHY_FAVICON_ACTION (object);
+	EphyFaviconAction *fav = EPHY_FAVICON_ACTION (object);
 
 	switch (prop_id)
 	{
