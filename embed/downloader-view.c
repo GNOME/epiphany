@@ -558,7 +558,6 @@ downloader_view_build_ui (DownloaderView *dv)
 	GtkListStore *liststore;
 	GtkTreeViewColumn *column;
 	GtkCellRenderer *renderer;
-	GdkPixbuf *icon;
 	EphyDialog *d = EPHY_DIALOG (dv);
 	GtkTreeSelection *selection;
 
@@ -636,11 +635,7 @@ downloader_view_build_ui (DownloaderView *dv)
 
 	priv->model = GTK_TREE_MODEL (liststore);
 
-	icon = gtk_widget_render_icon (GTK_WIDGET (priv->window),
-				       EPHY_STOCK_DOWNLOAD,
-				       GTK_ICON_SIZE_MENU,
-				       NULL);
-	gtk_window_set_icon (GTK_WINDOW(priv->window), icon);
+	gtk_window_set_icon_name (GTK_WINDOW (priv->window), EPHY_STOCK_DOWNLOAD);
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
 	g_signal_connect (selection, "changed", G_CALLBACK (selection_changed), dv);
