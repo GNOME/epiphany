@@ -133,7 +133,7 @@ ephy_history_set_property (GObject *object,
 			   const GValue *value,
 			   GParamSpec *pspec)
 {
-	EphyHistory *history = EPHY_HISTORY (history);
+	EphyHistory *history = EPHY_HISTORY (object);
 
 	switch (prop_id)
 	{
@@ -149,7 +149,7 @@ ephy_history_get_property (GObject *object,
 			   GValue *value,
 			   GParamSpec *pspec)
 {
-	EphyHistory *history = EPHY_HISTORY (history);
+	EphyHistory *history = EPHY_HISTORY (object);
 
 	switch (prop_id)
 	{
