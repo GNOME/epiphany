@@ -1,15 +1,15 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2003-2004 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the epiphany package.
-# Funda Wang <fundawang@linux.net.cn>, 2003, 2004.
+# Funda Wang <fundawang@linux.net.cn>, 2003-2005.
 # Liu Songhe <jackliu9999@263.net>, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 2.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-26 03:45+0100\n"
-"PO-Revision-Date: 2005-01-26 13:42+0800\n"
+"POT-Creation-Date: 2005-01-29 03:44+0100\n"
+"PO-Revision-Date: 2005-01-29 16:38+0800\n"
 "Last-Translator: Liu Songhe <jackliu9999@263.net>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -46,48 +46,48 @@ msgid "Additional safe protocols"
 msgstr "额外的安全协议"
 
 #: data/epiphany-lockdown.schemas.in.h:3
-msgid "Disable Arbitrary URLs"
-msgstr "禁用不当的 URL"
-
-#: data/epiphany-lockdown.schemas.in.h:4
-msgid "Disable Bookmark Editing"
-msgstr "禁用书签编辑"
-
-#: data/epiphany-lockdown.schemas.in.h:5
-msgid "Disable History"
-msgstr "禁用历史"
-
-#: data/epiphany-lockdown.schemas.in.h:6
 msgid "Disable JavaScript chrome control"
 msgstr "禁用 JavaScript chrome 控制"
 
-#: data/epiphany-lockdown.schemas.in.h:7
+#: data/epiphany-lockdown.schemas.in.h:4
 msgid "Disable JavaScript's control over window chrome."
 msgstr "禁止 JavaScript 对窗口 chrome 的控制。"
 
-#: data/epiphany-lockdown.schemas.in.h:8
-msgid "Disable Toolbar Editing"
-msgstr "禁用工具栏编辑"
-
-#: data/epiphany-lockdown.schemas.in.h:9
+#: data/epiphany-lockdown.schemas.in.h:5
 msgid ""
-"Disable all historical information by disabling the back button, not "
-"allowing the history dialog and hiding the most used bookmarks list."
+"Disable all historical information by disabling back and forward navigation, "
+"not allowing the history dialog and hiding the most used bookmarks list."
 msgstr ""
-"通过禁用后退按钮禁用全部历史信息，不允许出现历史对话框并隐藏最常用的书签列"
+"通过禁用后退和前进按钮禁用全部历史信息，不允许出现历史对话框并隐藏最常用的书签列"
 "表。"
 
-#: data/epiphany-lockdown.schemas.in.h:10
-msgid "Disable the user's ability to edit their bookmarks."
-msgstr "禁止用户编辑书签。"
+#: data/epiphany-lockdown.schemas.in.h:6
+msgid "Disable arbitrary URLs"
+msgstr "禁用不当的 URL"
 
-#: data/epiphany-lockdown.schemas.in.h:11
+#: data/epiphany-lockdown.schemas.in.h:7
+msgid "Disable bookmark editing"
+msgstr "禁用书签编辑"
+
+#: data/epiphany-lockdown.schemas.in.h:8
+msgid "Disable history"
+msgstr "禁用历史"
+
+#: data/epiphany-lockdown.schemas.in.h:9
+msgid "Disable the user's ability to add or edit bookmarks."
+msgstr "禁止用户添加或编辑书签。"
+
+#: data/epiphany-lockdown.schemas.in.h:10
 msgid "Disable the user's ability to edit toolbars."
 msgstr "禁止用户编辑工具栏。"
 
+#: data/epiphany-lockdown.schemas.in.h:11
+msgid "Disable the user's ability to type in a URL to Epiphany."
+msgstr "禁止用户在 Epiphany 中输入 URL。"
+
 #: data/epiphany-lockdown.schemas.in.h:12
-msgid "Disable the user's ability to type in a URL to epiphany."
-msgstr "禁止用户在 epiphany 中输入 URL。"
+msgid "Disable toolbar editing"
+msgstr "禁用工具栏编辑"
 
 #: data/epiphany-lockdown.schemas.in.h:13
 msgid "Disable unsafe protocols"
@@ -95,17 +95,27 @@ msgstr "禁用不安全的协议"
 
 #: data/epiphany-lockdown.schemas.in.h:14
 msgid ""
-"Disables loading of content from unsafe protocols. Safe protocols are http: "
-"and https:."
-msgstr "禁止从不安全的协议中装入内容。安全的协议是指 http: 和 https:。"
+"Disables loading of content from unsafe protocols. Safe protocols are http "
+"and https."
+msgstr "禁止从不安全的协议中装入内容。安全的协议是指 http 和 https。"
 
 #: data/epiphany-lockdown.schemas.in.h:15
 msgid "Hide menubar by default"
 msgstr "默认隐藏菜单栏"
 
 #: data/epiphany-lockdown.schemas.in.h:16
-msgid "Hide the menubar by default."
-msgstr "默认隐藏菜单栏。"
+msgid ""
+"Hide the menubar by default. The menubar can still be accessed using F10."
+msgstr ""
+"默认隐藏菜单栏。菜单栏仍可使用 F10 访问。"
+
+#: data/epiphany-lockdown.schemas.in.h:17
+msgid "Lock in fullscreen mode"
+msgstr "在全屏模式中锁定"
+
+#: data/epiphany-lockdown.schemas.in.h:18
+msgid "Locks Epiphany in fullscreen mode."
+msgstr "在全屏模式中锁定 Epiphany。"
 
 #: data/epiphany.desktop.in.h:1
 msgid "Browse the web"
@@ -455,8 +465,8 @@ msgid ""
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
 "\"text\"."
 msgstr ""
-"工具栏样式。可供选择的值包括“”(使用 GNOME 默认样式)、“both”(文字和图标)、"
-"“both-horiz”(文字在图标旁)、“icons”和“text”。"
+"工具栏样式。可供选择的值包括“”(使用 GNOME 默认样式)、“both”(文字和图"
+"标)、“both-horiz”(文字在图标旁)、“icons”和“text”。"
 
 #: data/epiphany.schemas.in.h:65
 msgid "Use caret browsing mode."
@@ -622,7 +632,7 @@ msgstr "Cookies"
 msgid "Download Manager"
 msgstr "下载管理器"
 
-#: data/glade/epiphany.glade.h:6 src/ephy-window.c:1131
+#: data/glade/epiphany.glade.h:6 src/ephy-window.c:1128
 msgid "Find"
 msgstr "查找"
 
@@ -892,7 +902,7 @@ msgstr "页号(_N)"
 msgid "Paper"
 msgstr "纸张"
 
-#: data/glade/print.glade.h:21 src/ephy-window.c:1127
+#: data/glade/print.glade.h:21 src/ephy-window.c:1124
 msgid "Print"
 msgstr "打印"
 
@@ -985,7 +995,7 @@ msgstr ""
 "%s\n"
 "%s，共%s"
 
-#: embed/downloader-view.c:372 src/ephy-window.c:1325
+#: embed/downloader-view.c:372 src/ephy-window.c:1322
 msgid "Unknown"
 msgstr "未知"
 
@@ -1757,8 +1767,7 @@ msgstr "页面通过安全连接装入"
 msgid ""
 "You can always see the security status of a page from the padlock icon on "
 "the statusbar."
-msgstr ""
-"您总是可以通过状态栏上的锁行图标来查看页面的安全状态。"
+msgstr "您总是可以通过状态栏上的锁行图标来查看页面的安全状态。"
 
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
@@ -1775,8 +1784,7 @@ msgstr "此页面通过低安全连接装入"
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
-msgstr ""
-"您在此页面看到或输入的任何信息都可能被第三方轻易截取。"
+msgstr "您在此页面看到或输入的任何信息都可能被第三方轻易截取。"
 
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid "Some parts of this page are loaded over an insecure connection"
@@ -1786,8 +1794,7 @@ msgstr "此页面的某些部分是通过不安全连接装入的"
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
-msgstr ""
-"您看到或输入的某些信息是通过不安全的连接传送的，可被第三方轻易截取。"
+msgstr "您看到或输入的某些信息是通过不安全的连接传送的，可被第三方轻易截取。"
 
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
@@ -1798,8 +1805,7 @@ msgstr "通过不安全连接发送此信息吗？"
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
-msgstr ""
-"您输入的信息是通过不安全的连接传送的，可被第三方轻易截取。"
+msgstr "您输入的信息是通过不安全的连接传送的，可被第三方轻易截取。"
 
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
@@ -1812,8 +1818,8 @@ msgid ""
 "have entered will be sent over an insecure connection, and could easily be "
 "intercepted by a third party."
 msgstr ""
-"尽管此页面是通过安全连接装入的，但您输入的信息是通过不安全的连接传送的，"
-"可被第三方轻易截取。"
+"尽管此页面是通过安全连接装入的，但您输入的信息是通过不安全的连接传送的，可被"
+"第三方轻易截取。"
 
 #: embed/mozilla/MozDownload.cpp:604
 msgid "Files"
@@ -2026,11 +2032,11 @@ msgstr "历史"
 
 #: lib/ephy-stock-icons.c:59 src/bookmarks/ephy-bookmarks-editor.c:757
 #: src/bookmarks/ephy-bookmarks-editor.c:1619
-#: src/bookmarks/ephy-topic-action.c:930 src/ephy-window.c:1133
+#: src/bookmarks/ephy-topic-action.c:930 src/ephy-window.c:1130
 msgid "Bookmarks"
 msgstr "书签"
 
-#: lib/ephy-stock-icons.c:60 src/ephy-toolbar.c:348
+#: lib/ephy-stock-icons.c:60 src/ephy-toolbar.c:350
 msgid "Address Entry"
 msgstr "地址输入项"
 
@@ -2372,8 +2378,7 @@ msgstr "导入失败"
 msgid ""
 "The bookmarks from \"%s\" could not be imported because the file is "
 "corrupted or of an unsupported type."
-msgstr ""
-"来自“%s”的书签无法导入，因为文件已损坏，或者类型不支持。"
+msgstr "来自“%s”的书签无法导入，因为文件已损坏，或者类型不支持。"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:698
 msgid "Import bookmarks from file"
@@ -2561,11 +2566,11 @@ msgstr "其它编码"
 msgid "_Automatic"
 msgstr "自动(_A)"
 
-#: src/ephy-fullscreen-popup.c:283 src/ephy-toolbar.c:655
+#: src/ephy-fullscreen-popup.c:301 src/ephy-toolbar.c:657
 msgid "Leave Fullscreen"
 msgstr "保持全屏"
 
-#: src/ephy-go-action.c:71 src/ephy-toolbar.c:377
+#: src/ephy-go-action.c:71 src/ephy-toolbar.c:379
 msgid "Go"
 msgstr "转到"
 
@@ -2772,72 +2777,72 @@ msgstr "正在等待来自 %s 的认证..."
 msgid "Loading %s..."
 msgstr "正在装入 %s...."
 
-#: src/ephy-toolbar.c:288
+#: src/ephy-toolbar.c:290
 msgid "Back"
 msgstr "后退"
 
-#: src/ephy-toolbar.c:290
+#: src/ephy-toolbar.c:292
 msgid "Go back"
 msgstr "后退"
 
 #. this is the tooltip on the Back button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'back' to
 #.
-#: src/ephy-toolbar.c:294
+#: src/ephy-toolbar.c:296
 msgid "Back history"
 msgstr "后退历史"
 
-#: src/ephy-toolbar.c:307
+#: src/ephy-toolbar.c:309
 msgid "Forward"
 msgstr "前进"
 
-#: src/ephy-toolbar.c:309
+#: src/ephy-toolbar.c:311
 msgid "Go forward"
 msgstr "前进"
 
 #. this is the tooltip on the Forward button's drop-down arrow, which will show
 #. * a menu with all sites you can go 'forward' to
 #.
-#: src/ephy-toolbar.c:313
+#: src/ephy-toolbar.c:315
 msgid "Forward history"
 msgstr "前进历史"
 
-#: src/ephy-toolbar.c:325
+#: src/ephy-toolbar.c:327
 msgid "Up"
 msgstr "向上"
 
-#: src/ephy-toolbar.c:327 src/ephy-window.c:229
+#: src/ephy-toolbar.c:329 src/ephy-window.c:229
 msgid "Go up one level"
 msgstr "向上一级"
 
 #. this is the tooltip on the Up button's drop-down arrow, which will show
 #. * a menu with al sites you can go 'up' to
 #.
-#: src/ephy-toolbar.c:331
+#: src/ephy-toolbar.c:333
 msgid "List of upper levels"
 msgstr "列出上一级"
 
-#: src/ephy-toolbar.c:350
+#: src/ephy-toolbar.c:352
 msgid "Enter a web address to open, or a phrase to search for on the web"
 msgstr "输入要打开的网址，或者要在网上搜索的短语"
 
-#: src/ephy-toolbar.c:365
+#: src/ephy-toolbar.c:367
 msgid "Zoom"
 msgstr "缩放"
 
-#: src/ephy-toolbar.c:367
+#: src/ephy-toolbar.c:369
 msgid "Adjust the text size"
 msgstr "调整文本大小"
 
-#: src/ephy-toolbar.c:379
+#: src/ephy-toolbar.c:381
 msgid "Go to the address entered in the address entry"
 msgstr "转到在地址输入项中输入的地址"
 
-#: src/ephy-toolbar.c:388
+#: src/ephy-toolbar.c:390
 msgid "_Home"
 msgstr "主页(_H)"
 
-#: src/ephy-toolbar.c:390
+#: src/ephy-toolbar.c:392
 msgid "Go to the home page"
 msgstr "转到主页"
 
@@ -3347,103 +3352,103 @@ msgstr "使用图像作为背景(_U)"
 msgid "Copy I_mage Address"
 msgstr "复制图像地址(_M)"
 
-#: src/ephy-window.c:662
+#: src/ephy-window.c:657
 msgid "There are unsubmitted changes to form elements"
 msgstr "对窗体元素而言有未提交的改变"
 
-#: src/ephy-window.c:666
+#: src/ephy-window.c:661
 msgid "If you close the document anyway, you will lose that information."
 msgstr "如果您无论如何都要关闭该文档，您将丢失那些信息。"
 
-#: src/ephy-window.c:670
+#: src/ephy-window.c:665
 msgid "Close _Document"
 msgstr "关闭文档(_D)"
 
-#: src/ephy-window.c:1123 src/window-commands.c:369
+#: src/ephy-window.c:1120 src/window-commands.c:369
 msgid "Open"
 msgstr "打开"
 
-#: src/ephy-window.c:1125 src/window-commands.c:395
+#: src/ephy-window.c:1122 src/window-commands.c:395
 msgid "Save As"
 msgstr "另存为"
 
-#: src/ephy-window.c:1129
+#: src/ephy-window.c:1126
 msgid "Bookmark"
 msgstr "书签"
 
-#: src/ephy-window.c:1328
+#: src/ephy-window.c:1325
 msgid "Insecure"
 msgstr "不安全"
 
-#: src/ephy-window.c:1333
+#: src/ephy-window.c:1330
 msgid "Broken"
 msgstr "破碎"
 
-#: src/ephy-window.c:1341
+#: src/ephy-window.c:1338
 msgid "Low"
 msgstr "低"
 
-#: src/ephy-window.c:1348
+#: src/ephy-window.c:1345
 msgid "High"
 msgstr "高"
 
-#: src/ephy-window.c:1357
+#: src/ephy-window.c:1354
 #, c-format
 msgid "Security level: %s"
 msgstr "安全级别：%s"
 
-#: src/ephy-window.c:1397
+#: src/ephy-window.c:1394
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d 个隐藏的弹出窗口"
 
-#: src/ephy-window.c:1629
+#: src/ephy-window.c:1626
 #, c-format
 msgid "Save background image '%s'"
 msgstr "保存背景图像“%s”"
 
-#: src/ephy-window.c:1643
+#: src/ephy-window.c:1640
 #, c-format
 msgid "Open image '%s'"
 msgstr "打开图像“%s”"
 
-#: src/ephy-window.c:1648
+#: src/ephy-window.c:1645
 #, c-format
 msgid "Use as desktop background '%s'"
 msgstr "用作桌面背景“%s”"
 
-#: src/ephy-window.c:1653
+#: src/ephy-window.c:1650
 #, c-format
 msgid "Save image '%s'"
 msgstr "保存图像“%s”"
 
-#: src/ephy-window.c:1658
+#: src/ephy-window.c:1655
 #, c-format
 msgid "Copy image address '%s'"
 msgstr "复制图像地址“%s”"
 
-#: src/ephy-window.c:1671
+#: src/ephy-window.c:1668
 #, c-format
 msgid "Send email to address '%s'"
 msgstr "给地址“%s”发送电子邮件"
 
-#: src/ephy-window.c:1677
+#: src/ephy-window.c:1674
 #, c-format
 msgid "Copy email address '%s'"
 msgstr "复制电子邮件地址“%s”"
 
-#: src/ephy-window.c:1689
+#: src/ephy-window.c:1686
 #, c-format
 msgid "Save link '%s'"
 msgstr "保存链接“%s”"
 
-#: src/ephy-window.c:1695
+#: src/ephy-window.c:1692
 #, c-format
 msgid "Bookmark link '%s'"
 msgstr "将链接“%s”加为书签"
 
-#: src/ephy-window.c:1701
+#: src/ephy-window.c:1698
 #, c-format
 msgid "Copy link's address '%s'"
 msgstr "复制链接地址“%s”"
@@ -3836,3 +3841,4 @@ msgstr "Epiphany"
 #: src/window-commands.c:810
 msgid "translator-credits"
 msgstr "开源软件国际化简体中文组(http://i18n.linux.net.cn),Funda Wang"
+
