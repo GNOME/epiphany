@@ -58,8 +58,6 @@ struct EphyNodeViewPrivate
 
 	EphyNodeFilter *filter;
 
-	EphyNode *selected_node;
-
 	GtkTargetList *drag_targets;
 
 	int default_sort_column_id;
@@ -86,8 +84,6 @@ enum
 	PROP_ROOT,
 	PROP_FILTER
 };
-
-static EphyNodeView *target_view;
 
 static GObjectClass *parent_class = NULL;
 
@@ -388,8 +384,6 @@ ephy_node_view_selection_changed_cb (GtkTreeSelection *selection,
 	GList *list;
 	EphyNode *node = NULL;
 
-	view->priv->selected_node = NULL;
-
 	list = ephy_node_view_get_selection (view);
 	if (list)
 	{
@@ -493,44 +487,36 @@ ephy_node_view_key_press_cb (GtkTreeView *treeview,
 }
 
 static gboolean
-ephy_node_view_button_press_cb (GtkTreeView *treeview,
+ephy_node_view_button_press_cb (GtkWidget *treeview,
 			        GdkEventButton *event,
 			        EphyNodeView *view)
 {
 	GtkTreePath *path = NULL;
 	GtkTreeSelection *selection;
-	gboolean result = FALSE;
 
-	if (event->button == 3)
+	if (event->button != 3) return FALSE;
+
+	if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (treeview),
+					   event->x,
+					   event->y,
+					   &path,
+					   NULL, NULL, NULL))
 	{
-		if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (treeview),
-						   event->x,
-						   event->y,
-						   &path,
-						   NULL, NULL, NULL))
+		selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
+		if (!gtk_tree_selection_path_is_selected (selection, path))
 		{
-			selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
-			if (gtk_tree_selection_path_is_selected (selection, path))
-			{
-				/* We handle the event (so the view won't be
-				 * changed by the user click) because the user
-				 * clicked on an already selected element */
-				result = TRUE;
-			}
-			else
-			{
-				view->priv->selected_node =
-					get_node_from_path (view, path);
-			}
-
-			target_view = view;
-			g_signal_emit (G_OBJECT (view), ephy_node_view_signals[SHOW_POPUP], 0);
-			target_view = NULL;
-			gtk_tree_path_free (path);
+			GTK_WIDGET_CLASS (parent_class)->button_press_event (treeview, event);
 		}
+		else if (!gtk_widget_is_focus (GTK_WIDGET (treeview)))
+		{
+			gtk_widget_grab_focus (GTK_WIDGET (treeview));
+		}
+
+		g_signal_emit (G_OBJECT (view), ephy_node_view_signals[SHOW_POPUP], 0);
+		gtk_tree_path_free (path);
 	}
 
-	return result;
+	return TRUE;
 }
 
 static void
@@ -913,7 +899,6 @@ ephy_node_view_init (EphyNodeView *view)
 	view->priv = g_new0 (EphyNodeViewPrivate, 1);
 	view->priv->editable_renderer = NULL;
 	view->priv->editing = TRUE;
-	view->priv->selected_node = NULL;
 	view->priv->searchable_data_column = -1;
 
 	gtk_tree_view_set_enable_search (GTK_TREE_VIEW (view), FALSE);
@@ -951,20 +936,12 @@ ephy_node_view_get_selection (EphyNodeView *view)
 	GList *list = NULL;
 	GtkTreeSelection *selection;
 
-	if (view->priv->selected_node)
-	{
-		list = g_list_append (list, view->priv->selected_node);
-	}
-	else
-	{
-		selection = gtk_tree_view_get_selection
-			(GTK_TREE_VIEW (view));
+	selection = gtk_tree_view_get_selection	(GTK_TREE_VIEW (view));
 
-		gtk_tree_selection_selected_foreach
+	gtk_tree_selection_selected_foreach
 			(selection,
 			 (GtkTreeSelectionForeachFunc) get_selection,
 			 (gpointer) &list);
-	}
 
 	return list;
 }
@@ -1109,18 +1086,7 @@ ephy_node_view_edit (EphyNodeView *view)
 gboolean
 ephy_node_view_is_target (EphyNodeView *view)
 {
-	if (target_view == view)
-	{
-		return TRUE;
-	}
-	else if (target_view != NULL)
-	{
-		return FALSE;
-	}
-	else
-	{
-		return gtk_widget_is_focus (GTK_WIDGET (view));
-	}
+	return gtk_widget_is_focus (GTK_WIDGET (view));
 }
 
 gboolean
@@ -1129,17 +1095,8 @@ ephy_node_view_has_selection (EphyNodeView *view, gboolean *multiple)
 	GtkTreeSelection *selection;
 	int rows;
 
-	if (view->priv->selected_node)
-	{
-		rows = 1;
-	}
-	else
-	{
-		selection = gtk_tree_view_get_selection
-			(GTK_TREE_VIEW (view));
-
-		rows = gtk_tree_selection_count_selected_rows (selection);
-	}
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
+	rows = gtk_tree_selection_count_selected_rows (selection);
 
 	if (multiple)
 	{
@@ -1148,4 +1105,3 @@ ephy_node_view_has_selection (EphyNodeView *view, gboolean *multiple)
 
 	return rows > 0;
 }
-
