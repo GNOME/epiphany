@@ -67,14 +67,11 @@ class GContentHandler : public nsIHelperAppLauncherDialog
   private:
 
 	NS_METHOD Init ();
-	NS_METHOD LaunchHelperApp ();
 
 	NS_METHOD MIMEConfirmAction ();
 	NS_METHOD MIMEDoAction ();
 
 	nsCOMPtr<nsIHelperAppLauncher> mLauncher;
-	nsCOMPtr<nsIURI> mUri;
-	nsCOMPtr<nsIFile> mTempFile;
 	nsCOMPtr<nsISupports> mContext;
 
 	PRBool mAppSupportScheme;
@@ -83,7 +80,6 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	EphyMimePermission mPermission;
 
 	nsEmbedCString mUrl;
-	nsEmbedCString mScheme;
 #ifdef MOZ_NSIMIMEINFO_NSACSTRING_
 	nsEmbedCString mMimeType;
 #else

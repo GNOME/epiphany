@@ -182,31 +182,6 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 	}
 }
 
-NS_METHOD GContentHandler::LaunchHelperApp (void)
-{
-	nsCOMPtr<nsIExternalHelperAppService> helperService;
-
-	helperService = do_GetService (NS_EXTERNALHELPERAPPSERVICE_CONTRACTID);
-	NS_ENSURE_TRUE (helperService, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsPIExternalAppLauncher> appLauncher = do_QueryInterface (helperService);
-	NS_ENSURE_TRUE (appLauncher, NS_ERROR_FAILURE);
-	appLauncher->DeleteTemporaryFileOnExit(mTempFile);
-
-	GList *params = NULL;
-	char *param;
-	
-	param = gnome_vfs_make_uri_canonical (mUrl.get());
-	params = g_list_append (params, param);
-	gnome_vfs_mime_application_launch (mHelperApp, params);
-	g_free (param);
-	g_list_free (params);
-
-	mLauncher->Cancel();
-
-	return NS_OK;
-}
-
 NS_METHOD GContentHandler::Init (void)
 {
 	nsresult rv;
@@ -223,13 +198,11 @@ NS_METHOD GContentHandler::Init (void)
 	rv = MIMEInfo->GetMIMEType (&mMimeType);
 #endif
 
-	mLauncher->GetTargetFile (getter_AddRefs(mTempFile));
-
-	mLauncher->GetSource (getter_AddRefs(mUri));
-	NS_ENSURE_TRUE (mUri, NS_ERROR_FAILURE);
+	nsCOMPtr<nsIURI> uri;
+	mLauncher->GetSource (getter_AddRefs(uri));
+	NS_ENSURE_TRUE (uri, NS_ERROR_FAILURE);
 	
-	rv = mUri->GetSpec (mUrl);
-	rv = mUri->GetScheme (mScheme);
+	uri->GetSpec (mUrl);
 
 	return NS_OK;
 }
