@@ -9,6 +9,7 @@ Code changes
 	* Rewrite toolbar editor: more flexible model, do not use xml to build
 	  toolbars internally but EggAction directly (Marco)
 	* EphyDnd, EphyShell, Session cleanups (Christian Persch)
+	* Remove --geometry parameter (it was not being respected anyway) (Xan Lopez)
 
 Interface improvements
 
@@ -21,11 +22,9 @@ Interface improvements
 	* Not categorized special topic (Marco)
 	* Ever open tab as last on File->New tab and similars (Marco)
 	* Hidden pref for middle click open url, it can be confusing (Marco)
-	* "Intelligent" selection when an item is removed
-	  for history and bookmarks. (Xan Lopez)
 	* Rework the design of the history dialog, not completed,
 	  but it's already more usable (Marco, Dave Bordoley)
-	* Fix Pause/Resume buttons of the downloader (Xan Lopez)
+	* Merge (and fix) Pause/Resume buttons of the downloader (Xan Lopez)
 	* Open view source next to the current tab (Xan Lopez)
 	* Update View, Zoom, Tabs main menu bar items sensitivity according
 	  to the state (Marco)
@@ -63,6 +62,8 @@ Bugfixes
 	* Fix translation of some menus (Christian Neumair)
 	* Fix the downloader to remove/pause only current download, not all
 	  (Xan Lopez)
+	* "Intelligent" selection when an item is removed
+	  for history and bookmarks. (Xan Lopez)
 
 Updated translations
 
