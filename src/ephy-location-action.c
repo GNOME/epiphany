@@ -177,10 +177,7 @@ remove_completion_actions (GtkAction *action, GtkWidget *proxy)
 
 	for (l = la->priv->actions; l != NULL; l = l->next)
 	{
-		int index;
-
-		index = g_list_position (la->priv->actions, l);
-		gtk_entry_completion_delete_action (completion, index);
+		gtk_entry_completion_delete_action (completion, 0);
 	}
 
 	g_signal_handlers_disconnect_by_func
