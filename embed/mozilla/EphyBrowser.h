@@ -80,20 +80,20 @@ public:
 	nsresult PushTargetDocument (nsIDOMDocument *domDoc);
 	nsresult PopTargetDocument ();
 
+	nsresult GetContentViewer (nsIContentViewer **aViewer);
 	nsresult GetDocument (nsIDOMDocument **aDOMDocument);
 	nsresult GetTargetDocument (nsIDOMDocument **aDOMDocument);
 	nsresult GetDocumentUrl (nsCString &url);
 	nsresult GetTargetDocumentUrl (nsCString &url);
 
 	nsCOMPtr<nsIWebBrowser> mWebBrowser;
-	nsCOMPtr<nsIDOMWindow> mDOMWindow;
-	nsCOMPtr<nsIDOMDocument> mDOMDocument;
 
-	GtkMozEmbed *mGtkMozEmbed;
 private:
 	nsCOMPtr<nsIDOMDocument> mTargetDocument;
 	nsCOMPtr<nsIWebProgressListener> mProgress;
 	nsCOMPtr<nsIDOMEventReceiver> mEventReceiver;
+	nsCOMPtr<nsIDOMWindow> mDOMWindow;
+	nsCOMPtr<nsIDOMDocument> mDOMDocument;
 	EphyEventListener *mEventListener;
 
 	nsresult GetListener (void);
@@ -105,7 +105,6 @@ private:
 	nsresult GetSHistory (nsISHistory **aSHistory);
 	nsresult GetPIDOMWindow(nsPIDOMWindow **aPIWin);
 	nsresult GetWebNavigation(nsIWebNavigation **aWebNavigation);
-	nsresult GetContentViewer (nsIContentViewer **aViewer);
 };
 
 #endif

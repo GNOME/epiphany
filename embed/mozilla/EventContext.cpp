@@ -23,6 +23,7 @@
 #endif
 
 #include "EventContext.h"
+#include "nsIContentViewer.h"
 #include "nsIDOMEventTarget.h"
 #include "nsIDocument.h"
 #include "nsIDOMHTMLInputElement.h"
@@ -769,9 +770,12 @@ nsresult EventContext::GetKeyEventInfo (nsIDOMKeyEvent *aKeyEvent, EphyEmbedEven
 nsresult EventContext::IsPageFramed (nsIDOMNode *node, PRBool *Framed)
 {
 	nsresult result;
+
+	nsCOMPtr<nsIContentViewer> contentViewer;
+	result = mBrowser->GetContentViewer (getter_AddRefs(contentViewer));
 	
 	nsCOMPtr<nsIDOMDocument> mainDocument;
-	result = mBrowser->GetDocument (getter_AddRefs(mainDocument));
+	result = contentViewer->GetDOMDocument (getter_AddRefs(mainDocument));
 	if (NS_FAILED(result) || !mainDocument) return NS_ERROR_FAILURE;
 	
 	nsCOMPtr<nsIDOMDocument> nodeDocument;

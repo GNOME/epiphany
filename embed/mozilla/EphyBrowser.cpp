@@ -91,8 +91,6 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 {
 	nsresult rv;
 
-	mGtkMozEmbed = mozembed;
-
 	gtk_moz_embed_get_nsIWebBrowser (mozembed,
 					 getter_AddRefs(mWebBrowser));
 	if (!mWebBrowser) return NS_ERROR_FAILURE;
@@ -106,7 +104,7 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 
 	mEventListener = new EphyEventListener();
 
-	rv = mEventListener->Init (EPHY_EMBED (mGtkMozEmbed));
+	rv = mEventListener->Init (EPHY_EMBED (mozembed));
 	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
  	rv = GetListener();
