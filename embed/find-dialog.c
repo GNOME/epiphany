@@ -19,6 +19,7 @@
  */
 
 #include "find-dialog.h"
+#include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
 #include "ephy-embed.h"
 #include "ephy-debug.h"
@@ -252,7 +253,7 @@ find_dialog_init (FindDialog *dialog)
 
 	ephy_dialog_construct (EPHY_DIALOG(dialog),
 			       properties,
-			       "epiphany.glade",
+			       ephy_file ("epiphany.glade"),
 			       "find_dialog");
 	update_navigation_controls (dialog, TRUE, TRUE);
 

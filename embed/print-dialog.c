@@ -22,6 +22,7 @@
 #include "print-dialog.h"
 #include "ephy-embed-dialog.h"
 #include "ephy-file-chooser.h"
+#include "ephy-file-helpers.h"
 #include "ephy-stock-icons.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
@@ -330,7 +331,7 @@ ephy_print_dialog_new (GtkWidget *parent,
 	}
 
 	ephy_dialog_construct (dialog,  print_props,
-			       "print.glade", "print_dialog");
+			       ephy_file ("print.glade"), "print_dialog");
 
 	window = ephy_dialog_get_control (dialog, print_props[WINDOW_PROP].id);
 	icon = gtk_widget_render_icon (window, 
@@ -359,7 +360,8 @@ ephy_print_setup_dialog_new (void)
 	dialog = EPHY_DIALOG (g_object_new (EPHY_TYPE_DIALOG, NULL));
 
 	ephy_dialog_construct (dialog, setup_props,
-			       "print.glade", "print_setup_dialog");
+			       ephy_file ("print.glade"),
+			       "print_setup_dialog");
 
 	ephy_dialog_add_enum (dialog, setup_props[PAPER_PROP].id,
 			      n_paper_format_enum, paper_format_enum);

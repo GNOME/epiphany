@@ -26,6 +26,7 @@
 #include "pdm-dialog.h"
 #include "ephy-shell.h"
 #include "ephy-cookie-manager.h"
+#include "ephy-file-helpers.h"
 #include "ephy-password-manager.h"
 #include "ephy-gui.h"
 #include "ephy-ellipsizing-label.h"
@@ -784,7 +785,7 @@ pdm_dialog_init (PdmDialog *dialog)
 
 	ephy_dialog_construct (EPHY_DIALOG(dialog),
 			       properties,
-			       "epiphany.glade",
+			       ephy_file ("epiphany.glade"),
 			       "pdm_dialog");
 
 	/**

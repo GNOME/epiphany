@@ -27,6 +27,7 @@
 #include "ephy-encodings.h"
 #include "ephy-embed.h"
 #include "ephy-embed-shell.h"
+#include "ephy-file-helpers.h"
 #include "ephy-shell.h"
 #include "ephy-node.h"
 #include "ephy-node-view.h"
@@ -317,7 +318,7 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 
 	ephy_dialog_construct (EPHY_DIALOG (dialog),
 			       properties,
-			       "epiphany.glade",
+			       ephy_file ("epiphany.glade"),
 			       "encoding_dialog");
 
 	dialog->priv->filter = ephy_node_filter_new ();

@@ -1,3 +1,20 @@
+2004-01-21  Adam Hooper  <adamh@cvs.gnome.org>
+
+	* embed/downloader-view.c: (downloader_view_build_ui):
+	* embed/find-dialog.c: (find_dialog_init):
+	* embed/mozilla/GtkNSSDialogs.cpp:
+	* embed/print-dialog.c: (ephy_print_dialog_new),
+	(ephy_print_setup_dialog_new):
+	* lib/ephy-glade.c: (ephy_glade_widget_new):
+	* src/ephy-encoding-dialog.c: (ephy_encoding_dialog_init):
+	* src/pdm-dialog.c: (pdm_dialog_init):
+	* src/prefs-dialog.c: (setup_add_language_dialog),
+	(prefs_dialog_init):
+
+	Explicitly call ephy_file () whenever specifying a Glade file. This
+	gives the ability to load a Glade file outside of SHARE_DIR (i.e., in
+	extensions). Fixes Bug #132018.
+
 2004-01-21  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* embed/mozilla/ContentHandler.cpp:

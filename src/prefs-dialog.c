@@ -39,6 +39,7 @@
 #include "ephy-debug.h"
 #include "ephy-ellipsizing-label.h"
 #include "ephy-file-chooser.h"
+#include "ephy-file-helpers.h"
 #include "ephy-tree-model-node.h"
 #include "ephy-tree-model-sort.h"
 
@@ -795,7 +796,8 @@ setup_add_language_dialog (PrefsDialog *pd)
 					     NULL));
 
 	ephy_dialog_construct (dialog,  add_lang_props,
-			       "prefs-dialog.glade", "add_language_dialog");
+			       ephy_file ("prefs-dialog.glade"),
+			       "add_language_dialog");
 
 	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
@@ -1144,7 +1146,7 @@ prefs_dialog_init (PrefsDialog *pd)
 
 	ephy_dialog_construct (dialog,
 			       properties,
-			       "prefs-dialog.glade",
+			       ephy_file ("prefs-dialog.glade"),
 			       "prefs_dialog");
 
 	ephy_dialog_add_enum (dialog, properties[ACCEPT_COOKIES_PROP].id,

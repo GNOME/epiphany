@@ -38,15 +38,11 @@ ephy_glade_widget_new (const char *file, const char *widget_name,
 		       GtkWidget **root, gpointer data)
 {
 	GladeXML *gxml;
-	const char *glade_file;
-
-	glade_file = ephy_file (file);
-	g_return_val_if_fail (glade_file != NULL, NULL);
 
 	/* build the widget */
 	/* note that libglade automatically caches the parsed file,
 	 * so we don't need to worry about the efficiency of this */
-	gxml = glade_xml_new (glade_file, widget_name, NULL);
+	gxml = glade_xml_new (file, widget_name, NULL);
 	g_return_val_if_fail (gxml != NULL, NULL);
 
 	/* lookup the root widget if requested */

@@ -71,6 +71,7 @@
 #include <libgnome/gnome-i18n.h>
 
 #include "GtkNSSDialogs.h"
+#include "ephy-file-helpers.h"
 #include "ephy-glade.h"
 #include "ephy-gui.h"
 
@@ -1253,7 +1254,7 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 	PRUnichar ** usage;
 	GtkSizeGroup * sizegroup;
 
-	gxml = ephy_glade_widget_new ("certificate-dialogs.glade", 
+	gxml = ephy_glade_widget_new (ephy_file ("certificate-dialogs.glade"),
 				      "viewcert_dialog",
 				      &dialog, NULL);
 
