@@ -441,7 +441,7 @@ ephy_node_view_sort_func (GtkTreeModel *model,
 		GType type = gtk_tree_model_get_column_type (model, column);
 		GValue a_value = {0, };
 		GValue b_value = {0, };
-		const char *stra, *strb;
+		gchar *stra, *strb;
 
 		gtk_tree_model_get_value (model, a, column, &a_value);
 		gtk_tree_model_get_value (model, b, column, &b_value);
@@ -449,14 +449,15 @@ ephy_node_view_sort_func (GtkTreeModel *model,
 		switch (G_TYPE_FUNDAMENTAL (type))
 		{
 		case G_TYPE_STRING:
-			stra = g_value_get_string (&a_value);
-			strb = g_value_get_string (&b_value);
-			if (stra == NULL) stra = "";
-			if (strb == NULL) strb = "";
+			stra = g_utf8_casefold (g_value_get_string (&a_value), -1);
+			strb = g_utf8_casefold (g_value_get_string (&b_value), -1);
+			g_return_val_if_fail (stra != NULL || strb != NULL, 0);
 
 			if (column == EPHY_TREE_MODEL_NODE_COL_BOOKMARK ||
 			    column == EPHY_TREE_MODEL_NODE_COL_KEYWORD)
-				retval = strcmp (stra, strb);
+				retval = g_utf8_collate (stra, strb);
+			g_free (stra);
+			g_free (strb);
 			break;
 		case G_TYPE_INT:
 			if (g_value_get_int (&a_value) < g_value_get_int (&b_value))
