@@ -247,6 +247,7 @@ tab_set_action_accelerator (GtkActionGroup *action_group,
 	/* set the accel path for the menu item */
 	accel_path = g_strconcat ("<Actions>/", action_group_name, "/",
 				  action_name, NULL);
+	gtk_action_set_accel_path (action, accel_path);
 
 	/* Only the first ten tabs get accelerators starting from 1 through 0 */
 	if (tab_number < 10)
@@ -260,12 +261,13 @@ tab_set_action_accelerator (GtkActionGroup *action_group,
 
 		if (accel_key != 0)
 		{
-			gtk_action_set_accel_path (action, accel_path);
+			gtk_accel_map_change_entry (accel_path, accel_key,
+						    accel_mods, TRUE);
 		}
 	}
 	else
 	{
-		gtk_action_set_accel_path (action, accel_path);
+		gtk_accel_map_change_entry (accel_path, 0, 0, TRUE);
 	}
 }
 
@@ -308,7 +310,7 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 		action_name = gtk_action_get_name (action);
 		name = g_strdup_printf ("%sMenu", action_name);
 
-		tab_set_action_accelerator (p->action_group, action, i);
+		tab_set_action_accelerator (p->action_group, action, i++);
 
 		gtk_ui_manager_add_ui (merge, p->ui_id,
 				       "/menubar/TabsMenu/TabsOpen",

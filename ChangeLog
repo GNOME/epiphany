@@ -1,3 +1,15 @@
+2003-12-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/glade/print.glade:
+
+	Make print dialogue spacing HIG-compliant.
+
+	* src/ephy-tabs-menu.c: (tab_set_action_accelerator),
+	(ephy_tabs_menu_update):
+
+	Restore tabs menu shortcut keys ALT-1 .. ALT-0 for the first
+	ten tabs; they somehow got lost in the Egg->Gtk port.
+
 2003-12-09  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* data/epiphany.schemas.in:
