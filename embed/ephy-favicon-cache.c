@@ -388,12 +388,13 @@ favicon_download_completed_cb (EphyEmbedPersist *persist,
 {
 	char *url;
 
-	url = g_object_get_data (G_OBJECT (persist), "url"),
+	url = g_object_get_data (G_OBJECT (persist), "url");
+	g_return_if_fail (url != NULL);
+
+	g_signal_emit (G_OBJECT (cache), ephy_favicon_cache_signals[CHANGED], 0, url);
 
 	g_hash_table_remove (cache->priv->downloads_hash, url);
 	g_object_unref (persist);
-
-	g_signal_emit (G_OBJECT (cache), ephy_favicon_cache_signals[CHANGED], 0, url);
 }
 
 static void
@@ -429,10 +430,10 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 			  G_CALLBACK (favicon_download_completed_cb),
 			  cache);
 
-	ephy_embed_persist_save (persist);
-
 	g_hash_table_insert (cache->priv->downloads_hash,
 			     g_strdup (favicon_url), persist);
+
+	ephy_embed_persist_save (persist);
 }
 
 GdkPixbuf *
@@ -444,6 +445,8 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 	GValue value = { 0, };
 	char *pix_file;
 	GdkPixbuf *pixbuf;
+
+	if (url == NULL) return NULL;
 
 	now = time (NULL);
 

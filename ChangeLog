@@ -1,3 +1,13 @@
+2003-06-29  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/ephy-favicon-cache.c: (favicon_download_completed_cb),
+	(ephy_favicon_cache_download), (ephy_favicon_cache_get):
+
+	Emit the changed signal before unrefing the persist object.
+	The changed url is set_data_full on it and it will be freed
+	otherwise.
+	Make sure we never emit signals with NULL url.
+
 2003-06-28  Piers Cornwell  <piersc@cogs.susx.ac.uk>
 
 	* embed/downloader-view.c: (downloader_view_add_download):
