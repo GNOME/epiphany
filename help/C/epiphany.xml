@@ -2,9 +2,9 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
   <!ENTITY legal SYSTEM "legal.xml">
-  <!ENTITY appversion "1.4">
-  <!ENTITY manrevision "1.4">
-  <!ENTITY date "May 2004">
+  <!ENTITY appversion "1.6">
+  <!ENTITY manrevision "1.6">
+  <!ENTITY date "January 2005">
   <!ENTITY fr "<application>Epiphany</application>">
   <!-- Information about the entities
        The legal.xml file contains legal information, there is no need to edit the file. 
@@ -36,7 +36,7 @@
       <holder>David Bordoley</holder>
     </copyright>
     <copyright>
-      <year>2004</year>
+      <year>2005</year>
       <holder>Piers Cornwell</holder>
     </copyright>
 
@@ -52,7 +52,7 @@
      not specified, the publisher/author is the same for all versions of the 
      document.  -->
     <publisher> 
-      <publishername> GNOME Documentation Project </publishername> 
+      <publishername>GNOME Documentation Project</publishername> 
     </publisher> 
 
    &legal; <!-- This file contains link to license for the
@@ -201,7 +201,7 @@
       </sect2>
   </sect1>
 
-<!-- ============= Browser Windows ============================ -->
+<!-- ============= Browser Windows ================================ -->
   <sect1 id="ephy-browser-windows">
     <title>Browser Windows</title>
     <para>
@@ -332,7 +332,7 @@
     </para>
   </sect1>
 
-<!-- ============= Browsing the Web =========================== -->
+<!-- ============= Browsing the Web =============================== -->
   <sect1 id="ephy-browsing-web">
       <title>Browsing the Web</title>
       <para>
@@ -390,7 +390,14 @@
             </guimenuitem> </menuchoice>.
           </para>
           <para>
-            You can exit Fullscreen mode by clicking <guibutton>Exit 
+            When in Fullscreen mode, only a minimal toolbar is shown. You
+            can toggle its visibility by right-clicking on a blank area
+            of the page and choosing <menuchoice> <guimenuitem>New 
+            Toolbar</guimenuitem> </menuchoice> or by pressing 
+            <keycap>Ctrl-Shift-T</keycap>.
+          </para>
+          <para>
+            You can exit Fullscreen mode by clicking <guibutton>Leave 
             Fullscreen</guibutton>.
           </para>
         </sect2>
@@ -407,7 +414,7 @@
           <para>
             To open a new tab, choose <menuchoice> <guimenu>
             File</guimenu> <guimenuitem>New Tab</guimenuitem>
-            </menuchoice>. The new tab will be place to the right of 
+            </menuchoice>. The new tab will be placed to the right of 
             any existing tabs.
 	  </para>
 	</sect2>
@@ -620,7 +627,10 @@
             Some web pages automatically open new browser windows when viewed.
             These are known as popup windows. To show or hide a page's popup
             windows, choose <menuchoice><guimenu>View</guimenu>
-            <guimenuitem>Popup Windows</guimenuitem></menuchoice>.
+            <guimenuitem>Popup Windows</guimenuitem></menuchoice>. When the 
+            popups for the page are hidden, the blocked popup icon will show
+            in the statusbar. The tooltip for this icons shows how many popup
+            windows have been blocked.
           </para>
           <para>
             To set a default popup window behavior for all web pages, see
@@ -692,10 +702,16 @@
             <guimenu>Tabs</guimenu> <guimenuitem>Detach Tab</guimenuitem>
             </menuchoice>.
           </para>
+           <tip>
+             <para>
+               You can also access these options by right-clicking the
+               tab header.
+             </para>
+           </tip>
         </sect2>
   </sect1>
 
-<!-- ============= Managing Your Bookmarks ================ -->
+<!-- ============= Managing Your Bookmarks ======================== -->
   <sect1 id="ephy-managing-bookmarks">
       <title>Managing Your Bookmarks</title>
       <para>
@@ -791,23 +807,23 @@
                <para>
                  Typing in a topic in the location bar of the main
                  window drops down a list of bookmarks of that category.
-		</para>
+               </para>
               </listitem>
               <listitem>
                <para>
                  A word typed into the location bar are automatically
                  searched in the bookmark database and matching bookmarks
                  are shown in a drop down list below the location bar. 
-		</para>
+               </para>
               </listitem>
               <listitem>
                <para>
                  The menu item <guimenu>Bookmark</guimenu> gives a menu of 
-		 all the different topics. Bookmarks related to these topics 
-		 can then be accessed from submenus here. This is closest to
+                 all the different topics. Bookmarks related to these topics 
+                 can then be accessed from submenus here. This is closest to
                  the traditional method of accessing bookmarks, and is
                  provided to keep compatibility.
-		</para>
+               </para>
               </listitem>
               <listitem>
                <para>
@@ -817,13 +833,13 @@
                  However, each topic and bookmark needs to be configured in 
                  the Bookmarks dialog to be shown on this bar. This can be 
                  used to organise most frequently used bookmarks. 
-	        </para>
+               </para>
               </listitem>
             </itemizedlist>
           </para>
         </sect2>
-	<sect2 id="to-create-new-bookmark">
-	  <title>To Create a New Bookmark</title>
+    <sect2 id="to-create-new-bookmark">
+       <title>To Create a New Bookmark</title>
           <para>
             You can create new bookmarks in several ways.
           </para>
@@ -1577,7 +1593,6 @@
   </sect1>
 
 <!-- ============= Certificates and Online Security =============== -->
-
   <sect1 id="ephy-certificates">
     <title>Certificates &amp; Online Security</title>
     <para>
@@ -1588,8 +1603,13 @@
     <sect2 id="identifying-secure-sites">
       <title>Identifying Secure Sites</title>
       <para>
-        When viewing web pages, &fr; displays a lock icon in the status bar
-        which shows you whether the current site is secure.
+        When viewing web pages, &fr; displays a padlock icon 
+        which shows you whether the current site is secure. When the 
+        statusbar is visible, this icon will appear there, otherwise it
+        will be shown in the right-hand side of the address entry. In 
+        Fullscreen mode when the toolbar is hidden, the lock icon 
+        will be shown in the top right corner of the window on secure 
+        sites.
       </para>
       <variablelist>
         <varlistentry>
@@ -1613,7 +1633,7 @@
           <listitem>
             <para>
               Indicates that some parts of this page are secure, and others
-              are not.
+              are not. You should consider the page as a whole to be insecure.
             </para>
           </listitem>
         </varlistentry>
@@ -1976,10 +1996,24 @@
              </listitem>
            </itemizedlist>
         </sect2>
+        <sect2 id="extending-epiphany">
+        <title>Extending &fr;</title>
+          <para>
+            Additional features can be added to &fr; by installing Extensions.
+            Examples of Extensions include Mouse Gestures which allows page 
+            navigation using cursor movements and Error Viewer and Validator 
+            which can check web pages for coding errors.
+          </para>
+          <para>
+            Please consult your system administrator to find out whether 
+            the extensions you require are installed, or see the <ulink
+            url="http://www.gnome.org/projects/epiphany/" type="http">Epiphany 
+            Web page</ulink> for installation instructions. 
+          </para>
+        </sect2>
   </sect1>
 
 <!-- ============= Shortcuts ===================================== -->
-
   <sect1 id="shortcuts">
     <title>Shortcuts</title>
     <para>
