@@ -833,7 +833,7 @@ toolbar_editor_response_cb (GtkDialog  *dialog,
 						n - 1, "UserCreated");
 		break;
 	case GTK_RESPONSE_HELP:
-		/* FIXME: Connect toolbar editor help */
+		ephy_gui_help (GTK_WINDOW (dialog), "epiphany", "to-edit-toolbars");
 		break;
 	}
 }
