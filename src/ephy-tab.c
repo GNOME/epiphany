@@ -275,10 +275,10 @@ ephy_tab_get_property (GObject *object,
 			g_value_set_string (value, ephy_tab_get_status_message (tab));
 			break;
 		case PROP_NAVIGATION:
-			g_value_set_int (value, tab->priv->nav_flags);
+			g_value_set_flags (value, tab->priv->nav_flags);
 			break;
 		case PROP_SECURITY:
-			g_value_set_int (value, tab->priv->security_level);
+			g_value_set_enum (value, tab->priv->security_level);
 			break;
 		case PROP_HIDDEN_POPUP_COUNT:
 			g_value_set_int (value, popup_blocker_n_hidden (tab));
@@ -449,15 +449,12 @@ ephy_tab_class_init (EphyTabClass *class)
 
 	g_object_class_install_property (object_class,
 					 PROP_NAVIGATION,
-					 g_param_spec_int ("navigation",
-							   "Navigation flags",
-							   "The tab's navigation flags",
-							    0,
-							    TAB_NAV_UP |
-							    TAB_NAV_BACK |
-							    TAB_NAV_FORWARD,
-							    0,
-							    G_PARAM_READABLE));
+					 g_param_spec_flags ("navigation",
+							     "Navigation flags",
+							     "The tab's navigation flags",
+							     EPHY_TYPE_TAB_NAVIGATION_FLAGS,
+							     0,
+							     G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
 					 PROP_SECURITY,
