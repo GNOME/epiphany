@@ -1,5 +1,13 @@
 2003-06-16  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-notebook.c: (ephy_notebook_remove_page):
+
+	Ref the child before removing it, and unref it after emitting the
+	tabs_removed signal. That way it stays alive while the signal is
+	being processed. Fixes bug 115306.
+
+2003-06-16  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.in:
 
 	Added 'en_GB' to ALL_LINGUAS.

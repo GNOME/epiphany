@@ -1075,10 +1075,17 @@ ephy_notebook_remove_page (EphyNotebook *nb,
 	g_signal_handlers_disconnect_by_func (label,
 					      G_CALLBACK (sync_load_status), tab);
 
-
-	g_signal_emit (G_OBJECT (nb), signals[TAB_REMOVED], 0, child);
+	/**
+	 * we ref the child so that it's still alive while the tabs_removed
+	 * signal is processed.
+	 */
+	g_object_ref (child);
 
 	gtk_notebook_remove_page (GTK_NOTEBOOK (nb), position);
 
 	update_tabs_visibility (nb, FALSE);
+
+	g_signal_emit (G_OBJECT (nb), signals[TAB_REMOVED], 0, child);
+
+	g_object_unref (child);
 }
