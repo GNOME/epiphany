@@ -246,7 +246,7 @@ GContentHandler::~GContentHandler()
 // begin nsIHelperAppLauncher impl
 ////////////////////////////////////////////////////////////////////////////////
 
-#if MOZILLA_SNAPSHOT > 8
+#if MOZILLA_SNAPSHOT > 9
 /* void show (in nsIHelperAppLauncher aLauncher, in nsISupports aContext); */
 NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 				    nsISupports *aContext,
@@ -273,7 +273,7 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 
 /* nsILocalFile promptForSaveToFile (in nsISupports aWindowContext, in wstring aDefaultFile, in wstring aSuggestedFileExtension); */
 NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
-#if MOZILLA_SNAPSHOT > 9
+#if MOZILLA_SNAPSHOT > 10
 				    nsIHelperAppLauncher *aLauncher,
 #endif				    
 				    nsISupports *aWindowContext,
@@ -343,7 +343,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 	}
 }
 
-#if MOZILLA_SNAPSHOT < 9
+#if MOZILLA_SNAPSHOT < 10
 /* void showProgressDialog (in nsIHelperAppLauncher aLauncher, in nsISupports aContext); */
 NS_METHOD GContentHandler::ShowProgressDialog(nsIHelperAppLauncher *aLauncher,
 					      nsISupports *aContext)
