@@ -72,35 +72,6 @@ mozilla_embed_single_init (MozillaEmbedSingle *ges);
 static void
 mozilla_embed_single_finalize (GObject *object);
 
-static void   
-impl_clear_cache (EphyEmbedSingle *shell);
-static void
-impl_set_offline_mode (EphyEmbedSingle *shell,
-		       gboolean offline);
-static void
-impl_load_proxy_autoconf (EphyEmbedSingle *shell,
-			  const char* url);
-static GList *
-impl_get_font_list (EphyEmbedSingle *shell,
-		    const char *langGroup);
-static GList *
-impl_list_cookies (EphyEmbedSingle *shell);
-static void
-impl_remove_cookies (EphyEmbedSingle *shell,
-		     GList *cookies);
-static GList *
-impl_list_passwords (EphyEmbedSingle *shell,
-		     PasswordType type);
-static void
-impl_remove_passwords (EphyEmbedSingle *shell,
-		       GList *passwords,
-		       PasswordType type);
-
-static void mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *embed,
-            	           		              GtkMozEmbed **retval, 
-					              guint chrome_mask,
-                           		              EphyEmbedSingle *shell);
-
 #define MOZILLA_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED_SINGLE, MozillaEmbedSinglePrivate))
 
 struct MozillaEmbedSinglePrivate
@@ -139,28 +110,6 @@ mozilla_embed_single_get_type (void)
         }
 
         return mozilla_embed_single_type;
-}
-
-static void
-mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	EphyEmbedSingleClass *shell_class = EPHY_EMBED_SINGLE_CLASS (klass);
-	
-	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
-	
-        object_class->finalize = mozilla_embed_single_finalize;
-
-	shell_class->clear_cache = impl_clear_cache;
-	shell_class->set_offline_mode = impl_set_offline_mode;
-	shell_class->load_proxy_autoconf = impl_load_proxy_autoconf;
-	shell_class->get_font_list = impl_get_font_list;
-	shell_class->list_cookies = impl_list_cookies;
-	shell_class->remove_cookies = impl_remove_cookies;
-	shell_class->list_passwords = impl_list_passwords;
-	shell_class->remove_passwords = impl_remove_passwords;
-
-	g_type_class_add_private (object_class, sizeof(MozillaEmbedSinglePrivate));
 }
 
 EphyEmbedSingle *
@@ -276,6 +225,51 @@ mozilla_setup_colors (MozillaEmbedSingle *mes)
 	mes->priv->theme_window = window;
 }			
 
+static void 
+mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *embed,
+                      		          GtkMozEmbed **retval, 
+					  guint chrome_mask,
+                           		  EphyEmbedSingle *shell)
+{
+	/* FIXME conversion duped in mozilla_embed */
+	EphyEmbed *new_embed;
+	int i;
+        EmbedChromeMask mask = EMBED_CHROME_OPENASPOPUP;
+        
+        struct
+        {
+                guint chromemask;
+                EmbedChromeMask embed_mask;
+        }
+        conversion_map [] =
+        {
+                { GTK_MOZ_EMBED_FLAG_DEFAULTCHROME, EMBED_CHROME_DEFAULT },
+                { GTK_MOZ_EMBED_FLAG_MENUBARON, EMBED_CHROME_MENUBARON },
+                { GTK_MOZ_EMBED_FLAG_TOOLBARON, EMBED_CHROME_TOOLBARON },
+                { GTK_MOZ_EMBED_FLAG_STATUSBARON, EMBED_CHROME_STATUSBARON },
+                { GTK_MOZ_EMBED_FLAG_WINDOWRAISED, EMBED_CHROME_WINDOWRAISED },
+                { GTK_MOZ_EMBED_FLAG_WINDOWLOWERED, EMBED_CHROME_WINDOWLOWERED },
+                { GTK_MOZ_EMBED_FLAG_CENTERSCREEN, EMBED_CHROME_CENTERSCREEN },
+                { GTK_MOZ_EMBED_FLAG_OPENASDIALOG, EMBED_CHROME_OPENASDIALOG },
+                { GTK_MOZ_EMBED_FLAG_OPENASCHROME, EMBED_CHROME_OPENASCHROME },
+                { 0, EMBED_CHROME_NONE }
+        };
+
+        for (i = 0; conversion_map[i].chromemask != 0; i++)
+        {
+                if (chrome_mask & conversion_map[i].chromemask)
+                {
+                        mask = (EmbedChromeMask) (mask | conversion_map[i].embed_mask); 
+                }
+        }
+       
+	g_signal_emit_by_name (shell, "new_window_orphan", &new_embed, mask);
+
+	g_assert (new_embed != NULL);
+	
+	*retval = GTK_MOZ_EMBED(EPHY_EMBED(new_embed));
+}
+
 static void
 mozilla_init_single (MozillaEmbedSingle *mes)
 {	
@@ -290,7 +284,7 @@ mozilla_init_single (MozillaEmbedSingle *mes)
 
         /* allow creation of orphan windows */
         g_signal_connect (G_OBJECT (single), "new_window_orphan",
-                          GTK_SIGNAL_FUNC (mozilla_embed_single_new_window_orphan_cb),
+                          G_CALLBACK (mozilla_embed_single_new_window_orphan_cb),
 			  mes);
 }
 
@@ -460,51 +454,6 @@ mozilla_embed_single_init_services (MozillaEmbedSingle *single)
 	mozilla_register_external_protocols ();
 
 	return TRUE;
-}
-
-static void 
-mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *embed,
-                      		          GtkMozEmbed **retval, 
-					  guint chrome_mask,
-                           		  EphyEmbedSingle *shell)
-{
-	/* FIXME conversion duped in mozilla_embed */
-	EphyEmbed *new_embed;
-	int i;
-        EmbedChromeMask mask = EMBED_CHROME_OPENASPOPUP;
-        
-        struct
-        {
-                guint chromemask;
-                EmbedChromeMask embed_mask;
-        }
-        conversion_map [] =
-        {
-                { GTK_MOZ_EMBED_FLAG_DEFAULTCHROME, EMBED_CHROME_DEFAULT },
-                { GTK_MOZ_EMBED_FLAG_MENUBARON, EMBED_CHROME_MENUBARON },
-                { GTK_MOZ_EMBED_FLAG_TOOLBARON, EMBED_CHROME_TOOLBARON },
-                { GTK_MOZ_EMBED_FLAG_STATUSBARON, EMBED_CHROME_STATUSBARON },
-                { GTK_MOZ_EMBED_FLAG_WINDOWRAISED, EMBED_CHROME_WINDOWRAISED },
-                { GTK_MOZ_EMBED_FLAG_WINDOWLOWERED, EMBED_CHROME_WINDOWLOWERED },
-                { GTK_MOZ_EMBED_FLAG_CENTERSCREEN, EMBED_CHROME_CENTERSCREEN },
-                { GTK_MOZ_EMBED_FLAG_OPENASDIALOG, EMBED_CHROME_OPENASDIALOG },
-                { GTK_MOZ_EMBED_FLAG_OPENASCHROME, EMBED_CHROME_OPENASCHROME },
-                { 0, EMBED_CHROME_NONE }
-        };
-
-        for (i = 0; conversion_map[i].chromemask != 0; i++)
-        {
-                if (chrome_mask & conversion_map[i].chromemask)
-                {
-                        mask = (EmbedChromeMask) (mask | conversion_map[i].embed_mask); 
-                }
-        }
-       
-	g_signal_emit_by_name (shell, "new_window_orphan", &new_embed, mask);
-
-	g_assert (new_embed != NULL);
-	
-	*retval = GTK_MOZ_EMBED(EPHY_EMBED(new_embed));
 }
 
 static void
@@ -748,4 +697,26 @@ impl_remove_passwords (EphyEmbedSingle *shell,
                                         (nsDependentCString(p->host));
                 };
         };
+}
+
+static void
+mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	EphyEmbedSingleClass *shell_class = EPHY_EMBED_SINGLE_CLASS (klass);
+	
+	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
+	
+        object_class->finalize = mozilla_embed_single_finalize;
+
+	shell_class->clear_cache = impl_clear_cache;
+	shell_class->set_offline_mode = impl_set_offline_mode;
+	shell_class->load_proxy_autoconf = impl_load_proxy_autoconf;
+	shell_class->get_font_list = impl_get_font_list;
+	shell_class->list_cookies = impl_list_cookies;
+	shell_class->remove_cookies = impl_remove_cookies;
+	shell_class->list_passwords = impl_list_passwords;
+	shell_class->remove_passwords = impl_remove_passwords;
+
+	g_type_class_add_private (object_class, sizeof(MozillaEmbedSinglePrivate));
 }

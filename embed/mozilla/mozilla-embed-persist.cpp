@@ -43,11 +43,6 @@ mozilla_embed_persist_init (MozillaEmbedPersist *ges);
 static void
 mozilla_embed_persist_finalize (GObject *object);
 
-static gboolean
-impl_save (EphyEmbedPersist *persist);
-static void
-impl_cancel (EphyEmbedPersist *persist);
-
 #define MOZILLA_EMBED_PERSIST_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED_PERSIST, MozillaEmbedPersistPrivate))
 
 struct MozillaEmbedPersistPrivate
@@ -84,22 +79,6 @@ mozilla_embed_persist_get_type (void)
         }
 
         return mozilla_embed_persist_type;
-}
-
-static void
-mozilla_embed_persist_class_init (MozillaEmbedPersistClass *klass)
-{
-        GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	EphyEmbedPersistClass *persist_class = EPHY_EMBED_PERSIST_CLASS (klass);
-	
-        parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
-	
-        object_class->finalize = mozilla_embed_persist_finalize;
-
-	persist_class->save = impl_save;
-	persist_class->cancel = impl_cancel;
-
-	g_type_class_add_private (object_class, sizeof(MozillaEmbedPersistPrivate));
 }
 
 static void
@@ -284,4 +263,20 @@ impl_save (EphyEmbedPersist *persist)
 	}
 
 	return TRUE;
+}
+
+static void
+mozilla_embed_persist_class_init (MozillaEmbedPersistClass *klass)
+{
+        GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	EphyEmbedPersistClass *persist_class = EPHY_EMBED_PERSIST_CLASS (klass);
+	
+        parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
+	
+        object_class->finalize = mozilla_embed_persist_finalize;
+
+	persist_class->save = impl_save;
+	persist_class->cancel = impl_cancel;
+
+	g_type_class_add_private (object_class, sizeof(MozillaEmbedPersistPrivate));
 }

@@ -47,77 +47,8 @@ static void	mozilla_embed_init		(MozillaEmbed *gs);
 static void	mozilla_embed_destroy		(GtkObject *object);
 static void	ephy_embed_init			(EphyEmbedClass *embed_class);
 
-static void
-impl_load_url (EphyEmbed *embed, 
-               const char *url);
-static void
-impl_stop_load (EphyEmbed *embed);
-static gboolean
-impl_can_go_back (EphyEmbed *embed);
-static gboolean
-impl_can_go_forward (EphyEmbed *embed);
-static gboolean
-impl_can_go_up (EphyEmbed *embed);
-static GSList *
-impl_get_go_up_list (EphyEmbed *embed);
-static void
-impl_go_back (EphyEmbed *embed);
-static void
-impl_go_forward (EphyEmbed *embed);
-static void
-impl_go_up (EphyEmbed *embed);
-static char *
-impl_get_title (EphyEmbed *embed);
-static char *
-impl_get_location (EphyEmbed *embed, 
-                   gboolean toplevel);
-static void
-impl_reload (EphyEmbed *embed, 
-             EmbedReloadFlags flags);
-static void
-impl_zoom_set (EphyEmbed *embed, 
-               float zoom, 
-               gboolean reflow);
-static float
-impl_zoom_get (EphyEmbed *embed);
-static int
-impl_shistory_n_items (EphyEmbed *embed);
-static void
-impl_shistory_get_nth (EphyEmbed *embed, 
-                       int nth,
-                       gboolean is_relative,
-                       char **url,
-                       char **title);
-static int
-impl_shistory_get_pos (EphyEmbed *embed);
-static void
-impl_shistory_go_nth (EphyEmbed *embed, 
-                      int nth);
-static void
-impl_get_security_level (EphyEmbed *embed, 
-                         EmbedSecurityLevel *level,
-                         char **description);
-static void
-impl_set_encoding (EphyEmbed *embed,
-                   const char *encoding);
-static EphyEncodingInfo *
-impl_get_encoding_info (EphyEmbed *embed);
-static void
-impl_print (EphyEmbed *embed, 
-            EmbedPrintInfo *info);
-static void
-impl_print_preview_close (EphyEmbed *embed);
-static int
-impl_print_preview_n_pages (EphyEmbed *embed);
-static void
-impl_print_preview_navigate (EphyEmbed *embed,
-			     EmbedPrintPreviewNavType navType,
-			     gint pageNum);
-
 static void 
 mozilla_embed_connect_signals (MozillaEmbed *membed);
-static char *
-mozilla_embed_get_uri_parent (const char *uri);
 static void
 mozilla_embed_location_changed_cb (GtkMozEmbed *embed, MozillaEmbed *membed);
 static void
@@ -310,39 +241,6 @@ impl_find_set_properties (EphyEmbed *embed,
 }
 
 static void
-ephy_embed_init (EphyEmbedClass *embed_class)
-{
-	embed_class->load_url = impl_load_url; 
-	embed_class->stop_load = impl_stop_load;
-	embed_class->can_go_back = impl_can_go_back;
-	embed_class->can_go_forward =impl_can_go_forward;
-	embed_class->can_go_up = impl_can_go_up;
-	embed_class->get_go_up_list = impl_get_go_up_list;
-	embed_class->go_back = impl_go_back;
-	embed_class->go_forward = impl_go_forward;
-	embed_class->go_up = impl_go_up;
-	embed_class->get_title = impl_get_title;
-	embed_class->get_location = impl_get_location;
-	embed_class->reload = impl_reload;
-	embed_class->zoom_set = impl_zoom_set;
-	embed_class->zoom_get = impl_zoom_get;
-	embed_class->shistory_n_items = impl_shistory_n_items;
-	embed_class->shistory_get_nth = impl_shistory_get_nth;
-	embed_class->shistory_get_pos = impl_shistory_get_pos;
-	embed_class->shistory_go_nth = impl_shistory_go_nth;
-	embed_class->get_security_level = impl_get_security_level;
-	embed_class->find_next = impl_find_next;
-	embed_class->activate = impl_activate;
-	embed_class->find_set_properties = impl_find_set_properties;
-	embed_class->set_encoding = impl_set_encoding;
-	embed_class->get_encoding_info = impl_get_encoding_info;
-	embed_class->print = impl_print;
-	embed_class->print_preview_close = impl_print_preview_close;
-	embed_class->print_preview_n_pages = impl_print_preview_n_pages;
-	embed_class->print_preview_navigate = impl_print_preview_navigate;
-}
-
-static void
 mozilla_embed_realize (GtkWidget *widget)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (widget)->priv;
@@ -460,6 +358,52 @@ impl_can_go_forward (EphyEmbed *embed)
 	return gtk_moz_embed_can_go_forward (GTK_MOZ_EMBED(embed));
 }
 
+static char *
+mozilla_embed_get_uri_parent (const char *aUri)
+{
+        nsresult rv;
+
+        nsCOMPtr<nsIURI> uri;
+        rv = NS_NewURI (getter_AddRefs(uri), aUri);
+        if (NS_FAILED(rv) || !uri) return NULL;
+
+        nsCOMPtr<nsIURL> url = do_QueryInterface(uri, &rv);
+        if (NS_FAILED(rv) || !url) return NULL;
+
+        nsCAutoString dirPath;
+        rv = url->GetDirectory (dirPath);
+        if (NS_FAILED(rv) || !dirPath.Length()) return NULL;
+
+        nsCAutoString filePath;
+        rv = url->GetFilePath (filePath);
+        if (NS_FAILED(rv) || !filePath.Length()) return NULL;
+
+        PRInt32 pathLength = filePath.Length();
+        PRInt32 trailingSlash = filePath.RFind("/");
+
+        if(pathLength < 2 || trailingSlash == -1)
+        {
+                return NULL;
+        }
+
+        if(trailingSlash != (pathLength-1))
+        {
+                uri->SetPath(dirPath);
+        }
+        else
+        {
+                PRInt32 nextSlash = filePath.RFind("/",PR_FALSE,trailingSlash-1);
+                nsCAutoString parentPath;
+                filePath.Left(parentPath, nextSlash);
+                uri->SetPath(parentPath);
+        }
+
+        nsCAutoString spec;
+        uri->GetSpec(spec);
+
+        return !spec.IsEmpty() ? g_strdup(spec.get()) : NULL;
+}
+
 static gboolean
 impl_can_go_up (EphyEmbed *embed)
 {
@@ -538,52 +482,6 @@ impl_go_up (EphyEmbed *embed)
 	ephy_embed_load_url (embed, parent_uri);
 
 	g_free (parent_uri);
-}
-
-static char *
-mozilla_embed_get_uri_parent (const char *aUri)
-{
-        nsresult rv;
-
-        nsCOMPtr<nsIURI> uri;
-        rv = NS_NewURI (getter_AddRefs(uri), aUri);
-        if (NS_FAILED(rv) || !uri) return NULL;
-
-        nsCOMPtr<nsIURL> url = do_QueryInterface(uri, &rv);
-        if (NS_FAILED(rv) || !url) return NULL;
-
-        nsCAutoString dirPath;
-        rv = url->GetDirectory (dirPath);
-        if (NS_FAILED(rv) || !dirPath.Length()) return NULL;
-
-        nsCAutoString filePath;
-        rv = url->GetFilePath (filePath);
-        if (NS_FAILED(rv) || !filePath.Length()) return NULL;
-
-        PRInt32 pathLength = filePath.Length();
-        PRInt32 trailingSlash = filePath.RFind("/");
-
-        if(pathLength < 2 || trailingSlash == -1)
-        {
-                return NULL;
-        }
-
-        if(trailingSlash != (pathLength-1))
-        {
-                uri->SetPath(dirPath);
-        }
-        else
-        {
-                PRInt32 nextSlash = filePath.RFind("/",PR_FALSE,trailingSlash-1);
-                nsCAutoString parentPath;
-                filePath.Left(parentPath, nextSlash);
-                uri->SetPath(parentPath);
-        }
-
-        nsCAutoString spec;
-        uri->GetSpec(spec);
-
-        return !spec.IsEmpty() ? g_strdup(spec.get()) : NULL;
 }
 
 static char *
@@ -1228,4 +1126,37 @@ mozilla_embed_security_level (MozillaEmbed *membed)
                 break;
         }
 	return level;
+}
+
+static void
+ephy_embed_init (EphyEmbedClass *embed_class)
+{
+	embed_class->load_url = impl_load_url; 
+	embed_class->stop_load = impl_stop_load;
+	embed_class->can_go_back = impl_can_go_back;
+	embed_class->can_go_forward =impl_can_go_forward;
+	embed_class->can_go_up = impl_can_go_up;
+	embed_class->get_go_up_list = impl_get_go_up_list;
+	embed_class->go_back = impl_go_back;
+	embed_class->go_forward = impl_go_forward;
+	embed_class->go_up = impl_go_up;
+	embed_class->get_title = impl_get_title;
+	embed_class->get_location = impl_get_location;
+	embed_class->reload = impl_reload;
+	embed_class->zoom_set = impl_zoom_set;
+	embed_class->zoom_get = impl_zoom_get;
+	embed_class->shistory_n_items = impl_shistory_n_items;
+	embed_class->shistory_get_nth = impl_shistory_get_nth;
+	embed_class->shistory_get_pos = impl_shistory_get_pos;
+	embed_class->shistory_go_nth = impl_shistory_go_nth;
+	embed_class->get_security_level = impl_get_security_level;
+	embed_class->find_next = impl_find_next;
+	embed_class->activate = impl_activate;
+	embed_class->find_set_properties = impl_find_set_properties;
+	embed_class->set_encoding = impl_set_encoding;
+	embed_class->get_encoding_info = impl_get_encoding_info;
+	embed_class->print = impl_print;
+	embed_class->print_preview_close = impl_print_preview_close;
+	embed_class->print_preview_n_pages = impl_print_preview_n_pages;
+	embed_class->print_preview_navigate = impl_print_preview_navigate;
 }
