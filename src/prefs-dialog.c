@@ -639,6 +639,11 @@ create_fonts_language_menu (PrefsDialog *dialog)
 	GtkWidget *optionmenu, *menu;
 	GList *l = NULL;
 	guint i;
+	guint n_fonts_languages;
+	const FontsLanguageInfo *fonts_language;
+	
+	n_fonts_languages = ephy_langs_get_n_font_languages ();
+	fonts_language = ephy_langs_get_font_languages ();
 
 	for (i = 0; i < n_fonts_languages; i++)
 	{

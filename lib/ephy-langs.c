@@ -16,8 +16,28 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
- #include "ephy-langs.h"
- 
+#include "ephy-langs.h"
+#include <bonobo/bonobo-i18n.h>
+
+static const FontsLanguageInfo font_languages[] =
+{
+	{ N_("Arabic"),			"ar" },
+	{ N_("Baltic"),			"x-baltic" },
+	{ N_("Central European"),	"x-central-euro" },
+	{ N_("Cyrillic"),		"x-cyrillic" },
+	{ N_("Greek"),			"el" },
+	{ N_("Hebrew"),			"he" },
+	{ N_("Japanese"),		"ja" },
+	{ N_("Korean"),			"ko" },
+	{ N_("Simplified Chinese"),	"zh-CN" },
+	{ N_("Thai"),			"th" },
+	{ N_("Traditional Chinese"),	"zh-TW" },
+	{ N_("Turkish"),		"tr" },
+	{ N_("Unicode"),		"x-unicode" },
+	{ N_("Western"),		"x-western" },
+};
+static const guint n_font_languages = G_N_ELEMENTS (font_languages);
+
 void
 language_group_info_free (LanguageGroupInfo *info)
 {
@@ -39,4 +59,16 @@ encoding_info_free (EncodingInfo *info)
 	g_free (info->encoding);
 
 	g_free (info);
+}
+
+guint
+ephy_langs_get_n_font_languages (void)
+{
+	return n_font_languages;
+}
+
+const FontsLanguageInfo *
+ephy_langs_get_font_languages (void)
+{
+	return font_languages;
 }

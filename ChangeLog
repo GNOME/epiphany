@@ -1,3 +1,12 @@
+2003-06-12  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-langs.h:
+	* lib/ephy-langs.c: (ephy_langs_get_n_font_languages),
+	(ephy_langs_get_font_languages):
+	
+	Use functions instead of declaring static vars in .h file,
+	(hopefully) fixing # 114906 .
+
 2003-06-12  Xan Lopez  <xan@masilla.org>
 
 	* lib/widgets/ephy-node-view.c: (ephy_node_view_select_node):

@@ -344,6 +344,8 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 {
 	GConfClient *client = eel_gconf_client_get_global ();
 	guint i;
+	guint n_fonts_languages;
+	const FontsLanguageInfo *fonts_language;
 
 	for (i = 0; conversion_table[i].gconf_key != NULL; i++)
 	{
@@ -381,6 +383,8 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 	}
 
 	/* fonts notifiers */
+	n_fonts_languages = ephy_langs_get_n_font_languages ();
+	fonts_language = ephy_langs_get_font_languages ();
 	for (i = 0; i < n_fonts_languages; i++)
 	{
 		guint k;
