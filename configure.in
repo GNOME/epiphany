@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(epiphany, 1.2.1,
+AC_INIT(epiphany, 1.2.2,
        [http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany])
 
 EPIPHANY_MAJOR=1.2
@@ -18,8 +18,8 @@ AC_PROG_INTLTOOL([0.29])
 dnl put the ACLOCAL flags in the Makefile
 ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
-GLIB_REQUIRED=2.3.5
-GTK_REQUIRED=2.3.5
+GLIB_REQUIRED=2.4.0
+GTK_REQUIRED=2.4.0
 LIBBONOBOUI_REQUIRED=2.1.1
 LIBXML_REQUIRED=2.6.6
 LIBGNOMEVFS_REQUIRED=2.3.1
@@ -223,7 +223,7 @@ dnl Internationalization
 dnl ******************************* 
 dnl Add the languages which your application supports here.
 
-ALL_LINGUAS="am ar az be bg bn ca cs cy da de el en_CA en_GB es et fa fi fr ga hi hr hu is id it ja ko li lt nl mi mk mn ms nn no pl pt pt_BR ro ru sk sl sq sr sr@Latn sv ta tr uk vi wa zh_CN zh_TW"
+ALL_LINGUAS="am ar az be bg bn ca cs cy da de el en_CA en_GB es et fa fi fr ga gu hi hr hu is id it ja ko li lt nl mi mk mn ms nn no pa pl pt pt_BR ro ru sk sl sq sr sr@Latn sv ta tr uk vi wa zh_CN zh_TW"
 GETTEXT_PACKAGE=epiphany
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package])
