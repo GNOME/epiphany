@@ -587,36 +587,6 @@ window_cmd_edit_find_prev (GtkAction *action,
 }
 
 void
-window_cmd_view_bookmarks_bar (GtkAction *action,
-			       EphyWindow *window)
-{
-	gboolean active;
-
-	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
-	eel_gconf_set_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR, active);
-}
-
-void
-window_cmd_view_toolbar (GtkAction *action,
-			 EphyWindow *window)
-{
-	gboolean active;
-
-	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
-	eel_gconf_set_boolean (CONF_WINDOWS_SHOW_TOOLBARS, active);
-}
-
-void
-window_cmd_view_statusbar (GtkAction *action,
-			   EphyWindow *window)
-{
-	gboolean active;
-
-	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
-	eel_gconf_set_boolean (CONF_WINDOWS_SHOW_STATUSBAR, active);
-}
-
-void
 window_cmd_view_fullscreen (GtkAction *action,
 			    EphyWindow *window)
 {

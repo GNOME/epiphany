@@ -65,10 +65,17 @@ static void ephy_window_class_init		(EphyWindowClass *klass);
 static void ephy_window_init			(EphyWindow *gs);
 static void ephy_window_finalize		(GObject *object);
 static void ephy_window_show			(GtkWidget *widget);
+
 static void ephy_window_notebook_switch_page_cb	(GtkNotebook *notebook,
 						 GtkNotebookPage *page,
 						 guint page_num,
 						 EphyWindow *window);
+static void ephy_window_view_statusbar_cb       (GtkAction *action,
+			                         EphyWindow *window);
+static void ephy_window_view_toolbar_cb         (GtkAction *action,
+			                         EphyWindow *window);
+static void ephy_window_view_bookmarksbar_cb    (GtkAction *action,
+			                         EphyWindow *window);
 
 static GtkActionEntry ephy_menu_entries [] = {
 
@@ -233,13 +240,13 @@ static GtkToggleActionEntry ephy_menu_toggle_entries [] =
 	/* View Menu */
 	{ "ViewToolbar", NULL, N_("_Toolbar"), "<shift><control>T",
 	  N_("Show or hide toolbar"),
-	  G_CALLBACK (window_cmd_view_toolbar), TRUE },
+	  G_CALLBACK (ephy_window_view_toolbar_cb), TRUE },
 	{ "ViewBookmarksBar", NULL, N_("_Bookmarks Bar"), NULL,
 	  N_("Show or hide bookmarks bar"),
-	  G_CALLBACK (window_cmd_view_bookmarks_bar), TRUE },
+	  G_CALLBACK (ephy_window_view_bookmarksbar_cb), TRUE },
 	{ "ViewStatusbar", NULL, N_("St_atusbar"), NULL,
 	  N_("Show or hide statusbar"),
-	  G_CALLBACK (window_cmd_view_statusbar), TRUE },
+	  G_CALLBACK (ephy_window_view_statusbar_cb), TRUE },
 	{ "ViewFullscreen", STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
 	  N_("Browse at full screen"),
 	  G_CALLBACK (window_cmd_view_fullscreen), FALSE },
@@ -297,14 +304,21 @@ static GtkActionEntry ephy_popups_entries [] = {
 };
 static guint ephy_popups_n_entries = G_N_ELEMENTS (ephy_popups_entries);
 
-#define CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME  "/apps/epiphany/lockdown/disable_javascript_chrome"
 #define CONF_LOCKDOWN_HIDE_MENUBAR "/apps/epiphany/lockdown/hide_menubar"
 #define CONF_DESKTOP_BG_PICTURE "/desktop/gnome/background/picture_filename"
 
 #define EPHY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WINDOW, EphyWindowPrivate))
 
+typedef enum
+{
+	EPHY_WINDOW_MODE_NORMAL,
+	EPHY_WINDOW_MODE_FULLSCREEN,
+	EPHY_WINDOW_MODE_PRINT_PREVIEW
+} EphyWindowMode;
+
 struct EphyWindowPrivate
 {
+	EphyWindowMode mode;
 	GtkWidget *main_vbox;
 	GtkWidget *menu_dock;
 	GtkWidget *exit_fullscreen_popup;
@@ -321,21 +335,16 @@ struct EphyWindowPrivate
 	EphyTab *active_tab;
 	EphyDialog *find_dialog;
 	EphyDialog *print_dialog;
-	EmbedChromeMask requested_chrome_mask;
-	EmbedChromeMask actual_chrome_mask;
 	gboolean closing;
-	gboolean is_fullscreen;
-	gboolean is_ppview;
 	gboolean has_size;
 	guint num_tabs;
 	guint tab_message_cid;
 	guint help_message_cid;
 
-	guint disable_js_chrome_notifier_id;
-	guint show_toolbars_notifier_id;
-	guint show_bookmarks_bar_notifier_id;
-	guint show_statusbar_notifier_id;
-	guint hide_menubar_notifier_id;
+	EphyEmbedChrome chrome;
+	gboolean show_bookmarksbar;
+	gboolean should_save_chrome;
+
 	guint disable_arbitrary_url_notifier_id;
 	guint disable_bookmark_editing_notifier_id;
 	guint disable_toolbar_editing_notifier_id;
@@ -350,7 +359,8 @@ struct EphyWindowPrivate
 enum
 {
 	PROP_0,
-	PROP_ACTIVE_TAB
+	PROP_ACTIVE_TAB,
+	PROP_CHROME
 };
 
 static GObjectClass *parent_class = NULL;
@@ -450,19 +460,41 @@ exit_fullscreen_button_clicked_cb (GtkWidget *button, EphyWindow *window)
 }
 
 static void
-update_chromes_visibility (EphyWindow *window)
+get_chromes_visibility (EphyWindow *window, gboolean *show_menubar,
+			gboolean *show_statusbar, gboolean *show_toolbar)
+{
+	EphyEmbedChrome flags = window->priv->chrome;
+
+	switch (window->priv->mode)
+	{
+		case EPHY_WINDOW_MODE_NORMAL:
+			*show_menubar = flags & EPHY_EMBED_CHROME_MENUBAR;
+			*show_statusbar = flags & EPHY_EMBED_CHROME_STATUSBAR;
+			*show_toolbar = flags & EPHY_EMBED_CHROME_TOOLBAR;
+			break;
+		case EPHY_WINDOW_MODE_FULLSCREEN:
+			*show_toolbar = flags & EPHY_EMBED_CHROME_TOOLBAR;
+			*show_menubar = *show_statusbar = FALSE;
+			break;
+		default:
+			*show_menubar = *show_statusbar = *show_toolbar = FALSE;
+	}
+}
+
+static void
+sync_chromes_visibility (EphyWindow *window)
 {
 	GtkWidget *menubar;
-	gboolean fullscreen;
-	EmbedChromeMask flags = window->priv->actual_chrome_mask;
+	gboolean show_statusbar, show_menubar, show_toolbar;
 
-	fullscreen = window->priv->is_fullscreen;
+	get_chromes_visibility (window, &show_menubar,
+				&show_statusbar, &show_toolbar);
 
 	menubar = gtk_ui_manager_get_widget
 		(GTK_UI_MANAGER (window->ui_merge), "/menubar");
 	g_assert (menubar != NULL);
 
-	if (!fullscreen && flags & EMBED_CHROME_MENUBARON)
+	if (show_menubar)
 	{
 		gtk_widget_show (menubar);
 	}
@@ -471,12 +503,11 @@ update_chromes_visibility (EphyWindow *window)
 		gtk_widget_hide (menubar);
 	}
 
-	toolbar_set_visibility (window->priv->toolbar,
-				flags & EMBED_CHROME_TOOLBARON,
-				flags & EMBED_CHROME_BOOKMARKSBARON);
+	toolbar_set_visibility (window->priv->toolbar, show_toolbar,
+				window->priv->show_bookmarksbar);
 
 
-	if (!fullscreen && flags & EMBED_CHROME_STATUSBARON)
+	if (show_statusbar)
 	{
 		gtk_widget_show (window->priv->statusbar);
 	}
@@ -484,76 +515,6 @@ update_chromes_visibility (EphyWindow *window)
 	{
 		gtk_widget_hide (window->priv->statusbar);
 	}
-
-	if ((flags & EMBED_CHROME_PPVIEWTOOLBARON) != FALSE)
-	{
-		if (!window->priv->ppview_toolbar)
-		{
-			window->priv->ppview_toolbar = ppview_toolbar_new (window);
-		}
-	}
-	else
-	{
-		if (window->priv->ppview_toolbar)
-		{
-			g_object_unref (window->priv->ppview_toolbar);
-			window->priv->ppview_toolbar = NULL;
-		}
-	}
-}
-
-static void
-update_chrome(EphyWindow *window)
-{
-	EmbedChromeMask chrome_mask;
-
-	if (window->priv->is_ppview)
-	{
-		window->priv->actual_chrome_mask = EMBED_CHROME_PPVIEWTOOLBARON;
-	}
-	else
-	{
-		if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME))
-		{
-			chrome_mask = EMBED_CHROME_DEFAULT;
-		}
-		else
-		{
-			chrome_mask = window->priv->requested_chrome_mask;
-		}
-
-		if ((chrome_mask & EMBED_CHROME_BOOKMARKSBAR_DEFAULT) ||
-		    (chrome_mask & EMBED_CHROME_DEFAULT))
-		{
-			/* keep only not layout flags */
-			chrome_mask &= (EMBED_CHROME_WINDOWRAISED |
-					EMBED_CHROME_WINDOWLOWERED |
-					EMBED_CHROME_CENTERSCREEN |
-					EMBED_CHROME_OPENASDIALOG |
-					EMBED_CHROME_OPENASPOPUP);
-
-			/* Load defaults */
-			if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_TOOLBARS))
-			{
-				chrome_mask |= EMBED_CHROME_TOOLBARON;
-			}
-			if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR))
-			{
-				chrome_mask |= EMBED_CHROME_BOOKMARKSBARON;
-			}
-			if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_STATUSBAR))
-			{
-				chrome_mask |= EMBED_CHROME_STATUSBARON;
-			}
-			if (!eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
-			{
-				chrome_mask |= EMBED_CHROME_MENUBARON;
-			}
-		}
-		window->priv->actual_chrome_mask = chrome_mask;
-	}
-
-	update_chromes_visibility (window);
 }
 
 static void
@@ -561,7 +522,7 @@ ephy_window_fullscreen (EphyWindow *window)
 {
 	GtkWidget *popup, *button, *icon, *label, *hbox;
 
-	window->priv->is_fullscreen = TRUE;
+	window->priv->mode = EPHY_WINDOW_MODE_FULLSCREEN;
 
 	popup = gtk_window_new (GTK_WINDOW_POPUP);
 	window->priv->exit_fullscreen_popup = popup;
@@ -593,13 +554,13 @@ ephy_window_fullscreen (EphyWindow *window)
                           "size-changed", G_CALLBACK (size_changed_cb),
 			  window);
 
-	update_chromes_visibility (window);
+	sync_chromes_visibility (window);
 }
 
 static void
 ephy_window_unfullscreen (EphyWindow *window)
 {
-	window->priv->is_fullscreen = FALSE;
+	window->priv->mode = EPHY_WINDOW_MODE_NORMAL;
 
 	g_signal_handlers_disconnect_by_func (G_OBJECT (gdk_screen_get_default ()),
                                               G_CALLBACK (size_changed_cb),
@@ -608,7 +569,7 @@ ephy_window_unfullscreen (EphyWindow *window)
 	gtk_widget_destroy (window->priv->exit_fullscreen_popup);
 	window->priv->exit_fullscreen_popup = NULL;
 
-	update_chromes_visibility (window);
+	sync_chromes_visibility (window);
 }
 
 static gboolean
@@ -901,6 +862,106 @@ connect_proxy_cb (GtkUIManager *manager,
 		g_signal_connect (proxy, "deselect",
 				  G_CALLBACK (menu_item_deselect_cb), window);
 	}
+}
+
+static void
+update_chromes_actions (EphyWindow *window)
+{
+	GtkActionGroup *action_group = GTK_ACTION_GROUP (window->priv->action_group);
+	GtkAction *action;
+	gboolean show_statusbar, show_menubar, show_toolbar;
+
+	get_chromes_visibility (window, &show_menubar,
+				&show_statusbar, &show_toolbar);
+
+	action = gtk_action_group_get_action (action_group, "ViewToolbar");
+	g_signal_handlers_block_by_func (G_OBJECT (action),
+		 			 G_CALLBACK (ephy_window_view_toolbar_cb),
+		 			 window);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), show_toolbar);
+	g_signal_handlers_unblock_by_func (G_OBJECT (action),
+		 			   G_CALLBACK (ephy_window_view_toolbar_cb),
+		 			   window);
+
+	action = gtk_action_group_get_action (action_group, "ViewBookmarksBar");
+	g_signal_handlers_block_by_func (G_OBJECT (action),
+		 			 G_CALLBACK (ephy_window_view_bookmarksbar_cb),
+		 			 window);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
+				      window->priv->show_bookmarksbar);
+	g_signal_handlers_unblock_by_func (G_OBJECT (action),
+		 			   G_CALLBACK (ephy_window_view_bookmarksbar_cb),
+		 			   window);
+
+	action = gtk_action_group_get_action (action_group, "ViewStatusbar");
+	g_signal_handlers_block_by_func (G_OBJECT (action),
+		 			 G_CALLBACK (ephy_window_view_statusbar_cb),
+		 			 window);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), show_statusbar);
+	g_signal_handlers_unblock_by_func (G_OBJECT (action),
+		 			   G_CALLBACK (ephy_window_view_statusbar_cb),
+		 			   window);
+}
+
+static void
+update_actions_sensitivity (EphyWindow *window)
+{
+	GtkActionGroup *action_group = GTK_ACTION_GROUP (window->priv->action_group);
+	GtkActionGroup *popups_action_group = GTK_ACTION_GROUP (window->priv->popups_action_group);
+	GtkAction *action;
+	gboolean bookmarks_editable, save_to_disk;
+	gboolean printing, print_setup;
+
+	action = gtk_action_group_get_action (action_group, "ViewToolbar");
+	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_TOOLBARS), NULL);
+
+	action = gtk_action_group_get_action (action_group, "ViewBookmarksBar");
+	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_BOOKMARKS_BAR), NULL);
+
+	action = gtk_action_group_get_action (action_group, "ViewStatusbar");
+	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_STATUSBAR), NULL);
+
+	action = gtk_action_group_get_action (action_group, "GoLocation");
+	g_object_set (action, "sensitive", ! eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL), NULL);
+
+	action = gtk_action_group_get_action (action_group, "GoHistory");
+	g_object_set (action, "sensitive", ! eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY), NULL);
+
+	bookmarks_editable = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING);
+	action = gtk_action_group_get_action (action_group, "GoBookmarks");
+	g_object_set (action, "sensitive", bookmarks_editable, NULL);
+	action = gtk_action_group_get_action (action_group, "FileBookmarkPage");
+	g_object_set (action, "sensitive", bookmarks_editable, NULL);
+	action = gtk_action_group_get_action (popups_action_group, "ContextBookmarkPage");
+	g_object_set (action, "sensitive", bookmarks_editable, NULL);
+	action = gtk_action_group_get_action (popups_action_group, "BookmarkLink");
+	g_object_set (action, "sensitive", bookmarks_editable, NULL);
+
+	save_to_disk = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK);
+	action = gtk_action_group_get_action (action_group, "FileSaveAs");
+	g_object_set (action, "sensitive", save_to_disk, NULL);
+	action = gtk_action_group_get_action (popups_action_group, "DownloadLink");
+	g_object_set (action, "sensitive", save_to_disk, NULL);
+	action = gtk_action_group_get_action (popups_action_group, "SaveBackgroundAs");
+	g_object_set (action, "sensitive", save_to_disk, NULL);
+	action = gtk_action_group_get_action (popups_action_group, "SaveImageAs");
+	g_object_set (action, "sensitive", save_to_disk, NULL);
+
+	printing = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINTING);
+	print_setup = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP) &&
+		!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_COMMAND_LINE);
+	action = gtk_action_group_get_action (action_group, "FilePrintSetup");
+	g_object_set (action, "sensitive", printing && print_setup, NULL);
+	action = gtk_action_group_get_action (action_group, "FilePrintPreview");
+	g_object_set (action, "sensitive", printing && print_setup, NULL);
+	action = gtk_action_group_get_action (action_group, "FilePrint");
+	g_object_set (action, "sensitive", printing, NULL);
+
+	action = gtk_action_group_get_action (popups_action_group, "SetImageAsBackground");
+	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_DESKTOP_BG_PICTURE), NULL);
+
+	action = gtk_action_group_get_action (action_group, "EditToolbar");
+	g_object_set (action, "sensitive", ! eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING), NULL);
 }
 
 static void
@@ -1311,7 +1372,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	gboolean showing_edit_actions = FALSE;
 
 	/* Do not show the menu in print preview mode */
-	if (window->priv->is_ppview)
+	if (window->priv->mode == EPHY_WINDOW_MODE_PRINT_PREVIEW)
 	{
 		return;
 	}
@@ -1662,6 +1723,29 @@ setup_notebook (EphyWindow *window)
 	return notebook;
 }
 
+static EphyEmbedChrome
+get_default_chrome (void)
+{
+	EphyEmbedChrome chrome_mask = 0;
+
+	if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_TOOLBARS))
+	{
+		chrome_mask |= EPHY_EMBED_CHROME_TOOLBAR;
+	}
+
+	if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_STATUSBAR))
+	{
+		chrome_mask |= EPHY_EMBED_CHROME_STATUSBAR;
+	}
+
+	if (!eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
+	{
+		chrome_mask |= EPHY_EMBED_CHROME_MENUBAR;
+	}
+
+	return chrome_mask;
+}
+
 static void
 ephy_window_set_property (GObject *object,
 			  guint prop_id,
@@ -1674,6 +1758,16 @@ ephy_window_set_property (GObject *object,
 	{
 		case PROP_ACTIVE_TAB:
 			ephy_window_set_active_tab (window, g_value_get_object (value));
+			break;
+		case PROP_CHROME:
+			window->priv->chrome = g_value_get_flags (value);
+			if (window->priv->chrome == EPHY_EMBED_CHROME_DEFAULT)
+			{
+				window->priv->chrome = get_default_chrome ();
+				window->priv->should_save_chrome = TRUE;
+			}
+			sync_chromes_visibility (window);
+			update_chromes_actions (window);
 			break;
 	}
 }
@@ -1719,6 +1813,16 @@ ephy_window_class_init (EphyWindowClass *klass)
 							      EPHY_TYPE_TAB,
 							      G_PARAM_READWRITE));
 
+	g_object_class_install_property (object_class,
+					 PROP_CHROME,
+					 g_param_spec_flags ("chrome",
+							     "chrome",
+							     "Window chrome",
+							     EPHY_TYPE_EMBED_CHROME_MASK,
+							     EPHY_EMBED_CHROME_DEFAULT,
+							     G_PARAM_CONSTRUCT_ONLY |
+							     G_PARAM_READWRITE));
+
 	g_type_class_add_private (object_class, sizeof(EphyWindowPrivate));
 }
 
@@ -1757,73 +1861,6 @@ ensure_default_icon (void)
 }
 
 static void
-update_actions (EphyWindow *window)
-{
-	GtkActionGroup *action_group = GTK_ACTION_GROUP (window->priv->action_group);
-	GtkActionGroup *popups_action_group = GTK_ACTION_GROUP (window->priv->popups_action_group);
-	GtkAction *action;
-	gboolean bookmarks_editable, save_to_disk;
-	gboolean printing, print_setup;
-
-	action = gtk_action_group_get_action (action_group, "ViewToolbar");
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
-				      eel_gconf_get_boolean (CONF_WINDOWS_SHOW_TOOLBARS));
-	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_TOOLBARS), NULL);
-
-	action = gtk_action_group_get_action (action_group, "ViewBookmarksBar");
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
-				      eel_gconf_get_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR));
-	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_BOOKMARKS_BAR), NULL);
-
-	action = gtk_action_group_get_action (action_group, "ViewStatusbar");
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
-				      eel_gconf_get_boolean (CONF_WINDOWS_SHOW_STATUSBAR));
-	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_STATUSBAR), NULL);
-
-	action = gtk_action_group_get_action (action_group, "GoLocation");
-	g_object_set (action, "sensitive", ! eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL), NULL);
-
-	action = gtk_action_group_get_action (action_group, "GoHistory");
-	g_object_set (action, "sensitive", ! eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY), NULL);
-
-	bookmarks_editable = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING);
-	action = gtk_action_group_get_action (action_group, "GoBookmarks");
-	g_object_set (action, "sensitive", bookmarks_editable, NULL);
-	action = gtk_action_group_get_action (action_group, "FileBookmarkPage");
-	g_object_set (action, "sensitive", bookmarks_editable, NULL);
-	action = gtk_action_group_get_action (popups_action_group, "ContextBookmarkPage");
-	g_object_set (action, "sensitive", bookmarks_editable, NULL);
-	action = gtk_action_group_get_action (popups_action_group, "BookmarkLink");
-	g_object_set (action, "sensitive", bookmarks_editable, NULL);
-
-	save_to_disk = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK);
-	action = gtk_action_group_get_action (action_group, "FileSaveAs");
-	g_object_set (action, "sensitive", save_to_disk, NULL);
-	action = gtk_action_group_get_action (popups_action_group, "DownloadLink");
-	g_object_set (action, "sensitive", save_to_disk, NULL);
-	action = gtk_action_group_get_action (popups_action_group, "SaveBackgroundAs");
-	g_object_set (action, "sensitive", save_to_disk, NULL);
-	action = gtk_action_group_get_action (popups_action_group, "SaveImageAs");
-	g_object_set (action, "sensitive", save_to_disk, NULL);
-
-	printing = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINTING);
-	print_setup = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP) &&
-		!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_COMMAND_LINE);
-	action = gtk_action_group_get_action (action_group, "FilePrintSetup");
-	g_object_set (action, "sensitive", printing && print_setup, NULL);
-	action = gtk_action_group_get_action (action_group, "FilePrintPreview");
-	g_object_set (action, "sensitive", printing && print_setup, NULL);
-	action = gtk_action_group_get_action (action_group, "FilePrint");
-	g_object_set (action, "sensitive", printing, NULL);
-
-	action = gtk_action_group_get_action (popups_action_group, "SetImageAsBackground");
-	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_DESKTOP_BG_PICTURE), NULL);
-
-	action = gtk_action_group_get_action (action_group, "EditToolbar");
-	g_object_set (action, "sensitive", ! eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING), NULL);
-}
-
-static void
 update_navigation (EphyWindow *window)
 {
 	if (window->priv->active_tab)
@@ -1833,32 +1870,22 @@ update_navigation (EphyWindow *window)
 }
 
 static void
-chrome_notifier (GConfClient *client,
-		 guint cnxn_id,
-		 GConfEntry *entry,
-		 EphyWindow *window)
-{
-	update_chrome (window);
-	update_actions(window);
-}
-
-static void
 actions_notifier (GConfClient *client,
 		  guint cnxn_id,
 		  GConfEntry *entry,
 		  EphyWindow *window)
 {
-	update_actions(window);
+	update_actions_sensitivity (window);
 }
 
 static void
 navigation_notifier (GConfClient *client,
-		   guint cnxn_id,
-		   GConfEntry *entry,
-		   EphyWindow *window)
+		     guint cnxn_id,
+		     GConfEntry *entry,
+		     EphyWindow *window)
 {
-	update_navigation(window);
-	update_actions(window);
+	update_navigation (window);
+	update_actions_sensitivity (window);
 }
 
 static void
@@ -1885,15 +1912,15 @@ ephy_window_init (EphyWindow *window)
 	window->priv = EPHY_WINDOW_GET_PRIVATE (window);
 
 	window->priv->active_tab = NULL;
-	window->priv->requested_chrome_mask = EMBED_CHROME_DEFAULT;
-	window->priv->actual_chrome_mask = 0;
 	window->priv->closing = FALSE;
 	window->priv->ppview_toolbar = NULL;
 	window->priv->exit_fullscreen_popup = NULL;
 	window->priv->num_tabs = 0;
-	window->priv->is_fullscreen = FALSE;
-	window->priv->is_ppview = FALSE;
 	window->priv->has_size = FALSE;
+	window->priv->should_save_chrome = FALSE;
+	window->priv->mode = EPHY_WINDOW_MODE_NORMAL;
+	window->priv->show_bookmarksbar =
+		eel_gconf_get_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR);
 
 	ensure_default_icon ();
 
@@ -1913,7 +1940,6 @@ ephy_window_init (EphyWindow *window)
 			    FALSE, TRUE, 0);
 	window->priv->tab_message_cid = gtk_statusbar_get_context_id
 		(GTK_STATUSBAR (window->priv->statusbar), "tab_message");
-
 	window->priv->help_message_cid = gtk_statusbar_get_context_id
 		(GTK_STATUSBAR (window->priv->statusbar), "help_message");
 
@@ -1929,6 +1955,8 @@ ephy_window_init (EphyWindow *window)
 			  GTK_WIDGET (window->priv->toolbar),
 			  FALSE, FALSE, 0);
 
+	update_actions_sensitivity (window);
+
 	/* Once the window is sufficiently created let the extensions attach to it */
 	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
 	ephy_extension_attach_window (manager, window);
@@ -1936,7 +1964,6 @@ ephy_window_init (EphyWindow *window)
 	/* show widgets */
 	gtk_widget_show (GTK_WIDGET (window->priv->toolbar));
 	gtk_widget_show (GTK_WIDGET (window->priv->notebook));
-	gtk_widget_show (window->priv->statusbar);
 
 	g_signal_connect (window, "window-state-event",
 			  G_CALLBACK (ephy_window_state_event_cb),
@@ -1946,26 +1973,6 @@ ephy_window_init (EphyWindow *window)
 			  window);
 
 	/* lockdown pref notifiers */
-	window->priv->disable_js_chrome_notifier_id = eel_gconf_notification_add
-		(CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME,
-		 (GConfClientNotifyFunc)chrome_notifier, window);
-
-	window->priv->show_toolbars_notifier_id = eel_gconf_notification_add
-		(CONF_WINDOWS_SHOW_TOOLBARS,
-		 (GConfClientNotifyFunc)chrome_notifier, window);
-
-	window->priv->show_bookmarks_bar_notifier_id = eel_gconf_notification_add
-		(CONF_WINDOWS_SHOW_BOOKMARKS_BAR,
-		 (GConfClientNotifyFunc)chrome_notifier, window);
-
-	window->priv->show_statusbar_notifier_id = eel_gconf_notification_add
-		(CONF_WINDOWS_SHOW_STATUSBAR,
-		 (GConfClientNotifyFunc)chrome_notifier, window);
-
-	window->priv->hide_menubar_notifier_id = eel_gconf_notification_add
-		(CONF_LOCKDOWN_HIDE_MENUBAR,
-		 (GConfClientNotifyFunc)chrome_notifier, window);
-
 	window->priv->disable_arbitrary_url_notifier_id = eel_gconf_notification_add
 		(CONF_LOCKDOWN_DISABLE_ARBITRARY_URL,
 		 (GConfClientNotifyFunc)navigation_notifier, window);
@@ -2015,11 +2022,6 @@ ephy_window_finalize (GObject *object)
 {
         EphyWindow *window = EPHY_WINDOW (object);
 
-	eel_gconf_notification_remove (window->priv->disable_js_chrome_notifier_id);
-	eel_gconf_notification_remove (window->priv->show_toolbars_notifier_id);
-	eel_gconf_notification_remove (window->priv->show_bookmarks_bar_notifier_id);
-	eel_gconf_notification_remove (window->priv->show_statusbar_notifier_id);
-	eel_gconf_notification_remove (window->priv->hide_menubar_notifier_id);
 	eel_gconf_notification_remove (window->priv->disable_arbitrary_url_notifier_id);
 	eel_gconf_notification_remove (window->priv->disable_bookmark_editing_notifier_id);
 	eel_gconf_notification_remove (window->priv->disable_toolbar_editing_notifier_id);
@@ -2066,22 +2068,48 @@ ephy_window_new (void)
 	return EPHY_WINDOW (g_object_new (EPHY_TYPE_WINDOW, NULL));
 }
 
-void
-ephy_window_request_chrome (EphyWindow *window,
-			    EmbedChromeMask flags)
+EphyWindow *
+ephy_window_new_with_chrome (EphyEmbedChrome chrome)
 {
-	window->priv->requested_chrome_mask = flags;
-	update_chrome (window);
+	return EPHY_WINDOW (g_object_new (EPHY_TYPE_WINDOW,
+					  "chrome", chrome,
+					  NULL));
 }
 
 void
 ephy_window_set_print_preview (EphyWindow *window, gboolean enabled)
 {
-	window->priv->is_ppview = enabled;
-	update_chrome (window);
-	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (window->priv->notebook), !enabled);
-}
+	GtkAccelGroup *accel_group;
+	EphyWindowMode mode;
 
+	accel_group = gtk_ui_manager_get_accel_group (GTK_UI_MANAGER (window->ui_merge));
+
+	mode = enabled ? EPHY_WINDOW_MODE_PRINT_PREVIEW :
+			 EPHY_WINDOW_MODE_NORMAL;
+
+	if (mode == window->priv->mode) return;
+
+	window->priv->mode = mode;
+
+	sync_chromes_visibility (window);
+	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (window->priv->notebook), !enabled);
+
+	if (enabled)
+	{
+		g_return_if_fail (window->priv->ppview_toolbar == NULL);
+
+		window->priv->ppview_toolbar = ppview_toolbar_new (window);
+		gtk_window_remove_accel_group (GTK_WINDOW (window), accel_group);
+	}
+	else
+	{
+		g_return_if_fail (window->priv->ppview_toolbar != NULL);
+
+		g_object_unref (window->priv->ppview_toolbar);
+		window->priv->ppview_toolbar = NULL;
+		gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+	}
+}
 
 GtkWidget *
 ephy_window_get_toolbar (EphyWindow *window)
@@ -2211,30 +2239,16 @@ ephy_window_show (GtkWidget *widget)
 {
 	EphyWindow *window = EPHY_WINDOW(widget);
 
-	update_chrome (window);
-	update_actions(window);
-
 	if (!window->priv->has_size)
 	{
-		gboolean keep_state = TRUE;
+		EphyTab *tab;
+		int width, height;
 
-		/* Do not keep state of sized popups */
-		if (window->priv->actual_chrome_mask & EMBED_CHROME_OPENASPOPUP)
-		{
-			EphyTab *tab;
-			int width, height;
+		tab = ephy_window_get_active_tab (EPHY_WINDOW (window));
+		g_return_if_fail (tab != NULL);
 
-			tab = ephy_window_get_active_tab (EPHY_WINDOW (window));
-			g_return_if_fail (tab != NULL);
-
-			ephy_tab_get_size (tab, &width, &height);
-			if (width != -1 || height != -1)
-			{
-				keep_state = FALSE;
-			}
-		}
-
-		if (keep_state)
+		ephy_tab_get_size (tab, &width, &height);
+		if (width == -1 && height == -1)
 		{
 			ephy_state_add_window (widget, "main_window", 600, 500,
 					       EPHY_STATE_WINDOW_SAVE_SIZE);
@@ -2431,4 +2445,60 @@ ephy_window_set_zoom (EphyWindow *window,
 	{
 		ephy_embed_zoom_set (embed, zoom, TRUE);
 	}
+}
+
+static void
+sync_prefs_with_chrome (EphyWindow *window)
+{
+	EphyEmbedChrome flags = window->priv->chrome;
+
+	if (window->priv->should_save_chrome)
+	{
+		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR,
+				       window->priv->show_bookmarksbar);
+		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_TOOLBARS,
+				       flags & EPHY_EMBED_CHROME_TOOLBAR);
+		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_STATUSBAR,
+				       flags & EPHY_EMBED_CHROME_STATUSBAR);
+	}
+}
+
+static void
+sync_chrome_with_view_toggle (GtkAction *action, EphyWindow *window,
+			      EphyEmbedChrome chrome_flag)
+{
+	gboolean active;
+
+	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
+	window->priv->chrome = active ? window->priv->chrome | chrome_flag :
+					window->priv->chrome & (~chrome_flag);
+
+	sync_chromes_visibility (window);
+	sync_prefs_with_chrome (window);
+}
+
+static void
+ephy_window_view_statusbar_cb (GtkAction *action,
+			       EphyWindow *window)
+{
+	sync_chrome_with_view_toggle (action, window,
+				      EPHY_EMBED_CHROME_STATUSBAR);
+}
+
+static void
+ephy_window_view_toolbar_cb (GtkAction *action,
+			     EphyWindow *window)
+{
+	sync_chrome_with_view_toggle (action, window,
+				      EPHY_EMBED_CHROME_TOOLBAR);
+}
+
+static void
+ephy_window_view_bookmarksbar_cb (GtkAction *action,
+			          EphyWindow *window)
+{
+	window->priv->show_bookmarksbar = gtk_toggle_action_get_active
+						(GTK_TOGGLE_ACTION (action));
+	sync_chromes_visibility (window);
+	sync_prefs_with_chrome (window);
 }

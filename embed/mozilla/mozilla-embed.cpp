@@ -983,45 +983,41 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 static void
 mozilla_embed_new_window_cb (GtkMozEmbed *embed, 
 			     GtkMozEmbed **newEmbed,
-                             guint chromemask, 
+                             guint chrome_mask, 
 			     MozillaEmbed *membed)
 {
-	int i;
-	EmbedChromeMask mask = EMBED_CHROME_OPENASPOPUP;
+	guint i;
+	guint mask = 0;
 	EphyEmbed *new_embed = NULL;
 
 	struct
 	{
-		guint chromemask;
-		EmbedChromeMask embed_mask;
+		guint mozilla_mask;
+		guint embed_mask;
 	}
 	conversion_map [] =
 	{
-		{ GTK_MOZ_EMBED_FLAG_DEFAULTCHROME, EMBED_CHROME_DEFAULT },
-		{ GTK_MOZ_EMBED_FLAG_MENUBARON, EMBED_CHROME_MENUBARON },
-		{ GTK_MOZ_EMBED_FLAG_TOOLBARON, EMBED_CHROME_TOOLBARON },
-		{ GTK_MOZ_EMBED_FLAG_PERSONALTOOLBARON, EMBED_CHROME_BOOKMARKSBAR_DEFAULT },
-		{ GTK_MOZ_EMBED_FLAG_STATUSBARON, EMBED_CHROME_STATUSBARON },
-		{ GTK_MOZ_EMBED_FLAG_WINDOWRAISED, EMBED_CHROME_WINDOWRAISED },
-		{ GTK_MOZ_EMBED_FLAG_WINDOWLOWERED, EMBED_CHROME_WINDOWLOWERED },
-		{ GTK_MOZ_EMBED_FLAG_CENTERSCREEN, EMBED_CHROME_CENTERSCREEN },
-		{ 0, EMBED_CHROME_NONE }
+		{ GTK_MOZ_EMBED_FLAG_DEFAULTCHROME, EPHY_EMBED_CHROME_DEFAULT },
+		{ GTK_MOZ_EMBED_FLAG_MENUBARON, EPHY_EMBED_CHROME_MENUBAR },
+		{ GTK_MOZ_EMBED_FLAG_TOOLBARON, EPHY_EMBED_CHROME_TOOLBAR },
+		{ GTK_MOZ_EMBED_FLAG_STATUSBARON, EPHY_EMBED_CHROME_STATUSBAR },
+		{ 0, 0 }
 	};
 
-	if (chromemask & GTK_MOZ_EMBED_FLAG_OPENASCHROME)
+	if (chrome_mask & GTK_MOZ_EMBED_FLAG_OPENASCHROME)
 	{
 		*newEmbed = _mozilla_embed_new_xul_dialog ();
 		return;
 	}
 
-	for (i = 0; conversion_map[i].chromemask != 0; i++)
+	for (i = 0; conversion_map[i].mozilla_mask != 0; i++)
 	{
-		if (chromemask & conversion_map[i].chromemask)
+		if (chrome_mask & conversion_map[i].mozilla_mask)
 		{
-			mask = (EmbedChromeMask) (mask | conversion_map[i].embed_mask);	
+			mask |= conversion_map[i].embed_mask;
 		}
 	}
-	
+
 	g_signal_emit_by_name (membed, "ge_new_window", &new_embed, mask);
 
 	g_assert (new_embed != NULL);

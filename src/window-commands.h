@@ -112,15 +112,6 @@ void window_cmd_edit_find_next	(GtkAction *action,
 void window_cmd_edit_find_prev	(GtkAction *action,
 				 EphyWindow *window);
 
-void window_cmd_view_statusbar	(GtkAction *action,
-				 EphyWindow *window);
-
-void window_cmd_view_toolbar	(GtkAction *action,
-				 EphyWindow *window);
-
-void window_cmd_view_bookmarks_bar	(GtkAction *action,
-				    	 EphyWindow *window);
-
 void window_cmd_view_fullscreen	(GtkAction *action,
 				 EphyWindow *window);
 

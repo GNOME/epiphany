@@ -46,7 +46,7 @@ static void		gnv_embed_title_cb 			(EphyEmbed *embed,
 								 EphyNautilusView *view);
 static void		gnv_embed_new_window_cb			(EphyEmbed *embed, 
 								 EphyEmbed **new_embed,
-								 EmbedChromeMask chromemask,
+								 EphyEmbedChrome chromemask,
 								 EphyNautilusView *view);
 static void		gnv_embed_link_message_cb 		(EphyEmbed *embed, 
 								 EphyNautilusView *view);
@@ -421,7 +421,7 @@ gnv_stop_loading_cb (EphyNautilusView *view, gpointer user_data)
 
 static void
 gnv_embed_new_window_cb (EphyEmbed *embed, EphyEmbed **new_embed,
-			 EmbedChromeMask chromemask, EphyNautilusView *view)
+			 EphyEmbedChrome chromemask, EphyNautilusView *view)
 {
 	EphyTab *new_tab;
 	EphyWindow *window;

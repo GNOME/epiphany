@@ -1,3 +1,45 @@
+2004-03-16  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/ephy-embed.c: (ephy_embed_chrome_get_type):
+	* embed/ephy-embed.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Cleanups chromes code and register a type for the enum.
+
+	* src/ephy-nautilus-view.c: (gnv_embed_new_window_cb):
+
+	Adapt to the api changes
+
+	* src/ephy-tab.c: (ephy_tab_new_window_cb):
+
+	Move js chrome lockdown pref check here.
+
+	* src/ephy-window.c: (get_chromes_visibility),
+	(sync_chromes_visibility), (ephy_window_fullscreen),
+	(ephy_window_unfullscreen), (update_chromes_actions),
+	(update_actions_sensitivity), (show_embed_popup),
+	(get_default_chrome), (ephy_window_set_property),
+	(ephy_window_class_init), (actions_notifier),
+	(navigation_notifier), (ephy_window_init), (ephy_window_finalize),
+	(ephy_window_new_with_chrome), (ephy_window_set_print_preview),
+	(ephy_window_show), (sync_prefs_with_chrome),
+	(sync_chrome_with_view_toggle), (ephy_window_view_statusbar_cb),
+	(ephy_window_view_toolbar_cb), (ephy_window_view_bookmarksbar_cb):
+
+	Rework chrome handling so that it's not applied to all windows.
+	Changes are now saved on the fly like for window size.
+
+	* src/ephy-window.h:
+
+	Use a construct property instead of a _set for chrome.
+
+	* src/window-commands.c:
+	* src/window-commands.h:
+
+	Move chromes actions to EphyWindow so we dont need to expose
+	chrome handling.
+
 2004-03-18  Xan Lopez  <xan@gnome.org>
 
 	* lib/widgets/ephy-node-view.c:

@@ -60,6 +60,8 @@
 
 #define EPHY_TAB_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TAB, EphyTabPrivate))
 
+#define CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME  "/apps/epiphany/lockdown/disable_javascript_chrome"
+
 struct EphyTabPrivate
 {
 	EphyWindow *window;
@@ -901,13 +903,19 @@ ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 
 static void
 ephy_tab_new_window_cb (EphyEmbed *embed, EphyEmbed **new_embed,
-			EmbedChromeMask chromemask, EphyTab *tab)
+			EphyEmbedChrome chromemask, EphyTab *tab)
 {
 	EphyTab *new_tab;
 	EphyWindow *window;
 
-	window = ephy_window_new ();
-	ephy_window_request_chrome (window, chromemask);
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME))
+	{
+		window = ephy_window_new ();
+	}
+	else
+	{
+		window = ephy_window_new_with_chrome (chromemask);
+	}
 
 	new_tab = ephy_tab_new ();
 	gtk_widget_show (GTK_WIDGET (new_tab));
