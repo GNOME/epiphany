@@ -539,7 +539,7 @@ ephy_location_entry_autocompletion_sources_changed_cb (EphyAutocompletion *aw,
 	    && p->last_completion
 	    && !strcmp (p->last_completion, gtk_entry_get_text (GTK_ENTRY (p->entry))))
 	{
-		p->autocompletion_timeout = gtk_timeout_add
+		p->autocompletion_timeout = g_timeout_add
 			(AUTOCOMPLETION_DELAY,
 			 (GSourceFunc) ephy_location_entry_autocompletion_to, w);
 	}
@@ -547,7 +547,7 @@ ephy_location_entry_autocompletion_sources_changed_cb (EphyAutocompletion *aw,
         if (p->show_alternatives_timeout == 0
 	    && p->autocompletion_window_visible)
 	{
-		p->show_alternatives_timeout = gtk_timeout_add
+		p->show_alternatives_timeout = g_timeout_add
 			(SHOW_ALTERNATIVES_DELAY,
 			 (GSourceFunc) ephy_location_entry_autocompletion_show_alternatives_to, w);
 	}
