@@ -30,6 +30,7 @@
 #include "eel-gconf-extensions.h"
 
 #include <libgnomeui/gnome-ui-init.h>
+#include <libgnomeui/gnome-app-helper.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmessagedialog.h>
 #include <libgnome/gnome-program.h>
@@ -193,6 +194,7 @@ main (int argc, char *argv[])
 	eel_gconf_monitor_remove ("/apps/epiphany/general");
 	eel_gconf_monitor_remove ("/apps/epiphany/lockdown");
 	eel_gconf_monitor_remove ("/desktop/gnome/lockdown");
+	gnome_accelerators_sync ();
 	ephy_state_save ();
 	ephy_file_helpers_shutdown ();
 	gnome_vfs_shutdown ();
