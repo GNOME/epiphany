@@ -622,7 +622,7 @@ setup_size_controls (PrefsDialog *dialog)
 
 	spin = ephy_dialog_get_control (EPHY_DIALOG(dialog),
 					  VARIABLE_SIZE_PROP);
-	setup_size_control (dialog, CONF_RENDERING_FONT_VAR_SIZE, 12, spin);
+	setup_size_control (dialog, CONF_RENDERING_FONT_VAR_SIZE, 11, spin);
 
 	spin = ephy_dialog_get_control (EPHY_DIALOG(dialog),
 					  MIN_SIZE_PROP);
