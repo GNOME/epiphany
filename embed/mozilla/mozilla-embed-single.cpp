@@ -329,7 +329,7 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	pref->SetBoolPref ("mozilla.widget.raise-on-setfocus", PR_FALSE);
 
 	/* set default search engine */
-	pref->SetCharPref ("keyword.URL", "http://www.google.com/search?q=");
+	pref->SetCharPref ("keyword.URL", "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q=");
 	pref->SetBoolPref ("keyword.enabled", PR_TRUE);
 	pref->SetBoolPref ("security.checkloaduri", PR_TRUE);
 
