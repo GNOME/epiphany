@@ -60,29 +60,6 @@ save_page (EphyEmbed *embed,
 
 </para>
 
-<!-- ##### ENUM EmbedPersistFlags ##### -->
-<para>
-Determines how the #EphyEmbedPersist should act.
-</para>
-
-@EMBED_PERSIST_COPY_PAGE: If set, download a copy of the page being browsed by
-			  the #EphyEmbedPersist's #EphyEmbed. This should be
-			  specified with ephy_embed_persist_set_embed(). If
-			  unset, ephy_embed_persist_set_source() must have been
-			  called.
-@EMBED_PERSIST_MAINDOC: If set and %EMBED_PERSIST_COPY_PAGE is set, download the
-			#EphyEmbedPersist's #EphyEmbed's page's frameset. If
-			unset, download the currently-focused frame.
-@EMBED_PERSIST_NO_VIEW: If set, do not display this download in the download
-			manager.
-@EMBED_PERSIST_ASK_DESTINATION: If set, display a filechooser dialog. You must
-				call ephy_embed_persist_set_fc_title() and
-				ephy_embed_persist_set_fc_parent() before
-				ephy_embed_persist_save() if this is the case.
-				If unset, use the destination specified with
-				ephy_embed_persist_set_dest().
-@EMBED_PERSIST_DO_CONVERSION: 
-
 <!-- ##### FUNCTION ephy_embed_persist_set_dest ##### -->
 <para>
 

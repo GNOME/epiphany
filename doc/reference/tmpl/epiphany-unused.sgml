@@ -38,6 +38,40 @@ mozilla-embed-event
 </para>
 
 
+<!-- ##### ENUM EmbedPersistFlags ##### -->
+<para>
+Determines how the #EphyEmbedPersist should act.
+</para>
+
+@EMBED_PERSIST_COPY_PAGE: If set, download a copy of the page being browsed by
+			  the #EphyEmbedPersist's #EphyEmbed. This should be
+			  specified with ephy_embed_persist_set_embed(). If
+			  unset, ephy_embed_persist_set_source() must have been
+			  called.
+@EMBED_PERSIST_MAINDOC: If set and %EMBED_PERSIST_COPY_PAGE is set, download the
+			#EphyEmbedPersist's #EphyEmbed's page's frameset. If
+			unset, download the currently-focused frame.
+@EMBED_PERSIST_NO_VIEW: If set, do not display this download in the download
+			manager.
+@EMBED_PERSIST_ASK_DESTINATION: If set, display a filechooser dialog. You must
+				call ephy_embed_persist_set_fc_title() and
+				ephy_embed_persist_set_fc_parent() before
+				ephy_embed_persist_save() if this is the case.
+				If unset, use the destination specified with
+				ephy_embed_persist_set_dest().
+@EMBED_PERSIST_DO_CONVERSION: 
+
+<!-- ##### ENUM EmbedPrintPreviewNavType ##### -->
+<para>
+Specifies the action to perform in ephy_embed_print_preview_navigate().
+</para>
+
+@PRINTPREVIEW_GOTO_PAGENUM: 
+@PRINTPREVIEW_PREV_PAGE: 
+@PRINTPREVIEW_NEXT_PAGE: 
+@PRINTPREVIEW_HOME: 
+@PRINTPREVIEW_END: 
+
 <!-- ##### ENUM EmbedReloadFlags ##### -->
 <para>
 
@@ -45,6 +79,35 @@ mozilla-embed-event
 
 @EMBED_RELOAD_NORMAL: 
 @EMBED_RELOAD_FORCE: Bypass cache and proxy while reloading a web page
+
+<!-- ##### ENUM EmbedSecurityLevel ##### -->
+<para>
+Represents the security status of an #EphyEmbed. For example, a page with an
+invalid SSL certificate will have an #EmbedSecurityLevel of %STATE_IS_BROKEN.
+</para>
+
+@STATE_IS_UNKNOWN: 
+@STATE_IS_INSECURE: 
+@STATE_IS_BROKEN: 
+@STATE_IS_SECURE_MED: 
+@STATE_IS_SECURE_LOW: 
+@STATE_IS_SECURE_HIGH: 
+
+<!-- ##### ENUM EmbedState ##### -->
+<para>
+Represents the state of an #EphyEmbed with regards to networking negotiations.
+</para>
+
+@EMBED_STATE_UNKNOWN: 
+@EMBED_STATE_START: 
+@EMBED_STATE_REDIRECTING: 
+@EMBED_STATE_TRANSFERRING: 
+@EMBED_STATE_NEGOTIATING: 
+@EMBED_STATE_STOP: 
+@EMBED_STATE_IS_REQUEST: 
+@EMBED_STATE_IS_DOCUMENT: 
+@EMBED_STATE_IS_NETWORK: 
+@EMBED_STATE_IS_WINDOW: 
 
 <!-- ##### SIGNAL EphyEmbedPersist::cancelled ##### -->
 <para>
@@ -299,6 +362,13 @@ A string identifier unique to this #EphyNodeDb
 
 @tab: 
 @Returns: 
+
+<!-- ##### FUNCTION ephy_window_print ##### -->
+<para>
+
+</para>
+
+@window: 
 
 <!-- ##### FUNCTION mozilla_embed_event_new ##### -->
 <para>

@@ -49,7 +49,6 @@
 #include "ephy-download.h"
 #include "ephy-embed-shell.h"
 
-#include <nsIDownload.h>
 #include <nsIWebProgressListener.h>
 #include <nsIDOMDocument.h>
 #include <nsIURI.h>
@@ -58,6 +57,12 @@
 #include <nsIObserver.h>
 #include <nsIRequest.h>
 #include <nsIMIMEInfo.h>
+
+#ifdef HAVE_NSITRANSFER_H
+#include <nsITransfer.h>
+#else
+#include <nsIDownload.h>
+#endif
 
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
@@ -89,17 +94,31 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceUri
 				  PRInt32 aMaxSize);
 nsresult BuildDownloadPath (const char *defaultFileName, nsILocalFile **_retval);
 
-class MozDownload : public nsIDownload,
+class MozDownload :
+#ifdef HAVE_NSITRANSFER_H
+		    public nsITransfer
+#else
+		    public nsIDownload,
                     public nsIWebProgressListener
+#endif
 {
 public:
         MozDownload();
 	virtual ~MozDownload();
     
 	NS_DECL_ISUPPORTS
-	NS_DECL_NSITRANSFER
-	NS_DECL_NSIDOWNLOAD
 	NS_DECL_NSIWEBPROGRESSLISTENER
+	NS_DECL_NSITRANSFER
+#ifndef HAVE_NSITRANSFER_H
+	NS_DECL_NSIDOWNLOAD
+#endif
+
+#ifdef HAVE_NSITRANSFER_H
+	nsresult GetMIMEInfo (nsIMIMEInfo **aMIMEInfo);
+	nsresult GetTargetFile (nsILocalFile **aFile);
+	nsresult GetSource(nsIURI * *aSource);
+	nsresult GetPercentComplete(PRInt32 *aPercentComplete);
+#endif
 
 	virtual void Cancel();
 	virtual void Pause();

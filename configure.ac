@@ -15,7 +15,7 @@ dnl You should have received a copy of the GNU General Public License along
 dnl with this program; if not, write to the Free Software Foundation, Inc.,
 dnl 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 
-AC_INIT([GNOME Web Browser],[1.5.3.90],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+AC_INIT([GNOME Web Browser],[1.5.4],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
 
@@ -382,6 +382,7 @@ AC_MSG_RESULT([$result])
 
 dnl Added in 1.8a6 on trunk
 dnl https://bugzilla.mozilla.org/show_bug.cgi?id=223310
+
 AC_MSG_CHECKING([whether nsIKeygenThread::StartKeyGeneration takes an nsIObserver])
 
 AC_COMPILE_IFELSE(
@@ -412,6 +413,13 @@ AC_COMPILE_IFELSE(
 	[result=no])
 
 AC_MSG_RESULT([$result])
+
+dnl exists since 1.8a6
+
+AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsITransfer.h],
+	[AC_DEFINE([HAVE_NSITRANSFER_H],[1],[Define if nsITransfer.h exists])],
+	[AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/uriloader/nsITransfer.h],
+		[AC_DEFINE([HAVE_NSITRANSFER_H],[1],[Define if nsITransfer.h exists])])])
 
 dnl check for broken reload in GtkMozEmbed
 dnl This is fixed since 1.7.4 on 1.7 branch, and since 1.8a3 on trunk

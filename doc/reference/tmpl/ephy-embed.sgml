@@ -195,6 +195,8 @@ be done by casting).
 @: 
 @:
 @: 
+@:
+@: 
 @: 
 
 <!-- ##### SIGNAL EphyEmbed::ge-security-change ##### -->
@@ -267,22 +269,6 @@ be done by casting).
 @activate: 
 @has_modified_forms: 
 
-<!-- ##### ENUM EmbedState ##### -->
-<para>
-Represents the state of an #EphyEmbed with regards to networking negotiations.
-</para>
-
-@EMBED_STATE_UNKNOWN: 
-@EMBED_STATE_START: 
-@EMBED_STATE_REDIRECTING: 
-@EMBED_STATE_TRANSFERRING: 
-@EMBED_STATE_NEGOTIATING: 
-@EMBED_STATE_STOP: 
-@EMBED_STATE_IS_REQUEST: 
-@EMBED_STATE_IS_DOCUMENT: 
-@EMBED_STATE_IS_NETWORK: 
-@EMBED_STATE_IS_WINDOW: 
-
 <!-- ##### ENUM EphyEmbedChrome ##### -->
 <para>
 Determines which aspects of the user interface should be displayed. Most of the
@@ -297,30 +283,6 @@ windows opened with JavaScript often use a nonstandard chrome.
 @EPHY_EMBED_CHROME_STATUSBAR: %TRUE for the #EphyEmbed's containing #EphyWindow
 			      to display its statusbar.
 @EPHY_EMBED_CHROME_BOOKMARKSBAR: 
-
-<!-- ##### ENUM EmbedPrintPreviewNavType ##### -->
-<para>
-Specifies the action to perform in ephy_embed_print_preview_navigate().
-</para>
-
-@PRINTPREVIEW_GOTO_PAGENUM: 
-@PRINTPREVIEW_PREV_PAGE: 
-@PRINTPREVIEW_NEXT_PAGE: 
-@PRINTPREVIEW_HOME: 
-@PRINTPREVIEW_END: 
-
-<!-- ##### ENUM EmbedSecurityLevel ##### -->
-<para>
-Represents the security status of an #EphyEmbed. For example, a page with an
-invalid SSL certificate will have an #EmbedSecurityLevel of %STATE_IS_BROKEN.
-</para>
-
-@STATE_IS_UNKNOWN: 
-@STATE_IS_INSECURE: 
-@STATE_IS_BROKEN: 
-@STATE_IS_SECURE_MED: 
-@STATE_IS_SECURE_LOW: 
-@STATE_IS_SECURE_HIGH: 
 
 <!-- ##### FUNCTION ephy_embed_load_url ##### -->
 <para>
