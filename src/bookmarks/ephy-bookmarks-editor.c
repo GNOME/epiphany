@@ -632,7 +632,9 @@ import_bookmarks (EphyBookmarksEditor *editor,
 		gtk_window_set_title (GTK_WINDOW (dialog), _("Import Failed"));
 		gtk_message_dialog_format_secondary_text
 			(GTK_MESSAGE_DIALOG (dialog),
-			 _("The bookmarks from \"%s\" were not imported."),
+			 _("The bookmarks from \"%s\" could not be imported "
+			   "because the file is corrupted or of an "
+			   "unsupported type."),
 			 basename);
 
 		gtk_window_group_add_window (GTK_WINDOW (editor)->group,
