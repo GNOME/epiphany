@@ -198,7 +198,7 @@ static GtkActionEntry ephy_history_ui_entries [] = {
 	{ "SelectAll", NULL, N_("Select _All"), "<control>A",
 	  N_("Select all history links or text"),
 	  G_CALLBACK (cmd_select_all) },
-	{ "Clear", GTK_STOCK_CLEAR, N_("Cl_ear History"), NULL,
+	{ "Clear", GTK_STOCK_CLEAR, N_("Clear _History"), NULL,
 	  N_("Clear your browsing history"),
 	  G_CALLBACK (cmd_clear) },
 
