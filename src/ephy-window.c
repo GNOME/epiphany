@@ -1304,7 +1304,6 @@ tab_added_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
 	sync_tab_load_status (tab, NULL, window);
 	g_signal_connect_object (G_OBJECT (tab), "notify::load-status",
 				 G_CALLBACK (sync_tab_load_status), window, 0);
-	sync_tab_visibility (tab, NULL, window);
 	g_signal_connect_object (G_OBJECT (tab), "notify::visible",
 				 G_CALLBACK (sync_tab_visibility), window, 0);
 }

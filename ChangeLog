@@ -1,3 +1,10 @@
+2003-06-26  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* src/ephy-window.c: (tab_added_cb):
+
+	Do not sync tab visibility on tab creation, it's state
+	is undefined at that point
+
 2003-06-25  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/egg/egg-editable-toolbar.c: (set_item_drag_source),
