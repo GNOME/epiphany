@@ -1,6 +1,3 @@
-#MOZILLA_ACDEFINES = -include $(MOZILLA_INCLUDE_ROOT)/mozilla-config.h
-MOZILLA_ACDEFINES=-DNEW_H=\<new\>
-
 INCLUDES = \
 	-I$(top_srcdir)/lib	    \
 	-I$(top_srcdir)/embed	    \
@@ -49,7 +46,7 @@ INCLUDES = \
         -DGDK_PIXBUF_DISABLE_DEPRECATED \
         -DGNOME_DISABLE_DEPRECATED	\
 	-DSHARE_DIR=\"$(pkgdatadir)\"   \
-	$(MOZILLA_ACDEFINES)
+	-include $(MOZILLA_INCLUDE_ROOT)/mozilla-config.h
 
 noinst_LTLIBRARIES = libephymozillaembed.la
 

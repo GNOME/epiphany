@@ -142,6 +142,33 @@ fi
 
 AM_GCONF_SOURCE_2
 
+dnl This is from Mozilla's configure.in. They set almost all the config stuff
+dnl they need in mozilla-config.h Except for this compiler flag, which can't
+dnl go in mozilla-config.h So we check the flag too and now we can include
+dnl mozilla-config.h without breaking galeon.
+dnl This is really gcc-only
+dnl Do this test using CXX only since some versions of gcc
+dnl 2.95-2.97 have a signed wchar_t in c++ only and some versions
+dnl only have short-wchar support for c++.
+AC_LANG_PUSH(C++)
+_SAVE_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS -fshort-wchar"
+
+AC_CACHE_CHECK(for compiler -fshort-wchar option,
+    ac_cv_have_usable_wchar_option,
+    [AC_TRY_RUN([#include <stddef.h>
+                 int main () {
+                   return (sizeof(wchar_t) != 2) ||
+                          (wchar_t)-1 < (wchar_t) 0 ; } ],
+                ac_cv_have_usable_wchar_option="yes",
+                ac_cv_have_usable_wchar_option="no",
+                ac_cv_have_usable_wchar_option="maybe")])
+
+if test "$ac_cv_have_usable_wchar_option" != "yes"; then
+    CXXFLAGS=$_SAVE_CXXFLAGS
+fi
+AC_LANG_POP(C++)
+
 dnl *******************************
 dnl Internationalization
 dnl ******************************* 
