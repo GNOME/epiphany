@@ -52,9 +52,9 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_topics_selector_get_type (void)
 {
-	static GType ephy_topics_selector_type = 0;
+	static GType type = 0;
 
-	if (ephy_topics_selector_type == 0)
+	if (type == 0)
 	{
 		static const GTypeInfo our_info =
 		{
@@ -69,12 +69,12 @@ ephy_topics_selector_get_type (void)
 			(GInstanceInitFunc) ephy_topics_selector_init
 		};
 
-		ephy_topics_selector_type = g_type_register_static (EPHY_TYPE_NODE_VIEW,
-							            "EphyTopicsSelector",
-							            &our_info, 0);
+		type = g_type_register_static (EPHY_TYPE_NODE_VIEW,
+					       "EphyTopicsSelector",
+					       &our_info, 0);
 	}
 
-	return ephy_topics_selector_type;
+	return type;
 }
 
 static void
@@ -139,7 +139,8 @@ ephy_topics_selector_get_property (GObject *object,
 }
 
 void
-ephy_topics_selector_apply (EphyTopicsSelector *selector, EphyNode *bookmark)
+ephy_topics_selector_apply (EphyTopicsSelector *selector,
+			    EphyNode *bookmark)
 {
 	GList *l;
 
@@ -153,7 +154,9 @@ ephy_topics_selector_apply (EphyTopicsSelector *selector, EphyNode *bookmark)
 }
 
 static void
-provide_toggle (EphyNode *node, GValue *value, gpointer data)
+provide_toggle (EphyNode *node,
+		GValue *value,
+		gpointer data)
 {
 	EphyTopicsSelector *selector = EPHY_TOPICS_SELECTOR (data);
 	gboolean result = FALSE;
@@ -173,7 +176,8 @@ provide_toggle (EphyNode *node, GValue *value, gpointer data)
 }
 
 static GObject *
-ephy_topics_selector_constructor (GType type, guint n_construct_properties,
+ephy_topics_selector_constructor (GType type,
+				  guint n_construct_properties,
                                   GObjectConstructParam *construct_params)
 
 {
@@ -190,7 +194,7 @@ ephy_topics_selector_constructor (GType type, guint n_construct_properties,
 
 	ephy_node_view_add_toggle (EPHY_NODE_VIEW (selector),
 				   provide_toggle, selector);
-	ephy_node_view_add_column (EPHY_NODE_VIEW (selector), "Topics",
+	ephy_node_view_add_column (EPHY_NODE_VIEW (selector), _("Topics"),
 				   G_TYPE_STRING,
 				   EPHY_NODE_KEYWORD_PROP_NAME,
 				   EPHY_NODE_VIEW_SHOW_PRIORITY |
@@ -203,7 +207,8 @@ ephy_topics_selector_constructor (GType type, guint n_construct_properties,
 }
 
 static void
-topic_destroy_cb (EphyNode *node, EphyTopicsSelector *selector)
+topic_destroy_cb (EphyNode *node,
+		  EphyTopicsSelector *selector)
 {
 	selector->priv->topics = g_list_remove
 				(selector->priv->topics, node);
@@ -232,7 +237,7 @@ node_toggled_cb (EphyTopicsSelector *selector, EphyNode *node,
 	{
 		if (checked)
 		{
-			selector->priv->topics = g_list_append
+			selector->priv->topics = g_list_prepend
 					(selector->priv->topics, node);
 			ephy_node_signal_connect_object (node, EPHY_NODE_DESTROY,
 				 			 (EphyNodeCallback) topic_destroy_cb,
@@ -263,6 +268,18 @@ ephy_topics_selector_init (EphyTopicsSelector *selector)
 
 	g_signal_connect (selector, "node_toggled",
 			  G_CALLBACK (node_toggled_cb), NULL);
+}
+
+static void
+ephy_topics_selector_finalize (GObject *object)
+{
+	EphyTopicsSelector *selector = EPHY_TOPICS_SELECTOR (object);
+
+	g_list_free (selector->priv->topics);
+
+	g_object_unref (selector->priv->filter);
+
+	parent_class->finalize (object);
 }
 
 GtkWidget *
@@ -306,6 +323,7 @@ ephy_topics_selector_class_init (EphyTopicsSelectorClass *klass)
 	object_class->set_property = ephy_topics_selector_set_property;
 	object_class->get_property = ephy_topics_selector_get_property;
 	object_class->constructor = ephy_topics_selector_constructor;
+	object_class->finalize = ephy_topics_selector_finalize;
 
 	g_object_class_install_property (object_class,
 					 PROP_BOOKMARKS,
