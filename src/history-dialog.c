@@ -542,13 +542,18 @@ history_ok_button_clicked_cb (GtkWidget *button,
 	g_object_unref (G_OBJECT(dialog));
 }
 
-void
-history_clear_button_clicked_cb (GtkWidget *button,
-			         HistoryDialog *dialog)
+static void
+clear_history_dialog_response_cb (GtkDialog *dialog, gint response,
+			          HistoryDialog *history_dialog)
 {
 	const GList *windows;
 	Session *session;
 
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+	
+	if (response != GTK_RESPONSE_OK)
+		return;
+	
 	session = ephy_shell_get_session (ephy_shell);
 	windows = session_get_windows (session);
 
@@ -560,5 +565,64 @@ history_clear_button_clicked_cb (GtkWidget *button,
 		toolbar_clear_location_history (t);
 	}
 
-	ephy_history_clear (dialog->priv->gh);
+	ephy_history_clear (history_dialog->priv->gh);
+}
+
+void
+history_clear_button_clicked_cb (GtkWidget *button,
+			         HistoryDialog *dialog)
+{
+	GtkWidget *clear;
+	GtkWidget *label;
+	GtkWidget *vbox;
+	GtkWidget *hbox;
+	GtkWidget *image;
+	char *str;
+
+	clear = gtk_dialog_new_with_buttons (_("Clear history"), 
+					     GTK_WINDOW (dialog->priv->window),
+					     GTK_DIALOG_DESTROY_WITH_PARENT |
+					     GTK_DIALOG_NO_SEPARATOR,
+					     GTK_STOCK_CANCEL,
+					     GTK_RESPONSE_CANCEL,
+					     GTK_STOCK_CLEAR,
+					     GTK_RESPONSE_OK, 
+					     NULL);
+	gtk_dialog_set_default_response (GTK_DIALOG (clear), GTK_RESPONSE_OK);
+	gtk_container_set_border_width (GTK_CONTAINER (clear), 6);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (clear)->vbox), 12);
+
+	hbox = gtk_hbox_new (FALSE, 6);
+	gtk_widget_show (hbox);
+	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (clear)->vbox), hbox,
+			    TRUE, TRUE, 0);
+	
+	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
+					  GTK_ICON_SIZE_DIALOG);
+	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0);
+	gtk_widget_show (image);
+	gtk_box_pack_start (GTK_BOX (hbox), image, TRUE, TRUE, 0);
+
+	vbox = gtk_vbox_new (FALSE, 6);
+	gtk_widget_show (vbox);
+	gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
+
+	label = gtk_label_new (NULL);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	str = g_strconcat ("<b>","<big>", _("Clear browsing history?"),"</big>", "</b>", NULL);
+	gtk_label_set_markup (GTK_LABEL (label), str);
+	g_free (str);
+	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+	gtk_widget_show (label);
+
+	label = gtk_label_new (_("Clearing the browsing history will cause all history items to be permanently deleted."));
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+	gtk_widget_show (label);
+
+	g_signal_connect (clear, "response", 
+			  G_CALLBACK (clear_history_dialog_response_cb), dialog);
+        gtk_widget_show (clear);	
 }
