@@ -62,6 +62,8 @@ struct DownloaderViewPrivate
 	GtkWidget *abort_button;
 
 	EggStatusIcon *status_icon;
+
+	long remaining_secs;
 };
 
 typedef struct
@@ -153,7 +155,7 @@ downloader_view_class_init (DownloaderViewClass *klass)
 static void
 status_icon_activated (EggStatusIcon *icon, DownloaderView *dv)
 {
-	gtk_widget_show (dv->priv->window);
+	gtk_window_present (GTK_WINDOW (dv->priv->window));
 }
 
 static void
@@ -313,9 +315,45 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 }
 
 static void
+seconds_remaining_total (EphyDownload *download, gpointer data, DownloaderView *dv)
+{
+	long secs;
+
+	secs = ephy_download_get_remaining_time (download);
+	if (secs > 0)
+	{
+		dv->priv->remaining_secs += secs;
+	}
+}
+
+static void
+update_status_icon (DownloaderView *dv)
+{
+	char *tooltip, *remaining;
+	int downloads;
+
+	dv->priv->remaining_secs = 0;
+	g_hash_table_foreach (dv->priv->downloads_hash,
+			      (GHFunc) seconds_remaining_total, dv);
+	
+	remaining = format_interval (dv->priv->remaining_secs);
+	downloads = g_hash_table_size (dv->priv->downloads_hash);
+	tooltip = g_strdup_printf ("%d downloads, with a total of "
+				   "%s minutes remaining",
+				   downloads, remaining);
+
+	egg_status_icon_set_tooltip (dv->priv->status_icon,
+				     tooltip, NULL);
+
+	g_free (tooltip);
+	g_free (remaining);
+}
+
+static void
 download_changed_cb (EphyDownload *download, DownloaderView *dv)
 {
 	update_download_row (dv, download);
+	update_status_icon (dv);
 }
 
 void
@@ -341,6 +379,7 @@ downloader_view_add_download (DownloaderView *dv,
 			     row_ref);
 
 	update_download_row (dv, download);
+	update_status_icon (dv);
 
 	selection = gtk_tree_view_get_selection
 		(GTK_TREE_VIEW(dv->priv->treeview));
