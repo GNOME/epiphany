@@ -85,6 +85,7 @@ enum
 	PROP_NAVIGATION,
 	PROP_SECURITY,
 	PROP_TITLE,
+	PROP_VISIBLE,
 	PROP_WINDOW,
 	PROP_ZOOM
 };
@@ -164,6 +165,7 @@ ephy_tab_set_property (GObject *object,
 		case PROP_NAVIGATION:
 		case PROP_SECURITY:
 		case PROP_TITLE:
+		case PROP_VISIBLE:
 		case PROP_ZOOM:
 			/* read only */
 			break;
@@ -203,6 +205,9 @@ ephy_tab_get_property (GObject *object,
 			break;
 		case PROP_TITLE:
 			g_value_set_string (value, tab->priv->title);
+			break;
+		case PROP_VISIBLE:
+			g_value_set_boolean (value, tab->priv->visibility);
 			break;
 		case PROP_WINDOW:
 			g_value_set_object (value, tab->priv->window);
@@ -303,6 +308,14 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "The tab's title",
 							      _("Blank page"),
 							      G_PARAM_READABLE));
+
+	g_object_class_install_property (object_class,
+					 PROP_LOAD_STATUS,
+					 g_param_spec_boolean ("visible",
+							       "Visibility",
+							       "The tab's visibility",
+							       TRUE,
+							       G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
 					 PROP_WINDOW,
@@ -486,9 +499,10 @@ ephy_tab_set_visibility (EphyTab *tab,
                          gboolean visible)
 {
 	g_return_if_fail (IS_EPHY_TAB (tab));
-	g_return_if_fail (tab->priv->window != NULL);
 
 	tab->priv->visibility = visible;
+
+	g_object_notify (G_OBJECT (tab), "visible");
 }
 
 static void
@@ -796,10 +810,6 @@ ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
 	}
 
 	ephy_tab_set_visibility (tab, visibility);
-
-	g_return_if_fail (tab->priv->window != NULL);
-
-	ephy_window_update_control (tab->priv->window, WindowVisibilityControl);
 }
 
 static void

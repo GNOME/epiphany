@@ -749,6 +749,40 @@ sync_tab_title (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 }
 
 static void
+sync_tab_visibility (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+{
+	GList *l, *tabs;
+	gboolean visible = FALSE;
+
+	if (window->priv->closing) return;
+
+	LOG ("sync tab visibility window %p tab %p", window, tab)
+
+	tabs = ephy_window_get_tabs (window);
+	for (l = tabs; l != NULL; l = l->next)
+	{
+		EphyTab *tab = EPHY_TAB(l->data);
+		g_return_if_fail (IS_EPHY_TAB(tab));
+
+		if (ephy_tab_get_visibility (tab))
+		{
+			visible = TRUE;
+			break;
+		}
+	}
+	g_list_free (tabs);
+
+	if (visible)
+	{
+		gtk_widget_show (GTK_WIDGET(window));
+	}
+	else
+	{
+		gtk_widget_hide (GTK_WIDGET (window));
+	}
+}
+
+static void
 sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	EggActionGroup *action_group;
@@ -933,6 +967,9 @@ tab_added_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
 	sync_tab_load_status (tab, NULL, window);
 	g_signal_connect_object (G_OBJECT (tab), "notify::load-status",
 				 G_CALLBACK (sync_tab_load_status), window, 0);
+	sync_tab_visibility (tab, NULL, window);
+	g_signal_connect_object (G_OBJECT (tab), "notify::visible",
+				 G_CALLBACK (sync_tab_visibility), window, 0);
 }
 
 static void
@@ -945,6 +982,9 @@ tab_removed_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
 
 	g_signal_handlers_disconnect_by_func (G_OBJECT (tab),
 					      G_CALLBACK (sync_tab_load_status),
+					      window);	
+	g_signal_handlers_disconnect_by_func (G_OBJECT (tab),
+					      G_CALLBACK (sync_tab_visibility),
 					      window);	
 
 	window->priv->num_tabs--;
@@ -1519,36 +1559,6 @@ update_find_control (EphyWindow *window)
 	}
 }
 
-static void
-update_window_visibility (EphyWindow *window)
-{
-	GList *l, *tabs;
-	gboolean visible = FALSE;
-
-	tabs = ephy_window_get_tabs (window);
-	for (l = tabs; l != NULL; l = l->next)
-	{
-		EphyTab *tab = EPHY_TAB(l->data);
-		g_return_if_fail (IS_EPHY_TAB(tab));
-
-		if (ephy_tab_get_visibility (tab))
-		{
-			visible = TRUE;
-			break;
-		}
-	}
-	g_list_free (tabs);
-
-	if (visible)
-	{
-		gtk_widget_show (GTK_WIDGET(window));
-	}
-	else
-	{
-		gtk_widget_hide (GTK_WIDGET (window));
-	}
-}
-
 void
 ephy_window_update_control (EphyWindow *window,
 			      ControlID control)
@@ -1559,9 +1569,6 @@ ephy_window_update_control (EphyWindow *window,
 	{
 	case FindControl:
 		update_find_control (window);
-		break;
-	case WindowVisibilityControl:
-		update_window_visibility (window);
 		break;
 	case FavoritesControl:
 		update_favorites_control (window);

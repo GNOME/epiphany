@@ -63,7 +63,6 @@ typedef enum
 typedef enum
 {
 	FindControl,
-	WindowVisibilityControl,
 	FavoritesControl
 } ControlID;
 
