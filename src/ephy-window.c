@@ -1181,6 +1181,11 @@ ephy_window_get_chrome (EphyWindow *window)
 static void
 translate_default_chrome (EmbedChromeMask *chrome_mask)
 {
+	gboolean bbar;
+
+	bbar = (*chrome_mask & EMBED_CHROME_BOOKMARKSBAR_DEFAULT) ||
+	       (*chrome_mask & EMBED_CHROME_DEFAULT);
+
 	/* keep only not layout flags */
 	*chrome_mask &= (EMBED_CHROME_WINDOWRAISED |
 			 EMBED_CHROME_WINDOWLOWERED |
@@ -1200,7 +1205,7 @@ translate_default_chrome (EmbedChromeMask *chrome_mask)
 	{
 		*chrome_mask |= EMBED_CHROME_TOOLBARON;
 	}
-	if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR))
+	if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR) && bbar)
 	{
 		*chrome_mask |= EMBED_CHROME_BOOKMARKSBARON;
 	}
@@ -1338,7 +1343,8 @@ void
 ephy_window_set_chrome (EphyWindow *window,
 			EmbedChromeMask flags)
 {
-	if (flags & EMBED_CHROME_DEFAULT)
+	if ((flags & EMBED_CHROME_DEFAULT) ||
+	    (flags & EMBED_CHROME_BOOKMARKSBAR_DEFAULT))
 	{
 		translate_default_chrome (&flags);
 	}
