@@ -41,14 +41,11 @@ NS_IMPL_ISUPPORTS1 (GBaseProtocolHandler, nsIProtocolHandler)
 
 GBaseProtocolHandler::GBaseProtocolHandler(const char *aScheme)
 {
-	NS_INIT_ISUPPORTS();
-	/* member initializers and constructor code */
 	mScheme.Assign(aScheme);
 }
 
 GBaseProtocolHandler::~GBaseProtocolHandler()
 {
-	/* destructor code */
 }
 
 /* readonly attribute string scheme; */
@@ -121,14 +118,11 @@ NS_IMPL_ISUPPORTS2 (GBaseProtocolContentHandler, nsIProtocolHandler, nsIContentH
 GBaseProtocolContentHandler::GBaseProtocolContentHandler(const char *aScheme) :
 		      GBaseProtocolHandler(aScheme)
 {
-	NS_INIT_ISUPPORTS();
-	/* member initializers and constructor code */
 	mMimeType = NS_LITERAL_CSTRING("application-x-gnome-") + mScheme;
 }
 
 GBaseProtocolContentHandler::~GBaseProtocolContentHandler()
 {
-	/* destructor code */
 }
 
 /* nsIChannel newChannel (in nsIURI aURI); */

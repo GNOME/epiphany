@@ -48,13 +48,10 @@ NS_IMPL_ISUPPORTS1(GContentHandler, nsIHelperAppLauncherDialog)
 GContentHandler::GContentHandler() : mUri(nsnull),
 				     mMimeType(nsnull)
 {
-	NS_INIT_ISUPPORTS();
-	/* member initializers and constructor code */
 }
 
 GContentHandler::~GContentHandler()
 {
-	/* destructor code */
 	g_free (mUri);
 	g_free (mMimeType);
 }

@@ -45,13 +45,10 @@ NS_IMPL_ISUPPORTS1(GExternalProtocolService, nsIExternalProtocolService)
 
 GExternalProtocolService::GExternalProtocolService()
 {
-  NS_INIT_ISUPPORTS();
-  /* member initializers and constructor code */
 }
 
 GExternalProtocolService::~GExternalProtocolService()
 {
-  /* destructor code */
 }
 
 /* boolean externalProtocolHandlerExists (in string aProtocolScheme); */

@@ -39,13 +39,10 @@ NS_IMPL_ISUPPORTS1(GPrintingPromptService, nsIPrintingPromptService)
 
 GPrintingPromptService::GPrintingPromptService()
 {
-  NS_INIT_ISUPPORTS();
-  /* member initializers and constructor code */
 }
 
 GPrintingPromptService::~GPrintingPromptService()
 {
-  /* destructor code */
 }
 
 /* void showPrintDialog (in nsIDOMWindow parent, in nsIWebBrowserPrint webBrowserPrint, in nsIPrintSettings printSettings); */

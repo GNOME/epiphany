@@ -63,8 +63,6 @@ NS_IMPL_ISUPPORTS1(GFilePicker, nsIFilePicker)
 
 GFilePicker::GFilePicker()
 {
-	NS_INIT_ISUPPORTS();
-
 	LOG ("GFilePicker constructor")
 
 	mDialog = EPHY_FILE_CHOOSER (g_object_new (EPHY_TYPE_FILE_CHOOSER, NULL));

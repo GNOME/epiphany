@@ -44,7 +44,6 @@ class GBaseProtocolHandler : public nsIProtocolHandler
 
 	GBaseProtocolHandler (const char *aScheme);
 	virtual ~GBaseProtocolHandler();
-	/* additional members */
   protected:
 	nsCString mScheme;
 };
@@ -60,7 +59,6 @@ class GBaseProtocolContentHandler : public GBaseProtocolHandler,
 
 	GBaseProtocolContentHandler (const char *aScheme);
 	virtual ~GBaseProtocolContentHandler();
-	/* additional members */
   protected:
 	nsCString mMimeType;
 };
@@ -82,8 +80,8 @@ class GIRCProtocolHandler : public GBaseProtocolContentHandler
 {
   public:
 	NS_DECL_ISUPPORTS
-	GIRCProtocolHandler() : GBaseProtocolContentHandler("irc")
-				   {NS_INIT_ISUPPORTS();};
+
+	GIRCProtocolHandler() : GBaseProtocolContentHandler("irc") {};
 	virtual ~GIRCProtocolHandler() {};
 };
 
@@ -104,10 +102,8 @@ class GFtpProtocolHandler : public GBaseProtocolContentHandler
 {
   public:
 	NS_DECL_ISUPPORTS
-	GFtpProtocolHandler() : GBaseProtocolContentHandler("ftp")
-				{NS_INIT_ISUPPORTS();};
+	GFtpProtocolHandler() : GBaseProtocolContentHandler("ftp") {};
 	virtual ~GFtpProtocolHandler() {};
-	/* additional members */
 };
 
 #define G_MAILTO_PROTOCOL_CID                        \
@@ -127,8 +123,7 @@ class GMailtoProtocolHandler : public GBaseProtocolContentHandler
 {
   public:
 	NS_DECL_ISUPPORTS
-	GMailtoProtocolHandler() : GBaseProtocolContentHandler("mailto")
-				   {NS_INIT_ISUPPORTS();};
+	GMailtoProtocolHandler() : GBaseProtocolContentHandler("mailto") {};
 	virtual ~GMailtoProtocolHandler() {};
   private:
 };
@@ -150,8 +145,8 @@ class GNewsProtocolHandler : public GBaseProtocolContentHandler
 {
   public:
 	NS_DECL_ISUPPORTS
-	GNewsProtocolHandler() : GBaseProtocolContentHandler("news")
-				   {NS_INIT_ISUPPORTS();};
+
+	GNewsProtocolHandler() : GBaseProtocolContentHandler("news") {};
 	virtual ~GNewsProtocolHandler() {};
   private:
 };

@@ -1,3 +1,18 @@
+2003-11-24  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/EphyEventListener.cpp:
+	* embed/mozilla/ExternalProtocolHandlers.cpp:
+	* embed/mozilla/ExternalProtocolHandlers.h:
+	* embed/mozilla/ExternalProtocolService.cpp:
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/GlobalHistory.cpp:
+	* embed/mozilla/PrintingPromptService.cpp:
+	* embed/mozilla/mozilla-notifiers.cpp:
+
+	Get rid of NS_INIT_ISUPPORTS() macros in constructors;
+	it's not been needed since mozilla 1.3.
+
 2003-11-24  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* embed/mozilla/MozRegisterComponents.cpp:
