@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"POT-Creation-Date: 2003-03-27 02:36+0100\n"
-"PO-Revision-Date: 2003-03-27 02:37+0100\n"
+"POT-Creation-Date: 2003-03-29 14:31+0100\n"
+"PO-Revision-Date: 2003-03-29 14:33+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1056,7 +1056,7 @@ msgstr "_Datum"
 # Arkiv Arkiv Arkiv Arkiv Arkiv Arkiv Arkiv och inget annat än Arkiv!
 #. Toplevel
 #: data/glade/print.glade.h:31 data/ui/nautilus-epiphany-view.xml.in.h:35
-#: src/bookmarks/ephy-bookmarks-editor.c:111 src/ephy-window.c:58
+#: src/bookmarks/ephy-bookmarks-editor.c:112 src/ephy-window.c:58
 msgid "_File"
 msgstr "_Arkiv"
 
@@ -1288,7 +1288,7 @@ msgid "Use Image As Background"
 msgstr "Använd bild som bakgrund"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:34
-#: src/bookmarks/ephy-bookmarks-editor.c:112 src/ephy-window.c:59
+#: src/bookmarks/ephy-bookmarks-editor.c:113 src/ephy-window.c:59
 msgid "_Edit"
 msgstr "_Redigera"
 
@@ -1846,58 +1846,70 @@ msgstr "Lägg till verktygsrad"
 msgid "Untitled"
 msgstr "Namnlös"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:115
+#: src/bookmarks/ephy-bookmarks-editor.c:116
 msgid "_New Topic"
 msgstr "_Nytt ämne"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:118
+#: src/bookmarks/ephy-bookmarks-editor.c:119
 msgid "_Open In New Window"
 msgstr "_Öppna i nytt fönster"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:121
+#: src/bookmarks/ephy-bookmarks-editor.c:122
 msgid "Open In New _Tab"
 msgstr "Öppna i ny _flik"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:124
-msgid "_Rename Bookmark"
-msgstr "_Byt namn på bokmärke"
+#. Edit menu
+#: src/bookmarks/ephy-bookmarks-editor.c:125 src/ephy-window.c:92
+msgid "Cu_t"
+msgstr "Klipp _ut"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:127
-msgid "R_ename Topic"
-msgstr "B_yt namn på ämne"
+#: src/bookmarks/ephy-bookmarks-editor.c:128 src/ephy-window.c:95
+msgid "_Copy"
+msgstr "_Kopiera"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:130
-msgid "_Delete Bookmark"
-msgstr "_Ta bort bokmärke"
+#: src/bookmarks/ephy-bookmarks-editor.c:131 src/ephy-window.c:98
+msgid "_Paste"
+msgstr "Klistra _in"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:133
-msgid "D_elete Topic"
-msgstr "T_a bort ämne"
+#: src/bookmarks/ephy-bookmarks-editor.c:134 src/ephy-window.c:101
+msgid "Select _All"
+msgstr "Markera _allt"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:136
+#: src/bookmarks/ephy-bookmarks-editor.c:137
+msgid "_Rename"
+msgstr "_Byt namn"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:140
+msgid "_Delete"
+msgstr "_Ta bort"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:143
 msgid "_Properties"
 msgstr "_Egenskaper"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:139 src/ephy-window.c:87
+#: src/bookmarks/ephy-bookmarks-editor.c:146 src/ephy-window.c:87
 msgid "_Close"
 msgstr "S_täng"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:151
+#: src/bookmarks/ephy-bookmarks-editor.c:158
 msgid "Type a topic"
 msgstr "Ange ett ämne"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:532
+#: src/bookmarks/ephy-bookmarks-editor.c:607
 msgid "Search:"
 msgstr "Sök:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:584
-#: src/bookmarks/ephy-bookmarks-editor.c:660
+#: src/bookmarks/ephy-bookmarks-editor.c:659
 msgid "Bookmarks"
 msgstr "Bokmärken"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:632
+#: src/bookmarks/ephy-bookmarks-editor.c:707
 msgid "Topics"
 msgstr "Ämnen"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:743 src/history-dialog.c:295
+msgid "Title"
+msgstr "Titel"
 
 #: src/bookmarks/ephy-bookmarks.c:395
 msgid "All"
@@ -2140,34 +2152,17 @@ msgstr "Lägg till bokmärke för den aktuella sidan"
 msgid "Close this window"
 msgstr "Stäng detta fönster"
 
-#. Edit menu
-#: src/ephy-window.c:92
-msgid "Cu_t"
-msgstr "Klipp _ut"
-
 #: src/ephy-window.c:93
 msgid "Cut the selection"
 msgstr "Klipp ut markeringen"
-
-#: src/ephy-window.c:95
-msgid "_Copy"
-msgstr "_Kopiera"
 
 #: src/ephy-window.c:96
 msgid "Copy the selection"
 msgstr "Kopiera markeringen"
 
-#: src/ephy-window.c:98
-msgid "_Paste"
-msgstr "Klistra _in"
-
 #: src/ephy-window.c:99
 msgid "Paste clipboard"
 msgstr "Klistra in urklipp"
-
-#: src/ephy-window.c:101
-msgid "Select _All"
-msgstr "Markera _allt"
 
 #: src/ephy-window.c:102
 msgid "Select the entire page"
@@ -2699,10 +2694,6 @@ msgstr "Vietnamesiska"
 msgid "Walloon"
 msgstr "Vallonska"
 
-#: src/history-dialog.c:295
-msgid "Title"
-msgstr "Titel"
-
 #: src/history-dialog.c:296
 msgid "Location"
 msgstr "Adress"
@@ -2841,6 +2832,21 @@ msgstr ""
 #: src/window-commands.c:727
 msgid "A GNOME browser based on Mozilla"
 msgstr "En GNOME-webbläsare, baserad på Mozilla"
+
+#~ msgid "Rename"
+#~ msgstr "Byt namn"
+
+#~ msgid "_Rename Bookmark"
+#~ msgstr "_Byt namn på bokmärke"
+
+#~ msgid "R_ename Topic"
+#~ msgstr "B_yt namn på ämne"
+
+#~ msgid "_Delete Bookmark"
+#~ msgstr "_Ta bort bokmärke"
+
+#~ msgid "D_elete Topic"
+#~ msgstr "T_a bort ämne"
 
 #~ msgid "New Topic"
 #~ msgstr "Nytt ämne"
@@ -4497,9 +4503,6 @@ msgstr "En GNOME-webbläsare, baserad på Mozilla"
 #~ msgid "is not"
 #~ msgstr "inte är"
 
-#~ msgid "name"
-#~ msgstr "namn"
-
 #~ msgid "nicknames"
 #~ msgstr "smeknamn"
 
@@ -4695,9 +4698,6 @@ msgstr "En GNOME-webbläsare, baserad på Mozilla"
 
 #~ msgid "Undo the last action"
 #~ msgstr "Ångra den senaste åtgärden"
-
-#~ msgid "_Delete"
-#~ msgstr "_Ta bort"
 
 #~ msgid "_Go to Bookmark Target"
 #~ msgstr "_Gå till bokmärkets mål"
