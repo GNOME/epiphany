@@ -71,7 +71,7 @@ struct EphyTabPrivate
 	int total_requests;
 	int width;
 	int height;
-	GtkRadioAction *action;
+	GtkToggleAction *action;
 	float zoom;
 	EmbedSecurityLevel security_level;
 	TabNavigationFlags nav_flags;
@@ -1010,9 +1010,10 @@ ephy_tab_init (EphyTab *tab)
 
 	id = g_strdup_printf ("Tab%lu", tab_id++);
 
-	tab->priv->action = g_object_new (GTK_TYPE_RADIO_ACTION,
+	tab->priv->action = g_object_new (GTK_TYPE_TOGGLE_ACTION,
 					  "name", id,
 					  "label", _("Blank page"),
+					  "draw_as_radio", TRUE,
 					  NULL);
 
 	g_free (id);

@@ -48,7 +48,6 @@ struct _EphyTabsMenuPrivate
 {
 	EphyWindow *window;
 	GtkActionGroup *action_group;
-	GSList *radio_group;
 	guint ui_id;
 };
 
@@ -108,9 +107,6 @@ tab_added_cb (EphyNotebook *notebook, GtkWidget *child, EphyTabsMenu *menu)
 	action = GTK_ACTION (ephy_tab_get_action (tab));
 	gtk_action_group_add_action (menu->priv->action_group, action);
 
-	gtk_radio_action_set_group (GTK_RADIO_ACTION (action), menu->priv->radio_group);
-	menu->priv->radio_group = gtk_radio_action_get_group (GTK_RADIO_ACTION (action));
-
 	ephy_tabs_menu_update (menu);
 }
 
@@ -124,7 +120,6 @@ tab_removed_cb (EphyNotebook *notebook, GtkWidget *child, EphyTabsMenu *menu)
 	tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
 
 	action = GTK_ACTION (ephy_tab_get_action (tab));
-	gtk_radio_action_set_group (GTK_RADIO_ACTION (action), NULL);
 	gtk_action_group_remove_action (menu->priv->action_group, action);
 
 	ephy_tabs_menu_update (menu);
@@ -209,7 +204,6 @@ ephy_tabs_menu_init (EphyTabsMenu *menu)
 	menu->priv = EPHY_TABS_MENU_GET_PRIVATE (menu);
 
 	menu->priv->ui_id = 0;
-	menu->priv->radio_group = NULL;
 	menu->priv->action_group = NULL;
 }
 

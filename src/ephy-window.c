@@ -1081,6 +1081,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 {
 	EphyTab *old_tab;
 	EphyEmbed *embed;
+	GtkToggleAction *action;
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 	if (ephy_tab_get_window (new_tab) != window) return;
@@ -1123,14 +1124,15 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_handlers_disconnect_by_func (G_OBJECT (embed),
 						      G_CALLBACK (tab_context_menu_cb),
 						      window);
+
+		action = GTK_TOGGLE_ACTION (ephy_tab_get_action (old_tab));
+		gtk_toggle_action_set_active (action, FALSE);
 	}
 
 	window->priv->active_tab = new_tab;
 
 	if (new_tab)
 	{
-		GtkToggleAction *action;
-
 		sync_tab_address	(new_tab, NULL, window);
 		sync_tab_icon		(new_tab, NULL, window);
 		sync_tab_load_progress	(new_tab, NULL, window);
