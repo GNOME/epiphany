@@ -426,6 +426,7 @@ NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 	LOG ("GFilePicker::Show")
 
 	gtk_window_set_modal (GTK_WINDOW (mDialog), TRUE);
+	gtk_window_set_destroy_with_parent (GTK_WINDOW (mDialog), FALSE);
 
 	gtk_widget_show (GTK_WIDGET (mDialog));
 
