@@ -719,8 +719,12 @@ ephy_window_key_press_event (GtkWidget *widget,
 	GtkWidget *menubar;
 	guint modifiers = gtk_accelerator_get_default_mod_mask ();
 
-	/* Show and activate the menubar on F10, if it isn't visible */
-        if (event->keyval == GDK_F10 && (event->state & modifiers) == 0)
+	/* Show and activate the menubar on F10, if it isn't visible,
+	 * unless we're in ppv mode
+	 */
+        if (window->priv->ppv_mode == FALSE &&
+	    event->keyval == GDK_F10 &&
+	    (event->state & modifiers) == 0)
 	{
 		menubar = gtk_ui_manager_get_widget
 			(GTK_UI_MANAGER (window->ui_merge), "/menubar");
