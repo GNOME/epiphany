@@ -27,6 +27,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-embed-shell.h"
+#include "ephy-stock-icons.h"
 
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkliststore.h>
@@ -707,7 +708,7 @@ downloader_view_build_ui (DownloaderView *dv)
 	GtkCellRenderer *renderer;
 	GtkTreeSelection *selection;
 	GtkWidget *details_table;
-	const char *icon_path;
+	GdkPixbuf *icon;
 	EphyDialog *d = EPHY_DIALOG (dv);
 
 	ephy_dialog_construct (d,
@@ -801,8 +802,11 @@ downloader_view_build_ui (DownloaderView *dv)
 
 	priv->model = GTK_TREE_MODEL (liststore);
 
-	icon_path =  ephy_file ("epiphany-download.png");
-	gtk_window_set_icon_from_file (GTK_WINDOW(priv->window), icon_path, NULL);
+	icon = gtk_widget_render_icon (GTK_WINDOW (priv->window), 
+				       EPHY_STOCK_DOWNLOAD,
+				       GTK_ICON_SIZE_MENU,
+				       NULL);
+	gtk_window_set_icon (GTK_WINDOW(priv->window), icon);
 }
 
 void

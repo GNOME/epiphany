@@ -49,6 +49,7 @@
 #include "ephy-stock-icons.h"
 #include "ephy-gui.h"
 #include "toolbar.h"
+#include "ephy-stock-icons.h"
 
 static GtkTargetEntry page_drag_types [] =
 {
@@ -945,13 +946,16 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	EggMenuMerge *ui_merge;
 	EggActionGroup *action_group;
 	EggAction *action;
-	const char *icon_path;
+	GdkPixbuf *icon;
 	int i;
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("History"));
 
-	icon_path = ephy_file ("epiphany-history.png");
-	gtk_window_set_icon_from_file (GTK_WINDOW (editor), icon_path, NULL);
+	icon = gtk_widget_render_icon (GTK_WINDOW (editor), 
+				       EPHY_STOCK_HISTORY,
+				       GTK_ICON_SIZE_MENU,
+				       NULL);
+	gtk_window_set_icon (GTK_WINDOW(editor), icon);
 
 	g_signal_connect (editor, "delete_event",
 			  G_CALLBACK (delete_event_cb), NULL);

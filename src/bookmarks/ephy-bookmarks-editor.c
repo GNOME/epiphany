@@ -30,7 +30,6 @@
 #include <gtk/gtkvbox.h>
 #include <gdk/gdkkeysyms.h>
 #include <bonobo/bonobo-i18n.h>
-#include <libgnome/gnome-program.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <string.h>
 
@@ -53,6 +52,7 @@
 #include "window-commands.h"
 #include "ephy-debug.h"
 #include "ephy-gui.h"
+#include "ephy-stock-icons.h"
 
 static GtkTargetEntry topic_drag_dest_types [] =
 {
@@ -1114,14 +1114,16 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	EggMenuMerge *ui_merge;
 	EggActionGroup *action_group;
 	EggAction *action;
-	const char *icon_path;
+	GdkPixbuf *icon;
 	int i;
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
 
-	icon_path = gnome_program_locate_file (NULL, GNOME_FILE_DOMAIN_APP_PIXMAP,
-					       "epiphany-bookmarks.png", TRUE, NULL);
-	gtk_window_set_icon_from_file (GTK_WINDOW (editor), icon_path, NULL);
+	icon = gtk_widget_render_icon (GTK_WINDOW (editor), 
+				       EPHY_STOCK_BOOKMARKS,
+				       GTK_ICON_SIZE_MENU,
+				       NULL);
+	gtk_window_set_icon (GTK_WINDOW(editor), icon);
 
 	g_signal_connect (editor, "delete_event",
 			  G_CALLBACK (delete_event_cb), NULL);

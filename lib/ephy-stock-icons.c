@@ -43,7 +43,8 @@ ephy_stock_icons_init (void)
 		EPHY_STOCK_NEW_TAB,
 		EPHY_STOCK_VIEWSOURCE,
 		EPHY_STOCK_SEND_LINK,
-		EPHY_STOCK_ENTRY
+		EPHY_STOCK_ENTRY,
+		EPHY_STOCK_DOWNLOAD
 	};
 
 	factory = gtk_icon_factory_new ();
