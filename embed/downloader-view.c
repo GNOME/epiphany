@@ -57,13 +57,12 @@ enum
 struct DownloaderViewPrivate
 {
 	GtkTreeModel *model;
-	GHashTable *details_hash;
+	GHashTable *downloads_hash;
 
 	/* Widgets */
 	GtkWidget *window;
 	GtkWidget *treeview;
 
-	GtkWidget *open_button;
 	GtkWidget *pause_button;
 	GtkWidget *abort_button;
 };
@@ -72,7 +71,6 @@ typedef struct
 {
 	gboolean is_paused;
 	gboolean can_abort;
-	gboolean can_open;
 	DownloaderViewPrivate *priv;
 } ControlsInfo;
 
@@ -80,7 +78,6 @@ enum
 {
 	PROP_WINDOW,
 	PROP_TREEVIEW,
-	PROP_OPEN_BUTTON,
 	PROP_PAUSE_BUTTON,
 	PROP_ABORT_BUTTON,
 	PROP_DETAILS_BUTTON
@@ -91,7 +88,6 @@ EphyDialogProperty properties [] =
 {
 	{ PROP_WINDOW, "download_manager_dialog", NULL, PT_NORMAL, NULL},
         { PROP_TREEVIEW, "clist", NULL, PT_NORMAL, NULL },
-	{ PROP_OPEN_BUTTON, "open_button", NULL, PT_NORMAL, NULL },
 	{ PROP_PAUSE_BUTTON, "pause_button", NULL, PT_NORMAL, NULL },
 	{ PROP_ABORT_BUTTON, "abort_button", NULL, PT_NORMAL, NULL },
 
@@ -115,9 +111,6 @@ download_dialog_abort_cb (GtkButton *button, DownloaderView *dv);
 gboolean
 download_dialog_delete_cb (GtkWidget *window, GdkEventAny *event,
 			   DownloaderView *dv);
-void
-download_dialog_open_cb (GtkWidget *button,
-			 DownloaderView *dv);
 
 static GObjectClass *parent_class = NULL;
 
@@ -166,7 +159,7 @@ downloader_view_init (DownloaderView *dv)
 {
         dv->priv = EPHY_DOWNLOADER_VIEW_GET_PRIVATE (dv);
 
-	dv->priv->details_hash = g_hash_table_new_full
+	dv->priv->downloads_hash = g_hash_table_new_full
 		(g_direct_hash, g_direct_equal, NULL,
 		 (GDestroyNotify)gtk_tree_row_reference_free);
 
@@ -179,7 +172,7 @@ static void
 downloader_view_finalize (GObject *object)
 {
 	DownloaderView *dv = EPHY_DOWNLOADER_VIEW (object);
-	g_hash_table_destroy (dv->priv->details_hash);
+	g_hash_table_destroy (dv->priv->downloads_hash);
 	g_object_unref (embed_shell);
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -214,7 +207,7 @@ format_interval (long interval)
 static GtkTreeRowReference *
 get_row_from_download (DownloaderView *dv, EphyDownload *download)
 {
-	return  g_hash_table_lookup (dv->priv->details_hash, download);
+	return  g_hash_table_lookup (dv->priv->downloads_hash, download);
 }
 
 static void
@@ -245,9 +238,8 @@ download_changed_cb (EphyDownload *download, DownloaderView *dv)
 		remaining_secs = 0;	
 		break;
 	case EPHY_DOWNLOAD_COMPLETED:
-		percent = 100;
-		remaining_secs = 0;
-		break;
+		downloader_view_remove_download (dv, download);
+		return;
 	case EPHY_DOWNLOAD_DOWNLOADING:
 	case EPHY_DOWNLOAD_PAUSED:	
 		percent = ephy_download_get_percent (download);
@@ -294,7 +286,7 @@ downloader_view_add_download (DownloaderView *dv,
 	row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (dv->priv->model), path);
 	gtk_tree_path_free (path);
 
-	g_hash_table_insert (dv->priv->details_hash,
+	g_hash_table_insert (dv->priv->downloads_hash,
 			     download,
 			     row_ref);
 
@@ -311,8 +303,8 @@ downloader_view_add_download (DownloaderView *dv,
 	gtk_tree_selection_unselect_all (selection);
 	gtk_tree_selection_select_iter (selection, &iter);
 
-	g_signal_connect (download, "changed",
-			  G_CALLBACK (download_changed_cb), dv);
+	g_signal_connect_object (download, "changed",
+				 G_CALLBACK (download_changed_cb), dv, 0);
 
 	ephy_dialog_show (EPHY_DIALOG (dv));
 }
@@ -336,7 +328,6 @@ downloader_view_build_ui (DownloaderView *dv)
 	/* lookup needed widgets */
 	priv->window = ephy_dialog_get_control(d, PROP_WINDOW);
 	priv->treeview = ephy_dialog_get_control (d, PROP_TREEVIEW);
-	priv->open_button = ephy_dialog_get_control (d, PROP_OPEN_BUTTON);
 	priv->pause_button = ephy_dialog_get_control (d, PROP_PAUSE_BUTTON);
 	priv->abort_button = ephy_dialog_get_control (d, PROP_ABORT_BUTTON);
 
@@ -411,6 +402,8 @@ downloader_view_build_ui (DownloaderView *dv)
 				       GTK_ICON_SIZE_MENU,
 				       NULL);
 	gtk_window_set_icon (GTK_WINDOW(priv->window), icon);
+
+	g_print ("THE UI IS BUILT\n");
 }
 
 void
@@ -461,11 +454,13 @@ downloader_view_remove_download (DownloaderView *dv, EphyDownload *download)
 
 	/* FIXME: smart selection */
 
-	g_hash_table_remove (dv->priv->details_hash,
+	g_hash_table_remove (dv->priv->downloads_hash,
 			     download);
 
 	gtk_tree_path_free (path);
-
+	
+	if (!g_hash_table_size (dv->priv->downloads_hash))
+		g_object_unref (G_OBJECT (dv));
 }
 
 void
@@ -495,24 +490,4 @@ download_dialog_delete_cb (GtkWidget *window, GdkEventAny *event,
 			   DownloaderView *dv)
 {
 	return FALSE;
-}
-
-static void
-open_selection_foreach (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
-			DownloaderView *dv)
-{
-}
-
-void
-download_dialog_open_cb (GtkWidget *button,
-			 DownloaderView *dv)
-{
-	GtkTreeSelection *selection;
-
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(dv->priv->treeview));
-
-	gtk_tree_selection_selected_foreach
-		(selection,
-		 (GtkTreeSelectionForeachFunc)open_selection_foreach,
-		 (gpointer)dv);
 }
