@@ -27,6 +27,7 @@ CFILE_GLOB=$(top_srcdir)/lib/*.c
 
 # Header files to ignore when scanning.
 IGNORE_HFILES = \
+	config.h \
 	eel-gconf-extensions.h \
 	ephy-bonobo-extensions.h \
 	ephy-debug.h \
