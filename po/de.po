@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany 1.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-20 14:33+0100\n"
-"PO-Revision-Date: 2003-12-20 14:31+0100\n"
+"POT-Creation-Date: 2003-12-20 17:56+0100\n"
+"PO-Revision-Date: 2003-12-20 17:56+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1916,7 +1916,7 @@ msgstr "%s existiert, bitte entfernen Sie es von dort."
 msgid "Failed to create directory %s."
 msgstr "Verzeichnis %s konnte nicht angelegt werden."
 
-#: lib/ephy-gui.c:76
+#: lib/ephy-gui.c:88
 #, c-format
 msgid ""
 "File %s will be overwritten.\n"
@@ -1929,7 +1929,7 @@ msgstr ""
 "\n"
 "Wollen Sie fortfahren?"
 
-#: lib/ephy-gui.c:107
+#: lib/ephy-gui.c:119
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Hilfe konnte nicht angezeigt werden: %s"
@@ -3329,11 +3329,19 @@ msgstr "Wallonisch"
 msgid "Custom [%s]"
 msgstr "Benutzerdefiniert [%s]"
 
-#: src/prefs-dialog.c:1088
+#: src/prefs-dialog.c:1091
 msgid "Desktop"
 msgstr "Desktop"
 
-#: src/prefs-dialog.c:1296
+#. Note that this does NOT refer to the home page but to a
+#. * user's home folder. It should be translated by the same
+#. * term as GTK+'s "Home" string to be consistent with the
+#. * filechooser
+#: src/prefs-dialog.c:1100
+msgid "Home"
+msgstr "Persönlicher Ordner"
+
+#: src/prefs-dialog.c:1309
 msgid "Select a directory"
 msgstr "Wählen Sie ein Verzeichnis"
 
