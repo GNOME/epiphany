@@ -191,14 +191,14 @@ pdm_dialog_show_help (PdmDialog *pd)
 		"managing-passwords"
 	};
 
-	window = ephy_dialog_get_control (EPHY_DIALOG (pd), properties[PROP_WINDOW].id);
-	g_return_if_fail (GTK_IS_WINDOW (window));
-
-	notebook = ephy_dialog_get_control (EPHY_DIALOG (pd), properties[PROP_NOTEBOOK].id);
-	g_return_if_fail (notebook != NULL);
+	ephy_dialog_get_controls
+		(EPHY_DIALOG (pd),
+		 properties[PROP_WINDOW].id, &window,
+		 properties[PROP_NOTEBOOK].id, &notebook,
+		 NULL);
 
 	id = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
-	g_assert (id == 0 || id == 1);
+	g_return_if_fail (id == 0 || id == 1);
 
 	ephy_gui_help (GTK_WINDOW (window), "epiphany", help_preferences[id]);
 }
@@ -816,8 +816,11 @@ pdm_dialog_init (PdmDialog *dialog)
 			       "pdm_dialog",
 			       NULL);
 
-	window = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-					  properties[PROP_WINDOW].id);
+	ephy_dialog_get_controls (EPHY_DIALOG (dialog),
+				  properties[PROP_WINDOW].id, &window,
+				  properties[PROP_NOTEBOOK].id, &notebook,
+				  NULL);
+
 	gtk_window_set_icon_name (GTK_WINDOW (window), "web-browser");
 
 	/**
@@ -861,7 +864,6 @@ pdm_dialog_init (PdmDialog *dialog)
 	cookies->construct (cookies);
 	passwords->construct (passwords);
 
-	notebook = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[PROP_NOTEBOOK].id);
 	sync_notebook_tab (notebook, NULL, 0, dialog);
 	g_signal_connect (G_OBJECT (notebook), "switch_page",
 			  G_CALLBACK (sync_notebook_tab), dialog);

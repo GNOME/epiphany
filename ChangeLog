@@ -1,3 +1,19 @@
+2004-10-22  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-dialog.c: (ephy_dialog_get_controls):
+	* lib/ephy-dialog.h:
+
+	Add varargs version of ephy_dialog_get_control to get more
+	than one control at a time.
+
+ 	* embed/downloader-view.c: (downloader_view_build_ui):
+	* src/pdm-dialog.c: (pdm_dialog_show_help), (pdm_dialog_init):
+	* src/prefs-dialog.c: (prefs_dialog_show_help),
+	(setup_add_language_dialog), (create_language_section),
+	(prefs_dialog_init):
+
+	Use that.
+
 2004-10-21  Jordi Mallach  <jordi@sindominio.net>
 
 	* doc/Makefile.am:

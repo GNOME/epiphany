@@ -416,8 +416,10 @@ prefs_dialog_show_help (EphyDialog *dialog)
 		"language-preferences"
 	};
 
-	window = ephy_dialog_get_control (dialog, properties[WINDOW_PROP].id);
-	notebook = ephy_dialog_get_control (dialog, properties[NOTEBOOK_PROP].id);
+	ephy_dialog_get_controls (dialog,
+				  properties[WINDOW_PROP].id, &window,
+				  properties[NOTEBOOK_PROP].id, &notebook,
+				  NULL);
 
 	id = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
 	id = CLAMP (id, 0, 3);
@@ -821,8 +823,10 @@ setup_add_language_dialog (PrefsDialog *pd)
 	gtk_tree_sortable_set_sort_column_id
 		(GTK_TREE_SORTABLE (sortmodel), COL_LANG_NAME, GTK_SORT_ASCENDING);
 
-	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
-			(dialog, add_lang_props[LANGUAGE_PROP].id));
+	ephy_dialog_get_controls (dialog,
+				  add_lang_props[LANGUAGE_PROP].id, &treeview,
+				  add_lang_props[LANGUAGE_DIALOG].id, &window,
+				  NULL);
 
 	gtk_tree_view_set_reorderable (GTK_TREE_VIEW (treeview), FALSE);
 
@@ -844,7 +848,6 @@ setup_add_language_dialog (PrefsDialog *pd)
 	selection = gtk_tree_view_get_selection (treeview);
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 
-	window = ephy_dialog_get_control (dialog, add_lang_props[LANGUAGE_DIALOG].id);
 	g_signal_connect (window, "response",
 			  G_CALLBACK (add_lang_dialog_response_cb), pd);
 
@@ -977,9 +980,16 @@ create_language_section (EphyDialog *dialog)
 	GtkTreeSelection *selection;
 	GSList *list, *l, *ulist = NULL;
 
+	ephy_dialog_get_controls
+		(dialog,
+		 properties[LANGUAGE_TREEVIEW_PROP].id, &treeview,
+		 properties[LANGUAGE_ADD_BUTTON_PROP].id, &pd->priv->lang_add_button,
+		 properties[LANGUAGE_REMOVE_BUTTON_PROP].id, &pd->priv->lang_remove_button,
+		 properties[LANGUAGE_UP_BUTTON_PROP].id, &pd->priv->lang_up_button, 
+		 properties[LANGUAGE_DOWN_BUTTON_PROP].id, &pd->priv->lang_down_button,
+		 NULL);
+
 	/* setup the languages treeview */
-	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
-			(dialog, properties[LANGUAGE_TREEVIEW_PROP].id));
 	pd->priv->lang_treeview = treeview;
 
 	gtk_tree_view_set_reorderable (GTK_TREE_VIEW (treeview), TRUE);
@@ -1012,15 +1022,6 @@ create_language_section (EphyDialog *dialog)
 			  G_CALLBACK (language_editor_treeview_drag_end_cb), pd);
 	g_signal_connect (G_OBJECT (selection), "changed",
 			  G_CALLBACK (language_editor_selection_changed_cb), pd);
-
-	pd->priv->lang_add_button = ephy_dialog_get_control
-		(dialog, properties[LANGUAGE_ADD_BUTTON_PROP].id);
-	pd->priv->lang_remove_button = ephy_dialog_get_control
-		(dialog, properties[LANGUAGE_REMOVE_BUTTON_PROP].id);
-	pd->priv->lang_up_button = ephy_dialog_get_control
-		(dialog, properties[LANGUAGE_UP_BUTTON_PROP].id);
-	pd->priv->lang_down_button = ephy_dialog_get_control
-		(dialog, properties[LANGUAGE_DOWN_BUTTON_PROP].id);
 
 	list = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
 
@@ -1151,7 +1152,8 @@ prefs_dialog_init (PrefsDialog *pd)
 {
 	EphyDialog *dialog = EPHY_DIALOG (pd);
 	EphyEncodings *encodings;
-	GtkWidget *window, *button, *combo;
+	GtkWidget *window, *curr_button, *blank_button;
+	GtkWidget *variable_combo, *monospace_combo;
 	GtkCellRenderer *renderer;
 	gboolean sensitive;
 
@@ -1171,27 +1173,31 @@ prefs_dialog_init (PrefsDialog *pd)
 				    properties[AUTO_ENCODING_LABEL_PROP].id,
 				    NULL);
 
-	window = ephy_dialog_get_control (dialog, properties[WINDOW_PROP].id);
+	ephy_dialog_get_controls
+		(dialog,
+		 properties[WINDOW_PROP].id, &window,
+		 properties[HOMEPAGE_CURRENT_PROP].id, &curr_button,
+		 properties[HOMEPAGE_BLANK_PROP].id, &blank_button,
+		 properties[VARIABLE_PROP].id, &variable_combo,
+		 properties[MONOSPACE_PROP].id, &monospace_combo,
+		 NULL);
+
 	gtk_window_set_icon_name (GTK_WINDOW (window), GTK_STOCK_PREFERENCES);
 
 	/* set homepage button sensitivity */
 	sensitive = eel_gconf_key_is_writable (CONF_GENERAL_HOMEPAGE);
-	button = ephy_dialog_get_control (dialog, properties[HOMEPAGE_CURRENT_PROP].id);
-	gtk_widget_set_sensitive (button, sensitive);
-	button = ephy_dialog_get_control (dialog, properties[HOMEPAGE_BLANK_PROP].id);
-	gtk_widget_set_sensitive (button, sensitive);
+	gtk_widget_set_sensitive (curr_button, sensitive);
+	gtk_widget_set_sensitive (blank_button, sensitive);
 
-	combo = ephy_dialog_get_control (dialog, properties[VARIABLE_PROP].id);
         renderer = gtk_cell_renderer_text_new ();
-        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
-        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (variable_combo), renderer, TRUE);
+        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (variable_combo), renderer,
                                         "text", 0,
                                         NULL);
 	ephy_dialog_set_data_column (dialog, properties[VARIABLE_PROP].id, 0);
-	combo = ephy_dialog_get_control (dialog, properties[MONOSPACE_PROP].id);
         renderer = gtk_cell_renderer_text_new ();
-        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
-        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (monospace_combo), renderer, TRUE);
+        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (monospace_combo), renderer,
                                         "text", 0,
                                         NULL);
 	ephy_dialog_set_data_column (dialog, properties[MONOSPACE_PROP].id, 0);

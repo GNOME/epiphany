@@ -1228,6 +1228,31 @@ ephy_dialog_get_control (EphyDialog *dialog,
 	return info->widget;
 }
 
+void
+ephy_dialog_get_controls (EphyDialog *dialog,
+			  const char *property_id,
+			  ...)
+{
+	PropertyInfo *info;
+	GtkWidget **wptr;
+	va_list varargs;
+
+	va_start (varargs, property_id);
+
+	while (property_id != NULL)
+	{
+		info = lookup_info (dialog, property_id);
+		g_return_if_fail (info != NULL);
+
+		wptr = va_arg (varargs, GtkWidget **);
+		*wptr = info->widget;
+
+		property_id = va_arg (varargs, const char *);
+	}
+
+	va_end (varargs);
+}
+
 gboolean
 ephy_dialog_get_value (EphyDialog *dialog,
 		       const char *property_id,

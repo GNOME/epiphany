@@ -568,10 +568,13 @@ downloader_view_build_ui (DownloaderView *dv)
 			       NULL);
 
 	/* lookup needed widgets */
-	priv->window = ephy_dialog_get_control(d, properties[PROP_WINDOW].id);
-	priv->treeview = ephy_dialog_get_control (d, properties[PROP_TREEVIEW].id);
-	priv->pause_button = ephy_dialog_get_control (d, properties[PROP_PAUSE_BUTTON].id);
-	priv->abort_button = ephy_dialog_get_control (d, properties[PROP_ABORT_BUTTON].id);
+	ephy_dialog_get_controls
+		(d,
+		 properties[PROP_WINDOW].id, &priv->window,
+		 properties[PROP_TREEVIEW].id, &priv->treeview,
+		 properties[PROP_PAUSE_BUTTON].id, &priv->pause_button,
+		 properties[PROP_ABORT_BUTTON].id, &priv->abort_button,
+		 NULL);
 
 	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview)),
 				     GTK_SELECTION_BROWSE);
