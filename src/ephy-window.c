@@ -169,7 +169,7 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "GoHistory", N_("H_istory"), EPHY_STOCK_HISTORY, "<control>H",
 	  N_("Go to an already visited page"),
 	  G_CALLBACK (window_cmd_go_history), NULL },
-	{ "GoBookmarks", N_("_Bookmarks"), EPHY_STOCK_BOOKMARKS, "<control>B",
+	{ "GoBookmarks", N_("Boo_kmarks"), EPHY_STOCK_BOOKMARKS, "<control>B",
 	  N_("Go to a bookmark"),
 	  G_CALLBACK (window_cmd_go_bookmarks), NULL },
 
