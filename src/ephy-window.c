@@ -490,13 +490,13 @@ setup_window (EphyWindow *window)
 	egg_menu_merge_insert_action_group (merge, action_group, 0);
 	window->priv->action_group = action_group;
 	action = egg_action_group_get_action (action_group, "FileOpen");
-	g_object_set (action, "short_label", N_("Open"), NULL);
+	g_object_set (action, "short_label", _("Open"), NULL);
 	action = egg_action_group_get_action (action_group, "FileSaveAs");
-	g_object_set (action, "short_label", N_("Save As"), NULL);
+	g_object_set (action, "short_label", _("Save As"), NULL);
 	action = egg_action_group_get_action (action_group, "FilePrint");
-	g_object_set (action, "short_label", N_("Print"), NULL);
+	g_object_set (action, "short_label", _("Print"), NULL);
 	action = egg_action_group_get_action (action_group, "FileBookmarkPage");
-	g_object_set (action, "short_label", N_("Bookmark"), NULL);
+	g_object_set (action, "short_label", _("Bookmark"), NULL);
 	action = egg_action_group_get_action (action_group, "ViewZoomNormal");
 	g_object_set (action, "sensitive", FALSE, NULL);
 
