@@ -431,6 +431,230 @@ Translations
 
 
 ==============
+Epiphany 1.2.8
+==============
+
+Code changes
+
+	* Adapt to Mozilla API changes (Christian)
+	* Confirm before overwriting a file (Christian) [#143501]
+
+Bug fixes
+
+	* Fix compilation of nautilus view (Christian) [#148995]
+	* Fix some memory leaks (Jean-François Rameau)
+	* Really translate the program name (Christian) [#148948]
+	* Fix restoring the history window on resume (Christian)
+	* Fix new tab position (Christian)
+	* Fix a crash in content handler (Christian) [#149550]
+	* Fix context menu on links with namespaced tag (Mikael Brockman) [#150208]
+
+
+==============
+Epiphany 1.2.7
+==============
+
+Code changes
+
+	* Adapt to mozilla API changes (Christian)
+	* Use nsIDOMWindow2 to get the root event target on 
+	  mozilla >= 1.7rc3 (Christian)
+
+Bug fixes
+
+	* Work around mozilla bug #246392 which causes reloads of framed pages to
+	  go back to original URI (backported from HEAD) (Christian) [#115800]
+	* Escape markup in string in the duplicate bookmarks dialogue
+	  and topics menu (Christian)
+	* Escape markup in strings in the NSS dialogues (Crispin Flowerday)
+	* Work aroung mozilla bug #246392 which causes reload of framed pages to go
+	  back to initial frameset (Christian, Crispin Flowerday) [#115800]
+	* Don't show redirected and non-toplevel pages in history (Christian) [#142143]
+	* Allow importing of Epiphany bookmarks format too (Christian) [#144699]
+	* Fix crash with corrupted toolbars file (Christian) [#144698]
+	* Fix prefs persistence with non-existent or bogus initial values (Christian)
+	* Unescape mailto: addresses (Christian) [#144462]
+	* Fix filename encoding for print-to-file (Christian)
+	* Depend on libgnomeui >= 2.6.0 (Christian) [#145776]
+	* Make print and print setup go trough nsIPrintingPromptService (Christian,
+	  backported from HEAD)
+	* Fix print-to-file filechooser modality (Christian) [#147628]
+	* Fix mem leaks in gtk NSS dialogues (Christian, ported from galeon)
+	* Gracefully handle failure to create downloads directory (Marco) [#146902]
+	* Fix single observer ownership and reference counting (Christian) [#146873, #146461]
+	* Fix downloader crash on shutdown (Marco) [#141928]
+	* Fix build with old mozilla versions (1.4.x, 1.5) (Christian)
+	* Use nsACString instead of nsCString in a few places in EphyWrapper (Christian)
+	* Fix crash on screen size change after using fullscreen (Christian)
+
+New translations
+
+	* רועי קרשטיין, גיל אשר (he)
+
+Updated translations
+
+	* Владимир Петков (bg)
+	* Xavier Conde Rueda (ca)
+	* Trịnh Minh Thanh (vi)
+
+
+==============
+Epiphany 1.2.6
+==============
+
+Code changes
+
+	* Support for mozilla 1.7rc1, 1.7rc2, 17rc3, 1.7 branch and trunk
+	  (Christian, Marco, Carlos Romero)
+	* Eliminate external protocol handlers and use prefs instead (Christian Biesinger)
+	* Various solaris portability fixes (Brian Cameron, Christian)
+	* Filter unwanted urls from history (Christian) [#142143]
+	* Disable xpinstall by default (Christian) [144035]
+
+Bugfixes
+
+	* Fix some compile warnings (Christian)
+	* Use single sign-on prompt for downloads too (Christian)
+	* Fix crash with popup window and when opening windows from command line
+	  (Christian) (backported from HEAD) [#142184]
+	* Fix compilation with gcc 2.95 (Christian)
+	* Fix LD_LIBRARY_PATH setting in startup script (Christian) [#141576]
+	* Fix a mem leak in the toolbar editor (Christian)
+	* Fix cookies-cleared notification (Christian)
+	* Fix toolbar editor dragging theme bug (Crispin Flowerday)
+	* Fix reload not to use forced reload by default (C. J. N. Breame) [#143365]
+	* Fix filechooser default filename shown from web form file inputs (Christian)
+	* Fix opening of webcal: urls (Marco) [#139040]
+	* Fix check for firefox bookmarks file import (Christian)
+	* Fix contextmenu on unfocused text fields (Marco) [#139040]
+
+Documentation translations
+
+	* Translated to spanish (es) by Francisco F. Serrador
+
+Translations
+
+	* Владимир Петков (bg)
+	* Νίκος Χαρωνιτάκης  (el)
+	* อิสริยะ ไพรีพ่ายฤทธิ์ (th)
+	* Gurban Mühemmet Tewekgeli (tk)
+	* Дмитрий Мастрюков (ru)
+
+
+==============
+Epiphany 1.2.5
+==============
+
+Bugfixes
+	* Make saving a web page not re-fetch the page (Christian) [#141652]
+	* Fix crash on startup (Marco) [#141262]
+
+Translations
+	* Duarte Loreto (pt)
+
+Documentation
+	* New translation of help into Basque (eu) by
+	  Hizkuntza Politikarako Sailburuordetza
+	* Updated screenshots in help (Piers)
+	* Updated help on smart bookmarks (Matthew Gatto) [#139616]
+
+
+==============
+Epiphany 1.2.4
+==============
+
+Bugfixes
+	* Fix problem with font selection in prefs dialogue (Christian)
+	* Fix encoding of downloaded and saved content (Marco) [#126571, #141050]
+	* Fix crash when closing a window while in print preview
+	  mode (Christian) [#121298]
+
+Translations
+	* John C Barstow (mi)
+
+
+==============
+Epiphany 1.2.3
+==============
+
+Code changes
+	* Cleanup chrome handling (Marco)
+
+Bugfixes
+	* Fix bookmarks import from XBEL (Marco)
+	* Set window icon on "About" dialogue (Christian)
+	* Fix "Add" button appearance for some themes (Christian)
+	* Fix "Go" button (Christian)
+	* Fix "Open In New Tabs" from bookmarks editor (Christian) [#138343]
+	* Fix context menu for anchors without href (Christian) [#138200]
+	* Fix context menu for linked images (Christian) [#138200]
+	* Fix startup script on solaris (Marco) [#138088]
+	* Fix filechooser handling (Federico Mena Quintero) [#138263]
+	* Fix compilation with -fdata-sections (Christian) [#136878]
+	* Check for invalid font size pref (Piers)
+	* Fix clear-history dialogue button size with themes (Piers)
+	* Fix bookmarks toolbar visibility in fullscreen and ppview
+	  mode (Christian) [#138520]
+	* Fix link dragging to new notebook tabs (Christian) [#138902]
+	* Sync toolbar code with galeon gtk 2.4 port; fixes crash when
+	  dragging items from other applications (Crispin Flowerday)
+	* Fix homepage setting to current page (Christian) [#139124]
+	* Make pdm, prefs and print setup dialogue transient (Christian)
+	* Sort the actions in location entry drop-down (Christian) [#139575]
+	* Don't quit filechooser when choosing not to overwrite an
+	  existing file (Christian) [#139400]
+	* Fix filename encoding in confirm-overwrite dialogue (Christian)
+	* Fix accel setting for dynamic menus (Christian) [#139641]
+	* Don't gunzip downloaded files (Marco) [#131778]
+	* Fix content policy contract ID (Christian)
+	* Fix chrome handling for new windows from _blank target links
+	  (Marco) [#139512]
+	* Make message selectable in content handler dialogue (Piers)
+
+Translations
+	* Vladimir Petkov (bg)
+	* Iñaki Larrañaga, Hizkuntza Politikarako Sailburuordetza (eu)
+	* helgi (is)
+	* Dvornik László (hu)
+	* Kjartan Maraas (no)
+	* Amanpreet Singh Alam (pa)
+	* Дмитрий Мастрюков (ru)
+
+
+==============
+Epiphany 1.2.2
+==============
+
+Translations:
+	* Amanpreet Singh Alam (pa)
+	* Duarte Loreto (pt)
+	* Åsmund Skjævelan (nn)
+	* Gujarati team at Magnet-i (gu)
+	* Trinh Minh Thanh (vi)
+
+
+===============
+Epiphany 1.2.1
+===============
+
+Bug fixes:
+	* Fix a crash when opening bookmarks properties (Christian)
+
+Translations:
+	* Arafat Medini (ar)
+	* Dmitry G. Mastrukov (ru)
+	* Gabor Kelemen (hu)
+	* Åsmund Skjæveland (nn)
+	* Liu Songhe (zh_CN)
+	* Marcel Telka (sk)
+	* Ma SivaKumar (ta)
+	* Rhys Jones (cy)
+	* Sanlig Badral (mn)
+	* Vladimir Petkov (bg)
+	* Xavier Conde Rueda (ca)
+
+
+==============
 Epiphany 1.2.0
 ==============
 
@@ -1226,6 +1450,18 @@ Translations
 	* sv (Christian Rose)
 	* ta (Dinesh Nadarajah)
 	* vi (Pablo Saratxaga)
+
+
+==============
+Epiphany 1.0.8
+==============
+
+Bugfixes:
+	* Fix a crash when the icon theme doesn't have our "about" icon
+	  (Christian)
+	* Fix a crash when pressing delete after deleting the last cookie
+	  in the pdm dialogue (backported from HEAD) (Christian)
+	* Fix session saving for urls with "&" (Christian)
 
 
 ==============
