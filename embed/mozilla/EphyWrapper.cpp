@@ -584,6 +584,7 @@ nsresult EphyWrapper::GetMainDocumentUrl (nsCString &url)
 
 	nsCOMPtr<nsIURI> uri;
 	doc->GetDocumentURL(getter_AddRefs(uri));
+	if (!uri) return NS_ERROR_FAILURE;
 
 	return uri->GetSpec (url);
 }
@@ -602,10 +603,9 @@ nsresult EphyWrapper::GetDocumentUrl (nsCString &url)
 
         nsCOMPtr<nsIURI> uri;
         doc->GetDocumentURL(getter_AddRefs(uri));
+	if (!uri) return NS_ERROR_FAILURE;
 
-        uri->GetSpec (url);
-
-        return NS_OK;
+        return uri->GetSpec (url);
 }
 
 nsresult  EphyWrapper::CopyHistoryTo (EphyWrapper *dest)
