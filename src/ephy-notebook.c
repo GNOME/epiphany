@@ -629,7 +629,7 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 	{
 		EphyWindow *window;
 
-		window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (tab)));
+		window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (widget)));
 
 		ephy_window_load_in_tabs (window, tab, uri_list);
 		gnome_vfs_uri_list_free (uri_list);

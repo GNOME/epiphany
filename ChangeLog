@@ -1,3 +1,14 @@
+2004-07-05  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* src/bookmarks/ephy-bookmark-action.c: (drag_motion_cb):
+
+	Support also GDK_ACTION_COPY. Fix #145254.
+
+	* src/ephy-notebook.c: (notebook_drag_data_received_cb):
+
+	Use the notebook to access the toplevel, data passed to the
+	signal can be NULL.
+
 2004-07-05  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/EphySingle.cpp:
