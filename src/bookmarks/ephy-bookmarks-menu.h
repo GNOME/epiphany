@@ -23,15 +23,7 @@
 
 #include "ephy-window.h"
 
-/* object forward declarations */
-
-typedef struct _EphyBookmarksMenu EphyBookmarksMenu;
-typedef struct _EphyBookmarksMenuClass EphyBookmarksMenuClass;
-typedef struct _EphyBookmarksMenuPrivate EphyBookmarksMenuPrivate;
-
-/**
- * Editor object
- */
+G_BEGIN_DECLS
 
 #define EPHY_TYPE_BOOKMARKS_MENU	    (ephy_bookmarks_menu_get_type())
 #define EPHY_BOOKMARKS_MENU(object)	    (G_TYPE_CHECK_INSTANCE_CAST((object), EPHY_TYPE_BOOKMARKS_MENU, EphyBookmarksMenu))
@@ -39,6 +31,10 @@ typedef struct _EphyBookmarksMenuPrivate EphyBookmarksMenuPrivate;
 #define EPHY_IS_BOOKMARKS_MENU(object)	    (G_TYPE_CHECK_INSTANCE_TYPE((object), EPHY_TYPE_BOOKMARKS_MENU))
 #define EPHY_IS_BOOKMARKS_MENU_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), EPHY_TYPE_BOOKMARKS_MENU))
 #define EPHY_BOOKMARKS_MENU_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_BOOKMARKS_MENU, EphyBookmarksMenuClass))
+
+typedef struct _EphyBookmarksMenu		EphyBookmarksMenu;
+typedef struct _EphyBookmarksMenuClass		EphyBookmarksMenuClass;
+typedef struct _EphyBookmarksMenuPrivate	EphyBookmarksMenuPrivate;
 
 struct _EphyBookmarksMenuClass
 {
@@ -57,5 +53,6 @@ GType              ephy_bookmarks_menu_get_type		(void);
 
 EphyBookmarksMenu *ephy_bookmarks_menu_new		(EphyWindow *window);
 
-#endif
+G_END_DECLS
 
+#endif

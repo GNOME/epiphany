@@ -1,5 +1,36 @@
 2004-08-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_bookmarks_import):
+	* src/bookmarks/ephy-bookmarks-import.c: (xbel_parse_folder),
+	(folders_list_to_topic_name):
+	* src/bookmarks/ephy-bookmarks.h:
+
+	Make the hierarchy separator a #define.
+
+	* src/bookmarks/ephy-bookmarks-menu.c: (remove_action),
+	(ephy_bookmarks_menu_clean), (open_bookmark_cb),
+	(add_action_for_bookmark), (ensure_bookmark_actions),
+	(create_menu), (create_submenu), (ephy_bookmarks_menu_rebuild),
+	(do_update_cb), (ephy_bookmarks_menu_maybe_update),
+	(ephy_bookmarks_menu_set_window),
+	(ephy_bookmarks_menu_set_property),
+	(ephy_bookmarks_menu_get_property), (bookmarks_tree_changed_cb),
+	(topics_added_cb), (topics_removed_cb), (topic_child_changed_cb),
+	(bookmark_added_cb), (bookmark_removed_cb), (activate_cb),
+	(ephy_bookmarks_menu_init), (ephy_bookmarks_menu_constructor),
+	(ephy_bookmarks_menu_finalize), (ephy_bookmarks_menu_class_init),
+	(ephy_bookmarks_menu_new):
+	* src/bookmarks/ephy-bookmarks-menu.h:
+	* src/bookmarks/ephy-bookmarks.c: (bookmarks_removed_cb),
+	(topics_removed_cb), (ephy_bookmarks_add):
+
+	Speed up bookmarks menu with large bookmarks collections, partially
+	fixes bug #141269.
+	Fix topic hierarchy and updating on changes, fixes bug #147470,
+	bug 147786, and bug #150246.
+
+2004-08-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* NEWS:
 
 	Merge from gnome-2-6 branch.

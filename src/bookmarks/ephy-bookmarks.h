@@ -40,6 +40,8 @@ typedef struct EphyBookmarksClass	EphyBookmarksClass;
 typedef struct EphyBookmarks		EphyBookmarks;
 typedef struct EphyBookmarksPrivate	EphyBookmarksPrivate;
 
+#define	BOOKMARKS_HIERARCHY_SEP	"/"
+
 enum
 {
 	EPHY_NODE_BMK_PROP_TITLE	= 2,

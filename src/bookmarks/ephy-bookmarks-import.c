@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -301,7 +302,8 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, char *parent_fold
 				}
 				else
 				{
-					folder = g_strconcat (parent_folder, "/",
+					folder = g_strconcat (parent_folder,
+							      BOOKMARKS_HIERARCHY_SEP,
 							      title, NULL);
 				}
 
@@ -675,7 +677,7 @@ folders_list_to_topic_name (GList *folders)
 
 	for (l = folders->next; l != NULL; l = l->next)
 	{
-		g_string_append (topic, "/");
+		g_string_append (topic, BOOKMARKS_HIERARCHY_SEP);
 		g_string_append (topic, l->data);
 	}
 

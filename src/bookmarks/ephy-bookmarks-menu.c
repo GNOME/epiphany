@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,30 +33,53 @@
 #include <glib/gprintf.h>
 #include <glib/gi18n.h>
 #include <gtk/gtkuimanager.h>
-
-#define BOOKMARKS_MENU_PATH "/menubar/BookmarksMenu"
+#include <string.h>
 
 #define EPHY_BOOKMARKS_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKS_MENU, EphyBookmarksMenuPrivate))
 
 struct _EphyBookmarksMenuPrivate
 {
-	GtkUIManager *merge;
+	GtkUIManager *manager;
 	EphyWindow *window;
 	EphyBookmarks *bookmarks;
-	GtkActionGroup *action_group;
+	GtkActionGroup *bmk_actions;
+	GtkActionGroup *folder_actions;
+	GSList *removed_bmks;
 	guint ui_id;
 	guint update_tag;
+	gboolean needs_update;
 };
 
-static void	ephy_bookmarks_menu_class_init	  (EphyBookmarksMenuClass *klass);
-static void	ephy_bookmarks_menu_init	  (EphyBookmarksMenu *menu);
-static void	ephy_bookmarks_menu_finalize      (GObject *o);
+#define BOOKMARKS_MENU_PATH "/menubar/BookmarksMenu"
+
+/* 14 = strlen ("0000000000000000") - strlen ("%x")
+ * FIXME: for 32bit, 6 is sufficient -> use some #if magic?
+ */
+#define MAXLEN	14
+
+/* this %x is bookmark node id */
+#define BMK_VERB_FORMAT		"Bmk%x"
+#define BMK_VERB_FORMAT_LENGTH	strlen (BMK_VERB_FORMAT) + MAXLEN + 1
+
+/* first %x is bookmark node id, second %x is g_str_hash of path */
+#define BMK_NAME_FORMAT		"Bmk%x%x"
+#define	BMK_NAME_FORMAT_LENGTH	strlen (BMK_NAME_FORMAT) + 2 * MAXLEN + 1
+
+/* first %x is g_str_hash of folder name, 2nd %x is g_str_hash of path */
+#define FOLDER_VERB_FORMAT		"Fld%x%x"
+#define FOLDER_VERB_FORMAT_LENGTH	strlen (FOLDER_VERB_FORMAT) + 2 * MAXLEN + 1
+
+#define GAZILLION	200
+#define UPDATE_DELAY	5000 /* ms */
 
 enum
 {
 	PROP_0,
-	PROP_EPHY_WINDOW
+	PROP_WINDOW
 };
+
+static void ephy_bookmarks_menu_class_init (EphyBookmarksMenuClass *klass);
+static void ephy_bookmarks_menu_init	   (EphyBookmarksMenu *menu);
 
 static GObjectClass *parent_class = NULL;
 
@@ -88,32 +112,113 @@ ephy_bookmarks_menu_get_type (void)
 }
 
 static void
+remove_action (gpointer idptr,
+	       GtkActionGroup *action_group)
+{
+	GtkAction *action;
+	char verb[BMK_VERB_FORMAT_LENGTH];
+
+	g_snprintf (verb, sizeof (verb), BMK_VERB_FORMAT, GPOINTER_TO_UINT (idptr));
+	action = gtk_action_group_get_action (action_group, verb);
+	g_return_if_fail (action != NULL);
+
+	gtk_action_group_remove_action (action_group, action);
+}
+
+static void
 ephy_bookmarks_menu_clean (EphyBookmarksMenu *menu)
 {
 	EphyBookmarksMenuPrivate *p = menu->priv;
 
 	START_PROFILER ("Cleaning bookmarks menu")
 
-	if (p->ui_id > 0)
+	if (p->ui_id != 0)
 	{
-		gtk_ui_manager_remove_ui (p->merge, p->ui_id);
-		gtk_ui_manager_ensure_update (p->merge);
+		gtk_ui_manager_remove_ui (p->manager, p->ui_id);
+		gtk_ui_manager_ensure_update (p->manager);
 		p->ui_id = 0;
 	}
 
-	if (p->action_group != NULL)
+	if (p->bmk_actions != NULL && menu->priv->removed_bmks != NULL)
 	{
-		gtk_ui_manager_remove_action_group (p->merge, p->action_group);
-		g_object_unref (p->action_group);
+		/* now we can remove the actions for removed bookmarks */
+		g_slist_foreach (menu->priv->removed_bmks, (GFunc) remove_action,
+				 menu->priv->bmk_actions);
+		g_slist_free (menu->priv->removed_bmks);
+		menu->priv->removed_bmks = NULL;
+	}
+
+	if (p->folder_actions != NULL)
+	{
+		gtk_ui_manager_remove_action_group (p->manager, p->folder_actions);
+		g_object_unref (p->folder_actions);
 	}
 
 	STOP_PROFILER ("Cleaning bookmarks menu")
 }
 
 static void
-open_bookmark_cb (GtkAction *action, char *location, EphyWindow *window)
+open_bookmark_cb (GtkAction *action,
+		  char *location,
+		  EphyBookmarksMenu *menu)
 {
-	ephy_window_load_url (window, location);
+	ephy_window_load_url (menu->priv->window, location);
+}
+
+#define BMK_ACCEL_PATH_PREFIX "<Actions>/BmkActions/"
+
+static void
+add_action_for_bookmark (EphyBookmarksMenu *menu,
+			 EphyNode *bmk)
+{
+	GtkAction *action;
+	char verb[BMK_VERB_FORMAT_LENGTH];
+	char apath[strlen (BMK_ACCEL_PATH_PREFIX) + BMK_VERB_FORMAT_LENGTH];
+	guint id;
+
+	g_return_if_fail (bmk != NULL);
+
+	id = ephy_node_get_id (bmk);
+
+	g_snprintf (verb, sizeof (verb), BMK_VERB_FORMAT, id);
+	g_snprintf (apath, sizeof (apath), BMK_ACCEL_PATH_PREFIX "%s", verb);
+
+	action = ephy_bookmark_action_new (verb, id);
+
+	gtk_action_set_accel_path (action, apath);
+
+	g_signal_connect (action, "activate",
+			  G_CALLBACK (open_bookmark_cb), menu);
+
+	gtk_action_group_add_action (menu->priv->bmk_actions, action);
+	g_object_unref (action);
+}
+
+static void
+ensure_bookmark_actions (EphyBookmarksMenu *menu)
+{
+	EphyNode *bookmarks, *bmk;
+	GPtrArray *children;
+	int i;
+
+	if (menu->priv->bmk_actions != NULL) return;
+
+	START_PROFILER ("Adding bookmarks actions")
+
+	menu->priv->bmk_actions = gtk_action_group_new ("BmkActions");
+	gtk_ui_manager_insert_action_group (menu->priv->manager,
+					    menu->priv->bmk_actions, -1);
+
+	bookmarks = ephy_bookmarks_get_bookmarks (menu->priv->bookmarks);
+	children = ephy_node_get_children (bookmarks);
+	for (i = 0; i < children->len; i++)
+	{
+		bmk = g_ptr_array_index (children, i);
+
+		add_action_for_bookmark (menu, bmk);
+	}
+
+	STOP_PROFILER ("Adding bookmarks actions")
 }
 
 static int
@@ -183,12 +288,17 @@ sort_bookmarks (gconstpointer a, gconstpointer b)
 }
 
 static void
-create_menu (EphyBookmarksMenu *menu, EphyNode *node, const char *path)
+create_menu (EphyBookmarksMenu *menu,
+	     EphyNode *node,
+	     const char *path)
 {
 	GPtrArray *children;
 	EphyBookmarksMenuPrivate *p = menu->priv;
 	GList *node_list = NULL, *l;
+	guint phash;
 	int i;
+
+	phash = g_str_hash (path);
 
 	children = ephy_node_get_children (node);
 	for (i = 0; i < children->len; ++i)
@@ -197,96 +307,93 @@ create_menu (EphyBookmarksMenu *menu, EphyNode *node, const char *path)
 					    g_ptr_array_index (children, i));
 	}
 
-	if (node_list != NULL)
+	node_list = g_list_sort (node_list, (GCompareFunc)sort_bookmarks);
+	for (l = node_list; l != NULL; l = l->next)
 	{
-		node_list = g_list_sort (node_list, (GCompareFunc)sort_bookmarks);
-		for (l = node_list; l != NULL; l = l->next)
-		{
-			GtkAction *action;
-			EphyNode *child;
-			long id;
-			char verb[30], name[30], accel_path[60];
+		char verb[BMK_VERB_FORMAT_LENGTH];
+		char name[BMK_NAME_FORMAT_LENGTH];
+		guint id;
 
-			child = l->data;
-			id = ephy_node_get_id (child);
-			g_snprintf (verb, sizeof (verb), 
-				    "OpenBmk%d", ephy_node_get_id (child));
-			g_snprintf (name, sizeof (name), "%sName", verb);
-			g_snprintf (accel_path, sizeof (accel_path),
-				    "<Actions>/BookmarksActions/%s", verb);
+		id = ephy_node_get_id ((EphyNode *) l->data);
 
-			action = ephy_bookmark_action_new (verb, id);
-			gtk_action_set_accel_path (action, accel_path);
-			gtk_action_group_add_action (p->action_group, action);
-			g_object_unref (action);
-			g_signal_connect (action, "open",
-					  G_CALLBACK (open_bookmark_cb), p->window);
+		g_snprintf (verb, sizeof (verb), BMK_VERB_FORMAT, id);
+		g_snprintf (name, sizeof (name), BMK_NAME_FORMAT, id, phash);
 
-			gtk_ui_manager_add_ui (p->merge, p->ui_id, path,
-					       name, verb,
-					       GTK_UI_MANAGER_MENUITEM, FALSE);
-		}
-		g_list_free (node_list);
+		gtk_ui_manager_add_ui (p->manager, p->ui_id, path,
+				       name, verb,
+				       GTK_UI_MANAGER_MENUITEM, FALSE);
 	}
+	g_list_free (node_list);
 }
 
-static void
-ensure_folder (EphyBookmarksMenu *menu, const char *path, const char *folder)
-{
-	EphyBookmarksMenuPrivate *p = menu->priv;
-	char *action_name;
-	GtkAction *action;
-
-	g_return_if_fail (folder != NULL);
-
-	action_name = g_strdup_printf ("TopicAction-%s\n", folder);
-	action = gtk_action_group_get_action (p->action_group, action_name);
-
-	if (action == NULL)
-	{
-		action = g_object_new (GTK_TYPE_ACTION,
-				       "name", action_name,
-				       "label", folder,
-				       "hide_if_empty", FALSE,
-				       NULL);
-		gtk_action_group_add_action (p->action_group, action);
-		g_object_unref (action);
-
-		gtk_ui_manager_add_ui (p->merge, p->ui_id, path,
-				       folder, action_name,
-				       GTK_UI_MANAGER_MENU, FALSE);
-	}
-
-	g_free (action_name);
-}
+#define FOLDER_ACCEL_PATH_PREFIX "<Actions>/FolderActions/"
 
 static char *
-create_submenu (EphyBookmarksMenu *menu, EphyNode *topic)
+create_submenu (EphyBookmarksMenu *menu,
+		EphyNode *topic)
 {
+	EphyBookmarksMenuPrivate *p = menu->priv;
+	GtkAction *action;
+	char verb[FOLDER_VERB_FORMAT_LENGTH];
+	char apath[strlen (FOLDER_ACCEL_PATH_PREFIX) + FOLDER_VERB_FORMAT_LENGTH];
 	const char *tmp;
 	char *title, *folder;
 	char **folders;
 	GString *path;
+	guint phash, fhash;
 	int i;
 
 	tmp = ephy_node_get_property_string (topic, EPHY_NODE_KEYWORD_PROP_NAME);
+	g_return_val_if_fail (tmp != NULL, NULL);
+
 	title = ephy_string_double_underscores (tmp);
-
-	g_return_val_if_fail (title != NULL, NULL);
-
-	folders = g_strsplit (title, "/", -1);
+	folders = g_strsplit (title, BOOKMARKS_HIERARCHY_SEP, -1);
 	g_free (title);
-	g_return_val_if_fail (folders != NULL, NULL); /* FIXME */
+
+	/* occurs if topic name was "" or BOOKMARKS_HIERARCHY_SEP */
+	if (folders == NULL || folders[0] == NULL)
+	{
+		g_strfreev (folders);
+		return g_strdup (BOOKMARKS_MENU_PATH);
+	}
 
 	path = g_string_new (BOOKMARKS_MENU_PATH);
 	for (i = 0; folders[i] != NULL; i++)
 	{
 		folder = folders[i];
 
-		ensure_folder (menu, path->str, folder);
+		/* happens for BOOKMARKS_HIERARCHY_SEP at start/end of title,
+		 * or when occurring twice in succession.
+		 * Treat as if it didn't occur/only occurred once.
+		 */
+		if (folders[i][0] == '\0') continue;
+
+		phash = g_str_hash (path->str);
+		fhash = g_str_hash (folder);
+		g_snprintf (verb, sizeof (verb), FOLDER_VERB_FORMAT, fhash, phash);
+	
+		if (gtk_action_group_get_action (p->folder_actions, verb) == NULL)
+		{
+			g_snprintf (apath, sizeof (apath),
+				    FOLDER_ACCEL_PATH_PREFIX "%s", verb);
+
+			action = g_object_new (GTK_TYPE_ACTION,
+					       "name", verb,
+					       "label", folder,
+					       "hide_if_empty", FALSE,
+					       NULL);
+			gtk_action_set_accel_path (action, apath);
+
+			gtk_action_group_add_action (p->folder_actions, action);
+			g_object_unref (action);
+
+			gtk_ui_manager_add_ui (p->manager, p->ui_id, path->str,
+					       verb, verb,
+					       GTK_UI_MANAGER_MENU, FALSE);
+		}
 
 		g_string_append (path, "/");
-		g_string_append (path, folder);
+		g_string_append (path, verb);
 	}
 
 	g_strfreev (folders);
@@ -298,11 +405,18 @@ static void
 ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 {
 	EphyBookmarksMenuPrivate *p = menu->priv;
-	gint i;
-	EphyNode *topics;
-	EphyNode *not_categorized;
+	EphyNode *topics, *not_categorized, *node;
 	GPtrArray *children;
 	GList *node_list = NULL, *l;
+	char *path;
+	int i;
+
+	if (menu->priv->needs_update == FALSE)
+	{
+		LOG ("No update required")
+	
+		return;
+	}
 
 	LOG ("Rebuilding bookmarks menu")
 
@@ -310,14 +424,14 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 
 	START_PROFILER ("Rebuilding bookmarks menu")
 
+	ensure_bookmark_actions (menu);
+	p->folder_actions = gtk_action_group_new ("FolderActions");
+	gtk_ui_manager_insert_action_group (p->manager, p->folder_actions, -1);
+
+	p->ui_id = gtk_ui_manager_new_merge_id (p->manager);
+
 	topics = ephy_bookmarks_get_keywords (p->bookmarks);
-	not_categorized = ephy_bookmarks_get_not_categorized (p->bookmarks);
 	children = ephy_node_get_children (topics);
-
-	p->ui_id = gtk_ui_manager_new_merge_id (p->merge);
-
-	p->action_group = gtk_action_group_new ("BookmarksActions");
-	gtk_ui_manager_insert_action_group (p->merge, p->action_group, 0);
 
 	for (i = 0; i < children->len; ++i)
 	{
@@ -335,16 +449,18 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 		}
 	}
 
-	node_list = g_list_sort (node_list, (GCompareFunc)sort_topics);
+	node_list = g_list_sort (node_list, (GCompareFunc) sort_topics);
 
 	for (l = node_list; l != NULL; l = l->next)
 	{
-		char *path;
+		node = (EphyNode *) l->data;
 
-		path = create_submenu (menu, l->data);
-		create_menu (menu, l->data, path);
+		path = create_submenu (menu, node);
+		create_menu (menu, node, path);
 		g_free (path);
 	}
+
+	not_categorized = ephy_bookmarks_get_not_categorized (p->bookmarks);
 
 	if (ephy_node_get_n_children (not_categorized) > 0)
 	{
@@ -354,14 +470,60 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 	g_list_free (node_list);
 
 	STOP_PROFILER ("Rebuilding bookmarks menu")
+
+	menu->priv->needs_update = FALSE;
+}
+
+static gboolean
+do_update_cb (EphyBookmarksMenu *menu)
+{
+	LOG ("do_update_cb")
+
+	ephy_bookmarks_menu_rebuild (menu);
+	menu->priv->update_tag = 0;
+
+	/* don't run again */
+	return FALSE;
 }
 
 static void
-ephy_bookmarks_menu_set_window (EphyBookmarksMenu *menu, EphyWindow *window)
+ephy_bookmarks_menu_maybe_update (EphyBookmarksMenu *menu)
+{
+	EphyNode *bookmarks;
+	GPtrArray *children;
+
+	menu->priv->needs_update = TRUE;
+
+	/* FIXME: is there any way that we get here while the menu is popped up?
+	 * if so, needs to do_update NOW
+	 */
+
+	/* if there are only a few bookmarks, update soon */
+	bookmarks = ephy_bookmarks_get_bookmarks (menu->priv->bookmarks);
+	children = ephy_node_get_children (bookmarks);
+	if (children->len < GAZILLION)
+	{
+		if (menu->priv->update_tag == 0)
+		{
+			menu->priv->update_tag =
+				g_timeout_add (UPDATE_DELAY,
+					       (GSourceFunc) do_update_cb, menu);
+		}
+	}
+	else if (menu->priv->update_tag != 0)
+	{
+		/* remove scheduled update, update on demand */
+		g_source_remove (menu->priv->update_tag);
+		menu->priv->update_tag = 0;
+	}
+}
+
+static void
+ephy_bookmarks_menu_set_window (EphyBookmarksMenu *menu,
+				EphyWindow *window)
 {
 	menu->priv->window = window;
-	menu->priv->merge = GTK_UI_MANAGER (window->ui_merge);
-	ephy_bookmarks_menu_rebuild (menu);
+	menu->priv->manager = GTK_UI_MANAGER (window->ui_merge);
 }
 
 static void
@@ -374,7 +536,7 @@ ephy_bookmarks_menu_set_property (GObject *object,
 
         switch (prop_id)
         {
-                case PROP_EPHY_WINDOW:
+                case PROP_WINDOW:
                         ephy_bookmarks_menu_set_window
 				(m, g_value_get_object (value));
                         break;
@@ -391,73 +553,40 @@ ephy_bookmarks_menu_get_property (GObject *object,
 
         switch (prop_id)
         {
-                case PROP_EPHY_WINDOW:
+                case PROP_WINDOW:
                         g_value_set_object (value, m->priv->window);
                         break;
         }
 }
 
-
 static void
-ephy_bookmarks_menu_class_init (EphyBookmarksMenuClass *klass)
+bookmarks_tree_changed_cb (EphyBookmarks *bookmarks,
+			   EphyBookmarksMenu *menu)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	LOG ("bookmarks_tree_changed_cb")
 
-	parent_class = g_type_class_peek_parent (klass);
-
-	object_class->finalize = ephy_bookmarks_menu_finalize;
-	object_class->set_property = ephy_bookmarks_menu_set_property;
-	object_class->get_property = ephy_bookmarks_menu_get_property;
-
-	g_object_class_install_property (object_class,
-                                         PROP_EPHY_WINDOW,
-                                         g_param_spec_object ("EphyWindow",
-                                                              "EphyWindow",
-                                                              "Parent window",
-                                                              EPHY_TYPE_WINDOW,
-                                                              G_PARAM_READWRITE |
-							      G_PARAM_CONSTRUCT_ONLY));
-
-	g_type_class_add_private (object_class, sizeof(EphyBookmarksMenuPrivate));
-}
-
-static gboolean
-do_updates (EphyBookmarksMenu *menu)
-{
-	ephy_bookmarks_menu_rebuild (menu);
-
-	menu->priv->update_tag = 0;
-
-	return FALSE;
+	ephy_bookmarks_menu_maybe_update (menu);
 }
 
 static void
-bookmarks_tree_changed_cb (EphyBookmarks *bookmarks, EphyBookmarksMenu *menu)
+topics_added_cb (EphyNode *keywords,
+		 EphyNode *bmk,
+		 EphyBookmarksMenu *menu)
 {
-	if (menu->priv->update_tag == 0)
-	{
-		menu->priv->update_tag = g_idle_add((GSourceFunc)do_updates, menu);
-	}
+	LOG ("topics_added_cb")
+
+	ephy_bookmarks_menu_maybe_update (menu);
 }
 
 static void
-sync_topic_properties (GtkAction *action, EphyNode *bmk)
+topics_removed_cb (EphyNode *keywords,
+		   EphyNode *child,
+		   guint old_index,
+		   EphyBookmarksMenu *menu)
 {
-	const char *tmp;
-	char *title;
-	int priority;
+	LOG ("topics_removed_cb")
 
-	priority = ephy_node_get_property_int 
-		(bmk, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-
-	tmp = ephy_node_get_property_string
-       	        (bmk, EPHY_NODE_KEYWORD_PROP_NAME);
-
-	title = ephy_string_double_underscores (tmp);
-
-	g_object_set (action, "label", title, NULL);
-
-	g_free (title);
+	ephy_bookmarks_menu_maybe_update (menu);
 }
 
 static void
@@ -466,34 +595,85 @@ topic_child_changed_cb (EphyNode *node,
 			guint property_id,
 			EphyBookmarksMenu *menu)
 {
-	GtkAction *action;
-	char name[64];
+	LOG ("topic_child_changed_cb id=%d property=%d",
+	     ephy_node_get_id (child), property_id)
 
-	if (menu->priv->update_tag != 0 || menu->priv->action_group == NULL)
+	if (property_id == EPHY_NODE_KEYWORD_PROP_NAME)
 	{
-		return;
+		/* the title of the topic has changed, which may change the
+		 * hierarchy.
+		 */
+		ephy_bookmarks_menu_maybe_update (menu);
 	}
+}
 
-	g_snprintf (name, sizeof (name), "OpenTopic%d", ephy_node_get_id (child));
+static void
+bookmark_added_cb (EphyNode *bookmarks,
+		   EphyNode *bmk,
+		   EphyBookmarksMenu *menu)
+{
+	LOG ("bookmark_added_cb id=%d", ephy_node_get_id (bmk))
 
-	action = gtk_action_group_get_action (menu->priv->action_group, name);
-
-	if (action != NULL)
+	if (menu->priv->bmk_actions != NULL)
 	{
-		sync_topic_properties (action, child);
+		add_action_for_bookmark (menu, bmk);
+
+		ephy_bookmarks_menu_maybe_update (menu);
 	}
+}
+
+static void
+bookmark_removed_cb (EphyNode *bookmarks,
+		     EphyNode *bmk,
+		     guint old_index,
+		     EphyBookmarksMenu *menu)
+{
+	LOG ("bookmark_removed_cb id=%d", ephy_node_get_id (bmk))
+
+	if (menu->priv->bmk_actions != NULL)
+	{
+		/* we cannot remove the action here since the menu might still
+		 * reference it.
+		 */
+		menu->priv->removed_bmks =
+			g_slist_prepend (menu->priv->removed_bmks,
+					 GUINT_TO_POINTER (ephy_node_get_id (bmk)));
+
+		ephy_bookmarks_menu_maybe_update (menu);
+	}
+}
+
+static void
+activate_cb (GtkAction *action,
+	     EphyBookmarksMenu *menu)
+{
+	LOG ("activate_cb")
+
+	ephy_bookmarks_menu_rebuild (menu);
 }
 
 static void
 ephy_bookmarks_menu_init (EphyBookmarksMenu *menu)
 {
-	EphyBookmarksMenuPrivate *p = EPHY_BOOKMARKS_MENU_GET_PRIVATE (menu);
+	menu->priv = EPHY_BOOKMARKS_MENU_GET_PRIVATE (menu);
+}
+
+static GObject *
+ephy_bookmarks_menu_constructor (GType type,
+				 guint n_construct_properties,
+				 GObjectConstructParam *construct_params)
+{
+	EphyBookmarksMenu *menu;
+        GObject *object;
+	GtkAction *action;
 	EphyNode *node;
 
-	menu->priv = p;
-	menu->priv->ui_id = 0;
-	menu->priv->action_group = NULL;
-	menu->priv->update_tag = 0;
+        object = parent_class->constructor (type, n_construct_properties,
+                                            construct_params);
+
+	menu = EPHY_BOOKMARKS_MENU (object);
+
+	g_assert (menu->priv->window != NULL);
 
 	menu->priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	g_signal_connect_object (menu->priv->bookmarks, "tree_changed",
@@ -501,9 +681,32 @@ ephy_bookmarks_menu_init (EphyBookmarksMenu *menu)
 			         menu, 0);
 
 	node = ephy_bookmarks_get_keywords (menu->priv->bookmarks);
+	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_ADDED,
+				         (EphyNodeCallback) topics_added_cb,
+				         G_OBJECT (menu));
+	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_REMOVED,
+				         (EphyNodeCallback) topics_removed_cb,
+				         G_OBJECT (menu));
 	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_CHANGED,
 				         (EphyNodeCallback) topic_child_changed_cb,
 				         G_OBJECT (menu));
+
+	node = ephy_bookmarks_get_bookmarks (menu->priv->bookmarks);
+	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_ADDED,
+					 (EphyNodeCallback) bookmark_added_cb,
+					 G_OBJECT (menu));
+	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_REMOVED,
+					 (EphyNodeCallback) bookmark_removed_cb,
+					 G_OBJECT (menu));
+
+	action = gtk_ui_manager_get_action (menu->priv->manager,
+					    BOOKMARKS_MENU_PATH);
+	g_signal_connect_object (action, "activate",
+				 G_CALLBACK (activate_cb), menu, 0);
+
+	ephy_bookmarks_menu_maybe_update (menu);
+
+	return object;
 }
 
 static void
@@ -517,19 +720,51 @@ ephy_bookmarks_menu_finalize (GObject *o)
 		g_source_remove (menu->priv->update_tag);
 	}
 
-	if (p->action_group != NULL)
+	g_slist_free (menu->priv->removed_bmks);
+
+	if (p->bmk_actions != NULL)
 	{
-		g_object_unref (p->action_group);
+		g_object_unref (p->bmk_actions);
 	}
 
+	if (p->folder_actions != NULL)
+	{
+		g_object_unref (p->folder_actions);
+	}
+
+	LOG ("EphyBookmarksMenu finalised %p", o);
+
 	G_OBJECT_CLASS (parent_class)->finalize (o);
+}
+
+static void
+ephy_bookmarks_menu_class_init (EphyBookmarksMenuClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	parent_class = g_type_class_peek_parent (klass);
+
+	object_class->constructor = ephy_bookmarks_menu_constructor;
+	object_class->finalize = ephy_bookmarks_menu_finalize;
+	object_class->set_property = ephy_bookmarks_menu_set_property;
+	object_class->get_property = ephy_bookmarks_menu_get_property;
+
+	g_object_class_install_property (object_class,
+                                         PROP_WINDOW,
+                                         g_param_spec_object ("window",
+                                                              "Window",
+                                                              "Parent window",
+                                                              EPHY_TYPE_WINDOW,
+                                                              G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof (EphyBookmarksMenuPrivate));
 }
 
 EphyBookmarksMenu *
 ephy_bookmarks_menu_new (EphyWindow *window)
 {
-	EphyBookmarksMenu *ret = g_object_new (EPHY_TYPE_BOOKMARKS_MENU,
-					       "EphyWindow", window,
-					       NULL);
-	return ret;
+	return EPHY_BOOKMARKS_MENU (g_object_new (EPHY_TYPE_BOOKMARKS_MENU,
+						  "window", window,
+						  NULL));
 }
