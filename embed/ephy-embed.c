@@ -192,7 +192,7 @@ ephy_embed_base_init (gpointer g_class)
 			      ephy_marshal_BOOLEAN__OBJECT,
 			      G_TYPE_BOOLEAN,
 			      1,
-			      G_TYPE_POINTER);
+			      G_TYPE_OBJECT);
 /**
  * EphyEmbed::ge-dom-mouse-down:
  * @embed:
@@ -209,7 +209,7 @@ ephy_embed_base_init (gpointer g_class)
 			      ephy_marshal_BOOLEAN__OBJECT,
 			      G_TYPE_BOOLEAN,
 			      1,
-			      G_TYPE_POINTER);
+			      G_TYPE_OBJECT);
 /**
  * EphyEmbed::ge-security-change:
  * @embed:
