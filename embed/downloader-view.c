@@ -513,7 +513,7 @@ downloader_view_set_download_info (DownloaderViewPrivate *priv,
 	{
 		sprintf (buffer,
 			 details->progress > 0 ?
-		 	 "00.00" :
+		 	 _("00.00") :
 		 	 _("Unknown"));
 	}
 	
