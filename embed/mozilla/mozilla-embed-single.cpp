@@ -62,56 +62,46 @@
 #define MOZILLA_PROFILE_NAME "epiphany"
 #define MOZILLA_PROFILE_FILE "prefs.js"
 
-/* language groups */
-typedef enum
-{
-	LG_ARABIC,
-	LG_BALTIC,
-	LG_CENTRAL_EUROPEAN,
-	LG_CHINESE,
-	LG_CYRILLIC,
-	LG_GREEK,
-	LG_HEBREW,
-	LG_INDIAN,
-	LG_JAPANESE, 
-	LG_KOREAN,
-	LG_TURKISH,
-	LG_UNICODE,
-	LG_VIETNAMESE,
-	LG_WESTERN,
-	LG_OTHER,
-} LanguageGroup;
-
 /* language groups names */
-static const gchar *lgroups[] =
-{
-        N_("Arabic"),
-        N_("Baltic"),
-        N_("Central European"),
-        N_("Chinese"),
-        N_("Cyrillic"),
-        N_("Greek"),
-        N_("Hebrew"),
-        N_("Indian"),
-        N_("Japanese"), 
-        N_("Korean"),
-        N_("Turkish"),
-        N_("Unicode"),
-        N_("Vietnamese"),
-        N_("Western"),
-        N_("Other")
-};
-static const guint n_lgroups = G_N_ELEMENTS (lgroups);
-
-/* translated charset titles */
 static const
 struct
 {
-	gchar *charset_title;
-	gchar *charset_name;
-	LanguageGroup lgroup;
+	gchar *title;
+	LanguageGroup group;
 }
-charset_trans_array[] =
+lang_groups[] =
+{
+        { N_("Arabic"),			LG_ARABIC },
+        { N_("Baltic"),			LG_BALTIC },
+        { N_("Central European"),	LG_CENTRAL_EUROPEAN },
+        { N_("Chinese"),		LG_CHINESE },
+        { N_("Cyrillic"),		LG_CYRILLIC },
+        { N_("Greek"),			LG_GREEK },
+        { N_("Hebrew"),			LG_HEBREW },
+        { N_("Indian"),			LG_INDIAN },
+        { N_("Japanese"),		LG_JAPANESE },
+        { N_("Korean"),			LG_KOREAN },
+        { N_("Turkish"),		LG_TURKISH },
+        { N_("Unicode"),		LG_UNICODE },
+        { N_("Vietnamese"),		LG_VIETNAMESE },
+        { N_("Western"),		LG_WESTERN },
+        { N_("Other"),			LG_OTHER }
+};
+static const guint n_lang_groups = G_N_ELEMENTS (lang_groups);
+
+/**
+ * translatable encodings titles
+ * NOTE: if you add /change encodings, please also update the schema file
+ * epiphany.schemas.in
+ */
+static const 
+struct
+{
+	gchar *title;
+	gchar *name;
+	LanguageGroup group;
+}
+encodings[] =
 { 
 	{ N_("Arabic (IBM-864)"),                  "IBM864",                LG_ARABIC },
 	{ N_("Arabic (IBM-864-I)"),                "IBM864i",               LG_ARABIC },
@@ -196,12 +186,12 @@ charset_trans_array[] =
 	{ N_("Western (ISO-8859-15)"),             "ISO-8859-15",           LG_WESTERN },
 	{ N_("Western (MacRoman)"),                "x-mac-roman",           LG_WESTERN },
 	{ N_("Western (Windows-1252)"),            "windows-1252",          LG_WESTERN },
-	/* charsets whithout posibly translatable names */
+	/* encodings whithout posibly translatable names */
 	{ "T.61-8bit",                             "T.61-8bit",             LG_OTHER },
 	{ "x-imap4-modified-utf7",                 "x-imap4-modified-utf7", LG_UNICODE },
 	{ "x-u-escaped",                           "x-u-escaped",           LG_OTHER }
 };
-static const guint n_charset_trans_array = G_N_ELEMENTS (charset_trans_array);
+static const guint n_encodings = G_N_ELEMENTS (encodings);
 
 static void
 mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass);
@@ -220,12 +210,13 @@ static gresult
 impl_load_proxy_autoconf (EphyEmbedSingle *shell,
 			  const char* url);
 static gresult           
-impl_get_charset_titles (EphyEmbedSingle *shell,
-			 const char *group,
-			 GList **charsets);
+impl_get_encodings (EphyEmbedSingle *shell,
+		    LanguageGroup group,
+		    gboolean elide_underscores,
+		    GList **encodings_list);
 static gresult           
-impl_get_charset_groups (EphyEmbedSingle *shell,
-		         GList **groups);
+impl_get_language_groups (EphyEmbedSingle *shell,
+		          GList **groups);
 static gresult
 impl_get_font_list (EphyEmbedSingle *shell,
 		    const char *langGroup,
@@ -262,11 +253,13 @@ static void mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *embed,
 					              guint chrome_mask,
                            		              EphyEmbedSingle *shell);
 
+#ifdef GNOME_ENABLE_DEBUG
+static gresult control_encodings_list (void);
+#endif
+
 struct MozillaEmbedSinglePrivate
 {
 	char *user_prefs;
-	GHashTable *charsets_hash;
-	GList *sorted_charsets_titles;
 };
 
 static NS_DEFINE_CID(kJVMManagerCID, NS_JVMMANAGER_CID);
@@ -315,8 +308,8 @@ mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 	shell_class->clear_cache = impl_clear_cache;
 	shell_class->set_offline_mode = impl_set_offline_mode;
 	shell_class->load_proxy_autoconf = impl_load_proxy_autoconf;
-	shell_class->get_charset_titles = impl_get_charset_titles;
-	shell_class->get_charset_groups = impl_get_charset_groups;
+	shell_class->get_encodings = impl_get_encodings;
+	shell_class->get_language_groups = impl_get_language_groups;
 	shell_class->get_font_list = impl_get_font_list;
 	shell_class->list_cookies = impl_list_cookies;
 	shell_class->remove_cookies = impl_remove_cookies;
@@ -472,8 +465,6 @@ static void
 mozilla_embed_single_init (MozillaEmbedSingle *mes)
 {
  	mes->priv = g_new0 (MozillaEmbedSinglePrivate, 1);
-	mes->priv->charsets_hash = NULL;
-	mes->priv->sorted_charsets_titles = NULL;
 
 	mes->priv->user_prefs =
 		g_build_filename (ephy_dot_dir (), 
@@ -501,6 +492,9 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 
 	mozilla_register_external_protocols ();
 
+#ifdef GNOME_ENABLE_DEBUG
+	control_encodings_list ();
+#endif
 	/* FIXME alert if fails */
 }
 
@@ -622,13 +616,15 @@ impl_load_proxy_autoconf (EphyEmbedSingle *shell,
 	return G_OK;
 }
 
+#ifdef GNOME_ENABLE_DEBUG
 static gresult
-fill_charsets_lists (MozillaEmbedSinglePrivate *priv)
+control_encodings_list (void)
 {
 	nsresult rv;
 	char *tmp;
         PRUint32 cscount;
-        char *charset_str, *charset_title_str;
+        char *encoding_str, *encoding_title_str;
+	gresult ret = G_OK;
 
         nsCOMPtr<nsIAtom> docCharsetAtom;
         nsCOMPtr<nsICharsetConverterManager2> ccm2 =
@@ -640,131 +636,151 @@ fill_charsets_lists (MozillaEmbedSinglePrivate *priv)
         if (!NS_SUCCEEDED(rv)) return G_FAILED;
 
         rv = cs_list->Count(&cscount);
-        priv->charsets_hash = g_hash_table_new (g_str_hash, g_str_equal);
 	for (PRUint32 i = 0; i < cscount; i++)
         {
                 nsCOMPtr<nsISupports> cssupports =
                                         (dont_AddRef)(cs_list->ElementAt(i));
                 nsCOMPtr<nsIAtom> csatom ( do_QueryInterface(cssupports) );
-                nsAutoString charset_ns, charset_title_ns;
+                nsAutoString encoding_ns, encoding_title_ns;
 
-                /* charset name */
-		rv = csatom->ToString(charset_ns);
-                tmp = ToNewCString (charset_ns);
+                /* encoding name */
+		rv = csatom->ToString(encoding_ns);
+                tmp = ToNewCString (encoding_ns);
                 if (tmp == NULL || strlen (tmp) == 0)
                 {
                         continue;
                 }
-		charset_str = g_strdup (tmp);
+		encoding_str = g_strdup (tmp);
 		nsMemory::Free (tmp);
 		tmp = nsnull;
 
-                /* charset readable title */
-                rv = ccm2->GetCharsetTitle2(csatom, &charset_title_ns);
-                tmp = ToNewCString (charset_title_ns);
+                /* encoding readable title */
+                rv = ccm2->GetCharsetTitle2(csatom, &encoding_title_ns);
+                tmp = ToNewCString (encoding_title_ns);
                 if (tmp == NULL || 
                     strlen (tmp) == 0)
                 {
-                        charset_title_str = g_strdup (charset_str);
+                        encoding_title_str = g_strdup (encoding_str);
                 }
 		else
 		{
-			charset_title_str = g_strdup (tmp);
+			encoding_title_str = g_strdup (tmp);
 		}
 
 		if (tmp) nsMemory::Free (tmp);
 		tmp = nsnull;
 
-#ifdef GNOME_ENABLE_DEBUG
 		gboolean found = FALSE;
-#endif
-		for (PRUint32 j = 0; j < n_charset_trans_array; j++)
+		for (PRUint32 j = 0; j < n_encodings; j++)
                 {
                         if (g_ascii_strcasecmp (
-                                charset_str, 
-                                charset_trans_array[j].charset_name) == 0)
+                                encoding_str, 
+                                encodings[j].name) == 0)
                         {
-                                g_free (charset_title_str);
-                                charset_title_str = (char *) 
-                                        _(charset_trans_array[j].charset_title);
-#ifdef GNOME_ENABLE_DEBUG
+				LOG ("Mozilla reported encoding %s with title %s found in our list.",
+				     encoding_str, encoding_title_str)
+
 				found = TRUE;
-#endif
                                 break;
                         }
                 }
 
-#ifdef GNOME_ENABLE_DEBUG
 		if (found == FALSE)
 		{
-			g_warning ("Charset %s with title %s not in list!",
-			           charset_str, charset_title_str);
+			g_warning ("Mozilla reported encoding %s with title %s NOT found in our list!",
+				   encoding_str, encoding_title_str);
+			ret = G_FAILED;
 		}
-#endif
-
-		/* fill the hash and the sorted list */
-		g_hash_table_insert (priv->charsets_hash, charset_title_str, charset_str);
-                priv->sorted_charsets_titles = 
-			g_list_insert_sorted (priv->sorted_charsets_titles,
-                                              (gpointer)charset_title_str,
-                                              (GCompareFunc)g_ascii_strcasecmp); 
         }
 
-	return G_OK;
+	return ret;
 }
+#endif
 
-static void
-ensure_charsets_tables (MozillaEmbedSingle *shell)
+static gint
+encoding_info_cmp (const EncodingInfo *i1, const EncodingInfo *i2)
 {
-	if (!shell->priv->charsets_hash)
-	{
-		fill_charsets_lists (shell->priv);
-	}
+	return strcmp (i1->key, i2->key);
 }
 
 static gresult           
-impl_get_charset_titles (EphyEmbedSingle *shell,
-		         const char *group,
-			 GList **charsets)
+impl_get_encodings (EphyEmbedSingle *shell,
+		   LanguageGroup group,
+		   gboolean elide_underscores,
+		   GList **encodings_list)
 {
-	MozillaEmbedSingle *mshell = MOZILLA_EMBED_SINGLE(shell);
 	GList *l = NULL;
-	guint j;
+	guint i;
 
-	ensure_charsets_tables (mshell);
-	g_return_val_if_fail (mshell->priv->charsets_hash != NULL, G_FAILED);
-
-	for (j = 0; j < n_charset_trans_array; j++)
-	{	
-		if (group == NULL ||
-		    strcmp (group, lgroups[charset_trans_array[j].lgroup]) == 0) 
+	for (i = 0; i < n_encodings; i++)
+	{
+		if (group == LG_ALL || group == encodings[i].group)
 		{
-			CharsetInfo *info;
-			info = g_new0 (CharsetInfo, 1);
-			info->name = charset_trans_array[j].charset_name;
-			info->title = charset_trans_array[j].charset_title;
+			EncodingInfo *info;
+			gchar *elided = NULL;
+
+			info = g_new0 (EncodingInfo, 1);
+
+			info->encoding = g_strdup (encodings[i].name);
+			
+			elided = ephy_str_elide_underscores (_(encodings[i].title));
+
+			if (elide_underscores)
+			{
+				info->title = g_strdup (elided);
+			}
+			else
+			{
+				info->title = g_strdup (_(encodings[i].title));
+			}
+
+			/* collate without underscores */
+			info->key = g_utf8_collate_key (elided, -1);
+
+			info->group = encodings[i].group;
+
 			l = g_list_prepend (l, info);
+			g_free (elided);
 		}
 	}
 
-	*charsets = g_list_reverse (l);
+	*encodings_list = g_list_sort (l, (GCompareFunc) encoding_info_cmp);
 
 	return G_OK;
 }
 
+static gint
+language_group_info_cmp (const LanguageGroupInfo *i1, const LanguageGroupInfo *i2)
+{
+	return strcmp (i1->key, i2->key);
+}
+
 static gresult           
-impl_get_charset_groups (EphyEmbedSingle *shell,
-		         GList **groups)
+impl_get_language_groups (EphyEmbedSingle *shell,
+		          GList **groups)
 {
 	GList *l = NULL;
 	guint i;
 	
-	for (i = 0; i < n_lgroups; i++)
+	for (i = 0; i < n_lang_groups; i++)
 	{
-		l = g_list_prepend (l, (gpointer)lgroups[i]);
+		LanguageGroupInfo *info;
+		gchar *elided = NULL;
+		
+		info = g_new0 (LanguageGroupInfo, 1);
+		
+		info->title = g_strdup (_(lang_groups[i].title));
+		info->group = lang_groups[i].group;
+		
+		/* collate without underscores */
+		elided = ephy_str_elide_underscores (info->title);
+		info->key = g_utf8_collate_key (elided, -1);
+		g_free (elided);
+
+		l = g_list_prepend (l, info);
 	}
 	
-	*groups = g_list_reverse (l);
+	*groups = g_list_sort (l, (GCompareFunc) language_group_info_cmp);
 	
 	return G_OK;
 }

@@ -26,6 +26,7 @@
 #include "ephy-bonobo-extensions.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
+#include "ephy-langs.h"
 
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkmessagedialog.h>
@@ -168,129 +169,94 @@ ephy_embed_utils_save (GtkWidget *window,
         g_free (fileName);
 }
 
-static void
-build_group (GString *xml_string, const char *group, int index)
-{
-	char *tmp;
-
-	tmp = g_strdup_printf ("<submenu label=\"%s\" name=\"CharsetGroup%d\">\n", 
-			       group, index);
-	xml_string = g_string_append (xml_string, tmp);
-	g_free (tmp);
-}
-
-static void
-build_charset (GString *xml_string, const CharsetInfo *info, int index)
-{
-	char *tmp;
-	char *verb;
-
-	verb = g_strdup_printf ("Charset%d", index);
-	tmp = g_strdup_printf ("<menuitem label=\"%s\" name=\"%s\" verb=\"%s\"/>\n",
-			       info->title, verb, verb);
-	xml_string = g_string_append (xml_string, tmp);
-
-	g_free (tmp);
-	g_free (verb);
-}
-
-static void
-add_verbs (BonoboUIComponent *ui_component,
-	   BonoboUIVerbFn fn, GList *verbs)
-{
-	GList *l;
-	char verb[15];
-	int charset_index = 0;
-
-	for (l = verbs; l != NULL; l = l->next)
-	{
-		EncodingMenuData *edata = (EncodingMenuData *)l->data;
-
-		sprintf (verb, "Charset%d", charset_index);
-		charset_index++;
-		bonobo_ui_component_add_verb_full
-			(ui_component, verb,
-		         g_cclosure_new (G_CALLBACK (fn), edata,
-			 (GClosureNotify)g_free));
-	}
-}
-
 /**
- * ephy_embed_utils_build_charsets_submenu:
+ * ephy_embed_utils_build_encodings_submenu:
  * @ui_component: the parent #BonoboUIComponent
  * @path: the bonoboui path where to create the submenu.
  * It's recommended to use a <placeholder/>
- * @fn: callback to report the selected charsets
+ * @fn: callback to report the selected encodings
  * @data: the data passed to the callback
  *
- * Create a charset submenu using bonobo ui.
+ * Create a encoding submenu using bonobo ui.
  **/
 void
-ephy_embed_utils_build_charsets_submenu (BonoboUIComponent *ui_component,
-					 const char *path,
-					 BonoboUIVerbFn fn,
-					 gpointer data)
+ephy_embed_utils_build_encodings_submenu (BonoboUIComponent *ui_component,
+					  const char *path,
+					  BonoboUIVerbFn fn,
+					  gpointer view)
 {
-	GList *groups, *gl;
+	gchar *tmp, *verb;
 	GString *xml_string;
+	GList *groups, *gl, *encodings, *l;
 	GList *verbs = NULL;
-	int group_index = 0;
-	int charset_index = 0;
 	EphyEmbedSingle *single;
 
-	single = ephy_embed_shell_get_embed_single
-		(EPHY_EMBED_SHELL (embed_shell));
-
-	START_PROFILER ("Charsets menu")
-
+	single = ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (embed_shell));
 	g_return_if_fail (IS_EPHY_EMBED_SHELL (embed_shell));
-	g_return_if_fail (ephy_embed_single_get_charset_groups (single, &groups) == G_OK);
 
+	START_PROFILER ("Encodings menu")
+
+	ephy_embed_single_get_language_groups (single, &groups);
+	g_return_if_fail (groups != NULL);
+	
 	xml_string = g_string_new (NULL);
 	g_string_append (xml_string, "<submenu name=\"Encoding\" _label=\"_Encoding\">");
 
 	for (gl = groups; gl != NULL; gl = gl->next)
         {
-		GList *charsets, *cl;
-		const char *group = (const char *)gl->data;
+		const LanguageGroupInfo *lang_info = (LanguageGroupInfo *) gl->data;
 
-		build_group (xml_string, group, group_index);
+		tmp = g_strdup_printf ("<submenu label=\"%s\" name=\"EncodingGroup%d\">\n", 
+					lang_info->title, lang_info->group);
+		xml_string = g_string_append (xml_string, tmp);
+		g_free (tmp);
 
-		ephy_embed_single_get_charset_titles (single,
-                                                      group,
-                                                      &charsets);
-
-		for (cl = charsets; cl != NULL; cl = cl->next)
+		ephy_embed_single_get_encodings (single, lang_info->group,
+						FALSE, &encodings);
+		
+		for (l = encodings; l != NULL; l = l->next)
                 {
-			const CharsetInfo *info = cl->data;
-			EncodingMenuData *edata;
+			const EncodingInfo *info = (EncodingInfo *) l->data;
 
-			edata = g_new0 (EncodingMenuData, 1);
-			edata->encoding = info->name;
-			edata->data = data;
-			verbs = g_list_append (verbs, edata);
+			verb = g_strdup_printf ("Encoding%s", info->encoding);
+			tmp = g_strdup_printf ("<menuitem label=\"%s\" name=\"%s\" verb=\"%s\"/>\n",
+						info->title, verb, verb);
+			xml_string = g_string_append (xml_string, tmp);
 
-			build_charset (xml_string, info, charset_index);
-			charset_index++;
+			verbs = g_list_prepend (verbs, verb);
+
+			g_free (tmp);
 		}
 
+		g_list_foreach (encodings, (GFunc) encoding_info_free, NULL);
+		g_list_free (encodings);
 
-		g_list_free (charsets);
 		g_string_append (xml_string, "</submenu>");
-		group_index++;
 	}
+
+	g_list_foreach (groups, (GFunc) language_group_info_free, NULL);
+	g_list_free (groups);
 
 	g_string_append (xml_string, "</submenu>");
 
 	bonobo_ui_component_set_translate (ui_component, path,
 					   xml_string->str, NULL);
-	add_verbs (ui_component, fn, verbs);
 
+	verbs = g_list_reverse (verbs);
+
+	for (l = verbs; l != NULL; l = l->next)
+	{
+		bonobo_ui_component_add_verb (ui_component,
+					      (const char *) l->data,
+					      fn, view);
+	}
+
+	g_list_foreach (verbs, (GFunc) g_free, NULL);
 	g_list_free (verbs);
-	g_list_free (groups);
+
 	g_string_free (xml_string, TRUE);
 
-	STOP_PROFILER ("Charsets menu")
+	STOP_PROFILER ("Encodings menu")
 }
 
 /**

@@ -536,11 +536,11 @@ ephy_embed_find (EphyEmbed *embed,
 }
 
 gresult
-ephy_embed_set_charset (EphyEmbed *embed,
-                          const char *charset)
+ephy_embed_set_encoding (EphyEmbed *embed,
+			 const char *encoding)
 {
 	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
-        return klass->set_charset (embed, charset);
+	return klass->set_encoding (embed, encoding);
 }
 
 gresult

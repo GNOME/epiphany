@@ -149,8 +149,8 @@ impl_find (EphyEmbed *embed,
            EmbedFindInfo *info);
 
 static gresult
-impl_set_charset (EphyEmbed *embed,
-                  const char *charset);
+impl_set_encoding (EphyEmbed *embed,
+                   const char *encoding);
 
 static gresult
 impl_print (EphyEmbed *embed, 
@@ -327,7 +327,7 @@ ephy_embed_init (EphyEmbedClass *embed_class)
 	embed_class->shistory_copy = impl_shistory_copy;
 	embed_class->get_security_level = impl_get_security_level;
 	embed_class->find = impl_find;
-	embed_class->set_charset = impl_set_charset;
+	embed_class->set_encoding = impl_set_encoding;
 	embed_class->select_all = impl_select_all;
 	embed_class->print = impl_print;
 	embed_class->print_preview_close = impl_print_preview_close;
@@ -437,7 +437,7 @@ impl_get_capabilities (EphyEmbed *embed,
 	        EMBED_PRINT_CAP |
 	        EMBED_FIND_CAP |
 	        EMBED_SECURITY_CAP |
-	        EMBED_CHARSET_CAP |
+	        EMBED_ENCODING_CAP |
 	        EMBED_SHISTORY_CAP );
 	
 	*caps = mozilla_caps;
@@ -1155,8 +1155,8 @@ impl_find (EphyEmbed *embed,
 }
 
 static gresult
-impl_set_charset (EphyEmbed *embed,
-                  const char *charset)
+impl_set_encoding (EphyEmbed *embed,
+		   const char *encoding)
 {
 	nsresult result = NS_OK;
 	EphyWrapper *wrapper;
@@ -1164,7 +1164,7 @@ impl_set_charset (EphyEmbed *embed,
 	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
 	g_return_val_if_fail (wrapper != NULL, G_FAILED);
 
-	result = wrapper->ForceCharacterSet (charset);
+	result = wrapper->ForceEncoding (encoding);
 	if (NS_FAILED (result)) return G_FAILED;
 	
 	gtk_moz_embed_reload (GTK_MOZ_EMBED (embed),

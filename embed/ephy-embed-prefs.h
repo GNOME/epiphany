@@ -16,8 +16,8 @@
 #define CONF_SECURITY_JAVA_ENABLED "/apps/epiphany/security/java_enabled"
 #define CONF_SECURITY_JAVASCRIPT_ENABLED "/apps/epiphany/security/javascript_enabled"
 #define CONF_SECURITY_COOKIES_ACCEPT "/apps/epiphany/security/cookie_accept"
-#define CONF_LANGUAGE_AUTODETECT_CHARSET "/apps/epiphany/rendering/autodetect_charset"
-#define CONF_LANGUAGE_DEFAULT_CHARSET "/apps/epiphany/rendering/default_charset"
+#define CONF_LANGUAGE_AUTODETECT_ENCODING "/apps/epiphany/rendering/autodetect_encoding"
+#define CONF_LANGUAGE_DEFAULT_ENCODING "/apps/epiphany/rendering/default_encoding"
 #define CONF_RENDERING_DEFAULT_FONT "/apps/epiphany/rendering/default_font"
 #define CONF_FILTERING_DEFAULT_STATUSBAR "/apps/epiphany/filtering/default_allow_statusbar"
 

@@ -74,8 +74,8 @@ static void		gnv_zoomable_zoom_to_fit_cb		(BonoboZoomable *zoomable,
 static void		gnv_zoomable_zoom_to_default_cb		(BonoboZoomable *zoomable,
 								 EphyNautilusView *view);
 /* commands */
-static void		gnv_cmd_set_charset			(BonoboUIComponent *uic, 
-								 EncodingMenuData *data, 
+static void		gnv_cmd_set_encoding			(BonoboUIComponent *uic, 
+								 EphyNautilusView *view,
 								 const char* verbname);
 static void 		gnv_cmd_file_print			(BonoboUIComponent *uic, 
 								 EphyNautilusView *view, 
@@ -131,7 +131,7 @@ BonoboUIVerb ephy_verbs [] = {
         BONOBO_UI_VERB_END
 };
 
-#define CHARSET_MENU_PATH "/menu/View/Encoding"
+#define ENCODING_MENU_PATH "/menu/View/Encoding"
 
 
 BONOBO_CLASS_BOILERPLATE (EphyNautilusView, ephy_nautilus_view,
@@ -470,9 +470,9 @@ gnv_bonobo_control_activate_cb (BonoboControl *control, gboolean state, EphyNaut
 						 "nautilus-epiphany-view.xml", "EphyNautilusView");
 		g_return_if_fail (BONOBO_IS_UI_COMPONENT (p->ui));
 		
-		ephy_embed_utils_build_charsets_submenu (p->ui,
-							   CHARSET_MENU_PATH,
-							   (BonoboUIVerbFn) gnv_cmd_set_charset,
+		ephy_embed_utils_build_encodings_submenu (p->ui,
+							   ENCODING_MENU_PATH,
+							   (BonoboUIVerbFn) gnv_cmd_set_encoding,
 							   view);
 
 		bonobo_ui_component_add_verb_list_with_data (p->ui, ephy_verbs, view);
@@ -544,19 +544,22 @@ gnv_popup_cmd_frame_in_new_window (BonoboUIComponent *uic,
 }
 
 void 
-gnv_cmd_set_charset (BonoboUIComponent *uic, 
-		     EncodingMenuData *data, 
-		     const char* verbname)
+gnv_cmd_set_encoding (BonoboUIComponent *uic, 
+		      EphyNautilusView *view,
+		      const char* verbname)
 {
-	EphyNautilusView *view = data->data;
-	EphyNautilusViewPrivate *p;
+	const char *encoding;
 
 	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
 
-	p = view->priv;
-	
-	LOG ("Set charset %s", data->encoding)
-	ephy_embed_set_charset (p->embed, data->encoding);
+	if (strncmp (verbname, "Encoding", 8) == 0)
+	{
+		encoding = verbname + 8;
+		
+		LOG ("Set encoding %s", encoding)
+
+		ephy_embed_set_encoding (view->priv->embed, encoding);
+	}
 }
 
 static void

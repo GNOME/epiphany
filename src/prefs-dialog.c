@@ -24,6 +24,7 @@
 #include "ephy-dialog.h"
 #include "ephy-prefs.h"
 #include "ephy-embed-prefs.h"
+#include "ephy-embed-single.h"
 #include "ephy-shell.h"
 #include "ephy-gui.h"
 #include "eel-gconf-extensions.h"
@@ -176,8 +177,8 @@ enum
 	/* General */
 	OPEN_IN_TABS_PROP,
 	HOMEPAGE_ENTRY_PROP,
-	AUTOCHARSET_PROP,
-	DEFAULT_CHARSET_PROP,
+	AUTO_ENCODING_PROP,
+	DEFAULT_ENCODING_PROP,
 	LANGUAGE_PROP,
 
 	/* Appeareance */
@@ -212,8 +213,8 @@ EphyDialogProperty properties [] =
 	/* General */
 	{ OPEN_IN_TABS_PROP, "open_in_tabs_checkbutton", CONF_TABS_TABBED, PT_AUTOAPPLY, NULL },
 	{ HOMEPAGE_ENTRY_PROP, "homepage_entry", CONF_GENERAL_HOMEPAGE, PT_AUTOAPPLY, NULL },
-	{ AUTOCHARSET_PROP, "autocharset_optionmenu", CONF_LANGUAGE_AUTODETECT_CHARSET, PT_AUTOAPPLY, NULL },
-	{ DEFAULT_CHARSET_PROP, "default_charset_optionmenu", NULL, PT_NORMAL, NULL },
+	{ AUTO_ENCODING_PROP, "auto_encoding_optionmenu", CONF_LANGUAGE_AUTODETECT_ENCODING, PT_AUTOAPPLY, NULL },
+	{ DEFAULT_ENCODING_PROP, "default_encoding_optionmenu", NULL, PT_NORMAL, NULL },
 	{ LANGUAGE_PROP, "language_optionmenu", NULL, PT_NORMAL, NULL },
 
 	/* Appeareance */
@@ -254,6 +255,7 @@ struct PrefsDialogPrivate
 	GtkWidget *window;
 
 	GList *langs;
+	GList *encodings;
 
 	int language;
 	gboolean switching;
@@ -337,6 +339,9 @@ prefs_dialog_finalize (GObject *object)
 
 	g_list_foreach (pd->priv->langs, (GFunc) free_lang_item, NULL);
 	g_list_free (pd->priv->langs);
+
+	g_list_foreach (pd->priv->encodings, (GFunc) encoding_info_free, NULL);
+	g_list_free (pd->priv->encodings);
 
         g_free (pd->priv);
 
@@ -584,87 +589,72 @@ setup_fonts (PrefsDialog *dialog)
 }
 
 static void
-default_charset_menu_changed_cb (GtkOptionMenu *option_menu,
-				 EphyEmbedShell *shell)
+default_encoding_menu_changed_cb (GtkOptionMenu *option_menu,
+				  PrefsDialog *dialog)
 {
-	GList *charsets;
-	int i;
-	CharsetInfo *info;
-	EphyEmbedSingle *single;
-
-	single = ephy_embed_shell_get_embed_single
-		(EPHY_EMBED_SHELL (ephy_shell));
-
-	ephy_embed_single_get_charset_titles (single, NULL, &charsets);
+	GList *encoding;
+	gint i;
+	EncodingInfo *info;
 
 	i = gtk_option_menu_get_history (option_menu);
-	charsets = g_list_nth (charsets, i);
-	g_assert (charsets != NULL);
-	info = (CharsetInfo *) charsets->data;
-	eel_gconf_set_string (CONF_LANGUAGE_DEFAULT_CHARSET,
-			      info->name);
+	encoding = g_list_nth (dialog->priv->encodings, i);
+	g_assert (encoding != NULL);
 
-	g_list_free (charsets);
+	info = (EncodingInfo *) encoding->data;
+	eel_gconf_set_string (CONF_LANGUAGE_DEFAULT_ENCODING, info->encoding);
 }
 
 static gint
-find_charset_in_list_cmp (gconstpointer a,
-                          gconstpointer b)
+find_encoding_in_list_cmp (const EncodingInfo *info, const gchar *encoding)
 {
-	CharsetInfo *info = (CharsetInfo *)a;
-	const char *value = b;
-
-	return (strcmp (info->name, value));
+	return strcmp (info->encoding, encoding);
 }
 
 static void
-create_default_charset_menu (PrefsDialog *dialog)
+create_default_encoding_menu (PrefsDialog *dialog)
 {
 	GList *l;
-	GList *charsets;
-	GtkWidget *menu;
-	GtkWidget *optionmenu;
-	char *value;
+	GtkWidget *menu, *optionmenu;
+	gchar *encoding;
 	EphyEmbedSingle *single;
 
 	single = ephy_embed_shell_get_embed_single
 		(EPHY_EMBED_SHELL (ephy_shell));
 
-	ephy_embed_single_get_charset_titles (single, NULL, &l);
+	ephy_embed_single_get_encodings (single, LG_ALL, TRUE,
+					 &dialog->priv->encodings);
 
 	menu = gtk_menu_new ();
 
 	optionmenu = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-					      DEFAULT_CHARSET_PROP);
+					      DEFAULT_ENCODING_PROP);
 
-	for (charsets = l; charsets != NULL; charsets = charsets->next)
+	for (l = dialog->priv->encodings; l != NULL; l = l->next)
 	{
-		CharsetInfo *info = (CharsetInfo *) charsets->data;
+		EncodingInfo *info = (EncodingInfo *) l->data;
 		GtkWidget *item;
 
-		item = gtk_menu_item_new_with_label (_(info->title));
-		gtk_menu_shell_append (GTK_MENU_SHELL(menu),
-				       item);
+		item = gtk_menu_item_new_with_label (info->title);
+		gtk_menu_shell_append (GTK_MENU_SHELL(menu), item);
 		gtk_widget_show (item);
 	}
 
 	gtk_option_menu_set_menu (GTK_OPTION_MENU(optionmenu), menu);
 
 	/* init value */
-	charsets = l;
-	value = eel_gconf_get_string (CONF_LANGUAGE_DEFAULT_CHARSET);
-	g_return_if_fail (value != NULL);
-	charsets = g_list_find_custom (charsets, (gconstpointer)value,
-				       (GCompareFunc)find_charset_in_list_cmp);
+	encoding = eel_gconf_get_string (CONF_LANGUAGE_DEFAULT_ENCODING);
+	/* fallback */
+	if (encoding == NULL) encoding = g_strdup ("ISO-8859-1");
+
+	l = g_list_find_custom (dialog->priv->encodings, encoding,
+				(GCompareFunc) find_encoding_in_list_cmp);
 	gtk_option_menu_set_history (GTK_OPTION_MENU(optionmenu),
-				     g_list_position (l, charsets));
-	g_free (value);
+				     g_list_position (dialog->priv->encodings, l));
+	g_free (encoding);
 
 	g_signal_connect (optionmenu, "changed",
-			  G_CALLBACK (default_charset_menu_changed_cb),
-			  embed_shell);
-
-	g_list_free (l);
+			  G_CALLBACK (default_encoding_menu_changed_cb),
+			  dialog);
 }
 
 static gint
@@ -858,6 +848,7 @@ prefs_dialog_init (PrefsDialog *pd)
 	pd->priv->window = ephy_dialog_get_control (dialog, WINDOW_PROP);
 	pd->priv->notebook = ephy_dialog_get_control (dialog, NOTEBOOK_PROP);
 	pd->priv->langs = NULL;
+	pd->priv->encodings = NULL;
 
 	icon = gtk_widget_render_icon (pd->priv->window,
 				       GTK_STOCK_PREFERENCES,
@@ -872,7 +863,7 @@ prefs_dialog_init (PrefsDialog *pd)
 	attach_fonts_signals (pd);
 	attach_size_controls_signals (pd);
 	create_languages_list (pd);
-	create_default_charset_menu (pd);
+	create_default_encoding_menu (pd);
 	create_language_menu (pd);
 }
 

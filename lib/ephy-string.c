@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-
+ 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -497,5 +497,34 @@ ephy_str_replace_substring (const char *string,
 	g_assert (result_position - result == result_length);
 	result_position[0] = '\0';
 
+	return result;
+}
+
+/* copied from egg-toolbar-editor.c */
+gchar *
+ephy_str_elide_underscores (const gchar *original)
+{
+	gchar *q, *result;
+	const gchar *p;
+	gboolean last_underscore;
+	
+	q = result = g_malloc (strlen (original) + 1);
+	last_underscore = FALSE;
+	
+	for (p = original; *p; p++)
+	{
+		if (!last_underscore && *p == '_')
+		{
+			last_underscore = TRUE;
+		}
+		else
+		{
+			last_underscore = FALSE;
+			*q++ = *p;
+		}
+	}
+	
+	*q = '\0';
+	
 	return result;
 }

@@ -714,7 +714,7 @@ nsresult  EphyWrapper::CopyHistoryTo (EphyWrapper *dest)
 	return NS_OK;
 }
 
-nsresult EphyWrapper::ForceCharacterSet (const char *charset) 
+nsresult EphyWrapper::ForceEncoding (const char *encoding) 
 {
 	nsresult result;
 
@@ -730,7 +730,7 @@ nsresult EphyWrapper::ForceCharacterSet (const char *charset)
 								  &result);
 	if (NS_FAILED(result) || !mdv) return NS_ERROR_FAILURE;
 
-	result = mdv->SetForceCharacterSet (NS_ConvertUTF8toUCS2(charset).get());
+	result = mdv->SetForceCharacterSet (NS_ConvertUTF8toUCS2(encoding).get());
 
 	return result;
 }

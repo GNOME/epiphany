@@ -20,6 +20,7 @@
 
 #include "ephy-bookmarks-export.h"
 #include "ephy-node-common.h"
+#include "ephy-file-helpers.h"
 #include "ephy-debug.h"
 
 static void

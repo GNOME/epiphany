@@ -167,20 +167,21 @@ ephy_embed_single_load_proxy_autoconf (EphyEmbedSingle *shell,
 }
 
 gresult
-ephy_embed_single_get_charset_titles (EphyEmbedSingle *shell,
-				     const char *group,
-				     GList **charsets)
+ephy_embed_single_get_encodings (EphyEmbedSingle *shell,
+				 LanguageGroup group,
+				 gboolean elide_underscores,
+				 GList **encodings)
 {
 	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
-        return klass->get_charset_titles (shell, group, charsets);
+	return klass->get_encodings (shell, group, elide_underscores, encodings);
 }
 
 gresult
-ephy_embed_single_get_charset_groups (EphyEmbedSingle *shell,
-			             GList **groups)
+ephy_embed_single_get_language_groups (EphyEmbedSingle *shell,
+			              GList **groups)
 {
 	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
-        return klass->get_charset_groups (shell, groups);
+	return klass->get_language_groups (shell, groups);
 }
 
 gresult

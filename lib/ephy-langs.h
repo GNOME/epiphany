@@ -16,6 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifndef EPHY_LANGS_H
+#define EPHY_LANGS_H
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -23,6 +26,42 @@
 #include <glib.h>
 
 G_BEGIN_DECLS
+
+/* language groups */
+typedef enum
+{
+	LG_ARABIC,
+	LG_BALTIC,
+	LG_CENTRAL_EUROPEAN,
+	LG_CHINESE,
+	LG_CYRILLIC,
+	LG_GREEK,
+	LG_HEBREW,
+	LG_INDIAN,
+	LG_JAPANESE, 
+	LG_KOREAN,
+	LG_TURKISH,
+	LG_UNICODE,
+	LG_VIETNAMESE,
+	LG_WESTERN,
+	LG_OTHER,
+	LG_ALL
+} LanguageGroup;
+
+typedef struct
+{
+	gchar *title;
+	gchar *key;
+	LanguageGroup group;
+} LanguageGroupInfo;
+
+typedef struct
+{
+	gchar *title;
+	gchar *key;
+	gchar *encoding;
+	LanguageGroup group;
+} EncodingInfo;
 
 /* language encoding groups */
 static const gchar *lang_encode_item[] =
@@ -44,4 +83,10 @@ static const gchar *lang_encode_item[] =
 };
 static const guint n_lang_encode_items = G_N_ELEMENTS (lang_encode_item);
 
+void	language_group_info_free	(LanguageGroupInfo *info);
+
+void	encoding_info_free		(EncodingInfo *info);
+
 G_END_DECLS
+
+#endif

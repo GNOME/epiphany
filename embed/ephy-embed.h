@@ -64,7 +64,7 @@ typedef enum
 	EMBED_FIND_CAP = 1 << 7,
 	EMBED_SCROLL_CAP = 1 << 8,
 	EMBED_SECURITY_CAP = 1 << 9,
-	EMBED_CHARSET_CAP = 1 << 10,
+	EMBED_ENCODING_CAP = 1 << 10,
 	EMBED_SHISTORY_CAP = 1 << 11
 } EmbedCapabilities;
 
@@ -272,8 +272,8 @@ struct EphyEmbedClass
 	gresult   (* print_preview_navigate)	(EphyEmbed *embed,
 						 EmbedPrintPreviewNavType navType,
 						 gint pageNum);
-	gresult   (* set_charset)          (EphyEmbed *embed,
-					    const char *charset);
+	gresult   (* set_encoding)         (EphyEmbed *embed,
+					    const char *encoding);
 };
 
 GType         ephy_embed_get_type             (void);
@@ -386,8 +386,8 @@ gresult       ephy_embed_get_security_level   (EphyEmbed *embed,
 gresult       ephy_embed_find                 (EphyEmbed *embed,
 					       EmbedFindInfo *find);
 
-gresult       ephy_embed_set_charset          (EphyEmbed *embed,
-					       const char *charset);
+gresult       ephy_embed_set_encoding         (EphyEmbed *embed,
+					       const char *encoding);
 
 /* Printing */
 

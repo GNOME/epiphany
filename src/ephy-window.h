@@ -65,7 +65,7 @@ typedef enum
 	NavControl,
 	FindControl,
 	ZoomControl,
-	CharsetsControl,
+	EncodingsControl,
 	TitleControl,
 	LocationControl,
 	FaviconControl,

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,30 +15,28 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
+ 
+ #include "ephy-langs.h"
+ 
+void
+language_group_info_free (LanguageGroupInfo *info)
+{
+	g_return_if_fail (info != NULL);
 
-#ifndef EPHY_EMBED_UTILS_H
-#define EPHY_EMBED_UTILS_H
+	g_free (info->title);
+	g_free (info->key);
 
-#include "ephy-embed-persist.h"
+	g_free (info);
+}
 
-#include <gtk/gtkwidget.h>
-#include <bonobo/bonobo-ui-component.h>
+void
+encoding_info_free (EncodingInfo *info)
+{
+	g_return_if_fail (info != NULL);
 
-G_BEGIN_DECLS
+	g_free (info->title);
+	g_free (info->key);
+	g_free (info->encoding);
 
-void ephy_embed_utils_save			(GtkWidget *window,
-						 const char *default_dir_pref,
-						 gboolean ask_dest,
-						 gboolean with_content,
-						 EphyEmbedPersist *persist);
-
-void ephy_embed_utils_build_encodings_submenu   (BonoboUIComponent *ui_component,
-						 const char *path,
-						 BonoboUIVerbFn fn,
-						 gpointer view);
-
-void ephy_embed_utils_nohandler_dialog_run      (GtkWidget *parent);
-
-G_END_DECLS
-
-#endif
+	g_free (info);
+}

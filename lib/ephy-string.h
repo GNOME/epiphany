@@ -61,7 +61,7 @@ char		*ephy_str_replace_substring		(const char *string,
 							 const char *substring,
 							 const char *replacement);
 
-
+gchar 		*ephy_str_elide_underscores		(const gchar *original);
 
 G_END_DECLS
 

@@ -80,10 +80,10 @@ mozilla_language_notifier(GConfClient *client,
 			  EphyEmbedSingle *single);
 
 static void
-mozilla_autodetect_charset_notifier(GConfClient *client,
-				    guint cnxn_id,
-				    GConfEntry *entry,
-				    EphyEmbedSingle *single);
+mozilla_autodetect_encoding_notifier(GConfClient *client,
+				     guint cnxn_id,
+				     GConfEntry *entry,
+				     EphyEmbedSingle *single);
 
 static void
 mozilla_default_font_notifier(GConfClient *client,
@@ -109,10 +109,10 @@ mozilla_user_agent_notifier(GConfClient *client,
 			    EphyEmbedSingle *single);
 
 static void 
-mozilla_default_charset_notifier (GConfClient *client,
-				  guint cnxn_id,
-				  GConfEntry *entry,
-				  EphyEmbedSingle *single);
+mozilla_default_encoding_notifier (GConfClient *client,
+				   guint cnxn_id,
+				   GConfEntry *entry,
+				   EphyEmbedSingle *single);
 static void
 mozilla_socks_version_notifier (GConfClient *client,
 				guint cnxn_id,
@@ -174,12 +174,12 @@ custom_notifiers [] =
 	  (GConfClientNotifyFunc) mozilla_own_fonts_notifier },
 	{ CONF_SECURITY_ALLOW_POPUPS, 
 	  (GConfClientNotifyFunc) mozilla_allow_popups_notifier },
-	{ CONF_LANGUAGE_DEFAULT_CHARSET, 
-	  (GConfClientNotifyFunc) mozilla_default_charset_notifier },
+	{ CONF_LANGUAGE_DEFAULT_ENCODING, 
+	  (GConfClientNotifyFunc) mozilla_default_encoding_notifier },
 	{ CONF_RENDERING_LANGUAGE, 
 	  (GConfClientNotifyFunc) mozilla_language_notifier },
-	{ CONF_LANGUAGE_AUTODETECT_CHARSET, 
-	  (GConfClientNotifyFunc) mozilla_autodetect_charset_notifier },
+	{ CONF_LANGUAGE_AUTODETECT_ENCODING, 
+	  (GConfClientNotifyFunc) mozilla_autodetect_encoding_notifier },
 	{ CONF_RENDERING_DEFAULT_FONT, 
 	  (GConfClientNotifyFunc) mozilla_default_font_notifier },
 	{ CONF_NETWORK_SOCKS_PROXY_VERSION, 
@@ -527,10 +527,10 @@ generic_mozilla_bool_notifier(GConfClient *client,
 }
 
 static void 
-mozilla_default_charset_notifier(GConfClient *client,
-				 guint cnxn_id,
-				 GConfEntry *entry,
-				 EphyEmbedSingle *single)
+mozilla_default_encoding_notifier(GConfClient *client,
+				  guint cnxn_id,
+				  GConfEntry *entry,
+				  EphyEmbedSingle *single)
 {
 	/* FIXME */
 }
@@ -633,7 +633,7 @@ mozilla_language_notifier(GConfClient *client,
 	g_slist_free (languages);
 }
 
-static char *autodetect_charset_prefs[] =
+static char *autodetect_encoding_prefs[] =
 {
         "",
         "zh_parallel_state_machine",
@@ -647,22 +647,22 @@ static char *autodetect_charset_prefs[] =
 };
 
 static void
-mozilla_autodetect_charset_notifier(GConfClient *client,
+mozilla_autodetect_encoding_notifier(GConfClient *client,
 				    guint cnxn_id,
 				    GConfEntry *entry,
 				    EphyEmbedSingle *single)
 {
-	int charset = eel_gconf_get_integer (CONF_LANGUAGE_AUTODETECT_CHARSET);
-	if (charset < 0 || 
-	    charset >= (int)(sizeof(autodetect_charset_prefs)
-		             / sizeof(autodetect_charset_prefs[0])))
+	int encoding = eel_gconf_get_integer (CONF_LANGUAGE_AUTODETECT_ENCODING);
+	if (encoding < 0 || 
+	    encoding >= (int)(sizeof(autodetect_encoding_prefs)
+		             / sizeof(autodetect_encoding_prefs[0])))
 	{
-		g_warning ("mozilla_autodetect_charset_notifier: "
-			   "unsupported value: %d", charset);
+		g_warning ("mozilla_autodetect_encoding_notifier: "
+			   "unsupported value: %d", encoding);
 		return;
 	}
 	mozilla_prefs_set_string ("intl.charset.detector", 
-				  autodetect_charset_prefs[charset]);
+				  autodetect_encoding_prefs[encoding]);
 }
 
 static void

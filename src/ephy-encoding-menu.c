@@ -29,6 +29,8 @@
 
 #include <bonobo/bonobo-i18n.h>
 
+#include <string.h>
+
 /**
  * Private data
  */
@@ -37,12 +39,6 @@ struct _EphyEncodingMenuPrivate
 	EphyWindow *window;
 	EggActionGroup *action_group;
 };
-
-typedef struct
-{
-	EphyWindow *window;
-	const char *encoding;
-} EncodingData;
 
 /**
  * Private functions, only availble from this file
@@ -167,68 +163,77 @@ ephy_encoding_menu_new (EphyWindow *window)
 }
 
 static void
-ephy_encoding_menu_verb_cb (EggMenuMerge *merge,
-			    EncodingData *data)
+ephy_encoding_menu_verb_cb (EggAction *action,
+			    EphyEncodingMenu *menu)
 {
-	EphyWindow *window = data->window;
+	EphyWindow *window;
 	EphyEmbed *embed;
+	gchar *encoding;
+
+	window = menu->priv->window;
 
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_set_charset (embed, data->encoding);
+	if (strncmp (action->name, "Encoding", 8) == 0)
+	{
+		encoding = action->name + 8;
+
+		LOG ("Switching to encoding %s", encoding)
+
+		ephy_embed_set_encoding (embed, encoding);
+	}
 }
 
 static void
-build_group (EggActionGroup *action_group, GString *xml_string, const char *group, int index)
+build_group (EggActionGroup *action_group,
+	     GString *xml_string,
+	     const LanguageGroupInfo *info)
 {
-	char *tmp;
-	char *verb;
+	gchar *tmp;
+	gchar *verb;
 	EggAction *action;
 
-	verb = g_strdup_printf ("CharsetGroup%d", index);
+	verb = g_strdup_printf ("EncodingGroup%d", info->group);
 
 	action = g_object_new (EGG_TYPE_ACTION,
 			       "name", verb,
-			       "label", _(group),
+			       "label", info->title,
 			       NULL);
 	egg_action_group_add_action (action_group, action);
 	g_object_unref (action);
 
-	tmp = g_strdup_printf ("<submenu name=\"CharsetGroup%dItem\" name=\"%s\">\n",
-			       index, verb);
+	tmp = g_strdup_printf ("<submenu name=\"%sItem\" name=\"%s\">\n",
+			       verb, verb);
 	xml_string = g_string_append (xml_string, tmp);
 	g_free (tmp);
 	g_free (verb);
 }
 
 static void
-build_charset (EggActionGroup *action_group,
-	       GString *xml_string,
-	       const CharsetInfo *info,
-	       int index,
-	       EncodingData *edata)
+build_encoding (EphyEncodingMenu *menu,
+		EggActionGroup *action_group,
+		GString *xml_string,
+		const EncodingInfo *info)
 {
 	char *tmp;
 	char *verb;
 	EggAction *action;
 
-	verb = g_strdup_printf ("Charset%d", index);
+	verb = g_strdup_printf ("Encoding%s", info->encoding);
 	action = g_object_new (EGG_TYPE_ACTION,
 			       "name", verb,
-			       "label", _(info->title),
+			       "label", info->title,
 			       NULL);
-	g_signal_connect_closure
-		(action, "activate",
-		 g_cclosure_new (G_CALLBACK (ephy_encoding_menu_verb_cb),
-				 edata,
-				 (GClosureNotify)g_free),
-		 FALSE);
+	g_signal_connect (action, "activate",
+			  G_CALLBACK (ephy_encoding_menu_verb_cb),
+			  menu);
+
 	egg_action_group_add_action (action_group, action);
 	g_object_unref (action);
 
-	tmp = g_strdup_printf ("<menuitem name=\"Charset%dItem\" verb=\"%s\"/>\n",
-			       index, verb);
+	tmp = g_strdup_printf ("<menuitem name=\"%sItem\" verb=\"%s\"/>\n",
+			       verb, verb);
 	xml_string = g_string_append (xml_string, tmp);
 
 	g_free (tmp);
@@ -238,17 +243,20 @@ build_charset (EggActionGroup *action_group,
 static void
 ephy_encoding_menu_rebuild (EphyEncodingMenu *wrhm)
 {
-	EphyEncodingMenuPrivate *p = wrhm->priv;
-	GString *xml;
-	GList *groups, *gl;
-	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
-	int group_index = 0, charset_index = 0;
 	EphyEmbedSingle *single;
+	EphyEncodingMenuPrivate *p = wrhm->priv;
+	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
+	GString *xml;
+	GList *groups, *lg, *encodings, *enc;
 
-	single = ephy_embed_shell_get_embed_single
-		(EPHY_EMBED_SHELL (ephy_shell));
+	p->action_group = NULL;
 
 	LOG ("Rebuilding encoding menu")
+
+	single = ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (ephy_shell));
+	g_return_if_fail (single != NULL);
+
+	ephy_embed_single_get_language_groups (single, &groups);
 
 	xml = g_string_new (NULL);
 	g_string_append (xml, "<Root><menu><submenu name=\"ViewMenu\">"
@@ -258,43 +266,34 @@ ephy_encoding_menu_rebuild (EphyEncodingMenu *wrhm)
 	p->action_group = egg_action_group_new ("EncodingActions");
 	egg_menu_merge_insert_action_group (merge, p->action_group, 0);
 
-	ephy_embed_single_get_charset_groups (single, &groups);
-
-	for (gl = groups; gl != NULL; gl = gl->next)
+	for (lg = groups; lg != NULL; lg = lg->next)
         {
-		GList *charsets, *cl;
-		const char *group = (const char *)gl->data;
+		const LanguageGroupInfo *lang_info = (LanguageGroupInfo *) lg->data;
 
-		build_group (p->action_group, xml, group, group_index);
+		build_group (p->action_group, xml, lang_info);
 
-		ephy_embed_single_get_charset_titles (single,
-                                                      group,
-                                                      &charsets);
+		ephy_embed_single_get_encodings (single, lang_info->group,
+						FALSE, &encodings);
 
-		for (cl = charsets; cl != NULL; cl = cl->next)
+		for (enc = encodings; enc != NULL; enc = enc->next)
                 {
-			const CharsetInfo *info = cl->data;
-			EncodingData *edata;
+			const EncodingInfo *info = (EncodingInfo *) enc->data;
 
-			edata = g_new0 (EncodingData, 1);
-			edata->encoding = info->name;
-			edata->window = p->window;
-
-			build_charset (p->action_group, xml, info,
-				       charset_index, edata);
-			charset_index++;
+			build_encoding (wrhm, p->action_group, xml, info);
 		}
 
-		g_list_foreach (charsets, (GFunc)g_free, NULL);
-		g_list_free (charsets);
+		g_list_foreach (encodings, (GFunc) encoding_info_free, NULL);
+		g_list_free (encodings);
+		
 		g_string_append (xml, "</submenu>");
-		group_index++;
 	}
+
+	g_list_foreach (groups, (GFunc) language_group_info_free, NULL);
+	g_list_free (groups);
 
 	g_string_append (xml, "</submenu></placeholder></submenu></menu></Root>");
 
-	egg_menu_merge_add_ui_from_string
-		(merge, xml->str, -1, NULL);
+	egg_menu_merge_add_ui_from_string (merge, xml->str, -1, NULL);
 
 	g_string_free (xml, TRUE);
 }
