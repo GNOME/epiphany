@@ -41,6 +41,7 @@
 #include "ephy-embed-single.h"
 #include "ephy-embed-shell.h"
 #include "ephy-file-chooser.h"
+#include "ephy-stock-icons.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtkimage.h>
@@ -239,7 +240,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 
 	action_label =  (mAction == CONTENT_ACTION_OPEN) ||
 			(mAction == CONTENT_ACTION_OPEN_TMP) ?
-			_("_Open") : _("_Download");
+			GTK_STOCK_OPEN : _("_Download");
 
 	dialog = gtk_dialog_new_with_buttons
 		("", parentWindow, GTK_DIALOG_NO_SEPARATOR,
