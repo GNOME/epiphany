@@ -269,11 +269,6 @@ ephy_session_init (EphySession *session)
 
 	LOG ("EphySession initialising")
 
-	session->priv->windows = NULL;
-	session->priv->tool_windows = NULL;
-	session->priv->resume_dialog = NULL;
-	session->priv->resuming = FALSE;
-
 	ensure_session_directory ();
 }
 

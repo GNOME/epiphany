@@ -298,9 +298,6 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 		EPHY_ENCODINGS (ephy_embed_shell_get_encodings
 				(EPHY_EMBED_SHELL (ephy_shell)));
 
-	dialog->priv->update_tag = FALSE;
-	dialog->priv->selected_node = NULL;
-
 	ephy_dialog_construct (EPHY_DIALOG (dialog),
 			       properties,
 			       ephy_file ("epiphany.glade"),

@@ -807,9 +807,6 @@ pdm_dialog_init (PdmDialog *dialog)
 
 	dialog->priv = EPHY_PDM_DIALOG_GET_PRIVATE (dialog);
 
-	dialog->priv->cookies = NULL;
-	dialog->priv->passwords = NULL;
-
 	ephy_dialog_construct (EPHY_DIALOG(dialog),
 			       properties,
 			       ephy_file ("epiphany.glade"),

@@ -298,12 +298,6 @@ ephy_embed_shell_init (EphyEmbedShell *shell)
 	/* globally accessible singleton */
 	g_assert (embed_shell == NULL);
 	embed_shell = shell;
-
-	shell->priv->global_history = NULL;
-	shell->priv->downloader_view = NULL;
-	shell->priv->favicon_cache = NULL;
-	shell->priv->encodings = NULL;
-	shell->priv->mime_table = NULL;
 }
 
 static void

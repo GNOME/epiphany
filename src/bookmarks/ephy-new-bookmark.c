@@ -434,10 +434,6 @@ static void
 ephy_new_bookmark_init (EphyNewBookmark *editor)
 {
 	editor->priv = EPHY_NEW_BOOKMARK_GET_PRIVATE (editor);
-
-	editor->priv->location = NULL;
-	editor->priv->icon = NULL;
-	editor->priv->id = 0;
 }
 
 void

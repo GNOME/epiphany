@@ -83,11 +83,12 @@ struct EphyDialogPrivate
 	GHashTable *props;
 	GtkWidget *parent;
 	GtkWidget *dialog;
-	gboolean modal;
-	gboolean has_default_size;
-	gboolean disposing;
-	gboolean initialized;
-	gboolean persist_position;
+
+	gboolean modal : 1;
+	gboolean has_default_size : 1;
+	gboolean disposing : 1;
+	gboolean initialized : 1;
+	gboolean persist_position : 1;
 	int default_width;
 	int default_height;
 };
@@ -1088,7 +1089,7 @@ void
 ephy_dialog_set_modal (EphyDialog *dialog,
 		       gboolean is_modal)
 {
-	dialog->priv->modal = is_modal;
+	dialog->priv->modal = is_modal != FALSE;
 
 	gtk_window_set_modal (GTK_WINDOW(dialog->priv->dialog), is_modal);
 }
@@ -1298,13 +1299,6 @@ ephy_dialog_init (EphyDialog *dialog)
 {
 	dialog->priv = EPHY_DIALOG_GET_PRIVATE (dialog);
 
-	dialog->priv->parent = NULL;
-	dialog->priv->dialog = NULL;
-	dialog->priv->name = NULL;
-	dialog->priv->initialized = FALSE;
-	dialog->priv->has_default_size = FALSE;
-	dialog->priv->disposing = FALSE;
-	dialog->priv->persist_position = FALSE;
 	dialog->priv->default_width = -1;
 	dialog->priv->default_height = -1;
 

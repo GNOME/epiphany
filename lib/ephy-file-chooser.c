@@ -98,8 +98,6 @@ static void
 ephy_file_chooser_init (EphyFileChooser *dialog)
 {
 	dialog->priv = EPHY_FILE_CHOOSER_GET_PRIVATE (dialog);
-
-	dialog->priv->persist_key = NULL;
 }
 
 static GObject *

@@ -959,10 +959,6 @@ ephy_bookmark_action_init (EphyBookmarkAction *action)
 
 	action->priv = EPHY_BOOKMARK_ACTION_GET_PRIVATE (action);
 
-	action->priv->prop_dialog = NULL;
-	action->priv->cache_handler = 0;
-	action->priv->motion_handler = 0;
-
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	node = ephy_bookmarks_get_smart_bookmarks (bookmarks);
 	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_ADDED,

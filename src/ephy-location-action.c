@@ -498,7 +498,6 @@ ephy_location_action_init (EphyLocationAction *action)
 	action->priv = EPHY_LOCATION_ACTION_GET_PRIVATE (action);
 
 	action->priv->address = g_strdup ("");
-	action->priv->actions = NULL;
 	action->priv->editable = TRUE;
 	action->priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	action->priv->smart_bmks = ephy_bookmarks_get_smart_bookmarks

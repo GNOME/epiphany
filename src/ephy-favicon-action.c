@@ -306,8 +306,6 @@ ephy_favicon_action_init (EphyFaviconAction *action)
 {
 	action->priv = EPHY_FAVICON_ACTION_GET_PRIVATE (action);
 
-	action->priv->icon = NULL;
-
 	action->priv->cache = EPHY_FAVICON_CACHE
 		(ephy_embed_shell_get_favicon_cache
 		(EPHY_EMBED_SHELL (ephy_shell)));

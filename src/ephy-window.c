@@ -2300,16 +2300,7 @@ ephy_window_init (EphyWindow *window)
 
 	window->priv = EPHY_WINDOW_GET_PRIVATE (window);
 
-	window->priv->active_tab = NULL;
-	window->priv->closing = FALSE;
-	window->priv->ppview_toolbar = NULL;
-	window->priv->exit_fullscreen_popup = NULL;
-	window->priv->num_tabs = 0;
-	window->priv->has_size = FALSE;
 	window->priv->chrome = EPHY_EMBED_CHROME_ALL;
-	window->priv->should_save_chrome = FALSE;
-	window->priv->fullscreen_mode = FALSE;
-	window->priv->ppv_mode = FALSE;
 
 	g_object_ref (ephy_shell);
 

@@ -103,12 +103,6 @@ ephy_encoding_menu_init (EphyEncodingMenu *menu)
 	menu->priv->encodings =
 		EPHY_ENCODINGS (ephy_embed_shell_get_encodings
 				(EPHY_EMBED_SHELL (ephy_shell)));
-
-	menu->priv->update_tag = FALSE;
-	menu->priv->action_group = NULL;
-	menu->priv->merge_id = 0;
-	menu->priv->encodings_radio_group = NULL;
-	menu->priv->dialog = NULL;
 }
 
 static int

@@ -521,15 +521,12 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 {
  	mes->priv = MOZILLA_EMBED_SINGLE_GET_PRIVATE (mes);
 
-	mes->priv->theme_window = NULL;
 	mes->priv->user_prefs =
 		g_build_filename (ephy_dot_dir (), 
 				  MOZILLA_PROFILE_DIR,
 				  MOZILLA_PROFILE_NAME,
 				  MOZILLA_PROFILE_FILE,
 				  NULL);
-
-	mes->priv->mSingleObserver = nsnull;
 
 	if (!init_services (mes))
 	{

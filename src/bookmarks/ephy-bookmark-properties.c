@@ -425,8 +425,6 @@ static void
 ephy_bookmark_properties_init (EphyBookmarkProperties *editor)
 {
 	editor->priv = EPHY_BOOKMARK_PROPERTIES_GET_PRIVATE (editor);
-
-	editor->priv->bookmark = NULL;
 }
 
 GtkWidget *

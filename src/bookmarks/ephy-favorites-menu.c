@@ -279,9 +279,6 @@ ephy_favorites_menu_init (EphyFavoritesMenu *menu)
 	menu->priv = p;
 
 	menu->priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	menu->priv->ui_id = 0;
-	menu->priv->update_tag = 0;
-	menu->priv->action_group = NULL;
 
 	fav = ephy_bookmarks_get_favorites (menu->priv->bookmarks);
 	ephy_node_signal_connect_object (fav,

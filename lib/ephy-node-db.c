@@ -182,8 +182,6 @@ ephy_node_db_init (EphyNodeDb *db)
 {
 	db->priv = EPHY_NODE_DB_GET_PRIVATE (db);
 
-	db->priv->name = NULL;
-
 	/* id to node */
 	db->priv->id_to_node = g_ptr_array_new ();
 

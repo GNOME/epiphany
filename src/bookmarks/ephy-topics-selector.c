@@ -261,8 +261,6 @@ static void
 ephy_topics_selector_init (EphyTopicsSelector *selector)
 {
 	selector->priv = EPHY_TOPICS_SELECTOR_GET_PRIVATE (selector);
-	selector->priv->bookmark = NULL;
-	selector->priv->topics = NULL;
 
 	selector->priv->filter = ephy_node_filter_new ();
 	ephy_node_filter_add_expression (selector->priv->filter,

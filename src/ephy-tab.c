@@ -1558,23 +1558,14 @@ ephy_tab_init (EphyTab *tab)
 
 	tab->priv = EPHY_TAB_GET_PRIVATE (tab);
 
-	tab->priv->status_message = NULL;
-	tab->priv->link_message = NULL;
 	tab->priv->total_requests = 0;
 	tab->priv->cur_requests = 0;
 	tab->priv->width = -1;
 	tab->priv->height = -1;
-	tab->priv->title = NULL;
-	tab->priv->address = NULL;
-	tab->priv->icon_address = NULL;
 	tab->priv->load_percent = 0;
 	tab->priv->load_status = FALSE;
-	tab->priv->link_message = NULL;
 	tab->priv->security_level = STATE_IS_UNKNOWN;
-	tab->priv->hidden_popups = NULL;
-	tab->priv->shown_popups = NULL;
 	tab->priv->zoom = 1.0;
-	tab->priv->setting_zoom = FALSE;
 	tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
 
 	embed = ephy_embed_factory_new_object (EPHY_TYPE_EMBED);

@@ -110,8 +110,6 @@ static void
 ephy_embed_dialog_init (EphyEmbedDialog *dialog)
 {
         dialog->priv = EPHY_EMBED_DIALOG_GET_PRIVATE (dialog);
-
-	dialog->priv->embed = NULL;
 }
 
 static void

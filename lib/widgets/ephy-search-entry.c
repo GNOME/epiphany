@@ -141,9 +141,6 @@ ephy_search_entry_init (EphySearchEntry *entry)
 {
 	entry->priv = EPHY_SEARCH_ENTRY_GET_PRIVATE (entry);
 
-	entry->priv->clearing = FALSE;
-	entry->priv->timeout = 0;
-
 	g_signal_connect (G_OBJECT (entry),
 			  "destroy",
 			  G_CALLBACK (ephy_search_entry_destroy_cb),

@@ -253,9 +253,6 @@ find_dialog_init (FindDialog *dialog)
 
 	dialog->priv = EPHY_FIND_DIALOG_GET_PRIVATE (dialog);
 
-	dialog->priv->old_embed = NULL;
-	dialog->priv->initialised = FALSE;
-
 	ephy_dialog_construct (EPHY_DIALOG(dialog),
 			       properties,
 			       ephy_file ("epiphany.glade"),

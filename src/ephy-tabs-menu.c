@@ -220,9 +220,6 @@ static void
 ephy_tabs_menu_init (EphyTabsMenu *menu)
 {
 	menu->priv = EPHY_TABS_MENU_GET_PRIVATE (menu);
-
-	menu->priv->ui_id = 0;
-	menu->priv->action_group = NULL;
 }
 
 static void

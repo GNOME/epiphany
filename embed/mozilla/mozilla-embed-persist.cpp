@@ -91,6 +91,7 @@ static void
 mozilla_embed_persist_init (MozillaEmbedPersist *persist)
 {
         persist->priv = MOZILLA_EMBED_PERSIST_GET_PRIVATE (persist);
+
       	persist->priv->mPersist = do_CreateInstance (NS_WEBBROWSERPERSIST_CONTRACTID);
 }
 

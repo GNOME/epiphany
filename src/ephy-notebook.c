@@ -678,9 +678,6 @@ ephy_notebook_init (EphyNotebook *notebook)
 	g_object_ref (G_OBJECT (notebook->priv->title_tips));
 	gtk_object_sink (GTK_OBJECT (notebook->priv->title_tips));
 
-	notebook->priv->drag_in_progress = FALSE;
-	notebook->priv->motion_notify_handler_id = 0;
-	notebook->priv->focused_pages = NULL;
 	notebook->priv->show_tabs = TRUE;
 
 	g_signal_connect (notebook, "button-press-event",

@@ -1,5 +1,44 @@
 2004-10-27  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-embed-dialog.c: (ephy_embed_dialog_init):
+	* embed/ephy-embed-persist.c: (ephy_embed_persist_init),
+	(ephy_embed_persist_to_string):
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_init):
+	* embed/find-dialog.c: (find_dialog_init):
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* lib/ephy-dialog.c: (ephy_dialog_set_modal), (ephy_dialog_init):
+	* lib/ephy-file-chooser.c: (ephy_file_chooser_init):
+	* lib/ephy-node-db.c: (ephy_node_db_init):
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_init):
+	* lib/widgets/ephy-search-entry.c: (ephy_search_entry_init):
+	* src/bookmarks/ephy-bookmark-action.c:
+	(ephy_bookmark_action_init):
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(ephy_bookmark_properties_init):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init):
+	* src/bookmarks/ephy-favorites-menu.c: (ephy_favorites_menu_init):
+	* src/bookmarks/ephy-new-bookmark.c: (ephy_new_bookmark_init):
+	* src/bookmarks/ephy-topics-selector.c:
+	(ephy_topics_selector_init):
+	* src/ephy-encoding-dialog.c: (ephy_encoding_dialog_init):
+	* src/ephy-encoding-menu.c: (ephy_encoding_menu_init):
+	* src/ephy-favicon-action.c: (ephy_favicon_action_init):
+	* src/ephy-location-action.c: (ephy_location_action_init):
+	* src/ephy-notebook.c: (ephy_notebook_init):
+	* src/ephy-session.c: (ephy_session_init):
+	* src/ephy-shell.c: (ephy_shell_init):
+	* src/ephy-tab.c: (ephy_tab_init):
+	* src/ephy-tabs-menu.c: (ephy_tabs_menu_init):
+	* src/ephy-window.c: (ephy_window_init):
+	* src/pdm-dialog.c: (pdm_dialog_init):
+	* src/ppview-toolbar.c: (ppview_toolbar_init):
+
+	Private data is 0-initialised, no need to set members to NULL,  0,
+	or FALSE.
+
+2004-10-27  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/ephy-node-view.h:
 
 	Remove unused signal from EphyNodeView struct.

@@ -678,12 +678,10 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	EphyNodeDb *db;
 
 	eb->priv = EPHY_BOOKMARKS_GET_PRIVATE (eb);
-	eb->priv->toolbars_model = NULL;
 
 	db = ephy_node_db_new (EPHY_NODE_DB_BOOKMARKS);
 	eb->priv->db = db;
-	eb->priv->dirty = FALSE;
-	eb->priv->save_timeout_id = 0;
+
 	eb->priv->xml_file = g_build_filename (ephy_dot_dir (),
 					       "ephy-bookmarks.xml",
 					       NULL);

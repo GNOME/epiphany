@@ -442,13 +442,7 @@ ephy_embed_persist_init (EphyEmbedPersist *persist)
 
 	LOG ("EphyEmbedPersist initialising %p", persist)
 
-	persist->priv->dest = NULL;
-	persist->priv->source = NULL;
-	persist->priv->fc_title = NULL;
-	persist->priv->fc_parent = NULL;
-	persist->priv->flags = 0;
 	persist->priv->max_size = -1;
-	persist->priv->persist_key = NULL;
 }
 
 static void
@@ -638,4 +632,3 @@ ephy_embed_persist_to_string (EphyEmbedPersist *persist)
        EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);
        return klass->to_string (persist);
 }
-

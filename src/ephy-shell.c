@@ -175,16 +175,6 @@ ephy_shell_init (EphyShell *shell)
 
 	shell->priv = EPHY_SHELL_GET_PRIVATE (shell);
 
-	shell->priv->session = NULL;
-	shell->priv->bookmarks = NULL;
-	shell->priv->bme = NULL;
-	shell->priv->history_window = NULL;
-	shell->priv->pdm_dialog = NULL;
-	shell->priv->print_setup_dialog = NULL;
-	shell->priv->toolbars_model = NULL;
-	shell->priv->fs_toolbars_model = NULL;
-	shell->priv->extensions_manager = NULL;
-
 	/* globally accessible singleton */
 	g_assert (ephy_shell == NULL);
 	ephy_shell = shell;

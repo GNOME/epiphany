@@ -249,8 +249,6 @@ ppview_toolbar_init (PPViewToolbar *t)
 {
 	t->priv = EPHY_PPVIEW_TOOLBAR_GET_PRIVATE (t);
 
-	t->priv->window = NULL;
-	t->priv->manager = NULL;
 	t->priv->current_page = 1;
 }
 

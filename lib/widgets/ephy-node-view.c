@@ -1281,13 +1281,8 @@ ephy_node_view_init (EphyNodeView *view)
 {
 	view->priv = EPHY_NODE_VIEW_GET_PRIVATE (view);
 
-	view->priv->remove_if_cancelled = FALSE;
 	view->priv->toggle_column = -1;
-	view->priv->filter = NULL;
-	view->priv->editable_renderer = NULL;
-	view->priv->edited_node = NULL;
 	view->priv->searchable_data_column = -1;
-	view->priv->source_target_list = NULL;
 	view->priv->priority_column = -1;
 	view->priv->priority_prop_id = 0;
 	view->priv->sort_column = -1;
