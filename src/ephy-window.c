@@ -114,7 +114,7 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	  N_("View and remove cookies and passwords"),
 	  G_CALLBACK (window_cmd_edit_personal_data), NULL },
 	{ "EditToolbar", N_("T_oolbars"), NULL, NULL,
-	  N_("Costumize toolbars"),
+	  N_("Customize toolbars"),
 	  G_CALLBACK (window_cmd_edit_toolbar), NULL },
 	{ "EditPrefs", N_("P_references"), GTK_STOCK_PREFERENCES, NULL,
 	  N_("Configure the web browser"),
