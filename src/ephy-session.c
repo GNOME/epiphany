@@ -524,6 +524,12 @@ ephy_session_save (EphySession *session,
 		return FALSE;
 	}
 
+	ret = xmlTextWriterSetIndent (writer, 1);
+	if (ret < 0) goto out;
+
+	ret = xmlTextWriterSetIndentString (writer, "  ");
+	if (ret < 0) goto out;
+
 	START_PROFILER ("Saving session")
 
 	ret = xmlTextWriterStartDocument (writer, "1.0", NULL, NULL);

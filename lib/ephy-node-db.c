@@ -413,6 +413,12 @@ ephy_node_db_write_to_xml_valist (EphyNodeDb *db,
 		return -1;
 	}
 
+	ret = xmlTextWriterSetIndent (writer, 1);
+	if (ret < 0) goto out;
+
+	ret = xmlTextWriterSetIndentString (writer, "  ");
+	if (ret < 0) goto out;
+
 	ret = xmlTextWriterStartDocument (writer, "1.0", NULL, NULL);
 	if (ret < 0) goto out;
 
