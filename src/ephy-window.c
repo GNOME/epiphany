@@ -604,13 +604,6 @@ save_window_chrome (EphyWindow *window)
 	else if (flags & EMBED_CHROME_PPVIEWTOOLBARON)
 	{
 	}
-	else if (flags & EMBED_CHROME_OPENASFULLSCREEN)
-	{
-		eel_gconf_set_boolean (CONF_WINDOWS_FS_SHOW_TOOLBARS,
-				       flags & EMBED_CHROME_TOOLBARON);
-		eel_gconf_set_boolean (CONF_WINDOWS_FS_SHOW_STATUSBAR,
-				       flags & EMBED_CHROME_STATUSBARON);
-	}
 	else
 	{
 		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR,
@@ -749,32 +742,22 @@ translate_default_chrome (EmbedChromeMask *chrome_mask)
 			 EMBED_CHROME_OPENASFULLSCREEN);
 
 	/* Load defaults */
-	if (*chrome_mask & EMBED_CHROME_OPENASFULLSCREEN)
+	if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_STATUSBAR))
 	{
-		if (eel_gconf_get_boolean (CONF_WINDOWS_FS_SHOW_STATUSBAR))
-		{
-			*chrome_mask |= EMBED_CHROME_STATUSBARON;
-		}
-		if (eel_gconf_get_boolean (CONF_WINDOWS_FS_SHOW_TOOLBARS))
-		{
-			*chrome_mask |= EMBED_CHROME_TOOLBARON;
-		}
+		*chrome_mask |= EMBED_CHROME_STATUSBARON;
 	}
-	else
+	if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_TOOLBARS))
 	{
-		if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_STATUSBAR))
-		{
-			*chrome_mask |= EMBED_CHROME_STATUSBARON;
-		}
-		if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_TOOLBARS))
-		{
-			*chrome_mask |= EMBED_CHROME_TOOLBARON;
-		}
-		if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR))
-		{
-			*chrome_mask |= EMBED_CHROME_BOOKMARKSBARON;
-		}
+		*chrome_mask |= EMBED_CHROME_TOOLBARON;
+	}
+	if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR))
+	{
+		*chrome_mask |= EMBED_CHROME_BOOKMARKSBARON;
+	}
 
+	// Show the menu bar if we're not in fullscreen
+	if (!(*chrome_mask & EMBED_CHROME_OPENASFULLSCREEN))
+	{
 		*chrome_mask |= EMBED_CHROME_MENUBARON;
 	}
 }

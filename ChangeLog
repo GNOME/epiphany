@@ -1,4 +1,17 @@
 2003-04-30  David Bordoley <bordoley@msu.edu>
+	
+	* src/ephy-window.c
+	* data/epiphany.schemas.in
+	* lib/ephy-prefs.h:
+
+	Remove fullscreen-only prefs for which UI items to display.
+	Now fullscreen respects the "View" menu toggles for UI
+	items - but the menu bar is not shown in fullscreen view.
+	See bug 111747 for details.
+
+	Patch from Lee Willis <lwillis@plus.net>	
+
+2003-04-30  David Bordoley <bordoley@msu.edu>
 
 	* src/session.c: (parse_embed):
 
