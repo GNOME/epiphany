@@ -70,9 +70,9 @@
 
 static GtkTargetEntry page_drag_types [] =
 {
-        { EPHY_DND_URI_LIST_TYPE,   0, 0 },
-        { EPHY_DND_TEXT_TYPE,       0, 1 },
-        { EPHY_DND_URL_TYPE,        0, 2 }
+        { EPHY_DND_URL_TYPE,        0, 0 },
+        { EPHY_DND_URI_LIST_TYPE,   0, 1 },
+        { EPHY_DND_TEXT_TYPE,       0, 2 }
 };
 static int n_page_drag_types = G_N_ELEMENTS (page_drag_types);
 

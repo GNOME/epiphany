@@ -1,3 +1,17 @@
+2005-01-14  Jorn Baayen  <jbaayen@gnome.org>
+
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_construct_contents):
+	* lib/widgets/ephy-node-view.c: (motion_notify_cb):
+	* src/bookmarks/ephy-bookmark-action.c: (drag_motion_cb):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	* src/ephy-history-window.c:
+
+	Add GDK_ACTION_ASK, and prefer _NETSCAPE_URL over uri-list drag types.
+	This is to match the new Nautilus _NETSCAPE_URL DnD behaviour.
+
+	Fixes #163937.
+
 2005-01-14  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/bookmarks/ephy-bookmark-action.c: (show_context_menu):

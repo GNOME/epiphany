@@ -738,7 +738,7 @@ motion_notify_cb (GtkWidget *widget,
 		{
 			context = gtk_drag_begin
 				(widget, view->priv->source_target_list,
-                                 GDK_ACTION_COPY,
+                                 GDK_ACTION_ASK | GDK_ACTION_COPY | GDK_ACTION_LINK,
                                  view->priv->drag_button,
                                  (GdkEvent*)event);
 
