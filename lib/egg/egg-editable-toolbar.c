@@ -24,6 +24,7 @@
 
 #include "egg-editable-toolbar.h"
 #include "egg-toolbars-model.h"
+#include "egg-toolbar-editor.h"
 
 #include <gtk/gtkvseparator.h>
 #include <gtk/gtkiconfactory.h>
@@ -613,7 +614,8 @@ toolbar_drag_motion_cb (GtkWidget          *widget,
       flags = egg_toolbars_model_get_flags (etoolbar->priv->model, pos);
 
       if ((flags & EGG_TB_MODEL_ACCEPT_ITEMS_ONLY) &&
-          !GTK_IS_TOOL_ITEM (source))
+          !gtk_widget_get_ancestor (source, EGG_TYPE_EDITABLE_TOOLBAR) &&
+	  !gtk_widget_get_ancestor (source, EGG_TYPE_TOOLBAR_EDITOR))
         {
           gdk_drag_status (context, 0, time);
           return FALSE;

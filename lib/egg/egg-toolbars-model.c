@@ -309,7 +309,7 @@ egg_toolbars_model_add_separator (EggToolbarsModel *t,
   g_return_if_fail (EGG_IS_TOOLBARS_MODEL (t));
 
   parent_node = g_node_nth_child (t->priv->toolbars, toolbar_position);
-  item = toolbars_item_new ("separator", "separator", TRUE);
+  item = toolbars_item_new ("separator", EGG_TOOLBAR_ITEM_TYPE, TRUE);
   node = g_node_new (item);
   g_node_insert (parent_node, position, node);
 
