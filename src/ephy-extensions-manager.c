@@ -39,6 +39,8 @@
 #include <libgnomevfs/gnome-vfs-ops.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
+#include <gconf/gconf-client.h>
+
 #include <gmodule.h>
 #include <dirent.h>
 #include <string.h>
@@ -854,14 +856,33 @@ unload_extension (EphyExtensionsManager *manager,
 static void
 sync_loaded_extensions (EphyExtensionsManager *manager)
 {
-	GSList *active_extensions;
+	GConfClient *client;
+	GConfValue *value;
+	GSList *active_extensions = NULL;
 	GList *l;
 	gboolean active;
 	ExtensionInfo *info;
 
 	LOG ("Synching changed list of active extensions")
 
-	active_extensions = eel_gconf_get_string_list (CONF_LOADED_EXTENSIONS);
+	client = gconf_client_get_default ();
+	g_return_if_fail (client != NULL);
+
+	value = gconf_client_get (client, CONF_LOADED_EXTENSIONS, NULL);
+
+	/* make sure the extensions-manager-ui is loaded */
+	if (value == NULL ||
+	    value->type != GCONF_VALUE_LIST ||
+	    gconf_value_get_list_type (value) != GCONF_VALUE_STRING)
+	{
+		active_extensions = g_slist_prepend (active_extensions,
+						     g_strdup ("extensions-manager-ui"));
+		eel_gconf_set_string_list (CONF_LOADED_EXTENSIONS, active_extensions);
+	}
+	else
+	{
+		active_extensions = eel_gconf_get_string_list (CONF_LOADED_EXTENSIONS);
+	}
 
 	for (l = manager->priv->data; l != NULL; l = l->next)
 	{
@@ -891,6 +912,8 @@ sync_loaded_extensions (EphyExtensionsManager *manager)
 
 	g_slist_foreach (active_extensions, (GFunc) g_free, NULL);
 	g_slist_free (active_extensions);
+
+	g_object_unref (client);
 }
 
 static void
