@@ -21,7 +21,10 @@ libegg_la_SOURCES = \
   $(EGGSOURCES) \
   eggmarshalers.c
 
-EGGHEADERS = \
+INST_H_FILES = \
+  egg-editable-toolbar.h
+
+NO_INST_H_FILES = \
   eggdropdowntoolbutton.h \
   eggtreemultidnd.h \
   egg-editable-toolbar.h \
@@ -29,12 +32,12 @@ EGGHEADERS = \
   egg-toolbar-editor.h \
   eggstatusicon.h \
   eggtrayicon.h \
-  eggtraymanager.h
-
-noinst_HEADERS = \
-  $(EGGHEADERS) \
+  eggtraymanager.h \
   eggmarshalers.h \
   eggintl.h
+
+headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
+header_DATA = $(INST_H_FILES)
 
 BUILT_SOURCES = eggmarshalers.h eggmarshalers.c
 
@@ -55,7 +58,7 @@ egg-marshal.c: eggmarshalers.h eggmarshalers.c
 EXTRA_DIST=			\
 	eggmarshalers.list
 
-EGGFILES=$(EGGSOURCES) $(EGGHEADERS)
+EGGFILES=$(EGGSOURCES) $(INST_H_FILES) $(NO_INST_H_FILES)
 EGGDIR=$(srcdir)/../../../libegg/libegg
 
 regenerate-built-sources:
