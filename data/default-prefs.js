@@ -2,6 +2,9 @@
 pref("mousewheel.withcontrolkey.action", 1);
 pref("mousewheel.withcontrolkey.numlines", 1);
 pref("mousewheel.withcontrolkey.sysnumlines", false);
+// fix horizontal scroll with 2nd wheel, see bug #148557
+pref("mousewheel.horizscroll.withnokey.action", 0);
+pref("mousewheel.horizscroll.withnokey.sysnumlines", true);
 
 // don't allow opening file:/// URLs on pages from network sources (http, etc.)
 pref("security.checkloaduri", true);
