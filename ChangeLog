@@ -1,5 +1,12 @@
 2004-07-31  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-menu.c: (ensure_folder),
+	(create_submenu):
+
+	Fix submenu creation with non-ascii topic names. Fixes bug #147469.
+
+2004-07-31  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-bookmark-action.c: (drag_data_get_cb):
 	* src/bookmarks/ephy-bookmarks-export.c: (write_topics_list),
 	(ephy_bookmarks_export_rdf):

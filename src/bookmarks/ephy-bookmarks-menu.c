@@ -244,8 +244,6 @@ ensure_folder (EphyBookmarksMenu *menu, const char *path, const char *folder)
 
 	if (action == NULL)
 	{
-		char *full_path;
-
 		action = g_object_new (GTK_TYPE_ACTION,
 				       "name", action_name,
 				       "label", folder,
@@ -254,12 +252,9 @@ ensure_folder (EphyBookmarksMenu *menu, const char *path, const char *folder)
 		gtk_action_group_add_action (p->action_group, action);
 		g_object_unref (action);
 
-		full_path = g_strdup_printf (BOOKMARKS_MENU_PATH "/%s", path);
-		gtk_ui_manager_add_ui (p->merge, p->ui_id, full_path,
+		gtk_ui_manager_add_ui (p->merge, p->ui_id, path,
 				       folder, action_name,
 				       GTK_UI_MANAGER_MENU, FALSE);
-
-		g_free (full_path);
 	}
 
 	g_free (action_name);
@@ -269,42 +264,34 @@ static char *
 create_submenu (EphyBookmarksMenu *menu, EphyNode *topic)
 {
 	const char *tmp;
-	char *title, *path, *p, *p2;
+	char *title, *folder;
+	char **folders;
+	GString *path;
+	int i;
 
 	tmp = ephy_node_get_property_string (topic, EPHY_NODE_KEYWORD_PROP_NAME);
 	title = ephy_string_double_underscores (tmp);
 
 	g_return_val_if_fail (title != NULL, NULL);
 
-	p = p2 = title;
-	while (p)
+	folders = g_strsplit (title, "/", -1);
+	g_free (title);
+	g_return_val_if_fail (folders != NULL, NULL); /* FIXME */
+
+	path = g_string_new (BOOKMARKS_MENU_PATH);
+	for (i = 0; folders[i] != NULL; i++)
 	{
-		if (*p == '\0' || g_utf8_get_char (p) == '/')
-		{
-			char *folder, *path;
-			glong offset;
+		folder = folders[i];
 
-			offset = g_utf8_pointer_to_offset (title, p2);
-			path = g_strndup (title, offset);
+		ensure_folder (menu, path->str, folder);
 
-			offset = g_utf8_pointer_to_offset (p2, p);
-			folder = g_strndup (p2, offset);
-
-			ensure_folder (menu, path, folder);
-
-			g_free (folder);
-			g_free (path);
-
-			p2 = p + 1;
-		}
-
-		p = (*p != '\0') ? g_utf8_next_char (p) : NULL;
+		g_string_append (path, "/");
+		g_string_append (path, folder);
 	}
 
-	path = g_strdup_printf (BOOKMARKS_MENU_PATH "/%s", title);
-	g_free (title);
+	g_strfreev (folders);
 
-	return path;
+	return g_string_free (path, FALSE);
 }
 
 static void
