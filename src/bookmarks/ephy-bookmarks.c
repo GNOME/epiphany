@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2002, 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2002-2004 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -80,7 +80,6 @@ static const EphyBookmarksBookmarkInfo default_bookmarks [] =
 	 * For instance in .nl these should be
 	 * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 	 */
-
 	{ N_("Search the web"), N_("http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8") }
 };
 static int n_default_bookmarks = G_N_ELEMENTS (default_bookmarks);
@@ -111,21 +110,18 @@ enum
 
 static guint ephy_bookmarks_signals[LAST_SIGNAL] = { 0 };
 
-static void
-ephy_bookmarks_class_init (EphyBookmarksClass *klass);
-static void
-ephy_bookmarks_init (EphyBookmarks *tab);
-static void
-ephy_bookmarks_finalize (GObject *object);
+static void ephy_bookmarks_class_init	(EphyBookmarksClass *klass);
+static void ephy_bookmarks_init		(EphyBookmarks *tab);
+static void ephy_bookmarks_finalize	(GObject *object);
 
 static GObjectClass *parent_class = NULL;
 
 GType
 ephy_bookmarks_get_type (void)
 {
-        static GType ephy_bookmarks_type = 0;
+        static GType type = 0;
 
-        if (ephy_bookmarks_type == 0)
+        if (type == 0)
         {
                 static const GTypeInfo our_info =
                 {
@@ -140,12 +136,12 @@ ephy_bookmarks_get_type (void)
                         (GInstanceInitFunc) ephy_bookmarks_init
                 };
 
-                ephy_bookmarks_type = g_type_register_static (G_TYPE_OBJECT,
-							      "EphyBookmarks",
-							      &our_info, 0);
+                type = g_type_register_static (G_TYPE_OBJECT,
+					       "EphyBookmarks",
+					       &our_info, 0);
         }
 
-        return ephy_bookmarks_type;
+        return type;
 }
 
 static void
@@ -898,6 +894,17 @@ options_find_next_option (const char *current)
 	return (char *) ret;
 }
 
+static char *
+options_find_first_option (const char *input)
+{
+	const char *start;
+
+	if (!input) return NULL;
+	start = strrchr (input, '{');
+	if (!start || !(*start)) return NULL;
+	return options_skip_spaces (start+1);
+}
+
 /**
  * Very simple parser for option strings in the
  * form a=b,c=d,e="f g",...
@@ -907,7 +914,7 @@ smart_url_options_get (const gchar *options, const gchar *option)
 {
 	gchar *ret = NULL;
 	gsize optionlen = strlen (option);
-	const gchar *current = options_skip_spaces (options);
+	const gchar *current = options_find_first_option (options_skip_spaces (options));
 
 	while (current)
 	{
@@ -983,6 +990,7 @@ ephy_bookmarks_solve_smart_url (EphyBookmarks *eb,
 
 	arg = g_convert (content, strlen (content),
 			 encoding, "UTF-8", NULL, NULL, NULL);
+	if (arg == NULL) return NULL;
 	escaped_arg = gnome_vfs_escape_string (arg);
 
 	t1 = smarturl_only;
