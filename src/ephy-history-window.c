@@ -966,6 +966,8 @@ site_node_selected_cb (EphyNodeView *view,
 {
 	EphyNode *pages;
 
+	if (editor->priv->selected_site == node) return;
+
 	editor->priv->selected_site = node;
 
 	if (node == NULL)

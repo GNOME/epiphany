@@ -1,3 +1,15 @@
+2003-10-06  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-node-view.c: (did_not_drag):
+
+	Do not unselect all on single selection mode, to not generate
+	useless node selection changes.
+
+	* src/ephy-history-window.c: (site_node_selected_cb):
+
+	Do not refilter if the new selected node is the same
+	as the old one.
+
 2003-10-03  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/egg/egg-toolbars-model.c: (safe_save_xml),

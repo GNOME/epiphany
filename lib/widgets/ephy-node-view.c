@@ -739,7 +739,11 @@ did_not_drag (EphyNodeView *view,
                    gtk_tree_selection_path_is_selected (selection, path) &&
                    !button_event_modifies_selection (event))
 		{
-                        gtk_tree_selection_unselect_all (selection);
+			if (gtk_tree_selection_get_mode (selection) == GTK_SELECTION_MULTIPLE)
+			{
+	                        gtk_tree_selection_unselect_all (selection);
+			}
+
                         gtk_tree_selection_select_path (selection, path);
                 }
                                                                                                                               
