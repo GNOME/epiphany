@@ -84,11 +84,16 @@ DISTCLEAN_FILES = $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 
 stamp_files = \
+	stamp-ephy-lib-type-builtins.c	\
 	stamp-ephy-lib-type-builtins.h	\
+	stamp-ephy-marshal.c		\
 	stamp-ephy-marshal.h
 
-ephy-marshal.c: ephy-marshal.list
-	$(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header --body > ephy-marshal.c
+ephy-marshal.c: stamp-ephy-marshal.c
+	@true
+stamp-ephy-marshal.c: ephy-marshal.list
+	$(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header --body > ephy-marshal.c \
+	&& echo timestamp > $(@F)
 
 ephy-marshal.h: stamp-ephy-marshal.h
 	@true
@@ -96,7 +101,9 @@ stamp-ephy-marshal.h: ephy-marshal.list
 	$(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header > ephy-marshal.h \
 	&& echo timestamp > $(@F)
 
-ephy-lib-type-builtins.c: $(TYPES_H_FILES)
+ephy-lib-type-builtins.c: stamp-ephy-lib-type-builtins.c
+	@true
+stamp-ephy-lib-type-builtins.c: $(TYPES_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
 		--fhead "#include \"ephy-lib-type-builtins.h\"\n\n" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
@@ -110,8 +117,9 @@ ephy-lib-type-builtins.c: $(TYPES_H_FILES)
 		--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n\n" \
 		--vtail "  return type;\n}\n\n" \
 		$(^F) ) > xgen-$(@F) \
-	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
-	&& rm -f xgen-$(@F)
+	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
+	&& rm -f xgen-$(@F) \
+	&& echo timestamp > $(@F)
 
 ephy-lib-type-builtins.h: stamp-ephy-lib-type-builtins.h
 	@true

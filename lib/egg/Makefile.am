@@ -44,7 +44,9 @@ BUILT_SOURCES = \
 	eggtypebuiltins.h
 
 stamp_files = \
+	stamp-eggmarshalers.c \
 	stamp-eggmarshalers.h \
+	stamp-eggtypebuiltins.c \
 	stamp-eggtypebuiltins.h
 
 eggmarshalers.h: stamp-eggmarshalers.h
@@ -53,10 +55,15 @@ stamp-eggmarshalers.h: eggmarshalers.list
 	$(GLIB_GENMARSHAL) --prefix=_egg_marshal $(srcdir)/eggmarshalers.list --header > eggmarshalers.h \
 	&& echo timestamp > $(@F)
 
-eggmarshalers.c: eggmarshalers.list
-	$(GLIB_GENMARSHAL) --prefix=_egg_marshal $(srcdir)/eggmarshalers.list --header --body > eggmarshalers.c
+eggmarshalers.c: stamp-eggmarshalers.c
+	@true
+stamp-eggmarshalers.c: eggmarshalers.list
+	$(GLIB_GENMARSHAL) --prefix=_egg_marshal $(srcdir)/eggmarshalers.list --header --body > eggmarshalers.c \
+	&& echo timestamp > $(@F)
 
-eggtypebuiltins.c: $(EGGHEADERS)
+eggtypebuiltins.c: stamp-eggtypebuiltins.c
+	@true
+stamp-eggtypebuiltins.c: $(EGGHEADERS)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
 		--fhead "#include \"eggtypebuiltins.h\"\n\n" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
@@ -70,8 +77,9 @@ eggtypebuiltins.c: $(EGGHEADERS)
 		--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n\n" \
 		--vtail "  return type;\n}\n\n" \
 		$(^F) ) > xgen-$(@F) \
-	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
-	&& rm -f xgen-$(@F)
+	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
+	&& rm -f xgen-$(@F) \
+	&& echo timestamp > $(@F)
 
 eggtypebuiltins.h: stamp-eggtypebuiltins.h
 	@true

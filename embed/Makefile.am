@@ -95,9 +95,12 @@ DISTCLEAN_FILES = $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 
 stamp_files = \
+	stamp-ephy-embed-type-builtins.c	\
 	stamp-ephy-embed-type-builtins.h
 
-ephy-embed-type-builtins.c: $(TYPES_H_FILES)
+ephy-embed-type-builtins.c: stamp-ephy-embed-type-builtins.c
+	@true
+stamp-ephy-embed-type-builtins.c: $(TYPES_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
 		--fhead "#include \"ephy-embed-type-builtins.h\"\n\n" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
@@ -111,8 +114,9 @@ ephy-embed-type-builtins.c: $(TYPES_H_FILES)
 		--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n\n" \
 		--vtail "  return type;\n}\n\n" \
 		$(^F) ) > xgen-$(@F) \
-	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
-	&& rm -f xgen-$(@F)
+	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
+	&& rm -f xgen-$(@F) \
+	&& echo timestamp > $(@F)
 
 ephy-embed-type-builtins.h: stamp-ephy-embed-type-builtins.h
 	@true

@@ -149,9 +149,12 @@ TYPES_SOURCE = \
 	ephy-type-builtins.h
 
 stamp_files = \
+	stamp-ephy-type-builtins.c	\
 	stamp-ephy-type-builtins.h
 
-ephy-type-builtins.c: $(INST_H_FILES) $(NOINST_H_FILES)
+ephy-type-builtins.c: stamp-ephy-type-builtins.c
+	@true
+stamp-ephy-type-builtins.c: $(INST_H_FILES) $(NOINST_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
 		--fhead "#include \"ephy-type-builtins.h\"\n\n" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
@@ -165,8 +168,9 @@ ephy-type-builtins.c: $(INST_H_FILES) $(NOINST_H_FILES)
 		--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n\n" \
 		--vtail "  return type;\n}\n\n" \
 		$(^F) ) > xgen-$(@F) \
-	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
-	&& rm -f xgen-$(@F)
+	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
+	&& rm -f xgen-$(@F) \
+	&& echo timestamp > $(@F)
 
 ephy-type-builtins.h: stamp-ephy-type-builtins.h
 	@true
