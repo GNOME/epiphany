@@ -29,6 +29,7 @@
 
     <copyright> 
       <year>2003</year> 
+
       <holder>Patanjali Somayaji</holder> 
     </copyright>
     <copyright> 
@@ -279,6 +280,20 @@ you can choose items related to the display of the web page.</para>
         <sect2 id="using-address-entry">
           <title>Using the Address Entry</title>
           <para>
+            The address entry is used to enter web addresses or search
+            terms. Any words entered in the address entry are searched
+            for in the Bookmarks database and the History database. If
+            there are any matches, these are shown in a drop down list
+            and can be selected by you. The selected web page will be
+            loaded in the browser window or tab. 
+          </para>
+          <para>
+            You can type in a bookmark topic or a term that is
+            part of the address or title of any page stored in your
+            bookmarks. These
+            terms are searched in the bookmark database for
+            matches. For more information, see <xref
+            linkend="overview-of-bookmarks"/>.
           </para>
         </sect2>
 	<sect2 id="using-toolbar">
@@ -676,6 +691,13 @@ Click on the bookmark that you want to select.</para>
 	<sect2 id="to-create-new-topic">
           <title>To Create a New Topic</title>
           <para>
+            To create a new topic, choose 
+            <menuchoice>
+              <guimenu>File</guimenu>
+              <guimenuitem>New Topic</guimenuitem>
+            </menuchoice>
+            in the Bookmark window. A new topic is created, you can
+            now enter the name of the topic. 
           </para>
         </sect2>
 	<sect2 id="to-add-bookmark-to-topic">
@@ -803,11 +825,49 @@ bookmark, then choose <guimenuitem>Copy Address</guimenuitem>.</para>
 	<sect2 id="overview-of-history">
           <title>Overview of the Epiphany History System</title>
           <para>
+            Epiphany collects history information about locations that
+            are visited by you. This information is stored in a
+            database and can then be accessed later. 
           </para>
+          <para>
+            As you type in the location bar of the main window,
+            &fr; searches for matches in the title or address of the
+            locations stored in the history and the bookmark
+            databases. Matches are shown in a list below the location
+            bar. 
+          </para>
+          <para>
+            You can manage history by opening the history window. This
+            window allows you to search the history, and delete locations
+            you do not want to revisit later.
+          </para>
+          <para>
+            <xref linkend="ephy-history-window-screenshot"/> shows the
+            history window. 
+          </para>
+          <figure id="ephy-history-window-screenshot">
+            <title>History window</title>
+            <screenshot>
+              <mediaobject>
+                <imageobject>
+                  <imagedata
+                  fileref="figures/ephy-history-window-screenshot.png"
+                  format="PNG"/> 
+                </imageobject>
+              </mediaobject>
+            </screenshot>
+          </figure>
         </sect2>
 	<sect2 id="to-select-history">
           <title>To Select History Links</title>
           <para>
+            Select <menuchoice>
+            <guimenu>Go</guimenu>
+            <guimenuitem>History</guimenuitem>
+            </menuchoice>
+            to open the history window. You can search for history
+            links, open history links in a new window or a new tab, or
+            delete history from the database. 
           </para>
         </sect2>
 	<sect2 id="to-open-history-link">
@@ -861,6 +921,19 @@ history link, then choose <guimenuitem>Delete</guimenuitem>.</para>
 	<sect2 id="to-search-history">
           <title>To Search Your History Links</title>
           <para>
+            You can type into the search entry in
+            the history window. In case any matches are found in the
+            history database, they are shown in a list below. These
+            matches can then be opened in a new window, a new tab or
+            the link address can be copied for pasting in any other
+            application. 
+          </para>
+          <para>
+            Alternatively, anything you enter in the address entry of
+            the &fr; window 
+            is matched against the history database, and shown in a
+            drop down list alongwith other matches from the bookmarks
+            database. 
           </para>
         </sect2>
 	<sect2 id="to-copy-history-link-address">
