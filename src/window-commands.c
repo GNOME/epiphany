@@ -901,7 +901,7 @@ window_cmd_help_about (GtkAction *action,
 	static GtkWidget *about = NULL;
 	GtkWidget** ptr;
 	const char *icon_path;
-	GdkPixbuf *logo = NULL;
+	GdkPixbuf *icon = NULL;
 	GtkIconTheme *icon_theme;
 	GtkIconInfo *icon_info;
 
@@ -940,7 +940,7 @@ window_cmd_help_about (GtkAction *action,
 
 		if (icon_path != NULL)
 		{
-			logo = gdk_pixbuf_new_from_file (icon_path, NULL);
+			icon = gdk_pixbuf_new_from_file (icon_path, NULL);
 		}
 	}
 	else
@@ -955,13 +955,13 @@ window_cmd_help_about (GtkAction *action,
 		       (const char **)authors,
 		       (const char **)documenters,
 		       strcmp (translator_credits, "translator-credits") != 0 ? translator_credits : NULL,
-		       logo);
+		       icon);
 
-	gtk_window_set_icon (GTK_WINDOW (about), logo);
+	gtk_window_set_icon (GTK_WINDOW (about), icon);
 
-	if (logo != NULL)
+	if (icon != NULL)
 	{
-		g_object_unref (logo);
+		g_object_unref (icon);
 	}
 
 	gtk_window_set_transient_for (GTK_WINDOW (about),
