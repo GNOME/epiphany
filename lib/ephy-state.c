@@ -22,7 +22,6 @@
 #include "ephy-state.h"
 #include "ephy-file-helpers.h"
 #include "ephy-node-db.h"
-#include "ephy-types.h"
 #include "ephy-node-common.h"
 
 #include <string.h>

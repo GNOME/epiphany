@@ -23,6 +23,7 @@ NOINST_H_FILES = \
 	ephy-file-helpers.h			\
 	ephy-glade.h				\
 	ephy-gui.h				\
+	ephy-langs.h				\
 	ephy-marshal.h				\
 	ephy-node-filter.h			\
 	ephy-node-common.h			\
@@ -35,10 +36,8 @@ NOINST_H_FILES = \
 
 INST_H_FILES = \
 	ephy-dialog.h				\
-	ephy-langs.h				\
 	ephy-node.h				\
-	ephy-node-db.h				\
-	ephy-types.h
+	ephy-node-db.h
 
 libephy_la_SOURCES = \
 	eel-gconf-extensions.c			\

@@ -451,7 +451,7 @@ save_tab (EphyWindow *window,
 
         /* otherwise, use the actual location. */
 	embed = ephy_tab_get_embed (tab);
-	ephy_embed_get_location (embed, TRUE, &location);
+	location = ephy_embed_get_location (embed, TRUE);
         xmlSetProp (embed_node, "url", location);
 	g_free (location);
 

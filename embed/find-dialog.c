@@ -302,7 +302,6 @@ find_dialog_new_with_parent (GtkWidget *window,
 static void
 find_dialog_go_next (FindDialog *dialog)
 {
-	gresult result;
 	EphyEmbed *embed;
 
 	g_return_if_fail (EPHY_IS_FIND_DIALOG (dialog));
@@ -310,9 +309,7 @@ find_dialog_go_next (FindDialog *dialog)
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG(dialog));
 	g_return_if_fail (embed != NULL);
 
-        result = ephy_embed_find_next (embed, FALSE);
-
-	if (result == G_OK)
+        if (ephy_embed_find_next (embed, FALSE))
 	{
 		update_navigation_controls (dialog, TRUE, TRUE);
 	}
@@ -325,7 +322,6 @@ find_dialog_go_next (FindDialog *dialog)
 static void
 find_dialog_go_prev (FindDialog *dialog)
 {
-	gresult result;
 	EphyEmbed *embed;
 
 	g_return_if_fail (EPHY_IS_FIND_DIALOG (dialog));
@@ -333,9 +329,7 @@ find_dialog_go_prev (FindDialog *dialog)
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG(dialog));
 	g_return_if_fail (embed != NULL);
 
-	result = ephy_embed_find_next (embed, TRUE);
-
-	if (result == G_OK)
+	if (ephy_embed_find_next (embed, TRUE))
 	{
 		update_navigation_controls (dialog, TRUE, TRUE);
 	}

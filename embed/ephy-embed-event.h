@@ -19,8 +19,6 @@
 #ifndef EPHY_EMBED_EVENT_H
 #define EPHY_EMBED_EVENT_H
 
-#include "ephy-embed-types.h"
-
 #include <glib-object.h>
 #include <glib.h>
 
@@ -75,32 +73,29 @@ struct EphyEmbedEventClass
         GObjectClass parent_class;
 };
 
-GType             ephy_embed_event_get_type		(void);
+GType			ephy_embed_event_get_type	(void);
 
-EphyEmbedEvent   *ephy_embed_event_new			(void);
+EphyEmbedEvent	       *ephy_embed_event_new		(void);
 
-guint		  ephy_embed_event_get_modifier		(EphyEmbedEvent *event);
+guint			ephy_embed_event_get_modifier	(EphyEmbedEvent *event);
 
-gresult		  ephy_embed_event_get_event_type	(EphyEmbedEvent *event,
-							 EphyEmbedEventType *type);
+EphyEmbedEventType	ephy_embed_event_get_event_type	(EphyEmbedEvent *event);
 
-gresult		  ephy_embed_event_get_coords		(EphyEmbedEvent *event,
+void			ephy_embed_event_get_coords	(EphyEmbedEvent *event,
 							 guint *x, guint *y);
 
-gresult		  ephy_embed_event_get_context		(EphyEmbedEvent *event,
-							 EmbedEventContext *context);
+EmbedEventContext	ephy_embed_event_get_context	(EphyEmbedEvent *event);
 
-void		  ephy_embed_event_set_property		(EphyEmbedEvent *event,
+void			ephy_embed_event_set_property	(EphyEmbedEvent *event,
 							 const char *name,
 							 GValue *value);
 
-void		  ephy_embed_event_get_property		(EphyEmbedEvent *event,
+void			ephy_embed_event_get_property	(EphyEmbedEvent *event,
 							 const char *name,
 							 const GValue **value);
 
-gboolean	  ephy_embed_event_has_property		(EphyEmbedEvent *event,
+gboolean		ephy_embed_event_has_property	(EphyEmbedEvent *event,
 							 const char *name);
-
 
 G_END_DECLS
 

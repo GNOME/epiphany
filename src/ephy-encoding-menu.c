@@ -150,14 +150,13 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	EphyEncodingMenuPrivate *p = menu->priv;
 	EphyEmbed *embed;
 	GtkAction *action;
-	EphyEncodingInfo *info = NULL;
+	EphyEncodingInfo *info;
 	char name[128];
 	const char *encoding;
 	EphyNode *enc_node;
 	GList *recent, *related = NULL, *l;
 	EphyLanguageGroup groups;
 	gboolean is_automatic;
-	gresult result;
 
 	START_PROFILER ("Rebuilding encoding menu")
 
@@ -171,8 +170,8 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	recent = ephy_encodings_get_recent (p->encodings);
 
 	embed = ephy_window_get_active_embed (p->window);
-	result = ephy_embed_get_encoding_info (embed, &info);
-	if (result != G_OK || info == NULL) goto build_menu;
+	info = ephy_embed_get_encoding_info (embed);
+	if (info == NULL) goto build_menu;
 
 	LOG ("encoding information\n enc='%s' default='%s' hint='%s' "
 	     "prev_doc='%s' forced='%s' parent='%s' source=%d "
@@ -291,7 +290,6 @@ encoding_activate_cb (GtkAction *action, EphyEncodingMenu *menu)
 	EphyEmbed *embed;
 	EphyEncodingInfo *info;
 	const char *name, *encoding;
-	gresult result;
 
 	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)) == FALSE
 	    || menu->priv->update_tag)
@@ -304,8 +302,8 @@ encoding_activate_cb (GtkAction *action, EphyEncodingMenu *menu)
 
 	embed = ephy_window_get_active_embed (menu->priv->window);
 
-	result = ephy_embed_get_encoding_info (embed, &info);
-	if (result != G_OK || info == NULL) return;
+	info = ephy_embed_get_encoding_info (embed);
+	if (info == NULL) return;
 
 	/* Force only when different from current encoding */
 	if (info->encoding && strcmp (info->encoding, encoding) != 0)

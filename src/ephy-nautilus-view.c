@@ -298,8 +298,8 @@ gnv_embed_dom_mouse_click_cb (EphyEmbed *embed,
 	EphyEmbedEventType type;
 	EmbedEventContext context;
 
-	ephy_embed_event_get_event_type (event, &type);
-	ephy_embed_event_get_context (event, &context);
+	type = ephy_embed_event_get_event_type (event);
+	context = ephy_embed_event_get_context (event);
 
 	if (type == EPHY_EMBED_EVENT_MOUSE_BUTTON2
 	    && (context & EMBED_CONTEXT_LINK))
@@ -325,9 +325,7 @@ gnv_embed_context_menu_cb (EphyEmbed *embed,
 			   EphyNautilusView *view)
 {
 	EphyNautilusViewPrivate *p = view->priv;
-	EmbedEventContext context;
 
-	ephy_embed_event_get_context (event, &context);
 	ephy_embed_popup_control_set_event (p->popup, event);
 	ephy_embed_popup_control_show (p->popup, embed);
 }
@@ -382,7 +380,7 @@ gnv_embed_title_cb (EphyEmbed *embed, EphyNautilusView *view)
 	g_return_if_fail (view->priv->embed == embed);
 
 	g_free (p->title);
-	ephy_embed_get_title (embed, &p->title);
+	p->title = ephy_embed_get_title (embed);
 
  	nautilus_view_set_title (NAUTILUS_VIEW (view), p->title);
 }
@@ -501,7 +499,7 @@ gnv_popup_cmd_frame_in_new_window (BonoboUIComponent *uic,
 	
 	info = ephy_embed_popup_control_get_event (popup);
 	
-	ephy_embed_get_location (view->priv->embed, FALSE, &location);
+	location = ephy_embed_get_location (view->priv->embed, FALSE);
 
 	nautilus_view_open_location (NAUTILUS_VIEW (view),
 				     location,
@@ -572,12 +570,10 @@ gnv_zoomable_zoom_in_cb (BonoboZoomable *zoomable,
 			 EphyNautilusView *view)
 {
 	float zoom, new_zoom;
-	gresult rv;
 	
 	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
 
-	rv = ephy_embed_zoom_get (view->priv->embed, &zoom);
-	if (rv == G_FAILED) return;
+	zoom = ephy_embed_zoom_get (view->priv->embed);
 
 	new_zoom = ephy_zoom_get_changed_zoom_level (zoom, 1);
 	ephy_embed_zoom_set (view->priv->embed, new_zoom, TRUE);
@@ -588,12 +584,10 @@ gnv_zoomable_zoom_out_cb (BonoboZoomable *zoomable,
 			  EphyNautilusView *view)
 {
 	float zoom, new_zoom;
-	gresult rv;
 		
 	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
 
-	rv = ephy_embed_zoom_get (view->priv->embed, &zoom);
-	if (rv == G_FAILED) return;
+	zoom = ephy_embed_zoom_get (view->priv->embed);
 
 	new_zoom = ephy_zoom_get_changed_zoom_level (zoom, -1);
 	ephy_embed_zoom_set (view->priv->embed, new_zoom, TRUE);

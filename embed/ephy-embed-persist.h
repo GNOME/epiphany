@@ -60,22 +60,22 @@ struct EphyEmbedPersistClass
 {
 	GObjectClass parent_class;
 
-	void (* completed)	(EphyEmbedPersist *persist);
+	void	 (* completed)	(EphyEmbedPersist *persist);
 
 	/* Methods */
 
-	gresult (* save)	(EphyEmbedPersist *persist);
+	gboolean (* save)	(EphyEmbedPersist *persist);
 
-	gresult (* cancel)	(EphyEmbedPersist *persist);
+	void	 (* cancel)	(EphyEmbedPersist *persist);
 };
 
 GType			 ephy_embed_persist_get_type	(void);
 
 EphyEmbedPersist	*ephy_embed_persist_new			(EphyEmbed *embed);
 
-gresult			 ephy_embed_persist_save		(EphyEmbedPersist *persist);
+gboolean		 ephy_embed_persist_save		(EphyEmbedPersist *persist);
 
-gresult			 ephy_embed_persist_cancel		(EphyEmbedPersist *persist);
+void			 ephy_embed_persist_cancel		(EphyEmbedPersist *persist);
 
 void			 ephy_embed_persist_set_dest		(EphyEmbedPersist *persist,
 								 const char *value);

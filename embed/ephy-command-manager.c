@@ -79,19 +79,18 @@ ephy_command_manager_base_init (gpointer g_class)
 	}
 }
 
-gresult
+void
 ephy_command_manager_do_command (EphyCommandManager *manager,
 				 const char *command)
 {
 	EphyCommandManagerClass *klass = EPHY_COMMAND_MANAGER_GET_CLASS (manager);
-        return klass->do_command (manager, command);
+        klass->do_command (manager, command);
 }
 
-gresult
+gboolean
 ephy_command_manager_get_command_state (EphyCommandManager *manager,
-				        const char *command,
-					gboolean *enabled)
+				        const char *command)
 {
 	EphyCommandManagerClass *klass = EPHY_COMMAND_MANAGER_GET_CLASS (manager);
-        return klass->get_command_state (manager, command, enabled);
+        return klass->get_command_state (manager, command);
 }

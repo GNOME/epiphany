@@ -632,7 +632,7 @@ pdm_dialog_init (PdmDialog *dialog)
 	passwords_tv = setup_passwords_treeview (dialog);
 
 	cookies = g_new0 (PdmActionInfo, 1);
-	ephy_embed_single_list_cookies (single, &cookies->list);
+	cookies->list = ephy_embed_single_list_cookies (single);
 	cookies->dialog = dialog;
 	cookies->remove_id = PROP_COOKIES_REMOVE;
 	cookies->add = pdm_dialog_cookie_add;
@@ -643,8 +643,8 @@ pdm_dialog_init (PdmDialog *dialog)
 	setup_action (cookies);
 
 	passwords = g_new0 (PdmActionInfo, 1);
-	ephy_embed_single_list_passwords (single, PASSWORD_PASSWORD,
-					  &passwords->list);
+	passwords->list = ephy_embed_single_list_passwords
+				(single, PASSWORD_PASSWORD);
 	passwords->dialog = dialog;
 	passwords->remove_id = PROP_PASSWORDS_REMOVE;
 	passwords->add = pdm_dialog_password_add;

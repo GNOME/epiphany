@@ -127,7 +127,6 @@ sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 	EphyEmbed *embed;
 	EphyEncodingInfo *info;
 	EphyNode *node;
-	gresult result;
         GtkTreeSelection *selection;
         GtkTreeModel *model;
         GList *rows;
@@ -139,8 +138,8 @@ sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	result = ephy_embed_get_encoding_info (embed, &info);
-	if (result != G_OK || info == NULL) return;
+	info = ephy_embed_get_encoding_info (embed);
+	if (info == NULL) return;
 
 	node = ephy_encodings_get_node (dialog->priv->encodings, info->encoding);
 	g_return_if_fail (EPHY_IS_NODE (node));
@@ -205,13 +204,12 @@ activate_choice (EphyEncodingDialog *dialog)
 	EphyEncodingInfo *info;
 	GtkWidget *button;
 	gboolean is_automatic;
-	gresult result;
 
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	result = ephy_embed_get_encoding_info (embed, &info);
-	if (result != G_OK || info == NULL) return;
+	info = ephy_embed_get_encoding_info (embed);
+	if (info == NULL) return;
 
 	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), AUTOMATIC_PROP);
 	is_automatic = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,37 +44,37 @@ ephy_embed_event_get_type (void)
 {
        static GType ephy_embed_event_type = 0;
 
-        if (ephy_embed_event_type == 0)
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (EphyEmbedEventClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) ephy_embed_event_class_init,
-                        NULL, /* class_finalize */
-                        NULL, /* class_data */
-                        sizeof (EphyEmbedEvent),
-                        0,    /* n_preallocs */
-                        (GInstanceInitFunc) ephy_embed_event_init
-                };
+	if (ephy_embed_event_type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyEmbedEventClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			(GClassInitFunc) ephy_embed_event_class_init,
+			NULL, /* class_finalize */
+			NULL, /* class_data */
+			sizeof (EphyEmbedEvent),
+			0,    /* n_preallocs */
+			(GInstanceInitFunc) ephy_embed_event_init
+		};
 
-                ephy_embed_event_type = g_type_register_static (G_TYPE_OBJECT,
-                                                                  "EphyEmbedEvent",
-                                                                  &our_info, 0);
-        }
+		ephy_embed_event_type = g_type_register_static (G_TYPE_OBJECT,
+								"EphyEmbedEvent",
+								&our_info, 0);
+	}
 
-        return ephy_embed_event_type;
+	return ephy_embed_event_type;
 }
 
 static void
 ephy_embed_event_class_init (EphyEmbedEventClass *klass)
 {
-        GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-        parent_class = g_type_class_peek_parent (klass);
+	parent_class = g_type_class_peek_parent (klass);
 
-        object_class->finalize = ephy_embed_event_finalize;
+	object_class->finalize = ephy_embed_event_finalize;
 
 	g_type_class_add_private (object_class, sizeof(EphyEmbedEventPrivate));
 }
@@ -89,7 +89,7 @@ free_g_value (gpointer value)
 static void
 ephy_embed_event_init (EphyEmbedEvent *event)
 {
-        event->priv = EPHY_EMBED_EVENT_GET_PRIVATE (event);
+	event->priv = EPHY_EMBED_EVENT_GET_PRIVATE (event);
 
 	event->priv->props = g_hash_table_new_full (g_str_hash, g_str_equal,
 						    g_free, free_g_value);
@@ -98,22 +98,18 @@ ephy_embed_event_init (EphyEmbedEvent *event)
 static void
 ephy_embed_event_finalize (GObject *object)
 {
-        EphyEmbedEvent *event = EPHY_EMBED_EVENT (object);
+	EphyEmbedEvent *event = EPHY_EMBED_EVENT (object);
 
 	g_hash_table_destroy (event->priv->props);
 
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 
 EphyEmbedEvent *
 ephy_embed_event_new (void)
 {
-	EphyEmbedEvent *event;
-
-        event = EPHY_EMBED_EVENT (g_object_new (EPHY_TYPE_EMBED_EVENT, NULL));
-
-        return event;
+	return EPHY_EMBED_EVENT (g_object_new (EPHY_TYPE_EMBED_EVENT, NULL));
 }
 
 guint
@@ -122,29 +118,24 @@ ephy_embed_event_get_modifier (EphyEmbedEvent *event)
 	return event->modifier;
 }
 
-gresult
-ephy_embed_event_get_event_type (EphyEmbedEvent *event,
-				 EphyEmbedEventType *type)
+EphyEmbedEventType
+ephy_embed_event_get_event_type (EphyEmbedEvent *event)
 {
-	*type = event->type;
-	return G_OK;
+	return event->type;
 }
 
-gresult
+void
 ephy_embed_event_get_coords (EphyEmbedEvent *event,
 			     guint *x, guint *y)
 {
 	*x = event->x;
 	*y = event->y;
-	return G_OK;
 }
 
-gresult
-ephy_embed_event_get_context (EphyEmbedEvent *event,
-			      EmbedEventContext *context)
+EmbedEventContext
+ephy_embed_event_get_context (EphyEmbedEvent *event)
 {
-	*context = event->context;
-	return G_OK;
+	return event->context;
 }
 
 void
@@ -153,8 +144,8 @@ ephy_embed_event_set_property (EphyEmbedEvent *event,
 			       GValue *value)
 {
 	g_hash_table_insert (event->priv->props,
-                             g_strdup (name),
-                             value);
+			     g_strdup (name),
+			     value);
 }
 
 void

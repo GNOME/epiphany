@@ -610,8 +610,7 @@ ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 		EphyHistory *history;
 		EphyNode *host;
 		GValue value = { 0, };
-		float zoom = 1.0, current_zoom = 1.0;
-		gresult rv;
+		float zoom = 1.0, current_zoom;
 
 		history = ephy_embed_shell_get_global_history
 				(EPHY_EMBED_SHELL (ephy_shell));
@@ -624,8 +623,8 @@ ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 			g_value_unset (&value);
 		}
 
-		rv = ephy_embed_zoom_get (embed, &current_zoom);
-		if (rv == G_OK && zoom != current_zoom)
+		current_zoom = ephy_embed_zoom_get (embed);
+		if (zoom != current_zoom)
 		{
 			tab->priv->setting_zoom = TRUE;
 			ephy_embed_zoom_set (embed, zoom, FALSE);
@@ -648,20 +647,22 @@ ephy_tab_zoom_changed_cb (EphyEmbed *embed, float zoom, EphyTab *tab)
 		return;
 	}
 
-	ephy_embed_get_location (embed, TRUE, &address);
+	address = ephy_embed_get_location (embed, TRUE);
 	if (address_has_web_scheme (address))
 	{
 		EphyHistory *history;
 		EphyNode *host;
 		GValue value = { 0, };
-		float zoom = 1.0;
-
 		history = ephy_embed_shell_get_global_history
 				(EPHY_EMBED_SHELL (ephy_shell));
 		host = ephy_history_get_host (history, address);
 
-		if (host != NULL && ephy_embed_zoom_get (embed, &zoom) == G_OK)
+		if (host != NULL)
 		{
+			float zoom;
+
+			zoom = ephy_embed_zoom_get (embed);
+
 			g_value_init (&value, G_TYPE_FLOAT);
 			g_value_set_float (&value, zoom);
 			ephy_node_set_property
@@ -678,7 +679,7 @@ ephy_tab_title_cb (EphyEmbed *embed, EphyTab *tab)
 {
 	char *title;
 
-	ephy_embed_get_title (embed, &title);
+	title = ephy_embed_get_title (embed);
 
 	ephy_tab_set_title (tab, title);
 
@@ -1008,8 +1009,8 @@ ephy_tab_dom_mouse_click_cb  (EphyEmbed *embed,
 
 	g_assert (EPHY_IS_EMBED_EVENT(event));
 
-	ephy_embed_event_get_event_type (event, &type);
-	ephy_embed_event_get_context (event, &context);
+	type = ephy_embed_event_get_event_type (event);
+	context = ephy_embed_event_get_context (event);
 
 	if (type == EPHY_EMBED_EVENT_MOUSE_BUTTON2
 	    && (context & EMBED_CONTEXT_LINK))
@@ -1181,17 +1182,17 @@ ephy_tab_update_navigation_flags (EphyTab *tab)
 
 	embed = tab->priv->embed;
 
-	if (ephy_embed_can_go_up (embed) == G_OK)
+	if (ephy_embed_can_go_up (embed))
 	{
 		flags |= TAB_NAV_UP;
 	}
 
-	if (ephy_embed_can_go_back (embed) == G_OK)
+	if (ephy_embed_can_go_back (embed))
 	{
 		flags |= TAB_NAV_BACK;
 	}
 
-	if (ephy_embed_can_go_forward (embed) == G_OK)
+	if (ephy_embed_can_go_forward (embed))
 	{
 		flags |= TAB_NAV_FORWARD;
 	}
@@ -1248,7 +1249,7 @@ ephy_tab_set_title (EphyTab *tab, const char *new_title)
 		GnomeVFSURI *uri = NULL;
 		char *address;
 
-		ephy_embed_get_location (tab->priv->embed, TRUE, &address);
+		address = ephy_embed_get_location (tab->priv->embed, TRUE);
 
 		if (address)
 		{

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002, 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -60,27 +60,27 @@ ephy_embed_single_get_type (void)
 {
        static GType ephy_embed_single_type = 0;
 
-        if (ephy_embed_single_type == 0)
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (EphyEmbedSingleClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) ephy_embed_single_class_init,
-                        NULL, /* class_finalize */
-                        NULL, /* class_data */
-                        sizeof (EphyEmbedSingle),
-                        0,    /* n_preallocs */
-                        (GInstanceInitFunc) ephy_embed_single_init
-                };
+	if (ephy_embed_single_type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyEmbedSingleClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			(GClassInitFunc) ephy_embed_single_class_init,
+			NULL, /* class_finalize */
+			NULL, /* class_data */
+			sizeof (EphyEmbedSingle),
+			0,    /* n_preallocs */
+			(GInstanceInitFunc) ephy_embed_single_init
+		};
 
-                ephy_embed_single_type = g_type_register_static (G_TYPE_OBJECT,
+		ephy_embed_single_type = g_type_register_static (G_TYPE_OBJECT,
 								"EphyEmbedSingle",
 								&our_info, 0);
-        }
+	}
 
-        return ephy_embed_single_type;
+	return ephy_embed_single_type;
 }
 
 static void
@@ -91,15 +91,15 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
 	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
 	ephy_embed_single_signals[NEW_WINDOW] =
-                g_signal_new ("new_window_orphan",
-                              G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (EphyEmbedSingleClass, new_window),
-                              NULL, NULL,
-                              ephy_marshal_VOID__POINTER_INT,
-                              G_TYPE_NONE,
-                              2,
-                              G_TYPE_POINTER,
+		g_signal_new ("new_window_orphan",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyEmbedSingleClass, new_window),
+			      NULL, NULL,
+			      ephy_marshal_VOID__POINTER_INT,
+			      G_TYPE_NONE,
+			      2,
+			      G_TYPE_POINTER,
 			      G_TYPE_INT);
 
 	g_type_class_add_private (object_class, sizeof(EphyEmbedSinglePrivate));
@@ -116,75 +116,72 @@ ephy_embed_single_init (EphyEmbedSingle *ges)
 	ges->priv->favicon_cache = NULL;
 }
 
-gresult
+void
 ephy_embed_single_clear_cache (EphyEmbedSingle *shell)
 {
 	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
-        return klass->clear_cache (shell);
+	klass->clear_cache (shell);
 }
 
-gresult
+void
 ephy_embed_single_set_offline_mode (EphyEmbedSingle *shell,
 				   gboolean offline)
 {
 	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
-        return klass->set_offline_mode (shell, offline);
+	klass->set_offline_mode (shell, offline);
 }
 
-gresult
+void
 ephy_embed_single_load_proxy_autoconf (EphyEmbedSingle *shell,
 				      const char* url)
 {
 	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
-        return klass->load_proxy_autoconf (shell, url);
+	klass->load_proxy_autoconf (shell, url);
 }
 
-gresult
+GList *
 ephy_embed_single_get_font_list (EphyEmbedSingle *shell,
-				const char *langGroup,
-				GList **fontList)
+				 const char *langGroup)
 {
 	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
-        return klass->get_font_list (shell, langGroup, fontList);
+	return klass->get_font_list (shell, langGroup);
 }
 
-gresult
-ephy_embed_single_list_cookies (EphyEmbedSingle *shell,
-			       GList **cookies)
+GList *
+ephy_embed_single_list_cookies (EphyEmbedSingle *shell)
 {
 	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
-        return klass->list_cookies (shell, cookies);
+	return klass->list_cookies (shell);
 }
 
-gresult
+void
 ephy_embed_single_remove_cookies (EphyEmbedSingle *shell,
 				 GList *cookies)
 {
 	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
-        return klass->remove_cookies (shell, cookies);
+	klass->remove_cookies (shell, cookies);
 }
 
-gresult
+GList *
 ephy_embed_single_list_passwords (EphyEmbedSingle *shell,
-				 PasswordType type,
-				 GList **passwords)
+				  PasswordType type)
 {
 	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
-        return klass->list_passwords (shell, type, passwords);
+	return klass->list_passwords (shell, type);
 }
 
-gresult
+void
 ephy_embed_single_remove_passwords (EphyEmbedSingle *shell,
-				   GList *passwords,
-				   PasswordType type)
+				    GList *passwords,
+				    PasswordType type)
 {
 	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
-        return klass->remove_passwords (shell, passwords, type);
+	klass->remove_passwords (shell, passwords, type);
 }
 
-gresult
+void
 ephy_embed_single_free_cookies (EphyEmbedSingle *shell,
-			       GList *cookies)
+				GList *cookies)
 {
 	GList *l;
 
@@ -202,13 +199,11 @@ ephy_embed_single_free_cookies (EphyEmbedSingle *shell,
 	}
 
 	g_list_free (cookies);
-
-	return G_OK;
 }
 
-gresult
+void
 ephy_embed_single_free_passwords (EphyEmbedSingle *shell,
-				 GList *passwords)
+				  GList *passwords)
 {
 	GList *l;
 
@@ -221,6 +216,4 @@ ephy_embed_single_free_passwords (EphyEmbedSingle *shell,
 	}
 
 	g_list_free (passwords);
-
-	return G_OK;
 }

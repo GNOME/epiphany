@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -72,29 +72,26 @@ mozilla_embed_single_init (MozillaEmbedSingle *ges);
 static void
 mozilla_embed_single_finalize (GObject *object);
 
-static gresult      
+static void   
 impl_clear_cache (EphyEmbedSingle *shell);
-static gresult          
+static void
 impl_set_offline_mode (EphyEmbedSingle *shell,
 		       gboolean offline);
-static gresult           
+static void
 impl_load_proxy_autoconf (EphyEmbedSingle *shell,
 			  const char* url);
-static gresult
+static GList *
 impl_get_font_list (EphyEmbedSingle *shell,
-		    const char *langGroup,
-		    GList **fontList);
-static gresult           
-impl_list_cookies (EphyEmbedSingle *shell,
-		   GList **cookies);
-static gresult           
+		    const char *langGroup);
+static GList *
+impl_list_cookies (EphyEmbedSingle *shell);
+static void
 impl_remove_cookies (EphyEmbedSingle *shell,
 		     GList *cookies);
-static gresult           
+static GList *
 impl_list_passwords (EphyEmbedSingle *shell,
-		     PasswordType type, 
-		     GList **passwords);
-static gresult           
+		     PasswordType type);
+static void
 impl_remove_passwords (EphyEmbedSingle *shell,
 		       GList *passwords,
 		       PasswordType type);
@@ -531,37 +528,33 @@ mozilla_embed_single_finalize (GObject *object)
 	}
 }
 
-static gresult      
+static void
 impl_clear_cache (EphyEmbedSingle *shell)
 {
 	nsresult rv;
 	
 	nsCOMPtr<nsICacheService> CacheService =
                         do_GetService (NS_CACHESERVICE_CONTRACTID, &rv);
-	if (NS_FAILED(rv)) return G_FAILED;
-
-	CacheService->EvictEntries (nsICache::STORE_ANYWHERE);
-
-	return G_OK;
+	if (NS_SUCCEEDED (rv))
+	{
+		CacheService->EvictEntries (nsICache::STORE_ANYWHERE);
+	}
 }
 
-static gresult          
+static void
 impl_set_offline_mode (EphyEmbedSingle *shell,
 		       gboolean offline)
 {
 	nsresult rv;
 
 	nsCOMPtr<nsIIOService> io = do_GetService(NS_IOSERVICE_CONTRACTID, &rv);
-        if (NS_FAILED(rv))
-                return G_FAILED;
-
-        rv = io->SetOffline(offline);
-	if (NS_SUCCEEDED(rv)) return G_FAILED;
-	
-	return G_OK;
+	if (NS_SUCCEEDED (rv))
+	{
+		io->SetOffline(offline);
+	}
 }
 
-static gresult           
+static void
 impl_load_proxy_autoconf (EphyEmbedSingle *shell,
 			  const char* url)
 {
@@ -570,18 +563,15 @@ impl_load_proxy_autoconf (EphyEmbedSingle *shell,
         nsCOMPtr<nsIProtocolProxyService> pps =
                 do_GetService ("@mozilla.org/network/protocol-proxy-service;1",
                                &rv);
-        if (NS_FAILED(rv) || !pps) return G_FAILED;
-
-        rv = pps->ConfigureFromPAC (url);
-	if (NS_FAILED(rv)) return G_FAILED;
-	
-	return G_OK;
+	if (NS_SUCCEEDED (rv))
+	{
+		pps->ConfigureFromPAC (url);
+	}
 }
 
-static gresult
+static GList *
 impl_get_font_list (EphyEmbedSingle *shell,
-		    const char *langGroup,
-		    GList **fontList)
+		    const char *langGroup)
 {
 	nsresult rv;
 	PRUint32 fontCount;
@@ -590,11 +580,11 @@ impl_get_font_list (EphyEmbedSingle *shell,
 
 	nsCOMPtr<nsIFontEnumerator> mozFontEnumerator;
 	mozFontEnumerator = do_CreateInstance("@mozilla.org/gfx/fontenumerator;1", &rv);
-	if(NS_FAILED(rv)) return G_FAILED;
+	if(NS_FAILED(rv)) return NULL;
 
 	rv = mozFontEnumerator->EnumerateFonts (nsnull, nsnull,
 					        &fontCount, &fontArray);
-	if (NS_FAILED (rv)) return G_FAILED;
+	if (NS_FAILED (rv)) return NULL;
 
 	for (PRUint32 i = 0; i < fontCount; i++)
 	{
@@ -607,23 +597,21 @@ impl_get_font_list (EphyEmbedSingle *shell,
 
 	nsMemory::Free (fontArray);
 
-	*fontList = g_list_reverse (l);
-
-	return G_OK;
+	return g_list_reverse (l);
 }
 
-static gresult           
-impl_list_cookies (EphyEmbedSingle *shell,
-		   GList **cookies)
+static GList *
+impl_list_cookies (EphyEmbedSingle *shell)
 {
         nsresult result;
+	GList *cookies = NULL;
 
         nsCOMPtr<nsICookieManager> cookieManager = 
                         do_CreateInstance (NS_COOKIEMANAGER_CONTRACTID);
         nsCOMPtr<nsISimpleEnumerator> cookieEnumerator;
         result = 
             cookieManager->GetEnumerator (getter_AddRefs(cookieEnumerator));
-        if (NS_FAILED(result)) return G_FAILED;
+        if (NS_FAILED(result)) return NULL;
 	
         PRBool enumResult;
         for (cookieEnumerator->HasMoreElements(&enumResult) ;
@@ -634,7 +622,7 @@ impl_list_cookies (EphyEmbedSingle *shell,
         
                 nsCOMPtr<nsICookie> nsCookie;
                 result = cookieEnumerator->GetNext (getter_AddRefs(nsCookie));
-                if (NS_FAILED(result)) return G_FAILED;
+                if (NS_FAILED(result)) return NULL;
 
                 c = g_new0 (CookieInfo, 1);
 
@@ -663,15 +651,13 @@ impl_list_cookies (EphyEmbedSingle *shell,
 		else
 	                c->expire = g_strdup_printf ("%s",ctime((time_t*)&dateTime));
                 
-                *cookies = g_list_prepend (*cookies, c);
+                cookies = g_list_prepend (cookies, c);
         }       
 
-	*cookies = g_list_reverse (*cookies);
-		
-	return G_OK;
+	return g_list_reverse (cookies);
 }
 
-static gresult           
+static void
 impl_remove_cookies (EphyEmbedSingle *shell,
 		     GList *cookies)
 {
@@ -679,9 +665,8 @@ impl_remove_cookies (EphyEmbedSingle *shell,
 	GList *cl;
         nsCOMPtr<nsICookieManager> cookieManager =
                         do_CreateInstance (NS_COOKIEMANAGER_CONTRACTID);
-	
-        for (cl = g_list_first(cookies) ; cl != NULL ; 
-             cl = g_list_next (cl))
+
+	for (cl = cookies; cl != NULL; cl = cl->next)
         {
                 CookieInfo *c = (CookieInfo *)cl->data;
 
@@ -689,18 +674,15 @@ impl_remove_cookies (EphyEmbedSingle *shell,
                                                 nsDependentCString(c->name),
                                                 nsDependentCString(c->path),
                                                 PR_FALSE);
-                if (NS_FAILED(result)) return G_FAILED;
         };
-
-	return G_OK;
 }
 	
-static gresult           
+static GList *
 impl_list_passwords (EphyEmbedSingle *shell,
-		     PasswordType type, 
-		     GList **passwords)
+		     PasswordType type)
 {
         nsresult result = NS_ERROR_FAILURE;
+	GList *passwords = NULL;
 
         nsCOMPtr<nsIPasswordManager> passwordManager =
                         do_CreateInstance (NS_PASSWORDMANAGER_CONTRACTID);
@@ -711,7 +693,7 @@ impl_list_passwords (EphyEmbedSingle *shell,
         else if (type == PASSWORD_REJECT)
                 result = passwordManager->GetRejectEnumerator 
                                 (getter_AddRefs(passwordEnumerator));
-        if (NS_FAILED(result)) return G_FAILED;      
+        if (NS_FAILED(result)) return NULL;      
 
         PRBool enumResult;
         for (passwordEnumerator->HasMoreElements(&enumResult) ;
@@ -721,7 +703,7 @@ impl_list_passwords (EphyEmbedSingle *shell,
                 nsCOMPtr<nsIPassword> nsPassword;
                 result = passwordEnumerator->GetNext 
                                         (getter_AddRefs(nsPassword));
-                if (NS_FAILED(result)) return G_FAILED;
+                if (NS_FAILED(result)) return NULL;
 
                 PasswordInfo *p = g_new0 (PasswordInfo, 1);
 
@@ -736,15 +718,13 @@ impl_list_passwords (EphyEmbedSingle *shell,
                         p->username = g_strdup(NS_ConvertUCS2toUTF8(unicodeName).get());
                 }
 
-		*passwords = g_list_prepend (*passwords, p);
+		passwords = g_list_prepend (passwords, p);
         }       
 
-	*passwords = g_list_reverse (*passwords);
-
-	return G_OK;
+	return g_list_reverse (passwords);
 }
 
-static gresult           
+static void
 impl_remove_passwords (EphyEmbedSingle *shell,
 		       GList *passwords, 
 		       PasswordType type)
@@ -752,9 +732,9 @@ impl_remove_passwords (EphyEmbedSingle *shell,
 	nsresult result = NS_ERROR_FAILURE;
         nsCOMPtr<nsIPasswordManager> passwordManager =
                         do_CreateInstance (NS_PASSWORDMANAGER_CONTRACTID);
+	GList *l;
 
-        for (GList *l = g_list_first(passwords) ; l !=NULL ; 
-             l = g_list_next(l))
+	for (l = passwords; l != NULL; l = l->next)
         {
                 PasswordInfo *p = (PasswordInfo *)l->data;
                 if (type == PASSWORD_PASSWORD)
@@ -767,9 +747,5 @@ impl_remove_passwords (EphyEmbedSingle *shell,
                         result = passwordManager->RemoveReject
                                         (nsDependentCString(p->host));
                 };
-
-                if (NS_FAILED(result)) return G_FAILED;
         };
-	
-        return G_OK;
 }

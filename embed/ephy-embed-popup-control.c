@@ -391,7 +391,7 @@ ephy_embed_popup_control_set_event (EphyEmbedPopupControl *p,
 		g_object_unref (G_OBJECT (p->priv->event));
 	}
 
-	ephy_embed_event_get_context (event, &context);
+	context = ephy_embed_event_get_context (event);
 
 	p->priv->context = context;
 
@@ -442,7 +442,7 @@ embed_popup_copy_location_cmd (BonoboUIComponent *uic,
                                const char* verbname)
 {
 	char *location;
-	ephy_embed_get_location (popup->priv->embed, FALSE, &location);
+	location = ephy_embed_get_location (popup->priv->embed, FALSE);
 	embed_popup_copy_to_clipboard (popup, location);
 	g_free (location);
 }
@@ -635,8 +635,7 @@ embed_popup_save_page_as_cmd (BonoboUIComponent *uic,
 {
 	char *location;
 
-	ephy_embed_get_location (popup->priv->embed,
-				   FALSE, &location);
+	location = ephy_embed_get_location (popup->priv->embed, FALSE);
 	save_url (popup, _("Save Page As"), TRUE, location);
 	g_free (location);
 }
@@ -657,8 +656,7 @@ embed_popup_open_frame_cmd (BonoboUIComponent *uic,
 {
 	char *location;
 
-	ephy_embed_get_location (popup->priv->embed,
-				   FALSE, &location);
+	location = ephy_embed_get_location (popup->priv->embed, FALSE);
 
 	ephy_embed_load_url (popup->priv->embed, location);
 

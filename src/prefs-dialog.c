@@ -416,9 +416,8 @@ setup_font_menu (PrefsDialog *dialog,
 	single = ephy_embed_shell_get_embed_single
 		(EPHY_EMBED_SHELL (ephy_shell));
 
-	ephy_embed_single_get_font_list (single,
-					 get_current_language_code (dialog),
-					 &fonts);
+	fonts = ephy_embed_single_get_font_list
+			(single, get_current_language_code (dialog));
 
 	/* Get the default font */
 	g_snprintf (key, 255, "%s_%s_%s", CONF_RENDERING_FONT, type,
@@ -1101,7 +1100,7 @@ prefs_homepage_current_button_clicked_cb (GtkWidget *button,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_get_location (embed, TRUE, &location);
+	location = ephy_embed_get_location (embed, TRUE);
 	set_homepage_entry (dialog, location);
 	g_free (location);
 }

@@ -603,16 +603,16 @@ edit_menu_show_cb (GtkWidget *menu,
 		embed = ephy_window_get_active_embed (window);
 		g_return_if_fail (embed != NULL);
 
-		ephy_command_manager_get_command_state
-			(EPHY_COMMAND_MANAGER (embed), "cmd_copy", &can_copy);
-		ephy_command_manager_get_command_state
-			(EPHY_COMMAND_MANAGER (embed), "cmd_cut", &can_cut);
-		ephy_command_manager_get_command_state
-			(EPHY_COMMAND_MANAGER (embed), "cmd_paste", &can_paste);
-		ephy_command_manager_get_command_state
-			(EPHY_COMMAND_MANAGER (embed), "cmd_undo", &can_undo);
-		ephy_command_manager_get_command_state
-			(EPHY_COMMAND_MANAGER (embed), "cmd_redo", &can_redo);
+		can_copy = ephy_command_manager_get_command_state
+				(EPHY_COMMAND_MANAGER (embed), "cmd_copy");
+		can_cut = ephy_command_manager_get_command_state
+				(EPHY_COMMAND_MANAGER (embed), "cmd_cut");
+		can_paste = ephy_command_manager_get_command_state
+				(EPHY_COMMAND_MANAGER (embed), "cmd_paste");
+		can_undo = ephy_command_manager_get_command_state
+				(EPHY_COMMAND_MANAGER (embed), "cmd_undo");
+		can_redo = ephy_command_manager_get_command_state
+				(EPHY_COMMAND_MANAGER (embed), "cmd_redo");
 	}
 
 	action_group = window->priv->action_group;
@@ -871,11 +871,7 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 
 	embed = ephy_tab_get_embed (tab);
 
-	if (ephy_embed_get_security_level (embed, &level, &description) != G_OK)
-	{
-		level = STATE_IS_UNKNOWN;
-		description = NULL;
-	}
+	ephy_embed_get_security_level (embed, &level, &description);
 
 	if (level != ephy_tab_get_security_level (tab))
 	{
@@ -1083,7 +1079,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 
 	has_background = ephy_embed_event_has_property (event, "background_image");
 
-	ephy_embed_event_get_context (event, &context);
+	context = ephy_embed_event_get_context (event);
 
 	if ((context & EMBED_CONTEXT_LINK) &&
 	    (context & EMBED_CONTEXT_IMAGE))
@@ -1123,7 +1119,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	g_signal_connect (widget, "destroy",
 			  G_CALLBACK (popup_destroy_cb), window);
 
-	ephy_embed_event_get_event_type (event, &type);
+	type = ephy_embed_event_get_event_type (event);
 	if (type == EPHY_EMBED_EVENT_KEY)
 	{
 		gtk_menu_popup (GTK_MENU (widget), NULL, NULL,
@@ -1950,7 +1946,7 @@ ephy_window_set_zoom (EphyWindow *window,
 	embed = ephy_window_get_active_embed (window);
         g_return_if_fail (embed != NULL);
 
-	ephy_embed_zoom_get (embed, &current_zoom);
+	current_zoom = ephy_embed_zoom_get (embed);
 
 	if (zoom == ZOOM_IN)
 	{

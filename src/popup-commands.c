@@ -196,7 +196,7 @@ popup_cmd_frame_in_new_tab (GtkAction *action,
 
 	embed = ephy_window_get_active_embed (window);
 
-	ephy_embed_get_location (embed, FALSE, &location);
+	location = ephy_embed_get_location (embed, FALSE);
 
 	ephy_shell_new_tab (ephy_shell, window, tab,
 			    location,
@@ -218,7 +218,7 @@ popup_cmd_frame_in_new_window (GtkAction *action,
 
 	embed = ephy_window_get_active_embed (window);
 
-	ephy_embed_get_location (embed, FALSE, &location);
+	location = ephy_embed_get_location (embed, FALSE);
 
 	ephy_shell_new_tab (ephy_shell, NULL, tab,
 			    location,
@@ -428,7 +428,7 @@ popup_cmd_open_frame (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_get_location (embed, FALSE, &location);
+	location = ephy_embed_get_location (embed, FALSE);
 
 	ephy_embed_load_url (embed, location);
 

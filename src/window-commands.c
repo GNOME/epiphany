@@ -121,11 +121,12 @@ window_cmd_file_send_to	(GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_get_location (embed, TRUE, &embed_location);
+	embed_location = ephy_embed_get_location (embed, TRUE);
 	location = gnome_vfs_escape_string (embed_location);
 	g_free (embed_location);
 
-	if (ephy_embed_get_title (embed, &title) == G_OK)
+	title = ephy_embed_get_title (embed);
+	if (title != NULL)
 	{
 		char *tmp = gnome_vfs_escape_string (title);
 		g_free (title);
@@ -297,9 +298,10 @@ window_cmd_file_bookmark_page (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_get_location (embed, TRUE, &location);
+	location = ephy_embed_get_location (embed, TRUE);
 
-	if (ephy_embed_get_title (embed, &title) != G_OK)
+	title = ephy_embed_get_title (embed);
+	if (title == NULL)
 	{
 		title = g_strdup (_("Untitled"));
 	}
@@ -754,7 +756,7 @@ window_cmd_view_page_source (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_get_location (embed, TRUE, &address);
+	address = ephy_embed_get_location (embed, TRUE);
 
 	if (editor_can_open_uri (address))
 	{

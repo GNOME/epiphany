@@ -121,7 +121,7 @@ activate_up_menu_item_cb (GtkWidget *menu, EphyWindow *window)
 
 	go_nth = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(menu), "go_nth"));
 
-	ephy_embed_get_go_up_list (embed, &l);
+	l = ephy_embed_get_go_up_list (embed);
 
 	url = g_slist_nth_data (l, go_nth);
 	if (url)
@@ -143,8 +143,8 @@ setup_back_or_forward_menu (EphyWindow *window, GtkMenuShell *ms, EphyNavigation
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_shistory_get_pos (embed, &pos);
-	ephy_embed_shistory_count (embed, &count);
+	pos = ephy_embed_shistory_get_pos (embed);
+	count = ephy_embed_shistory_n_items (embed);
 
 	if (count == 0) return;
 
@@ -196,7 +196,7 @@ setup_up_menu (EphyWindow *window, GtkMenuShell *ms)
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_get_go_up_list (embed, &l);
+	l = ephy_embed_get_go_up_list (embed);
 
 	for (li = l; li; li = li->next)
 	{

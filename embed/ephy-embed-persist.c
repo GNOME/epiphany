@@ -431,14 +431,14 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 	g_type_class_add_private (object_class, sizeof(EphyEmbedPersistPrivate));
 }
 
-gresult
+void
 ephy_embed_persist_cancel (EphyEmbedPersist *persist)
 {
 	EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);
-	return klass->cancel (persist);
+	klass->cancel (persist);
 }
 
-gresult
+gboolean
 ephy_embed_persist_save (EphyEmbedPersist *persist)
 {
 	EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,12 +14,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifndef EPHY_EMBED_H
 #define EPHY_EMBED_H
 
-#include "ephy-embed-types.h"
 #include "ephy-embed-event.h"
 #include "ephy-encodings.h"
 
@@ -56,17 +57,21 @@ typedef enum
 
 typedef enum
 {
-	EMBED_CLIPBOARD_CAP = 1 << 0,
-	EMBED_COOKIES_CAP = 1 << 1,
-	EMBED_LINKS_CAP = 1 << 2,
-	EMBED_ZOOM_CAP = 1 << 3,
-	EMBED_PRINT_CAP = 1 << 6,
-	EMBED_FIND_CAP = 1 << 7,
-	EMBED_SCROLL_CAP = 1 << 8,
-	EMBED_SECURITY_CAP = 1 << 9,
-	EMBED_ENCODING_CAP = 1 << 10,
-	EMBED_SHISTORY_CAP = 1 << 11
-} EmbedCapabilities;
+	EMBED_CHROME_NONE = 0,
+	EMBED_CHROME_DEFAULT = 1 << 0,
+	EMBED_CHROME_MENUBARON = 1 << 1,
+	EMBED_CHROME_TOOLBARON = 1 << 2,
+	EMBED_CHROME_BOOKMARKSBARON = 1 << 3,
+	EMBED_CHROME_BOOKMARKSBAR_DEFAULT = 1 << 4,
+	EMBED_CHROME_STATUSBARON = 1 << 5,
+	EMBED_CHROME_WINDOWRAISED = 1 << 6,
+	EMBED_CHROME_WINDOWLOWERED = 1 << 7,
+	EMBED_CHROME_CENTERSCREEN = 1 << 8,
+	EMBED_CHROME_OPENASDIALOG = 1 << 9,
+	EMBED_CHROME_OPENASCHROME = 1 << 10,
+	EMBED_CHROME_OPENASPOPUP = 1 << 11,
+	EMBED_CHROME_PPVIEWTOOLBARON = 1 << 12
+} EmbedChromeMask;
 
 typedef struct
 {
@@ -88,37 +93,37 @@ typedef enum
 
 typedef struct
 {
-        gboolean print_to_file;
-        gchar *printer;
-        gchar *file;
-        gchar *paper;
-        gint top_margin;
-        gint bottom_margin;
-        gint left_margin;
-        gint right_margin;
-        gint pages;
-        gint from_page;
-        gint to_page;
-        gint frame_type;
-        gint orientation;
-        gboolean print_color;
+	gboolean print_to_file;
+	gchar *printer;
+	gchar *file;
+	gchar *paper;
+	gint top_margin;
+	gint bottom_margin;
+	gint left_margin;
+	gint right_margin;
+	gint pages;
+	gint from_page;
+	gint to_page;
+	gint frame_type;
+	gint orientation;
+	gboolean print_color;
 
-         /*
-         * &T - title
-         * &U - Document URL
-         * &D - Date/Time
-         * &P - Page Number
-         * &PT - Page Number with total Number of Pages (example: 1 of 34)
-         *
-         * So, if headerLeftStr = "&T" the title and the document URL
-         * will be printed out on the top left-hand side of each page.
-         */
-        gchar *header_left_string;
-        gchar *header_center_string;
-        gchar *header_right_string;
-        gchar *footer_left_string;
-        gchar *footer_center_string;
-        gchar *footer_right_string;
+	 /*
+	 * &T - title
+	 * &U - Document URL
+	 * &D - Date/Time
+	 * &P - Page Number
+	 * &PT - Page Number with total Number of Pages (example: 1 of 34)
+	 *
+	 * So, if headerLeftStr = "&T" the title and the document URL
+	 * will be printed out on the top left-hand side of each page.
+	 */
+	gchar *header_left_string;
+	gchar *header_center_string;
+	gchar *header_right_string;
+	gchar *footer_left_string;
+	gchar *footer_center_string;
+	gchar *footer_right_string;
 
 	gboolean preview;
 }
@@ -145,7 +150,7 @@ typedef enum
 
 struct EphyEmbedClass
 {
-        GTypeInterface base_iface;
+	GTypeInterface base_iface;
 
 	gint (* context_menu)	 (EphyEmbed *embed,
 				  EphyEmbedEvent *event);
@@ -160,217 +165,169 @@ struct EphyEmbedClass
 	void (* title)           (EphyEmbed *embed);
 	void (* progress)        (EphyEmbed *embed,
 				  const char *uri,
-			          gint curprogress,
+				  gint curprogress,
 				  gint maxprogress);
 	void (* net_state)       (EphyEmbed *embed,
 				  const char *uri,
-			          EmbedState state);
+				  EmbedState state);
 	void (* new_window)      (EphyEmbed *embed,
-			          EphyEmbed **new_embed,
-                                  EmbedChromeMask chromemask);
+				  EphyEmbed **new_embed,
+				  EmbedChromeMask chromemask);
 	void (* visibility)      (EphyEmbed *embed,
-			          gboolean visibility);
+				  gboolean visibility);
 	void (* destroy_brsr)    (EphyEmbed *embed);
 	gint (* open_uri)        (EphyEmbed *embed,
-			          const char *uri);
+				  const char *uri);
 	void (* size_to)         (EphyEmbed *embed,
-			          gint width,
-			          gint height);
+				  gint width,
+				  gint height);
 	gint (* dom_mouse_click) (EphyEmbed *embed,
-			          EphyEmbedEvent *event);
+				  EphyEmbedEvent *event);
 	gint (* dom_mouse_down)  (EphyEmbed *embed,
-			          EphyEmbedEvent *event);
+				  EphyEmbedEvent *event);
 	void (* security_change) (EphyEmbed *embed,
-                                  EmbedSecurityLevel level);
+				  EmbedSecurityLevel level);
 	void (* zoom_change)	 (EphyEmbed *embed,
-                                  guint new_zoom);
+				  guint new_zoom);
 
 	/* Methods  */
-        void (* get_capabilities)          (EphyEmbed *embed,
-				            EmbedCapabilities *caps);
-	gresult   (* load_url)             (EphyEmbed *embed,
-					    const char *url);
-	gresult   (* stop_load)            (EphyEmbed *embed);
-	gresult   (* can_go_back)          (EphyEmbed *embed);
-	gresult   (* can_go_forward)       (EphyEmbed *embed);
-	gresult   (* can_go_up)            (EphyEmbed *embed);
-	gresult   (* get_go_up_list)       (EphyEmbed *embed, GSList **l);
-	gresult   (* go_back)              (EphyEmbed *embed);
-	gresult   (* go_forward)           (EphyEmbed *embed);
-	gresult   (* go_up)                (EphyEmbed *embed);
-	gresult   (* render_data)          (EphyEmbed *embed,
-					    const char *data,
-					    guint32 len,
-					    const char *base_uri,
-					    const char *mime_type);
-	gresult   (* open_stream)          (EphyEmbed *embed,
-					    const char *base_uri,
-					    const char *mime_type);
-	gresult   (* append_data)          (EphyEmbed *embed,
-					    const char *data,
-					    guint32 len);
-	gresult   (* close_stream)         (EphyEmbed *embed);
-	gresult   (* get_title)            (EphyEmbed *embed,
-					    char **title);
-	gresult   (* get_location)         (EphyEmbed *embed,
-				            gboolean toplevel,
-				            char **location);
-	gresult   (* reload)               (EphyEmbed *embed,
-					    EmbedReloadFlags flags);
-	gresult   (* zoom_set)             (EphyEmbed *embed,
-					    float zoom,
-					    gboolean reflow);
-	gresult   (* zoom_get)             (EphyEmbed *embed,
-				            float *zoom);
-	gresult   (* shistory_count)	   (EphyEmbed *embed,
-					    int *count);
-	gresult   (* shistory_get_nth)     (EphyEmbed *embed,
-				            int nth,
-				            gboolean is_relative,
-				            char **url,
-				            char **title);
-	gresult   (* shistory_get_pos)     (EphyEmbed *embed,
-				            int *pos);
-	gresult   (* shistory_go_nth)      (EphyEmbed *embed,
-					    int nth);
-	gresult   (* get_security_level)   (EphyEmbed *embed,
-					    EmbedSecurityLevel *level,
-					    char **description);
-	gresult   (* find_set_properties)  (EphyEmbed *embed,
-					    char *search_string,
-					    gboolean case_sensitive,
-					    gboolean wrap_around);
-	gresult	  (* find_next)	           (EphyEmbed *embed,
-					    gboolean backwards);
-	gresult   (* activate)             (EphyEmbed *embed);
-	gresult   (* print)                (EphyEmbed *embed,
-				            EmbedPrintInfo *info);
-	gresult	  (* print_preview_close)  (EphyEmbed *embed);
-	gresult   (* print_preview_num_pages)	(EphyEmbed *embed,
-						 gint *retNum);
-	gresult   (* print_preview_navigate)	(EphyEmbed *embed,
-						 EmbedPrintPreviewNavType navType,
-						 gint pageNum);
-	gresult   (* set_encoding)         (EphyEmbed *embed,
-					    const char *encoding);
-	gresult   (* get_encoding_info)    (EphyEmbed *embed,
-					    EphyEncodingInfo **info);
+	void		   (* load_url)			(EphyEmbed *embed,
+							 const char *url);
+	void		   (* stop_load)		(EphyEmbed *embed);
+	void		   (* reload)			(EphyEmbed *embed,
+							 EmbedReloadFlags flags);
+	gboolean	   (* can_go_back)		(EphyEmbed *embed);
+	gboolean	   (* can_go_forward)		(EphyEmbed *embed);
+	gboolean	   (* can_go_up)		(EphyEmbed *embed);
+	GSList *	   (* get_go_up_list)		(EphyEmbed *embed);
+	void		   (* go_back)			(EphyEmbed *embed);
+	void		   (* go_forward)		(EphyEmbed *embed);
+	void		   (* go_up)			(EphyEmbed *embed);
+
+	char *		   (* get_title)		(EphyEmbed *embed);
+	char *		   (* get_location)		(EphyEmbed *embed,
+							 gboolean toplevel);
+	int		   (* shistory_n_items)		(EphyEmbed *embed);
+	void		   (* shistory_get_nth)		(EphyEmbed *embed,
+							 int nth,
+							 gboolean is_relative,
+							 char **url,
+							 char **title);
+	int		   (* shistory_get_pos)		(EphyEmbed *embed);
+	void		   (* shistory_go_nth)		(EphyEmbed *embed,
+							 int nth);
+	void		   (* get_security_level)	(EphyEmbed *embed,
+						  	 EmbedSecurityLevel *level,
+						  	 char **description);
+	void		   (* zoom_set)			(EphyEmbed *embed,
+							 float zoom,
+							 gboolean reflow);
+	float		   (* zoom_get)			(EphyEmbed *embed);
+	void		   (* find_set_properties)	(EphyEmbed *embed,
+							 char *search_string,
+							 gboolean case_sensitive,
+							 gboolean wrap_around);
+	gboolean	   (* find_next)		(EphyEmbed *embed,
+							 gboolean backwards);
+	void		   (* set_encoding)		(EphyEmbed *embed,
+							 const char *encoding);
+	EphyEncodingInfo * (* get_encoding_info)	(EphyEmbed *embed);
+	void		   (* print)			(EphyEmbed *embed,
+							 EmbedPrintInfo *info);
+	void		   (* print_preview_close)	(EphyEmbed *embed);
+	int		   (* print_preview_n_pages)	(EphyEmbed *embed);
+	void		   (* print_preview_navigate)	(EphyEmbed *embed,
+							 EmbedPrintPreviewNavType type,
+							 int page);
+	void		   (* activate)			(EphyEmbed *embed);
 };
 
-GType         ephy_embed_get_type             (void);
+GType		  ephy_embed_get_type			(void);
+
+EphyEmbed	 *ephy_embed_new			(GObject *single);
 
 /* Base */
+void		  ephy_embed_load_url			(EphyEmbed *embed,
+							 const char *url);
 
-EphyEmbed    *ephy_embed_new                  (GObject *single);
+void		  ephy_embed_stop_load			(EphyEmbed *embed);
 
-void          ephy_embed_get_capabilities     (EphyEmbed *embed,
-					       EmbedCapabilities *caps);
+void		  ephy_embed_reload			(EphyEmbed *embed,
+							 EmbedReloadFlags flags);
 
-gresult       ephy_embed_load_url             (EphyEmbed *embed,
-					       const char *url);
+char 		 *ephy_embed_get_title			(EphyEmbed *embed);
 
-gresult       ephy_embed_stop_load            (EphyEmbed *embed);
+char		 *ephy_embed_get_location		(EphyEmbed *embed,
+							 gboolean toplevel);
 
-gresult       ephy_embed_can_go_back          (EphyEmbed *embed);
+/* Navigation */
+gboolean	  ephy_embed_can_go_back		(EphyEmbed *embed);
 
-gresult       ephy_embed_can_go_forward       (EphyEmbed *embed);
+gboolean	  ephy_embed_can_go_forward		(EphyEmbed *embed);
 
-gresult       ephy_embed_can_go_up            (EphyEmbed *embed);
+gboolean	  ephy_embed_can_go_up			(EphyEmbed *embed);
 
-gresult       ephy_embed_get_go_up_list       (EphyEmbed *embed,
-					       GSList **l);
+GSList 		 *ephy_embed_get_go_up_list		(EphyEmbed *embed);
 
-gresult       ephy_embed_go_back              (EphyEmbed *embed);
+void		  ephy_embed_go_back			(EphyEmbed *embed);
 
-gresult       ephy_embed_go_forward           (EphyEmbed *embed);
+void		  ephy_embed_go_forward			(EphyEmbed *embed);
 
-gresult       ephy_embed_go_up                (EphyEmbed *embed);
+void		  ephy_embed_go_up			(EphyEmbed *embed);
 
-gresult       ephy_embed_render_data          (EphyEmbed *embed,
-					       const char *data,
-					       guint32 len,
-					       const char *base_uri,
-					       const char *mime_type);
+int		  ephy_embed_shistory_n_items		(EphyEmbed *embed);
 
-gresult       ephy_embed_open_stream          (EphyEmbed *embed,
-					       const char *base_uri,
-					       const char *mime_type);
+void		  ephy_embed_shistory_get_nth		(EphyEmbed *embed,
+							 int nth,
+							 gboolean is_relative,
+							 char **url,
+							 char **title);
 
-gresult       ephy_embed_append_data          (EphyEmbed *embed,
-					       const char *data,
-					       guint32 len);
+int		  ephy_embed_shistory_get_pos		(EphyEmbed *embed);
 
-gresult       ephy_embed_close_stream         (EphyEmbed *embed);
+void		  ephy_embed_shistory_go_nth		(EphyEmbed *embed,
+							 int nth);
 
-gresult       ephy_embed_get_title            (EphyEmbed *embed,
-					       char **title);
-
-gresult       ephy_embed_get_location         (EphyEmbed *embed,
-					       gboolean toplevel,
-					       char **location);
-
-gresult       ephy_embed_reload               (EphyEmbed *embed,
-					       EmbedReloadFlags flags);
+void		  ephy_embed_get_security_level		(EphyEmbed *embed,
+							 EmbedSecurityLevel *level,
+						 	char **description);
 
 /* Zoom */
-gresult       ephy_embed_zoom_set             (EphyEmbed *embed,
-					       float zoom,
-					       gboolean reflow);
+void		  ephy_embed_zoom_set			(EphyEmbed *embed,
+							 float zoom,
+							 gboolean reflow);
 
-gresult       ephy_embed_zoom_get             (EphyEmbed *embed,
-					       float *zoom);
+float		  ephy_embed_zoom_get			(EphyEmbed *embed);
 
-/* Session history */
-gresult       ephy_embed_shistory_count       (EphyEmbed *embed,
-					       int *count);
+/* Find */
+void		  ephy_embed_find_set_properties	(EphyEmbed *embed,
+							 char *search_string,
+							 gboolean case_sensitive,
+							 gboolean wrap_around);
 
-gresult       ephy_embed_shistory_get_nth     (EphyEmbed *embed,
-					       int nth,
-					       gboolean is_relative,
-					       char **url,
-					       char **title);
+gboolean	  ephy_embed_find_next			(EphyEmbed *embed,
+							 gboolean backwards);
 
-gresult       ephy_embed_shistory_get_pos     (EphyEmbed *embed,
-					       int *pos);
+/* Encoding */
+void		  ephy_embed_set_encoding		(EphyEmbed *embed,
+							 const char *encoding);
 
-gresult       ephy_embed_shistory_go_nth      (EphyEmbed *embed,
-					       int nth);
+EphyEncodingInfo *ephy_embed_get_encoding_info		(EphyEmbed *embed);
 
-/* Utils */
+/* Print */
+void		  ephy_embed_print			(EphyEmbed *embed,
+							 EmbedPrintInfo *info);
 
-gresult       ephy_embed_get_security_level   (EphyEmbed *embed,
-					       EmbedSecurityLevel *level,
-					       char **description);
+void		  ephy_embed_print_preview_close	(EphyEmbed *embed);
 
-gresult       ephy_embed_find_set_properties  (EphyEmbed *embed,
-					       char *search_string,
-					       gboolean case_sensitive,
-					       gboolean wrap_around);
+int		  ephy_embed_print_preview_n_pages	(EphyEmbed *embed);
 
-gresult	      ephy_embed_find_next	      (EphyEmbed *embed,
-					       gboolean backwards);
+void		  ephy_embed_print_preview_navigate	(EphyEmbed *embed,
+							 EmbedPrintPreviewNavType type,
+							 int page);
 
-gresult       ephy_embed_set_encoding         (EphyEmbed *embed,
-					       const char *encoding);
-
-gresult       ephy_embed_get_encoding_info    (EphyEmbed *embed,
-					       EphyEncodingInfo **info);
-
-gresult       ephy_embed_activate             (EphyEmbed *embed);
-
-/* Printing */
-
-gresult       ephy_embed_print                (EphyEmbed *embed,
-					       EmbedPrintInfo *info);
-
-gresult	      ephy_embed_print_preview_close  (EphyEmbed *embed);
-
-gresult       ephy_embed_print_preview_num_pages (EphyEmbed *embed,
-						  gint *retNum);
-
-gresult       ephy_embed_print_preview_navigate	 (EphyEmbed *embed,
-						  EmbedPrintPreviewNavType navType,
-						  gint pageNum);
+/* Misc. utility */
+void		  ephy_embed_activate			(EphyEmbed *embed);
 
 G_END_DECLS
 

@@ -35,7 +35,6 @@ INST_H_FILES = \
 	ephy-embed-prefs.h		\
 	ephy-embed-single.h		\
 	ephy-embed-shell.h		\
-	ephy-embed-types.h		\
 	ephy-encodings.h		\
 	ephy-history.h
 

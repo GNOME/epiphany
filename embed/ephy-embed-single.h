@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,17 +47,17 @@ typedef struct EphyEmbedSinglePrivate EphyEmbedSinglePrivate;
 
 typedef enum
 {
-        modeOpen = 0,
-        modeSave = 1,
-        modeGetFolder =2
+	modeOpen = 0,
+	modeSave = 1,
+	modeGetFolder =2
 } FilePickerMode;
 
 typedef struct
 {
-        /* description of the file format */
-        gchar *description;
-        /* tipical sufixes, NULL terminated */
-        gchar **extensions;
+	/* description of the file format */
+	gchar *description;
+	/* tipical sufixes, NULL terminated */
+	gchar **extensions;
 } FileFormat;
 
 /**
@@ -66,11 +66,11 @@ typedef struct
 typedef struct
 {
 	gchar *domain;
-        gchar *name;
-        gchar *value;
-        gchar *path;
-        gchar *secure;
-        gchar *expire;
+	gchar *name;
+	gchar *value;
+	gchar *path;
+	gchar *secure;
+	gchar *expire;
 } CookieInfo;
 
 /**
@@ -78,8 +78,8 @@ typedef struct
  */
 typedef struct
 {
-        gchar *host;
-        gchar *username;
+	gchar *host;
+	gchar *username;
 } PasswordInfo;
 
 /**
@@ -87,8 +87,8 @@ typedef struct
  */
 typedef enum
 {
-        PASSWORD_PASSWORD,
-        PASSWORD_REJECT
+	PASSWORD_PASSWORD,
+	PASSWORD_REJECT
 } PasswordType;
 
 typedef enum
@@ -100,77 +100,71 @@ typedef enum
 struct EphyEmbedSingle
 {
 	GObject parent;
-        EphyEmbedSinglePrivate *priv;
+	EphyEmbedSinglePrivate *priv;
 };
 
 struct EphyEmbedSingleClass
 {
-        GObjectClass parent_class;
+	GObjectClass parent_class;
 
 	/* Signals */
 	void		(* new_window)          (EphyEmbedSingle *shell,
-					         EphyEmbed **new_embed,
+						 EphyEmbed **new_embed,
 						 EmbedChromeMask chromemask);
 
 	/* Methods */
 
-	gresult         (* clear_cache)         (EphyEmbedSingle *shell);
-	gresult         (* set_offline_mode)    (EphyEmbedSingle *shell,
-						 gboolean offline);
-	gresult         (* load_proxy_autoconf) (EphyEmbedSingle *shell,
-					         const char* url);
-	gresult         (* show_java_console)   (EphyEmbedSingle *shell);
-	gresult         (* show_js_console)     (EphyEmbedSingle *shell);
-	gresult		(* get_font_list)	(EphyEmbedSingle *shell,
-						 const char *langGroup,
-						 GList **fontList);
-	gresult         (* list_cookies)        (EphyEmbedSingle *shell,
-						 GList **cokies);
-	gresult         (* remove_cookies)      (EphyEmbedSingle *shell,
-						 GList *cookies);
-	gresult         (* list_passwords)      (EphyEmbedSingle *shell,
-						 PasswordType type,
-						 GList **passwords);
-	gresult         (* remove_passwords)    (EphyEmbedSingle *shell,
-						 GList *passwords,
-						 PasswordType type);
+	void	(* clear_cache)         (EphyEmbedSingle *shell);
+	void	(* set_offline_mode)    (EphyEmbedSingle *shell,
+					 gboolean offline);
+	void	(* load_proxy_autoconf) (EphyEmbedSingle *shell,
+					 const char* url);
+	void	(* show_java_console)   (EphyEmbedSingle *shell);
+	void	(* show_js_console)     (EphyEmbedSingle *shell);
+	GList *	(* get_font_list)	(EphyEmbedSingle *shell,
+					 const char *langGroup);
+	GList *	(* list_cookies)        (EphyEmbedSingle *shell);
+	void	(* remove_cookies)      (EphyEmbedSingle *shell,
+					 GList *cookies);
+	GList *	(* list_passwords)      (EphyEmbedSingle *shell,
+					 PasswordType type);
+	void	(* remove_passwords)    (EphyEmbedSingle *shell,
+					 GList *passwords,
+					 PasswordType type);
 };
 
-GType             ephy_embed_single_get_type            (void);
+GType	ephy_embed_single_get_type		(void);
 
-gresult           ephy_embed_single_clear_cache         (EphyEmbedSingle *shell);
+void	ephy_embed_single_clear_cache		(EphyEmbedSingle *shell);
 
-gresult           ephy_embed_single_set_offline_mode    (EphyEmbedSingle *shell,
-							 gboolean offline);
+void	ephy_embed_single_set_offline_mode	(EphyEmbedSingle *shell,
+						 gboolean offline);
 
-gresult           ephy_embed_single_load_proxy_autoconf (EphyEmbedSingle *shell,
-							 const char* url);
+void	ephy_embed_single_load_proxy_autoconf	(EphyEmbedSingle *shell,
+						const char* url);
 
-gresult           ephy_embed_single_get_font_list       (EphyEmbedSingle *shell,
-							 const char *langGroup,
-							 GList **fontList);
+GList  *ephy_embed_single_get_font_list		(EphyEmbedSingle *shell,
+						 const char *langGroup);
 
 /* Cookies */
-gresult           ephy_embed_single_list_cookies        (EphyEmbedSingle *shell,
-							 GList **cookies);
+GList  *ephy_embed_single_list_cookies		(EphyEmbedSingle *shell);
 
-gresult           ephy_embed_single_remove_cookies      (EphyEmbedSingle *shell,
-							 GList *cookies);
+void	ephy_embed_single_remove_cookies	(EphyEmbedSingle *shell,
+						 GList *cookies);
 
-gresult		  ephy_embed_single_free_cookies        (EphyEmbedSingle *shell,
-							 GList *cookies);
+void	ephy_embed_single_free_cookies		(EphyEmbedSingle *shell,
+						 GList *cookies);
 
 /* Passwords */
-gresult           ephy_embed_single_list_passwords      (EphyEmbedSingle *shell,
-							 PasswordType type,
-							 GList **passwords);
+GList  *ephy_embed_single_list_passwords	(EphyEmbedSingle *shell,
+						 PasswordType type);
 
-gresult		  ephy_embed_single_free_passwords      (EphyEmbedSingle *shell,
-							 GList *passwords);
+void	ephy_embed_single_free_passwords	(EphyEmbedSingle *shell,
+						 GList *passwords);
 
-gresult           ephy_embed_single_remove_passwords    (EphyEmbedSingle *shell,
-							 GList *passwords,
-							 PasswordType type);
+void	ephy_embed_single_remove_passwords	(EphyEmbedSingle *shell,
+						 GList *passwords,
+						 PasswordType type);
 
 G_END_DECLS
 

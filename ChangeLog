@@ -1,3 +1,91 @@
+2003-11-05  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/Makefile.am:
+	* embed/ephy-command-manager.c: (ephy_command_manager_do_command),
+	(ephy_command_manager_get_command_state):
+	* embed/ephy-command-manager.h:
+	* embed/ephy-embed-event.c: (ephy_embed_event_get_type),
+	(ephy_embed_event_class_init), (ephy_embed_event_init),
+	(ephy_embed_event_finalize), (ephy_embed_event_new),
+	(ephy_embed_event_get_event_type), (ephy_embed_event_get_coords),
+	(ephy_embed_event_get_context), (ephy_embed_event_set_property):
+	* embed/ephy-embed-event.h:
+	* embed/ephy-embed-persist.c: (ephy_embed_persist_cancel):
+	* embed/ephy-embed-persist.h:
+	* embed/ephy-embed-popup-control.c:
+	(ephy_embed_popup_control_set_event),
+	(embed_popup_copy_location_cmd), (embed_popup_save_page_as_cmd),
+	(embed_popup_open_frame_cmd):
+	* embed/ephy-embed-single.c: (ephy_embed_single_get_type),
+	(ephy_embed_single_class_init), (ephy_embed_single_clear_cache),
+	(ephy_embed_single_set_offline_mode),
+	(ephy_embed_single_load_proxy_autoconf),
+	(ephy_embed_single_get_font_list),
+	(ephy_embed_single_list_cookies),
+	(ephy_embed_single_remove_cookies),
+	(ephy_embed_single_list_passwords),
+	(ephy_embed_single_remove_passwords),
+	(ephy_embed_single_free_cookies),
+	(ephy_embed_single_free_passwords):
+	* embed/ephy-embed-single.h:
+	* embed/ephy-embed-types.h:
+	* embed/ephy-embed.c: (ephy_embed_get_type),
+	(ephy_embed_base_init), (ephy_embed_new), (ephy_embed_load_url),
+	(ephy_embed_stop_load), (ephy_embed_can_go_back),
+	(ephy_embed_can_go_forward), (ephy_embed_can_go_up),
+	(ephy_embed_get_go_up_list), (ephy_embed_go_back),
+	(ephy_embed_go_forward), (ephy_embed_go_up),
+	(ephy_embed_get_title), (ephy_embed_get_location),
+	(ephy_embed_reload), (ephy_embed_zoom_set), (ephy_embed_zoom_get),
+	(ephy_embed_shistory_n_items), (ephy_embed_shistory_get_nth),
+	(ephy_embed_shistory_get_pos), (ephy_embed_shistory_go_nth),
+	(ephy_embed_get_security_level), (ephy_embed_find_set_properties),
+	(ephy_embed_find_next), (ephy_embed_activate),
+	(ephy_embed_set_encoding), (ephy_embed_get_encoding_info),
+	(ephy_embed_print), (ephy_embed_print_preview_close),
+	(ephy_embed_print_preview_n_pages),
+	(ephy_embed_print_preview_navigate):
+	* embed/ephy-embed.h:
+	* embed/ephy-history.c:
+	* embed/find-dialog.c: (find_dialog_go_next),
+	(find_dialog_go_prev):
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* embed/mozilla/mozilla-embed.h:
+	* lib/Makefile.am:
+	* lib/ephy-state.c:
+	* lib/ephy-types.h:
+	* src/ephy-encoding-dialog.c: (sync_embed_cb), (activate_choice):
+	* src/ephy-encoding-menu.c: (update_encoding_menu_cb),
+	(encoding_activate_cb):
+	* src/ephy-favicon-action.c: (each_url_get_data_binder):
+	* src/ephy-nautilus-view.c: (gnv_embed_dom_mouse_click_cb),
+	(gnv_embed_context_menu_cb), (gnv_embed_title_cb),
+	(gnv_popup_cmd_frame_in_new_window), (gnv_zoomable_zoom_in_cb),
+	(gnv_zoomable_zoom_out_cb):
+	* src/ephy-navigation-action.c: (activate_up_menu_item_cb),
+	(setup_back_or_forward_menu), (setup_up_menu):
+	* src/ephy-tab.c: (ephy_tab_address_cb),
+	(ephy_tab_zoom_changed_cb), (ephy_tab_title_cb),
+	(ephy_tab_dom_mouse_click_cb), (ephy_tab_update_navigation_flags),
+	(ephy_tab_set_title):
+	* src/ephy-window.c: (edit_menu_show_cb), (sync_tab_security),
+	(show_embed_popup), (ephy_window_set_zoom):
+	* src/pdm-dialog.c: (pdm_dialog_init):
+	* src/popup-commands.c: (popup_cmd_frame_in_new_tab),
+	(popup_cmd_frame_in_new_window), (popup_cmd_open_frame):
+	* src/ppview-toolbar.c: (toolbar_update_sensitivity),
+	(toolbar_cmd_ppv_goto_last), (clamp_page_limits):
+	* src/prefs-dialog.c: (setup_font_menu),
+	(prefs_homepage_current_button_clicked_cb):
+	* src/session.c: (save_tab):
+	* src/window-commands.c: (window_cmd_file_send_to),
+	(window_cmd_file_bookmark_page), (window_cmd_view_page_source):
+
+	Get rid of gresult type. Use return values instead of out-parameters
+	whereever possible, and port all callers.
+
 2003-11-04  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* embed/ephy-embed-prefs.h:

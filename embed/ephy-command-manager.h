@@ -19,8 +19,6 @@
 #ifndef EPHY_COMMAND_MANAGER_H
 #define EPHY_COMMAND_MANAGER_H
 
-#include "ephy-embed-types.h"
-
 #include <glib-object.h>
 #include <glib.h>
 
@@ -38,28 +36,26 @@ typedef struct _EphyCommandManager EphyCommandManager;
 
 struct EphyCommandManagerClass
 {
-        GTypeInterface base_iface;
+	GTypeInterface base_iface;
 
-	gresult (* do_command)        (EphyCommandManager *manager,
-				       const char *command);
-	gresult (* get_command_state) (EphyCommandManager *manager,
-				       const char *command,
-				       gboolean *enabled);
+	void		(* do_command)		(EphyCommandManager *manager,
+						 const char *command);
+	gboolean	(* get_command_state)	(EphyCommandManager *manager,
+						 const char *command);
 
 	/* Signals */
 
-	void    (* command_changed) (EphyCommandManager *manager,
+	void	(* command_changed) (EphyCommandManager *manager,
 				     char *command);
 };
 
-GType	ephy_command_manager_get_type		(void);
+GType		ephy_command_manager_get_type		(void);
 
-gresult	ephy_command_manager_do_command		(EphyCommandManager *manager,
-						 const char *command);
+void		ephy_command_manager_do_command		(EphyCommandManager *manager,
+							 const char *command);
 
-gresult	ephy_command_manager_get_command_state	(EphyCommandManager *manager,
-						 const char *command,
-						 gboolean *enabled);
+gboolean	ephy_command_manager_get_command_state	(EphyCommandManager *manager,
+							 const char *command);
 
 G_END_DECLS
 

@@ -220,7 +220,7 @@ toolbar_update_sensitivity (PPViewToolbar *t)
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_print_preview_num_pages (embed, &pages);
+	pages = ephy_embed_print_preview_n_pages (embed);
 	c_page = t->priv->current_page;
 
 	action = gtk_action_group_get_action (action_group, "PPVGoBack");
@@ -321,8 +321,7 @@ toolbar_cmd_ppv_goto_last  (GtkUIManager *merge,
 					   PRINTPREVIEW_END,
 					   0);
 
-	ephy_embed_print_preview_num_pages (embed,
-					    &t->priv->current_page);
+	t->priv->current_page = ephy_embed_print_preview_n_pages (embed);
 
 	toolbar_update_sensitivity (t);
 }
@@ -337,7 +336,7 @@ clamp_page_limits (PPViewToolbar *t, int page)
 	embed = ephy_window_get_active_embed (window);
 	g_return_val_if_fail (embed != NULL, -1);
 
-	ephy_embed_print_preview_num_pages (embed, &pages);
+	pages = ephy_embed_print_preview_n_pages (embed);
 
 	return CLAMP (page, 1, pages);
 }
