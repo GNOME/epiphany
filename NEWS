@@ -1,4 +1,33 @@
 ==============
+Epiphany 1.4.8
+==============
+
+Changes
+
+	* Fix crash when closing window while filepicker is up [#156816]
+	* Use gnome_vfs_url_show() for Send To [#162532]
+	* Set selection mode to BROWSE in topics selector [#162331]
+	* We don't need to implement nsIBrowserHistory
+	* Don't focus the close-tab button on click [#119461]
+	* Don't store more than 5 hidden popups [Adam Hooper, #160863]
+	* Fix a mem leak [#164302]
+	* Really make confirm-overwrite dialogue have a parent window [#164189]
+	* Rename EphyTab's "visible" property to not clash with GtkWidget property
+	* Default typeaheadfindsea to on [#157435]
+	* Switch to fullscreen toolbar also in lockdown fullscreen mode [#165256]
+	* Disable DownloadLinkAs and SetAsBackground if saving to disk is disabled
+	* Don't crash if we need to open an orphan non-chrome window [part of #165445]
+	* Some sparse fixes
+	* Ungrab the pointer when moving tab between notebooks [#165797]
+	* Don't weak ref the shell when it's finalised already [#165542]
+	* Don't show the menubar with F10 in lockdown mode [#165550]
+	* Don't disable print preview if print setup is locked down [#165552]
+	* Adapt to mozilla API changes
+	* Implement nsIWebProgressListener [#165328]
+	* Fix window destruction [#165992]
+
+
+==============
 Epiphany 1.4.7
 ==============
 
