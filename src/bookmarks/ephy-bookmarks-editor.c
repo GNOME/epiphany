@@ -603,6 +603,7 @@ cmd_bookmarks_import (GtkAction *action,
 	combo = gtk_combo_box_new (GTK_TREE_MODEL (store));
 	gtk_widget_show (combo); 
 	g_object_set_data (G_OBJECT (dialog), "combo_box", combo);
+	g_object_unref (store);
 
 	cell = gtk_cell_renderer_text_new ();
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), cell, TRUE);
