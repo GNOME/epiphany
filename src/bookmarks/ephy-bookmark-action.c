@@ -69,7 +69,7 @@ enum
 
 static GObjectClass *parent_class = NULL;
 
-static guint ephy_bookmark_action_signals[LAST_SIGNAL] = { 0 };
+static guint signals[LAST_SIGNAL] = { 0 };
 
 GType
 ephy_bookmark_action_get_type (void)
@@ -319,12 +319,38 @@ activate_cb (GtkWidget *widget, GtkAction *action)
 		}
 	}
 
-	g_signal_emit (action,
-		       ephy_bookmark_action_signals[GO_LOCATION],
-		       0, location);
+	g_signal_emit (action, signals[GO_LOCATION], 0, location);
 
 	g_free (location);
 	g_free (text);
+}
+
+static gboolean
+button_press_cb (GtkWidget *widget,
+		 GdkEventButton *event,
+		 gpointer dummy)
+{
+	if (event->type == GDK_BUTTON_PRESS && event->button == 2)	
+	{
+		gtk_button_pressed (GTK_BUTTON (widget));
+	}
+
+	return FALSE;
+}
+
+static gboolean
+button_release_cb (GtkWidget *widget,
+                   GdkEventButton *event,
+		   gpointer dummy)
+{
+	if (event->type == GDK_BUTTON_RELEASE && event->button == 2)	
+	{
+		gtk_button_released (GTK_BUTTON (widget));
+
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 static void
@@ -352,6 +378,10 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 	{
 		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
 		g_signal_connect (button, "clicked", G_CALLBACK (activate_cb), action);
+		g_signal_connect (button, "button-press-event",
+				  G_CALLBACK (button_press_cb), NULL);
+		g_signal_connect (button, "button-release-event",
+				  G_CALLBACK (button_release_cb), NULL);
 
 		entry = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "entry"));
 		g_signal_connect (entry, "activate", G_CALLBACK (activate_cb), action);
@@ -450,7 +480,7 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 	object_class->set_property = ephy_bookmark_action_set_property;
 	object_class->get_property = ephy_bookmark_action_get_property;
 
-	ephy_bookmark_action_signals[GO_LOCATION] =
+	signals[GO_LOCATION] =
                 g_signal_new ("go_location",
                               G_OBJECT_CLASS_TYPE (object_class),
                               G_SIGNAL_RUN_FIRST,

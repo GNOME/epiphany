@@ -166,7 +166,43 @@ arbitrary_url_notifier (GConfClient *client,
 static void
 go_location_cb (GtkAction *action, char *location, EphyWindow *window)
 {
-	ephy_window_load_url (window, location);
+	GdkEvent *event;
+	gboolean new_tab = FALSE;
+
+	event = gtk_get_current_event ();
+	if (event != NULL)
+	{
+		if (event->type == GDK_BUTTON_RELEASE)
+		{
+			guint modifiers, button, state;
+
+			modifiers = gtk_accelerator_get_default_mod_mask ();
+			button = event->button.button;
+			state = event->button.state;
+
+			/* middle-click or control-click */
+			if ((button == 1 && ((state & modifiers) == GDK_CONTROL_MASK)) ||
+			    (button == 2))
+			{
+				new_tab = TRUE;
+			}
+		}
+
+		gdk_event_free (event);
+	}
+
+	if (new_tab)
+	{
+		ephy_shell_new_tab (ephy_shell, window,
+				    ephy_window_get_active_tab (window),
+				    location,
+				    EPHY_NEW_TAB_OPEN_PAGE |
+				    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+	}
+	else
+	{
+		ephy_window_load_url (window, location);
+	}
 }
 
 static void

@@ -1,5 +1,14 @@
 2004-05-19  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmark-action.c: (activate_cb),
+	(button_press_cb), (button_release_cb), (connect_proxy),
+	(ephy_bookmark_action_class_init):
+	* src/toolbar.c: (go_location_cb):
+
+	Open bookmark in new tab on middle-click. Fixes bug #106250.
+
+2004-05-19  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/ephy-cell-renderer-progress.c:
 	(ephy_cell_renderer_progress_init), (compute_dimensions),
 	(ephy_cell_renderer_progress_get_size),
