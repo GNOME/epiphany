@@ -1,3 +1,11 @@
+2005-01-30  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	Don't crash if we get the new-window signal on the embed single
+	for a non-chrome window; just don't open any window in that case.
+	Part of bug #165445.
+
 2005-01-28  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/mozilla-embed.cpp:
