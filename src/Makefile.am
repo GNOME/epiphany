@@ -19,7 +19,7 @@ INCLUDES = \
 	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
 	-DGNOME_DISABLE_DEPRECATED
 
-bin_PROGRAMS = epiphany
+bin_PROGRAMS = epiphany-bin
 
 CXXLD = $(CXX)
 LINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
@@ -39,7 +39,7 @@ else
 nautilus_view_sources =
 endif
 
-epiphany_SOURCES = 				    	\
+epiphany_bin_SOURCES = 				    	\
 	$(ephy_automation_interface_idl_sources) 	\
 	$(nautilus_view_sources)			\
 	appearance-prefs.c				\
@@ -92,7 +92,7 @@ epiphany_SOURCES = 				    	\
 	window-commands.c				\
 	window-commands.h
 
-epiphany_LDADD = \
+epiphany_bin_LDADD = \
 	$(top_builddir)/embed/libephyembed.la \
 	$(top_builddir)/lib/libephy.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \

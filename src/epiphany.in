@@ -1,0 +1,20 @@
+#!/bin/sh
+
+dist_bin=`dirname $0`
+
+if test -n "$MOZILLA_FIVE_HOME"; then
+	MOZILLA_HOME=$MOZILLA_FIVE_HOME
+elif [ -f @MOZILLA_HOME@/chrome/comm.jar ]; then
+	MOZILLA_HOME=@MOZILLA_HOME@
+else
+	echo "Cannot find mozilla installation directory. Please set MOZILLA_FIVE_HOME to your mozilla directory"
+	exit
+fi
+
+LD_LIBRARY_PATH=$MOZILLA_HOME:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH
+
+MOZILLA_FIVE_HOME=$MOZILLA_HOME
+export MOZILLA_FIVE_HOME
+
+exec "$dist_bin/epiphany-bin" "$@"
