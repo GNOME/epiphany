@@ -14,6 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
+ *
  */
 
 #include "ephy-arrow-toolbutton.h"
@@ -210,6 +213,7 @@ ephy_arrow_toolbutton_init (EphyArrowToolButton *arrowtb)
 	gtk_container_remove (GTK_CONTAINER (arrowtb), real_button);
 	gtk_container_add (GTK_CONTAINER (hbox), real_button);
 	gtk_container_add (GTK_CONTAINER (arrowtb), hbox);
+	g_object_unref (real_button);
 
 	arrow_button = gtk_toggle_button_new ();
 	gtk_widget_show (arrow_button);
@@ -225,6 +229,9 @@ ephy_arrow_toolbutton_init (EphyArrowToolButton *arrowtb)
 	arrowtb->priv->arrow_widget = arrow_button;
 
 	arrowtb->priv->menu = GTK_MENU (gtk_menu_new ());
+	g_object_ref (arrowtb->priv->menu);
+	gtk_object_sink (GTK_OBJECT (arrowtb->priv->menu));
+
 	g_signal_connect (arrowtb->priv->menu, "deactivate",
 			  G_CALLBACK (menu_deactivated_cb), arrowtb);
 
