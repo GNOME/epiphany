@@ -604,7 +604,7 @@ cmd_bookmarks_import (GtkAction *action,
 	gtk_widget_show (label);
 
         store = GTK_LIST_STORE (gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING));
-	combo = gtk_combo_box_new (GTK_TREE_MODEL (store));
+	combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
 	gtk_widget_show (combo); 
 	g_object_set_data (G_OBJECT (dialog), "combo_box", combo);
 	g_object_unref (store);
