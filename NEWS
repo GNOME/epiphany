@@ -10,9 +10,11 @@ Code changes
 	  of code duplication (Dave Bordoley)
 	* Rework prefs dialog code to use a notebook directly from glade
 	  and to fit in one file (Marco)
-	* Export bookmarks in rdf format, will be more useful when
-	  it will be possible to import it (Marco, Edd Dumbill)
+	* Export bookmarks in rdf format, it will be more useful when
+	  it's possible to import from it (Marco, Edd Dumbill)
 	* Use gtk api for fullscreen (Marco)
+	* Do not allow to have more than one bookmark with the same address in
+	  the bookmarks collection (Xan Lopez)
 
 New features
 
@@ -27,7 +29,8 @@ Interface improvements
 	* ctrl+u show page source (Marco)
 	* Use address as title when the page is untitled (Christian Persch)
 	* Confirmation dialog for clearing history (Jon Svendsen)
-	* Improve find dialog readability (Dave Bordoley)
+	* Improve find dialog readability, avoid vertical resizing
+	  of it (Dave Bordoley, Xan Lopez)
 	* Use the term Adress instead of Location as discussed
 	  with docs guys (Dave Bordoley)
 	* Show bookmarks icons in the toolbar only when there
@@ -37,7 +40,6 @@ Interface improvements
 	* Some cleanups of the preferences dialog, work in progress (Marco)
 	* Alphabetical sort of bookmarks menu (Xan Lopez)
 	* Show the full page title in tooltip on the tab label (Christian Persch)
-	* Warn the user when he is trying to add an already existent bookmark (Xan Lopez)
 	* On Go->Location, show the toolbar if it's hidden, and hide it again
 	  when the user finished to type (Marco)
 
@@ -48,7 +50,7 @@ Bugfixes
 	* Improve default topics, add google smart bookmark
 	  to the toolbar by default (Dave Bordoley)
 	* Fix menu sensitivity for the history dialog (Marco)
-	* Fix leak in bookmarks importing and improve speed.
+	* Fix leak in bookmarks importing and improve its speed.
 	  This make importing large collection of bookmarks
 	  actually possible  (Osma Ahvenlampi)
 	* Use AM_CXX_FLAGS instead of CXX_FLAGS, make
