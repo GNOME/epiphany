@@ -40,6 +40,9 @@ struct _EggToggleToolButton
 {
   EggToolButton parent;
 
+  /*< private >*/
+  GtkWidget *menu_item;
+
   guint active : 1;
 };
 

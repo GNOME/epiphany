@@ -180,7 +180,11 @@ egg_tool_button_init (EggToolButton *button, EggToolButtonClass *klass)
 
   /* create button */
   button->button = g_object_new (klass->button_type, NULL);
-  GTK_WIDGET_UNSET_FLAGS (button->button, GTK_CAN_FOCUS);
+#if 0
+  /* FIXME: enable this when we can depend on gtk+ 2.3.0 */
+  gtk_button_set_focus_on_click (button->button, FALSE);
+#endif
+  
   g_signal_connect_object (button->button, "clicked",
 			   G_CALLBACK (button_clicked), button, 0);
 
@@ -328,7 +332,7 @@ egg_tool_button_get_property (GObject         *object,
       break;
     case PROP_USE_UNDERLINE:
       g_value_set_boolean (value,
-		gtk_label_get_use_underline (GTK_LABEL (button->label)));
+			   gtk_label_get_use_underline (GTK_LABEL (button->label)));
       break;
     case PROP_STOCK_ID:
       g_value_set_string (value, button->stock_id);
@@ -602,6 +606,8 @@ egg_tool_button_new_from_stock (const gchar *stock_id)
 {
   EggToolButton *button;
 
+  g_return_val_if_fail (stock_id != NULL, NULL);
+    
   button = g_object_new (EGG_TYPE_TOOL_BUTTON,
 			 "stock_id", stock_id,
 			 "use_underline", TRUE,

@@ -38,7 +38,15 @@ extern void _egg_marshal_VOID__OBJECT_STRING_STRING (GClosure     *closure,
                                                      gpointer      invocation_hint,
                                                      gpointer      marshal_data);
 
-/* BOOLEAN:VOID (eggmarshalers.list:5) */
+/* BOOLEAN:ENUM (eggmarshalers.list:5) */
+extern void _egg_marshal_BOOLEAN__ENUM (GClosure     *closure,
+                                        GValue       *return_value,
+                                        guint         n_param_values,
+                                        const GValue *param_values,
+                                        gpointer      invocation_hint,
+                                        gpointer      marshal_data);
+
+/* BOOLEAN:VOID (eggmarshalers.list:6) */
 extern void _egg_marshal_BOOLEAN__VOID (GClosure     *closure,
                                         GValue       *return_value,
                                         guint         n_param_values,
@@ -46,7 +54,7 @@ extern void _egg_marshal_BOOLEAN__VOID (GClosure     *closure,
                                         gpointer      invocation_hint,
                                         gpointer      marshal_data);
 
-/* OBJECT:VOID (eggmarshalers.list:6) */
+/* OBJECT:VOID (eggmarshalers.list:7) */
 extern void _egg_marshal_OBJECT__VOID (GClosure     *closure,
                                        GValue       *return_value,
                                        guint         n_param_values,

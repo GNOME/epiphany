@@ -69,5 +69,5 @@ EGGFILES=$(EGGSOURCES) $(EGGHEADERS)
 EGGDIR=$(srcdir)/../../../libegg/libegg
 
 regenerate-built-sources:
-	EGGFILES="$(EGGFILES)" EGGDIR="$(EGGDIR)" $(srcdir)/update-from-egg.sh
+	EGGFILES="$(EGGFILES) eggmarshalers.list" EGGDIR="$(EGGDIR)" $(srcdir)/update-from-egg.sh
 

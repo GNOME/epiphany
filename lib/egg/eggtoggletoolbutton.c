@@ -35,6 +35,7 @@ enum {
 
 static void egg_toggle_tool_button_init       (EggToggleToolButton      *button);
 static void egg_toggle_tool_button_class_init (EggToggleToolButtonClass *klass);
+static void egg_toggle_tool_button_finalize   (GObject                  *object);
 
 static GtkWidget *egg_toggle_tool_button_create_menu_proxy (EggToolItem *button);
 
@@ -77,17 +78,20 @@ egg_toggle_tool_button_get_type (void)
 static void
 egg_toggle_tool_button_class_init (EggToggleToolButtonClass *klass)
 {
+  GObjectClass *object_class;
   EggToolItemClass *toolitem_class;
   EggToolButtonClass *toolbutton_class;
 
   parent_class = g_type_class_peek_parent (klass);
-  
+
+  object_class = (GObjectClass *)klass;
   toolitem_class = (EggToolItemClass *)klass;
   toolbutton_class = (EggToolButtonClass *)klass;
 
+  object_class->finalize = egg_toggle_tool_button_finalize;
   toolitem_class->create_menu_proxy = egg_toggle_tool_button_create_menu_proxy;
   toolbutton_class->button_type = GTK_TYPE_TOGGLE_BUTTON;
-
+  
   toggle_signals[TOGGLED] =
     g_signal_new ("toggled",
 		  G_OBJECT_CLASS_TYPE (klass),
@@ -105,24 +109,42 @@ egg_toggle_tool_button_init (EggToggleToolButton *button)
 			   G_CALLBACK (button_toggled), button, 0);
 }
 
+static void
+egg_toggle_tool_button_finalize (GObject *object)
+{
+  EggToggleToolButton *button = EGG_TOGGLE_TOOL_BUTTON (object);
+  
+  if (button->menu_item)
+    g_object_remove_weak_pointer (G_OBJECT (button->menu_item),
+				  (gpointer *)&(button->menu_item));
+
+  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+}
+
 static GtkWidget *
 egg_toggle_tool_button_create_menu_proxy (EggToolItem *item)
 {
   EggToggleToolButton *button = EGG_TOGGLE_TOOL_BUTTON (item);
-  GtkWidget *menu_item;
   const char *label;
 
   label = gtk_label_get_text (GTK_LABEL (EGG_TOOL_BUTTON (button)->label));
+
+  if (button->menu_item)
+    g_object_remove_weak_pointer (G_OBJECT (button->menu_item),
+				  (gpointer *)&(button->menu_item));
   
-  menu_item = gtk_check_menu_item_new_with_mnemonic (label);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
+  button->menu_item = gtk_check_menu_item_new_with_mnemonic (label);
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (button->menu_item),
 				  button->active);
-  g_signal_connect_object (menu_item, "activate",
+  g_signal_connect_object (button->menu_item, "activate",
 			   G_CALLBACK (gtk_button_clicked),
 			   EGG_TOOL_BUTTON (button)->button,
 			   G_CONNECT_SWAPPED);
 
-  return menu_item;
+  g_object_add_weak_pointer (G_OBJECT (button->menu_item),
+			     (gpointer *)&(button->menu_item));
+
+  return button->menu_item;
 }
 
 static void
@@ -136,6 +158,12 @@ button_toggled (GtkWidget           *widget,
     {
       button->active = toggle_active;
       g_signal_emit (G_OBJECT (button), toggle_signals[TOGGLED], 0);
+    }
+
+  if (button->menu_item)
+    {
+      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (button->menu_item),
+				      button->active);
     }
 }
 
@@ -155,6 +183,8 @@ egg_toggle_tool_button_new_from_stock (const gchar *stock_id)
 {
   EggToolButton *button;
 
+  g_return_val_if_fail (stock_id != NULL, NULL);
+  
   button = g_object_new (EGG_TYPE_TOGGLE_TOOL_BUTTON,
 			 "stock_id", stock_id,
 			 "use_underline", TRUE,

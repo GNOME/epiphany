@@ -560,7 +560,7 @@ get_dest_targets (EggEditableToolbar *etoolbar)
 {
   GList *l;
   GtkTargetList *targets;
-  int i;
+  int i = 0;
 
   targets = gtk_target_list_new (NULL, 0);
 
@@ -1037,6 +1037,44 @@ add_to_list (EggToolbarsItem  *item,
   *l = g_list_append (*l, item);
 }
 
+static GtkWidget *
+editor_create_item (EggEditableToolbar *etoolbar,
+		    const char         *stock_id,
+		    const char         *label_text,
+		    GdkDragAction	action)
+{
+  GtkWidget *event_box;
+  GtkWidget *vbox;
+  GtkWidget *icon;
+  GtkWidget *label;
+
+  event_box = gtk_event_box_new ();
+  gtk_widget_show (event_box);
+  gtk_drag_source_set (event_box,
+		       GDK_BUTTON1_MASK,
+		       source_drag_types, 1, action);
+  g_signal_connect (event_box, "drag_data_get",
+		    G_CALLBACK (drag_data_get_cb), etoolbar);
+  g_signal_connect (event_box, "drag_data_delete",
+		    G_CALLBACK (editor_drag_data_delete_cb), etoolbar);
+
+  vbox = gtk_vbox_new (0, FALSE);
+  gtk_widget_show (vbox);
+  gtk_container_add (GTK_CONTAINER (event_box), vbox);
+
+  icon = gtk_image_new_from_stock
+	(stock_id ? stock_id : GTK_STOCK_DND,
+	 GTK_ICON_SIZE_LARGE_TOOLBAR);
+  gtk_widget_show (icon);
+  gtk_box_pack_start (GTK_BOX (vbox), icon, FALSE, TRUE, 0);
+
+  label = gtk_label_new_with_mnemonic (label_text);
+  gtk_widget_show (label);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+
+  return event_box;
+}
+
 static void
 update_editor_sheet (EggEditableToolbar *etoolbar)
 {
@@ -1045,6 +1083,7 @@ update_editor_sheet (EggEditableToolbar *etoolbar)
   int x, y, height, width;
   GtkWidget *table;
   GtkWidget *viewport;
+  GtkWidget *item;
 
   g_return_if_fail (IS_EGG_EDITABLE_TOOLBAR (etoolbar));
 
@@ -1076,44 +1115,17 @@ update_editor_sheet (EggEditableToolbar *etoolbar)
 
   for (l = to_drag; l != NULL; l = l->next)
     {
-      GtkWidget *event_box;
-      GtkWidget *vbox;
-      GtkWidget *icon;
-      GtkWidget *label;
       EggToolbarsItem *node = (EggToolbarsItem *) (l->data);
       EggAction *action;
 
       action = egg_editable_toolbar_get_action (etoolbar, node->action);
       g_return_if_fail (action != NULL);
 
-      event_box = gtk_event_box_new ();
-      gtk_widget_show (event_box);
-      gtk_drag_source_set (event_box,
-			   GDK_BUTTON1_MASK,
-			   source_drag_types, 1, GDK_ACTION_MOVE);
-      g_signal_connect (event_box, "drag_data_get",
-			G_CALLBACK (drag_data_get_cb), etoolbar);
-      g_signal_connect (event_box, "drag_data_delete",
-			G_CALLBACK (editor_drag_data_delete_cb), etoolbar);
-
-      g_object_set_data (G_OBJECT (event_box), "egg-action", action);
-
-      vbox = gtk_vbox_new (0, FALSE);
-      gtk_widget_show (vbox);
-      gtk_container_add (GTK_CONTAINER (event_box), vbox);
-
-      icon = gtk_image_new_from_stock
-	(action->stock_id ? action->stock_id : GTK_STOCK_DND,
-	 GTK_ICON_SIZE_LARGE_TOOLBAR);
-      gtk_widget_show (icon);
-      gtk_box_pack_start (GTK_BOX (vbox), icon, FALSE, TRUE, 0);
-
-      label = gtk_label_new_with_mnemonic (action->label);
-      gtk_widget_show (label);
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
-
+      item = editor_create_item (etoolbar, action->stock_id,
+				 action->label, GDK_ACTION_MOVE);
+      g_object_set_data (G_OBJECT (item), "egg-action", action);
       gtk_table_attach_defaults (GTK_TABLE (etoolbar->priv->table),
-				 event_box, x, x + 1, y, y + 1);
+		                 item, x, x + 1, y, y + 1);
 
       x++;
       if (x >= width)
@@ -1122,6 +1134,11 @@ update_editor_sheet (EggEditableToolbar *etoolbar)
 	  y++;
 	}
     }
+
+  item = editor_create_item (etoolbar, NULL, _("Separator"),
+			     GDK_ACTION_COPY);
+  gtk_table_attach_defaults (GTK_TABLE (etoolbar->priv->table),
+		             item, x, x + 1, y, y + 1);
 
   g_list_free (to_drag);
 }

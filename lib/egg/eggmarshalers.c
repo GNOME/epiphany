@@ -201,7 +201,46 @@ _egg_marshal_VOID__OBJECT_STRING_STRING (GClosure     *closure,
             data2);
 }
 
-/* BOOLEAN:VOID (eggmarshalers.list:5) */
+/* BOOLEAN:ENUM (eggmarshalers.list:5) */
+void
+_egg_marshal_BOOLEAN__ENUM (GClosure     *closure,
+                            GValue       *return_value,
+                            guint         n_param_values,
+                            const GValue *param_values,
+                            gpointer      invocation_hint,
+                            gpointer      marshal_data)
+{
+  typedef gboolean (*GMarshalFunc_BOOLEAN__ENUM) (gpointer     data1,
+                                                  gint         arg_1,
+                                                  gpointer     data2);
+  register GMarshalFunc_BOOLEAN__ENUM callback;
+  register GCClosure *cc = (GCClosure*) closure;
+  register gpointer data1, data2;
+  gboolean v_return;
+
+  g_return_if_fail (return_value != NULL);
+  g_return_if_fail (n_param_values == 2);
+
+  if (G_CCLOSURE_SWAP_DATA (closure))
+    {
+      data1 = closure->data;
+      data2 = g_value_peek_pointer (param_values + 0);
+    }
+  else
+    {
+      data1 = g_value_peek_pointer (param_values + 0);
+      data2 = closure->data;
+    }
+  callback = (GMarshalFunc_BOOLEAN__ENUM) (marshal_data ? marshal_data : cc->callback);
+
+  v_return = callback (data1,
+                       g_marshal_value_peek_enum (param_values + 1),
+                       data2);
+
+  g_value_set_boolean (return_value, v_return);
+}
+
+/* BOOLEAN:VOID (eggmarshalers.list:6) */
 void
 _egg_marshal_BOOLEAN__VOID (GClosure     *closure,
                             GValue       *return_value,
@@ -238,7 +277,7 @@ _egg_marshal_BOOLEAN__VOID (GClosure     *closure,
   g_value_set_boolean (return_value, v_return);
 }
 
-/* OBJECT:VOID (eggmarshalers.list:6) */
+/* OBJECT:VOID (eggmarshalers.list:7) */
 void
 _egg_marshal_OBJECT__VOID (GClosure     *closure,
                            GValue       *return_value,

@@ -225,12 +225,13 @@ egg_tool_item_class_init (EggToolItemClass *klass)
 		  GTK_TYPE_TOOLTIPS,
 		  G_TYPE_STRING,
 		  G_TYPE_STRING);		  
-		  
 }
 
 static void
 egg_tool_item_init (EggToolItem *toolitem)
 {
+  GTK_WIDGET_UNSET_FLAGS (toolitem, GTK_CAN_FOCUS);  
+
   toolitem->visible_horizontal = TRUE;
   toolitem->visible_vertical = TRUE;
   toolitem->homogeneous = FALSE;
@@ -357,10 +358,7 @@ egg_tool_item_map (GtkWidget *widget)
   toolitem = EGG_TOOL_ITEM (widget);
   GTK_WIDGET_CLASS (parent_class)->map (widget);
   if (toolitem->drag_window)
-    {
-      gdk_window_raise (toolitem->drag_window);
-      gdk_window_show (toolitem->drag_window);
-    }
+    gdk_window_show (toolitem->drag_window);
 }
 
 static void
@@ -477,36 +475,45 @@ void
 egg_tool_item_set_expandable (EggToolItem *tool_item,
 			      gboolean     expandable)
 {
-  if ((expandable && tool_item->expandable) ||
-      (!expandable && !tool_item->expandable))
-    return;
+  g_return_if_fail (EGG_IS_TOOL_ITEM (tool_item));
+    
+  expandable = expandable != FALSE;
 
-  tool_item->expandable = expandable;
-  gtk_widget_queue_resize (GTK_WIDGET (tool_item));
+  if (tool_item->expandable != expandable)
+    {
+      tool_item->expandable = expandable;
+      gtk_widget_queue_resize (GTK_WIDGET (tool_item));
+    }
 }
 
 void
 egg_tool_item_set_pack_end (EggToolItem *tool_item,
 			    gboolean pack_end)
 {
-  if ((pack_end && tool_item->pack_end) ||
-      (!pack_end && !tool_item->pack_end))
-    return;
+  g_return_if_fail (EGG_IS_TOOL_ITEM (tool_item));
+    
+  pack_end = pack_end != FALSE;
 
-  tool_item->pack_end = pack_end;
-  gtk_widget_queue_resize (GTK_WIDGET (tool_item));
+  if (tool_item->pack_end != pack_end)
+    {
+      tool_item->pack_end = pack_end;
+      gtk_widget_queue_resize (GTK_WIDGET (tool_item));
+    }
 }
 
 void
 egg_tool_item_set_homogeneous (EggToolItem *tool_item,
 			       gboolean     homogeneous)
 {
-  if ((homogeneous && tool_item->homogeneous) ||
-      (!homogeneous && !tool_item->homogeneous))
-    return;
+  g_return_if_fail (EGG_IS_TOOL_ITEM (tool_item));
+    
+  homogeneous = homogeneous != FALSE;
 
-  tool_item->homogeneous = homogeneous;
-  gtk_widget_queue_resize (GTK_WIDGET (tool_item));
+  if (tool_item->homogeneous != homogeneous)
+    {
+      tool_item->homogeneous = homogeneous;
+      gtk_widget_queue_resize (GTK_WIDGET (tool_item));
+    }
 }
 
 void
@@ -527,24 +534,29 @@ egg_tool_item_set_use_drag_window (EggToolItem *toolitem,
 {
   g_return_if_fail (EGG_IS_TOOL_ITEM (toolitem));
 
-  toolitem->use_drag_window = use_drag_window;
+  use_drag_window = use_drag_window != FALSE;
 
-  if (use_drag_window)
+  if (toolitem->use_drag_window != use_drag_window)
     {
-      if (!toolitem->drag_window && GTK_WIDGET_REALIZED (toolitem))
+      toolitem->use_drag_window = use_drag_window;
+      
+      if (use_drag_window)
 	{
-	  create_drag_window(toolitem);
-	  if (GTK_WIDGET_MAPPED (toolitem))
-	    gdk_window_show (toolitem->drag_window);
+	  if (!toolitem->drag_window && GTK_WIDGET_REALIZED (toolitem))
+	    {
+	      create_drag_window(toolitem);
+	      if (GTK_WIDGET_MAPPED (toolitem))
+		gdk_window_show (toolitem->drag_window);
+	    }
+	}
+      else
+	{
+	  if (toolitem->drag_window)
+	    {
+	      gdk_window_set_user_data (toolitem->drag_window, NULL);
+	      gdk_window_destroy (toolitem->drag_window);
+	      toolitem->drag_window = NULL;
+	    }
 	}
     }
-  else
-    {
-      if (toolitem->drag_window)
-	{
-	  gdk_window_set_user_data (toolitem->drag_window, NULL);
-	  gdk_window_destroy (toolitem->drag_window);
-	  toolitem->drag_window = NULL;
-	}
-   }
 }

@@ -1131,12 +1131,12 @@ update_node (EggMenuMerge *self, GNode *node)
 		  EggToolItem *item;
 
 		  item = egg_separator_tool_item_new();
-		  egg_toolbar_insert_tool_item(EGG_TOOLBAR(toolbar), item, pos);
+		  egg_toolbar_insert (EGG_TOOLBAR(toolbar), item, pos);
 		  NODE_INFO(node)->proxy = GTK_WIDGET (item);
 		  //gtk_widget_show(NODE_INFO(node)->proxy);
 
 		  item = egg_separator_tool_item_new();
-		  egg_toolbar_insert_tool_item(EGG_TOOLBAR(toolbar), item, pos+1);
+		  egg_toolbar_insert (EGG_TOOLBAR(toolbar), item, pos+1);
 		  NODE_INFO(node)->extra = GTK_WIDGET (item);
 		  //gtk_widget_show(NODE_INFO(node)->extra);
 		}
@@ -1192,8 +1192,8 @@ update_node (EggMenuMerge *self, GNode *node)
 		{
 		  info->proxy = egg_action_create_tool_item (info->action);
 
-		  egg_toolbar_insert_tool_item (EGG_TOOLBAR (toolbar),
-					        EGG_TOOL_ITEM (info->proxy), pos);
+		  egg_toolbar_insert (EGG_TOOLBAR (toolbar),
+				      EGG_TOOL_ITEM (info->proxy), pos);
 		}
 	    }
 	  else
@@ -1218,7 +1218,7 @@ update_node (EggMenuMerge *self, GNode *node)
 	      if (find_toolbar_position(node, &toolbar, &pos))
 		{
 		  EggToolItem *item = egg_separator_tool_item_new();
-		  egg_toolbar_insert_tool_item (EGG_TOOLBAR (toolbar), item, pos);
+		  egg_toolbar_insert (EGG_TOOLBAR (toolbar), item, pos);
 		  info->proxy = GTK_WIDGET (item);
 		  gtk_widget_show(info->proxy);
 		}
