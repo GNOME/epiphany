@@ -204,10 +204,7 @@ ephy_embed_shell_get_favicon_cache (EphyEmbedShell *ees)
 {
 	if (ees->priv->favicon_cache == NULL)
 	{
-		EphyHistory *history;
-
-		history = ephy_embed_shell_get_global_history (ees);
-		ees->priv->favicon_cache = ephy_favicon_cache_new (history);
+		ees->priv->favicon_cache = ephy_favicon_cache_new ();
 	}
 
 	return ees->priv->favicon_cache;

@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "ephy-history.h"
-
 #include <glib-object.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -35,6 +33,13 @@ G_BEGIN_DECLS
 
 typedef struct EphyFaviconCachePrivate EphyFaviconCachePrivate;
 
+enum
+{
+	EPHY_NODE_FAVICON_PROP_URL = 2,
+	EPHY_NODE_FAVICON_PROP_FILENAME = 3,
+	EPHY_NODE_FAVICON_PROP_LAST_USED = 4
+};
+
 typedef struct
 {
 	GObject parent;
@@ -51,17 +56,10 @@ typedef struct
 
 GType               ephy_favicon_cache_get_type        (void);
 
-EphyFaviconCache   *ephy_favicon_cache_new             (EphyHistory *history);
+EphyFaviconCache   *ephy_favicon_cache_new             (void);
 
-GdkPixbuf          *ephy_favicon_cache_lookup          (EphyFaviconCache *cache,
+GdkPixbuf          *ephy_favicon_cache_get             (EphyFaviconCache *cache,
 						        const char *url);
-
-GdkPixbuf          *ephy_favicon_cache_lookup_direct   (EphyFaviconCache *cache,
-						        const char *cache_url);
-
-void                ephy_favicon_cache_insert_from_url (EphyFaviconCache *cache,
-							const char *url,
-							const char *favicon_url);
 
 G_END_DECLS
 

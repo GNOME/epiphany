@@ -484,6 +484,10 @@ mozilla_embed_shell_finalize (GObject *object)
 {
 	MozillaEmbedShell *mes;
 
+	/* Destroy EphyEmbedShell before because some
+	 * services depend on xpcom */
+        G_OBJECT_CLASS (parent_class)->finalize (object);
+
         g_return_if_fail (object != NULL);
         g_return_if_fail (IS_MOZILLA_EMBED_SHELL (object));
 
@@ -498,8 +502,6 @@ mozilla_embed_shell_finalize (GObject *object)
 	gtk_moz_embed_pop_startup ();
 	
         g_free (mes->priv);
-
-        G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void              

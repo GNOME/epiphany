@@ -25,8 +25,6 @@ libephyembed_la_SOURCES = \
 	ephy-embed-dialog.h		\
 	ephy-embed-event.c		\
 	ephy-embed-event.h		\
-	ephy-embed-favicon.c		\
-	ephy-embed-favicon.h		\
 	ephy-embed-persist.c		\
 	ephy-embed-persist.h		\
 	ephy-embed-popup.c		\
@@ -41,8 +39,6 @@ libephyembed_la_SOURCES = \
 	ephy-embed-types.h		\
 	ephy-embed-utils.c		\
 	ephy-embed-utils.h		\
-	ephy-favicon.c			\
-	ephy-favicon.h			\
 	ephy-favicon-cache.c		\
 	ephy-favicon-cache.h		\
 	ephy-history.c			\

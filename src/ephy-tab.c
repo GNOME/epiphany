@@ -53,6 +53,7 @@ struct EphyTabPrivate
 	TabLoadStatus load_status;
 	char status_message[255];
 	char link_message[255];
+	char favicon_url[255];
 	char *title;
 	char *location;
 	int load_percent;
@@ -76,6 +77,10 @@ enum
 	PROP_EPHY_SHELL
 };
 
+static void
+ephy_tab_favicon_cb (EphyEmbed *embed,
+		     const char *url,
+		     EphyTab *tab);
 static void
 ephy_tab_link_message_cb (EphyEmbed *embed,
 			  const char *message,
@@ -199,6 +204,7 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->is_active = FALSE;
 	*tab->priv->status_message = '\0';
 	*tab->priv->link_message = '\0';
+	*tab->priv->favicon_url = '\0';
 	tab->priv->load_status = TAB_LOAD_NONE;
 	tab->priv->load_percent = 0;
 	tab->priv->title = NULL;
@@ -259,6 +265,9 @@ ephy_tab_init (EphyTab *tab)
 			  tab);
 	g_signal_connect (embed, "ge_security_change",
 			  GTK_SIGNAL_FUNC (ephy_tab_security_change_cb),
+			  tab);
+	g_signal_connect (embed, "ge_favicon",
+			  GTK_SIGNAL_FUNC (ephy_tab_favicon_cb),
 			  tab);
 }
 
@@ -424,6 +433,20 @@ ephy_tab_set_visibility (EphyTab *tab,
 /* Private callbacks for embed signals */
 
 static void
+ephy_tab_favicon_cb (EphyEmbed *embed,
+		     const char *url,
+		     EphyTab *tab)
+{
+	g_strlcpy (tab->priv->favicon_url,
+		   url, 255);
+
+	if (!tab->priv->is_active) return;
+
+	ephy_window_update_control (tab->priv->window,
+				    FaviconControl);
+}
+
+static void
 ephy_tab_link_message_cb (EphyEmbed *embed,
 			  const char *message,
 			  EphyTab *tab)
@@ -444,6 +467,7 @@ ephy_tab_location_cb (EphyEmbed *embed, EphyTab *tab)
 	ephy_embed_get_location (embed, TRUE,
 				 &tab->priv->location);
 	tab->priv->link_message[0] = '\0';
+	tab->priv->favicon_url[0] = '\0';
 
 	if (tab->priv->is_active)
 	{
@@ -904,6 +928,19 @@ const char *
 ephy_tab_get_location (EphyTab *tab)
 {
 	return tab->priv->location;
+}
+
+const char *
+ephy_tab_get_favicon_url (EphyTab *tab)
+{
+	if (tab->priv->favicon_url[0] == '\0')
+	{
+		return NULL;
+	}
+	else
+	{
+		return tab->priv->favicon_url;
+	}
 }
 
 void

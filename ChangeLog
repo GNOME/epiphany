@@ -1,5 +1,34 @@
 2003-01-11  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* embed/Makefile.am:
+	* embed/ephy-embed-favicon.c:
+	* embed/ephy-embed-favicon.h:
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_get_favicon_cache):
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_class_init),
+	(ephy_favicon_cache_new), (ephy_favicon_cache_load),
+	(icon_is_obsolete), (icons_added_cb), (icons_removed_cb),
+	(remove_obsolete_icons), (ephy_favicon_cache_save),
+	(ephy_favicon_cache_init), (kill_download),
+	(cleanup_downloads_hash), (ephy_favicon_cache_finalize),
+	(favicon_name_build), (favicon_download_completed_cb),
+	(ephy_favicon_cache_download), (ephy_favicon_cache_get):
+	* embed/ephy-favicon-cache.h:
+	* embed/ephy-favicon.c:
+	* embed/ephy-favicon.h:
+	* embed/mozilla/mozilla-embed-shell.cpp:
+	* src/ephy-tab.c: (ephy_tab_init), (ephy_tab_favicon_cb),
+	(ephy_tab_location_cb), (ephy_tab_get_location),
+	(ephy_tab_get_favicon_url):
+	* src/ephy-tab.h:
+	* src/ephy-window.c: (update_favicon_control):
+	* src/toolbar.c: (toolbar_setup_favicon_ebox),
+	(toolbar_update_favicon):
+
+	Reimplement favicons. Now all exit crashes related
+	to connections left open by favicons should be fixed.
+
+2003-01-11  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* embed/ephy-embed-persist.c: (ephy_embed_persist_cancel):
 	* embed/ephy-embed-persist.h:
 	* embed/mozilla/ProgressListener.cpp:

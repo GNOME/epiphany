@@ -1086,12 +1086,12 @@ update_favicon_control (EphyWindow *window)
 	cache = ephy_embed_shell_get_favicon_cache
 		(EPHY_EMBED_SHELL (ephy_shell));
 
-	location = ephy_tab_get_location (window->priv->active_tab);
+	location = ephy_tab_get_favicon_url (window->priv->active_tab);
 	if (location)
 	{
 		GdkPixbuf *pixbuf;
 
-		pixbuf = ephy_favicon_cache_lookup_direct (cache, location);
+		pixbuf = ephy_favicon_cache_get (cache, location);
 		gtk_window_set_icon (GTK_WINDOW (window), pixbuf);
 	}
 

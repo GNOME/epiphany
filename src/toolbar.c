@@ -29,7 +29,6 @@
 #include "ephy-gui.h"
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
-#include "ephy-embed-favicon.h"
 #include "ephy-dnd.h"
 #include "ephy-toolbar-bonobo-view.h"
 #include "ephy-toolbar-item-factory.h"
@@ -255,8 +254,7 @@ toolbar_setup_favicon_ebox (Toolbar *t, GtkWidget *w)
 
 	g_return_if_fail (w == p->favicon_ebox);
 
-	p->favicon = g_object_ref (ephy_embed_favicon_new
-				   (ephy_window_get_active_embed (p->window)));
+	p->favicon = g_object_ref (gtk_image_new ());
 	gtk_container_add (GTK_CONTAINER (p->favicon_ebox), p->favicon);
 	gtk_container_set_border_width (GTK_CONTAINER (p->favicon_ebox), 2);
 
@@ -667,10 +665,29 @@ toolbar_set_location (Toolbar *t,
 void
 toolbar_update_favicon (Toolbar *t)
 {
-	if (t->priv->favicon)
+	GdkPixbuf *pixbuf = NULL;
+	EphyFaviconCache *cache;
+	EphyTab *tab;
+	const char *url;
+
+	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
+	tab = ephy_window_get_active_tab (t->priv->window);
+	url = ephy_tab_get_favicon_url (tab);
+
+	if (url)
 	{
-		ephy_embed_favicon_set_embed (EPHY_EMBED_FAVICON (t->priv->favicon),
-				              ephy_window_get_active_embed (t->priv->window));
+		pixbuf = ephy_favicon_cache_get (cache, url);
+	}
+
+	if (pixbuf)
+	{
+		gtk_image_set_from_pixbuf (GTK_IMAGE (t->priv->favicon), pixbuf);
+	}
+	else
+	{
+		gtk_image_set_from_stock (GTK_IMAGE (t->priv->favicon),
+					  GTK_STOCK_JUMP_TO,
+					  GTK_ICON_SIZE_MENU);
 	}
 }
 

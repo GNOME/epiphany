@@ -90,6 +90,8 @@ const char   *ephy_tab_get_title		(EphyTab *tab);
 
 const char   *ephy_tab_get_location             (EphyTab *tab);
 
+const char   *ephy_tab_get_favicon_url          (EphyTab *tab);
+
 void	      ephy_tab_set_location             (EphyTab *tab,
 						 char *location);
 
