@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-12 02:02+0100\n"
-"PO-Revision-Date: 2004-01-12 02:04+0100\n"
+"POT-Creation-Date: 2004-01-14 08:11+0100\n"
+"PO-Revision-Date: 2004-01-14 08:31+0100\n"
 "Last-Translator: Danilo Segan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -92,7 +92,9 @@ msgstr "Онемогући уређивање алатки"
 msgid ""
 "Disable all historical information by disabling the back button, not "
 "allowing the history dialog and hiding the favorite bookmarks."
-msgstr "Онемогући све податке историјата искључивањем дугмета за назад, не дозвољавањем прозорчета историјата и сакривањем омиљених обележивача."
+msgstr ""
+"Онемогући све податке историјата искључивањем дугмета за назад, не "
+"дозвољавањем прозорчета историјата и сакривањем омиљених обележивача."
 
 #: data/epiphany-lockdown.schemas.in.h:10
 msgid "Disable unsafe protocols"
@@ -673,7 +675,7 @@ msgstr "_Пронађи:"
 msgid "_Next"
 msgstr "_Следећи"
 
-#: data/glade/epiphany.glade.h:15
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:513
 msgid "_Pause"
 msgstr "_Паузирај"
 
@@ -1139,40 +1141,36 @@ msgstr "_Пронађи..."
 msgid "_Print..."
 msgstr "_Штампај..."
 
-#: embed/downloader-view.c:221
+#: embed/downloader-view.c:228
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u:%02u"
 
-#: embed/downloader-view.c:225
+#: embed/downloader-view.c:232
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
-#: embed/downloader-view.c:296 lib/widgets/ephy-cell-renderer-progress.c:35
+#: embed/downloader-view.c:303 lib/widgets/ephy-cell-renderer-progress.c:35
 #: src/ephy-window.c:1083
 msgid "Unknown"
 msgstr "Непознато"
 
-#: embed/downloader-view.c:434
+#: embed/downloader-view.c:441
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:444
+#: embed/downloader-view.c:451
 msgid "File"
 msgstr "Датотека"
 
-#: embed/downloader-view.c:457
+#: embed/downloader-view.c:464
 msgid "Remaining"
 msgstr "Преостало"
 
-#: embed/downloader-view.c:501
-msgid "Resume"
-msgstr "Настави"
-
-#: embed/downloader-view.c:506
-msgid "Pause"
-msgstr "Паузирај"
+#: embed/downloader-view.c:508
+msgid "_Resume"
+msgstr "Нас_тави"
 
 #: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:341
 msgid "Save Image As"
@@ -1553,15 +1551,15 @@ msgstr "Украјински"
 msgid "Unknown (%s)"
 msgstr "Непознато (%s)"
 
-#: embed/ephy-history.c:482 src/bookmarks/ephy-bookmarks.c:587
+#: embed/ephy-history.c:485 src/bookmarks/ephy-bookmarks.c:587
 msgid "All"
 msgstr "Све"
 
-#: embed/ephy-history.c:655
+#: embed/ephy-history.c:658
 msgid "Others"
 msgstr "Остали"
 
-#: embed/ephy-history.c:661
+#: embed/ephy-history.c:664
 msgid "Local files"
 msgstr "Локалне датотеке"
 
@@ -2614,30 +2612,30 @@ msgstr ""
 "Спознају је сада немогуће користити, због неочекиване грешке у Бонобу при "
 "покушају проналажења објекта аутоматизације"
 
-#: src/ephy-tab.c:326 src/ephy-tab.c:1137 src/ephy-tab.c:1319
+#: src/ephy-tab.c:326 src/ephy-tab.c:1138 src/ephy-tab.c:1320
 msgid "Blank page"
 msgstr "Празна страница"
 
-#: src/ephy-tab.c:744
+#: src/ephy-tab.c:745
 msgid "site"
 msgstr "странице"
 
-#: src/ephy-tab.c:768
+#: src/ephy-tab.c:769
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Преусмерава на %s..."
 
-#: src/ephy-tab.c:772
+#: src/ephy-tab.c:773
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Преноси податке са %s..."
 
-#: src/ephy-tab.c:776
+#: src/ephy-tab.c:777
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Очекује овлашћење од %s..."
 
-#: src/ephy-tab.c:784
+#: src/ephy-tab.c:785
 #, c-format
 msgid "Loading %s..."
 msgstr "Учитава %s..."
@@ -3484,6 +3482,9 @@ msgstr ""
 #: src/window-commands.c:969
 msgid "A GNOME browser based on Mozilla"
 msgstr "Гном веб читач заснован на Мозили"
+
+#~ msgid "Pause"
+#~ msgstr "Паузирај"
 
 #~ msgid "Organization (O):"
 #~ msgstr "Организација (О):"
