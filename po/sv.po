@@ -8,13 +8,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"POT-Creation-Date: 2003-01-08 11:38+0100\n"
-"PO-Revision-Date: 2003-01-08 11:38+0100\n"
+"POT-Creation-Date: 2003-01-08 21:54+0100\n"
+"PO-Revision-Date: 2003-01-08 21:54+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: lib/ephy-start-here.c:238
+msgid "Import mozilla bookmarks"
+msgstr "Importera Mozilla-bokmärken"
+
+#: src/ephy-shell.c:145
+msgid "Bookmarks imported successfully."
+msgstr "Import av bokmärken lyckades."
 
 #: data/GNOME_Epiphany_Automation.server.in.h:1
 msgid "Epiphany automation"
@@ -55,6 +63,71 @@ msgstr "Surfa på nätet"
 #: data/epiphany.desktop.in.h:2
 msgid "Epiphany Web Browser"
 msgstr "Webbläsaren Epiphany"
+
+#: data/starthere/index.xml.in.h:1
+msgid "Getting started"
+msgstr "Komma igång"
+
+#: data/starthere/index.xml.in.h:2
+msgid ""
+"If your internet connection requires it, make sure to setup your proxy in "
+"the desktop wide <action id=\"configure-network\" param=\"\">configuration "
+"dialog</action>."
+msgstr ""
+"Om din Internetanslutning kräver det bör du försäkra dig om att konfigurera "
+"din proxyserver i den globala <action id=\"configure-network\" param="
+"\"\">konfigurationsdialogen</action>."
+
+#: data/starthere/index.xml.in.h:3
+msgid "The web browser"
+msgstr "Webbläsaren"
+
+#: data/starthere/index.xml.in.h:4
+msgid ""
+"To import bookmarks from another browser installed on your system just click "
+"on one of the links below: <content id=\"bookmarks-import\"/>"
+msgstr ""
+"För att importera bokmärken från en annan webbläsare installerad på ditt "
+"system klickar du bara på en länk nedan: <content id=\"bookmarks-import\"/>"
+
+#: data/starthere/index.xml.in.h:5
+msgid ""
+"You can start browsing web pages either by typing a location (example: www."
+"google.com) or a keyword (example: best computer shop) in the toolbar text "
+"entry and then pressing the Enter key. You can remember important visited "
+"pages using bookmarks or browse all of them with the history dialog."
+msgstr ""
+"Du kan börja surfa på webbsidor antingen genom att ange en plats (exempel: "
+"www.google.com) eller ett nyckelord (exempel: bästa datorbutiken) i "
+"verktygsradstextfältet och sedan trycka på returtangenten. Du kan komma ihåg "
+"viktiga besökta sidor genom att använda bokmärken eller bläddra bland alla "
+"med historikdialogen."
+
+#: data/starthere/smartbookmarks.xml.in.h:1
+msgid ""
+"Right click the icon and choose \"Add Bookmark\" from the menu list. When "
+"you will type a word in the toolbar entry, a list of your smart bookmarks "
+"will be displayed. Just choose one of them to perform the search. The next "
+"time you type a word, just pressing the Enter key will be enough to perform "
+"the same action."
+msgstr ""
+"Högerklicka på ikonen och klicka \"Lägg till bokmärke\" från menylistan. När "
+"du skriver in ett ord i verktygsradsfältet kommer en lista med dina smarta "
+"bokmärken att visas. Välj en av dem för att utföra en sökning. Nästa gång du "
+"skriver in ett ord kommer returtangenten att vara tillräckligt för att "
+"utföra samma åtgärd."
+
+#: data/starthere/smartbookmarks.xml.in.h:2
+msgid "Smart Bookmarks"
+msgstr "Smarta bokmärken"
+
+#: data/starthere/smartbookmarks.xml.in.h:3
+msgid ""
+"Smart bookmarks allows to perform searches and similar actions directly from "
+"the location entry."
+msgstr ""
+"Smarta bokmärken låter dig utföra sökningar och liknande åtgärder direkt "
+"från platsfältet."
 
 #: data/epiphany.schemas.in.h:1
 msgid "Allow Java"
@@ -1124,40 +1197,6 @@ msgstr "Verktygsradsredigerare"
 msgid "_Reset to defaults"
 msgstr "_Återställ till standardalternativ"
 
-#: data/starthere/index.xml.in.h:1
-msgid "Getting started"
-msgstr "Komma igång"
-
-#: data/starthere/index.xml.in.h:2
-msgid ""
-"If your internet connection requires it, make sure to setup your proxy in "
-"the desktop wide <_action>configuration dialog</_action>."
-msgstr ""
-"Om din Internetanslutning kräver det bör du försäkra dig om att konfigurera "
-"din proxyserver i den globala <_action>konfigurationsdialogen</_action>."
-
-#: data/starthere/index.xml.in.h:3
-msgid "The web browser"
-msgstr "Webbläsaren"
-
-#: data/starthere/index.xml.in.h:4
-msgid ""
-"To import bookmarks from another browser installed on your system just click "
-"on one of the links below: <content id=\"bookmarks-import\"/>"
-msgstr ""
-"För att importera bokmärken från en annan webbläsare installerad på ditt "
-"system klickar du bara på en länk nedan: <content id=\"bookmarks-import\"/>"
-
-#: data/starthere/index.xml.in.h:5
-msgid ""
-"You can start browsing web pages either by typing a location (example: www."
-"google.com) or a keyword (example: best computer shop) in the toolbar text "
-"entry."
-msgstr ""
-"Du kan börja surfa på webbsidor antingen genom att ange en plats (exempel: "
-"www.google.com) eller ett nyckelord (exempel: bästa datorbutiken) i "
-"verktygsradstextfältet."
-
 #: data/ui/epiphany-ui.xml.in.h:1
 msgid "About this application"
 msgstr "Om detta program"
@@ -2165,10 +2204,6 @@ msgstr "Igår klockan %H.%M"
 #: lib/ephy-node.c:835
 msgid "%A, %B %-d %Y at %-H:%M"
 msgstr "%A %-d %B %Y klockan %H.%M"
-
-#: lib/ephy-start-here.c:238
-msgid "Import mozilla bookmarks"
-msgstr "Importera Mozilla-bokmärken"
 
 #: lib/ephy-string.c:115
 msgid "%Y-%m-%d"
@@ -5156,9 +5191,6 @@ msgstr ""
 #~ msgid "Setup Complete"
 #~ msgstr "Konfigurationen färdig"
 
-#~ msgid "Smart Bookmarks Toolbar"
-#~ msgstr "Vertygsrad med smarta bokmärken"
-
 #~ msgid "Toolbar Contents"
 #~ msgstr "Innehåll i verktygsrad"
 
@@ -7098,9 +7130,6 @@ msgstr ""
 
 #~ msgid "Exporting bookmarks failed"
 #~ msgstr "Export av bokmärken misslyckades"
-
-#~ msgid "Bookmarks successfully exported"
-#~ msgstr "Export av bokmärken lyckades"
 
 #~ msgid "Save As..."
 #~ msgstr "Spara som..."
