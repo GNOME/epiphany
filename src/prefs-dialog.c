@@ -63,8 +63,6 @@ static void prefs_dialog_class_init	(PrefsDialogClass *klass);
 static void prefs_dialog_init		(PrefsDialog *pd);
 
 /* Glade callbacks */
-void prefs_proxy_auto_url_reload_cb		(GtkWidget *button,
-						 EphyDialog *dialog);
 void prefs_clear_cache_button_clicked_cb	(GtkWidget *button,
 						 gpointer data);
 void prefs_dialog_response_cb			(GtkDialog *widget,

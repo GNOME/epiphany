@@ -476,19 +476,19 @@ ephy_embed_get_js_status (EphyEmbed *embed)
 /**
  * ephy_embed_reload:
  * @embed: an #EphyEmbed
- * @flags: %EMBED_RELOAD_FORCE to bypass cache
+ * @force: %TRUE to bypass cache
  *
  * Reloads the web page being displayed in @embed.
  *
- * If @flags is %EMBED_RELOAD_FORCE, cache and proxy will be bypassed when
- * reloading the page. Otherwise, use %EMBED_RELOAD_NORMAL.
+ * If @force is %TRUE, cache and proxy will be bypassed when
+ * reloading the page.
  **/
 void
 ephy_embed_reload (EphyEmbed *embed,
-		   EmbedReloadFlags flags)
+		   gboolean force)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->reload (embed, flags);
+	iface->reload (embed, force);
 }
 
 /**

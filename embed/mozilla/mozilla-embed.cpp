@@ -507,13 +507,13 @@ impl_get_location (EphyEmbed *embed,
 
 static void
 impl_reload (EphyEmbed *embed, 
-             EmbedReloadFlags flags)
+             gboolean force)
 {
 	guint32 mflags;
 
 	mflags = GTK_MOZ_EMBED_FLAG_RELOADNORMAL;
 
-	if (flags & EMBED_RELOAD_FORCE)
+	if (force)
 	{
 		mflags = GTK_MOZ_EMBED_FLAG_RELOADBYPASSPROXYANDCACHE;
 	}

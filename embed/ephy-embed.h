@@ -70,12 +70,6 @@ typedef enum
 			       EPHY_EMBED_CHROME_STATUSBAR |	\
 			       EPHY_EMBED_CHROME_BOOKMARKSBAR)
 
-typedef enum
-{
-	EMBED_RELOAD_NORMAL	= 1 << 0,
-	EMBED_RELOAD_FORCE	= 1 << 1
-} EmbedReloadFlags;
-
 typedef struct
 {
 	gboolean print_to_file;
@@ -179,7 +173,7 @@ struct _EphyEmbedIface
 							 const char *url);
 	void		   (* stop_load)		(EphyEmbed *embed);
 	void		   (* reload)			(EphyEmbed *embed,
-							 EmbedReloadFlags flags);
+							 gboolean force);
 	gboolean	   (* can_go_back)		(EphyEmbed *embed);
 	gboolean	   (* can_go_forward)		(EphyEmbed *embed);
 	gboolean	   (* can_go_up)		(EphyEmbed *embed);
@@ -240,7 +234,7 @@ void		  ephy_embed_load_url			(EphyEmbed *embed,
 void		  ephy_embed_stop_load			(EphyEmbed *embed);
 
 void		  ephy_embed_reload			(EphyEmbed *embed,
-							 EmbedReloadFlags flags);
+							 gboolean force);
 
 char 		 *ephy_embed_get_title			(EphyEmbed *embed);
 
