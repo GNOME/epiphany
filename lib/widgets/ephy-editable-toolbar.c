@@ -511,9 +511,9 @@ ephy_editable_toolbar_set_group (EphyEditableToolbar *t, EphyToolbarsGroup *grou
 
 	t->priv->group = group;
 
-	g_signal_connect (group, "changed",
-			  G_CALLBACK (group_changed_cb),
-			  t);
+	g_signal_connect_object (group, "changed",
+			         G_CALLBACK (group_changed_cb),
+			         t, 0);
 }
 
 static void

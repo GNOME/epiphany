@@ -1,5 +1,13 @@
 2003-02-21  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/widgets/ephy-editable-toolbar.c:
+	(ephy_editable_toolbar_set_group):
+	
+	Use connect_object so the changed signal is removed
+	from closed window.
+
+2003-02-21  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/toolbar.c: (get_bookmark_action), (toolbar_get_action):
 
 	Dont create duped actions, fix crash on exit
