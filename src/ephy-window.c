@@ -536,6 +536,14 @@ ephy_window_fullscreen (EphyWindow *window)
 
 	window->priv->mode = EPHY_WINDOW_MODE_FULLSCREEN;
 
+	sync_chromes_visibility (window);
+
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN))
+	{
+		/* no need to show "exit fullscreen" button */
+		return;
+	}
+
 	popup = gtk_window_new (GTK_WINDOW_POPUP);
 	window->priv->exit_fullscreen_popup = popup;
 
@@ -570,8 +578,6 @@ ephy_window_fullscreen (EphyWindow *window)
 		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
 		 EGG_TOOLBARS_MODEL (
 		 	ephy_shell_get_toolbars_model (ephy_shell, TRUE)));
-
-	sync_chromes_visibility (window);
 }
 
 static void
@@ -579,12 +585,15 @@ ephy_window_unfullscreen (EphyWindow *window)
 {
 	window->priv->mode = EPHY_WINDOW_MODE_NORMAL;
 
-	g_signal_handlers_disconnect_by_func (G_OBJECT (gdk_screen_get_default ()),
-                                              G_CALLBACK (size_changed_cb),
-					      window);
+	if (window->priv->exit_fullscreen_popup != NULL)
+	{
+		g_signal_handlers_disconnect_by_func (G_OBJECT (gdk_screen_get_default ()),
+						      G_CALLBACK (size_changed_cb),
+						      window);
 
-	gtk_widget_destroy (window->priv->exit_fullscreen_popup);
-	window->priv->exit_fullscreen_popup = NULL;
+		gtk_widget_destroy (window->priv->exit_fullscreen_popup);
+		window->priv->exit_fullscreen_popup = NULL;
+	}
 
 	egg_editable_toolbar_set_model
 		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
@@ -992,7 +1001,7 @@ update_actions_sensitivity (EphyWindow *window)
 	GtkActionGroup *popups_action_group = GTK_ACTION_GROUP (window->priv->popups_action_group);
 	GtkAction *action;
 	gboolean bookmarks_editable, save_to_disk;
-	gboolean printing, print_setup;
+	gboolean printing, print_setup, fullscreen;
 
 	action = gtk_action_group_get_action (action_group, "ViewToolbar");
 	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_TOOLBARS), NULL);
@@ -1044,6 +1053,14 @@ update_actions_sensitivity (EphyWindow *window)
 
 	action = gtk_action_group_get_action (action_group, "EditToolbar");
 	g_object_set (action, "sensitive", ! eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING), NULL);
+
+	fullscreen = eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);
+	action = gtk_action_group_get_action (action_group, "FileNewWindow");
+	g_object_set (action, "sensitive", !fullscreen, NULL);
+	action = gtk_action_group_get_action (action_group, "ViewFullscreen");
+	g_object_set (action, "sensitive", !fullscreen, NULL);
+	action = gtk_action_group_get_action (action_group, "TabsDetach");
+	g_object_set (action, "sensitive", !fullscreen, NULL);
 }
 
 static void
@@ -1829,6 +1846,11 @@ tab_detached_cb (EphyNotebook *notebook,
 
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN))
+	{
+		return;
+	}
+
 	window = ephy_window_new ();
 	ephy_notebook_move_tab (notebook,
 				EPHY_NOTEBOOK (ephy_window_get_notebook (window)),
@@ -1849,7 +1871,12 @@ tab_delete_cb (EphyNotebook *notebook,
 {
 	g_return_val_if_fail (EPHY_IS_TAB (tab), FALSE);
 
-	if (ephy_embed_has_modified_forms (ephy_tab_get_embed (tab)))
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_QUIT) &&
+	    gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) == 1)
+	{
+		return TRUE;
+	}
+	else if (ephy_embed_has_modified_forms (ephy_tab_get_embed (tab)))
 	{
 		return !confirm_close_with_modified_forms (window);
 	}
@@ -2190,6 +2217,11 @@ ephy_window_init (EphyWindow *window)
 	g_signal_connect (window, "delete-event",
 			  G_CALLBACK (ephy_window_delete_event_cb),
 			  window);
+
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN))
+	{
+		gtk_window_fullscreen (GTK_WINDOW (window));
+	}
 
 	/* lockdown pref notifiers */
 	window->priv->disable_arbitrary_url_notifier_id = eel_gconf_notification_add

@@ -286,7 +286,7 @@ window_cmd_file_new_window (GtkAction *action,
 	tab = ephy_window_get_active_tab (window);
 	g_return_if_fail (tab != NULL);
 
-	ephy_shell_new_tab (ephy_shell, NULL, tab, NULL,
+	ephy_shell_new_tab (ephy_shell, window, tab, NULL,
 			    EPHY_NEW_TAB_NEW_PAGE |
 			    EPHY_NEW_TAB_IN_NEW_WINDOW);
 }
@@ -450,6 +450,12 @@ window_cmd_file_close_window (GtkAction *action,
 		              EphyWindow *window)
 {
 	EphyTab *tab;
+
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_QUIT) &&
+	    gtk_notebook_get_n_pages (GTK_NOTEBOOK (ephy_window_get_notebook (window))) == 1)
+	{
+		return;
+	}
 
 	tab = ephy_window_get_active_tab (window);
 	g_return_if_fail (tab != NULL);

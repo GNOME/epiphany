@@ -1,3 +1,16 @@
+2004-07-19  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/ephy-prefs.h:
+	* src/ephy-shell.c: (ephy_shell_new_tab):
+	* src/ephy-window.c: (ephy_window_fullscreen),
+	(ephy_window_unfullscreen), (update_actions_sensitivity),
+	(tab_detached_cb), (tab_delete_cb), (ephy_window_init):
+	* src/window-commands.c: (window_cmd_file_new_window),
+	(window_cmd_file_close_window):
+
+	Add disable_quit, disable_new_window, first_window_fullscreen
+	lockdown options.
+
 2004-07-17  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/print-dialog.c: (ephy_print_dialog_browse_button_cb):

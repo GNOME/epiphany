@@ -44,6 +44,7 @@ G_BEGIN_DECLS
 #define CONF_STATE_UPLOAD_DIR		"/apps/epiphany/directories/upload"
 
 /* Lockdown */
+#define CONF_LOCKDOWN_FULLSCREEN		"/apps/epiphany/lockdown/fullscreen"
 #define CONF_LOCKDOWN_DISABLE_ARBITRARY_URL	"/apps/epiphany/lockdown/disable_arbitrary_url"
 #define CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING  "/apps/epiphany/lockdown/disable_bookmark_editing"
 #define CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING	"/apps/epiphany/lockdown/disable_toolbar_editing"
@@ -53,6 +54,7 @@ G_BEGIN_DECLS
 #define CONF_LOCKDOWN_DISABLE_PRINTING		"/desktop/gnome/lockdown/disable_printing"
 #define CONF_LOCKDOWN_DISABLE_PRINT_SETUP	"/desktop/gnome/lockdown/disable_print_setup"
 #define CONF_LOCKDOWN_DISABLE_COMMAND_LINE	"/desktop/gnome/lockdown/disable_command_line"
+#define CONF_LOCKDOWN_DISABLE_QUIT		"/apps/epiphany/lockdown/disable_quit"
 
 /* System prefs */
 #define CONF_DESKTOP_FTP_HANDLER	"/desktop/gnome/url-handlers/ftp/command"

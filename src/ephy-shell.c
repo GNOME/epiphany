@@ -555,6 +555,8 @@ ephy_shell_new_tab (EphyShell *shell,
 	if (flags & EPHY_NEW_TAB_IN_NEW_WINDOW) in_new_window = TRUE;
 	if (flags & EPHY_NEW_TAB_IN_EXISTING_WINDOW) in_new_window = FALSE;
 
+	in_new_window = in_new_window && !eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);
+
 	jump_to = (flags & EPHY_NEW_TAB_JUMP);
 
 	if (!in_new_window && parent_window != NULL)
