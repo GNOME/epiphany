@@ -1026,7 +1026,7 @@ update_print_actions (EphyWindow *window,
 	action = gtk_action_group_get_action (action_group, "FilePrintSetup");
 	g_object_set (action, "sensitive", printing && print_setup, NULL);
 	action = gtk_action_group_get_action (action_group, "FilePrintPreview");
-	g_object_set (action, "sensitive", enable && printing && print_setup, NULL);
+	g_object_set (action, "sensitive", enable && printing, NULL);
 	action = gtk_action_group_get_action (action_group, "FilePrint");
 	g_object_set (action, "sensitive", enable && printing, NULL);
 

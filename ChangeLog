@@ -1,5 +1,12 @@
 2005-02-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-window.c: (update_print_actions):
+
+	Don't disable print preview if print setup is locked down.
+	Fixes bug #165552.
+
+2005-02-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-window.c: (ephy_window_key_press_event):
 
 	Don't show the menubar with F10 in lockdown mode.
