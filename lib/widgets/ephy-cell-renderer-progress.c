@@ -39,9 +39,6 @@
                                                                                      EPHY_TYPE_CELL_RENDERER_PROGRESS, \
                                                                                      EphyCellRendererProgressPrivate))
 
-#define XPAD 4
-#define YPAD 8
-
 enum
 {
 	PROP_0,
@@ -71,7 +68,8 @@ static void ephy_cell_renderer_progress_set_value    (EphyCellRendererProgress *
 						     gint                     value);
 static void ephy_cell_renderer_progress_set_text     (EphyCellRendererProgress *cellprogress,
 						     const gchar              *text);
-static void compute_dimensions                      (GtkWidget               *widget,
+static void compute_dimensions                      (GtkCellRenderer         *cell,
+                                                     GtkWidget               *widget,
 						     const gchar             *text,
 						     gint                    *width,
 						     gint                    *height);
@@ -152,6 +150,9 @@ ephy_cell_renderer_progress_init (EphyCellRendererProgress *cellprogress)
   cellprogress->priv->text = NULL;
   cellprogress->priv->label = NULL;
   cellprogress->priv->min_w = -1;
+
+  GTK_CELL_RENDERER (cellprogress)->xpad = 4;
+  GTK_CELL_RENDERER (cellprogress)->ypad = 8;
 }
 
 
@@ -268,10 +269,11 @@ ephy_cell_renderer_progress_set_text (EphyCellRendererProgress *cellprogress,
 }
 
 static void
-compute_dimensions (GtkWidget   *widget, 
-		    const gchar *text, 
-		    gint        *width, 
-		    gint        *height)
+compute_dimensions (GtkCellRenderer *cell,
+		    GtkWidget       *widget, 
+		    const gchar     *text, 
+		    gint            *width, 
+		    gint            *height)
 {
   PangoRectangle logical_rect;
   PangoLayout *layout;
@@ -280,10 +282,10 @@ compute_dimensions (GtkWidget   *widget,
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   
   if (width)
-    *width = logical_rect.width + XPAD * 2 + widget->style->xthickness * 2;
+    *width = logical_rect.width + cell->xpad * 2 + widget->style->xthickness * 2;
   
   if (height)
-    *height = logical_rect.height + YPAD * 2 + widget->style->ythickness * 2;
+    *height = logical_rect.height + cell->ypad * 2 + widget->style->ythickness * 2;
   
   g_object_unref (G_OBJECT (layout));
 }
@@ -301,11 +303,11 @@ ephy_cell_renderer_progress_get_size (GtkCellRenderer *cell,
   gint w, h;
   
   if (cellprogress->priv->min_w < 0)
-    compute_dimensions (widget, _("Unknown"),
+    compute_dimensions (cell, widget, _("Unknown"),
 			&cellprogress->priv->min_w,
 			&cellprogress->priv->min_h);
   
-  compute_dimensions (widget, cellprogress->priv->label, &w, &h);
+  compute_dimensions (cell, widget, cellprogress->priv->label, &w, &h);
   
   if (width)
       *width = MAX (cellprogress->priv->min_w, w);
@@ -335,11 +337,11 @@ ephy_cell_renderer_progress_render (GtkCellRenderer *cell,
   
   gc = gdk_gc_new (window);
   
-  x = cell_area->x + XPAD;
-  y = cell_area->y + YPAD;
+  x = cell_area->x + cell->xpad;
+  y = cell_area->y + cell->ypad;
   
-  w = cell_area->width - XPAD * 2;
-  h = cell_area->height - YPAD * 2;
+  w = cell_area->width - cell->xpad * 2;
+  h = cell_area->height - cell->ypad * 2;
   
   gdk_gc_set_rgb_fg_color (gc, &widget->style->fg[GTK_STATE_NORMAL]);
   gdk_draw_rectangle (window, gc, TRUE, x, y, w, h);
@@ -352,7 +354,7 @@ ephy_cell_renderer_progress_render (GtkCellRenderer *cell,
   gdk_draw_rectangle (window, gc, TRUE, x, y, w, h);
   
   gdk_gc_set_rgb_fg_color (gc, &widget->style->bg[GTK_STATE_SELECTED]);
-  perc_w = w * cellprogress->priv->value / 100;
+  perc_w = w * MAX (0, cellprogress->priv->value) / 100;
   gdk_draw_rectangle (window, gc, TRUE, is_rtl ? (x + w - perc_w) : x, y, perc_w, h);
   
   layout = gtk_widget_create_pango_layout (widget, cellprogress->priv->label);
