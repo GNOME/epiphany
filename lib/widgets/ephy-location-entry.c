@@ -49,7 +49,6 @@ struct _EphyLocationEntryPrivate {
 	EphyAutocompletion *autocompletion;
 	EphyAutocompletionWindow *autocompletion_window;
 	gboolean autocompletion_window_visible;
-	gint autocompletion_timeout;
 	gint show_alternatives_timeout;
 	gboolean block_set_autocompletion_key;
 	gboolean going_to_site;
@@ -386,6 +385,14 @@ ephy_location_entry_autocompletion_hide_alternatives (EphyLocationEntry *w)
 		ephy_autocompletion_window_hide (p->autocompletion_window);
 		p->autocompletion_window_visible = FALSE;
 	}
+
+	p->autocompletion_window_visible = FALSE;
+
+	if (p->show_alternatives_timeout)
+	{
+		g_source_remove (p->show_alternatives_timeout);
+		p->show_alternatives_timeout = 0;
+	}
 }
 
 static void
@@ -461,12 +468,6 @@ insert_text_cb (GtkWidget *editable,
 	if (!GTK_WINDOW (window)->has_focus) return;
 
 	if (p->going_to_site) return;
-
-        if (p->autocompletion_timeout != 0)
-	{
-                g_source_remove (p->autocompletion_timeout);
-		p->autocompletion_timeout = 0;
-	}
 
         if (p->show_alternatives_timeout != 0)
 	{
@@ -710,12 +711,6 @@ ephy_location_entry_autocompletion_window_hidden_cb (EphyAutocompletionWindow *a
 	{
 		g_source_remove (p->show_alternatives_timeout);
 		p->show_alternatives_timeout = 0;
-	}
-
-	if (p->autocompletion_timeout)
-	{
-		g_source_remove (p->autocompletion_timeout);
-		p->autocompletion_timeout = 0;
 	}
 }
 
