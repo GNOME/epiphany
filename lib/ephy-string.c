@@ -25,40 +25,39 @@
 #include <libgnomevfs/gnome-vfs-mime.h>
 #include <libxml/parser.h>
 
+#define ELLIPSIS "\xe2\x80\xa6"
+
 /**
  * ephy_string_shorten: returns a newly allocated shortened version of str.
- * the new string will be no longer than target_length characters, and will
- * be of the form "http://blahblah...blahblah.html".
+ * The input must be valid utf-8.
+ * @str: the string to shorten
+ * @target_length: the length of the shortened string (in characters)
+ *
+ * FIXME: this function is a big mess. While it is utf-8 safe now,
+ * it can still split a sequence of combining characters
  */
 gchar *
 ephy_string_shorten (const gchar *str, gint target_length)
 {
 	gchar *new_str;
-	gint actual_length, first_length, second_length;
+	glong actual_length;
+	gulong bytes;
 
 	if (!str) return NULL;
 
-	actual_length = strlen (str);
+	actual_length = g_utf8_strlen (str, -1);
 
 	/* if the string is already short enough, or if it's too short for
 	 * us to shorten it, return a new copy */
-	if (actual_length <= target_length ||
-	    actual_length <= 3)
-		return g_strdup (str);
-
-	/* allocate new string */
-	new_str = g_new (gchar, target_length + 1);
-
-	/* calc lengths to take from beginning and ending of str */
-	second_length = (target_length - 3) / 2;
-	first_length = target_length - 3 - second_length;
+	if (actual_length <= target_length) return g_strdup (str);
 
 	/* create string */
-	strncpy (new_str, str, first_length);
-	strncpy (new_str + first_length, "...", 3);
-	strncpy (new_str + first_length + 3,
-		 str + actual_length - second_length, second_length);
-	new_str[target_length] = '\0';
+	bytes = GPOINTER_TO_UINT (g_utf8_offset_to_pointer (str, target_length - 1) - str);
+	
+	new_str = g_new0 (gchar, bytes + strlen(ELLIPSIS) + 1);
+	
+	strncpy (new_str, str, bytes);
+	strncpy (new_str + bytes, ELLIPSIS, strlen (ELLIPSIS));
 
 	return new_str;
 }
