@@ -43,8 +43,15 @@ BUILT_SOURCES = \
 	eggtypebuiltins.c \
 	eggtypebuiltins.h
 
-eggmarshalers.h: eggmarshalers.list
-	$(GLIB_GENMARSHAL) --prefix=_egg_marshal $(srcdir)/eggmarshalers.list --header > eggmarshalers.h
+stamp_files = \
+	stamp-eggmarshalers.h \
+	stamp-eggtypebuiltins.h
+
+eggmarshalers.h: stamp-eggmarshalers.h
+	@true
+stamp-eggmarshalers.h: eggmarshalers.list
+	$(GLIB_GENMARSHAL) --prefix=_egg_marshal $(srcdir)/eggmarshalers.list --header > eggmarshalers.h \
+	&& echo timestamp > $(@F)
 
 eggmarshalers.c: eggmarshalers.list
 	$(GLIB_GENMARSHAL) --prefix=_egg_marshal $(srcdir)/eggmarshalers.list --header --body > eggmarshalers.c
@@ -66,7 +73,9 @@ eggtypebuiltins.c: $(EGGHEADERS)
 	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
 	&& rm -f xgen-$(@F)
 
-eggtypebuiltins.h: $(EGGHEADERS)
+eggtypebuiltins.h: stamp-eggtypebuiltins.h
+	@true
+stamp-eggtypebuiltins.h: $(EGGHEADERS)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
 		--fhead "#ifndef __EGGTYPEBUILTINS_H__\n" \
 		--fhead "#define __EGGTYPEBUILTINS_H__ 1\n\n" \
@@ -78,10 +87,11 @@ eggtypebuiltins.h: $(EGGHEADERS)
 		--eprod "#define EGG_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
 		--eprod "GType @enum_name@_get_type (void);\n" \
 		$(^F) ) > xgen-$(@F) \
-	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
-	&& rm -f xgen-$(@F)
+	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
+	&& rm -f xgen-$(@F) \
+	&& echo timestamp > $(@F)
 
-EXTRA_DIST=			\
+EXTRA_DIST = \
 	eggmarshalers.list
 
 EGGFILES=$(EGGSOURCES) $(EGGHEADERS)
@@ -92,3 +102,4 @@ regenerate-built-sources:
 
 CLEANFILES = $(BUILT_SOURCES)
 DISTCLEAN_FILES = $(BUILT_SOURCES)
+MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)

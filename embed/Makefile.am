@@ -92,6 +92,10 @@ BUILT_SOURCES = \
 
 CLEAN_FILES = $(BUILT_SOURCES)
 DISTCLEAN_FILES = $(BUILT_SOURCES)
+MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
+
+stamp_files = \
+	stamp-ephy-embed-type-builtins.h
 
 ephy-embed-type-builtins.c: $(TYPES_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
@@ -110,7 +114,9 @@ ephy-embed-type-builtins.c: $(TYPES_H_FILES)
 	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
 	&& rm -f xgen-$(@F)
 
-ephy-embed-type-builtins.h: $(TYPES_H_FILES)
+ephy-embed-type-builtins.h: stamp-ephy-embed-type-builtins.h
+	@true
+stamp-ephy-embed-type-builtins.h: $(TYPES_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
 		--fhead "#ifndef EPHY_EMBED_TYPE_BUILTINS_H\n" \
 		--fhead "#define EPHY_EMBED_TYPE_BUILTINS_H 1\n\n" \
@@ -122,5 +128,6 @@ ephy-embed-type-builtins.h: $(TYPES_H_FILES)
 		--eprod "#define EPHY_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
 		--eprod "GType @enum_name@_get_type (void);\n" \
 		$(^F) ) > xgen-$(@F) \
-	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
-	&& rm -f xgen-$(@F)
+	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
+	&& rm -f xgen-$(@F) \
+	&& echo timestamp > $(@F)

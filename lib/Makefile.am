@@ -81,12 +81,20 @@ BUILT_SOURCES = \
 
 CLEAN_FILES = $(BUILT_SOURCES)
 DISTCLEAN_FILES = $(BUILT_SOURCES)
+MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
+
+stamp_files = \
+	stamp-ephy-lib-type-builtins.h	\
+	stamp-ephy-marshal.h
 
 ephy-marshal.c: ephy-marshal.list
 	$(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header --body > ephy-marshal.c
 
-ephy-marshal.h: ephy-marshal.list
-	$(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header > ephy-marshal.h
+ephy-marshal.h: stamp-ephy-marshal.h
+	@true
+stamp-ephy-marshal.h: ephy-marshal.list
+	$(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header > ephy-marshal.h \
+	&& echo timestamp > $(@F)
 
 ephy-lib-type-builtins.c: $(TYPES_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
@@ -105,7 +113,9 @@ ephy-lib-type-builtins.c: $(TYPES_H_FILES)
 	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
 	&& rm -f xgen-$(@F)
 
-ephy-lib-type-builtins.h: $(TYPES_H_FILES)
+ephy-lib-type-builtins.h: stamp-ephy-lib-type-builtins.h
+	@true
+stamp-ephy-lib-type-builtins.h: $(TYPES_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
 		--fhead "#ifndef EPHY_LIB_TYPE_BUILTINS_H\n" \
 		--fhead "#define EPHY_LIB_TYPE_BUILTINS_H 1\n\n" \
@@ -117,8 +127,9 @@ ephy-lib-type-builtins.h: $(TYPES_H_FILES)
 		--eprod "#define EPHY_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
 		--eprod "GType @enum_name@_get_type (void);\n" \
 		$(^F) ) > xgen-$(@F) \
-	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
-	&& rm -f xgen-$(@F)
+	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
+	&& rm -f xgen-$(@F) \
+	&& echo timestamp > $(@F)
 
 EXTRA_DIST = 			\
 	ephy-marshal.list

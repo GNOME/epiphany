@@ -150,6 +150,9 @@ TYPES_SOURCE = \
 	ephy-type-builtins.c	\
 	ephy-type-builtins.h
 
+stamp_files = \
+	stamp-ephy-type-builtins.h
+
 ephy-type-builtins.c: $(INST_H_FILES) $(NOINST_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
 		--fhead "#include \"ephy-type-builtins.h\"\n\n" \
@@ -167,7 +170,9 @@ ephy-type-builtins.c: $(INST_H_FILES) $(NOINST_H_FILES)
 	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
 	&& rm -f xgen-$(@F)
 
-ephy-type-builtins.h: $(INST_H_FILES) $(NOINST_H_FILES)
+ephy-type-builtins.h: stamp-ephy-type-builtins.h
+	@true
+stamp-ephy-type-builtins.h: $(INST_H_FILES) $(NOINST_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
 		--fhead "#ifndef EPHY_TYPE_BUILTINS_H\n" \
 		--fhead "#define EPHY_TYPE_BUILTINS_H 1\n\n" \
@@ -179,8 +184,9 @@ ephy-type-builtins.h: $(INST_H_FILES) $(NOINST_H_FILES)
 		--eprod "#define EPHY_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
 		--eprod "GType @enum_name@_get_type (void);\n" \
 		$(^F) ) > xgen-$(@F) \
-	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
-	&& rm -f xgen-$(@F)
+	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
+	&& rm -f xgen-$(@F) \
+	&& echo timestamp > $(@F)
 
 CLEANFILES = $(BUILT_SOURCES)
 DISTCLEANFILES = $(BUILT_SOURCES)
