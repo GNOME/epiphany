@@ -10,7 +10,7 @@ DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.sgml
 # The directory containing the source code. Relative to $(srcdir).
 # gtk-doc will search all .c & .h files beneath here for inline comments
 # documenting functions and macros.
-DOC_SOURCE_DIR=../../lib
+DOC_SOURCE_DIR=../..
 
 # Extra options to supply to gtkdoc-scan.
 SCAN_OPTIONS=
@@ -22,11 +22,11 @@ MKDB_OPTIONS=--sgml-mode --output-format=xml
 FIXXREF_OPTIONS=
 
 # Used for dependencies.
-HFILE_GLOB=
-CFILE_GLOB=
+HFILE_GLOB=$(top_srcdir)/lib/*.h
+CFILE_GLOB=$(top_srcdir)/lib/*.c
 
 # Header files to ignore when scanning.
-IGNORE_HFILES=
+IGNORE_HFILES= BaseProtocolContentHandler.h BaseProtocolHandler.h ContentHandler.h EphyAboutRedirector.h EphyBrowser.h EphyEventListener.h EphyHeaderSniffer.h EventContext.h ExternalProtocolHandlers.h ExternalProtocolService.h FilePicker.h GlobalHistory.h GtkNSSClientAuthDialogs.h GtkNSSDialogs.h GtkNSSKeyPairDialogs.h MozDownload.h mozilla-download.h mozilla-embed.h mozilla-embed-persist.h mozilla-embed-single.h mozilla-notifiers.h MozillaPrivate.h MozRegisterComponents.h nsUnicharUtils.h PrintingPromptService.h
 
 # Images to copy into HTML directory.
 HTML_IMAGES =
@@ -51,7 +51,6 @@ GTKDOC_LIBS = \
 	$(top_builddir)/embed/libephyembed.la \
 	$(top_builddir)/lib/libephy.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
-	$(top_builddir)/src/libephymain.la \
 	$(EPIPHANY_DEPENDENCY_LIBS)
 
 # If you need to override some of the declarations, place them in the
