@@ -321,6 +321,23 @@ mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *embed,
 }
 
 static void
+mozilla_init_plugin_path ()
+{
+	const char *user_path;
+	char *new_path;
+
+	user_path = g_getenv ("MOZ_PLUGIN_PATH");
+	new_path = g_strconcat (user_path ? user_path : "",
+				user_path ? ":" : "",
+				MOZILLA_PREFIX "/lib/mozilla/plugins:"
+				MOZILLA_HOME "/plugins",
+				NULL);
+
+	g_setenv ("MOZ_PLUGIN_PATH", new_path, TRUE);
+	g_free (new_path);
+}
+
+static void
 mozilla_init_single (MozillaEmbedSingle *mes)
 {	
 	GtkMozEmbedSingle *single;
@@ -463,6 +480,7 @@ static gboolean
 init_services (MozillaEmbedSingle *single)
 {
 	/* Pre initialization */
+	mozilla_init_plugin_path ();
 	mozilla_init_home ();
 	mozilla_init_profile ();
 
