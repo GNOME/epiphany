@@ -645,5 +645,5 @@ ephy_node_view_set_hinted (EphyNodeView *view, gboolean hinted)
 {
 	g_return_if_fail (view != NULL);
 
-	gtk_tree_view_set_rules_hint (view->priv->treeview, hinted);
+	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view->priv->treeview), hinted);
 }
