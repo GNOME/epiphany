@@ -1,5 +1,12 @@
 2004-03-05  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-file-helpers.c: (ephy_file_downloads_dir):
+
+	Don't assume Desktop directory location, check the gconf key if it's
+	$HOME/Desktop or $HOME. Fixes bug #134951.
+
+2004-03-05  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/EphyHeaderSniffer.cpp:
 
 	Replace filename validity check, it was making the filename invalid

@@ -31,6 +31,8 @@
 #include <libgnome/gnome-init.h>
 
 #include "ephy-file-helpers.h"
+#include "ephy-prefs.h"
+#include "eel-gconf-extensions.h"
 
 static GHashTable *files = NULL;
 
@@ -67,14 +69,27 @@ ephy_file_downloads_dir (void)
 {
 	const char *translated_folder;
 	char *converted, *downloads_dir;
+	gboolean desktop_is_home;
 
 	/* The name of the default downloads folder */
 	translated_folder = _("Downloads");
 
 	converted = g_filename_from_utf8 (translated_folder, -1, NULL, 
 					  NULL, NULL);
-	downloads_dir = g_build_filename (g_get_home_dir (), "Desktop",
-					  converted, NULL);
+
+	desktop_is_home = eel_gconf_get_boolean (CONF_DESKTOP_IS_HOME_DIR);
+
+	if (desktop_is_home)
+	{
+		downloads_dir = g_build_filename
+			(g_get_home_dir (), converted, NULL);
+	}
+	else
+	{
+		downloads_dir = g_build_filename
+			(g_get_home_dir (), "Desktop", converted, NULL);
+	}
+
 	g_free (converted);
 
 	return downloads_dir;
