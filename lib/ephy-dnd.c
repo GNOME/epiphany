@@ -27,6 +27,7 @@ static GtkTargetEntry url_drag_types [] =
         { EPHY_DND_TEXT_TYPE,       0, EPHY_DND_TEXT },
         { EPHY_DND_URL_TYPE,        0, EPHY_DND_URL }
 };
+static int n_url_drag_types = G_N_ELEMENTS (url_drag_types);
 
 /* Encode a "_NETSCAPE_URL_" selection.
  * As far as I can tell, Netscape is expecting a single
@@ -94,7 +95,7 @@ ephy_dnd_url_drag_source_set (GtkWidget *widget)
 	gtk_drag_source_set (widget,
                              GDK_BUTTON1_MASK,
 			     url_drag_types,
-			     G_N_ELEMENTS (url_drag_types),
+			     n_url_drag_types,
                              GDK_ACTION_COPY);
 }
 
@@ -103,7 +104,7 @@ ephy_dnd_enable_model_drag_source (GtkWidget *treeview)
 {
 	gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (treeview),
 						GDK_BUTTON1_MASK,
-						url_drag_types, G_N_ELEMENTS (url_drag_types),
+						url_drag_types, n_url_drag_types,
 						GDK_ACTION_COPY);
 }
 

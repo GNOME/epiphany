@@ -31,14 +31,12 @@ G_BEGIN_DECLS
 #define EPHY_DND_URI_LIST_TYPE          "text/uri-list"
 #define EPHY_DND_TEXT_TYPE              "text/plain"
 #define EPHY_DND_URL_TYPE               "_NETSCAPE_URL"
-#define EPHY_DND_EPHY_URL_TYPE		"EPHY_URL"
-#define EPHY_DND_EPHY_BOOKMARK_TYPE	"EPHY_BOOKMARK"
 
 /* Standard Drag & Drop types. */
 typedef enum {
         EPHY_DND_URI_LIST,
-        EPHY_DND_URL,
         EPHY_DND_TEXT,
+        EPHY_DND_URL
 } EphyIconDndTargetType;
 
 typedef void (* EphyDragEachSelectedItemDataGet)    (const char *url,

@@ -44,9 +44,7 @@ static GtkTargetEntry dest_drag_types [] =
 
 static GtkTargetEntry source_drag_types [] =
 {
-        { "EPHY_TOOLBAR_BUTTON", 0, 0 },
-	/* FIXME generic way to add types */
-        { EPHY_DND_URL_TYPE, 0, EPHY_DND_URL }
+        { "EPHY_TOOLBAR_BUTTON", 0, 0 }
 };
 
 static void ephy_editable_toolbar_class_init (EphyEditableToolbarClass *klass);
@@ -90,6 +88,7 @@ typedef struct
 {
 	gboolean separator;
 	EggAction *action;
+	char *type;
 } ItemNode;
 
 GType
@@ -133,13 +132,14 @@ toolbar_node_new (void)
 }
 
 static ItemNode *
-item_node_new (EggAction *action, gboolean separator)
+item_node_new (EggAction *action, const char *type, gboolean separator)
 {
 	ItemNode *item;
 
 	item = g_new0 (ItemNode, 1);
 	item->action = action;
 	item->separator = separator;
+	item->type = type ? g_strdup (type) : NULL;
 
 	return item;
 }
@@ -220,7 +220,7 @@ add_action (EphyEditableToolbar *t,
 		action = ephy_editable_toolbar_get_action (t, type, name);
 	}
 
-	item = item_node_new (action, separator);
+	item = item_node_new (action, type, separator);
 	node = g_node_new (item);
 
 	g_node_insert_before (parent, sibling, node);
@@ -236,11 +236,14 @@ parse_item_list (EphyEditableToolbar *t,
 		if (xmlStrEqual (child->name, "toolitem"))
 		{
 			xmlChar *verb;
+			xmlChar *type;
 
 			verb = xmlGetProp (child, "verb");
-			add_action (t, parent, NULL, NULL, verb);
+			type = xmlGetProp (child, "type");
+			add_action (t, parent, NULL, type, verb);
 
 			xmlFree (verb);
+			xmlFree (type);
 		}
 		else if (xmlStrEqual (child->name, "separator"))
 		{
@@ -364,6 +367,10 @@ toolbar_list_to_xml (EphyEditableToolbar *t, GNode *tl)
 			{
 				node = xmlNewChild (tnode, NULL, "toolitem", NULL);
 				xmlSetProp (node, "verb", item->action->name);
+				if (item->type)
+				{
+					xmlSetProp (node, "type", item->type);
+				}
 			}
 		}
 	}
@@ -454,6 +461,8 @@ drag_data_received_cb (GtkWidget *widget,
 	GNode *toolbar;
 	GNode *parent;
 	GNode *sibling;
+	const char *type = NULL;
+	GdkAtom target;
 
 	toolbar = (GNode *)g_object_get_data (G_OBJECT (widget), "toolbar_node");
 
@@ -468,7 +477,13 @@ drag_data_received_cb (GtkWidget *widget,
 		parent = toolbar;
 	}
 
-	add_action (etoolbar, parent, sibling, NULL, selection_data->data);
+	target = gtk_drag_dest_find_target (widget, context, NULL);
+	if (target == gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE))
+	{
+		type = EPHY_DND_URL_TYPE;
+	}
+
+	add_action (etoolbar, parent, sibling, type, selection_data->data);
 
 	queue_ui_update (etoolbar);
 }
@@ -529,7 +544,8 @@ setup_toolbar_drag (EphyEditableToolbar *etoolbar, GNode *toolbars)
 			g_object_set_data (G_OBJECT (toolbar), "drag_dest_set",
 					   GINT_TO_POINTER (TRUE));
 			gtk_drag_dest_set (toolbar, GTK_DEST_DEFAULT_ALL,
-					   dest_drag_types, 2, GDK_ACTION_MOVE);
+					   dest_drag_types, 2,
+					   GDK_ACTION_MOVE | GDK_ACTION_COPY);
 			g_signal_connect (toolbar, "drag_data_received",
 					  G_CALLBACK (drag_data_received_cb),
 					  etoolbar);
@@ -563,7 +579,8 @@ setup_toolbar_drag (EphyEditableToolbar *etoolbar, GNode *toolbars)
 				g_object_set_data (G_OBJECT (toolitem), "drag_dest_set",
 						   GINT_TO_POINTER (TRUE));
 				gtk_drag_dest_set (toolitem, GTK_DEST_DEFAULT_ALL,
-						   dest_drag_types, 2, GDK_ACTION_MOVE);
+						   dest_drag_types, 2,
+						   GDK_ACTION_COPY | GDK_ACTION_MOVE);
 				g_signal_connect (toolitem, "drag_data_received",
 						  G_CALLBACK (drag_data_received_cb),
 						  etoolbar);

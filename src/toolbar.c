@@ -129,14 +129,7 @@ toolbar_get_action (EphyEditableToolbar *etoolbar,
 
 		snprintf (action_name, 255, "GoBookmarkId%ld", id);
 		action = ephy_bookmark_action_new (name, id);
-	}
-	else if (g_str_has_prefix (name, "GoBookmarkId"))
-	{
-		ephy_str_to_int (name + strlen ("GoBookmarkId"), &id);
-	}
 
-	if (action)
-	{
 		g_signal_connect (action, "go_location",
 				  G_CALLBACK (go_location_cb), t->priv->window);
 		egg_action_group_add_action (t->priv->action_group, action);
