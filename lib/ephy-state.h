@@ -38,6 +38,7 @@ void ephy_state_add_window	(GtkWidget *window,
 				 const char *name,
 				 int default_width,
 				 int default_heigth,
+				 gboolean maximize,
 				 EphyStateWindowFlags flags);
 
 void ephy_state_add_paned	(GtkWidget *paned,

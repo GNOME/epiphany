@@ -907,9 +907,8 @@ window_cmd_edit_toolbar (GtkAction *action,
 	
 	g_signal_connect (G_OBJECT (dialog), "response",
 			  G_CALLBACK (toolbar_editor_response_cb), model);
-	ephy_state_add_window (dialog,
-			       "toolbar_editor",
-		               500, 330,
+	ephy_state_add_window (dialog, "toolbar_editor",
+		               500, 330, FALSE,
 			       EPHY_STATE_WINDOW_SAVE_SIZE);
 	gtk_widget_show (dialog);
 

@@ -318,6 +318,7 @@ static EphyNode *
 create_window_node (const char *name,
 		    int default_width,
 		    int default_height,
+		    gboolean maximize,
 		    EphyStateWindowFlags flags)
 {
 	EphyNode *node;
@@ -333,7 +334,7 @@ create_window_node (const char *name,
 	g_value_unset (&value);
 
 	g_value_init (&value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&value, FALSE);
+	g_value_set_boolean (&value, maximize);
 	ephy_node_set_property (node, EPHY_NODE_STATE_PROP_MAXIMIZE,
 			        &value);
 	g_value_unset (&value);
@@ -367,6 +368,7 @@ ephy_state_add_window (GtkWidget *window,
 		       const char *name,
 		       int default_width,
 		       int default_height,
+		       gboolean maximize,
 		       EphyStateWindowFlags flags)
 {
 	EphyNode *node;
@@ -376,7 +378,8 @@ ephy_state_add_window (GtkWidget *window,
 	node = find_by_name (name);
 	if (node == NULL)
 	{
-		node = create_window_node (name, default_width, default_height, flags);
+		node = create_window_node (name, default_width, default_height,
+					   maximize, flags);
 	}
 
 	ephy_state_window_set_size (window, node);

@@ -2631,7 +2631,7 @@ ephy_window_show (GtkWidget *widget)
 		if (width == -1 && height == -1)
 		{
 			ephy_state_add_window (widget, "main_window", 600, 500,
-					       EPHY_STATE_WINDOW_SAVE_SIZE);
+					       TRUE, EPHY_STATE_WINDOW_SAVE_SIZE);
 		}
 
 		window->priv->has_size = TRUE;
