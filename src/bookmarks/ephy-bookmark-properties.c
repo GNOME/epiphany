@@ -302,13 +302,7 @@ build_ui (EphyBookmarkProperties *editor)
 	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 6);
 	gtk_widget_show (table);
-
-	label = gtk_label_new (NULL);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	str = g_strconcat ("<b>", _("Title:"), "</b>", NULL);
-	gtk_label_set_markup (GTK_LABEL (label), str);
-	g_free (str);
-	gtk_widget_show (label);
+	
 	entry = gtk_entry_new ();
 	tmp = ephy_node_get_property_string (editor->priv->bookmark,
 					     EPHY_NODE_BMK_PROP_TITLE);
@@ -319,15 +313,16 @@ build_ui (EphyBookmarkProperties *editor)
 	editor->priv->title_entry = entry;
 	gtk_widget_set_size_request (entry, 200, -1);
 	gtk_widget_show (entry);
+	label = gtk_label_new (NULL);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	str = g_strconcat ("<b>", _("_Title:"), "</b>", NULL);
+	gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), str);
+	g_free (str);
+	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1, GTK_FILL, 0, 0, 0);
 
-	label = gtk_label_new (NULL);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	str = g_strconcat ("<b>", _("Location:"), "</b>", NULL);
-	gtk_label_set_markup (GTK_LABEL (label), str);
-	g_free (str);
-	gtk_widget_show (label);
 	entry = gtk_entry_new ();
 	tmp = ephy_node_get_property_string (editor->priv->bookmark,
 					     EPHY_NODE_BMK_PROP_LOCATION);
@@ -337,21 +332,27 @@ build_ui (EphyBookmarkProperties *editor)
 	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 	editor->priv->location_entry = entry;
 	gtk_widget_show (entry);
+	label = gtk_label_new (NULL);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	str = g_strconcat ("<b>", _("_Location:"), "</b>", NULL);
+	gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), str);
+	g_free (str);
+	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2, GTK_FILL, 0, 0, 0);
-
-	label = gtk_label_new (NULL);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-	str = g_strconcat ("<b>", _("Topics:"), "</b>", NULL);
-	gtk_label_set_markup (GTK_LABEL (label), str);
-	g_free (str);
-	gtk_widget_show (label);
+	
 	topics_selector = ephy_topics_selector_new (editor->priv->bookmarks,
 						    editor->priv->bookmark);
 	gtk_widget_show (topics_selector);
 	editor->priv->topics_selector = topics_selector;
-
-	gtk_widget_show (entry);
+	label = gtk_label_new (NULL);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+	str = g_strconcat ("<b>", _("To_pics:"), "</b>", NULL);
+	gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), str);
+	g_free (str);
+	gtk_label_set_mnemonic_widget (GTK_LABEL (label), topics_selector);
+	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
 	gtk_table_attach (GTK_TABLE (table), topics_selector, 1, 2, 2, 3,
 			  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);

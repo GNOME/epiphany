@@ -1,3 +1,19 @@
+2003-03-30  David Bordoley <bordoley@msu.edu>
+
+	* src/bookmarks/ephy-bookmark-properties.c: (build_ui):
+	* src/bookmarks/ephy-new-bookmark.c: (build_editing_table):
+	Use hotkeys to navigate around the dialog.
+	
+	* src/bookmarks/ephy-topics-selector.c: (mneumonic_activated),
+	(ephy_topics_build_ui), (ephy_topics_selector_new):
+	Catch the mneumonic-activated signal and focus the currently
+	selected item in the list. If no items are selected, select the
+	first item.
+
+	* src/bookmarks/ephy-bookmarks-editor.c: (key_pressed_cb):
+	Change function to return a gboolean and return false
+	if we don't handle the key event (fixes keynav in the bme).
+
 2003-03-30  Xan Lopez  <xan@masilla.org>
 
 	* src/bookmarks/ephy-bookmarks-editor.c:

@@ -523,7 +523,7 @@ bookmarks_filter (EphyBookmarksEditor *editor,
 	ephy_node_filter_done_changing (editor->priv->bookmarks_filter);
 }
 
-static void
+static gboolean
 key_pressed_cb (GtkWidget *widget,
 		GdkEventKey *event,
 		EphyNodeView *view)
@@ -533,11 +533,13 @@ key_pressed_cb (GtkWidget *widget,
 	case GDK_Delete:
 	case GDK_KP_Delete:
 		ephy_node_view_remove (view);
-		break;
+		return TRUE;
 
 	default:
 		break;
 	}
+
+	return FALSE;
 }
 
 static void

@@ -25,6 +25,7 @@
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktreeview.h>
+#include <gtk/gtkwindow.h>
 #include <gdk/gdkkeysyms.h>
 
 static void ephy_topics_selector_class_init (EphyTopicsSelectorClass *klass);
@@ -43,6 +44,7 @@ struct EphyTopicsSelectorPrivate
 {
 	EphyBookmarks *bookmarks;
 	GtkTreeModel *model;
+	GtkWidget *treeview;
 	EphyNode *bookmark;
 };
 
@@ -363,41 +365,60 @@ topic_key_pressed (GtkTreeView *tree_view,
 	return FALSE;	
 }
 
+static gboolean
+mneumonic_activated (GtkWidget *widget,
+                     gboolean arg1,
+                     EphyTopicsSelector *editor)
+{
+	GtkTreeIter iter;
+	GtkTreeSelection* sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (editor->priv->treeview));
+	GtkWidget *window = gtk_widget_get_toplevel (GTK_WIDGET (editor->priv->treeview));
+	
+	if ((sel == NULL)
+	    && gtk_tree_model_get_iter_first (editor->priv->model, &iter))
+	{
+		gtk_tree_selection_select_iter (sel, &iter);
+	}
+	
+	gtk_window_set_focus (GTK_WINDOW (window), GTK_WIDGET (editor->priv->treeview));
+	
+	return TRUE;
+}
+
 static void
 ephy_topics_build_ui (EphyTopicsSelector *editor)
 {
 	GtkListStore *model;
-	GtkWidget *treeview;
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 
 	model = gtk_list_store_new (3, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_POINTER);
 	editor->priv->model = GTK_TREE_MODEL (model);
 
-	treeview = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
-	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (treeview), FALSE);
+	editor->priv->treeview = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
+	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (editor->priv->treeview), FALSE);
 	g_idle_add ((GSourceFunc) set_sort_column_id, model);
-	gtk_widget_show (treeview);
+	gtk_widget_show (editor->priv->treeview);
 	g_object_unref (model);
 
 	/* Has topic column */
 	renderer = gtk_cell_renderer_toggle_new ();
 	column = gtk_tree_view_column_new_with_attributes
 		("", renderer, "active", COL_HAS_TOPIC, NULL);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
+	gtk_tree_view_append_column (GTK_TREE_VIEW (editor->priv->treeview), column);
 
 	renderer = gtk_cell_renderer_text_new ();
 	column = gtk_tree_view_column_new_with_attributes
 		("Description", renderer, "text", COL_TOPIC, NULL);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
+	gtk_tree_view_append_column (GTK_TREE_VIEW (editor->priv->treeview), column);
 	
-	g_signal_connect (G_OBJECT (treeview), "key_press_event",
+	g_signal_connect (G_OBJECT (editor->priv->treeview), "key_press_event",
 			  G_CALLBACK (topic_key_pressed), editor);
-	g_signal_connect (G_OBJECT (treeview), "button_press_event",
+	g_signal_connect (G_OBJECT (editor->priv->treeview), "button_press_event",
 			  G_CALLBACK (topic_clicked), editor);
 	fill_model (editor);
 
-	gtk_container_add (GTK_CONTAINER (editor), treeview);
+	gtk_container_add (GTK_CONTAINER (editor), editor->priv->treeview);
 }
 
 static void
@@ -428,6 +449,8 @@ ephy_topics_selector_new (EphyBookmarks *bookmarks,
 			 NULL));
 
 	ephy_topics_build_ui (editor);
+	g_signal_connect (G_OBJECT (editor), "mnemonic-activate",
+			  G_CALLBACK (mneumonic_activated), editor);
 
 	return GTK_WIDGET (editor);
 }
