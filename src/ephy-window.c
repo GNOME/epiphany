@@ -435,6 +435,8 @@ update_exit_fullscreen_popup_position (EphyWindow *window)
 	GdkRectangle screen_rect;
 	int popup_height;
 
+	g_return_if_fail (window->priv->exit_fullscreen_popup != NULL);
+
 	gtk_window_get_size (GTK_WINDOW (window->priv->exit_fullscreen_popup),
                              NULL, &popup_height);
 
@@ -602,7 +604,7 @@ ephy_window_fullscreen (EphyWindow *window)
 
 	g_signal_connect (G_OBJECT (gdk_screen_get_default ()),
                           "size-changed", G_CALLBACK (size_changed_cb),
-			  popup);
+			  window);
 
 	update_chromes_visibility (window);
 }
