@@ -32,57 +32,7 @@
 static void ephy_tree_model_node_class_init (EphyTreeModelNodeClass *klass);
 static void ephy_tree_model_node_init (EphyTreeModelNode *model);
 static void ephy_tree_model_node_finalize (GObject *object);
-static void ephy_tree_model_node_set_property (GObject *object,
-					       guint prop_id,
-					       const GValue *value,
-					       GParamSpec *pspec);
-static void ephy_tree_model_node_get_property (GObject *object,
-					       guint prop_id,
-					       GValue *value,
-					       GParamSpec *pspec);
-static guint ephy_tree_model_node_get_flags (GtkTreeModel *tree_model);
-static gboolean ephy_tree_model_node_get_iter (GtkTreeModel *tree_model,
-					       GtkTreeIter *iter,
-					       GtkTreePath *path);
-static GtkTreePath *ephy_tree_model_node_get_path (GtkTreeModel *tree_model,
-						   GtkTreeIter *iter);
-static gboolean	ephy_tree_model_node_iter_next (GtkTreeModel *tree_model,
-					        GtkTreeIter *iter);
-static gboolean	ephy_tree_model_node_iter_children (GtkTreeModel *tree_model,
-						    GtkTreeIter *iter,
-						    GtkTreeIter *parent);
-static gboolean	ephy_tree_model_node_iter_has_child (GtkTreeModel *tree_model,
-						     GtkTreeIter *iter);
-static int ephy_tree_model_node_iter_n_children (GtkTreeModel *tree_model,
-					         GtkTreeIter *iter);
-static gboolean	ephy_tree_model_node_iter_nth_child (GtkTreeModel *tree_model,
-						     GtkTreeIter *iter,
-						     GtkTreeIter *parent,
-					             int n);
-static gboolean	ephy_tree_model_node_iter_parent (GtkTreeModel *tree_model,
-					          GtkTreeIter *iter,
-					          GtkTreeIter *child);
 static void ephy_tree_model_node_tree_model_init (GtkTreeModelIface *iface);
-static void root_child_removed_cb (EphyNode *node,
-				   EphyNode *child,
-				   guint old_index,
-				   EphyTreeModelNode *model);
-static void root_child_added_cb (EphyNode *node,
-				 EphyNode *child,
-				 EphyTreeModelNode *model);
-static void root_child_changed_cb (EphyNode *node,
-				   EphyNode *child,
-		                   EphyTreeModelNode *model);
-static void root_children_reordered_cb (EphyNode *node,
-				     int *new_order,
-				     EphyTreeModelNode *model);
-static inline void ephy_tree_model_node_update_node (EphyTreeModelNode *model,
-				                     EphyNode *node,
-					             int idx);
-static void root_destroy_cb (EphyNode *node,
-		             EphyTreeModelNode *model);
-static inline GtkTreePath *get_path_real (EphyTreeModelNode *model,
-	                                  EphyNode *node);
 
 #define EPHY_TREE_MODEL_NODE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TREE_MODEL_NODE, EphyTreeModelNodePrivate))
 
@@ -94,6 +44,8 @@ struct EphyTreeModelNodePrivate
 
 	GPtrArray *columns;
 	int columns_num;
+
+	int stamp;
 };
 
 typedef struct
@@ -153,57 +105,100 @@ ephy_tree_model_node_get_type (void)
 }
 
 static void
-ephy_tree_model_node_class_init (EphyTreeModelNodeClass *klass)
+root_child_removed_cb (EphyNode *node,
+		       EphyNode *child,
+		       guint old_index,
+		       EphyTreeModelNode *model)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GtkTreePath *path;
 
-	parent_class = g_type_class_peek_parent (klass);
+	path = gtk_tree_path_new ();
+	gtk_tree_path_append_index (path, old_index);
+	gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
+	gtk_tree_path_free (path);
+}
 
-	object_class->finalize = ephy_tree_model_node_finalize;
+static inline GtkTreePath *
+get_path_real (EphyTreeModelNode *model,
+	       EphyNode *node)
+{
+	GtkTreePath *retval;
 
-	object_class->set_property = ephy_tree_model_node_set_property;
-	object_class->get_property = ephy_tree_model_node_get_property;
+	retval = gtk_tree_path_new ();
+	gtk_tree_path_append_index (retval, ephy_node_get_child_index (model->priv->root, node));
 
-	g_object_class_install_property (object_class,
-					 PROP_ROOT,
-					 g_param_spec_pointer ("root",
-							      "Root node",
-							      "Root node",
-							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-	g_object_class_install_property (object_class,
-					 PROP_FILTER,
-					 g_param_spec_object ("filter",
-							      "Filter object",
-							      "Filter object",
-							      EPHY_TYPE_NODE_FILTER,
-							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-	g_type_class_add_private (object_class, sizeof (EphyTreeModelNodePrivate));
+	return retval;
 }
 
 static void
-ephy_tree_model_node_init (EphyTreeModelNode *model)
+root_child_added_cb (EphyNode *node,
+		     EphyNode *child,
+		     EphyTreeModelNode *model)
 {
-	do
+	GtkTreePath *path;
+	GtkTreeIter iter;
+
+	ephy_tree_model_node_iter_from_node (model, child, &iter);
+
+	path = get_path_real (model, child);
+	gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
+	gtk_tree_path_free (path);
+}
+
+static inline void
+ephy_tree_model_node_update_node (EphyTreeModelNode *model,
+				  EphyNode *node,
+				  int idx)
+{
+	GtkTreePath *path;
+	GtkTreeIter iter;
+
+	ephy_tree_model_node_iter_from_node (model, node, &iter);
+
+	if (idx >= 0)
 	{
-		model->stamp = g_random_int ();
+		path = gtk_tree_path_new ();
+		gtk_tree_path_append_index (path, idx);
 	}
-	while (model->stamp == 0);
+	else
+	{
+		path = get_path_real (model, node);
+	}
 
-	model->priv = EPHY_TREE_MODEL_NODE_GET_PRIVATE (model);
+	LOG ("Updating row")
 
-	model->priv->columns = g_ptr_array_new ();
-	model->priv->columns_num = EPHY_TREE_MODEL_NODE_BUILTIN_COLUMNS;
+	gtk_tree_model_row_changed (GTK_TREE_MODEL (model), path, &iter);
+	gtk_tree_path_free (path);
 }
 
 static void
-ephy_tree_model_node_finalize (GObject *object)
+root_child_changed_cb (EphyNode *node,
+		       EphyNode *child,
+		       EphyTreeModelNode *model)
 {
-	EphyTreeModelNode *model = EPHY_TREE_MODEL_NODE (object);
+	ephy_tree_model_node_update_node (model, child, -1);
+}
 
-	g_ptr_array_free (model->priv->columns, TRUE);
+static void
+root_children_reordered_cb (EphyNode *node,
+			    int *new_order,
+			    EphyTreeModelNode *model)
+{
+	GtkTreePath *path;
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	path = gtk_tree_path_new ();
+	gtk_tree_model_rows_reordered (GTK_TREE_MODEL (model), path, NULL, new_order);
+	gtk_tree_path_free (path);
+}
+
+static void
+root_destroy_cb (EphyNode *node,
+		 EphyTreeModelNode *model)
+{
+	model->priv->root = NULL;
+
+	/* no need to do other stuff since we should have had a bunch of child_removed
+	 * signals already */
 }
 
 static void
@@ -300,6 +295,54 @@ ephy_tree_model_node_get_property (GObject *object,
 	}
 }
 
+static void
+ephy_tree_model_node_class_init (EphyTreeModelNodeClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	parent_class = g_type_class_peek_parent (klass);
+
+	object_class->finalize = ephy_tree_model_node_finalize;
+
+	object_class->set_property = ephy_tree_model_node_set_property;
+	object_class->get_property = ephy_tree_model_node_get_property;
+
+	g_object_class_install_property (object_class,
+					 PROP_ROOT,
+					 g_param_spec_pointer ("root",
+							      "Root node",
+							      "Root node",
+							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+	g_object_class_install_property (object_class,
+					 PROP_FILTER,
+					 g_param_spec_object ("filter",
+							      "Filter object",
+							      "Filter object",
+							      EPHY_TYPE_NODE_FILTER,
+							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof (EphyTreeModelNodePrivate));
+}
+
+static void
+ephy_tree_model_node_init (EphyTreeModelNode *model)
+{
+	model->priv = EPHY_TREE_MODEL_NODE_GET_PRIVATE (model);
+	model->priv->stamp = g_random_int ();
+	model->priv->columns = g_ptr_array_new ();
+	model->priv->columns_num = EPHY_TREE_MODEL_NODE_BUILTIN_COLUMNS;
+}
+
+static void
+ephy_tree_model_node_finalize (GObject *object)
+{
+	EphyTreeModelNode *model = EPHY_TREE_MODEL_NODE (object);
+
+	g_ptr_array_free (model->priv->columns, TRUE);
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
 EphyTreeModelNode *
 ephy_tree_model_node_new (EphyNode *root,
 			  EphyNodeFilter *filter)
@@ -322,6 +365,7 @@ ephy_tree_model_node_add_prop_column (EphyTreeModelNode *model,
 				      int prop_id)
 {
 	EphyTreeModelNodeColData *col;
+	int col_id;
 
 	col = g_new0 (EphyTreeModelNodeColData, 1);
 	col->prop_id = prop_id;
@@ -330,9 +374,10 @@ ephy_tree_model_node_add_prop_column (EphyTreeModelNode *model,
 	col->user_data = NULL;
 
 	g_ptr_array_add (model->priv->columns, col);
+	col_id = model->priv->columns_num;
 	model->priv->columns_num++;
 
-	return model->priv->columns_num;
+	return col_id;
 }
 
 int
@@ -342,6 +387,7 @@ ephy_tree_model_node_add_func_column (EphyTreeModelNode *model,
 				      gpointer user_data)
 {
 	EphyTreeModelNodeColData *col;
+	int col_id;
 
 	col = g_new0 (EphyTreeModelNodeColData, 1);
 	col->prop_id = -1;
@@ -350,9 +396,10 @@ ephy_tree_model_node_add_func_column (EphyTreeModelNode *model,
 	col->user_data = user_data;
 
 	g_ptr_array_add (model->priv->columns, col);
+	col_id = model->priv->columns_num;
 	model->priv->columns_num++;
 
-	return model->priv->columns_num;
+	return col_id;
 }
 
 static int
@@ -374,7 +421,7 @@ ephy_tree_model_node_get_column_type (GtkTreeModel *tree_model,
 	if (index == EPHY_TREE_MODEL_NODE_COL_VISIBLE)
 		return G_TYPE_BOOLEAN;
 
-	list_index = index - EPHY_TREE_MODEL_NODE_BUILTIN_COLUMNS - 1;
+	list_index = index - EPHY_TREE_MODEL_NODE_BUILTIN_COLUMNS;
 	col = g_ptr_array_index (model->priv->columns, list_index);
 
 	return col->type;
@@ -393,7 +440,7 @@ ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 
 	g_return_if_fail (EPHY_IS_TREE_MODEL_NODE (tree_model));
 	g_return_if_fail (iter != NULL);
-	g_return_if_fail (iter->stamp == model->stamp);
+	g_return_if_fail (iter->stamp == model->priv->stamp);
 
 	if (model->priv->root == NULL)
 		return;
@@ -416,39 +463,28 @@ ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 	}
 	else
 	{
-		list_index = column - EPHY_TREE_MODEL_NODE_BUILTIN_COLUMNS - 1;
+		list_index = column - EPHY_TREE_MODEL_NODE_BUILTIN_COLUMNS;
 		col = g_ptr_array_index (model->priv->columns, list_index);
 
 		g_return_if_fail (col != NULL);
 
 		if (col->prop_id >= 0)
 		{
-			ephy_node_get_property (node,
-					        col->prop_id,
-					        value);
+			if (!ephy_node_get_property (node, col->prop_id, value))
+			{
+				/* make sure to return a valid string anyway */
+				g_value_init (value, col->type);
+				if (col->type == G_TYPE_STRING)
+				{
+					g_value_set_string (value, "");
+				}
+			}
 		}
 		else
 		{
 			col->func (node, value, col->user_data);
 		}
 	}
-}
-
-static void
-ephy_tree_model_node_tree_model_init (GtkTreeModelIface *iface)
-{
-	iface->get_flags       = ephy_tree_model_node_get_flags;
-	iface->get_iter        = ephy_tree_model_node_get_iter;
-	iface->get_path        = ephy_tree_model_node_get_path;
-	iface->iter_next       = ephy_tree_model_node_iter_next;
-	iface->iter_children   = ephy_tree_model_node_iter_children;
-	iface->iter_has_child  = ephy_tree_model_node_iter_has_child;
-	iface->iter_n_children = ephy_tree_model_node_iter_n_children;
-	iface->iter_nth_child  = ephy_tree_model_node_iter_nth_child;
-	iface->iter_parent     = ephy_tree_model_node_iter_parent;
-	iface->get_n_columns   = ephy_tree_model_node_get_n_columns;
-	iface->get_column_type = ephy_tree_model_node_get_column_type;
-	iface->get_value       = ephy_tree_model_node_get_value;
 }
 
 static guint
@@ -473,7 +509,7 @@ ephy_tree_model_node_get_iter (GtkTreeModel *tree_model,
 
 	i = gtk_tree_path_get_indices (path)[0];
 
-	iter->stamp = model->stamp;
+	iter->stamp = model->priv->stamp;
 	iter->user_data = ephy_node_get_nth_child (model->priv->root, i);
 
 	if (iter->user_data == NULL)
@@ -483,18 +519,6 @@ ephy_tree_model_node_get_iter (GtkTreeModel *tree_model,
 	}
 
 	return TRUE;
-}
-
-static inline GtkTreePath *
-get_path_real (EphyTreeModelNode *model,
-	       EphyNode *node)
-{
-	GtkTreePath *retval;
-
-	retval = gtk_tree_path_new ();
-	gtk_tree_path_append_index (retval, ephy_node_get_child_index (model->priv->root, node));
-
-	return retval;
 }
 
 static GtkTreePath *
@@ -507,7 +531,7 @@ ephy_tree_model_node_get_path (GtkTreeModel *tree_model,
 	g_return_val_if_fail (EPHY_IS_TREE_MODEL_NODE (tree_model), NULL);
 	g_return_val_if_fail (iter != NULL, NULL);
 	g_return_val_if_fail (iter->user_data != NULL, NULL);
-	g_return_val_if_fail (iter->stamp == model->stamp, NULL);
+	g_return_val_if_fail (iter->stamp == model->priv->stamp, NULL);
 
 	if (model->priv->root == NULL)
 		return NULL;
@@ -529,7 +553,7 @@ ephy_tree_model_node_iter_next (GtkTreeModel *tree_model,
 
 	g_return_val_if_fail (iter != NULL, FALSE);
 	g_return_val_if_fail (iter->user_data != NULL, FALSE);
-	g_return_val_if_fail (iter->stamp == EPHY_TREE_MODEL_NODE (tree_model)->stamp, FALSE);
+	g_return_val_if_fail (iter->stamp == model->priv->stamp, FALSE);
 
 	if (model->priv->root == NULL)
 		return FALSE;
@@ -557,7 +581,7 @@ ephy_tree_model_node_iter_children (GtkTreeModel *tree_model,
 	if (parent != NULL)
 		return FALSE;
 
-	iter->stamp = model->stamp;
+	iter->stamp = model->priv->stamp;
 	iter->user_data = model->priv->root;
 
 	return TRUE;
@@ -584,7 +608,7 @@ ephy_tree_model_node_iter_n_children (GtkTreeModel *tree_model,
 	if (iter == NULL)
 		return ephy_node_get_n_children (model->priv->root);
 
-	g_return_val_if_fail (model->stamp == iter->stamp, -1);
+	g_return_val_if_fail (model->priv->stamp == iter->stamp, -1);
 
 	return 0;
 }
@@ -610,7 +634,7 @@ ephy_tree_model_node_iter_nth_child (GtkTreeModel *tree_model,
 
 	if (node != NULL)
 	{
-		iter->stamp = model->stamp;
+		iter->stamp = model->priv->stamp;
 		iter->user_data = node;
 		return TRUE;
 	}
@@ -638,88 +662,23 @@ ephy_tree_model_node_iter_from_node (EphyTreeModelNode *model,
 				     EphyNode *node,
 				     GtkTreeIter *iter)
 {
-	iter->stamp = model->stamp;
+	iter->stamp = model->priv->stamp;
 	iter->user_data = node;
 }
 
 static void
-root_child_removed_cb (EphyNode *node,
-		       EphyNode *child,
-		       guint old_index,
-		       EphyTreeModelNode *model)
+ephy_tree_model_node_tree_model_init (GtkTreeModelIface *iface)
 {
-	GtkTreePath *path;
-
-	path = gtk_tree_path_new ();
-	gtk_tree_path_append_index (path, old_index);
-	gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
-	gtk_tree_path_free (path);
+	iface->get_flags       = ephy_tree_model_node_get_flags;
+	iface->get_iter        = ephy_tree_model_node_get_iter;
+	iface->get_path        = ephy_tree_model_node_get_path;
+	iface->iter_next       = ephy_tree_model_node_iter_next;
+	iface->iter_children   = ephy_tree_model_node_iter_children;
+	iface->iter_has_child  = ephy_tree_model_node_iter_has_child;
+	iface->iter_n_children = ephy_tree_model_node_iter_n_children;
+	iface->iter_nth_child  = ephy_tree_model_node_iter_nth_child;
+	iface->iter_parent     = ephy_tree_model_node_iter_parent;
+	iface->get_n_columns   = ephy_tree_model_node_get_n_columns;
+	iface->get_column_type = ephy_tree_model_node_get_column_type;
+	iface->get_value       = ephy_tree_model_node_get_value;
 }
-
-static void
-root_child_added_cb (EphyNode *node,
-		     EphyNode *child,
-		     EphyTreeModelNode *model)
-{
-	GtkTreePath *path;
-	GtkTreeIter iter;
-
-	ephy_tree_model_node_iter_from_node (model, child, &iter);
-
-	path = get_path_real (model, child);
-	gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
-	gtk_tree_path_free (path);
-}
-
-static inline void
-ephy_tree_model_node_update_node (EphyTreeModelNode *model,
-				  EphyNode *node,
-				  int idx)
-{
-	GtkTreePath *path;
-	GtkTreeIter iter;
-
-	ephy_tree_model_node_iter_from_node (model, node, &iter);
-
-	if (idx >= 0)
-	{
-		path = gtk_tree_path_new ();
-		gtk_tree_path_append_index (path, idx);
-	}
-	else
-	{
-		path = get_path_real (model, node);
-	}
-
-	LOG ("Updating row")
-
-	gtk_tree_model_row_changed (GTK_TREE_MODEL (model), path, &iter);
-	gtk_tree_path_free (path);
-}
-
-static void
-root_child_changed_cb (EphyNode *node,
-		       EphyNode *child,
-		       EphyTreeModelNode *model)
-{
-	ephy_tree_model_node_update_node (model, child, -1);
-}
-
-static void
-root_children_reordered_cb (EphyNode *node,
-			    int *new_order,
-			    EphyTreeModelNode *model)
-{
-	gtk_tree_model_rows_reordered (GTK_TREE_MODEL (model), NULL, NULL, new_order);
-}
-
-static void
-root_destroy_cb (EphyNode *node,
-		 EphyTreeModelNode *model)
-{
-	model->priv->root = NULL;
-
-	/* no need to do other stuff since we should have had a bunch of child_removed
-	 * signals already */
-}
-

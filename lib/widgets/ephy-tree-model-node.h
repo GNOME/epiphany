@@ -50,8 +50,6 @@ typedef struct
 	GObject parent;
 
 	EphyTreeModelNodePrivate *priv;
-
-	int stamp;
 } EphyTreeModelNode;
 
 typedef struct

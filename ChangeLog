@@ -1,3 +1,25 @@
+2003-10-07  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-tree-model-node.c: (root_child_removed_cb),
+	(get_path_real), (root_child_added_cb),
+	(ephy_tree_model_node_update_node), (root_child_changed_cb),
+	(root_children_reordered_cb), (root_destroy_cb),
+	(ephy_tree_model_node_class_init), (ephy_tree_model_node_init),
+	(ephy_tree_model_node_finalize),
+	(ephy_tree_model_node_add_prop_column),
+	(ephy_tree_model_node_add_func_column),
+	(ephy_tree_model_node_get_column_type),
+	(ephy_tree_model_node_get_value), (ephy_tree_model_node_get_iter),
+	(ephy_tree_model_node_get_path), (ephy_tree_model_node_iter_next),
+	(ephy_tree_model_node_iter_children),
+	(ephy_tree_model_node_iter_n_children),
+	(ephy_tree_model_node_iter_nth_child),
+	(ephy_tree_model_node_iter_from_node),
+	(ephy_tree_model_node_tree_model_init):
+	* lib/widgets/ephy-tree-model-node.h:
+
+	Merge fixes from branch and clean up.
+
 2003-10-06  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-notebook.c: (find_notebook_at_pointer),
