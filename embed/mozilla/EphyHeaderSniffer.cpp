@@ -292,7 +292,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		dialog = ephy_file_chooser_new (title ? title: _("Save"),
 						GTK_WIDGET (window),
 						GTK_FILE_CHOOSER_ACTION_SAVE,
-						key ? key : CONF_STATE_DOWNLOADING_DIR);
+						key ? key : CONF_STATE_DOWNLOAD_DIR);
 
 		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
 						   NS_ConvertUCS2toUTF8 (defaultFileName).get());
@@ -308,7 +308,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 
 	/* FIXME: how to inform user of failed save ? */
 
-	download_dir = eel_gconf_get_string (CONF_STATE_DOWNLOADING_DIR);
+	download_dir = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
 	if (!download_dir)
 	{
 		/* Emergency download destination */

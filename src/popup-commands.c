@@ -289,7 +289,7 @@ save_property_url (GtkAction *action,
 	ephy_embed_persist_set_flags
 		(persist, ask_dest ? EMBED_PERSIST_ASK_DESTINATION : 0);
 	ephy_embed_persist_set_persist_key
-		(persist, CONF_STATE_DOWNLOADING_DIR);
+		(persist, CONF_STATE_DOWNLOAD_DIR);
 	ephy_embed_persist_set_source (persist, location);
 
 	ephy_embed_persist_save (persist);

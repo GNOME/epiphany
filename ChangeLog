@@ -1,3 +1,18 @@
+2003-11-02  Xan Lopez  <xan@masilla.org>
+
+	* data/epiphany.schemas.in:
+
+	Remove the "show_details in downloader" schema.
+	
+	* embed/ephy-embed-popup-control.c: (save_url):
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* lib/ephy-prefs.h:
+	* src/popup-commands.c: (save_property_url):
+
+	Implement the new downloading mechanism in CH, also rename
+	CONF_STATE_DOWNLOADING_DIR to CONF_STATE_DOWNLOAD_DIR.
+
 2003-11-02  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-dialog.c: (impl_run):

@@ -150,8 +150,6 @@
 #endif
 
 #include "ContentHandler.h"
-
-#include "FilePicker.h"
 #include "MozillaPrivate.h"
 
 #include "nsCOMPtr.h"
@@ -187,6 +185,7 @@
 #include <libgnome/gnome-config.h>
 #include <libgnome/gnome-util.h>
 #include <libgnomevfs/gnome-vfs-mime.h>
+#include <libgnomevfs/gnome-vfs-utils.h>
 #include <bonobo/bonobo-i18n.h>
 
 class GContentHandler;
@@ -275,66 +274,47 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 				    const PRUnichar *aSuggestedFileExtension,
 				    nsILocalFile **_retval)
 {
-	nsresult rv;
+	char *path, *download_dir;
 
-	mContext = aWindowContext;
-
-	nsCOMPtr<nsIDOMWindowInternal> windowInternal = 
-					do_QueryInterface (aWindowContext);
-	
-	nsCOMPtr<nsILocalFile> saveDir;
-	char *dirName;
-	
-	dirName = eel_gconf_get_string (CONF_STATE_DOWNLOADING_DIR);
-	if (dirName == NULL)
+	download_dir = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
+	if (!download_dir)
 	{
-		dirName = g_strdup (g_get_home_dir());
+		/* Emergency download destination */
+		download_dir = g_strdup (g_get_home_dir ());
 	}
 
-	saveDir = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
-	saveDir->InitWithPath (NS_ConvertUTF8toUCS2(dirName));
-	g_free (dirName);
-
-	nsCOMPtr <nsILocalFile> saveFile (do_CreateInstance(NS_LOCAL_FILE_CONTRACTID));
-
-	PRInt16 okToSave = nsIFilePicker::returnCancel;
-
-	nsCOMPtr<nsIFilePicker> filePicker =
-				do_CreateInstance (G_FILEPICKER_CONTRACTID);
-
-	const nsAString &title = NS_ConvertUTF8toUCS2(_("Select the destination filename"));
-
-	filePicker->Init (windowInternal,
-			   PromiseFlatString(title).get(), 
-			   nsIFilePicker::modeSave);
-	filePicker->SetDefaultString (aDefaultFile);
-	filePicker->SetDisplayDirectory (saveDir);
-
-	filePicker->Show (&okToSave);
-
-	if (okToSave == nsIFilePicker::returnOK)
+	if (!strcmp (download_dir, "Desktop"))
 	{
-		filePicker->GetFile (getter_AddRefs(saveFile));
-
-		nsString uFileName;
-		saveFile->GetPath(uFileName);
-		const nsCString &aFileName = NS_ConvertUCS2toUTF8(uFileName);
-
-		char *dir = g_path_get_dirname (aFileName.get());
-
-		eel_gconf_set_string (CONF_STATE_DOWNLOADING_DIR, dir);
-		g_free (dir);
-
-		nsCOMPtr<nsIFile> directory;
-		rv = saveFile->GetParent (getter_AddRefs(directory));
-
-		NS_IF_ADDREF (*_retval = saveFile);
-		return NS_OK;
+		if (eel_gconf_get_boolean (CONF_DESKTOP_IS_HOME_DIR))
+		{
+			path = g_build_filename 
+				(g_get_home_dir (),
+				 NS_ConvertUCS2toUTF8 (aDefaultFile).get(),
+				 NULL);
+		}
+		else
+		{
+			path = g_build_filename 
+				(g_get_home_dir (), "Desktop",
+				 NS_ConvertUCS2toUTF8 (aDefaultFile).get(),
+				 NULL);
+		}
 	}
 	else
 	{
-		return NS_ERROR_FAILURE;
+		path = g_build_filename
+			(gnome_vfs_expand_initial_tilde (download_dir),
+			 NS_ConvertUCS2toUTF8 (aDefaultFile).get(),
+			 NULL);
 	}
+	g_free (download_dir);
+
+	nsCOMPtr <nsILocalFile> destFile (do_CreateInstance(NS_LOCAL_FILE_CONTRACTID));
+	destFile->InitWithNativePath (nsDependentCString (path));
+	g_free (path);
+
+	NS_IF_ADDREF (*_retval = destFile);
+	return NS_OK;
 }
 
 #if MOZILLA_SNAPSHOT < 10
