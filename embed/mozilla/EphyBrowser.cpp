@@ -722,3 +722,15 @@ nsresult EphyBrowser::DoCommand (const char *command)
 
 	return cmdManager->DoCommand (command, nsnull, nsnull);
 }
+
+nsresult EphyBrowser::GetCommandState (const char *command, PRBool *enabled)
+{
+	nsCOMPtr<nsICommandManager> cmdManager;
+
+	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+
+	cmdManager = do_GetInterface (mWebBrowser);
+	if (!cmdManager) return NS_ERROR_FAILURE;
+
+	return cmdManager->IsCommandEnabled (command, nsnull, enabled);
+}

@@ -23,6 +23,7 @@
 #endif
 
 #include "ephy-window.h"
+#include "ephy-command-manager.h"
 #include "ephy-bookmarks-menu.h"
 #include "ephy-favorites-menu.h"
 #include "ephy-state.h"
@@ -56,11 +57,27 @@
 #include <gtk/gtkuimanager.h>
 #include <gtk/gtktoggleaction.h>
 
+static void
+ephy_window_class_init (EphyWindowClass *klass);
+static void
+ephy_window_init (EphyWindow *gs);
+static void
+ephy_window_finalize (GObject *object);
+static void
+ephy_window_show (GtkWidget *widget);
+static void
+ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
+				     GtkNotebookPage *page,
+				     guint page_num,
+				     EphyWindow *window);
+static void
+window_cmd_edit (GtkAction *action, EphyWindow *window);
+
 static GtkActionEntry ephy_menu_entries [] = {
 
 	/* Toplevel */
 	{ "File", NULL, N_("_File") },
-	{ "Edit", NULL, N_("_Edit") },
+	{ "Edit", NULL, N_("_Edit"), NULL, NULL, G_CALLBACK (window_cmd_edit) },
 	{ "View", NULL, N_("_View") },
 	{ "Bookmarks", NULL, N_("_Bookmarks") },
 	{ "Go", NULL, N_("_Go") },
@@ -292,20 +309,6 @@ struct EphyWindowPrivate
 	guint num_tabs;
 };
 
-static void
-ephy_window_class_init (EphyWindowClass *klass);
-static void
-ephy_window_init (EphyWindow *gs);
-static void
-ephy_window_finalize (GObject *object);
-static void
-ephy_window_show (GtkWidget *widget);
-static void
-ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
-				     GtkNotebookPage *page,
-				     guint page_num,
-				     EphyWindow *window);
-
 enum
 {
 	PROP_0,
@@ -339,6 +342,46 @@ ephy_window_get_type (void)
 							   &our_info, 0);
         }
         return ephy_window_type;
+}
+
+void
+window_cmd_edit (GtkAction *action,
+		 EphyWindow *window)
+{
+	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+	GtkActionGroup *action_group;
+	gboolean can_copy, can_cut;
+
+	if (GTK_IS_EDITABLE (widget))
+	{
+		gboolean has_selection;
+
+		has_selection = gtk_editable_get_selection_bounds
+			(GTK_EDITABLE (widget), NULL, NULL);
+
+		can_copy = has_selection;
+		can_cut = has_selection;
+	}
+	else
+	{
+		EphyEmbed *embed;
+
+		embed = ephy_window_get_active_embed (window);
+		g_return_if_fail (embed != NULL);
+
+		ephy_command_manager_get_command_state
+			(EPHY_COMMAND_MANAGER (embed), "cmd_copy", &can_copy);
+		ephy_command_manager_get_command_state
+			(EPHY_COMMAND_MANAGER (embed), "cmd_cut", &can_cut);
+	}
+
+	action_group = window->priv->action_group;
+
+	action = gtk_action_group_get_action (action_group, "EditCopy");
+	g_object_set (action, "sensitive", can_copy, NULL);
+
+	action = gtk_action_group_get_action (action_group, "EditCut");
+	g_object_set (action, "sensitive", can_cut, NULL);
 }
 
 static void
@@ -1000,10 +1043,10 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	{
 		popup = "/EphyImagePopup";
 	}
-	/* else if (context & EMBED_CONTEXT_INPUT)
+	else if (context & EMBED_CONTEXT_INPUT)
 	{
 		popup = "/EphyInputPopup";
-	} */
+	}
 	else
 	{
 		popup = framed ? "/EphyFramedDocumentPopup" :

@@ -40,12 +40,11 @@ struct EphyCommandManagerClass
 {
         GTypeInterface base_iface;
 
-	gresult (* do_command)      (EphyCommandManager *manager,
-				     const char *command);
-	gresult (* can_do_command)  (EphyCommandManager *manager,
-				     const char *command);
-	gresult (* observe_command) (EphyCommandManager *manager,
-				     const char *command);
+	gresult (* do_command)        (EphyCommandManager *manager,
+				       const char *command);
+	gresult (* get_command_state) (EphyCommandManager *manager,
+				       const char *command,
+				       gboolean *enabled);
 
 	/* Signals */
 
@@ -58,11 +57,9 @@ GType	ephy_command_manager_get_type		(void);
 gresult	ephy_command_manager_do_command		(EphyCommandManager *manager,
 						 const char *command);
 
-gresult	ephy_command_manager_can_do_command	(EphyCommandManager *manager,
-						 const char *command);
-
-gresult ephy_command_manager_observe_command	(EphyCommandManager *manager,
-						 const char *command);
+gresult	ephy_command_manager_get_command_state	(EphyCommandManager *manager,
+						 const char *command,
+						 gboolean *enabled);
 
 G_END_DECLS
 

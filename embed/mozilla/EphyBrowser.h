@@ -50,6 +50,7 @@ public:
 	nsresult Destroy (void);
 
 	nsresult DoCommand (const char *command);
+	nsresult GetCommandState (const char *command, PRBool *enabled);
 
 	nsresult SetZoom (float aTextZoom, PRBool reflow);
 	nsresult GetZoom (float *aTextZoom);

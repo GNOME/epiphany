@@ -88,17 +88,10 @@ ephy_command_manager_do_command (EphyCommandManager *manager,
 }
 
 gresult
-ephy_command_manager_can_do_command (EphyCommandManager *manager,
-				     const char *command)
+ephy_command_manager_get_command_state (EphyCommandManager *manager,
+				        const char *command,
+					gboolean *enabled)
 {
 	EphyCommandManagerClass *klass = EPHY_COMMAND_MANAGER_GET_CLASS (manager);
-        return klass->can_do_command (manager, command);
-}
-
-gresult
-ephy_command_manager_observe_command (EphyCommandManager *manager,
-				      const char *command)
-{
-	EphyCommandManagerClass *klass = EPHY_COMMAND_MANAGER_GET_CLASS (manager);
-        return klass->observe_command (manager, command);
+        return klass->get_command_state (manager, command, enabled);
 }

@@ -243,25 +243,23 @@ impl_manager_do_command (EphyCommandManager *manager,
 }
 
 static gresult
-impl_manager_can_do_command (EphyCommandManager *manager,
-			     const char *command) 
+impl_manager_get_command_state (EphyCommandManager *manager,
+			        const char *command,
+			        gboolean *enabled) 
 {
-	return G_NOT_IMPLEMENTED;
-}
+	nsresult result;
+	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(manager)->priv;
 
-static gresult
-impl_manager_observe_command (EphyCommandManager *manager,
-			      const char *command) 
-{
-	return G_NOT_IMPLEMENTED;
+        result = mpriv->browser->GetCommandState (command, enabled);
+	
+	return result ? G_OK : G_FAILED;
 }
 
 static void
 ephy_command_manager_init (EphyCommandManagerClass *manager_class)
 {
 	manager_class->do_command = impl_manager_do_command;
-	manager_class->can_do_command = impl_manager_can_do_command;
-	manager_class->observe_command = impl_manager_observe_command;
+	manager_class->get_command_state = impl_manager_get_command_state;
 }
 	
 GType 

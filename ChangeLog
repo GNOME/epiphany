@@ -1,3 +1,26 @@
+2003-11-04  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* data/ui/epiphany-ui.xml:
+
+	Show only paste in the context menu, it's the only
+	one that works in mozilla.
+
+	* embed/ephy-command-manager.c:
+	(ephy_command_manager_get_command_state):
+	* embed/ephy-command-manager.h:
+
+	Rename the state api.
+
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Implement state api.
+
+	* src/ephy-window.c: (window_cmd_edit), (show_embed_popup):
+
+	Update clipboard menus on activate.
+
 2003-11-03  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-marshal.list:
