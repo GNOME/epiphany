@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-09 15:45-0500\n"
-"PO-Revision-Date: 2005-01-09 18:56-0400\n"
+"POT-Creation-Date: 2005-01-10 01:35-0500\n"
+"PO-Revision-Date: 2005-01-10 18:56-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -466,74 +466,88 @@ msgid "The path of the folder where downloads are saved."
 msgstr "The path of the folder where downloads are saved."
 
 #: data/epiphany.schemas.in.h:63
+msgid "Toolbar style"
+msgstr "Toolbar style"
+
+#: data/epiphany.schemas.in.h:64
+msgid ""
+"Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
+"\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
+"\"text\"."
+msgstr ""
+"Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
+"\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
+"\"text\"."
+
+#: data/epiphany.schemas.in.h:65
 msgid "Use caret browsing mode."
 msgstr "Use caret browsing mode."
 
-#: data/epiphany.schemas.in.h:64
+#: data/epiphany.schemas.in.h:66
 msgid "Use own colors"
 msgstr "Use own colours"
 
-#: data/epiphany.schemas.in.h:65
+#: data/epiphany.schemas.in.h:67
 msgid "Use own fonts"
 msgstr "Use own fonts"
 
-#: data/epiphany.schemas.in.h:66
+#: data/epiphany.schemas.in.h:68
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Use your own colours instead of the colours the page requests."
 
-#: data/epiphany.schemas.in.h:67
+#: data/epiphany.schemas.in.h:69
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Use your own fonts instead of the fonts the page requests."
 
-#: data/epiphany.schemas.in.h:68
-msgid ""
-"When files cannot be opened by the browser they are automatically downloaded "
-"to the download folder and opened with the appropriate application."
-msgstr ""
-"When files cannot be opened by the browser they are automatically downloaded "
-"to the download folder and opened with the appropriate application."
-
-#: data/epiphany.schemas.in.h:69
-msgid ""
-"Where to accept cookies from. Possible values are \"anywhere\", \"current "
-"site\" and \"nowhere\"."
-msgstr ""
-"Where to accept cookies from. Possible values are \"anywhere\", \"current "
-"site\" and \"nowhere\"."
-
 #: data/epiphany.schemas.in.h:70
+msgid ""
+"When files cannot be opened by the browser they are automatically downloaded "
+"to the download folder and opened with the appropriate application."
+msgstr ""
+"When files cannot be opened by the browser they are automatically downloaded "
+"to the download folder and opened with the appropriate application."
+
+#: data/epiphany.schemas.in.h:71
+msgid ""
+"Where to accept cookies from. Possible values are \"anywhere\", \"current "
+"site\" and \"nowhere\"."
+msgstr ""
+"Where to accept cookies from. Possible values are \"anywhere\", \"current "
+"site\" and \"nowhere\"."
+
+#: data/epiphany.schemas.in.h:72
 msgid "Whether to print the date in the footer"
 msgstr "Whether to print the date in the footer"
 
-#: data/epiphany.schemas.in.h:71
+#: data/epiphany.schemas.in.h:73
 msgid "Whether to print the date in the footer."
 msgstr "Whether to print the date in the footer."
 
-#: data/epiphany.schemas.in.h:72
+#: data/epiphany.schemas.in.h:74
 msgid "Whether to print the page address in the header"
 msgstr "Whether to print the page address in the header"
 
-#: data/epiphany.schemas.in.h:73
+#: data/epiphany.schemas.in.h:75
 msgid "Whether to print the page address in the header."
 msgstr "Whether to print the page address in the header."
 
-#: data/epiphany.schemas.in.h:74
+#: data/epiphany.schemas.in.h:76
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "Whether to print the page numbers (x of total) in the footer"
 
-#: data/epiphany.schemas.in.h:75
+#: data/epiphany.schemas.in.h:77
 msgid "Whether to print the page numbers (x of total) in the footer."
 msgstr "Whether to print the page numbers (x of total) in the footer."
 
-#: data/epiphany.schemas.in.h:76
+#: data/epiphany.schemas.in.h:78
 msgid "Whether to print the page title in the header"
 msgstr "Whether to print the page title in the header"
 
-#: data/epiphany.schemas.in.h:77
+#: data/epiphany.schemas.in.h:79
 msgid "Whether to print the page title in the header."
 msgstr "Whether to print the page title in the header."
 
-#: data/epiphany.schemas.in.h:78
+#: data/epiphany.schemas.in.h:80
 msgid "x-western"
 msgstr "x-western"
 
@@ -1475,7 +1489,7 @@ msgstr "_Save As..."
 
 #: embed/mozilla/EphyHeaderSniffer.cpp:320
 #: src/bookmarks/ephy-bookmarks-import.c:250
-#: src/bookmarks/ephy-bookmarksbar-model.c:350 src/window-commands.c:324
+#: src/bookmarks/ephy-bookmarksbar-model.c:350 src/window-commands.c:316
 msgid "Untitled"
 msgstr "Untitled"
 
@@ -2664,7 +2678,7 @@ msgstr "Launch the bookmarks editor"
 msgid "Ephy"
 msgstr "Ephy"
 
-#: src/ephy-notebook.c:885
+#: src/ephy-notebook.c:882
 msgid "Close tab"
 msgstr "Close tab"
 
@@ -2692,25 +2706,25 @@ msgstr "_Recover"
 msgid "Crash Recovery"
 msgstr "Crash Recovery"
 
-#: src/ephy-shell.c:331
-msgid ""
-"Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
-"use bonobo-activation-sysconf to configure the search path for bonobo server "
-"files."
-msgstr ""
-"Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
-"use bonobo-activation-sysconf to configure the search path for bonobo server "
-"files."
-
 #: src/ephy-shell.c:338
 msgid ""
+"Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
+"use bonobo-activation-sysconf to configure the search path for bonobo server "
+"files."
+msgstr ""
+"Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
+"use bonobo-activation-sysconf to configure the search path for bonobo server "
+"files."
+
+#: src/ephy-shell.c:345
+msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to register the automation server"
 msgstr ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to register the automation server"
 
-#: src/ephy-shell.c:355
+#: src/ephy-shell.c:362
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
@@ -3220,11 +3234,11 @@ msgstr "If you close the document anyway, you will lose that information."
 msgid "Close _Document"
 msgstr "Close _Document"
 
-#: src/ephy-window.c:1165 src/window-commands.c:377
+#: src/ephy-window.c:1165 src/window-commands.c:369
 msgid "Open"
 msgstr "Open"
 
-#: src/ephy-window.c:1167 src/window-commands.c:403
+#: src/ephy-window.c:1167 src/window-commands.c:395
 msgid "Save As"
 msgstr "Save As"
 
@@ -3745,19 +3759,11 @@ msgstr "_Home"
 msgid "Go to the home page"
 msgstr "Go to the home page"
 
-#: src/window-commands.c:171
+#: src/window-commands.c:163
 msgid "Check this out!"
 msgstr "Check this out!"
 
-#: src/window-commands.c:822
-msgid "Toolbar Editor"
-msgstr "Toolbar Editor"
-
-#: src/window-commands.c:842
-msgid "_Add a New Toolbar"
-msgstr "_Add a New Toolbar"
-
-#: src/window-commands.c:889
+#: src/window-commands.c:797
 msgid "Epiphany"
 msgstr "Epiphany"
 
@@ -3769,7 +3775,7 @@ msgstr "Epiphany"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:902
+#: src/window-commands.c:810
 msgid "translator-credits"
 msgstr ""
 "Maintainer: Adam Weinberger <adamw@gnome.org>\n"
