@@ -1,3 +1,9 @@
+2005-01-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:
+
+	Set show-once to PR_FALSE if the GetBoolPref call fails.
+
 2005-01-09  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* src/Makefile.am (epiphany_CPPFLAGS): 
@@ -15,6 +21,16 @@
 	* src/ephy-window.c: (sync_tab_security):
 
 	Don't show the description for no-secure and broken sites.
+
+2005-01-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/ui/epiphany-fs-toolbar.xml:
+	* embed/ephy-embed.h:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/mozilla-embed-event.cpp:
+	* embed/mozilla/mozilla-embed-event.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-window.h:
 
 2005-01-09  Christian Persch  <chpe@cvs.gnome.org>
 

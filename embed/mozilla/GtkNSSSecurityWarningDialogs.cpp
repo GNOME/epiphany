@@ -58,9 +58,6 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtkdialog.h>
-#include <gtk/gtkbutton.h>
-#include <gtk/gtktogglebutton.h>
-#include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkbox.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
@@ -220,7 +217,7 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 	{
 		showOncePref = g_strconcat (aPrefName, ".show_once", NULL);
 		rv = prefBranch->GetBoolPref (showOncePref, &showOnce);
-		if (NS_FAILED (rv)) showOnce = PR_TRUE;
+		if (NS_FAILED (rv)) showOnce = PR_FALSE;
 	}
 
 	if (!show && !showOnce)
@@ -270,9 +267,9 @@ GtkNSSSecurityWarningDialogs::DoDialog (nsIInterfaceRequestor *aContext,
 
 	int response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-	*_retval = response == GTK_RESPONSE_ACCEPT;
+	*_retval = (response == GTK_RESPONSE_ACCEPT || response == GTK_RESPONSE_OK);
 
-	if (prefBranch && showOncePref && showOnce)
+	if (prefBranch && showOncePref && showOnce && *_retval)
 	{
 		prefBranch->SetBoolPref (showOncePref, PR_FALSE);
 	}
