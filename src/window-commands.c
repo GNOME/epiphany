@@ -896,7 +896,7 @@ window_cmd_help_about (GtkAction *action,
 	GtkWidget** ptr;
 	GdkPixbuf *icon;
 	const char *icon_path;
-	GdkPixbuf *logo;
+	GdkPixbuf *logo = NULL;
 	GtkIconTheme *icon_theme;
 	GtkIconInfo *icon_info;
 
@@ -924,24 +924,23 @@ window_cmd_help_about (GtkAction *action,
 		return;
 	}
 
+	/* FIXME: use the icon theme for the correct screen, not for the default screen */
 	icon_theme = gtk_icon_theme_get_default ();
 	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "web-browser", -1, 0);
 
 	if (icon_info)
 	{
-
 		icon_path = gtk_icon_info_get_filename (icon_info);
-		g_return_if_fail (icon_path != NULL);
 
-		logo = gdk_pixbuf_new_from_file (icon_path, NULL);
+		if (icon_path != NULL)
+		{
+			logo = gdk_pixbuf_new_from_file (icon_path, NULL);
+		}
 	}
 	else
 	{
-		logo = NULL;
 		g_warning ("Web browser gnome icon not found");
 	}
-
-	g_object_unref (icon_theme);
 
 	about = gnome_about_new(
 		       "Epiphany", VERSION,
@@ -952,7 +951,10 @@ window_cmd_help_about (GtkAction *action,
 		       strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,
 		       logo);
 
-	g_object_unref (logo);
+	if (logo != NULL)
+	{
+		g_object_unref (logo);
+	}
 
 	gtk_window_set_transient_for (GTK_WINDOW (about),
 				      GTK_WINDOW (window));
