@@ -732,7 +732,7 @@ impl_get_location (EphyEmbed *embed,
 	 * in fact the wrapper is initialized on net start */
 	if (!wrapper) 
 	{
-		*location = NULL;
+		*location = g_strdup ("about:blank");
 		return G_FAILED;
 	}
 	
