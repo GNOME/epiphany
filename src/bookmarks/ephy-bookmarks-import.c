@@ -418,7 +418,7 @@ xbel_parse_xbel (EphyBookmarks *eb, xmlTextReaderPtr reader)
 			/* shouldn't happen but does anyway :( */
 		}
 		else if (xmlStrEqual (tag, (xmlChar *) "bookmark") && type == XML_READER_TYPE_ELEMENT
-			 && state == STATE_FOLDER)
+			 && state == STATE_XBEL)
 		{
 			EphyNode *node = NULL;
 
