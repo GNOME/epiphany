@@ -72,6 +72,7 @@
 #include "nsIChannel.h"
 #include "nsIScriptSecurityManager.h"
 #include "nsIServiceManager.h"
+#include "nsIInterfaceRequestor.h"
 
 #ifdef ALLOW_PRIVATE_API
 /* not frozen yet */
@@ -82,6 +83,11 @@
 #ifdef HAVE_MOZILLA_PSM
 /* not sure about this one: */
 #include <nsITransportSecurityInfo.h>
+/* these are in pipnss/, are they really private? */
+#include <nsISSLStatus.h>
+#include <nsISSLStatusProvider.h>
+#include <nsIX509Cert.h>
+#include <nsICertificateDialogs.h>
 #endif
 #endif
 
@@ -1083,5 +1089,33 @@ EphyBrowser::GetSecurityDescription (nsACString &aDescription)
 	return NS_OK;
 #else
 	return NS_ERROR_NOT_IMPLEMENTED;
+#endif
+}
+
+nsresult
+EphyBrowser::ShowCertificate ()
+{
+#ifdef HAVE_MOZILLA_PSM
+	if (!mSecurityInfo) return NS_ERROR_FAILURE;
+
+	nsCOMPtr<nsISSLStatusProvider> statusProvider (do_QueryInterface (mSecurityInfo));
+	NS_ENSURE_TRUE (statusProvider, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsISSLStatus> SSLStatus;
+	statusProvider->GetSSLStatus (getter_AddRefs (SSLStatus));
+	NS_ENSURE_TRUE (SSLStatus, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsIX509Cert> serverCert;
+	SSLStatus->GetServerCert (getter_AddRefs (serverCert));
+	NS_ENSURE_TRUE (serverCert, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsICertificateDialogs> certDialogs (do_GetService (NS_CERTIFICATEDIALOGS_CONTRACTID));
+	NS_ENSURE_TRUE (certDialogs, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsIInterfaceRequestor> requestor(do_QueryInterface (mDOMWindow));
+
+	return certDialogs->ViewCert (requestor, serverCert);
+#else
+	return NS_OK;
 #endif
 }

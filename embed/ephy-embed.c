@@ -670,6 +670,19 @@ ephy_embed_get_security_level (EphyEmbed *embed,
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
 	iface->get_security_level (embed, level, description);
 }
+/**
+ * ephy_embed_show_page_certificate:
+ * @embed: an #EphyEmbed
+ *
+ * Shows a dialogue displaying the certificate of the currently loaded page
+ * of @embed, if it was loaded over a secure connection; else does nothing.
+ **/
+void
+ephy_embed_show_page_certificate (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	iface->show_page_certificate (embed);
+}
 
 /**
  * ephy_embed_find_set_properties:

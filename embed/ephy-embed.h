@@ -131,8 +131,6 @@ struct _EphyEmbedIface
 					 float new_zoom);
 	void	 (* content_change)	(EphyEmbed *embed,
 					 const char *uri);
-	gboolean (* modal_alert)	(EphyEmbed *embed);
-	void	 (* modal_alert_closed)	(EphyEmbed *embed);
 
 	/* Methods  */
 	void		   (* load_url)			(EphyEmbed *embed,
@@ -187,6 +185,13 @@ struct _EphyEmbedIface
 							 int page);
 	void		   (* activate)			(EphyEmbed *embed);
 	gboolean	   (* has_modified_forms)	(EphyEmbed *embed);
+
+	/* added at the end to preserve ABI */
+	/* Signals */
+	gboolean	   (* modal_alert)		(EphyEmbed *embed);
+	void		   (* modal_alert_closed)	(EphyEmbed *embed);
+	/* Methods */
+	void		   (* show_page_certificate)	(EphyEmbed *embed);
 };
 
 GType		  ephy_embed_chrome_get_type		(void);
@@ -242,6 +247,8 @@ void		  ephy_embed_shistory_go_nth		(EphyEmbed *embed,
 void		  ephy_embed_get_security_level		(EphyEmbed *embed,
 							 EmbedSecurityLevel *level,
 						 	 char **description);
+
+void		  ephy_embed_show_page_certificate	(EphyEmbed *embed);
 
 /* Zoom */
 void		  ephy_embed_set_zoom			(EphyEmbed *embed,

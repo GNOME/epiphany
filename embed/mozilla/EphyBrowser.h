@@ -138,6 +138,7 @@ public:
 
 	nsresult SetSecurityInfo (nsIRequest *aRequest);
 	nsresult GetSecurityDescription (nsACString &aDescription);
+	nsresult ShowCertificate ();
 
 	nsCOMPtr<nsIWebBrowser> mWebBrowser;
 
