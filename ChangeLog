@@ -1,5 +1,12 @@
 2003-11-17  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* embed/mozilla/EphyBrowser.cpp:
+
+	Pass WebPageDescriptor, not CurrentDescriptor.
+	This way we dont refetch page on post.
+
+2003-11-17  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* configure.in:
 	* embed/mozilla/GtkNSSDialogs.cpp:
 	* embed/mozilla/GtkNSSKeyPairDialogs.cpp:

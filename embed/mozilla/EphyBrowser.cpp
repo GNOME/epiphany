@@ -494,12 +494,14 @@ nsresult EphyBrowser::GetPageDescriptor(nsISupports **aPageDescriptor)
 
 	nsCOMPtr<nsIDocShell> ds;
 	ds = do_GetInterface (mWebBrowser);
-	if (!ds) return NS_ERROR_FAILURE;
 
-	nsCOMPtr<nsIWebPageDescriptor> wpd = do_QueryInterface(ds, &rv);
-	if (!wpd || !NS_SUCCEEDED(rv)) return NS_ERROR_FAILURE;
+	nsCOMPtr<nsIWebPageDescriptor> wpd = do_QueryInterface (ds);
+	if (!wpd) return NS_ERROR_FAILURE;
 
-	return wpd->GetCurrentDescriptor(aPageDescriptor);
+	*aPageDescriptor = wpd.get();
+	NS_IF_ADDREF (*aPageDescriptor);
+
+	return NS_OK;
 }
 
 nsresult EphyBrowser::GetDocumentUrl (nsCString &url)
