@@ -1,0 +1,301 @@
+/*
+ *  Copyright (C) 2002 Marco Pesenti Gritti <mpeseng@tin.it>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ */
+
+#include "ephy-bookmark-properties.h"
+#include "ephy-topics-selector.h"
+#include "ephy-debug.h"
+
+#include <gtk/gtkstock.h>
+#include <gtk/gtkentry.h>
+#include <gtk/gtkvbox.h>
+#include <gtk/gtktable.h>
+#include <gtk/gtklabel.h>
+#include <gtk/gtkmisc.h>
+#include <libgnome/gnome-i18n.h>
+
+static void ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass);
+static void ephy_bookmark_properties_init (EphyBookmarkProperties *editor);
+static void ephy_bookmark_properties_finalize (GObject *object);
+static void ephy_bookmark_properties_set_property (GObject *object,
+		                               guint prop_id,
+		                               const GValue *value,
+		                               GParamSpec *pspec);
+static void ephy_bookmark_properties_get_property (GObject *object,
+		                               guint prop_id,
+		                               GValue *value,
+		                               GParamSpec *pspec);
+
+struct EphyBookmarkPropertiesPrivate
+{
+	EphyBookmarks *bookmarks;
+	EphyNode *bookmark;
+
+	GtkWidget *title_entry;
+	GtkWidget *location_entry;
+	GtkWidget *topics_selector;
+};
+
+enum
+{
+	PROP_0,
+	PROP_BOOKMARKS,
+	PROP_BOOKMARK
+};
+
+static GObjectClass *parent_class = NULL;
+
+GType
+ephy_bookmark_properties_get_type (void)
+{
+	static GType ephy_bookmark_properties_type = 0;
+
+	if (ephy_bookmark_properties_type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyBookmarkPropertiesClass),
+			NULL,
+			NULL,
+			(GClassInitFunc) ephy_bookmark_properties_class_init,
+			NULL,
+			NULL,
+			sizeof (EphyBookmarkProperties),
+			0,
+			(GInstanceInitFunc) ephy_bookmark_properties_init
+		};
+
+		ephy_bookmark_properties_type = g_type_register_static (GTK_TYPE_DIALOG,
+							                "EphyBookmarkProperties",
+							                &our_info, 0);
+	}
+
+	return ephy_bookmark_properties_type;
+}
+
+static void
+ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	parent_class = g_type_class_peek_parent (klass);
+
+	object_class->finalize = ephy_bookmark_properties_finalize;
+
+	object_class->set_property = ephy_bookmark_properties_set_property;
+	object_class->get_property = ephy_bookmark_properties_get_property;
+
+	g_object_class_install_property (object_class,
+					 PROP_BOOKMARKS,
+					 g_param_spec_object ("bookmarks",
+							      "Bookmarks set",
+							      "Bookmarks set",
+							      EPHY_BOOKMARKS_TYPE,
+							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+	g_object_class_install_property (object_class,
+					 PROP_BOOKMARK,
+					 g_param_spec_object ("bookmark",
+							      "Bookmark",
+							      "Bookmark",
+							      EPHY_TYPE_NODE,
+							      G_PARAM_READWRITE));
+}
+
+static void
+ephy_bookmark_properties_finalize (GObject *object)
+{
+	EphyBookmarkProperties *editor;
+
+	g_return_if_fail (object != NULL);
+	g_return_if_fail (EPHY_IS_BOOKMARK_PROPERTIES (object));
+
+	editor = EPHY_BOOKMARK_PROPERTIES (object);
+
+	g_return_if_fail (editor->priv != NULL);
+
+	g_free (editor->priv);
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+ephy_bookmark_properties_set_bookmark (EphyBookmarkProperties *selector,
+				       EphyNode *bookmark)
+{
+	LOG ("Set bookmark")
+
+	selector->priv->bookmark = bookmark;
+
+	g_object_notify (G_OBJECT (selector), "bookmark");
+}
+
+static void
+ephy_bookmark_properties_set_property (GObject *object,
+		                   guint prop_id,
+		                   const GValue *value,
+		                   GParamSpec *pspec)
+{
+	EphyBookmarkProperties *selector = EPHY_BOOKMARK_PROPERTIES (object);
+
+	switch (prop_id)
+	{
+	case PROP_BOOKMARKS:
+		selector->priv->bookmarks = g_value_get_object (value);
+		break;
+	case PROP_BOOKMARK:
+		ephy_bookmark_properties_set_bookmark
+			(selector, g_value_get_object (value));
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
+}
+
+static void
+ephy_bookmark_properties_get_property (GObject *object,
+		                   guint prop_id,
+		                   GValue *value,
+		                   GParamSpec *pspec)
+{
+	EphyBookmarkProperties *selector = EPHY_BOOKMARK_PROPERTIES (object);
+
+	switch (prop_id)
+	{
+	case PROP_BOOKMARK:
+		g_value_set_object (value, selector);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
+}
+
+static void
+bookmark_properties_response_cb (GtkDialog *dialog,
+		                 int response_id,
+			         gpointer data)
+{
+	switch (response_id)
+	{
+		case GTK_RESPONSE_CLOSE:
+			gtk_widget_destroy (GTK_WIDGET (dialog));
+			break;
+	}
+}
+
+static void
+build_ui (EphyBookmarkProperties *editor)
+{
+	GtkWidget *table, *label, *entry, *topics_selector;
+	char *str;
+
+	g_signal_connect (G_OBJECT (editor),
+			  "response",
+			  G_CALLBACK (bookmark_properties_response_cb),
+			  editor);
+
+	gtk_window_set_title (GTK_WINDOW (editor),
+			      _("Bookmark properties"));
+
+	gtk_dialog_set_has_separator (GTK_DIALOG (editor), FALSE);
+	gtk_container_set_border_width (GTK_CONTAINER (editor), 6);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (editor)->vbox), 12);
+
+	table = gtk_table_new (2, 2, FALSE);
+	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
+	gtk_table_set_col_spacings (GTK_TABLE (table), 6);
+	gtk_widget_show (table);
+
+	label = gtk_label_new (NULL);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	str = g_strconcat ("<b>", _("Title:"), "</b>", NULL);
+	gtk_label_set_markup (GTK_LABEL (label), str);
+	g_free (str);
+	gtk_widget_show (label);
+	entry = gtk_entry_new ();
+	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+	editor->priv->title_entry = entry;
+	gtk_widget_set_size_request (entry, 200, -1);
+	gtk_widget_show (entry);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1, GTK_FILL, 0, 0, 0);
+
+	label = gtk_label_new (NULL);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	str = g_strconcat ("<b>", _("Location:"), "</b>", NULL);
+	gtk_label_set_markup (GTK_LABEL (label), str);
+	g_free (str);
+	gtk_widget_show (label);
+	entry = gtk_entry_new ();
+	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+	editor->priv->location_entry = entry;
+	gtk_widget_show (entry);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2, GTK_FILL, 0, 0, 0);
+
+	label = gtk_label_new (NULL);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+	str = g_strconcat ("<b>", _("Topics:"), "</b>", NULL);
+	gtk_label_set_markup (GTK_LABEL (label), str);
+	g_free (str);
+	gtk_widget_show (label);
+	topics_selector = ephy_topics_selector_new (editor->priv->bookmarks);
+	gtk_widget_show (topics_selector);
+	editor->priv->topics_selector = topics_selector;
+
+	gtk_widget_show (entry);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), topics_selector, 1, 2, 2, 3,
+			  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+
+	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (editor)->vbox),
+			    table, TRUE, TRUE, 0);
+
+	gtk_dialog_add_button (GTK_DIALOG (editor),
+			       GTK_STOCK_CLOSE,
+			       GTK_RESPONSE_CLOSE);
+	gtk_dialog_set_default_response (GTK_DIALOG (editor), GTK_RESPONSE_CLOSE);
+}
+
+static void
+ephy_bookmark_properties_init (EphyBookmarkProperties *editor)
+{
+	editor->priv = g_new0 (EphyBookmarkPropertiesPrivate, 1);
+
+	editor->priv->bookmark = NULL;
+}
+
+GtkWidget *
+ephy_bookmark_properties_new (EphyBookmarks *bookmarks,
+			      EphyNode *bookmark)
+{
+	EphyBookmarkProperties *editor;
+
+	g_assert (bookmarks != NULL);
+
+	editor = EPHY_BOOKMARK_PROPERTIES (g_object_new
+			(EPHY_TYPE_BOOKMARK_PROPERTIES,
+			 "bookmarks", bookmarks,
+			 "bookmark", bookmark,
+			 NULL));
+
+	build_ui (editor);
+
+	return GTK_WIDGET (editor);
+}

@@ -27,7 +27,7 @@
 #include <libgnome/gnome-i18n.h>
 
 #include "ephy-new-bookmark.h"
-#include "ephy-keywords-entry.h"
+#include "ephy-topics-selector.h"
 #include "ephy-debug.h"
 
 static void ephy_new_bookmark_class_init (EphyNewBookmarkClass *klass);
@@ -51,7 +51,7 @@ struct EphyNewBookmarkPrivate
 	gulong id;
 
 	GtkWidget *title_entry;
-	GtkWidget *keywords_entry;
+	GtkWidget *topics_selector;
 };
 
 enum
@@ -144,17 +144,20 @@ static void
 ephy_new_bookmark_add (EphyNewBookmark *new_bookmark)
 {
 	char *title;
-	char *keywords;
 	EphyNode *node;
+	EphyTopicsSelector *selector;
+
+	selector = EPHY_TOPICS_SELECTOR (new_bookmark->priv->topics_selector);
 
 	title = gtk_editable_get_chars
 		(GTK_EDITABLE (new_bookmark->priv->title_entry), 0, -1);
-	keywords = gtk_editable_get_chars
-		(GTK_EDITABLE (new_bookmark->priv->keywords_entry), 0, -1);
 	node = ephy_bookmarks_add (new_bookmark->priv->bookmarks, title,
 			           new_bookmark->priv->location,
-			           new_bookmark->priv->smarturl, keywords);
+			           new_bookmark->priv->smarturl);
 	new_bookmark->priv->id = ephy_node_get_id (node);
+
+	ephy_topics_selector_set_bookmark (selector, node);
+	ephy_topics_selector_apply (selector);
 
 	if (new_bookmark->priv->icon)
 	{
@@ -182,7 +185,7 @@ ephy_new_bookmark_response_cb (GtkDialog *dialog,
 static GtkWidget *
 build_editing_table (EphyNewBookmark *editor)
 {
-	GtkWidget *table, *label, *entry;
+	GtkWidget *table, *label, *entry, *topics_selector;
 	char *str;
 
 	table = gtk_table_new (2, 2, FALSE);
@@ -202,22 +205,22 @@ build_editing_table (EphyNewBookmark *editor)
 	gtk_widget_set_size_request (entry, 200, -1);
 	gtk_widget_show (entry);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
-	gtk_table_attach_defaults (GTK_TABLE (table), entry, 1, 2, 0, 1);
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1, GTK_FILL, 0, 0, 0);
 
 	label = gtk_label_new (NULL);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
 	str = g_strconcat ("<b>", _("Topics:"), "</b>", NULL);
 	gtk_label_set_markup (GTK_LABEL (label), str);
 	g_free (str);
 	gtk_widget_show (label);
-	entry = ephy_keywords_entry_new ();
-	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-	ephy_keywords_entry_set_bookmarks (EPHY_KEYWORDS_ENTRY (entry),
-					   editor->priv->bookmarks);
-	editor->priv->keywords_entry = entry;
+	topics_selector = ephy_topics_selector_new (editor->priv->bookmarks);
+	gtk_widget_show (topics_selector);
+	editor->priv->topics_selector = topics_selector;
+
 	gtk_widget_show (entry);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
-	gtk_table_attach_defaults (GTK_TABLE (table), entry, 1, 2, 1, 2);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, GTK_FILL, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), topics_selector, 1, 2, 1, 2,
+			  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
 
 	return table;
 }
@@ -225,8 +228,6 @@ build_editing_table (EphyNewBookmark *editor)
 static void
 ephy_new_bookmark_construct (EphyNewBookmark *editor)
 {
-	GtkWidget *hbox, *vbox;
-
 	gtk_window_set_title (GTK_WINDOW (editor),
 			      _("Add bookmark"));
 
@@ -237,20 +238,10 @@ ephy_new_bookmark_construct (EphyNewBookmark *editor)
 			  G_CALLBACK (ephy_new_bookmark_response_cb),
 			  editor);
 
-	hbox = gtk_hbox_new (FALSE, 6);
 	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (editor)->vbox), 12);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (editor)->vbox),
-			    hbox, TRUE, TRUE, 0);
-	gtk_widget_show (hbox);
-
-	vbox = gtk_vbox_new (FALSE, 6);
-	gtk_box_pack_start (GTK_BOX (hbox),
-			    vbox, TRUE, TRUE, 0);
-	gtk_widget_show (vbox);
-
-	gtk_box_pack_start (GTK_BOX (vbox),
 			    build_editing_table (editor),
-			    FALSE, FALSE, 0);
+			    TRUE, TRUE, 0);
 
 	gtk_dialog_add_button (GTK_DIALOG (editor),
 			       GTK_STOCK_CANCEL,

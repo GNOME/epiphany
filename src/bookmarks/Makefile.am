@@ -17,20 +17,24 @@ INCLUDES = \
 
 noinst_LTLIBRARIES = libephybookmarks.la
 
-libephybookmarks_la_SOURCES = \
-	ephy-bookmark-action.c	\
-	ephy-bookmark-action.h	\
-	ephy-bookmarks.c	\
-	ephy-bookmarks.h	\
-	ephy-bookmarks-editor.c	\
-	ephy-bookmarks-editor.h	\
-	ephy-bookmarks-import.c \
-	ephy-bookmarks-import.h	\
-	ephy-keywords-entry.c	\
-	ephy-keywords-entry.h	\
-	ephy-new-bookmark.c	\
-	ephy-new-bookmark.h	\
-	ephy-node-view.c	\
-	ephy-node-view.h	\
-	ephy-tree-model-node.c	\
+libephybookmarks_la_SOURCES = 		\
+	ephy-bookmark-action.c		\
+	ephy-bookmark-action.h		\
+	ephy-bookmark-properties.c	\
+	ephy-bookmark-properties.h	\
+	ephy-bookmarks.c		\
+	ephy-bookmarks.h		\
+	ephy-bookmarks-editor.c		\
+	ephy-bookmarks-editor.h		\
+	ephy-bookmarks-import.c 	\
+	ephy-bookmarks-import.h		\
+	ephy-keywords-entry.c		\
+	ephy-keywords-entry.h		\
+	ephy-new-bookmark.c		\
+	ephy-new-bookmark.h		\
+	ephy-node-view.c		\
+	ephy-node-view.h		\
+	ephy-topics-selector.c  	\
+	ephy-topics-selector.h		\
+	ephy-tree-model-node.c		\
 	ephy-tree-model-node.h

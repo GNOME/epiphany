@@ -1,5 +1,43 @@
 2003-03-22  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* data/ui/epiphany-bookmark-editor-ui.xml.in:
+	* src/bookmarks/Makefile.am:
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(ephy_bookmark_properties_get_type),
+	(ephy_bookmark_properties_class_init),
+	(ephy_bookmark_properties_finalize),
+	(ephy_bookmark_properties_set_bookmark),
+	(ephy_bookmark_properties_set_property),
+	(ephy_bookmark_properties_get_property),
+	(bookmark_properties_response_cb), (build_ui),
+	(ephy_bookmark_properties_init), (ephy_bookmark_properties_new):
+	* src/bookmarks/ephy-bookmark-properties.h:
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(popup_cmd_bookmark_properties), (ephy_bookmarks_editor_get_type),
+	(keyword_node_selected_cb), (ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-bookmarks-editor.h:
+	* src/bookmarks/ephy-bookmarks-import.c: (mozilla_parse_bookmarks),
+	(xbel_parse_single_bookmark), (xbel_parse_folder):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_add),
+	(ephy_bookmarks_set_keyword), (ephy_bookmarks_unset_keyword):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/bookmarks/ephy-new-bookmark.c: (ephy_new_bookmark_add),
+	(build_editing_table), (ephy_new_bookmark_construct):
+	* src/bookmarks/ephy-topics-selector.c:
+	(ephy_topics_selector_get_type), (ephy_topics_selector_class_init),
+	(ephy_topics_selector_finalize),
+	(ephy_topics_selector_set_bookmark),
+	(ephy_topics_selector_set_property),
+	(ephy_topics_selector_get_property), (fill_model), (topic_toggled),
+	(ephy_topics_selector_apply), (ephy_topics_build_ui),
+	(ephy_topics_selector_init), (ephy_topics_selector_new):
+	* src/bookmarks/ephy-topics-selector.h:
+
+	Begin bookmarks editor redesign. Please still dont use it or you really
+	want backup your bookmarks ;)
+
+2003-03-22  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/ephy-window.c: (update_favicon_control):
 
 	Cleanup: get active tab using the function

@@ -45,7 +45,6 @@ enum
 	EPHY_NODE_BMK_PROP_SMART_LOCATION = 6,
 	EPHY_NODE_BMK_PROP_ICON = 7,
 	EPHY_NODE_KEYWORD_PROP_ALL_PRIORITY = 8
-		
 };
 
 struct EphyBookmarks
@@ -68,8 +67,7 @@ EphyBookmarks  *ephy_bookmarks_new		(void);
 EphyNode       *ephy_bookmarks_add		(EphyBookmarks *eb,
 						 const char *title,
 						 const char *url,
-						 const char *smart_url,
-						 const char *keywords);
+						 const char *smart_url);
 
 guint		 ephy_bookmarks_get_bookmark_id (EphyBookmarks *eb,
 						 const char *url);
@@ -98,10 +96,6 @@ void            ephy_bookmarks_set_keyword      (EphyBookmarks *eb,
 void            ephy_bookmarks_unset_keyword    (EphyBookmarks *eb,
 						 EphyNode *keyword,
 						 EphyNode *bookmark);
-
-void		ephy_bookmarks_update_keywords  (EphyBookmarks *eb,
-						 const char *keywords,
-						 EphyNode *bookmark_node);
 
 /* Favorites */
 

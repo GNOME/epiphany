@@ -39,7 +39,7 @@ typedef struct EphyBookmarksEditorPrivate EphyBookmarksEditorPrivate;
 
 typedef struct
 {
-	GtkDialog parent;
+	GtkWindow parent;
 
 	EphyBookmarksEditorPrivate *priv;
 } EphyBookmarksEditor;

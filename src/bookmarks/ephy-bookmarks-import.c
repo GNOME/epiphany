@@ -62,8 +62,7 @@ mozilla_parse_bookmarks (EphyBookmarks *bookmarks,
 			ephy_bookmarks_add (bookmarks,
 					    title,
 					    url,
-					    NULL,
-					    *keyword);
+					    NULL);
 			xmlFree (title);
 			xmlFree (url);
 		}
@@ -104,7 +103,7 @@ xbel_parse_single_bookmark (EphyBookmarks *bookmarks,
 		{
 			xbel->smarturl = xmlNodeGetContent (child);
 		}
-		
+
 		child = child->next;
 	}
 }
@@ -144,12 +143,10 @@ xbel_parse_folder (EphyBookmarks *bookmarks,
 						    child->children,
 						    xbel);
 
-			
 			ephy_bookmarks_add (bookmarks,
 					    xbel->title,
 					    url,
-					    xbel->smarturl,
-					    keyword);
+					    xbel->smarturl);
 
 			if (url)
 				xmlFree (url);

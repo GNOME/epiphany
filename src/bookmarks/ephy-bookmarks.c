@@ -552,8 +552,7 @@ EphyNode *
 ephy_bookmarks_add (EphyBookmarks *eb,
 		    const char *title,
 		    const char *url,
-		    const char *smart_url,
-		    const char *keywords)
+		    const char *smart_url)
 {
 	EphyNode *bm;
 	GValue value = { 0, };
@@ -575,14 +574,6 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, smart_url);
 	ephy_node_set_property (bm, EPHY_NODE_BMK_PROP_SMART_LOCATION,
-			        &value);
-	g_value_unset (&value);
-
-	ephy_bookmarks_update_keywords (eb, keywords, bm);
-
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, keywords);
-	ephy_node_set_property (bm, EPHY_NODE_BMK_PROP_KEYWORDS,
 			        &value);
 	g_value_unset (&value);
 
@@ -868,6 +859,8 @@ ephy_bookmarks_set_keyword (EphyBookmarks *eb,
 			    EphyNode *keyword,
 			    EphyNode *bookmark)
 {
+	if (ephy_node_has_child (keyword, bookmark)) return;
+
 	ephy_node_add_child (keyword, bookmark);
 }
 
@@ -876,87 +869,10 @@ ephy_bookmarks_unset_keyword (EphyBookmarks *eb,
 			      EphyNode *keyword,
 			      EphyNode *bookmark)
 {
+	if (!ephy_node_has_child (keyword, bookmark)) return;
+
 	ephy_node_remove_child (keyword, bookmark);
 	ephy_bookmarks_clean_empty_keywords (eb);
-}
-
-static GList *
-diff_keywords (char **ks1, char **ks2)
-{
-	GList *result = NULL;
-	int i, j;
-
-	for (i = 0; ks1 != NULL && ks1[i] != NULL; i++)
-	{
-		gboolean found = FALSE;
-
-		LOG ("Diff keywords, keyword:\"%s\"", ks1[i])
-
-		for (j = 0; ks2 != NULL && ks2[j] != NULL; j++)
-		{
-			if (strcmp (ks1[i], ks2[j]) == 0)
-			{
-				found = TRUE;
-			}
-		}
-
-		if (!found && g_utf8_strlen (ks1[i], -1) > 0)
-		{
-			result = g_list_append (result, ks1[i]);
-		}
-	}
-
-	return result;
-}
-
-void
-ephy_bookmarks_update_keywords (EphyBookmarks *eb,
-		                const char *keywords,
-		                EphyNode *node)
-{
-	const char *prop;
-	char **ks, **old_ks = NULL;
-	GList *diffs, *l;
-	EphyNode *keyword;
-
-	prop = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_KEYWORDS);
-	ks = g_strsplit (keywords, " ", 10);
-	if (prop != NULL)
-	{
-		old_ks = g_strsplit (prop, " ", 10);
-	}
-
-	diffs = diff_keywords (ks, old_ks);
-	for (l = diffs; l != NULL; l = l->next)
-	{
-		char *word = (char *)l->data;
-
-		keyword = ephy_bookmarks_find_keyword
-			(eb, word, FALSE);
-
-		if (!keyword)
-		{
-			keyword = ephy_bookmarks_add_keyword
-				(eb, word);
-		}
-
-		ephy_bookmarks_set_keyword (eb, keyword, node);
-	}
-	g_list_free (diffs);
-
-	diffs = diff_keywords (old_ks, ks);
-	for (l = diffs; l != NULL; l = l->next)
-	{
-		keyword = ephy_bookmarks_find_keyword (eb,
-						      (char *)l->data, FALSE);
-		g_return_if_fail (keyword != NULL);
-
-		ephy_bookmarks_unset_keyword (eb, keyword, node);
-	}
-	g_list_free (diffs);
-
-	g_strfreev (ks);
-	g_strfreev (old_ks);
 }
 
 EphyNode *
