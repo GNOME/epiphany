@@ -308,6 +308,8 @@ create_menu_proxy (EggToolItem *item, EggAction *action)
 
 	egg_tool_item_set_proxy_menu_item (item, menu_id, menu_item);
 
+	g_free (menu_id);
+
 	return TRUE;	
 }
 
