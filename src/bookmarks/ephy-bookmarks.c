@@ -796,6 +796,7 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	g_value_unset (&value);
 
 	update_has_smart_address (eb, bm, url);
+	update_bookmark_keywords (eb, bm);
 
 	ephy_node_add_child (eb->priv->bookmarks, bm);
 	ephy_node_add_child (eb->priv->notcategorized, bm);
