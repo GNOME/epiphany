@@ -82,7 +82,7 @@ struct MozillaEmbedPrivate
 {
 	EphyBrowser *browser;
 	nsCOMPtr<nsIRequest> request;
-	gint security_state;
+	guint security_state;
 };
 
 #define WINDOWWATCHER_CONTRACTID "@mozilla.org/embedcomp/window-watcher;1"
