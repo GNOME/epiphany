@@ -117,7 +117,6 @@ static const char *languages[] =
 	"be",
 	"bg",
 	"bn",
-	"bs",
 	"br",
 	"bs",
 	"ca",
