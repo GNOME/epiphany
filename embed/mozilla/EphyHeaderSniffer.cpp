@@ -36,6 +36,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+#include "MozillaPrivate.h"
+
 #include "MozDownload.h"
 #include "EphyHeaderSniffer.h"
 #include "netCore.h"
@@ -51,19 +53,15 @@
 #include "nsIDOMHTMLDocument.h"
 #include "nsIDownload.h"
 
-const char* const persistContractID = "@mozilla.org/embedding/browser/nsWebBrowserPersist;1";
-
 EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,
 		nsIFile* aFile, nsIURI* aURL, nsIDOMDocument* aDocument, nsIInputStream* aPostData,
-                const nsAString& aSuggestedFilename, PRBool aBypassCache)
+                PRBool aBypassCache)
 : mPersist(aPersist)
 , mEmbedPersist(aEmbedPersist)
 , mTmpFile(aFile)
 , mURL(aURL)
 , mDocument(aDocument)
 , mPostData(aPostData)
-, mDefaultFilename(aSuggestedFilename)
-, mBypassCache(aBypassCache)
 {
 	mPrompt = do_GetService("@mozilla.org/embedcomp/prompt-service;1");
 }
@@ -157,116 +155,91 @@ EphyHeaderSniffer::OnSecurityChange (nsIWebProgress *aWebProgress, nsIRequest *a
 nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 {
 	nsresult rv;
+	EmbedPersistFlags flags;
+	PRBool askDownloadDest;
 
-	PRBool isHTML = (mDocument && mContentType.Equals("text/html") ||
-			 mContentType.Equals("text/xml") ||
-			 mContentType.Equals("application/xhtml+xml"));
+	ephy_embed_persist_get_flags (EPHY_EMBED_PERSIST (mEmbedPersist), &flags);
+	askDownloadDest = flags & EMBED_PERSIST_ASK_DESTINATION;
  
-        nsCOMPtr<nsILocalFile> file;
-       	rv = NS_NewLocalFile(mDefaultFilename, PR_TRUE, getter_AddRefs(file)); 
-        if (NS_FAILED(rv) || !file) return G_FAILED;
-  
-	nsCOMPtr<nsISupports> sourceData;
-	if (isHTML)
+	nsAutoString defaultFileName;
+
+	if (defaultFileName.IsEmpty() && !mContentDisposition.IsEmpty())
 	{
-		sourceData = do_QueryInterface(mDocument);
-	}
-	else
-	{
-		sourceData = do_QueryInterface(mURL);
-	}
-
-	return InitiateDownload(sourceData, file, inOriginalURI);
-}
-
-nsresult EphyHeaderSniffer::InitiateDownload (nsISupports* inSourceData, nsILocalFile* inDestFile,
-					      nsIURI* inOriginalURI)
-{
-	nsresult rv = NS_OK;
-
-	nsCOMPtr<nsIWebBrowserPersist> webPersist = do_CreateInstance(persistContractID, &rv);
-	if (NS_FAILED(rv)) return rv;
-  
-	nsCOMPtr<nsIURI> sourceURI = do_QueryInterface(inSourceData);
-
-	PRInt64 timeNow = PR_Now();
-  
-	nsAutoString fileDisplayName;
-	inDestFile->GetLeafName(fileDisplayName);
-
-	MozDownload *downloader = new MozDownload ();
-	/* dlListener attaches to its progress dialog here, which gains ownership */
-	rv = downloader->InitForEmbed (inOriginalURI, inDestFile, fileDisplayName.get(),
-				       nsnull, timeNow, webPersist, mEmbedPersist);
-	if (NS_FAILED(rv)) return rv;
-
-	PRInt32 flags = nsIWebBrowserPersist::PERSIST_FLAGS_NO_CONVERSION | 
-                        nsIWebBrowserPersist::PERSIST_FLAGS_REPLACE_EXISTING_FILES;
-	if (mBypassCache)
-	{
-		flags |= nsIWebBrowserPersist::PERSIST_FLAGS_BYPASS_CACHE;
-	}
-	else
-	{
-		flags |= nsIWebBrowserPersist::PERSIST_FLAGS_FROM_CACHE;
-	}
-
-	webPersist->SetPersistFlags(flags);
-    
-	if (sourceURI)
-	{
-		rv = webPersist->SaveURI (sourceURI, nsnull, nsnull,
-					  mPostData, nsnull, inDestFile);
-	}
-	else
-	{
-		nsCOMPtr<nsIDOMDocument> domDoc = do_QueryInterface(inSourceData, &rv);
-		if (!domDoc) return rv;  /* should never happen */
-    
-		PRInt32 encodingFlags = 0;
-		nsCOMPtr<nsILocalFile> filesFolder;
-    
-		if (!mContentType.Equals("text/plain"))
+		/* 1 Use the HTTP header suggestion. */
+		PRInt32 index = mContentDisposition.Find("filename=");
+		if (index >= 0)
 		{
-			/* Create a local directory in the same dir as our file.  It
-			   will hold our associated files. */
-
-			filesFolder = do_CreateInstance("@mozilla.org/file/local;1");
-			nsAutoString unicodePath;
-			inDestFile->GetPath(unicodePath);
-			filesFolder->InitWithPath(unicodePath);
-      
-			nsAutoString leafName;
-			filesFolder->GetLeafName(leafName);
-			nsAutoString nameMinusExt(leafName);
-			PRInt32 index = nameMinusExt.RFind(".");
-			if (index >= 0)
-			{
-				nameMinusExt.Left(nameMinusExt, index);
-			}
-
-			nameMinusExt += NS_LITERAL_STRING(" Files");
-			filesFolder->SetLeafName(nameMinusExt);
-			PRBool exists = PR_FALSE;
-			filesFolder->Exists(&exists);
-			if (!exists)
-			{
-				rv = filesFolder->Create(nsILocalFile::DIRECTORY_TYPE, 0755);
-				if (NS_FAILED(rv)) return rv;
-			}
+			/* Take the substring following the prefix. */
+			index += 9;
+			nsCAutoString filename;
+			mContentDisposition.Right(filename, mContentDisposition.Length() - index);
+			defaultFileName = NS_ConvertUTF8toUCS2(filename);
 		}
-		else
-		{
-			encodingFlags |= nsIWebBrowserPersist::ENCODE_FLAGS_FORMATTED |
-					 nsIWebBrowserPersist::ENCODE_FLAGS_ABSOLUTE_LINKS |
-					 nsIWebBrowserPersist::ENCODE_FLAGS_NOFRAMES_CONTENT;
-		}
-
-		rv = webPersist->SaveDocument (domDoc, inDestFile, filesFolder,
-					       mContentType.get(), encodingFlags, 80);
 	}
-  
-	return rv;
+    
+	if (defaultFileName.IsEmpty())
+	{
+		/* 2 For file URLs, use the file name. */
+
+		nsCOMPtr<nsIURL> url(do_QueryInterface(mURL));
+		if (url)
+		{
+			nsCAutoString fileNameCString;
+			url->GetFileName(fileNameCString);
+			defaultFileName = NS_ConvertUTF8toUCS2(fileNameCString);
+		}
+	}
+    
+	if (defaultFileName.IsEmpty() && mDocument)
+	{
+		/* 3 Use the title of the document. */
+
+		nsCOMPtr<nsIDOMHTMLDocument> htmlDoc(do_QueryInterface(mDocument));
+		if (htmlDoc)
+		{
+			htmlDoc->GetTitle(defaultFileName);
+		}
+	}
+    
+	if (defaultFileName.IsEmpty() && mURL)
+	{
+		/* 4 Use the host. */
+		nsCAutoString hostName;
+		mURL->GetHost(hostName);
+		defaultFileName = NS_ConvertUTF8toUCS2(hostName);
+	}
+    
+	/* 5 One last case to handle about:blank and other fruity untitled pages. */
+	if (defaultFileName.IsEmpty())
+	{
+		defaultFileName.AssignWithConversion("untitled");
+	}
+        
+	/* Validate the file name to ensure legality. */
+	for (PRUint32 i = 0; i < defaultFileName.Length(); i++)
+	{
+		if (defaultFileName[i] == ':' || defaultFileName[i] == '/')
+		{
+			defaultFileName.SetCharAt(i, PRUnichar(' '));
+		}
+	}
+
+	if (askDownloadDest)
+	{
+		/* FIXME show the file selector here */
+	}
+	else
+	{
+		/* FIXME build path from download dir */
+	}
+             
+        nsCOMPtr<nsILocalFile> destFile;
+       	rv = NS_NewLocalFile(defaultFileName, PR_TRUE, getter_AddRefs(destFile)); 
+        if (NS_FAILED(rv) || !destFile) return G_FAILED;
+
+	return InitiateMozillaDownload (mDocument, mURL, destFile,
+					mContentType.get(), inOriginalURI, mEmbedPersist,
+					mBypassCache, mPostData);
 }
 
 NS_IMETHODIMP EphyHeaderSniffer::Prompt (const PRUnichar *dialogTitle, const PRUnichar *text,

@@ -44,7 +44,9 @@
 #include "nsIWebProgressListener.h"
 #include "nsIHelperAppLauncherDialog.h"
 #include "nsIExternalHelperAppService.h"
+#include "nsIDOMDocument.h"
 
+#include "nsString.h"
 #include "nsIURI.h"
 #include "nsILocalFile.h"
 #include "nsIWebBrowserPersist.h"
@@ -73,6 +75,11 @@
 }
 
 #define MOZ_DOWNLOAD_CLASSNAME "Ephy's Download Progress Dialog"
+
+nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceUri,
+				  nsILocalFile* inDestFile, const char *contentType,
+				  nsIURI* inOriginalURI, MozillaEmbedPersist *embedPersist,
+				  PRBool bypassCache, nsIInputStream *postData);
 
 class MozDownload : public nsIDownload,
                     public nsIWebProgressListener

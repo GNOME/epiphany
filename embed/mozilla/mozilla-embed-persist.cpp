@@ -20,6 +20,7 @@
 
 #include "EphyWrapper.h"
 #include "EphyHeaderSniffer.h"
+#include "MozDownload.h"
 #include "mozilla-embed.h"
 #include "mozilla-embed-persist.h"
 
@@ -206,10 +207,6 @@ impl_save (EphyEmbedPersist *persist)
       	rv = NS_NewURI(getter_AddRefs(inURI), sURI);
 	if (NS_FAILED(rv) || !inURI) return G_FAILED;
 
-	/* Filename to save to */
-	nsAutoString inFilename;
-	inFilename.AssignWithConversion (filename);
-
 	/* Get post data */
 	nsCOMPtr<nsIInputStream> postData;
 	if (wrapper)
@@ -244,20 +241,37 @@ impl_save (EphyEmbedPersist *persist)
         	if (NS_FAILED(rv) || !DOMDocument) return G_FAILED;
 	}
 
-	/* Create an header sniffer and do the save */
-	nsCOMPtr<nsIWebBrowserPersist> webPersist =
-		MOZILLA_EMBED_PERSIST (persist)->priv->mPersist;
-	if (!webPersist) return G_FAILED;
+	if (filename == NULL)
+	{
+		/* Create an header sniffer and do the save */
+		nsCOMPtr<nsIWebBrowserPersist> webPersist =
+			MOZILLA_EMBED_PERSIST (persist)->priv->mPersist;
+		if (!webPersist) return G_FAILED;
 
-	EphyHeaderSniffer* sniffer = new EphyHeaderSniffer
-		(webPersist, MOZILLA_EMBED_PERSIST (persist),
-		 tmpFile, inURI, DOMDocument, postData,
-		 inFilename, flags & EMBED_PERSIST_BYPASSCACHE);
-	if (!sniffer) return G_FAILED;
+		EphyHeaderSniffer* sniffer = new EphyHeaderSniffer
+			(webPersist, MOZILLA_EMBED_PERSIST (persist),
+			 tmpFile, inURI, DOMDocument, postData,
+			 flags & EMBED_PERSIST_BYPASSCACHE);
+		if (!sniffer) return G_FAILED;
  
-	webPersist->SetProgressListener(sniffer);
-	rv = webPersist->SaveURI(inURI, nsnull, nsnull, nsnull, nsnull, tmpFile);
-	if (NS_FAILED (rv)) return G_FAILED;
+		webPersist->SetProgressListener(sniffer);
+		rv = webPersist->SaveURI(inURI, nsnull, nsnull, nsnull, nsnull, tmpFile);
+		if (NS_FAILED (rv)) return G_FAILED;
+	}
+	else
+	{
+		/* Filename to save to */
+		nsCOMPtr<nsILocalFile> destFile;
+		rv = NS_NewNativeLocalFile (nsDependentCString(filename),
+				            PR_TRUE, getter_AddRefs(destFile));
+	        if (NS_FAILED(rv) || !destFile) return G_FAILED;
+
+		rv =  InitiateMozillaDownload (DOMDocument, inURI, destFile,
+					       nsnull, inURI, MOZILLA_EMBED_PERSIST (persist),
+					       flags & EMBED_PERSIST_BYPASSCACHE,
+					       postData);
+		if (NS_FAILED (rv)) return G_FAILED;
+	}
 
 	return G_OK;
 }

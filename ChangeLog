@@ -1,3 +1,25 @@
+2003-10-24  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozDownload.h:
+
+	Add an helper to initialize downloads.
+
+	* embed/ephy-embed-persist.h:
+
+	Add a flag to ask destination.
+
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/EphyHeaderSniffer.h:
+
+	Use the helper. Add code to determine a good
+	filename. 
+
+	* embed/mozilla/mozilla-embed-persist.cpp:
+
+	Use a MozDownload directly if there is a dest set,
+	it doesnt make sense to use sniffer for favicons.
+
 2003-10-23  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* lib/egg/egg-editable-toolbar.c: (create_item_from_action),

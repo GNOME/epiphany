@@ -41,7 +41,8 @@ typedef enum
 {
 	EMBED_PERSIST_BYPASSCACHE = 1 << 0,
 	EMBED_PERSIST_MAINDOC = 1 << 1,
-	EMBED_PERSIST_NO_VIEW = 1 << 2
+	EMBED_PERSIST_NO_VIEW = 1 << 2,
+	EMBED_PERSIST_ASK_DESTINATION = 1 << 3
 } EmbedPersistFlags;
 
 typedef struct

@@ -54,8 +54,7 @@ class EphyHeaderSniffer : public nsIWebProgressListener,
 public:
 	EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,
 		           nsIFile* aFile, nsIURI* aURL,
-                           nsIDOMDocument* aDocument, nsIInputStream* aPostData,
-                           const nsAString& aSuggestedFilename, PRBool aBypassCache);
+                           nsIDOMDocument* aDocument, nsIInputStream* aPostData, PRBool aBypassCache);
 	virtual ~EphyHeaderSniffer ();
 
 	NS_DECL_ISUPPORTS
@@ -64,7 +63,6 @@ public:
   
 protected:
 	nsresult PerformSave (nsIURI* inOriginalURI);
-	nsresult InitiateDownload (nsISupports* inSourceData, nsILocalFile* inDestFile, nsIURI* inOriginalURI);
 
 private:
 	nsIWebBrowserPersist*      mPersist; /* Weak. It owns us as a listener. */
@@ -73,7 +71,6 @@ private:
 	nsCOMPtr<nsIURI>           mURL;
 	nsCOMPtr<nsIDOMDocument>   mDocument;
 	nsCOMPtr<nsIInputStream>   mPostData;
-	nsString                   mDefaultFilename;
 	PRBool                     mBypassCache;
 	nsCString                  mContentType;
 	nsCString                  mContentDisposition;

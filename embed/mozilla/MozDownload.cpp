@@ -48,6 +48,8 @@
 #include "netCore.h"
 #include "nsIObserver.h"
 
+const char* const persistContractID = "@mozilla.org/embedding/browser/nsWebBrowserPersist;1";
+
 MozDownload::MozDownload() :
 	mGotFirstStateChange(false), mIsNetworkTransfer(false),
 	mUserCanceled(false),
@@ -375,4 +377,98 @@ MozDownload::Pause()
 void
 MozDownload::Resume()
 {
+}
+
+nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI,
+				  nsILocalFile* inDestFile, const char *contentType,
+				  nsIURI* inOriginalURI, MozillaEmbedPersist *embedPersist,
+				  PRBool bypassCache, nsIInputStream *postData)
+{
+	nsresult rv = NS_OK;
+
+	PRBool isHTML = (domDocument && contentType &&
+			(strcmp (contentType, "text/html") == 0 ||
+			 strcmp (contentType, "text/xml") == 0 ||
+			 strcmp (contentType, "application/xhtml+xml") == 0));
+
+	nsCOMPtr<nsIWebBrowserPersist> webPersist = do_CreateInstance(persistContractID, &rv);
+	if (NS_FAILED(rv)) return rv;
+  
+	PRInt64 timeNow = PR_Now();
+  
+	nsAutoString fileDisplayName;
+	inDestFile->GetLeafName(fileDisplayName);
+
+	MozDownload *downloader = new MozDownload ();
+	/* dlListener attaches to its progress dialog here, which gains ownership */
+	rv = downloader->InitForEmbed (inOriginalURI, inDestFile, fileDisplayName.get(),
+				       nsnull, timeNow, webPersist, embedPersist);
+	if (NS_FAILED(rv)) return rv;
+
+	PRInt32 flags = nsIWebBrowserPersist::PERSIST_FLAGS_NO_CONVERSION | 
+                        nsIWebBrowserPersist::PERSIST_FLAGS_REPLACE_EXISTING_FILES;
+	if (bypassCache)
+	{
+		flags |= nsIWebBrowserPersist::PERSIST_FLAGS_BYPASS_CACHE;
+	}
+	else
+	{
+		flags |= nsIWebBrowserPersist::PERSIST_FLAGS_FROM_CACHE;
+	}
+
+	webPersist->SetPersistFlags(flags);
+    
+	if (!isHTML)
+	{
+		rv = webPersist->SaveURI (sourceURI, nsnull, nsnull,
+					  postData, nsnull, inDestFile);
+	}
+	else
+	{
+		if (!domDocument) return rv;  /* should never happen */
+    
+		PRInt32 encodingFlags = 0;
+		nsCOMPtr<nsILocalFile> filesFolder;
+
+    		if (contentType && strcmp (contentType, "text/plain") == 0)
+		{
+			/* Create a local directory in the same dir as our file.  It
+			   will hold our associated files. */
+
+			filesFolder = do_CreateInstance("@mozilla.org/file/local;1");
+			nsAutoString unicodePath;
+			inDestFile->GetPath(unicodePath);
+			filesFolder->InitWithPath(unicodePath);
+      
+			nsAutoString leafName;
+			filesFolder->GetLeafName(leafName);
+			nsAutoString nameMinusExt(leafName);
+			PRInt32 index = nameMinusExt.RFind(".");
+			if (index >= 0)
+			{
+				nameMinusExt.Left(nameMinusExt, index);
+			}
+
+			nameMinusExt += NS_LITERAL_STRING(" Files");
+			filesFolder->SetLeafName(nameMinusExt);
+			PRBool exists = PR_FALSE;
+			filesFolder->Exists(&exists);
+			if (!exists)
+			{
+				rv = filesFolder->Create(nsILocalFile::DIRECTORY_TYPE, 0755);
+				if (NS_FAILED(rv)) return rv;
+			}
+		}
+		else
+		{
+			encodingFlags |= nsIWebBrowserPersist::ENCODE_FLAGS_FORMATTED |
+					 nsIWebBrowserPersist::ENCODE_FLAGS_ABSOLUTE_LINKS |
+					 nsIWebBrowserPersist::ENCODE_FLAGS_NOFRAMES_CONTENT;
+		}
+
+		rv = webPersist->SaveDocument (domDocument, inDestFile, filesFolder,
+					       contentType, encodingFlags, 80);
+	}
+  
+	return rv;
 }
