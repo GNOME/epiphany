@@ -10,7 +10,6 @@ static void egg_separator_tool_item_class_init (EggSeparatorToolItemClass*class)
 
 static void       egg_separator_tool_item_add               (GtkContainer *container,
 							     GtkWidget    *child);
-static GtkWidget *egg_separator_tool_item_create_menu_proxy (EggToolItem  *self);
 
 static GObjectClass *parent_class = NULL;
 
@@ -53,7 +52,6 @@ egg_separator_tool_item_class_init (EggSeparatorToolItemClass *class)
   toolitem_class = (EggToolItemClass *)class;
 
   container_class->add = egg_separator_tool_item_add;
-  toolitem_class->create_menu_proxy = egg_separator_tool_item_create_menu_proxy;
 }
 
 static void
@@ -66,13 +64,6 @@ egg_separator_tool_item_add (GtkContainer *container, GtkWidget *child)
 {
   g_warning("attempt to add a child to an EggSeparatorToolItem");
 }
-
-static GtkWidget *
-egg_separator_tool_item_create_menu_proxy (EggToolItem *item)
-{
-  return gtk_separator_menu_item_new ();
-}
-
 
 EggToolItem *
 egg_separator_tool_item_new (void)

@@ -24,6 +24,7 @@
 #include "ephy-tree-model-node.h"
 #include "ephy-node-common.h"
 #include "ephy-toolbars-model.h"
+#include "ephy-bookmarks-export.h"
 
 #include <string.h>
 #include <libgnome/gnome-i18n.h>
@@ -243,7 +244,7 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 		ephy_bookmarks_add (eb, default_bookmarks[i].title,
 				    default_bookmarks[i].location,
 				    default_bookmarks[i].smart_url);
-		
+
 		id = ephy_bookmarks_get_bookmark_id (eb, default_bookmarks[i].location);
 		ephy_toolbars_model_add_bookmark (model, FALSE, id);
 	}
@@ -289,6 +290,7 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 	xmlNodePtr root;
 	GPtrArray *children;
 	int i;
+	char *rdf_file;
 
 	LOG ("Saving bookmarks")
 
@@ -329,6 +331,13 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 
 	xmlSaveFormatFile (eb->priv->xml_file, doc, 1);
 	xmlFreeDoc(doc);
+
+	/* Export bookmarks in rdf */
+	rdf_file = g_build_filename (ephy_dot_dir (),
+				     "bookmarks.rdf",
+				     NULL);
+	ephy_bookmarks_export_rdf (eb, rdf_file);
+	g_free (rdf_file);
 }
 
 static double

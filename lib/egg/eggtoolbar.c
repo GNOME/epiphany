@@ -490,7 +490,7 @@ egg_toolbar_init (EggToolbar *toolbar)
   priv->arrow_button = gtk_toggle_button_new ();
   g_signal_connect (priv->arrow_button, "button_press_event",
 		    G_CALLBACK (egg_toolbar_arrow_button_press), toolbar);
-  g_signal_connect_after (priv->arrow_button, "clicked",
+  g_signal_connect (priv->arrow_button, "clicked",
 		    G_CALLBACK (egg_toolbar_arrow_button_clicked), toolbar);
   gtk_button_set_relief (GTK_BUTTON (priv->arrow_button),
 			 get_button_relief (toolbar));
@@ -1835,14 +1835,22 @@ menu_deactivated (GtkWidget *menu, EggToolbar *toolbar)
 }
 
 static void
+remove_item (GtkWidget *menu_item, gpointer data)
+{
+  gtk_container_remove (GTK_CONTAINER (menu_item->parent), menu_item);
+}
+
+static void
 show_menu (EggToolbar *toolbar, GdkEventButton *event)
 {
   EggToolbarPrivate *priv = EGG_TOOLBAR_GET_PRIVATE (toolbar);
   GList *list;
-  GtkWidget *menu_item;
   
   if (priv->menu)
-    gtk_widget_destroy (GTK_WIDGET (priv->menu));
+    {
+      gtk_container_foreach (GTK_CONTAINER (priv->menu), remove_item, NULL);
+      gtk_widget_destroy (GTK_WIDGET (priv->menu));
+    }
 
   priv->menu = GTK_MENU (gtk_menu_new ());
   g_signal_connect (priv->menu, "deactivate", G_CALLBACK (menu_deactivated), toolbar);
@@ -1853,11 +1861,13 @@ show_menu (EggToolbar *toolbar, GdkEventButton *event)
 
       if (TOOLBAR_ITEM_VISIBLE (item) && item->overflow_item)
 	{
-	  menu_item = NULL;
-	  g_signal_emit_by_name (item, "create_menu_proxy", &menu_item);
-	  
+	  GtkWidget *menu_item = egg_tool_item_retrieve_proxy_menu_item (item);
+
 	  if (menu_item)
-	    gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), menu_item);
+	    {
+	      g_assert (GTK_IS_MENU_ITEM (menu_item));
+	      gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), menu_item);
+	    }
 	}
     }
 
@@ -1873,12 +1883,12 @@ egg_toolbar_arrow_button_clicked (GtkWidget *button, EggToolbar *toolbar)
 {
   EggToolbarPrivate *priv = EGG_TOOLBAR_GET_PRIVATE (toolbar);  
 
-  /* We only get here when the button is clicked with the keybaord,
-   * because we block mouse button presses by returning TRUE from
-   * egg_toolbar_arrow_button_press
-   */
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->arrow_button)))
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->arrow_button)) &&
+      (!priv->menu || !GTK_WIDGET_VISIBLE (GTK_WIDGET (priv->menu))))
     {
+      /* We only get here when the button is clicked with the keybaord,
+       * because mouse button presses result in the menu being shown.
+       */
       show_menu (toolbar, NULL);
       gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->menu), FALSE);
     }
@@ -1889,10 +1899,9 @@ egg_toolbar_arrow_button_press (GtkWidget      *button,
 				GdkEventButton *event,
 				EggToolbar     *toolbar)
 {
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-
   show_menu (toolbar, event);
-  
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+ 
   return TRUE;
 }
 

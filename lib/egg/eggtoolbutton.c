@@ -35,6 +35,8 @@
 #  define _(s) (s)
 #endif
 
+#define MENU_ID "egg-tool-button-menu-id"
+
 enum {
   CLICKED,
   LAST_SIGNAL
@@ -66,7 +68,7 @@ static void egg_tool_button_get_property (GObject      *object,
 static void egg_tool_button_finalize     (GObject      *object);
 static void egg_tool_button_parent_set (GtkWidget *widget, GtkWidget *parent);
 
-static GtkWidget *egg_tool_button_create_menu_proxy (EggToolItem     *item);
+static gboolean   egg_tool_button_create_menu_proxy (EggToolItem     *item);
 static void       button_clicked                    (GtkWidget       *widget,
 						     EggToolButton   *button);
 
@@ -248,6 +250,8 @@ egg_tool_button_construct_contents (EggToolItem *tool_item)
 	  gchar *text = _egg_tool_button_get_label_text (button);
 	  label = gtk_label_new (text);
 	  g_free (text);
+
+	  gtk_widget_show (label);
 	}
     }
 
@@ -267,7 +271,7 @@ egg_tool_button_construct_contents (EggToolItem *tool_item)
 	      GtkImageType storage_type = gtk_image_get_storage_type (image);
 	      
 	      /* FIXME: this seems a bit dubious. We are changing a widget that the
-	       * user passed in. It's probably  better to create a new image instead.
+	       * user passed in. It's probably better to create a new image instead.
 	       */
 
 	      if (storage_type == GTK_IMAGE_STOCK)
@@ -319,10 +323,6 @@ egg_tool_button_construct_contents (EggToolItem *tool_item)
       break;
     }
 
-  if (label)
-    gtk_widget_show (label);
-  if (icon)
-    gtk_widget_show (icon);
   if (box)
     gtk_widget_show (box);
 
@@ -409,17 +409,20 @@ egg_tool_button_finalize (GObject *object)
   parent_class->finalize (object);
 }
 
-static GtkWidget *
+static gboolean
 egg_tool_button_create_menu_proxy (EggToolItem *item)
 {
   EggToolButton *button = EGG_TOOL_BUTTON (item);
   GtkWidget *menu_item;
   GtkWidget *menu_image = NULL;
   gchar *label;
-  
+
   label = _egg_tool_button_get_label_text (button);
   menu_item = gtk_image_menu_item_new_with_label (label);
   g_free (label);
+
+  g_object_ref (menu_item);
+  gtk_object_sink (GTK_OBJECT (menu_item));
 
   if (button->icon_set)
     {
@@ -456,7 +459,11 @@ egg_tool_button_create_menu_proxy (EggToolItem *item)
 			   EGG_TOOL_BUTTON (button)->button,
 			   G_CONNECT_SWAPPED);
 
-  return menu_item;
+  egg_tool_item_set_proxy_menu_item (EGG_TOOL_ITEM (button), MENU_ID, menu_item);
+
+  g_object_unref (menu_item);
+  
+  return TRUE;
 }
 
 static void

@@ -23,10 +23,13 @@
 #include "eggmarshalers.h"
 #include "eggtoolbar.h"
 #include <gtk/gtkseparatormenuitem.h>
+#include <string.h>
 
 #ifndef _
 #  define _(s) (s)
 #endif
+
+#define MENU_ID "egg-tool-item-menu-id"
 
 enum {
   CREATE_MENU_PROXY,
@@ -66,7 +69,7 @@ static void egg_tool_item_real_set_tooltip (EggToolItem *tool_item,
 					    const gchar *tip_text,
 					    const gchar *tip_private);
 
-static GtkWidget *egg_tool_item_create_menu_proxy (EggToolItem *item);
+static gboolean egg_tool_item_create_menu_proxy (EggToolItem *item);
 
 
 static GObjectClass *parent_class = NULL;
@@ -101,21 +104,20 @@ egg_tool_item_get_type (void)
 }
 
 static gboolean
-create_proxy_accumulator (GSignalInvocationHint *hint,
-			  GValue *return_accumulator,
-			  const GValue *handler_return,
-			  gpointer user_data)
+egg_boolean_handled_accumulator (GSignalInvocationHint *ihint,
+				  GValue                *return_accu,
+				  const GValue          *handler_return,
+				  gpointer               dummy)
 {
-  GObject *proxy;
   gboolean continue_emission;
-
-  proxy = g_value_get_object (handler_return);
-  g_value_set_object (return_accumulator, proxy);
-  continue_emission = (proxy == NULL);
-
+  gboolean signal_handled;
+  
+  signal_handled = g_value_get_boolean (handler_return);
+  g_value_set_boolean (return_accu, signal_handled);
+  continue_emission = !signal_handled;
+  
   return continue_emission;
 }
-
 static void
 egg_tool_item_class_init (EggToolItemClass *klass)
 {
@@ -153,15 +155,16 @@ egg_tool_item_class_init (EggToolItemClass *klass)
 							 _("Whether the toolbar item is visible when the toolbar is in a vertical orientation."),
 							 TRUE,
 							 G_PARAM_READWRITE));
-  
   toolitem_signals[CREATE_MENU_PROXY] =
     g_signal_new ("create_menu_proxy",
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (EggToolItemClass, create_menu_proxy),
-		  create_proxy_accumulator, NULL,
-		  _egg_marshal_OBJECT__VOID,
-		  GTK_TYPE_WIDGET, 0);
+		  egg_boolean_handled_accumulator, NULL, /* FIXME: use gtk_boolean_handled() when
+							  * we are added to gtk+
+							  */
+		  _egg_marshal_BOOLEAN__VOID,
+		  G_TYPE_BOOLEAN, 0);
   toolitem_signals[TOOLBAR_RECONFIGURED] =
     g_signal_new ("toolbar_reconfigured",
 		  G_OBJECT_CLASS_TYPE (klass),
@@ -362,13 +365,23 @@ egg_tool_item_size_allocate (GtkWidget     *widget,
     }
 }
 
-static GtkWidget *
+static gboolean
 egg_tool_item_create_menu_proxy (EggToolItem *item)
 {
-  if (GTK_BIN (item)->child)
-    return NULL;
-  else
-    return gtk_separator_menu_item_new ();
+  GtkWidget *menu_item = NULL;
+
+  if (!GTK_BIN (item)->child)
+    {
+      menu_item = gtk_separator_menu_item_new();
+      g_object_ref (menu_item);
+      gtk_object_sink (GTK_OBJECT (menu_item));
+    }
+
+  egg_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
+  if (menu_item)
+    g_object_unref (menu_item);
+  
+  return TRUE;
 }
 
 EggToolItem *
@@ -599,4 +612,51 @@ egg_tool_item_get_visible_vertical (EggToolItem *toolitem)
   g_return_val_if_fail (EGG_IS_TOOL_ITEM (toolitem), FALSE);
 
   return toolitem->visible_vertical;
+}
+
+GtkWidget *
+egg_tool_item_retrieve_proxy_menu_item (EggToolItem *tool_item)
+{
+  gboolean retval;
+  
+  g_return_val_if_fail (EGG_IS_TOOL_ITEM (tool_item), NULL);
+
+  g_signal_emit (tool_item, toolitem_signals[CREATE_MENU_PROXY], 0, &retval);
+  
+  return tool_item->menu_item;
+}
+
+GtkWidget *
+egg_tool_item_get_proxy_menu_item (EggToolItem *tool_item,
+				   const gchar *menu_item_id)
+{
+  g_return_val_if_fail (EGG_IS_TOOL_ITEM (tool_item), NULL);
+  g_return_val_if_fail (menu_item_id != NULL, NULL);
+
+  if (tool_item->menu_item_id && strcmp (tool_item->menu_item_id, menu_item_id) == 0)
+    return tool_item->menu_item;
+
+  return NULL;
+}
+
+void
+egg_tool_item_set_proxy_menu_item (EggToolItem *tool_item,
+				   const gchar *menu_item_id,
+				   GtkWidget *menu_item)
+{
+  g_return_if_fail (EGG_IS_TOOL_ITEM (tool_item));
+  g_return_if_fail (menu_item == NULL || GTK_IS_MENU_ITEM (menu_item));
+  g_return_if_fail (menu_item_id != NULL);
+
+  if (tool_item->menu_item)
+    g_object_unref (G_OBJECT (tool_item->menu_item));
+
+  if (tool_item->menu_item_id)
+    g_free (tool_item->menu_item_id);
+
+  if (menu_item)
+    g_object_ref (G_OBJECT (menu_item));
+  tool_item->menu_item = menu_item;
+  
+  tool_item->menu_item_id = g_strdup (menu_item_id);
 }

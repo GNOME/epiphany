@@ -28,6 +28,8 @@
 #  define _(s) (s)
 #endif
 
+#define MENU_ID "egg-toggle-tool-button-menu-id"
+
 enum {
   TOGGLED,
   LAST_SIGNAL
@@ -37,7 +39,7 @@ static void egg_toggle_tool_button_init       (EggToggleToolButton      *button)
 static void egg_toggle_tool_button_class_init (EggToggleToolButtonClass *klass);
 static void egg_toggle_tool_button_finalize   (GObject                  *object);
 
-static GtkWidget *egg_toggle_tool_button_create_menu_proxy (EggToolItem *button);
+static gboolean egg_toggle_tool_button_create_menu_proxy (EggToolItem *button);
 
 static void button_toggled      (GtkWidget           *widget,
 				 EggToggleToolButton *button);
@@ -120,31 +122,34 @@ egg_toggle_tool_button_finalize (GObject *object)
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
-static GtkWidget *
+static gboolean
 egg_toggle_tool_button_create_menu_proxy (EggToolItem *item)
 {
+  GtkWidget *menu_item = NULL;
+
   EggToggleToolButton *button = EGG_TOGGLE_TOOL_BUTTON (item);
   gchar *label;
 
   label = _egg_tool_button_get_label_text (EGG_TOOL_BUTTON (item));
-
-  if (button->menu_item)
-    g_object_remove_weak_pointer (G_OBJECT (button->menu_item),
-				  (gpointer *)&(button->menu_item));
   
-  button->menu_item = gtk_check_menu_item_new_with_mnemonic (label);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (button->menu_item),
+  menu_item = gtk_check_menu_item_new_with_mnemonic (label);
+  g_free (label);
+
+  g_object_ref (menu_item);
+  gtk_object_sink (GTK_OBJECT (menu_item));
+  
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
 				  button->active);
-  g_signal_connect_object (button->menu_item, "activate",
+
+  g_signal_connect_object (menu_item, "activate",
 			   G_CALLBACK (menu_item_activated),
 			   EGG_TOOL_BUTTON (button), 0);
 
-  g_object_add_weak_pointer (G_OBJECT (button->menu_item),
-			     (gpointer *)&(button->menu_item));
+  egg_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
 
-  g_free (label);
+  g_object_unref (menu_item);
   
-  return button->menu_item;
+  return TRUE;
 }
 
 static void
@@ -173,11 +178,14 @@ button_toggled (GtkWidget           *widget,
 
   if (toggle_tool_button->active != toggle_active)
     {
+      GtkWidget *menu_item;
+      
       toggle_tool_button->active = toggle_active;
        
-      if (toggle_tool_button->menu_item)
-	{
-	  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (toggle_tool_button->menu_item),
+      if ((menu_item =
+	   egg_tool_item_get_proxy_menu_item (EGG_TOOL_ITEM (toggle_tool_button), MENU_ID)))
+	  {
+	  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
 					  toggle_tool_button->active);
 	}
 

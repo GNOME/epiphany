@@ -408,10 +408,18 @@ egg_action_sync_stock_id (EggAction *action, GParamSpec *pspec,
     }
 }
 
-static GtkWidget *
+static gboolean
 egg_action_create_menu_proxy (EggToolItem *tool_item, EggAction *action)
 {
-  return egg_action_create_menu_item (action);
+  GtkWidget *menu_item = egg_action_create_menu_item (action);
+
+  g_object_ref (menu_item);
+  gtk_object_sink (GTK_OBJECT (menu_item));
+  
+  egg_tool_item_set_proxy_menu_item (tool_item, "egg-action-menu-item", menu_item);
+  g_object_unref (menu_item);
+
+  return TRUE;
 }
 
 static void

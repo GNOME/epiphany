@@ -1,3 +1,29 @@
+2003-05-11  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/egg/egg-action.c:
+	* lib/egg/eggseparatortoolitem.c:
+	* lib/egg/eggtoggletoolbutton.c:
+	* lib/egg/eggtoolbar.c:
+	* lib/egg/eggtoolbutton.c:
+	* lib/egg/eggtoolitem.c:
+	* lib/egg/eggtoolitem.h:
+	
+	Update
+
+	* src/bookmarks/Makefile.am:
+	* src/bookmarks/ephy-bookmarks.c:
+	* src/bookmarks/ephy-bookmarks-export.c:
+	* src/bookmarks/ephy-bookmarks-export.h:
+
+	Export bookmarks in an rdf format (RSS was perfect,
+	so I just used it instead of inventing a new one).
+	This is useful to ensure compatibility in case
+	of database formats changes. It will be used also
+	as import format for ephy. Also I think it can be easily
+	displayed, need to talk with Edd about the css url though.
+
+	Thanks to Edd Dumbill for the help with this.
+
 2003-05-11  Xan Lopez  <xan@masilla.org>
 
 	* src/bookmarks/ephy-topic-action.c: (build_bookmarks_menu):

@@ -24,6 +24,8 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-bookmark-action.h		\
 	ephy-bookmarks-editor.c		\
 	ephy-bookmarks-editor.h		\
+	ephy-bookmarks-export.c		\
+	ephy-bookmarks-export.h		\
 	ephy-bookmarks-import.c 	\
 	ephy-bookmarks-import.h		\
 	ephy-bookmark-properties.c	\
