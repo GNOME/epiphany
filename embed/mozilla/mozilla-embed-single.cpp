@@ -451,6 +451,9 @@ init_services (MozillaEmbedSingle *single)
 	mozilla_init_home ();
 	mozilla_init_profile ();
 
+	/* Set mozilla binary path */
+	gtk_moz_embed_set_comp_path (MOZILLA_HOME);
+
 	/* Fire up the beast */
 	gtk_moz_embed_push_startup ();
 
@@ -499,6 +502,8 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 	{
 		GtkWidget *dialog;
 
+		/* FIXME Kill references to MOZILLA_FIVE_HOME
+		   when string freeze is over */
 		dialog = gtk_message_dialog_new
 			(NULL,
                          GTK_DIALOG_MODAL,
