@@ -74,7 +74,6 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	NS_METHOD MIMEAskAction (void);
 	
 	nsCOMPtr<nsIHelperAppLauncher> mLauncher;
-	nsCOMPtr<nsISupports> mContext;
 
 	nsCOMPtr<nsIURI> mUri;
 	PRInt64 mTimeDownloadStarted;
@@ -87,7 +86,5 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	nsCString mUrl;
 	nsCString mScheme;
 };
-
-extern nsresult NS_NewContentHandlerFactory(nsIFactory** aFactory);
 
 #endif

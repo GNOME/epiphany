@@ -81,7 +81,6 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 	nsresult rv;
 
 	mLauncher = aLauncher;
-	mContext = aContext;
 	rv = Init ();
 	if (NS_FAILED (rv)) return rv;
 	
@@ -286,9 +285,6 @@ NS_METHOD GContentHandler::SynchroniseMIMEInfo (void)
 	return NS_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// begin local private methods impl
-////////////////////////////////////////////////////////////////////////////////
 NS_METHOD GContentHandler::Init (void)
 {
 	nsresult rv;
@@ -342,8 +338,6 @@ NS_METHOD GContentHandler::MIMEAskAction (void)
 {
 	nsresult rv;
 	gboolean auto_open;
-
-	/* FIXME can we assume mime is not NULL ? */
 
 	auto_open = eel_gconf_get_boolean (CONF_AUTO_OPEN_DOWNLOADS);
 	GContentHandler *mContentHandler = this;
