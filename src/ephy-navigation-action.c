@@ -94,7 +94,7 @@ activate_back_or_forward_menu_item_cb (GtkWidget *menu, EphyWindow *window)
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	go_nth = (int)g_object_get_data (G_OBJECT(menu), "go_nth");
+	go_nth = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(menu), "go_nth"));
 
 	ephy_embed_shistory_go_nth (embed, go_nth);
 }
@@ -110,7 +110,7 @@ activate_up_menu_item_cb (GtkWidget *menu, EphyWindow *window)
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	go_nth = (int)g_object_get_data (G_OBJECT(menu), "go_nth");
+	go_nth = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(menu), "go_nth"));
 
 	ephy_embed_get_go_up_list (embed, &l);
 
