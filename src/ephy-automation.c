@@ -90,7 +90,7 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 			      const CORBA_boolean raise,
                               CORBA_Environment * ev)
 {
-	EphyNewTabFlags flags = 0;
+	EphyNewTabFlags flags;
 	const char *load_page = NULL;
 	EphyWindow *window;
 	Session *session;
@@ -115,9 +115,11 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 		return;
 	}
 
+	flags = EPHY_NEW_TAB_RAISE_WINDOW;
+
 	if (*url == '\0')
 	{
-		flags = EPHY_NEW_TAB_HOMEPAGE;
+		flags |= EPHY_NEW_TAB_HOMEPAGE;
 	}
 	else
 	{

@@ -126,6 +126,7 @@ struct EphyBookmarksEditorPrivate
 	EggActionGroup *action_group;
 	int priority_col;
 	EphyToolbarsModel *tb_model;
+	GHashTable *props_dialogs;
 };
 
 enum
@@ -407,10 +408,37 @@ cmd_delete (EggAction *action,
 }
 
 static void
+prop_dialog_destroy_cb (GtkWidget *dialog, EphyBookmarksEditor *editor)
+{
+	EphyNode *node;
+
+	node = ephy_bookmark_properties_get_node (EPHY_BOOKMARK_PROPERTIES (dialog));
+	g_hash_table_remove (editor->priv->props_dialogs, node);
+}
+
+static void
+show_properties_dialog (EphyBookmarksEditor *editor, EphyNode *node)
+{
+	GtkWidget *dialog;
+
+	dialog = g_hash_table_lookup (editor->priv->props_dialogs, node);
+
+	if (!dialog)
+	{
+		dialog = ephy_bookmark_properties_new
+			(editor->priv->bookmarks, node, GTK_WINDOW (editor));
+		g_signal_connect (dialog, "destroy",
+				  G_CALLBACK (prop_dialog_destroy_cb), editor);
+		g_hash_table_insert (editor->priv->props_dialogs, node, dialog);
+	}
+
+	gtk_window_present (GTK_WINDOW (dialog));
+}
+
+static void
 cmd_bookmark_properties (EggAction *action,
 			 EphyBookmarksEditor *editor)
 {
-	GtkWidget *dialog;
 	GList *selection;
 	GList *l;
 
@@ -419,8 +447,7 @@ cmd_bookmark_properties (EggAction *action,
 	for (l = selection; l; l = l->next)
 	{
 		EphyNode *node = EPHY_NODE (l->data);
-		dialog = ephy_bookmark_properties_new (editor->priv->bookmarks, node, GTK_WINDOW (editor));
-		gtk_widget_show (GTK_WIDGET (dialog));
+		show_properties_dialog (editor, node);
 	}
 
 	g_list_free (selection);
@@ -581,6 +608,8 @@ ephy_bookmarks_editor_finalize (GObject *object)
                         (G_OBJECT(editor->priv->window),
                          (gpointer *)&editor->priv->window);
 	}
+
+	g_hash_table_destroy (editor->priv->props_dialogs);
 
 	g_free (editor->priv);
 
@@ -1348,6 +1377,8 @@ ephy_bookmarks_editor_init (EphyBookmarksEditor *editor)
 {
 	editor->priv = g_new0 (EphyBookmarksEditorPrivate, 1);
 
+	editor->priv->props_dialogs = g_hash_table_new (g_direct_hash,
+                                                        g_direct_equal);
 	editor->priv->tb_model = ephy_shell_get_toolbars_model (ephy_shell);
 
 	g_signal_connect (editor->priv->tb_model, "item_added",

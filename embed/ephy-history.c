@@ -258,7 +258,7 @@ remove_obsolete_pages (EphyHistory *eb)
 
 		if (page_is_obsolete (kid, &current_date))
 		{
-			ephy_history_remove (eb, kid);
+			ephy_node_unref (kid);
 		}
 	}
 }
@@ -354,12 +354,27 @@ pages_removed_cb (EphyNode *node,
 		  EphyNode *child,
 		  EphyHistory *eb)
 {
+	EphyNode *host;
+	int host_id;
+	int children;
+
 	g_static_rw_lock_writer_lock (eb->priv->pages_hash_lock);
 
 	g_hash_table_remove (eb->priv->pages_hash,
 			     ephy_node_get_property_string (child, EPHY_NODE_PAGE_PROP_LOCATION));
 
 	g_static_rw_lock_writer_unlock (eb->priv->pages_hash_lock);
+
+	host_id = ephy_node_get_property_int (child, EPHY_NODE_PAGE_PROP_HOST_ID);
+	host = ephy_node_get_from_id (host_id);
+	children = ephy_node_get_n_children (host);
+
+	LOG ("Check host children: %d", children)
+
+	if (children == 0)
+	{
+		ephy_node_unref (host);
+	}
 }
 
 static gboolean
@@ -834,35 +849,4 @@ ephy_history_get_last_page (EphyHistory *gh)
 
 	return ephy_node_get_property_string
 		(gh->priv->last_page, EPHY_NODE_PAGE_PROP_LOCATION);
-}
-
-void
-ephy_history_remove (EphyHistory *gh, EphyNode *node)
-{
-	EphyNode *host;
-	int host_id;
-
-	LOG ("Remove history item")
-
-	host_id = ephy_node_get_property_int (node, EPHY_NODE_PAGE_PROP_HOST_ID);
-	if (host_id < 0)
-	{
-		EphyNode *tmp;
-		while ((tmp = ephy_node_get_nth_child (node, 0)) != NULL)
-		{
-			ephy_node_unref (tmp);
-		}
-		ephy_node_unref (node);
-		return;
-	}
-
-	host = ephy_node_get_from_id (host_id);
-	if (ephy_node_get_n_children (host) == 1)
-	{
-		ephy_node_unref (host);
-	}
-	else
-	{
-		ephy_node_unref (node);
-	}
 }

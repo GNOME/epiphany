@@ -91,9 +91,6 @@ void		ephy_history_set_icon           (EphyHistory *gh,
 						 const char *url,
 						 const char *icon);
 
-void            ephy_history_remove             (EphyHistory *gh,
-						 EphyNode *node);
-
 void            ephy_history_clear              (EphyHistory *gh);
 
 G_END_DECLS

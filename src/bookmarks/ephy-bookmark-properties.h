@@ -54,6 +54,8 @@ GtkWidget	    *ephy_bookmark_properties_new             (EphyBookmarks *bookmark
 							       EphyNode *bookmark,
 							       GtkWindow *parent_window);
 
+EphyNode            *ephy_bookmark_properties_get_node        (EphyBookmarkProperties *properties);
+
 G_END_DECLS
 
 #endif /* EPHY_BOOKMARK_PROPERTIES_H */

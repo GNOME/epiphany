@@ -458,3 +458,10 @@ ephy_bookmark_properties_new (EphyBookmarks *bookmarks,
 	}
 	return GTK_WIDGET (editor);
 }
+
+EphyNode *
+ephy_bookmark_properties_get_node (EphyBookmarkProperties *properties)
+{
+	return properties->priv->bookmark;
+}
+

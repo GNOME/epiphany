@@ -1,3 +1,29 @@
+2003-04-29  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/ephy-history.c: (remove_obsolete_pages),
+	(pages_removed_cb), (ephy_history_get_last_page):
+	* embed/ephy-history.h:
+
+	We dont need a _remove api, unrefing the node will work
+	better.
+	Try to remove the host when it's empty. It still doesnt work
+	properly, prolly EphyNode bug.
+
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(ephy_bookmark_properties_get_node):
+	* src/bookmarks/ephy-bookmark-properties.h:
+	* src/bookmarks/ephy-bookmarks-editor.c: (prop_dialog_destroy_cb),
+	(show_properties_dialog), (cmd_bookmark_properties),
+	(ephy_bookmarks_editor_finalize), (ephy_bookmarks_editor_init):
+
+	Do not open more than one dialog per node, just present it.
+	Picky picky Dave.
+
+	* src/ephy-automation.c: (impl_ephy_automation_loadurl):
+	* src/ephy-shell.c: (ephy_shell_new_tab):
+
+	Ever present the window when opening windows through automation.
+
 2003-04-29  Christian Persch <chpe+gnomebugz@stud.uni-saarland.de>
 
 	* lib/ephy-dnd.c: (ephy_dnd_drag_data_get),

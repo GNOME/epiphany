@@ -521,14 +521,22 @@ ephy_shell_new_tab (EphyShell *shell,
 	{
 		grouped = TRUE;
 	}
-	
+
 	tab = ephy_tab_new ();
 	embed = ephy_tab_get_embed (tab);
 	gtk_widget_show (GTK_WIDGET(embed));
 	ephy_window_add_tab (window, tab,
 			     grouped,
 			     jump_to);
-	gtk_widget_show (GTK_WIDGET(window));
+
+	if (flags & EPHY_NEW_TAB_RAISE_WINDOW)
+	{
+		gtk_window_present (GTK_WINDOW(window));
+	}
+	else
+	{
+		gtk_widget_show (GTK_WIDGET(window));
+	}
 
 	if (flags & EPHY_NEW_TAB_HOMEPAGE)
 	{
