@@ -18,6 +18,10 @@
  *  $Id$
  */
 
+#include "mozilla-config.h"
+
+#include "config.h"
+
 #include "MozillaPrivate.h"
 
 #include <nsIPrintSettingsService.h>
@@ -26,6 +30,14 @@
 #include <nsISimpleEnumerator.h>
 #include <nsISupportsPrimitives.h>
 #include <nsPromiseFlatString.h>
+
+#ifdef HAVE_NSIWALLETSERVICE_H
+#include <nsIPrefBranch.h>
+#include <nsIDOMWindowInternal.h>
+#include <wallet/nsIWalletService.h>
+#endif
+
+#include "ephy-debug.h"
 
 /* IMPORTANT. Put only code that use internal mozilla strings (nsAutoString for
  * example) in this file. Note that you cannot use embed strings here,
@@ -70,4 +82,59 @@ MozillaPrivate::GetPrinterList ()
 	}
 
 	return g_list_reverse (printers);
+}
+
+#ifdef HAVE_NSIWALLETSERVICE_H
+
+class DummyWindow : public nsIDOMWindowInternal
+{
+public:
+	DummyWindow () { LOG ("DummyWindow ctor"); };
+	virtual ~DummyWindow () { LOG ("DummyWindow dtor"); };
+
+	NS_DECL_ISUPPORTS
+	NS_FORWARD_SAFE_NSIDOMWINDOW(mFake);
+	NS_FORWARD_SAFE_NSIDOMWINDOW2(mFake2);
+	NS_FORWARD_SAFE_NSIDOMWINDOWINTERNAL(mFakeInt);
+private:
+	nsCOMPtr<nsIDOMWindow> mFake;
+	nsCOMPtr<nsIDOMWindow2> mFake2;
+	nsCOMPtr<nsIDOMWindowInternal> mFakeInt;
+};
+
+NS_IMPL_ISUPPORTS3(DummyWindow, nsIDOMWindow, nsIDOMWindow2, nsIDOMWindowInternal)
+
+#endif /* HAVE_NSIWALLETSERVICE_H */
+
+void
+MozillaPrivate::SecureWallet (nsIPrefBranch *pref)
+{
+#ifdef HAVE_NSIWALLETSERVICE_H
+	nsresult rv;
+	PRBool isEnabled = PR_FALSE;
+	rv = pref->GetBoolPref ("wallet.crypto", &isEnabled);
+	if (NS_SUCCEEDED (rv) && isEnabled) return;
+		
+	nsCOMPtr<nsIWalletService> wallet (do_GetService (NS_WALLETSERVICE_CONTRACTID));
+	NS_ENSURE_TRUE (wallet, );
+
+	/* We cannot set nsnull as callback data here, since that will crash
+	 * in case wallet needs to get the prompter from it (missing null check
+	 * in wallet code). Therefore we create a dummy impl which will just
+	 * always fail. There is no way to safely set nsnull after we're done,
+	 * so we'll just leak our dummy window.
+	 */
+	DummyWindow *win = new DummyWindow();
+	if (!win) return;
+
+	nsCOMPtr<nsIDOMWindowInternal> domWinInt (do_QueryInterface (win));
+	NS_ENSURE_TRUE (domWinInt, );
+
+	/* WALLET_InitReencryptCallback doesN'T addref but stores the pointer! */
+	NS_ADDREF (win);
+	wallet->WALLET_InitReencryptCallback (domWinInt);
+
+	/* Now set the pref. This will encrypt the existing data. */
+	pref->SetBoolPref ("wallet.crypto", PR_TRUE);
+#endif /* HAVE_NSIWALLETSERVICE_H */
 }

@@ -87,11 +87,6 @@
 #include <nsIIDNService.h>
 #endif /* ALLOW_PRIVATE_API */
 
-#ifdef HAVE_NSIWALLETSERVICE_H
-#include <nsIDOMWindowInternal.h>
-#include <wallet/nsIWalletService.h>
-#endif
-
 #include <stdlib.h>
 
 #define MOZILLA_PROFILE_DIR  "/mozilla"
@@ -194,28 +189,6 @@ mozilla_embed_single_get_type (void)
         return type;
 }
 
-#ifdef HAVE_NSIWALLETSERVICE_H
-
-class DummyWindow : public nsIDOMWindowInternal
-{
-public:
-	DummyWindow () { LOG ("DummyWindow ctor"); };
-	virtual ~DummyWindow () { LOG ("DummyWindow dtor"); };
-
-	NS_DECL_ISUPPORTS
-	NS_FORWARD_SAFE_NSIDOMWINDOW(mFake);
-	NS_FORWARD_SAFE_NSIDOMWINDOW2(mFake2);
-	NS_FORWARD_SAFE_NSIDOMWINDOWINTERNAL(mFakeInt);
-private:
-	nsCOMPtr<nsIDOMWindow> mFake;
-	nsCOMPtr<nsIDOMWindow2> mFake2;
-	nsCOMPtr<nsIDOMWindowInternal> mFakeInt;
-};
-
-NS_IMPL_ISUPPORTS3(DummyWindow, nsIDOMWindow, nsIDOMWindow2, nsIDOMWindowInternal)
-
-#endif /* HAVE_NSIWALLETSERVICE_H */
-
 static gboolean
 mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 {
@@ -272,33 +245,7 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	pref->SetBoolPref("network.protocol-handler.external.ftp",
 			  have_gnome_url_handler ("ftp"));
 
-#ifdef HAVE_NSIWALLETSERVICE_H
-	PRBool isEnabled = PR_FALSE;
-	rv = pref->GetBoolPref ("wallet.crypto", &isEnabled);
-	if (NS_FAILED (rv) || !isEnabled)
-	{
-		nsCOMPtr<nsIWalletService> wallet (do_GetService (NS_WALLETSERVICE_CONTRACTID));
-		NS_ENSURE_TRUE (wallet, TRUE);
-
-		/* We cannot set nsnull as callback data here, since that will crash
-		 * in case wallet needs to get the prompter from it (missing null check
-		 * in wallet code). Therefore we create a dummy impl which will just
-		 * always fail. There is no way to safely set nsnull after we're done,
-		 * so we'll just leak our dummy window.
-		 */
-		DummyWindow *win = new DummyWindow();
-		if (!win) return TRUE;
-
-		nsCOMPtr<nsIDOMWindowInternal> domWinInt (do_QueryInterface (win));
-		NS_ENSURE_TRUE (domWinInt, TRUE);
-
-		NS_ADDREF (win);
-		wallet->WALLET_InitReencryptCallback (domWinInt);
-
-		/* Now set the pref. This will encrypt the existing data. */
-		pref->SetBoolPref ("wallet.crypto", PR_TRUE);
-	}
-#endif /* HAVE_NSIWALLETSERVICE_H */
+	MozillaPrivate::SecureWallet (pref);
 
 	return TRUE;
 }
