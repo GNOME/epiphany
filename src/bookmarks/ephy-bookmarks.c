@@ -324,17 +324,19 @@ ephy_bookmarks_load (EphyBookmarks *eb)
 	g_return_val_if_fail (doc != NULL, FALSE);
 
 	root = xmlDocGetRootElement (doc);
-
+	child = root->children;
+	
 	tmp = xmlGetProp (root, "version");
 	if (tmp != NULL && strcmp (tmp, EPHY_BOOKMARKS_XML_VERSION) != 0)
 	{
 		g_warning ("Old bookmarks database format detected");
+
 		child = NULL;
 		result = FALSE;
 	}
 	g_free (tmp);
 
-	for (child = root->children; child != NULL; child = child->next)
+	for (; child != NULL; child = child->next)
 	{
 		EphyNode *node;
 
