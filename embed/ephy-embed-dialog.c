@@ -174,7 +174,7 @@ ephy_embed_dialog_new_with_parent (GtkWidget *parent_window,
 {
 	return EPHY_EMBED_DIALOG (g_object_new
 				    (EPHY_TYPE_EMBED_DIALOG,
-				     "ParentWindow", parent_window,
+				     "parent-window", parent_window,
 				     "embed", embed,
 				     NULL));
 }
