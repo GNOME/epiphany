@@ -94,14 +94,6 @@ struct
 }
 languages [] =
 {
-	/**
-	 * please translate like this: "<your language> (System setting)"
-	 * Examples:
-	 * "de"    translation: "Deutsch (Systemeinstellung)"
-	 * "en_AU" translation: "English, Australia (System setting)" or
-	 *                      "Australian English (System setting)"
-	 */ 
-	{ N_("System language"), "system" },
 	{ N_("Afrikaans"), "ak" },
 	{ N_("Albanian"), "sq" },
 	{ N_("Arabic"), "ar" },
@@ -777,6 +769,34 @@ add_lang_dialog_response_cb (GtkWidget *widget,
 	g_object_unref (dialog);
 }
 
+static void
+add_system_language_entry (GtkListStore *store)
+{
+	GtkTreeIter iter;
+	char **sys_langs;
+	char *system, *text;
+	int n_sys_langs;
+
+	sys_langs = ephy_langs_get_languages ();
+	n_sys_langs = g_strv_length (sys_langs);
+
+	system = g_strjoinv (", ", sys_langs);
+
+	text = g_strdup_printf
+		(ngettext (_("System language [%s]"),
+			   _("System languages [%s]"), n_sys_langs), system);
+
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter,
+			    COL_LANG_NAME, text,
+			    COL_LANG_CODE, "system",
+			    -1);
+
+	g_strfreev (sys_langs);
+	g_free (system);
+	g_free (text);
+}
+
 static EphyDialog *
 setup_add_language_dialog (PrefsDialog *pd)
 {
@@ -816,6 +836,8 @@ setup_add_language_dialog (PrefsDialog *pd)
 				    COL_LANG_CODE, languages[i].code,
 				    -1);
 	}
+
+	add_system_language_entry (store);
 
 	sortmodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
 	gtk_tree_sortable_set_sort_column_id
@@ -1053,11 +1075,19 @@ create_language_section (EphyDialog *dialog)
 		/* code isn't in stock list */
 		if (i == n_languages)
 		{
-			char *text;
-
-			text = g_strdup_printf (_("Custom [%s]"), code);
-			language_editor_add (pd, code, text);
-			g_free (text);
+			if (strcmp (code, "system") != 0)
+			{
+				char *text;
+	
+				text = g_strdup_printf (_("Custom [%s]"), code);
+	
+				language_editor_add (pd, code, text);
+				g_free (text);
+			}
+			else
+			{
+				add_system_language_entry (store);
+			}
 		}
 		else
 		{

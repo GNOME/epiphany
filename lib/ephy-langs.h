@@ -32,9 +32,15 @@ typedef struct
 	char *code;
 } EphyFontsLanguageInfo;
 
-const EphyFontsLanguageInfo 	*ephy_font_languages	(void);
+const EphyFontsLanguageInfo *ephy_font_languages	 (void);
 
-guint				 ephy_font_n_languages	(void);
+guint			     ephy_font_n_languages	 (void);
+
+void			     ephy_langs_append_languages (GArray *array);
+
+void			     ephy_langs_sanitise	 (GArray *array);
+
+char			   **ephy_langs_get_languages	 (void);
 
 G_END_DECLS
 

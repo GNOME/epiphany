@@ -33,6 +33,7 @@
 #include "ephy-langs.h"
 #include "ephy-debug.h"
 
+#include <glib/gi18n.h>
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
@@ -44,8 +45,6 @@
 #include <nsEmbedString.h>
 #include <nsIPrefService.h>
 #include <nsIServiceManager.h>
-/* we don't use glib/gi18n.h here because we need gnome_i18n_get_language_list() */
-#include <libgnome/gnome-i18n.h>
 
 #ifdef ALLOW_PRIVATE_API
 #include <nsIProtocolProxyService.h>
@@ -696,118 +695,46 @@ mozilla_allow_popups_notifier(GConfClient *client,
 	mozilla_prefs_set_boolean ("dom.disable_open_during_load", !value);
 }
 
-static char *
-get_system_language ()
-{
-	const GList *sys_langs;
-	const char *lang;
-
-	/**
-	 * This is a comma separated list of language ranges, as specified
-	 * by RFC 2616, 14.4.
-	 * Always include the basic language code last.
-	 *
-	 * Examples:
-	 * "pt"    translation: "pt"
-	 * "pt_BR" translation: "pt-br,pt"
-	 * "zh_CN" translation: "zh-cn,zh"
-	 * "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
-	 */
-	lang = _("system-language");
-	
-	if (strncmp (lang, "system-language", 15) != 0)
-	{
-		/* the l10n has it */
-		return g_strdup (lang);
-	}
-	
-	sys_langs = gnome_i18n_get_language_list ("LC_MESSAGES");
-
-	if (sys_langs)
-	{
-		lang = (char *)sys_langs->data;
-
-		/* FIXME this probably need to be smarter */
-		/* FIXME this can be up to 8 chars, not just 2 */
-		if (strcmp (lang, "C") != 0)
-		{
-			return g_strndup (lang, 2);
-		}
-	}
-
-	/* fallback to english */
-	return g_strdup ("en");
-}
-
 static void
 mozilla_language_notifier(GConfClient *client,
 			  guint cnxn_id,
 			  GConfEntry *entry,
 			  EphyEmbedSingle *single)
 {
-	GSList *languages, *l, *ulist = NULL;
-	GString *result;
+	GArray *array;
+	GSList *languages, *l;
+	char **langs;
+	char *list;
 
 	languages = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
 
-	result = g_string_new ("");
+	array = g_array_new (TRUE, FALSE, sizeof (char *));
 
-	/* substitute the system language */
-	l = g_slist_find_custom (languages, "system", (GCompareFunc) strcmp);
-	if (l != NULL)
-	{
-		char *sys_lang;
-		int index;
-
-		index = g_slist_position (languages, l);
-		g_free (l->data);
-		languages = g_slist_delete_link (languages, l);
-
-		sys_lang = get_system_language ();
-
-		if (sys_lang)
-		{
-			char **s;
-			int i = 0;
-
-			s = g_strsplit (sys_lang, ",", -1);
-			while (s[i] != NULL)
-			{
-				languages = g_slist_insert (languages, g_strdup (s[i]), index);
-
-				index ++;
-				i++;
-			}
-
-			g_strfreev (s);
-			g_free (sys_lang);
-		}		
-	}
-
-	/* now make a list of unique entries */
 	for (l = languages; l != NULL; l = l->next)
 	{
-		if (g_slist_find_custom (ulist, l->data, (GCompareFunc) strcmp) == NULL)
+		if (strcmp ((char *) l->data, "system") == 0)
 		{
-			ulist = g_slist_prepend (ulist, l->data);
+			ephy_langs_append_languages (array);
+			g_free (l->data);
+		}
+		else
+		{
+			g_array_append_val (array, l->data);
 		}
 	}
-	ulist = g_slist_reverse (ulist);
 
-	for (l = ulist; l != NULL; l = l->next)
-	{
-		g_string_append (result, (char *)l->data);
-
-		if (l->next) g_string_append (result, ",");
-	}
-
-	mozilla_prefs_set_string ("intl.accept_languages", result->str);
-
-	g_string_free (result, TRUE);
-
-	g_slist_foreach (languages, (GFunc) g_free, NULL);
 	g_slist_free (languages);
-	g_slist_free (ulist);
+
+	ephy_langs_sanitise (array);
+
+	langs = (char **) g_array_free (array, FALSE);
+
+	list = g_strjoinv (",", langs);
+
+	mozilla_prefs_set_string ("intl.accept_languages", list);
+
+	g_strfreev (langs);
+	g_free (list);
 }
 
 static void

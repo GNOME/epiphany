@@ -1,5 +1,17 @@
 2004-11-07  Christian Persch  <chpe@cvs.gnome.org>
 
+	* data/epiphany.schemas.in:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* lib/ephy-langs.c: (ephy_font_n_languages), (ephy_langs_sanitise),
+	(ephy_langs_append_languages), (ephy_langs_get_languages):
+	* lib/ephy-langs.h:
+	* src/prefs-dialog.c: (add_system_language_entry),
+	(setup_add_language_dialog), (create_language_section):
+
+	Show language code in the string in languages editor. Fixes bug #115355.
+
+2004-11-07  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/ephy-zoom-control.c: (ephy_zoom_control_init),
 	(set_combo_tooltip), (combo_realized),
 	(ephy_zoom_control_set_tooltip):
