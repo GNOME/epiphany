@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-26 01:01+0200\n"
-"PO-Revision-Date: 2003-10-26 02:27+0200\n"
+"POT-Creation-Date: 2003-10-26 22:50+0100\n"
+"PO-Revision-Date: 2003-10-26 22:51+0100\n"
 "Last-Translator: Danilo Segan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -893,7 +893,7 @@ msgid "Cut the Selection"
 msgstr "Iseci izabrano"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:10
-#: embed/ephy-embed-popup-control.c:532
+#: embed/ephy-embed-popup-control.c:546
 msgid "Download Link"
 msgstr "Preuzmi vezu"
 
@@ -978,14 +978,14 @@ msgid "Use Image As Background"
 msgstr "Upotrebi sliku za pozadinu"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:33
-#: src/bookmarks/ephy-bookmarks-editor.c:161 src/ephy-history-window.c:152
+#: src/bookmarks/ephy-bookmarks-editor.c:162 src/ephy-history-window.c:152
 #: src/ephy-window.c:63
 msgid "_Edit"
 msgstr "_Uređivanje"
 
 #. Toplevel
 #: data/ui/nautilus-epiphany-view.xml.in.h:34
-#: src/bookmarks/ephy-bookmarks-editor.c:160 src/ephy-history-window.c:151
+#: src/bookmarks/ephy-bookmarks-editor.c:161 src/ephy-history-window.c:151
 #: src/ephy-window.c:62
 msgid "_File"
 msgstr "_Datoteka"
@@ -998,51 +998,43 @@ msgstr "_Pronađi..."
 msgid "_Print..."
 msgstr "_Štampaj..."
 
-#: embed/downloader-view.c:199
+#: embed/downloader-view.c:198
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u:%02u"
 
-#: embed/downloader-view.c:203
+#: embed/downloader-view.c:202
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
-#: embed/downloader-view.c:352
+#: embed/downloader-view.c:351
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:363
+#: embed/downloader-view.c:362
 msgid "Filename"
 msgstr "Ime datoteke"
 
-#: embed/downloader-view.c:374
+#: embed/downloader-view.c:373
 msgid "Size"
 msgstr "Veličina"
 
-#: embed/downloader-view.c:385
+#: embed/downloader-view.c:384
 msgid "Remaining"
 msgstr "Preostalo"
 
-#: embed/ephy-embed-popup-control.c:543 src/popup-commands.c:327
+#: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:333
 msgid "Save Image As"
 msgstr "Sačuvaj sliku kao"
 
-#: embed/ephy-embed-popup-control.c:650
+#: embed/ephy-embed-popup-control.c:641
 msgid "Save Page As"
 msgstr "Sačuvaj stranicu kao"
 
-#: embed/ephy-embed-popup-control.c:659 src/popup-commands.c:415
+#: embed/ephy-embed-popup-control.c:650 src/popup-commands.c:419
 msgid "Save Background As"
 msgstr "Sačuvaj pozadinu kao"
-
-#: embed/ephy-embed-utils.c:174
-msgid "The file has not been saved."
-msgstr "Ova datoteka nije sačuvana."
-
-#: embed/ephy-embed-utils.c:210
-msgid "No available applications to open the specified file."
-msgstr "Ne postoje programi za otvaranje navedene datoteke."
 
 #: embed/ephy-encodings.c:63
 msgid "Arabic (_IBM-864)"
@@ -1392,13 +1384,18 @@ msgstr "Ostali"
 msgid "Local files"
 msgstr "Lokalne datoteke"
 
-#: embed/mozilla/ContentHandler.cpp:307
+#: embed/mozilla/ContentHandler.cpp:305
 msgid "Select the destination filename"
 msgstr "Izaberi ciljno ime datoteke"
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:221
+#: embed/mozilla/ContentHandler.cpp:660
+msgid "No available applications to open the specified file."
+msgstr "Ne postoje programi za otvaranje navedene datoteke."
+
+#: embed/mozilla/EphyHeaderSniffer.cpp:227
+#: embed/mozilla/EphyHeaderSniffer.cpp:250
 #: src/bookmarks/ephy-bookmarks-import.c:236
-#: src/bookmarks/ephy-bookmarks-import.c:362 src/window-commands.c:299
+#: src/bookmarks/ephy-bookmarks-import.c:362 src/window-commands.c:303
 #: src/ephy-toolbars-model.c:199
 msgid "Untitled"
 msgstr "Neimenovana"
@@ -1421,17 +1418,29 @@ msgstr ""
 "\n"
 "Želite li da probate uobičajeni Gnom protokol?"
 
-#: embed/mozilla/FilePicker.cpp:328
-msgid "The specified path does not exist."
-msgstr "Navedena putanja ne postoji."
+#: embed/mozilla/FilePicker.cpp:145
+msgid "All files"
+msgstr "Sve datoteke"
 
-#: embed/mozilla/FilePicker.cpp:347
-msgid "A file was selected when a folder was expected."
-msgstr "Izabrana je datoteka, a očekivan je direktorijum."
+#: embed/mozilla/FilePicker.cpp:150
+msgid "HTML files"
+msgstr "HTML datoteke"
 
-#: embed/mozilla/FilePicker.cpp:354
-msgid "A folder was selected when a file was expected."
-msgstr "Izabran je direktorijum, a očekivana je datoteka."
+#: embed/mozilla/FilePicker.cpp:155
+msgid "Text files"
+msgstr "Tekstualne datoteke"
+
+#: embed/mozilla/FilePicker.cpp:160
+msgid "Image files"
+msgstr "Datoteke slika"
+
+#: embed/mozilla/FilePicker.cpp:165
+msgid "XML files"
+msgstr "XML datoteke"
+
+#: embed/mozilla/FilePicker.cpp:170
+msgid "XUL files"
+msgstr "XUL datoteke"
 
 #. Add the buttons
 #: embed/mozilla/GtkNSSDialogs.cpp:223 embed/mozilla/GtkNSSDialogs.cpp:528
@@ -1550,7 +1559,9 @@ msgstr "Verovati novom izdavaču sertifikata?"
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
-msgstr "Pre ukazivanja poverenja izdavaču sertifikata, treba da proverite da li je sertifikat autentičan."
+msgstr ""
+"Pre ukazivanja poverenja izdavaču sertifikata, treba da proverite da li je "
+"sertifikat autentičan."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:558
 msgid "_Web sites"
@@ -1660,21 +1671,32 @@ msgstr "Ne mogu da odobrim ovaj sertifikat zato što izdavač nije poznat."
 #: embed/mozilla/GtkNSSDialogs.cpp:1297
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
-msgstr "Ne mogu da odobrim ovaj sertifikat zato što je CA sertifikat neispravan."
+msgstr ""
+"Ne mogu da odobrim ovaj sertifikat zato što je CA sertifikat neispravan."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1302
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Ne mogu da odobrim ovaj sertifikat iz nepoznatih razloga."
 
-#: embed/mozilla/mozilla-embed-single.cpp:661
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:161
+msgid "Generating Private Key."
+msgstr "Obrazujem privatni ključ."
+
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:162
+msgid ""
+"Please wait while a new private key is generated. This process could take a "
+"few minutes."
+msgstr "Sačekajte malo dok se obrazuje novi privatni ključ. Ovaj postupak može potrajati nekoliko minuta."
+
+#: embed/mozilla/mozilla-embed-single.cpp:651
 msgid "Yes"
 msgstr "Da"
 
-#: embed/mozilla/mozilla-embed-single.cpp:663
+#: embed/mozilla/mozilla-embed-single.cpp:653
 msgid "No"
 msgstr "Ne"
 
-#: embed/mozilla/mozilla-embed-single.cpp:668
+#: embed/mozilla/mozilla-embed-single.cpp:658
 msgid "End of current session"
 msgstr "Kraj tekuće sesije"
 
@@ -1883,241 +1905,241 @@ msgstr "_Teme:"
 msgid "_Show in bookmarks bar"
 msgstr "_Prikaži u liniji sa obeleživačima"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:162 src/ephy-history-window.c:153
+#: src/bookmarks/ephy-bookmarks-editor.c:163 src/ephy-history-window.c:153
 #: src/ephy-window.c:64
 msgid "_View"
 msgstr "_Pregled"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:163 src/ephy-history-window.c:154
+#: src/bookmarks/ephy-bookmarks-editor.c:164 src/ephy-history-window.c:154
 #: src/ephy-window.c:68
 msgid "_Help"
 msgstr "_Pomoć"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:167
+#: src/bookmarks/ephy-bookmarks-editor.c:168
 msgid "_New Topic"
 msgstr "_Nova tema"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:168
+#: src/bookmarks/ephy-bookmarks-editor.c:169
 msgid "Create a new topic"
 msgstr "Napravi novu temu"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:170
-#: src/bookmarks/ephy-bookmarks-editor.c:951 src/ephy-history-window.c:158
+#: src/bookmarks/ephy-bookmarks-editor.c:171
+#: src/bookmarks/ephy-bookmarks-editor.c:975 src/ephy-history-window.c:158
 #: src/ephy-history-window.c:725
 msgid "_Open in New Window"
 msgstr "_Otvori u novom prozoru"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:171
+#: src/bookmarks/ephy-bookmarks-editor.c:172
 msgid "Open the selected bookmark in a new window"
 msgstr "Otvori izabrani obeleživač u novom prozoru"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:173
-#: src/bookmarks/ephy-bookmarks-editor.c:952 src/ephy-history-window.c:161
+#: src/bookmarks/ephy-bookmarks-editor.c:174
+#: src/bookmarks/ephy-bookmarks-editor.c:976 src/ephy-history-window.c:161
 #: src/ephy-history-window.c:726
 msgid "Open in New _Tab"
 msgstr "Otvoru u novom _listu"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:174
+#: src/bookmarks/ephy-bookmarks-editor.c:175
 msgid "Open the selected bookmark in a new tab"
 msgstr "Otvori izabrani obeleživač u novom listu"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:176
+#: src/bookmarks/ephy-bookmarks-editor.c:177
 msgid "_Rename..."
 msgstr "_Preimenuj..."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:177
+#: src/bookmarks/ephy-bookmarks-editor.c:178
 msgid "Rename the selected bookmark or topic"
 msgstr "Preimenuj izabrani obeleživač ili temu"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:178 src/ephy-history-window.c:164
+#: src/bookmarks/ephy-bookmarks-editor.c:179 src/ephy-history-window.c:164
 msgid "_Delete"
 msgstr "_Obriši"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:179
+#: src/bookmarks/ephy-bookmarks-editor.c:180
 msgid "Delete the selected bookmark or topic"
 msgstr "Ukloni izabrani obeleživač ili temu"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:181
+#: src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "_Properties"
 msgstr "Osob_ine"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:182
+#: src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Pregledajte ili izmenite osobine izabranog obeleživača"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:184
+#: src/bookmarks/ephy-bookmarks-editor.c:185
 msgid "_Import Bookmarks..."
 msgstr "U_vezite obeleživače..."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:185
+#: src/bookmarks/ephy-bookmarks-editor.c:186
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr ""
 "Uvezite obeleživače iz nekog drugog veb čitača ili iz datoteke sa "
 "obeleživačima"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:187 src/ephy-history-window.c:170
+#: src/bookmarks/ephy-bookmarks-editor.c:188 src/ephy-history-window.c:170
 #: src/ephy-window.c:90
 msgid "_Close"
 msgstr "_Zatvori"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:188
+#: src/bookmarks/ephy-bookmarks-editor.c:189
 msgid "Close the bookmarks window"
 msgstr "Zatvori prozor sa obeleživačima"
 
 #. Edit Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:192 src/ephy-history-window.c:175
+#: src/bookmarks/ephy-bookmarks-editor.c:193 src/ephy-history-window.c:175
 #: src/ephy-window.c:95
 msgid "Cu_t"
 msgstr "I_seci"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:193 src/ephy-history-window.c:176
+#: src/bookmarks/ephy-bookmarks-editor.c:194 src/ephy-history-window.c:176
 #: src/ephy-window.c:96
 msgid "Cut the selection"
 msgstr "Iseci izabrano"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:195
-#: src/bookmarks/ephy-bookmarks-editor.c:961 src/ephy-history-window.c:178
+#: src/bookmarks/ephy-bookmarks-editor.c:196
+#: src/bookmarks/ephy-bookmarks-editor.c:985 src/ephy-history-window.c:178
 #: src/ephy-history-window.c:735 src/ephy-window.c:98
 msgid "_Copy"
 msgstr "_Umnoži"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:196 src/ephy-history-window.c:179
+#: src/bookmarks/ephy-bookmarks-editor.c:197 src/ephy-history-window.c:179
 #: src/ephy-window.c:99
 msgid "Copy the selection"
 msgstr "Umnoži izabrano"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:198 src/ephy-history-window.c:181
+#: src/bookmarks/ephy-bookmarks-editor.c:199 src/ephy-history-window.c:181
 #: src/ephy-window.c:101
 msgid "_Paste"
 msgstr "U_baci"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:199 src/ephy-history-window.c:182
+#: src/bookmarks/ephy-bookmarks-editor.c:200 src/ephy-history-window.c:182
 msgid "Paste the clipboard"
 msgstr "Ubaci iz spiska isečaka"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:201 src/ephy-history-window.c:184
+#: src/bookmarks/ephy-bookmarks-editor.c:202 src/ephy-history-window.c:184
 #: src/ephy-window.c:104
 msgid "Select _All"
 msgstr "Izaberi _sve"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:202
+#: src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "Select all bookmarks or text"
 msgstr "Izaberi sve obeleživače ili sav tekst"
 
 #. Help Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:206 src/ephy-history-window.c:192
+#: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:192
 #: src/ephy-window.c:195
 msgid "_Contents"
 msgstr "_Sadržaj"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:207
+#: src/bookmarks/ephy-bookmarks-editor.c:208
 msgid "Display bookmarks help"
 msgstr "Prikaži pomoć za obeleživače"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:209 src/ephy-history-window.c:195
+#: src/bookmarks/ephy-bookmarks-editor.c:210 src/ephy-history-window.c:195
 #: src/ephy-window.c:198
 msgid "_About"
 msgstr "_O programu"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:210 src/ephy-history-window.c:196
+#: src/bookmarks/ephy-bookmarks-editor.c:211 src/ephy-history-window.c:196
 #: src/ephy-window.c:199
 msgid "Display credits for the web browser creators"
 msgstr "Prikaži zasluge za tvorce ovog veb čitača"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:218
+#: src/bookmarks/ephy-bookmarks-editor.c:219
 msgid "_Show in Bookmarks Bar"
 msgstr "_Prikaži u liniji sa obeleživačima"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:219
+#: src/bookmarks/ephy-bookmarks-editor.c:220
 msgid "Show the selected bookmark or topic in the bookmarks bar"
 msgstr "Prikaži izabrani obeleživač ili temu u liniji sa obeleživačima"
 
 #. View Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:233 src/ephy-history-window.c:211
+#: src/bookmarks/ephy-bookmarks-editor.c:234 src/ephy-history-window.c:211
 msgid "_Title"
 msgstr "_Naslov"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:234 src/ephy-history-window.c:212
+#: src/bookmarks/ephy-bookmarks-editor.c:235 src/ephy-history-window.c:212
 msgid "Show only the title column"
 msgstr "Prikaži samo naslovnu kolonu"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:235 src/ephy-history-window.c:215
+#: src/bookmarks/ephy-bookmarks-editor.c:236 src/ephy-history-window.c:215
 msgid "T_itle and Address"
 msgstr "Nas_lov i adresa"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:236 src/ephy-history-window.c:216
+#: src/bookmarks/ephy-bookmarks-editor.c:237 src/ephy-history-window.c:216
 msgid "Show both the title and address columns"
 msgstr "Prikaži kolone i za naslov i za adresu"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:278
+#: src/bookmarks/ephy-bookmarks-editor.c:279
 msgid "Type a topic"
 msgstr "Unesi temu"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:522
+#: src/bookmarks/ephy-bookmarks-editor.c:543
 msgid "Import bookmarks from file"
 msgstr "Uvezi obeleživače iz datoteke"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:552
+#: src/bookmarks/ephy-bookmarks-editor.c:576
 msgid "Import Bookmarks"
 msgstr "Uvezi obeleživače"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:572
+#: src/bookmarks/ephy-bookmarks-editor.c:596
 msgid "Choose the bookmarks source:"
 msgstr "Izaberite izvor obeleživača:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:589
+#: src/bookmarks/ephy-bookmarks-editor.c:613
 msgid "Mozilla bookmarks"
 msgstr "Mozilini obeleživači"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:591
+#: src/bookmarks/ephy-bookmarks-editor.c:615
 msgid "Firebird bookmarks"
 msgstr "Obeleživači Firebird-a"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:593
+#: src/bookmarks/ephy-bookmarks-editor.c:617
 msgid "Galeon bookmarks"
 msgstr "Galeonovi obeleživači"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:595
+#: src/bookmarks/ephy-bookmarks-editor.c:619
 msgid "Konqueror bookmarks"
 msgstr "Konkverorovi obeleživači"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:599
+#: src/bookmarks/ephy-bookmarks-editor.c:623
 msgid "Import from a file"
 msgstr "Uvezite iz datoteke"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:946 src/ephy-history-window.c:720
+#: src/bookmarks/ephy-bookmarks-editor.c:970 src/ephy-history-window.c:720
 msgid "_Open in New Windows"
 msgstr "_Otvori u novim prozorima"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:947 src/ephy-history-window.c:721
+#: src/bookmarks/ephy-bookmarks-editor.c:971 src/ephy-history-window.c:721
 msgid "Open in New _Tabs"
 msgstr "Otvori u novim _listovima"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:957 src/ephy-history-window.c:731
+#: src/bookmarks/ephy-bookmarks-editor.c:981 src/ephy-history-window.c:731
 msgid "_Copy Address"
 msgstr "_Umnoži adresu"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1204 src/ephy-history-window.c:1029
+#: src/bookmarks/ephy-bookmarks-editor.c:1228 src/ephy-history-window.c:1029
 msgid "_Search:"
 msgstr "_Pretraga:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1336
+#: src/bookmarks/ephy-bookmarks-editor.c:1360
 #: src/bookmarks/ephy-topic-action.c:624 src/ephy-window.c:612
 msgid "Bookmarks"
 msgstr "Obeleživači"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1419
+#: src/bookmarks/ephy-bookmarks-editor.c:1443
 msgid "Topics"
 msgstr "Teme"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1481 src/ephy-history-window.c:1308
+#: src/bookmarks/ephy-bookmarks-editor.c:1505 src/ephy-history-window.c:1308
 msgid "Title"
 msgstr "Naslov"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1488 src/ephy-history-window.c:1314
+#: src/bookmarks/ephy-bookmarks-editor.c:1512 src/ephy-history-window.c:1314
 msgid "Address"
 msgstr "Adresa"
 
@@ -2799,11 +2821,11 @@ msgstr "Umnoži adresu sli_ke"
 msgid "Exit Fullscreen"
 msgstr "Ne koristi ceo ekran"
 
-#: src/ephy-window.c:602 src/window-commands.c:339
+#: src/ephy-window.c:602 src/window-commands.c:353
 msgid "Open"
 msgstr "Otvori"
 
-#: src/ephy-window.c:604 src/window-commands.c:385
+#: src/ephy-window.c:604 src/window-commands.c:376
 msgid "Save As"
 msgstr "Sačuvaj kao"
 
@@ -2881,7 +2903,7 @@ msgstr "Bezbedan:"
 msgid "Expire:"
 msgstr "Ističe:"
 
-#: src/popup-commands.c:317
+#: src/popup-commands.c:323
 msgid "Download link"
 msgstr "Preuzmi vezu"
 
@@ -3173,29 +3195,41 @@ msgstr "Ikona za stranicu"
 msgid "Go to the address entered in the address entry"
 msgstr "Idi na adresu navedenu u polju za unos adrese."
 
-#: src/window-commands.c:131
+#: src/window-commands.c:135
 msgid "Check this out!"
 msgstr "Pogledajte ovo!"
 
-#: src/window-commands.c:697
+#: src/window-commands.c:693
 msgid "Toolbar Editor"
 msgstr "Uređivanje alatki"
 
-#: src/window-commands.c:719
+#: src/window-commands.c:715
 msgid "_Add a New Toolbar"
 msgstr "_Dodaj novu paletu alatki"
 
 #. Translator credits
-#: src/window-commands.c:769
+#: src/window-commands.c:765
 msgid "translator_credits"
 msgstr ""
 "Danilo Šegan <danilo@prevod.org>\n"
 "\n"
 "http://www.Prevod.org/"
 
-#: src/window-commands.c:797
+#: src/window-commands.c:793
 msgid "A GNOME browser based on Mozilla"
 msgstr "Gnom veb čitač zasnovan na Mozili"
+
+#~ msgid "The file has not been saved."
+#~ msgstr "Ova datoteka nije sačuvana."
+
+#~ msgid "The specified path does not exist."
+#~ msgstr "Navedena putanja ne postoji."
+
+#~ msgid "A file was selected when a folder was expected."
+#~ msgstr "Izabrana je datoteka, a očekivan je direktorijum."
+
+#~ msgid "A folder was selected when a file was expected."
+#~ msgstr "Izabran je direktorijum, a očekivana je datoteka."
 
 #~ msgid "Done."
 #~ msgstr "Gotovo."
