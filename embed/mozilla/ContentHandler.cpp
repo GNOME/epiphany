@@ -272,7 +272,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 			(mAction == CONTENT_ACTION_OPEN_TMP) ?
 			GTK_STOCK_OPEN : EPHY_STOCK_DOWNLOAD;
 
-	if (mPermission == EPHY_MIME_PERMISSION_UNSAFE && mHelperApp)
+	if (mPermission != EPHY_MIME_PERMISSION_SAFE && mHelperApp)
 	{
 		dialog = gtk_message_dialog_new
 			(parentWindow, GTK_DIALOG_DESTROY_WITH_PARENT,
