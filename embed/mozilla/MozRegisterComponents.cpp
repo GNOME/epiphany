@@ -109,7 +109,11 @@ static const nsModuleComponentInfo sAppComps[] = {
 	{
 		MOZ_DOWNLOAD_CLASSNAME,
 		MOZ_DOWNLOAD_CID,
+#ifdef NS_TRANSFER_CONTRACTID
+		NS_TRANSFER_CONTRACTID,
+#else
 		NS_DOWNLOAD_CONTRACTID,
+#endif
 		MozDownloadConstructor
 	},
 #ifdef ENABLE_FILEPICKER
