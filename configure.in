@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([GNOME Web browser], [1.4.4],
+AC_INIT([GNOME Web browser], [1.4.4.90],
         [http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
@@ -368,6 +368,7 @@ GETTEXT_PACKAGE=epiphany
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package])
 AM_GLIB_GNU_GETTEXT
+AM_GLIB_DEFINE_LOCALEDIR([GNOMELOCALEDIR])
 
 dnl uninstalled share dir to search data
 AC_DEFINE_UNQUOTED(SHARE_UNINSTALLED_DIR,"`pwd`/data",[path to source data dir])
