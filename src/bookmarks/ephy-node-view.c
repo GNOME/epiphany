@@ -400,17 +400,19 @@ ephy_node_view_new (EphyNode *root,
 
 static int
 ephy_node_view_sort_func (GtkTreeModel *model,
-		GtkTreeIter *a,
-		GtkTreeIter *b,
-		gpointer user_data)
+			  GtkTreeIter *a,
+			  GtkTreeIter *b,
+			  gpointer user_data)
 {
-	g_return_val_if_fail (model != NULL, 0);
-	g_return_val_if_fail (user_data != NULL, 0);
-	
-	GList *order = (GList *) user_data;
+	GList *order;
 	GList *l;
 	int retval = 0;
-	
+
+	g_return_val_if_fail (model != NULL, 0);
+	g_return_val_if_fail (user_data != NULL, 0);
+
+	order = (GList *) user_data;
+
 	for (l = order; l != NULL && retval == 0; l = g_list_next (l))
 	{
 		EphyTreeModelNodeColumn column = GPOINTER_TO_INT (l->data);
