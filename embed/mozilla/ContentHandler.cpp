@@ -34,8 +34,7 @@
 #include "nsIURL.h"
 #include "nsILocalFile.h"
 #include "nsIMIMEInfo.h"
-
-#include "nsIWebNavigation.h" // Needed to create the LoadType flag
+#include "nsIInterfaceRequestorUtils.h"
 
 #include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
@@ -129,7 +128,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 					  _retval);
 	}
 
-	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_QueryInterface (aWindowContext);
+	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (aWindowContext);
 	GtkWidget *parentWindow = GTK_WIDGET (MozillaFindGtkParent (parentDOMWindow));
 
 	dialog = ephy_file_chooser_new (_("Save"), parentWindow,
@@ -257,7 +256,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction (PRBool autoDownload)
 	char *text;
 	int response;
 
-	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_QueryInterface (mContext);
+	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (mContext);
 	GtkWindow *parentWindow = GTK_WINDOW (MozillaFindGtkParent(parentDOMWindow));
 
 	dialog = gtk_dialog_new_with_buttons
@@ -277,8 +276,6 @@ NS_METHOD GContentHandler::MIMEConfirmAction (PRBool autoDownload)
 	gtk_widget_show (hbox);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
 			    TRUE, TRUE, 0);
-
-	g_print ("AAA %d %p", mPermission, mHelperApp);
 
 	if (mPermission == EPHY_MIME_PERMISSION_UNSAFE && mHelperApp)
 	{

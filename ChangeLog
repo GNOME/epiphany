@@ -1,5 +1,19 @@
 2004-02-28  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* embed/mozilla/ContentHandler.cpp:
+
+	Use getInterface to get the dom window from the
+	docshell, not queryInterface. (Bug #121160)
+
+	* embed/mozilla/MozillaPrivate.cpp:
+
+	Do not fallback to the active window if
+	the parent cannot be found. It just hides problems
+	and cause more annoying behaviors (like dialogs
+	parented on the wrong window).
+
+2004-02-28  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* HACKING:
 
 	Add a note about changelog entry.
