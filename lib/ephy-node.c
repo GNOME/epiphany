@@ -322,6 +322,8 @@ ephy_node_new (EphyNodeDb *db)
 {
 	long id;
 
+	g_return_val_if_fail (EPHY_IS_NODE_DB (db), NULL);
+
 	id = _ephy_node_db_new_id (db);
 
 	return ephy_node_new_with_id (db, id);
@@ -331,6 +333,8 @@ EphyNode *
 ephy_node_new_with_id (EphyNodeDb *db, gulong reserved_id)
 {
 	EphyNode *node;
+
+	g_return_val_if_fail (EPHY_IS_NODE_DB (db), NULL);
 
 	node = g_new0 (EphyNode, 1);
 
@@ -366,6 +370,8 @@ ephy_node_new_with_id (EphyNodeDb *db, gulong reserved_id)
 EphyNodeDb *
 ephy_node_get_db (EphyNode *node)
 {
+	g_return_val_if_fail (EPHY_IS_NODE (node), NULL);
+	
 	return node->db;
 }
 
