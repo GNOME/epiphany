@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000-2003 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2004 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 
 G_BEGIN_DECLS
 
-GObject	*ephy_embed_factory_new_object (const char *object_id);
+GObject	*ephy_embed_factory_new_object (GType type);
 
 G_END_DECLS
 

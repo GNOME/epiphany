@@ -1,3 +1,17 @@
+2004-09-11  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-embed-factory.c: (ephy_embed_factory_new_object):
+	* embed/ephy-embed-factory.h:
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_get_embed_single):
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_download):
+	* src/ephy-tab.c: (save_property_url), (ephy_tab_init):
+	* src/popup-commands.c: (save_property_url),
+	(popup_cmd_set_image_as_background):
+	* src/window-commands.c: (window_cmd_file_save_as),
+	(save_temp_source):
+
+	Just pass a GType to ephy_embed_factory_new_object().
+
 2004-09-11  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/bookmarks/ephy-topics-selector.c: (toggle_topic),

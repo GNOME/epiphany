@@ -203,7 +203,7 @@ save_property_url (GtkAction *action,
 	location = g_value_get_string (value);
 
 	persist = EPHY_EMBED_PERSIST
-		(ephy_embed_factory_new_object ("EphyEmbedPersist"));
+		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
 
 	ephy_embed_persist_set_embed (persist, embed);
 	ephy_embed_persist_set_fc_title (persist, title);
@@ -303,7 +303,7 @@ popup_cmd_set_image_as_background (GtkAction *action,
 	location = g_value_get_string (value);
 
 	persist = EPHY_EMBED_PERSIST
-		(ephy_embed_factory_new_object ("EphyEmbedPersist"));
+		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
 
 	base = g_path_get_basename (location);
 	base_converted = g_filename_from_utf8 (base, -1, NULL, NULL, NULL);

@@ -1397,7 +1397,7 @@ save_property_url (EphyEmbed *embed,
 	location = g_value_get_string (value);
 
 	persist = EPHY_EMBED_PERSIST
-		(ephy_embed_factory_new_object ("EphyEmbedPersist"));
+		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
 
 	ephy_embed_persist_set_embed (persist, embed);
 	ephy_embed_persist_set_flags (persist, 0);
@@ -1556,7 +1556,7 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->setting_zoom = FALSE;
 	tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
 
-	embed = ephy_embed_factory_new_object ("EphyEmbed");
+	embed = ephy_embed_factory_new_object (EPHY_TYPE_EMBED);
 	g_assert (embed != NULL);
 
 	gtk_container_add (GTK_CONTAINER (tab), GTK_WIDGET (embed));
