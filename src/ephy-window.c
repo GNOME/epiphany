@@ -561,18 +561,15 @@ ephy_window_fullscreen (EphyWindow *window)
 {
 	GtkWidget *popup;
 	EphyTab *tab;
+	gboolean lockdown_fs;
 
 	window->priv->fullscreen_mode = TRUE;
 
-	sync_chromes_visibility (window);
-
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN))
-	{
-		/* no need to show "exit fullscreen" button */
-		return;
-	}
+	lockdown_fs = eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);
 
 	popup = ephy_fullscreen_popup_new (window);
+	ephy_fullscreen_popup_set_show_leave
+		(EPHY_FULLSCREEN_POPUP (popup), !lockdown_fs);
 	window->priv->fullscreen_popup = popup;
 	g_signal_connect_swapped (popup, "exit-clicked",
 				  G_CALLBACK (exit_fullscreen_clicked_cb), window);
@@ -582,17 +579,15 @@ ephy_window_fullscreen (EphyWindow *window)
 	sync_tab_load_status (tab, NULL, window);
 	sync_tab_security (tab, NULL, window);
 
-	if (get_toolbar_visibility (window) == FALSE)
-	{
-		gtk_widget_show (popup);
-	}
-
 	egg_editable_toolbar_set_model
 		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
 		 EGG_TOOLBARS_MODEL (
 		 	ephy_shell_get_toolbars_model (ephy_shell, TRUE)));
 
-	ephy_toolbar_set_fullscreen_mode (window->priv->toolbar, TRUE);
+	ephy_toolbar_set_show_leave_fullscreen (window->priv->toolbar,
+						!lockdown_fs);
+
+	sync_chromes_visibility (window);
 }
 
 static void
@@ -602,7 +597,7 @@ ephy_window_unfullscreen (EphyWindow *window)
 
 	destroy_fullscreen_popup (window);
 
-	ephy_toolbar_set_fullscreen_mode (window->priv->toolbar, FALSE);
+	ephy_toolbar_set_show_leave_fullscreen (window->priv->toolbar, FALSE);
 
 	egg_editable_toolbar_set_model
 		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),

@@ -27,12 +27,12 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_FULLSCREEN_POPUP	 (ephy_fullscreen_popup_get_type ())
-#define EPHY_FULLSCREEN_POPUP(o)	   (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_FULLSCREEN_POPUP, EphyFullscreenPopup))
-#define EPHY_FULLSCREEN_POPUP_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_FULLSCREEN_POPUP, EphyFullscreenPopupClass))
-#define EPHY_IS_FULLSCREEN_POPUP(o)	(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_FULLSCREEN_POPUP))
-#define EPHY_IS_FULLSCREEN_POPUP_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_FULLSCREEN_POPUP))
-#define EPHY_FULLSCREEN_POPUP_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_FULLSCREEN_POPUP, EphyFullscreenPopupClass))
+#define EPHY_TYPE_FULLSCREEN_POPUP		(ephy_fullscreen_popup_get_type ())
+#define EPHY_FULLSCREEN_POPUP(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_FULLSCREEN_POPUP, EphyFullscreenPopup))
+#define EPHY_FULLSCREEN_POPUP_CLASS(k)  	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_FULLSCREEN_POPUP, EphyFullscreenPopupClass))
+#define EPHY_IS_FULLSCREEN_POPUP(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_FULLSCREEN_POPUP))
+#define EPHY_IS_FULLSCREEN_POPUP_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_FULLSCREEN_POPUP))
+#define EPHY_FULLSCREEN_POPUP_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_FULLSCREEN_POPUP, EphyFullscreenPopupClass))
 
 typedef struct _EphyFullscreenPopup		EphyFullscreenPopup;
 typedef struct _EphyFullscreenPopupPrivate	EphyFullscreenPopupPrivate;
@@ -57,6 +57,9 @@ struct _EphyFullscreenPopupClass
 GType	   ephy_fullscreen_popup_get_type	    (void);
 
 GtkWidget *ephy_fullscreen_popup_new		    (EphyWindow *window);
+
+void	   ephy_fullscreen_popup_set_show_leave	    (EphyFullscreenPopup *popup,
+						     gboolean show_button);
 
 void	   ephy_fullscreen_popup_set_spinning	    (EphyFullscreenPopup *popup,
 						     gboolean spinning);

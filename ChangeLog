@@ -1,3 +1,20 @@
+2005-01-26  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-fullscreen-popup.c:
+	(ephy_fullscreen_popup_update_visibility),
+	(ephy_fullscreen_popup_set_show_leave),
+	(ephy_fullscreen_popup_init):
+	* src/ephy-fullscreen-popup.h:
+	* src/ephy-toolbar.c: (ephy_toolbar_update_fixed_visibility),
+	(ephy_toolbar_set_show_leave_fullscreen):
+	* src/ephy-toolbar.h:
+	* src/ephy-window.c: (ephy_window_fullscreen),
+	(ephy_window_unfullscreen):
+
+	Don't show the Leave Fullscreen button in lockdown fullscreen mode.
+	Switch to fullscreen toolbar also in lockdown fullscreen mode.
+	Fixes bug #165256.
+
 2005-01-26  Piers Cornwell  <piers@gnome.org>
 
 	* help/C/epiphany.xml:

@@ -52,8 +52,9 @@ struct _EphyFullscreenPopupPrivate
 	GtkWidget *lock;
 	GtkWidget *lock_ebox;
 	GtkWidget *button;
-	gboolean spinning;
-	gboolean show_lock;
+	guint show_button : 1;
+	guint spinning : 1;
+	guint show_lock : 1;
 };
 
 enum
@@ -99,11 +100,14 @@ static void
 ephy_fullscreen_popup_update_visibility (EphyFullscreenPopup *popup)
 {
 	EphyFullscreenPopupPrivate *priv = popup->priv;
-	gboolean show_frame;
+	gboolean show_frame, show_sep;
 
 	show_frame = priv->spinning || priv->show_lock;
+	show_sep = show_frame && priv->show_button;
 
-	g_object_set (priv->sep, "visible", show_frame, NULL);
+	g_object_set (priv->button, "visible", priv->show_button,
+				    "sensitive", priv->show_button, NULL);
+	g_object_set (priv->sep, "visible", show_sep, NULL);
 	g_object_set (priv->frame, "visible", show_frame, NULL);
 	g_object_set (priv->spinner, "visible", priv->spinning, NULL);
 	g_object_set (priv->lock_ebox, "visible", priv->show_lock, NULL);
@@ -171,6 +175,16 @@ ephy_fullscreen_popup_set_window (EphyFullscreenPopup *popup,
 /* public functions */
 
 void
+ephy_fullscreen_popup_set_show_leave (EphyFullscreenPopup *popup,
+				      gboolean show_button)
+{
+	EphyFullscreenPopupPrivate *priv = popup->priv;
+
+	priv->show_button = show_button;
+	ephy_fullscreen_popup_update_visibility (popup);
+}
+
+void
 ephy_fullscreen_popup_set_spinning (EphyFullscreenPopup *popup,
 				    gboolean spinning)
 {
@@ -201,7 +215,11 @@ ephy_fullscreen_popup_set_security_state (EphyFullscreenPopup *popup,
 static void
 ephy_fullscreen_popup_init (EphyFullscreenPopup *popup)
 {
-	popup->priv = EPHY_FULLSCREEN_POPUP_GET_PRIVATE (popup);
+	EphyFullscreenPopupPrivate *priv;
+
+	priv = popup->priv = EPHY_FULLSCREEN_POPUP_GET_PRIVATE (popup);
+
+	priv->show_button = TRUE;
 }
 
 static GObject *

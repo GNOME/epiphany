@@ -75,7 +75,7 @@ struct _EphyToolbarPrivate
 	gulong set_focus_handler;
 	gboolean show_lock;
 	gboolean lock_visible;
-	gboolean fullscreen;
+	gboolean leave_fullscreen_visible;
 	gboolean spinning;
 };
 
@@ -119,10 +119,12 @@ static void
 ephy_toolbar_update_fixed_visibility (EphyToolbar *toolbar)
 {
 	EphyToolbarPrivate *priv = toolbar->priv;
+	gboolean show;
 
-	g_object_set (priv->sep_item, "visible", priv->fullscreen, NULL);
-	g_object_set (priv->exit_button, "visible", priv->fullscreen,
-					 "sensitive", priv->fullscreen, NULL);
+	show = priv->leave_fullscreen_visible;
+	g_object_set (priv->sep_item, "visible", show, NULL);
+	g_object_set (priv->exit_button, "visible", show,
+					 "sensitive", show, NULL);
 }
 
 static void
@@ -412,12 +414,12 @@ ephy_toolbar_set_favicon (EphyToolbar *toolbar,
 }
 
 void
-ephy_toolbar_set_fullscreen_mode (EphyToolbar *toolbar,
-				  gboolean fullscreen)
+ephy_toolbar_set_show_leave_fullscreen (EphyToolbar *toolbar,
+					gboolean show)
 {
 	EphyToolbarPrivate *priv = toolbar->priv;
 
-	priv->fullscreen = fullscreen;
+	priv->leave_fullscreen_visible = show;
 
 	ephy_toolbar_update_fixed_visibility (toolbar);
 }

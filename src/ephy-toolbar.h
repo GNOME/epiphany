@@ -67,8 +67,8 @@ EphyToolbar    *ephy_toolbar_new			(EphyWindow *window);
 void		ephy_toolbar_set_favicon		(EphyToolbar *toolbar,
 							 const char *icon);
 
-void		ephy_toolbar_set_fullscreen_mode	(EphyToolbar *toolbar,
-							 gboolean fullscreen);
+void		ephy_toolbar_set_show_leave_fullscreen	(EphyToolbar *toolbar,
+							 gboolean show);
 
 void		ephy_toolbar_activate_location		(EphyToolbar *t);
 
