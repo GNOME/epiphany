@@ -236,22 +236,18 @@ ephy_statusbar_new (void)
 /**
  * ephy_statusbar_set_security_state:
  * @statusbar: an #EphyStatusbar
- * @secure: whether to set the icon to show secure or insecure
+ * @stock_id: stock-id of the icon showing the security state
  * @tooltip: a string detailing the security state
  * 
  * Sets the statusbar's security icon and its tooltip.
  **/
 void
 ephy_statusbar_set_security_state (EphyStatusbar *statusbar,
-				   gboolean secure,
+				   const char *stock_id,
 				   const char *tooltip)
 {
-	const char *stock;
-
-	stock = secure ? EPHY_STOCK_SECURE : EPHY_STOCK_UNSECURE;
-
-	gtk_image_set_from_stock (GTK_IMAGE (statusbar->priv->security_icon), stock,
-				  GTK_ICON_SIZE_MENU);
+	gtk_image_set_from_stock (GTK_IMAGE (statusbar->priv->security_icon),
+				  stock_id, GTK_ICON_SIZE_MENU);
 
 	gtk_tooltips_set_tip (statusbar->tooltips, statusbar->priv->security_evbox,
 			      tooltip, NULL);

@@ -1,6 +1,4 @@
 art_DATA = \
-	epiphany-secure.png	\
-	epiphany-unsecure.png	\
 	epiphany-entry.png \
 	epiphany-download.png \
 	epiphany-history.png	\

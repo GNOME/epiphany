@@ -1279,8 +1279,8 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	EmbedSecurityLevel level;
 	char *description = NULL;
 	char *state = NULL;
-	gboolean secure;
 	char *tooltip;
+	const char *stock_id = STOCK_LOCK_INSECURE;
 
 	if (window->priv->closing) return;
 
@@ -1288,14 +1288,6 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 
 	ephy_embed_get_security_level (embed, &level, &description);
 
-	if (level != ephy_tab_get_security_level (tab))
-	{
-		/* something is VERY wrong here! */
-		level = STATE_IS_UNKNOWN;
-		description = NULL;
-	}
-
-	secure = FALSE;
 	switch (level)
 	{
 		case STATE_IS_UNKNOWN:
@@ -1306,18 +1298,19 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 			break;
 		case STATE_IS_BROKEN:
 			state = _("Broken");
+			stock_id = STOCK_LOCK_BROKEN;
 			break;
 		case STATE_IS_SECURE_MED:
 			state = _("Medium");
-			secure = TRUE;
+			stock_id = STOCK_LOCK_SECURE;
 			break;
 		case STATE_IS_SECURE_LOW:
 			state = _("Low");
-			secure = TRUE;
+			stock_id = STOCK_LOCK_SECURE;
 			break;
 		case STATE_IS_SECURE_HIGH:
 			state = _("High");
-			secure = TRUE;
+			stock_id = STOCK_LOCK_SECURE;
 			break;
 		default:
 			g_assert_not_reached ();
@@ -1337,7 +1330,7 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	}
 
 	ephy_statusbar_set_security_state (EPHY_STATUSBAR (window->priv->statusbar),
-					   secure, tooltip);
+					   stock_id, tooltip);
 	g_free (tooltip);
 
 }

@@ -23,8 +23,6 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_STOCK_SECURE          "epiphany-secure"
-#define EPHY_STOCK_UNSECURE        "epiphany-unsecure"
 #define EPHY_STOCK_POPUPS	   "epiphany-popup-hidden"
 #define EPHY_STOCK_HISTORY         "epiphany-history"
 #define EPHY_STOCK_BOOKMARKS       "epiphany-bookmarks"
@@ -37,6 +35,9 @@ G_BEGIN_DECLS
 #define STOCK_SEND_MAIL		   "stock_mail-send"
 #define STOCK_ADD_BOOKMARK	   "stock_add-bookmark"
 #define STOCK_PRINT_SETUP	   "stock_print-setup"
+#define STOCK_LOCK_INSECURE	   "stock_lock-open"
+#define STOCK_LOCK_SECURE	   "stock_lock"
+#define STOCK_LOCK_BROKEN	   "stock_lock-broken"
 
 void ephy_stock_icons_init (void);
 
