@@ -378,8 +378,10 @@ CXXFLAGS=$_SAVE_CXXFLAGS
 AC_LANG_POP(C++)
 
 AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/pipnss/nsIX509Cert.h],
-	[AC_DEFINE(HAVE_MOZILLA_PSM, 1,
-	[Define if you have the mozilla psm headers installed])])
+	[AC_DEFINE([HAVE_MOZILLA_PSM],[1],
+	[Define if you have the mozilla psm headers installed]) have_psm=yes],
+	[have_psm=no])
+AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "x$have_psm" = "xyes"])
 
 if test "x$flavour" = "xmozilla"; then
 	AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsIPassword.h],

@@ -1,5 +1,15 @@
 2004-11-19  Christian Persch  <chpe@cvs.gnome.org>
 
+	* configure.ac:
+	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
+	* embed/mozilla/GtkNSSDialogs.cpp:
+	* embed/mozilla/GtkNSSKeyPairDialogs.cpp:
+	* embed/mozilla/Makefile.am:
+
+	Only build those files when we have mozilla psm.
+
+2004-11-19  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/EphyBrowser.cpp:
 
 	Use the dom window from the event.

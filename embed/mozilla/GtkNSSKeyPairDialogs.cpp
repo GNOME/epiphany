@@ -39,8 +39,6 @@
 
 #include "config.h"
 
-#ifdef HAVE_MOZILLA_PSM
-
 #include "EphyUtils.h"
 
 #include <nsIServiceManager.h>
@@ -711,5 +709,3 @@ NS_IMETHODIMP KeyPairHelperWindow::GetWindowRoot(nsIDOMEventTarget * *aWindowRoo
 {
     MOZ_NOT_IMPLEMENTED
 }
-
-#endif

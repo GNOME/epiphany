@@ -66,12 +66,6 @@ libephymozillaembed_la_SOURCES = 	\
 	EventContext.h                  \
 	GlobalHistory.cpp               \
 	GlobalHistory.h                 \
-	GtkNSSClientAuthDialogs.cpp	\
-	GtkNSSClientAuthDialogs.h	\
-	GtkNSSDialogs.cpp		\
-	GtkNSSDialogs.h			\
-	GtkNSSKeyPairDialogs.cpp	\
-	GtkNSSKeyPairDialogs.h		\
 	MozDownload.cpp			\
 	MozDownload.h			\
 	MozillaPrivate.cpp		\
@@ -97,4 +91,14 @@ if ENABLE_FILEPICKER
 libephymozillaembed_la_SOURCES += 	\
 	FilePicker.cpp			\
 	FilePicker.h
+endif
+
+if HAVE_MOZILLA_PSM
+libephymozillaembed_la_SOURCES += 	\
+	GtkNSSClientAuthDialogs.cpp	\
+	GtkNSSClientAuthDialogs.h	\
+	GtkNSSDialogs.cpp		\
+	GtkNSSDialogs.h			\
+	GtkNSSKeyPairDialogs.cpp	\
+	GtkNSSKeyPairDialogs.h
 endif

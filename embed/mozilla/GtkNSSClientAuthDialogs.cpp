@@ -24,8 +24,6 @@
 
 #include "config.h"
 
-#ifdef HAVE_MOZILLA_PSM
-
 #include "EphyUtils.h"
 
 #include <nsIServiceManager.h>
@@ -284,5 +282,3 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	gtk_widget_destroy (dialog);
 	return NS_OK;
 }
-
-#endif

@@ -30,8 +30,6 @@
 
 #include "config.h"
 
-#ifdef HAVE_MOZILLA_PSM
-
 #include "EphyUtils.h"
 
 #include <nsCOMPtr.h>
@@ -1465,5 +1463,3 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 	gtk_widget_destroy (dialog);
 	return NS_OK;
 }
-
-#endif
