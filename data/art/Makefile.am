@@ -1,4 +1,5 @@
 art_DATA = \
+	epiphany-close-tab.png \
 	epiphany-secure.png	\
 	epiphany-unsecure.png	\
 	epiphany-entry.png \

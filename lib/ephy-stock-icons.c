@@ -94,4 +94,6 @@ ephy_stock_icons_init (void)
 	}
 
 	g_object_unref (G_OBJECT (factory));
+
+	gtk_icon_size_register (EPHY_ICON_SIZE_TAB_BUTTON, 10, 10);
 }
