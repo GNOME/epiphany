@@ -74,7 +74,7 @@ typedef struct
 
 #define EPHY_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_DIALOG, EphyDialogPrivate))
 
-struct EphyDialogPrivate
+struct _EphyDialogPrivate
 {
 	char *name;
 

@@ -35,9 +35,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_DIALOG_CLASS(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_DIALOG))
 #define EPHY_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_DIALOG, EphyDialogClass))
 
-typedef struct EphyDialogClass		EphyDialogClass;
-typedef struct EphyDialog		EphyDialog;
-typedef struct EphyDialogPrivate	EphyDialogPrivate;
+typedef struct _EphyDialogClass		EphyDialogClass;
+typedef struct _EphyDialog		EphyDialog;
+typedef struct _EphyDialogPrivate	EphyDialogPrivate;
 
 typedef enum
 {
@@ -53,7 +53,7 @@ typedef struct
 	GType data_type;
 } EphyDialogProperty;
 
-struct EphyDialogClass
+struct _EphyDialogClass
 {
 	GObjectClass parent_class;
 
@@ -71,7 +71,7 @@ struct EphyDialogClass
 	void	(* show)	(EphyDialog *dialog);
 };
 
-struct EphyDialog
+struct _EphyDialog
 {
 	GObject parent;
 
