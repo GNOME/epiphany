@@ -574,6 +574,8 @@ ephy_history_finalize (GObject *object)
 
 	eel_gconf_notification_remove (eb->priv->disable_history_notifier_id);
 
+	g_free (eb->priv->xml_file);
+
 	LOG ("Global history finalized");
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
