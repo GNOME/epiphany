@@ -428,7 +428,7 @@ ephy_bookmark_properties_init (EphyBookmarkProperties *editor)
 
 	editor->priv->bookmark = NULL;
 	editor->priv->tb_model = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell));
+		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
 }
 
 GtkWidget *

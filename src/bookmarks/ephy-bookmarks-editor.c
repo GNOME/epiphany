@@ -1479,7 +1479,7 @@ ephy_bookmarks_editor_init (EphyBookmarksEditor *editor)
 	editor->priv->props_dialogs = g_hash_table_new (g_direct_hash,
                                                         g_direct_equal);
 	editor->priv->tb_model = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell));
+		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
 
 	g_signal_connect (editor->priv->tb_model, "item_added",
 			  G_CALLBACK (toolbar_items_changed_cb), editor);
