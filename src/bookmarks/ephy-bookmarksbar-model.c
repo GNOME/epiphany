@@ -475,6 +475,8 @@ ephy_bookmarksbar_model_init (EphyBookmarksBarModel *model)
 {
 	model->priv = EPHY_BOOKMARKSBAR_MODEL_GET_PRIVATE (model);
 
+	LOG ("EphyBookmarksBarModel initialising")
+
 	model->priv->xml_file = g_build_filename (ephy_dot_dir (),
 						  EPHY_BOOKMARKSBARS_XML_FILE,
 						  NULL);
@@ -494,6 +496,14 @@ ephy_bookmarksbar_model_dispose (GObject *object)
 {
 	EphyBookmarksBarModel *model = EPHY_BOOKMARKSBAR_MODEL (object);
 
+	LOG ("EphyBookmarksBarModel disposing")
+
+	if (model->priv->timeout != 0)
+	{
+		g_source_remove (model->priv->timeout);
+		model->priv->timeout = 0;
+	}
+
 	save_changes_idle (model);
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);
@@ -504,13 +514,9 @@ ephy_bookmarksbar_model_finalize (GObject *object)
 {
 	EphyBookmarksBarModel *model = EPHY_BOOKMARKSBAR_MODEL (object);
 
-	if (model->priv->timeout != 0)
-	{
-		g_source_remove (model->priv->timeout);
-		model->priv->timeout = 0;
-	}
-
 	g_free (model->priv->xml_file);
+
+	LOG ("EphyBookmarksBarModel finalised")
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

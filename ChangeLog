@@ -1,5 +1,13 @@
 2004-08-28  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarksbar-model.c:
+	(ephy_bookmarksbar_model_init), (ephy_bookmarksbar_model_dispose),
+	(ephy_bookmarksbar_model_finalize):
+
+	Remove the save timeout on dispose.
+
+2004-08-28  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-window.c: (ephy_window_init):
 
 	Make sure to instantiate the toolbars model before instantiating the
