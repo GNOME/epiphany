@@ -618,6 +618,9 @@ setup_window (EphyWindow *window)
 	action = gtk_action_group_get_action (action_group, "GoBookmarks");
 	g_object_set (action, "is_important", TRUE, NULL);
 
+	action = gtk_action_group_get_action (action_group, "ViewEncoding");
+	g_object_set (action, "hide_if_empty", FALSE, NULL);
+
 	action_group = gtk_action_group_new ("PopupsActions");
 	gtk_action_group_set_translation_domain (action_group, NULL);
 	gtk_action_group_add_actions (action_group, ephy_popups_entries,
