@@ -65,7 +65,7 @@
 
 #define CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME  "/apps/epiphany/lockdown/disable_javascript_chrome"
 
-struct EphyTabPrivate
+struct _EphyTabPrivate
 {
 	char *status_message;
 	char *link_message;

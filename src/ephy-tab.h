@@ -35,9 +35,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_TAB_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TAB))
 #define EPHY_TAB_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TAB, EphyTabClass))
 
-typedef struct EphyTabClass	EphyTabClass;
+typedef struct _EphyTabClass	EphyTabClass;
 typedef struct _EphyTab		EphyTab;
-typedef struct EphyTabPrivate	EphyTabPrivate;
+typedef struct _EphyTabPrivate	EphyTabPrivate;
 
 typedef enum
 {
@@ -61,13 +61,10 @@ struct _EphyTab
 	EphyTabPrivate *priv;
 };
 
-struct EphyTabClass
+struct _EphyTabClass
 {
 	GtkBinClass parent_class;
 };
-
-/* Include the header down here to resolve circular dependency */
-#include "ephy-window.h"
 
 GType			ephy_tab_get_type		(void);
 
