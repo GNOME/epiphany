@@ -758,10 +758,11 @@ ephy_history_set_page_title (EphyHistory *gh,
 			     const char *title)
 {
 	EphyNode *node;
-	guint host_id;
 	GValue value = { 0, };
 
 	LOG ("Set page title")
+
+	if (title == NULL || title[0] == '\0') return;
 
 	node = ephy_history_get_page (gh, url);
 	if (!node) return;
@@ -771,9 +772,28 @@ ephy_history_set_page_title (EphyHistory *gh,
 	ephy_node_set_property
 		(node, EPHY_NODE_PAGE_PROP_TITLE, &value);
 	g_value_unset (&value);
+}
 
-	host_id = ephy_node_get_property_int
-		(node, EPHY_NODE_PAGE_PROP_HOST_ID);
+void
+ephy_history_set_icon (EphyHistory *gh,
+		       const char *url,
+		       const char *icon)
+{
+	EphyNode *host;
+
+	LOG ("Set host icon")
+
+	host = g_hash_table_lookup (gh->priv->hosts_hash, url);
+	if (host)
+	{
+		GValue value = { 0, };
+
+		g_value_init (&value, G_TYPE_STRING);
+		g_value_set_string (&value, icon);
+		ephy_node_set_property
+			(host, EPHY_NODE_PAGE_PROP_ICON, &value);
+		g_value_unset (&value);
+	}
 }
 
 void
@@ -786,7 +806,8 @@ ephy_history_clear (EphyHistory *gh)
 		ephy_node_unref (node);
 	}
 
-	while ((node = ephy_node_get_nth_child (gh->priv->hosts, 0)) != NULL)
+	/* The first node is All, dont unref it */
+	while ((node = ephy_node_get_nth_child (gh->priv->hosts, 1)) != NULL)
 	{
 		ephy_node_unref (node);
 	}

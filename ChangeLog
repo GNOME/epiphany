@@ -1,5 +1,16 @@
 2003-04-18  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* embed/ephy-history.c: (ephy_history_set_page_title),
+	(ephy_history_set_icon), (ephy_history_clear):
+	* embed/ephy-history.h:
+	* src/ephy-history-window.c: (cmd_clear), (provide_favicon),
+	(ephy_history_window_construct):
+	* src/ephy-tab.c: (ephy_tab_set_favicon):
+
+	Implement clear history. Put favicons near sites names.
+
+2003-04-18  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* data/art/Makefile.am:
 
 	Do not install two copies of epiphany.png

@@ -127,6 +127,7 @@ static void
 cmd_clear (EggAction *action,
 	   EphyHistoryWindow *editor)
 {
+	ephy_history_clear (editor->priv->history);
 }
 
 static void
@@ -510,6 +511,28 @@ menu_activate_cb (EphyNodeView *view,
 }
 
 static void
+provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
+{
+	EphyFaviconCache *cache;
+	const char *icon_location;
+	GdkPixbuf *pixbuf = NULL;
+
+	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
+	icon_location = ephy_node_get_property_string
+		(node, EPHY_NODE_PAGE_PROP_ICON);
+
+	LOG ("Get favicon for %s", icon_location ? icon_location : "None")
+
+	if (icon_location)
+	{
+		pixbuf = ephy_favicon_cache_get (cache, icon_location);
+	}
+
+	g_value_init (value, GDK_TYPE_PIXBUF);
+	g_value_set_object (value, pixbuf);
+}
+
+static void
 ephy_history_window_construct (EphyHistoryWindow *editor)
 {
 	GtkTreeViewColumn *col;
@@ -587,6 +610,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 					   EPHY_NODE_PAGE_PROP_LOCATION);
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (sites_view));
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
+	ephy_node_view_add_icon_column (EPHY_NODE_VIEW (sites_view), provide_favicon);
 	ephy_node_view_add_column (EPHY_NODE_VIEW (sites_view), _("Sites"),
 				   G_TYPE_STRING,
 				   EPHY_NODE_PAGE_PROP_TITLE,

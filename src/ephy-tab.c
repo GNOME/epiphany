@@ -449,6 +449,7 @@ ephy_tab_set_favicon (EphyTab *tab,
 {
 	GtkWidget *nb;
 	EphyBookmarks *eb;
+	EphyHistory *history;
 
 	nb = ephy_window_get_notebook (tab->priv->window);
 	ephy_notebook_set_page_icon (EPHY_NOTEBOOK (nb),
@@ -458,8 +459,12 @@ ephy_tab_set_favicon (EphyTab *tab,
 	if (tab->priv->favicon_url[0] != '\0')
 	{
 		eb = ephy_shell_get_bookmarks (ephy_shell);
+		history = ephy_embed_shell_get_global_history
+			(EPHY_EMBED_SHELL (ephy_shell));
 		ephy_bookmarks_set_icon (eb, tab->priv->location,
 				         tab->priv->favicon_url);
+		ephy_history_set_icon (history, tab->priv->location,
+				       tab->priv->favicon_url);
 		ephy_window_update_control (tab->priv->window,
 					    FaviconControl);
 	}

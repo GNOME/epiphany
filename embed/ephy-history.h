@@ -44,7 +44,8 @@ enum
 	EPHY_NODE_PAGE_PROP_LAST_VISIT = 5,
 	EPHY_NODE_PAGE_PROP_FIRST_VISIT = 6,
 	EPHY_NODE_PAGE_PROP_HOST_ID = 7,
-	EPHY_NODE_PAGE_PROP_PRIORITY = 8
+	EPHY_NODE_PAGE_PROP_PRIORITY = 8,
+	EPHY_NODE_PAGE_PROP_ICON = 9
 };
 
 struct EphyHistory
@@ -85,6 +86,10 @@ void            ephy_history_set_page_title     (EphyHistory *gh,
 						 const char *title);
 
 const char     *ephy_history_get_last_page	(EphyHistory *gh);
+
+void		ephy_history_set_icon           (EphyHistory *gh,
+						 const char *url,
+						 const char *icon);
 
 void            ephy_history_remove             (EphyHistory *gh,
 						 EphyNode *node);
