@@ -1,3 +1,15 @@
+2003-09-28  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	The file picker dir can be NULL, check before
+	trying to expand tilde.
+
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(import_dialog_response_cb), (cmd_bookmarks_import):
+
+	Implement import from a file
+
 2003-09-27  Xan Lopez  <xan@masilla.org>
 
 	* configure.in:

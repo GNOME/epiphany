@@ -1013,12 +1013,15 @@ impl_show_file_picker (EphyEmbedSingle *shell,
                        FileFormat *file_formats, 
 		       int *ret_file_format)
 {
-	gchar *expanded_directory;
+	char *expanded_directory = NULL;
 	gresult result;
 
         GFilePicker *filePicker = new GFilePicker (file_formats);
 
-        expanded_directory = gnome_vfs_expand_initial_tilde (directory);
+	if (directory != NULL)
+	{
+	        expanded_directory = gnome_vfs_expand_initial_tilde (directory);
+	}
 
         /* make sure the directory exists, and use the home directory
          * otherwise */

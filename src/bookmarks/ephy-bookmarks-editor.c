@@ -499,20 +499,35 @@ add_bookmarks_source_menu (GtkWidget *menu,
 
 static void
 import_dialog_response_cb (GtkDialog *dialog, gint response,
-			   GtkWidget *optionmenu)
+			   EphyBookmarksEditor *editor)
 {
 	if (response == GTK_RESPONSE_OK)
 	{
 		char *filename;
-		GtkWidget *item, *menu;
-		EphyBookmarks *bookmarks;
+		GtkWidget *item, *menu, *optionmenu;
 
+		optionmenu = g_object_get_data (G_OBJECT (dialog), "option_menu");
 		menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (optionmenu));
 		item = gtk_menu_get_active (GTK_MENU (menu));
 		filename = g_object_get_data (G_OBJECT (item), "bookmarks_file");
 
-		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-		ephy_bookmarks_import (bookmarks, filename);
+		if (filename == NULL)
+		{
+			const char *title;
+			EphyEmbedSingle *single;
+
+			title = _("Import bookmarks from file");
+			single = ephy_embed_shell_get_embed_single
+				(EPHY_EMBED_SHELL (ephy_shell));
+			ephy_embed_single_show_file_picker
+				(single, GTK_WIDGET (editor), title, NULL,
+				 NULL, modeOpen, &filename, NULL, NULL);
+		}
+
+		if (filename != NULL)
+		{
+			ephy_bookmarks_import (editor->priv->bookmarks, filename);
+		}
 	}
 
 	gtk_widget_destroy (GTK_WIDGET (dialog));
@@ -525,7 +540,7 @@ cmd_bookmarks_import (GtkAction *action,
 	GtkWidget *dialog;
 	GtkWidget *label;
 	GtkWidget *vbox;
-	GtkWidget *menu;
+	GtkWidget *menu, *item;
 	GtkWidget *option_menu;
 
 	dialog = gtk_dialog_new_with_buttons (_("Import Bookmarks"),
@@ -566,14 +581,19 @@ cmd_bookmarks_import (GtkAction *action,
 	add_bookmarks_source_menu (menu, _("Konqueror bookmarks"),
 				   KDE_BOOKMARKS_DIR, "bookmarks.xml", 0);
 
+	item = gtk_menu_item_new_with_mnemonic (_("Import from a file"));
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	gtk_widget_show (item);
+
 	option_menu = gtk_option_menu_new ();
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
 	gtk_widget_show (option_menu);
 	gtk_box_pack_start (GTK_BOX (vbox), option_menu, TRUE, TRUE, 0);
 
+	g_object_set_data (G_OBJECT (dialog), "option_menu", option_menu);
 	g_signal_connect (dialog, "response",
 			  G_CALLBACK (import_dialog_response_cb),
-			  option_menu);
+			  editor);
 
 	gtk_widget_show (dialog);
 }
