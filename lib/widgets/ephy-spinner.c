@@ -37,7 +37,7 @@
 #include "ephy-file-helpers.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <libgnomeui/gnome-icon-theme.h>
+#include <gtk/gtkicontheme.h>
 
 #define spinner_DEFAULT_TIMEOUT 100	/* Milliseconds Per Frame */
 
@@ -46,7 +46,7 @@
 struct EphySpinnerDetails {
 	GList	*image_list;
 	GdkPixbuf *quiescent_pixbuf;
-	GnomeIconTheme *icon_theme;
+	GtkIconTheme *icon_theme;
 
 	int	max_frame;
 	int	delay;
@@ -62,7 +62,7 @@ static void ephy_spinner_init (EphySpinner *spinner);
 static void ephy_spinner_load_images            (EphySpinner *spinner);
 static void ephy_spinner_unload_images          (EphySpinner *spinner);
 static void ephy_spinner_remove_update_callback (EphySpinner *spinner);
-static void ephy_spinner_theme_changed     (GnomeIconTheme *icon_theme,
+static void ephy_spinner_theme_changed     (GtkIconTheme *icon_theme,
                                                  EphySpinner *spinner);
 
 static GObjectClass *parent_class = NULL;
@@ -178,7 +178,7 @@ ephy_spinner_init (EphySpinner *spinner)
 	spinner->details = EPHY_SPINNER_GET_PRIVATE (spinner);
 
 	spinner->details->delay = spinner_DEFAULT_TIMEOUT;
-	spinner->details->icon_theme = gnome_icon_theme_new ();
+	spinner->details->icon_theme = gtk_icon_theme_get_default ();
 	g_signal_connect (spinner->details->icon_theme,
 			  "changed",
 			  G_CALLBACK (ephy_spinner_theme_changed),
@@ -190,7 +190,7 @@ ephy_spinner_init (EphySpinner *spinner)
 
 /* handler for handling theme changes */
 static void
-ephy_spinner_theme_changed (GnomeIconTheme *icon_theme, EphySpinner *spinner)
+ephy_spinner_theme_changed (GtkIconTheme *icon_theme, EphySpinner *spinner)
 {
 	gtk_widget_hide (GTK_WIDGET (spinner));
 	ephy_spinner_load_images (spinner);
@@ -417,19 +417,24 @@ static void
 ephy_spinner_load_images (EphySpinner *spinner)
 {
 	int grid_width, grid_height, x, y, size;
-	char *icon;
+	const char *icon;
 	GdkPixbuf *icon_pixbuf, *pixbuf;
 	GList *image_list;
+	GtkIconInfo *icon_info;
 
 	ephy_spinner_unload_images (spinner);
 
 	/* Load the animation */
-	icon = gnome_icon_theme_lookup_icon (spinner->details->icon_theme,
-					     "gnome-spinner", -1, NULL, &size);
-	if (icon == NULL) {
+	icon_info = gtk_icon_theme_lookup_icon (spinner->details->icon_theme,
+					        "gnome-spinner", -1, 0);
+	if (icon_info == NULL) {
 		g_warning ("Throbber animation not found");
 		return;
 	}
+
+	size = gtk_icon_info_get_base_size (icon_info);
+	icon = gtk_icon_info_get_filename (icon_info);
+	g_return_if_fail (icon_info != NULL);
 
 	icon_pixbuf = gdk_pixbuf_new_from_file (icon, NULL);
 	grid_width = gdk_pixbuf_get_width (icon_pixbuf);
@@ -453,22 +458,24 @@ ephy_spinner_load_images (EphySpinner *spinner)
 	spinner->details->image_list = g_list_reverse (image_list);
 	spinner->details->max_frame = g_list_length (spinner->details->image_list);
 
-	g_free (icon);
+	gtk_icon_info_free (icon_info);
 	g_object_unref (icon_pixbuf);
 
 	/* Load the rest icon */
-	icon = gnome_icon_theme_lookup_icon (spinner->details->icon_theme,
-					     "gnome-spinner-rest", -1, NULL, &size);
+	icon_info = gtk_icon_theme_lookup_icon (spinner->details->icon_theme,
+					        "gnome-spinner-rest", -1, -1);
 	if (icon == NULL) {
 		g_warning ("Throbber rest icon not found");
 		return;
 	}
 
+	size = gtk_icon_info_get_base_size (icon_info);
+	icon = gtk_icon_info_get_filename (icon_info);
 	icon_pixbuf = gdk_pixbuf_new_from_file (icon, NULL);
 	spinner->details->quiescent_pixbuf = scale_to_real_size (spinner, icon_pixbuf);
 
 	g_object_unref (icon_pixbuf);
-	g_free (icon);
+	gtk_icon_info_free (icon_info);
 }
 
 /*
@@ -512,8 +519,6 @@ ephy_spinner_finalize (GObject *object)
 
 	ephy_spinner_remove_update_callback (spinner);
 	ephy_spinner_unload_images (spinner);
-
-	g_object_unref (spinner->details->icon_theme);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

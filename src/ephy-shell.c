@@ -53,7 +53,7 @@
 #include <gtk/gtkmessagedialog.h>
 #include <dirent.h>
 #include <libgnomevfs/gnome-vfs-init.h>
-#include <libgnomeui/gnome-icon-theme.h>
+#include <gtk/gtkicontheme.h>
 #include <glade/glade-init.h>
 
 #ifdef ENABLE_NAUTILUS_VIEW
@@ -202,8 +202,9 @@ ephy_shell_init (EphyShell *gs)
 {
 	EphyEmbedSingle *single;
 	EphyShell **ptr = &ephy_shell;
-	GnomeIconTheme *icon_theme;
-	char *file;
+	GtkIconTheme *icon_theme;
+	GtkIconInfo *icon_info;
+	const char *icon_file;
 
 	gs->priv = EPHY_SHELL_GET_PRIVATE (gs);
 
@@ -257,15 +258,19 @@ ephy_shell_init (EphyShell *gs)
 
 	ephy_shell_load_plugins (gs);
 
-	icon_theme = gnome_icon_theme_new ();
-	file = gnome_icon_theme_lookup_icon (icon_theme, "web-browser",
-					     -1, NULL, NULL);
-	g_object_unref (icon_theme);
+	/* FIXME listen on icon changes */
+	icon_theme = gtk_icon_theme_get_default ();
+	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "web-browser", -1, -1);
 
-	if (file)
+	if (icon_info)
 	{
-		gtk_window_set_default_icon_from_file (file, NULL);
-		g_free (file);
+
+		icon_file = gtk_icon_info_get_filename (icon_info);
+		g_return_if_fail (icon_file != NULL);
+
+		gtk_window_set_default_icon_from_file (icon_file, NULL);
+
+		gtk_icon_info_free (icon_info);
 	}
 	else
 	{

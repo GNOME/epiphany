@@ -113,3 +113,75 @@ ephy_gui_help (GtkWindow *parent,
 		g_error_free (err);
 	}
 }
+
+#define ICON_NAME_MIME_PREFIX "gnome-mime-"
+
+static char *
+make_mime_name (const char *mime_type)
+{
+	char *mime_type_without_slashes, *icon_name;
+	char *p;
+                                                                                                                              
+	if (mime_type == NULL)
+	{
+		return NULL;
+	}
+                                                                                                                              
+	mime_type_without_slashes = g_strdup (mime_type);
+                                                                                                                              
+	while ((p = strchr(mime_type_without_slashes, '/')) != NULL)
+		*p = '-';
+                                                                                                                              
+	icon_name = g_strconcat (ICON_NAME_MIME_PREFIX, mime_type_without_slashes, NULL);
+	g_free (mime_type_without_slashes);
+                                                                                                                              
+	return icon_name;
+}
+
+GdkPixbuf *
+ephy_gui_get_pixbuf_from_mime_type (const char *mime_type,
+                                    int size)
+{
+	GdkPixbuf *pixbuf;
+	GtkIconInfo *icon_info;
+	GtkIconTheme *icon_theme;
+	const char *icon;
+	char *icon_name;
+
+	icon_name = make_mime_name (mime_type);
+
+	icon_theme = gtk_icon_theme_get_default ();
+	g_return_val_if_fail (icon_theme != NULL, NULL);
+
+	icon_info = gtk_icon_theme_lookup_icon
+		(icon_theme, icon_name, size, -1);
+	g_free (icon_name);
+
+	/* try without specific size */
+	if (icon_info == NULL)
+	{
+		icon_info = gtk_icon_theme_lookup_icon
+			(icon_theme, icon_name, -1, -1);
+	}
+
+	/* no icon found */
+	if (icon_info == NULL) return NULL;
+
+	icon = gtk_icon_info_get_filename (icon_info);
+	pixbuf = gdk_pixbuf_new_from_file (icon, NULL);
+	g_return_val_if_fail (pixbuf != NULL, NULL);
+
+	if (size != gtk_icon_info_get_base_size (icon_info))
+	{
+		GdkPixbuf *tmp;
+
+		tmp = gdk_pixbuf_scale_simple (pixbuf, size, size,
+					      GDK_INTERP_BILINEAR);
+		g_object_unref (pixbuf);
+		pixbuf = tmp;
+	}
+
+	gtk_icon_info_free (icon_info);
+
+	return pixbuf;
+}

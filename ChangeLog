@@ -1,3 +1,16 @@
+2003-09-27  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/mozilla/ContentHandler.cpp:
+	* lib/ephy-gui.c: (make_mime_name),
+	(ephy_gui_get_pixbuf_from_mime_type):
+	* lib/ephy-gui.h:
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_init),
+	(ephy_spinner_theme_changed), (ephy_spinner_load_images),
+	(ephy_spinner_finalize):
+	* src/ephy-shell.c: (ephy_shell_init):
+
+	Use gtkicontheme, and use it also for mime icons.
+
 2003-09-26  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* data/epiphany.schemas.in:
