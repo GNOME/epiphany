@@ -436,8 +436,9 @@ ephy_state_add_paned (GtkWidget *paned,
 }
 
 static void
-expander_activate_cb (GtkExpander *expander,
-		      EphyNode *node)
+sync_expander_cb (GtkExpander *expander,
+		  GParamSpec *pspec,
+		  EphyNode *node)
 {
 	GValue value = { 0, };
 
@@ -483,8 +484,8 @@ ephy_state_add_expander	(GtkWidget *expander,
 
 	gtk_expander_set_expanded (GTK_EXPANDER (expander), expanded);
 
-	g_signal_connect (expander, "activate",
-			  G_CALLBACK (expander_activate_cb), node);
+	g_signal_connect (expander, "notify::expanded",
+			  G_CALLBACK (sync_expander_cb), node);
 }
 
 void
