@@ -575,6 +575,52 @@
         <locale name="C">
         </locale>
       </schema>
+      <schema>
+        <key>/schemas/apps/epiphay/security/cookie_accept</key>
+        <applyto>/apps/epiphany/security/cookie_accept</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>0</default>
+        <locale name="C">
+        <short>Cookie accept</short>
+        <long>Where to accept cookies from.  Possible values are 0 (anywhere), 
+        1 (from current server only), 2 (nowhere)</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/security/allow_popups</key>
+        <applyto>/apps/epiphany/security/allow_popups</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>true</default>
+        <locale name="C">
+        <short>Allow popups</short>
+        <long>Allow sites to open new windows using JavaScript (if JavaScript
+        is enabled).</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/security/java_enabled</key>
+        <applyto>/apps/epiphany/security/java_enabled</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>1</default>
+        <locale name="C">
+        <short>Enable Java</short>
+        <long>Enable Java.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/security/javascript_enabled</key>
+        <applyto>/apps/epiphany/security/javascript_enabled</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>1</default>
+        <locale name="C">
+        <short>Enable JavaScript</short>
+        <long>Enable JavaScript.</long>
+        </locale>
+      </schema>
     </schemalist>
 </gconfschemafile>
   

@@ -48,11 +48,6 @@ mozilla_own_fonts_notifier(GConfClient *client,
 			   EphyEmbedSingle *single);
 
 static void
-mozilla_animate_notifier(GConfClient *client,
-			 guint cnxn_id,
-			 GConfEntry *entry,
-			 EphyEmbedSingle *single);
-static void
 generic_mozilla_string_notifier(GConfClient *client,
 				guint cnxn_id,
 				GConfEntry *entry,
@@ -139,9 +134,8 @@ static const struct
 }
 conversion_table [] =
 {
-	{ CONF_FILTERING_JAVA_ENABLED, BOOL_PREF, "security.enable_java"},
-	{ CONF_FILTERING_JAVASCRIPT_ENABLED, BOOL_PREF, "javascript.enabled"},
-	{ CONF_FILTERING_IMAGE_LOADING_TYPE, INT_PREF, "network.image.imageBehavior"},
+	{ CONF_SECURITY_JAVA_ENABLED, BOOL_PREF, "security.enable_java"},
+	{ CONF_SECURITY_JAVASCRIPT_ENABLED, BOOL_PREF, "javascript.enabled"},
 	{ CONF_RENDERING_BG_COLOR, STRING_PREF, "browser.display.background_color"},
 	{ CONF_RENDERING_TEXT_COLOR, STRING_PREF, "browser.display.foreground_color"},
 	{ CONF_RENDERING_UNVISITED_LINKS, STRING_PREF, "browser.anchor_color"},
@@ -160,10 +154,7 @@ conversion_table [] =
 	{ CONF_NETWORK_MEMORY_CACHE, INT_PREF, "browser.cache.memory.capacity"},
 	{ CONF_NETWORK_DISK_CACHE, INT_PREF, "browser.cache.disk.capacity"},
 	{ CONF_NETWORK_CACHE_COMPARE, INT_PREF, "browser.cache.check_doc_frequency"},
-	{ CONF_PERSISTENT_COOKIE_WARN, BOOL_PREF, "network.cookie.warnAboutCookies"},
-	{ CONF_PERSISTENT_COOKIES_BEHAVIOR, INT_PREF, "network.cookie.cookieBehavior"},
-	{ CONF_PERSISTENT_COOKIE_LIFETIME, BOOL_PREF, "network.cookie.lifetime.enabled"},
-	{ CONF_PERSISTENT_PASSWORDS_SAVE, BOOL_PREF, "signon.rememberSignons"},
+	{ CONF_SECURITY_COOKIES_ACCEPT, BOOL_PREF, "network.cookie.warnAboutCookies"},
 	{ CONF_RENDERING_USE_SYSTEM_COLORS, BOOL_PREF, "browser.display.use_system_colors"},
 	{ NULL, 0, NULL }
 };
@@ -177,13 +168,11 @@ custom_notifiers [] =
 {
 	{ CONF_NETWORK_USER_AGENT, 
 	  (GConfClientNotifyFunc) mozilla_user_agent_notifier },
-	{ CONF_FILTERING_ANIMATE_TYPE, 
-	  (GConfClientNotifyFunc) mozilla_animate_notifier },
 	{ CONF_RENDERING_USE_OWN_COLORS, 
 	  (GConfClientNotifyFunc) mozilla_own_colors_notifier },
 	{ CONF_RENDERING_USE_OWN_FONTS, 
 	  (GConfClientNotifyFunc) mozilla_own_fonts_notifier },
-	{ CONF_FILTERING_ALLOW_POPUPS, 
+	{ CONF_SECURITY_ALLOW_POPUPS, 
 	  (GConfClientNotifyFunc) mozilla_allow_popups_notifier },
 	{ CONF_LANGUAGE_DEFAULT_CHARSET, 
 	  (GConfClientNotifyFunc) mozilla_default_charset_notifier },
@@ -510,29 +499,12 @@ mozilla_own_fonts_notifier(GConfClient *client,
 }
 
 static void
-mozilla_animate_notifier(GConfClient *client,
-			 guint cnxn_id,
-			 GConfEntry *entry,
-			 EphyEmbedSingle *single)
-{
-	static const gchar *type[] =
-	{
-		"normal",
-		"once",
-		"none"
-	};
-
-	mozilla_prefs_set_string ("image.animation_mode",
-				  type[gconf_value_get_int(entry->value)]);
-}
-
-static void
 mozilla_allow_popups_notifier(GConfClient *client,
 			      guint cnxn_id,
 			      GConfEntry *entry,
 			      EphyEmbedSingle *single)
 {
-	gboolean new_val = eel_gconf_get_boolean(CONF_FILTERING_ALLOW_POPUPS);
+	gboolean new_val = eel_gconf_get_boolean(CONF_SECURITY_ALLOW_POPUPS);
 	mozilla_prefs_set_boolean ("dom.disable_open_during_load", 
 					!new_val);
 }

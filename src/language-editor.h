@@ -19,7 +19,8 @@
 #ifndef LANGUAGE_EDITOR_H
 #define LANGUAGE_EDITOR_H
 
-#include "general-prefs.h"
+#include "ephy-dialog.h"
+#include "language-editor.h"
 
 #include <gtk/gtkwidget.h>
 #include <glib-object.h>
