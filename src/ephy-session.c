@@ -496,7 +496,7 @@ ephy_session_save (EphySession *session,
 {
 	xmlTextWriterPtr writer;
 	GList *w;
-	char *save_to;
+	char *save_to, *tmp_file;
 	int ret;
 
 	LOG ("ephy_sesion_save %s", filename)
@@ -508,9 +508,11 @@ ephy_session_save (EphySession *session,
 	}
 
 	save_to = get_session_filename (filename);
+	tmp_file = g_strconcat (save_to, ".tmp", NULL);
 
 	/* FIXME: do we want to turn on compression? */
-	writer = xmlNewTextWriterFilename (save_to, 0);
+	writer = xmlNewTextWriterFilename (tmp_file, 0);
+	g_free (tmp_file);
 	if (writer == NULL)
 	{
 		return FALSE;
@@ -553,6 +555,14 @@ ephy_session_save (EphySession *session,
 
 out:
 	xmlFreeTextWriter (writer);
+
+	if (ret >= 0)
+	{
+		if (ephy_file_switch_temp_file (save_to, tmp_file) == FALSE)
+		{
+			ret = -1;
+		}
+	}
 
 	g_free (save_to);
 
