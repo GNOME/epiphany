@@ -21,7 +21,8 @@
 #ifndef EPHY_BOOKMARKS_MENU_H
 #define EPHY_BOOKMARKS_MENU_H
 
-#include "ephy-window.h"
+#include <glib-object.h>
+#include <gtk/gtkuimanager.h>
 
 G_BEGIN_DECLS
 
@@ -39,6 +40,10 @@ typedef struct _EphyBookmarksMenuPrivate	EphyBookmarksMenuPrivate;
 struct _EphyBookmarksMenuClass
 {
 	GObjectClass parent_class;
+
+	void (*open)          (EphyBookmarksMenu *menu,
+			       const char *address,
+			       gboolean open_in_new);
 };
 
 struct _EphyBookmarksMenu
@@ -51,7 +56,8 @@ struct _EphyBookmarksMenu
 
 GType              ephy_bookmarks_menu_get_type		(void);
 
-EphyBookmarksMenu *ephy_bookmarks_menu_new		(EphyWindow *window);
+EphyBookmarksMenu *ephy_bookmarks_menu_new		(GtkUIManager *manager,
+							 const char *path);
 
 G_END_DECLS
 

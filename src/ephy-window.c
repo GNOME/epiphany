@@ -329,6 +329,8 @@ static guint ephy_popups_n_entries = G_N_ELEMENTS (ephy_popups_entries);
 #define CONF_DESKTOP_BG_PICTURE "/desktop/gnome/background/picture_filename"
 #define INSANE_NUMBER_OF_URLS 20
 
+#define BOOKMARKS_MENU_PATH "/menubar/BookmarksMenu"
+
 #define EPHY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WINDOW, EphyWindowPrivate))
 
 struct _EphyWindowPrivate
@@ -2290,6 +2292,15 @@ action_request_forward_cb (GObject *toolbar,
 }
 
 static void
+open_bookmark_cb (EphyBookmarksMenu *menu,
+		  const char *location,
+		  gboolean open_in_new,
+		  EphyWindow *window)
+{
+	ephy_window_load_url (window, location);
+}
+
+static void
 ephy_window_init (EphyWindow *window)
 {
 	EphyExtension *manager;
@@ -2326,7 +2337,11 @@ ephy_window_init (EphyWindow *window)
 	window->priv->tabs_menu = ephy_tabs_menu_new (window);
 	window->priv->fav_menu = ephy_favorites_menu_new (window);
 	window->priv->enc_menu = ephy_encoding_menu_new (window);
-	window->priv->bmk_menu = ephy_bookmarks_menu_new (window);
+
+	window->priv->bmk_menu = ephy_bookmarks_menu_new (window->priv->manager,
+							  BOOKMARKS_MENU_PATH);
+	g_signal_connect (window->priv->bmk_menu, "open",
+			  G_CALLBACK (open_bookmark_cb), window);
 
 	/* get the toolbars model *before* getting the bookmarksbar model
 	 * (via ephy_bookmarsbar_new()), so that the toolbars model is

@@ -1,5 +1,20 @@
 2004-10-29  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-menu.c: (open_bookmark_cb),
+	(open_bookmark_in_tab_cb), (add_action_for_bookmark),
+	(create_submenu), (ephy_bookmarks_menu_rebuild),
+	(ephy_bookmarks_menu_set_property),
+	(ephy_bookmarks_menu_get_property),
+	(ephy_bookmarks_menu_constructor), (ephy_bookmarks_menu_finalize),
+	(ephy_bookmarks_menu_class_init), (ephy_bookmarks_menu_new):
+	* src/bookmarks/ephy-bookmarks-menu.h:
+	* src/ephy-window.c: (open_bookmark_cb), (ephy_window_init):
+
+	Slightly refactor bookmarks menu, to take a configurable path
+	where to merge its UI.
+
+2004-10-29  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-topic-action.c: (can_open_in_tabs),
 	(open_in_tabs_activate_cb), (add_open_in_tabs_menu),
 	(build_bookmarks_menu), (show_context_menu):
