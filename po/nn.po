@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-21 15:53+0100\n"
-"PO-Revision-Date: 2004-03-21 20:47+0100\n"
+"PO-Revision-Date: 2004-03-21 21:21+0100\n"
 "Last-Translator: Åsmund Skjæveland\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -1147,7 +1147,7 @@ msgstr "%02u.%02u"
 
 #: embed/downloader-view.c:280
 msgid "_Resume"
-msgstr ""
+msgstr "Hald f_ram"
 
 #: embed/downloader-view.c:343 lib/widgets/ephy-cell-renderer-progress.c:35
 #: src/ephy-window.c:1132
@@ -1726,6 +1726,8 @@ msgid ""
 "Your browser was unable to trust %s. It is possible that someone is "
 "intercepting your communication to obtain your confidential information."
 msgstr ""
+"Nettlesaren din kan ikkje stola på %s. Det er mogleg at nokon avlyttar sambandet "
+"for å få tak i konfidensiell informasjon om deg."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:343
 #, c-format
@@ -1733,108 +1735,112 @@ msgid ""
 "You should only connect to the site if you are certain you are connected to %"
 "s."
 msgstr ""
+"Du bør berre kopla deg til nettstaden dersom du her heilt sikker på at det "
+"faktisk er %s du koplar deg til."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:348
 msgid "Connect to untrusted site?"
-msgstr ""
+msgstr "Kopla til nettstad som ikkje kan stolast på?"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:352
 msgid "_Don't show this message again for this site"
-msgstr ""
+msgstr "_Ikkje vis denne meldinga igjen for denne nettstaden"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:353
 msgid "Co_nnect"
-msgstr ""
+msgstr "_Kopla til"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:414
 msgid "Accept expired security information?"
-msgstr ""
+msgstr "Godta for gamal tryggleiksinformasjon?"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:415
 #, c-format
 msgid "The security information for %s expired on %s."
-msgstr ""
+msgstr "Tryggleiksinformasjonen om %s gjekk ut %s."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:421
 msgid "Accept not yet valid security information?"
-msgstr ""
+msgstr "Godta tryggleiksinformasjon som ikkje er gyldig enno?"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:422
 #, c-format
 msgid "The security information for %s isn't valid until %s."
-msgstr ""
+msgstr "Tryggleiksinformasjonen om %s er ikkje gyldig før %s."
 
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
 #: embed/mozilla/GtkNSSDialogs.cpp:433
 msgid "%a %d %b %Y"
-msgstr ""
+msgstr "%A den %d. %B %Y"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:444
 msgid "You should ensure that your computer's time is correct."
-msgstr ""
+msgstr "Du bør kontrollera at klokka på datamaskinen din går rett."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:489
 #, c-format
 msgid "Cannot establish connection to %s."
-msgstr ""
+msgstr "Kan ikkje oppretta samband til %s."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:492
 #, c-format
 msgid "The certificate revocation list (CRL) from %s needs to be updated."
-msgstr ""
+msgstr "Lista over tilbakekalla sertifikat (CRL) frå %s treng å oppdaterast."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:497
 msgid "Please ask your system administrator for assistance."
-msgstr ""
+msgstr "Be systemansvarleg om hjelp."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:536
 msgid "_Trust CA"
-msgstr ""
+msgstr "_Stol på CA"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:548
 #, c-format
 msgid "Trust %s to identify:"
-msgstr ""
+msgstr "Stol på at %s kan identifisera:"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:552
 msgid "Trust new Certificate Authority?"
-msgstr ""
+msgstr "Stol på ny sertifikatsautoritet (CA)?"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:553
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
 msgstr ""
+"Før du vel å stola på ein sertifikatsautoritt (CA) bør du kontrollera at "
+"sertifikatet er autentisk."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:563
 msgid "_Web sites"
-msgstr ""
+msgstr "_Nettstader"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:568
 msgid "_Software developers"
-msgstr ""
+msgstr "_Programutviklarar"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:634
 msgid "Certificate already exists."
-msgstr ""
+msgstr "Sertifikatet finst frå før."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:635
 msgid "The certificate has already been imported."
-msgstr ""
+msgstr "Dette sertifikatet har allereie vorte importert."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:754
 msgid "_Backup Certificate"
-msgstr ""
+msgstr "_Ta tryggleikskopi av sertifikatet"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:761
 msgid "Select password."
-msgstr ""
+msgstr "Vel passord."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:762
 msgid "Select a password to protect this certificate."
-msgstr ""
+msgstr "Vel eit passord som skal verna dette sertifikatet."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:774 embed/mozilla/GtkNSSDialogs.cpp:876
 msgid "_Password:"
@@ -1842,24 +1848,24 @@ msgstr "_Passord:"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:788
 msgid "Con_firm password:"
-msgstr ""
+msgstr "Stad_fest passord:"
 
 #. TODO: We need a better password quality meter
 #: embed/mozilla/GtkNSSDialogs.cpp:800
 msgid "Password quality:"
-msgstr ""
+msgstr "Passordkvalitet:"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:857
 msgid "I_mport Certificate"
-msgstr ""
+msgstr "I_mporter sertifikat"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:865
 msgid "Password required."
-msgstr ""
+msgstr "Passord påkravd."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:866
 msgid "Enter the password for this certificate."
-msgstr ""
+msgstr "Skriv inn passordet for dette sertifikatet."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:944
 msgid "Certificate Revocation list successfully imported."
@@ -1875,63 +1881,67 @@ msgstr "Eining:"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:970
 msgid "Next Update:"
-msgstr ""
+msgstr "Neste oppdatering:"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:997
 msgid "Not part of certificate"
-msgstr ""
+msgstr "Ikkje ein del av sertifikatet"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1265
 msgid "Certificate Properties"
-msgstr ""
+msgstr "Sertifikateigenskapar"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1287
 msgid "This certificate has been verified for the following uses:"
-msgstr ""
+msgstr "Dette sertifikatet har vorte verifisert til dei følgjande bruksområda:"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1290
 msgid "Could not verify this certificate because it has been revoked."
-msgstr ""
+msgstr "Kunne ikkje stadfesta dette sertifikatet, avdi det er kalla tilbake."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1293
 msgid "Could not verify this certificate because it has expired."
-msgstr ""
+msgstr "Kunne ikkje stadfesta dette sertifikatet, avdi det er for gamalt."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1296
 msgid "Could not verify this certificate because it is not trusted."
-msgstr ""
+msgstr "Kunne ikkje stadfesta dette sertifikatet, avdi det er ikkje stolt på."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1299
 msgid "Could not verify this certificate because the issuer is not trusted."
-msgstr ""
+msgstr "Kunne ikkje stadfesta dette sertifikatet, avdi utferdar ikkje er stolt på."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1302
 msgid "Could not verify this certificate because the issuer is unknown."
-msgstr ""
+msgstr "Kunne ikkje stadfesta dette sertifikatet, avdi utferdar er ukjent."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1305
 msgid "Could not verify this certificate because the CA certificate is invalid."
-msgstr ""
+msgstr "Kunne ikkje stadfesta dette sertifikatet, avdi CA-sertifikatet er ugyldig."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1310
 msgid "Could not verify this certificate for unknown reasons."
-msgstr ""
+msgstr "Kunne ikkje stadfesta dette sertifikatet, av ukjende årsaker."
 
 #: embed/mozilla/GtkNSSKeyPairDialogs.cpp:183
 msgid "Generating Private Key."
-msgstr ""
+msgstr "Lagar privat nøkkel."
 
 #: embed/mozilla/GtkNSSKeyPairDialogs.cpp:184
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
 msgstr ""
+"Vent litt medan ein ny privat nøkkel vert laga. Denne prosessen kan ta nokre "
+"få minutt."
 
 #: embed/mozilla/mozilla-embed-single.cpp:501
 msgid ""
 "Epiphany can't be used now. Mozilla initialization failed. Check your "
 "MOZILLA_FIVE_HOME environmental variable."
 msgstr ""
+"Epiphany kan ikkje brukast no. Mozilla-oppstart feila. Kontroller "
+"miljøvariabelen MOZILLA_FIVE_HOME."
 
 #. *
 #. * This is a comma separated list of language ranges, as specified
@@ -1946,11 +1956,11 @@ msgstr ""
 #.
 #: embed/mozilla/mozilla-notifiers.cpp:737
 msgid "system-language"
-msgstr ""
+msgstr "nn-no,nn"
 
 #: embed/print-dialog.c:289
 msgid "Print to"
-msgstr ""
+msgstr "Skriv ut til"
 
 #: lib/eel-gconf-extensions.c:82
 #, c-format
@@ -1968,6 +1978,9 @@ msgid ""
 "  %s\n"
 "All further errors shown only on terminal"
 msgstr ""
+"GConf-feil:\n"
+"  %s\n"
+"Alle vidare feilmeldingar går berre til terminalen"
 
 #: lib/eel-gconf-extensions.c:90
 msgid "GConf Error"
@@ -1975,7 +1988,7 @@ msgstr "GConf-feil"
 
 #: lib/egg/egg-editable-toolbar.c:512
 msgid "_Remove Toolbar"
-msgstr ""
+msgstr "_Fjern verktøylinja"
 
 #: lib/egg/egg-toolbar-editor.c:559
 msgid "Separator"
@@ -1986,6 +1999,8 @@ msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
 msgstr ""
+"Dra eit element til verktøylinja for å leggja det til. Dra det frå verktøylinja "
+"for å fjerna det."
 
 #. The name of the default downloads folder
 #: lib/ephy-file-helpers.c:75 src/prefs-dialog.c:1107
@@ -1995,17 +2010,17 @@ msgstr "Nedlastingar"
 #: lib/ephy-file-helpers.c:164
 #, c-format
 msgid "Failed to find %s"
-msgstr ""
+msgstr "Klarte ikkje finna %s"
 
 #: lib/ephy-file-helpers.c:229
 #, c-format
 msgid "%s exists, please move it out of the way."
-msgstr ""
+msgstr "%s finst frå før, flytt henne vekk."
 
 #: lib/ephy-file-helpers.c:232
 #, c-format
 msgid "Failed to create directory %s."
-msgstr ""
+msgstr "Klarte ikkje laga katalogen %s."
 
 #: lib/ephy-gui.c:90
 #, c-format
