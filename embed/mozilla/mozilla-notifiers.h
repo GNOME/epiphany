@@ -1,5 +1,7 @@
 /*
- *  Copyright (C) 2000 Nate Case 
+ *  Copyright (C) 2000 Nate Case
+ *  Copyright (C) 2000-2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,10 +23,33 @@
 #ifndef MOZILLA_NOTIFIERS_H
 #define MOZILLA_NOTIFIERS_H
 
-#include "ephy-embed-single.h"
+#include <glib-object.h>
+#include <gconf/gconf.h>
 
-void mozilla_notifiers_init         (EphyEmbedSingle *single);
+G_BEGIN_DECLS
 
-void mozilla_notifiers_free         (void);
+typedef gboolean (* PrefValueTransformFunc)	(GConfValue *, GValue *);
+
+gboolean mozilla_notifier_transform_bool	(GConfValue *, GValue *);
+
+gboolean mozilla_notifier_transform_bool_invert	(GConfValue *, GValue *);
+
+gboolean mozilla_notifier_transform_int		(GConfValue *, GValue *);
+
+gboolean mozilla_notifier_transform_string	(GConfValue *, GValue *);
+
+void	 mozilla_notifier_add		(const char *gconf_key,
+					 const char *mozilla_pref,
+					 PrefValueTransformFunc func);
+
+void	 mozilla_notifier_remove	(const char *gconf_key,
+					 const char *mozilla_pref,
+					 PrefValueTransformFunc func);
+
+void	 mozilla_notifiers_init		(void);
+
+void	 mozilla_notifiers_shutdown	(void);
+
+G_END_DECLS
 
 #endif

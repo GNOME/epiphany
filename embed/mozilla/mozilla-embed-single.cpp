@@ -506,7 +506,7 @@ init_services (MozillaEmbedSingle *single)
 	mozilla_setup_colors (single);
 
 	START_PROFILER ("Mozilla prefs notifiers")
-	mozilla_notifiers_init (EPHY_EMBED_SINGLE (single));
+	mozilla_notifiers_init ();
 	STOP_PROFILER ("Mozilla prefs notifiers")
 
 	mozilla_register_components ();
@@ -569,7 +569,7 @@ mozilla_embed_single_finalize (GObject *object)
 	 * services depend on xpcom */
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 
-	mozilla_notifiers_free ();
+	mozilla_notifiers_shutdown ();
 
 	gtk_moz_embed_pop_startup ();
 
