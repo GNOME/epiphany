@@ -165,15 +165,19 @@ set_properties (FindDialog *find_dialog)
 
 	ephy_dialog_get_value (dialog, MATCH_CASE_PROP, &match_case);
         b_match_case = g_value_get_boolean (&match_case);
+	g_value_unset (&match_case);
 
 	ephy_dialog_get_value (dialog, AUTOWRAP_PROP, &wrap);
         b_wrap = g_value_get_boolean (&wrap);
+	g_value_unset (&wrap);
 
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG(dialog));
 	g_return_if_fail (embed != NULL);
 
         ephy_embed_find_set_properties (embed, search_string,
 					b_match_case, b_wrap);
+
+	g_free (search_string);
 }
 
 static void
