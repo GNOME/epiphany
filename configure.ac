@@ -36,15 +36,15 @@ AM_MAINTAINER_MODE
 if test "x$enable_maintainer_mode" = "xyes"; then
 	AC_DEFINE([MAINTAINER_MODE],[1],[Define to enable 'maintainer-only' behaviour])
 	enable_debug=yes
-	AM_CPPFLAGS="$AM_CPPFLAGS -DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGCONF_DISABLE_DEPRECATED -DGNOME_VFS_DISABLE_DEPRECATED -DBONOBO_UI_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED -DLIBGLADE_DISABLE_DEPRECATED -DPANGO_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGNOME_DISABLE_DEPRECATED"
-	AM_CXXFLAGS="$AM_CXXFLAGS -Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor"
+        DEPRECATION_FLAGS="-DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGCONF_DISABLE_DEPRECATED -DGNOME_VFS_DISABLE_DEPRECATED -DBONOBO_UI_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED -DLIBGLADE_DISABLE_DEPRECATED -DPANGO_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGNOME_DISABLE_DEPRECATED"
+	MOZILLA_WARN_CXXFLAGS="-Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor"
 fi
 
 AC_PROG_INTLTOOL([0.29])
 
 GLIB_REQUIRED=2.5.6
 PANGO_REQUIRED=1.6.0
-GTK_REQUIRED=2.5.5
+GTK_REQUIRED=2.5.7
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
 LIBGNOMEVFS_REQUIRED=2.3.1
@@ -73,15 +73,9 @@ AM_PROG_CC_STDC
 AC_HEADER_STDC
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 
-AC_SUBST([AM_CPPFLAGS])
-AC_SUBST([AM_CFLAGS])
-AC_SUBST([AM_CXXFLAGS])
-
 GNOME_DEBUG_CHECK
 GNOME_COMPILE_WARNINGS([error])
 dnl GNOME_CXX_WARNINGS
-AM_CFLAGS="$AM_CFLAGS $WARN_CFLAGS"
-AM_CXXFLAGS="$AM_CXXFLAGS $WARN_CXXFLAGS"
 
 PKG_CHECK_MODULES([EPIPHANY_DEPENDENCY], [\
 		  glib-2.0 >= $GLIB_REQUIRED \
@@ -202,7 +196,10 @@ dnl This is really gcc-only
 dnl Do this test using CXX only since some versions of gcc
 dnl 2.95-2.97 have a signed wchar_t in c++ only and some versions
 dnl only have short-wchar support for c++.
+
 AC_LANG_PUSH([C++])
+
+_SAVE_CPPFLAGS=$CPPFLAGS
 _SAVE_CXXFLAGS=$CXXFLAGS
 _SAVE_AM_CXXFLAGS=$AM_CXXFLAGS
 AM_CXXFLAGS="$AM_CXXFLAGS -fshort-wchar"
@@ -229,7 +226,24 @@ dnl **********************************
 
 dnl FIXME find a m4/autoconf guru who can distill this into a nice macro
 
-CXXFLAGS="$_SAVE_CXXFLAGS $AM_CXXFLAGS -I$MOZILLA_INCLUDE_ROOT `pkg-config --cflags $MOZILLA-xpcom` -DMOZILLA_STRICT_API"
+CPPFLAGS="-I$MOZILLA_INCLUDE_ROOT -I$MOZILLA_INCLUDE_ROOT/pipnss `$PKG_CONFIG --cflags-only-I $MOZILLA-xpcom` -DMOZILLA_STRICT_API"
+CXXFLAGS="$_SAVE_CXXFLAGS $AM_CXXFLAGS `$PKG_CONFIG --cflags-only-other $MOZILLA-xpcom`"
+
+AC_MSG_CHECKING([[whether we have a gtk 2 mozilla build]])
+
+AC_RUN_IFELSE(
+	[AC_LANG_SOURCE(
+		[[#include <mozilla-config.h>
+		  #include <string.h>
+                  int main(void) {
+		    return strcmp (MOZ_DEFAULT_TOOLKIT, "gtk2") != 0;
+		  } ]]
+	)],
+	[result=yes],
+	[AC_MSG_ERROR([[Epiphany needs a gtk 2 mozilla build]])],
+        [result=maybe])
+
+AC_MSG_RESULT([$result])
 
 dnl Changed from PRUnichar* to nsAString& in 1.8a1 and on aviary branch
 
@@ -395,25 +409,42 @@ AC_COMPILE_IFELSE(
 AC_MSG_RESULT([$result])
 
 dnl check for broken reload in GtkMozEmbed
-dnl FIXME: I have NO IDEA how to do this. For now, just always enable our workaround
-dnl
 dnl This is fixed since 1.7.4 on 1.7 branch, and since 1.8a3 on trunk
 
 AC_MSG_CHECKING([for broken reload])
 
-AC_DEFINE([GTKMOZEMBED_BROKEN_RELOAD],[1],[Define if GtkMozEmbed has broken reload])
+if $PKG_CONFIG --atleast-version 1.8a3 $MOZILLA-gtkmozembed; then
+	broken_reload=no
+else
+	broken_reload="couldn't autodetect, assuming yes"
+	AC_DEFINE([GTKMOZEMBED_BROKEN_RELOAD],[1],[Define if GtkMozEmbed has broken reload])
+fi
 
-AC_MSG_RESULT([couldn't autodetect, assuming yes])
+AC_MSG_RESULT([$broken_reload])
+
+AC_MSG_CHECKING([for mozilla security compoment])
+
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM(
+		[[#include <nsIX509Cert.h>]],
+		[[nsIX509Cert *c;
+		  c->GetIssuer (nsnull);]]
+	)],
+	[AC_DEFINE([HAVE_MOZILLA_PSM], [1],[Define if you have the mozilla psm headers installed]) have_psm=yes],
+	[have_psm=no])
+
+AC_MSG_RESULT([$have_psm])
+
+AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "x$have_psm" = "xyes"])
 
 dnl restore flags
+CPPFLAGS=$_SAVE_CPPFLAGS
 CXXFLAGS=$_SAVE_CXXFLAGS
-AC_LANG_POP(C++)
 
-AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/pipnss/nsIX509Cert.h],
-	[AC_DEFINE([HAVE_MOZILLA_PSM],[1],
-	[Define if you have the mozilla psm headers installed]) have_psm=yes],
-	[have_psm=no])
-AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "x$have_psm" = "xyes"])
+AC_LANG_POP([C++])
+
+dnl Not a simple file check due to the header being in the SDK since 1.8a6
+dnl https://bugzilla.mozilla.org/show_bug.cgi?id=271068
 
 if test "x$flavour" = "xmozilla"; then
 	AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsIPassword.h],
@@ -434,8 +465,19 @@ AC_MSG_RESULT([$filepicker])
 
 AM_CONDITIONAL([ENABLE_FILEPICKER],[test "x$filepicker" = "xyes"])
 if test "x$filepicker" = "xyes"; then
-  AC_DEFINE([ENABLE_FILEPICKER],[1],[Define to enable the native filepicker])
+	AC_DEFINE([ENABLE_FILEPICKER],[1],[Define to enable the native filepicker])
 fi
+
+dnl *******************************
+dnl Add warning flags
+dnl *******************************
+
+AM_CPPFLAGS="$AM_CPPFLAGS $DEPRECATION_FLAGS"
+AM_CFLAGS="$AM_CFLAGS $WARN_CFLAGS"
+AM_CXXFLAGS="$AM_CXXFLAGS $WARN_CXXFLAGS $MOZILLA_WARN_CXXFLAGS"
+AC_SUBST([AM_CPPFLAGS])
+AC_SUBST([AM_CFLAGS])
+AC_SUBST([AM_CXXFLAGS])
 
 dnl *******************************
 dnl Internationalization
