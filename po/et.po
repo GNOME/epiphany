@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany Web Browser\n"
 "POT-Creation-Date: 2004-02-27 03:12+0100\n"
-"PO-Revision-Date: 2004-02-27 14:14+0300\n"
+"PO-Revision-Date: 2004-02-28 02:53+0300\n"
 "Last-Translator: Priit Laes <amd@tt.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -130,7 +130,7 @@ msgstr "Kasutaja alguslehe aadress."
 
 #: data/epiphany.schemas.in.h:2
 msgid "Allow popups"
-msgstr "Hüpikaknad lubatud"
+msgstr "Luba hüpikaknad"
 
 #: data/epiphany.schemas.in.h:3
 msgid "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
@@ -438,24 +438,20 @@ msgid "    "
 msgstr "    "
 
 #: data/glade/certificate-dialogs.glade.h:2
-#, fuzzy
 msgid "<b>Fingerprints</b>"
-msgstr "<b>Kirjatüübid</b>"
+msgstr "<b>Sõrmejäljed</b>"
 
 #: data/glade/certificate-dialogs.glade.h:3
-#, fuzzy
 msgid "<b>Issued By</b>"
-msgstr "<b>Päised</b>"
+msgstr "<b>Väljastaja</b>"
 
 #: data/glade/certificate-dialogs.glade.h:4
-#, fuzzy
 msgid "<b>Issued To</b>"
-msgstr "<b>Prindi</b>"
+msgstr "<b>Omanik</b>"
 
 #: data/glade/certificate-dialogs.glade.h:5
-#, fuzzy
 msgid "<b>Validity</b>"
-msgstr "<b>Olek:</b>"
+msgstr "<b>Kehtivus</b>"
 
 #: data/glade/certificate-dialogs.glade.h:6
 msgid "Certificate _Fields"
@@ -535,7 +531,7 @@ msgstr "<b>Olek:</b>"
 
 #: data/glade/epiphany.glade.h:4
 msgid "<b>_Use a different encoding:</b>"
-msgstr ""
+msgstr "<b>_Kasuta teist kodeeringut:</b>"
 
 #: data/glade/epiphany.glade.h:5
 msgid "C_ase sensitive"
@@ -591,7 +587,7 @@ msgstr "_Eelmine"
 
 #: data/glade/epiphany.glade.h:17
 msgid "_Wrap around"
-msgstr "_Lõppu jõudes jätka algusest"
+msgstr "_Lõpust mine algusesse"
 
 #: data/glade/prefs-dialog.glade.h:3
 #: data/glade/print.glade.h:3
@@ -731,9 +727,8 @@ msgid "_Disk space:"
 msgstr "Ke_ttaruum"
 
 #: data/glade/prefs-dialog.glade.h:37
-#, fuzzy
 msgid "_Down"
-msgstr "Valmis."
+msgstr "_Alla"
 
 #: data/glade/prefs-dialog.glade.h:38
 #, fuzzy
@@ -855,16 +850,15 @@ msgstr "Prindi"
 
 #: data/glade/print.glade.h:25
 msgid "_All pages"
-msgstr "Kõ_ik leheküljed"
+msgstr "_Kõik leheküljed"
 
 #: data/glade/print.glade.h:26
 msgid "_Bottom:"
 msgstr "_Alumine:"
 
 #: data/glade/print.glade.h:27
-#, fuzzy
 msgid "_Browse..."
-msgstr "Ve_el..."
+msgstr "_Sirvi..."
 
 #: data/glade/print.glade.h:28
 msgid "_Date"
@@ -1593,7 +1587,7 @@ msgstr "XUL failid"
 
 #: embed/mozilla/GtkNSSClientAuthDialogs.cpp:182
 msgid "_Select Certificate"
-msgstr "_Vali tunnistus"
+msgstr "_Vali sertifikaat"
 
 #: embed/mozilla/GtkNSSClientAuthDialogs.cpp:221
 #, c-format
@@ -1612,12 +1606,11 @@ msgstr ""
 #: embed/mozilla/GtkNSSDialogs.cpp:222
 #: embed/mozilla/GtkNSSDialogs.cpp:533
 msgid "_View Certificate"
-msgstr "_Vaata tunnistust"
+msgstr "_Ava sertifikaat"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:230
-#, fuzzy
 msgid "_Accept"
-msgstr "_Luba alati"
+msgstr "_Nõustu"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:294
 #, c-format
@@ -1631,7 +1624,7 @@ msgstr ""
 
 #: embed/mozilla/GtkNSSDialogs.cpp:305
 msgid "Accept incorrect security information?"
-msgstr ""
+msgstr "Kas usaldad ebakorrektset turvainfot?"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:337
 #, c-format
@@ -1649,7 +1642,7 @@ msgstr ""
 
 #: embed/mozilla/GtkNSSDialogs.cpp:352
 msgid "_Don't show this message again for this site"
-msgstr ""
+msgstr "Ä_ra näita seda teadet selle serveri kohta uuesti"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:353
 msgid "Co_nnect"
@@ -1657,7 +1650,7 @@ msgstr "Üh_endu"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:414
 msgid "Accept expired security information?"
-msgstr ""
+msgstr "Kas võtad vastu kehtivuse kaotanud turvainfo?"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:415
 #, c-format
@@ -1666,7 +1659,7 @@ msgstr ""
 
 #: embed/mozilla/GtkNSSDialogs.cpp:421
 msgid "Accept not yet valid security information?"
-msgstr ""
+msgstr "Kas võtad vastu veel mittekehtiva turvainfo?"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:422
 #, c-format
@@ -1678,7 +1671,7 @@ msgstr ""
 #  * strftime(3)
 #: embed/mozilla/GtkNSSDialogs.cpp:433
 msgid "%a %d %b %Y"
-msgstr ""
+msgstr "%a, %d, %b %Y"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:444
 msgid "You should ensure that your computer's time is correct."
@@ -1716,13 +1709,12 @@ msgid "Before trusting a Certificate Authority (CA) you should verify the certif
 msgstr ""
 
 #: embed/mozilla/GtkNSSDialogs.cpp:563
-#, fuzzy
 msgid "_Web sites"
-msgstr "_Lääne"
+msgstr "_Veebisaidid"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:568
 msgid "_Software developers"
-msgstr ""
+msgstr "_Tarkvaraarendajad"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:634
 msgid "Certificate already exists."
@@ -1747,9 +1739,8 @@ msgstr ""
 
 #: embed/mozilla/GtkNSSDialogs.cpp:774
 #: embed/mozilla/GtkNSSDialogs.cpp:876
-#, fuzzy
 msgid "_Password:"
-msgstr "Paroolid"
+msgstr "_Parool:"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:788
 msgid "Con_firm password:"
@@ -1762,7 +1753,7 @@ msgstr "Parooli kvaliteet:"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:857
 msgid "I_mport Certificate"
-msgstr ""
+msgstr "I_mpordi sertifikaat"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:865
 msgid "Password required."
@@ -1787,7 +1778,7 @@ msgstr "Nimetu"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:970
 msgid "Next Update:"
-msgstr ""
+msgstr "Järgmine uuendamine:"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:997
 msgid "Not part of certificate"
@@ -1887,7 +1878,7 @@ msgstr ""
 
 #: lib/egg/egg-editable-toolbar.c:510
 msgid "_Remove Toolbar"
-msgstr "Eemalda tööriista_riba"
+msgstr "_Eemalda tööriistariba"
 
 #: lib/egg/egg-toolbar-editor.c:552
 msgid "Separator"
@@ -2115,7 +2106,7 @@ msgstr "Ava valitud järjehoidja uues sakis"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:177
 msgid "_Rename..."
-msgstr "_Muuda nime..."
+msgstr "_Nimeta ümber..."
 
 #: src/bookmarks/ephy-bookmarks-editor.c:178
 msgid "Rename the selected bookmark or topic"
@@ -2383,9 +2374,8 @@ msgid "Not Categorized"
 msgstr "Kategoriseerimata"
 
 #: src/bookmarks/ephy-new-bookmark.c:261
-#, fuzzy
 msgid "Add Bookmark"
-msgstr "_Lisa järjehoidja"
+msgstr "Lisa järjehoidja"
 
 #  FIXME: We "should" use gtk_message dialog here
 #  * but it doesn't support markup of text yet
@@ -2414,9 +2404,8 @@ msgid "Encodings"
 msgstr "_Kodeering"
 
 #: src/ephy-encoding-menu.c:379
-#, fuzzy
 msgid "_Other..."
-msgstr "_Muu"
+msgstr "_Muu..."
 
 #: src/ephy-encoding-menu.c:380
 msgid "Other encodings"
@@ -2424,7 +2413,7 @@ msgstr "Teised kodeeringud"
 
 #: src/ephy-encoding-menu.c:387
 msgid "_Automatic"
-msgstr ""
+msgstr "_Automaaselt"
 
 #: src/ephy-go-action.c:73
 #: src/toolbar.c:409
@@ -2704,9 +2693,8 @@ msgstr "Sulge aktiivne aken"
 
 #  Edit menu
 #: src/ephy-window.c:116
-#, fuzzy
 msgid "_Undo"
-msgstr "_Unicode"
+msgstr "T_aasta"
 
 #: src/ephy-window.c:117
 #, fuzzy
@@ -2784,7 +2772,7 @@ msgstr "Peata aktiivne allalaadimine"
 
 #: src/ephy-window.c:157
 msgid "_Reload"
-msgstr "Vä_rskenda"
+msgstr "Lae _uuesti"
 
 #: src/ephy-window.c:158
 msgid "Display the latest content of the current page"
@@ -2928,7 +2916,7 @@ msgstr "Liiguta aktiivne sakk paremale"
 
 #: src/ephy-window.c:217
 msgid "_Detach Tab"
-msgstr "Eralda _sakk"
+msgstr "_Eralda sakk"
 
 #: src/ephy-window.c:218
 msgid "Detach current tab"
@@ -2965,7 +2953,7 @@ msgstr "Näita või peida tööriistariba"
 
 #: src/ephy-window.c:243
 msgid "_Fullscreen"
-msgstr "Tä_isekraanvaade"
+msgstr "_Täisekraanvaade"
 
 #: src/ephy-window.c:244
 msgid "Browse at full screen"
@@ -2998,10 +2986,10 @@ msgstr "Ava raam uues a_knas"
 msgid "Open Frame in New _Tab"
 msgstr "Ava _raam uues sakis"
 
-#. Links
+#  Links
 #: src/ephy-window.c:269
 msgid "_Open Link"
-msgstr "Ava v_iit"
+msgstr "A_va viit"
 
 #: src/ephy-window.c:271
 msgid "Open Link in _New Window"
@@ -3426,7 +3414,7 @@ msgstr "Liigu üles"
 
 #: src/toolbar.c:375
 msgid "Address Entry"
-msgstr "Aadressisisestus"
+msgstr "Aadressi sisestus"
 
 #: src/toolbar.c:377
 msgid "Enter a web address to open, or a phrase to search for on the web"
@@ -3458,7 +3446,7 @@ msgstr "Tööriistariba redaktor"
 
 #: src/window-commands.c:903
 msgid "_Add a New Toolbar"
-msgstr "_Lisa uus tööriistariba..."
+msgstr "_Lisa uus tööriistariba"
 
 #  Translator credits
 #: src/window-commands.c:955
