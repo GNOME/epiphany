@@ -446,6 +446,220 @@ Translations
 	* ta (Dinesh Nadarajah)
 	* vi (Pablo Saratxaga)
 
+
+==============
+Epiphany 1.0.7
+==============
+
+Code changes:
+
+	* Support for mozilla 1.6 (ported from HEAD) (Christian)
+
+Bugfixes:
+
+	* Fix a compiler warning introduced in 1.0.6 (Christian)
+	* Monitor /system/http_proxy too (Christian)
+	* Fix recovery from corrupted session, bookmarks and 
+	  history files (Christian)
+	* Fix some mem leaks (JF Rameau)
+	* Don't remember last action from location entry,
+	  fixes short hostname urls (Marco, Christian)
+	* Fix crash when printing from js (Christian)
+	* Delete host entries from history db when there are no more
+	  pages from that host in the history (Marco, Christian)
+	* Fix crash of nautilus view after using the find dialogue (Christian)
+	* Fix toolbar drag handle drag data (Christian)
+	* Fix a crasher when deleting a bookmark (Marco, Christian)
+	* Fix epiphany freezing when editing a bookmark while loading the page
+	  it points to (Marco, Christian)
+	* Fix crash when calling epiphany from thunderbird (Marco, Christian)
+	* Don't close all epiphany window when exiting the last nautilus view
+	  (Christian)
+	* Fix crash when printing a frame from javascript (Christian)
+	* Fix window position restoring (Dave Jones)
+	* Fix documentation OMF file (ported from HEAD) (Christian, Piers Cornwell)
+	* Fix a mem leak (Christian)
+
+Translations:
+
+	* Danilo Segan (sr)
+	* Priit Laes (et)
+	* Alessio Frusciante (it)
+	* Орчуулагчдын тухай (mn)
+
+
+==============
+Epiphany 1.0.6
+==============
+
+Bugfixes:
+
+	* Fix a crash in the bookmarks editor (Marco)
+	* Fix session resume (Marco)
+	* Fix RDF export to encode entities (Christian)
+	* Fix session saving to encode entities (Christian)
+	* Fix recovery from corrupted toolbar layout file (Christian)
+
+Translations:
+
+	* ko (Changwoo Ryu)
+
+
+==============
+Epiphany 1.0.5
+==============
+
+Bugfixes
+
+	* Fixes for printing dialogue when shown from mozilla (Christian)
+	* Don't show a failure dialogue when cancelling the print dialogue
+	  shown from mozilla (Christian)
+	* Initialise the print dialogue also when shown from mozilla
+	  (Christian)
+	* Always show the print dialogue when printing from mozilla
+	  (Christian)
+	* Only allow printing the selection when there really is one
+	  (Christian)
+
+Translations
+
+	* ca (Jordi Mas)
+	* ga (David O'Callaghan)
+	* hi (रविशंकर श्रीवास्तव)
+	* sk (Marcel Telka)
+	* sv (Christian Rose)
+
+
+==============
+Epiphany 1.0.4
+==============
+
+Code
+
+	* Grab focus to the search entry when showing bookmarks editor
+	  (Ettore Perazzoli, Marco)
+
+Bugfixes
+
+	* Fix intermittent nautilus view activation failure (Mark McLoughlin)
+	* Fix autocompletion window popping up unexpectedly (Marco)
+
+Translations
+
+	* kn (ಪ್ರಮೋದ್.ಆರ್)
+	* pt_BR (Gustavo Noronha Silva)
+
+
+==============
+Epiphany 1.0.3
+==============
+
+Code
+
+	* Add support for mozilla 1.5 final (Kristian Rietveld)
+
+Documentation
+
+	* Translated to Ukrainian by Максим Дзюманенко
+
+Translations
+
+	* it (Francesco Marletta)
+	* uk (Максим Дзюманенко)
+
+
+==============
+Epiphany 1.0.2
+==============
+
+Bugfixes
+	* Don't show session resume dialogue in server mode (Christian)
+	* Fix http accept language header when running in C locale (Christian)
+
+Translations
+	* hu (Tímár András)
+	* sr, sr@Latn (Danilo Šegan)
+
+
+==============
+Epiphany 1.0.1
+==============
+
+Code
+
+	* Add support for mozilla 1.4.1 (Marco)
+	* Add support for mozilla 1.6a (Xan)
+
+Bugfixes
+
+	* Fix XBEL (Galeon/Konqueror) bookmarks importer (Christian)
+	* Use the translated names for the default bookmarks and topics
+	  when creating them (Christian)
+	* Set MOZ_PLUGIN_PATH in the startup script (Christopher James Lahey)
+	* Remove the autocompletion window timeout also when the window is
+	  still not visible (Marco)
+	* Add supported protocols to epiphany.application (Marco)
+	* Fix peristence of directory selection (Christian)
+	* Initialise completion visibility flag (Maroc)
+	* Fix check for return value of xmlSaveFileFormat (Christian)
+	* Specify UTF-8 encoding for the keyword: url (Christian)
+	* Check for NULL return of gtk_get_current_event (Christian)
+	* Fix session saving crash when run in --server mode (Christian)
+	* Stop download when cancelling the unknown mime type dialogue 
+	  (Christian)
+	* Follow tabs pref on double click in the history window (Marco)
+	* Fix compile warning on Solaris (Marco)
+	* Fix loading of bookmarks and toolbar files when they are corrupted
+	  (Christian)
+	* Don't pass NULL to gnome_vfs_expand_initial_tilde (Marco, Christian)
+
+Translations:
+
+	* el (Νίκος Χαρωνιτάκης)
+	* et (Priit Laes)
+	* fr (Eric Seigne)
+	* hu (Tímár András)
+	* lt (Žygimantas Beručk)
+	* pt_BR (Evandro Fernandes Giovanini, Augusta Marques da Silva)
+	* sk (Marcel Telka)
+	* sv (Christian Rose)
+
+==============
+Epiphany 1.0
+==============
+
+Bugfixes
+
+	* fix crashes when dragging on bookmarks topics (Marco)
+	* fix wrap around option in find dialog (Marco)
+
+Translations
+
+	* bn (Taneem Ahmed)
+	* fi (Pauli Virtanen)
+	* el (Nikos Charonitakis)
+	* hi (Guntupalli Karunakar)
+	* ja (Takayuki KUSANO)
+	* ko (Young-Ho Cha)
+	* mn (Sanlig Badral)
+	* sk (Marcel Telka)
+
+==============
+Epiphany 0.9.3
+==============
+
+Translations
+
+	* cy (Dafydd Harries)
+	* es (Francisco Javier F. Serrador)
+	* fr (Eric Seigne)
+	* it (Alessio Frusciante)
+	* ko (Changwoo Ryu)
+	* nl (Vincent van Adrighem)
+	* sq (Laurent Dhima)
+	* ta (Dinesh Nadarajah)
+	* zh_CN (Wang Jian)
+
 ==============
 Epiphany 0.9.2
 ==============
