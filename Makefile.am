@@ -13,6 +13,7 @@ EXTRA_DIST = 			\
 	xmldocs.make		\
 	omf.make		\
 	COPYING.README		\
+	MAINTAINERS		\
 	ChangeLog-20030925
 
 DISTCLEANFILES = 		\
