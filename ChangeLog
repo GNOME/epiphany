@@ -1,3 +1,26 @@
+2004-11-25  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.ac:
+
+	Check for iso-codes package.
+
+	* data/glade/prefs-dialog.glade:
+	* lib/ephy-langs.c: (ephy_langs_bind_iso_domains),
+	(read_iso_639_entry), (read_iso_3166_entry), (load_iso_entries),
+	(ephy_langs_iso_639_table), (ephy_langs_iso_3166_table):
+	* lib/ephy-langs.h:
+
+	Load language and locales list from iso-codes package, if available.
+
+	* src/prefs-dialog.c: (prefs_dialog_finalize),
+	(add_lang_dialog_selection_changed), (add_lang_dialog_response_cb),
+	(get_name_for_lang_code), (add_system_language_entry),
+	(setup_add_language_dialog), (create_language_section):
+
+	If the iso-codes package is available, use that to translate
+	language names and offer a wider variety of languages.
+	Fixes bug #155498.
+
 2004-11-24  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.ac:

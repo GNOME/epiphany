@@ -364,7 +364,7 @@ AC_MSG_RESULT([$result])
 
 dnl Added in 1.8a6 on trunk
 dnl https://bugzilla.mozilla.org/show_bug.cgi?id=223310
-AC_MSG_CHECKING([whether nsIKeygenThread takes an nsIObserver])
+AC_MSG_CHECKING([whether nsIKeygenThread::StartKeyGeneration takes an nsIObserver])
 
 AC_COMPILE_IFELSE(
 	[AC_LANG_PROGRAM(
@@ -429,9 +429,34 @@ fi
 dnl *******************************
 dnl Internationalization
 dnl ******************************* 
-dnl Add the languages which your application supports here.
 
+AC_MSG_CHECKING([for iso-codes package])
+have_iso_codes=no
+if $PKG_CONFIG --exists iso-codes --atleast-version=0.35; then
+	have_iso_codes=yes
+fi
+AC_MSG_RESULT([$have_iso_codes])
+
+if test "x$have_iso_codes" = "xyes"; then
+	AC_MSG_CHECKING([whether iso-codes has iso-639 and iso-3166 domains])
+	if $PKG_CONFIG --variable=domains iso-codes | grep -q 639 && \
+	   $PKG_CONFIG --variable=domains iso-codes | grep -q 3166 ; then
+		result=yes
+	else
+		result=no
+		have_iso_codes=no
+	fi
+	AC_MSG_RESULT([$result])
+fi
+
+if test "x$have_iso_codes" = "xyes"; then
+	AC_DEFINE_UNQUOTED([ISO_CODES_PREFIX],["`$PKG_CONFIG --variable=prefix iso-codes`"],[ISO codes prefix])
+	AC_DEFINE([HAVE_ISO_CODES],[1],[Define if you have the iso-codes package])
+fi
+
+dnl Add the languages which your application supports here.
 ALL_LINGUAS="am ar az be bg bn bs ca cs cy da de el en_CA en_GB es et eu fa fi fr ga gu he hi hr hu id is it ja ko li lt mi mk ml mn ms nb ne nl nn no pa pl pt pt_BR ro ru sk sl sq sr sr@Latn sv ta th tk tr uk vi wa zh_CN zh_TW"
+
 GETTEXT_PACKAGE=epiphany
 AC_SUBST([GETTEXT_PACKAGE])
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [Gettext package])
