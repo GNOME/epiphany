@@ -75,6 +75,9 @@ void          ephy_statusbar_set_progress		(EphyStatusbar *statusbar,
 void	      ephy_statusbar_add_widget			(EphyStatusbar *statusbar,
 							 GtkWidget *widget);
 
+void	      ephy_statusbar_remove_widget		(EphyStatusbar *statusbar,
+							 GtkWidget *widget);
+
 G_END_DECLS
 
 #endif

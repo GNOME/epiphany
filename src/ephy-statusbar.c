@@ -300,12 +300,12 @@ ephy_statusbar_set_progress (EphyStatusbar *statusbar,
 
 /**
  * ephy_statusbar_add_widget:
- * @statusbar: a #EphyStatusbar
+ * @statusbar: an #EphyStatusbar
  * @widget: a #GtkWidget
  * 
  * Adds the @widget to the statusbar. Use this function whenever you want to
  * add a widget to the statusbar. You can remove the widget again with
- * gtk_container_remove().
+ * ephy_statusbar_remove_widget().
  **/
 void
 ephy_statusbar_add_widget (EphyStatusbar *statusbar,
@@ -325,4 +325,23 @@ ephy_statusbar_add_widget (EphyStatusbar *statusbar,
 				      &shadow, NULL);
 		gtk_frame_set_shadow_type (GTK_FRAME (widget), shadow);
 	}
+}
+
+/**
+ * ephy_statusbar_remove_widget:
+ * @statusbar: an #EphyStatusbar
+ * @widget: a #GtkWidget
+ *
+ * Removes @widget, which must have been added to @statusbar using
+ * ephy_statusbar_add_widget ().
+ */
+void
+ephy_statusbar_remove_widget (EphyStatusbar *statusbar,
+			      GtkWidget *widget)
+{
+	g_return_if_fail (EPHY_IS_STATUSBAR (statusbar));
+	g_return_if_fail (GTK_IS_WIDGET (widget));
+
+	gtk_container_remove (GTK_CONTAINER (statusbar->priv->icon_container),
+			      widget);
 }
