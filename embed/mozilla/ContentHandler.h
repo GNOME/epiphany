@@ -68,21 +68,17 @@ class GContentHandler : public nsIHelperAppLauncherDialog
   private:
 
 	NS_METHOD Init ();
-	NS_METHOD LaunchHelperApp ();
 
 	NS_METHOD MIMEInitiateAction ();
 	NS_METHOD MIMEConfirmAction ();
 
 	nsCOMPtr<nsIHelperAppLauncher> mLauncher;
-	nsCOMPtr<nsIURI> mUri;
-	nsCOMPtr<nsIFile> mTempFile;
 	nsCOMPtr<nsISupports> mContext;
 
 	GnomeVFSMimeApplication *mHelperApp;
 	EphyMimePermission mPermission;
 
 	nsEmbedCString mUrl;
-	nsEmbedCString mScheme;
 #ifdef MOZ_NSIMIMEINFO_NSACSTRING_
 	nsEmbedCString mMimeType;
 #else
