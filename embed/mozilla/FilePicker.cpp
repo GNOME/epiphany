@@ -83,7 +83,7 @@ GFilePicker::~GFilePicker()
 
 /* void init (in nsIDOMWindow parent, in AString title, in short mode); */
 #if MOZILLA_SNAPSHOT < 16
-NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, PRUnichar *title, PRInt16 mode)
+NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *title, PRInt16 mode)
 #else
 NS_IMETHODIMP GFilePicker::Init(nsIDOMWindow *parent, const nsAString& title, PRInt16 mode)
 #endif
@@ -287,7 +287,11 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(nsAString& aDefaultString)
 	{
 		converted = g_filename_to_utf8(filename, -1, NULL, NULL, NULL);
 
+#if MOZILLA_SNAPSHOT < 16
+		*aDefaultString = ToNewUnicode (NS_ConvertUTF8toUTF16 (converted));
+#else
 		aDefaultString = NS_ConvertUTF8toUTF16 (converted);
+#endif
 	
 		g_free (filename);
 		g_free (converted);
