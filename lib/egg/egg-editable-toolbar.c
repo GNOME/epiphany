@@ -290,6 +290,7 @@ create_toolbar (EggEditableToolbar *t)
   GtkWidget *toolbar;
 
   toolbar = egg_toolbar_new ();
+  egg_toolbar_set_show_arrow (EGG_TOOLBAR (toolbar), TRUE);
   gtk_widget_show (toolbar);
   gtk_drag_dest_set (toolbar, GTK_DEST_DEFAULT_DROP,
 		     dest_drag_types, n_dest_drag_types,
