@@ -67,6 +67,7 @@ EXTRA_DIST = \
 	     $(extensionschema_DATA)	\
 	     $(pkgconfig_DATA)		\
 	     $(default_prefs_in_FILES)	\
+	     $(xsl_DATA)		\ 
 	     check-mime.py
 
 DISTCLEANFILES = \
