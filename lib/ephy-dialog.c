@@ -187,8 +187,6 @@ set_value_from_pref (PropertyInfo *info, GValue *value)
 			g_warning ("Unsupported value read from pref %s\n", info->pref);
 			break;
 	}
-
-	LOG ("id[%s], pref[%s] = %s", info->id, info->pref, g_strdup_value_contents (value))
 }
 
 static void
@@ -542,9 +540,10 @@ set_combo_box_from_value (PropertyInfo *info, const  GValue *value)
 		{
 			gtk_tree_model_get_value (model, &iter, info->data_col, &data);
 			found = compare_values (&data, value);
+			g_value_unset (&data);
+
 			if (found) break;
 
-			g_value_unset (&data);
 			valid = gtk_tree_model_iter_next (model, &iter);
 		}
 
