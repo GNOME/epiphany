@@ -265,9 +265,8 @@ NS_IMETHODIMP
 MozDownload::GetListener(nsIWebProgressListener **aListener)
 {
 	NS_ENSURE_ARG_POINTER(aListener);
-	NS_IF_ADDREF(*aListener = (nsIWebProgressListener *)this);
 
-	return NS_OK;
+	return CallQueryInterface (this, aListener);
 }
 
 NS_IMETHODIMP
