@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
-"POT-Creation-Date: 2004-02-15 18:56+0100\n"
-"PO-Revision-Date: 2004-02-15 21:00+0100\n"
+"POT-Creation-Date: 2004-02-22 20:19+0100\n"
+"PO-Revision-Date: 2004-02-22 20:28+0100\n"
 "Last-Translator: Reinout van Schouwen <reinout@cs.vu.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -106,8 +106,8 @@ msgid ""
 "allowing the history dialog and hiding the most used bookmarks list."
 msgstr ""
 "Alle geschiedenisinformatie uitschakelen door de terug-knop uit te "
-"schakelen, het geschiedenisdialoog niet toe te staan en de meest "
-"gebruikte bladwijzers te verbergen."
+"schakelen, het geschiedenisdialoog niet toe te staan en de meest gebruikte "
+"bladwijzers te verbergen."
 
 #: data/epiphany-lockdown.schemas.in.h:10
 msgid "Disable the user's ability to edit their bookmarks."
@@ -475,11 +475,18 @@ msgstr ""
 "\" (traditioneel chinees), \"tr\" (turks), \"x-unicode\" (overige talen) and "
 "\"x-western\" (talen in westeuropees schrift)."
 
+# src/context.c:62
+# src/history_callbacks.c:159
+# src/misc_callbacks.c:408
 #: data/epiphany.schemas.in.h:55
+msgid "The downloads folder"
+msgstr "De map voor downloads"
+
+#: data/epiphany.schemas.in.h:56
 msgid "The encoding autodetector. Empty string means autodetect is off"
 msgstr "De tekenset autodetectie. Een lege tekenreeks zet de autodetectie uit"
 
-#: data/epiphany.schemas.in.h:56
+#: data/epiphany.schemas.in.h:57
 msgid ""
 "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
 "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
@@ -502,11 +509,11 @@ msgstr ""
 "\" (autodetectie van traditionele chinese coderingen) en "
 "\"universal_charset_detector\" (meeste coderingen automatisch detecteren)."
 
-#: data/epiphany.schemas.in.h:57
+#: data/epiphany.schemas.in.h:58
 msgid "The page informations shown in the history view"
 msgstr "De weergegeven informatie bij geschiedenis"
 
-#: data/epiphany.schemas.in.h:58
+#: data/epiphany.schemas.in.h:59
 msgid ""
 "The page informations shown in the history view. Valid values in the list "
 "are \"address\", \"title\"."
@@ -514,33 +521,37 @@ msgstr ""
 "De weergegeven informatie bij geschiedenis. Geldige waarden zijn \"address"
 "\" (adres) en \"title\" (titel)."
 
+#: data/epiphany.schemas.in.h:60
+msgid "The path of the folder where downloads are saved."
+msgstr "Het pad van de map waar downloads opgeslagen worden."
+
 # Cursorbladermodus??
-#: data/epiphany.schemas.in.h:59
+#: data/epiphany.schemas.in.h:61
 msgid "Use caret browsing mode."
 msgstr "Cursorbladermodus gebruiken."
 
 # src/menubar.c:401
-#: data/epiphany.schemas.in.h:60
+#: data/epiphany.schemas.in.h:62
 msgid "Use own colors"
 msgstr "Eigen kleuren gebruiken"
 
 # src/menubar.c:396
-#: data/epiphany.schemas.in.h:61
+#: data/epiphany.schemas.in.h:63
 msgid "Use own fonts"
 msgstr "Eigen lettertypen gebruiken"
 
 # src/menubar.c:402
-#: data/epiphany.schemas.in.h:62
+#: data/epiphany.schemas.in.h:64
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Eigen kleuren gebruiken i.p.v door document aangegeven kleuren."
 
 # src/menubar.c:397
-#: data/epiphany.schemas.in.h:63
+#: data/epiphany.schemas.in.h:65
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr ""
 "Eigen lettertypen gebruiken i.p.v door document aangegeven lettertypen."
 
-#: data/epiphany.schemas.in.h:64
+#: data/epiphany.schemas.in.h:66
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -548,7 +559,7 @@ msgstr ""
 "Wanneer de bestanden niet met de browser geopend kunnen worden, komen ze "
 "automatisch in de downloadmap terecht en opent de geschikte toepassing ze."
 
-#: data/epiphany.schemas.in.h:65
+#: data/epiphany.schemas.in.h:67
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -557,43 +568,43 @@ msgstr ""
 "\" (overal vandaan), \"current site\" (huidige website) en \"nowhere"
 "\" (nooit)."
 
-#: data/epiphany.schemas.in.h:66
+#: data/epiphany.schemas.in.h:68
 msgid "Whether to print the date in the footer"
 msgstr "Of de datum afgedrukt moet worden in de voettekst"
 
-#: data/epiphany.schemas.in.h:67
+#: data/epiphany.schemas.in.h:69
 msgid "Whether to print the date in the footer."
 msgstr "Of de datum moet worden afgedrukt in de voettekst."
 
-#: data/epiphany.schemas.in.h:68
+#: data/epiphany.schemas.in.h:70
 msgid "Whether to print the page address in the header"
 msgstr "Of het adres van de pagina moet worden afgedrukt in de koptekst."
 
-#: data/epiphany.schemas.in.h:69
+#: data/epiphany.schemas.in.h:71
 msgid "Whether to print the page address in the header."
 msgstr "Of het adres van de pagina afgedrukt moet worden in de koptekst."
 
-#: data/epiphany.schemas.in.h:70
+#: data/epiphany.schemas.in.h:72
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr ""
 "Of de paginanummering (x van totaal) afgedrukt moet worden in de voettekst"
 
-#: data/epiphany.schemas.in.h:71
+#: data/epiphany.schemas.in.h:73
 msgid "Whether to print the page numbers (x of total) in the footer."
 msgstr ""
 "Of de paginanummering (x van totaal) moet worden afgedrukt in de voettekst."
 
-#: data/epiphany.schemas.in.h:72
+#: data/epiphany.schemas.in.h:74
 msgid "Whether to print the page title in the header"
 msgstr "Of de paginatitel afgedrukt moet worden in de koptekst"
 
-#: data/epiphany.schemas.in.h:73
+#: data/epiphany.schemas.in.h:75
 msgid "Whether to print the page title in the header."
 msgstr "Of de paginatitel moet worden afgedrukt in de koptekst."
 
 # src/mozilla_i18n.c:39
 # ui/preferences.glade.h:212
-#: data/epiphany.schemas.in.h:74
+#: data/epiphany.schemas.in.h:76
 msgid "x-western"
 msgstr "x-western"
 
@@ -2331,7 +2342,7 @@ msgid "Print to"
 msgstr "Afdrukken naar"
 
 # src/eel-gconf-extensions.c:100
-#: lib/eel-gconf-extensions.c:79
+#: lib/eel-gconf-extensions.c:82
 #, c-format
 msgid ""
 "GConf error:\n"
@@ -2340,7 +2351,7 @@ msgstr ""
 "GConf fout:\n"
 "  %s"
 
-#: lib/eel-gconf-extensions.c:83
+#: lib/eel-gconf-extensions.c:86
 #, c-format
 msgid ""
 "GConf error:\n"
@@ -2352,7 +2363,7 @@ msgstr ""
 "Verdere foutmeldingen zullen alleen in de terminal weergegeven worden"
 
 # src/eel-gconf-extensions.c:100
-#: lib/eel-gconf-extensions.c:87
+#: lib/eel-gconf-extensions.c:90
 msgid "GConf Error"
 msgstr "GConf fout"
 
@@ -2361,11 +2372,11 @@ msgstr "GConf fout"
 msgid "_Remove Toolbar"
 msgstr "_Werkbalk verwijderen"
 
-#: lib/egg/egg-toolbar-editor.c:535
+#: lib/egg/egg-toolbar-editor.c:552
 msgid "Separator"
 msgstr "Scheidingsteken"
 
-#: lib/egg/egg-toolbar-editor.c:565
+#: lib/egg/egg-toolbar-editor.c:582
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
@@ -2397,7 +2408,7 @@ msgstr "%s bestaat. Haal het alstublieft uit de weg."
 msgid "Failed to create directory %s."
 msgstr "Kan de map %s niet aanmaken."
 
-#: lib/ephy-gui.c:88
+#: lib/ephy-gui.c:90
 #, c-format
 msgid ""
 "File %s will be overwritten.\n"
@@ -2410,7 +2421,7 @@ msgstr ""
 "\n"
 "Wilt u doorgaan?"
 
-#: lib/ephy-gui.c:119
+#: lib/ephy-gui.c:121
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Kon hulp niet weergeven: %s"
@@ -4206,18 +4217,18 @@ msgid "Check this out!"
 msgstr "Kijk hier eens naar!"
 
 # src/menubar.c:150
-#: src/window-commands.c:879
+#: src/window-commands.c:878
 msgid "Toolbar Editor"
 msgstr "Werkbalkbeheer"
 
 # src/bookmarks_menus.c:525
 # ui/bookmarks.glade.h:47
-#: src/window-commands.c:901
+#: src/window-commands.c:900
 msgid "_Add a New Toolbar"
 msgstr "Nieuwe werkbalk _toevoegen"
 
 #. Translator credits
-#: src/window-commands.c:953
+#: src/window-commands.c:952
 msgid "translator-credits"
 msgstr ""
 "Vincent van Adrighem\n"
@@ -4226,7 +4237,7 @@ msgstr ""
 "Lode Vereiren <lode@linu.cx>"
 
 # src/menu_callbacks.c:428
-#: src/window-commands.c:983
+#: src/window-commands.c:982
 msgid "A GNOME browser based on Mozilla"
 msgstr "Een GNOME browser gebaseerd op Mozilla"
 
