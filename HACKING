@@ -5,6 +5,7 @@ need to stick to in order to get your patch accepted:
 - curly brackets are on a new line
 - please compare with NULL or FALSE isntead of using "!"
 - callback functions have a suffix _cb
+- all files have to be encoded in UTF-8
 
   Comment blocks are written like this:
   
@@ -14,7 +15,10 @@ need to stick to in order to get your patch accepted:
 
 When submitting a patch or committing to cvs do not forget
 to write a Changelog entry. Please put both a description
-and a reference to the bug (if there is one).
+and a reference to the bug (if there is one). Write your entry
+using UTF-8 encoding, and make sure your editor doesn't mangle
+the encoding of the ChangeLog file.
+
 
 Example of an entry:
 
