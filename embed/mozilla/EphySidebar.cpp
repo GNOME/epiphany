@@ -64,8 +64,9 @@ EphySidebar::AddPanel (const PRUnichar *aTitle,
 
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
 
+	gboolean result = FALSE;
 	g_signal_emit_by_name (single, "add-sidebar",
-			       aContentURL, title.get());
+			       aContentURL, title.get(), &result);
 
 	return NS_OK;
 }
