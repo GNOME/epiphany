@@ -252,9 +252,8 @@ ephy_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
 	g_return_val_if_fail (IS_EPHY_SPINNER (widget), FALSE);
 
 	spinner = EPHY_SPINNER (widget);
-	if (!spinner->details->ready) {
-		return FALSE;
-	}
+
+	if (!GTK_WIDGET_DRAWABLE (spinner)) return TRUE;
 
 	pixbuf = select_spinner_image (spinner);
 	if (pixbuf == NULL) {
@@ -292,18 +291,6 @@ ephy_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
 	return FALSE;
 }
 
-static void
-ephy_spinner_map (GtkWidget *widget)
-{
-	EphySpinner *spinner;
-
-	spinner = EPHY_SPINNER (widget);
-
-	GTK_WIDGET_CLASS (parent_class)->map (widget);
-
-	spinner->details->ready = TRUE;
-}
-
 /* here's the actual timeout task to bump the frame and schedule a redraw */
 
 static gboolean
@@ -312,9 +299,8 @@ bump_spinner_frame (gpointer callback_data)
 	EphySpinner *spinner;
 
 	spinner = EPHY_SPINNER (callback_data);
-	if (!spinner->details->ready) {
-		return TRUE;
-	}
+
+	if (!GTK_WIDGET_DRAWABLE (spinner)) return TRUE;
 
 	spinner->details->current_frame += 1;
 	if (spinner->details->current_frame > spinner->details->max_frame - 1) {
@@ -551,7 +537,6 @@ ephy_spinner_class_init (EphySpinnerClass *class)
 
 	widget_class->expose_event = ephy_spinner_expose;
 	widget_class->size_request = ephy_spinner_size_request;
-	widget_class->map = ephy_spinner_map;
 }
 
 static EphySpinnerInfo *

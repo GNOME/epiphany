@@ -719,7 +719,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	bm_view = ephy_node_view_new (node, editor->priv->bookmarks_filter);
 	ephy_node_view_enable_drag_source (bm_view);
 	ephy_node_view_add_icon_column (bm_view, EPHY_TREE_MODEL_NODE_COL_ICON);
-	ephy_node_view_add_column (bm_view, _("Title"),
+	ephy_node_view_add_column (bm_view, _("Bookmarks"),
 				   EPHY_TREE_MODEL_NODE_COL_BOOKMARK, TRUE);
 	gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (bm_view), TRUE, TRUE, 0);
 	gtk_widget_show (GTK_WIDGET (bm_view));
