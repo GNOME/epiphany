@@ -496,9 +496,16 @@ ephy_completion_model_iter_next (GtkTreeModel *tree_model,
 
 	root = get_node_root (model, node);
 	next = ephy_node_get_next_child (root, node);
-	if (next == NULL && root == model->priv->history)
+	if (next == NULL)
 	{
-		next = ephy_node_get_nth_child (model->priv->bookmarks, 0);
+		if (root == model->priv->history)
+		{
+			next = ephy_node_get_nth_child (model->priv->bookmarks, 0);
+		}
+		else
+		{
+			return FALSE;
+		}
 	}
 
 	iter->user_data = next;
