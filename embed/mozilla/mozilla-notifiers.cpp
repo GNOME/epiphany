@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2000 Nate Case 
+ *  Copyright (C) 2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,6 +15,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -451,6 +454,7 @@ mozilla_notifiers_init (EphyEmbedSingle *single)
 
 	eel_gconf_monitor_add ("/apps/epiphany/web");
 	eel_gconf_monitor_add ("/system/proxy");
+	eel_gconf_monitor_add ("/system/http_proxy");
 
 #ifdef MIGRATE_PIXEL_SIZE
 	gboolean migrate_size;
@@ -608,6 +612,7 @@ mozilla_notifiers_free (void)
 {
 	eel_gconf_monitor_remove ("/apps/epiphany/web");
 	eel_gconf_monitor_remove ("/system/proxy");
+	eel_gconf_monitor_remove ("/system/http_proxy");
 
 	g_list_foreach (mozilla_notifiers, 
 		        (GFunc)eel_gconf_notification_remove, 
