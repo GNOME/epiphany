@@ -23,7 +23,7 @@
 
 #include "ephy-bookmarks.h"
 
-#include <gtk/gtkscrolledwindow.h>
+#include <gtk/gtktreeview.h>
 
 G_BEGIN_DECLS
 
@@ -38,14 +38,14 @@ typedef struct EphyTopicsSelectorPrivate EphyTopicsSelectorPrivate;
 
 typedef struct
 {
-	GtkScrolledWindow parent;
+	GtkTreeView parent;
 
 	EphyTopicsSelectorPrivate *priv;
 } EphyTopicsSelector;
 
 typedef struct
 {
-	GtkScrolledWindowClass parent;
+	GtkTreeViewClass parent;
 } EphyTopicsSelectorClass;
 
 GType		     ephy_topics_selector_get_type        (void);

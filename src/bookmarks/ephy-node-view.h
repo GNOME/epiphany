@@ -21,7 +21,7 @@
 #ifndef __EPHY_NODE_VIEW_H
 #define __EPHY_NODE_VIEW_H
 
-#include <gtk/gtkscrolledwindow.h>
+#include <gtk/gtktreeview.h>
 #include <gtk/gtkdnd.h>
 
 #include "ephy-tree-model-node.h"
@@ -40,14 +40,14 @@ typedef struct EphyNodeViewPrivate EphyNodeViewPrivate;
 
 typedef struct
 {
-	GtkScrolledWindow parent;
+	GtkTreeView parent;
 
 	EphyNodeViewPrivate *priv;
 } EphyNodeView;
 
 typedef struct
 {
-	GtkScrolledWindowClass parent;
+	GtkTreeViewClass parent;
 
 	void (*node_activated)      (EphyNodeView *view, EphyNode *node);
 	void (*node_selected)       (EphyNodeView *view, EphyNode *node);
@@ -57,7 +57,7 @@ typedef struct
 
 GType         ephy_node_view_get_type                 (void);
 
-EphyNodeView *ephy_node_view_new                      (EphyNode *root,
+GtkWidget    *ephy_node_view_new                      (EphyNode *root,
 					               EphyNodeFilter *filter);
 
 void	      ephy_node_view_enable_dnd		      (EphyNodeView *view);
@@ -77,8 +77,6 @@ GList        *ephy_node_view_get_selection            (EphyNodeView *view);
 
 void	      ephy_node_view_select_all		      (EphyNodeView *view);
 
-gboolean      ephy_node_view_has_focus		      (EphyNodeView *view);
-
 void	      ephy_node_view_set_browse_mode	      (EphyNodeView *view);
 
 void	      ephy_node_view_select_node              (EphyNodeView *view,
@@ -92,9 +90,6 @@ void	      ephy_node_view_enable_drag_source       (EphyNodeView *view,
 void	      ephy_node_view_enable_drag_dest	      (EphyNodeView *view,
 						       GtkTargetEntry *types,
 						       int n_types);
-
-void	      ephy_node_view_set_hinted		      (EphyNodeView *view,
-						       gboolean hinted);
 
 void	      ephy_node_view_edit		      (EphyNodeView *view);
 

@@ -17,7 +17,6 @@
  *
  */
 
-#include <gtk/gtktreeview.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtkcellrenderertext.h>
@@ -59,8 +58,6 @@ struct EphyNodeViewPrivate
 	EphyTreeModelNodeColumn editable_node_column;
 
 	EphyNodeFilter *filter;
-
-	GtkWidget *treeview;
 
 	EphyTreeModelNodeColumn default_sort_column_id;
 
@@ -107,7 +104,7 @@ ephy_node_view_get_type (void)
 			(GInstanceInitFunc) ephy_node_view_init
 		};
 
-		ephy_node_view_type = g_type_register_static (GTK_TYPE_SCROLLED_WINDOW,
+		ephy_node_view_type = g_type_register_static (GTK_TYPE_TREE_VIEW,
 							      "EphyNodeView",
 							      &our_info, 0);
 	}
@@ -388,32 +385,28 @@ ephy_node_view_construct (EphyNodeView *view)
 				 G_CALLBACK (node_from_sort_iter_cb),
 				 view,
 				 0);
-	view->priv->treeview = gtk_tree_view_new_with_model
-		(GTK_TREE_MODEL (view->priv->sortmodel));
-	gtk_widget_show (view->priv->treeview);
-	g_signal_connect_object (G_OBJECT (view->priv->treeview),
+	gtk_tree_view_set_model (GTK_TREE_VIEW (view), GTK_TREE_MODEL (view->priv->sortmodel));
+	g_signal_connect_object (G_OBJECT (view),
 			         "button_press_event",
 			         G_CALLBACK (ephy_node_view_button_press_cb),
 			         view,
 				 0);
-	g_signal_connect_object (G_OBJECT (view->priv->treeview),
+	g_signal_connect_object (G_OBJECT (view),
 			         "row_activated",
 			         G_CALLBACK (ephy_node_view_row_activated_cb),
 			         view,
 				 0);
 
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view->priv->treeview));
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 	g_signal_connect_object (G_OBJECT (selection),
 			         "changed",
 			         G_CALLBACK (ephy_node_view_selection_changed_cb),
 			         view,
 				 0);
-
-	gtk_container_add (GTK_CONTAINER (view), view->priv->treeview);
 }
 
-EphyNodeView *
+GtkWidget *
 ephy_node_view_new (EphyNode *root,
 		    EphyNodeFilter *filter)
 {
@@ -421,11 +414,6 @@ ephy_node_view_new (EphyNode *root,
 
 	view = EPHY_NODE_VIEW (g_object_new (EPHY_TYPE_NODE_VIEW,
 					     "filter", filter,
-					     "hadjustment", NULL,
-					     "vadjustment", NULL,
-					     "hscrollbar_policy", GTK_POLICY_AUTOMATIC,
-					     "vscrollbar_policy", GTK_POLICY_AUTOMATIC,
-					     "shadow_type", GTK_SHADOW_IN,
 					     "root", root,
 					     NULL));
 
@@ -433,7 +421,7 @@ ephy_node_view_new (EphyNode *root,
 
 	g_return_val_if_fail (view->priv != NULL, NULL);
 
-	return view;
+	return GTK_WIDGET (view);
 }
 
 static int
@@ -599,7 +587,7 @@ ephy_node_view_add_column (EphyNodeView *view,
 	gtk_tree_view_column_set_sizing (gcolumn,
 					 GTK_TREE_VIEW_COLUMN_AUTOSIZE);
 	gtk_tree_view_column_set_title (gcolumn, title);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (view->priv->treeview),
+	gtk_tree_view_append_column (GTK_TREE_VIEW (view),
 				     gcolumn);
 	if (sortable)
 	{
@@ -623,7 +611,7 @@ ephy_node_view_add_icon_column (EphyNodeView *view,
 					     NULL);
 	gtk_tree_view_column_set_sizing (gcolumn,
 					 GTK_TREE_VIEW_COLUMN_AUTOSIZE);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (view->priv->treeview),
+	gtk_tree_view_append_column (GTK_TREE_VIEW (view),
 				     gcolumn);
 }
 
@@ -667,7 +655,7 @@ ephy_node_view_get_selection (EphyNodeView *view)
 	GtkTreeSelection *selection;
 
 	selection = gtk_tree_view_get_selection
-		(GTK_TREE_VIEW (view->priv->treeview));
+		(GTK_TREE_VIEW (view));
 
 	gtk_tree_selection_selected_foreach (selection,
 					     (GtkTreeSelectionForeachFunc) get_selection,
@@ -679,25 +667,8 @@ ephy_node_view_get_selection (EphyNodeView *view)
 void
 ephy_node_view_select_all (EphyNodeView *view)
 {
-	GtkTreeSelection *sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (view->priv->treeview));
+	GtkTreeSelection *sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
 	gtk_tree_selection_select_all (sel);
-}
-
-gboolean
-ephy_node_view_has_focus (EphyNodeView *view)
-{
-	GtkWidget *window;
-	GtkWidget *focused_widget;
-
-	window = gtk_widget_get_toplevel (view->priv->treeview);
-	focused_widget = gtk_window_get_focus (GTK_WINDOW(window));
-
-	if (view->priv->treeview  == focused_widget)
-	{
-		return TRUE;
-	}
-
-	return FALSE;
 }
 
 void
@@ -720,7 +691,7 @@ ephy_node_view_set_browse_mode (EphyNodeView *view)
 {
 	GtkTreeSelection *selection;
 
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view->priv->treeview));
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 }
 
@@ -734,7 +705,7 @@ ephy_node_view_select_node (EphyNodeView *view,
 	GtkTreeSelection *selection;
 	GtkTreePath *path;
 
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view->priv->treeview));
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
 
 	g_return_if_fail (node != NULL);
 
@@ -752,7 +723,7 @@ ephy_node_view_select_node (EphyNodeView *view,
 							&iter, &iter2);
 
 	path = gtk_tree_model_get_path (GTK_TREE_MODEL (view->priv->sortmodel), &iter);
-	gtk_tree_view_set_cursor (GTK_TREE_VIEW (view->priv->treeview),
+	gtk_tree_view_set_cursor (GTK_TREE_VIEW (view),
 				  path, NULL, FALSE);
 	gtk_tree_path_free (path);
 }
@@ -865,7 +836,7 @@ ephy_node_view_enable_drag_dest (EphyNodeView *view,
 
 	g_return_if_fail (view != NULL);
 
-	treeview = view->priv->treeview;
+	treeview = GTK_WIDGET (view);
 
 	gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (treeview),
 					      types, n_types,
@@ -890,7 +861,7 @@ ephy_node_view_enable_drag_source (EphyNodeView *view,
 
 	g_return_if_fail (view != NULL);
 
-	treeview = view->priv->treeview;
+	treeview = GTK_WIDGET (view);
 
 	egg_tree_multi_drag_add_drag_support (GTK_TREE_VIEW (treeview));
 
@@ -904,14 +875,6 @@ ephy_node_view_enable_drag_source (EphyNodeView *view,
 }
 
 void
-ephy_node_view_set_hinted (EphyNodeView *view, gboolean hinted)
-{
-	g_return_if_fail (view != NULL);
-
-	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view->priv->treeview), hinted);
-}
-
-void
 ephy_node_view_edit (EphyNodeView *view)
 {
 	GtkTreeSelection *selection;
@@ -921,7 +884,7 @@ ephy_node_view_edit (EphyNodeView *view)
 	g_return_if_fail (view->priv->editable_renderer != NULL);
 
 	selection = gtk_tree_view_get_selection
-		(GTK_TREE_VIEW (view->priv->treeview));
+		(GTK_TREE_VIEW (view));
 	rows = gtk_tree_selection_get_selected_rows (selection, &model);
 	if (rows == NULL) return;
 
@@ -929,7 +892,7 @@ ephy_node_view_edit (EphyNodeView *view)
                       "editable", TRUE,
                       NULL);
 
-	gtk_tree_view_set_cursor (GTK_TREE_VIEW (view->priv->treeview),
+	gtk_tree_view_set_cursor (GTK_TREE_VIEW (view),
                                   (GtkTreePath *)rows->data,
                                   view->priv->editable_column,
                                   TRUE);

@@ -23,6 +23,7 @@
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtkeditable.h>
 #include <libgnome/gnome-i18n.h>
 
@@ -187,7 +188,7 @@ ephy_new_bookmark_response_cb (GtkDialog *dialog,
 static GtkWidget *
 build_editing_table (EphyNewBookmark *editor)
 {
-	GtkWidget *table, *label, *entry, *topics_selector;
+	GtkWidget *table, *label, *entry, *topics_selector, *scrolled_window;
 	char *str;
 
 	table = gtk_table_new (2, 2, FALSE);
@@ -214,6 +215,15 @@ build_editing_table (EphyNewBookmark *editor)
 	
 	topics_selector = ephy_topics_selector_new (editor->priv->bookmarks, NULL);
 	gtk_widget_show (topics_selector);
+	scrolled_window = g_object_new (GTK_TYPE_SCROLLED_WINDOW,	
+					"hadjustment", NULL,
+					"vadjustment", NULL,
+					"hscrollbar_policy", GTK_POLICY_AUTOMATIC,
+					"vscrollbar_policy", GTK_POLICY_AUTOMATIC,
+					"shadow_type", GTK_SHADOW_IN,
+					NULL);
+	gtk_widget_show (scrolled_window);
+	gtk_container_add (GTK_CONTAINER (scrolled_window), topics_selector);
 	editor->priv->topics_selector = topics_selector;
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
@@ -223,7 +233,7 @@ build_editing_table (EphyNewBookmark *editor)
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), topics_selector);
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, GTK_FILL, 0, 0);
-	gtk_table_attach (GTK_TABLE (table), topics_selector, 1, 2, 1, 2,
+	gtk_table_attach (GTK_TABLE (table), scrolled_window, 1, 2, 1, 2,
 			  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
 
 	return table;

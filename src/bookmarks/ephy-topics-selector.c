@@ -44,7 +44,6 @@ struct EphyTopicsSelectorPrivate
 {
 	EphyBookmarks *bookmarks;
 	GtkTreeModel *model;
-	GtkWidget *treeview;
 	EphyNode *bookmark;
 };
 
@@ -84,7 +83,7 @@ ephy_topics_selector_get_type (void)
 			(GInstanceInitFunc) ephy_topics_selector_init
 		};
 
-		ephy_topics_selector_type = g_type_register_static (GTK_TYPE_SCROLLED_WINDOW,
+		ephy_topics_selector_type = g_type_register_static (GTK_TYPE_TREE_VIEW,
 							            "EphyTopicsSelector",
 							            &our_info, 0);
 	}
@@ -365,26 +364,6 @@ topic_key_pressed (GtkTreeView *tree_view,
 	return FALSE;	
 }
 
-static gboolean
-mneumonic_activated (GtkWidget *widget,
-                     gboolean arg1,
-                     EphyTopicsSelector *editor)
-{
-	GtkTreeIter iter;
-	GtkTreeSelection* sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (editor->priv->treeview));
-	GtkWidget *window = gtk_widget_get_toplevel (GTK_WIDGET (editor->priv->treeview));
-	
-	if ((sel == NULL)
-	    && gtk_tree_model_get_iter_first (editor->priv->model, &iter))
-	{
-		gtk_tree_selection_select_iter (sel, &iter);
-	}
-	
-	gtk_window_set_focus (GTK_WINDOW (window), GTK_WIDGET (editor->priv->treeview));
-	
-	return TRUE;
-}
-
 static void
 ephy_topics_build_ui (EphyTopicsSelector *editor)
 {
@@ -395,30 +374,27 @@ ephy_topics_build_ui (EphyTopicsSelector *editor)
 	model = gtk_list_store_new (3, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_POINTER);
 	editor->priv->model = GTK_TREE_MODEL (model);
 
-	editor->priv->treeview = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
-	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (editor->priv->treeview), FALSE);
+	gtk_tree_view_set_model (GTK_TREE_VIEW (editor), GTK_TREE_MODEL (model));
+	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (editor), FALSE);
 	g_idle_add ((GSourceFunc) set_sort_column_id, model);
-	gtk_widget_show (editor->priv->treeview);
 	g_object_unref (model);
 
 	/* Has topic column */
 	renderer = gtk_cell_renderer_toggle_new ();
 	column = gtk_tree_view_column_new_with_attributes
 		("", renderer, "active", COL_HAS_TOPIC, NULL);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (editor->priv->treeview), column);
+	gtk_tree_view_append_column (GTK_TREE_VIEW (editor), column);
 
 	renderer = gtk_cell_renderer_text_new ();
 	column = gtk_tree_view_column_new_with_attributes
 		("Description", renderer, "text", COL_TOPIC, NULL);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (editor->priv->treeview), column);
+	gtk_tree_view_append_column (GTK_TREE_VIEW (editor), column);
 	
-	g_signal_connect (G_OBJECT (editor->priv->treeview), "key_press_event",
+	g_signal_connect (G_OBJECT (editor), "key_press_event",
 			  G_CALLBACK (topic_key_pressed), editor);
-	g_signal_connect (G_OBJECT (editor->priv->treeview), "button_press_event",
+	g_signal_connect (G_OBJECT (editor), "button_press_event",
 			  G_CALLBACK (topic_clicked), editor);
 	fill_model (editor);
-
-	gtk_container_add (GTK_CONTAINER (editor), editor->priv->treeview);
 }
 
 static void
@@ -441,16 +417,9 @@ ephy_topics_selector_new (EphyBookmarks *bookmarks,
 			(EPHY_TYPE_TOPIC_SELECTOR,
 			 "bookmarks", bookmarks,
 			 "bookmark", bookmark,
-			 "hadjustment", NULL,
-			 "vadjustment", NULL,
-			 "hscrollbar_policy", GTK_POLICY_AUTOMATIC,
-			 "vscrollbar_policy", GTK_POLICY_AUTOMATIC,
-			 "shadow_type", GTK_SHADOW_IN,
 			 NULL));
 
 	ephy_topics_build_ui (editor);
-	g_signal_connect (G_OBJECT (editor), "mnemonic-activate",
-			  G_CALLBACK (mneumonic_activated), editor);
-
+	
 	return GTK_WIDGET (editor);
 }

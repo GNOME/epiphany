@@ -20,6 +20,7 @@
 #include <gtk/gtktable.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
 #include <gdk/gdkkeysyms.h>
@@ -105,8 +106,8 @@ static void cmd_select_all		  (EggAction *action,
 struct EphyBookmarksEditorPrivate
 {
 	EphyBookmarks *bookmarks;
-	EphyNodeView *bm_view;
-	EphyNodeView *key_view;
+	GtkWidget *bm_view;
+	GtkWidget *key_view;
 	EphyNodeFilter *bookmarks_filter;
 	GtkWidget *search_entry;
 	GtkWidget *menu_dock;
@@ -132,10 +133,10 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 	{ "NewTopic", N_("_New Topic"), GTK_STOCK_NEW, "<control>N",
 	  NULL, G_CALLBACK (cmd_add_topic), NULL },
 
-	{ "OpenInWindow", N_("_Open In New Window"), GTK_STOCK_OPEN, "<control>O",
+	{ "OpenInWindow", N_("_Open in New Window"), GTK_STOCK_OPEN, "<control>O",
 	  NULL, G_CALLBACK (cmd_open_bookmarks_in_browser), NULL },
 
-	{ "OpenInTab", N_("Open In New _Tab"), NULL, "<shift><control>O",
+	{ "OpenInTab", N_("Open in New _Tab"), NULL, "<shift><control>O",
 	  NULL, G_CALLBACK (cmd_open_bookmarks_in_tabs), NULL },
 
 	{ "Cut", N_("Cu_t"), GTK_STOCK_CUT, "<control>X",
@@ -172,8 +173,8 @@ cmd_add_topic (EggAction *action,
 
 	node = ephy_bookmarks_add_keyword (editor->priv->bookmarks,
 				           _("Type a topic"));
-	ephy_node_view_select_node (editor->priv->key_view, node);
-	ephy_node_view_edit (editor->priv->key_view);
+	ephy_node_view_select_node (EPHY_NODE_VIEW (editor->priv->key_view), node);
+	ephy_node_view_edit (EPHY_NODE_VIEW (editor->priv->key_view));
 }
 
 static void
@@ -187,13 +188,13 @@ static void
 cmd_rename (EggAction *action,
 	    EphyBookmarksEditor *editor)
 {
-	if (ephy_node_view_has_focus (editor->priv->bm_view))
+	if (gtk_widget_is_focus (editor->priv->bm_view))
 	{
-		ephy_node_view_edit (editor->priv->bm_view);
+		ephy_node_view_edit (EPHY_NODE_VIEW (editor->priv->bm_view));
 	}
-	else if (ephy_node_view_has_focus (editor->priv->key_view))
+	else if (gtk_widget_is_focus (editor->priv->key_view))
 	{
-		ephy_node_view_edit (editor->priv->key_view);
+		ephy_node_view_edit (EPHY_NODE_VIEW (editor->priv->key_view));
 	}
 }
 
@@ -219,7 +220,7 @@ cmd_open_bookmarks_in_tabs (EggAction *action,
 	GList *l;
 
 	window = EPHY_WINDOW (get_target_window (editor));
-	selection = ephy_node_view_get_selection (editor->priv->bm_view);
+	selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->bm_view));
 
 	for (l = selection; l; l = l->next)
 	{
@@ -245,7 +246,7 @@ cmd_open_bookmarks_in_browser (EggAction *action,
 	GList *l;
 
 	window = EPHY_WINDOW (get_target_window (editor));
-	selection = ephy_node_view_get_selection (editor->priv->bm_view);
+	selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->bm_view));
 
 	for (l = selection; l; l = l->next)
 	{
@@ -266,13 +267,13 @@ static void
 cmd_delete (EggAction *action,
 	    EphyBookmarksEditor *editor)
 {
-	if (ephy_node_view_has_focus (editor->priv->bm_view))
+	if (gtk_widget_is_focus (editor->priv->bm_view))
 	{
-		ephy_node_view_remove (editor->priv->bm_view);
+		ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->bm_view));
 	}
-	else if (ephy_node_view_has_focus (editor->priv->key_view))
+	else if (gtk_widget_is_focus (editor->priv->key_view))
 	{
-		ephy_node_view_remove (editor->priv->key_view);
+		ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->key_view));
 	}
 }
 
@@ -284,7 +285,7 @@ cmd_bookmark_properties (EggAction *action,
 	GList *selection;
 	GList *l;
 
-	selection = ephy_node_view_get_selection (editor->priv->bm_view);
+	selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->bm_view));
 
 	for (l = selection; l; l = l->next)
 	{
@@ -342,9 +343,9 @@ cmd_select_all (EggAction *action,
 	{
 		gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
 	}
-	else if (ephy_node_view_has_focus (editor->priv->bm_view))
+	else if (gtk_widget_is_focus (editor->priv->bm_view))
 	{
-		ephy_node_view_select_all (editor->priv->bm_view);
+		ephy_node_view_select_all (EPHY_NODE_VIEW (editor->priv->bm_view));
 	}
 }
 
@@ -416,7 +417,7 @@ ephy_bookmarks_editor_dispose (GObject *object)
 
 	if (editor->priv->key_view != NULL)
 	{
-		selection = ephy_node_view_get_selection (editor->priv->key_view);
+		selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->key_view));
 		if (selection == NULL || selection->data == NULL)
 		{
 			editor->priv->key_view = NULL;
@@ -552,7 +553,7 @@ keyword_node_selected_cb (EphyNodeView *view,
 	if (node == NULL)
 	{
 		bookmarks = ephy_bookmarks_get_bookmarks (editor->priv->bookmarks);
-		ephy_node_view_select_node (editor->priv->key_view, bookmarks);
+		ephy_node_view_select_node (EPHY_NODE_VIEW (editor->priv->key_view), bookmarks);
 	}
 	else
 	{
@@ -671,7 +672,8 @@ static void
 ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 {
 	GtkWidget *hbox, *vbox;
-	EphyNodeView *bm_view, *key_view;
+	GtkWidget *bm_view, *key_view;
+	GtkWidget *scrolled_window;
 	EphyNode *node;
 	long selected_id;
 	EphyNode *selected_node;
@@ -726,26 +728,36 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 
 	node = ephy_bookmarks_get_keywords (editor->priv->bookmarks);
 
+	scrolled_window = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
+					"hadjustment", NULL,
+					"vadjustment", NULL,
+					"hscrollbar_policy", GTK_POLICY_AUTOMATIC,
+					"vscrollbar_policy", GTK_POLICY_AUTOMATIC,
+					"shadow_type", GTK_SHADOW_IN,
+					NULL);
+	gtk_box_pack_start (GTK_BOX (hbox), scrolled_window, FALSE, TRUE, 0);
+	gtk_widget_show (scrolled_window);
+
 	/* Keywords View */
 	key_view = ephy_node_view_new (node, NULL);
-	ephy_node_view_enable_drag_source (key_view,
+	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (key_view),
 					   topic_drag_types,
 				           n_topic_drag_types,
 					   -1);
-	ephy_node_view_enable_drag_dest (key_view,
+	ephy_node_view_enable_drag_dest (EPHY_NODE_VIEW (key_view),
 					 topic_drag_dest_types,
 				         n_topic_drag_dest_types);
-	ephy_node_view_set_browse_mode (key_view);
-	ephy_node_view_add_column (key_view, _("Topics"),
+	ephy_node_view_set_browse_mode (EPHY_NODE_VIEW (key_view));
+	ephy_node_view_add_column (EPHY_NODE_VIEW (key_view), _("Topics"),
 			           EPHY_TREE_MODEL_NODE_COL_KEYWORD, TRUE, TRUE);
-	gtk_box_pack_start (GTK_BOX (hbox), GTK_WIDGET (key_view), FALSE, TRUE, 0);
-	gtk_widget_set_size_request (GTK_WIDGET (key_view), 130, -1);
-	gtk_widget_show (GTK_WIDGET (key_view));
+	gtk_container_add (GTK_CONTAINER (scrolled_window), key_view);  
+	gtk_widget_set_size_request (key_view, 130, -1);
+	gtk_widget_show (key_view);
 	editor->priv->key_view = key_view;
 	g_signal_connect (G_OBJECT (key_view),
 			  "key_press_event",
 			  G_CALLBACK (key_pressed_cb),
-			  editor->priv->key_view);
+			  EPHY_NODE_VIEW (editor->priv->key_view));
 	g_signal_connect (G_OBJECT (key_view),
 			  "node_selected",
 			  G_CALLBACK (keyword_node_selected_cb),
@@ -768,26 +780,36 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			    build_search_box (editor),
 			    FALSE, FALSE, 0);
 
+	scrolled_window = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
+					"hadjustment", NULL,
+					"vadjustment", NULL,
+					"hscrollbar_policy", GTK_POLICY_AUTOMATIC,
+					"vscrollbar_policy", GTK_POLICY_AUTOMATIC,
+					"shadow_type", GTK_SHADOW_IN,
+					NULL);
+	gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
+	gtk_widget_show (scrolled_window);
+	
 	node = ephy_bookmarks_get_bookmarks (editor->priv->bookmarks);
 	editor->priv->bookmarks_filter = ephy_node_filter_new ();
 
 	/* Bookmarks View */
 	bm_view = ephy_node_view_new (node, editor->priv->bookmarks_filter);
-	ephy_node_view_set_hinted (bm_view, TRUE);
-	ephy_node_view_enable_drag_source (bm_view,
+	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (bm_view), TRUE);
+	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (bm_view),
 					   bmk_drag_types,
 				           n_bmk_drag_types,
 					   EPHY_NODE_BMK_PROP_LOCATION);
-	ephy_node_view_add_icon_column (bm_view, EPHY_TREE_MODEL_NODE_COL_ICON);
-	ephy_node_view_add_column (bm_view, _("Title"),
+	ephy_node_view_add_icon_column (EPHY_NODE_VIEW (bm_view), EPHY_TREE_MODEL_NODE_COL_ICON);
+	ephy_node_view_add_column (EPHY_NODE_VIEW (bm_view), _("Title"),
 				   EPHY_TREE_MODEL_NODE_COL_BOOKMARK, TRUE, TRUE);
-	gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (bm_view), TRUE, TRUE, 0);
-	gtk_widget_show (GTK_WIDGET (bm_view));
+	gtk_container_add (GTK_CONTAINER (scrolled_window), bm_view);
+	gtk_widget_show (bm_view);
 	editor->priv->bm_view = bm_view;
 	g_signal_connect (G_OBJECT (bm_view),
 			  "key_press_event",
 			  G_CALLBACK (key_pressed_cb),
-			  editor->priv->bm_view);
+			  EPHY_NODE_VIEW (editor->priv->bm_view));
 	g_signal_connect (G_OBJECT (bm_view),
 			  "node_activated",
 			  G_CALLBACK (ephy_bookmarks_editor_node_activated_cb),
@@ -812,7 +834,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	selected_node = ephy_node_get_from_id (selected_id);
 	if (selected_node != NULL)
 	{
-		ephy_node_view_select_node (key_view, selected_node);
+		ephy_node_view_select_node (EPHY_NODE_VIEW (key_view), selected_node);
 	}
 
 	g_free (selected_id_str);
@@ -914,7 +936,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor,
 	/* Unselection */
 	if (node == NULL)
 	{
-		selection = ephy_node_view_get_selection (editor->priv->bm_view);
+		selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->bm_view));
 		if (!selection)
 		{
 			rename = delete = properties = FALSE;
@@ -945,7 +967,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor,
 		}
 		else
 		{
-			if (view == editor->priv->key_view)
+			if (view == EPHY_NODE_VIEW (editor->priv->key_view))
 			{
 				properties = FALSE;
 			}
@@ -955,7 +977,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor,
 			}
 			
 			delete = TRUE;
-			selection = ephy_node_view_get_selection (editor->priv->bm_view);
+			selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->bm_view));
 			if (g_list_length (selection) > 1)
 			{
 				rename = FALSE;

@@ -1,6 +1,43 @@
 2003-03-30  David Bordoley <bordoley@msu.edu>
 
 	* src/bookmarks/ephy-bookmark-properties.c: (build_ui):
+	Update to reflect changes in EphyTopicSelector api. Wrap the 
+	topic selector in a GtkScrolledWindow.	
+	
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_add_topic),
+	(cmd_rename), (cmd_open_bookmarks_in_tabs), (cmd_open_bookmarks_in_browser),
+	(cmd_delete), (cmd_bookmark_properties), (cmd_select_all), 
+	(ephy_bookmarks_editor_dispose), (keyword_node_selected_cb),
+	(ephy_bookmarks_editor_construct), (ephy_bookmarks_editor_update_menu):
+	Update to reflect changes in EphyNodeView api. Wrap bm_view 
+	and key_view in GtkScrolledWindows.	
+	s/_Open In New Window/_Open in New Window and s/Open In New _Tabs/Open in New _Tab.
+
+	* src/bookmarks/ephy-new-bookmark.c: (build_editing_table):
+	Update to reflect changes in EphyTopicSelector api. Wrap the 
+	topic selector in a GtkScrolledWindow.	
+
+	* src/bookmarks/ephy-node-view.c: (ephy_node_view_get_type), 
+	(ephy_node_view_construct), (ephy_node_view_new), 
+	(ephy_node_view_add_column), (ephy_node_view_add_icon_column),
+	(ephy_node_view_get_selection), (ephy_node_view_has_focus), 
+	(ephy_node_view_set_browse_mode), (ephy_node_view_select_node),
+	(ephy_node_view_enable_drag_dest), (ephy_node_view_enable_drag_source),
+	(ephy_node_view_set_hinted), (ephy_node_view_edit):
+	* src/bookmarks/ephy-node-view.h:
+	Inherit from GtkTreeView instead of GtkScrolledWindow and
+	change methods to reflect the change. Allow for better/easier keynav.
+	Return a GtkWidget from ephy_node_view_new to be consistent with GTK.
+
+	* src/bookmarks/ephy-topics-selector.c: (ephy_topics_selector_get_type),
+	(mneumonic_activated), (ephy_topics_build_ui), (ephy_topics_selector_new):
+	* src/bookmarks/ephy-topics-selector.h:
+	Inherit from GtkTreeView instead of GtkScrolledWindow and
+	change methods to reflect the change. Allow for better/easier keynav.
+
+2003-03-30  David Bordoley <bordoley@msu.edu>
+
+	* src/bookmarks/ephy-bookmark-properties.c: (build_ui):
 	* src/bookmarks/ephy-new-bookmark.c: (build_editing_table):
 	Use hotkeys to navigate around the dialog.
 	
