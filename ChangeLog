@@ -1,5 +1,16 @@
 2004-02-17  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-extension.c: (ephy_extension_get_type),
+	(ephy_extension_attach_window), (ephy_extension_detach_window):
+	* src/ephy-extension.h:
+	* src/ephy-extensions-manager.c:
+	(ephy_extensions_manager_iface_init):
+	* src/ephy-session.c: (ephy_session_iface_init):
+
+	s/EphyExtensionClass/EphyExtensionIface/g
+
+2004-02-17  Christian Persch  <chpe@cvs.gnome.org>
+
 	* NEWS:
 	* configure.in:
 

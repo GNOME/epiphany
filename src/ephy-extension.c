@@ -30,7 +30,7 @@ ephy_extension_get_type (void)
 	{
 		static const GTypeInfo our_info =
 		{
-			sizeof (EphyExtensionClass),
+			sizeof (EphyExtensionIface),
 			NULL,
 			NULL,
 		};
@@ -47,14 +47,14 @@ void
 ephy_extension_attach_window (EphyExtension *extension,
 			      EphyWindow *window)
 {
-	EphyExtensionClass *class = EPHY_EXTENSION_GET_CLASS (extension);
-	class->attach_window (extension, window);
+	EphyExtensionIface *iface = EPHY_EXTENSION_GET_IFACE (extension);
+	iface->attach_window (extension, window);
 }
 
 void
 ephy_extension_detach_window (EphyExtension *extension,
 			      EphyWindow *window)
 {
-	EphyExtensionClass *class = EPHY_EXTENSION_GET_CLASS (extension);
-	class->detach_window (extension, window);
+	EphyExtensionIface *iface = EPHY_EXTENSION_GET_IFACE (extension);
+	iface->detach_window (extension, window);
 }

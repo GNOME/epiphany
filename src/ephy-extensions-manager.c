@@ -42,7 +42,7 @@ struct EphyExtensionsManagerPrivate
 static GObjectClass *parent_class = NULL;
 
 static void ephy_extensions_manager_class_init	(EphyExtensionsManagerClass *klass);
-static void ephy_extensions_manager_iface_init	(EphyExtensionClass *iface);
+static void ephy_extensions_manager_iface_init	(EphyExtensionIface *iface);
 static void ephy_extensions_manager_init	(EphyExtensionsManager *manager);
 
 GType
@@ -233,7 +233,7 @@ impl_detach_window (EphyExtension *extension,
 }
 
 static void
-ephy_extensions_manager_iface_init (EphyExtensionClass *iface)
+ephy_extensions_manager_iface_init (EphyExtensionIface *iface)
 {
 	iface->attach_window = impl_attach_window;
 	iface->detach_window = impl_detach_window;

@@ -61,7 +61,7 @@ struct EphySessionPrivate
 #define SESSION_CRASHED		"type:session_crashed"
 
 static void ephy_session_class_init	(EphySessionClass *klass);
-static void ephy_session_iface_init	(EphyExtensionClass *iface);
+static void ephy_session_iface_init	(EphyExtensionIface *iface);
 static void ephy_session_init		(EphySession *session);
 
 static GObjectClass *parent_class = NULL;
@@ -265,7 +265,7 @@ ephy_session_finalize (GObject *object)
 }
 
 static void
-ephy_session_iface_init (EphyExtensionClass *iface)
+ephy_session_iface_init (EphyExtensionIface *iface)
 {
 	iface->attach_window = impl_attach_window;
 	iface->detach_window = impl_detach_window;

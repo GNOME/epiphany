@@ -30,15 +30,15 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_EXTENSION		(ephy_extension_get_type ())
 #define EPHY_EXTENSION(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_EXTENSION, EphyExtension))
-#define EPHY_EXTENSION_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_EXTENSION, EphyExtensionClass))
+#define EPHY_EXTENSION_IFACE(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_EXTENSION, EphyExtensionIface))
 #define EPHY_IS_EXTENSION(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_EXTENSION))
-#define EPHY_IS_EXTENSION_CLASS(class)	(G_TYPE_CHECK_CLASS_TYPE ((class), EPHY_TYPE_EXTENSION))
-#define EPHY_EXTENSION_GET_CLASS(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EXTENSION, EphyExtensionClass))
+#define EPHY_IS_EXTENSION_IFACE(class)	(G_TYPE_CHECK_CLASS_TYPE ((class), EPHY_TYPE_EXTENSION))
+#define EPHY_EXTENSION_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EXTENSION, EphyExtensionIface))
 
 typedef struct _EphyExtension		EphyExtension;
-typedef struct _EphyExtensionClass	EphyExtensionClass;
+typedef struct _EphyExtensionIface	EphyExtensionIface;
 	
-struct _EphyExtensionClass
+struct _EphyExtensionIface
 {
 	GTypeInterface base_iface;
 
