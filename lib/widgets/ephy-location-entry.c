@@ -534,6 +534,7 @@ ephy_location_entry_set_completion (EphyLocationEntry *le,
 				       cell, "text", text_col);
 
 	gtk_entry_set_completion (GTK_ENTRY (le->priv->entry), completion);
+	g_object_unref (completion);
 }
 
 void
