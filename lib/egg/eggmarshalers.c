@@ -387,7 +387,7 @@ _egg_marshal_OBJECT__VOID (GClosure     *closure,
   v_return = callback (data1,
                        data2);
 
-  g_value_set_object_take_ownership (return_value, v_return);
+  g_value_take_object (return_value, v_return);
 }
 
 /* VOID:VOID (eggmarshalers.list:10) */

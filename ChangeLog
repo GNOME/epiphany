@@ -1,3 +1,12 @@
+2003-09-13  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/egg/eggmarshalers.c: (_egg_marshal_OBJECT__VOID):
+	* src/bookmarks/ephy-bookmarks-editor.c: (provide_favicon):
+	* src/ephy-history-window.c: (provide_favicon):
+
+	Exchange the newly-deprecated g_value_set_object_take_ownership() with
+	g_value_take_object().
+
 2003-09-12  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* data/glade/prefs-dialog.glade:
