@@ -355,3 +355,43 @@ ephy_toolbars_model_has_bookmark (EphyToolbarsModel *model,
 
 	return (position != -1);
 }
+
+void
+ephy_toolbars_model_set_flag (EphyToolbarsModel *model,
+			      EggTbModelFlags flags)
+{
+	EggToolbarsModel *t = EGG_TOOLBARS_MODEL (model);
+	int i, n_toolbars;
+
+	n_toolbars = egg_toolbars_model_n_toolbars
+		(EGG_TOOLBARS_MODEL (model));
+
+	for (i = 0; i < n_toolbars; i++)
+	{
+		EggTbModelFlags old_flags;
+
+		old_flags = egg_toolbars_model_get_flags (t, i);
+
+		egg_toolbars_model_set_flags (t, old_flags | flags, i);
+	}
+}
+
+void
+ephy_toolbars_model_unset_flag (EphyToolbarsModel *model,
+			        EggTbModelFlags flags)
+{
+	EggToolbarsModel *t = EGG_TOOLBARS_MODEL (model);
+	int i, n_toolbars;
+
+	n_toolbars = egg_toolbars_model_n_toolbars
+		(EGG_TOOLBARS_MODEL (model));
+
+	for (i = 0; i < n_toolbars; i++)
+	{
+		EggTbModelFlags old_flags;
+
+		old_flags = egg_toolbars_model_get_flags (t, i);
+
+		egg_toolbars_model_set_flags (t, old_flags ^ flags, i);
+	}
+}

@@ -263,6 +263,7 @@ struct EphyWindowPrivate
 	GtkWidget *main_vbox;
 	GtkWidget *menu_dock;
 	GtkWidget *menubar;
+	GtkWidget *exit_fullscreen_popup;
 	Toolbar *toolbar;
 	GtkWidget *statusbar;
 	EggActionGroup *action_group;
@@ -586,6 +587,7 @@ ephy_window_init (EphyWindow *window)
 	window->priv->chrome_mask = 0;
 	window->priv->closing = FALSE;
 	window->priv->ppview_toolbar = NULL;
+	window->priv->exit_fullscreen_popup = NULL;
 
 	/* Setup the window and connect verbs */
 	setup_window (window);
@@ -714,7 +716,8 @@ translate_default_chrome (EmbedChromeMask *chrome_mask)
 			 EMBED_CHROME_OPENASFULLSCREEN);
 
 	/* Load defaults */
-	if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_STATUSBAR))
+	if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_STATUSBAR) &&
+	    !(*chrome_mask & EMBED_CHROME_OPENASFULLSCREEN))
 	{
 		*chrome_mask |= EMBED_CHROME_STATUSBARON;
 	}
@@ -756,6 +759,104 @@ update_layout_toggles (EphyWindow *window)
 	action = egg_action_group_get_action (action_group, "ViewFullscreen");
 	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action),
 				      mask & EMBED_CHROME_OPENASFULLSCREEN);
+}
+
+static void
+update_exit_fullscreen_popup_position (EphyWindow *window)
+{
+	GdkRectangle screen_rect;
+	int popup_height;
+
+	gtk_window_get_size (GTK_WINDOW (window->priv->exit_fullscreen_popup),
+                             NULL, &popup_height);
+
+	gdk_screen_get_monitor_geometry (gdk_screen_get_default (),
+                        gdk_screen_get_monitor_at_window
+                        (gdk_screen_get_default (),
+                         GTK_WIDGET (window)->window),
+                         &screen_rect);
+
+	gtk_window_move (GTK_WINDOW (window->priv->exit_fullscreen_popup),
+                        screen_rect.x, screen_rect.height - popup_height);
+}
+
+static void
+size_changed_cb (GdkScreen *screen, EphyWindow *window)
+{
+	update_exit_fullscreen_popup_position (window);
+}
+
+static void
+exit_fullscreen_button_clicked_cb (GtkWidget *button, EphyWindow *window)
+{
+	EmbedChromeMask mask;
+
+	mask = ephy_window_get_chrome (window);
+
+	mask ^= EMBED_CHROME_OPENASFULLSCREEN;
+	mask |= EMBED_CHROME_DEFAULT;
+
+	ephy_window_set_chrome (window, mask);
+}
+
+static void
+ephy_window_fullscreen (EphyWindow *window)
+{
+	GtkWidget *popup, *button, *icon, *label, *hbox;
+	EphyToolbarsModel *tmodel;
+
+	gtk_window_fullscreen (GTK_WINDOW (window));
+
+	tmodel = ephy_shell_get_toolbars_model (ephy_shell);
+	ephy_toolbars_model_set_flag (tmodel, EGG_TB_MODEL_ICONS_ONLY);
+
+	popup = gtk_window_new (GTK_WINDOW_POPUP);
+	window->priv->exit_fullscreen_popup = popup;
+
+	button = gtk_button_new ();
+	g_signal_connect (button, "clicked",
+			  G_CALLBACK (exit_fullscreen_button_clicked_cb),
+			  window);
+	gtk_widget_show (button);
+	gtk_container_add (GTK_CONTAINER (popup), button);
+
+	hbox = gtk_hbox_new (FALSE, 2);
+	gtk_widget_show (hbox);
+	gtk_container_add (GTK_CONTAINER (button), hbox);
+
+	icon = gtk_image_new_from_stock (GTK_STOCK_QUIT, GTK_ICON_SIZE_BUTTON);
+	gtk_widget_show (icon);
+	gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, FALSE, 0);
+
+	label = gtk_label_new (_("Exit Fullscreen"));
+	gtk_widget_show (label);
+	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+	update_exit_fullscreen_popup_position (window);
+
+	gtk_widget_show (popup);
+
+	g_signal_connect (G_OBJECT (gdk_screen_get_default ()),
+                          "size-changed", G_CALLBACK (size_changed_cb),
+			  popup);
+}
+
+static void
+ephy_window_unfullscreen (EphyWindow *window)
+{
+	EphyToolbarsModel *tmodel;
+
+	tmodel = ephy_shell_get_toolbars_model (ephy_shell);
+	ephy_toolbars_model_unset_flag (tmodel, EGG_TB_MODEL_ICONS_ONLY);
+
+	g_signal_handlers_disconnect_by_func (G_OBJECT (gdk_screen_get_default ()),
+                                              G_CALLBACK (size_changed_cb),
+					      window);
+
+	gtk_widget_destroy (window->priv->exit_fullscreen_popup);
+	window->priv->exit_fullscreen_popup = NULL;
+
+	gtk_window_unfullscreen (GTK_WINDOW (window));
 }
 
 void
@@ -812,11 +913,11 @@ ephy_window_set_chrome (EphyWindow *window,
 		save_window_chrome (window);
 		if (flags & EMBED_CHROME_OPENASFULLSCREEN)
 		{
-			gtk_window_fullscreen (GTK_WINDOW (window));
+			ephy_window_fullscreen (window);
 		}
 		else
 		{
-			gtk_window_unfullscreen (GTK_WINDOW (window));
+			ephy_window_unfullscreen (window);
 		}
 	}
 

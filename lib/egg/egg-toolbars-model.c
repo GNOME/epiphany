@@ -31,6 +31,7 @@ enum
   ITEM_ADDED,
   ITEM_REMOVED,
   TOOLBAR_ADDED,
+  TOOLBAR_CHANGED,
   TOOLBAR_REMOVED,
   LAST_SIGNAL
 };
@@ -213,6 +214,9 @@ egg_toolbars_model_set_flags (EggToolbarsModel *t,
   toolbar = toolbar_node->data;
 
   toolbar->flags = flags;
+
+  g_signal_emit (G_OBJECT (t), egg_toolbars_model_signals[TOOLBAR_CHANGED],
+		 0, toolbar_position);
 }
 
 void
@@ -396,6 +400,13 @@ egg_toolbars_model_class_init (EggToolbarsModelClass *klass)
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (EggToolbarsModelClass, toolbar_removed),
+		  NULL, NULL, g_cclosure_marshal_VOID__INT,
+		  G_TYPE_NONE, 1, G_TYPE_INT);
+  egg_toolbars_model_signals[TOOLBAR_CHANGED] =
+    g_signal_new ("toolbar_changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (EggToolbarsModelClass, toolbar_changed),
 		  NULL, NULL, g_cclosure_marshal_VOID__INT,
 		  G_TYPE_NONE, 1, G_TYPE_INT);
 }

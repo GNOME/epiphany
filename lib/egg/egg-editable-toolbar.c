@@ -366,6 +366,27 @@ create_item (EggEditableToolbar *t,
 }
 
 static void
+toolbar_changed_cb (EggToolbarsModel   *model,
+	            int                 position,
+	            EggEditableToolbar *t)
+{
+  GtkWidget *toolbar;
+  EggTbModelFlags flags;
+
+  flags = egg_toolbars_model_get_flags (model, position);
+  toolbar = get_toolbar_nth (t, position);
+
+  if (flags & EGG_TB_MODEL_ICONS_ONLY)
+  {
+    egg_toolbar_set_style (EGG_TOOLBAR (toolbar), GTK_TOOLBAR_ICONS);
+  }
+  else
+  {
+    egg_toolbar_unset_style (EGG_TOOLBAR (toolbar));
+  }
+}
+
+static void
 toolbar_added_cb (EggToolbarsModel   *model,
 	          int                 position,
 	          EggEditableToolbar *t)
@@ -444,6 +465,8 @@ egg_editable_toolbar_set_model (EggEditableToolbar *t,
 			   G_CALLBACK (toolbar_added_cb), t, 0);
   g_signal_connect_object (model, "toolbar_removed",
 			   G_CALLBACK (toolbar_removed_cb), t, 0);
+  g_signal_connect_object (model, "toolbar_changed",
+			   G_CALLBACK (toolbar_changed_cb), t, 0);
 }
 
 static void

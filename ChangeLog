@@ -1,6 +1,36 @@
 2003-06-05  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* data/epiphany.schemas.in:
+
+	s/ask download/ask for download
+
+	* lib/egg/egg-editable-toolbar.c: (toolbar_changed_cb),
+	(egg_editable_toolbar_set_model):
+	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_set_flags),
+	(egg_toolbars_model_class_init):
+	* lib/egg/egg-toolbars-model.h:
+	* lib/egg/eggtoolbar.c: (egg_toolbar_internal_insert_element):
+
+	Update.
+
+	* src/ephy-toolbars-model.c: (ephy_toolbars_model_set_flag),
+	(ephy_toolbars_model_unset_flag):
+	* src/ephy-toolbars-model.h:
+
+	Add a way to set/unset a flag on all toolbars.
+
+	* src/ephy-window.c: (ephy_window_init),
+	(translate_default_chrome),
+	(update_exit_fullscreen_popup_position), (size_changed_cb),
+	(exit_fullscreen_button_clicked_cb), (ephy_window_fullscreen),
+	(ephy_window_unfullscreen), (ephy_window_set_chrome):
+
+	Implement an exit fullscreen button.
+	Force toolbars style to be icon only.
+
+2003-06-05  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/epiphany.schemas.in:
 	* embed/ephy-embed-popup.c: (embed_popup_download_link_cmd):
 	* embed/ephy-embed-utils.c: (ephy_embed_utils_save):
 

@@ -39,7 +39,8 @@ typedef struct EggToolbarsModelPrivate EggToolbarsModelPrivate;
 
 typedef enum
 {
-	EGG_TB_MODEL_NOT_REMOVABLE = 1
+  EGG_TB_MODEL_NOT_REMOVABLE = 1,
+  EGG_TB_MODEL_ICONS_ONLY = 2
 } EggTbModelFlags;
 
 struct EggToolbarsModel
@@ -60,6 +61,8 @@ struct EggToolbarsModelClass
 			    int toolbar_position,
 			    int position);
   void (* toolbar_added)   (EggToolbarsModel *group,
+			    int position);
+  void (* toolbar_changed) (EggToolbarsModel *group,
 			    int position);
   void (* toolbar_removed) (EggToolbarsModel *group,
 			    int position);

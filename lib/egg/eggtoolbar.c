@@ -2594,6 +2594,8 @@ egg_toolbar_internal_insert_element (EggToolbar          *toolbar,
       break;
     }
 
+  gtk_widget_show (GTK_WIDGET (item));
+  
   if (type == EGG_TOOLBAR_CHILD_BUTTON ||
       type == EGG_TOOLBAR_CHILD_RADIOBUTTON ||
       type == EGG_TOOLBAR_CHILD_TOGGLEBUTTON)
