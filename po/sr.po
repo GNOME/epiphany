@@ -1,5 +1,5 @@
 # Serbian translation of epiphany
-# Courtesy of Prevod.org team (http://www.prevod.org/) -- 2003, 2004.
+# Courtesy of Prevod.org team (http://prevod.org/) -- 2003, 2004.
 #
 # This file is distributed under the same license as the epiphany package.
 #
@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-27 12:51+0100\n"
-"PO-Revision-Date: 2004-01-27 12:52+0100\n"
+"POT-Creation-Date: 2004-02-12 01:55+0100\n"
+"PO-Revision-Date: 2004-02-12 01:55+0100\n"
 "Last-Translator: Danilo Segan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -676,7 +676,7 @@ msgstr "_Пронађи:"
 msgid "_Next"
 msgstr "_Следећи"
 
-#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:539
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:281
 msgid "_Pause"
 msgstr "_Паузирај"
 
@@ -1037,7 +1037,7 @@ msgid "Cut the Selection"
 msgstr "Исеци изабрано"
 
 #: data/ui/nautilus-epiphany-view.xml.h:10
-#: embed/ephy-embed-popup-control.c:547
+#: embed/ephy-embed-popup-control.c:551
 msgid "Download Link"
 msgstr "Преузми везу"
 
@@ -1142,22 +1142,26 @@ msgstr "_Пронађи..."
 msgid "_Print..."
 msgstr "_Штампај..."
 
-#: embed/downloader-view.c:230
+#: embed/downloader-view.c:226
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u:%02u"
 
-#: embed/downloader-view.c:234
+#: embed/downloader-view.c:230
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
-#: embed/downloader-view.c:306 lib/widgets/ephy-cell-renderer-progress.c:35
+#: embed/downloader-view.c:281
+msgid "_Resume"
+msgstr "Нас_тави"
+
+#: embed/downloader-view.c:344 lib/widgets/ephy-cell-renderer-progress.c:35
 #: src/ephy-window.c:1147
 msgid "Unknown"
 msgstr "Непознато"
 
-#: embed/downloader-view.c:354
+#: embed/downloader-view.c:395
 #, c-format
 msgid "About %d second left"
 msgid_plural "About %d seconds left"
@@ -1165,7 +1169,7 @@ msgstr[0] "Преостала %d секунда"
 msgstr[1] "Преостале %d секунде"
 msgstr[2] "Преостало %d секунди"
 
-#: embed/downloader-view.c:362
+#: embed/downloader-view.c:403
 #, c-format
 msgid "About %d minute left"
 msgid_plural "About %d minutes left"
@@ -1173,7 +1177,7 @@ msgstr[0] "Преостао %d минут"
 msgstr[1] "Преостала %d минута"
 msgstr[2] "Преостало %d минута"
 
-#: embed/downloader-view.c:369
+#: embed/downloader-view.c:410
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -1181,31 +1185,27 @@ msgstr[0] "%d преузимање"
 msgstr[1] "%d преузимања"
 msgstr[2] "%d преузимања"
 
-#: embed/downloader-view.c:467
+#: embed/downloader-view.c:520
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:477
+#: embed/downloader-view.c:531
 msgid "File"
 msgstr "Датотека"
 
-#: embed/downloader-view.c:490
+#: embed/downloader-view.c:545
 msgid "Remaining"
 msgstr "Преостало"
 
-#: embed/downloader-view.c:534
-msgid "_Resume"
-msgstr "Нас_тави"
-
-#: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:344
+#: embed/ephy-embed-popup-control.c:561 src/popup-commands.c:344
 msgid "Save Image As"
 msgstr "Сачувај слику као"
 
-#: embed/ephy-embed-popup-control.c:641
+#: embed/ephy-embed-popup-control.c:645
 msgid "Save Page As"
 msgstr "Сачувај страницу као"
 
-#: embed/ephy-embed-popup-control.c:650 src/popup-commands.c:432
+#: embed/ephy-embed-popup-control.c:654 src/popup-commands.c:432
 msgid "Save Background As"
 msgstr "Сачувај позадину као"
 
@@ -1572,40 +1572,40 @@ msgstr "Украјински"
 msgid "Unknown (%s)"
 msgstr "Непознато (%s)"
 
-#: embed/ephy-history.c:485 src/bookmarks/ephy-bookmarks.c:587
+#: embed/ephy-history.c:487 src/bookmarks/ephy-bookmarks.c:612
 msgid "All"
 msgstr "Све"
 
-#: embed/ephy-history.c:660
+#: embed/ephy-history.c:662
 msgid "Others"
 msgstr "Остали"
 
-#: embed/ephy-history.c:666
+#: embed/ephy-history.c:668
 msgid "Local files"
 msgstr "Локалне датотеке"
 
-#: embed/mozilla/ContentHandler.cpp:136
+#: embed/mozilla/ContentHandler.cpp:135
 #: embed/mozilla/EphyHeaderSniffer.cpp:314
 msgid "Save"
 msgstr "Сачувај"
 
-#: embed/mozilla/ContentHandler.cpp:266
+#: embed/mozilla/ContentHandler.cpp:265
 msgid "_Save As..."
 msgstr "Сачувај _као..."
 
-#: embed/mozilla/ContentHandler.cpp:269
+#: embed/mozilla/ContentHandler.cpp:268
 msgid "_Open"
 msgstr "_Отвори"
 
-#: embed/mozilla/ContentHandler.cpp:269
+#: embed/mozilla/ContentHandler.cpp:268
 msgid "_Download"
 msgstr "_Преузми"
 
-#: embed/mozilla/ContentHandler.cpp:285
+#: embed/mozilla/ContentHandler.cpp:284
 msgid "Download the unsafe file?"
 msgstr "Преузети небезбедну датотеку?"
 
-#: embed/mozilla/ContentHandler.cpp:286
+#: embed/mozilla/ContentHandler.cpp:285
 msgid ""
 "This type of file could potentially damage your documents or invade your "
 "privacy. It's not safe to open it directly. You can save it instead."
@@ -1614,11 +1614,11 @@ msgstr ""
 "приватност. Није безбедно непосредно је отворити. Можете је сачувати уместо "
 "тога."
 
-#: embed/mozilla/ContentHandler.cpp:294
+#: embed/mozilla/ContentHandler.cpp:293
 msgid "Open the file in another application?"
 msgstr "Отворити датотеку у неком другом програму?"
 
-#: embed/mozilla/ContentHandler.cpp:295
+#: embed/mozilla/ContentHandler.cpp:294
 msgid ""
 "It's not possible to view this file type directly in the browser. You can "
 "open it with another application or save it."
@@ -1626,15 +1626,14 @@ msgstr ""
 "Није могуће погледати датотеку ове врсте непосредно у читачу. Можете је "
 "отворити неким другим програмом или је сачувати."
 
-#: embed/mozilla/ContentHandler.cpp:302
+#: embed/mozilla/ContentHandler.cpp:301
 msgid "Download the file?"
 msgstr "Преузети датотеку?"
 
-# bug: missing space after dot
-#: embed/mozilla/ContentHandler.cpp:303
+#: embed/mozilla/ContentHandler.cpp:302
 msgid ""
 "It's not possible to view this file because there is no application "
-"installed that can open it.You can save it instead."
+"installed that can open it. You can save it instead."
 msgstr ""
 "Није могуће погледати ову датотеку зато што није постављен програм за њено "
 "отварање. Можете је уместо тога сачувати."
@@ -2000,7 +1999,7 @@ msgstr ""
 msgid "GConf Error"
 msgstr "ГКонф грешка"
 
-#: lib/egg/egg-editable-toolbar.c:504
+#: lib/egg/egg-editable-toolbar.c:510
 msgid "_Remove Toolbar"
 msgstr "_Уклони алатке"
 
@@ -2016,7 +2015,7 @@ msgstr ""
 "Превуците ставку међу алатке да је додате, а одвуците је да је уклоните."
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:71 src/prefs-dialog.c:1113
+#: lib/ephy-file-helpers.c:71 src/prefs-dialog.c:1115
 msgid "Downloads"
 msgstr "Преузето"
 
@@ -2025,12 +2024,12 @@ msgstr "Преузето"
 msgid "Failed to find %s"
 msgstr "Не може да пронађе %s"
 
-#: lib/ephy-file-helpers.c:205
+#: lib/ephy-file-helpers.c:208
 #, c-format
 msgid "%s exists, please move it out of the way."
 msgstr "%s већ постоји, уклоните га."
 
-#: lib/ephy-file-helpers.c:208
+#: lib/ephy-file-helpers.c:211
 #, c-format
 msgid "Failed to create directory %s."
 msgstr "Не може да направи директоријум %s."
@@ -2154,11 +2153,7 @@ msgstr "400%"
 msgid "Failed"
 msgstr "Неуспешно"
 
-#: lib/widgets/ephy-zoom-control.c:138
-msgid "_Zoom"
-msgstr "У_већај"
-
-#: src/bookmarks/ephy-bookmark-action.c:219
+#: src/bookmarks/ephy-bookmark-action.c:221
 #, c-format
 msgid "%s:"
 msgstr "%s:"
@@ -2404,7 +2399,7 @@ msgid "_Search:"
 msgstr "_Претрага:"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:1357
-#: src/bookmarks/ephy-topic-action.c:621 src/ephy-window.c:968
+#: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:968
 msgid "Bookmarks"
 msgstr "Обележивачи"
 
@@ -2424,44 +2419,44 @@ msgstr "Адреса"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: src/bookmarks/ephy-bookmarks.c:84
+#: src/bookmarks/ephy-bookmarks.c:83
 msgid "Search the web"
 msgstr "Претражи веб"
 
-#: src/bookmarks/ephy-bookmarks.c:84
+#: src/bookmarks/ephy-bookmarks.c:83
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: src/bookmarks/ephy-bookmarks.c:90
+#: src/bookmarks/ephy-bookmarks.c:89
 msgid "Entertainment"
 msgstr "Забава"
 
-#: src/bookmarks/ephy-bookmarks.c:91
+#: src/bookmarks/ephy-bookmarks.c:90
 msgid "News"
 msgstr "Вести"
 
-#: src/bookmarks/ephy-bookmarks.c:92
+#: src/bookmarks/ephy-bookmarks.c:91
 msgid "Shopping"
 msgstr "Куповина"
 
-#: src/bookmarks/ephy-bookmarks.c:93
+#: src/bookmarks/ephy-bookmarks.c:92
 msgid "Sports"
 msgstr "Спорт"
 
-#: src/bookmarks/ephy-bookmarks.c:94
+#: src/bookmarks/ephy-bookmarks.c:93
 msgid "Travel"
 msgstr "Путовања"
 
-#: src/bookmarks/ephy-bookmarks.c:95
+#: src/bookmarks/ephy-bookmarks.c:94
 msgid "Work"
 msgstr "Посао"
 
-#: src/bookmarks/ephy-bookmarks.c:622
+#: src/bookmarks/ephy-bookmarks.c:647
 msgid "Most Visited"
 msgstr "Најпосећеније"
 
-#: src/bookmarks/ephy-bookmarks.c:639
+#: src/bookmarks/ephy-bookmarks.c:664
 msgid "Not Categorized"
 msgstr "Неразврстано"
 
@@ -2503,7 +2498,7 @@ msgstr "Остала кодирања"
 msgid "_Automatic"
 msgstr "_Самостално"
 
-#: src/ephy-go-action.c:80 src/ephy-go-action.c:97 src/toolbar.c:409
+#: src/ephy-go-action.c:73 src/toolbar.c:409
 msgid "Go"
 msgstr "Иди"
 
@@ -2556,8 +2551,8 @@ msgid "Show only the address column"
 msgstr "Прикажи само колону са адресом"
 
 #: src/ephy-history-window.c:246
-msgid "Clear history"
-msgstr "Очисти историјат"
+msgid "Clear History"
+msgstr "О_чисти историјат"
 
 #: src/ephy-history-window.c:278
 msgid "C_lear"
@@ -2653,13 +2648,13 @@ msgstr "_Не желите опоравак"
 msgid "_Recover"
 msgstr "_Опоравак"
 
-#: src/ephy-session.c:331
+#: src/ephy-session.c:332
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr ""
 "Изгледа да је Спознаја пукла или је била убијена у току последњег рада."
 
-#: src/ephy-session.c:337
+#: src/ephy-session.c:338
 msgid "You can recover the opened tabs and windows."
 msgstr "Можете повратити отворене листове и прозоре."
 
@@ -2689,30 +2684,30 @@ msgstr ""
 "Спознају је сада немогуће користити, због неочекиване грешке у Бонобу при "
 "покушају проналажења објекта аутоматизације"
 
-#: src/ephy-tab.c:326 src/ephy-tab.c:1140 src/ephy-tab.c:1322
+#: src/ephy-tab.c:327 src/ephy-tab.c:1172 src/ephy-tab.c:1354
 msgid "Blank page"
 msgstr "Празна страница"
 
-#: src/ephy-tab.c:747
+#: src/ephy-tab.c:748
 msgid "site"
 msgstr "странице"
 
-#: src/ephy-tab.c:771
+#: src/ephy-tab.c:772
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Преусмерава на %s..."
 
-#: src/ephy-tab.c:775
+#: src/ephy-tab.c:776
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Преноси податке са %s..."
 
-#: src/ephy-tab.c:779
+#: src/ephy-tab.c:780
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Очекује овлашћење од %s..."
 
-#: src/ephy-tab.c:787
+#: src/ephy-tab.c:788
 #, c-format
 msgid "Loading %s..."
 msgstr "Учитава %s..."
@@ -3469,12 +3464,12 @@ msgstr "Вијетнамски"
 msgid "Walloon"
 msgstr "Валун"
 
-#: src/prefs-dialog.c:1055
+#: src/prefs-dialog.c:1057
 #, c-format
 msgid "Custom [%s]"
 msgstr "По избору [%s]"
 
-#: src/prefs-dialog.c:1100
+#: src/prefs-dialog.c:1102
 msgid "Desktop"
 msgstr "Радна површ"
 
@@ -3482,11 +3477,11 @@ msgstr "Радна површ"
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1108
+#: src/prefs-dialog.c:1110
 msgid "Home"
 msgstr "Лично"
 
-#: src/prefs-dialog.c:1323
+#: src/prefs-dialog.c:1325
 msgid "Select a directory"
 msgstr "Изаберите директоријум"
 
@@ -3554,22 +3549,29 @@ msgstr "_Додај нову палету алатки"
 
 #. Translator credits
 #: src/window-commands.c:953
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr ""
 "Данило Шеган <danilo@prevod.org>\n"
 "\n"
-"http://www.Prevod.org/"
+"Prevod.org — превод на српски језик."
 
 #: src/window-commands.c:983
 msgid "A GNOME browser based on Mozilla"
 msgstr "Гном веб читач заснован на Мозили"
 
+# bug: missing space after dot
 #~ msgid ""
 #~ "It's not possible to view this file because there is no application "
-#~ "installed that can open it. You can save it instead."
+#~ "installed that can open it.You can save it instead."
 #~ msgstr ""
 #~ "Није могуће погледати ову датотеку зато што није постављен програм за "
 #~ "њено отварање. Можете је уместо тога сачувати."
+
+#~ msgid "_Zoom"
+#~ msgstr "У_већај"
+
+#~ msgid "Clear history"
+#~ msgstr "Очисти историјат"
 
 #~ msgid ""
 #~ "Automatically open downloaded files which are \"safe\" to open, like "
