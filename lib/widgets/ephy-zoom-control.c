@@ -34,8 +34,8 @@
 
 #define EPHY_ZOOM_CONTROL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ZOOM_CONTROL, EphyZoomControlPrivate))
 
-struct _EphyZoomControlPrivate {
-	GtkWidget *ebox;
+struct _EphyZoomControlPrivate
+{
 	GtkComboBox *combo;
 	float zoom;
 	guint handler_id;
@@ -122,7 +122,7 @@ ephy_zoom_control_init (EphyZoomControl *control)
 {
 	EphyZoomControlPrivate *p;
 	GtkComboBox *combo;
-	GtkWidget *vbox, *ebox;
+	GtkWidget *vbox;
 	guint i;
 
 	p = EPHY_ZOOM_CONTROL_GET_PRIVATE (control);
@@ -145,15 +145,8 @@ ephy_zoom_control_init (EphyZoomControl *control)
 	i = ephy_zoom_get_zoom_level_index (p->zoom);
 	gtk_combo_box_set_active (combo, i);
 
-	/* FIXME: remove this when combobox supports tooltip itself */
-	ebox = p->ebox = gtk_event_box_new ();
-	/* We need enter/leave to do tooltips */
-	gtk_widget_add_events (ebox, GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
-	gtk_container_add (GTK_CONTAINER (ebox), GTK_WIDGET (combo));
-	gtk_widget_show (ebox);
-
 	vbox = gtk_vbox_new (TRUE, 0);
-	gtk_box_pack_start (GTK_BOX (vbox), ebox, TRUE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (combo), TRUE, FALSE, 0);
 	gtk_widget_show (vbox);
 
 	gtk_container_add (GTK_CONTAINER (control), vbox);
@@ -205,6 +198,30 @@ ephy_zoom_control_get_property (GObject *object,
 	}
 }
 
+static void
+set_combo_tooltip (GtkWidget *widget, 
+		   GtkTooltipsData *data)
+{
+	if (GTK_IS_BUTTON (widget))
+	{
+		gtk_tooltips_set_tip (data->tooltips, widget,
+				      data->tip_text, data->tip_private);
+	}
+}
+
+static void
+combo_realized (GtkWidget *combo,
+		GtkWidget *control)
+{
+	GtkTooltipsData *data;
+
+	data = gtk_tooltips_data_get (control);
+	g_return_if_fail (data != NULL);
+
+	gtk_container_forall (GTK_CONTAINER (combo),
+			      (GtkCallback) set_combo_tooltip, data);
+}
+
 static gboolean
 ephy_zoom_control_set_tooltip (GtkToolItem *tool_item,
 			       GtkTooltips *tooltips,
@@ -212,9 +229,23 @@ ephy_zoom_control_set_tooltip (GtkToolItem *tool_item,
 			       const char *tip_private)
 {
 	EphyZoomControl *control = EPHY_ZOOM_CONTROL (tool_item);
+	GtkWidget *widget = GTK_WIDGET (tool_item);
 
-	gtk_tooltips_set_tip (tooltips, GTK_WIDGET (control->priv->ebox),
-			      tip_text, tip_private);
+	/* hack to make tooltips work also on Ctrl-F1 */
+	gtk_tooltips_set_tip (tooltips, widget, tip_text, tip_private);
+
+	g_signal_handlers_disconnect_by_func
+		(control->priv->combo, G_CALLBACK (combo_realized), widget);
+
+	if (GTK_WIDGET_REALIZED (tool_item))
+	{
+		combo_realized (GTK_WIDGET (control->priv->combo), widget);
+	}
+	else
+	{
+		g_signal_connect_after (control->priv->combo, "realize",
+					G_CALLBACK (combo_realized), widget);
+	}
 
 	return TRUE;
 }
