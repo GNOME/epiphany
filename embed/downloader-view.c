@@ -802,7 +802,7 @@ downloader_view_build_ui (DownloaderView *dv)
 
 	priv->model = GTK_TREE_MODEL (liststore);
 
-	icon = gtk_widget_render_icon (GTK_WINDOW (priv->window), 
+	icon = gtk_widget_render_icon (GTK_WIDGET (priv->window),
 				       EPHY_STOCK_DOWNLOAD,
 				       GTK_ICON_SIZE_MENU,
 				       NULL);

@@ -1,3 +1,22 @@
+2003-05-20  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/downloader-view.c: (downloader_view_build_ui):
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/default-prefs.js:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* embed/mozilla/mozilla-prefs.cpp:
+	* embed/mozilla/mozilla-prefs.h:
+	* lib/ephy-dnd.c: (ephy_dnd_node_list_extract_nodes):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_construct):
+	* src/ephy-history-window.c: (ephy_history_window_construct):
+
+	Fix some warnings.
+	Go back hardcoding defaults in the code, mozilla pref api sucks :/
+	Cleanup mozilla prefs code, we can use mozilla api directly now,
+	no need for a wrapper like in galeon1.
+
 2003-05-19  Christian Neumair  <chris@gnome-de.org>
 
 	* data/glade/epiphany.glade

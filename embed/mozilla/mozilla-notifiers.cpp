@@ -24,7 +24,6 @@
 #include "ephy-embed-single.h"
 #include "mozilla-notifiers.h"
 #include "eel-gconf-extensions.h"
-#include "mozilla-prefs.h"
 #include "MozRegisterComponents.h"
 #include "ephy-prefs.h"
 #include "ephy-embed-prefs.h"
@@ -37,6 +36,9 @@
 #include <stdlib.h>
 #include <sys/utsname.h>
 #include "nsBuildID.h"
+#include "nsCOMPtr.h"
+#include "nsIPrefService.h"
+#include "nsIServiceManager.h"
 
 static void
 mozilla_own_colors_notifier(GConfClient *client,
@@ -187,6 +189,64 @@ custom_notifiers [] =
 	  (GConfClientNotifyFunc) mozilla_proxy_autoconfig_notifier },
 	{NULL, NULL}
 };
+
+static gboolean
+mozilla_prefs_set_string(const char *preference_name, const char *new_value)
+{
+        g_return_val_if_fail (preference_name != NULL, FALSE);
+        g_return_val_if_fail (new_value != NULL, FALSE);
+        nsCOMPtr<nsIPrefService> prefService = 
+                                do_GetService (NS_PREFSERVICE_CONTRACTID);
+        nsCOMPtr<nsIPrefBranch> pref;
+        prefService->GetBranch ("", getter_AddRefs(pref));
+
+        if (pref)
+        {
+		nsresult rv = pref->SetCharPref (preference_name, new_value);            
+                return NS_SUCCEEDED (rv) ? TRUE : FALSE;
+        }
+
+        return FALSE;
+}
+
+static gboolean
+mozilla_prefs_set_boolean (const char *preference_name,
+                           gboolean new_boolean_value)
+{
+        g_return_val_if_fail (preference_name != NULL, FALSE);
+  
+        nsCOMPtr<nsIPrefService> prefService = 
+                                do_GetService (NS_PREFSERVICE_CONTRACTID);
+        nsCOMPtr<nsIPrefBranch> pref;
+        prefService->GetBranch ("", getter_AddRefs(pref));
+  
+        if (pref)
+        {
+                nsresult rv = pref->SetBoolPref (preference_name,
+                                new_boolean_value ? PR_TRUE : PR_FALSE);
+                return NS_SUCCEEDED (rv) ? TRUE : FALSE;
+        }
+        return FALSE;
+}
+
+static gboolean
+mozilla_prefs_set_int (const char *preference_name, int new_int_value)
+{
+        g_return_val_if_fail (preference_name != NULL, FALSE);
+
+        nsCOMPtr<nsIPrefService> prefService = 
+                                do_GetService (NS_PREFSERVICE_CONTRACTID);
+        nsCOMPtr<nsIPrefBranch> pref;
+        prefService->GetBranch ("", getter_AddRefs(pref));
+
+        if (pref)
+        {
+                nsresult rv = pref->SetIntPref (preference_name, new_int_value);
+                return NS_SUCCEEDED (rv) ? TRUE : FALSE;
+        }
+
+        return FALSE;
+}
 
 static void
 mozilla_font_size_notifier (GConfClient *client,

@@ -99,12 +99,5 @@ libephymozillaembed_la_SOURCES = 	\
 	mozilla-i18n.h			\
 	mozilla-notifiers.cpp		\
 	mozilla-notifiers.h		\
-	mozilla-prefs.cpp		\
-	mozilla-prefs.h			\
 	nsUnicharUtils.cpp		\
 	nsUnicharUtils.h
-
-mozilla_DATA = default-prefs.js
-mozilladir = $(pkgdatadir)
-
-EXTRA_DIST = $(mozilla_DATA)

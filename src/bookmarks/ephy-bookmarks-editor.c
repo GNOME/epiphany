@@ -1119,7 +1119,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
 
-	icon = gtk_widget_render_icon (GTK_WINDOW (editor), 
+	icon = gtk_widget_render_icon (GTK_WIDGET (editor), 
 				       EPHY_STOCK_BOOKMARKS,
 				       GTK_ICON_SIZE_MENU,
 				       NULL);

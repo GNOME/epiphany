@@ -21,7 +21,6 @@
 #include "ephy-debug.h"
 #include "gtkmozembed.h"
 #include "mozilla-embed-single.h"
-#include "mozilla-prefs.h"
 #include "ephy-prefs.h"
 #include "ephy-file-helpers.h"
 #include "mozilla-notifiers.h"
@@ -36,6 +35,7 @@
 #include <string.h>
 #include <nsICacheService.h>
 #include <nsCOMPtr.h>
+#include <nsIPrefService.h>
 #include <nsNetCID.h>
 #include <nsIServiceManager.h>
 #include <nsIIOService.h>
@@ -183,8 +183,45 @@ mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 static void
 mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 {
-	mozilla_prefs_load (ephy_file ("default-prefs.js"));
-	mozilla_prefs_save (mes->priv->user_prefs);
+	nsCOMPtr<nsIPrefService> prefService;
+
+        prefService = do_GetService (NS_PREFSERVICE_CONTRACTID);
+	g_return_if_fail (prefService != NULL);
+
+        nsCOMPtr<nsIPrefBranch> pref;
+        prefService->GetBranch ("", getter_AddRefs(pref));
+	g_return_if_fail (pref != NULL);
+
+	/* Don't allow mozilla to raise window when setting focus (work around bugs) */
+	pref->SetBoolPref ("mozilla.widget.raise-on-setfocus", PR_FALSE);
+
+	/* set default search engine */
+	pref->SetCharPref ("keyword.URL", "http://www.google.com/search?btnI=I%27m+Feeling+Lucky&q=");
+	pref->SetBoolPref ("keyword.enabled", PR_TRUE);
+	pref->SetBoolPref ("security.checkloaduri", PR_FALSE);
+
+	/* dont allow xpi installs from epiphany, there are crashes */
+	pref->SetBoolPref ("xpinstall.enabled", PR_FALSE);
+
+	/* deactivate mailcap and mime.types support */
+	pref->SetCharPref ("helpers.global_mailcap_file", "");
+	pref->SetCharPref ("helpers.global_mime_types_file", "");
+	pref->SetCharPref ("helpers.private_mailcap_file", "");
+	pref->SetCharPref ("helpers.private_mime_types_file", "");
+
+	/* disable sucky XUL ftp view, have nice ns4-like html page instead */
+	pref->SetBoolPref ("network.dir.generate_html", PR_TRUE);
+
+	/* disable usless security warnings */
+	pref->SetBoolPref ("security.warn_entering_secure", PR_FALSE);
+	pref->SetBoolPref ("security.warn_leaving_secure", PR_FALSE);
+	pref->SetBoolPref ("security.warn_submit_insecure", PR_FALSE);
+
+	/* Always use the system colors if a page doesn't specify its own. */
+	pref->SetBoolPref ("browser.display.use_system_colors", PR_TRUE);
+
+	/* Smooth scrolling on */
+	pref->SetBoolPref ("general.smoothScroll", PR_TRUE);
 }
 
 static void
@@ -364,8 +401,6 @@ mozilla_embed_single_finalize (GObject *object)
 
 	mozilla_notifiers_free ();
 
-	mozilla_prefs_save (mes->priv->user_prefs);
-	
 	gtk_moz_embed_pop_startup ();
 
 	g_free (mes->priv->user_prefs);
@@ -599,11 +634,22 @@ impl_get_font_list (EphyEmbedSingle *shell,
 
 	if (default_font != NULL)
 	{
-		char key [255];
+		char key[255];
+		char *value = NULL;
+		nsCOMPtr<nsIPrefService> prefService;
+
+	        prefService = do_GetService (NS_PREFSERVICE_CONTRACTID);
+		g_return_val_if_fail (prefService != NULL, G_FAILED);
+	
+	        nsCOMPtr<nsIPrefBranch> pref;
+	        prefService->GetBranch ("", getter_AddRefs(pref));
+		g_return_val_if_fail (pref != NULL, G_FAILED);
 
 		sprintf (key, "font.name.%s.%s", fontType, langGroup);
 		
-		*default_font = mozilla_prefs_get_string (key);
+		pref->GetCharPref (key, &value);
+		*default_font = g_strdup (value);
+		nsMemory::Free (value);
 	}
 
 	return G_OK;
