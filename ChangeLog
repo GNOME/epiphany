@@ -1,5 +1,14 @@
 2003-11-26  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* data/ui/epiphany-ui.xml:
+	* src/ephy-window.c: (update_edit_actions_sensitivity),
+	(edit_menu_show_cb), (show_embed_popup):
+
+	Restore clipboard actions in input context menu.
+	Show it only if mozilla is recent enough though.
+
+2003-11-26  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* embed/downloader-view.c: (update_download_row),
 	(download_changed_cb), (downloader_view_add_download),
 	(downloader_view_build_ui):

@@ -567,9 +567,9 @@ ephy_window_state_event_cb (GtkWidget *widget, GdkEventWindowState *event, EphyW
 	return FALSE;
 }
 
+
 static void
-edit_menu_show_cb (GtkWidget *menu,
-		   EphyWindow *window)
+update_edit_actions_sensitivity (EphyWindow *window)
 {
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
 	GtkActionGroup *action_group;
@@ -620,6 +620,13 @@ edit_menu_show_cb (GtkWidget *menu,
 	g_object_set (action, "sensitive", can_undo, NULL);
 	action = gtk_action_group_get_action (action_group, "EditRedo");
 	g_object_set (action, "sensitive", can_redo, NULL);
+}
+
+static void
+edit_menu_show_cb (GtkWidget *menu,
+		   EphyWindow *window)
+{
+	update_edit_actions_sensitivity (window);
 }
 
 static void
@@ -1076,10 +1083,13 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	{
 		popup = "/EphyImagePopup";
 	}
+#if MOZILLA_SNAPSHOT > 12
 	else if (context & EMBED_CONTEXT_INPUT)
 	{
+		update_edit_actions_sensitivity (window);
 		popup = "/EphyInputPopup";
 	}
+#endif
 	else
 	{
 		popup = framed ? "/EphyFramedDocumentPopup" :
