@@ -209,21 +209,7 @@ ephy_embed_shell_get_embed_single (EphyEmbedShell *shell)
 
 	if (!shell->priv->embed_single)
 	{
-		EphyEmbedSingle *single;
-		gboolean res;
-
-		single = mozilla_embed_single_new ();
-		res = mozilla_embed_single_init_services
-			(MOZILLA_EMBED_SINGLE (single));
-
-		if (res)
-		{
-			shell->priv->embed_single = single;
-		}
-		else
-		{
-			g_object_unref (single);
-		}
+		shell->priv->embed_single = mozilla_embed_single_new ();
 	}
 
 	return shell->priv->embed_single;

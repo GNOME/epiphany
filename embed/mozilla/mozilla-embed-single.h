@@ -50,8 +50,6 @@ GType             mozilla_embed_single_get_type	     (void);
 
 EphyEmbedSingle  *mozilla_embed_single_new	     (void);
 
-gboolean	  mozilla_embed_single_init_services (MozillaEmbedSingle *single);
-
 G_END_DECLS
 
 #endif

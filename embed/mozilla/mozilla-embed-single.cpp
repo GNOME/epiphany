@@ -315,20 +315,6 @@ mozilla_register_external_protocols (void)
 	mozilla_register_MailtoProtocolHandler ();
 }
 
-static void
-mozilla_embed_single_init (MozillaEmbedSingle *mes)
-{
- 	mes->priv = MOZILLA_EMBED_SINGLE_GET_PRIVATE (mes);
-
-	mes->priv->theme_window = NULL;
-	mes->priv->user_prefs =
-		g_build_filename (ephy_dot_dir (), 
-				  MOZILLA_PROFILE_DIR,
-				  MOZILLA_PROFILE_NAME,
-				  MOZILLA_PROFILE_FILE,
-				  NULL);
-}
-
 static nsresult
 getUILang (nsAString& aUILang)
 {
@@ -387,8 +373,8 @@ mozilla_init_chrome (void)
 	return NS_OK;
 }
 
-gboolean
-mozilla_embed_single_init_services (MozillaEmbedSingle *single)
+static gboolean
+init_services (MozillaEmbedSingle *single)
 {
 	/* Pre initialization */
 	mozilla_init_home ();
@@ -421,6 +407,37 @@ mozilla_embed_single_init_services (MozillaEmbedSingle *single)
 	mozilla_register_external_protocols ();
 
 	return TRUE;
+}
+
+static void
+mozilla_embed_single_init (MozillaEmbedSingle *mes)
+{
+ 	mes->priv = MOZILLA_EMBED_SINGLE_GET_PRIVATE (mes);
+
+	mes->priv->theme_window = NULL;
+	mes->priv->user_prefs =
+		g_build_filename (ephy_dot_dir (), 
+				  MOZILLA_PROFILE_DIR,
+				  MOZILLA_PROFILE_NAME,
+				  MOZILLA_PROFILE_FILE,
+				  NULL);
+
+	if (!init_services (mes))
+	{
+		GtkWidget *dialog;
+
+		dialog = gtk_message_dialog_new
+			(NULL,
+                         GTK_DIALOG_MODAL,
+                         GTK_MESSAGE_ERROR,
+                         GTK_BUTTONS_CLOSE,
+                         _("Epiphany can't be used now. "
+                         "Mozilla initialization failed. Check your "
+                         "MOZILLA_FIVE_HOME environmental variable."));
+		gtk_dialog_run (GTK_DIALOG (dialog));
+
+		exit (0);
+	}
 }
 
 static void
