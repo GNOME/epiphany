@@ -21,6 +21,7 @@
 #endif
 
 #include "ephy-window.h"
+#include "ephy-bookmarks-toolbar.h"
 #include "ephy-favorites-menu.h"
 #include "ephy-state.h"
 #include "ephy-gobject-misc.h"
@@ -129,6 +130,9 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "ViewToolbar", N_("_Toolbar"), NULL, "<shift><control>T",
 	  N_("Show or hide toolbar"),
 	  G_CALLBACK (window_cmd_view_toolbar), NULL, TOGGLE_ACTION },
+	{ "ViewBookmarksToolbar", N_("_Bookmarks Toolbar"), NULL, NULL,
+	  N_("Show or hide bookmarks toolbar"),
+	  G_CALLBACK (window_cmd_view_bookmarks_toolbar), NULL, TOGGLE_ACTION },
 	{ "ViewStatusbar", N_("St_atusbar"), NULL, NULL,
 	  N_("Show or hide statusbar"),
 	  G_CALLBACK (window_cmd_view_statusbar), NULL, TOGGLE_ACTION },
@@ -253,10 +257,10 @@ struct EphyWindowPrivate
 	GtkWidget *menu_dock;
 	GtkWidget *menubar;
 	Toolbar *toolbar;
-	GList *toolbars;
 	GtkWidget *statusbar;
 	EggActionGroup *action_group;
 	EggActionGroup *popups_action_group;
+	EphyBookmarksToolbar *bmk_toolbar;
 	EphyFavoritesMenu *fav_menu;
 	EphyEncodingMenu *enc_menu;
 	PPViewToolbar *ppview_toolbar;
@@ -389,11 +393,6 @@ add_widget (EggMenuMerge *merge, GtkWidget *widget, EphyWindow *window)
 	if (GTK_IS_MENU_SHELL (widget))
 	{
 		window->priv->menubar = widget;
-	}
-	else
-	{
-		window->priv->toolbars = g_list_append
-			(window->priv->toolbars, widget);
 	}
 
 	gtk_box_pack_start (GTK_BOX (window->priv->menu_dock),
@@ -567,11 +566,11 @@ ephy_window_init (EphyWindow *window)
 	window->priv->chrome_mask = 0;
 	window->priv->closing = FALSE;
 	window->priv->ppview_toolbar = NULL;
-	window->priv->toolbars = NULL;
 
 	/* Setup the window and connect verbs */
 	setup_window (window);
 
+	window->priv->bmk_toolbar = ephy_bookmarks_toolbar_new (window);
 	window->priv->fav_menu = ephy_favorites_menu_new (window);
 	window->priv->enc_menu = ephy_encoding_menu_new (window);
 
@@ -613,6 +612,8 @@ save_window_chrome (EphyWindow *window)
 	}
 	else
 	{
+		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_PERSONAL_TOOLBAR,
+				       flags & EMBED_CHROME_PERSONALTOOLBARON);
 		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_TOOLBARS,
 				       flags & EMBED_CHROME_TOOLBARON);
 		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_STATUSBAR,
@@ -660,11 +661,6 @@ ephy_window_finalize (GObject *object)
 	if (window->priv->ppview_toolbar)
 	{
 		g_object_unref (window->priv->ppview_toolbar);
-	}
-
-	if (window->priv->toolbars)
-	{
-		g_list_free (window->priv->toolbars);
 	}
 
 	g_object_unref (window->priv->action_group);
@@ -778,8 +774,11 @@ translate_default_chrome (EmbedChromeMask *chrome_mask)
 		{
 			*chrome_mask |= EMBED_CHROME_TOOLBARON;
 		}
+		if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_PERSONAL_TOOLBAR))
+		{
+			*chrome_mask |= EMBED_CHROME_PERSONALTOOLBARON;
+		}
 
-		*chrome_mask |= EMBED_CHROME_PERSONALTOOLBARON;
 		*chrome_mask |= EMBED_CHROME_MENUBARON;
 	}
 }
@@ -794,6 +793,10 @@ update_layout_toggles (EphyWindow *window)
 	action = egg_action_group_get_action (action_group, "ViewToolbar");
 	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action),
 				      mask & EMBED_CHROME_TOOLBARON);
+
+	action = egg_action_group_get_action (action_group, "ViewBookmarksToolbar");
+	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action),
+				      mask & EMBED_CHROME_PERSONALTOOLBARON);
 
 	action = egg_action_group_get_action (action_group, "ViewStatusbar");
 	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action),
@@ -822,15 +825,24 @@ ephy_window_set_chrome (EphyWindow *window,
 		gtk_widget_hide (window->priv->menubar);
 	}
 
-	if (flags & EMBED_CHROME_TOOLBARON)
+	if (flags & EMBED_CHROME_PERSONALTOOLBARON)
 	{
-		g_list_foreach (window->priv->toolbars,
-				(GFunc)gtk_widget_show, NULL);
+		ephy_bookmarks_toolbar_show (window->priv->bmk_toolbar);
 	}
 	else
 	{
-		g_list_foreach (window->priv->toolbars,
-				(GFunc)gtk_widget_hide, NULL);
+		ephy_bookmarks_toolbar_hide (window->priv->bmk_toolbar);
+	}
+
+	if (flags & EMBED_CHROME_TOOLBARON)
+	{
+		egg_editable_toolbar_show
+			(EGG_EDITABLE_TOOLBAR (window->priv->toolbar));
+	}
+	else
+	{
+		egg_editable_toolbar_hide
+			(EGG_EDITABLE_TOOLBAR (window->priv->toolbar));
 	}
 
 	if (flags & EMBED_CHROME_STATUSBARON)

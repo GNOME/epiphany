@@ -1169,6 +1169,58 @@ set_action_sensitive (EggToolbarsItem    *item,
     }
 }
 
+static void
+hide_toolbar (EggToolbarsToolbar *t,
+	      EggEditableToolbar *etoolbar)
+{
+  GtkWidget *tb;
+
+  g_return_if_fail (IS_EGG_EDITABLE_TOOLBAR (etoolbar));
+  g_return_if_fail (t != NULL);
+
+  tb = get_item_widget (etoolbar, t);
+
+  g_return_if_fail (tb != NULL);
+
+  gtk_widget_hide (tb);
+}
+
+static void
+show_toolbar (EggToolbarsToolbar *t,
+	      EggEditableToolbar *etoolbar)
+{
+  GtkWidget *tb;
+
+  g_return_if_fail (IS_EGG_EDITABLE_TOOLBAR (etoolbar));
+  g_return_if_fail (t != NULL);
+
+  tb = get_item_widget (etoolbar, t);
+
+  g_return_if_fail (tb != NULL);
+
+  gtk_widget_show (tb);
+}
+
+void
+egg_editable_toolbar_show (EggEditableToolbar *etoolbar)
+{
+  g_return_if_fail (IS_EGG_EDITABLE_TOOLBAR (etoolbar));
+
+  egg_toolbars_group_foreach_toolbar (etoolbar->priv->group,
+				      (EggToolbarsGroupForeachToolbarFunc)
+				      show_toolbar, etoolbar);
+}
+
+void
+egg_editable_toolbar_hide (EggEditableToolbar *etoolbar)
+{
+  g_return_if_fail (IS_EGG_EDITABLE_TOOLBAR (etoolbar));
+
+  egg_toolbars_group_foreach_toolbar (etoolbar->priv->group,
+				      (EggToolbarsGroupForeachToolbarFunc)
+				      hide_toolbar, etoolbar);
+}
+
 void
 egg_editable_toolbar_edit (EggEditableToolbar *etoolbar,
 			   GtkWidget          *window)

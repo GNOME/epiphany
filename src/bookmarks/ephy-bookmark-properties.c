@@ -23,6 +23,8 @@
 #include "ephy-shell.h"
 #include "ephy-state.h"
 
+#include <gtk/gtkcheckbutton.h>
+#include <gtk/gtktogglebutton.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkvbox.h>
@@ -213,6 +215,22 @@ bookmark_properties_response_cb (GtkDialog *dialog,
 }
 
 static void
+update_checkbox (EphyBookmarkProperties *props, GtkWidget *checkbox, gulong prop)
+{
+	GValue value = { 0, };
+	gboolean state;
+
+	state = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbox));
+
+	g_value_init (&value, G_TYPE_BOOLEAN);
+	g_value_set_boolean (&value, state);
+	ephy_node_set_property (props->priv->bookmark,
+			        prop,
+			        &value);
+	g_value_unset (&value);
+}
+
+static void
 update_entry (EphyBookmarkProperties *props, GtkWidget *entry, guint prop)
 {
 	GValue value = { 0, };
@@ -233,7 +251,7 @@ update_window_title(EphyBookmarkProperties *editor)
 {
 	char *title;
 	const char *tmp;
-	
+
 	tmp = ephy_node_get_property_string (editor->priv->bookmark,
 					     EPHY_NODE_BMK_PROP_TITLE);
 	title = g_strdup_printf (_("%s Properties"), tmp);
@@ -256,6 +274,12 @@ location_entry_changed_cb (GtkWidget *entry, EphyBookmarkProperties *props)
 }
 
 static void
+toolbar_checkbox_changed_cb (GtkWidget *checkbox, EphyBookmarkProperties *props)
+{
+	update_checkbox (props, checkbox, EPHY_NODE_BMK_PROP_SHOW_IN_TOOLBAR);
+}
+
+static void
 set_window_icon (EphyBookmarkProperties *editor)
 {
 	EphyFaviconCache *cache;
@@ -275,10 +299,10 @@ set_window_icon (EphyBookmarkProperties *editor)
 
 	else
 	{
-		icon = gtk_widget_render_icon (GTK_WIDGET (editor), 
-						      	      GTK_STOCK_PROPERTIES,
-						      	      GTK_ICON_SIZE_MENU,
-						      	      NULL);
+		icon = gtk_widget_render_icon (GTK_WIDGET (editor),
+					       GTK_STOCK_PROPERTIES,
+					       GTK_ICON_SIZE_MENU,
+					       NULL);
 	}
 
 	gtk_window_set_icon (GTK_WINDOW (editor), icon);
@@ -288,9 +312,11 @@ set_window_icon (EphyBookmarkProperties *editor)
 static void
 build_ui (EphyBookmarkProperties *editor)
 {
-	GtkWidget *table, *label, *entry, *topics_selector, *scrolled_window;
+	GtkWidget *table, *label, *entry, *topics_selector;
+	GtkWidget *checkbox, *scrolled_window;
 	char *str;
 	const char *tmp;
+	gboolean state;
 
 	g_signal_connect (G_OBJECT (editor),
 			  "response",
@@ -312,7 +338,7 @@ build_ui (EphyBookmarkProperties *editor)
 	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 6);
 	gtk_widget_show (table);
-	
+
 	entry = gtk_entry_new ();
 	tmp = ephy_node_get_property_string (editor->priv->bookmark,
 					     EPHY_NODE_BMK_PROP_TITLE);
@@ -375,6 +401,16 @@ build_ui (EphyBookmarkProperties *editor)
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
 	gtk_table_attach (GTK_TABLE (table), scrolled_window, 1, 2, 2, 3,
 			  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+
+	checkbox = gtk_check_button_new_with_mnemonic (_("Show in the bookmarks _toolbar"));
+	state = ephy_node_get_property_boolean (editor->priv->bookmark,
+					        EPHY_NODE_BMK_PROP_SHOW_IN_TOOLBAR);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbox), state);
+	g_signal_connect (checkbox, "toggled",
+			  G_CALLBACK (toolbar_checkbox_changed_cb), editor);
+	gtk_table_attach (GTK_TABLE (table), checkbox, 0, 2, 3, 4, GTK_FILL, 0, 0, 0);
+	gtk_widget_show (checkbox);
+
 
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (editor)->vbox),
 			    table, TRUE, TRUE, 0);

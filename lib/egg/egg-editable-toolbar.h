@@ -62,6 +62,8 @@ EggEditableToolbar *egg_editable_toolbar_new		 (EggMenuMerge       *merge,
 							  EggToolbarsGroup   *group);
 void		    egg_editable_toolbar_edit		 (EggEditableToolbar *etoolbar,
 							  GtkWidget          *window);
+void		    egg_editable_toolbar_show		 (EggEditableToolbar *etoolbar);
+void		    egg_editable_toolbar_hide		 (EggEditableToolbar *etoolbar);
 char		   *egg_editable_toolbar_get_action_name (EggEditableToolbar *etoolbar,
 					                  const char         *drag_type,
 					                  const char         *data);

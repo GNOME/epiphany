@@ -18,16 +18,18 @@ INCLUDES = \
 noinst_LTLIBRARIES = libephybookmarks.la
 
 libephybookmarks_la_SOURCES = 		\
-	ephy-bookmark-action.c		\
-	ephy-bookmark-action.h		\
-	ephy-bookmark-properties.c	\
-	ephy-bookmark-properties.h	\
 	ephy-bookmarks.c		\
 	ephy-bookmarks.h		\
+	ephy-bookmark-action.c		\
+	ephy-bookmark-action.h		\
 	ephy-bookmarks-editor.c		\
 	ephy-bookmarks-editor.h		\
 	ephy-bookmarks-import.c 	\
 	ephy-bookmarks-import.h		\
+	ephy-bookmark-properties.c	\
+	ephy-bookmark-properties.h	\
+	ephy-bookmarks-toolbar.c	\
+	ephy-bookmarks-toolbar.h	\
 	ephy-keywords-entry.c		\
 	ephy-keywords-entry.h		\
 	ephy-new-bookmark.c		\

@@ -1,5 +1,33 @@
 2003-04-20  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/egg/egg-editable-toolbar.c:
+
+	Update
+
+	* data/epiphany.schemas.in:
+	* data/ui/epiphany-ui.xml.in:
+	* lib/egg/egg-editable-toolbar.h:
+	* lib/ephy-prefs.h:
+	* src/bookmarks/Makefile.am:
+	* src/bookmarks/ephy-bookmark-properties.c: (update_checkbox),
+	(update_window_title), (toolbar_checkbox_changed_cb),
+	(set_window_icon), (build_ui):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/ephy-window.c: (add_widget), (ephy_window_init),
+	(save_window_chrome), (ephy_window_finalize),
+	(translate_default_chrome), (update_layout_toggles),
+	(ephy_window_set_chrome):
+	* src/window-commands.c: (window_cmd_view_bookmarks_toolbar):
+	* src/window-commands.h:
+
+	First implementation of the new bookmarks toolbar thing.
+	Still doesnt work properly ... old bmk toolbars are still there
+	though.
+	Dave I dont like much the position of the checkbox in properties :/
+	Maybe a different tab dunno ....
+
+2003-04-20  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* data/ui/epiphany-history-window-ui.xml.in:
 
 	Looks like Erich forgot the xml changes
