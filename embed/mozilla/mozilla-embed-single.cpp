@@ -757,7 +757,7 @@ impl_get_charset_groups (EphyEmbedSingle *shell,
 		         GList **groups)
 {
 	GList *l = NULL;
-	int i;
+	guint i;
 	
 	for (i = 0; i < n_lgroups; i++)
 	{
