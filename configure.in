@@ -186,8 +186,8 @@ MOZILLA_VERSION="`$PKG_CONFIG --modversion mozilla-gtkmozembed`"
 dnl allow user to override the autodetected mozilla version
 dnl     - without arguments for cvs head
 AC_ARG_WITH(mozilla-snapshot,
-  AC_HELP_STRING([--with-mozilla-snapshot@<:@=1.4|1.4.1|1.4.2|1.5|1.5.1|1.6|1.7|1.7.1|1.7.2|1.7.3|1.8a3|trunk@:>@],
-		 [Whether to try building against mozilla 1.4|1.4.1|1.4.2|1.5|1.5.1|1.6|1.7|1.7.1|1.7.2|1.7.3|1.8a3|trunk
+  AC_HELP_STRING([--with-mozilla-snapshot@<:@=1.4|1.4.1|1.4.2|1.5|1.5.1|1.6|1.7|1.7.1|1.7.2|1.7.3@:>@],
+		 [Whether to try building against mozilla 1.4|1.4.1|1.4.2|1.5|1.5.1|1.6|1.7|1.7.1|1.7.2|1.7.3
 		  @<:@guessed@:>@]),
   [autodetect=" (guessed: $MOZILLA_VERSION)"; MOZILLA_VERSION="$withval"])
 
@@ -209,12 +209,6 @@ case "$MOZILLA_VERSION" in
 1.7.4) MOZILLA_SNAPSHOT=18 ;;
 1.7.5) MOZILLA_SNAPSHOT=18 ;;
 branch1.7) MOZILLA_SNAPSHOT=18 ;;
-1.8a3) MOZILLA_SNAPSHOT=20 ;;
-1.8a4) MOZILLA_SNAPSHOT=21 ;;
- 1.8b) MOZILLA_SNAPSHOT=21 ;;
-1.8rc1) MOZILLA_SNAPSHOT=21 ;;
-  1.8) MOZILLA_SNAPSHOT=21 ;;
-branch1.8) MOZILLA_SNAPSHOT = 21 ;;
 trunk) MOZILLA_SNAPSHOT=21 ;;
     *) AC_ERROR([
 *****************************************************************************

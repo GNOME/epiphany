@@ -134,6 +134,8 @@ struct EphyEmbedIface
 					 EmbedSecurityLevel level);
 	void	 (* zoom_change)	(EphyEmbed *embed,
 					 float new_zoom);
+	gboolean (* modal_alert)	(EphyEmbed *embed);
+	void	 (* modal_alert_closed)	(EphyEmbed *embed);
 
 	/* Methods  */
 	void		   (* load_url)			(EphyEmbed *embed,

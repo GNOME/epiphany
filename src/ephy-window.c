@@ -1638,11 +1638,34 @@ update_tabs_menu_sensitivity (EphyWindow *window)
 	g_object_set (action, "sensitive", detach, NULL);
 }
 
+static gboolean
+modal_alert_cb (EphyEmbed *embed,
+		EphyWindow *window)
+{
+	EphyTab *tab;
+	char *address;
+
+	tab = ephy_tab_for_embed (embed);
+	g_return_val_if_fail (tab != NULL, FALSE);
+
+	ephy_window_jump_to_tab (window, tab);
+
+	/* make sure the location entry shows the real URL of the tab's page */
+	address = ephy_embed_get_location (embed, TRUE);
+	toolbar_set_location (window->priv->toolbar, address);
+	g_free (address);
+
+	/* don't suppress alert */
+	return FALSE;
+}
+
 static void
 tab_added_cb (EphyNotebook *notebook,
 	      EphyTab *tab,
 	      EphyWindow *window)
 {
+	EphyEmbed *embed;
+
         g_return_if_fail (EPHY_IS_TAB (tab));
 
 	window->priv->num_tabs++;
@@ -1651,6 +1674,12 @@ tab_added_cb (EphyNotebook *notebook,
 
 	g_signal_connect_object (G_OBJECT (tab), "notify::visible",
 				 G_CALLBACK (sync_tab_visibility), window, 0);
+
+	embed = ephy_tab_get_embed (tab);
+	g_return_if_fail (embed != NULL);
+
+	g_signal_connect_after (embed, "ge-modal-alert",
+				G_CALLBACK (modal_alert_cb), window);
 }
 
 static void
@@ -1658,6 +1687,8 @@ tab_removed_cb (EphyNotebook *notebook,
 		EphyTab *tab,
 		EphyWindow *window)
 {
+	EphyEmbed *embed;
+
         g_return_if_fail (EPHY_IS_TAB (tab));
 
 	g_signal_handlers_disconnect_by_func (G_OBJECT (tab),
@@ -1670,6 +1701,12 @@ tab_removed_cb (EphyNotebook *notebook,
 	{
 		update_tabs_menu_sensitivity (window);
 	}
+
+	embed = ephy_tab_get_embed (tab);
+	g_return_if_fail (embed != NULL);
+
+	g_signal_handlers_disconnect_by_func
+		(embed, G_CALLBACK (modal_alert_cb), window);
 }
 
 static void

@@ -73,6 +73,14 @@ public:
 	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
 };
 
+#if MOZILLA_SNAPSHOT >= 18
+class EphyModalAlertEventListener : public EphyEventListener
+{
+public:
+	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
+};
+#endif
+
 class EphyBrowser
 {
 public:
@@ -135,6 +143,9 @@ private:
 	nsCOMPtr<nsIDOMWindow> mDOMWindow;
 	EphyFaviconEventListener *mFaviconEventListener;
 	EphyPopupEventListener *mPopupEventListener;
+#if MOZILLA_SNAPSHOT >= 18
+	EphyModalAlertEventListener *mModalAlertListener;
+#endif
 	PRBool mInitialized;
 
 	nsresult GetListener (void);

@@ -56,6 +56,7 @@
 #include "nsIDOMDocument.h"
 #include "nsIDOMDocumentStyle.h"
 #include "nsIDOMEvent.h"
+#include "nsIDOMNSEvent.h"
 #include "nsIDOMEventTarget.h"
 #include "nsIDOMNode.h"
 #include "nsIDOMElement.h"
@@ -201,9 +202,51 @@ EphyPopupEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 	return NS_OK;
 }
 
+#if MOZILLA_SNAPSHOT >= 18
+NS_IMETHODIMP
+EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
+{
+	NS_ENSURE_TRUE (mOwner, NS_ERROR_FAILURE);
+
+	/* make sure the event is trusted */
+	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aDOMEvent));
+	NS_ENSURE_TRUE (nsEvent, NS_ERROR_FAILURE);
+	PRBool isTrusted = PR_FALSE;
+	nsEvent->GetIsTrusted (&isTrusted);
+	if (!isTrusted) return NS_OK;
+
+	nsresult rv;
+	nsAutoString type;
+	rv = aDOMEvent->GetType (type);
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	if (type.Equals(NS_LITERAL_STRING("DOMWillOpenModalDialog")))
+	{
+		gboolean retval = FALSE;
+		g_signal_emit_by_name (mOwner, "ge-modal-alert", &retval);
+
+		/* suppress alert */
+		if (retval)
+		{
+			aDOMEvent->PreventDefault ();
+			aDOMEvent->StopPropagation ();
+		}
+	}
+	else if (type.Equals(NS_LITERAL_STRING("DOMModalDialogClosed")))
+	{
+		g_signal_emit_by_name (mOwner, "ge-modal-alert-closed");
+	}
+
+	return NS_OK;
+}
+#endif
+
 EphyBrowser::EphyBrowser ()
 : mFaviconEventListener(nsnull)
 , mPopupEventListener(nsnull)
+#if MOZILLA_SNAPSHOT >= 18
+, mModalAlertListener(nsnull)
+#endif
 , mInitialized(PR_FALSE)
 {
 }
@@ -241,6 +284,15 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 
 	rv = mPopupEventListener->Init (EPHY_EMBED (mozembed));
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+#if MOZILLA_SNAPSHOT >= 18
+
+	mModalAlertListener = new EphyModalAlertEventListener ();
+	if (!mModalAlertListener) return NS_ERROR_OUT_OF_MEMORY;
+
+	rv = mModalAlertListener->Init (EPHY_EMBED (mozembed));
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+#endif
 
  	rv = GetListener();
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
@@ -302,6 +354,14 @@ EphyBrowser::AttachListeners(void)
 				      mPopupEventListener, PR_FALSE);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
+#if MOZILLA_SNAPSHOT >= 18
+	rv = target->AddEventListener(NS_LITERAL_STRING("DOMWillOpenModalDialog"),
+				      mModalAlertListener, PR_TRUE);
+	rv |= target->AddEventListener(NS_LITERAL_STRING("DOMWillOpenModalDialog"),
+				       mModalAlertListener, PR_TRUE);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+#endif
+
 	return NS_OK;
 }
 
@@ -323,6 +383,14 @@ EphyBrowser::DetachListeners(void)
 	rv = target->RemoveEventListener(NS_LITERAL_STRING("DOMPopupBlocked"),
 					 mPopupEventListener, PR_FALSE);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+#if MOZILLA_SNAPSHOT >= 18
+	rv = target->RemoveEventListener(NS_LITERAL_STRING("DOMWillOpenModalDialog"),
+					 mModalAlertListener, PR_TRUE);
+	rv |= target->RemoveEventListener(NS_LITERAL_STRING("DOMWillOpenModalDialog"),
+					  mModalAlertListener, PR_TRUE);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+#endif
 
 	return NS_OK;
 }
