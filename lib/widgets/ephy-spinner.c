@@ -37,13 +37,6 @@
 #include "ephy-file-helpers.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtksignal.h>
-#include <libgnome/gnome-macros.h>
-#include <libgnome/gnome-util.h>
-#include <math.h>
-#include <libgnomevfs/gnome-vfs.h>
 #include <libgnomeui/gnome-icon-theme.h>
 
 #define spinner_DEFAULT_TIMEOUT 100	/* Milliseconds Per Frame */

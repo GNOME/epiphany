@@ -29,7 +29,6 @@
 #define EPHY_SPINNER_H
 
 #include <gtk/gtkeventbox.h>
-#include <bonobo.h>
 
 G_BEGIN_DECLS
 

@@ -44,6 +44,7 @@
 #include "eggtoolbar.h"
 
 #include <string.h>
+#include <bonobo/bonobo-i18n.h>
 
 static void toolbar_class_init (ToolbarClass *klass);
 static void toolbar_init (Toolbar *t);

@@ -56,8 +56,7 @@ struct _EphyAutocompletionWindowPrivate {
 	GtkTreeViewColumn *col1;
 	GtkTreeView *action_tree_view;
 	GtkTreeViewColumn *action_col1;
-	GtkTreeView *active_tree_view;
-	gboolean only_actions;
+	int sel_index;
 
 	char *selected;
 
@@ -208,6 +207,9 @@ ephy_autocompletion_window_finalize_impl (GObject *o)
 
 	g_free (p->selected);
 	g_free (p);
+
+	gdk_pointer_ungrab (GDK_CURRENT_TIME);
+	gdk_keyboard_ungrab (GDK_CURRENT_TIME);
 
 	G_OBJECT_CLASS (g_object_class)->finalize (o);
 }
@@ -545,17 +547,6 @@ ephy_autocompletion_window_show (EphyAutocompletionWindow *aw)
 
 	ephy_autocompletion_window_fill_store_chunk (aw);
 
-	p->only_actions = (!GTK_WIDGET_VISIBLE (p->scrolled_window) ||
-	                   GTK_WIDGET_HAS_FOCUS (p->action_tree_view));
-	if (p->only_actions)
-	{
-		p->active_tree_view = p->action_tree_view;
-	}
-	else
-	{
-		p->active_tree_view = p->tree_view;
-	}
-
 	gtk_tree_view_set_model (p->tree_view, GTK_TREE_MODEL (p->list_store));
 	gtk_tree_view_set_model (p->action_tree_view, GTK_TREE_MODEL (p->action_list_store));
 
@@ -569,6 +560,11 @@ ephy_autocompletion_window_show (EphyAutocompletionWindow *aw)
 	{
 		gtk_widget_show (p->window);
 
+		gdk_pointer_grab (p->parent->window, TRUE,
+				  GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK |
+				  GDK_BUTTON_RELEASE_MASK,
+				  NULL, NULL, GDK_CURRENT_TIME);
+		gdk_keyboard_grab (p->parent->window, TRUE, GDK_CURRENT_TIME);
 		gtk_grab_add (p->window);
 
 		g_signal_connect (p->window, "button-press-event",
@@ -619,124 +615,106 @@ ephy_autocompletion_window_button_press_event_cb (GtkWidget *widget,
 	return TRUE;
 }
 
-static GtkTreeView *
-hack_tree_view_move_selection (EphyAutocompletionWindow *aw, GtkTreeView *tv,
-			       GtkTreeView *alternate, int dir)
+static void
+move_selection (EphyAutocompletionWindow *aw, int dir, gboolean *action)
 {
-	GtkTreeSelection *ts = gtk_tree_view_get_selection (tv);
-	GtkTreeModel *model;
-	GList *selected = NULL;
-	gboolean prev_result = TRUE;
-	selected = gtk_tree_selection_get_selected_rows (ts, &model);
+	int new_index;
+	int n_compl, n_actions, n_items;
+	GtkTreeModel *compl_model, *actions_model;
+	GtkTreeSelection *compl_sel, *actions_sel;
 
-	gtk_tree_selection_unselect_all (ts);
+	compl_model = gtk_tree_view_get_model (aw->priv->tree_view);
+	actions_model = gtk_tree_view_get_model (aw->priv->action_tree_view);
+	compl_sel = gtk_tree_view_get_selection (aw->priv->tree_view);
+	actions_sel = gtk_tree_view_get_selection (aw->priv->action_tree_view);
 
-	if (!selected)
+	n_compl = gtk_tree_model_iter_n_children (compl_model, NULL);
+	n_actions = gtk_tree_model_iter_n_children (actions_model, NULL);
+	n_items = n_compl + n_actions;
+
+	/* Index 0  no selection.
+	 * Index 1  in the completion.
+	 * Index -1 in the actions. */
+	new_index = aw->priv->sel_index + dir;
+
+	/* On overflow stay on 0/max if you are no already there. Otherwise
+	   go on the opposite limit */
+	if (new_index < 0)
 	{
-		GtkTreePath *p = gtk_tree_path_new_first ();
-		gtk_tree_selection_select_path (ts, p);
-		gtk_tree_view_scroll_to_cell (tv, p, NULL, FALSE, 0, 0);
-		gtk_tree_path_free (p);
+		new_index = (aw->priv->sel_index != 0) ? 0 : n_items;
+	}
+	else if (new_index > n_items)
+	{
+		new_index = (aw->priv->sel_index != n_items) ? n_items : 0;
+	}
+
+	gtk_tree_selection_unselect_all (compl_sel);
+	gtk_tree_selection_unselect_all (actions_sel);
+
+	if (new_index == 0)
+	{
+	}
+	else if (new_index > n_compl)
+	{
+		GtkTreeIter iter;
+		GtkTreePath *path;
+
+		gtk_tree_selection_unselect_all (compl_sel);
+		gtk_tree_model_iter_nth_child (actions_model, &iter, NULL,
+					       new_index - n_compl - 1);
+		gtk_tree_selection_select_iter (actions_sel, &iter);
+
+		path = gtk_tree_model_get_path (actions_model, &iter);
+		gtk_tree_view_scroll_to_cell (aw->priv->action_tree_view,
+					      path, NULL, FALSE, 0, 0);
+		gtk_tree_path_free (path);
+
+		*action = TRUE;
+	}
+	else if (new_index <= n_compl)
+	{
+		GtkTreeIter iter;
+		GtkTreePath *path;
+
+		gtk_tree_selection_unselect_all (actions_sel);
+		gtk_tree_model_iter_nth_child (compl_model, &iter, NULL,
+					       new_index - 1);
+		gtk_tree_selection_select_iter (compl_sel, &iter);
+
+		path = gtk_tree_model_get_path (compl_model, &iter);
+		gtk_tree_view_scroll_to_cell (aw->priv->tree_view,
+					      path, NULL, FALSE, 0, 0);
+		gtk_tree_path_free (path);
+
+		*action = FALSE;
 	}
 	else
 	{
-		GtkTreePath *p = selected->data;
-		int i;
-		gboolean exit = FALSE;
-
-		if (dir > 0)
-		{
-			for (i = 0; i < dir; ++i)
-			{
-				gtk_tree_path_next (p);
-			}
-		}
-		else
-		{
-			for (i = 0; i > dir; --i)
-			{
-				prev_result = gtk_tree_path_prev (p);
-			}
-		}
-
-		if (prev_result)
-		{
-			gtk_tree_selection_select_path (ts, p);
-			gtk_tree_view_scroll_to_cell (tv, p, NULL, FALSE, 0, 0);
-		}
-		else
-		{
-			g_signal_emit (aw, EphyAutocompletionWindowSignals
-				       [SELECTED], 0, NULL, FALSE);
-			exit = TRUE;
-		}
-
-		g_list_foreach (selected, (GFunc) gtk_tree_path_free, NULL);
-		g_list_free (selected);
-
-		if (exit) return NULL;
+		g_assert_not_reached ();
 	}
 
-	if (!prev_result)
-	{
-		GtkTreeModel *model;
-		int c;
-		GtkTreeIter iter;
-		GtkTreePath *p;
-		GtkTreeSelection *selection;
-
-		model = gtk_tree_view_get_model (alternate);
-		c = gtk_tree_model_iter_n_children (model, NULL);
-		if (c > 0 && alternate)
-		{
-			gtk_tree_model_iter_nth_child (model, &iter, NULL, c - 1);
-			p = gtk_tree_model_get_path (model, &iter);
-			selection = gtk_tree_view_get_selection (alternate);
-			gtk_tree_selection_select_path (selection, p);
-			gtk_tree_view_scroll_to_cell (alternate, p, NULL, FALSE, 0, 0);
-			gtk_tree_path_free (p);
-		}
-		return alternate;
-	}
-	else if (gtk_tree_selection_count_selected_rows (ts) == 0)
-	{
-		hack_tree_view_move_selection (aw, alternate, tv, dir);
-		return alternate;
-	}
-
-	return tv;
+	aw->priv->sel_index = new_index;
 }
 
 static gboolean
 ephy_autocompletion_window_key_press_hack (EphyAutocompletionWindow *aw,
 					   guint keyval)
 {
-	GtkTreeView *tree_view, *alt;
-	EphyAutocompletionWindowPrivate *p = aw->priv;
-	gboolean action;
-
-	action = (p->active_tree_view == p->action_tree_view);
-	tree_view = action ? p->action_tree_view : p->tree_view;
-	alt = action ? p->tree_view : p->action_tree_view;
-	alt = p->only_actions ? p->action_tree_view : alt;
+	gboolean action = FALSE;
 
 	switch (keyval)
 	{
 	case GDK_Up:
-		p->active_tree_view = hack_tree_view_move_selection
-			(aw, tree_view, alt, -1);
+		move_selection (aw, -1, &action);
 		break;
 	case GDK_Down:
-		p->active_tree_view = hack_tree_view_move_selection
-			(aw, tree_view, alt, +1);
+		move_selection (aw, +1, &action);
 		break;
 	case GDK_Page_Down:
-		p->active_tree_view = hack_tree_view_move_selection
-			(aw, tree_view, alt, +5);
+		move_selection (aw, +5, &action);
 		break;
 	case GDK_Page_Up:
-		p->active_tree_view = hack_tree_view_move_selection
-			(aw, tree_view, alt, -5);
+		move_selection (aw, -5, &action);
 		break;
 	case GDK_Return:
 	case GDK_space:
@@ -746,12 +724,7 @@ ephy_autocompletion_window_key_press_hack (EphyAutocompletionWindow *aw,
 				       [ACTIVATED], 0, aw->priv->selected, action);
 		}
 		break;
-	default:
-		g_warning ("Unexpected keyval");
-		break;
 	}
-
-	action = (p->active_tree_view == p->action_tree_view);
 
 	switch (keyval)
 	{
@@ -816,8 +789,11 @@ ephy_autocompletion_window_hide (EphyAutocompletionWindow *aw)
 	{
 		gtk_widget_hide (aw->priv->window);
 		gtk_grab_remove (aw->priv->window);
+		gdk_pointer_ungrab (GDK_CURRENT_TIME);
+		gdk_keyboard_ungrab (GDK_CURRENT_TIME);
 		ephy_autocompletion_window_unselect (aw);
 		g_signal_emit (aw, EphyAutocompletionWindowSignals[EPHY_AUTOCOMPLETION_WINDOW_HIDDEN], 0);
+		aw->priv->sel_index = 0;
 	}
 	g_free (aw->priv->selected);
 	aw->priv->selected = NULL;

@@ -1,3 +1,23 @@
+2003-07-07  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/widgets/ephy-autocompletion-window.c:
+	(ephy_autocompletion_window_finalize_impl),
+	(ephy_autocompletion_window_show), (move_selection),
+	(ephy_autocompletion_window_key_press_hack),
+	(ephy_autocompletion_window_hide):
+
+	Rewrite selection logic to be simpler and to
+	fix bugs.
+
+	* lib/widgets/ephy-spinner.c:
+	* lib/widgets/ephy-spinner.h:
+
+	Remove unused includes.
+
+	* src/toolbar.c:
+	
+	Add missing include.
+
 2003-07-06  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/widgets/ephy-spinner.c: (ephy_spinner_get_type),
