@@ -148,9 +148,6 @@ tab_added_cb (EphyNotebook *notebook,
 			       "tooltip", _("Switch to this tab"),
 			       NULL);
 
-	g_signal_connect (action, "activate",
-			  G_CALLBACK (tab_action_activate_cb), menu);
-
 	sync_tab_title (tab, NULL, action);
 	g_signal_connect (tab, "notify::title",
 			  G_CALLBACK (sync_tab_title), action);
@@ -160,8 +157,18 @@ tab_added_cb (EphyNotebook *notebook,
 	group = gtk_radio_action_get_group (GTK_RADIO_ACTION (priv->anchor_action));
 	gtk_radio_action_set_group (GTK_RADIO_ACTION (action), group);
 
+	/* set this here too, since tab-added comes after notify::active-tab */
+	if (ephy_window_get_active_tab (priv->window) == tab)
+	{
+		gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+	}
+
 	g_object_set_data (G_OBJECT (tab), DATA_KEY, action);
 	g_object_set_data (G_OBJECT (action), DATA_KEY, tab);
+
+	g_signal_connect (action, "activate",
+			  G_CALLBACK (tab_action_activate_cb), menu);
+
 	g_object_unref (action);
 
 	ephy_tabs_menu_update (menu);
@@ -175,8 +182,6 @@ tab_removed_cb (EphyNotebook *notebook,
 	EphyTabsMenuPrivate *priv = menu->priv;
 	GtkAction *action;
 													     
-	g_return_if_fail (EPHY_IS_TAB (tab));
-
 	LOG ("tab_removed_cb tab=%p", tab);
 
 	action = g_object_get_data (G_OBJECT (tab), DATA_KEY);
@@ -230,10 +235,11 @@ sync_active_tab (EphyWindow *window,
 	GtkAction *action;
 
 	tab = ephy_window_get_active_tab (window);
-	g_return_if_fail (tab != NULL);
-	if (tab == NULL) return;
 
 	LOG ("active tab is tab %p", tab);
+ 
+	g_return_if_fail (tab != NULL);
+	if (tab == NULL) return;
 
 	action = g_object_get_data (G_OBJECT (tab), DATA_KEY);
 	/* happens initially, since the ::active-tab comes before
