@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#include "ephy-embed-shell.h"
+
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
 #define MOZILLA_STRICT_API
