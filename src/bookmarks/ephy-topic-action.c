@@ -185,20 +185,18 @@ sort_bookmarks (gconstpointer a, gconstpointer b)
 	retval = g_utf8_collate (str_a, str_b);
 	g_free (str_a);
 	g_free (str_b);
-	
+
 	return retval;
 }
 
 #define MAX_LENGTH 32
 
-static GtkWidget *
-build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
+static void
+append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node)
 {
         EphyFaviconCache *cache;
-	GtkWidget *menu, *item;
+	GtkWidget *item;
 	GPtrArray *children;
-
-	menu = gtk_menu_new ();
 
         cache = EPHY_FAVICON_CACHE
 		(ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell)));
@@ -216,24 +214,24 @@ build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 	{
 		GList *node_list = NULL, *l;
 		int i;
-		
+
 		for (i = 0; i < children->len; ++i)
 		{
 			node_list = g_list_prepend (node_list,
 						   g_ptr_array_index (children, i));
 		}
-		
+
 		node_list = g_list_sort (node_list, (GCompareFunc)sort_bookmarks);
-	
+
 		for (l = g_list_first (node_list); l != NULL; l = g_list_next (l))
 		{
 			EphyNode *kid;
-                	const char *icon_location;
+			const char *icon_location;
 			const char *title;
 			char *title_short;
-	
+
 			kid = (EphyNode*)l->data;
-	
+
 			icon_location = ephy_node_get_property_string
 				(kid, EPHY_NODE_BMK_PROP_ICON);
 			title = ephy_node_get_property_string
@@ -241,13 +239,13 @@ build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 			if (title == NULL) continue;
 			title_short = ephy_string_shorten (title, MAX_LENGTH);
 			LOG ("Create menu for bookmark %s", title_short)
-	
+
 			item = gtk_image_menu_item_new_with_label (title_short);
 			if (icon_location)
 			{
 				GdkPixbuf *icon;
 				GtkWidget *image;
-	
+
 				icon = ephy_favicon_cache_get (cache, icon_location);
 				if (icon != NULL)
 				{
@@ -270,8 +268,18 @@ build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 
 		g_list_free (node_list);
 	}
-	
+
 	ephy_node_thaw (node);
+}
+
+static GtkWidget *
+build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
+{
+	GtkWidget *menu;
+
+	menu = gtk_menu_new ();
+
+	append_bookmarks_menu (action, menu, node);
 
 	return menu;
 }
@@ -286,28 +294,16 @@ sort_topics (gconstpointer a, gconstpointer b)
 	char *str_b = NULL;
 	int retval;
 
-	priority_a = ephy_node_get_property_int (node_a, EPHY_NODE_KEYWORD_PROP_PRIORITY);	
-	priority_b = ephy_node_get_property_int (node_b, EPHY_NODE_KEYWORD_PROP_PRIORITY);	
+	priority_a = ephy_node_get_property_int (node_a, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+	priority_b = ephy_node_get_property_int (node_b, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+	str_a = g_utf8_casefold (ephy_node_get_property_string (node_a, EPHY_NODE_KEYWORD_PROP_NAME),
+				 -1);
+	str_b = g_utf8_casefold (ephy_node_get_property_string (node_b, EPHY_NODE_KEYWORD_PROP_NAME),
+				 -1);
+	retval = g_utf8_collate (str_a, str_b);
+	g_free (str_a);
+	g_free (str_b);
 
-	if (priority_a < priority_b)
-	{
-		retval = -1;
-	}
-	else if (priority_a > priority_b)
-	{
-		retval = 1;
-	}
-	else
-	{
-		str_a = g_utf8_casefold (ephy_node_get_property_string (node_a, EPHY_NODE_KEYWORD_PROP_NAME),
-					 -1);
-		str_b = g_utf8_casefold (ephy_node_get_property_string (node_b, EPHY_NODE_KEYWORD_PROP_NAME),
-				         -1);
-		retval = g_utf8_collate (str_a, str_b);
-		g_free (str_a);
-		g_free (str_b);
-	}
-	
 	return retval;
 }
 
@@ -318,9 +314,8 @@ build_topics_menu (EphyTopicAction *action, EphyNode *node)
 	GPtrArray *children;
 	int i;
 	EphyBookmarks *bookmarks;
-	EphyNode *all;
+	EphyNode *all, *uncategorized;
 	EphyNodePriority priority;
-	char *markup_title = NULL;
 	GList *node_list = NULL, *l = NULL;
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
@@ -329,15 +324,22 @@ build_topics_menu (EphyTopicAction *action, EphyNode *node)
 	menu = gtk_menu_new ();
 
 	children = ephy_node_get_children (node);
-	
+
 	for (i = 0; i < children->len; ++i)
 	{
-		node_list = g_list_prepend (node_list,
-					   g_ptr_array_index (children, i));
+		EphyNode *kid;
+
+		kid = g_ptr_array_index (children, i);
+		priority = ephy_node_get_property_int
+			(kid, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+		if (priority == EPHY_NODE_NORMAL_PRIORITY)
+		{
+			node_list = g_list_prepend (node_list, kid);
+		}
 	}
-	
+
 	node_list = g_list_sort (node_list, (GCompareFunc)sort_topics);
-	
+
 	for (l = g_list_first (node_list); l != NULL; l = g_list_next (l))
 	{
 		EphyNode *kid;
@@ -349,21 +351,9 @@ build_topics_menu (EphyTopicAction *action, EphyNode *node)
 
 		title = ephy_node_get_property_string
 			(kid, EPHY_NODE_KEYWORD_PROP_NAME);
-		priority = ephy_node_get_property_int 
-			(kid, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 		LOG ("Create menu for topic %s", title);
 
-		if (priority == EPHY_NODE_ALL_PRIORITY ||
-		    priority == EPHY_NODE_SPECIAL_PRIORITY)
-		{
-			markup_title = g_strconcat ("<b>", title, "</b>", NULL);
-		}
-		else
-		{
-			markup_title = g_strdup (title);
-		}
-		item = gtk_image_menu_item_new_with_label (markup_title);
-		g_free (markup_title);
+		item = gtk_image_menu_item_new_with_label (title);
 
 		label = gtk_bin_get_child (GTK_BIN (item));
 		gtk_label_set_use_markup  (GTK_LABEL (label), TRUE);
@@ -377,6 +367,9 @@ build_topics_menu (EphyTopicAction *action, EphyNode *node)
 	}
 	ephy_node_thaw (node);
 	g_list_free (node_list);
+
+	uncategorized = ephy_bookmarks_get_not_categorized (bookmarks);
+	append_bookmarks_menu (action, menu, uncategorized);
 
 	return menu;
 }
