@@ -100,7 +100,9 @@ static void cmd_help_contents		  (GtkAction *action,
 					   EphyHistoryWindow *editor);
 
 #define EPHY_HISTORY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_HISTORY_WINDOW, EphyHistoryWindowPrivate))
+
 #define CONF_HISTORY_DATE_FILTER "/apps/epiphany/dialogs/history_date_filter"
+#define CONF_HISTORY_VIEW_DETAILS "/apps/epiphany/dialogs/history_view_details"
 
 struct EphyHistoryWindowPrivate
 {
@@ -117,6 +119,8 @@ struct EphyHistoryWindowPrivate
 	GtkActionGroup *action_group;
 	GtkWidget *confirmation_dialog;
 	EphyNode *selected_site;
+	GtkTreeViewColumn *title_col;
+	GtkTreeViewColumn *address_col;
 };
 
 enum
@@ -191,6 +195,27 @@ static GtkActionEntry ephy_history_ui_entries [] = {
 	  G_CALLBACK (window_cmd_help_about) },
 };
 static guint ephy_history_ui_n_entries = G_N_ELEMENTS (ephy_history_ui_entries);
+
+enum
+{
+	VIEW_TITLE,
+	VIEW_ADDRESS,
+	VIEW_TITLE_AND_ADDRESS
+};
+
+static GtkRadioActionEntry ephy_history_radio_entries [] =
+{
+	/* View Menu */
+	{ "ViewTitle", NULL, N_("_Title"), NULL,
+	  N_("Show only the title column"), VIEW_TITLE },
+	{ "ViewAddress", NULL, N_("_Address"), NULL,
+	  N_("Show only the address column"), VIEW_ADDRESS },
+	{ "ViewTitleAddress", NULL, N_("T_itle and Address"), NULL,
+	  N_("Show both the title and address columns"),
+	  VIEW_TITLE_AND_ADDRESS } 
+};
+static guint ephy_history_n_radio_entries = G_N_ELEMENTS (ephy_history_radio_entries);
+
 
 static void
 confirmation_dialog_response_cb (GtkDialog *dialog, gint response,
@@ -523,6 +548,52 @@ cmd_help_contents (GtkAction *action,
 	ephy_gui_help (GTK_WINDOW (editor),
 		       "epiphany", 
 		       "ephy-managing-history");
+}
+
+static void
+set_columns_visibility (EphyHistoryWindow *view, int value)
+{
+	switch (value)
+	{
+		case VIEW_TITLE:
+			gtk_tree_view_column_set_visible (view->priv->title_col, TRUE);
+			gtk_tree_view_column_set_visible (view->priv->address_col, FALSE);
+			break;
+		case VIEW_ADDRESS:
+			gtk_tree_view_column_set_visible (view->priv->title_col, FALSE);
+			gtk_tree_view_column_set_visible (view->priv->address_col, TRUE);
+			break;
+		case VIEW_TITLE_AND_ADDRESS:
+			gtk_tree_view_column_set_visible (view->priv->title_col, TRUE);
+			gtk_tree_view_column_set_visible (view->priv->address_col, TRUE);
+			break;
+	}
+}
+
+static void
+cmd_view_columns (GtkAction *action,
+		  GtkRadioAction *current,
+		  EphyHistoryWindow *view)
+{
+	int value;
+	GSList *svalues = NULL;
+
+	value = gtk_radio_action_get_current_value (current);
+	set_columns_visibility (view, value);
+
+	switch (value)
+	{
+		case VIEW_TITLE:
+			svalues = g_slist_append (svalues, (gpointer)"title");
+			break;
+		case VIEW_TITLE_AND_ADDRESS:
+			svalues = g_slist_append (svalues, (gpointer)"title");
+			svalues = g_slist_append (svalues, (gpointer)"address");
+			break;
+	}
+
+	eel_gconf_set_string_list (CONF_HISTORY_VIEW_DETAILS, svalues);
+	g_slist_free (svalues);
 }
 
 GType
@@ -1074,6 +1145,38 @@ view_selection_changed_cb (GtkWidget *view, EphyHistoryWindow *editor)
 	ephy_history_window_update_menu (editor);
 }
 
+static int
+get_details_value (void)
+{
+	int value;
+	GSList *svalues;
+
+	svalues = eel_gconf_get_string_list (CONF_HISTORY_VIEW_DETAILS);
+	if (svalues == NULL) return VIEW_TITLE_AND_ADDRESS;
+
+	if (g_slist_find_custom (svalues, "title", (GCompareFunc)strcmp) &&
+	    g_slist_find_custom (svalues, "address", (GCompareFunc)strcmp))
+	{
+		value = VIEW_TITLE_AND_ADDRESS;
+	}
+	else if (g_slist_find_custom (svalues, "title", (GCompareFunc)strcmp))
+	{
+		value = VIEW_TITLE;
+	}
+	else if (g_slist_find_custom (svalues, "address", (GCompareFunc)strcmp))
+	{
+		value = VIEW_ADDRESS;
+	}
+	else
+	{
+		value = VIEW_TITLE_AND_ADDRESS;
+	}
+
+	g_slist_free (svalues);
+
+	return value;
+}
+
 static void
 ephy_history_window_construct (EphyHistoryWindow *editor)
 {
@@ -1086,7 +1189,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
 	GdkPixbuf *icon;
-	int col_id;
+	int col_id, details_value;
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("History"));
 
@@ -1111,6 +1214,15 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	gtk_action_group_set_translation_domain (action_group, NULL);
 	gtk_action_group_add_actions (action_group, ephy_history_ui_entries,
 				      ephy_history_ui_n_entries, editor);
+
+	details_value = get_details_value ();
+	gtk_action_group_add_radio_actions (action_group,
+					    ephy_history_radio_entries,
+					    ephy_history_n_radio_entries,
+					    details_value,
+					    G_CALLBACK (cmd_view_columns), 
+					    editor);
+
 	gtk_ui_manager_insert_action_group (ui_merge,
 					    action_group, 0);
 	gtk_ui_manager_add_ui_from_file (ui_merge,
@@ -1207,10 +1319,12 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 				         -1, EPHY_NODE_VIEW_USER_SORT |
 					 EPHY_NODE_VIEW_SEARCHABLE, NULL);
 	gtk_tree_view_column_set_max_width (col, 250);
+	editor->priv->title_col = col;
 	col = ephy_node_view_add_column (EPHY_NODE_VIEW (pages_view), _("Address"),
 				         G_TYPE_STRING, EPHY_NODE_PAGE_PROP_LOCATION,
 				         -1, EPHY_NODE_VIEW_USER_SORT, NULL);
 	gtk_tree_view_column_set_max_width (col, 200);
+	editor->priv->address_col = col;
 	gtk_container_add (GTK_CONTAINER (scrolled_window), pages_view);
 	gtk_widget_show (pages_view);
 	editor->priv->pages_view = pages_view;
@@ -1239,6 +1353,8 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	ephy_state_add_paned  (GTK_WIDGET (hpaned),
 			       "history_paned",
 		               130);
+
+	set_columns_visibility (editor, details_value);
 
 	ephy_node_view_select_node (EPHY_NODE_VIEW (sites_view),
 				    ephy_history_get_pages (editor->priv->history));
