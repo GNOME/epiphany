@@ -95,6 +95,7 @@ static gpointer gtk_hbox_class;
  */
 enum EphyLocationEntrySignalsEnum {
 	ACTIVATED,
+	FINISHED,
 	LAST_SIGNAL
 };
 static gint EphyLocationEntrySignals[LAST_SIGNAL];
@@ -123,12 +124,23 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		2,
 		G_TYPE_STRING,
 		G_TYPE_STRING);
+	EphyLocationEntrySignals[FINISHED] = g_signal_new (
+		"finished", G_OBJECT_CLASS_TYPE (klass),
+		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST | G_SIGNAL_RUN_CLEANUP,
+                G_STRUCT_OFFSET (EphyLocationEntryClass, finished),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__VOID,
+		G_TYPE_NONE,
+		0,
+		G_TYPE_NONE);
 }
 
 static gboolean
 location_focus_out_cb (GtkWidget *widget, GdkEventFocus *event, EphyLocationEntry *w)
 {
 	w->priv->editing = FALSE;
+
+	g_signal_emit (w, EphyLocationEntrySignals[FINISHED], 0);
 
 	return FALSE;
 }
@@ -435,6 +447,8 @@ ephy_location_entry_activate_cb (GtkEntry *entry, EphyLocationEntry *w)
 	w->priv->editing = FALSE;
 
 	g_signal_emit (w, EphyLocationEntrySignals[ACTIVATED], 0, target, content);
+	g_signal_emit (w, EphyLocationEntrySignals[FINISHED], 0);
+
 	g_free (content);
 }
 

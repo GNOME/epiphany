@@ -1,3 +1,28 @@
+2003-05-13  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/mozilla/ExternalProtocolService.cpp:
+
+	Revert api change. So we keep 2.2 compatibility.
+
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_class_init), (location_focus_out_cb),
+	(ephy_location_entry_activate_cb):
+	* lib/widgets/ephy-location-entry.h:
+
+	Add a finished callback to know when the user finished
+	using location.
+
+	* src/bookmarks/ephy-bookmarks.c: (history_site_visited_cb),
+	(ephy_bookmarks_set_icon):
+
+	Remove unused vars. Bad xan.
+
+	* src/toolbar.c: (location_finished_cb),
+	(toolbar_activate_location):
+
+	Show the toolbar on ctrl+l, hide it again when the user
+	finished to edit (focus out/activate)
+
 2003-05-13  David Bordoley <bordoley@msu.edu>
 
 	* src/bookmarks/ephy-new-bookmark.c: (duplicate_dialog_construct),

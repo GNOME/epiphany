@@ -52,6 +52,7 @@ struct _EphyLocationEntryClass
 	void		(*activated)	(EphyLocationEntry *w,
 					 const char *content,
 					 const char *target);
+	void		(*finished)	(EphyLocationEntry *w);
 };
 
 /* Remember: fields are public read-only */

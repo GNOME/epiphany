@@ -36,6 +36,7 @@
 #include "ephy-debug.h"
 #include "ephy-new-bookmark.h"
 #include "ephy-stock-icons.h"
+#include "eggtoolbar.h"
 
 #include <string.h>
 
@@ -565,17 +566,38 @@ toolbar_edit_location (Toolbar *t)
 		(EPHY_LOCATION_ENTRY(location));
 }
 
+static void
+location_finished_cb (GtkWidget *location, GtkWidget *toolbar)
+{
+	gtk_widget_hide (toolbar);
+
+	g_signal_handlers_disconnect_by_func (G_OBJECT (location),
+                                              G_CALLBACK (location_finished_cb),
+                                              toolbar);
+}
+
 void
 toolbar_activate_location (Toolbar *t)
 {
 	EggAction *action;
 	GtkWidget *location;
+	GtkWidget *location_tb;
 
 	action = egg_action_group_get_action
 		(t->priv->action_group, "Location");
 	location = ephy_location_action_get_widget
 		(EPHY_LOCATION_ACTION (action));
 	g_return_if_fail (location != NULL);
+
+	location_tb = gtk_widget_get_ancestor (location, EGG_TYPE_TOOLBAR);
+	g_return_if_fail (location_tb != NULL);
+
+	if (!GTK_WIDGET_VISIBLE (location_tb))
+	{
+		g_signal_connect (location, "finished",
+				  G_CALLBACK (location_finished_cb), location_tb);
+		gtk_widget_show (location_tb);
+	}
 
 	ephy_location_entry_activate
 		(EPHY_LOCATION_ENTRY(location));
