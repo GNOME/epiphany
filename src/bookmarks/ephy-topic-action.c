@@ -192,7 +192,7 @@ sort_bookmarks (gconstpointer a, gconstpointer b)
 #define MAX_LENGTH 32
 
 static void
-append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node)
+append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node, gboolean show_empty)
 {
         EphyFaviconCache *cache;
 	GtkWidget *item;
@@ -203,7 +203,7 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node)
 
 	children = ephy_node_get_children (node);
 
-	if (children->len < 1)
+	if (children->len < 1 && show_empty)
 	{
 		item = gtk_menu_item_new_with_label (_("Empty"));
 		gtk_widget_set_sensitive (item, FALSE);
@@ -279,7 +279,7 @@ build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 
 	menu = gtk_menu_new ();
 
-	append_bookmarks_menu (action, menu, node);
+	append_bookmarks_menu (action, menu, node, TRUE);
 
 	return menu;
 }
@@ -369,7 +369,7 @@ build_topics_menu (EphyTopicAction *action, EphyNode *node)
 	g_list_free (node_list);
 
 	uncategorized = ephy_bookmarks_get_not_categorized (bookmarks);
-	append_bookmarks_menu (action, menu, uncategorized);
+	append_bookmarks_menu (action, menu, uncategorized, FALSE);
 
 	return menu;
 }

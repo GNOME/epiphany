@@ -1,5 +1,17 @@
 2003-07-22  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-tab.c: (ephy_tab_set_title):
+
+	If the page is about:blank, set title to "Blank page", not "about:blank".
+
+	* src/bookmarks/ephy-topic-action.c: (append_bookmarks_menu),
+	(build_topics_menu):
+
+	If there are no uncategorised bookmarks, don't append insensitive
+	"Empty" menu item after the topics.
+
+2003-07-22  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/ephy-event-box.h:
 	* lib/widgets/ephy-event-box.c:
 

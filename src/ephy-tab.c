@@ -1139,7 +1139,7 @@ ephy_tab_set_title (EphyTab *tab, const char *new_title)
 					GNOME_VFS_URI_HIDE_FRAGMENT_IDENTIFIER);
 			gnome_vfs_uri_unref (uri);
 		}
-		else if (address != NULL)
+		else if (address != NULL && strncmp (address, "about:blank", 11) != 0)
 		{
 			title = g_strdup (address);
 		}
@@ -1149,7 +1149,6 @@ ephy_tab_set_title (EphyTab *tab, const char *new_title)
 			g_free (title);
 			title = g_strdup (_("Blank page"));
 		}
-
 
 		g_free (address);
 	}
