@@ -9,6 +9,7 @@ NOINST_H_FILES = \
 	downloader-view.h		\
 	ephy-download.h			\
 	ephy-embed-dialog.h		\
+	ephy-encodings.h		\
 	ephy-favicon-cache.h		\
 	find-dialog.h			\
 	print-dialog.h
@@ -23,7 +24,6 @@ INST_H_FILES = \
 	ephy-embed-prefs.h		\
 	ephy-embed-single.h		\
 	ephy-embed-shell.h		\
-	ephy-encodings.h		\
 	ephy-history.h			\
 	ephy-password-manager.h		\
 	ephy-permission-manager.h
