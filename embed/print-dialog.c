@@ -22,6 +22,7 @@
 #include "ephy-prefs.h"
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkstock.h>
+#include <libgnomevfs/gnome-vfs-utils.h>
 
 #define CONF_PRINT_BOTTOM_MARGIN "/apps/epiphany/dialogs/print_bottom_margin"
 #define CONF_PRINT_TOP_MARGIN "/apps/epiphany/dialogs/print_top_margin"
@@ -299,7 +300,7 @@ print_get_info (EphyDialog *dialog)
 	g_value_unset (&printer);
 
 	ephy_dialog_get_value (dialog, FILE_PROP, &file);
-	info->file = g_strdup (g_value_get_string (&file));
+	info->file = gnome_vfs_expand_initial_tilde (g_value_get_string (&file));
 	g_value_unset (&file);
 
 	ephy_dialog_get_value (dialog, BOTTOM_PROP, &bottom_margin);
