@@ -512,6 +512,12 @@ session_save (Session *session,
 
 	save_to = get_session_filename (filename);
 
+	if (session->priv->windows == NULL)
+	{
+		session_delete (session, filename);
+		return;
+	}
+
         doc = xmlNewDoc ("1.0");
 
         /* create and set the root node for the session */
