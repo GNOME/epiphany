@@ -507,6 +507,7 @@ mozilla_embed_single_dispose (GObject *object)
 	{
 		single->priv->mSingleObserver->Detach ();
 		NS_RELEASE (single->priv->mSingleObserver);
+		single->priv->mSingleObserver = nsnull;
 	}
 }
 
