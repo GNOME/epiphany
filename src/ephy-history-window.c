@@ -886,7 +886,7 @@ add_by_date_filter (EphyHistoryWindow *editor,
 {
 	time_t now, midnight, cmp_time = 0;
 	struct tm btime;
-	int time_range;
+	int time_range, days = 0;
 
 	time_range = gtk_combo_box_get_active
 		(GTK_COMBO_BOX (editor->priv->time_combo));
@@ -906,29 +906,28 @@ add_by_date_filter (EphyHistoryWindow *editor,
 	switch (time_range)
 	{
 		case TIME_LAST_THREE_DAYS:
-			/* subtract 1 day */
-			midnight -= 43200;
-			localtime_r (&midnight, &btime);
-			btime.tm_sec = 0;
-			btime.tm_min = 0;
-			btime.tm_hour = 0;
-			midnight = mktime (&btime);
+			days++;
 			/* fall-through */
 		case TIME_LAST_TWO_DAYS:
-			/* subtract 1 day */
-			midnight -= 43200;
-			localtime_r (&midnight, &btime);
-			btime.tm_sec = 0;
-			btime.tm_min = 0;
-			btime.tm_hour = 0;
-			midnight = mktime (&btime);
+			days++;
 			/* fall-through */
-  		case TIME_TODAY:
-  			cmp_time = midnight;
-  			break;
+		case TIME_TODAY:
+			cmp_time = midnight;
+			break;
 		default:
 			g_return_if_reached ();
 			break;
+	}
+
+	while (--days >= 0)
+	{
+		/* subtract 1 day */
+		cmp_time -= 43200;
+		localtime_r (&cmp_time, &btime);
+		btime.tm_sec = 0;
+		btime.tm_min = 0;
+		btime.tm_hour = 0;
+		cmp_time = mktime (&btime);
 	}
 
 	ephy_node_filter_add_expression
