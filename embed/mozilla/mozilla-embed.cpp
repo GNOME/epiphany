@@ -349,7 +349,7 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 static void
 mozilla_embed_init (MozillaEmbed *embed)
 {
-        embed->priv = new MozillaEmbedPrivate;
+        embed->priv = g_new0 (MozillaEmbedPrivate, 1);
 
 	mozilla_embed_connect_signals (embed);
 }
