@@ -18,7 +18,8 @@
 
 #include "ephy-toolbars-model.h"
 #include "ephy-dnd.h"
-#include "ephy-new-bookmark.h"
+#include "ephy-bookmarks.h"
+#include "ephy-node-common.h"
 #include "ephy-file-helpers.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
@@ -76,6 +77,42 @@ ephy_toolbars_model_get_type (void)
 	return ephy_toolbars_model_type;
 }
 
+char *
+ephy_toolbars_model_get_action_name (EphyToolbarsModel *model,
+				     gboolean topic, long id)
+{
+	char *action_name;
+	const char *name;
+	EphyNode *node;
+	EphyNodePriority priority;
+
+	node = ephy_bookmarks_get_from_id (model->priv->bookmarks, id);
+	priority = ephy_node_get_property_int
+		(node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+
+	if (topic)
+	{
+		if (priority != EPHY_NODE_NORMAL_PRIORITY)
+		{
+			action_name = g_strdup_printf ("GoSpecialTopic-%ld", id);
+		}
+		else
+		{
+			name = ephy_node_get_property_string
+				(node, EPHY_NODE_KEYWORD_PROP_NAME);
+			action_name = g_strdup_printf ("GoTopic-%s", name);
+		}
+	}
+	else
+	{
+		name = ephy_node_get_property_string
+			(node, EPHY_NODE_BMK_PROP_LOCATION);
+		action_name = g_strdup_printf ("GoBookmark-%s", name);
+	}
+
+	return action_name;
+}
+
 static const char *
 impl_add_item (EggToolbarsModel *t,
 	       int toolbar_position,
@@ -86,7 +123,7 @@ impl_add_item (EggToolbarsModel *t,
 	char *action_name = NULL;
 	const char *res;
 	gboolean topic = FALSE, normal_item = FALSE;
-	int id = -1;
+	long id = -1;
 
 	LOG ("Add item %s", name)
 
@@ -97,7 +134,8 @@ impl_add_item (EggToolbarsModel *t,
 		topic = TRUE;
 		nodes = ephy_dnd_node_list_extract_nodes (name);
 		id = ephy_node_get_id (nodes->data);
-		action_name = g_strdup_printf ("GoTopicId%d", id);
+		action_name = ephy_toolbars_model_get_action_name
+			(EPHY_TOOLBARS_MODEL (t), TRUE, id);
 		g_list_free (nodes);
 	}
 	else if (gdk_atom_intern (EPHY_DND_BOOKMARK_TYPE, FALSE) == type)
@@ -106,7 +144,8 @@ impl_add_item (EggToolbarsModel *t,
 
 		nodes = ephy_dnd_node_list_extract_nodes (name);
 		id = ephy_node_get_id (nodes->data);
-		action_name = g_strdup_printf ("GoBookmarkId%d", id);
+		action_name = ephy_toolbars_model_get_action_name
+			(EPHY_TOOLBARS_MODEL (t), FALSE, id);
 		g_list_free (nodes);
 	}
 	else
@@ -231,7 +270,7 @@ ephy_toolbars_model_init (EphyToolbarsModel *t)
 	t->priv->bookmarks = NULL;
 
 	t->priv->xml_file = g_build_filename (ephy_dot_dir (),
-                                              "ephy-toolbar.xml",
+                                              "ephy-toolbars.xml",
                                               NULL);
 
 	if (g_file_test (t->priv->xml_file, G_FILE_TEST_EXISTS))
@@ -311,23 +350,6 @@ get_item_pos (EphyToolbarsModel *model,
 	return -1;
 }
 
-static char *
-get_action_name (gboolean topic, gulong id)
-{
-	char *action_name;
-
-	if (topic)
-	{
-		action_name = g_strdup_printf ("GoTopicId%ld", id);
-	}
-	else
-	{
-		action_name = g_strdup_printf ("GoBookmarkId%ld", id);
-	}
-
-	return action_name;
-}
-
 static int
 get_toolbar_pos (EphyToolbarsModel *model,
 		 const char *name)
@@ -355,12 +377,12 @@ get_toolbar_pos (EphyToolbarsModel *model,
 void
 ephy_toolbars_model_remove_bookmark (EphyToolbarsModel *model,
 				     gboolean topic,
-				     gulong id)
+				     long id)
 {
 	char *action_name;
 	int toolbar_position, position;
 
-	action_name = get_action_name (topic, id);
+	action_name = ephy_toolbars_model_get_action_name (model, topic, id);
 
 	toolbar_position = get_toolbar_pos (model, "BookmarksBar");
 	g_return_if_fail (toolbar_position != -1);
@@ -376,12 +398,12 @@ ephy_toolbars_model_remove_bookmark (EphyToolbarsModel *model,
 void
 ephy_toolbars_model_add_bookmark (EphyToolbarsModel *model,
 				  gboolean topic,
-				  gulong id)
+				  long id)
 {
 	char *action_name;
 	int toolbar_position;
 
-	action_name = get_action_name (topic, id);
+	action_name = ephy_toolbars_model_get_action_name (model, topic, id);
 
 	toolbar_position = get_toolbar_pos (model, "BookmarksBar");
 	g_return_if_fail (toolbar_position != -1);
@@ -396,12 +418,12 @@ ephy_toolbars_model_add_bookmark (EphyToolbarsModel *model,
 gboolean
 ephy_toolbars_model_has_bookmark (EphyToolbarsModel *model,
 				  gboolean topic,
-				  gulong id)
+				  long id)
 {
 	char *action_name;
 	int toolbar_position, position;
 
-	action_name = get_action_name (topic, id);
+	action_name = ephy_toolbars_model_get_action_name (model, topic, id);
 
 	toolbar_position = get_toolbar_pos (model, "BookmarksBar");
 	g_return_val_if_fail (toolbar_position != -1, FALSE);
