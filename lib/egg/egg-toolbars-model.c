@@ -146,7 +146,7 @@ safe_save_xml (const char *xml_file, xmlDocPtr doc)
 	tmp_file = g_strconcat (xml_file, ".tmp", NULL);
 	old_file = g_strconcat (xml_file, ".old", NULL);
 
-	if (!xmlSaveFormatFile (tmp_file, doc, 1))
+	if (xmlSaveFormatFile (tmp_file, doc, 1) <= 0)
 	{
 		g_warning ("Failed to write XML data to %s", tmp_file);
 		goto failed;
@@ -441,6 +441,11 @@ egg_toolbars_model_load (EggToolbarsModel *t,
   g_return_if_fail (IS_EGG_TOOLBARS_MODEL (t));
 
   doc = xmlParseFile (xml_file);
+  if (doc == NULL)
+  {
+    g_warning ("Failed to load XML data from %s", xml_file);
+    return;
+  }
   root = xmlDocGetRootElement (doc);
 
   t->priv->toolbars = g_node_new (NULL);
