@@ -525,7 +525,7 @@ session_save (Session *session,
 
 		for (l = tabs; l != NULL; l = l->next)
 	        {
-			EphyTab *tab = EPHY_TAB(tabs->data);
+			EphyTab *tab = EPHY_TAB(l->data);
 			save_tab (window, tab, doc, window_node);
 		}
 		g_list_free (tabs);
