@@ -119,8 +119,8 @@ ephy_embed_single_iface_init (gpointer g_class)
 
 /**
  * EphyEmbedSingle::check_content:
- * @single:
- * @type: the type of content
+ * @single: the #EphyEmbedSingle
+ * @type: the type of content (an #EphyContentCheckType)
  * @address: the address of the content
  * @requesting_address: the address of the requesting content (may be empty)
  * @mime_type_guess: a guess of the mime type of the content (may be empty)
