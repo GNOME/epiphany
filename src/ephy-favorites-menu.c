@@ -133,16 +133,20 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *menu)
 	{
 		char verb[20];
 		char name[20];
+		char accel_path[48];
 		EphyNode *node;
 		GtkAction *action;
 
-		g_sprintf (verb, "GoFav%d", i);
-		g_sprintf (name, "GoFav%dMenu", i);
+		g_snprintf (verb, sizeof (verb),"GoFav%d", i);
+		g_snprintf (name, sizeof (name), "GoFav%dMenu", i);
+		g_snprintf (accel_path, sizeof (accel_path),
+			    "<Actions>/FavoritesActions/%s", verb);
 
 		node = g_ptr_array_index (children, i);
 
 		action = ephy_bookmark_action_new (verb,
 						   ephy_node_get_id (node));
+		gtk_action_set_accel_path (action, accel_path);
 		gtk_action_group_add_action (p->action_group, action);
 		g_object_unref (action);
 		g_signal_connect (action, "go_location",
