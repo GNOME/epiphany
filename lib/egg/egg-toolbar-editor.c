@@ -603,7 +603,7 @@ egg_toolbar_editor_init (EggToolbarEditor *t)
   setup_editor (t);
 }
 
-static void
+void
 egg_toolbar_editor_add_action (EggToolbarEditor *editor,
 			       const char       *action_name)
 {

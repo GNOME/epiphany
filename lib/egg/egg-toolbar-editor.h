@@ -59,6 +59,9 @@ GtkWidget        *egg_toolbar_editor_new          (GtkUIManager *merge,
 void              egg_toolbar_editor_load_actions (EggToolbarEditor *editor,
 						   const char       *xml_file);
 
+void		  egg_toolbar_editor_add_action	  (EggToolbarEditor *editor,
+						   const char *action_name);
+
 G_END_DECLS
 
 #endif
