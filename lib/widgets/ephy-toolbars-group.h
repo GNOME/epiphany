@@ -80,7 +80,7 @@ EphyToolbarsToolbar    *ephy_toolbars_group_add_toolbar		(EphyToolbarsGroup *t);
 
 void			ephy_toolbars_group_add_item		(EphyToolbarsGroup *t,
 								 EphyToolbarsToolbar *parent,
-								 EphyToolbarsItem *sibling,
+								 int pos,
 								 const char *name);
 
 void			ephy_toolbars_group_remove_toolbar	(EphyToolbarsGroup *t,

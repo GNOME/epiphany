@@ -1,3 +1,31 @@
+2003-03-31  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/egg/eggtoolbar.c: (egg_toolbar_class_init),
+	(egg_toolbar_init), (egg_toolbar_unrealize), (egg_toolbar_expose),
+	(egg_toolbar_size_allocate), (find_drop_pos),
+	(egg_toolbar_drag_leave), (egg_toolbar_drag_motion),
+	(egg_toolbar_get_item_index), (egg_toolbar_get_show_arrow),
+	(egg_toolbar_get_drop_index):
+	* lib/egg/eggtoolbar.h:
+	* lib/egg/eggtoolitem.c: (egg_tool_item_get_type),
+	(egg_tool_item_class_init), (create_drag_window),
+	(egg_tool_item_realize), (egg_tool_item_unrealize),
+	(egg_tool_item_map), (egg_tool_item_unmap),
+	(egg_tool_item_size_allocate), (egg_tool_item_set_tooltip),
+	(egg_tool_item_set_use_drag_window):
+	* lib/egg/eggtoolitem.h:
+	* lib/widgets/ephy-editable-toolbar.c: (drag_data_received_cb),
+	(drag_data_get_cb), (connect_item_drag_source),
+	(disconnect_item_drag_source), (popup_toolbar_context_menu),
+	(setup_toolbar), (do_merge), (ephy_editable_toolbar_init),
+	(hide_editor), (update_editor_sheet), (show_editor):
+	* lib/widgets/ephy-toolbars-group.c: (add_action),
+	(ephy_toolbars_group_add_item), (parse_item_list):
+	* lib/widgets/ephy-toolbars-group.h:
+
+	Use the new EggToolbar apis. Better drop feedback,
+	separators drag and code cleanups.
+
 2003-03-30  David Bordoley <bordoley@msu.edu>
 
 	* src/bookmarks/ephy-bookmark-properties.c: (build_ui):

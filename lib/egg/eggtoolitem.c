@@ -21,6 +21,7 @@
 
 #include "eggtoolitem.h"
 #include "eggmarshalers.h"
+#include <gtk/gtkseparatormenuitem.h>
 
 #ifndef _
 #  define _(s) (s)
@@ -57,6 +58,10 @@ static void egg_tool_item_get_property (GObject         *object,
 					GValue          *value,
 					GParamSpec      *pspec);
 
+static void egg_tool_item_realize       (GtkWidget      *widget);
+static void egg_tool_item_unrealize     (GtkWidget      *widget);
+static void egg_tool_item_map           (GtkWidget      *widget);
+static void egg_tool_item_unmap         (GtkWidget      *widget);
 static void egg_tool_item_size_request  (GtkWidget      *widget,
 					 GtkRequisition *requisition);
 static void egg_tool_item_size_allocate (GtkWidget      *widget,
@@ -71,7 +76,7 @@ static guint         toolitem_signals[LAST_SIGNAL] = { 0 };
 GType
 egg_tool_item_get_type (void)
 {
-  static GType type = 0;
+  static GtkType type = 0;
 
   if (!type)
     {
@@ -125,7 +130,11 @@ egg_tool_item_class_init (EggToolItemClass *klass)
   object_class->set_property = egg_tool_item_set_property;
   object_class->get_property = egg_tool_item_get_property;
 
-  widget_class->size_request = egg_tool_item_size_request;
+  widget_class->realize       = egg_tool_item_realize;
+  widget_class->unrealize     = egg_tool_item_unrealize;
+  widget_class->map           = egg_tool_item_map;
+  widget_class->unmap         = egg_tool_item_unmap;
+  widget_class->size_request  = egg_tool_item_size_request;
   widget_class->size_allocate = egg_tool_item_size_allocate;
 
   klass->create_menu_proxy = egg_tool_item_create_menu_proxy;
@@ -280,6 +289,92 @@ egg_tool_item_get_property (GObject         *object,
 }
 
 static void
+create_drag_window (EggToolItem *toolitem)
+{
+  GtkWidget *widget;
+  GdkWindowAttr attributes;
+  gint attributes_mask, border_width;
+
+  g_return_if_fail (toolitem->use_drag_window == TRUE);
+
+  widget = GTK_WIDGET (toolitem);
+  border_width = GTK_CONTAINER (toolitem)->border_width;
+
+  attributes.window_type = GDK_WINDOW_CHILD;
+  attributes.x = widget->allocation.x + border_width;
+  attributes.y = widget->allocation.y + border_width;
+  attributes.width = widget->allocation.width - border_width * 2;
+  attributes.height = widget->allocation.height - border_width * 2;
+  attributes.wclass = GDK_INPUT_ONLY;
+  attributes.event_mask = gtk_widget_get_events (widget);
+  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
+
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
+
+  toolitem->drag_window = gdk_window_new (gtk_widget_get_parent_window (widget),
+					  &attributes, attributes_mask);
+  gdk_window_set_user_data (toolitem->drag_window, toolitem);
+}
+
+static void
+egg_tool_item_realize (GtkWidget *widget)
+{
+  EggToolItem *toolitem;
+
+  toolitem = EGG_TOOL_ITEM (widget);
+  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+
+  widget->window = gtk_widget_get_parent_window (widget);
+  g_object_ref (widget->window);
+
+  if (toolitem->use_drag_window)
+    create_drag_window(toolitem);
+
+  widget->style = gtk_style_attach (widget->style, widget->window);
+}
+
+static void
+egg_tool_item_unrealize (GtkWidget *widget)
+{
+  EggToolItem *toolitem;
+
+  toolitem = EGG_TOOL_ITEM (widget);
+
+  if (toolitem->drag_window)
+    {
+      gdk_window_set_user_data (toolitem->drag_window, NULL);
+      gdk_window_destroy (toolitem->drag_window);
+      toolitem->drag_window = NULL;
+    }
+  GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
+}
+
+static void
+egg_tool_item_map (GtkWidget *widget)
+{
+  EggToolItem *toolitem;
+
+  toolitem = EGG_TOOL_ITEM (widget);
+  GTK_WIDGET_CLASS (parent_class)->map (widget);
+  if (toolitem->drag_window)
+    {
+      gdk_window_raise (toolitem->drag_window);
+      gdk_window_show (toolitem->drag_window);
+    }
+}
+
+static void
+egg_tool_item_unmap (GtkWidget *widget)
+{
+  EggToolItem *toolitem;
+
+  toolitem = EGG_TOOL_ITEM (widget);
+  if (toolitem->drag_window)
+    gdk_window_hide (toolitem->drag_window);
+  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+}
+
+static void
 egg_tool_item_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
 {
@@ -296,19 +391,30 @@ static void
 egg_tool_item_size_allocate (GtkWidget     *widget,
 			     GtkAllocation *allocation)
 {
-  GtkBin *bin = GTK_BIN (widget);
+  EggToolItem *toolitem = EGG_TOOL_ITEM (widget);
   GtkAllocation child_allocation;
+  gint border_width;
+  GtkWidget *child;
 
   widget->allocation = *allocation;
+  border_width = GTK_CONTAINER (widget)->border_width;
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (toolitem->drag_window && GTK_WIDGET_REALIZED (widget))
+    gdk_window_move_resize (toolitem->drag_window,
+                            widget->allocation.x + border_width,
+                            widget->allocation.y + border_width,
+                            widget->allocation.width - border_width * 2,
+                            widget->allocation.height - border_width * 2);
+  
+  child = GTK_BIN (toolitem)->child;
+  if (child && GTK_WIDGET_VISIBLE (child))
     {
-      child_allocation.x = allocation->x + GTK_CONTAINER (widget)->border_width;
-      child_allocation.y = allocation->y + GTK_CONTAINER (widget)->border_width;
-      child_allocation.width = allocation->width - GTK_CONTAINER (widget)->border_width * 2;
-      child_allocation.height = allocation->height - GTK_CONTAINER (widget)->border_width * 2;
+      child_allocation.x = allocation->x + border_width;
+      child_allocation.y = allocation->y + border_width;
+      child_allocation.width = allocation->width - border_width * 2;
+      child_allocation.height = allocation->height - border_width * 2;
       
-      gtk_widget_size_allocate (bin->child, &child_allocation);
+      gtk_widget_size_allocate (child, &child_allocation);
     }
 }
 
@@ -413,4 +519,32 @@ egg_tool_item_set_tooltip (EggToolItem *tool_item,
 
   g_signal_emit (tool_item, toolitem_signals[SET_TOOLTIP], 0,
 		 tooltips, tip_text, tip_private);
+}
+
+void
+egg_tool_item_set_use_drag_window (EggToolItem *toolitem,
+				   gboolean     use_drag_window)
+{
+  g_return_if_fail (EGG_IS_TOOL_ITEM (toolitem));
+
+  toolitem->use_drag_window = use_drag_window;
+
+  if (use_drag_window)
+    {
+      if (!toolitem->drag_window && GTK_WIDGET_REALIZED (toolitem))
+	{
+	  create_drag_window(toolitem);
+	  if (GTK_WIDGET_MAPPED (toolitem))
+	    gdk_window_show (toolitem->drag_window);
+	}
+    }
+  else
+    {
+      if (toolitem->drag_window)
+	{
+	  gdk_window_set_user_data (toolitem->drag_window, NULL);
+	  gdk_window_destroy (toolitem->drag_window);
+	  toolitem->drag_window = NULL;
+	}
+   }
 }

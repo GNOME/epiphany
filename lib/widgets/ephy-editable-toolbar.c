@@ -29,18 +29,26 @@
 #include <libgnome/gnome-i18n.h>
 #include <string.h>
 
+enum
+{
+	X_TOOLBAR_ITEM
+};
+
 static GtkTargetEntry dest_drag_types [] =
 {
-        { "EPHY_TOOLBAR_BUTTON", 0, 0 },
+        { "application/x-toolbar-item", 0, X_TOOLBAR_ITEM },
 	/* FIXME generic way to add types */
-        { EPHY_DND_URL_TYPE, 0, 1 },
+        { EPHY_DND_URL_TYPE, 0, 2 },
         { EPHY_DND_TOPIC_TYPE, 0, 2 }
 };
+static int n_dest_drag_types = G_N_ELEMENTS (dest_drag_types);
 
 static GtkTargetEntry source_drag_types [] =
 {
-        { "EPHY_TOOLBAR_BUTTON", 0, 0 }
+        { "application/x-toolbar-item", 0, X_TOOLBAR_ITEM },
 };
+
+static int n_source_drag_types = G_N_ELEMENTS (source_drag_types);
 
 enum
 {
@@ -238,31 +246,20 @@ drag_data_received_cb (GtkWidget *widget,
 		       EphyEditableToolbar *etoolbar)
 {
 	EphyToolbarsToolbar *toolbar;
-	EphyToolbarsToolbar *parent;
-	EphyToolbarsItem *sibling;
 	const char *type = NULL;
 	GdkAtom target;
 	EggAction *action = NULL;
+	int pos;
 
 	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
 
-	LOG ("Drag data received")
+	LOG ("Drag data received %s", selection_data->data)
 
 	toolbar = (EphyToolbarsToolbar *)g_object_get_data (G_OBJECT (widget), "toolbar_data");
+	pos = egg_toolbar_get_drop_index (EGG_TOOLBAR (widget), x, y);
 
-	if (!toolbar)
-	{
-		sibling = (EphyToolbarsItem *)g_object_get_data (G_OBJECT (widget), "item_data");
-		g_return_if_fail (sibling != NULL);
-		parent = sibling->parent;
-	}
-	else
-	{
-		sibling = NULL;
-		parent = toolbar;
-	}
-
-	g_return_if_fail (parent != NULL);
+	/* HACK placeholder are implemented as separators */
+	pos = pos/3 + 1;
 
 	target = gtk_drag_dest_find_target (widget, context, NULL);
 	if (target == gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE))
@@ -293,11 +290,18 @@ drag_data_received_cb (GtkWidget *widget,
 
 	if (action)
 	{
-		ephy_toolbars_group_add_item (etoolbar->priv->group, parent, sibling,
+		ephy_toolbars_group_add_item (etoolbar->priv->group, toolbar, pos,
 					      action->name);
 		etoolbar->priv->toolbars_dirty = TRUE;
-		queue_ui_update (etoolbar);
 	}
+	else if (strcmp (selection_data->data, "separator") == 0)
+	{
+		ephy_toolbars_group_add_item (etoolbar->priv->group, toolbar, pos,
+					      "separator");
+		etoolbar->priv->toolbars_dirty = TRUE;
+	}
+
+	queue_ui_update (etoolbar);
 }
 
 static void
@@ -331,9 +335,17 @@ drag_data_get_cb (GtkWidget *widget,
 	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
 
 	action = EGG_ACTION (g_object_get_data (G_OBJECT (widget), "egg-action"));
-	target = action->name;
 
-	LOG ("Drag data get %s", action->name);
+	if (action)
+	{
+		LOG ("Drag data get %s", action->name);
+		target = action->name;
+	}
+	else
+	{
+		LOG ("Drag data get %s", separator);
+		target = "separator";
+	}
 
 	gtk_selection_data_set (selection_data,
 				selection_data->target,
@@ -431,6 +443,13 @@ connect_item_drag_source (EphyToolbarsItem *item, EphyEditableToolbar *etoolbar)
 		g_object_set_data (G_OBJECT (toolitem), "drag_source_set",
 				   GINT_TO_POINTER (TRUE));
 
+		egg_tool_item_set_use_drag_window (EGG_TOOL_ITEM (toolitem), TRUE);
+
+		g_object_set_data (G_OBJECT (toolitem), "item_data", item);
+
+		gtk_drag_source_set (toolitem, GDK_BUTTON1_MASK,
+				     source_drag_types, n_source_drag_types,
+				     GDK_ACTION_MOVE);
 		g_signal_connect (toolitem, "drag_data_get",
 				  G_CALLBACK (drag_data_get_cb),
 				  etoolbar);
@@ -454,6 +473,8 @@ disconnect_item_drag_source (EphyToolbarsItem *item, EphyEditableToolbar *etoolb
 	{
 		g_object_set_data (G_OBJECT (toolitem), "drag_source_set",
 				   GINT_TO_POINTER (FALSE));
+
+		egg_tool_item_set_use_drag_window (EGG_TOOL_ITEM (toolitem), FALSE);
 
 		g_signal_handlers_disconnect_by_func (toolitem,
 						      G_CALLBACK (drag_data_get_cb),
@@ -524,7 +545,7 @@ static void
 popup_toolbar_context_menu (EggToolbar *toolbar, ContextMenuData *data)
 {
 	GtkWidget *widget;
-	
+
 	widget = egg_menu_merge_get_widget (data->etoolbar->priv->popup_merge,
 					    "/popups/EphyToolbarPopup");
 
@@ -556,7 +577,7 @@ setup_toolbar (EphyToolbarsToolbar *toolbar, EphyEditableToolbar *etoolbar)
 		g_object_set_data (G_OBJECT (widget), "drag_dest_set",
 				   GINT_TO_POINTER (TRUE));
 		gtk_drag_dest_set (widget, GTK_DEST_DEFAULT_ALL,
-				   dest_drag_types, 3,
+				   dest_drag_types, n_dest_drag_types,
 				   GDK_ACTION_MOVE | GDK_ACTION_COPY);
 		g_signal_connect (widget, "drag_data_received",
 				  G_CALLBACK (drag_data_received_cb),
@@ -579,38 +600,6 @@ setup_toolbar (EphyToolbarsToolbar *toolbar, EphyEditableToolbar *etoolbar)
 	}
 
 	etoolbar->priv->last_toolbar = widget;
-}
-
-static void
-setup_item (EphyToolbarsItem *item, EphyEditableToolbar *etoolbar)
-{
-	GtkWidget *toolitem;
-	char *path;
-
-	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
-	g_return_if_fail (item != NULL);
-
-	path = ephy_toolbars_group_get_path (etoolbar->priv->group, item);
-	g_return_if_fail (path != NULL);
-
-	toolitem = get_item_widget (etoolbar, item);
-	g_object_set_data (G_OBJECT (toolitem), "item_data", item);
-
-	LOG ("Setup drag dest for toolbar item %s %p", path, toolitem);
-
-	if (!g_object_get_data (G_OBJECT (toolitem), "drag_dest_set"))
-	{
-		g_object_set_data (G_OBJECT (toolitem), "drag_dest_set",
-				   GINT_TO_POINTER (TRUE));
-		gtk_drag_dest_set (toolitem, GTK_DEST_DEFAULT_ALL,
-				   dest_drag_types, 3,
-				   GDK_ACTION_COPY | GDK_ACTION_MOVE);
-		g_signal_connect (toolitem, "drag_data_received",
-				  G_CALLBACK (drag_data_received_cb),
-				  etoolbar);
-	}
-
-	g_free (path);
 }
 
 static void
@@ -664,9 +653,6 @@ do_merge (EphyEditableToolbar *t)
 	ephy_toolbars_group_foreach_toolbar (t->priv->group,
 					     (EphyToolbarsGroupForeachToolbarFunc)
 					     setup_toolbar, t);
-	ephy_toolbars_group_foreach_item (t->priv->group,
-					  (EphyToolbarsGroupForeachItemFunc)
-					  setup_item, t);
 
 	if (t->priv->edit_mode)
 	{
@@ -827,9 +813,9 @@ ephy_editable_toolbar_init (EphyEditableToolbar *t)
 	{
 		ephy_toolbar_popups[i].user_data = t;
 	}
-		
+
 	t->priv->popup_merge = egg_menu_merge_new ();
-	
+
 	t->priv->popup_action_group = egg_action_group_new ("ToolbarPopupActions");
 	egg_action_group_add_actions (t->priv->popup_action_group,
 				      ephy_toolbar_popups,
@@ -887,7 +873,6 @@ hide_editor (EphyEditableToolbar *etoolbar)
 {
 	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
 
-	gtk_grab_remove (GTK_WIDGET (etoolbar->priv->editor));
 	gtk_widget_hide (GTK_WIDGET (etoolbar->priv->editor));
 }
 
@@ -1050,7 +1035,7 @@ update_editor_sheet (EphyEditableToolbar *etoolbar)
 	gtk_scrolled_window_add_with_viewport
 		(GTK_SCROLLED_WINDOW (etoolbar->priv->scrolled_window), table);
 	gtk_drag_dest_set (table, GTK_DEST_DEFAULT_ALL,
-			   dest_drag_types, 3, GDK_ACTION_MOVE);
+			   dest_drag_types, n_dest_drag_types, GDK_ACTION_MOVE);
 	g_signal_connect (table, "drag_data_received",
 			  G_CALLBACK (editor_drag_data_received_cb),
 			  etoolbar);
@@ -1120,52 +1105,6 @@ update_editor_sheet (EphyEditableToolbar *etoolbar)
 	g_list_free (to_drag);
 }
 
-static gboolean
-button_press_cb (GtkWidget *w,
-		 GdkEvent *event,
-		 EphyEditableToolbar *etoolbar)
-{
-	GtkWidget *widget;
-	GtkWidget *toolitem;
-
-	g_return_val_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar), FALSE);
-
-	widget = gtk_get_event_widget (event);
-	toolitem = gtk_widget_get_ancestor (widget, EGG_TYPE_TOOL_ITEM);
-			
-	if (toolitem == NULL &&
-	    event->type == GDK_BUTTON_PRESS &&
-	    EGG_IS_TOOLBAR (widget))
-	{
-		if (event->button.button == 3)
-		{
-			gtk_widget_event (widget, event);
-			return FALSE;
-		}
-		else
-		{
-			gtk_drag_begin (widget,
-					gtk_target_list_new (source_drag_types, 1),
-					GDK_ACTION_MOVE, 1, event);
-			return TRUE;
-		}
-	}
-	else if (toolitem == NULL) return FALSE;
-
-	switch (event->type)
-	{
-		case GDK_BUTTON_PRESS:
-			gtk_drag_begin (toolitem,
-					gtk_target_list_new (source_drag_types, 1),
-					GDK_ACTION_MOVE, 1, event);
-			return TRUE;
-		default:
-			break;
-	}
-
-	return FALSE;
-}
-
 static void
 show_editor (EphyEditableToolbar *etoolbar)
 {
@@ -1175,11 +1114,6 @@ show_editor (EphyEditableToolbar *etoolbar)
 	g_return_if_fail (editor != NULL);
 
 	gtk_widget_show (GTK_WIDGET (editor));
-	gtk_grab_add (editor);
-
-	g_signal_connect (editor, "button_press_event",
-			  G_CALLBACK (button_press_cb),
-			  etoolbar);
 }
 
 static void

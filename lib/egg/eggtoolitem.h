@@ -45,12 +45,15 @@ struct _EggToolItem
 
   gchar *tip_text;
   gchar *tip_private;
-  
+
+  GdkWindow *drag_window;
+
   guint visible_horizontal : 1;
   guint visible_vertical : 1;
   guint homogeneous : 1;
   guint expandable : 1;
   guint pack_end : 1;
+  guint use_drag_window : 1;
 };
 
 struct _EggToolItemClass
@@ -94,5 +97,8 @@ void egg_tool_item_set_tooltip       (EggToolItem     *tool_item,
 				      GtkTooltips     *tooltips,
 				      const gchar     *tip_text,
 				      const gchar     *tip_private);
+void egg_tool_item_set_use_drag_window (EggToolItem   *toolitem,
+					gboolean       use_drag_window);
+
 
 #endif /* __EGG_TOOL_ITEM_H__ */

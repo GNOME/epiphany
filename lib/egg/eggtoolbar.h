@@ -89,7 +89,7 @@ struct _EggToolbar
 
   guint            style_set_connection;
   guint            icon_size_connection;
-  
+
   guint            style_set : 1;
   guint            icon_size_set : 1;
 };
@@ -124,6 +124,9 @@ void egg_toolbar_insert_tool_item  (EggToolbar  *toolbar,
 void egg_toolbar_remove_tool_item  (EggToolbar  *toolbar,
 				    EggToolItem *item);
 
+gint egg_toolbar_get_item_index    (EggToolbar  *toolbar,
+				    EggToolItem *item);
+
 /* Style functions */
 void            egg_toolbar_set_show_arrow  (EggToolbar      *toolbar,
 					     gboolean         show_arrow);
@@ -143,7 +146,9 @@ GtkToolbarStyle egg_toolbar_get_style       (EggToolbar      *toolbar);
 GtkIconSize     egg_toolbar_get_icon_size   (EggToolbar      *toolbar);
 gboolean        egg_toolbar_get_tooltips    (EggToolbar      *toolbar);
 GList*          egg_toolbar_get_tool_items  (EggToolbar      *toolbar);
-
+gint            egg_toolbar_get_drop_index  (EggToolbar      *toolbar,
+                                             gint             x,
+                                             gint             y);
 
 
 #ifndef EGG_DISABLE_DEPRECATED

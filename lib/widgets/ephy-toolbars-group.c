@@ -179,7 +179,7 @@ free_item_node (EphyToolbarsItem *item)
 static void
 add_action (EphyToolbarsGroup *t,
 	    GNode *parent,
-	    GNode *sibling,
+	    int pos,
 	    const char *name)
 {
 	EphyToolbarsItem *item;
@@ -193,17 +193,16 @@ add_action (EphyToolbarsGroup *t,
 	item->parent = parent->data;
 	node = g_node_new (item);
 
-	g_node_insert_before (parent, sibling, node);
+	g_node_insert (parent, pos, node);
 }
 
 void
 ephy_toolbars_group_add_item (EphyToolbarsGroup *t,
 			      EphyToolbarsToolbar *parent,
-			      EphyToolbarsItem *sibling,
+			      int pos,
 			      const char *name)
 {
 	GNode *parent_node;
-	GNode *sibling_node = NULL;
 
 	g_return_if_fail (IS_EPHY_TOOLBARS_GROUP (t));
 	g_return_if_fail (parent != NULL);
@@ -211,14 +210,7 @@ ephy_toolbars_group_add_item (EphyToolbarsGroup *t,
 
 	parent_node = g_node_find (t->priv->toolbars, G_IN_ORDER, G_TRAVERSE_ALL, parent);
 
-	if (sibling)
-	{
-		sibling_node = g_node_find (t->priv->toolbars, G_IN_ORDER,
-					    G_TRAVERSE_ALL, sibling);
-		g_return_if_fail (sibling_node != NULL);
-	}
-
-	add_action (t, parent_node, sibling_node, name);
+	add_action (t, parent_node, pos, name);
 
 	toolbars_group_save (t);
 
@@ -237,13 +229,13 @@ parse_item_list (EphyToolbarsGroup *t,
 			xmlChar *verb;
 
 			verb = xmlGetProp (child, "verb");
-			add_action (t, parent, NULL, verb);
+			add_action (t, parent, -1, verb);
 
 			xmlFree (verb);
 		}
 		else if (xmlStrEqual (child->name, "separator"))
 		{
-			add_action (t, parent, NULL, "separator");
+			add_action (t, parent, -1, "separator");
 		}
 
 		child = child->next;
