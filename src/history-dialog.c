@@ -16,6 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#include "ephy-node-view.h"
 #include "history-dialog.h"
 #include "ephy-shell.h"
 #include "ephy-embed-shell.h"
@@ -209,6 +210,8 @@ add_column (HistoryDialog *dialog,
 {
 	GtkTreeViewColumn *gcolumn;
 	GtkCellRenderer *renderer;
+
+	ephy_node_view_get_type ();
 
 	gcolumn = (GtkTreeViewColumn *) gtk_tree_view_column_new ();
 	renderer = gtk_cell_renderer_text_new ();
