@@ -50,16 +50,18 @@
 #include <nsIIOService.h>
 #include <nsISupportsPrimitives.h>
 #include <nsICookieManager.h>
-#include <nsIPassword.h>
-#include <nsIPasswordManager.h>
-#include <nsIPassword.h>
 #include <nsICookie2.h>
 #include <nsICookieManager.h>
+#include <nsIPasswordManager.h>
 #include <nsCPasswordManager.h>
 #include <nsIPermission.h>
 #include <nsIPermissionManager.h>
 #include <nsILocalFile.h>
 #include <nsIURI.h>
+
+#ifdef HAVE_NSIPASSWORD_H
+#include <nsIPassword.h>
+#endif
 
 #ifdef ALLOW_PRIVATE_API
 // FIXME: For setting the locale. hopefully gtkmozembed will do itself soon
@@ -432,8 +434,8 @@ init_services (MozillaEmbedSingle *single)
 	/* Pre initialization */
 	mozilla_init_home ();
 	mozilla_init_profile ();
-	
-	/* Fire up the best */
+
+	/* Fire up the beast */
 	gtk_moz_embed_push_startup ();
 
 	/* Until gtkmozembed does this itself */
@@ -649,6 +651,8 @@ static GList *
 impl_list_passwords (EphyPasswordManager *manager)
 {
 	GList *passwords = NULL;
+
+#ifdef HAVE_NSIPASSWORD_H
 	nsresult rv;
 
 	nsCOMPtr<nsIPasswordManager> passwordManager =
@@ -684,6 +688,7 @@ impl_list_passwords (EphyPasswordManager *manager)
 
 		passwords = g_list_prepend (passwords, p);
 	}
+#endif
 
 	return passwords;
 }
