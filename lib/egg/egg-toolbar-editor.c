@@ -563,11 +563,6 @@ static void
 setup_editor (EggToolbarEditor *editor)
 {
   GtkWidget *scrolled_window;
-  GtkWidget *label_hbox;
-  GtkWidget *image;
-  GtkWidget *label;
-
-  g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (editor));
 
   gtk_container_set_border_width (GTK_CONTAINER (editor), 12);
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
@@ -576,18 +571,6 @@ setup_editor (EggToolbarEditor *editor)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_box_pack_start (GTK_BOX (editor), scrolled_window, TRUE, TRUE, 0);
-  label_hbox = gtk_hbox_new (FALSE, 6);
-  gtk_widget_show (label_hbox);
-  gtk_box_pack_start (GTK_BOX (editor), label_hbox, FALSE, FALSE, 0);
-  image =
-    gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
-  gtk_widget_show (image);
-  gtk_box_pack_start (GTK_BOX (label_hbox), image, FALSE, FALSE, 0);
-  label = gtk_label_new (_("Drag an item onto the toolbars above to add it, "
-			   "from the toolbars in the items table to remove it."));
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-  gtk_widget_show (label);
-  gtk_box_pack_start (GTK_BOX (label_hbox), label, FALSE, TRUE, 0);
 }
 
 static void
