@@ -1,5 +1,12 @@
 2004-05-29  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-debug.h:
+
+	Use ISO style variable argument macros. Patch by Brian Cameron,
+	part of bug #141319.
+	
+2004-05-29  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.in:
 
 	Add check for 'mkdtemp', since solaris doesn't have it.
@@ -7,6 +14,7 @@
 	* lib/ephy-file-helpers.c: (ephy_file_tmp_dir):
 
 	Error out if we don't have mkdtemp.
+	Part of bug #141319.
 
 2004-05-29  Christian Persch  <chpe@cvs.gnome.org>
 
