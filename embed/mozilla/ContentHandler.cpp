@@ -300,7 +300,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 		text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
 					_("Download the file?"),
 					_("It's not possible to view this file because there is no "
-					  "application installed that can open it."
+					  "application installed that can open it. "
 					  "You can save it instead."));
 	}
 
