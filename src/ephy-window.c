@@ -1567,6 +1567,16 @@ ephy_window_remove_tab (EphyWindow *window,
 				  embed);
 }
 
+/**
+ * ephy_window_load_url:
+ * @window: a #EphyWindow
+ * @url: the url to load
+ *
+ * Load a new url in the active tab of the window.
+ * Unlike ephy_embed_load_url this function activate
+ * the embed.
+ *
+ **/
 void
 ephy_window_load_url (EphyWindow *window,
 			const char *url)
@@ -1579,6 +1589,7 @@ ephy_window_load_url (EphyWindow *window,
         g_return_if_fail (url != NULL);
 
         ephy_embed_load_url (embed, url);
+	gtk_widget_grab_focus (GTK_BIN (embed)->child);
 }
 
 void ephy_window_activate_location (EphyWindow *window)
