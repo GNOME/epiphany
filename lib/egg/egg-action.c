@@ -1,5 +1,6 @@
 #include "egg-action.h"
 #include "eggtoolbutton.h"
+#include "eggtoolbar.h"
 #include "eggintl.h"
 
 
@@ -171,6 +172,8 @@ egg_action_class_init (EggActionClass *class)
 static void
 egg_action_init (EggAction *action)
 {
+  static GtkTooltips *egg_action_tooltips = NULL;
+
   action->name = NULL;
   action->label = NULL;
   action->short_label = NULL;
@@ -186,6 +189,17 @@ egg_action_init (EggAction *action)
   action->accel_quark = 0;
 
   action->proxies = NULL;
+
+  if (egg_action_tooltips == NULL)
+  {
+    egg_action_tooltips = gtk_tooltips_new ();
+    action->tooltips = g_object_ref (egg_action_tooltips);
+    gtk_object_sink (GTK_OBJECT (egg_action_tooltips));
+  }
+  else
+  {
+    action->tooltips = g_object_ref (egg_action_tooltips);
+  }
 }
 
 static void
@@ -194,6 +208,8 @@ egg_action_finalize (GObject *object)
   EggAction *action;
 
   action = EGG_ACTION (object);
+
+  g_object_unref (action->tooltips);
 
   g_free (action->name);
   g_free (action->label);
@@ -368,6 +384,18 @@ egg_action_sync_property (EggAction *action, GParamSpec *pspec,
 }
 
 static void
+egg_action_sync_tooltip (EggAction *action, GParamSpec *pspec, GtkWidget *proxy)
+{
+	if (action->tooltip != NULL)
+	{
+		egg_tool_item_set_tooltip (EGG_TOOL_ITEM (proxy),
+					   action->tooltips,
+					   action->tooltip,
+					   NULL);
+	}
+}
+
+static void
 egg_action_sync_label (EggAction *action, GParamSpec *pspec, GtkWidget *proxy)
 {
   GtkWidget *label = NULL;
@@ -520,6 +548,10 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
 		    NULL);
       g_signal_connect_object (action, "notify::short_label",
 			       G_CALLBACK (egg_action_sync_short_label),
+			       proxy, 0);
+      egg_action_sync_tooltip (action, NULL, proxy);
+      g_signal_connect_object (action, "notify::tooltip",
+			       G_CALLBACK (egg_action_sync_tooltip),
 			       proxy, 0);
 
       g_object_set (G_OBJECT (proxy), "stock_id", action->stock_id, NULL);

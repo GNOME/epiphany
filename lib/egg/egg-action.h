@@ -33,6 +33,8 @@ struct _EggAction
 
   /* list of proxy widgets */
   GSList *proxies;
+
+  GtkTooltips *tooltips;
 };
 
 struct _EggActionClass
