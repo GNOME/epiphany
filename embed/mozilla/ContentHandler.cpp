@@ -391,13 +391,14 @@ NS_METHOD GContentHandler::LaunchHelperApp (void)
 		const nsCString &document = (mUrlHelper) ? mUrl : aFileName;
 
 		char *param = g_strdup (document.get());
-		ephy_file_launch_application (mHelperApp->command,
-					      param,
-					      mHelperApp->requires_terminal);
+
+		GList *params = NULL;
+		params = g_list_append (params, param);
+		gnome_vfs_mime_application_launch (mHelperApp, params);
+		g_free (param);
+		g_list_free (params);
 
 		if(mUrlHelper) mLauncher->Cancel();
-
-		g_free (param);
 	}
 	else
 	{

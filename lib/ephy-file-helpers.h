@@ -34,10 +34,6 @@ void        ephy_file_helpers_init       (void);
 
 void        ephy_file_helpers_shutdown   (void);
 
-void	    ephy_file_launch_application (const char *command_string,
-					  const char *parameter,
-					  gboolean use_terminal);
-
 char       *ephy_file_tmp_filename	 (const char *base,
 					  const char *extension);
 
