@@ -793,6 +793,8 @@ drag_motion_cb (GtkWidget *widget,
 						 GTK_TREE_VIEW_DROP_INTO_OR_AFTER);
 		gdk_drag_status (context, context->suggested_action, time);
 	}
+
+	return TRUE;
 }
 
 static gboolean
