@@ -227,6 +227,22 @@ impl_attach_window (EphyExtension *extension,
 			  G_CALLBACK (tab_removed_cb), session);
 	g_signal_connect (notebook, "tabs_reordered",
 			  G_CALLBACK (tabs_reordered_cb), session);
+
+	/* Set unique identifier as role, so that on restore, the WM can
+	 * place the window on the right workspace
+	 */
+
+	if (gtk_window_get_role (GTK_WINDOW (window)) == NULL)
+	{
+		/* I guess rand() is unique enough, otherwise we could use
+		 * time + pid or something
+		 */
+		char *role;
+
+		role = g_strdup_printf ("epiphany-window-%x", rand());
+		gtk_window_set_role (GTK_WINDOW (window), role);
+		g_free (role);
+	}
 }
 
 static void
@@ -556,6 +572,7 @@ write_ephy_window (xmlTextWriterPtr writer,
 		   EphyWindow *window)
 {
 	GList *tabs, *l;
+	const char *role;
 	int ret;
 
 	tabs = ephy_window_get_tabs (window);
@@ -570,6 +587,13 @@ write_ephy_window (xmlTextWriterPtr writer,
 
 	ret = write_window_geometry (writer, GTK_WINDOW (window));
 	if (ret < 0) return ret;
+
+	role = gtk_window_get_role (GTK_WINDOW (window));
+	if (role != NULL)
+	{
+		ret = xmlTextWriterWriteAttribute (writer, "role", role);
+		if (ret < 0) return ret;
+	}
 
 	for (l = tabs; l != NULL; l = l->next)
 	{
@@ -741,8 +765,16 @@ restore_geometry (GtkWindow *window,
 
 	if (success)
 	{
+		tmp = xmlGetProp (node, (xmlChar *)"role");
+		if (tmp != NULL)
+		{
+			gtk_window_set_role (GTK_WINDOW (window), (const char *)tmp);
+			xmlFree (tmp);
+		}
+
 		gtk_window_move (window, x, y);
 		gtk_window_set_default_size (window, width, height);
+		
 	}
 }
 /*
@@ -792,7 +824,7 @@ ephy_session_load (EphySession *session,
 
 			ephy_gui_window_update_user_time (widget, user_time);
 
-			gtk_window_present (GTK_WINDOW (widget));
+			gtk_widget_show (widget);
 		}
 		else if (xmlStrEqual (child->name, (const xmlChar *) "toolwindow"))
 		{
@@ -819,7 +851,7 @@ ephy_session_load (EphySession *session,
 
 			ephy_gui_window_update_user_time (widget, user_time);
 
-			gtk_window_present (GTK_WINDOW (widget));
+			gtk_widget_show (widget);
 		}
 
 		child = child->next;
