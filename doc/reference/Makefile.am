@@ -41,7 +41,6 @@ IGNORE_HFILES = \
 	ephy-gui.h \
 	ephy-langs.h \
 	ephy-marshal.h \
-	ephy-module-loader.h \
 	ephy-node-common.h \
 	ephy-node-filter.h \
 	ephy-node.h \
