@@ -28,6 +28,8 @@
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtkimage.h>
+#include <gtk/gtkbutton.h>
 #include <libgnomevfs/gnome-vfs-mime.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
@@ -231,7 +233,7 @@ release_cb (GContentHandler *data)
 
 NS_METHOD GContentHandler::MIMEConfirmAction ()
 {
-	GtkWidget *dialog;
+	GtkWidget *dialog, *button, *image;
 	const char *action_label;
 
 	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (mContext);
@@ -281,8 +283,13 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 			   " it. You can save it instead."));
 	}
 
-	gtk_dialog_add_button (GTK_DIALOG (dialog),
-			       _("_Save As..."), CONTENT_ACTION_SAVEAS);
+	button = gtk_button_new_with_label (_("_Save As..."));
+	image = gtk_image_new_from_stock (GTK_STOCK_SAVE_AS, GTK_ICON_SIZE_BUTTON);
+	gtk_button_set_image (GTK_BUTTON (button), image);
+	gtk_widget_show (image);
+	gtk_widget_show (button);
+	gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, CONTENT_ACTION_SAVEAS);
+
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
 			       GTK_STOCK_CANCEL, CONTENT_ACTION_NONE);
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
