@@ -104,7 +104,8 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 	{
 		return ephy_bookmarks_import_xbel (bookmarks, filename);
 	}
-	else if (strstr (filename, MOZILLA_BOOKMARKS_DIR) != NULL)
+	else if (strstr (filename, MOZILLA_BOOKMARKS_DIR) != NULL ||
+                 strstr (filename, FIREBIRD_BOOKMARKS_DIR) != NULL)
 	{
 		return ephy_bookmarks_import_mozilla (bookmarks, filename);
 	}
