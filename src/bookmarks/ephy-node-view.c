@@ -556,7 +556,7 @@ cell_renderer_edited (GtkCellRendererText *cell,
 	g_value_unset (&value);
 }
 
-void
+GtkTreeViewColumn *
 ephy_node_view_add_column (EphyNodeView *view,
 			   const char  *title,
 			   EphyTreeModelNodeColumn column,
@@ -566,7 +566,7 @@ ephy_node_view_add_column (EphyNodeView *view,
 	GtkTreeViewColumn *gcolumn;
 	GtkCellRenderer *renderer;
 
-	g_return_if_fail (!editable || view->priv->editable_renderer == NULL);
+	g_return_val_if_fail (!editable || view->priv->editable_renderer == NULL, NULL);
 
 	gcolumn = (GtkTreeViewColumn *) gtk_tree_view_column_new ();
 	renderer = gtk_cell_renderer_text_new ();
@@ -594,6 +594,8 @@ ephy_node_view_add_column (EphyNodeView *view,
 		view->priv->default_sort_column_id = column;
 		g_idle_add ((GSourceFunc) set_sort_column_id, view);
 	}
+
+	return gcolumn;
 }
 
 void
@@ -665,13 +667,6 @@ ephy_node_view_get_selection (EphyNodeView *view)
 }
 
 void
-ephy_node_view_select_all (EphyNodeView *view)
-{
-	GtkTreeSelection *sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
-	gtk_tree_selection_select_all (sel);
-}
-
-void
 ephy_node_view_remove (EphyNodeView *view)
 {
 	GList *list;
@@ -684,15 +679,6 @@ ephy_node_view_remove (EphyNodeView *view)
 	}
 
 	g_list_free (list);
-}
-
-void
-ephy_node_view_set_browse_mode (EphyNodeView *view)
-{
-	GtkTreeSelection *selection;
-
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
-	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 }
 
 void

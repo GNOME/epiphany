@@ -350,14 +350,18 @@ cmd_select_all (EggAction *action,
 		EphyBookmarksEditor *editor)
 {
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (editor));
+	GtkWidget *bm_view = editor->priv->bm_view;
 
 	if (GTK_IS_EDITABLE (widget))
 	{
 		gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
 	}
-	else if (gtk_widget_is_focus (editor->priv->bm_view))
+	else if (gtk_widget_is_focus (bm_view))
 	{
-		ephy_node_view_select_all (EPHY_NODE_VIEW (editor->priv->bm_view));
+		GtkTreeSelection *sel;
+
+		sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (bm_view));
+		gtk_tree_selection_select_all (sel);
 	}
 }
 
@@ -831,6 +835,7 @@ node_dropped_cb (EphyNodeView *view, EphyNode *node,
 static void
 ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 {
+	GtkTreeSelection *selection;
 	GtkWidget *hbox, *vbox;
 	GtkWidget *bm_view, *key_view;
 	GtkWidget *scrolled_window;
@@ -908,7 +913,8 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	ephy_node_view_enable_drag_dest (EPHY_NODE_VIEW (key_view),
 					 topic_drag_dest_types,
 				         n_topic_drag_dest_types);
-	ephy_node_view_set_browse_mode (EPHY_NODE_VIEW (key_view));
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (key_view));
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 	ephy_node_view_add_column (EPHY_NODE_VIEW (key_view), _("Topics"),
 			           EPHY_TREE_MODEL_NODE_COL_KEYWORD, TRUE, TRUE);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), key_view);

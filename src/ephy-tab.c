@@ -785,7 +785,7 @@ ephy_tab_new_window_cb (EphyEmbed *embed, EphyEmbed **new_embed,
 	}
 
 	new_tab = ephy_tab_new ();
-        ephy_window_add_tab (window, new_tab, FALSE);
+        ephy_window_add_tab (window, new_tab, TRUE, FALSE);
 
 	*new_embed = ephy_tab_get_embed (new_tab);
 }

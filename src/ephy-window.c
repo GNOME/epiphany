@@ -831,10 +831,12 @@ ephy_window_get_notebook (EphyWindow *window)
 
 void
 ephy_window_add_tab (EphyWindow *window,
-		       EphyTab *tab,
-		       gboolean jump_to)
+		     EphyTab *tab,
+		     gboolean grouped,
+		     gboolean jump_to)
 {
 	GtkWidget *widget;
+	int position;
 
 	g_return_if_fail (IS_EPHY_WINDOW (window));
 	g_return_if_fail (IS_EPHY_TAB (tab));
@@ -843,10 +845,9 @@ ephy_window_add_tab (EphyWindow *window,
 
 	widget = GTK_WIDGET(ephy_tab_get_embed (tab));
 
+	position = grouped ? EPHY_NOTEBOOK_INSERT_GROUPED : EPHY_NOTEBOOK_INSERT_LAST;
 	ephy_notebook_insert_page (EPHY_NOTEBOOK (window->priv->notebook),
-				  widget,
-				  EPHY_NOTEBOOK_INSERT_GROUPED,
-				  jump_to);
+				   widget, position, jump_to);
 }
 
 void

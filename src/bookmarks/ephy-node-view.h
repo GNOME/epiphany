@@ -55,46 +55,42 @@ typedef struct
 	void (*show_popup)          (EphyNodeView *view);
 } EphyNodeViewClass;
 
-GType         ephy_node_view_get_type                 (void);
+GType              ephy_node_view_get_type	      (void);
 
-GtkWidget    *ephy_node_view_new                      (EphyNode *root,
+GtkWidget         *ephy_node_view_new                 (EphyNode *root,
 					               EphyNodeFilter *filter);
 
-void	      ephy_node_view_enable_dnd		      (EphyNodeView *view);
+void	           ephy_node_view_enable_dnd	      (EphyNodeView *view);
 
-void	      ephy_node_view_add_column		      (EphyNodeView *view,
+GtkTreeViewColumn *ephy_node_view_add_column	      (EphyNodeView *view,
 						       const char  *title,
 						       EphyTreeModelNodeColumn column,
 						       gboolean sortable,
 						       gboolean editable);
 
-void	      ephy_node_view_add_icon_column	      (EphyNodeView *view,
+void	           ephy_node_view_add_icon_column     (EphyNodeView *view,
 						       EphyTreeModelNodeColumn column);
 
-void	      ephy_node_view_remove		      (EphyNodeView *view);
+void		   ephy_node_view_remove              (EphyNodeView *view);
 
-gboolean      ephy_node_view_has_selection            (EphyNodeView *view,
+gboolean           ephy_node_view_has_selection       (EphyNodeView *view,
 						       gboolean *multiple);
 
-GList        *ephy_node_view_get_selection            (EphyNodeView *view);
+GList             *ephy_node_view_get_selection       (EphyNodeView *view);
 
-void	      ephy_node_view_select_all		      (EphyNodeView *view);
-
-void	      ephy_node_view_set_browse_mode	      (EphyNodeView *view);
-
-void	      ephy_node_view_select_node              (EphyNodeView *view,
+void	           ephy_node_view_select_node         (EphyNodeView *view,
 			                               EphyNode *node);
 
-void	      ephy_node_view_enable_drag_source       (EphyNodeView *view,
+void	           ephy_node_view_enable_drag_source  (EphyNodeView *view,
 						       GtkTargetEntry *types,
 						       int n_types,
 						       guint prop_id);
 
-void	      ephy_node_view_enable_drag_dest	      (EphyNodeView *view,
+void	           ephy_node_view_enable_drag_dest    (EphyNodeView *view,
 						       GtkTargetEntry *types,
 						       int n_types);
 
-void	      ephy_node_view_edit		      (EphyNodeView *view);
+void		   ephy_node_view_edit		      (EphyNodeView *view);
 
 G_END_DECLS
 

@@ -465,7 +465,7 @@ gnv_embed_new_window_cb (EphyEmbed *embed, EphyEmbed **new_embed,
 					  EMBED_CHROME_OPENASPOPUP);
 	}
 	new_tab = ephy_tab_new ();
-	ephy_window_add_tab (window, new_tab, FALSE);
+	ephy_window_add_tab (window, new_tab, FALSE, FALSE);
 	
 	*new_embed = ephy_tab_get_embed (new_tab);
 }

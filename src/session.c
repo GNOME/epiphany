@@ -563,7 +563,7 @@ parse_embed (xmlNodePtr child, EphyWindow *window)
 
 			gtk_widget_show (GTK_WIDGET(embed));
 
-			ephy_window_add_tab (window, tab, FALSE);
+			ephy_window_add_tab (window, tab, FALSE, FALSE);
 
 			ephy_embed_load_url (embed, url);
 

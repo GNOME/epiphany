@@ -1,3 +1,25 @@
+2003-04-15  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* TODO:
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_select_all),
+	(ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-node-view.c: (ephy_node_view_add_column),
+	(ephy_node_view_remove):
+	* src/bookmarks/ephy-node-view.h:
+
+	Remove some api that was just silly wrappers.
+	Return GtkTreeViewColumn on add_column.
+
+	* src/ephy-nautilus-view.c: (gnv_embed_new_window_cb):
+	* src/ephy-shell.c: (ephy_shell_new_window_cb),
+	(ephy_shell_new_tab):
+	* src/ephy-tab.c: (ephy_tab_new_window_cb):
+	* src/ephy-window.c: (ephy_window_add_tab):
+	* src/ephy-window.h:
+	* src/session.c: (parse_embed):
+
+	Ever open tab as last on File->New tab and similars.
+
 2003-04-13  Vincent Untz  <vincent@vuntz.net>
 
 	* src/prefs-dialog.c: (prefs_dialog_show_help):

@@ -247,7 +247,7 @@ ephy_shell_new_window_cb (EphyEmbedShell *shell,
 	}
 
 	new_tab = ephy_tab_new ();
-	ephy_window_add_tab (window, new_tab, FALSE);
+	ephy_window_add_tab (window, new_tab, TRUE, FALSE);
 	*new_embed = ephy_tab_get_embed (new_tab);
 }
 
@@ -501,6 +501,7 @@ ephy_shell_new_tab (EphyShell *shell,
 	embed = ephy_tab_get_embed (tab);
 	gtk_widget_show (GTK_WIDGET(embed));
 	ephy_window_add_tab (window, tab,
+			     url != NULL,
 			     jump_to);
 	gtk_widget_show (GTK_WIDGET(window));
 
