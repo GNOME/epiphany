@@ -803,14 +803,14 @@ nsresult EventContext::CheckLinkScheme (const nsAString &link)
 	rv = uri->GetScheme (scheme);
 	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
-	if (g_ascii_strcasecmp (scheme.get(), "http") ||
-	    g_ascii_strcasecmp (scheme.get(), "https") ||
-	    g_ascii_strcasecmp (scheme.get(), "ftp") ||
-	    g_ascii_strcasecmp (scheme.get(), "file") ||
-	    g_ascii_strcasecmp (scheme.get(), "data") ||
-	    g_ascii_strcasecmp (scheme.get(), "resource") ||
-	    g_ascii_strcasecmp (scheme.get(), "about") ||
-	    g_ascii_strcasecmp (scheme.get(), "gopher"))
+	if (g_ascii_strcasecmp (scheme.get(), "http") == 0 ||
+	    g_ascii_strcasecmp (scheme.get(), "https") == 0 ||
+	    g_ascii_strcasecmp (scheme.get(), "ftp") == 0 ||
+	    g_ascii_strcasecmp (scheme.get(), "file") == 0 ||
+	    g_ascii_strcasecmp (scheme.get(), "data") == 0 ||
+	    g_ascii_strcasecmp (scheme.get(), "resource") == 0 ||
+	    g_ascii_strcasecmp (scheme.get(), "about") == 0 ||
+	    g_ascii_strcasecmp (scheme.get(), "gopher") == 0)
 	{
 		SetIntProperty ("link-has-web-scheme", TRUE);
 	}
