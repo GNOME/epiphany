@@ -28,8 +28,6 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-bookmarks-import.h		\
 	ephy-bookmark-properties.c	\
 	ephy-bookmark-properties.h	\
-	ephy-bookmarks-toolbar.c	\
-	ephy-bookmarks-toolbar.h	\
 	ephy-new-bookmark.c		\
 	ephy-new-bookmark.h		\
 	ephy-topic-action.c		\

@@ -21,7 +21,6 @@
 #endif
 
 #include "ephy-window.h"
-#include "ephy-bookmarks-toolbar.h"
 #include "ephy-favorites-menu.h"
 #include "ephy-state.h"
 #include "ephy-gobject-misc.h"
@@ -260,7 +259,6 @@ struct EphyWindowPrivate
 	GtkWidget *statusbar;
 	EggActionGroup *action_group;
 	EggActionGroup *popups_action_group;
-	EphyBookmarksToolbar *bmk_toolbar;
 	EphyFavoritesMenu *fav_menu;
 	EphyEncodingMenu *enc_menu;
 	PPViewToolbar *ppview_toolbar;
@@ -570,7 +568,6 @@ ephy_window_init (EphyWindow *window)
 	/* Setup the window and connect verbs */
 	setup_window (window);
 
-	window->priv->bmk_toolbar = ephy_bookmarks_toolbar_new (window);
 	window->priv->fav_menu = ephy_favorites_menu_new (window);
 	window->priv->enc_menu = ephy_encoding_menu_new (window);
 
@@ -827,11 +824,9 @@ ephy_window_set_chrome (EphyWindow *window,
 
 	if (flags & EMBED_CHROME_PERSONALTOOLBARON)
 	{
-		ephy_bookmarks_toolbar_show (window->priv->bmk_toolbar);
 	}
 	else
 	{
-		ephy_bookmarks_toolbar_hide (window->priv->bmk_toolbar);
 	}
 
 	if (flags & EMBED_CHROME_TOOLBARON)
