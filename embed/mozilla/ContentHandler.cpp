@@ -25,12 +25,9 @@
 
 #include "config.h"
 
-#include <gtk/gtkimage.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtklabel.h>
 #include <gtk/gtkdialog.h>
+#include <gtk/gtkmessagedialog.h>
+#include <gtk/gtkstock.h>
 #include <libgnomevfs/gnome-vfs-mime.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
@@ -259,9 +256,7 @@ NS_METHOD GContentHandler::Init (void)
 NS_METHOD GContentHandler::MIMEConfirmAction ()
 {
 	GtkWidget *dialog;
-	GtkWidget *hbox, *vbox, *label, *image;
-	const char *action_label;
-	char *text;
+	const char *action_label, *primary, *secondary;
 	int response;
 
 	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (mContext);
@@ -271,67 +266,49 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 			(mAction == CONTENT_ACTION_OPEN_TMP) ?
 			GTK_STOCK_OPEN : EPHY_STOCK_DOWNLOAD;
 
-	dialog = gtk_dialog_new_with_buttons
-		("", parentWindow, GTK_DIALOG_NO_SEPARATOR,
-		 _("_Save As..."), CONTENT_ACTION_SAVEAS,
-		 GTK_STOCK_CANCEL, CONTENT_ACTION_NONE,
-		 action_label, mAction, NULL);
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), (guint)mAction);
-	
-	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14);
-
-	hbox = gtk_hbox_new (FALSE, 6);
-	gtk_widget_show (hbox);
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
-			    TRUE, TRUE, 0);
-
 	if (mPermission == EPHY_MIME_PERMISSION_UNSAFE && mHelperApp)
 	{
-		text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
-					_("Download the unsafe file?"),
-					_("This type of file could potentially damage your documents "
-					  "or invade your privacy. "
-					  "It's not safe to open it directly. You "
-					  "can save it instead."));
+		primary = _("Download the unsafe file?");
+		secondary = _("This type of file could potentially damage "
+			      "your documents or invade your privacy. "
+			      "It's not safe to open it directly. "
+			      "You can save it instead.");
 	}
 	else if (mAction == CONTENT_ACTION_OPEN_TMP)
 	{
-		text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
-					_("Open the file in another application?"),
-					_("It's not possible to view this file type directly "
-					  "in the browser. You can open it with another "
-					  "application or save it."));
+		primary = _("Open the file in another application?");
+		secondary = _("It's not possible to view this file type "
+			      "directly in the browser. You can open it with "
+			      "another application or save it.");
 	}
 	else
 	{
-		text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
-					_("Download the file?"),
-					_("It's not possible to view this file because there is no "
-					  "application installed that can open it. "
-					  "You can save it instead."));
+		primary = _("Download the file?");
+		secondary = _("It's not possible to view this file because "
+			      "there is no application installed that can open"
+			      " it. You can save it instead.");
 	}
 
-	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
-					  GTK_ICON_SIZE_DIALOG);
-	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0);
-	gtk_widget_show (image);
-	gtk_box_pack_start (GTK_BOX (hbox), image, TRUE, TRUE, 0);
+	dialog = gtk_message_dialog_new
+		(parentWindow,
+		 GTK_DIALOG_MODAL /* FIXME mozilla sucks */,
+		 GTK_MESSAGE_WARNING,
+		 GTK_BUTTONS_NONE,	
+		 primary);
 
-	vbox = gtk_vbox_new (FALSE, 6);
-	gtk_widget_show (vbox);
-	gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
+	gtk_message_dialog_format_secondary_text
+		(GTK_MESSAGE_DIALOG (dialog), secondary);
 
-	label = gtk_label_new (NULL);
-	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-	gtk_label_set_markup (GTK_LABEL (label), text);
-	g_free (text);
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       _("_Save As..."), CONTENT_ACTION_SAVEAS);
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       GTK_STOCK_CANCEL, CONTENT_ACTION_NONE);
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       action_label, mAction);
 
-	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
-	gtk_widget_show (label);
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), (guint) mAction);
 
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 
