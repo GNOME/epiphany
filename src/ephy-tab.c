@@ -459,7 +459,7 @@ ephy_tab_class_init (EphyTabClass *class)
 
 	g_object_class_install_property (object_class,
 					 PROP_VISIBLE,
-					 g_param_spec_boolean ("visible",
+					 g_param_spec_boolean ("visibility",
 							       "Visibility",
 							       "The tab's visibility",
 							       TRUE,
@@ -1389,7 +1389,7 @@ ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
 
 	tab->priv->visibility = visibility;
 
-	g_object_notify (G_OBJECT (tab), "visible");
+	g_object_notify (G_OBJECT (tab), "visibility");
 }
 
 static void

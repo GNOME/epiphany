@@ -2106,7 +2106,7 @@ tab_added_cb (EphyNotebook *notebook,
 
 	update_tabs_menu_sensitivity (window);
 
-	g_signal_connect_object (G_OBJECT (tab), "notify::visible",
+	g_signal_connect_object (G_OBJECT (tab), "notify::visibility",
 				 G_CALLBACK (sync_tab_visibility), window, 0);
 
 	embed = ephy_tab_get_embed (tab);
