@@ -72,9 +72,30 @@ egg_menu_merge_get_type (void)
   return type;
 }
 
+static GObjectClass *parent_class = NULL;
+
+static void
+egg_menu_merge_finalize (GObject *object)
+{
+  EggMenuMerge *merge;
+
+  merge = EGG_MENU_MERGE (object);
+  if (merge->update_tag != 0)
+    {
+      g_source_remove(merge->update_tag);
+    }
+}
+
 static void
 egg_menu_merge_class_init (EggMenuMergeClass *class)
 {
+  GObjectClass *object_class;
+
+  parent_class = g_type_class_peek_parent (class);
+  object_class = G_OBJECT_CLASS(class);
+
+  object_class->finalize     = egg_menu_merge_finalize;
+
   if (!merge_node_chunk)
     merge_node_chunk = g_mem_chunk_create(EggMenuMergeNode, 64,
 					  G_ALLOC_AND_FREE);
