@@ -611,6 +611,7 @@ help/es/Makefile
 help/eu/Makefile
 help/fi/Makefile
 help/ja/Makefile
+help/uk/Makefile
 po/Makefile.in
 ])
 

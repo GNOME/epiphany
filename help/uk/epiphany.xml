@@ -1,18 +1,16 @@
-<?xml version="1.0"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
-"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-  <!ENTITY legal SYSTEM "legal.xml">
-  <!ENTITY appversion "1.0">
-  <!ENTITY manrevision "1.0">
-  <!ENTITY date "May 2003">
-  <!ENTITY fr "<application>Epiphany</application>">
-  <!-- Information about the entities
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY legal SYSTEM "legal.xml">
+<!ENTITY appversion "1.6">
+<!ENTITY manrevision "1.6">
+<!ENTITY date "January 2005">
+<!ENTITY fr "&quot;Epiphany&quot;">
+<!-- Information about the entities
        The legal.xml file contains legal information, there is no need to edit the file. 
        Use the appversion entity to specify the version of the application.
        Use the manrevision entity to specify the revision number of this manual.
        Use the date entity to specify the release date of this manual.
-       Use the fr entity to specify the name of the application. -->
-]>
+       Use the fr entity to specify the name of the application. -->]>
 <!-- 
       (Do not remove this comment block.)
   Maintained by the GNOME Documentation Project
@@ -25,28 +23,34 @@
 <!-- please do not change the id; for translations, change lang to -->
 <!-- appropriate code -->
   <articleinfo> 
-    <title>Довідка з Epiphany версії &manrevision;</title>       
+    <title>Довідка з Epiphany версії 1.6</title>       
 
-    <copyright> 
-      <year>2003</year> 
+    <copyright>
+      <year>2003</year>
+      <holder>Patanjali Somayaji</holder>
+    </copyright>
+    <copyright>
+      <year>2003</year>
+      <holder>David Bordoley</holder>
+    </copyright>
+    <copyright>
+      <year>2005</year>
+      <holder>Piers Cornwell</holder>
+    </copyright><copyright><year>2003, 2005</year><holder>Максим Дзюманенко (mvd@mylinux.com.ua)</holder></copyright>
 
-      <holder>Patanjali Somayaji</holder> 
-    </copyright>
-    <copyright> 
-      <year>2003</year> 
-      <holder>David Bordoley</holder> 
-    </copyright>
+<!-- translators: uncomment this:
 
   <copyright>
-   <year>2003</year>
-   <holder>Максим Дзюманенко (переклад українською)</holder>
+   <year>2002</year>
+   <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
   </copyright>
 
+   -->
 <!-- An address can be added to the publisher information.  If a role is 
      not specified, the publisher/author is the same for all versions of the 
      document.  -->
     <publisher> 
-      <publishername> GNOME Documentation Project </publishername> 
+      <publishername>Проект документування GNOME</publishername> 
     </publisher> 
 
    &legal; <!-- This file contains link to license for the
@@ -58,34 +62,31 @@
 	<firstname>Patanjali</firstname> 
 	<surname>Somayaji</surname> 
 	<affiliation> 
-	  <orgname>GNOME Documentation Project</orgname> 
-	  <address> <email>patanjali@codito.com</email> </address> 
+	  <orgname>Проект документування GNOME</orgname> 
+	  <address><email>patanjali@codito.com</email></address> 
 	</affiliation> 
       </author> 
       <author> 
 	<firstname>David</firstname> 
 	<surname>Bordoley</surname> 
 	<affiliation> 
-	  <orgname>Epiphany Development Team</orgname> 
-	  <address> <email>bordoley@msu.edu</email> </address> 
+	  <orgname>Команда розробки Epiphany</orgname> 
+	  <address><email>bordoley@msu.edu</email></address> 
 	</affiliation> 
       </author> 
-      <othercredit role="translator">
-		<firstname>Максим</firstname> 
-		<surname>Дзюманенко</surname> 
-		<affiliation> 
-	  		<orgname>myLinux, Ltd.</orgname> 
-	  		<address> <email>mvd@mylinux.com.ua</email> </address> 
-		</affiliation>
-		<contrib>Переклад українською.</contrib>
-      </othercredit>
-
+      <author> 
+	<firstname>Piers</firstname> 
+	<surname>Cornwell</surname> 
+	<affiliation> 
+	  <orgname>Команда розробки Epiphany</orgname> 
+	  <address><email>piers@gnome.org</email></address> 
+	</affiliation> 
+      </author>
     </authorgroup>
 
 
-    <releaseinfo>Ця довідка описує &fr; версії &appversion;.
-    </releaseinfo> 
-  </articleinfo> 
+    <releaseinfo>Ця довідка описує "Epiphany" версії 1.6</releaseinfo>
+  </articleinfo>
 
   <indexterm zone="index"> 
     <primary>Epiphany</primary> 
@@ -94,100 +95,38 @@
     <primary>epiphany</primary> 
   </indexterm>
   <indexterm zone="index"> 
-    <primary>Browser</primary> 
+    <primary>Веб-переглядач</primary> 
   </indexterm>
 
-<!-- ============= Document Body ============================= -->
-<!-- ============= Introduction ============================== -->
+<!-- ============= Document Body ================================== -->
+<!-- ============= Introduction =================================== -->
 <!-- Use the Introduction section to give a brief overview of what
      the application is and what it does. -->
   <sect1 id="fr-introduction"> 
     <title>Вступ</title> 
-    <para>&fr; - це програма перегляду web-сторінок для середовища GNOME, яка побудована на механізмі 
-        растеризації від mozilla. Метою створення &fr; була простота використання та відповідність стандартам.
-   </para>
+    <para>"Epiphany" - це програма перегляду web-сторінок для середовища GNOME. Метою її створення була простота використання та відповідність стандартам.</para>
   </sect1>
 
-<!-- ============= Getting Started =============================== -->
+<!-- ============= Getting Started ================================ -->
   <sect1 id="ephy-getting-started">
-      <title>Починаємо роботу</title>
+    <title>Початок роботи</title>
 
-        <sect2 id="ephy-to-open-browser-window">
-          <title>Відкривання вікна програми перегляду</title>
-          	<para>Запустити програму перегляду можна наступним чином:</para>
-		<variablelist>
-    		<varlistentry>
-    		<term>З меню <guimenu>Прикладні програми</guimenu></term>
-    		<listitem>
-    		<para>Виберіть
-    		<menuchoice>
-    		<guisubmenu>Інтернет</guisubmenu>
-    		<guimenuitem>Переглядач web-сторінок</guimenuitem>
-    		</menuchoice>. </para>
-    		</listitem>
-    		</varlistentry>
-    		<varlistentry>
-    		<term>З командного рядка</term>
-    		<listitem>
-    		<para>Наберіть <command>epiphany</command>, потім натисніть <keycap>Enter</keycap>.</para>
-    		</listitem>
-    		</varlistentry>
-    		</variablelist>
-        </sect2>
-        <sect2 id="ephy-to-open-bookmarks">
-          <title>Відкривання вікна закладок</title>
-                <para>Відкрити вікно закладок можна наступним чином:</para>
-		<variablelist>
-    		
-                <varlistentry>
-    		<term>З меню <guimenu>Прикладні програми</guimenu></term>
-    		<listitem>
-    		<para>Виберіть
-    		<menuchoice>
-    		<guisubmenu>Інтернет</guisubmenu>
-    		<guimenuitem>Закладки web-сторінок</guimenuitem>
-    		</menuchoice>. 
-                </para>
-    		</listitem>
-    		</varlistentry>
-    		
-                <varlistentry>
-    		<term>З командного рядка</term>
-    		<listitem>
-    		<para>Наберіть <command>epiphany -b</command>, потім натисніть  <keycap>Enter</keycap>.</para>
-    		</listitem>
-    		</varlistentry>
-
- 
-                <varlistentry>
-                <term>З меню <guimenu>Закладки</guimenu></term>
-                <listitem>
-                <para>Виберіть <menuchoice>
-                  <guimenu>Закладки</guimenu>
-                  <guimenuitem>Редагувати закладки</guimenuitem>
-                  </menuchoice> у головному меню програми &fr;. 
-                </para>
-                </listitem>
-                </varlistentry>
-
-                <varlistentry>
-                <term>З пеналу &fr;</term>
-                <listitem>
-                <para>
-                Натисніть на кнопку Закладки у головному вікні. 
-                </para>
-                </listitem>
-                </varlistentry>
-                </variablelist>
-        </sect2>
-
+      <sect2 id="ephy-to-open-browser-window">
+        <title>Відкривання вікна програми перегляду</title>
+        <para>Запустити програму перегляду можна наступним чином:</para>
+        <variablelist><varlistentry><term>З меню <guimenu>Програми</guimenu></term><listitem><para>Виберіть <menuchoice><guisubmenu>Інтернет</guisubmenu><guimenuitem>Веб-переглядач Epiphany</guimenuitem></menuchoice>.</para></listitem></varlistentry><varlistentry><term>З командного рядка</term><listitem><para>Наберіть <command>epiphany</command>, потім натисніть <keycap>Enter</keycap>.</para></listitem></varlistentry></variablelist>
+      </sect2>
+      <sect2 id="ephy-to-open-bookmarks">
+        <title>Відкривання вікна закладок</title>
+        <para>Відкрити вікно закладок можна наступним чином:</para>
+        <variablelist><varlistentry><term>З меню <guimenu>Програми</guimenu></term><listitem><para>Виберіть <menuchoice><guisubmenu>Інтернет</guisubmenu><guimenuitem>Закладки веб-переглядача Epiphany</guimenuitem></menuchoice>.</para></listitem></varlistentry><varlistentry><term>З командного рядка</term><listitem><para>Наберіть <command>epiphany -b</command>, потім натисніть <keycap>Enter</keycap>.</para></listitem></varlistentry><varlistentry><term>З меню <guimenu>Закладки</guimenu></term><listitem><para>Виберіть <menuchoice><guimenu>Закладки</guimenu><guimenuitem>Правка закладок</guimenuitem></menuchoice> у головному меню програми "Epiphany".</para></listitem></varlistentry><varlistentry><term>З панелі інструментів "Epiphany"</term><listitem><para>Натисніть на кнопку Закладки на панелі інструментів головного вікна. </para></listitem></varlistentry></variablelist>
+      </sect2>
   </sect1>
 
-<!-- ============= Browser Windows ============================ -->
+<!-- ============= Browser Windows ================================ -->
   <sect1 id="ephy-browser-windows">
-      <title>Вікна програми перегляду</title>
-      <para>Вікна програми перегляду дозволяють переглядати web-сторінки.
-<xref linkend="ephy-screenshot"/> показує вікно, що відображує  домашню сторінку.</para>
+    <title>Вікна веб-переглядача</title>
+    <para>Вікна веб-переглядача дозволяють переглядати веб-сторінки. На <xref linkend="ephy-screenshot"/> показано вікно, що відображує домашню сторінку.</para>
     <figure id="ephy-screenshot">
       <title>Вікно переглядача з домашньою сторінкою</title>
       <screenshot>
@@ -196,14 +135,14 @@
             <imagedata fileref="figures/ephy-screenshot.png" format="PNG"/>
           </imageobject>
           <textobject>
-            <phrase>Сторінка, що відображується у вікні перегляду. Callouts: Menubar, toolbar, address entry, bookmarks bar, view pane</phrase>
+            <phrase>Сторінка, що відображується у вікні веб-переглядача. Callouts: Menubar, toolbar, address entry, bookmarks bar, view pane</phrase>
           </textobject>
         </mediaobject>
       </screenshot>
     </figure>
-    <para><xref linkend="epiphany-TBL-1"/> описує компоненти вікна програми перегляду.</para>
+    <para>У <xref linkend="epiphany-TBL-1"/> описано компоненти вікна веб-переглядача.</para>
     <table frame="topbot" id="epiphany-TBL-1">
-      <title>Компоненти вікна програми перегляду</title>
+      <title>Компоненти вікна веб-переглядача</title>
       <tgroup cols="2" colsep="0" rowsep="0">
         <colspec colname="colspec0" colwidth="29.39*"/>
         <colspec colname="colspec1" colwidth="70.61*"/>
@@ -223,15 +162,15 @@
               <para>Панель меню</para>
             </entry>
             <entry valign="top">
-              <para>Містить меню, яке використовується для виконання завдань головного вікна програми.</para>
+              <para>Містить меню, яке використовується для виконання завдань у головному вікні програми.</para>
             </entry>
           </row>
           <row>
             <entry valign="top">
-              <para>Пенал</para>
+              <para>Панель інструментів</para>
             </entry>
             <entry valign="top">
-              <para>Містить кнопки, які використовуються для виконання завдань головного вікна програми.</para>
+              <para>Містить кнопки, які використовуються для виконання завдань у головному вікні програми.</para>
             </entry>
           </row>
           <row>
@@ -239,10 +178,10 @@
               <para>Поле вводу адреси</para>
             </entry>
             <entry colname="colspec1" valign="top">
-              <para>Комбінація поля редагування та розкривного списку для вводу адрес web-сторінок або виразів, які відшукуються.</para>
+              <para>Комбінація поля редагування та розкривного списку для вводу адрес веб-сторінок або виразів, які відшукуються.</para>
             </entry>
           </row>
-	<row>
+	  <row>
             <entry colname="colspec0" valign="top">
               <para>Панель закладок</para>
             </entry>
@@ -252,7 +191,7 @@
           </row>
           <row>
             <entry valign="top">
-              <para>Площина перегляду</para>
+              <para>Область перегляду</para>
             </entry>
             <entry valign="top">
               <para>Відображує вміст поточної сторінки, що переглядається.</para>
@@ -260,7 +199,7 @@
           </row>
           <row>
             <entry colname="colspec0" valign="top">
-              <para>Панель стану</para>
+              <para>Рядок стану</para>
             </entry>
             <entry colname="colspec1" valign="top">
               <para>Відображає інформацію про стан.</para>
@@ -269,577 +208,296 @@
         </tbody>
       </tgroup>
     </table>
-    <para>Також у вікні перегляду можна користуватись контекстним меню. 
-Контекстне меню відкривається при клацанні правою кнопкою миші у вікні перегляду.
-Елементи цього меню залежіть від об'єкта на якому ви клацнули. Наприклад,
-при клацанні на посиланні, пункти контекстного меню мають відношення до
-посилань. У контекстному меню самої web-сторінки, можні вибрати пункти,
-що відносяться до її відображення.</para>
+    <para>Також у вікні перегляду можна користуватись контекстним меню. Контекстне меню відкривається при клацанні правою кнопкою миші у вікні перегляду. Елементи цього меню залежіть від об'єкта на якому ви клацнули. Наприклад, при клацанні на посиланні, пункти контекстного меню мають відношення до посилань. У контекстному меню самої веб-сторінки, можна вибрати пункти, що відносяться до її відображення.</para>
   </sect1>
 
-<!-- ============= Browsing the Web =========================== -->
+<!-- ============= Browsing the Web =============================== -->
   <sect1 id="ephy-browsing-web">
       <title>Перегляд сторінок</title>
       <para>
       </para>
         <sect2 id="using-address-entry">
           <title>Використання поля вводу адреси</title>
-          <para>
-            Поле вводу адреси використовується для вводу адрес web-сторінок
-            або виразів, які відшукуються. Будь-які слова, що вводяться у полі вводу адреси
-            шукаються серед закладок та історії сторінок. Якщо є будь-які відповідності,
-            вони показується у розкривному списку, з якого ви їх можете вибрати.
-            Вибрана web-сторінка відображується у вікні перегляду або вкладці. 
-          </para>
-          <para>
-            Ви можете вводити категорію закладок або вирази, які є частиною адреси, 
-            або заголовком будь-якої зі сторінок, що зберігаються у ваших закладках.
-            Ці вирази шукаються у базі даних закладок. Докладнішу інформацію дивіться у
-            <xref linkend="overview-of-bookmarks"/>.
-          </para>
+          <para>Поле вводу адреси використовується для вводу адрес веб-сторінок або виразів, які відшукуються. Будь-які слова, що вводяться у полі вводу адреси шукаються серед закладок та історії сторінок. Якщо є будь-які відповідності, вони показується у розкривному списку, з якого ви їх можете вибрати. Вибрана веб-сторінка відображується у вікні перегляду або вкладці.</para>
+          <para>Ви можете вводити категорію закладок або вирази, які є частиною адреси, або заголовком будь-якої зі сторінок, що зберігаються у ваших закладках. Ці вирази шукаються у базі даних закладок. Докладнішу про це дивіться у <xref linkend="overview-of-bookmarks"/></para>
         </sect2>
 	<sect2 id="using-toolbar">
-          <title>Використання пеналу</title>
-          <para>
-          </para>
+          <title>Використання панелі інструментів</title>
+          <para>Панель інструментів містить декілька кнопок для найбільш уживаних функцій. Панель інструментів можна використовувати для переходу між сторінками, натискаючи кнопки вперед та назад. Також, можна зупиняти завантаження сторінок натискаючи на кнопку "Зупинити". Зрештою, можна перезавантажувати сторінки, натискаючи кнопку "Перевантажити".</para>
+          <para>Можна налаштувати кнопки у вашій панелі інструментів у вікні "Редактор панелей". Докладніше про це у <xref linkend="to-edit-toolbars"/>.</para>
         </sect2>
 	<sect2 id="using-bookmarks-bar">
           <title>Використання панелі закладок</title>
-          <para>
-          </para>
+          <para>Панель закладок дозволяє тримати на панелі інструментів посилання на улюблені веб-сторінки. Докладніше про додавання закладок до панелі закладок дивіться у <xref linkend="to-add-bookmark-or-topic-to-bookmarks-bar"/>.</para>
         </sect2>
 	<sect2 id="using-fullscreen-mode">
           <title>Використання повноекранного режиму</title>
-          <para>
-          </para>
+          <para>Повноекранний режим дозволяє переглядачу використовувати весь екран для області відображення. Для переходу у повноекранний режим, виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>На весь екран</guimenuitem></menuchoice>.</para>
+          <para>У повноекранному режимі, виводиться лише мінімальна панель інструментів. Можна перемикнути її видимість, якщо клацнути правою кнопкою миші на чистій області сторінки та вибрати <menuchoice><guimenuitem>Панель</guimenuitem></menuchoice> або натиснути <keycap>Ctrl-Shift-T</keycap>.</para>
+          <para>Вийти з повноекранного режиму можна натиснувши <guibutton>Вийти з повноекранного режиму</guibutton>.</para>
         </sect2>
 	<sect2 id="to-open-new-window">
           <title>Відкривання нового вікна</title>
-          <para>Щоб відкрити нове вікно, виберіть 
-		  <menuchoice> <guimenu>Файл</guimenu> <guimenuitem>Нове вікно</guimenuitem>
-			 </menuchoice>.
-	  </para>
+          <para>Щоб відкрити нове вікно, виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Створити вікно</guimenuitem></menuchoice>.</para>
         </sect2>
 	<sect2 id="to-open-new-tab">
           <title>Відкривання нової вкладки</title>
-          <para>Щоб відкрити нову вкладку, виберіть 
-		  <menuchoice> <guimenu>Файл</guimenu> <guimenuitem>Нова вкладка</guimenuitem>
-			 </menuchoice>. Нова вкладка відкриється справа від існуючих.
-	  </para>
+          <para>Щоб відкрити нову вкладку, виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Створити вкладку</guimenuitem></menuchoice>. Нова вкладка відкриється справа від існуючих.</para>
 	</sect2>
 	<sect2 id="ephy-to-open-file">
           <title>Відкривання файлу</title>
-          <para>Щоб відкрити файл, виберіть
-		  <menuchoice> <guimenu>Файл</guimenu> <guimenuitem>Відкрити...</guimenuitem>
-			 </menuchoice>
-		  Відкриється діалогове вікно <guilabel>Відкрити</guilabel>. Виберіть необхідний файл, 
-		  потім натисніть на кнопку <guibutton>Гаразд</guibutton>. Файл відобразиться у
-		  вікні перегляду. </para>
+          <para>Щоб відкрити файл, виберіть <menuchoice> <guimenu>Файл</guimenu> <guimenuitem>Відкрити...</guimenuitem></menuchoice>. Відкриється діалогове вікно <guilabel>Відкрити</guilabel>. Виберіть необхідний файл, потім натисніть на кнопку <guibutton>Гаразд</guibutton>. Файл відобразиться у вікні перегляду.</para>
         </sect2>
 	<sect2 id="to-save-page-to-file">
           <title>Збереження сторінки у файл</title>
-          <para>Щоб зберегти сторінку у файлі, виберіть
-		<menuchoice> <guimenu>Файл</guimenu> <guimenuitem>Зберегти як</guimenuitem> 
-			</menuchoice>. 
-		Введіть назву файлу у діалоговому вікні <guilabel>Зберегти як</guilabel>, потім натисніть
-		на кнопку <guibutton>Гаразд</guibutton>. </para>
+          <para>Щоб зберегти сторінку у файлі, виберіть <menuchoice> <guimenu>Файл</guimenu> <guimenuitem>Зберегти як</guimenuitem></menuchoice>.  Введіть назву файлу у діалоговому вікні <guilabel>Зберегти як</guilabel>, потім натисніть на кнопку <guibutton>Гаразд</guibutton>.</para>
+        </sect2>
+        <sect2 id="using-print-setup">
+          <title>Параметри принтера</title>
+          <para>Параметри принтера дозволяють налаштувати спосіб друкування веб-сторінок.</para>
+          <variablelist><varlistentry><term>Відступи</term><listitem><para>Відстань від краю сторінки до вмісту сторінки.</para></listitem></varlistentry><varlistentry><term>Кольори</term><listitem><para>Друкувати у сірих тонах чи кольоровий друк.</para></listitem></varlistentry><varlistentry><term>Внизу сторінки</term><listitem><para>Виберіть чи друкувати номери сторінок та поточну дату внизу кожної сторінки.</para></listitem></varlistentry><varlistentry><term>Вгорі сторінки</term><listitem><para>Виберіть чи друкувати заголовок веб-сторінки згори кожної сторінки.</para></listitem></varlistentry><varlistentry><term>Розмір</term><listitem><para>Розмір паперу.</para></listitem></varlistentry><varlistentry><term>Орієнтація</term><listitem><para>Визначає верх сторінки є коротшим (книжкова) або довшим (альбомна) краєм сторінки.</para></listitem></varlistentry></variablelist>
+        </sect2>
+        <sect2 id="using-print-preview">
+          <title>Попередній перегляд</title>
+          <para>Попередній перегляд дозволяє переглянути як сторінка буде виглядати після друку. Для попереднього перегляду виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Попередній перегляд</guimenuitem></menuchoice>.</para>
         </sect2>
 	<sect2 id="to-print-page">
-          <title>Друкування у файл</title>
-          <para>
-          </para>
+          <title>Друк сторінки</title>
+          <para>для друкування сторінки виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>друк</guimenuitem></menuchoice>. Введіть назву принтера у полі <guilabel>Принтер</guilabel>, або введіть назву у полі <guilabel>Файл</guilabel>, щоб вивести друк у файл.</para>
+          <para>У розділі <guilabel>Діапазон сторінок</guilabel>для друку усієї сторінки виберіть <guilabel>Усі сторінки</guilabel>, для друку лише виділеної частини сторінки виберіть <guilabel>Виділене</guilabel>, або <guilabel>Сторінки</guilabel> - для друку визначеного вами діапазону сторінок.</para>
         </sect2>
 	<sect2 id="to-find-text-in-page">
           <title>Пошук тексту на сторінці</title>
 	  <para>Щоб знайти рядок на сторінці, виконайте наступні дії:</para>
-		<orderedlist> 
-		  <listitem><para>Виберіть
-				<menuchoice> <guimenu>Редагувати</guimenu>
-				  <guimenuitem>Знайти</guimenuitem> </menuchoice>.
-				Відобразиться діалогове вікно <guilabel>Знайти</guilabel>.</para>
-		  </listitem>
-		  <listitem><para>Наберіть рядок, який бажаєте знайти, у полі
-				<guilabel>Знайти</guilabel>.</para>
-		  </listitem>
-		  <listitem><para>Щоб шукати лише рядки, регістр яких збігається з набраним вами рядком, виберіть
-			 параметр  <guilabel>Враховувати регістр</guilabel>. </para>
-		  </listitem>
-		  <listitem><para>Щоб після закінчення пошуку на сторінці, починати пошук з
-			початку сторінки виберіть параметр <guilabel>Автоматично переходити на початок</guilabel>. </para>
-		  </listitem>
-		  <listitem><para>Для переходу до першого знайденого рядка натисніть кнопку <guibutton>Наступний</guibutton>.
-			 Якщо рядок знайдено, курсор переміщується у його позицію та цей рядок виділяється.</para>
-		  </listitem>
-		  <listitem><para>Щоб знайти місцезнаходження наступного рядка, натисніть кнопку
-				<guibutton>Наступний</guibutton>.</para>
-		  </listitem>
-		  <listitem><para>Щоб знайти місцезнаходження попереднього рядка, натисніть кнопку
-				<guibutton>Попередній</guibutton>.</para>
-		  </listitem>
-		  <listitem><para>Щоб закінчити пошук, натисніть на кнопку
-				<guibutton>Закрити</guibutton>. </para>
-		  </listitem>
-		</orderedlist>
+            <orderedlist><listitem><para>Виберіть <menuchoice><guimenu>Редагувати</guimenu><guimenuitem>Знайти</guimenuitem></menuchoice>. Відобразиться діалогове вікно <guilabel>Знайти</guilabel>.</para></listitem><listitem><para>Наберіть рядок, який бажаєте знайти, у полі <guilabel>Знайти</guilabel>.</para></listitem><listitem><para>Щоб шукати лише рядки, регістр яких збігається з набраним вами рядком, відмітьте параметр <guilabel>Враховувати регістр</guilabel>.</para></listitem><listitem><para>Щоб після закінчення пошуку на сторінці, починати пошук з початку сторінки виберіть параметр <guilabel>Автоматично переходити на початок</guilabel>.</para></listitem><listitem><para>Для переходу до першого знайденого рядка натисніть кнопку <guibutton>Наступний</guibutton>. Якщо рядок знайдено, курсор переміщується у його позицію та цей рядок виділяється.</para></listitem><listitem><para>Щоб знайти місцезнаходження наступного рядка, натисніть кнопку <guibutton>Наступний</guibutton>.</para></listitem><listitem><para>Щоб знайти місцезнаходження попереднього рядка, натисніть кнопку <guibutton>Попередній</guibutton>.</para></listitem><listitem><para>Щоб закінчити пошук, натисніть на кнопку <guibutton>Закрити</guibutton>.</para></listitem></orderedlist>
         </sect2>	
 	<sect2 id="to-change-zoom">
 	  <title>Зміна масштабу</title>
-	  <para>Змінити масштабування сторінки можна наступним чином</para>
-	  <itemizedlist>
-	  	<listitem><para>Щоб збільшити вигляд сторінки, виберіть
-	  	<menuchoice>
-		<guimenu>Вигляд</guimenu>
-		<guimenuitem>Збільшити</guimenuitem>
-	  	</menuchoice>.</para>
-		</listitem>
-		<listitem><para>Щоб зменшити вигляд сторінки, виберіть
-		<menuchoice>
-		<guimenu>Вигляд</guimenu>
-		<guimenuitem>Зменшити</guimenuitem>
-		</menuchoice>.</para>
-		</listitem>
-		<listitem><para>Щоб повернути вигляд сторінки до оригінального розміру 
-		<menuchoice>
-		<guimenu>Вигляд</guimenu>
-		<guimenuitem>Звичайний розмір</guimenuitem>
-		</menuchoice>. </para>
-		</listitem>
-	  </itemizedlist>
+	  <para>Змінити масштаб сторінки можна наступним чином</para>
+	  <itemizedlist><listitem><para>Щоб збільшити вигляд сторінки, виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Збільшити</guimenuitem></menuchoice>.</para></listitem><listitem><para>Щоб зменшити вигляд сторінки, виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Зменшити</guimenuitem></menuchoice>.</para></listitem><listitem><para>Щоб повернути оригінальний розмір сторінки виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Звичайний розмір</guimenuitem></menuchoice>.</para></listitem></itemizedlist>
         </sect2>
 	<sect2 id="to-view-page-source">
           <title>Перегляд вихідного тексту сторінки</title>
-          <para>
-          </para>
+          <para>Для перегляду вихідного коду сторінки, виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Вихідний код сторінки</guimenuitem></menuchoice>. Вихідний текст відобразиться у типовому текстовому редакторі.</para>
+        </sect2>
+        <sect2 id="to-view-popup-windows">
+          <title>Перегляд випадаючих вікон сторінок</title>
+          <para>Деякі веб-сторінки автоматично відкривають нові вікна переглядача. Вони відомі як випадаючі вікна. Щоб показати чи сховати випадаючі вікна, виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Випадаючі вікна</guimenuitem></menuchoice>. Коли випадаючі вікна сторінки приховані, у рядку стану відображається значок заблоковані випадаючі блокування випадаючих вікон.</para>
+          <para>Встановлення типової поведінки випадаючих вікон дивіться у <xref linkend="privacy-preferences"/>.</para>
         </sect2>
 	<sect2 id="to-open-link">
           <title>Відкривання посилання</title>
-          <para>
-          </para>
-        </sect2>
-	<sect2 id="to-open-link-in-window">
-          <title>Відкривання посилання у новому вікні</title>
-          <para>
-          </para>
-        </sect2>
-	<sect2 id="to-open-link-in-tab">
-          <title>Відкривання посилання у новій вкладці</title>
-          <para>
-          </para>
+          <para>Веб-сторінки містять посилання на інші веб-сторінки, часто (але не завжди) посилання позначаються підкресленням. Щоб перейти за посиланням, клацніть на ньому.</para>
+          <variablelist><varlistentry><term>Відкривання посилання, як визначено у сторінці</term><listitem><para>Клацніть лівою кнопкою на посиланні. Посилання може відкритись у поточному вікні чи новому вікні, в залежності від того, як це визначено автором сторінки.</para></listitem></varlistentry><varlistentry><term>Відкривання посилання у новій вкладці</term><listitem><para>Клацніть на ньому правою кнопкою та виберіть <guimenuitem>Відкрити посилання у новій вкладці</guimenuitem>,</para></listitem></varlistentry><varlistentry><term>Відкривання посилання у новому вікні</term><listitem><para>Клацніть на ньому правою кнопкою та виберіть <guimenuitem>Відкрити посилання у новому вікні</guimenuitem>,</para></listitem></varlistentry></variablelist>
         </sect2>
 	<sect2 id="to-download-link">
           <title>Завантаження посилання</title>
-          <para>
-          </para>
+          <para>Щоб зберегти цільову сторінку посилання клацніть на ньому правою кнопкою миші та виберіть <guimenuitem>Завантажити посилання</guimenuitem>. Файли чи документ, на який вказує посилання, буде збережений у теці завантаження, яку можна вибрати у <xref linkend="general-preferences"/>.</para>
         </sect2>
-	<sect2 id="to-switch-between-tab">
+	<sect2 id="to-switch-between-tabs">
           <title>Перемикання між вкладками</title>
-          <para>
-          </para>
+          <para>Для перемикання на певну вкладку клацніть на її заголовку.</para>
         </sect2>
 	<sect2 id="to-move-tabs">
           <title>Переміщення вкладок</title>
-          <para>
-          </para>
+          <para>Вкладки можна впорядковувати за власним смаком. Для переміщення вкладок виберіть <menuchoice><guimenu>Вкладки</guimenu><guimenuitem>Перемістити вкладку ліворуч</guimenuitem></menuchoice> або <menuchoice><guimenu>Вкладки</guimenu><guimenuitem>Перемістити вкладку праворуч</guimenuitem></menuchoice>. Також їх можна перетягувати мишею.</para>
+          <para>Для переміщення поточної вкладки у нове вікно виберіть <menuchoice><guimenu>Вкладки</guimenu><guimenuitem>Відкріпити вкладку</guimenuitem></menuchoice>.</para>
+           <tip>
+             <para>Також можна отримати доступ до цих параметрів клацнувши правою кнопкою на заголовку вкладки.</para>
+           </tip>
         </sect2>
   </sect1>
 
-<!-- ============= Managing Your Bookmarks ================ -->
+<!-- ============= Managing Your Bookmarks ======================== -->
   <sect1 id="ephy-managing-bookmarks">
       <title>Керування закладками</title>
       <para>
       </para>
 	<sect2 id="overview-of-bookmarks">
           <title>Огляд системи закладок програми Epiphany</title>
-          <para>
-            Система закладок &fr; дещо відрізняється від методу розташування 
-            ієрархічних папок, який реалізовано у більшості переглядачів Інтернет.
-            Вона побудована на двох принципах: 
-            <itemizedlist>
-              <listitem>
-              <para>Максимально простий інтерфейс побудови переглядача.</para>
-              </listitem>
-              <listitem>
-              <para>Звільнення користувачів від необхідності запам'ятовувати 
-              адреси сайтів, які вони хочуть відвідати.</para>
-              </listitem>
-            </itemizedlist>
-          </para>
-          <para>
-            Ієрархічний спосіб побудови закладок не задовольняє потреби більшості
-            людей. Натомість підхід &fr; подібний до бази даних.
-            Адреса зберігається у закладці разом з асоційованими метаданими.
-            Потім ці метадані використовуються для пошуку закладки.
-            У наступних версіях &fr; буде впроваджено зручні механізми пошуку
-            закладок у цій базі даних.
-          </para>
-          <para>
-            У системі закладок &fr; адреси впорядковані за їх відношенням
-            до однієї або більше категорій. Наприклад, якщо хтось зберігає закладку на
-            <ulink type="http" url="http://developer.gnome.org">Домашню 
-	    сторінку розробників GNOME</ulink>, у будь-якому іншому переглядачі, 
-            може розташувати її у наступній ієрархії:
-            <programlisting>
-            Розробка -> GNOME -> домашня сторінка розробників GNOME
-            </programlisting>
-	  </para>
-          <para>
-            У &fr; ту ж саму сторінку можна пов'язати з двома категоріями: 
-            <programlisting>
-            Розробка -> домашня сторінка розробників GNOME
-            GNOME -> домашня сторінка розробників GNOME
-            </programlisting>
-            Тепер користувач може дістатись закладки набравши
-            "GNOME" або "Розробка" у полі вводу адреси. Також користувач може набрати 
-	    будь-яке зі слів "GNOME", "розробників", "домашня" або "сторінка" у полі вводу адреси. 
-	    Будь-який з цих методів розкриває список з потрібними закладками. Всі шляхи відкривання закладок
-            розглянуті у <xref
-            linkend="to-access-a-bookmark"/>
-          </para>
-          <para>
-            <note>
-              <title>Без підтеми</title>
-              <para>
-                &fr; має лише один рівень категорій. Ці категорії не можуть мати під-категорій. 
-              </para>
-            </note>
-          </para>
+          <para>Система закладок "Epiphany" дещо відрізняється від методу розташування ієрархічних папок, який реалізовано у більшості переглядачів Інтернет. Вона побудована на двох принципах: <itemizedlist><listitem><para>Максимально простий інтерфейс побудови переглядача.</para></listitem><listitem><para>Звільнення користувачів від необхідності запам'ятовувати адреси сайтів, які вони хочуть відвідати.</para></listitem></itemizedlist></para>
+          <para>Ієрархічний спосіб побудови закладок не задовольняє потреби більшості людей. Натомість підхід "Epiphany" подібний до бази даних. Адреса зберігається у закладці разом з асоційованими метаданими. Потім ці метадані використовуються для пошуку закладки. У наступних версіях "Epiphany" буде впроваджено зручні механізми пошуку закладок у цій базі даних.</para>
+          <para>У системі закладок "Epiphany" адреси впорядковані за їх відношенням до однієї або більше категорій. Наприклад, якщо хтось зберігає закладку на <ulink type="http" url="http://developer.gnome.org">GNOME Developers home page</ulink>, у будь-якому іншому переглядачі, може розташувати її у наступній ієрархії:</para>
+          <para>У "Epiphany", одна й та сама сторінка може бути пов'язана з двома категоріями: <programlisting>
+            Розробка -&gt; домашня сторінка розробників GNOME
+        GNOME -&gt; домашня сторінка розробників GNOME
+            </programlisting> Тепер користувач може дістатись закладки набравши "GNOME" або "Development" у полі вводу адреси. Також користувач може набрати у полі вводу адреси будь-яке зі слів "GNOME", "developers", "home" or "page". Будь-який з цих методів розкриє список з потрібними закладками. Всі шляхи відкривання закладок розглянуті у <xref linkend="to-access-a-bookmark"/></para>
+          <para><note><title>Без підтеми</title><para>"Epiphany" має лише один рівень категорій. Ці категорії не можуть мати під-категорій. </para></note></para>
         </sect2>
         <sect2 id="to-access-a-bookmark">
           <title>Доступ до закладок</title>
-          <para>
-            Основним шляхом доступу до закладок є вікно закладок.
-            Як відкривати вікно закладок дивіться у <xref
-            linkend="ephy-to-open-bookmarks"/>. 
-            Для навігації по закладках та їх впорядкування використовується окреме вікно.
-	    Це спрощує навігацію та дозволяє виконувати пошук та редагування
-            у одному місці. Колекцію закладок можна редагувати безпосередньо з 
-            робочої стільниці. Там же можна змінювати заголовок закладки,
-            додавати категорії, видаляти закладки, пов'язувати їх з іншими категоріями
-            шляхом перетаскування, редагувати властивості закладок, тощо.
-          </para>
-          <para>
-            Також дістатись закладок можна так:
-            <itemizedlist>
-              <listitem>
-              <para>Набрати назву категорії у полі вводу адреси головного вікна.
-              Відкриється розкривний список закладок цієї категорії.</para>
-              </listitem>
-              <listitem>
-              <para>Ввести слово у полі вводу адреси головного вікна. Це призводить
-              до автоматичного пошуку у базі даних закладок, які відповідають цьому слову.
-	      Відкриється розкривний список із знайденими закладками.</para>
-              </listitem>
-              <listitem>
-              <para>Пункт головного меню <guimenu>Закладки</guimenu> містить 
-              назви всіх категорій. Закладки, що відносяться до цих категорій,
-              можна вибрати з їх підменю. Це подібно до традиційного методу
-	      доступу до закладок та підтримується заради сумісності.</para>
-              </listitem>
-              <listitem>
-              <para>Скористатись панеллю закладок. 
-              Щоб додати панель закладок виберіть <menuchoice>
-                     <guimenu>Вигляд</guimenu>
-                     <guimenuitem>Панель закладок</guimenuitem>
-                     </menuchoice>.
-              У діалоговому вікні Закладки можна налаштувати будь-яку категорію
-	      або закладку, щоб вона показувалась на цій панелі. Таким чином
-              можна вивести найбільш вживані закладки.</para>
-              </listitem>
-            </itemizedlist>
-          </para>
+          <para>Основним шляхом доступу до закладок є вікно закладок. Як відкривати вікно закладок дивіться у <xref linkend="ephy-to-open-bookmarks"/>. Для переміщення по закладках та їх впорядкування використовується окреме вікно. Це спрощує навігацію та дозволяє виконувати пошук та редагування у одному місці. Колекцію закладок можна редагувати безпосередньо з робочої стільниці. Там же можна змінювати заголовок закладки, додавати категорії, видаляти закладки, пов'язувати їх з іншими категоріями шляхом перетаскування, редагувати властивості закладок, тощо.</para>
+          <para>Також дістатись закладок можна так: <itemizedlist><listitem><para>Набрати назву категорії у полі вводу адреси головного вікна. Відкриється розкривний список закладок цієї категорії.</para></listitem><listitem><para>Ввести слово у полі вводу адреси головного вікна. Це призводить до автоматичного пошуку у базі даних закладок, які відповідають цьому слову. Відкриється розкривний список із знайденими закладками.</para></listitem><listitem><para>Пункт головного меню <guimenu>Закладки</guimenu> містить назви всіх категорій. Закладки, що відносяться до цих категорій, можна вибрати з їх підменю. Це подібно до традиційного методу доступу до закладок та підтримується заради сумісності.</para></listitem><listitem><para>Скористатись панеллю закладок. Щоб додати панель закладок виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Панель закладок</guimenuitem></menuchoice>. У діалоговому вікні Закладки можна налаштувати будь-яку категорію або закладку, щоб вона показувалась на цій панелі. Таким чином можна вивести найбільш вживані закладки.</para></listitem></itemizedlist></para>
         </sect2>
-	<sect2 id="to-create-new-bookmark">
-	  <title>Створення нової закладки</title>
+    <sect2 id="to-create-new-bookmark">
+       <title>Створення нової закладки</title>
           <para>Існує декілька способів створити нову закладку.</para>
-		<variablelist>
-    		<varlistentry>
-    		<term>У вікні програми перегляду</term>
-    		<listitem>
-			<itemizedlist>
-	  		<listitem><para>Щоб додати поточну сторінку до закладок виберіть
-	  		<menuchoice>
-			<guimenu>Закладки</guimenu>
-			<guimenuitem>Додати закладку...</guimenuitem>
-	  		</menuchoice>.</para>
-			</listitem>
-			<listitem><para>Щоб додати до закладок посилання з поточної сторінки 
-				клацніть на ньому правою кнопкою миші та виберіть
-	  		<menuchoice>
-			<guimenuitem>Занести посилання у закладки...</guimenuitem>
-	  		</menuchoice>.</para>
-			</listitem>
-			</itemizedlist>
-    		</listitem>
-    		</varlistentry>
-		<varlistentry>
-		<term>У вікні історії</term>
-    		<listitem>
-		<para>Щоб додати до закладок вибраний елемент історії виберіть
-	  	<menuchoice>
-		<guimenu>Файл</guimenu>
-		<guimenuitem>Занести у закладки...</guimenuitem>
-	  	</menuchoice>. Або клацніть правою кнопкою миші на елементі історії та
-		 виберіть з контекстного меню <guimenuitem>Занести у закладки..</guimenuitem>.</para>
-		</listitem>
-    		</varlistentry>
-    		</variablelist>
-	
+          <variablelist><varlistentry><term>У вікні програми перегляду</term><listitem><itemizedlist><listitem><para>Щоб додати поточну сторінку до закладок виберіть <menuchoice><guimenu>Закладки</guimenu><guimenuitem>Додати закладку...</guimenuitem></menuchoice>.</para></listitem><listitem><para>Щоб додати до закладок посилання з поточної сторінки клацніть на ньому правою кнопкою миші та виберіть <menuchoice><guimenuitem>Додати посилання до закладок...</guimenuitem></menuchoice>.</para></listitem></itemizedlist></listitem></varlistentry><varlistentry><term>У вікні історії</term><listitem><para>Щоб додати до закладок вибраний елемент історії виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Додати закладку...</guimenuitem></menuchoice>. Або клацніть правою кнопкою миші на елементі історії та виберіть з контекстного меню <guimenuitem>Додати закладку..</guimenuitem>.</para></listitem></varlistentry></variablelist>
         </sect2>
 	<sect2 id="to-select-bookmarks">
           <title>Вибір закладок та категорій</title>
-          <para>Існує декілька шляхів вибору закладок та категорій.  
-		<xref linkend="epiphany-TBL-2"/> описує вибір елементів у вікні впорядковування закладок.</para>
-      		<table frame="topbot" id="epiphany-TBL-2">
-        	<title>Вибір елементів у вікні Закладки</title>
-        	<tgroup cols="2" colsep="0" rowsep="0">
-          	<colspec colname="colspec0" colwidth="36.36*"/>
-          	<colspec colname="colspec2" colwidth="63.64*"/>
-          	<thead>
-            	<row rowsep="1">
-              	<entry valign="top">
-                <para>Завдання</para>
-              	</entry>
-              	<entry colname="colspec2" valign="top">
-                <para>Дія</para>
-              	</entry>
+          <para>Існує декілька шляхів вибору закладок та категорій.  У <xref linkend="epiphany-TBL-2"/> описано вибір елементів у вікні впорядковування закладок.</para>
+          <table frame="topbot" id="epiphany-TBL-2">
+            <title>Вибір елементів у вікні Закладки</title>
+            <tgroup cols="2" colsep="0" rowsep="0">
+              <colspec colname="colspec0" colwidth="36.36*"/>
+              <colspec colname="colspec2" colwidth="63.64*"/>
+              <thead>
+                <row rowsep="1">
+                  <entry valign="top">
+                    <para>Завдання</para>
+                  </entry>
+              	  <entry colname="colspec2" valign="top">
+                    <para>Дія</para>
+                  </entry>
             	</row>
-          	</thead>
-          	<tbody>
-            	<row>
-              	<entry colname="colspec0" valign="top">
-                <para>Вибрати закладку або категорію</para>
-              	</entry>
-              	<entry colname="colspec2" valign="top">
-                <para>Клацніть на закладку чи категорію.</para>
-              	</entry>
-            	</row>
-            	<row>
-              	<entry colname="colspec0" valign="top">
-                <para>Вибрати групу суміжних закладок</para>
-              	</entry>
-              	<entry colname="colspec2" valign="top">
-                <para>Натисніть та утримуйте <keycap>Shift</keycap>. Клацніть за першу закладку групи, потім клацніть на 
-		останню закладку групи.</para>
-              	</entry>
+              </thead>
+              <tbody>
+                <row>
+                  <entry colname="colspec0" valign="top">
+                    <para>Вибрати закладку або категорію</para>
+              	  </entry>
+              	  <entry colname="colspec2" valign="top">
+                    <para>Клацніть на закладку чи категорію.</para>
+              	  </entry>
             	</row>
             	<row>
-              	<entry colname="colspec0" valign="top">
-                <para>Вибрати декілька закладок</para>
-              	</entry>
-              	<entry colname="colspec2" valign="top">
-                <para>Натисніть та утримуйте <keycap>Ctrl</keycap>. Клацніть за необхідних закладках.</para>
-              	</entry>
+              	  <entry colname="colspec0" valign="top">
+                    <para>Вибрати групу суміжних закладок</para>
+              	  </entry>
+              	  <entry colname="colspec2" valign="top">
+                    <para>Натисніть та утримуйте <keycap>Shift</keycap>. Клацніть за першу закладку групи, потім клацніть на останню закладку групи.</para>
+                  </entry>
             	</row>
             	<row>
-              	<entry colname="colspec0" valign="top">
-                <para>Вибрати всі закладки категорії</para>
-              	</entry>
-              	<entry colname="colspec2" valign="top">
-                <para>Виберіть <menuchoice><guimenu>Редагування</guimenu><guimenuitem>Вибрати все</guimenuitem></menuchoice>.</para>
-              	</entry>
+              	  <entry colname="colspec0" valign="top">
+                    <para>Вибрати декілька закладок</para>
+              	  </entry>
+              	  <entry colname="colspec2" valign="top">
+                    <para>Натисніть та утримуйте <keycap>Ctrl</keycap>. Клацніть за необхідних закладках.</para>
+              	  </entry>
             	</row>
-          	</tbody>
-        	</tgroup>
-      		</table>
+            	<row>
+              	  <entry colname="colspec0" valign="top">
+                    <para>Вибрати всі закладки категорії</para>
+              	  </entry>
+              	  <entry colname="colspec2" valign="top">
+                    <para>Виберіть <menuchoice><guimenu>Правка</guimenu><guimenuitem>Виділити все</guimenuitem></menuchoice>.</para>
+              	  </entry>
+            	</row>
+              </tbody>
+            </tgroup>
+          </table>
         </sect2>
 	<sect2 id="to-open-bookmark">
           <title>Відкривання закладки у новому вікні або вкладці</title>
-          <variablelist>
-    		<varlistentry>
-    			<term>Щоб відкрити закладку у новому вікні виконайте наступні дії:</term>
-    				<listitem>
-				<orderedlist>
-        			<listitem>
-          			<para>Виберіть необхідну закладку.</para>
-        			</listitem>
-        			<listitem>
-          			<para>Виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Відкрити у 
-					новому вікні</guimenuitem></menuchoice>. 
-					Або клацніть правою кнопкою миші на закладці, потім виберіть
- 					<menuchoice><guimenuitem>Відкрити у новому вікні</guimenuitem>
-					</menuchoice>.</para>
-        			</listitem>
-				</orderedlist>
-				</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term>Щоб відкрити закладку у новій вкладці виконайте наступні дії:</term>
-				<listitem>
-				<orderedlist>
-        			<listitem>
-          			<para>Виберіть необхідну закладку.</para>
-        			</listitem>
-        			<listitem>
-          			<para>Виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Відкрити 					у новій вкладці</guimenuitem></menuchoice>. 
-					Або клацніть правою кнопкою миші на закладці, потім виберіть
-					<menuchoice><guimenuitem>Відкрити у новій вкладці</guimenuitem>
-					</menuchoice>.</para>
-        			</listitem>
-				</orderedlist>
-				</listitem>
-		</varlistentry>
-	  </variablelist>
+          <variablelist><varlistentry><term>Щоб відкрити закладку у новому вікні виконайте наступні дії:</term><listitem><orderedlist><listitem><para>Виберіть потрібну закладку.</para></listitem><listitem><para>Виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Відкрити у новому вікні</guimenuitem></menuchoice>. Або клацніть правою кнопкою миші на закладці, потім виберіть <menuchoice><guimenuitem>Відкрити у новому вікні</guimenuitem></menuchoice>.</para></listitem></orderedlist></listitem></varlistentry><varlistentry><term>Щоб відкрити закладку у новій вкладці виконайте наступні дії:</term><listitem><orderedlist><listitem><para>Виберіть потрібну закладку.</para></listitem><listitem><para>Виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Відкрити у новій вкладці</guimenuitem></menuchoice>. Або клацніть правою кнопкою миші на закладці, потім виберіть <menuchoice><guimenuitem>Відкрити у новій вкладці</guimenuitem></menuchoice>.</para></listitem></orderedlist></listitem></varlistentry></variablelist>
         </sect2>
 	<sect2 id="to-create-new-topic">
           <title>Створення нової категорії</title>
-          <para>
-            Щоб створити нову категорію виберіть у меню вікна Закладки
-            <menuchoice>
-              <guimenu>Файл</guimenu>
-              <guimenuitem>Нова категорія</guimenuitem>
-            </menuchoice>.
-            Створиться нова категорія, після чого можна ввести її назву. 
-          </para>
+          <para>Щоб створити нову категорію виберіть у меню вікна Закладки <menuchoice><guimenu>Файл</guimenu><guimenuitem>Створити категорію</guimenuitem></menuchoice>. Створиться нова категорія, після чого можна ввести її назву. Категорія з'явиться як підменю у меню <guimenu>Закладки</guimenu>.</para>
         </sect2>
 	<sect2 id="to-add-bookmark-to-topic">
           <title>Додавання закладки у категорію</title>
-          <para>
-          </para>
+          <para>Щоб додати закладку у категорію, клацніть правою кнопкою на елементі у вікні закладок та виберіть <guimenuitem>Властивості</guimenuitem>. У списку <guilabel>Категорії</guilabel> відмітьте категорії, до яких має належати закладка та натисніть <guibutton>Закрити</guibutton>.</para>
         </sect2>
 	<sect2 id="to-remove-bookmark-from-topic">
           <title>Видалення закладки або категорії</title>
-          <para>
-          </para>
+          <para>Щоб видалити закладку з категорії, клацніть правою кнопкою на елементі у вікні закладок та виберіть <guimenuitem>Властивості</guimenuitem>. У списку <guilabel>Категорії</guilabel> зніміть відмітку з категорій, з яких треба видалити закладку та натисніть <guibutton>Закрити</guibutton>.</para>
         </sect2>
 	<sect2 id="to-rename-bookmark-or-topic">
           <title>Перейменування закладки з категорії</title>
           <para>Щоб перейменувати закладку або категорію виконайте наступні дії:</para>
-      		<orderedlist>
-        	<listitem>
-          	<para>Виберіть необхідну закладку або категорію у вікні менеджера закладок.</para>
-        	</listitem>
-        	<listitem>
-          	<para>Виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Перейменувати...</guimenuitem>
-		</menuchoice>. Або клацніть правою кнопкою миші на закладці або категорії, потім виберіть
-		<guimenuitem>Перейменувати...</guimenuitem>.
-          	Назву закладки або теми буде виділено.</para>
-        	</listitem>
-        	<listitem>
-          	<para>Введіть нову назву закладки або категорії, потім натисніть <keycap>Enter</keycap>.</para>
-        	</listitem>
-      		</orderedlist>
+          <orderedlist><listitem><para>Виберіть необхідну закладку або категорію у вікні менеджера закладок.</para></listitem><listitem><para>Виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Перейменувати...</guimenuitem></menuchoice>. Або клацніть правою кнопкою миші на закладці або категорії, потім виберіть <guimenuitem>Перейменувати...</guimenuitem>. Назву закладки або теми буде виділено.</para></listitem><listitem><para>Введіть нову назву закладки або категорії, потім натисніть <keycap>Enter</keycap>.</para></listitem></orderedlist>
         </sect2>
 	<sect2 id="to-delete-bookmark-or-topic">
           <title>Видалення закладки або категорії</title>
           <para>Щоб видалити закладку або категорію виконайте наступні дії:</para>
-      		<orderedlist>
-        	<listitem>
-          	<para>Виберіть необхідну закладку або категорію у вікні менеджера закладок.</para>
-        	</listitem>
-        	<listitem>
-          	<para>Виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Видалити</guimenuitem></menuchoice>. 
-		Або клацніть правою кнопкою миші на закладці або категорії, потім виберіть <guimenuitem>Видалити</guimenuitem>.</para>
-        	</listitem>
-      		</orderedlist>
+          <orderedlist><listitem><para>Виберіть необхідну закладку або категорію у вікні менеджера закладок.</para></listitem><listitem><para>Виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Видалити</guimenuitem></menuchoice>. Або клацніть правою кнопкою миші на закладці або категорії, потім виберіть <guimenuitem>Видалити</guimenuitem>.</para></listitem></orderedlist>
         </sect2>
 	<sect2 id="to-edit-bookmark-properties">
 	  <title>Редагування властивостей закладок</title>
-          <para>
-          </para>
+          <para>Для редагування таких властивостей закладок як заголовок чи адреса, клацніть правою кнопкою миші у вікні закладок та виберіть <guimenuitem>Властивості</guimenuitem>.</para>
         </sect2>
 	<sect2 id="to-search-bookmarks">
           <title>Пошук к закладках</title>
-          <para>
-          </para>
+          <para>Щоб знайти закладку, введіть фразу пошуку у полі <guilabel>Знайти</guilabel>. "Epiphany" виконає пошук в усіх закладках незалежно від поточної категорії.</para>
         </sect2>
 	<sect2 id="to-copy-bookmark-address">
-          <title>Копіювання адресу у закладку</title>
+          <title>Копіювання адреси у закладку</title>
           <para>Щоб скопіювати адресу у закладки виконайте наступні дії:</para>
-      		<orderedlist>
-        	<listitem>
-          	<para>Виберіть закладку.</para>
-        	</listitem>
-        	<listitem>
-          	<para>Виберіть <menuchoice><guimenu>Редагування</guimenu><guimenuitem>Скопіювати адресу</guimenuitem></menuchoice>.
-		 Або клацніть правою кнопкою миші, а потім виберіть <guimenuitem>Скопіювати адресу</guimenuitem>.</para>
-        	</listitem>
-      		</orderedlist>
+          <orderedlist><listitem><para>Виділіть закладку.</para></listitem><listitem><para>Виберіть <menuchoice><guimenu>Правка</guimenu><guimenuitem>Копіювати адресу</guimenuitem></menuchoice>. Або клацніть правою кнопкою миші, а потім виберіть <guimenuitem>Копіювати адресу</guimenuitem>.</para></listitem></orderedlist>
         </sect2>
 	<sect2 id="to-add-bookmark-or-topic-to-bookmarks-bar">
           <title>Додавання закладки або категорії до панелі закладок</title>
           <para>Додати закладку або категорію можна наступним чином:</para>
-		<variablelist>
-    		<varlistentry>
-    		<term>У меню <guimenu>Файл</guimenu></term>
-    		<listitem>
-    		<para>Виберіть необхідну закладку або категорію, потім виберіть 
-    		<menuchoice>
-    		<guisubmenu>Файл</guisubmenu>
-    		<guimenuitem>Показувати у панелі закладок</guimenuitem>
-    		</menuchoice>. </para>
-    		</listitem>
-    		</varlistentry>
-    		<varlistentry>
-    		<term>Перетягуванням</term>
-    		<listitem>
-    		<para>Ви можете перетягувати закладки або категорії з вікна закладок у панель закладок.</para>
-    		</listitem>
-    		</varlistentry>
-    		</variablelist>
+          <variablelist><varlistentry><term>З меню <guimenu>Файл</guimenu></term><listitem><para>Виберіть необхідну закладку або категорію, потім виберіть <menuchoice><guisubmenu>Файл</guisubmenu><guimenuitem>Показувати у панелі закладок</guimenuitem></menuchoice>.</para></listitem></varlistentry><varlistentry><term>Перетягуванням</term><listitem><para>Ви можете перетягувати закладки або категорії з вікна закладок у панель закладок.</para></listitem></varlistentry></variablelist>
         </sect2>
 	<sect2 id="to-remove-bookmark-or-topic-from-bookmarks-bar">
           <title>Видалення закладки або теми з панелі закладок</title>
           <para>Видалити закладку або категорію можна наступним чином:</para>
-		<variablelist>
-    		<varlistentry>
-    		<term>У меню <guimenu>Файл</guimenu></term>
-    		<listitem>
-    		<para>Виберіть необхідну закладку або категорію, потім виберіть 
-    		<menuchoice>
-    		<guisubmenu>Файл</guisubmenu>
-    		<guimenuitem>Показувати у панелі закладок</guimenuitem>
-    		</menuchoice>.</para>
-    		</listitem>
-    		</varlistentry>
-    		<varlistentry>
-    		<term>Редактор пеналів</term>
-    		<listitem>
-    		<para>Закладки або категорії можна видалити з панелі закладок
-		      використовуючи редактор пеналів, як описано у розділі
-		      <xref linkend="to-edit-toolbars"/>.</para>
-    		</listitem>
-    		</varlistentry>
-    		</variablelist>
+          <variablelist><varlistentry><term>З меню <guimenu>Файл</guimenu></term><listitem><para>Виділіть необхідну закладку або категорію, потім виберіть <menuchoice><guisubmenu>Файл</guisubmenu><guimenuitem>Показувати у панелі закладок</guimenuitem></menuchoice>.</para></listitem></varlistentry><varlistentry><term>Редактор панелей інструментів</term><listitem><para>Закладки або категорії можна видалити з панелі закладок використовуючи редактор панелей інструментів, як описано у розділі <xref linkend="to-edit-toolbars"/>.</para></listitem></varlistentry></variablelist>
         </sect2>
 	<sect2 id="smart-bookmarks">
-          <title>Розумні закладки</title>
+	  <title>Розумні закладки</title>
           <para>
           </para>
+          <sect3 id="smart-bookmarks-introduction">
+            <title>Вступ</title>
+            <para>Розумні закладки - спеціальний тип закладок, який може мати один або більше параметрів. При використанні розумних закладок пошук у Веб може виконуватись без попереднього завантаження пошукової сторінки.</para>
+            <para>Усі розумні закладки відображаються у розкривному меню, якщо ви введете якийсь текст у полі вводу адреси, як це показано на <xref linkend="ephy-addressbar-smartbookmark-screenshot"/>. При виборі розумної закладки буде виконано пошук введеного тексту.</para>
+            <figure id="ephy-addressbar-smartbookmark-screenshot">
+              <title>Розумна закладка у розкривному списку поля вводу адреси</title>
+              <screenshot>
+                <mediaobject>
+                  <imageobject>
+                    <imagedata fileref="figures/ephy-addressbar-smartbookmark-screenshot.png" format="PNG"/> 
+                  </imageobject>
+                </mediaobject>
+              </screenshot>
+            </figure>
+            <para>Також можні додавати розумні закладки на панель інструментів, для цього у вікні властивостей закладки виберіть <guimenuitem>Показувати у стовпчику закладок</guimenuitem>. Тоді ви побачите назву закладки та текстове поле, як показано на <xref linkend="ephy-bookmarkbar-smartbookmark-screenshot"/>. Для запуску розумної закладки введіть текст у текстовому полі та натисніть Enter.</para>
+            <figure id="ephy-bookmarkbar-smartbookmark-screenshot">
+              <title>Розумна закладка у панелі закладок</title>
+              <screenshot>
+                <mediaobject>
+                  <imageobject>
+                    <imagedata fileref="figures/ephy-bookmarkbar-smartbookmark-screenshot.png" format="PNG"/> 
+                  </imageobject>
+                </mediaobject>
+              </screenshot>
+            </figure>
+          </sect3>
+          <sect3 id="smart-bookmarks-create-a-smartbookmark">
+            <title>Як створити розумну закладку?</title>
+            <para>Розумну закладку можна створити, якщо знайти яку адресу використовує сайт для пошуку, наприклад <command>http://www.google.com/search?q=SEARCHPHRASE</command> призведе запиту до Google фрази <command>SEARCHPHRASE</command>.</para>
+            <para>Щоб зробити цю адресу розумною закладкою, виконайте наступні дії:</para>
+            <orderedlist><listitem><para>Додайте закладку на <command>http://www.google.com/search?q=SEARCHPHRASE</command></para></listitem><listitem><para>Відкрийте вікно закладок.</para></listitem><listitem><para>У полі <guimenuitem>Адреса</guimenuitem> діалогового вікна закладок <guimenuitem>Властивості</guimenuitem>, замініть <command>SEARCHPHRASE</command> на %s.</para></listitem><listitem><para>(Необов'язково) Якщо хочете, щоб у панелі закладок з'явилась розумна закладка, як показано на <xref linkend="ephy-bookmarkbar-smartbookmark-screenshot"/>, виберіть <guimenuitem>Показувати у панелі закладок</guimenuitem> у діалоговому вікні <guimenuitem>Властивості</guimenuitem> закладки.</para></listitem></orderedlist>
+          </sect3>
+          <sect3 id="smart-bookmarks-archive">
+            <title>Архів розумних закладок</title>
+            <para>Архів з великою кількістю розумних закладок доступний на веб-сторінці <ulink url="http://galeon.sourceforge.net/bookmarks/">Galeon</ulink></para>
+          </sect3>
         </sect2>
   </sect1>
 
-<!-- ============= Managing Your History Links ================ -->
+<!-- ============= Managing Your History Links ==================== -->
   <sect1 id="ephy-managing-history">
       <title>Керування історією посилань</title>
       <para>
       </para>
 	<sect2 id="overview-of-history">
           <title>Огляд системи керування історією посилань Epiphany</title>
-          <para>
-            Epiphany зберігає дані про історію відвіданих вами посилань.
-            Ця інформація зберігається у базі даних. 
-          </para>
-          <para>
-            Коли ви набираєте у області вводу адреси головного вікна,
-            &fr; шукає відповідності між заголовками або адресами з 
-            бази даних історії відвіданих сайтів. Відповідності показуються
-            показуються у розкривному списку. 
-          </para>
-          <para>
-            Керувати історією посилань можна у вікні Історія.
-            Воно дозволяє виконувати пошук у історії, та видалити сайти, якщо ви не бажаєте
-            відвідати її пізніше.
-          </para>
-          <para>
-            <xref linkend="ephy-history-window-screenshot"/> показує вікно історії. 
-          </para>
+          <para>Epiphany зберігає дані про історію відвіданих вами посилань.  Ця інформація зберігається у базі даних. </para>
+          <para>Коли ви набираєте у області вводу адреси головного вікна, "Epiphany" шукає відповідності між заголовками або адресами з бази даних історії відвіданих сайтів. Відповідності показуються показуються у розкривному списку.</para>
+          <para>Керувати історією посилань можна у вікні Історія. Воно дозволяє виконувати пошук у історії, та видалити сайти, якщо ви не бажаєте відвідати її пізніше.</para>
+          <para><xref linkend="ephy-history-window-screenshot"/> показує вікно історії.</para>
           <figure id="ephy-history-window-screenshot">
             <title>Вікно історії</title>
             <screenshot>
               <mediaobject>
                 <imageobject>
-                  <imagedata
-                  fileref="figures/ephy-history-window-screenshot.png"
-                  format="PNG"/> 
+                  <imagedata fileref="figures/ephy-history-window-screenshot.png" format="PNG"/> 
                 </imageobject>
               </mediaobject>
             </screenshot>
@@ -847,165 +505,523 @@
         </sect2>
 	<sect2 id="to-select-history">
           <title>Вибір посилань з історії</title>
-          <para>
-            Вікно історії посилань відкривається при виборі <menuchoice>
-            <guimenu>Перейти</guimenu>
-            <guimenuitem>Історія</guimenuitem>
-            </menuchoice>.
-            Це вікно дозволяє знайти посилання у історії, відкрити посилання з історії
-            у новому вікні або новій вкладці, або видалити посилання з бази даних історії. 
-          </para>
+          <para>Вікно історії посилань відкривається при виборі <menuchoice><guimenu>Перейти</guimenu><guimenuitem>Історія</guimenuitem></menuchoice>.  Це вікно дозволяє знайти посилання у історії, відкрити посилання з історії у новому вікні або новій вкладці, або видалити посилання з бази даних історії.</para>
         </sect2>
 	<sect2 id="to-open-history-link">
           <title>Відкривання посилання історії у новому вікні або вкладці</title>
-          <variablelist>
-    		<varlistentry>
-    			<term>Щоб відкрити посилання з історії у новому вікні виконайте наступні дії:</term>
-    				<listitem>
-				<orderedlist>
-        			<listitem>
-          			<para>Виберіть необхідне посилання історії.</para>
-        			</listitem>
-        			<listitem>
-          			<para>Виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Відкрити у новому 						вікні</guimenuitem></menuchoice>. 
-					Або клацніть правою кнопкою миші у вікні історії, а потім виберіть 					<menuchoice><guimenuitem>Відкрити у новому вікні</guimenuitem>
-					</menuchoice>.</para>
-        			</listitem>
-				</orderedlist>
-				</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term>Щоб відкрити посилання з історії у новій вкладці виконайте наступні дії:</term>
-				<listitem>
-				<orderedlist>
-        			<listitem>
-          			<para>Виберіть необхідне посилання історії.</para>
-        			</listitem>
-        			<listitem>
-          			<para>Виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Відкрити у новій
-					вкладці</guimenuitem></menuchoice>. 
-					Або клацніть правою кнопкою миші у вікні історії, а потім виберіть 					<menuchoice><guimenuitem>Відкрити у новій вкладці</guimenuitem>
-					</menuchoice>.</para>
-        			</listitem>
-				</orderedlist>
-				</listitem>
-		</varlistentry>
-	  </variablelist>
+          <variablelist><varlistentry><term>Щоб відкрити посилання з історії у новому вікні виконайте наступні дії:</term><listitem><orderedlist><listitem><para>Виділіть необхідне посилання історії.</para></listitem><listitem><para>Виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Відкрити у новому вікні</guimenuitem></menuchoice>. Або клацніть правою кнопкою миші у вікні історії, а потім виберіть <menuchoice><guimenuitem>Відкрити у новому вікні</guimenuitem></menuchoice>.</para></listitem></orderedlist></listitem></varlistentry><varlistentry><term>Щоб відкрити посилання з історії у новій вкладці виконайте наступні дії:</term><listitem><orderedlist><listitem><para>Виділіть необхідне посилання історії.</para></listitem><listitem><para>Виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Відкрити у новій вкладці</guimenuitem></menuchoice>. Або клацніть правою кнопкою миші у вікні історії, а потім виберіть <menuchoice><guimenuitem>Відкрити у новій вкладці</guimenuitem></menuchoice>.</para></listitem></orderedlist></listitem></varlistentry></variablelist>
         </sect2>
 	<sect2 id="to-delete-history-link">
           <title>Видалення посилання з історії</title>
           <para>Щоб видалити посилання з історії виконайте наступні дії:</para>
-      		<orderedlist>
-        	<listitem>
-          	<para>Виберіть необхідне посилання з історії.</para>
-        	</listitem>
-        	<listitem>
-          	<para>Виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Видалити</guimenuitem></menuchoice>. Або клацніть правою кнопкою миші на посиланні з історії, а потім виберіть <guimenuitem>Видалити</guimenuitem>.</para>
-        	</listitem>
-      		</orderedlist>
+          <orderedlist><listitem><para>Виділіть посилання з історії, яке треба виділити.</para></listitem><listitem><para>Виберіть <menuchoice><guimenu>Файл</guimenu><guimenuitem>Видалити</guimenuitem></menuchoice>. Або клацніть правою кнопкою миші на посиланні з історії, а потім виберіть <guimenuitem>Видалити</guimenuitem>.</para></listitem></orderedlist>
         </sect2>
 	<sect2 id="to-search-history">
           <title>Пошук у історії</title>
-          <para>
-            При набиранні тексту у полі пошуку вікна історії,
-            відшукуються відповідності між набраним вами словом та
-            вмістом бази даних історії. Вони показуються у розташованому нижче списку.
-            Ці посилання можна відкрити у новому вікні, новій вкладці, або 
-            можна скопіювати їх адресу у буфер обміну, та вставити у іншій програмі.
-          </para>
-          <para>
-            Також, все що ви вводите у полі вводу адреси головного вікна &fr;
-            порівнюється у вмістом бази даних історії. Відповідності показуються у
-            розкривному списку разом з відповідностями з бази даних закладок. 
-          </para>
+          <para>При набиранні тексту у полі пошуку вікна історії, відшукуються відповідності між набраним вами словом та вмістом бази даних історії. Вони показуються у розташованому нижче списку. Ці посилання можна відкрити у новому вікні, новій вкладці, або можна скопіювати їх адресу у буфер обміну, та вставити у іншій програмі.</para>
+          <para>Також, все що ви вводите у полі вводу адреси головного вікна "Epiphany" порівнюється у вмістом бази даних історії. Відповідності показуються у розкривному списку разом з відповідностями з бази даних закладок.</para>
         </sect2>
 	<sect2 id="to-copy-history-link-address">
           <title>Копіювання адреси історії посилань</title>
           <para>Щоб скопіювати адресу історії виконайте наступні дії:</para>
-      		<orderedlist>
-        	<listitem>
-          	<para>Виберіть посилання з історії.</para>
-        	</listitem>
-        	<listitem>
-          	<para>Виберіть <menuchoice><guimenu>Редагувати</guimenu><guimenuitem>Копіювати адресу</guimenuitem></menuchoice>. 
-		Або клацніть правою кнопкою миші на посиланні у вікні історії, а потім виберіть <guimenuitem>Копіювати адресу</guimenuitem>.</para>
-        	</listitem>
-      		</orderedlist>
+          <orderedlist><listitem><para>Виберіть посилання з історії.</para></listitem><listitem><para>Виберіть <menuchoice><guimenu>Правка</guimenu><guimenuitem>Копіювати адресу</guimenuitem></menuchoice>. Або клацніть правою кнопкою миші на посиланні у вікні історії, а потім виберіть <guimenuitem>Копіювати адресу</guimenuitem>.</para></listitem></orderedlist>
         </sect2>
   </sect1>
 
-<!-- ============= Managing Your Passwords and Cookies ==== -->
+<!-- ============= Managing Your Passwords and Cookies ============ -->
   <sect1 id="ephy-managing-passwords-cookies">
-      <title>Керування паролями та cookies</title>
-      <para>
-      </para>
+    <title>Керування паролями та cookies</title>
+    <para>"Epiphany" зберігає ваші cookies та паролі у менеджері особистих даних, доступ до якого можна отримати вибравши <menuchoice><guimenu>Правка</guimenu><guisubmenu>Особисті дані</guisubmenu></menuchoice>.</para>
+    <sect2 id="managing-cookies">
+      <title>Керування cookie</title>
+      <para>Cookies дозволяють веб-сторінкам зберігати блоки даних, які потім можуть бути доступні для сайту при наступному відвідуванні сторінки.</para>
+      <para>У менеджері особистих даних ви можете переглядати cookies, що зберігаються у вашому комп'ютері та пов'язану з ними інформацію. Також тут можна видаляти cookies.</para>
+      <itemizedlist><listitem><para>Щоб переглянути вміст cookie, виберіть відповідний елемент зі списку та натисніть <guibutton>Властивості</guibutton>.</para></listitem><listitem><para>Для видалення cookie, виділіть усі cookie, які треба видалити, та натисніть кнопку <guibutton>Видалити</guibutton>.</para></listitem></itemizedlist>
+      <para>Вікно властивостей cookie відображає наступні параметри:</para>
+      <variablelist><varlistentry><term>Вміст</term><listitem><para>Вміст cookie.</para></listitem></varlistentry><varlistentry><term>Шлях</term><listitem><para>Шлях у домені, для якого діє цей cookie.</para></listitem></varlistentry><varlistentry><term>Надсилати для</term><listitem><para>Якщо поле має значення <guilabel>Довільного типу з'єднань</guilabel>, cookie надсилається будь-якому серверу. Якщо значення <guilabel>Лише шифрованих з'єднань</guilabel>, cookie надсилається лише серверам через безпечні протоколи.</para></listitem></varlistentry><varlistentry><term>Застаріває</term><listitem><para>Дата й час відколи cookie вже не буде дійсний.</para></listitem></varlistentry></variablelist>          
+    </sect2>
+    <sect2 id="managing-passwords">
+      <title>Керування паролями</title>
+      <para>На деяких веб-сайтах для доступу до сайту чи його частини вимагається реєстрація з використанням облікового запису та паролю. "Epiphany" може запам'ятати паролі, тож ви зможете швидше реєструватись у майбутньому.</para>
+      <para>У менеджері особистих даних можна переглядати сайти для яких збережено паролі та видаляти їх.</para>
+      <itemizedlist><listitem><para>Щоб видалити паролі, виділіть елементи, які треба видалити, та натисніть кнопку <guibutton>Видалити</guibutton>.</para></listitem></itemizedlist>
+    </sect2>
   </sect1>
 
-<!-- ============= Using the Download Manager ==== -->
+<!-- ============= Using the Download Manager ===================== -->
   <sect1 id="ephy-download-manager">
       <title>Використання менеджера завантажень</title>
-      <para>
-      </para>
+      <para>Коли ви завантажуєте файли, менеджер завантажень виводить відомості про хід завантаження: </para>
+      <itemizedlist><listitem><para>Стовпчик <guilabel>%</guilabel> показує перебіг завантаження.</para></listitem><listitem><para><guilabel>Назва файлу</guilabel> назва файлу, що завантажується. Теку, у яку завантажуються файли можна вказати у <xref linkend="general-preferences"/>. Цей стовпчик також відображає обсяг завантаженої частини файлу та його загальний розмір.</para></listitem><listitem><para>Стовпчик <guilabel>Залишилось</guilabel> відображає очікуваний час до завершення. Це наближене значення, що залежить від швидкості та надійності вашого з'єднання, тому ця величина може значно коливатись.</para></listitem></itemizedlist>
+      <para>Щоб припинити завантаження, виділіть елемент у менеджері завантаження та натисніть <guibutton>Зупинити</guibutton>.</para>
+      <note>
+        <para>Після завершення або скасування усіх завантажень менеджер завантажень закривається.</para>
+      </note>
   </sect1>
 
-<!-- ============= Customizing Epiphany ==== -->
+<!-- ============= Certificates and Online Security =============== -->
+  <sect1 id="ephy-certificates">
+    <title>Сертифікати та безпека мережі</title>
+    <para>Користуючись сайтами, які вимагають реєстрації, чи при здійсненні покупок у Інтернет, важливо знати, що безпека вашої інформації гарантована. "Epiphany" підтримує для цього декілька функцій.</para>
+    <sect2 id="identifying-secure-sites">
+      <title>Розпізнавання безпечних сайтів</title>
+      <para>При перегляді веб-сторінок, "Epiphany" відображає значок замка, який показує чи є цей сайт безпечним. Якщо відображається рядок стану, цей значок знаходиться на ньому. У іншому випадку він відображається з правого боку поля вводу адреси. У повноекранному режимі, коли панель інструментів прихована, значок відображається у правому верхньому куті вікон безпечних сайтів.</para>
+      <variablelist><varlistentry><term>Відкритий замок</term><listitem><para>Означає, що сайт не є безпечним.</para></listitem></varlistentry><varlistentry><term>Закритий замок</term><listitem><para>Означає, що сайт безпечний.</para></listitem></varlistentry><varlistentry><term>Зламаний замок</term><listitem><para>Означає, що ця сторінка безпечна, але інші - ні. Слід розглядати цю сторінку як в цілому небезпечною.</para></listitem></varlistentry></variablelist>
+    </sect2>
+    <sect2 id="using-certificate-viewer">
+      <title>Використанні переглядача сертифікатів</title>
+      <para>Переглядач сертифікатів представляє подробиці сертифікату. Вкладка <guilabel>Загальне</guilabel> має наступні поля:</para>
+      <variablelist><varlistentry><term>Загальна назва</term><listitem><para>Показує або кому виданий сертифікат, або домен якому він виданий.</para></listitem></varlistentry><varlistentry><term>Організація</term><listitem><para>Показує назву компанії, що видала сертифікат, або назву компанії, які він був виданий.</para></listitem></varlistentry><varlistentry><term>Організаційний підрозділ</term><listitem><para>Показує підрозділ компанії які видала чи отримала сертифікат.</para></listitem></varlistentry><varlistentry><term>Серійний номер</term><listitem><para>Унікальний ідентифікатор сертифікату.</para></listitem></varlistentry><varlistentry><term>Дата видачі</term><listitem><para>Дата, коли видано сертифікат.</para></listitem></varlistentry><varlistentry><term>Дата закінчення дії</term><listitem><para>Дата закінчення дії сертифікату.</para></listitem></varlistentry><varlistentry><term>Відбитки SHA1</term><listitem><para>Ідентифікаційний рядок цього сертифіката. Ви можете перевірити у записах компанії-видавця, що цей рядок відповідає сертифікату.</para></listitem></varlistentry><varlistentry><term>Відбитки MD5</term><listitem><para>Ідентифікаційний рядок цього сертифіката. Ви можете перевірити у записах компанії-видавця, що цей рядок відповідає сертифікату.</para></listitem></varlistentry></variablelist>
+      <para>Вкладка <guilabel>Подробиці</guilabel> відображає наступну інформацію:</para>
+      <variablelist><varlistentry><term>Ієрархія сертифікату</term><listitem><para>Деякі сертифікати підписані компаніями-посередниками, які піднімають довіру сертифікату на вищій рівень. Цей список відображає весь ланцюг сертифікату.</para></listitem></varlistentry><varlistentry><term>Поля сертифікату</term><listitem><para>Відображає поля поля сертифікату у ієрархічному вигляді.</para></listitem></varlistentry><varlistentry><term>Значення поля</term><listitem><para>Відображає значення вибраного поля сертифікату.</para></listitem></varlistentry></variablelist>
+    </sect2>
+  </sect1>
+
+<!-- ============= Customizing Epiphany =========================== -->
   <sect1 id="ephy-customize">
-      <title>Налаштовування &fr;</title>
+      <title>Налаштовування "Epiphany"</title>
       <para>
       </para>
 	<sect2 id="setting-preferences">
           <title>Налаштовування вподобань</title>
-          <para>
-          </para>
+          <para>"Epiphany" можна налаштувати для відповідності власним потребам. Це робиться у діалоговому вікні параметрів, яке відкривається при виборі <menuchoice><guimenu>Правка</guimenu><guimenuitem>Параметри</guimenuitem></menuchoice>.</para>
+          <sect3 id="general-preferences">
+            <title>Загальні параметри</title>
+            <para>
+            </para>
+            <itemizedlist><listitem><para>У розділі <guilabel>Домашня сторінка</guilabel> виберіть сторінку, що відображається при натисканні на панелі інструментів кнопки <guibutton>Додому</guibutton>, чи одразу після запуску "Epiphany"</para></listitem><listitem><para>У розділі <guilabel>Тека завантаження</guilabel> можна вибрати теку, куди завантажуються файли. Для цього натисніть на кнопку поруч та виберіть теку. Якщо ви відмітите <guilabel>Автоматично завантажувати та відривати файли</guilabel>, перед завантаженням чи відкриванням файлів не буде виводитись попередження.</para></listitem></itemizedlist>
+          </sect3>
+          <sect3 id="fonts-and-colors-preferences">
+            <title>Шрифти та кольори</title>
+            <para>Цей розділ дозволяє налаштувати стиль тексту та кольори веб-сторінки.</para>
+            <para>Можна вибирати різні стилі та розміри шрифтів, в залежності від мови сторінки. Спочатку у розкривному списку <guilabel>Мова</guilabel> виберіть мову. Для звичайного тексту, у якому ширина символів не постійна, шрифт визначається розкривним списком <guilabel>Змінної ширини</guilabel> та відповідним полем з прокруткою. Шрифт фіксованої ширини, коли усі символи мають однакову ширину, визначається списком <guilabel>Фіксованої ширини</guilabel> та відповідним полем з прокруткою.</para>
+            <para>Можна встановити мінімальний розмір шрифту веб-сторінок у полі з прокруткою <guilabel>мінімальний розмір</guilabel>. Шрифти, що менші за значення цього поля, будуть збільшуватись до цієї величини.</para>
+            <para>У веб-сторінках часто вказано їх власні стилі шрифтів та розміри. Якщо відмітити параметр <guilabel>Завжди використовувати ці шрифти</guilabel>, можна змусити "Epiphany" користуватись лише вибраними шрифтами.</para>
+            <para>Також у веб-сторінках часто вказано їх власні кольори, колір тла та шрифти. Відмітивши <guilabel>Завжди використовувати теми кольорів</guilabel> ви змусите "Epiphany" завжди використовувати кольори з вашої поточної теми.</para>
+          </sect3>
+          <sect3 id="privacy-preferences">
+            <title>Конфіденційність</title>
+            <para>"Epiphany" дозволяє налаштовувати параметри, які можуть обмежувати дії веб--сторінок:</para>
+            <itemizedlist><listitem><para>Відмітьте <guilabel>Дозволити випадаючі вікна</guilabel>, щоб веб-сторінки могли автоматично відкривати нові вікна зі сторінками.</para></listitem><listitem><para>Відмітьте <guilabel>Увімкнути Java</guilabel>, щоб сторінки могли завантажувати Java аплети в середині сторінок.</para></listitem><listitem><para>Відмітьте <guilabel>Увімкнути JavaScript</guilabel>, щоб дати веб-сторінкам можливість користуватись розширеною технікою програмування на мові JavaScript.</para></listitem></itemizedlist>
+            <note>
+              <para>Вимикання цих функцій може призвести до некоректного відображення чи втрати частини функціональності. Для роботи Java необхідно встановити Java модуль.</para>
+            </note>
+            <para>Також можна налаштувати поведінку cookie:</para>
+            <itemizedlist><listitem><para>Щоб дозволити cookie виберіть <guilabel>Приймати завжди</guilabel></para></listitem><listitem><para>Щоб дозволити cookie лише з сайтів які ви відвідали виберіть <guilabel>Лише з сайтів які ви відвідуєте</guilabel></para></listitem><listitem><para>Щоб вимкнути cookie виберіть <guilabel>Ніколи не приймати</guilabel></para></listitem></itemizedlist>
+            <note>
+              <para>Вимикання чи обмеження cookie може призвести до вимикання частини функціональності деяких сайтів.</para>
+            </note>
+            <para>"Epiphany" зберігає деякий вміст веб-сторінок у тимчасових теках, що дозволяє швидше завантажувати їх вміст при наступному відвідуванні. Поле з прокруткою <guilabel>Простір на диску</guilabel> визначає максимальний простір, який "Epiphany" може використовувати для цих файлів. Встановлення цьому полю нульового значення призведе вимикає зберігання тимчасових файлів. Ці тимчасові файли можна видалити кнопкою  <guibutton>Очистити</guibutton>.</para>
+          </sect3>
+          <sect3 id="language-preferences">
+            <title>Мова</title>
+            <para>Кодова сторінка визначає набір символів, який у ній використовується. Розділ <guilabel>Кодова сторінка</guilabel> визначає як "Epiphany" їх розрізняє. Розкривний список <guilabel>Типова</guilabel> дозволяє встановити кодування, яке використовується за відсутності визначення кодування у сторінці.</para>
+            <para>Розкривний список <guilabel>Автовизначення</guilabel> дозволяє визначити групу кодувань, з якої "Epiphany" буде намагатись підібрати правильне кодування для сторінки, якщо у сторінці кодування не зазначено. Наприклад, зазвичай ви відвідуєте китайські сторінки, які можуть мати декілька кодувань, ви можете встановити значення цього поля у <guilabel>Китайська</guilabel>. Щоб вимкнути автоматичний підбір кодової сторінки встановіть <guilabel>Вимкнено</guilabel>.</para>
+            <para>На деяких сайтах сторінки можуть бути представлені у кількох варіантах для різних мов. Ви можете вибрати вподобану мову вибравши елемент з розкривного списку <guilabel>Мови</guilabel>. Якщо ви бажаєте встановити одну чи більше запасні мови, на випадок коли сторінка для вашої типової мови недоступна, натисніть <guibutton>Додатково</guibutton> та додайте резервні мови у список. Порядок перерахування елементів визначає порядок підбору мови, починаючи згори. Перетягуючи елементи можна змінити порядок.</para>
+          </sect3>
         </sect2>
 	<sect2 id="to-show-hide-window-components">
-          <title>Приховування та показ компонентів головного вікна перегляду</title>
-            <para>Приховати або показати компоненти головного вікна перегляду виконується наступним чином: </para>
-      	    <itemizedlist>
-            <listitem>
-            <para>Щоб приховати пенал, виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Пенал</guimenuitem></menuchoice>. 
-	    Щоб знову його показати, ще раз виберіть 
-		<menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Пенал</guimenuitem></menuchoice>. </para>
-            </listitem>
-            <listitem>
-            <para>Щоб приховати панель закладок, виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Панель закладок</guimenuitem></menuchoice>. Щоб знову її показати, ще 
-	раз виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Панель закладок</guimenuitem></menuchoice>.</para>
-            </listitem>
-            <listitem>
-            <para>Щоб приховати панель стану, виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Панель стану</guimenuitem></menuchoice>. Щоб знову її показати, ще
-	раз виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Панель закладок</guimenuitem></menuchoice>. </para>
-           </listitem> 
-           </itemizedlist>
+          <title>Приховування та показ компонентів головного вікна</title>
+            <para>Приховати або показати компоненти головного вікна можна наступним чином:</para>
+      	    <itemizedlist><listitem><para>Щоб приховати панель інструментів, виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Панель інструментів</guimenuitem></menuchoice>. Щоб знову її показати, ще раз виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Панель інструментів</guimenuitem></menuchoice>.</para></listitem><listitem><para>Щоб приховати панель закладок, виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Панель закладок</guimenuitem></menuchoice>. Щоб знову її показати, ще раз виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Панель закладок</guimenuitem></menuchoice>.</para></listitem><listitem><para>Щоб приховати рядок стану, виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Рядок стану</guimenuitem></menuchoice>. Щоб знову його показати, ще раз виберіть <menuchoice><guimenu>Вигляд</guimenu><guimenuitem>Рядок стану</guimenuitem></menuchoice>.</para></listitem></itemizedlist>
+           <tip>
+             <para>Для приховування більшості компонентів "Epiphany" можна користуватись повноекранним режимом. Докладніше про це у <xref linkend="using-fullscreen-mode"/>.</para>
+           </tip>
         </sect2>
 	<sect2 id="to-edit-toolbars">
-          <title>Редагування пеналу</title>
-          <para>
-          </para>
+          <title>Редагування панелі інструментів</title>
+          <para>Елементи панелі інструментів можна налаштувати:</para>
+          <itemizedlist><listitem><para>Щоб додати чи видалити кнопки з панелі інструментів виберіть <menuchoice><guimenu>Правка</guimenu><guimenuitem>Панелі</guimenuitem></menuchoice>. Можна перетягувати значки до панелі, щоб додати кнопку, чи з панелі, щоб видалити кнопку.</para></listitem><listitem><para>Щоб створити нову панель інструментів, натисніть у редакторі панелей кнопку <guibutton>Додати нову панель</guibutton>.</para></listitem><listitem><para>Щоб видалити панель інструментів, видаліть з неї усі елементи. Тоді панель автоматично знижується.</para></listitem><listitem><para>Для впорядкування панелей можна перетягувати кнопки, включно з закладками, як в межах однієї панелі, так і між різними панелями.</para></listitem></itemizedlist>
+        </sect2>
+        <sect2 id="extending-epiphany">
+        <title>Розширення "Epiphany"</title>
+          <para>До "Epiphany" можна додати додаткові функції встановивши доповнення. Приклади доповнень включають "Жести миші", що дозволяє переміщуватись між сторінками використовуючи рухи миші; "Перегляд помилок та перевірка", що дозволяє перевіряти наявність помилок у коді сторінок.</para>
+          <para>Щоб встановити доповнення зверніться до системного адміністратора, або перегляньте інструкції з встановлення на <ulink url="http://www.gnome.org/projects/epiphany/" type="http">Веб-сторінці Epiphany</ulink>.</para>
         </sect2>
   </sect1>
 
-<!-- ============= About ================================== -->
-  <sect1 id="fr-about"> 
-    <title>Про &fr;</title> 
-
-    <para>Програма &fr; написана Marco Presenti Gritti 
-      (<email>marco@it.gnome.org</email>). Додаткову ішформацію про &fr; дивіться на <ulink
-      url="http://epiphany.mozdev.org" type="http">Домашній сторінці Epiphany</ulink>. 
-    </para>
+<!-- ============= Shortcuts ===================================== -->
+  <sect1 id="shortcuts">
+    <title>Скорочені дії</title>
     <para>
-      Цю довідку написав David Bordoley (<email>bordoley@msu.edu</email>) та Patanjali Somayaji (<email>patanjali@codito.com</email>). 
     </para>
+    <sect2 id="keyboard-shortcuts">
+      <title>Комбінації клавіш</title>
+      <para>
+      </para>
+    <table frame="topbot" id="epiphany-TBL-3">
+      <title>Загальні комбінації клавіш</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>Комбінація</para>
+            </entry>
+            <entry valign="top">
+              <para>Опис</para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para><keycap>Ctrl-O</keycap></para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>Відкрити файл з локальної теки.</para>
+            </entry>
+          </row>
+	  <row>
+            <entry colname="colspec0" valign="top">
+              <para><keycap>Shift-Ctrl-S</keycap></para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>Зберегти поточний документ у локальну теку.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Ctrl-P</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Надрукувати поточний документ.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para><keycap>Ctrl-W</keycap></para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>Закрити поточний документ.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para><keycap>F1</keycap></para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>Вивести довідку.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para><keycap>F7</keycap></para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>Перемикнути режим відображення курсора.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para><keycap>Ctrl-D</keycap></para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>Додати закладку на поточну сторінку.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para><keycap>Ctrl-B</keycap></para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>Відкрити менеджер закладок.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para><keycap>Ctrl-H</keycap></para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>Відкрити менеджер історії.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para><keycap>Shift-Ctrl-T</keycap></para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>Перемикнути відображення панелі інструментів.</para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>   
+   <para>
+   </para>
+   <table frame="topbot" id="epiphany-TBL-4">
+      <title>Комбінацій клавіш навігації</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>Комбінація</para>
+            </entry>
+            <entry valign="top">
+              <para>Опис</para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para><keycap>Ctrl-N</keycap></para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>Відкрити нове вікно</para>
+            </entry>
+          </row>
+	  <row>
+            <entry colname="colspec0" valign="top">
+              <para><keycap>Ctrl-T</keycap></para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>Відкрити нову вкладку.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para><keycap>Ctrl-L</keycap></para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>Передати фокус полю вводу адреси.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Alt-Left</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Перейти назад.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Alt-Right</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Перейти вперед.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Alt-Up</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Перейти рівнем вище.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Alt-Home</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Перейти на домашню сторінку.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Esc</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Зупинити завантаження сторінки.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>F6</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Перейти на наступний фрейм.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Shift-F6</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Перейти на попередній фрейм.</para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table> 
+   <para>
+   </para>
+   <table frame="topbot" id="epiphany-TBL-5">
+      <title>Комбінації клавіш перегляду вкладок</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>Комбінація</para>
+            </entry>
+            <entry valign="top">
+              <para>Опис</para>
+            </entry>
+          </row>
+        </thead>
+        <tbody> 
+          <row>
+            <entry valign="top">
+              <para><keycap>Ctrl-Page Up</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Передати фокус наступній вкладці.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Ctrl-Page Down</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Передати фокус наступній вкладці.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Shift-Ctrl-Page Up</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Перемістити вкладку ліворуч.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Shift-Ctrl-Page Down</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Перемістити вкладку праворуч.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Shift-Ctrl-M</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Відкріпити вкладку.</para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table> 
+  <para>
+  </para>
+  <table frame="topbot" id="epiphany-TBL-6">
+      <title>Комбінації клавіш перегляду сторінки</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>Комбінація</para>
+            </entry>
+            <entry valign="top">
+              <para>Опис</para>
+            </entry>
+          </row>
+        </thead>
+        <tbody> 
+          <row>
+            <entry valign="top">
+              <para><keycap>F11</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Перемикнути повноекранний режим.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Ctrl-+</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Збільшити текст.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Ctrl--</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Зменшити текст.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Ctrl-U</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Переглянути вихідний код сторінки.</para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table> 
+    </sect2>
+    <sect2 id="mouse-shortcuts">
+      <title>Скороченні дії миші</title>
+      <para>
+      </para>
+      <table frame="topbot" id="epiphany-TBL-7">
+      <title>Скороченні дії миші</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>Комбінація</para>
+            </entry>
+            <entry valign="top">
+              <para>Опис</para>
+            </entry>
+          </row>
+        </thead>
+        <tbody> 
+          <row>
+            <entry valign="top">
+              <para><keycap>Клацання середньою кнопкою (на посилання)</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Відкрити посилання у новій вкладці.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Ctrl-Клацання (на посилання)</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Відкрити посилання у новій вкладці.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para><keycap>Shift-Клацання (на посилання)</keycap></para>
+            </entry>
+            <entry valign="top">
+              <para>Завантажити посилання.</para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table> 
+    </sect2>
+  </sect1>
 
-    <para>
-      Переклад українською виконав Максим Дзюманенко (<email>mvd@mylinux.com.ua</email>)
-    </para>
+<!-- ============= About ========================================== -->
+  <sect1 id="fr-about">
+    <title>Про програму "Epiphany"</title>
 
-    <para> Ця програма розповсюджується на умовах опублікованої Free 
-      Software Foundation загальної вільної ліцензії GNU GPL, версією 2 цієї ліцензії, або
-     (на ваш вибір) будь-якою пізнішою версією.
-      Копію цієї ліцензії можна знайти на
-      <ulink url="ghelp:gpl" type="help">цій</ulink> сторінці, або у файлі 
-      COPYING у вихідному коді цієї програми.</para>
+    <para>"Epiphany" написав Marco Presenti Gritti (<email>marco@gnome.org</email>). Додаткову інформацію про "Epiphany" дивіться на <ulink url="http://www.gnome.org/projects/epiphany/" type="http">Веб-сторінці Epiphany</ulink>.</para>
 
+    <para>Цю довідку написав David Bordoley (<email>bordoley@msu.edu</email>), Piers Cornwell (<email>piers@gnome.org</email>) та Patanjali Somayaji (<email>patanjali@codito.com</email>). Переклад виконав Максим Дзюманенко (<email>mvd@mylinux.com.ua</email>)</para>
+
+    <para>Ця програма поширюється на умовах Публічної ліцензії GNU, яку опубліковано Фондом вільного ПЗ; версією 2 цієї ліцензії, або (на ваш розсуд) будь-якою пізнішою версією ліцензією. Копію цієї ліцензії можна знайти за цим <ulink url="ghelp:gpl" type="help">посиланням</ulink>, або у файлі COPYING, що включений у код цієї програми.</para>
   </sect1> 
 </article>
