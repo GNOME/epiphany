@@ -148,7 +148,7 @@ ephy_gui_menu_position_on_panel (GtkMenu *menu,
 	gtk_widget_size_request (GTK_WIDGET (menu), &requisition);
 
 	if (GTK_WIDGET_NO_WINDOW (widget))
-	{g_print ("NOT WINDOW!\n");
+	{
 		*x += widget->allocation.x;
 		*y += widget->allocation.y;
 	}

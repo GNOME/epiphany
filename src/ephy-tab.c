@@ -1088,7 +1088,7 @@ ephy_tab_document_type_cb (EphyEmbed *embed,
 	if (tab->priv->document_type != type)
 	{
 		tab->priv->document_type = type;
-g_print ("new doc type %d\n", type);
+
 		g_object_notify (G_OBJECT (tab), "document-type");
 	}
 }

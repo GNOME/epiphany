@@ -441,7 +441,7 @@ ephy_node_filter_expression_evaluate (EphyNodeFilterExpression *exp,
 
 		prop = ephy_node_get_property_int (node,
 						 exp->args.prop_args.prop_id);
-		g_print ("%d %d\n", prop, exp->args.prop_args.second_arg.number);
+
 		return (prop < exp->args.prop_args.second_arg.number);
 	}
 	default:
