@@ -59,6 +59,7 @@
 #include "nsIDOMDocument.h"
 #include "nsIDOM3Document.h"
 #include "nsIDOMEvent.h"
+#include "nsIDOMNSEvent.h"
 #include "nsIDOMEventTarget.h"
 #include "nsIDOMPopupBlockedEvent.h"
 #include "nsIDOMNode.h"
@@ -82,6 +83,13 @@ static PRUnichar DOMLinkAdded[] = { 'D', 'O', 'M', 'L', 'i', 'n', 'k',
 static PRUnichar DOMPopupBlocked[] = { 'D', 'O', 'M', 'P', 'o', 'p',
 				       'u', 'p', 'B', 'l', 'o', 'c',
 				       'k', 'e', 'd', '\0' };
+static PRUnichar DOMWillOpenModalDialog[] = { 'D', 'O', 'M', 'W', 'i', 'l', 'l',
+					      'O', 'p', 'e', 'n', 'M', 'o', 'd',
+					      'a', 'l', 'D', 'i', 'a', 'l', 'o',
+					      'g', '\0' };
+static PRUnichar DOMModalDialogClosed[] = { 'D', 'O', 'M', 'M', 'o', 'd', 'a',
+					    'l', 'D', 'i', 'a', 'l', 'o', 'g',
+					    'C', 'l', 'o', 's', 'e', 'd', '\0' };
 
 EphyEventListener::EphyEventListener(void)
 : mOwner(nsnull)
@@ -205,9 +213,51 @@ EphyPopupBlockEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 	return NS_OK;
 }
 
+NS_IMETHODIMP
+EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
+{
+	NS_ENSURE_TRUE (mOwner, NS_ERROR_FAILURE);
+
+	/* make sure the event is trusted */
+	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aDOMEvent));
+	PRBool isTrusted = PR_FALSE;
+	nsEvent->GetIsTrusted (&isTrusted);
+	if (!isTrusted) return NS_OK;
+
+	nsresult rv;
+	nsEmbedString type;
+	rv = aDOMEvent->GetType (type);
+	NS_ENSURE_SUCCESS (rv, rv);
+
+	nsEmbedCString cType;
+	NS_UTF16ToCString (type, NS_CSTRING_ENCODING_UTF8, cType);
+
+	LOG ("ModalAlertListener event %s", cType.get());
+
+	if (strcmp (cType.get(), "DOMWillOpenModalDialog") == 0)
+	{
+		gboolean retval = FALSE;
+		g_signal_emit_by_name (mOwner, "ge-modal-alert", &retval);
+
+		/* suppress alert */
+		if (retval)
+		{
+			aDOMEvent->PreventDefault ();
+			aDOMEvent->StopPropagation();
+		}
+	}
+	else if (strcmp (cType.get(), "DOMModalDialogClosed") == 0)
+	{
+		g_signal_emit_by_name (mOwner, "ge-modal-alert-closed");
+	}
+
+	return NS_OK;
+}
+
 EphyBrowser::EphyBrowser ()
 : mFaviconEventListener(nsnull)
 , mPopupBlockEventListener(nsnull)
+, mModalAlertListener(nsnull)
 , mInitialized(PR_FALSE)
 {
 	LOG ("EphyBrowser ctor (%p)", this)
@@ -247,6 +297,12 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 	rv = mPopupBlockEventListener->Init (EPHY_EMBED (mozembed));
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
+	mModalAlertListener = new EphyModalAlertEventListener ();
+	if (!mModalAlertListener) return NS_ERROR_OUT_OF_MEMORY;
+
+	rv = mModalAlertListener->Init (EPHY_EMBED (mozembed));
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
  	rv = GetListener();
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
@@ -282,6 +338,10 @@ EphyBrowser::AttachListeners(void)
 					    mFaviconEventListener, PR_FALSE);
 	rv |= mEventTarget->AddEventListener(nsEmbedString(DOMPopupBlocked),
 					     mPopupBlockEventListener, PR_FALSE);
+	rv |= mEventTarget->AddEventListener(nsEmbedString(DOMWillOpenModalDialog),
+					     mModalAlertListener, PR_TRUE);
+	rv |= mEventTarget->AddEventListener(nsEmbedString(DOMModalDialogClosed),
+					     mModalAlertListener, PR_TRUE);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	return NS_OK;
@@ -297,6 +357,10 @@ EphyBrowser::DetachListeners(void)
 					       mFaviconEventListener, PR_FALSE);
 	rv |= mEventTarget->RemoveEventListener(nsEmbedString(DOMPopupBlocked),
 					        mPopupBlockEventListener, PR_FALSE);
+	rv |= mEventTarget->RemoveEventListener(nsEmbedString(DOMWillOpenModalDialog),
+						mModalAlertListener, PR_TRUE);
+	rv |= mEventTarget->RemoveEventListener(nsEmbedString(DOMModalDialogClosed),
+						mModalAlertListener, PR_TRUE);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	return NS_OK;
