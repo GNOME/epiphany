@@ -122,6 +122,7 @@ static void
 menu_deactivate_cb (GtkMenuShell *ms, GtkWidget *button)
 {
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
+	gtk_button_released (GTK_BUTTON (button));
 }
 
 static void
@@ -393,7 +394,13 @@ button_toggled_cb (GtkWidget *button,
 				ephy_gui_menu_position_under_widget,
 				button, 1, gtk_get_current_event_time ());
 	}
+}
 
+static void
+button_pressed_cb (GtkWidget *button,
+		   EphyTopicAction *action)
+{
+	 gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 }
 
 static void
@@ -410,6 +417,10 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
 	button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
 	g_signal_connect (button, "toggled",
 			  G_CALLBACK (button_toggled_cb), action);
+
+	/* We want the menu to popup up on mouse down */
+	g_signal_connect (button, "pressed",
+			  G_CALLBACK (button_pressed_cb), action);
 }
 
 static void
