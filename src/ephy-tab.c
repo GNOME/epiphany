@@ -65,6 +65,8 @@
 
 #define CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME  "/apps/epiphany/lockdown/disable_javascript_chrome"
 
+#define MAX_HIDDEN_POPUPS 5
+
 struct _EphyTabPrivate
 {
 	char *status_message;
@@ -493,7 +495,25 @@ popups_manager_add (EphyTab *tab,
 	tab->priv->hidden_popups = g_slist_prepend
 		(tab->priv->hidden_popups, popup);
 
-	g_object_notify (G_OBJECT (tab), "hidden-popup-count");
+	if (popup_blocker_n_hidden (tab) > MAX_HIDDEN_POPUPS) /* bug #160863 */
+	{
+		/* Remove the oldest popup */
+		GSList *l = tab->priv->hidden_popups;
+
+		while (l->next->next != NULL)
+		{
+			l = l->next;
+		}
+
+		popup = (PopupInfo *) l->next->data;
+		popups_manager_free_info (popup);
+
+		l->next = NULL;
+	}
+	else
+	{
+		g_object_notify (G_OBJECT (tab), "hidden-popup-count");
+	}
 }
 
 static gboolean
