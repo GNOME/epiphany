@@ -3,8 +3,6 @@
 
 Downloader:
 
-- Update rate (used for estimated time) only after some time, otherwise estimated
-keep to chang in an annoying way
 - Fixup column sizing. Ideally filename should get all available space, the
 others column can get the minimum (for progress we can just fixup requisition
 in the renderer to something sane)
@@ -13,4 +11,5 @@ in the renderer to something sane)
 constructor/destructor. Verify that references are correct == objects
 are destroyed at right time.
 - Probably use cur from total instead of just total in the size field
-- fix EphyHeaderSniffer style
+- when porting to the new file picker get rid of FilePicker.cpp and
+show the dialog in Sniffer, so we can have proper filename

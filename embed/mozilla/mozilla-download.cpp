@@ -61,7 +61,7 @@ mozilla_download_get_type (void)
 }
 
 static char *
-impl_get_source (EphyDownload *download)
+impl_get_target (EphyDownload *download)
 {
 	nsCOMPtr<nsILocalFile> targetFile;
 	MozDownload *mozDownload;
@@ -77,7 +77,7 @@ impl_get_source (EphyDownload *download)
 }
 
 static char *
-impl_get_target (EphyDownload *download)
+impl_get_source (EphyDownload *download)
 {
 	nsCOMPtr<nsIURI> uri;
 	MozDownload *mozDownload;

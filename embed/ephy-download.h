@@ -46,6 +46,7 @@ typedef enum
 struct EphyDownload
 {
         GObject parent;
+	EphyDownloadPrivate *priv;
 };
 
 struct EphyDownloadClass

@@ -48,38 +48,35 @@
 #include "nsIAuthPrompt.h"
 #include "nsIPromptService.h"
 
-// Implementation of a header sniffer class that is used when saving Web pages and images.
 class EphyHeaderSniffer : public nsIWebProgressListener,
 			  public nsIAuthPrompt
 {
 public:
-    EphyHeaderSniffer(nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,
-		      nsIFile* aFile, nsIURI* aURL,
-                      nsIDOMDocument* aDocument, nsIInputStream* aPostData,
-                      const nsAString& aSuggestedFilename, PRBool aBypassCache);
-    virtual ~EphyHeaderSniffer();
+	EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,
+		           nsIFile* aFile, nsIURI* aURL,
+                           nsIDOMDocument* aDocument, nsIInputStream* aPostData,
+                           const nsAString& aSuggestedFilename, PRBool aBypassCache);
+	virtual ~EphyHeaderSniffer ();
 
-    NS_DECL_ISUPPORTS
-    NS_DECL_NSIWEBPROGRESSLISTENER
-    NS_DECL_NSIAUTHPROMPT
+	NS_DECL_ISUPPORTS
+	NS_DECL_NSIWEBPROGRESSLISTENER
+	NS_DECL_NSIAUTHPROMPT
   
 protected:
-
-    nsresult  PerformSave(nsIURI* inOriginalURI);
-    nsresult  InitiateDownload(nsISupports* inSourceData, nsILocalFile* inDestFile, nsIURI* inOriginalURI);
+	nsresult PerformSave (nsIURI* inOriginalURI);
+	nsresult InitiateDownload (nsISupports* inSourceData, nsILocalFile* inDestFile, nsIURI* inOriginalURI);
 
 private:
-
-    nsIWebBrowserPersist*     mPersist; // Weak. It owns us as a listener.
-    MozillaEmbedPersist      *mEmbedPersist;
-    nsCOMPtr<nsIFile>         mTmpFile;
-    nsCOMPtr<nsIURI>          mURL;
-    nsCOMPtr<nsIDOMDocument>  mDocument;
-    nsCOMPtr<nsIInputStream>  mPostData;
-    nsString                  mDefaultFilename;
-    PRBool                    mBypassCache;
-    nsCString                 mContentType;
-    nsCString                 mContentDisposition;
-    nsCOMPtr<nsIPromptService> mPrompt;
+	nsIWebBrowserPersist*      mPersist; /* Weak. It owns us as a listener. */
+	MozillaEmbedPersist       *mEmbedPersist;
+	nsCOMPtr<nsIFile>          mTmpFile;
+	nsCOMPtr<nsIURI>           mURL;
+	nsCOMPtr<nsIDOMDocument>   mDocument;
+	nsCOMPtr<nsIInputStream>   mPostData;
+	nsString                   mDefaultFilename;
+	PRBool                     mBypassCache;
+	nsCString                  mContentType;
+	nsCString                  mContentDisposition;
+	nsCOMPtr<nsIPromptService> mPrompt;
 };
 

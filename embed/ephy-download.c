@@ -26,6 +26,10 @@
 
 #include <libgnomevfs/gnome-vfs-uri.h>
 
+#define EPHY_DOWNLOAD_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_DOWNLOAD, EphyDownloadPrivate))
+
+#define REMAINING_TIME_UPDATE_SECS 2
+
 static void
 ephy_download_class_init (EphyDownloadClass *klass);
 static void
@@ -35,6 +39,12 @@ enum
 {
 	CHANGED,
 	LAST_SIGNAL
+};
+
+struct EphyDownloadPrivate
+{
+	long remaining_time_last_update;
+	long remaining_time;
 };
 
 static GObjectClass *parent_class = NULL;
@@ -72,6 +82,8 @@ ephy_download_get_type (void)
 static void
 ephy_download_class_init (EphyDownloadClass *klass)
 {
+        GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
         parent_class = g_type_class_peek_parent (klass);
 
 	ephy_download_signals[CHANGED] =
@@ -83,11 +95,17 @@ ephy_download_class_init (EphyDownloadClass *klass)
                               g_cclosure_marshal_VOID__VOID,
                               G_TYPE_NONE,
                               0);
+
+	g_type_class_add_private (object_class, sizeof(EphyDownloadPrivate));
 }
 
 static void
-ephy_download_init (EphyDownload *dv)
+ephy_download_init (EphyDownload *download)
 {
+	download->priv = EPHY_DOWNLOAD_GET_PRIVATE (download);
+
+	download->priv->remaining_time = 0;
+	download->priv->remaining_time_last_update = 0;
 }
 
 EphyDownload *
@@ -119,11 +137,10 @@ ephy_download_get_name (EphyDownload *download)
 	return result;
 }
 
-long
-ephy_download_get_remaining_time (EphyDownload *download)
+static void
+update_remaining_time (EphyDownload *download)
 {
-	long elapsed_time, remaining_time = 0;
-	long total, cur;
+	long elapsed_time, total, cur;
 
 	total = ephy_download_get_total_progress (download);
 	cur = ephy_download_get_current_progress (download);
@@ -131,10 +148,24 @@ ephy_download_get_remaining_time (EphyDownload *download)
 
 	if (cur > 0)
 	{
-		remaining_time = elapsed_time * (total - cur) / cur;
+		download->priv->remaining_time = elapsed_time * (total - cur) / cur;
+	}
+}
+
+long
+ephy_download_get_remaining_time (EphyDownload *download)
+{
+	long elapsed_time;
+
+	elapsed_time = ephy_download_get_elapsed_time (download);
+	if (elapsed_time - download->priv->remaining_time_last_update >=
+	    REMAINING_TIME_UPDATE_SECS)
+	{
+		update_remaining_time (download);
+		download->priv->remaining_time_last_update = elapsed_time;
 	}
 
-	return remaining_time;
+	return download->priv->remaining_time;
 }
 
 char *
