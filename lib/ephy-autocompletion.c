@@ -341,7 +341,7 @@ ephy_autocompletion_update_matches_full_item (EphyAutocompletionSource *source,
 					      guint32 score,
 					      EphyAutocompletionPrivate *p)
 {
-	g_return_if_fail (item != NULL);
+	g_return_if_fail ((item != NULL) || is_action);
 
 	if (is_action ||
 	    (substring && g_strrstr (item, p->keys[0])) ||
