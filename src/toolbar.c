@@ -364,6 +364,7 @@ toolbar_setup_actions (Toolbar *t)
 			       "name", "Favicon",
 			       "label", _("Favicon"),
 			       "window", t->priv->window,
+			       "visible-overflown", FALSE,
 			       NULL);
 	gtk_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
