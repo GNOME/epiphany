@@ -58,14 +58,17 @@
 #include "GtkNSSClientAuthDialogs.h"
 
 #include "ephy-state.h"
+#include "ephy-debug.h"
 
 GtkNSSClientAuthDialogs::GtkNSSClientAuthDialogs()
 {
+	LOG ("GtkNSSClientAuthDialogs ctor (%p)", this)
 }
 
 
 GtkNSSClientAuthDialogs::~GtkNSSClientAuthDialogs()
 {
+	LOG ("GtkNSSClientAuthDialogs dtor (%p)", this)
 }
 
 NS_IMPL_THREADSAFE_ISUPPORTS1 (GtkNSSClientAuthDialogs, 

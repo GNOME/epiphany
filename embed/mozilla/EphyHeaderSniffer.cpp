@@ -86,12 +86,12 @@ EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmb
 {
 	mPrompt = do_GetService("@mozilla.org/embedcomp/prompt-service;1");
 
-	LOG ("EphyHeaderSniffer constructor")
+	LOG ("EphyHeaderSniffer ctor (%p)", this)
 }
 
 EphyHeaderSniffer::~EphyHeaderSniffer()
 {
-	LOG ("EphyHeaderSniffer destructor")
+	LOG ("EphyHeaderSniffer dtor (%p)", this)
 }
 
 NS_IMPL_ISUPPORTS2(EphyHeaderSniffer, nsIWebProgressListener, nsIAuthPrompt)
@@ -250,7 +250,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 			do_GetService("@mozilla.org/network/mime-hdrparam;1");     
 		
 		if (mimehdrpar)
-		{g_print ("Using nsIMIMEHeaderParam!\n");
+		{
 			nsCAutoString fallbackCharset;
 			if (mURL)
 			{

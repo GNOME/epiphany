@@ -59,12 +59,12 @@ NS_IMPL_ISUPPORTS1(GContentHandler, nsIHelperAppLauncherDialog)
 
 GContentHandler::GContentHandler() : mMimeType(nsnull)
 {
-	LOG ("GContentHandler ctor")
+	LOG ("GContentHandler ctor (%p)", this)
 }
 
 GContentHandler::~GContentHandler()
 {
-	LOG ("GContentHandler dtor")
+	LOG ("GContentHandler dtor (%p)", this)
 
 	nsMemory::Free (mMimeType);
 }

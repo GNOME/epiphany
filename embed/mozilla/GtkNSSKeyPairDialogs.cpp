@@ -60,14 +60,16 @@
 #include <libgnome/gnome-i18n.h>
 
 #include "GtkNSSKeyPairDialogs.h"
-
+#include "ephy-debug.h"
 
 GtkNSSKeyPairDialogs::GtkNSSKeyPairDialogs ()
 {
+	LOG ("GtkNSSKeyPairDialogs ctor (%p)", this)
 }
 
 GtkNSSKeyPairDialogs::~GtkNSSKeyPairDialogs ()
 {
+	LOG ("GtkNSSKeyPairDialogs dtor (%p)", this)
 }
 
 NS_IMPL_ISUPPORTS1 (GtkNSSKeyPairDialogs, 
