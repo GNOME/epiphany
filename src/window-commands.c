@@ -770,6 +770,8 @@ window_cmd_tabs_move_left  (EggAction *action,
 		child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), page);
 		gtk_notebook_reorder_child (GTK_NOTEBOOK (notebook), child, page - 1);
 	}
+
+	ephy_window_update_control (window, TabsControl);
 }
 
 void window_cmd_tabs_move_right (EggAction *action,
@@ -790,6 +792,8 @@ void window_cmd_tabs_move_right (EggAction *action,
 		child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), page);
 		gtk_notebook_reorder_child (GTK_NOTEBOOK (notebook), child, page + 1);
 	}
+
+	ephy_window_update_control (window, TabsControl);
 }
 
 void
