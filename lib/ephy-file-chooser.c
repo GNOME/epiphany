@@ -119,6 +119,8 @@ ephy_file_chooser_constructor (GType type,
 		(GTK_FILE_CHOOSER (object), downloads_dir, NULL);
 	g_free (downloads_dir);
 
+	gtk_window_set_icon_name (GTK_WINDOW (object), "web-browser");
+
 	return object;
 }
 
