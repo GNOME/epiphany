@@ -1,3 +1,20 @@
+2003-11-13  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* idl/EphyAutomation.idl:
+	* src/ephy-automation.c: (ephy_automation_factory_cb),
+	(ephy_automation_factory_new), (impl_ephy_automation_loadurl):
+	* src/ephy-automation.h:
+	* src/ephy-main.c: (shell_weak_notify), (main):
+	* src/ephy-shell.c: (ephy_shell_error_quark), (ephy_shell_init),
+	(init_services), (open_urls), (ephy_shell_startup),
+	(ephy_shell_finalize), (ephy_shell_new):
+	* src/ephy-shell.h:
+
+	First stab at reorganizing initialization.
+	Fix crashes when launching an epiphany instance while
+	another once is still not initialized completely. It still
+	doesnt open the second session correctly though.
+
 2003-11-12  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* embed/mozilla/mozilla-embed-single.cpp:
