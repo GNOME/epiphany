@@ -177,28 +177,36 @@ ephy_state_window_set_position (GtkWidget *window, EphyNode *node)
 	GdkScreen *screen;
 	int x, y;
 	int screen_width, screen_height;
+	gboolean maximize;
 
 	g_return_if_fail (GTK_IS_WINDOW (window));
 
 	/* Setting the default size doesn't work when the window is already showing. */
 	g_return_if_fail (!GTK_WIDGET_VISIBLE (window));
 
-	x = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_POSITION_X);
-	y = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_POSITION_Y);
+	maximize = ephy_node_get_property_boolean (node, EPHY_NODE_STATE_PROP_MAXIMIZE);
 
-	screen = gtk_window_get_screen (GTK_WINDOW (window));
-	screen_width  = gdk_screen_get_width  (screen);
-	screen_height = gdk_screen_get_height (screen);
+	/* Don't set the position of the window if it is maximized */	
 
-	if ((x >= screen_width) || (y >= screen_height))
+	if (!maximize)
 	{
-		x = y = WINDOW_POSITION_UNSET;
-	}
+		x = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_POSITION_X);
+		y = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_POSITION_Y);
 
-	/* If the window has a saved position set it, otherwise let the WM do it */
-	if ((x != WINDOW_POSITION_UNSET) && (y != WINDOW_POSITION_UNSET))
-	{
-		gtk_window_move (GTK_WINDOW (window), x, y);
+		screen = gtk_window_get_screen (GTK_WINDOW (window));
+		screen_width  = gdk_screen_get_width  (screen);
+		screen_height = gdk_screen_get_height (screen);
+
+		if ((x >= screen_width) || (y >= screen_height))
+		{
+			x = y = WINDOW_POSITION_UNSET;
+		}
+
+		/* If the window has a saved position set it, otherwise let the WM do it */
+		if ((x != WINDOW_POSITION_UNSET) && (y != WINDOW_POSITION_UNSET))
+		{
+			gtk_window_move (GTK_WINDOW (window), x, y);
+		}
 	}
 }
 
@@ -243,21 +251,31 @@ static void
 ephy_state_window_save_position (GtkWidget *window, EphyNode *node)
 {
 	int x,y;
+	gboolean maximize;
+	GdkWindowState state;
 	GValue value = { 0, };
+	
+	state = gdk_window_get_state (GTK_WIDGET (window)->window);
+	maximize = ((state & GDK_WINDOW_STATE_MAXIMIZED) > 0);
 
-	gtk_window_get_position (GTK_WINDOW (window), &x, &y);
+	/* Don't save the position if maximized */	
 
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, x);
-	ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION_X,
-			        &value);
-	g_value_unset (&value);
+	if (!maximize)
+	{
+        	gtk_window_get_position (GTK_WINDOW (window), &x, &y);
 
-	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, y);
-	ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION_Y,
-			        &value);
-	g_value_unset (&value);
+		g_value_init (&value, G_TYPE_INT);
+		g_value_set_int (&value, x);
+		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION_X,
+				        &value);
+		g_value_unset (&value);
+
+		g_value_init (&value, G_TYPE_INT);
+		g_value_set_int (&value, y);
+		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION_Y,
+				        &value);
+		g_value_unset (&value);
+	}
 }
 
 static gboolean

@@ -1,4 +1,19 @@
 2003-04-30  David Bordoley <bordoley@msu.edu>
+
+	* lib/ephy-state.c: (ephy_state_window_set_position),
+	(ephy_state_window_save_position):
+
+	Don't set/save window position if it is maximized.
+
+	* src/ephy-history-window.c: (ephy_history_window_construct):
+	* src/bookmarks/ephy-bookmarks-editor.c: 
+	(ephy_bookmarks_editor_construct):
+
+	Don't set the shadow_type to GTK_SHADOW_IN 
+	the ScrolledWindows. It breaks some fitts law considerations,
+	and really amounts to just visual noise.
+
+2003-04-30  David Bordoley <bordoley@msu.edu>
 	
 	* src/ephy-window.c
 	* data/epiphany.schemas.in
