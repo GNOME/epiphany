@@ -1,19 +1,20 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2003 THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2003-2004 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the epiphany package.
-# Funda Wang <fundawang@linux.net.cn>, 2003, 2004
+# Funda Wang <fundawang@linux.net.cn>, 2003, 2004.
+# Liu Songhe <jackliu9999@263.net>, 2004.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-06 03:16+0100\n"
-"PO-Revision-Date: 2004-03-06 17:16+0800\n"
-"Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
+"Project-Id-Version: epiphany 2.6.0\n"
+"POT-Creation-Date: 2004-03-16 03:14+0100\n"
+"PO-Revision-Date: 2004-03-16 19:19+0800\n"
+"Last-Translator: Liu Songhe <jackliu9999@263.net>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: data/GNOME_Epiphany_Automation.server.in.h:1
@@ -53,6 +54,8 @@ msgid ""
 "A list of protocols to be considered safe in addition to the default, when "
 "disable_unsafe_protocols is enabled."
 msgstr ""
+"当 disable_unsafe_protocols 启用的时候，一个除了默认协议之外被认为安全的协议"
+"列表。"
 
 #: data/epiphany-lockdown.schemas.in.h:2
 msgid "Additional safe protocols"
@@ -60,7 +63,7 @@ msgstr "额外的安全协议"
 
 #: data/epiphany-lockdown.schemas.in.h:3
 msgid "Disable Arbitrary URLs"
-msgstr ""
+msgstr "禁用不当的 URL"
 
 #: data/epiphany-lockdown.schemas.in.h:4
 msgid "Disable Bookmark Editing"
@@ -87,6 +90,8 @@ msgid ""
 "Disable all historical information by disabling the back button, not "
 "allowing the history dialog and hiding the most used bookmarks list."
 msgstr ""
+"通过禁用后退按钮禁用全部历史信息，不允许出现历史对话框并隐藏最常用的书签列"
+"表。"
 
 #: data/epiphany-lockdown.schemas.in.h:10
 msgid "Disable the user's ability to edit their bookmarks."
@@ -108,8 +113,7 @@ msgstr "禁用不安全的协议"
 msgid ""
 "Disables loading of content from unsafe protocols. Safe protocols are http: "
 "and https:."
-msgstr ""
-"禁止从不安全的协议中装入内容。安全的协议是指 http: 和 https:。"
+msgstr "禁止从不安全的协议中装入内容。安全的协议是指 http: 和 https:。"
 
 #: data/epiphany-lockdown.schemas.in.h:15
 msgid "Hide menubar by default"
@@ -349,6 +353,8 @@ msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
 msgstr ""
+"显示“曾经”访问过的、“近两天”访问过的、“近三天”访问过的、“今天”访问过的历史页"
+"面。"
 
 #: data/epiphany.schemas.in.h:46
 msgid "Show the tab bar also when there is only one tab open."
@@ -378,7 +384,7 @@ msgstr "显示在编辑器视图中的书签信息"
 msgid ""
 "The bookmark informations shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
-msgstr ""
+msgstr "显示在编辑器视图里的书签信息。此列表的有效值是“地址”和“标题”。"
 
 #: data/epiphany.schemas.in.h:53
 msgid "The currently selected fonts language"
@@ -437,7 +443,7 @@ msgstr "显示在历史视图中的页面信息"
 msgid ""
 "The page informations shown in the history view. Valid values in the list "
 "are \"address\", \"title\"."
-msgstr ""
+msgstr "显示在历史视图里的页面信息。此列表的有效值是“地址”和“标题”。"
 
 #: data/epiphany.schemas.in.h:60
 msgid "The path of the folder where downloads are saved."
@@ -468,7 +474,8 @@ msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
 msgstr ""
-"如果浏览器无法打开文件，则这些文件将会被自动下载到下载文件夹，并用相应的应用程序打开。"
+"如果浏览器无法打开文件，则这些文件将会被自动下载到下载文件夹，并用相应的应用"
+"程序打开。"
 
 #: data/epiphany.schemas.in.h:67
 msgid ""
@@ -1586,7 +1593,8 @@ msgid ""
 "It's not possible to view this file type directly in the browser. You can "
 "open it with another application or save it."
 msgstr ""
-"无法在浏览器中直接查看此文件。您还可以在其它应用程序中打开此文件，或保存此文件。"
+"无法在浏览器中直接查看此文件。您还可以在其它应用程序中打开此文件，或保存此文"
+"件。"
 
 #: embed/mozilla/ContentHandler.cpp:303
 msgid "Download the file?"
@@ -1596,11 +1604,10 @@ msgstr "下载文件吗？"
 msgid ""
 "It's not possible to view this file because there is no application "
 "installed that can open it. You can save it instead."
-msgstr ""
-"无法查看此文件，因为没有安装可打开该文件的应用程序。您可以先保存它。"
+msgstr "无法查看此文件，因为没有安装可打开该文件的应用程序。您可以先保存它。"
 
 #: embed/mozilla/EphyHeaderSniffer.cpp:331
-#: src/bookmarks/ephy-bookmarks-import.c:251 src/ephy-toolbars-model.c:201
+#: src/bookmarks/ephy-bookmarks-import.c:252 src/ephy-toolbars-model.c:201
 #: src/window-commands.c:342
 msgid "Untitled"
 msgstr "无标题"
@@ -1680,6 +1687,7 @@ msgid ""
 "someone is intercepting your communication to obtain your confidential "
 "information."
 msgstr ""
+"站点 %s 针对 %s 返回的安全信息。可能某人正在截获您的通讯来获取您的机密信息。"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:300
 #, c-format
@@ -1695,14 +1703,14 @@ msgstr "接受不正确的安全信息吗？"
 msgid ""
 "Your browser was unable to trust %s. It is possible that someone is "
 "intercepting your communication to obtain your confidential information."
-msgstr ""
+msgstr "您的浏览器无法信任 %s。可能有人正在截获您的通讯以获取您的机密信息。"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:343
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to %"
 "s."
-msgstr ""
+msgstr "您应该仅仅连接到您确信无疑被连接到了的站点 %s。"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:348
 msgid "Connect to untrusted site?"
@@ -1766,17 +1774,17 @@ msgstr "信任 CA(_T)"
 #: embed/mozilla/GtkNSSDialogs.cpp:548
 #, c-format
 msgid "Trust %s to identify:"
-msgstr ""
+msgstr "信任 %s 来识别："
 
 #: embed/mozilla/GtkNSSDialogs.cpp:552
 msgid "Trust new Certificate Authority?"
-msgstr "新任新的证书颁发机构吗？"
+msgstr "信任新的证书颁发机构吗？"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:553
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
-msgstr ""
+msgstr "在信任一个证书颁发机构之前您应该验证该证书是可信的。"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:563
 msgid "_Web sites"
@@ -1833,11 +1841,11 @@ msgstr "输入此证书的密码。"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:944
 msgid "Certificate Revocation list successfully imported."
-msgstr ""
+msgstr "证书吊销列表成功导入。"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:945
 msgid "Certificate Revocation list (CRL) imported:"
-msgstr ""
+msgstr "证书吊销列表(CRL)已导入："
 
 #: embed/mozilla/GtkNSSDialogs.cpp:967
 msgid "Unit:"
@@ -1849,7 +1857,7 @@ msgstr "下次更新："
 
 #: embed/mozilla/GtkNSSDialogs.cpp:997
 msgid "Not part of certificate"
-msgstr ""
+msgstr "不是证书的一部分"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1265
 msgid "Certificate Properties"
@@ -1857,46 +1865,46 @@ msgstr "证书属性"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1287
 msgid "This certificate has been verified for the following uses:"
-msgstr ""
+msgstr "此证书已在下列用途得到验证："
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1290
 msgid "Could not verify this certificate because it has been revoked."
-msgstr ""
+msgstr "无法验证此证书因其已被撤消。"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1293
 msgid "Could not verify this certificate because it has expired."
-msgstr ""
+msgstr "无法验证此证书因其已过期。"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1296
 msgid "Could not verify this certificate because it is not trusted."
-msgstr ""
+msgstr "无法验证此证书因其不被信任。"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1299
 msgid "Could not verify this certificate because the issuer is not trusted."
-msgstr ""
+msgstr "无法验证此证书因其发行者不可信。"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1302
 msgid "Could not verify this certificate because the issuer is unknown."
-msgstr ""
+msgstr "无法验证此证书因其发行者未知。"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1305
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
-msgstr ""
+msgstr "无法验证此证书因其 CA 证书无效。"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1310
 msgid "Could not verify this certificate for unknown reasons."
-msgstr ""
+msgstr "无法验证此证书，原因未知。"
 
 #: embed/mozilla/GtkNSSKeyPairDialogs.cpp:183
 msgid "Generating Private Key."
-msgstr ""
+msgstr "正在生成私钥。"
 
 #: embed/mozilla/GtkNSSKeyPairDialogs.cpp:184
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
-msgstr ""
+msgstr "当一个私钥生成的时候请稍等。此过程可能花费几分钟。"
 
 #: embed/mozilla/mozilla-embed-single.cpp:501
 msgid ""
@@ -1941,20 +1949,23 @@ msgid ""
 "  %s\n"
 "All further errors shown only on terminal"
 msgstr ""
+"GConf 错误：\n"
+"  %s\n"
+"所有进一步的错误仅显示在终端上"
 
 #: lib/eel-gconf-extensions.c:90
 msgid "GConf Error"
 msgstr "GConf 错误"
 
-#: lib/egg/egg-editable-toolbar.c:510
+#: lib/egg/egg-editable-toolbar.c:512
 msgid "_Remove Toolbar"
 msgstr "删除工具栏(_R)"
 
-#: lib/egg/egg-toolbar-editor.c:552
+#: lib/egg/egg-toolbar-editor.c:559
 msgid "Separator"
 msgstr "分隔符"
 
-#: lib/egg/egg-toolbar-editor.c:582
+#: lib/egg/egg-toolbar-editor.c:589
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
@@ -2603,18 +2614,22 @@ msgid ""
 "use bonobo-activation-sysconf to configure the search path for bonobo server "
 "files."
 msgstr ""
+"Bonobo 无法定位 GNOME_Epiphany_Automation.server 文件。您可以使用 bonobo-"
+"activation-sysconf 配置 bonobo 服务器文件的搜索路径。"
 
 #: src/ephy-shell.c:364
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to register the automation server"
 msgstr ""
+"Epiphany 目前不可用，这是由于试图注册自动化服务器时一个 Bonobo 的意外错误。"
 
 #: src/ephy-shell.c:387
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
 msgstr ""
+"Epiphany 现在不可用，这是由于试图定位自动化对象时一个 Bonobo 的意外错误。"
 
 #: src/ephy-tab.c:367 src/ephy-tab.c:1200 src/ephy-tab.c:1370
 msgid "Blank page"
@@ -2691,7 +2706,7 @@ msgstr "另存为(_A)..."
 
 #: src/ephy-window.c:97
 msgid "Save the current page"
-msgstr "保存当前页(_C)"
+msgstr "保存当前页面"
 
 #: src/ephy-window.c:99
 msgid "Print Set_up..."
@@ -3081,11 +3096,11 @@ msgstr "关闭文档(_C)"
 
 #: src/ephy-window.c:685
 msgid "There are unsubmitted changes to form elements."
-msgstr ""
+msgstr "对窗体元素而言有未提交的改变。"
 
 #: src/ephy-window.c:686
 msgid "If you close the document anyway, you will lose that information."
-msgstr ""
+msgstr "如果您无论如何都要关闭该文档，您将丢失那些信息。"
 
 #: src/ephy-window.c:943 src/window-commands.c:395
 msgid "Open"
@@ -3480,7 +3495,7 @@ msgstr "添加新工具栏(_A)"
 #. Translator credits
 #: src/window-commands.c:954
 msgid "translator-credits"
-msgstr "Gnome 中文翻译组 <i18n-translation@lists.linux.net.cn>"
+msgstr "开源软件国际化简体中文组(http://i18n.linux.net.cn),Funda Wang"
 
 #: src/window-commands.c:984
 msgid "A GNOME browser based on Mozilla"
