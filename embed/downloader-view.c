@@ -498,12 +498,12 @@ download_dialog_pause_cb (GtkButton *button, DownloaderView *dv)
 	if (state == EPHY_DOWNLOAD_DOWNLOADING)
 	{
 		ephy_download_pause (download);
-		gtk_button_set_label (GTK_BUTTON (dv->priv->pause_button), _("Resume"));
+		gtk_button_set_label (GTK_BUTTON (dv->priv->pause_button), _("_Resume"));
 	}
 	else if (state == EPHY_DOWNLOAD_PAUSED)
 	{
 		ephy_download_resume (download);
-		gtk_button_set_label (GTK_BUTTON (dv->priv->pause_button), _("Pause"));
+		gtk_button_set_label (GTK_BUTTON (dv->priv->pause_button), _("_Pause"));
 	}
 }
 
