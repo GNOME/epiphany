@@ -64,7 +64,6 @@ libephymisc_la_SOURCES = \
 	ephy-string.c				\
 	ephy-stock-icons.c			\
 	ephy-thread-helpers.c			\
-	ephy-types.h				\
 	ephy-zoom.c				\
 	$(INST_H_FILES)				\
 	$(NOINST_H_FILES)
