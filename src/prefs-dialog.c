@@ -105,7 +105,7 @@ languages [] =
 	 *                      "Australian English (System setting)"
 	 */ 
 	{ N_("System language"), "system" },
-	{ N_("Afrikaans"), "ak" },
+	{ N_("Afrikaans"), "af" },
 	{ N_("Albanian"), "sq" },
 	{ N_("Arabic"), "ar" },
 	{ N_("Azerbaijani"), "az" },
