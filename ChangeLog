@@ -1,5 +1,12 @@
 2003-05-25  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/ephy-node.c: (ephy_node_dispose):
+
+	Unlink the node from the childs only after the remove
+	from parent signal has been emitted.
+
+2003-05-25  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* configure.in:
 	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_save):
 	* embed/ephy-history.c: (ephy_history_save), (hosts_removed_cb),

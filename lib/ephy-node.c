@@ -283,6 +283,11 @@ ephy_node_dispose (EphyNode *node)
 
 	lock_gdk ();
 
+	/* remove from DAG */
+	g_hash_table_foreach (node->parents,
+			      (GHFunc) remove_child,
+			      node);
+
 	for (i = 0; i < node->children->len; i++) {
 		EphyNode *child;
 
@@ -294,11 +299,6 @@ ephy_node_dispose (EphyNode *node)
 
 		g_static_rw_lock_writer_unlock (child->lock);
 	}
-
-	/* remove from DAG */
-	g_hash_table_foreach (node->parents,
-			      (GHFunc) remove_child,
-			      node);
 
 	g_static_rw_lock_writer_unlock (node->lock);
 
