@@ -139,6 +139,13 @@ fi
 
 AM_GCONF_SOURCE_2
 
+dnl ******************
+dnl Portability checks
+dnl ******************
+
+AC_CHECK_FUNCS(mkdtemp)
+
+dnl *************************************************************************
 dnl This is from Mozilla's configure.in. They set almost all the config stuff
 dnl they need in mozilla-config.h Except for this compiler flag, which can't
 dnl go in mozilla-config.h So we check the flag too and now we can include
