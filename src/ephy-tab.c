@@ -423,13 +423,12 @@ ephy_tab_class_init (EphyTabClass *class)
 
 	g_object_class_install_property (object_class,
 					 PROP_SECURITY,
-					 g_param_spec_int ("security-level",
-							   "Security Level",
-							   "The tab's security level",
+					 g_param_spec_enum ("security-level",
+							    "Security Level",
+							    "The tab's security level",
+							    EPHY_TYPE_EMBED_SECURITY_LEVEL,
 							    STATE_IS_UNKNOWN,
-							    STATE_IS_SECURE_HIGH,
-							    STATE_IS_UNKNOWN,
-							    G_PARAM_READABLE));
+							     G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
 					 PROP_HIDDEN_POPUP_COUNT,

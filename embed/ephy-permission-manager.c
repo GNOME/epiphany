@@ -28,6 +28,27 @@
 /* EphyPermissionInfo */
 
 GType
+ephy_permission_get_type (void)
+{
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GEnumValue values[] =
+		{
+		{ EPHY_PERMISSION_ALLOWED, "EPHY_PERMISSION_ALLOWED", "allowed" },
+		{ EPHY_PERMISSION_DENIED, "EPHY_PERMISSION_DENIED", "denied" },
+		{ EPHY_PERMISSION_DEFAULT, "EPHY_PERMISSION_DEFAULT", "default" },
+		{ 0, NULL, NULL }
+		};
+
+		type = g_enum_register_static ("EphyPermission", values);
+	}
+
+	return type;
+}
+
+GType
 ephy_permission_info_get_type (void)
 {
 	static GType type = 0;
