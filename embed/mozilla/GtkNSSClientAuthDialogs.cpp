@@ -45,7 +45,7 @@
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtkexpander.h>
-#if GTK_CHECK_VERSION (2,3,0)
+#if GTK_CHECK_VERSION (2,3,1)
 #include <gtk/gtkliststore.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtkcelllayout.h>
@@ -93,7 +93,7 @@ higgy_indent_widget (GtkWidget *widget)
 	return hbox;
 }
 
-#if GTK_CHECK_VERSION(2,3,0)
+#if GTK_CHECK_VERSION(2,3,1)
 
 static void
 combo_changed_cb (GtkComboBox *combo, GtkTextView *textview)
@@ -160,7 +160,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 {
 	GtkWidget *dialog, *label, *vbox, *textview;
 	GtkWidget *details, *expander, *hbox, *image;
-#if GTK_CHECK_VERSION(2,3,0)
+#if GTK_CHECK_VERSION(2,3,1)
 	GtkWidget *combo;
 	GtkListStore *store;
 	GtkTreeIter iter;
@@ -229,7 +229,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	g_free (markup_text);
 
         /* Create and populate the option menu */
-#if GTK_CHECK_VERSION (2,3,0)
+#if GTK_CHECK_VERSION (2,3,1)
 	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 	for (i = 0; i < count; i++)
 	{
@@ -298,7 +298,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 
 	gtk_container_add (GTK_CONTAINER (expander), details);
 
-#if GTK_CHECK_VERSION(2,3,0)
+#if GTK_CHECK_VERSION(2,3,1)
 	g_signal_connect (G_OBJECT (combo), "changed",
 			  G_CALLBACK (combo_changed_cb),
 			  textview);
@@ -317,7 +317,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	if (res == GTK_RESPONSE_OK)
 	{
 		*canceled = PR_FALSE;
-#if GTK_CHECK_VERSION(2,3,0)
+#if GTK_CHECK_VERSION(2,3,1)
 		*selectedIndex = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
 #else
 		*selectedIndex = gtk_option_menu_get_history (GTK_OPTION_MENU (optionmenu));
