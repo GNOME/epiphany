@@ -77,7 +77,11 @@
 #include "nsIDOMHTMLInputElement.h"
 #include "nsIDOMHTMLTextAreaElement.h"
 #include "nsIDeviceContext.h"
+#if MOZILLA_SNAPSHOT >= 20
+#include "nsPresContext.h"
+#else
 #include "nsIPresContext.h"
+#endif
 #include "nsIAtom.h"
 #include "nsIDocumentCharsetInfo.h"
 #include "nsPromiseFlatString.h"
@@ -513,7 +517,11 @@ nsresult EphyBrowser::SetZoom (float aZoom, PRBool reflow)
 
 nsresult EphyBrowser::SetZoomOnDocshell (float aZoom, nsIDocShell *DocShell)
 {
+#if MOZILLA_SNAPSHOT >= 20
+	nsCOMPtr<nsPresContext> PresContext;
+#else
 	nsCOMPtr<nsIPresContext> PresContext;
+#endif
 	DocShell->GetPresContext (getter_AddRefs(PresContext));
 	NS_ENSURE_TRUE (PresContext, NS_ERROR_FAILURE);
 
