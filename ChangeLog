@@ -1,3 +1,23 @@
+2004-04-18  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.in:
+	* lib/ephy-dialog.c: (set_value_from_editable),
+	(set_value_from_combobox), (set_value_from_radiobuttongroup),
+	(set_value_from_spin_button), (set_value_from_togglebutton),
+	(set_value_from_info), (set_combo_box_from_value),
+	(set_pref_from_info_and_emit), (save_info),
+	(ephy_dialog_get_value):
+	* lib/ephy-dialog.h:
+	* src/prefs-dialog.c: (setup_font_combo):
+
+        Fix font selection combo box issues; fixes bug #138560.
+
+2004-04-18  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.in:
+
+	Remove libbonoboui checks, we don't depend on it anymore.
+
 2004-04-18  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* embed/ephy-embed.c: (ephy_embed_chrome_get_type):

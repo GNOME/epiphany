@@ -227,13 +227,14 @@ set_pref_from_value (PropertyInfo *info, GValue *value)
 	}
 }
 
-static void
+static gboolean
 set_value_from_editable (PropertyInfo *info, GValue *value)
 {
 	char *text;
+	gboolean retval = TRUE;
 	gboolean free_text = TRUE;
 
-	g_return_if_fail (GTK_IS_EDITABLE (info->widget));
+	g_return_val_if_fail (GTK_IS_EDITABLE (info->widget), FALSE);
 
 	text = gtk_editable_get_chars (GTK_EDITABLE (info->widget), 0, -1);
 
@@ -252,6 +253,7 @@ set_value_from_editable (PropertyInfo *info, GValue *value)
 			g_value_set_float (value, strtod (text, NULL));
 			break;
 		default:
+			retval = FALSE;
 			g_warning ("Unsupported value type for editable %s", info->id);
 			break;
 	}
@@ -260,43 +262,48 @@ set_value_from_editable (PropertyInfo *info, GValue *value)
 	{
 		g_free (text);
 	}
+
+	return retval;
 }
 
-static void
+static gboolean
 set_value_from_combobox (PropertyInfo *info, GValue *value)
 {
-	int index;
-
-	g_return_if_fail (GTK_IS_COMBO_BOX (info->widget));
-
-	index = gtk_combo_box_get_active (GTK_COMBO_BOX (info->widget));
-	g_return_if_fail (index >= 0);
+	g_return_val_if_fail (GTK_IS_COMBO_BOX (info->widget), FALSE);
 
 	if (info->data_col != -1)
 	{
 		GtkTreeModel *model;
 		GtkTreeIter iter;
 
-		model = gtk_combo_box_get_model (GTK_COMBO_BOX (info->widget));
-
-		if (gtk_tree_model_iter_nth_child (model, &iter, NULL, index))
+		if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (info->widget), &iter))
 		{
+			model = gtk_combo_box_get_model (GTK_COMBO_BOX (info->widget));
 			gtk_tree_model_get_value (model, &iter, info->data_col, value);
-		}
-		else
-		{
-			g_warning ("Invalid index in combo model for %s\n", info->id);
+
+			return TRUE;
 		}
 	}
 	else if (info->data_type == G_TYPE_INT)
 	{
-		g_value_init (value, G_TYPE_INT);
-		g_value_set_int (value, index);
+		int index;
+
+		index = gtk_combo_box_get_active (GTK_COMBO_BOX (info->widget));
+
+		if (index >= 0)
+		{
+			g_value_init (value, G_TYPE_INT);
+			g_value_set_int (value, index);
+
+			return TRUE;
+		}
 	}
 	else
 	{
 		g_warning ("Unsupported data type for combo %s\n", info->id);
 	}
+
+	return FALSE;
 }
 
 static int
@@ -328,20 +335,22 @@ get_radio_button_active_index (GtkWidget *radiobutton)
 	return index = (length - 1) - i;
 }
 
-static void
+static gboolean
 set_value_from_radiobuttongroup (PropertyInfo *info, GValue *value)
 {
+	gboolean retval = TRUE;
 	int index;
 
-	g_return_if_fail (GTK_IS_RADIO_BUTTON (info->widget));
+	g_return_val_if_fail (GTK_IS_RADIO_BUTTON (info->widget), FALSE);
 
 	index = get_radio_button_active_index (info->widget);
-	g_return_if_fail (index >= 0);
+	g_return_val_if_fail (index >= 0, FALSE);
 
 	g_value_init (value, info->data_type);
 	if (info->data_type == G_TYPE_STRING)
 	{
-		g_return_if_fail (info->string_enum != NULL);
+		g_return_val_if_fail (info->string_enum != NULL, FALSE);
+		g_return_val_if_fail (g_list_nth_data (info->string_enum, index) != NULL, FALSE);
 
 		g_value_set_string (value, (char*) g_list_nth_data (info->string_enum, index));
 	}
@@ -351,17 +360,21 @@ set_value_from_radiobuttongroup (PropertyInfo *info, GValue *value)
 	}
 	else
 	{
+		retval = FALSE;
 		g_warning ("unsupported data type for radio button %s\n", info->id);
 	}
+
+	return retval;
 }
 
-static void
+static gboolean
 set_value_from_spin_button (PropertyInfo *info, GValue *value)
 {
+	gboolean retval = TRUE;
 	gdouble f;
 	gboolean is_int;
 
-	g_return_if_fail (GTK_IS_SPIN_BUTTON (info->widget));
+	g_return_val_if_fail (GTK_IS_SPIN_BUTTON (info->widget), FALSE);
 
 	f = gtk_spin_button_get_value (GTK_SPIN_BUTTON (info->widget));
 
@@ -378,16 +391,20 @@ set_value_from_spin_button (PropertyInfo *info, GValue *value)
 	}
 	else
 	{
+		retval = FALSE;
 		g_warning ("Unsupported data type for spin button %s\n", info->id);
 	}
+
+	return retval;
 }
 
-static void
+static gboolean
 set_value_from_togglebutton (PropertyInfo *info, GValue *value)
 {
+	gboolean retval = TRUE;
 	gboolean active;
 
-	g_return_if_fail (GTK_IS_TOGGLE_BUTTON (info->widget));
+	g_return_val_if_fail (GTK_IS_TOGGLE_BUTTON (info->widget), FALSE);
 
 	active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (info->widget));
 
@@ -398,39 +415,47 @@ set_value_from_togglebutton (PropertyInfo *info, GValue *value)
 	}
 	else
 	{
+		retval = FALSE;
 		g_warning ("Unsupported data type for toggle button %s\n", info->id);
 	}
+
+	return retval;
 }
 
-static void
+static gboolean
 set_value_from_info (PropertyInfo *info, GValue *value)
 {
+	gboolean retval;
+
 	if (info->sane_state == FALSE)
 	{
-		g_warning ("id[%s] has insane state when trying to get value!\n", info->id);
+		return FALSE;
 	}
 
 	switch (info->widget_type)
 	{
 		case PT_SPINBUTTON:
-			set_value_from_spin_button (info, value);
+			retval = set_value_from_spin_button (info, value);
 			break;
 		case PT_RADIOBUTTON:
-			set_value_from_radiobuttongroup (info, value);
+			retval = set_value_from_radiobuttongroup (info, value);
 			break;
 		case PT_TOGGLEBUTTON:
-			set_value_from_togglebutton (info, value);
+			retval = set_value_from_togglebutton (info, value);
 			break;
 		case PT_EDITABLE:
-			set_value_from_editable (info, value);
+			retval = set_value_from_editable (info, value);
 			break;
 		case PT_COMBOBOX:
-			set_value_from_combobox (info, value);
+			retval = set_value_from_combobox (info, value);
 			break;
 		default:
+			retval = FALSE;
 			g_warning ("Unsupported widget type\n");
 			break;
 	}
+
+	return retval;
 }
 
 static void
@@ -530,8 +555,6 @@ compare_values (const GValue *a, const GValue *b)
 static void
 set_combo_box_from_value (PropertyInfo *info, const  GValue *value)
 {
-	int index = -1;
-
 	g_return_if_fail (GTK_IS_COMBO_BOX (info->widget));
 
 	if (info->data_col != -1)
@@ -557,37 +580,35 @@ set_combo_box_from_value (PropertyInfo *info, const  GValue *value)
 
 		if (found)
 		{
-			GtkTreePath *path;
-			gint *indices;
-
-			path = gtk_tree_model_get_path (model, &iter);
-			indices = gtk_tree_path_get_indices (path);
-			index = indices[0];
-			gtk_tree_path_free (path);
+			gtk_combo_box_set_active_iter (GTK_COMBO_BOX (info->widget), &iter);
 		}
+		else
+		{
+			gtk_combo_box_set_active (GTK_COMBO_BOX (info->widget), -1);
+
+			char *v = g_strdup_value_contents (value);
+			g_warning ("Value '%s' not found in model for combo %s\n", v, info->id);
+			g_free (v);
+		}
+
+		info->sane_state = found;
 	}
 	else if (info->data_type == G_TYPE_INT)
 	{
+		int index;
+
 		index = g_value_get_int (value);
+
+		info->sane_state = index >= 0;
+
+		g_return_if_fail (index >= -1);
+
+		gtk_combo_box_set_active (GTK_COMBO_BOX (info->widget), index);
 	}
 	else
 	{
 		g_warning ("Unsupported data type for combo box %s\n", info->id);
 	}
-
-	if (index < 0)
-	{
-		info->sane_state = FALSE;
-
-		g_return_if_fail (index >= 0);
-		return;
-	}
-
-	LOG ("index[%s] is %d", info->id, index)
-
-	info->sane_state = TRUE;
-
-	gtk_combo_box_set_active (GTK_COMBO_BOX (info->widget), index);
 }
 
 static void
@@ -712,13 +733,10 @@ set_pref_from_info_and_emit (PropertyInfo *info)
 {
 	GValue value = { 0, };
 
-	if (!info->sane_state)
+	if (!set_value_from_info (info, &value))
 	{
-		g_warning ("Not emitting/persisting insane state of id[%s]", info->id);
 		return;
 	}
-
-	set_value_from_info (info, &value);
 
 	g_signal_emit (info->dialog, signals[CHANGED], g_quark_from_string (info->id), &value);
 
@@ -962,9 +980,11 @@ save_info (gpointer key, PropertyInfo *info, EphyDialog *dialog)
 		return;
 	}
 
-	set_value_from_info (info, &value);
-	set_pref_from_value (info, &value);
-	g_value_unset (&value);
+	if (set_value_from_info (info, &value))
+	{
+		set_pref_from_value (info, &value);
+		g_value_unset (&value);
+	}
 }
 
 static void
@@ -1201,7 +1221,7 @@ ephy_dialog_get_control (EphyDialog *dialog,
 	return info->widget;
 }
 
-void
+gboolean
 ephy_dialog_get_value (EphyDialog *dialog,
 		       const char *property_id,
 		       GValue *value)
@@ -1209,9 +1229,9 @@ ephy_dialog_get_value (EphyDialog *dialog,
 	PropertyInfo *info;
 
 	info = lookup_info (dialog, property_id);
-	g_return_if_fail (info != NULL);
+	g_return_val_if_fail (info != NULL, FALSE);
 
-	set_value_from_info (info, value);
+	return set_value_from_info (info, value);
 }
 
 void
