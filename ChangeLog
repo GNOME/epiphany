@@ -1,5 +1,19 @@
 2003-04-27  David Bordoley <bordoley@msu.edu>
 
+	* lib/ephy-state.c: (ephy_state_window_set_position),
+	(ephy_state_window_save_position), (window_configure_event_cb),
+	(window_state_event_cb), (ephy_state_add_window):
+
+	Save the position of windows on the screen, 
+	and checks if the position is off the screen.
+
+	* src/toolbar.c: (init_bookmarks_toolbar):
+
+	Pass arguments to egg_toolbars_model_set_flags in the
+	correct order.
+
+2003-04-27  David Bordoley <bordoley@msu.edu>
+
 	* src/bookmarks/ephy-bookmarks-editor.c: (ephy_bookmarks_editor_construct):
 	
 	Make the view paned and monitor the state.

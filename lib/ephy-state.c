@@ -29,13 +29,16 @@
 #include <gtk/gtkpaned.h>
 
 #define STATES_FILE "states.xml"
+#define WINDOW_POSITION_UNSET -1
 
 enum
 {
 	EPHY_NODE_STATE_PROP_NAME = 2,
 	EPHY_NODE_STATE_PROP_WIDTH = 3,
 	EPHY_NODE_STATE_PROP_HEIGHT = 4,
-	EPHY_NODE_STATE_PROP_MAXIMIZE = 5
+	EPHY_NODE_STATE_PROP_MAXIMIZE = 5,
+	EPHY_NODE_STATE_PROP_POSITION_X = 6,
+	EPHY_NODE_STATE_PROP_POSITION_Y = 7
 };
 
 static EphyNode *states;
@@ -167,6 +170,38 @@ ephy_state_window_set_size (GtkWidget *window, EphyNode *node)
 }
 
 static void
+ephy_state_window_set_position (GtkWidget *window, EphyNode *node)
+{
+	GdkScreen *screen;
+	int x, y;
+	int screen_width, screen_height;
+
+	g_return_if_fail (GTK_IS_WINDOW (window));
+
+	/* Setting the default size doesn't work when the window is already showing. */
+	g_return_if_fail (!GTK_WIDGET_VISIBLE (window));
+
+	x = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_POSITION_X);
+	y = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_POSITION_Y);
+
+	screen = gtk_window_get_screen (GTK_WINDOW (window));
+	screen_width  = gdk_screen_get_width  (screen);
+	screen_height = gdk_screen_get_height (screen);
+
+	if ((x >= screen_width) || (y >= screen_height))
+	{
+		x = y = WINDOW_POSITION_UNSET;
+	}		
+
+	/* If the window has a saved position set it, otherwise let the WM do it */
+	if ((x != WINDOW_POSITION_UNSET) && (y != WINDOW_POSITION_UNSET))
+	{
+		gtk_window_move (GTK_WINDOW (window), x, y);
+	}
+}
+
+
+static void
 ephy_state_window_save_size (GtkWidget *window, EphyNode *node)
 {
 	int width, height;
@@ -202,12 +237,34 @@ ephy_state_window_save_size (GtkWidget *window, EphyNode *node)
 	g_value_unset (&value);
 }
 
+static void
+ephy_state_window_save_position (GtkWidget *window, EphyNode *node)
+{
+	int x,y;
+	GValue value = { 0, };
+
+	gtk_window_get_position (GTK_WINDOW (window), &x, &y);
+
+	g_value_init (&value, G_TYPE_INT);
+	g_value_set_int (&value, x);
+	ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION_X,
+			        &value);
+	g_value_unset (&value);
+
+	g_value_init (&value, G_TYPE_INT);
+	g_value_set_int (&value, y);
+	ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION_Y,
+			        &value);
+	g_value_unset (&value);
+}
+
 static gboolean
 window_configure_event_cb (GtkWidget *widget,
 			   GdkEventConfigure *event,
 			   EphyNode *node)
 {
 	ephy_state_window_save_size (widget, node);
+	ephy_state_window_save_position (widget, node);
 	return FALSE;
 }
 
@@ -217,6 +274,7 @@ window_state_event_cb (GtkWidget *widget,
 		       EphyNode *node)
 {
 	ephy_state_window_save_size (widget, node);
+	ephy_state_window_save_position (widget, node);
 	return FALSE;
 }
 
@@ -261,9 +319,26 @@ ephy_state_add_window (GtkWidget *window,
 		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_MAXIMIZE,
 				        &value);
 		g_value_unset (&value);
+
+		/* Metacity and presumably any other sane wm won't let
+		 * you drag the titlebar of a window off the screen, so
+		 * we set the inital cordinate to an impossible value (-1,-1)
+		 */ 
+		g_value_init (&value, G_TYPE_INT);
+		g_value_set_int (&value, WINDOW_POSITION_UNSET);
+		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION_X,
+				        &value);
+		g_value_unset (&value);
+	
+		g_value_init (&value, G_TYPE_INT);
+		g_value_set_int (&value, WINDOW_POSITION_UNSET);
+		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION_Y,
+				        &value);
+		g_value_unset (&value);
 	}
 
 	ephy_state_window_set_size (window, node);
+	ephy_state_window_set_position (window, node);
 
 	g_signal_connect_object (window, "configure_event",
 			         G_CALLBACK (window_configure_event_cb), node, 0);

@@ -344,7 +344,7 @@ init_bookmarks_toolbar (Toolbar *t)
 				 t_name);
 			egg_toolbars_model_set_flags
 				(EGG_TOOLBARS_MODEL (model),
-				 i, EGG_TB_MODEL_NOT_REMOVABLE);
+				 EGG_TB_MODEL_NOT_REMOVABLE, i);
 		}
 	}
 }
