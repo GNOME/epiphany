@@ -35,11 +35,13 @@
 #include <locale.h>
 #include <libgnome/gnome-i18n.h>
 #include <stdlib.h>
-#include "nsCOMPtr.h"
-#include "nsIPrefService.h"
-#include "nsIServiceManager.h"
+#include <gdk/gdkx.h>
+#include <nsCOMPtr.h>
+#include <nsIPrefService.h>
+#include <nsIServiceManager.h>
 
 #define MOZILLA_PREF_NO_PROXIES "network.proxy.no_proxies_on"
+#define MIGRATE_PIXEL_SIZE
 
 static void
 mozilla_cache_size_notifier (GConfClient *client,
@@ -382,13 +384,80 @@ add_notification_and_notify (GConfClient		*client,
 	gconf_client_notify (client, key);
 }
 
+#ifdef MIGRATE_PIXEL_SIZE
+
+#define INT_ROUND(a) gint((a) + 0.5f)
+
+/**
+ *  This function gets the dpi in the same way that mozilla gets the dpi, 
+ *  this allows us to convert from pixels to points easily
+ */
+static gint
+mozilla_get_dpi ()
+{
+	GtkSettings* settings = gtk_settings_get_default ();
+	gint dpi = 0;
+ 
+	/* Use the gdk-xft-dpi setting if it is set */
+	if (g_object_class_find_property (G_OBJECT_GET_CLASS (G_OBJECT (settings)),
+					  "gtk-xft-dpi"))
+	{
+		g_object_get (G_OBJECT (settings), "gtk-xft-dpi", &dpi, NULL);
+		if (dpi) return INT_ROUND (dpi / PANGO_SCALE);
+	}
+
+	/* Fall back to what xft thinks it is */
+	char *val = XGetDefault (GDK_DISPLAY (), "Xft", "dpi");
+	if (val)
+	{
+		char *e;
+		double d = strtod(val, &e);
+		if (e != val) return INT_ROUND (d);
+	}
+	
+	/* Fall back to calculating manually from the gdk screen settings */
+	float screenWidthIn = float (gdk_screen_width_mm()) / 25.4f;
+	return INT_ROUND (gdk_screen_width() / screenWidthIn);
+}
+
+static void
+mozilla_migrate_font_gconf_key (const char *pixel_key, const char *point_key)
+{
+	int size;
+
+	size = eel_gconf_get_integer (pixel_key);
+
+	if (size > 0)
+	{
+		/* Use doubles to get more accurate arithmetic */
+		double dpi   = (double)mozilla_get_dpi ();
+		double value = (double)eel_gconf_get_integer (pixel_key);
+		gint point = INT_ROUND ((value * 72) / dpi);
+
+		eel_gconf_set_integer (point_key, point);
+	}
+}
+
+#endif
+
 void 
-mozilla_notifiers_init(EphyEmbedSingle *single) 
+mozilla_notifiers_init (EphyEmbedSingle *single) 
 {
 	GConfClient *client = eel_gconf_client_get_global ();
 	guint i;
 	const EphyFontsLanguageInfo *font_languages;
 	guint n_font_languages;
+
+#ifdef MIGRATE_PIXEL_SIZE
+	gboolean migrate_size;
+
+	migrate_size = (eel_gconf_get_integer (CONF_SCHEMA_VERSION)
+			< EPIPHANY_SCHEMA_VERSION);
+	if (migrate_size)
+	{
+		eel_gconf_set_integer (CONF_SCHEMA_VERSION, EPIPHANY_SCHEMA_VERSION);
+	}
+#endif
 
 	for (i = 0; conversion_table[i].gconf_key != NULL; i++)
 	{
@@ -436,6 +505,9 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 		char *types [] = { "variable", "monospace" };
 		char key[255];
 		char *info;
+#ifdef MIGRATE_PIXEL_SIZE
+		char old_key[255];
+#endif
 		
 		for (k = 0; k < G_N_ELEMENTS (types); k++)
 		{
@@ -456,6 +528,15 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 					     info);
 		font_infos = g_list_prepend (font_infos, info);
 
+#ifdef MIGRATE_PIXEL_SIZE
+		if (migrate_size)
+		{
+			g_snprintf (old_key, 255, "%s_%s",
+				    CONF_RENDERING_FONT_MIN_SIZE_OLD, code);
+			mozilla_migrate_font_gconf_key (old_key, key);
+		}
+#endif
+
 		g_snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_FIXED_SIZE, code);
 		info = g_strconcat ("size.fixed", ".", code, NULL);
 		add_notification_and_notify (client, key,
@@ -463,19 +544,40 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 					     info);
 		font_infos = g_list_prepend (font_infos, info);
 
+#ifdef MIGRATE_PIXEL_SIZE
+		if (migrate_size)
+		{
+			g_snprintf (old_key, 255, "%s_%s",
+				    CONF_RENDERING_FONT_FIXED_SIZE_OLD, code);
+			mozilla_migrate_font_gconf_key (old_key, key);
+		}
+#endif
+
 		g_snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_VAR_SIZE, code);
 		info = g_strconcat ("size.variable", ".", code, NULL);
 		add_notification_and_notify (client, key,
 					     (GConfClientNotifyFunc)mozilla_font_size_notifier,
 					     info);
-		font_infos = g_list_prepend (font_infos, info);		
+		font_infos = g_list_prepend (font_infos, info);
+
+#ifdef MIGRATE_PIXEL_SIZE
+		if (migrate_size)
+		{
+			g_snprintf (old_key, 255, "%s_%s",
+				    CONF_RENDERING_FONT_VAR_SIZE_OLD, code);
+			mozilla_migrate_font_gconf_key (old_key, key);
+		}
+#endif
 	}
 }
 
 void 
 mozilla_notifiers_free (void)
 {
-	ephy_notification_remove (&mozilla_notifiers);
+	g_list_foreach (mozilla_notifiers, 
+		        (GFunc)eel_gconf_notification_remove, 
+		        NULL);
+	g_list_free(mozilla_notifiers);
 
 	g_list_foreach (font_infos, (GFunc) g_free, NULL);
 	g_list_free (font_infos);

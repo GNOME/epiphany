@@ -1,8 +1,8 @@
 #define CONF_NETWORK_CACHE_SIZE "/apps/epiphany/web/cache_size"
 #define CONF_RENDERING_FONT "/apps/epiphany/web/font"
-#define CONF_RENDERING_FONT_VAR_SIZE "/apps/epiphany/web/font_var_size"
-#define CONF_RENDERING_FONT_FIXED_SIZE "/apps/epiphany/web/font_fixed_size"
-#define CONF_RENDERING_FONT_MIN_SIZE "/apps/epiphany/web/font_min_size"
+#define CONF_RENDERING_FONT_VAR_SIZE "/apps/epiphany/web/font_var_size_pt"
+#define CONF_RENDERING_FONT_FIXED_SIZE "/apps/epiphany/web/font_fixed_size_pt"
+#define CONF_RENDERING_FONT_MIN_SIZE "/apps/epiphany/web/font_min_size_pt"
 #define CONF_RENDERING_LANGUAGE "/apps/epiphany/web/language"
 #define CONF_RENDERING_USE_OWN_COLORS "/apps/epiphany/web/use_own_colors"
 #define CONF_RENDERING_USE_OWN_FONTS "/apps/epiphany/web/use_own_fonts"
@@ -26,3 +26,8 @@
 #define CONF_NETWORK_SOCKS_PROXY_PORT "/system/proxy/socks_port"
 #define CONF_NETWORK_PROXY_AUTO_URL "/system/proxy/autoconfig_url"
 #define CONF_NETWORK_PROXY_IGNORE_HOSTS "/system/http_proxy/ignore_hosts"
+
+/* Deprecated, we migrate them */
+#define CONF_RENDERING_FONT_VAR_SIZE_OLD "/apps/epiphany/web/font_var_size"
+#define CONF_RENDERING_FONT_FIXED_SIZE_OLD "/apps/epiphany/web/font_fixed_size"
+#define CONF_RENDERING_FONT_MIN_SIZE_OLD "/apps/epiphany/web/font_min_size"

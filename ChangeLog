@@ -1,5 +1,29 @@
 2003-11-04  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* lib/eel-gconf-extensions.c: (global_client_free),
+	(eel_gconf_client_get_global), (eel_gconf_handle_error),
+	(eel_gconf_set_string), (eel_gconf_is_default),
+	(eel_gconf_key_is_writable), (eel_gconf_monitor_add),
+	(eel_gconf_monitor_remove), (eel_gconf_preload_cache),
+	(eel_gconf_get_default_value), (eel_strcmp), (eel_str_is_equal),
+	(simple_value_is_equal), (eel_gconf_value_is_equal),
+	(eel_gconf_value_get_string_list),
+	(eel_gconf_value_set_string_list), (eel_gconf_set_float),
+	(eel_gconf_get_float):
+	* lib/eel-gconf-extensions.h:
+
+	Resync with eel.
+
+	* lib/ephy-prefs.h:
+	* lib/widgets/ephy-spinner.c:
+	* embed/ephy-embed-prefs.h:
+	* embed/mozilla/mozilla-notifiers.cpp:
+
+	Migrate old font size settings. This will screw things
+	for 1.1 users, not much we can do about it now.
+
+2003-11-04  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* embed/downloader-view.c:
 	* embed/mozilla/ExternalProtocolService.cpp:
 	* embed/mozilla/mozilla-embed-single.cpp:

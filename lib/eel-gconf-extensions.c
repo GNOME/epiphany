@@ -22,15 +22,13 @@
    Authors: Ramiro Estrugo <ramiro@eazel.com>
 */
 
-#include <stdlib.h>
 #include <config.h>
 #include "eel-gconf-extensions.h"
 
+#include <bonobo/bonobo-i18n.h>
 #include <gconf/gconf-client.h>
 #include <gconf/gconf.h>
-#include <gtk/gtkwidget.h>
-#include <bonobo/bonobo-i18n.h>
-#include <gtk/gtkmessagedialog.h>
+#include <string.h>
 
 static GConfClient *global_gconf_client = NULL;
 
@@ -40,8 +38,8 @@ global_client_free (void)
 	if (global_gconf_client == NULL) {
 		return;
 	}
-
-	g_object_unref (G_OBJECT (global_gconf_client));
+	
+	g_object_unref (global_gconf_client);
 	global_gconf_client = NULL;
 }
 
@@ -59,7 +57,6 @@ eel_gconf_client_get_global (void)
 				return NULL;
 			}
 		}
-		
 	}
 	
 	if (global_gconf_client == NULL) {
@@ -73,10 +70,23 @@ eel_gconf_client_get_global (void)
 gboolean
 eel_gconf_handle_error (GError **error)
 {
+	char *message;
+	static gboolean shown_dialog = FALSE;
+	
 	g_return_val_if_fail (error != NULL, FALSE);
 
 	if (*error != NULL) {
 		g_warning (_("GConf error:\n  %s"), (*error)->message);
+		if (! shown_dialog) {
+			shown_dialog = TRUE;
+
+			message = g_strdup_printf (_("GConf error:\n  %s\n"
+						     "All further errors shown "
+						     "only on terminal"),
+						   (*error)->message);
+			g_error (message, _("GConf Error"), NULL);
+			g_free (message);
+		}
 		g_error_free (*error);
 		*error = NULL;
 
@@ -161,71 +171,18 @@ eel_gconf_get_integer (const char *key)
 }
 
 void
-eel_gconf_set_float (const char *key,
-			    gfloat float_value)
-{
-	GConfClient *client;
-	GError *error = NULL;
-
-	g_return_if_fail (key != NULL);
-
-	client = eel_gconf_client_get_global ();
-	g_return_if_fail (client != NULL);
-
-	gconf_client_set_float (client, key, float_value, &error);
-	eel_gconf_handle_error (&error);
-}
-
-gfloat
-eel_gconf_get_float (const char *key)
-{
-	gfloat result;
-	GConfClient *client;
-	GError *error = NULL;
-	
-	g_return_val_if_fail (key != NULL, 0);
-	
-	client = eel_gconf_client_get_global ();
-	g_return_val_if_fail (client != NULL, 0);
-	
-	result = gconf_client_get_float (client, key, &error);
-
-	if (eel_gconf_handle_error (&error)) {
-		result = 0;
-	}
-
-	return result;
-}
-
-void
 eel_gconf_set_string (const char *key,
-		      const char *string_value)
+			   const char *string_value)
 {
 	GConfClient *client;
 	GError *error = NULL;
 
 	g_return_if_fail (key != NULL);
-	g_return_if_fail (string_value != NULL);
 
 	client = eel_gconf_client_get_global ();
 	g_return_if_fail (client != NULL);
 	
 	gconf_client_set_string (client, key, string_value, &error);
-	eel_gconf_handle_error (&error);
-}
-
-void 
-eel_gconf_unset (const char *key)
-{
-	GConfClient *client;
-	GError *error = NULL;
-
-	g_return_if_fail (key != NULL);
-
-	client = eel_gconf_client_get_global ();
-	g_return_if_fail (client != NULL);
-	
-	gconf_client_unset (client, key, &error);
 	eel_gconf_handle_error (&error);
 }
 
@@ -291,49 +248,6 @@ eel_gconf_get_string_list (const char *key)
 	return slist;
 }
 
-/* This code wasn't part of the original eel-gconf-extensions.c */
-void
-eel_gconf_set_integer_list (const char *key,
-			const GSList *slist)
-{
-	GConfClient *client;
-	GError *error;
-
-	g_return_if_fail (key != NULL);
-
-	client = eel_gconf_client_get_global ();
-	g_return_if_fail (client != NULL);
-
-	error = NULL;
-	gconf_client_set_list (client, key, GCONF_VALUE_INT,
-			       /* Need cast cause of GConf api bug */
-			       (GSList *) slist,
-			       &error);
-	eel_gconf_handle_error (&error);
-}
-
-GSList *
-eel_gconf_get_integer_list (const char *key)
-{
-	GSList *slist;
-	GConfClient *client;
-	GError *error;
-	
-	g_return_val_if_fail (key != NULL, NULL);
-	
-	client = eel_gconf_client_get_global ();
-	g_return_val_if_fail (client != NULL, NULL);
-	
-	error = NULL;
-	slist = gconf_client_get_list (client, key, GCONF_VALUE_INT, &error);
-	if (eel_gconf_handle_error (&error)) {
-		slist = NULL;
-	}
-
-	return slist;
-}
-/* End of added code */
-
 gboolean
 eel_gconf_is_default (const char *key)
 {
@@ -353,12 +267,24 @@ eel_gconf_is_default (const char *key)
 	}
 
 	result = (value == NULL);
+	eel_gconf_value_free (value);
+	return result;
+}
 
-	if (value != NULL) {
-		gconf_value_free (value);
+gboolean
+eel_gconf_key_is_writable (const char *key)
+{
+	gboolean result;
+	GError *error = NULL;
+	
+	g_return_val_if_fail (key != NULL, FALSE);
+	
+	result = gconf_client_key_is_writable  (eel_gconf_client_get_global (), key, &error);
+
+	if (eel_gconf_handle_error (&error)) {
+		return result;
 	}
 
-	
 	return result;
 }
 
@@ -370,7 +296,7 @@ eel_gconf_monitor_add (const char *directory)
 
 	g_return_val_if_fail (directory != NULL, FALSE);
 
-	client = eel_gconf_client_get_global ();
+	client = gconf_client_get_default ();
 	g_return_val_if_fail (client != NULL, FALSE);
 
 	gconf_client_add_dir (client,
@@ -395,7 +321,7 @@ eel_gconf_monitor_remove (const char *directory)
 		return FALSE;
 	}
 
-	client = eel_gconf_client_get_global ();
+	client = gconf_client_get_default ();
 	g_return_val_if_fail (client != NULL, FALSE);
 	
 	gconf_client_remove_dir (client,
@@ -407,6 +333,28 @@ eel_gconf_monitor_remove (const char *directory)
 	}
 	
 	return TRUE;
+}
+
+void
+eel_gconf_preload_cache (const char             *directory,
+			 GConfClientPreloadType  preload_type)
+{
+	GError *error = NULL;
+	GConfClient *client;
+
+	if (directory == NULL) {
+		return;
+	}
+
+	client = gconf_client_get_default ();
+	g_return_if_fail (client != NULL);
+	
+	gconf_client_preload (client,
+			      directory,
+			      preload_type,
+			      &error);
+	
+	eel_gconf_handle_error (&error);
 }
 
 void
@@ -446,22 +394,150 @@ eel_gconf_get_value (const char *key)
 	return value;
 }
 
-void
-eel_gconf_set_value (const char *key, GConfValue *value)
+GConfValue*
+eel_gconf_get_default_value (const char *key)
 {
+	GConfValue *value = NULL;
 	GConfClient *client;
 	GError *error = NULL;
-
-	g_return_if_fail (key != NULL);
+	
+	g_return_val_if_fail (key != NULL, NULL);
 
 	client = eel_gconf_client_get_global ();
-	g_return_if_fail (client != NULL);
+	g_return_val_if_fail (client != NULL, NULL);
 
-	gconf_client_set (client, key, value, &error);
+	value = gconf_client_get_default_from_schema (client, key, &error);
 	
 	if (eel_gconf_handle_error (&error)) {
-		return;
+		if (value != NULL) {
+			gconf_value_free (value);
+			value = NULL;
+		}
 	}
+
+	return value;
+}
+
+static int
+eel_strcmp (const char *string_a, const char *string_b)
+{
+	/* FIXME bugzilla.eazel.com 5450: Maybe we need to make this
+	 * treat 'NULL < ""', or have a flavor that does that. If we
+	 * didn't have code that already relies on 'NULL == ""', I
+	 * would change it right now.
+	 */
+	return strcmp (string_a == NULL ? "" : string_a,
+		       string_b == NULL ? "" : string_b);
+}
+
+static gboolean
+eel_str_is_equal (const char *string_a, const char *string_b)
+{
+	/* FIXME bugzilla.eazel.com 5450: Maybe we need to make this
+	 * treat 'NULL != ""', or have a flavor that does that. If we
+	 * didn't have code that already relies on 'NULL == ""', I
+	 * would change it right now.
+	 */
+	return eel_strcmp (string_a, string_b) == 0;
+}
+
+static gboolean
+simple_value_is_equal (const GConfValue *a,
+		       const GConfValue *b)
+{
+	g_return_val_if_fail (a != NULL, FALSE);
+	g_return_val_if_fail (b != NULL, FALSE);
+
+	switch (a->type) {
+	case GCONF_VALUE_STRING:
+		return eel_str_is_equal (gconf_value_get_string (a),
+					 gconf_value_get_string (b));
+		break;
+
+	case GCONF_VALUE_INT:
+		return gconf_value_get_int (a) ==
+			gconf_value_get_int (b);
+		break;
+
+	case GCONF_VALUE_FLOAT:
+		return gconf_value_get_float (a) ==
+			gconf_value_get_float (b);
+		break;
+
+	case GCONF_VALUE_BOOL:
+		return gconf_value_get_bool (a) ==
+			gconf_value_get_bool (b);
+		break;
+	default:
+		g_assert_not_reached ();
+	}
+	
+	return FALSE;
+}
+
+gboolean
+eel_gconf_value_is_equal (const GConfValue *a,
+			       const GConfValue *b)
+{
+	GSList *node_a;
+	GSList *node_b;
+
+	if (a == NULL && b == NULL) {
+		return TRUE;
+	}
+
+	if (a == NULL || b == NULL) {
+		return FALSE;
+	}
+
+	if (a->type != b->type) {
+		return FALSE;
+	}
+
+	switch (a->type) {
+	case GCONF_VALUE_STRING:
+	case GCONF_VALUE_INT:
+	case GCONF_VALUE_FLOAT:
+	case GCONF_VALUE_BOOL:
+		return simple_value_is_equal (a, b);
+		break;
+		
+	case GCONF_VALUE_LIST:
+		if (gconf_value_get_list_type (a) !=
+		    gconf_value_get_list_type (b)) {
+			return FALSE;
+		}
+
+		node_a = gconf_value_get_list (a);
+		node_b = gconf_value_get_list (b);
+		
+		if (node_a == NULL && node_b == NULL) {
+			return TRUE;
+		}
+
+		if (g_slist_length (node_a) !=
+		    g_slist_length (node_b)) {
+			return FALSE;
+		}
+		
+		for (;
+		     node_a != NULL && node_b != NULL;
+		     node_a = node_a->next, node_b = node_b->next) {
+			g_assert (node_a->data != NULL);
+			g_assert (node_b->data != NULL);
+			if (!simple_value_is_equal (node_a->data, node_b->data)) {
+				return FALSE;
+			}
+		}
+		
+		return TRUE;
+	default:
+		/* FIXME: pair ? */
+		g_assert (0);
+	}
+	
+	g_assert_not_reached ();
+	return FALSE;
 }
 
 void
@@ -521,36 +597,93 @@ eel_gconf_notification_remove (guint notification_id)
 	gconf_client_notify_remove (client, notification_id);
 }
 
-/* Simple wrapper for eel_gconf_notifier_add which
- * adds the notifier id to the GList given as argument
- * so that a call to ephy_notification_free can remove the notifiers
- */
-void
-ephy_notification_add (const char *key,
-		       GConfClientNotifyFunc notification_callback,
-		       gpointer callback_data,
-		       GList **notifiers)
+GSList *
+eel_gconf_value_get_string_list (const GConfValue *value)
 {
-	guint id = 0;
+ 	GSList *result;
+ 	const GSList *slist;
+ 	const GSList *node;
+	const char *string;
+	const GConfValue *next_value;
 
-	id = eel_gconf_notification_add(key,
-					notification_callback,
-					callback_data);
-	if (notifiers != NULL) {
-		*notifiers = g_list_append(*notifiers,
-					   GINT_TO_POINTER(id));
+	if (value == NULL) {
+		return NULL;
 	}
+
+	g_return_val_if_fail (value->type == GCONF_VALUE_LIST, NULL);
+	g_return_val_if_fail (gconf_value_get_list_type (value) == GCONF_VALUE_STRING, NULL);
+
+	slist = gconf_value_get_list (value);
+	result = NULL;
+	for (node = slist; node != NULL; node = node->next) {
+		next_value = node->data;
+		g_return_val_if_fail (next_value != NULL, NULL);
+		g_return_val_if_fail (next_value->type == GCONF_VALUE_STRING, NULL);
+		string = gconf_value_get_string (next_value);
+		result = g_slist_append (result, g_strdup (string));
+	}
+	return result;
 }
 
-/* Removes all the notifiers listed in notifiers */
-/* Frees the notifiers list */
 void
-ephy_notification_remove (GList **notifiers)
+eel_gconf_value_set_string_list (GConfValue *value,
+				 const GSList *string_list)
 {
-	g_list_foreach(*notifiers,
-		       (GFunc)eel_gconf_notification_remove,
-		       NULL);
-	g_list_free(*notifiers);
-	*notifiers = NULL;
+ 	const GSList *node;
+	GConfValue *next_value;
+ 	GSList *value_list;
+
+	g_return_if_fail (value->type == GCONF_VALUE_LIST);
+	g_return_if_fail (gconf_value_get_list_type (value) == GCONF_VALUE_STRING);
+
+	value_list = NULL;
+	for (node = string_list; node != NULL; node = node->next) {
+		next_value = gconf_value_new (GCONF_VALUE_STRING);
+		gconf_value_set_string (next_value, node->data);
+		value_list = g_slist_append (value_list, next_value);
+	}
+
+	gconf_value_set_list (value, value_list);
+
+	for (node = value_list; node != NULL; node = node->next) {
+		gconf_value_free (node->data);
+	}
+	g_slist_free (value_list);
 }
 
+void
+eel_gconf_set_float (const char *key,
+			    gfloat float_value)
+{
+	GConfClient *client;
+	GError *error = NULL;
+
+	g_return_if_fail (key != NULL);
+
+	client = eel_gconf_client_get_global ();
+	g_return_if_fail (client != NULL);
+
+	gconf_client_set_float (client, key, float_value, &error);
+	eel_gconf_handle_error (&error);
+}
+
+gfloat
+eel_gconf_get_float (const char *key)
+{
+	gfloat result;
+	GConfClient *client;
+	GError *error = NULL;
+	
+	g_return_val_if_fail (key != NULL, 0);
+	
+	client = eel_gconf_client_get_global ();
+	g_return_val_if_fail (client != NULL, 0);
+	
+	result = gconf_client_get_float (client, key, &error);
+
+	if (eel_gconf_handle_error (&error)) {
+		result = 0;
+	}
+
+	return result;
+}

@@ -31,7 +31,6 @@
 #endif
 
 #include "ephy-spinner.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-string.h"
 #include "ephy-file-helpers.h"
 

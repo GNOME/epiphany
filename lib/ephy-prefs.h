@@ -21,6 +21,9 @@
 
 G_BEGIN_DECLS
 
+#define EPIPHANY_SCHEMA_VERSION 1
+#define CONF_SCHEMA_VERSION "/apps/epiphany/schema_version"
+
 /* General */
 #define CONF_GENERAL_HOMEPAGE "/apps/epiphany/general/homepage"
 #define CONF_ALWAYS_SHOW_TABS_BAR "/apps/epiphany/general/always_show_tabs_bar"
