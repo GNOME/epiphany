@@ -277,7 +277,7 @@ struct
 }
 languages [] =
 {
-	{ "ak",		N_("Afrikaans") },
+	{ "af",		N_("Afrikaans") },
 	{ "ar",		N_("Arabic") },
 	{ "az",		N_("Azerbaijani") },
 	{ "be",		N_("Byelorussian") },
