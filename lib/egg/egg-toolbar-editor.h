@@ -50,8 +50,10 @@ struct EggToolbarEditorClass
   GtkDialogClass parent_class;
 };
 
+
 GType             egg_toolbar_editor_get_type     (void);
-GtkWidget        *egg_toolbar_editor_new          (EggMenuMerge *merge,
+GtkWidget        *egg_toolbar_editor_new          (GtkWindow *parent,
+						   EggMenuMerge *merge,
 						   EggToolbarsModel *model);
 void              egg_toolbar_editor_load_actions (EggToolbarEditor *editor,
 						   const char       *xml_file);

@@ -210,7 +210,8 @@ egg_toolbar_editor_finalize (GObject *object)
 }
 
 GtkWidget *
-egg_toolbar_editor_new (EggMenuMerge *merge,
+egg_toolbar_editor_new (GtkWindow *parent,
+			EggMenuMerge *merge,
 			EggToolbarsModel *model)
 {
   EggToolbarEditor *t;
@@ -219,6 +220,10 @@ egg_toolbar_editor_new (EggMenuMerge *merge,
 					"MenuMerge", merge,
 					"ToolbarsModel", model,
 					NULL));
+  if (parent != NULL)
+    {
+      gtk_window_set_transient_for (GTK_WINDOW (t), parent);
+    }
 
   g_return_val_if_fail (t->priv != NULL, NULL);
 
@@ -535,7 +540,7 @@ parse_item_list (EggToolbarEditor *t,
     }
 }
 
-gboolean
+static gboolean
 model_has_action (EggToolbarsModel *model, EggAction *action)
 {
   int i, l, n_items, n_toolbars;

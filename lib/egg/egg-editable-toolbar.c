@@ -53,6 +53,7 @@ struct EggEditableToolbarPrivate
   EggMenuMerge *merge;
   EggToolbarsModel *model;
   gboolean edit_mode;
+  GtkWidget *selected_toolbar;
 };
 
 GType
@@ -223,12 +224,12 @@ drag_data_get_cb (GtkWidget          *widget,
 }
 
 static void
-remove_toolbar_cb (GtkWidget          *toolbar,
+remove_toolbar_cb (GtkWidget          *menuitem,
 		   EggEditableToolbar *etoolbar)
 {
   int pos;
 
-  pos = get_toolbar_position (etoolbar, toolbar);
+  pos = get_toolbar_position (etoolbar, etoolbar->priv->selected_toolbar);
   egg_toolbars_model_remove_toolbar (etoolbar->priv->model, pos);
 }
 
@@ -240,20 +241,25 @@ popup_toolbar_context_menu_cb (GtkWidget          *toolbar,
   GtkWidget *item;
   GtkWidget *image;
 
-  menu = gtk_menu_new ();
+  if (t->priv->edit_mode)
+    {
+      t->priv->selected_toolbar = toolbar;
 
-  item = gtk_image_menu_item_new_with_mnemonic (_("_Remove Toolbar"));
-  gtk_widget_show (item);
-  image = gtk_image_new_from_stock (GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  g_signal_connect (item, "activate",
-	            G_CALLBACK (remove_toolbar_cb),
-		    t);
+      menu = gtk_menu_new ();
 
-  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 2,
-		  gtk_get_current_event_time ());
+      item = gtk_image_menu_item_new_with_mnemonic (_("_Remove Toolbar"));
+      gtk_widget_show (item);
+      image = gtk_image_new_from_stock (GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU);
+      gtk_widget_show (image);
+      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+      g_signal_connect (item, "activate",
+	                G_CALLBACK (remove_toolbar_cb),
+		        t);
+
+      gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 2,
+		      gtk_get_current_event_time ());
+    }
 }
 
 static GtkWidget *
