@@ -682,7 +682,7 @@ folders_list_to_topic_name (GList *folders)
 
 	for (l = folders->next; l != NULL; l = l->next)
 	{
-		g_string_append (topic, "|");
+		g_string_append (topic, "/");
 		g_string_append (topic, l->data);
 	}
 
