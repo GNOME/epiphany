@@ -60,6 +60,7 @@ struct EphyEmbedEvent
 	guint mouse_button;
 	guint context;
 	guint x, y;
+	guint keycode;
 };
 
 struct EphyEmbedEventClass

@@ -586,6 +586,64 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, EphyEmb
 	return NS_OK;
 }
 
+nsresult EventContext::GetKeyEventInfo (nsIDOMKeyEvent *aKeyEvent, EphyEmbedEvent *info)
+{
+	nsresult rv;
+
+	PRUint32 keyCode;
+	rv = aKeyEvent->GetKeyCode(&keyCode);
+	if (NS_FAILED(rv)) return rv;
+	info->keycode = keyCode;
+
+	nsCOMPtr<nsIDOMEventTarget> target;
+	rv = aKeyEvent->GetTarget(getter_AddRefs(target));
+	if (NS_FAILED(rv) || !target) return NS_ERROR_FAILURE;
+
+	/* Calculate the node coordinates relative to the widget origin */
+	nsCOMPtr<nsIDOMNSHTMLElement> elem = do_QueryInterface(target, &rv);
+	if (NS_FAILED(rv)) return rv;
+
+	PRInt32 x = 0, y = 0;
+	while (elem)
+	{
+		PRInt32 val;
+		elem->GetOffsetTop(&val);	y += val;
+		elem->GetScrollTop(&val);	y -= val;
+		elem->GetOffsetLeft(&val);	x += val;
+		elem->GetScrollLeft(&val);	x -= val;
+
+		nsCOMPtr<nsIDOMElement> parent;
+		elem->GetOffsetParent(getter_AddRefs(parent));
+		elem = do_QueryInterface(parent, &rv);
+	}
+	info->x = x;
+	info->y = y;
+
+	/* Context */
+	rv = GetEventContext (target, info);
+	if (NS_FAILED(rv)) return rv;
+
+	/* Get the modifier */
+
+	PRBool mod_key;
+
+	info->modifier = 0;
+
+	aKeyEvent->GetAltKey(&mod_key);
+	if (mod_key) info->modifier |= GDK_MOD1_MASK;
+
+	aKeyEvent->GetShiftKey(&mod_key);
+	if (mod_key) info->modifier |= GDK_SHIFT_MASK;
+
+	aKeyEvent->GetMetaKey(&mod_key);
+	if (mod_key) info->modifier |= GDK_Meta_L;
+	
+	aKeyEvent->GetCtrlKey(&mod_key);
+	if (mod_key) info->modifier |= GDK_CONTROL_MASK;
+
+	return NS_OK;
+}
+
 nsresult EventContext::IsPageFramed (nsIDOMNode *node, PRBool *Framed)
 {
 	nsresult result;

@@ -29,6 +29,7 @@
 enum
 {
 	NEW_WINDOW,
+	CONTEXT_MENU,
 	LINK_MESSAGE,
 	FAVICON,
 	JS_STATUS,
@@ -108,6 +109,16 @@ ephy_embed_base_init (gpointer g_class)
                               G_TYPE_NONE,
                               1,
 			      G_TYPE_STRING);
+	ephy_embed_signals[CONTEXT_MENU] =
+                g_signal_new ("ge_context_menu",
+                              EPHY_EMBED_TYPE,
+                              G_SIGNAL_RUN_LAST,
+                              G_STRUCT_OFFSET (EphyEmbedClass, context_menu),
+                              NULL, NULL,
+                              ephy_marshal_INT__OBJECT,
+                              G_TYPE_INT,
+                              1,
+			      G_TYPE_OBJECT);
 	ephy_embed_signals[FAVICON] =
                 g_signal_new ("ge_favicon",
                               EPHY_EMBED_TYPE,

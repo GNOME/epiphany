@@ -45,6 +45,7 @@ public:
 	nsresult Init (EphyWrapper *wrapper);
 
 	nsresult GetMouseEventInfo (nsIDOMMouseEvent *event, EphyEmbedEvent *info);
+	nsresult GetKeyEventInfo (nsIDOMKeyEvent *event, EphyEmbedEvent *info);
 	nsresult GetTargetDocument (nsIDOMDocument **domDoc);
 
 private:

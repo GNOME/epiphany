@@ -206,6 +206,9 @@ mozilla_embed_security_change_cb (GtkMozEmbed *embed,
                                   guint state, MozillaEmbed *membed);
 static EmbedSecurityLevel
 mozilla_embed_security_level (MozillaEmbed *membed);
+static gint
+mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
+		               MozillaEmbed *membed);
 
 /* signals to connect on each embed widget */
 static const struct
@@ -228,6 +231,7 @@ signal_connections[] =
         { "size_to",         (void *) mozilla_embed_size_to_cb           },
         { "new_window",      (void *) mozilla_embed_new_window_cb        },
         { "security_change", (void *) mozilla_embed_security_change_cb   },
+	{ "dom_key_down",    (void *) mozilla_embed_dom_key_down_cb      },
 
         /* terminator -- must be last in the list! */
         { NULL, NULL } 
@@ -1312,6 +1316,63 @@ mozilla_embed_visibility_cb (GtkMozEmbed *embed, gboolean visibility,
 	}
 }
 
+static gint
+mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
+		               MozillaEmbed *membed)
+{
+	nsCOMPtr<nsIDOMKeyEvent> ev = static_cast<nsIDOMKeyEvent*>(dom_event);
+	if (!ev)
+	{
+		return FALSE;
+	}
+
+	EphyWrapper *wrapper = MOZILLA_EMBED(membed)->priv->wrapper;
+	g_return_val_if_fail (wrapper != NULL, G_FAILED);
+
+	EphyEmbedEvent *info;
+	info = ephy_embed_event_new ();
+
+	gboolean ret = FALSE;
+
+	// Just check for Shift-F10 so that we know to popup the context menu.
+	//
+	// The DOM_VK_* keycodes are not compatible with the keycodes defined
+	// in GDK, so making a generic dom_key_down signal is probably not
+	// worth the trouble.
+
+	nsresult rv;
+	EventContext ctx;
+	ctx.Init (wrapper);
+	rv = ctx.GetKeyEventInfo (ev, info);
+	if (NS_SUCCEEDED(rv) &&
+	    (info->keycode == nsIDOMKeyEvent::DOM_VK_F10 &&
+	     info->modifier == GDK_SHIFT_MASK))
+	{
+		// Translate relative coordinates to absolute values, and try
+		// to avoid covering links by adding a little offset.
+
+		int x, y;
+		gdk_window_get_origin (GTK_WIDGET(membed)->window, &x, &y);
+		info->x += x + 6;	
+		info->y += y + 6;
+
+		nsCOMPtr<nsIDOMDocument> doc;
+		rv = ctx.GetTargetDocument (getter_AddRefs(doc));
+		if (NS_SUCCEEDED(rv))
+		{
+			rv = wrapper->PushTargetDocument (doc);
+			if (NS_SUCCEEDED(rv))
+			{
+				g_signal_emit_by_name (membed, "ge_context_menu", info, &ret);
+				wrapper->PopTargetDocument ();
+			}
+		}
+	}
+
+	g_object_unref (info);
+	return ret;
+}
+
 static void
 mozilla_embed_destroy_brsr_cb (GtkMozEmbed *embed, 
 			       MozillaEmbed *membed)
@@ -1371,8 +1432,18 @@ static gint
 mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event, 
 				 MozillaEmbed *membed)
 {
-	return mozilla_embed_emit_mouse_signal
+	int ret;
+
+	ret =  mozilla_embed_emit_mouse_signal
 		(membed, dom_event, "ge_dom_mouse_down");
+
+	if (!ret)
+	{
+		ret = mozilla_embed_emit_mouse_signal
+	                (membed, dom_event, "ge_context_menu");
+	}
+
+	return ret;
 }
 
 static void

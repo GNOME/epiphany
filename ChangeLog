@@ -1,3 +1,23 @@
+2003-06-15  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/ephy-embed-event.c: (ephy_embed_event_init):
+	* embed/ephy-embed-event.h:
+	* embed/ephy-embed-popup-bw.c: (popup_menu_at_coords),
+	(ephy_embed_popup_bw_show_impl):
+	* embed/ephy-embed.c: (ephy_embed_base_init):
+	* embed/ephy-embed.h:
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/EventContext.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-tab.c: (popup_menu_at_coords),
+	(ephy_tab_show_embed_popup), (ephy_tab_context_menu_cb),
+	(ephy_tab_init):
+
+	Shift+F10 show context menus on the embed.
+	(Less invasive way until gtkmozembed has a context_menu
+	signal)
+	From galeon.
+
 2003-06-15  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/mozilla-embed-single.cpp:

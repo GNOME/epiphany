@@ -164,6 +164,8 @@ struct EphyEmbedClass
 {
         GTypeInterface base_iface;
 
+	gint (* context_menu)	 (EphyEmbed *embed,
+				  EphyEmbedEvent *event);
 	void (* favicon)	 (EphyEmbed *embed,
 				  const char *location);
 	void (* link_message)    (EphyEmbed *embed,

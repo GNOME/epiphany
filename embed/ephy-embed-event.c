@@ -87,6 +87,7 @@ ephy_embed_event_init (EphyEmbedEvent *event)
 
 	event->priv->props = g_hash_table_new_full (g_str_hash, g_str_equal,
 						    g_free, free_g_value);
+	event->mouse_button = -1;
 }
 
 static void

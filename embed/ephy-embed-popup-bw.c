@@ -162,6 +162,17 @@ ephy_embed_popup_bw_new (BonoboWindow *window)
 }
 
 static void
+popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
+		      gpointer user_data)
+{
+	EphyEmbedEvent *event = user_data;
+
+	*x = event->x;
+	*y = event->y;
+	*push_in = FALSE;
+}
+
+static void
 ephy_embed_popup_bw_show_impl (EphyEmbedPopup *pp,
 				 EphyEmbed *embed)
 {
@@ -181,7 +192,7 @@ ephy_embed_popup_bw_show_impl (EphyEmbedPopup *pp,
 				 ephy_embed_popup_get_popup_path (EPHY_EMBED_POPUP (p)));
 
 	gtk_menu_popup (GTK_MENU (p->priv->menu),
-			NULL, NULL, NULL, NULL,
+			NULL, NULL, button == 2 ? popup_menu_at_coords : NULL, event,
 			button, gtk_get_current_event_time ());
 }
 

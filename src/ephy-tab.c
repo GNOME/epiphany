@@ -886,6 +886,17 @@ ephy_tab_set_event (EphyTab *tab,
 }
 
 static void
+popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
+		      gpointer user_data)
+{
+	EphyEmbedEvent *event = user_data;
+
+	*x = event->x;
+	*y = event->y;
+	*push_in = FALSE;
+}
+
+static void
 ephy_tab_show_embed_popup (EphyTab *tab, EphyEmbedEvent *event)
 {
 	EmbedEventContext context;
@@ -935,7 +946,7 @@ ephy_tab_show_embed_popup (EphyTab *tab, EphyEmbedEvent *event)
 	g_return_if_fail (widget != NULL);
 
 	ephy_tab_set_event (tab, event);
-	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
+	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, popup_menu_at_coords, event, 2,
 			gtk_get_current_event_time ());
 }
 
@@ -983,9 +994,9 @@ ephy_tab_dom_mouse_click_cb  (EphyEmbed *embed,
 }
 
 static gint
-ephy_tab_dom_mouse_down_cb  (EphyEmbed *embed,
-			     EphyEmbedEvent *event,
-			     EphyTab *tab)
+ephy_tab_context_menu_cb  (EphyEmbed *embed,
+			   EphyEmbedEvent *event,
+			   EphyTab *tab)
 {
 	EphyWindow *window;
 	int button;
@@ -999,6 +1010,13 @@ ephy_tab_dom_mouse_down_cb  (EphyEmbed *embed,
 
 	if (button == 2)
 	{
+		ephy_tab_show_embed_popup (tab, event);
+	}
+	else if (button == -1)
+	{
+		int x, y;
+
+		ephy_embed_event_get_coords (event, &x, &y);
 		ephy_tab_show_embed_popup (tab, event);
 	}
 
@@ -1101,8 +1119,8 @@ ephy_tab_init (EphyTab *tab)
 	g_signal_connect (embed, "ge_size_to",
 			  G_CALLBACK (ephy_tab_size_to_cb),
 			  tab);
-	g_signal_connect (embed, "ge_dom_mouse_down",
-			  G_CALLBACK (ephy_tab_dom_mouse_down_cb),
+	g_signal_connect (embed, "ge_context_menu",
+			  G_CALLBACK (ephy_tab_context_menu_cb),
 			  tab);
 	g_signal_connect (embed, "ge_dom_mouse_click",
 			  G_CALLBACK (ephy_tab_dom_mouse_click_cb),
