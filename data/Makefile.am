@@ -2,6 +2,7 @@ SUBDIRS = ui art glade starthere
 
 @INTLTOOL_SERVER_RULE@
 @INTLTOOL_DESKTOP_RULE@
+@INTLTOOL_SCHEMAS_RULE@
 
 server_in_files = GNOME_Epiphany_Automation.server.in GNOME_Epiphany_NautilusView.server.in
 server_DATA = GNOME_Epiphany_Automation.server GNOME_Epiphany_NautilusView.server
@@ -14,6 +15,7 @@ Applicationsdir = $(datadir)/applications
 Applications_DATA = $(DESKTOP_FILES)
 
 schemadir = $(sysconfdir)/gconf/schemas
+schema_in_files = epiphany.schemas.in
 schema_DATA = epiphany.schemas
 
 EXTRA_DIST = $(glade_DATA)
@@ -25,9 +27,9 @@ install-data-local:
 	done \
         fi
 
-CLEANFILES = $(server_DATA) $(Applications_DATA) 
+CLEANFILES = $(server_DATA) $(Applications_DATA) $(schema_DATA)
 
 EXTRA_DIST = $(server_in_files)     	\
-	     $(schema_DATA)         	\
+	     $(schema_in_files)         \
 	     $(DESKTOP_IN_FILES)
 

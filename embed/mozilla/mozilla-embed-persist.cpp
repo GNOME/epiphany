@@ -236,7 +236,7 @@ impl_save (EphyEmbedPersist *persist)
                                  	   persist, 
 					   !(flags & EMBED_PERSIST_SHOW_PROGRESS));
 
-		rv = bpersist->SaveURI (linkURI, nsnull, file);
+		rv = bpersist->SaveURI (linkURI, nsnull, nsnull, nsnull, nsnull, file);
 		if (NS_FAILED(rv)) return G_FAILED;
 	}
 	
