@@ -1368,13 +1368,10 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 			state = _("Broken");
 			stock_id = STOCK_LOCK_BROKEN;
 			break;
-		case EPHY_EMBED_STATE_IS_SECURE_MED:
-			state = _("Medium");
-			stock_id = STOCK_LOCK_SECURE;
-			break;
 		case EPHY_EMBED_STATE_IS_SECURE_LOW:
+		case EPHY_EMBED_STATE_IS_SECURE_MED:
 			state = _("Low");
-			stock_id = STOCK_LOCK_SECURE;
+			stock_id = STOCK_LOCK_INSECURE;
 			break;
 		case EPHY_EMBED_STATE_IS_SECURE_HIGH:
 			state = _("High");
