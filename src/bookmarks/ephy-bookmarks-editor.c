@@ -1575,7 +1575,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	EphyNode *node;
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
-	int col_id, details_value;
+	int col_id, url_col_id, title_col_id, details_value;
 
 	ephy_gui_ensure_window_group (GTK_WINDOW (editor));
 
@@ -1645,9 +1645,16 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	col_id = ephy_node_view_add_data_column (EPHY_NODE_VIEW (key_view),
 					         G_TYPE_STRING, -1,
 						 provide_keyword_uri, editor);
+	ephy_node_view_add_column (EPHY_NODE_VIEW (key_view), _("Topics"),
+				   G_TYPE_STRING,
+				   EPHY_NODE_KEYWORD_PROP_NAME,
+				   EPHY_NODE_VIEW_SHOW_PRIORITY |
+				   EPHY_NODE_VIEW_EDITABLE |
+				   EPHY_NODE_VIEW_SEARCHABLE, NULL, NULL);
 	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (key_view),
 					   topic_drag_types,
-				           n_topic_drag_types, col_id);
+				           n_topic_drag_types,
+					   col_id, -1);
 	ephy_node_view_enable_drag_dest (EPHY_NODE_VIEW (key_view),
 			                 topic_drag_dest_types,
 			                 n_topic_drag_dest_types);
@@ -1657,12 +1664,6 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			  "changed",
 			  G_CALLBACK (view_selection_changed_cb),
 			  editor);
-	ephy_node_view_add_column (EPHY_NODE_VIEW (key_view), _("Topics"),
-				   G_TYPE_STRING,
-				   EPHY_NODE_KEYWORD_PROP_NAME,
-				   EPHY_NODE_VIEW_SHOW_PRIORITY |
-				   EPHY_NODE_VIEW_EDITABLE |
-				   EPHY_NODE_VIEW_SEARCHABLE, NULL);
 	ephy_node_view_set_priority (EPHY_NODE_VIEW (key_view),
 				     EPHY_NODE_KEYWORD_PROP_PRIORITY);
 	ephy_node_view_set_sort (EPHY_NODE_VIEW (key_view), G_TYPE_STRING,
@@ -1713,24 +1714,20 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	/* Bookmarks View */
 	bm_view = ephy_node_view_new (node, editor->priv->bookmarks_filter);
 	add_focus_monitor (editor, bm_view);
-	col_id = ephy_node_view_add_data_column (EPHY_NODE_VIEW (bm_view),
-					         G_TYPE_STRING,
-					         EPHY_NODE_BMK_PROP_LOCATION,
-						 NULL, NULL);
-	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (bm_view),
-					   bmk_drag_types,
-				           n_bmk_drag_types,
-					   col_id);
-	editor->priv->title_col = ephy_node_view_add_column
+	title_col_id = ephy_node_view_add_column
 				  (EPHY_NODE_VIEW (bm_view), _("Title"),
 				   G_TYPE_STRING, EPHY_NODE_BMK_PROP_TITLE,
 				   EPHY_NODE_VIEW_EDITABLE |
 				   EPHY_NODE_VIEW_SEARCHABLE,
-				   provide_favicon);
-	editor->priv->address_col = ephy_node_view_add_column
+				   provide_favicon, &(editor->priv->title_col));
+	url_col_id = ephy_node_view_add_column
 				  (EPHY_NODE_VIEW (bm_view), _("Address"),
 				   G_TYPE_STRING, EPHY_NODE_BMK_PROP_LOCATION,
-				   0, NULL);
+				   0, NULL, &(editor->priv->address_col));
+	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (bm_view),
+					   bmk_drag_types,
+				           n_bmk_drag_types,
+					   url_col_id, title_col_id);
 	ephy_node_view_set_sort (EPHY_NODE_VIEW (bm_view), G_TYPE_STRING,
 				 EPHY_NODE_BMK_PROP_TITLE, GTK_SORT_ASCENDING);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), bm_view);

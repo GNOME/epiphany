@@ -200,7 +200,7 @@ ephy_topics_selector_constructor (GType type,
 				   EPHY_NODE_KEYWORD_PROP_NAME,
 				   EPHY_NODE_VIEW_SHOW_PRIORITY |
 				   EPHY_NODE_VIEW_EDITABLE |
-				   EPHY_NODE_VIEW_SEARCHABLE, NULL);
+				   EPHY_NODE_VIEW_SEARCHABLE, NULL, NULL);
 	ephy_node_view_set_sort (EPHY_NODE_VIEW (selector), G_TYPE_STRING,
 				 EPHY_NODE_KEYWORD_PROP_NAME, GTK_SORT_ASCENDING);
 

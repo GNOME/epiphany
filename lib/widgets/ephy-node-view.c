@@ -1158,13 +1158,14 @@ ephy_node_view_add_data_column (EphyNodeView *view,
 	return column;
 }
 
-GtkTreeViewColumn *
+int
 ephy_node_view_add_column (EphyNodeView *view,
 			   const char  *title,
 			   GType value_type,
 			   guint prop_id,
 			   EphyNodeViewFlags flags,
-			   EphyTreeModelNodeValueFunc icon_func)
+			   EphyTreeModelNodeValueFunc icon_func,
+			   GtkTreeViewColumn **ret)
 
 {
 	GtkTreeViewColumn *gcolumn;
@@ -1236,7 +1237,10 @@ ephy_node_view_add_column (EphyNodeView *view,
 		gtk_tree_view_column_set_sort_column_id (gcolumn, column);
 	}
 
-	return gcolumn;
+	if (ret != NULL)
+		*ret = gcolumn;
+
+	return column;
 }
 
 void
@@ -1409,7 +1413,8 @@ void
 ephy_node_view_enable_drag_source (EphyNodeView *view,
 				   GtkTargetEntry *types,
 				   int n_types,
-				   int column)
+				   int base_drag_column,
+				   int extra_drag_column)
 {
 	GtkWidget *treeview;
 
@@ -1420,8 +1425,10 @@ ephy_node_view_enable_drag_source (EphyNodeView *view,
 	view->priv->source_target_list =
 		gtk_target_list_new (types, n_types);
 
-	ephy_tree_model_sort_set_column_id (EPHY_TREE_MODEL_SORT (view->priv->sortmodel),
-					    column);
+	ephy_tree_model_sort_set_base_drag_column_id  (EPHY_TREE_MODEL_SORT (view->priv->sortmodel),
+					               base_drag_column);
+	ephy_tree_model_sort_set_extra_drag_column_id (EPHY_TREE_MODEL_SORT (view->priv->sortmodel),
+					               extra_drag_column);
 
 	g_signal_connect_object (G_OBJECT (view),
 			         "button_release_event",

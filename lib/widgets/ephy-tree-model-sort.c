@@ -48,7 +48,8 @@ static gboolean ephy_tree_model_sort_multi_drag_data_delete (EggTreeMultiDragSou
 struct _EphyTreeModelSortPrivate
 {
 	char *str_list;
-	int drag_column_id;
+	int base_drag_column_id;
+	int extra_drag_column_id;
 };
 
 static GObjectClass *parent_class = NULL;
@@ -108,7 +109,8 @@ ephy_tree_model_sort_init (EphyTreeModelSort *ma)
 {
 	ma->priv = EPHY_TREE_MODEL_SORT_GET_PRIVATE (ma);
 
-	ma->priv->drag_column_id = -1;
+	ma->priv->base_drag_column_id = -1;
+	ma->priv->extra_drag_column_id = -1;
 }
 
 static void
@@ -146,14 +148,21 @@ ephy_tree_model_sort_multi_drag_source_init (EggTreeMultiDragSourceIface *iface)
 static gboolean
 ephy_tree_model_sort_multi_row_draggable (EggTreeMultiDragSource *drag_source, GList *path_list)
 {
-	return (EPHY_TREE_MODEL_SORT (drag_source)->priv->drag_column_id > 0);
+	return (EPHY_TREE_MODEL_SORT (drag_source)->priv->base_drag_column_id >= 0);
 }
 
 void
-ephy_tree_model_sort_set_column_id (EphyTreeModelSort *ms,
-				    int id)
+ephy_tree_model_sort_set_base_drag_column_id (EphyTreeModelSort *ms,
+				              int id)
 {
-	ms->priv->drag_column_id = id;
+	ms->priv->base_drag_column_id = id;
+}
+
+void
+ephy_tree_model_sort_set_extra_drag_column_id (EphyTreeModelSort *ms,
+					       int id)
+{
+	ms->priv->extra_drag_column_id = id;
 }
 
 static gboolean
@@ -171,29 +180,41 @@ each_property_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 	GList *path_list = (GList *) (context[0]);
 	GList *i;
 	EphyTreeModelSort *model = EPHY_TREE_MODEL_SORT (context[1]);
-	GValue value = {0, };
+	GValue base_value = {0, }, extra_value = {0, };
 
 	for (i = path_list; i != NULL; i = i->next)
 	{
 		GtkTreeIter iter;
 		GtkTreePath *path = NULL;
-		const char *svalue;
+		const char *base_data, *extra_data;
 
 		path = gtk_tree_row_reference_get_path (i->data);
 		gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path);
+
 		gtk_tree_model_get_value (GTK_TREE_MODEL (model), &iter,
-					  model->priv->drag_column_id,
-					  &value);
-		svalue = g_value_get_string (&value);
+					  model->priv->base_drag_column_id,
+					  &base_value);
+		base_data = g_value_get_string (&base_value);
 
-		g_return_if_fail (svalue != NULL);
+		if (model->priv->extra_drag_column_id >= 0) {
+			gtk_tree_model_get_value (GTK_TREE_MODEL (model), &iter,
+						  model->priv->extra_drag_column_id,
+						  &extra_value);
+			extra_data = g_value_get_string (&extra_value);
+		} else
+			extra_data = NULL;
 
-		LOG ("Data get %s", svalue)
+		g_return_if_fail (base_data != NULL);
 
-		iteratee (svalue, NULL, data);
+		LOG ("Data get %s (%s)", base_data, extra_data)
+
+		iteratee (base_data, extra_data, data);
 
 		gtk_tree_path_free (path);
-		g_value_unset (&value);
+		g_value_unset (&base_value);
+
+		if (model->priv->extra_drag_column_id >= 0)
+			g_value_unset (&extra_value);
 	}
 }
 

@@ -50,12 +50,14 @@ typedef struct
 	void (*node_from_iter) (EphyTreeModelSort *model, GtkTreeIter *iter, void **node);
 } EphyTreeModelSortClass;
 
-GType		ephy_tree_model_sort_get_type		(void);
+GType		ephy_tree_model_sort_get_type		      (void);
 
-GtkTreeModel   *ephy_tree_model_sort_new		(GtkTreeModel *child_model);
+GtkTreeModel   *ephy_tree_model_sort_new		      (GtkTreeModel *child_model);
 
-void		ephy_tree_model_sort_set_column_id	(EphyTreeModelSort *ms,
-							 int id);
+void		ephy_tree_model_sort_set_base_drag_column_id  (EphyTreeModelSort *ms,
+							       int id);
+void		ephy_tree_model_sort_set_extra_drag_column_id (EphyTreeModelSort *ms,
+							       int id);
 
 G_END_DECLS
 

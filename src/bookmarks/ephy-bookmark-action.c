@@ -402,7 +402,8 @@ drag_data_get_cb (GtkWidget *widget, GdkDragContext *context,
 		  GtkSelectionData *selection_data, guint info,
 		  guint32 time, EphyBookmarkAction *action)
 {
-	const char *address;
+	const char *address, *title;
+	char *data;
 
 	g_return_if_fail (action->priv->node != NULL);
 
@@ -410,8 +411,14 @@ drag_data_get_cb (GtkWidget *widget, GdkDragContext *context,
 						 EPHY_NODE_BMK_PROP_LOCATION);
 	g_return_if_fail (address != NULL);
 
+	title = ephy_node_get_property_string (action->priv->node,
+					       EPHY_NODE_BMK_PROP_TITLE);
+	g_return_if_fail (title != NULL);
+
+	data = g_strdup_printf ("%s\n%s", address, title);
 	gtk_selection_data_set (selection_data, selection_data->target, 8,
-				(unsigned char *) address, strlen (address));
+				(unsigned char *) data, strlen (data));
+	g_free (data);
 }
 
 static int

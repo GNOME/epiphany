@@ -1,3 +1,26 @@
+2005-01-21  Jorn Baayen  <jbaayen@gnome.org>
+
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_add_column),
+	(ephy_node_view_enable_drag_source):
+	* lib/widgets/ephy-node-view.h:
+	* lib/widgets/ephy-tree-model-sort.c: (ephy_tree_model_sort_init),
+	(ephy_tree_model_sort_multi_row_draggable),
+	(ephy_tree_model_sort_set_base_drag_column_id),
+	(ephy_tree_model_sort_set_extra_drag_column_id),
+	(each_property_get_data_binder):
+	* lib/widgets/ephy-tree-model-sort.h:
+	* src/bookmarks/ephy-bookmark-action.c: (drag_data_get_cb):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-topics-selector.c:
+	(ephy_topics_selector_constructor):
+	* src/ephy-encoding-dialog.c: (ephy_encoding_dialog_init):
+	* src/ephy-history-window.c: (ephy_history_window_construct):
+
+	Add proper _NETSCAPE_URL drag support, supplying the URL as well as
+	the title. As a side effect most data_columns in NodeViews have been
+	obsoleted. Fixes #163937.
+
 2005-01-20  Adam Hooper  <adamh@cvs.gnome.org>
 
 	* src/ephy-statusbar.c: (ephy_statusbar_add_widget),

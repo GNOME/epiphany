@@ -311,7 +311,7 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 				   G_TYPE_STRING,
 				   EPHY_NODE_ENCODING_PROP_TITLE_ELIDED,
 				   EPHY_NODE_VIEW_SEARCHABLE,
-				   NULL);
+				   NULL, NULL);
 
 	ephy_node_view_set_sort (EPHY_NODE_VIEW (treeview), G_TYPE_STRING,
 				 EPHY_NODE_ENCODING_PROP_TITLE_ELIDED,
