@@ -37,11 +37,11 @@ G_BEGIN_DECLS
 #define EPHY_IS_NOTEBOOK_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_NOTEBOOK))
 #define EPHY_NOTEBOOK_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_NOTEBOOK, EphyNotebookClass))
 
-typedef struct EphyNotebookClass	EphyNotebookClass;
-typedef struct EphyNotebook		EphyNotebook;
-typedef struct EphyNotebookPrivate	EphyNotebookPrivate;
+typedef struct _EphyNotebookClass	EphyNotebookClass;
+typedef struct _EphyNotebook		EphyNotebook;
+typedef struct _EphyNotebookPrivate	EphyNotebookPrivate;
 
-struct EphyNotebook
+struct _EphyNotebook
 {
 	GtkNotebook parent;
 
@@ -49,7 +49,7 @@ struct EphyNotebook
         EphyNotebookPrivate *priv;
 };
 
-struct EphyNotebookClass
+struct _EphyNotebookClass
 {
         GtkNotebookClass parent_class;
 

@@ -38,11 +38,11 @@ G_BEGIN_DECLS
 #define EPHY_IS_SESSION_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_SESSION))
 #define EPHY_SESSION_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SESSION, EphySessionClass))
 
-typedef struct EphySession		EphySession;
-typedef struct EphySessionClass		EphySessionClass;
-typedef struct EphySessionPrivate	EphySessionPrivate;
+typedef struct _EphySession		EphySession;
+typedef struct _EphySessionClass	EphySessionClass;
+typedef struct _EphySessionPrivate	EphySessionPrivate;
 
-struct EphySession
+struct _EphySession
 {
         GObject parent;
 
@@ -50,7 +50,7 @@ struct EphySession
         EphySessionPrivate *priv;
 };
 
-struct EphySessionClass
+struct _EphySessionClass
 {
         GObjectClass parent_class;
 };

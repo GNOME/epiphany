@@ -40,7 +40,7 @@ static GObjectClass *parent_class = NULL;
 
 #define EPHY_STATUSBAR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_STATUSBAR, EphyStatusbarPrivate))
 
-struct EphyStatusbarPrivate
+struct _EphyStatusbarPrivate
 {
 	GtkWidget *icon_container;
 

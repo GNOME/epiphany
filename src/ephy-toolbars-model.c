@@ -32,7 +32,7 @@
 
 #define EPHY_TOOLBARS_MODEL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOOLBARS_MODEL, EphyToolbarsModelPrivate))
 
-struct EphyToolbarsModelPrivate
+struct _EphyToolbarsModelPrivate
 {
 	char *xml_file;
 	guint timeout;

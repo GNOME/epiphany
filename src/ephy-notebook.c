@@ -61,7 +61,7 @@
 
 #define EPHY_NOTEBOOK_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NOTEBOOK, EphyNotebookPrivate))
 
-struct EphyNotebookPrivate
+struct _EphyNotebookPrivate
 {
 	GList *focused_pages;
 	GtkTooltips *title_tips;

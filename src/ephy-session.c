@@ -51,7 +51,7 @@
 
 #define EPHY_SESSION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SESSION, EphySessionPrivate))
 
-struct EphySessionPrivate
+struct _EphySessionPrivate
 {
 	GList *windows;
 	GList *tool_windows;

@@ -35,11 +35,11 @@ G_BEGIN_DECLS
 #define EPHY_IS_STATUSBAR_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_STATUSBAR))
 #define EPHY_STATUSBAR_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_STATUSBAR, EphyStatusbarClass))
 
-typedef struct EphyStatusbar		EphyStatusbar;
-typedef struct EphyStatusbarPrivate	EphyStatusbarPrivate;
-typedef struct EphyStatusbarClass	EphyStatusbarClass;
+typedef struct _EphyStatusbar		EphyStatusbar;
+typedef struct _EphyStatusbarPrivate	EphyStatusbarPrivate;
+typedef struct _EphyStatusbarClass	EphyStatusbarClass;
 
-struct EphyStatusbar
+struct _EphyStatusbar
 {
         GtkStatusbar parent;
 
@@ -52,7 +52,7 @@ struct EphyStatusbar
         EphyStatusbarPrivate *priv;
 };
 
-struct EphyStatusbarClass
+struct _EphyStatusbarClass
 {
         GtkStatusbarClass parent_class;
 };

@@ -34,11 +34,11 @@ G_BEGIN_DECLS
 #define EPHY_IS_TOOLBARS_MODEL_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TOOLBARS_MODEL))
 #define EPHY_TOOLBARS_MODEL_GET_CLASS(o)(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TOOLBARS_MODEL, EphyToolbarsModelClass))
 
-typedef struct EphyToolbarsModelClass	EphyToolbarsModelClass;
-typedef struct EphyToolbarsModel	EphyToolbarsModel;
-typedef struct EphyToolbarsModelPrivate	EphyToolbarsModelPrivate;
+typedef struct _EphyToolbarsModelClass		EphyToolbarsModelClass;
+typedef struct _EphyToolbarsModel		EphyToolbarsModel;
+typedef struct _EphyToolbarsModelPrivate	EphyToolbarsModelPrivate;
 
-struct EphyToolbarsModel
+struct _EphyToolbarsModel
 {
 	EggToolbarsModel parent_object;
 
@@ -46,7 +46,7 @@ struct EphyToolbarsModel
 	EphyToolbarsModelPrivate *priv;
 };
 
-struct EphyToolbarsModelClass
+struct _EphyToolbarsModelClass
 {
 	EggToolbarsModelClass parent_class;
 };
