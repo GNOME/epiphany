@@ -53,16 +53,15 @@
 #include "nsIDOMWindowInternal.h"
 #endif
 
-#include "gtk/gtkdialog.h"
-#include "gtk/gtkprogressbar.h"
-#include "gtk/gtkimage.h"
-#include "gtk/gtkstock.h"
-#include "gtk/gtklabel.h"
-#include "gtk/gtkhbox.h"
-#include "gtk/gtkvbox.h"
-#include "gtk/gtkmain.h"
-
-#include <libgnome/gnome-i18n.h>
+#include <gtk/gtkdialog.h>
+#include <gtk/gtkprogressbar.h>
+#include <gtk/gtkimage.h>
+#include <gtk/gtkstock.h>
+#include <gtk/gtklabel.h>
+#include <gtk/gtkhbox.h>
+#include <gtk/gtkvbox.h>
+#include <gtk/gtkmain.h>
+#include <glib/gi18n.h>
 
 #include "GtkNSSKeyPairDialogs.h"
 #include "ephy-debug.h"
