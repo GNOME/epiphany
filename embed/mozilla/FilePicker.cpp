@@ -143,9 +143,9 @@ NS_IMETHODIMP GFilePicker::SetFilterIndex(PRInt32 aFilterIndex)
 /* attribute wstring defaultString; */
 NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar * *aDefaultString)
 {
-	guint bytesRead(0), bytesWritten(0);
+	gsize bytesWritten;
 	gchar *utf8DefaultString = g_filename_to_utf8(mDefaultString.get(), -1,
-						      &bytesRead,
+						      NULL,
 						      &bytesWritten, NULL);
 
 	*aDefaultString = ToNewUnicode(NS_ConvertUTF8toUCS2(utf8DefaultString));
@@ -157,10 +157,10 @@ NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
 {
 	if (aDefaultString)
 	{
-		guint bytesRead(0), bytesWritten(0);
+		gsize bytesWritten;
 		gchar *localeDefaultString =
 			g_filename_from_utf8(NS_ConvertUCS2toUTF8(aDefaultString).get(),
-					     -1, &bytesRead,
+					     -1, NULL,
 					     &bytesWritten, NULL);
 		mDefaultString = localeDefaultString;					     
 		g_free(localeDefaultString);
