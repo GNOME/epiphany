@@ -2,6 +2,16 @@
 
 	* embed/mozilla/EphyBrowser.cpp:
 	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/EventContext.cpp:
+
+	We cant cache mDOMDocument, it changes for
+	every document loaded.
+	Remove some unused methods from definition.
+
+2003-10-29  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
 
 	Make some vars private, remove an unused one.
 

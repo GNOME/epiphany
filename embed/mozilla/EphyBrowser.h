@@ -80,7 +80,6 @@ public:
 	nsresult PushTargetDocument (nsIDOMDocument *domDoc);
 	nsresult PopTargetDocument ();
 
-	nsresult GetContentViewer (nsIContentViewer **aViewer);
 	nsresult GetDocument (nsIDOMDocument **aDOMDocument);
 	nsresult GetTargetDocument (nsIDOMDocument **aDOMDocument);
 	nsresult GetDocumentUrl (nsCString &url);
@@ -93,18 +92,14 @@ private:
 	nsCOMPtr<nsIWebProgressListener> mProgress;
 	nsCOMPtr<nsIDOMEventReceiver> mEventReceiver;
 	nsCOMPtr<nsIDOMWindow> mDOMWindow;
-	nsCOMPtr<nsIDOMDocument> mDOMDocument;
 	EphyEventListener *mEventListener;
 
 	nsresult GetListener (void);
 	nsresult AttachListeners (void);
 	nsresult DetachListeners (void);
 	nsresult SetZoomOnDocshell (float aZoom, nsIDocShell *DocShell);
-	nsresult GetDocShell (nsIDocShell **aDocShell);
-	nsresult GetCSSBackground (nsIDOMNode *node, nsAutoString& url);
 	nsresult GetSHistory (nsISHistory **aSHistory);
-	nsresult GetPIDOMWindow(nsPIDOMWindow **aPIWin);
-	nsresult GetWebNavigation(nsIWebNavigation **aWebNavigation);
+	nsresult GetContentViewer (nsIContentViewer **aViewer);
 };
 
 #endif
