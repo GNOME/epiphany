@@ -211,11 +211,13 @@ format_time (gchar *buffer, glong time)
 
 	if (hours)
 	{
-		sprintf (buffer, "%u:%02u.%02u", hours, mins, secs);
+		/* Hours, Minutes, Seconds */
+		sprintf (buffer, _("%u:%02u.%02u"), hours, mins, secs);
 	}
 	else
 	{
-		sprintf (buffer, "%02u.%02u", mins, secs);
+		/* Minutes, Seconds */
+		sprintf (buffer, _("%02u.%02u"), mins, secs);
 	}
 }
 
