@@ -493,19 +493,19 @@ NS_METHOD GContentHandler::Init (void)
 	nsCOMPtr<nsIMIMEInfo> MIMEInfo;
 	rv = mLauncher->GetMIMEInfo (getter_AddRefs(MIMEInfo));
 	rv = MIMEInfo->GetMIMEType (&mMimeType);
-	
+
+#if MOZILLA_SNAPSHOT > 11
+	rv = mLauncher->GetSource(getter_AddRefs(mUri));
+	rv = mLauncher->GetTargetFile(getter_AddRefs(mTempFile));
+#else
 	rv = mLauncher->GetDownloadInfo(getter_AddRefs(mUri),
 					&mTimeDownloadStarted,
 					getter_AddRefs(mTempFile));
+#endif
+	
 	rv = mUri->GetSpec (mUrl);
 	rv = mUri->GetScheme (mScheme);
-#if 0
-	/* GetSource seems redundant and isn't in 0.9 This code is here while
-	   it remains unclear what GetSource is for. --phil */
-	nsCOMPtr<nsIURI> uri;
-	rv = mLauncher->GetSource(getter_AddRefs(uri));
-	rv = uri->GetSpec (mUrl);
-#endif	
+
 	ProcessMimeInfo ();
 
 	return NS_OK;
