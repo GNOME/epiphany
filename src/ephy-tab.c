@@ -450,10 +450,18 @@ ephy_tab_get_load_status (EphyTab *tab)
 static void
 ephy_tab_set_link_message (EphyTab *tab, char *message)
 {
+	char *tmp1, *tmp2;
+
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
+	tmp1 = ephy_string_strip_chr (message, '\r');
+	tmp2 = ephy_string_strip_chr (tmp1, '\n');
+
 	g_free (tab->priv->link_message);
-	tab->priv->link_message = message;
+	tab->priv->link_message = tmp2;
+
+	g_free (tmp1);
+	g_free (message);
 
 	g_object_notify (G_OBJECT (tab), "message");
 }
@@ -769,10 +777,6 @@ build_net_state_message (const char *uri, EmbedState flags)
                 {
                         msg = _("Loading %s...");
                 }
-                else if (flags & EMBED_STATE_STOP)
-                {
-			msg = ("");
-                }
         }
 
 	if (msg)
@@ -832,11 +836,11 @@ ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 	char *new_msg;
 
 	new_msg = build_net_state_message (uri, state);
-	if (new_msg)
+	if (tab->priv->status_message)
 	{
 		g_free (tab->priv->status_message);
-		tab->priv->status_message = new_msg;
 	}
+	tab->priv->status_message = new_msg;
 
 	g_object_notify (G_OBJECT (tab), "message");
 
@@ -1104,7 +1108,6 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->load_status = FALSE;
 	tab->priv->link_message = NULL;
 	tab->priv->security_level = STATE_IS_UNKNOWN;
-	tab->priv->status_message = NULL;
 	tab->priv->zoom = 1.0;
 	tab->priv->setting_zoom = FALSE;
 	tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
@@ -1244,7 +1247,7 @@ ephy_tab_get_navigation_flags (EphyTab *tab)
 const char *
 ephy_tab_get_status_message (EphyTab *tab)
 {
-	g_return_val_if_fail (EPHY_IS_TAB (tab), "");
+	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
 
 	if (tab->priv->link_message && tab->priv->link_message[0] != '\0')
 	{
@@ -1256,7 +1259,7 @@ ephy_tab_get_status_message (EphyTab *tab)
 	}
 	else
 	{
-		return "";
+		return NULL;
 	}
 }
 
