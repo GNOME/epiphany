@@ -1,3 +1,14 @@
+2003-04-19  Jorn Baayen  <jorn@nl.linux.org>
+
+	* lib/widgets/ephy-tree-model-node.c: (ephy_tree_model_node_init),
+	(ephy_tree_model_node_finalize),
+	(ephy_tree_model_node_add_prop_column),
+	(ephy_tree_model_node_add_func_column),
+	(ephy_tree_model_node_get_column_type),
+	(ephy_tree_model_node_get_value):
+
+	Use a GPtrArray rather than a GList for columns.
+
 2003-04-19  Xan Lopez  <xan@masilla.org>
 
 	* src/ephy-shell.c: (ephy_shell_new_tab):

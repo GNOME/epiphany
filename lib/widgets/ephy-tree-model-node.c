@@ -88,7 +88,7 @@ struct EphyTreeModelNodePrivate
 
 	EphyNodeFilter *filter;
 
-	GList *columns;
+	GPtrArray *columns;
 	int columns_num;
 };
 
@@ -193,7 +193,7 @@ ephy_tree_model_node_init (EphyTreeModelNode *model)
 
 	gtk_widget_destroy (dummy);
 
-	model->priv->columns = NULL;
+	model->priv->columns = g_ptr_array_new ();
 	model->priv->columns_num = EPHY_TREE_MODEL_NODE_BUILTIN_COLUMNS;
 }
 
@@ -209,8 +209,7 @@ ephy_tree_model_node_finalize (GObject *object)
 
 	g_return_if_fail (model->priv != NULL);
 
-	g_list_foreach (model->priv->columns, (GFunc) g_free, NULL);
-	g_list_free (model->priv->columns);
+	g_ptr_array_free (model->priv->columns, TRUE);
 
 	g_free (model->priv);
 
@@ -340,7 +339,7 @@ ephy_tree_model_node_add_prop_column (EphyTreeModelNode *model,
 	col->func = NULL;
 	col->user_data = NULL;
 
-	model->priv->columns = g_list_append (model->priv->columns, col);
+	g_ptr_array_add (model->priv->columns, col);
 	model->priv->columns_num++;
 
 	return model->priv->columns_num;
@@ -360,7 +359,7 @@ ephy_tree_model_node_add_func_column (EphyTreeModelNode *model,
 	col->func = func;
 	col->user_data = user_data;
 
-	model->priv->columns = g_list_append (model->priv->columns, col);
+	g_ptr_array_add (model->priv->columns, col);
 	model->priv->columns_num++;
 
 	return model->priv->columns_num;
@@ -386,7 +385,7 @@ ephy_tree_model_node_get_column_type (GtkTreeModel *tree_model,
 		return G_TYPE_BOOLEAN;
 
 	list_index = index - EPHY_TREE_MODEL_NODE_BUILTIN_COLUMNS - 1;
-	col = g_list_nth_data (model->priv->columns, list_index);
+	col = g_ptr_array_index (model->priv->columns, list_index);
 
 	return col->type;
 }
@@ -429,7 +428,7 @@ ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 	else
 	{
 		list_index = column - EPHY_TREE_MODEL_NODE_BUILTIN_COLUMNS - 1;
-		col = g_list_nth_data (model->priv->columns, list_index);
+		col = g_ptr_array_index (model->priv->columns, list_index);
 
 		g_return_if_fail (col != NULL);
 
