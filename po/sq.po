@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.sq\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-05 10:51+0100\n"
-"PO-Revision-Date: 2004-02-05 10:59+0100\n"
+"POT-Creation-Date: 2004-02-12 15:54+0100\n"
+"PO-Revision-Date: 2004-02-12 16:01+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -673,7 +673,7 @@ msgstr "_Gjej:"
 msgid "_Next"
 msgstr "_Pasardhësi"
 
-#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:533
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:281
 msgid "_Pause"
 msgstr "_Pezullo"
 
@@ -1032,7 +1032,7 @@ msgid "Cut the Selection"
 msgstr "Prije pjesën e zgjedhur"
 
 #: data/ui/nautilus-epiphany-view.xml.h:10
-#: embed/ephy-embed-popup-control.c:547
+#: embed/ephy-embed-popup-control.c:551
 msgid "Download Link"
 msgstr "Shkarko lidhjen"
 
@@ -1042,7 +1042,7 @@ msgstr "I/e Para"
 
 #: data/ui/nautilus-epiphany-view.xml.h:13 src/ppview-toolbar.c:96
 msgid "Last"
-msgstr "I/e fundit"
+msgstr "I/e Fundit"
 
 #: data/ui/nautilus-epiphany-view.xml.h:14 src/ppview-toolbar.c:104
 msgid "Next"
@@ -1137,67 +1137,67 @@ msgstr "_Gjej..."
 msgid "_Print..."
 msgstr "_Printo..."
 
-#: embed/downloader-view.c:225
+#: embed/downloader-view.c:226
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: embed/downloader-view.c:229
+#: embed/downloader-view.c:230
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: embed/downloader-view.c:299 lib/widgets/ephy-cell-renderer-progress.c:35
+#: embed/downloader-view.c:281
+msgid "_Resume"
+msgstr "_Resume"
+
+#: embed/downloader-view.c:344 lib/widgets/ephy-cell-renderer-progress.c:35
 #: src/ephy-window.c:1147
 msgid "Unknown"
 msgstr "I/e panjohur"
 
-#: embed/downloader-view.c:348
+#: embed/downloader-view.c:395
 #, c-format
 msgid "About %d second left"
 msgid_plural "About %d seconds left"
 msgstr[0] "Rreth %d sekondë akoma"
 msgstr[1] "Rreth %d sekondë akoma"
 
-#: embed/downloader-view.c:356
+#: embed/downloader-view.c:403
 #, c-format
 msgid "About %d minute left"
 msgid_plural "About %d minutes left"
 msgstr[0] "Rreth %d minutë e mbetur"
 msgstr[1] "Rreth %d minutë e mbetur"
 
-#: embed/downloader-view.c:363
+#: embed/downloader-view.c:410
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "% shkarkim"
 msgstr[1] "% shkarkim"
 
-#: embed/downloader-view.c:461
+#: embed/downloader-view.c:520
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:471
+#: embed/downloader-view.c:531
 msgid "File"
 msgstr "File"
 
-#: embed/downloader-view.c:484
+#: embed/downloader-view.c:545
 msgid "Remaining"
 msgstr "E mbetur"
 
-#: embed/downloader-view.c:528
-msgid "_Resume"
-msgstr "_Resume"
-
-#: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:344
+#: embed/ephy-embed-popup-control.c:561 src/popup-commands.c:344
 msgid "Save Image As"
 msgstr "Ruaj imazhin si"
 
-#: embed/ephy-embed-popup-control.c:641
+#: embed/ephy-embed-popup-control.c:645
 msgid "Save Page As"
 msgstr "Ruaj faqen si"
 
-#: embed/ephy-embed-popup-control.c:650 src/popup-commands.c:432
+#: embed/ephy-embed-popup-control.c:654 src/popup-commands.c:432
 msgid "Save Background As"
 msgstr "Ruaj sfondin si"
 
@@ -1564,15 +1564,15 @@ msgstr "Ukrahinase"
 msgid "Unknown (%s)"
 msgstr "I/e panjohur (%s)"
 
-#: embed/ephy-history.c:485 src/bookmarks/ephy-bookmarks.c:583
+#: embed/ephy-history.c:487 src/bookmarks/ephy-bookmarks.c:583
 msgid "All"
 msgstr "Gjithçka"
 
-#: embed/ephy-history.c:660
+#: embed/ephy-history.c:662
 msgid "Others"
 msgstr "Të tjerë"
 
-#: embed/ephy-history.c:666
+#: embed/ephy-history.c:668
 msgid "Local files"
 msgstr "Files lokalë"
 
@@ -1607,7 +1607,7 @@ msgstr ""
 
 #: embed/mozilla/ContentHandler.cpp:293
 msgid "Open the file in another application?"
-msgstr "Ta hap file me një aplikativ tjetër?"
+msgstr "Ta hap file me një program tjetër?"
 
 #: embed/mozilla/ContentHandler.cpp:294
 msgid ""
@@ -1615,7 +1615,7 @@ msgid ""
 "open it with another application or save it."
 msgstr ""
 "Shikimi i këtij lloj file direkt në browser është i pamundur. Mund ta hapni "
-"atë me një aplikativ tjetër ose ta ruani."
+"atë me një program tjetër ose ta ruani."
 
 #: embed/mozilla/ContentHandler.cpp:301
 msgid "Download the file?"
@@ -1627,7 +1627,7 @@ msgid ""
 "installed that can open it. You can save it instead."
 msgstr ""
 "Shikimi i këtij file është i pamundur pasi nuk keni të instaluar asnjë "
-"aplikativ që mund ta hapë atë. Mund ta ruani në vend të hapjes."
+"program që mund ta hapë atë. Mund ta ruani në vend të hapjes."
 
 #: embed/mozilla/EphyHeaderSniffer.cpp:289
 #: src/bookmarks/ephy-bookmarks-import.c:247
@@ -2638,13 +2638,13 @@ msgstr "_Mos rekupero"
 msgid "_Recover"
 msgstr "_Rekupero"
 
-#: src/ephy-session.c:331
+#: src/ephy-session.c:332
 msgid "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr ""
-"Mesa duket Epiphany ka shkuar në crash ose është vrarë herë e fundit që "
+"Mesa duket Epiphany është bllokuar ose është vrarë herën e fundit që "
 "është ekzekutuar."
 
-#: src/ephy-session.c:337
+#: src/ephy-session.c:338
 msgid "You can recover the opened tabs and windows."
 msgstr "Keni mundësi të rekuperoni skedat dhe dritaret e hapura."
 
@@ -2674,30 +2674,30 @@ msgstr ""
 "Epiphany nuk mund të përdoret tani, për shkak të një difekti të papritur nga "
 "Bonobo gjatë përpjekjes për të gjetur objektin automatizues."
 
-#: src/ephy-tab.c:326 src/ephy-tab.c:1140 src/ephy-tab.c:1322
+#: src/ephy-tab.c:327 src/ephy-tab.c:1172 src/ephy-tab.c:1354
 msgid "Blank page"
 msgstr "Faqe bosh"
 
-#: src/ephy-tab.c:747
+#: src/ephy-tab.c:748
 msgid "site"
 msgstr "siti"
 
-#: src/ephy-tab.c:771
+#: src/ephy-tab.c:772
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Duke u ridrejtuar tek %s..."
 
-#: src/ephy-tab.c:775
+#: src/ephy-tab.c:776
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Duke transferuar të dhënat nga %s..."
 
-#: src/ephy-tab.c:779
+#: src/ephy-tab.c:780
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Në pritje të autorizimit nga %s..."
 
-#: src/ephy-tab.c:787
+#: src/ephy-tab.c:788
 #, c-format
 msgid "Loading %s..."
 msgstr "Duke ngarkuar %s..."
@@ -3539,7 +3539,7 @@ msgstr "_Shto një panel të ri instrumentësh"
 
 #. Translator credits
 #: src/window-commands.c:953
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr "Laurent Dhima <laurenti@alblinux.net>"
 
 #: src/window-commands.c:983
