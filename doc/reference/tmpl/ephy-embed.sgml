@@ -42,6 +42,83 @@ be done by casting).
 </para>
 
 
+<!-- ##### SIGNAL EphyEmbed::ge-context-menu ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-dom-mouse-click ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-dom-mouse-down ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-favicon ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-location ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-net-state ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-new-window ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-security-change ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-zoom-change ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
 <!-- ##### STRUCT EphyEmbedIface ##### -->
 <para>
 
@@ -81,8 +158,9 @@ be done by casting).
 @get_zoom: 
 @find_set_properties: 
 @find_next: 
+@get_encoding: 
+@has_automatic_encoding: 
 @set_encoding: 
-@get_encoding_info: 
 @print: 
 @print_preview_close: 
 @print_preview_n_pages: 
@@ -374,15 +452,6 @@ invalid SSL certificate will have an #EmbedSecurityLevel of %STATE_IS_BROKEN.
 @encoding: 
 
 
-<!-- ##### FUNCTION ephy_embed_get_encoding_info ##### -->
-<para>
-
-</para>
-
-@embed: 
-@Returns: 
-
-
 <!-- ##### FUNCTION ephy_embed_print ##### -->
 <para>
 
@@ -435,81 +504,4 @@ invalid SSL certificate will have an #EmbedSecurityLevel of %STATE_IS_BROKEN.
 @embed: 
 @Returns: 
 
-
-<!-- ##### SIGNAL EphyEmbed::ge-context-menu ##### -->
-<para>
-
-</para>
-
-@ephyembed: the object which received the signal.
-@arg1: 
-@Returns: 
-
-<!-- ##### SIGNAL EphyEmbed::ge-dom-mouse-click ##### -->
-<para>
-
-</para>
-
-@ephyembed: the object which received the signal.
-@arg1: 
-@Returns: 
-
-<!-- ##### SIGNAL EphyEmbed::ge-dom-mouse-down ##### -->
-<para>
-
-</para>
-
-@ephyembed: the object which received the signal.
-@arg1: 
-@Returns: 
-
-<!-- ##### SIGNAL EphyEmbed::ge-favicon ##### -->
-<para>
-
-</para>
-
-@ephyembed: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL EphyEmbed::ge-location ##### -->
-<para>
-
-</para>
-
-@ephyembed: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL EphyEmbed::ge-net-state ##### -->
-<para>
-
-</para>
-
-@ephyembed: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL EphyEmbed::ge-new-window ##### -->
-<para>
-
-</para>
-
-@ephyembed: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL EphyEmbed::ge-security-change ##### -->
-<para>
-
-</para>
-
-@ephyembed: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL EphyEmbed::ge-zoom-change ##### -->
-<para>
-
-</para>
-
-@ephyembed: the object which received the signal.
-@arg1: 
 
