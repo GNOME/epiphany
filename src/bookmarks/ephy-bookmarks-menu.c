@@ -30,6 +30,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <libxml/entities.h>
+#include <bonobo/bonobo-i18n.h>
 
 #define EMPTY_ACTION_NAME "GoBookmarkEmpty"
 
