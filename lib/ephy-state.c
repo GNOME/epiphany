@@ -41,7 +41,7 @@ enum
 	EPHY_NODE_STATE_PROP_POSITION_Y = 7
 };
 
-static EphyNode *states;
+static EphyNode *states = NULL;
 
 static void
 ephy_states_load (void)
@@ -82,6 +82,8 @@ ephy_states_save (void)
 	GPtrArray *children;
 	int i;
 	char *xml_file;
+
+	if (states == NULL) return;
 
 	xml_file = g_build_filename (ephy_dot_dir (),
                                      STATES_FILE,
@@ -191,7 +193,7 @@ ephy_state_window_set_position (GtkWidget *window, EphyNode *node)
 	if ((x >= screen_width) || (y >= screen_height))
 	{
 		x = y = WINDOW_POSITION_UNSET;
-	}		
+	}
 
 	/* If the window has a saved position set it, otherwise let the WM do it */
 	if ((x != WINDOW_POSITION_UNSET) && (y != WINDOW_POSITION_UNSET))
@@ -323,13 +325,13 @@ ephy_state_add_window (GtkWidget *window,
 		/* Metacity and presumably any other sane wm won't let
 		 * you drag the titlebar of a window off the screen, so
 		 * we set the inital cordinate to an impossible value (-1,-1)
-		 */ 
+		 */
 		g_value_init (&value, G_TYPE_INT);
 		g_value_set_int (&value, WINDOW_POSITION_UNSET);
 		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION_X,
 				        &value);
 		g_value_unset (&value);
-	
+
 		g_value_init (&value, G_TYPE_INT);
 		g_value_set_int (&value, WINDOW_POSITION_UNSET);
 		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION_Y,
