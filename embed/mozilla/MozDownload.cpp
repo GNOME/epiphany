@@ -622,6 +622,58 @@ GetFilePath (const char *filename)
 	return path;
 }
 
+static const char*
+file_is_compressed (const char *filename)
+{
+        int i;
+        const char *compression[] = {".gz", ".bz2", ".Z", ".lz", NULL};
+
+        for (i = 0; compression[i] != NULL; i++)
+        {
+                if (g_str_has_suffix (filename, compression[i]))
+                        return compression[i];
+        }
+
+        return NULL;
+}
+
+static const char*
+parse_extension (const char *filename)
+{
+        const char *compression;
+
+        compression = file_is_compressed (filename);
+
+        /* If the file is compressed we might have a double extension */
+        if (compression != NULL)
+        {
+                int i;
+                const char *extensions[] = {"tar", "ps", "xcf", "dvi", "txt", "text", NULL};
+
+                for (i = 0; extensions[i] != NULL; i++)
+                {
+                        char *suffix;
+                        suffix = g_strdup_printf (".%s%s", extensions[i],
+                                                  compression);
+
+                        if (g_str_has_suffix (filename, suffix))
+                        {
+                                char *p;
+
+                                p = g_strrstr (filename, suffix);
+                                g_free (suffix);
+
+                                return p;
+                        }
+
+                        g_free (suffix);
+                }
+        }
+        
+        /* default case */
+        return g_strrstr (filename, ".");
+}
+
 nsresult BuildDownloadPath (const char *defaultFileName, nsILocalFile **_retval)
 {
 	char *path;
@@ -631,11 +683,12 @@ nsresult BuildDownloadPath (const char *defaultFileName, nsILocalFile **_retval)
 	if (g_file_test (path, G_FILE_TEST_EXISTS))
 	{
 		int i = 1;
-		char *dot_pos, *serial = NULL;
+		const char *dot_pos;
+                char *serial = NULL;
 		GString *tmp_path;
 		gssize position;
 
-		dot_pos = g_strrstr (defaultFileName, ".");
+                dot_pos = parse_extension (defaultFileName);
 		if (dot_pos)
 		{
 			position = dot_pos - defaultFileName;
