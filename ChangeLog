@@ -1,5 +1,13 @@
 2005-02-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-window.c: (ephy_window_key_press_event):
+
+	Don't show the menubar with F10 in lockdown mode.
+	Make sure we always chain up to GtkWindow's keypress handler.
+	Fixes bug #165550.
+
+2005-02-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-main.c: (main):
 	* src/ephy-shell.c: (ephy_shell_finalize):
 

@@ -715,10 +715,10 @@ ephy_window_key_press_event (GtkWidget *widget,
 	guint mask = gtk_accelerator_get_default_mod_mask ();
 	char *accel = NULL;
 
-	/* Don't activate menubar in ppv mode */
-	if (window->priv->ppv_mode)
+	/* Don't activate menubar in ppv mode, or in lockdown mode */
+	if (window->priv->ppv_mode || eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
 	{
-		return FALSE;
+		return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
 	}
 
 	g_object_get (gtk_widget_get_settings (widget),
