@@ -1,3 +1,12 @@
+2004-02-26  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* src/ephy-tab.c: (ephy_tab_address_cb), (ensure_page_info):
+
+	Do not show about:blank to the user, an empty address bar
+	will do better.
+	When the address bar is empty (no page or blank page is
+	loaded) set the address before loading succeeded.
+
 2004-02-25  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/window-commands.c: (open_response_cb):

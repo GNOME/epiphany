@@ -621,11 +621,24 @@ ephy_tab_link_message_cb (EphyEmbed *embed,
 static void
 ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 {
+	const char *uv_address;
+
 	LOG ("ephy_tab_address_cb tab %p address %s", tab, address)
+
+	/* Do not expose about:blank to the user, an empty address
+	   bar will do better */
+	if (address && strcmp (address, "about:blank") == 0)
+	{
+		uv_address = "";
+	}
+	else
+	{
+		uv_address = address;
+	}
 
 	if (tab->priv->address_expire == TAB_ADDRESS_EXPIRE_NOW)
 	{
-		ephy_tab_set_location (tab, address, TAB_ADDRESS_EXPIRE_NOW);
+		ephy_tab_set_location (tab, uv_address, TAB_ADDRESS_EXPIRE_NOW);
 	}
 
 	ephy_tab_set_link_message (tab, NULL);
@@ -842,7 +855,7 @@ build_progress_from_requests (EphyTab *tab, EmbedState state)
 static void
 ensure_page_info (EphyTab *tab, const char *address)
 {
-	if (tab->priv->address == NULL &&
+	if ((tab->priv->address == NULL || *tab->priv->address == '\0') &&
 	    tab->priv->address_expire == TAB_ADDRESS_EXPIRE_NOW)
         {
 		ephy_tab_set_location (tab, address, TAB_ADDRESS_EXPIRE_NOW);
