@@ -926,6 +926,7 @@ ephy_notebook_add_tab (EphyNotebook *nb,
 		       gboolean jump_to)
 {
 	GtkWidget *label;
+	int new_position;
 
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
@@ -956,15 +957,24 @@ ephy_notebook_add_tab (EphyNotebook *nb,
 
 	g_signal_emit (G_OBJECT (nb), signals[TAB_ADDED], 0, tab);
 
+	/* The signal handler may have reordered the tabs */
+	new_position = gtk_notebook_page_num (GTK_NOTEBOOK (nb), GTK_WIDGET (tab));
+
+	/* if the signal handler reordered the tabs, emit "tabs-reordered",
+	 * so that the tabs menu updates itself.
+	 */
+	if (position != new_position)
+	{
+		g_signal_emit (nb, signals[TABS_REORDERED], 0);
+	}
+
 	if (jump_to)
 	{
-		/* The signal handler may have reordered the tabs */
-		position = gtk_notebook_page_num (GTK_NOTEBOOK (nb), GTK_WIDGET(tab));
-
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (nb),
-					       position);
+					       new_position);
 		g_object_set_data (G_OBJECT (tab), "jump_to",
 				   GINT_TO_POINTER (jump_to));
+
 	}
 }
 
