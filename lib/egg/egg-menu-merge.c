@@ -700,7 +700,7 @@ static GMarkupParser ui_parser = {
 
 guint
 egg_menu_merge_add_ui_from_string (EggMenuMerge *self,
-				   const gchar *buffer, glong length,
+				   const gchar *buffer, size_t length,
 				   GError **error)
 {
   ParseContext ctx = { 0 };
@@ -742,7 +742,7 @@ egg_menu_merge_add_ui_from_file (EggMenuMerge *self,
 				 GError **error)
 {
   gchar *buffer;
-  gint length;
+  size_t length;
   guint res;
 
   if (!g_file_get_contents (filename, &buffer, &length, error))

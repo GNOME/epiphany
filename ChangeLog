@@ -1,3 +1,12 @@
+2003-06-08  Jeremy Katz  <katzj@redhat.com>
+ 
+	* lib/egg/egg-menu-merge.h (egg_menu_merge_add_ui_from_string):
+	Update prototype.
+
+	* lib/egg/egg-menu-merge.c (egg_menu_merge_add_ui_from_file):
+	size_t fixes for 64 bit platforms.
+	(egg_menu_merge_add_ui_from_string): Use size_t appropriately.
+
 2003-06-09  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* data/epiphany.schemas.in:
