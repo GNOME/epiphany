@@ -21,6 +21,12 @@
 #endif
 
 #include "ephy-shell.h"
+#include "ephy-file-helpers.h"
+#include "ephy-thread-helpers.h"
+#include "ephy-state.h"
+#include "ephy-debug.h"
+#include "ephy-stock-icons.h"
+#include "eel-gconf-extensions.h"
 
 #include <libgnomeui/gnome-ui-init.h>
 #include <gtk/gtkmain.h>
@@ -28,6 +34,8 @@
 #include <libgnome/gnome-program.h>
 #include <bonobo/bonobo-main.h>
 #include <glib/gi18n.h>
+#include <glade/glade-init.h>
+#include <libgnomevfs/gnome-vfs-init.h>
 
 static gboolean open_in_existing = FALSE;
 static gboolean open_in_new_tab = FALSE;
@@ -143,6 +151,13 @@ main (int argc, char *argv[])
 		string_arg = bookmark_url;
 	}
 
+	gnome_vfs_init ();
+	glade_gnome_init ();
+	ephy_debug_init ();
+	ephy_thread_helpers_init ();
+	ephy_file_helpers_init ();
+	ephy_stock_icons_init ();
+	eel_gconf_monitor_add ("/apps/epiphany/general");
 	bonobo_activate ();
 
 	ephy_shell = ephy_shell_new ();
@@ -166,6 +181,11 @@ main (int argc, char *argv[])
 
 		gtk_main ();
 	}
+
+	eel_gconf_monitor_remove ("/apps/epiphany/general");
+	ephy_state_save ();
+	ephy_file_helpers_shutdown ();
+	gnome_vfs_shutdown ();
 
 	return 0;
 }

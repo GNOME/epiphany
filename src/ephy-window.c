@@ -1451,6 +1451,40 @@ ephy_window_class_init (EphyWindowClass *klass)
 }
 
 static void
+ensure_default_icon (void)
+{
+	static gboolean ephy_has_default_icon = FALSE;
+	GtkIconTheme *icon_theme;
+	GtkIconInfo *icon_info;
+	const char *icon_file;
+
+	if (ephy_has_default_icon) return;
+
+	/* FIXME listen on icon changes */
+	/* FIXME MultiHead: icon theme is per-display, not global */
+	icon_theme = gtk_icon_theme_get_default ();
+	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "web-browser", -1, 0);
+
+	if (icon_info)
+	{
+
+		icon_file = gtk_icon_info_get_filename (icon_info);
+		if (icon_file)
+		{
+			gtk_window_set_default_icon_from_file (icon_file, NULL);
+		}
+
+		gtk_icon_info_free (icon_info);
+	}
+	else
+	{
+		g_warning ("Web browser gnome icon not found");
+	}
+
+	ephy_has_default_icon = TRUE;
+}
+
+static void
 ephy_window_init (EphyWindow *window)
 {
 	EphyExtension *manager;
@@ -1467,6 +1501,8 @@ ephy_window_init (EphyWindow *window)
 	window->priv->num_tabs = 0;
 	window->priv->is_fullscreen = FALSE;
 	window->priv->has_size = FALSE;
+
+	ensure_default_icon ();
 
 	/* Setup the window and connect verbs */
 	setup_window (window);

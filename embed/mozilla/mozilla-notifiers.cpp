@@ -449,6 +449,9 @@ mozilla_notifiers_init (EphyEmbedSingle *single)
 	const EphyFontsLanguageInfo *font_languages;
 	guint n_font_languages;
 
+	eel_gconf_monitor_add ("/apps/epiphany/web");
+	eel_gconf_monitor_add ("/system/proxy");
+
 #ifdef MIGRATE_PIXEL_SIZE
 	gboolean migrate_size;
 
@@ -603,6 +606,9 @@ mozilla_notifiers_init (EphyEmbedSingle *single)
 void 
 mozilla_notifiers_free (void)
 {
+	eel_gconf_monitor_remove ("/apps/epiphany/web");
+	eel_gconf_monitor_remove ("/system/proxy");
+
 	g_list_foreach (mozilla_notifiers, 
 		        (GFunc)eel_gconf_notification_remove, 
 		        NULL);

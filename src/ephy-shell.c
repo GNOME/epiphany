@@ -23,15 +23,12 @@
 #endif
 
 #include "ephy-shell.h"
-#include "ephy-state.h"
 #include "ephy-embed-shell.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
-#include "ephy-favicon-cache.h"
-#include "ephy-stock-icons.h"
-#include "ephy-window.h"
 #include "ephy-file-helpers.h"
-#include "ephy-thread-helpers.h"
+#include "ephy-favicon-cache.h"
+#include "ephy-window.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-history-window.h"
@@ -51,9 +48,6 @@
 #include <gtk/gtkmessagedialog.h>
 #include <dirent.h>
 #include <unistd.h>
-#include <libgnomevfs/gnome-vfs-init.h>
-#include <gtk/gtkicontheme.h>
-#include <glade/glade-init.h>
 
 #ifdef ENABLE_NAUTILUS_VIEW
 
@@ -170,6 +164,7 @@ ephy_shell_init (EphyShell *gs)
 	gs->priv->history_window = NULL;
 	gs->priv->toolbars_model = NULL;
 	gs->priv->fs_toolbars_model = NULL;
+	gs->priv->extensions_manager = NULL;
 
 	ephy_shell = gs;
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
@@ -177,68 +172,6 @@ ephy_shell_init (EphyShell *gs)
 
 	/* Instantiate the automation factory */
 	gs->priv->automation_factory = ephy_automation_factory_new ();
-}
-
-static void
-init_services (EphyShell *gs, GError **error)
-{
-	GtkIconTheme *icon_theme;
-	GtkIconInfo *icon_info;
-	const char *icon_file;
-	EphyEmbedSingle *single;
-
-	gnome_vfs_init ();
-	glade_gnome_init ();
-	ephy_debug_init ();
-	ephy_thread_helpers_init ();
-	ephy_file_helpers_init ();
-	ephy_stock_icons_init ();
-	ephy_ensure_dir_exists (ephy_dot_dir ());
-
-	/* preload the prefs */
-	/* it also enables notifiers support */
-	eel_gconf_monitor_add ("/apps/epiphany");
-	eel_gconf_monitor_add ("/system/proxy");
-
-	/* This ensures mozilla is fired up */
-	single = ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (gs));
-	if (single == NULL)
-	{
-		g_set_error (error, EPHY_SHELL_ERROR,
-			     EPHY_SHELL_ERROR_MOZILLA_REG_FAILED,
-			     _("Epiphany can't be used now. "
-                               "Mozilla initialization failed. Check your "
-                               "MOZILLA_FIVE_HOME environmental variable."));
-	}
-
-	/* FIXME listen on icon changes */
-	/* FIXME MultiHead: icon theme is per-display, not global */
-	icon_theme = gtk_icon_theme_get_default ();
-	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "web-browser", -1, 0);
-
-	if (icon_info)
-	{
-
-		icon_file = gtk_icon_info_get_filename (icon_info);
-		if (icon_file)
-		{
-			gtk_window_set_default_icon_from_file (icon_file, NULL);
-		}
-
-		gtk_icon_info_free (icon_info);
-	}
-	else
-	{
-		g_warning ("Web browser gnome icon not found");
-	}
-
-	/* Instantiate extensions manager; this will load the extensions */
-	gs->priv->extensions_manager = ephy_extensions_manager_new ();
-
-	/* Instantiate internal extensions */
-	gs->priv->session =
-		EPHY_SESSION (ephy_extensions_manager_add
-			(gs->priv->extensions_manager, EPHY_TYPE_SESSION));
 }
 
 static void
@@ -278,6 +211,8 @@ ephy_shell_startup (EphyShell *gs,
 	GNOME_EphyAutomation automation;
 	Bonobo_RegistrationResult result;
 
+	ephy_ensure_dir_exists (ephy_dot_dir ());
+
 #ifdef ENABLE_NAUTILUS_VIEW
 	ephy_nautilus_view_init_factory (gs);
 #endif
@@ -290,8 +225,6 @@ ephy_shell_startup (EphyShell *gs,
 	switch (result)
 	{
 		case Bonobo_ACTIVATION_REG_SUCCESS:
-			init_services (gs, error);
-			if (*error != NULL) return TRUE;
 			break;
 		case Bonobo_ACTIVATION_REG_ALREADY_ACTIVE:
 			break;
@@ -422,10 +355,6 @@ ephy_shell_finalize (GObject *object)
 	}
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
-
-	ephy_state_save ();
-	ephy_file_helpers_shutdown ();
-	gnome_vfs_shutdown ();
 
 	if (gs->priv->automation_factory)
 	{
@@ -613,6 +542,19 @@ ephy_shell_get_session (EphyShell *gs)
 {
 	g_return_val_if_fail (EPHY_IS_SHELL (gs), NULL);
 
+	if (gs->priv->session == NULL)
+	{
+		EphyExtensionsManager *manager;
+
+		manager = EPHY_EXTENSIONS_MANAGER
+			(ephy_shell_get_extensions_manager (gs));
+
+		/* Instantiate internal extensions */
+		gs->priv->session =
+			EPHY_SESSION (ephy_extensions_manager_add
+				(manager, EPHY_TYPE_SESSION));
+	}
+
 	return G_OBJECT (gs->priv->session);
 }
 
@@ -666,6 +608,12 @@ GObject *
 ephy_shell_get_extensions_manager (EphyShell *es)
 {
 	g_return_val_if_fail (EPHY_IS_SHELL (es), NULL);
+
+	if (es->priv->extensions_manager == NULL)
+	{
+		/* Instantiate extensions manager; this will load the extensions */
+		es->priv->extensions_manager = ephy_extensions_manager_new ();
+	}
 
 	return G_OBJECT (es->priv->extensions_manager);
 }
