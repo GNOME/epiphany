@@ -361,7 +361,7 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 	/* Intelligent selection logic, no actual selection yet */
 	
 	path = gtk_tree_row_reference_get_path 
-		((GtkTreeRowReference *) g_list_last (rlist)->data);
+		((GtkTreeRowReference *) g_list_first (rlist)->data);
 	
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_path_free (path);

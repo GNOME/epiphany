@@ -985,7 +985,7 @@ ephy_node_view_remove (EphyNodeView *view)
 
 	list = ephy_node_view_get_selection (view);
 	g_return_if_fail (list != NULL);
-	node = g_list_last (list)->data;
+	node = g_list_first (list)->data;
 	ephy_tree_model_node_iter_from_node (EPHY_TREE_MODEL_NODE (view->priv->nodemodel),
 					     node, &iter);
 	egg_tree_model_filter_convert_child_iter_to_iter (EGG_TREE_MODEL_FILTER (view->priv->filtermodel),

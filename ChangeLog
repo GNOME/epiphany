@@ -1,5 +1,15 @@
 2003-07-14  Xan Lopez  <xan@masilla.org>
 
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_remove):
+	* src/pdm-dialog.c: (pdm_cmd_delete_selection):
+
+	We use g_list_prepend to create selections now (in ephy_node_view_get_selection()
+	and inside pdm_cmd_delete_selection), so the last element selected is the first in
+	the list and we need to use g_list_first instead of _last to make intelligent selection
+	after removal work on multiple selections.
+
+2003-07-14  Xan Lopez  <xan@masilla.org>
+
 	* src/pdm-dialog.c: (pdm_cmd_delete_selection):
 
 	Fix leak.
