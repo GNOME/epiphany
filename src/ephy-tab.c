@@ -958,7 +958,7 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 	}
 }
 
-static void
+static gboolean
 open_link_in_new_tab (EphyTab *tab,
 		      const char *link_address)
 {
@@ -966,7 +966,7 @@ open_link_in_new_tab (EphyTab *tab,
 	gboolean new_tab;
 
 	window = ephy_tab_get_window (tab);
-	g_return_if_fail (window != NULL);
+	g_return_val_if_fail (window != NULL, FALSE);
 
 	new_tab = address_has_web_scheme (link_address);
 
@@ -977,10 +977,8 @@ open_link_in_new_tab (EphyTab *tab,
 				    EPHY_NEW_TAB_OPEN_PAGE |
 				    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 	}
-	else
-	{
-		ephy_window_load_url (window, link_address);
-	}
+
+	return new_tab;
 }
 
 static void
@@ -1081,7 +1079,7 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 
 		ephy_embed_event_get_property (event, "link", &value);
 		link_address = g_value_get_string (value);
-		open_link_in_new_tab (tab, link_address);
+		handled = open_link_in_new_tab (tab, link_address);
 	}
 	/* shift+click saves the link target */
 	else if (is_link && is_left_click && with_shift)
