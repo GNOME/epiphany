@@ -1173,7 +1173,7 @@ build_load_percent (int requests_done, int requests_total)
 }
 
 static void
-update_net_state_message (EphyTab *tab, const char *uri, EmbedState flags)
+update_net_state_message (EphyTab *tab, const char *uri, EmbedNetState flags)
 {
 	GnomeVFSURI *vfs_uri = NULL;
 	const char *msg = NULL;
@@ -1239,7 +1239,7 @@ out:
 }
 
 static void
-build_progress_from_requests (EphyTab *tab, EmbedState state)
+build_progress_from_requests (EphyTab *tab, EmbedNetState state)
 {
 	int load_percent;
 
@@ -1277,8 +1277,10 @@ ensure_page_info (EphyTab *tab, EphyEmbed *embed, const char *address)
 }
 
 static void
-ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
-		       EmbedState state, EphyTab *tab)
+ephy_tab_net_state_cb (EphyEmbed *embed,
+		       const char *uri,
+		       EmbedNetState state,
+		       EphyTab *tab)
 {
 	update_net_state_message (tab, uri, state);
 

@@ -34,8 +34,11 @@ G_BEGIN_DECLS
 #define EPHY_IS_EMBED_EVENT_IFACE(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_EVENT))
 #define EPHY_EMBED_EVENT_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventIface))
 
-typedef struct EphyEmbedEventIface	EphyEmbedEventIface;
-typedef struct EphyEmbedEvent		EphyEmbedEvent;
+#define EPHY_TYPE_EMBED_EVENT_CONTEXT		(ephy_embed_event_context_get_type ())
+#define EPHY_TYPE_EMBED_EVENT_TYPE		(ephy_embed_event_type_get_type ())
+
+typedef struct _EphyEmbedEventIface	EphyEmbedEventIface;
+typedef struct _EphyEmbedEvent		EphyEmbedEvent;
 
 typedef enum
 {
@@ -57,7 +60,7 @@ typedef enum
 	EPHY_EMBED_EVENT_KEY
 } EphyEmbedEventType;
 
-struct EphyEmbedEventIface
+struct _EphyEmbedEventIface
 {
 	GTypeInterface parent_iface;
 
@@ -76,7 +79,11 @@ struct EphyEmbedEventIface
 	gpointer		(* get_dom_event)	(EphyEmbedEvent *event);
 };
 
-GType			ephy_embed_event_get_type	(void);
+GType			ephy_embed_event_get_type		(void);
+
+GType			ephy_embed_event_context_get_type	(void);
+
+GType			ephy_embed_event_type_get_type 		(void);
 
 EphyEmbedEventType	ephy_embed_event_get_event_type	(EphyEmbedEvent *event);
 

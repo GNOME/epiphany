@@ -25,6 +25,54 @@
 #include <glib/ghash.h>
 #include <gtk/gtktypeutils.h>
 
+GType
+ephy_embed_event_context_get_type (void)
+{
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GFlagsValue values[] =
+		{
+		{ EMBED_CONTEXT_NONE, "EMBED_CONTEXT_NONE", "none" },
+		{ EMBED_CONTEXT_DEFAULT, "EMBED_CONTEXT_DEFAULT", "default" },
+		{ EMBED_CONTEXT_LINK, "EMBED_CONTEXT_LINK", "link" },
+		{ EMBED_CONTEXT_IMAGE, "EMBED_CONTEXT_IMAGE", "image" },
+		{ EMBED_CONTEXT_DOCUMENT, "EMBED_CONTEXT_DOCUMENT", "document" },
+		{ EMBED_CONTEXT_INPUT, "EMBED_CONTEXT_INPUT", "input" },
+		{ EMBED_CONTEXT_XUL, "EMBED_CONTEXT_XUL", "xul" },
+		{ EMBED_CONTEXT_EMAIL_LINK, "EMBED_CONTEXT_EMAIL_LINK", "email-link" },
+		{ 0, NULL, NULL }
+		};
+
+		type = g_flags_register_static ("EphyEmbedEventContext", values);
+	}
+
+	return type;
+}
+
+GType
+ephy_embed_event_type_get_type (void)
+{
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GEnumValue values[] =
+		{
+		{ EPHY_EMBED_EVENT_MOUSE_BUTTON1, "EPHY_EMBED_EVENT_MOUSE_BUTTON1", "mouse-button-1" },
+		{ EPHY_EMBED_EVENT_MOUSE_BUTTON2, "EPHY_EMBED_EVENT_MOUSE_BUTTON2", "mouse-button-2" },
+		{ EPHY_EMBED_EVENT_MOUSE_BUTTON3, "EPHY_EMBED_EVENT_MOUSE_BUTTON3", "mouse-button-3" },
+		{ EPHY_EMBED_EVENT_KEY, "EPHY_EMBED_EVENT_KEY", "key" },
+		{ 0, NULL, NULL }
+		};
+
+		type = g_enum_register_static ("EphyEmbedEventType", values);
+	}
+
+	return type;
+}
+
 static void ephy_embed_event_base_init (gpointer g_class);
 
 GType

@@ -36,7 +36,10 @@ G_BEGIN_DECLS
 #define EPHY_IS_EMBED_IFACE(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED))
 #define EPHY_EMBED_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EMBED, EphyEmbedIface))
 
+#define EPHY_TYPE_EMBED_NET_STATE	(ephy_embed_net_state_get_type ())
 #define EPHY_TYPE_EMBED_CHROME_MASK     (ephy_embed_chrome_get_type ())
+#define EPHY_TYPE_EMBED_PPV_NAVIGATION	(ephy_embed_ppv_navigation_get_type ())
+#define EPHY_TYPE_EMBED_SECURITY_LEVEL	(ephy_embed_security_level_get_type ())
 #define EPHY_TYPE_EMBED_DOCUMENT_TYPE	(ephy_embed_document_type_get_type ())
 
 typedef struct _EphyEmbed	EphyEmbed;
@@ -55,7 +58,7 @@ typedef enum
 	EMBED_STATE_IS_DOCUMENT		= 1 << 6,
 	EMBED_STATE_IS_NETWORK		= 1 << 7,
 	EMBED_STATE_IS_WINDOW		= 1 << 8
-} EmbedState;
+} EmbedNetState;
 
 typedef enum
 {
@@ -84,8 +87,8 @@ typedef enum
 	STATE_IS_UNKNOWN,
 	STATE_IS_INSECURE,
 	STATE_IS_BROKEN,
-	STATE_IS_SECURE_MED,
 	STATE_IS_SECURE_LOW,
+	STATE_IS_SECURE_MED,
 	STATE_IS_SECURE_HIGH
 } EmbedSecurityLevel;
 
@@ -123,7 +126,7 @@ struct _EphyEmbedIface
 					 const char *location);
 	void	 (* net_state)		(EphyEmbed *embed,
 					 const char *uri,
-					 EmbedState state);
+					 EmbedNetState state);
 	gboolean (* dom_mouse_click)	(EphyEmbed *embed,
 					 EphyEmbedEvent *event);
 	gboolean (* dom_mouse_down)	(EphyEmbed *embed,
@@ -200,7 +203,13 @@ struct _EphyEmbedIface
 	gboolean	   (* has_modified_forms)	(EphyEmbed *embed);
 };
 
+GType 		  ephy_embed_net_state_get_type		(void);
+
 GType		  ephy_embed_chrome_get_type		(void);
+
+GType 		  ephy_embed_ppv_navigation_get_type	(void);
+
+GType		  ephy_embed_security_level_get_type	(void);
 
 GType		  ephy_embed_document_type_get_type	(void);
 

@@ -836,13 +836,13 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
                                 gint state, guint status, 
 				MozillaEmbed *membed)
 {
-	EmbedState estate = EMBED_STATE_UNKNOWN;
+	EmbedNetState estate = EMBED_STATE_UNKNOWN;
 	int i;
 
 	struct
 	{
 		guint state;
-		EmbedState embed_state;
+		EmbedNetState embed_state;
 	}
 	conversion_map [] =
 	{
@@ -861,7 +861,7 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 	{
 		if (state & conversion_map[i].state)
 		{
-			estate = (EmbedState) (estate | conversion_map[i].embed_state);	
+			estate = (EmbedNetState) (estate | conversion_map[i].embed_state);	
 		}
 	}
 

@@ -30,6 +30,34 @@
 static void ephy_embed_base_init (gpointer g_class);
 
 GType
+ephy_embed_net_state_get_type (void)
+{
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GFlagsValue values[] =
+		{
+		{ EMBED_STATE_UNKNOWN, "EMBED_STATE_UNKNOWN", "unknown" },
+		{ EMBED_STATE_START, "EMBED_STATE_START", "start" },
+		{ EMBED_STATE_REDIRECTING, "EMBED_STATE_REDIRECTING", "redirecting" },
+		{ EMBED_STATE_TRANSFERRING, "EMBED_STATE_TRANSFERRING", "transferring" },
+		{ EMBED_STATE_NEGOTIATING, "EMBED_STATE_NEGOTIATING", "negotiating", },
+		{ EMBED_STATE_STOP, "EMBED_STATE_STOP", "stop" },
+		{ EMBED_STATE_IS_REQUEST, "EMBED_STATE_IS_REQUEST", "is-request" },
+		{ EMBED_STATE_IS_DOCUMENT, "EMBED_STATE_IS_DOCUMENT", "is-document" },
+		{ EMBED_STATE_IS_NETWORK, "EMBED_STATE_IS_NETWORK", "is-network" },
+		{ EMBED_STATE_IS_WINDOW, "EMBED_STATE_IS_WINDOW", "is-window" },
+		{ 0, NULL, NULL }
+		};
+
+		type = g_flags_register_static ("EphyEmbedNetState", values);
+	}
+
+	return type;
+}
+
+GType
 ephy_embed_chrome_get_type (void)
 {
 	static GType type = 0;
@@ -46,6 +74,53 @@ ephy_embed_chrome_get_type (void)
 		};
 
 		type = g_flags_register_static ("EphyEmbedChrome", values);
+	}
+
+	return type;
+}
+
+GType
+ephy_embed_ppv_navigation_get_type (void)
+{
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GEnumValue values[] =
+		{
+		{ PRINTPREVIEW_GOTO_PAGENUM, "PRINTPREVIEW_GOTO_PAGENUM", "page-num" },
+		{ PRINTPREVIEW_PREV_PAGE, "PRINTPREVIEW_PREV_PAGE", "prev" },
+		{ PRINTPREVIEW_NEXT_PAGE, "PRINTPREVIEW_NEXT_PAGE", "next" },
+		{ PRINTPREVIEW_HOME, "PRINTPREVIEW_HOME", "home" },
+		{ PRINTPREVIEW_END, "PRINTPREVIEW_END", "end" },
+		{ 0, NULL, NULL }
+		};
+
+		type = g_enum_register_static ("EphyEmbedPPVNavigation", values);
+	}
+
+	return type;
+}
+
+GType
+ephy_embed_security_level_get_type (void)
+{
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GEnumValue values[] =
+		{
+		{ STATE_IS_UNKNOWN, "STATE_IS_UNKNOWN", "unknown" },
+		{ STATE_IS_INSECURE, "STATE_IS_INSECURE", "insecure" },
+		{ STATE_IS_BROKEN, "STATE_IS_BROKEN", "broken" },
+		{ STATE_IS_SECURE_LOW, "STATE_IS_SECURE_LOW", "low" },
+		{ STATE_IS_SECURE_MED, "STATE_IS_SECURE_MED", "medium" },
+		{ STATE_IS_SECURE_HIGH, "STATE_IS_SECURE_HIGH", "high" },
+		{ 0, NULL, NULL }
+		};
+
+		type = g_enum_register_static ("EphyEmbedSecurityLevel", values);
 	}
 
 	return type;
@@ -210,11 +285,11 @@ ephy_embed_base_init (gpointer g_class)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (EphyEmbedIface, net_state),
 			      NULL, NULL,
-			      ephy_marshal_VOID__STRING_INT,
+			      ephy_marshal_VOID__STRING_FLAGS,
 			      G_TYPE_NONE,
 			      2,
 			      G_TYPE_STRING,
-			      G_TYPE_INT);
+			      EPHY_TYPE_EMBED_NET_STATE);
 /**
  * EphyEmbed::ge-dom-mouse-click:
  * @embed:
@@ -262,10 +337,10 @@ ephy_embed_base_init (gpointer g_class)
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (EphyEmbedIface, security_change),
 			      NULL, NULL,
-			      g_cclosure_marshal_VOID__INT,
+			      g_cclosure_marshal_VOID__ENUM,
 			      G_TYPE_NONE,
 			      1,
-			      G_TYPE_INT);
+			      EPHY_TYPE_EMBED_SECURITY_LEVEL);
 /**
  * EphyEmbed::ge-zoom-change:
  * @embed:
