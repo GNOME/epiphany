@@ -231,7 +231,7 @@ remove_obsolete_pages (EphyHistory *eb)
         g_date_set_time (&current_date, time (NULL));
 
 	children = ephy_node_get_children (eb->priv->pages);
-	for (i = 0; i < children->len; i++)
+	for (i = children->len -1; i >= 0; i--)
 	{
 		EphyNode *kid;
 
