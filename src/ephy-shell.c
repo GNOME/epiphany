@@ -41,6 +41,7 @@
 #include "downloader-view.h"
 #include "ephy-toolbars-model.h"
 #include "ephy-automation.h"
+#include "print-dialog.h"
 
 #include <string.h>
 #include <bonobo/bonobo-main.h>
@@ -75,20 +76,18 @@ struct EphyShellPrivate
 	GtkWidget *history_window;
 	GObject *pdm_dialog;
 	GObject *prefs_dialog;
+	GObject *print_setup_dialog;
 	GList *del_on_exit;
 	guint server_timeout;
 };
 
-static void
-ephy_shell_class_init (EphyShellClass *klass);
-static void
-ephy_shell_init (EphyShell *gs);
-static void
-ephy_shell_finalize (GObject *object);
+EphyShell *ephy_shell = NULL;
+
+static void ephy_shell_class_init	(EphyShellClass *klass);
+static void ephy_shell_init		(EphyShell *shell);
+static void ephy_shell_finalize		(GObject *object);
 
 static GObjectClass *parent_class = NULL;
-
-EphyShell *ephy_shell;
 
 GQuark
 ephy_shell_error_quark (void)
@@ -106,63 +105,47 @@ ephy_shell_error_quark (void)
 GType
 ephy_shell_get_type (void)
 {
-        static GType ephy_shell_type = 0;
+	static GType type = 0;
 
-        if (ephy_shell_type == 0)
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (EphyShellClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) ephy_shell_class_init,
-                        NULL,
-                        NULL, /* class_data */
-                        sizeof (EphyShell),
-                        0, /* n_preallocs */
-                        (GInstanceInitFunc) ephy_shell_init
-                };
+	if (type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyShellClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			(GClassInitFunc) ephy_shell_class_init,
+			NULL,
+			NULL, /* class_data */
+			sizeof (EphyShell),
+			0, /* n_preallocs */
+			(GInstanceInitFunc) ephy_shell_init
+		};
 
-		ephy_shell_type = g_type_register_static (EPHY_TYPE_EMBED_SHELL,
-							  "EphyShell",
-							  &our_info, 0);
-        }
+		type = g_type_register_static (EPHY_TYPE_EMBED_SHELL,
+					       "EphyShell",
+					       &our_info, 0);
+	}
 
-        return ephy_shell_type;
-
+	return type;
 }
 
 static void
 ephy_shell_class_init (EphyShellClass *klass)
 {
-        GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-        parent_class = g_type_class_peek_parent (klass);
+	parent_class = g_type_class_peek_parent (klass);
 
-        object_class->finalize = ephy_shell_finalize;
+	object_class->finalize = ephy_shell_finalize;
 
 	g_type_class_add_private (object_class, sizeof(EphyShellPrivate));
 }
 
-#ifdef ENABLE_NAUTILUS_VIEW
-
-static BonoboObject *
-ephy_nautilus_view_new (EphyShell *gs)
-{
-	EphyNautilusView *view;
-
-	view = EPHY_NAUTILUS_VIEW
-		(ephy_nautilus_view_new_component (gs));
-
-	return BONOBO_OBJECT (view);
-}
-
-#endif
-
 static BonoboObject *
 ephy_automation_factory_cb (BonoboGenericFactory *this_factory,
 			    const char *iid,
-			    EphyShell *es)
+			    EphyShell *shell)
 {
 	if (strcmp (iid, AUTOMATION_IID) == 0)
 	{
@@ -171,7 +154,7 @@ ephy_automation_factory_cb (BonoboGenericFactory *this_factory,
 #ifdef ENABLE_NAUTILUS_VIEW
 	else if (strcmp (iid, EPHY_NAUTILUS_VIEW_IID) == 0)
 	{
-		return ephy_nautilus_view_new (es);
+		return BONOBO_OBJECT (ephy_nautilus_view_new_component (shell));
 	}
 #endif
 
@@ -180,9 +163,8 @@ ephy_automation_factory_cb (BonoboGenericFactory *this_factory,
 	return NULL;
 }
 
-
 static BonoboGenericFactory *
-ephy_automation_factory_new (EphyShell *es)
+ephy_automation_factory_new (EphyShell *shell)
 {
 	BonoboGenericFactory *factory;
 	GClosure *factory_closure;
@@ -190,7 +172,7 @@ ephy_automation_factory_new (EphyShell *es)
 	factory = g_object_new (bonobo_generic_factory_get_type (), NULL);
 
 	factory_closure = g_cclosure_new
-		(G_CALLBACK (ephy_automation_factory_cb), es, NULL);
+		(G_CALLBACK (ephy_automation_factory_cb), shell, NULL);
 
 	bonobo_generic_factory_construct_noreg
 		(factory, AUTOMATION_FACTORY_IID, factory_closure);
@@ -199,28 +181,31 @@ ephy_automation_factory_new (EphyShell *es)
 }
 
 static void
-ephy_shell_init (EphyShell *gs)
+ephy_shell_init (EphyShell *shell)
 {
 	EphyShell **ptr = &ephy_shell;
 
-	gs->priv = EPHY_SHELL_GET_PRIVATE (gs);
+	shell->priv = EPHY_SHELL_GET_PRIVATE (shell);
 
-	gs->priv->session = NULL;
-	gs->priv->bookmarks = NULL;
-	gs->priv->bme = NULL;
-	gs->priv->history_window = NULL;
-	gs->priv->pdm_dialog = NULL;
-	gs->priv->toolbars_model = NULL;
-	gs->priv->fs_toolbars_model = NULL;
-	gs->priv->extensions_manager = NULL;
-	gs->priv->server_timeout = 0;
+	shell->priv->session = NULL;
+	shell->priv->bookmarks = NULL;
+	shell->priv->bme = NULL;
+	shell->priv->history_window = NULL;
+	shell->priv->pdm_dialog = NULL;
+	shell->priv->print_setup_dialog = NULL;
+	shell->priv->toolbars_model = NULL;
+	shell->priv->fs_toolbars_model = NULL;
+	shell->priv->extensions_manager = NULL;
+	shell->priv->server_timeout = 0;
 
-	ephy_shell = gs;
+	/* globally accessible singleton */
+	g_assert (ephy_shell == NULL);
+	ephy_shell = shell;
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
 				   (gpointer *)ptr);
 
 	/* Instantiate the automation factory */
-	gs->priv->automation_factory = ephy_automation_factory_new (gs);
+	shell->priv->automation_factory = ephy_automation_factory_new (shell);
 }
 
 static char *
@@ -271,9 +256,9 @@ open_urls (GNOME_EphyAutomation automation,
 }
 
 static gboolean
-server_timeout (EphyShell *gs)
+server_timeout (EphyShell *shell)
 {
-	g_object_unref (gs);
+	g_object_unref (shell);
 
 	return FALSE;
 }
@@ -343,7 +328,7 @@ gnome_session_init (EphyShell *shell)
 }
 
 gboolean
-ephy_shell_startup (EphyShell *gs,
+ephy_shell_startup (EphyShell *shell,
 		    EphyShellStartupFlags flags,
 		    const char **args,
 		    const char *string_arg,
@@ -358,7 +343,7 @@ ephy_shell_startup (EphyShell *gs,
 	CORBA_exception_init (&ev);
 
 	result = bonobo_activation_register_active_server
-		(AUTOMATION_FACTORY_IID, BONOBO_OBJREF (gs->priv->automation_factory), NULL);
+		(AUTOMATION_FACTORY_IID, BONOBO_OBJREF (shell->priv->automation_factory), NULL);
 
 	switch (result)
 	{
@@ -386,15 +371,15 @@ ephy_shell_startup (EphyShell *gs,
 
 	if (flags & EPHY_SHELL_STARTUP_SERVER)
 	{
-		g_object_ref (gs);
-		gs->priv->server_timeout = g_timeout_add
-			(SERVER_TIMEOUT, (GSourceFunc)server_timeout, gs);
+		g_object_ref (shell);
+		shell->priv->server_timeout = g_timeout_add
+			(SERVER_TIMEOUT, (GSourceFunc)server_timeout, shell);
 	}
 	else if (result == Bonobo_ACTIVATION_REG_SUCCESS ||
-                 result == Bonobo_ACTIVATION_REG_ALREADY_ACTIVE)
+		 result == Bonobo_ACTIVATION_REG_ALREADY_ACTIVE)
 	{
 		automation = bonobo_activation_activate_from_id (AUTOMATION_IID,
-						                 0, NULL, &ev);
+								 0, NULL, &ev);
 		if (CORBA_Object_is_nil (automation, &ev))
 		{
 			g_set_error (error, EPHY_SHELL_ERROR,
@@ -437,7 +422,7 @@ ephy_shell_startup (EphyShell *gs,
 			bonobo_object_release_unref (automation, &ev);
 		}
 
-		gnome_session_init (gs);
+		gnome_session_init (shell);
 	}
 
 	CORBA_exception_free (&ev);
@@ -458,73 +443,79 @@ delete_files (GList *l)
 static void
 ephy_shell_finalize (GObject *object)
 {
-        EphyShell *gs = EPHY_SHELL (object);
+	EphyShell *shell = EPHY_SHELL (object);
 
 	g_assert (ephy_shell == NULL);
 
-	if (gs->priv->server_timeout > 0)
+	if (shell->priv->server_timeout > 0)
 	{
-		g_source_remove (gs->priv->server_timeout);
+		g_source_remove (shell->priv->server_timeout);
 	}
 
 	/* this will unload the extensions */
 	LOG ("Unref extension manager")
-	g_object_unref (gs->priv->extensions_manager);
+	g_object_unref (shell->priv->extensions_manager);
 
-	delete_files (gs->priv->del_on_exit);
-	g_list_foreach (gs->priv->del_on_exit, (GFunc)g_free, NULL);
-	g_list_free (gs->priv->del_on_exit);
+	delete_files (shell->priv->del_on_exit);
+	g_list_foreach (shell->priv->del_on_exit, (GFunc)g_free, NULL);
+	g_list_free (shell->priv->del_on_exit);
 
 	LOG ("Unref toolbars model")
-	if (gs->priv->toolbars_model)
+	if (shell->priv->toolbars_model)
 	{
-		g_object_unref (G_OBJECT (gs->priv->toolbars_model));
+		g_object_unref (G_OBJECT (shell->priv->toolbars_model));
 	}
 
 	LOG ("Unref fullscreen toolbars model")
-	if (gs->priv->fs_toolbars_model)
+	if (shell->priv->fs_toolbars_model)
 	{
-		g_object_unref (G_OBJECT (gs->priv->fs_toolbars_model));
+		g_object_unref (G_OBJECT (shell->priv->fs_toolbars_model));
 	}
 
 	LOG ("Unref Bookmarks Editor");
-	if (gs->priv->bme)
+	if (shell->priv->bme)
 	{
-		gtk_widget_destroy (GTK_WIDGET (gs->priv->bme));
+		gtk_widget_destroy (GTK_WIDGET (shell->priv->bme));
 	}
 
 	LOG ("Unref History Window");
-	if (gs->priv->history_window)
+	if (shell->priv->history_window)
 	{
-		gtk_widget_destroy (GTK_WIDGET (gs->priv->history_window));
+		gtk_widget_destroy (GTK_WIDGET (shell->priv->history_window));
 	}
 
 	LOG ("Unref PDM Dialog")
-	if (gs->priv->pdm_dialog)
+	if (shell->priv->pdm_dialog)
 	{
-		g_object_unref (gs->priv->pdm_dialog);
+		g_object_unref (shell->priv->pdm_dialog);
 	}
 
 	LOG ("Unref prefs dialog")
-	if (gs->priv->prefs_dialog)
+	if (shell->priv->prefs_dialog)
 	{
-		g_object_unref (gs->priv->prefs_dialog);
+		g_object_unref (shell->priv->prefs_dialog);
+	}
+
+	LOG ("Unref print setup dialog")
+	if (shell->priv->print_setup_dialog)
+	{
+		g_object_unref (shell->priv->print_setup_dialog);
 	}
 
 	LOG ("Unref bookmarks")
-	if (gs->priv->bookmarks)
+	if (shell->priv->bookmarks)
 	{
-		g_object_unref (gs->priv->bookmarks);
+		g_object_unref (shell->priv->bookmarks);
 	}
 
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 
-	if (gs->priv->automation_factory)
+	if (shell->priv->automation_factory)
 	{
 		bonobo_activation_unregister_active_server
-			(AUTOMATION_FACTORY_IID, BONOBO_OBJREF (gs->priv->automation_factory));
+			(AUTOMATION_FACTORY_IID, BONOBO_OBJREF (shell->priv->automation_factory));
 
-		bonobo_object_unref (gs->priv->automation_factory);
+		bonobo_object_unref (shell->priv->automation_factory);
 	}
 
 	LOG ("Ephy shell finalized")
@@ -607,7 +598,7 @@ ephy_shell_new_tab (EphyShell *shell,
 	}
 
 	grouped = ((flags & EPHY_NEW_TAB_OPEN_PAGE ||
-	            flags & EPHY_NEW_TAB_APPEND_GROUPED)) &&
+		    flags & EPHY_NEW_TAB_APPEND_GROUPED)) &&
 		  !(flags & EPHY_NEW_TAB_APPEND_LAST);
 
 	if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_embed != NULL)
@@ -647,81 +638,81 @@ ephy_shell_new_tab (EphyShell *shell,
 		gtk_window_fullscreen (GTK_WINDOW (window));
 	}
 
-        return tab;
+	return tab;
 }
 
 /**
  * ephy_shell_get_session:
- * @gs: a #EphyShell
+ * @shell: the #EphyShell
  *
  * Returns current session.
  *
  * Return value: the current session.
  **/
 GObject *
-ephy_shell_get_session (EphyShell *gs)
+ephy_shell_get_session (EphyShell *shell)
 {
-	g_return_val_if_fail (EPHY_IS_SHELL (gs), NULL);
+	g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
 
-	if (gs->priv->session == NULL)
+	if (shell->priv->session == NULL)
 	{
 		EphyExtensionsManager *manager;
 
 		manager = EPHY_EXTENSIONS_MANAGER
-			(ephy_shell_get_extensions_manager (gs));
+			(ephy_shell_get_extensions_manager (shell));
 
 		/* Instantiate internal extensions */
-		gs->priv->session =
+		shell->priv->session =
 			EPHY_SESSION (ephy_extensions_manager_add
 				(manager, EPHY_TYPE_SESSION));
 	}
 
-	return G_OBJECT (gs->priv->session);
+	return G_OBJECT (shell->priv->session);
 }
 
 EphyBookmarks *
-ephy_shell_get_bookmarks (EphyShell *gs)
+ephy_shell_get_bookmarks (EphyShell *shell)
 {
-	if (gs->priv->bookmarks == NULL)
+	if (shell->priv->bookmarks == NULL)
 	{
-		gs->priv->bookmarks = ephy_bookmarks_new ();
+		shell->priv->bookmarks = ephy_bookmarks_new ();
 	}
 
-	return gs->priv->bookmarks;
+	return shell->priv->bookmarks;
 }
 
 GObject *
-ephy_shell_get_toolbars_model (EphyShell *gs, gboolean fullscreen)
+ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
 {
 	if (fullscreen)
 	{
-		if (gs->priv->fs_toolbars_model == NULL)
+		if (shell->priv->fs_toolbars_model == NULL)
 		{
 			const char *xml;
 
-			gs->priv->fs_toolbars_model = egg_toolbars_model_new ();
+			shell->priv->fs_toolbars_model = egg_toolbars_model_new ();
 			xml = ephy_file ("epiphany-fs-toolbar.xml");
-			egg_toolbars_model_load (gs->priv->fs_toolbars_model, xml);
+			egg_toolbars_model_load (shell->priv->fs_toolbars_model, xml);
 		}
 
-		return G_OBJECT (gs->priv->fs_toolbars_model);
+		return G_OBJECT (shell->priv->fs_toolbars_model);
 	}
 	else
 	{
-		if (gs->priv->toolbars_model == NULL)
+		if (shell->priv->toolbars_model == NULL)
 		{
 			EphyBookmarks *bookmarks;
 
-			bookmarks = ephy_shell_get_bookmarks (gs);
+			bookmarks = ephy_shell_get_bookmarks (shell);
 
-			gs->priv->toolbars_model = ephy_toolbars_model_new (bookmarks);
+			shell->priv->toolbars_model = ephy_toolbars_model_new (bookmarks);
 
 			g_object_set (bookmarks, "toolbars_model",
-				      gs->priv->toolbars_model, NULL);
+				      shell->priv->toolbars_model, NULL);
 		}
 
 
-		return G_OBJECT (gs->priv->toolbars_model);
+		return G_OBJECT (shell->priv->toolbars_model);
 	}
 }
 
@@ -764,44 +755,44 @@ toolwindow_hide_cb (GtkWidget *widget, EphyShell *es)
 }
 
 GtkWidget *
-ephy_shell_get_bookmarks_editor (EphyShell *gs)
+ephy_shell_get_bookmarks_editor (EphyShell *shell)
 {
 	EphyBookmarks *bookmarks;
 
-	if (gs->priv->bme == NULL)
+	if (shell->priv->bme == NULL)
 	{
 		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 		g_assert (bookmarks != NULL);
-		gs->priv->bme = ephy_bookmarks_editor_new (bookmarks);
+		shell->priv->bme = ephy_bookmarks_editor_new (bookmarks);
 
-		g_signal_connect (gs->priv->bme, "show", 
-				  G_CALLBACK (toolwindow_show_cb), gs);
-		g_signal_connect (gs->priv->bme, "hide", 
-				  G_CALLBACK (toolwindow_hide_cb), gs);
+		g_signal_connect (shell->priv->bme, "show", 
+				  G_CALLBACK (toolwindow_show_cb), shell);
+		g_signal_connect (shell->priv->bme, "hide", 
+				  G_CALLBACK (toolwindow_hide_cb), shell);
 	}
 
-	return gs->priv->bme;
+	return shell->priv->bme;
 }
 
 GtkWidget *
-ephy_shell_get_history_window (EphyShell *gs)
+ephy_shell_get_history_window (EphyShell *shell)
 {
 	EphyHistory *history;
 
-	if (gs->priv->history_window == NULL)
+	if (shell->priv->history_window == NULL)
 	{
 		history = ephy_embed_shell_get_global_history
 			(EPHY_EMBED_SHELL (ephy_shell));
 		g_assert (history != NULL);
-		gs->priv->history_window = ephy_history_window_new (history);
+		shell->priv->history_window = ephy_history_window_new (history);
 
-		g_signal_connect (gs->priv->history_window, "show",
-				  G_CALLBACK (toolwindow_show_cb), gs);
-		g_signal_connect (gs->priv->history_window, "hide",
-				  G_CALLBACK (toolwindow_hide_cb), gs);
+		g_signal_connect (shell->priv->history_window, "show",
+				  G_CALLBACK (toolwindow_show_cb), shell);
+		g_signal_connect (shell->priv->history_window, "hide",
+				  G_CALLBACK (toolwindow_hide_cb), shell);
 	}
 
-	return gs->priv->history_window;
+	return shell->priv->history_window;
 }
 
 GObject *
@@ -832,10 +823,23 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
 	return shell->priv->prefs_dialog;
 }
 
-void
-ephy_shell_delete_on_exit (EphyShell *gs, const char *path)
+GObject *
+ephy_shell_get_print_setup_dialog (EphyShell *shell)
 {
-	gs->priv->del_on_exit = g_list_append (gs->priv->del_on_exit,
-					       g_strdup (path));
+	if (shell->priv->print_setup_dialog == NULL)
+	{
+		shell->priv->print_setup_dialog = G_OBJECT (ephy_print_setup_dialog_new ());
+
+		g_object_add_weak_pointer (shell->priv->print_setup_dialog,
+					   (gpointer *) &shell->priv->print_setup_dialog);
+	}
+
+	return shell->priv->print_setup_dialog;
 }
 
+void
+ephy_shell_delete_on_exit (EphyShell *shell, const char *path)
+{
+	shell->priv->del_on_exit = g_list_append (shell->priv->del_on_exit,
+						  g_strdup (path));
+}

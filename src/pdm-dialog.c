@@ -114,15 +114,6 @@ EphyDialogProperty properties [] =
 	{ NULL }
 };
 
-static const
-char *size_group [] =
-{
-	"cookies_remove_button",
-	"cookies_properties_button",
-	"passwords_remove_button"
-};
-const guint n_size_group = G_N_ELEMENTS (size_group);
-
 static void pdm_dialog_class_init	(PdmDialogClass *klass);
 static void pdm_dialog_init		(PdmDialog *dialog);
 static void pdm_dialog_finalize		(GObject *object);
@@ -804,7 +795,11 @@ pdm_dialog_init (PdmDialog *dialog)
 	 * avoid the little jerk you get otherwise when switching pages because
 	 * one set of buttons is wider than another.
 	 */
-	ephy_dialog_set_size_group (EPHY_DIALOG (dialog), size_group, n_size_group);
+	ephy_dialog_set_size_group (EPHY_DIALOG (dialog),
+				    properties[PROP_COOKIES_REMOVE].id,
+				    properties[PROP_COOKIES_PROPERTIES].id,
+				    properties[PROP_PASSWORDS_REMOVE].id,
+				    NULL);
 
 	cookies = g_new0 (PdmActionInfo, 1);
 	cookies->construct = pdm_dialog_cookies_construct;

@@ -58,19 +58,14 @@
 #include <gtk/gtkuimanager.h>
 #include <gtk/gtktoggleaction.h>
 
-static void
-ephy_window_class_init (EphyWindowClass *klass);
-static void
-ephy_window_init (EphyWindow *gs);
-static void
-ephy_window_finalize (GObject *object);
-static void
-ephy_window_show (GtkWidget *widget);
-static void
-ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
-				     GtkNotebookPage *page,
-				     guint page_num,
-				     EphyWindow *window);
+static void ephy_window_class_init		(EphyWindowClass *klass);
+static void ephy_window_init			(EphyWindow *gs);
+static void ephy_window_finalize		(GObject *object);
+static void ephy_window_show			(GtkWidget *widget);
+static void ephy_window_notebook_switch_page_cb	(GtkNotebook *notebook,
+						 GtkNotebookPage *page,
+						 guint page_num,
+						 EphyWindow *window);
 
 static GtkActionEntry ephy_menu_entries [] = {
 
@@ -97,6 +92,12 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "FileSaveAs", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><control>S",
 	  N_("Save the current page"),
 	  G_CALLBACK (window_cmd_file_save_as) },
+	{ "FilePrintSetup", NULL, N_("Print Set_up..."), NULL,
+	  N_("Setup the page settings for printing"),
+	  G_CALLBACK (window_cmd_file_print_setup) },
+	{ "FilePrintPreview", GTK_STOCK_PRINT_PREVIEW, N_("Print Pre_view"),"<control><shift>P",
+	  N_("Print preview"),
+	  G_CALLBACK (window_cmd_file_print_preview) },
 	{ "FilePrint", GTK_STOCK_PRINT, N_("_Print..."), "<control>P",
 	  N_("Print the current page"),
 	  G_CALLBACK (window_cmd_file_print) },
@@ -1707,7 +1708,7 @@ ephy_window_set_print_preview (EphyWindow *window, gboolean enabled)
 {
 	window->priv->is_ppview = enabled;
 	update_chrome (window);
-	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (window->priv->notebook), enabled);
+	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (window->priv->notebook), !enabled);
 }
 
 GtkWidget *
@@ -1971,30 +1972,17 @@ ephy_window_find (EphyWindow *window)
 	ephy_dialog_show (window->priv->find_dialog);
 }
 
-static void
-print_dialog_preview_cb (EphyDialog *dialog,
-			 EphyWindow *window)
-{
-	window->priv->is_ppview = TRUE;
-	update_chrome(window);
-	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (window->priv->notebook), FALSE);
-}
-
 void
 ephy_window_print (EphyWindow *window)
 {
-	EphyDialog *dialog;
-	EphyEmbed *embed;
-
 	if (window->priv->print_dialog == NULL)
 	{
+		EphyDialog *dialog;
+		EphyEmbed *embed;
+
 		embed = ephy_window_get_active_embed (window);
-		dialog = print_dialog_new_with_parent
-					(GTK_WIDGET(window), embed, NULL);
-		g_signal_connect (G_OBJECT (dialog),
-				  "preview",
-				  G_CALLBACK (print_dialog_preview_cb),
-				  window);
+		dialog = ephy_print_dialog_new  (GTK_WIDGET (window), embed, FALSE);
+
 		window->priv->print_dialog = dialog;
 		g_object_add_weak_pointer(G_OBJECT (dialog),
 					  (gpointer *) &window->priv->print_dialog);

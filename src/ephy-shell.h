@@ -38,12 +38,7 @@ G_BEGIN_DECLS
 #define EPHY_IS_SHELL_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_SHELL))
 #define EPHY_SHELL_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SHELL, EphyShellClass))
 
-/* FIXME: huh? */
-#ifndef EPHY_SHELL_TYPE_DEF
 typedef struct EphyShell EphyShell;
-#define EPHY_SHELL_TYPE_DEF
-#endif
-
 typedef struct EphyShellClass EphyShellClass;
 typedef struct EphyShellPrivate EphyShellPrivate;
 
@@ -60,14 +55,14 @@ typedef enum
 
 typedef enum
 {
-	EPHY_SHELL_STARTUP_TABS = 1 << 0,
-	EPHY_SHELL_STARTUP_EXISTING_WINDOW = 1 << 2,
-	EPHY_SHELL_STARTUP_FULLSCREEN = 1 << 3,
-	EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR = 1 << 4,
-	EPHY_SHELL_STARTUP_SESSION = 1 << 5,
-	EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS = 1 << 6,
-	EPHY_SHELL_STARTUP_ADD_BOOKMARK = 1 << 7,
-	EPHY_SHELL_STARTUP_SERVER = 1 << 8
+	EPHY_SHELL_STARTUP_TABS			= 1 << 0,
+	EPHY_SHELL_STARTUP_EXISTING_WINDOW	= 1 << 2,
+	EPHY_SHELL_STARTUP_FULLSCREEN		= 1 << 3,
+	EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR	= 1 << 4,
+	EPHY_SHELL_STARTUP_SESSION		= 1 << 5,
+	EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS	= 1 << 6,
+	EPHY_SHELL_STARTUP_ADD_BOOKMARK		= 1 << 7,
+	EPHY_SHELL_STARTUP_SERVER		= 1 << 8
 } EphyShellStartupFlags;
 
 typedef enum
@@ -102,44 +97,46 @@ struct EphyShellClass
 	EphyEmbedShellClass parent_class;
 };
 
-GQuark          ephy_shell_error_quark			(void);
-
 GType		ephy_shell_get_type			(void);
+
+GQuark		ephy_shell_error_quark			(void);
 
 EphyShell      *ephy_shell_new				(void);
 
-gboolean	ephy_shell_startup			(EphyShell *gs,
+gboolean	ephy_shell_startup			(EphyShell *shell,
 							 EphyShellStartupFlags flags,
 							 const char **args,
 							 const char *string_arg,
 							 GError **error);
 
-EphyWindow     *ephy_shell_get_active_window		(EphyShell *gs);
+EphyWindow     *ephy_shell_get_active_window		(EphyShell *shell);
 
-EphyTab        *ephy_shell_new_tab			(EphyShell *shell,
+EphyTab	       *ephy_shell_new_tab			(EphyShell *shell,
 							 EphyWindow *parent_window,
 							 EphyTab *previous_tab,
 							 const char *url,
 							 EphyNewTabFlags flags);
 
-GObject	       *ephy_shell_get_session			(EphyShell *gs);
+GObject	      *ephy_shell_get_session			(EphyShell *shell);
 
-EphyBookmarks  *ephy_shell_get_bookmarks		(EphyShell *gs);
+EphyBookmarks  *ephy_shell_get_bookmarks		(EphyShell *shell);
 
-GObject	       *ephy_shell_get_toolbars_model		(EphyShell *gs,
+GObject	      *ephy_shell_get_toolbars_model		(EphyShell *shell,
 							 gboolean fullscreen);
 
-GObject	       *ephy_shell_get_extensions_manager	(EphyShell *es);
+GObject	       *ephy_shell_get_extensions_manager	(EphyShell *shell);
 
-GtkWidget      *ephy_shell_get_bookmarks_editor 	(EphyShell *gs);
+GtkWidget      *ephy_shell_get_bookmarks_editor 	(EphyShell *shell);
 
-GtkWidget      *ephy_shell_get_history_window		(EphyShell *gs);
+GtkWidget      *ephy_shell_get_history_window		(EphyShell *shell);
 
 GObject        *ephy_shell_get_pdm_dialog		(EphyShell *shell);
 
 GObject        *ephy_shell_get_prefs_dialog		(EphyShell *shell);
 
-void		ephy_shell_delete_on_exit		(EphyShell *gs,
+GObject	       *ephy_shell_get_print_setup_dialog	(EphyShell *shell);
+
+void		ephy_shell_delete_on_exit		(EphyShell *shell,
 							 const char *path);
 
 G_END_DECLS

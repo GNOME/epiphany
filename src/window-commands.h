@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include <gtk/gtkaction.h>
@@ -21,9 +23,6 @@
 #include "ephy-window.h"
 
 void window_cmd_edit_find	(GtkAction *action,
-				 EphyWindow *window);
-
-void window_cmd_file_print	(GtkAction *action,
 				 EphyWindow *window);
 
 void window_cmd_view_stop	(GtkAction *action,
@@ -72,6 +71,15 @@ void window_cmd_file_open	(GtkAction *action,
 				 EphyWindow *window);
 
 void window_cmd_file_save_as    (GtkAction *action,
+				 EphyWindow *window);
+
+void window_cmd_file_print_setup (GtkAction *action,
+				  EphyWindow *window);
+
+void window_cmd_file_print_preview (GtkAction *action,
+				    EphyWindow *window);
+
+void window_cmd_file_print	(GtkAction *action,
 				 EphyWindow *window);
 
 void window_cmd_file_send_to	(GtkAction *action,

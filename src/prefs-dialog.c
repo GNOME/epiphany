@@ -70,8 +70,6 @@ void prefs_clear_cache_button_clicked_cb	(GtkWidget *button,
 void prefs_dialog_response_cb			(GtkDialog *widget,
 						 gint response_id,
 						 EphyDialog *dialog);
-void fonts_language_combo_changed_cb		(GtkComboBox *combo,
-						 EphyDialog *dialog);
 void prefs_homepage_current_button_clicked_cb	(GtkWidget *button,
 						 EphyDialog *dialog);
 void prefs_homepage_blank_button_clicked_cb	(GtkWidget *button,
@@ -274,15 +272,6 @@ EphyDialogProperty properties [] =
 	{ NULL }
 };
 
-static const
-char *lang_size_group [] =
-{
-	"language_label",
-	"default_encoding_label",
-	"auto_encoding_label"
-};
-
-static guint n_lang_size_group = G_N_ELEMENTS (lang_size_group);
 enum
 {
 	COL_FONTS_LANG_NAME,
@@ -426,17 +415,18 @@ setup_font_combo (EphyDialog *dialog,
 	ephy_dialog_set_pref (dialog, properties[prop].id, key);
 }
 
-void
-fonts_language_combo_changed_cb (GtkComboBox *combo,
-				 EphyDialog *dialog)
+static void
+fonts_language_changed_cb (EphyDialog *dialog,
+			   const GValue *value,
+			   gpointer data)
 {
-	GValue value = { 0, };
 	const char *code;
 	char key[128];
 	int size;
 
-	ephy_dialog_get_value (dialog, properties[FONTS_LANGUAGE_PROP].id, &value);
-	code = g_value_get_string (&value);
+	code = g_value_get_string (value);
+
+	LOG ("fonts language combo changed, new code '%s'", code)
 
 	setup_font_combo (dialog, "variable", code, VARIABLE_PROP);
 	setup_font_combo (dialog, "monospace", code, MONOSPACE_PROP);
@@ -464,8 +454,6 @@ fonts_language_combo_changed_cb (GtkComboBox *combo,
 		eel_gconf_set_integer (key, default_size[FONT_SIZE_MIN]);
 	}
 	ephy_dialog_set_pref (dialog, properties[MIN_SIZE_PROP].id, key);
-
-	g_value_unset (&value);
 }
 
 static void
@@ -509,9 +497,9 @@ create_fonts_language_menu (EphyDialog *dialog)
 
 	ephy_dialog_set_data_column (dialog, properties[FONTS_LANGUAGE_PROP].id, COL_FONTS_LANG_CODE);
 
-	g_signal_connect (combo, "changed",
-			  G_CALLBACK (fonts_language_combo_changed_cb),
-			  dialog);
+	g_signal_connect (dialog, "changed::fonts_language_combo",
+			  G_CALLBACK (fonts_language_changed_cb),
+			  NULL);
 }
 
 static void
@@ -752,8 +740,11 @@ prefs_dialog_init (PrefsDialog *pd)
 	ephy_dialog_add_enum (dialog, properties[ACCEPT_COOKIES_PROP].id,
 			      n_cookies_accept_enum, cookies_accept_enum);
 
-	ephy_dialog_set_size_group (dialog, lang_size_group,
-				    n_lang_size_group);
+	ephy_dialog_set_size_group (dialog,
+				    properties[LANGUAGE_LABEL_PROP].id,
+				    properties[DEFAULT_ENCODING_LABEL_PROP].id,
+				    properties[AUTO_ENCODING_LABEL_PROP].id,
+				    NULL);
 
 	window = ephy_dialog_get_control (dialog, properties[WINDOW_PROP].id);
 
@@ -929,7 +920,7 @@ prefs_language_more_button_clicked_cb (GtkWidget *button,
 	/* FIXME: make it only modal to prefs dialogue, not to all windows */
 	ephy_dialog_set_modal (EPHY_DIALOG (editor), TRUE);
 
-	g_signal_connect (editor, "changed",
+	g_signal_connect (editor, "list-changed",
 			  G_CALLBACK (language_dialog_changed_cb),
 			  dialog);
 

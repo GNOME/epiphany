@@ -20,8 +20,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
-#include <config.h>
 #include <libgnome/gnome-macros.h>
 #include <bonobo/bonobo-zoomable.h>
 #include <bonobo/bonobo-ui-util.h>
@@ -264,15 +266,10 @@ ephy_nautilus_view_instance_init (EphyNautilusView *view)
 	bonobo_ui_component_add_verb_list_with_data (p->popup_ui, ephy_popup_verbs, p->popup);
 }
 
-/**
- * Returns a new EphyNautilusView as a BonoboObject 
- **/
 BonoboObject *
-ephy_nautilus_view_new_component (EphyShell *gs)
+ephy_nautilus_view_new_component (EphyShell *shell)
 {
-	EphyNautilusView *view;
-	view = EPHY_NAUTILUS_VIEW (g_object_new (EPHY_TYPE_NAUTILUS_VIEW, NULL));
-	return BONOBO_OBJECT (view);
+	return BONOBO_OBJECT (g_object_new (EPHY_TYPE_NAUTILUS_VIEW, NULL));
 }
 
 static void
@@ -545,11 +542,10 @@ gnv_cmd_file_print (BonoboUIComponent *uic,
 	EphyDialog *dialog;
 	EphyNautilusViewPrivate *p = view->priv;
 	
-	dialog = print_dialog_new (p->embed, NULL);
+	dialog = ephy_print_dialog_new (NULL, p->embed, FALSE);
 
 	ephy_dialog_set_modal (dialog, TRUE);
 	ephy_dialog_show (dialog);
-
 }
 
 static void

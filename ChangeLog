@@ -1,3 +1,58 @@
+2003-12-07  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/glade/print.glade:
+	* data/ui/epiphany-ui.xml:
+	* embed/mozilla/PrintingPromptService.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* embed/print-dialog.c: (ephy_print_info_free),
+	(ephy_print_get_print_info), (ephy_print_dialog_response_cb),
+	(print_filechooser_response_cb),
+	(ephy_print_dialog_browse_button_cb),
+	(ephy_print_setup_dialog_close_button_cb), (ephy_print_dialog_new),
+	(ephy_print_setup_dialog_new):
+	* embed/print-dialog.h:
+	* src/ephy-nautilus-view.c: (ephy_nautilus_view_new_component),
+	(gnv_cmd_file_print):
+	* src/ephy-nautilus-view.h:
+	* src/ephy-shell.c: (ephy_shell_get_type), (ephy_shell_class_init),
+	(ephy_automation_factory_cb), (ephy_automation_factory_new),
+	(ephy_shell_init), (server_timeout), (ephy_shell_startup),
+	(ephy_shell_finalize), (ephy_shell_new_tab),
+	(ephy_shell_get_session), (ephy_shell_get_bookmarks),
+	(ephy_shell_get_toolbars_model), (ephy_shell_get_bookmarks_editor),
+	(ephy_shell_get_history_window),
+	(ephy_shell_get_print_setup_dialog), (ephy_shell_delete_on_exit):
+	* src/ephy-shell.h:
+	* src/ephy-window.c: (ephy_window_set_print_preview),
+	(ephy_window_print):
+	* src/ephy-window.h:
+	* src/window-commands.c: (window_cmd_file_print_setup),
+	(window_cmd_file_print_preview):
+	* src/window-commands.h:
+
+	Split print dialogue in print setup and actual print, and move
+	print preview into the menus too. Made print setup a global dialogue,
+	print a per-window dialogue.
+
+	* lib/ephy-dialog.c: (set_value_from_pref), (set_pref_from_value),
+	(set_value_from_combobox), (set_combo_box_from_value),
+	(set_radiobuttongroup_from_value), (set_pref_from_info_and_emit),
+	(togglebutton_clicked_cb), (radiobutton_clicked_cb),
+	(spinbutton_timeout_cb), (changed_cb), (init_props), (load_info),
+	(save_info), (impl_show), (ephy_dialog_set_size_group),
+	(ephy_dialog_construct), (run_response_cb), (ephy_dialog_run),
+	(ephy_dialog_set_parent), (ephy_dialog_class_init),
+	(ephy_dialog_new_with_parent):
+	* lib/ephy-dialog.h:
+	* src/language-editor.c: (language_editor_class_init):
+	* src/language-editor.h:
+	* src/pdm-dialog.c: (pdm_dialog_init):
+	* src/prefs-dialog.c: (fonts_language_changed_cb),
+	(create_fonts_language_menu), (prefs_dialog_init),
+	(prefs_language_more_button_clicked_cb):
+
+	Slight api change; port callers.
+
 2003-12-02  David Bordoley  <bordoley@msu.edu>
 
 	* help/C/epiphany.xml:

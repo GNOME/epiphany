@@ -57,11 +57,17 @@ struct EphyDialogClass
 {
 	GObjectClass parent_class;
 
-	void		(* construct)	(EphyDialog *dialog,
-					 const EphyDialogProperty *properties,
-					 const char *file,
-					 const char *name);
-	void		(* show)	(EphyDialog *dialog);
+	/* Signals */
+
+	void	(* changed)	(EphyDialog *dialog,
+				 const GValue *value);
+
+	/* Methods */
+	void	(* construct)	(EphyDialog *dialog,
+				 const EphyDialogProperty *properties,
+				 const char *file,
+				 const char *name);
+	void	(* show)	(EphyDialog *dialog);
 };
 
 struct EphyDialog
@@ -93,8 +99,8 @@ void		ephy_dialog_set_data_column	(EphyDialog *dialog,
 						 int col);
 
 void		ephy_dialog_set_size_group	(EphyDialog *dialog,
-						 const char **controls_id,
-						 guint n_controls);
+						 const char *first_id,
+						 ...);
 
 int		ephy_dialog_run			(EphyDialog *dialog);
 

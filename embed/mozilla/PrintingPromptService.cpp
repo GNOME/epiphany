@@ -26,6 +26,7 @@
 
 #include "print-dialog.h"
 #include "ephy-embed.h"
+#include "ephy-command-manager.h"
 #include "MozillaPrivate.h"
 #include "PrintingPromptService.h"
 
@@ -49,26 +50,36 @@ GPrintingPromptService::~GPrintingPromptService()
 NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIWebBrowserPrint *webBrowserPrint, nsIPrintSettings *printSettings)
 {
 	EphyDialog *dialog;
-	EmbedPrintInfo *info;
-	nsresult rv = NS_OK;
+	nsresult rv = NS_ERROR_ABORT;
 
 	GtkWidget *gtkParent = MozillaFindGtkParent(parent);
-	EphyEmbed *embed = EPHY_EMBED (MozillaFindEmbed (parent));
+	if (!gtkParent) return NS_ERROR_ABORT;
 
-	dialog = print_dialog_new_with_parent (gtkParent, embed, &info);
+	EphyEmbed *embed = EPHY_EMBED (MozillaFindEmbed (parent));
+	if (!embed) return NS_ERROR_ABORT;
+
+	dialog = ephy_print_dialog_new (gtkParent, embed, TRUE);
 	ephy_dialog_set_modal (dialog, TRUE);
 
-	gint ret = ephy_dialog_run (dialog);
-	if(ret == GTK_RESPONSE_OK)
+	int ret = ephy_dialog_run (dialog);
+	if (ret == GTK_RESPONSE_OK)
 	{
-		MozillaCollatePrintSettings(info, printSettings);
-		print_free_info(info);
+		EmbedPrintInfo *info;
+
+		info = ephy_print_get_print_info ();
+
+		/* work around mozilla bug which borks when printing selection without having one */
+		if (info->pages == 2 && ephy_command_manager_can_do_command
+			(EPHY_COMMAND_MANAGER (embed), "cmd_copy") == FALSE)
+		{
+			info->pages = 0;
+		}
+
+		MozillaCollatePrintSettings (info, printSettings);
+
+		ephy_print_info_free (info);
 
 		rv = NS_OK;
-	}
-	else
-	{
-		rv = NS_ERROR_ABORT;
 	}
 
 	g_object_unref (dialog);

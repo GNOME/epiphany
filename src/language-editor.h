@@ -51,7 +51,7 @@ struct LanguageEditorClass
 {
         EphyDialogClass parent_class;
 
-	void (* changed) (GSList *codes);
+	void (* list_changed) (GSList *codes);
 };
 
 GType           language_editor_get_type	(void);

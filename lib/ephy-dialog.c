@@ -59,6 +59,7 @@ typedef enum
 typedef struct
 {
 	const char *id;
+	EphyDialog *dialog;
 	char *pref;
 	EphyDialogApplyType apply_type;
 	GtkWidget *widget;
@@ -86,6 +87,14 @@ struct EphyDialogPrivate
 };
 
 #define SPIN_DELAY 0.20
+
+enum
+{
+	CHANGED,
+	LAST_SIGNAL
+};
+
+static guint signals [LAST_SIGNAL] = { 0, };
 
 static void ephy_dialog_class_init (EphyDialogClass *klass);
 static void ephy_dialog_init	   (EphyDialog *window);
@@ -151,40 +160,24 @@ set_sensitivity (PropertyInfo *info, gboolean sensitive)
 static void
 set_value_from_pref (PropertyInfo *info, GValue *value)
 {
-	GConfValue *gcvalue;
-	GConfValueType value_type;
 	char *text;
 
-	gcvalue = eel_gconf_get_value (info->pref);
-	if (gcvalue == NULL)
+	switch (info->data_type)
 	{
-		/* ugly hack around what appears to be a gconf bug
-		 * it returns a NULL GConfValue for a valid string pref
-		 * which is "" by default */
-		value_type = GCONF_VALUE_STRING;
-	}
-	else
-	{
-		value_type = gcvalue->type;
-		gconf_value_free (gcvalue);
-	}
-
-	switch (value_type)
-	{
-		case GCONF_VALUE_STRING:
+		case G_TYPE_STRING:
 			g_value_init (value, G_TYPE_STRING);
 			text = eel_gconf_get_string (info->pref);
 			g_value_take_string (value, text ? text : g_strdup (""));
 			break;
-		case GCONF_VALUE_INT:
+		case G_TYPE_INT:
 			g_value_init (value, G_TYPE_INT);
 			g_value_set_int (value, eel_gconf_get_integer (info->pref));
 			break;
-		case GCONF_VALUE_FLOAT:
+		case G_TYPE_FLOAT:
 			g_value_init (value, G_TYPE_FLOAT);
 			g_value_set_float (value, eel_gconf_get_float (info->pref));
 			break;
-		case GCONF_VALUE_BOOL:
+		case G_TYPE_BOOLEAN:
 			g_value_init (value, G_TYPE_BOOLEAN);
 			g_value_set_boolean (value, eel_gconf_get_boolean (info->pref));
 			break;
@@ -193,19 +186,19 @@ set_value_from_pref (PropertyInfo *info, GValue *value)
 			break;
 	}
 
-	if (!G_VALUE_HOLDS (value, info->data_type))
-	{
-		g_warning ("Pref %s has wrong value type for id %s!\n", info->pref, info->id);
-	}
-
-	LOG ("id[%s], pref[%s]: %s", info->id, info->pref, g_strdup_value_contents (value))
+	LOG ("id[%s], pref[%s] = %s", info->id, info->pref, g_strdup_value_contents (value))
 }
 
 static void
 set_pref_from_value (PropertyInfo *info, GValue *value)
 {
 	const char *pref = info->pref;
-	g_return_if_fail (G_VALUE_HOLDS (value, info->data_type));
+
+	if (!G_VALUE_HOLDS (value, info->data_type))
+	{
+		g_warning ("Value type mismatch for id[%s], pref[%s]", info->id, info->pref);
+		return;
+	}
 
 	switch (info->data_type)
 	{
@@ -277,8 +270,6 @@ set_value_from_combobox (PropertyInfo *info, GValue *value)
 		GtkTreeIter iter;
 
 		model = gtk_combo_box_get_model (GTK_COMBO_BOX (info->widget));
-
-		g_return_if_fail (gtk_tree_model_get_column_type (model, info->data_col) == info->data_type);
 
 		if (gtk_tree_model_iter_nth_child (model, &iter, NULL, index))
 		{
@@ -544,8 +535,6 @@ set_combo_box_from_value (PropertyInfo *info, const  GValue *value)
 
 		model = gtk_combo_box_get_model (GTK_COMBO_BOX (info->widget));
 
-		g_return_if_fail (gtk_tree_model_get_column_type (model, info->data_col) == info->data_type);
-
 		valid = gtk_tree_model_get_iter_first (model, &iter);
 		while (valid)
 		{
@@ -582,6 +571,7 @@ set_combo_box_from_value (PropertyInfo *info, const  GValue *value)
 		info->sane_state = FALSE;
 
 		g_return_if_fail (index >= 0);
+		return;
 	}
 
 	LOG ("index[%s] is %d", info->id, index)
@@ -615,6 +605,7 @@ set_radiobuttongroup_from_value (PropertyInfo *info, const GValue *value)
 	{
 		info->sane_state = FALSE;
 		g_return_if_fail (index >= 0 && index < length);
+		return;
 	}
 
 	button = GTK_TOGGLE_BUTTON (g_slist_nth_data (list, index));
@@ -708,30 +699,32 @@ set_info_from_value (PropertyInfo *info, const GValue *value)
 /* widget changed callbacks */
 
 static void
-set_pref_from_info (PropertyInfo *info)
+set_pref_from_info_and_emit (PropertyInfo *info)
 {
 	GValue value = { 0, };
 
-	if (info->pref != NULL && info->sane_state)
+	if (!info->sane_state)
 	{
-		set_value_from_info (info, &value);
-		set_pref_from_value (info, &value);
-		g_value_unset (&value);
+		g_warning ("Not emitting/persisting insane state of id[%s]", info->id);
+		return;
 	}
 
-	if (info->pref != NULL && !info->sane_state)
+	set_value_from_info (info, &value);
+
+	g_signal_emit (info->dialog, signals[CHANGED], g_quark_from_string (info->id), &value);
+
+	if (info->apply_type == PT_AUTOAPPLY && info->pref != NULL)
 	{
-		g_warning ("Not persisting insane state of id[%s] to pref %s!\n", info->id, info->pref);
+		set_pref_from_value (info, &value);
 	}
+
+	g_value_unset (&value);
 }
 
 static void
 togglebutton_clicked_cb (GtkWidget *widget, PropertyInfo *info)
 {
-	if (info->apply_type == PT_AUTOAPPLY)
-	{
-		set_pref_from_info (info);
-	}
+	set_pref_from_info_and_emit (info);
 }
 
 static void
@@ -742,10 +735,7 @@ radiobutton_clicked_cb (GtkWidget *widget, PropertyInfo *info)
 		return;
 	}
 
-	if (info->apply_type == PT_AUTOAPPLY)
-	{
-		set_pref_from_info (info);
-	}
+	set_pref_from_info_and_emit (info);
 }
 
 static gboolean
@@ -774,7 +764,7 @@ spinbutton_timeout_cb (PropertyInfo *info)
 		 * and set in the pref. Otherwise the old value is used */
 		gtk_spin_button_update (GTK_SPIN_BUTTON (info->widget));
 
-		set_pref_from_info (info);
+		set_pref_from_info_and_emit (info);
 
 		/* done, don't run again */
 		return FALSE;
@@ -810,27 +800,7 @@ spinbutton_changed_cb (GtkWidget *widget, PropertyInfo *info)
 static void
 changed_cb (GtkWidget *widget, PropertyInfo *info)
 {
-	if (info->apply_type == PT_AUTOAPPLY)
-	{
-		set_pref_from_info (info);
-	}
-}
-
-static void
-set_info_from_pref (PropertyInfo *info)
-{
-	GValue value = { 0, };
-
-	g_return_if_fail (info->widget != NULL);
-
-	if (info->pref != NULL)
-	{
-		set_value_from_pref (info, &value);
-		set_info_from_value (info, &value);
-		g_value_unset (&value);
-	
-		set_sensitivity (info, eel_gconf_key_is_writable (info->pref));
-	}
+	set_pref_from_info_and_emit (info);
 }
 
 static void
@@ -895,8 +865,9 @@ init_props (EphyDialog *dialog, const EphyDialogProperty *properties, GladeXML *
 	for (i = 0 ; properties[i].id != NULL; i++)
 	{
 		PropertyInfo *info = g_new0 (PropertyInfo, 1);
-		
+
 		info->id = properties[i].id;
+		info->dialog = dialog;
 		info->pref = g_strdup (properties[i].pref);
 		info->apply_type = properties[i].apply_type;
 		info->string_enum = NULL;
@@ -950,7 +921,21 @@ init_props (EphyDialog *dialog, const EphyDialogProperty *properties, GladeXML *
 static void
 load_info (gpointer key, PropertyInfo *info, EphyDialog *dialog)
 {
-	set_info_from_pref (info);
+	GValue value = { 0, };
+
+	g_return_if_fail (info->widget != NULL);
+
+	if (info->pref != NULL)
+	{
+		set_value_from_pref (info, &value);
+		set_info_from_value (info, &value);
+
+		g_signal_emit (info->dialog, signals[CHANGED], g_quark_from_string (info->id), &value);
+
+		g_value_unset (&value);
+	
+		set_sensitivity (info, eel_gconf_key_is_writable (info->pref));
+	}
 
 	info->loaded = TRUE;
 }
@@ -958,10 +943,22 @@ load_info (gpointer key, PropertyInfo *info, EphyDialog *dialog)
 static void
 save_info (gpointer key, PropertyInfo *info, EphyDialog *dialog)
 {
-	if (info->apply_type == PT_NORMAL)
+	GValue value = { 0, };
+
+	if (info->pref == NULL || info->apply_type != PT_NORMAL)
 	{
-		set_pref_from_info (info);
+		return;
 	}
+
+	if (!info->sane_state)
+	{
+		g_warning ("Not persisting insane state of id[%s]", info->id);
+		return;
+	}
+
+	set_value_from_info (info, &value);
+	set_pref_from_value (info, &value);
+	g_value_unset (&value);
 }
 
 static void
@@ -1029,7 +1026,7 @@ impl_show (EphyDialog *dialog)
 
 	setup_default_size (dialog);
 
-	if (dialog->priv->parent)
+	if (dialog->priv->parent != NULL)
 	{
 		/* make the dialog transient again, because it seems to get
 		 * forgotten after gtk_widget_hide
@@ -1111,32 +1108,38 @@ ephy_dialog_set_pref (EphyDialog *dialog,
 
 void
 ephy_dialog_set_size_group (EphyDialog *dialog,
-			    const char **controls_id,
-			    guint n_controls)
+			    const char *first_id,
+			    ...)
 {
 	GtkSizeGroup *size_group;
-	int i;
+	va_list vl;
 
 	size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
-	for (i = 0; i < n_controls; i++)
+	va_start (vl, first_id);
+
+	while (first_id != NULL)
 	{
 		PropertyInfo *info;
 
-		info = lookup_info (dialog, controls_id[i]);
+		info = lookup_info (dialog, first_id);
 		g_return_if_fail (info != NULL);
 
 		g_return_if_fail (info->widget != NULL);
 
 		gtk_size_group_add_widget (size_group, info->widget);
+
+		first_id = va_arg (vl, const char*);
 	}
+
+	va_end (vl);
 }
 
 void
 ephy_dialog_construct (EphyDialog *dialog,
-			 const EphyDialogProperty *properties,
-			 const char *file,
-			 const char *name)
+		       const EphyDialogProperty *properties,
+		       const char *file,
+		       const char *name)
 {
 	EphyDialogClass *klass = EPHY_DIALOG_GET_CLASS (dialog);
 	return klass->construct (dialog, properties, file, name);
@@ -1149,11 +1152,50 @@ ephy_dialog_show (EphyDialog *dialog)
 	klass->show (dialog);
 }
 
+#if 0
+static void
+run_response_cb (GtkWidget *dialog,
+		 int response,
+		 int *result)
+{
+	*result = response;
+
+	gtk_grab_remove (dialog);
+	LOG ("run_response_cb: leaving gtk level %d", gtk_main_level())
+	gtk_main_quit();
+}
+#endif
+
 int
 ephy_dialog_run (EphyDialog *dialog)
 {
 	ephy_dialog_show (dialog);
 
+#if 0
+	if (dialog->priv->parent != NULL && dialog->priv->modal == FALSE)
+	{
+		GtkWindowGroup *group;
+		int response = 0;
+
+		group = GTK_WINDOW (dialog->priv->parent)->group;
+		if (group == NULL)
+		{
+			group = gtk_window_group_new ();
+			gtk_window_group_add_window (group, GTK_WINDOW (dialog->priv->parent));
+			g_object_unref (group);
+		}
+
+		gtk_window_group_add_window (group, GTK_WINDOW (dialog->priv->dialog));
+		g_signal_connect(dialog->priv->dialog, "response",
+				 G_CALLBACK (run_response_cb), &response);
+		gtk_grab_add (dialog->priv->dialog);
+		LOG ("ephy_dialog_run before main(): level %d", gtk_main_level())
+		gtk_main ();
+		LOG ("ephy_dialog_run after main(): level %d", gtk_main_level())
+
+		return response;
+	}
+#endif
 	return gtk_dialog_run (GTK_DIALOG (dialog->priv->dialog));
 }
 
@@ -1254,14 +1296,7 @@ static void
 ephy_dialog_set_parent (EphyDialog *dialog,
 			GtkWidget *parent)
 {
-	g_return_if_fail (dialog->priv->parent == NULL);
-	g_return_if_fail (GTK_IS_WINDOW (parent));
-	g_return_if_fail (GTK_IS_WINDOW (dialog->priv->dialog));
-
 	dialog->priv->parent = parent;
-
-	gtk_window_set_transient_for (GTK_WINDOW (dialog->priv->dialog),
-				      GTK_WINDOW (parent));
 
 	g_object_notify (G_OBJECT (dialog), "parent-window");
 }
@@ -1318,6 +1353,17 @@ ephy_dialog_class_init (EphyDialogClass *klass)
 	klass->construct = impl_construct;
 	klass->show = impl_show;
 
+	signals[CHANGED] =
+		g_signal_new ("changed",
+			      EPHY_TYPE_DIALOG,
+			      G_SIGNAL_RUN_FIRST | G_SIGNAL_DETAILED,
+			      G_STRUCT_OFFSET (EphyDialogClass, changed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE,
+			      1,
+			      G_TYPE_POINTER);
+
 	g_object_class_install_property (object_class,
 					 PROP_PARENT_WINDOW,
 					 g_param_spec_object ("parent-window",
@@ -1346,6 +1392,8 @@ ephy_dialog_new (void)
 EphyDialog *
 ephy_dialog_new_with_parent (GtkWidget *parent_window)
 {
+	g_return_val_if_fail (parent_window != NULL, NULL);
+
 	return EPHY_DIALOG (g_object_new (EPHY_TYPE_DIALOG,
 					  "parent-window", parent_window,
 					  NULL));

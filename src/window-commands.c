@@ -69,6 +69,35 @@ window_cmd_edit_find (GtkAction *action,
 }
 
 void
+window_cmd_file_print_setup (GtkAction *action,
+			     EphyWindow *window)
+{
+	EphyDialog *dialog;
+
+	dialog = EPHY_DIALOG (ephy_shell_get_print_setup_dialog (ephy_shell));
+
+	ephy_dialog_show (dialog);
+}
+
+void
+window_cmd_file_print_preview (GtkAction *action,
+			       EphyWindow *window)
+{
+	EphyEmbed *embed;
+	EmbedPrintInfo *info;
+
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (EPHY_IS_EMBED (embed));
+
+	info = ephy_print_get_print_info ();
+	info->preview = TRUE;
+
+	ephy_embed_print (embed, info);
+
+	ephy_window_set_print_preview (window, TRUE);
+}
+
+void
 window_cmd_file_print (GtkAction *action,
 		       EphyWindow *window)
 {

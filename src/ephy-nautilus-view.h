@@ -33,9 +33,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_NAUTILUS_VIEW_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_NAUTILUS_VIEW))
 #define EPHY_NAUTILUS_VIEW_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_NAUTILUS_VIEW, EphyNautilusViewClass))
 
-typedef struct EphyNautilusView EphyNautilusView;
-typedef struct EphyNautilusViewClass EphyNautilusViewClass;
-typedef struct EphyNautilusViewPrivate EphyNautilusViewPrivate;
+typedef struct EphyNautilusView		EphyNautilusView;
+typedef struct EphyNautilusViewClass	EphyNautilusViewClass;
+typedef struct EphyNautilusViewPrivate	EphyNautilusViewPrivate;
 
 struct EphyNautilusView
 {
@@ -50,36 +50,9 @@ struct EphyNautilusViewClass
 	NautilusViewClass parent_class;
 };
 
+GType		ephy_nautilus_view_get_type		(void);
 
-GType			ephy_nautilus_view_get_type			(void);
-BonoboObject *		ephy_nautilus_view_new_component		(EphyShell *gs);
-
-/* old public methods, probably all of them are going to be killed */
-
-void
-ephy_nautilus_view_set_title			(EphyNautilusView *view,
-						 const gchar *title);
-void
-ephy_nautilus_view_set_location			(EphyNautilusView *view,
-						 const gchar *uri);
-void
-ephy_nautilus_view_set_statusbar		(EphyNautilusView *view,
-						 const gchar *message);
-void
-ephy_nautilus_view_report_load_underway		(EphyNautilusView *view);
-
-void
-ephy_nautilus_view_report_load_complete		(EphyNautilusView *view);
-
-void
-ephy_nautilus_view_report_load_progress		(EphyNautilusView *view,
-						 double value);
-void
-ephy_nautilus_view_report_zoom			(EphyNautilusView *view,
-						 gint level);
-
-void ephy_nautilus_view_open_in_new_window	(EphyNautilusView *view,
-						 const gchar *url);
+BonoboObject   *ephy_nautilus_view_new_component	(EphyShell *shell);
 
 G_END_DECLS
 

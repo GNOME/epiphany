@@ -703,7 +703,14 @@ impl_print (EphyEmbed *embed,
 
         nsCOMPtr<nsIPrintSettings> options;
         result = mpriv->browser->GetPrintSettings(getter_AddRefs(options));
-        if (!NS_SUCCEEDED (result)) return;
+        if (NS_FAILED (result) || !options) return;
+
+	/* work around mozilla bug which borks when printing selection without having one */
+	if (info->pages == 2 && ephy_command_manager_can_do_command
+		(EPHY_COMMAND_MANAGER (embed), "cmd_copy") == FALSE)
+	{
+		info->pages = 0;
+	}
 
 	MozillaCollatePrintSettings(info, options);
 
