@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: galeon 1.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-31 13:34+0100\n"
-"PO-Revision-Date: 2004-01-31 13:35+0100\n"
+"POT-Creation-Date: 2004-02-10 10:33+0100\n"
+"PO-Revision-Date: 2004-02-10 10:34+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -88,7 +88,9 @@ msgstr "Slå av redigering av verktøylinjer"
 msgid ""
 "Disable all historical information by disabling the back button, not "
 "allowing the history dialog and hiding the most used bookmarks list."
-msgstr "Slå av all historisk informasjon ved å slå av tilbakeknappen, historikkdialogen og skjule listen over oftest brukte bokmerker."
+msgstr ""
+"Slå av all historisk informasjon ved å slå av tilbakeknappen, "
+"historikkdialogen og skjule listen over oftest brukte bokmerker."
 
 #: data/epiphany-lockdown.schemas.in.h:10
 msgid "Disable the user's ability to edit their bookmarks."
@@ -662,7 +664,7 @@ msgstr "_Finn:"
 msgid "_Next"
 msgstr "_Neste"
 
-#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:538
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:533
 msgid "_Pause"
 msgstr "_Pause"
 
@@ -1021,7 +1023,7 @@ msgid "Cut the Selection"
 msgstr "Klipp ut utvalget"
 
 #: data/ui/nautilus-epiphany-view.xml.h:10
-#: embed/ephy-embed-popup-control.c:547
+#: embed/ephy-embed-popup-control.c:551
 msgid "Download Link"
 msgstr "Last ned lenke"
 
@@ -1126,67 +1128,67 @@ msgstr "_Finn..."
 msgid "_Print..."
 msgstr "_Skriv ut..."
 
-#: embed/downloader-view.c:230
+#: embed/downloader-view.c:225
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: embed/downloader-view.c:234
+#: embed/downloader-view.c:229
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: embed/downloader-view.c:304 lib/widgets/ephy-cell-renderer-progress.c:35
+#: embed/downloader-view.c:299 lib/widgets/ephy-cell-renderer-progress.c:35
 #: src/ephy-window.c:1147
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: embed/downloader-view.c:353
+#: embed/downloader-view.c:348
 #, c-format
 msgid "About %d second left"
 msgid_plural "About %d seconds left"
 msgstr[0] "Omtrent %d sekund igjen"
 msgstr[1] "Omtrent %d sekunder igjen"
 
-#: embed/downloader-view.c:361
+#: embed/downloader-view.c:356
 #, c-format
 msgid "About %d minute left"
 msgid_plural "About %d minutes left"
 msgstr[0] "Omtrent %d minutt igjen"
 msgstr[1] "Omtrent %d minutter igjen"
 
-#: embed/downloader-view.c:368
+#: embed/downloader-view.c:363
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d nedlasting"
 msgstr[1] "%d nedlastinger"
 
-#: embed/downloader-view.c:466
+#: embed/downloader-view.c:461
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:476
+#: embed/downloader-view.c:471
 msgid "File"
 msgstr "Fil"
 
-#: embed/downloader-view.c:489
+#: embed/downloader-view.c:484
 msgid "Remaining"
 msgstr "Gjenstår"
 
-#: embed/downloader-view.c:533
+#: embed/downloader-view.c:528
 msgid "_Resume"
 msgstr "_Gjenoppta"
 
-#: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:344
+#: embed/ephy-embed-popup-control.c:561 src/popup-commands.c:344
 msgid "Save Image As"
 msgstr "Lagre bilde som"
 
-#: embed/ephy-embed-popup-control.c:641
+#: embed/ephy-embed-popup-control.c:645
 msgid "Save Page As"
 msgstr "Lagre siden som"
 
-#: embed/ephy-embed-popup-control.c:650 src/popup-commands.c:432
+#: embed/ephy-embed-popup-control.c:654 src/popup-commands.c:432
 msgid "Save Background As"
 msgstr "Lagre bakgrunn som"
 
@@ -1614,10 +1616,8 @@ msgstr "Last ned filen?"
 #: embed/mozilla/ContentHandler.cpp:302
 msgid ""
 "It's not possible to view this file because there is no application "
-"installed that can open it.You can save it instead."
-msgstr ""
-"Det er ikke mulig å vise denne filen fordi det ikke finnes applikasjoner "
-"installert som kan åpne den. Du kan lagre den i stedet."
+"installed that can open it. You can save it instead."
+msgstr "Det er ikke mulig å vise denne filen fordi det ikke finnes installerte applikasjoner som kan åpne den. Du kan lagre den i stedet."
 
 #: embed/mozilla/EphyHeaderSniffer.cpp:289
 #: src/bookmarks/ephy-bookmarks-import.c:247
@@ -1983,7 +1983,7 @@ msgstr ""
 msgid "GConf Error"
 msgstr "GConf-feil"
 
-#: lib/egg/egg-editable-toolbar.c:504
+#: lib/egg/egg-editable-toolbar.c:510
 msgid "_Remove Toolbar"
 msgstr "Fje_rn verktøylinje"
 
@@ -2000,7 +2000,7 @@ msgstr ""
 "verktøylinjene i oppføringstabellen for å fjerne den."
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:71 src/prefs-dialog.c:1113
+#: lib/ephy-file-helpers.c:71 src/prefs-dialog.c:1115
 msgid "Downloads"
 msgstr "Nedlastinger"
 
@@ -2137,11 +2137,7 @@ msgstr "400%"
 msgid "Failed"
 msgstr "Feilet"
 
-#: lib/widgets/ephy-zoom-control.c:138
-msgid "_Zoom"
-msgstr "_Zoom"
-
-#: src/bookmarks/ephy-bookmark-action.c:219
+#: src/bookmarks/ephy-bookmark-action.c:221
 #, c-format
 msgid "%s:"
 msgstr "%s:"
@@ -2387,7 +2383,7 @@ msgid "_Search:"
 msgstr "_Søk:"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:1357
-#: src/bookmarks/ephy-topic-action.c:621 src/ephy-window.c:968
+#: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:968
 msgid "Bookmarks"
 msgstr "Bokmerker"
 
@@ -2486,7 +2482,7 @@ msgstr "Andre kodinger"
 msgid "_Automatic"
 msgstr "_Automatisk"
 
-#: src/ephy-go-action.c:80 src/ephy-go-action.c:97 src/toolbar.c:409
+#: src/ephy-go-action.c:73 src/toolbar.c:409
 msgid "Go"
 msgstr "Gå til"
 
@@ -2539,7 +2535,7 @@ msgid "Show only the address column"
 msgstr "Vis kun adressekolonnen"
 
 #: src/ephy-history-window.c:246
-msgid "Clear history"
+msgid "Clear History"
 msgstr "Tøm historikk"
 
 #: src/ephy-history-window.c:278
@@ -2633,13 +2629,13 @@ msgstr "Ikke _gjenopprett"
 msgid "_Recover"
 msgstr "_Gjenopprett"
 
-#: src/ephy-session.c:331
+#: src/ephy-session.c:332
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr ""
 "Epiphany ser ut til å ha krasjet eller blitt terminert ved forrige kjøring."
 
-#: src/ephy-session.c:337
+#: src/ephy-session.c:338
 msgid "You can recover the opened tabs and windows."
 msgstr "Du kan gjenopprette de åpne fanene og vinduene."
 
@@ -2668,30 +2664,30 @@ msgstr ""
 "Epiphany kan ikke brukes nå pga en uventet feil fra Bonobo ved forsøk på å "
 "laste automasjonsobjektet."
 
-#: src/ephy-tab.c:326 src/ephy-tab.c:1140 src/ephy-tab.c:1322
+#: src/ephy-tab.c:327 src/ephy-tab.c:1174 src/ephy-tab.c:1356
 msgid "Blank page"
 msgstr "Tom side"
 
-#: src/ephy-tab.c:747
+#: src/ephy-tab.c:748
 msgid "site"
 msgstr "nettsted"
 
-#: src/ephy-tab.c:771
+#: src/ephy-tab.c:772
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Omdirigerer til %s..."
 
-#: src/ephy-tab.c:775
+#: src/ephy-tab.c:776
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Overfører data fra %s..."
 
-#: src/ephy-tab.c:779
+#: src/ephy-tab.c:780
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Venter på godkjenning fra %s..."
 
-#: src/ephy-tab.c:787
+#: src/ephy-tab.c:788
 #, c-format
 msgid "Loading %s..."
 msgstr "Laster %s..."
@@ -3449,12 +3445,12 @@ msgstr "Vietnamesisk"
 msgid "Walloon"
 msgstr "Walloon"
 
-#: src/prefs-dialog.c:1055
+#: src/prefs-dialog.c:1057
 #, c-format
 msgid "Custom [%s]"
 msgstr "Egendefinert [%s]"
 
-#: src/prefs-dialog.c:1100
+#: src/prefs-dialog.c:1102
 msgid "Desktop"
 msgstr "Skrivebord"
 
@@ -3462,11 +3458,11 @@ msgstr "Skrivebord"
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1108
+#: src/prefs-dialog.c:1110
 msgid "Home"
 msgstr "Hjem"
 
-#: src/prefs-dialog.c:1323
+#: src/prefs-dialog.c:1325
 msgid "Select a directory"
 msgstr "Velg en katalog"
 
