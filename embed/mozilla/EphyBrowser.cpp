@@ -340,7 +340,7 @@ nsresult EphyBrowser::SetPrintPreviewMode (PRBool previewMode)
 		print->GetGlobalPrintSettings (getter_AddRefs(settings));
 
 		info = ephy_print_get_print_info ();
-		MozillaCollatePrintSettings (info, settings);
+		MozillaCollatePrintSettings (info, settings, TRUE);
 		ephy_print_info_free (info);
 
 		rv = print->PrintPreview (nsnull, mDOMWindow, nsnull);

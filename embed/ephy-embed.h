@@ -86,7 +86,6 @@ typedef struct
 	int frame_type;
 	int orientation;
 	gboolean print_color;
-	gboolean preview;
 
 	/*
 	 * &T - title

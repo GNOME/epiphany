@@ -27,4 +27,5 @@ GtkWidget *MozillaFindEmbed	(nsIDOMWindow *aDOMWindow);
 GtkWidget *MozillaFindGtkParent (nsIDOMWindow *aDOMWindow);
 
 NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
-				       nsIPrintSettings *settings);
+				       nsIPrintSettings *settings,
+				       gboolean preview);

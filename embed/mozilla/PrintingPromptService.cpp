@@ -95,7 +95,7 @@ NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIW
 		info->pages = 0;
 	}
 
-	MozillaCollatePrintSettings (info, printSettings);
+	MozillaCollatePrintSettings (info, printSettings, FALSE);
 
 	ephy_print_info_free (info);
 

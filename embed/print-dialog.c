@@ -208,7 +208,6 @@ ephy_print_get_print_info (void)
 	info->footer_center_string = g_strdup("");
 
 	info->frame_type = 0;
-	info->preview = FALSE;
 
 	return info;
 }
