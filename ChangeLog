@@ -1,5 +1,12 @@
 2005-03-14  Christian Persch  <chpe@cvs.gnome.org>
 
+        * src/ephy-tabs-menu.c: (tab_added_cb):
+	
+        Use connect_object, to guard against "title" signal emitted
+        when the window is dying. Fixes bug #169833.
+			
+2005-03-14  Christian Persch  <chpe@cvs.gnome.org>
+
         * src/ephy-tabs-menu.c: (tab_removed_cb):
 	
         Fix signal handler disconnection; bug #170353.
