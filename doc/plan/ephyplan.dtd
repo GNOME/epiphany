@@ -2,12 +2,13 @@
 
 <!ELEMENT plan (item*)>
 
-<!ELEMENT item (title,description,status,responsible)>
+<!ELEMENT item (bugzilla|description|responsible|status|title)*>
 <!ELEMENT title (#PCDATA)>
 <!ELEMENT description (#PCDATA)>
 <!ELEMENT status EMPTY>
 <!ELEMENT responsible (#PCDATA)>
 
+<!ATTLIST bugzilla id CDATA #REQUIRED>
 <!ATTLIST plan version CDATA #REQUIRED>
-<!ATTLIST status id (completed|delayed|designed|implementing|orphan|pending) #REQUIRED>
 <!ATTLIST responsible email CDATA #REQUIRED>
+<!ATTLIST status id (completed|delayed|designed|implementing|orphan|pending) #REQUIRED>
