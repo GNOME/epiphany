@@ -1,5 +1,12 @@
 2004-05-29  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/window-commands.c: (window_cmd_view_reload):
+
+	Fix reload logic not to use forced reload by default.
+	Patch by C. J. N. Breame, fixes bug #143365
+
+2004-05-29  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-debug.h:
 
 	Revert varargs change, it doesn't work for LOG("Message") without
