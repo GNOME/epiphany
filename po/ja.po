@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-13 13:45+0900\n"
-"PO-Revision-Date: 2005-02-13 13:42+0900\n"
+"POT-Creation-Date: 2005-03-02 09:43+0900\n"
+"PO-Revision-Date: 2005-03-02 09:04+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -126,7 +126,7 @@ msgstr "Epiphany をフルスクリーン・モードにロックします。"
 msgid "Browse the web"
 msgstr "ウェブを閲覧します"
 
-#: ../data/epiphany.desktop.in.h:2 ../src/ephy-main.c:177
+#: ../data/epiphany.desktop.in.h:2 ../src/ephy-main.c:234
 msgid "Epiphany Web Browser"
 msgstr "Epiphany ウェブ・ブラウザ"
 
@@ -571,7 +571,7 @@ msgstr "ページのタイトルをヘッダに印刷するかどうかを指定
 
 #: ../data/epiphany.schemas.in.h:80
 msgid "x-western"
-msgstr "x-western"
+msgstr "ja"
 
 #: ../data/glade/certificate-dialogs.glade.h:1
 msgid "<b>Fingerprints</b>"
@@ -1460,16 +1460,16 @@ msgstr "その他"
 msgid "Local files"
 msgstr "ローカル・ファイル"
 
-#: ../embed/mozilla/ContentHandler.cpp:147
-#: ../embed/mozilla/EphyHeaderSniffer.cpp:358
+#: ../embed/mozilla/ContentHandler.cpp:155
+#: ../embed/mozilla/EphyHeaderSniffer.cpp:365
 msgid "Save"
 msgstr "保存"
 
-#: ../embed/mozilla/ContentHandler.cpp:258
+#: ../embed/mozilla/ContentHandler.cpp:269
 msgid "Download the unsafe file?"
 msgstr "安全ではないファイルをダウンロードしますか？"
 
-#: ../embed/mozilla/ContentHandler.cpp:261
+#: ../embed/mozilla/ContentHandler.cpp:272
 msgid ""
 "This type of file could potentially damage your documents or invade your "
 "privacy. It's not safe to open it directly. You can save it instead."
@@ -1478,13 +1478,13 @@ msgstr ""
 "能性が潜んでいます。直接開くのは危険です。そのかわり保存することは可能です。"
 
 #. translators: %s is the name of the application
-#: ../embed/mozilla/ContentHandler.cpp:272
+#: ../embed/mozilla/ContentHandler.cpp:283
 #, c-format
 msgid "Open this file with \"%s\"?"
 msgstr "このファイルを \"%s\" で開きますか？"
 
 #. translators: %s is the name of the application
-#: ../embed/mozilla/ContentHandler.cpp:277
+#: ../embed/mozilla/ContentHandler.cpp:288
 #, c-format
 msgid ""
 "It's not possible to view this file type directly in the browser. You can "
@@ -1493,11 +1493,11 @@ msgstr ""
 "この種類のファイルを直接ブラウザで表示することはできません。\"%s\" を使って開"
 "くか、保存して下さい。"
 
-#: ../embed/mozilla/ContentHandler.cpp:287
+#: ../embed/mozilla/ContentHandler.cpp:298
 msgid "Download the file?"
 msgstr "ファイルをダウンロードしますか？"
 
-#: ../embed/mozilla/ContentHandler.cpp:290
+#: ../embed/mozilla/ContentHandler.cpp:301
 msgid ""
 "It's not possible to view this file because there is no application "
 "installed that can open it. You can save it instead."
@@ -1505,7 +1505,7 @@ msgstr ""
 "このファイルを開くことが可能なアプリケーションがインストールされていないの"
 "で、表示することはできません。そのかわり保存することは可能です。"
 
-#: ../embed/mozilla/ContentHandler.cpp:295
+#: ../embed/mozilla/ContentHandler.cpp:306
 msgid "_Save As..."
 msgstr "別名で保存(_S)..."
 
@@ -1882,7 +1882,7 @@ msgstr ""
 "このページはセキュアな接続を介して読み込まれていますが、入力した情報はセキュ"
 "アではない接続を介して送信され、第三者から簡単に傍受される恐れがあります。"
 
-#: ../embed/mozilla/MozDownload.cpp:604
+#: ../embed/mozilla/MozDownload.cpp:611
 msgid "Files"
 msgstr "ファイル"
 
@@ -1900,7 +1900,7 @@ msgstr "ファイル"
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 
-#: ../embed/mozilla/mozilla-embed-single.cpp:561
+#: ../embed/mozilla/mozilla-embed-single.cpp:563
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr "現在、Epiphany は利用できません。Mozilla の初期化に失敗しました。"
 
@@ -1934,31 +1934,31 @@ msgid "All supported types"
 msgstr "サポートしている全種類"
 
 #. The name of the default downloads folder
-#: ../lib/ephy-file-helpers.c:81 ../src/prefs-dialog.c:1446
+#: ../lib/ephy-file-helpers.c:89 ../src/prefs-dialog.c:1446
 msgid "Downloads"
 msgstr "ダウンロード"
 
-#: ../lib/ephy-file-helpers.c:182
+#: ../lib/ephy-file-helpers.c:190
 #, c-format
 msgid "Failed to find %s"
 msgstr "%s の検索に失敗しました"
 
-#: ../lib/ephy-file-helpers.c:255
+#: ../lib/ephy-file-helpers.c:263
 #, c-format
 msgid "%s exists, please move it out of the way."
 msgstr "%s は存在します。別の場所に移動して下さい。"
 
-#: ../lib/ephy-file-helpers.c:261
+#: ../lib/ephy-file-helpers.c:269
 #, c-format
 msgid "Failed to create directory %s."
 msgstr "フォルダ %s を作成できませんでした。"
 
-#: ../lib/ephy-gui.c:210
+#: ../lib/ephy-gui.c:223
 #, c-format
 msgid "Overwrite \"%s\"?"
 msgstr "\"%s\" を上書きしますか？"
 
-#: ../lib/ephy-gui.c:214
+#: ../lib/ephy-gui.c:227
 msgid ""
 "A file with this name already exists. If you choose to overwrite this file, "
 "the contents will be lost."
@@ -1966,15 +1966,15 @@ msgstr ""
 "同名のファイルが存在します。このファイルを上書きすると、その内容が失われま"
 "す。"
 
-#: ../lib/ephy-gui.c:218
+#: ../lib/ephy-gui.c:231
 msgid "_Overwrite"
 msgstr "上書きする(_O)"
 
-#: ../lib/ephy-gui.c:220
+#: ../lib/ephy-gui.c:233
 msgid "Overwrite File?"
 msgstr "ファイルの上書き？"
 
-#: ../lib/ephy-gui.c:256
+#: ../lib/ephy-gui.c:269
 #, c-format
 msgid "Could not display help: %s"
 msgstr "ヘルプを表示できませんでした: %s"
@@ -2646,7 +2646,7 @@ msgstr "別のエンコーディングを選択します"
 msgid "_Automatic"
 msgstr "自動(_A)"
 
-#: ../src/ephy-fullscreen-popup.c:301 ../src/ephy-toolbar.c:666
+#: ../src/ephy-fullscreen-popup.c:292 ../src/ephy-toolbar.c:666
 msgid "Leave Fullscreen"
 msgstr "フルスクリーンのままにする"
 
@@ -2737,51 +2737,51 @@ msgstr[1] "%d 日前"
 msgid "Sites"
 msgstr "サイト"
 
-#: ../src/ephy-main.c:55
+#: ../src/ephy-main.c:57
 msgid "Open a new tab in an existing Epiphany window"
 msgstr "既存の Epiphany ウィンドウの中に新しいタブを開く"
 
-#: ../src/ephy-main.c:58
+#: ../src/ephy-main.c:60
 msgid "Run Epiphany in full screen mode"
 msgstr "Epiphany をフルスクリーン・モードで起動する"
 
-#: ../src/ephy-main.c:61
+#: ../src/ephy-main.c:63
 msgid "Load the given session file"
 msgstr "指定したセッションを読み込む"
 
-#: ../src/ephy-main.c:62 ../src/ephy-main.c:68
+#: ../src/ephy-main.c:64 ../src/ephy-main.c:70
 msgid "FILE"
 msgstr "FILE"
 
-#: ../src/ephy-main.c:64
+#: ../src/ephy-main.c:66
 msgid "Add a bookmark (don't open any window)"
 msgstr "ブックマークを追加する (ウィンドウは開かない)"
 
-#: ../src/ephy-main.c:65
+#: ../src/ephy-main.c:67
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:67
+#: ../src/ephy-main.c:69
 msgid "Import bookmarks from the given file"
 msgstr "指定されたファイルからブックマークをインポートする"
 
-#: ../src/ephy-main.c:70
+#: ../src/ephy-main.c:72
 msgid "Launch the bookmarks editor"
 msgstr "ブックマーク・エディタを起動する"
 
-#: ../src/ephy-main.c:173
+#: ../src/ephy-main.c:226
 msgid "Ephy"
 msgstr "Ephy"
 
-#: ../src/ephy-notebook.c:892
+#: ../src/ephy-notebook.c:893
 msgid "Close tab"
 msgstr "タブを閉じます"
 
-#: ../src/ephy-session.c:372
+#: ../src/ephy-session.c:388
 msgid "Recover previous browser windows and tabs?"
 msgstr "前回のウィンドウとタブを復元しますか？"
 
-#: ../src/ephy-session.c:376
+#: ../src/ephy-session.c:392
 msgid ""
 "Epiphany appears to have exited unexpectedly the last time it was run. You "
 "can recover the opened windows and tabs."
@@ -2789,15 +2789,15 @@ msgstr ""
 "Epiphany が前回の実行中に突然クラッシュして強制終了したようです。その時の状態"
 "に復元することが可能です。"
 
-#: ../src/ephy-session.c:380
+#: ../src/ephy-session.c:396
 msgid "_Don't Recover"
 msgstr "復元しない(_D)"
 
-#: ../src/ephy-session.c:382
+#: ../src/ephy-session.c:398
 msgid "_Recover"
 msgstr "復元する(_R)"
 
-#: ../src/ephy-session.c:384
+#: ../src/ephy-session.c:400
 msgid "Crash Recovery"
 msgstr "Epiphany クラッシュ・リカバリ"
 
@@ -2841,26 +2841,26 @@ msgstr ""
 "Bonobo がオートメーション・オブジェクトの場所を特定する際に予期しないエラーが"
 "発生したため、現在、Epiphany は利用できません。"
 
-#: ../src/ephy-tab.c:434 ../src/ephy-tab.c:1811
+#: ../src/ephy-tab.c:446 ../src/ephy-tab.c:1823
 msgid "Blank page"
 msgstr "空のページ"
 
-#: ../src/ephy-tab.c:1187
+#: ../src/ephy-tab.c:1199
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "%s へリダイレクト中..."
 
-#: ../src/ephy-tab.c:1191
+#: ../src/ephy-tab.c:1203
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "%s からデータの転送中..."
 
-#: ../src/ephy-tab.c:1195
+#: ../src/ephy-tab.c:1207
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "%s からの認証待ちです..."
 
-#: ../src/ephy-tab.c:1203
+#: ../src/ephy-tab.c:1215
 #, c-format
 msgid "Loading %s..."
 msgstr "%s の読み込み中..."
@@ -3594,19 +3594,19 @@ msgstr "有効期限:"
 msgid "End of current session"
 msgstr "現在のセッションの最後"
 
-#: ../src/popup-commands.c:245
+#: ../src/popup-commands.c:246
 msgid "Download Link"
 msgstr "リンク先のダウンロード"
 
-#: ../src/popup-commands.c:253
+#: ../src/popup-commands.c:254
 msgid "Save Link As"
 msgstr "リンク先を別名で保存"
 
-#: ../src/popup-commands.c:260
+#: ../src/popup-commands.c:261
 msgid "Save Image As"
 msgstr "画像を別名で保存"
 
-#: ../src/popup-commands.c:355
+#: ../src/popup-commands.c:353
 msgid "Save Background As"
 msgstr "背景を別名で保存"
 
@@ -3920,7 +3920,7 @@ msgstr "フォルダの選択"
 msgid "Check this out!"
 msgstr "Check this out!"
 
-#: ../src/window-commands.c:797
+#: ../src/window-commands.c:775
 msgid "Epiphany"
 msgstr "Epiphany"
 
@@ -3932,7 +3932,7 @@ msgstr "Epiphany"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:810
+#: ../src/window-commands.c:788
 msgid "translator-credits"
 msgstr ""
 "相花 毅 <aihana@gnome.gr.jp>\n"
