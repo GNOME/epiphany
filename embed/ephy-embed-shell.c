@@ -196,9 +196,24 @@ ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell)
 EphyEmbedSingle *
 ephy_embed_shell_get_embed_single (EphyEmbedShell *shell)
 {
+
 	if (!shell->priv->embed_single)
 	{
-		shell->priv->embed_single = ephy_embed_single_new ("mozilla");
+		EphyEmbedSingle *single;
+		gboolean res;
+
+		single = mozilla_embed_single_new ();
+		res = mozilla_embed_single_init_services
+			(MOZILLA_EMBED_SINGLE (single));
+
+		if (res)
+		{
+			shell->priv->embed_single = single;
+		}
+		else
+		{
+			g_object_unref (single);
+		}
 	}
 
 	return shell->priv->embed_single;

@@ -170,13 +170,31 @@ ephy_shell_init (EphyShell *gs)
 
 	/* This ensures mozilla is fired up */
 	single = ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (gs));
+	if (single != NULL)
+	{
+		g_signal_connect (G_OBJECT (single),
+				  "new_window_orphan",
+				  G_CALLBACK(ephy_shell_new_window_cb),
+				  NULL);
 
-	g_signal_connect (G_OBJECT (single),
-			  "new_window_orphan",
-			  G_CALLBACK(ephy_shell_new_window_cb),
-			  NULL);
+		ephy_init_services (gs);
+	}
+	else
+	{
+		GtkWidget *dialog;
 
-	ephy_init_services (gs);
+		dialog = gtk_message_dialog_new
+			(NULL,
+                         GTK_DIALOG_MODAL,
+                         GTK_MESSAGE_ERROR,
+                         GTK_BUTTONS_CLOSE,
+                         _("Epiphany can't be used now. "
+                         "Mozilla initialization failed. Check your "
+                         "MOZILLA_FIVE_HOME environmental variable."));
+		gtk_dialog_run (GTK_DIALOG (dialog));
+
+		exit (0);
+	}
 }
 
 static void

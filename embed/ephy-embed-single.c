@@ -129,19 +129,6 @@ ephy_embed_single_finalize (GObject *object)
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-EphyEmbedSingle *
-ephy_embed_single_new (const char *type)
-{
-	if (strcmp (type, "mozilla") == 0)
-	{
-		return EPHY_EMBED_SINGLE (g_object_new
-			(MOZILLA_EMBED_SINGLE_TYPE, NULL));
-	}
-
-	g_assert_not_reached ();
-	return NULL;
-}
-
 gresult
 ephy_embed_single_clear_cache (EphyEmbedSingle *shell)
 {

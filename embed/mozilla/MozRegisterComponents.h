@@ -16,18 +16,15 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef __MozRegisterComponents_h
-#define __MozRegisterComponents_h
+#ifndef MOZREGISTERCOMPONENTS_H
+#define MOZREGISTERCOMPONENTS_H
 
-#include <glib.h>
+gboolean mozilla_register_components		(void);
 
-G_BEGIN_DECLS
+gboolean mozilla_register_FtpProtocolHandler	(void);
 
-gboolean mozilla_register_components (void);
-gboolean mozilla_register_FtpProtocolHandler (void);
-gboolean mozilla_unregister_FtpProtocolHandler (void);
+gboolean mozilla_unregister_FtpProtocolHandler	(void);
+
 gboolean mozilla_register_MailtoProtocolHandler (void);
 
-G_END_DECLS
-
-#endif // __MozRegisterComponents_h
+#endif // MOZREGISTERCOMPONENTS_H

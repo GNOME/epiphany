@@ -156,8 +156,6 @@ struct EphyEmbedSingleClass
 
 GType             ephy_embed_single_get_type            (void);
 
-EphyEmbedSingle  *ephy_embed_single_new                 (const char *type);
-
 gresult           ephy_embed_single_clear_cache         (EphyEmbedSingle *shell);
 
 gresult           ephy_embed_single_set_offline_mode    (EphyEmbedSingle *shell,

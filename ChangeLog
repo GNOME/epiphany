@@ -1,3 +1,27 @@
+2003-07-04  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* configure.in:
+
+	Remove use of acconfig.h.
+
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_get_embed_single):
+	* embed/ephy-embed-single.c:
+	* embed/ephy-embed-single.h:
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/EphyWrapper.cpp:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozRegisterComponents.cpp:
+	* embed/mozilla/MozRegisterComponents.h:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-embed-single.h:
+	* src/bookmarks/ephy-bookmarks-import.c: (bookmark_add),
+	(xbel_parse_folder), (ephy_bookmarks_import_mozilla):
+	* src/ephy-shell.c: (ephy_shell_init):
+
+	Show an alert when mozilla cant start instead of crashing.
+	Do not import bookmarks dups.
+	Cleanup some mozilla code headers inclusion.
+
 2003-07-03  Jeremy Katz  <katzj@redhat.com>
 
 	* lib/ephy-node.c (callback): Must use va_copy when assigning

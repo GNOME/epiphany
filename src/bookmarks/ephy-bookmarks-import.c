@@ -43,22 +43,29 @@ typedef struct _XbelInfo
 	char *smarturl;
 } XbelInfo;
 
-static EphyNode *
-set_folder (EphyBookmarks *bookmarks,
-	    EphyNode *bookmark,
-	    const char *name)
+static void
+bookmark_add (EphyBookmarks *bookmarks,
+	      const char *title,
+	      const char *address,
+	      const char *topic_name)
 {
 	EphyNode *topic;
+	EphyNode *bmk;
 
-	topic = ephy_bookmarks_find_keyword (bookmarks, name, FALSE);
-	if (topic == NULL)
+	if (ephy_bookmarks_find_bookmark (bookmarks, address)) return;
+
+	bmk = ephy_bookmarks_add (bookmarks, title, address);
+
+	if (topic_name)
 	{
-		topic = ephy_bookmarks_add_keyword (bookmarks, name);
+		topic = ephy_bookmarks_find_keyword (bookmarks, topic_name, FALSE);
+		if (topic == NULL)
+		{
+			topic = ephy_bookmarks_add_keyword (bookmarks, topic_name);
+		}
+
+		ephy_bookmarks_set_keyword (bookmarks, topic, bmk);
 	}
-
-	ephy_bookmarks_set_keyword (bookmarks, topic, bookmark);
-
-	return topic;
 }
 
 gboolean
@@ -144,7 +151,6 @@ xbel_parse_folder (EphyBookmarks *bookmarks,
 		{
 			XbelInfo *xbel;
 			xmlChar *url;
-			EphyNode *bmk;
 
 			xbel = g_new0 (XbelInfo, 1);
 			xbel->title = NULL;
@@ -156,14 +162,7 @@ xbel_parse_folder (EphyBookmarks *bookmarks,
 						    child->children,
 						    xbel);
 
-			/* FIXME need to import also smart bookmark */
-			bmk = ephy_bookmarks_add (bookmarks,
-					          xbel->title,
-					          url);
-			if (keyword)
-			{
-				set_folder (bookmarks, bmk, keyword);
-			}
+			bookmark_add (bookmarks, xbel->title, url, keyword);
 
 			xmlFree (url);
 
@@ -393,7 +392,6 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 	gchar *parsedname;
 	GString *url = g_string_new (NULL);
 	char *current_folder = NULL;
-	EphyNode *bmk;
 
 	if (!(bf = fopen (filename, "r"))) {
 		g_warning ("Failed to open file: %s\n", filename);
@@ -411,10 +409,9 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 			break;
 		case NS_SITE:
 			parsedname = ns_parse_bookmark_item (name);
-			bmk = ephy_bookmarks_add (bookmarks,
-					          parsedname,
-					          url->str);
-			set_folder (bookmarks, bmk, current_folder);
+
+			bookmark_add (bookmarks, parsedname,
+				      url->str, current_folder);
 			break;
 		default:
 			break;

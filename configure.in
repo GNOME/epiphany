@@ -54,30 +54,11 @@ if test "x$enable_nautilus_view" = "xauto"; then
   fi
 fi
 if test "x$enable_nautilus_view" = "xyes"; then
-  AC_DEFINE(ENABLE_NAUTILUS_VIEW)
+  AC_DEFINE(ENABLE_NAUTILUS_VIEW, 1, [Define if the nautilus view has to be built])
   nautilusview_pkgs=libnautilus
 fi
 AC_MSG_RESULT($enable_nautilus_view)
 AM_CONDITIONAL(ENABLE_NAUTILUS_VIEW, test "x$enable_nautilus_view" = "xyes")
-
-dnl See if nautilus is installed in other prefix than epiphany so that we can load
-dnl nautilus throbbers even then.  
-dnl Maybe FIXME: make this check not require libnautilus.pc
-dnl
-nautilus_prefix=`pkg-config --variable=prefix libnautilus 2> /dev/null`
-if test "x${nautilus_prefix}" != "x"; then
-  if test "x${prefix}" = "xNONE"; then
-    epiphany_prefix="${ac_default_prefix}"
-  else
-    epiphany_prefix="${prefix}"
-  fi
-
-  dnl We already search for nautilus throbbers in epiphany prefix, don't add the
-  dnl same directory or we'd show the throbbers twice.
-  if test "x${nautilus_prefix}" != "x${epiphany_prefix}"; then
-    AC_DEFINE_UNQUOTED(NAUTILUS_PREFIX, "${nautilus_prefix}")
-  fi
-fi
 
 PKG_CHECK_MODULES(EPIPHANY_DEPENDENCY, gtk+-2.0 libxml-2.0 libgnomeui-2.0 libglade-2.0 bonobo-activation-2.0 libbonoboui-2.0 >= $LIBBONOBOUI_REQUIRED ORBit-2.0 libglade-2.0 gnome-vfs-2.0 gnome-vfs-module-2.0 gconf-2.0 $nautilusview_pkgs)
 AC_SUBST(EPIPHANY_DEPENDENCY_CFLAGS)
@@ -93,7 +74,6 @@ BONOBO_ACTIVATION_IDL="`$PKG_CONFIG --variable=idldir bonobo-activation-2.0`"
 AC_SUBST(BONOBO_ACTIVATION_IDL)
 
 PKG_CHECK_MODULES(MOZILLA_COMPONENT, mozilla-gtkmozembed)
-dnl AC_DEFINE(ENABLE_MOZILLA_EMBED)
 AC_SUBST(MOZILLA_COMPONENT_CFLAGS)
 AC_SUBST(MOZILLA_COMPONENT_LIBS)
 
@@ -200,7 +180,7 @@ dnl Add the languages which your application supports here.
 ALL_LINGUAS="am ar be ca cs da de el en_GB es fr hu ja ko li nl mk ms no pl pt pt_BR ru sr sr@Latn sv tr vi zh_TW"
 GETTEXT_PACKAGE=epiphany
 AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE")
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package])
 AM_GLIB_GNU_GETTEXT
 
 dnl uninstalled share dir to search data

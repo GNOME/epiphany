@@ -37,7 +37,6 @@
 #include <time.h>
 #include <libgnome/gnome-i18n.h>
 #include <string.h>
-#include "nsBuildID.h"
 #include <nsICacheService.h>
 #include <nsCOMPtr.h>
 #include <nsIPrefService.h>
@@ -45,7 +44,6 @@
 #include <nsIServiceManager.h>
 #include <nsIIOService.h>
 #include <nsIProtocolProxyService.h>
-#include <nsIJVMManager.h>
 #include <nsIAtom.h>
 #include <nsIFontList.h>
 #include <nsISupportsPrimitives.h>
@@ -250,8 +248,6 @@ struct MozillaEmbedSinglePrivate
 	GtkWidget *theme_window;
 };
 
-static NS_DEFINE_CID(kJVMManagerCID, NS_JVMMANAGER_CID);
-
 static GObjectClass *parent_class = NULL;
 
 GType
@@ -306,17 +302,23 @@ mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 	shell_class->show_file_picker = impl_show_file_picker;
 }
 
-static void
+EphyEmbedSingle *
+mozilla_embed_single_new (void)
+{
+	return EPHY_EMBED_SINGLE (g_object_new (MOZILLA_EMBED_SINGLE_TYPE, NULL));
+}
+
+static gboolean
 mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 {
 	nsCOMPtr<nsIPrefService> prefService;
 
         prefService = do_GetService (NS_PREFSERVICE_CONTRACTID);
-	g_return_if_fail (prefService != NULL);
+	if (prefService == NULL) return FALSE;
 
         nsCOMPtr<nsIPrefBranch> pref;
         prefService->GetBranch ("", getter_AddRefs(pref));
-	g_return_if_fail (pref != NULL);
+	if (pref == NULL) return FALSE;
 
 	/* Don't allow mozilla to raise window when setting focus (work around bugs) */
 	pref->SetBoolPref ("mozilla.widget.raise-on-setfocus", PR_FALSE);
@@ -383,6 +385,8 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	sub for embedding apps */
 	pref->SetCharPref ("general.useragent.vendor", "Epiphany");
 	pref->SetCharPref ("general.useragent.vendorSub", VERSION);
+
+	return TRUE;
 }
 
 static char *
@@ -531,13 +535,18 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 {
  	mes->priv = g_new0 (MozillaEmbedSinglePrivate, 1);
 
+	mes->priv->theme_window = NULL;
 	mes->priv->user_prefs =
 		g_build_filename (ephy_dot_dir (), 
 				  MOZILLA_PROFILE_DIR,
 				  MOZILLA_PROFILE_NAME,
 				  MOZILLA_PROFILE_FILE,
 				  NULL);
+}
 
+gboolean
+mozilla_embed_single_init_services (MozillaEmbedSingle *single)
+{
 	/* Pre initialization */
 	mozilla_init_home ();
 	mozilla_init_profile ();
@@ -545,24 +554,27 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 	/* Fire up the best */
 	gtk_moz_embed_push_startup ();
 
-	mozilla_set_default_prefs (mes);
+	mozilla_init_single (single);
+
+	if (!mozilla_set_default_prefs (single))
+	{
+		return FALSE;
+	}
 
 	/* FIXME: This should be removed when mozilla
 	 * bugs 207000 and 207001 are fixed.
 	 */
-	mozilla_setup_colors (mes);
+	mozilla_setup_colors (single);
 
 	START_PROFILER ("Mozilla prefs notifiers")
-	mozilla_notifiers_init (EPHY_EMBED_SINGLE (mes));
+	mozilla_notifiers_init (EPHY_EMBED_SINGLE (single));
 	STOP_PROFILER ("Mozilla prefs notifiers")
 
-	mozilla_init_single (mes);
-	
 	mozilla_register_components ();
 
 	mozilla_register_external_protocols ();
 
-	/* FIXME alert if fails */
+	return TRUE;
 }
 
 static void 
@@ -632,7 +644,10 @@ mozilla_embed_single_finalize (GObject *object)
 
 	g_free (mes->priv->user_prefs);
 
-	gtk_widget_destroy (mes->priv->theme_window);
+	if (mes->priv->theme_window)
+	{
+		gtk_widget_destroy (mes->priv->theme_window);
+	}
 	
         g_free (mes->priv);
 }

@@ -173,13 +173,11 @@ static const nsModuleComponentInfo sModuleComps[] = {
 
 static NS_DEFINE_CID(knsFtpProtocolHandlerCID, NS_FTPPROTOCOLHANDLER_CID);
 
-//Annoying globals to track the mozilla ftp handler so it can be restored.
+/* Annoying globals to track the mozilla ftp handler so it can be restored. */
 static PRBool ftpRegistered = PR_FALSE;
 static nsCOMPtr<nsIFactory> nsFtpFactory;
 
-/* FIXME why we need to use "C" here ???? */
-
-extern  "C" gboolean
+gboolean
 mozilla_register_components (void)
 {
 	gboolean ret = TRUE;
@@ -214,7 +212,8 @@ mozilla_register_components (void)
 /**
  * mozilla_register_FtpProtocolHandler: Register Ftp Protocol Handler
  */
-extern "C" gboolean mozilla_register_FtpProtocolHandler (void)
+gboolean
+mozilla_register_FtpProtocolHandler (void)
 {
 	if (ftpRegistered == PR_TRUE) return TRUE;
 
@@ -251,7 +250,8 @@ extern "C" gboolean mozilla_register_FtpProtocolHandler (void)
 /**
  * mozilla_unregister_FtpProtocolHandler: Unregister Ftp Protocol Handler
  */
-extern "C" gboolean mozilla_unregister_FtpProtocolHandler (void)
+gboolean
+mozilla_unregister_FtpProtocolHandler (void)
 {
 	if (ftpRegistered == PR_FALSE) return FALSE;
         
@@ -273,7 +273,7 @@ extern "C" gboolean mozilla_unregister_FtpProtocolHandler (void)
 /**
  * mozilla_register_MailtoProtocolHandler: Register Mailto Protocol Handler
  */
-extern "C" gboolean 
+gboolean 
 mozilla_register_MailtoProtocolHandler (void)
 {
 	gboolean retVal = TRUE;
