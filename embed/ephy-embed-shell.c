@@ -29,6 +29,7 @@
 enum
 {
 	NEW_WINDOW,
+	COMMAND,
 	LAST_SIGNAL
 };
 
@@ -113,6 +114,17 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                               2,
                               G_TYPE_POINTER,
 			      G_TYPE_INT);
+	ephy_embed_shell_signals[COMMAND] =
+                g_signal_new ("command",
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              G_SIGNAL_RUN_LAST,
+                              G_STRUCT_OFFSET (EphyEmbedShellClass, command),
+                              NULL, NULL,
+                              ephy_marshal_VOID__STRING_STRING,
+                              G_TYPE_NONE,
+                              2,
+                              G_TYPE_STRING,
+			      G_TYPE_STRING);
 }
 
 static void

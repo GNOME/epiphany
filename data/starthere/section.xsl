@@ -55,9 +55,15 @@
 </xsl:template>
 
 <xsl:template match="action">
-<a href="action:{@id}?{@param}">
+<a href="start-here:{@id}?{@param}">
   <xsl:apply-templates/>
 </a>
+</xsl:template>
+
+<xsl:template match="smartbookmark">
+<a type="text/smartbookmark" href="{@normal}" rel="{@smart}" title="{@title}">
+  <xsl:apply-templates/>
+</a><br/>
 </xsl:template>
 
 </xsl:stylesheet>

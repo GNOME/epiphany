@@ -139,6 +139,10 @@ struct EphyEmbedShellClass
 					         EphyEmbed **new_embed,
 						 EmbedChromeMask chromemask);
 
+	void		(* command)             (EphyEmbedShell *shell,
+						 char *command,
+						 char *param);
+
 	/* Methods */
 
 	void		(* get_capabilities)    (EphyEmbedShell *shell,

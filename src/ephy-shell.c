@@ -26,7 +26,9 @@
 #include "ephy-window.h"
 #include "ephy-file-helpers.h"
 #include "ephy-thread-helpers.h"
+#include "ephy-bookmarks-import.h"
 
+#include <string.h>
 #include <libgnomeui/gnome-client.h>
 #include <bonobo/bonobo-main.h>
 #include <bonobo/bonobo-i18n.h>
@@ -121,6 +123,38 @@ ephy_shell_class_init (EphyShellClass *klass)
 }
 
 static void
+ephy_shell_command_cb (EphyEmbedShell *shell,
+		       char *command,
+		       char *param,
+		       gpointer data)
+{
+	EphyBookmarks *bookmarks;
+	GtkWidget *dialog;
+
+	bookmarks = ephy_shell_get_bookmarks (EPHY_SHELL (shell));
+
+	if (strcmp (command, "import-bookmarks") == 0)
+	{
+		ephy_bookmarks_import_mozilla (bookmarks, param);
+
+		dialog = gtk_message_dialog_new
+			(NULL,
+                         GTK_DIALOG_MODAL,
+                         GTK_MESSAGE_ERROR,
+                         GTK_BUTTONS_OK,
+                         _("Bookmarks imported successfully."));
+		gtk_dialog_run (GTK_DIALOG (dialog));
+		gtk_widget_destroy (dialog);
+	}
+	else if (strcmp (command, "configure-network") == 0)
+	{
+		ephy_file_launch_application ("gnome-network-preferences",
+					      NULL,
+					      FALSE);
+	}
+}
+
+static void
 ephy_shell_new_window_cb (EphyEmbedShell *shell,
 			  EphyEmbed **new_embed,
                           EmbedChromeMask chromemask,
@@ -171,6 +205,11 @@ ephy_shell_init (EphyShell *gs)
 	g_signal_connect (G_OBJECT (gs),
 			  "new_window_orphan",
 			  G_CALLBACK(ephy_shell_new_window_cb),
+			  NULL);
+
+	g_signal_connect (G_OBJECT (gs),
+			  "command",
+			  G_CALLBACK(ephy_shell_command_cb),
 			  NULL);
 
 	ephy_init_services (gs);

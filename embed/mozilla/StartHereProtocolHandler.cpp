@@ -18,6 +18,9 @@
 
 #include "ephy-file-helpers.h"
 #include "ephy-start-here.h"
+#include "ephy-embed-shell.h"
+
+#include <string.h>
 
 #include "nsCOMPtr.h"
 #include "nsIFactory.h"
@@ -121,6 +124,19 @@ NS_IMETHODIMP GStartHereProtocolHandler::NewChannel(nsIURI *aURI,
 	rv = aURI->GetPath(path);
 	if (NS_FAILED(rv)) return rv;
 
+	if (g_str_has_prefix (path.get(), "import-bookmarks"))
+	{
+		g_signal_emit_by_name (embed_shell, "command", "import-bookmarks",
+				       path.get() + strlen ("import-bookmarks?"));
+		return NS_ERROR_FAILURE;
+	}
+	else if (g_str_has_prefix (path.get(), "configure-network"))
+	{
+		g_signal_emit_by_name (embed_shell, "command", "configure-network",
+				       NULL);
+		return NS_ERROR_FAILURE;	
+	}
+
     	nsCOMPtr<nsIStorageStream> sStream;
 	nsCOMPtr<nsIOutputStream> stream;
 
@@ -131,7 +147,8 @@ NS_IMETHODIMP GStartHereProtocolHandler::NewChannel(nsIURI *aURI,
 	if (NS_FAILED(rv)) return rv;
 
 	sh = ephy_start_here_new ();
-	buf = ephy_start_here_get_page (sh, "index");
+	buf = ephy_start_here_get_page
+		(sh, path.IsEmpty() ? "index" : path.get ());
 	aBaseURI = ephy_start_here_get_base_uri (sh);	
 	
 	rv = stream->Write (buf, strlen (buf), &bytesWritten);
