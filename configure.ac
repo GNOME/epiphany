@@ -364,13 +364,6 @@ AC_DEFINE([GTKMOZEMBED_BROKEN_RELOAD],[1],[Define if GtkMozEmbed has broken relo
 
 AC_MSG_RESULT([couldn't autodetect, assuming yes])
 
-dnl check if mozilla's stack walker is accessible
-
-AC_CHECK_LIB([xpcom],[_Z15DumpStackToFileP8_IO_FILE],
-	[AC_DEFINE([HAVE_DUMPSTACKTOFILE], [1], [Define if DumpStackToFile is available]) result=yes],
-	[result=no],
-	[`pkg-config --libs $MOZILLA-xpcom`])
-
 dnl restore flags
 CXXFLAGS=$_SAVE_CXXFLAGS
 AC_LANG_POP(C++)

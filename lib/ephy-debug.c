@@ -28,17 +28,14 @@
 
 #include <glib/gbacktrace.h>
 #include <string.h>
-#include <stdio.h>
 #include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <execinfo.h>
 
 static GHashTable *ephy_profilers_hash = NULL;
 static const char *ephy_profile_modules = NULL;
 static const char *ephy_debug_break = NULL;
-
-#ifdef HAVE_DUMPSTACKTOFILE
-#define DumpStackToFile(f) _Z15DumpStackToFileP8_IO_FILE(f)
-extern void _Z15DumpStackToFileP8_IO_FILE (FILE *f);
-#endif
 
 #endif
 
@@ -85,6 +82,8 @@ log_module (const gchar *log_domain,
 	}
 }
 
+#define MAX_DEPTH 200
+
 static void 
 trap_handler (const char *log_domain,
 	      GLogLevelFlags log_level,
@@ -101,11 +100,11 @@ trap_handler (const char *log_domain,
 	{
 		if (strcmp (ephy_debug_break, "stack") == 0)
 		{
-#ifdef HAVE_DUMPSTACKTOFILE
-			DumpStackToFile (stderr);
-#else
-			g_on_error_stack_trace (g_get_prgname ());
-#endif
+			void *array[MAX_DEPTH];
+			size_t size;
+			
+			size = backtrace (array, MAX_DEPTH);
+			backtrace_symbols_fd (array, size, 2);
 		}
 		else if (strcmp (ephy_debug_break, "trap") == 0)
 		{
@@ -130,8 +129,6 @@ void
 ephy_debug_init (void)
 {
 #ifndef DISABLE_LOGGING
-	const char *debug_break;
-
 	ephy_log_modules = g_getenv ("EPHY_LOG_MODULES");
 	ephy_debug_break = g_getenv ("EPHY_DEBUG_BREAK");
 
