@@ -1,5 +1,13 @@
 2003-06-15  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/session.c: (do_session_resume):
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_download),
+	(ephy_favicon_cache_get):
+
+	Fix mem leaks.
+
+2003-06-15  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/mozilla-embed-single: (control_encodings_list):
 	* embed/mozilla/EventContext.cpp: (EventContext::SetIntProperty),
 	(EventContext::SetStringProperty (const char*, const char*)),

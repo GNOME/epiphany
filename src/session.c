@@ -173,10 +173,11 @@ get_session_filename (const char *filename)
 static void
 do_session_resume (Session *session)
 {
-	const char *crashed_session;
+	char *crashed_session;
 
 	crashed_session = get_session_filename (SESSION_CRASHED);
 	session_load (session, crashed_session);
+	g_free (crashed_session);
 }
 
 static void

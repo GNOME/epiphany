@@ -402,7 +402,7 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 			     const char *filename)
 {
 	EphyEmbedPersist *persist;
-	const char *dest;
+	char *dest;
 
 	LOG ("Download favicon: %s", favicon_url)
 
@@ -418,6 +418,8 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 	ephy_embed_persist_set_flags    (persist, EMBED_PERSIST_BYPASSCACHE);
 	ephy_embed_persist_set_source   (persist, favicon_url);
 	ephy_embed_persist_set_dest     (persist, dest);
+
+	g_free (dest);
 
 	g_object_set_data_full (G_OBJECT (persist), "url",
 				g_strdup (favicon_url), g_free);
@@ -440,7 +442,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 	GTime now;
 	EphyNode *icon;
 	GValue value = { 0, };
-	const char *pix_file;
+	char *pix_file;
 	GdkPixbuf *pixbuf;
 
 	now = time (NULL);
@@ -479,6 +481,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 	g_value_set_int (&value, now);
 	ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_LAST_USED,
 			        &value);
+	g_value_unset (&value);
 
 	if (g_hash_table_lookup (cache->priv->downloads_hash, url) != NULL)
 	{
@@ -490,8 +493,6 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 		(cache->priv->directory,
 		 ephy_node_get_property_string (icon, EPHY_NODE_FAVICON_PROP_FILENAME),
 		 NULL);
-
-	g_hash_table_lookup (cache->priv->icons_hash, url);
 
 	LOG ("Create pixbuf for %s", pix_file)
 
@@ -507,7 +508,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 		pixbuf = scaled;
 	}
 
+	g_free (pix_file);
+
 	return pixbuf;
 }
-
-
