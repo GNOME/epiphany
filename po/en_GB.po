@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany\n"
-"POT-Creation-Date: 2003-06-17 17:45+0200\n"
-"PO-Revision-Date: 2003-06-17 17:58+0200\n"
+"POT-Creation-Date: 2003-06-19 01:08+0200\n"
+"PO-Revision-Date: 2003-06-18 22:16+0200\n"
 "Last-Translator: Christian Persch <chpe@cvs.gnome.org>\n"
 "Language-Team: British English\n"
 "MIME-Version: 1.0\n"
@@ -782,7 +782,7 @@ msgid "Paper"
 msgstr "Paper"
 
 #: data/glade/print.glade.h:26 data/ui/nautilus-epiphany-view.xml.in.h:23
-#: src/ephy-window.c:479
+#: src/ephy-window.c:477
 msgid "Print"
 msgstr "Print"
 
@@ -967,7 +967,7 @@ msgstr "_Edit"
 msgid "_File"
 msgstr "_File"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:34
+#: data/ui/nautilus-epiphany-view.xml.in.h:34 src/ephy-window.c:106
 msgid "_Find..."
 msgstr "_Find..."
 
@@ -1006,8 +1006,13 @@ msgstr "%d of %d KB"
 msgid "%d KB"
 msgstr "%d KB"
 
+#: embed/downloader-view.c:408
+#, c-format
+msgid "%s at %.1f KB/s"
+msgstr "%s at %.1f KB/s"
+
 #: embed/downloader-view.c:519 embed/downloader-view.c:537
-#: src/ephy-window.c:706
+#: src/ephy-window.c:704
 msgid "Unknown"
 msgstr "Unknown"
 
@@ -1691,7 +1696,7 @@ msgstr "Create a new topic"
 #. File Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:160
 #: src/bookmarks/ephy-bookmarks-editor.c:861 src/ephy-history-window.c:130
-#: src/ephy-history-window.c:648
+#: src/ephy-history-window.c:673
 msgid "_Open in New Window"
 msgstr "_Open in New Window"
 
@@ -1701,7 +1706,7 @@ msgstr "Open the selected bookmark in a new window"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:163
 #: src/bookmarks/ephy-bookmarks-editor.c:862 src/ephy-history-window.c:133
-#: src/ephy-history-window.c:649
+#: src/ephy-history-window.c:674
 msgid "Open in New _Tab"
 msgstr "Open in New _Tab"
 
@@ -1771,7 +1776,7 @@ msgstr "Cut the selection"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:188
 #: src/bookmarks/ephy-bookmarks-editor.c:871 src/ephy-history-window.c:150
-#: src/ephy-history-window.c:658 src/ephy-window.c:97
+#: src/ephy-history-window.c:683 src/ephy-window.c:97
 msgid "_Copy"
 msgstr "_Copy"
 
@@ -1867,23 +1872,23 @@ msgstr "Galeon bookmarks"
 msgid "Konqueror bookmarks"
 msgstr "Konqueror bookmarks"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:856 src/ephy-history-window.c:643
+#: src/bookmarks/ephy-bookmarks-editor.c:856 src/ephy-history-window.c:668
 msgid "_Open in New Windows"
 msgstr "_Open in New Windows"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:857 src/ephy-history-window.c:644
+#: src/bookmarks/ephy-bookmarks-editor.c:857 src/ephy-history-window.c:669
 msgid "Open in New _Tabs"
 msgstr "Open in New _Tabs"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:867 src/ephy-history-window.c:654
+#: src/bookmarks/ephy-bookmarks-editor.c:867 src/ephy-history-window.c:679
 msgid "_Copy Address"
 msgstr "_Copy Address"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1119 src/ephy-history-window.c:859
+#: src/bookmarks/ephy-bookmarks-editor.c:1119 src/ephy-history-window.c:884
 msgid "_Search:"
 msgstr "_Search:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1205 src/ephy-window.c:483
+#: src/bookmarks/ephy-bookmarks-editor.c:1205 src/ephy-window.c:481
 msgid "Bookmarks"
 msgstr "Bookmarks"
 
@@ -1891,7 +1896,7 @@ msgstr "Bookmarks"
 msgid "Topics"
 msgstr "Topics"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1335 src/ephy-history-window.c:1045
+#: src/bookmarks/ephy-bookmarks-editor.c:1335 src/ephy-history-window.c:1070
 msgid "Title"
 msgstr "Title"
 
@@ -2006,15 +2011,19 @@ msgstr "Clear your browsing history"
 msgid "Display history help"
 msgstr "Display history help"
 
-#: src/ephy-history-window.c:220
+#: src/ephy-history-window.c:222
 msgid "Clear history"
 msgstr "Clear history"
 
-#: src/ephy-history-window.c:251
+#: src/ephy-history-window.c:254
+msgid "C_lear"
+msgstr "C_lear"
+
+#: src/ephy-history-window.c:276
 msgid "Clear browsing history?"
 msgstr "Clear browsing history?"
 
-#: src/ephy-history-window.c:258
+#: src/ephy-history-window.c:283
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2022,37 +2031,38 @@ msgstr ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 
-#: src/ephy-history-window.c:932
+#: src/ephy-history-window.c:957
 msgid "History"
 msgstr "History"
 
-#: src/ephy-history-window.c:999
+#: src/ephy-history-window.c:1024
 msgid "Sites"
 msgstr "Sites"
 
-#: src/ephy-history-window.c:1049
+#: src/ephy-history-window.c:1074
 msgid "Address"
 msgstr "Address"
 
 #: src/ephy-main.c:71
-msgid "Open a new tab in an existing Ephy window"
+msgid "Open a new tab in an existing Epiphany window"
 msgstr "Open a new tab in an existing Epiphany window"
 
 #: src/ephy-main.c:74
-msgid "Open a new window in an existing Ephy process"
+msgid "Open a new window in an existing Epiphany process"
 msgstr "Open a new window in an existing Epiphany process"
 
 #: src/ephy-main.c:77
-msgid "Do not raise the window when opening a page in an existing Ephy process"
+msgid ""
+"Do not raise the window when opening a page in an existing Epiphany process"
 msgstr ""
 "Do not raise the window when opening a page in an existing Epiphany process"
 
 #: src/ephy-main.c:80
-msgid "Run Ephy in full screen mode"
+msgid "Run Epiphany in full screen mode"
 msgstr "Run Epiphany in full screen mode"
 
 #: src/ephy-main.c:83
-msgid "Attempt to load URL in existing Ephy window"
+msgid "Attempt to load URL in existing Epiphany window"
 msgstr "Attempt to load URL in existing Epiphany window"
 
 #: src/ephy-main.c:86
@@ -2066,7 +2076,7 @@ msgstr "FILE"
 #: src/ephy-main.c:89
 msgid ""
 "Don't open any windows; instead act as a server for quick startup of new "
-"Ephy instances"
+"Epiphany instances"
 msgstr ""
 "Don't open any windows; instead act as a server for quick start up of new "
 "Epiphany instances"
@@ -2080,7 +2090,7 @@ msgid "URL"
 msgstr "URL"
 
 #: src/ephy-main.c:96
-msgid "Close all Ephy windows"
+msgid "Close all Epiphany windows"
 msgstr "Close all Epiphany windows"
 
 #: src/ephy-main.c:99
@@ -2103,43 +2113,53 @@ msgstr "Epiphany Web Browser"
 msgid "Ephy"
 msgstr "Epiphany"
 
-#: src/ephy-main.c:293
-msgid "Ephy already running, using existing process"
-msgstr "Epiphany already running, using existing process"
+#: src/ephy-main.c:189
+msgid ""
+"Epiphany can't be used now. Running the command \"bonobo-slay\" from the "
+"console may fix the problem. If not, you can try rebooting the computer or "
+"installing Epiphany again.\n"
+"\n"
+"Bonobo couldn't locate the GNOME_Epiphany_Automation.server."
+msgstr ""
+"Epiphany can't be used now. Running the command \"bonobo-slay\" from the "
+"console may fix the problem. If not, you can try rebooting the computer or "
+"installing Epiphany again.\n"
+"\n"
+"Bonobo couldn't locate the GNOME_Epiphany_Automation.server file."
 
-#: src/ephy-tab.c:310 src/ephy-tab.c:1085 src/ephy-tab.c:1258
+#: src/ephy-tab.c:309 src/ephy-tab.c:1098 src/ephy-tab.c:1271
 msgid "Blank page"
 msgstr "Blank page"
 
-#: src/ephy-tab.c:644
+#: src/ephy-tab.c:640
 msgid "site"
 msgstr "site"
 
-#: src/ephy-tab.c:668
+#: src/ephy-tab.c:664
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Redirecting to %s..."
 
-#: src/ephy-tab.c:672
+#: src/ephy-tab.c:668
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Transferring data from %s..."
 
-#: src/ephy-tab.c:676
+#: src/ephy-tab.c:672
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Waiting for authorisation from %s..."
 
-#: src/ephy-tab.c:684 src/ephy-tab.c:736
+#: src/ephy-tab.c:680
 #, c-format
 msgid "Loading %s..."
 msgstr "Loading %s..."
 
-#: src/ephy-tab.c:688
+#: src/ephy-tab.c:684
 msgid "Done."
 msgstr "Done."
 
-#: src/ephy-tab.c:1063
+#: src/ephy-tab.c:1077
 msgid "Loading..."
 msgstr "Loading..."
 
@@ -2211,10 +2231,6 @@ msgstr "Paste clipboard"
 #: src/ephy-window.c:104
 msgid "Select the entire page"
 msgstr "Select the entire page"
-
-#: src/ephy-window.c:106
-msgid "_Find"
-msgstr "_Find..."
 
 #: src/ephy-window.c:107
 msgid "Find a string"
@@ -2503,68 +2519,64 @@ msgstr "_Bookmark Link..."
 msgid "_Copy Link Address"
 msgstr "_Copy Link Address"
 
-#: src/ephy-window.c:245
-msgid "Copy _Email Address"
-msgstr "Copy _Email Address"
-
 #. Images
-#: src/ephy-window.c:249
+#: src/ephy-window.c:247
 msgid "Open _Image"
 msgstr "Open _Image"
 
-#: src/ephy-window.c:251
+#: src/ephy-window.c:249
 msgid "Open Image in New _Window"
 msgstr "Open Image in New _Window"
 
-#: src/ephy-window.c:253
+#: src/ephy-window.c:251
 msgid "Open Image in New T_ab"
 msgstr "Open Image in New T_ab"
 
-#: src/ephy-window.c:255
+#: src/ephy-window.c:253
 msgid "_Save Image As..."
 msgstr "_Save Image As..."
 
-#: src/ephy-window.c:257
+#: src/ephy-window.c:255
 msgid "_Use Image As Background"
 msgstr "_Use Image As Background"
 
-#: src/ephy-window.c:259
+#: src/ephy-window.c:257
 msgid "Copy I_mage Address"
 msgstr "Copy I_mage Address"
 
-#: src/ephy-window.c:475
+#: src/ephy-window.c:473
 msgid "Open"
 msgstr "Open"
 
-#: src/ephy-window.c:477
+#: src/ephy-window.c:475
 msgid "Save As"
 msgstr "Save As"
 
-#: src/ephy-window.c:481
+#: src/ephy-window.c:479
 msgid "Bookmark"
 msgstr "Bookmark"
 
-#: src/ephy-window.c:709
+#: src/ephy-window.c:707
 msgid "Insecure"
 msgstr "Insecure"
 
-#: src/ephy-window.c:712
+#: src/ephy-window.c:710
 msgid "Broken"
 msgstr "Broken"
 
-#: src/ephy-window.c:715
+#: src/ephy-window.c:713
 msgid "Medium"
 msgstr "Medium"
 
-#: src/ephy-window.c:719
+#: src/ephy-window.c:717
 msgid "Low"
 msgstr "Low"
 
-#: src/ephy-window.c:723
+#: src/ephy-window.c:721
 msgid "High"
 msgstr "High"
 
-#: src/ephy-window.c:733
+#: src/ephy-window.c:731
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2573,48 +2585,48 @@ msgstr ""
 "Security level: %s\n"
 "%s"
 
-#: src/ephy-window.c:739
+#: src/ephy-window.c:737
 #, c-format
 msgid "Security level: %s"
 msgstr "Security level: %s"
 
-#: src/ephy-window.c:1338
+#: src/ephy-window.c:1336
 msgid "Exit Fullscreen"
 msgstr "Exit Full Screen"
 
-#: src/pdm-dialog.c:229
+#: src/pdm-dialog.c:260
 msgid "Host"
 msgstr "Host"
 
-#: src/pdm-dialog.c:241
+#: src/pdm-dialog.c:272
 msgid "User Name"
 msgstr "User Name"
 
-#: src/pdm-dialog.c:286
+#: src/pdm-dialog.c:317
 msgid "Domain"
 msgstr "Domain"
 
-#: src/pdm-dialog.c:298
+#: src/pdm-dialog.c:329
 msgid "Name"
 msgstr "Name"
 
-#: src/pdm-dialog.c:602
+#: src/pdm-dialog.c:633
 msgid "Cookie Properties"
 msgstr "Cookie Properties"
 
-#: src/pdm-dialog.c:615
+#: src/pdm-dialog.c:646
 msgid "Value:"
 msgstr "Value:"
 
-#: src/pdm-dialog.c:629
+#: src/pdm-dialog.c:660
 msgid "Path:"
 msgstr "Path:"
 
-#: src/pdm-dialog.c:643
+#: src/pdm-dialog.c:674
 msgid "Secure:"
 msgstr "Secure:"
 
-#: src/pdm-dialog.c:657
+#: src/pdm-dialog.c:688
 msgid "Expire:"
 msgstr "Expire:"
 
@@ -2922,10 +2934,19 @@ msgid "_Add a New Toolbar"
 msgstr "_Add a New Toolbar"
 
 #. Translator credits
-#: src/window-commands.c:768
+#: src/window-commands.c:769
 msgid "translator_credits"
 msgstr "Christian Persch"
 
-#: src/window-commands.c:785
+#: src/window-commands.c:786
 msgid "A GNOME browser based on Mozilla"
 msgstr "A GNOME web browser based on Mozilla"
+
+#~ msgid "Ephy already running, using existing process"
+#~ msgstr "Epiphany already running, using existing process"
+
+#~ msgid "_Find"
+#~ msgstr "_Find..."
+
+#~ msgid "Copy _Email Address"
+#~ msgstr "Copy _Email Address"
