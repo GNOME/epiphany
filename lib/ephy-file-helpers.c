@@ -44,6 +44,13 @@
 #undef GNOME_DISABLE_DEPRECATED
 #include <libgnome/gnome-desktop-item.h>
 
+#ifdef HAVE_STARTUP_NOTIFICATION
+#define SN_API_NOT_YET_FROZEN
+#include <libsn/sn.h>
+#include <gdk/gdk.h>
+#include <gdk/gdkx.h>
+#endif
+
 static GHashTable *files = NULL;
 static GHashTable *mime_table = NULL;
 
@@ -458,6 +465,331 @@ ephy_file_check_mime (const char *mime_type)
 	return permission;
 }
 
+/* Copied from nautilus-program-choosing.c */
+
+extern char **environ;
+
+/* Cut and paste from gdkspawn-x11.c */
+static gchar **
+my_gdk_spawn_make_environment_for_screen (GdkScreen  *screen,
+					  gchar     **envp)
+{
+  gchar **retval = NULL;
+  gchar  *display_name;
+  gint    display_index = -1;
+  gint    i, env_len;
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  if (envp == NULL)
+    envp = environ;
+
+  for (env_len = 0; envp[env_len]; env_len++)
+    if (strncmp (envp[env_len], "DISPLAY", strlen ("DISPLAY")) == 0)
+      display_index = env_len;
+
+  retval = g_new (char *, env_len + 1);
+  retval[env_len] = NULL;
+
+  display_name = gdk_screen_make_display_name (screen);
+
+  for (i = 0; i < env_len; i++)
+    if (i == display_index)
+      retval[i] = g_strconcat ("DISPLAY=", display_name, NULL);
+    else
+      retval[i] = g_strdup (envp[i]);
+
+  g_assert (i == env_len);
+
+  g_free (display_name);
+
+  return retval;
+}
+
+#ifdef HAVE_STARTUP_NOTIFICATION
+static void
+sn_error_trap_push (SnDisplay *display,
+		    Display   *xdisplay)
+{
+	gdk_error_trap_push ();
+}
+
+static void
+sn_error_trap_pop (SnDisplay *display,
+		   Display   *xdisplay)
+{
+	gdk_error_trap_pop ();
+}
+
+static char **
+make_spawn_environment_for_sn_context (SnLauncherContext *sn_context,
+				       char             **envp)
+{
+	char **retval;
+	int    i, j;
+
+	retval = NULL;
+	
+	if (envp == NULL) {
+		envp = environ;
+	}
+	
+	for (i = 0; envp[i]; i++) {
+		/* Count length */
+	}
+
+	retval = g_new (char *, i + 2);
+
+	for (i = 0, j = 0; envp[i]; i++) {
+		if (!g_str_has_prefix (envp[i], "DESKTOP_STARTUP_ID=")) {
+			retval[j] = g_strdup (envp[i]);
+			++j;
+	        }
+	}
+
+	retval[j] = g_strdup_printf ("DESKTOP_STARTUP_ID=%s",
+				     sn_launcher_context_get_startup_id (sn_context));
+	++j;
+	retval[j] = NULL;
+
+	return retval;
+}
+
+/* This should be fairly long, as it's confusing to users if a startup
+ * ends when it shouldn't (it appears that the startup failed, and
+ * they have to relaunch the app). Also the timeout only matters when
+ * there are bugs and apps don't end their own startup sequence.
+ *
+ * This timeout is a "last resort" timeout that ignores whether the
+ * startup sequence has shown activity or not.  Metacity and the
+ * tasklist have smarter, and correspondingly able-to-be-shorter
+ * timeouts. The reason our timeout is dumb is that we don't monitor
+ * the sequence (don't use an SnMonitorContext)
+ */
+#define STARTUP_TIMEOUT_LENGTH (30 /* seconds */ * 1000)
+
+typedef struct
+{
+	GdkScreen *screen;
+	GSList *contexts;
+	guint timeout_id;
+} StartupTimeoutData;
+
+static void
+free_startup_timeout (void *data)
+{
+	StartupTimeoutData *std;
+
+	std = data;
+
+	g_slist_foreach (std->contexts,
+			 (GFunc) sn_launcher_context_unref,
+			 NULL);
+	g_slist_free (std->contexts);
+
+	if (std->timeout_id != 0) {
+		g_source_remove (std->timeout_id);
+		std->timeout_id = 0;
+	}
+
+	g_free (std);
+}
+
+static gboolean
+startup_timeout (void *data)
+{
+	StartupTimeoutData *std;
+	GSList *tmp;
+	GTimeVal now;
+	int min_timeout;
+
+	std = data;
+
+	min_timeout = STARTUP_TIMEOUT_LENGTH;
+	
+	g_get_current_time (&now);
+	
+	tmp = std->contexts;
+	while (tmp != NULL) {
+		SnLauncherContext *sn_context;
+		GSList *next;
+		long tv_sec, tv_usec;
+		double elapsed;
+		
+		sn_context = tmp->data;
+		next = tmp->next;
+		
+		sn_launcher_context_get_last_active_time (sn_context,
+							  &tv_sec, &tv_usec);
+
+		elapsed =
+			((((double)now.tv_sec - tv_sec) * G_USEC_PER_SEC +
+			  (now.tv_usec - tv_usec))) / 1000.0;
+
+		if (elapsed >= STARTUP_TIMEOUT_LENGTH) {
+			std->contexts = g_slist_remove (std->contexts,
+							sn_context);
+			sn_launcher_context_complete (sn_context);
+			sn_launcher_context_unref (sn_context);
+		} else {
+			min_timeout = MIN (min_timeout, (STARTUP_TIMEOUT_LENGTH - elapsed));
+		}
+		
+		tmp = next;
+	}
+
+	if (std->contexts == NULL) {
+		std->timeout_id = 0;
+	} else {
+		std->timeout_id = g_timeout_add (min_timeout,
+						 startup_timeout,
+						 std);
+	}
+
+	/* always remove this one, but we may have reinstalled another one. */
+	return FALSE;
+}
+
+static void
+add_startup_timeout (GdkScreen         *screen,
+		     SnLauncherContext *sn_context)
+{
+	StartupTimeoutData *data;
+
+	data = g_object_get_data (G_OBJECT (screen), "nautilus-startup-data");
+	if (data == NULL) {
+		data = g_new (StartupTimeoutData, 1);
+		data->screen = screen;
+		data->contexts = NULL;
+		data->timeout_id = 0;
+		
+		g_object_set_data_full (G_OBJECT (screen), "nautilus-startup-data",
+					data, free_startup_timeout);		
+	}
+
+	sn_launcher_context_ref (sn_context);
+	data->contexts = g_slist_prepend (data->contexts, sn_context);
+	
+	if (data->timeout_id == 0) {
+		data->timeout_id = g_timeout_add (STARTUP_TIMEOUT_LENGTH,
+						  startup_timeout,
+						  data);		
+	}
+}
+
+#endif /* HAVE_STARTUP_NOTIFICATION */
+
+gboolean
+ephy_file_launch_application (GnomeVFSMimeApplication *application,
+			      const char *parameter,
+			      guint32 user_time)
+{
+	GdkScreen       *screen;
+	GList           *uris = NULL;
+	char            *uri;
+	char           **envp;
+	GnomeVFSResult   result;
+#ifdef HAVE_STARTUP_NOTIFICATION
+	SnLauncherContext *sn_context;
+	SnDisplay *sn_display;
+#endif
+
+	g_return_val_if_fail (application != NULL, FALSE);
+	g_return_val_if_fail (parameter != NULL, FALSE);
+
+	uri = gnome_vfs_make_uri_canonical (parameter);
+	if (uri == NULL) return FALSE;
+
+	uris = g_list_prepend (NULL, uri);
+	
+	screen = gdk_screen_get_default ();
+	envp = my_gdk_spawn_make_environment_for_screen (screen, NULL);
+	
+#ifdef HAVE_STARTUP_NOTIFICATION
+	sn_display = sn_display_new (gdk_display,
+				     sn_error_trap_push,
+				     sn_error_trap_pop);
+
+	
+	/* Only initiate notification if application supports it. */
+	if (gnome_vfs_mime_application_supports_startup_notification (application))
+	{
+		char *name;
+
+		sn_context = sn_launcher_context_new (sn_display,
+						      screen ? gdk_screen_get_number (screen) :
+						      DefaultScreen (gdk_display));
+		
+		name = g_filename_display_basename (uri);
+		if (name != NULL) {
+			char *description;
+			
+			sn_launcher_context_set_name (sn_context, name);
+
+			/* FIXME: i18n after string freeze! */
+			description = g_strdup_printf ("Opening %s", name);
+			
+			sn_launcher_context_set_description (sn_context, description);
+
+			g_free (name);
+			g_free (description);
+		}
+		
+		if (!sn_launcher_context_get_initiated (sn_context)) {
+			const char *binary_name;
+			char **old_envp;
+
+			binary_name = gnome_vfs_mime_application_get_binary_name (application);
+		
+			sn_launcher_context_set_binary_name (sn_context,
+							     binary_name);
+			
+			sn_launcher_context_initiate (sn_context,
+						      g_get_prgname () ? g_get_prgname () : "unknown",
+						      binary_name,
+						      (Time) user_time);
+
+			old_envp = envp;
+			envp = make_spawn_environment_for_sn_context (sn_context, envp);
+			g_strfreev (old_envp);
+		}
+	} else {
+		sn_context = NULL;
+	}
+#endif /* HAVE_STARTUP_NOTIFICATION */
+	
+	result = gnome_vfs_mime_application_launch_with_env (application, uris, envp);
+
+#ifdef HAVE_STARTUP_NOTIFICATION
+	if (sn_context != NULL) {
+		if (result != GNOME_VFS_OK) {
+			sn_launcher_context_complete (sn_context); /* end sequence */
+		} else {
+			add_startup_timeout (screen ? screen :
+					     gdk_display_get_default_screen (gdk_display_get_default ()),
+					     sn_context);
+		}
+		sn_launcher_context_unref (sn_context);
+	}
+	
+	sn_display_unref (sn_display);
+#endif /* HAVE_STARTUP_NOTIFICATION */
+
+	g_strfreev (envp);
+	g_list_foreach (uris, (GFunc) g_free,NULL);
+	g_list_free (uris);
+
+	if (result != GNOME_VFS_OK)
+	{
+		g_warning ("Cannot launch application '%s'\n",
+			   gnome_vfs_mime_application_get_name (application));
+	}
+
+	return result == GNOME_VFS_OK;
+}
+
+/* End cut-paste-adapt from nautilus */
+
 static int
 launch_desktop_item (const char *desktop_file,
 		     const char *parameter,
@@ -523,37 +855,6 @@ ephy_file_launch_desktop_file (const char *filename,
 		}
 
 		g_free (path);
-	}
-
-	return ret >= 0;
-}
-
-gboolean
-ephy_file_launch_application (GnomeVFSMimeApplication *application,
-			      const char *parameter,
-			      guint32 user_time)
-{
-	GError *error = NULL;
-	const char *desktop_file;
-	int ret = -1;
-
-	g_return_val_if_fail (application != NULL, FALSE);
-	g_return_val_if_fail (parameter != NULL, FALSE);
-
-	desktop_file = gnome_vfs_mime_application_get_desktop_file_path (application);
-	if (desktop_file != NULL)
-	{
-		ret = launch_desktop_item (desktop_file, parameter, user_time, &error);
-	}
-
-	if (ret == -1 || error != NULL)
-	{
-		/* FIXME We should really warn the user here */
-
-		g_warning ("Cannot launch application '%s': %s\n",
-			   gnome_vfs_mime_application_get_name (application),
-			   error ? error->message : "(unknown error)");
-		g_clear_error (&error);
 	}
 
 	return ret >= 0;
