@@ -357,7 +357,13 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 	selection = gtk_tree_view_get_selection
 		(GTK_TREE_VIEW(action->treeview));
 	llist = gtk_tree_selection_get_selected_rows (selection, &model);
-	
+
+	if (llist == NULL)
+	{
+		/* nothing to delete, return early */
+		return;
+	}
+
 	for (l = llist;l != NULL; l = l->next)
 	{
 		rlist = g_list_prepend (rlist, gtk_tree_row_reference_new
