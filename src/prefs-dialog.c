@@ -78,6 +78,13 @@ struct
 }
 languages [] =
 {
+	/**
+	 * please translate like this: "<your language> (System setting)"
+	 * Examples:
+	 * "de"    translation: "Deutsch (Systemeinstellung)"
+	 * "en_AU" translation: "English, Australia (System setting)" or
+	 *                      "Australian English (System setting)"
+	 */ 
 	{ N_("System language"), "system" },
 	{ N_("Afrikaans"), "ak" },
 	{ N_("Albanian"), "sq" },

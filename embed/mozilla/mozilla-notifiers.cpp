@@ -585,9 +585,15 @@ get_system_language ()
 	const char *lang;
 
 	/**
-	 * translate this as the comma separated list of language ranges
-	 * for your locale, as specified by RFC 2616, 14.4. 
-	 * for example for en_NZ locale this could be "en-nz,en-au,en-gb,en"
+	 * This is a comma separated list of language ranges, as specified
+	 * by RFC 2616, 14.4.
+	 * Always include the basic language code last.
+	 *
+	 * Examples:
+	 * "pt"    translation: "pt"
+	 * "pt_BR" translation: "pt-br,pt"
+	 * "zh_CN" translation: "zh-cn,zh"
+	 * "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
 	 */
 	lang = _("system-language");
 	
