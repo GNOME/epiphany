@@ -441,55 +441,6 @@ ephy_embed_zoom_get (EphyEmbed *embed,
 }
 
 gresult
-ephy_embed_selection_can_cut (EphyEmbed *embed)
-{
-	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
-        return klass->selection_can_cut (embed);
-}
-
-gresult
-ephy_embed_selection_can_copy (EphyEmbed *embed)
-{
-	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
-        return klass->selection_can_copy (embed);
-}
-
-gresult
-ephy_embed_can_paste (EphyEmbed *embed)
-{
-	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
-        return klass->can_paste (embed);
-}
-
-gresult
-ephy_embed_select_all (EphyEmbed *embed)
-{
-	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
-        return klass->select_all (embed);
-}
-
-gresult
-ephy_embed_selection_cut (EphyEmbed *embed)
-{
-	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
-        return klass->selection_cut (embed);
-}
-
-gresult
-ephy_embed_selection_copy (EphyEmbed *embed)
-{
-	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
-        return klass->selection_copy (embed);
-}
-
-gresult
-ephy_embed_paste (EphyEmbed *embed)
-{
-	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
-        return klass->paste (embed);
-}
-
-gresult
 ephy_embed_shistory_count  (EphyEmbed *embed,
                             int *count)
 {

@@ -29,6 +29,7 @@ NOINST_H_FILES = \
 	print-dialog.h
 
 INST_H_FILES = \
+	ephy-command-manager.h		\
 	ephy-embed.h			\
 	ephy-embed-event.h		\
 	ephy-embed-persist.h		\
@@ -41,6 +42,7 @@ INST_H_FILES = \
 
 libephyembed_la_SOURCES = \
 	downloader-view.c		\
+	ephy-command-manager.c		\
 	ephy-download.c			\
 	ephy-embed.c			\
 	ephy-embed-dialog.c		\

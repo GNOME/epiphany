@@ -10,6 +10,7 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/chrome		\
 	-I$(MOZILLA_INCLUDE_ROOT)/content		\
 	-I$(MOZILLA_INCLUDE_ROOT)/cookie		\
+	-I$(MOZILLA_INCLUDE_ROOT)/commandhandler	\
 	-I$(MOZILLA_INCLUDE_ROOT)/docshell		\
 	-I$(MOZILLA_INCLUDE_ROOT)/dom			\
 	-I$(MOZILLA_INCLUDE_ROOT)/exthandler		\

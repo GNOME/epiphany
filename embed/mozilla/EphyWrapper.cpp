@@ -30,6 +30,7 @@
 #include <gtkmozembed_internal.h>
 #include <unistd.h>
 
+#include "nsICommandManager.h"
 #include "nsIContentViewer.h"
 #include "nsIGlobalHistory.h"
 #include "nsIDocShellHistory.h"
@@ -51,7 +52,6 @@
 #include "nsCWebBrowserPersist.h"
 #include "nsNetUtil.h"
 #include "nsIChromeEventHandler.h"
-#include "nsIClipboardCommands.h"
 #include "nsIDOMDocumentStyle.h"
 #include "nsIDocShellTreeItem.h"
 #include "nsIDocShellTreeNode.h"
@@ -712,48 +712,6 @@ nsresult EphyWrapper::ForceEncoding (const char *encoding)
 	return result;
 }
 
-nsresult EphyWrapper::CanCutSelection(PRBool *result)
-{
-	nsCOMPtr<nsIClipboardCommands> clipboard (do_GetInterface(mWebBrowser));
-	return clipboard->CanCutSelection (result);
-}
-
-nsresult EphyWrapper::CanCopySelection(PRBool *result)
-{
-	nsCOMPtr<nsIClipboardCommands> clipboard (do_GetInterface(mWebBrowser));
-	return clipboard->CanCopySelection (result);
-}
-
-nsresult EphyWrapper::CanPaste(PRBool *result)
-{
-	nsCOMPtr<nsIClipboardCommands> clipboard (do_GetInterface(mWebBrowser));
-	return clipboard->CanPaste (result);
-}
-
-nsresult EphyWrapper::CutSelection(void)
-{
-	nsCOMPtr<nsIClipboardCommands> clipboard (do_GetInterface(mWebBrowser));
-	return clipboard->CutSelection ();
-}
-
-nsresult EphyWrapper::CopySelection(void)
-{
-	nsCOMPtr<nsIClipboardCommands> clipboard (do_GetInterface(mWebBrowser));
-	return clipboard->CopySelection ();
-}
-
-nsresult EphyWrapper::Paste(void)
-{
-	nsCOMPtr<nsIClipboardCommands> clipboard (do_GetInterface(mWebBrowser));
-	return clipboard->Paste ();
-}
-
-nsresult EphyWrapper::SelectAll (void)
-{
-	nsCOMPtr<nsIClipboardCommands> clipboard (do_GetInterface(mWebBrowser));
-	return clipboard->SelectAll ();
-}
-
 nsresult EphyWrapper::PushTargetDocument (nsIDOMDocument *domDoc)
 {
 	mTargetDocument = domDoc;
@@ -893,4 +851,13 @@ nsresult EphyWrapper::GetEncodingInfo (EphyEncodingInfo **infoptr)
 	info->hint_encoding_source = (EphyEncodingSource) source;
 
 	return NS_OK;
+}
+
+nsresult EphyWrapper::DoCommand (const char *command)
+{
+	nsCOMPtr<nsICommandManager> cmdManager;
+	cmdManager = do_GetInterface (mWebBrowser);
+	if (!cmdManager) return NS_ERROR_FAILURE;
+
+	return cmdManager->DoCommand (command, nsnull, nsnull);
 }

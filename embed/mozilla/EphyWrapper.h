@@ -48,6 +48,8 @@ public:
 	nsresult Init (GtkMozEmbed *mozembed);
 	nsresult Destroy (void);
 
+	nsresult DoCommand (const char *command);
+
 	nsresult SetZoom (float aTextZoom, PRBool reflow);
 	nsresult GetZoom (float *aTextZoom);
 
@@ -81,21 +83,7 @@ public:
 
 	nsresult GetEncodingInfo (EphyEncodingInfo **infoptr);
 
-	nsresult CanCutSelection(PRBool *result);
-
-	nsresult CanCopySelection(PRBool *result);
-
-	nsresult CanPaste(PRBool *result);
-
-	nsresult CutSelection(void);
-
-	nsresult CopySelection(void);
-
-	nsresult Paste(void);
-
 	nsresult GetMainDOMDocument (nsIDOMDocument **aDOMDocument);
-
-	nsresult SelectAll (void);
 
 	nsresult PushTargetDocument (nsIDOMDocument *domDoc);
 	nsresult PopTargetDocument ();

@@ -231,13 +231,6 @@ struct EphyEmbedClass
 					    gboolean reflow);
 	gresult   (* zoom_get)             (EphyEmbed *embed,
 				            float *zoom);
-	gresult   (* selection_can_cut)    (EphyEmbed *embed);
-	gresult   (* selection_can_copy)   (EphyEmbed *embed);
-	gresult   (* can_paste)            (EphyEmbed *embed);
-	gresult   (* selection_cut)        (EphyEmbed *embed);
-	gresult   (* selection_copy)       (EphyEmbed *embed);
-	gresult   (* paste)                (EphyEmbed *embed);
-	gresult   (* select_all)           (EphyEmbed *embed);
 	gresult   (* shistory_count)	   (EphyEmbed *embed,
 					    int *count);
 	gresult   (* shistory_get_nth)     (EphyEmbed *embed,
@@ -341,21 +334,6 @@ gresult       ephy_embed_zoom_set             (EphyEmbed *embed,
 
 gresult       ephy_embed_zoom_get             (EphyEmbed *embed,
 					       float *zoom);
-
-/* Clipboard */
-gresult       ephy_embed_selection_can_cut    (EphyEmbed *embed);
-
-gresult       ephy_embed_selection_can_copy   (EphyEmbed *embed);
-
-gresult       ephy_embed_can_paste            (EphyEmbed *embed);
-
-gresult       ephy_embed_selection_cut        (EphyEmbed *embed);
-
-gresult       ephy_embed_selection_copy       (EphyEmbed *embed);
-
-gresult       ephy_embed_paste                (EphyEmbed *embed);
-
-gresult       ephy_embed_select_all           (EphyEmbed *embed);
 
 /* Session history */
 gresult       ephy_embed_shistory_count       (EphyEmbed *embed,

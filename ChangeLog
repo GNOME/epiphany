@@ -1,3 +1,34 @@
+2003-10-25  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/Makefile.am:
+	* embed/ephy-command-manager.c: (ephy_command_manager_get_type),
+	(ephy_command_manager_base_init),
+	(ephy_command_manager_do_command),
+	(ephy_command_manager_can_do_command),
+	(ephy_command_manager_observe_command):
+	* embed/ephy-command-manager.h:
+
+	Interface for commands. Useful for undo. (cmd_undo works).
+
+	* embed/ephy-embed.c:
+	* embed/ephy-embed.h:
+
+	Remove all clipboard calls.
+
+	* embed/mozilla/EphyWrapper.cpp:
+	* embed/mozilla/EphyWrapper.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Implement part of the commands interface.
+	No regressions.
+
+	* src/window-commands.c: (window_cmd_edit_cut),
+	(window_cmd_edit_copy), (window_cmd_edit_paste),
+	(window_cmd_edit_select_all):
+
+	Implement clipboard using commands.
+
 2003-10-25  Xan Lopez  <xan@masilla.org>
 
 	* embed/downloader-view.c: (downloader_view_build_ui),

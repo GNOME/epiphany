@@ -18,8 +18,7 @@
  *  $Id$
  */
 
-#include "gtkmozembed.h"
-#include "gtkmozembed_internal.h"
+#include "ephy-command-manager.h"
 #include "ephy-string.h"
 #include "ephy-embed.h"
 #include "ephy-debug.h"
@@ -29,6 +28,8 @@
 #include "EventContext.h"
 #include "ephy-debug.h"
 
+#include <gtkmozembed.h>
+#include <gtkmozembed_internal.h>
 #include <nsIWindowWatcher.h>
 #include <nsIURI.h>
 #include <nsIURL.h>
@@ -108,20 +109,6 @@ impl_zoom_set (EphyEmbed *embed,
 static gresult
 impl_zoom_get (EphyEmbed *embed,
                float *zoom);
-static gresult 
-impl_selection_can_cut (EphyEmbed *embed);
-static gresult 
-impl_selection_can_copy (EphyEmbed *embed);
-static gresult 
-impl_can_paste (EphyEmbed *embed);
-static gresult 
-impl_select_all (EphyEmbed *embed);
-static gresult
-impl_selection_cut (EphyEmbed *embed);
-static gresult
-impl_selection_copy (EphyEmbed *embed);
-static gresult
-impl_paste (EphyEmbed *embed);
 static gresult
 impl_shistory_count  (EphyEmbed *embed,
                       int *count);
@@ -256,6 +243,43 @@ static NS_DEFINE_CID(kPrintOptionsCID, NS_PRINTOPTIONS_CID);
 
 static GObjectClass *parent_class = NULL;
 
+static gresult
+impl_manager_do_command (EphyCommandManager *manager,
+			 const char *command) 
+{
+	nsresult result = NS_OK;
+	EphyWrapper *wrapper;
+
+	wrapper = MOZILLA_EMBED(manager)->priv->wrapper;
+	g_return_val_if_fail (wrapper != NULL, G_FAILED);
+	
+        result = wrapper->DoCommand (command);
+	
+	return result ? G_OK : G_FAILED;
+}
+
+static gresult
+impl_manager_can_do_command (EphyCommandManager *manager,
+			     const char *command) 
+{
+	return G_NOT_IMPLEMENTED;
+}
+
+static gresult
+impl_manager_observe_command (EphyCommandManager *manager,
+			      const char *command) 
+{
+	return G_NOT_IMPLEMENTED;
+}
+
+static void
+ephy_command_manager_init (EphyCommandManagerClass *manager_class)
+{
+	manager_class->do_command = impl_manager_do_command;
+	manager_class->can_do_command = impl_manager_can_do_command;
+	manager_class->observe_command = impl_manager_observe_command;
+}
+	
 GType 
 mozilla_embed_get_type (void)
 {
@@ -278,11 +302,18 @@ mozilla_embed_get_type (void)
 
 		static const GInterfaceInfo embed_info =
 		{
-			(GInterfaceInitFunc) ephy_embed_init,      /* interface_init */
-        		NULL,                                      /* interface_finalize */
-        		NULL                                       /* interface_data */
+			(GInterfaceInitFunc) ephy_embed_init,
+        		NULL,
+        		NULL
+     		};
+
+		static const GInterfaceInfo ephy_command_manager_info =
+		{
+			(GInterfaceInitFunc) ephy_command_manager_init,
+        		NULL,
+        		NULL
      		 };
-		
+	
                 mozilla_embed_type = g_type_register_static (GTK_TYPE_MOZ_EMBED,
 							     "MozillaEmbed",
 							     &our_info, 
@@ -290,6 +321,9 @@ mozilla_embed_get_type (void)
 		g_type_add_interface_static (mozilla_embed_type,
                                    	     EPHY_TYPE_EMBED,
                                    	     &embed_info);
+		g_type_add_interface_static (mozilla_embed_type,
+                                   	     EPHY_TYPE_COMMAND_MANAGER,
+                                   	     &ephy_command_manager_info);
         }
 
         return mozilla_embed_type;
@@ -364,12 +398,6 @@ ephy_embed_init (EphyEmbedClass *embed_class)
 	embed_class->copy_page = impl_copy_page;
 	embed_class->zoom_set = impl_zoom_set;
 	embed_class->zoom_get = impl_zoom_get;
-	embed_class->selection_can_cut = impl_selection_can_cut;
-	embed_class->selection_can_copy = impl_selection_can_copy;
-	embed_class->can_paste = impl_can_paste;
-	embed_class->selection_cut = impl_selection_cut;
-	embed_class->selection_copy = impl_selection_copy;
-	embed_class->paste = impl_paste;
 	embed_class->shistory_count = impl_shistory_count;
 	embed_class->shistory_get_nth = impl_shistory_get_nth;
 	embed_class->shistory_get_pos = impl_shistory_get_pos;
@@ -381,7 +409,6 @@ ephy_embed_init (EphyEmbedClass *embed_class)
 	embed_class->find_set_properties = impl_find_set_properties;
 	embed_class->set_encoding = impl_set_encoding;
 	embed_class->get_encoding_info = impl_get_encoding_info;
-	embed_class->select_all = impl_select_all;
 	embed_class->print = impl_print;
 	embed_class->print_preview_close = impl_print_preview_close;
 	embed_class->print_preview_num_pages = impl_print_preview_num_pages;
@@ -858,104 +885,6 @@ impl_zoom_get (EphyEmbed *embed,
 	{
 		return G_FAILED;
 	}
-}
-
-static gresult 
-impl_selection_can_cut (EphyEmbed *embed)
-{
-	gboolean result;
-	EphyWrapper *wrapper;
-	
-	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
-	g_return_val_if_fail (wrapper != NULL, G_FAILED);
-	
-	wrapper->CanCutSelection (&result);
-	
-	return result ? G_OK : G_FAILED;
-}
-
-static gresult 
-impl_selection_can_copy (EphyEmbed *embed)
-{
-	gboolean result;
-	EphyWrapper *wrapper;
-	
-	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
-	g_return_val_if_fail (wrapper != NULL, G_FAILED);
-	
-	wrapper->CanCopySelection (&result);
-	
-	return result ? G_OK : G_FAILED;
-}
-
-static gresult 
-impl_can_paste (EphyEmbed *embed)
-{
-	gboolean result;
-	EphyWrapper *wrapper;
-
-	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
-	g_return_val_if_fail (wrapper != NULL, G_FAILED);
-	
-	wrapper->CanPaste (&result);
-	
-	return result ? G_OK : G_FAILED;
-}
-
-static gresult 
-impl_select_all (EphyEmbed *embed)
-{
-	nsresult result;
-	EphyWrapper *wrapper;
-
-	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
-	g_return_val_if_fail (wrapper != NULL, G_FAILED);
-	
-	result = wrapper->SelectAll ();
-	
-	return result ? G_OK : G_FAILED;
-}
-
-static gresult
-impl_selection_cut (EphyEmbed *embed)
-{
-	nsresult rv;
-	EphyWrapper *wrapper;
-	
-	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
-	g_return_val_if_fail (wrapper != NULL, G_FAILED);
-	
-	rv = wrapper->CutSelection ();
-	
-	return NS_SUCCEEDED(rv) ? G_OK : G_FAILED;
-}
-
-static gresult
-impl_selection_copy (EphyEmbed *embed)
-{
-	nsresult rv;
-	EphyWrapper *wrapper;
-	
-	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
-	g_return_val_if_fail (wrapper != NULL, G_FAILED);
-	
-	rv = wrapper->CopySelection ();
-	
-	return NS_SUCCEEDED(rv) ? G_OK : G_FAILED;
-}
-
-static gresult
-impl_paste (EphyEmbed *embed)
-{
-	nsresult rv;
-	EphyWrapper *wrapper;
-	
-	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
-	g_return_val_if_fail (wrapper != NULL, G_FAILED);
-	
-	rv = wrapper->Paste ();
-	
-	return NS_SUCCEEDED(rv) ? G_OK : G_FAILED;
 }
 
 static gresult
