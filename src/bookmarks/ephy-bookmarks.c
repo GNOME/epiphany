@@ -190,7 +190,6 @@ ephy_bookmarks_autocompletion_source_foreach (EphyAutocompletionSource *source,
 		func (source, keywords, title, url, smart_url,
 		      !smart_url, 0, data);
 	}
-	ephy_node_thaw (eb->priv->bookmarks);
 }
 
 static void
@@ -387,7 +386,6 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 			ephy_node_save_to_xml (kid, root);
 		}
 	}
-	ephy_node_thaw (eb->priv->keywords);
 
 	children = ephy_node_get_children (eb->priv->bookmarks);
 	for (i = 0; i < children->len; i++)
@@ -398,7 +396,6 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 
 		ephy_node_save_to_xml (kid, root);
 	}
-	ephy_node_thaw (eb->priv->bookmarks);
 
 	ephy_file_save_xml (eb->priv->xml_file, doc);
 	xmlFreeDoc(doc);
@@ -476,7 +473,6 @@ compute_lower_fav (EphyNode *favorites, double *score)
 			result = child;
 		}
 	}
-	ephy_node_thaw (favorites);
 
 	if (result == NULL) *score = 0;
 
@@ -612,7 +608,6 @@ get_topics_list (EphyBookmarks *eb,
 			*no_topics = FALSE;
 		}
 	}
-	ephy_node_thaw (eb->priv->keywords);
 
 	return g_string_free (list, FALSE);
 }
@@ -660,7 +655,6 @@ topics_removed_cb (EphyNode *node,
 
 		g_free (list);
 	}
-	ephy_node_thaw (child);
 
 	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
 }
@@ -912,11 +906,9 @@ ephy_bookmarks_find_bookmark (EphyBookmarks *eb,
 
 		if (location != NULL && strcmp (url, location) == 0)
 		{
-			ephy_node_thaw (eb->priv->bookmarks);
 			return kid;
 		}
 	}
-	ephy_node_thaw (eb->priv->bookmarks);
 
 	return NULL;
 }
@@ -1213,7 +1205,6 @@ ephy_bookmarks_find_keyword (EphyBookmarks *eb,
 			 node = kid;
 		 }
 	}
-	ephy_node_thaw (eb->priv->keywords);
 
 	return node;
 }

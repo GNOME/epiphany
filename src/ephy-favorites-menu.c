@@ -158,7 +158,6 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 
 		g_free (verb);
 	}
-	ephy_node_thaw (fav);
 
 	g_string_append (xml, "</placeholder></submenu></menu></Root>");
 

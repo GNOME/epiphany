@@ -127,7 +127,6 @@ ephy_states_save (void)
 
 		ephy_node_save_to_xml (kid, root);
 	}
-	ephy_node_thaw (states);
 
 	ephy_file_save_xml (xml_file, doc);
 	g_free (xml_file);
@@ -155,7 +154,6 @@ find_by_name (const char *name)
 			result = kid;
 		}
 	}
-	ephy_node_thaw (states);
 
 	return result;
 }

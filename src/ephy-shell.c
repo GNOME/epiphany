@@ -31,7 +31,6 @@
 #include "ephy-stock-icons.h"
 #include "ephy-window.h"
 #include "ephy-file-helpers.h"
-#include "ephy-thread-helpers.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-history-window.h"
@@ -208,7 +207,6 @@ ephy_shell_init (EphyShell *gs)
 				   (gpointer *)ptr);
 
 	ephy_debug_init ();
-	ephy_thread_helpers_init ();
 	ephy_file_helpers_init ();
 	ephy_stock_icons_init ();
 	ephy_ensure_dir_exists (ephy_dot_dir ());

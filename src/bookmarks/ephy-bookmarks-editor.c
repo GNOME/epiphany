@@ -1073,8 +1073,6 @@ search_entry_search_cb (GtkWidget *entry, const char *search_text, EphyBookmarks
 
 	search_text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
 
-	GDK_THREADS_ENTER ();
-
 	ephy_node_filter_empty (editor->priv->bookmarks_filter);
 	ephy_node_filter_add_expression (editor->priv->bookmarks_filter,
 				         ephy_node_filter_expression_new (EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_CONTAINS,
@@ -1087,8 +1085,6 @@ search_entry_search_cb (GtkWidget *entry, const char *search_text, EphyBookmarks
 								          search_text),
 				         0);
 	ephy_node_filter_done_changing (editor->priv->bookmarks_filter);
-
-	GDK_THREADS_LEAVE ();
 }
 
 static GtkWidget *

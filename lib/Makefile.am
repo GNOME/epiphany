@@ -27,7 +27,6 @@ NOINST_H_FILES = \
 	ephy-state.h				\
 	ephy-string.h				\
 	ephy-stock-icons.h			\
-	ephy-thread-helpers.h			\
 	ephy-zoom.h
 
 INST_H_FILES = \
@@ -76,8 +75,6 @@ libephy_la_SOURCES = \
 	ephy-string.h				\
 	ephy-stock-icons.c			\
 	ephy-stock-icons.h			\
-	ephy-thread-helpers.c			\
-	ephy-thread-helpers.h			\
 	ephy-types.h				\
 	ephy-zoom.h				\
 	ephy-zoom.c

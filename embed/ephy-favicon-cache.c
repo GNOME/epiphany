@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include <libxml/tree.h>
@@ -44,7 +46,6 @@ struct EphyFaviconCachePrivate
 	EphyNodeDb *db;
 	EphyNode *icons;
 	GHashTable *icons_hash;
-	GStaticRWLock *icons_hash_lock;
 	GHashTable *downloads_hash;
 };
 
@@ -168,13 +169,9 @@ icons_added_cb (EphyNode *node,
 	        EphyNode *child,
 	        EphyFaviconCache *eb)
 {
-	g_static_rw_lock_writer_lock (eb->priv->icons_hash_lock);
-
 	g_hash_table_insert (eb->priv->icons_hash,
 			     (char *) ephy_node_get_property_string (child, EPHY_NODE_FAVICON_PROP_URL),
 			     child);
-
-	g_static_rw_lock_writer_unlock (eb->priv->icons_hash_lock);
 }
 
 static void
@@ -182,12 +179,8 @@ icons_removed_cb (EphyNode *node,
 		  EphyNode *child,
 		  EphyFaviconCache *eb)
 {
-	g_static_rw_lock_writer_lock (eb->priv->icons_hash_lock);
-
 	g_hash_table_remove (eb->priv->icons_hash,
 			     ephy_node_get_property_string (child, EPHY_NODE_FAVICON_PROP_URL));
-
-	g_static_rw_lock_writer_unlock (eb->priv->icons_hash_lock);
 }
 
 static void
@@ -203,7 +196,6 @@ remove_obsolete_icons (EphyFaviconCache *eb)
         g_date_set_time (&current_date, time (NULL));
 
 	children = ephy_node_get_children (eb->priv->icons);
-	ephy_node_thaw (eb->priv->icons);
 	for (i = 0; i < children->len; i++)
 	{
 		EphyNode *kid;
@@ -250,7 +242,6 @@ ephy_favicon_cache_save (EphyFaviconCache *eb)
 
 		ephy_node_save_to_xml (kid, root);
 	}
-	ephy_node_thaw (eb->priv->icons);
 
 	ephy_file_save_xml (eb->priv->xml_file, doc);
 
@@ -284,9 +275,7 @@ ephy_favicon_cache_init (EphyFaviconCache *cache)
 	}
 
 	cache->priv->icons_hash = g_hash_table_new (g_str_hash,
-			                            g_str_equal);
-	cache->priv->icons_hash_lock = g_new0 (GStaticRWLock, 1);
-	g_static_rw_lock_init (cache->priv->icons_hash_lock);
+						    g_str_equal);
 	cache->priv->downloads_hash = g_hash_table_new_full (g_str_hash,
 			                                     g_str_equal,
 							     g_free,
@@ -319,9 +308,7 @@ kill_download (gpointer key,
 	ephy_embed_persist_cancel (persist);
 	g_object_unref (persist);
 
-	g_static_rw_lock_reader_lock (cache->priv->icons_hash_lock);
 	icon = g_hash_table_lookup (cache->priv->icons_hash, (char *)key);
-	g_static_rw_lock_reader_unlock (cache->priv->icons_hash_lock);
 
 	ephy_node_unref (icon);
 
@@ -357,8 +344,6 @@ ephy_favicon_cache_finalize (GObject *object)
 	g_free (cache->priv->xml_file);
 	g_free (cache->priv->directory);
 	g_hash_table_destroy (cache->priv->icons_hash);
-	g_static_rw_lock_free (cache->priv->icons_hash_lock);
-	g_free (cache->priv->icons_hash_lock);
 	g_hash_table_destroy (cache->priv->downloads_hash);
 
 	g_object_unref (cache->priv->db);
@@ -452,9 +437,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 
 	now = time (NULL);
 
-	g_static_rw_lock_reader_lock (cache->priv->icons_hash_lock);
 	icon = g_hash_table_lookup (cache->priv->icons_hash, url);
-	g_static_rw_lock_reader_unlock (cache->priv->icons_hash_lock);
 
 	if (!icon)
 	{

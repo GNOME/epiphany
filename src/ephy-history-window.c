@@ -843,8 +843,6 @@ search_entry_search_cb (GtkWidget *entry, char *search_text, EphyHistoryWindow *
 		 G_CALLBACK (site_node_selected_cb),
 		 editor);
 
-	GDK_THREADS_ENTER ();
-
 	ephy_node_filter_empty (editor->priv->pages_filter);
 	ephy_node_filter_add_expression (editor->priv->pages_filter,
 				         ephy_node_filter_expression_new (EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_CONTAINS,
@@ -857,8 +855,6 @@ search_entry_search_cb (GtkWidget *entry, char *search_text, EphyHistoryWindow *
 								          search_text),
 				         0);
 	ephy_node_filter_done_changing (editor->priv->pages_filter);
-
-	GDK_THREADS_LEAVE ();
 }
 
 static GtkWidget *

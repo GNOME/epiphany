@@ -1,5 +1,61 @@
 2003-12-18  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-favicon-cache.c: (icons_added_cb), (icons_removed_cb),
+	(remove_obsolete_icons), (ephy_favicon_cache_save),
+	(ephy_favicon_cache_init), (kill_download),
+	(ephy_favicon_cache_finalize), (ephy_favicon_cache_get):
+	* embed/ephy-history.c:
+	(ephy_history_autocompletion_source_foreach),
+	(remove_obsolete_pages), (ephy_history_save), (hosts_added_cb),
+	(hosts_removed_cb), (pages_added_cb), (pages_removed_cb),
+	(update_host_on_child_remove), (update_hosts), (ephy_history_init),
+	(ephy_history_finalize), (ephy_history_add_host),
+	(ephy_history_get_page):
+	* lib/Makefile.am:
+	* lib/ephy-node-db.c: (ephy_node_db_init), (ephy_node_db_finalize),
+	(ephy_node_db_get_node_from_id), (_ephy_node_db_new_id),
+	(_ephy_node_db_add_id), (_ephy_node_db_remove_id):
+	* lib/ephy-node-filter.c: (ephy_node_filter_expression_evaluate):
+	* lib/ephy-node.c: (ephy_node_finalize), (real_remove_child),
+	(remove_child), (ephy_node_dispose), (ephy_node_new_with_id),
+	(ephy_node_get_id), (ephy_node_ref), (ephy_node_unref),
+	(child_changed), (ephy_node_set_property),
+	(ephy_node_get_property), (ephy_node_get_property_string),
+	(ephy_node_get_property_boolean), (ephy_node_get_property_long),
+	(ephy_node_get_property_int), (ephy_node_get_property_double),
+	(ephy_node_get_property_float), (ephy_node_get_property_node),
+	(save_parent), (ephy_node_save_to_xml), (ephy_node_add_child),
+	(ephy_node_remove_child), (ephy_node_has_child),
+	(ephy_node_sort_children), (ephy_node_reorder_children),
+	(ephy_node_get_children), (ephy_node_get_n_children),
+	(ephy_node_get_nth_child), (ephy_node_get_child_index),
+	(ephy_node_get_next_child), (ephy_node_get_previous_child):
+	* lib/ephy-node.h:
+	* lib/ephy-state.c: (ephy_states_save), (find_by_name):
+	* lib/ephy-thread-helpers.c:
+	* lib/ephy-thread-helpers.h:
+	* lib/widgets/ephy-tree-model-node.c: (filter_changed_cb):
+	* src/bookmarks/ephy-bookmarks-editor.c: (search_entry_search_cb):
+	* src/bookmarks/ephy-bookmarks-export.c: (add_topics_list),
+	(ephy_bookmarks_export_rdf):
+	* src/bookmarks/ephy-bookmarks-menu.c: (add_bookmarks_menu),
+	(ephy_bookmarks_menu_rebuild):
+	* src/bookmarks/ephy-bookmarks.c:
+	(ephy_bookmarks_autocompletion_source_foreach),
+	(ephy_bookmarks_save), (compute_lower_fav), (get_topics_list),
+	(topics_removed_cb), (ephy_bookmarks_find_bookmark),
+	(ephy_bookmarks_find_keyword):
+	* src/bookmarks/ephy-topic-action.c: (append_bookmarks_menu),
+	(build_topics_menu):
+	* src/bookmarks/ephy-topics-selector.c: (fill_model):
+	* src/ephy-favorites-menu.c: (ephy_favorites_menu_rebuild):
+	* src/ephy-history-window.c: (search_entry_search_cb):
+	* src/ephy-shell.c: (ephy_shell_init):
+
+	Fix freeze bug 129413.
+
+2003-12-18  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/ephy-node-view.c:
 	(ephy_node_view_select_node_by_key):
 

@@ -60,10 +60,6 @@ long        ephy_node_get_id                (EphyNode *node);
 void        ephy_node_ref                   (EphyNode *node);
 void        ephy_node_unref                 (EphyNode *node);
 
-/* locking */
-void        ephy_node_freeze                (EphyNode *node);
-void        ephy_node_thaw                  (EphyNode *node);
-
 /* signals */
 int         ephy_node_signal_connect_object (EphyNode *node,
 					     EphyNodeSignalType type,

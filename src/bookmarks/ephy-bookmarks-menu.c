@@ -239,8 +239,6 @@ add_bookmarks_menu (EphyBookmarksMenu *menu, EphyNode *node, GString *xml)
 
 		g_list_free (node_list);
 	}
-
-	ephy_node_thaw (node);
 }
 
 static void
@@ -298,7 +296,6 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 			node_list = g_list_prepend (node_list, kid);
 		}
 	}
-	ephy_node_thaw (topics);
 
 	node_list = g_list_sort (node_list, (GCompareFunc)sort_topics);
 

@@ -50,7 +50,6 @@ add_topics_list (EphyNode *topics, EphyNode *bmk,
 			bmks = g_list_append (bmks, kid);
 		}
 	}
-	ephy_node_thaw (topics);
 
 	if (bmks == NULL) return;
 
@@ -182,7 +181,6 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 		xmlFree (encoded_title);
 		g_free (link);
 	}
-	ephy_node_thaw (bmks);
 
 	ephy_file_save_xml (filename, doc);
 	xmlFreeDoc(doc);

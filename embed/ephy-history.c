@@ -49,9 +49,7 @@ struct EphyHistoryPrivate
 	EphyNode *pages;
 	EphyNode *last_page;
 	GHashTable *hosts_hash;
-	GStaticRWLock *hosts_hash_lock;
 	GHashTable *pages_hash;
-	GStaticRWLock *pages_hash_lock;
 	int autosave_timeout;
 	guint update_hosts_idle;
 };
@@ -162,7 +160,6 @@ ephy_history_autocompletion_source_foreach (EphyAutocompletionSource *source,
 		      url, url, FALSE,
 		      FALSE, score, data);
 	}
-	ephy_node_thaw (eb->priv->pages);
 }
 
 static void
@@ -256,7 +253,6 @@ remove_obsolete_pages (EphyHistory *eb)
         g_date_set_time (&current_date, time (NULL));
 
 	children = ephy_node_get_children (eb->priv->pages);
-	ephy_node_thaw (eb->priv->pages);
 	for (i = 0; i < children->len; i++)
 	{
 		EphyNode *kid;
@@ -298,7 +294,6 @@ ephy_history_save (EphyHistory *eb)
 
 		ephy_node_save_to_xml (kid, root);
 	}
-	ephy_node_thaw (eb->priv->hosts);
 
 	children = ephy_node_get_children (eb->priv->pages);
 	for (i = 0; i < children->len; i++)
@@ -309,7 +304,6 @@ ephy_history_save (EphyHistory *eb)
 
 		ephy_node_save_to_xml (kid, root);
 	}
-	ephy_node_thaw (eb->priv->pages);
 
 	ephy_file_save_xml (eb->priv->xml_file, doc);
 	xmlFreeDoc(doc);
@@ -320,13 +314,9 @@ hosts_added_cb (EphyNode *node,
 	        EphyNode *child,
 	        EphyHistory *eb)
 {
-	g_static_rw_lock_writer_lock (eb->priv->hosts_hash_lock);
-
 	g_hash_table_insert (eb->priv->hosts_hash,
 			     (char *) ephy_node_get_property_string (child, EPHY_NODE_PAGE_PROP_LOCATION),
 			     child);
-
-	g_static_rw_lock_writer_unlock (eb->priv->hosts_hash_lock);
 }
 
 static void
@@ -335,12 +325,8 @@ hosts_removed_cb (EphyNode *node,
 		  guint old_index,
 		  EphyHistory *eb)
 {
-	g_static_rw_lock_writer_lock (eb->priv->hosts_hash_lock);
-
 	g_hash_table_remove (eb->priv->hosts_hash,
 			     ephy_node_get_property_string (child, EPHY_NODE_PAGE_PROP_LOCATION));
-
-	g_static_rw_lock_writer_unlock (eb->priv->hosts_hash_lock);
 }
 
 static void
@@ -348,13 +334,9 @@ pages_added_cb (EphyNode *node,
 	        EphyNode *child,
 	        EphyHistory *eb)
 {
-	g_static_rw_lock_writer_lock (eb->priv->pages_hash_lock);
-
 	g_hash_table_insert (eb->priv->pages_hash,
 			     (char *) ephy_node_get_property_string (child, EPHY_NODE_PAGE_PROP_LOCATION),
 			     child);
-
-	g_static_rw_lock_writer_unlock (eb->priv->pages_hash_lock);
 }
 
 static void
@@ -363,12 +345,8 @@ pages_removed_cb (EphyNode *node,
 		  guint old_index,
 		  EphyHistory *eb)
 {
-	g_static_rw_lock_writer_lock (eb->priv->pages_hash_lock);
-
 	g_hash_table_remove (eb->priv->pages_hash,
 			     ephy_node_get_property_string (child, EPHY_NODE_PAGE_PROP_LOCATION));
-
-	g_static_rw_lock_writer_unlock (eb->priv->pages_hash_lock);
 }
 
 static gboolean
@@ -405,7 +383,6 @@ update_host_on_child_remove (EphyNode *node)
 			new_host_last_visit = last_visit;
 		}
 	}
-	ephy_node_thaw (node);
 
 	if (host_last_visit != new_host_last_visit)
 	{
@@ -445,7 +422,6 @@ update_hosts (EphyHistory *eh)
 			}
 		}
 	}
-	ephy_node_thaw (eh->priv->hosts);
 
 	g_list_foreach (empty, (GFunc)ephy_node_unref, NULL);
 	g_list_free (empty);
@@ -500,13 +476,8 @@ ephy_history_init (EphyHistory *eb)
 
 	eb->priv->pages_hash = g_hash_table_new (g_str_hash,
 			                          g_str_equal);
-	eb->priv->pages_hash_lock = g_new0 (GStaticRWLock, 1);
-	g_static_rw_lock_init (eb->priv->pages_hash_lock);
-
 	eb->priv->hosts_hash = g_hash_table_new (g_str_hash,
 			                         g_str_equal);
-	eb->priv->hosts_hash_lock = g_new0 (GStaticRWLock, 1);
-	g_static_rw_lock_init (eb->priv->hosts_hash_lock);
 
 	/* Pages */
 	eb->priv->pages = ephy_node_new_with_id (db, PAGES_NODE_ID);
@@ -587,9 +558,7 @@ ephy_history_finalize (GObject *object)
 	g_object_unref (eb->priv->db);
 
 	g_hash_table_destroy (eb->priv->pages_hash);
-	g_static_rw_lock_free (eb->priv->pages_hash_lock);
 	g_hash_table_destroy (eb->priv->hosts_hash);
-	g_static_rw_lock_free (eb->priv->hosts_hash_lock);
 
 	g_source_remove (eb->priv->autosave_timeout);
 
@@ -701,15 +670,12 @@ ephy_history_add_host (EphyHistory *eh, EphyNode *page)
 
 	g_return_val_if_fail (host_locations != NULL, NULL);
 
-	g_static_rw_lock_reader_lock (eh->priv->hosts_hash_lock);
-
 	for (l = host_locations; l != NULL; l = l->next)
 	{
 		host = g_hash_table_lookup (eh->priv->hosts_hash,
 					    (char *)l->data);
 		if (host) break;
 	}
-	g_static_rw_lock_reader_unlock (eh->priv->hosts_hash_lock);
 
 	if (!host)
 	{
@@ -868,9 +834,7 @@ ephy_history_get_page (EphyHistory *eb,
 {
 	EphyNode *node;
 
-	g_static_rw_lock_reader_lock (eb->priv->pages_hash_lock);
 	node = g_hash_table_lookup (eb->priv->pages_hash, url);
-	g_static_rw_lock_reader_unlock (eb->priv->pages_hash_lock);
 
 	return node;
 }
