@@ -23,6 +23,7 @@
 #include <gtk/gtkstock.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
+#include <gdk/gdkkeysyms.h>
 #include <libgnome/gnome-i18n.h>
 #include <string.h>
 
@@ -337,6 +338,22 @@ ephy_bookmarks_editor_show_popup_cb (GtkWidget *view,
 					    "/popups/EphyBookmarkEditorPopup");
 	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
 			gtk_get_current_event_time ());	
+}
+
+static void
+ephy_bookmarks_editor_key_pressed_cb (GtkWidget *view,
+				      GdkEventKey *event,
+				      EphyBookmarksEditor *editor)
+{
+	switch (event->keyval) 
+	{
+	case GDK_Delete:
+		ephy_node_view_remove (editor->priv->bm_view);
+		break;
+	default:
+		break;
+	}
+	
 }
 
 static void
@@ -667,6 +684,8 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	g_assert (editor->priv->bookmarks);
 
 	node = ephy_bookmarks_get_keywords (editor->priv->bookmarks);
+	
+	/* Keywords View */
 	key_view = ephy_node_view_new (node, NULL);
 	ephy_node_view_set_browse_mode (key_view);
 	ephy_node_view_add_column (key_view, _("Keywords"),
@@ -691,6 +710,8 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 
 	node = ephy_bookmarks_get_bookmarks (editor->priv->bookmarks);
 	editor->priv->bookmarks_filter = ephy_node_filter_new ();
+
+	/* Bookmarks View */
 	bm_view = ephy_node_view_new (node, editor->priv->bookmarks_filter);
 	ephy_node_view_enable_drag_source (bm_view);
 	ephy_node_view_add_icon_column (bm_view, EPHY_TREE_MODEL_NODE_COL_ICON);
@@ -699,6 +720,10 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (bm_view), TRUE, TRUE, 0);
 	gtk_widget_show (GTK_WIDGET (bm_view));
 	editor->priv->bm_view = bm_view;
+	g_signal_connect (G_OBJECT (bm_view),
+			  "key_press_event",
+			  G_CALLBACK (ephy_bookmarks_editor_key_pressed_cb),
+			  editor);
 	g_signal_connect (G_OBJECT (bm_view),
 			  "node_activated",
 			  G_CALLBACK (ephy_bookmarks_editor_node_activated_cb),
