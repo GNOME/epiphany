@@ -126,7 +126,8 @@ static void
 bookmark_open_in_tab_cb (GtkAction *action, char *location,
 			 gboolean new_window, EphyBookmarksBar *toolbar)
 {
-	EphyNewTabFlags flags = EPHY_NEW_TAB_OPEN_PAGE;
+	EphyNewTabFlags flags = EPHY_NEW_TAB_OPEN_PAGE |
+				EPHY_NEW_TAB_JUMP;
 
 	if (!new_window)
 	{
