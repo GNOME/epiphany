@@ -10,6 +10,16 @@ ephy_permission_manager_remove
 ephy_permission_manager_clear
 ephy_permission_manager_test
 ephy_permission_manager_list
+<SUBSECTION Standard>
+EPHY_PERMISSION_MANAGER
+EPHY_IS_PERMISSION_MANAGER
+EPHY_TYPE_PERMISSION_MANAGER
+EPHY_TYPE_PERMISSION_INFO
+ephy_permission_info_get_type
+EPHY_PERMISSION_MANAGER_GET_IFACE
+EPHY_IS_PERMISSION_MANAGER_IFACE
+EPHY_PERMISSION_MANAGER_IFACE
+ephy_permission_manager_get_type
 </SECTION>
 
 <SECTION>
@@ -18,7 +28,6 @@ ephy_permission_manager_list
 EphyWindow
 ephy_window_new
 ephy_window_new_with_chrome
-
 ephy_window_get_notebook
 ephy_window_add_tab
 ephy_window_remove_tab
@@ -34,6 +43,14 @@ ephy_window_set_print_preview
 ephy_window_set_zoom
 ephy_window_activate_location
 ephy_window_load_url
+<SUBSECTION Standard>
+EPHY_WINDOW
+EPHY_IS_WINDOW
+EPHY_TYPE_WINDOW
+ephy_window_get_type
+EPHY_WINDOW_CLASS
+EPHY_IS_WINDOW_CLASS
+EPHY_WINDOW_GET_CLASS
 </SECTION>
 
 <SECTION>
@@ -41,7 +58,6 @@ ephy_window_load_url
 <TITLE>EphyTab</TITLE>
 EphyTab
 ephy_tab_new
-ephy_tab_get_window
 ephy_tab_get_embed
 ephy_tab_for_embed
 ephy_tab_get_icon_address
@@ -53,8 +69,68 @@ ephy_tab_get_load_status
 ephy_tab_get_load_percent
 ephy_tab_get_link_message
 ephy_tab_get_status_message
+<SUBSECTION Standard>
+EPHY_TAB
+EPHY_IS_TAB
+EPHY_TYPE_TAB
+ephy_tab_get_type
+EPHY_TAB_CLASS
+EPHY_IS_TAB_CLASS
+EPHY_TAB_GET_CLASS
 </SECTION>
 
+<SECTION>
+<FILE>ephy-embed</FILE>
+<TITLE>EphyEmbed</TITLE>
+EphyEmbed
+EphyEmbedIface
+EmbedState
+EphyEmbedChrome
+EmbedReloadFlags
+EmbedPrintPreviewNavType
+EmbedSecurityLevel
+ephy_embed_load_url
+ephy_embed_stop_load
+ephy_embed_reload
+ephy_embed_get_title
+ephy_embed_get_location
+ephy_embed_get_link_message
+ephy_embed_get_js_status
+ephy_embed_can_go_back
+ephy_embed_can_go_forward
+ephy_embed_can_go_up
+ephy_embed_get_go_up_list
+ephy_embed_go_back
+ephy_embed_go_forward
+ephy_embed_go_up
+ephy_embed_shistory_n_items
+ephy_embed_shistory_get_nth
+ephy_embed_shistory_get_pos
+ephy_embed_shistory_go_nth
+ephy_embed_get_security_level
+ephy_embed_set_zoom
+ephy_embed_get_zoom
+ephy_embed_find_set_properties
+ephy_embed_find_next
+ephy_embed_set_encoding
+ephy_embed_get_encoding_info
+ephy_embed_print
+ephy_embed_print_preview_close
+ephy_embed_print_preview_n_pages
+ephy_embed_print_preview_navigate
+ephy_embed_activate
+ephy_embed_has_modified_forms
+<SUBSECTION Standard>
+ephy_embed_get_type
+EPHY_EMBED
+EPHY_IS_EMBED
+EPHY_TYPE_EMBED
+ephy_embed_chrome_get_type
+EPHY_EMBED_GET_IFACE
+EPHY_EMBED_IFACE
+EPHY_IS_EMBED_IFACE
+EPHY_TYPE_EMBED_CHROME_MASK
+</SECTION>
 
 
 

@@ -1,0 +1,515 @@
+<!-- ##### SECTION Title ##### -->
+EphyEmbed
+
+<!-- ##### SECTION Short_Description ##### -->
+An interface to the widget displaying web pages
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+Each #EphyTab contains an #EphyEmbed. An #EphyEmbed is an interface; right now
+it is only implemented by #MozillaEmbed, but whenever possible, #EphyEmbed's
+functions should be used instead of their #MozillaEmbed equivalents.
+</para>
+<para>
+#EphyEmbed's most important functions can be divided into sets:
+</para>
+<itemizedlist>
+<listitem>Functions which affect navigation</listitem>
+<listitem>Functions which return information about the displayed web
+page</listitem>
+<listitem>Functions which manipulate the session history</listitem>
+</itemizedlist>
+<para>The first two sets of functions are self-explanitory.</para>
+<para>The session history functions are used to traverse the embedded browser's
+history. Each #EphyEmbed remembers a history of the web pages it has visited.
+There can be a maximum limit, however; for #MozillaEmbed, this limit is
+determined by Mozilla's browser.sessionhistory.max_entries preference. Because
+of this limit, ephy_embed_shistory_n_items() will not necessarily return the
+number of web pages visited in the embed's lifetime; likewise,
+ephy_embed_shistory_go_nth() will not always return to the user's home page
+when called with a 0 argument.</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+Using #EphyEmbed instead of #MozillaEmbed is good practice. However, using a
+#MozillaEmbed or even a #GtkMozEmbed may be necessary in certain cases (this can
+be done by casting).
+</para>
+
+<!-- ##### STRUCT EphyEmbed ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT EphyEmbedIface ##### -->
+<para>
+
+</para>
+
+@base_iface: 
+@context_menu: 
+@favicon: 
+@location: 
+@net_state: 
+@new_window: 
+@dom_mouse_click: 
+@dom_mouse_down: 
+@popup_blocked: 
+@security_change: 
+@zoom_change: 
+@load_url: 
+@stop_load: 
+@reload: 
+@can_go_back: 
+@can_go_forward: 
+@can_go_up: 
+@get_go_up_list: 
+@go_back: 
+@go_forward: 
+@go_up: 
+@get_title: 
+@get_location: 
+@get_link_message: 
+@get_js_status: 
+@shistory_n_items: 
+@shistory_get_nth: 
+@shistory_get_pos: 
+@shistory_go_nth: 
+@get_security_level: 
+@set_zoom: 
+@get_zoom: 
+@find_set_properties: 
+@find_next: 
+@set_encoding: 
+@get_encoding_info: 
+@print: 
+@print_preview_close: 
+@print_preview_n_pages: 
+@print_preview_navigate: 
+@activate: 
+@has_modified_forms: 
+
+<!-- ##### ENUM EmbedState ##### -->
+<para>
+Represents the state of an #EphyEmbed with regards to networking negotiations.
+</para>
+
+@EMBED_STATE_UNKNOWN: 
+@EMBED_STATE_START: 
+@EMBED_STATE_REDIRECTING: 
+@EMBED_STATE_TRANSFERRING: 
+@EMBED_STATE_NEGOTIATING: 
+@EMBED_STATE_STOP: 
+@EMBED_STATE_IS_REQUEST: 
+@EMBED_STATE_IS_DOCUMENT: 
+@EMBED_STATE_IS_NETWORK: 
+@EMBED_STATE_IS_WINDOW: 
+
+<!-- ##### ENUM EphyEmbedChrome ##### -->
+<para>
+Determines which aspects of the user interface should be displayed. Most of the
+time, an #EphyEmbed's chrome will simply be %EPHY_EMBED_CHROME_DEFAULT. However,
+windows opened with JavaScript often use a nonstandard chrome.
+</para>
+
+@EPHY_EMBED_CHROME_DEFAULT: 
+@EPHY_EMBED_CHROME_MENUBAR: %TRUE for the #EphyEmbed's containing #EphyWindow
+			    to display its menubar.
+@EPHY_EMBED_CHROME_TOOLBAR: %TRUE for the #EphyEmbed's containing #EphyWindow
+			    to display its toolbars.
+@EPHY_EMBED_CHROME_STATUSBAR: %TRUE for the #EphyEmbed's containing #EphyWindow
+			      to display its statusbar.
+
+<!-- ##### ENUM EmbedReloadFlags ##### -->
+<para>
+
+</para>
+
+@EMBED_RELOAD_NORMAL: 
+@EMBED_RELOAD_FORCE: Bypass cache and proxy while reloading a web page
+
+<!-- ##### ENUM EmbedPrintPreviewNavType ##### -->
+<para>
+Specifies the action to perform in ephy_embed_print_preview_navigate().
+</para>
+
+@PRINTPREVIEW_GOTO_PAGENUM: 
+@PRINTPREVIEW_PREV_PAGE: 
+@PRINTPREVIEW_NEXT_PAGE: 
+@PRINTPREVIEW_HOME: 
+@PRINTPREVIEW_END: 
+
+<!-- ##### ENUM EmbedSecurityLevel ##### -->
+<para>
+Represents the security status of an #EphyEmbed. For example, a page with an
+invalid SSL certificate will have an #EmbedSecurityLevel of %STATE_IS_BROKEN.
+</para>
+
+@STATE_IS_UNKNOWN: 
+@STATE_IS_INSECURE: 
+@STATE_IS_BROKEN: 
+@STATE_IS_SECURE_MED: 
+@STATE_IS_SECURE_LOW: 
+@STATE_IS_SECURE_HIGH: 
+
+<!-- ##### FUNCTION ephy_embed_load_url ##### -->
+<para>
+
+</para>
+
+@embed: 
+@url: 
+
+
+<!-- ##### FUNCTION ephy_embed_stop_load ##### -->
+<para>
+
+</para>
+
+@embed: 
+
+
+<!-- ##### FUNCTION ephy_embed_reload ##### -->
+<para>
+
+</para>
+
+@embed: 
+@flags: 
+
+
+<!-- ##### FUNCTION ephy_embed_get_title ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_embed_get_location ##### -->
+<para>
+
+</para>
+
+@embed: 
+@toplevel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_embed_get_link_message ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_embed_get_js_status ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_embed_can_go_back ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_embed_can_go_forward ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_embed_can_go_up ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_embed_get_go_up_list ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_embed_go_back ##### -->
+<para>
+
+</para>
+
+@embed: 
+
+
+<!-- ##### FUNCTION ephy_embed_go_forward ##### -->
+<para>
+
+</para>
+
+@embed: 
+
+
+<!-- ##### FUNCTION ephy_embed_go_up ##### -->
+<para>
+
+</para>
+
+@embed: 
+
+
+<!-- ##### FUNCTION ephy_embed_shistory_n_items ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_embed_shistory_get_nth ##### -->
+<para>
+
+</para>
+
+@embed: 
+@nth: 
+@is_relative: 
+@url: 
+@title: 
+
+
+<!-- ##### FUNCTION ephy_embed_shistory_get_pos ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_embed_shistory_go_nth ##### -->
+<para>
+
+</para>
+
+@embed: 
+@nth: 
+
+
+<!-- ##### FUNCTION ephy_embed_get_security_level ##### -->
+<para>
+
+</para>
+
+@embed: 
+@level: 
+@description: 
+
+
+<!-- ##### FUNCTION ephy_embed_set_zoom ##### -->
+<para>
+
+</para>
+
+@embed: 
+@zoom: 
+@reflow: 
+
+
+<!-- ##### FUNCTION ephy_embed_get_zoom ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_embed_find_set_properties ##### -->
+<para>
+
+</para>
+
+@embed: 
+@search_string: 
+@case_sensitive: 
+@wrap_around: 
+
+
+<!-- ##### FUNCTION ephy_embed_find_next ##### -->
+<para>
+
+</para>
+
+@embed: 
+@backwards: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_embed_set_encoding ##### -->
+<para>
+
+</para>
+
+@embed: 
+@encoding: 
+
+
+<!-- ##### FUNCTION ephy_embed_get_encoding_info ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_embed_print ##### -->
+<para>
+
+</para>
+
+@embed: 
+@info: 
+
+
+<!-- ##### FUNCTION ephy_embed_print_preview_close ##### -->
+<para>
+
+</para>
+
+@embed: 
+
+
+<!-- ##### FUNCTION ephy_embed_print_preview_n_pages ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION ephy_embed_print_preview_navigate ##### -->
+<para>
+
+</para>
+
+@embed: 
+@type: 
+@page: 
+
+
+<!-- ##### FUNCTION ephy_embed_activate ##### -->
+<para>
+
+</para>
+
+@embed: 
+
+
+<!-- ##### FUNCTION ephy_embed_has_modified_forms ##### -->
+<para>
+
+</para>
+
+@embed: 
+@Returns: 
+
+
+<!-- ##### SIGNAL EphyEmbed::ge-context-menu ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-dom-mouse-click ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-dom-mouse-down ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-favicon ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-location ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-net-state ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-new-window ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-security-change ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EphyEmbed::ge-zoom-change ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+

@@ -59,7 +59,6 @@
 #include "nsIDOMEventTarget.h"
 #include "nsIDOMNode.h"
 #include "nsIDOMElement.h"
-#include "nsIDOMPopupBlockedEvent.h"
 #include "nsIDocShellTreeItem.h"
 #include "nsIDocShellTreeNode.h"
 #include "nsIDocShellTreeOwner.h"
@@ -170,23 +169,9 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 	return NS_OK;
 }
 
-NS_IMETHODIMP
-EphyPopupEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
-{
-	nsCOMPtr<nsIDOMPopupBlockedEvent> popupEvent =
-		do_QueryInterface(aDOMEvent);
-	if (popupEvent)
-	{
-		g_signal_emit_by_name (mOwner, "ge_popup_blocked");
-	}
-
-	return NS_OK;
-}
-
 EphyBrowser::EphyBrowser ()
 {
 	mFaviconEventListener = nsnull;
-	mPopupEventListener = nsnull;
 	mEventReceiver = nsnull;
 	mInitialized = PR_FALSE;
 }
@@ -216,13 +201,7 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 	mFaviconEventListener = new EphyFaviconEventListener();
 	if (!mFaviconEventListener) return NS_ERROR_OUT_OF_MEMORY;
 
-	mPopupEventListener = new EphyPopupEventListener();
-	if (!mPopupEventListener) return NS_ERROR_OUT_OF_MEMORY;
-
 	rv = mFaviconEventListener->Init (EPHY_EMBED (mozembed));
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
-	rv = mPopupEventListener->Init (EPHY_EMBED (mozembed));
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
  	rv = GetListener();
@@ -270,10 +249,6 @@ EphyBrowser::AttachListeners(void)
 				      mFaviconEventListener, PR_FALSE);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-	rv = target->AddEventListener(NS_LITERAL_STRING("DOMPopupBlocked"),
-				      mPopupEventListener, PR_FALSE);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
 	return NS_OK;
 }
 
@@ -289,10 +264,6 @@ EphyBrowser::DetachListeners(void)
 
 	rv = target->RemoveEventListener(NS_LITERAL_STRING("DOMLinkAdded"),
 					 mFaviconEventListener, PR_FALSE);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
-	rv = target->RemoveEventListener(NS_LITERAL_STRING("DOMPopupBlocked"),
-					 mPopupEventListener, PR_FALSE);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	return NS_OK;

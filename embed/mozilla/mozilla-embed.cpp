@@ -190,7 +190,7 @@ impl_activate (EphyEmbed *embed)
 
 static void
 impl_find_set_properties (EphyEmbed *embed, 
-                          char *search_string,
+                          const char *search_string,
 	                  gboolean case_sensitive,
 			  gboolean wrap_around)
 {
@@ -521,7 +521,7 @@ impl_reload (EphyEmbed *embed,
 }
 
 static void
-impl_zoom_set (EphyEmbed *embed, 
+impl_set_zoom (EphyEmbed *embed, 
                float zoom, 
                gboolean reflow)
 {
@@ -542,7 +542,7 @@ impl_zoom_set (EphyEmbed *embed,
 }
 
 static float
-impl_zoom_get (EphyEmbed *embed)
+impl_get_zoom (EphyEmbed *embed)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	float f;
@@ -1089,8 +1089,8 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->get_link_message = impl_get_link_message;
 	iface->get_js_status = impl_get_js_status;
 	iface->reload = impl_reload;
-	iface->zoom_set = impl_zoom_set;
-	iface->zoom_get = impl_zoom_get;
+	iface->set_zoom = impl_set_zoom;
+	iface->get_zoom = impl_get_zoom;
 	iface->shistory_n_items = impl_shistory_n_items;
 	iface->shistory_get_nth = impl_shistory_get_nth;
 	iface->shistory_get_pos = impl_shistory_get_pos;

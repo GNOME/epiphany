@@ -1,3 +1,36 @@
+2004-03-25  Adam Hooper  <adamh@cvs.gnome.org>
+
+	* doc/reference/Makefile.am:
+	* doc/reference/epiphany-docs.sgml:
+	* doc/reference/epiphany-sections.txt:
+	* doc/reference/epiphany.types:
+	* doc/reference/tmpl/ephy-embed.sgml
+	* doc/reference/tmpl/ephy-tab.sgml:
+	* doc/reference/tmpl/epiphany-unused.sgml:
+	* embed/ephy-embed.c: (ephy_embed_base_init),
+	(ephy_embed_set_zoom), (ephy_embed_get_zoom),
+	(ephy_embed_find_set_properties):
+	* embed/ephy-embed.h:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-nautilus-view.c: (gnv_zoomable_set_zoom_level_cb),
+	(gnv_zoomable_zoom_in_cb), (gnv_zoomable_zoom_out_cb),
+	(gnv_zoomable_zoom_to_default_cb):
+	* src/ephy-tab.c: (ephy_tab_address_cb),
+	(ephy_tab_zoom_changed_cb):
+	* src/ephy-window.c: (ephy_window_set_zoom):
+
+	Documented EphyEmbed.
+
+	s/zoom_[sg]et/[sg]et_zoom/g.
+
+	Removed the ge_popup_blocked signal, which can be done entirely from
+	an extension now.
+
+	s/match_word/wrap_around/ and s/char */const char */ in
+	ephy_embed_find_set_properties.
+
 2004-03-23  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-tab.c:

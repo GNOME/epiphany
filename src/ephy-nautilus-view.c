@@ -577,7 +577,7 @@ gnv_zoomable_set_zoom_level_cb (BonoboZoomable *zoomable,
 				EphyNautilusView *view)
 {
 	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
-	ephy_embed_zoom_set (view->priv->embed,
+	ephy_embed_set_zoom (view->priv->embed,
 			     ephy_zoom_get_nearest_zoom_level (level), TRUE);
 }
 
@@ -589,10 +589,10 @@ gnv_zoomable_zoom_in_cb (BonoboZoomable *zoomable,
 	
 	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
 
-	zoom = ephy_embed_zoom_get (view->priv->embed);
+	zoom = ephy_embed_get_zoom (view->priv->embed);
 
 	new_zoom = ephy_zoom_get_changed_zoom_level (zoom, 1);
-	ephy_embed_zoom_set (view->priv->embed, new_zoom, TRUE);
+	ephy_embed_set_zoom (view->priv->embed, new_zoom, TRUE);
 }
 
 static void
@@ -603,10 +603,10 @@ gnv_zoomable_zoom_out_cb (BonoboZoomable *zoomable,
 		
 	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
 
-	zoom = ephy_embed_zoom_get (view->priv->embed);
+	zoom = ephy_embed_get_zoom (view->priv->embed);
 
 	new_zoom = ephy_zoom_get_changed_zoom_level (zoom, -1);
-	ephy_embed_zoom_set (view->priv->embed, new_zoom, TRUE);
+	ephy_embed_set_zoom (view->priv->embed, new_zoom, TRUE);
 }
 
 static void
@@ -621,7 +621,7 @@ gnv_zoomable_zoom_to_default_cb	(BonoboZoomable *zoomable,
 				 EphyNautilusView *view)
 {
 	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
-	ephy_embed_zoom_set (view->priv->embed, 1.0, TRUE);
+	ephy_embed_set_zoom (view->priv->embed, 1.0, TRUE);
 }
 
 static void

@@ -67,12 +67,6 @@ private:
 	nsresult HandleFaviconLink (nsIDOMNode *node);
 };
 
-class EphyPopupEventListener : public EphyEventListener
-{
-public:
-	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
-};
-
 class EphyBrowser
 {
 public:
@@ -129,7 +123,6 @@ private:
 	nsCOMPtr<nsIDOMEventReceiver> mEventReceiver;
 	nsCOMPtr<nsIDOMWindow> mDOMWindow;
 	EphyFaviconEventListener *mFaviconEventListener;
-	EphyPopupEventListener *mPopupEventListener;
 	PRBool mInitialized;
 
 	nsresult GetListener (void);

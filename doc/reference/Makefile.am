@@ -1,6 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 AUTOMAKE_OPTIONS = 1.6
 
+INCLUDES = $(MOZILLA_COMPONENT_CFLAGS) \
+	   -include $(MOZILLA_INCLUDE_ROOT)/mozilla-config.h
+
 # The name of the module
 DOC_MODULE=epiphany
 
@@ -66,7 +69,6 @@ IGNORE_HFILES = \
 	ephy-download.h \
 	ephy-embed-dialog.h \
 	ephy-embed-event.h \
-	ephy-embed.h \
 	ephy-embed-persist.h \
 	ephy-embed-popup-control.h \
 	ephy-embed-prefs.h \

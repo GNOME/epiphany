@@ -39,8 +39,8 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_EMBED_CHROME_MASK     (ephy_embed_chrome_get_type ())
 
-typedef struct EphyEmbed	EphyEmbed;
-typedef struct EphyEmbedIface	EphyEmbedIface;
+typedef struct _EphyEmbed	EphyEmbed; /* dummy typedef */
+typedef struct _EphyEmbedIface	EphyEmbedIface;
 
 typedef enum
 {
@@ -127,7 +127,7 @@ typedef enum
 	STATE_IS_SECURE_HIGH
 } EmbedSecurityLevel;
 
-struct EphyEmbedIface
+struct _EphyEmbedIface
 {
 	GTypeInterface base_iface;
 
@@ -198,12 +198,12 @@ struct EphyEmbedIface
 	void		   (* get_security_level)	(EphyEmbed *embed,
 						  	 EmbedSecurityLevel *level,
 						  	 char **description);
-	void		   (* zoom_set)			(EphyEmbed *embed,
+	void		   (* set_zoom)			(EphyEmbed *embed,
 							 float zoom,
 							 gboolean reflow);
-	float		   (* zoom_get)			(EphyEmbed *embed);
+	float		   (* get_zoom)			(EphyEmbed *embed);
 	void		   (* find_set_properties)	(EphyEmbed *embed,
-							 char *search_string,
+							 const char *search_string,
 							 gboolean case_sensitive,
 							 gboolean wrap_around);
 	gboolean	   (* find_next)		(EphyEmbed *embed,
@@ -277,15 +277,15 @@ void		  ephy_embed_get_security_level		(EphyEmbed *embed,
 						 	 char **description);
 
 /* Zoom */
-void		  ephy_embed_zoom_set			(EphyEmbed *embed,
+void		  ephy_embed_set_zoom			(EphyEmbed *embed,
 							 float zoom,
 							 gboolean reflow);
 
-float		  ephy_embed_zoom_get			(EphyEmbed *embed);
+float		  ephy_embed_get_zoom			(EphyEmbed *embed);
 
 /* Find */
 void		  ephy_embed_find_set_properties	(EphyEmbed *embed,
-							 char *search_string,
+							 const char *search_string,
 							 gboolean case_sensitive,
 							 gboolean wrap_around);
 

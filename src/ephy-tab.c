@@ -696,11 +696,11 @@ ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 			g_value_unset (&value);
 		}
 
-		current_zoom = ephy_embed_zoom_get (embed);
+		current_zoom = ephy_embed_get_zoom (embed);
 		if (zoom != current_zoom)
 		{
 			tab->priv->setting_zoom = TRUE;
-			ephy_embed_zoom_set (embed, zoom, FALSE);
+			ephy_embed_set_zoom (embed, zoom, FALSE);
 			tab->priv->setting_zoom = FALSE;
 		}
 	}
@@ -734,7 +734,7 @@ ephy_tab_zoom_changed_cb (EphyEmbed *embed, float zoom, EphyTab *tab)
 		{
 			float zoom;
 
-			zoom = ephy_embed_zoom_get (embed);
+			zoom = ephy_embed_get_zoom (embed);
 
 			g_value_init (&value, G_TYPE_FLOAT);
 			g_value_set_float (&value, zoom);
