@@ -1,5 +1,16 @@
 2003-11-26  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-shell.c: (ephy_shell_init), (ephy_shell_finalize),
+	(ephy_shell_get_history_window), (ephy_shell_get_pdm_dialog):
+	* src/ephy-shell.h:
+	* src/pdm-dialog.c: (pdm_dialog_response_cb):
+	* src/pdm-dialog.h:
+	* src/window-commands.c: (window_cmd_edit_personal_data):
+
+	Make PDM dialogue a singleton.
+
+2003-11-26  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-cookie-manager.c: (ephy_cookie_copy),
 	(ephy_cookie_manager_remove_cookie):
 	* embed/ephy-cookie-manager.h:

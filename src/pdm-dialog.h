@@ -34,9 +34,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_PDM_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_PDM_DIALOG))
 #define EPHY_PDM_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_PDM_DIALOG, PdmDialogClass))
 
-typedef struct PdmDialog PdmDialog;
-typedef struct PdmDialogClass PdmDialogClass;
-typedef struct PdmDialogPrivate PdmDialogPrivate;
+typedef struct PdmDialog	PdmDialog;
+typedef struct PdmDialogClass	PdmDialogClass;
+typedef struct PdmDialogPrivate	PdmDialogPrivate;
 
 struct PdmDialog
 {
@@ -52,8 +52,6 @@ struct PdmDialogClass
 };
 
 GType         pdm_dialog_get_type         (void);
-
-EphyDialog   *pdm_dialog_new              (GtkWidget *window);
 
 G_END_DECLS
 

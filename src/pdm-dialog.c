@@ -1000,11 +1000,3 @@ pdm_dialog_response_cb (GtkDialog *widget,
 			break;
 	}
 }
-
-EphyDialog *
-pdm_dialog_new (GtkWidget *window)
-{
-	return EPHY_DIALOG (g_object_new (EPHY_TYPE_PDM_DIALOG,
-					  "ParentWindow", window,
-					  NULL));
-}

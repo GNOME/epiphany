@@ -135,6 +135,8 @@ GtkWidget      *ephy_shell_get_bookmarks_editor 	(EphyShell *gs);
 
 GtkWidget      *ephy_shell_get_history_window		(EphyShell *gs);
 
+GObject        *ephy_shell_get_pdm_dialog		(EphyShell *shell);
+
 void		ephy_shell_delete_on_exit		(EphyShell *gs,
 							 const char *path);
 

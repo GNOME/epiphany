@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 #include "print-dialog.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
-#include "pdm-dialog.h"
+#include "ephy-dialog.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-history-window.h"
 #include "ephy-new-bookmark.h"
@@ -46,16 +46,16 @@
 #include "egg-editable-toolbar.h"
 #include "egg-toolbar-editor.h"
 
-#include <glib.h>
 #include <string.h>
+#include <glib.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
-#include <glib/gi18n.h>
-#include <libgnomeui/gnome-about.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtktoggleaction.h>
+#include <libgnomeui/gnome-about.h>
+#include <glib/gi18n.h>
 
 enum
 {
@@ -796,7 +796,7 @@ window_cmd_edit_personal_data (GtkAction *action,
 {
 	EphyDialog *dialog;
 
-	dialog = pdm_dialog_new (GTK_WIDGET(window));
+	dialog = EPHY_DIALOG (ephy_shell_get_pdm_dialog (ephy_shell));
 
 	ephy_dialog_show (dialog);
 }
