@@ -362,20 +362,24 @@ ephy_notebook_move_tab (EphyNotebook *src,
 }
 
 static void
-drag_start (EphyNotebook *notebook)
+drag_start (EphyNotebook *notebook,
+	    guint32 time)
 {
 	notebook->priv->drag_in_progress = TRUE;
 
 	/* get a new cursor, if necessary */
+	/* FIXME multi-head */
 	if (!cursor) cursor = gdk_cursor_new (GDK_FLEUR);
 
 	/* grab the pointer */
 	gtk_grab_add (GTK_WIDGET (notebook));
-	if (!gdk_pointer_is_grabbed ()) {
-		gdk_pointer_grab (GDK_WINDOW(GTK_WIDGET (notebook)->window),
+	/* FIXME multi-head */
+	if (!gdk_pointer_is_grabbed ())
+	{
+		gdk_pointer_grab (GTK_WIDGET (notebook)->window,
 				  FALSE,
 				  GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
-				  NULL, cursor, GDK_CURRENT_TIME);
+				  NULL, cursor, time);
 	}
 }
 
@@ -435,12 +439,11 @@ motion_notify_cb (EphyNotebook *notebook,
 					      notebook->priv->y_start,
 					      event->x_root, event->y_root))
 		{
-			drag_start (notebook);
+			drag_start (notebook, event->time);
+			return TRUE;
 		}
-		else
-		{
-			return FALSE;
-		}
+
+		return FALSE;
 	}
 
 	result = find_notebook_and_tab_at_pos ((gint)event->x_root,
@@ -499,13 +502,14 @@ move_tab_to_another_notebook (EphyNotebook *src,
 	ephy_notebook_move_tab (src, dest, tab, dest_position);
 
 	/* start drag handling in dest notebook */
-	drag_start (dest);
 
 	dest->priv->motion_notify_handler_id =
 		g_signal_connect (G_OBJECT (dest),
 				  "motion-notify-event",
 				  G_CALLBACK (motion_notify_cb),
 				  NULL);
+
+	drag_start (dest, event->time);
 }
 
 static gboolean
@@ -535,8 +539,8 @@ button_release_cb (EphyNotebook *notebook,
 		if (gdk_pointer_is_grabbed ())
 		{
 			gdk_pointer_ungrab (event->time);
-			gtk_grab_remove (GTK_WIDGET (notebook));
 		}
+		gtk_grab_remove (GTK_WIDGET (notebook));
 	}
 
 	/* This must be called even if a drag isn't happening */
