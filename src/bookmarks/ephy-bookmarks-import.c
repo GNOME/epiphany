@@ -53,33 +53,16 @@ typedef enum
 static EphyNode *
 bookmark_add (EphyBookmarks *bookmarks,
 	      const char *title,
-	      const char *address,
-	      const char *topic_name)
+	      const char *address)
 {
-	EphyNode *topic;
-	EphyNode *bmk;
-
-	if (ephy_bookmarks_find_bookmark (bookmarks, address)) return NULL;
-
-	bmk = ephy_bookmarks_add (bookmarks, title, address);
-
-	if (bmk == NULL) return NULL;
-
-	if (topic_name)
+	if (!ephy_bookmarks_find_bookmark (bookmarks, address))
 	{
-		topic = ephy_bookmarks_find_keyword (bookmarks, topic_name, FALSE);
-		if (topic == NULL)
-		{
-			topic = ephy_bookmarks_add_keyword (bookmarks, topic_name);
-		}
-
-		if (topic != NULL)
-		{
-			ephy_bookmarks_set_keyword (bookmarks, topic, bmk);
-		}
+		return ephy_bookmarks_add (bookmarks, title, address);
 	}
-
-	return bmk;
+	else
+	{
+		return NULL;
+	}
 }
 
 gboolean
@@ -257,7 +240,7 @@ xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader, EphyNode **ret_
 		title = xmlStrdup (_("Untitled"));
 	}
 
-	node = bookmark_add (eb, title, address, NULL);
+	node = bookmark_add (eb, title, address);
 	if (node == NULL)
 	{
 		/* probably a duplicate */
@@ -694,7 +677,7 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 	FILE *bf;  /* bookmark file */
 	GString *name;
 	char *parsedname;
-	GString *url = g_string_new (NULL);
+	GString *url;
 	GList *folders = NULL, *l;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
@@ -728,7 +711,7 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 		case NS_SITE:
 			parsedname = ns_parse_bookmark_item (name);
 
-			node = bookmark_add (bookmarks, parsedname, url->str, NULL);
+			node = bookmark_add (bookmarks, parsedname, url->str);
 
 			if (node == NULL)
 			{
@@ -880,7 +863,7 @@ parse_rdf_item (EphyBookmarks *bookmarks,
 		child = child->next;
 	}
 
-	bmk = bookmark_add (bookmarks, title, link, NULL);
+	bmk = bookmark_add (bookmarks, title, link);
 	if (bmk)
 	{
 		l = subjects;
