@@ -380,7 +380,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 			nsEmbedCString cDesc;
 			NS_UTF16ToCString (description, NS_CSTRING_ENCODING_UTF8, cDesc);
 #else
-			char *mime;
+			char *mime = nsnull;
 			rv = mMIMEInfo->GetMIMEType (&mime);
 			NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 

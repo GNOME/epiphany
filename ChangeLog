@@ -1,5 +1,12 @@
 2005-02-27  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/eel-gconf-extensions.c: (tilde_compress):
+
+	Fix compress_tilde to only look at the prefix, and not
+	substitute in the middle.
+
+2005-02-27  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/MozDownload.cpp:
 
 	Try to fix the build with 1.7 branch.
