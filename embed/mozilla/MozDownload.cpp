@@ -61,6 +61,9 @@
 #include <nsEmbedString.h>
 #undef MOZILLA_STRICT_API
 
+#include <errno.h>
+#include <stdlib.h>
+
 const char* const persistContractID = "@mozilla.org/embedding/browser/nsWebBrowserPersist;1";
 
 MozDownload::MozDownload() :
@@ -365,58 +368,61 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 		else if (NS_SUCCEEDED (aStatus))
 		{
 			GnomeVFSMimeApplication *helperApp;
-#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
 			nsEmbedCString mimeType;
+#ifdef MOZ_NSIMIMEINFO_NSACSTRING_
 			rv = mMIMEInfo->GetMIMEType (mimeType);
 			NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
-			helperApp = gnome_vfs_mime_get_default_application (mimeType.get()); 
 
 			nsEmbedString description;
 			mMIMEInfo->GetApplicationDescription (description);
 
 			nsEmbedCString cDesc;
 			NS_UTF16ToCString (description, NS_CSTRING_ENCODING_UTF8, cDesc);
-
-			/* HACK we use the application description to decide
-			   if we have to open the saved file */
-			if ((strcmp (cDesc.get(), "gnome-default") == 0) &&
-			    helperApp)
 #else
 			char *mimeType;
 			rv = mMIMEInfo->GetMIMEType (&mimeType);
 			NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-			helperApp = gnome_vfs_mime_get_default_application (mimeType); 
+			if (mime)
+			{
+				mimeType.Assign (mime);
+				nsMemory::Free (mime);
+			}
 
 			PRUnichar *description;
 			mMIMEInfo->GetApplicationDescription (&description);
+			NS_ENSURE_TRUE (description, NS_ERROR_FAILURE);
 
 			nsEmbedCString cDesc;
 			NS_UTF16ToCString (nsEmbedString(description),
 					   NS_CSTRING_ENCODING_UTF8, cDesc);
 
+			nsMemory::Free (description);
+#endif
+
 			/* HACK we use the application description to decide
 			   if we have to open the saved file */
-			if (strcmp (cDesc.get(), "gnome-default") == 0 &&
-			    helperApp)
-#endif
+			if (g_str_has_suffix (cDesc.get(), "gnome-default:"))
 			{
-				GList *params = NULL;
-				char *param;
+				/* Format gnome-default:<usertime>:<helperapp id> */
+				char **str = g_strsplit (cDesc.get(), ":", -1);
+				g_return_val_if_fail (g_strv_length (str) != 3, NS_ERROR_FAILURE);
+
+				char *end;
+				guint32 user_time = strtoul (str[1], &end, 0);
+
+				helperApp = gnome_vfs_mime_application_new_from_desktop_id (str[2]);
+				if (!helperApp) return NS_ERROR_FAILURE;
+
 				nsEmbedCString aDest;
+				rv = mDestination->GetSpec (aDest);
+				NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-				mDestination->GetSpec (aDest);
+				ephy_file_launch_application (helperApp, aDest.get (), user_time);
 
-				param = gnome_vfs_make_uri_canonical (aDest.get ());
-				params = g_list_append (params, param);
-				gnome_vfs_mime_application_launch (helperApp, params);
-				g_free (param);
-
-				g_list_free (params);
+				gnome_vfs_mime_application_free (helperApp);
+				g_strfreev (str);
 			}
-
-			gnome_vfs_mime_application_free (helperApp);
 		}
 	}
         

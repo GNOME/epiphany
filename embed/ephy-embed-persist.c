@@ -25,6 +25,8 @@
 #include "mozilla-embed-persist.h"
 #include "ephy-debug.h"
 
+#include <gtk/gtkmain.h>
+
 enum
 {
 	PROP_0,
@@ -36,7 +38,8 @@ enum
 	PROP_HANDLER,
 	PROP_MAX_SIZE,
 	PROP_PERSISTKEY,
-	PROP_SOURCE,	
+	PROP_SOURCE,
+	PROP_USER_TIME	
 };
 
 #define EPHY_EMBED_PERSIST_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_PERSIST, EphyEmbedPersistPrivate))
@@ -51,6 +54,7 @@ struct _EphyEmbedPersistPrivate
 	long max_size;
 	EphyEmbedPersistFlags flags;
 	GtkWindow *fc_parent;
+	guint32 user_time;
 };
 
 static void	ephy_embed_persist_class_init	(EphyEmbedPersistClass *klass);
@@ -239,6 +243,26 @@ ephy_embed_persist_set_source (EphyEmbedPersist *persist,
 }
 
 /**
+ * ephy_embed_persist_set_user_time:
+ * @persist: an #EphyEmbedPersist
+ * @user_time: a timestamp, or 0
+ *
+ * Sets the time stamp of the user action which created @persist.
+ * Defaults to gtk_get_current_event_time() when @persist is created.
+ **/
+void
+ephy_embed_persist_set_user_time (EphyEmbedPersist *persist,
+				  guint32 user_time)
+{
+	g_return_if_fail (EPHY_IS_EMBED_PERSIST (persist));
+
+	LOG ("ephy_embed_persist_set_user_time persist %p user-time %d",
+	     persist, user_time);
+
+	persist->priv->user_time = user_time;
+}
+
+/**
  * ephy_embed_persist_get_dest:
  * @persist: an #EphyEmbedPersist
  *
@@ -367,6 +391,24 @@ ephy_embed_persist_get_source (EphyEmbedPersist *persist)
 	return persist->priv->source;
 }
 
+/**
+ * ephy_embed_persist_get_user_time:
+ * @persist: an #EphyEmbedPersist
+ *
+ * Returns the timestamp of the user action which created @persist.
+ * If not set explicitly, defaults to gtk_get_current_event_time ()
+ * at the time of creation of @persist.
+ *
+ * Return value: a timestamp, or 0
+ **/
+guint32
+ephy_embed_persist_get_user_time (EphyEmbedPersist *persist)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED_PERSIST (persist), 0);
+
+	return persist->priv->user_time;
+}
+
 static void
 ephy_embed_persist_set_property (GObject *object,
 				 guint prop_id,
@@ -400,6 +442,9 @@ ephy_embed_persist_set_property (GObject *object,
 			break;
 		case PROP_SOURCE:
 			ephy_embed_persist_set_source (persist, g_value_get_string (value));
+			break;
+		case PROP_USER_TIME:
+			ephy_embed_persist_set_user_time (persist, g_value_get_uint (value));
 			break;
 	}
 }
@@ -438,6 +483,9 @@ ephy_embed_persist_get_property (GObject *object,
 		case PROP_SOURCE:
 			g_value_set_string (value, ephy_embed_persist_get_source (persist));
 			break;
+		case PROP_USER_TIME:
+			g_value_set_uint (value, ephy_embed_persist_get_user_time (persist));
+			break;
 	}
 }
 
@@ -449,6 +497,8 @@ ephy_embed_persist_init (EphyEmbedPersist *persist)
 	LOG ("EphyEmbedPersist initialising %p", persist);
 
 	persist->priv->max_size = -1;
+
+	ephy_embed_persist_set_user_time (persist, gtk_get_current_event_time ());
 }
 
 static void
@@ -584,6 +634,16 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 							       "Url of the document to save",
 							       NULL,
 							       G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_USER_TIME,
+					 g_param_spec_uint   ("user-time",
+							      "User Time",
+							      "User Time",
+							      0,
+							      G_MAXUINT,
+							      0,
+							      G_PARAM_READWRITE));
 
 	g_type_class_add_private (object_class, sizeof(EphyEmbedPersistPrivate));
 }

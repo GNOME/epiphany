@@ -25,11 +25,14 @@
 
 #include "config.h"
 
+#include "ContentHandler.h"
+
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkbutton.h>
+#include <gtk/gtkmain.h>
 #include <libgnomevfs/gnome-vfs-mime.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
@@ -55,17 +58,22 @@
 #include "ephy-debug.h"
 #include "eel-gconf-extensions.h"
 
-#include "ContentHandler.h"
 #include "MozDownload.h"
 #include "EphyUtils.h"
 
+/* FIXME: we don't generally have a timestamp for the user action which initiated this
+ * content handler.
+ */
 #ifdef MOZ_NSIMIMEINFO_NSACSTRING_
 GContentHandler::GContentHandler()
+: mUserTime(0)
 {
 	LOG ("GContentHandler ctor (%p)", this);
 }
 #else
-GContentHandler::GContentHandler() : mMimeType(nsnull)
+GContentHandler::GContentHandler()
+: mMimeType(nsnull)
+, mUserTime(0)
 {
 	LOG ("GContentHandler ctor (%p)", this);
 }
@@ -155,6 +163,9 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 		gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (parentWindow)),
 					     GTK_WINDOW (dialog));
 	}
+
+	/* FIXME: this will only be the real user time if we came from ::Show */
+	ephy_gui_window_update_user_time (GTK_WIDGET (dialog), (guint32) mUserTime);
 
 	/* FIXME: modal -- mozilla sucks! */
 	do
@@ -267,7 +278,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 	{
 		dialog = gtk_message_dialog_new
 			(parentWindow, GTK_DIALOG_DESTROY_WITH_PARENT,
-			 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
+			 GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
 			 /* translators: %s is the name of the application */
 			 _("Open this file with \"%s\"?"),
 			 mHelperApp->name);
@@ -283,7 +294,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 	{
 		dialog = gtk_message_dialog_new
 			(parentWindow, GTK_DIALOG_DESTROY_WITH_PARENT,
-			 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
+			 GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
 			 _("Download the file?"));
 		gtk_message_dialog_format_secondary_text
 			(GTK_MESSAGE_DIALOG (dialog),
@@ -312,6 +323,10 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 	g_signal_connect_data (dialog, "response",
 			       G_CALLBACK (response_cb), this,
 			       (GClosureNotify) release_cb, (GConnectFlags) 0);
+
+	/* FIXME: should find a way to get the user time of the user action which
+	 * initiated this content handler
+	 */
 	gtk_window_present (GTK_WINDOW (dialog));
 
 	return NS_OK;
@@ -361,16 +376,30 @@ NS_METHOD GContentHandler::MIMEInitiateAction (void)
 
 NS_METHOD GContentHandler::MIMEDoAction (void)
 {
+	/* This is okay, since we either clicked on a button, or we get 0 */
+	mUserTime = gtk_get_current_event_time ();
+
 	nsCOMPtr<nsIMIMEInfo> mimeInfo;
 	mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
 	NS_ENSURE_TRUE (mimeInfo, NS_ERROR_FAILURE);
 
 	if (mAction == CONTENT_ACTION_OPEN)
 	{
-		nsEmbedString desc;
+		g_return_val_if_fail (mHelperApp, NS_ERROR_FAILURE);
 
-		NS_CStringToUTF16 (nsEmbedCString ("gnome-default"),
+		const char *id;
+		id = gnome_vfs_mime_application_get_desktop_id (mHelperApp);
+		
+		/* The current time is fine here as the user has just clicked
+		 * a button (it is used as the time for the application opening)
+		 */
+		char *info;
+		info = g_strdup_printf ("gnome-default:%d:%s", gtk_get_current_event_time(), id);
+
+		nsEmbedString desc;
+		NS_CStringToUTF16 (nsEmbedCString (info),
 			           NS_CSTRING_ENCODING_UTF8, desc);
+		g_free (info);
 
 		/* HACK we use the application description to ask
 		   MozDownload to open the file when download

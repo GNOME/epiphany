@@ -32,6 +32,7 @@
 #include <string.h>
 #include <glib/gi18n.h>
 #include <gtk/gtkclipboard.h>
+#include <gtk/gtkmain.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <libgnomevfs/gnome-vfs-file-info.h>
 #include <libgnomevfs/gnome-vfs-ops.h>
@@ -266,11 +267,13 @@ popup_cmd_save_image_as (GtkAction *action,
 #define GNOME_BACKGROUND_PREFERENCES "gnome-background-properties"
 
 static void
-background_download_completed (EphyEmbedPersist *persist,
-			       gpointer data)
+background_download_completed (EphyEmbedPersist *persist)
 {
 	const char *bg;
-	char *type, *path;
+	char *type;
+	guint32 user_time;
+
+	user_time = ephy_embed_persist_get_user_time (persist);
 
 	bg = ephy_embed_persist_get_dest (persist);
 	eel_gconf_set_string (CONF_DESKTOP_BG_PICTURE, bg);
@@ -285,12 +288,7 @@ background_download_completed (EphyEmbedPersist *persist,
 	g_object_unref (persist);
 
 	/* open the "Background Properties" capplet */
-	path = g_find_program_in_path (GNOME_BACKGROUND_PREFERENCES);
-	if (path != NULL)
-	{
-		g_spawn_command_line_async (path, NULL);
-		g_free (path);
-	}
+	ephy_file_launch_desktop_file ("background.desktop", user_time);
 }
 
 void
@@ -375,63 +373,34 @@ popup_cmd_open_frame (GtkAction *action,
 
 static void
 image_open_uri (const char *address,
-		gboolean delete)
+		gboolean delete,
+		guint32 user_time)
 {
-	GList *uris = NULL;
-	char *canonical;
-	GnomeVFSMimeApplication *app = NULL;
-	GnomeVFSFileInfo *info;
+	gboolean success;
 
-	canonical = gnome_vfs_make_uri_canonical (address);
+	success = ephy_file_launch_handler (NULL, address, user_time);
 
-	info = gnome_vfs_file_info_new ();
-	if (gnome_vfs_get_file_info (canonical, info,
-				     GNOME_VFS_FILE_INFO_GET_MIME_TYPE |
-				     GNOME_VFS_FILE_INFO_FORCE_SLOW_MIME_TYPE) == GNOME_VFS_OK &&
-	    (info->valid_fields & GNOME_VFS_FILE_INFO_FIELDS_MIME_TYPE) &&
-	    info->mime_type != NULL &&
-	    info->mime_type[0] != '\0' &&
-	    ephy_file_check_mime (info->mime_type) == EPHY_MIME_PERMISSION_SAFE)
+	if (delete && success)
 	{
-		app = gnome_vfs_mime_get_default_application (info->mime_type);
+		ephy_file_delete_on_exit (address);
 	}
-
-	if (app != NULL)
+	else if (delete)
 	{
-		/* FIXME rename tmp file to right extension ? */
-		uris = g_list_append (uris, canonical);
-		gnome_vfs_mime_application_launch (app, uris);
-		gnome_vfs_mime_application_free (app);
-		g_list_free (uris);
-		if (delete)
-		{
-			ephy_file_delete_on_exit (address);
-		}
+		gnome_vfs_unlink (address);
 	}
-	else
-	{
-		/* FIXME We should really warn the user here */
-
-		g_warning ("Cannot find an application to open %s with.", address);
-		if (delete)
-		{
-			gnome_vfs_unlink (address);
-		}
-	}
-
-	g_free (canonical);
-	gnome_vfs_file_info_unref (info);
 }
 
 static void
 save_source_completed_cb (EphyEmbedPersist *persist)
 {
 	const char *dest;
+	guint32 user_time;
 
+	user_time = ephy_embed_persist_get_user_time (persist);
 	dest = ephy_embed_persist_get_dest (persist);
 	g_return_if_fail (dest != NULL);
 
-	image_open_uri (dest, TRUE);
+	image_open_uri (dest, TRUE, user_time);
 }
 
 static void
@@ -492,7 +461,8 @@ popup_cmd_open_image (GtkAction *action,
 
 	if (strcmp (scheme, "file") == 0)
 	{
-		image_open_uri (address, FALSE);
+		image_open_uri (address, FALSE,
+				gtk_get_current_event_time ());
 	}
 	else
 	{

@@ -84,6 +84,7 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 #else
 	char *mMimeType;
 #endif
+	PRUint32 mUserTime;
 };
 
 #endif /* CONTENT_HANDLER_H */

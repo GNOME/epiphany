@@ -22,6 +22,12 @@
 
 #include "config.h"
 
+#include "ephy-file-helpers.h"
+
+#include "ephy-prefs.h"
+#include "eel-gconf-extensions.h"
+#include "ephy-debug.h"
+
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -29,12 +35,14 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <libgnome/gnome-init.h>
+#include <libgnomevfs/gnome-vfs-utils.h>
+#include <libgnomevfs/gnome-vfs-file-info.h>
+#include <libgnomevfs/gnome-vfs-ops.h>
 #include <libxml/xmlreader.h>
 
-#include "ephy-file-helpers.h"
-#include "ephy-prefs.h"
-#include "eel-gconf-extensions.h"
-#include "ephy-debug.h"
+/* bug http://bugzilla.gnome.org/show_bug.cgi?id=156687 */
+#undef GNOME_DISABLE_DEPRECATED
+#include <libgnome/gnome-desktop-item.h>
 
 static GHashTable *files = NULL;
 static GHashTable *mime_table = NULL;
@@ -448,4 +456,159 @@ ephy_file_check_mime (const char *mime_type)
 	}
 
 	return permission;
+}
+
+static int
+launch_desktop_item (const char *desktop_file,
+		     const char *parameter,
+		     guint32 user_time,
+		     GError **error)
+{
+	GnomeDesktopItem *item = NULL;
+	GList *uris = NULL;
+	char *canonical;
+	int ret = -1;
+
+	item = gnome_desktop_item_new_from_file (desktop_file, 0, NULL);
+	if (item == NULL) return FALSE;
+		
+	if (parameter != NULL)
+	{
+		canonical = gnome_vfs_make_uri_canonical (parameter);
+		uris = g_list_append (uris, canonical);
+	}
+
+	gnome_desktop_item_set_launch_time (item, user_time);
+	ret = gnome_desktop_item_launch (item, uris, 0, error);
+
+	g_list_foreach (uris, (GFunc) g_free, NULL);
+	g_list_free (uris);
+	gnome_desktop_item_unref (item);
+
+	return ret;
+}
+
+gboolean
+ephy_file_launch_desktop_file (const char *filename,
+			       guint32 user_time)
+{
+	GError *error = NULL;
+	const char * const *dirs;
+	char *path = NULL;
+	int i, ret = -1;
+
+	dirs = g_get_system_data_dirs ();
+	if (dirs == NULL) return FALSE;
+
+	for (i = 0; dirs[i] != NULL; i++)
+	{
+		g_print ("Looking in path: %s\n", dirs[i]);
+
+		path = g_build_filename (dirs[i], "applications", filename, NULL);
+
+		if (g_file_test (path, G_FILE_TEST_IS_REGULAR)) break;
+
+		g_free (path);
+	}
+
+	if (path != NULL)
+	{
+		ret = launch_desktop_item (path, NULL, user_time, &error);
+
+		if (ret == -1 || error != NULL)
+		{
+			g_warning ("Cannot launch desktop item '%s': %s\n",
+				path, error ? error->message : "(unknown error)");
+			g_clear_error (&error);
+		}
+
+		g_free (path);
+	}
+
+	return ret >= 0;
+}
+
+gboolean
+ephy_file_launch_application (GnomeVFSMimeApplication *application,
+			      const char *parameter,
+			      guint32 user_time)
+{
+	GError *error = NULL;
+	const char *desktop_file;
+	int ret = -1;
+
+	g_return_val_if_fail (application != NULL, FALSE);
+	g_return_val_if_fail (parameter != NULL, FALSE);
+
+	desktop_file = gnome_vfs_mime_application_get_desktop_file_path (application);
+	if (desktop_file != NULL)
+	{
+		ret = launch_desktop_item (desktop_file, parameter, user_time, &error);
+	}
+
+	if (ret == -1 || error != NULL)
+	{
+		/* FIXME We should really warn the user here */
+
+		g_warning ("Cannot launch application '%s': %s\n",
+			   gnome_vfs_mime_application_get_name (application),
+			   error ? error->message : "(unknown error)");
+		g_clear_error (&error);
+	}
+
+	return ret >= 0;
+}
+
+gboolean
+ephy_file_launch_handler (const char *mime_type,
+			  const char *address,
+			  guint32 user_time)
+{
+	GnomeVFSMimeApplication *app = NULL;
+	GnomeVFSFileInfo *info = NULL;
+	char *canonical;
+	gboolean ret = FALSE;
+
+	g_return_val_if_fail (address != NULL, FALSE);
+
+	canonical = gnome_vfs_make_uri_canonical (address);
+	g_return_val_if_fail (canonical != NULL, FALSE);
+
+	if (mime_type != NULL)
+	{
+		app = gnome_vfs_mime_get_default_application (mime_type);
+	}
+	else
+	{
+		/* Sniff mime type and check if it's safe to open */
+		info = gnome_vfs_file_info_new ();
+		if (gnome_vfs_get_file_info (canonical, info,
+					     GNOME_VFS_FILE_INFO_GET_MIME_TYPE |
+					     GNOME_VFS_FILE_INFO_FORCE_SLOW_MIME_TYPE) == GNOME_VFS_OK &&
+		    (info->valid_fields & GNOME_VFS_FILE_INFO_FIELDS_MIME_TYPE) &&
+		    info->mime_type != NULL &&
+		    info->mime_type[0] != '\0' &&
+		    ephy_file_check_mime (info->mime_type) == EPHY_MIME_PERMISSION_SAFE)
+		{
+			/* FIXME rename tmp file to right extension ? */
+			app = gnome_vfs_mime_get_default_application (info->mime_type);
+		}
+		gnome_vfs_file_info_unref (info);
+	}
+
+	if (app != NULL)
+	{
+		ret = ephy_file_launch_application (app, address, user_time);
+
+		gnome_vfs_mime_application_free (app);
+	}
+	else
+	{
+		/* FIXME: warn user? */
+		g_warning ("No handler for found or file type is unsafe!\n");
+	}
+
+	g_free (canonical);
+
+	return ret;
 }

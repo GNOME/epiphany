@@ -1,3 +1,63 @@
+2005-02-26  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.ac:
+
+	Depend on gnome-desktop for gnome-desktop-item,
+	and up the gnome-vfs dependency version.
+
+	* embed/ephy-embed-persist.c: (ephy_embed_persist_set_user_time),
+	(ephy_embed_persist_get_user_time),
+	(ephy_embed_persist_set_property),
+	(ephy_embed_persist_get_property), (ephy_embed_persist_init),
+	(ephy_embed_persist_class_init):
+	* embed/ephy-embed-persist.h:
+
+	Add user time property.
+
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/ContentHandler.h:
+
+	Forward user time to MozDownload via a string. Not perfect,
+	but better than nothing.
+
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+
+	Set user time on filechooser.
+
+	* embed/mozilla/MozDownload.cpp:
+
+	Get user time from content handler, and use it when
+	launching the external handler app.
+
+	* lib/ephy-file-helpers.c: (ephy_file_check_mime),
+	(launch_desktop_item), (ephy_file_launch_desktop_file),
+	(ephy_file_launch_application), (ephy_file_launch_handler):
+	* lib/ephy-file-helpers.h:
+
+	Convenience functions to launch an app, or a desktop item,
+	with user time.
+
+	* lib/ephy-gui.c: (ephy_gui_confirm_overwrite_file),
+	(ephy_gui_window_update_user_time), (ephy_gui_window_present):
+	* lib/ephy-gui.h:
+
+	Make our own gtk_window_present, to correctly update user time.
+	Check if the path is writable in ephy_gui_confirm_overwrite_file().
+
+	* src/ephy-session.c: (ephy_session_autoresume):
+
+	After showing the recovery dialogue, don't use the old user time
+	to launch the windows; use the current event time instead.
+
+	* src/popup-commands.c: (background_download_completed),
+	(image_open_uri), (save_source_completed_cb),
+	(popup_cmd_open_image):
+	* src/window-commands.c: (window_cmd_file_save_as),
+	(save_source_completed_cb), (save_temp_source),
+	(window_cmd_view_page_source):
+
+	Launch handlers with user time.
+
 2005-02-24  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-link.c: (ephy_link_base_init):

@@ -22,6 +22,7 @@
 
 #include "ephy-gui.h"
 #include "eel-gconf-extensions.h"
+#include "ephy-debug.h"
 
 #include <ctype.h>
 #include <string.h>
@@ -36,6 +37,8 @@
 #include <gtk/gtkstock.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtktreeselection.h>
+
+#include <unistd.h>
 
 void
 ephy_gui_sanitise_popup_position (GtkMenu *menu,
@@ -190,15 +193,25 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent,
 				 const char *filename)
 {
 	GtkWidget *dialog;
-	char *display_name;
-	gboolean retval;
+	char *display_name, *path;
+	gboolean retval, writable;
 
 	if (filename == NULL) return FALSE;
 
 	if (!g_file_test (filename, G_FILE_TEST_EXISTS))
 	{
-		return TRUE;
+		/* check if path is writable to */
+		path = g_path_get_dirname (filename);
+		writable = access (path, W_OK) == 0;
+		g_free (path);
+
+		/* FIXME put up some UI to inform the user */
+		return writable;
 	}
+
+	/* check if file is writable */
+	/* FIXME put up some UI to inform the user */
+	if (access (filename, W_OK) != 0) return FALSE;
 
 	display_name = g_filename_display_basename (filename);
 
@@ -349,6 +362,8 @@ void
 ephy_gui_window_update_user_time (GtkWidget *window,
 				  guint32 user_time)
 {
+	LOG ("updating user time on window %p to %d", window, user_time);
+
 	if (user_time != 0)
 	{
 		gtk_widget_realize (window);
@@ -356,4 +371,33 @@ ephy_gui_window_update_user_time (GtkWidget *window,
 					      user_time);
 	}
 
+}
+
+/* gtk+ bug 166379 */
+/* adapted from gtk+/gtk/gtkwindow.c */
+void
+ephy_gui_window_present (GtkWindow *window,
+			 guint32 user_time)
+{
+	GtkWidget *widget;
+	
+	g_return_if_fail (GTK_IS_WINDOW (window));
+	
+	widget = GTK_WIDGET (window);
+	
+	if (GTK_WIDGET_VISIBLE (window))
+	{
+		g_assert (widget->window != NULL);
+
+		gdk_window_show (widget->window);
+
+		/* note that gdk_window_focus() will also move the window to
+		* the current desktop, for WM spec compliant window managers.
+		*/
+		gdk_window_focus (widget->window, user_time);
+	}
+	else
+	{
+		gtk_widget_show (widget);
+	}
 }

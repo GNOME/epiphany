@@ -444,7 +444,7 @@ ephy_session_autoresume (EphySession *session,
 	{
 		ephy_gui_window_update_user_time (session->priv->resume_dialog,
 						  user_time);
-		gtk_window_present (GTK_WINDOW (priv->resume_dialog));
+		ephy_gui_window_present (GTK_WINDOW (priv->resume_dialog), user_time);
 		return TRUE;
 	}
 
@@ -455,7 +455,7 @@ ephy_session_autoresume (EphySession *session,
 	{
 		session->priv->dont_save = TRUE;
 		retval = ephy_session_load (session, saved_session,
-					    user_time);
+					    0 /* since we've shown the dialogue */);
 		session->priv->dont_save = FALSE;
 		ephy_session_save (session, SESSION_CRASHED);
 	}

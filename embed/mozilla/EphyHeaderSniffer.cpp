@@ -351,9 +351,16 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		EphyFileChooser *dialog;
 		GtkWindow *window;
 		const char *title;
+		guint32 user_time;
 
 		title = ephy_embed_persist_get_fc_title (EPHY_EMBED_PERSIST (mEmbedPersist));
 		window = ephy_embed_persist_get_fc_parent (EPHY_EMBED_PERSIST (mEmbedPersist));
+
+		user_time = ephy_embed_persist_get_user_time (EPHY_EMBED_PERSIST (mEmbedPersist));
+		if (user_time == 0)
+		{
+			g_warning ("EphyHeaderSniffer::PerformSave without valid user time!\n");
+		}
 
 		dialog = ephy_file_chooser_new (title ? title: _("Save"),
 						GTK_WIDGET (window),
@@ -367,6 +374,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		g_signal_connect (dialog, "response",
 				  G_CALLBACK (filechooser_response_cb), this);
 
+		ephy_gui_window_update_user_time (GTK_WIDGET (dialog), user_time);
 		gtk_widget_show (GTK_WIDGET (dialog));
 
                 g_free (filename);

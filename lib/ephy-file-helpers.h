@@ -24,6 +24,7 @@
 #define EPHY_FILE_HELPERS_H
 
 #include <glib.h>
+#include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
 G_BEGIN_DECLS
 
@@ -44,7 +45,7 @@ void        ephy_file_helpers_shutdown   (void);
 
 char       *ephy_file_downloads_dir      (void);
 
-char       *ephy_file_desktop_dir      (void);
+char       *ephy_file_desktop_dir	 (void);
 
 const char *ephy_file_tmp_dir	 	 (void);
 
@@ -63,6 +64,17 @@ gboolean    ephy_file_switch_temp_file   (const char *filename,
 void	    ephy_file_delete_on_exit	 (const char *path);
 
 EphyMimePermission ephy_file_check_mime	 (const char *mime_type);
+
+gboolean    ephy_file_launch_desktop_file (const char *filename,
+					   guint32 user_time);
+
+gboolean    ephy_file_launch_application (GnomeVFSMimeApplication *application,
+					  const char *parameter,
+					  guint32 user_time);
+
+gboolean    ephy_file_launch_handler	 (const char *mime_type,
+					  const char *address,
+					  guint32 user_time);
 
 G_END_DECLS
 

@@ -105,6 +105,8 @@ void			 ephy_embed_persist_set_persist_key	(EphyEmbedPersist *persist,
 
 void			 ephy_embed_persist_set_source		(EphyEmbedPersist *persist,
 								 const char *value);
+void			 ephy_embed_persist_set_user_time	(EphyEmbedPersist *persist,
+								 guint32 user_time);
 
 const char 		*ephy_embed_persist_get_dest		(EphyEmbedPersist *persist);
 
@@ -121,6 +123,8 @@ long			 ephy_embed_persist_get_max_size	(EphyEmbedPersist *persist);
 const char 		*ephy_embed_persist_get_persist_key	(EphyEmbedPersist *persist);
 
 const char 		*ephy_embed_persist_get_source		(EphyEmbedPersist *persist);
+
+guint32			 ephy_embed_persist_get_user_time	(EphyEmbedPersist *persist);
 
 char			*ephy_embed_persist_to_string		(EphyEmbedPersist *persist);
 

@@ -57,6 +57,8 @@
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtktoggleaction.h>
 #include <glib/gi18n.h>
+#include <libgnomeui/gnome-icon-theme.h>
+#include <libgnome/gnome-desktop-item.h>
 
 void
 window_cmd_edit_find (GtkAction *action,
@@ -394,6 +396,7 @@ window_cmd_file_save_as (GtkAction *action,
 	ephy_embed_persist_set_embed (persist, embed);
 	ephy_embed_persist_set_fc_title (persist, _("Save As"));
 	ephy_embed_persist_set_fc_parent (persist,GTK_WINDOW (window));
+
 	ephy_embed_persist_set_flags
 		(persist, EPHY_EMBED_PERSIST_MAINDOC | EPHY_EMBED_PERSIST_ASK_DESTINATION);
 	ephy_embed_persist_set_persist_key
@@ -403,7 +406,6 @@ window_cmd_file_save_as (GtkAction *action,
 
 	g_object_unref (G_OBJECT(persist));
 }
-
 
 void
 window_cmd_file_work_offline (GtkAction *action,
@@ -619,48 +621,23 @@ window_cmd_view_zoom_normal (GtkAction *action,
 }
 
 static void
-editor_open_uri (const char *address)
-{
-	GList *uris = NULL;
-	char *canonical;
-	GnomeVFSMimeApplication *app;
-
-	canonical = gnome_vfs_make_uri_canonical (address);
-
-	uris = g_list_append (uris, canonical);
-
-	app = gnome_vfs_mime_get_default_application ("text/plain");
-	if (app)
-	{
-		gnome_vfs_mime_application_launch (app, uris);
-		gnome_vfs_mime_application_free (app);
-	}
-	else
-	{
-		/* FIXME We should really warn the user here */
-
-		g_warning ("Cannot find a text editor.");
-	}
-
-	g_free (canonical);
-	g_list_free (uris);
-}
-
-static void
 save_source_completed_cb (EphyEmbedPersist *persist)
 {
 	const char *dest;
+	guint32 user_time;
 
+	user_time = ephy_embed_persist_get_user_time (persist);
 	dest = ephy_embed_persist_get_dest (persist);
 	g_return_if_fail (dest != NULL);
 
 	ephy_file_delete_on_exit (dest);
 
-	editor_open_uri (dest);
+	ephy_file_launch_handler ("text/plain", dest, user_time);
 }
 
 static void
-save_temp_source (EphyEmbed *embed)
+save_temp_source (EphyEmbed *embed,
+		  guint32 user_time)
 {
 	char *tmp, *base;
 	EphyEmbedPersist *persist;
@@ -687,6 +664,7 @@ save_temp_source (EphyEmbed *embed)
 	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_COPY_PAGE |
 				      EPHY_EMBED_PERSIST_NO_VIEW);
 	ephy_embed_persist_set_dest (persist, tmp);
+	ephy_embed_persist_set_user_time (persist, user_time);
 
 	g_signal_connect (persist, "completed",
 			  G_CALLBACK (save_source_completed_cb), NULL);
@@ -704,20 +682,22 @@ window_cmd_view_page_source (GtkAction *action,
 	EphyEmbed *embed;
 	char *address;
 	char *scheme;
+	guint32 user_time;
 
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
 	address = ephy_embed_get_location (embed, TRUE);
 	scheme = gnome_vfs_get_uri_scheme (address);
+	user_time = gtk_get_current_event_time ();
 
 	if (strcmp (scheme, "file") == 0)
 	{
-		editor_open_uri (address);
+		ephy_file_launch_handler ("text/plain", address, user_time);
 	}
 	else
 	{
-		save_temp_source (embed);
+		save_temp_source (embed, user_time);
 	}
 
 	g_free (scheme);
