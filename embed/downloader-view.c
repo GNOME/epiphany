@@ -325,6 +325,7 @@ controls_info_foreach (GtkTreeModel *model,
 
 	gtk_tree_model_get_value (model, iter, COL_PERSIST_OBJECT, &val);
 	persist_object = g_value_get_pointer (&val);
+	g_value_unset (&val);
 
 	details = g_hash_table_lookup (info->priv->details_hash,
 				       persist_object);
@@ -847,6 +848,7 @@ download_dialog_pause_cb (GtkButton *button, DownloaderView *dv)
 
 	gtk_tree_model_get_value (model, &iter, COL_PERSIST_OBJECT, &val);
 	persist_object = g_value_get_pointer (&val);
+	g_value_unset (&val);
 
 	details = g_hash_table_lookup (dv->priv->details_hash,
 				       persist_object);
@@ -900,6 +902,7 @@ download_dialog_abort_cb (GtkButton *button, DownloaderView *dv)
 		gtk_tree_model_get_value (model, &iter,
 					  COL_PERSIST_OBJECT, &val);
 		persist_object = g_value_get_pointer (&val);
+		g_value_unset (&val);
 
 		details = g_hash_table_lookup (dv->priv->details_hash,
 					       persist_object);
@@ -939,6 +942,7 @@ downloader_treeview_selection_changed_cb (GtkTreeSelection *selection,
 	{
 		gtk_tree_model_get_value (priv->model, &iter, COL_PERSIST_OBJECT, &val);
 		persist_object = g_value_get_pointer (&val);
+		g_value_unset (&val);
 
 		details = g_hash_table_lookup (priv->details_hash,
 					       persist_object);
@@ -1059,6 +1063,7 @@ open_selection_foreach (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *ite
 
 	gtk_tree_model_get_value (model, iter, COL_PERSIST_OBJECT, &val);
 	persist_object = g_value_get_pointer (&val);
+	g_value_unset (&val);
 
 	details = g_hash_table_lookup (dv->priv->details_hash,
 				       persist_object);

@@ -792,6 +792,7 @@ pdm_dialog_cookies_properties_button_clicked_cb (GtkWidget *button,
 	gtk_tree_model_get_value
 		(model, &iter, COL_COOKIES_DATA, &val);
 	info = (CookieInfo *)g_value_get_pointer (&val);
+	g_value_unset (&val);
 
 	show_cookies_properties (dialog, info);
 

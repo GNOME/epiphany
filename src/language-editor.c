@@ -154,6 +154,7 @@ language_editor_update_pref (LanguageEditor *editor)
 		gtk_tree_model_get_value (GTK_TREE_MODEL (editor->priv->model),
 					  &iter, COL_DATA, &val);
 		index = g_value_get_int (&val);
+		g_value_unset (&val);
 
 		strings = g_slist_append(strings, GINT_TO_POINTER(index));
 	}

@@ -1,3 +1,13 @@
+2003-07-14  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/pdm-dialog.c: (pdm_dialog_cookies_properties_button_clicked_cb):
+	* src/language-editor.c: (language_editor_update_pref):
+	* embed/downloader-view.c: (controls_info_foreach),
+	(download_dialog_pause_cb), (download_dialog_abort_cb),
+	(downloader_treeview_selection_changed_cb), (open_selection_foreach):
+
+	Fix mem leaks; thanks to Xan for pointing this out.
+
 2003-07-14  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/egg/eggtreemultidnd.c:
