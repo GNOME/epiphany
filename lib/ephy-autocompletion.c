@@ -369,8 +369,10 @@ ephy_autocompletion_refine_matches (EphyAutocompletion *ac)
 	for (i = 0; i < oldmatches.num_matches; i++)
 	{
 		EphyAutocompletionMatch *mi = &oldmatches.array[i];
+
 		if (mi->is_action ||
 		    (mi->substring && g_strrstr (mi->match, p->keys[0])) ||
+		    (mi->substring && g_strrstr (mi->title, p->keys[0])) ||
 		    !strncmp (key0, mi->title + mi->offset, key0l))
 		{
 			acma_append (&newmatches, mi, mi->is_action);
@@ -425,7 +427,8 @@ ephy_autocompletion_update_matches_full_item (EphyAutocompletionSource *source,
 					      EphyAutocompletionPrivate *p)
 {
 	if (is_action ||
-	    (substring && g_strrstr (item, p->keys[0])))
+	    (substring && g_strrstr (item, p->keys[0])) ||
+	    (substring && g_strrstr (title, p->keys[0])))
 	{
 		EphyAutocompletionMatch m;
 		m.match = item;

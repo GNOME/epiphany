@@ -119,7 +119,6 @@ ephy_bookmarks_autocompletion_source_foreach (EphyAutocompletionSource *source,
 	{
 		EphyNode *kid;
 		const char *url, *smart_url, *title, *keywords;
-		char *item;
 
 		kid = g_ptr_array_index (children, i);
 		url = ephy_node_get_property_string
@@ -130,7 +129,6 @@ ephy_bookmarks_autocompletion_source_foreach (EphyAutocompletionSource *source,
 			(kid, EPHY_NODE_BMK_PROP_TITLE);
 		keywords = ephy_node_get_property_string
 			(kid, EPHY_NODE_BMK_PROP_KEYWORDS);
-		item = g_strconcat (title, keywords, NULL);
 
 		if (smart_url == NULL ||
 		    g_utf8_strlen (smart_url, -1) == 0)
@@ -139,13 +137,11 @@ ephy_bookmarks_autocompletion_source_foreach (EphyAutocompletionSource *source,
 		}
 
 		func (source,
-		      smart_url ? NULL : item,
+		      smart_url ? NULL : keywords,
 		      title,
 		      smart_url ? smart_url : url,
 		      (smart_url != NULL),
 		      TRUE, 0, data);
-
-		g_free (item);
 	}
 	ephy_node_thaw (eb->priv->bookmarks);
 }

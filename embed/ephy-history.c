@@ -112,29 +112,41 @@ ephy_history_autocompletion_source_set_basic_key (EphyAutocompletionSource *sour
 
 static void
 ephy_history_autocompletion_source_foreach (EphyAutocompletionSource *source,
-					      const gchar *current_text,
-					      EphyAutocompletionSourceForeachFunc func,
-					      gpointer data)
+					    const gchar *current_text,
+					    EphyAutocompletionSourceForeachFunc func,
+					    gpointer data)
 {
 	GPtrArray *children;
 	int i;
 	EphyHistory *eb = EPHY_HISTORY (source);
+	GTime now;
+
+	now = time (NULL);
 
 	children = ephy_node_get_children (eb->priv->pages);
 	for (i = 0; i < children->len; i++)
 	{
 		EphyNode *kid;
 		const char *url, *title;
+		int last_visit, visits;
+		guint32 score;
 
 		kid = g_ptr_array_index (children, i);
+		g_assert (EPHY_IS_NODE (kid));
+
 		url = ephy_node_get_property_string
 			(kid, EPHY_NODE_PAGE_PROP_LOCATION);
 		title = ephy_node_get_property_string
 			(kid, EPHY_NODE_PAGE_PROP_TITLE);
+		last_visit = ephy_node_get_property_int
+			(kid, EPHY_NODE_PAGE_PROP_LAST_VISIT);
+		visits = ephy_node_get_property_int
+			(kid, EPHY_NODE_PAGE_PROP_VISITS);
+		score = MAX (visits - ((now - last_visit) >> 15), 1);
 
 		func (source, url,
 		      url, url, FALSE,
-		      FALSE, 0, data);
+		      FALSE, score, data);
 	}
 	ephy_node_thaw (eb->priv->pages);
 }
@@ -308,8 +320,6 @@ ephy_history_init (EphyHistory *eb)
 					       "ephy-history.xml",
 					       NULL);
 
-	ephy_node_system_init ();
-
 	eb->priv->pages_hash = g_hash_table_new (g_str_hash,
 			                          g_str_equal);
 	eb->priv->pages_hash_lock = g_new0 (GStaticRWLock, 1);
@@ -425,7 +435,27 @@ ephy_history_add_host (EphyHistory *eh, const char *url)
 	}
 
 	g_static_rw_lock_reader_lock (eh->priv->hosts_hash_lock);
+
 	host = g_hash_table_lookup (eh->priv->hosts_hash, host_name);
+
+	if (!host)
+	{
+		char *tmp;
+
+		if (g_str_has_prefix (host_name, "www."))
+		{
+			tmp = g_strdup (g_utf8_offset_to_pointer (host_name, 4));
+		}
+		else
+		{
+			tmp = g_strconcat ("www.", host_name, NULL);
+		}
+
+		host = g_hash_table_lookup (eh->priv->hosts_hash, tmp);
+
+		g_free (tmp);
+	}
+
 	g_static_rw_lock_reader_unlock (eh->priv->hosts_hash_lock);
 
 	if (!host)
@@ -451,6 +481,8 @@ ephy_history_add_host (EphyHistory *eh, const char *url)
 
 		ephy_node_add_child (eh->priv->hosts, host);
 	}
+
+	g_assert (EPHY_IS_NODE (host));
 
 	visits = ephy_node_get_property_int
 		(host, EPHY_NODE_PAGE_PROP_VISITS);
@@ -489,6 +521,8 @@ ephy_history_visited (EphyHistory *eh, EphyNode *node)
 
 	now = time (NULL);
 
+	g_assert (EPHY_IS_NODE (node));
+
 	url = ephy_node_get_property_string
 		(node, EPHY_NODE_PAGE_PROP_LOCATION);
 
@@ -525,14 +559,15 @@ ephy_history_get_page_visits (EphyHistory *gh,
 			      const char *url)
 {
 	EphyNode *node;
-	int visits;
+	int visits = 0;
 
 	node = ephy_history_get_page (gh, url);
-
-	visits = ephy_node_get_property_int
-		(node, EPHY_NODE_PAGE_PROP_VISITS);
-	if (visits < 0) visits = 0;
-	visits++;
+	if (node)
+	{
+		visits = ephy_node_get_property_int
+			(node, EPHY_NODE_PAGE_PROP_VISITS);
+		if (visits < 0) visits = 0;
+	}
 
 	return visits;
 }

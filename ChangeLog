@@ -1,3 +1,23 @@
+2002-12-31  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/glade/prefs-dialog.glade:
+	
+	Remove hidden filtering page.
+
+	* embed/ephy-history.c:
+	(ephy_history_autocompletion_source_foreach), (ephy_history_init),
+	(ephy_history_add_host), (ephy_history_visited),
+	(ephy_history_get_page_visits):
+	* lib/ephy-autocompletion.c: (ephy_autocompletion_refine_matches),
+	(ephy_autocompletion_update_matches_full_item):
+	* src/bookmarks/ephy-bookmarks.c:
+	(ephy_bookmarks_autocompletion_source_foreach):
+
+	Fix memory corruption in bookmarks refine.
+	Implement history autocompletion score.
+	Smarter host matching code.
+	Add some sanity checks.
+
 2002-12-31  Christian Rose  <menthos@menthos.com>
 
 	* configure.in: Added "sv" to ALL_LINGUAS.
