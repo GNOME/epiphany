@@ -235,7 +235,7 @@ drag_data_get_cb (GtkWidget          *widget,
 
   g_return_if_fail (IS_EGG_EDITABLE_TOOLBAR (etoolbar));
 
-  action = GTK_ACTION (g_object_get_data (G_OBJECT (widget), "egg-action"));
+  action = GTK_ACTION (g_object_get_data (G_OBJECT (widget), "gtk-action"));
 
   if (action)
     {
@@ -381,7 +381,6 @@ create_item (EggEditableToolbar *t,
 		     0, action_name);
       action = find_action (t, action_name);
       item = gtk_action_create_tool_item (action);
-      gtk_widget_set_sensitive (item, TRUE);
     }
 
   gtk_widget_show (item);
@@ -392,6 +391,7 @@ create_item (EggEditableToolbar *t,
 
   if (t->priv->edit_mode)
     {
+      gtk_widget_set_sensitive (item, TRUE);
       set_item_drag_source (item, action, is_separator);
       gtk_tool_item_set_use_drag_window (GTK_TOOL_ITEM (item), TRUE);
     }
