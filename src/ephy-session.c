@@ -284,6 +284,8 @@ ephy_session_dispose (GObject *object)
 	LOG ("EphySession disposing")
 
 	session_delete (session, SESSION_CRASHED);
+
+	parent_class->dispose (object);
 }
 
 static void

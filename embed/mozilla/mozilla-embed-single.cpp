@@ -559,6 +559,8 @@ mozilla_embed_single_dispose (GObject *object)
 		NS_RELEASE (single->priv->mSingleObserver);
 		single->priv->mSingleObserver = nsnull;
 	}
+
+	parent_class->dispose (object);
 }
 
 static void

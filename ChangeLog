@@ -1,5 +1,13 @@
 2004-10-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/mozilla-embed-single.cpp: (mozilla_embed_single_dispose):
+	* lib/ephy-dialog.c: (ephy_dialog_dispose):
+	* src/ephy-session.c: (ephy_session_dispose):
+
+	Chain up to parent's dispose handler.
+
+2004-10-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/downloader-view.c: (downloader_view_get_type):
 	* embed/ephy-command-manager.c: (ephy_command_manager_get_type):
 	* embed/ephy-cookie-manager.c: (ephy_cookie_get_type),

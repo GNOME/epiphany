@@ -1323,6 +1323,8 @@ ephy_dialog_dispose (GObject *object)
 		gtk_widget_destroy (dialog->priv->dialog);
 		dialog->priv->dialog = NULL;
 	}
+
+	parent_class->dispose (object);
 }
 
 static void
