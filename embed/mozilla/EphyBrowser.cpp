@@ -236,7 +236,7 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 		PRBool shouldLoad = PR_FALSE;
 		rv = policy->ShouldLoad (nsIContentPolicy::IMAGE,
 					 favUri, eventTarget,
-					 mOwner->mDOMWindow,
+					 domWin,
 					 &shouldLoad);
 		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 		if (!shouldLoad) return NS_OK;
