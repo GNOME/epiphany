@@ -26,12 +26,15 @@
 #endif
 
 #include "ContentHandler.h"
-#include "FilePicker.h"
 #include "GlobalHistory.h"
 #include "PrintingPromptService.h"
 #include "MozDownload.h"
 #include "EphyAboutRedirector.h"
 #include "EphyContentPolicy.h"
+
+#ifdef ENABLE_FILEPICKER
+#include "FilePicker.h"
+#endif
 
 #ifdef HAVE_MOZILLA_PSM
 #include "GtkNSSClientAuthDialogs.h"
@@ -51,12 +54,15 @@
 #include <glib/gmessages.h>
 
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyAboutRedirector)
-NS_GENERIC_FACTORY_CONSTRUCTOR(MozDownload)	
-NS_GENERIC_FACTORY_CONSTRUCTOR(GFilePicker)
+NS_GENERIC_FACTORY_CONSTRUCTOR(MozDownload)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GContentHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(MozGlobalHistory)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GPrintingPromptService)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyContentPolicy)
+
+#ifdef ENABLE_FILEPICKER
+NS_GENERIC_FACTORY_CONSTRUCTOR(GFilePicker)
+#endif
 
 #ifdef HAVE_MOZILLA_PSM
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSClientAuthDialogs)
@@ -88,12 +94,14 @@ static const nsModuleComponentInfo sAppComps[] = {
 		NS_DOWNLOAD_CONTRACTID,
 		MozDownloadConstructor
 	},
+#ifdef ENABLE_FILEPICKER
 	{
 		G_FILEPICKER_CLASSNAME,
 		G_FILEPICKER_CID,
 		G_FILEPICKER_CONTRACTID,
 		GFilePickerConstructor
 	},
+#endif
 #ifdef HAVE_MOZILLA_PSM
 	{
 		GTK_NSSCLIENTAUTHDIALOGS_CLASSNAME,
