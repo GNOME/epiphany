@@ -36,6 +36,7 @@ AM_MAINTAINER_MODE
 if test "x$enable_maintainer_mode" = "xyes"; then
 	AC_DEFINE([MAINTAINER_MODE],[1],[Define to enable 'maintainer-only' behaviour])
 	enable_debug=yes
+	MORE_WARN_FLAGS="-Wdeclaration-after-statement"
         DEPRECATION_FLAGS="-DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGCONF_DISABLE_DEPRECATED -DGNOME_VFS_DISABLE_DEPRECATED -DBONOBO_UI_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED -DLIBGLADE_DISABLE_DEPRECATED -DPANGO_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGNOME_DISABLE_DEPRECATED"
 	MOZILLA_WARN_CXXFLAGS="-Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor"
 fi
@@ -408,12 +409,27 @@ AC_COMPILE_IFELSE(
 
 AC_MSG_RESULT([$result])
 
+dnl Since 1.8a6
+
+AC_MSG_CHECKING([for nsIDownload::GetSize])
+
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM(
+		[[#include <uriloader/nsIDownload.h>]],
+		[[nsIDownload *p;
+		  p->GetSize(nsnull);]]
+	)],
+	[AC_DEFINE([MOZ_NSIDOWNLOAD_GETSIZE],[1],[Define if nsIDownload::GetSize exists]) result=yes],
+	[result=no])
+
+AC_MSG_RESULT([$result])
+
 dnl check for broken reload in GtkMozEmbed
 dnl This is fixed since 1.7.4 on 1.7 branch, and since 1.8a3 on trunk
 
 AC_MSG_CHECKING([for broken reload])
 
-if $PKG_CONFIG --atleast-version 1.8a3 $MOZILLA-gtkmozembed; then
+if $PKG_CONFIG --atleast-version 1.7.5 $MOZILLA-gtkmozembed; then
 	broken_reload=no
 else
 	broken_reload="couldn't autodetect, assuming yes"
@@ -473,7 +489,7 @@ dnl Add warning flags
 dnl *******************************
 
 AM_CPPFLAGS="$AM_CPPFLAGS $DEPRECATION_FLAGS"
-AM_CFLAGS="$AM_CFLAGS $WARN_CFLAGS"
+AM_CFLAGS="$AM_CFLAGS $WARN_CFLAGS $MORE_WARN_FLAGS"
 AM_CXXFLAGS="$AM_CXXFLAGS $WARN_CXXFLAGS $MOZILLA_WARN_CXXFLAGS"
 AC_SUBST([AM_CPPFLAGS])
 AC_SUBST([AM_CFLAGS])
