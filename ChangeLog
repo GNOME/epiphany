@@ -1,3 +1,15 @@
+2004-01-19  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/MozDownload.cpp:
+
+	Make uri canonical before passing it as
+	launch argument to make vfs happy.
+
+	* lib/eel-gconf-extensions.c: (eel_gconf_set_path):
+
+	Do not mix utf8/locale. Thanks to chpe to notice it.
+
 2004-01-19  Christian Persch  <chpe@cvs.gnome.org>
 
 	* NEWS:

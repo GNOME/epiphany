@@ -171,8 +171,10 @@ NS_METHOD GContentHandler::LaunchHelperApp (void)
 	NS_ENSURE_TRUE (appLauncher, NS_ERROR_FAILURE);
 	appLauncher->DeleteTemporaryFileOnExit(mTempFile);
 
-	char *param = g_strdup (mUrl.get());
 	GList *params = NULL;
+	char *param;
+	
+	param = gnome_vfs_make_uri_canonical (mUrl.get());
 	params = g_list_append (params, param);
 	gnome_vfs_mime_application_launch (mHelperApp, params);
 	g_free (param);
@@ -246,10 +248,10 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 
 	dialog = gtk_dialog_new_with_buttons
 		("", NULL, GTK_DIALOG_NO_SEPARATOR,
-		 _("Save As..."), CONTENT_ACTION_SAVEAS,
+		 _("_Save As..."), CONTENT_ACTION_SAVEAS,
 		 GTK_STOCK_CANCEL, CONTENT_ACTION_NONE,
 		 mAction == CONTENT_ACTION_OPEN ?
-		 _("Open") : _("Download"), mAction,
+		 _("_Open") : _("_Download"), mAction,
 		 NULL);
 	
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);

@@ -331,7 +331,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 
 				mDestination->GetNativePath (aDest);
 
-				param = g_strdup (aDest.get ());
+				param = gnome_vfs_make_uri_canonical (aDest.get ());
 				params = g_list_append (params, param);
 				gnome_vfs_mime_application_launch (helperApp, params);
 				g_free (param);

@@ -741,10 +741,9 @@ eel_gconf_set_path (const char *key,
 	char *tilde_path;
 	char *converted;
 	
-	converted = g_filename_to_utf8 (value, -1, NULL, NULL, NULL);
-
-	tilde_path = tilde_compress (converted);
-	eel_gconf_set_string (key, tilde_path);
+	tilde_path = tilde_compress (value);
+	converted = g_filename_to_utf8 (tilde_path, -1, NULL, NULL, NULL);
+	eel_gconf_set_string (key, converted);
 
 	g_free (tilde_path);
 	g_free (converted);
