@@ -325,6 +325,8 @@ load_defaults (EphyToolbarsGroup *t)
 
 		child = child->next;
 	}
+
+	xmlFreeDoc (doc);
 }
 
 static void
@@ -345,6 +347,8 @@ load_toolbar (EphyToolbarsGroup *t)
 
 	t->priv->toolbars = g_node_new (NULL);
 	parse_toolbars (t, root->children);
+
+	xmlFreeDoc (doc);
 }
 
 char *
