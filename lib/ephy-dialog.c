@@ -819,8 +819,6 @@ connect_signals (gpointer key, PropertyInfo *info, EphyDialog *dialog)
 
 	g_return_if_fail (info->widget != NULL);
 
-	if (info->apply_type != PT_AUTOAPPLY) return;
-
 	switch (info->widget_type)
 	{
 		case PT_TOGGLEBUTTON:
@@ -853,7 +851,6 @@ connect_signals (gpointer key, PropertyInfo *info, EphyDialog *dialog)
 					  G_CALLBACK (changed_cb), info);
 			break;
 		case PT_UNKNOWN:
-			g_warning ("Unsupported widget type\n");
 			break;
 	}
 }
