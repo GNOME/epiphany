@@ -1212,6 +1212,9 @@ ephy_dialog_run (EphyDialog *dialog)
 {
 	ephy_dialog_show (dialog);
 
+	gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (dialog->priv->parent)),
+				     GTK_WINDOW (dialog->priv->dialog));
+
 	return gtk_dialog_run (GTK_DIALOG (dialog->priv->dialog));
 }
 
