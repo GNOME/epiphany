@@ -108,7 +108,8 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 	g_signal_connect_object (action, "notify::zoom",
 				 G_CALLBACK (sync_zoom_cb), proxy, 0);
 
-	g_signal_connect (proxy, "zoom_to_level", GTK_SIGNAL_FUNC(zoom_to_level_cb), action);
+	g_signal_connect (proxy, "zoom_to_level",
+			  G_CALLBACK (zoom_to_level_cb), action);
 
 	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
 }
