@@ -62,6 +62,8 @@ epiphany_bin_SOURCES = 				    	\
 	ephy-main.c					\
 	ephy-navigation-action.c			\
 	ephy-navigation-action.h			\
+	ephy-notebook.c					\
+	ephy-notebook.h					\
 	ephy-shell.c					\
 	ephy-shell.h					\
 	ephy-spinner-action.c				\

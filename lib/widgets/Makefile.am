@@ -23,8 +23,6 @@ libephywidgets_la_SOURCES = \
 	ephy-location-entry.h			\
 	ephy-node-view.c			\
 	ephy-node-view.h			\
-	ephy-notebook.c				\
-	ephy-notebook.h				\
 	ephy-spinner.c				\
 	ephy-spinner.h				\
 	ephy-tree-model-node.c			\

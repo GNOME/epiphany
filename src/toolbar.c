@@ -134,6 +134,8 @@ ensure_bookmark_action (Toolbar *t, EphyBookmarks *bookmarks, gulong id, const c
 			  G_CALLBACK (go_location_cb), t->priv->window);
 	egg_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
+
+	return action;
 }
 
 static void

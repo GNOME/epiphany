@@ -1,3 +1,18 @@
+2003-04-28  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/widgets/Makefile.am:
+	* lib/widgets/ephy-notebook.c:
+	* lib/widgets/ephy-notebook.h:
+	* src/Makefile.am:
+	* src/ephy-notebook.c: (ephy_notebook_get_type),
+	* src/ephy-notebook.h:
+
+	Move notebook in src/. An abstract notebook is an overkill.
+
+	* src/toolbar.c: (ensure_bookmark_action):
+
+	Fix compilation issue on 2.95
+
 2003-04-28  David Bordoley  <bordoley@msu.edu>
 
 	* embed/ephy-embed-types.h:
