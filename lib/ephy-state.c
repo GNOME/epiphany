@@ -157,7 +157,7 @@ ephy_state_window_set_position (GtkWidget *window, EphyNode *node)
 	size = ephy_node_get_property_boolean (node, EPHY_NODE_STATE_PROP_POSITION);
 
 	/* Don't set the position of the window if it is maximized */
-	if (!maximize & size)
+	if ((!maximize) && size)
 	{
 		x = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_POSITION_X);
 		y = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_POSITION_Y);
