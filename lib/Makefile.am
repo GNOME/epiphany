@@ -25,6 +25,7 @@ NOINST_H_FILES = \
 	ephy-gui.h				\
 	ephy-langs.h				\
 	ephy-marshal.h				\
+	ephy-module-loader.h			\
 	ephy-node-filter.h			\
 	ephy-node-common.h			\
 	ephy-prefs.h				\
@@ -41,45 +42,32 @@ INST_H_FILES = \
 
 libephy_la_SOURCES = \
 	eel-gconf-extensions.c			\
-	eel-gconf-extensions.h			\
-	ephy-bonobo-extensions.h		\
 	ephy-bonobo-extensions.c		\
 	ephy-debug.c				\
-	ephy-debug.h				\
 	ephy-dialog.c				\
-	ephy-dialog.h				\
 	ephy-dnd.c				\
-	ephy-dnd.h				\
 	ephy-file-chooser.c			\
 	ephy-file-helpers.c			\
-	ephy-file-helpers.h			\
 	ephy-glade.c				\
-	ephy-glade.h				\
 	ephy-gui.c				\
 	ephy-gui.h				\
-	ephy-langs.h				\
 	ephy-langs.c				\
+	ephy-module-loader.c			\
 	ephy-marshal.c				\
-	ephy-marshal.h				\
 	ephy-node.c				\
 	ephy-node.h				\
 	ephy-node-filter.c			\
-	ephy-node-filter.h			\
 	ephy-node-common.h			\
 	ephy-node-db.c				\
-	ephy-node-db.h				\
 	ephy-prefs.h				\
 	ephy-state.c				\
-	ephy-state.h				\
 	ephy-string.c				\
-	ephy-string.h				\
 	ephy-stock-icons.c			\
-	ephy-stock-icons.h			\
 	ephy-thread-helpers.c			\
-	ephy-thread-helpers.h			\
 	ephy-types.h				\
-	ephy-zoom.h				\
-	ephy-zoom.c
+	ephy-zoom.c				\
+	$(INST_H_FILES)				\
+	$(NOINST_H_FILES)
 
 libephy_la_LIBADD = \
 	$(top_builddir)/lib/widgets/libephywidgets.la	\

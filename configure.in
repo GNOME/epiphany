@@ -203,14 +203,6 @@ AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/pipnss/nsIX509Cert.h],
 	[AC_DEFINE(HAVE_MOZILLA_PSM, 1,
 		   [Define if you have the mozilla psm headers installed])])
 
-dnl *******************************
-dnl Plugins
-dnl *******************************
-
-AC_ARG_ENABLE(sample-plugin, [  --enable-sample-plugin  (yes,no)
-	      	Enable sample plugin])
-AM_CONDITIONAL(ENABLE_SAMPLE_PLUGIN, test "x$enable_sample_plugin" = "xyes")
-
 
 dnl *******************************
 dnl Internationalization
@@ -244,8 +236,6 @@ help/Makefile
 help/C/Makefile
 help/nl/Makefile
 po/Makefile.in
-plugins/Makefile
-plugins/sample/Makefile
 src/epiphany
 ],
 [chmod +x src/epiphany])

@@ -47,18 +47,19 @@
 #include "ephy-window.h"
 #include "ephy-dnd.h"
 #include "ephy-shell.h"
+#include "ephy-session.h"
 #include "ephy-file-helpers.h"
 #include "ephy-file-chooser.h"
 #include "popup-commands.h"
 #include "ephy-state.h"
 #include "window-commands.h"
-#include "ephy-debug.h"
 #include "ephy-gui.h"
 #include "ephy-stock-icons.h"
 #include "ephy-search-entry.h"
 #include "ephy-toolbars-model.h"
 #include "ephy-favicon-cache.h"
 #include "eel-gconf-extensions.h"
+#include "ephy-debug.h"
 
 static GtkTargetEntry topic_drag_dest_types [] =
 {
@@ -312,7 +313,11 @@ get_target_window (EphyBookmarksEditor *editor)
 	}
 	else
 	{
-		return GTK_WIDGET (ephy_shell_get_active_window (ephy_shell));
+		EphySession *session;
+
+		session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+
+		return GTK_WIDGET (ephy_session_get_active_window (session));
 	}
 }
 

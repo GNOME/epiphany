@@ -32,7 +32,6 @@
 #include "ephy-toolbars-model.h"
 #include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
-#include "session.h"
 
 #include <string.h>
 #include <glib/gi18n.h>

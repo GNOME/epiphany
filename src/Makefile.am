@@ -9,7 +9,7 @@ INCLUDES = \
 	$(WARN_CFLAGS)			\
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
 	-DSHARE_DIR=\"$(pkgdatadir)\" 	\
-	-DPLUGINS_DIR=\""$(libdir)/epiphany/plugins"\" 	\
+	-DEXTENSIONS_DIR=\""$(libdir)/epiphany/extensions"\" 	\
 	-DDATADIR=\""$(datadir)"\" 	\
 	-DPIXMAP_DIR=\""$(datadir)/pixmaps"\" 		\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
@@ -52,13 +52,13 @@ NOINST_H_FILES =					\
 	ephy-automation.h				\
 	ephy-encoding-dialog.h				\
 	ephy-encoding-menu.h				\
+	ephy-extensions-manager.h			\
 	ephy-favicon-action.h				\
 	ephy-favorites-menu.h				\
 	ephy-go-action.h				\
 	ephy-history-window.h				\
 	ephy-location-action.h				\
 	ephy-navigation-action.h			\
-	ephy-plugin.h					\
 	ephy-tabs-menu.h				\
 	ephy-toolbars-model.h				\
 	language-editor.h				\
@@ -71,11 +71,12 @@ NOINST_H_FILES =					\
 	window-commands.h
 
 INST_H_FILES = 				    		\
+	ephy-extension.h				\
 	ephy-notebook.h					\
+	ephy-session.h					\
 	ephy-shell.h					\
 	ephy-tab.h					\
-	ephy-window.h					\
-	session.h
+	ephy-window.h
 
 epiphany_bin_SOURCES = 				    	\
 	$(CORBA_SOURCE)				 	\
@@ -85,6 +86,8 @@ epiphany_bin_SOURCES = 				    	\
 	ephy-completion-model.h				\
 	ephy-encoding-dialog.c				\
 	ephy-encoding-menu.c				\
+	ephy-extension.c				\
+	ephy-extensions-manager.c			\
 	ephy-favicon-action.c				\
 	ephy-favorites-menu.c				\
 	ephy-go-action.c				\
@@ -93,7 +96,7 @@ epiphany_bin_SOURCES = 				    	\
 	ephy-main.c					\
 	ephy-navigation-action.c			\
 	ephy-notebook.c					\
-	ephy-plugin.c					\
+	ephy-session.c					\
 	ephy-shell.c					\
 	ephy-tab.c					\
 	ephy-tab.h					\
@@ -106,7 +109,6 @@ epiphany_bin_SOURCES = 				    	\
 	popup-commands.c				\
 	prefs-dialog.c					\
 	ppview-toolbar.c				\
-	session.c					\
 	statusbar.c					\
 	toolbar.c					\
 	window-commands.c				\

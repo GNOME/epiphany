@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002, 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "ephy-shell.h"
@@ -36,9 +36,9 @@
 #include "ephy-bookmarks-editor.h"
 #include "ephy-history-window.h"
 #include "ephy-debug.h"
-#include "ephy-plugin.h"
+#include "ephy-extensions-manager.h"
 #include "toolbar.h"
-#include "session.h"
+#include "ephy-session.h"
 #include "downloader-view.h"
 #include "ephy-toolbars-model.h"
 #include "ephy-automation.h"
@@ -69,13 +69,13 @@
 struct EphyShellPrivate
 {
 	BonoboGenericFactory *automation_factory;
-	Session *session;
+	EphySession *session;
 	EphyBookmarks *bookmarks;
 	EphyToolbarsModel *toolbars_model;
 	EggToolbarsModel *fs_toolbars_model;
+	EphyExtensionsManager *extensions_manager;
 	GtkWidget *bme;
 	GtkWidget *history_window;
-	GList *plugins;
 	GList *del_on_exit;
 };
 
@@ -164,39 +164,6 @@ ephy_shell_new_window_cb (EphyEmbedShell *shell,
 }
 
 static void
-ephy_shell_load_plugins (EphyShell *es)
-{
-	DIR *d;
-	struct dirent *e;
-
-	d = opendir (PLUGINS_DIR);
-
-	if (d == NULL)
-	{
-		return;
-	}
-
-	while ((e = readdir (d)) != NULL)
-	{
-		char *plugin;
-
-		plugin = g_strconcat (PLUGINS_DIR"/", e->d_name, NULL);
-
-		if (g_str_has_suffix (plugin, ".so"))
-		{
-			EphyPlugin *obj;
-
-			obj = ephy_plugin_new (plugin);
-			es->priv->plugins = g_list_append
-				(es->priv->plugins, obj);
-		}
-
-		g_free (plugin);
-	}
-	closedir (d);
-}
-
-static void
 ephy_shell_init (EphyShell *gs)
 {
 	EphyEmbedSingle *single;
@@ -213,7 +180,6 @@ ephy_shell_init (EphyShell *gs)
 	gs->priv->history_window = NULL;
 	gs->priv->toolbars_model = NULL;
 	gs->priv->fs_toolbars_model = NULL;
-	gs->priv->plugins = NULL;
 
 	ephy_shell = gs;
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
@@ -255,9 +221,8 @@ ephy_shell_init (EphyShell *gs)
 		exit (0);
 	}
 
-	ephy_shell_load_plugins (gs);
-
 	/* FIXME listen on icon changes */
+	/* FIXME MultiHead: icon theme is per-display, not global */
 	icon_theme = gtk_icon_theme_get_default ();
 	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "web-browser", -1, 0);
 
@@ -265,9 +230,10 @@ ephy_shell_init (EphyShell *gs)
 	{
 
 		icon_file = gtk_icon_info_get_filename (icon_info);
-		g_return_if_fail (icon_file != NULL);
-
-		gtk_window_set_default_icon_from_file (icon_file, NULL);
+		if (icon_file)
+		{
+			gtk_window_set_default_icon_from_file (icon_file, NULL);
+		}
 
 		gtk_icon_info_free (icon_info);
 	}
@@ -276,6 +242,15 @@ ephy_shell_init (EphyShell *gs)
 		g_warning ("Web browser gnome icon not found");
 	}
 
+	/* Instantiate extensions manager; this will load the extensions */
+	gs->priv->extensions_manager = ephy_extensions_manager_new ();
+
+	/* Instantiate internal extensions */
+	gs->priv->session =
+		EPHY_SESSION (ephy_extensions_manager_add
+			(gs->priv->extensions_manager, EPHY_TYPE_SESSION));
+
+	/* Instantiate the automation factory */
 	gs->priv->automation_factory = ephy_automation_factory_new ();
 }
 
@@ -295,8 +270,9 @@ ephy_shell_finalize (GObject *object)
 
 	g_assert (ephy_shell == NULL);
 
-	g_list_foreach (gs->priv->plugins, (GFunc)g_type_module_unuse, NULL);
-	g_list_free (gs->priv->plugins);
+	/* this will unload the extensions */
+	LOG ("Unref extension manager")
+	g_object_unref (gs->priv->extensions_manager);
 
 	delete_files (gs->priv->del_on_exit);
 	g_list_foreach (gs->priv->del_on_exit, (GFunc)g_free, NULL);
@@ -312,12 +288,6 @@ ephy_shell_finalize (GObject *object)
 	if (gs->priv->fs_toolbars_model)
 	{
 		g_object_unref (G_OBJECT (gs->priv->fs_toolbars_model));
-	}
-
-	LOG ("Unref session")
-	if (gs->priv->session)
-	{
-		g_object_unref (G_OBJECT (gs->priv->session));
 	}
 
 	LOG ("Unref Bookmarks Editor");
@@ -395,42 +365,6 @@ load_homepage (EphyEmbed *embed)
 	ephy_embed_load_url (embed, home);
 
 	g_free (home);
-}
-
-/**
- * ephy_shell_get_active_window:
- * @gs: a #EphyShell
- *
- * Get the current active window. Use it when you
- * need to take an action (like opening an url) on
- * a window but you dont have a target window.
- * Ex. open a new tab from command line.
- *
- * Return value: the current active window
- **/
-EphyWindow *
-ephy_shell_get_active_window (EphyShell *gs)
-{
-	Session *session;
-	GList *windows, *l;
-	EphyWindow *window = NULL;
-
-	session = EPHY_SESSION (ephy_shell_get_session (gs));
-
-	windows = session_get_windows (session);
-
-	for (l = windows; l != NULL; l = l->next)
-	{
-		if (EPHY_IS_WINDOW (l->data))
-		{
-			window = EPHY_WINDOW (l->data);
-			break;
-		}
-	}
-
-	g_list_free (windows);
-
-	return window;
 }
 
 /**
@@ -584,10 +518,7 @@ ephy_nautilus_view_new (BonoboGenericFactory *factory, const char *id,
 GObject *
 ephy_shell_get_session (EphyShell *gs)
 {
-	if (!gs->priv->session)
-	{
-		gs->priv->session = session_new ();
-	}
+	g_return_val_if_fail (EPHY_IS_SHELL (gs), NULL);
 
 	return G_OBJECT (gs->priv->session);
 }
@@ -638,11 +569,19 @@ ephy_shell_get_toolbars_model (EphyShell *gs, gboolean fullscreen)
 	}
 }
 
+GObject *
+ephy_shell_get_extensions_manager (EphyShell *es)
+{
+	g_return_val_if_fail (EPHY_IS_SHELL (es), NULL);
+
+	return G_OBJECT (es->priv->extensions_manager);
+}
+
 static void
 toolwindow_show_cb (GtkWidget *widget)
 {
 	LOG ("Ref shell for %s", G_OBJECT_TYPE_NAME (widget))
-	session_add_window (ephy_shell->priv->session, GTK_WINDOW (widget));
+	ephy_session_add_window (ephy_shell->priv->session, GTK_WINDOW (widget));
 	g_object_ref (ephy_shell);
 }
 
@@ -650,7 +589,7 @@ static void
 toolwindow_hide_cb (GtkWidget *widget)
 {
 	LOG ("Unref shell for %s", G_OBJECT_TYPE_NAME (widget))
-	session_remove_window (ephy_shell->priv->session, GTK_WINDOW (widget));
+	ephy_session_remove_window (ephy_shell->priv->session, GTK_WINDOW (widget));
 	g_object_unref (ephy_shell);
 }
 

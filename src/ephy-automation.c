@@ -19,11 +19,12 @@
  */
 
 #include "ephy-automation.h"
-#include "ephy-shell.h"
+
 #include "EphyAutomation.h"
+#include "ephy-shell.h"
 #include "ephy-embed.h"
 #include "ephy-window.h"
-#include "session.h"
+#include "ephy-session.h"
 #include "ephy-bookmarks.h"
 #include "ephy-bookmarks-import.h"
 
@@ -31,10 +32,9 @@
 #include <bonobo/bonobo-main.h>
 #include <bonobo/bonobo-context.h>
 
-static void
-ephy_automation_class_init (EphyAutomationClass *klass);
+static void ephy_automation_class_init (EphyAutomationClass *klass);
 
-static GObjectClass *ephy_automation_parent_class;
+static GObjectClass *parent_class = NULL;
 
 #define EPHY_FACTORY_OAFIID "OAFIID:GNOME_Epiphany_Automation_Factory"
 
@@ -43,11 +43,7 @@ ephy_automation_factory (BonoboGenericFactory *this_factory,
 			 const char *iid,
 			 gpointer user_data)
 {
-        EphyAutomation *a;
-
-        a  = g_object_new (EPHY_TYPE_AUTOMATION, NULL);
-
-        return BONOBO_OBJECT(a);
+	return BONOBO_OBJECT (g_object_new (EPHY_TYPE_AUTOMATION, NULL));
 }
 
 BonoboGenericFactory *
@@ -60,7 +56,7 @@ ephy_automation_factory_new (void)
 					      NULL);
 	if (factory == NULL)
 	{
-		g_warning ("Could not initialize EphyAutomation factory");
+		g_warning ("Could not initialize EphyAutomation factory\n");
 	}
 
 	return factory;
@@ -78,18 +74,18 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 {
 	EphyNewTabFlags flags = 0;
 	EphyWindow *window;
-	Session *session;
+	EphySession *session;
 
 	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
 
-	if (session_autoresume (session) && *url == '\0')
+	if (ephy_session_autoresume (session) && *url == '\0')
 	{
 		/* no need to open the homepage,
 		 * we did already open session windows */
 		return;
 	}
 
-	window = ephy_shell_get_active_window (ephy_shell);
+	window = ephy_session_get_active_window (session);
 
 	if (open_in_existing_tab && window != NULL)
 	{
@@ -147,10 +143,10 @@ impl_ephy_automation_load_session (PortableServer_Servant _servant,
 				   const CORBA_char * filename,
 				   CORBA_Environment * ev)
 {
-	Session *session;
+	EphySession *session;
 
 	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
-	session_load (session, filename);
+	ephy_session_load (session, filename);
 }
 
 static void
@@ -170,25 +166,14 @@ ephy_automation_init (EphyAutomation *c)
 }
 
 static void
-ephy_automation_object_finalize (GObject *object)
-{
-        EphyAutomation *a = EPHY_AUTOMATION (object);
-
-        ephy_automation_parent_class->finalize (G_OBJECT (a));
-}
-
-static void
 ephy_automation_class_init (EphyAutomationClass *klass)
 {
-        GObjectClass *object_class = (GObjectClass *) klass;
-        POA_GNOME_EphyAutomation__epv *epv = &klass->epv;
+	POA_GNOME_EphyAutomation__epv *epv = &klass->epv;
 
-        ephy_automation_parent_class = g_type_class_peek_parent (klass);
+	parent_class = g_type_class_peek_parent (klass);
 
-        object_class->finalize = ephy_automation_object_finalize;
-
-        /* connect implementation callbacks */
-        epv->loadurl = impl_ephy_automation_loadurl;
+	/* connect implementation callbacks */
+	epv->loadurl = impl_ephy_automation_loadurl;
 	epv->addBookmark = impl_ephy_automation_add_bookmark;
 	epv->importBookmarks = impl_ephy_automation_import_bookmarks;
 	epv->loadSession = impl_ephy_automation_load_session;

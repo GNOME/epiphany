@@ -1,5 +1,0 @@
-SUBDIRS =
-
-if ENABLE_SAMPLE_PLUGIN
-SUBDIRS += sample
-endif

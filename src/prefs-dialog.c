@@ -27,6 +27,7 @@
 #include "ephy-prefs.h"
 #include "ephy-embed-shell.h"
 #include "ephy-shell.h"
+#include "ephy-session.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-single.h"
 #include "ephy-shell.h"
@@ -1090,11 +1091,13 @@ void
 prefs_homepage_current_button_clicked_cb (GtkWidget *button,
 					  EphyDialog *dialog)
 {
+	EphySession *session;
 	EphyWindow *window;
 	EphyEmbed *embed;
 	char *location;
 
-	window = ephy_shell_get_active_window (ephy_shell);
+	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+	window = ephy_session_get_active_window (session);
 	g_return_if_fail (window != NULL);
 
 	embed = ephy_window_get_active_embed (window);

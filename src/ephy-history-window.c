@@ -53,7 +53,7 @@
 #include "toolbar.h"
 #include "ephy-stock-icons.h"
 #include "ephy-search-entry.h"
-#include "session.h"
+#include "ephy-session.h"
 #include "ephy-favicon-cache.h"
 #include "eel-gconf-extensions.h"
 
@@ -353,7 +353,10 @@ get_target_window (EphyHistoryWindow *editor)
 	}
 	else
 	{
-		return GTK_WIDGET (ephy_shell_get_active_window (ephy_shell));
+		EphySession *session;
+
+		session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+		return GTK_WIDGET (ephy_session_get_active_window (session));
 	}
 }
 

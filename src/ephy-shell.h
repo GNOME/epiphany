@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifndef EPHY_SHELL_H
@@ -68,40 +70,42 @@ typedef enum
 
 struct EphyShell
 {
-        EphyEmbedShell parent;
-        EphyShellPrivate *priv;
+	EphyEmbedShell parent;
+	EphyShellPrivate *priv;
 };
 
 struct EphyShellClass
 {
-        EphyEmbedShellClass parent_class;
+	EphyEmbedShellClass parent_class;
 };
 
-GType               ephy_shell_get_type              (void);
+GType		ephy_shell_get_type			(void);
 
-EphyShell	   *ephy_shell_new                   (void);
+EphyShell      *ephy_shell_new				(void);
 
-EphyWindow	   *ephy_shell_get_active_window     (EphyShell *gs);
+EphyWindow     *ephy_shell_get_active_window		(EphyShell *gs);
 
-EphyTab            *ephy_shell_new_tab	             (EphyShell *shell,
-						      EphyWindow *parent_window,
-						      EphyTab *previous_tab,
-						      const char *url,
-						      EphyNewTabFlags flags);
+EphyTab        *ephy_shell_new_tab			(EphyShell *shell,
+							 EphyWindow *parent_window,
+							 EphyTab *previous_tab,
+							 const char *url,
+							 EphyNewTabFlags flags);
 
-GObject		   *ephy_shell_get_session	     (EphyShell *gs);
+GObject	       *ephy_shell_get_session			(EphyShell *gs);
 
-EphyBookmarks      *ephy_shell_get_bookmarks         (EphyShell *gs);
+EphyBookmarks  *ephy_shell_get_bookmarks		(EphyShell *gs);
 
-GObject		   *ephy_shell_get_toolbars_model    (EphyShell *gs,
-						      gboolean fullscreen);
+GObject	       *ephy_shell_get_toolbars_model		(EphyShell *gs,
+							 gboolean fullscreen);
 
-GtkWidget	   *ephy_shell_get_bookmarks_editor  (EphyShell *gs);
+GObject	       *ephy_shell_get_extensions_manager	(EphyShell *es);
 
-GtkWidget	   *ephy_shell_get_history_window    (EphyShell *gs);
+GtkWidget      *ephy_shell_get_bookmarks_editor 	(EphyShell *gs);
 
-void		    ephy_shell_delete_on_exit        (EphyShell *gs,
-						      const char *path);
+GtkWidget      *ephy_shell_get_history_window		(EphyShell *gs);
+
+void		ephy_shell_delete_on_exit		(EphyShell *gs,
+							 const char *path);
 
 G_END_DECLS
 

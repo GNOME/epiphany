@@ -1,3 +1,70 @@
+2003-11-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	New extensions API.
+
+	* Makefile.am:
+	* configure.in:
+	* lib/Makefile.am:
+	* lib/ephy-module-loader.c: (ephy_module_loader_get_type),
+	(ephy_module_loader_new), (ephy_module_loader_load),
+	(ephy_module_loader_unload), (ephy_module_loader_class_init),
+	(ephy_module_loader_init), (ephy_module_loader_finalize),
+	(ephy_module_loader_factory):
+	* lib/ephy-module-loader.h:
+	* plugins/.cvsignore:
+	* plugins/Makefile.am:
+	* plugins/sample/.cvsignore:
+	* plugins/sample/Makefile.am:
+	* plugins/sample/sample.c:
+	* src/Makefile.am:
+	* src/bookmarks/ephy-bookmarks-editor.c: (get_target_window):
+	* src/bookmarks/ephy-bookmarks.c:
+	* src/ephy-automation.c: (ephy_automation_factory),
+	(ephy_automation_factory_new), (impl_ephy_automation_loadurl),
+	(impl_ephy_automation_load_session), (ephy_automation_class_init):
+	* src/ephy-extension.c: (ephy_extension_get_type),
+	(ephy_extension_attach_window), (ephy_extension_detach_window):
+	* src/ephy-extension.h:
+	* src/ephy-extensions-manager.c:
+	(ephy_extensions_manager_get_type),
+	(ephy_extensions_manager_instantiate_extension),
+	(ephy_extensions_manager_load), (ephy_extensions_manager_load_dir),
+	(ephy_extensions_manager_add), (ephy_extensions_manager_init),
+	(ephy_extensions_manager_finalize), (impl_attach_window),
+	(impl_detach_window), (ephy_extensions_manager_iface_init),
+	(ephy_extensions_manager_class_init),
+	(ephy_extensions_manager_new):
+	* src/ephy-extensions-manager.h:
+	* src/ephy-history-window.c: (get_target_window):
+	* src/ephy-plugin.c:
+	* src/ephy-plugin.h:
+	* src/ephy-session.c: (ephy_session_get_type),
+	(get_session_filename), (session_delete), (net_stop_cb),
+	(tab_added_cb), (tab_removed_cb), (tabs_reordered_cb),
+	(impl_attach_window), (impl_detach_window), (save_yourself_cb),
+	(die_cb), (gnome_session_attach), (gnome_session_detach),
+	(ensure_session_directory), (ephy_session_init),
+	(ephy_session_dispose), (ephy_session_finalize),
+	(ephy_session_iface_init), (ephy_session_class_init),
+	(offer_to_resume), (ephy_session_autoresume), (ephy_session_close),
+	(write_tab), (write_window_geometry), (write_tool_window),
+	(write_ephy_window), (ephy_session_save), (parse_embed),
+	(ephy_session_load), (ephy_session_get_windows),
+	(ephy_session_add_window), (ephy_session_remove_window),
+	(ephy_session_get_active_window):
+	* src/ephy-session.h:
+	* src/ephy-shell.c: (ephy_shell_init), (ephy_shell_finalize),
+	(ephy_shell_get_session), (ephy_shell_get_extensions_manager),
+	(toolwindow_show_cb), (toolwindow_hide_cb):
+	* src/ephy-shell.h:
+	* src/ephy-window.c: (ephy_window_destroy), (ephy_window_init):
+	* src/prefs-dialog.c: (prefs_homepage_current_button_clicked_cb):
+	* src/session.c:
+	* src/session.h:
+
+	Create a new extensions API. Make session an internal extension :)
+	Port callers to session API changes.
+
 2003-11-10  Xan Lopez  <xan@masilla.org>
 
 	* embed/mozilla/mozilla-embed-persist.cpp:

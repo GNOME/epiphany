@@ -43,7 +43,7 @@
 #include "ephy-encoding-menu.h"
 #include "ephy-tabs-menu.h"
 #include "ephy-stock-icons.h"
-#include "session.h"
+#include "ephy-extension.h"
 #include "ephy-favicon-cache.h"
 
 #include <string.h>
@@ -349,17 +349,6 @@ ephy_window_get_type (void)
 }
 
 static void
-remove_from_session (EphyWindow *window)
-{
-	Session *session;
-
-	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
-	g_return_if_fail (session != NULL);
-
-	session_remove_window (session, GTK_WINDOW (window));
-}
-
-static void
 ephy_window_destroy (GtkObject *gtkobject)
 {
 	EphyWindow *window = EPHY_WINDOW (gtkobject);
@@ -368,9 +357,13 @@ ephy_window_destroy (GtkObject *gtkobject)
 
 	if (window->priv->closing == FALSE)
 	{
+		EphyExtension *manager;
+
 		window->priv->closing = TRUE;
 
-		remove_from_session (window);
+		/* Let the extensions detach themselves from the window */
+		manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
+		ephy_extension_detach_window (manager, window);
 	}
 
 	if (window->priv->exit_fullscreen_popup)
@@ -1460,11 +1453,9 @@ ephy_window_class_init (EphyWindowClass *klass)
 static void
 ephy_window_init (EphyWindow *window)
 {
-	Session *session;
+	EphyExtension *manager;
 
 	LOG ("EphyWindow initialising %p", window)
-
-	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
 
 	window->priv = EPHY_WINDOW_GET_PRIVATE (window);
 
@@ -1500,8 +1491,9 @@ ephy_window_init (EphyWindow *window)
 	window->priv->enc_menu = ephy_encoding_menu_new (window);
 	window->priv->bmk_menu = ephy_bookmarks_menu_new (window);
 
-	/* Once window is fully created, add it to the session list*/
-	session_add_window (session, GTK_WINDOW (window));
+	/* Once the window is fully created let the extensions attach to it */
+	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
+	ephy_extension_attach_window (manager, window);
 }
 
 static void
