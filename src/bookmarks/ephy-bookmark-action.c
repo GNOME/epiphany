@@ -437,6 +437,8 @@ drag_motion_cb (GtkWidget *widget, GdkEventMotion *event, EphyBookmarkAction *ac
 		stop_drag_check (action, widget);
 		gtk_drag_begin (widget, target_list, GDK_ACTION_MOVE |
 				GDK_ACTION_COPY, 1, (GdkEvent*)event);
+
+		gtk_target_list_unref (target_list);
 	}
 
 	return TRUE;
