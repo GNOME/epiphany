@@ -1445,7 +1445,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	editor->priv->address_col = ephy_node_view_add_column
 				  (EPHY_NODE_VIEW (bm_view), _("Address"),
 				   G_TYPE_STRING, EPHY_NODE_BMK_PROP_LOCATION,
-				   0, -1, NULL);
+				   -1, 0, NULL);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), bm_view);
 	gtk_widget_show (bm_view);
 	editor->priv->bm_view = bm_view;
