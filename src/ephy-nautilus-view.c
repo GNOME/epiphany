@@ -175,7 +175,7 @@ ephy_nautilus_view_instance_init (EphyNautilusView *view)
 		(EPHY_EMBED_SHELL (ephy_shell));
 
 	view->priv = p;
-	view->priv->embed = ephy_embed_new (G_OBJECT (ephy_shell));
+	view->priv->embed = ephy_embed_new (G_OBJECT (single));
 
 	g_object_ref (G_OBJECT (ephy_shell));
 

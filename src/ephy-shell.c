@@ -16,6 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "ephy-shell.h"
 #include "ephy-embed-shell.h"
 #include "eel-gconf-extensions.h"
@@ -41,7 +45,7 @@
 #include <bonobo/bonobo-generic-factory.h>
 #include "ephy-nautilus-view.h"
 
-#define EPHY_NAUTILUS_VIEW_OAFIID "OAFIID:GNOME_Ephy_NautilusViewFactory"
+#define EPHY_NAUTILUS_VIEW_OAFIID "OAFIID:GNOME_Epiphany_NautilusViewFactory"
 
 #endif
 

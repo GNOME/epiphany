@@ -67,7 +67,7 @@ if test "x$enable_nautilus_view" = "xauto"; then
   fi
 fi
 if test "x$enable_nautilus_view" = "xyes"; then
-  dnl AC_DEFINE(ENABLE_NAUTILUS_VIEW)
+  AC_DEFINE(ENABLE_NAUTILUS_VIEW)
   nautilusview_pkgs=libnautilus
 fi
 AC_MSG_RESULT($enable_nautilus_view)
