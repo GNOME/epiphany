@@ -73,11 +73,6 @@ class GProgressListener : public nsIProgressDialog,
 				  EphyEmbedPersist *ephyPersist,
 				  PRBool noDialog,
 				  PRInt64 aTimeDownloadStarted = 0);
-	NS_METHOD InitForDownload (nsIHelperAppLauncher *aLauncher,
-				   nsISupports *aContext,
-				   GContentHandler *aHandler,
-				   DownloadAction aDownload);
-
 	nsresult Pause (void);
 	nsresult Resume (void);
 	nsresult Abort (void);

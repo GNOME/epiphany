@@ -59,11 +59,9 @@ struct DownloaderViewClass
 {
         EphyDialogClass parent_class;
 
-	void (*download_remove)    (DownloaderView *dv);
-
-	void (*download_pause)     (DownloaderView *dv);
-
-	void (*download_resume)    (DownloaderView *dv);
+	void (*download_remove)    (DownloaderView *dv, gpointer persist_object);
+	void (*download_pause)     (DownloaderView *dv, gpointer persist_object);
+	void (*download_resume)    (DownloaderView *dv, gpointer persist_object);
 };
 
 GType           downloader_view_get_type              (void);

@@ -17,7 +17,6 @@
  */
 
 #include "downloader-view.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-gui.h"
 #include "ephy-prefs.h"
 #include "ephy-ellipsizing-label.h"
@@ -60,7 +59,6 @@ struct DownloaderViewPrivate
 	/* Widgets */
 	GtkWidget *window;
 	GtkWidget *treeview;
-	GtkWidget *details_file;
 	GtkWidget *details_location;
 	GtkWidget *details_status;
 	GtkWidget *details_elapsed;
@@ -68,10 +66,10 @@ struct DownloaderViewPrivate
 	GtkWidget *details_progress;
 	GtkWidget *details_button;
 	GtkWidget *keep_open_check;
-	GtkWidget *pause_button;
-	GtkWidget *resume_button;
-	GtkWidget *abort_button;
+
 	GtkWidget *open_button;
+	GtkWidget *pause_button;
+	GtkWidget *abort_button;
 };
 
 typedef struct
@@ -92,7 +90,7 @@ typedef struct
 
 typedef struct
 {
-	gboolean can_resume;
+	gboolean is_paused;
 	gboolean can_abort;
 	gboolean can_open;
 	DownloaderViewPrivate *priv;
@@ -110,10 +108,9 @@ enum
 	PROP_DETAILS_ELAPSED,
 	PROP_DETAILS_REMAINING,
 	PROP_DETAILS_PROGRESS,
-	PROP_PAUSE_BUTTON,
-	PROP_RESUME_BUTTON,
-	PROP_ABORT_BUTTON,
 	PROP_OPEN_BUTTON,
+	PROP_PAUSE_BUTTON,
+	PROP_ABORT_BUTTON,
 	PROP_DETAILS_BUTTON
 };
 
@@ -130,10 +127,9 @@ EphyDialogProperty properties [] =
 	{ PROP_DETAILS_ELAPSED, "details_elapsed", NULL, PT_NORMAL, NULL },
 	{ PROP_DETAILS_REMAINING, "details_remaining", NULL, PT_NORMAL, NULL },
 	{ PROP_DETAILS_PROGRESS, "details_progress", NULL, PT_NORMAL, NULL },
-	{ PROP_PAUSE_BUTTON, "pause_button", NULL, PT_NORMAL, NULL },
-	{ PROP_RESUME_BUTTON, "resume_button", NULL, PT_NORMAL, NULL },
-	{ PROP_ABORT_BUTTON, "abort_button", NULL, PT_NORMAL, NULL },
 	{ PROP_OPEN_BUTTON, "open_button", NULL, PT_NORMAL, NULL },
+	{ PROP_PAUSE_BUTTON, "pause_button", NULL, PT_NORMAL, NULL },
+	{ PROP_ABORT_BUTTON, "abort_button", NULL, PT_NORMAL, NULL },
 	{ PROP_DETAILS_BUTTON, "details_togglebutton", CONF_DOWNLOADING_SHOW_DETAILS, PT_NORMAL, NULL },
 
         { -1, NULL, NULL }
@@ -149,8 +145,6 @@ static void
 downloader_view_init (DownloaderView *dv);
 
 /* Callbacks */
-void
-download_dialog_resume_cb (GtkButton *button, DownloaderView *dv);
 void
 download_dialog_pause_cb (GtkButton *button, DownloaderView *dv);
 void
@@ -238,28 +232,27 @@ downloader_view_class_init (DownloaderViewClass *klass)
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (DownloaderViewClass, download_remove),
                               NULL, NULL,
-                              g_cclosure_marshal_VOID__VOID,
-                              G_TYPE_NONE,
-                              0);
+                              g_cclosure_marshal_VOID__POINTER,
+                              G_TYPE_NONE, 1,
+			      G_TYPE_POINTER);
 	downloader_view_signals[DOWNLOAD_PAUSE] =
                 g_signal_new ("download_pause",
                               G_OBJECT_CLASS_TYPE (object_class),
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (DownloaderViewClass, download_pause),
                               NULL, NULL,
-                              g_cclosure_marshal_VOID__VOID,
-                              G_TYPE_NONE,
-                              0);
+                              g_cclosure_marshal_VOID__POINTER,
+                              G_TYPE_NONE, 1,
+			      G_TYPE_POINTER);
 	downloader_view_signals[DOWNLOAD_RESUME] =
                 g_signal_new ("download_resume",
                               G_OBJECT_CLASS_TYPE (object_class),
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (DownloaderViewClass, download_resume),
                               NULL, NULL,
-                              g_cclosure_marshal_VOID__VOID,
-                              G_TYPE_NONE,
-                              0);
-
+                              g_cclosure_marshal_VOID__POINTER,
+                              G_TYPE_NONE, 1,
+			      G_TYPE_POINTER);
 }
 
 static void
@@ -328,7 +321,7 @@ controls_info_foreach (GtkTreeModel *model,
 	details = g_hash_table_lookup (info->priv->details_hash,
 				       persist_object);
 
-	info->can_resume |= (details->status == DOWNLOAD_STATUS_PAUSED);
+	info->is_paused |= (details->status == DOWNLOAD_STATUS_PAUSED);
 	info->can_abort |= (details->status != DOWNLOAD_STATUS_COMPLETED);
 	info->can_open |= (details->status == DOWNLOAD_STATUS_COMPLETED);
 }
@@ -345,7 +338,7 @@ downloader_view_update_controls (DownloaderViewPrivate *priv)
 	info->priv = priv;
 
 	/* initial conditions */
-	info->can_resume = info->can_abort = info->can_open = FALSE;
+	info->is_paused = info->can_abort = info->can_open = FALSE;
 
 	if (selection)
 	{
@@ -356,11 +349,20 @@ downloader_view_update_controls (DownloaderViewPrivate *priv)
 	}
 
 	/* setup buttons */
-	gtk_widget_set_sensitive (priv->pause_button, TRUE);
-	gtk_widget_set_sensitive (priv->resume_button, info->can_resume);
-	gtk_widget_set_sensitive (priv->abort_button, info->can_abort);
 	gtk_widget_set_sensitive (priv->open_button, info->can_open);
+	gtk_widget_set_sensitive (priv->pause_button, info->can_abort);
+	/* As long as we can abort, we can pause/resume */
+	gtk_widget_set_sensitive (priv->abort_button, info->can_abort);
 
+	if (info->is_paused)
+	{
+		gtk_button_set_label (GTK_BUTTON (priv->pause_button), _("Resume"));
+	}
+	else
+	{
+		gtk_button_set_label (GTK_BUTTON (priv->pause_button), _("Pause"));
+	}
+	
 	g_free (info);
 }
 
@@ -373,9 +375,6 @@ downloader_view_update_details (DownloaderViewPrivate *priv,
 	ephy_ellipsizing_label_set_text
 		(EPHY_ELLIPSIZING_LABEL (priv->details_location),
 		 details->source);
-	ephy_ellipsizing_label_set_text
-		(EPHY_ELLIPSIZING_LABEL (priv->details_file),
-		 details->filename);
 
 	if (details->size_total >= 10000)
 	{
@@ -512,7 +511,7 @@ downloader_view_set_download_info (DownloaderViewPrivate *priv,
 	{
 		sprintf (buffer,
 			 details->progress > 0 ?
-		 	 _("00.00") :
+		 	 "00.00" :
 		 	 _("Unknown"));
 	}
 	
@@ -596,7 +595,7 @@ downloader_view_add_download (DownloaderView *dv,
 
 	downloader_view_set_download_info (dv->priv, details, &iter);
 
-	ephy_dialog_show (EPHY_DIALOG(dv));
+	ephy_dialog_show (EPHY_DIALOG (dv));
 }
 
 void
@@ -721,25 +720,18 @@ downloader_view_build_ui (DownloaderView *dv)
 	priv->details_progress = ephy_dialog_get_control (d, PROP_DETAILS_PROGRESS);
 	priv->keep_open_check = ephy_dialog_get_control (d, PROP_KEEP_OPEN);
 	priv->details_button = ephy_dialog_get_control (d, PROP_DETAILS_BUTTON);
-	priv->pause_button = ephy_dialog_get_control (d, PROP_PAUSE_BUTTON);
-	priv->resume_button = ephy_dialog_get_control (d, PROP_RESUME_BUTTON);
-	priv->abort_button = ephy_dialog_get_control (d, PROP_ABORT_BUTTON);
 	priv->open_button = ephy_dialog_get_control (d, PROP_OPEN_BUTTON);
+	priv->pause_button = ephy_dialog_get_control (d, PROP_PAUSE_BUTTON);
+	priv->abort_button = ephy_dialog_get_control (d, PROP_ABORT_BUTTON);
 	details_table = ephy_dialog_get_control (d, PROP_DETAILS_TABLE);
 
 	/* create file and location details labels */
 	priv->details_location = ephy_ellipsizing_label_new ("");
-	priv->details_file = ephy_ellipsizing_label_new ("");
 	gtk_table_attach_defaults (GTK_TABLE(details_table), priv->details_location,
 				   1, 2, 0, 1);
-	gtk_table_attach_defaults (GTK_TABLE(details_table), priv->details_file,
-				   1, 2, 1, 2);
 	gtk_misc_set_alignment (GTK_MISC(priv->details_location), 0, 0);
-	gtk_misc_set_alignment (GTK_MISC(priv->details_file), 0, 0);
 	gtk_label_set_selectable (GTK_LABEL(priv->details_location), TRUE);
-	gtk_label_set_selectable (GTK_LABEL(priv->details_file), TRUE);
 	gtk_widget_show (priv->details_location);
-	gtk_widget_show (priv->details_file);
 
 	liststore = gtk_list_store_new (5,
 					G_TYPE_STRING,
@@ -799,7 +791,7 @@ downloader_view_build_ui (DownloaderView *dv)
         gtk_tree_view_column_set_sort_column_id (column, COL_REMAINING);
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(priv->treeview));
-	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
         g_signal_connect (G_OBJECT (selection), "changed",
                           G_CALLBACK (downloader_treeview_selection_changed_cb), dv);
 
@@ -809,74 +801,42 @@ downloader_view_build_ui (DownloaderView *dv)
 	gtk_window_set_icon_from_file (GTK_WINDOW(priv->window), icon_path, NULL);
 }
 
-static void
-resume_selection_foreach (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
-			  DownloaderView *dv)
-{
-	DownloadDetails *details;
-	GValue val = {0, };
-	gpointer *persist_object;
-
-	gtk_tree_model_get_value (model, iter, COL_PERSIST_OBJECT, &val);
-	persist_object = g_value_get_pointer (&val);
-
-	details = g_hash_table_lookup (dv->priv->details_hash,
-				       persist_object);
-	g_return_if_fail (details);
-
-	if (details->status == DOWNLOAD_STATUS_COMPLETED) return;
-
-	downloader_view_set_download_status (dv, DOWNLOAD_STATUS_RESUMING, persist_object);
-
-	g_signal_emit (G_OBJECT (dv), downloader_view_signals[DOWNLOAD_RESUME], 0);
-}
-
-void
-download_dialog_resume_cb (GtkButton *button, DownloaderView *dv)
-{
-	GtkTreeSelection *selection;
-
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(dv->priv->treeview));
-
-	gtk_tree_selection_selected_foreach
-		(selection,
-		 (GtkTreeSelectionForeachFunc)resume_selection_foreach,
-		 (gpointer)dv);
-}
-
-static void
-pause_selection_foreach (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
-			 DownloaderView *dv)
-{
-	DownloadDetails *details;
-	GValue val = {0, };
-	gpointer *persist_object;
-
-	gtk_tree_model_get_value (model, iter, COL_PERSIST_OBJECT, &val);
-	persist_object = g_value_get_pointer (&val);
-
-	details = g_hash_table_lookup (dv->priv->details_hash,
-				       persist_object);
-	g_return_if_fail (details);
-
-	if (details->status == DOWNLOAD_STATUS_COMPLETED) return;
-
-	downloader_view_set_download_status (dv, DOWNLOAD_STATUS_PAUSED, persist_object);
-
-	g_signal_emit (G_OBJECT (dv), downloader_view_signals[DOWNLOAD_PAUSE], 0);
-}
-
 void
 download_dialog_pause_cb (GtkButton *button, DownloaderView *dv)
 {
 	GtkTreeSelection *selection;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	DownloadDetails *details;
+	GValue val = {0, };
+	gpointer *persist_object;
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(dv->priv->treeview));
 
-	gtk_tree_selection_selected_foreach
-		(selection,
-		 (GtkTreeSelectionForeachFunc)pause_selection_foreach,
-		 (gpointer)dv);
+	if (!gtk_tree_selection_get_selected (selection, &model, &iter)) return;
+
+	gtk_tree_model_get_value (model, &iter, COL_PERSIST_OBJECT, &val);
+	persist_object = g_value_get_pointer (&val);
+
+	details = g_hash_table_lookup (dv->priv->details_hash,
+				       persist_object);
+	g_return_if_fail (details);
+
+	if (details->status == DOWNLOAD_STATUS_COMPLETED) 
+	{
+		return;
+	}
+	else if (details->status == DOWNLOAD_STATUS_DOWNLOADING ||
+		 details->status == DOWNLOAD_STATUS_RESUMING)
+	{
+		g_signal_emit (G_OBJECT (dv), downloader_view_signals[DOWNLOAD_PAUSE], 0, persist_object);
+		downloader_view_set_download_status (dv, DOWNLOAD_STATUS_PAUSED, persist_object);
+	}
+	else if (details->status == DOWNLOAD_STATUS_PAUSED)
+	{
+		g_signal_emit (G_OBJECT (dv), downloader_view_signals[DOWNLOAD_RESUME], 0, persist_object);
+		downloader_view_set_download_status (dv, DOWNLOAD_STATUS_RESUMING, persist_object);
+	}
 }
 
 void
@@ -913,7 +873,7 @@ download_dialog_abort_cb (GtkButton *button, DownloaderView *dv)
 					       persist_object);
 		g_return_if_fail (details);
 
-		g_signal_emit (G_OBJECT (dv), downloader_view_signals[DOWNLOAD_REMOVE], 0);
+		g_signal_emit (G_OBJECT (dv), downloader_view_signals[DOWNLOAD_REMOVE], 0, persist_object);
 
 		downloader_view_remove_download (dv, persist_object);
 
@@ -957,7 +917,6 @@ downloader_treeview_selection_changed_cb (GtkTreeSelection *selection,
 	else
 	{
 		gtk_label_set_text (GTK_LABEL (priv->details_location), "");
-		gtk_label_set_text (GTK_LABEL (priv->details_file), "");
 		gtk_label_set_text (GTK_LABEL (priv->details_status), "");
 		gtk_label_set_text (GTK_LABEL (priv->details_elapsed), "");
 		gtk_label_set_text (GTK_LABEL (priv->details_remaining), "");
@@ -1007,7 +966,7 @@ download_dialog_delete_cb (GtkWidget *window, GdkEventAny *event,
 
 	/* build question dialog */
 	dialog = gtk_message_dialog_new (
-		 GTK_WINDOW(window),
+		 GTK_WINDOW (window),
 		 GTK_DIALOG_MODAL,
 		 GTK_MESSAGE_WARNING,
 		 GTK_BUTTONS_YES_NO,

@@ -22,7 +22,6 @@
 
 #include "ProgressListener.h"
 
-#include "eel-gconf-extensions.h"
 #include "ephy-file-helpers.h"
 #include "mozilla-embed-persist.h"
 
@@ -35,11 +34,11 @@
 #include "nsCOMPtr.h"
 
 static void
-download_remove_cb (DownloaderView *dv, GProgressListener *Progress);
+download_remove_cb (DownloaderView *dv, GProgressListener *Changed, GProgressListener *Progress);
 static void
-download_resume_cb (DownloaderView *dv, GProgressListener *Progress);
+download_resume_cb (DownloaderView *dv, GProgressListener *Changed, GProgressListener *Progress);
 static void
-download_pause_cb (DownloaderView *dv, GProgressListener *Progress);
+download_pause_cb (DownloaderView *dv, GProgressListener *Changed, GProgressListener *Progress);
 
 NS_IMPL_ISUPPORTS4 (GProgressListener, nsIDownload, nsIWebProgressListener,
 		    nsIProgressDialog, nsISupportsWeakReference)
@@ -73,7 +72,6 @@ NS_METHOD GProgressListener::InitForPersist (nsIWebBrowserPersist *aPersist,
 					      PRInt64 aTimeDownloadStarted)
 {
 	nsresult rv;
-
 	/* fill in download details */
 	mAction = aAction;
 	mParent = aParent;
@@ -89,35 +87,6 @@ NS_METHOD GProgressListener::InitForPersist (nsIWebBrowserPersist *aPersist,
 
 	/* pick up progress messages */
 	mPersist->SetProgressListener (this);
-
-	/* done */
-	return rv;
-}
-
-NS_METHOD GProgressListener::InitForDownload (nsIHelperAppLauncher *aLauncher,
-					       nsISupports *aContext,
-					       GContentHandler *aHandler,
-					       DownloadAction aAction)
-{
-	nsresult rv;
-
-	mNoDialog = 0;
-
-	/* fill in download details */
-	mAction = aAction;
-	mParent = do_QueryInterface (aContext);
-	mNoDialog = PR_TRUE;
-	mHandler = aHandler;
-	mLauncher = aLauncher;
-	rv = mLauncher->GetDownloadInfo (getter_AddRefs (mUri),
-					 &mTimeDownloadStarted,
-					 getter_AddRefs (mFile));
-
-	/* do remaining init */
-	rv = PrivateInit ();
-
-	/* pick up progress messages */
-	mLauncher->SetWebProgressListener (this);
 
 	/* done */
 	return rv;
@@ -673,19 +642,25 @@ nsresult GProgressListener::Abort (void)
 }
 
 static void
-download_remove_cb (DownloaderView *dv, GProgressListener *Progress)
+download_remove_cb (DownloaderView *dv, GProgressListener *Changed, GProgressListener *Progress)
 {
-	Progress->Abort();
+	if (Changed == Progress){
+		Progress->Abort();
+	}
 }
 
 static void
-download_resume_cb (DownloaderView *dv, GProgressListener *Progress)
+download_resume_cb (DownloaderView *dv, GProgressListener *Changed, GProgressListener *Progress)
 {
-	Progress->Resume();
+	if (Changed == Progress) {
+		Progress->Resume();
+	}
 }
 
 static void
-download_pause_cb (DownloaderView *dv, GProgressListener *Progress)
+download_pause_cb (DownloaderView *dv, GProgressListener *Changed, GProgressListener *Progress)
 {
-	Progress->Pause();
+	if (Changed == Progress) {
+		Progress->Pause();
+	}
 }

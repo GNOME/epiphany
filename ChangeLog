@@ -1,3 +1,25 @@
+2003-05-02  Xan Lopez  <xan@masilla.org>
+
+	* data/glade/epiphany.glade:
+	* embed/downloader-view.c: (downloader_view_class_init),
+	(controls_info_foreach), (downloader_view_update_controls),
+	(downloader_view_update_details),
+	(downloader_view_set_download_info),
+	(downloader_view_add_download), (downloader_view_build_ui),
+	(download_dialog_pause_cb), (download_dialog_abort_cb),
+	(downloader_treeview_selection_changed_cb),
+	(download_dialog_delete_cb):
+	* embed/downloader-view.h:
+	* embed/mozilla/ProgressListener.cpp:
+	* embed/mozilla/ProgressListener.h:
+
+	Workaround to not act on every download, ongoing or finished,
+	when we click on Pause/Resume or Remove.
+	
+	Minor UI changes to the download dialog, including merging Pause
+	and Resume in one button, and removing File: from the details view.
+
+
 2003-04-30  David Bordoley <bordoley@msu.edu>
 
 	* data/epiphany.schemas.in:
