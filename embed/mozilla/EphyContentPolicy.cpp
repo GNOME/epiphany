@@ -19,13 +19,6 @@
  *  $Id$
  */
 
-/* Relevant Mozilla bug numbers:
- *
- * The API will change soon:
- * 	http://bugzilla.mozilla.org/show_bug.cgi?id=191839
- *	"Content Policy API sucks rock"
- */
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
