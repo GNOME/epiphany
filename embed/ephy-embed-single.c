@@ -165,21 +165,6 @@ ephy_embed_single_get_offline_mode (EphyEmbedSingle *single)
 }
 
 /**
- * ephy_embed_single_load_proxy_autoconf:
- * @single: the #EphyEmbedSingle
- * @url: a URL to a PAC file
- * 
- * Sets the address of the PAC file, and loads the proxy configuration from it.
- **/
-void
-ephy_embed_single_load_proxy_autoconf (EphyEmbedSingle *single,
-				       const char* url)
-{
-	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
-	iface->load_proxy_autoconf (single, url);
-}
-
-/**
  * ephy_embed_single_get_font_list:
  * @single: the #EphyEmbedSingle
  * @lang_group: a mozilla font language group name, or %NULL

@@ -81,10 +81,7 @@ void	 ephy_embed_single_set_offline_mode	(EphyEmbedSingle *single,
 
 gboolean ephy_embed_single_get_offline_mode	(EphyEmbedSingle *single);
 
-void	 ephy_embed_single_load_proxy_autoconf	(EphyEmbedSingle *single,
-						 const char* url);
-
-GList	*ephy_embed_single_get_font_list		(EphyEmbedSingle *single,
+GList	*ephy_embed_single_get_font_list	(EphyEmbedSingle *single,
 						 const char *lang_group);
 
 G_END_DECLS

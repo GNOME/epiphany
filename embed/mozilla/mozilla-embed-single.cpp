@@ -73,7 +73,6 @@
 // FIXME: For setting the locale. hopefully gtkmozembed will do itself soon
 #include <nsIChromeRegistry.h>
 #include <nsILocaleService.h>
-#include <nsIProtocolProxyService.h>
 #include <nsIHttpAuthManager.h>
 #include <nsICacheService.h>
 #include <nsIFontEnumerator.h>
@@ -576,23 +575,6 @@ impl_get_offline_mode (EphyEmbedSingle *shell)
 	return isOffline;
 }
 
-static void
-impl_load_proxy_autoconf (EphyEmbedSingle *shell,
-			  const char* url)
-{
-	g_assert (url != NULL);
-
-        nsCOMPtr<nsIProtocolProxyService> pps =
-                do_GetService ("@mozilla.org/network/protocol-proxy-service;1");
-	if (!pps) return;
-
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 2)
-	pps->ConfigureFromPAC (nsEmbedCString (url));
-#else
-	pps->ConfigureFromPAC (url);
-#endif
-}
-
 static GList *
 impl_get_font_list (EphyEmbedSingle *shell,
 		    const char *langGroup)
@@ -945,7 +927,6 @@ ephy_embed_single_iface_init (EphyEmbedSingleIface *iface)
 	iface->clear_auth_cache = impl_clear_auth_cache;
 	iface->set_offline_mode = impl_set_offline_mode;
 	iface->get_offline_mode = impl_get_offline_mode;
-	iface->load_proxy_autoconf = impl_load_proxy_autoconf;
 	iface->get_font_list = impl_get_font_list;
 	iface->open_window = impl_open_window;
 }

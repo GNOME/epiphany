@@ -23,6 +23,8 @@
 #include "config.h"
 #endif
 
+#include "mozilla-version.h"
+
 #include "ephy-embed-single.h"
 #include "ephy-embed-shell.h"
 #include "mozilla-notifiers.h"
@@ -46,6 +48,10 @@
 #include <nsIServiceManager.h>
 #include <libgnome/gnome-i18n.h>
 
+#ifdef ALLOW_PRIVATE_API
+#include <nsIProtocolProxyService.h>
+#endif
+ 
 #define MOZILLA_PREF_NO_PROXIES "network.proxy.no_proxies_on"
 #define MIGRATE_PIXEL_SIZE
 
@@ -354,13 +360,18 @@ mozilla_proxy_autoconfig_notifier (GConfClient *client,
 		       		   GConfEntry *entry,
 		       		   EphyEmbedSingle *single)
 {
-	char *url;
+        nsCOMPtr<nsIProtocolProxyService> pps =
+                do_GetService ("@mozilla.org/network/protocol-proxy-service;1");
+        if (!pps) return;
 
-	url = eel_gconf_get_string (entry->key);
-
+	char *url = eel_gconf_get_string (entry->key);
 	if (url && url[0] != '\0')
 	{
-		ephy_embed_single_load_proxy_autoconf (single, url);
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 2)
+	        pps->ConfigureFromPAC (nsEmbedCString (url));
+#else
+	        pps->ConfigureFromPAC (url);
+#endif
 	}
 
 	g_free (url);
