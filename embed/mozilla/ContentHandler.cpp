@@ -132,7 +132,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 					   NS_ConvertUTF16toUTF8 (aDefaultFile).get());
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-	if (response == EPHY_RESPONSE_SAVE)
+	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 

@@ -37,12 +37,6 @@ G_BEGIN_DECLS
 
 typedef struct EphyFileChooserPrivate EphyFileChooserPrivate;
 
-enum
-{
-	EPHY_RESPONSE_OPEN = 2,
-	EPHY_RESPONSE_SAVE = 3
-};
-
 typedef struct
 {
 	GtkFileChooserDialog parent;

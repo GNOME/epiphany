@@ -258,7 +258,7 @@ print_filechooser_response_cb (GtkDialog *fc,
 			       int response,
 			       EphyDialog *dialog)
 {
-	if (response == EPHY_RESPONSE_SAVE)
+	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		char *filename;
 

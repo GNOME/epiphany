@@ -364,7 +364,7 @@ window_cmd_file_bookmark_page (GtkAction *action,
 static void
 open_response_cb (GtkDialog *dialog, int response, EphyWindow *window)
 {
-	if (response == EPHY_RESPONSE_OPEN)
+	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		char *uri, *converted;
 
