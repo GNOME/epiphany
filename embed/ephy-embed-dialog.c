@@ -17,7 +17,6 @@
  */
 
 #include "ephy-embed-dialog.h"
-#include "ephy-embed-shell.h"
 
 static void
 ephy_embed_dialog_class_init (EphyEmbedDialogClass *klass);
@@ -199,12 +198,5 @@ ephy_embed_dialog_set_embed (EphyEmbedDialog *dialog,
 EphyEmbed *
 ephy_embed_dialog_get_embed (EphyEmbedDialog *dialog)
 {
-	if (dialog->priv->embed == NULL)
-	{
-		EphyEmbed *embed;
-		embed = ephy_embed_shell_get_active_embed (embed_shell);
-		ephy_embed_dialog_set_embed (dialog, embed);
-	}
-
 	return dialog->priv->embed;
 }

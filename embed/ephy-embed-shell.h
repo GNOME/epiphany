@@ -55,10 +55,6 @@ struct EphyEmbedShellClass
 {
         GObjectClass parent_class;
 
-	void		(* command)             (EphyEmbedShell *shell,
-						 char *command,
-						 char *param);
-
 	/* Methods */
 	EphyHistory    * (* get_global_history)  (EphyEmbedShell *shell);
 	DownloaderView * (* get_downloader_view) (EphyEmbedShell *shell);
@@ -71,16 +67,6 @@ GType             ephy_embed_shell_get_impl            (void);
 EphyEmbedShell   *ephy_embed_shell_new                 (const char *type);
 
 EphyFaviconCache *ephy_embed_shell_get_favicon_cache   (EphyEmbedShell *ges);
-
-void              ephy_embed_shell_add_embed           (EphyEmbedShell *ges,
-							EphyEmbed *embed);
-
-void              ephy_embed_shell_remove_embed        (EphyEmbedShell *ges,
-							EphyEmbed *embed);
-
-EphyEmbed        *ephy_embed_shell_get_active_embed    (EphyEmbedShell *ges);
-
-GList            *ephy_embed_shell_get_embeds          (EphyEmbedShell *ges);
 
 EphyHistory      *ephy_embed_shell_get_global_history  (EphyEmbedShell *shell);
 

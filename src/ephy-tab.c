@@ -813,9 +813,6 @@ ephy_tab_destroy_brsr_cb (EphyEmbed *embed, EphyTab *tab)
 	g_return_if_fail (tab->priv->window != NULL);
 
 	ephy_window_remove_tab (tab->priv->window, tab);
-
-	ephy_embed_shell_remove_embed (EPHY_EMBED_SHELL (ephy_shell),
-				       tab->priv->embed);
 }
 
 static gint
@@ -954,8 +951,6 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
 
 	tab->priv->embed = ephy_embed_new (G_OBJECT(single));
-	ephy_embed_shell_add_embed (EPHY_EMBED_SHELL (ephy_shell),
-				    tab->priv->embed);
 
 	embed = G_OBJECT (tab->priv->embed);
 	embed_widget = G_OBJECT (tab->priv->embed);

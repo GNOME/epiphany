@@ -365,6 +365,7 @@ print_dialog_print (EphyDialog *dialog)
 	{
 		embed = ephy_embed_dialog_get_embed
 			(EPHY_EMBED_DIALOG(dialog));
+		g_return_if_fail (embed != NULL);
 
 		info->preview = FALSE;
 		ephy_embed_print (embed, info);
@@ -390,6 +391,7 @@ print_dialog_preview (EphyDialog *dialog)
 	{
 		embed = ephy_embed_dialog_get_embed
 			(EPHY_EMBED_DIALOG(dialog));
+		g_return_if_fail (embed != NULL);
 
 		info->preview = TRUE;
 		ephy_embed_print (embed, info);

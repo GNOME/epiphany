@@ -49,10 +49,10 @@ epiphany_bin_SOURCES = 				    	\
 	ephy-encoding-menu.h				\
 	ephy-favicon-action.c				\
 	ephy-favicon-action.h				\
-	ephy-go-action.c				\
-	ephy-go-action.h				\
 	ephy-favorites-menu.c				\
 	ephy-favorites-menu.h				\
+	ephy-go-action.c				\
+	ephy-go-action.h				\
 	ephy-history-window.c				\
 	ephy-history-window.h				\
 	ephy-location-action.c				\

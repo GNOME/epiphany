@@ -30,7 +30,6 @@ struct EphyEmbedShellPrivate
 {
 	EphyHistory *global_history;
 	DownloaderView *downloader_view;
-	GList *embeds;
 	EphyFaviconCache *favicon_cache;
 	EphyEmbedSingle *embed_single;
 };
@@ -101,8 +100,6 @@ ephy_embed_shell_init (EphyEmbedShell *ges)
 
 	ges->priv->global_history = NULL;
 	ges->priv->downloader_view = NULL;
-	ges->priv->embeds = NULL;
-
 	ges->priv->favicon_cache = NULL;
 }
 
@@ -180,36 +177,6 @@ ephy_embed_shell_get_favicon_cache (EphyEmbedShell *ees)
 	}
 
 	return ees->priv->favicon_cache;
-}
-
-void
-ephy_embed_shell_add_embed (EphyEmbedShell *ges,
-                            EphyEmbed *embed)
-{
-	ges->priv->embeds = g_list_append (ges->priv->embeds, embed);
-}
-
-void
-ephy_embed_shell_remove_embed (EphyEmbedShell *ges,
-                               EphyEmbed *embed)
-{
-	ges->priv->embeds = g_list_remove (ges->priv->embeds, embed);
-}
-
-EphyEmbed *
-ephy_embed_shell_get_active_embed (EphyEmbedShell *ges)
-{
-	GList *list = ges->priv->embeds;
-
-        g_return_val_if_fail (ges->priv->embeds != NULL, NULL);
-
-        return EPHY_EMBED (list->data);
-}
-
-GList *
-ephy_embed_shell_get_embeds (EphyEmbedShell *ges)
-{
-	return ges->priv->embeds;
 }
 
 EphyHistory *
