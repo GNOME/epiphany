@@ -1,0 +1,2558 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+  <!ENTITY legal SYSTEM "legal.xml">
+  <!ENTITY appversion "1.2">
+  <!ENTITY manrevision "1.2">
+  <!ENTITY date "November 2003">
+  <!ENTITY fr "<application>Epiphany</application>">
+  <!-- Information about the entities
+       The legal.xml file contains legal information, there is no need to edit the file. 
+       Use the appversion entity to specify the version of the application.
+       Use the manrevision entity to specify the revision number of this manual.
+       Use the date entity to specify the release date of this manual.
+       Use the fr entity to specify the name of the application. -->
+]>
+<!-- 
+      (Do not remove this comment block.)
+  Maintained by the GNOME Documentation Project
+  http://developer.GNOME.org/projects/gdp
+  Template version: 2.0 beta
+  Template last modified Jan 30, 2002
+-->
+<!-- =============Document Header ============================= -->
+<article id="index" lang="ja">
+<!-- please do not change the id; for translations, change lang to -->
+<!-- appropriate code -->
+  <articleinfo> 
+    <title>Epiphany マニュアル<!-- Manual --> V&manrevision;</title>       
+
+    <copyright>
+      <year>2003</year>
+      <holder>Patanjali Somayaji</holder>
+    </copyright>
+    <copyright>
+      <year>2003</year>
+      <holder>David Bordoley</holder>
+    </copyright>
+    <copyright>
+      <year>2004</year>
+      <holder>Piers Cornwell</holder>
+    </copyright>
+
+<!-- translators: uncomment this: -->
+
+  <copyright>
+   <year>2004</year>
+   <holder>SATOH Satoru (和訳)</holder>
+  </copyright>
+
+   <!-- -->
+<!-- An address can be added to the publisher information.  If a role is 
+     not specified, the publisher/author is the same for all versions of the 
+     document.  -->
+    <publisher> 
+      <publishername> GNOME ドキュメンテーションプロジェクト</publishername> 
+    </publisher> 
+
+   &legal; <!-- This file contains link to license for the
+   documentation (GNU FDL), and other legal stuff such as "NO
+   WARRANTY" statement. Please do not change any of this. -->
+
+    <authorgroup> 
+      <author> 
+	<firstname>Patanjali</firstname> 
+	<surname>Somayaji</surname> 
+	<affiliation> 
+	  <orgname>GNOME ドキュメンテーションプロジェクト</orgname> 
+	  <address><email>patanjali@codito.com</email></address> 
+	</affiliation> 
+      </author> 
+      <author> 
+	<firstname>David</firstname> 
+	<surname>Bordoley</surname> 
+	<affiliation> 
+	  <orgname>Epiphany 開発チーム</orgname> 
+	  <address><email>bordoley@msu.edu</email></address> 
+	</affiliation> 
+      </author> 
+      <author> 
+	<firstname>Piers</firstname> 
+	<surname>Cornwell</surname> 
+	<affiliation> 
+	  <orgname>Epiphany Development Team</orgname> 
+	  <address><email>piers@gnome.org</email></address> 
+	</affiliation> 
+      </author>
+    </authorgroup>
+
+
+    <releaseinfo>
+      <!-- This manual describes version &appversion; of &fr;. -->
+      このマニュアルは &fr; V&appversion; について説明しています。
+    </releaseinfo>
+  </articleinfo>
+
+  <indexterm zone="index"> 
+    <primary>Epiphany</primary> 
+  </indexterm> 
+  <indexterm zone="index"> 
+    <primary>epiphany</primary> 
+  </indexterm>
+  <indexterm zone="index"> 
+    <primary>ブラウザ</primary> 
+  </indexterm>
+
+<!-- ============= Document Body ================================== -->
+<!-- ============= Introduction =================================== -->
+<!-- Use the Introduction section to give a brief overview of what
+     the application is and what it does. -->
+  <sect1 id="fr-introduction"> 
+    <title>概要<!-- Introduction --></title> 
+    <para>
+      &fr; は GNOME のウェブブラウザです。
+      &fr; は簡単に使え、かつ標準に準拠することを目的としています。
+      <!-- &fr; is the GNOME web browser. &fr; aims to be simple to
+      use and standards compliant. -->
+   </para>
+  </sect1>
+
+<!-- ============= Getting Started ================================ -->
+  <sect1 id="ephy-getting-started">
+    <title>はじめに<!-- Getting Started --></title>
+
+      <sect2 id="ephy-to-open-browser-window">
+        <title>ブラウザウィンドウを開く<!-- To Open a Browser Window --></title>
+        <para>
+          次のようにしてブラウザウィンドウを開くことができます。
+          <!-- You can open a browser window in the following ways: -->
+        </para>
+        <variablelist>
+          <varlistentry>
+            <term><guimenu>アプリケーション</guimenu>メニュー</term>
+            <listitem>
+              <para>
+                <menuchoice><guisubmenu>インターネット</guisubmenu>
+                <guimenuitem>ウェブブラウザ</guimenuitem></menuchoice>
+		を選択します。
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>コマンドライン</term>
+            <listitem>
+              <para>
+                <command>epiphany</command> と入力してから
+                <keycap>Enter</keycap> キーを押します。
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </sect2>
+      <sect2 id="ephy-to-open-bookmarks">
+        <title>ブックマークウィンドウを開く<!-- To Open the Bookmarks Window --></title>
+        <para>
+          次のようにしてブックマークウィンドウを開くことができます。
+          <!-- You can open the bookmarks window in the following ways: -->
+        </para>
+        <variablelist>
+          <varlistentry>
+            <term>
+              <guimenu>アプリケーション</guimenu>メニュー
+            </term>
+            <listitem>
+   	      <para>
+                <menuchoice><guisubmenu>インターネット</guisubmenu>
+                <guimenuitem>ウェブ・ブックマーク</guimenuitem></menuchoice>
+		を選択します。
+              </para>
+            </listitem>
+          </varlistentry>
+	
+          <varlistentry>
+            <term>
+              コマンドライン
+            </term>
+            <listitem>
+              <para>
+               <command>epiphany -b</command> と入力してから
+	       <keycap>Enter</keycap>キーを押します。
+              </para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>
+              <guimenu>ブックマーク</guimenu>メニューから
+            </term>
+            <listitem>
+              <para>
+                &fr; メインウィンドウから
+                <menuchoice><guimenu>ブックマーク</guimenu>
+                <guimenuitem>ブックマークの編集</guimenuitem>
+                </menuchoice>を選択
+              </para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>
+              &fr; ツールバーから
+            </term>
+            <listitem>
+              <para>
+                メインウィンドウのツールバー内のブックマークボタンをクリック
+                <!-- Click on the Bookmarks button in the toolbar
+		of the main window. -->
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </sect2>
+  </sect1>
+
+<!-- ============= Browser Windows ============================ -->
+  <sect1 id="ephy-browser-windows">
+    <title>ブラウザウィンドウ</title>
+    <para>
+      ブラウザウィンドウでウェブページを見ることができます。
+      <xref linkend="ephy-screenshot" />
+      はブラウザウィンドウでホームページを表示しているところです。
+      <!-- Browser windows enable you to browse between web pages. 
+      <xref linkend="ephy-screenshot"/> shows a browser window displaying the 
+      home page. -->
+    </para>
+    <figure id="ephy-screenshot">
+      <title>ブラウザウィンドウでホームページを表示<!-- Browser window displaying the home page --></title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/ephy-screenshot.png" format="PNG"/>
+          </imageobject>
+          <textobject>
+            <phrase>ページをブラウザウィンドウで表示しています。
+	    (上からメニューバー、ツールバー、アドレスエントリ、ブックマークバー、ビューペイン)
+	    <!-- A page being displayed in a browser window. Callouts: Menubar, toolbar, address entry, bookmarks bar, view pane --></phrase>
+          </textobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+    <para>
+      <xref linkend="epiphany-TBL-1"/>
+      でブラウザウィンドウのコンポーネントを示します。
+      <!-- describes the components of a browser window. -->
+    </para>
+    <table frame="topbot" id="epiphany-TBL-1">
+      <title>Browser Window Components</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>コンポーネント</para>
+            </entry>
+            <entry valign="top">
+              <para>説明</para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry valign="top">
+              <para>メニューバー</para>
+            </entry>
+            <entry valign="top">
+              <para>
+	        ブラウザウィンドウでタスクを実行するためのメニューを含みます。
+                <!-- Contains menus that you use to perform tasks in a browser window. -->
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>ツールバー</para>
+            </entry>
+            <entry valign="top">
+              <para>
+                ブラウザウィンドウでタスクを実行するためのボタンを含みます。
+                <!-- Contains buttons that you use to perform tasks in a browser window. -->
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>アドレスエントリ</para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                ウェブアドレスまたは検索語句を入力するためのドロップダウンコンビネーションボックスです。
+                <!-- Drop-down combination box that you use to enter web addresses or 
+                search terms. -->
+              </para>
+            </entry>
+          </row>
+	  <row>
+            <entry colname="colspec0" valign="top">
+              <para>ブックマークバー</para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                メニュー、ボタン、ブックマーク、そしてウェブ検索に即座にアクセスするためのテキストフィールドを含みます。
+                <!-- Contains menus, buttons and text fields that you use for highspeed 
+                access to bookmarks and web searches. -->
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>ビューペイン</para>
+            </entry>
+            <entry valign="top">
+              <para>ページ内容を表示します。
+                <!-- Displays the contents of the viewed page. -->
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>ステータスバー</para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>ステータス情報を表示します。<!-- Displays status information. --></para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <para>
+      ブラウザウィンドウでポップアップメニューを開くこともできます。
+      ポップアップメニューを開くにはブラウザウィンドウ内で右クリックします。
+      このメニュー内のアイテムはどこで右クリックしたかによって異なります。
+      例えば、リンクで右クリックするとリンクに関連するアイテムを、
+      ウェブページ自体の上で右クリックするとウェブページの表示に関連するアイテムを選択できます。
+      <!-- You can also open a popup menu from browser windows. To open 
+      this popup menu right-click in a browser window. The items in 
+      this menu depend on where you right-click. For example, when 
+      you right-click on a link, you can choose items related to the 
+      link. When you right-click on the web page itself, you can 
+      choose items related to the display of the web page. -->
+    </para>
+  </sect1>
+
+<!-- ============= Browsing the Web =========================== -->
+  <sect1 id="ephy-browsing-web">
+      <title>ウェブブラウズ<!-- Browsing the Web --></title>
+      <para>
+      </para>
+        <sect2 id="using-address-entry">
+          <title>アドレスエントリを使う<!-- Using the Address Entry --></title>
+          <para>
+            アドレスエントリはウェブアドレスまたは検索語句を入力するのに使います。
+	    アドレスエントリに入力された語句でブックマークデータベースと履歴データベースが検索されます。
+	    もし何かマッチするものがあればドロップダウンリストに表示され、選択可能となります。
+	    選択するとそのウェブページがブラウザウィンドウまたはタブに読み込まれます。
+            <!-- The address entry is used to enter web addresses or search
+            terms. Any words entered in the address entry are searched
+            for in the Bookmarks database and the History database. If
+            there are any matches, these are shown in a drop down list
+            and can be selected by you. The selected web page will be
+            loaded in the browser window or tab. -->
+          </para>
+          <para>
+            ブックマークに保存されたページのアドレス、
+	    またはタイトルの一部であるようなブックマークトピックでも語句でも何でも入力することができます。
+	    それら語句にマッチするかどうかブックマークデータベースが検索されます。
+	    詳細については <xref linkend="overview-of-bookmarks" /> を参照して下さい。 
+            <!-- You can type in a bookmark topic or a term that is
+            part of the address or title of any page stored in your
+            bookmarks. These
+            terms are searched in the bookmark database for
+            matches. For more information, see <xref
+            linkend="overview-of-bookmarks"/>. -->
+          </para>
+        </sect2>
+	<sect2 id="using-toolbar">
+          <title>ツールバーを使う<!-- Using the Toolbar --></title>
+          <para>
+            ツールバーには沢山の通常使う機能へのショートカットが含まれています。
+	    ツールバーで『戻る』『進む』ボタンをクリックすれば履歴をナビゲートできます。
+	    また『中止』ボタンをクリックしてページの読み込みを停止することも、
+	    『再読み込み』ボタンをクリックしてページを再度読み込むこともできます。
+            <!-- The toolbar contains a number of shortcuts to commonly 
+            used functions. You can use the toolbar to navigate 
+            through your web history by clicking the back and 
+            forward buttons. In addition it is possible to stop the 
+            loading of pages by clicking the stop button. Finally 
+            pages may be reloaded by clicking the reload button. -->
+          </para>
+          <para>
+            ツールバーに表示されるボタンはツールバーエディタでカスタマイズできます。
+	    詳細については <xref linkend="to-edit-toolbars"/> を参照して下さい。
+            <!-- You can customize the buttons which appear on your 
+            toolbar by using the Toolbar Editor: for details, see 
+            <xref linkend="to-edit-toolbars"/>. -->
+          </para>
+        </sect2>
+	<sect2 id="using-bookmarks-bar">
+          <title>ブックマークバーを使う</title>
+          <para>
+            ブックマークバーで好みのウェブサイトに簡単にツールバーからアクセスできるようにリンクできます。
+	    ブックマークバーへのブックマーク追加の詳細については
+	    <xref linkend="to-add-bookmark-or-topic-to-bookmarks-bar"/> を参照して下さい。
+            <!-- The Bookmarks Bar allows you to have links to your favorite 
+            websites on a toolbar for easy access. For details on 
+            adding bookmarks to the bookmarks bar, see <xref 
+            linkend="to-add-bookmark-or-topic-to-bookmarks-bar"/>. -->
+          </para>
+        </sect2>
+	<sect2 id="using-fullscreen-mode">
+          <title>全画面モードを使う<!-- Using Fullscreen Mode --></title>
+          <para>
+            全画面モードで表示エリアの画面全体にブラウザを表示することができます。
+	    全画面モードにするには
+            <!-- Fullscreen mode allows the browser to use the whole screen 
+            for its viewable area. To enter Fullscreen mode, select -->
+            <menuchoice> <guimenu>表示</guimenu><guimenuitem>フルスクリーン
+            </guimenuitem></menuchoice> を選択します。
+          </para>
+          <para>
+            全画面モードを抜けるには <guibutton>フルスクリーンモードの終了</guibutton>
+	    をクリックします。
+            <!-- You can exit Fullscreen mode by clicking <guibutton>Exit Fullscreen</guibutton>. -->
+          </para>
+        </sect2>
+	<sect2 id="to-open-new-window">
+          <title>新しいウィンドウを開く</title>
+          <para>
+            新しいウィンドウを開くには <menuchoice><guimenu>ファイル</guimenu>
+	    <guimenuitem>新しいウィンドウ</guimenuitem></menuchoice>を選択します。
+            <!-- To open a new window, choose <menuchoice> <guimenu>
+            File</guimenu> <guimenuitem>New Window</guimenuitem></menuchoice>. -->
+	  </para>
+        </sect2>
+	<sect2 id="to-open-new-tab">
+          <title>新しいタブを開く</title>
+          <para>
+            新しいタブを開くには <menuchoice><guimenu>ファイル</guimenu>
+	    <guimenuitem>新しいタブ</guimenuitem></menuchoice>を選択します。
+	    新しいタブは既存のタブの右側に現われます。
+	    <!-- The new tab will be place to the right of any existing tabs. -->
+	  </para>
+	</sect2>
+	<sect2 id="ephy-to-open-file">
+          <title>ファイルを開く</title>
+          <para>
+            ファイルを開くには <menuchoice><guimenu>ファイル</guimenu>
+	    <guimenuitem>開く...</guimenuitem></menuchoice>を選択し、
+	    <guilabel>(ファイルを)開く</guilabel>ダイアログを表示します。
+	    目的のファイルを選択し<guibutton>開く</guibutton>
+	    をクリックするとそのファイルがブラウザウィンドウに表示されます。
+          </para>
+        </sect2>
+	<sect2 id="to-save-page-to-file">
+          <title>ページをファイルに保存</title>
+          <para>
+             ページをファイルに保存するには <menuchoice><guimenu>ファイル</guimenu>
+	     <guimenuitem>別名で保存</guimenuitem></menuchoice>を選択します。
+             <guilabel>別名で保存</guilabel>ダイアログにファイル名を入力し、
+	     <guibutton>保存</guibutton>をクリックします。
+          </para>
+        </sect2>
+        <sect2 id="using-print-setup">
+          <title>印刷の設定<!-- Using Print Setup --></title>
+          <para>
+            『印刷の設定』でどのようにウェブページを印刷するか設定できます。
+	    <!-- Print setup allows you to configure how web pages are printed. -->
+          </para>
+          <variablelist>
+            <varlistentry>
+              <term>余白</term>
+              <listitem>
+                <para>ページの隅から内容までの距離
+                  <!-- The distance from the edge of the page to the content. -->
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>色</term>
+              <listitem>
+                <para>グレイスケール/色(あり)で印刷</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>フッタ</term>
+              <listitem>
+                <para>ページ番号と日付を毎ページ下に印刷するかどうか選択
+                  <!-- Choose whether to display page numbers and current date
+                  at the bottom of every page. -->
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>ヘッダ</term>
+              <listitem>
+                <para>ウェブページタイトルとアドレスを毎ページ上に印刷するかどうか選択
+                  <!-- Choose whether to display the web page title and address
+                  at the top of every page. -->
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>大きさ</term>
+              <listitem>
+                <para>ページの大きさ</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>向き</term>
+              <listitem>
+                <para>縦向き(ポートレイト)に印刷するか横向き(ランドスケープ)に印刷するか指定
+                  <!-- Defines whether the top of the page is the short (portrait) or 
+                  long (landscape) edge of the paper. -->
+                </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        </sect2>
+        <sect2 id="using-print-preview">
+          <title>印刷プレビュー<!-- Using Print Preview --></title>
+          <para>
+            印刷プレビューでページがどのように印刷されるか見ることができます。
+	    現在のページの印刷プレビューを表示するには
+            <menuchoice><guimenu>ファイル</guimenu><guimenuitem>印刷プレビュー</guimenuitem> 
+            </menuchoice>を選択します。
+            <!-- With print preview, you can see how a page will look once it has been 
+            printed. To print preview the current page, choose <menuchoice> 
+            <guimenu>File</guimenu> <guimenuitem>Print Preview</guimenuitem> 
+            </menuchoice>. -->
+          </para>
+        </sect2>
+	<sect2 id="to-print-page">
+          <title>印刷<!-- To Print a Page --></title>
+          <para>
+            ページを印刷するには<menuchoice><guimenu>ファイル</guimenu>
+            <guimenuitem>印刷</guimenuitem></menuchoice>を選択します。
+	    <guilabel>プリンタ</guilabel>フィールドにプリンタ名を入力するか
+	    <guilabel>ファイル</guilabel>フィールドに出力するファイル名を入力します。
+          </para>
+          <para>
+            <guilabel>ページ範囲</guilabel>セクションでは、ウェブページ全体を印刷するには
+	    <guilabel>全てのページ</guilabel>を、<guilabel>ページ</guilabel>
+	    で指定したページ分だけを印刷するには <guilabel>選択範囲</guilabel>を選択します。
+            <!-- In the <guilabel>Page Range</guilabel> section, choose <guilabel>
+            All Pages</guilabel> to print the entire web page, <guilabel>Selection
+            </guilabel> to print the currently selected part of the web page only or
+            <guilabel>Pages</guilabel> to print the range of pages that you specify. -->
+          </para>
+        </sect2>
+	<sect2 id="to-find-text-in-page">
+          <title>ページ内の語句を検索<!-- To Find Text in a Page --></title>
+	  <para>ページ内で文字列を検索するときは次のステップを実行します:
+            <!-- To search a page for a string, perform the following steps: --></para>
+            <orderedlist> 
+              <listitem>
+                <para>
+                  <menuchoice><guimenu>編集</guimenu>
+                  <guimenuitem>検索</guimenuitem></menuchoice>を選択して
+                  <guilabel>検索</guilabel>ダイアログを表示します。
+                </para>
+              </listitem>
+              <listitem>
+                <para><guilabel>検索</guilabel>フィールドに検索したい文字列を入力します。</para>
+              </listitem>
+              <listitem>
+                <para>
+                  <guilabel>大/小文字を区別する</guilabel>
+		  オプションを選択すると入力した語に正確にマッチするものだけが検索されます。
+                  <!-- Select the <guilabel>Case sensitive</guilabel> 
+                  option to only find occurrences of the string that 
+                  match the case of the text that you type. -->
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <guilabel>折り返しも検索する</guilabel>
+		  オプションを選択すると、検索してページ最後まで行ったら先頭に戻って検索を続けます。
+                  <!-- Select the <guilabel>Wrap around</guilabel> option to 
+                  search to the end of the page and then continue the 
+                  search from the beginning of the page. -->
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <guibutton>次へ</guibutton>をクリックすると検索を開始し、
+		  文字列がみつかればその最初にみつかった文字列にカーソルが移動し、
+		  その文字列が選択されます。
+                </para>
+              </listitem>
+              <listitem>
+                <para>次に文字列が出現する場所を検索するには<guibutton>次へ</guibutton>をクリックします。</para>
+              </listitem>
+              <listitem>
+                <para>前に文字列が出現する場所を検索するには<guibutton>前へ</guibutton>をクリックします。</para>
+              </listitem>
+              <listitem>
+                <para>検索を終了するには<guibutton>閉じる</guibutton>をクリックします。</para>
+              </listitem>
+            </orderedlist>
+        </sect2>	
+	<sect2 id="to-change-zoom">
+	  <title>拡大縮小表示<!-- To Change the Zoom Factor --></title>
+	  <para>ページ表示を拡大縮小するには次のようにします。</para>
+	  <itemizedlist>
+            <listitem>
+              <para>ページを拡大表示するには<menuchoice>
+                <guimenu>表示</guimenu><guimenuitem>拡大する</guimenuitem>
+                </menuchoice>を選択します。
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                ページを縮小表示するには<menuchoice><guimenu>表示</guimenu>
+		<guimenuitem>縮小する</guimenuitem></menuchoice>を選択します。
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                ページをその実際の大きさで表示するには<menuchoice><guimenu>表示</guimenu>
+		<guimenuitem>通常の大きさ</guimenuitem></menuchoice>を選択します。
+              </para>
+            </listitem>
+          </itemizedlist>
+        </sect2>
+	<sect2 id="to-view-page-source">
+          <title>ページのソースを表示<!-- To View the Source of a Page --></title>
+          <para>
+            ページのソースコードを表示するには<menuchoice><guimenu>表示</guimenu>
+	    <guimenuitem>ページのソース</guimenuitem></menuchoice>を選択します。
+	    ソースはデフォルトに指定されたテキストエディタで表示されます。
+          </para>
+        </sect2>
+	<sect2 id="to-open-link">
+          <title>リンクを開く</title>
+          <para>
+            ウェブページはしばしば(しかし常にではありません)下線で示される他のウェブページへのリンクを含んでいます。
+	    リンクを追うにはただそれをクリックします。
+            <!-- Web pages contain links to other web pages, often (but not always)
+            indicated by an underline. To follow a link, left click it. -->
+          </para>
+          <variablelist>
+            <varlistentry>
+              <term>リンク先をページの指定どおりに開く<!-- To open a link as the page specifies --></term>
+              <listitem>
+                <para>
+                  リンクを左クリック。リンクはページ作者の指定に従い現在のウィンドウはまたは新しいウィンドウで開かれます。
+                  <!-- Left-click a link. The link may open in the current window or 
+                  a new window according to what the page author specified. -->
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>リンク先を新しいタブで開く</term>
+              <listitem>
+                <para>右クリックして<guimenuitem>リンク先を新しいタブで開く</guimenuitem>
+		を選択するか、中央マウスボタンでクリックします。
+                  <!-- Right click it and select <guimenuitem>Open Link in New 
+                  Tab</guimenuitem>, click with the middle mouse button. -->
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>リンク先を新しいウィンドウで開く</term>
+              <listitem>
+                <para>
+                  右クリックして<guimenuitem>リンク先を新しいウィンドウで開く</guimenuitem>を選択します。
+                </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        </sect2>
+	<sect2 id="to-download-link">
+          <title>リンク先をダウンロード<!-- To Download a Link --></title>
+          <para>
+            リンク先のターゲットを保存するには、右クリックして
+	    <guimenuitem>リンク先のダウンロード</guimenuitem>を選択します。
+	    リンク先のファイルまたはドキュメントは
+            <xref linkend="general-preferences"/>
+	    で指定できるダウンロードフォルダに保存されます。
+            <!-- To save the target of a link, right click it and select 
+            <guimenuitem>Download Link</guimenuitem>. The linked file or 
+            document will be saved to your download folder which you can 
+            set in <xref linkend="general-preferences"/>. -->
+          </para>
+        </sect2>
+	<sect2 id="to-switch-between-tabs">
+          <title>タブの切り替え<!-- To Switch in Between Tabs --></title>
+          <para>タブのつまみをクリックするとタブを切り替えられます。</para>
+        </sect2>
+	<sect2 id="to-move-tabs">
+          <title>タブの移動<!-- To Move Tabs --></title>
+          <para>
+            ウィンドウのタブを再調整するには
+	    <menuchoice><guimenu>タブ</guimenu> <guimenuitem>タブを左へ移動</guimenuitem></menuchoice>
+	    または
+	    <menuchoice><guimenu>タブ</guimenu> <guimenuitem>タブを右へ移動</guimenuitem></menuchoice>
+	    を選択すると現在のタブを移動できます。
+	    またタブをドラッグすることでも並び換えできます。
+            <!-- To rearrange tabs in the current window, select <menuchoice>
+            <guimenu>Tabs</guimenu> <guimenuitem>Move Tab Left</guimenuitem>
+            </menuchoice> or <menuchoice> <guimenu>Tabs</guimenu> 
+            <guimenuitem>Move Tab Right</guimenuitem></menuchoice> to 
+            move the current tab. You can also drag tabs to reorder them. -->
+          </para>
+          <para>タブを新しいウィンドウに移動させるには
+	  <menuchoice><guimenu>タブ</guimenu> <guimenuitem>タブの取り外し</guimenuitem></menuchoice>
+	  を選択します。
+            <!-- To move the current tab to a new window choose <menuchoice> 
+            <guimenu>Tabs</guimenu> <guimenuitem>Detach Tab</guimenuitem>
+            </menuchoice>. -->
+          </para>
+        </sect2>
+  </sect1>
+
+<!-- ============= Managing Your Bookmarks ================ -->
+  <sect1 id="ephy-managing-bookmarks">
+      <title>ブックマークの管理<!-- Managing Your Bookmarks --></title>
+      <para>
+      </para>
+	<sect2 id="overview-of-bookmarks">
+          <title>Epiphany ブックマークシステムの概要</title>
+          <para>
+            &fr; のブックマークシステムはほとんどのブラウザで使われている階層化ファイルフォルダとは大きく異なっています。
+	    この設計は二つの設計原理に沿っています:
+            <!-- The &fr; bookmark system is quite different from the
+            hierarchical file folder method used by most
+            browsers. This design is in keeping with two design principles: -->
+            <itemizedlist>
+              <listitem>
+                <para>可能な限り単純なインターフェースのブラウザをつくる</para>
+              </listitem>
+              <listitem>
+                <para>ユーザーに希望のサイトのアドレスを覚えさせる必要を避ける
+                  <!-- Avoiding the need for the user to remember addresses of
+                  sites that the user wants to visit. -->
+		</para>
+              </listitem>
+            </itemizedlist>
+          </para>
+          <para>
+            ブックマーク整理の階層化による方法はほとんどの人にとってうまく行きません。
+	    このアプローチの代りに &fr; はデータベースに似た方法を使っています。
+	    ブックマークのアドレスはそれと関連付けられたメタデータと一緒に保存されます。
+	    このメタデータは後でブックマークをみつけるのに使われます。
+	    &fr; の将来のバージョンではこのデータベースを使ってブックマークを検索し、
+	    みつけるための便利な方法を提供する予定です。
+            <!-- The hierarchical way of organising bookmarks does not work
+            well for most people. Instead of this approach, &fr;
+            follows a database like approach. An address related to a
+            bookmark is stored with some metadata associated with
+            it. This metadata is then used to retrieve a bookmark
+            later. Future versions of &fr; will provide useful ways of
+            searching for and retrieving bookmarks using this
+            database. -->
+          </para>
+          <para>
+            &fr; のブックマークシステムではアドレスはそれぞれについて一つまたはより多くのトピックと関連付けられて整理されます。
+	    例えば、<ulink type="http" url="http://developer.gnome.org">GNOME Developers home page</ulink>
+	    のブックマークを保存する場合、他のどのブラウザでもおそらくユーザーはそれを次のように階層化して保存するでしょう:
+            <!-- In the &fr; bookmark system, addresses are organised by
+            associating each address with one or more topic. For
+            example, if one were to store a bookmark for
+            <ulink type="http" url="http://developer.gnome.org">GNOME
+            Developers home page</ulink>, in any other browser, the user
+            might store it under the following hierarchy: -->
+            <programlisting>
+            Development -> GNOME -> GNOME developers home page
+            </programlisting>
+	  </para>
+          <para>
+            &fr; では同じページを二つのトピックに関連付けられます:
+            <!-- In &fr;, the same page could be associated with two topics: -->
+            <programlisting>
+            Development -> GNOME developers home page
+            GNOME -> GNOME developers home page
+            </programlisting>
+            これでユーザーはトピック "GNOME"、"Development"
+	    のどちらをアドレスバーに入力してもこのブックマークにアクセスできるようになります。
+	    またアドレスバーに入力するキーワードは "GNOME"、"developers"、"home"、"page" のいずれでも良いのです。
+	    これらのどの語句でも求めるブックマークを含むリストが選り分けられます。
+	    ブックマークにアクセスするすべての方法を知りたければ
+	    <xref linkend="to-access-a-bookmark"/> を参照して下さい。
+            <!-- Now the user can access this bookmark by typing the  
+            topic "GNOME" or "Development" in the location
+            bar. The user can also type in any of the words "GNOME",
+            "developers", "home" or "page" in the location bar. Either of these
+            methods drops a list containing the required bookmark. For
+            all ways to access bookmarks, see <xref
+            linkend="to-access-a-bookmark"/> -->
+          </para>
+          <para>
+            <note>
+              <title>サブトピックはありません<!-- No Subtopics --></title>
+              <para>
+                &fr; ではト単一なトピックの階層だけです。サブトピックはつくれません。
+                <!-- &fr; allows only a single level of topics. Topics cannot
+                have sub-topics. -->
+              </para>
+            </note>
+          </para>
+        </sect2>
+        <sect2 id="to-access-a-bookmark">
+          <title>ブックマークへのアクセス<!-- To Access a bookmark --></title>
+          <para>
+            ブックマークへアクセスする第一の方法はブックマークウィンドウです。
+            ブックマークウィンドウを開く方法については 
+	    <xref linkend="ephy-to-open-bookmarks"/> を参照して下さい。
+	    ナビゲートしやすく、また同じ場所で検索と編集ができるように、
+	    分割されたウィンドウを使ってブックマークを整理します。
+	    ブックマークコレクションはデスクトップから直接編集できます。
+	    今では、同じ場所でインラインでブックマークタイトルを編集、
+	    トピックを追加、ブックマークを削除、ドラッグアンドドロップでさらに他のトピックに関連付け、
+	    ブックマークのプロパティを編集といったことなどが可能となっています。
+            <!-- The primary way to access bookmarks is the bookmarks
+            window. To open the bookmarks window, see <xref
+            linkend="ephy-to-open-bookmarks"/>. 
+            A separate window is used for organising bookmarks because
+            that makes it easier to navigate, and also allows it to
+            have search and edit 
+            functionalities in the same place. The bookmarks
+            collection can be directly edited from the desktop. In the
+            same place, it is now possible to edit the bookmark title
+            inline, add more topics, remove bookmarks, associate them
+            to more topics with drag and drop, edit properties of a
+            bookmark, etc. -->
+          </para>
+          <para>ブックマークはまた次のようにしてアクセスできます:
+            <!-- The bookmarks can also be accessed by: -->
+            <itemizedlist>
+              <listitem>
+               <para>
+                 メインウィンドウのアドレスバー内でトピックを入力すると、
+		 そのカテゴリのブックマークのリストがドロップダウンリストに表示されます。
+                 <!-- Typing in a topic in the location bar of the main
+                 window drops down a list of bookmarks of that category. -->
+		</para>
+              </listitem>
+              <listitem>
+               <para>
+                 アドレスバーに入力した語で自動的にブックマークデータベースが検索され、
+		 マッチしたブックマークはアドレスバーの下のドロップダウンリストに表示されます。
+                 <!-- A word typed into the location bar are automatically
+                 searched in the bookmark database and matching bookmarks
+                 are shown in a drop down list below the location bar. -->
+		</para>
+              </listitem>
+              <listitem>
+               <para>
+                 メニューアイテム<guimenu>ブックマーク</guimenu>ですべてのトピックのメニューが表示されます。
+		 これらトピックに関連付けられたブックマークはこのサブメニューからアクセス可能です。
+		 これはブックマークにアクセスする伝統的な方法に近く、互換性のために提供されています。
+                 <!-- The menu item <guimenu>Bookmark</guimenu> gives a menu of 
+		 all the different topics. Bookmarks related to these topics 
+		 can then be accessed from submenus here. This is closest to
+                 the traditional method of accessing bookmarks, and is
+                 provided to keep compatibility. -->
+		</para>
+              </listitem>
+              <listitem>
+               <para>ブックマークバーでもブックマークにアクセスできます。
+                 <menuchoice><guimenu>表示</guimenu><guimenuitem>ブックマークバー</guimenuitem></menuchoice>
+		 を選択するとブックマークバーを追加できます。
+		 しかし各トピックとブックマークはこのバー内に表示するためにブックマークダイアログで設定する必要があります。
+		 これは特によく使うブックマークを整理するのに使えます。
+                 <!-- The bookmark bar can also be used to access your bookmarks.
+                 Choose <menuchoice>
+                        <guimenu>View</guimenu>
+                        <guimenuitem>Bookmarks Bar</guimenuitem>
+                        </menuchoice>
+                 to add the Bookmark bar. However, each topic and
+                 bookmark needs to be configured in the Bookmarks dialog
+                 to be shown on this bar. This can be used to organise
+                 most frequently used bookmarks. -->
+	        </para>
+              </listitem>
+            </itemizedlist>
+          </para>
+        </sect2>
+	<sect2 id="to-create-new-bookmark">
+	  <title>新しいブックマークをつくる<!-- To Create a New Bookmark --></title>
+          <para>ブックマークをつくるにはいくつか方法があります。</para>
+		<variablelist>
+    		<varlistentry>
+    		<term>ブラウザウィンドウ</term>
+    		<listitem>
+			<itemizedlist>
+	  		<listitem>
+			 <para>今見ているページをブックマークするには
+	  		<menuchoice><guimenu>ブックマーク</guimenu><guimenuitem>ブックマークの追加...</guimenuitem></menuchoice>
+			を選択します。</para>
+			</listitem>
+			<listitem>
+			 <para>今見ているページ内のリンクをブックマークするには、
+			 リンクを右クリックして
+			 <menuchoice><guimenuitem>リンク先をブックマークする...</guimenuitem></menuchoice>
+			 を選択します。</para>
+			</listitem>
+			</itemizedlist>
+    		</listitem>
+    		</varlistentry>
+		<varlistentry>
+		<term>履歴ウィンドウ</term>
+    		<listitem>
+		<para>今選択している履歴リンクをブックマークするには
+	  	<menuchoice><guimenu>ファイル</guimenu>
+		<guimenuitem>リンクをブックマークする...</guimenuitem></menuchoice>
+		を選択するか、 または履歴ウィンドウの履歴リンクを右クリックして
+		<guimenuitem>リンクをブックマークする..</guimenuitem>
+		を選択します。</para>
+		</listitem>
+    		</varlistentry>
+    		</variablelist>
+	
+        </sect2>
+	<sect2 id="to-select-bookmarks">
+          <title>ブックマークとトピックの選択</title>
+          <para>
+            ブックマークとトピックを選択するにはいくつか方法があります。
+            <xref linkend="epiphany-TBL-2"/>
+	    でブックマークウィンドウ内のアイテムを選択する方法について説明しています。
+            <!-- You can select bookmarks and topics in several ways. 
+            <xref linkend="epiphany-TBL-2"/> describes how to select items 
+            in the bookmark window. -->
+          </para>
+          <table frame="topbot" id="epiphany-TBL-2">
+            <title>ブックマークウィンドウ内のアイテムの選択</title>
+            <tgroup cols="2" colsep="0" rowsep="0">
+              <colspec colname="colspec0" colwidth="36.36*"/>
+              <colspec colname="colspec2" colwidth="63.64*"/>
+              <thead>
+                <row rowsep="1">
+                  <entry valign="top">
+                    <para>タスク</para>
+                  </entry>
+              	  <entry colname="colspec2" valign="top">
+                    <para>アクション</para>
+                  </entry>
+            	</row>
+              </thead>
+              <tbody>
+                <row>
+                  <entry colname="colspec0" valign="top">
+                    <para>ブックマークまたはトピックを選択</para>
+              	  </entry>
+              	  <entry colname="colspec2" valign="top">
+                    <para>ブックマークまたはトピックをクリック</para>
+              	  </entry>
+            	</row>
+            	<row>
+              	  <entry colname="colspec0" valign="top">
+                    <para>連続するブックマークのグループを選択</para>
+              	  </entry>
+              	  <entry colname="colspec2" valign="top">
+                    <para>
+                      <keycap>Shift</keycap>を押しながらグループの最初のブックマークをクリックし、
+		      グループの最後のブックマークをクリック
+                      <!-- Press-and-hold <keycap>Shift</keycap>. Click on the 
+                      first bookmark in the group, then click on the last 
+                      bookmark in the group. -->
+                    </para>
+                  </entry>
+            	</row>
+            	<row>
+              	  <entry colname="colspec0" valign="top">
+                    <para>複数のブックマークを選択</para>
+              	  </entry>
+              	  <entry colname="colspec2" valign="top">
+                    <para>
+                      <keycap>Ctrl</keycap>を押しながら選択したいブックマークをクリック
+                      <!-- Press-and-hold <keycap>Ctrl</keycap>. Click on the 
+                      bookmark that you want to select. -->
+                    </para>
+              	  </entry>
+            	</row>
+            	<row>
+              	  <entry colname="colspec0" valign="top">
+                    <para>トピック内のすべてのブックマークを選択</para>
+              	  </entry>
+              	  <entry colname="colspec2" valign="top">
+                    <para>
+                      <menuchoice><guimenu>編集</guimenu><guimenuitem>全て選択</guimenuitem></menuchoice>を選択
+                    </para>
+              	  </entry>
+            	</row>
+              </tbody>
+            </tgroup>
+          </table>
+        </sect2>
+	<sect2 id="to-open-bookmark">
+          <title>ブックマークを新しいウィンドウまたはブックマークで開く</title>
+          <variablelist>
+            <varlistentry>
+              <term>ブックマークを新しいウィンドウで開くには次のステップを踏みます:
+	      <!-- To open a bookmark in a new window perform the following steps: --></term>
+              <listitem>
+                <orderedlist>
+                  <listitem>
+                    <para>開きたいブックマークを選択</para>
+                  </listitem>
+                 <listitem>
+                   <para>
+                      <menuchoice><guimenu>ファイル</guimenu><guimenuitem>新しいウィンドウで開く</guimenuitem></menuchoice>を選択。
+		      またはブックマークを右クリックして
+		      <menuchoice><guimenuitem>新しいウィンドウで開く</guimenuitem></menuchoice>を選択。
+                   </para>
+                 </listitem>
+               </orderedlist>
+             </listitem>
+           </varlistentry>
+           <varlistentry>
+             <term>ブックマークを新しいタブで開くには次のステップを踏みます:</term>
+             <listitem>
+               <orderedlist>
+                 <listitem>
+                   <para>開きたいブックマークを選択</para>
+                 </listitem>
+                 <listitem>
+                   <para>
+                      <menuchoice><guimenu>ファイル</guimenu><guimenuitem>新しいタブで開く</guimenuitem></menuchoice>を選択。
+		      またはブックマークを右クリックして<menuchoice><guimenuitem>新しいタブで開く</guimenuitem></menuchoice>を選択。
+                   </para>
+                 </listitem>
+               </orderedlist>
+             </listitem>
+            </varlistentry>
+	  </variablelist>
+        </sect2>
+	<sect2 id="to-create-new-topic">
+          <title>新しいトピックの作成</title>
+          <para>
+            新しいトピックをつくるにはブックマークウィンドウで
+	    <menuchoice><guimenu>ファイル</guimenu><guimenuitem>新しいトピック</guimenuitem></menuchoice>
+	    を選択します。新しいトピックがつくられると、トピック名を入力することができます。
+	    そのトピックは<guimenu>ブックマーク</guimenu>メニュー内にサブメニューとして表示されます。
+            <!-- To create a new topic, choose <menuchoice> <guimenu>File</guimenu>
+            <guimenuitem>New Topic</guimenuitem></menuchoice> in the Bookmark 
+            window. A new topic is created, you can now enter the name of the 
+            topic. The topics will appear as submenus in the <guimenu>Bookmarks
+            </guimenu> menu. -->
+          </para>
+        </sect2>
+	<sect2 id="to-add-bookmark-to-topic">
+          <title>ブックマークをトピックに追加</title>
+          <para>
+            ブックマークをトピックに追加するには、ブックマークウィンドウ内のエントリを右クリックして
+            <guimenuitem>プロパティ</guimenuitem>を選択します。
+            <guilabel>トピック</guilabel>リストからこのブックマークを加えるトピックを選択し、
+            <guibutton>閉じる</guibutton>をクリックします。
+            <!-- To add a bookmark to a topic, right-click its entry in the bookmarks 
+            window and choose <guimenuitem>Properties</guimenuitem>. From the 
+            <guilabel>Topics</guilabel> list, select each topic to add this 
+            bookmark to, and click <guibutton>Close</guibutton>. -->
+          </para>
+        </sect2>
+	<sect2 id="to-remove-bookmark-from-topic">
+          <title>ブックマークをトピックから削除する<!-- To Remove a Bookmark From a Topic --></title>
+          <para>
+            ブックマークをトピックから削除するには、ブックマークウィンドウ内のエントリを右クリックし
+	    <guimenuitem>プロパティ</guimenuitem>を選択します。
+	    <guilabel>トピック</guilabel>リストからこのブックマークを削除したいトピックの選択を外し、
+	    <guibutton>閉じる</guibutton>をクリックします。
+            <!-- To remove a bookmark from a topic, right-click its entry in the bookmarks 
+            window and choose <guimenuitem>Properties</guimenuitem>. From the 
+            <guilabel>Topics</guilabel> list, deselect each topic from which you 
+            wish to remove this bookmark, then click <guibutton>Close</guibutton>. -->
+          </para>
+        </sect2>
+	<sect2 id="to-rename-bookmark-or-topic">
+          <title>ブックマークまたはトピックの名前を変える<!-- To Rename a Bookmark or Topic --></title>
+          <para>ブックマークまたはトピックの名前を変えるには次のようにします:
+            <!-- To rename a bookmark or topic perform the following steps: -->
+          </para>
+          <orderedlist>
+            <listitem>
+              <para>ブックマークウィンドウ内で名前を変えたいブックマークまたはトピックを選択
+                <!-- Select the bookmark or topic that you want to rename in the bookmarks window. -->
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <menuchoice><guimenu>ファイル</guimenu><guimenuitem>名前の変更...</guimenuitem></menuchoice>
+		を選択するか、またはビューペインでブックマークまたはトピックを右クリックして
+		<guimenuitem>名前の変更...</guimenuitem>を選択。
+		ブックマークまたはトピックの名前が選択状態となるはずです。
+                <!-- Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Rename...</guimenuitem>
+		</menuchoice>. Alternatively, right-click on the bookmark
+		or topic in the view pane, then choose <guimenuitem>Rename...</guimenuitem>.
+          	The name of the bookmark or topic is selected. -->
+	      </para>
+             </listitem>
+             <listitem>
+              <para>ブックマークまたはトピックの新しい名前を入力し、<keycap>Enter</keycap>を押す。
+                <!-- Type a new name for the topic or bookmark, then press <keycap>Return</keycap>. -->
+              </para>
+             </listitem>
+           </orderedlist>
+        </sect2>
+	<sect2 id="to-delete-bookmark-or-topic">
+          <title>ブックマークまたはトピックの削除</title>
+          <para>ブックマークまたはトピックを削除するには次のようにします:</para>
+          <orderedlist>
+            <listitem>
+              <para>ブックマークウィンドウから削除したいブックマークまたはトピックを選択します。
+                <!-- Select the bookmark or topic that you want to delete 
+                from the bookmarks window. -->
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <menuchoice><guimenu>ファイル</guimenu><guimenuitem>削除</guimenuitem></menuchoice>
+		を選択するか、またはブックマークウィンドウ内のブックマークまたはトピックを右クリックし
+		<guimenuitem>削除</guimenuitem>を選択します。
+                <!-- Choose <menuchoice><guimenu>File</guimenu><guimenuitem>
+                Delete</guimenuitem></menuchoice>. Alternatively, 
+                right-click on the bookmarks or topic in the bookmarks 
+                window, then choose <guimenuitem>Delete</guimenuitem>. -->
+              </para>
+            </listitem>
+      	  </orderedlist>
+        </sect2>
+	<sect2 id="to-edit-bookmark-properties">
+	  <title>ブックマークのプロパティを編集<!-- To Edit a Bookmark's Properties --></title>
+          <para>
+            タイトルやアドレスといったブックマークのプロパティを編集するには、
+	    ブックマークウィンドウ内のエントリを右クリックし<guimenuitem>プロパティ</guimenuitem>
+	    を選択します。
+            <!-- To edit a bookmark's properties such as it's title and address
+            right click it's entry in the bookmarks window and select 
+            <guimenuitem>Properties</guimenuitem>. -->
+          </para>
+        </sect2>
+	<sect2 id="to-search-bookmarks">
+          <title>ブックマークの検索</title>
+          <para>
+            ブックマークを検索するには<guilabel>検索</guilabel>フィールドに検索する語句を入力します。
+	    &fr; は選択されているトピックによらずすべてのブックマークを検索します。
+            <!-- To search through your bookmarks, enter you search term in 
+            the <guilabel>Search</guilabel> field. &fr; will search through 
+            all your bookmarks no matter which topic is currently selected. -->
+          </para>
+        </sect2>
+	<sect2 id="to-copy-bookmark-address">
+          <title>ブックマークのアドレスをコピー</title>
+          <para>ブックマークのアドレスをコピーするには次のようにします:</para>
+          <orderedlist>
+            <listitem>
+              <para>ブックマークを選択</para>
+            </listitem>
+            <listitem>
+              <para>
+                <menuchoice><guimenu>編集</guimenu><guimenuitem>アドレスのコピー</guimenuitem></menuchoice>
+		を選択するか、ブックマークを右クリックして<guimenuitem>アドレスのコピー</guimenuitem>
+		を選択します。
+              </para>
+            </listitem>
+          </orderedlist>
+        </sect2>
+	<sect2 id="to-add-bookmark-or-topic-to-bookmarks-bar">
+          <title>ブックマークまたはトピックをブックマークバーに追加</title>
+          <para>ブックマークまたはトピックをブックマークバーに追加するには次のようにします:</para>
+          <variablelist>
+            <varlistentry>
+              <term><guimenu>ファイル</guimenu>メニュー</term>
+              <listitem>
+                <para>
+                  追加したいブックマークまたはトピックを選択し、
+                  <menuchoice><guisubmenu>ファイル</guisubmenu><guimenuitem>ブックマークバーに表示</guimenuitem></menuchoice>
+		  を選択します。
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+             <term>ドラッグアンドドロップ</term>
+             <listitem>
+               <para>
+                 ブックマークウィンドウからブックマークまたはトピックをブックマークバーにドラッグアンドドロップできます。
+                 <!-- You can drag and drop bookmarks and topics from the 
+                 bookmarks window onto the bookmarks bar. -->
+               </para>
+             </listitem>
+           </varlistentry>
+         </variablelist>
+        </sect2>
+	<sect2 id="to-remove-bookmark-or-topic-from-bookmarks-bar">
+          <title>ブックマークまたはトピックをブックマークバーから削除</title>
+          <para>ブックマークまたはトピックをブックマークバーから削除するには次のようにします:</para>
+          <variablelist>
+            <varlistentry>
+              <term><guimenu>ファイル</guimenu>メニュー</term>
+              <listitem>
+                <para>
+                  削除したいブックマークまたはトピックを選択し、
+                  <menuchoice><guisubmenu>ファイル</guisubmenu><guimenuitem>
+                  ブックマークバーで表示</guimenuitem></menuchoice>を選択。
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>ツールバーエディタ</term>
+              <listitem>
+                <para>
+                  ブックマークまたはトピックを、
+		  セクション<xref linkend="to-edit-toolbars"/>で説明されているツールバーエディタを使って
+		  ブックマークバーから削除できます。
+                </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        </sect2>
+	<sect2 id="smart-bookmarks">
+	  <title>スマートブックマーク</title>
+          <para>
+          </para>
+          <sect3 id="smart-bookmarks-introduction">
+            <title>概要<!-- Introduction --></title>
+            <para>
+              スマートブックマークは一つまたはより多くの引数をとることのできる特別な種類のブックマークです。
+	      スマートブックマークを使うと、最初に問合せページを読み込むことなしにウェブ検索や問合せを実行できます。
+              <!-- Smart Bookmarks are a special kind of bookmark that can take one or more 
+              arguments. By using Smart Bookmarks, web searches and queries can be 
+              performed without loading a query page first. -->
+            </para>
+            <para>
+              すべてのスマートブックマークはアドレスバーに何かテキストを入力すると
+              <xref linkend="ephy-addressbar-smartbookmark-screenshot"/>
+	      のようにドロップダウンメニューに表示されます。
+	      スマートブックマークを選択するとその文字での検索が実行されます。
+              <!-- All of your Smart Bookmarks will appear in a drop down menu if you enter 
+              some text in the address bar, as shown in  
+              <xref linkend="ephy-addressbar-smartbookmark-screenshot"/>. By selecting 
+              the Smart Bookmark, a query using the given text will be performed. -->
+            </para>
+            <figure id="ephy-addressbar-smartbookmark-screenshot">
+              <title>アドレスバーのドロップダウンメニューでのスマートブックマーク</title>
+              <screenshot>
+                <mediaobject>
+                  <imageobject>
+                    <imagedata
+                    fileref="figures/ephy-addressbar-smartbookmark-screenshot.png"
+                    format="PNG"/> 
+                  </imageobject>
+                </mediaobject>
+              </screenshot>
+            </figure>
+            <para>
+              またスマートブックマークをブックマークプロパティの
+	      <guimenuitem>ブックマークバーに表示</guimenuitem>
+	      を選択することでツールバーに追加することもできます。
+	      そうするとその名前とテキストボックスが
+	      <xref linkend="ephy-bookmarkbar-smartbookmark-screenshot"/>
+	      で示されているように表示されます。
+	      ボックスにテキストを入力し、Enter を押せばそのスマートブックマークの機能が実行されます。
+              <!-- It is also possible to add a Smart Bookmark to a toolbar by selecting 
+              <guimenuitem>Show in Bookmarks Bar</guimenuitem> in the bookmark's 
+              property dialog. If you do so, you will see its name and a text box, 
+              as shown in <xref linkend="ephy-bookmarkbar-smartbookmark-screenshot"/>. 
+              You can enter text into the box and press enter to perform the function of 
+              the Smart Bookmark. -->
+            </para>
+            <figure id="ephy-bookmarkbar-smartbookmark-screenshot">
+              <title>ブックマークバー内のスマートブックマーク</title>
+              <screenshot>
+                <mediaobject>
+                  <imageobject>
+                    <imagedata
+                    fileref="figures/ephy-bookmarkbar-smartbookmark-screenshot.png"
+                    format="PNG"/> 
+                  </imageobject>
+                </mediaobject>
+              </screenshot>
+            </figure>
+          </sect3>
+          <sect3 id="smart-bookmarks-create-a-smartbookmark">
+            <title>スマートブックマークをどうやってつくるか?<!-- How do I create a Smart Bookmark? --></title>
+            <para>
+              スマートブックマークはサイトがどのアドレスで検索を行うかをみつけることでつくれます。
+	      例えば、<command>http://www.google.com/search?q=SEARCHPHRASE</command>
+	      は Google に <command>SEARCHPHRASE</command>で検索を開始させます。
+              <!-- Smart Bookmarks can be created by finding out what address a site uses for 
+              searching, for example 
+              <command>http://www.google.com/search?q=SEARCHPHRASE</command> will 
+              start a Google query for <command>SEARCHPHRASE</command>. -->
+            </para>
+            <para>このアドレスをスマートブックマークにするには次のようにします:</para>
+            <orderedlist>
+              <listitem>
+                <para>
+                  <command>http://www.google.com/search?q=SEARCHPHRASE</command>
+		  のブックマークを追加します。
+                </para>
+              </listitem>
+              <listitem>
+                <para>ブックマークウィンドウを開きます。</para>
+              </listitem>
+              <listitem>
+                <para>
+                  ブックマークの<guimenuitem>プロパティ</guimenuitem>ダイアログの
+		  <guimenuitem>アドレス</guimenuitem>フィールドの
+                  <command>SEARCHPHRASE</command> を %s で置き換えます。
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  (オプション) もし <xref linkend="ephy-bookmarkbar-smartbookmark-screenshot"/>
+		  のようにブックマークバーにこのスマートブックマークが表示されるようにしたいなら
+                  ブックマークの<guimenuitem>プロパティ</guimenuitem>ダイアログで
+                  <guimenuitem>ブックマークバーに表示</guimenuitem>を選択します。
+                </para>
+              </listitem>
+            </orderedlist>
+          </sect3>
+          <sect3 id="smart-bookmarks-archive">
+            <title>スマートブックマークアーカイブ</title>
+            <para>
+              沢山のスマートブックマークが集められたアーカイブが
+              <ulink url="http://galeon.sourceforge.net/bookmarks/">Galeon</ulink> 
+              ウェブサイトで提供されています。
+            </para>
+          </sect3>
+        </sect2>
+  </sect1>
+
+<!-- ============= Managing Your History Links ==================== -->
+  <sect1 id="ephy-managing-history">
+      <title>履歴リンクの管理<!-- Managing Your History Links --></title>
+      <para>
+      </para>
+	<sect2 id="overview-of-history">
+          <title>Epiphany 履歴システムの概要<!-- Overview of the Epiphany History System --></title>
+          <para>
+            Epiphany は訪ずれた場所について履歴情報を集めます。
+	    この情報はデータベースに保存され後でアクセスすることができます。
+            <!-- Epiphany collects history information about locations that
+            are visited by you. This information is stored in a
+            database and can then be accessed later. -->
+          </para>
+          <para>
+            メインウィンドウのアドレスバーに入力すると、&fr;
+	    は履歴およびブックマークデータベースに保存された場所のタイトルまたはアドレスからマッチするものを検索します。
+	    マッチしたものはアドレスバーの下のリストに表示されます。
+            <!-- As you type in the location bar of the main window,
+            &fr; searches for matches in the title or address of the
+            locations stored in the history and the bookmark
+            databases. Matches are shown in a list below the location bar. -->
+          </para>
+          <para>
+            履歴ウィンドウを開けば履歴を管理することができます。
+	    このウィンドウでは履歴を検索し、後で訪ずれたいとは思わない場所を削除できます。
+            <!-- You can manage history by opening the history window. This
+            window allows you to search the history, and delete locations
+            you do not want to revisit later. -->
+          </para>
+          <para>
+            <xref linkend="ephy-history-window-screenshot"/>
+	    は履歴ウィンドウのスクリーンショットです。
+            <!-- <xref linkend="ephy-history-window-screenshot"/> shows the
+            history window. -->
+          </para>
+          <figure id="ephy-history-window-screenshot">
+            <title>履歴ウィンドウ</title>
+            <screenshot>
+              <mediaobject>
+                <imageobject>
+                  <imagedata
+                  fileref="figures/ephy-history-window-screenshot.png"
+                  format="PNG"/> 
+                </imageobject>
+              </mediaobject>
+            </screenshot>
+          </figure>
+        </sect2>
+	<sect2 id="to-select-history">
+          <title>履歴リンクを選択</title>
+          <para>
+            <menuchoice><guimenu>移動</guimenu><guimenuitem>履歴</guimenuitem></menuchoice>
+	    を選択し履歴ウィンドウを開きます。
+	    履歴ウィンドウでは履歴リンクを検索したり、
+	    新しいウィンドウまたはタブで開いたり、
+	    データベースから履歴を削除することが可能です。
+            <!-- Select <menuchoice><guimenu>Go</guimenu><guimenuitem>History</guimenuitem></menuchoice>
+            to open the history window. You can search for history
+            links, open history links in a new window or a new tab, or
+            delete history from the database. -->
+          </para>
+        </sect2>
+	<sect2 id="to-open-history-link">
+          <title>履歴リンクを新しいウィンドウまたはタブで開く</title>
+          <variablelist>
+            <varlistentry>
+              <term>履歴リンクを新しいウィンドウで開くには次のようにします:</term>
+    	      <listitem>
+                <orderedlist>
+                  <listitem>
+                    <para>開きたい履歴リンクを選択</para>
+                  </listitem>
+                  <listitem>
+                    <para>
+                      <menuchoice><guimenu>ファイル</guimenu><guimenuitem>新しいウィンドウで開く</guimenuitem></menuchoice>
+		      を選択するか、履歴リンクを右クリックして
+		      <menuchoice><guimenuitem>新しいウィンドウで開く</guimenuitem></menuchoice>
+		      を選択。
+                    </para>
+                  </listitem>
+                 </orderedlist>
+               </listitem>
+             </varlistentry>
+             <varlistentry>
+               <term>履歴リンクを新しいタブで開くには次のようにします:</term>
+               <listitem>
+                 <orderedlist>
+                   <listitem>
+                     <para>開きたい履歴リンクを選択</para>
+                   </listitem>
+                   <listitem>
+                     <para>
+                      <menuchoice><guimenu>ファイル</guimenu><guimenuitem>新しいタブで開く</guimenuitem></menuchoice>
+		      を選択するか、履歴リンクを右クリックして
+		      <menuchoice><guimenuitem>新しいタブで開く</guimenuitem></menuchoice>
+		      を選択。
+                     </para>
+                   </listitem>
+                 </orderedlist>
+               </listitem>
+             </varlistentry>
+	  </variablelist>
+        </sect2>
+	<sect2 id="to-delete-history-link">
+          <title>履歴リンクを削除</title>
+          <para>履歴リンクを削除するには次のようにします:</para>
+          <orderedlist>
+            <listitem>
+              <para>削除したい履歴リンクを選択</para>
+            </listitem>
+            <listitem>
+              <para>
+                <menuchoice><guimenu>ファイル</guimenu><guimenuitem>削除</guimenuitem></menuchoice>
+		を選択するか、履歴リンクを右クリックして
+		<menuchoice><guimenuitem>削除</guimenuitem></menuchoice>
+		を選択。
+              </para>
+            </listitem>
+          </orderedlist>
+        </sect2>
+	<sect2 id="to-search-history">
+          <title>履歴リンクを検索</title>
+          <para>
+            履歴ウィンドウで入力してエントリを検索できます。
+	    履歴データベースでマッチしたものはすべてリストに表示されます。
+	    これらマッチしたものは新しいウィンドウ、タブで開く、
+	    またはリンクアドレスをコピーして他のどのアプリケーションにも貼り付けられます。
+	    <!-- You can type into the search entry in
+            the history window. In case any matches are found in the
+            history database, they are shown in a list below. These
+            matches can then be opened in a new window, a new tab or
+            the link address can be copied for pasting in any other
+            application. -->
+          </para>
+          <para>
+            また &fr; ウィンドウのアドレスエントリに入力したものは何でも履歴データベースについて検索され、
+	    ブックマークデータベースでマッチした他のものと一緒にドロップダウンリストに表示されます。
+            <!-- Alternatively, anything you enter in the address entry of
+            the &fr; window 
+            is matched against the history database, and shown in a
+            drop down list alongwith other matches from the bookmarks
+            database. -->
+          </para>
+        </sect2>
+	<sect2 id="to-copy-history-link-address">
+          <title>履歴リンクのアドレスをコピー</title>
+          <para>履歴リンクのアドレスをコピーするには次のようにします:</para>
+          <orderedlist>
+            <listitem>
+              <para>履歴リンクを選択</para>
+            </listitem>
+            <listitem>
+              <para>
+                <menuchoice><guimenu>編集</guimenu><guimenuitem>アドレスのコピー</guimenuitem></menuchoice>
+		を選択するか、履歴リンクを右クリックして<guimenuitem>アドレスのコピー</guimenuitem>を選択。
+              </para>
+            </listitem>
+          </orderedlist>
+        </sect2>
+  </sect1>
+
+<!-- ============= Managing Your Passwords and Cookies ============ -->
+  <sect1 id="ephy-managing-passwords-cookies">
+    <title>パスワードとクッキーの管理<!-- Managing Your Passwords and Cookies --></title>
+    <para>
+      &fr; はクッキーとパスワードを
+      <menuchoice><guimenu>編集</guimenu><guisubmenu>個人データ</guisubmenu></menuchoice>
+      をクリックすることでアクセスできる、個人データマネージャ内に保存します。
+      <!-- &fr; stores your cookies and passwords in the Personal Data Manager
+      which can be accessed by clicking <menuchoice> <guimenu>Edit</guimenu> 
+      <guisubmenu>Personal Data</guisubmenu> </menuchoice>. -->
+    </para>
+    <sect2 id="managing-cookies">
+      <title>クッキーの管理<!-- Managing Cookies --></title>
+      <para>
+        ウェブページはあなたが次にサイトを訪ずれるときにアクセスできるように、クッキーに一連の情報を保持しています。
+        <!-- Cookies allow web pages to store pieces of information which can then be accessed 
+        by the site when you next visit. -->
+      </para>
+      <para>
+        個人データマネージャではコンピュータに保存されているクッキーとその中の詳細を見ることができます。
+	またクッキーを削除することもできます。
+        <!-- In Personal Data Manager, you can view the cookies stored on your 
+        computer and the details contained within them. You can also delete cookies. -->
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            クッキーの内容を見るにはリストからエントリを選択し
+	    <guibutton>プロパティ</guibutton>をクリックします。
+            <!-- To view the contents of a cookie, select its entry in the list and click 
+            <guibutton>Properties</guibutton>. -->
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            クッキーを削除するには、削除したいすべてのクッキーを選択し
+	    <guibutton>削除</guibutton>をクリックします。
+            <!-- To delete cookies, select all the cookies you want to delete, and click the 
+            <guibutton>Delete</guibutton> button. -->
+          </para>
+        </listitem>
+      </itemizedlist>
+      <para>クッキープロパティウィンドウは次のような詳細を表示します:
+        <!-- The cookies properties window shows you the following details: -->
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>内容</term>
+          <listitem>
+            <para>クッキーの内容</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>パス名</term>
+          <listitem>
+            <para>クッキーが適切なものならそれについてのドメインのパス</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>セキュア</term>
+          <listitem>
+            <para><guilabel>はい</guilabel>ならクッキーは接続が暗号化されている場合にのみ送信されます。
+              <!-- When <guilabel>Yes</guilabel>, the cookie will only be 
+              sent if the connection is encrypted. -->
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>有効期限</term>
+          <listitem>
+            <para>クッキーが妥当でなくなる期日です。
+              <!-- The date and time at which the cookie is no longer valid. -->
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>          
+    </sect2>
+    <sect2 id="managing-passwords">
+      <title>パスワードの管理</title>
+      <para>
+        多くのウェブサイトでは、そのサイトのすべてまたは部分にアクセスするために、
+	ユーザー名とパスワードを使ってログインすることを要求します。
+	&fr; は将来あなたが素早くログインできるようにパスワードを記憶できます。
+        <!-- Many web sites require you to log in using a username and password to gain access 
+        to some or all of the site. &fr; can remember the passwords for you so that you 
+        can quickly login in future. -->
+      </para>
+      <para>
+        個人データマネージャではパスワードを保存しているサイトを見、削除することができます。
+        <!-- In Personal Data Manager, you can view the sites for which passwords
+        have been stored, and delete them. -->
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            パスワードを削除するには削除したいすべてのエントリを選択し
+	    <guibutton>削除</guibutton>ボタンをクリックします。
+            <!-- To delete passwords, select all the entries you want to delete, and click the 
+            <guibutton>Delete</guibutton> button. -->
+          </para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+  </sect1>
+
+<!-- ============= Using the Download Manager ===================== -->
+  <sect1 id="ephy-download-manager">
+      <title>ダウンロードマネージャの利用<!-- Using the Download Manager --></title>
+      <para>
+        ファイルをダウンロードしているとき、ダウンロードマネージャは現在のダウンロードについての詳細を提供します:
+        <!-- When you are downloading files, the download manager provides you with details of the 
+        current downloads: -->
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            <guilabel>%</guilabel>カラムは各ダウンロードの進捗を示します。
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <guilabel>ファイル名</guilabel>はダウンロードファイルの名前です。
+	    ファイルをダウンロードするフォルダは<xref linkend="general-preferences"/>で指定できます。
+	    このカラムはまたダウンロードしたファイルの容量とその総容量を示しています。
+	    1 MByte は 1024 kByte で計算しています。
+            <!-- The <guilabel>Filename</guilabel> is the name of the downloading file. The folder 
+            which the file is downloaded to can be specified in <xref linkend="general-preferences"/>.
+            This column also shows the amount of the file downloaded and its total size. 1MB is 
+            equivilent to 1024kB. -->
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <guilabel>残り<!-- Remaining --></guilabel>は完全にダウンロードが終了するまでの残り時間です。
+	    これは最も最適な条件下での推測に基づくものであり、接続の状態に依存します。
+	    この値は精度によって変化します。
+	    <!-- gives an estimation of the amount of time to completion.
+            This is a best guess and, depending on the reliability of your connection, this value may 
+            vary in accuracy. -->
+          </para>
+        </listitem>
+      </itemizedlist>
+      <para>ダウンロードを取り消すには、ダウンロードマネージャのエントリを選択して
+      <guibutton>中止</guibutton>をクリックします。
+        <!-- To cancel a download, select its entry in the download manager and click <guibutton>
+        Stop</guibutton>. -->
+      </para>
+      <note>
+        <para>一度ダウンロードが完了、または取り消されると、ダウンロードマネージャは閉じられます。
+          <!-- Once all downloads have finished, or been cancelled, the download manager will close. -->
+        </para>
+      </note>
+  </sect1>
+
+<!-- ============= Certificates and Online Security =============== -->
+
+  <sect1 id="ephy-certificates">
+    <title>証明書とオンラインセキュリティ</title>
+    <para>
+      ログインを要求するサイト、またはオンラインショッピングを使っているとき、
+      サブミットした情報が安全かどうか知ることはとても重要です。
+      &fr; はこれを行うのを手助けする沢山の機能を提供しています。
+      <!-- When using sites which require you to login, or when using online
+      shopping, it is important to know that the information you submit 
+      is secure. &fr; offers a number of features to help you do this. -->
+    </para>
+    <sect2 id="identifying-secure-sites">
+      <title>セキュアサイトの確認<!-- Identifying Secure Sites --></title>
+      <para>
+        ウェブページを見ているとき &fr; はそのサイトが安全かどうかを示すロックアイコンをステータスバーに表示します。
+        <!-- When viewing web pages, &fr; displays a lock icon in the status bar
+        which shows you whether the current site is secure. -->
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>ロックされていない南京錠<!-- An unlocked padlock --></term>
+          <listitem>
+            <para>サイトが安全ではないことを示します。<!-- Indicates that this site is insecure. --></para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>ロックされた南京錠<!-- A locked padlock --></term>
+          <listitem>
+            <para>サイトが安全であることを示します。<!-- Indicates that this site is secure. --></para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>壊れた南京錠<!-- A broken padlock --></term>
+          <listitem>
+            <para>ページが部分的に安全でありその他が安全ではないことを示します。
+              <!-- Indicates that some parts of this page are secure, and others are not. -->
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </sect2>
+    <sect2 id="using-certificate-viewer">
+      <title>証明書ビューアの利用<!-- Using Certificate Viewer --></title>
+      <para>
+        証明書ビューアは証明書について詳細を提示します。
+	<guilabel>一般</guilabel>タブは次のような詳細を提供しています。
+        <!-- The certificate viewer presents the details held within the certificate. 
+        The <guilabel>General</guilabel> tab provides the following details: -->
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>Common Name</term>
+          <listitem>
+            <para>誰が証明書を発行しているか、どのドメインのものかを表示します。
+              <!-- Shows either who issued the certificate, or the domain to which 
+              it was issued. -->
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>組織<!-- Organisation --></term>
+          <listitem>
+            <para>発行している会社名を表示します。
+              <!-- Shows the name of the issuing company, or the name of the company 
+              to which is was issued. -->
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>組織の単位<!-- Organisational Unit --></term>
+          <listitem>
+            <para>発行しているまたは証明書を受け取っている会社の部署を表示します。
+              <!-- Shows the division of the company which issued or received the certificate. -->
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>シリアル番号<!-- Serial Number --></term>
+          <listitem>
+            <para>証明書の固有な識別子<!-- A unique identifier for this certificate. --></para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>発行日<!-- Issued On --></term>
+          <listitem>
+            <para>証明書の発行日<!-- The date the certificate was issued. --></para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>失効日<!-- Expires On --></term>
+          <listitem>
+            <para>証明書の失効日<!-- The date the certificate expires. --></para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>SHA1 指紋<!-- Fingerprint --></term>
+          <listitem>
+            <para>
+              証明書を確認する文字列。発行している会社の記録上の証明書とこの文字列がマッチするか確認できます。
+              <!-- An identifying string for this certificate. You can check with the 
+              issuing company that this string matches the certificate on their records. -->
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>MD5 指紋<!-- Fingerprint --></term>
+          <listitem>
+            <para>
+              証明書を確認する文字列。発行している会社の記録上の証明書とこの文字列がマッチするか確認できます。
+              <!-- An identifying string for this certificate. You can check with the 
+              issuing company that this string matches the certificate on their records. -->
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      <para><guilabel>詳細</guilabel>タブでは次の情報が表示されます:</para>
+      <variablelist>
+        <varlistentry>
+          <term>証明書階層<!-- Certificate Hierarchy --></term>
+          <listitem>
+            <para>
+              いくつかの証明書は、より高次の権威によってやはり同じように署名されている、中間の権威によって署名されています。
+	      このリストは完全な証明書のチェインを表示します。
+              <!-- Some certificates are signed by intermediate authorities who are in
+              turn signed by an authority at a higher level. This list displays
+              the complete certificate chain. -->
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>証明書フィールド<!-- Certificate Fields --></term>
+          <listitem>
+            <para>
+              階層内の選択された証明書について証明書に含まれるフィールドを表示します。
+              <!-- Displays the fields as they appear in the certificate for the selected
+              certificate in the hierarchy. -->
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>フィールド値</term>
+          <listitem>
+            <para>選択した証明書フィールドの値を表示します。</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </sect2>
+  </sect1>
+
+<!-- ============= Customizing Epiphany =========================== -->
+  <sect1 id="ephy-customize">
+      <title>&fr; をカスタマイズ</title>
+      <para>
+      </para>
+	<sect2 id="setting-preferences">
+          <title>好みの動作に設定<!-- Setting Your Preferences --></title>
+          <para>
+            <menuchoice><guimenu>編集</guimenu><guimenuitem>設定</guimenuitem></menuchoice>
+	    を選択するとアクセスできる設定ダイアログで、
+	    あなたの好みに合わせて &fr; をカスタマイズすることができます。
+            <!-- You can customize &fr; to suit your personal needs by using the Preferences 
+            dialog which can be accessed by selecting <menuchoice> <guimenu>Edit</guimenu> 
+            <guimenuitem>Preferences</guimenuitem> </menuchoice>. -->
+          </para>
+          <sect3 id="general-preferences">
+            <title>全般</title>
+            <para>
+            </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  <guilabel>ホーム・ページ</guilabel> セクションにアドレスを入力するとツールバーの
+		  <guibutton>ホーム</guibutton>ボタンをクリックする、あるいは &fr;
+		  の起動時に表示されるページを指定できます。
+                  <!-- Choose the page displayed when the <guibutton>Home</guibutton>
+                  button on the toolbar is clicked, and also when &fr; is launched, by 
+                  entering an address in the <guilabel>Home page</guilabel> section. -->
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <guilabel>ダウンロード・フォルダ</guilabel>
+		  ボタンをクリックしてフォルダを選択するとダウンロドファイルのためのフォルダを指定できます。
+                  <!-- Choose the folder for downloaded files by clicking the <guilabel>
+                  Download folder</guilabel> button and selecting a folder. -->
+                </para>
+              </listitem>
+            </itemizedlist>
+          </sect3>
+          <sect3 id="fonts-and-colors-preferences">
+            <title>フォントと色</title>
+            <para>
+              このセクションではウェブページに使われるテキストのスタイルと色を設定できます。
+              <!-- This section allows you to configure the style of text and the colors used
+              on web pages. -->
+            </para>
+            <para>
+              ページの言語に応じて異なるフォントスタイルと色を選択できます。
+	      まず <guilabel>対象の言語</guilabel>
+	      ドロップダウンリストから設定したい言語を選択します。
+	      文字幅の変る標準の文字のフォントを設定するには<guilabel>可変幅</guilabel>
+	      ドロップダウンリストとスピンボックスを使います。
+	      文字幅が常に同じである等幅のテキストのフォントを設定するには
+	      <guilabel>固定幅</guilabel>ドロップダウンリストとスピンボックスを使います。
+              <!-- You can choose different font styles and sizes depending on the language 
+              that a page is written in. First select the language you want to configure 
+              from the <guilabel>For language</guilabel> drop-down list. To 
+              set the font for standard text, where the width of characters varies, 
+              use the <guilabel>Variable width</guilabel> drop down list 
+              and spin box. To set the font for fixed width text, where the width of 
+              characters is always the same, use the <guilabel>Fixed width</guilabel> 
+              drop down list and spin box. -->
+            </para>
+            <para>
+              また<guilabel>最小サイズ</guilabel>スピンボックスでウェブページフォントの最小サイズを設定できます。
+	      これより小さなものはこのサイズまで拡大表示されます。
+              <!-- You can also set a minimum size for web page fonts by using the <guilabel>
+              Minimum size</guilabel> spin box. Fonts smaller than this value will be 
+              increased to this size. -->
+            </para>
+            <para>
+              ウェブページはしばしば固有のフォントスタイルとサイズを指定しています。
+	      <guilabel>常にこれらのフォントを使う</guilabel>オプションを選択すると &fr;
+	      は常にそれらのフォントだけを使用するようになります。
+              <!-- Web pages often specify their own font styles and sizes. You can make &fr; 
+              only use the fonts that you have chosen by selecting the <guilabel>Always 
+              use these fonts</guilabel> option. -->
+            </para>
+            <para>
+              ウェブページはまたテキストと背景に固有の色を指定しています。
+	      <guilabel>常にデスクトップのテーマの色を使用する</guilabel>
+	      オプションを選択することで常に現在のデスクトップテーマで指定された色を
+	      &fr; が使うようにできます。
+              <!-- Web pages may also specify their own colors for the background and for 
+              fonts. You can make &fr; always use the colors specifed by your current 
+              desktop theme by selecting the <guilabel>Always use the desktop theme 
+              colors</guilabel> option. -->
+            </para>
+          </sect3>
+          <sect3 id="privacy-preferences">
+            <title>プライバシー<!-- Privacy Preferences --></title>
+            <para>
+              &fr; ではウェブページができることを制限する沢山の機能を設定できます:
+              <!-- &fr; allows you to configure a number of features which allow you to 
+              restrict what web pages can do: -->
+            </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  <guilabel>ウィンドウのポップアップを許可する</guilabel>を選択すると、
+		  ウェブページが自動的に新しいウィンドウ内に内容を表示することができるようになります。
+                  <!-- Select <guilabel>Allow popup windows</guilabel> if you want web pages 
+                  to be able to launch content in new windows automatically. -->
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <guilabel>Java を有効にする</guilabel>を選択するとページが Java
+		  アプレット(ウェブページ内で動作するプログラム)を読み込めるようになります。
+		  なお Java を動作させるには Java プラグインをインストールする必要があります。
+                  <!-- Select <guilabel>Enable Java</guilabel> to allow pages to load Java 
+                  applets - programs which run inside web pages. -->
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <guilabel>JavaScript を有効にする</guilabel>を選択すると、
+		  ウェブページが JavaScript
+		  言語によるより高度なプログラミング技術を使うことができるようになります。
+                  <!-- Select <guilabel>Enable JavaScript</guilabel> to give web pages the
+                  capability to use the more advanced programming techniques of the 
+                  JavaScript language. -->
+                </para>
+              </listitem>
+            </itemizedlist>
+            <note>
+              <para>
+                これらの機能を無効にするといくつかのページでは正確に表示できなかったり何らかの機能が使えなくなります。
+                <!-- Disabling these features may cause some pages to display incorrectly or
+                cause some loss of functionility. For Java to work, you need to install 
+                the Java plugin. -->
+              </para>
+            </note>
+            <para>またクッキーをどう扱うか設定することもできます:</para>
+            <itemizedlist>
+              <listitem>
+                <para><guilabel>常に受け入れる</guilabel>を選択するとどのサイトもクッキーをセットできるようになります。</para>
+              </listitem>
+              <listitem>
+                <para><guilabel>訪問したサイトのみ受け入れる</guilabel>
+		を選択するとナビゲートしているサイトに対してのみクッキーをセットすることを許します。
+                  <!-- Select <guilabel>Only from sites you visit</guilabel> to only allow 
+                  cookies to be set for sites which you have navigated to. -->
+                </para>
+              </listitem>
+              <listitem>
+                <para><guilabel>受け入れない</guilabel>を選択するとサイトはクッキーをセットできなくなります。
+                  <!-- Select <guilabel>Never accept</guilabel> to prevent sites from setting cookies. -->
+                </para>
+              </listitem>
+            </itemizedlist>
+            <note>
+              <para>
+                クッキーを無効にしたり制限したりするといくつかのサイトへのアクセスができなくなったりいくつかの機能が無効になります。
+                <!-- Disabling or restricting cookies may disable access to parts of some sites or 
+                disable some of their features. -->
+              </para>
+            </note>
+            <para>
+              &fr; は次回表示するときに内容を高速に読み込めるようにウェブページの内容をいくつか保持しています。
+	      <guilabel>ディスク・キャッシュ</guilabel>スピンボックスで &fr;
+	      がこれらファイルに使う最大容量を指定できます。0 にすると &fr;
+	      は一時ファイルに保持しないようになります。
+	      これら一時ファイルは <guilabel>クリア</guilabel>ボタンをクリックすると削除できます。
+              <!-- &fr; stores some of the content of web pages in temporary files to allow 
+              faster loading of the content when you next view them. The <guilabel>Disk 
+              space</guilabel> spin box allows you to specify the maximum amount of space 
+              &fr; can use for these files. Setting this value to zero will cause &fr; to 
+              never store temporary files. These temporary files can be removed by clicking 
+              the <guibutton>Clear</guibutton> button. -->
+            </para>
+          </sect3>
+          <sect3 id="language-preferences">
+            <title>言語<!-- Language Preferences --></title>
+            <para>
+              ページのエンコーティングは使われている文字集合を指定します。
+	      <guilabel>エンコーティング</guilabel>セクションでは &fr;
+	      がこの集合をどのように識別するかを設定します。
+	      <guilabel>デフォルト</guilabel>ドロップダウンリストで、
+	      ページがエンコーティングを未指定な場合のフォールバックエンコーディングを設定できます。
+              <!-- The encoding of a page specifies the set of characters that are used in it.
+              The <guilabel>Encodings</guilabel> section configures how &fr; identifies
+              this set. The <guilabel>Default</guilabel> drop-down list allows 
+              you to set an encoding to fall back to when the page doesn't specify one. -->
+            </para>
+            <para>
+              <guilabel>自動検出</guilabel>ドロップダウンリストで、
+	      エンコーティングが未指定な場合に &fr;
+	      が適切なエンコーティングを選択しようとするエンコーティングのグループを選択できます。
+	      例えば通常中国語のページを見ているのなら、いくつかの異なるエンコーティングのために、
+	      <guilabel>中国語</guilabel>を選択すると良いでしょう。
+	      &fr; がエンコーティングを検出しようとするのをやめさせるなら<guilabel>オフ</guilabel>
+	      を選択します。
+              <!-- The <guilabel>Autodetect</guilabel> drop-down list allows you to 
+              select a group of encodings from which &fr; will try to select to right 
+              encoding for the page if one is not specified. For example, if you normally 
+              visit Chinese pages, for which these may be several different encodings, 
+              you might set this to <guilabel>Chinese</guilabel>. To stop &fr; from 
+              trying to guess an encoding, select <guilabel>Off</guilabel>. -->
+            </para>
+            <para>
+              いくつかのウェブサイトでは沢山の異なる言語で提供されています。
+	      <guilabel>言語</guilabel>
+	      ドロップダウンリストでのエントリを選択することで好みの言語を指定できます。
+	      もし希望の言語がみつからないのなら、<guilabel>追加</guilabel>
+	      をクリックして言語をリストに追加します。
+	      エントリは一番上の希望言語から順番にチェックされます。
+	      ドラッグすることでエントリの順番は変えることができます。
+              <!-- Some web sites have pages which are available in a number of different 
+              languages. You can set your prefered language by selecting an entry from
+              the <guilabel>Language</guilabel> drop down list. If you would
+              like to set one or more fall back languages, in case your prefered 
+              language isn't available, click <guibutton>More</guibutton> and add 
+              your back up languages to the list. Entries are listed in the order 
+              they will be checked with your prefered language at the top. You can 
+              reorder entries by dragging them. -->
+            </para>
+          </sect3>
+        </sect2>
+	<sect2 id="to-show-hide-window-components">
+          <title>ブラウザウィンドウコンポーネントの表示/非表示<!-- To Show and Hide Browser Window Components --></title>
+            <para>次のようにしてブラウザウィンドウコンポーネントを表示/非表示できます:
+              <!-- You can show and hide browser window components as follows: -->
+            </para>
+      	    <itemizedlist>
+              <listitem>
+                <para>
+                  ツールバーを隠すには <menuchoice><guimenu>表示</guimenu><guimenuitem>ツールバー</guimenuitem></menuchoice>
+		  を選択します。再びツールバーを表示するには再度
+                  <menuchoice><guimenu>表示</guimenu><guimenuitem>ツールバー</guimenuitem></menuchoice>
+		  を選択します。
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  ブックマークバーを隠すには <menuchoice><guimenu>表示</guimenu><guimenuitem>ブックマークバー</guimenuitem></menuchoice>
+		  を選択します。再びブックマークバーを表示するには再度
+                  <menuchoice><guimenu>表示</guimenu><guimenuitem>ブックマークバー</guimenuitem></menuchoice>
+		  を選択します。
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  ステータスバーを隠すには <menuchoice><guimenu>表示</guimenu><guimenuitem>ステータスバー</guimenuitem></menuchoice>
+		  を選択します。再びステータスバーを表示するには再度
+                  <menuchoice><guimenu>表示</guimenu><guimenuitem>ステータスバー</guimenuitem></menuchoice>
+		  を選択します。
+                </para>
+              </listitem> 
+           </itemizedlist>
+           <tip>
+             <para>
+               &fr; のウィンドウコンポーネントのほとんどを隠すには全画面モードを使うことができます。
+	       詳細については<xref linkend="using-fullscreen-mode"/>を参照して下さい。
+             </para>
+           </tip>
+        </sect2>
+	<sect2 id="to-edit-toolbars">
+          <title>ツールバーの編集</title>
+          <para>
+            ツールバーに表示されるアイテムをカスタマイズすることができます。
+          </para>
+          <itemizedlist>
+            <listitem>
+              <para>
+                ツールバーへボタンを追加/削除するには
+                <menuchoice><guimenu>編集</guimenu><guimenuitem>ツールバー</guimenuitem></menuchoice>
+		を選択します。アイコンをツールバーそしてエディタからドラッグすると追加/削除できます。
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                新しいツールバーを追加するにはツールバーエディタ内の
+		<guibutton>新しいツールバーの追加</guibutton>をクリックします。
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                すべてのアイテムをツールバーから削除すれば自動的にそのツールバーは削除されます。
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                ブックマークを含めてボタンをドラッグすれば同じあるいは異なるツールバー上でそれを再設定できます。
+              </para>
+             </listitem>
+           </itemizedlist>
+        </sect2>
+  </sect1>
+
+<!-- ============= Shortcuts ===================================== -->
+
+  <sect1 id="shortcuts">
+    <title>ショートカット</title>
+    <para>
+    </para>
+    <sect2 id="keyboard-shortcuts">
+      <title>キーボードショートカット</title>
+      <para>
+      </para>
+    <table frame="topbot" id="epiphany-TBL-3">
+      <title>一般<!-- General Shortcuts --></title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>ショートカット</para>
+            </entry>
+            <entry valign="top">
+              <para>説明</para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-O</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>ローカルフォルダからファイルを開く</para>
+            </entry>
+          </row>
+	  <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Shift-Ctrl-S</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>現在のドキュメントをローカルフォルダに保存</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-P</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>現在のドキュメントを印刷</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-W</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>現在のタブまたはウィンドウを閉じる</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>F1</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>ヘルプを表示</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>F7</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>キャレットブラウズモード(文字入力カーソルを表示)を切り替え</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-D</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>現在のページをブックマーク</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-B</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>ブックマークマネージャを表示(ブックマークを編集)</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-H</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>履歴(マネージャ)を表示</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Shift-Ctrl-T</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>ツールバーを表示/非表示</para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>   
+   <para>
+   </para>
+   <table frame="topbot" id="epiphany-TBL-4">
+      <title>ナビゲーションショートカット</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>ショートカット</para>
+            </entry>
+            <entry valign="top">
+              <para>説明</para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-N</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>新しいウィンドウを開く</para>
+            </entry>
+          </row>
+	  <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-T</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>新しいタブを開く</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-L</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>アドレスバーにフォーカス</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Alt-Left</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>戻る</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Alt-Right</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>進む</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Alt-Up</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>階層を一つ上へ移動</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Alt-Home</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>ホームに移動</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Esc</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>ページ読み込みを中止</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>F6</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>次のフレームへ移動</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Shift-F6</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>前のフレームへ移動</para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table> 
+   <para>
+   </para>
+   <table frame="topbot" id="epiphany-TBL-5">
+      <title>タブブラウズショートカット</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>ショートカット</para>
+            </entry>
+            <entry valign="top">
+              <para>説明</para>
+            </entry>
+          </row>
+        </thead>
+        <tbody> 
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-Page Up</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>次のタブにフォーカス</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-Page Down</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>前のタブにフォーカス</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Shift-Ctrl-Page Up</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>タブを左に移動</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Shift-Ctrl-Page Down</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>タブを右に移動</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Shift-Ctrl-M</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>タブを取り外し<!-- Detach tab. --></para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table> 
+  <para>
+  </para>
+  <table frame="topbot" id="epiphany-TBL-6">
+      <title>ページ表示ショートカット</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>ショートカット</para>
+            </entry>
+            <entry valign="top">
+              <para>説明</para>
+            </entry>
+          </row>
+        </thead>
+        <tbody> 
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>F11</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>全画面表示モードを切り替え<!-- Toggle fullscreen mode. --></para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-+</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>文字を拡大表示<!-- Zoom text larger. --></para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl--</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>文字を縮小表示<!-- Zoom text smaller. --></para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-U</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>ページのソースを表示<!-- View page source. --></para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table> 
+    </sect2>
+    <sect2 id="mouse-shortcuts">
+      <title>マウスショートカット</title>
+      <para>
+      </para>
+      <table frame="topbot" id="epiphany-TBL-7">
+      <title>マウスショートカット</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>ショートカット</para>
+            </entry>
+            <entry valign="top">
+              <para>説明</para>
+            </entry>
+          </row>
+        </thead>
+        <tbody> 
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>(リンク上で)中央クリック<!-- Middle-click (On a link) --></keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>リンク先を新しいタブで開く<!-- Open link in a new tab. --></para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>(リンク上で)Ctrl-クリック<!-- Click (On a link) --></keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>リンク先を新しいタブで開く<!-- Open link in a new tab. --></para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>(リンク上で)Shift-クリック<!-- Shift-Click (On a link) --></keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>リンク先のダウンロード</para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table> 
+    </sect2>
+  </sect1>
+
+<!-- ============= About ========================================== -->
+  <sect1 id="fr-about">
+    <title>&fr; について</title>
+
+    <para>
+      &fr; は<!-- was written by --> Marco Presenti Gritti
+      (<email>marco@gnome.org</email>) がつくりました。
+      &fr; についてもっと沢山の情報をみつけるには<!-- To find more information -->
+      <!-- &fr;, please visit the --><ulink
+      url="http://www.gnome.org/projects/epiphany/" type="http">Epiphany 
+      ウェブページ<!-- Web page --></ulink> を訪ずれてみて下さい。
+    </para>
+
+    <para>
+      このマニュアルページは
+      David Bordoley (<email>bordoley@msu.edu</email>)、
+      Piers Cornwell (<email>piers@gnome.org</email>)、そして
+      Patanjali Somayaji (<email>patanjali@codito.com</email>)
+      が書きました。
+      <!-- This manual was written by David Bordoley 
+      (<email>bordoley@msu.edu</email>), Piers Cornwell 
+      (<email>piers@gnome.org</email>) and Patanjali Somayaji 
+      (<email>patanjali@codito.com</email>). -->
+    </para>
+
+    <para>
+      このプログラムは Free Software Foundation が配布する
+      GNU 一般公共使用許諾(GPL)
+      の第二版または(あなたの選択によっては)それ以降のものに基づいて配布されています。
+      このライセンスの複製は <ulink url="ghelp:gpl" type="help">リンク</ulink>
+      でみつけることができます。
+      またこのプログラムのソースコードに含まれる COPYING ファイルもその複製です。
+      <!-- This program is distributed under the terms of the GNU
+      General Public license as published by the Free Software
+      Foundation; either version 2 of the License, or (at your option)
+      any later version. A copy of this license can be found at this
+      <ulink url="ghelp:gpl" type="help">link</ulink>, or in the file
+      COPYING included with the source code of this program. -->
+    </para>
+  </sect1> 
+</article>
