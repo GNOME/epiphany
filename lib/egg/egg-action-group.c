@@ -1,8 +1,7 @@
 #include "egg-action-group.h"
 #include "egg-toggle-action.h"
 #include "egg-radio-action.h"
-
-#define _(String) gettext (String)
+#include "eggintl.h"
 
 static void egg_action_group_init       (EggActionGroup *self);
 static void egg_action_group_class_init (EggActionGroupClass *class);

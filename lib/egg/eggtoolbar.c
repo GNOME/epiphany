@@ -1311,6 +1311,7 @@ egg_toolbar_drag_motion (GtkWidget      *widget,
   EggToolbar *toolbar = EGG_TOOLBAR (widget);
   EggToolbarPrivate *priv = EGG_TOOLBAR_GET_PRIVATE (toolbar);
   gint new_index, new_pos;
+
   find_drop_pos(toolbar, x, y, &new_index, &new_pos);
 
   if (!priv->drag_highlight)

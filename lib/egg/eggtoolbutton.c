@@ -82,7 +82,7 @@ static GObjectClass *parent_class = NULL;
 GType
 egg_tool_button_get_type (void)
 {
-  static GType type = 0;
+  static GtkType type = 0;
 
   if (!type)
     {

@@ -238,7 +238,7 @@ prefs_dialog_show_page (PrefsDialog *pd,
 	gtk_notebook_set_current_page (GTK_NOTEBOOK (pd->priv->notebook), id);
 }
 
-static void 
+static void
 prefs_dialog_show_help (PrefsDialog *pd)
 {
 	GError *err;
@@ -258,17 +258,17 @@ prefs_dialog_show_help (PrefsDialog *pd)
 	{
 		GtkWidget *err_dialog;
 		err_dialog = gtk_message_dialog_new (
-				GTK_WINDOW (pd), 
-				GTK_DIALOG_DESTROY_WITH_PARENT, 
-				GTK_MESSAGE_ERROR, 
+				GTK_WINDOW (pd),
+				GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_MESSAGE_ERROR,
 				GTK_BUTTONS_CLOSE,
-				_("Could not display help: %s"), 
+				_("Could not display help: %s"),
 				  err->message);
 
-		g_signal_connect (G_OBJECT (err_dialog), "response", 
+		g_signal_connect (G_OBJECT (err_dialog), "response",
 				G_CALLBACK (gtk_widget_destroy),
 				NULL);
-		gtk_window_set_resizable (GTK_WINDOW (err_dialog), 
+		gtk_window_set_resizable (GTK_WINDOW (err_dialog),
 				FALSE);
 		gtk_widget_show (err_dialog);
 		g_error_free (err);
@@ -278,18 +278,15 @@ prefs_dialog_show_help (PrefsDialog *pd)
 static void
 prefs_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data)
 {
-	GError *err;
-	
 	if (response_id == GTK_RESPONSE_CLOSE)
 	{
 		gtk_widget_destroy (GTK_WIDGET(dialog));
-	} 
+	}
 	else if (response_id == GTK_RESPONSE_HELP)
 	{
 		PrefsDialog *pd = (PrefsDialog *)data;
-		prefs_dialog_show_help (pd);	
+		prefs_dialog_show_help (pd);
 	}
-		
 }
 
 static void

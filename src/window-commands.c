@@ -35,7 +35,7 @@
 #include "ephy-bookmarks-editor.h"
 #include "ephy-new-bookmark.h"
 #include "egg-toggle-action.h"
-#include "ephy-editable-toolbar.h"
+#include "egg-editable-toolbar.h"
 #include "toolbar.h"
 
 #include <string.h>
@@ -663,8 +663,8 @@ window_cmd_edit_toolbar (EggAction *action,
 
 	toolbar = ephy_window_get_toolbar (window);
 
-	ephy_editable_toolbar_edit (EPHY_EDITABLE_TOOLBAR (toolbar),
-				    GTK_WIDGET (window));
+	egg_editable_toolbar_edit (EGG_EDITABLE_TOOLBAR (toolbar),
+				   GTK_WIDGET (window));
 }
 
 void 

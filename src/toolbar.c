@@ -35,7 +35,7 @@
 #include "ephy-string.h"
 #include "ephy-debug.h"
 #include "ephy-new-bookmark.h"
-#include "ephy-toolbars-group.h"
+#include "egg-toolbars-group.h"
 #include "ephy-stock-icons.h"
 
 #include <string.h>
@@ -96,7 +96,7 @@ toolbar_get_type (void)
                         (GInstanceInitFunc) toolbar_init
                 };
 
-                toolbar_type = g_type_register_static (EPHY_EDITABLE_TOOLBAR_TYPE,
+                toolbar_type = g_type_register_static (EGG_EDITABLE_TOOLBAR_TYPE,
 						       "Toolbar",
 						       &our_info, 0);
         }
@@ -134,7 +134,7 @@ get_bookmark_action (Toolbar *t, EphyBookmarks *bookmarks, gulong id, const char
 }
 
 static char *
-toolbar_get_action_name (EphyEditableToolbar *etoolbar,
+toolbar_get_action_name (EggEditableToolbar *etoolbar,
 		         const char *drag_type,
 			 const char *data)
 {
@@ -201,7 +201,7 @@ toolbar_get_action_name (EphyEditableToolbar *etoolbar,
 }
 
 static EggAction *
-toolbar_get_action (EphyEditableToolbar *etoolbar,
+toolbar_get_action (EggEditableToolbar *etoolbar,
 		    const char *name)
 {
 	Toolbar *t = TOOLBAR (etoolbar);
@@ -211,7 +211,7 @@ toolbar_get_action (EphyEditableToolbar *etoolbar,
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
-	action = EPHY_EDITABLE_TOOLBAR_CLASS
+	action = EGG_EDITABLE_TOOLBAR_CLASS
 			(parent_class)->get_action (etoolbar, name);
 	if (action)
 	{
@@ -248,10 +248,10 @@ static void
 toolbar_class_init (ToolbarClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	EphyEditableToolbarClass *eet_class;
+	EggEditableToolbarClass *eet_class;
 
         parent_class = g_type_class_peek_parent (klass);
-	eet_class = EPHY_EDITABLE_TOOLBAR_CLASS (klass);
+	eet_class = EGG_EDITABLE_TOOLBAR_CLASS (klass);
 
         object_class->finalize = toolbar_finalize;
 	object_class->set_property = toolbar_set_property;
@@ -397,7 +397,7 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 static void
 toolbar_init (Toolbar *t)
 {
-	static EphyToolbarsGroup *group = NULL;
+	static EggToolbarsGroup *group = NULL;
 
         t->priv = g_new0 (ToolbarPrivate, 1);
 
@@ -410,8 +410,8 @@ toolbar_init (Toolbar *t)
 		char *user;
 
 		user = g_build_filename (ephy_dot_dir (), "toolbar.xml", NULL);
-		group = ephy_toolbars_group_new ();
-		ephy_toolbars_group_set_source
+		group = egg_toolbars_group_new ();
+		egg_toolbars_group_set_source
 			(group, ephy_file ("epiphany-toolbar.xml"), user);
 		g_free (user);
 	}

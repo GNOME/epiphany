@@ -1,3 +1,51 @@
+2003-04-01  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/egg/Makefile.am:
+	* lib/egg/egg-accel-dialog.c:
+	* lib/egg/egg-action-group.c:
+	* lib/egg/egg-action.c:
+	* lib/egg/egg-editable-toolbar.c:
+	* lib/egg/egg-editable-toolbar.h:
+	* lib/egg/egg-radio-action.c:
+	* lib/egg/egg-toggle-action.c:
+	* lib/egg/egg-toolbars-group.c:
+	* lib/egg/egg-toolbars-group.h:
+	* lib/egg/eggintl.h:
+	* lib/egg/eggtoolbar.c:
+	* lib/egg/eggtoolbutton.c:
+	* lib/egg/update-from-egg.sh:
+
+	Use EggEditableToolbar.
+	Update to latest versions (not EggMenuMerge, we still need patches).
+	
+	WARNING: it's no more possible to drag bookmarks in the toolbar,
+	if you depend on that feature please wait the weekend to update cvs.
+
+	* lib/egg/egg-markup.c:
+	* lib/egg/egg-markup.h:
+
+	Remove, not used.
+
+	* lib/widgets/Makefile.am:
+	* lib/widgets/ephy-editable-toolbar.c:
+	* lib/widgets/ephy-editable-toolbar.h:
+	* lib/widgets/ephy-toolbars-group.c:
+	* lib/widgets/ephy-toolbars-group.h:
+
+	Remove.
+
+	* src/prefs-dialog.c: (prefs_dialog_show_help),
+	(prefs_dialog_response_cb):
+
+	Fix a warning.
+
+	* src/toolbar.c: (toolbar_get_type), (toolbar_get_action_name),
+	(toolbar_get_action), (toolbar_class_init), (toolbar_init):
+	* src/toolbar.h:
+	* src/window-commands.c: (window_cmd_edit_toolbar):
+
+	Update to use the egg api.
+
 2003-04-01  Christian Persch <chpe@stud.uni-saarland.de>
 
 	* src/ephy-tab.c:

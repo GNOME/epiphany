@@ -6,12 +6,11 @@ INCLUDES = \
 
 noinst_LTLIBRARIES = libegg.la
 
-libegg_la_SOURCES = \
+EGGSOURCES = \
   egg-action.c \
   egg-action-group.c \
   egg-toggle-action.c \
   egg-radio-action.c \
-  egg-markup.c \
   egg-menu-merge.c \
   egg-accel-dialog.c \
   eggradiotoolbutton.c \
@@ -20,15 +19,19 @@ libegg_la_SOURCES = \
   eggseparatortoolitem.c \
   eggtoolbar.c \
   eggtoolbutton.c \
-  eggmarshalers.c
+  eggmarshalers.c \
+  egg-editable-toolbar.c \
+  egg-toolbars-group.c
 
-noinst_HEADERS = \
+libegg_la_SOURCES = \
+  $(EGGSOURCES)
+
+EGGHEADERS = \
   egg-menu.h \
   egg-action.h \
   egg-action-group.h \
   egg-toggle-action.h \
   egg-radio-action.h \
-  egg-markup.h \
   egg-menu-merge.h \
   egg-accel-dialog.h \
   eggradiotoolbutton.h \
@@ -37,7 +40,13 @@ noinst_HEADERS = \
   eggseparatortoolitem.h \
   eggtoolbar.h \
   eggtoolbutton.h \
-  eggmarshalers.h
+  eggmarshalers.h \
+  egg-editable-toolbar.h \
+  egg-toolbars-group.h
+
+noinst_HEADERS = \
+  $(EGGHEADERS) \
+  eggintl.h
 
 eggmarshalers.h:
 	cd $(srcdir) \
@@ -55,3 +64,10 @@ egg-marshal.c: eggmarshalers.h eggmarshalers.c
 
 EXTRA_DIST=			\
 	eggmarshalers.list
+
+EGGFILES=$(EGGSOURCES) $(EGGHEADERS)
+EGGDIR=$(srcdir)/../../../libegg/libegg
+
+regenerate-built-sources:
+	EGGFILES="$(EGGFILES)" EGGDIR="$(EGGDIR)" $(srcdir)/update-from-egg.sh
+

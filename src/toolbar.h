@@ -19,7 +19,7 @@
 #ifndef TOOLBAR_H
 #define TOOLBAR_H
 
-#include "ephy-editable-toolbar.h"
+#include "egg-editable-toolbar.h"
 #include "ephy-window.h"
 
 #include <glib-object.h>
@@ -39,13 +39,13 @@ typedef struct ToolbarPrivate ToolbarPrivate;
 
 struct Toolbar
 {
-        EphyEditableToolbar parent_object;
+        EggEditableToolbar parent_object;
         ToolbarPrivate *priv;
 };
 
 struct ToolbarClass
 {
-        EphyEditableToolbarClass parent_class;
+        EggEditableToolbarClass parent_class;
 };
 
 GType         toolbar_get_type			(void);

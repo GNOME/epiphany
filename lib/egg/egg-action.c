@@ -1,9 +1,7 @@
 #include "egg-action.h"
 #include "eggtoolbutton.h"
+#include "eggintl.h"
 
-#ifndef _
-# define _(s) (s)
-#endif
 
 /* some code for making arbitrary GtkButtons that act like toolbar
  * buttons */
@@ -38,7 +36,7 @@ static const gchar *accel_path_key = "EggAction::accel_path";
 GType
 egg_action_get_type (void)
 {
-  static GType type = 0;
+  static GtkType type = 0;
 
   if (!type)
     {
@@ -560,14 +558,11 @@ disconnect_proxy (EggAction *action, GtkWidget *proxy)
 				G_CALLBACK (egg_action_sync_stock_id), proxy);
 
   /* menu item specific synchronisers ... */
-  if (GTK_IS_MENU_ITEM (proxy))
-  {
-    g_signal_handlers_disconnect_by_func (action,
-					  G_CALLBACK (egg_action_sync_label),
-					  proxy);
+  g_signal_handlers_disconnect_by_func (action,
+					G_CALLBACK (egg_action_sync_label),
+					proxy);
 
-    gtk_menu_item_set_accel_path (GTK_MENU_ITEM (proxy), NULL);
-  }
+  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (proxy), NULL);
 
   /* toolbar button specific synchronisers ... */
   g_signal_handlers_disconnect_by_func (action,
