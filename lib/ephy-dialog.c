@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1112,15 +1112,7 @@ setup_default_size (EphyDialog *dialog)
 static gint
 impl_run (EphyDialog *dialog)
 {
-	if (dialog->priv->props && !dialog->priv->initialized)
-	{
-		load_props (dialog->priv->props);
-		prefs_connect_signals (dialog);
-		prefs_set_sensitivity (dialog->priv->props);
-		dialog->priv->initialized = TRUE;
-	}
-
-	setup_default_size (dialog);
+	ephy_dialog_show (dialog);
 
 	return gtk_dialog_run (GTK_DIALOG(dialog->priv->dialog));
 }

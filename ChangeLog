@@ -1,3 +1,17 @@
+2003-11-05  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/glade/print.glade:
+	* embed/print-dialog.c: (impl_show), (print_dialog_class_init),
+	(print_dialog_new), (print_dialog_new_with_parent),
+	(print_dialog_print), (print_dialog_preview),
+	(print_cancel_button_cb), (print_preview_button_cb):
+
+	Only allow choosing "Selection" if there really is one.
+
+	* lib/ephy-dialog.c: (impl_run):
+
+	Use ephy_dialog_show() when running an EphyDialog.
+
 2003-11-05  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* lib/ephy-gui.c: (ephy_gui_help):
