@@ -520,6 +520,7 @@ ephy_shell_get_autocompletion (EphyShell *gs)
 		ephy_autocompletion_add_source (p->autocompletion,
 						EPHY_AUTOCOMPLETION_SOURCE (gs->priv->bookmarks));
 
+		g_object_unref (gh);
 		g_object_unref (fa);
 		g_object_unref (gs->priv->bookmarks);
 	}

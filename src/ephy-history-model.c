@@ -559,8 +559,7 @@ ephy_history_model_get_value (GtkTreeModel *tree_model,
 	node = EPHY_NODE (iter->user_data);
 
 	if (ephy_node_get_property_int (node, EPHY_NODE_PAGE_PROP_HOST_ID) < 0 &&
-	    (column == EPHY_HISTORY_MODEL_COL_LOCATION ||
-	     column == EPHY_HISTORY_MODEL_COL_FIRST_VISIT ||
+	    (column == EPHY_HISTORY_MODEL_COL_FIRST_VISIT ||
 	     column == EPHY_HISTORY_MODEL_COL_LAST_VISIT ||
 	     column == EPHY_HISTORY_MODEL_COL_VISITS))
 	{

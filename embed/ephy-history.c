@@ -270,7 +270,7 @@ ephy_history_save (EphyHistory *eb)
 	GPtrArray *children;
 	int i;
 
-	LOG ("Saving history\n")
+	LOG ("Saving history")
 
 	/* save nodes to xml */
 	xmlIndentTreeOutput = TRUE;
@@ -313,7 +313,7 @@ hosts_added_cb (EphyNode *node,
 	g_static_rw_lock_writer_lock (eb->priv->hosts_hash_lock);
 
 	g_hash_table_insert (eb->priv->hosts_hash,
-			     (char *) ephy_node_get_property_string (child, EPHY_NODE_PAGE_PROP_TITLE),
+			     (char *) ephy_node_get_property_string (child, EPHY_NODE_PAGE_PROP_LOCATION),
 			     child);
 
 	g_static_rw_lock_writer_unlock (eb->priv->hosts_hash_lock);
@@ -327,7 +327,7 @@ hosts_removed_cb (EphyNode *node,
 	g_static_rw_lock_writer_lock (eb->priv->hosts_hash_lock);
 
 	g_hash_table_remove (eb->priv->hosts_hash,
-			     ephy_node_get_property_string (child, EPHY_NODE_PAGE_PROP_TITLE));
+			     ephy_node_get_property_string (child, EPHY_NODE_PAGE_PROP_LOCATION));
 
 	g_static_rw_lock_writer_unlock (eb->priv->hosts_hash_lock);
 }
@@ -450,6 +450,8 @@ ephy_history_finalize (GObject *object)
 
         g_free (eb->priv);
 
+	LOG ("Global history finalized");
+
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -463,91 +465,39 @@ ephy_history_new ()
 	return tab;
 }
 
-static EphyNode *
-ephy_history_add_host (EphyHistory *eh, const char *url)
+static void
+ephy_history_host_set_title (EphyHistory *eh,
+			     EphyNode *host,
+			     EphyNode *page,
+			     const char *title)
 {
-	EphyNode *host;
-	GnomeVFSURI *vfs_uri = NULL;
-	const char *host_name = NULL;
-	char *host_location = NULL;
-	GTime now;
+	const char *real_url;
+	const char *host_url;
+	GValue value = { 0, };
+
+	real_url = ephy_node_get_property_string
+		(page, EPHY_NODE_PAGE_PROP_LOCATION);
+	host_url = ephy_node_get_property_string
+		(host, EPHY_NODE_PAGE_PROP_LOCATION);
+
+	if (strcmp (real_url, host_url) == 0)
+	{
+
+		g_value_init (&value, G_TYPE_STRING);
+		g_value_set_string (&value, title);
+		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_TITLE,
+					&value);
+		g_value_unset (&value);
+	}
+}
+
+static void
+ephy_history_host_visited (EphyHistory *eh,
+			   EphyNode *host,
+			   GTime now)
+{
 	GValue value = { 0, };
 	int visits;
-
-	now = time (NULL);
-
-	/* Build an host name */
-	if (!g_ascii_strncasecmp (url, "file://", 7))
-	{
-		host_name = _("Local files");
-		host_location = g_strdup ("file://");
-	}
-	else
-	{
-		vfs_uri = gnome_vfs_uri_new (url);
-		if (vfs_uri != NULL)
-		{
-			host_name = gnome_vfs_uri_get_host_name (vfs_uri);
-			host_location = gnome_vfs_uri_to_string
-				(vfs_uri, GNOME_VFS_URI_HIDE_FRAGMENT_IDENTIFIER);
-		}
-
-		if (host_name == NULL)
-		{
-			host_name = _("Other");
-			host_location = g_strdup ("about:blank");
-		}
-	}
-
-	g_static_rw_lock_reader_lock (eh->priv->hosts_hash_lock);
-
-	host = g_hash_table_lookup (eh->priv->hosts_hash, host_name);
-
-	if (!host)
-	{
-		char *tmp;
-
-		if (g_str_has_prefix (host_name, "www."))
-		{
-			tmp = g_strdup (g_utf8_offset_to_pointer (host_name, 4));
-		}
-		else
-		{
-			tmp = g_strconcat ("www.", host_name, NULL);
-		}
-
-		host = g_hash_table_lookup (eh->priv->hosts_hash, tmp);
-
-		g_free (tmp);
-	}
-
-	g_static_rw_lock_reader_unlock (eh->priv->hosts_hash_lock);
-
-	if (!host)
-	{
-		host = ephy_node_new ();
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, host_name);
-		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_TITLE,
-				        &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, host_location);
-		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_LOCATION,
-				        &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, now);
-		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_FIRST_VISIT,
-				        &value);
-		g_value_unset (&value);
-
-		ephy_node_add_child (eh->priv->hosts, host);
-	}
-
-	g_assert (EPHY_IS_NODE (host));
 
 	visits = ephy_node_get_property_int
 		(host, EPHY_NODE_PAGE_PROP_VISITS);
@@ -565,13 +515,115 @@ ephy_history_add_host (EphyHistory *eh, const char *url)
 	ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_LAST_VISIT,
 			        &value);
 	g_value_unset (&value);
+}
+
+static EphyNode *
+ephy_history_add_host (EphyHistory *eh, EphyNode *page)
+{
+	GnomeVFSURI *vfs_uri = NULL;
+	EphyNode *host = NULL;
+	const char *host_name = NULL;
+	GList *host_locations = NULL, *l;
+	GValue value = { 0, };
+	const char *url;
+	const char *scheme = NULL;
+	GTime now;
+
+	now = time (NULL);
+
+	url = ephy_node_get_property_string
+		(page, EPHY_NODE_PAGE_PROP_LOCATION);
+
+	vfs_uri = gnome_vfs_uri_new (url);
+
+	if (vfs_uri)
+	{
+		scheme = gnome_vfs_uri_get_scheme (vfs_uri);
+		host_name = gnome_vfs_uri_get_host_name (vfs_uri);
+	}
+
+	/* Build an host name */
+	if (scheme == NULL || host_name == NULL)
+	{
+		host_name = _("Others");
+		host_locations = g_list_append (host_locations,
+						g_strdup ("about:blank"));
+	}
+	else if (strcmp (url, "file") == 0)
+	{
+		host_name = _("Local files");
+		host_locations = g_list_append (host_locations,
+						g_strdup ("file:///"));
+	}
+	else
+	{
+		char *location;
+		char *tmp;
+
+		location = g_strconcat (gnome_vfs_uri_get_scheme (vfs_uri),
+					"://", host_name, "/", NULL);
+		host_locations = g_list_append (host_locations, location);
+
+
+		if (g_str_has_prefix (host_name, "www."))
+		{
+			tmp = g_strdup (g_utf8_offset_to_pointer (host_name, 4));
+		}
+		else
+		{
+			tmp = g_strconcat ("www.", host_name, NULL);
+		}
+		location = g_strconcat (gnome_vfs_uri_get_scheme (vfs_uri),
+					"://", tmp, "/", NULL);
+		g_free (tmp);
+		host_locations = g_list_append (host_locations, location);
+	}
+
+	g_return_val_if_fail (host_locations != NULL, NULL);
+
+	g_static_rw_lock_reader_lock (eh->priv->hosts_hash_lock);
+
+	for (l = host_locations; l != NULL; l = l->next)
+	{
+		host = g_hash_table_lookup (eh->priv->hosts_hash,
+					    (char *)l->data);
+		if (host) break;
+	}
+	g_static_rw_lock_reader_unlock (eh->priv->hosts_hash_lock);
+
+	if (!host)
+	{
+		host = ephy_node_new ();
+		g_value_init (&value, G_TYPE_STRING);
+		g_value_set_string (&value, host_name);
+		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_TITLE,
+				        &value);
+		g_value_unset (&value);
+
+		g_value_init (&value, G_TYPE_STRING);
+		g_value_set_string (&value, (char *)host_locations->data);
+		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_LOCATION,
+				        &value);
+		g_value_unset (&value);
+
+		g_value_init (&value, G_TYPE_INT);
+		g_value_set_int (&value, now);
+		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_FIRST_VISIT,
+				        &value);
+		g_value_unset (&value);
+
+		ephy_node_add_child (eh->priv->hosts, host);
+	}
+
+	ephy_history_host_visited (eh, host, now);
 
 	if (vfs_uri)
 	{
 		gnome_vfs_uri_unref (vfs_uri);
 	}
 
-	g_free (host_location);
+	g_list_foreach (host_locations, (GFunc)g_free, NULL);
+	g_list_free (host_locations);
 
 	return host;
 }
@@ -583,6 +635,7 @@ ephy_history_visited (EphyHistory *eh, EphyNode *node)
 	GTime now;
 	int visits;
 	const char *url;
+	int host_id;
 
 	now = time (NULL);
 
@@ -612,6 +665,12 @@ ephy_history_visited (EphyHistory *eh, EphyNode *node)
 			(node, EPHY_NODE_PAGE_PROP_FIRST_VISIT, &value);
 	}
 	g_value_unset (&value);
+
+	host_id = ephy_node_get_property_int (node, EPHY_NODE_PAGE_PROP_HOST_ID);
+	if (host_id >= 0)
+	{
+		ephy_history_host_visited (eh, ephy_node_get_from_id (host_id), now);
+	}
 
 	eh->priv->last_page = node;
 
@@ -661,7 +720,7 @@ ephy_history_add_page (EphyHistory *eb,
 			        &value);
 	g_value_unset (&value);
 
-	host = ephy_history_add_host (eb, url);
+	host = ephy_history_add_host (eb, bm);
 
 	g_value_init (&value, G_TYPE_INT);
 	g_value_set_int (&value, ephy_node_get_id (host));
@@ -701,6 +760,7 @@ ephy_history_set_page_title (EphyHistory *gh,
 			     const char *title)
 {
 	EphyNode *node;
+	guint host_id;
 
 	node = ephy_history_get_page (gh, url);
 	if (node)
@@ -712,6 +772,13 @@ ephy_history_set_page_title (EphyHistory *gh,
 		ephy_node_set_property
 			(node, EPHY_NODE_PAGE_PROP_TITLE, &value);
 		g_value_unset (&value);
+	}
+
+	host_id = ephy_node_get_property_int (node, EPHY_NODE_PAGE_PROP_HOST_ID);
+	if (host_id >= 0)
+	{
+		ephy_history_host_set_title (gh, ephy_node_get_from_id  (host_id),
+					     node, title);
 	}
 }
 

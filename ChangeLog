@@ -1,5 +1,18 @@
 2003-01-13  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* embed/ephy-history.c: (ephy_history_save), (hosts_added_cb),
+	(hosts_removed_cb), (ephy_history_finalize),
+	(ephy_history_host_set_title), (ephy_history_host_visited),
+	(ephy_history_add_host), (ephy_history_visited),
+	(ephy_history_add_page), (ephy_history_set_page_title):
+	* src/ephy-history-model.c: (ephy_history_model_get_value):
+	* src/ephy-shell.c: (ephy_shell_get_autocompletion):
+
+	Use the title also for hosts in history.
+	Cleanup hosts matching code a lot.
+
+2003-01-13  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* TODO:
 	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_get):
 	* src/bookmarks/ephy-bookmarks-editor.c:
