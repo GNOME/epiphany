@@ -57,6 +57,8 @@ GtkWidget	    *ephy_topics_selector_new             (EphyBookmarks *bookmarks,
 void		     ephy_topics_selector_set_bookmark    (EphyTopicsSelector *selector,
 							   EphyNode *bookmark);
 
+void		     ephy_topics_selector_new_topic	  (EphyTopicsSelector *selector);
+
 void		     ephy_topics_selector_apply		  (EphyTopicsSelector *selector);
 
 

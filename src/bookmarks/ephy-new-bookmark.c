@@ -54,6 +54,11 @@ static void ephy_new_bookmark_get_property (GObject *object,
 
 #define EPHY_NEW_BOOKMARK_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NEW_BOOKMARK, EphyNewBookmarkPrivate))
 
+enum
+{
+	RESPONSE_NEW_TOPIC
+};
+
 struct EphyNewBookmarkPrivate
 {
 	EphyBookmarks *bookmarks;
@@ -176,12 +181,19 @@ response_cb (EphyNewBookmark *new_bookmark,
 	     int response_id,
 	     gpointer user_data)
 {
+	EphyTopicsSelector *selector;
+
+	selector = EPHY_TOPICS_SELECTOR (new_bookmark->priv->topics_selector);
+
 	switch (response_id)
 	{
 		case GTK_RESPONSE_HELP:
 			ephy_gui_help (GTK_WINDOW (new_bookmark), 
 		       		       "epiphany",
 		       		       "to-create-new-bookmark");
+			break;
+		case RESPONSE_NEW_TOPIC:
+			ephy_topics_selector_new_topic (selector);
 			break;
 		/* For both OK and Cancel we want to destroy the dialog */
 		case GTK_RESPONSE_OK:
@@ -282,6 +294,9 @@ ephy_new_bookmark_construct (EphyNewBookmark *editor)
 	gtk_dialog_add_button (GTK_DIALOG (editor),
 			       GTK_STOCK_HELP,
 			       GTK_RESPONSE_HELP);
+	gtk_dialog_add_button (GTK_DIALOG (editor),
+			       _("_New Topic"),
+			       RESPONSE_NEW_TOPIC);
 	gtk_dialog_add_button (GTK_DIALOG (editor),
 			       GTK_STOCK_CANCEL,
 			       GTK_RESPONSE_CANCEL);

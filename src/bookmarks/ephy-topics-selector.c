@@ -26,6 +26,7 @@
 #include "ephy-debug.h"
 #include "ephy-node-view.h"
 
+#include <glib/gi18n.h>
 #include <gtk/gtkliststore.h>
 #include <gtk/gtkcellrenderertoggle.h>
 #include <gtk/gtkcellrenderertext.h>
@@ -52,6 +53,10 @@ struct EphyTopicsSelectorPrivate
 	EphyBookmarks *bookmarks;
 	GtkTreeModel *model;
 	EphyNode *bookmark;
+
+	GtkCellRenderer *renderer;
+	GtkTreeViewColumn *column;
+	GtkTreePath *edited_path;
 };
 
 enum
@@ -346,6 +351,45 @@ topic_key_pressed (GtkTreeView *tree_view,
 }
 
 static void
+renderer_edited_cb (GtkCellRendererText *cell,
+                    const char *path_str,
+                    const char *new_text,
+                    EphyTopicsSelector *selector)
+{
+	GtkTreePath *path;
+	GtkTreeIter iter;
+	EphyNode *topic;
+
+	path = gtk_tree_path_new_from_string (path_str);
+	gtk_tree_model_get_iter (selector->priv->model, &iter, path);
+
+	topic = ephy_bookmarks_add_keyword (selector->priv->bookmarks, new_text);
+	gtk_list_store_set (GTK_LIST_STORE (selector->priv->model), &iter,
+			    COL_HAS_TOPIC, TRUE,
+			    COL_TOPIC, new_text,
+			    COL_NODE, topic,
+			    -1);
+	gtk_tree_path_free (path);
+
+	g_object_set (G_OBJECT (cell), "editable", FALSE, NULL);
+	gtk_tree_path_free (selector->priv->edited_path);
+}
+
+static void
+renderer_editing_canceled_cb (GtkCellRendererText *cell,
+                              EphyTopicsSelector *selector)
+{
+	GtkTreeIter iter;
+
+	gtk_tree_model_get_iter (selector->priv->model, &iter,
+				 selector->priv->edited_path);
+	gtk_list_store_remove (GTK_LIST_STORE (selector->priv->model), &iter);
+
+	g_object_set (G_OBJECT (cell), "editable", FALSE, NULL);
+	gtk_tree_path_free (selector->priv->edited_path);
+}
+
+static void
 ephy_topics_build_ui (EphyTopicsSelector *editor)
 {
 	GtkListStore *model;
@@ -369,9 +413,15 @@ ephy_topics_build_ui (EphyTopicsSelector *editor)
 	gtk_tree_view_append_column (GTK_TREE_VIEW (editor), column);
 
 	renderer = gtk_cell_renderer_text_new ();
+	editor->priv->renderer = renderer;
 	column = gtk_tree_view_column_new_with_attributes
 		("Description", renderer, "text", COL_TOPIC, NULL);
+	editor->priv->column = column;
 	gtk_tree_view_append_column (GTK_TREE_VIEW (editor), column);
+	g_signal_connect (renderer, "edited",
+			  G_CALLBACK (renderer_edited_cb), editor);
+	g_signal_connect (renderer, "editing-canceled",
+			  G_CALLBACK (renderer_editing_canceled_cb), editor);
 
 	g_signal_connect (G_OBJECT (editor), "key_press_event",
 			  G_CALLBACK (topic_key_pressed), editor);
@@ -405,4 +455,27 @@ ephy_topics_selector_new (EphyBookmarks *bookmarks,
 	ephy_topics_build_ui (editor);
 
 	return GTK_WIDGET (editor);
+}
+
+void
+ephy_topics_selector_new_topic (EphyTopicsSelector *selector)
+{
+	GtkTreePath *path;
+	GtkTreeIter iter;
+
+	g_object_set (G_OBJECT (selector->priv->renderer),
+                      "editable", TRUE, NULL);
+
+	gtk_list_store_append (GTK_LIST_STORE (selector->priv->model), &iter);
+	gtk_list_store_set (GTK_LIST_STORE (selector->priv->model), &iter,
+			    COL_HAS_TOPIC, FALSE,
+			    COL_TOPIC, _("Type a topic"),
+			    COL_NODE, NULL,
+			    -1);
+
+	path = gtk_tree_model_get_path (selector->priv->model, &iter);
+	gtk_widget_grab_focus (GTK_WIDGET (selector));
+	gtk_tree_view_set_cursor (GTK_TREE_VIEW (selector), path,
+				  selector->priv->column, TRUE);
+	selector->priv->edited_path = path;
 }
