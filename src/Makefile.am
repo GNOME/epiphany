@@ -10,6 +10,7 @@ INCLUDES = \
 	$(WARN_CFLAGS)			\
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
 	-DSHARE_DIR=\"$(pkgdatadir)\" 	\
+	-DPLUGINS_DIR=\""$(libdir)/epiphany/plugins"\" 	\
 	-DDATADIR=\""$(datadir)"\" 	\
 	-DPIXMAP_DIR=\""$(datadir)/pixmaps"\" 		\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
@@ -62,6 +63,8 @@ epiphany_bin_SOURCES = 				    	\
 	ephy-navigation-action.h			\
 	ephy-notebook.c					\
 	ephy-notebook.h					\
+	ephy-plugin.c					\
+	ephy-plugin.h					\
 	ephy-shell.c					\
 	ephy-shell.h					\
 	ephy-spinner-action.c				\

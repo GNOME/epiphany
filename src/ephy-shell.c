@@ -34,6 +34,7 @@
 #include "ephy-bookmarks-editor.h"
 #include "ephy-history-window.h"
 #include "ephy-debug.h"
+#include "ephy-plugin.h"
 #include "toolbar.h"
 
 #include <string.h>
@@ -43,6 +44,7 @@
 #include <gtk/gtksignal.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmessagedialog.h>
+#include <dirent.h>
 
 #ifdef ENABLE_NAUTILUS_VIEW
 
@@ -61,6 +63,7 @@ struct EphyShellPrivate
 	EphyToolbarsModel *toolbars_model;
 	GtkWidget *bme;
 	GtkWidget *history_window;
+	GList *plugins;
 };
 
 static void
@@ -146,6 +149,39 @@ ephy_shell_new_window_cb (EphyEmbedShell *shell,
 }
 
 static void
+ephy_shell_load_plugins (EphyShell *es)
+{
+	DIR *d;
+	struct dirent *e;
+
+	d = opendir (PLUGINS_DIR);
+
+	if (d == NULL)
+	{
+		return;
+	}
+
+	while ((e = readdir (d)) != NULL)
+	{
+		char *plugin;
+
+		plugin = g_strconcat (PLUGINS_DIR"/", e->d_name, NULL);
+
+		if (g_str_has_suffix (plugin, ".so"))
+		{
+			EphyPlugin *obj;
+
+			obj = ephy_plugin_new (plugin);
+			es->priv->plugins = g_list_append
+				(es->priv->plugins, obj);
+		}
+
+		g_free (plugin);
+	}
+	closedir (d);
+}
+
+static void
 ephy_shell_init (EphyShell *gs)
 {
 	EphyEmbedSingle *single;
@@ -157,6 +193,7 @@ ephy_shell_init (EphyShell *gs)
 	gs->priv->bme = NULL;
 	gs->priv->history_window = NULL;
 	gs->priv->toolbars_model = NULL;
+	gs->priv->plugins = NULL;
 
 	ephy_shell = gs;
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
@@ -195,6 +232,8 @@ ephy_shell_init (EphyShell *gs)
 
 		exit (0);
 	}
+
+	ephy_shell_load_plugins (gs);
 }
 
 static void
@@ -210,6 +249,9 @@ ephy_shell_finalize (GObject *object)
         g_return_if_fail (gs->priv != NULL);
 
 	g_assert (ephy_shell == NULL);
+
+	g_list_foreach (gs->priv->plugins, (GFunc)g_type_module_unuse, NULL);
+	g_list_free (gs->priv->plugins);
 
 	LOG ("Unref toolbars model")
 	if (gs->priv->toolbars_model)

@@ -1,3 +1,23 @@
+2003-07-12  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* configure.in:
+	* plugins/.cvsignore:
+	* plugins/Makefile.am:
+	* plugins/sample/.cvsignore:
+	* plugins/sample/Makefile.am:
+	* plugins/sample/sample.c: (bmks_changed), (plugin_init),
+	(plugin_exit):
+	* src/Makefile.am:
+	* src/ephy-plugin.c: (ephy_plugin_get_type), (ephy_plugin_new),
+	(ephy_plugin_load), (ephy_plugin_unload), (ephy_plugin_class_init),
+	(ephy_plugin_init), (ephy_plugin_finalize):
+	* src/ephy-plugin.h:
+	* src/ephy-shell.c: (ephy_shell_load_plugins), (ephy_shell_init),
+	(ephy_shell_finalize):
+
+	Very simple plugin framework, unused for now.
+	We will start making something useful with it only post 1.0
+
 2003-07-12  Wang Jian  <lark@linux.net.cn>
 
 	* configure.in: Added "zh_CN" to ALL_LINGUAS.
