@@ -86,7 +86,7 @@ static void ephy_cell_renderer_progress_render       (GtkCellRenderer         *c
 						     GdkRectangle            *background_area,
 						     GdkRectangle            *cell_area,
 						     GdkRectangle            *expose_area,
-						     guint                    flags);
+						     GtkCellRendererState     flags);
 
      
 G_DEFINE_TYPE (EphyCellRendererProgress, ephy_cell_renderer_progress, GTK_TYPE_CELL_RENDERER);
@@ -323,7 +323,7 @@ ephy_cell_renderer_progress_render (GtkCellRenderer *cell,
 				   GdkRectangle    *background_area,
 				   GdkRectangle    *cell_area,
 				   GdkRectangle    *expose_area,
-				   guint            flags)
+				   GtkCellRendererState flags)
 {
   EphyCellRendererProgress *cellprogress = EPHY_CELL_RENDERER_PROGRESS (cell);
   GdkGC *gc;

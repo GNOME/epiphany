@@ -421,7 +421,7 @@ ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 	}
 }
 
-static guint
+static GtkTreeModelFlags
 ephy_tree_model_node_get_flags (GtkTreeModel *tree_model)
 {
 	return GTK_TREE_MODEL_ITERS_PERSIST | GTK_TREE_MODEL_LIST_ONLY;
