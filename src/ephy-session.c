@@ -444,6 +444,11 @@ ephy_session_close (EphySession *session)
 
 	LOG ("ephy_session_close")
 
+	/* we have to ref the shell or else we may get finalised between
+	 * destroying the windows and destroying the tool windows
+	 */
+	g_object_ref (ephy_shell);
+
 	windows	= ephy_session_get_windows (session);
 	g_list_foreach (windows, (GFunc) gtk_widget_destroy, NULL);
 	g_list_free (windows);
@@ -451,6 +456,8 @@ ephy_session_close (EphySession *session)
 	windows = g_list_copy (session->priv->tool_windows);
 	g_list_foreach (windows, (GFunc) gtk_widget_destroy, NULL);
 	g_list_free (windows);	
+
+	g_object_unref (ephy_shell);
 }
 
 static int
