@@ -12,14 +12,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 1.1.5\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-26 23:22+0100\n"
+"POT-Creation-Date: 2004-02-11 14:25+0100\n"
 "PO-Revision-Date: 2004-01-26 23:00+0100\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: data/GNOME_Epiphany_Automation.server.in.h:1
 msgid "Epiphany automation"
@@ -689,7 +689,7 @@ msgstr "_Rechercher :"
 msgid "_Next"
 msgstr "_Suivant"
 
-#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:539
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:533
 msgid "_Pause"
 msgstr "_Suspendre"
 
@@ -1154,55 +1154,55 @@ msgstr "_Rechercher..."
 msgid "_Print..."
 msgstr "_Imprimer..."
 
-#: embed/downloader-view.c:230
+#: embed/downloader-view.c:225
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u:%02u"
 
-#: embed/downloader-view.c:234
+#: embed/downloader-view.c:229
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
-#: embed/downloader-view.c:306 lib/widgets/ephy-cell-renderer-progress.c:35
+#: embed/downloader-view.c:299 lib/widgets/ephy-cell-renderer-progress.c:35
 #: src/ephy-window.c:1147
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: embed/downloader-view.c:354
+#: embed/downloader-view.c:348
 #, c-format
 msgid "About %d second left"
 msgid_plural "About %d seconds left"
 msgstr[0] "Plus que %d seconde restante"
 msgstr[1] "Plus que %d secondes restantes"
 
-#: embed/downloader-view.c:362
+#: embed/downloader-view.c:356
 #, c-format
 msgid "About %d minute left"
 msgid_plural "About %d minutes left"
 msgstr[0] "Plus que %d minute restante"
 msgstr[1] "Plus que %d minutes restantes"
 
-#: embed/downloader-view.c:369
+#: embed/downloader-view.c:363
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d téléchargement"
 msgstr[1] "%d téléchargements"
 
-#: embed/downloader-view.c:467
+#: embed/downloader-view.c:461
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:477
+#: embed/downloader-view.c:471
 msgid "File"
 msgstr "Fichier"
 
-#: embed/downloader-view.c:490
+#: embed/downloader-view.c:484
 msgid "Remaining"
 msgstr "Restant"
 
-#: embed/downloader-view.c:534
+#: embed/downloader-view.c:528
 msgid "_Resume"
 msgstr "_Reprendre"
 
@@ -1581,7 +1581,7 @@ msgstr "Ukrainien"
 msgid "Unknown (%s)"
 msgstr "Inconnu (%s)"
 
-#: embed/ephy-history.c:485 src/bookmarks/ephy-bookmarks.c:587
+#: embed/ephy-history.c:485 src/bookmarks/ephy-bookmarks.c:583
 msgid "All"
 msgstr "Tout"
 
@@ -1593,28 +1593,28 @@ msgstr "Autres"
 msgid "Local files"
 msgstr "Fichiers locaux"
 
-#: embed/mozilla/ContentHandler.cpp:136
+#: embed/mozilla/ContentHandler.cpp:135
 #: embed/mozilla/EphyHeaderSniffer.cpp:314
 msgid "Save"
 msgstr "Enregistrer"
 
-#: embed/mozilla/ContentHandler.cpp:266
+#: embed/mozilla/ContentHandler.cpp:265
 msgid "_Save As..."
 msgstr "_Enregistrer sous..."
 
-#: embed/mozilla/ContentHandler.cpp:269
+#: embed/mozilla/ContentHandler.cpp:268
 msgid "_Open"
 msgstr "_Ouvrir"
 
-#: embed/mozilla/ContentHandler.cpp:269
+#: embed/mozilla/ContentHandler.cpp:268
 msgid "_Download"
 msgstr "_Télécharger"
 
-#: embed/mozilla/ContentHandler.cpp:285
+#: embed/mozilla/ContentHandler.cpp:284
 msgid "Download the unsafe file?"
 msgstr "Télécharger les fichiers non sûrs ?"
 
-#: embed/mozilla/ContentHandler.cpp:286
+#: embed/mozilla/ContentHandler.cpp:285
 msgid ""
 "This type of file could potentially damage your documents or invade your "
 "privacy. It's not safe to open it directly. You can save it instead."
@@ -1623,11 +1623,11 @@ msgstr ""
 "votre vie privée. Il n'est as sûr de l'ouvrir directement. Vous pouvez "
 "l'enregistrer à la place."
 
-#: embed/mozilla/ContentHandler.cpp:294
+#: embed/mozilla/ContentHandler.cpp:293
 msgid "Open the file in another application?"
 msgstr "Ouvrir le fichier dans une autre application ?"
 
-#: embed/mozilla/ContentHandler.cpp:295
+#: embed/mozilla/ContentHandler.cpp:294
 msgid ""
 "It's not possible to view this file type directly in the browser. You can "
 "open it with another application or save it."
@@ -1635,15 +1635,18 @@ msgstr ""
 "Il n'est pas possible de visionner ce fichier directement dans le "
 "navigateur. Vous pouvez l'ouvrir avec une autre application ou l'enregistrer."
 
-#: embed/mozilla/ContentHandler.cpp:302
+#: embed/mozilla/ContentHandler.cpp:301
 msgid "Download the file?"
 msgstr "Télécharger le fichier ?"
 
-#: embed/mozilla/ContentHandler.cpp:303
+#: embed/mozilla/ContentHandler.cpp:302
+#, fuzzy
 msgid ""
 "It's not possible to view this file because there is no application "
-"installed that can open it.You can save it instead."
+"installed that can open it. You can save it instead."
 msgstr ""
+"Il n'est pas possible de visionner ce fichier directement dans le "
+"navigateur. Vous pouvez l'ouvrir avec une autre application ou l'enregistrer."
 
 #: embed/mozilla/EphyHeaderSniffer.cpp:289
 #: src/bookmarks/ephy-bookmarks-import.c:247
@@ -1985,7 +1988,7 @@ msgstr ""
 #.
 #: embed/mozilla/mozilla-notifiers.cpp:737
 msgid "system-language"
-msgstr "Langue-système"
+msgstr "fr"
 
 #: embed/print-dialog.c:289
 msgid "Print to"
@@ -2032,7 +2035,7 @@ msgstr ""
 "celle-ci pour l'y enlever."
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:71 src/prefs-dialog.c:1113
+#: lib/ephy-file-helpers.c:71 src/prefs-dialog.c:1115
 msgid "Downloads"
 msgstr "Téléchargements"
 
@@ -2041,12 +2044,12 @@ msgstr "Téléchargements"
 msgid "Failed to find %s"
 msgstr "La recherche de %s a échoué"
 
-#: lib/ephy-file-helpers.c:205
+#: lib/ephy-file-helpers.c:208
 #, c-format
 msgid "%s exists, please move it out of the way."
 msgstr "%s existe, veuillez le déplacer ailleurs."
 
-#: lib/ephy-file-helpers.c:208
+#: lib/ephy-file-helpers.c:211
 #, c-format
 msgid "Failed to create directory %s."
 msgstr "La création du dossier %s a échoué."
@@ -2169,11 +2172,7 @@ msgstr "400%"
 msgid "Failed"
 msgstr "Échec"
 
-#: lib/widgets/ephy-zoom-control.c:138
-msgid "_Zoom"
-msgstr "_Zoom"
-
-#: src/bookmarks/ephy-bookmark-action.c:219
+#: src/bookmarks/ephy-bookmark-action.c:221
 #, c-format
 msgid "%s:"
 msgstr "%s :"
@@ -2321,7 +2320,6 @@ msgid "Select all bookmarks or text"
 msgstr "Sélectionne tous les signets ou le texte"
 
 #. Help Menu
-#. Help menu
 #: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:192
 #: src/ephy-window.c:222
 msgid "_Contents"
@@ -2420,7 +2418,7 @@ msgid "_Search:"
 msgstr "_Rechercher :"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:1357
-#: src/bookmarks/ephy-topic-action.c:621 src/ephy-window.c:968
+#: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:968
 msgid "Bookmarks"
 msgstr "Signets"
 
@@ -2440,44 +2438,44 @@ msgstr "Adresse"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: src/bookmarks/ephy-bookmarks.c:84
+#: src/bookmarks/ephy-bookmarks.c:83
 msgid "Search the web"
 msgstr "Rechercher sur Internet"
 
-#: src/bookmarks/ephy-bookmarks.c:84
+#: src/bookmarks/ephy-bookmarks.c:83
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: src/bookmarks/ephy-bookmarks.c:90
+#: src/bookmarks/ephy-bookmarks.c:89
 msgid "Entertainment"
 msgstr "Loisirs"
 
-#: src/bookmarks/ephy-bookmarks.c:91
+#: src/bookmarks/ephy-bookmarks.c:90
 msgid "News"
 msgstr "Nouvelles"
 
-#: src/bookmarks/ephy-bookmarks.c:92
+#: src/bookmarks/ephy-bookmarks.c:91
 msgid "Shopping"
 msgstr "Achat"
 
-#: src/bookmarks/ephy-bookmarks.c:93
+#: src/bookmarks/ephy-bookmarks.c:92
 msgid "Sports"
 msgstr "Sports"
 
-#: src/bookmarks/ephy-bookmarks.c:94
+#: src/bookmarks/ephy-bookmarks.c:93
 msgid "Travel"
 msgstr "Voyages"
 
-#: src/bookmarks/ephy-bookmarks.c:95
+#: src/bookmarks/ephy-bookmarks.c:94
 msgid "Work"
 msgstr "Travail"
 
-#: src/bookmarks/ephy-bookmarks.c:622
+#: src/bookmarks/ephy-bookmarks.c:618
 msgid "Most Visited"
 msgstr "Le plus visité"
 
-#: src/bookmarks/ephy-bookmarks.c:639
+#: src/bookmarks/ephy-bookmarks.c:635
 msgid "Not Categorized"
 msgstr "Non classé"
 
@@ -2519,7 +2517,7 @@ msgstr "Autres codages"
 msgid "_Automatic"
 msgstr "_Automatique"
 
-#: src/ephy-go-action.c:80 src/ephy-go-action.c:97 src/toolbar.c:409
+#: src/ephy-go-action.c:73 src/toolbar.c:409
 msgid "Go"
 msgstr "Aller à"
 
@@ -2573,8 +2571,8 @@ msgid "Show only the address column"
 msgstr "Afficher seulement la colonne des adresses"
 
 #: src/ephy-history-window.c:246
-msgid "Clear history"
-msgstr "Effacer l'historique"
+msgid "Clear History"
+msgstr "Purger l'historique"
 
 #: src/ephy-history-window.c:278
 msgid "C_lear"
@@ -2669,14 +2667,14 @@ msgstr "_Ne pas rétablir"
 msgid "_Recover"
 msgstr "_Rétablir"
 
-#: src/ephy-session.c:331
+#: src/ephy-session.c:332
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr ""
 "Epipany a apparemment planté ou n'a pas été quitté correctement la dernière "
 "fois que vous l'avez utilisé."
 
-#: src/ephy-session.c:337
+#: src/ephy-session.c:338
 msgid "You can recover the opened tabs and windows."
 msgstr "Vous pouvez rétablir les onglets ainsi que les fenêtres ouvertes"
 
@@ -3310,7 +3308,7 @@ msgstr "Fermer l'aperçu avant impression"
 #.
 #: src/prefs-dialog.c:105
 msgid "System language"
-msgstr "Langue du système"
+msgstr "Français (langue du système)"
 
 #: src/prefs-dialog.c:106
 msgid "Afrikaans"
@@ -3488,12 +3486,12 @@ msgstr "Vietnamien"
 msgid "Walloon"
 msgstr "Wallon"
 
-#: src/prefs-dialog.c:1055
+#: src/prefs-dialog.c:1057
 #, c-format
 msgid "Custom [%s]"
 msgstr "Personnalisée [%s]"
 
-#: src/prefs-dialog.c:1100
+#: src/prefs-dialog.c:1102
 msgid "Desktop"
 msgstr "Bureau"
 
@@ -3501,11 +3499,11 @@ msgstr "Bureau"
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1108
+#: src/prefs-dialog.c:1110
 msgid "Home"
 msgstr "Accueil"
 
-#: src/prefs-dialog.c:1323
+#: src/prefs-dialog.c:1325
 msgid "Select a directory"
 msgstr "Sélectionner un répertoire"
 
@@ -3586,3 +3584,9 @@ msgstr ""
 #: src/window-commands.c:983
 msgid "A GNOME browser based on Mozilla"
 msgstr "Un navigateur GNOME dérivé de Mozilla"
+
+#~ msgid "_Zoom"
+#~ msgstr "_Zoom"
+
+#~ msgid "Clear history"
+#~ msgstr "Effacer l'historique"
