@@ -307,7 +307,7 @@ topic_clicked (GtkTreeView *tree_view,
 	       GdkEventButton *event,
 	       EphyTopicsSelector *selector)
 {
-	GtkTreePath *path;
+	GtkTreePath *path = NULL;
 
 	if (event->window != gtk_tree_view_get_bin_window (tree_view))
 		return FALSE;
@@ -321,6 +321,7 @@ topic_clicked (GtkTreeView *tree_view,
 		gchar *path_str = gtk_tree_path_to_string (path);
 		topic_toggled (NULL, path_str, selector);
 		g_free(path_str);
+		gtk_tree_path_free (path);
 	}
 
 	return FALSE;
@@ -349,6 +350,7 @@ topic_key_pressed (GtkTreeView *tree_view,
 			path_str = gtk_tree_path_to_string (path);
 			topic_toggled (NULL, path_str, selector);
 			g_free(path_str);
+			gtk_tree_path_free (path);
 		}
 		return TRUE;
 

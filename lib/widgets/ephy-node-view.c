@@ -435,7 +435,7 @@ ephy_node_view_button_press_cb (GtkTreeView *treeview,
 			        GdkEventButton *event,
 			        EphyNodeView *view)
 {
-	GtkTreePath *path;
+	GtkTreePath *path = NULL;
 	GtkTreeSelection *selection;
 	gboolean result = FALSE;
 
@@ -464,6 +464,7 @@ ephy_node_view_button_press_cb (GtkTreeView *treeview,
 			target_view = view;
 			g_signal_emit (G_OBJECT (view), ephy_node_view_signals[SHOW_POPUP], 0);
 			target_view = NULL;
+			gtk_tree_path_free (path);
 		}
 	}
 
@@ -661,9 +662,10 @@ ephy_node_view_sort_func (GtkTreeModel *model,
 		switch (G_TYPE_FUNDAMENTAL (type))
 		{
 		case G_TYPE_STRING:
+			/* FIXME: this is horribly inefficient */
 			stra = g_utf8_casefold (g_value_get_string (&a_value), -1);
 			strb = g_utf8_casefold (g_value_get_string (&b_value), -1);
-			g_return_val_if_fail (stra != NULL || strb != NULL, 0);
+			g_return_val_if_fail (stra != NULL && strb != NULL, 0);
 			retval = g_utf8_collate (stra, strb);
 			g_free (stra);
 			g_free (strb);
