@@ -44,6 +44,7 @@ struct _EphyLocationEntryPrivate {
 	gint autocompletion_timeout;
 	gint show_alternatives_timeout;
 	gboolean block_set_autocompletion_key;
+	gboolean going_to_site;
 
 	gchar *autocompletion_key;
 	gchar *last_completion;
@@ -686,17 +687,27 @@ ephy_location_entry_list_event_after_cb (GtkWidget *list,
 	if (event->type == GDK_BUTTON_PRESS
 	    && ((GdkEventButton *) event)->button == 1)
 	{
-		gchar *url = ephy_location_entry_get_location (e);
-		g_signal_emit
-			(e, EphyLocationEntrySignals[ACTIVATED], 0, url);
-		g_free (url);
+		e->priv->going_to_site = TRUE;
 	}
 }
 
 static void
 ephy_location_entry_editable_changed_cb (GtkEditable *editable, EphyLocationEntry *e)
 {
+	EphyLocationEntryPrivate *p = e->priv;
+
 	ephy_location_entry_set_autocompletion_key (e);
+
+	if (p->going_to_site)
+	{
+		char *url = ephy_location_entry_get_location (e);
+		if (url && url[0] != '\0')
+		{
+			p->going_to_site = FALSE;
+			g_signal_emit (e, EphyLocationEntrySignals[ACTIVATED], 0, NULL, url);
+			g_free (url);
+		}
+	}
 }
 
 static void
