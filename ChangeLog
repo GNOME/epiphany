@@ -1,3 +1,21 @@
+2003-04-05  David Bordoley <bordoley@msu.edu>
+
+	* src/popup-commands.c: (popup_cmd_bookmark_link):
+	* src/window-commands.c: (window_cmd_file_bookmark_page):
+	Just show the new bookmark dialog, don't go modal.
+
+	* src/bookmarks/ephy-bookmark-properties.c: 
+	(ephy_bookmark_properties_new):
+	* src/bookmarks/ephy-bookmark-properties.h
+	Need to pass the parent window to _new(), and 
+	set the dialog transient to its parent.	
+
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_bookmark_properties):
+	Pass the bme window to the ephy_bookmark_properties_new.
+
+	* src/bookmarks/ephy-new-bookmark.c: (ephy_new_bookmark_response_cb):
+	Call gtk_widget_destroy() when cancel or ok are clicked.	
+
 2003-04-05  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/egg/eggintl.h:

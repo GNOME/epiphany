@@ -287,7 +287,7 @@ cmd_bookmark_properties (EggAction *action,
 	for (l = selection; l; l = l->next)
 	{
 		EphyNode *node = EPHY_NODE (l->data);
-		dialog = ephy_bookmark_properties_new (editor->priv->bookmarks, node);
+		dialog = ephy_bookmark_properties_new (editor->priv->bookmarks, node, GTK_WINDOW (editor));
 		gtk_widget_show (GTK_WIDGET (dialog));
 	}
 

@@ -386,7 +386,8 @@ ephy_bookmark_properties_init (EphyBookmarkProperties *editor)
 
 GtkWidget *
 ephy_bookmark_properties_new (EphyBookmarks *bookmarks,
-			      EphyNode *bookmark)
+			      EphyNode *bookmark,
+			      GtkWindow *parent_window)
 {
 	EphyBookmarkProperties *editor;
 
@@ -398,7 +399,11 @@ ephy_bookmark_properties_new (EphyBookmarks *bookmarks,
 			 "bookmark", bookmark,
 			 NULL));
 
-	build_ui (editor);
-
+	build_ui (editor);	
+	
+	if (parent_window)
+	{
+		gtk_window_set_transient_for (GTK_WINDOW (editor), parent_window);
+	}
 	return GTK_WIDGET (editor);
 }

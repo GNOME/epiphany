@@ -162,8 +162,7 @@ popup_cmd_bookmark_link (EggAction *action,
 		(EPHY_NEW_BOOKMARK (new_bookmark), title);
 	ephy_new_bookmark_set_smarturl
 		(EPHY_NEW_BOOKMARK (new_bookmark), rel);
-	gtk_dialog_run (GTK_DIALOG (new_bookmark));
-	gtk_widget_destroy (new_bookmark);
+	gtk_widget_show (new_bookmark);
 }
 
 void

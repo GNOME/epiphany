@@ -51,7 +51,8 @@ typedef struct
 GType		     ephy_bookmark_properties_get_type        (void);
 
 GtkWidget	    *ephy_bookmark_properties_new             (EphyBookmarks *bookmarks,
-							       EphyNode *bookmark);
+							       EphyNode *bookmark,
+							       GtkWindow *parent_window);
 
 G_END_DECLS
 

@@ -315,8 +315,7 @@ window_cmd_file_bookmark_page (EggAction *action,
 		(EPHY_NEW_BOOKMARK (new_bookmark), title);
 	ephy_new_bookmark_set_icon
 		(EPHY_NEW_BOOKMARK (new_bookmark), icon);
-	gtk_dialog_run (GTK_DIALOG (new_bookmark));
-	gtk_widget_destroy (new_bookmark);
+	gtk_widget_show (new_bookmark);
 }
 
 void
