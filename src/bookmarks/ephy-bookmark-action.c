@@ -31,6 +31,7 @@
 #include "ephy-dnd.h"
 #include "ephy-bookmarksbar.h"
 #include "ephy-bookmarks.h"
+#include "ephy-bookmark-properties.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
@@ -54,11 +55,13 @@ static int n_drag_targets = G_N_ELEMENTS (drag_targets);
 
 struct EphyBookmarkActionPrivate
 {
+	EphyNode *bmk_node;
 	int bookmark_id;
 	char *location;
 	gboolean smart_url;
 	char *icon;
 	guint cache_handler;
+	GtkWidget *prop_dialog;
 
 	guint motion_handler;
 	gint drag_x;
@@ -497,6 +500,28 @@ move_right_activate_cb (GtkWidget *menu, GtkWidget *proxy)
 }
 
 static void
+properties_activate_cb (GtkWidget *menu, EphyBookmarkAction *action)
+{
+	GtkWidget *window, *proxy;
+	EphyBookmarks *bookmarks;
+	EphyBookmarkActionPrivate *p = action->priv;
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	proxy = g_object_get_data (G_OBJECT (menu), "proxy");
+	window = gtk_widget_get_toplevel (proxy);
+
+	if (p->prop_dialog == NULL)
+	{
+		p->prop_dialog = ephy_bookmark_properties_new
+				(bookmarks, p->bmk_node, GTK_WINDOW (window));
+		g_object_add_weak_pointer (G_OBJECT (p->prop_dialog),
+					   (gpointer)&p->prop_dialog);
+	}
+
+	gtk_widget_show (p->prop_dialog);
+}
+
+static void
 show_context_menu (EphyBookmarkAction *action, GtkWidget *proxy,
 		   GtkMenuPositionFunc func)
 {
@@ -516,6 +541,17 @@ show_context_menu (EphyBookmarkAction *action, GtkWidget *proxy,
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (open_in_window_activate_cb), action);
+
+	item = gtk_separator_menu_item_new ();
+	gtk_widget_show (item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	item = gtk_image_menu_item_new_from_stock (GTK_STOCK_PROPERTIES, NULL);
+	g_object_set_data (G_OBJECT (item), "proxy", proxy);
+	gtk_widget_show (item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	g_signal_connect (item, "activate",
+			  G_CALLBACK (properties_activate_cb), action);
 
 	item = gtk_separator_menu_item_new ();
 	gtk_widget_show (item);
@@ -650,6 +686,31 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 }
 
 static void
+bookmark_destroy_cb (EphyNode *node, EphyBookmarkAction *action)
+{
+	if (action->priv->prop_dialog != NULL)
+	{
+		gtk_widget_destroy (action->priv->prop_dialog);
+	}
+}
+
+static void
+ephy_bookmark_action_set_bookmark_id (EphyBookmarkAction *action, guint id)
+{
+	EphyBookmarks *bookmarks;
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+
+	action->priv->bookmark_id = id;
+	action->priv->bmk_node = ephy_bookmarks_get_from_id
+				(bookmarks, action->priv->bookmark_id);
+
+	ephy_node_signal_connect_object (action->priv->bmk_node, EPHY_NODE_DESTROY,
+					 (EphyNodeCallback) bookmark_destroy_cb,
+					 G_OBJECT (action));
+}
+
+static void
 ephy_bookmark_action_set_property (GObject *object,
                                    guint prop_id,
                                    const GValue *value,
@@ -662,7 +723,8 @@ ephy_bookmark_action_set_property (GObject *object,
 	switch (prop_id)
 	{
 		case PROP_BOOKMARK_ID:
-			bmk->priv->bookmark_id = g_value_get_int (value);
+			ephy_bookmark_action_set_bookmark_id
+					(bmk, g_value_get_int (value));
 			break;
 		case PROP_TOOLTIP:
 		case PROP_LOCATION:
@@ -711,6 +773,12 @@ static void
 ephy_bookmark_action_finalize (GObject *object)
 {
         EphyBookmarkAction *eba = EPHY_BOOKMARK_ACTION (object);
+
+	if (eba->priv->prop_dialog)
+	{
+		g_object_remove_weak_pointer (G_OBJECT (eba->priv->prop_dialog),
+					      (gpointer)&eba->priv->prop_dialog);
+	}
 
 	g_free (eba->priv->location);
 	g_free (eba->priv->icon);
@@ -881,6 +949,7 @@ ephy_bookmark_action_init (EphyBookmarkAction *action)
 
 	action->priv->location = NULL;
 	action->priv->icon = NULL;
+	action->priv->prop_dialog = NULL;
 	action->priv->cache_handler = 0;
 	action->priv->motion_handler = 0;
 
@@ -889,6 +958,7 @@ ephy_bookmark_action_init (EphyBookmarkAction *action)
 	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_CHANGED,
 				         (EphyNodeCallback) bookmarks_child_changed_cb,
 				         G_OBJECT (action));
+
 	node = ephy_bookmarks_get_smart_bookmarks (bookmarks);
 	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_ADDED,
 					 (EphyNodeCallback) smart_child_added_cb,
