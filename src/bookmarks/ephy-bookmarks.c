@@ -43,6 +43,8 @@
 #define BOOKMARKS_SAVE_DELAY (3 * 1000)
 #define MAX_FAVORITES_NUM 10
 
+#define EPHY_BOOKMARKS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKS, EphyBookmarksPrivate))
+
 struct EphyBookmarksPrivate
 {
 	EphyToolbarsModel *toolbars_model;
@@ -304,9 +306,10 @@ ephy_bookmarks_class_init (EphyBookmarksClass *klass)
                                          g_param_spec_object ("toolbars_model",
                                                               "Toolbars model",
                                                               "Toolbars model",
-                                                              EPHY_TOOLBARS_MODEL_TYPE,
+                                                              EPHY_TYPE_TOOLBARS_MODEL,
                                                               G_PARAM_READWRITE));
 
+	g_type_class_add_private (object_class, sizeof(EphyBookmarksPrivate));
 }
 
 static gboolean
@@ -520,7 +523,7 @@ update_favorites_menus ()
 	Session *session;
 	const GList *l;
 
-	session = SESSION (ephy_shell_get_session (ephy_shell));
+	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
 	l = session_get_windows (session);
 
 	for (; l != NULL; l = l->next)
@@ -668,9 +671,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	GValue value = { 0, };
 	EphyNodeDb *db;
 
-	LOG ("Init");
-
-        eb->priv = g_new0 (EphyBookmarksPrivate, 1);
+	eb->priv = EPHY_BOOKMARKS_GET_PRIVATE (eb);
 	eb->priv->toolbars_model = NULL;
 
 	db = ephy_node_db_new (EPHY_NODE_DB_BOOKMARKS);
@@ -770,13 +771,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 static void
 ephy_bookmarks_finalize (GObject *object)
 {
-        EphyBookmarks *eb;
-
-	g_return_if_fail (IS_EPHY_BOOKMARKS (object));
-
-	eb = EPHY_BOOKMARKS (object);
-
-        g_return_if_fail (eb->priv != NULL);
+	EphyBookmarks *eb = EPHY_BOOKMARKS (object);
 
 	if (eb->priv->save_timeout_id != 0)
 	{
@@ -801,8 +796,6 @@ ephy_bookmarks_finalize (GObject *object)
 	g_free (eb->priv->xml_file);
 	g_free (eb->priv->rdf_file);
 
-        g_free (eb->priv);
-
 	LOG ("Bookmarks finalized")
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -811,11 +804,11 @@ ephy_bookmarks_finalize (GObject *object)
 EphyBookmarks *
 ephy_bookmarks_new ()
 {
-	EphyBookmarks *tab;
+	EphyBookmarks *eb;
 
-	tab = EPHY_BOOKMARKS (g_object_new (EPHY_BOOKMARKS_TYPE, NULL));
+	eb = EPHY_BOOKMARKS (g_object_new (EPHY_TYPE_BOOKMARKS, NULL));
 
-	return tab;
+	return eb;
 }
 
 static void
@@ -893,7 +886,7 @@ ephy_bookmarks_find_bookmark (EphyBookmarks *eb,
 	GPtrArray *children;
 	int i;
 
-	g_return_val_if_fail (IS_EPHY_BOOKMARKS (eb), NULL);
+	g_return_val_if_fail (EPHY_IS_BOOKMARKS (eb), NULL);
 	g_return_val_if_fail (eb->priv->bookmarks != NULL, NULL);
 	g_return_val_if_fail (url != NULL, NULL);
 

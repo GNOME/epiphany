@@ -32,13 +32,12 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_SPINNER_TYPE		(ephy_spinner_get_type ())
-#define EPHY_SPINNER(obj)		(GTK_CHECK_CAST ((obj), EPHY_SPINNER_TYPE, EphySpinner))
-#define EPHY_SPINNER_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), EPHY_SPINNER_TYPE, EphySpinnerClass))
-#define IS_EPHY_SPINNER(obj)		(GTK_CHECK_TYPE ((obj), EPHY_SPINNER_TYPE))
-#define IS_EPHY_SPINNER_CLASS(klass)    (GTK_CHECK_CLASS_TYPE ((klass), EPHY_SPINNER_TYPE))
-
-typedef struct EphySpinnerInfo	EphySpinnerInfo;
+#define EPHY_TYPE_SPINNER	  (ephy_spinner_get_type ())
+#define EPHY_SPINNER(o)		  (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_SPINNER, EphySpinner))
+#define EPHY_SPINNER_CLASS(k)	  (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_SPINNER, EphySpinnerClass))
+#define EPHY_IS_SPINNER(o)	  (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_SPINNER))
+#define EPHY_IS_SPINNER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_SPINNER))
+#define EPHY_SPINNER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SPINNER, EphySpinnerClass))
 
 typedef struct EphySpinner EphySpinner;
 typedef struct EphySpinnerClass EphySpinnerClass;

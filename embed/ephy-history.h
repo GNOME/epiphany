@@ -25,14 +25,14 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_HISTORY		(ephy_history_get_type ())
+#define EPHY_HISTORY(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_HISTORY, EphyHistory))
+#define EPHY_HISTORY_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_HISTORY, EphyHistoryClass))
+#define EPHY_IS_HISTORY(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_HISTORY))
+#define EPHY_IS_HISTORY_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_HISTORY))
+#define EPHY_HISTORY_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_HISTORY, EphyHistoryClass))
+
 typedef struct EphyHistoryClass EphyHistoryClass;
-
-#define EPHY_HISTORY_TYPE             (ephy_history_get_type ())
-#define EPHY_HISTORY(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_HISTORY_TYPE, EphyHistory))
-#define EPHY_HISTORY_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_HISTORY_TYPE, EphyHistoryClass))
-#define IS_EPHY_HISTORY(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_HISTORY_TYPE))
-#define IS_EPHY_HISTORY_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_HISTORY_TYPE))
-
 typedef struct EphyHistory EphyHistory;
 typedef struct EphyHistoryPrivate EphyHistoryPrivate;
 

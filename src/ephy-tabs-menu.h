@@ -21,22 +21,18 @@
 
 #include "ephy-window.h"
 
-/* object forward declarations */
+G_BEGIN_DECLS
+
+#define EPHY_TYPE_TABS_MENU		(ephy_tabs_menu_get_type ())
+#define EPHY_TABS_MENU(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_TABS_MENU, EphyTabsMenu))
+#define EPHY_TABS_MENU_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_TABS_MENU, EphyTabsMenuClass))
+#define EPHY_IS_TABS_MENU(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_TABS_MENU))
+#define EPHY_IS_TABS_MENU_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TABS_MENU))
+#define EPHY_TABS_MENU_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TABS_MENU, EphyTabsMenuClass))
 
 typedef struct _EphyTabsMenu EphyTabsMenu;
 typedef struct _EphyTabsMenuClass EphyTabsMenuClass;
 typedef struct _EphyTabsMenuPrivate EphyTabsMenuPrivate;
-
-/**
- * Editor object
- */
-
-#define EPHY_TYPE_TABS_MENU	(ephy_tabs_menu_get_type())
-#define EPHY_TABS_MENU(object)	(G_TYPE_CHECK_INSTANCE_CAST((object), EPHY_TYPE_TABS_MENU, EphyTabsMenu))
-#define EPHY_TABS_MENU_CLASS(klass)(G_TYPE_CHECK_CLASS_CAST((klass), EPHY_TYPE_TABS_MENU, EphyTabsMenuClass))
-#define EPHY_IS_TABS_MENU(object)	(G_TYPE_CHECK_INSTANCE_TYPE((object), EPHY_TYPE_TABS_MENU))
-#define EPHY_IS_TABS_MENU_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), EPHY_TYPE_TABS_MENU))
-#define EPHY_TABS_MENU_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_TABS_MENU, EphyTabsMenuClass))
 
 struct _EphyTabsMenuClass
 {
@@ -57,5 +53,6 @@ EphyTabsMenu	  *ephy_tabs_menu_new			(EphyWindow *window);
 
 void		   ephy_tabs_menu_update		(EphyTabsMenu *menu);
 
-#endif
+G_END_DECLS
 
+#endif

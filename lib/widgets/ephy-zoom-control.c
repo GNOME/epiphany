@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -33,6 +35,9 @@
 /**
  * Private data
  */
+ 
+#define EPHY_ZOOM_CONTROL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ZOOM_CONTROL, EphyZoomControlPrivate))
+
 struct _EphyZoomControlPrivate {
 	GtkWidget *option_menu;
 	float zoom;
@@ -191,7 +196,7 @@ ephy_zoom_control_init (EphyZoomControl *control)
 	GtkWidget *item, *menu, *box;
 	guint i;
 
-	p = g_new0 (EphyZoomControlPrivate, 1);
+	p = EPHY_ZOOM_CONTROL_GET_PRIVATE (control);
 	control->priv = p;
 
 	p->zoom = 1.0;
@@ -325,6 +330,8 @@ ephy_zoom_control_class_init (EphyZoomControlClass *klass)
 		              G_TYPE_NONE,
 			      1,
 			      G_TYPE_FLOAT);
+
+	g_type_class_add_private (object_class, sizeof (EphyZoomControlPrivate));
 }
 
 static void
@@ -334,11 +341,8 @@ ephy_zoom_control_finalize (GObject *o)
 
 	g_object_unref (control->priv->option_menu);
 
-	g_free (control->priv);
-
 	G_OBJECT_CLASS (parent_class)->finalize (o);
 }
-
 
 void
 ephy_zoom_control_set_zoom_level (EphyZoomControl *control, float zoom)

@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -32,6 +34,9 @@
 /**
  * Private data
  */
+
+#define EPHY_ENCODING_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODING_MENU, EphyEncodingMenuPrivate))
+
 struct _EphyEncodingMenuPrivate
 {
 	EphyWindow *window;
@@ -105,14 +110,17 @@ ephy_encoding_menu_class_init (EphyEncodingMenuClass *klass)
                                          g_param_spec_object ("EphyWindow",
                                                               "EphyWindow",
                                                               "Parent window",
-                                                              EPHY_WINDOW_TYPE,
-                                                              G_PARAM_READWRITE));
+                                                              EPHY_TYPE_WINDOW,
+                                                              G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof(EphyEncodingMenuPrivate));
 }
 
 static void
 ephy_encoding_menu_init (EphyEncodingMenu *wrhm)
 {
-	EphyEncodingMenuPrivate *p = g_new0 (EphyEncodingMenuPrivate, 1);
+	EphyEncodingMenuPrivate *p = EPHY_ENCODING_MENU_GET_PRIVATE (wrhm);
 	wrhm->priv = p;
 
 	wrhm->priv->action_group = NULL;
@@ -131,8 +139,6 @@ ephy_encoding_menu_finalize_impl (GObject *o)
 			 p->action_group);
 		g_object_unref (p->action_group);
 	}
-
-	g_free (p);
 
 	G_OBJECT_CLASS (g_object_class)->finalize (o);
 }

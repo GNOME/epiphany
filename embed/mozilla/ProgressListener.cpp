@@ -118,7 +118,7 @@ NS_METHOD GProgressListener::PrivateInit (void)
 		if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 		source = g_strdup (cTmp.get());
 
-		mDownloaderView = DOWNLOADER_VIEW
+		mDownloaderView = EPHY_DOWNLOADER_VIEW
 			(ephy_embed_shell_get_downloader_view (embed_shell));
 		downloader_view_add_download (mDownloaderView, filename, source,
 					      dest, (gpointer)this);
@@ -339,7 +339,7 @@ NS_IMETHODIMP GProgressListener::OnStateChange (nsIWebProgress *aWebProgress,
 			break;
 		case ACTION_OBJECT_NOTIFY:
 
-			g_return_val_if_fail (IS_EPHY_EMBED_PERSIST (mEphyPersist),
+			g_return_val_if_fail (EPHY_IS_EMBED_PERSIST (mEphyPersist),
 					      NS_ERROR_FAILURE);
 			
 			PersistHandlerInfo *handler;

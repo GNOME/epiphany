@@ -27,14 +27,14 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_TOOLBAR		(toolbar_get_type ())
+#define EPHY_TOOLBAR(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_TOOLBAR, Toolbar))
+#define EPHY_TOOLBAR_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_TOOLBAR, ToolbarClass))
+#define EPHY_IS_TOOLBAR(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_TOOLBAR))
+#define EPHY_IS_TOOLBAR_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TOOLBAR))
+#define EPHY_TOOLBAR_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TOOLBAR, ToolbarClass))
+
 typedef struct ToolbarClass ToolbarClass;
-
-#define TOOLBAR_TYPE             (toolbar_get_type ())
-#define TOOLBAR(obj)             (GTK_CHECK_CAST ((obj), TOOLBAR_TYPE, Toolbar))
-#define TOOLBAR_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), TOOLBAR, ToolbarClass))
-#define IS_TOOLBAR(obj)          (GTK_CHECK_TYPE ((obj), TOOLBAR_TYPE))
-#define IS_TOOLBAR_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), TOOLBAR))
-
 typedef struct ToolbarPrivate ToolbarPrivate;
 
 struct Toolbar

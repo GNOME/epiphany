@@ -23,15 +23,15 @@
 
 G_BEGIN_DECLS
 
-typedef struct FindDialog FindDialog;
+#define EPHY_TYPE_FIND_DIALOG		(find_dialog_get_type ())
+#define EPHY_FIND_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_FIND_DIALOG, FindDialog))
+#define EPHY_FIND_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_FIND_DIALOG, FindDialogClass))
+#define EPHY_IS_FIND_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_FIND_DIALOG))
+#define EPHY_IS_FIND_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_FIND_DIALOG))
+#define EPHY_FIND_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_FIND_DIALOG, FindDialogClass))
+
 typedef struct FindDialogClass FindDialogClass;
-
-#define FIND_DIALOG_TYPE             (find_dialog_get_type ())
-#define FIND_DIALOG(obj)             (GTK_CHECK_CAST ((obj), FIND_DIALOG_TYPE, FindDialog))
-#define FIND_DIALOG_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), FIND_DIALOG, FindDialogClass))
-#define IS_FIND_DIALOG(obj)          (GTK_CHECK_TYPE ((obj), FIND_DIALOG_TYPE))
-#define IS_FIND_DIALOG_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), FIND_DIALOG))
-
+typedef struct FindDialog FindDialog;
 typedef struct FindDialogPrivate FindDialogPrivate;
 
 struct FindDialog

@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include <libxml/tree.h>
@@ -36,6 +38,8 @@
 static void ephy_favicon_cache_class_init (EphyFaviconCacheClass *klass);
 static void ephy_favicon_cache_init (EphyFaviconCache *ma);
 static void ephy_favicon_cache_finalize (GObject *object);
+
+#define EPHY_FAVICON_CACHE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FAVICON_CACHE, EphyFaviconCachePrivate))
 
 struct EphyFaviconCachePrivate
 {
@@ -105,6 +109,8 @@ ephy_favicon_cache_class_init (EphyFaviconCacheClass *klass)
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_STRING);
+
+	g_type_class_add_private (object_class, sizeof(EphyFaviconCachePrivate));
 }
 
 EphyFaviconCache *
@@ -113,8 +119,6 @@ ephy_favicon_cache_new (void)
 	EphyFaviconCache *cache;
 
 	cache = EPHY_FAVICON_CACHE (g_object_new (EPHY_TYPE_FAVICON_CACHE, NULL));
-
-	g_return_val_if_fail (cache->priv != NULL, NULL);
 
 	return cache;
 }
@@ -258,7 +262,7 @@ ephy_favicon_cache_init (EphyFaviconCache *cache)
 {
 	EphyNodeDb *db;
 
-	cache->priv = g_new0 (EphyFaviconCachePrivate, 1);
+	cache->priv = EPHY_FAVICON_CACHE_GET_PRIVATE (cache);
 
 	db = ephy_node_db_new (EPHY_NODE_DB_SITEICONS);
 	cache->priv->db = db;
@@ -335,16 +339,9 @@ cleanup_downloads_hash (EphyFaviconCache *cache)
 static void
 ephy_favicon_cache_finalize (GObject *object)
 {
-	EphyFaviconCache *cache;
+	EphyFaviconCache *cache = EPHY_FAVICON_CACHE (object);
 
 	LOG ("Finalize favicon cache")
-
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (EPHY_IS_FAVICON_CACHE (object));
-
-	cache = EPHY_FAVICON_CACHE (object);
-
-	g_return_if_fail (cache->priv != NULL);
 
 	cleanup_downloads_hash (cache);
 	remove_obsolete_icons (cache);
@@ -358,8 +355,6 @@ ephy_favicon_cache_finalize (GObject *object)
 	g_hash_table_destroy (cache->priv->downloads_hash);
 
 	g_object_unref (cache->priv->db);
-
-	g_free (cache->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "ephy-favicon-action.h"
@@ -36,6 +38,8 @@ static GtkTargetEntry url_drag_types [] =
         { EPHY_DND_URL_TYPE,        0, 2 }
 };
 static int n_url_drag_types = G_N_ELEMENTS (url_drag_types);
+
+#define EPHY_FAVICON_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FAVICON_ACTION, EphyFaviconActionPrivate))
 
 struct EphyFaviconActionPrivate
 {
@@ -271,12 +275,15 @@ ephy_favicon_action_class_init (EphyFaviconActionClass *class)
                                                                "The icon",
                                                                NULL,
                                                                G_PARAM_READWRITE));
+
+	g_type_class_add_private (object_class, sizeof(EphyFaviconActionPrivate));
 }
 
 static void
 ephy_favicon_action_init (EphyFaviconAction *action)
 {
-	action->priv = g_new0 (EphyFaviconActionPrivate, 1);
+	action->priv = EPHY_FAVICON_ACTION_GET_PRIVATE (action);
+
 	action->priv->icon = NULL;
 
 	action->priv->cache = EPHY_FAVICON_CACHE
@@ -288,19 +295,9 @@ ephy_favicon_action_init (EphyFaviconAction *action)
 static void
 ephy_favicon_action_finalize (GObject *object)
 {
-        EphyFaviconAction *action;
-
-        g_return_if_fail (EPHY_IS_FAVICON_ACTION (object));
-
-	action = EPHY_FAVICON_ACTION (object);
-
-        g_return_if_fail (action->priv != NULL);
+        EphyFaviconAction *action = EPHY_FAVICON_ACTION (object);
 
 	g_object_unref (action->priv->cache);
-
-	g_free (action->priv);
-
-	LOG ("Favicon action finalized")
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }

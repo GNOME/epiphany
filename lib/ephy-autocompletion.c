@@ -16,7 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *  $Id$
- *
  */
 
 #include <string.h>
@@ -44,6 +43,8 @@ typedef struct {
 } ACMatchArray;
 
 #define ACMA_BASE_SIZE 10240
+
+#define EPHY_AUTOCOMPLETION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_AUTOCOMPLETION, EphyAutocompletionPrivate))
 
 struct _EphyAutocompletionPrivate {
 	GSList *sources;
@@ -125,8 +126,11 @@ ephy_autocompletion_get_type (void)
 static void
 ephy_autocompletion_class_init (EphyAutocompletionClass *klass)
 {
-	G_OBJECT_CLASS (klass)->finalize = ephy_autocompletion_finalize_impl;
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
 	g_object_class = g_type_class_peek_parent (klass);
+
+	object_class->finalize = ephy_autocompletion_finalize_impl;
 
 	EphyAutocompletionSignals[EPHY_AUTOCOMPLETION_SOURCES_CHANGED] = g_signal_new (
 		"sources-changed", G_OBJECT_CLASS_TYPE (klass),
@@ -135,12 +139,14 @@ ephy_autocompletion_class_init (EphyAutocompletionClass *klass)
 		NULL, NULL,
 		ephy_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
+
+	g_type_class_add_private (object_class, sizeof (EphyAutocompletionPrivate));
 }
 
 static void
 ephy_autocompletion_init (EphyAutocompletion *ac)
 {
-	EphyAutocompletionPrivate *p = g_new0 (EphyAutocompletionPrivate, 1);
+	EphyAutocompletionPrivate *p = EPHY_AUTOCOMPLETION_GET_PRIVATE (ac);
 	ac->priv = p;
 	p->sources = NULL;
 	acma_init (&p->matches);
@@ -183,8 +189,6 @@ ephy_autocompletion_finalize_impl (GObject *o)
 	g_free (p->key_lengths);
 	g_strfreev (p->prefixes);
 	g_free (p->prefix_lengths);
-
-	g_free (p);
 
 	G_OBJECT_CLASS (g_object_class)->finalize (o);
 

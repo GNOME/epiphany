@@ -42,6 +42,8 @@ void find_check_toggled_cb (GtkWidget *toggle, EphyDialog *dialog);
 
 static GObjectClass *parent_class = NULL;
 
+#define EPHY_FIND_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FIND_DIALOG, FindDialogPrivate))
+
 struct FindDialogPrivate
 {
 	EphyEmbed *old_embed;
@@ -89,7 +91,7 @@ find_dialog_get_type (void)
                         (GInstanceInitFunc) find_dialog_init
                 };
 
-                find_dialog_type = g_type_register_static (EPHY_EMBED_DIALOG_TYPE,
+                find_dialog_type = g_type_register_static (EPHY_TYPE_EMBED_DIALOG,
 						           "FindDialog",
 						           &our_info, 0);
         }
@@ -135,6 +137,8 @@ find_dialog_class_init (FindDialogClass *klass)
         object_class->finalize = find_dialog_finalize;
 
 	ephy_dialog_class->show = impl_show;
+
+	g_type_class_add_private (object_class, sizeof (FindDialogPrivate));
 }
 
 static void
@@ -183,7 +187,7 @@ set_properties (FindDialog *find_dialog)
 static void
 sync_page_change (EphyEmbed *embed, const char *address, FindDialog *dialog)
 {
-	g_return_if_fail (IS_EPHY_EMBED (embed));
+	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	update_navigation_controls (dialog, TRUE, TRUE);
 	set_properties (dialog);
@@ -212,7 +216,7 @@ sync_embed (FindDialog *dialog, GParamSpec *pspec, gpointer data)
 	unset_old_embed (dialog);
 
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
-	g_return_if_fail (IS_EPHY_EMBED (embed));
+	g_return_if_fail (EPHY_IS_EMBED (embed));
 	dialog->priv->old_embed = embed;
 
 	g_signal_connect (G_OBJECT (embed), "ge_location",
@@ -231,7 +235,7 @@ find_dialog_init (FindDialog *dialog)
 	GdkPixbuf *icon;
 	GtkWidget *window;
 
-	dialog->priv = g_new0 (FindDialogPrivate, 1);
+	dialog->priv = EPHY_FIND_DIALOG_GET_PRIVATE (dialog);
 
 	dialog->priv->old_embed = NULL;
 
@@ -258,18 +262,13 @@ find_dialog_finalize (GObject *object)
 {
 	FindDialog *dialog;
 
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_FIND_DIALOG (object));
+        g_return_if_fail (EPHY_IS_FIND_DIALOG (object));
 
-	dialog = FIND_DIALOG (object);
+	dialog = EPHY_FIND_DIALOG (object);
 
 	g_signal_handlers_disconnect_by_func (dialog, G_CALLBACK (sync_embed), NULL);
 
-        g_return_if_fail (dialog->priv != NULL);
-
 	unset_old_embed (dialog);
-
-        g_free (dialog->priv);
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -279,9 +278,9 @@ find_dialog_new (EphyEmbed *embed)
 {
 	FindDialog *dialog;
 
-	dialog = FIND_DIALOG (g_object_new (FIND_DIALOG_TYPE,
-				     "embed", embed,
-				     NULL));
+	dialog = EPHY_FIND_DIALOG (g_object_new (EPHY_TYPE_FIND_DIALOG,
+						 "embed", embed,
+						 NULL));
 
 	return EPHY_DIALOG(dialog);
 }
@@ -292,10 +291,10 @@ find_dialog_new_with_parent (GtkWidget *window,
 {
 	FindDialog *dialog;
 
-	dialog = FIND_DIALOG (g_object_new (FIND_DIALOG_TYPE,
-				     "embed", embed,
-				     "ParentWindow", window,
-				     NULL));
+	dialog = EPHY_FIND_DIALOG (g_object_new (EPHY_TYPE_FIND_DIALOG,
+						 "embed", embed,
+						 "ParentWindow", window,
+						 NULL));
 
 	return EPHY_DIALOG(dialog);
 }
@@ -306,7 +305,7 @@ find_dialog_go_next (FindDialog *dialog)
 	gresult result;
 	EphyEmbed *embed;
 
-	g_return_if_fail (IS_FIND_DIALOG (dialog));
+	g_return_if_fail (EPHY_IS_FIND_DIALOG (dialog));
 
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG(dialog));
 	g_return_if_fail (embed != NULL);
@@ -329,7 +328,7 @@ find_dialog_go_prev (FindDialog *dialog)
 	gresult result;
 	EphyEmbed *embed;
 
-	g_return_if_fail (IS_FIND_DIALOG (dialog));
+	g_return_if_fail (EPHY_IS_FIND_DIALOG (dialog));
 
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG(dialog));
 	g_return_if_fail (embed != NULL);
@@ -356,21 +355,21 @@ find_close_button_clicked_cb (GtkWidget *button,
 void find_next_button_clicked_cb (GtkWidget *button,
 				  EphyDialog *dialog)
 {
-	find_dialog_go_next (FIND_DIALOG(dialog));
+	find_dialog_go_next (EPHY_FIND_DIALOG(dialog));
 }
 
 void
 find_prev_button_clicked_cb (GtkWidget *button,
 			     EphyDialog *dialog)
 {
-	find_dialog_go_prev (FIND_DIALOG(dialog));
+	find_dialog_go_prev (EPHY_FIND_DIALOG(dialog));
 }
 
 void
 find_entry_changed_cb  (GtkWidget *editable,
 			EphyDialog *dialog)
 {
-	FindDialog *find_dialog = FIND_DIALOG(dialog);
+	FindDialog *find_dialog = EPHY_FIND_DIALOG(dialog);
 
 	update_navigation_controls (find_dialog, TRUE, TRUE);
 	set_properties (find_dialog);
@@ -380,7 +379,7 @@ void
 find_check_toggled_cb (GtkWidget *toggle,
                        EphyDialog *dialog)
 {
-	FindDialog *find_dialog = FIND_DIALOG(dialog);
+	FindDialog *find_dialog = EPHY_FIND_DIALOG(dialog);
 
 	update_navigation_controls (find_dialog, TRUE, TRUE);
 	set_properties (find_dialog);

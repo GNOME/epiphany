@@ -41,6 +41,8 @@ static gboolean ephy_tree_model_sort_multi_drag_data_get (EggTreeMultiDragSource
 static gboolean ephy_tree_model_sort_multi_drag_data_delete (EggTreeMultiDragSource *drag_source,
 							     GList *path_list);
 
+#define EPHY_TREE_MODEL_SORT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TREE_MODEL_SORT, EphyTreeModelSortPrivate))
+
 struct EphyTreeModelSortPrivate
 {
 	char *str_list;
@@ -95,12 +97,14 @@ ephy_tree_model_sort_class_init (EphyTreeModelSortClass *klass)
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_tree_model_sort_finalize;
+
+	g_type_class_add_private (object_class, sizeof (EphyTreeModelSortPrivate));
 }
 
 static void
 ephy_tree_model_sort_init (EphyTreeModelSort *ma)
 {
-	ma->priv = g_new0 (EphyTreeModelSortPrivate, 1);
+	ma->priv = EPHY_TREE_MODEL_SORT_GET_PRIVATE (ma);
 
 	ma->priv->drag_column_id = -1;
 }
@@ -108,15 +112,9 @@ ephy_tree_model_sort_init (EphyTreeModelSort *ma)
 static void
 ephy_tree_model_sort_finalize (GObject *object)
 {
-	EphyTreeModelSort *model;
-
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (EPHY_IS_TREE_MODEL_SORT (object));
-
-	model = EPHY_TREE_MODEL_SORT (object);
+	EphyTreeModelSort *model = EPHY_TREE_MODEL_SORT (object);
 
 	g_free (model->priv->str_list);
-	g_free (model->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

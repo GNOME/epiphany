@@ -42,7 +42,6 @@
 
 static void print_dialog_class_init (PrintDialogClass *klass);
 static void print_dialog_init (PrintDialog *dialog);
-static void print_dialog_finalize (GObject *object);
 
 /* Glade callbacks */
 void
@@ -57,9 +56,10 @@ print_preview_button_cb (GtkWidget *widget,
 
 static GObjectClass *parent_class = NULL;
 
+#define EPHY_PRINT_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_PRINT_DIALOG, PrintDialogPrivate))
+
 struct PrintDialogPrivate
 {
-	gpointer dummy;
 	GtkWidget *window;
 };
 
@@ -145,7 +145,7 @@ print_dialog_get_type (void)
                         (GInstanceInitFunc) print_dialog_init
                 };
 
-                print_dialog_type = g_type_register_static (EPHY_EMBED_DIALOG_TYPE,
+                print_dialog_type = g_type_register_static (EPHY_TYPE_EMBED_DIALOG,
 						            "PrintDialog",
 						            &our_info, 0);
         }
@@ -161,8 +161,6 @@ print_dialog_class_init (PrintDialogClass *klass)
 
         parent_class = g_type_class_peek_parent (klass);
 
-        object_class->finalize = print_dialog_finalize;
-
 	print_dialog_signals[PREVIEW] =
                 g_signal_new ("preview",
                               G_OBJECT_CLASS_TYPE (object_class),
@@ -172,16 +170,17 @@ print_dialog_class_init (PrintDialogClass *klass)
                               g_cclosure_marshal_VOID__VOID,
                               G_TYPE_NONE,
                               0);
+
+	g_type_class_add_private (object_class, sizeof(PrintDialogPrivate));
 }
 
 static void
 print_dialog_init (PrintDialog *dialog)
 {
 	GdkPixbuf *icon;
-	dialog->priv = g_new0 (PrintDialogPrivate, 1);
+	dialog->priv = EPHY_PRINT_DIALOG_GET_PRIVATE (dialog);
 
 	dialog->only_collect_info = FALSE;
-
 	dialog->ret_info = NULL;
 
 	ephy_dialog_construct (EPHY_DIALOG(dialog),
@@ -201,32 +200,15 @@ print_dialog_init (PrintDialog *dialog)
 	g_object_unref (icon);
 }
 
-static void
-print_dialog_finalize (GObject *object)
-{
-	PrintDialog *dialog;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_PRINT_DIALOG (object));
-
-	dialog = PRINT_DIALOG (object);
-
-        g_return_if_fail (dialog->priv != NULL);
-
-        g_free (dialog->priv);
-
-        G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
 EphyDialog *
 print_dialog_new (EphyEmbed *embed,
 		  EmbedPrintInfo **ret_info)
 {
 	PrintDialog *dialog;
 
-	dialog = PRINT_DIALOG (g_object_new (PRINT_DIALOG_TYPE,
-				     "embed", embed,
-				     NULL));
+	dialog = EPHY_PRINT_DIALOG (g_object_new (EPHY_TYPE_PRINT_DIALOG,
+						  "embed", embed,
+						  NULL));
 
 	if (!embed) dialog->only_collect_info = TRUE;
 	dialog->ret_info = ret_info;
@@ -241,10 +223,10 @@ print_dialog_new_with_parent (GtkWidget *window,
 {
 	PrintDialog *dialog;
 
-	dialog = PRINT_DIALOG (g_object_new (PRINT_DIALOG_TYPE,
-				     "embed", embed,
-				     "ParentWindow", window,
-				     NULL));
+	dialog = EPHY_PRINT_DIALOG (g_object_new (EPHY_TYPE_PRINT_DIALOG,
+						  "embed", embed,
+						  "ParentWindow", window,
+						  NULL));
 
 	if (!embed) dialog->only_collect_info = TRUE;
 	dialog->ret_info = ret_info;
@@ -379,9 +361,9 @@ print_dialog_print (EphyDialog *dialog)
 
 	info = print_get_info (dialog);
 
-	if(PRINT_DIALOG(dialog)->only_collect_info && PRINT_DIALOG(dialog)->ret_info)
+	if(EPHY_PRINT_DIALOG(dialog)->only_collect_info && EPHY_PRINT_DIALOG(dialog)->ret_info)
 	{
-		*(PRINT_DIALOG(dialog)->ret_info) = info;
+		*(EPHY_PRINT_DIALOG(dialog)->ret_info) = info;
 	}
 	else
 	{
@@ -405,9 +387,9 @@ print_dialog_preview (EphyDialog *dialog)
 
 	info = print_get_info (dialog);
 
-	if(PRINT_DIALOG(dialog)->only_collect_info && PRINT_DIALOG(dialog)->ret_info)
+	if(EPHY_PRINT_DIALOG(dialog)->only_collect_info && EPHY_PRINT_DIALOG(dialog)->ret_info)
 	{
-		*(PRINT_DIALOG(dialog)->ret_info) = info;
+		*(EPHY_PRINT_DIALOG(dialog)->ret_info) = info;
 	}
 	else
 	{
@@ -443,7 +425,7 @@ print_preview_button_cb (GtkWidget *widget,
 		         EphyDialog *dialog)
 {
 	//FIXME: Don't show preview button at all.
-	if(!(PRINT_DIALOG(dialog)->only_collect_info))
+	if(!(EPHY_PRINT_DIALOG(dialog)->only_collect_info))
 		print_dialog_preview (dialog);
 }
 

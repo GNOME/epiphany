@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -96,6 +97,8 @@ static void cmd_select_all		  (GtkAction *action,
 					   EphyHistoryWindow *editor);
 static void cmd_help_contents		  (GtkAction *action,
 					   EphyHistoryWindow *editor);
+
+#define EPHY_HISTORY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_HISTORY_WINDOW, EphyHistoryWindowPrivate))
 
 struct EphyHistoryWindowPrivate
 {
@@ -194,7 +197,7 @@ confirmation_dialog_response_cb (GtkDialog *dialog, gint response,
 	if (response != GTK_RESPONSE_OK)
 		return;
 
-	session = SESSION (ephy_shell_get_session (ephy_shell));
+	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
 	windows = session_get_windows (session);
 
 	for (; windows != NULL; windows = windows->next)
@@ -560,21 +563,16 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 					 g_param_spec_object ("history",
 							      "Global history",
 							      "Global History",
-							      EPHY_HISTORY_TYPE,
+							      EPHY_TYPE_HISTORY,
 							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof(EphyHistoryWindowPrivate));
 }
 
 static void
 ephy_history_window_finalize (GObject *object)
 {
-	EphyHistoryWindow *editor;
-
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (EPHY_IS_HISTORY_WINDOW (object));
-
-	editor = EPHY_HISTORY_WINDOW (object);
-
-	g_return_if_fail (editor->priv != NULL);
+	EphyHistoryWindow *editor = EPHY_HISTORY_WINDOW (object);
 
 	g_object_unref (G_OBJECT (editor->priv->pages_filter));
 
@@ -589,8 +587,6 @@ ephy_history_window_finalize (GObject *object)
                         (G_OBJECT(editor->priv->window),
                          (gpointer *)&editor->priv->window);
 	}
-
-	g_free (editor->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -1179,7 +1175,7 @@ ephy_history_window_get_property (GObject *object,
 static void
 ephy_history_window_init (EphyHistoryWindow *editor)
 {
-	editor->priv = g_new0 (EphyHistoryWindowPrivate, 1);
+	editor->priv = EPHY_HISTORY_WINDOW_GET_PRIVATE (editor);
 }
 
 static void

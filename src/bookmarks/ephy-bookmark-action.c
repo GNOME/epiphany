@@ -36,6 +36,8 @@
 static void ephy_bookmark_action_init       (EphyBookmarkAction *action);
 static void ephy_bookmark_action_class_init (EphyBookmarkActionClass *class);
 
+#define EPHY_BOOKMARK_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARK_ACTION, EphyBookmarkActionPrivate))
+
 struct EphyBookmarkActionPrivate
 {
 	int bookmark_id;
@@ -407,18 +409,10 @@ ephy_bookmark_action_get_property (GObject *object,
 static void
 ephy_bookmark_action_finalize (GObject *object)
 {
-        EphyBookmarkAction *eba;
-
-	g_return_if_fail (EPHY_IS_BOOKMARK_ACTION (object));
-
-	eba = EPHY_BOOKMARK_ACTION (object);
-
-        g_return_if_fail (eba->priv != NULL);
+        EphyBookmarkAction *eba = EPHY_BOOKMARK_ACTION (object);
 
 	g_free (eba->priv->location);
 	g_free (eba->priv->icon);
-
-        g_free (eba->priv);
 
 	LOG ("Bookmark action finalized")
 
@@ -428,11 +422,10 @@ ephy_bookmark_action_finalize (GObject *object)
 static void
 ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 {
-	GtkActionClass *action_class;
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
+	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
 
 	parent_class = g_type_class_peek_parent (class);
-	action_class = GTK_ACTION_CLASS (class);
 
 	action_class->toolbar_item_type = GTK_TYPE_TOOL_ITEM;
 	action_class->create_tool_item = create_tool_item;
@@ -484,6 +477,8 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
                                                                "Icon",
                                                                NULL,
                                                                G_PARAM_READWRITE));
+
+	g_type_class_add_private (object_class, sizeof(EphyBookmarkActionPrivate));
 }
 
 static void
@@ -528,11 +523,10 @@ ephy_bookmark_action_init (EphyBookmarkAction *action)
 	EphyBookmarks *bookmarks;
 	EphyNode *node;
 
-	action->priv = g_new0 (EphyBookmarkActionPrivate, 1);
+	action->priv = EPHY_BOOKMARK_ACTION_GET_PRIVATE (action);
 
 	action->priv->location = NULL;
 	action->priv->icon = NULL;
-
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	node = ephy_bookmarks_get_bookmarks (bookmarks);
@@ -562,4 +556,3 @@ ephy_bookmark_action_new (const char *name, guint id)
 
 	return action;
 }
-

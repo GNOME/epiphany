@@ -43,7 +43,6 @@
 
 static void ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass);
 static void ephy_bookmark_properties_init (EphyBookmarkProperties *editor);
-static void ephy_bookmark_properties_finalize (GObject *object);
 static void ephy_bookmark_properties_set_property (GObject *object,
 		                               guint prop_id,
 		                               const GValue *value,
@@ -52,6 +51,8 @@ static void ephy_bookmark_properties_get_property (GObject *object,
 		                               guint prop_id,
 		                               GValue *value,
 		                               GParamSpec *pspec);
+
+#define EPHY_BOOKMARK_PROPERTIES_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARK_PROPERTIES, EphyBookmarkPropertiesPrivate))
 
 struct EphyBookmarkPropertiesPrivate
 {
@@ -109,8 +110,6 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
 
 	parent_class = g_type_class_peek_parent (klass);
 
-	object_class->finalize = ephy_bookmark_properties_finalize;
-
 	object_class->set_property = ephy_bookmark_properties_set_property;
 	object_class->get_property = ephy_bookmark_properties_get_property;
 
@@ -119,7 +118,7 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
 					 g_param_spec_object ("bookmarks",
 							      "Bookmarks set",
 							      "Bookmarks set",
-							      EPHY_BOOKMARKS_TYPE,
+							      EPHY_TYPE_BOOKMARKS,
 							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
 	g_object_class_install_property (object_class,
@@ -128,23 +127,8 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
 							       "Bookmark",
 							       "Bookmark",
 							       G_PARAM_READWRITE));
-}
 
-static void
-ephy_bookmark_properties_finalize (GObject *object)
-{
-	EphyBookmarkProperties *editor;
-
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (EPHY_IS_BOOKMARK_PROPERTIES (object));
-
-	editor = EPHY_BOOKMARK_PROPERTIES (object);
-
-	g_return_if_fail (editor->priv != NULL);
-
-	g_free (editor->priv);
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	g_type_class_add_private (object_class, sizeof(EphyBookmarkPropertiesPrivate));
 }
 
 static void
@@ -440,7 +424,7 @@ build_ui (EphyBookmarkProperties *editor)
 static void
 ephy_bookmark_properties_init (EphyBookmarkProperties *editor)
 {
-	editor->priv = g_new0 (EphyBookmarkPropertiesPrivate, 1);
+	editor->priv = EPHY_BOOKMARK_PROPERTIES_GET_PRIVATE (editor);
 
 	editor->priv->bookmark = NULL;
 	editor->priv->tb_model = EPHY_TOOLBARS_MODEL

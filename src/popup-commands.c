@@ -241,7 +241,7 @@ popup_cmd_copy_link_address (GtkAction *action,
 	const GValue *value;
 
 	event = get_event_info (window);
-	g_return_if_fail (IS_EPHY_EMBED_EVENT (event));
+	g_return_if_fail (EPHY_IS_EMBED_EVENT (event));
 
 	if (event->context & EMBED_CONTEXT_EMAIL_LINK)
 	{

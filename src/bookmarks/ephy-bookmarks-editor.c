@@ -123,6 +123,8 @@ static void cmd_select_all		  (GtkAction *action,
 static void cmd_help_contents		  (GtkAction *action,
 					   EphyBookmarksEditor *editor);
 
+#define EPHY_BOOKMARKS_EDITOR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKS_EDITOR, EphyBookmarksEditorPrivate))
+
 struct EphyBookmarksEditorPrivate
 {
 	EphyBookmarks *bookmarks;
@@ -701,21 +703,16 @@ ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass)
 					 g_param_spec_object ("bookmarks",
 							      "Bookmarks set",
 							      "Bookmarks set",
-							      EPHY_BOOKMARKS_TYPE,
+							      EPHY_TYPE_BOOKMARKS,
 							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof(EphyBookmarksEditorPrivate));
 }
 
 static void
 ephy_bookmarks_editor_finalize (GObject *object)
 {
-	EphyBookmarksEditor *editor;
-
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (EPHY_IS_BOOKMARKS_EDITOR (object));
-
-	editor = EPHY_BOOKMARKS_EDITOR (object);
-
-	g_return_if_fail (editor->priv != NULL);
+	EphyBookmarksEditor *editor = EPHY_BOOKMARKS_EDITOR (object);
 
 	g_object_unref (G_OBJECT (editor->priv->bookmarks_filter));
 
@@ -732,8 +729,6 @@ ephy_bookmarks_editor_finalize (GObject *object)
 	}
 
 	g_hash_table_destroy (editor->priv->props_dialogs);
-
-	g_free (editor->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -1468,7 +1463,7 @@ toolbar_items_changed_cb (EphyToolbarsModel *model,
 static void
 ephy_bookmarks_editor_init (EphyBookmarksEditor *editor)
 {
-	editor->priv = g_new0 (EphyBookmarksEditorPrivate, 1);
+	editor->priv = EPHY_BOOKMARKS_EDITOR_GET_PRIVATE (editor);
 
 	editor->priv->props_dialogs = g_hash_table_new (g_direct_hash,
                                                         g_direct_equal);

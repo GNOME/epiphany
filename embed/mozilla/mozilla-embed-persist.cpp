@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "ProgressListener.h"
@@ -38,6 +40,8 @@ static gresult
 impl_save (EphyEmbedPersist *persist);
 static gresult 
 impl_cancel (EphyEmbedPersist *persist);
+
+#define MOZILLA_EMBED_PERSIST_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED_PERSIST, MozillaEmbedPersistPrivate))
 
 struct MozillaEmbedPersistPrivate
 {
@@ -68,7 +72,7 @@ mozilla_embed_persist_get_type (void)
                 };
 
                 mozilla_embed_persist_type = 
-				g_type_register_static (EPHY_EMBED_PERSIST_TYPE,
+				g_type_register_static (EPHY_TYPE_EMBED_PERSIST,
                                                         "MozillaEmbedPersist",
                                                         &our_info, (GTypeFlags)0);
         }
@@ -80,41 +84,34 @@ static void
 mozilla_embed_persist_class_init (MozillaEmbedPersistClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	EphyEmbedPersistClass *persist_class;
+	EphyEmbedPersistClass *persist_class = EPHY_EMBED_PERSIST_CLASS (klass);
 	
         parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
-	persist_class = EPHY_EMBED_PERSIST_CLASS (klass);
 	
         object_class->finalize = mozilla_embed_persist_finalize;
 
 	persist_class->save = impl_save;
 	persist_class->cancel = impl_cancel;
+
+	g_type_class_add_private (object_class, sizeof(MozillaEmbedPersistPrivate));
 }
 
 static void
 mozilla_embed_persist_init (MozillaEmbedPersist *persist)
 {
-        persist->priv = g_new0 (MozillaEmbedPersistPrivate, 1);
+        persist->priv = MOZILLA_EMBED_PERSIST_GET_PRIVATE (persist);
+
       	persist->priv->mPersist = do_CreateInstance (NS_WEBBROWSERPERSIST_CONTRACTID);
 }
 
 static void
 mozilla_embed_persist_finalize (GObject *object)
 {
-        MozillaEmbedPersist *persist;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_MOZILLA_EMBED_PERSIST (object));
-
-        persist = MOZILLA_EMBED_PERSIST (object);
+        MozillaEmbedPersist *persist = MOZILLA_EMBED_PERSIST (object);
 
 	persist->priv->mPersist->SetProgressListener (nsnull);
 	persist->priv->mPersist = nsnull;
-	
-        g_return_if_fail (persist->priv != NULL);
 
-	g_free (persist->priv);
-	
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 

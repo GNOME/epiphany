@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "language-editor.h"
@@ -56,6 +58,7 @@ EphyDialogProperty properties [] =
         { -1, NULL, NULL }
 };
 
+#define EPHY_LANGUAGE_EDITOR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LANGUAGE_EDITOR, LanguageEditorPrivate))
 
 struct LanguageEditorPrivate
 {
@@ -74,8 +77,6 @@ static void
 language_editor_class_init (LanguageEditorClass *klass);
 static void
 language_editor_init (LanguageEditor *ge);
-static void
-language_editor_finalize (GObject *object);
 
 /* Glade callbacks */
 
@@ -106,7 +107,7 @@ language_editor_get_type (void)
                         (GInstanceInitFunc) language_editor_init
                 };
 
-                language_editor_type = g_type_register_static (EPHY_DIALOG_TYPE,
+		language_editor_type = g_type_register_static (EPHY_TYPE_DIALOG,
 							       "LanguageEditor",
 							       &our_info, 0);
         }
@@ -122,8 +123,6 @@ language_editor_class_init (LanguageEditorClass *klass)
 
         parent_class = g_type_class_peek_parent (klass);
 
-        object_class->finalize = language_editor_finalize;
-
 	signals[CHANGED] =
 		g_signal_new ("changed",
 			      G_OBJECT_CLASS_TYPE (object_class),
@@ -134,6 +133,8 @@ language_editor_class_init (LanguageEditorClass *klass)
                               G_TYPE_NONE,
                               1,
                               G_TYPE_POINTER);
+
+	g_type_class_add_private (object_class, sizeof(LanguageEditorPrivate));
 }
 
 static void
@@ -312,7 +313,7 @@ language_editor_init (LanguageEditor *le)
 	GtkWidget *add_button;
 	GtkWidget *remove_button;
 
-        le->priv = g_new0 (LanguageEditorPrivate, 1);
+	le->priv = EPHY_LANGUAGE_EDITOR_GET_PRIVATE (le);
 
 	ephy_dialog_construct (EPHY_DIALOG(le),
                                  properties,
@@ -332,29 +333,12 @@ language_editor_init (LanguageEditor *le)
 				  optionmenu);
 }
 
-static void
-language_editor_finalize (GObject *object)
-{
-        LanguageEditor *ge;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_LANGUAGE_EDITOR (object));
-
-	ge = LANGUAGE_EDITOR (object);
-
-        g_return_if_fail (ge->priv != NULL);
-
-        g_free (ge->priv);
-
-        G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
 LanguageEditor *
 language_editor_new (GtkWidget *parent)
 {
-	return LANGUAGE_EDITOR (g_object_new (LANGUAGE_EDITOR_TYPE,
-				"ParentWindow", parent,
-				NULL));
+	return EPHY_LANGUAGE_EDITOR (g_object_new (EPHY_TYPE_LANGUAGE_EDITOR,
+				  		   "ParentWindow", parent,
+				  		   NULL));
 }
 
 void

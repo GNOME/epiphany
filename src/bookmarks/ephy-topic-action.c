@@ -36,6 +36,8 @@
 static void ephy_topic_action_init       (EphyTopicAction *action);
 static void ephy_topic_action_class_init (EphyTopicActionClass *class);
 
+#define EPHY_TOPIC_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOPIC_ACTION, EphyTopicActionPrivate))
+
 struct EphyTopicActionPrivate
 {
 	int topic_id;
@@ -564,38 +566,18 @@ ephy_topic_action_get_property (GObject *object,
 }
 
 static void
-ephy_topic_action_finalize (GObject *object)
-{
-        EphyTopicAction *eba;
-
-	g_return_if_fail (EPHY_IS_TOPIC_ACTION (object));
-
-	eba = EPHY_TOPIC_ACTION (object);
-
-        g_return_if_fail (eba->priv != NULL);
-
-        g_free (eba->priv);
-
-	LOG ("Bookmark action finalized")
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-static void
 ephy_topic_action_class_init (EphyTopicActionClass *class)
 {
-	GtkActionClass *action_class;
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
+	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
 
 	parent_class = g_type_class_peek_parent (class);
-	action_class = GTK_ACTION_CLASS (class);
 
 	action_class->toolbar_item_type = GTK_TYPE_TOOL_ITEM;
 	action_class->create_tool_item = create_tool_item;
 	action_class->create_menu_item = create_menu_item;
 	action_class->connect_proxy = connect_proxy;
 
-	object_class->finalize = ephy_topic_action_finalize;
 	object_class->set_property = ephy_topic_action_set_property;
 	object_class->get_property = ephy_topic_action_get_property;
 
@@ -619,6 +601,8 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
 							   G_MAXINT,
                                                            0,
                                                            G_PARAM_READWRITE));
+
+	g_type_class_add_private (object_class, sizeof(EphyTopicActionPrivate));
 }
 
 static void
@@ -651,7 +635,7 @@ ephy_topic_action_init (EphyTopicAction *action)
 	EphyBookmarks *bookmarks;
 	EphyNode *node;
 
-	action->priv = g_new0 (EphyTopicActionPrivate, 1);
+	action->priv = EPHY_TOPIC_ACTION_GET_PRIVATE (action);
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	node = ephy_bookmarks_get_keywords (bookmarks);

@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -244,6 +246,8 @@ static void mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *embed,
 					              guint chrome_mask,
                            		              EphyEmbedSingle *shell);
 
+#define MOZILLA_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED_SINGLE, MozillaEmbedSinglePrivate))
+
 struct MozillaEmbedSinglePrivate
 {
 	char *user_prefs;
@@ -274,7 +278,7 @@ mozilla_embed_single_get_type (void)
                         (GInstanceInitFunc) mozilla_embed_single_init
                 };
 
-                mozilla_embed_single_type = g_type_register_static (EPHY_EMBED_SINGLE_TYPE,
+                mozilla_embed_single_type = g_type_register_static (EPHY_TYPE_EMBED_SINGLE,
 								   "MozillaEmbedSingle",
 								   &our_info, (GTypeFlags)0);
         }
@@ -286,10 +290,9 @@ static void
 mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	EphyEmbedSingleClass *shell_class;
+	EphyEmbedSingleClass *shell_class = EPHY_EMBED_SINGLE_CLASS (klass);
 	
 	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
-	shell_class = EPHY_EMBED_SINGLE_CLASS (klass);
 	
         object_class->finalize = mozilla_embed_single_finalize;
 
@@ -304,12 +307,14 @@ mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 	shell_class->list_passwords = impl_list_passwords;
 	shell_class->remove_passwords = impl_remove_passwords;
 	shell_class->show_file_picker = impl_show_file_picker;
+
+	g_type_class_add_private (object_class, sizeof(MozillaEmbedSinglePrivate));
 }
 
 EphyEmbedSingle *
 mozilla_embed_single_new (void)
 {
-	return EPHY_EMBED_SINGLE (g_object_new (MOZILLA_EMBED_SINGLE_TYPE, NULL));
+	return EPHY_EMBED_SINGLE (g_object_new (MOZILLA_TYPE_EMBED_SINGLE, NULL));
 }
 
 static gboolean
@@ -529,7 +534,7 @@ mozilla_register_external_protocols (void)
 static void
 mozilla_embed_single_init (MozillaEmbedSingle *mes)
 {
- 	mes->priv = g_new0 (MozillaEmbedSinglePrivate, 1);
+ 	mes->priv = MOZILLA_EMBED_SINGLE_GET_PRIVATE (mes);
 
 	mes->priv->theme_window = NULL;
 	mes->priv->user_prefs =
@@ -677,18 +682,11 @@ mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *embed,
 static void
 mozilla_embed_single_finalize (GObject *object)
 {
-	MozillaEmbedSingle *mes;
+	MozillaEmbedSingle *mes = MOZILLA_EMBED_SINGLE (object);
 
 	/* Destroy EphyEmbedSingle before because some
 	 * services depend on xpcom */
-        G_OBJECT_CLASS (parent_class)->finalize (object);
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_MOZILLA_EMBED_SINGLE (object));
-
-        mes = MOZILLA_EMBED_SINGLE (object);
-
-        g_return_if_fail (mes->priv != NULL);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 
 	mozilla_notifiers_free ();
 
@@ -700,8 +698,6 @@ mozilla_embed_single_finalize (GObject *object)
 	{
 		gtk_widget_destroy (mes->priv->theme_window);
 	}
-	
-        g_free (mes->priv);
 }
 
 static gresult      

@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -54,6 +56,8 @@ enum
 };
 
 static GObjectClass *parent_class = NULL;
+
+#define EPHY_PPVIEW_TOOLBAR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_PPVIEW_TOOLBAR, PPViewToolbarPrivate))
 
 struct PPViewToolbarPrivate
 {
@@ -123,30 +127,29 @@ static const gchar *ui_info =
 GType
 ppview_toolbar_get_type (void)
 {
-        static GType ppview_toolbar_type = 0;
+	static GType ppview_toolbar_type = 0;
 
-        if (ppview_toolbar_type == 0)
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (PPViewToolbarClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) ppview_toolbar_class_init,
-                        NULL,
-                        NULL, /* class_data */
-                        sizeof (PPViewToolbar),
-                        0, /* n_preallocs */
-                        (GInstanceInitFunc) ppview_toolbar_init
-                };
+	if (ppview_toolbar_type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (PPViewToolbarClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			(GClassInitFunc) ppview_toolbar_class_init,
+			NULL,
+			NULL, /* class_data */
+			sizeof (PPViewToolbar),
+			0, /* n_preallocs */
+			(GInstanceInitFunc) ppview_toolbar_init
+		};
 
-                ppview_toolbar_type = g_type_register_static (G_TYPE_OBJECT,
-						       "PPViewToolbar",
-						       &our_info, 0);
+		ppview_toolbar_type = g_type_register_static (G_TYPE_OBJECT,
+							      "PPViewToolbar",
+							      &our_info, 0);
         }
 
-        return ppview_toolbar_type;
-
+	return ppview_toolbar_type;
 }
 
 static void
@@ -166,8 +169,11 @@ ppview_toolbar_class_init (PPViewToolbarClass *klass)
                                          g_param_spec_object ("EphyWindow",
                                                               "EphyWindow",
                                                               "Parent window",
-                                                              EPHY_WINDOW_TYPE,
-                                                              G_PARAM_READWRITE));
+                                                              EPHY_TYPE_WINDOW,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof(PPViewToolbarPrivate));
 }
 
 static void
@@ -176,7 +182,7 @@ ppview_toolbar_set_property (GObject *object,
                       const GValue *value,
                       GParamSpec *pspec)
 {
-        PPViewToolbar *t = PPVIEW_TOOLBAR (object);
+        PPViewToolbar *t = EPHY_PPVIEW_TOOLBAR (object);
 
         switch (prop_id)
         {
@@ -192,7 +198,7 @@ ppview_toolbar_get_property (GObject *object,
                       GValue *value,
                       GParamSpec *pspec)
 {
-        PPViewToolbar *t = PPVIEW_TOOLBAR (object);
+        PPViewToolbar *t = EPHY_PPVIEW_TOOLBAR (object);
 
         switch (prop_id)
         {
@@ -251,7 +257,7 @@ ppview_toolbar_set_window (PPViewToolbar *t, EphyWindow *window)
 static void
 ppview_toolbar_init (PPViewToolbar *t)
 {
-        t->priv = g_new0 (PPViewToolbarPrivate, 1);
+	t->priv = EPHY_PPVIEW_TOOLBAR_GET_PRIVATE (t);
 
 	t->priv->window = NULL;
 	t->priv->ui_merge = NULL;
@@ -261,21 +267,12 @@ ppview_toolbar_init (PPViewToolbar *t)
 static void
 ppview_toolbar_finalize (GObject *object)
 {
-	PPViewToolbar *t;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_PPVIEW_TOOLBAR (object));
-
-	t = PPVIEW_TOOLBAR (object);
-
-        g_return_if_fail (t->priv != NULL);
+	PPViewToolbar *t = EPHY_PPVIEW_TOOLBAR (object);
 
 	gtk_ui_manager_remove_ui (t->priv->ui_merge, t->priv->ui_id);
 	gtk_ui_manager_remove_action_group (t->priv->ui_merge,
 					    t->priv->action_group);
 	g_object_unref (t->priv->action_group);
-
-        g_free (t->priv);
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -285,11 +282,9 @@ ppview_toolbar_new (EphyWindow *window)
 {
 	PPViewToolbar *t;
 
-	t = PPVIEW_TOOLBAR (g_object_new (PPVIEW_TOOLBAR_TYPE,
-					  "EphyWindow", window,
-					  NULL));
-
-	g_return_val_if_fail (t->priv != NULL, NULL);
+	t = EPHY_PPVIEW_TOOLBAR (g_object_new (EPHY_TYPE_PPVIEW_TOOLBAR,
+					       "EphyWindow", window,
+					       NULL));
 
 	return t;
 }
@@ -302,7 +297,7 @@ toolbar_cmd_ppv_goto_first (GtkUIManager *merge,
 	EphyEmbed *embed;
 
 	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
+	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	ephy_embed_print_preview_navigate (embed, PRINTPREVIEW_HOME, 0);
 
@@ -354,7 +349,7 @@ toolbar_cmd_ppv_go_back  (GtkUIManager *merge,
 	EphyEmbed *embed;
 
 	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
+	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	t->priv->current_page = clamp_page_limits (t, t->priv->current_page - 1);
 
@@ -373,7 +368,7 @@ toolbar_cmd_ppv_go_forward (GtkUIManager *merge,
 	EphyEmbed *embed;
 
 	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
+	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	t->priv->current_page = clamp_page_limits (t, t->priv->current_page + 1);
 
@@ -392,18 +387,18 @@ toolbar_cmd_ppv_close (GtkUIManager *merge,
 	EphyEmbed *embed;
 	GtkWidget *notebook;
 
-	g_return_if_fail (IS_PPVIEW_TOOLBAR (t));
+	g_return_if_fail (EPHY_IS_PPVIEW_TOOLBAR (t));
 
 	window = t->priv->window;
-	g_return_if_fail (IS_EPHY_WINDOW (window));
+	g_return_if_fail (EPHY_IS_WINDOW (window));
 
 	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (IS_EPHY_EMBED (embed));
+	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	ephy_window_set_chrome (window, t->priv->original_mask);
 
 	notebook = ephy_window_get_notebook (window);
-	g_return_if_fail (IS_EPHY_NOTEBOOK (notebook));
+	g_return_if_fail (EPHY_IS_NOTEBOOK (notebook));
 
 	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (notebook), TRUE);
 

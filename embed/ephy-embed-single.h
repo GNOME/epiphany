@@ -28,15 +28,14 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_EMBED_SINGLE		(ephy_embed_single_get_type ())
+#define EPHY_EMBED_SINGLE(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingle))
+#define EPHY_EMBED_SINGLE_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingleClass))
+#define EPHY_IS_EMBED_SINGLE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_SINGLE))
+#define EPHY_IS_EMBED_SINGLE_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_SINGLE))
+#define EPHY_EMBED_SINGLE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingleClass))
+
 typedef struct EphyEmbedSingleClass EphyEmbedSingleClass;
-
-#define EPHY_EMBED_SINGLE_TYPE             (ephy_embed_single_get_type ())
-#define EPHY_EMBED_SINGLE(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_EMBED_SINGLE_TYPE, EphyEmbedSingle))
-#define EPHY_EMBED_SINGLE_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_EMBED_SINGLE_TYPE, EphyEmbedSingleClass))
-#define IS_EPHY_EMBED_SINGLE(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_EMBED_SINGLE_TYPE))
-#define IS_EPHY_EMBED_SINGLE_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_EMBED_SINGLE_TYPE))
-#define EPHY_EMBED_SINGLE_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_EMBED_SINGLE_TYPE, EphyEmbedSingleClass))
-
 typedef struct EphyEmbedSingle EphyEmbedSingle;
 typedef struct EphyEmbedSinglePrivate EphyEmbedSinglePrivate;
 

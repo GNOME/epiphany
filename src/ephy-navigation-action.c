@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "ephy-navigation-action.h"
@@ -29,6 +31,8 @@ static void ephy_navigation_action_init       (EphyNavigationAction *action);
 static void ephy_navigation_action_class_init (EphyNavigationActionClass *class);
 
 static GObjectClass *parent_class = NULL;
+
+#define EPHY_NAVIGATION_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NAVIGATION_ACTION, EphyNavigationActionPrivate))
 
 struct EphyNavigationActionPrivate
 {
@@ -299,31 +303,17 @@ ephy_navigation_action_get_property (GObject *object,
 }
 
 static void
-ephy_navigation_action_finalize (GObject *object)
-{
-	EphyNavigationAction *action = EPHY_NAVIGATION_ACTION (object);
-
-	g_return_if_fail (action->priv != NULL);
-
-	g_free (action->priv);
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-static void
 ephy_navigation_action_class_init (EphyNavigationActionClass *class)
 {
-	GtkActionClass *action_class;
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
+	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
 
-	object_class->finalize = ephy_navigation_action_finalize;
 	object_class->set_property = ephy_navigation_action_set_property;
 	object_class->get_property = ephy_navigation_action_get_property;
 
 	parent_class = g_type_class_peek_parent (class);
-	action_class = GTK_ACTION_CLASS (class);
 
-	action_class->toolbar_item_type = EPHY_ARROW_TOOLBUTTON_TYPE;
+	action_class->toolbar_item_type = EPHY_TYPE_ARROW_TOOLBUTTON;
 	action_class->connect_proxy = connect_proxy;
 
 	g_object_class_install_property (object_class,
@@ -343,12 +333,13 @@ ephy_navigation_action_class_init (EphyNavigationActionClass *class)
                                                               G_TYPE_OBJECT,
                                                               G_PARAM_READWRITE));
 
+	g_type_class_add_private (object_class, sizeof(EphyNavigationActionPrivate));
 }
 
 static void
 ephy_navigation_action_init (EphyNavigationAction *action)
 {
-        action->priv = g_new0 (EphyNavigationActionPrivate, 1);
+        action->priv = EPHY_NAVIGATION_ACTION_GET_PRIVATE (action);
 }
 
 

@@ -26,15 +26,15 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_PPVIEW_TOOLBAR	(ppview_toolbar_get_type ())
+#define EPHY_PPVIEW_TOOLBAR(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_PPVIEW_TOOLBAR, PPViewToolbar))
+#define EPHY_PPVIEW_TOOLBAR_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_PPVIEW_TOOLBAR, PPViewToolbarClass))
+#define EPHY_IS_PPVIEW_TOOLBAR(o)	(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_PPVIEW_TOOLBAR))
+#define EPHY_IS_PPVIEW_TOOLBAR_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_PPVIEW_TOOLBAR))
+#define EPHY_PPVIEW_TOOLBAR_GET_CLASS(o)(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_PPVIEW_TOOLBAR, PPViewToolbarClass))
+
 typedef struct PPViewToolbar PPViewToolbar;
 typedef struct PPViewToolbarClass PPViewToolbarClass;
-
-#define PPVIEW_TOOLBAR_TYPE             (ppview_toolbar_get_type ())
-#define PPVIEW_TOOLBAR(obj)             (GTK_CHECK_CAST ((obj), PPVIEW_TOOLBAR_TYPE, PPViewToolbar))
-#define PPVIEW_TOOLBAR_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), PPVIEW_TOOLBAR, PPViewToolbarClass))
-#define IS_PPVIEW_TOOLBAR(obj)          (GTK_CHECK_TYPE ((obj), PPVIEW_TOOLBAR_TYPE))
-#define IS_PPVIEW_TOOLBAR_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), PPVIEW_TOOLBAR))
-
 typedef struct PPViewToolbarPrivate PPViewToolbarPrivate;
 
 struct PPViewToolbar

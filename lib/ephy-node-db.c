@@ -33,6 +33,8 @@ enum
 	PROP_NAME
 };
 
+#define EPHY_NODE_DB_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NODE_DB, EphyNodeDbPrivate))
+
 struct EphyNodeDbPrivate
 {
 	char *name;
@@ -142,12 +144,14 @@ ephy_node_db_class_init (EphyNodeDbClass *klass)
                                                                "Name",
                                                                NULL,
                                                                G_PARAM_READWRITE));
+
+	g_type_class_add_private (object_class, sizeof (EphyNodeDbPrivate));
 }
 
 static void
 ephy_node_db_init (EphyNodeDb *db)
 {
-	db->priv = g_new0 (EphyNodeDbPrivate, 1);
+	db->priv = EPHY_NODE_DB_GET_PRIVATE (db);
 
 	db->priv->name = NULL;
 
@@ -165,13 +169,7 @@ ephy_node_db_init (EphyNodeDb *db)
 static void
 ephy_node_db_finalize (GObject *object)
 {
-	EphyNodeDb *db;
-
-	g_return_if_fail (object != NULL);
-
-	db = EPHY_NODE_DB (object);
-
-	g_return_if_fail (db->priv != NULL);
+	EphyNodeDb *db = EPHY_NODE_DB (object);
 
 	g_hash_table_remove (ephy_node_databases, db->priv->name);
 	if (g_hash_table_size (ephy_node_databases) == 0)
@@ -186,8 +184,6 @@ ephy_node_db_finalize (GObject *object)
 	g_mutex_free (db->priv->id_factory_lock);
 
 	g_free (db->priv->name);
-
-	g_free (db->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

@@ -46,6 +46,9 @@ static void ephy_node_view_get_property (GObject *object,
 				         GValue *value,
 				         GParamSpec *pspec);
 
+
+#define EPHY_NODE_VIEW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NODE_VIEW, EphyNodeViewPrivate))
+
 struct EphyNodeViewPrivate
 {
 	EphyNode *root;
@@ -197,19 +200,14 @@ ephy_node_view_class_init (EphyNodeViewClass *klass)
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE,
 			      0);
+
+	g_type_class_add_private (object_class, sizeof (EphyNodeViewPrivate));
 }
 
 static void
 ephy_node_view_finalize (GObject *object)
 {
-	EphyNodeView *view;
-
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (EPHY_IS_NODE_VIEW (object));
-
-	view = EPHY_NODE_VIEW (object);
-
-	g_return_if_fail (view->priv != NULL);
+	EphyNodeView *view = EPHY_NODE_VIEW (object);
 
 	g_object_unref (G_OBJECT (view->priv->sortmodel));
 	g_object_unref (G_OBJECT (view->priv->filtermodel));
@@ -219,8 +217,6 @@ ephy_node_view_finalize (GObject *object)
 	{
 		gtk_target_list_unref (view->priv->source_target_list);
 	}
-
-	g_free (view->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -1304,7 +1300,8 @@ ephy_node_view_add_column (EphyNodeView *view,
 static void
 ephy_node_view_init (EphyNodeView *view)
 {
-	view->priv = g_new0 (EphyNodeViewPrivate, 1);
+	view->priv = EPHY_NODE_VIEW_GET_PRIVATE (view);
+
 	view->priv->editable_renderer = NULL;
 	view->priv->editing = TRUE;
 	view->priv->searchable_data_column = -1;

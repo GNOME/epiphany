@@ -25,12 +25,12 @@
 
 G_BEGIN_DECLS
 
-#define MOZILLA_EMBED_SINGLE_TYPE             (mozilla_embed_single_get_type ())
-#define MOZILLA_EMBED_SINGLE(obj)             (GTK_CHECK_CAST ((obj), MOZILLA_EMBED_SINGLE_TYPE, MozillaEmbedSingle))
-#define MOZILLA_EMBED_SINGLE_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), MOZILLA_EMBED_SINGLE_TYPE, MozillaEmbedSingleClass))
-#define IS_MOZILLA_EMBED_SINGLE(obj)          (GTK_CHECK_TYPE ((obj), MOZILLA_EMBED_SINGLE_TYPE))
-#define IS_MOZILLA_EMBED_SINGLE_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), MOZILLA_EMBED_SINGLE))
-#define MOZILLA_EMBED_SINGLE_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), MOZILLA_EMBED_SINGLE_TYPE, MozillaEmbedSingleClass))
+#define MOZILLA_TYPE_EMBED_SINGLE		(mozilla_embed_single_get_type ())
+#define MOZILLA_EMBED_SINGLE(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), MOZILLA_TYPE_EMBED_SINGLE, MozillaEmbedSingle))
+#define MOZILLA_EMBED_SINGLE_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), MOZILLA_TYPE_EMBED_SINGLE, MozillaEmbedSingleClass))
+#define MOZILLA_IS_EMBED_SINGLE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), MOZILLA_TYPE_EMBED_SINGLE))
+#define MOZILLA_IS_EMBED_SINGLE_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), MOZILLA_TYPE_EMBED_SINGLE))
+#define MOZILLA_EMBED_SINGLE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), MOZILLA_TYPE_EMBED_SINGLE, MozillaEmbedSingleClass))
 
 typedef struct MozillaEmbedSingle MozillaEmbedSingle;
 typedef struct MozillaEmbedSinglePrivate MozillaEmbedSinglePrivate;

@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -30,6 +32,9 @@
 /**
  * Private data
  */
+
+#define EPHY_FAVORITES_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FAVORITES_MENU, EphyFavoritesMenuPrivate))
+
 struct _EphyFavoritesMenuPrivate
 {
 	EphyWindow *window;
@@ -225,15 +230,18 @@ ephy_favorites_menu_class_init (EphyFavoritesMenuClass *klass)
                                          PROP_EPHY_WINDOW,
                                          g_param_spec_object ("EphyWindow",
                                                               "EphyWindow",
-                                                              "Parent window",
-                                                              EPHY_WINDOW_TYPE,
-                                                              G_PARAM_READWRITE));
+							      "Parent window",
+							      EPHY_TYPE_WINDOW,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof(EphyFavoritesMenuPrivate));
 }
 
 static void
 ephy_favorites_menu_init (EphyFavoritesMenu *wrhm)
 {
-	EphyFavoritesMenuPrivate *p = g_new0 (EphyFavoritesMenuPrivate, 1);
+	EphyFavoritesMenuPrivate *p = EPHY_FAVORITES_MENU_GET_PRIVATE (wrhm);
 	wrhm->priv = p;
 
 	wrhm->priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
@@ -254,8 +262,6 @@ ephy_favorites_menu_finalize (GObject *o)
 			 p->action_group);
 		g_object_unref (p->action_group);
 	}
-
-	g_free (p);
 
 	G_OBJECT_CLASS (parent_class)->finalize (o);
 }

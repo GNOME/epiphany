@@ -24,14 +24,14 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_NOTEBOOK		(ephy_notebook_get_type ())
+#define EPHY_NOTEBOOK(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_NOTEBOOK, EphyNotebook))
+#define EPHY_NOTEBOOK_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_NOTEBOOK, EphyNotebookClass))
+#define EPHY_IS_NOTEBOOK(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_NOTEBOOK))
+#define EPHY_IS_NOTEBOOK_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_NOTEBOOK))
+#define EPHY_NOTEBOOK_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_NOTEBOOK, EphyNotebookClass))
+
 typedef struct EphyNotebookClass EphyNotebookClass;
-
-#define EPHY_NOTEBOOK_TYPE             (ephy_notebook_get_type ())
-#define EPHY_NOTEBOOK(obj)             (GTK_CHECK_CAST ((obj), EPHY_NOTEBOOK_TYPE, EphyNotebook))
-#define EPHY_NOTEBOOK_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), EPHY_NOTEBOOK_TYPE, EphyNotebookClass))
-#define IS_EPHY_NOTEBOOK(obj)          (GTK_CHECK_TYPE ((obj), EPHY_NOTEBOOK_TYPE))
-#define IS_EPHY_NOTEBOOK_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), EPHY_NOTEBOOK))
-
 typedef struct EphyNotebook EphyNotebook;
 typedef struct EphyNotebookPrivate EphyNotebookPrivate;
 

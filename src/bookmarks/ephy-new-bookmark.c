@@ -51,6 +51,8 @@ static void ephy_new_bookmark_get_property (GObject *object,
 						GValue *value,
 						GParamSpec *pspec);
 
+#define EPHY_NEW_BOOKMARK_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NEW_BOOKMARK, EphyNewBookmarkPrivate))
+
 struct EphyNewBookmarkPrivate
 {
 	EphyBookmarks *bookmarks;
@@ -116,7 +118,7 @@ ephy_new_bookmark_class_init (EphyNewBookmarkClass *klass)
 					 g_param_spec_object ("bookmarks",
 							      "Bookmarks set",
 							      "Bookmarks set",
-							      EPHY_BOOKMARKS_TYPE,
+							      EPHY_TYPE_BOOKMARKS,
 							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 	g_object_class_install_property (object_class,
 					 PROP_LOCATION,
@@ -125,24 +127,17 @@ ephy_new_bookmark_class_init (EphyNewBookmarkClass *klass)
 							      "Bookmark location",
 							      "",
 							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof(EphyNewBookmarkPrivate));
 }
 
 static void
 ephy_new_bookmark_finalize (GObject *object)
 {
-	EphyNewBookmark *editor;
-
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (EPHY_IS_NEW_BOOKMARK (object));
-
-	editor = EPHY_NEW_BOOKMARK (object);
-
-	g_return_if_fail (editor->priv != NULL);
+	EphyNewBookmark *editor = EPHY_NEW_BOOKMARK (object);
 
 	g_free (editor->priv->location);
 	g_free (editor->priv->icon);
-
-	g_free (editor->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -460,7 +455,8 @@ ephy_new_bookmark_get_property (GObject *object,
 static void
 ephy_new_bookmark_init (EphyNewBookmark *editor)
 {
-	editor->priv = g_new0 (EphyNewBookmarkPrivate, 1);
+	editor->priv = EPHY_NEW_BOOKMARK_GET_PRIVATE (editor);
+
 	editor->priv->location = NULL;
 	editor->priv->icon = NULL;
 	editor->priv->id = 0;

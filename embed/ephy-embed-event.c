@@ -14,12 +14,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "ephy-embed-event.h"
 
 #include <glib/ghash.h>
 #include <gtk/gtktypeutils.h>
+
+#define EPHY_EMBED_EVENT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventPrivate))
 
 struct EphyEmbedEventPrivate
 {
@@ -71,6 +75,8 @@ ephy_embed_event_class_init (EphyEmbedEventClass *klass)
         parent_class = g_type_class_peek_parent (klass);
 
         object_class->finalize = ephy_embed_event_finalize;
+
+	g_type_class_add_private (object_class, sizeof(EphyEmbedEventPrivate));
 }
 
 static void
@@ -83,7 +89,7 @@ free_g_value (gpointer value)
 static void
 ephy_embed_event_init (EphyEmbedEvent *event)
 {
-        event->priv = g_new0 (EphyEmbedEventPrivate, 1);
+        event->priv = EPHY_EMBED_EVENT_GET_PRIVATE (event);
 
 	event->priv->props = g_hash_table_new_full (g_str_hash, g_str_equal,
 						    g_free, free_g_value);
@@ -92,18 +98,9 @@ ephy_embed_event_init (EphyEmbedEvent *event)
 static void
 ephy_embed_event_finalize (GObject *object)
 {
-        EphyEmbedEvent *event;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_EPHY_EMBED_EVENT (object));
-
-        event = EPHY_EMBED_EVENT (object);
-
-        g_return_if_fail (event->priv != NULL);
+        EphyEmbedEvent *event = EPHY_EMBED_EVENT (object);
 
 	g_hash_table_destroy (event->priv->props);
-
-	g_free (event->priv);
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -114,9 +111,7 @@ ephy_embed_event_new (void)
 {
 	EphyEmbedEvent *event;
 
-        event = EPHY_EMBED_EVENT (g_object_new (EPHY_EMBED_EVENT_TYPE, NULL));
-
-        g_return_val_if_fail (event->priv != NULL, NULL);
+        event = EPHY_EMBED_EVENT (g_object_new (EPHY_TYPE_EMBED_EVENT, NULL));
 
         return event;
 }

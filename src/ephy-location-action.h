@@ -21,6 +21,8 @@
 
 #include <gtk/gtkaction.h>
 
+G_BEGIN_DECLS
+
 #define EPHY_TYPE_LOCATION_ACTION            (ephy_location_action_get_type ())
 #define EPHY_LOCATION_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_LOCATION_ACTION, EphyLocationAction))
 #define EPHY_LOCATION_ACTION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_LOCATION_ACTION, EphyLocationActionClass))
@@ -46,5 +48,7 @@ struct _EphyLocationActionClass
 GType      ephy_location_action_get_type   (void);
 
 GtkWidget *ephy_location_action_get_widget (EphyLocationAction *action);
+
+G_END_DECLS
 
 #endif

@@ -25,15 +25,14 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_DIALOG	 (ephy_dialog_get_type ())
+#define EPHY_DIALOG(o)		 (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_DIALOG, EphyDialog))
+#define EPHY_DIALOG_CLASS(k)	 (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_DIALOG, EphyDialogClass))
+#define EPHY_IS_DIALOG(o)	 (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_DIALOG))
+#define EPHY_IS_DIALOG_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_DIALOG))
+#define EPHY_DIALOG_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_DIALOG, EphyDialogClass))
+
 typedef struct EphyDialogClass EphyDialogClass;
-
-#define EPHY_DIALOG_TYPE             (ephy_dialog_get_type ())
-#define EPHY_DIALOG(obj)             (GTK_CHECK_CAST ((obj), EPHY_DIALOG_TYPE, EphyDialog))
-#define EPHY_DIALOG_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), EPHY_DIALOG_TYPE, EphyDialogClass))
-#define IS_EPHY_DIALOG(obj)          (GTK_CHECK_TYPE ((obj), EPHY_DIALOG_TYPE))
-#define IS_EPHY_DIALOG_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), EPHY_DIALOG))
-#define EPHY_DIALOG_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_DIALOG_TYPE, EphyDialogClass))
-
 typedef struct EphyDialog EphyDialog;
 typedef struct EphyDialogPrivate EphyDialogPrivate;
 

@@ -37,6 +37,8 @@ enum
 	LAST_SIGNAL
 };
 
+#define EPHY_NODE_FILTER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NODE_FILTER, EphyNodeFilterPrivate))
+
 struct EphyNodeFilterPrivate
 {
 	GPtrArray *levels;
@@ -118,12 +120,14 @@ ephy_node_filter_class_init (EphyNodeFilterClass *klass)
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE,
 			      0);
+
+	g_type_class_add_private (object_class, sizeof (EphyNodeFilterPrivate));
 }
 
 static void
 ephy_node_filter_init (EphyNodeFilter *filter)
 {
-	filter->priv = g_new0 (EphyNodeFilterPrivate, 1);
+	filter->priv = EPHY_NODE_FILTER_GET_PRIVATE (filter);
 
 	filter->priv->levels = g_ptr_array_new ();
 }
@@ -131,14 +135,7 @@ ephy_node_filter_init (EphyNodeFilter *filter)
 static void
 ephy_node_filter_finalize (GObject *object)
 {
-	EphyNodeFilter *filter;
-
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (EPHY_IS_NODE_FILTER (object));
-
-	filter = EPHY_NODE_FILTER (object);
-
-	g_return_if_fail (filter->priv != NULL);
+	EphyNodeFilter *filter = EPHY_NODE_FILTER (object);
 
 	ephy_node_filter_empty (filter);
 

@@ -27,7 +27,8 @@
 
 static void ephy_search_entry_class_init (EphySearchEntryClass *klass);
 static void ephy_search_entry_init (EphySearchEntry *entry);
-static void ephy_search_entry_finalize (GObject *object);
+
+#define EPHY_SEARCH_ENTRY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SEARCH_ENTRY, EphySearchEntryPrivate))
 
 struct EphySearchEntryPrivate
 {
@@ -81,8 +82,6 @@ ephy_search_entry_class_init (EphySearchEntryClass *klass)
 
 	parent_class = g_type_class_peek_parent (klass);
 
-	object_class->finalize = ephy_search_entry_finalize;
-
 	ephy_search_entry_signals[SEARCH] =
 		g_signal_new ("search",
 			      G_OBJECT_CLASS_TYPE (object_class),
@@ -93,6 +92,8 @@ ephy_search_entry_class_init (EphySearchEntryClass *klass)
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_STRING);
+
+	g_type_class_add_private (object_class, sizeof (EphySearchEntryPrivate));
 }
 
 static gboolean
@@ -139,7 +140,10 @@ ephy_search_entry_destroy_cb (GtkEditable *editable,
 static void
 ephy_search_entry_init (EphySearchEntry *entry)
 {
-	entry->priv = g_new0 (EphySearchEntryPrivate, 1);
+	entry->priv = EPHY_SEARCH_ENTRY_GET_PRIVATE (entry);
+
+	entry->priv->clearing = FALSE;
+	entry->priv->timeout = 0;
 
 	g_signal_connect (G_OBJECT (entry),
 			  "destroy",
@@ -149,23 +153,6 @@ ephy_search_entry_init (EphySearchEntry *entry)
 			  "changed",
 			  G_CALLBACK (ephy_search_entry_changed_cb),
 			  entry);
-}
-
-static void
-ephy_search_entry_finalize (GObject *object)
-{
-	EphySearchEntry *entry;
-
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (EPHY_IS_SEARCH_ENTRY (object));
-
-	entry = EPHY_SEARCH_ENTRY (object);
-
-	g_return_if_fail (entry->priv != NULL);
-
-	g_free (entry->priv);
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 GtkWidget *

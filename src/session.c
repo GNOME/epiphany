@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -61,6 +63,8 @@ static void session_finalize (GObject *object);
 static void session_dispose (GObject *object);
 
 static GObjectClass *parent_class = NULL;
+
+#define EPHY_SESSION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SESSION, SessionPrivate))
 
 struct SessionPrivate
 {
@@ -137,6 +141,8 @@ session_class_init (SessionClass *klass)
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_OBJECT);
+
+	g_type_class_add_private (object_class, sizeof(SessionPrivate));
 }
 
 static char *
@@ -347,7 +353,8 @@ gnome_session_init (Session *session)
 static void
 session_init (Session *session)
 {
-        session->priv = g_new0 (SessionPrivate, 1);
+	session->priv = EPHY_SESSION_GET_PRIVATE (session);
+
 	session->priv->windows = NULL;
 	session->priv->dont_remove_crashed = FALSE;
 
@@ -393,7 +400,7 @@ session_delete (Session *session,
 static void
 session_dispose (GObject *object)
 {
-	Session *session = SESSION(object);
+	Session *session = EPHY_SESSION(object);
 
 	if (!session->priv->dont_remove_crashed)
 	{
@@ -404,18 +411,9 @@ session_dispose (GObject *object)
 static void
 session_finalize (GObject *object)
 {
-	Session *t;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_SESSION (object));
-
-	t = SESSION (object);
-
-        g_return_if_fail (t->priv != NULL);
+	Session *t = EPHY_SESSION (object);
 
 	g_list_free (t->priv->windows);
-
-        g_free (t->priv);
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -432,9 +430,7 @@ session_new (void)
 {
 	Session *t;
 
-	t = SESSION (g_object_new (SESSION_TYPE, NULL));
-
-	g_return_val_if_fail (t->priv != NULL, NULL);
+	t = EPHY_SESSION (g_object_new (EPHY_TYPE_SESSION, NULL));
 
 	return t;
 }
@@ -646,7 +642,7 @@ session_load (Session *session,
 const GList *
 session_get_windows (Session *session)
 {
-	g_return_val_if_fail (IS_SESSION (session), NULL);
+	g_return_val_if_fail (EPHY_IS_SESSION (session), NULL);
 
 	return session->priv->windows;
 }

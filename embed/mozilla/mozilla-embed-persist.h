@@ -26,15 +26,14 @@
 
 G_BEGIN_DECLS
 
+#define MOZILLA_TYPE_EMBED_PERSIST		(mozilla_embed_persist_get_type ())
+#define MOZILLA_EMBED_PERSIST(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), MOZILLA_TYPE_EMBED_PERSIST, MozillaEmbedPersist))
+#define MOZILLA_EMBED_PERSIST_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), MOZILLA_TYPE_EMBED_PERSIST, MozillaEmbedPersistClass))
+#define MOZILLA_IS_EMBED_PERSIST(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), MOZILLA_TYPE_EMBED_PERSIST))
+#define MOZILLA_IS_EMBED_PERSIST_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), MOZILLA_TYPE_EMBED_PERSIST))
+#define MOZILLA_EMBED_PERSIST_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), MOZILLA_TYPE_EMBED_PERSIST, MozillaEmbedPersistClass))
+
 typedef struct MozillaEmbedPersistClass MozillaEmbedPersistClass;
-
-#define MOZILLA_EMBED_PERSIST_TYPE             (mozilla_embed_persist_get_type ())
-#define MOZILLA_EMBED_PERSIST(obj)             (GTK_CHECK_CAST ((obj), MOZILLA_EMBED_PERSIST_TYPE, MozillaEmbedPersist))
-#define MOZILLA_EMBED_PERSIST_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), MOZILLA_EMBED_PERSIST_TYPE, MozillaEmbedPersistClass))
-#define IS_MOZILLA_EMBED_PERSIST(obj)          (GTK_CHECK_TYPE ((obj), MOZILLA_EMBED_PERSIST_TYPE))
-#define IS_MOZILLA_EMBED_PERSIST_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), MOZILLA_EMBED_PERSIST))
-#define MOZILLA_EMBED_PERSIST_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), MOZILLA_EMBED_PERSIST_TYPE, MozillaEmbedPersistClass))
-
 typedef struct MozillaEmbedPersist MozillaEmbedPersist;
 typedef struct MozillaEmbedPersistPrivate MozillaEmbedPersistPrivate;
 

@@ -41,6 +41,8 @@ enum
 	PROP_EPHY_EMBED
 };
 
+#define EPHY_EMBED_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_DIALOG, EphyEmbedDialogPrivate))
+
 struct EphyEmbedDialogPrivate
 {
 	EphyEmbed *embed;
@@ -68,7 +70,7 @@ ephy_embed_dialog_get_type (void)
                         (GInstanceInitFunc) ephy_embed_dialog_init
                 };
 
-                ephy_embed_dialog_type = g_type_register_static (EPHY_DIALOG_TYPE,
+                ephy_embed_dialog_type = g_type_register_static (EPHY_TYPE_DIALOG,
 								 "EphyEmbedDialog",
 								 &our_info, 0);
         }
@@ -94,12 +96,14 @@ ephy_embed_dialog_class_init (EphyEmbedDialogClass *klass)
                                                               "The dialog's embed",
                                                               G_TYPE_OBJECT,
                                                               G_PARAM_READWRITE));
+
+	g_type_class_add_private (object_class, sizeof(EphyEmbedDialogPrivate));
 }
 
 static void
 ephy_embed_dialog_init (EphyEmbedDialog *dialog)
 {
-        dialog->priv = g_new0 (EphyEmbedDialogPrivate, 1);
+        dialog->priv = EPHY_EMBED_DIALOG_GET_PRIVATE (dialog);
 
 	dialog->priv->embed = NULL;
 }
@@ -117,18 +121,9 @@ unset_embed (EphyEmbedDialog *dialog)
 static void
 ephy_embed_dialog_finalize (GObject *object)
 {
-        EphyEmbedDialog *dialog;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_EPHY_EMBED_DIALOG (object));
-
-        dialog = EPHY_EMBED_DIALOG (object);
-
-        g_return_if_fail (dialog->priv != NULL);
+        EphyEmbedDialog *dialog = EPHY_EMBED_DIALOG (object);
 
 	unset_embed (dialog);
-
-        g_free (dialog->priv);
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -168,7 +163,7 @@ ephy_embed_dialog_get_property (GObject *object,
 EphyEmbedDialog *
 ephy_embed_dialog_new (EphyEmbed *embed)
 {
-	return EPHY_EMBED_DIALOG (g_object_new (EPHY_EMBED_DIALOG_TYPE,
+	return EPHY_EMBED_DIALOG (g_object_new (EPHY_TYPE_EMBED_DIALOG,
 						"embed", embed,
 						NULL));
 }
@@ -178,7 +173,7 @@ ephy_embed_dialog_new_with_parent (GtkWidget *parent_window,
 				     EphyEmbed *embed)
 {
 	return EPHY_EMBED_DIALOG (g_object_new
-				    (EPHY_EMBED_DIALOG_TYPE,
+				    (EPHY_TYPE_EMBED_DIALOG,
 				     "ParentWindow", parent_window,
 				     "embed", embed,
 				     NULL));

@@ -24,15 +24,14 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_TOOLBARS_MODEL	(ephy_toolbars_model_get_type ())
+#define EPHY_TOOLBARS_MODEL(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_TOOLBARS_MODEL, EphyToolbarsModel))
+#define EPHY_TOOLBARS_MODEL_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_TOOLBARS_MODEL, EphyToolbarsModelClass))
+#define EPHY_IS_TOOLBARS_MODEL(o)	(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_TOOLBARS_MODEL))
+#define EPHY_IS_TOOLBARS_MODEL_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TOOLBARS_MODEL))
+#define EPHY_TOOLBARS_MODEL_GET_CLASS(o)(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TOOLBARS_MODEL, EphyToolbarsModelClass))
+
 typedef struct EphyToolbarsModelClass EphyToolbarsModelClass;
-
-#define EPHY_TOOLBARS_MODEL_TYPE             (ephy_toolbars_model_get_type ())
-#define EPHY_TOOLBARS_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TOOLBARS_MODEL_TYPE, EphyToolbarsModel))
-#define EPHY_TOOLBARS_MODEL_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TOOLBARS_MODEL_TYPE, EphyToolbarsModelClass))
-#define IS_EPHY_TOOLBARS_MODEL(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TOOLBARS_MODEL_TYPE))
-#define IS_EPHY_TOOLBARS_MODEL_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_TOOLBARS_MODEL_TYPE))
-#define EPHY_TOOLBARS_MODEL_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_TOOLBARS_MODEL_TYPE, EphyToolbarsModelClass))
-
 typedef struct EphyToolbarsModel EphyToolbarsModel;
 typedef struct EphyToolbarsModelPrivate EphyToolbarsModelPrivate;
 

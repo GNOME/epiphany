@@ -46,6 +46,8 @@
 #define TAB_MIN_SIZE 60
 #define TAB_NB_MAX    8
 
+#define EPHY_NOTEBOOK_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NOTEBOOK, EphyNotebookPrivate))
+
 struct EphyNotebookPrivate
 {
 	GList *focused_pages;
@@ -167,6 +169,8 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 			      ephy_marshal_VOID__VOID,
 			      G_TYPE_NONE,
 			      0);
+
+	g_type_class_add_private (object_class, sizeof(EphyNotebookPrivate));
 }
 
 static gboolean
@@ -573,7 +577,7 @@ button_press_cb (EphyNotebook *notebook,
 GtkWidget *
 ephy_notebook_new (void)
 {
-	return GTK_WIDGET (g_object_new (EPHY_NOTEBOOK_TYPE, NULL));
+	return GTK_WIDGET (g_object_new (EPHY_TYPE_NOTEBOOK, NULL));
 }
 
 static void
@@ -647,7 +651,7 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 	if (uris == NULL) return;
 
 	toplevel = gtk_widget_get_toplevel (widget);
-	g_return_if_fail (IS_EPHY_WINDOW (toplevel));
+	g_return_if_fail (EPHY_IS_WINDOW (toplevel));
 	window = EPHY_WINDOW (toplevel);
 
 	if (child)
@@ -721,7 +725,7 @@ tabs_visibility_notifier (GConfClient *client,
 static void
 ephy_notebook_init (EphyNotebook *notebook)
 {
-	notebook->priv = g_new (EphyNotebookPrivate, 1);
+	notebook->priv = EPHY_NOTEBOOK_GET_PRIVATE (notebook);
 
 	notebook->priv->title_tips = gtk_tooltips_new ();
 	g_object_ref (G_OBJECT (notebook->priv->title_tips));
@@ -776,8 +780,6 @@ ephy_notebook_finalize (GObject *object)
 	}
 	g_list_free (notebook->priv->opened_tabs);
 	g_object_unref (notebook->priv->title_tips);
-
-	g_free (notebook->priv);
 
 	LOG ("EphyNotebook finalised %p", object)
 }
@@ -963,9 +965,9 @@ ephy_notebook_insert_page (EphyNotebook *nb,
 	EphyTab *tab;
 	GtkWidget *label;
 
-	g_return_if_fail (IS_EPHY_EMBED (child));
+	g_return_if_fail (EPHY_IS_EMBED (child));
 	tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	label = build_tab_label (nb, child);
 
@@ -1063,11 +1065,11 @@ ephy_notebook_remove_page (EphyNotebook *nb,
 	EphyTab *tab;
 	GtkWidget *label, *ebox;
 
-	g_return_if_fail (IS_EPHY_NOTEBOOK (nb));
-	g_return_if_fail (IS_EPHY_EMBED (child));
+	g_return_if_fail (EPHY_IS_NOTEBOOK (nb));
+	g_return_if_fail (EPHY_IS_EMBED (child));
 
 	tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	num = gtk_notebook_get_n_pages (GTK_NOTEBOOK (nb));
 	if (num <= 1)

@@ -29,14 +29,14 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_WINDOW	(ephy_window_get_type ())
+#define EPHY_WINDOW(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_WINDOW, EphyWindow))
+#define EPHY_WINDOW_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_WINDOW, EphyWindowClass))
+#define EPHY_IS_WINDOW(o)	(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_WINDOW))
+#define EPHY_IS_WINDOW_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_WINDOW))
+#define EPHY_WINDOW_GET_CLASS(o)(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_WINDOW, EphyWindowClass))
+
 typedef struct EphyWindowClass EphyWindowClass;
-
-#define EPHY_WINDOW_TYPE             (ephy_window_get_type ())
-#define EPHY_WINDOW(obj)             (GTK_CHECK_CAST ((obj), EPHY_WINDOW_TYPE, EphyWindow))
-#define EPHY_WINDOW_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), EPHY_WINDOW, EphyWindowClass))
-#define IS_EPHY_WINDOW(obj)          (GTK_CHECK_TYPE ((obj), EPHY_WINDOW_TYPE))
-#define IS_EPHY_WINDOW_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), EPHY_WINDOW))
-
 typedef struct EphyWindow EphyWindow;
 typedef struct EphyWindowPrivate EphyWindowPrivate;
 typedef struct Toolbar Toolbar;

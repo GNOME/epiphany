@@ -24,15 +24,17 @@
 #include <glib-object.h>
 #include <glib.h>
 
+G_BEGIN_DECLS
+
+#define EPHY_TYPE_PREFS_DIALOG		(prefs_dialog_get_type ())
+#define EPHY_PREFS_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_PREFS_DIALOG, PrefsDialog))
+#define EPHY_PREFS_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_PREFS_DIALOG, PrefsDialogClass))
+#define EPHY_IS_PREFS_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_PREFS_DIALOG))
+#define EPHY_IS_PREFS_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_PREFS_DIALOG))
+#define EPHY_PREFS_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_PREFS_DIALOG, PrefsDialogClass))
+
 typedef struct PrefsDialog PrefsDialog;
 typedef struct PrefsDialogClass PrefsDialogClass;
-
-#define PREFS_DIALOG_TYPE             (prefs_dialog_get_type ())
-#define PREFS_DIALOG(obj)             (GTK_CHECK_CAST ((obj), PREFS_DIALOG_TYPE, PrefsDialog))
-#define PREFS_DIALOG_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), PREFS_DIALOG, PrefsDialogClass))
-#define IS_PREFS_DIALOG(obj)          (GTK_CHECK_TYPE ((obj), PREFS_DIALOG_TYPE))
-#define IS_PREFS_DIALOG_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), PREFS_DIALOG))
-
 typedef struct PrefsDialogPrivate PrefsDialogPrivate;
 
 struct PrefsDialog
@@ -49,5 +51,7 @@ struct PrefsDialogClass
 GType         prefs_dialog_get_type           (void);
 
 EphyDialog   *prefs_dialog_new		      (GtkWidget *parent);
+
+G_END_DECLS
 
 #endif

@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 
@@ -101,6 +103,8 @@ static void 		gnv_popup_cmd_frame_in_new_window	(BonoboUIComponent *uic,
 								 EphyEmbedPopupControl*popup, 
 								 const char* verbname);
 
+#define EPHY_NAUTILUS_VIEW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NAUTILUS_VIEW, EphyNautilusViewPrivate))
+
 struct EphyNautilusViewPrivate {
 	EphyEmbed *embed;
 	char *title;
@@ -140,7 +144,7 @@ static void
 ephy_nautilus_view_instance_init (EphyNautilusView *view)
 {
 	GtkWidget *w;
-	EphyNautilusViewPrivate *p = g_new0 (EphyNautilusViewPrivate, 1);
+	EphyNautilusViewPrivate *p = EPHY_NAUTILUS_VIEW_GET_PRIVATE (view);
 	EphyEmbedSingle *single;
 	float *levels;
 	gchar **names;
@@ -271,7 +275,6 @@ ephy_nautilus_view_finalize (GObject *object)
 
 	g_free (p->title);
 	g_free (p->location);
-	g_free (p);
 
 	GNOME_CALL_PARENT (G_OBJECT_CLASS, finalize, (object));
 
@@ -281,7 +284,11 @@ ephy_nautilus_view_finalize (GObject *object)
 static void
 ephy_nautilus_view_class_init (EphyNautilusViewClass *class)
 {
-	G_OBJECT_CLASS (class)->finalize = ephy_nautilus_view_finalize;
+	GObjectClas *object_class = G_OBJECT_CLASS (class);
+
+	object_class->finalize = ephy_nautilus_view_finalize;
+
+	g_type_class_add_private (object_class, sizeof(EphyNautilusViewPrivate));
 }
 
 static gint

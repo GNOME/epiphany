@@ -28,15 +28,14 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_EMBED_DIALOG		(ephy_embed_dialog_get_type ())
+#define EPHY_EMBED_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_DIALOG, EphyEmbedDialog))
+#define EPHY_EMBED_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_DIALOG, EphyEmbedDialogClass))
+#define EPHY_IS_EMBED_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_DIALOG))
+#define EPHY_IS_EMBED_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_DIALOG))
+#define EPHY_EMBED_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_DIALOG, EphyEmbedDialogClass))
+
 typedef struct EphyEmbedDialogClass EphyEmbedDialogClass;
-
-#define EPHY_EMBED_DIALOG_TYPE             (ephy_embed_dialog_get_type ())
-#define EPHY_EMBED_DIALOG(obj)             (GTK_CHECK_CAST ((obj), EPHY_EMBED_DIALOG_TYPE, EphyEmbedDialog))
-#define EPHY_EMBED_DIALOG_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), EPHY_EMBED_DIALOG_TYPE, EphyEmbedDialogClass))
-#define IS_EPHY_EMBED_DIALOG(obj)          (GTK_CHECK_TYPE ((obj), EPHY_EMBED_DIALOG_TYPE))
-#define IS_EPHY_EMBED_DIALOG_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), EPHY_EMBED_DIALOG))
-#define EPHY_EMBED_DIALOG_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_EMBED_DIALOG_TYPE, EphyEmbedDialogClass))
-
 typedef struct EphyEmbedDialog EphyEmbedDialog;
 typedef struct EphyEmbedDialogPrivate EphyEmbedDialogPrivate;
 

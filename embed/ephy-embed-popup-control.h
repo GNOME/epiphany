@@ -26,21 +26,14 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_EMBED_POPUP_CONTROL		(ephy_embed_popup_control_get_type ())
+#define EPHY_EMBED_POPUP_CONTROL(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_POPUP_CONTROL, EphyEmbedPopupControl))
+#define EPHY_EMBED_POPUP_CONTROL_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_POPUP_CONTROL, EphyEmbedPopupControlClass))
+#define EPHY_IS_EMBED_POPUP_CONTROL(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_POPUP_CONTROL))
+#define EPHY_IS_EMBED_POPUP_CONTROL_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_POPUP_CONTROL))
+#define EPHY_EMBED_POPUP_CONTROL_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_POPUP_CONTROL, EphyEmbedPopupControlClass))
+
 typedef struct EphyEmbedPopupControlClass EphyEmbedPopupControlClass;
-
-#define EPHY_EMBED_POPUP_CONTROL_TYPE		(ephy_embed_popup_control_get_type ())
-#define EPHY_EMBED_POPUP_CONTROL(obj)		(GTK_CHECK_CAST ((obj), EPHY_EMBED_POPUP_CONTROL_TYPE, \
-						 EphyEmbedPopupControl))
-#define EPHY_EMBED_POPUP_CONTROL_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), \
-						 EPHY_EMBED_POPUP_CONTROL_TYPE,\
-						 EphyEmbedPopupControlClass))
-#define IS_EPHY_EMBED_POPUP_CONTROL(obj)	(GTK_CHECK_TYPE ((obj), EPHY_EMBED_POPUP_CONTROL_TYPE))
-#define IS_EPHY_EMBED_POPUP_CONTROL_CLASS(klass)(GTK_CHECK_CLASS_TYPE ((klass), \
-						 EPHY_EMBED_POPUP_CONTROL))
-#define EPHY_EMBED_POPUP_CONTROL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-						 EPHY_EMBED_POPUP_CONTROL_TYPE, \
-						 EphyEmbedPopupControlClass))
-
 typedef struct EphyEmbedPopupControl EphyEmbedPopupControl;
 typedef struct EphyEmbedPopupControlPrivate EphyEmbedPopupControlPrivate;
 

@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "statusbar.h"
@@ -33,6 +35,8 @@ static void statusbar_init (Statusbar *t);
 static void statusbar_finalize (GObject *object);
 
 static GObjectClass *parent_class = NULL;
+
+#define EPHY_STATUSBAR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_STATUSBAR, StatusbarPrivate))
 
 struct StatusbarPrivate
 {
@@ -79,6 +83,8 @@ statusbar_class_init (StatusbarClass *klass)
         parent_class = g_type_class_peek_parent (klass);
 
         object_class->finalize = statusbar_finalize;
+
+	g_type_class_add_private (object_class, sizeof(StatusbarPrivate));
 }
 
 static void
@@ -120,7 +126,7 @@ create_statusbar_progress (Statusbar *s)
 static void
 statusbar_init (Statusbar *t)
 {
-        t->priv = g_new0 (StatusbarPrivate, 1);
+	t->priv = EPHY_STATUSBAR_GET_PRIVATE (t);
 
 	t->priv->tooltips = gtk_tooltips_new ();
 	g_object_ref (G_OBJECT (t->priv->tooltips));
@@ -135,18 +141,9 @@ statusbar_init (Statusbar *t)
 static void
 statusbar_finalize (GObject *object)
 {
-	Statusbar *t;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_STATUSBAR (object));
-
-	t = STATUSBAR (object);
-
-        g_return_if_fail (t->priv != NULL);
+	Statusbar *t = EPHY_STATUSBAR (object);
 
 	g_object_unref (t->priv->tooltips);
-
-        g_free (t->priv);
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -156,7 +153,7 @@ statusbar_new (void)
 {
 	GtkWidget *t;
 
-	t = GTK_WIDGET (g_object_new (STATUSBAR_TYPE,
+	t = GTK_WIDGET (g_object_new (EPHY_TYPE_STATUSBAR,
 				      NULL));
 
 	return t;

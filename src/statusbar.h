@@ -23,15 +23,15 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_STATUSBAR		(statusbar_get_type ())
+#define EPHY_STATUSBAR(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_STATUSBAR, Statusbar))
+#define EPHY_STATUSBAR_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_STATUSBAR, StatusbarClass))
+#define EPHY_IS_STATUSBAR(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_STATUSBAR))
+#define EPHY_IS_STATUSBAR_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_STATUSBAR))
+#define EPHY_STATUSBAR_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_STATUSBAR, StatusbarClass))
+
 typedef struct Statusbar Statusbar;
 typedef struct StatusbarClass StatusbarClass;
-
-#define STATUSBAR_TYPE             (statusbar_get_type ())
-#define STATUSBAR(obj)             (GTK_CHECK_CAST ((obj), STATUSBAR_TYPE, Statusbar))
-#define STATUSBAR_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), STATUSBAR, StatusbarClass))
-#define IS_STATUSBAR(obj)          (GTK_CHECK_TYPE ((obj), STATUSBAR_TYPE))
-#define IS_STATUSBAR_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), STATUSBAR))
-
 typedef struct StatusbarPrivate StatusbarPrivate;
 
 struct Statusbar

@@ -16,7 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *  $Id$
- *
  */
 
 #include "ephy-arrow-toolbutton.h"
@@ -29,6 +28,8 @@
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmain.h>
+
+#define EPHY_ARROW_TOOLBUTTON_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ARROW_TOOLBUTTON, EphyArrowToolButtonPrivate))
 
 struct EphyArrowToolButtonPrivate
 {
@@ -88,7 +89,7 @@ ephy_arrow_toolbutton_set_tooltip (GtkToolItem *tool_item,
 {
 	EphyArrowToolButton *button = EPHY_ARROW_TOOLBUTTON (tool_item);
 
-	g_return_val_if_fail (IS_EPHY_ARROW_TOOLBUTTON (button), FALSE);
+	g_return_val_if_fail (EPHY_IS_ARROW_TOOLBUTTON (button), FALSE);
 
 	gtk_tooltips_set_tip (tooltips, button->priv->button, tip_text, tip_private);
 
@@ -115,6 +116,8 @@ ephy_arrow_toolbutton_class_init (EphyArrowToolButtonClass *klass)
 		 NULL, NULL,
 		 ephy_marshal_VOID__VOID,
 		 G_TYPE_NONE, 0);
+
+	g_type_class_add_private (object_class, sizeof (EphyArrowToolButtonPrivate));
 }
 
 static void
@@ -202,7 +205,7 @@ ephy_arrow_toolbutton_init (EphyArrowToolButton *arrowtb)
 	GtkWidget *arrow_button;
 	GtkWidget *real_button;
 
-	arrowtb->priv = g_new (EphyArrowToolButtonPrivate, 1);
+	arrowtb->priv = EPHY_ARROW_TOOLBUTTON_GET_PRIVATE (arrowtb);
 
 	gtk_tool_item_set_homogeneous (GTK_TOOL_ITEM (arrowtb), FALSE);
 
@@ -255,8 +258,6 @@ ephy_arrow_toolbutton_finalize (GObject *object)
 	EphyArrowToolButton *arrow_toolbutton = EPHY_ARROW_TOOLBUTTON (object);
 
 	gtk_widget_destroy (GTK_WIDGET (arrow_toolbutton->priv->menu));
-
-	g_free (arrow_toolbutton->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

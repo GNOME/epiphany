@@ -26,15 +26,14 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_EMBED_EVENT		(ephy_embed_event_get_type ())
+#define EPHY_EMBED_EVENT(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_EVENT, EphyEmbedEvent))
+#define EPHY_EMBED_EVENT_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventClass))
+#define EPHY_IS_EMBED_EVENT(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_EVENT))
+#define EPHY_IS_EMBED_EVENT_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_EVENT))
+#define EPHY_EMBED_EVENT_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventClass))
+
 typedef struct EphyEmbedEventClass EphyEmbedEventClass;
-
-#define EPHY_EMBED_EVENT_TYPE             (ephy_embed_event_get_type ())
-#define EPHY_EMBED_EVENT(obj)             (GTK_CHECK_CAST ((obj), EPHY_EMBED_EVENT_TYPE, EphyEmbedEvent))
-#define EPHY_EMBED_EVENT_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), EPHY_PERSIST_SHELL, EphyEmbedEventClass))
-#define IS_EPHY_EMBED_EVENT(obj)          (GTK_CHECK_TYPE ((obj), EPHY_EMBED_EVENT_TYPE))
-#define IS_EPHY_EMBED_EVENT_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), EPHY_EMBED_EVENT))
-#define EPHY_EMBED_EVENT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_EMBED_SHELL_TYPE, EphyEmbedEventClass))
-
 typedef struct EphyEmbedEvent EphyEmbedEvent;
 typedef struct EphyEmbedEventPrivate EphyEmbedEventPrivate;
 

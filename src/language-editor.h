@@ -28,15 +28,15 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_LANGUAGE_EDITOR		(language_editor_get_type ())
+#define EPHY_LANGUAGE_EDITOR(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_LANGUAGE_EDITOR, LanguageEditor))
+#define EPHY_LANGUAGE_EDITOR_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_LANGUAGE_EDITOR, LanguageEditorClass))
+#define EPHY_IS_LANGUAGE_EDITOR(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_LANGUAGE_EDITOR))
+#define EPHY_IS_LANGUAGE_EDITOR_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_LANGUAGE_EDITOR))
+#define EPHY_LANGUAGE_EDITOR_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_LANGUAGE_EDITOR, LanguageEditorClass))
+
 typedef struct LanguageEditor LanguageEditor;
 typedef struct LanguageEditorClass LanguageEditorClass;
-
-#define LANGUAGE_EDITOR_TYPE             (language_editor_get_type ())
-#define LANGUAGE_EDITOR(obj)             (GTK_CHECK_CAST ((obj), LANGUAGE_EDITOR_TYPE, LanguageEditor))
-#define LANGUAGE_EDITOR_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), LANGUAGE_EDITOR, LanguageEditorClass))
-#define IS_LANGUAGE_EDITOR(obj)          (GTK_CHECK_TYPE ((obj), LANGUAGE_EDITOR_TYPE))
-#define IS_LANGUAGE_EDITOR_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), LANGUAGE_EDITOR))
-
 typedef struct LanguageEditorPrivate LanguageEditorPrivate;
 
 struct LanguageEditor

@@ -29,15 +29,14 @@
 
 G_BEGIN_DECLS
 
+#define MOZILLA_TYPE_EMBED		(mozilla_embed_get_type ())
+#define MOZILLA_EMBED(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), MOZILLA_TYPE_EMBED, MozillaEmbed))
+#define MOZILLA_EMBED_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), MOZILLA_TYPE_EMBED, MozillaEmbedClass))
+#define MOZILLA_IS_EMBED(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), MOZILLA_TYPE_EMBED))
+#define MOZILLA_IS_EMBED_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), MOZILLA_TYPE_EMBED))
+#define MOZILLA_EMBED_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), MOZILLA_TYPE_EMBED, MozillaEmbedClass))
+
 typedef struct MozillaEmbedClass MozillaEmbedClass;
-
-#define MOZILLA_EMBED_TYPE             (mozilla_embed_get_type ())
-#define MOZILLA_EMBED(obj)             (GTK_CHECK_CAST ((obj), MOZILLA_EMBED_TYPE, MozillaEmbed))
-#define MOZILLA_EMBED_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), MOZILLA_EMBED_TYPE, MozillaEmbedClass))
-#define IS_MOZILLA_EMBED(obj)          (GTK_CHECK_TYPE ((obj), MOZILLA_EMBED_TYPE))
-#define IS_MOZILLA_EMBED_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), MOZILLA_EMBED))
-#define MOZILLA_EMBED_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), MOZILLA_EMBED_TYPE, MozillaEmbedClass))
-
 typedef struct MozillaEmbed MozillaEmbed;
 typedef struct MozillaEmbedPrivate MozillaEmbedPrivate;
 

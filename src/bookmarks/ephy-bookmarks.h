@@ -25,14 +25,14 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_BOOKMARKS		(ephy_bookmarks_get_type ())
+#define EPHY_BOOKMARKS(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_BOOKMARKS, EphyBookmarks))
+#define EPHY_BOOKMARKS_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_BOOKMARKS, EphyBookmarksClass))
+#define EPHY_IS_BOOKMARKS(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_BOOKMARKS))
+#define EPHY_IS_BOOKMARKS_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_BOOKMARKS))
+#define EPHY_BOOKMARKS_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_BOOKMARKS, EphyBookmarksClass))
+
 typedef struct EphyBookmarksClass EphyBookmarksClass;
-
-#define EPHY_BOOKMARKS_TYPE             (ephy_bookmarks_get_type ())
-#define EPHY_BOOKMARKS(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_BOOKMARKS_TYPE, EphyBookmarks))
-#define EPHY_BOOKMARKS_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_BOOKMARKS_TYPE, EphyBookmarksClass))
-#define IS_EPHY_BOOKMARKS(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_BOOKMARKS_TYPE))
-#define IS_EPHY_BOOKMARKS_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_BOOKMARKS_TYPE))
-
 typedef struct EphyBookmarks EphyBookmarks;
 typedef struct EphyBookmarksPrivate EphyBookmarksPrivate;
 

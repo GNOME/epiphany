@@ -41,6 +41,8 @@
 
 #define spinner_DEFAULT_TIMEOUT 100	/* Milliseconds Per Frame */
 
+#define EPHY_SPINNER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SPINNER, EphySpinnerDetails))
+
 struct EphySpinnerDetails {
 	GList	*image_list;
 	GdkPixbuf *quiescent_pixbuf;
@@ -108,7 +110,7 @@ ephy_spinner_new (void)
 {
         GtkWidget *s;
 
-        s = GTK_WIDGET (g_object_new (EPHY_SPINNER_TYPE, NULL));
+        s = GTK_WIDGET (g_object_new (EPHY_TYPE_SPINNER, NULL));
 
         return s;
 }
@@ -173,7 +175,7 @@ ephy_spinner_init (EphySpinner *spinner)
 			       | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK
 			       | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
 
-	spinner->details = g_new0 (EphySpinnerDetails, 1);
+	spinner->details = EPHY_SPINNER_GET_PRIVATE (spinner);
 
 	spinner->details->delay = spinner_DEFAULT_TIMEOUT;
 	spinner->details->icon_theme = gnome_icon_theme_new ();
@@ -231,7 +233,7 @@ ephy_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
 	int x_offset, y_offset, width, height;
 	GdkRectangle pix_area, dest;
 
-	g_return_val_if_fail (IS_EPHY_SPINNER (widget), FALSE);
+	g_return_val_if_fail (EPHY_IS_SPINNER (widget), FALSE);
 
 	spinner = EPHY_SPINNER (widget);
 
@@ -506,16 +508,12 @@ ephy_spinner_size_request (GtkWidget *widget, GtkRequisition *requisition)
 static void
 ephy_spinner_finalize (GObject *object)
 {
-	EphySpinner *spinner;
-
-	spinner = EPHY_SPINNER (object);
+	EphySpinner *spinner = EPHY_SPINNER (object);
 
 	ephy_spinner_remove_update_callback (spinner);
 	ephy_spinner_unload_images (spinner);
 
 	g_object_unref (spinner->details->icon_theme);
-
-	g_free (spinner->details);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -523,13 +521,18 @@ ephy_spinner_finalize (GObject *object)
 static void
 ephy_spinner_class_init (EphySpinnerClass *class)
 {
+	GObjectClass *object_class;
 	GtkWidgetClass *widget_class;
 
-	parent_class = g_type_class_peek_parent (class);
+	object_class = G_OBJECT_CLASS (class);
 	widget_class = GTK_WIDGET_CLASS (class);
 
-	G_OBJECT_CLASS (class)->finalize = ephy_spinner_finalize;
+	parent_class = g_type_class_peek_parent (class);
+
+	object_class->finalize = ephy_spinner_finalize;
 
 	widget_class->expose_event = ephy_spinner_expose;
 	widget_class->size_request = ephy_spinner_size_request;
+
+	g_type_class_add_private (object_class, sizeof (EphySpinnerDetails));
 }

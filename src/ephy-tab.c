@@ -51,6 +51,8 @@
 #include <gtk/gtkuimanager.h>
 #include <string.h>
 
+#define EPHY_TAB_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TAB, EphyTabPrivate))
+
 struct EphyTabPrivate
 {
 	EphyEmbed *embed;
@@ -226,7 +228,7 @@ ephy_tab_get_property (GObject *object,
 static void
 ephy_tab_action_activate_cb (GtkAction *action, EphyTab *tab)
 {
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	ephy_window_jump_to_tab (tab->priv->window, tab);
 }
@@ -327,7 +329,7 @@ ephy_tab_class_init (EphyTabClass *class)
 					 g_param_spec_object ("window",
 							      "Window",
 							      "The tab's parent window",
-							      EPHY_WINDOW_TYPE,
+							      EPHY_TYPE_WINDOW,
 							      G_PARAM_READWRITE));
 
 	g_object_class_install_property (object_class,
@@ -339,6 +341,8 @@ ephy_tab_class_init (EphyTabClass *class)
 							     ZOOM_MAXIMAL,
 							     1.0,
 							     G_PARAM_READABLE));
+
+	g_type_class_add_private (object_class, sizeof(EphyTabPrivate));
 }
 
 static void
@@ -362,13 +366,7 @@ ephy_tab_embed_destroy_cb (GtkWidget *widget, EphyTab *tab)
 static void
 ephy_tab_finalize (GObject *object)
 {
-        EphyTab *tab;
-
-	g_return_if_fail (IS_EPHY_TAB (object));
-
-	tab = EPHY_TAB (object);
-
-        g_return_if_fail (tab->priv != NULL);
+        EphyTab *tab = EPHY_TAB (object);
 
 	g_idle_remove_by_data (tab->priv->embed);
 
@@ -383,8 +381,6 @@ ephy_tab_finalize (GObject *object)
 	g_free (tab->priv->link_message);
 	g_free (tab->priv->status_message);
 
-        g_free (tab->priv);
-
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 
 	LOG ("EphyTab finalized %p", tab)
@@ -397,15 +393,15 @@ ephy_tab_new (void)
 {
 	EphyTab *tab;
 
-	tab = EPHY_TAB (g_object_new (EPHY_TAB_TYPE, NULL));
-	g_return_val_if_fail (tab->priv != NULL, NULL);
+	tab = EPHY_TAB (g_object_new (EPHY_TYPE_TAB, NULL));
+
 	return tab;
 }
 
 static void
 ephy_tab_set_load_status (EphyTab *tab, gboolean status)
 {
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	tab->priv->load_status = status;
 
@@ -415,7 +411,7 @@ ephy_tab_set_load_status (EphyTab *tab, gboolean status)
 gboolean
 ephy_tab_get_load_status (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), FALSE);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), FALSE);
 
 	return tab->priv->load_status;
 }
@@ -423,7 +419,7 @@ ephy_tab_get_load_status (EphyTab *tab)
 static void
 ephy_tab_set_link_message (EphyTab *tab, const char *message)
 {
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	g_free (tab->priv->link_message);
 	tab->priv->link_message = g_strdup (message);
@@ -434,7 +430,7 @@ ephy_tab_set_link_message (EphyTab *tab, const char *message)
 const char *
 ephy_tab_get_link_message (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), NULL);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
 
 	return tab->priv->link_message;
 }
@@ -442,7 +438,7 @@ ephy_tab_get_link_message (EphyTab *tab)
 EphyEmbed *
 ephy_tab_get_embed (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), NULL);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
 
 	return tab->priv->embed;
 }
@@ -450,8 +446,8 @@ ephy_tab_get_embed (EphyTab *tab)
 void
 ephy_tab_set_window (EphyTab *tab, EphyWindow *window)
 {
-	g_return_if_fail (IS_EPHY_TAB (tab));
-	if (window) g_return_if_fail (IS_EPHY_WINDOW (window));
+	g_return_if_fail (EPHY_IS_TAB (tab));
+	if (window) g_return_if_fail (EPHY_IS_WINDOW (window));
 
 	if (window != tab->priv->window)
 	{
@@ -464,7 +460,7 @@ ephy_tab_set_window (EphyTab *tab, EphyWindow *window)
 EphyWindow *
 ephy_tab_get_window (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), NULL);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
 
 	return tab->priv->window;
 }
@@ -472,7 +468,7 @@ ephy_tab_get_window (EphyTab *tab)
 void
 ephy_tab_get_size (EphyTab *tab, int *width, int *height)
 {
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	*width = tab->priv->width;
 	*height = tab->priv->height;
@@ -481,7 +477,7 @@ ephy_tab_get_size (EphyTab *tab, int *width, int *height)
 gboolean
 ephy_tab_get_visibility (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), FALSE);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), FALSE);
 
 	return tab->priv->visibility;
 }
@@ -490,7 +486,7 @@ void
 ephy_tab_set_visibility (EphyTab *tab,
                          gboolean visible)
 {
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	tab->priv->visibility = visible;
 
@@ -519,7 +515,7 @@ ephy_tab_set_icon_address (EphyTab *tab, const char *address)
 	EphyBookmarks *eb;
 	EphyHistory *history;
 
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	g_free (tab->priv->icon_address);
 
@@ -542,7 +538,7 @@ ephy_tab_set_icon_address (EphyTab *tab, const char *address)
 const char *
 ephy_tab_get_icon_address (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), NULL);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
 
 	return tab->priv->icon_address;
 }
@@ -766,7 +762,7 @@ ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 			/* tab load completed, save in session */
 			Session *s;
 
-			s = SESSION (ephy_shell_get_session (ephy_shell));
+			s = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
 			session_save (s, SESSION_CRASHED);
 
 			ephy_tab_set_load_percent (tab, 0);
@@ -822,7 +818,7 @@ ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
 static void
 ephy_tab_destroy_brsr_cb (EphyEmbed *embed, EphyTab *tab)
 {
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 	g_return_if_fail (tab->priv->window != NULL);
 
 	ephy_window_remove_tab (tab->priv->window, tab);
@@ -929,7 +925,7 @@ ephy_tab_dom_mouse_click_cb  (EphyEmbed *embed,
 	window = ephy_tab_get_window (tab);
 	g_return_val_if_fail (window != NULL, FALSE);
 
-	g_assert (IS_EPHY_EMBED_EVENT(event));
+	g_assert (EPHY_IS_EMBED_EVENT(event));
 
 	ephy_embed_event_get_event_type (event, &type);
 	ephy_embed_event_get_context (event, &context);
@@ -980,7 +976,7 @@ ephy_tab_init (EphyTab *tab)
 	single = ephy_embed_shell_get_embed_single
 		(EPHY_EMBED_SHELL (ephy_shell));
 
-        tab->priv = g_new0 (EphyTabPrivate, 1);
+	tab->priv = EPHY_TAB_GET_PRIVATE (tab);
 
 	tab->priv->window = NULL;
 	tab->priv->status_message = NULL;
@@ -1075,7 +1071,7 @@ ephy_tab_init (EphyTab *tab)
 void
 ephy_tab_set_load_percent (EphyTab *tab, int percent)
 {
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	if (percent != tab->priv->load_percent)
 	{
@@ -1088,7 +1084,7 @@ ephy_tab_set_load_percent (EphyTab *tab, int percent)
 int
 ephy_tab_get_load_percent (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), -1);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), -1);
 
 	return tab->priv->load_percent;
 }
@@ -1127,7 +1123,7 @@ ephy_tab_update_navigation_flags (EphyTab *tab)
 TabNavigationFlags
 ephy_tab_get_navigation_flags (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), 0);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), 0);
 
 	return tab->priv->nav_flags;
 }
@@ -1135,7 +1131,7 @@ ephy_tab_get_navigation_flags (EphyTab *tab)
 const char *
 ephy_tab_get_status_message (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), "");
+	g_return_val_if_fail (EPHY_IS_TAB (tab), "");
 
 	if (tab->priv->link_message && tab->priv->link_message[0] != '\0')
 	{
@@ -1159,7 +1155,7 @@ ephy_tab_set_title (EphyTab *tab, const char *new_title)
 	char *title_short = NULL;
 	char *title = NULL;
 
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	g_free (tab->priv->title);
 
@@ -1223,7 +1219,7 @@ ephy_tab_set_title (EphyTab *tab, const char *new_title)
 const char *
 ephy_tab_get_title (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), "");
+	g_return_val_if_fail (EPHY_IS_TAB (tab), "");
 
 	return tab->priv->title;
 }
@@ -1231,7 +1227,7 @@ ephy_tab_get_title (EphyTab *tab)
 const char *
 ephy_tab_get_location (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), "");
+	g_return_val_if_fail (EPHY_IS_TAB (tab), "");
 
 	return tab->priv->address;
 }
@@ -1241,7 +1237,7 @@ ephy_tab_set_location (EphyTab *tab,
 		       const char *address,
 		       TabAddressExpire expire)
 {
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	if (tab->priv->address) g_free (tab->priv->address);
 	tab->priv->address = g_strdup (address);
@@ -1262,7 +1258,7 @@ ephy_tab_set_location (EphyTab *tab,
 static void
 ephy_tab_set_security_level (EphyTab *tab, EmbedSecurityLevel level)
 {
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	tab->priv->security_level = level;
 
@@ -1272,7 +1268,7 @@ ephy_tab_set_security_level (EphyTab *tab, EmbedSecurityLevel level)
 EmbedSecurityLevel
 ephy_tab_get_security_level (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), STATE_IS_UNKNOWN);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), STATE_IS_UNKNOWN);
 
 	return tab->priv->security_level;
 }
@@ -1280,7 +1276,7 @@ ephy_tab_get_security_level (EphyTab *tab)
 static void
 ephy_tab_set_zoom (EphyTab *tab, float zoom)
 {
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	tab->priv->zoom = zoom;
 
@@ -1290,7 +1286,7 @@ ephy_tab_set_zoom (EphyTab *tab, float zoom)
 float
 ephy_tab_get_zoom (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), 1.0);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), 1.0);
 
 	return tab->priv->zoom;
 }
@@ -1298,7 +1294,7 @@ ephy_tab_get_zoom (EphyTab *tab)
 GObject *
 ephy_tab_get_action (EphyTab *tab)
 {
-	g_return_val_if_fail (IS_EPHY_TAB (tab), NULL);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
 
 	return G_OBJECT (tab->priv->action);
 }

@@ -15,6 +15,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -27,6 +29,8 @@
 
 #include <glib-object.h>
 #include <bonobo/bonobo-i18n.h>
+
+#define EPHY_ZOOM_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ZOOM_ACTION, EphyZoomActionPrivate))
 
 struct _EphyZoomActionPrivate {
 	float zoom;
@@ -41,7 +45,6 @@ enum
 
 static void ephy_zoom_action_init       (EphyZoomAction *action);
 static void ephy_zoom_action_class_init (EphyZoomActionClass *class);
-static void ephy_zoom_action_finalize	(GObject *object);
 
 enum
 {
@@ -150,15 +153,13 @@ ephy_zoom_action_get_property (GObject *object,
 static void
 ephy_zoom_action_class_init (EphyZoomActionClass *class)
 {
-	GtkActionClass *action_class;
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
+	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
 
 	object_class->set_property = ephy_zoom_action_set_property;
 	object_class->get_property = ephy_zoom_action_get_property;
-	object_class->finalize = ephy_zoom_action_finalize;
 
 	parent_class = g_type_class_peek_parent (class);
-	action_class = GTK_ACTION_CLASS (class);
 
 	action_class->toolbar_item_type = EPHY_TYPE_ZOOM_CONTROL;
 	action_class->connect_proxy = connect_proxy;
@@ -183,24 +184,16 @@ ephy_zoom_action_class_init (EphyZoomActionClass *class)
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_FLOAT);
+
+	g_type_class_add_private (object_class, sizeof (EphyZoomActionPrivate));
 }
 
 static void
 ephy_zoom_action_init (EphyZoomAction *action)
 {
-	action->priv = g_new0 (EphyZoomActionPrivate, 1);
+	action->priv = EPHY_ZOOM_ACTION_GET_PRIVATE (action);
 
 	action->priv->zoom = 1.0;
-}
-
-static void
-ephy_zoom_action_finalize (GObject *object)
-{
-	EphyZoomAction *action = EPHY_ZOOM_ACTION (object);
-
-	g_free (action->priv);
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 void

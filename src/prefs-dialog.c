@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -305,6 +307,8 @@ typedef struct
 	gchar *code;
 } EphyLangItem;
 
+#define EPHY_PREFS_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_PREFS_DIALOG, PrefsDialogPrivate))
+
 struct PrefsDialogPrivate
 {
 	GtkWidget *notebook;
@@ -341,7 +345,7 @@ prefs_dialog_get_type (void)
                         (GInstanceInitFunc) prefs_dialog_init
                 };
 
-                prefs_dialog_type = g_type_register_static (EPHY_DIALOG_TYPE,
+		prefs_dialog_type = g_type_register_static (EPHY_TYPE_DIALOG,
 							    "PrefsDialog",
 							    &our_info, 0);
         }
@@ -353,9 +357,9 @@ prefs_dialog_get_type (void)
 EphyDialog *
 prefs_dialog_new (GtkWidget *parent)
 {
-        EphyDialog *dialog;
+	EphyDialog *dialog;
 
-        dialog = EPHY_DIALOG (g_object_new (PREFS_DIALOG_TYPE,
+	dialog = EPHY_DIALOG (g_object_new (EPHY_TYPE_PREFS_DIALOG,
 					    "ParentWindow", parent,
 					    NULL));
 
@@ -370,6 +374,8 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
         parent_class = g_type_class_peek_parent (klass);
 
         object_class->finalize = prefs_dialog_finalize;
+
+	g_type_class_add_private (object_class, sizeof(PrefsDialogPrivate));
 }
 
 static void
@@ -386,14 +392,7 @@ free_lang_item (EphyLangItem *item, gpointer user_data)
 static void
 prefs_dialog_finalize (GObject *object)
 {
-        PrefsDialog *pd;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_PREFS_DIALOG (object));
-
-	pd = PREFS_DIALOG (object);
-
-        g_return_if_fail (pd->priv != NULL);
+	PrefsDialog *pd = EPHY_PREFS_DIALOG (object);
 
 	g_list_foreach (pd->priv->langs, (GFunc) free_lang_item, NULL);
 	g_list_free (pd->priv->langs);
@@ -406,8 +405,6 @@ prefs_dialog_finalize (GObject *object)
 
 	g_list_foreach (pd->priv->fonts_languages, (GFunc) g_free, NULL);
 	g_list_free (pd->priv->fonts_languages);
-
-        g_free (pd->priv);
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -814,11 +811,11 @@ autodetect_encoding_menu_changed_cb (GtkOptionMenu *option_menu, gpointer data)
 	guint i;
 	EncodingAutodetectorInfo *info;
 
-	g_return_if_fail (IS_PREFS_DIALOG (data));
+	g_return_if_fail (EPHY_IS_PREFS_DIALOG (data));
 
 	i = gtk_option_menu_get_history (option_menu);
 
-	l = g_list_nth (PREFS_DIALOG (data)->priv->autodetectors, i);
+	l = g_list_nth (EPHY_PREFS_DIALOG (data)->priv->autodetectors, i);
 
 	if (l)
 	{
@@ -997,7 +994,7 @@ language_menu_changed_cb (GtkOptionMenu *option_menu,
 	GSList *list = NULL;
 	GList *lang = NULL;
 
-	g_return_if_fail (IS_PREFS_DIALOG (data));
+	g_return_if_fail (EPHY_IS_PREFS_DIALOG (data));
 
 	list = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
 	g_return_if_fail (list != NULL);
@@ -1005,7 +1002,7 @@ language_menu_changed_cb (GtkOptionMenu *option_menu,
 	/* Subst the first item according to the optionmenu */
 	i = gtk_option_menu_get_history (option_menu);
 
-	lang = g_list_nth (PREFS_DIALOG (data)->priv->langs, i);
+	lang = g_list_nth (EPHY_PREFS_DIALOG (data)->priv->langs, i);
 
 	if (lang)
 	{
@@ -1082,7 +1079,7 @@ prefs_dialog_init (PrefsDialog *pd)
 	EphyDialog *dialog = EPHY_DIALOG (pd);
 	GdkPixbuf *icon;
 
-	pd->priv = g_new0 (PrefsDialogPrivate, 1);
+	pd->priv = EPHY_PREFS_DIALOG_GET_PRIVATE (pd);
 
 	ephy_dialog_construct (EPHY_DIALOG (pd),
 			       properties,
@@ -1152,7 +1149,7 @@ fonts_language_optionmenu_changed_cb (GtkWidget *optionmenu,
 				      EphyDialog *dialog)
 {
 	guint i;
-	PrefsDialog *pd = PREFS_DIALOG (dialog);
+	PrefsDialog *pd = EPHY_PREFS_DIALOG (dialog);
 
 	i = gtk_option_menu_get_history
 		(GTK_OPTION_MENU (optionmenu));
@@ -1264,12 +1261,12 @@ prefs_language_more_button_clicked_cb (GtkWidget *button,
 	GtkWidget *menu;
 	GtkWidget *toplevel;
 
-	menu = general_prefs_new_language_menu (PREFS_DIALOG (dialog));
+	menu = general_prefs_new_language_menu (EPHY_PREFS_DIALOG (dialog));
 
 	toplevel = gtk_widget_get_toplevel (button);
 	editor = language_editor_new (toplevel);
 	language_editor_set_menu (editor, menu);
-	fill_language_editor (editor, PREFS_DIALOG (dialog));
+	fill_language_editor (editor, EPHY_PREFS_DIALOG (dialog));
 	ephy_dialog_set_modal (EPHY_DIALOG(editor), TRUE);
 
 	g_signal_connect (editor, "changed",

@@ -29,19 +29,20 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_SHELL		(ephy_shell_get_type ())
+#define EPHY_SHELL(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_SHELL, EphyShell))
+#define EPHY_SHELL_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_SHELL, EphyShellClass))
+#define EPHY_IS_SHELL(o)	(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_SHELL))
+#define EPHY_IS_SHELL_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_SHELL))
+#define EPHY_SHELL_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SHELL, EphyShellClass))
+
+/* FIXME: huh? */
 #ifndef EPHY_SHELL_TYPE_DEF
 typedef struct EphyShell EphyShell;
 #define EPHY_SHELL_TYPE_DEF
 #endif
 
 typedef struct EphyShellClass EphyShellClass;
-
-#define EPHY_SHELL_TYPE             (ephy_shell_get_type ())
-#define EPHY_SHELL(obj)             (GTK_CHECK_CAST ((obj), EPHY_SHELL_TYPE, EphyShell))
-#define EPHY_SHELL_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), EPHY_SHELL, EphyShellClass))
-#define IS_EPHY_SHELL(obj)          (GTK_CHECK_TYPE ((obj), EPHY_SHELL_TYPE))
-#define IS_EPHY_SHELL_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), EPHY_SHELL))
-
 typedef struct EphyShellPrivate EphyShellPrivate;
 
 extern EphyShell *ephy_shell;

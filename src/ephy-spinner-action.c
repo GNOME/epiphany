@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "ephy-spinner-action.h"
@@ -24,6 +26,8 @@
 
 static void ephy_spinner_action_init       (EphySpinnerAction *action);
 static void ephy_spinner_action_class_init (EphySpinnerActionClass *class);
+
+#define EPHY_SPINNER_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SPINNER_ACTION, EphySpinnerActionPrivate))
 
 struct EphySpinnerActionPrivate
 {
@@ -184,31 +188,17 @@ ephy_spinner_action_get_property (GObject *object,
 }
 
 static void
-ephy_spinner_action_finalize (GObject *object)
-{
-	EphySpinnerAction *action = EPHY_SPINNER_ACTION (object);
-
-	g_return_if_fail (action->priv != NULL);
-
-	g_free (action->priv);
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-static void
 ephy_spinner_action_class_init (EphySpinnerActionClass *class)
 {
-	GtkActionClass *action_class;
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
+	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
 
 	parent_class = g_type_class_peek_parent (class);
-	action_class = GTK_ACTION_CLASS (class);
 
-	action_class->toolbar_item_type = EPHY_SPINNER_TYPE;
+	action_class->toolbar_item_type = EPHY_TYPE_SPINNER;
 	action_class->create_tool_item = create_tool_item;
 	action_class->connect_proxy = connect_proxy;
 
-	object_class->finalize = ephy_spinner_action_finalize;
 	object_class->set_property = ephy_spinner_action_set_property;
 	object_class->get_property = ephy_spinner_action_get_property;
 
@@ -219,10 +209,12 @@ ephy_spinner_action_class_init (EphySpinnerActionClass *class)
                                                                "Throbbing",
                                                                FALSE,
                                                                G_PARAM_READWRITE));
+
+	g_type_class_add_private (object_class, sizeof(EphySpinnerActionPrivate));
 }
 
 static void
 ephy_spinner_action_init (EphySpinnerAction *action)
 {
-	action->priv = g_new0 (EphySpinnerActionPrivate, 1);
+	action->priv = EPHY_SPINNER_ACTION_GET_PRIVATE (action);
 }

@@ -15,6 +15,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "ephy-location-entry.h"
@@ -37,6 +39,9 @@
 /**
  * Private data
  */
+ 
+#define EPHY_LOCATION_ENTRY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LOCATION_ENTRY, EphyLocationEntryPrivate))
+
 struct _EphyLocationEntryPrivate {
 	GtkWidget *combo;
 	GtkWidget *entry;
@@ -198,6 +203,8 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		G_TYPE_NONE,
 		0,
 		G_TYPE_NONE);
+
+	g_type_class_add_private (object_class, sizeof (EphyLocationEntryPrivate));
 }
 
 static gboolean
@@ -215,8 +222,9 @@ ephy_location_entry_init (EphyLocationEntry *w)
 
 	LOG ("EphyLocationEntry initialising %p", w)
 
-	p = g_new0 (EphyLocationEntryPrivate, 1);
+	p = EPHY_LOCATION_ENTRY_GET_PRIVATE (w);
 	w->priv = p;
+
 	p->last_action_target = NULL;
 	p->before_completion = NULL;
 	p->user_changed = TRUE;
@@ -255,7 +263,6 @@ ephy_location_entry_finalize_impl (GObject *o)
 	g_free (p->before_completion);
 	g_free (p->autocompletion_key);
 
-	g_free (p);
 	G_OBJECT_CLASS (parent_class)->finalize (o);
 }
 

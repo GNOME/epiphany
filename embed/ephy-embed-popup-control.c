@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "ephy-embed-popup-control.h"
@@ -36,6 +38,8 @@ typedef enum
 	EMBED_POPUP_DOCUMENT,
 	EMBED_POPUP_ELEMENT
 } EmbedPopupType;
+
+#define EPHY_EMBED_POPUP_CONTROL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_POPUP_CONTROL, EphyEmbedPopupControlPrivate))
 
 struct EphyEmbedPopupControlPrivate
 {
@@ -243,12 +247,15 @@ ephy_embed_popup_control_class_init (EphyEmbedPopupControlClass *klass)
                                                               "Bonobo control",
                                                               BONOBO_TYPE_CONTROL,
                                                               G_PARAM_READWRITE));
+
+	g_type_class_add_private (object_class, sizeof(EphyEmbedPopupControlPrivate));
 }
 
 static void
 ephy_embed_popup_control_init (EphyEmbedPopupControl *gep)
 {
-        gep->priv = g_new0 (EphyEmbedPopupControlPrivate, 1);
+        gep->priv = EPHY_EMBED_POPUP_CONTROL_GET_PRIVATE (gep);
+
 	gep->priv->control = NULL;
 	gep->priv->embed = NULL;
 	gep->priv->event = NULL;
@@ -258,14 +265,7 @@ ephy_embed_popup_control_init (EphyEmbedPopupControl *gep)
 static void
 ephy_embed_popup_control_finalize (GObject *object)
 {
-	EphyEmbedPopupControl *gep;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_EPHY_EMBED_POPUP_CONTROL (object));
-
-        gep = EPHY_EMBED_POPUP_CONTROL (object);
-
-        g_return_if_fail (gep->priv != NULL);
+	EphyEmbedPopupControl *gep = EPHY_EMBED_POPUP_CONTROL (object);
 
 	if (gep->priv->event)
 	{
@@ -273,8 +273,6 @@ ephy_embed_popup_control_finalize (GObject *object)
 	}
 
 	g_free (gep->priv->selection);
-
-        g_free (gep->priv);
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -291,11 +289,9 @@ ephy_embed_popup_control_new (BonoboControl *control)
 {
 	EphyEmbedPopupControl *p;
 
-        p = EPHY_EMBED_POPUP_CONTROL (g_object_new (EPHY_EMBED_POPUP_CONTROL_TYPE,
-						      "BonoboControl", control,
-						      NULL));
-
-        g_return_val_if_fail (p->priv != NULL, NULL);
+	p = EPHY_EMBED_POPUP_CONTROL (g_object_new (EPHY_TYPE_EMBED_POPUP_CONTROL,
+						    "BonoboControl", control,
+						    NULL));
 
         return p;
 }
@@ -434,7 +430,7 @@ ephy_embed_popup_control_connect_verbs (EphyEmbedPopupControl *p,
 EphyEmbedEvent *
 ephy_embed_popup_control_get_event (EphyEmbedPopupControl *p)
 {
-	g_return_val_if_fail (IS_EPHY_EMBED_POPUP_CONTROL (p), NULL);
+	g_return_val_if_fail (EPHY_IS_EMBED_POPUP_CONTROL (p), NULL);
 
 	return p->priv->event;
 }

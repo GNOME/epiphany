@@ -37,6 +37,9 @@
 /**
  * Private data
  */
+ 
+#define EPHY_BOOKMARKS_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKS_MENU, EphyBookmarksMenuPrivate))
+
 struct _EphyBookmarksMenuPrivate
 {
 	EphyWindow *window;
@@ -405,9 +408,11 @@ ephy_bookmarks_menu_class_init (EphyBookmarksMenuClass *klass)
                                          g_param_spec_object ("EphyWindow",
                                                               "EphyWindow",
                                                               "Parent window",
-                                                              EPHY_WINDOW_TYPE,
+                                                              EPHY_TYPE_WINDOW,
                                                               G_PARAM_READWRITE |
 							      G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof(EphyBookmarksMenuPrivate));
 }
 
 static gboolean
@@ -432,7 +437,7 @@ bookmarks_tree_changed_cb (EphyBookmarks *bookmarks, EphyBookmarksMenu *menu)
 static void
 ephy_bookmarks_menu_init (EphyBookmarksMenu *menu)
 {
-	EphyBookmarksMenuPrivate *p = g_new0 (EphyBookmarksMenuPrivate, 1);
+	EphyBookmarksMenuPrivate *p = EPHY_BOOKMARKS_MENU_GET_PRIVATE (menu);
 
 	menu->priv = p;
 
@@ -464,8 +469,6 @@ ephy_bookmarks_menu_finalize (GObject *o)
 			 p->action_group);
 		g_object_unref (p->action_group);
 	}
-
-	g_free (p);
 
 	G_OBJECT_CLASS (parent_class)->finalize (o);
 }

@@ -21,6 +21,8 @@
 
 #include <glib-object.h>
 
+G_BEGIN_DECLS
+
 #define EPHY_TYPE_PLUGIN            (ephy_plugin_get_type ())
 #define EPHY_PLUGIN(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_PLUGIN, EphyPlugin))
 #define EPHY_PLUGIN_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_PLUGIN, EphyPluginClass))
@@ -33,5 +35,7 @@ typedef struct _EphyPlugin      EphyPlugin;
 GType       ephy_plugin_get_type   (void);
 
 EphyPlugin *ephy_plugin_new        (const char *name);
+
+G_END_DECLS
 
 #endif

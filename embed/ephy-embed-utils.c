@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -209,7 +211,7 @@ ephy_embed_utils_build_encodings_submenu (BonoboUIComponent *ui_component,
 	EphyEmbedSingle *single;
 
 	single = ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (embed_shell));
-	g_return_if_fail (IS_EPHY_EMBED_SHELL (embed_shell));
+	g_return_if_fail (EPHY_IS_EMBED_SHELL (embed_shell));
 
 	START_PROFILER ("Encodings menu")
 

@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -90,7 +92,7 @@ ephy_embed_base_init (gpointer g_class)
 	{
 	ephy_embed_signals[NEW_WINDOW] =
                 g_signal_new ("ge_new_window",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyEmbedClass, new_window),
                               NULL, NULL,
@@ -101,7 +103,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_INT);
 	ephy_embed_signals[LINK_MESSAGE] =
                 g_signal_new ("ge_link_message",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyEmbedClass, link_message),
                               NULL, NULL,
@@ -111,7 +113,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_STRING);
 	ephy_embed_signals[CONTEXT_MENU] =
                 g_signal_new ("ge_context_menu",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (EphyEmbedClass, context_menu),
                               NULL, NULL,
@@ -121,7 +123,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_OBJECT);
 	ephy_embed_signals[FAVICON] =
                 g_signal_new ("ge_favicon",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyEmbedClass, favicon),
                               NULL, NULL,
@@ -131,7 +133,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_STRING);
 	ephy_embed_signals[JS_STATUS] =
                 g_signal_new ("ge_js_status",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyEmbedClass, js_status),
                               NULL, NULL,
@@ -141,7 +143,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_STRING);
 	ephy_embed_signals[LOCATION] =
                 g_signal_new ("ge_location",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyEmbedClass, location),
                               NULL, NULL,
@@ -151,7 +153,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_STRING);
 	ephy_embed_signals[TITLE] =
                 g_signal_new ("ge_title",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyEmbedClass, title),
                               NULL, NULL,
@@ -160,7 +162,7 @@ ephy_embed_base_init (gpointer g_class)
                               0);
 	ephy_embed_signals[PROGRESS] =
                 g_signal_new ("ge_progress",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyEmbedClass, progress),
                               NULL, NULL,
@@ -172,7 +174,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_INT);
 	ephy_embed_signals[NET_STATE] =
                 g_signal_new ("ge_net_state",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyEmbedClass, net_state),
                               NULL, NULL,
@@ -183,7 +185,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_INT);
 	ephy_embed_signals[VISIBILITY] =
                 g_signal_new ("ge_visibility",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyEmbedClass, visibility),
                               NULL, NULL,
@@ -193,7 +195,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_BOOLEAN);
 	ephy_embed_signals[DESTROY_BRSR] =
                 g_signal_new ("ge_destroy_brsr",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyEmbedClass, destroy_brsr),
                               NULL, NULL,
@@ -202,7 +204,7 @@ ephy_embed_base_init (gpointer g_class)
                               0);
 	ephy_embed_signals[OPEN_URI] =
                 g_signal_new ("ge_open_uri",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (EphyEmbedClass, open_uri),
                               NULL, NULL,
@@ -212,7 +214,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_STRING);
 	ephy_embed_signals[SIZE_TO] =
                 g_signal_new ("ge_size_to",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (EphyEmbedClass, size_to),
                               NULL, NULL,
@@ -223,7 +225,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_INT);
 	ephy_embed_signals[DOM_MOUSE_CLICK] =
                 g_signal_new ("ge_dom_mouse_click",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (EphyEmbedClass, dom_mouse_click),
                               NULL, NULL,
@@ -233,7 +235,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_POINTER);
 	ephy_embed_signals[DOM_MOUSE_DOWN] =
                 g_signal_new ("ge_dom_mouse_down",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (EphyEmbedClass, dom_mouse_down),
                               NULL, NULL,
@@ -243,7 +245,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_POINTER);
 	ephy_embed_signals[SECURITY_CHANGE] =
                 g_signal_new ("ge_security_change",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (EphyEmbedClass, security_change),
                               NULL, NULL,
@@ -253,7 +255,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_INT);
 	ephy_embed_signals[ZOOM_CHANGE] =
                 g_signal_new ("ge_zoom_change",
-                              EPHY_EMBED_TYPE,
+                              EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (EphyEmbedClass, zoom_change),
                               NULL, NULL,
@@ -268,10 +270,10 @@ ephy_embed_base_init (gpointer g_class)
 EphyEmbed *
 ephy_embed_new (GObject *single)
 {
-	if (IS_MOZILLA_EMBED_SINGLE (single))
+	if (MOZILLA_IS_EMBED_SINGLE (single))
 	{
 		return EPHY_EMBED (g_object_new
-			(MOZILLA_EMBED_TYPE, NULL));
+			(MOZILLA_TYPE_EMBED, NULL));
 	}
 
 	g_assert_not_reached ();

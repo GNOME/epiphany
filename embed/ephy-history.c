@@ -16,7 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *  $Id$
- *
  */
 
 #ifdef HAVE_CONFIG_H
@@ -41,6 +40,8 @@
 #define HISTORY_SAVE_INTERVAL (60 * 5 * 1000)
 
 #define HISTORY_PAGE_OBSOLETE_DAYS 10
+
+#define EPHY_HISTORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_HISTORY, EphyHistoryPrivate))
 
 struct EphyHistoryPrivate
 {
@@ -197,6 +198,8 @@ ephy_history_class_init (EphyHistoryClass *klass)
                               G_TYPE_NONE,
                               1,
 			      G_TYPE_STRING);
+
+	g_type_class_add_private (object_class, sizeof(EphyHistoryPrivate));
 }
 
 static void
@@ -415,7 +418,7 @@ ephy_history_init (EphyHistory *eb)
 	GValue value = { 0, };
 	EphyNodeDb *db;
 
-        eb->priv = g_new0 (EphyHistoryPrivate, 1);
+        eb->priv = EPHY_HISTORY_GET_PRIVATE (eb);
 
 	db = ephy_node_db_new (EPHY_NODE_DB_HISTORY);
 	eb->priv->db = db;
@@ -492,13 +495,7 @@ ephy_history_init (EphyHistory *eb)
 static void
 ephy_history_finalize (GObject *object)
 {
-        EphyHistory *eb;
-
-	g_return_if_fail (IS_EPHY_HISTORY (object));
-
-	eb = EPHY_HISTORY (object);
-
-        g_return_if_fail (eb->priv != NULL);
+        EphyHistory *eb = EPHY_HISTORY (object);
 
 	ephy_history_save (eb);
 
@@ -514,8 +511,6 @@ ephy_history_finalize (GObject *object)
 
 	g_source_remove (eb->priv->autosave_timeout);
 
-        g_free (eb->priv);
-
 	LOG ("Global history finalized");
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -524,11 +519,11 @@ ephy_history_finalize (GObject *object)
 EphyHistory *
 ephy_history_new ()
 {
-	EphyHistory *tab;
+	EphyHistory *eh;
 
-	tab = EPHY_HISTORY (g_object_new (EPHY_HISTORY_TYPE, NULL));
+	eh = EPHY_HISTORY (g_object_new (EPHY_TYPE_HISTORY, NULL));
 
-	return tab;
+	return eh;
 }
 
 static void

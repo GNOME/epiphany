@@ -25,14 +25,14 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_ARROW_TOOLBUTTON	   (ephy_arrow_toolbutton_get_type ())
+#define EPHY_ARROW_TOOLBUTTON(o)	   (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_ARROW_TOOLBUTTON, EphyArrowToolButton))
+#define EPHY_ARROW_TOOLBUTTON_CLASS(k)	   (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_ARROW_TOOLBUTTON, EphyArrowToolButtonClass))
+#define EPHY_IS_ARROW_TOOLBUTTON(o)	   (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_ARROW_TOOLBUTTON))
+#define EPHY_IS_ARROW_TOOLBUTTON_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_ARROW_TOOLBUTTON))
+#define EPHY_ARROW_TOOLBUTTON_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_ARROW_TOOLBUTTON, EphyArrowToolButtonClass))
+
 typedef struct EphyArrowToolButtonClass EphyArrowToolButtonClass;
-
-#define EPHY_ARROW_TOOLBUTTON_TYPE             (ephy_arrow_toolbutton_get_type ())
-#define EPHY_ARROW_TOOLBUTTON(obj)             (GTK_CHECK_CAST ((obj), EPHY_ARROW_TOOLBUTTON_TYPE, EphyArrowToolButton))
-#define EPHY_ARROW_TOOLBUTTON_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), EPHY_ARROW_TOOLBUTTON_TYPE, EphyArrowToolButtonClass))
-#define IS_EPHY_ARROW_TOOLBUTTON(obj)          (GTK_CHECK_TYPE ((obj), EPHY_ARROW_TOOLBUTTON_TYPE))
-#define IS_EPHY_ARROW_TOOLBUTTON_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), EPHY_ARROW_TOOLBUTTON))
-
 typedef struct EphyArrowToolButton EphyArrowToolButton;
 typedef struct EphyArrowToolButtonPrivate EphyArrowToolButtonPrivate;
 

@@ -85,6 +85,8 @@ static void root_destroy_cb (EphyNode *node,
 static inline GtkTreePath *get_path_real (EphyTreeModelNode *model,
 	                                  EphyNode *node);
 
+#define EPHY_TREE_MODEL_NODE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TREE_MODEL_NODE, EphyTreeModelNodePrivate))
+
 struct EphyTreeModelNodePrivate
 {
 	EphyNode *root;
@@ -176,6 +178,8 @@ ephy_tree_model_node_class_init (EphyTreeModelNodeClass *klass)
 							      "Filter object",
 							      EPHY_TYPE_NODE_FILTER,
 							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof (EphyTreeModelNodePrivate));
 }
 
 static void
@@ -189,8 +193,9 @@ ephy_tree_model_node_init (EphyTreeModelNode *model)
 	}
 	while (model->stamp == 0);
 
-	model->priv = g_new0 (EphyTreeModelNodePrivate, 1);
+	model->priv = EPHY_TREE_MODEL_NODE_GET_PRIVATE (model);
 
+	/* FIXME: huh? */
 	dummy = gtk_tree_view_new ();
 
 	gtk_widget_destroy (dummy);
@@ -202,18 +207,9 @@ ephy_tree_model_node_init (EphyTreeModelNode *model)
 static void
 ephy_tree_model_node_finalize (GObject *object)
 {
-	EphyTreeModelNode *model;
-
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (EPHY_IS_TREE_MODEL_NODE (object));
-
-	model = EPHY_TREE_MODEL_NODE (object);
-
-	g_return_if_fail (model->priv != NULL);
+	EphyTreeModelNode *model = EPHY_TREE_MODEL_NODE (object);
 
 	g_ptr_array_free (model->priv->columns, TRUE);
-
-	g_free (model->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

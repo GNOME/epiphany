@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include <gtk/gtkcellrenderertext.h>
@@ -46,6 +48,9 @@
 /**
  * Private data
  */
+
+#define EPHY_AUTOCOMPLETION_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_AUTOCOMPLETION_WINDOW, EphyAutocompletionWindowPrivate))
+
 struct _EphyAutocompletionWindowPrivate {
 	EphyAutocompletion *autocompletion;
 	GtkWidget *parent;
@@ -130,8 +135,11 @@ ephy_autocompletion_window_get_type (void)
 static void
 ephy_autocompletion_window_class_init (EphyAutocompletionWindowClass *klass)
 {
-	G_OBJECT_CLASS (klass)->finalize = ephy_autocompletion_window_finalize_impl;
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
 	g_object_class = g_type_class_peek_parent (klass);
+
+	object_class->finalize = ephy_autocompletion_window_finalize_impl;
 
 	EphyAutocompletionWindowSignals[ACTIVATED] = g_signal_new (
 		"activated", G_OBJECT_CLASS_TYPE (klass),
@@ -162,12 +170,14 @@ ephy_autocompletion_window_class_init (EphyAutocompletionWindowClass *klass)
 		NULL, NULL,
 		ephy_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
+
+	g_type_class_add_private (object_class, sizeof (EphyAutocompletionWindowPrivate));
 }
 
 static void
 ephy_autocompletion_window_init (EphyAutocompletionWindow *aw)
 {
-	EphyAutocompletionWindowPrivate *p = g_new0 (EphyAutocompletionWindowPrivate, 1);
+	EphyAutocompletionWindowPrivate *p = EPHY_AUTOCOMPLETION_WINDOW_GET_PRIVATE (aw);
 	GtkTreeSelection *s;
 
 	aw->priv = p;
@@ -207,7 +217,6 @@ ephy_autocompletion_window_finalize_impl (GObject *o)
 	}
 
 	g_free (p->selected);
-	g_free (p);
 
 	gdk_pointer_ungrab (GDK_CURRENT_TIME);
 	gdk_keyboard_ungrab (GDK_CURRENT_TIME);

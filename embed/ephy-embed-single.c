@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include <config.h>
@@ -33,11 +35,13 @@ enum
 	LAST_SIGNAL
 };
 
+
+#define EPHY_EMBED_SINGLE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSinglePrivate))
+
 struct EphyEmbedSinglePrivate
 {
 	EphyHistory *global_history;
 	DownloaderView *downloader_view;
-	GList *embeds;
 	EphyFaviconCache *favicon_cache;
 };
 
@@ -45,10 +49,9 @@ static void
 ephy_embed_single_class_init (EphyEmbedSingleClass *klass);
 static void
 ephy_embed_single_init (EphyEmbedSingle *ges);
-static void
-ephy_embed_single_finalize (GObject *object);
 
 static GObjectClass *parent_class = NULL;
+
 static guint ephy_embed_single_signals[LAST_SIGNAL] = { 0 };
 
 GType
@@ -86,8 +89,6 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
 
 	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
-        object_class->finalize = ephy_embed_single_finalize;
-
 	ephy_embed_single_signals[NEW_WINDOW] =
                 g_signal_new ("new_window_orphan",
                               G_OBJECT_CLASS_TYPE (object_class),
@@ -99,35 +100,19 @@ ephy_embed_single_class_init (EphyEmbedSingleClass *klass)
                               2,
                               G_TYPE_POINTER,
 			      G_TYPE_INT);
+
+	g_type_class_add_private (object_class, sizeof(EphyEmbedSinglePrivate));
 }
 
 static void
 ephy_embed_single_init (EphyEmbedSingle *ges)
 {
-	ges->priv = g_new0 (EphyEmbedSinglePrivate, 1);
+	ges->priv = EPHY_EMBED_SINGLE_GET_PRIVATE (ges);
 
 	ges->priv->global_history = NULL;
 	ges->priv->downloader_view = NULL;
-	ges->priv->embeds = NULL;
 
 	ges->priv->favicon_cache = NULL;
-}
-
-static void
-ephy_embed_single_finalize (GObject *object)
-{
-	EphyEmbedSingle *ges;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_EPHY_EMBED_SINGLE (object));
-
-        ges = EPHY_EMBED_SINGLE (object);
-
-        g_return_if_fail (ges->priv != NULL);
-
-        g_free (ges->priv);
-
-        G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 gresult

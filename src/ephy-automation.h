@@ -16,8 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _EPHY_AUTOMATION_H_
-#define _EPHY_AUTOMATION_H_
+#ifndef EPHY_AUTOMATION_H
+#define EPHY_AUTOMATION_H
 
 #include "EphyAutomation.h"
 
@@ -26,12 +26,12 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_AUTOMATION_TYPE         (ephy_automation_get_type ())
-#define EPHY_AUTOMATION(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_AUTOMATION_TYPE, EphyAutomation))
-#define EPHY_AUTOMATION_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_AUTOMATION_TYPE, EphyAutomationClass))
-#define EPHY_AUTOMATION_IS_OBJECT(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_AUTOMATION_TYPE))
-#define EPHY_AUTOMATION_IS_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_AUTOMATION_TYPE))
-#define EPHY_AUTOMATION_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_AUTOMATION_TYPE, EphyAutomationClass))
+#define EPHY_TYPE_AUTOMATION		(ephy_automation_get_type ())
+#define EPHY_AUTOMATION(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_AUTOMATION, EphyAutomation))
+#define EPHY_AUTOMATION_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_AUTOMATION, EphyAutomationClass))
+#define EPHY_IS_AUTOMATION(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_AUTOMATION))
+#define EPHY_IS_AUTOMATION_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_AUTOMATION))
+#define EPHY_AUTOMATION_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_AUTOMATION, EphyAutomationClass))
 
 typedef struct {
         BonoboObject parent;

@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include <config.h>
@@ -26,6 +28,8 @@
 #include "downloader-view.h"
 
 #include <string.h>
+
+#define EPHY_EMBED_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellPrivate))
 
 struct EphyEmbedShellPrivate
 {
@@ -87,8 +91,11 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
         object_class->finalize = ephy_embed_shell_finalize;
+
 	klass->get_downloader_view = impl_get_downloader_view;
 	klass->get_global_history = impl_get_global_history;
+
+	g_type_class_add_private (object_class, sizeof(EphyEmbedShellPrivate));
 }
 
 static void
@@ -97,7 +104,7 @@ ephy_embed_shell_init (EphyEmbedShell *ges)
 	/* Singleton, globally accessible */
 	embed_shell = ges;
 
-	ges->priv = g_new0 (EphyEmbedShellPrivate, 1);
+	ges->priv = EPHY_EMBED_SHELL_GET_PRIVATE (ges);
 
 	ges->priv->global_history = NULL;
 	ges->priv->downloader_view = NULL;
@@ -107,14 +114,7 @@ ephy_embed_shell_init (EphyEmbedShell *ges)
 static void
 ephy_embed_shell_finalize (GObject *object)
 {
-	EphyEmbedShell *ges;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_EPHY_EMBED_SHELL (object));
-
-        ges = EPHY_EMBED_SHELL (object);
-
-        g_return_if_fail (ges->priv != NULL);
+	EphyEmbedShell *ges = EPHY_EMBED_SHELL (object);
 
 	LOG ("Unref history")
 	if (ges->priv->global_history)
@@ -143,8 +143,6 @@ ephy_embed_shell_finalize (GObject *object)
 		g_object_unref (G_OBJECT (ges->priv->embed_single));
 	}
 
-        g_free (ges->priv);
-
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -154,7 +152,7 @@ ephy_embed_shell_new (const char *type)
 	if (strcmp (type, "mozilla") == 0)
 	{
 		return EPHY_EMBED_SHELL (g_object_new
-			(EPHY_EMBED_SHELL_TYPE, NULL));
+			(EPHY_TYPE_EMBED_SHELL, NULL));
 	}
 
 	g_assert_not_reached ();

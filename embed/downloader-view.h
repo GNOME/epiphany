@@ -24,19 +24,17 @@
 #include <glib-object.h>
 #include <glib.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+G_BEGIN_DECLS
+
+#define EPHY_TYPE_DOWNLOADER_VIEW		(downloader_view_get_type ())
+#define EPHY_DOWNLOADER_VIEW(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_DOWNLOADER_VIEW, DownloaderView))
+#define EPHY_DOWNLOADER_VIEW_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_DOWNLOADER_VIEW, DownloaderViewClass))
+#define EPHY_IS_DOWNLOADER_VIEW(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_DOWNLOADER_VIEW))
+#define EPHY_IS_DOWNLOADER_VIEW_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_DOWNLOADER_VIEW))
+#define EPHY_DOWNLOADER_VIEW_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_DOWNLOADER_VIEW, DownloaderViewClass))
 
 typedef struct DownloaderView DownloaderView;
 typedef struct DownloaderViewClass DownloaderViewClass;
-
-#define DOWNLOADER_VIEW_TYPE             (downloader_view_get_type ())
-#define DOWNLOADER_VIEW(obj)             (GTK_CHECK_CAST ((obj), DOWNLOADER_VIEW_TYPE, DownloaderView))
-#define DOWNLOADER_VIEW_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), DOWNLOADER_VIEW, DownloaderViewClass))
-#define IS_DOWNLOADER_VIEW(obj)          (GTK_CHECK_TYPE ((obj), DOWNLOADER_VIEW_TYPE))
-#define IS_DOWNLOADER_VIEW_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), DOWNLOADER_VIEW))
-
 typedef struct DownloaderViewPrivate DownloaderViewPrivate;
 
 typedef enum
@@ -88,8 +86,6 @@ void            downloader_view_set_download_progress (DownloaderView *dv,
 						       gfloat progress,
 						       gpointer persist_object);
 
-#ifdef __cplusplus
-}
-#endif
+G_END_DECLS
 
 #endif

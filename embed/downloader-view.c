@@ -59,6 +59,8 @@ enum
 	COL_PERSIST_OBJECT
 };
 
+#define EPHY_DOWNLOADER_VIEW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_DOWNLOADER_VIEW, DownloaderViewPrivate))
+
 struct DownloaderViewPrivate
 {
 	GHashTable *details_hash;
@@ -191,7 +193,7 @@ downloader_view_get_type (void)
                         (GInstanceInitFunc) downloader_view_init
                 };
 
-                downloader_view_type = g_type_register_static (EPHY_DIALOG_TYPE,
+                downloader_view_type = g_type_register_static (EPHY_TYPE_DIALOG,
                                                                "DownloaderView",
                                                                &our_info, 0);
         }
@@ -226,10 +228,8 @@ static void
 downloader_view_class_init (DownloaderViewClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	EphyDialogClass *ephy_dialog_class;
 
         parent_class = g_type_class_peek_parent (klass);
-        ephy_dialog_class = EPHY_DIALOG_CLASS (klass);
 
         object_class->finalize = downloader_view_finalize;
 
@@ -261,6 +261,8 @@ downloader_view_class_init (DownloaderViewClass *klass)
                               g_cclosure_marshal_VOID__POINTER,
                               G_TYPE_NONE, 1,
 			      G_TYPE_POINTER);
+
+	g_type_class_add_private (object_class, sizeof(DownloaderViewPrivate));
 }
 
 static void
@@ -275,7 +277,8 @@ destroy_details_cb (DownloadDetails *details)
 static void
 downloader_view_init (DownloaderView *dv)
 {
-        dv->priv = g_new0 (DownloaderViewPrivate, 1);
+        dv->priv = EPHY_DOWNLOADER_VIEW_GET_PRIVATE (dv);
+
 	dv->priv->details_hash = g_hash_table_new_full (g_direct_hash,
 							g_direct_equal,
 							NULL,
@@ -288,20 +291,11 @@ downloader_view_init (DownloaderView *dv)
 static void
 downloader_view_finalize (GObject *object)
 {
-        DownloaderView *dv;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_DOWNLOADER_VIEW (object));
-
-        dv = DOWNLOADER_VIEW (object);
-
-        g_return_if_fail (dv->priv != NULL);
+        DownloaderView *dv = EPHY_DOWNLOADER_VIEW (object);
 
 	g_hash_table_destroy (dv->priv->details_hash);
 
 	g_object_unref (embed_shell);
-
-	g_free (dv->priv);
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -309,8 +303,8 @@ downloader_view_finalize (GObject *object)
 DownloaderView *
 downloader_view_new (void)
 {
-	return DOWNLOADER_VIEW (g_object_new
-			(DOWNLOADER_VIEW_TYPE, NULL));
+	return EPHY_DOWNLOADER_VIEW (g_object_new
+			(EPHY_TYPE_DOWNLOADER_VIEW, NULL));
 }
 
 static void
@@ -562,7 +556,7 @@ ensure_selected_row (DownloaderView *dv)
 	GtkTreeIter iter;
 	GtkTreeSelection *selection;
 
-	g_return_if_fail (IS_DOWNLOADER_VIEW(dv));
+	g_return_if_fail (EPHY_IS_DOWNLOADER_VIEW(dv));
 
 	selection = gtk_tree_view_get_selection
 		(GTK_TREE_VIEW(dv->priv->treeview));

@@ -26,15 +26,14 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_TAB		(ephy_tab_get_type ())
+#define EPHY_TAB(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_TAB, EphyTab))
+#define EPHY_TAB_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_TAB, EphyTabClass))
+#define EPHY_IS_TAB(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_TAB))
+#define EPHY_IS_TAB_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TAB))
+#define EPHY_TAB_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TAB, EphyTabClass))
+
 typedef struct EphyTabClass EphyTabClass;
-
-#define EPHY_TAB_TYPE             (ephy_tab_get_type ())
-#define EPHY_TAB(obj)             (GTK_CHECK_CAST ((obj), EPHY_TAB_TYPE, EphyTab))
-#define EPHY_TAB_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), EPHY_TAB, EphyTabClass))
-#define IS_EPHY_TAB(obj)          (GTK_CHECK_TYPE ((obj), EPHY_TAB_TYPE))
-#define IS_EPHY_TAB_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), EPHY_TAB))
-#define EPHY_TAB_GET_CLASS(obj)	  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TAB_TYPE, EphyTabClass))
-
 typedef struct EphyTab EphyTab;
 typedef struct EphyTabPrivate EphyTabPrivate;
 

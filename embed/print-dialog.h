@@ -27,15 +27,15 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_PRINT_DIALOG		(print_dialog_get_type ())
+#define EPHY_PRINT_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_PRINT_DIALOG, PrintDialog))
+#define EPHY_PRINT_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_PRINT_DIALOG, PrintDialogClass))
+#define EPHY_IS_PRINT_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_PRINT_DIALOG))
+#define EPHY_IS_PRINT_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_PRINT_DIALOG))
+#define EPHY_PRINT_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_PRINT_DIALOG, PrintDialogClass))
+
 typedef struct PrintDialog PrintDialog;
 typedef struct PrintDialogClass PrintDialogClass;
-
-#define PRINT_DIALOG_TYPE             (print_dialog_get_type ())
-#define PRINT_DIALOG(obj)             (GTK_CHECK_CAST ((obj), PRINT_DIALOG_TYPE, PrintDialog))
-#define PRINT_DIALOG_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), PRINT_DIALOG, PrintDialogClass))
-#define IS_PRINT_DIALOG(obj)          (GTK_CHECK_TYPE ((obj), PRINT_DIALOG_TYPE))
-#define IS_PRINT_DIALOG_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), PRINT_DIALOG))
-
 typedef struct PrintDialogPrivate PrintDialogPrivate;
 
 struct PrintDialog

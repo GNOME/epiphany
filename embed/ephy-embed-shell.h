@@ -28,16 +28,15 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_EMBED_SHELL		(ephy_embed_shell_get_type ())
+#define EPHY_EMBED_SHELL_IMPL		(ephy_embed_shell_get_impl ())
+#define EPHY_EMBED_SHELL(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_SHELL, EphyEmbedShell))
+#define EPHY_EMBED_SHELL_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellClass))
+#define EPHY_IS_EMBED_SHELL(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_SHELL))
+#define EPHY_IS_EMBED_SHELL_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_SHELL))
+#define EPHY_EMBED_SHELL_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellClass))
+
 typedef struct EphyEmbedShellClass EphyEmbedShellClass;
-
-#define EPHY_EMBED_SHELL_TYPE             (ephy_embed_shell_get_type ())
-#define EPHY_EMBED_SHELL_IMPL             (ephy_embed_shell_get_impl ())
-#define EPHY_EMBED_SHELL(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_EMBED_SHELL_TYPE, EphyEmbedShell))
-#define EPHY_EMBED_SHELL_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_EMBED_SHELL_TYPE, EphyEmbedShellClass))
-#define IS_EPHY_EMBED_SHELL(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_EMBED_SHELL_TYPE))
-#define IS_EPHY_EMBED_SHELL_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_EMBED_SHELL_TYPE))
-#define EPHY_EMBED_SHELL_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_EMBED_SHELL_TYPE, EphyEmbedShellClass))
-
 typedef struct EphyEmbedShell EphyEmbedShell;
 typedef struct EphyEmbedShellPrivate EphyEmbedShellPrivate;
 

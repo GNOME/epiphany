@@ -26,15 +26,14 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_EMBED_PERSIST		(ephy_embed_persist_get_type ())
+#define EPHY_EMBED_PERSIST(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_PERSIST, EphyEmbedPersist))
+#define EPHY_EMBED_PERSIST_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_PERSIST, EphyEmbedPersistClass))
+#define EPHY_IS_EMBED_PERSIST(o)	(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_PERSIST))
+#define EPHY_IS_EMBED_PERSIST_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_PERSIST))
+#define EPHY_EMBED_PERSIST_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_PERSIST, EphyEmbedPersistClass))
+
 typedef struct EphyEmbedPersistClass EphyEmbedPersistClass;
-
-#define EPHY_EMBED_PERSIST_TYPE             (ephy_embed_persist_get_type ())
-#define EPHY_EMBED_PERSIST(obj)             (GTK_CHECK_CAST ((obj), EPHY_EMBED_PERSIST_TYPE, EphyEmbedPersist))
-#define EPHY_EMBED_PERSIST_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), EPHY_EMBED_PERSIST_TYPE, EphyEmbedPersistClass))
-#define IS_EPHY_EMBED_PERSIST(obj)          (GTK_CHECK_TYPE ((obj), EPHY_EMBED_PERSIST_TYPE))
-#define IS_EPHY_EMBED_PERSIST_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), EPHY_EMBED_PERSIST))
-#define EPHY_EMBED_PERSIST_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_EMBED_PERSIST_TYPE, EphyEmbedPersistClass))
-
 typedef struct EphyEmbedPersist EphyEmbedPersist;
 typedef struct EphyEmbedPersistPrivate EphyEmbedPersistPrivate;
 

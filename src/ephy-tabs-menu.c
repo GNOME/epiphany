@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -38,6 +40,9 @@
 /**
  * Private data
  */
+
+#define EPHY_TABS_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TABS_MENU, EphyTabsMenuPrivate))
+
 struct _EphyTabsMenuPrivate
 {
 	EphyWindow *window;
@@ -140,19 +145,17 @@ ephy_tabs_menu_class_init (EphyTabsMenuClass *klass)
                                          g_param_spec_object ("EphyWindow",
                                                               "EphyWindow",
                                                               "Parent window",
-                                                              EPHY_WINDOW_TYPE,
+                                                              EPHY_TYPE_WINDOW,
                                                               G_PARAM_READWRITE |
 							      G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof(EphyTabsMenuPrivate));
 }
 
 static void
 ephy_tabs_menu_init (EphyTabsMenu *menu)
 {
-	EphyTabsMenuPrivate *p;
-	
-	p = g_new0 (EphyTabsMenuPrivate, 1);
-	
-	menu->priv = p;
+	menu->priv = EPHY_TABS_MENU_GET_PRIVATE (menu);
 
 	menu->priv->ui_id = 0;
 	menu->priv->action_group = NULL;
@@ -191,8 +194,6 @@ ephy_tabs_menu_finalize_impl (GObject *o)
 			 p->action_group);
 		g_object_unref (p->action_group);
 	}
-
-	g_free (p);
 
 	G_OBJECT_CLASS (g_object_class)->finalize (o);
 }

@@ -61,6 +61,8 @@
 
 #endif
 
+#define EPHY_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHELL, EphyShellPrivate))
+
 struct EphyShellPrivate
 {
 	Session *session;
@@ -116,7 +118,7 @@ ephy_shell_get_type (void)
                         (GInstanceInitFunc) ephy_shell_init
                 };
 
-                ephy_shell_type = g_type_register_static (EPHY_EMBED_SHELL_TYPE,
+		ephy_shell_type = g_type_register_static (EPHY_TYPE_EMBED_SHELL,
 							  "EphyShell",
 							  &our_info, 0);
         }
@@ -133,6 +135,8 @@ ephy_shell_class_init (EphyShellClass *klass)
         parent_class = g_type_class_peek_parent (klass);
 
         object_class->finalize = ephy_shell_finalize;
+
+	g_type_class_add_private (object_class, sizeof(EphyShellPrivate));
 }
 
 static void
@@ -193,7 +197,8 @@ ephy_shell_init (EphyShell *gs)
 	EphyEmbedSingle *single;
 	EphyShell **ptr = &ephy_shell;
 
-        gs->priv = g_new0 (EphyShellPrivate, 1);
+	gs->priv = EPHY_SHELL_GET_PRIVATE (gs);
+
 	gs->priv->session = NULL;
 	gs->priv->bookmarks = NULL;
 	gs->priv->bme = NULL;
@@ -245,14 +250,7 @@ ephy_shell_init (EphyShell *gs)
 static void
 ephy_shell_finalize (GObject *object)
 {
-        EphyShell *gs;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_EPHY_SHELL (object));
-
-	gs = EPHY_SHELL (object);
-
-        g_return_if_fail (gs->priv != NULL);
+        EphyShell *gs = EPHY_SHELL (object);
 
 	g_assert (ephy_shell == NULL);
 
@@ -268,7 +266,7 @@ ephy_shell_finalize (GObject *object)
 	LOG ("Unref session")
 	if (gs->priv->session)
 	{
-		g_return_if_fail (IS_SESSION(gs->priv->session));
+		g_return_if_fail (EPHY_IS_SESSION(gs->priv->session));
 		g_object_remove_weak_pointer
 			(G_OBJECT(gs->priv->session),
                          (gpointer *)&gs->priv->session);
@@ -301,8 +299,6 @@ ephy_shell_finalize (GObject *object)
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 
-        g_free (gs->priv);
-
 	ephy_state_save ();
 	ephy_file_helpers_shutdown ();
 
@@ -316,7 +312,7 @@ ephy_shell_finalize (GObject *object)
 EphyShell *
 ephy_shell_new (void)
 {
-	return EPHY_SHELL (g_object_new (EPHY_SHELL_TYPE, NULL));
+	return EPHY_SHELL (g_object_new (EPHY_TYPE_SHELL, NULL));
 }
 
 static void
@@ -371,7 +367,7 @@ ephy_shell_get_active_window (EphyShell *gs)
 	Session *session;
 	const GList *windows;
 
-	session = SESSION (ephy_shell_get_session (gs));
+	session = EPHY_SESSION (ephy_shell_get_session (gs));
 	windows = session_get_windows (session);
 
 	if (windows == NULL) return NULL;

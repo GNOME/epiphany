@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include <config.h>
@@ -39,6 +41,8 @@ enum
   PROP_FLAGS,
   PROP_HANDLER
 };
+
+#define EPHY_EMBED_PERSIST_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_PERSIST, EphyEmbedPersistPrivate))
 
 struct EphyEmbedPersistPrivate
 {
@@ -196,6 +200,8 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
                                                               "Handler",
                                                               "Handler",
                                                               G_PARAM_READWRITE));
+
+	g_type_class_add_private (object_class, sizeof(EphyEmbedPersistPrivate));
 }
 
 static void
@@ -275,7 +281,8 @@ ephy_embed_persist_get_property (GObject *object,
 static void
 ephy_embed_persist_init (EphyEmbedPersist *persist)
 {
-        persist->priv = g_new0 (EphyEmbedPersistPrivate, 1);
+	persist->priv = EPHY_EMBED_PERSIST_GET_PRIVATE (persist);
+
 	persist->priv->src = NULL;
 	persist->priv->dir = NULL;
 	persist->priv->handler = NULL;
@@ -286,14 +293,7 @@ ephy_embed_persist_init (EphyEmbedPersist *persist)
 static void
 ephy_embed_persist_finalize (GObject *object)
 {
-        EphyEmbedPersist *persist;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_EPHY_EMBED_PERSIST (object));
-
-        persist = EPHY_EMBED_PERSIST (object);
-
-        g_return_if_fail (persist->priv != NULL);
+        EphyEmbedPersist *persist = EPHY_EMBED_PERSIST (object);
 
 	g_free (persist->priv->dir);
 	g_free (persist->priv->src);
@@ -303,8 +303,6 @@ ephy_embed_persist_finalize (GObject *object)
 		g_free (persist->priv->handler->command);
 		g_free (persist->priv->handler);
 	}
-
-	g_free (persist->priv);
 
 	LOG ("Embed persist finalize")
 
@@ -316,19 +314,12 @@ EphyEmbedPersist *
 ephy_embed_persist_new (EphyEmbed *embed)
 {
 	EphyEmbedPersist *persist;
-	GType type = 0;
 
-	type = MOZILLA_EMBED_PERSIST_TYPE;
-
-	g_assert (type != 0);
-
-        persist = EPHY_EMBED_PERSIST (g_object_new (type,
+        persist = EPHY_EMBED_PERSIST (g_object_new (MOZILLA_TYPE_EMBED_PERSIST,
 						    "embed", embed,
 						    NULL));
 
-        g_return_val_if_fail (persist->priv != NULL, NULL);
-
-        return persist;
+	return persist;
 }
 
 gresult

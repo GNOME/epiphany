@@ -260,6 +260,8 @@ static GtkActionEntry ephy_popups_entries [] = {
 };
 static guint ephy_popups_n_entries = G_N_ELEMENTS (ephy_popups_entries);
 
+#define EPHY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WINDOW, EphyWindowPrivate))
+
 struct EphyWindowPrivate
 {
 	GtkWidget *main_vbox;
@@ -333,7 +335,7 @@ remove_from_session (EphyWindow *window)
 {
 	Session *session;
 
-	session = SESSION (ephy_shell_get_session (ephy_shell));
+	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
 	g_return_if_fail (session != NULL);
 
 	session_remove_window (session, window);
@@ -376,6 +378,8 @@ ephy_window_class_init (EphyWindowClass *klass)
 	widget_class->show = ephy_window_show;
 
 	gtkobject_class->destroy = ephy_window_destroy;
+
+	g_type_class_add_private (object_class, sizeof(EphyWindowPrivate));
 }
 
 static void
@@ -709,7 +713,7 @@ sync_tab_load_progress (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	if (window->priv->closing) return;
 
-	statusbar_set_progress (STATUSBAR (window->priv->statusbar),
+	statusbar_set_progress (EPHY_STATUSBAR (window->priv->statusbar),
 				ephy_tab_get_load_percent (tab));
 }
 
@@ -725,7 +729,7 @@ sync_tab_load_status (EphyTab *dummy, GParamSpec *pspec, EphyWindow *window)
 	for (l = tabs; l != NULL; l = l->next)
 	{
 		EphyTab *tab = EPHY_TAB(l->data);
-		g_return_if_fail (IS_EPHY_TAB(tab));
+		g_return_if_fail (EPHY_IS_TAB(tab));
 
 		if (ephy_tab_get_load_status (tab))
 		{
@@ -750,7 +754,7 @@ sync_tab_message (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	if (window->priv->closing) return;
 
-	statusbar_set_message (STATUSBAR (window->priv->statusbar),
+	statusbar_set_message (EPHY_STATUSBAR (window->priv->statusbar),
 			       ephy_tab_get_status_message (tab));
 }
 
@@ -859,7 +863,7 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 
 	}
 
-	statusbar_set_security_state (STATUSBAR (window->priv->statusbar),
+	statusbar_set_security_state (EPHY_STATUSBAR (window->priv->statusbar),
 			              secure, tooltip);
 	g_free (tooltip);
 
@@ -905,7 +909,7 @@ sync_tab_visibility (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	for (l = tabs; l != NULL; l = l->next)
 	{
 		EphyTab *tab = EPHY_TAB(l->data);
-		g_return_if_fail (IS_EPHY_TAB(tab));
+		g_return_if_fail (EPHY_IS_TAB(tab));
 
 		if (ephy_tab_get_visibility (tab))
 		{
@@ -1071,12 +1075,12 @@ tab_context_menu_cb (EphyEmbed *embed,
 {
 	EphyTab *tab;
 
-	g_return_val_if_fail (IS_EPHY_WINDOW (window), FALSE);
-	g_return_val_if_fail (IS_EPHY_EMBED (embed), FALSE);
-	g_assert (IS_EPHY_EMBED_EVENT(event));
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), FALSE);
+	g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
+	g_assert (EPHY_IS_EMBED_EVENT(event));
 
 	tab = EPHY_TAB (g_object_get_data (G_OBJECT (embed), "EphyTab"));
-	g_return_val_if_fail (IS_EPHY_TAB (tab), FALSE);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), FALSE);
 	g_return_val_if_fail (window->priv->active_tab == tab, FALSE);
 
 	window = ephy_tab_get_window (tab);
@@ -1093,7 +1097,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 	EphyTab *old_tab;
 	EphyEmbed *embed;
 
-	g_return_if_fail (IS_EPHY_WINDOW (window));
+	g_return_if_fail (EPHY_IS_WINDOW (window));
 	if (ephy_tab_get_window (new_tab) != window) return;
 
 	old_tab = window->priv->active_tab;
@@ -1237,7 +1241,7 @@ tab_added_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
 {
 	EphyTab *tab;
 
-	g_return_if_fail (IS_EPHY_EMBED (child));
+	g_return_if_fail (EPHY_IS_EMBED (child));
 	tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
 
 	window->priv->num_tabs++;
@@ -1256,7 +1260,7 @@ tab_removed_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
 {
 	EphyTab *tab;
 
-	g_return_if_fail (IS_EPHY_EMBED (child));
+	g_return_if_fail (EPHY_IS_EMBED (child));
 	tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
 
 	g_signal_handlers_disconnect_by_func (G_OBJECT (tab),
@@ -1287,8 +1291,8 @@ tab_detached_cb (EphyNotebook *notebook, GtkWidget *child,
 {
 	EphyWindow *window;
 
-	g_return_if_fail (IS_EPHY_NOTEBOOK (notebook));
-	g_return_if_fail (IS_EPHY_EMBED (child));
+	g_return_if_fail (EPHY_IS_NOTEBOOK (notebook));
+	g_return_if_fail (EPHY_IS_EMBED (child));
 
 	window = ephy_window_new ();
 	ephy_notebook_move_page (notebook,
@@ -1339,9 +1343,10 @@ ephy_window_init (EphyWindow *window)
 
 	LOG ("EphyWindow initialising %p", window)
 
-	session = SESSION (ephy_shell_get_session (ephy_shell));
+	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
 
-        window->priv = g_new0 (EphyWindowPrivate, 1);
+	window->priv = EPHY_WINDOW_GET_PRIVATE (window);
+
 	window->priv->active_tab = NULL;
 	window->priv->chrome_mask = 0;
 	window->priv->closing = FALSE;
@@ -1398,13 +1403,7 @@ save_window_chrome (EphyWindow *window)
 static void
 ephy_window_finalize (GObject *object)
 {
-        EphyWindow *window;
-
-        g_return_if_fail (IS_EPHY_WINDOW (object));
-
-	window = EPHY_WINDOW (object);
-
-        g_return_if_fail (window->priv != NULL);
+        EphyWindow *window = EPHY_WINDOW (object);
 
 	if (window->priv->find_dialog)
 	{
@@ -1431,8 +1430,6 @@ ephy_window_finalize (GObject *object)
 					    window->priv->action_group);
 	g_object_unref (window->ui_merge);
 
-	g_free (window->priv);
-
         G_OBJECT_CLASS (parent_class)->finalize (object);
 
 	LOG ("Ephy Window finalized %p", window)
@@ -1443,7 +1440,7 @@ ephy_window_finalize (GObject *object)
 EphyWindow *
 ephy_window_new (void)
 {
-	return EPHY_WINDOW (g_object_new (EPHY_WINDOW_TYPE, NULL));
+	return EPHY_WINDOW (g_object_new (EPHY_TYPE_WINDOW, NULL));
 }
 
 EmbedChromeMask
@@ -1527,7 +1524,7 @@ ephy_window_set_chrome (EphyWindow *window,
 GtkWidget *
 ephy_window_get_notebook (EphyWindow *window)
 {
-	g_return_val_if_fail (IS_EPHY_WINDOW (window), NULL);
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
 	return GTK_WIDGET (window->priv->notebook);
 }
@@ -1540,8 +1537,8 @@ ephy_window_add_tab (EphyWindow *window,
 {
 	GtkWidget *widget;
 
-	g_return_if_fail (IS_EPHY_WINDOW (window));
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_WINDOW (window));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	widget = GTK_WIDGET(ephy_tab_get_embed (tab));
 
@@ -1579,7 +1576,7 @@ real_get_active_tab (EphyWindow *window, int page_num)
 
 	g_return_val_if_fail (GTK_IS_WIDGET (embed_widget), NULL);
 	tab = g_object_get_data (G_OBJECT (embed_widget), "EphyTab");
-	g_return_val_if_fail (IS_EPHY_TAB (tab), NULL);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
 
 	return tab;
 }
@@ -1590,8 +1587,8 @@ ephy_window_remove_tab (EphyWindow *window,
 {
 	GtkWidget *embed;
 
-	g_return_if_fail (IS_EPHY_WINDOW (window));
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_WINDOW (window));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	embed = GTK_WIDGET (ephy_tab_get_embed (tab));
 
@@ -1605,7 +1602,7 @@ ephy_window_load_url (EphyWindow *window,
 {
 	EphyEmbed *embed;
 
-        g_return_if_fail (IS_EPHY_WINDOW(window));
+        g_return_if_fail (EPHY_IS_WINDOW(window));
 	embed = ephy_window_get_active_embed (window);
         g_return_if_fail (embed != NULL);
         g_return_if_fail (url != NULL);
@@ -1670,7 +1667,7 @@ void
 ephy_window_update_control (EphyWindow *window,
 			      ControlID control)
 {
-	g_return_if_fail (IS_EPHY_WINDOW (window));
+	g_return_if_fail (EPHY_IS_WINDOW (window));
 
 	switch (control)
 	{
@@ -1686,7 +1683,7 @@ ephy_window_update_control (EphyWindow *window,
 EphyTab *
 ephy_window_get_active_tab (EphyWindow *window)
 {
-	g_return_val_if_fail (IS_EPHY_WINDOW (window), NULL);
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
 	return window->priv->active_tab;
 }
@@ -1696,7 +1693,7 @@ ephy_window_get_active_embed (EphyWindow *window)
 {
 	EphyTab *tab;
 
-	g_return_val_if_fail (IS_EPHY_WINDOW (window), NULL);
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
 	tab = ephy_window_get_active_tab (window);
 
@@ -1720,7 +1717,7 @@ ephy_window_get_tabs (EphyWindow *window)
 		EphyTab *tab;
 
 		tab = g_object_get_data (G_OBJECT (w), "EphyTab");
-		g_return_val_if_fail (IS_EPHY_TAB (G_OBJECT (tab)), NULL);
+		g_return_val_if_fail (EPHY_IS_TAB (G_OBJECT (tab)), NULL);
 
 		tabs = g_list_prepend (tabs, tab);
 		i++;
@@ -1762,7 +1759,7 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 {
 	EphyTab *tab;
 
-	g_return_if_fail (IS_EPHY_WINDOW (window));
+	g_return_if_fail (EPHY_IS_WINDOW (window));
 	if (window->priv->closing) return;
 
 	/* get the new tab */
@@ -1837,7 +1834,7 @@ ephy_window_set_zoom (EphyWindow *window,
 	EphyEmbed *embed;
 	float current_zoom = 1.0;
 
-        g_return_if_fail (IS_EPHY_WINDOW (window));
+        g_return_if_fail (EPHY_IS_WINDOW (window));
 
 	embed = ephy_window_get_active_embed (window);
         g_return_if_fail (embed != NULL);

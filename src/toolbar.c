@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2000 Marco Pesenti Gritti
- *            (C) 2001, 2002 Jorn Baayen
+ *  Copyright (C) 2001, 2002 Jorn Baayen
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -78,6 +78,8 @@ enum
 };
 
 static GObjectClass *parent_class = NULL;
+
+#define EPHY_TOOLBAR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOOLBAR, ToolbarPrivate))
 
 struct ToolbarPrivate
 {
@@ -206,10 +208,8 @@ static void
 toolbar_class_init (ToolbarClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	EggEditableToolbarClass *eet_class;
 
         parent_class = g_type_class_peek_parent (klass);
-	eet_class = EGG_EDITABLE_TOOLBAR_CLASS (klass);
 
         object_class->finalize = toolbar_finalize;
 	object_class->set_property = toolbar_set_property;
@@ -220,8 +220,11 @@ toolbar_class_init (ToolbarClass *klass)
                                          g_param_spec_object ("EphyWindow",
                                                               "EphyWindow",
                                                               "Parent window",
-                                                              EPHY_WINDOW_TYPE,
-                                                              G_PARAM_READWRITE));
+							      EPHY_TYPE_WINDOW,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof(ToolbarPrivate));
 }
 
 static void
@@ -230,7 +233,7 @@ toolbar_set_property (GObject *object,
                       const GValue *value,
                       GParamSpec *pspec)
 {
-        Toolbar *t = TOOLBAR (object);
+        Toolbar *t = EPHY_TOOLBAR (object);
 
         switch (prop_id)
         {
@@ -246,7 +249,7 @@ toolbar_get_property (GObject *object,
                       GValue *value,
                       GParamSpec *pspec)
 {
-        Toolbar *t = TOOLBAR (object);
+        Toolbar *t = EPHY_TOOLBAR (object);
 
         switch (prop_id)
         {
@@ -360,7 +363,7 @@ action_request_cb (EggEditableToolbar *etoolbar,
 		   char *action_name,
 		   gpointer data)
 {
-	toolbar_ensure_action (TOOLBAR (etoolbar), action_name);
+	toolbar_ensure_action (EPHY_TOOLBAR (etoolbar), action_name);
 }
 
 static void
@@ -448,7 +451,7 @@ location_user_changed_cb (GtkWidget *entry, Toolbar *t)
 	char *address;
 
 	tab = ephy_window_get_active_tab (t->priv->window);
-	g_return_if_fail (IS_EPHY_TAB (tab));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	t->priv->can_set_location = FALSE;
 	address = ephy_location_entry_get_location (EPHY_LOCATION_ENTRY (entry));
@@ -497,7 +500,7 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 static void
 toolbar_init (Toolbar *t)
 {
-        t->priv = g_new0 (ToolbarPrivate, 1);
+	t->priv = EPHY_TOOLBAR_GET_PRIVATE (t);
 
 	t->priv->window = NULL;
 	t->priv->ui_merge = NULL;
@@ -512,21 +515,15 @@ toolbar_finalize (GObject *object)
 	ToolbarPrivate *p;
 	GtkUIManager *merge;
 
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_TOOLBAR (object));
-
-	t = TOOLBAR (object);
+	t = EPHY_TOOLBAR (object);
 	p = t->priv;
 	merge = GTK_UI_MANAGER (t->priv->window->ui_merge);
 
-        g_return_if_fail (p != NULL);
-
+	/* FIXME: why not at the end? */
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 
 	g_object_unref (t->priv->action_group);
 	gtk_ui_manager_remove_action_group (merge, t->priv->action_group);
-
-        g_free (t->priv);
 
 	LOG ("Toolbar finalized")
 }
@@ -536,11 +533,9 @@ toolbar_new (EphyWindow *window)
 {
 	Toolbar *t;
 
-	t = TOOLBAR (g_object_new (TOOLBAR_TYPE,
-				   "EphyWindow", window,
-				   NULL));
-
-	g_return_val_if_fail (t->priv != NULL, NULL);
+	t = EPHY_TOOLBAR (g_object_new (EPHY_TYPE_TOOLBAR,
+					"EphyWindow", window,
+					NULL));
 
 	return t;
 }

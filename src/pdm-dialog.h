@@ -24,15 +24,15 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_TYPE_PDM_DIALOG		(pdm_dialog_get_type ())
+#define EPHY_PDM_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_PDM_DIALOG, PdmDialog))
+#define EPHY_PDM_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_PDM_DIALOG, PdmDialogClass))
+#define EPHY_IS_PDM_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_PDM_DIALOG))
+#define EPHY_IS_PDM_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_PDM_DIALOG))
+#define EPHY_PDM_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_PDM_DIALOG, PdmDialogClass))
+
 typedef struct PdmDialog PdmDialog;
 typedef struct PdmDialogClass PdmDialogClass;
-
-#define PDM_DIALOG_TYPE             (pdm_dialog_get_type ())
-#define PDM_DIALOG(obj)             (GTK_CHECK_CAST ((obj), PDM_DIALOG_TYPE, PdmDialog))
-#define PDM_DIALOG_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), PDM_DIALOG, PdmDialogClass))
-#define IS_PDM_DIALOG(obj)          (GTK_CHECK_TYPE ((obj), PDM_DIALOG_TYPE))
-#define IS_PDM_DIALOG_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), PDM_DIALOG))
-
 typedef struct PdmDialogPrivate PdmDialogPrivate;
 
 struct PdmDialog
@@ -53,4 +53,3 @@ EphyDialog   *pdm_dialog_new              (GtkWidget *window);
 G_END_DECLS
 
 #endif
-

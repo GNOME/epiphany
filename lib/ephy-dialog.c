@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "ephy-dialog.h"
@@ -93,6 +95,8 @@ typedef struct
 	PropertyType type;
 	GList *string_enum;
 } PropertyInfo;
+
+#define EPHY_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_DIALOG, EphyDialogPrivate))
 
 struct EphyDialogPrivate
 {
@@ -188,6 +192,8 @@ ephy_dialog_class_init (EphyDialogClass *klass)
                                                                "Modal dialog",
                                                                FALSE,
                                                                G_PARAM_READWRITE));
+
+	g_type_class_add_private (object_class, sizeof (EphyDialogPrivate));
 }
 
 static void
@@ -798,7 +804,7 @@ prefs_connect_signals (EphyDialog *dialog)
 static void
 ephy_dialog_init (EphyDialog *dialog)
 {
-        dialog->priv = g_new0 (EphyDialogPrivate, 1);
+	dialog->priv = EPHY_DIALOG_GET_PRIVATE (dialog);
 
 	dialog->priv->parent = NULL;
 	dialog->priv->dialog = NULL;
@@ -939,20 +945,12 @@ free_props (PropertyInfo *properties)
 static void
 ephy_dialog_finalize (GObject *object)
 {
-        EphyDialog *dialog;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_EPHY_DIALOG (object));
-
-        dialog = EPHY_DIALOG (object);
-
-        g_return_if_fail (dialog->priv != NULL);
+        EphyDialog *dialog = EPHY_DIALOG (object);
 
 	free_props (dialog->priv->props);
 
 	g_free (dialog->priv->name);
 	g_free (dialog->priv->props);
-        g_free (dialog->priv);
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -1011,13 +1009,13 @@ ephy_dialog_set_parent (EphyDialog *dialog,
 EphyDialog *
 ephy_dialog_new (void)
 {
-	return EPHY_DIALOG (g_object_new (EPHY_DIALOG_TYPE, NULL));
+	return EPHY_DIALOG (g_object_new (EPHY_TYPE_DIALOG, NULL));
 }
 
 EphyDialog *
 ephy_dialog_new_with_parent (GtkWidget *parent_window)
 {
-	return EPHY_DIALOG (g_object_new (EPHY_DIALOG_TYPE,
+	return EPHY_DIALOG (g_object_new (EPHY_TYPE_DIALOG,
 					    "ParentWindow", parent_window,
 					    NULL));
 }

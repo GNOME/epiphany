@@ -76,6 +76,8 @@ struct PdmActionInfo
 	PdmDialog *dialog;
 };
 
+#define EPHY_PDM_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_PDM_DIALOG, PdmDialogPrivate))
+
 struct PdmDialogPrivate
 {
 	GtkTreeModel *model;
@@ -145,9 +147,9 @@ pdm_dialog_get_type (void)
                         (GInstanceInitFunc) pdm_dialog_init
                 };
 
-                pdm_dialog_type = g_type_register_static (EPHY_DIALOG_TYPE,
-						              "PdmDialog",
-						              &our_info, 0);
+		pdm_dialog_type = g_type_register_static (EPHY_TYPE_DIALOG,
+							  "PdmDialog",
+							  &our_info, 0);
         }
 
         return pdm_dialog_type;
@@ -162,6 +164,8 @@ pdm_dialog_class_init (PdmDialogClass *klass)
         parent_class = g_type_class_peek_parent (klass);
 
         object_class->finalize = pdm_dialog_finalize;
+
+	g_type_class_add_private (object_class, sizeof(PdmDialogPrivate));
 }
 
 static void
@@ -610,7 +614,8 @@ pdm_dialog_init (PdmDialog *dialog)
 	single = ephy_embed_shell_get_embed_single
 		(EPHY_EMBED_SHELL (ephy_shell));
 
-	dialog->priv = g_new0 (PdmDialogPrivate, 1);
+	dialog->priv = EPHY_PDM_DIALOG_GET_PRIVATE (dialog);
+
 	dialog->priv->cookies = NULL;
 	dialog->priv->passwords = NULL;
 
@@ -654,23 +659,13 @@ pdm_dialog_init (PdmDialog *dialog)
 static void
 pdm_dialog_finalize (GObject *object)
 {
-	PdmDialog *dialog;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_PDM_DIALOG (object));
-
-	dialog = PDM_DIALOG (object);
-
-        g_return_if_fail (dialog->priv != NULL);
+	PdmDialog *dialog = EPHY_PDM_DIALOG (object);
 
 	pdm_dialog_passwords_free (dialog->priv->passwords, NULL);
 	pdm_dialog_cookies_free (dialog->priv->cookies, NULL);
 
 	g_free (dialog->priv->passwords);
 	g_free (dialog->priv->cookies);
-
-        g_free (dialog->priv);
-	dialog->priv = NULL;
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -680,9 +675,9 @@ pdm_dialog_new (GtkWidget *window)
 {
 	PdmDialog *dialog;
 
-	dialog = PDM_DIALOG (g_object_new (PDM_DIALOG_TYPE,
-					   "ParentWindow", window,
-				           NULL));
+	dialog = EPHY_PDM_DIALOG (g_object_new (EPHY_TYPE_PDM_DIALOG,
+						"ParentWindow", window,
+						NULL));
 
 	return EPHY_DIALOG(dialog);
 }
@@ -820,8 +815,8 @@ pdm_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data)
 	}
 	else if (response_id == GTK_RESPONSE_HELP)
 	{
-		g_return_if_fail (IS_PDM_DIALOG (data));
+		g_return_if_fail (EPHY_IS_PDM_DIALOG (data));
 
-		pdm_dialog_show_help (PDM_DIALOG (data));
+		pdm_dialog_show_help (EPHY_PDM_DIALOG (data));
 	}
 }

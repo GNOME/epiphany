@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "ephy-automation.h"
@@ -62,7 +64,7 @@ ephy_automation_factory (BonoboGenericFactory *this_factory,
 {
         EphyAutomation *a;
 
-        a  = g_object_new (EPHY_AUTOMATION_TYPE, NULL);
+        a  = g_object_new (EPHY_TYPE_AUTOMATION, NULL);
 
         return BONOBO_OBJECT(a);
 }
@@ -95,7 +97,7 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 	EphyWindow *window;
 	Session *session;
 
-	session = SESSION (ephy_shell_get_session (ephy_shell));
+	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
 
 	/* no window open, let's try to autoresume */
 	if (session_get_windows (session) == NULL)
@@ -156,7 +158,7 @@ impl_ephy_automation_quit (PortableServer_Servant _servant,
 {
 	Session *session;
 
-	session = SESSION (ephy_shell_get_session (ephy_shell));
+	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
 
 	session_close (session);
 }
@@ -168,7 +170,7 @@ impl_ephy_automation_load_session (PortableServer_Servant _servant,
 {
 	Session *session;
 
-	session = SESSION (ephy_shell_get_session (ephy_shell));
+	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
 	session_load (session, filename);
 }
 

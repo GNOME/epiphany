@@ -25,13 +25,12 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_NAUTILUS_VIEW			(ephy_nautilus_view_get_type ())
-#define EPHY_NAUTILUS_VIEW(obj)			(GTK_CHECK_CAST ((obj), EPHY_TYPE_NAUTILUS_VIEW, \
-						 EphyNautilusView))
-#define EPHY_NAUTILUS_VIEW_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), EPHY_TYPE_NAUTILUS_VIEW, \
-						 EphyNautilusViewClass))
-#define EPHY_IS_NAUTILUS_VIEW(obj)		(GTK_CHECK_TYPE ((obj), EPHY_TYPE_NAUTILUS_VIEW))
-#define EPHY_IS_NAUTILUS_VIEW_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), EPHY_IS_NAUTILUS_VIEW_CLASS))
+#define EPHY_TYPE_NAUTILUS_VIEW		(ephy_nautilus_view_get_type ())
+#define EPHY_NAUTILUS_VIEW(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_NAUTILUS_VIEW, EphyNautilusView))
+#define EPHY_NAUTILUS_VIEW_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_NAUTILUS_VIEW, EphyNautilusViewClass))
+#define EPHY_IS_NAUTILUS_VIEW(o)	(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_NAUTILUS_VIEW))
+#define EPHY_IS_NAUTILUS_VIEW_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_NAUTILUS_VIEW))
+#define EPHY_NAUTILUS_VIEW_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_NAUTILUS_VIEW, EphyNautilusViewClass))
 
 typedef struct EphyNautilusView EphyNautilusView;
 typedef struct EphyNautilusViewClass EphyNautilusViewClass;

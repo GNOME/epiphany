@@ -56,6 +56,8 @@ enum
 
 static GObjectClass *parent_class = NULL;
 
+#define EPHY_TOOLBARS_MODEL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOOLBARS_MODEL, EphyToolbarsModelPrivate))
+
 struct EphyToolbarsModelPrivate
 {
 	EphyBookmarks *bookmarks;
@@ -403,8 +405,10 @@ ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass)
                                          g_param_spec_object ("bookmarks",
                                                               "Bookmarks",
                                                               "Bookmarks",
-                                                              EPHY_BOOKMARKS_TYPE,
+                                                              EPHY_TYPE_BOOKMARKS,
                                                               G_PARAM_READWRITE));
+
+	g_type_class_add_private (object_class, sizeof(EphyToolbarsModelPrivate));
 }
 
 static void
@@ -456,7 +460,8 @@ toolbar_removed (EphyToolbarsModel *model, int position)
 static void
 ephy_toolbars_model_init (EphyToolbarsModel *t)
 {
-	t->priv = g_new0 (EphyToolbarsModelPrivate, 1);
+	t->priv = EPHY_TOOLBARS_MODEL_GET_PRIVATE (t);
+
 	t->priv->bookmarks = NULL;
 	t->priv->loading = FALSE;
 	t->priv->xml_file = g_build_filename (ephy_dot_dir (),
@@ -474,16 +479,11 @@ ephy_toolbars_model_finalize (GObject *object)
 {
 	EphyToolbarsModel *t = EPHY_TOOLBARS_MODEL (object);
 
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (IS_EPHY_TOOLBARS_MODEL (object));
-
 	save_changes (t);
 
 	g_object_unref (t->priv->bookmarks);
 
 	g_free (t->priv->xml_file);
-
-	g_free (t->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -493,7 +493,7 @@ ephy_toolbars_model_new (EphyBookmarks *bookmarks)
 {
 	EphyToolbarsModel *t;
 
-	t = EPHY_TOOLBARS_MODEL (g_object_new (EPHY_TOOLBARS_MODEL_TYPE,
+	t = EPHY_TOOLBARS_MODEL (g_object_new (EPHY_TYPE_TOOLBARS_MODEL,
 					       "bookmarks", bookmarks,
 					       NULL));
 

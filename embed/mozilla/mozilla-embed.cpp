@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "gtkmozembed.h"
@@ -42,8 +44,6 @@ static void
 mozilla_embed_class_init (MozillaEmbedClass *klass);
 static void
 mozilla_embed_init (MozillaEmbed *gs);
-static void
-mozilla_embed_finalize (GObject *object);
 static void
 mozilla_embed_destroy (GtkObject *object);
 static void
@@ -233,6 +233,8 @@ signal_connections[] =
         { NULL, NULL } 
 };
 
+#define MOZILLA_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED, MozillaEmbedPrivate))
+
 struct MozillaEmbedPrivate
 {
 	MozillaEmbedPrivate() : wrapper(NULL), security_state(-1), no_page(1)
@@ -284,7 +286,7 @@ mozilla_embed_get_type (void)
 							     &our_info, 
 							     (GTypeFlags)0);
 		g_type_add_interface_static (mozilla_embed_type,
-                                   	     EPHY_EMBED_TYPE,
+                                   	     EPHY_TYPE_EMBED,
                                    	     &embed_info);
         }
 
@@ -311,7 +313,7 @@ impl_find_next (EphyEmbed *embed,
 static gresult
 impl_activate (EphyEmbed *embed) 
 {
-	g_return_val_if_fail (IS_EPHY_EMBED (embed), G_FAILED);
+	g_return_val_if_fail (EPHY_IS_EMBED (embed), G_FAILED);
 
 	gtk_widget_grab_focus (GTK_BIN (embed)->child);
 	
@@ -388,16 +390,19 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
      	GtkObjectClass *gtk_object_class = GTK_OBJECT_CLASS (klass); 
+
 	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
-	
+
 	gtk_object_class->destroy = mozilla_embed_destroy;
-        object_class->finalize = mozilla_embed_finalize;
+
+	g_type_class_add_private (object_class, sizeof(MozillaEmbedPrivate));
 }
 
 static void
 mozilla_embed_init (MozillaEmbed *embed)
 {
-        embed->priv = g_new0 (MozillaEmbedPrivate, 1);
+        embed->priv = MOZILLA_EMBED_GET_PRIVATE (embed);
+
 	embed->priv->no_page = 1;
 
 	mozilla_embed_connect_signals (embed);
@@ -451,25 +456,6 @@ mozilla_embed_destroy (GtkObject *object)
 	}
 	
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
-}
-
-static void
-mozilla_embed_finalize (GObject *object)
-{
-        MozillaEmbed *embed;
-
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (IS_MOZILLA_EMBED (object));
-
-	embed = MOZILLA_EMBED (object);
-	
-	g_return_if_fail (embed->priv != NULL);
-	
-	g_free (embed->priv);
-	
-        G_OBJECT_CLASS (parent_class)->finalize (object);
-
-	LOG ("MozillaEmbed finalized %p", embed)
 }
 
 static void
@@ -1225,7 +1211,7 @@ static void
 mozilla_embed_title_changed_cb (GtkMozEmbed *embed, 
 				MozillaEmbed *membed)
 {
-	g_return_if_fail (IS_MOZILLA_EMBED (membed));
+	g_return_if_fail (MOZILLA_IS_EMBED (membed));
 	g_return_if_fail (GTK_IS_WIDGET (embed));
 	g_signal_emit_by_name (membed, "ge_title");
 }

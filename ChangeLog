@@ -1,5 +1,247 @@
 2003-09-02  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/downloader-view.c: (downloader_view_get_type),
+	(downloader_view_class_init), (downloader_view_init),
+	(downloader_view_finalize), (downloader_view_new),
+	(ensure_selected_row):
+	* embed/downloader-view.h:
+	* embed/ephy-embed-dialog.c: (ephy_embed_dialog_get_type),
+	(ephy_embed_dialog_class_init), (ephy_embed_dialog_init),
+	(ephy_embed_dialog_finalize), (ephy_embed_dialog_new),
+	(ephy_embed_dialog_new_with_parent):
+	* embed/ephy-embed-dialog.h:
+	* embed/ephy-embed-event.c: (ephy_embed_event_class_init),
+	(ephy_embed_event_init), (ephy_embed_event_finalize),
+	(ephy_embed_event_new):
+	* embed/ephy-embed-event.h:
+	* embed/ephy-embed-persist.c: (ephy_embed_persist_class_init),
+	(ephy_embed_persist_init), (ephy_embed_persist_finalize),
+	(ephy_embed_persist_new):
+	* embed/ephy-embed-persist.h:
+	* embed/ephy-embed-popup-control.c:
+	(ephy_embed_popup_control_class_init),
+	(ephy_embed_popup_control_init),
+	(ephy_embed_popup_control_finalize),
+	(ephy_embed_popup_control_new),
+	(ephy_embed_popup_control_get_event):
+	* embed/ephy-embed-popup-control.h:
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_class_init),
+	(ephy_embed_shell_init), (ephy_embed_shell_finalize),
+	(ephy_embed_shell_new):
+	* embed/ephy-embed-shell.h:
+	* embed/ephy-embed-single.c: (ephy_embed_single_class_init),
+	(ephy_embed_single_init):
+	* embed/ephy-embed-single.h:
+	* embed/ephy-embed-utils.c:
+	(ephy_embed_utils_build_encodings_submenu):
+	* embed/ephy-embed.c: (ephy_embed_base_init), (ephy_embed_new):
+	* embed/ephy-embed.h:
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_class_init),
+	(ephy_favicon_cache_new), (ephy_favicon_cache_init),
+	(ephy_favicon_cache_finalize):
+	* embed/ephy-favicon-cache.h:
+	* embed/ephy-history.c: (ephy_history_class_init),
+	(ephy_history_init), (ephy_history_finalize), (ephy_history_new):
+	* embed/ephy-history.h:
+	* embed/find-dialog.c: (find_dialog_get_type),
+	(find_dialog_class_init), (sync_page_change), (sync_embed),
+	(find_dialog_init), (find_dialog_finalize), (find_dialog_new),
+	(find_dialog_new_with_parent), (find_dialog_go_next),
+	(find_dialog_go_prev), (find_next_button_clicked_cb),
+	(find_prev_button_clicked_cb), (find_entry_changed_cb),
+	(find_check_toggled_cb):
+	* embed/find-dialog.h:
+	* embed/mozilla/ProgressListener.cpp:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed-persist.h:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-embed-single.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* embed/mozilla/mozilla-embed.h:
+	* embed/print-dialog.c: (print_dialog_get_type),
+	(print_dialog_class_init), (print_dialog_init), (print_dialog_new),
+	(print_dialog_new_with_parent), (print_dialog_print),
+	(print_dialog_preview), (print_preview_button_cb):
+	* embed/print-dialog.h:
+	* lib/ephy-autocompletion.c: (ephy_autocompletion_class_init),
+	(ephy_autocompletion_init), (ephy_autocompletion_finalize_impl):
+	* lib/ephy-dialog.c: (ephy_dialog_class_init), (ephy_dialog_init),
+	(ephy_dialog_finalize), (ephy_dialog_new),
+	(ephy_dialog_new_with_parent):
+	* lib/ephy-dialog.h:
+	* lib/ephy-node-db.c: (ephy_node_db_class_init),
+	(ephy_node_db_init), (ephy_node_db_finalize):
+	* lib/ephy-node-filter.c: (ephy_node_filter_class_init),
+	(ephy_node_filter_init), (ephy_node_filter_finalize):
+	* lib/widgets/ephy-arrow-toolbutton.c:
+	(ephy_arrow_toolbutton_set_tooltip),
+	(ephy_arrow_toolbutton_class_init), (ephy_arrow_toolbutton_init),
+	(ephy_arrow_toolbutton_finalize):
+	* lib/widgets/ephy-arrow-toolbutton.h:
+	* lib/widgets/ephy-autocompletion-window.c:
+	(ephy_autocompletion_window_class_init),
+	(ephy_autocompletion_window_init),
+	(ephy_autocompletion_window_finalize_impl):
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_class_init), (ephy_location_entry_init),
+	(ephy_location_entry_finalize_impl):
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_class_init),
+	(ephy_node_view_finalize), (ephy_node_view_init):
+	* lib/widgets/ephy-search-entry.c: (ephy_search_entry_class_init),
+	(ephy_search_entry_init):
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_new),
+	(ephy_spinner_init), (ephy_spinner_expose),
+	(ephy_spinner_finalize), (ephy_spinner_class_init):
+	* lib/widgets/ephy-spinner.h:
+	* lib/widgets/ephy-tree-model-node.c:
+	(ephy_tree_model_node_class_init), (ephy_tree_model_node_init),
+	(ephy_tree_model_node_finalize):
+	* lib/widgets/ephy-tree-model-sort.c:
+	(ephy_tree_model_sort_class_init), (ephy_tree_model_sort_init),
+	(ephy_tree_model_sort_finalize):
+	* lib/widgets/ephy-zoom-action.c: (ephy_zoom_action_class_init),
+	(ephy_zoom_action_init):
+	* lib/widgets/ephy-zoom-control.c: (ephy_zoom_control_init),
+	(ephy_zoom_control_class_init), (ephy_zoom_control_finalize):
+	* src/bookmarks/ephy-bookmark-action.c:
+	(ephy_bookmark_action_finalize), (ephy_bookmark_action_class_init),
+	(ephy_bookmark_action_init), (ephy_bookmark_action_new):
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(ephy_bookmark_properties_class_init),
+	(ephy_bookmark_properties_init):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_class_init),
+	(ephy_bookmarks_editor_finalize), (ephy_bookmarks_editor_init):
+	* src/bookmarks/ephy-bookmarks-editor.h:
+	* src/bookmarks/ephy-bookmarks-menu.c:
+	(ephy_bookmarks_menu_class_init), (ephy_bookmarks_menu_init),
+	(ephy_bookmarks_menu_finalize):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_class_init),
+	(update_favorites_menus), (ephy_bookmarks_init),
+	(ephy_bookmarks_finalize), (ephy_bookmarks_new),
+	(ephy_bookmarks_find_bookmark):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/bookmarks/ephy-new-bookmark.c:
+	(ephy_new_bookmark_class_init), (ephy_new_bookmark_finalize),
+	(ephy_new_bookmark_init):
+	* src/bookmarks/ephy-topic-action.c:
+	(ephy_topic_action_class_init), (ephy_topic_action_init):
+	* src/bookmarks/ephy-topics-selector.c:
+	(ephy_topics_selector_class_init), (ephy_topics_selector_init),
+	(ephy_topics_selector_new):
+	* src/bookmarks/ephy-topics-selector.h:
+	* src/ephy-automation.c: (ephy_automation_factory),
+	(impl_ephy_automation_loadurl), (impl_ephy_automation_quit),
+	(impl_ephy_automation_load_session):
+	* src/ephy-automation.h:
+	* src/ephy-encoding-menu.c: (ephy_encoding_menu_class_init),
+	(ephy_encoding_menu_init), (ephy_encoding_menu_finalize_impl):
+	* src/ephy-favicon-action.c: (ephy_favicon_action_class_init),
+	(ephy_favicon_action_init), (ephy_favicon_action_finalize):
+	* src/ephy-favorites-menu.c: (ephy_favorites_menu_class_init),
+	(ephy_favorites_menu_init), (ephy_favorites_menu_finalize):
+	* src/ephy-history-window.c: (confirmation_dialog_response_cb),
+	(ephy_history_window_class_init), (ephy_history_window_finalize),
+	(ephy_history_window_init):
+	* src/ephy-location-action.h:
+	* src/ephy-nautilus-view.c: (ephy_nautilus_view_instance_init),
+	(ephy_nautilus_view_finalize), (ephy_nautilus_view_class_init):
+	* src/ephy-nautilus-view.h:
+	* src/ephy-navigation-action.c:
+	(ephy_navigation_action_class_init), (ephy_navigation_action_init):
+	* src/ephy-notebook.c: (ephy_notebook_class_init),
+	(ephy_notebook_new), (notebook_drag_data_received_cb),
+	(ephy_notebook_init), (ephy_notebook_finalize),
+	(ephy_notebook_insert_page), (ephy_notebook_remove_page):
+	* src/ephy-notebook.h:
+	* src/ephy-plugin.h:
+	* src/ephy-shell.c: (ephy_shell_get_type), (ephy_shell_class_init),
+	(ephy_shell_init), (ephy_shell_finalize), (ephy_shell_new),
+	(ephy_shell_get_active_window):
+	* src/ephy-shell.h:
+	* src/ephy-spinner-action.c: (ephy_spinner_action_class_init),
+	(ephy_spinner_action_init):
+	* src/ephy-tab.c: (ephy_tab_action_activate_cb),
+	(ephy_tab_class_init), (ephy_tab_finalize), (ephy_tab_new),
+	(ephy_tab_set_load_status), (ephy_tab_get_load_status),
+	(ephy_tab_set_link_message), (ephy_tab_get_link_message),
+	(ephy_tab_get_embed), (ephy_tab_set_window), (ephy_tab_get_window),
+	(ephy_tab_get_size), (ephy_tab_get_visibility),
+	(ephy_tab_set_visibility), (ephy_tab_set_icon_address),
+	(ephy_tab_get_icon_address), (ephy_tab_net_state_cb),
+	(ephy_tab_destroy_brsr_cb), (ephy_tab_dom_mouse_click_cb),
+	(ephy_tab_init), (ephy_tab_set_load_percent),
+	(ephy_tab_get_load_percent), (ephy_tab_get_navigation_flags),
+	(ephy_tab_get_status_message), (ephy_tab_set_title),
+	(ephy_tab_get_title), (ephy_tab_get_location),
+	(ephy_tab_set_location), (ephy_tab_set_security_level),
+	(ephy_tab_get_security_level), (ephy_tab_set_zoom),
+	(ephy_tab_get_zoom), (ephy_tab_get_action):
+	* src/ephy-tab.h:
+	* src/ephy-tabs-menu.c: (ephy_tabs_menu_class_init),
+	(ephy_tabs_menu_init), (ephy_tabs_menu_finalize_impl):
+	* src/ephy-tabs-menu.h:
+	* src/ephy-toolbars-model.c: (ephy_toolbars_model_class_init),
+	(ephy_toolbars_model_init), (ephy_toolbars_model_finalize),
+	(ephy_toolbars_model_new):
+	* src/ephy-toolbars-model.h:
+	* src/ephy-window.c: (remove_from_session),
+	(ephy_window_class_init), (sync_tab_load_progress),
+	(sync_tab_load_status), (sync_tab_message), (sync_tab_security),
+	(sync_tab_visibility), (tab_context_menu_cb),
+	(ephy_window_set_active_tab), (tab_added_cb), (tab_removed_cb),
+	(tab_detached_cb), (ephy_window_init), (ephy_window_finalize),
+	(ephy_window_new), (ephy_window_get_notebook),
+	(ephy_window_add_tab), (real_get_active_tab),
+	(ephy_window_remove_tab), (ephy_window_load_url),
+	(ephy_window_update_control), (ephy_window_get_active_tab),
+	(ephy_window_get_active_embed), (ephy_window_get_tabs),
+	(ephy_window_notebook_switch_page_cb), (ephy_window_set_zoom):
+	* src/ephy-window.h:
+	* src/language-editor.c: (language_editor_get_type),
+	(language_editor_class_init), (language_editor_init),
+	(language_editor_new):
+	* src/language-editor.h:
+	* src/pdm-dialog.c: (pdm_dialog_get_type), (pdm_dialog_class_init),
+	(pdm_dialog_init), (pdm_dialog_finalize), (pdm_dialog_new),
+	(pdm_dialog_response_cb):
+	* src/pdm-dialog.h:
+	* src/popup-commands.c: (popup_cmd_copy_link_address):
+	* src/ppview-toolbar.c: (ppview_toolbar_get_type),
+	(ppview_toolbar_class_init), (ppview_toolbar_set_property),
+	(ppview_toolbar_get_property), (ppview_toolbar_init),
+	(ppview_toolbar_finalize), (ppview_toolbar_new),
+	(toolbar_cmd_ppv_goto_first), (toolbar_cmd_ppv_go_back),
+	(toolbar_cmd_ppv_go_forward), (toolbar_cmd_ppv_close):
+	* src/ppview-toolbar.h:
+	* src/prefs-dialog.c: (prefs_dialog_get_type), (prefs_dialog_new),
+	(prefs_dialog_class_init), (prefs_dialog_finalize),
+	(autodetect_encoding_menu_changed_cb), (language_menu_changed_cb),
+	(prefs_dialog_init), (fonts_language_optionmenu_changed_cb),
+	(prefs_language_more_button_clicked_cb):
+	* src/prefs-dialog.h:
+	* src/session.c: (session_class_init), (session_init),
+	(session_dispose), (session_finalize), (session_new),
+	(session_get_windows):
+	* src/session.h:
+	* src/statusbar.c: (statusbar_class_init), (statusbar_init),
+	(statusbar_finalize), (statusbar_new):
+	* src/statusbar.h:
+	* src/toolbar.c: (toolbar_class_init), (toolbar_set_property),
+	(toolbar_get_property), (action_request_cb),
+	(location_user_changed_cb), (toolbar_init), (toolbar_finalize),
+	(toolbar_new):
+	* src/toolbar.h:
+
+	Change object macros: Consistently name types EPHY_TYPE_X,
+	check macros EPHY_IS_X[_CLASS] instead of IS_EPHY_X[_CLASS],
+	and replace the obsolete GTK_CHECK_* macros with G_TYPE_CHECK_*.
+
+	Use gobject instance private data, and remove unnecessary type checks
+	in class implementations.
+
+2003-09-02  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ppview-toolbar.c:
 
 	Fix ui xml, make ppview toolbar work again.

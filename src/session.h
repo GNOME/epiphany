@@ -19,25 +19,25 @@
 #ifndef SESSION_H
 #define SESSION_H
 
-#define SESSION_CRASHED "type:session_crashed"
-#define SESSION_GNOME "type:session_gnome"
-
 #include "ephy-window.h"
-
-G_BEGIN_DECLS
 
 #include <glib-object.h>
 #include <glib.h>
 
+G_BEGIN_DECLS
+
+#define EPHY_TYPE_SESSION		(session_get_type ())
+#define EPHY_SESSION(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_SESSION, Session))
+#define EPHY_SESSION_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_SESSION, SessionClass))
+#define EPHY_IS_SESSION(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_SESSION))
+#define EPHY_IS_SESSION_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_SESSION))
+#define EPHY_SESSION_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SESSION, SessionClass))
+
+#define SESSION_CRASHED "type:session_crashed"
+#define SESSION_GNOME "type:session_gnome"
+
 typedef struct Session Session;
 typedef struct SessionClass SessionClass;
-
-#define SESSION_TYPE             (session_get_type ())
-#define SESSION(obj)             (GTK_CHECK_CAST ((obj), SESSION_TYPE, Session))
-#define SESSION_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), SESSION, SessionClass))
-#define IS_SESSION(obj)          (GTK_CHECK_TYPE ((obj), SESSION_TYPE))
-#define IS_SESSION_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), SESSION))
-
 typedef struct SessionPrivate SessionPrivate;
 
 struct Session
