@@ -1,5 +1,22 @@
 2004-08-06  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-string.c: (ephy_string_parse_uri_list):
+	* lib/ephy-string.h:
+	* lib/widgets/ephy-node-view.c: (drag_data_received_cb),
+	(ephy_node_view_class_init):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	* src/ephy-notebook.c: (notebook_drag_data_received_cb):
+	* src/ephy-notebook.h:
+	* src/ephy-session.c:
+	* src/ephy-shell.c: (ephy_shell_new_tab):
+	* src/ephy-tab.c: (ephy_tab_new_window_cb):
+	* src/ephy-window.c: (ephy_window_load_in_tabs):
+
+	Fix dragging of urls which gnome-vfs can't handle.
+	Fix new tab positioning when opening tabs from drags.
+
+2004-08-06  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-session.c: (write_window_geometry), (write_tool_window),
 	(ephy_session_load):
 

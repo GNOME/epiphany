@@ -37,6 +37,8 @@ char		*ephy_string_elide_underscores		(const char *original);
 
 char            *ephy_string_double_underscores         (const char *string);
 
+GList		*ephy_string_parse_uri_list		(const char *uri_list);
+
 G_END_DECLS
 
 #endif

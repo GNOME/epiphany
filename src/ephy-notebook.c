@@ -606,33 +606,32 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 	{
 		/* URL_TYPE has format: url \n title */
 		tmp = g_strsplit (selection_data->data, "\n", 2);
-		if (tmp)
+		if (tmp != NULL && tmp[0] != NULL)
 		{
-			uri = gnome_vfs_uri_new (tmp[0]);
-			if (uri)
-			{
-				uri_list = g_list_append (uri_list, uri);
-			}
-			g_strfreev (tmp);
+			uri_list = g_list_prepend (uri_list, g_strdup (tmp[0]));
 		}
+
+		g_strfreev (tmp);
 	}
 	else if (selection_data->target == gdk_atom_intern (EPHY_DND_URI_LIST_TYPE, FALSE))
 	{
-		uri_list = gnome_vfs_uri_list_parse (selection_data->data);
+		uri_list = ephy_string_parse_uri_list (selection_data->data);
 	}
 	else
 	{
-		g_assert_not_reached ();
+		g_return_if_reached ();
 	}
 
-	if (uri_list)
+	if (uri_list != NULL)
 	{
 		EphyWindow *window;
 
 		window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (widget)));
 
 		ephy_window_load_in_tabs (window, tab, uri_list);
-		gnome_vfs_uri_list_free (uri_list);
+
+		g_list_foreach (uri_list, (GFunc) g_free, NULL);
+		g_list_free (uri_list);
 	}
 }
 

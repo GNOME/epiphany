@@ -41,11 +41,6 @@ typedef struct EphyNotebookClass	EphyNotebookClass;
 typedef struct EphyNotebook		EphyNotebook;
 typedef struct EphyNotebookPrivate	EphyNotebookPrivate;
 
-enum
-{
-	EPHY_NOTEBOOK_ADD_LAST	= -1
-};
-
 struct EphyNotebook
 {
 	GtkNotebook parent;

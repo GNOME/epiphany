@@ -549,7 +549,7 @@ ephy_shell_new_tab (EphyShell *shell,
 	gboolean jump_to;
 	EphyEmbed *previous_embed = NULL;
 	GtkWidget *nb;
-	gint position;
+	int position = -1;
 	Toolbar *toolbar;
 
 	if (flags & EPHY_NEW_TAB_IN_NEW_WINDOW) in_new_window = TRUE;
@@ -557,7 +557,7 @@ ephy_shell_new_tab (EphyShell *shell,
 
 	in_new_window = in_new_window && !eel_gconf_get_boolean (CONF_LOCKDOWN_FULLSCREEN);
 
-	jump_to = (flags & EPHY_NEW_TAB_JUMP);
+	jump_to = (flags & EPHY_NEW_TAB_JUMP) != 0;
 
 	if (!in_new_window && parent_window != NULL)
 	{
@@ -570,30 +570,24 @@ ephy_shell_new_tab (EphyShell *shell,
 
 	toolbar = EPHY_TOOLBAR (ephy_window_get_toolbar (window));
 
-	if (previous_tab)
+	if (previous_tab != NULL)
 	{
 		previous_embed = ephy_tab_get_embed (previous_tab);
 	}
 
-	if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_embed != NULL)
+	if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_tab != NULL)
 	{
 		nb = ephy_window_get_notebook (window);
 		position = gtk_notebook_page_num (GTK_NOTEBOOK (nb),
-						  GTK_WIDGET (previous_embed)) + 1;
-	}
-	else
-	{
-		position = EPHY_NOTEBOOK_ADD_LAST;
+						  GTK_WIDGET (previous_tab)) + 1;
 	}
 
 	tab = ephy_tab_new ();
 	gtk_widget_show (GTK_WIDGET (tab));
 	embed = ephy_tab_get_embed (tab);
 
-	ephy_window_add_tab (window, tab,
-			     position,
-			     jump_to);
-	gtk_widget_show (GTK_WIDGET(window));
+	ephy_window_add_tab (window, tab, position, jump_to);
+	gtk_window_present (GTK_WINDOW (window));
 
 	if (flags & EPHY_NEW_TAB_HOME_PAGE ||
 	    flags & EPHY_NEW_TAB_NEW_PAGE)

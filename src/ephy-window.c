@@ -2793,12 +2793,13 @@ ephy_window_set_zoom (EphyWindow *window,
 }
 
 void
-ephy_window_load_in_tabs (EphyWindow *window, EphyTab *tab, GList *uri_list)
+ephy_window_load_in_tabs (EphyWindow *window,
+			  EphyTab *tab,
+			  GList *uri_list)
 {
 	EphyEmbed *embed = NULL;
 	GList *l;
 	guint num = 0;
-	GnomeVFSURI *uri;
 
 	if (tab != NULL)
 	{
@@ -2809,10 +2810,7 @@ ephy_window_load_in_tabs (EphyWindow *window, EphyTab *tab, GList *uri_list)
 	l = uri_list;
 	while (l != NULL && num < INSANE_NUMBER_OF_URLS)
 	{
-		gchar *url = NULL;
-
-		uri = (GnomeVFSURI*) l->data;
-		url = gnome_vfs_uri_to_string (uri, GNOME_VFS_URI_HIDE_NONE);
+		const char *url = l->data;
 
 		if (num == 0 && embed != NULL)
 		{
@@ -2832,8 +2830,6 @@ ephy_window_load_in_tabs (EphyWindow *window, EphyTab *tab, GList *uri_list)
 							 EPHY_NEW_TAB_APPEND_LAST));
 		}
 
-		g_free (url);
-		url = NULL;
 		l = l->next;
 		++num;
 	}
