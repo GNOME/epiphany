@@ -37,6 +37,7 @@
 #include "ephy-favicon-cache.h"
 #include "ephy-ellipsizing-label.h"
 #include "ephy-spinner.h"
+#include "ephy-string.h"
 
 #include <glib-object.h>
 #include <gtk/gtkeventbox.h>
