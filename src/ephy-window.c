@@ -2031,7 +2031,7 @@ ephy_window_dispose (GObject *object)
 		ephy_extension_detach_window (manager, window);
 
 		/* Deactivate menus */
-		popups = gtk_ui_manager_get_toplevels (window->priv->manager, GTK_UI_MANAGER_POPUP);
+		popups = gtk_ui_manager_get_toplevels (GTK_UI_MANAGER (window->ui_merge), GTK_UI_MANAGER_POPUP);
 		g_slist_foreach (popups, (GFunc) gtk_menu_shell_deactivate, NULL);
 		g_slist_free (popups);
 	
@@ -2077,11 +2077,11 @@ ephy_window_dispose (GObject *object)
 		g_object_unref (priv->action_group);
 		priv->action_group = NULL;
 
-		g_object_unref (priv->manager);
-		priv->manager = NULL;
+		g_object_unref (window->ui_merge);
+		window->ui_merge = NULL;
 	}
 
-	destroy_fullscreen_popup (window);
+	destroy_exit_fullscreen_popup (window);
 
         G_OBJECT_CLASS (parent_class)->dispose (object);
 }
