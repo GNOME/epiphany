@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "ephy-command-manager.h"
@@ -88,9 +88,9 @@ ephy_command_manager_do_command (EphyCommandManager *manager,
 }
 
 gboolean
-ephy_command_manager_get_command_state (EphyCommandManager *manager,
+ephy_command_manager_can_do_command (EphyCommandManager *manager,
 				        const char *command)
 {
 	EphyCommandManagerClass *klass = EPHY_COMMAND_MANAGER_GET_CLASS (manager);
-        return klass->get_command_state (manager, command);
+        return klass->can_do_command (manager, command);
 }

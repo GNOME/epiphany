@@ -209,8 +209,8 @@ impl_manager_do_command (EphyCommandManager *manager,
 }
 
 static gboolean
-impl_manager_get_command_state (EphyCommandManager *manager,
-			        const char *command) 
+impl_manager_can_do_command (EphyCommandManager *manager,
+			     const char *command) 
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(manager)->priv;
 	nsresult result;
@@ -225,7 +225,7 @@ static void
 ephy_command_manager_init (EphyCommandManagerClass *manager_class)
 {
 	manager_class->do_command = impl_manager_do_command;
-	manager_class->get_command_state = impl_manager_get_command_state;
+	manager_class->can_do_command = impl_manager_can_do_command;
 }
 	
 GType 

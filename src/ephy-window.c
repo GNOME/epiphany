@@ -603,15 +603,15 @@ edit_menu_show_cb (GtkWidget *menu,
 		embed = ephy_window_get_active_embed (window);
 		g_return_if_fail (embed != NULL);
 
-		can_copy = ephy_command_manager_get_command_state
+		can_copy = ephy_command_manager_can_do_command
 				(EPHY_COMMAND_MANAGER (embed), "cmd_copy");
-		can_cut = ephy_command_manager_get_command_state
+		can_cut = ephy_command_manager_can_do_command
 				(EPHY_COMMAND_MANAGER (embed), "cmd_cut");
-		can_paste = ephy_command_manager_get_command_state
+		can_paste = ephy_command_manager_can_do_command
 				(EPHY_COMMAND_MANAGER (embed), "cmd_paste");
-		can_undo = ephy_command_manager_get_command_state
+		can_undo = ephy_command_manager_can_do_command
 				(EPHY_COMMAND_MANAGER (embed), "cmd_undo");
-		can_redo = ephy_command_manager_get_command_state
+		can_redo = ephy_command_manager_can_do_command
 				(EPHY_COMMAND_MANAGER (embed), "cmd_redo");
 	}
 
