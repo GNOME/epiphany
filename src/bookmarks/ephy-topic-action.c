@@ -25,6 +25,7 @@
 #include <gtk/gtktoolitem.h>
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
+#include <string.h>
 
 #include "ephy-topic-action.h"
 #include "ephy-node-common.h"
@@ -33,6 +34,7 @@
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
+#include "ephy-dnd.h"
 #include "ephy-gui.h"
 #include "ephy-string.h"
 #include "ephy-marshal.h"
@@ -42,10 +44,20 @@ static void ephy_topic_action_class_init (EphyTopicActionClass *class);
 
 #define EPHY_TOPIC_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOPIC_ACTION, EphyTopicActionPrivate))
 
+static GtkTargetEntry drag_targets[] =
+{
+	{ EPHY_DND_TOPIC_TYPE, 0, 0 }
+};
+static int n_drag_targets = G_N_ELEMENTS (drag_targets);
+
 struct EphyTopicActionPrivate
 {
 	guint topic_id;
 	EphyNode *topic_node;
+
+	guint motion_handler;
+	gint drag_x;
+	gint drag_y;
 };
 
 enum
@@ -109,6 +121,7 @@ create_tool_item (GtkAction *action)
 	gtk_container_add (GTK_CONTAINER (item), hbox);
 
 	button = gtk_toggle_button_new ();
+	gtk_widget_add_events (GTK_WIDGET (button), GDK_BUTTON1_MOTION_MASK);
 	gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (hbox), button);
@@ -133,6 +146,7 @@ create_tool_item (GtkAction *action)
 static void
 menu_deactivate_cb (GtkMenuShell *ms, GtkWidget *button)
 {
+	g_object_set_data (G_OBJECT (button), "popup", NULL);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
 	gtk_button_released (GTK_BUTTON (button));
 }
@@ -348,17 +362,17 @@ open_in_tabs_activate_cb (GtkWidget *menu, EphyTopicAction *action)
 }
 
 static void
-remove_activate_cb (GtkWidget *menu, GtkWidget *proxy)
+remove_from_model (GtkWidget *widget)
 {
 	EphyBookmarks *bookmarks;
 	EggToolbarsModel *model;
 	GtkWidget *item, *toolbar;
 	int pos;
 
-	item = gtk_widget_get_ancestor (proxy, GTK_TYPE_TOOL_ITEM);
+	item = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM);
 	g_return_if_fail (item != NULL);
 
-	toolbar = gtk_widget_get_ancestor (proxy, GTK_TYPE_TOOLBAR);
+	toolbar = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOLBAR);
 	g_return_if_fail (toolbar != NULL);
 
 	pos = gtk_toolbar_get_item_index (GTK_TOOLBAR (toolbar),
@@ -367,6 +381,12 @@ remove_activate_cb (GtkWidget *menu, GtkWidget *proxy)
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	model = ephy_bookmarks_get_toolbars_model (bookmarks);
 	egg_toolbars_model_remove_item (model, 0, pos);
+}
+
+static void
+remove_activate_cb (GtkWidget *menu, GtkWidget *proxy)
+{
+	remove_from_model (proxy);
 }
 
 static GtkWidget *
@@ -518,27 +538,104 @@ build_menu (EphyTopicAction *action)
 }
 
 static void
+drag_data_get_cb (GtkWidget *widget, GdkDragContext *context,
+		  GtkSelectionData *selection_data, guint info,
+		  guint32 time, EphyTopicAction *action)
+{
+	EphyBookmarks *bookmarks;
+	char *uri;
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	g_return_if_fail (bookmarks != NULL);
+
+	uri = ephy_bookmarks_get_topic_uri (bookmarks, action->priv->topic_node);
+	g_return_if_fail (uri != NULL);
+
+	gtk_selection_data_set (selection_data, selection_data->target, 8,
+				uri, strlen (uri));
+
+	g_free (uri);
+}
+
+static void
+drag_data_delete_cb (GtkWidget *widget, GdkDragContext *context,
+		     EphyTopicAction *action)
+{
+	remove_from_model (widget);
+}
+
+static gboolean
+stop_drag_check (EphyTopicAction *action, GtkWidget *widget)
+{
+	if (action->priv->motion_handler)
+	{
+		g_signal_handler_disconnect (widget, action->priv->motion_handler);
+		action->priv->motion_handler = 0;
+
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static gboolean
+check_horizontal_threshold (GtkWidget *widget, gint start_x, gint start_y,
+			    gint current_x, gint current_y)
+{
+	gint drag_threshold;
+
+	g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+	g_object_get (gtk_widget_get_settings (widget),
+		      "gtk-dnd-drag-threshold", &drag_threshold,
+		      NULL);
+
+	return (ABS (current_x - start_x) > drag_threshold &&
+		ABS (current_y - start_y) < drag_threshold);
+}
+
+static gboolean
+drag_motion_cb (GtkWidget *widget, GdkEventMotion *event, EphyTopicAction *action)
+{
+	GtkWidget *button, *event_widget;
+
+	event_widget = gtk_get_event_widget ((GdkEvent*) event);
+	button = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "button"));
+
+	if (!gtk_widget_is_ancestor (event_widget, widget) &&
+	    check_horizontal_threshold (widget, action->priv->drag_x,
+				        action->priv->drag_y, event->x, event->y))
+	{
+		GtkTargetList *target_list;
+
+		target_list = gtk_target_list_new (drag_targets, n_drag_targets);
+
+		stop_drag_check (action, widget);
+		gtk_menu_popdown (GTK_MENU (widget));
+		gtk_drag_begin (button, target_list, GDK_ACTION_MOVE |
+				GDK_ACTION_COPY, 1, (GdkEvent*)event);
+	}
+
+	return TRUE;
+}
+
+static void
 button_toggled_cb (GtkWidget *button,
 		   EphyTopicAction *action)
 {
-	GtkWidget *menu;
-
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
 	{
+		GtkWidget *menu;
+
 		menu = build_menu (action);
 		g_signal_connect (menu, "deactivate",
 				  G_CALLBACK (menu_deactivate_cb), button);
 		gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
 				ephy_gui_menu_position_under_widget,
 				button, 1, gtk_get_current_event_time ());
-	}
-}
 
-static void
-button_pressed_cb (GtkWidget *button,
-		   EphyTopicAction *action)
-{
-	 gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+		g_object_set_data (G_OBJECT (button), "popup", menu);
+	}
 }
 
 static GtkWidget *
@@ -606,12 +703,48 @@ popup_menu_cb (GtkWidget *widget, EphyTopicAction *action)
 }
 
 static gboolean
+button_release_cb (GtkWidget *widget,
+                   GdkEventButton *event,
+		   EphyTopicAction *action)
+{
+	if (event->button == 1)
+	{
+		stop_drag_check (action, widget);
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+	}
+
+	return FALSE;
+}
+
+static gboolean
 button_press_cb (GtkWidget *widget,
 		 GdkEventButton *event,
 		 EphyTopicAction *action)
 {
-	if (event->button == 3 &&
-	    gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))	
+	if (event->button == 1 &&
+	    gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))
+	{
+		if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+		{
+			GtkWidget *menu;
+
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+			menu = g_object_get_data (G_OBJECT (widget), "popup");
+			g_return_val_if_fail (menu != NULL, FALSE);
+
+			g_object_set_data (G_OBJECT (menu), "button", widget);
+
+			action->priv->drag_x = event->x;
+			action->priv->drag_y = event->y;
+			action->priv->motion_handler = g_signal_connect
+				(menu, "motion_notify_event",
+				 G_CALLBACK (drag_motion_cb), action);
+			
+			return TRUE;
+		}
+	}
+	else if (event->button == 3 &&
+	         gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))	
 	{
 		show_context_menu (action, widget, NULL);
 		return TRUE;
@@ -642,8 +775,12 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 				  G_CALLBACK (popup_menu_cb), action);
 		g_signal_connect (button, "button-press-event",
 				  G_CALLBACK (button_press_cb), action);
-		g_signal_connect (button, "pressed",
-				  G_CALLBACK (button_pressed_cb), action);
+		g_signal_connect (button, "button-release-event",
+				  G_CALLBACK (button_release_cb), action);
+		g_signal_connect (button, "drag_data_get",
+				  G_CALLBACK (drag_data_get_cb), action);
+		g_signal_connect (button, "drag_data_delete",
+				  G_CALLBACK (drag_data_delete_cb), action);
 	}
 }
 

@@ -1,3 +1,15 @@
+2004-07-11  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* src/bookmarks/ephy-topic-action.c: (create_tool_item),
+	(menu_deactivate_cb), (remove_from_model), (remove_activate_cb),
+	(drag_data_get_cb), (drag_data_delete_cb), (stop_drag_check),
+	(check_horizontal_threshold), (drag_motion_cb),
+	(button_toggled_cb), (button_release_cb), (button_press_cb),
+	(connect_proxy):
+
+	Implement topics drag and drop. Totally tricky but it seem
+	to work fine :)
+
 2004-07-11  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/bookmarks/ephy-bookmark-action.c: (drag_motion_cb):
