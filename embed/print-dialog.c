@@ -168,11 +168,7 @@ ephy_print_get_print_info (void)
 	filename = eel_gconf_get_string (print_props[FILE_PROP].pref);
 	if (filename != NULL)
 	{
-		char *expanded;
-
-		expanded = gnome_vfs_expand_initial_tilde (filename);
-		info->file = g_filename_to_utf8 (expanded, -1, NULL, NULL, NULL);
-		g_free (expanded);
+		info->file = gnome_vfs_expand_initial_tilde (filename);
 	}
 	else
 	{
