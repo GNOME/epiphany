@@ -19,6 +19,7 @@
 #include "ephy-toolbars-model.h"
 #include "ephy-dnd.h"
 #include "ephy-new-bookmark.h"
+#include "ephy-file-helpers.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 
@@ -45,6 +46,7 @@ static GObjectClass *parent_class = NULL;
 struct EphyToolbarsModelPrivate
 {
 	EphyBookmarks *bookmarks;
+	char *xml_file;
 };
 
 GType
@@ -193,10 +195,62 @@ ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass)
 }
 
 static void
+item_added (EphyToolbarsModel *model, int toolbar_position, int position)
+{
+	egg_toolbars_model_save (EGG_TOOLBARS_MODEL (model),
+				 model->priv->xml_file);
+}
+
+static void
+item_removed (EphyToolbarsModel *model, int toolbar_position, int position)
+{
+	egg_toolbars_model_save (EGG_TOOLBARS_MODEL (model),
+				 model->priv->xml_file);
+}
+
+static void
+toolbar_added (EphyToolbarsModel *model, int position)
+{
+	egg_toolbars_model_save (EGG_TOOLBARS_MODEL (model),
+				 model->priv->xml_file);
+}
+
+static void
+toolbar_removed (EphyToolbarsModel *model, int position)
+{
+	egg_toolbars_model_save (EGG_TOOLBARS_MODEL (model),
+				 model->priv->xml_file);
+}
+
+static void
 ephy_toolbars_model_init (EphyToolbarsModel *t)
 {
+	EggToolbarsModel *egg_model = EGG_TOOLBARS_MODEL (t);
+
 	t->priv = g_new0 (EphyToolbarsModelPrivate, 1);
 	t->priv->bookmarks = NULL;
+
+	t->priv->xml_file = g_build_filename (ephy_dot_dir (),
+                                              "ephy-toolbar.xml",
+                                              NULL);
+
+	if (g_file_test (t->priv->xml_file, G_FILE_TEST_EXISTS))
+	{
+		egg_toolbars_model_load (egg_model,
+					 t->priv->xml_file);
+	}
+	else
+	{
+		const char *default_xml;
+
+		default_xml = ephy_file ("epiphany-toolbar.xml");
+		egg_toolbars_model_load (egg_model, default_xml);
+	}
+
+	g_signal_connect (t, "item_added", G_CALLBACK (item_added), NULL);
+	g_signal_connect (t, "item_removed", G_CALLBACK (item_removed), NULL);
+	g_signal_connect (t, "toolbar_added", G_CALLBACK (toolbar_added), NULL);
+	g_signal_connect (t, "toolbar_removed", G_CALLBACK (toolbar_removed), NULL);
 }
 
 static void
@@ -208,6 +262,8 @@ ephy_toolbars_model_finalize (GObject *object)
 	g_return_if_fail (IS_EPHY_TOOLBARS_MODEL (object));
 
 	g_object_unref (t->priv->bookmarks);
+
+	g_free (t->priv->xml_file);
 
 	g_free (t->priv);
 
