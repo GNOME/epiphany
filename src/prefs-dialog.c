@@ -721,6 +721,33 @@ sort_encodings (gconstpointer a, gconstpointer b)
 	return strcmp (key1, key2);
 }
 
+static int
+sort_detectors (gconstpointer a, gconstpointer b)
+{
+	EphyNode *node1 = (EphyNode *) a;
+	EphyNode *node2 = (EphyNode *) b;
+	const char *code1, *code2;
+
+	code1 = ephy_node_get_property_string
+			(node1, EPHY_NODE_ENCODING_PROP_ENCODING);
+	code2 = ephy_node_get_property_string
+			(node2, EPHY_NODE_ENCODING_PROP_ENCODING);
+
+	/* "" is the code for No Autodetector; make sure it's first
+	 * in the list.
+	 */
+	if (strcmp (code1, "") == 0)
+	{
+		return -1;
+	}
+	if (strcmp (code2, "") == 0)
+	{
+		return 1;
+	}
+
+	return sort_encodings (a, b);
+}
+
 static void
 create_optionmenu (PrefsDialog *dialog,
 		   int property,
@@ -738,8 +765,6 @@ create_optionmenu (PrefsDialog *dialog,
 
 	optionmenu = ephy_dialog_get_control (EPHY_DIALOG (dialog),
 					      property);
-
-	list = g_list_sort (list, (GCompareFunc) sort_encodings);
 
 	num = g_list_length (list);
 	codes = g_new0 (char *, num);
@@ -1006,11 +1031,13 @@ prefs_dialog_init (PrefsDialog *pd)
 					(EPHY_EMBED_SHELL (ephy_shell)));
 
 	list = ephy_encodings_get_encodings (encodings, LG_ALL);
+	list = g_list_sort (list, (GCompareFunc) sort_encodings);
 	create_optionmenu (pd, DEFAULT_ENCODING_PROP, list,
 			   CONF_LANGUAGE_DEFAULT_ENCODING, "ISO-8859-1");
 	g_list_free (list);
 
 	list = ephy_encodings_get_detectors (encodings);
+	list = g_list_sort (list, (GCompareFunc) sort_detectors);
 	create_optionmenu (pd, AUTO_ENCODING_PROP, list,
 			   CONF_LANGUAGE_AUTODETECT_ENCODING, "");
 	g_list_free (list);
