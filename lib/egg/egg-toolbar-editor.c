@@ -349,7 +349,7 @@ set_drag_cursor (GtkWidget *widget)
   GdkPixbuf *pixbuf;
 
   pixbuf = gdk_pixbuf_new_from_file (CURSOR_DIR "/art/hand-open.png", NULL);
-  cursor = gdk_cursor_new_from_pixbuf (gdk_display_get_default (), pixbuf, 0, 0);
+  cursor = gdk_cursor_new_from_pixbuf (gdk_display_get_default (), pixbuf, 12, 12);
 
   gdk_window_set_cursor (widget->window, cursor);
   gdk_cursor_unref (cursor);
