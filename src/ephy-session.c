@@ -54,6 +54,7 @@
 struct EphySessionPrivate
 {
 	GList *windows;
+	GList *tool_windows;
 	GtkWidget *resume_dialog;
 };
 
@@ -267,6 +268,7 @@ ephy_session_init (EphySession *session)
 	LOG ("EphySession initialising")
 
 	session->priv->windows = NULL;
+	session->priv->tool_windows = NULL;
 	session->priv->resume_dialog = NULL;
 
 	ensure_session_directory ();
@@ -289,7 +291,9 @@ ephy_session_finalize (GObject *object)
 
 	LOG ("EphySession finalising")
 
+	/* FIXME: those should be NULL already!? */
 	g_list_free (session->priv->windows);
+	g_list_free (session->priv->tool_windows);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -308,6 +312,7 @@ ephy_session_set_property (GObject *object,
 			   GParamSpec *pspec)
 {
 	/* no writeable properties */
+	g_return_if_reached ();
 }
 
 static void
@@ -346,8 +351,8 @@ ephy_session_class_init (EphySessionClass *class)
 		 g_param_spec_object ("active-window",
 		 		      "Active Window",
 		 		      "The active window",
-				       EPHY_TYPE_WINDOW,
-				       G_PARAM_READABLE));
+				      EPHY_TYPE_WINDOW,
+				      G_PARAM_READABLE));
 
 	g_type_class_add_private (object_class, sizeof (EphySessionPrivate));
 }
@@ -467,11 +472,12 @@ ephy_session_close (EphySession *session)
 	LOG ("ephy_session_close")
 
 	windows	= ephy_session_get_windows (session);
-
-	/* close all windows */
 	g_list_foreach (windows, (GFunc) gtk_widget_destroy, NULL);
-
 	g_list_free (windows);
+
+	windows = g_list_copy (session->priv->tool_windows);
+	g_list_foreach (windows, (GFunc) gtk_widget_destroy, NULL);
+	g_list_free (windows);	
 }
 
 static int
@@ -522,10 +528,23 @@ write_window_geometry (xmlTextWriterPtr writer,
 
 static int
 write_tool_window (xmlTextWriterPtr writer,
-		   GtkWindow *window,
-		   xmlChar *id)
+		   GtkWindow *window)
 {
+	const xmlChar *id;
 	int ret;
+
+	if (EPHY_IS_BOOKMARKS_EDITOR (window))
+	{
+		id = (const xmlChar *) BOOKMARKS_EDITOR_ID;
+	}
+	else if (EPHY_IS_HISTORY_WINDOW (window))
+	{
+		id = (const xmlChar *) HISTORY_WINDOW_ID;
+	}
+	else
+	{
+		g_return_val_if_reached (-1);
+	}
 
 	ret = xmlTextWriterStartElement (writer, (xmlChar *) "toolwindow");
 	if (ret < 0) return ret;
@@ -606,7 +625,7 @@ ephy_session_save (EphySession *session,
 	ret = xmlTextWriterSetIndent (writer, 1);
 	if (ret < 0) goto out;
 
-	ret = xmlTextWriterSetIndentString (writer, (xmlChar *) "  ");
+	ret = xmlTextWriterSetIndentString (writer, (const xmlChar *) "  ");
 	if (ret < 0) goto out;
 
 	START_PROFILER ("Saving session")
@@ -615,27 +634,19 @@ ephy_session_save (EphySession *session,
 	if (ret < 0) goto out;
 
 	/* create and set the root node for the session */
-	ret = xmlTextWriterStartElement (writer, (xmlChar *) "session");
+	ret = xmlTextWriterStartElement (writer, (const xmlChar *) "session");
 	if (ret < 0) goto out;
 
-	/* iterate through all the windows */
-	for (w = session->priv->windows; w != NULL; w = w->next)
+	/* iterate through all the windows */	
+	for (w = session->priv->windows; w != NULL && ret >= 0; w = w->next)
 	{
-		GtkWindow *window = w->data;
-	
-		if (EPHY_IS_WINDOW (window))
-		{
-			ret = write_ephy_window (writer, EPHY_WINDOW (window));
-		}
-		else if (EPHY_IS_BOOKMARKS_EDITOR (window))
-		{
-			ret = write_tool_window (writer, window, (xmlChar *) BOOKMARKS_EDITOR_ID);
-		}
-		else if (EPHY_IS_HISTORY_WINDOW (window))
-		{
-			ret = write_tool_window (writer, window, (xmlChar *) HISTORY_WINDOW_ID);
-		}
-		if (ret < 0) break;
+		ret = write_ephy_window (writer, EPHY_WINDOW (w->data));
+	}
+	if (ret < 0) goto out;
+
+	for (w = session->priv->tool_windows; w != NULL && ret >= 0; w = w->next)
+	{
+		ret = write_tool_window (writer, GTK_WIDGET (w->data));
 	}
 	if (ret < 0) goto out;
 
@@ -674,7 +685,7 @@ parse_embed (xmlNodePtr child, EphyWindow *window)
 
 			g_return_if_fail (window != NULL);
 
-			url = xmlGetProp (child, (xmlChar *) "url");
+			url = xmlGetProp (child, (const xmlChar *) "url");
 
 			ephy_shell_new_tab (ephy_shell, window, NULL, (char *) url,
 					    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
@@ -725,12 +736,12 @@ ephy_session_load (EphySession *session,
 
 	while (child != NULL)
 	{
-		if (xmlStrEqual (child->name, (xmlChar *) "window"))
+		if (xmlStrEqual (child->name, (const xmlChar *) "window"))
 		{
 			widget = GTK_WIDGET (ephy_window_new ());
 			parse_embed (child->children, EPHY_WINDOW (widget));
 		}
-		else if (xmlStrEqual (child->name, (xmlChar *) "toolwindow"))
+		else if (xmlStrEqual (child->name, (const xmlChar *) "toolwindow"))
 		{
 			xmlChar *id;
 
@@ -780,9 +791,15 @@ ephy_session_load (EphySession *session,
 
 	xmlFreeDoc (doc);
 
-	return (session->priv->windows != NULL);
+	return (session->priv->windows != NULL || session->priv->tool_windows != NULL);
 }
 
+/**
+ * ephy_session_get_windows:
+ * @ephy_session: the #EphySession
+ *
+ * Returns: the list of open #EphyWindow:s.
+ **/
 GList *
 ephy_session_get_windows (EphySession *session)
 {
@@ -803,9 +820,10 @@ void
 ephy_session_add_window (EphySession *session,
 			 GtkWindow *window)
 {
-	LOG ("ephy_session_add_window")
+	LOG ("ephy_session_add_window %p", window)
 
-	session->priv->windows = g_list_append (session->priv->windows, window);
+	session->priv->tool_windows =
+		g_list_append (session->priv->tool_windows, window);
 
 	ephy_session_save (session, SESSION_CRASHED);
 }
@@ -813,7 +831,7 @@ ephy_session_add_window (EphySession *session,
 /**
  * ephy_session_remove_window:
  * @session: a #EphySession.
- * @window: a #GtkWindow. This is either the bookmarks editor or the
+ * @window: a #GtkWindow, which must be either the bookmarks editor or the
  * history window.
  *
  * Remove a tool window from the session.
@@ -822,9 +840,10 @@ void
 ephy_session_remove_window (EphySession *session,
 			    GtkWindow *window)
 {
-	LOG ("ephy_session_remove_window")
+	LOG ("ephy_session_remove_window %p", window)
 
-	session->priv->windows = g_list_remove (session->priv->windows, window);
+	session->priv->tool_windows =
+		g_list_remove (session->priv->tool_windows, window);
 
 	ephy_session_save (session, SESSION_CRASHED);
 }
@@ -842,19 +861,7 @@ ephy_session_remove_window (EphySession *session,
 EphyWindow *
 ephy_session_get_active_window (EphySession *session)
 {
-	GList *l;
-	EphyWindow *window = NULL;
-
 	g_return_val_if_fail (EPHY_IS_SESSION (session), NULL);
 
-	for (l = session->priv->windows; l != NULL; l = l->next)
-	{
-		if (EPHY_IS_WINDOW (l->data))
-		{
-			window = EPHY_WINDOW (l->data);
-			break;
-		}
-	}
-
-	return window;
+	return g_list_first (session->priv->windows);
 }
