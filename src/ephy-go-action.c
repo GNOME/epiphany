@@ -80,6 +80,27 @@ create_tool_item (GtkAction *action)
 }
 
 static void
+connect_proxy (GtkAction *action,
+	       GtkWidget *proxy)
+{      
+	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
+
+	g_signal_connect_object (GTK_BIN (proxy)->child, "clicked",
+				 G_CALLBACK (gtk_action_activate), action,
+				 G_CONNECT_SWAPPED);
+}
+
+static void
+disconnect_proxy (GtkAction *action,
+		  GtkWidget *proxy)
+{
+	g_signal_handlers_disconnect_by_func
+		(proxy, G_CALLBACK (gtk_action_activate), action);
+
+	GTK_ACTION_CLASS (parent_class)->disconnect_proxy (action, proxy);
+}
+
+static void
 ephy_go_action_class_init (EphyGoActionClass *class)
 {
 	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
@@ -87,4 +108,6 @@ ephy_go_action_class_init (EphyGoActionClass *class)
 	parent_class = g_type_class_peek_parent (class);
 
 	action_class->create_tool_item = create_tool_item;
+	action_class->connect_proxy = connect_proxy;
+	action_class->disconnect_proxy = disconnect_proxy;
 }
