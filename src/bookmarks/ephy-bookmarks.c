@@ -555,7 +555,7 @@ topics_removed_cb (EphyNode *node,
 
 		kid = g_ptr_array_index (children, i);
 
-		if (bookmark_is_categorized (eb, kid) &&
+		if (!bookmark_is_categorized (eb, kid) &&
 		    !ephy_node_has_child (eb->priv->notcategorized, kid))
 		{
 			ephy_node_add_child
