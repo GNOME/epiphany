@@ -56,7 +56,8 @@ struct RedirEntry {
 };
 
 static RedirEntry kRedirMap[] = {
-	{ "epiphany", "file://" SHARE_DIR "/epiphany.html" },
+	{ "epiphany", "file://" SHARE_DIR "/epiphany.xhtml" },
+	{ "conspiracy", "file://" SHARE_DIR "/conspiracy.xhtml" },
 	{ "options", "http://epiphany.mozdev.org/about/options.html" },
 	{ "marco", "http://mpgritti.oltrelinux.com" }
 };
