@@ -897,7 +897,7 @@ impl_list_cookies (EphyEmbedSingle *shell,
         nsresult result;
 
         nsCOMPtr<nsICookieManager> cookieManager = 
-                        do_CreateInstance (NS_COOKIEMANAGER_CONTRACTID);
+                        do_GetService (NS_COOKIEMANAGER_CONTRACTID);
         nsCOMPtr<nsISimpleEnumerator> cookieEnumerator;
         result = 
             cookieManager->GetEnumerator (getter_AddRefs(cookieEnumerator));
@@ -956,7 +956,7 @@ impl_remove_cookies (EphyEmbedSingle *shell,
 	nsresult result;
 	GList *cl;
         nsCOMPtr<nsICookieManager> cookieManager =
-                        do_CreateInstance (NS_COOKIEMANAGER_CONTRACTID);
+                        do_GetService (NS_COOKIEMANAGER_CONTRACTID);
 	
         for (cl = g_list_first(cookies) ; cl != NULL ; 
              cl = g_list_next (cl))
@@ -981,7 +981,7 @@ impl_list_passwords (EphyEmbedSingle *shell,
         nsresult result = NS_ERROR_FAILURE;
 
         nsCOMPtr<nsIPasswordManager> passwordManager =
-                        do_CreateInstance (NS_PASSWORDMANAGER_CONTRACTID);
+                        do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
         nsCOMPtr<nsISimpleEnumerator> passwordEnumerator;
         if (type == PASSWORD_PASSWORD)
                 result = passwordManager->GetEnumerator 
@@ -1029,7 +1029,7 @@ impl_remove_passwords (EphyEmbedSingle *shell,
 {
 	nsresult result = NS_ERROR_FAILURE;
         nsCOMPtr<nsIPasswordManager> passwordManager =
-                        do_CreateInstance (NS_PASSWORDMANAGER_CONTRACTID);
+                        do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
 
         for (GList *l = g_list_first(passwords) ; l !=NULL ; 
              l = g_list_next(l))
