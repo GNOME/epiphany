@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-04 03:10+0200\n"
-"PO-Revision-Date: 2004-08-04 11:09+0200\n"
+"POT-Creation-Date: 2004-08-22 11:08+0200\n"
+"PO-Revision-Date: 2004-08-22 11:38+0200\n"
 "Last-Translator: Laszlo Dvornik <dvornik@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
 "MIME-Version: 1.0\n"
@@ -443,7 +443,7 @@ msgstr "A letöltési mappa"
 msgid "The encoding autodetector. Empty string means autodetect is off"
 msgstr ""
 "A karakterkódolás automatikus felismerése. Az üres karakterlánc az "
-"automatikus felismerés kikapcsolását jelenti."
+"automatikus felismerés kikapcsolását jelenti"
 
 #: data/epiphany.schemas.in.h:57
 msgid ""
@@ -1106,7 +1106,7 @@ msgstr[0] "%d letöltés"
 msgstr[1] "%d letöltés"
 
 # src/trans.h:377
-#: embed/downloader-view.c:558 src/bookmarks/ephy-bookmarks-editor.c:691
+#: embed/downloader-view.c:558 src/bookmarks/ephy-bookmarks-editor.c:690
 msgid "File"
 msgstr "Fájl"
 
@@ -1513,7 +1513,7 @@ msgid "Off"
 msgstr "Kikapcsolva"
 
 # src/trans.h:220
-#: embed/ephy-encodings.c:147 src/prefs-dialog.c:118
+#: embed/ephy-encodings.c:147 src/prefs-dialog.c:119
 msgid "Chinese"
 msgstr "Kínai"
 
@@ -1533,17 +1533,17 @@ msgid "East Asian"
 msgstr "Kelet-ázsiai"
 
 # src/trans.h:222
-#: embed/ephy-encodings.c:151 lib/ephy-langs.c:38 src/prefs-dialog.c:138
+#: embed/ephy-encodings.c:151 lib/ephy-langs.c:38 src/prefs-dialog.c:139
 msgid "Japanese"
 msgstr "Japán"
 
 # src/trans.h:223
-#: embed/ephy-encodings.c:152 lib/ephy-langs.c:39 src/prefs-dialog.c:139
+#: embed/ephy-encodings.c:152 lib/ephy-langs.c:39 src/prefs-dialog.c:140
 msgid "Korean"
 msgstr "Koreai"
 
 # src/trans.h:224
-#: embed/ephy-encodings.c:153 src/prefs-dialog.c:151
+#: embed/ephy-encodings.c:153 src/prefs-dialog.c:152
 msgid "Russian"
 msgstr "Orosz"
 
@@ -1552,7 +1552,7 @@ msgid "Universal"
 msgstr "Univerzális"
 
 # src/trans.h:227
-#: embed/ephy-encodings.c:155 src/prefs-dialog.c:160
+#: embed/ephy-encodings.c:155 src/prefs-dialog.c:161
 msgid "Ukrainian"
 msgstr "Ukrán"
 
@@ -1625,14 +1625,14 @@ msgstr ""
 # src/bookmarks.c:827 src/bookmarks_callbacks.c:181
 # src/browser_callbacks.c:803 src/history.c:182 src/mozcallbacks.c:139
 #: embed/mozilla/EphyHeaderSniffer.cpp:323
-#: src/bookmarks/ephy-bookmarks-import.c:244
+#: src/bookmarks/ephy-bookmarks-import.c:251
 #: src/bookmarks/ephy-bookmarksbar-model.c:349 src/window-commands.c:344
 msgid "Untitled"
 msgstr "Névtelen"
 
 # src/trans.h:94
 #: embed/mozilla/FilePicker.cpp:145 embed/print-dialog.c:272
-#: lib/ephy-file-chooser.c:376 src/bookmarks/ephy-bookmarks-editor.c:601
+#: lib/ephy-file-chooser.c:376 src/bookmarks/ephy-bookmarks-editor.c:600
 msgid "All files"
 msgstr "Minden fájl"
 
@@ -1931,7 +1931,21 @@ msgstr ""
 msgid "Files"
 msgstr "Fájlok"
 
-#: embed/mozilla/mozilla-embed-single.cpp:494
+#. We do this before reading the user pref file so that the user
+#. * still can overwrite this pref.
+#. * We don't use the default-prefs.js file since that cannot be
+#. * localised (see bug #144909).
+#.
+#. translators: this is the URL that searches from the location
+#. * entry get directed to. The search terms will be _appended_ to it,
+#. * in url-escaped UTF-8; that means that if you're choosing google,
+#. * the 'q=' part needs to come last.
+#.
+#: embed/mozilla/mozilla-embed-single.cpp:222
+msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
+msgstr "http://www.google.co.hu/search?ie=UTF-8&oe=UTF-8&q="
+
+#: embed/mozilla/mozilla-embed-single.cpp:512
 msgid ""
 "Epiphany can't be used now. Mozilla initialization failed. Check your "
 "MOZILLA_FIVE_HOME environmental variable."
@@ -1974,16 +1988,16 @@ msgstr ""
 "  %s"
 
 # src/trans.h:14
-#: lib/egg/egg-editable-toolbar.c:538
+#: lib/egg/egg-editable-toolbar.c:536
 msgid "_Remove Toolbar"
 msgstr "_Eszköztár eltávolítása"
 
 # src/bookmarks_callbacks.c:543
-#: lib/egg/egg-toolbar-editor.c:557
+#: lib/egg/egg-toolbar-editor.c:554
 msgid "Separator"
 msgstr "Elválasztó"
 
-#: lib/egg/egg-toolbar-editor.c:587
+#: lib/egg/egg-toolbar-editor.c:584
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
@@ -1997,7 +2011,7 @@ msgstr "Minden támogatott típus"
 
 # src/prefs.c:407 src/trans.h:150 src/trans.h:164
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:79 src/prefs-dialog.c:1109
+#: lib/ephy-file-helpers.c:79 src/prefs-dialog.c:1110
 msgid "Downloads"
 msgstr "Letöltések"
 
@@ -2039,7 +2053,7 @@ msgid "Could not display help: %s"
 msgstr "Nem lehet megjeleníteni a súgót: %s"
 
 # src/trans.h:283
-#: lib/ephy-langs.c:31 src/prefs-dialog.c:109
+#: lib/ephy-langs.c:31 src/prefs-dialog.c:110
 msgid "Arabic"
 msgstr "Arab"
 
@@ -2062,20 +2076,20 @@ msgid "Devanagari"
 msgstr "Devanagari"
 
 # src/trans.h:299
-#: lib/ephy-langs.c:36 src/prefs-dialog.c:131
+#: lib/ephy-langs.c:36 src/prefs-dialog.c:132
 msgid "Greek"
 msgstr "Görög"
 
-#: lib/ephy-langs.c:37 src/prefs-dialog.c:132
+#: lib/ephy-langs.c:37 src/prefs-dialog.c:133
 msgid "Hebrew"
 msgstr "Héber"
 
 # src/trans.h:225
-#: lib/ephy-langs.c:40 src/prefs-dialog.c:116
+#: lib/ephy-langs.c:40 src/prefs-dialog.c:117
 msgid "Simplified Chinese"
 msgstr "Egyszerűsített kínai"
 
-#: lib/ephy-langs.c:41 src/prefs-dialog.c:158
+#: lib/ephy-langs.c:41 src/prefs-dialog.c:159
 msgid "Tamil"
 msgstr "Tamil"
 
@@ -2084,7 +2098,7 @@ msgid "Thai"
 msgstr "Thai"
 
 # src/trans.h:226
-#: lib/ephy-langs.c:43 src/prefs-dialog.c:117
+#: lib/ephy-langs.c:43 src/prefs-dialog.c:118
 msgid "Traditional Chinese"
 msgstr "Hagyományos kínai"
 
@@ -2094,7 +2108,7 @@ msgid "Traditional Chinese (Hong Kong)"
 msgstr "Hagyományos kínai (Hongkong)"
 
 # src/trans.h:316
-#: lib/ephy-langs.c:45 src/prefs-dialog.c:159
+#: lib/ephy-langs.c:45 src/prefs-dialog.c:160
 msgid "Turkish"
 msgstr "Török"
 
@@ -2126,7 +2140,7 @@ msgstr "Előzmények"
 
 # src/bookmarks.c:142 src/bookmarks.c:447 src/prefs.c:388 src/trans.h:76
 # src/trans.h:81
-#: lib/ephy-stock-icons.c:58 src/bookmarks/ephy-bookmarks-editor.c:1417
+#: lib/ephy-stock-icons.c:58 src/bookmarks/ephy-bookmarks-editor.c:1416
 #: src/bookmarks/ephy-topic-action.c:985 src/ephy-window.c:1122
 msgid "Bookmarks"
 msgstr "Könyvjelzők"
@@ -2191,6 +2205,15 @@ msgstr "Sikertelen"
 msgid "%d %%"
 msgstr "%d%%"
 
+# src/trans.h:52 src/trans.h:336
+#: lib/widgets/ephy-label.c:3426
+msgid "Select All"
+msgstr "Mindent kijelöl"
+
+#: lib/widgets/ephy-label.c:3436
+msgid "Input Methods"
+msgstr "Beviteli módok"
+
 #: src/bookmarks/ephy-bookmark-action.c:277
 #, c-format
 msgid "%s:"
@@ -2198,8 +2221,8 @@ msgstr "%s:"
 
 # src/misc.c:529
 #: src/bookmarks/ephy-bookmark-action.c:533
-#: src/bookmarks/ephy-bookmarks-editor.c:182
-#: src/bookmarks/ephy-bookmarks-editor.c:1041 src/ephy-history-window.c:169
+#: src/bookmarks/ephy-bookmarks-editor.c:181
+#: src/bookmarks/ephy-bookmarks-editor.c:1040 src/ephy-history-window.c:169
 #: src/ephy-history-window.c:747
 msgid "Open in New _Tab"
 msgstr "Megnyitás új _lapon"
@@ -2242,162 +2265,162 @@ msgstr "Megjelenítés a _könyvjelzősávon"
 
 # src/trans.h:377
 #. Toplevel
-#: src/bookmarks/ephy-bookmarks-editor.c:169 src/ephy-history-window.c:159
+#: src/bookmarks/ephy-bookmarks-editor.c:168 src/ephy-history-window.c:159
 #: src/ephy-window.c:90
 msgid "_File"
 msgstr "_Fájl"
 
 # src/trans.h:18 src/trans.h:189 src/trans.h:369
-#: src/bookmarks/ephy-bookmarks-editor.c:170 src/ephy-history-window.c:160
+#: src/bookmarks/ephy-bookmarks-editor.c:169 src/ephy-history-window.c:160
 #: src/ephy-window.c:91
 msgid "_Edit"
 msgstr "S_zerkesztés"
 
 # src/trans.h:377
-#: src/bookmarks/ephy-bookmarks-editor.c:171 src/ephy-history-window.c:161
+#: src/bookmarks/ephy-bookmarks-editor.c:170 src/ephy-history-window.c:161
 #: src/ephy-window.c:92
 msgid "_View"
 msgstr "_Nézet"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:172 src/ephy-history-window.c:162
+#: src/bookmarks/ephy-bookmarks-editor.c:171 src/ephy-history-window.c:162
 #: src/ephy-window.c:97
 msgid "_Help"
 msgstr "_Súgó"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:176
+#: src/bookmarks/ephy-bookmarks-editor.c:175
 #: src/bookmarks/ephy-new-bookmark.c:298
 msgid "_New Topic"
 msgstr "Új _témakör"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:177
+#: src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Create a new topic"
 msgstr "Új témakör létrehozása"
 
 # src/misc.c:529
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:179
-#: src/bookmarks/ephy-bookmarks-editor.c:1040 src/ephy-history-window.c:166
+#: src/bookmarks/ephy-bookmarks-editor.c:178
+#: src/bookmarks/ephy-bookmarks-editor.c:1039 src/ephy-history-window.c:166
 #: src/ephy-history-window.c:746
 msgid "_Open in New Window"
 msgstr "Megnyitás új _ablakban"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:180
+#: src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Open the selected bookmark in a new window"
 msgstr "A kijelölt könyvjelző megnyitása új ablakban"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:183
+#: src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "Open the selected bookmark in a new tab"
 msgstr "A kijelölt könyvjelző megnyitása új lapon"
 
 # src/trans.h:10
-#: src/bookmarks/ephy-bookmarks-editor.c:185
+#: src/bookmarks/ephy-bookmarks-editor.c:184
 msgid "_Rename..."
 msgstr "Á_tnevezés..."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:186
+#: src/bookmarks/ephy-bookmarks-editor.c:185
 msgid "Rename the selected bookmark or topic"
 msgstr "A kijelölt könyvjelző vagy témakör átnevezése"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:187 src/ephy-history-window.c:172
+#: src/bookmarks/ephy-bookmarks-editor.c:186 src/ephy-history-window.c:172
 msgid "_Delete"
 msgstr "_Törlés"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:188
+#: src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "Delete the selected bookmark or topic"
 msgstr "A kijelölt könyvjelző vagy témakör törlése"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:190
+#: src/bookmarks/ephy-bookmarks-editor.c:189
 msgid "_Properties"
 msgstr "_Tulajdonságok"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:191
+#: src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "View or modify the properties of the selected bookmark"
 msgstr ""
 "A kijelölt könyvjelző tulajdonságainak megtekintése, illetve szerkesztése"
 
 # src/trans.h:383
-#: src/bookmarks/ephy-bookmarks-editor.c:193
+#: src/bookmarks/ephy-bookmarks-editor.c:192
 msgid "_Import Bookmarks..."
 msgstr "Könyvjelzők _importálása..."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:194
+#: src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Könyvjelzők importálása másik böngészőből vagy könyvjelzőfájlból"
 
 # src/trans.h:363
-#: src/bookmarks/ephy-bookmarks-editor.c:196 src/ephy-history-window.c:178
+#: src/bookmarks/ephy-bookmarks-editor.c:195 src/ephy-history-window.c:178
 #: src/ephy-window.c:128
 msgid "_Close"
 msgstr "_Bezárás"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:197
+#: src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "Close the bookmarks window"
 msgstr "A könyvjelzők ablakának bezárása"
 
 #. Edit Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:201 src/ephy-history-window.c:183
+#: src/bookmarks/ephy-bookmarks-editor.c:200 src/ephy-history-window.c:183
 #: src/ephy-window.c:139
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:202 src/ephy-history-window.c:184
+#: src/bookmarks/ephy-bookmarks-editor.c:201 src/ephy-history-window.c:184
 #: src/ephy-window.c:140
 msgid "Cut the selection"
 msgstr "A kijelölés kivágása"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:204
-#: src/bookmarks/ephy-bookmarks-editor.c:1050 src/ephy-history-window.c:186
+#: src/bookmarks/ephy-bookmarks-editor.c:203
+#: src/bookmarks/ephy-bookmarks-editor.c:1049 src/ephy-history-window.c:186
 #: src/ephy-history-window.c:756 src/ephy-window.c:142
 msgid "_Copy"
 msgstr "_Másolás"
 
 # src/misc.c:531
-#: src/bookmarks/ephy-bookmarks-editor.c:205 src/ephy-history-window.c:187
+#: src/bookmarks/ephy-bookmarks-editor.c:204 src/ephy-history-window.c:187
 #: src/ephy-window.c:143
 msgid "Copy the selection"
 msgstr "A kijelölés másolása"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:189
+#: src/bookmarks/ephy-bookmarks-editor.c:206 src/ephy-history-window.c:189
 #: src/ephy-window.c:145
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:208 src/ephy-history-window.c:190
+#: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:190
 msgid "Paste the clipboard"
 msgstr "A vágólap tartalmának beillesztése"
 
 # src/trans.h:52 src/trans.h:336
-#: src/bookmarks/ephy-bookmarks-editor.c:210 src/ephy-history-window.c:192
+#: src/bookmarks/ephy-bookmarks-editor.c:209 src/ephy-history-window.c:192
 #: src/ephy-window.c:148
 msgid "Select _All"
 msgstr "_Mindent kijelöl"
 
 # src/bookmarks.c:142 src/bookmarks.c:447 src/prefs.c:388 src/trans.h:76
 # src/trans.h:81
-#: src/bookmarks/ephy-bookmarks-editor.c:211
+#: src/bookmarks/ephy-bookmarks-editor.c:210
 msgid "Select all bookmarks or text"
 msgstr "Minden könyvjelző vagy szöveg kijelölése"
 
 #. Help Menu
 #. Help menu
-#: src/bookmarks/ephy-bookmarks-editor.c:215 src/ephy-history-window.c:200
+#: src/bookmarks/ephy-bookmarks-editor.c:214 src/ephy-history-window.c:200
 #: src/ephy-window.c:239
 msgid "_Contents"
 msgstr "_Tartalom"
 
 # src/bookmarks.c:142 src/bookmarks.c:447 src/prefs.c:388 src/trans.h:76
 # src/trans.h:81
-#: src/bookmarks/ephy-bookmarks-editor.c:216
+#: src/bookmarks/ephy-bookmarks-editor.c:215
 msgid "Display bookmarks help"
 msgstr "Súgó a könyvjelzőkhöz"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:218 src/ephy-history-window.c:203
+#: src/bookmarks/ephy-bookmarks-editor.c:217 src/ephy-history-window.c:203
 #: src/ephy-window.c:242
 msgid "_About"
 msgstr "_Névjegy"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:219 src/ephy-history-window.c:204
+#: src/bookmarks/ephy-bookmarks-editor.c:218 src/ephy-history-window.c:204
 #: src/ephy-window.c:243
 msgid "Display credits for the web browser creators"
 msgstr "A webböngésző alkotóinak felsorolása"
@@ -2405,124 +2428,125 @@ msgstr "A webböngésző alkotóinak felsorolása"
 # src/bookmarks.c:142 src/bookmarks.c:447 src/prefs.c:388 src/trans.h:76
 # src/trans.h:81
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:227
+#: src/bookmarks/ephy-bookmarks-editor.c:226
 msgid "_Show in Bookmarks Bar"
 msgstr "_Megjelenítés a könyvjelzősávon"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:228
+#: src/bookmarks/ephy-bookmarks-editor.c:227
 msgid "Show the selected bookmark or topic in the bookmarks bar"
 msgstr "A kijelölt könyvjelző vagy témakör megjelenítése a könyvjelzősávon"
 
 # src/trans.h:325
 #. View Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:242 src/ephy-history-window.c:219
+#: src/bookmarks/ephy-bookmarks-editor.c:241 src/ephy-history-window.c:219
 msgid "_Title"
 msgstr "_Cím"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:243 src/ephy-history-window.c:220
+#: src/bookmarks/ephy-bookmarks-editor.c:242 src/ephy-history-window.c:220
 msgid "Show only the title column"
 msgstr "Csak a cím oszlop mutatása"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:244 src/ephy-history-window.c:223
+#: src/bookmarks/ephy-bookmarks-editor.c:243 src/ephy-history-window.c:223
 msgid "T_itle and Address"
 msgstr "Cím és _webcím"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:245 src/ephy-history-window.c:224
+#: src/bookmarks/ephy-bookmarks-editor.c:244 src/ephy-history-window.c:224
 msgid "Show both the title and address columns"
 msgstr "A cím és webcím oszlopok mutatása"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:287
-#: src/bookmarks/ephy-topics-selector.c:292
+#: src/bookmarks/ephy-bookmarks-editor.c:286
+#: src/bookmarks/ephy-topics-selector.c:311
 msgid "Type a topic"
 msgstr "Add meg a témát"
 
 # src/trans.h:383
-#: src/bookmarks/ephy-bookmarks-editor.c:582
+#: src/bookmarks/ephy-bookmarks-editor.c:581
 msgid "Import bookmarks from file"
 msgstr "Könyvjelzők importálása fájlból"
 
 # src/bookmarks.c:142 src/bookmarks.c:447 src/prefs.c:388 src/trans.h:76
 # src/trans.h:81
-#: src/bookmarks/ephy-bookmarks-editor.c:589
+#: src/bookmarks/ephy-bookmarks-editor.c:588
 msgid "Firefox/Firebird/Mozilla bookmarks"
 msgstr "Firefox/Firebird/Mozilla-könyvjelzők"
 
 # src/trans.h:18 src/trans.h:189 src/trans.h:369
-#: src/bookmarks/ephy-bookmarks-editor.c:593
+#: src/bookmarks/ephy-bookmarks-editor.c:592
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror-könyvjelzők"
 
 # src/trans.h:18 src/trans.h:189 src/trans.h:369
-#: src/bookmarks/ephy-bookmarks-editor.c:597
+#: src/bookmarks/ephy-bookmarks-editor.c:596
 msgid "Epiphany bookmarks"
 msgstr "Epiphany-könyvjelzők"
 
 # src/trans.h:383
-#: src/bookmarks/ephy-bookmarks-editor.c:636
+#: src/bookmarks/ephy-bookmarks-editor.c:635
 msgid "Import Bookmarks"
 msgstr "Könyvjelzők importálása"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:642
+#: src/bookmarks/ephy-bookmarks-editor.c:641
 msgid "I_mport"
 msgstr "I_mportálás"
 
 # src/trans.h:383
-#: src/bookmarks/ephy-bookmarks-editor.c:656
+#: src/bookmarks/ephy-bookmarks-editor.c:655
 msgid "Import bookmarks from:"
 msgstr "Könyvjelzők importálása innen:"
 
 # src/bookmarks.c:142 src/bookmarks.c:447 src/prefs.c:388 src/trans.h:76
 # src/trans.h:81
-#: src/bookmarks/ephy-bookmarks-editor.c:679
+#: src/bookmarks/ephy-bookmarks-editor.c:678
 msgid "Firebird"
 msgstr "Firebird"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:681
+#: src/bookmarks/ephy-bookmarks-editor.c:680
 msgid "Firefox"
 msgstr "Firefox"
 
 # src/trans.h:7 src/trans.h:123
-#: src/bookmarks/ephy-bookmarks-editor.c:683
+#: src/bookmarks/ephy-bookmarks-editor.c:682
 msgid "Galeon"
 msgstr "Galeon"
 
 # src/trans.h:18 src/trans.h:189 src/trans.h:369
-#: src/bookmarks/ephy-bookmarks-editor.c:685
+#: src/bookmarks/ephy-bookmarks-editor.c:684
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:687
+#: src/bookmarks/ephy-bookmarks-editor.c:686
 msgid "Mozilla"
 msgstr "Mozilla"
 
 # src/misc.c:529
-#: src/bookmarks/ephy-bookmarks-editor.c:1035 src/ephy-history-window.c:741
+#: src/bookmarks/ephy-bookmarks-editor.c:1034 src/ephy-history-window.c:741
 msgid "_Open in New Windows"
 msgstr "_Megnyitás új ablakokban"
 
 # src/misc.c:529
-#: src/bookmarks/ephy-bookmarks-editor.c:1036 src/ephy-history-window.c:742
+#: src/bookmarks/ephy-bookmarks-editor.c:1035 src/ephy-history-window.c:742
 msgid "Open in New _Tabs"
 msgstr "Megnyitás új _lapokon"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1046 src/ephy-history-window.c:752
+#: src/bookmarks/ephy-bookmarks-editor.c:1045 src/ephy-history-window.c:752
 msgid "_Copy Address"
 msgstr "_Cím másolása"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1287 src/ephy-history-window.c:1046
+#: src/bookmarks/ephy-bookmarks-editor.c:1286 src/ephy-history-window.c:1046
 msgid "_Search:"
 msgstr "_Keresés:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1500
+#: src/bookmarks/ephy-bookmarks-editor.c:1499
+#: src/bookmarks/ephy-topics-selector.c:197
 msgid "Topics"
 msgstr "Témakörök"
 
 # src/trans.h:325
-#: src/bookmarks/ephy-bookmarks-editor.c:1565 src/ephy-history-window.c:1330
+#: src/bookmarks/ephy-bookmarks-editor.c:1564 src/ephy-history-window.c:1330
 msgid "Title"
 msgstr "Cím"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1571 src/ephy-history-window.c:1336
+#: src/bookmarks/ephy-bookmarks-editor.c:1570 src/ephy-history-window.c:1336
 msgid "Address"
 msgstr "Cím"
 
@@ -2756,27 +2780,27 @@ msgid "Ephy"
 msgstr "Ephy"
 
 # src/prefs.c:401 src/trans.h:144 src/trans.h:149
-#: src/ephy-session.c:367
+#: src/ephy-session.c:374
 msgid "Crash Recovery"
 msgstr "Összeomlás utáni helyreállítás"
 
 # src/trans.h:97 src/trans.h:146
-#: src/ephy-session.c:369
+#: src/ephy-session.c:376
 msgid "_Don't Recover"
 msgstr "_Nincs helyreállítás"
 
 # src/trans.h:97 src/trans.h:146
-#: src/ephy-session.c:370
+#: src/ephy-session.c:377
 msgid "_Recover"
 msgstr "_Helyreállítás"
 
 # src/session.c:126
-#: src/ephy-session.c:401
+#: src/ephy-session.c:408
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr "Úgy tűnik, hogy legutóbb az Epiphany összeomlott vagy kilőtték."
 
-#: src/ephy-session.c:407
+#: src/ephy-session.c:414
 msgid "You can recover the opened tabs and windows."
 msgstr "A nyitott böngészőlapok és ablakok helyreállíthatóak."
 
@@ -3393,54 +3417,54 @@ msgstr[0] "%d rejtett felugró ablak"
 msgstr[1] "%d rejtett felugró ablak"
 
 # src/trans.h:45
-#: src/pdm-dialog.c:416
+#: src/pdm-dialog.c:417
 msgid "Domain"
 msgstr "Tartomány"
 
 # src/trans.h:183 src/trans.h:342 src/trans.h:348 src/trans.h:378
-#: src/pdm-dialog.c:428
+#: src/pdm-dialog.c:429
 msgid "Name"
 msgstr "Név"
 
-#: src/pdm-dialog.c:669
+#: src/pdm-dialog.c:661
 msgid "Host"
 msgstr "Gép"
 
 # src/prefs.c:378
-#: src/pdm-dialog.c:681
+#: src/pdm-dialog.c:673
 msgid "User Name"
 msgstr "Felhasználónév"
 
-#: src/pdm-dialog.c:874
+#: src/pdm-dialog.c:902
 msgid "Cookie Properties"
 msgstr "Süti tulajdonságai"
 
-#: src/pdm-dialog.c:889
+#: src/pdm-dialog.c:917
 msgid "Content:"
 msgstr "Tartalom:"
 
-#: src/pdm-dialog.c:904
+#: src/pdm-dialog.c:932
 msgid "Path:"
 msgstr "Útvonal:"
 
-#: src/pdm-dialog.c:919
+#: src/pdm-dialog.c:947
 msgid "Send for:"
 msgstr "Kéretés:"
 
-#: src/pdm-dialog.c:928
+#: src/pdm-dialog.c:956
 msgid "Encrypted connections only"
 msgstr "Csak titkosított kapcsolatok"
 
-#: src/pdm-dialog.c:928
+#: src/pdm-dialog.c:956
 msgid "Any type of connection"
 msgstr "Bármilyen típusú kapcsolat"
 
-#: src/pdm-dialog.c:934
+#: src/pdm-dialog.c:962
 msgid "Expires:"
 msgstr "Lejárat:"
 
 # src/trans.h:96
-#: src/pdm-dialog.c:945
+#: src/pdm-dialog.c:973
 msgid "End of current session"
 msgstr "A jelenlegi munkamenet vége"
 
@@ -3513,201 +3537,201 @@ msgstr "A nyomtatási kép bezárása"
 #. * "en_AU" translation: "English, Australia (System setting)" or
 #. *                      "Australian English (System setting)"
 #.
-#: src/prefs-dialog.c:106
+#: src/prefs-dialog.c:107
 msgid "System language"
 msgstr "Rendszer nyelve"
 
-#: src/prefs-dialog.c:107
+#: src/prefs-dialog.c:108
 msgid "Afrikaans"
 msgstr "Afrikaans"
 
 # src/trans.h:95 src/trans.h:148
-#: src/prefs-dialog.c:108
+#: src/prefs-dialog.c:109
 msgid "Albanian"
 msgstr "Albán"
 
-#: src/prefs-dialog.c:110
+#: src/prefs-dialog.c:111
 msgid "Azerbaijani"
 msgstr "Azerbajdzsán"
 
-#: src/prefs-dialog.c:111
+#: src/prefs-dialog.c:112
 msgid "Basque"
 msgstr "Baszk"
 
-#: src/prefs-dialog.c:112
+#: src/prefs-dialog.c:113
 msgid "Breton"
 msgstr "Breton"
 
-#: src/prefs-dialog.c:113
+#: src/prefs-dialog.c:114
 msgid "Bulgarian"
 msgstr "Bolgár"
 
 # src/trans.h:224
-#: src/prefs-dialog.c:114
+#: src/prefs-dialog.c:115
 msgid "Byelorussian"
 msgstr "Fehérorosz"
 
-#: src/prefs-dialog.c:115
+#: src/prefs-dialog.c:116
 msgid "Catalan"
 msgstr "Katalán"
 
 # src/trans.h:47 src/trans.h:50
-#: src/prefs-dialog.c:119
+#: src/prefs-dialog.c:120
 msgid "Croatian"
 msgstr "Horvát"
 
-#: src/prefs-dialog.c:120
+#: src/prefs-dialog.c:121
 msgid "Czech"
 msgstr "Cseh"
 
-#: src/prefs-dialog.c:121
+#: src/prefs-dialog.c:122
 msgid "Danish"
 msgstr "Dán"
 
-#: src/prefs-dialog.c:122
+#: src/prefs-dialog.c:123
 msgid "Dutch"
 msgstr "Holland"
 
-#: src/prefs-dialog.c:123
+#: src/prefs-dialog.c:124
 msgid "English"
 msgstr "Angol"
 
 # src/prefs.c:378
-#: src/prefs-dialog.c:124
+#: src/prefs-dialog.c:125
 msgid "Esperanto"
 msgstr "Eszperantó"
 
 # src/trans.h:221
-#: src/prefs-dialog.c:125
+#: src/prefs-dialog.c:126
 msgid "Estonian"
 msgstr "Észt"
 
 # src/trans.h:377
-#: src/prefs-dialog.c:126
+#: src/prefs-dialog.c:127
 msgid "Faeroese"
 msgstr "Färöi"
 
-#: src/prefs-dialog.c:127
+#: src/prefs-dialog.c:128
 msgid "Finnish"
 msgstr "Finn"
 
-#: src/prefs-dialog.c:128
+#: src/prefs-dialog.c:129
 msgid "French"
 msgstr "Francia"
 
-#: src/prefs-dialog.c:129
+#: src/prefs-dialog.c:130
 msgid "Galician"
 msgstr "Galíciai"
 
-#: src/prefs-dialog.c:130
+#: src/prefs-dialog.c:131
 msgid "German"
 msgstr "Német"
 
-#: src/prefs-dialog.c:133
+#: src/prefs-dialog.c:134
 msgid "Hungarian"
 msgstr "Magyar"
 
-#: src/prefs-dialog.c:134
+#: src/prefs-dialog.c:135
 msgid "Icelandic"
 msgstr "Izlandi"
 
-#: src/prefs-dialog.c:135
+#: src/prefs-dialog.c:136
 msgid "Indonesian"
 msgstr "Indonéz"
 
 # src/trans.h:316
-#: src/prefs-dialog.c:136
+#: src/prefs-dialog.c:137
 msgid "Irish"
 msgstr "Ír"
 
-#: src/prefs-dialog.c:137
+#: src/prefs-dialog.c:138
 msgid "Italian"
 msgstr "Olasz"
 
 # src/trans.h:47 src/trans.h:50
-#: src/prefs-dialog.c:140
+#: src/prefs-dialog.c:141
 msgid "Latvian"
 msgstr "Lett"
 
-#: src/prefs-dialog.c:141
+#: src/prefs-dialog.c:142
 msgid "Lithuanian"
 msgstr "Litván"
 
-#: src/prefs-dialog.c:142
+#: src/prefs-dialog.c:143
 msgid "Macedonian"
 msgstr "Macedón"
 
-#: src/prefs-dialog.c:143
+#: src/prefs-dialog.c:144
 msgid "Malay"
 msgstr "Maláj"
 
-#: src/prefs-dialog.c:144
+#: src/prefs-dialog.c:145
 msgid "Norwegian/Nynorsk"
 msgstr "Norvég/Nynorsk"
 
-#: src/prefs-dialog.c:145
+#: src/prefs-dialog.c:146
 msgid "Norwegian/Bokmal"
 msgstr "Norvég/Bokmål"
 
 # src/trans.h:223
-#: src/prefs-dialog.c:146
+#: src/prefs-dialog.c:147
 msgid "Norwegian"
 msgstr "Norvég"
 
 # src/trans.h:203 src/trans.h:209
-#: src/prefs-dialog.c:147
+#: src/prefs-dialog.c:148
 msgid "Polish"
 msgstr "Lengyel"
 
-#: src/prefs-dialog.c:148
+#: src/prefs-dialog.c:149
 msgid "Portuguese"
 msgstr "Portugál"
 
-#: src/prefs-dialog.c:149
+#: src/prefs-dialog.c:150
 msgid "Portuguese of Brazil"
 msgstr "Brazil portugál"
 
 # src/trans.h:45
-#: src/prefs-dialog.c:150
+#: src/prefs-dialog.c:151
 msgid "Romanian"
 msgstr "Román"
 
-#: src/prefs-dialog.c:152
+#: src/prefs-dialog.c:153
 msgid "Scottish"
 msgstr "Skót"
 
 # src/trans.h:192
-#: src/prefs-dialog.c:153
+#: src/prefs-dialog.c:154
 msgid "Serbian"
 msgstr "Szerb"
 
-#: src/prefs-dialog.c:154
+#: src/prefs-dialog.c:155
 msgid "Slovak"
 msgstr "Szlovák"
 
-#: src/prefs-dialog.c:155
+#: src/prefs-dialog.c:156
 msgid "Slovenian"
 msgstr "Szlovén"
 
-#: src/prefs-dialog.c:156
+#: src/prefs-dialog.c:157
 msgid "Spanish"
 msgstr "Spanyol"
 
-#: src/prefs-dialog.c:157
+#: src/prefs-dialog.c:158
 msgid "Swedish"
 msgstr "Svéd"
 
 # src/trans.h:270
-#: src/prefs-dialog.c:161
+#: src/prefs-dialog.c:162
 msgid "Vietnamese"
 msgstr "Vietnami"
 
 # src/trans.h:7 src/trans.h:123
-#: src/prefs-dialog.c:162
+#: src/prefs-dialog.c:163
 msgid "Walloon"
 msgstr "Vallon"
 
-#: src/prefs-dialog.c:1059
+#: src/prefs-dialog.c:1060
 #, c-format
 msgid "Custom [%s]"
 msgstr "Egyéni [%s]"
@@ -3717,15 +3741,15 @@ msgstr "Egyéni [%s]"
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1104
+#: src/prefs-dialog.c:1105
 msgid "Home"
 msgstr "Kezdőlap"
 
-#: src/prefs-dialog.c:1113
+#: src/prefs-dialog.c:1114
 msgid "Desktop"
 msgstr "Munkaasztal"
 
-#: src/prefs-dialog.c:1322
+#: src/prefs-dialog.c:1321
 msgid "Select a directory"
 msgstr "Válasszon ki egy könyvtárat"
 
@@ -3782,17 +3806,17 @@ msgid "Check this out!"
 msgstr "Próbálja ki!"
 
 # src/trans.h:14
-#: src/window-commands.c:874
+#: src/window-commands.c:881
 msgid "Toolbar Editor"
 msgstr "Eszköztárszerkesztő"
 
 # src/trans.h:14
-#: src/window-commands.c:893
+#: src/window-commands.c:900
 msgid "_Add a New Toolbar"
 msgstr "Új _eszköztár hozzáadása"
 
 #. Translator credits
-#: src/window-commands.c:946
+#: src/window-commands.c:953
 msgid "translator-credits"
 msgstr ""
 "Dvornik László <dvornik@gnome.hu>\n"
@@ -3800,6 +3824,6 @@ msgstr ""
 "Tímár András <timar@gnome.hu>"
 
 # src/misc_callbacks.c:59
-#: src/window-commands.c:976
+#: src/window-commands.c:983
 msgid "A GNOME browser based on Mozilla"
 msgstr "Mozilla-alapú GNOME böngésző"
