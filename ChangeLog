@@ -1,3 +1,16 @@
+2004-02-13  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* data/mime-types-permissions.xml:
+
+	Several types are actually safe.
+
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/ContentHandler.h:
+
+	Change the safe/unsafe logic to not consider unkown
+	files unsafe, they will not be opened anyway.
+	Cleanups.
+
 2004-02-13  Christian Persch  <chpe@cvs.gnome.org>
 
 	* doc/reference/Makefile.am:
