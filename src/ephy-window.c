@@ -486,6 +486,7 @@ static void
 ephy_window_destroy (GtkObject *gtkobject)
 {
 	EphyWindow *window = EPHY_WINDOW (gtkobject);
+	GSList *popups;
 
 	LOG ("EphyWindow destroy %p", window)
 
@@ -501,6 +502,10 @@ ephy_window_destroy (GtkObject *gtkobject)
 	}
 
 	destroy_exit_fullscreen_popup (window);
+
+	popups = gtk_ui_manager_get_toplevels (window->priv->manager, GTK_UI_MANAGER_POPUP);
+	g_slist_foreach (popups, (GFunc) gtk_menu_shell_deactivate, NULL);
+	g_slist_free (popups);
 
         GTK_OBJECT_CLASS (parent_class)->destroy (gtkobject);
 }
