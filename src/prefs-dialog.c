@@ -1076,16 +1076,28 @@ create_language_section (EphyDialog *dialog)
 static char*
 get_download_button_label ()
 {
-	char *label, *key, *desktop_path, *tmp;
+	char *label, *key, *desktop_path, *home_path, *tmp;
 
 	key = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
+
 	tmp = g_build_filename (g_get_home_dir (), "Desktop", NULL);
 	desktop_path = g_filename_to_utf8 (tmp, -1, NULL, NULL, NULL);
+	home_path = g_filename_to_utf8 (g_get_home_dir (), -1, NULL, NULL, NULL);
 	g_free (tmp);
+
 	if (g_utf8_collate (key, desktop_path) == 0)
 	{
 		g_free (key);
 		label = g_strdup (_("Desktop")); 
+	}
+	else if (g_utf8_collate (key, home_path) == 0)
+	{
+		g_free (key);
+		/* Note that this does NOT refer to the home page but to a
+		 * user's home folder. It should be translated by the same
+		 * term as GTK+'s "Home" string to be consistent with the
+		 * filechooser */
+		label = g_strdup (_("Home"));
 	}
 	else
 	{
@@ -1093,6 +1105,7 @@ get_download_button_label ()
 	}
 
 	g_free (desktop_path);
+	g_free (home_path);
 	return label;
 }
 	
