@@ -27,6 +27,8 @@
 #include "ephy-debug.h"
 #include "ephy-node-db.h"
 #include "ephy-node-common.h"
+#include "eel-gconf-extensions.h"
+#include "ephy-prefs.h"
 
 #include <time.h>
 #include <string.h>
@@ -56,34 +58,37 @@ struct EphyHistoryPrivate
 	int autosave_timeout;
 	guint update_hosts_idle;
 	gboolean dirty;
+	gboolean enabled;
+	guint disable_history_notifier_id;
 };
 
 enum
 {
-        ADD,
-	UPDATE,
-	REMOVE,
+	PROP_0,
+	PROP_ENABLED
+};
+
+enum
+{
 	VISITED,
+	CLEARED,
         LAST_SIGNAL
 };
 
-static void
-ephy_history_class_init (EphyHistoryClass *klass);
-static void
-ephy_history_init (EphyHistory *tab);
-static void
-ephy_history_finalize (GObject *object);
+static guint signals[LAST_SIGNAL] = { 0 };
+
+static void ephy_history_class_init	(EphyHistoryClass *klass);
+static void ephy_history_init		(EphyHistory *history);
+static void ephy_history_finalize	(GObject *object);
 
 static GObjectClass *parent_class = NULL;
-
-static guint ephy_history_signals[LAST_SIGNAL] = { 0 };
 
 GType
 ephy_history_get_type (void)
 {
-        static GType ephy_history_type = 0;
+        static GType type = 0;
 
-        if (ephy_history_type == 0)
+        if (type == 0)
         {
                 static const GTypeInfo our_info =
                 {
@@ -98,12 +103,58 @@ ephy_history_get_type (void)
                         (GInstanceInitFunc) ephy_history_init
                 };
 
-                ephy_history_type = g_type_register_static (G_TYPE_OBJECT,
-							      "EphyHistory",
-							      &our_info, 0);
+                type = g_type_register_static (G_TYPE_OBJECT,
+					       "EphyHistory",
+					       &our_info, 0);
         }
 
-        return ephy_history_type;
+        return type;
+}
+
+static void
+ephy_history_set_enabled (EphyHistory *history,
+			  gboolean enabled)
+{
+	LOG ("ephy_history_set_enabled %d", enabled)
+
+	ephy_node_db_set_immutable (history->priv->db, !enabled);
+
+	if (enabled == FALSE)
+	{
+		ephy_history_clear (history);
+	}
+}
+
+static void
+ephy_history_set_property (GObject *object,
+			   guint prop_id,
+			   const GValue *value,
+			   GParamSpec *pspec)
+{
+	EphyHistory *history = EPHY_HISTORY (history);
+
+	switch (prop_id)
+	{
+		case PROP_ENABLED:
+			ephy_history_set_enabled (history, g_value_get_boolean (value));
+			break;
+	}
+}
+
+static void
+ephy_history_get_property (GObject *object,
+			   guint prop_id,
+			   GValue *value,
+			   GParamSpec *pspec)
+{
+	EphyHistory *history = EPHY_HISTORY (history);
+
+	switch (prop_id)
+	{
+		case PROP_ENABLED:
+			g_value_set_boolean (value, history->priv->enabled);
+			break;
+		}
 }
 
 static void
@@ -114,8 +165,18 @@ ephy_history_class_init (EphyHistoryClass *klass)
         parent_class = g_type_class_peek_parent (klass);
 
         object_class->finalize = ephy_history_finalize;
+	object_class->get_property = ephy_history_get_property;
+	object_class->set_property = ephy_history_set_property;
 
-	ephy_history_signals[VISITED] =
+	g_object_class_install_property (object_class,
+					 PROP_ENABLED,
+					 g_param_spec_boolean ("enabled",
+							       "Enabled",
+							       "Enabled",
+							       TRUE,
+							       G_PARAM_READWRITE));
+
+	signals[VISITED] =
                 g_signal_new ("visited",
                               G_OBJECT_CLASS_TYPE (object_class),
                               G_SIGNAL_RUN_FIRST,
@@ -125,6 +186,16 @@ ephy_history_class_init (EphyHistoryClass *klass)
                               G_TYPE_NONE,
                               1,
 			      G_TYPE_STRING);
+
+	signals[CLEARED] =
+                g_signal_new ("cleared",
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              G_SIGNAL_RUN_FIRST,
+                              G_STRUCT_OFFSET (EphyHistoryClass, cleared),
+                              NULL, NULL,
+                              g_cclosure_marshal_VOID__VOID,
+                              G_TYPE_NONE,
+                              0);
 
 	g_type_class_add_private (object_class, sizeof(EphyHistoryPrivate));
 }
@@ -353,7 +424,7 @@ page_removed_from_host_cb (EphyNode *node,
 		           guint old_index,
 		           EphyHistory *eb)
 {
-	if (!eb->priv->update_hosts_idle)
+	if (eb->priv->update_hosts_idle == 0)
 	{
 		eb->priv->update_hosts_idle = g_idle_add
 			((GSourceFunc)update_hosts, eb);
@@ -371,6 +442,16 @@ connect_page_removed_from_host (char *url,
 					 EPHY_NODE_CHILD_REMOVED,
 				         (EphyNodeCallback) page_removed_from_host_cb,
 					 G_OBJECT (eb));
+}
+
+static void
+disable_history_notifier (GConfClient *client,
+			  guint cnxn_id,
+			  GConfEntry *entry,
+			  EphyHistory *history)
+{
+	ephy_history_set_enabled
+		(history, !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY));
 }
 
 static void
@@ -459,6 +540,11 @@ ephy_history_init (EphyHistory *eb)
 		g_timeout_add (HISTORY_SAVE_INTERVAL,
 		       (GSourceFunc)periodic_save_cb,
 		       eb);
+
+	disable_history_notifier (NULL, 0, NULL, eb);
+	eb->priv->disable_history_notifier_id = eel_gconf_notification_add
+		(CONF_LOCKDOWN_DISABLE_HISTORY,
+		 (GConfClientNotifyFunc) disable_history_notifier, eb);
 }
 
 static void
@@ -483,6 +569,8 @@ ephy_history_finalize (GObject *object)
 
 	g_source_remove (eb->priv->autosave_timeout);
 
+	eel_gconf_notification_remove (eb->priv->disable_history_notifier_id);
+
 	LOG ("Global history finalized");
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -491,11 +579,7 @@ ephy_history_finalize (GObject *object)
 EphyHistory *
 ephy_history_new ()
 {
-	EphyHistory *eh;
-
-	eh = EPHY_HISTORY (g_object_new (EPHY_TYPE_HISTORY, NULL));
-
-	return eh;
+	return EPHY_HISTORY (g_object_new (EPHY_TYPE_HISTORY, NULL));
 }
 
 static void
@@ -549,6 +633,11 @@ ephy_history_get_host (EphyHistory *eh, const char *url)
 	GTime now;
 
 	g_return_val_if_fail (url != NULL, NULL);
+
+	if (eh->priv->enabled == FALSE)
+	{
+		return NULL;
+	}
 
 	now = time (NULL);
 
@@ -696,7 +785,7 @@ ephy_history_visited (EphyHistory *eh, EphyNode *node)
 
 	eh->priv->last_page = node;
 
-	g_signal_emit (G_OBJECT (eh), ephy_history_signals[VISITED], 0, url);
+	g_signal_emit (G_OBJECT (eh), signals[VISITED], 0, url);
 }
 
 int
@@ -723,6 +812,11 @@ ephy_history_add_page (EphyHistory *eb,
 {
 	EphyNode *bm, *node, *host;
 	GValue value = { 0, };
+
+	if (eb->priv->enabled == FALSE)
+	{
+		return;
+	}
 
 	node = ephy_history_get_page (eb, url);
 	if (node)
@@ -786,7 +880,7 @@ ephy_history_set_page_title (EphyHistory *gh,
 	if (title == NULL || title[0] == '\0') return;
 
 	node = ephy_history_get_page (gh, url);
-	if (!node) return;
+	if (node == NULL) return;
 
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, title);
@@ -842,12 +936,19 @@ ephy_history_clear (EphyHistory *gh)
 {
 	EphyNode *node;
 
+	LOG ("clearing history")
+
+	ephy_node_db_set_immutable (gh->priv->db, FALSE);
+
 	while ((node = ephy_node_get_nth_child (gh->priv->pages, 0)) != NULL)
 	{
 		ephy_node_unref (node);
 	}
-
 	ephy_history_save (gh);
+
+	ephy_node_db_set_immutable (gh->priv->db, !gh->priv->enabled);
+
+	g_signal_emit (gh, signals[CLEARED], 0);
 }
 
 EphyNode *
@@ -869,4 +970,12 @@ ephy_history_get_last_page (EphyHistory *gh)
 
 	return ephy_node_get_property_string
 		(gh->priv->last_page, EPHY_NODE_PAGE_PROP_LOCATION);
+}
+
+gboolean
+ephy_history_is_enabled (EphyHistory *history)
+{
+	g_return_val_if_fail (EPHY_IS_HISTORY (history), FALSE);
+
+	return history->priv->enabled;
 }

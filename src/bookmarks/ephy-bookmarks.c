@@ -391,14 +391,56 @@ history_site_visited_cb (EphyHistory *gh, const char *url, EphyBookmarks *eb)
 }
 
 static void
+clear_favorites (EphyBookmarks *bookmarks)
+{
+	EphyNode *node;
+	GPtrArray *children;
+	int i;
+	gboolean was_immutable;
+
+	/* clear the favourites */
+
+	was_immutable = ephy_node_db_is_immutable (bookmarks->priv->db);
+	ephy_node_db_set_immutable (bookmarks->priv->db, FALSE);
+
+	node = bookmarks->priv->favorites;
+	children = ephy_node_get_children (node);
+	for (i = children->len - 1; i >= 0; i--)
+	{
+		EphyNode *kid;
+
+		kid = g_ptr_array_index (children, i);
+
+		ephy_node_remove_child (node, kid);
+	}
+
+	ephy_node_db_set_immutable (bookmarks->priv->db, was_immutable);
+
+	ephy_bookmarks_update_favorites (bookmarks);
+}
+
+static void
+history_cleared_cb (EphyHistory *history, EphyBookmarks *bookmarks)
+{
+	clear_favorites (bookmarks);
+}
+
+static void
 ephy_setup_history_notifiers (EphyBookmarks *eb)
 {
 	EphyHistory *history;
 
 	history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
 
+	if (ephy_history_is_enabled (history) == FALSE)
+	{
+		clear_favorites (eb);
+	}
+
 	g_signal_connect (history, "visited",
 			  G_CALLBACK (history_site_visited_cb), eb);
+	g_signal_connect (history, "cleared",
+			  G_CALLBACK (history_cleared_cb), eb);
 }
 
 static void

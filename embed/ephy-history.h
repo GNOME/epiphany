@@ -63,7 +63,10 @@ struct EphyHistoryClass
 {
         GObjectClass parent_class;
 
-	void (* visited) (const char *url);
+	/* Signals */
+	void	(* visited)	(EphyHistory *history,
+				 const char *url);
+	void	(* cleared)	(EphyHistory *history);
 };
 
 GType		ephy_history_get_type		(void);
@@ -102,6 +105,8 @@ const char     *ephy_history_get_icon		(EphyHistory *gh,
 						 const char *url);
 
 void            ephy_history_clear              (EphyHistory *gh);
+
+gboolean	ephy_history_is_enabled		(EphyHistory *history);
 
 G_END_DECLS
 

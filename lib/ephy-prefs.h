@@ -27,32 +27,33 @@ G_BEGIN_DECLS
 #define CONF_SCHEMA_VERSION "/apps/epiphany/schema_version"
 
 /* General */
-#define CONF_GENERAL_HOMEPAGE "/apps/epiphany/general/homepage"
-#define CONF_ALWAYS_SHOW_TABS_BAR "/apps/epiphany/general/always_show_tabs_bar"
-#define CONF_WINDOWS_SHOW_TOOLBARS "/apps/epiphany/general/show_toolbars"
-#define CONF_WINDOWS_SHOW_BOOKMARKS_BAR "/apps/epiphany/general/show_bookmarks_bar"
-#define CONF_WINDOWS_SHOW_STATUSBAR "/apps/epiphany/general/show_statusbar"
-#define CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL "/apps/epiphany/general/middle_click_open_url"
-#define CONF_AUTO_OPEN_DOWNLOADS "/apps/epiphany/general/auto_open_downloads"
-#define CONF_DESKTOP_IS_HOME_DIR "/apps/nautilus/preferences/desktop_is_home_dir"
+#define CONF_GENERAL_HOMEPAGE			"/apps/epiphany/general/homepage"
+#define CONF_ALWAYS_SHOW_TABS_BAR		"/apps/epiphany/general/always_show_tabs_bar"
+#define CONF_WINDOWS_SHOW_TOOLBARS		"/apps/epiphany/general/show_toolbars"
+#define CONF_WINDOWS_SHOW_BOOKMARKS_BAR		"/apps/epiphany/general/show_bookmarks_bar"
+#define CONF_WINDOWS_SHOW_STATUSBAR		"/apps/epiphany/general/show_statusbar"
+#define CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL	"/apps/epiphany/general/middle_click_open_url"
+#define CONF_AUTO_OPEN_DOWNLOADS		"/apps/epiphany/general/auto_open_downloads"
+#define CONF_DESKTOP_IS_HOME_DIR		"/apps/nautilus/preferences/desktop_is_home_dir"
 
 /* Directories */
-#define CONF_STATE_SAVE_DIR           "/apps/epiphany/directories/save"
-#define CONF_STATE_SAVE_IMAGE_DIR     "/apps/epiphany/directories/saveimage"
-#define CONF_STATE_OPEN_DIR           "/apps/epiphany/directories/open"
-#define CONF_STATE_DOWNLOAD_DIR    "/apps/epiphany/directories/download"
-#define CONF_STATE_UPLOAD_DIR	      "/apps/epiphany/directories/upload"
+#define CONF_STATE_SAVE_DIR		"/apps/epiphany/directories/save"
+#define CONF_STATE_SAVE_IMAGE_DIR	"/apps/epiphany/directories/saveimage"
+#define CONF_STATE_OPEN_DIR		"/apps/epiphany/directories/open"
+#define CONF_STATE_DOWNLOAD_DIR		"/apps/epiphany/directories/download"
+#define CONF_STATE_UPLOAD_DIR		"/apps/epiphany/directories/upload"
 
 /* Lockdown */
-#define CONF_LOCKDOWN_DISABLE_ARBITRARY_URL  "/apps/epiphany/lockdown/disable_arbitrary_url"
+#define CONF_LOCKDOWN_DISABLE_ARBITRARY_URL	"/apps/epiphany/lockdown/disable_arbitrary_url"
 #define CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING  "/apps/epiphany/lockdown/disable_bookmark_editing"
-#define CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING  "/apps/epiphany/lockdown/disable_toolbar_editing"
-#define CONF_LOCKDOWN_DISABLE_HISTORY  "/apps/epiphany/lockdown/disable_history"
+#define CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING	"/apps/epiphany/lockdown/disable_toolbar_editing"
+#define CONF_LOCKDOWN_DISABLE_HISTORY		"/apps/epiphany/lockdown/disable_history"
 #define CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK	"/desktop/gnome/lockdown/disable_save_to_disk"
+#define CONF_LOCKDOWN_DISABLE_HISTORY		"/apps/epiphany/lockdown/disable_history"
 
 /* System prefs */
-#define CONF_DESKTOP_FTP_HANDLER "/desktop/gnome/url-handlers/ftp/command"
-#define CONF_DESKTOP_TOOLBAR_STYLE "/desktop/gnome/interface/toolbar_style"
+#define CONF_DESKTOP_FTP_HANDLER	"/desktop/gnome/url-handlers/ftp/command"
+#define CONF_DESKTOP_TOOLBAR_STYLE	"/desktop/gnome/interface/toolbar_style"
 
 G_END_DECLS
 

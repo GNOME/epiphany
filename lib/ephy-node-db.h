@@ -75,6 +75,9 @@ const char   *ephy_node_db_get_name		(EphyNodeDb *db);
 
 gboolean      ephy_node_db_is_immutable		(EphyNodeDb *db);
 
+void	      ephy_node_db_set_immutable	(EphyNodeDb *db,
+						 gboolean immutable);
+
 EphyNode     *ephy_node_db_get_node_from_id	(EphyNodeDb *db,
 						 long id);
 

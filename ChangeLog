@@ -1,3 +1,23 @@
+2004-01-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-history.c: (ephy_history_get_type),
+	(ephy_history_set_enabled), (ephy_history_set_property),
+	(ephy_history_get_property), (ephy_history_class_init),
+	(page_removed_from_host_cb), (disable_history_notifier),
+	(ephy_history_init), (ephy_history_finalize), (ephy_history_new),
+	(ephy_history_get_host), (ephy_history_visited),
+	(ephy_history_add_page), (ephy_history_set_page_title),
+	(ephy_history_clear), (ephy_history_is_enabled):
+	* embed/ephy-history.h:
+	* lib/ephy-node-db.c: (ephy_node_db_get_property),
+	(ephy_node_db_set_property), (ephy_node_db_set_immutable):
+	* lib/ephy-node-db.h:
+	* lib/ephy-prefs.h:
+	* src/bookmarks/ephy-bookmarks.c: (clear_favorites),
+	(history_cleared_cb), (ephy_setup_history_notifiers):
+
+	Implement history disabling.
+
 2004-01-09  Christopher James Lahey  <clahey@ximian.com>
 
 	* data/epiphany-lockdown.schemas.in, lib/ephy-prefs.h: Added

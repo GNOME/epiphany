@@ -99,7 +99,6 @@ ephy_node_db_set_name (EphyNodeDb *db, const char *name)
 	g_hash_table_insert (ephy_node_databases, db->priv->name, db);
 }
 
-
 static void
 ephy_node_db_get_property (GObject *object,
                            guint prop_id,
@@ -116,11 +115,10 @@ ephy_node_db_get_property (GObject *object,
 			g_value_set_string (value, db->priv->name);
 			break;
 		case PROP_IMMUTABLE:
-			g_value_set_boolean (value, db->priv->immutable);
+			g_value_set_boolean (value, ephy_node_db_is_immutable (db));
 			break;
 	}
 }
-
 
 static void
 ephy_node_db_set_property (GObject *object,
@@ -138,8 +136,7 @@ ephy_node_db_set_property (GObject *object,
 			ephy_node_db_set_name (db, g_value_get_string (value));
 			break;
 		case PROP_IMMUTABLE:
-			db->priv->immutable = g_value_get_boolean (value);
-			g_object_notify (G_OBJECT (db), "immutable");
+			ephy_node_db_set_immutable (db, g_value_get_boolean (value));
 			break;
 	}
 }
@@ -251,6 +248,14 @@ gboolean
 ephy_node_db_is_immutable (EphyNodeDb *db)
 {
 	return db->priv->immutable;
+}
+
+void
+ephy_node_db_set_immutable (EphyNodeDb *db, gboolean immutable)
+{
+	db->priv->immutable = immutable;
+
+	g_object_notify (G_OBJECT (db), "immutable");
 }
 
 EphyNode *
