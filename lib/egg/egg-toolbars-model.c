@@ -431,7 +431,7 @@ parse_toolbars (EggToolbarsModel *t,
     }
 }
 
-void
+gboolean
 egg_toolbars_model_load (EggToolbarsModel *t,
 			 const char *xml_file)
 {
@@ -444,7 +444,7 @@ egg_toolbars_model_load (EggToolbarsModel *t,
   if (doc == NULL)
   {
     g_warning ("Failed to load XML data from %s", xml_file);
-    return;
+    return FALSE;
   }
   root = xmlDocGetRootElement (doc);
 
@@ -452,6 +452,8 @@ egg_toolbars_model_load (EggToolbarsModel *t,
   parse_toolbars (t, root->children);
 
   xmlFreeDoc (doc);
+
+  return TRUE;
 }
 
 static char *
