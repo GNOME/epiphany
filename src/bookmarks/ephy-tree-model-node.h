@@ -46,6 +46,13 @@ typedef enum
 	EPHY_TREE_MODEL_NODE_NUM_COLUMNS
 } EphyTreeModelNodeColumn;
 
+typedef enum
+{
+	EPHY_TREE_MODEL_ALL_PRIORITY,
+	EPHY_TREE_MODEL_SPECIAL_PRIORITY,
+	EPHY_TREE_MODEL_NORMAL_PRIORITY
+} EphyTreeModelNodePriority;
+
 GType ephy_tree_model_node_column_get_type (void);
 
 #define EPHY_TYPE_TREE_MODEL_NODE_COLUMN (ephy_tree_model_node_column_get_type ())

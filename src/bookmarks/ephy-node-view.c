@@ -458,6 +458,14 @@ ephy_node_view_sort_func (GtkTreeModel *model,
 			    column == EPHY_TREE_MODEL_NODE_COL_KEYWORD)
 				retval = strcmp (stra, strb);
 			break;
+		case G_TYPE_INT:
+			if (g_value_get_int (&a_value) < g_value_get_int (&b_value))
+				retval = -1;
+			else if (g_value_get_int (&a_value) == g_value_get_int (&b_value))
+				retval = 0;
+			else
+				retval = 1;
+			break;
 		case G_TYPE_BOOLEAN:
 			if (g_value_get_boolean (&a_value) < g_value_get_boolean (&b_value))
 				retval = -1;

@@ -1,3 +1,16 @@
+2003-03-23  Xan Lopez  <xan@masilla.org>
+
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init):
+	* src/bookmarks/ephy-node-view.c: (ephy_node_view_sort_func):
+	* src/bookmarks/ephy-tree-model-node.c:
+	(ephy_tree_model_node_get_column_type),
+	(ephy_tree_model_node_get_value):
+	* src/bookmarks/ephy-tree-model-node.h:
+
+	Some ground work on the PRIORITY property, change it from
+	bool to int, add more priority types (ALL, SPECIAL, NORMAL),
+	and use it in the WEIGTH_TEXT property (just ALL is bold now).
+
 2003-03-23  David Bordoley <bordoley@msu.edu>
 
 	* data/art/Makefile.am:

@@ -361,9 +361,9 @@ ephy_tree_model_node_get_column_type (GtkTreeModel *tree_model,
 		case EPHY_TREE_MODEL_NODE_COL_KEYWORD:
 			return G_TYPE_STRING;
 		case EPHY_TREE_MODEL_NODE_COL_TITLE_WEIGHT:
+		case EPHY_TREE_MODEL_NODE_COL_PRIORITY:	
 			return G_TYPE_INT;
 		case EPHY_TREE_MODEL_NODE_COL_VISIBLE:
-		case EPHY_TREE_MODEL_NODE_COL_PRIORITY:	
 			return G_TYPE_BOOLEAN;
 		case EPHY_TREE_MODEL_NODE_COL_ICON:
 			return GDK_TYPE_PIXBUF;
@@ -466,6 +466,7 @@ ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 {
 	EphyTreeModelNode *model = EPHY_TREE_MODEL_NODE (tree_model);
 	EphyNode *node;
+	int priority;
 
 	g_return_if_fail (EPHY_IS_TREE_MODEL_NODE (tree_model));
 	g_return_if_fail (iter != NULL);
@@ -509,15 +510,20 @@ ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 		break;
 	case EPHY_TREE_MODEL_NODE_COL_TITLE_WEIGHT:
 		g_value_init (value, G_TYPE_INT);
-		if (!ephy_node_get_property_boolean (node, EPHY_NODE_KEYWORD_PROP_ALL_PRIORITY))
+		/* Only priority ALL (0) has bold text */
+		if (ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_ALL_PRIORITY))
 			g_value_set_int (value, PANGO_WEIGHT_NORMAL);
 		else
 			g_value_set_int (value, PANGO_WEIGHT_BOLD);
 		break;
 	case EPHY_TREE_MODEL_NODE_COL_PRIORITY:
-		g_value_init (value, G_TYPE_BOOLEAN);
-		g_value_set_boolean (value, !ephy_node_get_property_boolean (node,
-					EPHY_NODE_KEYWORD_PROP_ALL_PRIORITY));
+		g_value_init (value, G_TYPE_INT);
+		priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_ALL_PRIORITY);
+		if (priority == EPHY_TREE_MODEL_ALL_PRIORITY || 
+		    priority == EPHY_TREE_MODEL_SPECIAL_PRIORITY)
+			g_value_set_int (value, priority);
+		else
+			g_value_set_int (value, EPHY_TREE_MODEL_NORMAL_PRIORITY);
 		break;
 	default:
 		g_assert_not_reached ();

@@ -21,6 +21,7 @@
 #include "ephy-shell.h"
 #include "ephy-history.h"
 #include "ephy-debug.h"
+#include "ephy-tree-model-node.h"
 
 #include <string.h>
 #include <libgnome/gnome-i18n.h>
@@ -444,8 +445,8 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	/* Keywords */
 	eb->priv->keywords = ephy_node_new_with_id (KEYWORDS_NODE_ID);
 	ephy_node_ref (eb->priv->keywords);
-	g_value_init (&value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&value, TRUE);
+	g_value_init (&value, G_TYPE_INT);
+	g_value_set_int (&value, EPHY_TREE_MODEL_ALL_PRIORITY);
 	ephy_node_set_property (eb->priv->bookmarks,
 			EPHY_NODE_KEYWORD_PROP_ALL_PRIORITY,
 			&value);
