@@ -625,7 +625,7 @@ import_bookmarks (EphyBookmarksEditor *editor,
 		basename = g_filename_display_basename (filename);
 		dialog = gtk_message_dialog_new (GTK_WINDOW (editor),
 						 GTK_DIALOG_MODAL,
-						 GTK_MESSAGE_WARNING,
+						 GTK_MESSAGE_ERROR,
 						 GTK_BUTTONS_OK,
 						 _("Import failed"));
 
