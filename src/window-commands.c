@@ -728,6 +728,11 @@ editor_can_open_uri (char *address)
 		gnome_vfs_uri_unref (uri);
 	}
 
+	if (app)
+	{
+		gnome_vfs_mime_application_free (app);
+	}
+
 	return result;
 }
 
