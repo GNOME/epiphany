@@ -806,7 +806,7 @@ update_has_smart_address (EphyBookmarks *bookmarks, EphyNode *bmk, const char *a
 	{
 		if (ephy_node_has_child (smart_bmks, bmk))
 		{
-			ephy_node_add_child (smart_bmks, bmk);
+			ephy_node_remove_child (smart_bmks, bmk);
 		}
 	}
 }

@@ -1,5 +1,13 @@
 2004-03-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks.c: (update_has_smart_address):
+
+	When changing a bookmark address and it was a smart bookmark but
+	now is not anymore, remove the bookmark from the smart_bmks node
+	instead of adding it :)
+
+2004-03-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-toolbars-model.c: (get_toolbar_pos),
 	(ephy_toolbars_model_set_bookmarks):
 
