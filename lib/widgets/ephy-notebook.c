@@ -791,7 +791,8 @@ update_tabs_visibility (EphyNotebook *nb, gboolean before_inserting)
 
 	if (before_inserting) tabs_num--;
 
-	show_tabs = gtk_notebook_get_nth_page (GTK_NOTEBOOK (nb), tabs_num) > 0;
+	show_tabs = eel_gconf_get_boolean (CONF_TABS_TABBED) || 
+		    gtk_notebook_get_nth_page (GTK_NOTEBOOK (nb), tabs_num) > 0;
 
 	gtk_notebook_set_show_tabs (GTK_NOTEBOOK (nb), show_tabs);
 }
