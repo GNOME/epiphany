@@ -19,6 +19,8 @@
  *  $Id$
  */
 
+#include "mozilla-config.h"
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -876,4 +878,3 @@ mozilla_proxy_ignore_notifier (GConfClient *client,
 	g_slist_foreach (hosts, (GFunc) g_free, NULL);
 	g_slist_free (hosts);
 }
-

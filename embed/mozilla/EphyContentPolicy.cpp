@@ -19,6 +19,8 @@
  *  $Id$
  */
 
+#include "mozilla-config.h"
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -167,4 +169,3 @@ NS_IMETHODIMP EphyContentPolicy::ShouldProcess(PRInt32 contentType,
 	return NS_OK;
 }
 #endif /* MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1) */
-

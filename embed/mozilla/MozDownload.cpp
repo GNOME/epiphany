@@ -41,6 +41,8 @@
  * $Id$
  */
 
+#include "mozilla-config.h"
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -720,4 +722,3 @@ nsresult BuildDownloadPath (const char *defaultFileName, nsILocalFile **_retval)
 	NS_IF_ADDREF (*_retval = destFile);
 	return NS_OK;
 }
-

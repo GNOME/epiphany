@@ -1,3 +1,38 @@
+2004-07-30  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/EphyAboutRedirector.cpp:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyContentPolicy.cpp:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/EphySingle.cpp:
+	* embed/mozilla/EphyUtils.cpp:
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/GlobalHistory.cpp:
+	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
+	* embed/mozilla/GtkNSSDialogs.cpp:
+	* embed/mozilla/GtkNSSKeyPairDialogs.cpp:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozRegisterComponents.cpp:
+	* embed/mozilla/MozillaPrivate.cpp:
+	* embed/mozilla/PrintingPromptService.cpp:
+	* embed/mozilla/mozilla-download.cpp:
+	* embed/mozilla/mozilla-embed-event.cpp:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* embed/mozilla/mozilla-notifiers.cpp:
+
+	Don't use -include which compilers other than gcc don't
+	understand. Instead include mozilla-config.h as first thing
+	in each file. Part of bug #143094.
+
+	* embed/mozilla/EphyUtils.cpp:
+
+	Also include config.h.
+
 2004-07-29  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/egg/egg-toolbars-model.c: (parse_toolbars):
