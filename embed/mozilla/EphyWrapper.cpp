@@ -18,6 +18,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "EphyWrapper.h"
 #include "GlobalHistory.h"
 #include "ProgressListener.h"
