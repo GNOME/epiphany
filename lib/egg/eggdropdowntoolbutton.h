@@ -62,6 +62,12 @@ void          egg_dropdown_tool_button_set_menu       (EggDropdownToolButton *bu
                                                        GtkMenuShell          *menu);
 GtkMenuShell *egg_dropdown_tool_button_get_menu       (EggDropdownToolButton *button);
 
+void          egg_dropdown_tool_button_set_arrow_tooltip (EggDropdownToolButton *button,
+                                                          GtkTooltips *tooltips,
+                                                          const gchar *tip_text,
+                                                          const gchar *tip_private);
+
+
 G_END_DECLS;
 
 #endif /* __EGG_DROPDOWN_TOOL_BUTTON_H__ */

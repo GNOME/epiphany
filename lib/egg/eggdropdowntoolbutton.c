@@ -99,15 +99,6 @@ egg_dropdown_tool_button_set_tooltip (GtkToolItem *tool_item,
 }
 
 static void
-egg_dropdown_tool_button_set_arrow_tooltip (EggDropdownToolButton *button,
-                                            GtkTooltips *tooltips,
-                                            const gchar *tip_text,
-                                            const gchar *tip_private)
-{
-  gtk_tooltips_set_tip (tooltips, button->priv->arrow_button, tip_text, tip_private);
-}
-
-static void
 egg_dropdown_tool_button_class_init (EggDropdownToolButtonClass *klass)
 {
   GObjectClass *object_class;
@@ -406,3 +397,15 @@ egg_dropdown_tool_button_get_menu (EggDropdownToolButton *button)
 {
   return GTK_MENU_SHELL (button->priv->menu);
 }
+
+void
+egg_dropdown_tool_button_set_arrow_tooltip (EggDropdownToolButton *button,
+                                            GtkTooltips *tooltips,
+                                            const gchar *tip_text,
+                                            const gchar *tip_private)
+{
+  g_return_if_fail (EGG_IS_DROPDOWN_TOOL_BUTTON (button));
+
+  gtk_tooltips_set_tip (tooltips, button->priv->arrow_button, tip_text, tip_private);
+}
+
