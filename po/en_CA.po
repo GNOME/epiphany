@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-20 09:21-0500\n"
-"PO-Revision-Date: 2004-12-20 18:56-0400\n"
+"POT-Creation-Date: 2004-12-22 21:31-0500\n"
+"PO-Revision-Date: 2004-12-22 18:56-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -659,7 +659,7 @@ msgstr "_Find:"
 msgid "_Next"
 msgstr "_Next"
 
-#: data/glade/epiphany.glade.h:13 embed/downloader-view.c:313
+#: data/glade/epiphany.glade.h:13 embed/downloader-view.c:314
 msgid "_Pause"
 msgstr "_Pause"
 
@@ -980,26 +980,27 @@ msgstr "_to:"
 msgid "fr_om:"
 msgstr "fr_om:"
 
-#: embed/downloader-view.c:180
+#. this opens the downloader window, or brings it to the foreground if already open
+#: embed/downloader-view.c:181
 msgid "_Show Downloader..."
 msgstr "_Show Downloader..."
 
-#: embed/downloader-view.c:258
+#: embed/downloader-view.c:259
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: embed/downloader-view.c:262
+#: embed/downloader-view.c:263
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: embed/downloader-view.c:313
+#: embed/downloader-view.c:314
 msgid "_Resume"
 msgstr "_Resume"
 
 #. translators: first %s is filename, "%s of %s" is current/total file size
-#: embed/downloader-view.c:360
+#: embed/downloader-view.c:361
 #, c-format
 msgid ""
 "%s\n"
@@ -1008,26 +1009,34 @@ msgstr ""
 "%s\n"
 "%s of %s"
 
-#: embed/downloader-view.c:371 src/ephy-window.c:1376
+#: embed/downloader-view.c:372 src/ephy-window.c:1376
 msgid "Unknown"
 msgstr "Unknown"
 
-#: embed/downloader-view.c:405
+#: embed/downloader-view.c:406
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d download"
 msgstr[1] "%d downloads"
 
-#: embed/downloader-view.c:581 src/bookmarks/ephy-bookmarks-editor.c:795
+#: embed/downloader-view.c:519 embed/downloader-view.c:528
+msgid "download status|Unknown"
+msgstr "download status|Unknown"
+
+#: embed/downloader-view.c:522
+msgid "download status|Failed"
+msgstr "download status|Failed"
+
+#: embed/downloader-view.c:582 src/bookmarks/ephy-bookmarks-editor.c:795
 msgid "File"
 msgstr "File"
 
-#: embed/downloader-view.c:603
+#: embed/downloader-view.c:604
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:614
+#: embed/downloader-view.c:615
 msgid "Remaining"
 msgstr "Remaining"
 
@@ -1429,6 +1438,7 @@ msgstr ""
 msgid "Open this file with \"%s\"?"
 msgstr "Open this file with \"%s\"?"
 
+#. translators: %s is the name of the application
 #: embed/mozilla/ContentHandler.cpp:276
 #, c-format
 msgid ""
@@ -3493,6 +3503,23 @@ msgstr "Vietnamese"
 #: src/prefs-dialog.c:332
 msgid "Walloon"
 msgstr "Walloon"
+
+#. translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#: src/prefs-dialog.c:1013 src/prefs-dialog.c:1019
+#, c-format
+msgid "language|%s (%s)"
+msgstr "language|%s (%s)"
+
+#. translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: src/prefs-dialog.c:1028 src/prefs-dialog.c:1386
+#, c-format
+msgid "language|User defined (%s)"
+msgstr "language|User defined (%s)"
 
 #: src/prefs-dialog.c:1051
 #, c-format
