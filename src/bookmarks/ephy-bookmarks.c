@@ -662,7 +662,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
         eb->priv = g_new0 (EphyBookmarksPrivate, 1);
 	eb->priv->toolbars_model = NULL;
 
-	db = ephy_node_db_new ("EphyBookmarks");
+	db = ephy_node_db_new (EPHY_NODE_DB_BOOKMARKS);
 	eb->priv->db = db;
 	eb->priv->dirty = FALSE;
 	eb->priv->save_timeout_id = 0;
