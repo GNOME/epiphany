@@ -32,6 +32,8 @@ typedef struct EphyEditableToolbarClass EphyEditableToolbarClass;
 #define EPHY_EDITABLE_TOOLBAR_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_EDITABLE_TOOLBAR_TYPE, EphyEditableToolbarClass))
 #define IS_EPHY_EDITABLE_TOOLBAR(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_EDITABLE_TOOLBAR_TYPE))
 #define IS_EPHY_EDITABLE_TOOLBAR_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_EDITABLE_TOOLBAR_TYPE))
+#define EPHY_EDITABLE_TOOLBAR_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_EDITABLE_TOOLBAR_TYPE, EphyEditableToolbarClass))
+
 
 typedef struct EphyEditableToolbar EphyEditableToolbar;
 typedef struct EphyEditableToolbarPrivate EphyEditableToolbarPrivate;
@@ -46,15 +48,21 @@ struct EphyEditableToolbarClass
 {
         GObjectClass parent_class;
 
-	void (* request_action) (EphyEditableToolbar *etoolbar,
-				 const char *action_name);
+	EggAction * (* get_action) (EphyEditableToolbar *etoolbar,
+				    const char *type,
+				    const char *name);
 };
 
-GType			ephy_editable_toolbar_get_type	(void);
+GType			ephy_editable_toolbar_get_type	 (void);
 
-EphyEditableToolbar    *ephy_editable_toolbar_new	(EggMenuMerge *merge);
+EphyEditableToolbar    *ephy_editable_toolbar_new	 (EggMenuMerge *merge);
 
-void			ephy_editable_toolbar_edit	(EphyEditableToolbar *etoolbar);
+void			ephy_editable_toolbar_edit	 (EphyEditableToolbar *etoolbar);
+
+EggAction              *ephy_editable_toolbar_get_action (EphyEditableToolbar *etoolbar,
+							  const char *type,
+							  const char *name);
+
 
 G_END_DECLS
 

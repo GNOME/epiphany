@@ -659,6 +659,26 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	return bm;
 }
 
+guint
+ephy_bookmarks_get_bookmark_id (EphyBookmarks *eb,
+				const char *url)
+{
+	EphyNode *node;
+
+	g_static_rw_lock_reader_lock (eb->priv->bookmarks_hash_lock);
+	node = g_hash_table_lookup (eb->priv->bookmarks_hash, url);
+	g_static_rw_lock_reader_unlock (eb->priv->bookmarks_hash_lock);
+
+	if (node)
+	{
+		return ephy_node_get_id (node);
+	}
+	else
+	{
+		return -1;
+	}
+}
+
 void
 ephy_bookmarks_set_icon	(EphyBookmarks *eb,
 			 const char *url,

@@ -1,3 +1,31 @@
+2003-01-29  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/ephy-bonobo-extensions.c: (ephy_bonobo_clear_path),
+	(ephy_bonobo_replace_path):
+	* lib/ephy-bonobo-extensions.h:
+	* lib/ephy-marshal.list:
+	* lib/ephy-string.c: (ephy_str_to_int):
+	* lib/ephy-string.h:
+	* lib/widgets/ephy-editable-toolbar.c: (impl_get_action),
+	(add_action), (parse_item_list), (add_toolbar), (parse_toolbars),
+	(load_defaults), (load_toolbar), (drag_data_received_cb),
+	(setup_toolbar_drag), (ensure_toolbars_min_size), (do_merge),
+	(ephy_editable_toolbar_class_init), (editor_get_dimensions),
+	(hide_editor), (editor_close_cb), (editor_add_toolbar_cb),
+	(editor_drag_data_received_cb), (editor_drag_data_delete_cb),
+	(setup_editor), (button_press_cb), (show_editor),
+	(ephy_editable_toolbar_edit), (ephy_editable_toolbar_get_action):
+	* lib/widgets/ephy-editable-toolbar.h:
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_get_bookmark_id):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/session.c: (session_load):
+	* src/toolbar.c: (go_location_cb), (toolbar_get_action),
+	(toolbar_class_init), (toolbar_init):
+
+	Complete (or nearly) toolbar editor implementation.
+	Bookmarks are implemented too, but some minor problems
+	are stopping them to work.
+
 2003-01-29  Christian Neumair  <chris@gnome-de.org>
 
 	* src/window-commands.c: Changed Copyright notice.

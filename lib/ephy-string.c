@@ -138,9 +138,9 @@ ephy_string_time_to_string (GDate *t,
 }
 
 gboolean
-ephy_str_to_int (const char *string, int *integer)
+ephy_str_to_int (const char *string, gulong *integer)
 {
-	long result;
+	gulong result;
 	char *parse_end;
 
 	/* Check for the case of an empty string. */

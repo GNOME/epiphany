@@ -100,16 +100,71 @@ toolbar_get_type (void)
 }
 
 static void
+go_location_cb (EggAction *action, char *location, EphyWindow *window)
+{
+	EphyEmbed *embed;
+
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (embed != NULL);
+
+	ephy_embed_load_url (embed, location);
+}
+
+static EggAction *
+toolbar_get_action (EphyEditableToolbar *etoolbar,
+		    const char *type,
+		    const char *name)
+{
+	Toolbar *t = TOOLBAR (etoolbar);
+	EggAction *action = NULL;
+	EphyBookmarks *bookmarks;
+	gulong id = 0;
+
+	if (type && (strcmp (type, EPHY_DND_URL_TYPE) == 0))
+	{
+		char action_name[255];
+
+		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+		id = ephy_bookmarks_get_bookmark_id (bookmarks, name);
+
+		snprintf (action_name, 255, "GoBookmarkId%ld", id);
+		action = ephy_bookmark_action_new (name, id);
+	}
+	else if (g_str_has_prefix (name, "GoBookmarkId"))
+	{
+		ephy_str_to_int (name + strlen ("GoBookmarkId"), &id);
+	}
+
+	if (action)
+	{
+		g_signal_connect (action, "go_location",
+				  G_CALLBACK (go_location_cb), t->priv->window);
+		egg_action_group_add_action (t->priv->action_group, action);
+		g_object_unref (action);
+	}
+	else
+	{
+		action = EPHY_EDITABLE_TOOLBAR_CLASS
+			(parent_class)->get_action (etoolbar, type, name);
+	}
+
+	return action;
+}
+
+static void
 toolbar_class_init (ToolbarClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	EphyEditableToolbarClass *eet_class;
 
         parent_class = g_type_class_peek_parent (klass);
+	eet_class = EPHY_EDITABLE_TOOLBAR_CLASS (klass);
 
         object_class->finalize = toolbar_finalize;
-
 	object_class->set_property = toolbar_set_property;
 	object_class->get_property = toolbar_get_property;
+
+	eet_class->get_action = toolbar_get_action;
 
 	g_object_class_install_property (object_class,
                                          PROP_EPHY_WINDOW,
@@ -150,17 +205,6 @@ toolbar_get_property (GObject *object,
                         g_value_set_object (value, t->priv->window);
                         break;
         }
-}
-
-static void
-go_location_cb (EggAction *action, char *location, EphyWindow *window)
-{
-	EphyEmbed *embed;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	ephy_embed_load_url (embed, location);
 }
 
 static void
@@ -246,28 +290,6 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 }
 
 static void
-editable_toolbar_request_action (Toolbar *t,
-				 const char *name,
-				 EphyEditableToolbar *etoolbar)
-{
-	guint id;
-
-	if (g_str_has_prefix (name, "GoBookmark") &&
-	    ephy_str_to_int (name + strlen ("GoBookmark"), &id))
-	{
-		EggAction *action;
-
-		LOG ("Create an action for bookmark %d", id)
-
-		action = ephy_bookmark_action_new (name, id);
-		g_signal_connect (action, "go_location",
-				  G_CALLBACK (go_location_cb), t->priv->window);
-		egg_action_group_add_action (t->priv->action_group, action);
-		g_object_unref (action);
-	}
-}
-
-static void
 toolbar_init (Toolbar *t)
 {
         t->priv = g_new0 (ToolbarPrivate, 1);
@@ -275,10 +297,6 @@ toolbar_init (Toolbar *t)
 	t->priv->window = NULL;
 	t->priv->ui_merge = NULL;
 	t->priv->visibility = TRUE;
-
-	g_signal_connect (t, "request_action",
-			  G_CALLBACK (editable_toolbar_request_action),
-			  EPHY_EDITABLE_TOOLBAR (t));
 }
 
 static void

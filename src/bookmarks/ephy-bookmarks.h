@@ -69,6 +69,9 @@ EphyNode       *ephy_bookmarks_add		(EphyBookmarks *eb,
 						 const char *smart_url,
 						 const char *keywords);
 
+guint		 ephy_bookmarks_get_bookmark_id (EphyBookmarks *eb,
+						 const char *url);
+
 void		 ephy_bookmarks_set_icon	(EphyBookmarks *eb,
 						 const char *url,
 						 const char *icon);

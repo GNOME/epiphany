@@ -604,7 +604,7 @@ session_load (Session *session,
 	{
 		if (strcmp (child->name, "window") == 0)
 		{
-			gint x = 0, y = 0, width = 0, height = 0;
+			gulong x = 0, y = 0, width = 0, height = 0;
 			xmlChar *tmp;
 
 			tmp = xmlGetProp (child, "x");

@@ -33,7 +33,7 @@ gchar		*ephy_string_time_to_string		(GDate *t,
 							 const char *format);
 
 gboolean	 ephy_str_to_int			(const char *string,
-							 int *integer);
+							 gulong *integer);
 
 char		*ephy_str_strip_chr			(const char *source,
 							 char remove_this);
