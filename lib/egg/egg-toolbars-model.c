@@ -428,7 +428,8 @@ parse_toolbars (EggToolbarsModel *t,
 	  style = xmlGetProp (child, "style");
 	  if (style && xmlStrEqual (style, "icons-only"))
 	    {
-	      egg_toolbars_model_set_flags (t, EGG_TB_MODEL_ICONS_ONLY, 0);
+	      /* FIXME: use toolbar position instead of 0 */
+	      egg_toolbars_model_set_flags (t, 0, EGG_TB_MODEL_ICONS_ONLY);
 	    }
 	  xmlFree (style);
 
@@ -609,7 +610,7 @@ static void
 egg_toolbars_model_finalize (GObject *object)
 {
   EggToolbarsModel *t = EGG_TOOLBARS_MODEL (object);
-
+  
   /* FIXME free nodes */
   g_node_destroy (t->priv->toolbars);
 
