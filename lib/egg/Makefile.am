@@ -36,6 +36,8 @@ noinst_HEADERS = \
   eggmarshalers.h \
   eggintl.h
 
+BUILT_SOURCES = eggmarshalers.h eggmarshalers.c
+
 eggmarshalers.h: eggmarshalers.list
 	cd $(srcdir) \
 	&& $(GLIB_GENMARSHAL) --prefix=_egg_marshal eggmarshalers.list --header > xgen-emh \
