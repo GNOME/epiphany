@@ -25,6 +25,7 @@
 #include "ephy-embed-shell.h"
 #include "session.h"
 #include "ephy-bookmarks.h"
+#include "ephy-toolbars-model.h"
 
 #include <glib-object.h>
 #include <glib.h>
@@ -93,6 +94,8 @@ Session		   *ephy_shell_get_session	   (EphyShell *gs);
 EphyAutocompletion *ephy_shell_get_autocompletion  (EphyShell *gs);
 
 EphyBookmarks      *ephy_shell_get_bookmarks       (EphyShell *gs);
+
+EphyToolbarsModel  *ephy_shell_get_toolbars_model  (EphyShell *gs);
 
 void		    ephy_shell_show_bookmarks_editor (EphyShell *gs);
 

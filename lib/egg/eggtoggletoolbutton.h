@@ -57,7 +57,6 @@ GType        egg_toggle_tool_button_get_type       (void) G_GNUC_CONST;
 EggToolItem *egg_toggle_tool_button_new            (void);
 EggToolItem *egg_toggle_tool_button_new_from_stock (const gchar *stock_id);
 
-void         egg_toggle_tool_button_toggled        (EggToggleToolButton *button);
 void         egg_toggle_tool_button_set_active     (EggToggleToolButton *button,
 						    gboolean             is_active);
 gboolean     egg_toggle_tool_button_get_active     (EggToggleToolButton *button);

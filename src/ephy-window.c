@@ -517,6 +517,10 @@ setup_window (EphyWindow *window)
 	g_signal_connect (menu, "activate", G_CALLBACK (menu_activate_cb), window);
 
 	window->priv->toolbar = toolbar_new (window);
+	gtk_widget_show (GTK_WIDGET (window->priv->toolbar));
+	gtk_box_pack_start (GTK_BOX (window->priv->menu_dock),
+			    GTK_WIDGET (window->priv->toolbar),
+			    FALSE, FALSE, 0);
 
 	g_signal_connect(window,
 			 "key-press-event",
@@ -649,11 +653,6 @@ ephy_window_finalize (GObject *object)
 
 	g_object_unref (window->priv->fav_menu);
 	g_object_unref (window->priv->enc_menu);
-
-	if (window->priv->toolbar)
-	{
-		g_object_unref (window->priv->toolbar);
-	}
 
 	if (window->priv->ppview_toolbar)
 	{
@@ -831,13 +830,13 @@ ephy_window_set_chrome (EphyWindow *window,
 
 	if (flags & EMBED_CHROME_TOOLBARON)
 	{
-		egg_editable_toolbar_show
-			(EGG_EDITABLE_TOOLBAR (window->priv->toolbar));
+/*		egg_editable_toolbar_show
+			(EGG_EDITABLE_TOOLBAR (window->priv->toolbar));*/
 	}
 	else
 	{
-		egg_editable_toolbar_hide
-			(EGG_EDITABLE_TOOLBAR (window->priv->toolbar));
+/*		egg_editable_toolbar_hide
+			(EGG_EDITABLE_TOOLBAR (window->priv->toolbar));*/
 	}
 
 	if (flags & EMBED_CHROME_STATUSBARON)

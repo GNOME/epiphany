@@ -58,6 +58,7 @@ struct EphyShellPrivate
 	Session *session;
 	EphyAutocompletion *autocompletion;
 	EphyBookmarks *bookmarks;
+	EphyToolbarsModel *toolbars_model;
 	GtkWidget *bme;
 	GtkWidget *history_window;
 };
@@ -263,6 +264,7 @@ ephy_shell_init (EphyShell *gs)
 	gs->priv->bookmarks = NULL;
 	gs->priv->bme = NULL;
 	gs->priv->history_window = NULL;
+	gs->priv->toolbars_model = NULL;
 
 	ephy_shell = gs;
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
@@ -638,6 +640,19 @@ ephy_shell_get_bookmarks (EphyShell *gs)
 	}
 
 	return gs->priv->bookmarks;
+}
+
+EphyToolbarsModel *
+ephy_shell_get_toolbars_model (EphyShell *gs)
+{
+	if (gs->priv->toolbars_model == NULL)
+	{
+		gs->priv->toolbars_model = ephy_toolbars_model_new ();
+		egg_toolbars_model_load (EGG_TOOLBARS_MODEL (gs->priv->toolbars_model),
+					 ephy_file ("epiphany-toolbar.xml"));
+	}
+
+	return gs->priv->toolbars_model;
 }
 
 static void

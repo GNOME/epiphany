@@ -22,7 +22,8 @@ EGGSOURCES = \
   eggtoolbar.c \
   eggtoolbutton.c \
   egg-editable-toolbar.c \
-  egg-toolbars-group.c
+  egg-toolbars-model.c \
+  egg-toolbar-editor.c
 
 libegg_la_SOURCES = \
   $(EGGSOURCES) \
@@ -45,7 +46,8 @@ EGGHEADERS = \
   eggtoolbar.h \
   eggtoolbutton.h \
   egg-editable-toolbar.h \
-  egg-toolbars-group.h
+  egg-toolbars-model.h \
+  egg-toolbar-editor.h
 
 noinst_HEADERS = \
   $(EGGHEADERS) \

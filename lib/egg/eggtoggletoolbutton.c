@@ -210,14 +210,6 @@ egg_toggle_tool_button_new_from_stock (const gchar *stock_id)
 }
 
 void
-egg_toggle_tool_button_toggled (EggToggleToolButton *button)
-{
-  g_return_if_fail (EGG_IS_TOGGLE_TOOL_BUTTON (button));
-
-  gtk_toggle_button_toggled (GTK_TOGGLE_BUTTON(EGG_TOOL_BUTTON(button)->button));
-}
-
-void
 egg_toggle_tool_button_set_active (EggToggleToolButton *button,
 				   gboolean is_active)
 {

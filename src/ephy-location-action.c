@@ -73,7 +73,7 @@ create_tool_item (EggAction *action)
 	item = GTK_WIDGET (egg_tool_item_new ());//(* EGG_ACTION_CLASS (parent_class)->create_tool_item) (action);
 	location = ephy_location_entry_new ();
 	gtk_container_add (GTK_CONTAINER (item), location);
-	egg_tool_item_set_expandable (EGG_TOOL_ITEM (item), TRUE);
+	egg_tool_item_set_expand (EGG_TOOL_ITEM (item), TRUE);
 	gtk_widget_show (location);
 
 	LOG ("Create location toolitem: Done.")

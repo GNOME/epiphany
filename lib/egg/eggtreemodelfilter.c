@@ -2605,9 +2605,6 @@ egg_tree_model_filter_refilter (EggTreeModelFilter *filter)
 {
   g_return_if_fail (EGG_IS_TREE_MODEL_FILTER (filter));
 
-  if (!filter->root)
-    return;
-
   /* S L O W */
   gtk_tree_model_foreach (filter->child_model,
                           egg_tree_model_filter_refilter_helper,

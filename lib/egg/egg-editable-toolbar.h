@@ -19,11 +19,10 @@
 #ifndef EGG_EDITABLE_TOOLBAR_H
 #define EGG_EDITABLE_TOOLBAR_H
 
-#include <glib-object.h>
-#include <glib.h>
-
+#include "egg-toolbars-model.h"
 #include "egg-menu-merge.h"
-#include "egg-toolbars-group.h"
+
+#include <gtk/gtkvbox.h>
 
 G_BEGIN_DECLS
 
@@ -40,37 +39,31 @@ typedef struct EggEditableToolbarClass EggEditableToolbarClass;
 typedef struct EggEditableToolbar EggEditableToolbar;
 typedef struct EggEditableToolbarPrivate EggEditableToolbarPrivate;
 
+#define EGG_TOOLBAR_ITEM_TYPE "application/x-toolbar-item"
+
 struct EggEditableToolbar
 {
-  GObject parent_object;
+  GtkVBox parent_object;
   EggEditableToolbarPrivate *priv;
 };
 
 struct EggEditableToolbarClass
 {
-  GObjectClass parent_class;
-
-  char *(* get_action_name) (EggEditableToolbar *etoolbar,
-			     const char         *drag_type,
-			     const char         *data);
-  EggAction *( *get_action) (EggEditableToolbar *etoolbar,
-			     const char         *name);
+  GtkVBoxClass parent_class;
 };
 
 GType               egg_editable_toolbar_get_type        (void);
-EggEditableToolbar *egg_editable_toolbar_new		 (EggMenuMerge       *merge,
-							  EggToolbarsGroup   *group);
-void		    egg_editable_toolbar_edit		 (EggEditableToolbar *etoolbar,
-							  GtkWidget          *window);
-void		    egg_editable_toolbar_show		 (EggEditableToolbar *etoolbar);
-void		    egg_editable_toolbar_hide		 (EggEditableToolbar *etoolbar);
-char		   *egg_editable_toolbar_get_action_name (EggEditableToolbar *etoolbar,
-					                  const char         *drag_type,
-					                  const char         *data);
-EggAction	   *egg_editable_toolbar_get_action	 (EggEditableToolbar *etoolbar,
+GtkWidget	   *egg_editable_toolbar_new		 (EggMenuMerge       *merge,
+							  EggToolbarsModel   *model);
+void		    egg_editable_toolbar_set_edit_mode	 (EggEditableToolbar *etoolbar,
+							  gboolean mode);
+void		    egg_editable_toolbar_show		 (EggEditableToolbar *etoolbar,
+							  const char         *name);
+void		    egg_editable_toolbar_hide		 (EggEditableToolbar *etoolbar,
 							  const char         *name);
 void		    egg_editable_toolbar_add_drag_type   (EggEditableToolbar *etoolbar,
-							  const char         *drag_type);
+							  const char         *drag_type,
+							  const char         *toolbar_name);
 
 G_END_DECLS
 

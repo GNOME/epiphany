@@ -28,7 +28,6 @@
 #endif
 
 enum {
-  CLICKED, 
   CREATE_MENU_PROXY,
   SET_ORIENTATION,
   SET_ICON_SIZE,
@@ -42,8 +41,6 @@ enum {
   PROP_0,
   PROP_VISIBLE_HORIZONTAL,
   PROP_VISIBLE_VERTICAL,
-  PROP_HOMOGENEOUS,
-  PROP_ORIENTATION
 };
 
 static void egg_tool_item_init       (EggToolItem *toolitem);
@@ -66,6 +63,10 @@ static void egg_tool_item_size_request  (GtkWidget      *widget,
 					 GtkRequisition *requisition);
 static void egg_tool_item_size_allocate (GtkWidget      *widget,
 					 GtkAllocation  *allocation);
+static void egg_tool_item_real_set_tooltip (EggToolItem *tool_item,
+					    GtkTooltips *tooltips,
+					    const gchar *tip_text,
+					    const gchar *tip_private);
 
 static GtkWidget *egg_tool_item_create_menu_proxy (EggToolItem *item);
 
@@ -110,8 +111,8 @@ create_proxy_accumulator (GSignalInvocationHint *hint,
   GObject *proxy;
   gboolean continue_emission;
 
-  proxy = g_value_get_object(handler_return);
-  g_value_set_object(return_accumulator, proxy);
+  proxy = g_value_get_object (handler_return);
+  g_value_set_object (return_accumulator, proxy);
   continue_emission = (proxy == NULL);
 
   return continue_emission;
@@ -138,6 +139,7 @@ egg_tool_item_class_init (EggToolItemClass *klass)
   widget_class->size_allocate = egg_tool_item_size_allocate;
 
   klass->create_menu_proxy = egg_tool_item_create_menu_proxy;
+  klass->set_tooltip       = egg_tool_item_real_set_tooltip;
   
   g_object_class_install_property (object_class,
 				   PROP_VISIBLE_HORIZONTAL,
@@ -153,22 +155,6 @@ egg_tool_item_class_init (EggToolItemClass *klass)
 							 _("Whether the toolbar item is visible when the toolbar is in a vertical orientation."),
 							 TRUE,
 							 G_PARAM_READWRITE));
-  g_object_class_install_property (object_class,
-				   PROP_HOMOGENEOUS,
-				   g_param_spec_boolean ("homogeneous",
-							 _("Homogeneous size"),
-							 _("Whether the toolbar item should be the same size as other homogeneous items."),
-							 FALSE,
-							 G_PARAM_READWRITE));
-
-  toolitem_signals[CLICKED] =
-    g_signal_new ("clicked",
-		  G_OBJECT_CLASS_TYPE (klass),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (EggToolItemClass, clicked),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE, 0);
   
   toolitem_signals[CREATE_MENU_PROXY] =
     g_signal_new ("create_menu_proxy",
@@ -252,13 +238,10 @@ egg_tool_item_set_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_VISIBLE_HORIZONTAL:
-      toolitem->visible_horizontal = g_value_get_boolean (value);
+      egg_tool_item_set_visible_horizontal (toolitem, g_value_get_boolean (value));
       break;
     case PROP_VISIBLE_VERTICAL:
-      toolitem->visible_vertical = g_value_get_boolean (value);
-      break;
-    case PROP_HOMOGENEOUS:
-      toolitem->homogeneous = g_value_get_boolean (value);
+      egg_tool_item_set_visible_horizontal (toolitem, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -280,9 +263,6 @@ egg_tool_item_get_property (GObject         *object,
       break;
     case PROP_VISIBLE_VERTICAL:
       g_value_set_boolean (value, toolitem->visible_vertical);
-      break;
-    case PROP_HOMOGENEOUS:
-      g_value_set_boolean (value, toolitem->homogeneous);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -472,16 +452,17 @@ egg_tool_item_set_relief_style (EggToolItem   *tool_item,
 }
 
 void
-egg_tool_item_set_expandable (EggToolItem *tool_item,
-			      gboolean     expandable)
+egg_tool_item_set_expand (EggToolItem *tool_item,
+			  gboolean     expand)
 {
   g_return_if_fail (EGG_IS_TOOL_ITEM (tool_item));
     
-  expandable = expandable != FALSE;
+  expand = expand != FALSE;
 
-  if (tool_item->expandable != expandable)
+  if (tool_item->expand != expand)
     {
-      tool_item->expandable = expandable;
+      tool_item->expand = expand;
+      gtk_widget_child_notify (GTK_WIDGET (tool_item), "expand");
       gtk_widget_queue_resize (GTK_WIDGET (tool_item));
     }
 }
@@ -497,6 +478,7 @@ egg_tool_item_set_pack_end (EggToolItem *tool_item,
   if (tool_item->pack_end != pack_end)
     {
       tool_item->pack_end = pack_end;
+      gtk_widget_child_notify (GTK_WIDGET (tool_item), "pack_end");
       gtk_widget_queue_resize (GTK_WIDGET (tool_item));
     }
 }
@@ -512,8 +494,20 @@ egg_tool_item_set_homogeneous (EggToolItem *tool_item,
   if (tool_item->homogeneous != homogeneous)
     {
       tool_item->homogeneous = homogeneous;
+      gtk_widget_child_notify (GTK_WIDGET (tool_item), "homogeneous");
       gtk_widget_queue_resize (GTK_WIDGET (tool_item));
     }
+}
+
+static void
+egg_tool_item_real_set_tooltip (EggToolItem *tool_item,
+				GtkTooltips *tooltips,
+				const gchar *tip_text,
+				const gchar *tip_private)
+{
+  GtkBin *bin = GTK_BIN (tool_item);
+
+  gtk_tooltips_set_tip (tooltips, bin->child, tip_text, tip_private);
 }
 
 void
@@ -559,4 +553,56 @@ egg_tool_item_set_use_drag_window (EggToolItem *toolitem,
 	    }
 	}
     }
+}
+
+void
+egg_tool_item_set_visible_horizontal (EggToolItem *toolitem,
+				      gboolean     visible_horizontal)
+{
+  g_return_if_fail (EGG_IS_TOOL_ITEM (toolitem));
+
+  visible_horizontal = visible_horizontal != FALSE;
+
+  if (toolitem->visible_horizontal != visible_horizontal)
+    {
+      toolitem->visible_horizontal = visible_horizontal;
+
+      g_object_notify (G_OBJECT (toolitem), "visible_horizontal");
+
+      gtk_widget_queue_resize (GTK_WIDGET (toolitem));
+    }
+}
+
+gboolean
+egg_tool_item_get_visible_horizontal (EggToolItem *toolitem)
+{
+  g_return_val_if_fail (EGG_IS_TOOL_ITEM (toolitem), FALSE);
+
+  return toolitem->visible_horizontal;
+}
+
+void
+egg_tool_item_set_visible_vertical (EggToolItem *toolitem,
+				    gboolean     visible_vertical)
+{
+  g_return_if_fail (EGG_IS_TOOL_ITEM (toolitem));
+
+  visible_vertical = visible_vertical != FALSE;
+
+  if (toolitem->visible_vertical != visible_vertical)
+    {
+      toolitem->visible_vertical = visible_vertical;
+
+      g_object_notify (G_OBJECT (toolitem), "visible_vertical");
+
+      gtk_widget_queue_resize (GTK_WIDGET (toolitem));
+    }
+}
+
+gboolean
+egg_tool_item_get_visible_vertical (EggToolItem *toolitem)
+{
+  g_return_val_if_fail (EGG_IS_TOOL_ITEM (toolitem), FALSE);
+
+  return toolitem->visible_vertical;
 }

@@ -1,3 +1,40 @@
+2003-04-25  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/ui/epiphany-toolbar.xml.in:
+	* lib/egg/Makefile.am:
+	* lib/egg/egg-editable-toolbar.c:
+	* lib/egg/egg-editable-toolbar.h:
+	* lib/egg/egg-menu-merge.c:
+	* lib/egg/egg-radio-action.c:
+	* lib/egg/eggmarshalers.c:
+	* lib/egg/eggmarshalers.h:
+	* lib/egg/eggmarshalers.list:
+	* lib/egg/eggtoggletoolbutton.c:
+	* lib/egg/eggtoggletoolbutton.h:
+	* lib/egg/eggtoolbar.c:
+	* lib/egg/eggtoolbar.h:
+	* lib/egg/eggtoolbutton.c:
+	* lib/egg/eggtoolbutton.h:
+	* lib/egg/eggtoolitem.c:
+	* lib/egg/eggtoolitem.h:
+	* lib/egg/eggtreemodelfilter.c:
+
+	Update from egg
+
+	* src/Makefile.am:
+	* src/ephy-location-action.c: (create_tool_item):
+	* src/ephy-shell.c: (ephy_shell_init), (ephy_shell_get_bookmarks),
+	* src/ephy-shell.h:
+	* src/ephy-window.c: (setup_window), (ephy_window_finalize),
+	(ephy_window_set_chrome):
+	* src/toolbar.c: (toolbar_class_init), (toolbar_set_window),
+	(topic_remove_cb), (bookmark_remove_cb), (toolbar_init),
+	(toolbar_new):
+	* src/window-commands.c: (window_cmd_edit_toolbar):
+
+	Use the new toolbar editor api. This is incomplete, if you
+	use bookmarks toolbars please still do not update.
+
 2003-04-23  David Bordoley <bordoley@msu.edu>
 
 	* embed/ephy-embed-single.c: (ephy_embed_single_show_file_picker):

@@ -128,11 +128,11 @@ void            egg_toolbar_prepend          (EggToolbar      *toolbar,
 void            egg_toolbar_insert           (EggToolbar      *toolbar,
 					      EggToolItem     *item,
 					      gint             pos);
-void            egg_toolbar_remove_tool_item (EggToolbar      *toolbar,
-					      EggToolItem     *item);
 gint            egg_toolbar_get_item_index   (EggToolbar      *toolbar,
 					      EggToolItem     *item);
-GList*          egg_toolbar_get_tool_items   (EggToolbar      *toolbar);
+gint		egg_toolbar_get_n_items      (EggToolbar      *toolbar);
+EggToolItem *   egg_toolbar_get_nth_item     (EggToolbar      *toolbar,
+					      gint             n);
 gint            egg_toolbar_get_drop_index   (EggToolbar      *toolbar,
 					      gint             x,
 					      gint             y);

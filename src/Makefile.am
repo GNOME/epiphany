@@ -68,6 +68,8 @@ epiphany_bin_SOURCES = 				    	\
 	ephy-spinner-action.h				\
 	ephy-tab.c					\
 	ephy-tab.h					\
+	ephy-toolbars-model.c				\
+	ephy-toolbars-model.h				\
 	ephy-window.c					\
 	ephy-window.h					\
 	general-prefs.c					\
