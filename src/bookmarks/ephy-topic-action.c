@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,24 +21,32 @@
 
 #include "config.h"
 
-#include <gtk/gtktoolitem.h>
-#include <glib/gi18n.h>
-#include <libgnomevfs/gnome-vfs-uri.h>
-#include <string.h>
-
 #include "ephy-topic-action.h"
 #include "ephy-node-common.h"
 #include "ephy-bookmarks.h"
 #include "ephy-bookmarksbar.h"
+#include "ephy-link.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
-#include "ephy-debug.h"
 #include "ephy-dnd.h"
 #include "ephy-gui.h"
-#include "ephy-marshal.h"
+#include "ephy-debug.h"
 
-static void ephy_topic_action_init       (EphyTopicAction *action);
-static void ephy_topic_action_class_init (EphyTopicActionClass *class);
+#include <glib/gi18n.h>
+#include <gtk/gtkwidget.h>
+#include <gtk/gtkarrow.h>
+#include <gtk/gtkhbox.h>
+#include <gtk/gtklabel.h>
+#include <gtk/gtkbutton.h>
+#include <gtk/gtktogglebutton.h>
+#include <gtk/gtkstock.h>
+#include <gtk/gtkimage.h>
+#include <gtk/gtkmenuitem.h>
+#include <gtk/gtkimagemenuitem.h>
+#include <gtk/gtkseparatormenuitem.h>
+#include <gtk/gtkmain.h>
+#include <libgnomevfs/gnome-vfs-uri.h>
+#include <string.h>
 
 #define TOOLITEM_WIDTH_CHARS	24
 #define MENUITEM_WIDTH_CHARS	32
@@ -66,17 +75,10 @@ enum
 	PROP_TOPIC
 };
 
-enum
-{
-	OPEN,
-	OPEN_IN_TAB,
-	OPEN_IN_TABS,
-	LAST_SIGNAL
-};
+static void ephy_topic_action_class_init (EphyTopicActionClass *class);
+static void ephy_topic_action_init       (EphyTopicAction *action);
 
 static GObjectClass *parent_class = NULL;
-
-static guint ephy_topic_action_signals[LAST_SIGNAL] = { 0 };
 
 GType
 ephy_topic_action_get_type (void)
@@ -98,10 +100,11 @@ ephy_topic_action_get_type (void)
 			(GInstanceInitFunc) ephy_topic_action_init,
 		};
 
-		type = g_type_register_static (GTK_TYPE_ACTION,
+		type = g_type_register_static (EPHY_TYPE_LINK_ACTION,
 					       "EphyTopicAction",
 					       &type_info, 0);
 	}
+
 	return type;
 }
 
@@ -163,16 +166,8 @@ menu_activate_cb (GtkWidget *item, GtkAction *action)
 	location = ephy_node_get_property_string
 		(node, EPHY_NODE_BMK_PROP_LOCATION);
 
-	if (ephy_gui_is_middle_click ())
-	{
-		g_signal_emit (action, ephy_topic_action_signals[OPEN_IN_TAB],
-			       0, location, FALSE);
-	}
-	else
-	{
-		g_signal_emit (action, ephy_topic_action_signals[OPEN],
-			       0, location);
-	}
+	ephy_link_open (EPHY_LINK (action), location, NULL,
+			ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
 }
 
 static void
@@ -337,8 +332,8 @@ static void
 open_in_tabs_activate_cb (GtkWidget *item, EphyTopicAction *action)
 {
 	EphyNode *node;
-	GList *uri_list = NULL;
 	GPtrArray *children;
+	EphyTab *tab = NULL;
 	int i;
 
 	node = g_object_get_data (G_OBJECT (item), TOPIC_NODE_DATA_KEY);
@@ -353,13 +348,10 @@ open_in_tabs_activate_cb (GtkWidget *item, EphyTopicAction *action)
 		child = g_ptr_array_index (children, i);
 		address = ephy_node_get_property_string
 			(child, EPHY_NODE_BMK_PROP_LOCATION);
-		uri_list = g_list_append (uri_list, g_strdup (address));
-	}
 
-	g_signal_emit (action, ephy_topic_action_signals[OPEN_IN_TABS],
-		       0, uri_list);
-	g_list_foreach (uri_list, (GFunc)g_free, NULL);
-	g_list_free (uri_list);
+		tab = ephy_link_open (EPHY_LINK (action), address, tab,
+				      tab ? EPHY_LINK_NEW_TAB : EPHY_LINK_NEW_WINDOW);
+	}
 }
 
 static int
@@ -988,40 +980,6 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
 
 	object_class->set_property = ephy_topic_action_set_property;
 	object_class->get_property = ephy_topic_action_get_property;
-
-	ephy_topic_action_signals[OPEN] =
-                g_signal_new ("open",
-                              G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_FIRST,
-                              G_STRUCT_OFFSET (EphyTopicActionClass, open),
-                              NULL, NULL,
-                              g_cclosure_marshal_VOID__STRING,
-                              G_TYPE_NONE,
-                              1,
-			      G_TYPE_STRING);
-
-	ephy_topic_action_signals[OPEN_IN_TAB] =
-                g_signal_new ("open_in_tab",
-                              G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_FIRST,
-                              G_STRUCT_OFFSET (EphyTopicActionClass, open_in_tab),
-                              NULL, NULL,
-                              ephy_marshal_VOID__STRING_BOOLEAN,
-                              G_TYPE_NONE,
-                              2,
-			      G_TYPE_STRING,
-			      G_TYPE_BOOLEAN);
-
-	ephy_topic_action_signals[OPEN_IN_TABS] =
-                g_signal_new ("open_in_tabs",
-                              G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_FIRST,
-                              G_STRUCT_OFFSET (EphyTopicActionClass, open_in_tabs),
-                              NULL, NULL,
-                              g_cclosure_marshal_VOID__POINTER,
-                              G_TYPE_NONE,
-                              1,
-			      G_TYPE_POINTER);
 
 	g_object_class_install_property
 		(object_class,

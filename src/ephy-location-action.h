@@ -21,7 +21,7 @@
 #ifndef EPHY_LOCATION_ACTION_H
 #define EPHY_LOCATION_ACTION_H
 
-#include <gtk/gtkaction.h>
+#include "ephy-link-action.h"
 
 G_BEGIN_DECLS
 
@@ -33,12 +33,12 @@ G_BEGIN_DECLS
 #define EPHY_LOCATION_ACTION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_LOCATION_ACTION, EphyLocationActionClass))
 
 typedef struct _EphyLocationAction		EphyLocationAction;
-typedef struct _EphyLocationActionClass		EphyLocationActionClass;
 typedef struct _EphyLocationActionPrivate	EphyLocationActionPrivate;
-	
+typedef struct _EphyLocationActionClass		EphyLocationActionClass;
+
 struct _EphyLocationAction
 {
-	GtkAction parent;
+	EphyLinkAction parent;
 
 	/*< private >*/
 	EphyLocationActionPrivate *priv;
@@ -46,9 +46,7 @@ struct _EphyLocationAction
 
 struct _EphyLocationActionClass
 {
-	GtkActionClass parent_class;
-
-	void (*go_location) (EphyLocationAction *action, char *location);
+	EphyLinkActionClass parent_class;
 };
 
 GType		ephy_location_action_get_type		(void);

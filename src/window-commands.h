@@ -40,9 +40,6 @@ void window_cmd_go_location	(GtkAction *action,
 void window_cmd_go_up		(GtkAction *action,
 				 EphyWindow *window);
 
-void window_cmd_go_home		(GtkAction *action,
-				 EphyWindow *window);
-
 void window_cmd_go_myportal	(GtkAction *action,
 				 EphyWindow *window);
 

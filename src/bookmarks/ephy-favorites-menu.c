@@ -1,6 +1,7 @@
 /*
  *  Copyright (C) 2002  Ricardo Fernández Pascual
- *  Copyright (C) 2003  Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,9 +24,12 @@
 
 #include "ephy-favorites-menu.h"
 #include "ephy-bookmark-action.h"
+#include "ephy-link.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 
+#include <gtk/gtkmenuitem.h>
+#include <gtk/gtklabel.h>
 #include <gtk/gtkuimanager.h>
 #include <glib/gprintf.h>
 
@@ -73,11 +77,21 @@ ephy_favorites_menu_get_type (void)
 			0, /* n_preallocs */
 			(GInstanceInitFunc) ephy_favorites_menu_init
 		};
+		static const GInterfaceInfo link_info = 
+		{
+			NULL,
+			NULL,
+			NULL
+		};
 
 		type = g_type_register_static (G_TYPE_OBJECT,
 					       "EphyFavoritesMenu",
 					       &our_info, 0);
+		g_type_add_interface_static (type,
+					     EPHY_TYPE_LINK,
+					     &link_info);
 	}
+
 	return type;
 }
 
@@ -99,12 +113,6 @@ ephy_favorites_menu_clean (EphyFavoritesMenu *menu)
 		gtk_ui_manager_remove_action_group (merge, p->action_group);
 		g_object_unref (p->action_group);
 	}
-}
-
-static void
-open_bookmark_cb (GtkAction *action, char *location, EphyWindow *window)
-{
-	ephy_window_load_url (window, location);
 }
 
 static void
@@ -166,8 +174,8 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *menu)
 		gtk_action_set_accel_path (action, accel_path);
 		gtk_action_group_add_action (p->action_group, action);
 		g_object_unref (action);
-		g_signal_connect (action, "open",
-				  G_CALLBACK (open_bookmark_cb), p->window);
+		g_signal_connect_swapped (action, "open-link",
+				  	  G_CALLBACK (ephy_link_open), menu);
 
 		gtk_ui_manager_add_ui (merge, p->ui_id,
 				       "/menubar/GoMenu",

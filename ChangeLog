@@ -1,5 +1,55 @@
 2004-12-24  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-marshal.list:
+	* src/Makefile.am:
+	* src/bookmarks/ephy-bookmark-action.c:
+	(ephy_bookmark_action_get_type), (create_tool_item),
+	(open_in_tab_activate_cb), (open_in_window_activate_cb),
+	(activate_cb), (connect_proxy), (ephy_bookmark_action_class_init):
+	* src/bookmarks/ephy-bookmark-action.h:
+	* src/bookmarks/ephy-bookmarks-menu.c:
+	(ephy_bookmarks_menu_get_type), (add_action_for_bookmark),
+	(ephy_bookmarks_menu_class_init):
+	* src/bookmarks/ephy-bookmarks-menu.h:
+	* src/bookmarks/ephy-bookmarksbar.c: (ephy_bookmarksbar_get_type),
+	(ephy_bookmarksbar_action_request):
+	* src/bookmarks/ephy-favorites-menu.c:
+	(ephy_favorites_menu_get_type), (ephy_favorites_menu_rebuild):
+	* src/bookmarks/ephy-favorites-menu.h:
+	* src/bookmarks/ephy-topic-action.c: (ephy_topic_action_get_type),
+	(menu_activate_cb), (open_in_tabs_activate_cb),
+	(ephy_topic_action_class_init):
+	* src/bookmarks/ephy-topic-action.h:
+	A src/ephy-home-action.c: (ephy_home_action_activate),
+	(ephy_home_action_class_init), (ephy_home_action_get_type):
+	A src/ephy-home-action.h:
+	A src/ephy-link-action.c: (ephy_link_action_get_type):
+	A src/ephy-link-action.h:
+	A src/ephy-link.c: (ephy_link_flags_get_type),
+	(ephy_link_base_init), (ephy_link_get_type), (ephy_link_open):
+	A src/ephy-link.h:
+	* src/ephy-location-action.c: (ephy_location_action_get_type),
+	(action_activated_cb), (location_url_activate_cb), (connect_proxy),
+	(disconnect_proxy), (ephy_location_action_class_init):
+	* src/ephy-location-action.h:
+	* src/ephy-navigation-action.c: (ephy_navigation_action_get_type),
+	(activate_back_or_forward_menu_item_cb),
+	(activate_up_menu_item_cb), (build_back_or_forward_menu),
+	(build_up_menu):
+	* src/ephy-navigation-action.h:
+	* src/ephy-shell.c: (ephy_shell_new_tab):
+	* src/ephy-window.c: (setup_ui_manager), (open_link_cb),
+	(ephy_window_init):
+	* src/toolbar.c: (toolbar_get_type), (toolbar_setup_actions):
+	* src/window-commands.c:
+	* src/window-commands.h:
+
+	Consolidate link opening in one place by introducing an EphyLink interface
+	which bookmarks, topics, navigation, location, home, toolbars, bookmarks menu
+	and favourites menu implement, forwarding the link opening to the window.
+
+2004-12-24  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-embed.c: (ephy_embed_base_init):
 	* lib/ephy-marshal.list:
 

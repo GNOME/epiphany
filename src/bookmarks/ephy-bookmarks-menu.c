@@ -23,9 +23,9 @@
 
 #include "ephy-bookmarks-menu.h"
 #include "ephy-bookmark-action.h"
+#include "ephy-link.h"
 #include "ephy-shell.h"
 #include "ephy-node-common.h"
-#include "ephy-marshal.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
 
@@ -68,6 +68,8 @@ struct _EphyBookmarksMenuPrivate
 #define FOLDER_VERB_FORMAT		"Fld%x%x"
 #define FOLDER_VERB_FORMAT_LENGTH	strlen (FOLDER_VERB_FORMAT) + 2 * MAXLEN + 1
 
+#define BMK_ACCEL_PATH_PREFIX "<Actions>/BmkActions/"
+
 #define GAZILLION	200
 #define UPDATE_DELAY	5000 /* ms */
 #define LABEL_WIDTH_CHARS	32
@@ -78,14 +80,6 @@ enum
 	PROP_PATH,
 	PROP_UI_MANAGER
 };
-
-enum
-{
-	OPEN,
-	LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL] = { 0 };
 
 static void ephy_bookmarks_menu_class_init (EphyBookmarksMenuClass *klass);
 static void ephy_bookmarks_menu_init	   (EphyBookmarksMenu *menu);
@@ -111,10 +105,19 @@ ephy_bookmarks_menu_get_type (void)
                         0, /* n_preallocs */
                         (GInstanceInitFunc) ephy_bookmarks_menu_init
                 };
+		static const GInterfaceInfo link_info = 
+		{
+			NULL,
+			NULL,
+			NULL
+		};
 
                 type = g_type_register_static (G_TYPE_OBJECT,
 					       "EphyBookmarksMenu",
 					       &our_info, 0);
+		g_type_add_interface_static (type,
+					     EPHY_TYPE_LINK,
+					     &link_info);
         }
 
         return type;
@@ -184,26 +187,6 @@ ephy_bookmarks_menu_clean (EphyBookmarksMenu *menu)
 }
 
 static void
-open_bookmark_cb (GtkAction *action,
-		  const char *location,
-		  EphyBookmarksMenu *menu)
-{
-	g_signal_emit (menu, signals[OPEN], 0, location,
-		       ephy_gui_is_middle_click ());
-}
-
-static void
-open_bookmark_in_tab_cb (GtkAction *action,
-			 const char *location,
-			 gboolean dummy,
-			 EphyBookmarksMenu *menu)
-{
-	g_signal_emit (menu, signals[OPEN], 0, location, TRUE);
-}
-
-#define BMK_ACCEL_PATH_PREFIX "<Actions>/BmkActions/"
-
-static void
 add_action_for_bookmark (EphyBookmarksMenu *menu,
 			 EphyNode *bmk)
 {
@@ -223,10 +206,8 @@ add_action_for_bookmark (EphyBookmarksMenu *menu,
 
 	gtk_action_set_accel_path (action, apath);
 
-	g_signal_connect (action, "open",
-			  G_CALLBACK (open_bookmark_cb), menu);
-	g_signal_connect (action, "open_in_tab",
-			  G_CALLBACK (open_bookmark_in_tab_cb), menu);
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), menu);
 
 	gtk_action_group_add_action (menu->priv->bmk_actions, action);
 	g_object_unref (action);
@@ -797,18 +778,6 @@ ephy_bookmarks_menu_class_init (EphyBookmarksMenuClass *klass)
 	object_class->finalize = ephy_bookmarks_menu_finalize;
 	object_class->set_property = ephy_bookmarks_menu_set_property;
 	object_class->get_property = ephy_bookmarks_menu_get_property;
-
-	signals[OPEN] =
-                g_signal_new ("open",
-                              G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_FIRST,
-                              G_STRUCT_OFFSET (EphyBookmarksMenuClass, open),
-                              NULL, NULL,
-                              ephy_marshal_VOID__STRING_BOOLEAN,
-                              G_TYPE_NONE,
-                              2,
-			      G_TYPE_STRING,
-			      G_TYPE_BOOLEAN);
 
 	g_object_class_install_property (object_class,
                                          PROP_PATH,

@@ -1,5 +1,7 @@
 /*
  *  Copyright (C) 2002  Ricardo Fernández Pascual
+ *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,16 +36,12 @@ G_BEGIN_DECLS
 #define EPHY_BOOKMARKS_MENU_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_BOOKMARKS_MENU, EphyBookmarksMenuClass))
 
 typedef struct _EphyBookmarksMenu		EphyBookmarksMenu;
-typedef struct _EphyBookmarksMenuClass		EphyBookmarksMenuClass;
 typedef struct _EphyBookmarksMenuPrivate	EphyBookmarksMenuPrivate;
+typedef struct _EphyBookmarksMenuClass		EphyBookmarksMenuClass;
 
 struct _EphyBookmarksMenuClass
 {
 	GObjectClass parent_class;
-
-	void (*open)          (EphyBookmarksMenu *menu,
-			       const char *address,
-			       gboolean open_in_new);
 };
 
 struct _EphyBookmarksMenu

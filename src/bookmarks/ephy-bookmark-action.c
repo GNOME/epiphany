@@ -21,19 +21,34 @@
 
 #include "config.h"
 
-#include <glib/gi18n.h>
-#include <libgnomevfs/gnome-vfs-uri.h>
-#include <gtk/gtktoolitem.h>
-
 #include "ephy-bookmark-action.h"
-#include "ephy-marshal.h"
-#include "ephy-dnd.h"
+#include "ephy-bookmarksbar-model.h"
 #include "ephy-bookmarksbar.h"
 #include "ephy-bookmarks.h"
+#include "ephy-link.h"
+#include "ephy-dnd.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
-#include "ephy-debug.h"
 #include "ephy-gui.h"
+#include "ephy-debug.h"
+
+#include <glib/gi18n.h>
+#include <gtk/gtkwidget.h>
+#include <gtk/gtkhbox.h>
+#include <gtk/gtklabel.h>
+#include <gtk/gtkbutton.h>
+#include <gtk/gtkentry.h>
+#include <gtk/gtkstock.h>
+#include <gtk/gtkimage.h>
+#include <gtk/gtkmenuitem.h>
+#include <gtk/gtkimagemenuitem.h>
+#include <gtk/gtkseparatormenuitem.h>
+#include <gtk/gtkmenushell.h>
+#include <gtk/gtkmenu.h>
+#include <gtk/gtktoolitem.h>
+#include <gtk/gtktoolbar.h>
+#include <gtk/gtkmain.h>
+#include <libgnomevfs/gnome-vfs-uri.h>
 
 #include <string.h>
 
@@ -52,7 +67,7 @@ static GtkTargetEntry drag_targets[] =
 };
 static int n_drag_targets = G_N_ELEMENTS (drag_targets);
 
-struct EphyBookmarkActionPrivate
+struct _EphyBookmarkActionPrivate
 {
 	EphyNode *node;
 	gboolean smart_url;
@@ -72,16 +87,7 @@ enum
 	PROP_ICON
 };
 
-enum
-{
-	OPEN,
-	OPEN_IN_TAB,
-	LAST_SIGNAL
-};
-
 static GObjectClass *parent_class = NULL;
-
-static guint signals[LAST_SIGNAL] = { 0 };
 
 GType
 ephy_bookmark_action_get_type (void)
@@ -103,10 +109,11 @@ ephy_bookmark_action_get_type (void)
 			(GInstanceInitFunc) ephy_bookmark_action_init,
 		};
 
-		type = g_type_register_static (GTK_TYPE_ACTION,
+		type = g_type_register_static (EPHY_TYPE_LINK_ACTION,
 					       "EphyBookmarkAction",
 					       &type_info, 0);
 	}
+
 	return type;
 }
 
@@ -117,7 +124,7 @@ create_tool_item (GtkAction *action)
 
 	LOG ("Creating tool item for action %p", action)
 
-	item = (* GTK_ACTION_CLASS (parent_class)->create_tool_item) (action);
+	item = GTK_ACTION_CLASS (parent_class)->create_tool_item (action);
 
 	hbox = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (hbox);
@@ -298,7 +305,8 @@ ephy_bookmark_action_sync_label (GtkAction *gaction,
 }
 
 static void
-open_in_tab_activate_cb (GtkWidget *widget, EphyBookmarkAction *action)
+open_in_tab_activate_cb (GtkWidget *widget,
+			 EphyBookmarkAction *action)
 {
 	const char *url;
 
@@ -306,7 +314,8 @@ open_in_tab_activate_cb (GtkWidget *widget, EphyBookmarkAction *action)
 
 	url = ephy_node_get_property_string (action->priv->node,
 					     EPHY_NODE_BMK_PROP_LOCATION);
-	g_signal_emit (action, signals[OPEN_IN_TAB], 0, url, FALSE);
+	ephy_link_open (EPHY_LINK (action), url, NULL,
+			EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
 }
 
 static void
@@ -318,7 +327,8 @@ open_in_window_activate_cb (GtkWidget *widget, EphyBookmarkAction *action)
 
 	url = ephy_node_get_property_string (action->priv->node,
 					     EPHY_NODE_BMK_PROP_LOCATION);
-	g_signal_emit (action, signals[OPEN_IN_TAB], 0, url, TRUE);
+
+	ephy_link_open (EPHY_LINK (action), url, NULL, EPHY_LINK_NEW_WINDOW);
 }
 
 static void
@@ -369,14 +379,8 @@ activate_cb (GtkWidget *widget,
 		}
 	}
 
-	if (ephy_gui_is_middle_click ())
-	{
-		g_signal_emit (action, signals[OPEN_IN_TAB], 0, location, FALSE);
-	}
-	else
-	{
-		g_signal_emit (action, signals[OPEN], 0, location);
-	}
+	ephy_link_open (EPHY_LINK (action), location, NULL,
+			ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
 
 	g_free (location);
 	g_free (text);
@@ -665,7 +669,7 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 
 	LOG ("Connecting action %p to proxy %p", action, proxy)
 
-	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
+	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
 
 	ephy_bookmark_action_sync_icon (action, NULL, proxy);
 	g_signal_connect_object (action, "notify::icon",
@@ -842,29 +846,6 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 	object_class->finalize = ephy_bookmark_action_finalize;
 	object_class->set_property = ephy_bookmark_action_set_property;
 	object_class->get_property = ephy_bookmark_action_get_property;
-
-	signals[OPEN] =
-                g_signal_new ("open",
-                              G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_FIRST,
-                              G_STRUCT_OFFSET (EphyBookmarkActionClass, open),
-                              NULL, NULL,
-                              g_cclosure_marshal_VOID__STRING,
-                              G_TYPE_NONE,
-                              1,
-			      G_TYPE_STRING);
-
-	signals[OPEN_IN_TAB] =
-                g_signal_new ("open_in_tab",
-                              G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_FIRST,
-                              G_STRUCT_OFFSET (EphyBookmarkActionClass, open_in_tab),
-                              NULL, NULL,
-                              ephy_marshal_VOID__STRING_BOOLEAN,
-                              G_TYPE_NONE,
-                              2,
-			      G_TYPE_STRING,
-			      G_TYPE_BOOLEAN);
 
 	g_object_class_install_property (object_class,
                                          PROP_BOOKMARK,

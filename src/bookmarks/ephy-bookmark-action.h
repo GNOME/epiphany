@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,24 +22,25 @@
 #ifndef EPHY_BOOKMARK_ACTION_H
 #define EPHY_BOOKMARK_ACTION_H
 
-#include <gtk/gtk.h>
-#include <gtk/gtkaction.h>
+#include "ephy-link-action.h"
 #include "ephy-node.h"
 
-#define EPHY_TYPE_BOOKMARK_ACTION            (ephy_bookmark_action_get_type ())
-#define EPHY_BOOKMARK_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_BOOKMARK_ACTION, EphyBookmarkAction))
-#define EPHY_BOOKMARK_ACTION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_BOOKMARK_ACTION, EphyBookmarkActionClass))
-#define EPHY_IS_BOOKMARK_ACTION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_BOOKMARK_ACTION))
-#define EPHY_IS_BOOKMARK_ACTION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), EPHY_TYPE_BOOKMARK_ACTION))
-#define EPHY_BOOKMARK_ACTION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_BOOKMARK_ACTION, EphyBookmarkActionClass))
+G_BEGIN_DECLS
 
-typedef struct _EphyBookmarkAction      EphyBookmarkAction;
-typedef struct _EphyBookmarkActionClass EphyBookmarkActionClass;
-typedef struct EphyBookmarkActionPrivate EphyBookmarkActionPrivate;
+#define EPHY_TYPE_BOOKMARK_ACTION		(ephy_bookmark_action_get_type ())
+#define EPHY_BOOKMARK_ACTION(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_BOOKMARK_ACTION, EphyBookmarkAction))
+#define EPHY_BOOKMARK_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_BOOKMARK_ACTION, EphyBookmarkActionClass))
+#define EPHY_IS_BOOKMARK_ACTION(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_BOOKMARK_ACTION))
+#define EPHY_IS_BOOKMARK_ACTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((obj), EPHY_TYPE_BOOKMARK_ACTION))
+#define EPHY_BOOKMARK_ACTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_BOOKMARK_ACTION, EphyBookmarkActionClass))
+
+typedef struct _EphyBookmarkAction		EphyBookmarkAction;
+typedef struct _EphyBookmarkActionPrivate	EphyBookmarkActionPrivate;
+typedef struct _EphyBookmarkActionClass		EphyBookmarkActionClass;
 
 struct _EphyBookmarkAction
 {
-	GtkAction parent;
+	EphyLinkAction parent_instance;
 
 	/*< private >*/
 	EphyBookmarkActionPrivate *priv;
@@ -46,13 +48,7 @@ struct _EphyBookmarkAction
 
 struct _EphyBookmarkActionClass
 {
-	GtkActionClass parent_class;
-
-	void (*open)          (EphyBookmarkAction *action,
-			       char *address);
-	void (*open_in_tab)   (EphyBookmarkAction *action,
-			       char *address,
-			       gboolean new_window);
+	EphyLinkActionClass parent_class;
 };
 
 GType      ephy_bookmark_action_get_type	(void);
@@ -60,4 +56,6 @@ GType      ephy_bookmark_action_get_type	(void);
 GtkAction *ephy_bookmark_action_new		(const char *name,
 						 EphyNode *node);
 
-#endif
+G_END_DECLS
+
+#endif /* EPHY_BOOKMARK_ACTION_H */

@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +26,8 @@
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
 #include "ephy-embed-shell.h"
+#include "ephy-link.h"
+#include "ephy-gui.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtklabel.h>
@@ -81,7 +84,7 @@ ephy_navigation_action_get_type (void)
 			(GInstanceInitFunc) ephy_navigation_action_init,
 		};
 
-		type = g_type_register_static (GTK_TYPE_ACTION,
+		type = g_type_register_static (EPHY_TYPE_LINK_ACTION,
 					       "EphyNavigationAction",
 					       &type_info, 0);
 	}
@@ -133,12 +136,12 @@ new_history_menu_item (const char *origtext,
 
 static void
 activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
-				       EphyWindow *window)
+				       EphyNavigationAction *action)
 {
 	EphyEmbed *embed;
 	int go_nth;
 
-	embed = ephy_window_get_active_embed (window);
+	embed = ephy_window_get_active_embed (action->priv->window);
 	g_return_if_fail (embed != NULL);
 
 	go_nth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menuitem), NTH_DATA_KEY));
@@ -148,18 +151,19 @@ activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
 
 static void
 activate_up_menu_item_cb (GtkWidget *menuitem,
-			  EphyWindow *window)
+			  EphyNavigationAction *action)
 {
 	EphyEmbed *embed;
 	char *url;
 
-	embed = ephy_window_get_active_embed (window);
+	embed = ephy_window_get_active_embed (action->priv->window);
 	g_return_if_fail (embed != NULL);
 
 	url = g_object_get_data (G_OBJECT (menuitem), URL_DATA_KEY);
 	g_return_if_fail (url != NULL);
 
-	ephy_window_load_url (window, url);
+	ephy_link_open (EPHY_LINK (action), url, NULL,
+			ephy_gui_is_middle_click () ? EPHY_LINK_NEW_TAB : 0);
 }
 
 static GtkWidget *
@@ -207,7 +211,7 @@ build_back_or_forward_menu (EphyNavigationAction *action)
 				   GINT_TO_POINTER (start));
 		g_signal_connect (item, "activate",
 				  G_CALLBACK (activate_back_or_forward_menu_item_cb),
-				  window);
+				  action);
 
 		gtk_menu_shell_append (menu, item);
 		gtk_widget_show_all (item);
@@ -256,7 +260,7 @@ build_up_menu (EphyNavigationAction *action)
 		g_object_set_data_full (G_OBJECT (item), URL_DATA_KEY, url,
 					(GDestroyNotify) g_free);
 		g_signal_connect (item, "activate",
-				  G_CALLBACK (activate_up_menu_item_cb), window);
+				  G_CALLBACK (activate_up_menu_item_cb), action);
 
 		gtk_menu_shell_append (menu, item);
 		gtk_widget_show (item);

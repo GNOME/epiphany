@@ -27,6 +27,7 @@
 #include "ephy-bookmarks.h"
 #include "ephy-shell.h"
 #include "ephy-topic-action.h"
+#include "ephy-link.h"
 #include "ephy-bookmark-action.h"
 #include "ephy-new-bookmark.h"
 #include "ephy-stock-icons.h"
@@ -87,59 +88,22 @@ ephy_bookmarksbar_get_type (void)
 			(GInstanceInitFunc) ephy_bookmarksbar_init
 		};
 
+		static const GInterfaceInfo link_info = 
+		{
+			NULL,
+			NULL,
+			NULL
+		};
+
 		type = g_type_register_static (EGG_TYPE_EDITABLE_TOOLBAR,
 					       "EphyBookmarksBar",
 					       &our_info, 0);
+		g_type_add_interface_static (type,
+					     EPHY_TYPE_LINK,
+					     &link_info);
 	}
 
 	return type;
-}
-
-static void
-open_in_tabs_cb (GtkAction *action, GList *uri_list, EphyBookmarksBar *toolbar)
-{
-	EphyTab *tab;
-	EphyWindow *window;
-	GList *l = uri_list;
-
-	g_return_if_fail (l != NULL);
-
-	tab = ephy_shell_new_tab (ephy_shell, NULL, NULL, l->data,
-				  EPHY_NEW_TAB_OPEN_PAGE);
-	g_return_if_fail (tab != NULL);
-
-	window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (tab)));
-	g_return_if_fail (window != NULL);
-
-	for (l = l->next; l != NULL; l = l->next)
-	{
-		ephy_shell_new_tab (ephy_shell, window, NULL, l->data,
-				    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-				    EPHY_NEW_TAB_OPEN_PAGE |
-				    EPHY_NEW_TAB_APPEND_LAST);
-	}
-}
-
-static void
-bookmark_open_in_tab_cb (GtkAction *action, char *location,
-			 gboolean new_window, EphyBookmarksBar *toolbar)
-{
-	EphyNewTabFlags flags = EPHY_NEW_TAB_OPEN_PAGE |
-				EPHY_NEW_TAB_JUMP;
-
-	if (!new_window)
-	{
-		flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
-	}
-
-	ephy_shell_new_tab (ephy_shell, toolbar->priv->window, NULL,
-			    location, flags);
-}
-
-static void
-bookmark_open_cb (GtkAction *action, char *location, EphyBookmarksBar *toolbar)
-{
-	ephy_window_load_url (toolbar->priv->window, location);
 }
 
 static gboolean
@@ -231,9 +195,6 @@ ephy_bookmarksbar_action_request (EggEditableToolbar *eggtoolbar,
 		if (ephy_node_has_child (topics, node))
 		{
 			action = ephy_topic_action_new (name, node);
-
-			g_signal_connect (action, "open_in_tabs",
-					  G_CALLBACK (open_in_tabs_cb), toolbar);
 		}
 		else if (ephy_node_has_child (bmks, node))
 		{
@@ -242,10 +203,8 @@ ephy_bookmarksbar_action_request (EggEditableToolbar *eggtoolbar,
 
 		g_return_if_fail (action != NULL);
 
-		g_signal_connect (action, "open",
-				  G_CALLBACK (bookmark_open_cb), toolbar);
-		g_signal_connect (action, "open_in_tab",
-				  G_CALLBACK (bookmark_open_in_tab_cb), toolbar);
+		g_signal_connect_swapped (action, "open-link",
+					  G_CALLBACK (ephy_link_open), toolbar);
 
 		gtk_action_group_add_action (toolbar->priv->action_group, action);
 		g_object_unref (action);

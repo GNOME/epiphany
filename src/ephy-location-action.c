@@ -1,6 +1,6 @@
 /*
- *  Copyright (C) 2003 Marco Pesenti Gritti
- *  Copyright (C) 2003 Christian Persch
+ *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
 #include "ephy-completion-model.h"
+#include "ephy-link.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtkentry.h>
@@ -57,15 +58,7 @@ enum
 	PROP_EDITABLE
 };
 
-enum
-{
-	GO_LOCATION,
-	LAST_SIGNAL
-};
-
 static GObjectClass *parent_class = NULL;
-
-static guint signals[LAST_SIGNAL] = { 0 };
 
 GType
 ephy_location_action_get_type (void)
@@ -87,7 +80,7 @@ ephy_location_action_get_type (void)
 			(GInstanceInitFunc) ephy_location_action_init,
 		};
 
-		type = g_type_register_static (GTK_TYPE_ACTION,
+		type = g_type_register_static (EPHY_TYPE_LINK_ACTION,
 					       "EphyLocationAction",
 					       &type_info, 0);
 	}
@@ -120,8 +113,8 @@ action_activated_cb (GtkEntryCompletion *completion,
 			(action->priv->bookmarks, smart_url, content);
 		g_return_if_fail (url != NULL);
 
-		g_signal_emit (action, signals[GO_LOCATION], 0, url);
-
+		ephy_link_open (EPHY_LINK (action), url, NULL, 0);
+	
 		g_free (url);
 		g_free (content);
 	}
@@ -134,9 +127,9 @@ location_url_activate_cb (GtkEntry *entry,
 	const char *content;
 
 	content = gtk_entry_get_text (entry);
-	if (content)
+	if (content != NULL)
 	{
-		g_signal_emit (action, signals[GO_LOCATION], 0, content);
+		ephy_link_open (EPHY_LINK (action), content, NULL, 0);
 	}
 }
 
@@ -260,7 +253,7 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 					 G_CALLBACK (user_changed_cb), action, 0);
 	}
 
-	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
+	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
 }
 
 static void
@@ -284,7 +277,7 @@ disconnect_proxy (GtkAction *action, GtkWidget *proxy)
 			(proxy, G_CALLBACK (user_changed_cb), action);
 	}
 
-	(* GTK_ACTION_CLASS (parent_class)->disconnect_proxy) (action, proxy);
+	GTK_ACTION_CLASS (parent_class)->disconnect_proxy (action, proxy);
 }
 
 static void
@@ -340,17 +333,6 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 	action_class->toolbar_item_type = EPHY_TYPE_LOCATION_ENTRY;
 	action_class->connect_proxy = connect_proxy;
 	action_class->disconnect_proxy = disconnect_proxy;
-
-	signals[GO_LOCATION] =
-                g_signal_new ("go_location",
-                              G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_FIRST,
-                              G_STRUCT_OFFSET (EphyLocationActionClass, go_location),
-                              NULL, NULL,
-                              g_cclosure_marshal_VOID__STRING,
-                              G_TYPE_NONE,
-                              1,
-			      G_TYPE_STRING);
 
 	g_object_class_install_property (object_class,
 					 PROP_ADDRESS,

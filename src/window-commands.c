@@ -196,26 +196,6 @@ window_cmd_go_forward (GtkAction *action,
 }
 
 void
-window_cmd_go_home (GtkAction *action,
-		    EphyWindow *window)
-{
-	char *location;
-
-	location = eel_gconf_get_string (CONF_GENERAL_HOMEPAGE);
-
-	if (location == NULL || location[0] == '\0')
-	{
-		g_free (location);
-
-		location = g_strdup ("about:blank");
-	}
-
-	ephy_window_load_url (window, location);
-
-	g_free (location);
-}
-
-void
 window_cmd_go_location (GtkAction *action,
 		        EphyWindow *window)
 {

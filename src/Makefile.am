@@ -23,64 +23,70 @@ $(CORBA_SOURCE): $(idls) $(ORBIT_IDL)
 headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
 header_DATA = $(INST_H_FILES)
 
-NOINST_H_FILES =					\
-	ephy-automation.h				\
-	ephy-encoding-dialog.h				\
-	ephy-encoding-menu.h				\
-	ephy-favicon-action.h				\
-	ephy-go-action.h				\
-	ephy-history-window.h				\
-	ephy-location-action.h				\
-	ephy-navigation-action.h			\
-	ephy-tabs-menu.h				\
-	ephy-toolbars-model.h				\
-	pdm-dialog.h					\
-	popup-commands.h				\
-	prefs-dialog.h					\
-	ppview-toolbar.h				\
-	toolbar.h					\
+NOINST_H_FILES = \
+	ephy-automation.h		\
+	ephy-encoding-dialog.h		\
+	ephy-encoding-menu.h		\
+	ephy-favicon-action.h		\
+	ephy-go-action.h		\
+	ephy-history-window.h		\
+	ephy-home-action.h		\
+	ephy-link.h			\
+	ephy-link-action.h		\
+	ephy-location-action.h		\
+	ephy-navigation-action.h	\
+	ephy-tabs-menu.h		\
+	ephy-toolbars-model.h		\
+	pdm-dialog.h			\
+	popup-commands.h		\
+	prefs-dialog.h			\
+	ppview-toolbar.h		\
+	toolbar.h			\
 	window-commands.h
 
-INST_H_FILES = 				    		\
-	ephy-extension.h				\
-	ephy-extensions-manager.h			\
-	ephy-notebook.h					\
-	ephy-session.h					\
-	ephy-shell.h					\
-	ephy-statusbar.h				\
-	ephy-tab.h					\
+INST_H_FILES = \
+	ephy-extension.h		\
+	ephy-extensions-manager.h	\
+	ephy-notebook.h			\
+	ephy-session.h			\
+	ephy-shell.h			\
+	ephy-statusbar.h		\
+	ephy-tab.h			\
 	ephy-window.h
 
-libephymain_la_SOURCES =				\
-	$(CORBA_SOURCE)				 	\
-	ephy-automation.c				\
-	ephy-completion-model.c				\
-	ephy-completion-model.h				\
-	ephy-encoding-dialog.c				\
-	ephy-encoding-menu.c				\
-	ephy-extension.c				\
-	ephy-extensions-manager.c			\
-	ephy-favicon-action.c				\
-	ephy-go-action.c				\
-	ephy-history-window.c				\
-	ephy-location-action.c				\
-	ephy-navigation-action.c			\
-	ephy-notebook.c					\
-	ephy-session.c					\
-	ephy-shell.c					\
-	ephy-statusbar.c				\
-	ephy-tab.c					\
-	ephy-tab.h					\
-	ephy-tabs-menu.c				\
-	ephy-toolbars-model.c				\
-	ephy-window.c					\
-	pdm-dialog.c					\
-	popup-commands.c				\
-	prefs-dialog.c					\
-	ppview-toolbar.c				\
-	toolbar.c					\
-	window-commands.c				\
-	$(INST_H_FILES)					\
+libephymain_la_SOURCES = \
+	$(CORBA_SOURCE)			\
+	ephy-automation.c		\
+	ephy-completion-model.c		\
+	ephy-completion-model.h		\
+	ephy-encoding-dialog.c		\
+	ephy-encoding-menu.c		\
+	ephy-extension.c		\
+	ephy-extensions-manager.c	\
+	ephy-favicon-action.c		\
+	ephy-go-action.c		\
+	ephy-home-action.c		\
+	ephy-history-window.c		\
+	ephy-link.c			\
+	ephy-link-action.c		\
+	ephy-location-action.c		\
+	ephy-navigation-action.c	\
+	ephy-notebook.c			\
+	ephy-session.c			\
+	ephy-shell.c			\
+	ephy-statusbar.c		\
+	ephy-tab.c			\
+	ephy-tab.h			\
+	ephy-tabs-menu.c		\
+	ephy-toolbars-model.c		\
+	ephy-window.c			\
+	pdm-dialog.c			\
+	popup-commands.c		\
+	prefs-dialog.c			\
+	ppview-toolbar.c		\
+	toolbar.c			\
+	window-commands.c		\
+	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
 
 libephymain_la_CPPFLAGS = \
@@ -136,7 +142,5 @@ epiphany_LDADD = \
 
 BUILT_SOURCES = $(CORBA_SOURCE)
 
-CLEANFILES = $(CORBA_SOURCE)
-
-dist-hook:
-	cd $(distdir); rm -f $(BUILT_SOURCES)
+CLEANFILES = $(BUILT_SOURCES)
+DISTCLEANFILES = $(BUILT_SOURCES)

@@ -24,7 +24,9 @@
 
 #include "toolbar.h"
 #include "ephy-favicon-action.h"
+#include "ephy-link.h"
 #include "ephy-go-action.h"
+#include "ephy-home-action.h"
 #include "ephy-location-entry.h"
 #include "ephy-location-action.h"
 #include "ephy-navigation-action.h"
@@ -38,9 +40,10 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 
-#include <string.h>
 #include <glib/gi18n.h>
+#include <gtk/gtkstock.h>
 #include <gtk/gtkuimanager.h>
+#include <string.h>
 
 static void toolbar_class_init (ToolbarClass *klass);
 static void toolbar_init (Toolbar *t);
@@ -88,29 +91,39 @@ struct ToolbarPrivate
 GType
 toolbar_get_type (void)
 {
-        static GType type = 0;
+	static GType type = 0;
 
-        if (G_UNLIKELY (type == 0))
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (ToolbarClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) toolbar_class_init,
-                        NULL,
-                        NULL, /* class_data */
-                        sizeof (Toolbar),
-                        0, /* n_preallocs */
-                        (GInstanceInitFunc) toolbar_init
-                };
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (ToolbarClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			(GClassInitFunc) toolbar_class_init,
+			NULL,
+			NULL, /* class_data */
+			sizeof (Toolbar),
+			0, /* n_preallocs */
+			(GInstanceInitFunc) toolbar_init
+		};
 
-                type = g_type_register_static (EGG_TYPE_EDITABLE_TOOLBAR,
+		static const GInterfaceInfo link_info = 
+		{
+			NULL,
+			NULL,
+			NULL
+		};
+
+		type = g_type_register_static (EGG_TYPE_EDITABLE_TOOLBAR,
 					       "Toolbar",
 					       &our_info, 0);
-        }
+		g_type_add_interface_static (type,
+					     EPHY_TYPE_LINK,
+					     &link_info);
+	}
 
-        return type;
+	return type;
 }
 
 static void
@@ -149,12 +162,6 @@ arbitrary_url_notifier (GConfClient *client,
 		        Toolbar *t)
 {
 	update_location_editable (t);
-}
-
-static void
-go_location_cb (GtkAction *action, char *location, EphyWindow *window)
-{
-	ephy_window_load_url (window, location);
 }
 
 static void
@@ -355,6 +362,8 @@ toolbar_setup_actions (Toolbar *t)
 			       NULL);
 	g_signal_connect (action, "activate",
 			  G_CALLBACK (window_cmd_go_up), t->priv->window);
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), t);
 	gtk_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
 
@@ -368,8 +377,8 @@ toolbar_setup_actions (Toolbar *t)
 			       "tooltip", _("Enter a web address to open, or a phrase to search for on the web"),
 			       "visible-overflown", FALSE,
 			       NULL);
-	g_signal_connect (action, "go_location",
-			  G_CALLBACK (go_location_cb), t->priv->window);
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), t);
 	g_signal_connect (action, "notify::address",
 			  G_CALLBACK (sync_user_input_cb), t);
 	gtk_action_group_add_action (t->priv->action_group, action);
@@ -407,6 +416,18 @@ toolbar_setup_actions (Toolbar *t)
 	g_signal_connect (action, "activate",
 			  G_CALLBACK (window_cmd_load_location), t->priv->window);
 	gtk_action_group_add_action (t->priv->action_group, action);
+	g_object_unref (action);
+
+	action = g_object_new (EPHY_TYPE_HOME_ACTION,
+			       "name", "GoHome",
+			       "label", _("_Home"),
+			       "stock_id", GTK_STOCK_HOME,
+			       "tooltip", _("Go to the home page"),
+			       "is_important", TRUE,
+			       NULL);
+	g_signal_connect_swapped (action, "open-link",
+				  G_CALLBACK (ephy_link_open), t);
+	gtk_action_group_add_action_with_accel (t->priv->action_group, action, "<alt>Home");
 	g_object_unref (action);
 }
 

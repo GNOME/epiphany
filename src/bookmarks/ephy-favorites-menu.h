@@ -33,9 +33,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_FAVORITES_MENU_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE((klass), EPHY_TYPE_FAVORITES_MENU))
 #define EPHY_FAVORITES_MENU_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_FAVORITES_MENU, EphyFavoritesMenuClass))
 
-typedef struct _EphyFavoritesMenu EphyFavoritesMenu;
-typedef struct _EphyFavoritesMenuClass EphyFavoritesMenuClass;
-typedef struct _EphyFavoritesMenuPrivate EphyFavoritesMenuPrivate;
+typedef struct _EphyFavoritesMenu		EphyFavoritesMenu;
+typedef struct _EphyFavoritesMenuClass		EphyFavoritesMenuClass;
+typedef struct _EphyFavoritesMenuPrivate	EphyFavoritesMenuPrivate;
 
 struct _EphyFavoritesMenuClass
 {

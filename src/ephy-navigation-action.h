@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +22,9 @@
 #ifndef EPHY_NAVIGATION_ACTION_H
 #define EPHY_NAVIGATION_ACTION_H
 
-#include <gtk/gtkaction.h>
+#include "ephy-link-action.h"
+
+G_BEGIN_DECLS
 
 #define EPHY_TYPE_NAVIGATION_ACTION            (ephy_navigation_action_get_type ())
 #define EPHY_NAVIGATION_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_NAVIGATION_ACTION, EphyNavigationAction))
@@ -31,8 +34,8 @@
 #define EPHY_NAVIGATION_ACTION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_NAVIGATION_ACTION, EphyNavigationActionClass))
 
 typedef struct _EphyNavigationAction		EphyNavigationAction;
-typedef struct _EphyNavigationActionClass	EphyNavigationActionClass;
 typedef struct _EphyNavigationActionPrivate	EphyNavigationActionPrivate;
+typedef struct _EphyNavigationActionClass	EphyNavigationActionClass;
 
 typedef enum
 {
@@ -43,7 +46,7 @@ typedef enum
 
 struct _EphyNavigationAction
 {
-	GtkAction parent;
+	EphyLinkAction parent;
 	
 	/*< private >*/
 	EphyNavigationActionPrivate *priv;
@@ -51,9 +54,11 @@ struct _EphyNavigationAction
 
 struct _EphyNavigationActionClass
 {
-	GtkActionClass parent_class;
+	EphyLinkActionClass parent_class;
 };
 
-GType    ephy_navigation_action_get_type   (void);
+GType ephy_navigation_action_get_type (void);
+
+G_END_DECLS
 
 #endif

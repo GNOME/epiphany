@@ -50,6 +50,7 @@
 #include "ephy-stock-icons.h"
 #include "ephy-extension.h"
 #include "ephy-favicon-cache.h"
+#include "ephy-link.h"
 #include "ephy-gui.h"
 
 #include <string.h>
@@ -216,9 +217,6 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "GoUp", GTK_STOCK_GO_UP, N_("_Up"), "<alt>Up",
 	  N_("Go up one level"),
 	  G_CALLBACK (window_cmd_go_up) },
-	{ "GoHome", GTK_STOCK_HOME, N_("_Home"), "<alt>Home",
-	  N_("Go to the home page"),
-	  G_CALLBACK (window_cmd_go_home) },
 	{ "GoLocation", NULL, N_("_Location..."), "<control>L",
 	  N_("Go to a specified location"),
 	  G_CALLBACK (window_cmd_go_location) },
@@ -1131,7 +1129,6 @@ setup_ui_manager (EphyWindow *window)
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	GtkUIManager *manager;
-	GError *err = NULL;
 
 	window->priv->main_vbox = gtk_vbox_new (FALSE, 0);
 	gtk_widget_show (window->priv->main_vbox);
@@ -1176,8 +1173,6 @@ setup_ui_manager (EphyWindow *window)
 
 	action = gtk_action_group_get_action (action_group, "EditFind");
 	g_object_set (action, "is_important", TRUE, NULL);
-	action = gtk_action_group_get_action (action_group, "GoHome");
-	g_object_set (action, "is_important", TRUE, NULL);
 	action = gtk_action_group_get_action (action_group, "GoBookmarks");
 	g_object_set (action, "is_important", TRUE, NULL);
 
@@ -1195,14 +1190,6 @@ setup_ui_manager (EphyWindow *window)
 	g_signal_connect (manager, "add_widget", G_CALLBACK (add_widget), window);
 	gtk_window_add_accel_group (GTK_WINDOW (window),
 				    gtk_ui_manager_get_accel_group (manager));
-
-	gtk_ui_manager_add_ui_from_file
-		(manager, ephy_file ("epiphany-ui.xml"), &err);
-	if (err != NULL)
-	{
-		g_warning ("Could not merge epiphany-ui.xml: %s", err->message);
-		g_clear_error (&err);
-        }
 }
 
 static void
@@ -2420,13 +2407,48 @@ action_request_forward_cb (GObject *toolbar,
 	g_signal_emit_by_name (bookmarksbar, "action_request", name);
 }
 
-static void
-open_bookmark_cb (EphyBookmarksMenu *menu,
-		  const char *location,
-		  gboolean open_in_new,
-		  EphyWindow *window)
+static EphyTab *
+open_link_cb (EphyLink *link,
+	      const char *address,
+	      EphyTab *tab,
+	      EphyLinkFlags flags,
+	      EphyWindow *window)
 {
-	ephy_window_load_url (window, location);
+	EphyTab *new_tab;
+
+	g_return_val_if_fail (address != NULL, NULL);
+
+	if (flags != 0)
+	{
+		EphyNewTabFlags ntflags = EPHY_NEW_TAB_OPEN_PAGE;
+
+		if (flags & EPHY_LINK_JUMP_TO)
+		{
+			ntflags |= EPHY_NEW_TAB_JUMP;
+		}
+		if (flags & EPHY_LINK_NEW_WINDOW)
+		{
+			ntflags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
+		}
+		else
+		{
+			ntflags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
+		}
+
+		new_tab = ephy_shell_new_tab
+				(ephy_shell,
+				 tab ? EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (tab)))
+				     : window,
+				 tab ? tab : ephy_window_get_active_tab (window),
+				 address, ntflags);
+	}
+	else
+	{
+		ephy_window_load_url (window, address);
+		new_tab = ephy_window_get_active_tab (window);
+	}
+
+	return new_tab;
 }
 
 static void
@@ -2435,6 +2457,7 @@ ephy_window_init (EphyWindow *window)
 	EphyExtension *manager;
 	EphyEmbedSingle *single;
 	EggToolbarsModel *model;
+	GError *error = NULL;
 
 	LOG ("EphyWindow initialising %p", window)
 
@@ -2464,16 +2487,6 @@ ephy_window_init (EphyWindow *window)
 	window->priv->help_message_cid = gtk_statusbar_get_context_id
 		(GTK_STATUSBAR (window->priv->statusbar), "help_message");
 
-	/* Initialize the menus */
-	window->priv->tabs_menu = ephy_tabs_menu_new (window);
-	window->priv->fav_menu = ephy_favorites_menu_new (window);
-	window->priv->enc_menu = ephy_encoding_menu_new (window);
-
-	window->priv->bmk_menu = ephy_bookmarks_menu_new (window->priv->manager,
-							  BOOKMARKS_MENU_PATH);
-	g_signal_connect (window->priv->bmk_menu, "open",
-			  G_CALLBACK (open_bookmark_cb), window);
-
 	/* get the toolbars model *before* getting the bookmarksbar model
 	 * (via ephy_bookmarsbar_new()), so that the toolbars model is
 	 * instantiated *before* the bookmarksbarmodel, to make forwarding
@@ -2483,10 +2496,34 @@ ephy_window_init (EphyWindow *window)
 
 	/* create the toolbars */
 	window->priv->toolbar = toolbar_new (window);
+	g_signal_connect (window->priv->toolbar, "open-link",
+			  G_CALLBACK (open_link_cb), window);
 	window->priv->bookmarksbar = ephy_bookmarksbar_new (window);
+	g_signal_connect (window->priv->bookmarksbar, "open-link",
+			  G_CALLBACK (open_link_cb), window);
 
 	g_signal_connect_swapped (window->priv->toolbar, "activation-finished",
 				  G_CALLBACK (sync_chromes_visibility), window);
+
+	/* now load the UI definition */
+	gtk_ui_manager_add_ui_from_file
+		(window->priv->manager, ephy_file ("epiphany-ui.xml"), &error);
+	if (error != NULL)
+	{
+		g_warning ("Could not merge epiphany-ui.xml: %s", error->message);
+		g_error_free (error);
+        }
+
+	/* Initialize the menus */
+	window->priv->tabs_menu = ephy_tabs_menu_new (window);
+	window->priv->enc_menu = ephy_encoding_menu_new (window);
+	window->priv->fav_menu = ephy_favorites_menu_new (window);
+	g_signal_connect (window->priv->fav_menu, "open-link",
+			  G_CALLBACK (open_link_cb), window);
+	window->priv->bmk_menu = ephy_bookmarks_menu_new (window->priv->manager,
+							  BOOKMARKS_MENU_PATH);
+	g_signal_connect (window->priv->bmk_menu, "open-link",
+			  G_CALLBACK (open_link_cb), window);
 
 	/* forward the toolbar's action_request signal to the bookmarks toolbar,
 	 * so the user can also have bookmarks on the normal toolbar

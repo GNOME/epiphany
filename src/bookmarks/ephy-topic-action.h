@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,10 +22,10 @@
 #ifndef EPHY_TOPIC_ACTION_H
 #define EPHY_TOPIC_ACTION_H
 
-#include <gtk/gtk.h>
-#include <gtk/gtkaction.h>
-
+#include "ephy-link-action.h"
 #include "ephy-node.h"
+
+G_BEGIN_DECLS
 
 #define EPHY_TYPE_TOPIC_ACTION            (ephy_topic_action_get_type ())
 #define EPHY_TOPIC_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_TOPIC_ACTION, EphyTopicAction))
@@ -34,12 +35,12 @@
 #define EPHY_TOPIC_ACTION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_TOPIC_ACTION, EphyTopicActionClass))
 
 typedef struct _EphyTopicAction		EphyTopicAction;
-typedef struct _EphyTopicActionClass	EphyTopicActionClass;
 typedef struct _EphyTopicActionPrivate	EphyTopicActionPrivate;
+typedef struct _EphyTopicActionClass	EphyTopicActionClass;
 
 struct _EphyTopicAction
 {
-	GtkAction parent;
+	EphyLinkAction parent_instance;
 
 	/*< private >*/
 	EphyTopicActionPrivate *priv;
@@ -47,20 +48,14 @@ struct _EphyTopicAction
 
 struct _EphyTopicActionClass
 {
-	GtkActionClass parent_class;
-
-	void (*open)         (EphyTopicAction *action,
-			      char *address);
-	void (*open_in_tab)  (EphyTopicAction *action,
-			      char *address,
-			      gboolean new_window);
-	void (*open_in_tabs) (EphyTopicAction *action,
-			      GList *uri_list);
+	EphyLinkActionClass parent_class;
 };
 
 GType      ephy_topic_action_get_type	(void);
 
 GtkAction *ephy_topic_action_new	(const char *name,
 					 EphyNode *node);
+
+G_END_DECLS
 
 #endif

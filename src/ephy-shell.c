@@ -539,6 +539,9 @@ ephy_shell_new_tab (EphyShell *shell,
 
 	jump_to = (flags & EPHY_NEW_TAB_JUMP) != 0;
 
+	LOG ("Opening new tab parent-window %p parent-tab %p in-new-window:%s jump-to:%s",
+	     parent_window, previous_tab, in_new_window ? "t" : "f", jump_to ? "t" : "f")
+
 	if (!in_new_window && parent_window != NULL)
 	{
 		window = parent_window;
