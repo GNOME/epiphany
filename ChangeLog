@@ -1,3 +1,26 @@
+2003-10-16  Mark McLoughlin  <mark@skynet.ie>
+
+	Change the behaviour of --nautilus-view such that the process
+	doesn't exit until the last control has been destroyed. The
+	previous behaviour caused intermittent activation failure
+	when the process timed out and died before the view could be
+	created - bug #124768.
+
+	* src/ephy-main.c:
+	(ephy_main_start): don't unref the shell when started with
+	--nautilus-view. 
+	(ephy_main_dummy_url_argument),
+	(ephy_main_translate_url_arguments): create a dummy argument
+	when no arguments are supplied which will cause the default
+	window to be opened.
+	
+	* src/ephy-shell.c:
+	(ephy_nautilus_view_all_controls_dead): unref the shell
+	here causing the process to exit.
+	(ephy_nautilus_view_init_factory): setup the all_controls_dead
+	callback.
+	(ephy_nautilus_view_new): instrument the control.
+
 2003-10-17  Ettore Perazzoli  <ettore@ximian.com>
 
 	* src/bookmarks/ephy-bookmarks-editor.c
