@@ -8,9 +8,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"POT-Creation-Date: 2003-07-31 17:57+0100\n"
-"PO-Revision-Date: 2003-07-31 18:28+0100\n"
-"Last-Translator: Chris M. Jackson <chris@www.linux.org.uk>\n"
+"POT-Creation-Date: 2003-08-11 00:19+0100\n"
+"PO-Revision-Date: 2003-08-11 00:21+0100\n"
+"Last-Translator: Dafydd Harries <daf@parnassus.ath.cx>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -496,7 +496,7 @@ msgid "Download _Details"
 msgstr "_Manylion Lawrlythiad"
 
 #: data/glade/epiphany.glade.h:16 data/ui/nautilus-epiphany-view.xml.in.h:11
-#: src/ephy-window.c:670
+#: src/ephy-window.c:686
 msgid "Find"
 msgstr "Canfod"
 
@@ -795,7 +795,7 @@ msgid "Paper"
 msgstr "Papur"
 
 #: data/glade/print.glade.h:26 data/ui/nautilus-epiphany-view.xml.in.h:23
-#: src/ephy-window.c:666
+#: src/ephy-window.c:682
 msgid "Print"
 msgstr "Argraffu"
 
@@ -1013,21 +1013,21 @@ msgstr "%.1f o %.1f MB"
 
 #: embed/downloader-view.c:397
 #, c-format
-msgid "%d of %d KB"
-msgstr "%d o %d CB"
+msgid "%d of %d kB"
+msgstr "%d o %d cB"
 
 #: embed/downloader-view.c:403
 #, c-format
-msgid "%d KB"
-msgstr "%d CB"
+msgid "%d kB"
+msgstr "%d cB"
 
 #: embed/downloader-view.c:409
 #, c-format
-msgid "%s at %.1f KB/s"
-msgstr "%s at %.1f CB/e"
+msgid "%s at %.1f kB/s"
+msgstr "%s at %.1f cB/e"
 
 #: embed/downloader-view.c:524 embed/downloader-view.c:542
-#: src/ephy-window.c:870
+#: src/ephy-window.c:886
 msgid "Unknown"
 msgstr "Anhysbys"
 
@@ -1035,27 +1035,27 @@ msgstr "Anhysbys"
 msgid "00.00"
 msgstr "00.00"
 
-#: embed/downloader-view.c:779
+#: embed/downloader-view.c:780
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:789
+#: embed/downloader-view.c:790
 msgid "Filename"
 msgstr "Enw Ffeil"
 
-#: embed/downloader-view.c:800
+#: embed/downloader-view.c:801
 msgid "Size"
 msgstr "Maint"
 
-#: embed/downloader-view.c:811
+#: embed/downloader-view.c:812
 msgid "Remaining"
 msgstr "Yn Weddill"
 
-#: embed/downloader-view.c:1015
+#: embed/downloader-view.c:1016
 msgid "Cancel all pending downloads?"
 msgstr "Diddymu pôb lawrlwythiad sydd heb orffen?"
 
-#: embed/ephy-embed-popup-control.c:554 src/popup-commands.c:325
+#: embed/ephy-embed-popup-control.c:554 src/popup-commands.c:333
 msgid "Save Image As"
 msgstr "Cadw'r Ddelwedd Fel..."
 
@@ -1063,7 +1063,7 @@ msgstr "Cadw'r Ddelwedd Fel..."
 msgid "Save Page As"
 msgstr "Cadw'r Dudalen Fel..."
 
-#: embed/ephy-embed-popup-control.c:677 src/popup-commands.c:413
+#: embed/ephy-embed-popup-control.c:677 src/popup-commands.c:421
 msgid "Save Background As"
 msgstr "Cadw'r Cefndir Fel..."
 
@@ -1075,19 +1075,19 @@ msgstr "Nid yw'r ffeil wedi cael ei gadw."
 msgid "No available applications to open the specified file."
 msgstr "Nid oes rhaglen ar gael er mwyn agor y ffeil a benodwyd."
 
-#: embed/ephy-history.c:438 src/bookmarks/ephy-bookmarks.c:689
+#: embed/ephy-history.c:441 src/bookmarks/ephy-bookmarks.c:689
 msgid "All"
 msgstr "Popeth"
 
-#: embed/ephy-history.c:587
+#: embed/ephy-history.c:590
 msgid "Others"
 msgstr "Eraill"
 
-#: embed/ephy-history.c:593
+#: embed/ephy-history.c:596
 msgid "Local files"
 msgstr "Ffeiliau lleol"
 
-#: embed/mozilla/ContentHandler.cpp:308
+#: embed/mozilla/ContentHandler.cpp:311
 msgid "Select the destination filename"
 msgstr "Dewis enw'r ffeil cyrchfannol"
 
@@ -1506,7 +1506,7 @@ msgstr "Diwedd y sesiwn cyfredol"
 #. * "zh_CN" translation: "zh-cn,zh"
 #. * "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
 #.
-#: embed/mozilla/mozilla-notifiers.cpp:598
+#: embed/mozilla/mozilla-notifiers.cpp:596
 msgid "system-language"
 msgstr "cy-gb,cy"
 
@@ -1910,7 +1910,7 @@ msgstr "_Copïo'r Cyfeiriad"
 msgid "_Search:"
 msgstr "_Chwilio:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1215 src/ephy-window.c:672
+#: src/bookmarks/ephy-bookmarks-editor.c:1215 src/ephy-window.c:688
 msgid "Bookmarks"
 msgstr "Atgofion"
 
@@ -1922,8 +1922,9 @@ msgstr "Pynciau"
 msgid "Title"
 msgstr "Teitl"
 
-#: src/bookmarks/ephy-bookmarks-menu.c:268
-#: src/bookmarks/ephy-topic-action.c:208
+#. This is the adjective, not the verb
+#: src/bookmarks/ephy-bookmarks-menu.c:269
+#: src/bookmarks/ephy-topic-action.c:209
 msgid "Empty"
 msgstr "Gwag"
 
@@ -2134,7 +2135,7 @@ msgstr "Y Porwr Gwe Epiphany"
 msgid "Ephy"
 msgstr "Ephy"
 
-#: src/ephy-main.c:201
+#: src/ephy-main.c:203
 msgid ""
 "Epiphany can't be used now. Running the command \"bonobo-slay\" from the "
 "console may fix the problem. If not, you can try rebooting the computer or "
@@ -2148,7 +2149,7 @@ msgstr ""
 "\n"
 "Ni all Bonobo leoli'r GNOME_Epiphany_Automation.server."
 
-#: src/ephy-shell.c:232
+#: src/ephy-shell.c:234
 msgid ""
 "Epiphany can't be used now. Mozilla initialization failed. Check your "
 "MOZILLA_FIVE_HOME environmental variable."
@@ -2156,35 +2157,35 @@ msgstr ""
 "Ni ellir defnyddio Epiphany ar hyn o bryd. Methwyd cychwyn Mozilla. Gwiriwch "
 "eich newidyn amgylchol MOZILLA_FIVE_HOME."
 
-#: src/ephy-tab.c:314 src/ephy-tab.c:1004 src/ephy-tab.c:1187
+#: src/ephy-tab.c:314 src/ephy-tab.c:1012 src/ephy-tab.c:1195
 msgid "Blank page"
 msgstr "Tudalen wag"
 
-#: src/ephy-tab.c:631
+#: src/ephy-tab.c:639
 msgid "site"
 msgstr "safle"
 
-#: src/ephy-tab.c:655
+#: src/ephy-tab.c:663
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Yn ailgyfeirio i %s..."
 
-#: src/ephy-tab.c:659
+#: src/ephy-tab.c:667
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Yn trosglwyddo data o %s..."
 
-#: src/ephy-tab.c:663
+#: src/ephy-tab.c:671
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Yn aros am awdurdod o %s..."
 
-#: src/ephy-tab.c:671
+#: src/ephy-tab.c:679
 #, c-format
 msgid "Loading %s..."
 msgstr "Yn llwytho %s..."
 
-#: src/ephy-tab.c:675
+#: src/ephy-tab.c:683
 msgid "Done."
 msgstr "Wedi gorffen."
 
@@ -2569,43 +2570,43 @@ msgstr "_Defnyddio Delwedd Fel Cefndir"
 msgid "Copy I_mage Address"
 msgstr "_Copïo Cyfeiriad y Ddelwedd"
 
-#: src/ephy-window.c:561
+#: src/ephy-window.c:577
 msgid "Exit Fullscreen"
 msgstr "Gadael y Modd Sgrîn Lawn"
 
-#: src/ephy-window.c:662 src/window-commands.c:324
+#: src/ephy-window.c:678 src/window-commands.c:331
 msgid "Open"
 msgstr "Agor"
 
-#: src/ephy-window.c:664 src/window-commands.c:365
+#: src/ephy-window.c:680 src/window-commands.c:372
 msgid "Save As"
 msgstr "Cadw Fel"
 
-#: src/ephy-window.c:668
+#: src/ephy-window.c:684
 msgid "Bookmark"
 msgstr "Atgof"
 
-#: src/ephy-window.c:873
+#: src/ephy-window.c:889
 msgid "Insecure"
 msgstr "Anniogel"
 
-#: src/ephy-window.c:876
+#: src/ephy-window.c:892
 msgid "Broken"
 msgstr "Wedi Torri"
 
-#: src/ephy-window.c:879
+#: src/ephy-window.c:895
 msgid "Medium"
 msgstr "Canolig"
 
-#: src/ephy-window.c:883
+#: src/ephy-window.c:899
 msgid "Low"
 msgstr "Isel"
 
-#: src/ephy-window.c:887
+#: src/ephy-window.c:903
 msgid "High"
 msgstr "Uchel"
 
-#: src/ephy-window.c:897
+#: src/ephy-window.c:913
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2614,7 +2615,7 @@ msgstr ""
 "Safon Diogelwch: %s\n"
 "%s"
 
-#: src/ephy-window.c:903
+#: src/ephy-window.c:919
 #, c-format
 msgid "Security level: %s"
 msgstr "Safon Diogelwch: %s"
@@ -2655,7 +2656,7 @@ msgstr "Diogel:"
 msgid "Expire:"
 msgstr "Darfod:"
 
-#: src/popup-commands.c:315
+#: src/popup-commands.c:323
 msgid "Download link"
 msgstr "Lawrlwytho'r cyswllt"
 
@@ -2899,26 +2900,26 @@ msgstr "Cyffredinol"
 msgid "Custom [%s]"
 msgstr "Addasiedig [%s]"
 
-#: src/session.c:194
+#: src/session.c:195
 msgid "Crash Recovery"
 msgstr "Adfer ar ôl Chwalfa"
 
-#: src/session.c:196
+#: src/session.c:197
 msgid "_Don't Recover"
 msgstr "_Peidio Adfer"
 
-#: src/session.c:197
+#: src/session.c:198
 msgid "_Recover"
 msgstr "_Adfer"
 
-#: src/session.c:226
+#: src/session.c:227
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr ""
 "Ymddengys bod Epiphany wedi chwalu neu cael ei ladd y tro diwethaf y cafodd "
 "ei redeg."
 
-#: src/session.c:232
+#: src/session.c:233
 msgid "You can recover the opened tabs and windows."
 msgstr "Gallwch adfer y tabiau a ffenestri a oedd ar agor."
 
@@ -2978,24 +2979,26 @@ msgstr "Mynd i'r cyfeiriad a roddwyd yn y maes cyfeiriad"
 msgid "Check this out!"
 msgstr "Edrychwch ar hyn!"
 
-#: src/window-commands.c:278
+#: src/window-commands.c:285
 msgid "Untitled"
 msgstr "Di-deitl"
 
-#: src/window-commands.c:675
+#: src/window-commands.c:682
 msgid "Toolbar Editor"
 msgstr "Golygydd Bar Offer"
 
-#: src/window-commands.c:697
+#: src/window-commands.c:704
 msgid "_Add a New Toolbar"
 msgstr "_Ychwanegu Bar Offer Newydd"
 
 #. Translator credits
-#: src/window-commands.c:747
+#: src/window-commands.c:754
 msgid "translator_credits"
-msgstr "Keith Willoughby, Dafydd Harries, Chris M. Jackson"
+msgstr "Keith Willoughby <keith@flat222.org>,"
+"Dafydd Harries <daf@parnassus.ath.cx>,"
+"Chris M. Jackson <chris@www.linux.org.uk>"
 
-#: src/window-commands.c:775
+#: src/window-commands.c:782
 msgid "A GNOME browser based on Mozilla"
 msgstr "Porwr GNOME yn seiliedig ar Mozilla"
 
