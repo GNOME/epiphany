@@ -378,12 +378,11 @@ build_content (EphyStartHere *sh, xmlNodePtr node)
 char *
 ephy_start_here_get_page (EphyStartHere *sh, const char *id)
 {
-        xmlNodePtr child;
-	xmlNodePtr root;
-	xmlBufferPtr buf;
+        xmlNodePtr root;
 	const char *xml_filepath;
 	char *xml_filename;
-	char *content;
+	xmlChar *content;
+	int size;
 
 	xml_filename = g_strconcat ("starthere/", id, ".xml", NULL);
 	xml_filepath = ephy_file (xml_filename);
@@ -392,20 +391,12 @@ ephy_start_here_get_page (EphyStartHere *sh, const char *id)
 
 	sh->priv->doc = xmlParseFile (xml_filepath);
 	root = xmlDocGetRootElement (sh->priv->doc);
-	buf = xmlBufferCreate ();
 
 	select_language (sh, root);
 	build_content (sh, root);
 
-	child = sh->priv->doc->children;
-	while (child)
-	{
-		xmlNodeDump (buf, sh->priv->doc, child, 1, 1);
-		child = child->next;
-	}
+	xmlDocDumpMemory (sh->priv->doc, &content, &size);
 
-	content = g_strdup (xmlBufferContent (buf));
-	xmlBufferFree (buf);
 	xmlFreeDoc (sh->priv->doc);
 
 	return content;

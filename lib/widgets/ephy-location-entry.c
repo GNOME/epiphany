@@ -140,6 +140,7 @@ ephy_location_entry_init (EphyLocationEntry *w)
 	w->priv = p;
 	p->last_action_target = NULL;
 	p->editing = FALSE;
+	p->before_completion = NULL;
 
 	ephy_location_entry_build (w);
 
@@ -168,6 +169,8 @@ ephy_location_entry_finalize_impl (GObject *o)
 	}
 
 	LOG ("EphyLocationEntry finalized")
+
+	g_free (p->before_completion);
 
 	g_free (p);
 	G_OBJECT_CLASS (gtk_hbox_class)->finalize (o);
@@ -244,6 +247,9 @@ static gint
 ephy_location_entry_autocompletion_show_alternatives_to (EphyLocationEntry *w)
 {
 	EphyLocationEntryPrivate *p = w->priv;
+
+	g_free (p->before_completion),
+	p->before_completion = gtk_editable_get_chars (GTK_EDITABLE(p->entry), 0, -1);
 
 	if (ephy_location_ignore_prefix (w)) return FALSE;
 
@@ -378,9 +384,13 @@ ephy_location_entry_key_press_event_cb (GtkWidget *entry, GdkEventKey *event, Ep
         case GDK_Right:
         case GDK_Up:
         case GDK_Down:
-	case GDK_Escape:
         case GDK_Page_Up:
         case GDK_Page_Down:
+		ephy_location_entry_autocompletion_hide_alternatives (w);
+                return FALSE;
+	case GDK_Escape:
+		real_entry_set_location (w, p->before_completion);
+		gtk_editable_set_position (GTK_EDITABLE (p->entry), -1);
 		ephy_location_entry_autocompletion_hide_alternatives (w);
                 return FALSE;
         default:
@@ -468,7 +478,7 @@ ephy_location_entry_autocompletion_window_url_selected_cb (EphyAutocompletionWin
 						           int action,
 						           EphyLocationEntry *w)
 {
-	real_entry_set_location (w, target);
+	real_entry_set_location (w, action ? w->priv->before_completion : target);
 }
 
 void

@@ -731,6 +731,8 @@ ephy_autocompletion_window_key_press_hack (EphyAutocompletionWindow *aw,
 		break;
 	}
 
+	action = (p->active_tree_view == p->action_tree_view);
+
 	switch (keyval)
 	{
 	case GDK_Up:

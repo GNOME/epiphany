@@ -1,3 +1,20 @@
+2003-02-28  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/ephy-start-here.c: (ephy_start_here_get_page):
+
+	cleaner xml dump code.
+
+	* lib/widgets/ephy-autocompletion-window.c:
+	(ephy_autocompletion_window_key_press_hack):
+	* lib/widgets/ephy-location-entry.c: (ephy_location_entry_init),
+	(ephy_location_entry_finalize_impl),
+	(ephy_location_entry_autocompletion_show_alternatives_to),
+	(ephy_location_entry_key_press_event_cb),
+	(ephy_location_entry_autocompletion_window_url_selected_cb):
+
+	Do not overwrite search text when going on an action,
+	make Esc get back the location content before the completion.
+
 2003-02-27  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/widgets/ephy-editable-toolbar.c: (editor_close),
