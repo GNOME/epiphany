@@ -878,9 +878,6 @@ add_by_site_filter (EphyHistoryWindow *editor, EphyNodeFilter *filter, int level
 		 level);
 }
 
-#define SEC_PER_DAY (60 * 60 * 24)
-#include "time.h"
-
 static void
 add_by_date_filter (EphyHistoryWindow *editor,
 		    EphyNodeFilter *filter,
@@ -906,18 +903,29 @@ add_by_date_filter (EphyHistoryWindow *editor,
 	btime.tm_hour = 0;
 	midnight = mktime (&btime);
 
-	/* FIXME: take switches from/to DST into account! */
 	switch (time_range)
 	{
-		case TIME_TODAY:
-			cmp_time = midnight;
-			break;
-		case TIME_LAST_TWO_DAYS:
-			cmp_time = midnight - SEC_PER_DAY;
-			break;
 		case TIME_LAST_THREE_DAYS:
-			cmp_time = midnight - 2 * SEC_PER_DAY;
-			break;
+			/* subtract 1 day */
+			midnight -= 43200;
+			localtime_r (&midnight, &btime);
+			btime.tm_sec = 0;
+			btime.tm_min = 0;
+			btime.tm_hour = 0;
+			midnight = mktime (&btime);
+			/* fall-through */
+		case TIME_LAST_TWO_DAYS:
+			/* subtract 1 day */
+			midnight -= 43200;
+			localtime_r (&midnight, &btime);
+			btime.tm_sec = 0;
+			btime.tm_min = 0;
+			btime.tm_hour = 0;
+			midnight = mktime (&btime);
+			/* fall-through */
+  		case TIME_TODAY:
+  			cmp_time = midnight;
+  			break;
 		default:
 			g_return_if_reached ();
 			break;
