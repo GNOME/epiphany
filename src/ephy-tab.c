@@ -807,10 +807,8 @@ build_progress_from_requests (EphyTab *tab, EmbedState state)
 
 		load_percent = build_load_percent (tab->priv->cur_requests,
 						   tab->priv->total_requests);
-		if (load_percent > tab->priv->load_percent || load_percent == -1)
-		{
-			ephy_tab_set_load_percent (tab, load_percent);
-		}
+
+		ephy_tab_set_load_percent (tab, load_percent);
 	}
 }
 
@@ -1006,6 +1004,7 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	gboolean with_control, with_shift, is_left_click, is_middle_click;
 	gboolean is_link, is_image, is_middle_clickable;
 	gboolean middle_click_opens;
+	gboolean is_input;
 
 	g_return_val_if_fail (EPHY_IS_EMBED_EVENT(event), FALSE);
 
@@ -1029,6 +1028,7 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	is_middle_clickable = !((context & EMBED_CONTEXT_LINK)
 				|| (context & EMBED_CONTEXT_INPUT)
 				|| (context & EMBED_CONTEXT_EMAIL_LINK));
+	is_input = (context & EMBED_CONTEXT_INPUT) != 0;
 
 	/* ctrl+click or middle click opens the link in new tab */
 	if (is_link && ((is_left_click && with_control) || is_middle_click))
@@ -1045,8 +1045,10 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	{
 		save_property_url (embed, event, "link", CONF_STATE_DOWNLOAD_DIR);
 	}
-	/* shift+click saves the non-link image */
-	else if (is_image && is_left_click && with_shift)
+	/* shift+click saves the non-link image, except when it's the submit
+	 * button for a form 
+	 */
+	else if (is_image && is_left_click && with_shift && !is_input)
 	{
 		save_property_url (embed, event, "image", CONF_STATE_SAVE_IMAGE_DIR);
 	}
