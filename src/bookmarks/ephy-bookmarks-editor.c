@@ -559,12 +559,14 @@ ephy_bookmarks_editor_node_selected_cb (EphyNodeView *view,
 	ephy_bookmarks_editor_update_menu (editor, view);
 }
 
-static void
+static gboolean
 view_focus_cb (EphyNodeView *view,
 	       GdkEventFocus *event,
 	       EphyBookmarksEditor *editor)
 {
 	ephy_bookmarks_editor_update_menu (editor, view);
+
+	return FALSE;
 }
 
 static void
