@@ -41,7 +41,6 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/widget \
 	-I$(MOZILLA_INCLUDE_ROOT)/windowwatcher \
 	-I$(MOZILLA_INCLUDE_ROOT)/typeaheadfind \
-	-I$(MOZILLA_INCLUDE_ROOT)/toolkitcomps \
 	$(GCONF_CFLAGS) \
 	$(EPIPHANY_DEPENDENCY_CFLAGS) \
 	-DLIB_DIR=\"$(pkglibdir)\" \
