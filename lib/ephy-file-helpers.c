@@ -377,7 +377,7 @@ ephy_file_save_xml (const char *xml_file, xmlDocPtr doc)
 	tmp_file = g_strconcat (xml_file, ".tmp", NULL);
 	old_file = g_strconcat (xml_file, ".old", NULL);
 
-	if (!xmlSaveFormatFile (tmp_file, doc, 1))
+	if (xmlSaveFormatFile (tmp_file, doc, 1) <= 0)
 	{
 		g_warning ("Failed to write XML data to %s", tmp_file);
 		goto failed;
