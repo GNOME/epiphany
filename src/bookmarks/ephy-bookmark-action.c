@@ -448,7 +448,8 @@ remove_activate_cb (GtkWidget *menu, GtkWidget *proxy)
 }
 
 static void
-show_context_menu (EphyBookmarkAction *action, GtkWidget *proxy)
+show_context_menu (EphyBookmarkAction *action, GtkWidget *proxy,
+		   GtkMenuPositionFunc func)
 {
 	GtkWidget *menu, *item;
 
@@ -476,8 +477,18 @@ show_context_menu (EphyBookmarkAction *action, GtkWidget *proxy)
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (remove_activate_cb), proxy);
 
-	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 3,
+	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, func, proxy, 3,
 			gtk_get_current_event_time ());
+}
+
+static void
+popup_menu_cb (GtkWidget *widget, EphyBookmarkAction *action)
+{
+	if (gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))
+        {
+                show_context_menu (action, widget,
+				   ephy_gui_menu_position_under_widget);
+        }
 }
 
 static gboolean
@@ -488,7 +499,7 @@ button_press_cb (GtkWidget *widget,
 	if (event->button == 3 &&
 	    gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))	
 	{
-		show_context_menu (action, widget);
+		show_context_menu (action, widget, NULL);
 		return TRUE;
 	}
 	else if (event->button == 2)	
@@ -549,6 +560,8 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 	{
 		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
 		g_signal_connect (button, "clicked", G_CALLBACK (activate_cb), action);
+		g_signal_connect (button, "popup_menu",
+				  G_CALLBACK (popup_menu_cb), action);
 		g_signal_connect (button, "button-press-event",
 				  G_CALLBACK (button_press_cb), action);
 		g_signal_connect (button, "button-release-event",
