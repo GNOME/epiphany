@@ -35,7 +35,6 @@
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 #include "ephy-favicon-cache.h"
-#include "ephy-label.h"
 #include "ephy-spinner.h"
 #include "ephy-string.h"
 
@@ -793,7 +792,7 @@ sync_label (EphyTab *tab, GParamSpec *pspec, GtkWidget *proxy)
 
 	if (title)
 	{
-		ephy_label_set_text (EPHY_LABEL (label), title);
+		gtk_label_set_text (GTK_LABEL (label), title);
 		gtk_tooltips_set_tip (tips, ebox, title, NULL);
 	}
 }
@@ -885,8 +884,8 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	gtk_box_pack_start (GTK_BOX (label_hbox), icon, FALSE, FALSE, 0);
 
 	/* setup label */
-        label = ephy_label_new ("");
-	ephy_label_set_ellipsize (EPHY_LABEL (label), PANGO_ELLIPSIZE_END);
+        label = gtk_label_new ("");
+	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
         gtk_misc_set_padding (GTK_MISC (label), 0, 0);
 	gtk_box_pack_start (GTK_BOX (label_hbox), label, TRUE, TRUE, 0);

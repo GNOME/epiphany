@@ -30,7 +30,6 @@
 #include "ephy-file-helpers.h"
 #include "ephy-password-manager.h"
 #include "ephy-gui.h"
-#include "ephy-label.h"
 #include "ephy-debug.h"
 #include "ephy-state.h"
 
@@ -923,16 +922,16 @@ show_cookies_properties (PdmDialog *dialog,
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
 			  GTK_FILL, GTK_FILL, 0, 0);
 
-	label = ephy_label_new (info->value);
-	ephy_label_set_selectable (EPHY_LABEL (label), TRUE);
+	label = gtk_label_new (info->value);
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 0, 1);
 
 	str = g_strconcat ("<b>", _("Path:"), "</b>", NULL);
-	label = ephy_label_new (str);
+	label = gtk_label_new (str);
 	g_free (str);
-	ephy_label_set_use_markup (EPHY_LABEL (label), TRUE);
+	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
