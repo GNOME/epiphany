@@ -3,8 +3,8 @@ pref("mousewheel.withcontrolkey.action", 1);
 pref("mousewheel.withcontrolkey.numlines", 1);
 pref("mousewheel.withcontrolkey.sysnumlines", false);
 
-// allow opening file:/// URLs on pages from network sources (http, etc.)
-pref("security.checkloaduri", false);
+// don't allow opening file:/// URLs on pages from network sources (http, etc.)
+pref("security.checkloaduri", true);
 
 // enable line wrapping in View Source
 pref("view_source.wrap_long_lines", true);
