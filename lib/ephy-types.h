@@ -30,6 +30,17 @@ typedef enum
 	G_NOT_IMPLEMENTED
 } gresult;
 
+/* Ids of the root nodes of history,
+ * bookmarks and favicon cache */
+enum
+{
+	BOOKMARKS_NODE_ID = 0,
+	KEYWORDS_NODE_ID = 1,
+	HOSTS_NODE_ID = 5,
+	PAGES_NODE_ID = 6,
+	ICONS_NODE_ID = 9,
+};
+
 G_END_DECLS
 
 #endif

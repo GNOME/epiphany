@@ -1,3 +1,20 @@
+2003-01-12  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* configure.in:
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_download):
+	* embed/ephy-history.c:
+	* lib/Makefile.am:
+	* lib/ephy-types.h:
+	* src/bookmarks/ephy-bookmarks.c:
+	* src/ephy-shell.c: (ephy_shell_init):
+
+	Move root nodes ids to ephy-types.
+	Simple logging facility:
+	EPHY_DEBUG_MODULES= all | filename
+	will enable it.
+	Need to provide a way to disable it and to get rid
+	of the old per file crap.
+
 2003-01-11  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/Makefile.am:

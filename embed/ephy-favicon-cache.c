@@ -26,6 +26,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-node.h"
+#include "ephy-debug.h"
 
 #define EPHY_FAVICON_CACHE_XML_VERSION "0.1"
 
@@ -49,11 +50,6 @@ enum
 {
 	CHANGED,
 	LAST_SIGNAL
-};
-
-enum
-{
-	ICONS_NODE_ID = 9,
 };
 
 static guint ephy_favicon_cache_signals[LAST_SIGNAL] = { 0 };
@@ -394,6 +390,8 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 {
 	EphyEmbedPersist *persist;
 	const char *dest;
+
+	LOG ("Download favicon: %s", favicon_url)
 
 	g_return_if_fail (EPHY_IS_FAVICON_CACHE (cache));
 	g_return_if_fail (favicon_url != NULL);

@@ -21,6 +21,8 @@ libephy_la_SOURCES = \
 	ephy-autocompletion-source.h		\
 	ephy-bonobo-extensions.h		\
 	ephy-bonobo-extensions.c		\
+	ephy-debug.c				\
+	ephy-debug.h				\
 	ephy-dialog.c				\
 	ephy-dialog.h				\
 	ephy-dnd.c				\
@@ -53,7 +55,6 @@ libephy_la_SOURCES = \
 	ephy-stock-icons.h			\
 	ephy-thread-helpers.c			\
 	ephy-thread-helpers.h			\
-	ephy-types.h				\
 	ephy-types.h
 
 libephy_la_LIBADD = \

@@ -16,6 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#include "ephy-types.h"
 #include "ephy-history.h"
 #include "ephy-file-helpers.h"
 #include "ephy-autocompletion-source.h"
@@ -55,12 +56,6 @@ enum
 	REMOVE,
 	VISITED,
         LAST_SIGNAL
-};
-
-enum
-{
-	HOSTS_NODE_ID = 5,
-	PAGES_NODE_ID = 6
 };
 
 static void

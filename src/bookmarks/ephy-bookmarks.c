@@ -47,12 +47,6 @@ struct EphyBookmarksPrivate
 	GStaticRWLock *keywords_hash_lock;
 };
 
-enum
-{
-	BOOKMARKS_NODE_ID = 0,
-	KEYWORDS_NODE_ID = 1
-};
-
 static void
 ephy_bookmarks_class_init (EphyBookmarksClass *klass);
 static void

@@ -27,6 +27,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-thread-helpers.h"
 #include "ephy-bookmarks-import.h"
+#include "ephy-debug.h"
 
 #include <string.h>
 #include <libgnomeui/gnome-client.h>
@@ -192,6 +193,7 @@ ephy_shell_init (EphyShell *gs)
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
 				   (gpointer *)&ephy_shell);
 
+	ephy_debug_init ();
 	ephy_thread_helpers_init ();
 	ephy_node_system_init ();
 	ephy_file_helpers_init ();
