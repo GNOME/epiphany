@@ -58,12 +58,12 @@ GFilePicker::GFilePicker()
 : mDialog(nsnull)
 , mMode(nsIFilePicker::modeOpen)
 {
-	LOG ("GFilePicker ctor (%p)", this)
+	LOG ("GFilePicker ctor (%p)", this);
 }
 
 GFilePicker::~GFilePicker()
 {
-	LOG ("GFilePicker dtor (%p)", this)
+	LOG ("GFilePicker dtor (%p)", this);
 
 	if (mDialog)
 	{
@@ -79,7 +79,7 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindow *parent, const nsAString& title, PR
 NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *title, PRInt16 mode)
 #endif
 {
-	LOG ("GFilePicker::Init")
+	LOG ("GFilePicker::Init");
 
 	GtkWidget *gtkparent = EphyUtils::FindGtkParent (parent);
 #if defined(MOZ_NSIFILEPICKER_NSASTRING_)
@@ -138,7 +138,7 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 {
 	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
 
-	LOG ("GFilePicker::AppendFilters mask=%d", filterMask)
+	LOG ("GFilePicker::AppendFilters mask=%d", filterMask);
 
 	// http://lxr.mozilla.org/seamonkey/source/xpfe/components/filepicker/res/locale/en-US/filepicker.properties
 	// http://lxr.mozilla.org/seamonkey/source/xpfe/components/filepicker/src/nsFilePicker.js line 131 ff
@@ -192,7 +192,7 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar 
 {
 	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
 
-	LOG ("GFilePicker::AppendFilter")
+	LOG ("GFilePicker::AppendFilter");
 
 #ifdef MOZ_NSIFILEPICKER_NSASTRING_
 	if (!filter.Length()) return NS_ERROR_FAILURE;
@@ -244,7 +244,7 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
 {
 	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
 
-	LOG ("GFilePicker::GetDefaultString")
+	LOG ("GFilePicker::GetDefaultString");
 
 #ifdef MOZ_NSIFILEPICKER_NSASTRING_
 	aDefaultString = mDefaultString;
@@ -271,7 +271,7 @@ NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
 		NS_UTF16ToCString (mDefaultString, NS_CSTRING_ENCODING_UTF8,
 				   defaultString);
 
-		LOG ("GFilePicker::SetDefaultString %s", defaultString.get())
+		LOG ("GFilePicker::SetDefaultString %s", defaultString.get());
 
 		if (!defaultString.Length()) return NS_ERROR_FAILURE;
 
@@ -290,7 +290,7 @@ NS_IMETHODIMP GFilePicker::GetDefaultExtension(nsAString& aDefaultExtension)
 NS_IMETHODIMP GFilePicker::GetDefaultExtension(PRUnichar **aDefaultExtension)
 #endif
 {
-	LOG ("GFilePicker::GetDefaultExtension")
+	LOG ("GFilePicker::GetDefaultExtension");
 
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
@@ -301,7 +301,7 @@ NS_IMETHODIMP GFilePicker::SetDefaultExtension(const nsAString& aDefaultExtensio
 NS_IMETHODIMP GFilePicker::SetDefaultExtension(const PRUnichar *aDefaultExtension)
 #endif
 {
-	LOG ("GFilePicker::SetDefaultExtension")
+	LOG ("GFilePicker::SetDefaultExtension");
 
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
@@ -309,14 +309,14 @@ NS_IMETHODIMP GFilePicker::SetDefaultExtension(const PRUnichar *aDefaultExtensio
 /* attribute long filterIndex; */
 NS_IMETHODIMP GFilePicker::GetFilterIndex(PRInt32 *aFilterIndex)
 {
-	LOG ("GFilePicker::GetFilterIndex")
+	LOG ("GFilePicker::GetFilterIndex");
 
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 NS_IMETHODIMP GFilePicker::SetFilterIndex(PRInt32 aFilterIndex)
 {
-	LOG ("GFilePicker::SetFilterIndex index=%d", aFilterIndex)
+	LOG ("GFilePicker::SetFilterIndex index=%d", aFilterIndex);
 
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
@@ -326,7 +326,7 @@ NS_IMETHODIMP GFilePicker::GetDisplayDirectory(nsILocalFile **aDisplayDirectory)
 {
 	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
 
-	LOG ("GFilePicker::GetDisplayDirectory")
+	LOG ("GFilePicker::GetDisplayDirectory");
 
 	char *dir = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (mDialog));
 
@@ -349,7 +349,7 @@ NS_IMETHODIMP GFilePicker::SetDisplayDirectory(nsILocalFile *aDisplayDirectory)
 	nsEmbedCString dir;
 	aDisplayDirectory->GetNativePath (dir);
 
-	LOG ("GFilePicker::SetDisplayDirectory to %s", dir.get())
+	LOG ("GFilePicker::SetDisplayDirectory to %s", dir.get());
 
 	if (mDefaultString.Length() && mMode != nsIFilePicker::modeSave)
 	{
@@ -378,7 +378,7 @@ NS_IMETHODIMP GFilePicker::GetFile(nsILocalFile **aFile)
 
 	char *filename;
 
-	LOG ("GFilePicker::GetFile")
+	LOG ("GFilePicker::GetFile");
 
 	filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (mDialog));
 
@@ -399,7 +399,7 @@ NS_IMETHODIMP GFilePicker::GetFileURL(nsIFileURL **aFileURL)
 {
 	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
 
-	LOG ("GFilePicker::GetFileURL")
+	LOG ("GFilePicker::GetFileURL");
 
 	nsCOMPtr<nsILocalFile> file;
 	GetFile (getter_AddRefs(file));
@@ -418,7 +418,7 @@ NS_IMETHODIMP GFilePicker::GetFiles(nsISimpleEnumerator * *aFiles)
 	// Not sure if we need to implement it at all, it's used nowhere
 	// in mozilla, but I guess a javascript might call it?
 
-	LOG ("GFilePicker::GetFiles")
+	LOG ("GFilePicker::GetFiles");
 
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
@@ -426,7 +426,7 @@ NS_IMETHODIMP GFilePicker::GetFiles(nsISimpleEnumerator * *aFiles)
 /* short show (); */
 NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 {
-	LOG ("GFilePicker::Show")
+	LOG ("GFilePicker::Show");
 
 	gtk_window_set_modal (GTK_WINDOW (mDialog), TRUE);
 	gtk_window_set_destroy_with_parent (GTK_WINDOW (mDialog), FALSE);
@@ -443,7 +443,7 @@ NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 		g_free (filename);
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (mDialog));
 
-		LOG ("GFilePicker::Show response=%d, filename=%s", response, filename)
+		LOG ("GFilePicker::Show response=%d, filename=%s", response, filename);
 	}
 	while (response == GTK_RESPONSE_ACCEPT &&
 	       mMode == nsIFilePicker::modeSave &&

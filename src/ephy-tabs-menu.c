@@ -301,7 +301,7 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 	guint i = 0;
 	GList *tabs = NULL, *l;
 
-	LOG ("Rebuilding open tabs menu")
+	LOG ("Rebuilding open tabs menu");
 
 	START_PROFILER ("Rebuilding tabs menu")
 

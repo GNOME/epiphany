@@ -115,7 +115,7 @@ static void
 ephy_history_set_enabled (EphyHistory *history,
 			  gboolean enabled)
 {
-	LOG ("ephy_history_set_enabled %d", enabled)
+	LOG ("ephy_history_set_enabled %d", enabled);
 
 	history->priv->enabled = enabled;
 
@@ -267,7 +267,7 @@ ephy_history_save (EphyHistory *eb)
 		return;
 	}
 
-	LOG ("Saving history db")
+	LOG ("Saving history db");
 
 	ret = ephy_node_db_write_to_xml_safe
 		(eb->priv->db, eb->priv->xml_file,
@@ -629,7 +629,7 @@ ephy_history_host_visited (EphyHistory *eh,
 	GValue value = { 0, };
 	int visits;
 
-	LOG ("Host visited")
+	LOG ("Host visited");
 
 	visits = ephy_node_get_property_int
 		(host, EPHY_NODE_PAGE_PROP_VISITS);
@@ -918,7 +918,7 @@ ephy_history_set_page_title (EphyHistory *gh,
 	EphyNode *node;
 	GValue value = { 0, };
 
-	LOG ("Set page title")
+	LOG ("Set page title");
 
 	if (title == NULL || title[0] == '\0') return;
 
@@ -959,7 +959,7 @@ ephy_history_set_icon (EphyHistory *gh,
 {
 	EphyNode *host;
 
-	LOG ("Set host icon")
+	LOG ("Set host icon");
 
 	host = g_hash_table_lookup (gh->priv->hosts_hash, url);
 	if (host)
@@ -979,7 +979,7 @@ ephy_history_clear (EphyHistory *gh)
 {
 	EphyNode *node;
 
-	LOG ("clearing history")
+	LOG ("clearing history");
 
 	ephy_node_db_set_immutable (gh->priv->db, FALSE);
 

@@ -43,12 +43,12 @@ NS_IMPL_ISUPPORTS1(GPrintingPromptService, nsIPrintingPromptService)
 
 GPrintingPromptService::GPrintingPromptService()
 {
-	LOG ("GPrintingPromptService ctor (%p)", this)
+	LOG ("GPrintingPromptService ctor (%p)", this);
 }
 
 GPrintingPromptService::~GPrintingPromptService()
 {
-	LOG ("GPrintingPromptService dtor (%p)", this)
+	LOG ("GPrintingPromptService dtor (%p)", this);
 }
 
 /* void showPrintDialog (in nsIDOMWindow parent, in nsIWebBrowserPrint webBrowserPrint, in nsIPrintSettings printSettings); */

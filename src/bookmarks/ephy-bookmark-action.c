@@ -122,7 +122,7 @@ create_tool_item (GtkAction *action)
 {
 	GtkWidget *item, *button, *hbox, *label, *icon, *entry;
 
-	LOG ("Creating tool item for action %p", action)
+	LOG ("Creating tool item for action %p", action);
 
 	item = GTK_ACTION_CLASS (parent_class)->create_tool_item (action);
 
@@ -679,7 +679,7 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	GtkWidget *button, *entry;
 
-	LOG ("Connecting action %p to proxy %p", action, proxy)
+	LOG ("Connecting action %p to proxy %p", action, proxy);
 
 	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
 
@@ -837,7 +837,7 @@ ephy_bookmark_action_finalize (GObject *object)
 {
  /*       EphyBookmarkAction *eba = EPHY_BOOKMARK_ACTION (object);*/
 
-	LOG ("Bookmark action %p finalized", object)
+	LOG ("Bookmark action %p finalized", object);
 
 	parent_class->finalize (object);
 }

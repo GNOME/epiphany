@@ -89,7 +89,7 @@ ephy_link_open (EphyLink *link,
 {
 	EphyTab *new_tab = NULL;
 
-	LOG ("ephy_link_open address \"%s\" parent-tab %p flags %u", address, tab, flags)
+	LOG ("ephy_link_open address \"%s\" parent-tab %p flags %u", address, tab, flags);
 
 	g_signal_emit (link, signals[OPEN_LINK], 0,
 		       address, tab, flags,

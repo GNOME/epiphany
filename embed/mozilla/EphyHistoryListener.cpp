@@ -45,12 +45,12 @@
  
 EphyHistoryListener::EphyHistoryListener ()
 {
-	LOG ("EphyHistoryListener ctor")
+	LOG ("EphyHistoryListener ctor");
 }
 
 EphyHistoryListener::~EphyHistoryListener ()
 {
-	LOG ("EphyHistoryListener dtor")
+	LOG ("EphyHistoryListener dtor");
 }
 
 nsresult

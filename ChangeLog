@@ -1,3 +1,138 @@
+2005-01-28  Christian Persch  <chpe@cvs.gnome.org>
+
+	* doc/reference/tmpl/ephy-embed.sgml:
+	* embed/ephy-embed-persist.c: (ephy_embed_persist_init),
+	(ephy_embed_persist_finalize):
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_finalize):
+	* embed/ephy-encodings.c: (ephy_encodings_finalize),
+	(ephy_encodings_init):
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_finalize),
+	(favicon_download_completed_cb), (favicon_download_cancelled_cb),
+	(ephy_favicon_cache_download), (ephy_favicon_cache_get):
+	* embed/ephy-history.c: (ephy_history_set_enabled),
+	(ephy_history_save), (ephy_history_finalize),
+	(ephy_history_host_visited), (ephy_history_set_page_title),
+	(ephy_history_set_icon), (ephy_history_clear):
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyContentPolicy.cpp:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/EphyHistoryListener.cpp:
+	* embed/mozilla/EphySidebar.cpp:
+	* embed/mozilla/EphySingle.cpp:
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
+	* embed/mozilla/GtkNSSKeyPairDialogs.cpp:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/PrintingPromptService.cpp:
+	* embed/mozilla/mozilla-download.cpp:
+	* embed/mozilla/mozilla-embed-event.cpp:
+	* lib/ephy-dbus.c: (session_filter_func), (system_filter_func),
+	(ephy_dbus_connect_to_system_bus),
+	(ephy_dbus_connect_to_session_bus), (path_message_func),
+	(ephy_dbus_startup), (ephy_dbus_shutdown), (ephy_dbus_init),
+	(ephy_dbus_finalize):
+	* lib/ephy-debug.h:
+	* lib/ephy-file-chooser.c: (ephy_file_chooser_finalize):
+	* lib/ephy-file-helpers.c: (ephy_file_helpers_shutdown):
+	* lib/ephy-langs.c: (load_iso_entries):
+	* lib/ephy-module.c: (ephy_module_load), (ephy_module_unload),
+	(ephy_module_new_object), (ephy_module_init),
+	(ephy_module_finalize):
+	* lib/ephy-node-db.c: (ephy_node_db_load_from_file),
+	(ephy_node_db_write_to_xml_valist):
+	* lib/ephy-shlib-loader.c: (ephy_shlib_loader_init),
+	(ephy_shlib_loader_finalize):
+	* lib/widgets/ephy-location-entry.c: (entry_style_set_cb),
+	(entry_realize_cb), (ephy_location_entry_construct_contents),
+	(ephy_location_entry_init):
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_cache_load),
+	(ephy_spinner_cache_get_images), (ephy_spinner_cache_init),
+	(ephy_spinner_cache_finalize):
+	* lib/widgets/ephy-tree-model-node.c:
+	(ephy_tree_model_node_update_node):
+	* lib/widgets/ephy-tree-model-sort.c:
+	(each_property_get_data_binder):
+	* src/bookmarks/ephy-bookmark-action.c: (create_tool_item),
+	(connect_proxy), (ephy_bookmark_action_finalize):
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(ephy_bookmark_properties_set_bookmark), (set_window_icon):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_update_menu), (provide_favicon):
+	* src/bookmarks/ephy-bookmarks-export.c:
+	(ephy_bookmarks_export_rdf), (ephy_bookmarks_export_mozilla):
+	* src/bookmarks/ephy-bookmarks-import.c: (ephy_bookmarks_import):
+	* src/bookmarks/ephy-bookmarks-menu.c:
+	(ephy_bookmarks_menu_rebuild), (do_update_cb),
+	(bookmarks_tree_changed_cb), (topics_added_cb),
+	(topics_removed_cb), (topic_child_changed_cb), (bookmark_added_cb),
+	(bookmark_removed_cb), (activate_cb),
+	(ephy_bookmarks_menu_finalize):
+	* src/bookmarks/ephy-bookmarks.c:
+	(ephy_bookmarks_get_toolbars_model), (ephy_bookmarks_save),
+	(ephy_bookmarks_finalize), (ephy_bookmarks_find_keyword),
+	(ephy_bookmarks_set_keyword), (ephy_bookmarks_unset_keyword):
+	* src/bookmarks/ephy-bookmarksbar-model.c: (save_changes_idle),
+	(load_toolbars), (ephy_bookmarksbar_model_init),
+	(ephy_bookmarksbar_model_dispose),
+	(ephy_bookmarksbar_model_finalize):
+	* src/bookmarks/ephy-bookmarksbar.c:
+	(ephy_bookmarksbar_action_request), (ephy_bookmarksbar_finalize):
+	* src/bookmarks/ephy-favorites-menu.c:
+	(ephy_favorites_menu_rebuild):
+	* src/bookmarks/ephy-new-bookmark.c: (ephy_new_bookmark_set_title):
+	* src/bookmarks/ephy-topic-action.c: (connect_proxy):
+	* src/bookmarks/ephy-topics-selector.c:
+	(ephy_topics_selector_set_bookmark):
+	* src/ephy-encoding-menu.c: (add_action):
+	* src/ephy-extensions-manager.c: (ephy_extensions_manager_load),
+	(ephy_extensions_manager_unload),
+	(ephy_extensions_manager_load_string), (get_loader_for_type),
+	(load_extension), (unload_extension), (sync_loaded_extensions),
+	(ephy_extensions_manager_load_dir), (ephy_extensions_manager_init),
+	(ephy_extensions_manager_startup),
+	(ephy_extensions_manager_finalize), (impl_attach_window),
+	(impl_detach_window), (impl_attach_tab), (impl_detach_tab):
+	* src/ephy-history-window.c: (setup_filters), (provide_favicon):
+	* src/ephy-link.c: (ephy_link_open):
+	* src/ephy-location-action.c: (user_changed_cb), (sync_address),
+	(ephy_location_action_set_address):
+	* src/ephy-navigation-action.c: (menu_activated_cb),
+	(connect_proxy):
+	* src/ephy-notebook.c: (ephy_notebook_finalize):
+	* src/ephy-session.c: (window_focus_in_event_cb),
+	(impl_attach_window), (impl_detach_window), (ephy_session_init),
+	(ephy_session_dispose), (ephy_session_finalize),
+	(ephy_session_autoresume), (ephy_session_close),
+	(ephy_session_save), (ephy_session_load),
+	(ephy_session_add_window), (ephy_session_remove_window):
+	* src/ephy-shell.c: (save_yourself_cb), (die_cb),
+	(ephy_shell_finalize), (ephy_shell_new_tab),
+	(ephy_shell_get_toolbars_model), (toolwindow_show_cb),
+	(toolwindow_hide_cb):
+	* src/ephy-tab.c: (popups_manager_add),
+	(popups_manager_add_window), (ephy_tab_get_popups_allowed),
+	(popups_manager_show_all), (popups_manager_hide_all),
+	(ephy_tab_finalize), (ephy_tab_address_cb),
+	(ephy_tab_zoom_changed_cb), (ephy_tab_new_window_cb),
+	(ephy_tab_visibility_cb), (ephy_tab_destroy_brsr_cb),
+	(ephy_tab_size_to_cb), (ephy_tab_dom_mouse_click_cb),
+	(ephy_tab_init):
+	* src/ephy-tabs-menu.c: (ephy_tabs_menu_update):
+	* src/ephy-toolbar.c: (sync_user_input_cb):
+	* src/ephy-toolbars-model.c: (save_changes_idle),
+	(ephy_toolbars_model_load):
+	* src/ephy-window.c: (ephy_window_destroy), (show_embed_popup),
+	(ephy_window_init), (ephy_window_finalize):
+	* src/pdm-dialog.c: (pdm_dialog_cookies_construct),
+	(cookie_added_cb), (cookie_changed_cb), (cookie_deleted_cb),
+	(cookies_cleared_cb), (pdm_dialog_passwords_construct),
+	(passwords_changed_cb):
+	* src/prefs-dialog.c: (fonts_language_changed_cb):
+
+	Add ; to all LOG statements, and adapt ephy-debug.h for
+	non-GNUC-varargs case.
+
 2005-01-28  Piers Cornwell  <piers@gnome.org>
                                                                                                                                                              
         * data/epiphany-lockdown.schemas.in:

@@ -279,7 +279,7 @@ menu_activated_cb (GtkMenuToolButton *button,
 {
 	GtkWidget *menu = NULL;
 
-	LOG ("menu_activated_cb dir %d", action->priv->direction)
+	LOG ("menu_activated_cb dir %d", action->priv->direction);
 
 	switch (action->priv->direction)
 	{
@@ -316,7 +316,7 @@ set_tooltip_cb (GtkMenuToolButton *proxy,
 static void
 connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
-	LOG ("Connect navigation action proxy")
+	LOG ("Connect navigation action proxy");
 
 	if (GTK_IS_MENU_TOOL_BUTTON (proxy))
 	{

@@ -177,7 +177,7 @@ mozilla_embed_event_init (MozillaEmbedEvent *event)
 {
 	event->priv = MOZILLA_EMBED_EVENT_GET_PRIVATE (event);
 
-	LOG ("MozillaEmbedEvent %p initialising", event)
+	LOG ("MozillaEmbedEvent %p initialising", event);
 
 	event->priv->dom_event = nsnull;
 	event->priv->props = g_hash_table_new_full (g_str_hash, g_str_equal,
@@ -194,7 +194,7 @@ mozilla_embed_event_finalize (GObject *object)
 	NS_IF_RELEASE (event->priv->dom_event);
 	event->priv->dom_event = nsnull;
 
-	LOG ("MozillaEmbedEvent %p finalised", object)
+	LOG ("MozillaEmbedEvent %p finalised", object);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

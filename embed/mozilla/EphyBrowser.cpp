@@ -117,12 +117,12 @@ static PRUnichar DOMModalDialogClosed[] = { 'D', 'O', 'M', 'M', 'o', 'd', 'a',
 EphyEventListener::EphyEventListener()
 : mOwner(nsnull)
 {
-	LOG ("EphyEventListener ctor (%p)", this)
+	LOG ("EphyEventListener ctor (%p)", this);
 }
 
 EphyEventListener::~EphyEventListener()
 {
-	LOG ("EphyEventListener dtor (%p)", this)
+	LOG ("EphyEventListener dtor (%p)", this);
 }
 
 NS_IMPL_ISUPPORTS1(EphyEventListener, nsIDOMEventListener)
@@ -341,12 +341,12 @@ EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 EphyContextMenuListener::EphyContextMenuListener()
 : mOwner(nsnull)
 {
-	LOG ("EphyContextMenuListener ctor (%p)", this)
+	LOG ("EphyContextMenuListener ctor (%p)", this);
 }
 
 EphyContextMenuListener::~EphyContextMenuListener()
 {
-	LOG ("EphyContextMenuListener dtor (%p)", this)
+	LOG ("EphyContextMenuListener dtor (%p)", this);
 }
 
 NS_IMPL_ISUPPORTS1(EphyContextMenuListener, nsIDOMContextMenuListener)
@@ -438,12 +438,12 @@ EphyBrowser::EphyBrowser ()
 , mContextMenuListener(nsnull)
 , mInitialized(PR_FALSE)
 {
-	LOG ("EphyBrowser ctor (%p)", this)
+	LOG ("EphyBrowser ctor (%p)", this);
 }
 
 EphyBrowser::~EphyBrowser ()
 {
-	LOG ("EphyBrowser dtor (%p)", this)
+	LOG ("EphyBrowser dtor (%p)", this);
 }
 
 nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)

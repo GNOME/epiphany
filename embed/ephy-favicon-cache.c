@@ -279,7 +279,7 @@ ephy_favicon_cache_finalize (GObject *object)
 {
 	EphyFaviconCache *cache = EPHY_FAVICON_CACHE (object);
 
-	LOG ("EphyFaviconCache finalising")
+	LOG ("EphyFaviconCache finalising");
 
 	g_hash_table_foreach_remove (cache->priv->downloads_hash,
 				     (GHRFunc) kill_download, cache);
@@ -326,7 +326,7 @@ favicon_download_completed_cb (EphyEmbedPersist *persist,
 	url = ephy_embed_persist_get_source (persist);
 	g_return_if_fail (url != NULL);
 
-	LOG ("Favicon cache download completed for %s", url)
+	LOG ("Favicon cache download completed for %s", url);
 
 	g_hash_table_remove (cache->priv->downloads_hash, url);
 
@@ -344,7 +344,7 @@ favicon_download_cancelled_cb (EphyEmbedPersist *persist,
 	url = ephy_embed_persist_get_source (persist);
 	g_return_if_fail (url != NULL);
 
-	LOG ("Favicon cache download cancelled %s", url)
+	LOG ("Favicon cache download cancelled %s", url);
 
 	g_hash_table_remove (cache->priv->downloads_hash, url);
 
@@ -365,7 +365,7 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 	EphyEmbedPersist *persist;
 	char *dest;
 
-	LOG ("Download favicon: %s", favicon_url)
+	LOG ("Download favicon: %s", favicon_url);
 
 	g_return_if_fail (EPHY_IS_FAVICON_CACHE (cache));
 	g_return_if_fail (favicon_url != NULL);
@@ -458,7 +458,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 		 ephy_node_get_property_string (icon, EPHY_NODE_FAVICON_PROP_FILENAME),
 		 NULL);
 
-	LOG ("Create pixbuf for %s", pix_file)
+	LOG ("Create pixbuf for %s", pix_file);
 
 	pixbuf = gdk_pixbuf_new_from_file (pix_file, NULL);
 

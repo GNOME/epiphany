@@ -85,7 +85,7 @@ ephy_module_load (GTypeModule *gmodule)
 	EphyModule *module = EPHY_MODULE (gmodule);
 	EphyModuleRegisterFunc register_func;
 
-	LOG ("Loading %s", module->path)
+	LOG ("Loading %s", module->path);
 
 	module->library = g_module_open (module->path, 0);
 
@@ -123,7 +123,7 @@ ephy_module_unload (GTypeModule *gmodule)
 {
 	EphyModule *module = EPHY_MODULE (gmodule);
 
-	LOG ("Unloading %s", module->path)
+	LOG ("Unloading %s", module->path);
 
 	g_module_close (module->library);
 
@@ -142,7 +142,7 @@ ephy_module_get_path (EphyModule *module)
 GObject *
 ephy_module_new_object (EphyModule *module)
 {
-	LOG ("Creating object of type %s", g_type_name (module->type))
+	LOG ("Creating object of type %s", g_type_name (module->type));
 
 	if (module->type == 0)
 	{
@@ -155,7 +155,7 @@ ephy_module_new_object (EphyModule *module)
 static void
 ephy_module_init (EphyModule *module)
 {
-	LOG ("EphyModule %p initialising", module)
+	LOG ("EphyModule %p initialising", module);
 }
 
 static void
@@ -163,7 +163,7 @@ ephy_module_finalize (GObject *object)
 {
 	EphyModule *module = EPHY_MODULE (object);
 
-	LOG ("EphyModule %p finalising", module)
+	LOG ("EphyModule %p finalising", module);
 
 	g_free (module->path);
 

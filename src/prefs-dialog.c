@@ -688,7 +688,7 @@ fonts_language_changed_cb (EphyDialog *dialog,
 
 	code = g_value_get_string (value);
 
-	LOG ("fonts language combo changed, new code '%s'", code)
+	LOG ("fonts language combo changed, new code '%s'", code);
 
 	setup_font_combo (dialog, "variable", code, VARIABLE_PROP);
 	setup_font_combo (dialog, "monospace", code, MONOSPACE_PROP);
@@ -1176,7 +1176,7 @@ language_editor_add_button_clicked_cb (GtkWidget *button,
 
 		g_object_add_weak_pointer
 			(G_OBJECT (pd->priv->add_lang_dialog),
-			(gpointer *) &pd->priv->add_lang_dialog);;
+			(gpointer *) &pd->priv->add_lang_dialog);
 	}
 
 	ephy_dialog_show (pd->priv->add_lang_dialog);

@@ -81,7 +81,7 @@ static void
 ephy_topics_selector_set_bookmark (EphyTopicsSelector *selector,
 				   EphyNode *bookmark)
 {
-	LOG ("Set bookmark")
+	LOG ("Set bookmark");
 
 	selector->priv->bookmark = bookmark;
 

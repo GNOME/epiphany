@@ -318,7 +318,7 @@ save_yourself_cb (GnomeClient *client,
 	EphySession *session;
 	char *tmp, *save_to;
 
-	LOG ("save_yourself_cb")
+	LOG ("save_yourself_cb");
 
 	tmp = g_build_filename (ephy_dot_dir (),
 				"session_gnome-XXXXXX",
@@ -350,7 +350,7 @@ die_cb (GnomeClient* client,
 {
 	EphySession *session;
 
-	LOG ("die_cb")
+	LOG ("die_cb");
 
 	session = EPHY_SESSION (ephy_shell_get_session (shell));
 	ephy_session_close (session);
@@ -479,27 +479,27 @@ ephy_shell_finalize (GObject *object)
 	g_assert (ephy_shell == NULL);
 
 	/* this will unload the extensions */
-	LOG ("Unref extension manager")
+	LOG ("Unref extension manager");
 	if (shell->priv->extensions_manager)
 	{
 		g_object_unref (shell->priv->extensions_manager);
 	}
 
 #ifdef ENABLE_DBUS
-	LOG ("Shutting down DBUS service")
+	LOG ("Shutting down DBUS service");
 	if (shell->priv->dbus_service)
 	{
 		g_object_unref (shell->priv->dbus_service);
 	}
 #endif
 
-	LOG ("Unref session manager")
+	LOG ("Unref session manager");
 	if (shell->priv->session)
 	{
 		g_object_unref (shell->priv->session);
 	}
 
-	LOG ("Unref toolbars model")
+	LOG ("Unref toolbars model");
 	if (shell->priv->toolbars_model)
 	if (shell->priv->toolbar_style_notifier_id != 0)
 	{
@@ -509,7 +509,7 @@ ephy_shell_finalize (GObject *object)
 		g_object_unref (shell->priv->toolbars_model);
 	}
 
-	LOG ("Unref fullscreen toolbars model")
+	LOG ("Unref fullscreen toolbars model");
 	if (shell->priv->fs_toolbars_model)
 	{
 		g_object_unref (shell->priv->fs_toolbars_model);
@@ -527,25 +527,25 @@ ephy_shell_finalize (GObject *object)
 		gtk_widget_destroy (GTK_WIDGET (shell->priv->history_window));
 	}
 
-	LOG ("Unref PDM Dialog")
+	LOG ("Unref PDM Dialog");
 	if (shell->priv->pdm_dialog)
 	{
 		g_object_unref (shell->priv->pdm_dialog);
 	}
 
-	LOG ("Unref prefs dialog")
+	LOG ("Unref prefs dialog");
 	if (shell->priv->prefs_dialog)
 	{
 		g_object_unref (shell->priv->prefs_dialog);
 	}
 
-	LOG ("Unref print setup dialog")
+	LOG ("Unref print setup dialog");
 	if (shell->priv->print_setup_dialog)
 	{
 		g_object_unref (shell->priv->print_setup_dialog);
 	}
 
-	LOG ("Unref bookmarks")
+	LOG ("Unref bookmarks");
 	if (shell->priv->bookmarks)
 	{
 		g_object_unref (shell->priv->bookmarks);
@@ -561,7 +561,7 @@ ephy_shell_finalize (GObject *object)
 		bonobo_object_unref (shell->priv->automation_factory);
 	}
 
-	LOG ("Ephy shell finalized")
+	LOG ("Ephy shell finalized");
 }
 
 
@@ -640,7 +640,7 @@ ephy_shell_new_tab (EphyShell *shell,
 	jump_to = (flags & EPHY_NEW_TAB_JUMP) != 0;
 
 	LOG ("Opening new tab parent-window %p parent-tab %p in-new-window:%s jump-to:%s",
-	     parent_window, previous_tab, in_new_window ? "t" : "f", jump_to ? "t" : "f")
+	     parent_window, previous_tab, in_new_window ? "t" : "f", jump_to ? "t" : "f");
 
 	if (!in_new_window && parent_window != NULL)
 	{
@@ -773,7 +773,7 @@ toolbar_style_notifier (GConfClient *client,
 GObject *
 ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
 {
-	LOG ("ephy_shell_get_toolbars_model fs=%d", fullscreen)
+	LOG ("ephy_shell_get_toolbars_model fs=%d", fullscreen);
 
 	if (fullscreen)
 	{
@@ -846,7 +846,7 @@ toolwindow_show_cb (GtkWidget *widget, EphyShell *es)
 {
 	EphySession *session;
 
-	LOG ("Ref shell for %s", G_OBJECT_TYPE_NAME (widget))
+	LOG ("Ref shell for %s", G_OBJECT_TYPE_NAME (widget));
 
 	session = EPHY_SESSION (ephy_shell_get_session (es));
 	ephy_session_add_window (ephy_shell->priv->session, GTK_WINDOW (widget));
@@ -858,7 +858,7 @@ toolwindow_hide_cb (GtkWidget *widget, EphyShell *es)
 {
 	EphySession *session;
 
-	LOG ("Unref shell for %s", G_OBJECT_TYPE_NAME (widget))
+	LOG ("Unref shell for %s", G_OBJECT_TYPE_NAME (widget));
 
 	session = EPHY_SESSION (ephy_shell_get_session (es));
 	ephy_session_remove_window (ephy_shell->priv->session, GTK_WINDOW (widget));

@@ -63,13 +63,13 @@
 
 GtkNSSClientAuthDialogs::GtkNSSClientAuthDialogs()
 {
-	LOG ("GtkNSSClientAuthDialogs ctor (%p)", this)
+	LOG ("GtkNSSClientAuthDialogs ctor (%p)", this);
 }
 
 
 GtkNSSClientAuthDialogs::~GtkNSSClientAuthDialogs()
 {
-	LOG ("GtkNSSClientAuthDialogs dtor (%p)", this)
+	LOG ("GtkNSSClientAuthDialogs dtor (%p)", this);
 }
 
 NS_IMPL_THREADSAFE_ISUPPORTS1 (GtkNSSClientAuthDialogs, 

@@ -62,18 +62,18 @@
 #ifdef MOZ_NSIMIMEINFO_NSACSTRING_
 GContentHandler::GContentHandler()
 {
-	LOG ("GContentHandler ctor (%p)", this)
+	LOG ("GContentHandler ctor (%p)", this);
 }
 #else
 GContentHandler::GContentHandler() : mMimeType(nsnull)
 {
-	LOG ("GContentHandler ctor (%p)", this)
+	LOG ("GContentHandler ctor (%p)", this);
 }
 #endif
 
 GContentHandler::~GContentHandler()
 {
-	LOG ("GContentHandler dtor (%p)", this)
+	LOG ("GContentHandler dtor (%p)", this);
 
 #ifndef MOZ_NSIMIMEINFO_NSACSTRING_
 	if (mMimeType)

@@ -1128,7 +1128,7 @@ provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 	icon_location = ephy_node_get_property_string
 		(node, EPHY_NODE_PAGE_PROP_ICON);
 
-	LOG ("Get favicon for %s", icon_location ? icon_location : "None")
+	LOG ("Get favicon for %s", icon_location ? icon_location : "None");
 
 	if (icon_location)
 	{

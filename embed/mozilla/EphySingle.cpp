@@ -46,7 +46,7 @@ NS_IMPL_ISUPPORTS1(EphySingle, nsIObserver)
 EphySingle::EphySingle()
 : mOwner(nsnull)
 {
-	LOG ("EphySingle ctor")
+	LOG ("EphySingle ctor");
 }
 
 nsresult
@@ -65,7 +65,7 @@ EphySingle::Init (EphyEmbedSingle *aOwner)
 
 	mOwner = aOwner;
 
-	LOG ("EphySingle::Init")
+	LOG ("EphySingle::Init");
 
 	return NS_OK;
 }
@@ -73,7 +73,7 @@ EphySingle::Init (EphyEmbedSingle *aOwner)
 nsresult
 EphySingle::Detach ()
 {
-	LOG ("EphySingle::Detach")
+	LOG ("EphySingle::Detach");
 
 	if (mObserverService)
 	{
@@ -89,7 +89,7 @@ EphySingle::Detach ()
 
 EphySingle::~EphySingle()
 {
-	LOG ("EphySingle dtor")
+	LOG ("EphySingle dtor");
 
 	mOwner = nsnull;
 }
@@ -98,7 +98,7 @@ nsresult
 EphySingle::EmitCookieNotification (const char *name,
 				    nsISupports *aSubject)
 {
-	LOG ("EmitCookieNotification %s", name)
+	LOG ("EmitCookieNotification %s", name);
 
 	nsCOMPtr<nsICookie> cookie = do_QueryInterface (aSubject);
 	NS_ENSURE_TRUE (cookie, NS_ERROR_FAILURE);
@@ -116,7 +116,7 @@ nsresult
 EphySingle::EmitPermissionNotification (const char *name,
 					nsISupports *aSubject)
 {
-	LOG ("EmitPermissionNotification %s", name)
+	LOG ("EmitPermissionNotification %s", name);
 
 	nsCOMPtr<nsIPermission> perm = do_QueryInterface (aSubject);
 	NS_ENSURE_TRUE (perm, NS_ERROR_FAILURE);
@@ -138,7 +138,7 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 {
 	nsresult rv = NS_OK;
 
-	LOG ("EphySingle::Observe topic %s", aTopic)
+	LOG ("EphySingle::Observe topic %s", aTopic);
 
 	if (strcmp (aTopic, "cookie-changed") == 0)
 	{
@@ -160,7 +160,7 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 		/* "cleared" */
 		else if (aData[0] == 'c' && aData[1] == 'l')
 		{
-			LOG ("EphySingle::cookie-changed::cleared")
+			LOG ("EphySingle::cookie-changed::cleared");
 
 			g_signal_emit_by_name (EPHY_COOKIE_MANAGER (mOwner), "cookies-cleared");
 		}
@@ -172,7 +172,7 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 	}
 	else if (strcmp (aTopic, "cookie-rejected") == 0)
 	{
-		LOG ("EphySingle::cookie-rejected")
+		LOG ("EphySingle::cookie-rejected");
 
 		nsCOMPtr<nsIURI> uri = do_QueryInterface (aSubject);
 		if (uri)
@@ -207,7 +207,7 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 		/* "cleared" */
 		else if (aData[0] == 'c' && aData[1] == 'l')
 		{
-			LOG ("EphySingle::perm-changed::cleared")
+			LOG ("EphySingle::perm-changed::cleared");
 
 			g_signal_emit_by_name (EPHY_PERMISSION_MANAGER (mOwner), "permissions-cleared");
 		}
@@ -240,7 +240,7 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 		rv = NS_ERROR_FAILURE;
 	}
 
-	LOG ("EphySingle::Observe %s", NS_SUCCEEDED (rv) ? "success" : "FAILURE")
+	LOG ("EphySingle::Observe %s", NS_SUCCEEDED (rv) ? "success" : "FAILURE");
 
 	return rv;
 }

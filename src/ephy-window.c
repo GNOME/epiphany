@@ -455,7 +455,7 @@ ephy_window_destroy (GtkObject *gtkobject)
 	EphyWindow *window = EPHY_WINDOW (gtkobject);
 	GSList *popups;
 
-	LOG ("EphyWindow destroy %p", window)
+	LOG ("EphyWindow destroy %p", window);
 
 	if (window->priv->closing == FALSE)
 	{
@@ -1728,7 +1728,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 
 	context = ephy_embed_event_get_context (event);
 
-	LOG ("show_embed_popup context %x", context)
+	LOG ("show_embed_popup context %x", context);
 
 	if ((context & EPHY_EMBED_CONTEXT_EMAIL_LINK) &&
 	    (context & EPHY_EMBED_CONTEXT_IMAGE))
@@ -2515,7 +2515,7 @@ ephy_window_init (EphyWindow *window)
 	EggToolbarsModel *model;
 	GError *error = NULL;
 
-	LOG ("EphyWindow initialising %p", window)
+	LOG ("EphyWindow initialising %p", window);
 
 	g_object_ref (ephy_shell);
 
@@ -2723,7 +2723,7 @@ ephy_window_finalize (GObject *object)
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 
-	LOG ("Ephy Window finalized %p", window)
+	LOG ("Ephy Window finalized %p", window);
 
 	g_object_unref (ephy_shell);
 }

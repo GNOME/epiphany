@@ -110,7 +110,7 @@ ephy_shlib_loader_init (EphyShlibLoader *loader)
 {
 	loader->priv = EPHY_SHLIB_LOADER_GET_PRIVATE (loader);
 
-	LOG ("EphyShlibLoader initialising")
+	LOG ("EphyShlibLoader initialising");
 }
 
 static void
@@ -118,7 +118,7 @@ ephy_shlib_loader_finalize (GObject *object)
 {
 	EphyShlibLoader *loader = EPHY_SHLIB_LOADER (object);
 
-	LOG ("EphyShlibLoader finalising")
+	LOG ("EphyShlibLoader finalising");
 
 	g_slist_foreach (loader->priv->data, (GFunc) free_loader_data, NULL);
 	g_slist_free (loader->priv->data);

@@ -184,7 +184,7 @@ ephy_spinner_cache_load (EphySpinnerCache *cache)
 	int grid_width, grid_height, x, y, size, h, w;
 	const char *icon;
 
-	LOG ("EphySpinnerCache loading")
+	LOG ("EphySpinnerCache loading");
 
 	ephy_spinner_cache_unload (cache);
 
@@ -334,7 +334,7 @@ ephy_spinner_cache_get_images (EphySpinnerCache *cache,
 	GList *element, *l;
 	int h, w;
 
-	LOG ("Getting animation images at size %d", size)
+	LOG ("Getting animation images at size %d", size);
 
 	if (cache->priv->images == NULL || cache->priv->originals == NULL)
 	{
@@ -388,7 +388,7 @@ ephy_spinner_cache_init (EphySpinnerCache *cache)
 {
 	cache->priv = EPHY_SPINNER_CACHE_GET_PRIVATE (cache);
 
-	LOG ("EphySpinnerCache initialising")
+	LOG ("EphySpinnerCache initialising");
 
 	/* FIXME: icon theme is per-screen, not global */
 	cache->priv->icon_theme = gtk_icon_theme_get_default ();
@@ -403,7 +403,7 @@ ephy_spinner_cache_finalize (GObject *object)
 {
 	EphySpinnerCache *cache = EPHY_SPINNER_CACHE (object); 
 
-	LOG ("EphySpinnerCache finalising")
+	LOG ("EphySpinnerCache finalising");
 
 	g_signal_handlers_disconnect_by_func
 		(cache->priv->icon_theme, G_CALLBACK(ephy_spinner_cache_load), cache);

@@ -139,7 +139,7 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *menu)
 	GPtrArray *children;
 	GtkUIManager *merge = GTK_UI_MANAGER (ephy_window_get_ui_manager (p->window));
 
-	LOG ("Rebuilding favorites menu")
+	LOG ("Rebuilding favorites menu");
 
 	START_PROFILER ("Rebuild favorites menu")
 

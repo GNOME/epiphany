@@ -316,7 +316,7 @@ load_iso_entries (int iso,
 	char *filename;
 	int ret = -1;
 
-	LOG ("Loading ISO-%d codes", iso)
+	LOG ("Loading ISO-%d codes", iso);
 
 	START_PROFILER ("Loading ISO codes")
 

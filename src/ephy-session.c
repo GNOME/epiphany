@@ -190,7 +190,7 @@ window_focus_in_event_cb (EphyWindow *window,
 			  GdkEventFocus *event,
 			  EphySession *session)
 {
-	LOG ("focus-in-event for window %p", window)
+	LOG ("focus-in-event for window %p", window);
 
 	g_return_val_if_fail (g_list_find (session->priv->windows, window) != NULL, FALSE);
 
@@ -211,7 +211,7 @@ impl_attach_window (EphyExtension *extension,
 	EphySession *session = EPHY_SESSION (extension);
 	GtkWidget *notebook;
 
-	LOG ("impl_attach_window")
+	LOG ("impl_attach_window");
 
 	session->priv->windows = g_list_append (session->priv->windows, window);
 	ephy_session_save (session, SESSION_CRASHED);
@@ -234,7 +234,7 @@ impl_detach_window (EphyExtension *extension,
 {
 	EphySession *session = EPHY_SESSION (extension);
 
-	LOG ("impl_detach_window")
+	LOG ("impl_detach_window");
 
 	session->priv->windows = g_list_remove (session->priv->windows, window);
 	ephy_session_save (session, SESSION_CRASHED);
@@ -266,7 +266,7 @@ ephy_session_init (EphySession *session)
 {
 	session->priv = EPHY_SESSION_GET_PRIVATE (session);
 
-	LOG ("EphySession initialising")
+	LOG ("EphySession initialising");
 
 	ensure_session_directory ();
 }
@@ -276,7 +276,7 @@ ephy_session_dispose (GObject *object)
 {
 	EphySession *session = EPHY_SESSION(object);
 
-	LOG ("EphySession disposing")
+	LOG ("EphySession disposing");
 
 	session_delete (session, SESSION_CRASHED);
 
@@ -288,7 +288,7 @@ ephy_session_finalize (GObject *object)
 {
 	EphySession *session = EPHY_SESSION (object);
 
-	LOG ("EphySession finalising")
+	LOG ("EphySession finalising");
 
 	/* FIXME: those should be NULL already!? */
 	g_list_free (session->priv->windows);
@@ -410,7 +410,7 @@ ephy_session_autoresume (EphySession *session)
 	char *saved_session;
 	gboolean retval = FALSE;
 
-	LOG ("ephy_session_autoresume")
+	LOG ("ephy_session_autoresume");
 
 	if (session->priv->windows != NULL || session->priv->tool_windows != NULL) return FALSE;
 
@@ -441,7 +441,7 @@ ephy_session_close (EphySession *session)
 {
 	GList *windows;
 
-	LOG ("ephy_session_close")
+	LOG ("ephy_session_close");
 
 	/* we have to ref the shell or else we may get finalised between
 	 * destroying the windows and destroying the tool windows
@@ -587,7 +587,7 @@ ephy_session_save (EphySession *session,
 		return TRUE;
 	}
 
-	LOG ("ephy_sesion_save %s", filename)
+	LOG ("ephy_sesion_save %s", filename);
 
 	if (session->priv->windows == NULL && session->priv->tool_windows == NULL)
 	{
@@ -752,7 +752,7 @@ ephy_session_load (EphySession *session,
 	GtkWidget *widget = NULL;
 	char *save_to;
 
-	LOG ("ephy_sesion_load %s", filename)
+	LOG ("ephy_sesion_load %s", filename);
 
 	save_to = get_session_filename (filename);
 
@@ -837,7 +837,7 @@ void
 ephy_session_add_window (EphySession *session,
 			 GtkWindow *window)
 {
-	LOG ("ephy_session_add_window %p", window)
+	LOG ("ephy_session_add_window %p", window);
 
 	session->priv->tool_windows =
 		g_list_append (session->priv->tool_windows, window);
@@ -857,7 +857,7 @@ void
 ephy_session_remove_window (EphySession *session,
 			    GtkWindow *window)
 {
-	LOG ("ephy_session_remove_window %p", window)
+	LOG ("ephy_session_remove_window %p", window);
 
 	session->priv->tool_windows =
 		g_list_remove (session->priv->tool_windows, window);

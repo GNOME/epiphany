@@ -69,12 +69,12 @@ MozDownload::MozDownload() :
 	mEmbedPersist(nsnull),
 	mDownloadState(EPHY_DOWNLOAD_INITIALISING)
 {
-	LOG ("MozDownload ctor (%p)", (void *) this)
+	LOG ("MozDownload ctor (%p)", (void *) this);
 }
 
 MozDownload::~MozDownload()
 {
-	LOG ("MozDownload dtor (%p)", (void *) this)
+	LOG ("MozDownload dtor (%p)", (void *) this);
 
 	NS_ASSERTION (!mEphyDownload, "MozillaDownload still alive!");
 }

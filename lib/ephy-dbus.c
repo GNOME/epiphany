@@ -116,7 +116,7 @@ session_filter_func (DBusConnection *connection,
 				    DBUS_INTERFACE_ORG_FREEDESKTOP_LOCAL,
 				    "Disconnected"))
 	{
-		LOG ("EphyDbus disconnected from session bus")
+		LOG ("EphyDbus disconnected from session bus");
 
 		dbus_connection_unref (dbus->priv->session_bus);
 		dbus->priv->session_bus = NULL;
@@ -140,13 +140,13 @@ system_filter_func (DBusConnection *connection,
 {
 	EphyDbus *dbus = EPHY_DBUS (user_data);
 
-	LOG ("EphyDbus filtering message from system bus")
+	LOG ("EphyDbus filtering message from system bus");
 
 	if (dbus_message_is_signal (message,
 				    DBUS_INTERFACE_ORG_FREEDESKTOP_LOCAL,
 				    "Disconnected"))
 	{
-		LOG ("EphyDbus disconnected from system bus")
+		LOG ("EphyDbus disconnected from system bus");
 
 		dbus_connection_unref (dbus->priv->system_bus);
 		dbus->priv->system_bus = NULL;
@@ -167,7 +167,7 @@ ephy_dbus_connect_to_system_bus (EphyDbus *dbus)
 	DBusConnection *bus;
 	DBusError	error;
 
-	LOG ("EphyDbus connecting to system DBUS")
+	LOG ("EphyDbus connecting to system DBUS");
 
 	dbus_error_init (&error);
 	bus = dbus_bus_get (DBUS_BUS_SYSTEM, &error);
@@ -200,7 +200,7 @@ ephy_dbus_connect_to_session_bus (EphyDbus *dbus)
 	DBusError       error;
 	DBusConnection *bus;
 
-	LOG ("EphyDbus connecting to session DBUS")
+	LOG ("EphyDbus connecting to session DBUS");
 
 	dbus_error_init (&error);
 	bus = dbus_bus_get (DBUS_BUS_SESSION, &error);
@@ -250,7 +250,7 @@ path_message_func (DBusConnection *connection,
 {
 	DBusHandlerResult result = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 
-	LOG ("EphyDbus filtering path messagefrom session bus")
+	LOG ("EphyDbus filtering path messagefrom session bus");
 
 	if (dbus_message_is_method_call (message, epiphany_dbus_service, "load"))
 	{
@@ -268,7 +268,7 @@ ephy_dbus_startup (EphyDbus *dbus)
 {
 	g_return_if_fail (EPHY_IS_DBUS (dbus));
 
-	LOG ("EphyDbus startup")
+	LOG ("EphyDbus startup");
 
 	ephy_dbus_connect_to_session_bus (dbus);
 	ephy_dbus_connect_to_system_bus (dbus);
@@ -279,7 +279,7 @@ ephy_dbus_shutdown (EphyDbus *dbus)
 {
 	g_return_if_fail (EPHY_IS_DBUS (dbus));
 
-	LOG ("EphyDbus shutdown")
+	LOG ("EphyDbus shutdown");
 
 	if (dbus->priv->reconnect_timeout_id != 0)
 	{
@@ -320,7 +320,7 @@ ephy_dbus_init (EphyDbus *dbus)
 {
 	dbus->priv = EPHY_DBUS_GET_PRIVATE (dbus);
 
-	LOG ("EphyDbus initialising")
+	LOG ("EphyDbus initialising");
 }
 
 static void
@@ -330,7 +330,7 @@ ephy_dbus_finalize (GObject *object)
 
 	ephy_dbus_shutdown (dbus);
 
-	LOG ("EphyDbus finalised")
+	LOG ("EphyDbus finalised");
 
 	parent_class->finalize (object);
 }

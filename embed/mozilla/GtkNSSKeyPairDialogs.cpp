@@ -71,12 +71,12 @@
 
 GtkNSSKeyPairDialogs::GtkNSSKeyPairDialogs ()
 {
-	LOG ("GtkNSSKeyPairDialogs ctor (%p)", this)
+	LOG ("GtkNSSKeyPairDialogs ctor (%p)", this);
 }
 
 GtkNSSKeyPairDialogs::~GtkNSSKeyPairDialogs ()
 {
-	LOG ("GtkNSSKeyPairDialogs dtor (%p)", this)
+	LOG ("GtkNSSKeyPairDialogs dtor (%p)", this);
 }
 
 NS_IMPL_ISUPPORTS1 (GtkNSSKeyPairDialogs, 

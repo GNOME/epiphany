@@ -329,7 +329,7 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 	char *tmp_file;
 	int ret;
 
-	LOG ("Exporting as RDF to %s", filename)
+	LOG ("Exporting as RDF to %s", filename);
 
 	START_PROFILER ("Exporting as RDF")
 
@@ -366,7 +366,7 @@ out:
 
 	STOP_PROFILER ("Exporting as RDF")
 
-	LOG ("Exporting as RDF %s.", ret >= 0 ? "succeeded" : "FAILED")
+	LOG ("Exporting as RDF %s.", ret >= 0 ? "succeeded" : "FAILED");
 }
 
 void
@@ -379,7 +379,7 @@ ephy_bookmarks_export_mozilla (EphyBookmarks *bookmarks,
 	char *tmp_file, *template;
 	int ret = -1;
 	
-	LOG ("Exporting as Mozilla to %s", filename)
+	LOG ("Exporting as Mozilla to %s", filename);
 
 	template = g_build_filename (g_get_tmp_dir (),
 				     "export-bookmarks-XXXXXX", NULL);
@@ -428,5 +428,5 @@ out:
 
 	STOP_PROFILER ("Exporting as Mozilla")
 	
-	LOG ("Exporting as Mozilla %s.", ret >= 0 ? "succeeded" : "FAILED")
+	LOG ("Exporting as Mozilla %s.", ret >= 0 ? "succeeded" : "FAILED");
 }

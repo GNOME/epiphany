@@ -1163,7 +1163,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	GtkWidget *focus_widget;
 	int num_bmk_selected;
 
-	LOG ("Update menu sensitivity")
+	LOG ("Update menu sensitivity");
 
 	bmk_focus = ephy_node_view_is_target
 		(EPHY_NODE_VIEW (editor->priv->bm_view));
@@ -1547,7 +1547,7 @@ provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 	icon_location = ephy_node_get_property_string
 		(node, EPHY_NODE_BMK_PROP_ICON);
 
-	LOG ("Get favicon for %s", icon_location ? icon_location : "None")
+	LOG ("Get favicon for %s", icon_location ? icon_location : "None");
 
 	if (icon_location)
 	{

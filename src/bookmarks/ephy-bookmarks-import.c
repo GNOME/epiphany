@@ -75,7 +75,7 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 
 	type = gnome_vfs_get_file_mime_type (filename, NULL, FALSE);
 
-	LOG ("Importing bookmarks of type %s", type ? type : "(null)")
+	LOG ("Importing bookmarks of type %s", type ? type : "(null)");
 
 	if (type == NULL)
 	{

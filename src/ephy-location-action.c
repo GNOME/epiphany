@@ -154,7 +154,7 @@ user_changed_cb (GtkWidget *proxy, EphyLocationAction *action)
 
 	address = ephy_location_entry_get_location (EPHY_LOCATION_ENTRY (proxy));
 
-	LOG ("user_changed_cb, new address %s", address)
+	LOG ("user_changed_cb, new address %s", address);
 
 	g_signal_handlers_block_by_func (action, G_CALLBACK (sync_address), proxy);
 	ephy_location_action_set_address (action, address);
@@ -169,7 +169,7 @@ sync_address (GtkAction *gaction,
 	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
 	EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (proxy);
 
-	LOG ("sync_address %s", action->priv->address)
+	LOG ("sync_address %s", action->priv->address);
 
 	g_signal_handlers_block_by_func (proxy, G_CALLBACK (user_changed_cb), action);
 	ephy_location_entry_set_location (lentry, action->priv->address);
@@ -703,7 +703,7 @@ ephy_location_action_set_address (EphyLocationAction *action,
 {
 	g_return_if_fail (EPHY_IS_LOCATION_ACTION (action));
 
-	LOG ("set_address %s", address)
+	LOG ("set_address %s", address);
 
 	g_free (action->priv->address);
 	action->priv->address = g_strdup (address);

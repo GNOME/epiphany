@@ -885,7 +885,7 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	GtkWidget *button;
 
-	LOG ("connect_proxy action %p, proxy %p", action, proxy)
+	LOG ("connect_proxy action %p, proxy %p", action, proxy);
 
 	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 

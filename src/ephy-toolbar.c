@@ -238,7 +238,7 @@ sync_user_input_cb (EphyLocationAction *action,
 	EphyTab *tab;
 	const char *address;
 
-	LOG ("sync_user_input_cb")
+	LOG ("sync_user_input_cb");
 
 	if (priv->updating_address) return;
 

@@ -219,7 +219,7 @@ ephy_bookmarks_get_toolbars_model (EphyBookmarks *eb)
 {
 	g_return_val_if_fail (EPHY_IS_BOOKMARKS (eb), NULL);
 
-	LOG ("ephy_bookmarks_get_toolbars_model")
+	LOG ("ephy_bookmarks_get_toolbars_model");
 
 	if (eb->priv->toolbars_model == NULL)
 	{
@@ -313,7 +313,7 @@ static void
 ephy_bookmarks_save (EphyBookmarks *eb)
 {
 
-	LOG ("Saving bookmarks")
+	LOG ("Saving bookmarks");
 
 	ephy_node_db_write_to_xml_safe
 		(eb->priv->db,
@@ -914,7 +914,7 @@ ephy_bookmarks_finalize (GObject *object)
 	ephy_bookmarks_save (eb);
 
 	/* have to do this before unreffing the nodes */
-        LOG ("Unref bookmarks toolbars model")
+        LOG ("Unref bookmarks toolbars model");
         if (eb->priv->toolbars_model != NULL)
         {
                 g_object_unref (eb->priv->toolbars_model);
@@ -930,7 +930,7 @@ ephy_bookmarks_finalize (GObject *object)
 	g_free (eb->priv->xml_file);
 	g_free (eb->priv->rdf_file);
 
-	LOG ("Bookmarks finalized")
+	LOG ("Bookmarks finalized");
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -1375,7 +1375,7 @@ ephy_bookmarks_find_keyword (EphyBookmarks *eb,
 
 	if (g_utf8_strlen (name, -1) == 0)
 	{
-		LOG ("Empty name, no keyword matches.")
+		LOG ("Empty name, no keyword matches.");
 		return NULL;
 	}
 
@@ -1435,7 +1435,7 @@ ephy_bookmarks_set_keyword (EphyBookmarks *eb,
 
 	if (ephy_node_has_child (eb->priv->notcategorized, bookmark))
 	{
-		LOG ("Remove from categorized bookmarks")
+		LOG ("Remove from categorized bookmarks");
 		ephy_node_remove_child
 			(eb->priv->notcategorized, bookmark);
 	}
@@ -1457,7 +1457,7 @@ ephy_bookmarks_unset_keyword (EphyBookmarks *eb,
 	if (!bookmark_is_categorized (eb, bookmark) &&
 	    !ephy_node_has_child (eb->priv->notcategorized, bookmark))
 	{
-		LOG ("Add to not categorized bookmarks")
+		LOG ("Add to not categorized bookmarks");
 		ephy_node_add_child
 			(eb->priv->notcategorized, bookmark);
 	}

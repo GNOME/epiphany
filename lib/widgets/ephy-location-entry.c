@@ -488,7 +488,7 @@ entry_style_set_cb (GtkWidget *widget,
 		    GtkStyle *previous_style,
 		    EphyLocationEntry *entry)
 {
-	LOG ("entry_style_set_cb")
+	LOG ("entry_style_set_cb");
 
 	modify_background (entry);
 }
@@ -497,7 +497,7 @@ static void
 entry_realize_cb (GtkWidget *widget,
 		  EphyLocationEntry *entry)
 {
-	LOG ("entry_realize_cb")
+	LOG ("entry_realize_cb");
 
 	modify_background (entry);
 }
@@ -508,7 +508,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 	EphyLocationEntryPrivate *priv = entry->priv;
 	GtkWidget *alignment, *frame, *hbox;
 
-	LOG ("EphyLocationEntry constructing contents %p", entry)
+	LOG ("EphyLocationEntry constructing contents %p", entry);
 
 	alignment = gtk_alignment_new (0.0, 0.5, 1.0, 0.0);
 	gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 1, 1);
@@ -582,7 +582,7 @@ ephy_location_entry_init (EphyLocationEntry *le)
 {
 	EphyLocationEntryPrivate *p;
 
-	LOG ("EphyLocationEntry initialising %p", le)
+	LOG ("EphyLocationEntry initialising %p", le);
 
 	p = EPHY_LOCATION_ENTRY_GET_PRIVATE (le);
 	le->priv = p;

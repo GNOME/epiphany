@@ -134,7 +134,7 @@ static void
 ephy_bookmark_properties_set_bookmark (EphyBookmarkProperties *selector,
 				       EphyNode *bookmark)
 {
-	LOG ("Set bookmark")
+	LOG ("Set bookmark");
 
 	selector->priv->bookmark = bookmark;
 
@@ -282,7 +282,7 @@ set_window_icon (EphyBookmarkProperties *editor)
 	icon_location = ephy_node_get_property_string
 		(editor->priv->bookmark, EPHY_NODE_BMK_PROP_ICON);
 
-	LOG ("Get favicon for %s", icon_location ? icon_location : "None")
+	LOG ("Get favicon for %s", icon_location ? icon_location : "None");
 
 	if (icon_location != NULL)
 	{

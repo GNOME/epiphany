@@ -77,7 +77,7 @@ EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmb
 , mDocument(aDocument)
 , mPostData(aPostData)
 {
-        LOG ("EphyHeaderSniffer ctor (%p)", this)
+        LOG ("EphyHeaderSniffer ctor (%p)", this);
 
         nsCOMPtr<nsIWindowWatcher> watcher
                 (do_GetService("@mozilla.org/embedcomp/window-watcher;1"));
@@ -92,7 +92,7 @@ EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmb
 
 EphyHeaderSniffer::~EphyHeaderSniffer()
 {
-	LOG ("EphyHeaderSniffer dtor (%p)", this)
+	LOG ("EphyHeaderSniffer dtor (%p)", this);
 
 	if (mSingle)
 	{
@@ -384,7 +384,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 
 nsresult EphyHeaderSniffer::InitiateDownload (nsILocalFile *aDestFile)
 {
-	LOG ("Initiating download")
+	LOG ("Initiating download");
 
 	return InitiateMozillaDownload (mDocument, mURL, aDestFile,
 					mContentType.get(), mOriginalURI, mEmbedPersist,

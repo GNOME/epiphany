@@ -290,7 +290,7 @@ add_action (EphyNode *encodings, EphyNode *node, EphyEncodingMenu *menu)
 	title = ephy_node_get_property_string
 			(node, EPHY_NODE_ENCODING_PROP_TITLE);
 
-	LOG ("add_action for encoding '%s'", encoding)
+	LOG ("add_action for encoding '%s'", encoding);
 
 	g_snprintf (name, sizeof (name), "Encoding%s", encoding);
 

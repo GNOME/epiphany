@@ -232,7 +232,7 @@ ephy_bookmarksbar_model_has_bookmark (EphyBookmarksBarModel *model,
 static gboolean
 save_changes_idle (EphyBookmarksBarModel *model)
 {
-	LOG ("Saving bookmarks toolbars model")
+	LOG ("Saving bookmarks toolbars model");
 
 	egg_toolbars_model_save
 		(EGG_TOOLBARS_MODEL (model),
@@ -418,7 +418,7 @@ load_toolbars (EphyBookmarksBarModel *model)
 	gboolean success = FALSE;
 
 	success = egg_toolbars_model_load (eggmodel, model->priv->xml_file);
-	LOG ("Loading the toolbars was %ssuccessful", success ? "" : "un")
+	LOG ("Loading the toolbars was %ssuccessful", success ? "" : "un");
 
 	/* Try migration first: load the old layout, and remove every toolbar
 	 * except the BookmarksBar toolbar
@@ -452,7 +452,7 @@ load_toolbars (EphyBookmarksBarModel *model)
 			}
 		}
 
-		LOG ("Migration was %ssuccessful", success ? "" : "un")
+		LOG ("Migration was %ssuccessful", success ? "" : "un");
 	}
 
 	/* Load default set */
@@ -460,7 +460,7 @@ load_toolbars (EphyBookmarksBarModel *model)
 	{
 		egg_toolbars_model_load
 			(eggmodel, ephy_file ("epiphany-bookmarksbar.xml"));	
-		LOG ("Loading the default toolbars was %ssuccessful", success ? "" : "un")
+		LOG ("Loading the default toolbars was %ssuccessful", success ? "" : "un");
 	}
 	
 	/* Ensure that we have a BookmarksBar */
@@ -476,7 +476,7 @@ ephy_bookmarksbar_model_init (EphyBookmarksBarModel *model)
 {
 	model->priv = EPHY_BOOKMARKSBAR_MODEL_GET_PRIVATE (model);
 
-	LOG ("EphyBookmarksBarModel initialising")
+	LOG ("EphyBookmarksBarModel initialising");
 
 	model->priv->xml_file = g_build_filename (ephy_dot_dir (),
 						  EPHY_BOOKMARKSBARS_XML_FILE,
@@ -497,7 +497,7 @@ ephy_bookmarksbar_model_dispose (GObject *object)
 {
 	EphyBookmarksBarModel *model = EPHY_BOOKMARKSBAR_MODEL (object);
 
-	LOG ("EphyBookmarksBarModel disposing")
+	LOG ("EphyBookmarksBarModel disposing");
 
 	if (model->priv->timeout != 0)
 	{
@@ -517,7 +517,7 @@ ephy_bookmarksbar_model_finalize (GObject *object)
 
 	g_free (model->priv->xml_file);
 
-	LOG ("EphyBookmarksBarModel finalised")
+	LOG ("EphyBookmarksBarModel finalised");
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

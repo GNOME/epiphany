@@ -494,7 +494,7 @@ popups_manager_add (EphyTab *tab,
 	PopupInfo *popup;
 
 	LOG ("popups_manager_add: tab %p, url %s, features %s",
-	     tab, url, features)
+	     tab, url, features);
 
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
@@ -549,7 +549,7 @@ static void
 popups_manager_add_window (EphyTab *tab,
 			   EphyWindow *window)
 {
-	LOG ("popups_manager_add_window: tab %p, window %p", tab, window)
+	LOG ("popups_manager_add_window: tab %p, window %p", tab, window);
 
 	g_return_if_fail (EPHY_IS_TAB (tab));
 	g_return_if_fail (EPHY_IS_WINDOW (window));
@@ -604,7 +604,7 @@ ephy_tab_get_popups_allowed (EphyTab *tab)
 
 	g_free (location);
 
-	LOG ("ephy_tab_get_popups_allowed: tab %p, allowed: %d", tab, allow)
+	LOG ("ephy_tab_get_popups_allowed: tab %p, allowed: %d", tab, allow);
 
 	return allow;
 }
@@ -630,7 +630,7 @@ popups_manager_show (PopupInfo *popup,
 static void
 popups_manager_show_all (EphyTab *tab)
 {
-	LOG ("popup_blocker_show_all: tab %p", tab)
+	LOG ("popup_blocker_show_all: tab %p", tab);
 
 	g_slist_foreach (tab->priv->hidden_popups,
 			 (GFunc) popups_manager_show, tab);
@@ -687,7 +687,7 @@ popups_manager_hide (EphyWindow *window,
 static void
 popups_manager_hide_all (EphyTab *tab)
 {
-	LOG ("popup_blocker_hide_all: tab %p", tab)
+	LOG ("popup_blocker_hide_all: tab %p", tab);
 
 	g_slist_foreach (tab->priv->shown_popups,
 			 (GFunc) popups_manager_hide, tab);
@@ -777,7 +777,7 @@ ephy_tab_finalize (GObject *object)
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 
-	LOG ("EphyTab finalized %p", tab)
+	LOG ("EphyTab finalized %p", tab);
 }
 
 static gboolean
@@ -1049,7 +1049,7 @@ ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 {
 	const char *uv_address;
 
-	LOG ("ephy_tab_address_cb tab %p address %s", tab, address)
+	LOG ("ephy_tab_address_cb tab %p address %s", tab, address);
 
 	/* Do not expose about:blank to the user, an empty address
 	   bar will do better */
@@ -1125,7 +1125,7 @@ ephy_tab_zoom_changed_cb (EphyEmbed *embed, float zoom, EphyTab *tab)
 {
 	char *address;
 
-	LOG ("ephy_tab_zoom_changed_cb tab %p zoom %f", tab, zoom)
+	LOG ("ephy_tab_zoom_changed_cb tab %p zoom %f", tab, zoom);
 
 	ephy_tab_set_zoom (tab, zoom);
 
@@ -1335,7 +1335,7 @@ ephy_tab_new_window_cb (EphyEmbed *embed,
 	EphyWindow *window;
 
 	LOG ("ephy_tab_new_window_cb tab %p with parent %p chrome %d",
-	     tab, ((GtkWidget *) tab)->parent, chromemask)
+	     tab, ((GtkWidget *) tab)->parent, chromemask);
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME))
 	{
@@ -1376,7 +1376,7 @@ ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
 			EphyTab *tab)
 {
 	LOG ("ephy_tab_visibility_cb tab %p visibility %d",
-	     tab, visibility)
+	     tab, visibility);
 
 	if (visibility)
 	{
@@ -1401,7 +1401,7 @@ ephy_tab_destroy_brsr_cb (EphyEmbed *embed, EphyTab *tab)
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	LOG ("ephy_tab_destroy_browser_cb tab %p parent %p",
-	     tab, ((GtkWidget *) tab)->parent)
+	     tab, ((GtkWidget *) tab)->parent);
 
 	window = ephy_tab_get_window (tab);
 	g_return_if_fail (window != NULL);
@@ -1419,7 +1419,7 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 	GtkWidget *notebook;
 	EphyWindow *window;
 
-	LOG ("ephy_tab_size_to_cb tab %p width %d height %d", tab, width, height)
+	LOG ("ephy_tab_size_to_cb tab %p width %d height %d", tab, width, height);
 
 	tab->priv->width = width;
 	tab->priv->height = height;
@@ -1536,7 +1536,7 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	modifier = ephy_embed_event_get_modifier (event);
 
 	LOG ("ephy_tab_dom_mouse_click_cb: button %d, context %x, modifier %x",
-	     button, context, modifier)
+	     button, context, modifier);
 
 	with_control = (modifier & GDK_CONTROL_MASK) != 0;
 	with_shift = (modifier & GDK_SHIFT_MASK) != 0;
@@ -1619,7 +1619,7 @@ ephy_tab_init (EphyTab *tab)
 	EphyFaviconCache *cache;
 	char *id;
 
-	LOG ("EphyTab initialising %p", tab)
+	LOG ("EphyTab initialising %p", tab);
 
 	tab->priv = EPHY_TAB_GET_PRIVATE (tab);
 

@@ -229,7 +229,7 @@ ephy_file_helpers_shutdown (void)
 
 	if (mime_table != NULL)
 	{
-		LOG ("Destroying mime type hashtable")
+		LOG ("Destroying mime type hashtable");
 		g_hash_table_destroy (mime_table);
 		mime_table = NULL;
 	}

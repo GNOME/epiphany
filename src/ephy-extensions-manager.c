@@ -167,7 +167,7 @@ ephy_extensions_manager_load (EphyExtensionsManager *manager,
 	g_return_if_fail (EPHY_IS_EXTENSIONS_MANAGER (manager));
 	g_return_if_fail (identifier != NULL);
 
-	LOG ("Adding '%s' to extensions", identifier)
+	LOG ("Adding '%s' to extensions", identifier);
 
 	gconf_exts = eel_gconf_get_string_list (CONF_LOADED_EXTENSIONS);
 
@@ -203,7 +203,7 @@ ephy_extensions_manager_unload (EphyExtensionsManager *manager,
 	g_return_if_fail (EPHY_IS_EXTENSIONS_MANAGER (manager));
 	g_return_if_fail (identifier != NULL);
 
-	LOG ("Removing '%s' from extensions", identifier)
+	LOG ("Removing '%s' from extensions", identifier);
 
 	gconf_exts = eel_gconf_get_string_list (CONF_LOADED_EXTENSIONS);
 
@@ -371,7 +371,7 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 	LocalisedString description = { NULL, G_MAXUINT };
 	LocalisedString name = { NULL, G_MAXUINT };
 
-	LOG ("Loading description file for '%s'", identifier)
+	LOG ("Loading description file for '%s'", identifier);
 
 	if (g_list_find_custom (manager->priv->data, identifier,
 				(GCompareFunc) find_extension_info) != NULL)
@@ -732,7 +732,7 @@ get_loader_for_type (EphyExtensionsManager *manager,
 	EphyLoader *shlib_loader;
 	GObject *loader;
 
-	LOG ("Looking for loader for type '%s'", type)
+	LOG ("Looking for loader for type '%s'", type);
 
 	l = g_list_find_custom (manager->priv->factories, type,
 				(GCompareFunc) find_loader);
@@ -811,7 +811,7 @@ load_extension (EphyExtensionsManager *manager,
 
 	g_return_if_fail (info->extension == NULL);
 
-	LOG ("Loading extension '%s'", info->info.identifier)
+	LOG ("Loading extension '%s'", info->info.identifier);
 
 	/* don't try again */
 	if (info->load_failed) return;
@@ -886,7 +886,7 @@ unload_extension (EphyExtensionsManager *manager,
 	g_return_if_fail (info->loader != NULL);
 	g_return_if_fail (info->extension != NULL || info->load_failed);
 
-	LOG ("Unloading extension '%s'", info->info.identifier)
+	LOG ("Unloading extension '%s'", info->info.identifier);
 
 	if (info->load_failed) return;
 
@@ -926,7 +926,7 @@ sync_loaded_extensions (EphyExtensionsManager *manager)
 	gboolean active;
 	ExtensionInfo *info;
 
-	LOG ("Synching changed list of active extensions")
+	LOG ("Synching changed list of active extensions");
 
 	client = gconf_client_get_default ();
 	g_return_if_fail (client != NULL);
@@ -958,7 +958,7 @@ sync_loaded_extensions (EphyExtensionsManager *manager)
 		LOG ("Extension '%s' is %sactive and %sloaded",
 		     info->info.identifier,
 		     active ? "" : "not ",
-		     info->info.active ? "" : "not ")
+		     info->info.active ? "" : "not ");
 
 		if (active != info->info.active)
 		{
@@ -1112,7 +1112,7 @@ ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
 	GnomeVFSMonitorHandle *monitor;
 	GnomeVFSResult res;
 
-	LOG ("Scanning directory '%s'", path)
+	LOG ("Scanning directory '%s'", path);
 
 	START_PROFILER ("Scanning directory")
 
@@ -1222,7 +1222,7 @@ ephy_extensions_manager_init (EphyExtensionsManager *manager)
 {
 	manager->priv = EPHY_EXTENSIONS_MANAGER_GET_PRIVATE (manager);
 
-	LOG ("EphyExtensionsManager initialising")
+	LOG ("EphyExtensionsManager initialising");
 }
 
 void
@@ -1232,7 +1232,7 @@ ephy_extensions_manager_startup (EphyExtensionsManager *manager)
 
 	g_return_if_fail (EPHY_IS_EXTENSIONS_MANAGER (manager));
 
-	LOG ("EphyExtensionsManager startup")
+	LOG ("EphyExtensionsManager startup");
 
 #ifdef ENABLE_VALIDATION
 	init_schema_ctxt (manager);
@@ -1259,7 +1259,7 @@ ephy_extensions_manager_finalize (GObject *object)
 	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (object);
 	EphyExtensionsManagerPrivate *priv = manager->priv;
 
-	LOG ("EphyExtensionsManager finalising")
+	LOG ("EphyExtensionsManager finalising");
 
 	eel_gconf_notification_remove (manager->priv->active_extensions_notifier_id);
 
@@ -1305,7 +1305,7 @@ impl_attach_window (EphyExtension *extension,
 {
 	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (extension);
 
-	LOG ("Attach")
+	LOG ("Attach");
 
 	g_list_foreach (manager->priv->extensions,
 			(GFunc) attach_extension_to_window, window);
@@ -1320,7 +1320,7 @@ impl_detach_window (EphyExtension *extension,
 	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (extension);
 	GList *tabs, *l;
 
-	LOG ("Detach")
+	LOG ("Detach");
 
 	manager->priv->windows = g_list_remove (manager->priv->windows, window);
 

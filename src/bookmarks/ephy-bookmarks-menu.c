@@ -433,12 +433,12 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 
 	if (menu->priv->needs_update == FALSE)
 	{
-		LOG ("No update required")
+		LOG ("No update required");
 	
 		return;
 	}
 
-	LOG ("Rebuilding bookmarks menu")
+	LOG ("Rebuilding bookmarks menu");
 
 	ephy_bookmarks_menu_clean (menu);
 
@@ -500,7 +500,7 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 static gboolean
 do_update_cb (EphyBookmarksMenu *menu)
 {
-	LOG ("do_update_cb")
+	LOG ("do_update_cb");
 
 	ephy_bookmarks_menu_rebuild (menu);
 	menu->priv->update_tag = 0;
@@ -574,7 +574,7 @@ static void
 bookmarks_tree_changed_cb (EphyBookmarks *bookmarks,
 			   EphyBookmarksMenu *menu)
 {
-	LOG ("bookmarks_tree_changed_cb")
+	LOG ("bookmarks_tree_changed_cb");
 
 	ephy_bookmarks_menu_maybe_update (menu);
 }
@@ -584,7 +584,7 @@ topics_added_cb (EphyNode *keywords,
 		 EphyNode *bmk,
 		 EphyBookmarksMenu *menu)
 {
-	LOG ("topics_added_cb")
+	LOG ("topics_added_cb");
 
 	ephy_bookmarks_menu_maybe_update (menu);
 }
@@ -595,7 +595,7 @@ topics_removed_cb (EphyNode *keywords,
 		   guint old_index,
 		   EphyBookmarksMenu *menu)
 {
-	LOG ("topics_removed_cb")
+	LOG ("topics_removed_cb");
 
 	ephy_bookmarks_menu_maybe_update (menu);
 }
@@ -607,7 +607,7 @@ topic_child_changed_cb (EphyNode *node,
 			EphyBookmarksMenu *menu)
 {
 	LOG ("topic_child_changed_cb id=%d property=%d",
-	     ephy_node_get_id (child), property_id)
+	     ephy_node_get_id (child), property_id);
 
 	if (property_id == EPHY_NODE_KEYWORD_PROP_NAME)
 	{
@@ -623,7 +623,7 @@ bookmark_added_cb (EphyNode *bookmarks,
 		   EphyNode *bmk,
 		   EphyBookmarksMenu *menu)
 {
-	LOG ("bookmark_added_cb id=%d", ephy_node_get_id (bmk))
+	LOG ("bookmark_added_cb id=%d", ephy_node_get_id (bmk));
 
 	if (menu->priv->bmk_actions != NULL)
 	{
@@ -656,7 +656,7 @@ bookmark_removed_cb (EphyNode *bookmarks,
 		     guint old_index,
 		     EphyBookmarksMenu *menu)
 {
-	LOG ("bookmark_removed_cb id=%d", ephy_node_get_id (bmk))
+	LOG ("bookmark_removed_cb id=%d", ephy_node_get_id (bmk));
 
 	if (menu->priv->bmk_actions != NULL)
 	{
@@ -675,7 +675,7 @@ static void
 activate_cb (GtkAction *action,
 	     EphyBookmarksMenu *menu)
 {
-	LOG ("activate_cb")
+	LOG ("activate_cb");
 
 	ephy_bookmarks_menu_rebuild (menu);
 }
@@ -762,7 +762,7 @@ ephy_bookmarks_menu_finalize (GObject *o)
 
 	g_free (p->path);
 
-	LOG ("EphyBookmarksMenu finalised %p", o);
+	LOG ("EphyBookmarksMenu finalised %p", o);;
 
 	G_OBJECT_CLASS (parent_class)->finalize (o);
 }

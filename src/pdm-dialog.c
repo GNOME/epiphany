@@ -382,7 +382,7 @@ pdm_dialog_cookies_construct (PdmActionInfo *info)
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
 
-	LOG ("pdm_dialog_cookies_construct")
+	LOG ("pdm_dialog_cookies_construct");
 
 	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
 			(EPHY_DIALOG (dialog), properties[PROP_COOKIES_TREEVIEW].id));
@@ -486,7 +486,7 @@ cookie_added_cb (EphyCookieManager *manager,
 {
 	PdmActionInfo *info = dialog->priv->cookies;
 	
-	LOG ("cookie_added_cb")
+	LOG ("cookie_added_cb");
 
 	info->add (info, (gpointer) ephy_cookie_copy (cookie));
 }
@@ -499,7 +499,7 @@ cookie_changed_cb (EphyCookieManager *manager,
 	PdmActionInfo *info = dialog->priv->cookies;
 	GtkTreeIter iter;
 
-	LOG ("cookie_changed_cb")
+	LOG ("cookie_changed_cb");
 
 	if (cookie_to_iter (info->model, cookie, &iter))
 	{
@@ -520,7 +520,7 @@ cookie_deleted_cb (EphyCookieManager *manager,
 	PdmActionInfo *info = dialog->priv->cookies;
 	GtkTreeIter iter;
 
-	LOG ("cookie_deleted_cb")
+	LOG ("cookie_deleted_cb");
 
 	if (cookie_to_iter (info->model, cookie, &iter))
 	{
@@ -538,7 +538,7 @@ cookies_cleared_cb (EphyCookieManager *manager,
 {
 	PdmActionInfo *info = dialog->priv->cookies;
 
-	LOG ("cookies_cleared_cb")
+	LOG ("cookies_cleared_cb");
 
 	gtk_list_store_clear (GTK_LIST_STORE (info->model));
 }
@@ -631,7 +631,7 @@ pdm_dialog_passwords_construct (PdmActionInfo *info)
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
 
-	LOG ("pdm_dialog_passwords_construct")
+	LOG ("pdm_dialog_passwords_construct");
 
 	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
 			(EPHY_DIALOG(dialog), properties[PROP_PASSWORDS_TREEVIEW].id));
@@ -686,7 +686,7 @@ static void
 passwords_changed_cb (EphyPasswordManager *manager,
 		      PdmDialog *dialog)
 {
-	LOG ("passwords changed")
+	LOG ("passwords changed");
 
 	/* since the callback doesn't carry any information about what
 	 * exactly has changed, we have to rebuild the list from scratch.

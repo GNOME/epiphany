@@ -128,7 +128,7 @@ ephy_file_chooser_finalize (GObject *object)
 
 	g_free (dialog->priv->persist_key);
 
-	LOG ("EphyFileChooser finalised")
+	LOG ("EphyFileChooser finalised");
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

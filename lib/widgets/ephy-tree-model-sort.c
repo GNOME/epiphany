@@ -206,7 +206,7 @@ each_property_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 
 		g_return_if_fail (base_data != NULL);
 
-		LOG ("Data get %s (%s)", base_data, extra_data)
+		LOG ("Data get %s (%s)", base_data, extra_data);
 
 		iteratee (base_data, extra_data, data);
 

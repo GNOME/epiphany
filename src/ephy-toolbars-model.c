@@ -73,7 +73,7 @@ ephy_toolbars_model_get_type (void)
 static gboolean
 save_changes_idle (EphyToolbarsModel *model)
 {
-	LOG ("Saving toolbars model")
+	LOG ("Saving toolbars model");
 
 	egg_toolbars_model_save
 		(EGG_TOOLBARS_MODEL (model),
@@ -157,7 +157,7 @@ ephy_toolbars_model_load (EphyToolbarsModel *model)
 	gboolean success;
 
 	success = egg_toolbars_model_load (eggmodel, model->priv->xml_file);
-	LOG ("Loading the toolbars was %ssuccessful", success ? "" : "un")
+	LOG ("Loading the toolbars was %ssuccessful", success ? "" : "un");
 
 	/* maybe an old format, try to migrate: load the old layout, and
 	 * remove the BookmarksBar toolbar
@@ -182,7 +182,7 @@ ephy_toolbars_model_load (EphyToolbarsModel *model)
 			}
 		}
 
-		LOG ("Migration was %ssuccessful", success ? "" : "un")
+		LOG ("Migration was %ssuccessful", success ? "" : "un");
 	}
 
 	/* Still no success, load the default toolbars */
@@ -190,7 +190,7 @@ ephy_toolbars_model_load (EphyToolbarsModel *model)
 	{
 		success = egg_toolbars_model_load
 				(eggmodel, ephy_file ("epiphany-toolbar.xml"));
-		LOG ("Loading the default toolbars was %ssuccessful", success ? "" : "un")
+		LOG ("Loading the default toolbars was %ssuccessful", success ? "" : "un");
 	}
 
 	/* Ensure we have at least 1 toolbar */

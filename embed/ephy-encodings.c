@@ -232,7 +232,7 @@ ephy_encodings_finalize (GObject *object)
 
 	g_object_unref (encodings->priv->db);
 
-	LOG ("EphyEncodings finalised")
+	LOG ("EphyEncodings finalised");
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -481,7 +481,7 @@ ephy_encodings_init (EphyEncodings *encodings)
 
 	encodings->priv = EPHY_ENCODINGS_GET_PRIVATE (encodings);
 
-	LOG ("EphyEncodings initialising")
+	LOG ("EphyEncodings initialising");
 
 	db = ephy_node_db_new ("EncodingsDB");
 	encodings->priv->db = db;

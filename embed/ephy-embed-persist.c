@@ -438,7 +438,7 @@ ephy_embed_persist_init (EphyEmbedPersist *persist)
 {
 	persist->priv = EPHY_EMBED_PERSIST_GET_PRIVATE (persist);
 
-	LOG ("EphyEmbedPersist initialising %p", persist)
+	LOG ("EphyEmbedPersist initialising %p", persist);
 
 	persist->priv->max_size = -1;
 }
@@ -453,7 +453,7 @@ ephy_embed_persist_finalize (GObject *object)
 	g_free (persist->priv->fc_title);
 	g_free (persist->priv->persist_key);
 
-	LOG ("EphyEmbedPersist finalised %p", object)
+	LOG ("EphyEmbedPersist finalised %p", object);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

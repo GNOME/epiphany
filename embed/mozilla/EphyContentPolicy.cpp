@@ -43,7 +43,7 @@ NS_IMPL_ISUPPORTS1(EphyContentPolicy, nsIContentPolicy)
 
 EphyContentPolicy::EphyContentPolicy()
 {
-	LOG ("EphyContentPolicy ctor (%p)", this)
+	LOG ("EphyContentPolicy ctor (%p)", this);
 
 	mLocked = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_UNSAFE_PROTOCOLS);
 
@@ -57,7 +57,7 @@ EphyContentPolicy::EphyContentPolicy()
 
 EphyContentPolicy::~EphyContentPolicy()
 {
-	LOG ("EphyContentPolicy dtor (%p)", this)
+	LOG ("EphyContentPolicy dtor (%p)", this);
 
 	g_slist_foreach (mSafeProtocols, (GFunc) g_free, NULL);
 	g_slist_free (mSafeProtocols);
@@ -208,7 +208,7 @@ NS_IMETHODIMP EphyContentPolicy::ShouldProcess(PRInt32 contentType,
 					       PRBool *_retval)
 {
 	/* This is never called. */
-	LOG ("ShouldProcess: this is quite unexpected!")
+	LOG ("ShouldProcess: this is quite unexpected!");
 
 	*_retval = PR_TRUE;
 	return NS_OK;

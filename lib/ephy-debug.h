@@ -32,13 +32,25 @@ G_BEGIN_DECLS
 #define DISABLE_PROFILING
 #endif
 
+#if defined(G_HAVE_GNUC_VARARGS)
+
 #ifdef DISABLE_LOGGING
-#define LOG(msg, args...)
+#define LOG(msg, args...) G_STMT_START { } G_STMT_END
 #else
-#define LOG(msg, args...)						\
-g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,				\
-       "[ %s ] " msg,						\
-       __FILE__ , ## args);
+#define LOG(msg, args...)			\
+g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,		\
+       "[ %s ] " msg,				\
+       __FILE__ , ## args)
+#endif
+
+#elif defined(G_HAVE_ISO_VARARGS)
+
+#define LOG(...) G_STMT_START { } G_STMT_END
+
+#else /* no varargs macros */
+
+static void LOG(const char *format, ...) {}
+
 #endif
 
 #ifdef DISABLE_PROFILING

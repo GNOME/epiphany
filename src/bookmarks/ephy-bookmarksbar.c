@@ -181,7 +181,7 @@ ephy_bookmarksbar_action_request (EggEditableToolbar *eggtoolbar,
 	bmks = ephy_bookmarks_get_bookmarks (toolbar->priv->bookmarks);
 	topics = ephy_bookmarks_get_keywords (toolbar->priv->bookmarks);
 
-	LOG ("Action request for action '%s'", name)
+	LOG ("Action request for action '%s'", name);
 
 	if (g_str_has_prefix (name, "GoBookmark-"))
 	{
@@ -295,7 +295,7 @@ ephy_bookmarksbar_finalize (GObject *object)
 		 G_CALLBACK (toolbar_added_cb),
 		 toolbar);
 
-	LOG ("EphyBookmarksBar %p finalised", object)
+	LOG ("EphyBookmarksBar %p finalised", object);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

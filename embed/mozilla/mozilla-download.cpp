@@ -226,7 +226,7 @@ mozilla_download_finalize (GObject *object)
 
 	NS_RELEASE (download->priv->moz_download);
 
-	LOG ("MozillaDownload %p finalised", object)
+	LOG ("MozillaDownload %p finalised", object);
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -306,7 +306,7 @@ mozilla_download_class_init (MozillaDownloadClass *klass)
 static void
 mozilla_download_init (MozillaDownload *download)
 {
-	LOG ("MozillaDownload %p initialising", download)
+	LOG ("MozillaDownload %p initialising", download);
 
 	download->priv = MOZILLA_DOWNLOAD_GET_PRIVATE (download);
 }

@@ -730,7 +730,7 @@ ephy_notebook_finalize (GObject *object)
 	}
 	g_object_unref (notebook->priv->title_tips);
 
-	LOG ("EphyNotebook finalised %p", object)
+	LOG ("EphyNotebook finalised %p", object);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

@@ -251,7 +251,7 @@ node_from_id_real (EphyNodeDb *db, guint id)
 	EphyNode *ret = NULL;
 
 	if (id < db->priv->id_to_node->len)
-		ret = g_ptr_array_index (db->priv->id_to_node, id);;
+		ret = g_ptr_array_index (db->priv->id_to_node, id);
 
 	return ret;
 }
@@ -380,7 +380,7 @@ ephy_node_db_load_from_file (EphyNodeDb *db,
 	gboolean was_immutable;
 	int ret;
 
-	LOG ("ephy_node_db_load_from_file %s", xml_file)
+	LOG ("ephy_node_db_load_from_file %s", xml_file);
 
 	START_PROFILER ("loading node db")
 
@@ -468,7 +468,7 @@ ephy_node_db_write_to_xml_valist (EphyNodeDb *db,
 	EphyNode *node;
 	int ret;
 
-	LOG ("Saving node db to %s", filename)
+	LOG ("Saving node db to %s", filename);
 
 	START_PROFILER ("Saving node db")
 

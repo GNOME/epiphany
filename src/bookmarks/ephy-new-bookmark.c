@@ -466,7 +466,7 @@ ephy_new_bookmark_set_title (EphyNewBookmark *bookmark,
 {
 	const char *real_title;
 
-	LOG ("Setting new bookmark title to: \"%s\"", title)
+	LOG ("Setting new bookmark title to: \"%s\"", title);
 
 	if (title == NULL || strlen (title) == 0)
 	{

@@ -83,13 +83,13 @@ ephy_embed_shell_finalize (GObject *object)
 {
 	EphyEmbedShell *shell = EPHY_EMBED_SHELL (object);
 
-	LOG ("Unref history")
+	LOG ("Unref history");
 	if (shell->priv->global_history)
 	{
 		g_object_unref (shell->priv->global_history);
 	}
 
-	LOG ("Unref downloader")
+	LOG ("Unref downloader");
 	if (shell->priv->downloader_view)
 	{
 		g_object_remove_weak_pointer
@@ -98,19 +98,19 @@ ephy_embed_shell_finalize (GObject *object)
 		g_object_unref (shell->priv->downloader_view);
 	}
 
-	LOG ("Unref favicon cache")
+	LOG ("Unref favicon cache");
 	if (shell->priv->favicon_cache)
 	{
 		g_object_unref (G_OBJECT (shell->priv->favicon_cache));
 	}
 
-	LOG ("Unref encodings")
+	LOG ("Unref encodings");
 	if (shell->priv->encodings)
 	{
 		g_object_unref (G_OBJECT (shell->priv->encodings));
 	}
 
-	LOG ("Unref embed single")
+	LOG ("Unref embed single");
 	if (shell->priv->embed_single)
 	{
 		g_object_unref (G_OBJECT (shell->priv->embed_single));
