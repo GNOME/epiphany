@@ -1,4 +1,100 @@
 ==============
+Epiphany 0.7.2
+==============
+
+Code changes
+
+	* Rewrite window updating code to use properties (Christian Persch)
+	* Rewrite tabs menu and gtknotebook signals (Christian Persch)
+	* Rewrite fullscreen to use the new gtk api (Marco)
+	* Rewrite the url typed by user overwrite logic (Marco
+	* For langauges use functions instead of declaring static
+	  vars in the header (Christian Persch)
+	* Remove unused gconf prefs, cleanup paths and use strings instead
+	  of numeric enumerations (Marco)
+	* Use new AM_INIT macro (Marco)
+	* Add a context menu signal on the embed to handle both keys and
+	  mouse (Marco)
+	* Do not override the UA but set vendor prefs so
+          that mozilla can build it correctly (Marco)
+	* Remove BonoboWindow/Control popup separation, as the first
+	  is no more needed (Marco)
+	* Translatable string for the locale-dependent http-accept-language
+	  list (Christian Persch)
+	* Get rid of the gobject macros (Marco)
+
+Interface improvements
+
+	* Better security state icons (suggested by Luca Ferretti, designed by Jimmac)
+	* Rename Appeareance preferences tab to be less generic (Marco)
+	* Remove memory cache prefs, now mozilla can deal with it automagically. (Marco)
+	* Delays bookmarks/history searches a bit after the user pressed key,
+	  so that it feel more responsive (Marco)
+	* Fixup embed context menu accesskeys (Piers Cornwell)
+	* Get rid of starthere: and default homepage to google (Marco)
+	* Add a way to import bookmarks from the editor (Marco)
+	* Allow to edit smart bookmarks in the user interface (Marco)
+	* Provide toolbar overflow menu items for bookmarks (Christian Persch)
+	* Better description for cookies preferences (Marco)
+	* HIGified Import Bookmarks dialog (Christian Neumair)
+	* Persist the language selected for the fonts preferences (Christian Persch)
+	* Convert dialog to metric units (Christian Persch)
+	* Suggest the address as bookmark title when web page has no title (Marco)
+	* Shift+F10 show context menus on the embed (Marco)
+	* Implement help button for personal data manager dialog (Christian Persch)
+	* Unify the "Copy Email Address" and "Copy Link Address"
+	  context menu items (Christian Persch)
+	* Higgify history clear dialog (Marco)
+	* Add ellipse to Find menu item (Piers Cornwell)
+	* Give up on page cloning until we find a good way to do it (Marco)
+	* If there's no background image, disable the Save Background As
+        menu entry. (Christian Persch)
+	* Do not allow to open properties of multiple cookies (Marco)
+	* Ever put cursor at the end of the text when selecting autocompletion
+        items. (Marco)
+	* Use page url as title when there is no page title. (Marco)
+
+Bugfixes
+
+	* Fix several memleaks (Christian Persch)
+	* Do not convert spaces to _ on bookmarks importing (Marco)
+	* Explicitly create pointer to avoid strict aliasing
+	  warnings with gcc 3.3. (Jeremy Katz)
+	* size_t fixes for 64 bit platforms (Jeremy Katz)
+	* Use va_copy for the valist instead of
+          directly accessing it (Jeremy Katz)
+	* Dont crash when adding a bookmark without topics. (Marco)
+	* Dont crash when closing add bookmark menu quickly (Marco)
+	* Fix crashes when adding bookmarks with more than one
+	  browser window (Marco)
+	* Correctly select the topic to rename when adding one (Xan Lopez)
+	* Use our own parser to import mozilla bookmarks so that it actually
+	  works. (Marco)
+	* Respect the bookmarks bar visibility user choice also
+          for popups. (Marco)
+	* Update find dialog when user select another tab or load a new url
+	  (Christian Persch)
+	* Use g_snprintf to not break gcc 2.95
+	* Sanitize location entry. Completion will work with pasted text and
+	  not ascii characters. (Marco)
+	* Fix downloader progress overflow (Marco)
+	* Fix add bookmark from link (Marco)
+	* Make sure tabs are hidden when going in print preview mode. (Marco)
+        * Make print dialog transient. (Marco)
+	* Select the old find text when opening find dialog (Marco)
+
+Updated translations
+
+	* cs (Miloslav Trmac)
+	* de (Christian Neumair)
+	* en_GB (Christian Persch)
+	* es (Francisco Javier F. Serrador)
+	* nl (Vincent van Adrighem)
+	* no (Kjartan Maraas)
+	* sv (Christian Rose)
+	* zh_TW (Abel Cheung)
+
+==============
 Epiphany 0.7
 ==============
 
