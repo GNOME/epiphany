@@ -50,6 +50,9 @@ struct _EphyEmbedShell
 struct _EphyEmbedShellClass
 {
 	GObjectClass parent_class;
+
+	/*< private >*/
+	GObject * (* get_embed_single)  (EphyEmbedShell *shell);
 };
 
 GType		   ephy_embed_shell_get_type		(void);

@@ -24,6 +24,7 @@
 #include "ephy-shell.h"
 #include "ephy-type-builtins.h"
 #include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-file-helpers.h"
@@ -80,6 +81,8 @@ struct _EphyShellPrivate
 	GObject *prefs_dialog;
 	GObject *print_setup_dialog;
 	GList *del_on_exit;
+
+	gboolean embed_single_connected;
 };
 
 EphyShell *ephy_shell = NULL;
@@ -87,6 +90,7 @@ EphyShell *ephy_shell = NULL;
 static void ephy_shell_class_init	(EphyShellClass *klass);
 static void ephy_shell_init		(EphyShell *shell);
 static void ephy_shell_finalize		(GObject *object);
+static GObject *impl_get_embed_single   (EphyEmbedShell *embed_shell);
 
 static GObjectClass *parent_class = NULL;
 
@@ -135,12 +139,73 @@ static void
 ephy_shell_class_init (EphyShellClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	EphyEmbedShellClass *embed_shell_class = EPHY_EMBED_SHELL_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_shell_finalize;
 
+	embed_shell_class->get_embed_single = impl_get_embed_single;
+
 	g_type_class_add_private (object_class, sizeof(EphyShellPrivate));
+}
+
+static gboolean
+ephy_shell_add_sidebar_cb (EphyEmbedSingle *embed_single,
+			   const char *url,
+			   const char *title,
+			   EphyShell *shell)
+{
+	EphySession *session;
+	EphyWindow *window;
+	GtkWidget *dialog;
+
+	session = EPHY_SESSION (ephy_shell_get_session (shell));
+	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
+
+	window = ephy_session_get_active_window (session);
+
+	dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+					 GTK_DIALOG_DESTROY_WITH_PARENT,
+					 GTK_MESSAGE_ERROR,
+					 GTK_BUTTONS_OK,
+					 _("Sidebar extension required"));
+
+	gtk_window_set_title (GTK_WINDOW (dialog), _("Sidebar Extension Required"));
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
+	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+		  _("The link you clicked needs the sidebar extension to be "
+		    "installed."));
+
+	g_signal_connect_swapped (dialog, "response", 
+				  G_CALLBACK (gtk_widget_destroy), dialog);
+
+	gtk_widget_show (dialog);
+
+	return TRUE;
+}
+
+static GObject*
+impl_get_embed_single (EphyEmbedShell *embed_shell)
+{
+	EphyShell *shell;
+	GObject *embed_single;
+
+	embed_single = EPHY_EMBED_SHELL_CLASS (parent_class)->get_embed_single (embed_shell);
+
+	shell = EPHY_SHELL (embed_shell);
+
+	if (embed_single != NULL && shell->priv->embed_single_connected == FALSE)
+	{
+		g_signal_connect_object (embed_single, "add-sidebar",
+					 G_CALLBACK (ephy_shell_add_sidebar_cb),
+					 embed_shell, G_CONNECT_AFTER);
+
+		shell->priv->embed_single_connected = TRUE;
+	}
+	
+	return embed_single;
 }
 
 static BonoboObject *

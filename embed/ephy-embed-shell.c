@@ -169,8 +169,8 @@ ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell)
 	return G_OBJECT (shell->priv->downloader_view);
 }
 
-GObject *
-ephy_embed_shell_get_embed_single (EphyEmbedShell *shell)
+static GObject *
+impl_get_embed_single (EphyEmbedShell *shell)
 {
 	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
@@ -181,6 +181,14 @@ ephy_embed_shell_get_embed_single (EphyEmbedShell *shell)
 	}
 
 	return G_OBJECT (shell->priv->embed_single);
+}
+
+GObject *
+ephy_embed_shell_get_embed_single (EphyEmbedShell *shell)
+{
+	EphyEmbedShellClass *klass = EPHY_EMBED_SHELL_GET_CLASS (shell);
+
+	return klass->get_embed_single (shell);
 }
 
 GObject *
@@ -214,6 +222,8 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_embed_shell_finalize;
+
+	klass->get_embed_single = impl_get_embed_single;
 
 	g_type_class_add_private (object_class, sizeof (EphyEmbedShellPrivate));
 }
