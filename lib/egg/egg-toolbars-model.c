@@ -438,7 +438,7 @@ egg_toolbars_model_load (EggToolbarsModel *t,
   xmlDocPtr doc;
   xmlNodePtr root;
 
-  g_return_if_fail (IS_EGG_TOOLBARS_MODEL (t));
+  g_return_val_if_fail (IS_EGG_TOOLBARS_MODEL (t), FALSE);
 
   doc = xmlParseFile (xml_file);
   if (doc == NULL)
