@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-08 14:55+0100\n"
-"PO-Revision-Date: 2005-02-08 14:46+0100\n"
+"POT-Creation-Date: 2005-02-14 12:43+0100\n"
+"PO-Revision-Date: 2005-02-14 12:43+0100\n"
 "Last-Translator: Hendrik Richter <hendrik@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -680,7 +680,7 @@ msgstr "Cookies"
 msgid "Download Manager"
 msgstr "Download-Manager"
 
-#: data/glade/epiphany.glade.h:6 src/ephy-window.c:1142
+#: data/glade/epiphany.glade.h:6 src/ephy-window.c:1114
 msgid "Find"
 msgstr "Suchen"
 
@@ -950,7 +950,7 @@ msgstr "Seiten_nummern"
 msgid "Paper"
 msgstr "Papier"
 
-#: data/glade/print.glade.h:21 src/ephy-window.c:1138
+#: data/glade/print.glade.h:21 src/ephy-window.c:1110
 msgid "Print"
 msgstr "Drucken"
 
@@ -1043,7 +1043,7 @@ msgstr ""
 "%s\n"
 "%s von %s"
 
-#: embed/downloader-view.c:372 src/ephy-window.c:1336
+#: embed/downloader-view.c:372 src/ephy-window.c:1308
 msgid "Unknown"
 msgstr "Unbekannt"
 
@@ -1919,7 +1919,7 @@ msgstr "Dateien"
 msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
 msgstr "http://www.google.de/search?ie=UTF-8&oe=UTF-8&q="
 
-#: embed/mozilla/mozilla-embed-single.cpp:559
+#: embed/mozilla/mozilla-embed-single.cpp:561
 msgid "Epiphany can't be used now. Mozilla initialization failed."
 msgstr ""
 "Epiphany kann im Moment nicht verwendet werden, da die Initialisierung von "
@@ -2116,7 +2116,7 @@ msgstr "Chronik"
 
 #: lib/ephy-stock-icons.c:59 src/bookmarks/ephy-bookmarks-editor.c:757
 #: src/bookmarks/ephy-bookmarks-editor.c:1619
-#: src/bookmarks/ephy-topic-action.c:930 src/ephy-window.c:1144
+#: src/bookmarks/ephy-topic-action.c:930 src/ephy-window.c:1116
 msgid "Bookmarks"
 msgstr "Lesezeichen"
 
@@ -2794,19 +2794,19 @@ msgstr "_Wiederherstellen"
 msgid "Crash Recovery"
 msgstr "Absturz-Wiederherstellung"
 
-#: src/ephy-shell.c:212
+#: src/ephy-shell.c:210
 msgid "Sidebar extension required"
 msgstr "Sidebar-Erweiterung benötigt"
 
-#: src/ephy-shell.c:214
+#: src/ephy-shell.c:212
 msgid "Sidebar Extension Required"
 msgstr "Sidebar-Erweiterung benötigt"
 
-#: src/ephy-shell.c:218
+#: src/ephy-shell.c:216
 msgid "The link you clicked needs the sidebar extension to be installed."
 msgstr "Dieser Link benötigt eine installierte Sidebar-Erweiterung."
 
-#: src/ephy-shell.c:449
+#: src/ephy-shell.c:447
 msgid ""
 "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
 "use bonobo-activation-sysconf to configure the search path for bonobo server "
@@ -2816,7 +2816,7 @@ msgstr ""
 "können bonobo-activation-sysconf verwenden, um den Suchpfad für Bonobo-"
 "Server-Dateien festzulegen."
 
-#: src/ephy-shell.c:456
+#: src/ephy-shell.c:454
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to register the automation server"
@@ -2824,7 +2824,7 @@ msgstr ""
 "Bonobo kann im Moment auf Grund eines unerwarteten Bonobo-Fehlers beim "
 "Versuch, den Automatisierungs-Server zu registrieren, nicht verwendet werden."
 
-#: src/ephy-shell.c:473
+#: src/ephy-shell.c:471
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
@@ -2832,29 +2832,81 @@ msgstr ""
 "Bonobo kann im Moment auf Grund eines unerwarteten Bonobo-Fehlers beim "
 "Versuch, das Automatisierungsobjekt zu finden, nicht verwendet werden."
 
-#: src/ephy-tab.c:455 src/ephy-tab.c:1630 src/ephy-tab.c:1847
+#: src/ephy-tab.c:434 src/ephy-tab.c:1811
 msgid "Blank page"
 msgstr "Leere Seite"
 
-#: src/ephy-tab.c:1215
+#: src/ephy-tab.c:1187
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Umleitung zur Seite %s..."
 
-#: src/ephy-tab.c:1219
+#: src/ephy-tab.c:1191
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Datenübertragung von %s..."
 
-#: src/ephy-tab.c:1223
+#: src/ephy-tab.c:1195
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Warten auf Legitimation von %s..."
 
-#: src/ephy-tab.c:1231
+#: src/ephy-tab.c:1203
 #, c-format
 msgid "Loading %s..."
 msgstr "%s wird geladen..."
+
+#: src/ephy-tabs-menu.c:148
+msgid "Switch to this tab"
+msgstr "Zu diesem Reiter wechseln"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: src/ephy-toolbar-editor.c:80
+msgid "toolbar style|Default"
+msgstr "Vorgabe"
+
+#. separator row
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string. *
+#. * Translators: translate the same as in gnome-control-center
+#: src/ephy-toolbar-editor.c:85
+msgid "toolbar style|Text below icons"
+msgstr "Text unter Symbolen"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string. *
+#. * Translators: translate the same as in gnome-control-center
+#: src/ephy-toolbar-editor.c:89
+msgid "toolbar style|Text beside icons"
+msgstr "Text neben Symbolen"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string. *
+#. * Translators: translate the same as in gnome-control-center
+#: src/ephy-toolbar-editor.c:93
+msgid "toolbar style|Icons only"
+msgstr "Nur Symbole"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string. *
+#. * Translators: translate the same as in gnome-control-center
+#: src/ephy-toolbar-editor.c:97
+msgid "toolbar style|Text only"
+msgstr "Nur Text"
+
+#: src/ephy-toolbar-editor.c:205
+msgid "Toolbar Editor"
+msgstr "Werkzeugleisteneditor"
+
+#. translators: translate the same as in gnome-control-center
+#: src/ephy-toolbar-editor.c:223
+msgid "Toolbar _button labels:"
+msgstr "_Knopfbeschriftungen in Werkzeugleisten:"
+
+#: src/ephy-toolbar-editor.c:281
+msgid "_Add a New Toolbar"
+msgstr "Werkzeugleiste _hinzufügen"
 
 #: src/ephy-toolbar.c:297
 msgid "Back"
@@ -2926,54 +2978,6 @@ msgstr "_Startseite"
 #: src/ephy-toolbar.c:401
 msgid "Go to the home page"
 msgstr "Zur Startseite gehen"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: src/ephy-toolbar-editor.c:80
-msgid "toolbar style|Default"
-msgstr "Vorgabe"
-
-#. separator row
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string. *
-#. * Translators: translate the same as in gnome-control-center
-#: src/ephy-toolbar-editor.c:85
-msgid "toolbar style|Text below icons"
-msgstr "Text unter Symbolen"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string. *
-#. * Translators: translate the same as in gnome-control-center
-#: src/ephy-toolbar-editor.c:89
-msgid "toolbar style|Text beside icons"
-msgstr "Text neben Symbolen"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string. *
-#. * Translators: translate the same as in gnome-control-center
-#: src/ephy-toolbar-editor.c:93
-msgid "toolbar style|Icons only"
-msgstr "Nur Symbole"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string. *
-#. * Translators: translate the same as in gnome-control-center
-#: src/ephy-toolbar-editor.c:97
-msgid "toolbar style|Text only"
-msgstr "Nur Text"
-
-#: src/ephy-toolbar-editor.c:205
-msgid "Toolbar Editor"
-msgstr "Werkzeugleisteneditor"
-
-#. translators: translate the same as in gnome-control-center
-#: src/ephy-toolbar-editor.c:223
-msgid "Toolbar _button labels:"
-msgstr "_Knopfbeschriftungen in Werkzeugleisten:"
-
-#: src/ephy-toolbar-editor.c:281
-msgid "_Add a New Toolbar"
-msgstr "Werkzeugleiste _hinzufügen"
 
 #: src/ephy-window.c:111
 msgid "_Bookmarks"
@@ -3433,105 +3437,105 @@ msgstr "Bild als _Hintergrundbild verwenden"
 msgid "Copy I_mage Address"
 msgstr "Bil_dadresse kopieren"
 
-#: src/ephy-window.c:671
+#: src/ephy-window.c:643
 msgid "There are unsubmitted changes to form elements"
 msgstr "Einige Änderungen an Formularelementen wurden nicht übertragen"
 
-#: src/ephy-window.c:675
+#: src/ephy-window.c:647
 msgid "If you close the document anyway, you will lose that information."
 msgstr ""
 "Falls Sie das Dokument dennoch schließen, gehen diese Informationen verloren."
 
-#: src/ephy-window.c:679
+#: src/ephy-window.c:651
 msgid "Close _Document"
 msgstr "_Dokument schließen"
 
-#: src/ephy-window.c:1134 src/window-commands.c:369
+#: src/ephy-window.c:1106 src/window-commands.c:369
 msgid "Open"
 msgstr "Öffnen"
 
-#: src/ephy-window.c:1136 src/window-commands.c:395
+#: src/ephy-window.c:1108 src/window-commands.c:395
 msgid "Save As"
 msgstr "Speichern unter"
 
-#: src/ephy-window.c:1140
+#: src/ephy-window.c:1112
 msgid "Bookmark"
 msgstr "Lesezeichen"
 
-#: src/ephy-window.c:1339
+#: src/ephy-window.c:1311
 msgid "Insecure"
 msgstr "Ungeschützt"
 
-#: src/ephy-window.c:1344
+#: src/ephy-window.c:1316
 msgid "Broken"
 msgstr "Defekt"
 
-#: src/ephy-window.c:1352
+#: src/ephy-window.c:1324
 msgid "Low"
 msgstr "Niedrig"
 
-#: src/ephy-window.c:1359
+#: src/ephy-window.c:1331
 msgid "High"
 msgstr "Hoch"
 
-#: src/ephy-window.c:1368
+#: src/ephy-window.c:1340
 #, c-format
 msgid "Security level: %s"
 msgstr "Sicherheitsstufe: %s"
 
-#: src/ephy-window.c:1408
+#: src/ephy-window.c:1380
 #, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d verborgenes Popup-Fenster"
 msgstr[1] "%d verborgene Popup-Fenster"
 
-#: src/ephy-window.c:1640
+#: src/ephy-window.c:1612
 #, c-format
 msgid "Save background image '%s'"
 msgstr "Hintergrund »%s« speichern unter"
 
-#: src/ephy-window.c:1654
+#: src/ephy-window.c:1626
 #, c-format
 msgid "Open image '%s'"
 msgstr "Bild »%s« öffnen"
 
-#: src/ephy-window.c:1659
+#: src/ephy-window.c:1631
 #, c-format
 msgid "Use as desktop background '%s'"
 msgstr "Bild »%s« als Hintergrundbild verwenden"
 
-#: src/ephy-window.c:1664
+#: src/ephy-window.c:1636
 #, c-format
 msgid "Save image '%s'"
 msgstr "Bild »%s« speichern unter"
 
-#: src/ephy-window.c:1669
+#: src/ephy-window.c:1641
 #, c-format
 msgid "Copy image address '%s'"
 msgstr "Bildadresse »%s« kopieren"
 
-#: src/ephy-window.c:1682
+#: src/ephy-window.c:1654
 #, c-format
 msgid "Send email to address '%s'"
 msgstr "E-Mail an »%s« senden"
 
-#: src/ephy-window.c:1688
+#: src/ephy-window.c:1660
 #, c-format
 msgid "Copy email address '%s'"
 msgstr "E-Mail-Adresse »%s« kopieren"
 
-#: src/ephy-window.c:1700
+#: src/ephy-window.c:1672
 #, c-format
 msgid "Save link '%s'"
 msgstr "Link »%s« speichern unter"
 
-#: src/ephy-window.c:1706
+#: src/ephy-window.c:1678
 #, c-format
 msgid "Bookmark link '%s'"
 msgstr "Link »%s« zu Lesezeichen _hinzufügen..."
 
-#: src/ephy-window.c:1712
+#: src/ephy-window.c:1684
 #, c-format
 msgid "Copy link's address '%s'"
 msgstr "Link-Adresse »%s« kopieren"
