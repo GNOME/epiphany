@@ -2,6 +2,16 @@
 
 	* src/ephy-toolbar.c: (ephy_toolbar_activate_location):
 
+	Revert patch from bug #169956, it's not correct.
+
+	* src/ephy-window.c: (sync_chromes_visibility):
+
+	Fix a crash on window close with active toolbar activation.
+
+2005-03-11  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-toolbar.c: (ephy_toolbar_activate_location):
+
 	Don't activate the location entry if it's hidden. Fixes bug #169956.
 
 2005-03-11  Christian Persch  <chpe@cvs.gnome.org>
