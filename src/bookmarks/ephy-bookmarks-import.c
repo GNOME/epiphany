@@ -71,6 +71,7 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 {
 	GnomeVFSURI *uri;
 	const char *type;
+	gboolean success = FALSE;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
 
@@ -79,35 +80,41 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 
 	LOG ("Importing bookmarks of type %s", type)
 
-	if (type == NULL) return FALSE;
+	if (type == NULL)
+	{
+		gnome_vfs_uri_unref (uri);
+		 return FALSE;
+	}
 
 	if (strcmp (type, "application/x-mozilla-bookmarks") == 0)
 	{
-		return ephy_bookmarks_import_mozilla (bookmarks, filename);
+		success = ephy_bookmarks_import_mozilla (bookmarks, filename);
 	}
 	else if (strcmp (type, "application/x-xbel") == 0)
 	{
-		return ephy_bookmarks_import_xbel (bookmarks, filename);
+		success = ephy_bookmarks_import_xbel (bookmarks, filename);
 	}
-	else if (strcmp (type, "text/rdf") == 0)
+	else if (strcmp (type, "application/rdf+xml") == 0 ||
+		 strcmp (type, "text/rdf") == 0)
 	{
-		return ephy_bookmarks_import_rdf (bookmarks, filename);
+		success = ephy_bookmarks_import_rdf (bookmarks, filename);
 	}
 	else if (strstr (filename, MOZILLA_BOOKMARKS_DIR) != NULL ||
                  strstr (filename, FIREBIRD_BOOKMARKS_DIR) != NULL ||
 		 strstr (filename, FIREFOX_BOOKMARKS_DIR) != NULL)
 	{
-		return ephy_bookmarks_import_mozilla (bookmarks, filename);
+		success = ephy_bookmarks_import_mozilla (bookmarks, filename);
 	}
 	else if (strstr (filename, GALEON_BOOKMARKS_DIR) != NULL ||
 		 strstr (filename, KDE_BOOKMARKS_DIR) != NULL)
 	{
-		return ephy_bookmarks_import_xbel (bookmarks, filename);
+		success = ephy_bookmarks_import_xbel (bookmarks, filename);
 	}
+	/* else FIXME: put up some UI to warn user about unrecognised format? */
 
 	gnome_vfs_uri_unref (uri);
 
-	return FALSE;
+	return success;
 }
 
 /* XBEL import */
