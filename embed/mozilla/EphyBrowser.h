@@ -103,7 +103,7 @@ public:
 
 	nsresult GetSHInfo (PRInt32 *count, PRInt32 *index);
 	nsresult GetSHTitleAtIndex (PRInt32 index, PRUnichar **title);
-	nsresult GetSHUrlAtIndex (PRInt32 index, nsCString &url);
+	nsresult GetSHUrlAtIndex (PRInt32 index, nsACString &url);
 	nsresult GoToHistoryIndex (PRInt16 index);
 
 	enum { RELOAD_NORMAL = 0 };
@@ -121,8 +121,8 @@ public:
 
 	nsresult GetDocument (nsIDOMDocument **aDOMDocument);
 	nsresult GetTargetDocument (nsIDOMDocument **aDOMDocument);
-	nsresult GetDocumentUrl (nsCString &url);
-	nsresult GetTargetDocumentUrl (nsCString &url);
+	nsresult GetDocumentUrl (nsACString &url);
+	nsresult GetTargetDocumentUrl (nsACString &url);
 
 	nsresult GetHasModifiedForms (PRBool *modified);
 

@@ -610,7 +610,7 @@ nsresult EphyBrowser::GetSHTitleAtIndex (PRInt32 index, PRUnichar **title)
 	return NS_OK;
 }
 
-nsresult EphyBrowser::GetSHUrlAtIndex (PRInt32 index, nsCString &url)
+nsresult EphyBrowser::GetSHUrlAtIndex (PRInt32 index, nsACString &url)
 {
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
@@ -678,7 +678,7 @@ nsresult EphyBrowser::GetPageDescriptor(nsISupports **aPageDescriptor)
 	return NS_OK;
 }
 
-nsresult EphyBrowser::GetDocumentUrl (nsCString &url)
+nsresult EphyBrowser::GetDocumentUrl (nsACString &url)
 {
 	NS_ENSURE_TRUE (mDOMWindow, NS_ERROR_FAILURE);
 
@@ -704,7 +704,7 @@ nsresult EphyBrowser::GetDocumentUrl (nsCString &url)
 	return uri->GetSpec (url);
 }
 
-nsresult EphyBrowser::GetTargetDocumentUrl (nsCString &url)
+nsresult EphyBrowser::GetTargetDocumentUrl (nsACString &url)
 {
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
