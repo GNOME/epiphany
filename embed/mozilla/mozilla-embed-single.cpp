@@ -53,12 +53,15 @@
 #include <nsIFontEnumerator.h>
 #include <nsISupportsPrimitives.h>
 #include <nsReadableUtils.h>
-#include <nsICookie2.h>
 #include <nsICookieManager.h>
 #include <nsIPassword.h>
 #include <nsIPasswordManager.h>
 #include <nsIPassword.h>
+#if MOZILLA_SNAPSHOT > 9
+#include <nsICookie2.h>
+#else
 #include <nsICookie.h>
+#endif
 #if MOZILLA_SNAPSHOT > 12
 #include <nsICookieManager.h>
 #else
@@ -589,7 +592,7 @@ impl_get_font_list (EphyEmbedSingle *shell,
 }
 
 static EphyCookie *
-mozilla_cookie_to_ephy_cookie (nsICookie2 *keks)
+mozilla_cookie_to_ephy_cookie (nsICookie *keks)
 {
 	EphyCookie *cookie;
 
@@ -610,14 +613,6 @@ mozilla_cookie_to_ephy_cookie (nsICookie2 *keks)
 	keks->GetIsSecure (&isSecure);
 	cookie->is_secure = isSecure != PR_FALSE;
 
-	PRUint64 dateTime;
-	keks->GetExpires (&dateTime);
-	cookie->expires = dateTime;
-
-	PRInt64 expiry;
-	keks->GetExpiry (&expiry);
-	cookie->real_expires = expiry;
-
 	nsCookieStatus status;
 	keks->GetStatus (&status);
 	cookie->p3p_state = status;
@@ -626,9 +621,27 @@ mozilla_cookie_to_ephy_cookie (nsICookie2 *keks)
 	keks->GetPolicy (&policy);
 	cookie->p3p_policy = policy;
 
-	PRBool isSession;
-	keks->GetIsSession (&isSession);
-	cookie->is_session = isSession != PR_FALSE;
+	PRUint64 dateTime;
+	keks->GetExpires (&dateTime);
+	cookie->expires = dateTime;
+
+#if MOZILLA_SNAPSHOT > 9
+	nsCOMPtr<nsICookie2> keks2 = do_QueryInterface (keks);
+	if (keks2)
+	{
+		
+		PRBool isSession;
+		keks2->GetIsSession (&isSession);
+		cookie->is_session = isSession != PR_FALSE;
+		
+		if (!isSession)
+		{
+			PRInt64 expiry;
+			keks2->GetExpiry (&expiry);
+			cookie->real_expires = expiry;
+		}
+	}
+#endif
 
 	return cookie;
 }
@@ -654,14 +667,9 @@ impl_list_cookies (EphyCookieManager *manager)
 		result = cookieEnumerator->GetNext (getter_AddRefs(keks));
 		if (NS_FAILED (result) || !keks) continue;
 
-		nsCOMPtr<nsICookie2> keks2 = do_QueryInterface (keks, &result);
-		if (NS_FAILED (result) || !keks2) continue;
+		EphyCookie *cookie = mozilla_cookie_to_ephy_cookie (keks);
 
-		EphyCookie *cookie = mozilla_cookie_to_ephy_cookie (keks2);
-		if (cookie != NULL)
-		{			
-			cookies = g_list_prepend (cookies, cookie);
-		}
+		cookies = g_list_prepend (cookies, cookie);
 	}       
 	
 	return cookies;
@@ -675,7 +683,7 @@ impl_remove_cookie (EphyCookieManager *manager,
 	nsCOMPtr<nsICookieManager> cookieManager =
 		do_GetService (NS_COOKIEMANAGER_CONTRACTID, &rv);
 	if (NS_FAILED (rv) || !cookieManager) return;
-g_print ("here!\n");
+
 	cookieManager->Remove (nsDependentCString(cookie->domain),
 			       nsDependentCString(cookie->name),
 			       nsDependentCString(cookie->path),
