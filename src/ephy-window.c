@@ -464,7 +464,12 @@ size_changed_cb (GdkScreen *screen, EphyWindow *window)
 static void
 exit_fullscreen_button_clicked_cb (GtkWidget *button, EphyWindow *window)
 {
-	gtk_window_unfullscreen (GTK_WINDOW (window));
+	GtkAction *action;
+
+	action = gtk_action_group_get_action (window->priv->action_group, "ViewFullscreen");
+	g_return_if_fail (action != NULL);
+
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), FALSE);
 }
 
 static void
@@ -488,6 +493,7 @@ get_chromes_visibility (EphyWindow *window, gboolean *show_menubar,
 			break;
 		default:
 			*show_menubar = *show_statusbar = *show_toolbar = *show_bookmarksbar = FALSE;
+			break;
 	}
 }
 
@@ -599,7 +605,11 @@ ephy_window_state_event_cb (GtkWidget *widget, GdkEventWindowState *event, EphyW
 		action_group = window->priv->action_group;
 
 		action = gtk_action_group_get_action (action_group, "ViewFullscreen");
+		g_signal_handlers_block_by_func
+			(action, G_CALLBACK (window_cmd_view_fullscreen), window);
 		gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), fullscreen);
+		g_signal_handlers_unblock_by_func
+			(action, G_CALLBACK (window_cmd_view_fullscreen), window);
 
 		action = gtk_action_group_get_action (action_group, "EditToolbar");
 		g_object_set (action, "sensitive", !fullscreen, NULL);
