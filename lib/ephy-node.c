@@ -129,8 +129,19 @@ callback (long id, EphyNodeSignalData *data, gpointer *user_data)
 
 		case EPHY_NODE_CHILD_ADDED:
 		case EPHY_NODE_CHILD_CHANGED:
-		case EPHY_NODE_CHILD_REMOVED:
 			data->callback (data->node, va_arg (valist, EphyNode *), data->data);
+		break;
+
+		case EPHY_NODE_CHILD_REMOVED:
+		{
+			EphyNode *node;
+			guint last_index;
+
+			node = va_arg (valist, EphyNode *);
+			last_index = va_arg (valist, guint);
+
+			data->callback (data->node, node, last_index, data->data);
+		}
 		break;
 
 		case EPHY_NODE_CHILDREN_REORDERED:
@@ -152,6 +163,7 @@ ephy_node_emit_signal (EphyNode *node, EphyNodeSignalType type, ...)
 	g_hash_table_foreach (node->signals,
 			      (GHFunc) callback,
 			      data);
+
 	va_end (valist);
 }
 
@@ -197,6 +209,9 @@ real_remove_child (EphyNode *node,
 
 	if (remove_from_parent) {
 		guint i;
+		guint old_index;
+
+		old_index = node_info->index;
 
 		g_ptr_array_remove_index (node->children,
 					  node_info->index);
@@ -216,21 +231,20 @@ real_remove_child (EphyNode *node,
 
 			g_static_rw_lock_writer_unlock (borked_node->lock);
 		}
+
+		write_lock_to_read_lock (node);
+		write_lock_to_read_lock (child);
+
+		ephy_node_emit_signal (node, EPHY_NODE_CHILD_REMOVED, child, old_index);
+
+		read_lock_to_write_lock (node);
+		read_lock_to_write_lock (child);
 	}
 
 	if (remove_from_child) {
 		g_hash_table_remove (child->parents,
 				     GINT_TO_POINTER (node->id));
 	}
-
-	write_lock_to_read_lock (node);
-	write_lock_to_read_lock (child);
-
-	ephy_node_emit_signal (node, EPHY_NODE_CHILD_REMOVED, child);
-
-	read_lock_to_write_lock (node);
-	read_lock_to_write_lock (child);
-
 }
 
 static void
@@ -267,18 +281,7 @@ ephy_node_dispose (EphyNode *node)
 {
 	guint i;
 
-	_ephy_node_db_remove_id (node->db, node->id);
-
 	lock_gdk ();
-
-	/* remove from DAG */
-	g_hash_table_foreach (node->parents,
-			      (GHFunc) remove_child,
-			      node);
-
-	g_hash_table_foreach (node->signals,
-			      (GHFunc) unref_signal_objects,
-			      node);
 
 	for (i = 0; i < node->children->len; i++) {
 		EphyNode *child;
@@ -292,9 +295,20 @@ ephy_node_dispose (EphyNode *node)
 		g_static_rw_lock_writer_unlock (child->lock);
 	}
 
+	/* remove from DAG */
+	g_hash_table_foreach (node->parents,
+			      (GHFunc) remove_child,
+			      node);
+
 	g_static_rw_lock_writer_unlock (node->lock);
 
 	ephy_node_emit_signal (node, EPHY_NODE_DESTROYED);
+
+	g_hash_table_foreach (node->signals,
+			      (GHFunc) unref_signal_objects,
+			      node);
+
+	_ephy_node_db_remove_id (node->db, node->id);
 
 	unlock_gdk ();
 }

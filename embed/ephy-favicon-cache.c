@@ -253,7 +253,7 @@ ephy_favicon_cache_save (EphyFaviconCache *eb)
 	}
 	ephy_node_thaw (eb->priv->icons);
 
-	xmlSaveFormatFile (eb->priv->xml_file, doc, 1);
+	ephy_file_save_xml (eb->priv->xml_file, doc);
 
 	xmlFreeDoc (doc);
 }

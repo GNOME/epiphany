@@ -66,6 +66,7 @@ static gboolean	ephy_tree_model_node_iter_parent (GtkTreeModel *tree_model,
 static void ephy_tree_model_node_tree_model_init (GtkTreeModelIface *iface);
 static void root_child_removed_cb (EphyNode *node,
 				   EphyNode *child,
+				   guint old_index,
 				   EphyTreeModelNode *model);
 static void root_child_added_cb (EphyNode *node,
 				 EphyNode *child,
@@ -656,11 +657,13 @@ ephy_tree_model_node_iter_from_node (EphyTreeModelNode *model,
 static void
 root_child_removed_cb (EphyNode *node,
 		       EphyNode *child,
+		       guint old_index,
 		       EphyTreeModelNode *model)
 {
 	GtkTreePath *path;
 
-	path = get_path_real (model, child);
+	path = gtk_tree_path_new ();
+	gtk_tree_path_append_index (path, old_index);
 	gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
 	gtk_tree_path_free (path);
 }

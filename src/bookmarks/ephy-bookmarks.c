@@ -339,7 +339,7 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 	}
 	ephy_node_thaw (eb->priv->bookmarks);
 
-	xmlSaveFormatFile (eb->priv->xml_file, doc, 1);
+	ephy_file_save_xml (eb->priv->xml_file, doc);
 	xmlFreeDoc(doc);
 
 	/* Export bookmarks in rdf */
@@ -482,6 +482,7 @@ bookmarks_changed_cb (EphyNode *node,
 static void
 bookmarks_removed_cb (EphyNode *node,
 		      EphyNode *child,
+		      guint old_index,
 		      EphyBookmarks *eb)
 {
 	long id;
@@ -544,6 +545,7 @@ update_topics_list (EphyNode *bookmark, const char *list)
 static void
 topics_removed_cb (EphyNode *node,
 		   EphyNode *child,
+		   guint old_index,
 		   EphyBookmarks *eb)
 {
 	long id;

@@ -1,3 +1,31 @@
+2003-05-25  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* configure.in:
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_save):
+	* embed/ephy-history.c: (ephy_history_save), (hosts_removed_cb),
+	(pages_removed_cb), (unref_empty_host),
+	(page_removed_from_host_cb), (connect_page_removed_from_host),
+	(ephy_history_init), (ephy_history_add_host):
+	* lib/ephy-file-helpers.c: (ephy_file_save_xml):
+	* lib/ephy-file-helpers.h:
+	* lib/ephy-node.c: (callback), (ephy_node_emit_signal),
+	(real_remove_child), (ephy_node_dispose):
+	* lib/ephy-node.h:
+	* lib/ephy-state.c: (ephy_states_save):
+	* lib/widgets/ephy-tree-model-node.c: (root_child_removed_cb):
+	* src/bookmarks/ephy-bookmarks-export.c:
+	(ephy_bookmarks_export_rdf):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_save),
+	(bookmarks_removed_cb), (topics_removed_cb):
+
+	Try to fix node removal problems. I cant repro crashes ...
+	but they are quite hard to reproduce.
+	Use a save_xml helper that is low disk safe.
+
+	* src/ephy-automation.c: (impl_ephy_automation_loadurl):
+
+	Use OPEN_PAGE when an url is passed
+
 2003-05-25  Xan Lopez  <xan@masilla.org>
 
 	* embed/downloader-view.c: (controls_info_foreach),

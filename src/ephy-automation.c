@@ -120,7 +120,7 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 	}
 	else
 	{
-		flags |= EPHY_NEW_TAB_NEW_PAGE;
+		flags |= EPHY_NEW_TAB_OPEN_PAGE;
 	}
 
 	if (open_in_new_tab)

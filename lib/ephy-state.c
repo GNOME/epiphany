@@ -109,7 +109,7 @@ ephy_states_save (void)
 	}
 	ephy_node_thaw (states);
 
-	xmlSaveFormatFile (xml_file, doc, 1);
+	ephy_file_save_xml (xml_file, doc);
 	g_free (xml_file);
 }
 

@@ -34,7 +34,7 @@ typedef enum
 	EPHY_NODE_RESTORED,          /* RBNode *node */
 	EPHY_NODE_CHILD_ADDED,       /* RBNode *node, RBNode *child */
 	EPHY_NODE_CHILD_CHANGED,     /* RBNode *node, RBNode *child */
-	EPHY_NODE_CHILD_REMOVED,     /* RBNode *node, RBNode *child */
+	EPHY_NODE_CHILD_REMOVED,     /* RBNode *node, RBNode *child, guint old_index */
 	EPHY_NODE_CHILDREN_REORDERED /* RBNode *node, int *new_order */
 } EphyNodeSignalType;
 

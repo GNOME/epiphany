@@ -309,7 +309,7 @@ ephy_history_save (EphyHistory *eb)
 	}
 	ephy_node_thaw (eb->priv->pages);
 
-	xmlSaveFormatFile (eb->priv->xml_file, doc, 1);
+	ephy_file_save_xml (eb->priv->xml_file, doc);
 	xmlFreeDoc(doc);
 }
 
@@ -330,6 +330,7 @@ hosts_added_cb (EphyNode *node,
 static void
 hosts_removed_cb (EphyNode *node,
 		  EphyNode *child,
+		  guint old_index,
 		  EphyHistory *eb)
 {
 	g_static_rw_lock_writer_lock (eb->priv->hosts_hash_lock);
@@ -357,29 +358,15 @@ pages_added_cb (EphyNode *node,
 static void
 pages_removed_cb (EphyNode *node,
 		  EphyNode *child,
+		  guint old_index,
 		  EphyHistory *eb)
 {
-	EphyNode *host;
-	int host_id;
-	int children;
-
 	g_static_rw_lock_writer_lock (eb->priv->pages_hash_lock);
 
 	g_hash_table_remove (eb->priv->pages_hash,
 			     ephy_node_get_property_string (child, EPHY_NODE_PAGE_PROP_LOCATION));
 
 	g_static_rw_lock_writer_unlock (eb->priv->pages_hash_lock);
-
-	host_id = ephy_node_get_property_int (child, EPHY_NODE_PAGE_PROP_HOST_ID);
-	host = ephy_node_db_get_node_from_id (eb->priv->db, host_id);
-	children = ephy_node_get_n_children (host);
-
-	LOG ("Check host children: %d", children)
-
-	if (children == 0)
-	{
-		ephy_node_unref (host);
-	}
 }
 
 static gboolean
@@ -389,6 +376,39 @@ periodic_save_cb (EphyHistory *eh)
 	ephy_history_save (eh);
 
 	return TRUE;
+}
+
+static gboolean
+unref_empty_host (EphyNode *node)
+{
+	ephy_node_unref (node);
+
+	return FALSE;
+}
+
+static void
+page_removed_from_host_cb (EphyNode *node,
+		           EphyNode *child,
+		           guint old_index,
+		           EphyHistory *eb)
+{
+	if (ephy_node_get_n_children (node) == 0)
+	{
+		g_idle_add ((GSourceFunc)unref_empty_host, node);
+	}
+}
+
+static void
+connect_page_removed_from_host (char *url,
+                                EphyNode *node,
+                                EphyHistory *eb)
+{
+	if (node == eb->priv->pages) return;
+
+	ephy_node_signal_connect_object (node,
+					 EPHY_NODE_CHILD_REMOVED,
+				         (EphyNodeCallback) page_removed_from_host_cb,
+					 G_OBJECT (eb));
 }
 
 static void
@@ -459,6 +479,10 @@ ephy_history_init (EphyHistory *eb)
 
 	ephy_history_load (eb);
 	ephy_history_emit_data_changed (eb);
+
+	g_hash_table_foreach (eb->priv->hosts_hash,
+			      (GHFunc) connect_page_removed_from_host,
+			      eb);
 
 	/* setup the periodic history saving callback */
 	eb->priv->autosave_timeout =
@@ -614,6 +638,11 @@ ephy_history_add_host (EphyHistory *eh, EphyNode *page)
 	if (!host)
 	{
 		host = ephy_node_new (eh->priv->db);
+		ephy_node_signal_connect_object (host,
+						 EPHY_NODE_CHILD_REMOVED,
+					         (EphyNodeCallback) page_removed_from_host_cb,
+						 G_OBJECT (eh));
+
 		g_value_init (&value, G_TYPE_STRING);
 		g_value_set_string (&value, host_name);
 		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_TITLE,

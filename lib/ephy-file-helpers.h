@@ -22,6 +22,7 @@
 #define EPHY_FILE_HELPERS_H
 
 #include <glib.h>
+#include <libxml/tree.h>
 
 G_BEGIN_DECLS
 
@@ -45,6 +46,9 @@ void	    ephy_ensure_dir_exists       (const char *dir);
 GSList     *ephy_file_find               (const char *path,
 	                                  const char *fname,
 	                                  gint maxdepth);
+
+gboolean    ephy_file_save_xml           (const char *xml_file,
+					  xmlDocPtr doc);
 
 G_END_DECLS
 

@@ -137,6 +137,6 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 	}
 	ephy_node_thaw (bmks);
 
-	xmlSaveFormatFile (filename, doc, 1);
+	ephy_file_save_xml (filename, doc);
 	xmlFreeDoc(doc);
 }

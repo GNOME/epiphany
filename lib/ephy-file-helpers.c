@@ -365,3 +365,60 @@ ephy_file_find (const char *path,
 	ephy_find_file_recursive (path, fname, &ret, 0, maxdepth);
 	return ret;
 }
+
+gboolean
+ephy_file_save_xml (const char *xml_file, xmlDocPtr doc)
+{
+	char *tmp_file;
+	char *old_file;
+	gboolean old_exist;
+	gboolean retval = TRUE;
+
+	tmp_file = g_strconcat (xml_file, ".tmp", NULL);
+	old_file = g_strconcat (xml_file, ".old", NULL);
+
+	if (!xmlSaveFormatFile (tmp_file, doc, 1))
+	{
+		g_warning ("Failed to write XML data to %s", tmp_file);
+		goto failed;
+	}
+
+	old_exist = g_file_test (xml_file, G_FILE_TEST_EXISTS);
+
+	if (old_exist)
+	{
+		if (rename (xml_file, old_file) < 0)
+		{
+			g_warning ("Failed to rename %s to %s", xml_file, old_file);
+			retval = FALSE;
+			goto failed;
+		}
+	}
+
+	if (rename (tmp_file, xml_file) < 0)
+	{
+		g_warning ("Failed to rename %s to %s", tmp_file, xml_file);
+
+		if (rename (old_file, xml_file) < 0)
+		{
+			g_warning ("Failed to restore %s from %s", xml_file, tmp_file);
+		}
+		retval = FALSE;
+		goto failed;
+	}
+
+	if (old_exist)
+	{
+		if (unlink (old_file) < 0)
+		{
+			g_warning ("Failed to delete old file %s", old_file);
+		}
+	}
+
+	failed:
+	g_free (old_file);
+	g_free (tmp_file);
+
+	return retval;
+}
+
