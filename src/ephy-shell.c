@@ -803,6 +803,8 @@ toolbar_style_notifier (GConfClient *client,
 		flags |= new_flags;
 		egg_toolbars_model_set_flags (model, i, new_flags);
 	}
+
+	g_free (pref);
 }
 
 GObject *
