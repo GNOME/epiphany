@@ -356,7 +356,7 @@ nsresult EphyWrapper::SetZoomOnDocshell (float aZoom, nsIDocShell *DocShell)
 
 	nsCOMPtr<nsIPresContext> PresContext;
 	result = DocShell->GetPresContext (getter_AddRefs(PresContext));
-	if (NS_FAILED(result)) return NS_ERROR_FAILURE;
+	if (NS_FAILED(result) || !PresContext) return NS_ERROR_FAILURE;
 					
 	nsCOMPtr<nsIDeviceContext> DeviceContext;
 	result = PresContext->GetDeviceContext (getter_AddRefs(DeviceContext));
