@@ -1,4 +1,4 @@
-SUBDIRS = ui art glade starthere
+SUBDIRS = ui art glade
 
 @INTLTOOL_SERVER_RULE@
 @INTLTOOL_DESKTOP_RULE@
