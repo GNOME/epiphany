@@ -599,7 +599,7 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 		switch (t)
 		{
 		case NS_FOLDER:
-			folders = g_list_prepend (folders, g_strdup (name->str));
+			folders = g_list_prepend (folders, ns_parse_bookmark_item (name));
 			break;
 		case NS_FOLDER_END:
 			if (folders)
