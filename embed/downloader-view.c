@@ -478,7 +478,8 @@ downloader_view_add_download (DownloaderView *dv,
 				 G_CALLBACK (download_changed_cb), dv, 0);
 
 	mime =  ephy_download_get_mime (download);
-	g_return_if_fail (mime != NULL);
+	if (mime == NULL) return;
+
 	theme = gtk_icon_theme_get_default ();
 	icon_name = gnome_icon_lookup (theme, NULL, NULL, NULL, NULL,
 				       mime, GNOME_ICON_LOOKUP_FLAGS_NONE, NULL);
@@ -491,7 +492,7 @@ downloader_view_add_download (DownloaderView *dv,
 		icon_info = gtk_icon_theme_lookup_icon (theme, icon_name, 0, 0);
 		g_free (icon_name);
 
-		g_return_if_fail (icon_info != NULL);
+		if (icon_info == NULL) return;
 
 		icon_name = g_strdup (gtk_icon_info_get_filename (icon_info));
 		gtk_icon_info_free (icon_info);
@@ -499,7 +500,8 @@ downloader_view_add_download (DownloaderView *dv,
 	
 	pixbuf = gdk_pixbuf_new_from_file (icon_name, NULL);
 	g_free (icon_name);
-        g_return_if_fail (pixbuf != NULL);
+	if (pixbuf == NULL) return;
+
 	gtk_list_store_set (GTK_LIST_STORE (dv->priv->model),
 			    &iter, COL_IMAGE, pixbuf, -1);
 	g_object_unref (pixbuf);

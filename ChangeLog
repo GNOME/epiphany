@@ -1,5 +1,12 @@
 2004-07-04  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/downloader-view.c: (downloader_view_add_download):
+
+	Use regular return for valid error conditions, not
+	g_return_if_fail.
+
+2004-07-04  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/mozilla-download.cpp: (impl_get_mime_type):
 
 	Fix compilation with mozilla 1.7.
