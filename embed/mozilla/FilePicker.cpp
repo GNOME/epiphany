@@ -314,7 +314,11 @@ NS_IMETHODIMP GFilePicker::SetDefaultString(const nsAString& aDefaultString)
 	     NS_ConvertUCS2toUTF8 (aDefaultString).get())
 #endif
 
+#if MOZILLA_SNAPSHOT < 16
+	if (aDefaultString)
+#else
 	if (aDefaultString.Length())
+#endif
 	{
 		/* set_current_name takes UTF-8, not a filename */
 #if MOZILLA_SNAPSHOT < 16

@@ -68,6 +68,10 @@
 #include <nsIDownload.h>
 #include <nsIMIMEHeaderParam.h>
 
+#ifdef ALLOW_PRIVATE_STRINGS
+#include <nsReadableUtils.h>
+#endif
+
 EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,
 		nsIFile* aFile, nsIURI* aURL, nsIDOMDocument* aDocument, nsIInputStream* aPostData)
 : mPersist(aPersist)

@@ -86,7 +86,11 @@ NS_IMPL_ISUPPORTS3(MozDownload, nsIDownload, nsITransfer, nsIWebProgressListener
 #endif
 
 NS_IMETHODIMP
+#if MOZILLA_SNAPSHOT < 16
+MozDownload::InitForEmbed (nsIURI *aSource, nsILocalFile *aTarget, const PRUnichar *aDisplayName,
+#else
 MozDownload::InitForEmbed (nsIURI *aSource, nsIURI *aTarget, const PRUnichar *aDisplayName,
+#endif
 		           nsIMIMEInfo *aMIMEInfo, PRInt64 startTime, nsIWebBrowserPersist *aPersist,
 		           MozillaEmbedPersist *aEmbedPersist, PRInt32 aMaxSize)
 {
@@ -527,12 +531,18 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 	nsAutoString fileDisplayName;
 	inDestFile->GetLeafName(fileDisplayName);
 
+	#if MOZILLA_SNAPSHOT >= 16
 	nsCOMPtr<nsIURI> destURI;
 	NS_NewFileURI (getter_AddRefs(destURI), inDestFile);
+	#endif
 
 	MozDownload *downloader = new MozDownload ();
 	/* dlListener attaches to its progress dialog here, which gains ownership */
+	#if MOZILLA_SNAPSHOT < 16
+	rv = downloader->InitForEmbed (inOriginalURI, inDestFile, fileDisplayName.get(),
+	#else
 	rv = downloader->InitForEmbed (inOriginalURI, destURI, fileDisplayName.get(),
+	#endif
 				       nsnull, timeNow, webPersist, embedPersist, aMaxSize);
 	NS_ENSURE_SUCCESS (rv, rv);
 
