@@ -3,7 +3,7 @@
 #define CONF_RENDERING_FONT "/apps/epiphany/web/font"
 #define CONF_RENDERING_FONT_VAR_SIZE "/apps/epiphany/web/font_var_size"
 #define CONF_RENDERING_FONT_FIXED_SIZE "/apps/epiphany/web/font_fixed_size"
-#define CONF_RENDERING_FONT_MIN_SIZE "/apps/epiphanyweb/font_min_size"
+#define CONF_RENDERING_FONT_MIN_SIZE "/apps/epiphany/web/font_min_size"
 #define CONF_RENDERING_LANGUAGE "/apps/epiphany/web/language"
 #define CONF_RENDERING_USE_OWN_COLORS "/apps/epiphany/web/use_own_colors"
 #define CONF_RENDERING_USE_OWN_FONTS "/apps/epiphany/web/use_own_fonts"
