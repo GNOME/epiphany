@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "print-dialog.h"
@@ -256,8 +258,10 @@ print_free_info (EmbedPrintInfo *info)
 	g_free (info->file);
 	g_free (info->paper);
 	g_free (info->header_left_string);
+	g_free (info->header_center_string);
 	g_free (info->header_right_string);
 	g_free (info->footer_left_string);
+	g_free (info->footer_center_string);
 	g_free (info->footer_right_string);
 	g_free (info);
 }
@@ -265,7 +269,7 @@ print_free_info (EmbedPrintInfo *info)
 static EmbedPrintInfo *
 print_get_info (EphyDialog *dialog)
 {
-        EmbedPrintInfo *info;
+	EmbedPrintInfo *info;
 	GValue print_to_file = {0, };
 	GValue printer = {0, };
 	GValue file = {0, };
@@ -284,67 +288,84 @@ print_get_info (EphyDialog *dialog)
 	GValue date = {0, };
 	GValue page_numbers = {0, };
 
-        info = g_new0 (EmbedPrintInfo, 1);
+	info = g_new0 (EmbedPrintInfo, 1);
 
 	ephy_dialog_get_value (dialog, PRINTON_PROP, &print_to_file);
-        info->print_to_file = g_value_get_int (&print_to_file);
+	info->print_to_file = g_value_get_int (&print_to_file);
+	g_value_unset (&print_to_file);
 
 	ephy_dialog_get_value (dialog, PRINTER_PROP, &printer);
 	info->printer = g_strdup (g_value_get_string (&printer));
+	g_value_unset (&printer);
 
 	ephy_dialog_get_value (dialog, FILE_PROP, &file);
-        info->file = g_strdup (g_value_get_string (&file));
+	info->file = g_strdup (g_value_get_string (&file));
+	g_value_unset (&file);
 
 	ephy_dialog_get_value (dialog, BOTTOM_PROP, &bottom_margin);
-        info->bottom_margin = g_value_get_float (&bottom_margin);
+	info->bottom_margin = g_value_get_float (&bottom_margin);
+	g_value_unset (&bottom_margin);
 
 	ephy_dialog_get_value (dialog, LEFT_PROP, &left_margin);
-        info->left_margin = g_value_get_float (&left_margin);
+	info->left_margin = g_value_get_float (&left_margin);
+	g_value_unset (&left_margin);
 
 	ephy_dialog_get_value (dialog, TOP_PROP, &top_margin);
-        info->top_margin = g_value_get_float (&top_margin);
+	info->top_margin = g_value_get_float (&top_margin);
+	g_value_unset (&top_margin);
 
 	ephy_dialog_get_value (dialog, RIGHT_PROP, &right_margin);
-        info->right_margin = g_value_get_float (&right_margin);
+	info->right_margin = g_value_get_float (&right_margin);
+	g_value_unset (&right_margin);
 
 	ephy_dialog_get_value (dialog, FROM_PROP, &from_page);
-        info->from_page = g_value_get_float (&from_page);
+	info->from_page = g_value_get_float (&from_page);
+	g_value_unset (&from_page);
 
 	ephy_dialog_get_value (dialog, TO_PROP, &to_page);
-        info->to_page = g_value_get_float (&to_page);
+	info->to_page = g_value_get_float (&to_page);
+	g_value_unset (&to_page);
 
 	ephy_dialog_get_value (dialog, PAPER_PROP, &paper);
-        info->paper = g_strdup (paper_format_enum[g_value_get_int (&paper)]);
+	info->paper = g_strdup (paper_format_enum[g_value_get_int (&paper)]);
+	g_value_unset (&paper);
 
 	ephy_dialog_get_value (dialog, ALL_PAGES_PROP, &pages);
-        info->pages = g_value_get_int (&pages);
+	info->pages = g_value_get_int (&pages);
+	g_value_unset (&pages);
 
 	ephy_dialog_get_value (dialog, COLOR_PROP, &print_color);
-        info->print_color = !g_value_get_int (&print_color);
+	info->print_color = !g_value_get_int (&print_color);
+	g_value_unset (&print_color);
 
 	ephy_dialog_get_value (dialog, ORIENTATION_PROP, &orientation);
-        info->orientation = g_value_get_int (&orientation);
+	info->orientation = g_value_get_int (&orientation);
+	g_value_unset (&orientation);
 
-        info->frame_type = 0;
+	info->frame_type = 0;
 
 	ephy_dialog_get_value (dialog, PAGE_TITLE_PROP, &page_title);
-        info->header_left_string = g_value_get_boolean (&page_title) ?
+	info->header_left_string = g_value_get_boolean (&page_title) ?
 				   g_strdup ("&T") : g_strdup ("");
+	g_value_unset (&page_title);
 
 	ephy_dialog_get_value (dialog, PAGE_URL_PROP, &page_url);
-        info->header_right_string = g_value_get_boolean (&page_url) ?
+	info->header_right_string = g_value_get_boolean (&page_url) ?
 				    g_strdup ("&U") : g_strdup ("");
+	g_value_unset (&page_url);
 
 	ephy_dialog_get_value (dialog, PAGE_NUMBERS_PROP, &page_numbers);
-        info->footer_left_string = g_value_get_boolean (&page_numbers) ?
+	info->footer_left_string = g_value_get_boolean (&page_numbers) ?
 				   g_strdup ("&PT") : g_strdup ("");
+	g_value_unset (&page_numbers);
 
 	ephy_dialog_get_value (dialog, DATE_PROP, &date);
-        info->footer_right_string = g_value_get_boolean (&date) ?
+	info->footer_right_string = g_value_get_boolean (&date) ?
 				    g_strdup ("&D") : g_strdup ("");
+	g_value_unset (&date);
 
-        info->header_center_string = g_strdup("");
-        info->footer_center_string = g_strdup("");
+	info->header_center_string = g_strdup("");
+	info->footer_center_string = g_strdup("");
 
 	return info;
 }
