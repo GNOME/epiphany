@@ -1,3 +1,35 @@
+2004-07-02  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* src/bookmarks/ephy-favorites-menu.c:
+	* src/bookmarks/ephy-favorites-menu.h:
+
+	Move in the bookmarks dir.
+
+	* lib/ephy-gui.c: (ephy_gui_select_row_by_key),
+	(ephy_gui_is_middle_click):
+	* lib/ephy-gui.h:
+
+	Add a function to check if menus was activated
+	by a middle or a ctrl+click (which is equivalent in epiphany)
+
+	* lib/ephy-marshal.list:
+	* src/Makefile.am:
+	* src/bookmarks/Makefile.am:
+	* src/bookmarks/ephy-bookmark-action.c: (activate_cb),
+	(ephy_bookmark_action_class_init):
+	* src/bookmarks/ephy-bookmark-action.h:
+	* src/bookmarks/ephy-bookmarks-menu.c: (open_bookmark_cb),
+	(create_menu):
+	* src/bookmarks/ephy-bookmarksbar.c: (bookmark_open_in_tab_cb),
+	(bookmark_open_cb), (ephy_bookmarksbar_action_request):
+	* src/bookmarks/ephy-topic-action.c: (menu_activate_cb),
+	(ephy_topic_action_class_init):
+	* src/bookmarks/ephy-topic-action.h:
+
+	Add signals to open bookmarks in new window/tab. I'll need
+	them for context menus.
+	Use them for middle/ctrl click.
+
 2004-07-01  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-window.c:

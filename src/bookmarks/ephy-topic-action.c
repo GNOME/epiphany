@@ -34,6 +34,7 @@
 #include "ephy-debug.h"
 #include "ephy-gui.h"
 #include "ephy-string.h"
+#include "ephy-marshal.h"
 
 static void ephy_topic_action_init       (EphyTopicAction *action);
 static void ephy_topic_action_class_init (EphyTopicActionClass *class);
@@ -54,7 +55,8 @@ enum
 
 enum
 {
-	GO_LOCATION,
+	OPEN,
+	OPEN_IN_TAB,
 	OPEN_IN_TABS,
 	LAST_SIGNAL
 };
@@ -143,8 +145,17 @@ menu_activate_cb (GtkWidget *item, GtkAction *action)
 	node = g_object_get_data (G_OBJECT (item), "node");
 	location = ephy_node_get_property_string
 		(node, EPHY_NODE_BMK_PROP_LOCATION);
-	g_signal_emit (action, ephy_topic_action_signals[GO_LOCATION],
-		       0, location);
+
+	if (ephy_gui_is_middle_click ())
+	{
+		g_signal_emit (action, ephy_topic_action_signals[OPEN_IN_TAB],
+			       0, location, FALSE);
+	}
+	else
+	{
+		g_signal_emit (action, ephy_topic_action_signals[OPEN],
+			       0, location);
+	}
 }
 
 static void
@@ -609,22 +620,34 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
 	object_class->set_property = ephy_topic_action_set_property;
 	object_class->get_property = ephy_topic_action_get_property;
 
-	ephy_topic_action_signals[GO_LOCATION] =
-                g_signal_new ("go_location",
+	ephy_topic_action_signals[OPEN] =
+                g_signal_new ("open",
                               G_OBJECT_CLASS_TYPE (object_class),
                               G_SIGNAL_RUN_FIRST,
-                              G_STRUCT_OFFSET (EphyTopicActionClass, go_location),
+                              G_STRUCT_OFFSET (EphyTopicActionClass, open),
                               NULL, NULL,
                               g_cclosure_marshal_VOID__STRING,
                               G_TYPE_NONE,
                               1,
 			      G_TYPE_STRING);
 
+	ephy_topic_action_signals[OPEN_IN_TAB] =
+                g_signal_new ("open_in_tab",
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              G_SIGNAL_RUN_FIRST,
+                              G_STRUCT_OFFSET (EphyTopicActionClass, open_in_tab),
+                              NULL, NULL,
+                              ephy_marshal_VOID__STRING_BOOLEAN,
+                              G_TYPE_NONE,
+                              2,
+			      G_TYPE_STRING,
+			      G_TYPE_BOOLEAN);
+
 	ephy_topic_action_signals[OPEN_IN_TABS] =
                 g_signal_new ("open_in_tabs",
                               G_OBJECT_CLASS_TYPE (object_class),
                               G_SIGNAL_RUN_FIRST,
-                              G_STRUCT_OFFSET (EphyTopicActionClass, go_location),
+                              G_STRUCT_OFFSET (EphyTopicActionClass, open_in_tabs),
                               NULL, NULL,
                               g_cclosure_marshal_VOID__POINTER,
                               G_TYPE_NONE,

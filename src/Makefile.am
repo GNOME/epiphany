@@ -48,7 +48,6 @@ NOINST_H_FILES =					\
 	ephy-encoding-menu.h				\
 	ephy-extensions-manager.h			\
 	ephy-favicon-action.h				\
-	ephy-favorites-menu.h				\
 	ephy-go-action.h				\
 	ephy-history-window.h				\
 	ephy-location-action.h				\
@@ -81,7 +80,6 @@ libephymain_la_SOURCES =				\
 	ephy-extension.c				\
 	ephy-extensions-manager.c			\
 	ephy-favicon-action.c				\
-	ephy-favorites-menu.c				\
 	ephy-go-action.c				\
 	ephy-history-window.c				\
 	ephy-location-action.c				\

@@ -47,7 +47,11 @@ struct _EphyBookmarkActionClass
 {
 	GtkActionClass parent_class;
 
-	void (*go_location) (EphyBookmarkAction *action, char *location);
+	void (*open)          (EphyBookmarkAction *action,
+			       char *address);
+	void (*open_in_tab)   (EphyBookmarkAction *action,
+			       char *address,
+			       gboolean new_window);
 };
 
 GType      ephy_bookmark_action_get_type	(void);

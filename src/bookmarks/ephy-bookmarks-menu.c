@@ -111,7 +111,7 @@ ephy_bookmarks_menu_clean (EphyBookmarksMenu *menu)
 }
 
 static void
-go_location_cb (GtkAction *action, char *location, EphyWindow *window)
+open_bookmark_cb (GtkAction *action, char *location, EphyWindow *window)
 {
 	ephy_window_load_url (window, location);
 }
@@ -219,8 +219,8 @@ create_menu (EphyBookmarksMenu *menu, EphyNode *node, const char *path)
 			gtk_action_set_accel_path (action, accel_path);
 			gtk_action_group_add_action (p->action_group, action);
 			g_object_unref (action);
-			g_signal_connect (action, "go_location",
-					  G_CALLBACK (go_location_cb), p->window);
+			g_signal_connect (action, "open",
+					  G_CALLBACK (open_bookmark_cb), p->window);
 
 			gtk_ui_manager_add_ui (p->merge, p->ui_id, path,
 					       name, verb,

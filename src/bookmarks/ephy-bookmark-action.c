@@ -27,6 +27,7 @@
 #include <gtk/gtktoolitem.h>
 
 #include "ephy-bookmark-action.h"
+#include "ephy-marshal.h"
 #include "ephy-dnd.h"
 #include "ephy-bookmarksbar.h"
 #include "ephy-bookmarks.h"
@@ -34,6 +35,7 @@
 #include "ephy-shell.h"
 #include "ephy-string.h"
 #include "ephy-debug.h"
+#include "ephy-gui.h"
 
 #include <string.h>
 
@@ -75,7 +77,8 @@ enum
 
 enum
 {
-	GO_LOCATION,
+	OPEN,
+	OPEN_IN_TAB,
 	LAST_SIGNAL
 };
 
@@ -342,7 +345,14 @@ activate_cb (GtkWidget *widget, GtkAction *action)
 		}
 	}
 
-	g_signal_emit (action, signals[GO_LOCATION], 0, location);
+	if (ephy_gui_is_middle_click ())
+	{
+		g_signal_emit (action, signals[OPEN_IN_TAB], 0, location, FALSE);
+	}
+	else
+	{
+		g_signal_emit (action, signals[OPEN], 0, location);
+	}
 
 	g_free (location);
 	g_free (text);
@@ -580,16 +590,28 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 	object_class->set_property = ephy_bookmark_action_set_property;
 	object_class->get_property = ephy_bookmark_action_get_property;
 
-	signals[GO_LOCATION] =
-                g_signal_new ("go_location",
+	signals[OPEN] =
+                g_signal_new ("open",
                               G_OBJECT_CLASS_TYPE (object_class),
                               G_SIGNAL_RUN_FIRST,
-                              G_STRUCT_OFFSET (EphyBookmarkActionClass, go_location),
+                              G_STRUCT_OFFSET (EphyBookmarkActionClass, open),
                               NULL, NULL,
                               g_cclosure_marshal_VOID__STRING,
                               G_TYPE_NONE,
                               1,
 			      G_TYPE_STRING);
+
+	signals[OPEN_IN_TAB] =
+                g_signal_new ("open_in_tab",
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              G_SIGNAL_RUN_FIRST,
+                              G_STRUCT_OFFSET (EphyBookmarkActionClass, open_in_tab),
+                              NULL, NULL,
+                              ephy_marshal_VOID__STRING_BOOLEAN,
+                              G_TYPE_NONE,
+                              2,
+			      G_TYPE_STRING,
+			      G_TYPE_BOOLEAN);
 
 	g_object_class_install_property (object_class,
                                          PROP_BOOKMARK_ID,

@@ -123,48 +123,24 @@ open_in_tabs_cb (GtkAction *action, GList *uri_list, EphyBookmarksBar *toolbar)
 }
 
 static void
-go_location_cb (GtkAction *action, char *location, EphyBookmarksBar *toolbar)
+bookmark_open_in_tab_cb (GtkAction *action, char *location,
+			 gboolean new_window, EphyBookmarksBar *toolbar)
 {
-	EphyWindow *window = toolbar->priv->window;
-	GdkEvent *event;
-	gboolean new_tab = FALSE;
+	EphyNewTabFlags flags = EPHY_NEW_TAB_OPEN_PAGE;
 
-	g_return_if_fail (window != NULL);
-
-	event = gtk_get_current_event ();
-	if (event != NULL)
+	if (!new_window)
 	{
-		if (event->type == GDK_BUTTON_RELEASE)
-		{
-			guint modifiers, button, state;
-
-			modifiers = gtk_accelerator_get_default_mod_mask ();
-			button = event->button.button;
-			state = event->button.state;
-
-			/* middle-click or control-click */
-			if ((button == 1 && ((state & modifiers) == GDK_CONTROL_MASK)) ||
-			    (button == 2))
-			{
-				new_tab = TRUE;
-			}
-		}
-
-		gdk_event_free (event);
+		flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
 	}
 
-	if (new_tab)
-	{
-		ephy_shell_new_tab (ephy_shell, window,
-				    ephy_window_get_active_tab (window),
-				    location,
-				    EPHY_NEW_TAB_OPEN_PAGE |
-				    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
-	}
-	else
-	{
-		ephy_window_load_url (window, location);
-	}
+	ephy_shell_new_tab (ephy_shell, toolbar->priv->window, NULL,
+			    location, flags);
+}
+
+static void
+bookmark_open_cb (GtkAction *action, char *location, EphyBookmarksBar *toolbar)
+{
+	ephy_window_load_url (toolbar->priv->window, location);
 }
 
 static gboolean
@@ -267,8 +243,10 @@ ephy_bookmarksbar_action_request (EggEditableToolbar *eggtoolbar,
 
 		g_return_if_fail (action != NULL);
 
-		g_signal_connect (action, "go_location",
-				  G_CALLBACK (go_location_cb), toolbar);
+		g_signal_connect (action, "open",
+				  G_CALLBACK (bookmark_open_cb), toolbar);
+		g_signal_connect (action, "open_in_tab",
+				  G_CALLBACK (bookmark_open_in_tab_cb), toolbar);
 
 		gtk_action_group_add_action (toolbar->priv->action_group, action);
 		g_object_unref (action);

@@ -35,6 +35,7 @@
 #include <gtk/gtkimage.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtkmain.h>
 
 /* Styles for tab labels */
 GtkStyle *loading_text_style = NULL;
@@ -213,4 +214,35 @@ ephy_gui_select_row_by_key (GtkTreeView *treeview, gint column, guint32 unicode)
 	g_free (event_string);
 
 	return TRUE;
+}
+
+gboolean
+ephy_gui_is_middle_click (void)
+{
+	gboolean new_tab = FALSE;
+	GdkEvent *event;
+
+	event = gtk_get_current_event ();
+	if (event != NULL)
+	{
+		if (event->type == GDK_BUTTON_RELEASE)
+		{
+			guint modifiers, button, state;
+
+			modifiers = gtk_accelerator_get_default_mod_mask ();
+			button = event->button.button;
+			state = event->button.state;
+
+			/* middle-click or control-click */
+			if ((button == 1 && ((state & modifiers) == GDK_CONTROL_MASK)) ||
+			    (button == 2))
+			{
+				new_tab = TRUE;
+			}
+		}
+
+		gdk_event_free (event);
+	}
+
+	return new_tab;
 }

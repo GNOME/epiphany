@@ -36,6 +36,8 @@ void		ephy_gui_menu_position_under_widget	 (GtkMenu   *menu,
 							  gboolean  *push_in,
 							  gpointer  user_data);
 
+gboolean	ephy_gui_is_middle_click		 (void);
+
 gboolean	ephy_gui_select_row_by_key		 (GtkTreeView *treeview,
 							  gint column,
 							  guint32 unicode);

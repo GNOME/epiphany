@@ -30,8 +30,9 @@ NOINST_H_FILES =		 	\
 	ephy-bookmarks-import.h		\
 	ephy-bookmarks-menu.h		\
 	ephy-bookmarksbar-model.h	\
-	ephy-bookmarksbar.h	\
+	ephy-bookmarksbar.h		\
 	ephy-bookmark-properties.h	\
+	ephy-favorites-menu.h		\
 	ephy-new-bookmark.h		\
 	ephy-topic-action.h		\
 	ephy-topics-selector.h
@@ -44,8 +45,9 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-bookmarks-import.c 	\
 	ephy-bookmarks-menu.c		\
 	ephy-bookmarksbar-model.c	\
-	ephy-bookmarksbar.c	\
+	ephy-bookmarksbar.c		\
 	ephy-bookmark-properties.c	\
+	ephy-favorites-menu.c		\
 	ephy-new-bookmark.c		\
 	ephy-topic-action.c		\
 	ephy-topics-selector.c  	\
