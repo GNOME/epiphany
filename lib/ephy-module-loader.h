@@ -38,6 +38,8 @@ GType			 ephy_module_loader_get_type	(void);
 
 EphyModuleLoader	*ephy_module_loader_new		(const char *path);
 
+const char		*ephy_module_loader_get_path	(EphyModuleLoader *loader);
+
 GObject			*ephy_module_loader_factory	(EphyModuleLoader *loader);
 
 G_END_DECLS

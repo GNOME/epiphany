@@ -1,3 +1,39 @@
+2004-09-13  Adam Hooper  <adamh@cvs.gnome.org>
+
+	* data/epiphany.schemas.in:
+	* doc/reference/Makefile.am:
+	* doc/reference/epiphany-docs.sgml:
+	* doc/reference/epiphany-sections.txt:
+	* doc/reference/epiphany.types:
+	* doc/reference/tmpl/ephy-embed-factory.sgml:
+	* doc/reference/tmpl/ephy-embed.sgml:
+	* doc/reference/tmpl/ephy-extensions-manager.sgml:
+	* doc/reference/tmpl/ephy-shell.sgml:
+	* doc/reference/tmpl/ephy-window.sgml:
+	* doc/reference/tmpl/epiphany-unused.sgml:
+	* lib/ephy-module-loader.c: (ephy_module_loader_new),
+	(ephy_module_loader_load), (ephy_module_loader_unload),
+	(ephy_module_loader_get_path):
+	* lib/ephy-module-loader.h:
+	* src/ephy-extensions-manager.c: (free_ext_info),
+	(windows_foreach), (attach_window), (detach_window),
+	(instantiate_extension), (real_load),
+	(ephy_extensions_manager_load), (real_unload),
+	(ephy_extensions_manager_unload), (ephy_extensions_manager_add),
+	(sync_one_extension), (ephy_extensions_manager_sync_gconf),
+	(ephy_extensions_manager_load_file),
+	(ephy_extensions_manager_load_dir), (active_extensions_notifier),
+	(ephy_extensions_manager_init), (ephy_extensions_manager_finalize),
+	(attach_window_to_info), (impl_attach_window),
+	(detach_window_from_info), (impl_detach_window):
+	* src/ephy-extensions-manager.h:
+	* src/ephy-shell.c: (ephy_shell_get_extensions_manager):
+
+	Load/unload extensions based on GConf key
+	/apps/epiphany/general/active_extensions.
+
+	Update documentation a bit (i.e., make sure it actually builds).
+
 2004-09-13  Christian Persch  <chpe@cvs.gnome.org>
 
 	* data/art/epiphany-entry.png:

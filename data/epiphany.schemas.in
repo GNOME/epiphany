@@ -191,6 +191,19 @@
         </locale>
       </schema>
       <schema>
+       <key>/schemas/apps/epiphany/general/active_extensions</key>
+       <applyto>/apps/epiphany/general/active_extensions</applyto>
+       <owner>epiphany</owner>
+       <type>list</type>
+       <list_type>string</list_type>
+       <locale name="C">
+       <short>Loaded extensions</short>
+       <long>Partial filenames of extensions to load. For example, if a desired
+       extension's filename is "libgesturesextension.so", add "gestures" to the
+       list.</long>
+       </locale>
+      </schema>
+      <schema>
         <key>/schemas/apps/epiphany/web/default_encoding</key>
         <applyto>/apps/epiphany/web/default_encoding</applyto>
         <owner>epiphany</owner>

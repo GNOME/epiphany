@@ -52,7 +52,6 @@ IGNORE_HFILES = \
 	ephy-thread-helpers.h \
 	ephy-zoom.h \
 	ephy-arrow-toolbutton.h \
-	ephy-cell-renderer-progress.h \
 	ephy-label.h \
 	ephy-location-entry.h \
 	ephy-node-view.h \
@@ -123,7 +122,6 @@ IGNORE_HFILES = \
 	ephy-encoding-dialog.h \
 	ephy-encoding-menu.h \
 	ephy-extension.h \
-	ephy-extensions-manager.h \
 	ephy-favicon-action.h \
 	ephy-favorites-menu.h \
 	ephy-go-action.h \

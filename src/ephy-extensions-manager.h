@@ -57,7 +57,10 @@ GType			 ephy_extensions_manager_get_type	(void);
 
 EphyExtensionsManager	*ephy_extensions_manager_new 		(void);
 
-EphyExtension		*ephy_extensions_manager_load		(EphyExtensionsManager *manager,
+void			 ephy_extensions_manager_load		(EphyExtensionsManager *manager,
+								 const char *filename);
+
+void			 ephy_extensions_manager_unload		(EphyExtensionsManager *manager,
 								 const char *filename);
 
 void			 ephy_extensions_manager_load_dir	(EphyExtensionsManager *manager,

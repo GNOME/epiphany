@@ -25,19 +25,33 @@
 
 #include "ephy-extensions-manager.h"
 
+#include "ephy-shell.h"
+#include "ephy-session.h" /* Weird (session is an extension) but it works */
 #include "ephy-module-loader.h"
 #include "ephy-debug.h"
 
+#include "eel-gconf-extensions.h"
+
 #include <gmodule.h>
 #include <dirent.h>
+#include <string.h>
+
+#define CONF_LOADED_EXTENSIONS "/apps/epiphany/general/active_extensions"
 
 #define EPHY_EXTENSIONS_MANAGER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EXTENSIONS_MANAGER, EphyExtensionsManagerPrivate))
 
 struct EphyExtensionsManagerPrivate
 {
-	GSList *loaders;
-	GSList *extensions;
+	GHashTable *extensions;
+	GSList *internal_extensions;
+	guint active_extensions_notifier_id;
 };
+
+typedef struct
+{
+	EphyModuleLoader *loader; /* NULL if never loaded */
+	EphyExtension *extension; /* NULL if unloaded */
+} ExtInfo;
 
 static GObjectClass *parent_class = NULL;
 
@@ -84,9 +98,47 @@ ephy_extensions_manager_get_type (void)
 	return type;
 }
 
+static void
+free_ext_info (ExtInfo *info)
+{
+	if (info->extension)
+	{
+		g_object_unref (info->extension);
+	}
+	g_free (info);
+}
+
+static void
+windows_foreach (GFunc func, EphyExtension *extension)
+{
+	EphySession *session;
+	GList *windows;
+
+	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
+
+	windows = ephy_session_get_windows (session);
+
+	g_list_foreach (windows, func, extension);
+
+	g_list_free (windows);
+}
+
+static void
+attach_window (EphyWindow *window,
+	       EphyExtension *extension)
+{
+	ephy_extension_attach_window (extension, window);
+}
+
+static void
+detach_window (EphyWindow *window,
+	       EphyExtension *extension)
+{
+	ephy_extension_detach_window (extension, window);
+}
+
 static EphyExtension *
-ephy_extensions_manager_instantiate_extension (EphyExtensionsManager *manager,
-					       EphyModuleLoader *loader)
+instantiate_extension (EphyModuleLoader *loader)
 {
 	EphyExtension *extension;
 
@@ -94,8 +146,7 @@ ephy_extensions_manager_instantiate_extension (EphyExtensionsManager *manager,
 
 	if (EPHY_IS_EXTENSION (extension))
 	{
-		manager->priv->extensions =
-			g_slist_append (manager->priv->extensions, extension);
+		windows_foreach ((GFunc) attach_window, extension);
 
 		return extension;
 	}
@@ -103,59 +154,116 @@ ephy_extensions_manager_instantiate_extension (EphyExtensionsManager *manager,
 	return NULL;
 }
 
-EphyExtension *
-ephy_extensions_manager_load (EphyExtensionsManager *manager,
-			      const char *filename)
+static void
+real_load (ExtInfo *info)
 {
-	EphyExtension *extension = NULL;
+	if (info->extension != NULL) return;
 
-	if (g_str_has_suffix (filename, G_MODULE_SUFFIX))
+	if (g_type_module_use (G_TYPE_MODULE (info->loader)) == FALSE)
 	{
-		EphyModuleLoader *loader;
-
-		loader = ephy_module_loader_new (filename);
-
-		if (loader != NULL)
-		{
-			manager->priv->loaders =
-				g_slist_prepend (manager->priv->loaders, loader);
-
-			extension = ephy_extensions_manager_instantiate_extension
-				(manager, loader);
-
-			g_type_module_unuse (G_TYPE_MODULE (loader));
-		}
-	}
-
-	return extension;
-}
-
-void
-ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
-				  const char *path)
-{
-	DIR *d;
-	struct dirent *e;
-
-	d = opendir (path);
-	if (d == NULL)
-	{
+		g_warning ("Could not load extension file at %s\n",
+			   ephy_module_loader_get_path (info->loader));
 		return;
 	}
 
-	while ((e = readdir (d)) != NULL)
+	info->extension = instantiate_extension (info->loader);
+
+	if (info->extension == NULL)
 	{
-		char *filename;
-
-		filename = g_build_filename (path, e->d_name, NULL);
-
-		ephy_extensions_manager_load (manager, filename);
-
-		g_free (filename);
+		g_warning ("Could not load extension at %s\n",
+			   ephy_module_loader_get_path (info->loader));
 	}
-	closedir (d);
+
+	g_type_module_unuse (G_TYPE_MODULE (info->loader));
 }
 
+/**
+ * ephy_extensions_manager_load:
+ * @manager: an #EphyExtensionsManager
+ * @filename: filename of an extension to load, minus "lib" and "extension.so"
+ *
+ * Loads the @filename extension.
+ **/
+void
+ephy_extensions_manager_load (EphyExtensionsManager *manager,
+			      const char *filename)
+{
+	GSList *gconf_exts;
+
+	gconf_exts = eel_gconf_get_string_list (CONF_LOADED_EXTENSIONS);
+
+	if (!g_slist_find_custom (gconf_exts, filename, (GCompareFunc) strcmp))
+	{
+		gconf_exts = g_slist_prepend (gconf_exts, g_strdup (filename));
+
+		eel_gconf_set_string_list (CONF_LOADED_EXTENSIONS, gconf_exts);
+	}
+
+	g_slist_foreach (gconf_exts, (GFunc) g_free, NULL);
+	g_slist_free (gconf_exts);
+}
+
+static void
+real_unload (ExtInfo *info)
+{
+	if (info->extension == NULL) return; /* not loaded */
+
+	windows_foreach ((GFunc) detach_window, info->extension);
+
+	/*
+	 * Only unref the extension in the idle loop; if the extension has its
+	 * own functions queued in the idle loop, the functions must exist in
+	 * memory before being called.
+	 */
+	g_idle_add ((GSourceFunc) g_object_unref, info->extension);
+	info->extension = NULL;
+}
+
+/**
+ * ephy_extensions_manager_unload:
+ * @manager: an #EphyExtensionsManager
+ * @filename: filename of extension to unload, minus "lib" and "extension.so"
+ *
+ * Unloads the extension specified by @filename.
+ *
+ * The extension with the same filename can afterwards be reloaded. However,
+ * if any GTypes within the extension have changed parent types, Epiphany must
+ * be restarted.
+ **/
+void
+ephy_extensions_manager_unload (EphyExtensionsManager *manager,
+				const char *filename)
+{
+	GSList *gconf_exts;
+	GSList *l;
+	
+	gconf_exts = eel_gconf_get_string_list (CONF_LOADED_EXTENSIONS);
+
+	l = g_slist_find_custom (gconf_exts, filename, (GCompareFunc) strcmp);
+
+	if (l != NULL)
+	{
+		gconf_exts = g_slist_remove_link (gconf_exts, l);
+		g_free (l->data);
+		g_slist_free_1 (l);
+
+		eel_gconf_set_string_list (CONF_LOADED_EXTENSIONS, gconf_exts);
+	}
+
+	g_slist_foreach (gconf_exts, (GFunc) g_free, NULL);
+	g_slist_free (gconf_exts);
+}
+
+/**
+ * ephy_extensions_manager_add:
+ * @manager: an #EphyExtensionsManager
+ * @type: GType of the extension to add
+ *
+ * Creates a new instance of @type (which must be an #EphyExtension) and adds
+ * it to @manager. This is only used to load internal Epiphany extensions.
+ *
+ * Return value: a new instance of @type
+ **/
 EphyExtension *
 ephy_extensions_manager_add (EphyExtensionsManager *manager,
 			     GType type)
@@ -172,10 +280,115 @@ ephy_extensions_manager_add (EphyExtensionsManager *manager,
 		return NULL;
 	}
 
-	manager->priv->extensions =
-		g_slist_append (manager->priv->extensions, extension);
+	manager->priv->internal_extensions =
+		g_slist_append (manager->priv->internal_extensions, extension);
 
 	return extension;
+}
+
+static void
+sync_one_extension (const char *name,
+		    ExtInfo *info,
+		    GSList *wanted_exts)
+{
+	if (g_slist_find_custom (wanted_exts, name, (GCompareFunc) strcmp))
+	{
+		real_load (info);
+	}
+	else
+	{
+		real_unload (info);
+	}
+}
+
+static void
+ephy_extensions_manager_sync_gconf (EphyExtensionsManager *manager)
+{
+	GSList *wanted_exts;
+
+	wanted_exts = eel_gconf_get_string_list (CONF_LOADED_EXTENSIONS);
+
+	g_hash_table_foreach (manager->priv->extensions,
+			      (GHFunc) sync_one_extension,
+			      wanted_exts);
+
+	g_slist_foreach (wanted_exts, (GFunc) g_free, NULL);
+	g_slist_free (wanted_exts);
+}
+
+static void
+ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
+				   const char *dir,
+				   const char *filename)
+{
+	ExtInfo *info;
+	char *name;
+	char *path;
+
+	/* Must match "libBLAHextension.so" */
+	if (!g_str_has_prefix (filename, "lib")
+		|| !g_str_has_suffix (filename, "extension." G_MODULE_SUFFIX))
+	{
+		return;
+	}
+
+	name = g_strndup (filename + 3,
+			  strlen(filename) - 13 - strlen(G_MODULE_SUFFIX));
+
+	if (g_hash_table_lookup (manager->priv->extensions, name) != NULL)
+	{
+		/* We already have another version stored */
+		g_free (name);
+		return;
+	}
+
+	path = g_build_filename (dir, filename, NULL);
+
+	info = g_new0 (ExtInfo, 1);
+	info->loader = ephy_module_loader_new (path);
+
+	g_free (path);
+
+	g_hash_table_insert (manager->priv->extensions, name, info);
+}
+
+/**
+ * ephy_extensions_manager_load_dir:
+ * @manager: an #EphyExtensionsManager
+ * @path: directory to load
+ *
+ * Searches @path for all files matching the pattern
+ * &quot;libEXTextension.so&quot; and stores them in @manager, ready to be
+ * loaded.
+ **/
+void
+ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
+				  const char *path)
+{
+	DIR *d;
+	struct dirent *e;
+
+	d = opendir (path);
+	if (d == NULL)
+	{
+		return;
+	}
+	while ((e = readdir (d)) != NULL)
+	{
+		ephy_extensions_manager_load_file (manager, path, e->d_name);
+	}
+	closedir (d);
+
+	ephy_extensions_manager_sync_gconf (manager);
+}
+
+static void
+active_extensions_notifier (GConfClient *client,
+			    guint cnxn_id,
+			    GConfEntry *entry,
+			    EphyExtensionsManager *manager)
+{
+	ephy_extensions_manager_sync_gconf (manager);
 }
 
 static void
@@ -185,8 +398,17 @@ ephy_extensions_manager_init (EphyExtensionsManager *manager)
 
 	LOG ("EphyExtensionsManager initialising")
 
-	manager->priv->loaders = NULL;
-	manager->priv->extensions = NULL;
+	manager->priv->extensions = g_hash_table_new_full
+		(g_str_hash, g_str_equal,
+		 (GDestroyNotify) g_free, (GDestroyNotify) free_ext_info);
+
+	manager->priv->internal_extensions = NULL;
+
+	manager->priv->active_extensions_notifier_id =
+		eel_gconf_notification_add (CONF_LOADED_EXTENSIONS,
+					    (GConfClientNotifyFunc)
+					     active_extensions_notifier,
+					    manager);
 }
 
 static void
@@ -196,12 +418,27 @@ ephy_extensions_manager_finalize (GObject *object)
 
 	LOG ("EphyExtensionsManager finalising")
 
-	g_slist_foreach (manager->priv->extensions, (GFunc) g_object_unref, NULL);
-	g_slist_free (manager->priv->extensions);
+	g_hash_table_destroy (manager->priv->extensions);
 
-	g_slist_free (manager->priv->loaders);
+	g_slist_foreach (manager->priv->internal_extensions,
+			 (GFunc) g_object_unref, NULL);
+	g_slist_free (manager->priv->internal_extensions);
+
+	eel_gconf_notification_remove
+		(manager->priv->active_extensions_notifier_id);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+attach_window_to_info (const char *key,
+		       ExtInfo *info,
+		       EphyWindow *window)
+{
+	if (info->extension)
+	{
+		ephy_extension_attach_window (info->extension, window);
+	}
 }
 
 static void
@@ -212,8 +449,23 @@ impl_attach_window (EphyExtension *extension,
 
 	LOG ("multiplexing attach_window")
 
-	g_slist_foreach (manager->priv->extensions,
+	g_slist_foreach (manager->priv->internal_extensions,
 			 (GFunc) ephy_extension_attach_window, window);
+
+	g_hash_table_foreach (manager->priv->extensions,
+			      (GHFunc) attach_window_to_info,
+			      window);
+}
+
+static void
+detach_window_from_info (const char *key,
+			 ExtInfo *info,
+			 EphyWindow *window)
+{
+	if (info->extension)
+	{
+		ephy_extension_detach_window (info->extension, window);
+	}
 }
 
 static void
@@ -226,8 +478,12 @@ impl_detach_window (EphyExtension *extension,
 
 	g_object_ref (window);
 
-	g_slist_foreach (manager->priv->extensions,
+	g_slist_foreach (manager->priv->internal_extensions,
 			 (GFunc) ephy_extension_detach_window, window);
+
+	g_hash_table_foreach (manager->priv->extensions,
+			      (GHFunc) detach_window_from_info,
+			      window);
 
 	g_object_unref (window);
 }

@@ -96,13 +96,6 @@ ephy_module_loader_new (const char *path)
 	g_type_module_set_name (G_TYPE_MODULE (result), path);
 	result->path = g_strdup (path);
 
-	if (!g_type_module_use (G_TYPE_MODULE (result)))
-	{
-		g_object_unref (result);
-
-		return NULL;
-	}
-
 	return result;
 }
 
@@ -110,14 +103,11 @@ static gboolean
 ephy_module_loader_load (GTypeModule *module)
 {
 	EphyModuleLoader *loader = EPHY_MODULE_LOADER (module);
-	char *module_path;
 	register_module_fn register_module;
 
 	LOG ("ephy_module_loader_load %s", loader->path)
 
-	module_path = g_strdup (loader->path);
-	loader->library = g_module_open (module_path, 0);
-	g_free (module_path);
+	loader->library = g_module_open (loader->path, 0);
 
 	if (!loader->library)
 	{
@@ -157,6 +147,14 @@ ephy_module_loader_unload (GTypeModule *module)
 
 	loader->library = NULL;
 	loader->type = 0;
+}
+
+const char *
+ephy_module_loader_get_path (EphyModuleLoader *loader)
+{
+	g_return_val_if_fail (EPHY_IS_MODULE_LOADER (loader), NULL);
+
+	return loader->path;
 }
 
 static void
