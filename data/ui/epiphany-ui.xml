@@ -13,7 +13,7 @@
 	<menuitem name="FileSendToMenu" action="FileSendTo"/>
 	<separator name="FileSep3"/>
 	<menuitem name="FileWorkOfflineItem" action="FileWorkOffline"/>
-	<menuitem name="FileCloseWindowMenu" action="FileCloseWindow"/>
+	<menuitem name="FileCloseTabMenu" action="FileCloseTab"/>
 </menu>
 
 <menu name="EditMenu" action="Edit">
@@ -179,6 +179,14 @@
 	<menuitem name="SaveImageAsIELP" action="SaveImageAs"/>
 	<menuitem name="SetImageAsBackgroundIELP" action="SetImageAsBackground"/>
 	<menuitem name="CopyImageLocationIELP" action="CopyImageLocation"/>
+</popup>
+
+ <popup name="EphyNotebookPopup" action="PopupAction">
+	<menuitem name="TabCloseENP" action="FileCloseTab"/>
+        <menuitem name="TabDetachENP" action="TabsDetach"/>
+	<separator name="TabsSep1"/>
+	<menuitem name="TabMoveLeftENP" action="TabsMoveLeft"/>
+	<menuitem name="TabMoveRightENP" action="TabsMoveRight"/>
 </popup>
 
 <accelerator name="BrowseWithCaretAccel" action="BrowseWithCaret"/>

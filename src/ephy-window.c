@@ -130,8 +130,8 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "FileSendTo", STOCK_SEND_MAIL, N_("S_end To..."), "<control>M",
 	  N_("Send a link of the current page"),
 	  G_CALLBACK (window_cmd_file_send_to) },
-	{ "FileCloseWindow", GTK_STOCK_CLOSE, N_("_Close"), "<control>W",
-	  N_("Close this window"),
+	{ "FileCloseTab", GTK_STOCK_CLOSE, N_("_Close"), "<control>W",
+	  N_("Close this tab"),
 	  G_CALLBACK (window_cmd_file_close_window) },
 
 	/* Edit menu */
@@ -2046,6 +2046,62 @@ modal_alert_cb (EphyEmbed *embed,
 	return FALSE;
 }
 
+static gboolean
+show_notebook_popup_menu (GtkNotebook *notebook,
+			  EphyWindow *window,
+			  GdkEventButton *event)
+{
+	GtkWidget *menu, *tab, *tab_label;
+
+	menu = gtk_ui_manager_get_widget (window->priv->manager, "/EphyNotebookPopup");
+	g_return_val_if_fail (menu != NULL, FALSE);
+
+	if (event != NULL)
+	{
+		gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+				NULL, NULL,
+				event->button, event->time);
+	}
+	else
+	{
+		tab = GTK_WIDGET (ephy_window_get_active_tab (window));
+		tab_label = gtk_notebook_get_tab_label (notebook, tab);
+
+		gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+				ephy_gui_menu_position_under_widget, tab_label,
+				0, gtk_get_current_event_time ());
+		gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
+	}
+
+	return TRUE;
+}
+
+static gboolean
+notebook_button_press_cb (GtkNotebook *notebook,
+			  GdkEventButton *event,
+			  EphyWindow *window)
+{
+	if (GDK_BUTTON_PRESS == event->type && 3 == event->button)
+	{
+		return show_notebook_popup_menu (notebook, window, event);
+	}
+
+	return FALSE;
+}
+
+static gboolean
+notebook_popup_menu_cb (GtkNotebook *notebook,
+			EphyWindow *window)
+{
+	/* Only respond if the notebook is the actual focus */
+	if (EPHY_IS_NOTEBOOK (gtk_window_get_focus (GTK_WINDOW (window))))
+	{
+		return show_notebook_popup_menu (notebook, window, NULL);
+	}
+
+	return FALSE;
+}
+
 static void
 tab_added_cb (EphyNotebook *notebook,
 	      EphyTab *tab,
@@ -2164,6 +2220,11 @@ setup_notebook (EphyWindow *window)
 				G_CALLBACK (
 				ephy_window_notebook_switch_page_cb),
 				window);
+
+	g_signal_connect (notebook, "popup-menu",
+			  G_CALLBACK (notebook_popup_menu_cb), window);
+	g_signal_connect (notebook, "button-press-event",
+			  G_CALLBACK(notebook_button_press_cb), window);
 
 	g_signal_connect (G_OBJECT (notebook), "tab_added",
 			  G_CALLBACK (tab_added_cb), window);
