@@ -608,17 +608,9 @@ ephy_history_window_node_activated_cb (GtkWidget *view,
 	g_return_if_fail (location != NULL);
 
 	window = EPHY_WINDOW (get_target_window (editor));
-	if (window != NULL)
-	{
-		ephy_window_load_url (EPHY_WINDOW (window), location);
-		gtk_window_present (GTK_WINDOW (window));
-	}
-	else
-	{
-		/* We have to create a browser window */
-		ephy_shell_new_tab (ephy_shell, NULL, NULL, location,
-				    EPHY_NEW_TAB_IN_NEW_WINDOW);
-	}
+	
+	ephy_shell_new_tab (ephy_shell, NULL, NULL, location,
+			    EPHY_NEW_TAB_OPEN_PAGE);
 }
 
 static void
