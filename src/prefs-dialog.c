@@ -240,7 +240,6 @@ prefs_dialog_show_page (PrefsDialog *pd,
 static void
 prefs_dialog_show_help (PrefsDialog *pd)
 {
-	GError *err = NULL;
 	gint id;
 
 	/* FIXME: Once we actually have documentation we
