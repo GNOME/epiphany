@@ -155,7 +155,14 @@ downloader_view_class_init (DownloaderViewClass *klass)
 static void
 status_icon_activated (EggStatusIcon *icon, DownloaderView *dv)
 {
-	gtk_window_present (GTK_WINDOW (dv->priv->window));
+	if (GTK_WIDGET_VISIBLE (dv->priv->window))
+	{
+		gtk_widget_hide (dv->priv->window);
+	}
+	else
+	{
+		gtk_window_present (GTK_WINDOW (dv->priv->window));
+	}
 }
 
 static void
