@@ -35,12 +35,21 @@
 #include "nsILocalFile.h"
 #include "nsIMIMEInfo.h"
 
+#include "nsIDocShell.h"
+#include "nsIWebNavigation.h" // Needed to create the LoadType flag
+
 #include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-shell.h"
 #include "ephy-debug.h"
 
+#include <gtk/gtkimage.h>
+#include <gtk/gtkhbox.h>
+#include <gtk/gtkvbox.h>
+#include <gtk/gtkstock.h>
+#include <gtk/gtklabel.h>
+#include <gtk/gtkdialog.h>
 #include <libgnomevfs/gnome-vfs-mime.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
@@ -61,6 +70,102 @@ GContentHandler::~GContentHandler()
 
 	g_free (mUri);
 	g_free (mMimeType);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// begin nsIHelperAppLauncher impl
+////////////////////////////////////////////////////////////////////////////////
+
+/* This is copied verbatim from nsDocShell.h in Mozilla, we should keep it synced */
+/* http://lxr.mozilla.org/mozilla/source/docshell/base/nsDocShell.h */
+
+#define MAKE_LOAD_TYPE(type, flags) ((type) | (flags << 16))
+
+enum LoadType {
+    LOAD_NORMAL = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_NORMAL, nsIWebNavigation::LOAD_FLAGS_NONE),
+    LOAD_NORMAL_REPLACE = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_NORMAL, nsIWebNavigation::LOAD_FLAGS_REPLACE_HISTORY),
+    LOAD_HISTORY = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_HISTORY, nsIWebNavigation::LOAD_FLAGS_NONE),
+    LOAD_RELOAD_NORMAL = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_RELOAD, nsIWebNavigation::LOAD_FLAGS_NONE),
+    LOAD_RELOAD_BYPASS_CACHE = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_RELOAD, nsIWebNavigation::LOAD_FLAGS_BYPASS_CACHE),
+    LOAD_RELOAD_BYPASS_PROXY = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_RELOAD, nsIWebNavigation::LOAD_FLAGS_BYPASS_PROXY),
+    LOAD_RELOAD_BYPASS_PROXY_AND_CACHE = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_RELOAD, nsIWebNavigation::LOAD_FLAGS_BYPASS_CACHE | nsIWebNavigation::LOAD_FLAGS_BYPASS_PROXY),
+    LOAD_LINK = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_NORMAL, nsIWebNavigation::LOAD_FLAGS_IS_LINK),
+    LOAD_REFRESH = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_NORMAL, nsIWebNavigation::LOAD_FLAGS_IS_REFRESH),
+    LOAD_RELOAD_CHARSET_CHANGE = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_RELOAD, nsIWebNavigation::LOAD_FLAGS_CHARSET_CHANGE),
+    LOAD_BYPASS_HISTORY = MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_NORMAL, nsIWebNavigation::LOAD_FLAGS_BYPASS_HISTORY)
+};
+
+static GtkWidget*
+ch_unrequested_dialog_construct (GtkWindow *parent, const char *title)
+{
+	GtkWidget *dialog;
+	GtkWidget *hbox, *vbox, *label, *image;
+	char *str, *tmp_str, *tmp_title;
+
+	dialog = gtk_dialog_new_with_buttons ("",
+					      GTK_WINDOW (parent),
+					      GTK_DIALOG_NO_SEPARATOR,
+					      GTK_STOCK_CANCEL,
+					      GTK_RESPONSE_CANCEL,
+					      GTK_STOCK_OK,
+					      GTK_RESPONSE_OK,
+					      NULL);
+	
+	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14);
+
+	hbox = gtk_hbox_new (FALSE, 6);
+	gtk_widget_show (hbox);
+	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
+			    TRUE, TRUE, 0);
+
+	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
+					  GTK_ICON_SIZE_DIALOG);
+	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0);
+	gtk_widget_show (image);
+	gtk_box_pack_start (GTK_BOX (hbox), image, TRUE, TRUE, 0);
+
+	vbox = gtk_vbox_new (FALSE, 6);
+	gtk_widget_show (vbox);
+	gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
+
+	label = gtk_label_new (NULL);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	tmp_title = g_strconcat ("<b>", title, "</b>", NULL);
+	tmp_str = g_strdup_printf (_("An unrequested download (%s) has been started.\n Would you like to continue it and open the file?"),
+			           tmp_title);
+	str = g_strconcat ("<big>", tmp_str, "</big>", NULL);
+	gtk_label_set_markup (GTK_LABEL (label), str);
+	g_free (tmp_title);
+	g_free (tmp_str);
+	g_free (str);
+	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+	gtk_widget_show (label);
+
+	return dialog;
+}
+
+static void
+ch_unrequested_dialog_cb (GtkWidget *dialog,
+			  int response_id,
+			  gpointer user_data)
+{
+	switch (response_id) 
+	{
+		case GTK_RESPONSE_OK:
+			((GContentHandler*)user_data)->MIMEAskAction ();
+			break;
+		case GTK_RESPONSE_CANCEL:
+			nsCOMPtr<nsIHelperAppLauncher> launcher;
+		
+			((GContentHandler*)user_data)->GetLauncher (getter_AddRefs(launcher));
+			launcher->Cancel ();
+			break;
+	}
+	
+	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 #if MOZILLA_SNAPSHOT > 9
@@ -85,7 +190,23 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 	g_signal_emit_by_name (single, "handle_content", mMimeType,
 			       mUrl.get(), &handled);
 
-	if (!handled)
+	nsCOMPtr<nsIDocShell> eDocShell = do_QueryInterface(aContext);
+	PRUint32 eLoadType;
+	eDocShell->GetLoadType (&eLoadType);
+	
+	/* We ask the user what to do if he has not explicitely started the download
+	 * (LoadType == LOAD_LINK) */
+	
+	if (eLoadType != LOAD_LINK) {
+		GtkWidget *dialog;
+		dialog = ch_unrequested_dialog_construct (NULL, mUrl.get()); 
+		g_signal_connect (G_OBJECT (dialog),
+				  "response",
+				  G_CALLBACK (ch_unrequested_dialog_cb),
+				  this);
+		gtk_widget_show (dialog);
+	}
+	else if (!handled)
 	{
 		MIMEAskAction ();
 	}

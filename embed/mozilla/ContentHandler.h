@@ -66,12 +66,11 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	NS_METHOD SetHelperApp(GnomeVFSMimeApplication *mHelperApp,
 			       PRBool alwaysUse);
 	NS_METHOD SynchroniseMIMEInfo (void);
-
+	NS_METHOD MIMEAskAction (void);
   private:
 	/* additional members */
 	NS_METHOD Init (void);
 	NS_METHOD ProcessMimeInfo (void);
-	NS_METHOD MIMEAskAction (void);
 	
 	nsCOMPtr<nsIHelperAppLauncher> mLauncher;
 
