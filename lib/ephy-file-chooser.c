@@ -82,12 +82,16 @@ current_folder_changed_cb (GtkFileChooser *chooser, EphyFileChooser *dialog)
 {
 	if (dialog->priv->persist_key)
 	{
-		char *dir;
+		char *dir, *converted;
 
 		dir = gtk_file_chooser_get_current_folder (chooser);
 		if (dir != NULL)
 		{
+			converted = g_filename_to_utf8 (dir, -1, NULL, NULL, NULL);
+
 			eel_gconf_set_string (dialog->priv->persist_key, dir);
+
+			g_free (converted);
 			g_free (dir);
 		}
 	}
@@ -128,21 +132,28 @@ ephy_file_chooser_set_persist_key (EphyFileChooser *dialog, const char *key)
 
 	if (key != NULL)
 	{
-		char *uri;
+		char *dir;
 
-		uri = eel_gconf_get_string (key);
+		dir = eel_gconf_get_string (key);
 
-		if (uri != NULL)
+		if (dir != NULL)
 		{
-			char *expanded;
+			char *expanded, *converted;
 
-			expanded = gnome_vfs_expand_initial_tilde (uri);
+			converted = g_filename_from_utf8
+				(dir, -1, NULL, NULL, NULL);
 
-			gtk_file_chooser_set_current_folder
-				(GTK_FILE_CHOOSER (dialog), expanded);
+			expanded = gnome_vfs_expand_initial_tilde (converted);
+
+			if (expanded != NULL)
+			{
+				gtk_file_chooser_set_current_folder
+					(GTK_FILE_CHOOSER (dialog), expanded);
+			}
 
 			g_free (expanded);
-			g_free (uri);
+			g_free (converted);
+			g_free (dir);
 		}
 	}
 }

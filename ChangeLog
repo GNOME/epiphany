@@ -1,5 +1,12 @@
 2003-10-26  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-file-chooser.c: (current_folder_changed_cb),
+	(ephy_file_chooser_set_persist_key):
+
+	Convert filenames from/to UTF-8 when persisting the directory.
+
+2003-10-26  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/window-commands.c: (open_response_cb):
 
 	Really used the converted string [in UTF-8] instead of
