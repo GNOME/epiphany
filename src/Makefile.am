@@ -33,7 +33,6 @@ NOINST_H_FILES = \
 	ephy-go-action.h		\
 	ephy-history-window.h		\
 	ephy-home-action.h		\
-	ephy-link.h			\
 	ephy-link-action.h		\
 	ephy-location-action.h		\
 	ephy-navigation-action.h	\
@@ -50,6 +49,7 @@ NOINST_H_FILES = \
 INST_H_FILES = \
 	ephy-extension.h		\
 	ephy-extensions-manager.h	\
+	ephy-link.h			\
 	ephy-notebook.h			\
 	ephy-session.h			\
 	ephy-shell.h			\

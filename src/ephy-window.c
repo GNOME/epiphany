@@ -71,10 +71,14 @@
 #include <gtk/gtkmessagedialog.h>
 
 static void ephy_window_class_init		(EphyWindowClass *klass);
+static void ephy_window_link_iface_init		(EphyLinkIface *iface);
 static void ephy_window_init			(EphyWindow *gs);
 static void ephy_window_finalize		(GObject *object);
 static void ephy_window_show			(GtkWidget *widget);
-
+static EphyTab *ephy_window_open_link		(EphyLink *link,
+						 const char *address,
+						 EphyTab *tab,
+						 EphyLinkFlags flags);
 static void ephy_window_notebook_switch_page_cb	(GtkNotebook *notebook,
 						 GtkNotebookPage *page,
 						 guint page_num,
@@ -430,10 +434,20 @@ ephy_window_get_type (void)
                         0, /* n_preallocs */
                         (GInstanceInitFunc) ephy_window_init
                 };
+		static const GInterfaceInfo link_info = 
+		{
+			(GInterfaceInitFunc) ephy_window_link_iface_init,
+			NULL,
+			NULL
+		};
 
                 type = g_type_register_static (GTK_TYPE_WINDOW,
 					       "EphyWindow",
 					       &our_info, 0);
+
+		g_type_add_interface_static (type,
+					     EPHY_TYPE_LINK,
+					     &link_info);
         }
 
         return type;
@@ -2334,6 +2348,12 @@ ephy_window_focus_out_event (GtkWidget *widget,
 }
 
 static void
+ephy_window_link_iface_init (EphyLinkIface *iface)
+{
+	iface->open_link = ephy_window_open_link;
+}
+
+static void
 ephy_window_class_init (EphyWindowClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -2455,12 +2475,12 @@ action_request_forward_cb (GObject *toolbar,
 }
 
 static EphyTab *
-open_link_cb (EphyLink *link,
-	      const char *address,
-	      EphyTab *tab,
-	      EphyLinkFlags flags,
-	      EphyWindow *window)
+ephy_window_open_link (EphyLink *link,
+		       const char *address,
+		       EphyTab *tab,
+		       EphyLinkFlags flags)
 {
+	EphyWindow *window = EPHY_WINDOW (link);
 	EphyTab *new_tab;
 
 	g_return_val_if_fail (address != NULL, NULL);
@@ -2529,8 +2549,8 @@ ephy_window_init (EphyWindow *window)
 	setup_ui_manager (window);
 
 	window->priv->notebook = setup_notebook (window);
-	g_signal_connect (window->priv->notebook, "open-link",
-			  G_CALLBACK (open_link_cb), window);
+	g_signal_connect_swapped (window->priv->notebook, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
 	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
 			    GTK_WIDGET (window->priv->notebook),
 			    TRUE, TRUE, 0);
@@ -2554,13 +2574,13 @@ ephy_window_init (EphyWindow *window)
 
 	/* create the toolbars */
 	window->priv->toolbar = ephy_toolbar_new (window);
-	g_signal_connect (window->priv->toolbar, "open-link",
-			  G_CALLBACK (open_link_cb), window);
+	g_signal_connect_swapped (window->priv->toolbar, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
 	g_signal_connect_swapped (window->priv->toolbar, "exit-clicked",
 				  G_CALLBACK (exit_fullscreen_clicked_cb), window);
 	window->priv->bookmarksbar = ephy_bookmarksbar_new (window);
-	g_signal_connect (window->priv->bookmarksbar, "open-link",
-			  G_CALLBACK (open_link_cb), window);
+	g_signal_connect_swapped (window->priv->bookmarksbar, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
 
 	g_signal_connect_swapped (window->priv->toolbar, "activation-finished",
 				  G_CALLBACK (sync_chromes_visibility), window);
@@ -2578,12 +2598,12 @@ ephy_window_init (EphyWindow *window)
 	window->priv->tabs_menu = ephy_tabs_menu_new (window);
 	window->priv->enc_menu = ephy_encoding_menu_new (window);
 	window->priv->fav_menu = ephy_favorites_menu_new (window);
-	g_signal_connect (window->priv->fav_menu, "open-link",
-			  G_CALLBACK (open_link_cb), window);
+	g_signal_connect_swapped (window->priv->fav_menu, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
 	window->priv->bmk_menu = ephy_bookmarks_menu_new (window->priv->manager,
 							  BOOKMARKS_MENU_PATH);
-	g_signal_connect (window->priv->bmk_menu, "open-link",
-			  G_CALLBACK (open_link_cb), window);
+	g_signal_connect_swapped (window->priv->bmk_menu, "open-link",
+				  G_CALLBACK (ephy_link_open), window);
 
 	/* forward the toolbar's action_request signal to the bookmarks toolbar,
 	 * so the user can also have bookmarks on the normal toolbar
@@ -2984,15 +3004,9 @@ void
 ephy_window_load_url (EphyWindow *window,
 		      const char *url)
 {
-	EphyEmbed *embed;
+	g_return_if_fail (url != NULL);
 
-        g_return_if_fail (EPHY_IS_WINDOW(window));
-	embed = ephy_window_get_active_embed (window);
-        g_return_if_fail (embed != NULL);
-        g_return_if_fail (url != NULL);
-
-        ephy_embed_load_url (embed, url);
-	ephy_embed_activate (embed);
+	ephy_link_open (EPHY_LINK (window), url, NULL, 0);
 }
 
 /**
