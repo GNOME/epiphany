@@ -1,3 +1,17 @@
+2003-10-29  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-history.c: (ephy_history_add_host),
+	(ephy_history_get_host):
+	* embed/ephy-history.h:
+
+	Add public function to get a host node from a page url.
+
+	* src/ephy-tab.c: (address_has_web_scheme), (ephy_tab_address_cb),
+	(ephy_tab_zoom_changed_cb), (open_link_in_new_tab),
+	(ephy_tab_init):
+
+	Persist zoom settings per host.
+
 2003-10-29  Soren Sandmann <sandmann@daimi.au.dk>
 
 	* lib/egg/egg-editable-toolbar.c: (drag_data_received_cb),

@@ -73,6 +73,7 @@ struct EphyTabPrivate
 	int height;
 	GtkToggleAction *action;
 	float zoom;
+	gboolean setting_zoom;
 	EmbedSecurityLevel security_level;
 	TabNavigationFlags nav_flags;
 };
@@ -391,6 +392,29 @@ ephy_tab_finalize (GObject *object)
 	LOG ("EphyTab finalized %p", tab)
 }
 
+static gboolean
+address_has_web_scheme (const char *address)
+{
+	GnomeVFSURI *uri;
+	const char *scheme;
+	gboolean has_web_scheme = FALSE;
+
+	uri = gnome_vfs_uri_new (address);
+	if (uri != NULL)
+	{
+		scheme = gnome_vfs_uri_get_scheme (uri);
+
+		has_web_scheme = (strcmp (scheme, "http") == 0 ||
+				  strcmp (scheme, "https") == 0 ||
+				  strcmp (scheme, "ftp") == 0 ||
+				  strcmp (scheme, "file") == 0);
+
+		gnome_vfs_uri_unref (uri);
+	}
+
+	return has_web_scheme;
+}
+
 /* Public functions */
 
 EphyTab *
@@ -569,6 +593,8 @@ ephy_tab_link_message_cb (EphyEmbed *embed,
 static void
 ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 {
+	LOG ("ephy_tab_address_cb tab %p address %s", tab, address)
+
 	if (tab->priv->address_expire == TAB_ADDRESS_EXPIRE_NOW)
 	{
 		ephy_tab_set_location (tab, address, TAB_ADDRESS_EXPIRE_NOW);
@@ -577,12 +603,74 @@ ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 	ephy_tab_set_link_message (tab, NULL);
 	ephy_tab_set_icon_address (tab, NULL);
 	ephy_tab_update_navigation_flags (tab);
+
+	/* restore zoom level */
+	if (address_has_web_scheme (address))
+	{
+		EphyHistory *history;
+		EphyNode *host;
+		GValue value = { 0, };
+		float zoom = 1.0, current_zoom = 1.0;
+		gresult rv;
+
+		history = ephy_embed_shell_get_global_history
+				(EPHY_EMBED_SHELL (ephy_shell));
+		host = ephy_history_get_host (history, address);
+
+		if (host != NULL && ephy_node_get_property
+				     (host, EPHY_NODE_HOST_PROP_ZOOM, &value))
+		{
+			zoom = g_value_get_float (&value);
+			g_value_unset (&value);
+		}
+
+		rv = ephy_embed_zoom_get (embed, &current_zoom);
+		if (rv == G_OK && zoom != current_zoom)
+		{
+			tab->priv->setting_zoom = TRUE;
+			ephy_embed_zoom_set (embed, zoom, FALSE);
+			tab->priv->setting_zoom = FALSE;
+		}
+	}
 }
 
 static void
 ephy_tab_zoom_changed_cb (EphyEmbed *embed, float zoom, EphyTab *tab)
 {
+	char *address;
+
+	LOG ("ephy_tab_zoom_changed_cb tab %p zoom %f", tab, zoom)
+
 	ephy_tab_set_zoom (tab, zoom);
+
+	if (tab->priv->setting_zoom)
+	{
+		return;
+	}
+
+	ephy_embed_get_location (embed, TRUE, &address);
+	if (address_has_web_scheme (address))
+	{
+		EphyHistory *history;
+		EphyNode *host;
+		GValue value = { 0, };
+		float zoom = 1.0;
+
+		history = ephy_embed_shell_get_global_history
+				(EPHY_EMBED_SHELL (ephy_shell));
+		host = ephy_history_get_host (history, address);
+
+		if (host != NULL && ephy_embed_zoom_get (embed, &zoom) == G_OK)
+		{
+			g_value_init (&value, G_TYPE_FLOAT);
+			g_value_set_float (&value, zoom);
+			ephy_node_set_property
+				(host, EPHY_NODE_HOST_PROP_ZOOM, &value);
+			g_value_unset (&value);
+		}
+	}
+
+	g_free (address);
 }
 
 static void
@@ -885,26 +973,13 @@ static void
 open_link_in_new_tab (EphyTab *tab,
 		      const char *link_address)
 {
-	GnomeVFSURI *uri;
-	const char *scheme;
 	EphyWindow *window;
-	gboolean new_tab = FALSE;
+	gboolean new_tab;
 
 	window = ephy_tab_get_window (tab);
 	g_return_if_fail (window != NULL);
 
-	uri = gnome_vfs_uri_new (link_address);
-	if (uri != NULL)
-	{
-		scheme = gnome_vfs_uri_get_scheme (uri);
-
-		new_tab = (strcmp (scheme, "http") == 0 ||
-			   strcmp (scheme, "https") == 0 ||
-	                   strcmp (scheme, "ftp") == 0 ||
-	                   strcmp (scheme, "file") == 0);
-
-		gnome_vfs_uri_unref (uri);
-	}
+	new_tab = address_has_web_scheme (link_address);
 
 	if (new_tab)
 	{
@@ -1000,6 +1075,7 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->security_level = STATE_IS_UNKNOWN;
 	tab->priv->status_message = NULL;
 	tab->priv->zoom = 1.0;
+	tab->priv->setting_zoom = FALSE;
 	tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
 
 	tab->priv->embed = ephy_embed_new (G_OBJECT(single));

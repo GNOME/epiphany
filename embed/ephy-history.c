@@ -536,19 +536,28 @@ ephy_history_host_visited (EphyHistory *eh,
 static EphyNode *
 ephy_history_add_host (EphyHistory *eh, EphyNode *page)
 {
+	const char *url;
+
+	url = ephy_node_get_property_string
+		(page, EPHY_NODE_PAGE_PROP_LOCATION);
+
+	return ephy_history_get_host (eh, url);
+}
+
+EphyNode *
+ephy_history_get_host (EphyHistory *eh, const char *url)
+{
 	GnomeVFSURI *vfs_uri = NULL;
 	EphyNode *host = NULL;
 	const char *host_name = NULL;
 	GList *host_locations = NULL, *l;
 	GValue value = { 0, };
-	const char *url;
 	const char *scheme = NULL;
 	GTime now;
 
-	now = time (NULL);
+	g_return_val_if_fail (url != NULL, NULL);
 
-	url = ephy_node_get_property_string
-		(page, EPHY_NODE_PAGE_PROP_LOCATION);
+	now = time (NULL);
 
 	vfs_uri = gnome_vfs_uri_new (url);
 

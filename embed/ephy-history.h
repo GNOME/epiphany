@@ -45,7 +45,8 @@ enum
 	EPHY_NODE_PAGE_PROP_FIRST_VISIT = 6,
 	EPHY_NODE_PAGE_PROP_HOST_ID = 7,
 	EPHY_NODE_PAGE_PROP_PRIORITY = 8,
-	EPHY_NODE_PAGE_PROP_ICON = 9
+	EPHY_NODE_PAGE_PROP_ICON = 9,
+	EPHY_NODE_HOST_PROP_ZOOM = 10
 };
 
 struct EphyHistory
@@ -66,6 +67,9 @@ GType		ephy_history_get_type		(void);
 EphyHistory    *ephy_history_new		(void);
 
 EphyNode       *ephy_history_get_hosts          (EphyHistory *gh);
+
+EphyNode       *ephy_history_get_host		(EphyHistory *gh,
+						 const char *url);
 
 EphyNode       *ephy_history_get_pages          (EphyHistory *gh);
 
