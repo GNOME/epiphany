@@ -656,7 +656,7 @@ ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
 		if (shell->priv->toolbars_model == NULL)
 		{
 			EphyBookmarks *bookmarks;
-			EggToolbarsModel *bookmarksbar_model;
+			GObject *bookmarksbar_model;
 
 			shell->priv->toolbars_model = ephy_toolbars_model_new ();
 
@@ -669,7 +669,7 @@ ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
 
 			/* ok, now we can load the model */
 			ephy_toolbars_model_load
-			(EPHY_TOOLBARS_MODEL (shell->priv->toolbars_model));
+				(EPHY_TOOLBARS_MODEL (shell->priv->toolbars_model));
 		}
 
 		return G_OBJECT (shell->priv->toolbars_model);

@@ -433,7 +433,7 @@ remove_from_model (GtkWidget *widget)
 	pos = get_item_position (widget, NULL);
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	model = ephy_bookmarks_get_toolbars_model (bookmarks);
+	model = EGG_TOOLBARS_MODEL (ephy_bookmarks_get_toolbars_model (bookmarks));
 
 	egg_toolbars_model_remove_item (model, 0, pos);
 }
@@ -446,7 +446,7 @@ move_in_model (GtkWidget *widget, int direction)
 	int pos, new_pos;
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	model = ephy_bookmarks_get_toolbars_model (bookmarks);
+	model = EGG_TOOLBARS_MODEL (ephy_bookmarks_get_toolbars_model (bookmarks));
 
 	pos = get_item_position (widget, NULL);
 	new_pos = MAX (0, pos + direction);

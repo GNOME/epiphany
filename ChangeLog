@@ -1,5 +1,21 @@
 2004-09-27  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/egg/Makefile.am:
+	* src/bookmarks/ephy-bookmark-action.c: (remove_from_model),
+	(move_in_model):
+	* src/bookmarks/ephy-bookmarks.c:
+	(ephy_bookmarks_get_toolbars_model):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/bookmarks/ephy-bookmarksbar.c:
+	(ephy_bookmarksbar_set_property):
+	* src/bookmarks/ephy-topic-action.c: (remove_from_model),
+	(move_in_model):
+	* src/ephy-shell.c: (ephy_shell_get_toolbars_model):
+
+	Don't reference private objects from public headers. Fixes bug #153766.
+
+2004-09-27  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.ac:
 	* lib/ephy-debug.c: (trap_handler), (ephy_debug_init):
 
