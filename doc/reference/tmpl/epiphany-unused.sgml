@@ -109,6 +109,29 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 @EMBED_STATE_IS_NETWORK: 
 @EMBED_STATE_IS_WINDOW: 
 
+<!-- ##### ENUM EphyCookieP3PPolicy ##### -->
+<para>
+
+</para>
+
+@EPHY_COOKIE_P3P_POLICY_UNKNOWN: 
+@EPHY_COOKIE_P3P_POLICY_NONE: 
+@EPHY_COOKIE_P3P_POLICY_NO_CONSENT: 
+@EPHY_COOKIE_P3P_POLICY_IMPLICIT_CONSENT: 
+@EPHY_COOKIE_P3P_POLICY_EXPLICIT_CONSENT: 
+@EPHY_COOKIE_P3P_POLICY_NO_II: 
+
+<!-- ##### ENUM EphyCookieP3PState ##### -->
+<para>
+
+</para>
+
+@EPHY_COOKIE_P3P_STATE_UNKNOWN: 
+@EPHY_COOKIE_P3P_STATE_ACCEPTED: 
+@EPHY_COOKIE_P3P_STATE_DOWNGRADED: 
+@EPHY_COOKIE_P3P_STATE_FLAGGED: 
+@EPHY_COOKIE_P3P_STATE_REJECTED: 
+
 <!-- ##### SIGNAL EphyEmbedPersist::cancelled ##### -->
 <para>
 
@@ -177,6 +200,12 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 </para>
 
 
+<!-- ##### ARG EphyTab:visible ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### FUNCTION ephy_embed_get_encoding_info ##### -->
 <para>
 
@@ -231,6 +260,30 @@ Represents the state of an #EphyEmbed with regards to networking negotiations.
 </para>
 
 @Returns: 
+
+<!-- ##### FUNCTION ephy_password_manager_add ##### -->
+<para>
+
+</para>
+
+@manager: 
+@info: 
+
+<!-- ##### FUNCTION ephy_password_manager_list ##### -->
+<para>
+
+</para>
+
+@manager: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_password_manager_remove ##### -->
+<para>
+
+</para>
+
+@manager: 
+@info: 
 
 <!-- ##### FUNCTION ephy_shell_delete_on_exit ##### -->
 <para>
