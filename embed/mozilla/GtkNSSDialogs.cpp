@@ -344,7 +344,7 @@ GtkNSSDialogs::ConfirmUnknownIssuer (nsIInterfaceRequestor *ctx,
 	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"", cCommonName.get());
 
 	secondary = g_strdup_printf
-		           (_("Your browser was unable to trust %s. "
+		           (_("It was not possible to automatically trust %s. "
 			      "It is possible that someone is intercepting your "
 			      "communication to obtain your confidential information."),
 			      ttCommonName);
