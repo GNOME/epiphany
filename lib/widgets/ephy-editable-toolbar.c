@@ -69,9 +69,9 @@ static EggActionGroupEntry ephy_toolbar_popups [] = {
 	{ "FakeToplevel", (""), NULL, NULL, NULL, NULL, NULL },
 
 	/* Popups */
-	{ "RemoveToolbarPopup", N_("_Remove"), GTK_STOCK_REMOVE, NULL,
+	{ "RemoveToolbarPopup", N_("_Remove Toolbar"), GTK_STOCK_REMOVE, NULL,
 	  NULL, G_CALLBACK (ephy_editable_toolbar_remove_cb), NULL },
-	{ "EditToolbarPopup", N_("_Edit"), GTK_STOCK_PREFERENCES, NULL,
+	{ "EditToolbarPopup", N_("_Edit Toolbars..."), GTK_STOCK_PREFERENCES, NULL,
 	  NULL, G_CALLBACK (ephy_editable_toolbar_edit_cb), NULL },
 };
 
