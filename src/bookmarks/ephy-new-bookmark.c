@@ -311,8 +311,9 @@ duplicate_dialog_construct (GtkWindow *parent,
 				   tmp_title);
 	str = g_strconcat ("<big>", tmp_str, "</big>", NULL);
 
-	dialog = gtk_message_dialog_new (GTK_WINDOW (parent), GTK_DIALOG_MODAL,
-					 GTK_MESSAGE_INFO, GTK_BUTTONS_OK, NULL);
+	dialog = gtk_message_dialog_new
+		(GTK_WINDOW (parent), GTK_DIALOG_DESTROY_WITH_PARENT,
+		 GTK_MESSAGE_INFO, GTK_BUTTONS_OK, NULL);
 	gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog), str);
 	g_free (str);
 
