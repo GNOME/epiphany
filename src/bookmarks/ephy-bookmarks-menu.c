@@ -159,7 +159,7 @@ ephy_bookmarks_menu_clean (EphyBookmarksMenu *menu)
 
 static void
 open_bookmark_cb (GtkAction *action,
-		  char *location,
+		  const char *location,
 		  EphyBookmarksMenu *menu)
 {
 	ephy_window_load_url (menu->priv->window, location);
@@ -187,7 +187,7 @@ add_action_for_bookmark (EphyBookmarksMenu *menu,
 
 	gtk_action_set_accel_path (action, apath);
 
-	g_signal_connect (action, "activate",
+	g_signal_connect (action, "open",
 			  G_CALLBACK (open_bookmark_cb), menu);
 
 	gtk_action_group_add_action (menu->priv->bmk_actions, action);
