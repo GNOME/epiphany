@@ -21,6 +21,7 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkscrolledwindow.h>
+#include <gtk/gtkhpaned.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
 #include <gdk/gdkkeysyms.h>
@@ -1048,7 +1049,7 @@ static void
 ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 {
 	GtkTreeSelection *selection;
-	GtkWidget *hbox, *vbox;
+	GtkWidget *hpaned, *vbox;
 	GtkWidget *bm_view, *key_view;
 	GtkWidget *scrolled_window;
 	EphyNode *node;
@@ -1060,10 +1061,6 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	EggAction *action;
 	const char *icon_path;
 	int i;
-
-	ephy_state_add_window (GTK_WIDGET(editor),
-			       "bookmarks_editor",
-		               450, 400);
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
 
@@ -1102,10 +1099,10 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	action = egg_action_group_get_action (action_group, "ViewTitle");
 	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action), TRUE);
 
-	hbox = gtk_hbox_new (FALSE, 6);
-	gtk_container_set_border_width (GTK_CONTAINER (hbox), 6);
-	gtk_container_add (GTK_CONTAINER (editor->priv->menu_dock), hbox);
-	gtk_widget_show (hbox);
+	hpaned = gtk_hpaned_new ();
+	gtk_container_set_border_width (GTK_CONTAINER (hpaned), 6);
+	gtk_container_add (GTK_CONTAINER (editor->priv->menu_dock), hpaned);
+	gtk_widget_show (hpaned);
 
 	g_assert (editor->priv->bookmarks);
 
@@ -1118,7 +1115,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 					"vscrollbar_policy", GTK_POLICY_AUTOMATIC,
 					"shadow_type", GTK_SHADOW_IN,
 					NULL);
-	gtk_box_pack_start (GTK_BOX (hbox), scrolled_window, FALSE, TRUE, 0);
+	gtk_paned_pack1 (GTK_PANED (hpaned), GTK_WIDGET (scrolled_window), TRUE, TRUE);
 	gtk_widget_show (scrolled_window);
 
 	/* Keywords View */
@@ -1165,8 +1162,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			  editor);
 
 	vbox = gtk_vbox_new (FALSE, 6);
-	gtk_box_pack_start (GTK_BOX (hbox),
-			    vbox, TRUE, TRUE, 0);
+	gtk_paned_pack2 (GTK_PANED (hpaned), vbox, TRUE, TRUE);
 	gtk_widget_show (vbox);
 
 	gtk_box_pack_start (GTK_BOX (vbox),
@@ -1220,6 +1216,13 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			  "changed",
 			  G_CALLBACK (view_selection_changed_cb),
 			  editor);
+	
+	ephy_state_add_window (GTK_WIDGET(editor),
+			       "bookmarks_editor",
+		               450, 400);
+	ephy_state_add_paned  (GTK_WIDGET (hpaned),
+			       "bookmarks_paned",
+		               130);
 
 	selected_id_str = eel_gconf_get_string (CONF_BOOKMARKS_SELECTED_NODE);
 	selected_id = g_ascii_strtoull (selected_id_str, NULL, 10);
