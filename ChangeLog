@@ -1,3 +1,9 @@
+2003-09-24  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/window-commands.c: (window_cmd_view_reload):
+
+	Check for NULL return of gtk_get_current_event. Fixes bug #123063.
+                
 2003-09-22  Christian Persch  <chpe@cvs.gnome.org>
 
 	* epiphany.spec:

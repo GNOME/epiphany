@@ -210,18 +210,21 @@ window_cmd_view_reload (EggAction *action,
 	g_return_if_fail (embed != NULL);
 
 	event = gtk_get_current_event ();
-	type = event->type;
-
-	if (type == GDK_BUTTON_RELEASE)
+	if (event)
 	{
-		state = event->button.state; 
-	}
-	else if (type == GDK_KEY_RELEASE)
-	{
-		state = event->key.state;
-	}
+		type = event->type;
 
-	gdk_event_free (event);
+		if (type == GDK_BUTTON_RELEASE)
+		{
+			state = event->button.state; 
+		}
+		else if (type == GDK_KEY_RELEASE)
+		{
+			state = event->key.state;
+		}
+
+		gdk_event_free (event);
+	}
 
 	if (state & GDK_SHIFT_MASK)
 	{
