@@ -8,14 +8,9 @@ keep to chang in an annoying way
 - Fixup column sizing. Ideally filename should get all available space, the
 others column can get the minimum (for progress we can just fixup requisition
 in the renderer to something sane)
-- Fix hash table destruction. Free row refs and unref download objects.
 - Cleanup downloader-view, there is prolly still crap here and there
 - Add LOGs on all objects involved in download. Init/Finalize and in c++
 constructor/destructor. Verify that references are correct == objects
 are destroyed at right time.
 - Probably use cur from total instead of just total in the size field
-- Deal with the case where total size is unknown (we need special rendering
-for progress too I guess)
-- Initialize progress values when starting the download
-- Need a way to do downloads without view, for favicons
-- expand filename col in downloader
+- fix EphyHeaderSniffer style
