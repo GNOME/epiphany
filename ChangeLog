@@ -1,5 +1,12 @@
 2003-09-04  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* lib/widgets/ephy-node-view.c: (drag_data_received_cb):
+
+	Use x,y only on drop, otherwise they are invalid. Damn
+	that api suck.
+
+2003-09-04  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* data/ui/epiphany-history-window-ui.xml.in:
 
 	Fix a typo in the xml
