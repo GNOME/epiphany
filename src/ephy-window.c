@@ -121,7 +121,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "FilePrint", GTK_STOCK_PRINT, N_("_Print..."), "<control>P",
 	  N_("Print the current page"),
 	  G_CALLBACK (window_cmd_file_print) },
-	{ "FileSendTo", STOCK_SEND_MAIL, N_("S_end To..."), NULL,
+	{ "FileSendTo", STOCK_SEND_MAIL, N_("S_end To..."), "<control>M",
 	  N_("Send a link of the current page"),
 	  G_CALLBACK (window_cmd_file_send_to) },
 	{ "FileCloseWindow", GTK_STOCK_CLOSE, N_("_Close"), "<control>W",
