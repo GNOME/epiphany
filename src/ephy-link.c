@@ -68,7 +68,7 @@ ephy_link_base_init (gpointer g_class)
 			 G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
 			 G_STRUCT_OFFSET (EphyLinkIface, open_link),
 			 ephy_signal_accumulator_object, ephy_tab_get_type,
-			 ephy_marshal_OBJECT__OBJECT_STRING_FLAGS,
+			 ephy_marshal_OBJECT__STRING_OBJECT_FLAGS,
 			 EPHY_TYPE_TAB,
 			 3,
 			 G_TYPE_STRING,
