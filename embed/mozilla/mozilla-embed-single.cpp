@@ -334,11 +334,13 @@ mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *moz_single,
 	g_signal_emit_by_name (single, "new-window", NULL, mask,
 			       &new_embed);
 
-	g_assert (new_embed != NULL);
+	/* it's okay not to have a new embed */
+	if (new_embed != NULL)
+	{
+		gtk_moz_embed_set_chrome_mask (GTK_MOZ_EMBED (new_embed), chrome);
 
-	gtk_moz_embed_set_chrome_mask (GTK_MOZ_EMBED (new_embed), chrome);
-
-	*newEmbed = GTK_MOZ_EMBED (new_embed);
+		*newEmbed = GTK_MOZ_EMBED (new_embed);
+	}
 }
 
 static void

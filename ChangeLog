@@ -1,5 +1,12 @@
 2005-02-26  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	Don't assert if we don't have a new embed in new_window callback.
+	Part of bug #165445.
+
+2005-02-26  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-bookmarks-import.c: (xbel_parse_folder):
 
 	Make sure folder is != NULL. Fixes bug #163341.
