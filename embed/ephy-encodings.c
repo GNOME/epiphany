@@ -294,6 +294,7 @@ ephy_encodings_add_recent (EphyEncodings *encodings,
 				       (GCompareFunc) strcmp);
 	if (element != NULL)
 	{
+		g_free (element->data);
 		encodings->priv->recent =
 			g_slist_remove_link (encodings->priv->recent, element);
 	}
