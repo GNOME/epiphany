@@ -43,7 +43,7 @@
 #include <gtk/gtkprivate.h>
 #include <string.h>
 
-#define DEFAULT_IPADDING 1
+#define DEFAULT_IPADDING 0
 #define DEFAULT_SPACE_SIZE  5
 #define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
 
@@ -53,11 +53,6 @@
 #define SPACE_LINE_DIVISION 10
 #define SPACE_LINE_START    3
 #define SPACE_LINE_END      7
-
-#define TOOLBAR_ITEM_VISIBLE(item) \
-(GTK_WIDGET_VISIBLE (item) && \
-((toolbar->orientation == GTK_ORIENTATION_HORIZONTAL && item->visible_horizontal) || \
- (toolbar->orientation == GTK_ORIENTATION_VERTICAL && item->visible_vertical)))
 
 #ifndef _
 #  define _(s) (s)
@@ -546,6 +541,33 @@ egg_toolbar_init (EggToolbar *toolbar)
   priv->menu = NULL;
 }
 
+static gboolean
+toolbar_item_visible (EggToolbar *toolbar, EggToolItem *item)
+{
+    if (GTK_WIDGET_VISIBLE (item) &&
+	((toolbar->orientation == GTK_ORIENTATION_HORIZONTAL && item->visible_horizontal) ||
+	 (toolbar->orientation == GTK_ORIENTATION_VERTICAL && item->visible_vertical)))
+      {
+	EggToolbarPrivate *priv = EGG_TOOLBAR_GET_PRIVATE (toolbar);
+	
+	/* With the old toolbar you could hide a button by calling gtk_widget_hide()
+	 * on it. This doesn't work with the new API because the EggToolItem will not be
+	 * hidden.
+	 */
+	if (priv->api_mode == OLD_API)
+	  {
+	    GtkWidget *bin_child = GTK_BIN (item)->child;
+	    
+	    if (!bin_child || !GTK_WIDGET_VISIBLE (bin_child))
+	      return FALSE;
+	  }
+	
+	return TRUE;
+      }
+    
+    return FALSE;
+}
+
 static void
 egg_toolbar_set_property (GObject     *object,
 			  guint        prop_id,
@@ -798,7 +820,7 @@ egg_toolbar_size_request (GtkWidget      *widget,
       GtkRequisition requisition;
       EggToolItem *item = list->data;
       
-      if (!TOOLBAR_ITEM_VISIBLE (item))
+      if (!toolbar_item_visible (toolbar, item))
 	continue;
 
       gtk_widget_size_request (GTK_WIDGET (item), &requisition);
@@ -825,7 +847,7 @@ egg_toolbar_size_request (GtkWidget      *widget,
       EggToolItem *item = list->data;
       guint size;
       
-      if (!TOOLBAR_ITEM_VISIBLE (item))
+      if (!toolbar_item_visible (toolbar, item))
 	continue;
       
       if (!GTK_BIN (item)->child)
@@ -1007,7 +1029,7 @@ egg_toolbar_size_allocate (GtkWidget     *widget,
     {
       EggToolItem *item = list->data;
       
-      if (TOOLBAR_ITEM_VISIBLE (item))
+      if (toolbar_item_visible (toolbar, item))
 	needed_size += get_item_size (toolbar, GTK_WIDGET (item));
     }
 
@@ -1028,7 +1050,7 @@ egg_toolbar_size_allocate (GtkWidget     *widget,
       GtkAllocation *allocation = &(allocations[n_items - i - 1]);
       gint item_size;
       
-      if (!item->pack_end || !TOOLBAR_ITEM_VISIBLE (item))
+      if (!item->pack_end || !toolbar_item_visible (toolbar, item))
 	continue;
 
       item_size = get_item_size (toolbar, GTK_WIDGET (item));
@@ -1059,7 +1081,7 @@ egg_toolbar_size_allocate (GtkWidget     *widget,
       EggToolItem *item = list->data;
       gint item_size;
 
-      if (item->pack_end || !TOOLBAR_ITEM_VISIBLE (item))
+      if (item->pack_end || !toolbar_item_visible (toolbar, item))
 	continue;
 
       item_size = get_item_size (toolbar, GTK_WIDGET (item));
@@ -1094,7 +1116,7 @@ egg_toolbar_size_allocate (GtkWidget     *widget,
     {
       EggToolItem *item = list->data;
       
-      if (TOOLBAR_ITEM_VISIBLE (item) && item->expand &&
+      if (toolbar_item_visible (toolbar, item) && item->expand &&
 	  !item->overflow_item && GTK_BIN (item)->child)
 	{
 	  n_expand_items++;
@@ -1105,7 +1127,7 @@ egg_toolbar_size_allocate (GtkWidget     *widget,
     {
       EggToolItem *item = list->data;
       
-      if (TOOLBAR_ITEM_VISIBLE (item) && item->expand &&
+      if (toolbar_item_visible (toolbar, item) && item->expand &&
 	  !item->overflow_item && GTK_BIN (item)->child)
 	{
 	  gint extra = size / n_expand_items;
@@ -1126,7 +1148,7 @@ egg_toolbar_size_allocate (GtkWidget     *widget,
     {
       EggToolItem *item = list->data;
       
-      if (TOOLBAR_ITEM_VISIBLE (item) && !item->overflow_item && !item->pack_end)
+      if (toolbar_item_visible (toolbar, item) && !item->overflow_item && !item->pack_end)
 	{
 	  allocations[i].x = pos;
 	  allocations[i].y = border_width;
@@ -1143,7 +1165,7 @@ egg_toolbar_size_allocate (GtkWidget     *widget,
     {
       EggToolItem *item = list->data;
       
-      if (TOOLBAR_ITEM_VISIBLE (item) && !item->overflow_item && item->pack_end)
+      if (toolbar_item_visible (toolbar, item) && !item->overflow_item && item->pack_end)
 	{
 	  GtkAllocation *allocation = &(allocations[n_items - i - 1]);
 
@@ -1199,7 +1221,7 @@ egg_toolbar_size_allocate (GtkWidget     *widget,
     {
       EggToolItem *item = list->data;
       
-      if (TOOLBAR_ITEM_VISIBLE (item) && !item->overflow_item)
+      if (toolbar_item_visible (toolbar, item) && !item->overflow_item)
 	{
 	  gtk_widget_size_allocate (GTK_WIDGET (item), &(allocations[i]));
 	  gtk_widget_set_child_visible (GTK_WIDGET (item), TRUE);
@@ -1912,7 +1934,7 @@ show_menu (EggToolbar     *toolbar,
     {
       EggToolItem *item = list->data;
 
-      if (TOOLBAR_ITEM_VISIBLE (item) && item->overflow_item)
+      if (toolbar_item_visible (toolbar, item) && item->overflow_item)
 	{
 	  GtkWidget *menu_item = egg_tool_item_retrieve_proxy_menu_item (item);
 

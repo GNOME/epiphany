@@ -367,30 +367,30 @@ egg_tool_button_construct_contents (EggToolItem *tool_item)
 	}
       else if (button->icon_widget)
 	{
-	  if (GTK_IS_IMAGE (button->icon_widget))
+	  icon = button->icon_widget;
+	  
+	  if (GTK_IS_IMAGE (icon))
 	    {
-	      GtkImage *image = GTK_IMAGE (button->icon_widget);
+	      GtkImage *image = GTK_IMAGE (icon);
 	      GtkImageType storage_type = gtk_image_get_storage_type (image);
 	      
-	      /* FIXME: this seems a bit dubious. We are changing a widget that the
-	       * user passed in. It's probably better to create a new image instead.
-	       */
-
 	      if (storage_type == GTK_IMAGE_STOCK)
 		{
 		  gchar *stock_id;
 		  gtk_image_get_stock (image, &stock_id, NULL);
-		  gtk_image_set_from_stock (image, stock_id, icon_size);
+
+		  icon = gtk_image_new_from_stock (stock_id, icon_size);
+		  gtk_widget_show (icon);
 		}
 	      else if (storage_type == GTK_IMAGE_ICON_SET)
 		{
 		  GtkIconSet *icon_set;
 		  gtk_image_get_icon_set (image, &icon_set, NULL);
-		  gtk_image_set_from_icon_set (image, icon_set, icon_size);
+		  
+		  icon = gtk_image_new_from_icon_set (icon_set, icon_size);
+		  gtk_widget_show (icon);
 		}
 	    }
-	  
-	  icon = button->icon_widget;
 	}
       else if (button->stock_id)
 	{
