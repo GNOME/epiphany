@@ -1,4 +1,82 @@
 ==============
+Epiphany 0.6.0
+==============
+
+Code changes
+
+	* Abstract implementation of EphyNodeView and EphyNodeTreeModel,
+	  so they can be shared by history and bookmarks (Marco, Jorn Baayen)
+	* Rewrite toolbar editor: more flexible model, do not use xml to build
+	  toolbars internally but EggAction directly (Marco)
+	* EphyDnd, EphyShell, Session cleanups (Christian Persch)
+
+Interface improvements
+
+	* Update smart bookmarks explanation (Marco)
+	* Remove "Epiphany" from desktop files (Marco)
+	* Always show tab bar if the user choose to default to tabs (Frank Belew)
+	* Add Help menu to the bookmarks editor (David Bordoley)
+	* All bookmarks menu on the bookmarks toolbar (Marco)
+	* Change the start page uri to home: (Marco)
+	* Not categorized special topic (Marco)
+	* Ever open tab as last on File->New tab and similars (Marco)
+	* Hidden pref for middle click open url, it can be confusing (Marco)
+	* "Intelligent" selection when an item is removed
+	  for history and bookmarks. (Xan Lopez)
+	* Rework the design of the history dialog, not completed,
+	  but it's already more usable (Marco, Dave Bordoley)
+	* Fix Pause/Resume buttons of the downloader (Xan Lopez)
+	* Open view source next to the current tab (Xan Lopez)
+	* Update View, Zoom, Tabs main menu bar items sensitivity according
+	  to the state (Marco)
+	* Default bookmarks toolbar. Do not allow to drag items to the
+	  other toolbars because it can be confusing. Accessible and more visible
+	  way to add bookmarks to the toolbar, in addition to drag and drop (Marco)
+	* Add tooltips to all the history and bookmarks menus (Dave Bordoley)
+	* Respect user selected font sizes in the home page (Xan Lopez)
+	* Add a down arrow to topics in bookmarks toolbars (Dave Bordoley)
+	* Save page content by default (Christian Persch)
+	* Make new bookmark dialog transient instead of modal (Dave Bordoley)
+	* Use epiphany logo in the about window (Xan Lopez)
+	* Add and help button to toolbar editor (Dave Bordoley)
+	* Allow to resize the two views in bookmarks editor and history using
+	  a pane (Dave Bordoley)
+	* Save the position of windows on the screen (Dave Bordoley)
+	* Consistent use of the term "Bookmarks Bar" in the code, ui and schema.
+	  (Dave Bordoley)
+	* New default toolbar layout (Dave Bordoley)
+	* In the history and bookmarks view pack the icon in the same
+	  column of the title (Marco)	
+	* Respect View menu toggles also in fullscreen (Lee Willis)
+
+Bugfixes
+	* Add bugzilla info (Mark Finlay)
+	* Fix a compilation bug on 2.95 (Vincent Untz)
+	* Fix select all for the bookmarks view (Dave Bordoley)
+	* Paste is only sensitive when in a text entry (Dave Bordoley)
+	* Fix bookmarks editor context menus to ever refer to the right view (Marco)
+	* Update bookmarksmenus sensitivity when the context change
+	  rather than after the menu is showed (Marco)
+	* Fix crash when opening popups (Marco)
+	* Fix crash when accessing secure sites (Dave Camp)
+	* Fix back and forward buttons prelighting randomly (Marco)
+	* Fix translation of some menus (Christian Neumair)
+	* Fix the downloader to remove/pause only current download, not all
+	  (Xan Lopez)
+
+Updated translations
+
+	* da (Ole Laursen)
+	* es (Francisco Javier Fernandez)
+	* ms (Hasbullah Bin Pit)
+	* nl (Vincent van Adrighem)
+	* no (Kjartan Maraas)
+	* pt (Duarte Loreto)
+	* pt_BR (Evandro Fernandes Giovanini)
+	* sv (Christian Rose)
+	* zh_TW (Abel Cheung)
+
+==============
 Epiphany 0.5.0
 ==============
 

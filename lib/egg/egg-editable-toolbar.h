@@ -69,6 +69,10 @@ void		    egg_editable_toolbar_set_drag_dest   (EggEditableToolbar   *etoolbar,
 							  gint                  n_targets,
 							  const char           *toolbar_name);
 
+/* Private Functions */
+
+GtkWidget 	   *_egg_editable_toolbar_new_separator_image ();
+
 G_END_DECLS
 
 #endif

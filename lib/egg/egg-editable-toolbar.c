@@ -291,7 +291,6 @@ create_toolbar (EggEditableToolbar *t)
 
   toolbar = egg_toolbar_new ();
   egg_toolbar_set_show_arrow (EGG_TOOLBAR (toolbar), TRUE);
-  gtk_widget_set_sensitive (toolbar, TRUE);
   gtk_widget_show (toolbar);
   gtk_drag_dest_set (toolbar, GTK_DEST_DEFAULT_DROP,
 		     dest_drag_types, n_dest_drag_types,
@@ -314,6 +313,8 @@ create_item (EggEditableToolbar *t,
   EggAction *action;
   const char *action_name;
   gboolean is_separator;
+  GtkWidget *icon;
+  GtkImageType type;
 
   action_name = egg_toolbars_model_item_nth
 		(model, toolbar_position, position,
@@ -322,6 +323,7 @@ create_item (EggEditableToolbar *t,
   if (is_separator)
     {
       item = GTK_WIDGET (egg_separator_tool_item_new ());
+      icon = _egg_editable_toolbar_new_separator_image ();
     }
   else
     {
@@ -329,6 +331,10 @@ create_item (EggEditableToolbar *t,
 		     0, action_name);
       action = find_action (t, action_name);
       item = egg_action_create_tool_item (action);
+      gtk_widget_set_sensitive (item, TRUE);
+      icon = gtk_image_new_from_stock
+		(action->stock_id ? action->stock_id : GTK_STOCK_DND,
+		 GTK_ICON_SIZE_LARGE_TOOLBAR);
     }
 
   gtk_widget_show (item);
@@ -339,6 +345,19 @@ create_item (EggEditableToolbar *t,
 		    G_CALLBACK (drag_data_get_cb), t);
   g_signal_connect (item, "drag_data_delete",
 		    G_CALLBACK (drag_data_delete_cb), t);
+
+  type = gtk_image_get_storage_type (GTK_IMAGE (icon));
+  if (type == GTK_IMAGE_STOCK)
+    {
+      gchar *stock_id;
+      gtk_image_get_stock (GTK_IMAGE (icon), &stock_id, NULL);
+      gtk_drag_source_set_icon_stock (item, stock_id);
+    }
+  else if (type == GTK_IMAGE_PIXBUF)
+    {
+      GdkPixbuf *pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (icon));
+      gtk_drag_source_set_icon_pixbuf (item, pixbuf);
+    }
 
   if (t->priv->edit_mode)
     {
@@ -701,3 +720,136 @@ egg_editable_toolbar_set_drag_dest (EggEditableToolbar   *etoolbar,
     }
 }
 
+#define DEFAULT_ICON_HEIGHT 20
+#define DEFAULT_ICON_WIDTH 0
+
+static void
+fake_expose_widget (GtkWidget *widget,
+		    GdkPixmap *pixmap)
+{
+  GdkWindow *tmp_window;
+  GdkEventExpose event;
+
+  event.type = GDK_EXPOSE;
+  event.window = pixmap;
+  event.send_event = FALSE;
+  event.area = widget->allocation;
+  event.region = NULL;
+  event.count = 0;
+
+  tmp_window = widget->window;
+  widget->window = pixmap;
+  gtk_widget_send_expose (widget, (GdkEvent *) &event);
+  widget->window = tmp_window;
+}
+
+/* We should probably experiment some more with this.
+ * Right now the rendered icon is pretty good for most
+ * themes. However, the icon is slightly large for themes
+ * with large toolbar icons.
+ */
+static GdkPixbuf *
+new_pixbuf_from_widget (GtkWidget *widget)
+{
+  GtkWidget *window;
+  GdkPixbuf *pixbuf;
+  GtkRequisition requisition;
+  GtkAllocation allocation;
+  GdkPixmap *pixmap;
+  GdkVisual *visual;
+  gint icon_width;
+  gint icon_height;
+
+  icon_width = DEFAULT_ICON_WIDTH;
+
+  if (!gtk_icon_size_lookup_for_settings (gtk_settings_get_default (), 
+					  GTK_ICON_SIZE_LARGE_TOOLBAR,
+					  NULL, 
+					  &icon_height))
+    {
+      icon_height = DEFAULT_ICON_HEIGHT;
+    }
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  
+  gtk_container_add (GTK_CONTAINER (window), widget);
+  gtk_widget_realize (window);
+  gtk_widget_show (widget);
+  gtk_widget_realize (widget);
+  gtk_widget_map (widget);
+
+  /* Gtk will never set the width or height of a window to 0. So setting the width to
+   * 0 and than getting it will provide us with the minimum width needed to render
+   * the icon correctly, without any additional window background noise.
+   * This is needed mostly for pixmap based themes.
+   */
+  gtk_window_set_default_size (GTK_WINDOW (window), icon_width, icon_height);
+  gtk_window_get_size (GTK_WINDOW (window),&icon_width, &icon_height);
+
+  gtk_widget_size_request (window, &requisition);
+  allocation.x = 0;
+  allocation.y = 0;
+  allocation.width = icon_width;
+  allocation.height = icon_height;
+  gtk_widget_size_allocate (window, &allocation);
+  gtk_widget_size_request (window, &requisition);
+  
+  /* Create a pixmap */
+  visual = gtk_widget_get_visual (window);
+  pixmap = gdk_pixmap_new (NULL, icon_width, icon_height, gdk_visual_get_best_depth());
+  gdk_drawable_set_colormap (GDK_DRAWABLE (pixmap), gtk_widget_get_colormap (window));
+
+  /* Draw the window */
+  gtk_widget_ensure_style (window);
+  g_assert (window->style);
+  g_assert (window->style->font_desc);
+  
+  fake_expose_widget (window, pixmap);
+  fake_expose_widget (widget, pixmap);
+  
+  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, icon_width, icon_height);
+  gdk_pixbuf_get_from_drawable (pixbuf, pixmap, NULL, 0, 0, 0, 0, icon_width, icon_height);
+
+  return pixbuf;
+}
+
+static GdkPixbuf *
+new_separator_pixbuf ()
+{
+  GtkWidget *separator;
+  GdkPixbuf *pixbuf;
+
+  separator = gtk_vseparator_new ();
+  pixbuf = new_pixbuf_from_widget (separator);
+  gtk_widget_destroy (separator);
+  return pixbuf;
+}
+
+static void
+update_separator_image (GtkImage *image)
+{
+  GdkPixbuf *pixbuf = new_separator_pixbuf ();
+  gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
+  g_object_unref (pixbuf);
+}
+
+static gboolean
+style_set_cb (GtkWidget *widget,
+              GtkStyle *previous_style,
+              GtkImage *image)
+{
+
+  update_separator_image (image);
+  return FALSE;
+}
+
+GtkWidget *
+_egg_editable_toolbar_new_separator_image ()
+{
+  GtkWidget *image = gtk_image_new ();
+  update_separator_image (GTK_IMAGE (image));
+  g_signal_connect (G_OBJECT (image), "style_set",
+		    G_CALLBACK (style_set_cb), GTK_IMAGE (image));
+
+  return image;
+}
