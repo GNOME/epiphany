@@ -71,7 +71,6 @@ NOINST_H_FILES =					\
 	popup-commands.h				\
 	prefs-dialog.h					\
 	ppview-toolbar.h				\
-	statusbar.h					\
 	toolbar.h					\
 	window-commands.h
 
@@ -80,6 +79,7 @@ INST_H_FILES = 				    		\
 	ephy-notebook.h					\
 	ephy-session.h					\
 	ephy-shell.h					\
+	ephy-statusbar.h				\
 	ephy-tab.h					\
 	ephy-window.h
 
@@ -102,6 +102,7 @@ libephymain_la_SOURCES =				\
 	ephy-notebook.c					\
 	ephy-session.c					\
 	ephy-shell.c					\
+	ephy-statusbar.c				\
 	ephy-tab.c					\
 	ephy-tab.h					\
 	ephy-tabs-menu.c				\
@@ -112,7 +113,6 @@ libephymain_la_SOURCES =				\
 	popup-commands.c				\
 	prefs-dialog.c					\
 	ppview-toolbar.c				\
-	statusbar.c					\
 	toolbar.c					\
 	window-commands.c				\
 	$(INST_H_FILES)					\

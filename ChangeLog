@@ -1,3 +1,21 @@
+2004-02-13  Christian Persch  <chpe@cvs.gnome.org>
+
+	* doc/reference/Makefile.am:
+	* src/Makefile.am:
+
+	Install the statusbar .h file.
+
+	R src/statusbar.[ch]:
+	A src/ephy-statusbar.[ch]:
+
+	s/statusbar/ephy-statusbar/ and friends.
+
+	* src/ephy-window.c: (sync_tab_load_progress), (sync_tab_security),
+	(ephy_window_init):
+
+	Change references from statusbar to ephy-statusbar.
+	Remove selection-received stuff, since it now lives in EphyTab.
+
 2004-02-12  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.in:

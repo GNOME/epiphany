@@ -39,7 +39,7 @@
 #include "ephy-zoom.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
-#include "statusbar.h"
+#include "ephy-statusbar.h"
 #include "toolbar.h"
 #include "popup-commands.h"
 #include "ephy-encoding-menu.h"
@@ -407,21 +407,6 @@ ephy_window_destroy (GtkObject *gtkobject)
 	}
 
         GTK_OBJECT_CLASS (parent_class)->destroy (gtkobject);
-}
-
-static void
-ephy_window_selection_received_cb (GtkWidget *widget,
-				   GtkSelectionData *selection_data,
-				   guint time, EphyWindow *window)
-{
-	EphyTab *tab;
-
-	if (selection_data->length <= 0 || selection_data->data == NULL)
-		return;
-
-	tab = ephy_window_get_active_tab (window);
-
-	ephy_embed_load_url (ephy_tab_get_embed (tab), selection_data->data);
 }
 
 static void
@@ -1049,8 +1034,8 @@ sync_tab_load_progress (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	if (window->priv->closing) return;
 
-	statusbar_set_progress (EPHY_STATUSBAR (window->priv->statusbar),
-				ephy_tab_get_load_percent (tab));
+	ephy_statusbar_set_progress (EPHY_STATUSBAR (window->priv->statusbar),
+				     ephy_tab_get_load_percent (tab));
 }
 
 static void
@@ -1181,8 +1166,8 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 
 	}
 
-	statusbar_set_security_state (EPHY_STATUSBAR (window->priv->statusbar),
-			              secure, tooltip);
+	ephy_statusbar_set_security_state (EPHY_STATUSBAR (window->priv->statusbar),
+					   secure, tooltip);
 	g_free (tooltip);
 
 }
@@ -1923,18 +1908,12 @@ ephy_window_init (EphyWindow *window)
 	/* Setup the UI manager and connect verbs */
 	setup_ui_manager (window);
 
-	window->priv->toolbar = toolbar_new (window);
-	gtk_box_pack_end (GTK_BOX (window->priv->menu_dock),
-			  GTK_WIDGET (window->priv->toolbar),
-			  FALSE, FALSE, 0);
-
-
 	window->priv->notebook = setup_notebook (window);
 	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
 			    GTK_WIDGET (window->priv->notebook),
 			    TRUE, TRUE, 0);
 
-	window->priv->statusbar = statusbar_new ();
+	window->priv->statusbar = ephy_statusbar_new ();
 	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
 			    GTK_WIDGET (window->priv->statusbar),
 			    FALSE, TRUE, 0);
@@ -1950,6 +1929,12 @@ ephy_window_init (EphyWindow *window)
 	window->priv->enc_menu = ephy_encoding_menu_new (window);
 	window->priv->bmk_menu = ephy_bookmarks_menu_new (window);
 
+	/* create the toolbar */
+	window->priv->toolbar = toolbar_new (window);
+	gtk_box_pack_end (GTK_BOX (window->priv->menu_dock),
+			  GTK_WIDGET (window->priv->toolbar),
+			  FALSE, FALSE, 0);
+
 	/* Once the window is sufficiently created let the extensions attach to it */
 	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
 	ephy_extension_attach_window (manager, window);
@@ -1959,10 +1944,6 @@ ephy_window_init (EphyWindow *window)
 	gtk_widget_show (GTK_WIDGET (window->priv->notebook));
 	gtk_widget_show (window->priv->statusbar);
 
-	g_signal_connect (window,
-			  "selection-received",
-			  G_CALLBACK (ephy_window_selection_received_cb),
-			  window);
 	g_signal_connect (window, "window-state-event",
 			  G_CALLBACK (ephy_window_state_event_cb),
 			  window);
