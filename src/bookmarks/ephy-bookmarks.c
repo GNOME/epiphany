@@ -38,8 +38,6 @@ struct EphyBookmarksPrivate
 	EphyNode *favorites;
 	EphyNode *lower_fav;
 	double lower_score;
-	GHashTable *keywords_hash;
-	GStaticRWLock *keywords_hash_lock;
 };
 
 static void
@@ -364,33 +362,6 @@ ephy_setup_history_notifiers (EphyBookmarks *eb)
 }
 
 static void
-keywords_added_cb (EphyNode *node,
-	           EphyNode *child,
-	           EphyBookmarks *eb)
-{
-	g_static_rw_lock_writer_lock (eb->priv->keywords_hash_lock);
-
-	g_hash_table_insert (eb->priv->keywords_hash,
-			     (char *) ephy_node_get_property_string (child, EPHY_NODE_KEYWORD_PROP_NAME),
-			     child);
-
-	g_static_rw_lock_writer_unlock (eb->priv->keywords_hash_lock);
-}
-
-static void
-keywords_removed_cb (EphyNode *node,
-		     EphyNode *child,
-		     EphyBookmarks *eb)
-{
-	g_static_rw_lock_writer_lock (eb->priv->keywords_hash_lock);
-
-	g_hash_table_remove (eb->priv->keywords_hash,
-			     ephy_node_get_property_string (child, EPHY_NODE_KEYWORD_PROP_NAME));
-
-	g_static_rw_lock_writer_unlock (eb->priv->keywords_hash_lock);
-}
-
-static void
 bookmarks_changed_cb (EphyNode *node,
 		      EphyNode *child,
 		      EphyBookmarks *eb)
@@ -416,11 +387,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	eb->priv->xml_file = g_build_filename (ephy_dot_dir (),
 					       "bookmarks.xml",
 					       NULL);
-
-	eb->priv->keywords_hash = g_hash_table_new (g_str_hash,
-			                            g_str_equal);
-	eb->priv->keywords_hash_lock = g_new0 (GStaticRWLock, 1);
-	g_static_rw_lock_init (eb->priv->keywords_hash_lock);
 
 	/* Bookmarks */
 	eb->priv->bookmarks = ephy_node_new_with_id (BOOKMARKS_NODE_ID);
@@ -454,16 +420,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 
 	ephy_node_add_child (eb->priv->keywords,
 			     eb->priv->bookmarks);
-	g_signal_connect_object (G_OBJECT (eb->priv->keywords),
-				 "child_added",
-				 G_CALLBACK (keywords_added_cb),
-				 G_OBJECT (eb),
-				 0);
-	g_signal_connect_object (G_OBJECT (eb->priv->keywords),
-				 "child_removed",
-				 G_CALLBACK (keywords_removed_cb),
-				 G_OBJECT (eb),
-				 0);
 
 	/* Favorites */
 	eb->priv->favorites = ephy_node_new_with_id (FAVORITES_NODE_ID);
@@ -505,9 +461,6 @@ ephy_bookmarks_finalize (GObject *object)
 	ephy_node_unref (eb->priv->bookmarks);
 	ephy_node_unref (eb->priv->keywords);
 	ephy_node_unref (eb->priv->favorites);
-
-	g_hash_table_destroy (eb->priv->keywords_hash);
-	g_static_rw_lock_free (eb->priv->keywords_hash_lock);
 
         g_free (eb->priv);
 
@@ -797,43 +750,35 @@ ephy_bookmarks_find_keyword (EphyBookmarks *eb,
 			     gboolean partial_match)
 {
 	EphyNode *node;
+	GPtrArray *children;
+	int i;
 
 	g_return_val_if_fail (name != NULL, NULL);
 
-	if (!partial_match)
+
+	if (g_utf8_strlen (name, -1) == 0)
 	{
-		g_static_rw_lock_reader_lock (eb->priv->keywords_hash_lock);
-		node = g_hash_table_lookup (eb->priv->keywords_hash, name);
-		g_static_rw_lock_reader_unlock (eb->priv->keywords_hash_lock);
+		LOG ("Empty name, no keyword matches.")
+		return NULL;
 	}
-	else
+
+	children = ephy_node_get_children (eb->priv->keywords);
+	node = NULL;
+	for (i = 0; i < children->len; i++)
 	{
-		GPtrArray *children;
-		int i;
+		 EphyNode *kid;
+		 const char *key;
 
-		if (g_utf8_strlen (name, -1) == 0)
-		{
-			LOG ("Empty name, no keyword matches.")
-			return NULL;
-		}
+		 kid = g_ptr_array_index (children, i);
+		 key = ephy_node_get_property_string (kid, EPHY_NODE_KEYWORD_PROP_NAME);
 
-		children = ephy_node_get_children (eb->priv->keywords);
-		node = NULL;
-		for (i = 0; i < children->len; i++)
-		{
-			 EphyNode *kid;
-			 const char *key;
-
-			 kid = g_ptr_array_index (children, i);
-			 key = ephy_node_get_property_string (kid, EPHY_NODE_KEYWORD_PROP_NAME);
-
-			 if (g_str_has_prefix (key, name) > 0)
-			 {
-				 node = kid;
-			 }
-		}
-		ephy_node_thaw (eb->priv->keywords);
+		 if ((partial_match && g_str_has_prefix (key, name) > 0) ||
+		     (!partial_match && strcmp (key, name) == 0))
+		 {
+			 node = kid;
+		 }
 	}
+	ephy_node_thaw (eb->priv->keywords);
 
 	return node;
 }

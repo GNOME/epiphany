@@ -22,6 +22,12 @@
 #include <gtk/gtktreeview.h>
 #include <string.h>
 
+typedef enum {
+        EPHY_DND_URI_LIST,
+        EPHY_DND_TEXT,
+        EPHY_DND_URL
+} EphyIconDndTargetType;
+
 static GtkTargetEntry url_drag_types [] =
 {
         { EPHY_DND_URI_LIST_TYPE,   0, EPHY_DND_URI_LIST },

@@ -25,19 +25,11 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_DND_NODE_PROPERTY		3
-
 /* Drag & Drop target names. */
 #define EPHY_DND_URI_LIST_TYPE          "text/uri-list"
 #define EPHY_DND_TEXT_TYPE              "text/plain"
 #define EPHY_DND_URL_TYPE               "_NETSCAPE_URL"
-
-/* Standard Drag & Drop types. */
-typedef enum {
-        EPHY_DND_URI_LIST,
-        EPHY_DND_TEXT,
-        EPHY_DND_URL
-} EphyIconDndTargetType;
+#define EPHY_DND_TOPIC_TYPE		"ephy_topic"
 
 typedef void (* EphyDragEachSelectedItemDataGet)    (const char *url,
                                                      int x, int y, int w, int h,

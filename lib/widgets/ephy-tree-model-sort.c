@@ -26,6 +26,7 @@
 #include "eggtreemultidnd.h"
 #include "ephy-dnd.h"
 #include "ephy-marshal.h"
+#include "ephy-debug.h"
 
 static void ephy_tree_model_sort_class_init (EphyTreeModelSortClass *klass);
 static void ephy_tree_model_sort_init (EphyTreeModelSort *ma);
@@ -43,6 +44,7 @@ static gboolean ephy_tree_model_sort_multi_drag_data_delete (EggTreeMultiDragSou
 struct EphyTreeModelSortPrivate
 {
 	char *str_list;
+	guint drag_property_id;
 };
 
 enum
@@ -119,6 +121,8 @@ static void
 ephy_tree_model_sort_init (EphyTreeModelSort *ma)
 {
 	ma->priv = g_new0 (EphyTreeModelSortPrivate, 1);
+
+	ma->priv->drag_property_id = -1;
 }
 
 static void
@@ -185,6 +189,13 @@ ephy_tree_model_sort_multi_row_draggable (EggTreeMultiDragSource *drag_source, G
 	return TRUE;
 }
 
+void
+ephy_tree_model_sort_set_drag_property (EphyTreeModelSort *ms,
+					guint id)
+{
+	ms->priv->drag_property_id = id;
+}
+
 static gboolean
 ephy_tree_model_sort_multi_drag_data_delete (EggTreeMultiDragSource *drag_source,
 					     GList *path_list)
@@ -216,8 +227,10 @@ each_url_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 		if (node == NULL)
 			return;
 
-		value = ephy_node_get_property_string (node,
-				                       EPHY_DND_NODE_PROPERTY);
+		value = ephy_node_get_property_string
+			(node, EPHY_TREE_MODEL_SORT (model)->priv->drag_property_id);
+
+		LOG ("Data get %s", value)
 
 		iteratee (value, -1, -1, -1, -1, data);
 	}
@@ -228,13 +241,40 @@ ephy_tree_model_sort_multi_drag_data_get (EggTreeMultiDragSource *drag_source,
 					  GList *path_list,
 					  guint info,
 					  GtkSelectionData *selection_data)
-{	gpointer icontext[2];
+{
+	EphyTreeModelSort *ms = EPHY_TREE_MODEL_SORT (drag_source);
 
-	icontext[0] = path_list;
-	icontext[1] = drag_source;
+	/* FIXME use the target type here, not property_id */
 
-	ephy_dnd_drag_data_get (NULL, NULL, selection_data,
-                info, 0, &icontext, each_url_get_data_binder);
+	if (ms->priv->drag_property_id != -1)
+	{
+		gpointer icontext[2];
+
+		icontext[0] = path_list;
+		icontext[1] = drag_source;
+
+		ephy_dnd_drag_data_get (NULL, NULL, selection_data,
+			info, 0, &icontext, each_url_get_data_binder);
+	}
+	else
+	{
+		GtkTreeIter iter;
+		GtkTreePath *path = gtk_tree_row_reference_get_path (path_list->data);
+		EphyNode *node = NULL;
+		char *data;
+
+		gtk_tree_model_get_iter (GTK_TREE_MODEL (drag_source), &iter, path);
+		g_signal_emit (G_OBJECT (drag_source),
+			       ephy_tree_model_sort_signals[NODE_FROM_ITER],
+			       0, &iter, &node);
+
+		/* FIXME free */
+		data = g_strdup_printf ("%ld", ephy_node_get_id (node));
+
+	        gtk_selection_data_set (selection_data,
+					selection_data->target,
+					8, data, strlen (data));
+	}
 
 	return TRUE;
 }

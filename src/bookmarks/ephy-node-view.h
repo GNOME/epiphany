@@ -79,7 +79,10 @@ void	      ephy_node_view_set_browse_mode	      (EphyNodeView *view);
 void	      ephy_node_view_select_node              (EphyNodeView *view,
 			                               EphyNode *node);
 
-void	      ephy_node_view_enable_drag_source       (EphyNodeView *view);
+void	      ephy_node_view_enable_drag_source       (EphyNodeView *view,
+						       GtkTargetEntry *types,
+						       int n_types,
+						       guint prop_id);
 
 void	      ephy_node_view_set_hinted		      (EphyNodeView *view,
 						       gboolean hinted);

@@ -278,6 +278,9 @@ history_dialog_setup_view (HistoryDialog *dialog)
 				                  EPHY_HISTORY_MODEL_COL_VISIBLE);
 	dialog->priv->sortmodel = EPHY_TREE_MODEL_SORT (
 			ephy_tree_model_sort_new (GTK_TREE_MODEL (dialog->priv->filtermodel)));
+	ephy_tree_model_sort_set_drag_property
+		(dialog->priv->sortmodel, EPHY_NODE_PAGE_PROP_TITLE);
+
 	g_signal_connect_object (G_OBJECT (dialog->priv->sortmodel),
 				 "node_from_iter",
 				 G_CALLBACK (node_from_sort_iter_cb),

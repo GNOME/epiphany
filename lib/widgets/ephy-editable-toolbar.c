@@ -29,18 +29,12 @@
 #include <libgnome/gnome-i18n.h>
 #include <string.h>
 
-/* This is copied from gtkscrollbarwindow.c */
-#define DEFAULT_SCROLLBAR_SPACING  3
-
-#define SCROLLBAR_SPACING(w)                                                            \
-  (GTK_SCROLLED_WINDOW_GET_CLASS (w)->scrollbar_spacing >= 0 ?                          \
-   GTK_SCROLLED_WINDOW_GET_CLASS (w)->scrollbar_spacing : DEFAULT_SCROLLBAR_SPACING)
-
 static GtkTargetEntry dest_drag_types [] =
 {
         { "EPHY_TOOLBAR_BUTTON", 0, 0 },
 	/* FIXME generic way to add types */
-        { EPHY_DND_URL_TYPE, 0, EPHY_DND_URL }
+        { EPHY_DND_URL_TYPE, 0, 1 },
+        { EPHY_DND_TOPIC_TYPE, 0, 2 }
 };
 
 static GtkTargetEntry source_drag_types [] =
@@ -180,23 +174,23 @@ find_action (EphyEditableToolbar *t, const char *name)
 	return action;
 }
 
+static char *
+impl_get_action_name (EphyEditableToolbar *etoolbar,
+		      const char *drag_type,
+		      const char *data)
+{
+	return NULL;
+}
+
 static EggAction *
 impl_get_action (EphyEditableToolbar *etoolbar,
-		 const char *type,
 		 const char *name)
 {
 	EggAction *action;
 
 	g_return_val_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar), NULL);
 
-	if (type == NULL)
-	{
-		action = find_action (etoolbar, name);
-	}
-	else
-	{
-		action = NULL;
-	}
+	action = find_action (etoolbar, name);
 
 	return action;
 }
@@ -248,9 +242,11 @@ drag_data_received_cb (GtkWidget *widget,
 	EphyToolbarsItem *sibling;
 	const char *type = NULL;
 	GdkAtom target;
-	EggAction *action;
+	EggAction *action = NULL;
 
 	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+
+	LOG ("Drag data received")
 
 	toolbar = (EphyToolbarsToolbar *)g_object_get_data (G_OBJECT (widget), "toolbar_data");
 
@@ -273,8 +269,28 @@ drag_data_received_cb (GtkWidget *widget,
 	{
 		type = EPHY_DND_URL_TYPE;
 	}
+	else if (target == gdk_atom_intern (EPHY_DND_TOPIC_TYPE, FALSE))
+	{
+		type = EPHY_DND_TOPIC_TYPE;
+	}
 
-	action = ephy_editable_toolbar_get_action (etoolbar, type, selection_data->data);
+	if (type)
+	{
+		char *name;
+
+		name = ephy_editable_toolbar_get_action_name
+			(etoolbar, type, selection_data->data);
+		if (name != NULL)
+		{
+			action = ephy_editable_toolbar_get_action (etoolbar, name);
+			g_free (name);
+		}
+	}
+	else
+	{
+		action = ephy_editable_toolbar_get_action (etoolbar, selection_data->data);
+	}
+
 	if (action)
 	{
 		ephy_toolbars_group_add_item (etoolbar->priv->group, parent, sibling,
@@ -540,7 +556,7 @@ setup_toolbar (EphyToolbarsToolbar *toolbar, EphyEditableToolbar *etoolbar)
 		g_object_set_data (G_OBJECT (widget), "drag_dest_set",
 				   GINT_TO_POINTER (TRUE));
 		gtk_drag_dest_set (widget, GTK_DEST_DEFAULT_ALL,
-				   dest_drag_types, 2,
+				   dest_drag_types, 3,
 				   GDK_ACTION_MOVE | GDK_ACTION_COPY);
 		g_signal_connect (widget, "drag_data_received",
 				  G_CALLBACK (drag_data_received_cb),
@@ -587,7 +603,7 @@ setup_item (EphyToolbarsItem *item, EphyEditableToolbar *etoolbar)
 		g_object_set_data (G_OBJECT (toolitem), "drag_dest_set",
 				   GINT_TO_POINTER (TRUE));
 		gtk_drag_dest_set (toolitem, GTK_DEST_DEFAULT_ALL,
-				   dest_drag_types, 2,
+				   dest_drag_types, 3,
 				   GDK_ACTION_COPY | GDK_ACTION_MOVE);
 		g_signal_connect (toolitem, "drag_data_received",
 				  G_CALLBACK (drag_data_received_cb),
@@ -676,7 +692,7 @@ ensure_action (EphyToolbarsItem *item, EphyEditableToolbar *t)
 	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (t));
 	g_return_if_fail (item != NULL);
 
-	ephy_editable_toolbar_get_action (t, NULL, item->action);
+	ephy_editable_toolbar_get_action (t, item->action);
 }
 
 static void
@@ -774,6 +790,7 @@ ephy_editable_toolbar_class_init (EphyEditableToolbarClass *klass)
 	object_class->get_property = ephy_editable_toolbar_get_property;
 
 	klass->get_action = impl_get_action;
+	klass->get_action_name = impl_get_action_name;
 
 	g_object_class_install_property (object_class,
                                          PROP_MENU_MERGE,
@@ -1033,7 +1050,7 @@ update_editor_sheet (EphyEditableToolbar *etoolbar)
 	gtk_scrolled_window_add_with_viewport
 		(GTK_SCROLLED_WINDOW (etoolbar->priv->scrolled_window), table);
 	gtk_drag_dest_set (table, GTK_DEST_DEFAULT_ALL,
-			   dest_drag_types, 2, GDK_ACTION_MOVE);
+			   dest_drag_types, 3, GDK_ACTION_MOVE);
 	g_signal_connect (table, "drag_data_received",
 			  G_CALLBACK (editor_drag_data_received_cb),
 			  etoolbar);
@@ -1057,7 +1074,7 @@ update_editor_sheet (EphyEditableToolbar *etoolbar)
 		EggAction *action;
 
 		action = ephy_editable_toolbar_get_action
-			(etoolbar, NULL, node->action);
+			(etoolbar, node->action);
 		g_return_if_fail (action != NULL);
 
 		event_box = gtk_event_box_new ();
@@ -1202,11 +1219,19 @@ ephy_editable_toolbar_edit (EphyEditableToolbar *etoolbar, GtkWidget *window)
 	show_editor (etoolbar);
 }
 
+char *
+ephy_editable_toolbar_get_action_name (EphyEditableToolbar *etoolbar,
+				       const char *drag_type,
+				       const char *data)
+{
+	 EphyEditableToolbarClass *klass = EPHY_EDITABLE_TOOLBAR_GET_CLASS (etoolbar);
+	 return klass->get_action_name (etoolbar, drag_type, data);
+}
+
 EggAction *
 ephy_editable_toolbar_get_action (EphyEditableToolbar *etoolbar,
-				  const char *type,
 				  const char *name)
 {
 	 EphyEditableToolbarClass *klass = EPHY_EDITABLE_TOOLBAR_GET_CLASS (etoolbar);
-	 return klass->get_action (etoolbar, type, name);
+	 return klass->get_action (etoolbar, name);
 }

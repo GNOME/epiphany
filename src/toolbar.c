@@ -27,6 +27,7 @@
 #include "ephy-spinner-action.h"
 #include "ephy-location-action.h"
 #include "ephy-favicon-action.h"
+#include "ephy-topic-action.h"
 #include "ephy-go-action.h"
 #include "ephy-navigation-action.h"
 #include "ephy-bookmark-action.h"
@@ -132,27 +133,30 @@ get_bookmark_action (Toolbar *t, EphyBookmarks *bookmarks, gulong id, const char
 	return action;
 }
 
-static EggAction *
-toolbar_get_action (EphyEditableToolbar *etoolbar,
-		    const char *type,
-		    const char *name)
+static char *
+toolbar_get_action_name (EphyEditableToolbar *etoolbar,
+		         const char *drag_type,
+			 const char *data)
 {
 	Toolbar *t = TOOLBAR (etoolbar);
-	EggAction *action = NULL;
 	EphyBookmarks *bookmarks;
 	gulong id = 0;
-	char action_name[255];
+	char *res = NULL;
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
-	if (type && (strcmp (type, EPHY_DND_URL_TYPE) == 0))
+	if (drag_type && (strcmp (drag_type, EPHY_DND_TOPIC_TYPE) == 0))
+	{
+		res = g_strdup_printf ("GoTopicId%s", data);
+	}
+	else if (drag_type && (strcmp (drag_type, EPHY_DND_URL_TYPE) == 0))
 	{
 		GtkWidget *new_bookmark;
 		const char *url;
 		const char *title = NULL;
 		GList *uris;
 
-		uris = ephy_dnd_uri_list_extract_uris (name);
+		uris = ephy_dnd_uri_list_extract_uris ((char *)data);
 		g_return_val_if_fail (uris != NULL, NULL);
 		url = (const char *)uris->data;
 		if (uris->next)
@@ -176,29 +180,59 @@ toolbar_get_action (EphyEditableToolbar *etoolbar,
 
 		g_list_foreach (uris, (GFunc)g_free, NULL);
 		g_list_free (uris);
+
+		if (id != 0)
+		{
+			res = g_strdup_printf ("GoBookmarkId%ld", id);
+		}
+		else
+		{
+			res = NULL;
+		}
+	}
+
+	return res;
+}
+
+static EggAction *
+toolbar_get_action (EphyEditableToolbar *etoolbar,
+		    const char *name)
+{
+	Toolbar *t = TOOLBAR (etoolbar);
+	EggAction *action = NULL;
+	gulong id = 0;
+	EphyBookmarks *bookmarks;
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+
+	action = EPHY_EDITABLE_TOOLBAR_CLASS
+			(parent_class)->get_action (etoolbar, name);
+	if (action)
+	{
+		return action;
 	}
 	else if (g_str_has_prefix (name, "GoBookmarkId"))
 	{
 		if (!ephy_str_to_int (name + strlen ("GoBookmarkId"), &id))
 		{
-			id = 0;
+			return NULL;
 		}
-	}
 
-	if (id != 0)
-	{
-		snprintf (action_name, 255, "GoBookmarkId%ld", id);
-		action = EPHY_EDITABLE_TOOLBAR_CLASS
-			(parent_class)->get_action (etoolbar, NULL, action_name);
-		if (action == NULL)
-		{
-			action = get_bookmark_action (t, bookmarks, id, action_name);
-		}
+		action = get_bookmark_action (t, bookmarks, id, name);
 	}
-	else
+	else if (g_str_has_prefix (name, "GoTopicId"))
 	{
-		action = EPHY_EDITABLE_TOOLBAR_CLASS
-			(parent_class)->get_action (etoolbar, type, name);
+		if (!ephy_str_to_int (name + strlen ("GoTopicId"), &id))
+		{
+			return NULL;
+		}
+
+		action = ephy_topic_action_new (name, id);
+		g_signal_connect (action, "go_location",
+				  G_CALLBACK (go_location_cb),
+				  t->priv->window);
+		egg_action_group_add_action (t->priv->action_group, action);
+		g_object_unref (action);
 	}
 
 	return action;
@@ -218,6 +252,7 @@ toolbar_class_init (ToolbarClass *klass)
 	object_class->get_property = toolbar_get_property;
 
 	eet_class->get_action = toolbar_get_action;
+	eet_class->get_action_name = toolbar_get_action_name;
 
 	g_object_class_install_property (object_class,
                                          PROP_EPHY_WINDOW,

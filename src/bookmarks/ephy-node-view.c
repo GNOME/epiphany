@@ -718,12 +718,33 @@ ephy_node_view_select_node (EphyNodeView *view,
 }
 
 void
-ephy_node_view_enable_drag_source (EphyNodeView *view)
+ephy_node_view_enable_drag_source (EphyNodeView *view,
+				   GtkTargetEntry *types,
+				   int n_types,
+				   guint prop_id)
 {
+	GtkWidget *treeview;
+
 	g_return_if_fail (view != NULL);
 
-	egg_tree_multi_drag_add_drag_support (GTK_TREE_VIEW (view->priv->treeview));
-	ephy_dnd_enable_model_drag_source (GTK_WIDGET (view->priv->treeview));
+	treeview = view->priv->treeview;
+
+	egg_tree_multi_drag_add_drag_support (GTK_TREE_VIEW (treeview));
+
+	if (types == NULL)
+	{
+		ephy_dnd_enable_model_drag_source (GTK_WIDGET (treeview));
+	}
+	else
+	{
+		gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (treeview),
+							GDK_BUTTON1_MASK,
+							types, n_types,
+							GDK_ACTION_COPY);
+	}
+
+	ephy_tree_model_sort_set_drag_property (EPHY_TREE_MODEL_SORT (view->priv->sortmodel),
+						prop_id);
 }
 
 void

@@ -1,3 +1,42 @@
+2003-03-25  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/ephy-dnd.c:
+	* lib/ephy-dnd.h:
+
+	Make ids private
+
+	* lib/widgets/ephy-editable-toolbar.c: (impl_get_action_name),
+	(impl_get_action), (drag_data_received_cb), (setup_toolbar),
+	(setup_item), (ensure_action), (ephy_editable_toolbar_class_init),
+	(update_editor_sheet), (ephy_editable_toolbar_get_action_name),
+	(ephy_editable_toolbar_get_action):
+	* lib/widgets/ephy-editable-toolbar.h:
+
+	Rework special actions api.
+
+	* lib/widgets/ephy-tree-model-sort.c: (ephy_tree_model_sort_init),
+	(ephy_tree_model_sort_set_drag_property),
+	(each_url_get_data_binder),
+	(ephy_tree_model_sort_multi_drag_data_get):
+	* lib/widgets/ephy-tree-model-sort.h:
+
+	Support nodes dnd. Need more work, see FIXME
+
+	* src/bookmarks/Makefile.am:
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init),
+	(ephy_bookmarks_finalize), (ephy_bookmarks_find_keyword):
+	* src/bookmarks/ephy-node-view.c:
+	(ephy_node_view_enable_drag_source):
+	* src/bookmarks/ephy-node-view.h:
+	* src/history-dialog.c: (history_dialog_setup_view):
+	* src/toolbar.c: (toolbar_get_action_name), (toolbar_get_action),
+	(toolbar_class_init):
+
+	Support for topics dnd. The menu is still not implemented
+	but the hard part is done. Cant finish it until the weekend :/
+
 2003-03-25  Xan Lopez  <xan@masilla.org>
 
 	* src/bookmarks/ephy-bookmarks-import.c: (set_folder):
