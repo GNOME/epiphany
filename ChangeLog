@@ -1,5 +1,16 @@
 2004-10-25  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-extensions-manager.c: (ephy_extensions_manager_init),
+	(ephy_extensions_manager_startup):
+	* src/ephy-extensions-manager.h:
+	* src/ephy-shell.c: (ephy_shell_get_extensions_manager):
+
+	De-couple instantiation and initialisation of the extensions manager.
+	Fixes double-instance and weirdness and double-type-registration
+	on startup when extensions use the session in their instance_init.
+
+2004-10-25  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-notebook.c: (ephy_notebook_remove_tab):
 	* src/ephy-window.c: (ephy_window_get_active_tab):
 

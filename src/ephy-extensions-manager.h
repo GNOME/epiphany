@@ -70,6 +70,8 @@ struct _EphyExtensionsManager
 
 GType	  ephy_extensions_manager_get_type	 (void);
 
+void	  ephy_extensions_manager_startup	 (EphyExtensionsManager *manager);
+
 void	  ephy_extensions_manager_load		 (EphyExtensionsManager *manager,
 						  const char *identifier);
 

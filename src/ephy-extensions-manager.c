@@ -887,11 +887,19 @@ init_schema_ctxt (EphyExtensionsManager *manager)
 static void
 ephy_extensions_manager_init (EphyExtensionsManager *manager)
 {
-	char *path;
-
 	manager->priv = EPHY_EXTENSIONS_MANAGER_GET_PRIVATE (manager);
 
 	LOG ("EphyExtensionsManager initialising")
+}
+
+void
+ephy_extensions_manager_startup (EphyExtensionsManager *manager)
+{
+	char *path;
+
+	g_return_if_fail (EPHY_IS_EXTENSIONS_MANAGER (manager));
+
+	LOG ("EphyExtensionsManager startup")
 
 	init_schema_ctxt (manager);
 

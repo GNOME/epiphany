@@ -694,6 +694,8 @@ ephy_shell_get_extensions_manager (EphyShell *es)
 		/* Instantiate extensions manager */
 		es->priv->extensions_manager =
 			g_object_new (EPHY_TYPE_EXTENSIONS_MANAGER, NULL);
+
+		ephy_extensions_manager_startup (es->priv->extensions_manager);
 	}
 
 	return G_OBJECT (es->priv->extensions_manager);
