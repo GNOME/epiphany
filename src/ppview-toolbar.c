@@ -110,15 +110,15 @@ static GtkActionEntry entries [] = {
 static guint n_entries = G_N_ELEMENTS (entries);
 
 static const gchar *ui_info =
-"<Root>\n"
-"  <dockitem name=\"PPViewToolbar\">\n"
-"    <toolitem name=\"PPVGotoFirstItem\" verb=\"PPVGotoFirst\" />\n"
-"    <toolitem name=\"PPVGotoLastItem\" verb=\"PPVGotoLast\" />\n"
-"    <toolitem name=\"PPVGoBackItem\"verb=\"PPVGoBack\" />\n"
-"    <toolitem name=\"PPVGoForwardItem\" verb=\"PPVGoForward\" />\n"
-"    <toolitem name=\"PPVClose\" verb=\"PPVClose\" />\n"
-"  </dockitem>\n"
-"</Root>\n";
+"<ui>"
+"  <toolbar name=\"PPViewToolbar\">"
+"    <toolitem name=\"PPVGotoFirstItem\" action=\"PPVGotoFirst\" />"
+"    <toolitem name=\"PPVGotoLastItem\" action=\"PPVGotoLast\" />"
+"    <toolitem name=\"PPVGoBackItem\" action=\"PPVGoBack\" />"
+"    <toolitem name=\"PPVGoForwardItem\" action=\"PPVGoForward\" />"
+"    <toolitem name=\"PPVClose\" action=\"PPVClose\" />"
+"  </toolbar>\n"
+"</ui>\n";
 
 GType
 ppview_toolbar_get_type (void)
