@@ -53,6 +53,7 @@ NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIW
 {
 	EphyDialog *dialog;
 	EmbedPrintInfo *info;
+	nsresult rv = NS_OK;
 
 	GtkWidget *gtkParent = MozillaFindGtkParent(parent);
 	EphyEmbed *embed = EPHY_EMBED (MozillaFindEmbed (parent));
@@ -66,10 +67,16 @@ NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIW
 		MozillaCollatePrintSettings(info, printSettings);
 		print_free_info(info);
 
-		return NS_OK;
+		rv = NS_OK;
 	}
 	else
-		return NS_ERROR_FAILURE;
+	{
+		rv = NS_ERROR_FAILURE;
+	}
+
+	g_object_unref (dialog);
+
+	return rv;
 }
 
 /* void showProgress (in nsIDOMWindow parent, in nsIWebBrowserPrint webBrowserPrint, in nsIPrintSettings printSettings, in nsIObserver openDialogObserver, in boolean isForPrinting, out nsIWebProgressListener webProgressListener, out nsIPrintProgressParams printProgressParams, out boolean notifyOnOpen); */
