@@ -77,11 +77,8 @@ void window_cmd_file_save_as    (EggAction *action,
 void window_cmd_file_send_to	(EggAction *action,
 				 EphyWindow *window);
 
-void window_cmd_file_close_tab	  (EggAction *action,
-				   EphyWindow *window);
-
-void window_cmd_file_close_window (EggAction *action,
-				   EphyWindow *window);
+void window_cmd_file_close_browser (EggAction *action,
+				    EphyWindow *window);
 
 void window_cmd_edit_cut	(EggAction *action,
 				 EphyWindow *window);

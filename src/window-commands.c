@@ -374,8 +374,8 @@ window_cmd_file_save_as (EggAction *action,
 }
 
 void
-window_cmd_file_close_tab (EggAction *action,
-		           EphyWindow *window)
+window_cmd_file_close_browser (EggAction *action,
+		               EphyWindow *window)
 {
 	EphyTab *tab;
 
@@ -383,13 +383,6 @@ window_cmd_file_close_tab (EggAction *action,
 	g_return_if_fail (tab != NULL);
 
 	ephy_window_remove_tab (window, tab);
-}
-
-void
-window_cmd_file_close_window (EggAction *action,
-		              EphyWindow *window)
-{
-	gtk_widget_destroy (GTK_WIDGET(window));
 }
 
 void

@@ -84,12 +84,9 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "FileAddBookmark", N_("_Add Bookmark..."), GTK_STOCK_ADD, "<control>D",
 	  N_("Add a bookmark for the current page"),
 	  G_CALLBACK (window_cmd_file_add_bookmark), NULL },
-	{ "FileCloseTab", N_("C_lose Tab"), GTK_STOCK_CLOSE, "<shift><control>W",
-	  N_("Close the selected tab"),
-	  G_CALLBACK (window_cmd_file_close_tab), NULL },
 	{ "FileCloseBrowser", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
 	  N_("Close this browser"),
-	  G_CALLBACK (window_cmd_file_close_window), NULL },
+	  G_CALLBACK (window_cmd_file_close_browser), NULL },
 
 	/* Edit menu */
 	{ "EditCut", N_("Cu_t"), GTK_STOCK_CUT, "<control>X",
