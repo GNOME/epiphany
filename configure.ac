@@ -15,7 +15,7 @@ dnl You should have received a copy of the GNU General Public License along
 dnl with this program; if not, write to the Free Software Foundation, Inc.,
 dnl 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 
-AC_INIT([GNOME Web Browser],[1.5.0],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+AC_INIT([GNOME Web Browser],[1.5.1],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
 
@@ -29,12 +29,15 @@ AC_SUBST([EPIPHANY_MAJOR])
 
 AM_INIT_AUTOMAKE([dist-bzip2 check-news])
 
+dnl AC_SUBST([ACLOCAL_AMFLAGS], ["-I $ac_macro_dir \${ACLOCAL_FLAGS}"])
+AC_SUBST([ACLOCAL_AMFLAGS], ["\${ACLOCAL_FLAGS}"])
+
 AM_MAINTAINER_MODE
 
 AC_PROG_INTLTOOL([0.29])
 
-GLIB_REQUIRED=2.5.5
-PANGO_REQUIRED=1.5.1
+GLIB_REQUIRED=2.5.4
+PANGO_REQUIRED=1.6.0
 GTK_REQUIRED=2.5.4
 LIBXML_REQUIRED=2.6.12
 LIBGNOMEVFS_REQUIRED=2.3.1
