@@ -38,7 +38,6 @@ IGNORE_HFILES = \
 	ephy-dnd.h \
 	ephy-file-chooser.h \
 	ephy-file-helpers.h \
-	ephy-glade.h \
 	ephy-gui.h \
 	ephy-langs.h \
 	ephy-marshal.h \

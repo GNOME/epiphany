@@ -35,9 +35,25 @@ glade_signal_connect_func (const gchar *cb_name, GObject *obj,
 			   gpointer user_data);
 
 /**
- * ephy_widget_new: build a new widget of the provided name, with all
- * signals attached and data set to the provided parameter.
- */
+ * ephy_glade_widget_new:
+ * @file: a Glade XML file
+ * @widget_name: the name of a widget within @file
+ * @root: the returned root #GtkWidget pointer, or %NULL if not wanted
+ * @data: callback data to connect to all @root's signal callbacks
+ * @domain: the translation domain for the XML file (or %NULL for default)
+ *
+ * Builds a new #GladeXML object from the given @file with root widget
+ * @widget_name. The widget can also be aquired by passing @root, a pointer
+ * to a #GtkWidget pointer.
+ *
+ * The signal callbacks underneath the desired root widget in @file will all be
+ * automatically connected; the callback data will be @data.
+ *
+ * Libglade automatically caches @file; it is not inefficient to call
+ * ephy_glade_widget_new() several times on the same XML file.
+ *
+ * Return value: the desired #GladeXML object, or %NULL on failure
+ **/
 GladeXML *
 ephy_glade_widget_new (const char *file,
 		       const char *widget_name,
@@ -48,8 +64,6 @@ ephy_glade_widget_new (const char *file,
 	GladeXML *gxml;
 
 	/* build the widget */
-	/* note that libglade automatically caches the parsed file,
-	 * so we don't need to worry about the efficiency of this */
 	gxml = glade_xml_new (file, widget_name, domain);
 	g_return_val_if_fail (gxml != NULL, NULL);
 
