@@ -81,17 +81,6 @@
         <long>Open in tabs by default.</long>
         </locale>
       </schema>
-      <schema>
-        <key>/schemas/apps/epiphany/interface/jumpto_tab</key>
-        <applyto>/apps/epiphany/interface/jumpto_tab</applyto>
-        <owner>epiphany</owner>
-        <type>bool</type>
-        <default>false</default>
-        <locale name="C">
-        <short>Jump to new tabs</short>
-        <long>Jump to new tabs.</long>
-        </locale>
-      </schema>
      <schema>
         <key>/schemas/apps/epiphany/interface/middle_click_open_url</key>
         <applyto>/apps/epiphany/interface/middle_click_open_url</applyto>
@@ -173,17 +162,6 @@
         <short>Default font type</short>
         <long>Default font type.  Possible values are 0 (serif), 1
         (sans-serif)</long>
-        </locale>
-      </schema>
-      <schema>
-        <key>/schemas/apps/epiphany/interface/spinner_theme</key>
-        <applyto>/apps/epiphany/interface/spinner_theme</applyto>
-        <owner>epiphany</owner>
-        <type>string</type>
-        <default>gnome</default>
-        <locale name="C">
-        <short>Default spinner theme</short>
-        <long>Default spinner theme</long>
         </locale>
       </schema>
      <schema>
@@ -387,8 +365,8 @@
         </locale>
       </schema>
      <schema>
-        <key>/schemas/apps/epiphany/directories/opendir</key>
-        <applyto>/apps/epiphany/directories/opendir</applyto>
+        <key>/schemas/apps/epiphany/directories/open</key>
+        <applyto>/apps/epiphany/directories/open</applyto>
         <owner>epiphany</owner>
         <type>string</type>
         <default>~</default>
@@ -396,8 +374,8 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/directories/savedir</key>
-        <applyto>/apps/epiphany/directories/savedir</applyto>
+        <key>/schemas/apps/epiphany/directories/save</key>
+        <applyto>/apps/epiphany/directories/save</applyto>
         <owner>epiphany</owner>
         <type>string</type>
         <default>~</default>
@@ -405,15 +383,24 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/directories/saveimagedir</key>
-        <applyto>/apps/epiphany/directories/saveimagedir</applyto>
+        <key>/schemas/apps/epiphany/directories/saveimage</key>
+        <applyto>/apps/epiphany/directories/saveimage</applyto>
         <owner>epiphany</owner>
         <type>string</type>
         <default>~</default>
         <locale name="C">
         </locale>
       </schema>
-     <schema>
+      <schema>
+        <key>/schemas/apps/epiphany/directories/downloading</key>
+        <applyto>/apps/epiphany/directories/downloading</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>~</default>
+        <locale name="C">
+        </locale>
+      </schema>
+      <schema>
         <key>/schemas/apps/epiphany/rendering/autodetect_encoding</key>
         <applyto>/apps/epiphany/rendering/autodetect_encoding</applyto>
         <owner>epiphany</owner>
@@ -490,4 +477,3 @@
       </schema>
     </schemalist>
 </gconfschemafile>
-  
