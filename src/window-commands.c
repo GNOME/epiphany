@@ -58,7 +58,7 @@
 #include <gtk/gtkmain.h>
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtktoggleaction.h>
-#include <libgnomeui/gnome-about.h>
+#include <gtk/gtkaboutdialog.h>
 #include <glib/gi18n.h>
 
 enum
@@ -949,17 +949,14 @@ window_cmd_help_about (GtkAction *action,
 		NULL
 	};
 
-	/* Translator credits */
-	char *translator_credits = _("translator-credits");
-
 	if (about != NULL)
 	{
-		gdk_window_show(about->window);
-		gdk_window_raise(about->window);
+		gtk_window_present (GTK_WINDOW (about));
+
 		return;
 	}
 
-	/* FIXME: use the icon theme for the correct screen, not for the default screen */
+	/* FIXME multihead: use the icon theme for the correct screen, not for the default screen */
 	icon_theme = gtk_icon_theme_get_default ();
 	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "web-browser", -1, 0);
 
@@ -977,28 +974,30 @@ window_cmd_help_about (GtkAction *action,
 		g_warning ("Web browser gnome icon not found");
 	}
 
-	about = gnome_about_new(
-		       "Epiphany", VERSION,
-		       "Copyright \xc2\xa9 2002-2004 Marco Pesenti Gritti",
-		       _("A GNOME browser based on Mozilla"),
-		       (const char **)authors,
-		       (const char **)documenters,
-		       strcmp (translator_credits, "translator-credits") != 0 ? translator_credits : NULL,
-		       icon);
-
-	gtk_window_set_icon (GTK_WINDOW (about), icon);
+	about = g_object_new (GTK_TYPE_ABOUT_DIALOG,
+			      "name", _("Epiphany"),
+			      "version", VERSION,
+			      "copyright", "Copyright \xc2\xa9 2002-2004 Marco Pesenti Gritti",
+			      "authors", authors,
+			      "documenters", documenters,
+			      "translator-credits", _("translator-credits"),
+			      "logo", icon,
+			      NULL);
 
 	if (icon != NULL)
 	{
 		g_object_unref (icon);
 	}
 
-	gtk_window_set_transient_for (GTK_WINDOW (about),
-				      GTK_WINDOW (window));
+	g_signal_connect (about, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+
+	gtk_window_set_transient_for (GTK_WINDOW (about), GTK_WINDOW (window));
+	gtk_window_set_destroy_with_parent (GTK_WINDOW (about), TRUE);
 
 	ptr = &about;
 	g_object_add_weak_pointer (G_OBJECT (about), (gpointer *)ptr);
-	gtk_widget_show (about);
+
+	gtk_window_present (GTK_WINDOW (about));
 }
 
 void
