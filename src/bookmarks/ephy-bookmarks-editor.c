@@ -47,6 +47,7 @@
 #include "ephy-state.h"
 #include "window-commands.h"
 #include "ephy-debug.h"
+#include "ephy-gui.h"
 
 static GtkTargetEntry topic_drag_dest_types [] =
 {
@@ -530,7 +531,9 @@ static void
 cmd_help_contents (EggAction *action,
 		   EphyBookmarksEditor *editor)
 {
-	/*FIXME: Implement help.*/
+	ephy_gui_help (GTK_WINDOW (editor), 
+		       "epiphany", 
+		       "ephy-managing-bookmarks");
 }
 
 GType

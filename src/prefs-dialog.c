@@ -28,6 +28,7 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-shell.h"
 #include "ephy-state.h"
+#include "ephy-gui.h"
 
 #include <bonobo/bonobo-i18n.h>
 #include <gtk/gtkframe.h>
@@ -38,8 +39,6 @@
 #include <gtk/gtkimage.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkstock.h>
-#include <gtk/gtkmessagedialog.h>
-#include <libgnome/gnome-help.h>
 
 static void
 prefs_dialog_class_init (PrefsDialogClass *klass);
@@ -243,35 +242,20 @@ prefs_dialog_show_help (PrefsDialog *pd)
 {
 	GError *err = NULL;
 	gint id;
+
+	/* FIXME: Once we actually have documentation we
+	 * should point these at the correct links.
+	 */
 	gchar *help_preferences[] = {
-		"ephy-preferences-appearance",
-		"ephy-preferences-general",
-		"ephy-preferences-ui",
-		"ephy-preferences-advanced"
+		"setting-preferences",
+		"setting-preferences",
+		"setting-preferences",
+		"setting-preferences"
 	};
 
 	id = gtk_notebook_get_current_page (GTK_NOTEBOOK (pd->priv->notebook));
 
-	gnome_help_display ("epiphany", help_preferences [id], &err);
-	if (err != NULL) 
-	{
-		GtkWidget *err_dialog;
-		err_dialog = gtk_message_dialog_new (
-				GTK_WINDOW (pd),
-				GTK_DIALOG_DESTROY_WITH_PARENT,
-				GTK_MESSAGE_ERROR,
-				GTK_BUTTONS_CLOSE,
-				_("Could not display help: %s"),
-				  err->message);
-
-		g_signal_connect (G_OBJECT (err_dialog), "response",
-				G_CALLBACK (gtk_widget_destroy),
-				NULL);
-		gtk_window_set_resizable (GTK_WINDOW (err_dialog),
-				FALSE);
-		gtk_widget_show (err_dialog);
-		g_error_free (err);
-	}
+	ephy_gui_help (GTK_WINDOW (pd), "epiphany", help_preferences[id]);
 }
 
 static void

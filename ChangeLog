@@ -1,3 +1,30 @@
+2003-05-08  David Adam Bordoley <bordoley@msu.edu>
+
+	* lib/ephy-gui.c: (ephy_gui_help):
+	* lib/ephy-gui.h:
+	
+	Convenience function for displaying help.
+	Remove unneeded include of gnome-dialog.h
+
+	* src/ephy-history-window.c: (cmd_help_contents):
+	* src/prefs-dialog.c: (prefs_dialog_show_help):
+	* src/window-commands.c: (window_cmd_help_contents),
+	(window_cmd_help_about):
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(ephy_bookmark_properties_help), 
+	(bookmark_properties_response_cb):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(cmd_help_contents):
+	* src/bookmarks/ephy-new-bookmark.c:
+	(ephy_new_bookmark_help), (response_cb):
+
+	Hook up help to windows/dialogs.
+	Add the guilty parties to about.
+
+	* help/C/epiphany.xml:
+	
+	Fixed the "To Create a New Bookmark" id.
+
 2003-05-08  Anders Carlsson  <andersca@codefactory.se>
 
 	* autogen.sh: Require automake >= 1.6

@@ -43,6 +43,7 @@
 #include "ephy-debug.h"
 #include "ephy-new-bookmark.h"
 #include "ephy-stock-icons.h"
+#include "ephy-gui.h"
 #include "toolbar.h"
 
 static GtkTargetEntry page_drag_types [] =
@@ -477,7 +478,9 @@ static void
 cmd_help_contents (EggAction *action,
 		   EphyHistoryWindow *editor)
 {
-	/*FIXME: Implement help.*/
+	ephy_gui_help (GTK_WINDOW (editor),
+		       "epiphany", 
+		       "ephy-managing-history");
 }
 
 GType

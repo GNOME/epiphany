@@ -32,6 +32,7 @@
 #include "ephy-topics-selector.h"
 #include "ephy-debug.h"
 #include "ephy-stock-icons.h"
+#include "ephy-gui.h"
 
 static void ephy_new_bookmark_class_init (EphyNewBookmarkClass *klass);
 static void ephy_new_bookmark_init (EphyNewBookmark *editor);
@@ -144,12 +145,6 @@ ephy_new_bookmark_finalize (GObject *object)
 }
 
 static void
-ephy_new_bookmark_help ()
-{
-	/* FIXME: Hook up Help */
-}
-
-static void
 ephy_new_bookmark_add (EphyNewBookmark *new_bookmark)
 {
 	char *title;
@@ -186,7 +181,9 @@ response_cb (EphyNewBookmark *new_bookmark,
 	switch (response_id)
 	{
 		case GTK_RESPONSE_HELP:
-			ephy_new_bookmark_help ();
+			ephy_gui_help (GTK_WINDOW (new_bookmark), 
+		       		       "epiphany",
+		       		       "to-create-new-bookmark");
 			break;
 		case GTK_RESPONSE_CANCEL:
 			break;

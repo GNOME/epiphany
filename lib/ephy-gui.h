@@ -22,24 +22,27 @@
 /* system includes */
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <libgnomeui/gnome-dialog.h>
 #include <gnome.h>
 
 G_BEGIN_DECLS
 
-void		 ephy_gui_menu_position_under_widget	 (GtkMenu   *menu,
+void		ephy_gui_menu_position_under_widget	 (GtkMenu   *menu,
 							  gint      *x,
 							  gint      *y,
 							  gboolean  *push_in,
 							  gpointer  user_data);
 
-gint		 ephy_gui_gtk_radio_button_get		 (GtkRadioButton *radio_button);
+gint		ephy_gui_gtk_radio_button_get		 (GtkRadioButton *radio_button);
 
-void		 ephy_gui_gtk_radio_button_set		 (GtkRadioButton *radio_button,
+void		ephy_gui_gtk_radio_button_set		 (GtkRadioButton *radio_button,
 							  gint index);
 
 gboolean	ephy_gui_confirm_overwrite_file	         (GtkWidget *parent,
 							  const char *filename);
+
+void		ephy_gui_help				 (GtkWindow *parent,
+							  const char *file_name,
+                                             		  const char *link_id);
 G_END_DECLS
 
 #endif

@@ -22,6 +22,7 @@
 #include "ephy-debug.h"
 #include "ephy-shell.h"
 #include "ephy-state.h"
+#include "ephy-gui.h"
 
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtktogglebutton.h>
@@ -195,12 +196,6 @@ ephy_bookmark_properties_get_property (GObject *object,
 }
 
 static void
-ephy_bookmark_properties_help ()
-{
-	/* FIXME: Implement Help */
-}
-
-static void
 bookmark_properties_response_cb (GtkDialog *dialog,
 		                 int response_id,
 			         gpointer data)
@@ -208,7 +203,9 @@ bookmark_properties_response_cb (GtkDialog *dialog,
 	switch (response_id)
 	{
 		case GTK_RESPONSE_HELP:
-			ephy_bookmark_properties_help ();
+			ephy_gui_help (GTK_WINDOW (dialog),
+				       "epiphany", 
+				       "to-edit-bookmark-properties");
 			break;
 		case GTK_RESPONSE_CLOSE:
 			gtk_widget_destroy (GTK_WIDGET (dialog));

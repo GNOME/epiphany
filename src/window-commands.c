@@ -16,11 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-/*
- * 25 Mar 2003: Added support for help manual : Patanjali Somayaji
- * 						(patanjali@codito.com)
- */
-
 #include <config.h>
 
 #include "ephy-shell.h"
@@ -40,6 +35,7 @@
 #include "ephy-file-helpers.h"
 #include "toolbar.h"
 #include "ephy-state.h"
+#include "ephy-gui.h"
 
 #include <string.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
@@ -47,9 +43,7 @@
 #include <bonobo/bonobo-i18n.h>
 #include <libgnomeui/gnome-about.h>
 #include <libgnomeui/gnome-stock-icons.h>
-#include <libgnome/gnome-help.h>
 #include <libgnome/gnome-program.h>
-#include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkeditable.h>
 
 enum
@@ -730,28 +724,7 @@ void
 window_cmd_help_contents (EggAction *action,
 			 EphyWindow *window)
 {
-	GError *err;
-
-	err = NULL;
-	gnome_help_display ("epiphany", NULL, &err);
-
-	if (err != NULL)
-	{
-		GtkWidget *dialog;
-		dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-				GTK_DIALOG_DESTROY_WITH_PARENT,
-				GTK_MESSAGE_ERROR,
-				GTK_BUTTONS_CLOSE,
-				_("Could not display help: %s"), err->message);
-
-		g_signal_connect (G_OBJECT (dialog), "response",
-			G_CALLBACK (gtk_widget_destroy),
-			NULL);
-
-		gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-		gtk_widget_show (dialog);
-		g_error_free (err);
-	}
+	ephy_gui_help (GTK_WINDOW (window), "epiphany", NULL);
 }
 
 void
@@ -765,11 +738,14 @@ window_cmd_help_about (EggAction *action,
 
 	static gchar *authors[] = {
 		"Marco Pesenti Gritti <mpeseng@tin.it>",
+		"Xan Lopez <xan@masilla.org>",
+		"David Bordoley <bordoley@msu.edu>",
 		NULL
 	};
 
 	gchar *documenters[] = {
 		"Patanjali Somayaji <patanjali@codito.com>",
+		"David Bordoley <bordoley@msu.edu>",
 		NULL
 	};
 
