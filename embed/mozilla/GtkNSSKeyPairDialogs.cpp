@@ -583,7 +583,7 @@ NS_IMETHODIMP KeyPairHelperWindow::UpdateCommands(const nsAString & action)
     MOZ_NOT_IMPLEMENTED
 }
 
-#if MOZILLA_SNAPSHOT <= 13
+#if MOZILLA_SNAPSHOT <= 12
 /* DOMString escape (in DOMString str); */
 NS_IMETHODIMP KeyPairHelperWindow::Escape(const nsAString & str, nsAString & _retval)
 {
