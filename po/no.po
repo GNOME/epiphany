@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: galeon 0.7.2\n"
-"POT-Creation-Date: 2003-04-28 16:08+0200\n"
-"PO-Revision-Date: 2003-04-28 16:20+0200\n"
+"POT-Creation-Date: 2003-04-29 22:21+0200\n"
+"PO-Revision-Date: 2003-04-29 22:22+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -53,7 +53,9 @@ msgstr "Tillat popups"
 #: data/epiphany.schemas.in.h:6
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
-msgstr "Tillat nettsteder å åpne nye vinduer ved bruk av JavaScript (hvis JavaScript er aktivert)."
+msgstr ""
+"Tillat nettsteder å åpne nye vinduer ved bruk av JavaScript (hvis JavaScript "
+"er aktivert)."
 
 #: data/epiphany.schemas.in.h:7
 msgid "Autowrap for find in page"
@@ -69,7 +71,8 @@ msgstr "Forvalgt tegnsett."
 
 #: data/epiphany.schemas.in.h:10
 msgid "Default color for unvisited links in #RRGGBB hex format."
-msgstr "Forvalgt farge for lenker som ikke er vist i #RRGGBB heksadesimalt format."
+msgstr ""
+"Forvalgt farge for lenker som ikke er vist i #RRGGBB heksadesimalt format."
 
 #: data/epiphany.schemas.in.h:11
 msgid "Default color for visited links in #RRGGBB hex format."
@@ -296,12 +299,12 @@ msgid "Save passwords."
 msgstr "Lagre passord."
 
 #: data/epiphany.schemas.in.h:66
-msgid "Show bookmarks toolbar by default"
-msgstr "Vis verktøylinje for bokmerker som forvalg"
+msgid "Show bookmarks bar by default"
+msgstr "Vis bokmerkelinje som forvalg"
 
 #: data/epiphany.schemas.in.h:67
-msgid "Show bookmarks toolbar by default."
-msgstr "Vis verktøylinje for bokmerker som forvalg."
+msgid "Show bookmarks bar by default."
+msgstr "Vis bokmerkelinje som forvalg."
 
 #: data/epiphany.schemas.in.h:68
 msgid "Show download details"
@@ -989,7 +992,7 @@ msgstr "_Dato"
 
 #. Toplevel
 #: data/glade/print.glade.h:31 data/ui/nautilus-epiphany-view.xml.in.h:35
-#: src/bookmarks/ephy-bookmarks-editor.c:140 src/ephy-history-window.c:117
+#: src/bookmarks/ephy-bookmarks-editor.c:142 src/ephy-history-window.c:117
 #: src/ephy-window.c:57
 msgid "_File"
 msgstr "_Fil"
@@ -1066,7 +1069,9 @@ msgstr "Kom i gang"
 msgid ""
 "If your internet connection requires it, make sure to setup your proxy in "
 "the desktop wide configuration dialog."
-msgstr "Hvis din internettforbindelse krever det må du sikre at du har satt opp en proxy i brukervalgdialogen for nettverksproxy."
+msgstr ""
+"Hvis din internettforbindelse krever det må du sikre at du har satt opp en "
+"proxy i brukervalgdialogen for nettverksproxy."
 
 #: data/starthere/index.xml.in.h:3
 msgid "Proxy configuration"
@@ -1245,7 +1250,7 @@ msgid "Use Image As Background"
 msgstr "Bruk bilde som bakgrunn"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:34
-#: src/bookmarks/ephy-bookmarks-editor.c:141 src/ephy-history-window.c:118
+#: src/bookmarks/ephy-bookmarks-editor.c:143 src/ephy-history-window.c:118
 #: src/ephy-window.c:58
 msgid "_Edit"
 msgstr "R_ediger"
@@ -1310,15 +1315,15 @@ msgstr "Åpne filnavn for destinasjon"
 msgid "No available applications to open the specified file."
 msgstr "Ingen applikasjoner tilgjengelig til å åpne spesifisert fil."
 
-#: embed/ephy-history.c:399 src/bookmarks/ephy-bookmarks.c:563
+#: embed/ephy-history.c:414 src/bookmarks/ephy-bookmarks.c:563
 msgid "All"
 msgstr "Alle"
 
-#: embed/ephy-history.c:546
+#: embed/ephy-history.c:561
 msgid "Others"
 msgstr "Andre"
 
-#: embed/ephy-history.c:552
+#: embed/ephy-history.c:567
 msgid "Local files"
 msgstr "Lokale filer"
 
@@ -1777,8 +1782,22 @@ msgstr "Importer bokmerker fra Konqueror"
 msgid "%Y-%m-%d"
 msgstr "%d.%m.%Y"
 
+#: lib/egg/egg-toolbar-editor.c:454
+msgid "Separator"
+msgstr ""
+
+#: lib/egg/egg-toolbar-editor.c:491
+msgid ""
+"Drag an item onto the toolbars above to add it, from the toolbars in the "
+"items table to remove it."
+msgstr ""
+
+#: lib/egg/egg-toolbar-editor.c:498
+msgid "_Add a New Toolbar"
+msgstr "_Legg til en ny verktøylinje"
+
 #. setup label
-#: lib/widgets/ephy-notebook.c:744 src/ephy-tab.c:579 src/ephy-tab.c:1036
+#: src/ephy-notebook.c:744 src/ephy-tab.c:579 src/ephy-tab.c:1036
 #: src/window-commands.c:274
 msgid "Untitled"
 msgstr "Uten tittel"
@@ -1800,8 +1819,8 @@ msgid "To_pics:"
 msgstr "Em_ner:"
 
 #: src/bookmarks/ephy-bookmark-properties.c:408
-msgid "_Show in the bookmarks toolbar"
-msgstr "Vi_s i verktyølinje for bokmerker"
+msgid "_Show in bookmarks bar"
+msgstr "Vi_s i bokmerkelinjen"
 
 #: src/bookmarks/ephy-bookmarks.c:54
 msgid "Search the web"
@@ -1835,202 +1854,202 @@ msgstr "Mest besøkt"
 msgid "Not Categorized"
 msgstr "Ikke kategorisert"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:142 src/ephy-history-window.c:119
+#: src/bookmarks/ephy-bookmarks-editor.c:144 src/ephy-history-window.c:119
 #: src/ephy-window.c:59
 msgid "_View"
 msgstr "_Vis"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:143 src/ephy-history-window.c:120
+#: src/bookmarks/ephy-bookmarks-editor.c:145 src/ephy-history-window.c:120
 #: src/ephy-window.c:62
 msgid "_Help"
 msgstr "_Hjelp"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:147
+#: src/bookmarks/ephy-bookmarks-editor.c:149
 msgid "_New Topic"
 msgstr "_Nytt emne"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:148
+#: src/bookmarks/ephy-bookmarks-editor.c:150
 msgid "Create a new topic"
 msgstr "Opprett et nytt emne"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:150
-#: src/bookmarks/ephy-bookmarks-editor.c:676 src/ephy-history-window.c:124
+#: src/bookmarks/ephy-bookmarks-editor.c:152
+#: src/bookmarks/ephy-bookmarks-editor.c:738 src/ephy-history-window.c:124
 #: src/ephy-history-window.c:553
 msgid "_Open in New Window"
 msgstr "_Åpne i nytt vindu"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:151
+#: src/bookmarks/ephy-bookmarks-editor.c:153
 msgid "Open the selected bookmark in a new window"
 msgstr "Åpne valgte bokmerker i et nytt vindu"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:153
-#: src/bookmarks/ephy-bookmarks-editor.c:677 src/ephy-history-window.c:127
+#: src/bookmarks/ephy-bookmarks-editor.c:155
+#: src/bookmarks/ephy-bookmarks-editor.c:739 src/ephy-history-window.c:127
 #: src/ephy-history-window.c:554
 msgid "Open in New _Tab"
 msgstr "Åpne i ny _fane"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:154
+#: src/bookmarks/ephy-bookmarks-editor.c:156
 msgid "Open the selected bookmark in a new tab"
 msgstr "Åpne valgte bokmerker i en ny fane"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:156
+#: src/bookmarks/ephy-bookmarks-editor.c:158
 msgid "_Rename"
 msgstr "End_re navn"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:157
+#: src/bookmarks/ephy-bookmarks-editor.c:159
 msgid "Rename the selected bookmark or topic"
 msgstr "Endre navn på valgt bokmerke eller emne"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:158 src/ephy-history-window.c:130
+#: src/bookmarks/ephy-bookmarks-editor.c:160 src/ephy-history-window.c:130
 msgid "_Delete"
 msgstr "_Slett"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:159
+#: src/bookmarks/ephy-bookmarks-editor.c:161
 msgid "Delete the selected bookmark or topic"
 msgstr "Slett valgt bokmerke eller emne"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:161
-msgid "_Show in the Toolbar"
-msgstr "Vi_s på verktøylinjen"
+#: src/bookmarks/ephy-bookmarks-editor.c:163
+msgid "_Show in Bookmarks Bar"
+msgstr "Vi_s i bokmerkelinjen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:162
-msgid "Show the selected bookmark or topic in the bookmarks toolbar"
-msgstr "Vis valgt bokmerke eller emne i verktøylinjen for bokmerker"
+#: src/bookmarks/ephy-bookmarks-editor.c:164
+msgid "Show the selected bookmark or topic in the bookmarks bar"
+msgstr "Vis valgt bokmerke eller emne i bokmerkelinjen"
 
 # (ugh)
-#: src/bookmarks/ephy-bookmarks-editor.c:164
+#: src/bookmarks/ephy-bookmarks-editor.c:166
 msgid "_Properties"
 msgstr "Egenska_per"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:165
+#: src/bookmarks/ephy-bookmarks-editor.c:167
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Vis eller endre egenskaper for valgt bokmerke"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:167 src/ephy-history-window.c:136
+#: src/bookmarks/ephy-bookmarks-editor.c:169 src/ephy-history-window.c:136
 #: src/ephy-window.c:86
 msgid "_Close"
 msgstr "L_ukk"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:168
+#: src/bookmarks/ephy-bookmarks-editor.c:170
 msgid "Close the bookmarks window"
 msgstr "Lukk bokmerkevinduet"
 
 #. Edit Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:172 src/ephy-history-window.c:141
+#: src/bookmarks/ephy-bookmarks-editor.c:174 src/ephy-history-window.c:141
 #: src/ephy-window.c:91
 msgid "Cu_t"
 msgstr "Klipp u_t"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:173 src/ephy-history-window.c:142
+#: src/bookmarks/ephy-bookmarks-editor.c:175 src/ephy-history-window.c:142
 #: src/ephy-window.c:92
 msgid "Cut the selection"
 msgstr "Klipp ut utvalget"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:175
-#: src/bookmarks/ephy-bookmarks-editor.c:686 src/ephy-history-window.c:144
+#: src/bookmarks/ephy-bookmarks-editor.c:177
+#: src/bookmarks/ephy-bookmarks-editor.c:748 src/ephy-history-window.c:144
 #: src/ephy-history-window.c:563 src/ephy-window.c:94
 msgid "_Copy"
 msgstr "_Kopier"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:176 src/ephy-history-window.c:145
+#: src/bookmarks/ephy-bookmarks-editor.c:178 src/ephy-history-window.c:145
 #: src/ephy-window.c:95
 msgid "Copy the selection"
 msgstr "Kopier utvalget"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:178 src/ephy-history-window.c:147
+#: src/bookmarks/ephy-bookmarks-editor.c:180 src/ephy-history-window.c:147
 #: src/ephy-window.c:97
 msgid "_Paste"
 msgstr "Li_m inn"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:179 src/ephy-history-window.c:148
+#: src/bookmarks/ephy-bookmarks-editor.c:181 src/ephy-history-window.c:148
 msgid "Paste the clipboard"
 msgstr "Lim inn utklippstavlen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:181 src/ephy-history-window.c:150
+#: src/bookmarks/ephy-bookmarks-editor.c:183 src/ephy-history-window.c:150
 #: src/ephy-window.c:100
 msgid "Select _All"
 msgstr "Velg _alt"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:182
+#: src/bookmarks/ephy-bookmarks-editor.c:184
 msgid "Select all bookmarks or text"
 msgstr "Velg alle bokmerker eller all tekst"
 
 #. View Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:186 src/ephy-history-window.c:158
+#: src/bookmarks/ephy-bookmarks-editor.c:188 src/ephy-history-window.c:158
 msgid "_Title"
 msgstr "_Tittel"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:187 src/ephy-history-window.c:159
+#: src/bookmarks/ephy-bookmarks-editor.c:189 src/ephy-history-window.c:159
 msgid "Show only the title column"
 msgstr "Vis kun tittelkolonnen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:189 src/ephy-history-window.c:161
+#: src/bookmarks/ephy-bookmarks-editor.c:191 src/ephy-history-window.c:161
 msgid "_Location"
 msgstr "_Adresse"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:190 src/ephy-history-window.c:162
+#: src/bookmarks/ephy-bookmarks-editor.c:192 src/ephy-history-window.c:162
 msgid "Show only the location column"
 msgstr "Vis kun adressekolonnen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:192 src/ephy-history-window.c:164
+#: src/bookmarks/ephy-bookmarks-editor.c:194 src/ephy-history-window.c:164
 msgid "T_itle and Location"
 msgstr "T_ittel og adresse"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:193 src/ephy-history-window.c:165
+#: src/bookmarks/ephy-bookmarks-editor.c:195 src/ephy-history-window.c:165
 msgid "Show both the title and location columns"
 msgstr "Vis både tittel- og adressekolonnene"
 
 #. Help Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:197 src/ephy-history-window.c:169
+#: src/bookmarks/ephy-bookmarks-editor.c:199 src/ephy-history-window.c:169
 #: src/ephy-window.c:196
 msgid "_Contents"
 msgstr "_Innhold"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:198
+#: src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "Display bookmarks help"
 msgstr "Vis hjelp for bokmerker"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:200 src/ephy-history-window.c:172
+#: src/bookmarks/ephy-bookmarks-editor.c:202 src/ephy-history-window.c:172
 #: src/ephy-window.c:199
 msgid "_About"
 msgstr "_Om"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:201 src/ephy-history-window.c:173
+#: src/bookmarks/ephy-bookmarks-editor.c:203 src/ephy-history-window.c:173
 #: src/ephy-window.c:200
 msgid "Display credits for the web browser creators"
 msgstr "Vis kreditering for skaperene av nettleseren"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:213
+#: src/bookmarks/ephy-bookmarks-editor.c:245
 msgid "Type a topic"
 msgstr "Skriv et emne"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:671 src/ephy-history-window.c:548
+#: src/bookmarks/ephy-bookmarks-editor.c:733 src/ephy-history-window.c:548
 msgid "_Open in New Windows"
 msgstr "_Åpne i nye vinduer"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:672 src/ephy-history-window.c:549
+#: src/bookmarks/ephy-bookmarks-editor.c:734 src/ephy-history-window.c:549
 msgid "Open in New _Tabs"
 msgstr "_Åpne i nye _faner"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:682 src/ephy-history-window.c:559
+#: src/bookmarks/ephy-bookmarks-editor.c:744 src/ephy-history-window.c:559
 msgid "_Copy Location"
 msgstr "_Kopier adresse"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:974 src/ephy-history-window.c:731
+#: src/bookmarks/ephy-bookmarks-editor.c:1023 src/ephy-history-window.c:731
 msgid "_Search:"
 msgstr "_Søk:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1065
+#: src/bookmarks/ephy-bookmarks-editor.c:1114
 msgid "Bookmarks"
 msgstr "Bokmerker"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1137
+#: src/bookmarks/ephy-bookmarks-editor.c:1186
 msgid "Topics"
 msgstr "Emner"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1195 src/ephy-history-window.c:916
+#: src/bookmarks/ephy-bookmarks-editor.c:1242 src/ephy-history-window.c:916
 msgid "Title"
 msgstr "Tittel"
 
@@ -2086,7 +2105,7 @@ msgstr "Vis hjelp for historikk"
 msgid "History"
 msgstr "Historie"
 
-#: src/ephy-history-window.c:876
+#: src/ephy-history-window.c:875
 msgid "Sites"
 msgstr "Nettsteder"
 
@@ -2377,12 +2396,12 @@ msgid "Show or hide toolbar"
 msgstr "Vis/skjul verktøylinje"
 
 #: src/ephy-window.c:132
-msgid "_Bookmarks Toolbar"
-msgstr "Verktøylinje for _bokmerker"
+msgid "_Bookmarks Bar"
+msgstr "_Bokmerkelinje"
 
 #: src/ephy-window.c:133
-msgid "Show or hide bookmarks toolbar"
-msgstr "Vis eller skjul verktøylinje for bokmerker"
+msgid "Show or hide bookmarks bar"
+msgstr "Vis eller skjul bokmerkelinje"
 
 #: src/ephy-window.c:135
 msgid "St_atusbar"
@@ -2936,15 +2955,15 @@ msgstr ""
 msgid "You can recover the opened tabs and windows."
 msgstr "Du kan gjenopprette de åpne fanene og vinduene."
 
-#: src/toolbar.c:243
+#: src/toolbar.c:245
 msgid "Back"
 msgstr "Tilbake"
 
-#: src/toolbar.c:255
+#: src/toolbar.c:257
 msgid "Forward"
 msgstr "Forover"
 
-#: src/toolbar.c:267
+#: src/toolbar.c:269
 msgid "Up"
 msgstr "Opp"
 
