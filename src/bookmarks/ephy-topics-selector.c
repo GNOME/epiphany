@@ -291,7 +291,7 @@ ephy_topics_selector_new_topic (EphyTopicsSelector *selector)
 	node = ephy_bookmarks_add_keyword
 			(selector->priv->bookmarks, _("Type a topic"));
 	ephy_node_view_select_node (EPHY_NODE_VIEW (selector), node);
-	ephy_node_view_edit (EPHY_NODE_VIEW (selector));
+	ephy_node_view_edit (EPHY_NODE_VIEW (selector), TRUE);
 }
 
 static void

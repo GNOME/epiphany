@@ -286,7 +286,7 @@ cmd_add_topic (GtkAction *action,
 	node = ephy_bookmarks_add_keyword (editor->priv->bookmarks,
 				           _("Type a topic"));
 	ephy_node_view_select_node (EPHY_NODE_VIEW (editor->priv->key_view), node);
-	ephy_node_view_edit (EPHY_NODE_VIEW (editor->priv->key_view));
+	ephy_node_view_edit (EPHY_NODE_VIEW (editor->priv->key_view), TRUE);
 	add_text_renderer_monitor (editor);
 }
 
@@ -303,11 +303,11 @@ cmd_rename (GtkAction *action,
 {
 	if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->bm_view)))
 	{
-		ephy_node_view_edit (EPHY_NODE_VIEW (editor->priv->bm_view));
+		ephy_node_view_edit (EPHY_NODE_VIEW (editor->priv->bm_view), FALSE);
 	}
 	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->key_view)))
 	{
-		ephy_node_view_edit (EPHY_NODE_VIEW (editor->priv->key_view));
+		ephy_node_view_edit (EPHY_NODE_VIEW (editor->priv->key_view), FALSE);
 	}
 	add_text_renderer_monitor (editor);
 }

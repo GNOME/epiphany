@@ -1,5 +1,18 @@
 2004-07-23  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* lib/widgets/ephy-node-view.c: (cell_renderer_edited),
+	(renderer_editing_canceled_cb), (ephy_node_view_init),
+	(ephy_node_view_edit):
+	* lib/widgets/ephy-node-view.h:
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_add_topic),
+	(cmd_rename):
+	* src/bookmarks/ephy-topics-selector.c:
+	(ephy_topics_selector_new_topic):
+
+	Do not remove the topic when rename is cancelled.
+
+2004-07-23  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* lib/ephy-marshal.list:
 	* lib/widgets/ephy-node-view.c: (path_toggled),
 	(ephy_node_view_key_press_cb), (get_selection_refs),

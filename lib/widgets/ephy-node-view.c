@@ -68,6 +68,7 @@ struct EphyNodeViewPrivate
 	int priority_column;
 
 	EphyNode *edited_node;
+	gboolean remove_if_cancelled;
 	int editable_property;
 
 	int searchable_data_column;
@@ -1007,13 +1008,19 @@ cell_renderer_edited (GtkCellRendererText *cell,
 	g_value_unset (&value);
 
 	gtk_tree_path_free (path);
+
+	view->priv->remove_if_cancelled = FALSE;
 }
 
 static void
 renderer_editing_canceled_cb (GtkCellRendererText *cell,
                               EphyNodeView *view)
 {
-	ephy_node_unref (view->priv->edited_node);
+	if (view->priv->remove_if_cancelled)
+	{
+		ephy_node_unref (view->priv->edited_node);
+		view->priv->remove_if_cancelled = FALSE;
+	}
 }
 
 static inline int
@@ -1331,6 +1338,7 @@ ephy_node_view_init (EphyNodeView *view)
 {
 	view->priv = EPHY_NODE_VIEW_GET_PRIVATE (view);
 
+	view->priv->remove_if_cancelled = FALSE;
 	view->priv->toggle_column = -1;
 	view->priv->filter = NULL;
 	view->priv->editable_renderer = NULL;
@@ -1498,7 +1506,7 @@ ephy_node_view_enable_drag_source (EphyNodeView *view,
 }
 
 void
-ephy_node_view_edit (EphyNodeView *view)
+ephy_node_view_edit (EphyNodeView *view, gboolean remove_if_cancelled)
 {
 	GtkTreePath *path;
 	GtkTreeSelection *selection;
@@ -1523,6 +1531,7 @@ ephy_node_view_edit (EphyNodeView *view)
                                   TRUE);
 
 	view->priv->edited_node = get_node_from_path (view, path);
+	view->priv->remove_if_cancelled = remove_if_cancelled;
 
 	g_list_foreach (rows, (GFunc)gtk_tree_path_free, NULL);
         g_list_free (rows);

@@ -123,7 +123,8 @@ void	           ephy_node_view_enable_drag_dest    (EphyNodeView *view,
 						       GtkTargetEntry *types,
 						       int n_types);
 
-void		   ephy_node_view_edit		      (EphyNodeView *view);
+void		   ephy_node_view_edit		      (EphyNodeView *view,
+						       gboolean remove_if_cancelled);
 
 gboolean	   ephy_node_view_is_target	      (EphyNodeView *view);
 
