@@ -175,7 +175,7 @@ static GtkActionEntry ephy_bookmark_popup_entries [] = {
 	{ "OpenInWindow", GTK_STOCK_OPEN, N_("_Open in New Window"), "<control>O",
 	  N_("Open the selected bookmark in a new window"), 
 	  G_CALLBACK (cmd_open_bookmarks_in_browser) },
-	{ "OpenInTab", NULL, N_("Open in New _Tab"), "<shift><control>O",
+	{ "OpenInTab", STOCK_NEW_TAB, N_("Open in New _Tab"), "<shift><control>O",
 	  N_("Open the selected bookmark in a new tab"), 
 	  G_CALLBACK (cmd_open_bookmarks_in_tabs) },
 	{ "Rename", NULL, N_("_Rename..."), "F2",
