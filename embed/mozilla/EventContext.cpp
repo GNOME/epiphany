@@ -577,7 +577,7 @@ nsresult EventContext::GetCSSBackground (nsIDOMNode *node, nsAString& url)
 nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, MozillaEmbedEvent *info)
 {
 	/* FIXME: casting 32-bit guint* to PRUint16* below will break on big-endian */
-	PRUint16 btn;
+	PRUint16 btn = (PRUint16) -1;
 	aMouseEvent->GetButton (&btn);
 
 	switch (btn)
