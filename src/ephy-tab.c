@@ -700,7 +700,7 @@ build_progress_from_requests (EphyTab *tab, EmbedState state)
 
 		load_percent = build_load_percent (tab->priv->cur_requests,
 						   tab->priv->total_requests);
-		if (load_percent > tab->priv->load_percent)
+		if (load_percent > tab->priv->load_percent || load_percent == -1)
 		{
 			ephy_tab_set_load_percent (tab, load_percent);
 		}
