@@ -98,7 +98,8 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 	session = SESSION (ephy_shell_get_session (ephy_shell));
 
 	/* no window open, let's try to autoresume */
-	if (session_get_windows (session) == NULL)
+	if (session_get_windows (session) == NULL
+	    && ephy_shell_get_server_mode (ephy_shell) == FALSE)
 	{
 		gboolean res;
 		res = session_autoresume (session);
