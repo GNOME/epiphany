@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2003 Christian Persch
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -143,24 +143,9 @@ void
 ephy_langs_append_languages (GArray *array)
 {
 	const char * const * languages;
-	const char *system_lang;
 	char *lang;
 	int i;
 
-	/**
-	* This is a comma separated list of language ranges, as specified
-	* by RFC 2616, 14.4.
-	* Always include the basic language code last.
-	*
-	* Examples:
-	* "pt"    translation: "pt"
-	* "pt_BR" translation: "pt-br,pt"
-	* "zh_CN" translation: "zh-cn,zh"
-	* "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
-	*/
-	system_lang = _("system-language");
-
-	/* FIXME: use system_language when given, instead of g_get_language_names () ? */
 	languages = g_get_language_names ();
 	g_return_if_fail (languages != NULL);
 
@@ -286,7 +271,7 @@ typedef enum
 	STATE_ENTRIES,
 } ParserState;
 
-static gboolean
+static void
 load_iso_entries (int iso,
 		  GFunc read_entry_func,
 		  gpointer user_data)
@@ -358,14 +343,11 @@ out:
 	{
 		g_warning ("Failed to load ISO-%d codes from %s!\n",
 			   iso, filename);
-		return FALSE;
 	}
 
 	g_free (filename);
 
 	STOP_PROFILER ("Loading ISO codes")
-
-	return TRUE;
 }
 
 GHashTable *
