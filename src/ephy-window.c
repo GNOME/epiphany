@@ -1148,10 +1148,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 					 G_CALLBACK (sync_tab_load_progress),
 					 window, 0);
 		g_signal_connect_object (G_OBJECT (new_tab),
-					 "notify::load-progress",
-					 G_CALLBACK (sync_tab_load_progress),
-					 window, 0);
-		g_signal_connect_object (G_OBJECT (new_tab),
 					 "notify::load-status",
 					 G_CALLBACK (sync_tab_load_status),
 					 window, 0);
