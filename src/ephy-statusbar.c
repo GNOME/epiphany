@@ -33,7 +33,6 @@
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkframe.h>
-#include <gtk/gtktooltips.h>
 
 static void ephy_statusbar_class_init	(EphyStatusbarClass *klass);
 static void ephy_statusbar_init		(EphyStatusbar *t);
@@ -47,7 +46,6 @@ struct EphyStatusbarPrivate
 {
 	GtkWidget *security_icon;
 	GtkWidget *progressbar;
-	GtkTooltips *tooltips;
 	GtkWidget *security_evbox;
 };
 
@@ -132,9 +130,9 @@ ephy_statusbar_init (EphyStatusbar *t)
 {
 	t->priv = EPHY_STATUSBAR_GET_PRIVATE (t);
 
-	t->priv->tooltips = gtk_tooltips_new ();
-	g_object_ref (G_OBJECT (t->priv->tooltips));
-	gtk_object_sink (GTK_OBJECT (t->priv->tooltips));
+	t->tooltips = gtk_tooltips_new ();
+	g_object_ref (G_OBJECT (t->tooltips));
+	gtk_object_sink (GTK_OBJECT (t->tooltips));
 
 	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (t), FALSE);
 
@@ -147,7 +145,7 @@ ephy_statusbar_finalize (GObject *object)
 {
 	EphyStatusbar *t = EPHY_STATUSBAR (object);
 
-	g_object_unref (t->priv->tooltips);
+	g_object_unref (t->tooltips);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -185,7 +183,7 @@ ephy_statusbar_set_security_state (EphyStatusbar *statusbar,
 	gtk_image_set_from_stock (GTK_IMAGE (statusbar->priv->security_icon), stock,
 				  GTK_ICON_SIZE_MENU);
 
-	gtk_tooltips_set_tip (statusbar->priv->tooltips, statusbar->priv->security_evbox,
+	gtk_tooltips_set_tip (statusbar->tooltips, statusbar->priv->security_evbox,
 			      tooltip, NULL);
 }
 

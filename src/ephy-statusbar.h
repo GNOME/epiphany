@@ -24,6 +24,7 @@
 #define EPHY_STATUSBAR_H
 
 #include <gtk/gtkstatusbar.h>
+#include <gtk/gtktooltips.h>
 
 G_BEGIN_DECLS
 
@@ -43,6 +44,7 @@ struct EphyStatusbar
         GtkStatusbar parent;
 
 	/*< public >*/
+	GtkTooltips *tooltips;
 	GtkWidget *security_frame;
 
 	/*< private >*/
