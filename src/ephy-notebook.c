@@ -965,6 +965,7 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	g_object_set_data (G_OBJECT (hbox), "label-ebox", label_ebox);
 	g_object_set_data (G_OBJECT (hbox), "loading-image", loading_image);
 	g_object_set_data (G_OBJECT (hbox), "icon", icon);
+	g_object_set_data (G_OBJECT (hbox), "close-button", close_button);
 	g_object_set_data (G_OBJECT (hbox), "tooltips", nb->priv->title_tips);
 
 	return hbox;
