@@ -437,9 +437,12 @@ ephy_state_add_paned (GtkWidget *paned,
 void
 ephy_state_save (void)
 {
-	ephy_states_save ();
-	ephy_node_unref (states);
-	g_object_unref (states_db);
-	states = NULL;
-	states_db = NULL;
+	if (states)
+	{
+		ephy_states_save ();
+		ephy_node_unref (states);
+		g_object_unref (states_db);
+		states = NULL;
+		states_db = NULL;
+	}
 }
