@@ -427,18 +427,17 @@ static void
 pdm_dialog_cookie_remove (PdmActionInfo *info,
 			  GList *data)
 {
-	EphyEmbedShell *shell;
-	shell = ephy_shell_get_embed_shell (ephy_shell);
-	ephy_embed_shell_remove_cookies (shell, data);
+	ephy_embed_shell_remove_cookies
+		(EPHY_EMBED_SHELL (ephy_shell), data);
 }
 
 static void
 pdm_dialog_password_remove (PdmActionInfo *info,
 			    GList *data)
 {
-	EphyEmbedShell *shell;
-	shell = ephy_shell_get_embed_shell (ephy_shell);
-	ephy_embed_shell_remove_passwords (shell, data, PASSWORD_PASSWORD);
+	ephy_embed_shell_remove_passwords
+		(EPHY_EMBED_SHELL (ephy_shell), data,
+		 PASSWORD_PASSWORD);
 }
 
 static void
@@ -448,7 +447,7 @@ pdm_dialog_cookies_free (PdmActionInfo *info,
 	EphyEmbedShell *shell;
 	GList *l;
 
-	shell = ephy_shell_get_embed_shell (ephy_shell);
+	shell = EPHY_EMBED_SHELL (ephy_shell);
 	l = data ? data : info->list;
 	ephy_embed_shell_free_cookies (shell, l);
 }
@@ -460,7 +459,7 @@ pdm_dialog_passwords_free (PdmActionInfo *info,
 	EphyEmbedShell *shell;
 	GList *l;
 
-	shell = ephy_shell_get_embed_shell (ephy_shell);
+	shell = EPHY_EMBED_SHELL (ephy_shell);
 	l = data ? data : info->list;
 	ephy_embed_shell_free_passwords (shell, l);
 }
@@ -474,7 +473,7 @@ pdm_dialog_init (PdmDialog *dialog)
 	GtkWidget *cookies_tv;
 	GtkWidget *passwords_tv;
 
-	shell = ephy_shell_get_embed_shell (ephy_shell);
+	shell = EPHY_EMBED_SHELL (ephy_shell);
 
 	dialog->priv = g_new0 (PdmDialogPrivate, 1);
 	dialog->priv->cookies = NULL;

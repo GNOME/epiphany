@@ -364,8 +364,7 @@ window_cmd_file_open (BonoboUIComponent *uic,
 	EphyEmbedShell *embed_shell;
 	gresult result;
 
-	embed_shell = ephy_shell_get_embed_shell (ephy_shell);
-	g_return_if_fail (embed_shell != NULL);
+	embed_shell = EPHY_EMBED_SHELL (ephy_shell);
 
 	wmain = GTK_WIDGET (window);
 	g_return_if_fail (wmain != NULL);

@@ -167,7 +167,8 @@ impl_save (EphyEmbedPersist *persist)
 	
 	if (embed)
 	{
-	        wrapper = (EphyWrapper *) mozilla_embed_get_galeon_wrapper (MOZILLA_EMBED(embed));	
+	        wrapper = (EphyWrapper *) mozilla_embed_get_galeon_wrapper (MOZILLA_EMBED(embed));
+		g_return_val_if_fail (wrapper != NULL, G_FAILED);	
 		wrapper->GetDOMWindow (getter_AddRefs (parent));
 	}
 

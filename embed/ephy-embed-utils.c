@@ -240,6 +240,7 @@ ephy_embed_utils_build_charsets_submenu (BonoboUIComponent *ui_component,
 	g_timer_start(timer);
 #endif
 
+	g_return_if_fail (IS_EPHY_EMBED_SHELL (embed_shell));
 	g_return_if_fail (ephy_embed_shell_get_charset_groups (embed_shell, &groups) == G_OK);
 
 	xml_string = g_string_new (NULL);

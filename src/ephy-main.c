@@ -23,12 +23,13 @@
 #include "ephy-shell.h"
 #include "ephy-automation.h"
 #include "ephy-window.h"
+#include "ephy-file-helpers.h"
 #include "EphyAutomation.h"
 
 #include <libbonoboui.h>
 #include <libgnome/gnome-program.h>
 #include <libgnomeui/gnome-ui-init.h>
-#include <libgnomeui/gnome-window-icon.h>
+#include <gtk/gtkwindow.h>
 #include <libgnomevfs/gnome-vfs-init.h>
 #include <glade/glade-init.h>
 
@@ -147,9 +148,10 @@ main (int argc, char *argv[])
 
 		glade_gnome_init ();
 
-		gnome_window_icon_set_default_from_file (PIXMAP_DIR "/ephy.png");
-
 		ephy_shell_new ();
+
+		gtk_window_set_default_icon_from_file
+			(ephy_file ("epiphany.png"), NULL);
 
 		g_idle_add ((GSourceFunc) ephy_main_start, NULL);
 

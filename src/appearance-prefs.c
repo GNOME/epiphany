@@ -179,15 +179,12 @@ setup_font_menu (AppearancePrefs *dialog,
 {
 	char *default_font;
 	GList *fonts;
-	EphyEmbedShell *shell;
 	const char *name;
 	char key[255];
 	int pos;
 	GtkWidget *entry = GTK_COMBO(combo)->entry;
 
-	shell = ephy_shell_get_embed_shell (ephy_shell);
-
-	ephy_embed_shell_get_font_list (shell,
+	ephy_embed_shell_get_font_list (EPHY_EMBED_SHELL (ephy_shell),
 					lang_encode[dialog->priv->language],
 					type, &fonts, &default_font);
 

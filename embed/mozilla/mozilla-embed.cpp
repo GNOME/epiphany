@@ -274,7 +274,7 @@ mozilla_embed_get_type (void)
 
 		static const GInterfaceInfo embed_info =
 		{
-			(GInterfaceInitFunc) ephy_embed_init,    /* interface_init */
+			(GInterfaceInitFunc) ephy_embed_init,      /* interface_init */
         		NULL,                                      /* interface_finalize */
         		NULL                                       /* interface_data */
      		 };
@@ -357,8 +357,6 @@ mozilla_embed_init (MozillaEmbed *embed)
 gpointer
 mozilla_embed_get_galeon_wrapper (MozillaEmbed *embed)
 {
-	g_return_val_if_fail (embed->priv->wrapper != NULL, NULL);
-	
 	return embed->priv->wrapper;
 }
 
@@ -719,6 +717,8 @@ impl_get_location (EphyEmbed *embed,
 	}
 
 	*location = l;
+
+	if (l == NULL) return G_FAILED;
 	
 	return G_OK;
 }
@@ -1309,14 +1309,16 @@ mozilla_embed_visibility_cb (GtkMozEmbed *embed, gboolean visibility,
 		(do_GetService(WINDOWWATCHER_CONTRACTID, &rv));
 	if (NS_FAILED(rv) || !wwatch) return;
 
-	EphyWrapper *wrapper = (EphyWrapper *)mozilla_embed_get_galeon_wrapper(membed);
-	if(!wrapper) return;
+	EphyWrapper *wrapper = membed->priv->wrapper;
 
-	nsCOMPtr<nsIDOMWindow> domWindow;
-	rv = wrapper->GetDOMWindow(getter_AddRefs(domWindow));
-	if(NS_FAILED(rv) || !domWindow) return;
+	if (wrapper)
+	{
+		nsCOMPtr<nsIDOMWindow> domWindow;
+		rv = wrapper->GetDOMWindow(getter_AddRefs(domWindow));
+		if(NS_FAILED(rv) || !domWindow) return;
 
-	rv = wwatch->SetActiveWindow(domWindow);
+		rv = wwatch->SetActiveWindow(domWindow);
+	}
 }
 
 static void

@@ -46,8 +46,6 @@ static void
 ephy_embed_shell_init (EphyEmbedShell *ges);
 static void
 ephy_embed_shell_finalize (GObject *object);
-static void
-ephy_embed_shell_finalize (GObject *object);
 
 static EphyHistory *
 impl_get_global_history (EphyEmbedShell *shell);
@@ -58,6 +56,12 @@ static GObjectClass *parent_class = NULL;
 static guint ephy_embed_shell_signals[LAST_SIGNAL] = { 0 };
 
 EphyEmbedShell *embed_shell;
+
+GType
+ephy_embed_shell_get_impl (void)
+{
+	return MOZILLA_EMBED_SHELL_TYPE;
+}
 
 GType
 ephy_embed_shell_get_type (void)
@@ -80,8 +84,8 @@ ephy_embed_shell_get_type (void)
                 };
 
                 ephy_embed_shell_type = g_type_register_static (G_TYPE_OBJECT,
-								  "EphyEmbedShell",
-								  &our_info, 0);
+								"EphyEmbedShell",
+								&our_info, 0);
         }
 
         return ephy_embed_shell_type;
@@ -173,21 +177,6 @@ ephy_embed_shell_new (const char *type)
 
 	g_assert_not_reached ();
 	return NULL;
-}
-
-const char *supported_embeds [] = {
-#ifdef ENABLE_MOZILLA_EMBED
-		"mozilla",
-#endif
-#ifdef ENABLE_GTKHTML_EMBED
-		"gtkhtml",
-#endif
-		NULL };
-
-const char **
-ephy_embed_shell_get_supported (void)
-{
-        return supported_embeds;
 }
 
 /**

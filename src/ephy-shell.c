@@ -45,7 +45,6 @@
 
 struct EphyShellPrivate
 {
-	EphyEmbedShell *embed_shell;
 	Session *session;
 	EphyAutocompletion *autocompletion;
 	EphyBookmarks *bookmarks;
@@ -102,9 +101,9 @@ ephy_shell_get_type (void)
                         (GInstanceInitFunc) ephy_shell_init
                 };
 
-                ephy_shell_type = g_type_register_static (G_TYPE_OBJECT,
-							    "EphyShell",
-							    &our_info, 0);
+                ephy_shell_type = g_type_register_static (EPHY_EMBED_SHELL_IMPL,
+							  "EphyShell",
+							  &our_info, 0);
         }
 
         return ephy_shell_type;
@@ -169,11 +168,7 @@ ephy_shell_init (EphyShell *gs)
 	gs->priv->session = NULL;
 	gs->priv->bookmarks = NULL;
 
-	gs->priv->embed_shell = ephy_embed_shell_new ("mozilla");
-
-	g_assert (gs->priv->embed_shell != NULL);
-
-	g_signal_connect (G_OBJECT(embed_shell),
+	g_signal_connect (G_OBJECT (gs),
 			  "new_window_orphan",
 			  G_CALLBACK(ephy_shell_new_window_cb),
 			  NULL);
@@ -195,9 +190,6 @@ ephy_shell_finalize (GObject *object)
 
 	g_assert (ephy_shell == NULL);
 
-	g_return_if_fail (IS_EPHY_EMBED_SHELL (gs->priv->embed_shell));
-	g_object_unref (G_OBJECT (gs->priv->embed_shell));
-
 	if (gs->priv->session)
 	{
 		g_return_if_fail (IS_SESSION(gs->priv->session));
@@ -217,12 +209,12 @@ ephy_shell_finalize (GObject *object)
 		g_object_unref (gs->priv->bookmarks);
 	}
 
-	ephy_file_helpers_shutdown ();
-	ephy_node_system_shutdown ();
+        G_OBJECT_CLASS (parent_class)->finalize (object);
 
         g_free (gs->priv);
 
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+	ephy_file_helpers_shutdown ();
+	ephy_node_system_shutdown ();
 
 #ifdef DEBUG_MARCO
 	g_print ("Ephy shell finalized\n");
@@ -239,22 +231,6 @@ EphyShell *
 ephy_shell_new (void)
 {
 	return EPHY_SHELL (g_object_new (EPHY_SHELL_TYPE, NULL));
-}
-
-/**
- * ephy_shell_get_embed_shell:
- * @gs: a #EphyShell
- *
- * Returns the embed shell created by the #EphyShell
- *
- * Return value: the embed shell
- **/
-EphyEmbedShell *
-ephy_shell_get_embed_shell (EphyShell *gs)
-{
-	g_return_val_if_fail (IS_EPHY_SHELL (gs), NULL);
-
-	return gs->priv->embed_shell;
 }
 
 static void
@@ -312,7 +288,7 @@ build_homepage_url (EphyShell *gs,
 		{
 			/* get location of last page */
 			gh = ephy_embed_shell_get_global_history
-				(gs->priv->embed_shell);
+				(EPHY_EMBED_SHELL (gs));
 			last_page_url = ephy_history_get_last_page (gh);
 			result = g_strdup (last_page_url);
 		}
@@ -495,7 +471,7 @@ ephy_shell_get_autocompletion (EphyShell *gs)
 			NULL
 		};
 
-		EphyHistory *gh = ephy_embed_shell_get_global_history (gs->priv->embed_shell);
+		EphyHistory *gh = ephy_embed_shell_get_global_history (EPHY_EMBED_SHELL (gs));
 		EphyFilesystemAutocompletion *fa = ephy_filesystem_autocompletion_new ();
 		p->autocompletion = ephy_autocompletion_new ();
 		ephy_autocompletion_set_prefixes (p->autocompletion, prefixes);

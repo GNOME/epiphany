@@ -174,8 +174,8 @@ ephy_nautilus_view_instance_init (EphyNautilusView *view)
 	EphyNautilusViewPrivate *p = g_new0 (EphyNautilusViewPrivate, 1);
 
 	view->priv = p;
-	view->priv->embed = ephy_embed_new (G_OBJECT (ephy_shell_get_embed_shell (ephy_shell)));
-	
+	view->priv->embed = ephy_embed_new (G_OBJECT (ephy_shell));
+
 	g_object_ref (G_OBJECT (ephy_shell));
 
 	g_signal_connect (view->priv->embed, "ge_link_message",

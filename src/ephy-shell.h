@@ -67,20 +67,18 @@ typedef enum
 
 struct EphyShell
 {
-        GObject parent;
+        EphyEmbedShell parent;
         EphyShellPrivate *priv;
 };
 
 struct EphyShellClass
 {
-        GObjectClass parent_class;
+        EphyEmbedShellClass parent_class;
 };
 
 GType               ephy_shell_get_type            (void);
 
 EphyShell	   *ephy_shell_new                 (void);
-
-EphyEmbedShell     *ephy_shell_get_embed_shell     (EphyShell *gs);
 
 EphyWindow	   *ephy_shell_get_active_window   (EphyShell *gs);
 

@@ -23,6 +23,7 @@
 #include "ephy-ellipsizing-label.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
+#include "ephy-embed-shell.h"
 
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkliststore.h>
@@ -85,7 +86,7 @@ typedef struct
 	gchar *source;
 	gchar *dest;
 	DownloadStatus status;
-	
+
 	GtkTreeRowReference *ref;
 } DownloadDetails;
 
@@ -277,8 +278,9 @@ downloader_view_init (DownloaderView *dv)
 							g_direct_equal,
 							NULL,
 							(GDestroyNotify)destroy_details_cb);
-
 	downloader_view_build_ui (dv);
+
+	g_object_ref (embed_shell);
 }
 
 static void
@@ -294,6 +296,8 @@ downloader_view_finalize (GObject *object)
         g_return_if_fail (dv->priv != NULL);
 
 	g_hash_table_destroy (dv->priv->details_hash);
+
+	g_object_unref (embed_shell);
 
 	g_free (dv->priv);
 

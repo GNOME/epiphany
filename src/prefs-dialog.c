@@ -320,7 +320,7 @@ prefs_clear_memory_cache_button_clicked_cb (GtkWidget *button,
 {
 	EphyEmbedShell *shell;
 
-	shell = ephy_shell_get_embed_shell (ephy_shell);
+	shell = EPHY_EMBED_SHELL (ephy_shell);
 	ephy_embed_shell_clear_cache (shell, MEMORY_CACHE);
 }
 
@@ -330,6 +330,6 @@ prefs_clear_disk_cache_button_clicked_cb (GtkWidget *button,
 {
 	EphyEmbedShell *shell;
 
-	shell = ephy_shell_get_embed_shell (ephy_shell);
+	shell = EPHY_EMBED_SHELL (ephy_shell);
 	ephy_embed_shell_clear_cache (shell, DISK_CACHE);
 }

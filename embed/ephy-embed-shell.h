@@ -32,10 +32,11 @@ G_BEGIN_DECLS
 typedef struct EphyEmbedShellClass EphyEmbedShellClass;
 
 #define EPHY_EMBED_SHELL_TYPE             (ephy_embed_shell_get_type ())
-#define EPHY_EMBED_SHELL(obj)             (GTK_CHECK_CAST ((obj), EPHY_EMBED_SHELL_TYPE, EphyEmbedShell))
-#define EPHY_EMBED_SHELL_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), EPHY_EMBED_SHELL_TYPE, EphyEmbedShellClass))
-#define IS_EPHY_EMBED_SHELL(obj)          (GTK_CHECK_TYPE ((obj), EPHY_EMBED_SHELL_TYPE))
-#define IS_EPHY_EMBED_SHELL_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), EPHY_EMBED_SHELL))
+#define EPHY_EMBED_SHELL_IMPL             (ephy_embed_shell_get_impl ())
+#define EPHY_EMBED_SHELL(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_EMBED_SHELL_TYPE, EphyEmbedShell))
+#define EPHY_EMBED_SHELL_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_EMBED_SHELL_TYPE, EphyEmbedShellClass))
+#define IS_EPHY_EMBED_SHELL(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_EMBED_SHELL_TYPE))
+#define IS_EPHY_EMBED_SHELL_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_EMBED_SHELL_TYPE))
 #define EPHY_EMBED_SHELL_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_EMBED_SHELL_TYPE, EphyEmbedShellClass))
 
 typedef struct EphyEmbedShell EphyEmbedShell;
@@ -186,6 +187,8 @@ struct EphyEmbedShellClass
 
 GType             ephy_embed_shell_get_type            (void);
 
+GType             ephy_embed_shell_get_impl            (void);
+
 EphyEmbedShell   *ephy_embed_shell_new                 (const char *type);
 
 EphyFaviconCache *ephy_embed_shell_get_favicon_cache   (EphyEmbedShell *ges);
@@ -199,8 +202,6 @@ void              ephy_embed_shell_remove_embed        (EphyEmbedShell *ges,
 EphyEmbed        *ephy_embed_shell_get_active_embed    (EphyEmbedShell *ges);
 
 GList            *ephy_embed_shell_get_embeds          (EphyEmbedShell *ges);
-
-const char      **ephy_embed_shell_get_supported       (void);
 
 void              ephy_embed_shell_get_capabilities    (EphyEmbedShell *shell,
 							EmbedShellCapabilities *caps);

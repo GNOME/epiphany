@@ -367,7 +367,7 @@ history_dialog_init (HistoryDialog *dialog)
 
 	dialog->priv = g_new0 (HistoryDialogPrivate, 1);
 
-	ges = ephy_shell_get_embed_shell (ephy_shell);
+	ges = EPHY_EMBED_SHELL (ephy_shell);
 	dialog->priv->gh = ephy_embed_shell_get_global_history (ges);
 	g_return_if_fail (dialog->priv->gh != NULL);
 

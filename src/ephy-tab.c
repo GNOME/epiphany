@@ -194,7 +194,7 @@ ephy_tab_init (EphyTab *tab)
 
         tab->priv = g_new0 (EphyTabPrivate, 1);
 
-	shell = ephy_shell_get_embed_shell (ephy_shell);
+	shell = EPHY_EMBED_SHELL (ephy_shell);
 
 	tab->priv->embed = ephy_embed_new (G_OBJECT(shell));
 
@@ -468,6 +468,7 @@ ephy_tab_location_cb (EphyEmbed *embed, EphyTab *tab)
 	{
 		ephy_window_update_control (tab->priv->window, LocationControl);
 		ephy_window_update_control (tab->priv->window, NavControl);
+		ephy_window_update_control (tab->priv->window, FaviconControl);
 	}
 }
 
@@ -735,7 +736,7 @@ ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
 	{
 		gtk_widget_hide (GTK_WIDGET(embed));
 	}
-       
+
 	ephy_tab_set_visibility (tab, visibility);
 
 	window = ephy_tab_get_window (tab);

@@ -134,13 +134,6 @@ update_url (EphyEmbedFavicon *favicon)
 }
 
 static void
-location_changed_cb (EphyEmbed *embed,
-	             EphyEmbedFavicon *favicon)
-{
-	update_url (favicon);
-}
-
-static void
 favicon_cb (EphyEmbed *embed,
 	    const char *favicon_url,
 	    EphyEmbedFavicon *favicon)
@@ -184,11 +177,6 @@ ephy_embed_favicon_set_property (GObject *object,
 			g_signal_connect_object (G_OBJECT (favicon->priv->embed),
 					         "ge_favicon",
 					         G_CALLBACK (favicon_cb),
-					         favicon,
-						 0);
-			g_signal_connect_object (G_OBJECT (favicon->priv->embed),
-					         "ge_location",
-					         G_CALLBACK (location_changed_cb),
 					         favicon,
 						 0);
 			update_url (favicon);

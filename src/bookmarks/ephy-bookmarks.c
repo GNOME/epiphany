@@ -294,7 +294,7 @@ compute_lower_fav (EphyNode *favorites, double *score)
 	EphyHistory *history;
 	EphyNode *result = NULL;
 
-	embed_shell = ephy_shell_get_embed_shell (ephy_shell);
+	embed_shell = EPHY_EMBED_SHELL (ephy_shell);
 	history = ephy_embed_shell_get_global_history (embed_shell);
 
 	*score = DBL_MAX;
@@ -399,7 +399,7 @@ ephy_setup_history_notifiers (EphyBookmarks *eb)
 	EphyEmbedShell *embed_shell;
 	EphyHistory *history;
 
-	embed_shell = ephy_shell_get_embed_shell (ephy_shell);
+	embed_shell = EPHY_EMBED_SHELL (ephy_shell);
 	history = ephy_embed_shell_get_global_history (embed_shell);
 
 	g_signal_connect (history, "visited",

@@ -218,7 +218,7 @@ create_default_charset_menu (GeneralPrefs *dialog)
 	GtkWidget *optionmenu;
 	char *value;
 
-	shell = ephy_shell_get_embed_shell (ephy_shell);
+	shell = EPHY_EMBED_SHELL (ephy_shell);
 	ephy_embed_shell_get_charset_titles (shell, NULL, &l);
 
 	menu = gtk_menu_new ();

@@ -1,3 +1,48 @@
+2003-01-05  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/art/Makefile.am:
+	* data/art/epiphany.png:
+	* data/epiphany.schemas.in:
+	* data/glade/epiphany.glade:
+	* embed/downloader-view.c: (downloader_view_init),
+	(downloader_view_finalize):
+	* embed/ephy-embed-favicon.c: (ephy_embed_favicon_set_property):
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_get_impl),
+	(ephy_embed_shell_get_type), (ephy_embed_shell_new):
+	* embed/ephy-embed-shell.h:
+	* embed/ephy-embed-utils.c:
+	(ephy_embed_utils_build_charsets_submenu):
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/appearance-prefs.c: (setup_font_menu):
+	* src/bookmarks/ephy-bookmarks.c: (compute_lower_fav),
+	(ephy_setup_history_notifiers):
+	* src/ephy-main.c: (main):
+	* src/ephy-nautilus-view.c: (ephy_nautilus_view_instance_init):
+	* src/ephy-shell.c: (ephy_shell_get_type), (ephy_shell_init),
+	(ephy_shell_finalize), (build_homepage_url),
+	(ephy_shell_get_autocompletion):
+	* src/ephy-shell.h:
+	* src/ephy-tab.c: (ephy_tab_init), (ephy_tab_location_cb),
+	(ephy_tab_visibility_cb):
+	* src/ephy-window.c: (favicon_cache_changed_cb),
+	(ephy_window_init), (update_favicon_control):
+	* src/general-prefs.c: (create_default_charset_menu):
+	* src/history-dialog.c: (history_dialog_init):
+	* src/pdm-dialog.c: (pdm_dialog_cookie_remove),
+	(pdm_dialog_password_remove), (pdm_dialog_cookies_free),
+	(pdm_dialog_passwords_free), (pdm_dialog_init):
+	* src/prefs-dialog.c: (prefs_clear_memory_cache_button_clicked_cb),
+	(prefs_clear_disk_cache_button_clicked_cb):
+	* src/window-commands.c: (window_cmd_file_open):
+
+	Make GaleonShell inherit from GaleonEmbedShell.
+	Ref the shell when using the downloader.
+	Use favicons for the window icon when possible.
+	This required to use jimmac icon as default,
+	we still dont have his permission, I'll remove it
+	later if necessary.
+
 2003-01-04  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/ephy-embed-favicon.c: (update_url), (location_changed_cb),
