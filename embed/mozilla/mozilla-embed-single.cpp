@@ -743,11 +743,11 @@ impl_get_charset_titles (EphyEmbedSingle *shell,
 			info = g_new0 (CharsetInfo, 1);
 			info->name = charset_trans_array[j].charset_name;
 			info->title = charset_trans_array[j].charset_title;
-			l = g_list_append (l, info);
+			l = g_list_prepend (l, info);
 		}
 	}
 
-	*charsets = l;
+	*charsets = g_list_reverse (l);
 
 	return G_OK;
 }
@@ -759,12 +759,12 @@ impl_get_charset_groups (EphyEmbedSingle *shell,
 	GList *l = NULL;
 	int i;
 	
-	for (i = 0; lgroups[i] != NULL; i++)
+	for (i = 0; i < n_lgroups; i++)
 	{
-		l = g_list_append (l, (gpointer)lgroups[i]);
+		l = g_list_prepend (l, (gpointer)lgroups[i]);
 	}
 	
-	*groups = l;
+	*groups = g_list_reverse (l);
 	
 	return G_OK;
 }
@@ -803,9 +803,9 @@ impl_get_font_list (EphyEmbedSingle *shell,
 
 		char *gFontString;
 		gFontString = g_strdup(NS_ConvertUCS2toUTF8(fontString).get());
-		l = g_list_append(l, gFontString);
+		l = g_list_prepend (l, gFontString);
 	}
-	*fontList = l;
+	*fontList = g_list_reverse (l);
 
 	if (default_font != NULL)
 	{

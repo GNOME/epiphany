@@ -1,3 +1,10 @@
+2003-05-27  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/mozilla-embed-single.cpp: (impl_get_charset_titles),
+	(impl_get_charset_groups), (impl_get_font_list):
+
+	g_list_prepend is faster than g_list_append.
+
 2003-05-27  Xan Lopez  <xan@masilla.org>
 
 	* lib/widgets/ephy-node-view.c: (ephy_node_view_get_selection):
