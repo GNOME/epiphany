@@ -1386,6 +1386,8 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 
 	context = ephy_embed_event_get_context (event);
 
+	LOG ("show_embed_popup context %x", context)
+
 	if ((context & EMBED_CONTEXT_LINK) &&
 	    (context & EMBED_CONTEXT_IMAGE))
 	{
