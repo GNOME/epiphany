@@ -194,14 +194,6 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	action = gtk_action_group_get_action (p->action_group, name);
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
 
-	/* check if encoding was overridden */
-	is_automatic = ephy_encoding_info_is_automatic (info);
-
-	action = gtk_action_group_get_action (p->action_group,
-					      "ViewEncodingAutomatic");
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), is_automatic);
-	g_object_set (G_OBJECT (action), "sensitive", !is_automatic, NULL);
-
 	/* get encodings related to the current encoding */
 	groups = ephy_node_get_property_int
 			(enc_node, EPHY_NODE_ENCODING_PROP_LANGUAGE_GROUPS);
@@ -227,6 +219,15 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	recent = g_list_sort (recent, (GCompareFunc) sort_encodings);
 
 build_menu:
+	/* check if encoding was overridden */
+	is_automatic = ephy_encoding_info_is_automatic (info);
+
+	action = gtk_action_group_get_action (p->action_group,
+					      "ViewEncodingAutomatic");
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), is_automatic);
+	g_object_set (G_OBJECT (action), "sensitive", !is_automatic, NULL);
+
+
 	/* clear the menu */
 	if (p->merge_id > 0)
 	{
