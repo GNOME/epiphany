@@ -100,11 +100,9 @@ egg_toolbar_editor_get_type (void)
 }
 
 static gint
-compare_actions (gconstpointer a, gconstpointer b)
+compare_actions (gconstpointer a,
+		 gconstpointer b)
 {
-  g_return_val_if_fail (GTK_IS_ACTION (a), 0);
-  g_return_val_if_fail (GTK_IS_ACTION (b), 0);
-
   GValue value_a = { 0, }, value_b = { 0, };
   const char *short_label_a, *short_label_b;
   int ret;
