@@ -89,6 +89,10 @@ egg_toolbars_model_get_type (void)
 	0,			/* n_preallocs */
 	(GInstanceInitFunc) egg_toolbars_model_init
       };
+      volatile GType flags_type; /* work around gcc's optimiser */
+
+      /* make sure the flags type is known */
+      flags_type = EGG_TYPE_TB_MODEL_FLAGS;
 
       type = g_type_register_static (G_TYPE_OBJECT,
 				     "EggToolbarsModel",
@@ -826,10 +830,4 @@ egg_toolbars_model_get_item_type (EggToolbarsModel *t,
   g_signal_emit (t, signals[GET_ITEM_TYPE], 0, type, &retval);
 
   return retval;
-}
-
-G_GNUC_UNUSED static void
-register_type (void)
-{
-	egg_tb_model_flags_get_type ();
 }
