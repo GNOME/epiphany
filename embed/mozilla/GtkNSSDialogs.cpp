@@ -291,10 +291,10 @@ GtkNSSDialogs::ConfirmMismatchDomain (nsIInterfaceRequestor *ctx,
 	NS_UTF16ToCString (commonName,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
- 	ttTargetUrl = g_strdup_printf ("\"<tt>%s</tt>\"", 
-                                       nsEmbedCString(targetURL).get());
+ 	ttTargetUrl = g_markup_printf_escaped ("\"<tt>%s</tt>\"", 
+                                               nsEmbedCString(targetURL).get());
 
-	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", cCommonName.get());
+	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"", cCommonName.get());
 
         first = g_strdup_printf (_("The site %s returned security information for "
 				   "%s. It is possible that someone is intercepting "
@@ -339,7 +339,7 @@ GtkNSSDialogs::ConfirmUnknownIssuer (nsIInterfaceRequestor *ctx,
 	NS_UTF16ToCString (commonName,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
-	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", cCommonName.get());
+	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"", cCommonName.get());
 
 	secondary = g_strdup_printf
 		           (_("Your browser was unable to trust %s. "
@@ -446,7 +446,7 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 		  localtime_r (&t, &tm));
 	fdate = g_locale_to_utf8 (formattedDate, -1, NULL, NULL, NULL);
 
-	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", cCommonName.get());
+	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"", cCommonName.get());
 
 	secondary = g_strdup_printf (text, ttCommonName, fdate);
 
@@ -495,10 +495,10 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 	NS_UTF16ToCString (commonName,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
-	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", cCommonName.get());
+	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"", cCommonName.get());
 
-	ttTargetUrl = g_strdup_printf ("\"<tt>%s</tt>\"",
-				       nsEmbedCString(targetURL).get());
+	ttTargetUrl = g_markup_printf_escaped ("\"<tt>%s</tt>\"",
+				               nsEmbedCString(targetURL).get());
 
 	primary = g_strdup_printf (_("Cannot establish connection to %s."),
 				   ttTargetUrl);
@@ -561,7 +561,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 	NS_UTF16ToCString (commonName,
 			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
-	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"",  cCommonName.get());
+	ttCommonName = g_markup_printf_escaped ("\"<tt>%s</tt>\"",  cCommonName.get());
 
 	tertiary = g_strdup_printf (_("Trust %s to identify:"), ttCommonName);
 	g_free (ttCommonName);

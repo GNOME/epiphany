@@ -189,7 +189,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	nsEmbedCString utf8_cn;
 	NS_UTF16ToCString (nsEmbedString (cn),
 			   NS_CSTRING_ENCODING_UTF8, utf8_cn);
-	tt_cn = g_strdup_printf ("\"<tt>%s</tt>\"", utf8_cn.get());
+	tt_cn = g_markup_printf_escaped ("\"<tt>%s</tt>\"", utf8_cn.get());
 
 	msg = g_strdup_printf (_("Choose a certificate to present as identification to %s."),
 			       tt_cn);
