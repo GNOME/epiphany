@@ -1285,7 +1285,15 @@ ephy_dialog_finalize (GObject *object)
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-static void
+GtkWidget *
+ephy_dialog_get_parent (EphyDialog *dialog)
+{
+	g_return_val_if_fail (EPHY_IS_DIALOG (dialog), NULL);
+
+	return dialog->priv->parent;
+}
+
+void
 ephy_dialog_set_parent (EphyDialog *dialog,
 			GtkWidget *parent)
 {

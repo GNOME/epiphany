@@ -110,6 +110,11 @@ void		ephy_dialog_show		(EphyDialog *dialog);
 
 void		ephy_dialog_hide		(EphyDialog *dialog);
 
+void		ephy_dialog_set_parent		(EphyDialog *dialog,
+						 GtkWidget *parent);
+
+GtkWidget      *ephy_dialog_get_parent		(EphyDialog *dialog);
+
 void		ephy_dialog_set_modal		(EphyDialog *dialog,
 						 gboolean is_modal);
 

@@ -1,3 +1,15 @@
+2004-04-05  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/glade/prefs-dialog.glade:
+	* lib/ephy-dialog.c: (ephy_dialog_get_parent):
+	* lib/ephy-dialog.h:
+	* src/prefs-dialog.c: (prefs_homepage_current_button_clicked_cb):
+	* src/window-commands.c: (window_cmd_file_print_setup),
+	(window_cmd_edit_personal_data), (window_cmd_edit_prefs):
+
+	Make prefs, pdm and print setup dialogues transient to their parent.
+	Fixes bug #139124.
+
 2004-04-03  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* lib/egg/egg-editable-toolbar.c: (set_fixed_style),
