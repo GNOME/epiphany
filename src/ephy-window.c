@@ -685,6 +685,48 @@ confirm_close_with_modified_forms (EphyWindow *window)
 	return response == GTK_RESPONSE_OK;
 }
 
+static void
+menubar_deactivate_cb (GtkWidget *menubar,
+		       EphyWindow *window)
+{
+	g_signal_handlers_disconnect_by_func
+		(menubar, G_CALLBACK (menubar_deactivate_cb), window);
+
+	gtk_menu_shell_deselect (GTK_MENU_SHELL (menubar));
+
+	sync_chromes_visibility (window);
+}
+
+static gboolean
+ephy_window_key_press_event (GtkWidget *widget,
+			     GdkEventKey *event)
+{
+	EphyWindow *window = EPHY_WINDOW (widget);
+	GtkWidget *menubar;
+	guint modifiers = gtk_accelerator_get_default_mod_mask ();
+
+	/* Show and activate the menubar on F10, if it isn't visible */
+        if (event->keyval == GDK_F10 && (event->state & modifiers) == 0)
+	{
+		menubar = gtk_ui_manager_get_widget
+			(GTK_UI_MANAGER (window->ui_merge), "/menubar");
+		g_return_val_if_fail (menubar != NULL , FALSE);
+	
+		if (!GTK_WIDGET_VISIBLE (menubar))
+		{
+			g_signal_connect (menubar, "deactivate",
+					  G_CALLBACK (menubar_deactivate_cb), window);
+
+			gtk_widget_show (menubar);
+			gtk_menu_shell_select_first (GTK_MENU_SHELL (menubar), FALSE);
+
+			return TRUE;
+		}
+        }
+
+	return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
+}
+
 static gboolean
 ephy_window_delete_event_cb (GtkWidget *widget, GdkEvent *event, EphyWindow *window)
 {
@@ -1931,6 +1973,7 @@ ephy_window_class_init (EphyWindowClass *klass)
 	gtkobject_class->destroy = ephy_window_destroy;
 
 	widget_class->show = ephy_window_show;
+	widget_class->key_press_event = ephy_window_key_press_event;
 
 	g_object_class_install_property (object_class,
 					 PROP_ACTIVE_TAB,
