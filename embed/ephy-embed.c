@@ -39,7 +39,6 @@ ephy_embed_chrome_get_type (void)
 	{
 		static const GFlagsValue values[] =
 		{
-		{ EPHY_EMBED_CHROME_DEFAULT, "EPHY_EMBED_CHROME_DEFAULT", "default" },
 		{ EPHY_EMBED_CHROME_MENUBAR, "EPHY_EMBED_CHROME_MENUBAR", "menubar" },
 		{ EPHY_EMBED_CHROME_TOOLBAR, "EPHY_EMBED_CHROME_TOOLBAR", "toolbar" },
 		{ EPHY_EMBED_CHROME_STATUSBAR, "EPHY_EMBED_CHROME_STATUSBAR", "statusbar" },

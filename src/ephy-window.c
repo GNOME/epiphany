@@ -1727,32 +1727,40 @@ setup_notebook (EphyWindow *window)
 	return notebook;
 }
 
-static EphyEmbedChrome
-get_default_chrome (void)
+static void
+ephy_window_set_chrome (EphyWindow *window, EphyEmbedChrome mask)
 {
-	EphyEmbedChrome chrome_mask = 0;
+	EphyEmbedChrome chrome_mask = mask;
 
-	if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_TOOLBARS))
+	if (mask == EPHY_EMBED_CHROME_ALL)
 	{
-		chrome_mask |= EPHY_EMBED_CHROME_TOOLBAR;
+		window->priv->should_save_chrome = TRUE;
 	}
 
-	if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_STATUSBAR))
+	if (!eel_gconf_get_boolean (CONF_WINDOWS_SHOW_TOOLBARS))
 	{
-		chrome_mask |= EPHY_EMBED_CHROME_STATUSBAR;
+		chrome_mask &= ~EPHY_EMBED_CHROME_TOOLBAR;
 	}
 
-	if (!eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
+	if (!eel_gconf_get_boolean (CONF_WINDOWS_SHOW_STATUSBAR))
 	{
-		chrome_mask |= EPHY_EMBED_CHROME_MENUBAR;
+		chrome_mask &= ~EPHY_EMBED_CHROME_STATUSBAR;
 	}
 
-	if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR))
+	if (!eel_gconf_get_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR))
 	{
-		chrome_mask |= EPHY_EMBED_CHROME_BOOKMARKSBAR;
+		chrome_mask &= ~EPHY_EMBED_CHROME_BOOKMARKSBAR;
 	}
 
-	return chrome_mask;
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR))
+	{
+		chrome_mask &= ~EPHY_EMBED_CHROME_MENUBAR;
+	}
+
+	window->priv->chrome = chrome_mask;
+
+	sync_chromes_visibility (window);
+	update_chromes_actions (window);
 }
 
 static void
@@ -1769,14 +1777,7 @@ ephy_window_set_property (GObject *object,
 			ephy_window_set_active_tab (window, g_value_get_object (value));
 			break;
 		case PROP_CHROME:
-			window->priv->chrome = g_value_get_flags (value);
-			if (window->priv->chrome == EPHY_EMBED_CHROME_DEFAULT)
-			{
-				window->priv->chrome = get_default_chrome ();
-				window->priv->should_save_chrome = TRUE;
-			}
-			sync_chromes_visibility (window);
-			update_chromes_actions (window);
+			ephy_window_set_chrome (window, g_value_get_flags (value));
 			break;
 	}
 }
@@ -1828,7 +1829,7 @@ ephy_window_class_init (EphyWindowClass *klass)
 							     "chrome",
 							     "Window chrome",
 							     EPHY_TYPE_EMBED_CHROME_MASK,
-							     EPHY_EMBED_CHROME_DEFAULT,
+							     EPHY_EMBED_CHROME_ALL,
 							     G_PARAM_CONSTRUCT_ONLY |
 							     G_PARAM_READWRITE));
 
