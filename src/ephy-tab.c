@@ -890,6 +890,7 @@ open_link_in_new_tab (EphyTab *tab,
 		scheme = gnome_vfs_uri_get_scheme (uri);
 
 		new_tab = (strcmp (scheme, "http") == 0 ||
+			   strcmp (scheme, "https") == 0 ||
 	                   strcmp (scheme, "ftp") == 0 ||
 	                   strcmp (scheme, "file") == 0);
 
