@@ -23,7 +23,7 @@
 #include <gtk/gtk.h>
 #include <libgnome/gnome-exec.h>
 #include <libgnome/gnome-i18n.h>
-#include <libgnome/gnome-url.h>
+#include <libgnomevfs/gnome-vfs-utils.h>
 
 #include <nsString.h>
 #include <nsXPIDLString.h>
@@ -104,7 +104,7 @@ NS_IMETHODIMP GExternalProtocolService::LoadUrl(nsIURI *aURL)
 	char *result = eel_gconf_get_string(key.get());
 	if (result)
 	{
-		gnome_url_show(cSpec.get(), NULL);
+		gnome_vfs_url_show(cSpec.get());
 		g_free (result);
 		return NS_OK;
 	}
@@ -145,7 +145,7 @@ NS_IMETHODIMP GExternalProtocolService::LoadUrl(nsIURI *aURL)
 
 	if (ret == 0)
 	{
-		gnome_url_show(cSpec.get(), NULL);		
+		gnome_vfs_url_show(cSpec.get());		
 		return NS_OK;
 	}
 	else
