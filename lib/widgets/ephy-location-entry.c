@@ -348,7 +348,7 @@ ephy_location_entry_autocompletion_show_alternatives (EphyLocationEntry *w)
 	   text in the location entry, the entry will lose the release
 	   event and will not reset it. It's what gtk does for the entry
 	   popup */
-	GTK_ENTRY (w)->button = 0;
+	GTK_ENTRY (p->entry)->button = 0;
 
 	if (p->autocompletion_window)
 	{
