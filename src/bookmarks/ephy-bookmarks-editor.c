@@ -54,6 +54,7 @@ struct EphyBookmarksEditorPrivate
 	EphyNodeView *key_view;
 	EphyNodeFilter *bookmarks_filter;
 	GtkWidget *title_entry;
+	GtkWidget *location_entry;
 	GtkWidget *keywords_entry;
 	GtkWidget *search_entry;
 };
@@ -189,6 +190,7 @@ ephy_bookmarks_editor_node_selected_cb (GtkWidget *view,
 {
 	const char *title;
 	const char *keywords;
+	const char *location;
 
 	if (node != NULL)
 	{
@@ -198,19 +200,26 @@ ephy_bookmarks_editor_node_selected_cb (GtkWidget *view,
 			(node, EPHY_NODE_BMK_PROP_TITLE);
 		keywords = ephy_node_get_property_string
 			(node, EPHY_NODE_BMK_PROP_KEYWORDS);
+		location = ephy_node_get_property_string
+			(node, EPHY_NODE_BMK_PROP_LOCATION);
 		gtk_entry_set_text (GTK_ENTRY (editor->priv->title_entry),
 				    title ? g_strdup (title) : "");
 		gtk_entry_set_text (GTK_ENTRY (editor->priv->keywords_entry),
 				    keywords ? g_strdup (keywords) : "");
+		gtk_entry_set_text (GTK_ENTRY (editor->priv->location_entry),
+				    location ? g_strdup (location) : "");	
 		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->title_entry), TRUE);
 		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->keywords_entry), TRUE);
+		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->location_entry), TRUE);
 	}
 	else
 	{
 		gtk_entry_set_text (GTK_ENTRY (editor->priv->title_entry), "");
 		gtk_entry_set_text (GTK_ENTRY (editor->priv->keywords_entry), "");
+		gtk_entry_set_text (GTK_ENTRY (editor->priv->location_entry), "");
 		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->title_entry), FALSE);
 		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->keywords_entry), FALSE);
+		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->location_entry), FALSE);
 	}
 }
 
@@ -257,7 +266,7 @@ update_prop_from_entry (EphyBookmarksEditor *editor,
 	GValue value = { 0, };
 
 	selection = ephy_node_view_get_selection (editor->priv->bm_view);
-	if (selection)
+	if (selection != NULL)
 	{
 		EphyNode *bm = EPHY_NODE (selection->data);
 		char *tmp;
@@ -269,8 +278,8 @@ update_prop_from_entry (EphyBookmarksEditor *editor,
 		ephy_node_set_property (bm, id, &value);
 	        g_value_unset (&value);
 		g_free (tmp);
+		g_list_free (selection);
 	}
-	g_list_free (selection);
 }
 
 static void
@@ -278,6 +287,13 @@ title_entry_changed_cb (GtkWidget *entry, EphyBookmarksEditor *editor)
 {
 	update_prop_from_entry (editor, editor->priv->title_entry,
 				EPHY_NODE_BMK_PROP_TITLE);
+}
+
+static void
+location_entry_changed_cb (GtkWidget *entry, EphyBookmarksEditor *editor)
+{
+	update_prop_from_entry (editor, editor->priv->location_entry,
+				EPHY_NODE_BMK_PROP_LOCATION);
 }
 
 static void
@@ -313,6 +329,7 @@ build_editing_table (EphyBookmarksEditor *editor)
 	gtk_table_set_col_spacings (GTK_TABLE (table), 6);
 	gtk_widget_show (table);
 
+	/* Title entry */
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	str = g_strconcat ("<b>", _("Title:"), "</b>", NULL);
@@ -329,6 +346,24 @@ build_editing_table (EphyBookmarksEditor *editor)
 			  G_CALLBACK (title_entry_changed_cb),
 			  editor);
 
+	/* Location entry */
+	label = gtk_label_new (NULL);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	str = g_strconcat ("<b>", _("Location:"), "</b>", NULL);
+	gtk_label_set_markup (GTK_LABEL (label), str);
+	g_free (str);
+	gtk_widget_show (label);
+	entry = gtk_entry_new ();
+	editor->priv->location_entry = entry;
+	gtk_widget_set_sensitive (GTK_WIDGET (entry), FALSE);
+	gtk_widget_show (entry);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
+	gtk_table_attach_defaults (GTK_TABLE (table), entry, 1, 2, 1, 2);
+	g_signal_connect (G_OBJECT (entry), "changed",
+			  G_CALLBACK (location_entry_changed_cb),
+			  editor);
+
+	/* Keywords entry */
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	str = g_strconcat ("<b>", _("Keywords:"), "</b>", NULL);
@@ -341,8 +376,8 @@ build_editing_table (EphyBookmarksEditor *editor)
 	editor->priv->keywords_entry = entry;
 	gtk_widget_set_sensitive (GTK_WIDGET (entry), FALSE);
 	gtk_widget_show (entry);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
-	gtk_table_attach_defaults (GTK_TABLE (table), entry, 1, 2, 1, 2);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, 0, 0, 0);
+	gtk_table_attach_defaults (GTK_TABLE (table), entry, 1, 2, 2, 3);
 	g_signal_connect (G_OBJECT (entry), "keywords_changed",
 			  G_CALLBACK (keywords_changed_cb),
 			  editor);
@@ -448,9 +483,11 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	EphyNode *selected_node;
 	char *selected_id_str;
 
+	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
+
 	gtk_dialog_set_has_separator (GTK_DIALOG (editor), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (editor), 6);
-	gtk_widget_set_size_request (GTK_WIDGET (editor), 500, 400);
+	gtk_widget_set_size_request (GTK_WIDGET (editor), 600, 400);
 	g_signal_connect (G_OBJECT (editor),
 			  "response",
 			  G_CALLBACK (ephy_bookmarks_editor_response_cb),
@@ -470,7 +507,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	ephy_node_view_add_column (key_view, _("Keywords"),
 			           EPHY_TREE_MODEL_NODE_COL_KEYWORD, FALSE);
 	gtk_box_pack_start (GTK_BOX (hbox), GTK_WIDGET (key_view), FALSE, TRUE, 0);
-	gtk_widget_set_size_request (GTK_WIDGET (key_view), 120, -1);
+	gtk_widget_set_size_request (GTK_WIDGET (key_view), 180, -1);
 	gtk_widget_show (GTK_WIDGET (key_view));
 	editor->priv->key_view = key_view;
 	g_signal_connect (G_OBJECT (key_view),
@@ -494,8 +531,6 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	ephy_node_view_add_icon_column (bm_view, EPHY_TREE_MODEL_NODE_COL_ICON);
 	ephy_node_view_add_column (bm_view, _("Title"),
 				   EPHY_TREE_MODEL_NODE_COL_BOOKMARK, TRUE);
-	ephy_node_view_add_column (bm_view, _("Location"),
-				   EPHY_TREE_MODEL_NODE_COL_LOCATION, TRUE);
 	gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (bm_view), TRUE, TRUE, 0);
 	gtk_widget_show (GTK_WIDGET (bm_view));
 	editor->priv->bm_view = bm_view;
@@ -519,8 +554,6 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			       GTK_STOCK_CLOSE,
 			       GTK_RESPONSE_CLOSE);
 	gtk_dialog_set_default_response (GTK_DIALOG (editor), GTK_RESPONSE_CLOSE);
-
-	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
 
 	selected_id_str = eel_gconf_get_string (CONF_BOOKMARKS_SELECTED_NODE);
 	selected_id = g_ascii_strtoull (selected_id_str, NULL, 10);

@@ -358,7 +358,6 @@ ephy_tree_model_node_get_column_type (GtkTreeModel *tree_model,
 	switch (index)
 	{
 		case EPHY_TREE_MODEL_NODE_COL_BOOKMARK:
-		case EPHY_TREE_MODEL_NODE_COL_LOCATION:
 		case EPHY_TREE_MODEL_NODE_COL_KEYWORD:
 			return G_TYPE_STRING;
 		case EPHY_TREE_MODEL_NODE_COL_VISIBLE:
@@ -481,11 +480,6 @@ ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 	case EPHY_TREE_MODEL_NODE_COL_BOOKMARK:
 		ephy_node_get_property (node,
 				        EPHY_NODE_BMK_PROP_TITLE,
-				        value);
-		break;
-	case EPHY_TREE_MODEL_NODE_COL_LOCATION:
-		ephy_node_get_property (node,
-				        EPHY_NODE_BMK_PROP_LOCATION,
 				        value);
 		break;
 	case EPHY_TREE_MODEL_NODE_COL_KEYWORD:
@@ -717,7 +711,6 @@ ephy_tree_model_node_column_get_type (void)
 		static const GEnumValue values[] =
 		{
 			{ EPHY_TREE_MODEL_NODE_COL_BOOKMARK, "EPHY_TREE_MODEL_NODE_COL_BOOKMARK", "bookmark" },
-			{ EPHY_TREE_MODEL_NODE_COL_LOCATION, "EPHY_TREE_MODEL_NODE_COL_LOCATION", "location" },
 			{ EPHY_TREE_MODEL_NODE_COL_KEYWORD,  "EPHY_TREE_MODEL_NODE_COL_KEYWORD", "keyword" },
 			{ EPHY_TREE_MODEL_NODE_COL_ICON,     "EPHY_TREE_MODEL_NODE_COL_ICON", "icon" },
 			{ EPHY_TREE_MODEL_NODE_COL_VISIBLE,  "EPHY_TREE_MODEL_NODE_COL_VISIBLE", "visible" },
