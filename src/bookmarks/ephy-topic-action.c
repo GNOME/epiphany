@@ -157,6 +157,18 @@ build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
                (EPHY_EMBED_SHELL (ephy_shell));
 
 	children = ephy_node_get_children (node);
+
+	// Show an insensitive "Empty" sub-menu if the topic has no children
+	if (children->len < 1)
+	{
+
+		item = gtk_menu_item_new_with_label (_("Empty"));
+		gtk_widget_set_sensitive (item, FALSE);
+		gtk_widget_show (item);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	}
+
 	for (i = 0; i < children->len; i++)
 	{
 		EphyNode *kid;
