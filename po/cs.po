@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-21 03:16+0100\n"
-"PO-Revision-Date: 2004-01-21 17:03+0100\n"
+"POT-Creation-Date: 2004-01-23 03:23+0100\n"
+"PO-Revision-Date: 2004-01-23 17:01+0100\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -89,10 +89,8 @@ msgstr "Zakázat úpravy lišty nástrojů"
 #: data/epiphany-lockdown.schemas.in.h:9
 msgid ""
 "Disable all historical information by disabling the back button, not "
-"allowing the history dialog and hiding the favorite bookmarks."
-msgstr ""
-"Zakázat všechny informace o historii zakázáním tlačítka zpět, nepovolením "
-"dialogu historie a skrytím oblíbených záložek."
+"allowing the history dialog and hiding the most used bookmarks list."
+msgstr "Zakázat všechny informace o historii zakázáním tlačítka zpět, nepovolením dialogu historie a skrytím seznamu nejpoužívanějších záložek."
 
 #: data/epiphany-lockdown.schemas.in.h:10
 msgid "Disable the user's ability to edit their bookmarks."
@@ -488,7 +486,9 @@ msgstr "Používat vaše vlastní písma místo písem, které požaduje stránk
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
-msgstr "Když soubory nemůže otevřít browser, jsou automaticky staženy do adresáře stahování a otevřeny odpovídající aplikací."
+msgstr ""
+"Když soubory nemůže otevřít browser, jsou automaticky staženy do adresáře "
+"stahování a otevřeny odpovídající aplikací."
 
 #: data/epiphany.schemas.in.h:65
 msgid ""
@@ -597,7 +597,7 @@ msgid "MD5 Fingerprint:"
 msgstr "Otisk MD5:"
 
 #: data/glade/certificate-dialogs.glade.h:16
-#: embed/mozilla/GtkNSSDialogs.cpp:964
+#: embed/mozilla/GtkNSSDialogs.cpp:965
 msgid "Organization:"
 msgstr "Organizace:"
 
@@ -671,7 +671,7 @@ msgstr "_Hledat:"
 msgid "_Next"
 msgstr "_Následující"
 
-#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:513
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:534
 msgid "_Pause"
 msgstr "_Pozastavit"
 
@@ -1150,19 +1150,43 @@ msgstr "%02u:%02u"
 msgid "Unknown"
 msgstr "Neznámý"
 
-#: embed/downloader-view.c:441
+#: embed/downloader-view.c:350
+#, c-format
+msgid "About %d second left"
+msgid_plural "About %d seconds left"
+msgstr[0] "Zbývá asi %d sekunda"
+msgstr[1] "Zbývají asi %d sekundy"
+msgstr[2] "Zbývá asi %d sekund"
+
+#: embed/downloader-view.c:358
+#, c-format
+msgid "About %d minute left"
+msgid_plural "About %d minutes left"
+msgstr[0] "Zbývá asi %d minuta"
+msgstr[1] "Zbývají asi %d minuty"
+msgstr[2] "Zbývá asi %d minut"
+
+#: embed/downloader-view.c:365
+#, c-format
+msgid "%d download"
+msgid_plural "%d downloads"
+msgstr[0] "%d stahování"
+msgstr[1] "%d stahování"
+msgstr[2] "%d stahování"
+
+#: embed/downloader-view.c:462
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:451
+#: embed/downloader-view.c:472
 msgid "File"
 msgstr "Soubor"
 
-#: embed/downloader-view.c:464
+#: embed/downloader-view.c:485
 msgid "Remaining"
 msgstr "Zbývá"
 
-#: embed/downloader-view.c:508
+#: embed/downloader-view.c:529
 msgid "_Resume"
 msgstr "_Obnovit"
 
@@ -1427,120 +1451,116 @@ msgid "Unicode (UTF-_8)"
 msgstr "Unicode (UTF-_8)"
 
 #: embed/ephy-encodings.c:127
-msgid "Unicode (UTF-_7)"
-msgstr "Unicode (UTF-_7)"
-
-#: embed/ephy-encodings.c:128
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
 msgstr "Azbuka/Ukrajinské (_KOI8-U)"
 
-#: embed/ephy-encodings.c:129
+#: embed/ephy-encodings.c:128
 msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
 msgstr "Azbuka/Ukrajinské (Mac_Ukrainian)"
 
-#: embed/ephy-encodings.c:130
+#: embed/ephy-encodings.c:129
 msgid "Vietnamese (_TCVN)"
 msgstr "Vietnamské (_TCVN)"
 
-#: embed/ephy-encodings.c:131
+#: embed/ephy-encodings.c:130
 msgid "Vietnamese (_VISCII)"
 msgstr "Vietnamské (_VISCII)"
 
-#: embed/ephy-encodings.c:132
+#: embed/ephy-encodings.c:131
 msgid "Vietnamese (V_PS)"
 msgstr "Vietnamské (V_PS)"
 
-#: embed/ephy-encodings.c:133
+#: embed/ephy-encodings.c:132
 msgid "Vietnamese (_Windows-1258)"
 msgstr "Vietnamské (_Windows-1258)"
 
-#: embed/ephy-encodings.c:134
+#: embed/ephy-encodings.c:133
 msgid "Western (_IBM-850)"
 msgstr "Západní (_IBM-850)"
 
-#: embed/ephy-encodings.c:135
+#: embed/ephy-encodings.c:134
 msgid "Western (_ISO-8859-1)"
 msgstr "Západní (_ISO-8859-1)"
 
-#: embed/ephy-encodings.c:136
+#: embed/ephy-encodings.c:135
 msgid "Western (IS_O-8859-15)"
 msgstr "Západní (IS_O-8859-15)"
 
-#: embed/ephy-encodings.c:137
+#: embed/ephy-encodings.c:136
 msgid "Western (_MacRoman)"
 msgstr "Západní (_MacRoman)"
 
-#: embed/ephy-encodings.c:138
+#: embed/ephy-encodings.c:137
 msgid "Western (_Windows-1252)"
 msgstr "Západní (_Windows-1252)"
 
 #. the following encodings are so rarely used that we don't want to pollute the "related"
 #. * part of the encodings menu with them, so we set the language group to 0 here
 #.
-#: embed/ephy-encodings.c:143
+#: embed/ephy-encodings.c:142
 msgid "English (_US-ASCII)"
 msgstr "Anglické (_US-ASCII)"
 
-#: embed/ephy-encodings.c:144
+#: embed/ephy-encodings.c:143
 msgid "Unicode (UTF-_16 BE)"
 msgstr "Unicode (UTF-_16 BE)"
 
-#: embed/ephy-encodings.c:145
+#: embed/ephy-encodings.c:144
 msgid "Unicode (UTF-1_6 LE)"
 msgstr "Unicode (UTF-1_6 LE)"
 
-#: embed/ephy-encodings.c:146
+#: embed/ephy-encodings.c:145
 msgid "Unicode (UTF-_32 BE)"
 msgstr "Unicode (UTF-_32 BE)"
 
-#: embed/ephy-encodings.c:147
+#: embed/ephy-encodings.c:146
 msgid "Unicode (UTF-3_2 LE)"
 msgstr "Unicode (UTF-3_2 LE)"
 
-#: embed/ephy-encodings.c:149
+#: embed/ephy-encodings.c:148
 msgid "Off"
 msgstr "Vypnuto"
 
-#: embed/ephy-encodings.c:150 src/prefs-dialog.c:116
+#: embed/ephy-encodings.c:149 src/prefs-dialog.c:117
 msgid "Chinese"
 msgstr "Čínské"
 
-#: embed/ephy-encodings.c:151
+#: embed/ephy-encodings.c:150
 msgid "Chinese Simplified"
 msgstr "Zjednodušené čínské"
 
-#: embed/ephy-encodings.c:152
+#: embed/ephy-encodings.c:151
 msgid "Chinese Traditional"
 msgstr "Tradiční čínské"
 
-#: embed/ephy-encodings.c:153
+#: embed/ephy-encodings.c:152
 msgid "East Asian"
 msgstr "Východoasijské"
 
-#: embed/ephy-encodings.c:154 lib/ephy-langs.c:38 src/prefs-dialog.c:136
+#: embed/ephy-encodings.c:153 lib/ephy-langs.c:38 src/prefs-dialog.c:137
 msgid "Japanese"
 msgstr "Japonské"
 
-#: embed/ephy-encodings.c:155 lib/ephy-langs.c:39 src/prefs-dialog.c:137
+#: embed/ephy-encodings.c:154 lib/ephy-langs.c:39 src/prefs-dialog.c:138
 msgid "Korean"
 msgstr "Korejské"
 
-#: embed/ephy-encodings.c:156 src/prefs-dialog.c:149
+#: embed/ephy-encodings.c:155 src/prefs-dialog.c:150
 msgid "Russian"
 msgstr "Ruské"
 
-#: embed/ephy-encodings.c:157
+#: embed/ephy-encodings.c:156
 msgid "Universal"
 msgstr "Univerzální"
 
-#: embed/ephy-encodings.c:158 src/prefs-dialog.c:158
+#: embed/ephy-encodings.c:157 src/prefs-dialog.c:159
 msgid "Ukrainian"
 msgstr "Ukrajinské"
 
 #. translators: this is the title that an unknown encoding will
 #. * be displayed as.
 #.
-#: embed/ephy-encodings.c:321
+#: embed/ephy-encodings.c:320
 #, c-format
 msgid "Unknown (%s)"
 msgstr "Neznámé (%s)"
@@ -1557,52 +1577,58 @@ msgstr "Ostatní"
 msgid "Local files"
 msgstr "Místní soubory"
 
-#: embed/mozilla/ContentHandler.cpp:132
+#: embed/mozilla/ContentHandler.cpp:136
 #: embed/mozilla/EphyHeaderSniffer.cpp:314
 msgid "Save"
 msgstr "Uložit"
 
-#: embed/mozilla/ContentHandler.cpp:251
+#: embed/mozilla/ContentHandler.cpp:262
 msgid "_Save As..."
 msgstr "Uložit _jako..."
 
-#: embed/mozilla/ContentHandler.cpp:254
+#: embed/mozilla/ContentHandler.cpp:265
 msgid "_Open"
 msgstr "_Otevřít"
 
-#: embed/mozilla/ContentHandler.cpp:254
+#: embed/mozilla/ContentHandler.cpp:265
 msgid "_Download"
 msgstr "_Stáhnout"
 
-#: embed/mozilla/ContentHandler.cpp:269
+#: embed/mozilla/ContentHandler.cpp:281
 msgid "Download the unsafe file?"
 msgstr "Stáhnout nebezpečný soubor?"
 
-#: embed/mozilla/ContentHandler.cpp:270
+#: embed/mozilla/ContentHandler.cpp:282
 msgid ""
 "This type of file could potentially damage your documents or invade your "
 "privacy. It's not safe to open it directly. You can save it instead."
-msgstr "Tento typ souboru by mohl poškodit vaše dokumenty nebo narušit vaše soukromí. Není bezpečné jej otevřít přímo. Místo toho jej můžete uložit."
+msgstr ""
+"Tento typ souboru by mohl poškodit vaše dokumenty nebo narušit vaše "
+"soukromí. Není bezpečné jej otevřít přímo. Místo toho jej můžete uložit."
 
-#: embed/mozilla/ContentHandler.cpp:278
+#: embed/mozilla/ContentHandler.cpp:290
 msgid "Open the file in another application?"
 msgstr "Otevřít soubor v jiné aplikaci?"
 
-#: embed/mozilla/ContentHandler.cpp:279
+#: embed/mozilla/ContentHandler.cpp:291
 msgid ""
 "It's not possible to view this file type directly in the browser. You can "
 "open it with another application or save it."
-msgstr "Tento soubor není možné zobrazit přímo v prohlížeči. Můžete jej otevřít jinou aplikací nebo jej uložit."
+msgstr ""
+"Tento soubor není možné zobrazit přímo v prohlížeči. Můžete jej otevřít "
+"jinou aplikací nebo jej uložit."
 
-#: embed/mozilla/ContentHandler.cpp:286
+#: embed/mozilla/ContentHandler.cpp:298
 msgid "Download the file?"
 msgstr "Stáhnout soubor?"
 
-#: embed/mozilla/ContentHandler.cpp:287
+#: embed/mozilla/ContentHandler.cpp:299
 msgid ""
 "It's not possible to view this file because there is no application "
 "installed that can open it.You can save it instead."
-msgstr "Není možné zobrazit tento soubor, protože není nainstalována aplikace, která by jej mohla otevřít. Místo toho jej můžete uložit."
+msgstr ""
+"Není možné zobrazit tento soubor, protože není nainstalována aplikace, která "
+"by jej mohla otevřít. Místo toho jej můžete uložit."
 
 #: embed/mozilla/EphyHeaderSniffer.cpp:289
 #: src/bookmarks/ephy-bookmarks-import.c:247
@@ -1671,15 +1697,15 @@ msgid "Certificate _Details"
 msgstr "_Detaily o certifikátu"
 
 #. Add the buttons
-#: embed/mozilla/GtkNSSDialogs.cpp:222 embed/mozilla/GtkNSSDialogs.cpp:533
+#: embed/mozilla/GtkNSSDialogs.cpp:223 embed/mozilla/GtkNSSDialogs.cpp:534
 msgid "_View Certificate"
 msgstr "_Zobrazit certifikát"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:230
+#: embed/mozilla/GtkNSSDialogs.cpp:231
 msgid "_Accept"
 msgstr "_Přijmout"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:294
+#: embed/mozilla/GtkNSSDialogs.cpp:295
 #, c-format
 msgid ""
 "The site %s returned security information for %s. It is possible that "
@@ -1689,17 +1715,17 @@ msgstr ""
 "Server %s vrátil informace o zabezpečení pro %s. Je možné, že někdo narušuje "
 "vaši komunikaci, aby získal důvěrné informace."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:300
+#: embed/mozilla/GtkNSSDialogs.cpp:301
 #, c-format
 msgid "You should only accept the security information if you trust %s and %s."
 msgstr ""
 "Informace o zabezpečení byste měli přijmout, jen pokud důvěřujete %s a %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:305
+#: embed/mozilla/GtkNSSDialogs.cpp:306
 msgid "Accept incorrect security information?"
 msgstr "Přijmout nesprávné informace o zabezpečení?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:337
+#: embed/mozilla/GtkNSSDialogs.cpp:338
 #, c-format
 msgid ""
 "Your browser was unable to trust %s. It is possible that someone is "
@@ -1708,7 +1734,7 @@ msgstr ""
 "Váš prohlížeč nevěří %s. Je možné, že někdo narušuje vaši komunikaci, aby "
 "získal důvěrné informace."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:343
+#: embed/mozilla/GtkNSSDialogs.cpp:344
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to %"
@@ -1717,32 +1743,32 @@ msgstr ""
 "K serveru byste se měli připojit, jen pokud jste si jisti, že jste připojeni "
 "k %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:348
+#: embed/mozilla/GtkNSSDialogs.cpp:349
 msgid "Connect to untrusted site?"
 msgstr "Připojit se k nedůvěryhodnému serveru?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:352
+#: embed/mozilla/GtkNSSDialogs.cpp:353
 msgid "_Don't show this message again for this site"
 msgstr "_Příště tuto zprávu pro tento server nezobrazovat"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:353
+#: embed/mozilla/GtkNSSDialogs.cpp:354
 msgid "Co_nnect"
 msgstr "_Připojit"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:414
+#: embed/mozilla/GtkNSSDialogs.cpp:415
 msgid "Accept expired security information?"
 msgstr "Přijmout informace o zabezpečení po vypršení platnosti?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:415
+#: embed/mozilla/GtkNSSDialogs.cpp:416
 #, c-format
 msgid "The security information for %s expired on %s."
 msgstr "Informace o zabezpečení pro %s vypršely dne %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:421
+#: embed/mozilla/GtkNSSDialogs.cpp:422
 msgid "Accept not yet valid security information?"
 msgstr "Přijmout dosud neplatné informace o zabezpečení?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:422
+#: embed/mozilla/GtkNSSDialogs.cpp:423
 #, c-format
 msgid "The security information for %s isn't valid until %s."
 msgstr "Informace o zabezpečení pro %s nejsou platné do %s."
@@ -1750,42 +1776,42 @@ msgstr "Informace o zabezpečení pro %s nejsou platné do %s."
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: embed/mozilla/GtkNSSDialogs.cpp:433
+#: embed/mozilla/GtkNSSDialogs.cpp:434
 msgid "%a %d %b %Y"
 msgstr "%a %d. %b %Y"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:444
+#: embed/mozilla/GtkNSSDialogs.cpp:445
 msgid "You should ensure that your computer's time is correct."
 msgstr "Měli byste se přesvědčit, že čas ve vašem počítači je správný."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:489
+#: embed/mozilla/GtkNSSDialogs.cpp:490
 #, c-format
 msgid "Cannot establish connection to %s."
 msgstr "Nemohu se připojit k %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:492
+#: embed/mozilla/GtkNSSDialogs.cpp:493
 #, c-format
 msgid "The certificate revocation list (CRL) from %s needs to be updated."
 msgstr "Je potřeba aktualizovat seznam odvolání certifikátů (CRL) z %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:497
+#: embed/mozilla/GtkNSSDialogs.cpp:498
 msgid "Please ask your system administrator for assistance."
 msgstr "Požádejte prosím o pomoc svého správce systému."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:536
+#: embed/mozilla/GtkNSSDialogs.cpp:537
 msgid "_Trust CA"
 msgstr "_Důvěřovat CA"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:548
+#: embed/mozilla/GtkNSSDialogs.cpp:549
 #, c-format
 msgid "Trust %s to identify:"
 msgstr "Důvěřovat %s pro identifikaci:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:552
+#: embed/mozilla/GtkNSSDialogs.cpp:553
 msgid "Trust new Certificate Authority?"
 msgstr "Důvěřovat nové certifikační autoritě?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:553
+#: embed/mozilla/GtkNSSDialogs.cpp:554
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1793,113 +1819,113 @@ msgstr ""
 "Před důvěřováním certifikační autoritě (CA) byste měli ověřit, že certifikát "
 "je autentický."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:563
+#: embed/mozilla/GtkNSSDialogs.cpp:564
 msgid "_Web sites"
 msgstr "_WWW stránky"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:568
+#: embed/mozilla/GtkNSSDialogs.cpp:569
 msgid "_Software developers"
 msgstr "_Vývojáře software"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:634
+#: embed/mozilla/GtkNSSDialogs.cpp:635
 msgid "Certificate already exists."
 msgstr "Certifikát již existuje."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:635
+#: embed/mozilla/GtkNSSDialogs.cpp:636
 msgid "The certificate has already been imported."
 msgstr "Certifikát již byl importován."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:754
+#: embed/mozilla/GtkNSSDialogs.cpp:755
 msgid "_Backup Certificate"
 msgstr "_Zazálohovat certifikát"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:761
+#: embed/mozilla/GtkNSSDialogs.cpp:762
 msgid "Select password."
 msgstr "Zvolte heslo."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:762
+#: embed/mozilla/GtkNSSDialogs.cpp:763
 msgid "Select a password to protect this certificate."
 msgstr "Zvolte heslo pro ochranu tohoto certifikátu."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:774 embed/mozilla/GtkNSSDialogs.cpp:876
+#: embed/mozilla/GtkNSSDialogs.cpp:775 embed/mozilla/GtkNSSDialogs.cpp:877
 msgid "_Password:"
 msgstr "_Heslo:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:788
+#: embed/mozilla/GtkNSSDialogs.cpp:789
 msgid "Con_firm password:"
 msgstr "_Potvrďte heslo:"
 
 #. TODO: We need a better password quality meter
-#: embed/mozilla/GtkNSSDialogs.cpp:800
+#: embed/mozilla/GtkNSSDialogs.cpp:801
 msgid "Password quality:"
 msgstr "Kvalita hesla:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:857
+#: embed/mozilla/GtkNSSDialogs.cpp:858
 msgid "I_mport Certificate"
 msgstr "_Importovat certifikát"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:865
+#: embed/mozilla/GtkNSSDialogs.cpp:866
 msgid "Password required."
 msgstr "Je vyžadováno heslo."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:866
+#: embed/mozilla/GtkNSSDialogs.cpp:867
 msgid "Enter the password for this certificate."
 msgstr "Zadejte heslo pro tento certifikát."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:944
+#: embed/mozilla/GtkNSSDialogs.cpp:945
 msgid "Certificate Revocation list successfully imported."
 msgstr "Seznam odvolání certifikátů byl úspěšně importován."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:945
+#: embed/mozilla/GtkNSSDialogs.cpp:946
 msgid "Certificate Revocation list (CRL) imported:"
 msgstr "Seznam odvolání certifikátů (CRL) byl importován."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:967
+#: embed/mozilla/GtkNSSDialogs.cpp:968
 msgid "Unit:"
 msgstr "Součást:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:970
+#: embed/mozilla/GtkNSSDialogs.cpp:971
 msgid "Next Update:"
 msgstr "Příští aktualizace:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:997
+#: embed/mozilla/GtkNSSDialogs.cpp:998
 msgid "Not part of certificate"
 msgstr "Není součást certifikátu"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1265
+#: embed/mozilla/GtkNSSDialogs.cpp:1266
 msgid "Certificate Properties"
 msgstr "Vlastnosti certifikátu"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1287
+#: embed/mozilla/GtkNSSDialogs.cpp:1288
 msgid "This certificate has been verified for the following uses:"
 msgstr "Tento certifikát byl ověřen pro následující použití:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1290
+#: embed/mozilla/GtkNSSDialogs.cpp:1291
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Nemohu ověřit certifikát, protože byl odvolán."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1293
+#: embed/mozilla/GtkNSSDialogs.cpp:1294
 msgid "Could not verify this certificate because it has expired."
 msgstr "Nemohu ověřit certifikát, protože mu vypršela platnost."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1296
+#: embed/mozilla/GtkNSSDialogs.cpp:1297
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Nemohu ověřit certifikát, protože se mu nevěří."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1299
+#: embed/mozilla/GtkNSSDialogs.cpp:1300
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr "Nemohu ověřit certifikát, protože vydavateli se nevěří."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1302
+#: embed/mozilla/GtkNSSDialogs.cpp:1303
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "Nemohu ověřit certifikát, protože vydavatel není znám."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1305
+#: embed/mozilla/GtkNSSDialogs.cpp:1306
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr "Nemohu ověřit certifikát, protože certifikát CA není platný."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1310
+#: embed/mozilla/GtkNSSDialogs.cpp:1311
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Nemohu ověřit certifikát z neznámého důvodu."
 
@@ -1938,7 +1964,7 @@ msgstr ""
 msgid "system-language"
 msgstr "cs"
 
-#: embed/print-dialog.c:288
+#: embed/print-dialog.c:289
 msgid "Print to"
 msgstr "Tisknot na"
 
@@ -1982,17 +2008,17 @@ msgstr ""
 "Přetáhněte položku na lišty nástrojů pro její přidání, z lišt nástrojů do "
 "tabulky položek pro její odebrání."
 
-#: lib/ephy-file-helpers.c:103
+#: lib/ephy-file-helpers.c:126
 #, c-format
 msgid "Failed to find %s"
 msgstr "Nelze najít %s"
 
-#: lib/ephy-file-helpers.c:145
+#: lib/ephy-file-helpers.c:188
 #, c-format
 msgid "%s exists, please move it out of the way."
 msgstr "%s existuje, přesuňte jej prosím jinam."
 
-#: lib/ephy-file-helpers.c:148
+#: lib/ephy-file-helpers.c:191
 #, c-format
 msgid "Failed to create directory %s."
 msgstr "Nelze vytvořit adresář %s."
@@ -2015,7 +2041,7 @@ msgstr ""
 msgid "Could not display help: %s"
 msgstr "Nemohu zobrazit nápovědu: %s"
 
-#: lib/ephy-langs.c:31 src/prefs-dialog.c:107
+#: lib/ephy-langs.c:31 src/prefs-dialog.c:108
 msgid "Arabic"
 msgstr "Arabské"
 
@@ -2035,19 +2061,19 @@ msgstr "Azbuka"
 msgid "Devanagari"
 msgstr "Devanagari"
 
-#: lib/ephy-langs.c:36 src/prefs-dialog.c:129
+#: lib/ephy-langs.c:36 src/prefs-dialog.c:130
 msgid "Greek"
 msgstr "Řecké"
 
-#: lib/ephy-langs.c:37 src/prefs-dialog.c:130
+#: lib/ephy-langs.c:37 src/prefs-dialog.c:131
 msgid "Hebrew"
 msgstr "Hebrejské"
 
-#: lib/ephy-langs.c:40 src/prefs-dialog.c:114
+#: lib/ephy-langs.c:40 src/prefs-dialog.c:115
 msgid "Simplified Chinese"
 msgstr "Zjednodušené čínské"
 
-#: lib/ephy-langs.c:41 src/prefs-dialog.c:156
+#: lib/ephy-langs.c:41 src/prefs-dialog.c:157
 msgid "Tamil"
 msgstr "Tamil"
 
@@ -2055,7 +2081,7 @@ msgstr "Tamil"
 msgid "Thai"
 msgstr "Thajské"
 
-#: lib/ephy-langs.c:43 src/prefs-dialog.c:115
+#: lib/ephy-langs.c:43 src/prefs-dialog.c:116
 msgid "Traditional Chinese"
 msgstr "Trandiční čínské"
 
@@ -2063,7 +2089,7 @@ msgstr "Trandiční čínské"
 msgid "Traditional Chinese (Hong Kong)"
 msgstr "Trandiční čínské (Hong Kong)"
 
-#: lib/ephy-langs.c:47 src/prefs-dialog.c:157
+#: lib/ephy-langs.c:47 src/prefs-dialog.c:158
 msgid "Turkish"
 msgstr "Turecké"
 
@@ -2119,7 +2145,7 @@ msgstr "Selhalo"
 msgid "_Zoom"
 msgstr "Z_většení"
 
-#: src/bookmarks/ephy-bookmark-action.c:218
+#: src/bookmarks/ephy-bookmark-action.c:219
 #, c-format
 msgid "%s:"
 msgstr "%s:"
@@ -2447,7 +2473,7 @@ msgstr "Pro tuto adresu již existuje záložka pojmenovaná %s."
 msgid "Empty"
 msgstr "Prázdný"
 
-#: src/ephy-encoding-dialog.c:328
+#: src/ephy-encoding-dialog.c:329
 msgid "Encodings"
 msgstr "Kódování"
 
@@ -2646,30 +2672,30 @@ msgstr ""
 "Epiphany nyní nelze použít kvůli neočekávané chybě od Bonobo při pokusu "
 "nalézt objekt automatizace."
 
-#: src/ephy-tab.c:326 src/ephy-tab.c:1138 src/ephy-tab.c:1320
+#: src/ephy-tab.c:326 src/ephy-tab.c:1140 src/ephy-tab.c:1322
 msgid "Blank page"
 msgstr "Prázdná stránka"
 
-#: src/ephy-tab.c:745
+#: src/ephy-tab.c:747
 msgid "site"
 msgstr "server"
 
-#: src/ephy-tab.c:769
+#: src/ephy-tab.c:771
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Přesměrovávám na %s..."
 
-#: src/ephy-tab.c:773
+#: src/ephy-tab.c:775
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Přenáším data z %s..."
 
-#: src/ephy-tab.c:777
+#: src/ephy-tab.c:779
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Čekám na autorizaci z %s..."
 
-#: src/ephy-tab.c:785
+#: src/ephy-tab.c:787
 #, c-format
 msgid "Loading %s..."
 msgstr "Načítám %s..."
@@ -3061,8 +3087,8 @@ msgid "_Download Link"
 msgstr "_Stáhnout odkaz"
 
 #: src/ephy-window.c:276
-msgid "_Download Link As..."
-msgstr "_Stáhnout odkaz jako..."
+msgid "_Save Link As..."
+msgstr "_Uložit odkaz jako..."
 
 #: src/ephy-window.c:278
 msgid "_Bookmark Link..."
@@ -3159,51 +3185,51 @@ msgstr ""
 msgid "Security level: %s"
 msgstr "Úroveň zabezpečení: %s"
 
-#: src/pdm-dialog.c:409
+#: src/pdm-dialog.c:410
 msgid "Domain"
 msgstr "Doména"
 
-#: src/pdm-dialog.c:421
+#: src/pdm-dialog.c:422
 msgid "Name"
 msgstr "Název"
 
-#: src/pdm-dialog.c:662
+#: src/pdm-dialog.c:663
 msgid "Host"
 msgstr "Počítač"
 
-#: src/pdm-dialog.c:674
+#: src/pdm-dialog.c:675
 msgid "User Name"
 msgstr "Jméno uživatele"
 
-#: src/pdm-dialog.c:866
+#: src/pdm-dialog.c:867
 msgid "Cookie Properties"
 msgstr "Vlastnosti koláčku"
 
-#: src/pdm-dialog.c:881
+#: src/pdm-dialog.c:882
 msgid "Content:"
 msgstr "Obsah:"
 
-#: src/pdm-dialog.c:896
+#: src/pdm-dialog.c:897
 msgid "Path:"
 msgstr "Cesta:"
 
-#: src/pdm-dialog.c:911
+#: src/pdm-dialog.c:912
 msgid "Secure:"
 msgstr "Zabezpečený:"
 
-#: src/pdm-dialog.c:920
+#: src/pdm-dialog.c:921
 msgid "Yes"
 msgstr "Ano"
 
-#: src/pdm-dialog.c:920
+#: src/pdm-dialog.c:921
 msgid "No"
 msgstr "Ne"
 
-#: src/pdm-dialog.c:926
+#: src/pdm-dialog.c:927
 msgid "Expires:"
 msgstr "Vyprší:"
 
-#: src/pdm-dialog.c:937
+#: src/pdm-dialog.c:938
 msgid "End of current session"
 msgstr "Konec aktuálního sezení"
 
@@ -3242,192 +3268,192 @@ msgstr "Zavřít náhled tisku"
 #. * "en_AU" translation: "English, Australia (System setting)" or
 #. *                      "Australian English (System setting)"
 #.
-#: src/prefs-dialog.c:104
+#: src/prefs-dialog.c:105
 msgid "System language"
 msgstr "Jazyk systému"
 
-#: src/prefs-dialog.c:105
+#: src/prefs-dialog.c:106
 msgid "Afrikaans"
 msgstr "Afrikaans"
 
-#: src/prefs-dialog.c:106
+#: src/prefs-dialog.c:107
 msgid "Albanian"
 msgstr "Albánština"
 
-#: src/prefs-dialog.c:108
+#: src/prefs-dialog.c:109
 msgid "Azerbaijani"
 msgstr "Ázerbajdžánština"
 
-#: src/prefs-dialog.c:109
+#: src/prefs-dialog.c:110
 msgid "Basque"
 msgstr "Baskičtina"
 
-#: src/prefs-dialog.c:110
+#: src/prefs-dialog.c:111
 msgid "Breton"
 msgstr "Bretonština"
 
-#: src/prefs-dialog.c:111
+#: src/prefs-dialog.c:112
 msgid "Bulgarian"
 msgstr "Bulharština"
 
-#: src/prefs-dialog.c:112
+#: src/prefs-dialog.c:113
 msgid "Byelorussian"
 msgstr "Běloruština"
 
-#: src/prefs-dialog.c:113
+#: src/prefs-dialog.c:114
 msgid "Catalan"
 msgstr "Katalánština"
 
-#: src/prefs-dialog.c:117
+#: src/prefs-dialog.c:118
 msgid "Croatian"
 msgstr "Chorvatština"
 
-#: src/prefs-dialog.c:118
+#: src/prefs-dialog.c:119
 msgid "Czech"
 msgstr "Čeština"
 
-#: src/prefs-dialog.c:119
+#: src/prefs-dialog.c:120
 msgid "Danish"
 msgstr "Dánština"
 
-#: src/prefs-dialog.c:120
+#: src/prefs-dialog.c:121
 msgid "Dutch"
 msgstr "Holandština"
 
-#: src/prefs-dialog.c:121
+#: src/prefs-dialog.c:122
 msgid "English"
 msgstr "Angličtina"
 
-#: src/prefs-dialog.c:122
+#: src/prefs-dialog.c:123
 msgid "Esperanto"
 msgstr "Esperanto"
 
-#: src/prefs-dialog.c:123
+#: src/prefs-dialog.c:124
 msgid "Estonian"
 msgstr "Estonština"
 
-#: src/prefs-dialog.c:124
+#: src/prefs-dialog.c:125
 msgid "Faeroese"
 msgstr "Faeroese"
 
-#: src/prefs-dialog.c:125
+#: src/prefs-dialog.c:126
 msgid "Finnish"
 msgstr "Finština"
 
-#: src/prefs-dialog.c:126
+#: src/prefs-dialog.c:127
 msgid "French"
 msgstr "Francouzština"
 
-#: src/prefs-dialog.c:127
+#: src/prefs-dialog.c:128
 msgid "Galician"
 msgstr "Galština"
 
-#: src/prefs-dialog.c:128
+#: src/prefs-dialog.c:129
 msgid "German"
 msgstr "Němčina"
 
-#: src/prefs-dialog.c:131
+#: src/prefs-dialog.c:132
 msgid "Hungarian"
 msgstr "Maďarština"
 
-#: src/prefs-dialog.c:132
+#: src/prefs-dialog.c:133
 msgid "Icelandic"
 msgstr "Islandština"
 
-#: src/prefs-dialog.c:133
+#: src/prefs-dialog.c:134
 msgid "Indonesian"
 msgstr "Indonéština"
 
-#: src/prefs-dialog.c:134
+#: src/prefs-dialog.c:135
 msgid "Irish"
 msgstr "Irština"
 
-#: src/prefs-dialog.c:135
+#: src/prefs-dialog.c:136
 msgid "Italian"
 msgstr "Italština"
 
-#: src/prefs-dialog.c:138
+#: src/prefs-dialog.c:139
 msgid "Latvian"
 msgstr "Lotyština"
 
-#: src/prefs-dialog.c:139
+#: src/prefs-dialog.c:140
 msgid "Lithuanian"
 msgstr "Litevština"
 
-#: src/prefs-dialog.c:140
+#: src/prefs-dialog.c:141
 msgid "Macedonian"
 msgstr "Makedonština"
 
-#: src/prefs-dialog.c:141
+#: src/prefs-dialog.c:142
 msgid "Malay"
 msgstr "Malajština"
 
-#: src/prefs-dialog.c:142
+#: src/prefs-dialog.c:143
 msgid "Norwegian/Nynorsk"
 msgstr "Norština/Nynorsk"
 
-#: src/prefs-dialog.c:143
+#: src/prefs-dialog.c:144
 msgid "Norwegian/Bokmal"
 msgstr "Norština/Bokmal"
 
-#: src/prefs-dialog.c:144
+#: src/prefs-dialog.c:145
 msgid "Norwegian"
 msgstr "Norština"
 
-#: src/prefs-dialog.c:145
+#: src/prefs-dialog.c:146
 msgid "Polish"
 msgstr "Polština"
 
-#: src/prefs-dialog.c:146
+#: src/prefs-dialog.c:147
 msgid "Portuguese"
 msgstr "Portugalština"
 
-#: src/prefs-dialog.c:147
+#: src/prefs-dialog.c:148
 msgid "Portuguese of Brazil"
 msgstr "Brazilská portugalština"
 
-#: src/prefs-dialog.c:148
+#: src/prefs-dialog.c:149
 msgid "Romanian"
 msgstr "Rumunština"
 
-#: src/prefs-dialog.c:150
+#: src/prefs-dialog.c:151
 msgid "Scottish"
 msgstr "Skotština"
 
-#: src/prefs-dialog.c:151
+#: src/prefs-dialog.c:152
 msgid "Serbian"
 msgstr "Srbština"
 
-#: src/prefs-dialog.c:152
+#: src/prefs-dialog.c:153
 msgid "Slovak"
 msgstr "Slovenština"
 
-#: src/prefs-dialog.c:153
+#: src/prefs-dialog.c:154
 msgid "Slovenian"
 msgstr "Slovinština"
 
-#: src/prefs-dialog.c:154
+#: src/prefs-dialog.c:155
 msgid "Spanish"
 msgstr "Španělština"
 
-#: src/prefs-dialog.c:155
+#: src/prefs-dialog.c:156
 msgid "Swedish"
 msgstr "Švédština"
 
-#: src/prefs-dialog.c:159
+#: src/prefs-dialog.c:160
 msgid "Vietnamese"
 msgstr "Vietnamské"
 
-#: src/prefs-dialog.c:160
+#: src/prefs-dialog.c:161
 msgid "Walloon"
 msgstr "Walloon"
 
-#: src/prefs-dialog.c:1051
+#: src/prefs-dialog.c:1053
 #, c-format
 msgid "Custom [%s]"
 msgstr "Vlastní [%s]"
 
-#: src/prefs-dialog.c:1090
+#: src/prefs-dialog.c:1092
 msgid "Desktop"
 msgstr "Pracovní plocha"
 
@@ -3435,15 +3461,15 @@ msgstr "Pracovní plocha"
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1099
+#: src/prefs-dialog.c:1101
 msgid "Home"
 msgstr "Domů"
 
-#: src/prefs-dialog.c:1104
+#: src/prefs-dialog.c:1106
 msgid "Downloads"
 msgstr "Stahování"
 
-#: src/prefs-dialog.c:1310
+#: src/prefs-dialog.c:1312
 msgid "Select a directory"
 msgstr "Vyberte adresář"
 
@@ -3499,20 +3525,20 @@ msgstr "Jít na adresu vloženou v poli adresy"
 msgid "Check this out!"
 msgstr "Zkuste tohle!"
 
-#: src/window-commands.c:865
+#: src/window-commands.c:876
 msgid "Toolbar Editor"
 msgstr "Editor lišty nástrojů"
 
-#: src/window-commands.c:887
+#: src/window-commands.c:898
 msgid "_Add a New Toolbar"
 msgstr "_Přidat novou lištu nástrojů"
 
 #. Translator credits
-#: src/window-commands.c:939
+#: src/window-commands.c:950
 msgid "translator_credits"
 msgstr "Miloslav Trmač <mitr@volny.cz>"
 
-#: src/window-commands.c:969
+#: src/window-commands.c:980
 msgid "A GNOME browser based on Mozilla"
 msgstr "GNOME prohlížeč založený na Mozille"
 
