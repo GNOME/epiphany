@@ -30,6 +30,7 @@
 #include <gtk/gtkvbox.h>
 #include <gtk/gtkactiongroup.h>
 #include <gtk/gtktoggleaction.h>
+#include <gtk/gtkcombobox.h>
 #include <gtk/gtkuimanager.h>
 #include <gdk/gdkkeysyms.h>
 #include <bonobo/bonobo-i18n.h>
@@ -112,7 +113,7 @@ struct EphyHistoryWindowPrivate
 	GtkWidget *pages_view;
 	EphyNodeFilter *pages_filter;
 	EphyNodeFilter *sites_filter;
-	GtkWidget *time_optionmenu;
+	GtkWidget *time_combo;
 	GtkWidget *search_entry;
 	GtkWidget *main_vbox;
 	GtkWidget *window;
@@ -880,8 +881,8 @@ add_by_date_filter (EphyHistoryWindow *editor, EphyNodeFilter *filter, int level
 
 	/* FIXME this is probably wrong for timezones */
 
-	time_range = gtk_option_menu_get_history
-		(GTK_OPTION_MENU (editor->priv->time_optionmenu));
+	time_range = gtk_combo_box_get_active
+		(GTK_COMBO_BOX (editor->priv->time_combo));
 
 	now = time (NULL);
 	days = now / SEC_PER_DAY;
@@ -1012,7 +1013,7 @@ search_entry_search_cb (GtkWidget *entry, char *search_text, EphyHistoryWindow *
 }
 
 static void
-time_optionmenu_changed_cb (GtkWidget *optionmenu, EphyHistoryWindow *editor)
+time_combo_changed_cb (GtkWidget *combo, EphyHistoryWindow *editor)
 {
 	setup_filters (editor, TRUE, TRUE);
 }
@@ -1021,7 +1022,7 @@ static GtkWidget *
 build_search_box (EphyHistoryWindow *editor)
 {
 	GtkWidget *box, *label, *entry;
-	GtkWidget *optionmenu, *menu, *item;
+	GtkWidget *combo;
 	char *str;
 	int time_range;
 
@@ -1043,32 +1044,20 @@ build_search_box (EphyHistoryWindow *editor)
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
 	gtk_widget_show (label);
 
-	optionmenu = gtk_option_menu_new ();
-	gtk_widget_show (optionmenu);
-	menu = gtk_menu_new ();
-	gtk_widget_show (menu);
+	combo = gtk_combo_box_new_text ();
+	gtk_widget_show (combo);
 
-	item = gtk_menu_item_new_with_mnemonic (_("Today"));
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	gtk_widget_show (item);
+	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Today"));
 	str = g_strdup_printf (ngettext ("Last %d day", "Last %d days", 2), 2);
-	item = gtk_menu_item_new_with_mnemonic (str);
+	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), str);
 	g_free (str);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	gtk_widget_show (item);
 	str = g_strdup_printf (ngettext ("Last %d day", "Last %d days", 3), 3);
-	item = gtk_menu_item_new_with_mnemonic (str);
+	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), str);
 	g_free (str);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	gtk_widget_show (item);
 	/* keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS */
 	str = g_strdup_printf (ngettext ("Last %d day", "Last %d days", 10), 10);
-	item = gtk_menu_item_new_with_mnemonic (str);
+	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), str);
 	g_free (str);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	gtk_widget_show (item);
-
-	gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu), menu);
 
 	str = eel_gconf_get_string (CONF_HISTORY_DATE_FILTER);
 	if (str && strcmp (TIME_TODAY_STRING, str) == 0)
@@ -1089,20 +1078,20 @@ build_search_box (EphyHistoryWindow *editor)
 	}
 	g_free (str);
 
-	gtk_option_menu_set_history (GTK_OPTION_MENU (optionmenu),
-				     time_range);
+	gtk_combo_box_set_active (GTK_COMBO_BOX (combo),
+				  time_range);
 
-	editor->priv->time_optionmenu = optionmenu;
+	editor->priv->time_combo = combo;
 
 	gtk_box_pack_start (GTK_BOX (box),
 			    label, FALSE, TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (box),
 			    entry, TRUE, TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (box),
-			    optionmenu, FALSE, TRUE, 0);
+			    combo, FALSE, TRUE, 0);
 
-	g_signal_connect (optionmenu, "changed",
-			  G_CALLBACK (time_optionmenu_changed_cb),
+	g_signal_connect (combo, "changed",
+			  G_CALLBACK (time_combo_changed_cb),
 			  editor);
 	g_signal_connect (G_OBJECT (entry), "search",
 			  G_CALLBACK (search_entry_search_cb),
@@ -1457,8 +1446,8 @@ save_date_filter (EphyHistoryWindow *editor)
 	const char *time_string = NULL;
 	int time_range;
 
-	time_range = gtk_option_menu_get_history
-		(GTK_OPTION_MENU (editor->priv->time_optionmenu));
+	time_range = gtk_combo_box_get_active
+		(GTK_COMBO_BOX (editor->priv->time_combo));
 
 	switch (time_range)
 	{
