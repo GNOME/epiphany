@@ -1413,16 +1413,10 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	EphyNode *node;
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
-	GdkPixbuf *icon;
 	int col_id, details_value;
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
-
-	icon = gtk_widget_render_icon (GTK_WIDGET (editor), 
-				       EPHY_STOCK_BOOKMARKS,
-				       GTK_ICON_SIZE_MENU,
-				       NULL);
-	gtk_window_set_icon (GTK_WINDOW(editor), icon);
+	gtk_window_set_icon_name (GTK_WINDOW (editor), EPHY_STOCK_BOOKMARKS);
 
 	g_signal_connect (editor, "delete_event",
 			  G_CALLBACK (delete_event_cb), NULL);

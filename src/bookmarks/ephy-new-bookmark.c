@@ -263,8 +263,6 @@ build_editing_table (EphyNewBookmark *editor)
 static void
 ephy_new_bookmark_construct (EphyNewBookmark *editor)
 {
-	GdkPixbuf *icon;
-
 	ephy_state_add_window (GTK_WIDGET(editor),
 			       "new_bookmark",
 		               280, 240,
@@ -272,12 +270,7 @@ ephy_new_bookmark_construct (EphyNewBookmark *editor)
 
 	gtk_window_set_title (GTK_WINDOW (editor),
 			      _("Add Bookmark"));
-	icon = gtk_widget_render_icon (GTK_WIDGET (editor),
-				       STOCK_ADD_BOOKMARK,
-				       GTK_ICON_SIZE_MENU,
-				       NULL);
-	gtk_window_set_icon (GTK_WINDOW (editor), icon);
-	g_object_unref(icon);
+	gtk_window_set_icon_name (GTK_WINDOW (editor), STOCK_ADD_BOOKMARK);
 
 	gtk_dialog_set_has_separator (GTK_DIALOG (editor), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (editor), 5);
@@ -325,7 +318,9 @@ duplicate_dialog_construct (GtkWindow *parent,
 					      GTK_STOCK_OK,
 					      GTK_RESPONSE_OK,
 					      NULL);
-	
+
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14);

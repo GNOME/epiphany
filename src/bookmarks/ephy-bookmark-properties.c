@@ -280,23 +280,15 @@ set_window_icon (EphyBookmarkProperties *editor)
 	GdkPixbuf *icon = NULL;
 
 	cache = EPHY_FAVICON_CACHE
-		(ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell)));
+		(ephy_embed_shell_get_favicon_cache (embed_shell));
 	icon_location = ephy_node_get_property_string
 		(editor->priv->bookmark, EPHY_NODE_BMK_PROP_ICON);
 
 	LOG ("Get favicon for %s", icon_location ? icon_location : "None")
 
-	if (icon_location)
+	if (icon_location != NULL)
 	{
 		icon = ephy_favicon_cache_get (cache, icon_location);
-	}
-
-	else
-	{
-		icon = gtk_widget_render_icon (GTK_WIDGET (editor),
-					       GTK_STOCK_PROPERTIES,
-					       GTK_ICON_SIZE_MENU,
-					       NULL);
 	}
 
 	if (icon != NULL)
@@ -304,6 +296,12 @@ set_window_icon (EphyBookmarkProperties *editor)
 		gtk_window_set_icon (GTK_WINDOW (editor), icon);
 		g_object_unref (icon);
 	}
+	else
+	{
+		gtk_window_set_icon_name (GTK_WINDOW (editor),
+					  GTK_STOCK_PROPERTIES);
+	}
+
 }
 
 static void
@@ -460,4 +458,3 @@ ephy_bookmark_properties_get_node (EphyBookmarkProperties *properties)
 {
 	return properties->priv->bookmark;
 }
-

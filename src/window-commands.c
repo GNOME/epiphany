@@ -881,6 +881,7 @@ window_cmd_edit_toolbar (GtkAction *action,
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Toolbar Editor"));
         gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
 	gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 	editor = egg_toolbar_editor_new (GTK_UI_MANAGER (ephy_window_get_ui_manager (window)), model);
 	egg_toolbar_editor_load_actions (EGG_TOOLBAR_EDITOR (editor),
