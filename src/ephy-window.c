@@ -110,7 +110,7 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "EditFindPrev", N_("Find Pre_vious"), NULL, "<shift><control>G",
 	  N_("Find previous occurence of the string"),
 	  G_CALLBACK (window_cmd_edit_find_prev), NULL },
-	{ "EditPersonalData", N_("P_ersonal Data"), NULL, "<control>F",
+	{ "EditPersonalData", N_("P_ersonal Data"), NULL, NULL,
 	  N_("View and remove cookies and passwords"),
 	  G_CALLBACK (window_cmd_edit_personal_data), NULL },
 	{ "EditToolbar", N_("T_oolbars"), NULL, NULL,
