@@ -12,5 +12,21 @@ need to stick to in order to get your patch accepted:
  * bla_bla_cb: This is an example comment block
  */
 
+When submitting a patch or committing to cvs do not forget
+to write a Changelog entry. Please put both a description
+and a reference to the bug (if there is one).
+
+Example of an entry:
+
+2004-02-19  Christian Persch  <chpe@cvs.gnome.org>
+                                                                                                                             
+        * lib/egg/egg-toolbar-editor.c: (toolbar_removed_cb),
+        (egg_toolbar_editor_set_model), (egg_toolbar_editor_class_init),
+        (update_actions_list), (egg_toolbar_editor_load_actions):
+        * lib/egg/egg-toolbar-editor.h:
+                                                                                                                             
+        When removing a toolbar, make its items available again in the toolbar
+        editor. (Bug #131182)
+
 Do NOT commit to this module without permission from me 
 (marco@gnome.org)
