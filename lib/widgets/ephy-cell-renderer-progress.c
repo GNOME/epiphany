@@ -1,6 +1,6 @@
 /* gtkcellrenderer.c
  * Copyright (C) 2002 Naba Kumar <kh_naba@users.sourceforge.net>
- * heavily modified by Jörgen Scheibengruber <mfcn@gmx.de>
+ * heavily modified by JÃ¶rgen Scheibengruber <mfcn@gmx.de>
  * heavily modified by Marco Pesenti Gritti <marco@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
