@@ -21,6 +21,7 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/mimetype		\
 	-I$(MOZILLA_INCLUDE_ROOT)/necko			\
 	-I$(MOZILLA_INCLUDE_ROOT)/nkcache		\
+	-I$(MOZILLA_INCLUDE_ROOT)/pipnss		\
 	-I$(MOZILLA_INCLUDE_ROOT)/pref			\
 	-I$(MOZILLA_INCLUDE_ROOT)/progressDlg		\
 	-I$(MOZILLA_INCLUDE_ROOT)/shistory		\
@@ -67,6 +68,8 @@ libephymozillaembed_la_SOURCES = 	\
 	FilePicker.h                    \
 	GlobalHistory.cpp               \
 	GlobalHistory.h                 \
+	GtkNSSDialogs.cpp		\
+	GtkNSSDialogs.h			\
 	MozillaPrivate.cpp		\
 	MozillaPrivate.h		\
 	MozRegisterComponents.cpp       \

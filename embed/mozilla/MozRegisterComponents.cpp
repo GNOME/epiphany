@@ -29,6 +29,10 @@
 #include "ExternalProtocolService.h"
 #include "EphyAboutRedirector.h"
 
+#ifdef HAVE_MOZILLA_PSM
+#include "GtkNSSDialogs.h"
+#endif
+
 #include <nsIGenericFactory.h>
 #include <nsIComponentRegistrar.h>
 #include <nsCOMPtr.h>
@@ -46,6 +50,10 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GIRCProtocolHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GFtpProtocolHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GNewsProtocolHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GExternalProtocolService)
+
+#ifdef HAVE_MOZILLA_PSM
+NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSDialogs)
+#endif
 
 static const nsModuleComponentInfo sAppComps[] = {
 	{
@@ -72,6 +80,14 @@ static const nsModuleComponentInfo sAppComps[] = {
 		G_FILEPICKER_CONTRACTID,
 		GFilePickerConstructor
 	},
+#ifdef HAVE_MOZILLA_PSM
+	{
+		GTK_NSSDIALOGS_CLASSNAME,
+		GTK_NSSDIALOGS_CID,
+		NS_BADCERTLISTENER_CONTRACTID,
+		GtkNSSDialogsConstructor
+	},
+#endif
 	{
 		NS_IHELPERAPPLAUNCHERDLG_CLASSNAME,
 		G_CONTENTHANDLER_CID,
