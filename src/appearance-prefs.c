@@ -201,13 +201,6 @@ setup_font_menu (AppearancePrefs *dialog,
 		name = default_font;
 	}
 
-	/* put the default font at the top in the list */
-	if (name != NULL)
-	{
-		fonts = g_list_prepend (fonts,
-					(gpointer)g_strdup(name));
-	}
-
 	/* set popdown doesnt like NULL */
 	if (fonts == NULL)
 	{

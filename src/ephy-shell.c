@@ -145,7 +145,7 @@ ephy_shell_command_cb (EphyEmbedShell *shell,
 			dialog = gtk_message_dialog_new
 				(NULL,
 				 GTK_DIALOG_MODAL,
-				 GTK_MESSAGE_ERROR,
+				 GTK_MESSAGE_INFO,
 				 GTK_BUTTONS_OK,
 				 _("Mozilla bookmarks imported successfully."));
 		}
