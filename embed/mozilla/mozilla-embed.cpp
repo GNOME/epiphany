@@ -338,54 +338,64 @@ impl_can_go_forward (EphyEmbed *embed)
 	return gtk_moz_embed_can_go_forward (GTK_MOZ_EMBED(embed));
 }
 
-static char *
-mozilla_embed_get_uri_parent (const char *aUri)
+static gboolean
+mozilla_embed_get_uri_parent (MozillaEmbed *membed,
+			      const char *aUri,
+			      nsEmbedCString &aParent)
 {
         nsresult rv;
+	nsEmbedCString encoding;
+	rv = membed->priv->browser->GetEncoding (encoding);
+	if (NS_FAILED (rv)) return FALSE;
 
         nsCOMPtr<nsIURI> uri;
-        rv = EphyUtils::NewURI (getter_AddRefs(uri), nsEmbedCString(aUri));
-        if (NS_FAILED(rv) || !uri) return NULL;
+        rv = EphyUtils::NewURI (getter_AddRefs(uri), nsEmbedCString(aUri), encoding.get());
+        if (NS_FAILED(rv) || !uri) return FALSE;
+
+	/* Don't support going 'up' with chrome url's, mozilla handily
+	 * fixes them up for us, so it doesn't work properly, see
+	 * rdf/chrome/src/nsChromeProtocolHandler.cpp::NewURI()
+	 * (the Canonify() call)
+	 */
+	nsEmbedCString scheme;
+	rv = uri->GetScheme (scheme);
+	if (NS_FAILED(rv) || !scheme.Length()) return FALSE;
+	if (strcmp (scheme.get(), "chrome") == 0) return FALSE;
 
 	nsEmbedCString path;
 	rv = uri->GetPath(path);
-	if (NS_FAILED(rv)) return NULL;
+	if (NS_FAILED(rv) || !path.Length()) return FALSE;
+	if (strcmp (path.get (), "/") == 0) return FALSE;
 
-	if (!path.Length() || strcmp (path.get(), "/") == 0 ||
-	    !strchr (path.get(), '/'))
+	const char *slash = strrchr (path.BeginReading(), '/');
+	if (!slash) return FALSE;
+
+	if (slash[1] == '\0')
 	{
-		return NULL;
+		/* ends with a slash - a directory, go to parent */
+		rv = uri->Resolve (nsEmbedCString(".."), aParent);
+	}
+	else
+	{
+		/* it's a file, go to the directory */
+		rv = uri->Resolve (nsEmbedCString("."), aParent);
 	}
 
-	nsEmbedCString parent;
-	rv = uri->Resolve (nsEmbedCString(".."), parent);
-	if (NS_FAILED(rv)) return NULL;
-
-	return g_strdup (parent.get()); 
+	return NS_SUCCEEDED (rv);
 }
 
 static gboolean
 impl_can_go_up (EphyEmbed *embed)
 {
-	char *address, *s;
+	MozillaEmbed *membed = MOZILLA_EMBED (embed);
+	char *address;
 	gboolean result;
 
 	address = ephy_embed_get_location (embed, TRUE);
-	if (address == NULL)
-	{
-		return FALSE;
-	}
+	if (address == NULL) return FALSE;
 
-	if ((s = mozilla_embed_get_uri_parent (address)) != NULL)
-	{
-		g_free (s);
-		result = TRUE;
-	}
-	else
-	{
-		result = FALSE;
-	}
-
+	nsEmbedCString parent;
+	result = mozilla_embed_get_uri_parent (membed, address, parent);
 	g_free (address);
 
 	return result;
@@ -394,20 +404,20 @@ impl_can_go_up (EphyEmbed *embed)
 static GSList *
 impl_get_go_up_list (EphyEmbed *embed)
 {
+	MozillaEmbed *membed = MOZILLA_EMBED (embed);
 	GSList *l = NULL;
 	char *address, *s;
 
 	address = ephy_embed_get_location (embed, TRUE);
-	if (address == NULL)
-	{
-		return NULL;
-	}
-	
+	if (address == NULL) return NULL;
+
 	s = address;
-	while ((s = mozilla_embed_get_uri_parent (s)) != NULL)
+	nsEmbedCString parent;
+	while (mozilla_embed_get_uri_parent (membed, s, parent))
 	{
+		s = g_strdup (parent.get());
 		l = g_slist_prepend (l, s);
-	}				
+	}
 
 	g_free (address);
 
@@ -429,23 +439,20 @@ impl_go_forward (EphyEmbed *embed)
 static void
 impl_go_up (EphyEmbed *embed)
 {
+	MozillaEmbed *membed = MOZILLA_EMBED (embed);
 	char *uri;
-	char *parent_uri;
 
 	uri = ephy_embed_get_location (embed, TRUE);
-	if (uri == NULL)
-	{
-		return;
-	}
-	
-	parent_uri = mozilla_embed_get_uri_parent (uri);
+	if (uri == NULL) return;
+
+	gboolean rv;
+	nsEmbedCString parent_uri;
+	rv = mozilla_embed_get_uri_parent (membed, uri, parent_uri);
 	g_free (uri);
 
-	if (parent_uri)
-	{
-		ephy_embed_load_url (embed, parent_uri);
-		g_free (parent_uri);
-	}
+	g_return_if_fail (rv != FALSE);
+
+	ephy_embed_load_url (embed, parent_uri.get ());
 }
 
 static char *
