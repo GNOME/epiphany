@@ -110,7 +110,7 @@ toolbar_style_sync (EggToolbar *toolbar,
 
 	spinner = EPHY_SPINNER (g_object_get_data (G_OBJECT (proxy), "spinner"));
 
-	small = (style == GTK_TOOLBAR_ICONS || style == GTK_TOOLBAR_TEXT);
+	small = (style != GTK_TOOLBAR_BOTH);
 	ephy_spinner_set_small_mode (EPHY_SPINNER (spinner), small);
 }
 
