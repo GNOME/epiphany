@@ -1138,6 +1138,8 @@ EphyBrowser::GetDocumentType ()
 {
   EmbedDocumentType type = EMBED_DOCUMENT_OTHER;
 
+  NS_ENSURE_TRUE (mDOMWindow, type);
+
   nsresult rv;
   nsCOMPtr<nsIDOMDocument> domDoc;
   rv = GetDocument (getter_AddRefs (domDoc));
