@@ -655,7 +655,7 @@ hack_tree_view_move_selection (GtkTreeView *tv, GtkTreeView *alternate, int dir)
 
 		model = gtk_tree_view_get_model (alternate);
 		c = gtk_tree_model_iter_n_children (model, NULL);
-		if (c > 0)
+		if (c > 0 && alternate)
 		{
 			gtk_tree_model_iter_nth_child (model, &iter, NULL, c - 1);
 			p = gtk_tree_model_get_path (model, &iter);
