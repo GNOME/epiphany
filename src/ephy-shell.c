@@ -717,6 +717,16 @@ ephy_shell_new_tab_full (EphyShell *shell,
 
 	ephy_gui_window_update_user_time (GTK_WIDGET (window), user_time);
 
+	if ((flags & EPHY_NEW_TAB_DONT_SHOW_WINDOW) == 0)
+	{
+		gtk_widget_show (GTK_WIDGET (window));
+	}
+
+	if (flags & EPHY_NEW_TAB_FULLSCREEN_MODE)
+	{
+		gtk_window_fullscreen (GTK_WINDOW (window));
+	}
+
 	if (flags & EPHY_NEW_TAB_HOME_PAGE ||
 	    flags & EPHY_NEW_TAB_NEW_PAGE)
 	{
@@ -728,16 +738,6 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	{
 		g_assert (url != NULL);
 		ephy_embed_load_url (embed, url);
-	}
-
-	if ((flags & EPHY_NEW_TAB_DONT_SHOW_WINDOW) == 0)
-	{
-		gtk_widget_show (GTK_WIDGET (window));
-	}
-
-	if (flags & EPHY_NEW_TAB_FULLSCREEN_MODE)
-	{
-		gtk_window_fullscreen (GTK_WINDOW (window));
 	}
 
 	return tab;
