@@ -60,7 +60,7 @@ NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aT
 	return NS_OK;
 }
 
-//* boolean isVisited (in nsIURI aURI); */
+/* boolean isVisited (in nsIURI aURI); */
 NS_IMETHODIMP MozGlobalHistory::IsVisited(nsIURI *aURI, PRBool *_retval)
 {
 	nsCAutoString spec;

@@ -1,5 +1,15 @@
 2004-02-12  Christian Persch  <chpe@cvs.gnome.org>
 
+	* configure.in:
+
+	Depend on libxml2 >= 2.6.6 because of bug #133298 and bug # 131548.
+
+	* src/ephy-main.c: (main):
+
+	Use LIBXML_TEST_VERSION to check for API compatibility.
+
+2004-02-12  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/GlobalHistory.cpp:
 
 	Fix compilation with mozilla 1.4.

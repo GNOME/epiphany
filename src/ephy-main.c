@@ -14,10 +14,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "ephy-shell.h"
@@ -35,6 +37,7 @@
 #include <glib/gi18n.h>
 #include <glade/glade-init.h>
 #include <libgnomevfs/gnome-vfs-init.h>
+#include <libxml/xmlversion.h>
 
 static gboolean open_in_existing = FALSE;
 static gboolean open_in_new_tab = FALSE;
@@ -96,6 +99,11 @@ main (int argc, char *argv[])
 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 	textdomain(GETTEXT_PACKAGE);
 #endif
+
+	/* check libxml2 API version epiphany was compiled with against the
+	 * version we're running with.
+	 */
+	LIBXML_TEST_VERSION
 
 	g_set_application_name (_("Epiphany Web Browser"));
 	program = gnome_program_init (PACKAGE, VERSION,
