@@ -29,6 +29,7 @@
 #include "ephy-topic-action.h"
 #include "ephy-node-common.h"
 #include "ephy-bookmarks.h"
+#include "ephy-bookmarksbar.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
@@ -338,6 +339,41 @@ open_in_tabs_activate_cb (GtkWidget *menu, EphyTopicAction *action)
 	g_list_free (uri_list);
 }
 
+static void
+remove_activate_cb (GtkWidget *menu, GtkWidget *proxy)
+{
+	EphyBookmarks *bookmarks;
+	EggToolbarsModel *model;
+	GtkWidget *item, *toolbar;
+	int pos;
+
+	item = gtk_widget_get_ancestor (proxy, GTK_TYPE_TOOL_ITEM);
+	g_return_if_fail (item != NULL);
+
+	toolbar = gtk_widget_get_ancestor (proxy, GTK_TYPE_TOOLBAR);
+	g_return_if_fail (toolbar != NULL);
+
+	pos = gtk_toolbar_get_item_index (GTK_TOOLBAR (toolbar),
+				          GTK_TOOL_ITEM (item));
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	model = ephy_bookmarks_get_toolbars_model (bookmarks);
+	egg_toolbars_model_remove_item (model, 0, pos);
+}
+
+static void
+add_open_in_tabs_menu (EphyTopicAction *action, GtkWidget *menu)
+{
+	GtkWidget *item;
+
+	item = gtk_menu_item_new_with_mnemonic (_("_Open in Tabs"));
+	gtk_widget_show (item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	g_signal_connect (item, "activate",
+			  G_CALLBACK (open_in_tabs_activate_cb), action);
+}
+
 static GtkWidget *
 build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 {
@@ -356,12 +392,7 @@ build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 		gtk_widget_show (item);
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
-		item = gtk_menu_item_new_with_mnemonic (_("_Open in Tabs"));
-		gtk_widget_show (item);
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-		g_signal_connect (item, "activate",
-				  G_CALLBACK (open_in_tabs_activate_cb), action);
+		add_open_in_tabs_menu (action, menu);
 	}
 
 	return menu;
@@ -531,6 +562,44 @@ create_menu_item (GtkAction *action)
 }
 
 static void
+show_context_menu (EphyTopicAction *action, GtkWidget *proxy)
+{
+	GtkWidget *menu, *item;
+
+	menu = gtk_menu_new ();
+
+	add_open_in_tabs_menu (action, menu);
+
+	item = gtk_separator_menu_item_new ();
+	gtk_widget_show (item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	item = gtk_image_menu_item_new_from_stock (GTK_STOCK_REMOVE, NULL);
+	gtk_widget_show (item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	g_signal_connect (item, "activate",
+			  G_CALLBACK (remove_activate_cb), proxy);
+
+	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 3,
+			gtk_get_current_event_time ());
+}
+
+static gboolean
+button_press_cb (GtkWidget *widget,
+		 GdkEventButton *event,
+		 EphyTopicAction *action)
+{
+	if (event->button == 3 &&
+	    gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))	
+	{
+		show_context_menu (action, widget);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static void
 connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	GtkWidget *button;
@@ -548,6 +617,9 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
 		g_signal_connect (button, "toggled",
 				  G_CALLBACK (button_toggled_cb), action);
+
+		g_signal_connect (button, "button-press-event",
+				  G_CALLBACK (button_press_cb), action);
 
 		/* We want the menu to popup up on mouse down */
 		g_signal_connect (button, "pressed",
