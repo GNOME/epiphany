@@ -1,11 +1,21 @@
 2004-02-04  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-go-action.c: (ephy_go_action_get_type),
+	(create_tool_item), (ephy_go_action_class_init):
+
+	gtk+ now connects the tool item's create_menu_proxy to the
+	action's create_menu_item, so we don't need to do it ourselves.
+	Also unnecessary to do connect_proxy.
+	The go action is now almost empty, we should really see if
+	we can use a stock gtktoolbutton for it.
+
+2004-02-04  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/ephy-zoom-action.c: (ephy_zoom_action_get_type),
 	(zoom_to_level_cb), (connect_proxy), (proxy_menu_activate_cb),
 	(create_menu_item), (ephy_zoom_action_class_init):
 	* lib/widgets/ephy-zoom-action.h:
 	* lib/widgets/ephy-zoom-control.c: (ephy_zoom_control_class_init):
-	* src/ephy-history-window.c: (cmd_delete),
 
 	Fix toolbar overflow menu creation. Don't connect zoom control signals
 	to a menu item.
