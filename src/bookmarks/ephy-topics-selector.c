@@ -299,15 +299,6 @@ ephy_topics_selector_apply (EphyTopicsSelector *editor)
 }
 
 static gboolean
-set_sort_column_id (GtkListStore *model)
-{
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
-					      COL_TOPIC,
-					      GTK_SORT_ASCENDING);
-	return FALSE;
-}
-
-static gboolean
 topic_clicked (GtkTreeView *tree_view, 
 		GdkEventButton *event,
 		EphyTopicsSelector *selector)
@@ -376,7 +367,9 @@ ephy_topics_build_ui (EphyTopicsSelector *editor)
 
 	gtk_tree_view_set_model (GTK_TREE_VIEW (editor), GTK_TREE_MODEL (model));
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (editor), FALSE);
-	g_idle_add ((GSourceFunc) set_sort_column_id, model);
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
+					      COL_TOPIC,
+					      GTK_SORT_ASCENDING);
 	g_object_unref (model);
 
 	/* Has topic column */

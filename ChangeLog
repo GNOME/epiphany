@@ -1,5 +1,12 @@
 2003-06-10  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* src/bookmarks/ephy-topics-selector.c: (ephy_topics_build_ui):
+
+	Dont set sort function on idle. The sort is visible and we can
+	crash if the dialog is closed very fast.
+
+2003-06-10  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* lib/egg/eggtoolbar.c:
 	* lib/egg/eggtoolbutton.c:
 
