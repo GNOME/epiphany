@@ -358,13 +358,16 @@ is_base_address (const char *address)
 	{
 		if (*address == '/') slashes++;
 
-		/* Base uris has 3 slashes like http://www.gnome.org/ */
-		if (slashes == 4) return FALSE;
-
 		address++;
+
+		/* Base uris has 3 slashes like http://www.gnome.org/ */
+		if (slashes == 3)
+		{
+			return (*address == '\0');
+		}
 	}
 
-	return TRUE;
+	return FALSE;
 }
 
 static void
@@ -389,7 +392,7 @@ init_relevance_col (GValue *value, EphyNode *node, int group)
 		address = ephy_node_get_property_string
 			(node, EPHY_NODE_PAGE_PROP_LOCATION);
 
-		visits = MAX (visits, (1 << 5) - 1);
+		visits = MIN (visits, (1 << 5) - 1);
 
 		if (is_base_address (address))
 		{
