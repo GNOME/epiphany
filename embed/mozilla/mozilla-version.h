@@ -41,6 +41,10 @@
 #define MOZILLA_CHECK_VERSION3(a,b,c) MOZILLA_CHECK_VERSION4(a,b,MOZILLA_RELEASE,c)
 #define MOZILLA_CHECK_VERSION2(a,b) MOZILLA_CHECK_VERSION3(a,b,0)
 
+#define MOZILLA_IS_VERSION4(major, minor, type, micro) \
+	(VERSION4(MOZILLA_MAJOR, MOZILLA_MINOR, MOZILLA_TYPE, MOZILLA_MICRO) == \
+	 VERSION4(major, minor, type, micro))
+
 /* Use the following:
  *
  *  1.4.1 -> MOZILLA_CHECK_VERSION3 (1,4,1)
