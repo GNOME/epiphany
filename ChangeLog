@@ -1,5 +1,11 @@
 2003-12-19  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/print-dialog.c: (ephy_print_dialog_browse_button_cb):
+
+	EphyFileChooser now destroys with parent, don't set the flag again here.
+
+2003-12-19  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-file-chooser.c: (ephy_file_chooser_new):
 
 	Destroy file chooser with its parent window; fixes crashes.

@@ -278,8 +278,6 @@ ephy_print_dialog_browse_button_cb (GtkWidget *widget,
 				    GTK_FILE_CHOOSER_ACTION_SAVE,
 				    CONF_PRINT_DIR);
 
-	gtk_window_set_destroy_with_parent (GTK_WINDOW (fc), TRUE);
-
 	g_signal_connect (GTK_DIALOG (fc), "response",
 			  G_CALLBACK (print_filechooser_response_cb),
 			  dialog);
