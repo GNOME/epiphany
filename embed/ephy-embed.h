@@ -184,6 +184,8 @@ struct EphyEmbedClass
 			          gint height);
 	gint (* dom_mouse_click) (EphyEmbed *embed,
 			          EphyEmbedEvent *event);
+	gint (* dom_mouse_down)  (EphyEmbed *embed,
+			          EphyEmbedEvent *event);
 	void (* security_change) (EphyEmbed *embed,
                                   EmbedSecurityLevel level);
 	void (* zoom_change)	 (EphyEmbed *embed,

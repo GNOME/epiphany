@@ -1456,7 +1456,7 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 {
 	EphyEmbedEvent *info;
 	EventContext event_context;
-	gint return_value = 0;
+	gint return_value = FALSE;
 	EphyWrapper *wrapper;
 	nsresult result;
 	EphyEmbedEventType type;
@@ -1474,24 +1474,30 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 
 	event_context.Init (wrapper);
         result = event_context.GetMouseEventInfo (static_cast<nsIDOMMouseEvent*>(dom_event), info);
+	if (NS_FAILED (result)) return FALSE;
 
 	ephy_embed_event_get_event_type (info, &type);
-
-	if (NS_SUCCEEDED(result) && (type == EPHY_EMBED_EVENT_MOUSE_BUTTON3))
+		
+	nsCOMPtr<nsIDOMDocument> domDoc;
+	result = event_context.GetTargetDocument (getter_AddRefs(domDoc));
+	if (NS_SUCCEEDED(result))
 	{
-		nsCOMPtr<nsIDOMDocument> domDoc;
-		result = event_context.GetTargetDocument (getter_AddRefs(domDoc));
+		result = wrapper->PushTargetDocument (domDoc);
+
 		if (NS_SUCCEEDED(result))
 		{
-			result = wrapper->PushTargetDocument (domDoc);
-			if (NS_SUCCEEDED(result))
+			g_signal_emit_by_name (membed, "ge_dom_mouse_down", 
+					       info, &return_value); 
+
+			if (return_value == FALSE &&
+			    type == EPHY_EMBED_EVENT_MOUSE_BUTTON3)
 			{
 				g_signal_emit_by_name (membed, "ge_context_menu", 
-						       info, &return_value); 
-				wrapper->PopTargetDocument ();
+						       info, &return_value);
 			}
-		}
 
+			wrapper->PopTargetDocument ();
+		}
 	}
 
 	g_object_unref (info);

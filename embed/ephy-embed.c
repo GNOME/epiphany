@@ -42,6 +42,7 @@ enum
 	OPEN_URI,
 	SIZE_TO,
 	DOM_MOUSE_CLICK,
+	DOM_MOUSE_DOWN,
 	SECURITY_CHANGE,
 	ZOOM_CHANGE,
 	LAST_SIGNAL
@@ -225,6 +226,16 @@ ephy_embed_base_init (gpointer g_class)
                               EPHY_EMBED_TYPE,
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (EphyEmbedClass, dom_mouse_click),
+                              NULL, NULL,
+                              ephy_marshal_INT__OBJECT,
+                              G_TYPE_INT,
+                              1,
+			      G_TYPE_POINTER);
+	ephy_embed_signals[DOM_MOUSE_DOWN] =
+                g_signal_new ("ge_dom_mouse_down",
+                              EPHY_EMBED_TYPE,
+                              G_SIGNAL_RUN_LAST,
+                              G_STRUCT_OFFSET (EphyEmbedClass, dom_mouse_down),
                               NULL, NULL,
                               ephy_marshal_INT__OBJECT,
                               G_TYPE_INT,
