@@ -1,5 +1,12 @@
 2005-02-13  Christian Persch  <chpe@cvs.gnome.org>
 
+        * lib/egg/eggstatusicon.c: (egg_status_icon_init),
+        (egg_status_icon_finalize):
+
+        Keep a ref on the tray icon. Should fix bug #166143.
+			
+2005-02-13  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.in:
 
 	Post-release version bump.
