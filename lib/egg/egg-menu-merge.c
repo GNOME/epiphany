@@ -31,10 +31,10 @@ static GNode *egg_menu_merge_get_node      (EggMenuMerge *self,
 					    gboolean create);
 static guint egg_menu_merge_next_merge_id  (EggMenuMerge *self);
 
-static void  egg_menu_merge_node_prepend_ui_reference (EggMenuMergeNode *node,
+static void  egg_menu_merge_node_prepend_uierence (EggMenuMergeNode *node,
 						       guint merge_id,
 						       GQuark action_quark);
-static void  egg_menu_merge_node_remove_ui_reference  (EggMenuMergeNode *node,
+static void  egg_menu_merge_node_remove_uierence  (EggMenuMergeNode *node,
 						       guint merge_id);
 
 enum {
@@ -46,6 +46,8 @@ enum {
 static guint merge_signals[LAST_SIGNAL] = { 0 };
 
 static GMemChunk *merge_node_chunk = NULL;
+
+static GObjectClass *parent_class = NULL;
 
 GType
 egg_menu_merge_get_type (void)
@@ -76,8 +78,28 @@ egg_menu_merge_get_type (void)
 }
 
 static void
+egg_menu_merge_finalize (GObject *object)
+{
+	EggMenuMerge *self = EGG_MENU_MERGE (object);
+
+	if (self->update_tag != 0)
+	{
+	  self->update_tag = g_idle_remove_by_data (self);
+	}
+
+        G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
 egg_menu_merge_class_init (EggMenuMergeClass *class)
 {
+  GObjectClass *object_class;
+
+  parent_class = g_type_class_peek_parent (class);
+  object_class = G_OBJECT_CLASS(class);
+
+  object_class->finalize = egg_menu_merge_finalize;
+
   if (!merge_node_chunk)
     merge_node_chunk = g_mem_chunk_create(EggMenuMergeNode, 64,
 					  G_ALLOC_AND_FREE);
@@ -119,10 +141,10 @@ egg_menu_merge_init (EggMenuMerge *self)
   merge_id = egg_menu_merge_next_merge_id(self);
   node = get_child_node(self, NULL, "Root", 4,
 			EGG_MENU_MERGE_ROOT, TRUE, FALSE);
-  egg_menu_merge_node_prepend_ui_reference(NODE_INFO(node), merge_id, 0);
+  egg_menu_merge_node_prepend_uierence(NODE_INFO(node), merge_id, 0);
   node = get_child_node(self, self->root_node, "popups", 6,
 			EGG_MENU_MERGE_POPUPS, TRUE, FALSE);
-  egg_menu_merge_node_prepend_ui_reference(NODE_INFO(node), merge_id, 0);
+  egg_menu_merge_node_prepend_uierence(NODE_INFO(node), merge_id, 0);
 }
 
 EggMenuMerge *
@@ -297,7 +319,7 @@ egg_menu_merge_next_merge_id (EggMenuMerge *self)
 }
 
 static void
-egg_menu_merge_node_prepend_ui_reference (EggMenuMergeNode *node,
+egg_menu_merge_node_prepend_uierence (EggMenuMergeNode *node,
 					  guint merge_id, GQuark action_quark)
 {
   NodeUIReference *reference;
@@ -313,7 +335,7 @@ egg_menu_merge_node_prepend_ui_reference (EggMenuMergeNode *node,
 }
 
 static void
-egg_menu_merge_node_remove_ui_reference (EggMenuMergeNode *node,
+egg_menu_merge_node_remove_uierence (EggMenuMergeNode *node,
 					 guint merge_id)
 {
   GList *p;
@@ -413,7 +435,7 @@ start_element_handler (GMarkupParseContext *context,
 	  ctx->current = self->root_node;
 	  raise_error = FALSE;
 
-	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+	  egg_menu_merge_node_prepend_uierence (NODE_INFO (ctx->current),
 						    ctx->merge_id, verb_quark);
 	}
       break;
@@ -428,7 +450,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (NODE_INFO(ctx->current)->action_name == 0)
 	    NODE_INFO(ctx->current)->action_name = verb_quark;
 
-	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+	  egg_menu_merge_node_prepend_uierence (NODE_INFO (ctx->current),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO(ctx->current)->dirty = TRUE;
 
@@ -446,7 +468,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (NODE_INFO(node)->action_name == 0)
 	    NODE_INFO(node)->action_name = verb_quark;
 
-	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (node),
+	  egg_menu_merge_node_prepend_uierence (NODE_INFO (node),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO(node)->dirty = TRUE;
 
@@ -464,7 +486,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (NODE_INFO(ctx->current)->action_name == 0)
 	    NODE_INFO(ctx->current)->action_name = verb_quark;
 
-	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+	  egg_menu_merge_node_prepend_uierence (NODE_INFO (ctx->current),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO(ctx->current)->dirty = TRUE;
 
@@ -480,7 +502,7 @@ start_element_handler (GMarkupParseContext *context,
 					EGG_MENU_MERGE_POPUPS,
 					TRUE, FALSE);
 
-	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+	  egg_menu_merge_node_prepend_uierence (NODE_INFO (ctx->current),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO(ctx->current)->dirty = TRUE;
 
@@ -496,7 +518,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (NODE_INFO(ctx->current)->action_name == 0)
 	    NODE_INFO(ctx->current)->action_name = verb_quark;
 
-	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+	  egg_menu_merge_node_prepend_uierence (NODE_INFO (ctx->current),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO(ctx->current)->dirty = TRUE;
 
@@ -516,7 +538,7 @@ start_element_handler (GMarkupParseContext *context,
 					  EGG_MENU_MERGE_TOOLBAR_PLACEHOLDER,
 					  TRUE, top);
 
-	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+	  egg_menu_merge_node_prepend_uierence (NODE_INFO (ctx->current),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO(ctx->current)->dirty = TRUE;
 
@@ -534,7 +556,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (NODE_INFO(ctx->current)->action_name == 0)
 	    NODE_INFO(ctx->current)->action_name = verb_quark;
 
-	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+	  egg_menu_merge_node_prepend_uierence (NODE_INFO (ctx->current),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO(ctx->current)->dirty = TRUE;
 
@@ -556,7 +578,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (NODE_INFO(node)->action_name == 0)
 	    NODE_INFO(node)->action_name = verb_quark;
 
-	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (node),
+	  egg_menu_merge_node_prepend_uierence (NODE_INFO (node),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO(node)->dirty = TRUE;
 
@@ -576,7 +598,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (NODE_INFO(node)->action_name == 0)
 	    NODE_INFO(node)->action_name = verb_quark;
 
-	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (node),
+	  egg_menu_merge_node_prepend_uierence (NODE_INFO (node),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO(node)->dirty = TRUE;
 
@@ -672,7 +694,7 @@ cleanup (GMarkupParseContext *context,
 {
   ParseContext *ctx = user_data;
   EggMenuMerge *self = ctx->self;
-
+  g_print ("Cleanup ui\n");
   ctx->current = NULL;
   /* should also walk through the tree and get rid of nodes related to
    * this UI file's tag */
@@ -749,7 +771,7 @@ remove_ui (GNode *node, gpointer user_data)
 {
   guint merge_id = GPOINTER_TO_UINT (user_data);
 
-  egg_menu_merge_node_remove_ui_reference (NODE_INFO (node), merge_id);
+  egg_menu_merge_node_remove_uierence (NODE_INFO (node), merge_id);
 
   return FALSE; /* continue */
 }
@@ -977,8 +999,8 @@ update_node (EggMenuMerge *self, GNode *node)
       if (info->action)
 	g_object_unref (info->action);
       info->action = action;
-      if (info->action)
-	g_object_ref (info->action);
+/*      if (info->action)
+	g_object_ref (info->action);*/
 
       switch (info->type)
 	{

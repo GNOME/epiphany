@@ -244,7 +244,7 @@ ephy_embed_utils_build_charsets_submenu (BonoboUIComponent *ui_component,
 	for (gl = groups; gl != NULL; gl = gl->next)
         {
 		GList *charsets, *cl;
-		const char *group = (const char *)groups->data;
+		const char *group = (const char *)gl->data;
 
 		build_group (xml_string, group, group_index);
 

@@ -46,6 +46,8 @@ epiphany_SOURCES = 				    	\
 	appearance-prefs.h				\
 	ephy-automation.c				\
 	ephy-automation.h				\
+	ephy-encoding-menu.c				\
+	ephy-encoding-menu.h				\
 	ephy-favicon-action.c				\
 	ephy-favicon-action.h				\
 	ephy-favorites-menu.c				\

@@ -21,8 +21,6 @@
 
 #include "ephy-window.h"
 
-#include <bonobo/bonobo-ui-component.h>
-
 /* object forward declarations */
 
 typedef struct _EphyFavoritesMenu EphyFavoritesMenu;

@@ -1,6 +1,36 @@
 2003-01-23  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* TODO:
+	* data/ui/epiphany-ui.xml.in:
+	* embed/ephy-embed-utils.c:
+	(ephy_embed_utils_build_charsets_submenu):
+	* lib/egg/egg-menu-merge.c: (egg_menu_merge_finalize),
+	(egg_menu_merge_class_init), (egg_menu_merge_init),
+	(egg_menu_merge_node_prepend_uierence),
+	(egg_menu_merge_node_remove_uierence), (start_element_handler),
+	(cleanup), (remove_ui), (update_node):
+	* src/Makefile.am:
+	* src/ephy-encoding-menu.c: (ephy_encoding_menu_class_init),
+	(ephy_encoding_menu_init), (ephy_encoding_menu_finalize_impl),
+	(ephy_encoding_menu_set_property),
+	(ephy_encoding_menu_get_property), (ephy_encoding_menu_new),
+	(ephy_encoding_menu_verb_cb), (build_group), (build_charset),
+	(ephy_encoding_menu_rebuild):
+	* src/ephy-encoding-menu.h:
+	* src/ephy-favorites-menu.c: (ephy_favorites_menu_finalize_impl),
+	(ephy_favorites_menu_verb_cb):
+	* src/ephy-favorites-menu.h:
+	* src/ephy-window.c: (ephy_window_init), (ephy_window_finalize):
+	* src/ppview-toolbar.c: (ppview_toolbar_finalize):
+
+	Reimplement encoding menus.
+	Work around eggmenu finalization problems.
+	Fix ppvtoolbar/favorites menu to correctly
+	remove action group on finalize.
+
+2003-01-23  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* TODO:
 	* lib/ephy-autocompletion.c: (ephy_autocompletion_reset),
 	(ephy_autocompletion_set_key),
 	(ephy_autocompletion_update_matches_full):

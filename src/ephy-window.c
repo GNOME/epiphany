@@ -31,13 +31,13 @@
 #include "ephy-shell.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
-#include "ephy-embed-utils.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "statusbar.h"
 #include "toolbar.h"
 #include "popup-commands.h"
 #include "egg-toggle-action.h"
+#include "ephy-encoding-menu.h"
 
 #include <string.h>
 #include <libgnome/gnome-i18n.h>
@@ -50,18 +50,6 @@
 #include <gdk/gdkkeysyms.h>
 #include "egg-action-group.h"
 #include "egg-menu-merge.h"
-
-#define CHARSET_MENU_PATH "/menu/View/EncodingMenuPlaceholder"
-#define GO_FAVORITES_PATH "/menu/Go/Favorites"
-
-#define GO_BACK_ACTION "GoBack"
-#define GO_FORWARD_ACTION "GoForward"
-#define GO_UP_ACTION "GoUp"
-#define EDIT_FIND_NEXT_ACTION "EditFindNext"
-#define EDIT_FIND_PREV_ACTION "EditFindPrev"
-#define VIEW_STATUSBAR_ACTION "ViewStatusbar"
-#define VIEW_TOOLBAR_ACTION "ViewToolbar"
-#define VIEW_FULLSCREEN_ACTION "ViewFullscreen"
 
 static EggActionGroupEntry ephy_menu_entries [] = {
 
@@ -159,6 +147,7 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "ViewZoomNormal", N_("_Normal Size"), GTK_STOCK_ZOOM_100, NULL,
 	  N_("Show the contents at the normal size"),
 	  G_CALLBACK (window_cmd_view_zoom_normal), NULL },
+	{ "ViewEncoding", N_("_Encoding"), NULL, NULL, NULL, NULL, NULL },
 	{ "ViewPageSource", N_("_Page Source"), NULL, NULL,
 	  N_("View the source code of the page"),
 	  G_CALLBACK (window_cmd_view_page_source), NULL },
@@ -271,6 +260,7 @@ struct EphyWindowPrivate
 	EggActionGroup *action_group;
 	EggActionGroup *popups_action_group;
 	EphyFavoritesMenu *fav_menu;
+	EphyEncodingMenu *enc_menu;
 	PPViewToolbar *ppview_toolbar;
 	GtkNotebook *notebook;
 	EphyTab *active_tab;
@@ -556,6 +546,7 @@ ephy_window_init (EphyWindow *window)
 	setup_window (window);
 
 	window->priv->fav_menu = ephy_favorites_menu_new (window);
+	window->priv->enc_menu = ephy_encoding_menu_new (window);
 
 	/* Setup window contents */
 	window->priv->notebook = setup_notebook (window);
@@ -639,6 +630,7 @@ ephy_window_finalize (GObject *object)
 	}
 
 	g_object_unref (window->priv->fav_menu);
+	g_object_unref (window->priv->enc_menu);
 
 	if (window->priv->toolbar)
 	{

@@ -26,10 +26,6 @@
 
 #include <string.h>
 #include <bonobo/bonobo-i18n.h>
-#include <bonobo/bonobo-window.h>
-#include <bonobo/bonobo-control.h>
-#include <bonobo/bonobo-ui-toolbar-button-item.h>
-#include <bonobo/bonobo-property-bag.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkmenu.h>
 
@@ -275,7 +271,10 @@ ppview_toolbar_finalize (GObject *object)
 	t = PPVIEW_TOOLBAR (object);
 
         g_return_if_fail (t->priv != NULL);
+
 	egg_menu_merge_remove_ui (t->priv->ui_merge, t->priv->ui_id);
+	egg_menu_merge_remove_action_group (t->priv->ui_merge,
+					    t->priv->action_group);
 	g_object_unref (t->priv->action_group);
 
         g_free (t->priv);

@@ -138,6 +138,14 @@ ephy_favorites_menu_finalize_impl (GObject *o)
 	EphyFavoritesMenu *wrhm = EPHY_FAVORITES_MENU (o);
 	EphyFavoritesMenuPrivate *p = wrhm->priv;
 
+	if (p->action_group != NULL)
+	{
+		egg_menu_merge_remove_action_group
+			(EGG_MENU_MERGE (p->window->ui_merge),
+			 p->action_group);
+		g_object_unref (p->action_group);
+	}
+
 	g_free (p);
 
 	G_OBJECT_CLASS (g_object_class)->finalize (o);
@@ -186,9 +194,8 @@ ephy_favorites_menu_new (EphyWindow *window)
 }
 
 static void
-ephy_favorites_menu_verb_cb (BonoboUIComponent *uic,
-			     FavoriteData *data,
-			     const char *cname)
+ephy_favorites_menu_verb_cb (EggMenuMerge *merge,
+			     FavoriteData *data)
 {
 	ephy_window_load_url (data->window, data->url);
 }
