@@ -26,6 +26,7 @@
 #include <glib.h>
 #include <stdio.h>
 #include <string.h>
+#include <glib/gi18n.h>
 
 #include "ephy-file-helpers.h"
 #include "ephy-stock-icons.h"
@@ -48,14 +49,14 @@ ephy_stock_icons_init (void)
 		STOCK_PRINT_SETUP
 	};
 
-	static const char *items[] =
+	static const GtkStockItem items[] =
 	{
-		EPHY_STOCK_SECURE,
-		EPHY_STOCK_UNSECURE,
-		EPHY_STOCK_HISTORY,
-		EPHY_STOCK_BOOKMARKS,
-		EPHY_STOCK_ENTRY,
-		EPHY_STOCK_DOWNLOAD
+		{ EPHY_STOCK_SECURE,	N_("Secure"),		0, 0, NULL },
+		{ EPHY_STOCK_UNSECURE,	N_("Insecure"),		0, 0, NULL },
+		{ EPHY_STOCK_HISTORY,	N_("History"),		0, 0, NULL },
+		{ EPHY_STOCK_BOOKMARKS, N_("Bookmarks"),	0, 0, NULL },
+		{ EPHY_STOCK_ENTRY,	N_("Address Entry"),	0, 0, NULL },
+		{ EPHY_STOCK_DOWNLOAD,	N_("_Download"),	0, 0, NULL }
 	};
 
 	factory = gtk_icon_factory_new ();
@@ -68,15 +69,17 @@ ephy_stock_icons_init (void)
 		icon_set = gtk_icon_set_new ();
 		icon_source = gtk_icon_source_new ();
 
-		fn = g_strconcat (items[i], ".png", NULL);
+		fn = g_strconcat (items[i].stock_id, ".png", NULL);
 		gtk_icon_source_set_filename (icon_source, ephy_file (fn));
 		g_free (fn);
 
 		gtk_icon_set_add_source (icon_set, icon_source);
-		gtk_icon_factory_add (factory, items[i], icon_set);
+		gtk_icon_factory_add (factory, items[i].stock_id, icon_set);
 		gtk_icon_set_unref (icon_set);
 		gtk_icon_source_free (icon_source);
 	}
+
+	gtk_stock_add_static (items, G_N_ELEMENTS (items));
 
 	for (i = 0; i < (int) G_N_ELEMENTS (icon_theme_items); i++)
 	{

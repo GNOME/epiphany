@@ -240,7 +240,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 
 	action_label =  (mAction == CONTENT_ACTION_OPEN) ||
 			(mAction == CONTENT_ACTION_OPEN_TMP) ?
-			GTK_STOCK_OPEN : _("_Download");
+			GTK_STOCK_OPEN : EPHY_STOCK_DOWNLOAD;
 
 	dialog = gtk_dialog_new_with_buttons
 		("", parentWindow, GTK_DIALOG_NO_SEPARATOR,
