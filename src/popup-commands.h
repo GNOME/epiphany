@@ -19,7 +19,7 @@
 #include "egg-action.h"
 #include "ephy-window.h"
 
-void popup_cmd_link_in_new_window	(EggAction *action,
+void popup_cmd_link_in_new_browser		(EggAction *action,
 					 EphyWindow *window);
 
 void popup_cmd_link_in_new_tab		(EggAction *action,
@@ -28,16 +28,16 @@ void popup_cmd_link_in_new_tab		(EggAction *action,
 void popup_cmd_image_in_new_tab		(EggAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_image_in_new_window	(EggAction *action,
+void popup_cmd_image_in_new_browser	(EggAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_add_link_bookmark	(EggAction *action,
+void popup_cmd_bookmark_link	(EggAction *action,
 					 EphyWindow *window);
 
 void popup_cmd_frame_in_new_tab		(EggAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_frame_in_new_window	(EggAction *action,
+void popup_cmd_frame_in_new_browser	(EggAction *action,
 					 EphyWindow *window);
 
 void popup_cmd_add_frame_bookmark	(EggAction *action,

@@ -36,4 +36,4 @@ void ephy_stock_icons_init (void);
 
 G_END_DECLS
 
-#endif /* __RB_STOCK_ICONS_H */
+#endif /* EPHY_STOCK_ICONS_H */

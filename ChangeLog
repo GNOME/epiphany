@@ -1,3 +1,32 @@
+2003-02-13  Dave Bordoley <bordoley@msu.edu>
+
+	* data/ui/epiphany-ui.xml.in
+	Added some separators.
+	Changed "bookmark" verbs and menu names to reflect changes
+	in src/ephy-window.c	
+
+	* src/ephy-window.c
+	Added a bunch of mneumonics to context menu entries
+	s/Add Bookmark.../Bookmark Page... for pages.
+	s/Add Bookmark.../Bookmark Link... for links.
+	Changed callbacks in  ephy_menu_entries[] and ephy_popups_entries
+	to reflect changes in src/window-commands.(ch) and src/pop-commands.(ch).
+
+	* src/popup-commands.c
+	* src/popup-commands.h
+	s/popup_cmd_link_in_new_window/popup_cmd_link_in_new_browser
+	s/popup_cmd_image_in_new_window/popup_cmd_image_in_new_browser
+	s/popup_cmd_add_link_bookmark/void popup_cmd_bookmark_link
+	s/void popup_cmd_frame_in_new_window/void popup_cmd_frame_in_new_browser
+
+	* src/window-commands.c
+	* src/window-commands.h
+	s/window_cmd_file_new_window/window_cmd_file_new_browser
+	s/window_cmd_file_add_bookmark/window_cmd_file_bookmark_page
+
+	* lib/ephy-stock-icons.h
+	Fixed #endif comment s/RB/EPHY
+
 2003-02-13  Lee Willis  <lwillis@plus.net>
 
 	* src/session.c: Fix session saving

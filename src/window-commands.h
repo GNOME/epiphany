@@ -56,13 +56,13 @@ void window_cmd_view_reload	(EggAction *action,
 void window_cmd_new		(EggAction *action,
 				 EphyWindow *window);
 
-void window_cmd_file_new_window	(EggAction *action,
+void window_cmd_file_new_browser	(EggAction *action,
 				 EphyWindow *window);
 
 void window_cmd_file_new_tab	(EggAction *action,
 				 EphyWindow *window);
 
-void window_cmd_file_add_bookmark(EggAction *action,
+void window_cmd_file_bookmark_page(EggAction *action,
 				  EphyWindow *window);
 
 void window_cmd_go_bookmarks	(EggAction *action,
