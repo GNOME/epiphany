@@ -62,11 +62,9 @@
 #include "nsIDocShellTreeItem.h"
 #include "nsIDocShellTreeNode.h"
 #include "nsIDocShellTreeOwner.h"
-#include "nsIHTMLContentContainer.h"
 #include "nsICSSLoader.h"
 #include "nsICSSStyleSheet.h"
 #include "nsICSSLoaderObserver.h"
-#include "nsIStyleSet.h"
 #include "nsIDocumentObserver.h"
 #include "nsCWebBrowser.h"
 #include "nsReadableUtils.h"
@@ -898,6 +896,10 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 				nsAutoString default_text, user_text;
 				areaElement->GetDefaultValue (default_text);
 				areaElement->GetValue (user_text);
+
+				/* Mozilla Bug 218277, 195946 and others */
+				default_text.ReplaceChar(0xa0, ' ');
+
 				if (Compare (user_text, default_text) != 0)
 				{
 					*aHasTextArea = PR_TRUE;
@@ -918,6 +920,10 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 				nsAutoString default_text, user_text;
 				inputElement->GetDefaultValue (default_text);
 				inputElement->GetValue (user_text);
+
+				/* Mozilla Bug 218277, 195946 and others */
+				default_text.ReplaceChar(0xa0, ' ');
+
 				if (Compare (user_text, default_text) != 0)
 				{
 					(*aNumTextFields)++;
