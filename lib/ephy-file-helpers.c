@@ -29,7 +29,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <libgnome/gnome-init.h>
-#include <libgnome/gnome-exec.h>
 
 #include "ephy-file-helpers.h"
 

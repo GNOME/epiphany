@@ -31,7 +31,6 @@
 #include <bonobo/bonobo-ui-component.h>
 #include <glib/gi18n.h>
 #include <gtk/gtkclipboard.h>
-#include <libgnome/gnome-exec.h>
 
 typedef enum
 {

@@ -33,12 +33,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
-#include <libgnome/gnome-i18n.h>
+#include <glib/gi18n.h>
 #include <stdlib.h>
 #include <gdk/gdkx.h>
 #include <nsCOMPtr.h>
 #include <nsIPrefService.h>
 #include <nsIServiceManager.h>
+#include <libgnome/gnome-i18n.h>
 
 #define MOZILLA_PREF_NO_PROXIES "network.proxy.no_proxies_on"
 #define MIGRATE_PIXEL_SIZE

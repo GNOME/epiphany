@@ -34,10 +34,6 @@
 #include <gtk/gtkliststore.h>
 #include <gtk/gtktreeviewcolumn.h>
 #include <glib/gi18n.h>
-#include <libgnomeui/gnome-dialog-util.h>
-#include <libgnomeui/gnome-dialog.h>
-#include <gtk/gtkprogressbar.h>
-#include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
 #define CONF_DOWNLOADING_SHOW_DETAILS "/apps/epiphany/dialogs/downloader_show_details"
 

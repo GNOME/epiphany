@@ -34,7 +34,7 @@
 #include "MozRegisterComponents.h"
 
 #include <time.h>
-#include <libgnome/gnome-i18n.h>
+#include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <nsICacheService.h>
 #include <nsCOMPtr.h>

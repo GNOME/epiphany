@@ -18,9 +18,10 @@
  *  $Id$
  */
 
-#include <gtk/gtklabel.h>
 #include <config.h>
-#include <libgnome/gnome-i18n.h>
+
+#include <gtk/gtklabel.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #include "ephy-search-entry.h"

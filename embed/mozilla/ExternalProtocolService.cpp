@@ -20,9 +20,8 @@
 #include <config.h>
 #endif
 
-#include <gtk/gtk.h>
-#include <libgnome/gnome-exec.h>
-#include <libgnome/gnome-i18n.h>
+#include <gtk/gtkmessagedialog.h>
+#include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
 #include <nsString.h>

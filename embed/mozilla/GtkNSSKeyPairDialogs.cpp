@@ -56,7 +56,7 @@
 #include "gtk/gtkhbox.h"
 #include "gtk/gtkvbox.h"
 
-#include <libgnome/gnome-i18n.h>
+#include <glib/gi18n.h>
 
 #include "GtkNSSKeyPairDialogs.h"
 
