@@ -16,6 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "ephy-embed-shell.h"
 #include "GlobalHistory.h"
 #include "nsCOMPtr.h"
@@ -103,6 +107,8 @@ NS_IMETHODIMP MozGlobalHistory::GetCount(PRUint32 *aCount)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
+
+#if MOZILLA_SNAPSHOT <= 7
  
 /* void startBatchUpdate (); */
 NS_IMETHODIMP MozGlobalHistory::StartBatchUpdate()
@@ -115,6 +121,8 @@ NS_IMETHODIMP MozGlobalHistory::EndBatchUpdate()
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
+
+#endif
 
 /* void markPageAsTyped (in string url); */
 NS_IMETHODIMP MozGlobalHistory::MarkPageAsTyped(const char *url)

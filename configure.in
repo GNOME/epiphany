@@ -180,8 +180,8 @@ MOZILLA_VERSION="`$PKG_CONFIG --modversion mozilla-gtkmozembed`"
 dnl allow user to override the autodetected mozilla version
 dnl     - without arguments for cvs head
 AC_ARG_WITH(mozilla-snapshot,
-  AC_HELP_STRING([--with-mozilla-snapshot@<:@=1.3|1.3.1|1.4a|trunk@:>@],
-		 [Whether to try building against mozilla 1.3|1.3.1|1.4a|trunk
+  AC_HELP_STRING([--with-mozilla-snapshot@<:@=1.3|1.3.1|1.4a|1.4|trunk@:>@],
+		 [Whether to try building against mozilla 1.3|1.3.1|1.4a|1.4|trunk
 		  snapshot. @<:@guessed@:>@]),
   [autodetect=" (guessed: $MOZILLA_VERSION)"; MOZILLA_VERSION="$withval"])
 
@@ -193,10 +193,11 @@ case "$MOZILLA_VERSION" in
    "") MOZILLA_SNAPSHOT=7 ;;
  1.4a) MOZILLA_SNAPSHOT=7 ;;
  1.4b) MOZILLA_SNAPSHOT=7 ;;
-trunk) MOZILLA_SNAPSHOT=7 ;;
+  1.4) MOZILLA_SNAPHOST=8 ;;
+trunk) MOZILLA_SNAPSHOT=8 ;;
     *) AC_ERROR([
 *****************************************************************************
-Epiphany can be built using mozilla 1.3, 1.3.1, 1.4a, 1.4b or trunk snapshot, but the 
+Epiphany can be built using mozilla 1.3, 1.3.1, 1.4a, 1.4b, 1.4 or trunk snapshot, but the 
 version available is $MOZILLA_VERSION.  
 
 When using mozilla trunk snapshot successful build is not guaranteed due to 
@@ -204,6 +205,8 @@ the frequently changing state of the mozilla interfaces and the limited
 resources of the epiphany team to support non-release mozilla snapshots.
 *****************************************************************************])
 esac
+
+AC_DEFINE_UNQUOTED(MOZILLA_SNAPSHOT, $MOZILLA_SNAPSHOT, [Define mozilla snapshot])
 
 dnl *******************************
 dnl Internationalization

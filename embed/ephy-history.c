@@ -860,12 +860,6 @@ ephy_history_clear (EphyHistory *gh)
 		ephy_node_unref (node);
 	}
 
-	/* The first node is All, dont unref it */
-	while ((node = ephy_node_get_nth_child (gh->priv->hosts, 1)) != NULL)
-	{
-		ephy_node_unref (node);
-	}
-
 	ephy_history_save (gh);
 }
 
