@@ -265,6 +265,8 @@ ephy_file_chooser_new (const char *title,
 	{
 		gtk_window_set_transient_for (GTK_WINDOW (dialog),
 					      GTK_WINDOW (parent));
+
+		gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 	}
 
 	return dialog;
