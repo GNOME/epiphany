@@ -4,13 +4,14 @@
 # Kostas Papadimas <pkst@gmx.net>, 2003.
 # Nikos Charonitakis <frolix68@yahoo.gr>, 2003.
 # kostas, 05Mar2003, initial translation,665 messages
-# Nikos,  29jul2003, updated fixes and update translation,425 messages
-#
+# Nikos,  29jul2003, fixes and update translation,425 messages
+# Nikos   31jul2003, fixes access keys and update,461 messages
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"POT-Creation-Date: 2003-07-28 02:32+0300\n"
-"PO-Revision-Date: 2003-07-29 01:04-0200\n"
+"POT-Creation-Date: 2003-07-31 15:25+0300\n"
+"PO-Revision-Date: 2003-07-31 16:14-0200\n"
 "Last-Translator: Nikos Charonitakis <charosn@her.fothnet.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
 "MIME-Version: 1.0\n"
@@ -39,7 +40,7 @@ msgstr "Εργοστάσιο συστατικού προβολής περιεχ�
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:5
 msgid "View as Web Page"
-msgstr "Εμφάνιση ως ιστοσελίδα"
+msgstr "Εμφάνιση Ως Ιστοσελίδα"
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:6
 msgid "Web Page"
@@ -78,7 +79,7 @@ msgstr "Να επιτρέπονται τα αναδυόμενα παράθυρα
 
 #: data/epiphany.schemas.in.h:3
 msgid "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
-msgstr "Να επιτρέπεται στις ιστοσελίδες να ανοίγουν νέα παράθυρα με την χρήση JavaScript (αν είναι ενεργή η JavaScript)"
+msgstr "Να επιτρέπεται στις ιστοσελίδες να ανοίγουν νέα παράθυρα με την χρήση JavaScript (αν είναι ενεργή η JavaScript)."
 
 #: data/epiphany.schemas.in.h:4
 #, fuzzy
@@ -369,9 +370,8 @@ msgid "*"
 msgstr "*"
 
 #: data/glade/epiphany.glade.h:3
-#, fuzzy
 msgid "<b>Address:</b>"
-msgstr "<b>Κεφαλίδες</b>"
+msgstr "<b>Διεύθυνση:</b>"
 
 #: data/glade/epiphany.glade.h:4
 msgid "<b>Status:</b>"
@@ -432,9 +432,8 @@ msgid "Passwords"
 msgstr "Κωδικοί"
 
 #: data/glade/epiphany.glade.h:18
-#, fuzzy
 msgid "Personal Data Manager"
-msgstr "Διαχειριστής προσωπικών δεδομένων"
+msgstr "Διαχειριστής Προσωπικών Δεδομένων"
 
 #: data/glade/epiphany.glade.h:19
 msgid "You can open it with another application or save it on disk."
@@ -473,9 +472,8 @@ msgid "<b>Colors</b>"
 msgstr "<b>Χρώματα</b>"
 
 #: data/glade/prefs-dialog.glade.h:4
-#, fuzzy
 msgid "<b>Cookies</b>"
-msgstr "<b>Χρώματα</b>"
+msgstr "<b>Cookies</b>"
 
 #: data/glade/prefs-dialog.glade.h:5
 #, fuzzy
@@ -491,9 +489,8 @@ msgid "<b>Home page</b>"
 msgstr "<b>Αρχική Σελίδα</b>"
 
 #: data/glade/prefs-dialog.glade.h:8
-#, fuzzy
 msgid "<b>Languages</b>"
-msgstr "<b>Γλώσσα</b>"
+msgstr "<b>Γλώσσες</b>"
 
 #: data/glade/prefs-dialog.glade.h:9
 msgid "<b>Tabs</b>"
@@ -545,7 +542,7 @@ msgstr "Ενεργοποίηση _Java"
 
 #: data/glade/prefs-dialog.glade.h:19
 msgid "Fonts and Colors"
-msgstr ""
+msgstr "Γραμματοσειρές και Χρώματα"
 
 #: data/glade/prefs-dialog.glade.h:20
 #: data/glade/print.glade.h:16
@@ -795,9 +792,8 @@ msgid "_Selection"
 msgstr "Επιλο_γή"
 
 #: data/glade/print.glade.h:36
-#, fuzzy
 msgid "_Top:"
-msgstr "_Πάνω:"
+msgstr "Πά_νω:"
 
 #: data/glade/print.glade.h:37
 msgid "_to:"
@@ -922,7 +918,7 @@ msgstr "Αποθήκευση σελίδας ως..."
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:28
 msgid "Search for a String"
-msgstr "Αναζήτηση αλφαριθμητικού"
+msgstr "Αναζήτηση Aλφαριθμητικού"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:29
 msgid "Select All"
@@ -954,12 +950,12 @@ msgstr "_Αρχείο"
 #: data/ui/nautilus-epiphany-view.xml.in.h:34
 #: src/ephy-window.c:109
 msgid "_Find..."
-msgstr "Εύ_ρεση..."
+msgstr "Ε_ύρεση..."
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:35
 #: src/ephy-window.c:86
 msgid "_Print..."
-msgstr "Εκτύ_πωση..."
+msgstr "_Εκτύπωση..."
 
 #. Hours, Minutes, Seconds
 #: embed/downloader-view.c:216
@@ -1100,30 +1096,27 @@ msgstr "Επιλέχθηκε ένας φάκελος ενώ αναμενόταν
 
 #: embed/mozilla/mozilla-embed-single.cpp:75
 msgid "_Arabic"
-msgstr "_Αραβικά"
+msgstr "_Αραβική"
 
 #: embed/mozilla/mozilla-embed-single.cpp:76
-#, fuzzy
 msgid "_Baltic"
-msgstr "Βαλτική"
+msgstr "_Βαλτική"
 
 #: embed/mozilla/mozilla-embed-single.cpp:77
-#, fuzzy
 msgid "Central _European"
-msgstr "Κεντρικής Ευρώπη"
+msgstr "Κεντρικής Ευρ_ώπης"
 
 #: embed/mozilla/mozilla-embed-single.cpp:78
-#, fuzzy
 msgid "Chi_nese"
-msgstr "Κινέζικα"
+msgstr "_Κινέζικη"
 
 #: embed/mozilla/mozilla-embed-single.cpp:79
 msgid "_Cyrillic"
-msgstr "_Κυριλλικά"
+msgstr "Κ_υριλλική"
 
 #: embed/mozilla/mozilla-embed-single.cpp:80
 msgid "_Greek"
-msgstr "_Ελληνικά"
+msgstr "_Ελληνική"
 
 #: embed/mozilla/mozilla-embed-single.cpp:81
 #, fuzzy
@@ -1131,21 +1124,20 @@ msgid "_Hebrew"
 msgstr "Εβραϊκά"
 
 #: embed/mozilla/mozilla-embed-single.cpp:82
-#, fuzzy
 msgid "_Indian"
-msgstr "Indian"
+msgstr "_Ινδική"
 
 #: embed/mozilla/mozilla-embed-single.cpp:83
 msgid "_Japanese"
-msgstr "_Γιαπωνέζικα"
+msgstr "_Γιαπωνέζικη"
 
 #: embed/mozilla/mozilla-embed-single.cpp:84
 msgid "_Korean"
-msgstr "_Κορεάτικα"
+msgstr "Κο_ρεάτικη"
 
 #: embed/mozilla/mozilla-embed-single.cpp:85
 msgid "_Turkish"
-msgstr "_Τουρκικά"
+msgstr "_Τουρκική"
 
 #: embed/mozilla/mozilla-embed-single.cpp:86
 msgid "_Unicode"
@@ -1153,16 +1145,15 @@ msgstr "_Unicode"
 
 #: embed/mozilla/mozilla-embed-single.cpp:87
 msgid "_Vietnamese"
-msgstr "_Βιετναμέζικα"
+msgstr "Βιετνα_μέζικη"
 
 #: embed/mozilla/mozilla-embed-single.cpp:88
-#, fuzzy
 msgid "_Western"
 msgstr "_Δυτική"
 
 #: embed/mozilla/mozilla-embed-single.cpp:89
 msgid "_Other"
-msgstr "_Άλλο"
+msgstr "Άλλ_η"
 
 #. translators: access keys need only be unique within the same LG_group
 #: embed/mozilla/mozilla-embed-single.cpp:108
@@ -1545,7 +1536,7 @@ msgstr "Όχι"
 
 #: embed/mozilla/mozilla-embed-single.cpp:930
 msgid "End of current session"
-msgstr "Τέλος της τρέχουσας συνεδρία"
+msgstr "Τέλος της τρέχουσας συνεδρίας"
 
 #. *
 #. * This is a comma separated list of language ranges, as specified
@@ -1559,9 +1550,8 @@ msgstr "Τέλος της τρέχουσας συνεδρία"
 #. * "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
 #.
 #: embed/mozilla/mozilla-notifiers.cpp:598
-#, fuzzy
 msgid "system-language"
-msgstr "Γλώσσα"
+msgstr "γλώσσα-συστήμαος"
 
 #: lib/eel-gconf-extensions.c:79
 #, c-format
@@ -1573,13 +1563,12 @@ msgstr ""
 "  %s"
 
 #: lib/egg/egg-editable-toolbar.c:269
-#, fuzzy
 msgid "_Remove Toolbar"
-msgstr "Ερ_γαλειοθήκη"
+msgstr "_Αφαίρεση Ερηαλειοθήκης"
 
 #: lib/egg/egg-toolbar-editor.c:427
 msgid "Separator"
-msgstr ""
+msgstr "Διαχωριστικό"
 
 #: lib/egg/egg-toolbar-editor.c:457
 msgid "Drag an item onto the toolbars above to add it, from the toolbars in the items table to remove it."
@@ -1733,9 +1722,8 @@ msgid "400%"
 msgstr "400%"
 
 #: lib/widgets/ephy-zoom-control.c:145
-#, fuzzy
 msgid "_Zoom"
-msgstr "_Κάτω"
+msgstr "_Μεγέθυνση"
 
 #: src/bookmarks/ephy-bookmark-action.c:212
 #, c-format
@@ -1779,15 +1767,14 @@ msgid "_New Topic"
 msgstr "_Νέο Θέμα"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:160
-#, fuzzy
 msgid "Create a new topic"
-msgstr "Δημιουργία νέας στήλης"
+msgstr "Δημιουργία νέου θέματος"
 
 #. File Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:162
-#: src/bookmarks/ephy-bookmarks-editor.c:862
+#: src/bookmarks/ephy-bookmarks-editor.c:853
 #: src/ephy-history-window.c:131
-#: src/ephy-history-window.c:674
+#: src/ephy-history-window.c:666
 #, fuzzy
 msgid "_Open in New Window"
 msgstr "Άνοιγμα σε νέο παράθυρο"
@@ -1797,9 +1784,9 @@ msgid "Open the selected bookmark in a new window"
 msgstr ""
 
 #: src/bookmarks/ephy-bookmarks-editor.c:165
-#: src/bookmarks/ephy-bookmarks-editor.c:863
+#: src/bookmarks/ephy-bookmarks-editor.c:854
 #: src/ephy-history-window.c:134
-#: src/ephy-history-window.c:675
+#: src/ephy-history-window.c:667
 #, fuzzy
 msgid "Open in New _Tab"
 msgstr "Άνοιγμα σε νέα σ_τήλη"
@@ -1875,12 +1862,12 @@ msgid "Cut the selection"
 msgstr "Αποκοπή της επιλογής"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:190
-#: src/bookmarks/ephy-bookmarks-editor.c:872
+#: src/bookmarks/ephy-bookmarks-editor.c:863
 #: src/ephy-history-window.c:151
-#: src/ephy-history-window.c:684
+#: src/ephy-history-window.c:676
 #: src/ephy-window.c:100
 msgid "_Copy"
-msgstr "Αντιγρα_φή"
+msgstr "Α_ντιγραφή"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:191
 #: src/ephy-history-window.c:152
@@ -1892,7 +1879,7 @@ msgstr "Αντιγραφή της επιλογής"
 #: src/ephy-history-window.c:154
 #: src/ephy-window.c:103
 msgid "_Paste"
-msgstr "Επι_κόλληση"
+msgstr "_Επικόλληση"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:194
 #: src/ephy-history-window.c:155
@@ -1970,9 +1957,8 @@ msgid "Type a topic"
 msgstr ""
 
 #: src/bookmarks/ephy-bookmarks-editor.c:510
-#, fuzzy
 msgid "Import Bookmarks"
-msgstr "Έξυπνοι  σελιδοδείκτες"
+msgstr "Εισαγωγή  Σελιδοδεικτών"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:530
 msgid "Choose the bookmarks source:"
@@ -1990,39 +1976,39 @@ msgstr "Σελιδοδείκτες Galeon "
 msgid "Konqueror bookmarks"
 msgstr "Σελιδοδείκτες Konqueror"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:857
-#: src/ephy-history-window.c:669
+#: src/bookmarks/ephy-bookmarks-editor.c:848
+#: src/ephy-history-window.c:661
 #, fuzzy
 msgid "_Open in New Windows"
 msgstr "Άνοιγμα σε νέο παράθυρο"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:858
-#: src/ephy-history-window.c:670
+#: src/bookmarks/ephy-bookmarks-editor.c:849
+#: src/ephy-history-window.c:662
 #, fuzzy
 msgid "Open in New _Tabs"
 msgstr "Άνοιγμα σε νέα σ_τήλη"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:868
-#: src/ephy-history-window.c:680
+#: src/bookmarks/ephy-bookmarks-editor.c:859
+#: src/ephy-history-window.c:672
 msgid "_Copy Address"
 msgstr "_Αντιγραφή Διεύθυνσης"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1115
-#: src/ephy-history-window.c:885
+#: src/bookmarks/ephy-bookmarks-editor.c:1106
+#: src/ephy-history-window.c:877
 msgid "_Search:"
 msgstr "_Αναζήτηση:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1224
+#: src/bookmarks/ephy-bookmarks-editor.c:1215
 #: src/ephy-window.c:672
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1300
+#: src/bookmarks/ephy-bookmarks-editor.c:1291
 msgid "Topics"
 msgstr "Θέματα"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1361
-#: src/ephy-history-window.c:1079
+#: src/bookmarks/ephy-bookmarks-editor.c:1352
+#: src/ephy-history-window.c:1071
 msgid "Title"
 msgstr "Τίτλος"
 
@@ -2080,9 +2066,8 @@ msgid "Not Categorized"
 msgstr ""
 
 #: src/bookmarks/ephy-new-bookmark.c:266
-#, fuzzy
 msgid "New Bookmark"
-msgstr "Σελιδοδείκτες"
+msgstr "Νέος Σελιδοδείκτης"
 
 #. FIXME: We "should" use gtk_message dialog here
 #. * but it doesn't support markup of text yet
@@ -2136,18 +2121,16 @@ msgid "Select all history links or text"
 msgstr ""
 
 #: src/ephy-history-window.c:160
-#, fuzzy
 msgid "C_lear History"
-msgstr "Ιστορικό"
+msgstr "_Καθαρισμός Ιστορικού"
 
 #: src/ephy-history-window.c:161
 msgid "Clear your browsing history"
 msgstr ""
 
 #: src/ephy-history-window.c:177
-#, fuzzy
 msgid "Display history help"
-msgstr "Προβολή βοήθειας φυλλομετρητή"
+msgstr "Προβολή βοήθειας ιστορικού"
 
 #: src/ephy-history-window.c:223
 msgid "Clear history"
@@ -2165,16 +2148,15 @@ msgstr ""
 msgid "Clearing the browsing history will cause all history links to be permanently deleted."
 msgstr ""
 
-#: src/ephy-history-window.c:959
+#: src/ephy-history-window.c:951
 msgid "History"
 msgstr "Ιστορικό"
 
-#: src/ephy-history-window.c:1029
-#, fuzzy
+#: src/ephy-history-window.c:1021
 msgid "Sites"
-msgstr "Μέγεθος"
+msgstr "Τοποθεσίες"
 
-#: src/ephy-history-window.c:1084
+#: src/ephy-history-window.c:1076
 msgid "Address"
 msgstr "Διεύθυνση"
 
@@ -2194,9 +2176,8 @@ msgid "Do not raise the window when opening a page in an existing Epiphany proce
 msgstr "Να μην γίνετε ανάδυση του παραθύρου κατά το άνοιγμα μιας σελίδας σε υπάρχουσα διεργασία του Ephy."
 
 #: src/ephy-main.c:81
-#, fuzzy
 msgid "Run Epiphany in full screen mode"
-msgstr "Εκτέλεση Ephy σε λειτουργία πλήρους οθόνης"
+msgstr "Εκτέλεση Epiphany σε λειτουργία πλήρους οθόνης"
 
 #: src/ephy-main.c:84
 #, fuzzy
@@ -2225,9 +2206,8 @@ msgid "URL"
 msgstr "URL"
 
 #: src/ephy-main.c:97
-#, fuzzy
 msgid "Close all Epiphany windows"
-msgstr "Κλείσιμο όλων των παραθύρων"
+msgstr "Κλείσιμο όλων των παραθύρων Epiphany"
 
 #: src/ephy-main.c:100
 msgid "Same as --close, but exits server mode too"
@@ -2304,7 +2284,7 @@ msgstr "_Μετάβαση"
 
 #: src/ephy-window.c:70
 msgid "_Tabs"
-msgstr "_Στήλες"
+msgstr "Σ_τήλες"
 
 #. File menu
 #: src/ephy-window.c:74
@@ -2318,7 +2298,7 @@ msgstr "Άνοιγμα σε νέο παράθυρο"
 
 #: src/ephy-window.c:77
 msgid "New _Tab"
-msgstr "Νέα _στήλη"
+msgstr "Νέα _Στήλη"
 
 #: src/ephy-window.c:78
 #, fuzzy
@@ -2327,7 +2307,7 @@ msgstr "Άνοιγμα σε νέα σ_τήλη"
 
 #: src/ephy-window.c:80
 msgid "_Open..."
-msgstr "Άνοι_γμα..."
+msgstr "_Άνοιγμα..."
 
 #: src/ephy-window.c:81
 msgid "Open a file"
@@ -2347,7 +2327,7 @@ msgstr "Εκτύπωση της τρέχουσας σελίδας"
 
 #: src/ephy-window.c:89
 msgid "S_end To..."
-msgstr "Α_ποστολή σε..."
+msgstr "Α_ποστολή Σε..."
 
 #: src/ephy-window.c:90
 msgid "Send a link of the current page"
@@ -2371,7 +2351,7 @@ msgstr ""
 
 #: src/ephy-window.c:112
 msgid "Find Ne_xt"
-msgstr "Εύρεση Επο_μένου"
+msgstr "Εύρεση Ε_πομένου"
 
 #: src/ephy-window.c:113
 #, fuzzy
@@ -2380,7 +2360,7 @@ msgstr "Εύρεση επόμενης εμφάνισης αλφαριθμητι�
 
 #: src/ephy-window.c:115
 msgid "Find Pre_vious"
-msgstr "Εύρεση προη_γουμένου"
+msgstr "Εύρεση Προη_γουμένου"
 
 #: src/ephy-window.c:116
 #, fuzzy
@@ -2389,7 +2369,7 @@ msgstr "Εύρεση προηγούμενης εμφάνισης αλφαριθ�
 
 #: src/ephy-window.c:118
 msgid "P_ersonal Data"
-msgstr "Π_ροσωπικά δεδομένα"
+msgstr "Προσωπικά _Δεδομένα"
 
 #: src/ephy-window.c:119
 msgid "View and remove cookies and passwords"
@@ -2430,25 +2410,23 @@ msgstr "Εμφάνιση των πιο πρόσφατων περιεχομένω
 
 #: src/ephy-window.c:135
 msgid "_Toolbar"
-msgstr "Ερ_γαλειοθήκη"
+msgstr "_Εργαλειοθήκη"
 
 #: src/ephy-window.c:136
 msgid "Show or hide toolbar"
 msgstr "Προβολή ή απόκρυψη της εργαλειοθήκης"
 
 #: src/ephy-window.c:138
-#, fuzzy
 msgid "_Bookmarks Bar"
-msgstr "Σελιδοδείκτες"
+msgstr "_Γραμμή Σελιδοδεικτών"
 
 #: src/ephy-window.c:139
-#, fuzzy
 msgid "Show or hide bookmarks bar"
-msgstr "Προβολή ή απόκρυψη της εργαλειοθήκης"
+msgstr "Προβολή ή απόκρυψη της γραμμής σελιδοδεικτών"
 
 #: src/ephy-window.c:141
 msgid "St_atusbar"
-msgstr "_Γραμμή κατάστασης"
+msgstr "Γ_ραμμή κατάστασης"
 
 #: src/ephy-window.c:142
 msgid "Show or hide statusbar"
@@ -2456,7 +2434,7 @@ msgstr "Προβολή ή απόκρυψη της γραμμής κατάστα�
 
 #: src/ephy-window.c:144
 msgid "_Fullscreen"
-msgstr "Πλήρης οθόνη"
+msgstr "_Πλήρης οθόνη"
 
 #: src/ephy-window.c:145
 msgid "Browse at full screen"
@@ -2464,35 +2442,35 @@ msgstr "Φυλλομέτρηση σε  λειτουργία πλήρους οθ�
 
 #: src/ephy-window.c:147
 msgid "Zoom _In"
-msgstr "Με_γένθυση "
+msgstr "_Μεγένθυση "
 
 #: src/ephy-window.c:148
 msgid "Increase the text size"
-msgstr ""
+msgstr "Μεγέθυνση κειμένου"
 
 #: src/ephy-window.c:150
 msgid "Zoom _Out"
-msgstr "Σ_μίκρυνση"
+msgstr "_Σμίκρυνση"
 
 #: src/ephy-window.c:151
 msgid "Decrease the text size"
-msgstr ""
+msgstr "Σμίκρυνση κειμένου"
 
 #: src/ephy-window.c:153
 msgid "_Normal Size"
-msgstr "Κα_νονικό μέγεθος"
+msgstr "_Κανονικό μέγεθος"
 
 #: src/ephy-window.c:154
 msgid "Use the normal text size"
-msgstr ""
+msgstr "Χρήση κανονικού μεγέθους κειμένου"
 
 #: src/ephy-window.c:156
 msgid "_Encoding"
-msgstr "_Κωδικοποίηση"
+msgstr "Κ_ωδικοποίηση"
 
 #: src/ephy-window.c:157
 msgid "_Page Source"
-msgstr "_Πηγαίος κώδικας σελίδας"
+msgstr "Π_ηγαίος Κώδικας Σελίδας"
 
 #: src/ephy-window.c:158
 msgid "View the source code of the page"
@@ -2509,9 +2487,8 @@ msgid "Add a bookmark for the current page"
 msgstr "Προσθήκη σελιδοδείκτη για τη τρέχουσα σελίδα"
 
 #: src/ephy-window.c:165
-#, fuzzy
 msgid "_Edit Bookmarks"
-msgstr "Σελιδοδείκτες"
+msgstr "_Επεξεργασία Σελιδοδεικτών"
 
 #: src/ephy-window.c:166
 msgid "Open the bookmarks window"
@@ -2536,7 +2513,7 @@ msgstr "Πήγαινε στην επόμενη αναγνωσμένη σελίδ
 
 #: src/ephy-window.c:176
 msgid "_Up"
-msgstr "_Πάνω"
+msgstr "_Επάνω"
 
 #: src/ephy-window.c:177
 msgid "Go up one level"
@@ -2552,7 +2529,7 @@ msgstr "Μετάβαση στην αρχική τοποθεσία"
 
 #: src/ephy-window.c:182
 msgid "_Location..."
-msgstr "Τοποθε_σία..."
+msgstr "_Τοποθεσία..."
 
 #: src/ephy-window.c:183
 msgid "Go to a specified location"
@@ -2560,7 +2537,7 @@ msgstr "Μετάβαση σε καθορισμένη τοποθεσία"
 
 #: src/ephy-window.c:185
 msgid "H_istory"
-msgstr "Ισ_τορικό"
+msgstr "_Ιστορικό"
 
 #: src/ephy-window.c:186
 #, fuzzy
@@ -2570,7 +2547,7 @@ msgstr "Κλείσιμο αυτού του παραθύρου"
 #. Tabs menu
 #: src/ephy-window.c:190
 msgid "_Previous Tab"
-msgstr "_Προηγούμενη στήλη"
+msgstr "_Προηγούμενη Στήλη"
 
 #: src/ephy-window.c:191
 msgid "Activate previous tab"
@@ -2578,7 +2555,7 @@ msgstr "Ενεργοποίηση της προηγούμενης στήλης"
 
 #: src/ephy-window.c:193
 msgid "_Next Tab"
-msgstr "Ε_πόμενη στήλη"
+msgstr "_Επόμενη Στήλη"
 
 #: src/ephy-window.c:194
 msgid "Activate next tab"
@@ -2586,7 +2563,7 @@ msgstr "Ενεργοποίηση επόμενης στήλης"
 
 #: src/ephy-window.c:196
 msgid "Move Tab _Left"
-msgstr "Μετακίνηση στήλης αρι_στερά"
+msgstr "Μετακίνηση Στήλης _Αριστερά"
 
 #: src/ephy-window.c:197
 msgid "Move current tab to left"
@@ -2594,7 +2571,7 @@ msgstr "Μετακίνηση της τρέχουσας στήλης αριστε
 
 #: src/ephy-window.c:199
 msgid "Move Tab _Right"
-msgstr "Μετακίνηση στήλης _δεξιά"
+msgstr "Μετακίνηση στήλης _Δεξιά"
 
 #: src/ephy-window.c:200
 msgid "Move current tab to right"
@@ -2602,7 +2579,7 @@ msgstr "Μετακίνηση της τρέχουσας στήλης στα δε�
 
 #: src/ephy-window.c:202
 msgid "_Detach Tab"
-msgstr "Από_σπαση στήλης"
+msgstr "Από_σπαση Στήλης"
 
 #: src/ephy-window.c:203
 msgid "Detach current tab"
@@ -2663,33 +2640,28 @@ msgstr "Αντιγραφή Διεύθυνσης Email"
 
 #. Images
 #: src/ephy-window.c:250
-#, fuzzy
 msgid "Open _Image"
-msgstr "Άνοιγμα εικόνας"
+msgstr "Άνοιγμα _Εικόνας"
 
 #: src/ephy-window.c:252
-#, fuzzy
 msgid "Open Image in New _Window"
-msgstr "Άνοιγμα εικόναςσε νέο παράθυρο"
+msgstr "Άνοιγμα Εικόνας σε Νέο _Παράθυρο"
 
 #: src/ephy-window.c:254
-#, fuzzy
 msgid "Open Image in New T_ab"
-msgstr "Άνοιγμα εικόνας σε νέα σ_τήλη"
+msgstr "Άνοιγμα Εικόνας σε Νέα Σ_τήλη"
 
 #: src/ephy-window.c:256
 msgid "_Save Image As..."
 msgstr "Αποθήκευ_ση εικόνας ως..."
 
 #: src/ephy-window.c:258
-#, fuzzy
 msgid "_Use Image As Background"
-msgstr "Χρήση εικόνας ως παρασκήνιο."
+msgstr "_Χρήση Εικόνας Ως Παρασκήνιο"
 
 #: src/ephy-window.c:260
-#, fuzzy
 msgid "Copy I_mage Address"
-msgstr "Αντιγραφή Διεύθυνσης Email"
+msgstr "Αντιγραφή Διεύθυνσης E_ικόνας"
 
 #: src/ephy-window.c:561
 #, fuzzy
@@ -2761,7 +2733,6 @@ msgid "Name"
 msgstr "Όνομα"
 
 #: src/pdm-dialog.c:705
-#, fuzzy
 msgid "Cookie Properties"
 msgstr "Ιδιότητες Cookie "
 
@@ -3091,9 +3062,8 @@ msgid "Enter a web address to open, or a phrase to search for on the web"
 msgstr ""
 
 #: src/toolbar.c:328
-#, fuzzy
 msgid "Zoom"
-msgstr "Με_γένθυση "
+msgstr "Μεγένθυση "
 
 #: src/toolbar.c:329
 msgid "Adjust the text size"
@@ -3121,7 +3091,7 @@ msgstr "Επεξεργαστής Εργαλειοθήκης"
 
 #: src/window-commands.c:697
 msgid "_Add a New Toolbar"
-msgstr "_Προσθήκη Νέας Εργαλειθήκης"
+msgstr "_Προσθήκη Νέας Εργαλειoθήκης"
 
 #. Translator credits
 #: src/window-commands.c:747
