@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -340,8 +342,10 @@ load_homepage (EphyEmbed *embed)
 
 	home = eel_gconf_get_string(CONF_GENERAL_HOMEPAGE);
 
-	if (home == NULL)
+	if (home == NULL || home[0] == '\0')
 	{
+		g_free (home);
+
 		home = g_strdup ("about:blank");
 	}
 
@@ -432,15 +436,16 @@ ephy_shell_new_tab (EphyShell *shell,
 	           flags & EPHY_NEW_TAB_APPEND_GROUPED ||
 		   flags & EPHY_NEW_TAB_CLONE_PAGE);
 
-	if (flags & EPHY_NEW_TAB_APPEND_AFTER)
+	if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_embed != NULL)
 	{
-		g_assert (previous_embed != NULL);
 		nb = ephy_window_get_notebook (window);
 		position = gtk_notebook_page_num (GTK_NOTEBOOK (nb),
 						  GTK_WIDGET (previous_embed)) + 1;
 	}
-
-	position = grouped ? EPHY_NOTEBOOK_INSERT_GROUPED : EPHY_NOTEBOOK_INSERT_LAST;
+	else
+	{
+		position = grouped ? EPHY_NOTEBOOK_INSERT_GROUPED : EPHY_NOTEBOOK_INSERT_LAST;
+	}
 
 	tab = ephy_tab_new ();
 	embed = ephy_tab_get_embed (tab);

@@ -157,7 +157,14 @@ window_cmd_go_home (EggAction *action,
 
 	location = eel_gconf_get_string (CONF_GENERAL_HOMEPAGE);
 
-	ephy_window_load_url (window, location ? location : "about:blank");
+	if (location == NULL || location[0] == '\0')
+	{
+		g_free (location);
+
+		location = g_strdup ("about:blank");
+	}
+
+	ephy_window_load_url (window, location);
 
 	g_free (location);
 }
