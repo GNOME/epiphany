@@ -58,6 +58,7 @@
 #include "ephy-search-entry.h"
 #include "ephy-toolbars-model.h"
 #include "ephy-favicon-cache.h"
+#include "eel-gconf-extensions.h"
 
 static GtkTargetEntry topic_drag_dest_types [] =
 {
@@ -124,6 +125,8 @@ static void cmd_help_contents		  (GtkAction *action,
 					   EphyBookmarksEditor *editor);
 
 #define EPHY_BOOKMARKS_EDITOR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKS_EDITOR, EphyBookmarksEditorPrivate))
+
+#define CONF_BOOKMARKS_VIEW_DETAILS "/apps/epiphany/dialogs/bookmarks_view_details"
 
 struct EphyBookmarksEditorPrivate
 {
@@ -674,16 +677,8 @@ cmd_help_contents (GtkAction *action,
 }
 
 static void
-cmd_view_columns (GtkAction *action,
-		  GtkRadioAction *current,
-		  EphyBookmarksEditor *editor)
+set_columns_visibility (EphyBookmarksEditor *editor, int value)
 {
-	int value;
-
-	g_return_if_fail (EPHY_IS_BOOKMARKS_EDITOR (editor));
-
-	value = gtk_radio_action_get_current_value (current);
-
 	switch (value)
 	{
 		case VIEW_TITLE:
@@ -695,6 +690,34 @@ cmd_view_columns (GtkAction *action,
 			gtk_tree_view_column_set_visible (editor->priv->address_col, TRUE);
 			break;
 	}
+}
+
+static void
+cmd_view_columns (GtkAction *action,
+		  GtkRadioAction *current,
+		  EphyBookmarksEditor *editor)
+{
+	int value;
+	GSList *svalues = NULL;
+
+	g_return_if_fail (EPHY_IS_BOOKMARKS_EDITOR (editor));
+
+	value = gtk_radio_action_get_current_value (current);
+	set_columns_visibility (editor, value);
+
+	switch (value)
+	{
+		case VIEW_TITLE:
+			svalues = g_slist_append (svalues, (gpointer)"title");
+			break;
+		case VIEW_TITLE_AND_ADDRESS:
+			svalues = g_slist_append (svalues, (gpointer)"title");
+			svalues = g_slist_append (svalues, (gpointer)"address");
+			break;
+	}
+
+	eel_gconf_set_string_list (CONF_BOOKMARKS_VIEW_DETAILS, svalues);
+	g_slist_free (svalues);
 }
 
 GType
@@ -1231,6 +1254,30 @@ provide_keyword_uri (EphyNode *node, GValue *value, gpointer data)
 	g_free (uri);
 }
 
+static int
+get_details_value (EphyBookmarksEditor *editor)
+{
+	int value;
+	GSList *svalues;
+
+	svalues = eel_gconf_get_string_list (CONF_BOOKMARKS_VIEW_DETAILS);
+
+	if (svalues &&
+	    g_slist_find_custom (svalues, "title", (GCompareFunc)strcmp) &&
+	    g_slist_find_custom (svalues, "address", (GCompareFunc)strcmp))
+	{
+		value = VIEW_TITLE_AND_ADDRESS;
+	}
+	else
+	{
+		value = VIEW_TITLE;
+	}
+
+	g_slist_free (svalues);
+
+	return value;
+}
+
 static void
 ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 {
@@ -1242,7 +1289,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
 	GdkPixbuf *icon;
-	int col_id;
+	int col_id, details_value;
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
 
@@ -1269,10 +1316,12 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 					     ephy_bookmark_popup_toggle_entries,
 					     ephy_bookmark_popup_n_toggle_entries,
 					     editor);
+
+	details_value = get_details_value (editor);
 	gtk_action_group_add_radio_actions (action_group,
 					    ephy_bookmark_radio_entries,
 					    ephy_bookmark_n_radio_entries,
-					    VIEW_TITLE,
+					    details_value,
 					    G_CALLBACK (cmd_view_columns), 
 					    editor);
 	gtk_ui_manager_insert_action_group (ui_merge,
@@ -1425,6 +1474,8 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	ephy_state_add_paned  (GTK_WIDGET (hpaned),
 			       "bookmarks_paned",
 		               130);
+
+	set_columns_visibility (editor, details_value);
 }
 
 void

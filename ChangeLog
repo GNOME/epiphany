@@ -1,3 +1,14 @@
+2003-09-22  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* data/epiphany.schemas.in:
+	* src/bookmarks/ephy-bookmarks-editor.c: (set_columns_visibility),
+	(cmd_view_columns), (get_details_value),
+	(ephy_bookmarks_editor_construct):
+
+	Complete view menu impl. There is a gtk bug that make it behave funnily
+	and the schemas does not work correctly (though I cant see any problem
+	with, maybe it's something borked here ...)
+
 2003-09-21  Christian Persch  <chpe@cvs.gnome.org>
 
 	* data/default-prefs.js:
