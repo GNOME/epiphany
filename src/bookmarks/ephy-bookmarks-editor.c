@@ -33,7 +33,6 @@
 #include "ephy-bookmark-properties.h"
 #include "ephy-node-view.h"
 #include "ephy-window.h"
-#include "ephy-keywords-entry.h"
 #include "ephy-dnd.h"
 #include "ephy-prefs.h"
 #include "ephy-shell.h"
