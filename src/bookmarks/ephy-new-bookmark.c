@@ -177,9 +177,9 @@ ephy_new_bookmark_add (EphyNewBookmark *new_bookmark)
 }
 
 static void
-ephy_new_bookmark_response_cb (GtkDialog *dialog,
-		               int response_id,
-			       EphyNewBookmark *new_bookmark)
+response_cb (EphyNewBookmark *new_bookmark,
+	     int response_id,
+	     gpointer user_data)
 {
 	switch (response_id)
 	{
@@ -270,7 +270,7 @@ ephy_new_bookmark_construct (EphyNewBookmark *editor)
 	gtk_container_set_border_width (GTK_CONTAINER (editor), 6);
 	g_signal_connect (G_OBJECT (editor),
 			  "response",
-			  G_CALLBACK (ephy_new_bookmark_response_cb),
+			  G_CALLBACK (response_cb),
 			  editor);
 
 	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (editor)->vbox), 12);
@@ -397,3 +397,18 @@ ephy_new_bookmark_get_id (EphyNewBookmark *bookmark)
 	return bookmark->priv->id;
 }
 
+/* Convenience function for callers */
+
+void
+ephy_new_bookmark_response_cb (EphyNewBookmark *bookmark,
+			       int response_id,
+			       gpointer user_data)
+{
+	switch (response_id)
+	{
+		case GTK_RESPONSE_CANCEL:
+		case GTK_RESPONSE_OK:
+			gtk_widget_destroy (GTK_WIDGET (bookmark));
+			break;
+	}
+}

@@ -378,8 +378,10 @@ cmd_bookmark_page (EggAction *action,
 			(bookmarks, window, location);
 		ephy_new_bookmark_set_title
 			(EPHY_NEW_BOOKMARK (new_bookmark), title);
-		gtk_dialog_run (GTK_DIALOG (new_bookmark));
-		gtk_widget_destroy (new_bookmark);
+		g_signal_connect (G_OBJECT (new_bookmark), "response",
+			  	  G_CALLBACK (ephy_new_bookmark_response_cb),
+			  	  NULL);
+		gtk_widget_show (new_bookmark);
 	}
 	g_list_free (selection);
 }

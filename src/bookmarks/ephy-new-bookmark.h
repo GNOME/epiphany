@@ -65,6 +65,12 @@ void		     ephy_new_bookmark_set_smarturl (EphyNewBookmark *bookmark,
 
 gulong		     ephy_new_bookmark_get_id       (EphyNewBookmark *bookmark);
 
+/* Convenience function for callers */
+
+void		     ephy_new_bookmark_response_cb  (EphyNewBookmark *bookmark,
+					  	     int response_id,
+					             gpointer user_data);
+
 
 G_END_DECLS
 

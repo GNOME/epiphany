@@ -141,6 +141,9 @@ ephy_shell_command_cb (EphyEmbedShell *shell,
 {
 	EphyBookmarks *bookmarks;
 	GtkWidget *dialog;
+	const gchar *message = NULL;
+	GtkMessageType message_type = GTK_MESSAGE_INFO;
+	EphyWindow *window;
 
 	bookmarks = ephy_shell_get_bookmarks (EPHY_SHELL (shell));
 
@@ -148,78 +151,63 @@ ephy_shell_command_cb (EphyEmbedShell *shell,
 	{
 		if (ephy_bookmarks_import_mozilla (bookmarks, param))
 		{
-			dialog = gtk_message_dialog_new
-				(NULL,
-				 GTK_DIALOG_MODAL,
-				 GTK_MESSAGE_INFO,
-				 GTK_BUTTONS_OK,
-				 _("Mozilla bookmarks imported successfully."));
+			message_type =  GTK_MESSAGE_INFO;
+			message = _("Mozilla bookmarks imported successfully.");
 		}
 		else
 		{
-			dialog = gtk_message_dialog_new
-				(NULL,
-				 GTK_DIALOG_MODAL,
-				 GTK_MESSAGE_ERROR,
-				 GTK_BUTTONS_OK,
-				 _("Importing Mozilla bookmarks failed."));
+			message_type = GTK_MESSAGE_ERROR;
+			message = _("Importing Mozilla bookmarks failed.");
 		}
-		gtk_dialog_run (GTK_DIALOG (dialog));
-		gtk_widget_destroy (dialog);
 	}
 	else if (strcmp (command, "import-galeon-bookmarks") == 0)
 	{
 		if (ephy_bookmarks_import_xbel (bookmarks, param,
 						_("Galeon")))
 		{
-			dialog = gtk_message_dialog_new
-				(NULL,
-				 GTK_DIALOG_MODAL,
-				 GTK_MESSAGE_INFO,
-				 GTK_BUTTONS_OK,
-				 _("Galeon bookmarks imported successfully."));
+			message_type = GTK_MESSAGE_INFO;
+			message = _("Galeon bookmarks imported successfully.");
 		}
 		else
 		{
-			dialog = gtk_message_dialog_new
-				(NULL,
-				 GTK_DIALOG_MODAL,
-				 GTK_MESSAGE_ERROR,
-				 GTK_BUTTONS_OK,
-				 _("Importing Galeon bookmarks failed."));
+			message_type = GTK_MESSAGE_ERROR;
+			message = _("Importing Galeon bookmarks failed.");
 		}
-		gtk_dialog_run (GTK_DIALOG (dialog));
-		gtk_widget_destroy (dialog);
 	}
 	else if (strcmp (command, "import-konqueror-bookmarks") == 0)
 	{
 		if (ephy_bookmarks_import_xbel (bookmarks, param,
 						_("Konqueror")))
 		{
-			dialog = gtk_message_dialog_new
-				(NULL,
-				 GTK_DIALOG_MODAL,
-				 GTK_MESSAGE_INFO,
-				 GTK_BUTTONS_OK,
-				 _("Konqueror bookmarks imported successfully."));
+			message_type = GTK_MESSAGE_INFO;
+			message = _("Konqueror bookmarks imported successfully.");
 		}
 		else
 		{
-			dialog = gtk_message_dialog_new
-				(NULL,
-				 GTK_DIALOG_MODAL,
-				 GTK_MESSAGE_ERROR,
-				 GTK_BUTTONS_OK,
-				 _("Importing Konqueror bookmarks failed."));
+			message_type = GTK_MESSAGE_ERROR;
+			message = _("Importing Konqueror bookmarks failed.");
 		}
-		gtk_dialog_run (GTK_DIALOG (dialog));
-		gtk_widget_destroy (dialog);
 	}
 	else if (strcmp (command, "configure-network") == 0)
 	{
 		ephy_file_launch_application ("gnome-network-preferences",
 					      NULL,
 					      FALSE);
+	}
+
+	if (message != NULL)
+	{
+		window = ephy_shell_get_active_window (EPHY_SHELL (shell));
+		dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+				 		 GTK_DIALOG_DESTROY_WITH_PARENT,
+				 		 message_type,
+				 		 GTK_BUTTONS_OK,
+				 		 message);
+		gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
+		g_signal_connect_swapped (G_OBJECT (dialog), "response",
+                           		  G_CALLBACK (gtk_widget_destroy),
+                           		  G_OBJECT (dialog));
+		gtk_widget_show (dialog);
 	}
 }
 

@@ -1,3 +1,25 @@
+2003-04-25  David Bordoley <bordoley@msu.edu>
+
+	* src/ephy-history-window.c: (cmd_bookmark_page):
+	* src/popup-commands.c: (popup_cmd_bookmark_link):
+	* src/window-commands.c: (window_cmd_file_bookmark_page):
+	
+	Hookup to the response signal instead of using gtk_dialog_run.
+	Prevents us from going modal.
+	
+	* src/bookmarks/ephy-new-bookmark.c: (response_cb),
+	(ephy_new_bookmark_response_cb):
+	* src/bookmarks/ephy-new-bookmark.h
+
+	Add a convenience callback function, that callers can
+	use to destroy the dialog after a response.
+
+	* src/ephy-shell.c: (ephy_shell_command_cb):
+	
+	Use a callback to the gtk_widget_destroy on the "response"
+	signal instead of using gtk_dialog_run. eg. don't go modal.
+	Some code cleanups too.
+
 2003-04-25  Xan Lopez  <xan@masilla.org>
 
 	* lib/ephy-node.c: (ephy_node_class_init), (ephy_node_has_child),
