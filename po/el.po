@@ -2,19 +2,20 @@
 # Copyright (C) Free Software Foundation. 2003
 # This file is distributed under the same license as the PACKAGE package.
 # Kostas Papadimas <pkst@gmx.net>, 2003.
+# Nikos Charonitakis <frolix68@yahoo.gr>, 2003.
 # kostas, 05Mar2003, initial translation,665 messages
+# Nikos,  29jul2003, updated fixes and update translation,425 messages
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"POT-Creation-Date: 2003-03-05 21:00+0200\n"
-"PO-Revision-Date: 2003-03-05 21:01+0200\n"
-"Last-Translator: Kostas Papadimas <pkst@gmx.net>\n"
+"POT-Creation-Date: 2003-07-28 02:32+0300\n"
+"PO-Revision-Date: 2003-07-29 01:04-0200\n"
+"Last-Translator: Nikos Charonitakis <charosn@her.fothnet.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.9.6\n"
 
 #: data/GNOME_Epiphany_Automation.server.in.h:1
 msgid "Epiphany automation"
@@ -48,498 +49,345 @@ msgstr "Ιστοσελίδα"
 msgid "Web Page Viewer"
 msgstr "Εφαρμογή Προβολής Ιστοσελίδας"
 
+#: data/bme.desktop.in.h:1
+msgid "Browse and organize your bookmarks"
+msgstr ""
+
+#: data/bme.desktop.in.h:2
+#, fuzzy
+msgid "Web Bookmarks"
+msgstr "Σελιδοδείκτες"
+
 #: data/epiphany.desktop.in.h:1
 msgid "Browse the web"
 msgstr "Φυλλομέτρηση στον παγκόσμιο ιστό"
 
 #: data/epiphany.desktop.in.h:2
-msgid "Epiphany Web Browser"
-msgstr "Περιηγητής Δικτ. Ιστού Epiphany "
+#, fuzzy
+msgid "Web Browser"
+msgstr "Περιηγητής Ιστοσελίδων"
 
 #: data/epiphany.schemas.in.h:1
-msgid "Allow Java"
-msgstr "Να επιτρέπεται η Java"
+#, fuzzy
+msgid "Address of the user's home page."
+msgstr "Μετάβαση στην αρχική τοποθεσία"
 
 #: data/epiphany.schemas.in.h:2
-msgid "Allow Java."
-msgstr "Να επιτρέπεται η Java"
-
-#: data/epiphany.schemas.in.h:3
-msgid "Allow JavaScript"
-msgstr "Να επιτρέπεται η JavaScript"
-
-#: data/epiphany.schemas.in.h:4
-msgid "Allow JavaScript."
-msgstr "Να επιτρέπεται η JavaScript"
-
-#: data/epiphany.schemas.in.h:5
 msgid "Allow popups"
 msgstr "Να επιτρέπονται τα αναδυόμενα παράθυρα"
 
-#: data/epiphany.schemas.in.h:6
+#: data/epiphany.schemas.in.h:3
 msgid "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
-msgstr ""
-"Να επιτρέπεται στις ιστοσελίδες να ανοίγουν νέα παράθυρα με την χρήση "
-"JavaScript (αν είναι ενεργή η JavaScript)"
+msgstr "Να επιτρέπεται στις ιστοσελίδες να ανοίγουν νέα παράθυρα με την χρήση JavaScript (αν είναι ενεργή η JavaScript)"
 
-#: data/epiphany.schemas.in.h:7
+#: data/epiphany.schemas.in.h:4
+#, fuzzy
+msgid "Ask for download destination"
+msgstr "Προβολή λεπτομερειών μεταφόρτωσης"
+
+#: data/epiphany.schemas.in.h:5
+#, fuzzy
+msgid "Ask for download destination."
+msgstr "Προβολή λεπτομερειών μεταφόρτωσης"
+
+#: data/epiphany.schemas.in.h:6
 msgid "Autowrap for find in page"
 msgstr "Αυτόματη αναδίπλωση για την εύρεση στην σελίδα"
 
+#: data/epiphany.schemas.in.h:7
+msgid "Cookie accept"
+msgstr ""
+
 #: data/epiphany.schemas.in.h:8
-msgid "Default charset"
-msgstr "Προεπιλεγμένη κωδικοποίηση χαρακτήρων"
+msgid "Default encoding"
+msgstr "Εξ ορισμού κωδικοποίηση"
 
 #: data/epiphany.schemas.in.h:9
-msgid "Default charset."
-msgstr "Προεπιλεγμένη κωδικοποίηση χαρακτήρων."
+msgid "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
+msgstr ""
 
 #: data/epiphany.schemas.in.h:10
-msgid "Default color for unvisited links in #RRGGBB hex format."
-msgstr "Εξ ορισμού χρώμα για μη αναγνωσμένους δεσμούς σε μορφή #RRGGBB hex."
-
-#: data/epiphany.schemas.in.h:11
-msgid "Default color for visited links in #RRGGBB hex format."
-msgstr "Εξ ορισμού χρώμα για αναγνωσμένους δεσμούς σε μορφή #RRGGBB hex."
-
-#: data/epiphany.schemas.in.h:12
 msgid "Default font type"
 msgstr "Εξ ορισμού τύπος γραμματοσειράς"
 
+#: data/epiphany.schemas.in.h:11
+#, fuzzy
+msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
+msgstr "Εξ ορισμού τύπος γραμματοσειράς. Οι πιθανές τιμές είναι 0 (serif), 1 (sans-serif)"
+
+#: data/epiphany.schemas.in.h:12
+msgid "Enable Java"
+msgstr "Ενεργοποίηση Java"
+
 #: data/epiphany.schemas.in.h:13
-msgid "Default font type. Possible values are 0 (serif), 1 (sans-serif)"
-msgstr ""
-"Εξ ορισμού τύπος γραμματοσειράς. Οι πιθανές τιμές είναι 0 (serif), 1 (sans-"
-"serif)"
+msgid "Enable Java."
+msgstr "Ενεργοποίηση Java."
 
 #: data/epiphany.schemas.in.h:14
-msgid "Default page background color"
-msgstr "Εξ ορισμού χρώμα παρασκηνίου σελίδας"
+msgid "Enable JavaScript"
+msgstr "Ενεργοποίηση JavaScript"
 
 #: data/epiphany.schemas.in.h:15
-msgid "Default page background color in #RRGGBB hex format."
-msgstr "Εξ ορισμού χρώμα παρασκηνίου σελίδας σε μορφή #RRGGBB hex."
+msgid "Enable JavaScript."
+msgstr "Ενεργοποίηση JavaScript."
 
 #: data/epiphany.schemas.in.h:16
-msgid "Default page text color"
-msgstr "Εξ ορισμού χρώμα κειμένου σελίδας"
-
-#: data/epiphany.schemas.in.h:17
-msgid "Default page text color in #RRGGBB hex format."
-msgstr "Εξ ορισμού χρώμα κειμένου σελίδας μορφή #RRGGBB hex."
-
-#: data/epiphany.schemas.in.h:18
-msgid "Default sidebar page"
-msgstr "Εξ ορισμού σελίδα πλευρικής στήλης"
-
-#: data/epiphany.schemas.in.h:19
-msgid "Default sidebar page."
-msgstr "Εξ ορισμού σελίδα πλευρικής στήλης."
-
-#: data/epiphany.schemas.in.h:20
-msgid "Default sidebar size"
-msgstr "Εξ' ορισμού μέγεθος πλευρικής στήλης"
-
-#: data/epiphany.schemas.in.h:21
-msgid "Default sidebar size."
-msgstr "Εξ' ορισμού μέγεθος πλευρικής στήλης."
-
-#: data/epiphany.schemas.in.h:22
-msgid "Default spinner theme"
-msgstr "Εξ ορισμού θέμα spinner "
-
-#: data/epiphany.schemas.in.h:23
-msgid "Default unvisited link color"
-msgstr "Εξ ορισμού χρώμα μη αναγνωσμένου δεσμού"
-
-#: data/epiphany.schemas.in.h:24
-msgid "Default visited link color"
-msgstr "Εξ ορισμού χρώμα αναγνωσμένου δεσμού"
-
-#: data/epiphany.schemas.in.h:25
-msgid "Expire history"
-msgstr "Λήξη ιστορικού"
-
-#: data/epiphany.schemas.in.h:26
-msgid "Expire history after how many days."
-msgstr "Λήξη ιστορικού μετά από πόσες μέρες."
-
-#: data/epiphany.schemas.in.h:27
 msgid "Filename to print to"
 msgstr "Όνομα αρχείου για εκτύπωση σε"
 
-#: data/epiphany.schemas.in.h:28
+#: data/epiphany.schemas.in.h:17
 msgid "Filename to print to."
 msgstr "Όνομα αρχείου για εκτύπωση σε."
 
-#: data/epiphany.schemas.in.h:29
-msgid ""
-"For find in page, whether to start again at the beginning after reaching the "
-"end of the page"
-msgstr ""
-"Για την εύρεση στην σελίδα, αν θα ξεκινάει ξανά από την αρχή μετά το τέλος "
-"της σελίδας"
+#: data/epiphany.schemas.in.h:18
+#, fuzzy
+msgid "For find in page, whether to start again at the beginning after reaching the end of the page."
+msgstr "Για την εύρεση στην σελίδα, αν θα ξεκινάει ξανά από την αρχή μετά το τέλος της σελίδας"
 
-#: data/epiphany.schemas.in.h:30
-msgid "History search time"
-msgstr "Χρόνος αναζήτησης ιστορικού"
-
-#: data/epiphany.schemas.in.h:31
+#: data/epiphany.schemas.in.h:19
 msgid "Home page"
 msgstr "Αρχική Σελίδα"
 
-#: data/epiphany.schemas.in.h:32
-msgid "Image animation type"
-msgstr "Τύπος κινούμενης εικόνας "
+#: data/epiphany.schemas.in.h:20
+msgid "ISO-8859-1"
+msgstr "ISO-8859-1"
 
-#: data/epiphany.schemas.in.h:33
-msgid ""
-"Image animation type. Possible values are 0 (continuously), 1 (once "
-"through), 2 (never)"
-msgstr ""
-"Τύπος κινούμενης εικόνας . Οι πιθανές τιμές είναι 0 (συνεχής),  (μια φορά), "
-"2 (ποτέ)"
-
-#: data/epiphany.schemas.in.h:34
-msgid "Jump to new tabs"
-msgstr "Μετάβαση σε νέες στήλες"
-
-#: data/epiphany.schemas.in.h:35
-msgid "Jump to new tabs."
-msgstr "Μετάβαση σε νέες στήλες."
-
-#: data/epiphany.schemas.in.h:36
-msgid "Keep downloader open after all downloads have finished."
-msgstr ""
-"Να διατηρείται η εφαρμογή μεταφόρτωσης ανοικτή μετά το τέλος όλων των "
-"μεταφορτώσεων."
-
-#: data/epiphany.schemas.in.h:37
-msgid "Keep downloader open after download finished"
-msgstr "Να διατηρείται η εφαρμογή μεταφόρτωσης ανοικτή μετά το τέλος της μεταφόρτωσης"
-
-#: data/epiphany.schemas.in.h:38
+#: data/epiphany.schemas.in.h:21
 msgid "Languages"
 msgstr "Γλώσσες"
 
-#: data/epiphany.schemas.in.h:39
-msgid "List of domains for wherefore not to use the proxy, comma delimited"
-msgstr ""
-"Λίστα τομέων για τους οποίους δεν θα χρησιμοποιείται διαμεσολαβητής, "
-"διαχωρισμένη με κόμμα"
-
-#: data/epiphany.schemas.in.h:40
+#: data/epiphany.schemas.in.h:22
 msgid "Match case for find in page"
 msgstr "Ταίριασμα χαρακτήρα για την εύρεση στην σελίδα"
 
-#: data/epiphany.schemas.in.h:41
+#: data/epiphany.schemas.in.h:23
 msgid "Match case for find in page."
 msgstr "Ταίριασμα χαρακτήρα για την εύρεση στην σελίδα."
 
-#: data/epiphany.schemas.in.h:42
-msgid "New page type"
-msgstr "Νέος τύπος σελίδας"
+#: data/epiphany.schemas.in.h:24
+msgid "Middle click to open the web page pointed to by the currently selected text"
+msgstr ""
 
-#: data/epiphany.schemas.in.h:43
-msgid "No proxy for"
-msgstr "Όχι διαμεσολαβητής για"
+#: data/epiphany.schemas.in.h:25
+msgid "Middle clicking on the main view pane will open the web page pointed to by the currently selected text."
+msgstr ""
 
-#: data/epiphany.schemas.in.h:44
+#: data/epiphany.schemas.in.h:26
 msgid "Open in tabs by default."
 msgstr "Εξ ορισμού άνοιγμα στηλών."
 
-#: data/epiphany.schemas.in.h:45
-msgid "Open popups in tabs"
-msgstr "Άνοιγμα αναδυόμενων παράθυρων σε στήλες"
-
-#: data/epiphany.schemas.in.h:46
-msgid "Open popups in tabs instead of new windows."
-msgstr "Άνοιγμα αναδυόμενων παράθυρων σε στήλες αντί για νέα παράθυρα."
-
-#: data/epiphany.schemas.in.h:47
+#: data/epiphany.schemas.in.h:27
 msgid "Paper type"
 msgstr "Τύπος χαρτιού"
 
-#: data/epiphany.schemas.in.h:48
-msgid "Paper type: 0 (Letter), 1 (Legal), 2 (Executive), 3 (A4)."
-msgstr "Τύπος χαρτιού: 0 (Letter), 1 (Legal), 2 (Executive), 3 (A4)."
+#: data/epiphany.schemas.in.h:28
+msgid "Paper type. Supported values are \"A4\", \"Letter\", \"Legal\" and \"Executive\"."
+msgstr ""
 
-#: data/epiphany.schemas.in.h:49
+#: data/epiphany.schemas.in.h:29
 msgid "Preferred languages, two letter codes."
 msgstr "Προτιμώμενες γλώσσες, κωδικοί δύο γραμμάτων."
 
-#: data/epiphany.schemas.in.h:50
-msgid "Print range"
-msgstr "Όριο εκτύπωσης"
-
-#: data/epiphany.schemas.in.h:51
-msgid "Print range: 0 (all pages), 1 (specific range)."
-msgstr "Όριο εκτύπωσης: 0 (όλες οι σελίδες), 1 (καθορισμένο όριο)."
-
-#: data/epiphany.schemas.in.h:52
+#: data/epiphany.schemas.in.h:30
 msgid "Printer name"
 msgstr "Όνομα εκτυπωτή"
 
-#: data/epiphany.schemas.in.h:53
+#: data/epiphany.schemas.in.h:31
 msgid "Printer name."
 msgstr "Όνομα εκτυπωτή."
 
-#: data/epiphany.schemas.in.h:54
+#: data/epiphany.schemas.in.h:32
 msgid "Printing bottom margin"
 msgstr "Κάτω περιθώριο εκτύπωσης"
 
-#: data/epiphany.schemas.in.h:55
-msgid "Printing bottom margin (in inches)."
+#: data/epiphany.schemas.in.h:33
+#, fuzzy
+msgid "Printing bottom margin (in mm)."
 msgstr "Κάτω περιθώριο εκτύπωσης (σε ίντσες)."
 
-#: data/epiphany.schemas.in.h:56
+#: data/epiphany.schemas.in.h:34
 msgid "Printing left margin"
 msgstr "Αριστερό περιθώριο εκτύπωσης"
 
-#: data/epiphany.schemas.in.h:57
-msgid "Printing left margin (in inches)."
+#: data/epiphany.schemas.in.h:35
+#, fuzzy
+msgid "Printing left margin (in mm)."
 msgstr "Αριστερό περιθώριο εκτύπωσης (σε ίντσες)."
 
-#: data/epiphany.schemas.in.h:58
+#: data/epiphany.schemas.in.h:36
 msgid "Printing right margin"
 msgstr "Δεξιό περιθώριο εκτύπωσης"
 
-#: data/epiphany.schemas.in.h:59
-msgid "Printing right margin (in inches)."
+#: data/epiphany.schemas.in.h:37
+#, fuzzy
+msgid "Printing right margin (in mm)."
 msgstr "Δεξιό περιθώριο εκτύπωσης (σε ίντσες)."
 
-#: data/epiphany.schemas.in.h:60
+#: data/epiphany.schemas.in.h:38
 msgid "Printing top margin"
 msgstr "Πάνω περιθώριο εκτύπωσης"
 
-#: data/epiphany.schemas.in.h:61
-msgid "Printing top margin (in inches)."
+#: data/epiphany.schemas.in.h:39
+#, fuzzy
+msgid "Printing top margin (in mm)."
 msgstr "Πάνω περιθώριο εκτύπωσης (σε ίντσες)."
 
-#: data/epiphany.schemas.in.h:62
-msgid "Save passwords"
-msgstr "Απομνημόνευση κωδικών"
+#: data/epiphany.schemas.in.h:40
+#, fuzzy
+msgid "Show bookmarks bar by default"
+msgstr "Εξ ορισμού εμφάνιση εργαλειοθηκών"
 
-#: data/epiphany.schemas.in.h:63
-msgid "Save passwords."
-msgstr "Απομνημόνευση κωδικών."
+#: data/epiphany.schemas.in.h:41
+#, fuzzy
+msgid "Show bookmarks bar by default."
+msgstr "Εξ ορισμού εμφάνιση εργαλειοθηκών."
 
-#: data/epiphany.schemas.in.h:64
+#: data/epiphany.schemas.in.h:42
 msgid "Show download details"
 msgstr "Προβολή λεπτομερειών μεταφόρτωσης"
 
-#: data/epiphany.schemas.in.h:65
-msgid ""
-"Show only history entries from a particular time. Possible values are 0 (all "
-"items), 1 (today), 2 (yesterday), 3 (two days ago), 4 (this week), 5 (this "
-"month)."
-msgstr ""
-"Εμφάνιση μόνο των καταχωρήσεων ιστορικού από συγκεκριμένη ημερομηνία. "
-"Πιθανές τιμές είναι:  0 (όλα), 1 (σήμερα), 2 (χθές), 3 (σπριν από δυο "
-"μέρες)  4 (αυτή την εβδομάδα), 5 (αυτ'ο τον μήνα)."
+#: data/epiphany.schemas.in.h:43
+#, fuzzy
+msgid "Show download details."
+msgstr "Προβολή λεπτομερειών μεταφόρτωσης"
 
-#: data/epiphany.schemas.in.h:66
-msgid "Show sidebar by default"
-msgstr "Εξ ορισμού εμφάνιση πλευρικής στήλης"
-
-#: data/epiphany.schemas.in.h:67
-msgid "Show sidebar by default."
-msgstr "Εξ ορισμού εμφάνιση πλευρικής στήλης."
-
-#: data/epiphany.schemas.in.h:68
-msgid "Show sidebar in full screen mode"
-msgstr "Εμφάνιση πλευρικής στήλης σε λειτουργία πλήρους οθόνης"
-
-#: data/epiphany.schemas.in.h:69
-msgid "Show sidebar in full screen mode."
-msgstr "Εμφάνιση πλευρικής στήλης σε λειτουργία πλήρους οθόνης."
-
-#: data/epiphany.schemas.in.h:70
+#: data/epiphany.schemas.in.h:44
 msgid "Show statusbar by default"
 msgstr "Εξ ορισμού εμφάνιση της γραμμής κατάστασης"
 
-#: data/epiphany.schemas.in.h:71
+#: data/epiphany.schemas.in.h:45
 msgid "Show statusbar by default."
 msgstr "Εξ ορισμού εμφάνιση της γραμμής κατάστασης."
 
-#: data/epiphany.schemas.in.h:72
-msgid "Show statusbar in full screen mode"
-msgstr "Εμφάνιση της γραμμής κατάστασης σε λειτουργία πλήρους οθόνης"
-
-#: data/epiphany.schemas.in.h:73
-msgid "Show statusbar in full screen mode."
-msgstr "Εμφάνιση της γραμμής κατάστασης σε λειτουργία πλήρους οθόνης."
-
-#: data/epiphany.schemas.in.h:74
+#: data/epiphany.schemas.in.h:46
 msgid "Show toolbars by default"
 msgstr "Εξ ορισμού εμφάνιση εργαλειοθηκών"
 
-#: data/epiphany.schemas.in.h:75
+#: data/epiphany.schemas.in.h:47
 msgid "Show toolbars by default."
 msgstr "Εξ ορισμού εμφάνιση εργαλειοθηκών."
 
-#: data/epiphany.schemas.in.h:76
-msgid "Show toolbars in full screen mode"
-msgstr "Εξ ορισμού εμφάνιση εργαλειοθηκών σε λειτουργία πλήρους οθόνης"
-
-#: data/epiphany.schemas.in.h:77
-msgid "Show toolbars in full screen mode."
-msgstr "Εξ ορισμού εμφάνιση εργαλειοθηκών σε λειτουργία πλήρους οθόνης."
-
-#: data/epiphany.schemas.in.h:78
+#: data/epiphany.schemas.in.h:48
 msgid "Size of disk cache"
 msgstr "Μέγεθος της cache του δίσκου"
 
-#: data/epiphany.schemas.in.h:79
-msgid "Size of disk cache, in KB."
+#: data/epiphany.schemas.in.h:49
+#, fuzzy
+msgid "Size of disk cache, in MB."
 msgstr "Μέγεθος της cache του δίσκου σε KB."
 
-#: data/epiphany.schemas.in.h:80
-msgid "Size of memory cache"
-msgstr "Μέγεθος της cache της μνήμη"
-
-#: data/epiphany.schemas.in.h:81
-msgid "Size of memory cache, in KB."
-msgstr "Μέγεθος της cache της μνήμης σε kB."
-
-#: data/epiphany.schemas.in.h:82
-msgid ""
-"The list of controls that will be present in the toolbar. You should edit "
-"this setting with the toolbar editor unless you know what you are doing."
+#: data/epiphany.schemas.in.h:50
+msgid "The currently selected fonts language"
 msgstr ""
-"Η λίστα των ελέγχων που θα εμφανίζεται στην εργαλειοθήκη. Θα πρέπει να "
-"επεξεργαστείτε αυτή την ρύθμιση με τον επεξεργαστή εργαλειοθήκης, εκτός και "
-"αν γνωρίζετε τι κάνετε."
 
-#: data/epiphany.schemas.in.h:83
-msgid "Toolbar setup"
-msgstr "Ρύθμιση εργαλειοθήκης"
-
-#: data/epiphany.schemas.in.h:84
-msgid ""
-"Type of page to show when opening a new window or tab. Possible values are: "
-"0 (home page), 1 (last page), 2 (blank)"
+#: data/epiphany.schemas.in.h:51
+msgid "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-baltic\" (baltic languages), \"x-central-euro\" (central european languages), \"x-cyrillic\" (languages written with cyrillic alphabet), \"el\" (greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-CN\" (simplified chinese), \"th\" (thai), \"zh-TW\" (traditional chinese), \"tr\" (turkish), \"x-unicode\" (other languages), \"x-western\" (languages written in latin script), \"x-tamil\" (tamil) and \"x-devanagari\" (devanagari)."
 msgstr ""
-"Ο τύπος της σελίδας που θα εμφανίζεατι κατά το άνοιγμα νέου παραθύρου ή "
-"στήλης. Οι πιθανές τιμές είναι: 0 (αρχική σελίδα), 1 (τελευταία σελίδα), 2 "
-"(κενή)"
 
-#: data/epiphany.schemas.in.h:85
-msgid ""
-"URL for the user's home page. Displayed on start up and when a new window or "
-"tab is created"
+#: data/epiphany.schemas.in.h:52
+msgid "The encoding autodetector. Empty string means autodetect is off"
 msgstr ""
-"URL για την αρχική σελίδα του χρήστη. Εμφανίζεται κατά την εκκίνηση και κατά "
-"την δημιουργία νέου παραθύρου ή στήλης"
 
-#: data/epiphany.schemas.in.h:86
-msgid "Underline links"
-msgstr "Υπογράμμιση δεσμών"
+#: data/epiphany.schemas.in.h:53
+msgid "The encoding autodetector. Valid entries are \"\" (autodetectors off), \"cjk_parallel_state_machine\" (autodetect east asian encodings), \"ja_parallel_state_machine\" (autodetect japanese encodings), \"ko_parallel_state_machine\" (autodetect korean encodings), \"ruprob\" (autodetect russian encodings), \"ukprob\" (autodetect ukrainian encodings), \"zh_parallel_state_machine\" (autodetect chinese encodings), \"zhcn_parallel_state_machine\" (autodetect simplified chinese encodings), \"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) and \"universal_charset_detector\" (autodetect most encodings)."
+msgstr ""
 
-#: data/epiphany.schemas.in.h:87
-msgid "Underline links."
-msgstr "Υπογράμμιση δεσμών."
-
-#: data/epiphany.schemas.in.h:88
+#: data/epiphany.schemas.in.h:54
 msgid "Use own colors"
 msgstr "Χρήση καθορισμένων χρωμάτων"
 
-#: data/epiphany.schemas.in.h:89
+#: data/epiphany.schemas.in.h:55
 msgid "Use own fonts"
 msgstr "Χρήση καθορισμένων γραμματοσειρών"
 
-#: data/epiphany.schemas.in.h:90
+#: data/epiphany.schemas.in.h:56
 msgid "Use tabs"
 msgstr "Χρήση στηλών"
 
-#: data/epiphany.schemas.in.h:91
+#: data/epiphany.schemas.in.h:57
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Χρήση καθορισμένων χρωμάτων αντί για τα χρώματα που ζητάει η σελίδα."
 
-#: data/epiphany.schemas.in.h:92
+#: data/epiphany.schemas.in.h:58
 msgid "Use your own fonts instead of the fonts the page requests."
+msgstr "Χρήση καθορισμένων γραμμαοσειρών αντί για τις γραμματοσειρές που ζητάει η σελίδα."
+
+#: data/epiphany.schemas.in.h:59
+msgid "Where to accept cookies from. Possible values are \"anywhere\", \"current site\" and \"nowhere\"."
 msgstr ""
-"Χρήση καθορισμένων γραμμαοσειρών αντί για τις γραμματοσειρές που ζητάει η "
-"σελίδα."
 
-#: data/epiphany.schemas.in.h:93
-msgid "When to compare cached copy"
-msgstr "Πότε θα γίνεται σύγκριση αποθηκευμένου αντιγράφου"
+#: data/epiphany.schemas.in.h:60
+#, fuzzy
+msgid "Whether to print the date in the footer"
+msgstr "Αν θα εκτυπώνεται η ημερομηνία στο υποσέλιδο."
 
-#: data/epiphany.schemas.in.h:94
-msgid ""
-"When to compare cached copy to web copy. Possible values are 0 (once per "
-"session), 1 (every time), 2 (never), 3 (automatic)."
-msgstr ""
-"Πότε θα γίνεται σύγκριση αποθηκευμένου αντιγράφου με το αντίγραφο στον ιστό. "
-"Οι πιθανές τιμές είναι: (μια φορά την συνεδρία), 1 (κάθε φορά), 2 (ποτέ), 3 "
-"(αυτόματα)."
-
-#: data/epiphany.schemas.in.h:95
-msgid "When to load images"
-msgstr "Πότε θα φορτώνονται εικόνες"
-
-#: data/epiphany.schemas.in.h:96
-msgid ""
-"When to load images. Possible values are 0 (always), 1 (from current server "
-"only), 2 (never)"
-msgstr ""
-"Πότε θα φορτώνονται εικόνες. Πιθανές τιμές είναι:  0 (πάντα), 1 (μόνο από "
-"τον τρέχων εξυπηρετητή),  2 (ποτέ)"
-
-#: data/epiphany.schemas.in.h:97
+#: data/epiphany.schemas.in.h:61
 msgid "Whether to print the date in the footer."
 msgstr "Αν θα εκτυπώνεται η ημερομηνία στο υποσέλιδο."
 
-#: data/epiphany.schemas.in.h:98
-msgid "Whether to print the page URL in the header"
+#: data/epiphany.schemas.in.h:62
+#, fuzzy
+msgid "Whether to print the page address in the header"
 msgstr "Αν θα εκτυπώνεται το URL της σελίδας στην κεφαλίδα"
 
-#: data/epiphany.schemas.in.h:99
+#: data/epiphany.schemas.in.h:63
+#, fuzzy
+msgid "Whether to print the page address in the header."
+msgstr "Αν θα εκτυπώνεται ο τίτλος της σελίδας στην κεφαλίδα."
+
+#: data/epiphany.schemas.in.h:64
+#, fuzzy
+msgid "Whether to print the page numbers (x of total) in the footer"
+msgstr "Αν θα εκτυπώνονται οι αριθμοί σελίδας (x από σύνολο) στο υποσέλιδο."
+
+#: data/epiphany.schemas.in.h:65
 msgid "Whether to print the page numbers (x of total) in the footer."
 msgstr "Αν θα εκτυπώνονται οι αριθμοί σελίδας (x από σύνολο) στο υποσέλιδο."
 
-#: data/epiphany.schemas.in.h:100
+#: data/epiphany.schemas.in.h:66
+#, fuzzy
+msgid "Whether to print the page title in the header"
+msgstr "Αν θα εκτυπώνεται ο τίτλος της σελίδας στην κεφαλίδα."
+
+#: data/epiphany.schemas.in.h:67
 msgid "Whether to print the page title in the header."
 msgstr "Αν θα εκτυπώνεται ο τίτλος της σελίδας στην κεφαλίδα."
+
+#: data/epiphany.schemas.in.h:68
+#, fuzzy
+msgid "x-western"
+msgstr "Δυτική"
 
 #: data/glade/epiphany.glade.h:1
 msgid "  "
 msgstr "  "
 
-#: data/glade/epiphany.glade.h:2 data/glade/prefs-dialog.glade.h:3
-#: data/glade/print.glade.h:2 data/glade/prompts.glade.h:1
+#: data/glade/epiphany.glade.h:2
+#: data/glade/prefs-dialog.glade.h:2
+#: data/glade/print.glade.h:2
 msgid "*"
 msgstr "*"
 
 #: data/glade/epiphany.glade.h:3
-msgid "<b>File:</b>"
-msgstr "<b>Αρχείο:</b>"
+#, fuzzy
+msgid "<b>Address:</b>"
+msgstr "<b>Κεφαλίδες</b>"
 
 #: data/glade/epiphany.glade.h:4
-msgid "<b>Find text in the document:</b>"
-msgstr "<b>Εύρεση κειμένου στο έγγραφο:</b>"
-
-#: data/glade/epiphany.glade.h:5
-msgid "<b>Location:</b>"
-msgstr "<b>Τοποθεσία:</b>"
-
-#: data/glade/epiphany.glade.h:6
 msgid "<b>Status:</b>"
 msgstr "<b>Κατάσταση:</b>"
 
-#: data/glade/epiphany.glade.h:7
+#: data/glade/epiphany.glade.h:5
 msgid "<b>Time Elapsed:</b>"
 msgstr "<b>Χρόνος που πέρασε:</b>"
 
-#: data/glade/epiphany.glade.h:8
+#: data/glade/epiphany.glade.h:6
 msgid "<b>Time Remaining:</b>"
 msgstr "<b>Χρόνος που απομένει:</b>"
 
-#: data/glade/epiphany.glade.h:9
+#: data/glade/epiphany.glade.h:7
 msgid ""
-"<span weight=\"bold\" size=\"larger\">What do you want to do with this "
-"file?\n"
+"<span weight=\"bold\" size=\"larger\">What do you want to do with this file?\n"
 "</span>\n"
 "It's not possible to view this file type directly in the browser:"
 msgstr ""
@@ -547,125 +395,92 @@ msgstr ""
 "</span>\n"
 "Δεν είναι δυνατή η προβολή του απ' ευθείας στον φυλλομετρητή:"
 
-#: data/glade/epiphany.glade.h:12
-msgid "Automatically _wrap around"
-msgstr "Αυτόματη αναδίπλ_ωση γύρω"
+#: data/glade/epiphany.glade.h:10
+msgid "C_ase sensitive"
+msgstr ""
 
-#: data/glade/epiphany.glade.h:13
-msgid "C_lear"
-msgstr "Ε_κκαθάριση"
-
-#: data/glade/epiphany.glade.h:14
+#: data/glade/epiphany.glade.h:11
 msgid "Choose the file type action"
 msgstr "Επιλέξτε την ενέργεια τύπου αρχείου"
 
-#: data/glade/epiphany.glade.h:15
+#: data/glade/epiphany.glade.h:12
 msgid "Cookies"
 msgstr "Cookies"
 
-#: data/glade/epiphany.glade.h:16 data/glade/prompts.glade.h:2
+#: data/glade/epiphany.glade.h:13
 msgid "DYNAMIC"
 msgstr "DYNAMIC"
 
-#: data/glade/epiphany.glade.h:17
-msgid "Download _details..."
-msgstr "Λε_πτομέρειες μεταφόρτωσης..."
-
-#: data/glade/epiphany.glade.h:18
-msgid "Downloading"
+#: data/glade/epiphany.glade.h:14
+#, fuzzy
+msgid "Download Manager"
 msgstr "Μεταφόρτωση"
 
-#: data/glade/epiphany.glade.h:19
-msgid "Ever"
-msgstr "Κάθε"
+#: data/glade/epiphany.glade.h:15
+#, fuzzy
+msgid "Download _Details"
+msgstr "Λε_πτομέρειες μεταφόρτωσης..."
 
-#: data/glade/epiphany.glade.h:20
-msgid "Find text..."
-msgstr "Εύρεση κειμένου..."
+#: data/glade/epiphany.glade.h:16
+#: data/ui/nautilus-epiphany-view.xml.in.h:11
+#: src/ephy-window.c:670
+msgid "Find"
+msgstr "Εύρεση"
 
-#: data/glade/epiphany.glade.h:21
-msgid "History"
-msgstr "Ιστορικό"
-
-#: data/glade/epiphany.glade.h:22
-msgid "Last three days"
-msgstr "Τελευταίες τρείς μέρες"
-
-#: data/glade/epiphany.glade.h:23
-msgid "Last two days"
-msgstr "Τελευταίες δυο μέρες"
-
-#: data/glade/epiphany.glade.h:24
+#: data/glade/epiphany.glade.h:17
 msgid "Passwords"
 msgstr "Κωδικοί"
 
-#: data/glade/epiphany.glade.h:25
-msgid "Personal data manager"
+#: data/glade/epiphany.glade.h:18
+#, fuzzy
+msgid "Personal Data Manager"
 msgstr "Διαχειριστής προσωπικών δεδομένων"
 
-#: data/glade/epiphany.glade.h:26
-msgid "Today"
-msgstr "Σήμερα"
-
-#: data/glade/epiphany.glade.h:27
-msgid "Two weeks"
-msgstr "Δύο εβδομάδες"
-
-#: data/glade/epiphany.glade.h:28
-msgid "Week"
-msgstr "Εβδομάδα"
-
-#: data/glade/epiphany.glade.h:29
+#: data/glade/epiphany.glade.h:19
 msgid "You can open it with another application or save it on disk."
 msgstr "Μπορείτε να το ανοίξετε με μια άλλη εφαρμογή ή να το αποθηκεύσετε στον δίσκο."
 
-#: data/glade/epiphany.glade.h:30
+#: data/glade/epiphany.glade.h:20
 msgid "_Find:"
 msgstr "_Εύρεση:"
 
-#: data/glade/epiphany.glade.h:31
-msgid "_Keep the dialog open"
-msgstr "_Διατήρηση του διαλόγου ανοικτού"
-
-#: data/glade/epiphany.glade.h:32
-msgid "_Match upper/lower case"
-msgstr "_Ταίριασμα εκθέτη/δείκτη"
-
-#: data/glade/epiphany.glade.h:33
+#: data/glade/epiphany.glade.h:21
 msgid "_Next"
 msgstr "Επόμε_νο"
 
-#: data/glade/epiphany.glade.h:34
+#: data/glade/epiphany.glade.h:22
+#: embed/downloader-view.c:373
 msgid "_Pause"
 msgstr "_Παύση"
 
-#: data/glade/epiphany.glade.h:35
+#: data/glade/epiphany.glade.h:23
 msgid "_Previous"
 msgstr "_Προηγούμενο"
 
-#: data/glade/epiphany.glade.h:36
-msgid "_Resume"
-msgstr "Συνέ_χεια"
-
-#: data/glade/epiphany.glade.h:37
-msgid "_Time:"
-msgstr "_Χρόνος:"
+#: data/glade/epiphany.glade.h:24
+#, fuzzy
+msgid "_Wrap around"
+msgstr "_Παρασκήνιο"
 
 #: data/glade/prefs-dialog.glade.h:1
-msgid "   "
-msgstr "   "
-
-#: data/glade/prefs-dialog.glade.h:2 data/glade/print.glade.h:1
+#: data/glade/print.glade.h:1
 msgid "    "
 msgstr "    "
 
-#: data/glade/prefs-dialog.glade.h:4
-msgid "<b>Caches</b>"
-msgstr "<b>Caches</b>"
-
-#: data/glade/prefs-dialog.glade.h:5 data/glade/print.glade.h:3
+#: data/glade/prefs-dialog.glade.h:3
+#: data/glade/print.glade.h:3
 msgid "<b>Colors</b>"
 msgstr "<b>Χρώματα</b>"
+
+#: data/glade/prefs-dialog.glade.h:4
+#, fuzzy
+msgid "<b>Cookies</b>"
+msgstr "<b>Χρώματα</b>"
+
+#: data/glade/prefs-dialog.glade.h:5
+#, fuzzy
+msgid "<b>Encodings</b>"
+msgstr "<b>Γραμματοσειρές</b>"
 
 #: data/glade/prefs-dialog.glade.h:6
 msgid "<b>Fonts</b>"
@@ -676,291 +491,173 @@ msgid "<b>Home page</b>"
 msgstr "<b>Αρχική Σελίδα</b>"
 
 #: data/glade/prefs-dialog.glade.h:8
-msgid "<b>Language</b>"
+#, fuzzy
+msgid "<b>Languages</b>"
 msgstr "<b>Γλώσσα</b>"
 
 #: data/glade/prefs-dialog.glade.h:9
-msgid "<b>Links</b>"
-msgstr "<b>Δεσμοί</b>"
-
-#: data/glade/prefs-dialog.glade.h:10
-msgid "<b>On New Page</b>"
-msgstr "<b>Σε νέα σελίδα</b>"
-
-#: data/glade/prefs-dialog.glade.h:11
-msgid "<b>Spinner</b>"
-msgstr "<b>Spinner</b>"
-
-#: data/glade/prefs-dialog.glade.h:12
 msgid "<b>Tabs</b>"
 msgstr "<b>Στήλες</b>"
 
-#: data/glade/prefs-dialog.glade.h:13
-msgid "Al_ways use these colors"
+#: data/glade/prefs-dialog.glade.h:10
+#, fuzzy
+msgid "<b>Temporary Files</b>"
+msgstr "<b>Αρχείο:</b>"
+
+#: data/glade/prefs-dialog.glade.h:11
+#, fuzzy
+msgid "<b>Web Content</b>"
+msgstr "<b>Γραμματοσειρές</b>"
+
+#: data/glade/prefs-dialog.glade.h:12
+#, fuzzy
+msgid "Al_ways use the desktop theme colors"
 msgstr "Να χρησιμοποιούνται πά_ντα αυτά τα χρώματα"
 
+#: data/glade/prefs-dialog.glade.h:13
+#, fuzzy
+msgid "Allow _popup windows"
+msgstr "Να επιτρέπονται τα αναδυόμενα παράθυρα"
+
 #: data/glade/prefs-dialog.glade.h:14
-msgid "Always us_e these fonts"
+#, fuzzy
+msgid "Always use _these fonts"
 msgstr "Να χρησιμοποιούνται πά_ντα αυτές οι γραμματοσειρές"
 
-#: data/glade/prefs-dialog.glade.h:15 embed/mozilla/mozilla-i18n.c:24
-#: src/general-prefs.c:88
-msgid "Arabic"
-msgstr "Αραβικά"
-
-#: data/glade/prefs-dialog.glade.h:16
-msgid "Autodetec_t encoding:"
+#: data/glade/prefs-dialog.glade.h:15
+#, fuzzy
+msgid "Autodetec_t:"
 msgstr "Αυτόματος εν_τοπισμός κωδικοποίησης:"
 
-#: data/glade/prefs-dialog.glade.h:17 embed/mozilla/mozilla-i18n.c:25
-msgid "Baltic"
-msgstr "Βαλτική"
+#: data/glade/prefs-dialog.glade.h:16
+#, fuzzy
+msgid "Cl_ear"
+msgstr "Ε_κκαθάριση"
 
-#: data/glade/prefs-dialog.glade.h:18 embed/mozilla/mozilla-i18n.c:26
-msgid "Central European"
-msgstr "Κεντρικής Ευρώπη"
+#: data/glade/prefs-dialog.glade.h:17
+#, fuzzy
+msgid "Enable Java_Script"
+msgstr "Να επιτρέπεται η JavaScript"
 
-#: data/glade/prefs-dialog.glade.h:19 embed/mozilla/mozilla-i18n.c:27
-#: src/general-prefs.c:95
-msgid "Chinese"
-msgstr "Κινέζικα"
+#: data/glade/prefs-dialog.glade.h:18
+msgid "Enable _Java"
+msgstr "Ενεργοποίηση _Java"
+
+#: data/glade/prefs-dialog.glade.h:19
+msgid "Fonts and Colors"
+msgstr ""
 
 #: data/glade/prefs-dialog.glade.h:20
-msgid "Clear _Disk Cache"
-msgstr "Εκκαθάριση cache _δίσκου"
+#: data/glade/print.glade.h:16
+msgid "General"
+msgstr "Γενικά"
 
 #: data/glade/prefs-dialog.glade.h:21
-msgid "Clear _Memory Cache"
-msgstr "Εκκαθάριση cache _μνήμης"
-
-#: data/glade/prefs-dialog.glade.h:22 embed/mozilla/mozilla-i18n.c:28
-msgid "Cyrillic"
-msgstr "Κυριλλικά"
-
-#: data/glade/prefs-dialog.glade.h:23
-msgid "Dis_k cache:"
-msgstr "Cache δίσ_κου:"
-
-#: data/glade/prefs-dialog.glade.h:24
-msgid "E_very time"
-msgstr "Κά_θε φορά"
-
-#: data/glade/prefs-dialog.glade.h:25
-msgid "East asian"
-msgstr "Ανατολικής Ασίας"
-
-#: data/glade/prefs-dialog.glade.h:26 embed/mozilla/mozilla-i18n.c:29
-#: src/general-prefs.c:108
-msgid "Greek"
-msgstr "Ελληνικά"
-
-#: data/glade/prefs-dialog.glade.h:27 embed/mozilla/mozilla-i18n.c:30
-#: src/general-prefs.c:109
-msgid "Hebrew"
-msgstr "Εβραϊκά"
-
-#: data/glade/prefs-dialog.glade.h:28 embed/mozilla/mozilla-i18n.c:32
-#: src/general-prefs.c:115
-msgid "Japanese"
-msgstr "Γιαπωνέζικα"
-
-#: data/glade/prefs-dialog.glade.h:29 embed/mozilla/mozilla-i18n.c:33
-#: src/general-prefs.c:116
-msgid "Korean"
-msgstr "Κορεάτικα"
-
-#: data/glade/prefs-dialog.glade.h:30
-msgid "Lan_guage:"
-msgstr "Γ_λώσσα:"
-
-#: data/glade/prefs-dialog.glade.h:31
 msgid "Language"
 msgstr "Γλώσσα"
 
-#: data/glade/prefs-dialog.glade.h:32
-msgid "Languages editor"
+#: data/glade/prefs-dialog.glade.h:22
+#, fuzzy
+msgid "Language Editor"
 msgstr "Επεξεργαστής γλωσσών"
 
-#: data/glade/prefs-dialog.glade.h:33
-msgid "Memor_y cache:"
-msgstr "Cache Μνή_μης:"
+#: data/glade/prefs-dialog.glade.h:23
+msgid "MB"
+msgstr "MB"
 
-#: data/glade/prefs-dialog.glade.h:34
+#: data/glade/prefs-dialog.glade.h:24
 msgid "Min_imum font size:"
 msgstr "Ελάχ_ιστο μέγεθος γραμματοσειράς:"
 
-#: data/glade/prefs-dialog.glade.h:35
-msgid "Off"
-msgstr "Απενεργοποιημένο"
+#: data/glade/prefs-dialog.glade.h:25
+#, fuzzy
+msgid "Mo_re..."
+msgstr "_Περισσότερα..."
 
-#: data/glade/prefs-dialog.glade.h:36
-msgid "Once per _session"
-msgstr "Μια φορά ανά _συνεδρία"
+#: data/glade/prefs-dialog.glade.h:26
+msgid "Only _from sites you visit"
+msgstr ""
 
-#: data/glade/prefs-dialog.glade.h:37
-msgid "Open _popups in tabs"
-msgstr "Άνοιγμα ανα_δυόμενων παράθυρων σε στήλες"
+#: data/glade/prefs-dialog.glade.h:27
+#, fuzzy
+msgid "Open in _tabs by default"
+msgstr "Εξ ορισμού άνοιγμα στηλών."
 
-#: data/glade/prefs-dialog.glade.h:38
-msgid "Pick the background color"
-msgstr "Επιλογή του χρώματος παρασκηνίου"
+#: data/glade/prefs-dialog.glade.h:28
+msgid "Preferences"
+msgstr "Προτιμήσεις"
 
-#: data/glade/prefs-dialog.glade.h:39
-msgid "Pick the text color"
-msgstr "Επιλογή χρώματος κειμένου"
+#: data/glade/prefs-dialog.glade.h:29
+msgid "Privacy"
+msgstr ""
 
-#: data/glade/prefs-dialog.glade.h:40
-msgid "Pick the unvisited link color"
-msgstr "Επιλογή του χρώματος μή αναγνωσμένου δεσμού"
-
-#: data/glade/prefs-dialog.glade.h:41
-msgid "Pick the visited link color"
-msgstr "Επιλογή του χρώματος αναγνωσμένου δεσμού"
-
-#: data/glade/prefs-dialog.glade.h:42 src/general-prefs.c:128
-msgid "Russian"
-msgstr "Ρωσική"
-
-#: data/glade/prefs-dialog.glade.h:43
+#: data/glade/prefs-dialog.glade.h:30
 msgid "S_ans serif:"
 msgstr "S_ans serif:"
 
-#: data/glade/prefs-dialog.glade.h:44
+#: data/glade/prefs-dialog.glade.h:31
 msgid "Sans Serif"
 msgstr "Sans Serif"
 
-#: data/glade/prefs-dialog.glade.h:45
+#: data/glade/prefs-dialog.glade.h:32
 msgid "Serif"
 msgstr "Serif"
 
-#: data/glade/prefs-dialog.glade.h:46
+#: data/glade/prefs-dialog.glade.h:33
+#, fuzzy
+msgid "Set to Current _Page"
+msgstr "Ορισμός σε _Τρέχουσα Σελίδα"
+
+#: data/glade/prefs-dialog.glade.h:34
 msgid "Set to _Blank Page"
 msgstr "Ορισμός σε _Κενή Σελίδα"
 
-#: data/glade/prefs-dialog.glade.h:47
-msgid "Set to _Current Page"
-msgstr "Ορισμός σε _Τρέχουσα Σελίδα"
-
-#: data/glade/prefs-dialog.glade.h:48
-msgid "Show blan_k page"
-msgstr "Προβολή κενή_ς σελίδας"
-
-#: data/glade/prefs-dialog.glade.h:49
-msgid "Show hom_e page"
-msgstr "Προβολή αρ_χικής σελίδας"
-
-#: data/glade/prefs-dialog.glade.h:50
-msgid "Show la_st page"
-msgstr "Προβολή τελε_υταίας σελίδας"
-
-#: data/glade/prefs-dialog.glade.h:51
+#: data/glade/prefs-dialog.glade.h:35
 msgid "Si_ze:"
 msgstr "Μέ_γεθος:"
 
-#: data/glade/prefs-dialog.glade.h:52
-msgid "Simplified Chinese"
-msgstr "Simplified Chinese"
-
-#: data/glade/prefs-dialog.glade.h:53
+#: data/glade/prefs-dialog.glade.h:36
 msgid "Siz_e:"
 msgstr "Μέγ_εθος:"
 
-#: data/glade/prefs-dialog.glade.h:54
-msgid "Thai"
-msgstr "Ταϊλανδέζικη"
+#: data/glade/prefs-dialog.glade.h:37
+#: src/bookmarks/ephy-bookmark-properties.c:387
+msgid "_Address:"
+msgstr "_Διεύθυνση:"
 
-#: data/glade/prefs-dialog.glade.h:55
-msgid "Traditional Chinese"
-msgstr "Traditional Chinese"
+#: data/glade/prefs-dialog.glade.h:38
+msgid "_Always accept"
+msgstr ""
 
-#: data/glade/prefs-dialog.glade.h:56 embed/mozilla/mozilla-i18n.c:34
-#: src/general-prefs.c:136
-msgid "Turkish"
-msgstr "Τουρκικά"
+#: data/glade/prefs-dialog.glade.h:39
+msgid "_Default:"
+msgstr "_Εξ ορισμού:"
 
-#: data/glade/prefs-dialog.glade.h:57 src/general-prefs.c:137
-msgid "Ukrainian"
-msgstr "Ukrainian"
+#: data/glade/prefs-dialog.glade.h:40
+#, fuzzy
+msgid "_Disk space:"
+msgstr "Cache δίσ_κου:"
 
-#: data/glade/prefs-dialog.glade.h:58 embed/mozilla/mozilla-i18n.c:35
-msgid "Unicode"
-msgstr "Unicode"
+#: data/glade/prefs-dialog.glade.h:41
+msgid "_Language:"
+msgstr "_Γλώσσα:"
 
-#: data/glade/prefs-dialog.glade.h:59
-msgid "Use s_ystem colors"
-msgstr "Χρήση χρωμάτων συσ_τήματος"
-
-#: data/glade/prefs-dialog.glade.h:60 embed/mozilla/mozilla-i18n.c:37
-msgid "Western"
-msgstr "Δυτική"
-
-#: data/glade/prefs-dialog.glade.h:61
-msgid "_Automatically"
-msgstr "_Αυτόματη"
-
-#: data/glade/prefs-dialog.glade.h:62
-msgid "_Background"
-msgstr "_Παρασκήνιο"
-
-#: data/glade/prefs-dialog.glade.h:63
-msgid "_Compare page:"
-msgstr "_Σύγκριση σελίδας"
-
-#: data/glade/prefs-dialog.glade.h:64
-msgid "_Default encoding:"
-msgstr "Ε_ξ ορισμού κωδικοποίηση"
-
-#: data/glade/prefs-dialog.glade.h:65
-msgid "_Jump to new tabs automatically"
-msgstr "Αυτόματη _μετάβαση σε νέες στήλες"
-
-#: data/glade/prefs-dialog.glade.h:66
-msgid "_Language encoding:"
-msgstr "Κωδικοποίηση γ_λώσσας:"
-
-#: data/glade/prefs-dialog.glade.h:67
-msgid "_Location:"
-msgstr "_Τοποθεσία:"
-
-#: data/glade/prefs-dialog.glade.h:68
+#: data/glade/prefs-dialog.glade.h:42
 msgid "_Monospace:"
 msgstr "_Monospace:"
 
-#: data/glade/prefs-dialog.glade.h:69
-msgid "_More..."
-msgstr "_Περισσότερα..."
-
-#: data/glade/prefs-dialog.glade.h:70
-msgid "_Never"
+#: data/glade/prefs-dialog.glade.h:43
+#, fuzzy
+msgid "_Never accept"
 msgstr "Πο_τέ"
 
-#: data/glade/prefs-dialog.glade.h:71
-msgid "_Open in tabs by default"
-msgstr "Εξ ο_ρισμού άνοιγμα σε στήλες "
-
-#: data/glade/prefs-dialog.glade.h:72
+#: data/glade/prefs-dialog.glade.h:44
 msgid "_Proportional:"
 msgstr "_Proportional:"
 
-#: data/glade/prefs-dialog.glade.h:73
+#: data/glade/prefs-dialog.glade.h:45
 msgid "_Serif:"
 msgstr "_Serif:"
-
-#: data/glade/prefs-dialog.glade.h:74
-msgid "_Text"
-msgstr " _Κείμενο"
-
-#: data/glade/prefs-dialog.glade.h:75
-msgid "_Unvisited link"
-msgstr "_Μη αναγνωσμένος δεσμός"
-
-#: data/glade/prefs-dialog.glade.h:76
-msgid "_Visited link"
-msgstr "Α_ναγνωσμένος δεσμός"
-
-#: data/glade/prefs-dialog.glade.h:77
-msgid "kB"
-msgstr "kB"
 
 #: data/glade/print.glade.h:4
 msgid "<b>Footers</b>"
@@ -971,7 +668,8 @@ msgid "<b>Headers</b>"
 msgstr "<b>Κεφαλίδες</b>"
 
 #: data/glade/print.glade.h:6
-msgid "<b>Margins (inches)</b>"
+#, fuzzy
+msgid "<b>Margins (in mm)</b>"
 msgstr "<b>Περιθώρια (ίντσες)</b>"
 
 #: data/glade/print.glade.h:7
@@ -979,11 +677,13 @@ msgid "<b>Orientation</b>"
 msgstr "<b>Προσανατολισμός</b>"
 
 #: data/glade/print.glade.h:8
-msgid "<b>Pages range</b>"
+#, fuzzy
+msgid "<b>Page Range</b>"
 msgstr "<b>Εύρος σελίδων</b>"
 
 #: data/glade/print.glade.h:9
-msgid "<b>Printer</b>"
+#, fuzzy
+msgid "<b>Print To</b>"
 msgstr "<b>Εκτυπωτής</b>"
 
 #: data/glade/print.glade.h:10
@@ -991,66 +691,68 @@ msgid "<b>Size</b>"
 msgstr "<b>Μέγεθος/b>"
 
 #: data/glade/print.glade.h:11
-msgid "A_4 (8.27\" x 11.69\")"
-msgstr "A_4 (8.27\" x 11.69\")"
+msgid "A_4"
+msgstr "A_4"
 
-#: data/glade/print.glade.h:12 src/prefs-dialog.c:262
+#: data/glade/print.glade.h:12
 msgid "Appearance"
 msgstr "Εμφάνιση"
 
 #: data/glade/print.glade.h:13
+msgid "C_olor"
+msgstr "Χ_ρώμα"
+
+#: data/glade/print.glade.h:14
 msgid "Choose a file to print to"
 msgstr "Επιλογή αρχείου για εκτύπωση σε"
 
-#: data/glade/print.glade.h:14
-msgid "E_xecutive (7.25\" x 10.5\")"
-msgstr "E_xecutive (7.25\" x 10.5\")"
-
 #: data/glade/print.glade.h:15
-msgid "G_rayscale"
-msgstr "Κλίμακα του _γκρί"
-
-#: data/glade/print.glade.h:16 src/prefs-dialog.c:261
-msgid "General"
-msgstr "Γενικά"
+msgid "E_xecutive"
+msgstr ""
 
 #: data/glade/print.glade.h:17
-msgid "L_egal (8.5\" x 14\")"
-msgstr "L_egal (8.5\" x 14\")"
+msgid "L_egal"
+msgstr ""
 
 #: data/glade/print.glade.h:18
 msgid "Lan_dscape"
 msgstr "Κατακόρυφη"
 
 #: data/glade/print.glade.h:19
-msgid "Le_ft"
-msgstr "Αριστε_ρά"
-
-#: data/glade/print.glade.h:20
-msgid "P_age Title"
+#, fuzzy
+msgid "P_age title"
 msgstr "Τίτλος σε_λίδας"
 
-#: data/glade/print.glade.h:21
+#: data/glade/print.glade.h:20
 msgid "P_ortrait"
 msgstr "Οριζό_ντια"
+
+#: data/glade/print.glade.h:21
+msgid "P_rinter:"
+msgstr "Εκτυ_πωτής:"
 
 #: data/glade/print.glade.h:22
 msgid "Pa_ges"
 msgstr "Σε_λίδες"
 
 #: data/glade/print.glade.h:23
-msgid "Page _URL"
-msgstr " _URL σελίδας"
+#, fuzzy
+msgid "Page _numbers"
+msgstr "Αριθμοί σε_λίδας"
 
 #: data/glade/print.glade.h:24
-msgid "Page nu_mbers"
+#, fuzzy
+msgid "Page a_ddress"
 msgstr "Αριθμοί σε_λίδας"
 
 #: data/glade/print.glade.h:25
-msgid "Paper Details"
-msgstr "Λεπτομέρειες χαρτιού"
+#, fuzzy
+msgid "Paper"
+msgstr "Τύπος χαρτιού"
 
-#: data/glade/print.glade.h:26 data/ui/nautilus-epiphany-view.xml.in.h:25
+#: data/glade/print.glade.h:26
+#: data/ui/nautilus-epiphany-view.xml.in.h:23
+#: src/ephy-window.c:666
 msgid "Print"
 msgstr "Εκτύπωση"
 
@@ -1059,129 +761,56 @@ msgid "_All pages"
 msgstr "'Ο_λες οι σελίδες"
 
 #: data/glade/print.glade.h:28
-msgid "_Bottom"
+#, fuzzy
+msgid "_Bottom:"
 msgstr "_Κάτω"
 
 #: data/glade/print.glade.h:29
-msgid "_Color"
-msgstr "_Χρώμα"
-
-#: data/glade/print.glade.h:30
 msgid "_Date"
 msgstr "_Ημερομηνία"
 
-#. Toplevel
-#: data/glade/print.glade.h:31 data/ui/nautilus-epiphany-view.xml.in.h:35
-#: src/ephy-window.c:58
-msgid "_File"
-msgstr "_Αρχείο"
+#: data/glade/print.glade.h:30
+msgid "_File:"
+msgstr "_Αρχείο:"
+
+#: data/glade/print.glade.h:31
+msgid "_Grayscale"
+msgstr "Κλίμακα του _γκρι"
 
 #: data/glade/print.glade.h:32
-msgid "_Letter (8.5\" x 11\")"
-msgstr "_Letter (8.5\" x 11\")"
+msgid "_Left:"
+msgstr "_Αριστερά:"
 
 #: data/glade/print.glade.h:33
-msgid "_Printer"
-msgstr "Εκτυ_πωτής"
+#, fuzzy
+msgid "_Letter"
+msgstr "Πο_τέ"
 
 #: data/glade/print.glade.h:34
-msgid "_Right"
-msgstr "_Δεξιά"
+msgid "_Right:"
+msgstr "_Δεξιά:"
 
 #: data/glade/print.glade.h:35
 msgid "_Selection"
 msgstr "Επιλο_γή"
 
 #: data/glade/print.glade.h:36
-msgid "_Top"
-msgstr "_Πάνω"
+#, fuzzy
+msgid "_Top:"
+msgstr "_Πάνω:"
 
 #: data/glade/print.glade.h:37
-msgid "from:"
-msgstr "από:"
+msgid "_to:"
+msgstr "_σε:"
 
 #: data/glade/print.glade.h:38
-msgid "lpr"
-msgstr "lpr"
+#, fuzzy
+msgid "fr_om:"
+msgstr "από:"
 
 #: data/glade/print.glade.h:39
-msgid "to:"
-msgstr "σε:"
-
-#: data/glade/prompts.glade.h:3
-msgid "Password"
-msgstr "Κωδικός"
-
-#: data/glade/prompts.glade.h:4
-msgid "Username"
-msgstr "Όνομα χρήστη"
-
-#: data/starthere/index.xml.in.h:1
-msgid "Getting started"
-msgstr "Ξεκινήστε εδώ"
-
-#: data/starthere/index.xml.in.h:2
-msgid ""
-"If your internet connection requires it, make sure to setup your proxy in "
-"the desktop wide configuration dialog."
-msgstr ""
-"Αν η σύνδεση σας στο διαδίκτυο το απαιτεί, θα πρέπει να ορίσετε τον "
-"διαμεσολαβητή σας στον διάλογο ρύθμισης."
-
-#: data/starthere/index.xml.in.h:3
-msgid "Proxy configuration"
-msgstr "Ρύθμιση διαμεσολαβητή"
-
-#: data/starthere/index.xml.in.h:4
-msgid "The web browser"
-msgstr "Ο φυλλομετρητής"
-
-#: data/starthere/index.xml.in.h:5
-msgid ""
-"To import bookmarks from another browser installed on your system just click "
-"on one of the links below:"
-msgstr ""
-"Για να εισάγετε σελιδοδείκτες από άλλον φυλλομετρητή που είναι "
-"εγκατεστημένος στο σύστημα σας πατήστε σε ένα από τους παρακάτω δεσμούς:"
-
-#: data/starthere/index.xml.in.h:6
-msgid ""
-"You can start browsing web pages either by typing a location (example: www."
-"google.com) or a keyword (example: best computer shop) in the toolbar text "
-"entry and then pressing the Enter key. You can remember important visited "
-"pages using bookmarks or browse all of them with the history dialog."
-msgstr ""
-"Μπορείτε να ξεκινήσετε την περιήγηση σας στο διαδίκτυο είτε με το να "
-"πληκτρολογήσετε μια τοποθεσία (π.χ  www.google.com) ή μια λέξη κλειδί (π.χ  "
-"best computer shop) στην γραμμή διευθύνσεων και μετά να πατήσετε το πλήκτρο "
-"Enter. Μπορείτε να θυμάστε σημαντικές αναγνωσμένες σελίδες με την χρήση "
-"σελιδοδεικτών ή τον διάλογο ιστορικού."
-
-#: data/starthere/smartbookmarks.xml.in.h:1
-msgid ""
-"Right click the icon and choose \"Add Bookmark\" from the menu list. When "
-"you will type a word in the toolbar entry, a list of your smart bookmarks "
-"will be displayed. Just choose one of them to perform the search. The next "
-"time you type a word, just pressing the Enter key will be enough to perform "
-"the same action."
-msgstr ""
-"Κάντε δεξί κλικ στο εικονίδιο και πατήστε  \"Προσθήκη σελιδοδείκτη\" από την "
-"λίστα μενού. Οταν θα πληκτρολογήσετε μια λέξη στην γραμμή διευθύσεων, μια "
-"λίστα από έξυπνους σελιδοδείκτες θα εμφανιστεί. Απλώς επιλέξτε έναν από "
-"αυτούς για να γίνει η αναζήτηση. την επόμενη φορά που θα πληκτρολογήσετε μια "
-"λέξη, μόλις πατήσετε το  Enter θα γίνει η ίδια ενέργεια."
-
-#: data/starthere/smartbookmarks.xml.in.h:2
-msgid "Smart Bookmarks"
-msgstr "Έξυπνοι  σελιδοδείκτες"
-
-#: data/starthere/smartbookmarks.xml.in.h:3
-msgid ""
-"Smart bookmarks allows to perform searches and similar actions directly from "
-"the location entry."
-msgstr ""
-"Οι έξυπνοι σελιδοδείκτες σας επιτρέπουν να κάνετε αναζητήσεις ή παρόμοιες "
-"ενέργειες κατευθείαν από την γραμμή διευθύνσεων."
+msgid "lpr"
+msgstr "lpr"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:1
 msgid "Add Bookmark for Frame"
@@ -1196,16 +825,19 @@ msgid "Copy Email Address"
 msgstr "Αντιγραφή Διεύθυνσης Email"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:4
-msgid "Copy Image Location"
-msgstr "Αντιγραφή τοποθεσίας εικόνας"
+#, fuzzy
+msgid "Copy Image Address"
+msgstr "Αντιγραφή Διεύθυνσης Email"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:5
-msgid "Copy Link Location"
-msgstr "Αντιγραφή τοποθεσίας δεσμού"
+#, fuzzy
+msgid "Copy Link Address"
+msgstr "Αντιγραφή Διεύθυνσης Email"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:6
-msgid "Copy Page Location"
-msgstr "Αντιγραφή τοποθεσίας σελίδας"
+#, fuzzy
+msgid "Copy Page Address"
+msgstr "Αντιγραφή Διεύθυνσης Email"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:7
 msgid "Copy the Selection"
@@ -1220,22 +852,22 @@ msgid "Cut the Selection"
 msgstr "Αποκοπή της επιλογής"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:10
+#: embed/ephy-embed-popup-control.c:543
 msgid "Download Link"
 msgstr "Μεταφόρτωση δεσμού"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:11
-msgid "Find"
-msgstr "Εύρεση"
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:12 src/ppview-toolbar.c:86
+#: data/ui/nautilus-epiphany-view.xml.in.h:12
+#: src/ppview-toolbar.c:89
 msgid "First"
 msgstr "Πρώτη"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:13 src/ppview-toolbar.c:90
+#: data/ui/nautilus-epiphany-view.xml.in.h:13
+#: src/ppview-toolbar.c:93
 msgid "Last"
 msgstr "Τελευταία"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:14 src/ppview-toolbar.c:98
+#: data/ui/nautilus-epiphany-view.xml.in.h:14
+#: src/ppview-toolbar.c:101
 msgid "Next"
 msgstr "Επόμενο"
 
@@ -1252,138 +884,191 @@ msgid "Open Image"
 msgstr "Άνοιγμα εικόνας"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:18
-msgid "Open Image With"
-msgstr "Άνοιγμα εικόνας με"
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:19
 msgid "Open Image in New Window"
 msgstr "Άνοιγμα εικόναςσε νέο παράθυρο"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:20
-msgid "Open With"
-msgstr "Άνοιγμα μεε"
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:21
+#: data/ui/nautilus-epiphany-view.xml.in.h:19
 msgid "Open in New Window"
 msgstr "Άνοιγμα σε νέο παράθυρο"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:22
+#: data/ui/nautilus-epiphany-view.xml.in.h:20
 msgid "Paste"
 msgstr "Επικόλληση"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:23
+#: data/ui/nautilus-epiphany-view.xml.in.h:21
 msgid "Paste the Clipboard"
 msgstr "Επικόλληση του προχείρου"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:24 src/ppview-toolbar.c:94
+#: data/ui/nautilus-epiphany-view.xml.in.h:22
+#: src/ppview-toolbar.c:97
 msgid "Previous"
 msgstr "Προηγούμενο"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:26
+#: data/ui/nautilus-epiphany-view.xml.in.h:24
 msgid "Print the Current File"
 msgstr "Εκτύπωση του τρέχοντος αρχείου"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:27
+#: data/ui/nautilus-epiphany-view.xml.in.h:25
 msgid "Save Background As..."
 msgstr "Αποθήκευση παρασκηνίου ως..."
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:28
+#: data/ui/nautilus-epiphany-view.xml.in.h:26
 msgid "Save Image As..."
 msgstr "Αποθήκευση εικόνας ως..."
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:29
+#: data/ui/nautilus-epiphany-view.xml.in.h:27
 msgid "Save Page As..."
 msgstr "Αποθήκευση σελίδας ως..."
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:30
+#: data/ui/nautilus-epiphany-view.xml.in.h:28
 msgid "Search for a String"
 msgstr "Αναζήτηση αλφαριθμητικού"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:31
+#: data/ui/nautilus-epiphany-view.xml.in.h:29
 msgid "Select All"
 msgstr "Επιλογή όλων"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:32
+#: data/ui/nautilus-epiphany-view.xml.in.h:30
 msgid "Select the Entire Document"
 msgstr "Επιλογή ολόκληρου του εγγράφου"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:33
+#: data/ui/nautilus-epiphany-view.xml.in.h:31
 msgid "Use Image As Background"
 msgstr "Χρήση εικόνας ως παρασκήνιο."
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:34 src/ephy-window.c:59
+#: data/ui/nautilus-epiphany-view.xml.in.h:32
+#: src/bookmarks/ephy-bookmarks-editor.c:153
+#: src/ephy-history-window.c:125
+#: src/ephy-window.c:66
 msgid "_Edit"
 msgstr "_Επεξεργασία"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:36
+#. Toplevel
+#: data/ui/nautilus-epiphany-view.xml.in.h:33
+#: src/bookmarks/ephy-bookmarks-editor.c:152
+#: src/ephy-history-window.c:124
+#: src/ephy-window.c:65
+msgid "_File"
+msgstr "_Αρχείο"
+
+#: data/ui/nautilus-epiphany-view.xml.in.h:34
+#: src/ephy-window.c:109
 msgid "_Find..."
 msgstr "Εύ_ρεση..."
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:37 src/ephy-window.c:78
+#: data/ui/nautilus-epiphany-view.xml.in.h:35
+#: src/ephy-window.c:86
 msgid "_Print..."
 msgstr "Εκτύ_πωση..."
 
-#: embed/downloader-view.c:383
+#. Hours, Minutes, Seconds
+#: embed/downloader-view.c:216
+#, c-format
+msgid "%u:%02u.%02u"
+msgstr ""
+
+#. Minutes, Seconds
+#: embed/downloader-view.c:221
+#, c-format
+msgid "%02u.%02u"
+msgstr ""
+
+#: embed/downloader-view.c:369
+msgid "_Resume"
+msgstr "Συνέ_χεια"
+
+#: embed/downloader-view.c:391
 #, c-format
 msgid "%.1f of %.1f MB"
 msgstr "%.1f από  %.1f MB"
 
-#: embed/downloader-view.c:389
+#: embed/downloader-view.c:397
 #, c-format
 msgid "%d of %d KB"
 msgstr "%d από %d KB"
 
-#: embed/downloader-view.c:395
+#: embed/downloader-view.c:403
 #, c-format
 msgid "%d KB"
 msgstr "%d KB"
 
-#: embed/downloader-view.c:499 embed/downloader-view.c:517
-#: src/ephy-window.c:1046
+#: embed/downloader-view.c:409
+#, c-format
+msgid "%s at %.1f KB/s"
+msgstr ""
+
+#: embed/downloader-view.c:524
+#: embed/downloader-view.c:542
+#: src/ephy-window.c:870
 msgid "Unknown"
 msgstr "Άγνωστο"
 
-#: embed/downloader-view.c:516
+#: embed/downloader-view.c:541
 msgid "00.00"
 msgstr "00.00"
 
-#: embed/downloader-view.c:759
+#: embed/downloader-view.c:779
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:769
+#: embed/downloader-view.c:789
 msgid "Filename"
 msgstr "Όνομα αρχείου"
 
-#: embed/downloader-view.c:780
+#: embed/downloader-view.c:800
 msgid "Size"
 msgstr "Μέγεθος"
 
-#: embed/downloader-view.c:791
+#: embed/downloader-view.c:811
 msgid "Remaining"
 msgstr "Απομένοντα"
 
-#: embed/downloader-view.c:1011
+#: embed/downloader-view.c:1015
 msgid "Cancel all pending downloads?"
-msgstr "Ακύρωση όλων των εκκρεμών μεταφορτώσεων?"
+msgstr "Ακύρωση όλων των εκκρεμών μεταφορτώσεων;"
 
-#: embed/ephy-embed-utils.c:132 embed/mozilla/ContentHandler.cpp:302
-msgid "Select the destination filename"
-msgstr "Επιλογή του ονόματος αρχείου προορισμού"
+#: embed/ephy-embed-popup-control.c:554
+#: src/popup-commands.c:325
+#, fuzzy
+msgid "Save Image As"
+msgstr "Αποθήκευση εικόνας ως..."
 
-#: embed/ephy-embed-utils.c:316
+#: embed/ephy-embed-popup-control.c:668
+msgid "Save Page As"
+msgstr "Αποθήκευση Σελίδας Ως"
+
+#: embed/ephy-embed-popup-control.c:677
+#: src/popup-commands.c:413
+#, fuzzy
+msgid "Save Background As"
+msgstr "Αποθήκευση παρασκηνίου ως..."
+
+#: embed/ephy-embed-utils.c:167
+msgid "The file has not been saved."
+msgstr ""
+
+#: embed/ephy-embed-utils.c:299
 msgid "No available applications to open the specified file."
 msgstr "Δεν υπάρχουν διαθέσιμες επιλογές για το άνοιγμα του αρχείου."
 
-#: embed/ephy-history.c:552
+#: embed/ephy-history.c:438
+#: src/bookmarks/ephy-bookmarks.c:689
+msgid "All"
+msgstr "Όλα"
+
+#: embed/ephy-history.c:587
 msgid "Others"
 msgstr "Άλλοι"
 
-#: embed/ephy-history.c:558
+#: embed/ephy-history.c:593
 msgid "Local files"
 msgstr "Τοπικά Αρχεία"
 
-#: embed/mozilla/ExternalProtocolService.cpp:121
+#: embed/mozilla/ContentHandler.cpp:308
+msgid "Select the destination filename"
+msgstr "Επιλογή του ονόματος αρχείου προορισμού"
+
+#: embed/mozilla/ExternalProtocolService.cpp:124
 msgid ""
 "Epiphany cannot handle this protocol,\n"
 "and no GNOME default handler is set"
@@ -1391,7 +1076,7 @@ msgstr ""
 "Η Epiphany δεν μπορεί να χειριστεί αυτό το πρωτόκολλο,\n"
 "και δεν έχει ορισθεί εξ ορισμού χειριστής του GNOME"
 
-#: embed/mozilla/ExternalProtocolService.cpp:135
+#: embed/mozilla/ExternalProtocolService.cpp:138
 msgid ""
 "The protocol specified is not recognised.\n"
 "\n"
@@ -1401,393 +1086,482 @@ msgstr ""
 "\n"
 "Θέλετε να δοκιμάσετε το εξ ορισμού από το GNOME?"
 
-#: embed/mozilla/FilePicker.cpp:261
-msgid "Save with content"
-msgstr "Αποθήκευση με περιεχόμενο"
-
-#: embed/mozilla/FilePicker.cpp:374
+#: embed/mozilla/FilePicker.cpp:356
 msgid "The specified path does not exist."
 msgstr "Η καθορισμένη διαδρομή δεν υπάρχει."
 
-#: embed/mozilla/FilePicker.cpp:393
+#: embed/mozilla/FilePicker.cpp:375
 msgid "A file was selected when a folder was expected."
 msgstr "Επιλέχθηκε ένα αρχείο ενώ αναμενόταν φάκελος."
 
-#: embed/mozilla/FilePicker.cpp:400
+#: embed/mozilla/FilePicker.cpp:382
 msgid "A folder was selected when a file was expected."
 msgstr "Επιλέχθηκε ένας φάκελος ενώ αναμενόταν αρχείο."
 
-#: embed/mozilla/PromptService.cpp:248
-msgid "Save"
-msgstr "Αποθήκευση"
+#: embed/mozilla/mozilla-embed-single.cpp:75
+msgid "_Arabic"
+msgstr "_Αραβικά"
 
-#: embed/mozilla/PromptService.cpp:251
-msgid "Revert"
-msgstr "Επαναφορά"
+#: embed/mozilla/mozilla-embed-single.cpp:76
+#, fuzzy
+msgid "_Baltic"
+msgstr "Βαλτική"
 
-#: embed/mozilla/PromptService.cpp:254
-msgid "Don't save"
-msgstr "Να μην αποθηκευτεί"
+#: embed/mozilla/mozilla-embed-single.cpp:77
+#, fuzzy
+msgid "Central _European"
+msgstr "Κεντρικής Ευρώπη"
 
-#: embed/mozilla/PromptService.cpp:661
-msgid "Epiphany"
-msgstr "Epiphany"
+#: embed/mozilla/mozilla-embed-single.cpp:78
+#, fuzzy
+msgid "Chi_nese"
+msgstr "Κινέζικα"
 
-#: embed/mozilla/mozilla-embed-single.cpp:760
+#: embed/mozilla/mozilla-embed-single.cpp:79
+msgid "_Cyrillic"
+msgstr "_Κυριλλικά"
+
+#: embed/mozilla/mozilla-embed-single.cpp:80
+msgid "_Greek"
+msgstr "_Ελληνικά"
+
+#: embed/mozilla/mozilla-embed-single.cpp:81
+#, fuzzy
+msgid "_Hebrew"
+msgstr "Εβραϊκά"
+
+#: embed/mozilla/mozilla-embed-single.cpp:82
+#, fuzzy
+msgid "_Indian"
+msgstr "Indian"
+
+#: embed/mozilla/mozilla-embed-single.cpp:83
+msgid "_Japanese"
+msgstr "_Γιαπωνέζικα"
+
+#: embed/mozilla/mozilla-embed-single.cpp:84
+msgid "_Korean"
+msgstr "_Κορεάτικα"
+
+#: embed/mozilla/mozilla-embed-single.cpp:85
+msgid "_Turkish"
+msgstr "_Τουρκικά"
+
+#: embed/mozilla/mozilla-embed-single.cpp:86
+msgid "_Unicode"
+msgstr "_Unicode"
+
+#: embed/mozilla/mozilla-embed-single.cpp:87
+msgid "_Vietnamese"
+msgstr "_Βιετναμέζικα"
+
+#: embed/mozilla/mozilla-embed-single.cpp:88
+#, fuzzy
+msgid "_Western"
+msgstr "_Δυτική"
+
+#: embed/mozilla/mozilla-embed-single.cpp:89
+msgid "_Other"
+msgstr "_Άλλο"
+
+#. translators: access keys need only be unique within the same LG_group
+#: embed/mozilla/mozilla-embed-single.cpp:108
+#, fuzzy
+msgid "Arabic (_IBM-864)"
+msgstr "Arabic (IBM-864)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:109
+#, fuzzy
+msgid "Arabic (ISO-_8859-6)"
+msgstr "Arabic (ISO-8859-6)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:110
+#, fuzzy
+msgid "Arabic (_MacArabic)"
+msgstr "Arabic (MacArabic)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:111
+#, fuzzy
+msgid "Arabic (_Windows-1256)"
+msgstr "Arabic (Windows-1256)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:112
+#, fuzzy
+msgid "Baltic (_ISO-8859-13)"
+msgstr "Baltic (ISO-8859-13)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:113
+#, fuzzy
+msgid "Baltic (I_SO-8859-4)"
+msgstr "Baltic (ISO-8859-4)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:114
+#, fuzzy
+msgid "Baltic (_Windows-1257)"
+msgstr "Baltic (Windows-1257)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:115
+#, fuzzy
+msgid "Central European (_IBM-852)"
+msgstr "Central European (IBM-852)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:116
+#, fuzzy
+msgid "Central European (I_SO-8859-2)"
+msgstr "Central European (ISO-8859-2)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:117
+#, fuzzy
+msgid "Central European (_MacCE)"
+msgstr "Central European (MacCE)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:118
+#, fuzzy
+msgid "Central European (_Windows-1250)"
+msgstr "Central European (Windows-1250)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:119
+#, fuzzy
+msgid "Croatian (Mac_Croatian)"
+msgstr "Croatian (MacCroatian)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:120
+#, fuzzy
+msgid "Chinese Simplified (_GB18030)"
+msgstr "Chinese Simplified (GB18030)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:121
+#, fuzzy
+msgid "Chinese Simplified (G_B2312)"
+msgstr "Chinese Simplified (GB2312)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:122
+#, fuzzy
+msgid "Chinese Simplified (GB_K)"
+msgstr "Chinese Simplified (GBK)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:123
+#, fuzzy
+msgid "Chinese Simplified (_HZ)"
+msgstr "Chinese Simplified (HZ)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:124
+#, fuzzy
+msgid "Chinese Simplified (_ISO-2022-CN)"
+msgstr "Chinese Simplified (GB2312)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:125
+#, fuzzy
+msgid "Chinese Traditional (Big_5)"
+msgstr "Chinese Traditional (Big5)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:126
+#, fuzzy
+msgid "Chinese Traditional (Big5-HK_SCS)"
+msgstr "Chinese Traditional (Big5-HKSCS)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:127
+#, fuzzy
+msgid "Chinese Traditional (_EUC-TW)"
+msgstr "Chinese Traditional (EUC-TW)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:128
+#, fuzzy
+msgid "Cyrillic (_IBM-855)"
+msgstr "Cyrillic (IBM-855)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:129
+#, fuzzy
+msgid "Cyrillic (I_SO-8859-5)"
+msgstr "Cyrillic (ISO-8859-5)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:130
+#, fuzzy
+msgid "Cyrillic (IS_O-IR-111)"
+msgstr "Cyrillic (ISO-IR-111)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:131
+#, fuzzy
+msgid "Cyrillic (_KOI8-R)"
+msgstr "Cyrillic (KOI8-R)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:132
+#, fuzzy
+msgid "Cyrillic (_MacCyrillic)"
+msgstr "Cyrillic (MacCyrillic)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:133
+#, fuzzy
+msgid "Cyrillic (_Windows-1251)"
+msgstr "Cyrillic (Windows-1251)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:134
+#, fuzzy
+msgid "Cyrillic/Russian (_CP-866)"
+msgstr "Cyrillic/Russian (CP-866)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:135
+#, fuzzy
+msgid "Cyrillic/Ukrainian (_KOI8-U)"
+msgstr "Cyrillic/Ukrainian (KOI8-U)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:136
+#, fuzzy
+msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
+msgstr "Cyrillic/Ukrainian (MacUkrainian)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:137
+msgid "Greek (_ISO-8859-7)"
+msgstr "Ελληνικά (_ISO-8859-7)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:138
+msgid "Greek (_MacGreek)"
+msgstr "Ελληνικά (_MacGreek)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:139
+msgid "Greek (_Windows-1253)"
+msgstr "Ελληνικά (_Windows-1253)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:140
+#, fuzzy
+msgid "Gujarati (_MacGujarati)"
+msgstr "Gujarati (MacGujarati)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:141
+#, fuzzy
+msgid "Gurmukhi (Mac_Gurmukhi)"
+msgstr "Gurmukhi (MacGurmukhi)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:142
+#, fuzzy
+msgid "Hindi (Mac_Devanagari)"
+msgstr "Hindi (MacDevanagari)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:143
+#, fuzzy
+msgid "Hebrew (_IBM-862)"
+msgstr "Hebrew (IBM-862)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:144
+#, fuzzy
+msgid "Hebrew (IS_O-8859-8-I)"
+msgstr "Hebrew (ISO-8859-8-I)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:145
+#, fuzzy
+msgid "Hebrew (_MacHebrew)"
+msgstr "Hebrew (MacHebrew)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:146
+#, fuzzy
+msgid "Hebrew (_Windows-1255)"
+msgstr "Hebrew (Windows-1255)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:147
+#, fuzzy
+msgid "_Visual Hebrew (ISO-8859-8)"
+msgstr "Visual Hebrew (ISO-8859-8)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:148
+#, fuzzy
+msgid "Japanese (_EUC-JP)"
+msgstr "Japanese (EUC-JP)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:149
+#, fuzzy
+msgid "Japanese (_ISO-2022-JP)"
+msgstr "Japanese (ISO-2022-JP)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:150
+#, fuzzy
+msgid "Japanese (_Shift-JIS)"
+msgstr "Japanese (Shift_JIS)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:151
+#, fuzzy
+msgid "Korean (_EUC-KR)"
+msgstr "Korean (EUC-KR)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:152
+#, fuzzy
+msgid "Korean (_ISO-2022-KR)"
+msgstr "Korean (ISO-2022-KR)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:153
+#, fuzzy
+msgid "Korean (_JOHAB)"
+msgstr "Korean (JOHAB)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:154
+#, fuzzy
+msgid "Korean (_UHC)"
+msgstr "Korean (UHC)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:155
+#, fuzzy
+msgid "Turkish (_IBM-857)"
+msgstr "Turkish (IBM-857)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:156
+#, fuzzy
+msgid "Turkish (I_SO-8859-9)"
+msgstr "Turkish (ISO-8859-9)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:157
+#, fuzzy
+msgid "Turkish (_MacTurkish)"
+msgstr "Turkish (MacTurkish)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:158
+#, fuzzy
+msgid "Turkish (_Windows-1254)"
+msgstr "Turkish (Windows-1254)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:159
+msgid "Unicode (UTF-_7)"
+msgstr "Unicode (UTF-_7)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:160
+msgid "Unicode (UTF-_8)"
+msgstr "Unicode (UTF-_8)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:161
+#, fuzzy
+msgid "Vietnamese (_TCVN)"
+msgstr "Vietnamese (TCVN)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:162
+#, fuzzy
+msgid "Vietnamese (_VISCII)"
+msgstr "Vietnamese (VISCII)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:163
+#, fuzzy
+msgid "Vietnamese (V_PS)"
+msgstr "Vietnamese (VPS)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:164
+#, fuzzy
+msgid "Vietnamese (_Windows-1258)"
+msgstr "Vietnamese (Windows-1258)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:165
+#, fuzzy
+msgid "Western (_IBM-850)"
+msgstr "Western (IBM-850)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:166
+#, fuzzy
+msgid "Western (I_SO-8859-1)"
+msgstr "Western (ISO-8859-1)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:167
+#, fuzzy
+msgid "Western (IS_O-8859-15)"
+msgstr "Western (ISO-8859-15)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:168
+#, fuzzy
+msgid "Western (_MacRoman)"
+msgstr "Western (MacRoman)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:169
+#, fuzzy
+msgid "Western (_Windows-1252)"
+msgstr "Western (Windows-1252)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:170
+#, fuzzy
+msgid "_Armenian (ARMSCII-8)"
+msgstr "Armenian (ARMSCII-8)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:171
+#, fuzzy
+msgid "_Celtic (ISO-8859-14)"
+msgstr "Celtic (ISO-8859-14)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:172
+#, fuzzy
+msgid "_Farsi (MacFarsi)"
+msgstr "Farsi (MacFarsi)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:173
+#, fuzzy
+msgid "_Georgian (GEOSTD8)"
+msgstr "Georgian (GEOSTD8)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:174
+#, fuzzy
+msgid "_Icelandic (MacIcelandic)"
+msgstr "Icelandic (MacIcelandic)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:175
+#, fuzzy
+msgid "_Nordic (ISO-8859-10)"
+msgstr "Nordic (ISO-8859-10)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:176
+#, fuzzy
+msgid "_Romanian (MacRomanian)"
+msgstr "Romanian (MacRomanian)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:177
+#, fuzzy
+msgid "R_omanian (ISO-8859-16)"
+msgstr "Romanian (ISO-8859-16)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:178
+#, fuzzy
+msgid "South _European (ISO-8859-3)"
+msgstr "South European (ISO-8859-3)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:179
+#, fuzzy
+msgid "Thai (TIS-_620)"
+msgstr "Thai (TIS-620)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:181
+#, fuzzy
+msgid "Thai (IS_O-8859-11)"
+msgstr "Baltic (ISO-8859-13)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:182
+#, fuzzy
+msgid "_Thai (Windows-874)"
+msgstr "Baltic (Windows-1257)"
+
+#: embed/mozilla/mozilla-embed-single.cpp:184
+#, fuzzy
+msgid "_User Defined"
+msgstr "Καθορισμένο από το χρήστη"
+
+#: embed/mozilla/mozilla-embed-single.cpp:923
 msgid "Yes"
 msgstr "Ναι"
 
-#: embed/mozilla/mozilla-embed-single.cpp:762
+#: embed/mozilla/mozilla-embed-single.cpp:925
 msgid "No"
 msgstr "Όχι"
 
-#: embed/mozilla/mozilla-embed-single.cpp:767
+#: embed/mozilla/mozilla-embed-single.cpp:930
 msgid "End of current session"
 msgstr "Τέλος της τρέχουσας συνεδρία"
 
-#: embed/mozilla/mozilla-i18n.c:31
-msgid "Indian"
-msgstr "Indian"
-
-#: embed/mozilla/mozilla-i18n.c:36
-msgid "Vietnamese"
-msgstr "Βιετναμέζικα"
-
-#: embed/mozilla/mozilla-i18n.c:38
-msgid "Other"
-msgstr "Άλλο"
-
-#: embed/mozilla/mozilla-i18n.c:43
-msgid "Arabic (IBM-864)"
-msgstr "Arabic (IBM-864)"
-
-#: embed/mozilla/mozilla-i18n.c:44
-msgid "Arabic (IBM-864-I)"
-msgstr "Arabic (IBM-864-I)"
-
-#: embed/mozilla/mozilla-i18n.c:45
-msgid "Arabic (ISO-8859-6)"
-msgstr "Arabic (ISO-8859-6)"
-
-#: embed/mozilla/mozilla-i18n.c:46
-msgid "Arabic (ISO-8859-6-E)"
-msgstr "Arabic (ISO-8859-6-E)"
-
-#: embed/mozilla/mozilla-i18n.c:47
-msgid "Arabic (ISO-8859-6-I)"
-msgstr "Arabic (ISO-8859-6-I)"
-
-#: embed/mozilla/mozilla-i18n.c:48
-msgid "Arabic (MacArabic)"
-msgstr "Arabic (MacArabic)"
-
-#: embed/mozilla/mozilla-i18n.c:49
-msgid "Arabic (Windows-1256)"
-msgstr "Arabic (Windows-1256)"
-
-#: embed/mozilla/mozilla-i18n.c:50
-msgid "Armenian (ARMSCII-8)"
-msgstr "Armenian (ARMSCII-8)"
-
-#: embed/mozilla/mozilla-i18n.c:51
-msgid "Baltic (ISO-8859-13)"
-msgstr "Baltic (ISO-8859-13)"
-
-#: embed/mozilla/mozilla-i18n.c:52
-msgid "Baltic (ISO-8859-4)"
-msgstr "Baltic (ISO-8859-4)"
-
-#: embed/mozilla/mozilla-i18n.c:53
-msgid "Baltic (Windows-1257)"
-msgstr "Baltic (Windows-1257)"
-
-#: embed/mozilla/mozilla-i18n.c:54
-msgid "Celtic (ISO-8859-14)"
-msgstr "Celtic (ISO-8859-14)"
-
-#: embed/mozilla/mozilla-i18n.c:55
-msgid "Central European (IBM-852)"
-msgstr "Central European (IBM-852)"
-
-#: embed/mozilla/mozilla-i18n.c:56
-msgid "Central European (ISO-8859-2)"
-msgstr "Central European (ISO-8859-2)"
-
-#: embed/mozilla/mozilla-i18n.c:57
-msgid "Central European (MacCE)"
-msgstr "Central European (MacCE)"
-
-#: embed/mozilla/mozilla-i18n.c:58
-msgid "Central European (Windows-1250)"
-msgstr "Central European (Windows-1250)"
-
-#: embed/mozilla/mozilla-i18n.c:59
-msgid "Chinese Simplified (GB18030)"
-msgstr "Chinese Simplified (GB18030)"
-
-#: embed/mozilla/mozilla-i18n.c:60
-msgid "Chinese Simplified (GB2312)"
-msgstr "Chinese Simplified (GB2312)"
-
-#: embed/mozilla/mozilla-i18n.c:61
-msgid "Chinese Simplified (GBK)"
-msgstr "Chinese Simplified (GBK)"
-
-#: embed/mozilla/mozilla-i18n.c:62
-msgid "Chinese Simplified (HZ)"
-msgstr "Chinese Simplified (HZ)"
-
-#: embed/mozilla/mozilla-i18n.c:63
-msgid "Chinese Simplified (Windows-936)"
-msgstr "Chinese Simplified (Windows-936)"
-
-#: embed/mozilla/mozilla-i18n.c:64
-msgid "Chinese Traditional (Big5)"
-msgstr "Chinese Traditional (Big5)"
-
-#: embed/mozilla/mozilla-i18n.c:65
-msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr "Chinese Traditional (Big5-HKSCS)"
-
-#: embed/mozilla/mozilla-i18n.c:66
-msgid "Chinese Traditional (EUC-TW)"
-msgstr "Chinese Traditional (EUC-TW)"
-
-#: embed/mozilla/mozilla-i18n.c:67
-msgid "Croatian (MacCroatian)"
-msgstr "Croatian (MacCroatian)"
-
-#: embed/mozilla/mozilla-i18n.c:68
-msgid "Cyrillic (IBM-855)"
-msgstr "Cyrillic (IBM-855)"
-
-#: embed/mozilla/mozilla-i18n.c:69
-msgid "Cyrillic (ISO-8859-5)"
-msgstr "Cyrillic (ISO-8859-5)"
-
-#: embed/mozilla/mozilla-i18n.c:70
-msgid "Cyrillic (ISO-IR-111)"
-msgstr "Cyrillic (ISO-IR-111)"
-
-#: embed/mozilla/mozilla-i18n.c:71
-msgid "Cyrillic (KOI8-R)"
-msgstr "Cyrillic (KOI8-R)"
-
-#: embed/mozilla/mozilla-i18n.c:72
-msgid "Cyrillic (MacCyrillic)"
-msgstr "Cyrillic (MacCyrillic)"
-
-#: embed/mozilla/mozilla-i18n.c:73
-msgid "Cyrillic (Windows-1251)"
-msgstr "Cyrillic (Windows-1251)"
-
-#: embed/mozilla/mozilla-i18n.c:74
-msgid "Cyrillic/Russian (CP-866)"
-msgstr "Cyrillic/Russian (CP-866)"
-
-#: embed/mozilla/mozilla-i18n.c:75
-msgid "Cyrillic/Ukrainian (KOI8-U)"
-msgstr "Cyrillic/Ukrainian (KOI8-U)"
-
-#: embed/mozilla/mozilla-i18n.c:76
-msgid "Cyrillic/Ukrainian (MacUkrainian)"
-msgstr "Cyrillic/Ukrainian (MacUkrainian)"
-
-#: embed/mozilla/mozilla-i18n.c:77
-msgid "English (US-ASCII)"
-msgstr "English (US-ASCII)"
-
-#: embed/mozilla/mozilla-i18n.c:78
-msgid "Farsi (MacFarsi)"
-msgstr "Farsi (MacFarsi)"
-
-#: embed/mozilla/mozilla-i18n.c:79
-msgid "Georgian (GEOSTD8)"
-msgstr "Georgian (GEOSTD8)"
-
-#: embed/mozilla/mozilla-i18n.c:80
-msgid "Greek (ISO-8859-7)"
-msgstr "Ελληνικά (ISO-8859-7)"
-
-#: embed/mozilla/mozilla-i18n.c:81
-msgid "Greek (MacGreek)"
-msgstr "Ελληνικά (MacGreek)"
-
-#: embed/mozilla/mozilla-i18n.c:82
-msgid "Greek (Windows-1253)"
-msgstr "(MacGreek)  (Windows-1253)"
-
-#: embed/mozilla/mozilla-i18n.c:83
-msgid "Gujarati (MacGujarati)"
-msgstr "Gujarati (MacGujarati)"
-
-#: embed/mozilla/mozilla-i18n.c:84
-msgid "Gurmukhi (MacGurmukhi)"
-msgstr "Gurmukhi (MacGurmukhi)"
-
-#: embed/mozilla/mozilla-i18n.c:85
-msgid "Hebrew (IBM-862)"
-msgstr "Hebrew (IBM-862)"
-
-#: embed/mozilla/mozilla-i18n.c:86
-msgid "Hebrew (ISO-8859-8-E)"
-msgstr "Hebrew (ISO-8859-8-E)"
-
-#: embed/mozilla/mozilla-i18n.c:87
-msgid "Hebrew (ISO-8859-8-I)"
-msgstr "Hebrew (ISO-8859-8-I)"
-
-#: embed/mozilla/mozilla-i18n.c:88
-msgid "Hebrew (MacHebrew)"
-msgstr "Hebrew (MacHebrew)"
-
-#: embed/mozilla/mozilla-i18n.c:89
-msgid "Hebrew (Windows-1255)"
-msgstr "Hebrew (Windows-1255)"
-
-#: embed/mozilla/mozilla-i18n.c:90
-msgid "Hindi (MacDevanagari)"
-msgstr "Hindi (MacDevanagari)"
-
-#: embed/mozilla/mozilla-i18n.c:91
-msgid "Icelandic (MacIcelandic)"
-msgstr "Icelandic (MacIcelandic)"
-
-#: embed/mozilla/mozilla-i18n.c:92
-msgid "Japanese (EUC-JP)"
-msgstr "Japanese (EUC-JP)"
-
-#: embed/mozilla/mozilla-i18n.c:93
-msgid "Japanese (ISO-2022-JP)"
-msgstr "Japanese (ISO-2022-JP)"
-
-#: embed/mozilla/mozilla-i18n.c:94
-msgid "Japanese (Shift_JIS)"
-msgstr "Japanese (Shift_JIS)"
-
-#: embed/mozilla/mozilla-i18n.c:95
-msgid "Korean (EUC-KR)"
-msgstr "Korean (EUC-KR)"
-
-#: embed/mozilla/mozilla-i18n.c:96
-msgid "Korean (ISO-2022-KR)"
-msgstr "Korean (ISO-2022-KR)"
-
-#: embed/mozilla/mozilla-i18n.c:97
-msgid "Korean (JOHAB)"
-msgstr "Korean (JOHAB)"
-
-#: embed/mozilla/mozilla-i18n.c:98
-msgid "Korean (UHC)"
-msgstr "Korean (UHC)"
-
-#: embed/mozilla/mozilla-i18n.c:99
-msgid "Nordic (ISO-8859-10)"
-msgstr "Nordic (ISO-8859-10)"
-
-#: embed/mozilla/mozilla-i18n.c:100
-msgid "Romanian (MacRomanian)"
-msgstr "Romanian (MacRomanian)"
-
-#: embed/mozilla/mozilla-i18n.c:101
-msgid "Romanian (ISO-8859-16)"
-msgstr "Romanian (ISO-8859-16)"
-
-#: embed/mozilla/mozilla-i18n.c:102
-msgid "South European (ISO-8859-3)"
-msgstr "South European (ISO-8859-3)"
-
-#: embed/mozilla/mozilla-i18n.c:103
-msgid "Thai (TIS-620)"
-msgstr "Thai (TIS-620)"
-
-#: embed/mozilla/mozilla-i18n.c:104
-msgid "Turkish (IBM-857)"
-msgstr "Turkish (IBM-857)"
-
-#: embed/mozilla/mozilla-i18n.c:105
-msgid "Turkish (ISO-8859-9)"
-msgstr "Turkish (ISO-8859-9)"
-
-#: embed/mozilla/mozilla-i18n.c:106
-msgid "Turkish (MacTurkish)"
-msgstr "Turkish (MacTurkish)"
-
-#: embed/mozilla/mozilla-i18n.c:107
-msgid "Turkish (Windows-1254)"
-msgstr "Turkish (Windows-1254)"
-
-#: embed/mozilla/mozilla-i18n.c:108
-msgid "Unicode (UTF-7)"
-msgstr "Unicode (UTF-7)"
-
-#: embed/mozilla/mozilla-i18n.c:109
-msgid "Unicode (UTF-8)"
-msgstr "Unicode (UTF-8)"
-
-#: embed/mozilla/mozilla-i18n.c:110
-msgid "Unicode (UTF-16BE)"
-msgstr "Unicode (UTF-16BE)"
-
-#: embed/mozilla/mozilla-i18n.c:111
-msgid "Unicode (UTF-16LE)"
-msgstr "Unicode (UTF-16LE)"
-
-#: embed/mozilla/mozilla-i18n.c:112
-msgid "Unicode (UTF-32BE)"
-msgstr "Unicode (UTF-32BE)"
-
-#: embed/mozilla/mozilla-i18n.c:113
-msgid "Unicode (UTF-32LE)"
-msgstr "Unicode (UTF-32LE)"
-
-#: embed/mozilla/mozilla-i18n.c:114
-msgid "User Defined"
-msgstr "Καθορισμένο από το χρήστη"
-
-#: embed/mozilla/mozilla-i18n.c:115
-msgid "Vietnamese (TCVN)"
-msgstr "Vietnamese (TCVN)"
-
-#: embed/mozilla/mozilla-i18n.c:116
-msgid "Vietnamese (VISCII)"
-msgstr "Vietnamese (VISCII)"
-
-#: embed/mozilla/mozilla-i18n.c:117
-msgid "Vietnamese (VPS)"
-msgstr "Vietnamese (VPS)"
-
-#: embed/mozilla/mozilla-i18n.c:118
-msgid "Vietnamese (Windows-1258)"
-msgstr "Vietnamese (Windows-1258)"
-
-#: embed/mozilla/mozilla-i18n.c:119
-msgid "Visual Hebrew (ISO-8859-8)"
-msgstr "Visual Hebrew (ISO-8859-8)"
-
-#: embed/mozilla/mozilla-i18n.c:120
-msgid "Western (IBM-850)"
-msgstr "Western (IBM-850)"
-
-#: embed/mozilla/mozilla-i18n.c:121
-msgid "Western (ISO-8859-1)"
-msgstr "Western (ISO-8859-1)"
-
-#: embed/mozilla/mozilla-i18n.c:122
-msgid "Western (ISO-8859-15)"
-msgstr "Western (ISO-8859-15)"
-
-#: embed/mozilla/mozilla-i18n.c:123
-msgid "Western (MacRoman)"
-msgstr "Western (MacRoman)"
-
-#: embed/mozilla/mozilla-i18n.c:124
-msgid "Western (Windows-1252)"
-msgstr "Western (Windows-1252)"
-
-#: embed/mozilla/mozilla-notifiers.cpp:671
-msgid "Default (recommended)"
-msgstr "Εξ ορισμού (συνιστάται)"
+#. *
+#. * This is a comma separated list of language ranges, as specified
+#. * by RFC 2616, 14.4.
+#. * Always include the basic language code last.
+#. *
+#. * Examples:
+#. * "pt"    translation: "pt"
+#. * "pt_BR" translation: "pt-br,pt"
+#. * "zh_CN" translation: "zh-cn,zh"
+#. * "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
+#.
+#: embed/mozilla/mozilla-notifiers.cpp:598
+#, fuzzy
+msgid "system-language"
+msgstr "Γλώσσα"
 
 #: lib/eel-gconf-extensions.c:79
 #, c-format
@@ -1797,6 +1571,19 @@ msgid ""
 msgstr ""
 "Σφάλμα GConf:\n"
 "  %s"
+
+#: lib/egg/egg-editable-toolbar.c:269
+#, fuzzy
+msgid "_Remove Toolbar"
+msgstr "Ερ_γαλειοθήκη"
+
+#: lib/egg/egg-toolbar-editor.c:427
+msgid "Separator"
+msgstr ""
+
+#: lib/egg/egg-toolbar-editor.c:457
+msgid "Drag an item onto the toolbars above to add it, from the toolbars in the items table to remove it."
+msgstr "Σύρετε ένα αντικείμενο στις παραπάνω εργαλειοθήκες για να το προσθέσετε, και από τις εργαλειοθήκες στον πίνακα αντικειμένων για να το απομακρύνετε."
 
 #: lib/ephy-file-helpers.c:104
 #, c-format
@@ -1813,7 +1600,7 @@ msgstr "%s υπάρχει, παρακαλώ απομακρύνετε το από
 msgid "Failed to create directory %s."
 msgstr "Αποτυχία δημιουργίας καταλόγου %s."
 
-#: lib/ephy-gui.c:135
+#: lib/ephy-gui.c:76
 #, c-format
 msgid ""
 "File %s will be overwritten.\n"
@@ -1826,700 +1613,1124 @@ msgstr ""
 "\n"
 "Θέλετε να συνεχίσετε?"
 
-#: lib/ephy-node.c:821 lib/ephy-node.c:827 lib/ephy-node.c:858
-msgid "Never"
-msgstr "Ποτέ"
-
-#: lib/ephy-node.c:849
-msgid "Today at %-H:%M"
-msgstr "Σήμερα στις %-H:%M"
-
-#: lib/ephy-node.c:851
-msgid "Yesterday at %-H:%M"
-msgstr "Χθες στις %-H:%M"
-
-#: lib/ephy-node.c:853
-msgid "%A, %B %-d %Y at %-H:%M"
-msgstr "%A, %B %-d %Y στις %-H:%M"
-
-#: lib/ephy-start-here.c:275
-msgid "Import Mozilla bookmarks"
-msgstr "Εισαγωγή σελιδοδεικτών Mozilla"
-
-#: lib/ephy-start-here.c:286
-msgid "Import Galeon bookmarks"
-msgstr "Εισαγωγή σελιδοδεικτών Galeon "
-
-#: lib/ephy-start-here.c:297
-msgid "Import Konqueror bookmarks"
-msgstr "Εισαγωγή σελιδοδεικτών Konqueror"
-
-#: lib/ephy-string.c:115
-msgid "%Y-%m-%d"
-msgstr "%Y-%m-%d"
-
-#: lib/widgets/ephy-editable-toolbar.c:756
-msgid ""
-"Drag an item onto the toolbars above to add it, from the toolbars in the "
-"items table to remove it."
+#: lib/ephy-gui.c:107
+#, c-format
+msgid "Could not display help: %s"
 msgstr ""
-"Σύρετε ένα αντικείμενο στις παραπάνω εργαλειοθήκες για να το προσθέσετε, και "
-"από τις εργαλειοθήκες στον πίνακα αντικειμένων για να το απομακρύνετε."
 
-#: lib/widgets/ephy-editable-toolbar.c:763
-msgid "Add Toolbar"
-msgstr "Προσθήκη εργαλειθήκης"
+#: lib/ephy-langs.c:28
+#: src/prefs-dialog.c:91
+msgid "Arabic"
+msgstr "Αραβικά"
 
-#. setup label
-#: lib/widgets/ephy-notebook.c:714 src/ephy-tab.c:521 src/ephy-tab.c:985
-#: src/window-commands.c:269
-msgid "Untitled"
-msgstr "Ανώνυμο"
+#: lib/ephy-langs.c:29
+msgid "Baltic"
+msgstr "Βαλτική"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:96
-msgid "Open In _New Window"
-msgstr "Άνοιγμα σε _Νέο Παράθυρο"
+#: lib/ephy-langs.c:30
+msgid "Central European"
+msgstr "Κεντρικής Ευρώπη"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:99
-msgid "Open In New _Tab"
+#: lib/ephy-langs.c:31
+msgid "Cyrillic"
+msgstr "Κυριλλικά"
+
+#: lib/ephy-langs.c:32
+#, fuzzy
+msgid "Devanagari"
+msgstr "Hindi (MacDevanagari)"
+
+#: lib/ephy-langs.c:33
+#: src/prefs-dialog.c:113
+msgid "Greek"
+msgstr "Ελληνικά"
+
+#: lib/ephy-langs.c:34
+#: src/prefs-dialog.c:114
+msgid "Hebrew"
+msgstr "Εβραϊκά"
+
+#: lib/ephy-langs.c:35
+#: src/prefs-dialog.c:120
+#: src/prefs-dialog.c:159
+msgid "Japanese"
+msgstr "Γιαπωνέζικα"
+
+#: lib/ephy-langs.c:36
+#: src/prefs-dialog.c:121
+#: src/prefs-dialog.c:160
+msgid "Korean"
+msgstr "Κορεάτικα"
+
+#: lib/ephy-langs.c:37
+#: src/prefs-dialog.c:98
+#: src/prefs-dialog.c:162
+msgid "Simplified Chinese"
+msgstr "Simplified Chinese"
+
+#: lib/ephy-langs.c:38
+#: src/prefs-dialog.c:140
+msgid "Tamil"
+msgstr "Tamil"
+
+#: lib/ephy-langs.c:39
+msgid "Thai"
+msgstr "Ταϊλανδέζικη"
+
+#: lib/ephy-langs.c:40
+#: src/prefs-dialog.c:99
+#: src/prefs-dialog.c:163
+msgid "Traditional Chinese"
+msgstr "Traditional Chinese"
+
+#: lib/ephy-langs.c:41
+#: src/prefs-dialog.c:141
+msgid "Turkish"
+msgstr "Τουρκικά"
+
+#: lib/ephy-langs.c:42
+msgid "Unicode"
+msgstr "Unicode"
+
+#: lib/ephy-langs.c:43
+msgid "Western"
+msgstr "Δυτική"
+
+#: lib/ephy-zoom.h:39
+msgid "50%"
+msgstr "50%"
+
+#: lib/ephy-zoom.h:40
+msgid "75%"
+msgstr "75%"
+
+#: lib/ephy-zoom.h:41
+msgid "100%"
+msgstr "100%"
+
+#: lib/ephy-zoom.h:42
+msgid "125%"
+msgstr "125%"
+
+#: lib/ephy-zoom.h:43
+msgid "150%"
+msgstr "150%"
+
+#: lib/ephy-zoom.h:44
+msgid "175%"
+msgstr "175%"
+
+#: lib/ephy-zoom.h:45
+msgid "200%"
+msgstr "200%"
+
+#: lib/ephy-zoom.h:46
+msgid "300%"
+msgstr "300%"
+
+#: lib/ephy-zoom.h:47
+msgid "400%"
+msgstr "400%"
+
+#: lib/widgets/ephy-zoom-control.c:145
+#, fuzzy
+msgid "_Zoom"
+msgstr "_Κάτω"
+
+#: src/bookmarks/ephy-bookmark-action.c:212
+#, c-format
+msgid "%s:"
+msgstr "%s:"
+
+#: src/bookmarks/ephy-bookmark-properties.c:245
+#, c-format
+msgid "%s Properties"
+msgstr "%s Ιδιότητες"
+
+#: src/bookmarks/ephy-bookmark-properties.c:368
+#: src/bookmarks/ephy-new-bookmark.c:220
+msgid "_Title:"
+msgstr "_Τίτλος:"
+
+#: src/bookmarks/ephy-bookmark-properties.c:410
+#: src/bookmarks/ephy-new-bookmark.c:243
+msgid "To_pics:"
+msgstr "Θέ_ματα:"
+
+#: src/bookmarks/ephy-bookmark-properties.c:419
+msgid "_Show in bookmarks bar"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:154
+#: src/ephy-history-window.c:126
+#: src/ephy-window.c:67
+msgid "_View"
+msgstr "_Προβολή"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:155
+#: src/ephy-history-window.c:127
+#: src/ephy-window.c:71
+msgid "_Help"
+msgstr "_Βοήθεια"
+
+#. File Menu
+#: src/bookmarks/ephy-bookmarks-editor.c:159
+msgid "_New Topic"
+msgstr "_Νέο Θέμα"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:160
+#, fuzzy
+msgid "Create a new topic"
+msgstr "Δημιουργία νέας στήλης"
+
+#. File Menu
+#: src/bookmarks/ephy-bookmarks-editor.c:162
+#: src/bookmarks/ephy-bookmarks-editor.c:862
+#: src/ephy-history-window.c:131
+#: src/ephy-history-window.c:674
+#, fuzzy
+msgid "_Open in New Window"
+msgstr "Άνοιγμα σε νέο παράθυρο"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:163
+msgid "Open the selected bookmark in a new window"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:165
+#: src/bookmarks/ephy-bookmarks-editor.c:863
+#: src/ephy-history-window.c:134
+#: src/ephy-history-window.c:675
+#, fuzzy
+msgid "Open in New _Tab"
 msgstr "Άνοιγμα σε νέα σ_τήλη"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:102
-msgid "_Remove"
-msgstr "_Απομάκρυνση"
+#: src/bookmarks/ephy-bookmarks-editor.c:166
+msgid "Open the selected bookmark in a new tab"
+msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:497
-#: src/bookmarks/ephy-new-bookmark.c:195
-msgid "Title:"
-msgstr "Τίτλος:"
+#: src/bookmarks/ephy-bookmarks-editor.c:168
+msgid "_Rename..."
+msgstr "_Μετονομασία..."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:514
-msgid "Location:"
-msgstr "Τοποθεσία:"
+#: src/bookmarks/ephy-bookmarks-editor.c:169
+msgid "Rename the selected bookmark or topic"
+msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:531
-#: src/bookmarks/ephy-new-bookmark.c:209
-msgid "Keywords:"
-msgstr "Λέξεις κλειδί:"
+#: src/bookmarks/ephy-bookmarks-editor.c:170
+#: src/ephy-history-window.c:137
+msgid "_Delete"
+msgstr "_Διαγραφή"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:623
-msgid "Search:"
-msgstr "Αναζήτηση:"
+#: src/bookmarks/ephy-bookmarks-editor.c:171
+msgid "Delete the selected bookmark or topic"
+msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:672
+#: src/bookmarks/ephy-bookmarks-editor.c:173
+msgid "_Show in Bookmarks Bar"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:174
+msgid "Show the selected bookmark or topic in the bookmarks bar"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:176
+msgid "_Properties"
+msgstr "_Ιδιότητες"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:177
+msgid "View or modify the properties of the selected bookmark"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:179
+#, fuzzy
+msgid "_Import Bookmarks..."
+msgstr "Έξυπνοι  σελιδοδείκτες"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:180
+msgid "Import bookmarks from another browser or a bookmarks file"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:182
+#: src/ephy-history-window.c:143
+#: src/ephy-window.c:92
+msgid "_Close"
+msgstr "_Κλείσιμο"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:183
+#, fuzzy
+msgid "Close the bookmarks window"
+msgstr "Κλείσιμο αυτού του παραθύρου"
+
+#. Edit Menu
+#: src/bookmarks/ephy-bookmarks-editor.c:187
+#: src/ephy-history-window.c:148
+#: src/ephy-window.c:97
+msgid "Cu_t"
+msgstr "Αποκο_πή"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:188
+#: src/ephy-history-window.c:149
+#: src/ephy-window.c:98
+msgid "Cut the selection"
+msgstr "Αποκοπή της επιλογής"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:190
+#: src/bookmarks/ephy-bookmarks-editor.c:872
+#: src/ephy-history-window.c:151
+#: src/ephy-history-window.c:684
+#: src/ephy-window.c:100
+msgid "_Copy"
+msgstr "Αντιγρα_φή"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:191
+#: src/ephy-history-window.c:152
+#: src/ephy-window.c:101
+msgid "Copy the selection"
+msgstr "Αντιγραφή της επιλογής"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:193
+#: src/ephy-history-window.c:154
+#: src/ephy-window.c:103
+msgid "_Paste"
+msgstr "Επι_κόλληση"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:194
+#: src/ephy-history-window.c:155
+#, fuzzy
+msgid "Paste the clipboard"
+msgstr "Επικόλληση του προχείρου"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:196
+#: src/ephy-history-window.c:157
+#: src/ephy-window.c:106
+msgid "Select _All"
+msgstr "Επιλογή _Όλων"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:197
+msgid "Select all bookmarks or text"
+msgstr ""
+
+#. View Menu
+#: src/bookmarks/ephy-bookmarks-editor.c:201
+#: src/ephy-history-window.c:165
+msgid "_Title"
+msgstr "_Τίτλος"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:202
+#: src/ephy-history-window.c:166
+msgid "Show only the title column"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:204
+#: src/ephy-history-window.c:168
+msgid "_Address"
+msgstr "_Διεύθυνση"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:205
+#: src/ephy-history-window.c:169
+msgid "Show only the address column"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:207
+#: src/ephy-history-window.c:171
+msgid "T_itle and Address"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:208
+#: src/ephy-history-window.c:172
+msgid "Show both the title and address columns"
+msgstr ""
+
+#. Help Menu
+#: src/bookmarks/ephy-bookmarks-editor.c:212
+#: src/ephy-history-window.c:176
+#: src/ephy-window.c:207
+msgid "_Contents"
+msgstr "_Περιεχόμενα"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:213
+#, fuzzy
+msgid "Display bookmarks help"
+msgstr "Προβολή βοήθειας φυλλομετρητή"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:215
+#: src/ephy-history-window.c:179
+#: src/ephy-window.c:210
+msgid "_About"
+msgstr "Πε_ρί"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:216
+#: src/ephy-history-window.c:180
+#: src/ephy-window.c:211
+msgid "Display credits for the web browser creators"
+msgstr "Εμφάνιση μνείας των δημιουργών του φυλλομετρητή"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:258
+msgid "Type a topic"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:510
+#, fuzzy
+msgid "Import Bookmarks"
+msgstr "Έξυπνοι  σελιδοδείκτες"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:530
+msgid "Choose the bookmarks source:"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:539
+msgid "Mozilla bookmarks"
+msgstr "Σελιδοδείκτες Mozilla"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:541
+msgid "Galeon bookmarks"
+msgstr "Σελιδοδείκτες Galeon "
+
+#: src/bookmarks/ephy-bookmarks-editor.c:543
+msgid "Konqueror bookmarks"
+msgstr "Σελιδοδείκτες Konqueror"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:857
+#: src/ephy-history-window.c:669
+#, fuzzy
+msgid "_Open in New Windows"
+msgstr "Άνοιγμα σε νέο παράθυρο"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:858
+#: src/ephy-history-window.c:670
+#, fuzzy
+msgid "Open in New _Tabs"
+msgstr "Άνοιγμα σε νέα σ_τήλη"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:868
+#: src/ephy-history-window.c:680
+msgid "_Copy Address"
+msgstr "_Αντιγραφή Διεύθυνσης"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:1115
+#: src/ephy-history-window.c:885
+msgid "_Search:"
+msgstr "_Αναζήτηση:"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:1224
+#: src/ephy-window.c:672
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:695
-msgid "Keywords"
-msgstr "Λέξεις κλειδί:"
+#: src/bookmarks/ephy-bookmarks-editor.c:1300
+msgid "Topics"
+msgstr "Θέματα"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:722 src/history-dialog.c:288
+#: src/bookmarks/ephy-bookmarks-editor.c:1361
+#: src/ephy-history-window.c:1079
 msgid "Title"
 msgstr "Τίτλος"
 
-#: src/bookmarks/ephy-bookmarks.c:465
-msgid "All"
-msgstr "Όλα"
+#: src/bookmarks/ephy-bookmarks-menu.c:268
+#: src/bookmarks/ephy-topic-action.c:208
+msgid "Empty"
+msgstr "Άδειο"
 
-#: src/bookmarks/ephy-new-bookmark.c:231
-msgid "Add bookmark"
-msgstr "Προσθήκη σελιδοδείκτη"
+#. Translators you should change these links to respect your locale.
+#. * For instance in .nl these should be
+#. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#.
+#: src/bookmarks/ephy-bookmarks.c:77
+#, fuzzy
+msgid "Search the web"
+msgstr "Φυλλομέτρηση στον παγκόσμιο ιστό"
 
-#: src/ephy-main.c:71
-msgid "Open a new tab in an existing Ephy window"
+#: src/bookmarks/ephy-bookmarks.c:77
+#, c-format
+msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks.c:83
+msgid "Entertainment"
+msgstr "Διασκέδαση"
+
+#: src/bookmarks/ephy-bookmarks.c:84
+msgid "News"
+msgstr "Νέα"
+
+#: src/bookmarks/ephy-bookmarks.c:85
+#, fuzzy
+msgid "Shopping"
+msgstr "Αγορές"
+
+#: src/bookmarks/ephy-bookmarks.c:86
+msgid "Sports"
+msgstr "Αθλητικά"
+
+#: src/bookmarks/ephy-bookmarks.c:87
+msgid "Travel"
+msgstr "Ταξίδια"
+
+#: src/bookmarks/ephy-bookmarks.c:88
+msgid "Work"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks.c:724
+#, fuzzy
+msgid "Most Visited"
+msgstr "Τελευταία επίσκεψη"
+
+#: src/bookmarks/ephy-bookmarks.c:741
+msgid "Not Categorized"
+msgstr ""
+
+#: src/bookmarks/ephy-new-bookmark.c:266
+#, fuzzy
+msgid "New Bookmark"
+msgstr "Σελιδοδείκτες"
+
+#. FIXME: We "should" use gtk_message dialog here
+#. * but it doesn't support markup of text yet
+#. * so we build our own. See bug 65501.
+#.
+#: src/bookmarks/ephy-new-bookmark.c:311
+#, fuzzy
+msgid "Duplicated Bookmark"
+msgstr "Έξυπνοι  σελιδοδείκτες"
+
+#: src/bookmarks/ephy-new-bookmark.c:341
+#, c-format
+msgid "A bookmark titled %s already exists for this page."
+msgstr ""
+
+#: src/ephy-go-action.c:80
+#: src/ephy-go-action.c:97
+#: src/toolbar.c:347
+msgid "Go"
+msgstr "Μετάβαση"
+
+#: src/ephy-history-window.c:132
+msgid "Open the selected history link in a new window"
+msgstr ""
+
+#: src/ephy-history-window.c:135
+msgid "Open the selected history link in a new tab"
+msgstr ""
+
+#: src/ephy-history-window.c:138
+#, fuzzy
+msgid "Delete the selected history link"
+msgstr "Αποκοπή της επιλογής"
+
+#: src/ephy-history-window.c:140
+#, fuzzy
+msgid "Boo_kmark Link..."
+msgstr "Δεσμός ως σελιδοδείκτης..."
+
+#: src/ephy-history-window.c:141
+msgid "Bookmark the selected history link"
+msgstr ""
+
+#: src/ephy-history-window.c:144
+#, fuzzy
+msgid "Close the history window"
+msgstr "Κλείσιμο αυτού του παραθύρου"
+
+#: src/ephy-history-window.c:158
+msgid "Select all history links or text"
+msgstr ""
+
+#: src/ephy-history-window.c:160
+#, fuzzy
+msgid "C_lear History"
+msgstr "Ιστορικό"
+
+#: src/ephy-history-window.c:161
+msgid "Clear your browsing history"
+msgstr ""
+
+#: src/ephy-history-window.c:177
+#, fuzzy
+msgid "Display history help"
+msgstr "Προβολή βοήθειας φυλλομετρητή"
+
+#: src/ephy-history-window.c:223
+msgid "Clear history"
+msgstr "Καθαρισμός ιστορικού"
+
+#: src/ephy-history-window.c:255
+msgid "C_lear"
+msgstr "Ε_κκαθάριση"
+
+#: src/ephy-history-window.c:277
+msgid "Clear browsing history?"
+msgstr ""
+
+#: src/ephy-history-window.c:284
+msgid "Clearing the browsing history will cause all history links to be permanently deleted."
+msgstr ""
+
+#: src/ephy-history-window.c:959
+msgid "History"
+msgstr "Ιστορικό"
+
+#: src/ephy-history-window.c:1029
+#, fuzzy
+msgid "Sites"
+msgstr "Μέγεθος"
+
+#: src/ephy-history-window.c:1084
+msgid "Address"
+msgstr "Διεύθυνση"
+
+#: src/ephy-main.c:72
+#, fuzzy
+msgid "Open a new tab in an existing Epiphany window"
 msgstr "Άνοιγμα νέας στήλης σε υπάρχον παράθυρο"
 
-#: src/ephy-main.c:74
-msgid "Open a new window in an existing Ephy process"
+#: src/ephy-main.c:75
+#, fuzzy
+msgid "Open a new window in an existing Epiphany process"
 msgstr "Άνοιγμα νέου παραθύρου σε υπάρχουσα εκτέλεση"
 
-#: src/ephy-main.c:77
-msgid "Do not raise the window when opening a page in an existing Ephy process"
-msgstr ""
-"Να μην γίνετε ανάδυση του παραθύρου κατά το άνοιγμα μιας σελίδας σε "
-"υπάρχουσα διεργασία του Ephy."
+#: src/ephy-main.c:78
+#, fuzzy
+msgid "Do not raise the window when opening a page in an existing Epiphany process"
+msgstr "Να μην γίνετε ανάδυση του παραθύρου κατά το άνοιγμα μιας σελίδας σε υπάρχουσα διεργασία του Ephy."
 
-#: src/ephy-main.c:80
-msgid "Run Ephy in full screen mode"
+#: src/ephy-main.c:81
+#, fuzzy
+msgid "Run Epiphany in full screen mode"
 msgstr "Εκτέλεση Ephy σε λειτουργία πλήρους οθόνης"
 
-#: src/ephy-main.c:83
-msgid "Attempt to load URL in existing Ephy window"
+#: src/ephy-main.c:84
+#, fuzzy
+msgid "Attempt to load URL in existing Epiphany window"
 msgstr "Προσπάθεια φόρτωσης URL σε υπάρχον παράθυρο Ephy"
 
-#: src/ephy-main.c:86
+#: src/ephy-main.c:87
 msgid "Load the given session file"
 msgstr "Φόρτωση του καθορισμένου αρχείου συνεδρίας"
 
-#: src/ephy-main.c:87
+#: src/ephy-main.c:88
 msgid "FILE"
 msgstr "ΑΡΧΕΙΟ"
 
-#: src/ephy-main.c:89
-msgid ""
-"Don't open any windows; instead act as a server for quick startup of new "
-"Ephy instances"
-msgstr ""
-"Να μην ανοιχθούν παράθυρα, αλλά να να λειτουργήσει σαν εξυπηρετητής για "
-"γρήγορη εκκίνηση νέων διεργασιών Ephy "
+#: src/ephy-main.c:90
+#, fuzzy
+msgid "Don't open any windows; instead act as a server for quick startup of new Epiphany instances"
+msgstr "Να μην ανοιχθούν παράθυρα, αλλά να να λειτουργήσει σαν εξυπηρετητής για γρήγορη εκκίνηση νέων διεργασιών Ephy "
 
-#: src/ephy-main.c:93
+#: src/ephy-main.c:94
 msgid "Add a bookmark (don't open any window)"
 msgstr "Προσθήκη σελιδοδείκτη (δεν ανοίγει κανένα παράθυρο)"
 
-#: src/ephy-main.c:94
+#: src/ephy-main.c:95
 msgid "URL"
 msgstr "URL"
 
-#: src/ephy-main.c:96
-msgid ""
-"Create the initial window with the given geometry.\n"
-"see X(1) for the GEOMETRY format"
-msgstr ""
-"Δημιουργία του αρχικού παραθύρου με την δοθείσα γεωμετρία.\n"
-"βλέπε  X(1) για την μορφή GEOMETRY."
-
-#: src/ephy-main.c:98
-msgid "GEOMETRY"
-msgstr "ΓΕΩΜΕΤΡΊΑ"
-
-#: src/ephy-main.c:100
-msgid "Close all Ephy windows"
+#: src/ephy-main.c:97
+#, fuzzy
+msgid "Close all Epiphany windows"
 msgstr "Κλείσιμο όλων των παραθύρων"
 
-#: src/ephy-main.c:103
+#: src/ephy-main.c:100
 msgid "Same as --close, but exits server mode too"
 msgstr "Το ίδιο όπως το --κλείσιμο, αλλά τερματίζεται και η λειτουργία εξυπηρετητή"
 
-#: src/ephy-main.c:106
+#: src/ephy-main.c:103
 msgid "Used internally by the nautilus view"
 msgstr "Χρησιμοποιείται εσωτερικά από την όψη του ναυτίλου"
 
-#: src/ephy-main.c:131
+#: src/ephy-main.c:106
+msgid "Launch the bookmarks editor"
+msgstr ""
+
+#: src/ephy-main.c:127
+msgid "Epiphany Web Browser"
+msgstr "Περιηγητής Δικτ. Ιστού Epiphany "
+
+#: src/ephy-main.c:132
 msgid "Ephy"
 msgstr "Ephy"
 
-#: src/ephy-main.c:291
-msgid "Ephy already running, using existing process"
-msgstr "Η εφαρμογή εκτελείται ήδη, χρήση υπάρχουσας διεργασίας"
+#: src/ephy-main.c:201
+msgid ""
+"Epiphany can't be used now. Running the command \"bonobo-slay\" from the console may fix the problem. If not, you can try rebooting the computer or installing Epiphany again.\n"
+"\n"
+"Bonobo couldn't locate the GNOME_Epiphany_Automation.server."
+msgstr ""
 
-#: src/ephy-nautilus-view.c:744
-msgid "name of icon for the mozilla view"
-msgstr "όνομα εικονιδίου για την όψη mozilla "
+#: src/ephy-shell.c:232
+msgid "Epiphany can't be used now. Mozilla initialization failed. Check your MOZILLA_FIVE_HOME environmental variable."
+msgstr ""
 
-#: src/ephy-nautilus-view.c:747
-msgid "mozilla summary info"
-msgstr "πληροφορίες περίληψης mozilla "
+#: src/ephy-tab.c:314
+#: src/ephy-tab.c:1004
+#: src/ephy-tab.c:1187
+msgid "Blank page"
+msgstr "Κενή σελίδα"
 
-#: src/ephy-shell.c:150
-msgid "Mozilla bookmarks imported successfully."
-msgstr "Η εισαγωγή σελιδοδεικτών Mozilla ήταν επιτυχής."
-
-#: src/ephy-shell.c:159
-msgid "Importing Mozilla bookmarks failed."
-msgstr "Η εισαγωγή σελιδοδεικτών Mozilla απέτυχε."
-
-#: src/ephy-shell.c:167
-msgid "Galeon"
-msgstr "Galeon"
-
-#: src/ephy-shell.c:174
-msgid "Galeon bookmarks imported successfully."
-msgstr "Η εισαγωγή σελιδοδεικτών Galeon ήταν επιτυχής."
-
-#: src/ephy-shell.c:183
-msgid "Importing Galeon bookmarks failed."
-msgstr "Η εισαγωγή σελιδοδεικτών Galeon απέτυχε."
-
-#: src/ephy-shell.c:191
-msgid "Konqueror"
-msgstr "Konqueror"
-
-#: src/ephy-shell.c:198
-msgid "Konqueror bookmarks imported successfully."
-msgstr "Η εισαγωγή σελιδοδεικτών Konqueror ήταν επιτυχής."
-
-#: src/ephy-shell.c:207
-msgid "Importing Konqueror bookmarks failed."
-msgstr "Η εισαγωγή σελιδοδεικτών Konqueror απέτυχε."
-
-#: src/ephy-tab.c:565
+#: src/ephy-tab.c:631
 msgid "site"
 msgstr "ιστοσελίδα"
 
-#: src/ephy-tab.c:591
+#: src/ephy-tab.c:655
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Ανακατεύθυνση σε %s..."
 
-#: src/ephy-tab.c:595
+#: src/ephy-tab.c:659
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Μεταφορά δεδομένων από %s... "
 
-#: src/ephy-tab.c:599
+#: src/ephy-tab.c:663
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Αναμονή για πιστοποίηση από %s..."
 
-#: src/ephy-tab.c:607
+#: src/ephy-tab.c:671
 #, c-format
 msgid "Loading %s..."
 msgstr "Φόρτωση %s..."
 
-#: src/ephy-tab.c:611
+#: src/ephy-tab.c:675
 msgid "Done."
 msgstr "Ολοκληρώθηκε."
 
-#: src/ephy-window.c:60
-msgid "_View"
-msgstr "_Προβολή"
+#: src/ephy-window.c:68
+msgid "_Bookmarks"
+msgstr "_Σελιδοδείκτες"
 
-#. Toolbar only
-#: src/ephy-window.c:61 src/ephy-window.c:202
+#: src/ephy-window.c:69
 msgid "_Go"
 msgstr "_Μετάβαση"
 
-#: src/ephy-window.c:62
+#: src/ephy-window.c:70
 msgid "_Tabs"
 msgstr "_Στήλες"
 
-#: src/ephy-window.c:63
-msgid "_Help"
-msgstr "_Βοήθεια"
-
 #. File menu
-#: src/ephy-window.c:66
+#: src/ephy-window.c:74
 msgid "_New Window"
 msgstr "_Νέο Παράθυρο"
 
-#: src/ephy-window.c:67
-msgid "Create a new window"
-msgstr "Δημιουργία νέου παραθύρου"
+#: src/ephy-window.c:75
+#, fuzzy
+msgid "Open a new window"
+msgstr "Άνοιγμα σε νέο παράθυρο"
 
-#: src/ephy-window.c:69
+#: src/ephy-window.c:77
 msgid "New _Tab"
 msgstr "Νέα _στήλη"
 
-#: src/ephy-window.c:70
-msgid "Create a new tab"
-msgstr "Δημιουργία νέας στήλης"
+#: src/ephy-window.c:78
+#, fuzzy
+msgid "Open a new tab"
+msgstr "Άνοιγμα σε νέα σ_τήλη"
 
-#: src/ephy-window.c:72
+#: src/ephy-window.c:80
 msgid "_Open..."
 msgstr "Άνοι_γμα..."
 
-#: src/ephy-window.c:73
+#: src/ephy-window.c:81
 msgid "Open a file"
 msgstr "Άνοιγμα αρχείου"
 
-#: src/ephy-window.c:75
+#: src/ephy-window.c:83
 msgid "Save _As..."
 msgstr "Αποθήκευση _Ως..."
 
-#: src/ephy-window.c:76
+#: src/ephy-window.c:84
 msgid "Save the current page"
 msgstr "Αποθήκευση της τρέχουσας σελίδας"
 
-#: src/ephy-window.c:79
+#: src/ephy-window.c:87
 msgid "Print the current page"
 msgstr "Εκτύπωση της τρέχουσας σελίδας"
 
-#: src/ephy-window.c:81
+#: src/ephy-window.c:89
 msgid "S_end To..."
 msgstr "Α_ποστολή σε..."
 
-#: src/ephy-window.c:82
+#: src/ephy-window.c:90
 msgid "Send a link of the current page"
 msgstr "Αποστολή δεσμού τρέχουσας σελίδας"
 
-#: src/ephy-window.c:84
-msgid "Boo_kmark Page..."
-msgstr "Προσθήκη σελίδας στους σελιδοδείκτες"
-
-#: src/ephy-window.c:85
-msgid "Add a bookmark for the current page"
-msgstr "Προσθήκη σελιδοδείκτη για τη τρέχουσα σελίδα"
-
-#: src/ephy-window.c:87
-msgid "_Close"
-msgstr "_Κλείσιμο"
-
-#: src/ephy-window.c:88
+#: src/ephy-window.c:93
 msgid "Close this window"
 msgstr "Κλείσιμο αυτού του παραθύρου"
 
-#. Edit menu
-#: src/ephy-window.c:92
-msgid "Cu_t"
-msgstr "Αποκο_πή"
-
-#: src/ephy-window.c:93
-msgid "Cut the selection"
-msgstr "Αποκοπή της επιλογής"
-
-#: src/ephy-window.c:95
-msgid "_Copy"
-msgstr "Αντιγρα_φή"
-
-#: src/ephy-window.c:96
-msgid "Copy the selection"
-msgstr "Αντιγραφή της επιλογής"
-
-#: src/ephy-window.c:98
-msgid "_Paste"
-msgstr "Επι_κόλληση"
-
-#: src/ephy-window.c:99
+#: src/ephy-window.c:104
 msgid "Paste clipboard"
 msgstr "Επικόλληση προχείρου"
 
-#: src/ephy-window.c:101
-msgid "Select _All"
-msgstr "Επιλογή _Όλων"
-
-#: src/ephy-window.c:102
+#: src/ephy-window.c:107
 msgid "Select the entire page"
 msgstr "Επιλογή ολόκληρης σελίδας"
 
-#: src/ephy-window.c:104
-msgid "_Find"
-msgstr "_Εύρεση"
+#: src/ephy-window.c:110
+msgid "Find a word or phrase in the page"
+msgstr ""
 
-#: src/ephy-window.c:105
-msgid "Find a string"
-msgstr "Εύρεση αλφαριθμητικού"
-
-#: src/ephy-window.c:107
+#: src/ephy-window.c:112
 msgid "Find Ne_xt"
 msgstr "Εύρεση Επο_μένου"
 
-#: src/ephy-window.c:108
-msgid "Find next occurence of the string"
+#: src/ephy-window.c:113
+#, fuzzy
+msgid "Find next occurrence of the word or phrase"
 msgstr "Εύρεση επόμενης εμφάνισης αλφαριθμητικού"
 
-#: src/ephy-window.c:110
+#: src/ephy-window.c:115
 msgid "Find Pre_vious"
 msgstr "Εύρεση προη_γουμένου"
 
-#: src/ephy-window.c:111
-msgid "Find previous occurence of the string"
+#: src/ephy-window.c:116
+#, fuzzy
+msgid "Find previous occurrence of the word or phrase"
 msgstr "Εύρεση προηγούμενης εμφάνισης αλφαριθμητικού"
 
-#: src/ephy-window.c:113
+#: src/ephy-window.c:118
 msgid "P_ersonal Data"
 msgstr "Π_ροσωπικά δεδομένα"
 
-#: src/ephy-window.c:114
+#: src/ephy-window.c:119
 msgid "View and remove cookies and passwords"
 msgstr "Εμφάνιση και απομάκρυνση κωδικών και cookies"
 
-#: src/ephy-window.c:116
+#: src/ephy-window.c:121
 msgid "T_oolbars"
 msgstr "Εργαλειο_θήκες"
 
-#: src/ephy-window.c:117
+#: src/ephy-window.c:122
 msgid "Customize toolbars"
 msgstr "Προσαρμογή εργαλειοθηκών"
 
-#: src/ephy-window.c:119
+#: src/ephy-window.c:124
 msgid "P_references"
 msgstr "Π_ροτιμήσεις"
 
-#: src/ephy-window.c:120
+#: src/ephy-window.c:125
 msgid "Configure the web browser"
 msgstr "Ρύθμιση του φυλλομετρητή"
 
 #. View menu
-#: src/ephy-window.c:124
+#: src/ephy-window.c:129
 msgid "_Stop"
 msgstr "_Διακοπή"
 
-#: src/ephy-window.c:125
+#: src/ephy-window.c:130
 msgid "Stop current data transfer"
 msgstr "Διακοπή τρέχουσας μεταφοράς δεδομένων"
 
-#: src/ephy-window.c:127
+#: src/ephy-window.c:132
 msgid "_Reload"
 msgstr "Α_νανέωση"
 
-#: src/ephy-window.c:128
+#: src/ephy-window.c:133
 msgid "Display the latest content of the current page"
 msgstr "Εμφάνιση των πιο πρόσφατων περιεχομένων της τρέχουσας σελίδας"
 
-#: src/ephy-window.c:130
+#: src/ephy-window.c:135
 msgid "_Toolbar"
 msgstr "Ερ_γαλειοθήκη"
 
-#: src/ephy-window.c:131
+#: src/ephy-window.c:136
 msgid "Show or hide toolbar"
 msgstr "Προβολή ή απόκρυψη της εργαλειοθήκης"
 
-#: src/ephy-window.c:133
+#: src/ephy-window.c:138
+#, fuzzy
+msgid "_Bookmarks Bar"
+msgstr "Σελιδοδείκτες"
+
+#: src/ephy-window.c:139
+#, fuzzy
+msgid "Show or hide bookmarks bar"
+msgstr "Προβολή ή απόκρυψη της εργαλειοθήκης"
+
+#: src/ephy-window.c:141
 msgid "St_atusbar"
 msgstr "_Γραμμή κατάστασης"
 
-#: src/ephy-window.c:134
+#: src/ephy-window.c:142
 msgid "Show or hide statusbar"
 msgstr "Προβολή ή απόκρυψη της γραμμής κατάστασης"
 
-#: src/ephy-window.c:136
+#: src/ephy-window.c:144
 msgid "_Fullscreen"
 msgstr "Πλήρης οθόνη"
 
-#: src/ephy-window.c:137
+#: src/ephy-window.c:145
 msgid "Browse at full screen"
 msgstr "Φυλλομέτρηση σε  λειτουργία πλήρους οθόνης"
 
-#: src/ephy-window.c:139
+#: src/ephy-window.c:147
 msgid "Zoom _In"
 msgstr "Με_γένθυση "
 
-#: src/ephy-window.c:140
-msgid "Show the contents in more detail"
-msgstr "Εμφάνιση των περιεχομένων με περισσότερη λεπτομέρεια"
+#: src/ephy-window.c:148
+msgid "Increase the text size"
+msgstr ""
 
-#: src/ephy-window.c:142
+#: src/ephy-window.c:150
 msgid "Zoom _Out"
 msgstr "Σ_μίκρυνση"
 
-#: src/ephy-window.c:143
-msgid "Show the contents in less detail"
-msgstr "Εμφάνιση των περιεχομένων με λιγότερη λεπτομέρεια"
+#: src/ephy-window.c:151
+msgid "Decrease the text size"
+msgstr ""
 
-#: src/ephy-window.c:145
+#: src/ephy-window.c:153
 msgid "_Normal Size"
 msgstr "Κα_νονικό μέγεθος"
 
-#: src/ephy-window.c:146
-msgid "Show the contents at the normal size"
-msgstr "Εμφάνιση των περιεχομένων στο κανονικό μέγεθος"
+#: src/ephy-window.c:154
+msgid "Use the normal text size"
+msgstr ""
 
-#: src/ephy-window.c:148
+#: src/ephy-window.c:156
 msgid "_Encoding"
 msgstr "_Κωδικοποίηση"
 
-#: src/ephy-window.c:149
+#: src/ephy-window.c:157
 msgid "_Page Source"
 msgstr "_Πηγαίος κώδικας σελίδας"
 
-#: src/ephy-window.c:150
+#: src/ephy-window.c:158
 msgid "View the source code of the page"
 msgstr "Προβολή του πηγαίου κώδικα της σελίδας"
 
+#. Bookmarks menu
+#: src/ephy-window.c:162
+msgid "_Add Bookmark..."
+msgstr "_Προσθήκη Σελιδοδείκτη..."
+
+#: src/ephy-window.c:163
+#: src/ephy-window.c:224
+msgid "Add a bookmark for the current page"
+msgstr "Προσθήκη σελιδοδείκτη για τη τρέχουσα σελίδα"
+
+#: src/ephy-window.c:165
+#, fuzzy
+msgid "_Edit Bookmarks"
+msgstr "Σελιδοδείκτες"
+
+#: src/ephy-window.c:166
+msgid "Open the bookmarks window"
+msgstr ""
+
 #. Go menu
-#: src/ephy-window.c:154
+#: src/ephy-window.c:170
 msgid "_Back"
 msgstr "_Πίσω"
 
-#: src/ephy-window.c:155
+#: src/ephy-window.c:171
 msgid "Go to the previous visited page"
 msgstr "Μετάβαση στην προηγούμενη αναγνωσμένη σελίδα"
 
-#: src/ephy-window.c:157
+#: src/ephy-window.c:173
 msgid "_Forward"
 msgstr "_Μπροστά"
 
-#: src/ephy-window.c:158
+#: src/ephy-window.c:174
 msgid "Go to the next visited page"
 msgstr "Πήγαινε στην επόμενη αναγνωσμένη σελίδα"
 
-#: src/ephy-window.c:160
+#: src/ephy-window.c:176
 msgid "_Up"
 msgstr "_Πάνω"
 
-#: src/ephy-window.c:161
+#: src/ephy-window.c:177
 msgid "Go up one level"
 msgstr "Μετάβαση ένα επίπεδο επάνω"
 
-#: src/ephy-window.c:163
+#: src/ephy-window.c:179
 msgid "_Home"
 msgstr "_Αρχική σελίδα"
 
-#: src/ephy-window.c:164
+#: src/ephy-window.c:180
 msgid "Go to the home page"
 msgstr "Μετάβαση στην αρχική τοποθεσία"
 
-#: src/ephy-window.c:166
+#: src/ephy-window.c:182
 msgid "_Location..."
 msgstr "Τοποθε_σία..."
 
-#: src/ephy-window.c:167
+#: src/ephy-window.c:183
 msgid "Go to a specified location"
 msgstr "Μετάβαση σε καθορισμένη τοποθεσία"
 
-#: src/ephy-window.c:169
+#: src/ephy-window.c:185
 msgid "H_istory"
 msgstr "Ισ_τορικό"
 
-#: src/ephy-window.c:170
-msgid "Go to an already visited page"
-msgstr "Μετάβαση σε ήδη αναγνωσμένη σελίδα"
-
-#: src/ephy-window.c:172
-msgid "Boo_kmarks"
-msgstr "Σελι_δοδείκτες"
-
-#: src/ephy-window.c:173
-msgid "Go to a bookmark"
-msgstr "Μετάβαση σε σελιδοδείκτης"
+#: src/ephy-window.c:186
+#, fuzzy
+msgid "Open the history window"
+msgstr "Κλείσιμο αυτού του παραθύρου"
 
 #. Tabs menu
-#: src/ephy-window.c:177
+#: src/ephy-window.c:190
 msgid "_Previous Tab"
 msgstr "_Προηγούμενη στήλη"
 
-#: src/ephy-window.c:178
+#: src/ephy-window.c:191
 msgid "Activate previous tab"
 msgstr "Ενεργοποίηση της προηγούμενης στήλης"
 
-#: src/ephy-window.c:180
+#: src/ephy-window.c:193
 msgid "_Next Tab"
 msgstr "Ε_πόμενη στήλη"
 
-#: src/ephy-window.c:181
+#: src/ephy-window.c:194
 msgid "Activate next tab"
 msgstr "Ενεργοποίηση επόμενης στήλης"
 
-#: src/ephy-window.c:183
+#: src/ephy-window.c:196
 msgid "Move Tab _Left"
 msgstr "Μετακίνηση στήλης αρι_στερά"
 
-#: src/ephy-window.c:184
+#: src/ephy-window.c:197
 msgid "Move current tab to left"
 msgstr "Μετακίνηση της τρέχουσας στήλης αριστερά"
 
-#: src/ephy-window.c:186
+#: src/ephy-window.c:199
 msgid "Move Tab _Right"
 msgstr "Μετακίνηση στήλης _δεξιά"
 
-#: src/ephy-window.c:187
+#: src/ephy-window.c:200
 msgid "Move current tab to right"
 msgstr "Μετακίνηση της τρέχουσας στήλης στα δεξιά"
 
-#: src/ephy-window.c:189
+#: src/ephy-window.c:202
 msgid "_Detach Tab"
 msgstr "Από_σπαση στήλης"
 
-#: src/ephy-window.c:190
+#: src/ephy-window.c:203
 msgid "Detach current tab"
 msgstr "Απόσπαση τρέχουσας στήλης"
 
-#. Help menu
-#: src/ephy-window.c:194
-msgid "_Contents"
-msgstr "_Περιεχόμενα"
-
-#: src/ephy-window.c:195
+#: src/ephy-window.c:208
 msgid "Display web browser help"
 msgstr "Προβολή βοήθειας φυλλομετρητή"
 
-#: src/ephy-window.c:197
-msgid "_About"
-msgstr "Πε_ρί"
-
-#: src/ephy-window.c:198
-msgid "Display credits for the web browser creators"
-msgstr "Εμφάνιση μνείας των δημιουργών του φυλλομετρητή"
-
-#: src/ephy-window.c:203
-msgid "Type a web address or a word in the field on the left, then click Go"
-msgstr "Εισάγετε μια διεύθυνση ή λέξη στο πεδίο αριστερά και πατήστε Μετάβαση"
-
 #. Document
-#: src/ephy-window.c:213
+#: src/ephy-window.c:221
 msgid "_Save Background As..."
 msgstr "Αποθήκευ_ση παρασκηνίου ως..."
 
+#: src/ephy-window.c:223
+msgid "Add Boo_kmark..."
+msgstr "Προσθήκη Σελιδο_δείκτη"
+
 #. Framed document
-#: src/ephy-window.c:217
+#: src/ephy-window.c:228
 msgid "_Open Frame"
 msgstr "Α_νοιγμα πλαισίου"
 
-#: src/ephy-window.c:219
+#: src/ephy-window.c:230
 msgid "Open Frame in _New Window"
 msgstr "Άνοιγμα πλαισίου σε _νέο παράθυρο"
 
-#: src/ephy-window.c:221
+#: src/ephy-window.c:232
 msgid "Open Frame in New _Tab"
 msgstr "Άνοιγμα πλαισίου σε νέα σ_τήλη"
 
 #. Links
-#: src/ephy-window.c:225
+#: src/ephy-window.c:236
 msgid "_Open Link"
 msgstr "_Άνοιγμα δεσμού"
 
-#: src/ephy-window.c:227
+#: src/ephy-window.c:238
 msgid "Open Link in _New Window"
 msgstr "Άνοιγμα δεσμού σε _νέο παράθυρο"
 
-#: src/ephy-window.c:229
+#: src/ephy-window.c:240
 msgid "Open Link in New _Tab"
 msgstr "Άνοιγμα δεσμού σε νέα σ_τήλη"
 
-#: src/ephy-window.c:231
-msgid "_Download Link"
+#: src/ephy-window.c:242
+#, fuzzy
+msgid "_Download Link..."
 msgstr "Μετα_φόρτωση δεσμού"
 
-#: src/ephy-window.c:233
+#: src/ephy-window.c:244
 msgid "_Bookmark Link..."
 msgstr "Δεσμός ως σελιδοδείκτης..."
 
-#: src/ephy-window.c:235
-msgid "_Copy Link Location"
-msgstr "Αντιγρα_φή τοποθεσίας δεσμού"
-
-#: src/ephy-window.c:237
-msgid "Copy _Email"
-msgstr "Αντιγραφή _Email "
+#: src/ephy-window.c:246
+#, fuzzy
+msgid "_Copy Link Address"
+msgstr "Αντιγραφή Διεύθυνσης Email"
 
 #. Images
-#: src/ephy-window.c:241
-msgid "_Open Image"
-msgstr "_'Ανοιγμα εικόνας"
+#: src/ephy-window.c:250
+#, fuzzy
+msgid "Open _Image"
+msgstr "Άνοιγμα εικόνας"
 
-#: src/ephy-window.c:243
-msgid "Open Image in _New Window"
-msgstr "Άνοιγμα εικόνας σε νέο παράθυρο"
+#: src/ephy-window.c:252
+#, fuzzy
+msgid "Open Image in New _Window"
+msgstr "Άνοιγμα εικόναςσε νέο παράθυρο"
 
-#: src/ephy-window.c:245
-msgid "Open Image in New _Tab"
+#: src/ephy-window.c:254
+#, fuzzy
+msgid "Open Image in New T_ab"
 msgstr "Άνοιγμα εικόνας σε νέα σ_τήλη"
 
-#: src/ephy-window.c:247
+#: src/ephy-window.c:256
 msgid "_Save Image As..."
 msgstr "Αποθήκευ_ση εικόνας ως..."
 
-#: src/ephy-window.c:249
-msgid "Use Image As _Background"
-msgstr "Χρήση εικόνας ως  _παρασκήνιο."
+#: src/ephy-window.c:258
+#, fuzzy
+msgid "_Use Image As Background"
+msgstr "Χρήση εικόνας ως παρασκήνιο."
 
-#: src/ephy-window.c:251
-msgid "_Copy Image Location"
-msgstr "Αντι_γραφή τοποθεσίας εικόνας"
+#: src/ephy-window.c:260
+#, fuzzy
+msgid "Copy I_mage Address"
+msgstr "Αντιγραφή Διεύθυνσης Email"
 
-#: src/ephy-window.c:1049
+#: src/ephy-window.c:561
+#, fuzzy
+msgid "Exit Fullscreen"
+msgstr "Πλήρης οθόνη"
+
+#: src/ephy-window.c:662
+#: src/window-commands.c:324
+msgid "Open"
+msgstr "Άνοιγμα"
+
+#: src/ephy-window.c:664
+#: src/window-commands.c:365
+msgid "Save As"
+msgstr "Αποθήκευση Ως"
+
+#: src/ephy-window.c:668
+msgid "Bookmark"
+msgstr "Σελιδοδείκτης"
+
+#: src/ephy-window.c:873
 msgid "Insecure"
 msgstr "Μή ασφαλής"
 
-#: src/ephy-window.c:1052
+#: src/ephy-window.c:876
 msgid "Broken"
 msgstr "Broken"
 
-#: src/ephy-window.c:1055
+#: src/ephy-window.c:879
 msgid "Medium"
 msgstr "Μέτρια"
 
-#: src/ephy-window.c:1059
+#: src/ephy-window.c:883
 msgid "Low"
 msgstr "Χαμηλή"
 
-#: src/ephy-window.c:1063
+#: src/ephy-window.c:887
 msgid "High"
 msgstr "Υψηλή"
 
-#: src/ephy-window.c:1073
+#: src/ephy-window.c:897
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2528,331 +2739,396 @@ msgstr ""
 "Επίπεδο ασφάλειας: %s\n"
 "%s"
 
-#: src/ephy-window.c:1079
+#: src/ephy-window.c:903
 #, c-format
 msgid "Security level: %s"
 msgstr "Επίπεδο ασφάλειας: %s"
 
-#: src/general-prefs.c:86
-msgid "Afrikaans"
-msgstr "Afrikaans"
-
-#: src/general-prefs.c:87
-msgid "Albanian"
-msgstr "Albanian"
-
-#: src/general-prefs.c:89
-msgid "Azerbaijani"
-msgstr "Azerbaijani"
-
-#: src/general-prefs.c:90
-msgid "Basque"
-msgstr "Basque"
-
-#: src/general-prefs.c:91
-msgid "Breton"
-msgstr "Breton"
-
-#: src/general-prefs.c:92
-msgid "Bulgarian"
-msgstr "Bulgarian"
-
-#: src/general-prefs.c:93
-msgid "Byelorussian"
-msgstr "Byelorussian"
-
-#: src/general-prefs.c:94
-msgid "Catalan"
-msgstr "Catalan"
-
-#: src/general-prefs.c:96
-msgid "Croatian"
-msgstr "Croatian"
-
-#: src/general-prefs.c:97
-msgid "Czech"
-msgstr "Czech"
-
-#: src/general-prefs.c:98
-msgid "Danish"
-msgstr "Danish"
-
-#: src/general-prefs.c:99
-msgid "Dutch"
-msgstr "Ολλανδική"
-
-#: src/general-prefs.c:100
-msgid "English"
-msgstr "English"
-
-#: src/general-prefs.c:101
-msgid "Esperanto"
-msgstr "Esperanto"
-
-#: src/general-prefs.c:102
-msgid "Estonian"
-msgstr "Estonian"
-
-#: src/general-prefs.c:103
-msgid "Faeroese"
-msgstr "Faeroese"
-
-#: src/general-prefs.c:104
-msgid "Finnish"
-msgstr "Finnish"
-
-#: src/general-prefs.c:105
-msgid "French"
-msgstr "French"
-
-#: src/general-prefs.c:106
-msgid "Galician"
-msgstr "Galician"
-
-#: src/general-prefs.c:107
-msgid "German"
-msgstr "German"
-
-#: src/general-prefs.c:110
-msgid "Hungarian"
-msgstr "Hungarian"
-
-#: src/general-prefs.c:111
-msgid "Icelandic"
-msgstr "Icelandic"
-
-#: src/general-prefs.c:112
-msgid "Indonesian"
-msgstr "Indonesian"
-
-#: src/general-prefs.c:113
-msgid "Irish"
-msgstr "Irish"
-
-#: src/general-prefs.c:114
-msgid "Italian"
-msgstr "Italian"
-
-#: src/general-prefs.c:117
-msgid "Latvian"
-msgstr "Latvian"
-
-#: src/general-prefs.c:118
-msgid "Lithuanian"
-msgstr "Lithuanian"
-
-#: src/general-prefs.c:119
-msgid "Macedonian"
-msgstr "Π.Γ.Δ.Μ"
-
-#: src/general-prefs.c:120
-msgid "Malay"
-msgstr "Malay"
-
-#: src/general-prefs.c:121
-msgid "Norwegian/Nynorsk"
-msgstr "Norwegian/Nynorsk"
-
-#: src/general-prefs.c:122
-msgid "Norwegian/Bokmaal"
-msgstr "Norwegian/Bokmaal"
-
-#: src/general-prefs.c:123
-msgid "Norwegian"
-msgstr "Νορβηγική"
-
-#: src/general-prefs.c:124
-msgid "Polish"
-msgstr "Πολωνική"
-
-#: src/general-prefs.c:125
-msgid "Portuguese"
-msgstr "Portuguese"
-
-#: src/general-prefs.c:126
-msgid "Portuguese of Brazil"
-msgstr "Portuguese of Brazil"
-
-#: src/general-prefs.c:127
-msgid "Romanian"
-msgstr "Romanian"
-
-#: src/general-prefs.c:129
-msgid "Scottish"
-msgstr "Scottish"
-
-#: src/general-prefs.c:130
-msgid "Serbian"
-msgstr "Serbian"
-
-#: src/general-prefs.c:131
-msgid "Slovak"
-msgstr "Slovak"
-
-#: src/general-prefs.c:132
-msgid "Slovenian"
-msgstr "Slovenian"
-
-#: src/general-prefs.c:133
-msgid "Spanish"
-msgstr "Spanish"
-
-#: src/general-prefs.c:134
-msgid "Swedish"
-msgstr "Σουηδική"
-
-#: src/general-prefs.c:135
-msgid "Tamil"
-msgstr "Tamil"
-
-#: src/general-prefs.c:138
-msgid "Vietnamian"
-msgstr "Vietnamian"
-
-#: src/general-prefs.c:139
-msgid "Walloon"
-msgstr "Walloon"
-
-#: src/history-dialog.c:289
-msgid "Location"
-msgstr "Τοποθεσία"
-
-#: src/history-dialog.c:290
-msgid "Last Visit"
-msgstr "Τελευταία επίσκεψη"
-
-#: src/pdm-dialog.c:224
+#: src/pdm-dialog.c:253
 msgid "Host"
 msgstr "Σύστημα"
 
-#: src/pdm-dialog.c:236
+#: src/pdm-dialog.c:265
 msgid "User Name"
-msgstr "Όνομα χρήστη "
+msgstr "Όνομα Χρήστη "
 
-#: src/pdm-dialog.c:281
+#: src/pdm-dialog.c:313
 msgid "Domain"
 msgstr "Τομέας"
 
-#: src/pdm-dialog.c:293
+#: src/pdm-dialog.c:325
 msgid "Name"
 msgstr "Όνομα"
 
-#: src/pdm-dialog.c:572
-msgid "Cookie properties"
+#: src/pdm-dialog.c:705
+#, fuzzy
+msgid "Cookie Properties"
 msgstr "Ιδιότητες Cookie "
 
-#: src/pdm-dialog.c:585
-msgid "Value"
-msgstr "Τιμή"
+#: src/pdm-dialog.c:718
+msgid "Value:"
+msgstr "Τιμή:"
 
-#: src/pdm-dialog.c:599
-msgid "Path"
-msgstr "Διαδρομή"
+#: src/pdm-dialog.c:732
+msgid "Path:"
+msgstr "Διαδρομή:"
 
-#: src/pdm-dialog.c:613
-msgid "Secure"
+#: src/pdm-dialog.c:746
+#, fuzzy
+msgid "Secure:"
 msgstr "Ασφαλές"
 
-#: src/pdm-dialog.c:627
-msgid "Expire"
+#: src/pdm-dialog.c:760
+#, fuzzy
+msgid "Expire:"
 msgstr "Λήγει"
 
-#: src/ppview-toolbar.c:88
+#: src/popup-commands.c:315
+msgid "Download link"
+msgstr "Μεταφόρτωση δεσμού"
+
+#: src/ppview-toolbar.c:91
 msgid "Go to the first page"
 msgstr "Μετάβαση στην πρώτη σελίδα"
 
-#: src/ppview-toolbar.c:92
+#: src/ppview-toolbar.c:95
 msgid "Go to the last page"
 msgstr "Μετάβαση στην τελευταία σελίδα"
 
-#: src/ppview-toolbar.c:96
+#: src/ppview-toolbar.c:99
 msgid "Go to the previous page"
 msgstr "Μετάβαση στην προηγούμενη σελίδα"
 
-#: src/ppview-toolbar.c:100
+#: src/ppview-toolbar.c:103
 msgid "Go to next page"
 msgstr "Μετάβαση στην επόμενη σελίδα"
 
-#: src/ppview-toolbar.c:102
+#: src/ppview-toolbar.c:105
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: src/ppview-toolbar.c:104
+#: src/ppview-toolbar.c:107
 msgid "Close print preview"
 msgstr "Κλείσιμο της προεπισκόπησης εκτύπωσης"
 
-#: src/prefs-dialog.c:263
-msgid "User Interface"
-msgstr "Επιφάνεια Χρήσης"
+#. *
+#. * please translate like this: "<your language> (System setting)"
+#. * Examples:
+#. * "de"    translation: "Deutsch (Systemeinstellung)"
+#. * "en_AU" translation: "English, Australia (System setting)" or
+#. *                      "Australian English (System setting)"
+#.
+#: src/prefs-dialog.c:88
+msgid "System language"
+msgstr "Γλώσσα Συστήματος"
 
-#: src/prefs-dialog.c:264
-msgid "Advanced"
-msgstr "Για προχωρημένους"
+#: src/prefs-dialog.c:89
+msgid "Afrikaans"
+msgstr "Afrikaans"
 
-#: src/prefs-dialog.c:316
-msgid "Preferences"
-msgstr "Προτιμήσεις"
+#: src/prefs-dialog.c:90
+msgid "Albanian"
+msgstr "Albanian"
 
-#: src/session.c:189
+#: src/prefs-dialog.c:92
+msgid "Azerbaijani"
+msgstr "Azerbaijani"
+
+#: src/prefs-dialog.c:93
+msgid "Basque"
+msgstr "Basque"
+
+#: src/prefs-dialog.c:94
+msgid "Breton"
+msgstr "Breton"
+
+#: src/prefs-dialog.c:95
+msgid "Bulgarian"
+msgstr "Bulgarian"
+
+#: src/prefs-dialog.c:96
+msgid "Byelorussian"
+msgstr "Byelorussian"
+
+#: src/prefs-dialog.c:97
+msgid "Catalan"
+msgstr "Catalan"
+
+#: src/prefs-dialog.c:100
+#: src/prefs-dialog.c:157
+msgid "Chinese"
+msgstr "Κινέζικα"
+
+#: src/prefs-dialog.c:101
+msgid "Croatian"
+msgstr "Croatian"
+
+#: src/prefs-dialog.c:102
+msgid "Czech"
+msgstr "Czech"
+
+#: src/prefs-dialog.c:103
+msgid "Danish"
+msgstr "Danish"
+
+#: src/prefs-dialog.c:104
+msgid "Dutch"
+msgstr "Ολλανδική"
+
+#: src/prefs-dialog.c:105
+msgid "English"
+msgstr "English"
+
+#: src/prefs-dialog.c:106
+msgid "Esperanto"
+msgstr "Esperanto"
+
+#: src/prefs-dialog.c:107
+msgid "Estonian"
+msgstr "Estonian"
+
+#: src/prefs-dialog.c:108
+msgid "Faeroese"
+msgstr "Faeroese"
+
+#: src/prefs-dialog.c:109
+msgid "Finnish"
+msgstr "Finnish"
+
+#: src/prefs-dialog.c:110
+msgid "French"
+msgstr "French"
+
+#: src/prefs-dialog.c:111
+msgid "Galician"
+msgstr "Galician"
+
+#: src/prefs-dialog.c:112
+msgid "German"
+msgstr "German"
+
+#: src/prefs-dialog.c:115
+msgid "Hungarian"
+msgstr "Hungarian"
+
+#: src/prefs-dialog.c:116
+msgid "Icelandic"
+msgstr "Icelandic"
+
+#: src/prefs-dialog.c:117
+msgid "Indonesian"
+msgstr "Indonesian"
+
+#: src/prefs-dialog.c:118
+msgid "Irish"
+msgstr "Irish"
+
+#: src/prefs-dialog.c:119
+msgid "Italian"
+msgstr "Italian"
+
+#: src/prefs-dialog.c:122
+msgid "Latvian"
+msgstr "Latvian"
+
+#: src/prefs-dialog.c:123
+msgid "Lithuanian"
+msgstr "Lithuanian"
+
+#: src/prefs-dialog.c:124
+msgid "Macedonian"
+msgstr "Π.Γ.Δ.Μ"
+
+#: src/prefs-dialog.c:125
+msgid "Malay"
+msgstr "Malay"
+
+#: src/prefs-dialog.c:126
+msgid "Norwegian/Nynorsk"
+msgstr "Norwegian/Nynorsk"
+
+#: src/prefs-dialog.c:127
+#, fuzzy
+msgid "Norwegian/Bokmal"
+msgstr "Norwegian/Bokmaal"
+
+#: src/prefs-dialog.c:128
+msgid "Norwegian"
+msgstr "Νορβηγική"
+
+#: src/prefs-dialog.c:129
+msgid "Polish"
+msgstr "Πολωνική"
+
+#: src/prefs-dialog.c:130
+msgid "Portuguese"
+msgstr "Portuguese"
+
+#: src/prefs-dialog.c:131
+msgid "Portuguese of Brazil"
+msgstr "Portuguese of Brazil"
+
+#: src/prefs-dialog.c:132
+msgid "Romanian"
+msgstr "Romanian"
+
+#: src/prefs-dialog.c:133
+#: src/prefs-dialog.c:161
+msgid "Russian"
+msgstr "Ρωσική"
+
+#: src/prefs-dialog.c:134
+msgid "Scottish"
+msgstr "Scottish"
+
+#: src/prefs-dialog.c:135
+msgid "Serbian"
+msgstr "Serbian"
+
+#: src/prefs-dialog.c:136
+msgid "Slovak"
+msgstr "Slovak"
+
+#: src/prefs-dialog.c:137
+msgid "Slovenian"
+msgstr "Slovenian"
+
+#: src/prefs-dialog.c:138
+msgid "Spanish"
+msgstr "Spanish"
+
+#: src/prefs-dialog.c:139
+msgid "Swedish"
+msgstr "Σουηδική"
+
+#: src/prefs-dialog.c:142
+#: src/prefs-dialog.c:165
+msgid "Ukrainian"
+msgstr "Ukrainian"
+
+#: src/prefs-dialog.c:143
+msgid "Vietnamese"
+msgstr "Βιετναμέζικα"
+
+#: src/prefs-dialog.c:144
+msgid "Walloon"
+msgstr "Walloon"
+
+#: src/prefs-dialog.c:156
+msgid "Off"
+msgstr "Απενεργοποιημένο"
+
+#: src/prefs-dialog.c:158
+#, fuzzy
+msgid "East Asian"
+msgstr "Ανατολικής Ασίας"
+
+#: src/prefs-dialog.c:164
+#, fuzzy
+msgid "Universal"
+msgstr "Γενικά"
+
+#: src/prefs-dialog.c:950
+#, c-format
+msgid "Custom [%s]"
+msgstr "Προσαρμογή [%s]"
+
+#: src/session.c:194
 msgid "Crash Recovery"
 msgstr "Ανάκτηση από κόλλημα"
 
-#: src/session.c:191
+#: src/session.c:196
 msgid "_Don't Recover"
 msgstr "Να μην γίνει ανάκτηση"
 
-#: src/session.c:192
+#: src/session.c:197
 msgid "_Recover"
 msgstr "Ανά_κτηση"
 
-#: src/session.c:220
-msgid "Epiphany appears to have crashed or been killed the last time it was run."
-msgstr ""
-"Η Epiphany φαίνεται να είχε κολλήσει ή τερματιστεί πρόωρα την τελευταία φορά "
-"που έτρεξε."
-
 #: src/session.c:226
+msgid "Epiphany appears to have crashed or been killed the last time it was run."
+msgstr "Η Epiphany φαίνεται να είχε κολλήσει ή τερματιστεί πρόωρα την τελευταία φορά που έτρεξε."
+
+#: src/session.c:232
 msgid "You can recover the opened tabs and windows."
 msgstr "Μπορείτε να ανακτήσετε τα ανοικτά παράθυρα και στήλες."
 
-#: src/toolbar.c:269
+#: src/toolbar.c:268
 msgid "Back"
 msgstr "Πίσω"
+
+#: src/toolbar.c:270
+msgid "Go back"
+msgstr "Μετάβαση πίσω"
 
 #: src/toolbar.c:281
 msgid "Forward"
 msgstr "Μπροστά"
 
-#: src/toolbar.c:293
+#: src/toolbar.c:283
+msgid "Go forward"
+msgstr "Μετάβαση Μπροστά"
+
+#: src/toolbar.c:294
 msgid "Up"
 msgstr "Επάνω"
 
-#: src/window-commands.c:132
+#: src/toolbar.c:296
+msgid "Go up"
+msgstr "Μετάβαση επάνω"
+
+#: src/toolbar.c:307
+#, fuzzy
+msgid "Spinner"
+msgstr "<b>Spinner</b>"
+
+#: src/toolbar.c:317
+msgid "Address Entry"
+msgstr ""
+
+#: src/toolbar.c:319
+msgid "Enter a web address to open, or a phrase to search for on the web"
+msgstr ""
+
+#: src/toolbar.c:328
+#, fuzzy
+msgid "Zoom"
+msgstr "Με_γένθυση "
+
+#: src/toolbar.c:329
+msgid "Adjust the text size"
+msgstr ""
+
+#: src/toolbar.c:339
+msgid "Favicon"
+msgstr ""
+
+#: src/toolbar.c:349
+msgid "Go to the address entered in the address entry"
+msgstr ""
+
+#: src/window-commands.c:126
 msgid "Check this out!"
 msgstr "Ελέγξτε αυτό!"
 
-#: src/window-commands.c:309
-msgid "Select the file to open"
-msgstr "Επιλογή αρχείου για άνοιγμα"
+#: src/window-commands.c:278
+msgid "Untitled"
+msgstr "Ανώνυμο"
+
+#: src/window-commands.c:675
+msgid "Toolbar Editor"
+msgstr "Επεξεργαστής Εργαλειοθήκης"
+
+#: src/window-commands.c:697
+msgid "_Add a New Toolbar"
+msgstr "_Προσθήκη Νέας Εργαλειθήκης"
 
 #. Translator credits
-#: src/window-commands.c:656
+#: src/window-commands.c:747
 msgid "translator_credits"
 msgstr "Κώστας Παπαδήμας <pkst@gmx.net>"
 
-#: src/window-commands.c:668
+#: src/window-commands.c:775
 msgid "A GNOME browser based on Mozilla"
-msgstr "Ένασ φυλλομετρητής του GNOME  βασισμένος στον Mozilla"
-
-#~ msgid "<b>Cu_rrent Controls</b>"
-#~ msgstr "<b>Τρέ_χοντες έλεγχοι</b>"
-
-#~ msgid "<b>_Available Controls</b>"
-#~ msgstr "<b>_Διαθέσιμοι Έλεγχοι</b>"
-
-#~ msgid "Toolbar Editor"
-#~ msgstr "Επεξεργαστής εργαλειοθήκης"
-
-#~ msgid "_Reset to defaults"
-#~ msgstr "_Επαναφορά προεπιλογών"
+msgstr "Ένας φυλλομετρητής του GNOME  βασισμένος στον Mozilla"
 
