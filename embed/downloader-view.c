@@ -488,20 +488,18 @@ downloader_view_add_download (DownloaderView *dv,
 	
 	gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height);
 	width *= 2;
-	height *= 2;
 
-	icon_info = gtk_icon_theme_lookup_icon (theme, icon_name, width, height);
+	icon_info = gtk_icon_theme_lookup_icon (theme, icon_name, width, 0);
 	g_free (icon_name);
 	if (icon_info == NULL) return;
 
-	icon_name = g_strdup (gtk_icon_info_get_filename (icon_info));
+	pixbuf = gdk_pixbuf_new_from_file_at_size
+		(gtk_icon_info_get_filename (icon_info), width, width, NULL);
 	gtk_icon_info_free (icon_info);
-	
-	pixbuf = gdk_pixbuf_new_from_file_at_size (icon_name, width, height, NULL);
-	g_free (icon_name);
+
 	gtk_list_store_set (GTK_LIST_STORE (dv->priv->model),
 			    &iter, COL_IMAGE, pixbuf, -1);
-	if (pixbuf)
+	if (pixbuf != NULL)
 	{
 		g_object_unref (pixbuf);
 	}
