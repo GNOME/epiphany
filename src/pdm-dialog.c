@@ -946,7 +946,11 @@ show_cookies_properties (PdmDialog *dialog,
 	}
 	else
 	{
-		str = g_strdup_printf ("%s",ctime((time_t*)&info->expires));
+		struct tm t;
+		char s[128];
+		const char *fmt_hack = "%c";
+		strftime (s, sizeof(s), fmt_hack, localtime_r (&info->expires, &t));
+		str = g_locale_to_utf8 (s, -1, NULL, NULL, NULL);
 	}
 	label = gtk_label_new (str);
 	g_free (str);

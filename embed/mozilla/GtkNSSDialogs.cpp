@@ -391,7 +391,8 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 	nsAutoString commonName;
 	time_t t;
 	struct tm tm;
-	char formattedDate[32];
+	char formattedDate[128];
+	char *fdate;
 	const char *primary, *text;
 	char *ttCommonName, *secondary, *msg;
 
@@ -430,11 +431,12 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 	 * strftime(3) */
 	strftime (formattedDate, sizeof(formattedDate), _("%a %d %b %Y"), 
 		  localtime_r (&t, &tm));
+	fdate = g_locale_to_utf8 (formattedDate, -1, NULL, NULL, NULL);
 
 	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
                                         NS_ConvertUCS2toUTF8(commonName).get());
 
-	secondary = g_strdup_printf (text, ttCommonName, formattedDate);
+	secondary = g_strdup_printf (text, ttCommonName, fdate);
 
 	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s\n\n%s",
 			       primary, secondary, 
@@ -442,6 +444,7 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 
 	int res = display_cert_warning_box (ctx, cert, msg, NULL, NULL, NULL);
 
+	g_free (fdate);
 	g_free (msg);
 	g_free (secondary);
 	g_free (ttCommonName);
