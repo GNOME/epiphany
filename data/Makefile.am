@@ -67,7 +67,7 @@ EXTRA_DIST = \
 
 DISTCLEANFILES = \
 	$(server_DATA)		\
-	$(Applications_DATA)	\
+	$(applications_DATA)	\
 	$(schema_DATA)		\
 	$(pkgconfig_DATA)	\
 	$(default_prefs_DATA)	\
