@@ -1,3 +1,22 @@
+2004-10-08  Marco Pesenti Gritti  <marco@gnome.org>
+
+	reviewed by: Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-dialog.c: (setup_default_size):
+	* lib/ephy-state.c: (create_window_node), (ephy_state_add_window):
+	* lib/ephy-state.h:
+	* src/bookmarks/ephy-bookmark-properties.c: (build_ui):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-new-bookmark.c: (ephy_new_bookmark_construct):
+	* src/ephy-history-window.c: (ephy_history_window_construct):
+	* src/ephy-window.c: (ephy_window_show):
+	* src/pdm-dialog.c: (show_cookies_properties):
+	* src/window-commands.c: (window_cmd_edit_toolbar):
+
+	Allow to set the default window state to maximize.
+	Default to maximize for the browser window.
+
 2004-10-07  Marco Pesenti Gritti  <marco@gnome.org>
 
 	reviewed by: Christian Persch  <chpe@cvs.gnome.org>

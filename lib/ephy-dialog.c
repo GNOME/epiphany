@@ -1018,7 +1018,7 @@ setup_default_size (EphyDialog *dialog)
 				       dialog->priv->name,
 				       dialog->priv->default_width,
 				       dialog->priv->default_height,
-				       flags);
+				       FALSE, flags);
 
 		dialog->priv->has_default_size = TRUE;
 	}
