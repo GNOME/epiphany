@@ -1,0 +1,27 @@
+#include <Bonobo.idl>
+
+module GNOME {
+
+	interface EphyAutomation : Bonobo::Unknown {
+		boolean loadurl  (in string  url, 
+				  in string  geometry, 
+				  in boolean fullscreen,
+				  in boolean open_in_existing_tab,
+				  in boolean open_in_new_tab,
+				  in boolean open_in_new_window,
+				  in boolean raise);
+
+		boolean addBookmark (in string url);
+
+		/**
+		 * Closes all opened windows. 
+		 * if disableServer is true, 
+		 * server mode is disbaled 
+		 * (and Galeon exits)
+		 */
+		boolean quit (in boolean disableServer);
+		
+		boolean loadSession (in string filename);
+	};
+};
+

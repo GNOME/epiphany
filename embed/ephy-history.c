@@ -1,0 +1,644 @@
+/*
+ *  Copyright (C) 2002 Marco Pesenti Gritti
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2, or (at your option)
+ *  any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+#include "ephy-history.h"
+#include "ephy-file-helpers.h"
+#include "ephy-autocompletion-source.h"
+
+#include <time.h>
+#include <string.h>
+#include <libgnome/gnome-i18n.h>
+#include <libgnomevfs/gnome-vfs-uri.h>
+
+//#define DEBUG_MSG(x) g_print x
+#define DEBUG_MSG(x)
+
+#define EPHY_HISTORY_XML_VERSION "0.1"
+
+struct EphyHistoryPrivate
+{
+	char *xml_file;
+	EphyNode *hosts;
+	EphyNode *pages;
+	EphyNode *last_page;
+	GHashTable *hosts_hash;
+	GStaticRWLock *hosts_hash_lock;
+	GHashTable *pages_hash;
+	GStaticRWLock *pages_hash_lock;
+};
+
+enum
+{
+        ADD,
+	UPDATE,
+	REMOVE,
+	VISITED,
+        LAST_SIGNAL
+};
+
+static void
+ephy_history_class_init (EphyHistoryClass *klass);
+static void
+ephy_history_init (EphyHistory *tab);
+static void
+ephy_history_finalize (GObject *object);
+static void
+ephy_history_autocompletion_source_init (EphyAutocompletionSourceIface *iface);
+
+static GObjectClass *parent_class = NULL;
+
+static guint ephy_history_signals[LAST_SIGNAL] = { 0 };
+
+GType
+ephy_history_get_type (void)
+{
+        static GType ephy_history_type = 0;
+
+        if (ephy_history_type == 0)
+        {
+                static const GTypeInfo our_info =
+                {
+                        sizeof (EphyHistoryClass),
+                        NULL, /* base_init */
+                        NULL, /* base_finalize */
+                        (GClassInitFunc) ephy_history_class_init,
+                        NULL,
+                        NULL, /* class_data */
+                        sizeof (EphyHistory),
+                        0, /* n_preallocs */
+                        (GInstanceInitFunc) ephy_history_init
+                };
+
+		static const GInterfaceInfo autocompletion_source_info =
+		{
+			(GInterfaceInitFunc) ephy_history_autocompletion_source_init,
+			NULL,
+			NULL
+		};
+
+                ephy_history_type = g_type_register_static (G_TYPE_OBJECT,
+							      "EphyHistory",
+							      &our_info, 0);
+
+		g_type_add_interface_static (ephy_history_type,
+					     EPHY_TYPE_AUTOCOMPLETION_SOURCE,
+					     &autocompletion_source_info);
+        }
+
+        return ephy_history_type;
+}
+
+static void
+ephy_history_autocompletion_source_set_basic_key (EphyAutocompletionSource *source,
+						  const gchar *basic_key)
+{
+	/* nothing to do here */
+}
+
+static void
+ephy_history_autocompletion_source_foreach (EphyAutocompletionSource *source,
+					      const gchar *current_text,
+					      EphyAutocompletionSourceForeachFunc func,
+					      gpointer data)
+{
+	GPtrArray *children;
+	int i;
+	EphyHistory *eb = EPHY_HISTORY (source);
+
+	children = ephy_node_get_children (eb->priv->pages);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+		const char *url, *title;
+
+		kid = g_ptr_array_index (children, i);
+		url = ephy_node_get_property_string
+			(kid, EPHY_NODE_PAGE_PROP_LOCATION);
+		title = ephy_node_get_property_string
+			(kid, EPHY_NODE_PAGE_PROP_TITLE);
+
+		func (source, url,
+		      url, url, FALSE,
+		      FALSE, 0, data);
+	}
+	ephy_node_thaw (eb->priv->pages);
+}
+
+static void
+ephy_history_emit_data_changed (EphyHistory *eb)
+{
+	g_signal_emit_by_name (eb, "data-changed");
+}
+
+static void
+ephy_history_autocompletion_source_init (EphyAutocompletionSourceIface *iface)
+{
+	iface->foreach = ephy_history_autocompletion_source_foreach;
+	iface->set_basic_key = ephy_history_autocompletion_source_set_basic_key;
+}
+
+static void
+ephy_history_class_init (EphyHistoryClass *klass)
+{
+        GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+        parent_class = g_type_class_peek_parent (klass);
+
+        object_class->finalize = ephy_history_finalize;
+
+	ephy_history_signals[VISITED] =
+                g_signal_new ("visited",
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              G_SIGNAL_RUN_FIRST,
+                              G_STRUCT_OFFSET (EphyHistoryClass, visited),
+                              NULL, NULL,
+                              g_cclosure_marshal_VOID__STRING,
+                              G_TYPE_NONE,
+                              1,
+			      G_TYPE_STRING);
+}
+
+static void
+ephy_history_load (EphyHistory *eb)
+{
+	xmlDocPtr doc;
+	xmlNodePtr root, child;
+	char *tmp;
+
+	if (g_file_test (eb->priv->xml_file, G_FILE_TEST_EXISTS) == FALSE)
+		return;
+
+	doc = xmlParseFile (eb->priv->xml_file);
+	g_assert (doc != NULL);
+
+	root = xmlDocGetRootElement (doc);
+
+	tmp = xmlGetProp (root, "version");
+	g_assert (tmp != NULL && strcmp (tmp, EPHY_HISTORY_XML_VERSION) == 0);
+	g_free (tmp);
+
+	for (child = root->children; child != NULL; child = child->next)
+	{
+		EphyNode *node;
+
+		node = ephy_node_new_from_xml (child);
+	}
+
+	xmlFreeDoc (doc);
+}
+
+static void
+ephy_history_save (EphyHistory *eb)
+{
+	xmlDocPtr doc;
+	xmlNodePtr root;
+	GPtrArray *children;
+	int i;
+
+	DEBUG_MSG (("Saving history\n"));
+
+	/* save nodes to xml */
+	xmlIndentTreeOutput = TRUE;
+	doc = xmlNewDoc ("1.0");
+
+	root = xmlNewDocNode (doc, NULL, "ephy_history", NULL);
+	xmlSetProp (root, "version", EPHY_HISTORY_XML_VERSION);
+	xmlDocSetRootElement (doc, root);
+
+	children = ephy_node_get_children (eb->priv->hosts);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+
+		kid = g_ptr_array_index (children, i);
+
+		ephy_node_save_to_xml (kid, root);
+	}
+	ephy_node_thaw (eb->priv->hosts);
+
+	children = ephy_node_get_children (eb->priv->pages);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+
+		kid = g_ptr_array_index (children, i);
+
+		ephy_node_save_to_xml (kid, root);
+	}
+	ephy_node_thaw (eb->priv->pages);
+
+	xmlSaveFormatFile (eb->priv->xml_file, doc, 1);
+}
+
+static void
+hosts_added_cb (EphyNode *node,
+	        EphyNode *child,
+	        EphyHistory *eb)
+{
+	g_static_rw_lock_writer_lock (eb->priv->hosts_hash_lock);
+
+	g_hash_table_insert (eb->priv->hosts_hash,
+			     (char *) ephy_node_get_property_string (child, EPHY_NODE_PAGE_PROP_TITLE),
+			     child);
+
+	g_static_rw_lock_writer_unlock (eb->priv->hosts_hash_lock);
+}
+
+static void
+hosts_removed_cb (EphyNode *node,
+		  EphyNode *child,
+		  EphyHistory *eb)
+{
+	g_static_rw_lock_writer_lock (eb->priv->hosts_hash_lock);
+
+	g_hash_table_remove (eb->priv->hosts_hash,
+			     ephy_node_get_property_string (child, EPHY_NODE_PAGE_PROP_TITLE));
+
+	g_static_rw_lock_writer_unlock (eb->priv->hosts_hash_lock);
+}
+
+static void
+pages_added_cb (EphyNode *node,
+	        EphyNode *child,
+	        EphyHistory *eb)
+{
+	g_static_rw_lock_writer_lock (eb->priv->pages_hash_lock);
+
+	g_hash_table_insert (eb->priv->pages_hash,
+			     (char *) ephy_node_get_property_string (child, EPHY_NODE_PAGE_PROP_LOCATION),
+			     child);
+
+	g_static_rw_lock_writer_unlock (eb->priv->pages_hash_lock);
+}
+
+static void
+pages_removed_cb (EphyNode *node,
+		  EphyNode *child,
+		  EphyHistory *eb)
+{
+	g_static_rw_lock_writer_lock (eb->priv->pages_hash_lock);
+
+	g_hash_table_remove (eb->priv->pages_hash,
+			     ephy_node_get_property_string (child, EPHY_NODE_PAGE_PROP_LOCATION));
+
+	g_static_rw_lock_writer_unlock (eb->priv->pages_hash_lock);
+}
+
+static void
+ephy_history_init (EphyHistory *eb)
+{
+        eb->priv = g_new0 (EphyHistoryPrivate, 1);
+
+	eb->priv->xml_file = g_build_filename (ephy_dot_dir (),
+					       "ephy-history.xml",
+					       NULL);
+
+	ephy_node_system_init ();
+
+	eb->priv->pages_hash = g_hash_table_new (g_str_hash,
+			                          g_str_equal);
+	eb->priv->pages_hash_lock = g_new0 (GStaticRWLock, 1);
+	g_static_rw_lock_init (eb->priv->pages_hash_lock);
+
+	eb->priv->hosts_hash = g_hash_table_new (g_str_hash,
+			                         g_str_equal);
+	eb->priv->hosts_hash_lock = g_new0 (GStaticRWLock, 1);
+	g_static_rw_lock_init (eb->priv->hosts_hash_lock);
+
+	/* Bookmarks */
+	eb->priv->pages = ephy_node_new ();
+	ephy_node_ref (eb->priv->pages);
+	g_signal_connect_object (G_OBJECT (eb->priv->pages),
+				 "child_added",
+				 G_CALLBACK (pages_added_cb),
+				 G_OBJECT (eb),
+				 0);
+	g_signal_connect_object (G_OBJECT (eb->priv->pages),
+				 "child_removed",
+				 G_CALLBACK (pages_removed_cb),
+				 G_OBJECT (eb),
+				 0);
+
+	/* Hosts */
+	eb->priv->hosts = ephy_node_new ();
+	ephy_node_ref (eb->priv->hosts);
+	g_signal_connect_object (G_OBJECT (eb->priv->hosts),
+				 "child_added",
+				 G_CALLBACK (hosts_added_cb),
+				 G_OBJECT (eb),
+				 0);
+	g_signal_connect_object (G_OBJECT (eb->priv->hosts),
+				 "child_removed",
+				 G_CALLBACK (hosts_removed_cb),
+				 G_OBJECT (eb),
+				 0);
+
+	ephy_history_load (eb);
+	ephy_history_emit_data_changed (eb);
+}
+
+static void
+ephy_history_finalize (GObject *object)
+{
+        EphyHistory *eb;
+
+	g_return_if_fail (IS_EPHY_HISTORY (object));
+
+	eb = EPHY_HISTORY (object);
+
+        g_return_if_fail (eb->priv != NULL);
+
+	ephy_history_save (eb);
+
+	ephy_node_unref (eb->priv->pages);
+	ephy_node_unref (eb->priv->hosts);
+
+	g_hash_table_destroy (eb->priv->pages_hash);
+	g_static_rw_lock_free (eb->priv->pages_hash_lock);
+	g_hash_table_destroy (eb->priv->hosts_hash);
+	g_static_rw_lock_free (eb->priv->hosts_hash_lock);
+
+        g_free (eb->priv);
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+EphyHistory *
+ephy_history_new ()
+{
+	EphyHistory *tab;
+
+	tab = EPHY_HISTORY (g_object_new (EPHY_HISTORY_TYPE, NULL));
+
+	return tab;
+}
+
+static EphyNode *
+ephy_history_add_host (EphyHistory *eh, const char *url)
+{
+	EphyNode *host;
+	GnomeVFSURI *vfs_uri = NULL;
+	const char *host_name = NULL;
+	char *host_location = NULL;
+	GTime now;
+	GValue value = { 0, };
+	int visits;
+
+	now = time (NULL);
+
+	/* Build an host name */
+	if (!g_ascii_strncasecmp (url, "file://", 7))
+	{
+		host_name = _("Local files");
+		host_location = g_strdup ("file://");
+	}
+	else
+	{
+		vfs_uri = gnome_vfs_uri_new (url);
+		if (vfs_uri != NULL)
+		{
+			host_name = gnome_vfs_uri_get_host_name (vfs_uri);
+			host_location = gnome_vfs_uri_to_string
+				(vfs_uri, GNOME_VFS_URI_HIDE_FRAGMENT_IDENTIFIER);
+		}
+
+		if (host_name == NULL)
+		{
+			host_name = _("Other");
+			host_location = g_strdup ("about:blank");
+		}
+	}
+
+	g_static_rw_lock_reader_lock (eh->priv->hosts_hash_lock);
+	host = g_hash_table_lookup (eh->priv->hosts_hash, host_name);
+	g_static_rw_lock_reader_unlock (eh->priv->hosts_hash_lock);
+
+	if (!host)
+	{
+		host = ephy_node_new ();
+		g_value_init (&value, G_TYPE_STRING);
+		g_value_set_string (&value, host_name);
+		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_TITLE,
+				        &value);
+		g_value_unset (&value);
+
+		g_value_init (&value, G_TYPE_STRING);
+		g_value_set_string (&value, host_location);
+		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_LOCATION,
+				        &value);
+		g_value_unset (&value);
+
+		g_value_init (&value, G_TYPE_INT);
+		g_value_set_int (&value, now);
+		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_FIRST_VISIT,
+				        &value);
+		g_value_unset (&value);
+
+		ephy_node_add_child (eh->priv->hosts, host);
+	}
+
+	visits = ephy_node_get_property_int
+		(host, EPHY_NODE_PAGE_PROP_VISITS);
+	if (visits < 0) visits = 0;
+	visits++;
+
+	g_value_init (&value, G_TYPE_INT);
+	g_value_set_int (&value, visits);
+	ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_VISITS,
+			        &value);
+	g_value_unset (&value);
+
+	g_value_init (&value, G_TYPE_INT);
+	g_value_set_int (&value, now);
+	ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_LAST_VISIT,
+			        &value);
+	g_value_unset (&value);
+
+	if (vfs_uri)
+	{
+		gnome_vfs_uri_unref (vfs_uri);
+	}
+
+	g_free (host_location);
+
+	return host;
+}
+
+static void
+ephy_history_visited (EphyHistory *eh, EphyNode *node)
+{
+	GValue value = { 0, };
+	GTime now;
+	int visits;
+	const char *url;
+
+	now = time (NULL);
+
+	url = ephy_node_get_property_string
+		(node, EPHY_NODE_PAGE_PROP_LOCATION);
+
+	visits = ephy_node_get_property_int
+		(node, EPHY_NODE_PAGE_PROP_VISITS);
+	if (visits < 0) visits = 0;
+	visits++;
+
+	g_value_init (&value, G_TYPE_INT);
+	g_value_set_int (&value, visits);
+	ephy_node_set_property (node, EPHY_NODE_PAGE_PROP_VISITS,
+			        &value);
+	g_value_unset (&value);
+
+	g_value_init (&value, G_TYPE_INT);
+	g_value_set_int (&value, now);
+	ephy_node_set_property (node, EPHY_NODE_PAGE_PROP_LAST_VISIT,
+			        &value);
+	if (visits == 1)
+	{
+		ephy_node_set_property
+			(node, EPHY_NODE_PAGE_PROP_FIRST_VISIT, &value);
+	}
+	g_value_unset (&value);
+
+	eh->priv->last_page = node;
+
+	g_signal_emit (G_OBJECT (eh), ephy_history_signals[VISITED], 0, url);
+	ephy_history_emit_data_changed (eh);
+}
+
+int
+ephy_history_get_page_visits (EphyHistory *gh,
+			      const char *url)
+{
+	EphyNode *node;
+	int visits;
+
+	node = ephy_history_get_page (gh, url);
+
+	visits = ephy_node_get_property_int
+		(node, EPHY_NODE_PAGE_PROP_VISITS);
+	if (visits < 0) visits = 0;
+	visits++;
+
+	return visits;
+}
+
+void
+ephy_history_add_page (EphyHistory *eb,
+		       const char *url)
+{
+	EphyNode *bm, *node, *host;
+	GValue value = { 0, };
+
+	node = ephy_history_get_page (eb, url);
+	if (node)
+	{
+		ephy_history_visited (eb, node);
+		return;
+	}
+
+	bm = ephy_node_new ();
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, url);
+	ephy_node_set_property (bm, EPHY_NODE_PAGE_PROP_LOCATION,
+			        &value);
+	ephy_node_set_property (bm, EPHY_NODE_PAGE_PROP_TITLE,
+			        &value);
+	g_value_unset (&value);
+
+	host = ephy_history_add_host (eb, url);
+
+	g_value_init (&value, G_TYPE_INT);
+	g_value_set_int (&value, ephy_node_get_id (host));
+	ephy_node_set_property (bm, EPHY_NODE_PAGE_PROP_HOST_ID,
+			        &value);
+	g_value_unset (&value);
+
+	ephy_history_visited (eb, bm);
+
+	ephy_node_add_child (host, bm);
+	ephy_node_add_child (eb->priv->pages, bm);
+}
+
+EphyNode *
+ephy_history_get_page (EphyHistory *eb,
+		       const char *url)
+{
+	EphyNode *node;
+
+	g_static_rw_lock_reader_lock (eb->priv->pages_hash_lock);
+	node = g_hash_table_lookup (eb->priv->pages_hash, url);
+	g_static_rw_lock_reader_unlock (eb->priv->pages_hash_lock);
+
+	return node;
+}
+
+gboolean
+ephy_history_is_page_visited (EphyHistory *gh,
+			      const char *url)
+{
+	return (ephy_history_get_page (gh, url) != NULL);
+}
+
+void
+ephy_history_set_page_title (EphyHistory *gh,
+			     const char *url,
+			     const char *title)
+{
+	EphyNode *node;
+
+	node = ephy_history_get_page (gh, url);
+	if (node)
+	{
+		GValue value = { 0, };
+
+		g_value_init (&value, G_TYPE_STRING);
+		g_value_set_string (&value, title);
+		ephy_node_set_property
+			(node, EPHY_NODE_PAGE_PROP_TITLE, &value);
+		g_value_unset (&value);
+	}
+}
+
+void
+ephy_history_clear (EphyHistory *gh)
+{
+	ephy_node_unref (gh->priv->hosts);
+	ephy_history_save (gh);
+}
+
+EphyNode *
+ephy_history_get_hosts (EphyHistory *eb)
+{
+	return eb->priv->hosts;
+}
+
+EphyNode *
+ephy_history_get_pages (EphyHistory *eb)
+{
+	return eb->priv->pages;
+}
+
+const char *
+ephy_history_get_last_page (EphyHistory *gh)
+{
+	if (gh->priv->last_page == NULL) return NULL;
+
+	return ephy_node_get_property_string
+		(gh->priv->last_page, EPHY_NODE_PAGE_PROP_LOCATION);
+}

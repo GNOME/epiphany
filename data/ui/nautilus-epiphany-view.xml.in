@@ -1,0 +1,130 @@
+<Root>
+<commands>
+
+        <cmd name="FilePrint" _label="Print"
+	_tip="Print the Current File" pixtype="stock" pixname="gtk-print"
+	accel="*Control*P"/>
+	
+        <cmd name="EditCut" _label="Cut" _tip="Cut the Selection"
+        pixtype="stock" pixname="gtk-cut"/>
+	
+        <cmd name="EditCopy" _label="Copy"
+	_tip="Copy the Selection" pixtype="stock" pixname="gtk-copy"/>
+	
+        <cmd name="EditPaste" _label="Paste"
+	_tip="Paste the Clipboard" pixtype="stock" pixname="gtk-paste"/>
+	
+	<cmd name="EditSelectAll" _label="Select All" _tip="Select the Entire Document"
+	accel="*Control*A"/>     
+
+	<cmd name="EditFind" _label="Find" _tip="Search for a String"
+        pixtype="stock" pixname="gtk-find" accel="*Control*F"/>
+
+
+	<cmd name="EPOpenInNewWindow" _label="Open in New Window"
+	pixtype="stock" pixname="gtk-new"/>
+	
+	<cmd name="EPCopyLinkLocation" _label="Copy Link Location"
+	pixtype="stock" pixname="gtk-copy"/>
+
+	<cmd name="EPDownloadLink" _label="Download Link"/>
+
+	<cmd name="EPOpenImage" _label="Open Image"
+	pixtype="stock" pixname="gtk-open"/>
+
+	<cmd name="EPOpenImageInNewWindow" _label="Open Image in New Window"/>
+	
+	<cmd name="EPSaveImageAs" _label="Save Image As..."
+	pixtype="stock" pixname="gtk-save"/>
+	
+	<cmd name="EPSetImageAsBackground" _label="Use Image as Background"/>
+	
+	<cmd name="EPCopyImageLocation" _label="Copy Image Location"
+	pixtype="stock" pixname="gtk-copy"/>
+
+	<cmd name="DPCopyLocation" _label="Copy Page Location"
+	pixtype="stock" pixname="gtk-copy"/>
+
+	<cmd name="DPOpenFrame" _label="Open Frame"
+	pixtype="stock" pixname="gtk-open"/>
+	
+	<cmd name="DPOpenFrameInNewWindow" _label="Open Frame in New Window"/>
+	
+	<cmd name="DPAddFrameBookmark" _label="Add Bookmark for Frame"
+	pixtype="stock" pixname="gtk-add"/>
+
+	<cmd name="DPSavePageAs" _label="Save Page As..."
+	pixtype="stock" pixname="gtk-save"/>
+	
+	<cmd name="DPSaveBackgroundAs" _label="Save Background As..."/>
+	
+	<cmd name="PPVGotoFirst" _label="First"/>
+	
+	<cmd name="PPVGotoLast" _label="Last"/>
+
+	<cmd name="PPVGoBack" _label="Previous"/>
+
+	<cmd name="PPVGoForward" _label="Next"/>
+
+	<cmd name="EPCopyEmail" _label="Copy Email Address"/>
+        
+</commands>
+
+<menu>
+	<submenu name="File" _label="_File">
+		<menuitem name="FilePrint" verb="" _label="_Print..."/>
+	</submenu>	
+	<submenu name="Edit" _label="_Edit">
+		<menuitem name="EditFind" verb="" _label="_Find..."/>
+	</submenu>
+	<submenu name="View">
+		<placeholder name="Encoding"/>
+	</submenu>
+</menu>
+
+<popups>
+
+	<popup name="EphyEmbedInputPopup">
+		<menuitem name="EditCut" verb=""/>
+		<menuitem name="EditCopy" verb=""/>
+		<menuitem name="EditPaste" verb=""/>
+	</popup>
+
+        <popup name="EphyEmbedDocumentPopup">
+		<menuitem name="DPSavePageAs" verb=""/>
+		<menuitem name="DPSaveBackgroundAs" verb=""/>
+        	<menuitem name="DPCopyLocation" verb=""/>
+		<submenu name="DPOpenWith" _label="Open With"/>
+		<placeholder name="FrameItems">
+			<separator/>
+			<menuitem name="DPOpenFrame" verb=""/>
+			<menuitem name="DPOpenFrameInNewWindow" verb=""/>
+		</placeholder>
+	</popup>
+	
+	<popup name="EphyEmbedElementPopup">
+		<placeholder name="LinkItems">
+        		<menuitem name="EPOpenInNewWindow" verb=""/>
+			<menuitem name="EPCopyLinkLocation" verb=""/>
+			<menuitem name="EPDownloadLink" verb=""/>
+		</placeholder>
+		<placeholder name="EmailLinkItems">
+                        <menuitem name="EPCopyEmail" 
+                         pixtype="stock" pixname="gtk-copy"     
+                         verb=""/>
+                </placeholder>
+		<placeholder name="BetweenElements1">
+			<separator/>
+		</placeholder>
+		<placeholder name="ImageItems">
+			<menuitem name="EPOpenImage" verb=""/>
+			<submenu name="EPOpenImageWith" _label="Open Image with"/>
+			<menuitem name="EPOpenImageInNewWindow" verb=""/>
+			<menuitem name="EPSaveImageAs" verb=""/>
+			<menuitem name="EPSetImageAsBackground" verb=""/>
+			<menuitem name="EPCopyImageLocation" verb=""/>
+      		</placeholder>
+	</popup>
+</popups>
+
+</Root>

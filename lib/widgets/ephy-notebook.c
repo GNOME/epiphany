@@ -1,0 +1,843 @@
+/*
+ *  Copyright (C) 2002 Christophe Fergeau
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2, or (at your option)
+ *  any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+#include "ephy-notebook.h"
+#include "eel-gconf-extensions.h"
+#include "ephy-prefs.h"
+#include "ephy-marshal.h"
+
+#include <gtk/gtk.h>
+#include <glib-object.h>
+#include <libgnome/gnome-i18n.h>
+
+#define AFTER_ALL_TABS -1
+#define NOT_IN_APP_WINDOWS -2
+#define TAB_MIN_SIZE 60
+#define TAB_NB_MAX    8
+
+struct EphyNotebookPrivate
+{
+	GList *focused_pages;
+	GList *opened_tabs;
+
+	/* Used during tab drag'n'drop */
+	gulong motion_notify_handler_id;
+	gint x_start, y_start;
+	gboolean drag_in_progress;
+	EphyNotebook *src_notebook;
+	gint src_page;
+};
+
+/* GObject boilerplate code */
+static void ephy_notebook_init         (EphyNotebook *notebook);
+static void ephy_notebook_class_init   (EphyNotebookClass *klass);
+static void ephy_notebook_finalize     (GObject *object);
+
+/* Local variables */
+static GdkCursor *cursor = NULL;
+static GList *notebooks  = NULL;
+
+
+/* Local functions */
+static void drag_start (EphyNotebook *notebook,
+			EphyNotebook *src_notebook,
+			gint src_page);
+static void drag_stop  (EphyNotebook *notebook);
+
+static gboolean motion_notify_cb (EphyNotebook *notebook,
+				  GdkEventMotion *event,
+				  gpointer data);
+
+/* Signals */
+enum
+{
+	TAB_DROPPED,
+	TAB_DETACHED,
+	LAST_SIGNAL
+};
+
+static guint ephy_notebook_signals[LAST_SIGNAL] = { 0 };
+
+GType
+ephy_notebook_get_type (void)
+{
+        static GType ephy_notebook_type = 0;
+
+        if (ephy_notebook_type == 0)
+        {
+                static const GTypeInfo our_info =
+			{
+				sizeof (EphyNotebookClass),
+				NULL, /* base_init */
+				NULL, /* base_finalize */
+				(GClassInitFunc) ephy_notebook_class_init,
+				NULL,
+				NULL, /* class_data */
+				sizeof (EphyNotebook),
+				0, /* n_preallocs */
+				(GInstanceInitFunc) ephy_notebook_init
+			};
+
+                ephy_notebook_type = g_type_register_static (GTK_TYPE_NOTEBOOK,
+							     "EphyNotebook",
+							     &our_info, 0);
+        }
+
+        return ephy_notebook_type;
+}
+
+static void
+ephy_notebook_class_init (EphyNotebookClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->finalize = ephy_notebook_finalize;
+
+	/* init signals */
+	ephy_notebook_signals[TAB_DROPPED] =
+		g_signal_new ("tab_dropped",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyNotebookClass,
+					       tab_dropped),
+			      NULL, NULL,
+			      ephy_marshal_VOID__OBJECT_OBJECT_INT,
+			      G_TYPE_NONE,
+			      3,
+			      GTK_TYPE_WIDGET,
+			      EPHY_NOTEBOOK_TYPE,
+			      G_TYPE_INT);
+	ephy_notebook_signals[TAB_DETACHED] =
+		g_signal_new ("tab_detached",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyNotebookClass,
+					       tab_detached),
+			      NULL, NULL,
+			      ephy_marshal_VOID__INT_INT_INT,
+			      G_TYPE_NONE,
+			      3,
+			      G_TYPE_INT,
+			      G_TYPE_INT,
+			      G_TYPE_INT);
+
+}
+
+static gboolean
+is_in_notebook_window (EphyNotebook *notebook,
+		       gint abs_x, gint abs_y)
+{
+	gint x, y;
+	gint rel_x, rel_y;
+	gint width, height;
+	GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET(notebook));
+	GdkWindow *window = GTK_WIDGET(toplevel)->window;
+
+	gdk_window_get_origin (window, &x, &y);
+	rel_x = abs_x - x;
+	rel_y = abs_y - y;
+
+	x = GTK_WIDGET(notebook)->allocation.x;
+	y = GTK_WIDGET(notebook)->allocation.y;
+	height = GTK_WIDGET(notebook)->allocation.height;
+	width  = GTK_WIDGET(notebook)->allocation.width;
+	return ((rel_x>=x) && (rel_y>=y) && (rel_x<=x+width) && (rel_y<=y+height));
+}
+
+static EphyNotebook *
+find_notebook_at_pointer (gint abs_x, gint abs_y)
+{
+	GList *l;
+	gint x, y;
+	GdkWindow *win_at_pointer = gdk_window_at_pointer (&x, &y);
+	GdkWindow *parent_at_pointer = NULL;
+
+	if (win_at_pointer == NULL)
+	{
+		/* We are outside all windows containing a notebook */
+		return NULL;
+	}
+
+	gdk_window_get_toplevel (win_at_pointer);
+	/* When we are in the notebook event window, win_at_pointer will be
+	   this event window, and the toplevel window we are interested in
+	   will be its parent
+	*/
+	parent_at_pointer = gdk_window_get_parent (win_at_pointer);
+
+	for (l = notebooks; l != NULL; l = l->next)
+	{
+		EphyNotebook *nb = EPHY_NOTEBOOK (l->data);
+		GdkWindow *win = GTK_WIDGET (nb)->window;
+
+		win = gdk_window_get_toplevel (win);
+		if (((win == win_at_pointer) || (win == parent_at_pointer))
+		    && is_in_notebook_window (nb, abs_x, abs_y))
+		{
+			return nb;
+		}
+	}
+	return NULL;
+}
+
+
+static gint
+find_tab_num_at_pos (EphyNotebook *notebook, gint abs_x, gint abs_y)
+{
+	GtkPositionType tab_pos;
+	int page_num = 0;
+	GtkNotebook *nb = GTK_NOTEBOOK (notebook);
+	GtkWidget *page;
+
+	tab_pos = gtk_notebook_get_tab_pos (GTK_NOTEBOOK (notebook));
+
+	if (GTK_NOTEBOOK (notebook)->first_tab == NULL)
+	{
+		return AFTER_ALL_TABS;
+	}
+
+	g_assert (is_in_notebook_window(notebook, abs_x, abs_y));
+
+	while ((page = gtk_notebook_get_nth_page (nb, page_num)))
+	{
+		GtkWidget *tab;
+		gint max_x, max_y;
+		gint x_root, y_root;
+
+		tab = gtk_notebook_get_tab_label (nb, page);
+		g_return_val_if_fail (tab != NULL, -1);
+
+		if (!GTK_WIDGET_MAPPED (GTK_WIDGET (tab)))
+		{
+			page_num++;
+			continue;
+		}
+
+		gdk_window_get_origin (GDK_WINDOW (tab->window),
+				       &x_root, &y_root);
+
+		max_x = x_root + tab->allocation.x + tab->allocation.width;
+		max_y = y_root + tab->allocation.y + tab->allocation.height;
+
+		if (((tab_pos == GTK_POS_TOP)
+		     || (tab_pos == GTK_POS_BOTTOM))
+		    &&(abs_x<=max_x))
+		{
+			return page_num;
+		}
+		else if (((tab_pos == GTK_POS_LEFT)
+			  || (tab_pos == GTK_POS_RIGHT))
+			 && (abs_y<=max_y))
+		{
+			return page_num;
+		}
+
+		page_num++;
+	}
+	return AFTER_ALL_TABS;
+}
+
+
+static gint find_notebook_and_tab_at_pos (gint abs_x, gint abs_y,
+					  EphyNotebook **notebook,
+					  gint *page_num)
+{
+	*notebook = find_notebook_at_pointer (abs_x, abs_y);
+	if (*notebook == NULL)
+	{
+		return NOT_IN_APP_WINDOWS;
+	}
+	*page_num = find_tab_num_at_pos (*notebook, abs_x, abs_y);
+
+	if (*page_num < 0)
+	{
+		return *page_num;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+static void
+tab_label_set_size (GtkWidget *window, GtkWidget *label)
+{
+	int label_width;
+
+	label_width = window->allocation.width/TAB_NB_MAX;
+
+	if (label_width < TAB_MIN_SIZE) label_width = TAB_MIN_SIZE;
+
+	gtk_widget_set_size_request (label, label_width, -1);
+}
+
+static GtkWidget *
+tab_get_label (EphyNotebook *nb, GtkWidget *child)
+{
+	GtkWidget *hbox, *label;
+
+	hbox = gtk_notebook_get_tab_label (GTK_NOTEBOOK (nb),
+					   child);
+	label = g_object_get_data (G_OBJECT (hbox), "label");
+
+	return label;
+}
+
+static void
+tab_label_size_request_cb (GtkWidget *window,
+			   GtkRequisition *requisition,
+			   GtkWidget *child)
+{
+	GtkWidget *hbox;
+	GtkWidget *nb;
+
+	nb = child->parent;
+
+	hbox = gtk_notebook_get_tab_label (GTK_NOTEBOOK (nb),
+					   child);
+	tab_label_set_size (window, hbox);
+}
+
+
+void
+ephy_notebook_move_page (EphyNotebook *src, EphyNotebook *dest,
+			GtkWidget *src_page,  gint dest_page)
+{
+	GtkWidget *tab_label;
+
+	tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (src), src_page);
+
+	/* We don't want gtk to destroy tab and src_page behind our back */
+	g_object_ref (G_OBJECT (src_page));
+	g_object_ref (G_OBJECT (tab_label));
+	ephy_notebook_remove_page (EPHY_NOTEBOOK (src), src_page);
+	ephy_notebook_insert_page (EPHY_NOTEBOOK (dest), src_page,
+				  dest_page, TRUE);
+	gtk_notebook_set_tab_label (GTK_NOTEBOOK (dest), src_page, tab_label);
+	g_object_unref (G_OBJECT (src_page));
+	g_object_unref (G_OBJECT (tab_label));
+}
+
+
+
+static void
+move_tab_to_another_notebook(EphyNotebook *src,
+			     EphyNotebook *dest, gint dest_page)
+{
+	GtkWidget *child;
+	gint cur_page;
+
+	/* This is getting tricky, the tab was dragged in a notebook
+	 * in another window of the same app, we move the tab
+	 * to that new notebook, and let this notebook handle the
+	 * drag
+	*/
+	g_assert (dest != NULL);
+	g_assert (dest != src);
+
+	/* Move the widgets (tab label and tab content) to the new
+	 * notebook
+	 */
+	cur_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (src));
+	child    = gtk_notebook_get_nth_page (GTK_NOTEBOOK (src), cur_page);
+	ephy_notebook_move_page (src, dest, child, dest_page);
+
+	/* "Give" drag handling to the new notebook */
+	drag_start (dest, src->priv->src_notebook, src->priv->src_page);
+	drag_stop (src);
+	gtk_grab_remove (GTK_WIDGET (src));
+
+	dest->priv->motion_notify_handler_id =
+		g_signal_connect (G_OBJECT (dest),
+				  "motion-notify-event",
+				  G_CALLBACK (motion_notify_cb),
+				  NULL);
+}
+
+
+static void
+move_tab (EphyNotebook *notebook, gint dest_page_num)
+{
+	gint cur_page_num;
+
+	cur_page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+
+	if (dest_page_num != cur_page_num)
+	{
+		GtkWidget *cur_page;
+		cur_page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
+						      cur_page_num);
+		gtk_notebook_reorder_child (GTK_NOTEBOOK (notebook), cur_page,
+					    dest_page_num);
+
+		/* Reset the list of newly opened tabs when moving tabs. */
+		g_list_free (notebook->priv->opened_tabs);
+		notebook->priv->opened_tabs = NULL;
+	}
+}
+
+static void
+drag_start (EphyNotebook *notebook,
+	    EphyNotebook *src_notebook,
+	    gint src_page)
+{
+	notebook->priv->drag_in_progress = TRUE;
+	notebook->priv->src_notebook = src_notebook;
+	notebook->priv->src_page = src_page;
+
+	/* get a new cursor, if necessary */
+	if (!cursor) cursor = gdk_cursor_new (GDK_FLEUR);
+
+	/* grab the pointer */
+	gtk_grab_add (GTK_WIDGET (notebook));
+	if (!gdk_pointer_is_grabbed ()) {
+		gdk_pointer_grab (GDK_WINDOW(GTK_WIDGET (notebook)->window),
+				  FALSE,
+				  GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
+				  NULL, cursor, GDK_CURRENT_TIME);
+	}
+}
+
+static void
+drag_stop (EphyNotebook *notebook)
+{
+	notebook->priv->drag_in_progress = FALSE;
+	notebook->priv->src_notebook = NULL;
+	notebook->priv->src_page = -1;
+	if (notebook->priv->motion_notify_handler_id != 0)
+	{
+		g_signal_handler_disconnect (G_OBJECT (notebook),
+					     notebook->priv->motion_notify_handler_id);
+		notebook->priv->motion_notify_handler_id = 0;
+	}
+}
+
+/* Callbacks */
+static gboolean
+button_release_cb (EphyNotebook *notebook, GdkEventButton *event,
+		   gpointer data)
+{
+	if (notebook->priv->drag_in_progress)
+	{
+		gint cur_page_num;
+		GtkWidget *cur_page;
+
+		cur_page_num =
+			gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+		cur_page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
+						      cur_page_num);
+
+		if (!is_in_notebook_window (notebook, event->x_root, event->y_root))
+		{
+			/* Tab was detached */
+			g_signal_emit (G_OBJECT(notebook),
+				       ephy_notebook_signals[TAB_DETACHED], 0,
+				       cur_page_num, (gint)event->x_root,
+				       (gint)event->y_root);
+		}
+		else
+		{
+			/* Tab was dragged and dropped (but it may have stayed
+			   in the same place) */
+			g_signal_emit (G_OBJECT(notebook),
+				       ephy_notebook_signals[TAB_DROPPED], 0,
+				       cur_page,
+				       notebook->priv->src_notebook,
+				       notebook->priv->src_page);
+		}
+
+		/* ungrab the pointer if it's grabbed */
+		if (gdk_pointer_is_grabbed ())
+		{
+			gdk_pointer_ungrab (GDK_CURRENT_TIME);
+			gtk_grab_remove (GTK_WIDGET (notebook));
+		}
+	}
+	/* This must be called even if a drag isn't happening */
+	drag_stop (notebook);
+	return FALSE;
+}
+
+
+static gboolean
+motion_notify_cb (EphyNotebook *notebook, GdkEventMotion *event,
+		  gpointer data)
+{
+	EphyNotebook *dest;
+	gint page_num;
+	gint result;
+
+	/* If the notebook only has one tab, we don't want to do
+	 * anything since ephy can't handle empty notebooks
+	 */
+	if (g_list_length (GTK_NOTEBOOK (notebook)->children) <= 1) {
+		return FALSE;
+	}
+
+	if ((notebook->priv->drag_in_progress == FALSE)
+	    && (gtk_drag_check_threshold (GTK_WIDGET (notebook),
+					  notebook->priv->x_start,
+					  notebook->priv->y_start,
+					  event->x_root, event->y_root)))
+	{
+		gint cur_page;
+
+		cur_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+		drag_start (notebook, notebook, cur_page);
+	}
+
+	result = find_notebook_and_tab_at_pos ((gint)event->x_root,
+					       (gint)event->y_root,
+					       &dest, &page_num);
+
+	if (result != NOT_IN_APP_WINDOWS)
+	{
+		if (dest != notebook)
+		{
+			move_tab_to_another_notebook (notebook, dest,
+						      page_num);
+		}
+		else
+		{
+			g_assert (page_num >= -1);
+			move_tab (notebook, page_num);
+		}
+	}
+
+	return FALSE;
+}
+
+static gboolean
+button_press_cb (EphyNotebook *notebook,
+		 GdkEventButton *event,
+		 gpointer data)
+{
+	gint tab_clicked = find_tab_num_at_pos (notebook,
+						event->x_root,
+						event->y_root);
+
+	if (notebook->priv->drag_in_progress)
+	{
+		return TRUE;
+	}
+
+	if ((event->button == 1) && (event->type == GDK_BUTTON_PRESS)
+	    && (tab_clicked != -1))
+	{
+		notebook->priv->x_start = event->x_root;
+		notebook->priv->y_start = event->y_root;
+		notebook->priv->motion_notify_handler_id =
+			g_signal_connect (G_OBJECT (notebook),
+					  "motion-notify-event",
+					  G_CALLBACK (motion_notify_cb), NULL);
+	}
+
+	return FALSE;
+}
+
+GtkWidget *
+ephy_notebook_new (void)
+{
+	return GTK_WIDGET (g_object_new (EPHY_NOTEBOOK_TYPE, NULL));
+}
+
+static void
+ephy_notebook_switch_page_cb (GtkNotebook *notebook,
+                             GtkNotebookPage *page,
+                             guint page_num,
+                             gpointer data)
+{
+	EphyNotebook *nb = EPHY_NOTEBOOK (notebook);
+	GtkWidget *child;
+
+	child = gtk_notebook_get_nth_page (notebook, page_num);
+
+	/* Remove the old page, we dont want to grow unnecessarily
+	 * the list */
+	if (nb->priv->focused_pages)
+	{
+		nb->priv->focused_pages =
+			g_list_remove (nb->priv->focused_pages, child);
+	}
+
+	nb->priv->focused_pages = g_list_append (nb->priv->focused_pages,
+						 child);
+
+	/* Reset the list of newly opened tabs when switching tabs. */
+	g_list_free (nb->priv->opened_tabs);
+	nb->priv->opened_tabs = NULL;
+}
+
+static void
+ephy_notebook_init (EphyNotebook *notebook)
+{
+	notebook->priv = g_new (EphyNotebookPrivate, 1);
+
+	notebook->priv->drag_in_progress = FALSE;
+	notebook->priv->motion_notify_handler_id = 0;
+	notebook->priv->src_notebook = NULL;
+	notebook->priv->src_page = -1;
+	notebook->priv->focused_pages = NULL;
+	notebook->priv->opened_tabs = NULL;
+
+	notebooks = g_list_append (notebooks, notebook);
+
+	g_signal_connect (notebook, "button-press-event",
+			  (GCallback)button_press_cb, NULL);
+	g_signal_connect (notebook, "button-release-event",
+			  (GCallback)button_release_cb, NULL);
+	gtk_widget_add_events (GTK_WIDGET (notebook), GDK_BUTTON1_MOTION_MASK);
+
+	g_signal_connect_after (G_OBJECT (notebook), "switch_page",
+                                G_CALLBACK (ephy_notebook_switch_page_cb),
+                                NULL);
+}
+
+static void
+ephy_notebook_finalize (GObject *object)
+{
+	EphyNotebook *notebook = EPHY_NOTEBOOK (object);
+
+	notebooks = g_list_remove (notebooks, notebook);
+
+	if (notebook->priv->focused_pages)
+	{
+		g_list_free (notebook->priv->focused_pages);
+	}
+	g_list_free (notebook->priv->opened_tabs);
+
+	g_free (notebook->priv);
+}
+
+
+void
+ephy_notebook_set_page_status (EphyNotebook *nb,
+			       GtkWidget *child,
+			       EphyNotebookPageLoadStatus status)
+{
+}
+
+static void
+ephy_tab_close_button_clicked_cb (GtkWidget *widget,
+				  GtkWidget *child)
+{
+	EphyNotebook *notebook;
+
+	notebook = EPHY_NOTEBOOK (gtk_widget_get_parent (child));
+	ephy_notebook_remove_page (notebook, child);
+}
+
+static GtkWidget *
+tab_build_label (EphyNotebook *nb, GtkWidget *child)
+{
+	GtkWidget *label, *hbox, *close_button, *image;
+	int h, w;
+	GClosure *closure;
+	GtkWidget *window;
+
+	window = gtk_widget_get_toplevel (GTK_WIDGET (nb));
+
+	gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &w, &h);
+
+	hbox = gtk_hbox_new (FALSE, 0);
+
+	/* setup close button */
+	close_button = gtk_button_new ();
+	gtk_button_set_relief (GTK_BUTTON (close_button),
+			       GTK_RELIEF_NONE);
+	image = gtk_image_new_from_stock (GTK_STOCK_CLOSE,
+					  GTK_ICON_SIZE_MENU);
+	gtk_widget_set_size_request (close_button, w, h);
+	gtk_container_add (GTK_CONTAINER (close_button),
+			   image);
+
+	/* setup label */
+        label = gtk_label_new (_("Untitled"));
+	gtk_misc_set_alignment (GTK_MISC (label), 0.00, 0.5);
+        gtk_misc_set_padding (GTK_MISC (label), 4, 0);
+	gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+
+	tab_label_set_size (GTK_WIDGET (window), hbox);
+
+	closure = g_cclosure_new (G_CALLBACK (tab_label_size_request_cb),
+				  child, NULL);
+	g_object_watch_closure (G_OBJECT (label), closure);
+	g_signal_connect_closure_by_id (G_OBJECT (window),
+		g_signal_lookup ("size_request",
+				 G_OBJECT_TYPE (G_OBJECT (window))), 0,
+                                 closure,
+                                 FALSE);
+
+	/* setup button */
+	gtk_box_pack_start (GTK_BOX (hbox), close_button,
+                            FALSE, FALSE, 0);
+
+	g_signal_connect (G_OBJECT (close_button), "clicked",
+                          G_CALLBACK (ephy_tab_close_button_clicked_cb),
+                          child);
+
+	gtk_widget_show (hbox);
+	gtk_widget_show (label);
+	gtk_widget_show (image);
+	gtk_widget_show (close_button);
+
+	g_object_set_data (G_OBJECT (hbox), "label", label);
+
+	return hbox;
+}
+
+/*
+ * update_tabs_visibility: Hide tabs if there is only one tab
+ * and the pref is not set.
+ * HACK We need to show tabs before inserting the second. Otherwise
+ * gtknotebook go crazy.
+ */
+static void
+update_tabs_visibility (EphyNotebook *nb, gboolean before_inserting)
+{
+	gboolean show_tabs;
+	guint tabs_num = 1;
+
+	if (before_inserting) tabs_num--;
+
+	show_tabs = gtk_notebook_get_nth_page (GTK_NOTEBOOK (nb), tabs_num) > 0;
+
+	gtk_notebook_set_show_tabs (GTK_NOTEBOOK (nb), show_tabs);
+}
+
+void
+ephy_notebook_insert_page (EphyNotebook *nb,
+			  GtkWidget *child,
+			  int position,
+			  gboolean jump_to)
+{
+	GtkWidget *tab_hbox;
+
+	tab_hbox = tab_build_label (nb, child);
+
+	update_tabs_visibility (nb, TRUE);
+
+	if (position == EPHY_NOTEBOOK_INSERT_GROUPED)
+	{
+		/* Keep a list of newly opened tabs, if the list is empty open the new
+		 * tab after the current one. If it's not, add it after the newly
+		 * opened tabs.
+		 */
+		if (nb->priv->opened_tabs != NULL)
+		{
+			GList *last = g_list_last (nb->priv->opened_tabs);
+			GtkWidget *last_tab = last->data;
+			position = gtk_notebook_page_num
+				    (GTK_NOTEBOOK (nb), last_tab) + 1;
+		}
+		else
+		{
+			position = gtk_notebook_get_current_page
+				    (GTK_NOTEBOOK (nb)) + 1;
+		}
+		nb->priv->opened_tabs =
+			g_list_append (nb->priv->opened_tabs, child);
+	}
+
+	gtk_notebook_insert_page (GTK_NOTEBOOK (nb),
+				  child,
+				  tab_hbox, position);
+
+	if (jump_to)
+	{
+		gtk_notebook_set_current_page (GTK_NOTEBOOK (nb),
+					       position);
+		g_object_set_data (G_OBJECT (child), "jump_to",
+				   GINT_TO_POINTER (jump_to));
+	}
+}
+
+static void
+smart_tab_switching_on_closure (EphyNotebook *nb,
+				GtkWidget *child)
+{
+	gboolean jump_to;
+
+	jump_to = GPOINTER_TO_INT (g_object_get_data
+				   (G_OBJECT (child), "jump_to"));
+
+	if (!jump_to || !nb->priv->focused_pages)
+	{
+		gtk_notebook_next_page (GTK_NOTEBOOK (nb));
+	}
+	else
+	{
+		GList *l;
+		GtkWidget *child;
+		int page_num;
+
+		/* activate the last focused tab */
+		l = g_list_last (nb->priv->focused_pages);
+		child = GTK_WIDGET (l->data);
+		page_num = gtk_notebook_page_num (GTK_NOTEBOOK (nb),
+						  child);
+		gtk_notebook_set_current_page
+			(GTK_NOTEBOOK (nb), page_num);
+	}
+}
+
+void
+ephy_notebook_remove_page (EphyNotebook *nb,
+			  GtkWidget *child)
+{
+	int position, cur;
+	gboolean last_tab;
+
+	last_tab = gtk_notebook_get_nth_page (GTK_NOTEBOOK (nb), 1) == NULL;
+	if (last_tab)
+	{
+		GtkWidget *window;
+		window = gtk_widget_get_toplevel (GTK_WIDGET (nb));
+		gtk_widget_destroy (window);
+		return;
+	}
+
+	/* Remove the page from the focused pages list */
+	nb->priv->focused_pages =  g_list_remove (nb->priv->focused_pages,
+						  child);
+	nb->priv->opened_tabs = g_list_remove (nb->priv->opened_tabs, child);
+
+
+	position = gtk_notebook_page_num (GTK_NOTEBOOK (nb),
+					  child);
+
+	cur = gtk_notebook_get_current_page (GTK_NOTEBOOK (nb));
+	if (position == cur)
+	{
+		smart_tab_switching_on_closure (nb, child);
+	}
+
+	gtk_notebook_remove_page (GTK_NOTEBOOK (nb), position);
+
+	update_tabs_visibility (nb, FALSE);
+}
+
+void
+ephy_notebook_set_page_title (EphyNotebook *nb,
+			     GtkWidget *child,
+			     const char *title)
+{
+	GtkWidget *label;
+
+	label = tab_get_label (nb, child);
+	gtk_label_set_label (GTK_LABEL (label), title);
+}

@@ -1,0 +1,69 @@
+/*
+ *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2, or (at your option)
+ *  any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+#ifndef EPHY_EMBED_DIALOG_H
+#define EPHY_EMBED_DIALOG_H
+
+#include "ephy-embed.h"
+#include "ephy-dialog.h"
+
+#include <glib-object.h>
+#include <glib.h>
+#include <gtk/gtkwidget.h>
+
+G_BEGIN_DECLS
+
+typedef struct EphyEmbedDialogClass EphyEmbedDialogClass;
+
+#define EPHY_EMBED_DIALOG_TYPE             (ephy_embed_dialog_get_type ())
+#define EPHY_EMBED_DIALOG(obj)             (GTK_CHECK_CAST ((obj), EPHY_EMBED_DIALOG_TYPE, EphyEmbedDialog))
+#define EPHY_EMBED_DIALOG_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), EPHY_EMBED_DIALOG_TYPE, EphyEmbedDialogClass))
+#define IS_EPHY_EMBED_DIALOG(obj)          (GTK_CHECK_TYPE ((obj), EPHY_EMBED_DIALOG_TYPE))
+#define IS_EPHY_EMBED_DIALOG_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), EPHY_EMBED_DIALOG))
+#define EPHY_EMBED_DIALOG_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_EMBED_DIALOG_TYPE, EphyEmbedDialogClass))
+
+typedef struct EphyEmbedDialog EphyEmbedDialog;
+typedef struct EphyEmbedDialogPrivate EphyEmbedDialogPrivate;
+
+struct EphyEmbedDialog
+{
+        EphyDialog parent;
+        EphyEmbedDialogPrivate *priv;
+};
+
+struct EphyEmbedDialogClass
+{
+        EphyDialogClass parent_class;
+};
+
+GType			ephy_embed_dialog_get_type		(void);
+
+EphyEmbedDialog	       *ephy_embed_dialog_new			(EphyEmbed *embed);
+
+EphyEmbedDialog	       *ephy_embed_dialog_new_with_parent	(GtkWidget *parent_window,
+								EphyEmbed *embed);
+
+void			ephy_embed_dialog_set_embed		(EphyEmbedDialog *dialog,
+								 EphyEmbed *embed);
+
+EphyEmbed *		ephy_embed_dialog_get_embed		(EphyEmbedDialog *dialog);
+
+G_END_DECLS
+
+#endif
+

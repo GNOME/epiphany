@@ -1,0 +1,81 @@
+/*
+ *  Copyright (C) 2002 Jorn Baayen <jorn@nl.linux.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
+ */
+
+#ifndef __EPHY_TREE_MODEL_NODE_H
+#define __EPHY_TREE_MODEL_NODE_H
+
+#include <gtk/gtktreemodel.h>
+
+#include "ephy-node.h"
+#include "ephy-node-filter.h"
+
+G_BEGIN_DECLS
+
+#define EPHY_TYPE_TREE_MODEL_NODE         (ephy_tree_model_node_get_type ())
+#define EPHY_TREE_MODEL_NODE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_TREE_MODEL_NODE, EphyTreeModelNode))
+#define EPHY_TREE_MODEL_NODE_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_TREE_MODEL_NODE, EphyTreeModelNodeClass))
+#define EPHY_IS_TREE_MODEL_NODE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_TREE_MODEL_NODE))
+#define EPHY_IS_TREE_MODEL_NODE_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TREE_MODEL_NODE))
+#define EPHY_TREE_MODEL_NODE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TREE_MODEL_NODE, EphyTreeModelNodeClass))
+
+typedef enum
+{
+	EPHY_TREE_MODEL_NODE_COL_BOOKMARK,
+	EPHY_TREE_MODEL_NODE_COL_LOCATION,
+	EPHY_TREE_MODEL_NODE_COL_KEYWORD,
+	EPHY_TREE_MODEL_NODE_COL_VISIBLE,
+	EPHY_TREE_MODEL_NODE_NUM_COLUMNS
+} EphyTreeModelNodeColumn;
+
+GType ephy_tree_model_node_column_get_type (void);
+
+#define EPHY_TYPE_TREE_MODEL_NODE_COLUMN (ephy_tree_model_node_column_get_type ())
+
+typedef struct EphyTreeModelNodePrivate EphyTreeModelNodePrivate;
+
+typedef struct
+{
+	GObject parent;
+
+	EphyTreeModelNodePrivate *priv;
+
+	int stamp;
+} EphyTreeModelNode;
+
+typedef struct
+{
+	GObjectClass parent;
+} EphyTreeModelNodeClass;
+
+GType              ephy_tree_model_node_get_type         (void);
+
+EphyTreeModelNode *ephy_tree_model_node_new              (EphyNode *root,
+						          EphyNodeFilter *filter);
+
+EphyNode          *ephy_tree_model_node_node_from_iter   (EphyTreeModelNode *model,
+						          GtkTreeIter *iter);
+
+void               ephy_tree_model_node_iter_from_node   (EphyTreeModelNode *model,
+						          EphyNode *node,
+						          GtkTreeIter *iter);
+
+G_END_DECLS
+
+#endif /* EPHY_TREE_MODEL_NODE_H */

@@ -1,0 +1,78 @@
+/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 8; tab-width: 8 -*- */
+
+/*
+ * Nautilus
+ *
+ * Copyright (C) 2000 Eazel, Inc.
+ *
+ * Nautilus is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Nautilus is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * Author: Andy Hertzfeld <andy@eazel.com>
+ *
+ * This is the header file for the throbber on the location bar
+ *
+ */
+
+#ifndef EPHY_SPINNER_H
+#define EPHY_SPINNER_H
+
+#include <gtk/gtkeventbox.h>
+#include <bonobo.h>
+
+G_BEGIN_DECLS
+
+#define EPHY_SPINNER_TYPE		(ephy_spinner_get_type ())
+#define EPHY_SPINNER(obj)		(GTK_CHECK_CAST ((obj), EPHY_SPINNER_TYPE, EphySpinner))
+#define EPHY_SPINNER_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), EPHY_SPINNER_TYPE, EphySpinnerClass))
+#define IS_EPHY_SPINNER(obj)		(GTK_CHECK_TYPE ((obj), EPHY_SPINNER_TYPE))
+#define IS_EPHY_SPINNER_CLASS(klass)    (GTK_CHECK_CLASS_TYPE ((klass), EPHY_SPINNER_TYPE))
+
+typedef struct EphySpinnerInfo	EphySpinnerInfo;
+
+struct EphySpinnerInfo
+{
+	gchar	*name;
+	gchar	*filename;
+	gchar	*directory;
+};
+
+typedef struct EphySpinner EphySpinner;
+typedef struct EphySpinnerClass EphySpinnerClass;
+typedef struct EphySpinnerDetails EphySpinnerDetails;
+
+struct EphySpinner {
+	GtkEventBox parent;
+	EphySpinnerDetails *details;
+};
+
+struct EphySpinnerClass {
+	GtkEventBoxClass parent_class;
+};
+
+GtkType       ephy_spinner_get_type       (void);
+GtkWidget    *ephy_spinner_new            (void);
+void          ephy_spinner_start          (EphySpinner *throbber);
+void          ephy_spinner_stop           (EphySpinner *throbber);
+void          ephy_spinner_set_small_mode (EphySpinner *throbber,
+					   gboolean new_mode);
+
+GList	     *ephy_spinner_list_spinners  (void);
+void	      ephy_spinner_info_free      (EphySpinnerInfo *info);
+
+G_END_DECLS
+
+#endif /* EPHY_SPINNER_H */
+
+

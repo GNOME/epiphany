@@ -1,0 +1,30 @@
+<oaf_info>
+
+<oaf_server iid="OAFIID:GNOME_Epiphany_NautilusViewFactory" type="exe" location="epiphany --nautilus-view">
+	<oaf_attribute name="repo_ids" type="stringv">
+		<item value="IDL:GNOME/ObjectFactory:1.0"/>
+	</oaf_attribute>
+	<oaf_attribute name="name" type="string" _value="Epiphany Nautilus view factory"/>
+	<oaf_attribute name="description" type="string" _value="Epiphany content view component's factory"/>
+</oaf_server>
+
+<oaf_server iid="OAFIID:GNOME_Epiphany_NautilusView" type="factory" location="OAFIID:GNOME_Epiphany_NautilusViewFactory">
+	<oaf_attribute name="repo_ids" type="stringv">
+		<item value="IDL:Bonobo/Unknown:1.0"/>
+		<item value="IDL:Bonobo/Control:1.0"/>
+		<item value="IDL:Nautilus/View:1.0"/>
+	</oaf_attribute>
+	<oaf_attribute name="name" type="string" _value="Epiphany Nautilus view"/>
+	<oaf_attribute name="description" type="string" _value="Epiphany content view component"/>
+	<oaf_attribute name="bonobo:supported_mime_types" type="stringv">
+		<item value="text/html"/>
+		<item value="text/xml"/>
+		<item value="x-directory/webdav"/>
+		<item value="x-directory/webdav-prefer-directory"/>
+	</oaf_attribute>
+	<oaf_attribute name="nautilus:view_as_name" type="string" _value="Web Page (Epiphany)"/>
+	<oaf_attribute name="nautilus:view_as_label" type="string" _value="View as Web Page (Epiphany)"/>
+	<oaf_attribute name="nautilus:viewer_label" type="string" _value="Web Page Viewer (Epiphany)"/>
+</oaf_server>
+
+</oaf_info>

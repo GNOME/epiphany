@@ -1,0 +1,627 @@
+<gconfschemafile>
+    <schemalist>
+      <schema>
+        <key>/schemas/apps/epiphany/general/start_page</key>
+        <applyto>/apps/epiphany/general/start_page</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>start-here:</default>
+        <locale name="C">
+        <short>Home page</short>
+        <long>URL for the user's home page.  Displayed on start up
+        and when a new window or tab is created </long>
+        </locale>
+      </schema>
+     <schema>
+        <key>/schemas/apps/epiphany/general/newpage_type</key>
+        <applyto>/apps/epiphany/general/newpage_type</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>0</default>
+        <locale name="C">
+        <short>New page type</short>
+        <long>Type of page to show when opening a new window or tab.  Possible
+        values are: 0 (home page), 1 (last page), 2 (blank)</long>
+        </locale>
+      </schema>
+     <schema>
+        <key>/schemas/apps/epiphany/find/match_case</key>
+        <applyto>/apps/epiphany/find/match_case</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>0</default>
+        <locale name="C">
+        <short>Match case for find in page</short>
+        <long>Match case for find in page.</long>
+        </locale>
+      </schema>
+     <schema>
+        <key>/schemas/apps/epiphany/find/autowrap</key>
+        <applyto>/apps/epiphany/find/autowrap</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>1</default>
+        <locale name="C">
+        <short>Autowrap for find in page</short>
+        <long>For find in page, whether to start again at the beginning after
+        reaching the end of the page</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/filtering/allow_popups</key>
+        <applyto>/apps/epiphany/filtering/allow_popups</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>true</default>
+        <locale name="C">
+        <short>Allow popups</short>
+        <long>Allow sites to open new windows using JavaScript (if JavaScript
+        is enabled).</long>
+        </locale>
+      </schema>
+     <schema>
+        <key>/schemas/apps/epiphany/rendering/use_own_colors</key>
+        <applyto>/apps/epiphany/rendering/use_own_colors</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>false</default>
+        <locale name="C">
+        <short>Use own colors</short>
+        <long>Use your own colors instead of the colors the page
+        requests.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/rendering/use_own_fonts</key>
+        <applyto>/apps/epiphany/rendering/use_own_fonts</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>false</default>
+        <locale name="C">
+        <short>Use own fonts</short>
+        <long>Use your own fonts instead of the fonts the page
+        requests.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/rendering/background_color</key>
+        <applyto>/apps/epiphany/rendering/background_color</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>#FFFFFF</default>
+        <locale name="C">
+        <short>Default page background color</short>
+        <long>Default page background color in #RRGGBB hex format.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/rendering/text_color</key>
+        <applyto>/apps/epiphany/rendering/text_color</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>#000000</default>
+        <locale name="C">
+        <short>Default page text color</short>
+        <long>Default page text color in #RRGGBB hex format.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/rendering/visited_link_color</key>
+        <applyto>/apps/epiphany/rendering/visited_link_color</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>#FF0000</default>
+        <locale name="C">
+        <short>Default visited link color</short>
+        <long>Default color for visited links in #RRGGBB hex format.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/rendering/unvisited_link_color</key>
+        <applyto>/apps/epiphany/rendering/unvisited_link_color</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>#0000FF</default>
+        <locale name="C">
+        <short>Default unvisited link color</short>
+        <long>Default color for unvisited links in #RRGGBB hex format.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/rendering/underline_links</key>
+        <applyto>/apps/epiphany/rendering/underline_links</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>true</default>
+        <locale name="C">
+        <short>Underline links</short>
+        <long>Underline links.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/interface/open_in_tab</key>
+        <applyto>/apps/epiphany/interface/open_in_tab</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>false</default>
+        <locale name="C">
+        <short>Use tabs</short>
+        <long>Open in tabs by default.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/interface/popups_in_tab</key>
+        <applyto>/apps/epiphany/interface/popups_in_tab</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>false</default>
+        <locale name="C">
+        <short>Open popups in tabs</short>
+        <long>Open popups in tabs instead of new windows.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/interface/jumpto_tab</key>
+        <applyto>/apps/epiphany/interface/jumpto_tab</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>false</default>
+        <locale name="C">
+        <short>Jump to new tabs</short>
+        <long>Jump to new tabs.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/interface/show_toolbars_in_fullscreen</key>
+        <applyto>/apps/epiphany/interface/show_toolbars_in_fullscreen</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>1</default>
+        <locale name="C">
+        <short>Show toolbars in full screen mode</short>
+        <long>Show toolbars in full screen mode.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/interface/show_statusbar_in_fullscreen</key>
+        <applyto>/apps/epiphany/interface/show_statusbar_in_fullscreen</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>0</default>
+        <locale name="C">
+        <short>Show statusbar in full screen mode</short>
+        <long>Show statusbar in full screen mode.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/interface/show_sidebar_in_fullscreen</key>
+        <applyto>/apps/epiphany/interface/show_sidebar_in_fullscreen</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>0</default>
+        <locale name="C">
+        <short>Show sidebar in full screen mode</short>
+        <long>Show sidebar in full screen mode.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/interface/show_sidebar</key>
+        <applyto>/apps/epiphany/interface/show_sidebar</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>0</default>
+        <locale name="C">
+        <short>Show sidebar by default</short>
+        <long>Show sidebar by default.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/interface/sidebar_size</key>
+        <applyto>/apps/epiphany/interface/sidebar_size</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>100</default>
+        <locale name="C">
+        <short>Default sidebar size</short>
+        <long>Default sidebar size.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/interface/sidebar_page</key>
+        <applyto>/apps/epiphany/interface/sidebar_page</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>history</default>
+        <locale name="C">
+        <short>Default sidebar page</short>
+        <long>Default sidebar page.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/interface/show_toolbars</key>
+        <applyto>/apps/epiphany/interface/show_toolbars</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>1</default>
+        <locale name="C">
+        <short>Show toolbars by default</short>
+        <long>Show toolbars by default.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/interface/show_statusbar</key>
+        <applyto>/apps/epiphany/interface/show_statusbar</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>1</default>
+        <locale name="C">
+        <short>Show statusbar by default</short>
+        <long>Show statusbar by default.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/filtering/image_loading_type</key>
+        <applyto>/apps/epiphany/filtering/image_loading_type</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>0</default>
+        <locale name="C">
+        <short>When to load images</short>
+        <long>When to load images. Possible values are 0 (always), 1 (from
+        current server only), 2 (never)</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/filtering/animate_type</key>
+        <applyto>/apps/epiphany/filtering/animate_type</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>0</default>
+        <locale name="C">
+        <short>Image animation type</short>
+        <long>Image animation type.  Possible values are 0 (continuously), 1
+        (once through), 2 (never)</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/rendering/default_charset</key>
+        <applyto>/apps/epiphany/rendering/default_charset</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>Western (ISO-8859-1)</default>
+        <locale name="C">
+        <short>Default charset</short>
+        <long>Default charset.</long>
+        </locale>
+      </schema>
+     <schema>
+        <key>/schemas/apps/epiphany/rendering/default_font</key>
+        <applyto>/apps/epiphany/rendering/default_font</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>0</default>
+        <locale name="C">
+        <short>Default font type</short>
+        <long>Default font type.  Possible values are 0 (serif), 1
+        (sans-serif)</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/interface/spinner_theme</key>
+        <applyto>/apps/epiphany/interface/spinner_theme</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>gnome</default>
+        <locale name="C">
+        <short>Default spinner theme</short>
+        <long>Default spinner theme</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/interface/toolbar_setup</key>
+        <applyto>/apps/epiphany/interface/toolbar_setup</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>back=std_toolitem(item=back);back_history=navigation_history(direction=back);forward=std_toolitem(item=forward);forward_history=navigation_history(direction=forward);stop=std_toolitem(item=stop);reload=std_toolitem(item=reload);home_separator=separator;home=std_toolitem(item=home);favicons_separator=separator;favicon=favicon;location=location;spinner=spinner;</default>
+        <locale name="C">
+        <short>Toolbar setup</short>
+        <long>The list of controls that will be present in the toolbar. You should edit 
+	this setting with the toolbar editor unless you know what you are doing.</long>
+        </locale>
+      </schema>
+     <schema>
+        <key>/schemas/apps/epiphany/downloader/keep_open</key>
+        <applyto>/apps/epiphany/downloader/keep_open</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>true</default>
+        <locale name="C">
+        <short>Keep downloader open after download finished</short>
+        <long>Keep downloader open after all downloads have finished.</long>
+        </locale>
+      </schema>
+     <schema>
+        <key>/schemas/apps/epiphany/filtering/java_enabled</key>
+        <applyto>/apps/epiphany/filtering/java_enabled</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>1</default>
+        <locale name="C">
+        <short>Allow Java</short>
+        <long>Allow Java.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/filtering/javascript_enabled</key>
+        <applyto>/apps/epiphany/filtering/javascript_enabled</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>1</default>
+        <locale name="C">
+        <short>Allow JavaScript</short>
+        <long>Allow JavaScript.</long>
+        </locale>
+      </schema>
+     <schema>
+        <key>/schemas/apps/epiphany/network/no_proxies_for</key>
+        <applyto>/apps/epiphany/network/no_proxies_for</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default></default>
+        <locale name="C">
+        <short>No proxy for</short>
+        <long>List of domains for wherefore not to use the proxy, comma
+        delimited</long>
+        </locale>
+      </schema>
+     <schema>
+        <key>/schemas/apps/epiphany/network/disk_cache_size</key>
+        <applyto>/apps/epiphany/network/disk_cache_size</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>50000</default>
+        <locale name="C">
+        <short>Size of disk cache</short>
+        <long>Size of disk cache, in KB.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/network/mem_cache_size</key>
+        <applyto>/apps/epiphany/network/mem_cache_size</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>4096</default>
+        <locale name="C">
+        <short>Size of memory cache</short>
+        <long>Size of memory cache, in KB.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/network/cache_compare</key>
+        <applyto>/apps/epiphany/network/cache_compare</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>3</default>
+        <locale name="C">
+        <short>When to compare cached copy</short>
+        <long>When to compare cached copy to web copy.  Possible values are 0
+        (once per session), 1 (every time), 2 (never), 3 (automatic).</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/rendering/lang</key>
+        <applyto>/apps/epiphany/rendering/lang</applyto>
+        <owner>epiphany</owner>
+        <type>list</type>
+        <list_type>string</list_type>
+        <default>[en]</default>
+        <locale name="C">
+        <short>Languages</short>
+        <long>Preferred languages, two letter codes.</long>
+        </locale>
+      </schema>
+     <schema>
+        <key>/schemas/apps/epiphany/filterin/passwords_save</key>
+        <applyto>/apps/epiphany/filtering/passwords_save</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>true</default>
+        <locale name="C">
+        <short>Save passwords</short>
+        <long>Save passwords.</long>
+        </locale>
+      </schema>
+     <schema>
+        <key>/schemas/apps/epiphany/history/expire</key>
+        <applyto>/apps/epiphany/history/expire</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>30</default>
+        <locale name="C">
+        <short>Expire history</short>
+        <long>Expire history after how many days.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/history/search_time</key>
+        <applyto>/apps/epiphany/history/search_time</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>1</default>
+        <locale name="C">
+        <short>History search time</short>
+        <long>Show only history entries from a particular time.  Possible
+        values are 0 (all items), 1 (today), 2 (yesterday), 3 (two days ago), 4
+        (this week), 5 (this month).</long>
+        </locale>
+      </schema>
+     <schema>
+        <key>/schemas/apps/epiphany/print/top_margin</key>
+        <applyto>/apps/epiphany/print/top_margin</applyto>
+        <owner>epiphany</owner>
+        <type>float</type>
+        <default>0.5</default>
+        <locale name="C">
+        <short>Printing top margin</short>
+        <long>Printing top margin (in inches).</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/print/bottom_margin</key>
+        <applyto>/apps/epiphany/print/bottom_margin</applyto>
+        <owner>epiphany</owner>
+        <type>float</type>
+        <default>0.5</default>
+        <locale name="C">
+        <short>Printing bottom margin</short>
+        <long>Printing bottom margin (in inches).</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/print/left_margin</key>
+        <applyto>/apps/epiphany/print/left_margin</applyto>
+        <owner>epiphany</owner>
+        <type>float</type>
+        <default>0.5</default>
+        <locale name="C">
+        <short>Printing left margin</short>
+        <long>Printing left margin (in inches).</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/print/right_margin</key>
+        <applyto>/apps/epiphany/print/right_margin</applyto>
+        <owner>epiphany</owner>
+        <type>float</type>
+        <default>0.5</default>
+        <locale name="C">
+        <short>Printing right margin</short>
+        <long>Printing right margin (in inches).</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/print/page_title_toggle</key>
+        <applyto>/apps/epiphany/print/page_title_toggle</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>true</default>
+        <locale name="C">
+        <short>Whether to print the page title in the header.</short>
+        <long>Whether to print the page title in the header.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/print/page_url_toggle</key>
+        <applyto>/apps/epiphany/print/page_url_toggle</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>true</default>
+        <locale name="C">
+        <short>Whether to print the page URL in the header</short>
+        <long>Whether to print the page URL in the header</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/print/date_toggle</key>
+        <applyto>/apps/epiphany/print/date_toggle</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>true</default>
+        <locale name="C">
+        <short>Whether to print the date in the footer.</short>
+        <long>Whether to print the date in the footer.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/print/page_numbers_toggle</key>
+        <applyto>/apps/epiphany/print/page_numbers_toggle</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>true</default>
+        <locale name="C">
+        <short>Whether to print the page numbers (x of total) in the footer.</short>
+        <long>Whether to print the page numbers (x of total) in the footer.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/print/printer</key>
+        <applyto>/apps/epiphany/print/printer</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>lpr</default>
+        <locale name="C">
+        <short>Printer name</short>
+        <long>Printer name.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/print/file</key>
+        <applyto>/apps/epiphany/print/file</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <locale name="C">
+        <short>Filename to print to</short>
+        <long>Filename to print to.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/print/printon</key>
+        <applyto>/apps/epiphany/print/printon</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>0</default>
+        <locale name="C">
+        <short>Print range</short>
+        <long>Print range: 0 (all pages), 1 (specific range).</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/print/paper</key>
+        <applyto>/apps/epiphany/print/paper</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>0</default>
+        <locale name="C">
+        <short>Paper type</short>
+        <long>Paper type: 0 (Letter), 1 (Legal), 2 (Executive), 3 (A4).</long>
+        </locale>
+      </schema>
+     <schema>
+        <key>/schemas/apps/epiphany/directories/opendir</key>
+        <applyto>/apps/epiphany/directories/opendir</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>~</default>
+        <locale name="C">
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/directories/savedir</key>
+        <applyto>/apps/epiphany/directories/savedir</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>~</default>
+        <locale name="C">
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/directories/saveimagedir</key>
+        <applyto>/apps/epiphany/directories/saveimagedir</applyto>
+        <owner>epiphany</owner>
+        <type>string</type>
+        <default>~</default>
+        <locale name="C">
+        </locale>
+      </schema>
+     <schema>
+        <key>/schemas/apps/epiphany/rendering/autodetect_charset</key>
+        <applyto>/apps/epiphany/rendering/autodetect_charset</applyto>
+        <owner>epiphany</owner>
+        <type>int</type>
+        <default>0</default>
+        <locale name="C">
+        </locale>
+      </schema>
+    </schemalist>
+</gconfschemafile>
+  

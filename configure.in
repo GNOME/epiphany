@@ -1,0 +1,171 @@
+dnl Process this file with autoconf to produce a configure script.
+
+AC_INIT(configure.in)
+AC_PREREQ(2.50)
+
+GCONF_REQUIRED=1.0.4
+GDK_PIXBUF_REQUIRED=0.13.0
+GLIB_REQUIRED=1.2.9
+LIBGLADE_REQUIRED=0.13
+GNOME_LIBS_REQUIRED=1.2.11
+GNOME_REQUIRED=1.2.8
+GNOME_VFS_REQUIRED=1.0.1
+GTK_REQUIRED=1.2.9
+LIBXML_REQUIRED=1.8.14
+OAF_REQUIRED=0.6.5
+ORBIT_REQUIRED=0.5.7
+MOZILLA_REQUIRED=1.1
+SCROLLKEEPER_REQUIRED=0.1.4
+
+AC_SUBST(SCROLLKEEPER_REQUIRED)
+AC_SUBST(GNOME_VFS_REQUIRED)
+AC_SUBST(LIBXML_REQUIRED)
+AC_SUBST(ORBIT_REQUIRED)
+AC_SUBST(LIBGLADE_REQUIRED)
+AC_SUBST(GNOME_LIBS_REQUIRED)
+AC_SUBST(MOZILLA_REQUIRED)
+
+AC_ENABLE_SHARED(yes)
+AC_ENABLE_STATIC(no)
+
+AM_INIT_AUTOMAKE(epiphany, 0.4.1)
+AM_CONFIG_HEADER(config.h)
+
+AM_PROG_LIBTOOL
+
+AC_ISC_POSIX
+AC_PROG_CC
+AC_PROG_CXX
+AM_PROG_CC_STDC
+AC_HEADER_STDC
+AC_PROG_INTLTOOL
+AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
+
+GNOME_COMPILE_WARNINGS(error)
+
+dnl ******************************
+dnl Nautilus View checking
+dnl ******************************
+
+build_nautilus_view=no
+AC_ARG_ENABLE(nautilus-view, [  --enable-nautilus-view  (auto,yes,no)
+			  Enable Nautilus View Galeon Component])
+
+AC_MSG_CHECKING(if NautilusView Galeon component is wanted)
+if test "x$enable_nautilus_view" = "x" ; then
+  enable_nautilus_view=auto
+fi
+if test "x$enable_nautilus_view" = "xauto"; then
+  temptest=`pkg-config --cflags libnautilus 2> /dev/null`
+  if test "x$temptest" = "x" ; then
+     enable_nautilus_view=no
+  else
+     enable_nautilus_view=yes
+  fi
+fi
+if test "x$enable_nautilus_view" = "xyes"; then
+  dnl AC_DEFINE(ENABLE_NAUTILUS_VIEW)
+  nautilusview_pkgs=libnautilus
+fi
+AC_MSG_RESULT($enable_nautilus_view)
+AM_CONDITIONAL(ENABLE_NAUTILUS_VIEW, test "x$enable_nautilus_view" = "xyes")
+
+dnl See if nautilus is installed in other prefix than epiphany so that we can load
+dnl nautilus throbbers even then.  
+dnl Maybe FIXME: make this check not require libnautilus.pc
+dnl
+nautilus_prefix=`pkg-config --variable=prefix libnautilus 2> /dev/null`
+if test "x${nautilus_prefix}" != "x"; then
+  if test "x${prefix}" = "xNONE"; then
+    epiphany_prefix="${ac_default_prefix}"
+  else
+    epiphany_prefix="${prefix}"
+  fi
+
+  dnl We already search for nautilus throbbers in epiphany prefix, don't add the
+  dnl same directory or we'd show the throbbers twice.
+  if test "x${nautilus_prefix}" != "x${epiphany_prefix}"; then
+    AC_DEFINE_UNQUOTED(NAUTILUS_PREFIX, "${nautilus_prefix}")
+  fi
+fi
+
+PKG_CHECK_MODULES(EPIPHANY_DEPENDENCY, gtk+-2.0 libxml-2.0 libgnomeui-2.0 libglade-2.0 bonobo-activation-2.0 ORBit-2.0 libglade-2.0 gnome-vfs-2.0 gnome-vfs-module-2.0 gconf-2.0 $nautilusview_pkgs)
+AC_SUBST(EPIPHANY_DEPENDENCY_CFLAGS)
+AC_SUBST(EPIPHANY_DEPENDENCY_LIBS)
+
+ORBIT_IDL="`$PKG_CONFIG --variable=orbit_idl ORBit-2.0`"
+AC_SUBST(ORBIT_IDL)
+
+LIBBONOBO_IDL="`$PKG_CONFIG --variable=idldir libbonobo-2.0`"
+AC_SUBST(LIBBONOBO_IDL)
+
+BONOBO_ACTIVATION_IDL="`$PKG_CONFIG --variable=idldir bonobo-activation-2.0`"
+AC_SUBST(BONOBO_ACTIVATION_IDL)
+
+PKG_CHECK_MODULES(MOZILLA_COMPONENT, mozilla-gtkmozembed)
+dnl AC_DEFINE(ENABLE_MOZILLA_EMBED)
+AC_SUBST(MOZILLA_COMPONENT_CFLAGS)
+AC_SUBST(MOZILLA_COMPONENT_LIBS)
+
+MOZILLA_INCLUDE_ROOT="`$PKG_CONFIG --variable=includedir mozilla-gtkmozembed`"
+AC_SUBST(MOZILLA_INCLUDE_ROOT)
+
+MOZILLA_HOME="`$PKG_CONFIG --variable=libdir mozilla-gtkmozembed`"
+AC_SUBST(MOZILLA_HOME)
+
+dnl whether to build with DEBUG defined
+AC_ARG_WITH(mozilla-debug,
+	[  --with-mozilla-debug        Use a debug mozilla build],
+	CXXFLAGS="-DDEBUG $CXXFLAGS",)
+
+AC_ARG_ENABLE(cpp-rtti,
+        [  --enable-cpp-rtti       Enable C++ RTTI (for cvs gcc)],,
+        enable_cpp_rtti=no)
+
+if test "x$enable_cpp_rtti" = "xno"; then
+  CXXFLAGS="-fno-rtti $CXXFLAGS"
+fi
+
+dnl Specify the gconf configuration source, 
+dnl default to xml::$(sysconfdir)/gconf/gconf.xml.defaults
+
+AC_PATH_PROG(GCONFTOOL, gconftool-2, no)
+
+if test x"$GCONFTOOL" = xno; then
+  AC_MSG_ERROR([gconftool-2 executable not found in your path - should be installed with GConf])
+fi
+
+AM_GCONF_SOURCE_2
+
+dnl *******************************
+dnl Internationalization
+dnl ******************************* 
+dnl Add the languages which your application supports here.
+
+ALL_LINGUAS=""
+GETTEXT_PACKAGE=epiphany-2.0
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE")
+AM_GLIB_GNU_GETTEXT
+
+dnl uninstalled share dir to search data
+AC_DEFINE_UNQUOTED(SHARE_UNINSTALLED_DIR,"`pwd`/data",[path to source data dir])
+
+AC_OUTPUT([
+Makefile
+data/Makefile
+data/glade/Makefile
+data/art/Makefile
+data/ui/Makefile
+data/GNOME_Epiphany_NautilusView.server
+data/epiphany.schemas
+data/GNOME_Epiphany_Automation.server
+lib/Makefile
+lib/widgets/Makefile
+lib/toolbar/Makefile
+embed/Makefile
+embed/mozilla/Makefile
+src/Makefile
+src/bookmarks/Makefile
+po/Makefile.in
+])

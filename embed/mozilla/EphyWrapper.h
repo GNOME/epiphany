@@ -1,0 +1,147 @@
+/*
+ *  Copyright (C) 2000 Marco Pesenti Gritti
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2, or (at your option)
+ *  any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+#ifndef EPHY_WRAPPER_H
+#define EPHY_WRAPPER_H
+
+#include "nsIDocShell.h"
+#include "ProgressListener.h"
+#include "nsIWebNavigation.h"
+#include "nsIWebPageDescriptor.h"
+#include "nsISHistory.h"
+#include "nsIWebBrowser.h"
+#include "nsIWebProgressListener.h"
+#include "nsCOMPtr.h"
+#include "nsIDOMEventReceiver.h"
+#include "nsIDOMDocument.h"
+#include "nsPIDOMWindow.h"
+#include <gtkmozembed.h>
+
+#include "nsIPrintSettings.h"
+
+class EphyEventListener;
+
+class EphyWrapper
+{
+public:
+	EphyWrapper();
+	~EphyWrapper();
+
+	nsresult Init (GtkMozEmbed *mozembed);
+	nsresult Destroy (void);
+
+	nsresult SetZoom (float aTextZoom, PRBool reflow);
+	nsresult GetZoom (float *aTextZoom);
+
+	nsresult Print (nsIPrintSettings *options, PRBool preview);
+	nsresult GetPrintSettings (nsIPrintSettings * *options);
+	nsresult PrintPreviewClose (void);
+	nsresult PrintPreviewNumPages (int *numPages);
+	nsresult PrintPreviewNavigate(PRInt16 navType, PRInt32 pageNum);
+
+	nsresult Find (const PRUnichar *search_string,
+		       PRBool matchcase, PRBool interactive,
+		       PRBool search_backwards, PRBool search_wrap_around,
+		       PRBool search_for_entire_word, PRBool search_in_frames,
+		       PRBool *didFind);
+
+	nsresult GetMainDocumentUrl (nsCString &url);
+	nsresult GetDocumentUrl (nsCString &url);
+	nsresult GetDocumentTitle (char **title);
+
+	nsresult ReloadDocument ();
+	nsresult LoadDocument(nsISupports *aPageDescriptor, PRUint32 aDisplayType);
+	nsresult GetPageDescriptor(nsISupports **aPageDescriptor);
+
+	nsresult GetSHInfo (PRInt32 *count, PRInt32 *index);
+	nsresult GetSHTitleAtIndex (PRInt32 index, PRUnichar **title);
+	nsresult GetSHUrlAtIndex (PRInt32 index, nsCString &url);
+
+	nsresult CopyHistoryTo (EphyWrapper *embed);
+
+	nsresult GoToHistoryIndex (PRInt16 index);
+
+	nsresult ForceCharacterSet (char *charset);
+
+	nsresult CanCutSelection(PRBool *result);
+
+	nsresult CanCopySelection(PRBool *result);
+
+	nsresult CanPaste(PRBool *result);
+
+	nsresult CutSelection(void);
+
+	nsresult CopySelection(void);
+
+	nsresult Paste(void);
+
+	nsresult Activate ();
+	nsresult Deactivate ();
+
+	nsresult GetMainDOMDocument (nsIDOMDocument **aDOMDocument);
+
+	nsresult GetLinkInterfaceItems (GList **list);
+
+	nsresult GetRealURL (nsCString &ret);
+
+	nsresult SelectAll (void);
+
+	nsresult ScrollUp (void);
+	nsresult ScrollDown (void);
+	nsresult ScrollLeft (void);
+	nsresult ScrollRight (void);
+
+	nsresult FineScroll (int horiz, int vert);
+
+	nsresult GetLastModified (gchar **ret);
+	nsresult GetImages (GList **ret);
+	nsresult GetForms (GList **ret);
+	nsresult GetLinks (GList **ret);
+	nsresult EvaluateJS (char *script);
+
+	nsresult PushTargetDocument (nsIDOMDocument *domDoc);
+	nsresult PopTargetDocument ();
+
+	nsresult GetDOMDocument (nsIDOMDocument **aDOMDocument);
+	nsresult GetDOMWindow (nsIDOMWindow **aDOMWindow);
+
+	nsCOMPtr<nsIWebBrowser>           mWebBrowser;
+
+	nsCOMPtr<nsIWebNavigation>        mChromeNav;
+
+	GtkMozEmbed *mGtkMozEmbed;
+private:
+	nsCOMPtr<nsIDOMDocument> mTargetDocument;
+	nsCOMPtr<nsIWebProgressListener> mProgress;
+	nsCOMPtr<nsIDOMEventReceiver> mEventReceiver;
+	EphyEventListener *mEventListener;
+	PRBool mListenersAttached;
+
+	void GetListener (void);
+	void AttachListeners (void);
+	void DetachListeners (void);
+	nsresult SetZoomOnDocshell (float aZoom, nsIDocShell *DocShell);
+	nsresult GetDocShell (nsIDocShell **aDocShell);
+	nsresult GetCSSBackground (nsIDOMNode *node, nsAutoString& url);
+	nsresult GetFocusedDOMWindow (nsIDOMWindow **aDOMWindow);
+	nsresult GetSHistory (nsISHistory **aSHistory);
+	nsresult GetPIDOMWindow(nsPIDOMWindow **aPIWin);
+	nsresult GetWebNavigation(nsIWebNavigation **aWebNavigation);
+};
+
+#endif

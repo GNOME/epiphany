@@ -1,0 +1,102 @@
+/*
+ *  Copyright (C) 2000 Marco Pesenti Gritti
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2, or (at your option)
+ *  any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+#ifndef __ContentHandler_h
+#define __ContentHandler_h
+
+#include "mozilla-embed-shell.h"
+
+#include <libgnomevfs/gnome-vfs-mime-handlers.h>
+#include "nsIHelperAppLauncherDialog.h"
+#include "nsIExternalHelperAppService.h"
+#include "nsCExternalHandlerService.h"
+#include "nsIWebProgressListener.h"
+
+#include "nsString.h"
+#include "nsIURI.h"
+#include "nsILocalFile.h"
+
+#include "nsCOMPtr.h"
+#include "nsISupports.h"
+#include "nsError.h"
+
+typedef enum
+{
+        ACTION_NONE,
+        ACTION_SAVEFORHELPER,
+        ACTION_OBJECT_NOTIFY
+} DownloadAction;
+
+#define G_CONTENTHANDLER_CID			     \
+{ /* 16072c4a-23a6-4996-9beb-9335c06bbeae */         \
+    0x16072c4a,                                      \
+    0x23a6,                                          \
+    0x4996,                                          \
+    {0x9b, 0xeb, 0x93, 0x35, 0xc0, 0x6b, 0xbe, 0xae} \
+}
+
+class nsIFactory;
+
+class GContentHandler : public nsIHelperAppLauncherDialog
+{
+  public:
+	NS_DECL_ISUPPORTS
+	NS_DECL_NSIHELPERAPPLAUNCHERDIALOG
+
+	GContentHandler();
+	virtual ~GContentHandler();
+
+	NS_METHOD FindHelperApp (void);
+	NS_METHOD LaunchHelperApp (void);
+	NS_METHOD ShowHelperProgressDialog (void);
+
+	NS_METHOD GetLauncher (nsIHelperAppLauncher * *_retval);
+	NS_METHOD GetContext (nsISupports * *_retval);
+	NS_METHOD SetHelperApp(GnomeVFSMimeApplication *mHelperApp,
+			       PRBool alwaysUse);
+	NS_METHOD SynchroniseMIMEInfo (void);
+
+  private:
+	/* additional members */
+	NS_METHOD Init (void);
+	NS_METHOD ProcessMimeInfo (void);
+	NS_METHOD MIMEAskAction (void);
+	
+	nsCOMPtr<nsIHelperAppLauncher> mLauncher;
+	nsCOMPtr<nsISupports> mContext;
+
+	nsCOMPtr<nsIURI> mUri;
+	PRInt64 mTimeDownloadStarted;
+	nsCOMPtr<nsIFile> mTempFile;
+
+	char *mMimeType;	
+	PRBool mUrlHelper;
+	GnomeVFSMimeApplication *mHelperApp;
+	
+	nsCString mUrl;
+	nsCString mScheme;
+
+	PRBool mDownloadCanceled;
+	PRBool mHelperProgress;
+	
+	nsCOMPtr<nsIWebProgressListener> mListener;
+};
+
+extern nsresult NS_NewContentHandlerFactory(nsIFactory** aFactory);
+
+#endif
