@@ -1178,6 +1178,8 @@ ephy_dialog_set_size_group (EphyDialog *dialog,
 	}
 
 	va_end (vl);
+
+	g_object_unref (size_group);
 }
 
 void
