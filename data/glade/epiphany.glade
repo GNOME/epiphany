@@ -726,6 +726,7 @@
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="has_separator">False</property>
+  <signal name="response" handler="pdm_dialog_response_cb" last_modification_time="Tue, 17 Jun 2003 22:37:44 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox27">
@@ -739,6 +740,18 @@
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
+	    <widget class="GtkButton" id="help_button">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-help</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">-11</property>
+	    </widget>
+	  </child>
+
+	  <child>
 	    <widget class="GtkButton" id="closebutton1">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
@@ -747,7 +760,6 @@
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">-7</property>
-	      <signal name="clicked" handler="pdm_dialog_close_button_clicked_cb" last_modification_time="Mon, 17 Jun 2002 11:00:39 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -760,7 +772,7 @@
       </child>
 
       <child>
-	<widget class="GtkNotebook" id="notebook3">
+	<widget class="GtkNotebook" id="pdm_notebook">
 	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>

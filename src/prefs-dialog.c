@@ -414,7 +414,7 @@ prefs_dialog_show_help (PrefsDialog *pd)
 
 	id = gtk_notebook_get_current_page (GTK_NOTEBOOK (pd->priv->notebook));
 
-	ephy_gui_help (GTK_WINDOW (pd), "epiphany", help_preferences[id]);
+	ephy_gui_help (GTK_WINDOW (pd->priv->window), "epiphany", help_preferences[id]);
 }
 
 static const gchar *

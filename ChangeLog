@@ -1,5 +1,16 @@
 2003-06-17  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/prefs-dialog.c:
+
+	Fix wrong cast of GtkDialog to GtkWindow.
+
+	* data/glade/epiphany.glade:
+	* src/pdm-dialog.c: (pdm_dialog_show_help), (pdm_dialog_response_cb):
+
+	Implement help button for pdm dialogue.
+
+2003-06-17  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/find-dialog.c: (sync_page_change), (unset_old_embed),
 	(sync_embed), (find_dialog_init), (find_dialog_finalize):
 

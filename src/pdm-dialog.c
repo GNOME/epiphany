@@ -79,6 +79,8 @@ struct PdmDialogPrivate
 
 enum
 {
+	PROP_WINDOW,
+	PROP_NOTEBOOK,
 	PROP_COOKIES_TREEVIEW,
 	PROP_COOKIES_REMOVE,
 	PROP_PASSWORDS_TREEVIEW,
@@ -104,6 +106,9 @@ enum
 static const
 EphyDialogProperty properties [] =
 {
+	{ PROP_WINDOW, "pdm_dialog", NULL, PT_NORMAL, NULL },
+	{ PROP_NOTEBOOK, "pdm_notebook", NULL, PT_NORMAL, NULL },
+
 	{ PROP_COOKIES_TREEVIEW, "cookies_treeview", NULL, PT_NORMAL, NULL },
 	{ PROP_COOKIES_REMOVE, "cookies_remove_button", NULL, PT_NORMAL, NULL },
 	{ PROP_PASSWORDS_TREEVIEW, "passwords_treeview", NULL, PT_NORMAL, NULL },
@@ -151,6 +156,32 @@ pdm_dialog_class_init (PdmDialogClass *klass)
         parent_class = g_type_class_peek_parent (klass);
 
         object_class->finalize = pdm_dialog_finalize;
+}
+
+static void
+pdm_dialog_show_help (PdmDialog *pd)
+{
+	GtkWidget *notebook, *window;
+	gint id;
+
+	/* FIXME: Once we actually have documentation we
+	 * should point these at the correct links.
+	 */
+	gchar *help_preferences[] = {
+		"pdm",
+		"pdm"
+	};
+
+	window = ephy_dialog_get_control (EPHY_DIALOG (pd), PROP_WINDOW);
+	g_return_if_fail (GTK_IS_WINDOW (window));
+
+	notebook = ephy_dialog_get_control (EPHY_DIALOG (pd), PROP_NOTEBOOK);
+	g_return_if_fail (notebook != NULL);
+
+	id = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+	g_assert (id == 0 || id == 1);
+
+	ephy_gui_help (GTK_WINDOW (window), "epiphany", help_preferences[id]);
 }
 
 static void
@@ -708,8 +739,16 @@ pdm_dialog_cookies_properties_button_clicked_cb (GtkWidget *button,
 }
 
 void
-pdm_dialog_close_button_clicked_cb (GtkWidget *button,
-			            PdmDialog *dialog)
+pdm_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data)
 {
-	g_object_unref (dialog);
+	if (response_id == GTK_RESPONSE_CLOSE)
+	{
+		gtk_widget_destroy (GTK_WIDGET(dialog));
+	}
+	else if (response_id == GTK_RESPONSE_HELP)
+	{
+		g_return_if_fail (IS_PDM_DIALOG (data));
+
+		pdm_dialog_show_help (PDM_DIALOG (data));
+	}
 }
