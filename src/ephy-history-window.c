@@ -166,7 +166,7 @@ static GtkActionEntry ephy_history_ui_entries [] = {
 	{ "OpenInWindow", GTK_STOCK_OPEN, N_("_Open in New Window"), "<control>O",
 	  N_("Open the selected history link in a new window"),
 	  G_CALLBACK (cmd_open_bookmarks_in_browser) },
-	{ "OpenInTab", NULL, N_("Open in New _Tab"), "<shift><control>O",
+	{ "OpenInTab", STOCK_NEW_TAB, N_("Open in New _Tab"), "<shift><control>O",
 	  N_("Open the selected history link in a new tab"),
 	  G_CALLBACK (cmd_open_bookmarks_in_tabs) },
 	{ "Delete", GTK_STOCK_DELETE, N_("_Delete"), NULL,
