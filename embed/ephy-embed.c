@@ -406,7 +406,7 @@ ephy_embed_print_preview_navigate (EphyEmbed *embed,
 				   int page)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->print_preview_navigate (embed, type, page);
+	iface->print_preview_navigate (embed, type, page);
 }
 
 gboolean
