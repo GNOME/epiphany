@@ -122,6 +122,7 @@ protected:
 	nsresult                mStatus;
    
 	nsCOMPtr<nsIWebBrowserPersist>  mWebPersist;
+	nsCOMPtr<nsIRequest>		mRequest;
 	EphyDownload                   *mEphyDownload;
 	DownloaderView                 *mDownloaderView;
 	MozillaEmbedPersist            *mEmbedPersist;

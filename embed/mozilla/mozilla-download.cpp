@@ -165,11 +165,13 @@ impl_cancel (EphyDownload *download)
 static void
 impl_pause (EphyDownload *download)
 {
+	MOZILLA_DOWNLOAD (download)->moz_download->Pause ();
 }
 
 static void
 impl_resume (EphyDownload *download)
 {
+	MOZILLA_DOWNLOAD (download)->moz_download->Resume ();
 }
 
 static void

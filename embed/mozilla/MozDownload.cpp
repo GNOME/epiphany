@@ -308,6 +308,9 @@ MozDownload::OnProgressChange(nsIWebProgress *aWebProgress, nsIRequest *aRequest
 			      PRInt32 aCurSelfProgress, PRInt32 aMaxSelfProgress,
 			      PRInt32 aCurTotalProgress, PRInt32 aMaxTotalProgress)
 {
+	if (!mRequest)
+		mRequest = aRequest;
+
 	PRInt64 now = PR_Now ();
 
 	if ((now - mLastUpdate < mInterval) &&
@@ -316,7 +319,7 @@ MozDownload::OnProgressChange(nsIWebProgress *aWebProgress, nsIRequest *aRequest
 		return NS_OK;
 
 	mLastUpdate = now;
-    
+
 	if (mUserCanceled)
 	{
 	        if (aRequest)
@@ -368,21 +371,31 @@ MozDownload::OnSecurityChange (nsIWebProgress *aWebProgress, nsIRequest *aReques
 void
 MozDownload::Cancel()
 {
-    mUserCanceled = true;
-    /* nsWebBrowserPersist does the right thing: After canceling, next time through
-       OnStateChange(), aStatus != NS_OK. This isn't the case with nsExternalHelperAppService.*/
-    if (!mWebPersist)
-        mStatus = NS_ERROR_ABORT;
+	mUserCanceled = true;
+	/* nsWebBrowserPersist does the right thing: After canceling, next time through
+	 * OnStateChange(), aStatus != NS_OK. This isn't the case with nsExternalHelperAppService.*/
+	if (!mWebPersist)
+		mStatus = NS_ERROR_ABORT;
 }
 
 void
 MozDownload::Pause()
 {
+	if (mRequest)
+	{
+		mRequest->Suspend ();
+		mDownloadState = EPHY_DOWNLOAD_PAUSED;
+	}
 }
 
 void
 MozDownload::Resume()
 {
+	if (mRequest)
+	{
+		mRequest->Resume ();
+		mDownloadState = EPHY_DOWNLOAD_DOWNLOADING;
+	}
 }
 
 nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI,
