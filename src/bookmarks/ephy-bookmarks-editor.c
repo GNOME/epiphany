@@ -44,6 +44,7 @@
 #include "popup-commands.h"
 #include "ephy-state.h"
 #include "window-commands.h"
+#include "ephy-debug.h"
 
 static GtkTargetEntry topic_drag_dest_types [] =
 {
@@ -118,6 +119,7 @@ struct EphyBookmarksEditorPrivate
 	GtkWidget *window;
 	EggMenuMerge *ui_merge;
 	EggActionGroup *action_group;
+	int priority_col;
 };
 
 enum
@@ -532,12 +534,12 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	if (key_focus && selected)
 	{
 		EphyNode *node = EPHY_NODE (selected->data);
-		EphyBookmarksKeywordPriority priority;;
+		EphyNodeViewPriority priority;;
 
 		priority = ephy_node_get_property_int
 			(node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-		if (priority == -1) priority = EPHY_BOOKMARKS_KEYWORD_NORMAL_PRIORITY;
-		key_normal = (priority == EPHY_BOOKMARKS_KEYWORD_NORMAL_PRIORITY);
+		if (priority == -1) priority = EPHY_NODE_VIEW_NORMAL_PRIORITY;
+		key_normal = (priority == EPHY_NODE_VIEW_NORMAL_PRIORITY);
 		g_list_free (selected);
 	}
 
@@ -828,6 +830,28 @@ menu_activate_cb (EphyNodeView *view,
 }
 
 static void
+provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
+{
+	EphyFaviconCache *cache;
+	const char *icon_location;
+	GdkPixbuf *pixbuf = NULL;
+
+	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
+	icon_location = ephy_node_get_property_string
+		(node, EPHY_NODE_BMK_PROP_ICON);
+
+	LOG ("Get favicon for %s", icon_location ? icon_location : "None")
+
+	if (icon_location)
+	{
+		pixbuf = ephy_favicon_cache_get (cache, icon_location);
+	}
+
+	g_value_init (value, GDK_TYPE_PIXBUF);
+	g_value_set_object (value, pixbuf);
+}
+
+static void
 ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 {
 	GtkTreeSelection *selection;
@@ -913,12 +937,15 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 				           n_topic_drag_types,
 					   -1);
 	ephy_node_view_enable_drag_dest (EPHY_NODE_VIEW (key_view),
-					 topic_drag_dest_types,
-				         n_topic_drag_dest_types);
+			                 topic_drag_dest_types,
+			                 n_topic_drag_dest_types);
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (key_view));
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 	ephy_node_view_add_column (EPHY_NODE_VIEW (key_view), _("Topics"),
-			           EPHY_TREE_MODEL_NODE_COL_KEYWORD, TRUE, TRUE);
+				   G_TYPE_STRING,
+				   EPHY_NODE_KEYWORD_PROP_NAME,
+				   EPHY_NODE_KEYWORD_PROP_PRIORITY,
+				   TRUE, TRUE);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), key_view);
 	gtk_widget_set_size_request (key_view, 130, -1);
 	gtk_widget_show (key_view);
@@ -932,12 +959,12 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			  G_CALLBACK (keyword_node_selected_cb),
 			  editor);
 	g_signal_connect (G_OBJECT (key_view),
-			  "show_popup",
-			  G_CALLBACK (keyword_node_show_popup_cb),
-			  editor);
-	g_signal_connect (G_OBJECT (key_view),
 			  "node_dropped",
 			  G_CALLBACK (node_dropped_cb),
+			  editor);
+	g_signal_connect (G_OBJECT (key_view),
+			  "show_popup",
+			  G_CALLBACK (keyword_node_show_popup_cb),
 			  editor);
 
 	vbox = gtk_vbox_new (FALSE, 6);
@@ -969,9 +996,10 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 					   bmk_drag_types,
 				           n_bmk_drag_types,
 					   EPHY_NODE_BMK_PROP_LOCATION);
-	ephy_node_view_add_icon_column (EPHY_NODE_VIEW (bm_view), EPHY_TREE_MODEL_NODE_COL_ICON);
+	ephy_node_view_add_icon_column (EPHY_NODE_VIEW (bm_view), provide_favicon);
 	ephy_node_view_add_column (EPHY_NODE_VIEW (bm_view), _("Title"),
-				   EPHY_TREE_MODEL_NODE_COL_BOOKMARK, TRUE, TRUE);
+				   G_TYPE_STRING, EPHY_NODE_BMK_PROP_TITLE,
+				   -1, TRUE, TRUE);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), bm_view);
 	gtk_widget_show (bm_view);
 	editor->priv->bm_view = bm_view;

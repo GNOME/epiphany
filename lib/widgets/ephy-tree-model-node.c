@@ -26,11 +26,9 @@
 #include <string.h>
 
 #include "ephy-node-filter.h"
-#include "ephy-bookmarks.h"
 #include "ephy-tree-model-node.h"
 #include "ephy-stock-icons.h"
 #include "ephy-node.h"
-#include "ephy-shell.h"
 #include "ephy-debug.h"
 
 static void ephy_tree_model_node_class_init (EphyTreeModelNodeClass *klass);
@@ -45,18 +43,11 @@ static void ephy_tree_model_node_get_property (GObject *object,
 					       GValue *value,
 					       GParamSpec *pspec);
 static guint ephy_tree_model_node_get_flags (GtkTreeModel *tree_model);
-static int ephy_tree_model_node_get_n_columns (GtkTreeModel *tree_model);
-static GType ephy_tree_model_node_get_column_type (GtkTreeModel *tree_model,
-						   int index);
 static gboolean ephy_tree_model_node_get_iter (GtkTreeModel *tree_model,
 					       GtkTreeIter *iter,
 					       GtkTreePath *path);
 static GtkTreePath *ephy_tree_model_node_get_path (GtkTreeModel *tree_model,
 						   GtkTreeIter *iter);
-static void ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
-					    GtkTreeIter *iter,
-					    int column,
-					    GValue *value);
 static gboolean	ephy_tree_model_node_iter_next (GtkTreeModel *tree_model,
 					        GtkTreeIter *iter);
 static gboolean	ephy_tree_model_node_iter_children (GtkTreeModel *tree_model,
@@ -96,7 +87,18 @@ struct EphyTreeModelNodePrivate
 	EphyNode *root;
 
 	EphyNodeFilter *filter;
+
+	GList *columns;
+	int columns_num;
 };
+
+typedef struct
+{
+	GType type;
+	int prop_id;
+	EphyTreeModelNodeValueFunc func;
+	gpointer user_data;
+} EphyTreeModelNodeColData;
 
 enum
 {
@@ -190,6 +192,9 @@ ephy_tree_model_node_init (EphyTreeModelNode *model)
 	dummy = gtk_tree_view_new ();
 
 	gtk_widget_destroy (dummy);
+
+	model->priv->columns = NULL;
+	model->priv->columns_num = EPHY_TREE_MODEL_NODE_BUILTIN_COLUMNS;
 }
 
 static void
@@ -203,6 +208,9 @@ ephy_tree_model_node_finalize (GObject *object)
 	model = EPHY_TREE_MODEL_NODE (object);
 
 	g_return_if_fail (model->priv != NULL);
+
+	g_list_foreach (model->priv->columns, (GFunc) g_free, NULL);
+	g_list_free (model->priv->columns);
 
 	g_free (model->priv);
 
@@ -319,58 +327,146 @@ ephy_tree_model_node_new (EphyNode *root,
 	return model;
 }
 
-static void
-ephy_tree_model_node_tree_model_init (GtkTreeModelIface *iface)
+int
+ephy_tree_model_node_add_prop_column (EphyTreeModelNode *model,
+				      GType value_type,
+				      int prop_id)
 {
-	iface->get_flags       = ephy_tree_model_node_get_flags;
-	iface->get_n_columns   = ephy_tree_model_node_get_n_columns;
-	iface->get_column_type = ephy_tree_model_node_get_column_type;
-	iface->get_iter        = ephy_tree_model_node_get_iter;
-	iface->get_path        = ephy_tree_model_node_get_path;
-	iface->get_value       = ephy_tree_model_node_get_value;
-	iface->iter_next       = ephy_tree_model_node_iter_next;
-	iface->iter_children   = ephy_tree_model_node_iter_children;
-	iface->iter_has_child  = ephy_tree_model_node_iter_has_child;
-	iface->iter_n_children = ephy_tree_model_node_iter_n_children;
-	iface->iter_nth_child  = ephy_tree_model_node_iter_nth_child;
-	iface->iter_parent     = ephy_tree_model_node_iter_parent;
+	EphyTreeModelNodeColData *col;
+
+	col = g_new0 (EphyTreeModelNodeColData, 1);
+	col->prop_id = prop_id;
+	col->type = value_type;
+	col->func = NULL;
+	col->user_data = NULL;
+
+	model->priv->columns = g_list_append (model->priv->columns, col);
+	model->priv->columns_num++;
+
+	return model->priv->columns_num;
 }
 
-static guint
-ephy_tree_model_node_get_flags (GtkTreeModel *tree_model)
+int
+ephy_tree_model_node_add_func_column (EphyTreeModelNode *model,
+				      GType value_type,
+				      EphyTreeModelNodeValueFunc func,
+				      gpointer user_data)
 {
-	return 0;
+	EphyTreeModelNodeColData *col;
+
+	col = g_new0 (EphyTreeModelNodeColData, 1);
+	col->prop_id = -1;
+	col->type = value_type;
+	col->func = func;
+	col->user_data = user_data;
+
+	model->priv->columns = g_list_append (model->priv->columns, col);
+	model->priv->columns_num++;
+
+	return model->priv->columns_num;
 }
 
 static int
 ephy_tree_model_node_get_n_columns (GtkTreeModel *tree_model)
 {
-	return EPHY_TREE_MODEL_NODE_NUM_COLUMNS;
+	EphyTreeModelNode *model = EPHY_TREE_MODEL_NODE (tree_model);
+
+	return model->priv->columns_num;
 }
 
 static GType
 ephy_tree_model_node_get_column_type (GtkTreeModel *tree_model,
 			              int index)
 {
-	g_return_val_if_fail (EPHY_IS_TREE_MODEL_NODE (tree_model), G_TYPE_INVALID);
-	g_return_val_if_fail ((index < EPHY_TREE_MODEL_NODE_NUM_COLUMNS) && (index >= 0), G_TYPE_INVALID);
+	int list_index;
+	EphyTreeModelNodeColData *col;
+	EphyTreeModelNode *model = EPHY_TREE_MODEL_NODE (tree_model);
 
-	switch (index)
+	if (index == EPHY_TREE_MODEL_NODE_COL_VISIBLE)
+		return G_TYPE_BOOLEAN;
+
+	list_index = index - EPHY_TREE_MODEL_NODE_BUILTIN_COLUMNS - 1;
+	col = g_list_nth_data (model->priv->columns, list_index);
+
+	return col->type;
+}
+
+static void
+ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
+			        GtkTreeIter *iter,
+			        int column,
+			        GValue *value)
+{
+	int list_index;
+	EphyTreeModelNodeColData *col;
+	EphyTreeModelNode *model = EPHY_TREE_MODEL_NODE (tree_model);
+	EphyNode *node;
+
+	g_return_if_fail (EPHY_IS_TREE_MODEL_NODE (tree_model));
+	g_return_if_fail (iter != NULL);
+	g_return_if_fail (iter->stamp == model->stamp);
+	g_return_if_fail (EPHY_IS_NODE (iter->user_data));
+
+	if (model->priv->root == NULL)
+		return;
+
+	node = EPHY_NODE (iter->user_data);
+
+	if (column == EPHY_TREE_MODEL_NODE_COL_VISIBLE)
 	{
-		case EPHY_TREE_MODEL_NODE_COL_BOOKMARK:
-		case EPHY_TREE_MODEL_NODE_COL_KEYWORD:
-			return G_TYPE_STRING;
-		case EPHY_TREE_MODEL_NODE_COL_TITLE_WEIGHT:
-		case EPHY_TREE_MODEL_NODE_COL_PRIORITY:	
-			return G_TYPE_INT;
-		case EPHY_TREE_MODEL_NODE_COL_VISIBLE:
-			return G_TYPE_BOOLEAN;
-		case EPHY_TREE_MODEL_NODE_COL_ICON:
-			return GDK_TYPE_PIXBUF;
-	default:
-		g_assert_not_reached ();
-		return G_TYPE_INVALID;
+		g_value_init (value, G_TYPE_BOOLEAN);
+
+		if (model->priv->filter != NULL)
+		{
+			g_value_set_boolean (value,
+					     ephy_node_filter_evaluate (model->priv->filter, node));
+		}
+		else
+		{
+			g_value_set_boolean (value, TRUE);
+		}
 	}
+	else
+	{
+		list_index = column - EPHY_TREE_MODEL_NODE_BUILTIN_COLUMNS - 1;
+		col = g_list_nth_data (model->priv->columns, list_index);
+
+		g_return_if_fail (col != NULL);
+
+		if (col->prop_id > 0)
+		{
+			ephy_node_get_property (node,
+					        col->prop_id,
+					        value);
+		}
+		else
+		{
+			col->func (node, value, col->user_data);
+		}
+	}
+}
+
+static void
+ephy_tree_model_node_tree_model_init (GtkTreeModelIface *iface)
+{
+	iface->get_flags       = ephy_tree_model_node_get_flags;
+	iface->get_iter        = ephy_tree_model_node_get_iter;
+	iface->get_path        = ephy_tree_model_node_get_path;
+	iface->iter_next       = ephy_tree_model_node_iter_next;
+	iface->iter_children   = ephy_tree_model_node_iter_children;
+	iface->iter_has_child  = ephy_tree_model_node_iter_has_child;
+	iface->iter_n_children = ephy_tree_model_node_iter_n_children;
+	iface->iter_nth_child  = ephy_tree_model_node_iter_nth_child;
+	iface->iter_parent     = ephy_tree_model_node_iter_parent;
+	iface->get_n_columns   = ephy_tree_model_node_get_n_columns;
+	iface->get_column_type = ephy_tree_model_node_get_column_type;
+	iface->get_value       = ephy_tree_model_node_get_value;
+}
+
+static guint
+ephy_tree_model_node_get_flags (GtkTreeModel *tree_model)
+{
+	return 0;
 }
 
 static gboolean
@@ -434,102 +530,6 @@ ephy_tree_model_node_get_path (GtkTreeModel *tree_model,
 		return gtk_tree_path_new ();
 
 	return get_path_real (model, node);
-}
-
-static void
-get_icon_pixbuf (EphyNode *node, GValue *value)
-{
-	EphyFaviconCache *cache;
-	const char *icon_location;
-	GdkPixbuf *pixbuf = NULL;
-
-	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
-	icon_location = ephy_node_get_property_string
-		(node, EPHY_NODE_BMK_PROP_ICON);
-
-	LOG ("Get favicon for %s", icon_location ? icon_location : "None")
-
-	if (icon_location)
-	{
-		pixbuf = ephy_favicon_cache_get (cache, icon_location);
-	}
-
-	g_value_init (value, GDK_TYPE_PIXBUF);
-	g_value_set_object (value, pixbuf);
-}
-
-static void
-ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
-			        GtkTreeIter *iter,
-			        int column,
-			        GValue *value)
-{
-	EphyTreeModelNode *model = EPHY_TREE_MODEL_NODE (tree_model);
-	EphyNode *node;
-	int priority;
-
-	g_return_if_fail (EPHY_IS_TREE_MODEL_NODE (tree_model));
-	g_return_if_fail (iter != NULL);
-	g_return_if_fail (iter->stamp == model->stamp);
-	g_return_if_fail (EPHY_IS_NODE (iter->user_data));
-	g_return_if_fail (column < EPHY_TREE_MODEL_NODE_NUM_COLUMNS);
-
-	if (model->priv->root == NULL)
-		return;
-
-	node = EPHY_NODE (iter->user_data);
-
-	switch (column)
-	{
-	case EPHY_TREE_MODEL_NODE_COL_BOOKMARK:
-		ephy_node_get_property (node,
-				        EPHY_NODE_BMK_PROP_TITLE,
-				        value);
-		break;
-	case EPHY_TREE_MODEL_NODE_COL_KEYWORD:
-		ephy_node_get_property (node,
-				        EPHY_NODE_KEYWORD_PROP_NAME,
-				        value);
-		break;
-	case EPHY_TREE_MODEL_NODE_COL_ICON:
-		get_icon_pixbuf (node, value);
-	break;
-
-	case EPHY_TREE_MODEL_NODE_COL_VISIBLE:
-		g_value_init (value, G_TYPE_BOOLEAN);
-
-		if (model->priv->filter != NULL)
-		{
-			g_value_set_boolean (value,
-					     ephy_node_filter_evaluate (model->priv->filter, node));
-		}
-		else
-		{
-			g_value_set_boolean (value, TRUE);
-		}
-		break;
-	case EPHY_TREE_MODEL_NODE_COL_TITLE_WEIGHT:
-		g_value_init (value, G_TYPE_INT);
-		priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-		if (priority == EPHY_BOOKMARKS_KEYWORD_ALL_PRIORITY ||
-		    priority == EPHY_BOOKMARKS_KEYWORD_SPECIAL_PRIORITY)
-			g_value_set_int (value, PANGO_WEIGHT_BOLD);
-		else
-			g_value_set_int (value, PANGO_WEIGHT_NORMAL);
-		break;
-	case EPHY_TREE_MODEL_NODE_COL_PRIORITY:
-		g_value_init (value, G_TYPE_INT);
-		priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-		if (priority == EPHY_BOOKMARKS_KEYWORD_ALL_PRIORITY ||
-		    priority == EPHY_BOOKMARKS_KEYWORD_SPECIAL_PRIORITY)
-			g_value_set_int (value, priority);
-		else
-			g_value_set_int (value, EPHY_BOOKMARKS_KEYWORD_NORMAL_PRIORITY);
-		break;
-	default:
-		g_assert_not_reached ();
-		break;
-	}
 }
 
 static gboolean
@@ -723,30 +723,5 @@ root_destroyed_cb (EphyNode *node,
 
 	/* no need to do other stuff since we should have had a bunch of child_removed
 	 * signals already */
-}
-
-GType
-ephy_tree_model_node_column_get_type (void)
-{
-	static GType etype = 0;
-
-	if (etype == 0)
-	{
-		static const GEnumValue values[] =
-		{
-			{ EPHY_TREE_MODEL_NODE_COL_BOOKMARK, "EPHY_TREE_MODEL_NODE_COL_BOOKMARK", "bookmark" },
-			{ EPHY_TREE_MODEL_NODE_COL_KEYWORD,  "EPHY_TREE_MODEL_NODE_COL_KEYWORD", "keyword" },
-			{ EPHY_TREE_MODEL_NODE_COL_ICON,     "EPHY_TREE_MODEL_NODE_COL_ICON", "icon" },
-			{ EPHY_TREE_MODEL_NODE_COL_VISIBLE,  "EPHY_TREE_MODEL_NODE_COL_VISIBLE", "visible" },
-			{ EPHY_TREE_MODEL_NODE_COL_TITLE_WEIGHT, "EPHY_TREE_MODEL_NODE_COL_TITLE_WEIGHT", "title weight" },
-			{ EPHY_TREE_MODEL_NODE_COL_PRIORITY, "EPHY_TREE_MODEL_NODE_COL_PRIORITY", "priority" },
-
-			{ 0, 0, 0 }
-		};
-
-		etype = g_enum_register_static ("EphyTreeModelNodeColumn", values);
-	}
-
-	return etype;
 }
 

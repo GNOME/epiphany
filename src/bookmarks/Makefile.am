@@ -32,11 +32,7 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-keywords-entry.h		\
 	ephy-new-bookmark.c		\
 	ephy-new-bookmark.h		\
-	ephy-node-view.c		\
-	ephy-node-view.h		\
 	ephy-topic-action.c		\
 	ephy-topic-action.h		\
 	ephy-topics-selector.c  	\
-	ephy-topics-selector.h		\
-	ephy-tree-model-node.c		\
-	ephy-tree-model-node.h
+	ephy-topics-selector.h

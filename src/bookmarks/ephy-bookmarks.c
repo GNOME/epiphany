@@ -22,6 +22,7 @@
 #include "ephy-history.h"
 #include "ephy-debug.h"
 #include "ephy-tree-model-node.h"
+#include "ephy-node-view.h"
 
 #include <string.h>
 #include <libgnome/gnome-i18n.h>
@@ -506,10 +507,10 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	eb->priv->keywords = ephy_node_new_with_id (KEYWORDS_NODE_ID);
 	ephy_node_ref (eb->priv->keywords);
 	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, EPHY_BOOKMARKS_KEYWORD_ALL_PRIORITY);
+	g_value_set_int (&value, EPHY_NODE_VIEW_ALL_PRIORITY);
 	ephy_node_set_property (eb->priv->bookmarks,
-			EPHY_NODE_KEYWORD_PROP_PRIORITY,
-			&value);
+			        EPHY_NODE_KEYWORD_PROP_PRIORITY,
+			        &value);
 	g_value_unset (&value);
 	g_signal_connect_object (G_OBJECT (eb->priv->keywords),
 				 "child_removed",
@@ -530,7 +531,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 			        &value);
 	g_value_unset (&value);
 	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, EPHY_BOOKMARKS_KEYWORD_SPECIAL_PRIORITY);
+	g_value_set_int (&value, EPHY_NODE_VIEW_SPECIAL_PRIORITY);
 	ephy_node_set_property (eb->priv->favorites,
 				EPHY_NODE_KEYWORD_PROP_PRIORITY,
 				&value);
@@ -547,7 +548,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 			        &value);
 	g_value_unset (&value);
 	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, EPHY_BOOKMARKS_KEYWORD_SPECIAL_PRIORITY);
+	g_value_set_int (&value, EPHY_NODE_VIEW_SPECIAL_PRIORITY);
 	ephy_node_set_property (eb->priv->notcategorized,
 				EPHY_NODE_KEYWORD_PROP_PRIORITY,
 				&value);
@@ -856,7 +857,7 @@ ephy_bookmarks_add_keyword (EphyBookmarks *eb,
 	g_value_unset (&value);
 
 	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, EPHY_BOOKMARKS_KEYWORD_NORMAL_PRIORITY);
+	g_value_set_int (&value, EPHY_NODE_VIEW_NORMAL_PRIORITY);
 	ephy_node_set_property (key, EPHY_NODE_KEYWORD_PROP_PRIORITY,
 			        &value);
 	g_value_unset (&value);

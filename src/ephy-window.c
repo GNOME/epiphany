@@ -316,7 +316,6 @@ ephy_window_get_type (void)
 							   "EphyWindow",
 							   &our_info, 0);
         }
-
         return ephy_window_type;
 }
 

@@ -45,6 +45,13 @@ typedef struct
 	EphyNodeViewPrivate *priv;
 } EphyNodeView;
 
+typedef enum
+{
+	EPHY_NODE_VIEW_ALL_PRIORITY,
+	EPHY_NODE_VIEW_SPECIAL_PRIORITY,
+	EPHY_NODE_VIEW_NORMAL_PRIORITY
+} EphyNodeViewPriority;
+
 typedef struct
 {
 	GtkTreeViewClass parent;
@@ -64,12 +71,14 @@ void	           ephy_node_view_enable_dnd	      (EphyNodeView *view);
 
 GtkTreeViewColumn *ephy_node_view_add_column	      (EphyNodeView *view,
 						       const char  *title,
-						       EphyTreeModelNodeColumn column,
-						       gboolean sortable,
-						       gboolean editable);
+						       GType value_type,
+						       int prop_id,
+						       int priority_prop_id,
+						       gboolean editable,
+						       gboolean sortable);
 
 void	           ephy_node_view_add_icon_column     (EphyNodeView *view,
-						       EphyTreeModelNodeColumn column);
+					               EphyTreeModelNodeValueFunc func);
 
 void		   ephy_node_view_remove              (EphyNodeView *view);
 
@@ -92,9 +101,15 @@ void	           ephy_node_view_enable_drag_dest    (EphyNodeView *view,
 
 void		   ephy_node_view_edit		      (EphyNodeView *view);
 
-gboolean	   ephy_node_view_is_editing	      (EphyNodeView *view);
+gboolean	   ephy_node_view_is_editing	      (EphyNodeView *view,
+						       int property);
 
 gboolean	   ephy_node_view_is_target	      (EphyNodeView *view);
+
+void	           ephy_node_view_enable_sort         (EphyNodeView *view,
+						       GtkTreeIterCompareFunc sort_func,
+						       gpointer data,
+						       GtkDestroyNotify destroy);
 
 G_END_DECLS
 

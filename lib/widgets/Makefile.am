@@ -21,10 +21,14 @@ libephywidgets_la_SOURCES = \
 	ephy-ellipsizing-label.h		\
 	ephy-location-entry.c			\
 	ephy-location-entry.h			\
+	ephy-node-view.c			\
+	ephy-node-view.h			\
 	ephy-notebook.c				\
 	ephy-notebook.h				\
 	ephy-spinner.c				\
 	ephy-spinner.h				\
+	ephy-tree-model-node.c			\
+	ephy-tree-model-node.h			\
 	ephy-tree-model-sort.c			\
 	ephy-tree-model-sort.h
 

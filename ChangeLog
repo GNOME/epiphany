@@ -1,3 +1,27 @@
+2003-04-17  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/widgets/Makefile.am:
+	* lib/widgets/ephy-node-view.c:
+	* lib/widgets/ephy-node-view.h:
+	* lib/widgets/ephy-tree-model-node.c:
+	* lib/widgets/ephy-tree-model-node.h:
+
+	New abstracted implementations.
+	Nicer and will be useful for 
+	history dialog interface rehash to make
+	it more consistent with bookmarks (this
+	was the hard part of the work).
+
+	* src/bookmarks/Makefile.am:
+	* src/bookmarks/ephy-bookmarks-editor.c:
+
+	Use them.
+
+	* src/history-dialog.c:
+
+	Temp hack to keep the thing building until
+	I actually rewrite history dialog.
+
 2003-04-16  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* data/ui/Makefile.am:

@@ -26,8 +26,6 @@
 #include <libgnome/gnome-i18n.h>
 
 #include "eggtreemodelfilter.h"
-#include "ephy-bookmarks.h"
-#include "ephy-tree-model-node.h"
 #include "ephy-node-view.h"
 #include "ephy-tree-model-sort.h"
 #include "eggtreemultidnd.h"
@@ -60,13 +58,16 @@ struct EphyNodeViewPrivate
 
 	EphyNodeFilter *filter;
 
-	EphyTreeModelNodeColumn default_sort_column_id;
+	EphyNode *selected_node;
 
 	GtkTargetList *drag_targets;
 
-	EphyNode *selected_node;
+	int default_sort_column_id;
+	int priority_prop_id;
+	int priority_column_id;
 
 	gboolean editing;
+	int editable_property;
 };
 
 enum
@@ -209,6 +210,146 @@ ephy_node_view_finalize (GObject *object)
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+static EphyNode *
+get_node_from_path (EphyNodeView *view, GtkTreePath *path)
+{
+	EphyNode *node;
+	GtkTreeIter iter, iter2;
+
+	gtk_tree_model_get_iter (view->priv->sortmodel, &iter, path);
+	gtk_tree_model_sort_convert_iter_to_child_iter
+		(GTK_TREE_MODEL_SORT (view->priv->sortmodel), &iter2, &iter);
+	egg_tree_model_filter_convert_iter_to_child_iter
+		(EGG_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
+	node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, &iter);
+
+	return node;
+}
+
+static gboolean
+drag_motion_cb (GtkWidget *widget,
+                GdkDragContext *context,
+                gint x,
+                gint y,
+                guint time,
+	        EphyNodeView *view)
+{
+	EphyNode *node;
+	GtkTreePath *path = NULL;
+	GtkTreeViewDropPosition pos;
+	gboolean res;
+	EphyNodeViewPriority priority;
+
+	g_signal_stop_emission_by_name (widget, "drag_motion");
+
+	res = gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
+					         x, y, &path, &pos);
+	if (!res) return TRUE;
+
+	node = get_node_from_path (view, path);
+
+	priority = ephy_node_get_property_int (node, view->priv->priority_prop_id);
+
+	if (priority != EPHY_NODE_VIEW_ALL_PRIORITY &&
+	    priority != EPHY_NODE_VIEW_SPECIAL_PRIORITY)
+
+	{
+		gtk_tree_view_set_drag_dest_row (GTK_TREE_VIEW (widget), path,
+						 GTK_TREE_VIEW_DROP_INTO_OR_AFTER);
+		gdk_drag_status (context, context->suggested_action, time);
+	}
+	else
+	{
+		gdk_drag_status (context, 0, time);
+	}
+
+	return TRUE;
+}
+
+static gboolean
+drag_drop_cb (GtkWidget *widget,
+              GdkDragContext *context,
+              gint x,
+              gint y,
+              guint time,
+	      EphyNodeView *view)
+{
+	GdkAtom target;
+
+	g_signal_stop_emission_by_name (widget, "drag_drop");
+
+	target = gtk_drag_dest_find_target (widget, context,
+					    view->priv->drag_targets);
+
+	if (target != GDK_NONE)
+	{
+		gtk_drag_get_data (widget, context, target, time);
+	}
+
+	return TRUE;
+}
+
+static gboolean
+drag_data_received_cb (GtkWidget *widget,
+                       GdkDragContext *context,
+                       gint x,
+                       gint y,
+	               GtkSelectionData *selection_data,
+                       guint info,
+                       guint time,
+	               EphyNodeView *view)
+{
+	GtkTreePath *path = NULL;
+	GtkTreeViewDropPosition pos;
+
+	g_signal_stop_emission_by_name (widget, "drag_data_received");
+
+	if (gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
+					       x, y, &path, &pos))
+	{
+		EphyNode *node;
+		GList *src_nodes;
+
+		node = get_node_from_path (view, path);
+
+		src_nodes = ephy_dnd_node_list_extract_nodes
+				(selection_data->data);
+
+		g_signal_emit (G_OBJECT (view),
+			       ephy_node_view_signals[NODE_DROPPED], 0,
+			       node, src_nodes);
+
+		g_list_free (src_nodes);
+
+	}
+
+	return TRUE;
+}
+
+void
+ephy_node_view_enable_drag_dest (EphyNodeView *view,
+				 GtkTargetEntry *types,
+				 int n_types)
+{
+	GtkWidget *treeview;
+
+	g_return_if_fail (view != NULL);
+
+	treeview = GTK_WIDGET (view);
+
+	gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (treeview),
+					      types, n_types,
+					      GDK_ACTION_COPY);
+	view->priv->drag_targets = gtk_target_list_new (types, n_types);
+
+	g_signal_connect (treeview, "drag_data_received",
+			  G_CALLBACK (drag_data_received_cb), view);
+	g_signal_connect (treeview, "drag_drop",
+			  G_CALLBACK (drag_drop_cb), view);
+	g_signal_connect (treeview, "drag_motion",
+			  G_CALLBACK (drag_motion_cb), view);
+}
+
 static void
 filter_changed_cb (EphyNodeFilter *filter,
 		   EphyNodeView *view)
@@ -276,22 +417,6 @@ ephy_node_view_row_activated_cb (GtkTreeView *treeview,
 	g_signal_emit (G_OBJECT (view), ephy_node_view_signals[NODE_ACTIVATED], 0, node);
 }
 
-static EphyNode *
-get_node_from_path (EphyNodeView *view, GtkTreePath *path)
-{
-	EphyNode *node;
-	GtkTreeIter iter, iter2;
-
-	gtk_tree_model_get_iter (view->priv->sortmodel, &iter, path);
-	gtk_tree_model_sort_convert_iter_to_child_iter
-		(GTK_TREE_MODEL_SORT (view->priv->sortmodel), &iter2, &iter);
-	egg_tree_model_filter_convert_iter_to_child_iter
-		(EGG_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
-	node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, &iter);
-
-	return node;
-}
-
 static gboolean
 ephy_node_view_key_press_cb (GtkTreeView *treeview,
 			     GdkEventKey *event,
@@ -335,7 +460,8 @@ ephy_node_view_button_press_cb (GtkTreeView *treeview,
 			}
 			else
 			{
-				view->priv->selected_node = get_node_from_path (view, path);
+				view->priv->selected_node =
+					get_node_from_path (view, path);
 			}
 
 			target_view = view;
@@ -478,6 +604,39 @@ ephy_node_view_new (EphyNode *root,
 	return GTK_WIDGET (view);
 }
 
+static void
+cell_renderer_edited (GtkCellRendererText *cell,
+                      const char *path_str,
+                      const char *new_text,
+                      EphyNodeView *view)
+{
+	GValue value = { 0, };
+	GtkTreePath *path;
+	GtkTreeIter iter, iter2;
+	EphyNode *node;
+
+	view->priv->editing = FALSE;
+
+	g_object_set (G_OBJECT (view->priv->editable_renderer),
+                      "editable", FALSE,
+                      NULL);
+
+	path = gtk_tree_path_new_from_string (path_str);
+	gtk_tree_model_get_iter (view->priv->sortmodel, &iter, path);
+	gtk_tree_model_sort_convert_iter_to_child_iter
+		(GTK_TREE_MODEL_SORT (view->priv->sortmodel), &iter2, &iter);
+	egg_tree_model_filter_convert_iter_to_child_iter
+		(EGG_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
+	node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, &iter);
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, new_text);
+	ephy_node_set_property (node,
+			        view->priv->editable_property,
+			        &value);
+	g_value_unset (&value);
+}
+
 static int
 ephy_node_view_sort_func (GtkTreeModel *model,
 			  GtkTreeIter *a,
@@ -510,10 +669,7 @@ ephy_node_view_sort_func (GtkTreeModel *model,
 			stra = g_utf8_casefold (g_value_get_string (&a_value), -1);
 			strb = g_utf8_casefold (g_value_get_string (&b_value), -1);
 			g_return_val_if_fail (stra != NULL || strb != NULL, 0);
-
-			if (column == EPHY_TREE_MODEL_NODE_COL_BOOKMARK ||
-			    column == EPHY_TREE_MODEL_NODE_COL_KEYWORD)
-				retval = g_utf8_collate (stra, strb);
+			retval = g_utf8_collate (stra, strb);
 			g_free (stra);
 			g_free (strb);
 			break;
@@ -549,9 +705,8 @@ ephy_node_view_sort_func (GtkTreeModel *model,
 static gboolean
 set_sort_column_id (EphyNodeView *view)
 {
-	EphyTreeModelNodeColumn priority = EPHY_TREE_MODEL_NODE_COL_PRIORITY;
 	GList *sort_order = NULL;
-	sort_order = g_list_append (sort_order, GINT_TO_POINTER (priority));
+	sort_order = g_list_append (sort_order, GINT_TO_POINTER (view->priv->priority_column_id));
 	sort_order = g_list_append (sort_order, GINT_TO_POINTER (view->priv->default_sort_column_id));
 
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (view->priv->sortmodel),
@@ -566,63 +721,51 @@ set_sort_column_id (EphyNodeView *view)
 }
 
 static void
-cell_renderer_edited (GtkCellRendererText *cell,
-                      const char *path_str,
-                      const char *new_text,
-                      EphyNodeView *view)
+provide_priority (EphyNode *node, GValue *value, EphyNodeView *view)
 {
-	GValue value = { 0, };
-	GtkTreePath *path;
-	GtkTreeIter iter, iter2;
-	EphyNode *node;
+	int priority;
 
-	view->priv->editing = FALSE;
+	g_value_init (value, G_TYPE_INT);
+	priority = ephy_node_get_property_int (node, view->priv->priority_prop_id);
+	if (priority == EPHY_NODE_VIEW_ALL_PRIORITY ||
+	    priority == EPHY_NODE_VIEW_SPECIAL_PRIORITY)
+		g_value_set_int (value, priority);
+	else
+		g_value_set_int (value, EPHY_NODE_VIEW_NORMAL_PRIORITY);
+}
 
-	g_object_set (G_OBJECT (view->priv->editable_renderer),
-                      "editable", FALSE,
-                      NULL);
+static void
+provide_text_weight (EphyNode *node, GValue *value, EphyNodeView *view)
+{
+	int priority;
 
-	path = gtk_tree_path_new_from_string (path_str);
-	gtk_tree_model_get_iter (view->priv->sortmodel, &iter, path);
-	gtk_tree_model_sort_convert_iter_to_child_iter
-		(GTK_TREE_MODEL_SORT (view->priv->sortmodel), &iter2, &iter);
-	egg_tree_model_filter_convert_iter_to_child_iter
-		(EGG_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
-	node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, &iter);
-
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, new_text);
-
-	switch (view->priv->editable_node_column)
-	{
-	case EPHY_TREE_MODEL_NODE_COL_BOOKMARK:
-		ephy_node_set_property (node,
-				        EPHY_NODE_BMK_PROP_TITLE,
-				        &value);
-		break;
-	case EPHY_TREE_MODEL_NODE_COL_KEYWORD:
-		ephy_node_set_property (node,
-				        EPHY_NODE_KEYWORD_PROP_NAME,
-				        &value);
-		break;
-	default:
-		break;
-	}
-
-	g_value_unset (&value);
+	g_value_init (value, G_TYPE_INT);
+	priority = ephy_node_get_property_int
+		(node, view->priv->priority_prop_id);
+	if (priority == EPHY_NODE_VIEW_ALL_PRIORITY ||
+	    priority == EPHY_NODE_VIEW_SPECIAL_PRIORITY)
+		g_value_set_int (value, PANGO_WEIGHT_BOLD);
+	else
+		g_value_set_int (value, PANGO_WEIGHT_NORMAL);
 }
 
 GtkTreeViewColumn *
 ephy_node_view_add_column (EphyNodeView *view,
 			   const char  *title,
-			   EphyTreeModelNodeColumn column,
-			   gboolean sortable,
-			   gboolean editable)
+			   GType value_type,
+			   int prop_id,
+			   int priority_prop_id,
+			   gboolean editable,
+			   gboolean sortable)
 {
 	GtkTreeViewColumn *gcolumn;
 	GtkCellRenderer *renderer;
+	int column;
 
 	g_return_val_if_fail (!editable || view->priv->editable_renderer == NULL, NULL);
+
+	column = ephy_tree_model_node_add_prop_column
+		(view->priv->nodemodel, value_type, prop_id);
 
 	gcolumn = (GtkTreeViewColumn *) gtk_tree_view_column_new ();
 	renderer = gtk_cell_renderer_text_new ();
@@ -638,15 +781,36 @@ ephy_node_view_add_column (EphyNodeView *view,
 	gtk_tree_view_column_pack_start (gcolumn, renderer, TRUE);
 	gtk_tree_view_column_set_attributes (gcolumn, renderer,
 					     "text", column,
-					     "weight", EPHY_TREE_MODEL_NODE_COL_TITLE_WEIGHT,
 					     NULL);
+	if (priority_prop_id > 0)
+	{
+		int wcol;
+
+		wcol = ephy_tree_model_node_add_func_column
+			(view->priv->nodemodel, G_TYPE_INT,
+			 (EphyTreeModelNodeValueFunc) provide_text_weight,
+			 view);
+		gtk_tree_view_column_add_attribute (gcolumn, renderer,
+						    "weight", wcol);
+	}
+
 	gtk_tree_view_column_set_sizing (gcolumn,
 					 GTK_TREE_VIEW_COLUMN_AUTOSIZE);
 	gtk_tree_view_column_set_title (gcolumn, title);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (view),
 				     gcolumn);
+
 	if (sortable)
 	{
+		int scol;
+
+		scol = ephy_tree_model_node_add_func_column
+			(view->priv->nodemodel, G_TYPE_INT,
+			 (EphyTreeModelNodeValueFunc) provide_priority,
+			 view);
+		view->priv->priority_column_id = scol;
+
+		view->priv->priority_prop_id = priority_prop_id;
 		view->priv->default_sort_column_id = column;
 		g_idle_add ((GSourceFunc) set_sort_column_id, view);
 	}
@@ -656,10 +820,14 @@ ephy_node_view_add_column (EphyNodeView *view,
 
 void
 ephy_node_view_add_icon_column (EphyNodeView *view,
-			        EphyTreeModelNodeColumn column)
+			        EphyTreeModelNodeValueFunc func)
 {
 	GtkTreeViewColumn *gcolumn;
 	GtkCellRenderer *renderer;
+	int column;
+
+	column = ephy_tree_model_node_add_func_column
+                 (view->priv->nodemodel, GDK_TYPE_PIXBUF, func, NULL);
 
 	gcolumn = (GtkTreeViewColumn *) gtk_tree_view_column_new ();
 	renderer = gtk_cell_renderer_pixbuf_new ();
@@ -813,130 +981,6 @@ ephy_node_view_select_node (EphyNodeView *view,
 	gtk_tree_path_free (path);
 }
 
-static gboolean
-drag_motion_cb (GtkWidget *widget,
-                GdkDragContext *context,
-                gint x,
-                gint y,
-                guint time,
-	        EphyNodeView *view)
-{
-	EphyNode *node;
-	GtkTreePath *path = NULL;
-	GtkTreeViewDropPosition pos;
-	gboolean res;
-	EphyBookmarksKeywordPriority priority;
-
-	g_signal_stop_emission_by_name (widget, "drag_motion");
-
-	res = gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
-					         x, y, &path, &pos);
-	if (!res) return TRUE;
-
-	node = get_node_from_path (view, path);
-
-	priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-
-	if (priority != EPHY_BOOKMARKS_KEYWORD_ALL_PRIORITY &&
-	    priority != EPHY_BOOKMARKS_KEYWORD_SPECIAL_PRIORITY)
-
-	{
-		gtk_tree_view_set_drag_dest_row (GTK_TREE_VIEW (widget), path,
-						 GTK_TREE_VIEW_DROP_INTO_OR_AFTER);
-		gdk_drag_status (context, context->suggested_action, time);
-	}
-	else
-	{
-		gdk_drag_status (context, 0, time);
-	}
-
-	return TRUE;
-}
-
-static gboolean
-drag_drop_cb (GtkWidget *widget,
-              GdkDragContext *context,
-              gint x,
-              gint y,
-              guint time,
-	      EphyNodeView *view)
-{
-	GdkAtom target;
-
-	g_signal_stop_emission_by_name (widget, "drag_drop");
-
-	target = gtk_drag_dest_find_target (widget, context,
-					    view->priv->drag_targets);
-
-	if (target != GDK_NONE)
-	{
-		gtk_drag_get_data (widget, context, target, time);
-	}
-
-	return TRUE;
-}
-
-static gboolean
-drag_data_received_cb (GtkWidget *widget,
-                       GdkDragContext *context,
-                       gint x,
-                       gint y,
-	               GtkSelectionData *selection_data,
-                       guint info,
-                       guint time,
-	               EphyNodeView *view)
-{
-	GtkTreePath *path = NULL;
-	GtkTreeViewDropPosition pos;
-
-	g_signal_stop_emission_by_name (widget, "drag_data_received");
-
-	if (gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
-					       x, y, &path, &pos))
-	{
-		EphyNode *node;
-		GList *src_nodes;
-
-		node = get_node_from_path (view, path);
-
-		src_nodes = ephy_dnd_node_list_extract_nodes
-				(selection_data->data);
-
-		g_signal_emit (G_OBJECT (view),
-			       ephy_node_view_signals[NODE_DROPPED], 0,
-			       node, src_nodes);
-
-		g_list_free (src_nodes);
-
-	}
-
-	return TRUE;
-}
-
-void
-ephy_node_view_enable_drag_dest (EphyNodeView *view,
-				 GtkTargetEntry *types,
-				 int n_types)
-{
-	GtkWidget *treeview;
-
-	g_return_if_fail (view != NULL);
-
-	treeview = GTK_WIDGET (view);
-
-	gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (treeview),
-					      types, n_types,
-					      GDK_ACTION_COPY);
-	view->priv->drag_targets = gtk_target_list_new (types, n_types);
-
-	g_signal_connect (treeview, "drag_data_received",
-			  G_CALLBACK (drag_data_received_cb), view);
-	g_signal_connect (treeview, "drag_drop",
-			  G_CALLBACK (drag_drop_cb), view);
-	g_signal_connect (treeview, "drag_motion",
-			  G_CALLBACK (drag_motion_cb), view);
-}
-
 void
 ephy_node_view_enable_drag_source (EphyNodeView *view,
 				   GtkTargetEntry *types,
@@ -990,8 +1034,11 @@ ephy_node_view_edit (EphyNodeView *view)
 }
 
 gboolean
-ephy_node_view_is_editing (EphyNodeView *view)
+ephy_node_view_is_editing (EphyNodeView *view,
+			   int property)
 {
+	view->priv->editable_property = property;
+
 	return view->priv->editing;
 }
 
@@ -1036,4 +1083,17 @@ ephy_node_view_has_selection (EphyNodeView *view, gboolean *multiple)
 	}
 
 	return rows > 0;
+}
+
+void
+ephy_node_view_enable_sort (EphyNodeView *view,
+			    GtkTreeIterCompareFunc sort_func,
+			    gpointer data,
+			    GtkDestroyNotify destroy)
+{
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (view->priv->sortmodel),
+					      GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
+					      GTK_SORT_ASCENDING);
+	gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (view->priv->sortmodel),
+						 sort_func, data, destroy);
 }

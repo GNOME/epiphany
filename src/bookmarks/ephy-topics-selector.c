@@ -19,6 +19,7 @@
 
 #include "ephy-topics-selector.h"
 #include "ephy-debug.h"
+#include "ephy-node-view.h"
 
 #include <gtk/gtkliststore.h>
 #include <gtk/gtkcellrenderertoggle.h>
@@ -223,9 +224,9 @@ fill_model (EphyTopicsSelector *editor)
 
 		priority = ephy_node_get_property_int
 			(kid, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-		if (priority == -1) priority = EPHY_BOOKMARKS_KEYWORD_NORMAL_PRIORITY;
+		if (priority == -1) priority = EPHY_NODE_VIEW_NORMAL_PRIORITY;
 
-		if (priority == EPHY_BOOKMARKS_KEYWORD_NORMAL_PRIORITY)
+		if (priority == EPHY_NODE_VIEW_NORMAL_PRIORITY)
 		{
 			gtk_list_store_append (model, &iter);
 			gtk_list_store_set (model, &iter,

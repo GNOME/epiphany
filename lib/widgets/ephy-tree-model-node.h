@@ -37,18 +37,11 @@ G_BEGIN_DECLS
 
 typedef enum
 {
-	EPHY_TREE_MODEL_NODE_COL_BOOKMARK,
-	EPHY_TREE_MODEL_NODE_COL_KEYWORD,
 	EPHY_TREE_MODEL_NODE_COL_VISIBLE,
-	EPHY_TREE_MODEL_NODE_COL_ICON,
-	EPHY_TREE_MODEL_NODE_COL_TITLE_WEIGHT,
-	EPHY_TREE_MODEL_NODE_COL_PRIORITY,
-	EPHY_TREE_MODEL_NODE_NUM_COLUMNS
+	EPHY_TREE_MODEL_NODE_BUILTIN_COLUMNS
 } EphyTreeModelNodeColumn;
 
-GType ephy_tree_model_node_column_get_type (void);
-
-#define EPHY_TYPE_TREE_MODEL_NODE_COLUMN (ephy_tree_model_node_column_get_type ())
+typedef void (*EphyTreeModelNodeValueFunc) (EphyNode *node, GValue *value, gpointer user_data);
 
 typedef struct EphyTreeModelNodePrivate EphyTreeModelNodePrivate;
 
@@ -70,6 +63,15 @@ GType              ephy_tree_model_node_get_type         (void);
 
 EphyTreeModelNode *ephy_tree_model_node_new              (EphyNode *root,
 						          EphyNodeFilter *filter);
+
+int                ephy_tree_model_node_add_prop_column  (EphyTreeModelNode *model,
+						          GType value_type,
+						          int prop_id);
+
+int                ephy_tree_model_node_add_func_column  (EphyTreeModelNode *model,
+						          GType value_type,
+						          EphyTreeModelNodeValueFunc func,
+						          gpointer user_data);
 
 EphyNode          *ephy_tree_model_node_node_from_iter   (EphyTreeModelNode *model,
 						          GtkTreeIter *iter);
