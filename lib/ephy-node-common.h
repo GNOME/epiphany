@@ -21,8 +21,13 @@
 #ifndef __EPHY_NODE_COMMON_H
 #define __EPHY_NODE_COMMON_H
 
-/* Ids of the root nodes of history,
- * bookmarks and favicon cache */
+/* Databases */
+#define EPHY_NODE_DB_HISTORY "EphyHistory"
+#define EPHY_NODE_DB_BOOKMARKS "EphyBookmarks"
+#define EPHY_NODE_DB_SITEICONS "EphySiteIcons"
+#define EPHY_NODE_DB_STATES "EphyStates"
+
+/* Root nodes */
 enum
 {
 	BOOKMARKS_NODE_ID = 0,
