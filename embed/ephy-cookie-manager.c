@@ -142,7 +142,7 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 		      G_SIGNAL_RUN_FIRST,
 		      G_STRUCT_OFFSET (EphyCookieManagerIFace, added),
 		      NULL, NULL,
-		      g_cclosure_marshal_VOID__POINTER,
+		      g_cclosure_marshal_VOID__BOXED,
 		      G_TYPE_NONE,
 		      1,
 		      EPHY_TYPE_COOKIE);
