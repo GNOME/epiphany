@@ -169,3 +169,13 @@ ephy_embed_single_get_font_list (EphyEmbedSingle *single,
 	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
 	return iface->get_font_list (single, lang_group);
 }
+
+void
+ephy_embed_single_open_window (EphyEmbedSingle *single,
+			       EphyEmbed *parent,
+			       const char *address,
+			       const char *features)
+{
+	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
+	return iface->open_window (single, parent, address, features);
+}

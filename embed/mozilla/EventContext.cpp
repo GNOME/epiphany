@@ -177,8 +177,6 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 {
 	nsresult rv;
 
-	const PRUnichar bgLiteral[] = {'b', 'a', 'c', 'k', 'g', 'r', 'o', 'u',
-				       'n', 'd', '\0'};
 	const PRUnichar hrefLiteral[] = {'h', 'r', 'e', 'f', '\0'};
 	const PRUnichar typeLiteral[] = {'t', 'y', 'p', 'e', '\0'};
 	const PRUnichar xlinknsLiteral[] = {'h', 't', 't', 'p', ':', '/', '/','w',

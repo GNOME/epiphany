@@ -21,8 +21,7 @@
 #ifndef EPHY_EMBED_SINGLE_H
 #define EPHY_EMBED_SINGLE_H
 
-#include <glib-object.h>
-#include <glib.h>
+#include "ephy-embed.h"
 
 G_BEGIN_DECLS
 
@@ -48,6 +47,10 @@ struct _EphyEmbedSingleIface
 
 	/* Methods */
 
+	void	(* open_window)		(EphyEmbedSingle *single,
+					 EphyEmbed *parent,
+					 const char *address,
+					 const char *features);
 	void	(* clear_cache)         (EphyEmbedSingle *shell);
 	void	(* clear_auth_cache)	(EphyEmbedSingle *shell);
 	void	(* set_offline_mode)    (EphyEmbedSingle *shell,
@@ -59,6 +62,11 @@ struct _EphyEmbedSingleIface
 };
 
 GType	ephy_embed_single_get_type		(void);
+
+void	ephy_embed_single_open_window		(EphyEmbedSingle *single,
+						 EphyEmbed *parent,
+						 const char *address,
+						 const char *features);
 
 void	ephy_embed_single_clear_cache		(EphyEmbedSingle *single);
 

@@ -39,7 +39,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_EMBED_CHROME_MASK     (ephy_embed_chrome_get_type ())
 
-typedef struct _EphyEmbed	EphyEmbed; /* dummy typedef */
+typedef struct _EphyEmbed	EphyEmbed;
 typedef struct _EphyEmbedIface	EphyEmbedIface;
 
 typedef enum

@@ -548,6 +548,15 @@ nsresult EphyBrowser::GetPageDescriptor(nsISupports **aPageDescriptor)
 	return NS_OK;
 }
 
+nsresult EphyBrowser::GetDOMWindow (nsIDOMWindow **aDOMWindow)
+{
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
+
+	NS_IF_ADDREF (*aDOMWindow = mDOMWindow);
+
+	return NS_OK;
+}
+
 nsresult EphyBrowser::GetDocumentUrl (nsACString &url)
 {
 	nsresult rv;

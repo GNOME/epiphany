@@ -40,6 +40,7 @@
 #include "ephy-embed-prefs.h"
 #include "MozRegisterComponents.h"
 #include "EphySingle.h"
+#include "EphyBrowser.h"
 #include "EphyUtils.h"
 
 #include <glib/gi18n.h>
@@ -50,6 +51,7 @@
 #include <nsEmbedString.h>
 #include <nsIPrefService.h>
 #include <nsIServiceManager.h>
+#include <nsIWindowWatcher.h>
 #include <nsIIOService.h>
 #include <nsISupportsPrimitives.h>
 #include <nsICookieManager.h>
@@ -836,6 +838,27 @@ impl_permission_manager_list (EphyPermissionManager *manager,
 	}
 
 	return list;
+}
+
+void
+mozilla_embed_single_open_window (EphyEmbedSingle *single,
+			          EphyEmbed *parent,
+			          const char *address,
+			          const char *features)
+{
+	nsCOMPtr<nsIDOMWindow> domWindow;
+	if (parent)
+	{
+		EphyBrowser *browser;
+
+		browser = (EphyBrowser *) _mozilla_embed_get_ephy_browser (MOZILLA_EMBED(parent));
+		g_return_if_fail (browser != NULL);
+
+		browser->GetDOMWindow (getter_AddRefs (domWindow));
+	}
+
+	nsCOMPtr<nsIWindowWatcher> wWatch(do_GetService ("@mozilla.org/embedcomp/window-watcher;1"));
+	wWatch->OpenWindow (domWindow, address, "", features, nsnull, nsnull);
 }
 
 static void

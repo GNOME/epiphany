@@ -1,5 +1,19 @@
 2004-06-12  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* embed/ephy-embed-single.c: (ephy_embed_single_open_window):
+	* embed/ephy-embed-single.h:
+	* embed/ephy-embed.h:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	Add a way to open new windows passing features and uri.
+	Something like js window.open. It's necessary for popup
+	blocker.
+
+2004-06-12  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* lib/egg/egg-editable-toolbar.c: (toolbar_drag_motion_cb):
 
 	Allow items to be dragged from toolbar editor also when
