@@ -340,7 +340,7 @@ duplicate_dialog_construct (GtkWindow *parent,
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 	tmp_title = g_strconcat ("<b>", title, "</b>", NULL);
-	tmp_str = g_strdup_printf (_("A bookmark titled %s already exists for this address"),
+	tmp_str = g_strdup_printf (_("A bookmark titled %s already exists for this page."),
 			           tmp_title);
 	str = g_strconcat ("<big>", tmp_str, "</big>", NULL);
 	gtk_label_set_markup (GTK_LABEL (label), str);
