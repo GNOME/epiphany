@@ -1,3 +1,33 @@
+2004-04-04  Adam Hooper  <adamh@cvs.gnome.org>
+
+	* HACKING:
+
+	Suggest /* to open comments instead of /** (rationale: gtk-doc)
+
+	* src/ephy-tab.c: (ephy_tab_set_title):
+
+	Change /** to /*
+
+	* doc/reference/Makefile.am:
+	* doc/reference/epiphany-docs.sgml:
+	* doc/reference/epiphany-sections.txt:
+	* lib/ephy-node-db.c: (node_from_id_real),
+	(ephy_node_db_get_node_from_id), (_ephy_node_db_new_id),
+	(_ephy_node_db_add_id), (_ephy_node_db_remove_id):
+	* lib/ephy-node-db.h:
+
+	Documented EphyNodeDb. Changed the ids to guints to conform with
+	GPtrArray.
+
+	* doc/reference/tmpl/ephy-tab.sgml:
+
+	Say how to get an EphyWindow from an EphyEmbed
+
+	* doc/reference/tmpl/ephy-embed-persist.sgml:
+	* doc/reference/tmpl/ephy-embed.sgml:
+
+	Automatically changed when I rebuilt docs
+
 2004-04-03  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* lib/egg/egg-editable-toolbar.c: (set_fixed_style),

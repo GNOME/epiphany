@@ -1459,7 +1459,7 @@ ephy_tab_set_title (EphyTab *tab, EphyEmbed *embed, const char *new_title)
 	title_short = ephy_string_shorten (title, MAX_LABEL_LENGTH);
 	title_tmp = ephy_string_double_underscores (title_short);
 
-	/**
+	/*
 	 * FIXME: instead of shortening the title here, use an egg action
 	 * which creates menu items with ellipsizing labels
 	 */

@@ -34,10 +34,10 @@ G_BEGIN_DECLS
 #define EPHY_IS_NODE_DB_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_NODE_DB))
 #define EPHY_NODE_DB_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_NODE_DB, EphyNodeDbClass))
 
-typedef struct EphyNodeDb EphyNodeDb;
+typedef struct _EphyNodeDb EphyNodeDb;
 typedef struct EphyNodeDbPrivate EphyNodeDbPrivate;
 
-struct EphyNodeDb
+struct _EphyNodeDb
 {
 	GObject parent;
 
@@ -79,16 +79,16 @@ void	      ephy_node_db_set_immutable	(EphyNodeDb *db,
 						 gboolean immutable);
 
 EphyNode     *ephy_node_db_get_node_from_id	(EphyNodeDb *db,
-						 long id);
+						 guint id);
 
-long	      _ephy_node_db_new_id		(EphyNodeDb *db);
+guint	      _ephy_node_db_new_id		(EphyNodeDb *db);
 
 void	      _ephy_node_db_add_id		(EphyNodeDb *db,
-						 long id,
+						 guint id,
 						 EphyNode *node);
 
 void	      _ephy_node_db_remove_id		(EphyNodeDb *db,
-						 long id);
+						 guint id);
 
 G_END_DECLS
 

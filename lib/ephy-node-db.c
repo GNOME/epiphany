@@ -55,7 +55,7 @@ struct EphyNodeDbPrivate
 	char *name;
 	gboolean immutable;
 
-	long id_factory;
+	guint id_factory;
 
 	GPtrArray *id_to_node;
 };
@@ -207,6 +207,14 @@ ephy_node_db_finalize (GObject *object)
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+/**
+ * ephy_node_db_get_by_name:
+ * @name: the name of the desired #EphyNodeDb
+ *
+ * Returns the #EphyNodeDb named @name, or %NULL if no such database exists.
+ *
+ * Return value: an #EphyNodeDb
+ **/
 EphyNodeDb *
 ephy_node_db_get_by_name (const char *name)
 {
@@ -217,6 +225,14 @@ ephy_node_db_get_by_name (const char *name)
 	return ret;
 }
 
+/**
+ * ephy_node_db_new:
+ * @name: the name of the new #EphyNodeDb
+ *
+ * Creates and returns a new #EphyNodeDb, named @name.
+ *
+ * Return value: the new #EphyNodeDb
+ **/
 EphyNodeDb *
 ephy_node_db_new (const char *name)
 {
@@ -232,7 +248,7 @@ ephy_node_db_new (const char *name)
 }
 
 static inline EphyNode *
-node_from_id_real (EphyNodeDb *db, long id)
+node_from_id_real (EphyNodeDb *db, guint id)
 {
 	EphyNode *ret = NULL;
 
@@ -242,18 +258,38 @@ node_from_id_real (EphyNodeDb *db, long id)
 	return ret;
 }
 
+/**
+ * ephy_node_db_get_name:
+ * @db: an #EphyNodeDb
+ *
+ * Return value: the name of @db
+ **/
 const char *
 ephy_node_db_get_name (EphyNodeDb *db)
 {
 	return db->priv->name;
 }
 
+/**
+ * ephy_node_db_is_immutable:
+ * @db: an #EphyNodeDb
+ *
+ * Return value: %TRUE if @db is immutable
+ **/
 gboolean
 ephy_node_db_is_immutable (EphyNodeDb *db)
 {
 	return db->priv->immutable;
 }
 
+/**
+ * ephy_node_db_set_immutable:
+ * @db: an #EphyNodeDb
+ * @immutable: %TRUE to make @db immutable
+ *
+ * If @immutable is %TRUE, sets @db immutable (read-only). Otherwise, sets @db
+ * to be read-write.
+ **/
 void
 ephy_node_db_set_immutable (EphyNodeDb *db, gboolean immutable)
 {
@@ -262,8 +298,17 @@ ephy_node_db_set_immutable (EphyNodeDb *db, gboolean immutable)
 	g_object_notify (G_OBJECT (db), "immutable");
 }
 
+/**
+ * ephy_node_db_get_node_from_id:
+ * @db: an #EphyNodeDb
+ * @id: an id specifying an #EphyNode in @db
+ *
+ * Returns the #EphyNode with id @id from @db, or %NULL if no such id exists.
+ *
+ * Return value: an #EphyNode
+ **/
 EphyNode *
-ephy_node_db_get_node_from_id (EphyNodeDb *db, long id)
+ephy_node_db_get_node_from_id (EphyNodeDb *db, guint id)
 {
 	EphyNode *ret = NULL;
 
@@ -272,10 +317,10 @@ ephy_node_db_get_node_from_id (EphyNodeDb *db, long id)
 	return ret;
 }
 
-long
+guint
 _ephy_node_db_new_id (EphyNodeDb *db)
 {
-	long ret;
+	guint ret;
 
 	while (node_from_id_real (db, db->priv->id_factory) != NULL)
 	{
@@ -289,7 +334,7 @@ _ephy_node_db_new_id (EphyNodeDb *db)
 
 void
 _ephy_node_db_add_id (EphyNodeDb *db,
-		      long id,
+		      guint id,
 		      EphyNode *node)
 {
 	/* resize array if needed */
@@ -301,7 +346,7 @@ _ephy_node_db_add_id (EphyNodeDb *db,
 
 void
 _ephy_node_db_remove_id (EphyNodeDb *db,
-			 long id)
+			 guint id)
 {
 	g_ptr_array_index (db->priv->id_to_node, id) = NULL;
 
@@ -309,6 +354,23 @@ _ephy_node_db_remove_id (EphyNodeDb *db,
 	db->priv->id_factory = RESERVED_IDS;
 }
 
+/**
+ * ephy_node_db_load_from_file:
+ * @db: a new #EphyNodeDb
+ * @xml_file: the filename from which @db will be populated
+ * @xml_root: the root element in @xml_file
+ * @xml_version: the required version attribute in the @xml_root
+ *
+ * Populates @db with data from @xml_file. The node database will be populated
+ * with everything inside of the @xml_root tag from @xml_file. If @xml_version
+ * is different from the version attribute of the @xml_root element, this
+ * function will fail.
+ *
+ * The data will most probably have been stored using
+ * ephy_node_db_write_to_xml_safe().
+ *
+ * Return value: %TRUE if successful
+ **/
 gboolean
 ephy_node_db_load_from_file (EphyNodeDb *db,
 			     const char *xml_file,
@@ -489,6 +551,39 @@ out:
 	return ret >= 0 ? 0 : -1;
 }
 
+/**
+ * ephy_node_db_write_to_xml_safe:
+ * @db: an #EphyNodeDb
+ * @filename: the XML file in which @db's data will be stored
+ * @root: the desired root element in @filename
+ * @version: the version attribute to the @root element
+ * @comment: a comment to place directly inside the @root element of @filename
+ * @node: The first node of data to write
+ * @Varargs: number of exceptions, list of their #EphyNodes, and more such
+ * 	     sequences, followed by %NULL
+ *
+ * Writes @db's data to an XML file for storage. The data can be retrieved in
+ * the future using ephy_node_db_load_from_file().
+ *
+ * The function arguments are straightforward until @node, at which point some
+ * explanation is necessary.
+ *
+ * The variable argument list starts at @node, which is an #EphyNode containing
+ * data to write to @filename. The next argument is an integer specifying the
+ * number of <quote>exception</quote> nodes. After this integer, that number of
+ * #EphyNode arguments should be given. Each of these <quote>exception</quote>
+ * nodes determines which data out of @node will <emphasis>not</emphasis> be
+ * written to @filename.
+ *
+ * To insert all of an #EphyNode's contents without exception, simply give the
+ * integer %0 after @node.
+ *
+ * The remainder of this function's arguments will be groups of such #EphyNode -
+ * integer - (list of #EphyNode<!-- -->s). Finally, the last argument must be
+ * %NULL.
+ *
+ * Return value: %0 on success or a negative number on failure
+ **/
 int
 ephy_node_db_write_to_xml_safe (EphyNodeDb *db,
 				const xmlChar *filename,

@@ -9,6 +9,9 @@ Represents an Epiphany tab
 Each #EphyWindow contains a #GtkNotebook which holds one or more #EphyTab:s.
 An #EphyTab is basically a container for an #EphyEmbed.
 </para>
+<para>
+To retrieve an #EphyTab's parent #EphyWindow, use gtk_widget_get_toplevel().
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
