@@ -402,8 +402,6 @@ downloader_view_build_ui (DownloaderView *dv)
 				       GTK_ICON_SIZE_MENU,
 				       NULL);
 	gtk_window_set_icon (GTK_WINDOW(priv->window), icon);
-
-	g_print ("THE UI IS BUILT\n");
 }
 
 void
@@ -489,5 +487,5 @@ gboolean
 download_dialog_delete_cb (GtkWidget *window, GdkEventAny *event,
 			   DownloaderView *dv)
 {
-	return FALSE;
+	return TRUE;
 }
