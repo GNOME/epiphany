@@ -20,6 +20,7 @@
 #include "ephy-editable-toolbar.h"
 #include "ephy-file-helpers.h"
 #include "ephy-debug.h"
+#include "eggtoolitem.h"
 
 #include <libxml/parser.h>
 #include <string.h>
@@ -40,7 +41,7 @@ static void ephy_editable_toolbar_class_init (EphyEditableToolbarClass *klass);
 static void ephy_editable_toolbar_init (EphyEditableToolbar *t);
 static void ephy_editable_toolbar_finalize (GObject *object);
 
-static void do_merge (EphyEditableToolbar *t, GList *toolbars);
+static void do_merge (EphyEditableToolbar *t);
 
 enum
 {
@@ -61,15 +62,27 @@ static gint EphyEditableToolbarSignals[LAST_SIGNAL];
 struct EphyEditableToolbarPrivate
 {
 	EggMenuMerge *merge;
-	GList *available_actions;
-	GList *toolbars;
+	GNode *available_actions;
+	GNode *toolbars;
 	char *filename;
 
 	GtkWidget *editor;
 	GtkWidget *table;
 
 	guint ui_id;
+	gboolean ui_dirty;
 };
+
+typedef struct
+{
+	GtkWidget *widget;
+} ToolbarNode;
+
+typedef struct
+{
+	gboolean separator;
+	EggAction *action;
+} ItemNode;
 
 GType
 ephy_editable_toolbar_get_type (void)
@@ -100,45 +113,27 @@ ephy_editable_toolbar_get_type (void)
 
 }
 
-static void
-copy_toolbars (EphyEditableToolbar *t, GList **copy)
+static ToolbarNode *
+toolbar_node_new (void)
 {
-	GList *l;
+	ToolbarNode *node;
 
-	*copy = NULL;
+	node = g_new0 (ToolbarNode, 1);
+	node->widget = NULL;
 
-	for (l = t->priv->toolbars; l != NULL; l = l->next)
-	{
-		GList *l2;
-
-		l2 = g_list_copy (l->data);
-
-		*copy = g_list_append (*copy, l2);
-	}
+	return node;
 }
 
-static gboolean
-is_action_in_toolbars (EphyEditableToolbar *t, EggAction *action)
+static ItemNode *
+item_node_new (EggAction *action, gboolean separator)
 {
-	GList *l1, *l2;
+	ItemNode *item;
 
-	for (l1 = t->priv->toolbars; l1 != NULL; l1 = l1->next)
-	{
-		for (l2 = l1->data; l2 != NULL; l2 = l2->next)
-		{
-			if (l2->data == action) return TRUE;
-		}
-	}
+	item = g_new0 (ItemNode, 1);
+	item->action = action;
+	item->separator = separator;
 
-	return FALSE;
-}
-
-static gboolean
-is_separator (EggAction *action)
-{
-	g_return_val_if_fail (action != NULL, FALSE);
-
-	return (strcmp (action->name, "separator") == 0);
+	return item;
 }
 
 static EggAction *
@@ -159,64 +154,55 @@ find_action (EphyEditableToolbar *t, const char *name)
 	return action;
 }
 
-static GList **
-find_toolbar_from_widget (EphyEditableToolbar *t, GList *toolbars, GtkWidget *widget)
+static GNode *
+find_node_from_action (EphyEditableToolbar *t, EggAction *action)
 {
-	GList *l;
-	int i = 0;
+	GNode *n1, *n2;
 
-	for (l = toolbars; l != NULL; l = l->next)
+	for (n1 = t->priv->toolbars->children; n1 != NULL; n1 = n1->next)
 	{
-		char path[255];
-		GtkWidget *toolbar;
+		for (n2 = n1->children; n2 != NULL; n2 = n2->next)
+		{
+			ItemNode *item = (ItemNode *) (n2->data);
 
-		sprintf (path, "/Toolbar%d", i);
-		toolbar = egg_menu_merge_get_widget (t->priv->merge, path);
-
-		if (widget == toolbar) return (GList **)(&(l->data));
-		i++;
+			if (!item->separator && item->action == action)
+				return n2;
+		}
 	}
 
 	return NULL;
 }
 
 static void
-add_action_to_list (EphyEditableToolbar *t,
-		    GList **list,
-		    const char *name,
-		    EggAction *sibling)
+add_action (EphyEditableToolbar *t,
+	    GNode *parent,
+	    GNode *sibling,
+	    const char *name)
 {
 	EggAction *action = NULL;
+	gboolean separator;
+	ItemNode *item;
+	GNode *node;
 
 	action = find_action (t, name);
+	separator = (strcmp (name, "separator") == 0);
 
-	if (!action)
+	if (!action && !separator)
 	{
 		g_signal_emit (t, EphyEditableToolbarSignals[REQUEST_ACTION], 0, name);
+		action = find_action (t, name);
 	}
 
-	action = find_action (t, name);
+	item = item_node_new (action, separator);
+	node = g_node_new (item);
 
-	if (action && sibling)
-	{
-		GList *s;
-
-		LOG ("Adding action %s to list, sibling is %s", name, sibling->name)
-
-		s = g_list_find (*list, sibling);
-		g_return_if_fail (s != NULL);
-		*list = g_list_insert_before (*list, s, action);
-	}
-	else
-	{
-		*list = g_list_append (*list, action);
-	}
+	g_node_insert_before (parent, sibling, node);
 }
 
 static void
 parse_item_list (EphyEditableToolbar *t,
 		 xmlNodePtr child,
-		 GList **actions)
+		 GNode *parent)
 {
 	while (child)
 	{
@@ -225,19 +211,13 @@ parse_item_list (EphyEditableToolbar *t,
 			xmlChar *verb;
 
 			verb = xmlGetProp (child, "verb");
-			add_action_to_list (t, actions, verb, NULL);
+			add_action (t, parent, NULL, verb);
 
 			xmlFree (verb);
 		}
 		else if (xmlStrEqual (child->name, "separator"))
 		{
-			EggAction *separator;
-
-			separator = g_object_new (EGG_TYPE_ACTION,
-						  "name", "separator",
-						  NULL);
-
-			*actions = g_list_append (*actions, separator);
+			add_action (t, parent, NULL, "separator");
 		}
 
 		child = child->next;
@@ -247,16 +227,20 @@ parse_item_list (EphyEditableToolbar *t,
 static void
 parse_toolbars (EphyEditableToolbar *t,
 		xmlNodePtr child,
-		GList **toolbars)
+		GNode *toolbars)
 {
 	while (child)
 	{
 		if (xmlStrEqual (child->name, "toolbar"))
 		{
-			GList *list = NULL;
+			ToolbarNode *toolbar;
+			GNode *node;
 
-			parse_item_list (t, child->children, &list);
-			*toolbars = g_list_append (*toolbars, list);
+			toolbar = toolbar_node_new ();
+			node = g_node_new (toolbar);
+			g_node_append (toolbars, node);
+
+			parse_item_list (t, child->children, node);
 		}
 
 		child = child->next;
@@ -283,14 +267,16 @@ load_defaults (EphyEditableToolbar *t)
 	{
 		if (xmlStrEqual (child->name, "available"))
 		{
+			t->priv->available_actions = g_node_new (NULL);
 			parse_item_list (t, child->children,
-					 &t->priv->available_actions);
+					 t->priv->available_actions);
 		}
 		else if (xmlStrEqual (child->name, "default") &&
 			 t->priv->toolbars == NULL)
 		{
+			t->priv->toolbars = g_node_new (NULL);
 			parse_toolbars (t, child->children,
-					&t->priv->toolbars);
+					t->priv->toolbars);
 		}
 
 		child = child->next;
@@ -311,39 +297,40 @@ load_toolbar (EphyEditableToolbar *t)
 	doc = xmlParseFile (xml_filepath);
 	root = xmlDocGetRootElement (doc);
 
+	t->priv->toolbars = g_node_new (NULL);
 	parse_toolbars (t, root->children,
-			&t->priv->toolbars);
+			t->priv->toolbars);
 }
 
 static xmlDocPtr
-toolbar_list_to_xml (EphyEditableToolbar *t, GList *tl)
+toolbar_list_to_xml (EphyEditableToolbar *t, GNode *tl)
 {
-	GList *l1, *l2;
+	GNode *l1, *l2;
 	xmlDocPtr doc;
 
 	xmlIndentTreeOutput = TRUE;
 	doc = xmlNewDoc ("1.0");
 	doc->children = xmlNewDocNode (doc, NULL, "toolbars", NULL);
 
-	for (l1 = tl; l1 != NULL; l1 = l1->next)
+	for (l1 = tl->children; l1 != NULL; l1 = l1->next)
 	{
 		xmlNodePtr tnode;
 
 		tnode = xmlNewChild (doc->children, NULL, "toolbar", NULL);
 
-		for (l2 = l1->data; l2 != NULL; l2 = l2->next)
+		for (l2 = l1->children; l2 != NULL; l2 = l2->next)
 		{
 			xmlNodePtr node;
-			EggAction *action = EGG_ACTION (l2->data);
+			ItemNode *item = (ItemNode *) (l2->data);
 
-			if (is_separator (action))
+			if (item->separator)
 			{
 				 node = xmlNewChild (tnode, NULL, "separator", NULL);
 			}
 			else
 			{
 				node = xmlNewChild (tnode, NULL, "toolitem", NULL);
-				xmlSetProp (node, "verb", action->name);
+				xmlSetProp (node, "verb", item->action->name);
 			}
 		}
 	}
@@ -352,27 +339,27 @@ toolbar_list_to_xml (EphyEditableToolbar *t, GList *tl)
 }
 
 static char *
-toolbar_list_to_string (EphyEditableToolbar *t, GList *tl)
+toolbar_list_to_string (EphyEditableToolbar *t, GNode *tl)
 {
 	GString *s;
-	GList *l1, *l2;
+	GNode *l1, *l2;
 	char *result;
+	int k = 0;
 
 	s = g_string_new (NULL);
 	g_string_append (s, "<Root>");
-	for (l1 = tl; l1 != NULL; l1 = l1->next)
+	for (l1 = tl->children; l1 != NULL; l1 = l1->next)
 	{
 		int i = 0;
 
 		g_string_append_printf
-			(s, "<dockitem name=\"Toolbar%d\">\n",
-			 g_list_index (tl, l1->data));
+			(s, "<dockitem name=\"Toolbar%d\">\n", k);
 
-		for (l2 = l1->data; l2 != NULL; l2 = l2->next)
+		for (l2 = l1->children; l2 != NULL; l2 = l2->next)
 		{
-			EggAction *action = EGG_ACTION (l2->data);
+			ItemNode *item = (ItemNode *) (l2->data);
 
-			if (is_separator (action))
+			if (item->separator)
 			{
 				g_string_append_printf
 					(s, "<placeholder name=\"PlaceHolder%d\">"
@@ -385,12 +372,14 @@ toolbar_list_to_string (EphyEditableToolbar *t, GList *tl)
 					(s, "<placeholder name=\"PlaceHolder%d\">"
 					 "<toolitem name=\"ToolItem\" verb=\"%s\"/>"
 					 "</placeholder>\n",
-					 i, action->name);
+					 i, item->action->name);
 			}
 			i++;
 		}
 
 		g_string_append (s, "</dockitem>\n");
+
+		k++;
 	}
 	g_string_append (s, "</Root>");
 
@@ -399,6 +388,24 @@ toolbar_list_to_string (EphyEditableToolbar *t, GList *tl)
 	g_string_free (s, FALSE);
 
 	return result;
+}
+
+static gboolean
+ui_update (gpointer data)
+{
+	EphyEditableToolbar *etoolbar = EPHY_EDITABLE_TOOLBAR (data);
+
+	do_merge (etoolbar);
+
+	return FALSE;
+}
+
+static void
+queue_ui_update (EphyEditableToolbar *etoolbar)
+{
+	etoolbar->priv->ui_dirty = TRUE;
+
+	g_idle_add (ui_update, etoolbar);
 }
 
 static void
@@ -411,99 +418,69 @@ drag_data_received_cb (GtkWidget *widget,
 		       guint time_,
 		       EphyEditableToolbar *etoolbar)
 {
-	EggAction *action;
-	gboolean motion;
-	GList **toolbar;
-	GList *toolbars;
+	GNode *parent;
+	GNode *sibling;
 
-	LOG ("Received data, action is %s", (char *)selection_data->data);
+	sibling = (GNode *)g_object_get_data (G_OBJECT (widget), "item_node");
+	parent = sibling->parent;
 
-	action = EGG_ACTION (g_object_get_data (G_OBJECT (widget), "egg-action"));
-	g_return_if_fail (action != NULL);
+	add_action (etoolbar, parent, sibling, selection_data->data);
 
-	/* Dragging over itself, ignore */
-	if (strcmp (action->name, selection_data->data) == 0) return;
-
-	motion = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "motion"));
-	if (motion)
-	{
-		copy_toolbars (etoolbar, &toolbars);
-	}
-	else
-	{
-		toolbars = etoolbar->priv->toolbars;
-	}
-
-	toolbar = find_toolbar_from_widget (etoolbar, toolbars, widget->parent);
-	g_return_if_fail (toolbar != NULL);
-
-	add_action_to_list (etoolbar, toolbar, selection_data->data, action);
-
-	do_merge (etoolbar, motion ? toolbars : NULL);
-}
-
-static gboolean
-drag_motion_cb (GtkWidget *widget,
-		GdkDragContext *context,
-		gint x,
-		gint y,
-		guint time)
-{
-	GdkAtom target;
-
-	LOG ("Motion")
-
-	target = gtk_drag_dest_find_target (widget, context, NULL);
-        if (target != GDK_NONE)
-	{
-		g_object_set_data (G_OBJECT (widget), "motion", GINT_TO_POINTER (TRUE));
-		gtk_drag_get_data (widget, context, target, time);
-	}
-
-	gdk_drag_status (context, GDK_ACTION_MOVE, time);
-
-	return TRUE;
-}
-
-static gboolean
-drag_drop_cb (GtkWidget *widget,
-	      GdkDragContext *context,
-	      gint x,
-	      gint y,
-	      guint time)
-{
-	GdkAtom target;
-
-	LOG ("Drop")
-
-	target = gtk_drag_dest_find_target (widget, context, NULL);
-        if (target != GDK_NONE)
-	{
-		g_object_set_data (G_OBJECT (widget), "motion", GINT_TO_POINTER (FALSE));
-		gtk_drag_get_data (widget, context, target, time);
-	}
-
-	return TRUE;
+	queue_ui_update (etoolbar);
 }
 
 static void
-setup_toolbar_drag (EphyEditableToolbar *etoolbar, GList *toolbars)
+drag_data_delete_cb (GtkWidget *widget,
+                     GdkDragContext *context,
+                     EphyEditableToolbar *etoolbar)
 {
-	GList *l1, *l2;
+	GNode *node;
+
+	node = (GNode *)g_object_get_data (G_OBJECT (widget), "item_node");
+	g_node_unlink (node);
+
+	queue_ui_update (etoolbar);
+}
+
+static void
+drag_data_get_cb (GtkWidget *widget,
+                  GdkDragContext *context,
+                  GtkSelectionData *selection_data,
+                  guint info,
+                  guint32 time,
+                  EphyEditableToolbar *etoolbar)
+{
+	EggAction *action;
+	const char *target;
+
+	action = EGG_ACTION (g_object_get_data (G_OBJECT (widget), "egg-action"));
+	target = action->name;
+
+	LOG ("Drag data get %s", action->name);
+
+	gtk_selection_data_set (selection_data,
+				selection_data->target,
+				8, target, strlen (target));
+}
+
+static void
+setup_toolbar_drag (EphyEditableToolbar *etoolbar, GNode *toolbars)
+{
+	GNode *l1, *l2;
 	int k = 0;
 
-	for (l1 = toolbars; l1 != NULL; l1 = l1->next)
+	for (l1 = toolbars->children; l1 != NULL; l1 = l1->next)
 	{
 		int i = 0;
 
-		for (l2 = l1->data; l2 != NULL; l2 = l2->next)
+		for (l2 = l1->children; l2 != NULL; l2 = l2->next)
 		{
-			EggAction *action = EGG_ACTION (l2->data);
+			ItemNode *node = (ItemNode *) (l2->data);
 			GtkWidget *toolitem;
 			char path[255];
 			const char *type;
 
-			if (is_separator (action))
+			if (node->separator)
 			{
 				type ="ToolSeparator";
 			}
@@ -513,30 +490,28 @@ setup_toolbar_drag (EphyEditableToolbar *etoolbar, GList *toolbars)
 			}
 
 			sprintf (path, "/Toolbar%d/PlaceHolder%d/%s", k, i, type);
-			LOG ("Setup drag dest for toolbar item %s", path);
 
 			toolitem = egg_menu_merge_get_widget (etoolbar->priv->merge, path);
 
-			if (is_separator (action))
-			{
-				g_object_set_data (G_OBJECT (toolitem), "egg-action", action);
-			}
+			g_object_set_data (G_OBJECT (toolitem), "item_node", l2);
+
+			LOG ("Setup drag dest for toolbar item %s %p", path, toolitem);
 
 			if (!g_object_get_data (G_OBJECT (toolitem), "drag_dest_set"))
 			{
 				g_object_set_data (G_OBJECT (toolitem), "drag_dest_set",
 						   GINT_TO_POINTER (TRUE));
-
-				gtk_drag_dest_set (GTK_WIDGET (toolitem), 0,
+				gtk_drag_dest_set (toolitem, GTK_DEST_DEFAULT_ALL,
 						   drag_types, 1, GDK_ACTION_MOVE);
 				g_signal_connect (toolitem, "drag_data_received",
 						  G_CALLBACK (drag_data_received_cb),
 						  etoolbar);
-				g_signal_connect (toolitem, "drag_motion",
-						  G_CALLBACK (drag_motion_cb),
+
+				g_signal_connect (toolitem, "drag_data_get",
+						  G_CALLBACK (drag_data_get_cb),
 						  etoolbar);
-				g_signal_connect (toolitem, "drag_drop",
-						  G_CALLBACK (drag_drop_cb),
+				g_signal_connect (toolitem, "drag_data_delete",
+						  G_CALLBACK (drag_data_delete_cb),
 						  etoolbar);
 			}
 
@@ -548,15 +523,12 @@ setup_toolbar_drag (EphyEditableToolbar *etoolbar, GList *toolbars)
 }
 
 static void
-do_merge (EphyEditableToolbar *t, GList *toolbars)
+do_merge (EphyEditableToolbar *t)
 {
-	GList *tl;
 	char *str;
 	guint ui_id;
 
-	tl = toolbars ? toolbars : t->priv->toolbars;
-
-	str = toolbar_list_to_string (t, tl);
+	str = toolbar_list_to_string (t, t->priv->toolbars);
 
 	LOG ("Merge UI\n%s", str)
 
@@ -575,7 +547,7 @@ do_merge (EphyEditableToolbar *t, GList *toolbars)
 
 	egg_menu_merge_ensure_update (t->priv->merge);
 
-	setup_toolbar_drag (t, tl);
+	setup_toolbar_drag (t, t->priv->toolbars);
 
 	g_free (str);
 }
@@ -589,7 +561,7 @@ ephy_editable_toolbar_set_merge (EphyEditableToolbar *t, EggMenuMerge *merge)
 
 	load_toolbar (t);
 	load_defaults (t);
-	do_merge (t, NULL);
+	do_merge (t);
 }
 
 static void
@@ -666,6 +638,7 @@ ephy_editable_toolbar_init (EphyEditableToolbar *t)
 	t->priv->filename = g_build_filename (ephy_dot_dir (), "toolbar.xml", NULL);
 	t->priv->editor = NULL;
 	t->priv->ui_id = 0;
+	t->priv->ui_dirty = FALSE;
 }
 
 static void
@@ -763,41 +736,21 @@ editor_get_dimensions (GtkWidget *window, GtkWidget *toolbar, GtkWidget *table,
 	*x = *x + (real_width/2 - *width/2);
 }
 
-static void
-drag_data_get_cb (GtkWidget *widget,
-                  GdkDragContext *context,
-                  GtkSelectionData *selection_data,
-                  guint info,
-                  guint32 time,
-                  EphyEditableToolbar *etoolbar)
-{
-	EggAction *action;
-	const char *target;
-
-	action = EGG_ACTION (g_object_get_data (G_OBJECT (widget), "egg-action"));
-	target = action->name;
-
-	LOG ("Drag data get %s", action->name);
-
-	gtk_selection_data_set (selection_data,
-				selection_data->target,
-				8, target, strlen (target));
-}
-
 static GList *
 build_to_drag_actions_list (EphyEditableToolbar *etoolbar)
 {
-	GList *l;
+	GNode *l;
 	GList *result = NULL;
 
-	for (l = etoolbar->priv->available_actions; l != NULL; l = l->next)
+	for (l = etoolbar->priv->available_actions->children; l != NULL; l = l->next)
 	{
-		EggAction *action;
+		ItemNode *item;
 
-		action = EGG_ACTION (l->data);
-		if (!is_action_in_toolbars (etoolbar, action))
+		item = (ItemNode *) (l->data);
+
+		if (!find_node_from_action (etoolbar, item->action))
 		{
-			result = g_list_append (result, action);
+			result = g_list_append (result, item);
 		}
 	}
 
@@ -851,7 +804,8 @@ setup_editor (EphyEditableToolbar *etoolbar)
 		GtkWidget *vbox;
 		GtkWidget *icon;
 		GtkWidget *label;
-		EggAction *action = EGG_ACTION (l->data);
+		ItemNode *node = (ItemNode *) (l->data);
+		EggAction *action = EGG_ACTION (node->action);
 
 		event_box = gtk_event_box_new ();
 		gtk_widget_show (event_box);
@@ -893,6 +847,33 @@ setup_editor (EphyEditableToolbar *etoolbar)
 	g_list_free (to_drag);
 }
 
+static gboolean
+button_press_cb (GtkWidget *w,
+		 GdkEvent *event,
+		 EphyEditableToolbar *etoolbar)
+{
+	GtkWidget *widget;
+	GtkWidget *toolitem;
+
+	widget = gtk_get_event_widget (event);
+	toolitem = gtk_widget_get_ancestor (widget, EGG_TYPE_TOOL_ITEM);
+
+	if (toolitem == NULL) return FALSE;
+
+	switch (event->type)
+	{
+		case GDK_BUTTON_PRESS:
+			gtk_drag_begin (toolitem,
+					gtk_target_list_new (drag_types, 1),
+					GDK_ACTION_MOVE, 1, event);
+			return TRUE;
+		default:
+			break;
+	}
+
+	return FALSE;
+}
+
 static void
 show_editor (EphyEditableToolbar *etoolbar, GtkWidget *toolbar)
 {
@@ -907,19 +888,22 @@ show_editor (EphyEditableToolbar *etoolbar, GtkWidget *toolbar)
 	gtk_window_move (GTK_WINDOW (editor), x, y);
 	gtk_widget_show (GTK_WIDGET (editor));
 	gtk_grab_add (editor);
+
+	g_signal_connect (editor, "button_press_event",
+			  G_CALLBACK (button_press_cb),
+			  etoolbar);
 }
 
 static void
 set_all_actions_sensitive (EphyEditableToolbar *etoolbar)
 {
-	GList *l;
+	GNode *l;
 
-	for (l = etoolbar->priv->available_actions; l != NULL; l = l->next)
+	for (l = etoolbar->priv->available_actions->children; l != NULL; l = l->next)
 	{
-		EggAction *action;
+		ItemNode *node = (ItemNode *) (l->data);
 
-		action = EGG_ACTION (l->data);
-		g_object_set (action, "sensitive", TRUE, NULL);
+		g_object_set (node->action, "sensitive", TRUE, NULL);
 	}
 }
 
@@ -929,7 +913,7 @@ ephy_editable_toolbar_edit (EphyEditableToolbar *etoolbar)
 	GtkWidget *last_toolbar;
 	char path[255];
 
-	sprintf (path, "/Toolbar%d", g_list_length (etoolbar->priv->toolbars) - 1);
+	sprintf (path, "/Toolbar%d", g_node_n_children (etoolbar->priv->toolbars) - 1);
 	last_toolbar = egg_menu_merge_get_widget (etoolbar->priv->merge, path);
 
 	set_all_actions_sensitive (etoolbar);

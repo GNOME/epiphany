@@ -1,3 +1,22 @@
+2003-01-28  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/widgets/ephy-editable-toolbar.c: (toolbar_node_new),
+	(item_node_new), (find_node_from_action), (add_action),
+	(parse_item_list), (parse_toolbars), (load_defaults),
+	(load_toolbar), (toolbar_list_to_xml), (toolbar_list_to_string),
+	(ui_update), (queue_ui_update), (drag_data_received_cb),
+	(drag_data_delete_cb), (drag_data_get_cb), (setup_toolbar_drag),
+	(do_merge), (ephy_editable_toolbar_set_merge),
+	(ephy_editable_toolbar_init), (build_to_drag_actions_list),
+	(setup_editor), (button_press_cb), (show_editor),
+	(set_all_actions_sensitive), (ephy_editable_toolbar_edit):
+	* src/ephy-window.c: (add_widget):
+	
+	Reimplement data using GNode, cleaner.
+	Give up on "autoapply" for now, gtk dnd doesnt really
+	like it :(.
+	Implement reordering.
+
 2003-01-27  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/ephy-embed.c: (ephy_embed_base_init):
