@@ -247,8 +247,6 @@ ephy_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
 
 	g_return_val_if_fail (IS_EPHY_SPINNER (widget), FALSE);
 
-	GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
-
 	spinner = EPHY_SPINNER (widget);
 	if (!spinner->details->ready) {
 		return FALSE;
@@ -517,7 +515,7 @@ ephy_spinner_size_request (GtkWidget *widget, GtkRequisition *requisition)
 
 	/* allocate some extra margin so we don't butt up against toolbar edges */
 	requisition->width = spinner_width + 4;
-	requisition->height = spinner_height;
+	requisition->height = spinner_height + 4;
 }
 
 static void
