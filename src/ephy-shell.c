@@ -432,9 +432,10 @@ ephy_shell_new_tab (EphyShell *shell,
 		previous_embed = ephy_tab_get_embed (previous_tab);
 	}
 
-	grouped = (flags & EPHY_NEW_TAB_OPEN_PAGE ||
-	           flags & EPHY_NEW_TAB_APPEND_GROUPED ||
-		   flags & EPHY_NEW_TAB_CLONE_PAGE);
+	grouped = ((flags & EPHY_NEW_TAB_OPEN_PAGE ||
+	            flags & EPHY_NEW_TAB_APPEND_GROUPED ||
+		    flags & EPHY_NEW_TAB_CLONE_PAGE)) &&
+		  !(flags & EPHY_NEW_TAB_APPEND_LAST);
 
 	if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_embed != NULL)
 	{

@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2002 Christophe Fergeau
+ *  Copyright (C) 2003 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,6 +15,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -673,7 +676,8 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 						  tab, url,
 						  EPHY_NEW_TAB_OPEN_PAGE |
 						  EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-						  EPHY_NEW_TAB_APPEND_LAST);
+						  (tab ? EPHY_NEW_TAB_APPEND_AFTER :
+							 EPHY_NEW_TAB_APPEND_LAST));
 		}
 
 		g_free (url);
