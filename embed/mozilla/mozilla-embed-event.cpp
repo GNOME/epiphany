@@ -35,9 +35,9 @@
 
 #define MOZILLA_EMBED_EVENT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED_EVENT, MozillaEmbedEventPrivate))
 
-struct MozillaEmbedEventPrivate
+struct _MozillaEmbedEventPrivate
 {
-	nsCOMPtr<nsIDOMEvent> dom_event;
+	nsIDOMEvent* dom_event;
 	GHashTable *props;
 };
 
@@ -94,6 +94,7 @@ mozilla_embed_event_new (gpointer dom_event)
 	event = MOZILLA_EMBED_EVENT (g_object_new (MOZILLA_TYPE_EMBED_EVENT, NULL));
 
 	event->priv->dom_event = static_cast<nsIDOMEvent*>(dom_event);
+	NS_IF_ADDREF (event->priv->dom_event);
 
 	return event;
 }
@@ -112,16 +113,16 @@ mozilla_embed_event_set_property (MozillaEmbedEvent *event,
 			     value);
 }
 
-static EphyEmbedEventType
-impl_get_type (EphyEmbedEvent *event)
-{
-	return ((MozillaEmbedEvent *) event)->type;
-}
-
 static EphyEmbedEventContext
 impl_get_context (EphyEmbedEvent *event)
 {
 	return (EphyEmbedEventContext) ((MozillaEmbedEvent *) event)->context;
+}
+
+static guint
+impl_get_button (EphyEmbedEvent *event)
+{
+	return ((MozillaEmbedEvent *) event)->button;
 }
 
 static guint
@@ -190,6 +191,7 @@ mozilla_embed_event_finalize (GObject *object)
 
 	g_hash_table_destroy (event->priv->props);
 
+	NS_IF_RELEASE (event->priv->dom_event);
 	event->priv->dom_event = nsnull;
 
 	LOG ("MozillaEmbedEvent %p finalised", object)
@@ -200,8 +202,8 @@ mozilla_embed_event_finalize (GObject *object)
 static void
 ephy_embed_event_iface_init (EphyEmbedEventIface *iface)
 {
-	iface->get_type = impl_get_type;
 	iface->get_context = impl_get_context;
+	iface->get_button = impl_get_button;
 	iface->get_modifier = impl_get_modifier;
 	iface->get_coordinates = impl_get_coordinates;
 	iface->get_property = impl_get_property;

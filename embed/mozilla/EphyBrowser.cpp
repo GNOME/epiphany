@@ -24,10 +24,13 @@
 
 #include "EphyBrowser.h"
 #include "EphyUtils.h"
+#include "EventContext.h"
 #include "ephy-embed.h"
 #include "ephy-string.h"
 #include "ephy-debug.h"
 #include "print-dialog.h"
+#include "mozilla-embed.h"
+#include "mozilla-embed-event.h"
 
 #include <gtkmozembed_internal.h>
 #include <unistd.h>
@@ -57,6 +60,8 @@
 #include "nsIDOMDocument.h"
 #include "nsIDOM3Document.h"
 #include "nsIDOMEvent.h"
+#include "nsIDOMKeyEvent.h"
+#include "nsIDOMMouseEvent.h"
 #include "nsIDOMNSEvent.h"
 #include "nsIDOMEventTarget.h"
 #include "nsIDOMPopupBlockedEvent.h"
@@ -96,6 +101,8 @@
 
 static PRUnichar DOMLinkAdded[] = { 'D', 'O', 'M', 'L', 'i', 'n', 'k',
 				    'A', 'd', 'd', 'e', 'd', '\0' };
+static PRUnichar ContextMenu[] = { 'c', 'o', 'n', 't', 'e', 'x', 't', 'm',
+				   'e', 'n', 'u', '\0' };
 static PRUnichar DOMPopupBlocked[] = { 'D', 'O', 'M', 'P', 'o', 'p',
 				       'u', 'p', 'B', 'l', 'o', 'c',
 				       'k', 'e', 'd', '\0' };
@@ -107,7 +114,7 @@ static PRUnichar DOMModalDialogClosed[] = { 'D', 'O', 'M', 'M', 'o', 'd', 'a',
 					    'l', 'D', 'i', 'a', 'l', 'o', 'g',
 					    'C', 'l', 'o', 's', 'e', 'd', '\0' };
 
-EphyEventListener::EphyEventListener(void)
+EphyEventListener::EphyEventListener()
 : mOwner(nsnull)
 {
 	LOG ("EphyEventListener ctor (%p)", this)
@@ -328,10 +335,104 @@ EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 	return NS_OK;
 }
 
+EphyContextMenuListener::EphyContextMenuListener()
+: mOwner(nsnull)
+{
+	LOG ("EphyContextMenuListener ctor (%p)", this)
+}
+
+EphyContextMenuListener::~EphyContextMenuListener()
+{
+	LOG ("EphyContextMenuListener dtor (%p)", this)
+}
+
+NS_IMPL_ISUPPORTS1(EphyContextMenuListener, nsIDOMContextMenuListener)
+
+nsresult
+EphyContextMenuListener::Init(EphyBrowser *aOwner)
+{
+	mOwner = aOwner;
+	return NS_OK;
+}
+
+NS_IMETHODIMP
+EphyContextMenuListener::ContextMenu (nsIDOMEvent* aDOMEvent)
+{
+	nsCOMPtr<nsIDOMMouseEvent> mouseEvent = do_QueryInterface(aDOMEvent);
+	NS_ENSURE_TRUE (mouseEvent, NS_ERROR_FAILURE);
+
+	MozillaEmbedEvent *info;
+	info = mozilla_embed_event_new (NS_STATIC_CAST (gpointer, aDOMEvent));
+
+	nsresult rv;
+	EventContext context;
+	context.Init (mOwner);
+        rv = context.GetMouseEventInfo (mouseEvent, MOZILLA_EMBED_EVENT (info));
+
+	/* Don't do any magic handling if we can't actually show the context
+	 * menu, this can happen for XUL pages (e.g. about:config)
+	 */
+	if (NS_FAILED (rv))
+	{
+		g_object_unref (info);
+		return NS_OK;   
+	}
+
+	if (info->button == 0)
+	{
+		/* Translate relative coordinates to absolute values, and try
+		 * to avoid covering links by adding a little offset
+		 */
+		int x, y;
+		gdk_window_get_origin (GTK_WIDGET (mOwner->mEmbed)->window, &x, &y);
+		info->x += x + 6;       
+		info->y += y + 6;
+
+		// Set the keycode to something sensible
+		info->keycode = nsIDOMKeyEvent::DOM_VK_CONTEXT_MENU;
+	}
+
+	if (info->modifier == GDK_CONTROL_MASK)
+	{
+		info->context = EPHY_EMBED_CONTEXT_DOCUMENT;
+	}
+
+	gboolean retval = FALSE;
+	nsCOMPtr<nsIDOMDocument> domDoc;
+	rv = context.GetTargetDocument (getter_AddRefs(domDoc));
+	if (NS_SUCCEEDED(rv))
+	{
+		mOwner->PushTargetDocument (domDoc);
+
+		g_signal_emit_by_name (mOwner->mEmbed, "ge_context_menu",
+				       info, &retval);
+
+		mOwner->PopTargetDocument ();
+	}
+
+	/* We handled the event, block javascript calls */
+	if (retval)
+	{
+		aDOMEvent->PreventDefault();
+		aDOMEvent->StopPropagation();
+	}
+	
+	g_object_unref (info);
+
+	return NS_OK;
+}
+
+NS_IMETHODIMP
+EphyContextMenuListener::HandleEvent (nsIDOMEvent* aDOMEvent)
+{
+	return NS_ERROR_NOT_IMPLEMENTED;
+}
+
 EphyBrowser::EphyBrowser ()
 : mFaviconEventListener(nsnull)
 , mPopupBlockEventListener(nsnull)
 , mModalAlertListener(nsnull)
+, mContextMenuListener(nsnull)
 , mInitialized(PR_FALSE)
 {
 	LOG ("EphyBrowser ctor (%p)", this)
@@ -377,6 +478,12 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 	if (!mModalAlertListener) return NS_ERROR_OUT_OF_MEMORY;
 
 	rv = mModalAlertListener->Init (this);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+	mContextMenuListener = new EphyContextMenuListener();
+	if (!mContextMenuListener) return NS_ERROR_OUT_OF_MEMORY;
+
+	rv = mContextMenuListener->Init (this);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
  	rv = GetListener();
@@ -431,6 +538,8 @@ EphyBrowser::AttachListeners(void)
 					     mModalAlertListener, PR_TRUE);
 	rv |= mEventTarget->AddEventListener(nsEmbedString(DOMModalDialogClosed),
 					     mModalAlertListener, PR_TRUE);
+	rv |= mEventTarget->AddEventListener(nsEmbedString(ContextMenu),
+					     mContextMenuListener, PR_TRUE /* capture */);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	return NS_OK;
@@ -450,6 +559,8 @@ EphyBrowser::DetachListeners(void)
 						mModalAlertListener, PR_TRUE);
 	rv |= mEventTarget->RemoveEventListener(nsEmbedString(DOMModalDialogClosed),
 						mModalAlertListener, PR_TRUE);
+	rv |= mEventTarget->RemoveEventListener(nsEmbedString(ContextMenu),
+					        mContextMenuListener, PR_TRUE /* capture */);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	return NS_OK;

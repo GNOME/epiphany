@@ -1521,9 +1521,8 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 			     EphyEmbedEvent *event,
 			     EphyTab *tab)
 {
-	EphyEmbedEventType type;
 	EphyEmbedEventContext context;
-	guint modifier;
+	guint button, modifier;
 	gboolean handled = TRUE;
 	gboolean with_control, with_shift, is_left_click, is_middle_click;
 	gboolean is_link, is_image, is_middle_clickable;
@@ -1532,17 +1531,17 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 
 	g_return_val_if_fail (EPHY_IS_EMBED_EVENT(event), FALSE);
 
-	type = ephy_embed_event_get_event_type (event);
+	button = ephy_embed_event_get_button (event);
 	context = ephy_embed_event_get_context (event);
 	modifier = ephy_embed_event_get_modifier (event);
 
-	LOG ("ephy_tab_dom_mouse_click_cb: type %d, context %x, modifier %x",
-	     type, context, modifier)
+	LOG ("ephy_tab_dom_mouse_click_cb: button %d, context %x, modifier %x",
+	     button, context, modifier)
 
 	with_control = (modifier & GDK_CONTROL_MASK) != 0;
 	with_shift = (modifier & GDK_SHIFT_MASK) != 0;
-	is_left_click = (type == EPHY_EMBED_EVENT_MOUSE_BUTTON1);
-	is_middle_click = (type == EPHY_EMBED_EVENT_MOUSE_BUTTON2);
+	is_left_click = (button == 1);
+	is_middle_click = (button == 2);
 
 	middle_click_opens =
 		eel_gconf_get_boolean (CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL) &&

@@ -572,38 +572,81 @@ nsresult EventContext::GetCSSBackground (nsIDOMNode *node, nsAString& url)
 	return NS_OK;
 }
 
+nsresult EventContext::GetTargetCoords (nsIDOMEventTarget *aTarget, PRInt32 *aX, PRInt32 *aY)
+{
+	/* Calculate the node coordinates relative to the widget origin */
+	nsCOMPtr<nsIDOMNSHTMLElement> elem (do_QueryInterface(aTarget));
+
+	PRInt32 x = 0, y = 0;
+	while (elem)
+	{
+		PRInt32 val;
+		elem->GetOffsetTop(&val);	y += val;
+		elem->GetScrollTop(&val);	y -= val;
+		elem->GetOffsetLeft(&val);	x += val;
+		elem->GetScrollLeft(&val);	x -= val;
+
+		nsCOMPtr<nsIDOMElement> parent;
+		elem->GetOffsetParent (getter_AddRefs (parent));
+		elem = do_QueryInterface(parent);
+	}
+
+	*aX = x;
+	*aY = y;
+
+	return NS_OK;
+}
+
 nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, MozillaEmbedEvent *info)
 {
 	/* FIXME: casting 32-bit guint* to PRUint16* below will break on big-endian */
-	PRUint16 btn;
+	PRUint16 btn = 1729;
 	aMouseEvent->GetButton (&btn);
 
 	switch (btn)
 	{
+		/* mozilla's button counting is one-off from gtk+'s */
 		case 0:
-			info->type = EPHY_EMBED_EVENT_MOUSE_BUTTON1;
-		break;
+			info->button = 1;
+			break;
 		case 1:
-			info->type = EPHY_EMBED_EVENT_MOUSE_BUTTON2;
-		break;
+			info->button = 2;
+			break;
 		case 2:
-			info->type = EPHY_EMBED_EVENT_MOUSE_BUTTON3;
-		break;
+			info->button = 3;
+			break;
+
+#ifdef MOZ_BROKEN_CTX_MENU_EVENT
+		case 1729:
+			/* This only appears to happen when getting a mouse context menu
+			 * signal, so map it to button 3 (right mouse button)
+			 * http://bugzilla.mozilla.org/show_bug.cgi?id=258193 */
+			info->button = 3;
+			break;
+#endif
 
 		case (PRUint16) -1:
 			/* when the user submits a form with Return, mozilla synthesises
 			 * a _mouse_ click event with btn=65535 (-1).
 			 */
-			info->type = EPHY_EMBED_EVENT_KEY;
-			break;
-
 		default:
-			g_warning ("Unknown mouse button");
+			info->button = 0;
+			break;
 	}
 
-	/* OTOH, casting only between (un)signedness is safe */
-	aMouseEvent->GetScreenX ((PRInt32*)&info->x);
-	aMouseEvent->GetScreenY ((PRInt32*)&info->y);
+	if (info->button != 0)
+	{
+		/* OTOH, casting only between (un)signedness is safe */
+		aMouseEvent->GetScreenX ((PRInt32*)&info->x);
+		aMouseEvent->GetScreenY ((PRInt32*)&info->y);
+	}
+	else /* this is really a keyboard event */
+	{
+		nsCOMPtr<nsIDOMEventTarget> eventTarget;
+		aMouseEvent->GetTarget (getter_AddRefs (eventTarget));
+
+		GetTargetCoords (eventTarget, (PRInt32*)&info->x, (PRInt32*)&info->y);
+	}
 
 	/* be sure we are not clicking on the scroolbars */
 
@@ -661,10 +704,9 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, Mozilla
 
 nsresult EventContext::GetKeyEventInfo (nsIDOMKeyEvent *aKeyEvent, MozillaEmbedEvent *info)
 {
+	info->button = 0;
+
 	nsresult rv;
-
-	info->type = EPHY_EMBED_EVENT_KEY;
-
 	PRUint32 keyCode;
 	rv = aKeyEvent->GetKeyCode(&keyCode);
 	if (NS_FAILED(rv)) return rv;
@@ -674,25 +716,7 @@ nsresult EventContext::GetKeyEventInfo (nsIDOMKeyEvent *aKeyEvent, MozillaEmbedE
 	rv = aKeyEvent->GetTarget(getter_AddRefs(target));
 	if (NS_FAILED(rv) || !target) return NS_ERROR_FAILURE;
 
-	/* Calculate the node coordinates relative to the widget origin */
-	nsCOMPtr<nsIDOMNSHTMLElement> elem = do_QueryInterface(target, &rv);
-	if (NS_FAILED(rv)) return rv;
-
-	PRInt32 x = 0, y = 0;
-	while (elem)
-	{
-		PRInt32 val;
-		elem->GetOffsetTop(&val);	y += val;
-		elem->GetScrollTop(&val);	y -= val;
-		elem->GetOffsetLeft(&val);	x += val;
-		elem->GetScrollLeft(&val);	x -= val;
-
-		nsCOMPtr<nsIDOMElement> parent;
-		elem->GetOffsetParent(getter_AddRefs(parent));
-		elem = do_QueryInterface(parent, &rv);
-	}
-	info->x = x;
-	info->y = y;
+	GetTargetCoords (target, (PRInt32*)&info->x, (PRInt32*)&info->y);
 
 	/* Context */
 	rv = GetEventContext (target, info);

@@ -49,21 +49,13 @@ typedef enum
 	EPHY_EMBED_CONTEXT_EMAIL_LINK = 1 << 8
 } EphyEmbedEventContext;
 
-typedef enum
-{
-	EPHY_EMBED_EVENT_MOUSE_BUTTON1,
-	EPHY_EMBED_EVENT_MOUSE_BUTTON2,
-	EPHY_EMBED_EVENT_MOUSE_BUTTON3,
-	EPHY_EMBED_EVENT_KEY
-} EphyEmbedEventType;
-
 struct _EphyEmbedEventIface
 {
 	GTypeInterface parent_iface;
 
 	/* Methods */
-	EphyEmbedEventType	(* get_type)		(EphyEmbedEvent *event);
 	EphyEmbedEventContext	(* get_context)		(EphyEmbedEvent *event);
+	guint			(* get_button)		(EphyEmbedEvent *event);
 	guint			(* get_modifier)	(EphyEmbedEvent *event);
 	void			(* get_coordinates)	(EphyEmbedEvent *event,
 							 guint *x,
@@ -82,9 +74,9 @@ GType			ephy_embed_event_context_get_type	(void);
 
 GType			ephy_embed_event_type_get_type 		(void);
 
-EphyEmbedEventType	ephy_embed_event_get_event_type	(EphyEmbedEvent *event);
-
 EphyEmbedEventContext	ephy_embed_event_get_context	(EphyEmbedEvent *event);
+
+guint			ephy_embed_event_get_button	(EphyEmbedEvent *event);
 
 guint			ephy_embed_event_get_modifier	(EphyEmbedEvent *event);
 

@@ -57,9 +57,6 @@ static void mozilla_embed_net_state_all_cb	(GtkMozEmbed *embed,
 						 gint state,
 						 guint status,
 						 MozillaEmbed *membed);
-static gint mozilla_embed_dom_key_down_cb	(GtkMozEmbed *embed,
-						 gpointer dom_event,
-						 MozillaEmbed *membed);
 static gint mozilla_embed_dom_mouse_click_cb	(GtkMozEmbed *embed,
 						 gpointer dom_event,
 						 MozillaEmbed *membed);
@@ -278,9 +275,6 @@ mozilla_embed_init (MozillaEmbed *embed)
 				 embed, (GConnectFlags) 0);
 	g_signal_connect_object (G_OBJECT (embed), "security_change",
 				 G_CALLBACK (mozilla_embed_security_change_cb),
-				 embed, (GConnectFlags) 0);
-	g_signal_connect_object (G_OBJECT (embed), "dom_key_down",
-				 G_CALLBACK (mozilla_embed_dom_key_down_cb),
 				 embed, (GConnectFlags) 0);
 }
 
@@ -871,71 +865,6 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 }
 
 static gint
-mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
-		               MozillaEmbed *membed)
-{
-	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
-
-	if (dom_event == NULL)
-	{
-		g_warning ("mozilla_embed_dom_key_down_cb: domevent NULL");
-		return FALSE;
-	}
-
-	nsCOMPtr<nsIDOMKeyEvent> ev = static_cast<nsIDOMKeyEvent*>(dom_event);
-	NS_ENSURE_TRUE (ev, FALSE);
-	nsCOMPtr<nsIDOMEvent> dev = do_QueryInterface (ev);
-	NS_ENSURE_TRUE (dev, FALSE);
-
-	MozillaEmbedEvent *info;
-	info = mozilla_embed_event_new (NS_STATIC_CAST (gpointer, dev));
-
-	gboolean ret = FALSE;
-
-	nsresult rv;
-	EventContext ctx;
-	ctx.Init (mpriv->browser);
-	rv = ctx.GetKeyEventInfo (ev, info);
-	if (NS_FAILED (rv)) return ret;
-
-	if ((info->keycode == nsIDOMKeyEvent::DOM_VK_F10 &&
-	    (info->modifier == GDK_SHIFT_MASK ||
-	     info->modifier == GDK_CONTROL_MASK))
-	    || (info->keycode == nsIDOMKeyEvent::DOM_VK_CONTEXT_MENU &&
-		!info->modifier)
-	   )
-	{
-		/* Translate relative coordinates to absolute values, and try
-		   to avoid covering links by adding a little offset. */
-
-		int x, y;
-		gdk_window_get_origin (GTK_WIDGET(membed)->window, &x, &y);
-		info->x += x + 6;	
-		info->y += y + 6;
-
-		if (info->modifier == GDK_CONTROL_MASK)
-		{
-			info->context = EPHY_EMBED_CONTEXT_DOCUMENT;	
-		}
-
-		nsCOMPtr<nsIDOMDocument> doc;
-		rv = ctx.GetTargetDocument (getter_AddRefs(doc));
-		if (NS_SUCCEEDED(rv))
-		{
-			rv = mpriv->browser->PushTargetDocument (doc);
-			if (NS_SUCCEEDED(rv))
-			{
-				g_signal_emit_by_name (membed, "ge_context_menu", info, &ret);
-				mpriv->browser->PopTargetDocument ();
-			}
-		}
-	}
-
-	g_object_unref (info);
-	return ret;
-}
-
-static gint
 mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event, 
 				  MozillaEmbed *membed)
 {
@@ -991,7 +920,6 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 	EventContext event_context;
 	gint return_value = FALSE;
 	nsresult rv;
-	EphyEmbedEventType type;
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
 	if (dom_event == NULL)
@@ -1011,28 +939,16 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
         rv = event_context.GetMouseEventInfo (ev, MOZILLA_EMBED_EVENT (info));
 	if (NS_FAILED (rv)) return FALSE;
 
-	type = ephy_embed_event_get_event_type ((EphyEmbedEvent *) info);
-		
 	nsCOMPtr<nsIDOMDocument> domDoc;
 	rv = event_context.GetTargetDocument (getter_AddRefs(domDoc));
 	if (NS_SUCCEEDED (rv))
 	{
-		rv = mpriv->browser->PushTargetDocument (domDoc);
+		mpriv->browser->PushTargetDocument (domDoc);
 
-		if (NS_SUCCEEDED (rv))
-		{
-			g_signal_emit_by_name (membed, "ge_dom_mouse_down", 
-					       info, &return_value); 
+		g_signal_emit_by_name (membed, "ge_dom_mouse_down", 
+				       info, &return_value); 
 
-			if (return_value == FALSE &&
-			    type == EPHY_EMBED_EVENT_MOUSE_BUTTON3)
-			{
-				g_signal_emit_by_name (membed, "ge_context_menu", 
-						       info, &return_value);
-			}
-
-			mpriv->browser->PopTargetDocument ();
-		}
+		mpriv->browser->PopTargetDocument ();
 	}
 
 	g_object_unref (info);

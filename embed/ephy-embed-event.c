@@ -59,18 +59,18 @@ ephy_embed_event_base_init (gpointer g_class)
 	initialised = TRUE;
 }
 
-EphyEmbedEventType
-ephy_embed_event_get_event_type (EphyEmbedEvent *event)
-{
-	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
-	return iface->get_type (event);
-}
-
 EphyEmbedEventContext
 ephy_embed_event_get_context (EphyEmbedEvent *event)
 {
 	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
 	return iface->get_context (event);
+}
+
+guint
+ephy_embed_event_get_button (EphyEmbedEvent *event)
+{
+	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
+	return iface->get_button (event);
 }
 
 guint

@@ -36,16 +36,16 @@ G_BEGIN_DECLS
 #define MOZILLA_IS_EMBED_EVENT_CLASS(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), MOZILLA_TYPE_EMBED_EVENT))
 #define MOZILLA_EMBED_EVENT_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), MOZILLA_TYPE_EMBED_EVENT, MozillaEmbedEventClass))
 
-typedef struct MozillaEmbedEventClass	MozillaEmbedEventClass;
-typedef struct MozillaEmbedEvent	MozillaEmbedEvent;
-typedef struct MozillaEmbedEventPrivate	MozillaEmbedEventPrivate;
+typedef struct _MozillaEmbedEventClass		MozillaEmbedEventClass;
+typedef struct _MozillaEmbedEvent		MozillaEmbedEvent;
+typedef struct _MozillaEmbedEventPrivate	MozillaEmbedEventPrivate;
 
-struct MozillaEmbedEventClass
+struct _MozillaEmbedEventClass
 {
         GObjectClass parent_class;
 };
 
-struct MozillaEmbedEvent
+struct _MozillaEmbedEvent
 {
         GObject parent;
 
@@ -53,7 +53,7 @@ struct MozillaEmbedEvent
         MozillaEmbedEventPrivate *priv;
 
 	/*< private >*/ /* public to the embed implementation */
-	EphyEmbedEventType type;
+	guint button;
 	guint context;
 	guint modifier;
 	guint x;

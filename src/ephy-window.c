@@ -1715,7 +1715,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	const GValue *value;
 	gboolean framed, has_background, can_open_in_new;
 	GtkWidget *widget;
-	EphyEmbedEventType type;
+	guint button;
 
 	/* Do not show the menu in print preview mode */
 	if (window->priv->ppv_mode)
@@ -1796,8 +1796,8 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	g_signal_connect (widget, "hide",
 			  G_CALLBACK (hide_embed_popup_cb), window);
 
-	type = ephy_embed_event_get_event_type (event);
-	if (type == EPHY_EMBED_EVENT_KEY)
+	button = ephy_embed_event_get_button (event);
+	if (button == 0)
 	{
 		gtk_menu_popup (GTK_MENU (widget), NULL, NULL,
 				popup_menu_at_coords, window, 0,
@@ -1807,7 +1807,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	else
 	{
 		gtk_menu_popup (GTK_MENU (widget), NULL, NULL,
-				NULL, NULL, 2,
+				NULL, NULL, button,
 				gtk_get_current_event_time ());
 	}
 }
@@ -1819,17 +1819,13 @@ tab_context_menu_cb (EphyEmbed *embed,
 {
 	EphyTab *tab;
 
-	g_return_val_if_fail (EPHY_IS_WINDOW (window), FALSE);
-	g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
-	g_return_val_if_fail (EPHY_IS_EMBED_EVENT(event), FALSE);
-
 	tab = ephy_tab_for_embed (embed);
 	g_return_val_if_fail (EPHY_IS_TAB (tab), FALSE);
 	g_return_val_if_fail (window->priv->active_tab == tab, FALSE);
 
 	show_embed_popup (window, tab, event);
 
-	return FALSE;
+	return TRUE;
 }
 
 static void
@@ -1963,7 +1959,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		embed = ephy_tab_get_embed (new_tab);
 		g_signal_connect_object (embed, "ge_context_menu",
 					 G_CALLBACK (tab_context_menu_cb),
-					 window, 0);
+					 window, G_CONNECT_AFTER);
 
 		action = GTK_TOGGLE_ACTION (ephy_tab_get_action (new_tab));
 		gtk_toggle_action_set_active (action, TRUE);

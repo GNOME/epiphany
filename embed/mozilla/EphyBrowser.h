@@ -29,6 +29,7 @@
 #include <gtkmozembed.h>
 #include <nsCOMPtr.h>
 #include <nsIDOMEventListener.h>
+#include <nsIDOMContextMenuListener.h>
 #include <nsIDOMEventTarget.h>
 #include <nsIWebNavigation.h>
 #include <nsISHistory.h>
@@ -84,12 +85,32 @@ public:
 	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
 };
 
+class EphyContextMenuListener : public nsIDOMContextMenuListener
+{
+public:
+        NS_DECL_ISUPPORTS
+
+        EphyContextMenuListener();   
+        virtual ~EphyContextMenuListener();
+
+        nsresult Init(EphyBrowser *aOwner);
+
+	// nsIDOMContextMenuListener
+
+        NS_IMETHOD ContextMenu(nsIDOMEvent *aEvent);
+        NS_IMETHOD HandleEvent(nsIDOMEvent *aEvent);
+
+protected:
+        EphyBrowser *mOwner;
+};
+
 class EphyBrowser
 {
 friend class EphyEventListener;
 friend class EphyFaviconEventListener;
 friend class EphyPopupBlockEventListener;
 friend class EphyModalAlertEventListener;
+friend class EphyContextMenuListener;
 public:
 	EphyBrowser();
 	~EphyBrowser();
@@ -159,6 +180,7 @@ private:
 	EphyFaviconEventListener *mFaviconEventListener;
 	EphyPopupBlockEventListener *mPopupBlockEventListener;
 	EphyModalAlertEventListener *mModalAlertListener;
+	EphyContextMenuListener *mContextMenuListener;
 	PRBool mInitialized;
 #ifdef HAVE_MOZILLA_PSM
 	nsCOMPtr<nsISecureBrowserUI> mSecurityInfo;

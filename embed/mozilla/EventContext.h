@@ -26,6 +26,7 @@
 #include "ephy-embed.h"
 #include "mozilla-embed-event.h"
 
+#include <nsIDOMEventTarget.h>
 #include <nsIDOMMouseEvent.h>
 #include <nsIDOMKeyEvent.h>
 #include <nsIDOMEvent.h>
@@ -51,6 +52,7 @@ private:
 	MozillaEmbedEvent *mEmbedEvent;
 	nsCOMPtr<nsIDOMDocument> mDOMDocument;
 
+	nsresult GetTargetCoords    (nsIDOMEventTarget *aTarget, PRInt32 *aX, PRInt32 *aY);
 	nsresult GatherTextUnder    (nsIDOMNode* aNode, nsAString& aResult);
 	nsresult ResolveBaseURL     (const nsAString &relurl, nsACString &url);
 	nsresult Unescape 	    (const nsACString &aEscaped, nsACString &aUnescaped);

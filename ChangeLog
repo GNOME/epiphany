@@ -1,5 +1,39 @@
 2005-01-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* configure.ac:
+
+	Check for broken context event button.
+
+	* embed/ephy-embed-event.c: (ephy_embed_event_get_context),
+	(ephy_embed_event_get_button):
+	* embed/ephy-embed-event.h:
+	* embed/mozilla/mozilla-embed-event.cpp:
+	* embed/mozilla/mozilla-embed-event.h:
+
+	Change get_type to get_button, and don't store a nsCOMPtr in .priv.
+
+        * src/ephy-tab.c: (ephy_tab_dom_mouse_click_cb):
+        * src/ephy-window.c: (show_embed_popup), (tab_context_menu_cb),
+        (ephy_window_set_active_tab):
+	
+	Adapted for above change.
+
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+
+	Attach listener to oncontextmenu event.
+
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/EventContext.h:
+
+	Get event target coordinates also for 'mouse' context events.
+
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Remove key-down handler, and context code from mouse-down handler.
+
+2005-01-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* data/default-prefs-common.js:
 	* data/default-prefs-toolkit.js:
 

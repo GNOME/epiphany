@@ -429,6 +429,23 @@ fi
 
 AC_MSG_RESULT([$broken_reload])
 
+dnl check for broken contextmenu event
+dnl This is fixed since 1.8a4
+dnl https://bugzilla.mozilla.org/show_bug.cgi?id=258193
+
+AC_MSG_CHECKING([for broken context menu event])
+
+if $PKG_CONFIG --atleast-version 1.8 $MOZILLA-gtkmozembed; then
+	broken_context_event=no
+else
+	broken_context_event="couldn't autodetect, assuming yes"
+	AC_DEFINE([MOZ_BROKEN_CTX_MENU_EVENT],[1],[Define if mozilla has a broken context menu event])
+fi
+
+AC_MSG_RESULT([$broken_context_event])
+
+dnl changed location in 1.8a6
+
 AC_MSG_CHECKING([for mozilla security compoment])
 
 AC_COMPILE_IFELSE(
