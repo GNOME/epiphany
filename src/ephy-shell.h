@@ -108,8 +108,6 @@ gboolean	ephy_shell_startup			(EphyShell *shell,
 							 const char *string_arg,
 							 GError **error);
 
-EphyWindow     *ephy_shell_get_active_window		(EphyShell *shell);
-
 EphyTab	       *ephy_shell_new_tab			(EphyShell *shell,
 							 EphyWindow *parent_window,
 							 EphyTab *previous_tab,
