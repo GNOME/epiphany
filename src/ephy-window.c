@@ -69,6 +69,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "Go", NULL, N_("_Go") },
 	{ "Tabs", NULL, N_("_Tabs") },
 	{ "Help", NULL, N_("_Help") },
+	{ "PopupMenu", NULL, NULL },
 
 	/* File menu */
 	{ "FileNewWindow", GTK_STOCK_NEW, N_("_New Window"), "<control>N",
@@ -406,65 +407,6 @@ add_widget (GtkUIManager *merge, GtkWidget *widget, EphyWindow *window)
 }
 
 static void
-menu_activate_cb (GtkWidget *widget,
-	          EphyWindow *window)
-{
-/* FIXME we need to be notified by mozilla on selection
-   changes to do this properly */
-#if 0
-	gboolean cut, copy, paste, select_all;
-	GtkActionGroup *action_group;
-	GtkAction *action;
-	GtkWidget *focus_widget;
-	EphyEmbed *embed;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	focus_widget = gtk_window_get_focus (GTK_WINDOW (window));
-
-
-	if (GTK_IS_EDITABLE (focus_widget))
-	{
-		gboolean has_selection;
-
-		has_selection = gtk_editable_get_selection_bounds
-			(GTK_EDITABLE (focus_widget), NULL, NULL);
-		paste = gtk_clipboard_wait_is_text_available
-			(gtk_clipboard_get (GDK_SELECTION_CLIPBOARD));
-		select_all = TRUE;
-		cut = has_selection;
-		copy = has_selection;
-	}
-	else if (focus_widget == GTK_WIDGET (embed) ||
-		 gtk_widget_get_ancestor (GTK_WIDGET (embed), EPHY_EMBED_TYPE))
-	{
-		paste = (ephy_embed_can_paste (embed) == G_OK);
-		cut = (ephy_embed_selection_can_cut (embed) == G_OK);
-		copy = (ephy_embed_selection_can_copy (embed) == G_OK);
-		select_all = TRUE;
-	}
-	else
-	{
-		paste = FALSE;
-		cut = FALSE;
-		copy = FALSE;
-		select_all = FALSE;
-	}
-
-	action_group = window->priv->action_group;
-	action = gtk_action_group_get_action (action_group, "EditCut");
-	g_object_set (action, "sensitive", cut, NULL);
-	action = gtk_action_group_get_action (action_group, "EditCopy");
-	g_object_set (action, "sensitive", copy, NULL);
-	action = gtk_action_group_get_action (action_group, "EditPaste");
-	g_object_set (action, "sensitive", paste, NULL);
-	action = gtk_action_group_get_action (action_group, "EditSelectAll");
-	g_object_set (action, "sensitive", select_all, NULL);
-#endif
-}
-
-static void
 update_exit_fullscreen_popup_position (EphyWindow *window)
 {
 	GdkRectangle screen_rect;
@@ -514,6 +456,7 @@ update_chromes_visibility (EphyWindow *window, EmbedChromeMask flags)
 	toolbar_set_visibility (window->priv->toolbar,
 				flags & EMBED_CHROME_TOOLBARON,
 				flags & EMBED_CHROME_BOOKMARKSBARON);
+
 
 	if (!fullscreen && flags & EMBED_CHROME_STATUSBARON)
 	{
@@ -640,7 +583,6 @@ setup_window (EphyWindow *window)
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	GtkUIManager *merge;
-	GtkWidget *menu;
 
 	window->priv->main_vbox = gtk_vbox_new (FALSE, 0);
 	gtk_widget_show (window->priv->main_vbox);
@@ -692,17 +634,12 @@ setup_window (EphyWindow *window)
 		(merge, ephy_file ("epiphany-ui.xml"), NULL);
 	gtk_window_add_accel_group (GTK_WINDOW (window),
 				    gtk_ui_manager_get_accel_group (merge));
-/*FIXME	gtk_ui_manager_ensure_update (merge);*/
-
-	menu = gtk_ui_manager_get_widget (merge, "/menu/EditMenu");
-	g_signal_connect (menu, "activate", G_CALLBACK (menu_activate_cb), window);
 
 	window->priv->toolbar = toolbar_new (window);
 	gtk_widget_show (GTK_WIDGET (window->priv->toolbar));
 	gtk_box_pack_start (GTK_BOX (window->priv->menu_dock),
 			    GTK_WIDGET (window->priv->toolbar),
 			    FALSE, FALSE, 0);
-
 	g_signal_connect (window,
 			  "selection-received",
 			  G_CALLBACK (ephy_window_selection_received_cb),
