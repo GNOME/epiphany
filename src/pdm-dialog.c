@@ -803,7 +803,7 @@ static void
 pdm_dialog_init (PdmDialog *dialog)
 {
 	PdmActionInfo *cookies, *passwords;
-	GtkWidget *notebook;
+	GtkWidget *notebook, *window;
 
 	dialog->priv = EPHY_PDM_DIALOG_GET_PRIVATE (dialog);
 
@@ -815,6 +815,10 @@ pdm_dialog_init (PdmDialog *dialog)
 			       ephy_file ("epiphany.glade"),
 			       "pdm_dialog",
 			       NULL);
+
+	window = ephy_dialog_get_control (EPHY_DIALOG (dialog),
+					  properties[PROP_WINDOW].id);
+	gtk_window_set_icon_name (GTK_WINDOW (window), "web-browser");
 
 	/**
 	 * Group all Properties and Remove buttons in the same size group to
