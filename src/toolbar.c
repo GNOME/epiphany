@@ -141,9 +141,12 @@ update_location_editable (Toolbar *t)
 		char *address;
 
 		embed = ephy_window_get_active_embed (t->priv->window);
-		address = ephy_embed_get_location (embed, TRUE);
-		toolbar_set_location (t, address);
-		g_free (address);
+		if (EPHY_IS_EMBED (embed))
+		{
+			address = ephy_embed_get_location (embed, TRUE);
+			toolbar_set_location (t, address);
+			g_free (address);
+		}
 	}
 
 	action_group = t->priv->action_group;
