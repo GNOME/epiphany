@@ -28,11 +28,13 @@
 #include "ephy-debug.h"
 
 #include <nsString.h>
-#include <nsICookie2.h>
 #include <nsIURI.h>
 #include <nsIPermissionManager.h>
 #include <nsICookieManager.h>
 #include <nsIServiceManager.h>
+#if MOZILLA_SNAPSHOT > 9
+#include <nsICookie2.h>
+#endif
 
 NS_IMPL_ISUPPORTS1(EphySingle, nsIObserver)
 
