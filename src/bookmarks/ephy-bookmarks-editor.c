@@ -597,6 +597,8 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	GList *selected;
 	GtkWidget *focus_widget;
 
+	LOG ("Update menu sensitivity")
+
 	bmk_focus = ephy_node_view_is_target
 		(EPHY_NODE_VIEW (editor->priv->bm_view));
 	key_focus = ephy_node_view_is_target
@@ -1037,6 +1039,12 @@ provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 }
 
 static void
+view_selection_changed_cb (GtkWidget *view, EphyBookmarksEditor *editor)
+{
+	ephy_bookmarks_editor_update_menu (editor);
+}
+
+static void
 ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 {
 	GtkTreeSelection *selection;
@@ -1125,6 +1133,10 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			                 n_topic_drag_dest_types);
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (key_view));
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
+	g_signal_connect (G_OBJECT (selection),
+			  "changed",
+			  G_CALLBACK (view_selection_changed_cb),
+			  editor);
 	ephy_node_view_add_column (EPHY_NODE_VIEW (key_view), _("Topics"),
 				   G_TYPE_STRING,
 				   EPHY_NODE_KEYWORD_PROP_NAME,
@@ -1202,6 +1214,11 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	g_signal_connect (G_OBJECT (bm_view),
 			  "show_popup",
 			  G_CALLBACK (ephy_bookmarks_editor_show_popup_cb),
+			  editor);
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (bm_view));
+	g_signal_connect (G_OBJECT (selection),
+			  "changed",
+			  G_CALLBACK (view_selection_changed_cb),
 			  editor);
 
 	selected_id_str = eel_gconf_get_string (CONF_BOOKMARKS_SELECTED_NODE);

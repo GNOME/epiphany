@@ -1,5 +1,19 @@
 2003-04-27  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_update_menu), (view_selection_changed_cb),
+	(ephy_bookmarks_editor_construct):
+
+	Update sensitivity on selection changes. Thanks xan to find
+	this one.
+
+	* src/toolbar.c: (remove_action), (topic_remove_cb),
+	(bookmark_remove_cb):
+
+	Get back bookmarks/toolbar sync on bookmark removal.
+
+2003-04-27  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/bookmarks/ephy-bookmarks-editor.c: (view_focus_cb),
 	(add_focus_monitor), (remove_focus_monitor),
 	(ephy_bookmarks_editor_show_popup_cb),
