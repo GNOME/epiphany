@@ -359,6 +359,7 @@ ephy_favicon_cache_finalize (GObject *object)
 	g_free (cache->priv->directory);
 	g_hash_table_destroy (cache->priv->icons_hash);
 	g_static_rw_lock_free (cache->priv->icons_hash_lock);
+	g_free (cache->priv->icons_hash_lock);
 	g_hash_table_destroy (cache->priv->downloads_hash);
 
 	g_object_unref (cache->priv->db);
