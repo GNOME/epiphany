@@ -326,16 +326,8 @@ static guint ephy_popups_n_entries = G_N_ELEMENTS (ephy_popups_entries);
 
 #define EPHY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WINDOW, EphyWindowPrivate))
 
-typedef enum
-{
-	EPHY_WINDOW_MODE_NORMAL,
-	EPHY_WINDOW_MODE_FULLSCREEN,
-	EPHY_WINDOW_MODE_PRINT_PREVIEW
-} EphyWindowMode;
-
 struct EphyWindowPrivate
 {
-	EphyWindowMode mode;
 	GtkWidget *main_vbox;
 	GtkWidget *menu_dock;
 	GtkWidget *exit_fullscreen_popup;
@@ -353,14 +345,10 @@ struct EphyWindowPrivate
 	GtkNotebook *notebook;
 	EphyTab *active_tab;
 	EphyDialog *find_dialog;
-	gboolean closing;
-	gboolean has_size;
 	guint num_tabs;
 	guint tab_message_cid;
 	guint help_message_cid;
-
 	EphyEmbedChrome chrome;
-	gboolean should_save_chrome;
 
 	guint disable_arbitrary_url_notifier_id;
 	guint disable_bookmark_editing_notifier_id;
@@ -372,6 +360,12 @@ struct EphyWindowPrivate
 	guint disable_command_line_notifier_id;
 	guint browse_with_caret_notifier_id;
 	guint allow_popups_notifier_id;
+
+	gboolean closing : 1;
+	gboolean has_size : 1;
+	gboolean fullscreen_mode : 1;
+	gboolean ppv_mode : 1;
+	gboolean should_save_chrome : 1;
 };
 
 enum
@@ -515,21 +509,21 @@ get_chromes_visibility (EphyWindow *window, gboolean *show_menubar,
 {
 	EphyEmbedChrome flags = window->priv->chrome;
 
-	switch (window->priv->mode)
+	if (window->priv->ppv_mode)
 	{
-		case EPHY_WINDOW_MODE_NORMAL:
-			*show_menubar = (flags & EPHY_EMBED_CHROME_MENUBAR) != 0;
-			*show_statusbar = (flags & EPHY_EMBED_CHROME_STATUSBAR) != 0;
-			*show_toolbar = (flags & EPHY_EMBED_CHROME_TOOLBAR) != 0;
-			*show_bookmarksbar = (flags & EPHY_EMBED_CHROME_BOOKMARKSBAR) != 0;
-			break;
-		case EPHY_WINDOW_MODE_FULLSCREEN:
-			*show_toolbar = (flags & EPHY_EMBED_CHROME_TOOLBAR) != 0;
-			*show_menubar = *show_statusbar = *show_bookmarksbar = FALSE;
-			break;
-		default:
-			*show_menubar = *show_statusbar = *show_toolbar = *show_bookmarksbar = FALSE;
-			break;
+		*show_menubar = *show_statusbar = *show_toolbar = *show_bookmarksbar = FALSE;
+	}
+	else if (window->priv->fullscreen_mode)
+	{
+		*show_toolbar = (flags & EPHY_EMBED_CHROME_TOOLBAR) != 0;
+		*show_menubar = *show_statusbar = *show_bookmarksbar = FALSE;
+	}
+	else
+	{
+		*show_menubar = (flags & EPHY_EMBED_CHROME_MENUBAR) != 0;
+		*show_statusbar = (flags & EPHY_EMBED_CHROME_STATUSBAR) != 0;
+		*show_toolbar = (flags & EPHY_EMBED_CHROME_TOOLBAR) != 0;
+		*show_bookmarksbar = (flags & EPHY_EMBED_CHROME_BOOKMARKSBAR) != 0;
 	}
 }
 
@@ -563,7 +557,7 @@ ephy_window_fullscreen (EphyWindow *window)
 {
 	GtkWidget *popup, *button, *icon, *label, *hbox;
 
-	window->priv->mode = EPHY_WINDOW_MODE_FULLSCREEN;
+	window->priv->fullscreen_mode = TRUE;
 
 	sync_chromes_visibility (window);
 
@@ -616,7 +610,7 @@ ephy_window_fullscreen (EphyWindow *window)
 static void
 ephy_window_unfullscreen (EphyWindow *window)
 {
-	window->priv->mode = EPHY_WINDOW_MODE_NORMAL;
+	window->priv->fullscreen_mode = FALSE;
 
 	destroy_exit_fullscreen_popup (window);
 
@@ -786,7 +780,7 @@ ephy_window_delete_event_cb (GtkWidget *widget, GdkEvent *event, EphyWindow *win
 	/* Workaround a crash when closing a window while in print preview mode. See
 	 * mozilla bug #241809
 	 */
-	if (window->priv->mode == EPHY_WINDOW_MODE_PRINT_PREVIEW)
+	if (window->priv->ppv_mode)
 	{
 		EphyEmbed *embed;
 
@@ -1582,7 +1576,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	EphyEmbedEventType type;
 
 	/* Do not show the menu in print preview mode */
-	if (window->priv->mode == EPHY_WINDOW_MODE_PRINT_PREVIEW)
+	if (window->priv->ppv_mode)
 	{
 		return;
 	}
@@ -2189,7 +2183,8 @@ ephy_window_init (EphyWindow *window)
 	window->priv->has_size = FALSE;
 	window->priv->chrome = EPHY_EMBED_CHROME_ALL;
 	window->priv->should_save_chrome = FALSE;
-	window->priv->mode = EPHY_WINDOW_MODE_NORMAL;
+	window->priv->fullscreen_mode = FALSE;
+	window->priv->ppv_mode = FALSE;
 
 	g_object_ref (ephy_shell);
 
@@ -2412,16 +2407,12 @@ void
 ephy_window_set_print_preview (EphyWindow *window, gboolean enabled)
 {
 	GtkAccelGroup *accel_group;
-	EphyWindowMode mode;
 
 	accel_group = gtk_ui_manager_get_accel_group (window->priv->manager);
 
-	mode = enabled ? EPHY_WINDOW_MODE_PRINT_PREVIEW :
-			 EPHY_WINDOW_MODE_NORMAL;
+	if (window->priv->ppv_mode == enabled) return;
 
-	if (mode == window->priv->mode) return;
-
-	window->priv->mode = mode;
+	window->priv->ppv_mode = enabled;
 
 	sync_chromes_visibility (window);
 	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (window->priv->notebook), !enabled);
