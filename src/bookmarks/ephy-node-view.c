@@ -664,7 +664,7 @@ ephy_node_view_get_selection (EphyNodeView *view)
 void
 ephy_node_view_select_all (EphyNodeView *view)
 {
-	GtkTreeSelection *sel = gtk_tree_view_get_selection (view->priv->treeview);
+	GtkTreeSelection *sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (view->priv->treeview));
 	gtk_tree_selection_select_all (sel);
 }
 
