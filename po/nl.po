@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.nl\n"
-"POT-Creation-Date: 2003-07-31 19:24+0200\n"
-"PO-Revision-Date: 2003-07-31 21:45+0100\n"
+"POT-Creation-Date: 2003-08-08 19:31+0200\n"
+"PO-Revision-Date: 2003-08-08 21:59+0100\n"
 "Last-Translator: Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -543,7 +543,7 @@ msgstr "Download _details"
 
 # src/toolbar.c:351
 #: data/glade/epiphany.glade.h:16 data/ui/nautilus-epiphany-view.xml.in.h:11
-#: src/ephy-window.c:670
+#: src/ephy-window.c:686
 msgid "Find"
 msgstr "Zoeken"
 
@@ -906,7 +906,7 @@ msgstr "Papier"
 
 # src/toolbar.c:286
 #: data/glade/print.glade.h:26 data/ui/nautilus-epiphany-view.xml.in.h:23
-#: src/ephy-window.c:666
+#: src/ephy-window.c:682
 msgid "Print"
 msgstr "Afdrukken"
 
@@ -968,7 +968,7 @@ msgstr "Bo_ven:"
 
 #: data/glade/print.glade.h:37
 msgid "_to:"
-msgstr "_aan:"
+msgstr "_tot:"
 
 #: data/glade/print.glade.h:38
 msgid "fr_om:"
@@ -1183,25 +1183,25 @@ msgstr "%.1f van %.1f MB"
 
 #: embed/downloader-view.c:397
 #, c-format
-msgid "%d of %d KB"
-msgstr "%d van %d KB"
+msgid "%d of %d kB"
+msgstr "%d van %d kB"
 
 #: embed/downloader-view.c:403
 #, c-format
-msgid "%d KB"
-msgstr "%d KB"
+msgid "%d kB"
+msgstr "%d kB"
 
 #: embed/downloader-view.c:409
 #, c-format
-msgid "%s at %.1f KB/s"
-msgstr "%s met %.1f KB/s"
+msgid "%s at %.1f kB/s"
+msgstr "%s met %.1f kB/s"
 
 # src/mozilla/mozilla.cpp:1993
 # src/prefs.c:1069
 # src/prefs_callbacks.c:237
 # src/prefs_callbacks.c:407
 #: embed/downloader-view.c:524 embed/downloader-view.c:542
-#: src/ephy-window.c:870
+#: src/ephy-window.c:886
 msgid "Unknown"
 msgstr "Onbekend"
 
@@ -1234,7 +1234,7 @@ msgid "Cancel all pending downloads?"
 msgstr "Alle wachtende downloads stoppen?"
 
 # src/context.c:67
-#: embed/ephy-embed-popup-control.c:554 src/popup-commands.c:325
+#: embed/ephy-embed-popup-control.c:554 src/popup-commands.c:333
 msgid "Save Image As"
 msgstr "Afbeelding opslaan als"
 
@@ -1244,7 +1244,7 @@ msgid "Save Page As"
 msgstr "Pagina opslaan als"
 
 # src/context.c:80
-#: embed/ephy-embed-popup-control.c:677 src/popup-commands.c:413
+#: embed/ephy-embed-popup-control.c:677 src/popup-commands.c:421
 msgid "Save Background As"
 msgstr "Achtergrond opslaan als"
 
@@ -1257,18 +1257,18 @@ msgid "No available applications to open the specified file."
 msgstr "Geen toepassingen beschikbaar om te openen."
 
 # src/mozilla/mozilla.cpp:994
-#: embed/ephy-history.c:438 src/bookmarks/ephy-bookmarks.c:689
+#: embed/ephy-history.c:441 src/bookmarks/ephy-bookmarks.c:689
 msgid "All"
 msgstr "Alles"
 
 # src/history.c:860
 # src/mozilla_i18n.c:40
-#: embed/ephy-history.c:587
+#: embed/ephy-history.c:590
 msgid "Others"
 msgstr "Anderen"
 
 # src/history.c:845
-#: embed/ephy-history.c:593
+#: embed/ephy-history.c:596
 msgid "Local files"
 msgstr "Lokale bestanden"
 
@@ -1807,7 +1807,7 @@ msgstr "Einde van huidige sessie"
 #. * "zh_CN" translation: "zh-cn,zh"
 #. * "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
 #.
-#: embed/mozilla/mozilla-notifiers.cpp:598
+#: embed/mozilla/mozilla-notifiers.cpp:596
 msgid "system-language"
 msgstr "nl"
 
@@ -2292,7 +2292,7 @@ msgid "_Search:"
 msgstr "_Zoeken:"
 
 # src/menubar.c:571
-#: src/bookmarks/ephy-bookmarks-editor.c:1215 src/ephy-window.c:672
+#: src/bookmarks/ephy-bookmarks-editor.c:1215 src/ephy-window.c:688
 msgid "Bookmarks"
 msgstr "Bladwijzers"
 
@@ -2306,8 +2306,9 @@ msgstr "Onderwerpen"
 msgid "Title"
 msgstr "Titel"
 
-#: src/bookmarks/ephy-bookmarks-menu.c:268
-#: src/bookmarks/ephy-topic-action.c:208
+#. This is the adjective, not the verb
+#: src/bookmarks/ephy-bookmarks-menu.c:269
+#: src/bookmarks/ephy-topic-action.c:209
 msgid "Empty"
 msgstr "Leeg"
 
@@ -2566,7 +2567,7 @@ msgstr "Epiphany Web Browser"
 msgid "Ephy"
 msgstr "Ephy"
 
-#: src/ephy-main.c:201
+#: src/ephy-main.c:203
 msgid ""
 "Epiphany can't be used now. Running the command \"bonobo-slay\" from the "
 "console may fix the problem. If not, you can try rebooting the computer or "
@@ -2581,7 +2582,7 @@ msgstr ""
 "\n"
 "Bonobo kan de GNOME_Epiphany_Automation.server niet vinden."
 
-#: src/ephy-shell.c:232
+#: src/ephy-shell.c:234
 msgid ""
 "Epiphany can't be used now. Mozilla initialization failed. Check your "
 "MOZILLA_FIVE_HOME environmental variable."
@@ -2590,41 +2591,41 @@ msgstr ""
 "Controleer uw MOZILLA_FIVE_HOME omgevingsvariabele."
 
 # ui/preferences.glade.h:170
-#: src/ephy-tab.c:314 src/ephy-tab.c:1004 src/ephy-tab.c:1187
+#: src/ephy-tab.c:314 src/ephy-tab.c:1012 src/ephy-tab.c:1195
 msgid "Blank page"
 msgstr "Blanco pagina"
 
 # ui/epiphany.glade.h:109
-#: src/ephy-tab.c:631
+#: src/ephy-tab.c:639
 msgid "site"
 msgstr "pagina"
 
 # src/mozcallbacks.c:400
-#: src/ephy-tab.c:655
+#: src/ephy-tab.c:663
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Doorgestuurd naar %s..."
 
 # src/mozcallbacks.c:405
-#: src/ephy-tab.c:659
+#: src/ephy-tab.c:667
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Data van %s wordt ingelezen..."
 
 # src/mozcallbacks.c:410
-#: src/ephy-tab.c:663
+#: src/ephy-tab.c:671
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Wacht op toestemming van %s..."
 
 # src/mozcallbacks.c:424
-#: src/ephy-tab.c:671
+#: src/ephy-tab.c:679
 #, c-format
 msgid "Loading %s..."
 msgstr "%s wordt geladen..."
 
 # src/mozcallbacks.c:436
-#: src/ephy-tab.c:675
+#: src/ephy-tab.c:683
 msgid "Done."
 msgstr "Klaar."
 
@@ -3102,51 +3103,51 @@ msgid "Copy I_mage Address"
 msgstr "Afbeeldingsadres _kopiëren"
 
 # src/menubar.c:165
-#: src/ephy-window.c:561
+#: src/ephy-window.c:577
 msgid "Exit Fullscreen"
 msgstr "_Volledig scherm sluiten"
 
 # src/bookmarks_editor.c:942
 # src/menubar.c:34
-#: src/ephy-window.c:662 src/window-commands.c:324
+#: src/ephy-window.c:678 src/window-commands.c:331
 msgid "Open"
 msgstr "Openen"
 
 # src/menubar.c:63
-#: src/ephy-window.c:664 src/window-commands.c:365
+#: src/ephy-window.c:680 src/window-commands.c:372
 msgid "Save As"
 msgstr "Opslaan als"
 
 # src/menubar.c:571
-#: src/ephy-window.c:668
+#: src/ephy-window.c:684
 msgid "Bookmark"
 msgstr "Bladwijzer"
 
-#: src/ephy-window.c:873
+#: src/ephy-window.c:889
 msgid "Insecure"
 msgstr "Onveilig"
 
 # src/mozilla/mozilla.cpp:996
 # src/persistent_data_manager.c:374
 # src/persistent_data_manager.c:609
-#: src/ephy-window.c:876
+#: src/ephy-window.c:892
 msgid "Broken"
 msgstr "Gebroken"
 
-#: src/ephy-window.c:879
+#: src/ephy-window.c:895
 msgid "Medium"
 msgstr "Gemiddeld"
 
-#: src/ephy-window.c:883
+#: src/ephy-window.c:899
 msgid "Low"
 msgstr "Laag"
 
 # src/mozilla/mozilla.cpp:1982
-#: src/ephy-window.c:887
+#: src/ephy-window.c:903
 msgid "High"
 msgstr "Hoog"
 
-#: src/ephy-window.c:897
+#: src/ephy-window.c:913
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3155,7 +3156,7 @@ msgstr ""
 "Beveiligingsniveau: %s\n"
 "%s"
 
-#: src/ephy-window.c:903
+#: src/ephy-window.c:919
 #, c-format
 msgid "Security level: %s"
 msgstr "Beveiligingsniveau: %s"
@@ -3211,7 +3212,7 @@ msgstr "Verloopt:"
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: src/popup-commands.c:315
+#: src/popup-commands.c:323
 msgid "Download link"
 msgstr "Verwijzing downloaden"
 
@@ -3500,28 +3501,28 @@ msgid "Custom [%s]"
 msgstr "Aangepast [%s]"
 
 # ui/epiphany.glade.h:51
-#: src/session.c:194
+#: src/session.c:195
 msgid "Crash Recovery"
 msgstr "Herstellen na vastlopen"
 
 # src/bookmarks_editor.c:943
-#: src/session.c:196
+#: src/session.c:197
 msgid "_Don't Recover"
 msgstr "_Niet herstellen"
 
 # src/bookmarks_editor.c:943
-#: src/session.c:197
+#: src/session.c:198
 msgid "_Recover"
 msgstr "He_rstellen"
 
 # ui/epiphany.glade.h:53
-#: src/session.c:226
+#: src/session.c:227
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr ""
 "Het lijkt erop dat Epiphany de vorige keer is vastgelopen of 'vernietigd'."
 
-#: src/session.c:232
+#: src/session.c:233
 msgid "You can recover the opened tabs and windows."
 msgstr "U kunt de geopende tabbladen en vensters herstellen."
 
@@ -3595,23 +3596,23 @@ msgstr "Kijk hier eens naar!"
 # src/misc.c:354
 # src/mozcallbacks.c:225
 # src/window.c:2279
-#: src/window-commands.c:278
+#: src/window-commands.c:285
 msgid "Untitled"
 msgstr "Naamloos"
 
 # src/menubar.c:150
-#: src/window-commands.c:675
+#: src/window-commands.c:682
 msgid "Toolbar Editor"
 msgstr "Werkbalkbeheer"
 
 # src/bookmarks_menus.c:525
 # ui/bookmarks.glade.h:47
-#: src/window-commands.c:697
+#: src/window-commands.c:704
 msgid "_Add a New Toolbar"
 msgstr "Nieuwe werkbalk _toevoegen"
 
 #. Translator credits
-#: src/window-commands.c:747
+#: src/window-commands.c:754
 msgid "translator_credits"
 msgstr ""
 "Vincent van Adrighem\n"
@@ -3619,6 +3620,6 @@ msgstr ""
 "Reinout van Schouwen <reinout@cs.vu.nl>"
 
 # src/menu_callbacks.c:428
-#: src/window-commands.c:775
+#: src/window-commands.c:782
 msgid "A GNOME browser based on Mozilla"
 msgstr "Een uitgebreide GNOME browser gebaseerd op Mozilla"
