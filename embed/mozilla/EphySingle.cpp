@@ -39,7 +39,7 @@
 #include <nsIIDNService.h>
 #endif
 
-NS_IMPL_ISUPPORTS2(EphySingle, nsIObserver, nsISupportsWeakReference)
+NS_IMPL_ISUPPORTS1(EphySingle, nsIObserver)
 
 EphySingle::EphySingle()
 : mOwner(nsnull)
@@ -54,10 +54,10 @@ EphySingle::Init (EphyEmbedSingle *aOwner)
 	NS_ENSURE_TRUE (mObserverService, NS_ERROR_FAILURE);
 
 	nsresult rv;
-	rv = mObserverService->AddObserver (this, "cookie-changed", PR_TRUE);
-	rv |= mObserverService->AddObserver (this, "cookie-rejected", PR_TRUE);
-	rv |= mObserverService->AddObserver (this, "perm-changed", PR_TRUE);
-	rv |= mObserverService->AddObserver (this, "network:offline-status-changed", PR_TRUE);
+	rv = mObserverService->AddObserver (this, "cookie-changed", PR_FALSE);
+	rv |= mObserverService->AddObserver (this, "cookie-rejected", PR_FALSE);
+	rv |= mObserverService->AddObserver (this, "perm-changed", PR_FALSE);
+	rv |= mObserverService->AddObserver (this, "network:offline-status-changed", PR_FALSE);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	mOwner = aOwner;

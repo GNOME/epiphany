@@ -419,8 +419,7 @@ mozilla_init_observer (MozillaEmbedSingle *single)
 	EphySingle *es;
 
 	es = new EphySingle ();
-	nsCOMPtr<nsIObserver> guard = NS_STATIC_CAST (nsIObserver *, es);
-	if (!guard) return;
+	NS_ADDREF (single->priv->mSingleObserver = es);
 
 	nsresult rv;
 	rv = es->Init (EPHY_EMBED_SINGLE (single));
@@ -429,8 +428,6 @@ mozilla_init_observer (MozillaEmbedSingle *single)
 		g_warning ("Failed to initialise EphySingle!\n");
 		return;
 	}
-
-	NS_ADDREF (single->priv->mSingleObserver = es);
 }
 
 static gboolean
@@ -511,8 +508,6 @@ mozilla_embed_single_dispose (GObject *object)
 	{
 		single->priv->mSingleObserver->Detach ();
 		NS_RELEASE (single->priv->mSingleObserver);
-		delete single->priv->mSingleObserver;
-		single->priv->mSingleObserver = nsnull;
 	}
 }
 

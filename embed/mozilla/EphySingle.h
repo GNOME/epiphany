@@ -33,8 +33,7 @@
 #include <nsICookie.h>
 #include <nsIPermission.h>
 
-class EphySingle : public nsIObserver,
-		   public nsSupportsWeakReference
+class EphySingle : public nsIObserver
 {
 public:
 	NS_DECL_ISUPPORTS
