@@ -615,9 +615,10 @@ toolbar_drag_motion_cb (GtkWidget          *widget,
       pos = get_toolbar_position (etoolbar, widget);
       flags = egg_toolbars_model_get_flags (etoolbar->priv->model, pos);
 
-      if ((flags & EGG_TB_MODEL_ACCEPT_ITEMS_ONLY) &&
-          !gtk_widget_get_ancestor (source, EGG_TYPE_EDITABLE_TOOLBAR) &&
-	  !gtk_widget_get_ancestor (source, EGG_TYPE_TOOLBAR_EDITOR))
+      if (!etoolbar->priv->edit_mode ||
+	  ((flags & EGG_TB_MODEL_ACCEPT_ITEMS_ONLY) &&
+           !gtk_widget_get_ancestor (source, EGG_TYPE_EDITABLE_TOOLBAR) &&
+	   !gtk_widget_get_ancestor (source, EGG_TYPE_TOOLBAR_EDITOR)))
         {
           gdk_drag_status (context, 0, time);
           return FALSE;
