@@ -937,24 +937,31 @@ add_by_word_filter (EphyHistoryWindow *editor, EphyNodeFilter *filter, int level
 }
 
 static void
-setup_filters (EphyHistoryWindow *editor)
+setup_filters (EphyHistoryWindow *editor,
+	       gboolean pages, gboolean sites)
 {
 	GDK_THREADS_ENTER ();
 
-	ephy_node_filter_empty (editor->priv->pages_filter);
+	if (pages)
+	{
+		ephy_node_filter_empty (editor->priv->pages_filter);
 
-	add_by_date_filter (editor, editor->priv->pages_filter, 0, NULL);
-	add_by_word_filter (editor, editor->priv->pages_filter, 1);
-	add_by_site_filter (editor, editor->priv->pages_filter, 2);
+		add_by_date_filter (editor, editor->priv->pages_filter, 0, NULL);
+		add_by_word_filter (editor, editor->priv->pages_filter, 1);
+		add_by_site_filter (editor, editor->priv->pages_filter, 2);
 
-	ephy_node_filter_done_changing (editor->priv->pages_filter);
+		ephy_node_filter_done_changing (editor->priv->pages_filter);
+	}
 
-	ephy_node_filter_empty (editor->priv->sites_filter);
+	if (sites)
+	{
+		ephy_node_filter_empty (editor->priv->sites_filter);
 
-	add_by_date_filter (editor, editor->priv->sites_filter, 0,
-			    ephy_history_get_pages (editor->priv->history));
+		add_by_date_filter (editor, editor->priv->sites_filter, 0,
+				    ephy_history_get_pages (editor->priv->history));
 
-	ephy_node_filter_done_changing (editor->priv->sites_filter);
+		ephy_node_filter_done_changing (editor->priv->sites_filter);
+	}
 
 	GDK_THREADS_LEAVE ();
 }
@@ -978,7 +985,7 @@ site_node_selected_cb (EphyNodeView *view,
 	else
 	{
 		ephy_search_entry_clear (EPHY_SEARCH_ENTRY (editor->priv->search_entry));
-		setup_filters (editor);
+		setup_filters (editor, TRUE, FALSE);
 	}
 }
 
@@ -1000,13 +1007,13 @@ search_entry_search_cb (GtkWidget *entry, char *search_text, EphyHistoryWindow *
 		 G_CALLBACK (site_node_selected_cb),
 		 editor);
 
-	setup_filters (editor);
+	setup_filters (editor, TRUE, FALSE);
 }
 
 static void
 time_optionmenu_changed_cb (GtkWidget *optionmenu, EphyHistoryWindow *editor)
 {
-	setup_filters (editor);
+	setup_filters (editor, TRUE, TRUE);
 }
 
 static GtkWidget *
