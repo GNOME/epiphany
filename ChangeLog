@@ -1,3 +1,10 @@
+2003-03-01  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-node-db.c: (ephy_node_db_load_from_file):
+
+	Guard against xml reading error, check for NULL subtree before
+	trying to parse it.
+
 2004-03-01  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* embed/downloader-view.c: (downloader_view_add_download),

@@ -348,13 +348,15 @@ ephy_node_db_load_from_file (EphyNodeDb *db,
 		    && type == XML_READER_TYPE_ELEMENT)
 		{
 			xmlNodePtr subtree;
-			EphyNode *node;
 
 			/* grow the subtree and load the node from it */
 			subtree = xmlTextReaderExpand (reader);
 
-			node = ephy_node_new_from_xml (db, subtree);
-			
+			if (subtree != NULL)
+			{
+				ephy_node_new_from_xml (db, subtree);
+			}			
+				
 			skip = TRUE;
 		}
 		else if (xmlStrEqual (name, xml_root)
