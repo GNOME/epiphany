@@ -1,3 +1,13 @@
+2004-07-31  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-window.c: (ephy_window_get_type),
+	(update_exit_fullscreen_popup_position), (screen_size_changed_cb),
+	(destroy_exit_fullscreen_popup), (ephy_window_destroy),
+	(add_widget), (ephy_window_fullscreen), (ephy_window_unfullscreen),
+	(update_chromes_actions), (update_actions_sensitivity):
+
+	Diconnect from screen's size-changed signal on finalize too.
+
 2004-07-31  Adam Hooper  <adamh@cvs.gnome.org>
 
 	* src/ephy-tab.c: (ephy_tab_set_property), (ephy_tab_get_property),

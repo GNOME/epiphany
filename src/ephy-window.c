@@ -379,9 +379,9 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_window_get_type (void)
 {
-        static GType ephy_window_type = 0;
+        static GType type = 0;
 
-        if (ephy_window_type == 0)
+        if (type == 0)
         {
                 static const GTypeInfo our_info =
                 {
@@ -396,45 +396,12 @@ ephy_window_get_type (void)
                         (GInstanceInitFunc) ephy_window_init
                 };
 
-                ephy_window_type = g_type_register_static (GTK_TYPE_WINDOW,
-							   "EphyWindow",
-							   &our_info, 0);
+                type = g_type_register_static (GTK_TYPE_WINDOW,
+					       "EphyWindow",
+					       &our_info, 0);
         }
-        return ephy_window_type;
-}
 
-static void
-ephy_window_destroy (GtkObject *gtkobject)
-{
-	EphyWindow *window = EPHY_WINDOW (gtkobject);
-
-	LOG ("EphyWindow destroy %p", window)
-
-	if (window->priv->closing == FALSE)
-	{
-		EphyExtension *manager;
-
-		window->priv->closing = TRUE;
-
-		/* Let the extensions detach themselves from the window */
-		manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
-		ephy_extension_detach_window (manager, window);
-	}
-
-	if (window->priv->exit_fullscreen_popup)
-	{
-		gtk_widget_destroy (window->priv->exit_fullscreen_popup);
-		window->priv->exit_fullscreen_popup = NULL;
-	}
-
-        GTK_OBJECT_CLASS (parent_class)->destroy (gtkobject);
-}
-
-static void
-add_widget (GtkUIManager *merge, GtkWidget *widget, EphyWindow *window)
-{
-	gtk_box_pack_start (GTK_BOX (window->priv->menu_dock),
-			    widget, FALSE, FALSE, 0);
+        return type;
 }
 
 static void
@@ -448,6 +415,7 @@ update_exit_fullscreen_popup_position (EphyWindow *window)
 
 	gtk_window_get_size (GTK_WINDOW (popup), &popup_width, &popup_height);
 
+	/* FIXME multihead */
 	gdk_screen_get_monitor_geometry (gdk_screen_get_default (),
                         gdk_screen_get_monitor_at_window
                         (gdk_screen_get_default (),
@@ -468,9 +436,55 @@ update_exit_fullscreen_popup_position (EphyWindow *window)
 }
 
 static void
-size_changed_cb (GdkScreen *screen, EphyWindow *window)
+screen_size_changed_cb (GdkScreen *screen,
+			EphyWindow *window)
 {
 	update_exit_fullscreen_popup_position (window);
+}
+
+static void
+destroy_exit_fullscreen_popup (EphyWindow *window)
+{
+	if (window->priv->exit_fullscreen_popup != NULL)
+	{
+		/* FIXME multihead */
+		g_signal_handlers_disconnect_by_func
+			(gdk_screen_get_default (),
+			 G_CALLBACK (screen_size_changed_cb), window);
+
+		gtk_widget_destroy (window->priv->exit_fullscreen_popup);
+		window->priv->exit_fullscreen_popup = NULL;
+	}
+}
+
+static void
+ephy_window_destroy (GtkObject *gtkobject)
+{
+	EphyWindow *window = EPHY_WINDOW (gtkobject);
+
+	LOG ("EphyWindow destroy %p", window)
+
+	if (window->priv->closing == FALSE)
+	{
+		EphyExtension *manager;
+
+		window->priv->closing = TRUE;
+
+		/* Let the extensions detach themselves from the window */
+		manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
+		ephy_extension_detach_window (manager, window);
+	}
+
+	destroy_exit_fullscreen_popup (window);
+
+        GTK_OBJECT_CLASS (parent_class)->destroy (gtkobject);
+}
+
+static void
+add_widget (GtkUIManager *merge, GtkWidget *widget, EphyWindow *window)
+{
+	gtk_box_pack_start (GTK_BOX (window->priv->menu_dock),
+			    widget, FALSE, FALSE, 0);
 }
 
 static void
@@ -566,13 +580,16 @@ ephy_window_fullscreen (EphyWindow *window)
 	gtk_widget_show (label);
 	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
+	gtk_window_set_resizable (GTK_WINDOW (popup), FALSE);
+
+	/* FIXME multihead */
+	g_signal_connect (gdk_screen_get_default (), "size-changed",
+			  G_CALLBACK (screen_size_changed_cb), window);
+
 	update_exit_fullscreen_popup_position (window);
 
 	gtk_widget_show (popup);
 
-	g_signal_connect (G_OBJECT (gdk_screen_get_default ()),
-                          "size-changed", G_CALLBACK (size_changed_cb),
-			  window);
 
 	egg_editable_toolbar_set_model
 		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
@@ -585,15 +602,7 @@ ephy_window_unfullscreen (EphyWindow *window)
 {
 	window->priv->mode = EPHY_WINDOW_MODE_NORMAL;
 
-	if (window->priv->exit_fullscreen_popup != NULL)
-	{
-		g_signal_handlers_disconnect_by_func (G_OBJECT (gdk_screen_get_default ()),
-						      G_CALLBACK (size_changed_cb),
-						      window);
-
-		gtk_widget_destroy (window->priv->exit_fullscreen_popup);
-		window->priv->exit_fullscreen_popup = NULL;
-	}
+	destroy_exit_fullscreen_popup (window);
 
 	egg_editable_toolbar_set_model
 		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
@@ -958,7 +967,7 @@ connect_proxy_cb (GtkUIManager *manager,
 static void
 update_chromes_actions (EphyWindow *window)
 {
-	GtkActionGroup *action_group = GTK_ACTION_GROUP (window->priv->action_group);
+	GtkActionGroup *action_group = window->priv->action_group;
 	GtkAction *action;
 	gboolean show_statusbar, show_menubar, show_toolbar, show_bookmarksbar;
 
@@ -997,8 +1006,8 @@ update_chromes_actions (EphyWindow *window)
 static void
 update_actions_sensitivity (EphyWindow *window)
 {
-	GtkActionGroup *action_group = GTK_ACTION_GROUP (window->priv->action_group);
-	GtkActionGroup *popups_action_group = GTK_ACTION_GROUP (window->priv->popups_action_group);
+	GtkActionGroup *action_group = window->priv->action_group;
+	GtkActionGroup *popups_action_group = window->priv->popups_action_group;
 	GtkAction *action;
 	gboolean bookmarks_editable, save_to_disk;
 	gboolean printing, print_setup, fullscreen;
