@@ -60,8 +60,8 @@ enum
 
 enum
 {
-	ACTION_REQUEST,
-	LAST_SIGNAL
+  ACTION_REQUEST,
+  LAST_SIGNAL
 };
 
 static guint egg_editable_toolbar_signals[LAST_SIGNAL] = { 0 };
@@ -74,8 +74,11 @@ struct EggEditableToolbarPrivate
   EggToolbarsModel *model;
   gboolean edit_mode;
   GtkWidget *selected_toolbar;
-  GtkWidget *dragged_item;
   GtkWidget *fixed_toolbar;
+
+  gboolean pending;
+  GtkToolbar *target_toolbar;
+  GtkWidget *dragged_item;
 };
 
 GType
@@ -379,22 +382,6 @@ data_is_separator (const char *data)
 }
 
 static void
-set_status_pending (GdkDragContext *context,
-                    GdkDragAction   suggested_action)
-{
-  g_object_set_data (G_OBJECT (context),
-                     "gtk-calendar-status-pending",
-                     GINT_TO_POINTER (suggested_action));
-}
-                                                                                                                             
-static GdkDragAction
-get_status_pending (GdkDragContext *context)
-{
-  return GPOINTER_TO_INT (g_object_get_data (G_OBJECT (context),
-                                             "gtk-calendar-status-pending"));
-}
-
-static void
 drag_data_received_cb (GtkWidget          *widget,
 		       GdkDragContext     *context,
 		       gint                x,
@@ -404,46 +391,57 @@ drag_data_received_cb (GtkWidget          *widget,
 		       guint               time,
 		       EggEditableToolbar *etoolbar)
 {
-  GdkDragAction suggested_action;
-  int pos, toolbar_pos;
+  /* This function can be called for two reasons
+   *
+   *  (1) drag_motion() needs an item to pass to
+   *      gtk_toolbar_set_drop_highlight_item(). We can
+   *      recognize this case by etoolbar->priv->pending being TRUE
+   *      We should just create an item and return.
+   *
+   *  (2) The drag has finished, and drag_drop() wants us to
+   *      actually add a new item to the toolbar.
+   */
 
-  suggested_action = get_status_pending (context);
-
-  if (suggested_action)
+  if (etoolbar->priv->pending)
     {
-      set_status_pending (context, 0);
+      etoolbar->priv->pending = FALSE;
       etoolbar->priv->dragged_item =
         create_item_from_action (etoolbar, selection_data->data,
 				 data_is_separator (selection_data->data));
-      gdk_drag_status (context, suggested_action, time);
-      return;
     }
+  else
+    {
+      int pos, toolbar_pos;
 
-   pos = gtk_toolbar_get_drop_index (GTK_TOOLBAR (widget), x, y);
-   toolbar_pos = get_toolbar_position (etoolbar, widget);
+      pos = gtk_toolbar_get_drop_index (GTK_TOOLBAR (widget), x, y);
+      toolbar_pos = get_toolbar_position (etoolbar, widget);
 
-   if (data_is_separator (selection_data->data))
-     {
-       egg_toolbars_model_add_separator (etoolbar->priv->model,
-	  				 toolbar_pos, pos);
-     }
-     else
-     {
-       GdkAtom target;
-       char *type;
-       char *id;
+      if (data_is_separator (selection_data->data))
+	{
+	  egg_toolbars_model_add_separator (etoolbar->priv->model,
+					    toolbar_pos, pos);
+	}
+      else
+	{
+	  GdkAtom target;
+	  char *type;
+	  char *id;
+	  
+	  target = gtk_drag_dest_find_target (widget, context, NULL);
+	  type = egg_toolbars_model_get_item_type (etoolbar->priv->model,
+						   target);
+	  id = egg_toolbars_model_get_item_id (etoolbar->priv->model, type,
+					       selection_data->data);
 
-       target = gtk_drag_dest_find_target (widget, context, NULL);
-       type = egg_toolbars_model_get_item_type (etoolbar->priv->model, target);
-       id = egg_toolbars_model_get_item_id (etoolbar->priv->model, type,
-					    selection_data->data);
-       egg_toolbars_model_add_item (etoolbar->priv->model,
-			            toolbar_pos, pos, id, type);
-       g_free (type);
-       g_free (id);
+	  egg_toolbars_model_add_item (etoolbar->priv->model,
+				       toolbar_pos, pos, id, type);
+	  g_free (type);
+	  g_free (id);
+	}
+      
+      gtk_drag_finish (context, TRUE, context->action == GDK_ACTION_MOVE,
+		       time);
     }
-
-    gtk_drag_finish (context, TRUE, context->action == GDK_ACTION_MOVE, time);
 }
 
 static void
@@ -502,10 +500,11 @@ static void
 free_dragged_item (EggEditableToolbar *etoolbar)
 {
   if (etoolbar->priv->dragged_item)
-  {	
-    gtk_widget_destroy (etoolbar->priv->dragged_item);
-    etoolbar->priv->dragged_item = NULL;
-  }
+    {
+      gtk_widget_destroy (etoolbar->priv->dragged_item);
+      g_object_unref (etoolbar->priv->dragged_item);
+      etoolbar->priv->dragged_item = NULL;
+    }
 }
 
 static gboolean
@@ -518,8 +517,6 @@ toolbar_drag_drop_cb (GtkWidget          *widget,
 {
   GdkAtom target;
 
-  free_dragged_item (etoolbar);
-  
   target = gtk_drag_dest_find_target (widget, context, NULL);
   if (target != GDK_NONE)
     {
@@ -528,6 +525,8 @@ toolbar_drag_drop_cb (GtkWidget          *widget,
                          time);
       return TRUE;
     }
+  
+  free_dragged_item (etoolbar);
   
   return FALSE;
 }
@@ -542,22 +541,42 @@ toolbar_drag_motion_cb (GtkWidget          *widget,
 {
   GdkAtom target;
   int index;
+  GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolItem *item;
 
   target = gtk_drag_dest_find_target (widget, context, NULL);
   if (target == GDK_NONE)
     {
       gdk_drag_status (context, 0, time);
-    }
-  else
-    {
-      set_status_pending (context, context->suggested_action);
-      gtk_drag_get_data (widget, context, target, time);
+      return FALSE;
     }
 
-  index = gtk_toolbar_get_drop_index (GTK_TOOLBAR (widget), x, y);
+  if (etoolbar->priv->target_toolbar != toolbar)
+    {
+      if (etoolbar->priv->target_toolbar)
+	gtk_toolbar_set_drop_highlight_item (toolbar, NULL, 0);
+      
+      free_dragged_item (etoolbar);
+      etoolbar->priv->pending = TRUE;
+
+      etoolbar->priv->target_toolbar = toolbar;
+
+      /* The handler will make sure the item is created */
+      gtk_drag_get_data (widget, context, target, time);
+
+      g_assert (etoolbar->priv->dragged_item);
+      g_assert (!etoolbar->priv->pending);
+
+      g_object_ref (etoolbar->priv->dragged_item);
+      gtk_object_sink (GTK_OBJECT (etoolbar->priv->dragged_item));
+    }
+
   item = GTK_TOOL_ITEM (etoolbar->priv->dragged_item);
-  gtk_toolbar_highlight_drop_location (GTK_TOOLBAR (widget), index, item);
+
+  index = gtk_toolbar_get_drop_index (toolbar, x, y);
+  gtk_toolbar_set_drop_highlight_item (toolbar, item, index);
+
+  gdk_drag_status (context, context->suggested_action, time);
 
   return TRUE;
 }
@@ -568,8 +587,22 @@ toolbar_drag_leave_cb (GtkToolbar         *toolbar,
 		       guint               time,
 		       EggEditableToolbar *etoolbar)
 {
-  free_dragged_item (etoolbar);
-  gtk_toolbar_unhighlight_drop_location (toolbar);
+  /* This is a workaround for bug 125557. Sometimes
+   * we seemingly enter another toolbar *before* leaving
+   * the current one.
+   *
+   * In that case etoolbar->priv->target_toolbar will
+   * have been set to something else and the highlighting
+   * will already have been turned off
+   */
+  
+  if (etoolbar->priv->target_toolbar == toolbar)
+    {
+      gtk_toolbar_set_drop_highlight_item (toolbar, NULL, 0);
+
+      etoolbar->priv->target_toolbar = NULL;
+      free_dragged_item (etoolbar);
+    }
 }
 
 static GtkWidget *
@@ -690,6 +723,8 @@ toolbar_added_cb (EggToolbarsModel   *model,
 
   gtk_box_reorder_child (GTK_BOX (t), dock, position);
 
+  gtk_widget_show_all (dock);
+  
   update_fixed (t);
 }
 
@@ -738,10 +773,10 @@ item_removed_cb (EggToolbarsModel   *model,
   gtk_container_remove (GTK_CONTAINER (toolbar), item);
 
   if (egg_toolbars_model_n_items (model, toolbar_position) == 0)
-  {
-    gtk_widget_set_size_request (toolbar, -1, MIN_TOOLBAR_HEIGHT);
-    egg_toolbars_model_remove_toolbar (model, toolbar_position);
-  }
+    {
+      gtk_widget_set_size_request (toolbar, -1, MIN_TOOLBAR_HEIGHT);
+      egg_toolbars_model_remove_toolbar (model, toolbar_position);
+    }
 }
 
 static void
