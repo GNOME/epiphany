@@ -122,7 +122,7 @@ callback (long id, EphyNodeSignalData *data, gpointer *user_data)
 
 	switch (data->type)
 	{
-		case EPHY_NODE_DESTROYED:
+		case EPHY_NODE_DESTROY:
 		case EPHY_NODE_RESTORED:
 			data->callback (data->node, data->data);
 		break;
@@ -281,6 +281,12 @@ ephy_node_dispose (EphyNode *node)
 {
 	guint i;
 
+	write_lock_to_read_lock (node);
+
+	ephy_node_emit_signal (node, EPHY_NODE_DESTROY);
+
+	read_lock_to_write_lock (node);
+
 	lock_gdk ();
 
 	/* remove from DAG */
@@ -301,8 +307,6 @@ ephy_node_dispose (EphyNode *node)
 	}
 
 	g_static_rw_lock_writer_unlock (node->lock);
-
-	ephy_node_emit_signal (node, EPHY_NODE_DESTROYED);
 
 	g_hash_table_foreach (node->signals,
 			      (GHFunc) unref_signal_objects,

@@ -34,11 +34,17 @@ enum
   LAST_SIGNAL
 };
 
+enum
+{
+	PROP_0,
+	PROP_BOOKMARKS
+};
+
 static GObjectClass *parent_class = NULL;
 
 struct EphyToolbarsModelPrivate
 {
-	gpointer dummy;
+	EphyBookmarks *bookmarks;
 };
 
 GType
@@ -75,15 +81,12 @@ impl_add_item (EggToolbarsModel *t,
 	       GdkAtom type,
 	       const char *name)
 {
-	EphyBookmarks *bookmarks;
 	char *action_name = NULL;
 	const char *res;
 	gboolean topic = FALSE, normal_item = FALSE;
 	int id = -1;
 
 	LOG ("Add item %s", name)
-
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
 	if (gdk_atom_intern (EPHY_DND_TOPIC_TYPE, FALSE) == type)
 	{
@@ -122,6 +125,49 @@ impl_add_item (EggToolbarsModel *t,
 }
 
 static void
+ephy_toolbars_model_set_bookmarks (EphyToolbarsModel *model, EphyBookmarks *bookmarks)
+{
+	model->priv->bookmarks = bookmarks;
+	g_object_ref (model->priv->bookmarks);
+}
+
+static void
+ephy_toolbars_model_set_property (GObject *object,
+                                  guint prop_id,
+                                  const GValue *value,
+                                  GParamSpec *pspec)
+{
+	EphyToolbarsModel *model;
+
+	model = EPHY_TOOLBARS_MODEL (object);
+
+	switch (prop_id)
+	{
+		case PROP_BOOKMARKS:
+			ephy_toolbars_model_set_bookmarks (model, g_value_get_object (value));
+			break;
+	}
+}
+
+static void
+ephy_toolbars_model_get_property (GObject *object,
+                                  guint prop_id,
+                                  GValue *value,
+                                  GParamSpec *pspec)
+{
+	EphyToolbarsModel *model;
+
+	model = EPHY_TOOLBARS_MODEL (object);
+
+	switch (prop_id)
+	{
+		case PROP_BOOKMARKS:
+			g_value_set_object (value, model->priv->bookmarks);
+			break;
+	}
+}
+
+static void
 ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -132,14 +178,25 @@ ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass)
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_toolbars_model_finalize;
+	object_class->set_property = ephy_toolbars_model_set_property;
+	object_class->get_property = ephy_toolbars_model_get_property;
 
 	etm_class->add_item = impl_add_item;
+
+	g_object_class_install_property (object_class,
+                                         PROP_BOOKMARKS,
+                                         g_param_spec_object ("bookmarks",
+                                                              "Bookmarks",
+                                                              "Bookmarks",
+                                                              EPHY_BOOKMARKS_TYPE,
+                                                              G_PARAM_READWRITE));
 }
 
 static void
 ephy_toolbars_model_init (EphyToolbarsModel *t)
 {
 	t->priv = g_new0 (EphyToolbarsModelPrivate, 1);
+	t->priv->bookmarks = NULL;
 }
 
 static void
@@ -150,17 +207,21 @@ ephy_toolbars_model_finalize (GObject *object)
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (IS_EPHY_TOOLBARS_MODEL (object));
 
+	g_object_unref (t->priv->bookmarks);
+
 	g_free (t->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 EphyToolbarsModel *
-ephy_toolbars_model_new (void)
+ephy_toolbars_model_new (EphyBookmarks *bookmarks)
 {
 	EphyToolbarsModel *t;
 
-	t = EPHY_TOOLBARS_MODEL (g_object_new (EPHY_TOOLBARS_MODEL_TYPE, NULL));
+	t = EPHY_TOOLBARS_MODEL (g_object_new (EPHY_TOOLBARS_MODEL_TYPE,
+					       "bookmarks", bookmarks,
+					       NULL));
 
 	g_return_val_if_fail (t->priv != NULL, NULL);
 

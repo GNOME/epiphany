@@ -20,6 +20,7 @@
 #define EPHY_TOOLBARS_MODEL_H
 
 #include "egg-toolbars-model.h"
+#include "ephy-bookmarks.h"
 
 G_BEGIN_DECLS
 
@@ -48,7 +49,7 @@ struct EphyToolbarsModelClass
 
 GType		   ephy_toolbars_model_get_type        (void);
 
-EphyToolbarsModel *ephy_toolbars_model_new	       (void);
+EphyToolbarsModel *ephy_toolbars_model_new	       (EphyBookmarks *bookmarks);
 
 void		   ephy_toolbars_model_add_bookmark    (EphyToolbarsModel *model,
 				                        gboolean topic,

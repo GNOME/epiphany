@@ -729,6 +729,8 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		EphyNode *node = selected->data;
 		gulong id;
 
+		g_return_if_fail (node != NULL);
+
 		id = ephy_node_get_id (node);
 		show_in_bookmarks_bar = ephy_toolbars_model_has_bookmark
 			(editor->priv->tb_model, FALSE, id);

@@ -42,6 +42,8 @@
 
 struct EphyBookmarksPrivate
 {
+	EphyToolbarsModel *toolbars_model;
+	gboolean init_defaults;
 	char *xml_file;
 	EphyNodeDb *db;
 	EphyNode *bookmarks;
@@ -81,6 +83,12 @@ static const char *default_topics [] =
 };
 static int n_default_topics = G_N_ELEMENTS (default_topics);
 
+enum
+{
+	PROP_0,
+	PROP_TOOLBARS_MODEL
+};
+
 static void
 ephy_bookmarks_class_init (EphyBookmarksClass *klass);
 static void
@@ -90,16 +98,7 @@ ephy_bookmarks_finalize (GObject *object);
 static void
 ephy_bookmarks_autocompletion_source_init (EphyAutocompletionSourceIface *iface);
 
-enum
-{
-	BOOKMARK_REMOVE,
-	TOPIC_REMOVE,
-	LAST_SIGNAL
-};
-
 static GObjectClass *parent_class = NULL;
-
-static guint ephy_bookmarks_signals[LAST_SIGNAL] = { 0 };
 
 GType
 ephy_bookmarks_get_type (void)
@@ -203,44 +202,10 @@ ephy_bookmarks_autocompletion_source_init (EphyAutocompletionSourceIface *iface)
 }
 
 static void
-ephy_bookmarks_class_init (EphyBookmarksClass *klass)
-{
-        GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-        parent_class = g_type_class_peek_parent (klass);
-
-        object_class->finalize = ephy_bookmarks_finalize;
-
-	ephy_bookmarks_signals[BOOKMARK_REMOVE] =
-                g_signal_new ("bookmark_remove",
-                              G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_FIRST,
-                              G_STRUCT_OFFSET (EphyBookmarksClass, bookmark_remove),
-                              NULL, NULL,
-                              g_cclosure_marshal_VOID__INT,
-                              G_TYPE_NONE,
-                              1,
-			      G_TYPE_INT);
-	ephy_bookmarks_signals[TOPIC_REMOVE] =
-                g_signal_new ("topic_remove",
-                              G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_FIRST,
-                              G_STRUCT_OFFSET (EphyBookmarksClass, topic_remove),
-                              NULL, NULL,
-                              g_cclosure_marshal_VOID__INT,
-                              G_TYPE_NONE,
-                              1,
-			      G_TYPE_INT);
-}
-
-static void
 ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 {
 	int i, id;
 	EphyNode *node;
-	EphyToolbarsModel *model;
-
-	model = ephy_shell_get_toolbars_model (ephy_shell);
 
 	for (i = 0; i < n_default_topics; i++)
 	{
@@ -256,10 +221,81 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 		node = ephy_bookmarks_find_bookmark (eb, default_bookmarks[i].location);
 		if (node == NULL) break;
 		id = ephy_node_get_id (node);
-		ephy_toolbars_model_add_bookmark (model, FALSE, id);
+		ephy_toolbars_model_add_bookmark (eb->priv->toolbars_model, FALSE, id);
 	}
 
 	ephy_bookmarks_save (eb);
+}
+
+static void
+ephy_bookmarks_set_toolbars_model (EphyBookmarks *eb, EphyToolbarsModel *model)
+{
+	eb->priv->toolbars_model = model;
+	g_object_add_weak_pointer (G_OBJECT(eb->priv->toolbars_model),
+				   (gpointer *)&eb->priv->toolbars_model);
+
+	if (eb->priv->init_defaults)
+	{
+		ephy_bookmarks_init_defaults (eb);
+	}
+}
+
+static void
+ephy_bookmarks_set_property (GObject *object,
+                             guint prop_id,
+                             const GValue *value,
+                             GParamSpec *pspec)
+{
+	EphyBookmarks *eb;
+
+	eb = EPHY_BOOKMARKS (object);
+
+	switch (prop_id)
+	{
+		case PROP_TOOLBARS_MODEL:
+			ephy_bookmarks_set_toolbars_model (eb, g_value_get_object (value));
+			break;
+	}
+}
+
+static void
+ephy_bookmarks_get_property (GObject *object,
+                             guint prop_id,
+                             GValue *value,
+                             GParamSpec *pspec)
+{
+	EphyBookmarks *eb;
+
+	eb = EPHY_BOOKMARKS (object);
+
+	switch (prop_id)
+	{
+		case PROP_TOOLBARS_MODEL:
+			g_value_set_object (value, eb->priv->toolbars_model);
+			break;
+	}
+}
+
+
+static void
+ephy_bookmarks_class_init (EphyBookmarksClass *klass)
+{
+        GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+        parent_class = g_type_class_peek_parent (klass);
+
+        object_class->finalize = ephy_bookmarks_finalize;
+	object_class->set_property = ephy_bookmarks_set_property;
+	object_class->get_property = ephy_bookmarks_get_property;
+
+	g_object_class_install_property (object_class,
+                                         PROP_TOOLBARS_MODEL,
+                                         g_param_spec_object ("toolbars_model",
+                                                              "Toolbars model",
+                                                              "Toolbars model",
+                                                              EPHY_TOOLBARS_MODEL_TYPE,
+                                                              G_PARAM_READWRITE));
+
 }
 
 static gboolean
@@ -485,12 +521,6 @@ bookmarks_removed_cb (EphyNode *node,
 		      guint old_index,
 		      EphyBookmarks *eb)
 {
-	long id;
-
-	id = ephy_node_get_id (child);
-	g_signal_emit (eb, ephy_bookmarks_signals[BOOKMARK_REMOVE],
-		       0, id);
-
 	ephy_bookmarks_emit_data_changed (eb);
 }
 
@@ -548,7 +578,6 @@ topics_removed_cb (EphyNode *node,
 		   guint old_index,
 		   EphyBookmarks *eb)
 {
-	long id;
 	GPtrArray *children;
 	int i;
 
@@ -574,10 +603,6 @@ topics_removed_cb (EphyNode *node,
 		g_free (list);
 	}
 	ephy_node_thaw (child);
-
-	id = ephy_node_get_id (child);
-	g_signal_emit (eb, ephy_bookmarks_signals[TOPIC_REMOVE],
-		       0, id);
 }
 
 static void
@@ -587,6 +612,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	EphyNodeDb *db;
 
         eb->priv = g_new0 (EphyBookmarksPrivate, 1);
+	eb->priv->toolbars_model = NULL;
 
 	db = ephy_node_db_new ("EphyBookmarks");
 	eb->priv->db = db;
@@ -664,10 +690,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	g_value_unset (&value);
 	ephy_node_add_child (eb->priv->keywords, eb->priv->notcategorized);
 
-	if (!ephy_bookmarks_load (eb))
-	{
-		ephy_bookmarks_init_defaults (eb);
-	}
+	eb->priv->init_defaults = !ephy_bookmarks_load (eb);
 
 	ephy_bookmarks_emit_data_changed (eb);
 
@@ -694,6 +717,12 @@ ephy_bookmarks_finalize (GObject *object)
 	ephy_node_unref (eb->priv->notcategorized);
 
 	g_object_unref (eb->priv->db);
+
+	if (eb->priv->toolbars_model)
+	{
+		g_object_remove_weak_pointer (G_OBJECT(eb->priv->toolbars_model),
+					      (gpointer *)&eb->priv->toolbars_model);
+	}
 
         g_free (eb->priv);
 

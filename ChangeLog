@@ -1,3 +1,35 @@
+2003-05-26  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/ephy-node.c: (callback), (ephy_node_dispose):
+	* lib/ephy-node.h:
+
+	s/DESTROYED/DESTROY which is more useulf
+
+	* lib/widgets/ephy-tree-model-node.c:
+	(ephy_tree_model_node_set_property), (root_destroy_cb):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_update_menu):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init_defaults),
+	(ephy_bookmarks_set_toolbars_model), (ephy_bookmarks_set_property),
+	(ephy_bookmarks_get_property), (ephy_bookmarks_class_init),
+	(bookmarks_removed_cb), (topics_removed_cb), (ephy_bookmarks_init),
+	(ephy_bookmarks_finalize):
+	* src/ephy-shell.c: (ephy_shell_get_toolbars_model):
+	* src/ephy-toolbars-model.c: (impl_add_item),
+	(ephy_toolbars_model_set_bookmarks),
+	(ephy_toolbars_model_set_property),
+	(ephy_toolbars_model_get_property),
+	(ephy_toolbars_model_class_init), (ephy_toolbars_model_init),
+	(ephy_toolbars_model_finalize), (ephy_toolbars_model_new):
+	* src/ephy-toolbars-model.h:
+	* src/toolbar.c: (topic_destroy_cb), (bookmark_destroy_cb),
+	(toolbar_ensure_action), (toolbar_init):
+
+	Better way to remove unrefed bookmarks from the toolbar.
+	
+	Ref bookmarks in toolbars model and weak reaf toolbars model
+	in bookmarks. So setting defaults really works.
+
 2003-05-25  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/ephy-node.c: (ephy_node_dispose):

@@ -663,8 +663,11 @@ ephy_shell_get_toolbars_model (EphyShell *gs)
 	{
 		char *xml_file;
 		EggToolbarsModel *model;
+		EphyBookmarks *bookmarks;
 
-		gs->priv->toolbars_model = ephy_toolbars_model_new ();
+		bookmarks = ephy_shell_get_bookmarks (gs);
+
+		gs->priv->toolbars_model = ephy_toolbars_model_new (bookmarks);
 		model = EGG_TOOLBARS_MODEL (gs->priv->toolbars_model);
 
 		xml_file = g_build_filename (ephy_dot_dir (),
@@ -682,6 +685,9 @@ ephy_shell_get_toolbars_model (EphyShell *gs)
 			egg_toolbars_model_load (model, default_xml);
 		}
 		g_free (xml_file);
+
+		g_object_set (bookmarks, "toolbars_model",
+			      gs->priv->toolbars_model, NULL);
 	}
 
 	return gs->priv->toolbars_model;

@@ -30,7 +30,7 @@ typedef struct EphyNode EphyNode;
 
 typedef enum
 {
-	EPHY_NODE_DESTROYED,         /* RBNode *node */
+	EPHY_NODE_DESTROY,           /* RBNode *node */
 	EPHY_NODE_RESTORED,          /* RBNode *node */
 	EPHY_NODE_CHILD_ADDED,       /* RBNode *node, RBNode *child */
 	EPHY_NODE_CHILD_CHANGED,     /* RBNode *node, RBNode *child */

@@ -80,8 +80,8 @@ static void root_children_reordered_cb (EphyNode *node,
 static inline void ephy_tree_model_node_update_node (EphyTreeModelNode *model,
 				                     EphyNode *node,
 					             int idx);
-static void root_destroyed_cb (EphyNode *node,
-		               EphyTreeModelNode *model);
+static void root_destroy_cb (EphyNode *node,
+		             EphyTreeModelNode *model);
 static inline GtkTreePath *get_path_real (EphyTreeModelNode *model,
 	                                  EphyNode *node);
 
@@ -267,8 +267,8 @@ ephy_tree_model_node_set_property (GObject *object,
 				                 (EphyNodeCallback) root_children_reordered_cb,
 				                 G_OBJECT (model));
 		ephy_node_signal_connect_object (model->priv->root,
-				                 EPHY_NODE_DESTROYED,
-				                 (EphyNodeCallback) root_destroyed_cb,
+				                 EPHY_NODE_DESTROY,
+				                 (EphyNodeCallback) root_destroy_cb,
 				                 G_OBJECT (model));
 
 		break;
@@ -726,8 +726,8 @@ root_children_reordered_cb (EphyNode *node,
 }
 
 static void
-root_destroyed_cb (EphyNode *node,
-		   EphyTreeModelNode *model)
+root_destroy_cb (EphyNode *node,
+		 EphyTreeModelNode *model)
 {
 	model->priv->root = NULL;
 
