@@ -462,14 +462,18 @@ cmd_bookmark_page (EggAction *action,
 		node = EPHY_NODE (selection->data);
 		location = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_LOCATION);
 		title = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_TITLE);
-		new_bookmark = ephy_new_bookmark_new
-			(bookmarks, window, location);
-		ephy_new_bookmark_set_title
-			(EPHY_NEW_BOOKMARK (new_bookmark), title);
-		g_signal_connect (G_OBJECT (new_bookmark), "response",
-				  G_CALLBACK (ephy_new_bookmark_response_cb),
-				  NULL);
-		gtk_widget_show (new_bookmark);
+		if (ephy_new_bookmark_is_unique (bookmarks, GTK_WINDOW (window),
+						 location))
+		{
+			new_bookmark = ephy_new_bookmark_new
+				(bookmarks, window, location);
+			ephy_new_bookmark_set_title
+				(EPHY_NEW_BOOKMARK (new_bookmark), title);
+			g_signal_connect (G_OBJECT (new_bookmark), "response",
+					  G_CALLBACK (ephy_new_bookmark_response_cb),
+					  NULL);
+			gtk_widget_show (new_bookmark);
+		}
 	}
 	g_list_free (selection);
 }

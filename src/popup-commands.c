@@ -156,16 +156,20 @@ popup_cmd_bookmark_link (EggAction *action,
 	}
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	new_bookmark = ephy_new_bookmark_new
-		(bookmarks, GTK_WINDOW (window), location);
-	ephy_new_bookmark_set_title
-		(EPHY_NEW_BOOKMARK (new_bookmark), title);
-	ephy_new_bookmark_set_smarturl
-		(EPHY_NEW_BOOKMARK (new_bookmark), rel);
-	g_signal_connect (G_OBJECT (new_bookmark), "response",
-			  G_CALLBACK (ephy_new_bookmark_response_cb),
-			  NULL);
-	gtk_widget_show (new_bookmark);
+	if (ephy_new_bookmark_is_unique (bookmarks, GTK_WINDOW (window),
+					 location))
+	{
+		new_bookmark = ephy_new_bookmark_new
+			(bookmarks, GTK_WINDOW (window), location);
+		ephy_new_bookmark_set_title
+			(EPHY_NEW_BOOKMARK (new_bookmark), title);
+		ephy_new_bookmark_set_smarturl
+			(EPHY_NEW_BOOKMARK (new_bookmark), rel);
+		g_signal_connect (G_OBJECT (new_bookmark), "response",
+				  G_CALLBACK (ephy_new_bookmark_response_cb),
+				  NULL);
+		gtk_widget_show (new_bookmark);
+	}
 }
 
 void

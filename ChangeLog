@@ -1,3 +1,20 @@
+2003-05-12  Xan Lopez  <xan@masilla.org>
+
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init_defaults),
+	(history_site_visited_cb), (ephy_bookmarks_find_bookmark),
+	(ephy_bookmarks_set_icon), (ephy_bookmarks_remove_keyword):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/bookmarks/ephy-new-bookmark.c: (duplicate_dialog_construct),
+	(ephy_new_bookmark_is_unique), (ephy_new_bookmark_new):
+	* src/bookmarks/ephy-new-bookmark.h:
+	* src/ephy-history-window.c: (cmd_bookmark_page):
+	* src/popup-commands.c: (popup_cmd_bookmark_link):
+	* src/window-commands.c: (window_cmd_file_bookmark_page):
+
+	Don't allow to have more than one bookmark with the same
+	URL^H^H^Haddress, warn the user with a nice dialog.
+	Fixes #110854.
+
 2003-05-12  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/mozilla/ExternalProtocolService.cpp:

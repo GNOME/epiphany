@@ -288,6 +288,77 @@ ephy_new_bookmark_construct (EphyNewBookmark *editor)
 	gtk_dialog_set_default_response (GTK_DIALOG (editor), GTK_RESPONSE_OK);
 }
 
+static GtkWidget*
+duplicate_dialog_construct (GtkWindow *parent,
+			    const char *title)
+{
+	GtkWidget *dialog;
+	GtkWidget *hbox, *vbox, *label, *image;
+	char *str;
+
+	dialog = gtk_dialog_new_with_buttons (_("Duplicated bookmark"),
+					      GTK_WINDOW (parent),
+					      GTK_DIALOG_NO_SEPARATOR,
+					      GTK_STOCK_OK,
+					      GTK_RESPONSE_ACCEPT,
+					      NULL);
+	
+	gtk_container_set_border_width (GTK_CONTAINER (dialog), 6);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 12);
+
+	hbox = gtk_hbox_new (FALSE, 6);
+	gtk_widget_show (hbox);
+	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
+			    TRUE, TRUE, 0);
+
+	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO,
+					  GTK_ICON_SIZE_DIALOG);
+	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0);
+	gtk_widget_show (image);
+	gtk_box_pack_start (GTK_BOX (hbox), image, TRUE, TRUE, 0);
+
+	vbox = gtk_vbox_new (FALSE, 6);
+	gtk_widget_show (vbox);
+	gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
+
+	label = gtk_label_new (NULL);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	str = g_strconcat ("<big>",_("A bookmark titled "), "<b>", title, "</b>",
+			   _(" already exists for this address."), "</big>",NULL);
+	gtk_label_set_markup (GTK_LABEL (label), str);
+	g_free (str);
+	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+	gtk_widget_show (label);
+
+	return dialog;
+}
+
+gboolean
+ephy_new_bookmark_is_unique (EphyBookmarks *bookmarks,
+				 GtkWindow *parent,
+				 const char *address)
+{
+	EphyNode *node;
+
+	node = ephy_bookmarks_find_bookmark (bookmarks, address);
+	if (node)
+	{
+		GtkWidget *dialog;
+		const char *title;
+
+		title = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE);
+		dialog = duplicate_dialog_construct (parent, title);
+		gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
+		gtk_dialog_run (GTK_DIALOG (dialog));
+		gtk_widget_destroy (dialog);
+
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 GtkWidget *
 ephy_new_bookmark_new (EphyBookmarks *bookmarks,
 		       GtkWindow *parent,
@@ -302,7 +373,6 @@ ephy_new_bookmark_new (EphyBookmarks *bookmarks,
 			 "bookmarks", bookmarks,
 			 "location", location,
 			 NULL));
-
 	if (parent)
 	{
 		gtk_window_set_transient_for (GTK_WINDOW (editor), parent);

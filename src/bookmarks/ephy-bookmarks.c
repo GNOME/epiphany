@@ -229,8 +229,8 @@ ephy_bookmarks_class_init (EphyBookmarksClass *klass)
 static void
 ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 {
-	int i;
-	int id;
+	int i, id;
+	EphyNode *node;
 	EphyToolbarsModel *model;
 
 	model = ephy_shell_get_toolbars_model (ephy_shell);
@@ -246,7 +246,9 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 				    default_bookmarks[i].location,
 				    default_bookmarks[i].smart_url);
 
-		id = ephy_bookmarks_get_bookmark_id (eb, default_bookmarks[i].location);
+		node = ephy_bookmarks_find_bookmark (eb, default_bookmarks[i].location);
+		if (node == NULL) break;
+		id = ephy_node_get_id (node);
 		ephy_toolbars_model_add_bookmark (model, FALSE, id);
 	}
 
@@ -441,10 +443,8 @@ history_site_visited_cb (EphyHistory *gh, const char *url, EphyBookmarks *eb)
 	EphyNode *node;
 	guint id;
 
-	id = ephy_bookmarks_get_bookmark_id (eb, url);
-	if (id == 0) return;
-
-	node = ephy_node_get_from_id (id);
+	node = ephy_bookmarks_find_bookmark (eb, url);
+	if (node == NULL) return;
 
 	if (add_to_favorites (eb, node, gh))
 	{
@@ -738,9 +738,9 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	return bm;
 }
 
-guint
-ephy_bookmarks_get_bookmark_id (EphyBookmarks *eb,
-				const char *url)
+EphyNode*
+ephy_bookmarks_find_bookmark (EphyBookmarks *eb,
+			      const char *url)
 {
 	GPtrArray *children;
 	int i;
@@ -757,12 +757,12 @@ ephy_bookmarks_get_bookmark_id (EphyBookmarks *eb,
 		if (strcmp (url, location) == 0)
 		{
 			ephy_node_thaw (eb->priv->bookmarks);
-			return ephy_node_get_id (kid);
+			return kid;
 		}
 	}
 	ephy_node_thaw (eb->priv->bookmarks);
 
-	return 0;
+	return NULL;
 }
 
 void
@@ -776,10 +776,8 @@ ephy_bookmarks_set_icon	(EphyBookmarks *eb,
 
 	g_return_if_fail (icon != NULL);
 
-	id = ephy_bookmarks_get_bookmark_id (eb, url);
-	if (id == 0) return;
-
-	node = ephy_node_get_from_id (id);
+	node = ephy_bookmarks_find_bookmark (eb, url);
+	if (node == NULL) return;
 
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, icon);
@@ -969,7 +967,8 @@ ephy_bookmarks_add_keyword (EphyBookmarks *eb,
 	return key;
 }
 
-void ephy_bookmarks_remove_keyword (EphyBookmarks *eb,
+void 
+ephy_bookmarks_remove_keyword (EphyBookmarks *eb,
 				    EphyNode *keyword)
 {
 	ephy_node_remove_child (eb->priv->keywords, keyword);

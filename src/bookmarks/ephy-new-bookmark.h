@@ -54,6 +54,10 @@ GtkWidget	    *ephy_new_bookmark_new          (EphyBookmarks *bookmarks,
 						     GtkWindow *parent,
 						     const char *location);
 
+gboolean	    ephy_new_bookmark_is_unique     (EphyBookmarks *bookmarks,
+						     GtkWindow *parent,
+						     const char *location);
+
 void		     ephy_new_bookmark_set_title    (EphyNewBookmark *bookmark,
 						     const char *title);
 
