@@ -1,3 +1,37 @@
+2004-03-23  Adam Hooper  <adamh@cvs.gnome.org>
+
+	* doc/reference/epiphany-docs.sgml:
+	* doc/reference/epiphany-sections.txt:
+	* doc/reference/tmpl/epiphany-unused.sgml:
+
+	Rearranged so that a) the stuff I haven't gone over is clearly marked,
+	and b) the docs build for people who aren't chpe :).
+
+2004-03-23  Adam Hooper  <adamh@cvs.gnome.org>
+
+	* data/.cvsignore:
+
+	Add epiphany-1.4.pc
+
+	* doc/plan.xml:
+
+	Add a comment about EphyPermissionManager's incorrect timing
+
+	* doc/reference-howto.txt:
+
+	s/TRUE/%TRUE, like gtk does it.
+
+	* doc/reference/Makefile.am:
+	* doc/reference/tmpl/ephy-permission-manager.sgml:
+	* doc/reference/tmpl/ephy-window.sgml:
+	* embed/ephy-permission-manager.c:
+	* embed/ephy-permission-manager.h:
+	* src/ephy-window.c: (ephy_window_activate_location):
+	* src/ephy-window.h:
+
+	API documentation.
+	Also, put a newline in ephy_window_activate_location's definition
+
 2004-03-22  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-import.c: (ephy_bookmarks_import):
