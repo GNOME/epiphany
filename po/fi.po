@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-05 21:55+0200\n"
-"PO-Revision-Date: 2004-02-05 23:45+0200\n"
+"POT-Creation-Date: 2004-02-10 22:44+0200\n"
+"PO-Revision-Date: 2004-02-07 17:58+0200\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@hut.fi>\n"
 "Language-Team: Gnome Finnish Translation Team <gnome-fi-laatu@lists."
 "sourceforge.net>\n"
@@ -303,7 +303,7 @@ msgstr ""
 
 #: data/epiphany.schemas.in.h:30
 msgid "Preferred languages, two letter codes."
-msgstr "Suositut kielet kaksikirjaimisina koodeina."
+msgstr "Halutut kielet kaksikirjaimisina koodeina."
 
 #: data/epiphany.schemas.in.h:31
 msgid "Printer name"
@@ -490,7 +490,9 @@ msgstr "Käytä omia kirjasimia sivun määrittelemien sijaan."
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
-msgstr "Kun tiedostoja ei voi avata selaimella, ne tallentuvat automaattisesti tallennushakemistoon ja avautuvat sopivalla sovelluksella."
+msgstr ""
+"Kun tiedostoja ei voi avata selaimella, ne tallentuvat automaattisesti "
+"tallennushakemistoon ja avautuvat sopivalla sovelluksella."
 
 #: data/epiphany.schemas.in.h:65
 msgid ""
@@ -1032,7 +1034,7 @@ msgid "Cut the Selection"
 msgstr "Leikkaa valinta"
 
 #: data/ui/nautilus-epiphany-view.xml.h:10
-#: embed/ephy-embed-popup-control.c:547
+#: embed/ephy-embed-popup-control.c:551
 msgid "Download Link"
 msgstr "Tallenna linkki"
 
@@ -1189,15 +1191,15 @@ msgstr "Jäljellä"
 msgid "_Resume"
 msgstr "_Jatka"
 
-#: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:344
+#: embed/ephy-embed-popup-control.c:561 src/popup-commands.c:344
 msgid "Save Image As"
 msgstr "Tallenna kuva nimellä"
 
-#: embed/ephy-embed-popup-control.c:641
+#: embed/ephy-embed-popup-control.c:645
 msgid "Save Page As"
 msgstr "Tallenna sivu nimellä"
 
-#: embed/ephy-embed-popup-control.c:650 src/popup-commands.c:432
+#: embed/ephy-embed-popup-control.c:654 src/popup-commands.c:432
 msgid "Save Background As"
 msgstr "Tallenna tausta nimellä"
 
@@ -1792,8 +1794,8 @@ msgstr "Sivustoon %s ei voi yhdistää."
 #, c-format
 msgid "The certificate revocation list (CRL) from %s needs to be updated."
 msgstr ""
-"Varmenteiden peruutusluettelo (Certificate Revocation List) lähteestä %s "
-"täytyy päivittää."
+"Varmenteiden sulkulista (Certificate Revocation List) lähteestä %s täytyy "
+"päivittää."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:498
 msgid "Please ask your system administrator for assistance."
@@ -1801,7 +1803,7 @@ msgstr "Pyydä järjestelmäsi ylläpitäjältä neuvoa."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:537
 msgid "_Trust CA"
-msgstr "_Luota varmenteiden myöntäjään"
+msgstr "_Luota varmenneviranomaiseen"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:549
 #, c-format
@@ -1875,11 +1877,11 @@ msgstr "Kirjoita tämän varmenteen salasana."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:945
 msgid "Certificate Revocation list successfully imported."
-msgstr "Varmenteiden peruutusluettelon tuonti onnistui."
+msgstr "Varmenteiden sulkulistan tuonti onnistui."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:946
 msgid "Certificate Revocation list (CRL) imported:"
-msgstr "Varmenteiden peruutusluettelo (Certificate Revocation List) tuotu:"
+msgstr "Varmenteiden sulkulista (Certificate Revocation List) tuotu:"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:968
 msgid "Unit:"
@@ -1903,7 +1905,7 @@ msgstr "Tämän varmenteen sopivuus seuraaviin käyttötapoihin on tarkistettu:"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1291
 msgid "Could not verify this certificate because it has been revoked."
-msgstr "Varmenteen tarkistaminen epäonnistui, koska varmenne on peruttu."
+msgstr "Varmenteen tarkistaminen epäonnistui, koska varmenne on mitätöity."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1294
 msgid "Could not verify this certificate because it has expired."
@@ -1944,7 +1946,8 @@ msgstr "Salainen avain muodostuu."
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
-msgstr "Odota hetki, kun uusi salainen avain syntyy. Tämä voi viedä hetkisen."
+msgstr ""
+"Odota hetki, kun uusi salainen avain muodostuu. Tämä voi viedä hetkisen."
 
 #: embed/mozilla/mozilla-embed-single.cpp:501
 msgid ""
@@ -1997,7 +2000,7 @@ msgstr ""
 msgid "GConf Error"
 msgstr "GConf-virhe"
 
-#: lib/egg/egg-editable-toolbar.c:504
+#: lib/egg/egg-editable-toolbar.c:510
 msgid "_Remove Toolbar"
 msgstr "_Poista työkalupalkki"
 
@@ -2643,13 +2646,13 @@ msgstr "_Älä palauta"
 msgid "_Recover"
 msgstr "_Palauta"
 
-#: src/ephy-session.c:331
+#: src/ephy-session.c:332
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr ""
 "Epiphany vaikuttaa viime kerralla kaatuneen, tai se on suljettu väkisin."
 
-#: src/ephy-session.c:337
+#: src/ephy-session.c:338
 msgid "You can recover the opened tabs and windows."
 msgstr "Voit palauttaa avoinna olleet välilehdet ja ikkunat."
 
@@ -2668,44 +2671,44 @@ msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to register the automation server"
 msgstr ""
-"Epiphanya ei voi käyttää nyt, koska tapahtui odottamatton Bonobo-virhe, kun "
-"Epiphany rekisteröityi automaatiopalveluun."
+"Epiphanya ei voi käyttää nyt, koska tapahtui odottamaton Bonobo-virhe "
+"Epiphanyn rekisteröityessä automaatiopalveluun."
 
 #: src/ephy-shell.c:387
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
 msgstr ""
-"Epiphanya ei voi käyttää nyt, koska tapahtui odottamatton Bonobo-virhe, kun "
-"Epiphany yritti paikantaa automaatio-olion."
+"Epiphanya ei voi käyttää nyt, koska tapahtui odottamaton Bonobo-virhe "
+"Epiphanyn paikantaessa automaatio-oliota."
 
-#: src/ephy-tab.c:326 src/ephy-tab.c:1140 src/ephy-tab.c:1322
+#: src/ephy-tab.c:327 src/ephy-tab.c:1174 src/ephy-tab.c:1356
 msgid "Blank page"
 msgstr "Tyhjä sivu"
 
 # Translator's note: this is intentional, "site" is used in phrases
 # such as "Redirecting to %s...", where the Finnish translation already
 # contains the word "site".
-#: src/ephy-tab.c:747
+#: src/ephy-tab.c:748
 msgid "site"
 msgstr " "
 
-#: src/ephy-tab.c:771
+#: src/ephy-tab.c:772
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Ohjautuu sivustolle %s..."
 
-#: src/ephy-tab.c:775
+#: src/ephy-tab.c:776
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Sivustolta %s siirtyy tietoja..."
 
-#: src/ephy-tab.c:779
+#: src/ephy-tab.c:780
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Luvan odottaminen sivustolta %s käynnissä..."
 
-#: src/ephy-tab.c:787
+#: src/ephy-tab.c:788
 #, c-format
 msgid "Loading %s..."
 msgstr "%s latautuu..."
@@ -3147,7 +3150,7 @@ msgstr "_Sulje asiakirja"
 
 #: src/ephy-window.c:700
 msgid "There are unsubmitted changes to form elements."
-msgstr "Lomakkeen kenttiä on muutettu."
+msgstr "Lähettämättömän lomakkeen kenttiä on muutettu."
 
 #: src/ephy-window.c:701
 msgid "If you close the document anyway, you will lose that information."
