@@ -406,7 +406,9 @@ offer_to_resume (EphySession *session,
 	ephy_gui_window_update_user_time (session->priv->resume_dialog,
 					  user_time);
 
+	gtk_window_set_auto_startup_notification (FALSE);
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_window_set_auto_startup_notification (TRUE);
 
 	gtk_widget_destroy (dialog);
 
