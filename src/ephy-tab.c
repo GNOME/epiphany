@@ -1748,7 +1748,7 @@ ephy_tab_get_status_message (EphyTab *tab)
 static void
 ephy_tab_set_title (EphyTab *tab, EphyEmbed *embed, const char *new_title)
 {
-	char *title_tmp, *title = NULL;
+	char *title = NULL;
 
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
@@ -1796,13 +1796,9 @@ ephy_tab_set_title (EphyTab *tab, EphyEmbed *embed, const char *new_title)
 
 	tab->priv->title = title;
 
-	title_tmp = ephy_string_double_underscores (title);
-
 	g_object_set (G_OBJECT (tab->priv->action),
-		      "label", title_tmp,
+		      "label", title,
 		      NULL);
-
-	g_free (title_tmp);
 
 	g_object_notify (G_OBJECT (tab), "title");
 }

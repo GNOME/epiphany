@@ -22,7 +22,6 @@
 #include "config.h"
 
 #include "ephy-tabs-menu.h"
-#include "ephy-string.h"
 #include "ephy-marshal.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
@@ -37,7 +36,7 @@
 #include <stdlib.h>
 #include <libxml/entities.h>
 
-#define MAX_LABEL_LENGTH 30
+#define LABEL_WIDTH_CHARS 32
 
 #define EPHY_TABS_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TABS_MENU, EphyTabsMenuPrivate))
 
@@ -131,8 +130,13 @@ connect_proxy_cb (GtkActionGroup *action_group,
 {
 	if (GTK_IS_MENU_ITEM (proxy))
 	{
-		gtk_label_set_ellipsize (GTK_LABEL (GTK_BIN (proxy)->child),
-					 PANGO_ELLIPSIZE_END);
+		GtkLabel *label;
+
+		label = GTK_LABEL (GTK_BIN (proxy)->child);
+
+		gtk_label_set_use_underline (label, FALSE);
+		gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+		gtk_label_set_max_width_chars (label, LABEL_WIDTH_CHARS);
 	}
 }
 

@@ -31,7 +31,6 @@
 #include <time.h>
 
 #include "ephy-node.h"
-#include "ephy-string.h"
 
 typedef struct
 {

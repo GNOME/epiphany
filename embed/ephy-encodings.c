@@ -22,7 +22,6 @@
 #include "config.h"
 
 #include "ephy-encodings.h"
-#include "ephy-string.h"
 #include "ephy-node-db.h"
 #include "ephy-file-helpers.h"
 #include "eel-gconf-extensions.h"
@@ -230,6 +229,35 @@ ephy_encodings_class_init (EphyEncodingsClass *klass)
 	g_type_class_add_private (object_class, sizeof (EphyEncodingsPrivate));
 }
 
+/* copied from egg-toolbar-editor.c */
+static char *
+elide_underscores (const char *original)
+{
+	char *q, *result;
+	const char *p;
+	gboolean last_underscore;
+
+	q = result = g_malloc (strlen (original) + 1);
+	last_underscore = FALSE;
+
+	for (p = original; *p; p++)
+	{
+		if (!last_underscore && *p == '_')
+		{
+			last_underscore = TRUE;
+		}
+		else
+		{
+			last_underscore = FALSE;
+			*q++ = *p;
+		}
+	}
+
+	*q = '\0';
+
+	return result;
+}
+
 static EphyNode *
 add_encoding (EphyEncodings *encodings,
 	      const char *title,
@@ -248,7 +276,7 @@ add_encoding (EphyEncodings *encodings,
 	ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_TITLE, &value);
 	g_value_unset (&value);
 
-	elided = ephy_string_elide_underscores (title);
+	elided = elide_underscores (title);
 	normalised = g_utf8_normalize (elided, -1, G_NORMALIZE_DEFAULT);
 
 	g_value_init (&value, G_TYPE_STRING);

@@ -36,8 +36,7 @@
 #include "ephy-dnd.h"
 #include "ephy-gui.h"
 #include "ephy-marshal.h"
-#include "ephy-string.h"
-#include "string.h"
+#include <string.h>
 
 static void ephy_node_view_class_init (EphyNodeViewClass *klass);
 static void ephy_node_view_init (EphyNodeView *view);

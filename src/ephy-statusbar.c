@@ -24,7 +24,6 @@
 
 #include "ephy-statusbar.h"
 #include "ephy-stock-icons.h"
-#include "ephy-string.h"
 
 #include <string.h>
 #include <gtk/gtkprogressbar.h>

@@ -1,5 +1,25 @@
 2004-12-13  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-encodings.c: (elide_underscores), (add_encoding):
+	* embed/mozilla/FilePicker.cpp:
+	* lib/ephy-dnd.c:
+	* lib/ephy-node.c:
+	* lib/ephy-string.c: (ephy_string_blank_chr):
+	* lib/ephy-string.h:
+	* lib/widgets/ephy-node-view.c:
+	* src/ephy-encoding-menu.c:
+	* src/ephy-notebook.c:
+	* src/ephy-session.c:
+	* src/ephy-statusbar.c:
+	* src/ephy-tab.c: (ephy_tab_set_title):
+	* src/ephy-tabs-menu.c: (connect_proxy_cb):
+	* src/ppview-toolbar.c:
+
+	Get rid of ephy_string_[elide|double]_underscores().
+	Remove unnecessary ephy-string.h includes.
+
+2004-12-13  Christian Persch  <chpe@cvs.gnome.org>
+
 	* Makefile.am:
 
 	Make distcheck fix.

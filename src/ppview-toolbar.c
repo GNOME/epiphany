@@ -22,7 +22,6 @@
 
 #include "ppview-toolbar.h"
 #include "ephy-window.h"
-#include "ephy-string.h"
 
 #include <string.h>
 #include <glib/gi18n.h>

@@ -29,7 +29,6 @@
 #include "ephy-shell.h"
 #include "ephy-history-window.h"
 #include "ephy-bookmarks-editor.h"
-#include "ephy-string.h"
 #include "ephy-file-helpers.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"

@@ -28,7 +28,6 @@
 #include "ephy-embed.h"
 #include "ephy-embed-shell.h"
 #include "ephy-shell.h"
-#include "ephy-string.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtkaction.h>

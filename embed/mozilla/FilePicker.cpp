@@ -42,7 +42,6 @@
 #include <nsIDOMWindowInternal.h>
 #endif
 
-#include "ephy-string.h"
 #include "ephy-prefs.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
