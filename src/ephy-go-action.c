@@ -70,6 +70,7 @@ create_tool_item (GtkAction *action)
 
 	button = gtk_button_new_with_label (_("Go"));
 	gtk_button_set_relief(GTK_BUTTON (button), GTK_RELIEF_NONE);
+	gtk_button_set_focus_on_click (GTK_BUTTON (button), FALSE);
 
 	gtk_container_add (GTK_CONTAINER (item), button);
 	gtk_widget_show (button);
