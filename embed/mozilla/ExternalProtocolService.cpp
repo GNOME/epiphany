@@ -20,6 +20,8 @@
 #include <config.h>
 #endif
 
+#if MOZILLA_SNAPSHOT < 12
+
 #include <gtk/gtkmessagedialog.h>
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
@@ -153,3 +155,5 @@ NS_IMETHODIMP GExternalProtocolService::LoadUrl(nsIURI *aURL)
 
 	return NS_OK;
 }
+
+#endif
