@@ -773,12 +773,12 @@ pdm_dialog_password_remove (PdmActionInfo *info,
 	 * selection in the process.
 	 */
 	g_signal_handlers_block_by_func
-		(manager, G_CALLBACK (passwords_changed_cb), info);
+		(manager, G_CALLBACK (passwords_changed_cb), info->dialog);
 
 	ephy_password_manager_remove (manager, pinfo);
 
 	g_signal_handlers_unblock_by_func
-		(manager, G_CALLBACK (passwords_changed_cb), info);
+		(manager, G_CALLBACK (passwords_changed_cb), info->dialog);
 }
 
 /* common routines */
