@@ -1055,6 +1055,8 @@ update_nav_control (EphyWindow *window)
 	g_object_set (action, "sensitive", !forward, NULL);
 	action = egg_action_group_get_action (action_group, "GoUp");
 	g_object_set (action, "sensitive", !up, NULL);
+	action = egg_action_group_get_action (action_group, "ViewStop");
+	g_object_set (action, "sensitive", stop, NULL);
 
 	toolbar_update_navigation_actions (window->priv->toolbar,
 					   back, forward, up);
