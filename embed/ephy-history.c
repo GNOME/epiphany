@@ -289,12 +289,6 @@ update_host_on_child_remove (EphyNode *node)
 	GPtrArray *children;
 	int i, host_last_visit, new_host_last_visit = 0;
 
-	if (ephy_node_get_n_children (node) == 0)
-	{
-		ephy_node_unref (node);
-		return;
-	}
-
 	host_last_visit = ephy_node_get_property_int
 			(node, EPHY_NODE_PAGE_PROP_LAST_VISIT);
 
@@ -333,19 +327,31 @@ update_hosts (EphyHistory *eh)
 {
 	GPtrArray *children;
 	int i;
+	GList *empty = NULL;
 
 	children = ephy_node_get_children (eh->priv->hosts);
-	ephy_node_thaw (eh->priv->hosts);
 	for (i = 0; i < children->len; i++)
 	{
 		EphyNode *kid;
 
 		kid = g_ptr_array_index (children, i);
+
 		if (kid != eh->priv->pages)
 		{
-			update_host_on_child_remove (kid);
+			if (ephy_node_get_n_children (kid) > 0)
+			{
+				update_host_on_child_remove (kid);
+			}
+			else
+			{
+				empty = g_list_prepend (empty, kid);
+			}
 		}
 	}
+	ephy_node_thaw (eh->priv->hosts);
+
+	g_list_foreach (empty, (GFunc)ephy_node_unref, NULL);
+	g_list_free (empty);
 
 	eh->priv->update_hosts_idle = 0;
 
