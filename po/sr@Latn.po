@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-14 14:22+0200\n"
-"PO-Revision-Date: 2003-10-14 14:27+0200\n"
+"POT-Creation-Date: 2003-10-22 01:49+0200\n"
+"PO-Revision-Date: 2003-10-22 01:51+0200\n"
 "Last-Translator: Danilo Segan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -469,28 +469,24 @@ msgstr "x-cyrillic"
 msgid "  "
 msgstr "  "
 
-#: data/glade/epiphany.glade.h:2 data/glade/prefs-dialog.glade.h:2
+#: data/glade/epiphany.glade.h:2
+msgid "      "
+msgstr "      "
+
+#: data/glade/epiphany.glade.h:3 data/glade/prefs-dialog.glade.h:2
 #: data/glade/print.glade.h:2
 msgid "*"
 msgstr "*"
 
-#: data/glade/epiphany.glade.h:3
-msgid "<b>Address:</b>"
-msgstr "<b>Adresa:</b>"
-
 #: data/glade/epiphany.glade.h:4
-msgid "<b>Status:</b>"
-msgstr "<b>Stanje:</b>"
+msgid "<b>Use a different _encoding:</b>"
+msgstr "<b>Koristi neko drugo _kodiranje:</b>"
 
 #: data/glade/epiphany.glade.h:5
-msgid "<b>Time Elapsed:</b>"
-msgstr "<b>Proteklo vreme:</b>"
+msgid "<b>_Automatic</b>"
+msgstr "<b>_Samostalno</b>"
 
 #: data/glade/epiphany.glade.h:6
-msgid "<b>Time Remaining:</b>"
-msgstr "<b>Preostalo vreme:</b>"
-
-#: data/glade/epiphany.glade.h:7
 msgid ""
 "<span weight=\"bold\" size=\"larger\">What do you want to do with this "
 "file?\n"
@@ -502,42 +498,46 @@ msgstr ""
 "</span>\n"
 "Ova vrsta datoteka se ne može neposredno pregledati u čitaču."
 
-#: data/glade/epiphany.glade.h:10
+#: data/glade/epiphany.glade.h:9
 msgid "C_ase sensitive"
 msgstr "Veličin_a slova je bitna"
 
-#: data/glade/epiphany.glade.h:11
+#: data/glade/epiphany.glade.h:10
 msgid "Choose the file type action"
 msgstr "Izaberi dejstvo za vrstu datoteka"
 
-#: data/glade/epiphany.glade.h:12
+#: data/glade/epiphany.glade.h:11
 msgid "Cookies"
 msgstr "Kolačići"
 
-#: data/glade/epiphany.glade.h:13
+#: data/glade/epiphany.glade.h:12
 msgid "DYNAMIC"
 msgstr "DINAMIČKI"
 
-#: data/glade/epiphany.glade.h:14
+#: data/glade/epiphany.glade.h:13
 msgid "Download Manager"
 msgstr "Preuzimanje"
 
-#: data/glade/epiphany.glade.h:15
-msgid "Download _Details"
-msgstr "_Detalji preuzimanja..."
-
-#: data/glade/epiphany.glade.h:16 data/ui/nautilus-epiphany-view.xml.in.h:11
-#: src/ephy-window.c:620
+#: data/glade/epiphany.glade.h:14 data/ui/nautilus-epiphany-view.xml.in.h:11
+#: src/ephy-window.c:610
 msgid "Find"
 msgstr "Pronađi"
 
-#: data/glade/epiphany.glade.h:17
+#: data/glade/epiphany.glade.h:15
 msgid "Passwords"
 msgstr "Lozinke"
 
-#: data/glade/epiphany.glade.h:18
+#: data/glade/epiphany.glade.h:16
 msgid "Personal Data Manager"
 msgstr "Upravljanje ličnim podacima"
+
+#: data/glade/epiphany.glade.h:17
+msgid "Text Encoding"
+msgstr "Kodiranje teksta"
+
+#: data/glade/epiphany.glade.h:18 src/ephy-encoding-menu.c:396
+msgid "Use the encoding specified by the document"
+msgstr "Koristi kodiranje koje je naznačio dokument"
 
 #: data/glade/epiphany.glade.h:19
 msgid "You can open it with another application or save it on disk."
@@ -552,7 +552,7 @@ msgstr "_Pronađi:"
 msgid "_Next"
 msgstr "_Sledeći"
 
-#: data/glade/epiphany.glade.h:22 embed/downloader-view.c:367
+#: data/glade/epiphany.glade.h:22
 msgid "_Pause"
 msgstr "_Zaustavi"
 
@@ -799,7 +799,7 @@ msgid "Paper"
 msgstr "Papir"
 
 #: data/glade/print.glade.h:26 data/ui/nautilus-epiphany-view.xml.in.h:23
-#: src/ephy-window.c:616
+#: src/ephy-window.c:606
 msgid "Print"
 msgstr "Štampaj"
 
@@ -893,7 +893,7 @@ msgid "Cut the Selection"
 msgstr "Iseci izabrano"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:10
-#: embed/ephy-embed-popup-control.c:539
+#: embed/ephy-embed-popup-control.c:532
 msgid "Download Link"
 msgstr "Preuzmi vezu"
 
@@ -970,124 +970,425 @@ msgid "Select the Entire Document"
 msgstr "Izaberi ceo dokument"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:31
+msgid "Text _Encoding..."
+msgstr "_Kodiranje teksta..."
+
+#: data/ui/nautilus-epiphany-view.xml.in.h:32
 msgid "Use Image As Background"
 msgstr "Upotrebi sliku za pozadinu"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:32
+#: data/ui/nautilus-epiphany-view.xml.in.h:33
 #: src/bookmarks/ephy-bookmarks-editor.c:161 src/ephy-history-window.c:152
 #: src/ephy-window.c:63
 msgid "_Edit"
 msgstr "_Uređivanje"
 
 #. Toplevel
-#: data/ui/nautilus-epiphany-view.xml.in.h:33
+#: data/ui/nautilus-epiphany-view.xml.in.h:34
 #: src/bookmarks/ephy-bookmarks-editor.c:160 src/ephy-history-window.c:151
 #: src/ephy-window.c:62
 msgid "_File"
 msgstr "_Datoteka"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:34 src/ephy-window.c:107
+#: data/ui/nautilus-epiphany-view.xml.in.h:35 src/ephy-window.c:107
 msgid "_Find..."
 msgstr "_Pronađi..."
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:35 src/ephy-window.c:84
+#: data/ui/nautilus-epiphany-view.xml.in.h:36 src/ephy-window.c:84
 msgid "_Print..."
 msgstr "_Štampaj..."
 
-#. Hours, Minutes, Seconds
-#: embed/downloader-view.c:218
+#: embed/downloader-view.c:206
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u:%02u"
 
-#. Minutes, Seconds
-#: embed/downloader-view.c:223
+#: embed/downloader-view.c:210
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
-#: embed/downloader-view.c:363
-msgid "_Resume"
-msgstr "_Nastavi"
-
-#: embed/downloader-view.c:385
-#, c-format
-msgid "%.1f of %.1f MB"
-msgstr "%.1f od %.1f MB"
-
-#: embed/downloader-view.c:391
-#, c-format
-msgid "%d of %d kB"
-msgstr "%d od %d kB"
-
-#: embed/downloader-view.c:397
-#, c-format
-msgid "%d kB"
-msgstr "%d kB"
-
-#: embed/downloader-view.c:403
-#, c-format
-msgid "%s at %.1f kB/s"
-msgstr "%s na %.1f kB/s"
-
-#: embed/downloader-view.c:518 embed/downloader-view.c:536
-#: src/ephy-window.c:800
-msgid "Unknown"
-msgstr "Nepoznato"
-
-#: embed/downloader-view.c:535
-msgid "00.00"
-msgstr "00.00"
-
-#: embed/downloader-view.c:774
+#: embed/downloader-view.c:361
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:784
+#: embed/downloader-view.c:372
 msgid "Filename"
 msgstr "Ime datoteke"
 
-#: embed/downloader-view.c:795
+#: embed/downloader-view.c:383
 msgid "Size"
 msgstr "Veličina"
 
-#: embed/downloader-view.c:806
+#: embed/downloader-view.c:394
 msgid "Remaining"
 msgstr "Preostalo"
 
-#: embed/downloader-view.c:1013
-msgid "Cancel all pending downloads?"
-msgstr "Otkaži sva zakazana preuzimanja?"
-
-#: embed/ephy-embed-popup-control.c:550 src/popup-commands.c:334
+#: embed/ephy-embed-popup-control.c:543 src/popup-commands.c:327
 msgid "Save Image As"
 msgstr "Sačuvaj sliku kao"
 
-#: embed/ephy-embed-popup-control.c:664
+#: embed/ephy-embed-popup-control.c:650
 msgid "Save Page As"
 msgstr "Sačuvaj stranicu kao"
 
-#: embed/ephy-embed-popup-control.c:673 src/popup-commands.c:422
+#: embed/ephy-embed-popup-control.c:659 src/popup-commands.c:415
 msgid "Save Background As"
 msgstr "Sačuvaj pozadinu kao"
 
-#: embed/ephy-embed-utils.c:178
+#: embed/ephy-embed-utils.c:174
 msgid "The file has not been saved."
 msgstr "Ova datoteka nije sačuvana."
 
-#: embed/ephy-embed-utils.c:294
+#: embed/ephy-embed-utils.c:210
 msgid "No available applications to open the specified file."
 msgstr "Ne postoje programi za otvaranje navedene datoteke."
 
-#: embed/ephy-history.c:408 src/bookmarks/ephy-bookmarks.c:585
+#: embed/ephy-encodings.c:63
+msgid "Arabic (_IBM-864)"
+msgstr "Arapski (_IBM-864)"
+
+#: embed/ephy-encodings.c:64
+msgid "Arabic (ISO-_8859-6)"
+msgstr "Arapski (ISO-_8859-6)"
+
+#: embed/ephy-encodings.c:65
+msgid "Arabic (_MacArabic)"
+msgstr "Arapski (_MacArabic)"
+
+#: embed/ephy-encodings.c:66
+msgid "Arabic (_Windows-1256)"
+msgstr "Arapski (_Windows-1256)"
+
+#: embed/ephy-encodings.c:67
+msgid "Baltic (_ISO-8859-13)"
+msgstr "Baltički (_ISO-8859-13)"
+
+#: embed/ephy-encodings.c:68
+msgid "Baltic (I_SO-8859-4)"
+msgstr "Baltički (I_SO-8859-4)"
+
+#: embed/ephy-encodings.c:69
+msgid "Baltic (_Windows-1257)"
+msgstr "Baltički (_Windows-1257)"
+
+#: embed/ephy-encodings.c:70
+msgid "_Armenian (ARMSCII-8)"
+msgstr "_Jermenski (ARMSCII-8)"
+
+#: embed/ephy-encodings.c:71
+msgid "_Georgian (GEOSTD8)"
+msgstr "_Gruzijski (GEOSTD8)"
+
+#: embed/ephy-encodings.c:72
+msgid "Central European (_IBM-852)"
+msgstr "Centralnoevropski (_IBM-852)"
+
+#: embed/ephy-encodings.c:73
+msgid "Central European (I_SO-8859-2)"
+msgstr "Centralnoevropski (I_SO-8859-2)"
+
+#: embed/ephy-encodings.c:74
+msgid "Central European (_MacCE)"
+msgstr "Centralnoevropski (_MacCE)"
+
+#: embed/ephy-encodings.c:75
+msgid "Central European (_Windows-1250)"
+msgstr "Centralnoevropski (_Windows-1250)"
+
+#: embed/ephy-encodings.c:76
+msgid "Chinese Simplified (_GB18030)"
+msgstr "Kineski pojednostavljeni (_GB18030)"
+
+#: embed/ephy-encodings.c:77
+msgid "Chinese Simplified (G_B2312)"
+msgstr "Kineski pojednostavljeni (G_B2312)"
+
+#: embed/ephy-encodings.c:78
+msgid "Chinese Simplified (GB_K)"
+msgstr "Kineski pojednostavljeni (GB_K)"
+
+#: embed/ephy-encodings.c:79
+msgid "Chinese Simplified (_HZ)"
+msgstr "Kineski pojednostavljeni (_HZ)"
+
+#: embed/ephy-encodings.c:80
+msgid "Chinese Simplified (_ISO-2022-CN)"
+msgstr "Kineski pojednostavljeni (_ISO-2022-CN)"
+
+#: embed/ephy-encodings.c:81
+msgid "Chinese Traditional (Big_5)"
+msgstr "Kineski Tradicionalni (Big_5)"
+
+#: embed/ephy-encodings.c:82
+msgid "Chinese Traditional (Big5-HK_SCS)"
+msgstr "Kineski Tradicionalni (Big5-HK_SCS)"
+
+#: embed/ephy-encodings.c:83
+msgid "Chinese Traditional (_EUC-TW)"
+msgstr "Kineski Tradicionalni (_EUC-TW)"
+
+#: embed/ephy-encodings.c:84
+msgid "Cyrillic (_IBM-855)"
+msgstr "Ćirilica (_IBM-855)"
+
+#: embed/ephy-encodings.c:85
+msgid "Cyrillic (I_SO-8859-5)"
+msgstr "Ćirilica (I_SO-8859-5)"
+
+#: embed/ephy-encodings.c:86
+msgid "Cyrillic (IS_O-IR-111)"
+msgstr "Ćirilica (IS_O-IR-111)"
+
+#: embed/ephy-encodings.c:87
+msgid "Cyrillic (_KOI8-R)"
+msgstr "Ćirilica (_KOI8-R)"
+
+#: embed/ephy-encodings.c:88
+msgid "Cyrillic (_MacCyrillic)"
+msgstr "Ćirilica (_MacCyrillic)"
+
+#: embed/ephy-encodings.c:89
+msgid "Cyrillic (_Windows-1251)"
+msgstr "Ćirilica (_Windows-1251)"
+
+#: embed/ephy-encodings.c:90
+msgid "Cyrillic/_Russian (IBM-866)"
+msgstr "Ćirilica/_Ruski (CP-866)"
+
+#: embed/ephy-encodings.c:91
+msgid "Greek (_ISO-8859-7)"
+msgstr "Grčki (_ISO-8859-7)"
+
+#: embed/ephy-encodings.c:92
+msgid "Greek (_MacGreek)"
+msgstr "Grčki (_MacGreek)"
+
+#: embed/ephy-encodings.c:93
+msgid "Greek (_Windows-1253)"
+msgstr "Grčki (_Windows-1253)"
+
+#: embed/ephy-encodings.c:94
+msgid "Gujarati (_MacGujarati)"
+msgstr "Gudžarati (_MacGujarati)"
+
+#: embed/ephy-encodings.c:95
+msgid "Gurmukhi (Mac_Gurmukhi)"
+msgstr "Gurmuki (Mac_Gurmukhi)"
+
+#: embed/ephy-encodings.c:96
+msgid "Hindi (Mac_Devanagari)"
+msgstr "Hindu (Mac_Devanagari)"
+
+#: embed/ephy-encodings.c:97
+msgid "Hebrew (_IBM-862)"
+msgstr "Hebrejski (_IBM-862)"
+
+#: embed/ephy-encodings.c:98
+msgid "Hebrew (IS_O-8859-8-I)"
+msgstr "Hebrejski (IS_O-8859-8-I)"
+
+#: embed/ephy-encodings.c:99
+msgid "Hebrew (_MacHebrew)"
+msgstr "Hebrejski (_MacHebrew)"
+
+#: embed/ephy-encodings.c:100
+msgid "Hebrew (_Windows-1255)"
+msgstr "Hebrejski (_Windows-1255)"
+
+#: embed/ephy-encodings.c:101
+msgid "_Visual Hebrew (ISO-8859-8)"
+msgstr "_Vizuelni Hebrejski (ISO-8859-8)"
+
+#: embed/ephy-encodings.c:102
+msgid "Japanese (_EUC-JP)"
+msgstr "Japanski (_EUC-JP)"
+
+#: embed/ephy-encodings.c:103
+msgid "Japanese (_ISO-2022-JP)"
+msgstr "Japanski (_ISO-2022-JP)"
+
+#: embed/ephy-encodings.c:104
+msgid "Japanese (_Shift-JIS)"
+msgstr "Japanski (_Shift_JIS)"
+
+#: embed/ephy-encodings.c:105
+msgid "Korean (_EUC-KR)"
+msgstr "Korejski (_EUC-KR)"
+
+#: embed/ephy-encodings.c:106
+msgid "Korean (_ISO-2022-KR)"
+msgstr "Korejski (_ISO-2022-KR)"
+
+#: embed/ephy-encodings.c:107
+msgid "Korean (_JOHAB)"
+msgstr "Korejski (_JOHAB)"
+
+#: embed/ephy-encodings.c:108
+msgid "Korean (_UHC)"
+msgstr "Korsejski (_UHC)"
+
+#: embed/ephy-encodings.c:109
+msgid "_Celtic (ISO-8859-14)"
+msgstr "_Keltski (ISO-8859-14)"
+
+#: embed/ephy-encodings.c:110
+msgid "_Icelandic (MacIcelandic)"
+msgstr "_Islandski (MacIcelandic)"
+
+#: embed/ephy-encodings.c:111
+msgid "_Nordic (ISO-8859-10)"
+msgstr "_Nordijski (ISO-8859-10)"
+
+#: embed/ephy-encodings.c:112
+msgid "_Persian (MacFarsi)"
+msgstr "_Farsi (MacFarsi)"
+
+#: embed/ephy-encodings.c:113
+msgid "Croatian (Mac_Croatian)"
+msgstr "Hrvatski (Mac_Croatian)"
+
+#: embed/ephy-encodings.c:114
+msgid "_Romanian (MacRomanian)"
+msgstr "_Rumunski (MacRomanian)"
+
+#: embed/ephy-encodings.c:115
+msgid "R_omanian (ISO-8859-16)"
+msgstr "R_umunski (ISO-8859-16)"
+
+#: embed/ephy-encodings.c:116
+msgid "South _European (ISO-8859-3)"
+msgstr "Južno_evropski (ISO-8859-3)"
+
+#: embed/ephy-encodings.c:117
+msgid "Thai (TIS-_620)"
+msgstr "Tajlandski (TIS-_620)"
+
+#: embed/ephy-encodings.c:119
+msgid "Thai (IS_O-8859-11)"
+msgstr "Tajlandski (IS_O-8859-11)"
+
+#: embed/ephy-encodings.c:120
+msgid "_Thai (Windows-874)"
+msgstr "_Tajlandski (Windows-874)"
+
+#: embed/ephy-encodings.c:122
+msgid "Turkish (_IBM-857)"
+msgstr "Turski (_IBM-857)"
+
+#: embed/ephy-encodings.c:123
+msgid "Turkish (I_SO-8859-9)"
+msgstr "Turski (I_SO-8859-9)"
+
+#: embed/ephy-encodings.c:124
+msgid "Turkish (_MacTurkish)"
+msgstr "Turski (_MacTurkish)"
+
+#: embed/ephy-encodings.c:125
+msgid "Turkish (_Windows-1254)"
+msgstr "Turski (_Windows-1254)"
+
+#: embed/ephy-encodings.c:126
+msgid "Unicode (UTF-_8)"
+msgstr "Unikod (UTF-_8)"
+
+#: embed/ephy-encodings.c:127
+msgid "Unicode (UTF-_7)"
+msgstr "Unikod (UTF-_7)"
+
+#: embed/ephy-encodings.c:128
+msgid "Cyrillic/Ukrainian (_KOI8-U)"
+msgstr "Ćirilica/Ukrajinski (_KOI8-U)"
+
+#: embed/ephy-encodings.c:129
+msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
+msgstr "Ćirilica/Ukrajinski (Mac_Ukrainian)"
+
+#: embed/ephy-encodings.c:130
+msgid "Vietnamese (_TCVN)"
+msgstr "Vijetnamski (_TCVN)"
+
+#: embed/ephy-encodings.c:131
+msgid "Vietnamese (_VISCII)"
+msgstr "Vijetnamski (_VISCII)"
+
+#: embed/ephy-encodings.c:132
+msgid "Vietnamese (V_PS)"
+msgstr "Vijetnamski (V_PS)"
+
+#: embed/ephy-encodings.c:133
+msgid "Vietnamese (_Windows-1258)"
+msgstr "Vijetnamski (_Windows-1258)"
+
+#: embed/ephy-encodings.c:134
+msgid "Western (_IBM-850)"
+msgstr "Zapadni (_IBM-850)"
+
+#: embed/ephy-encodings.c:135
+msgid "Western (_ISO-8859-1)"
+msgstr "Zapadni (I_SO-8859-1)"
+
+#: embed/ephy-encodings.c:136
+msgid "Western (IS_O-8859-15)"
+msgstr "Zapadni (IS_O-8859-15)"
+
+#: embed/ephy-encodings.c:137
+msgid "Western (_MacRoman)"
+msgstr "Zapadni (_MacRoman)"
+
+#: embed/ephy-encodings.c:138
+msgid "Western (_Windows-1252)"
+msgstr "Zapadni (_Windows-1252)"
+
+#: embed/ephy-encodings.c:140
+msgid "Off"
+msgstr "Isključeno"
+
+#: embed/ephy-encodings.c:141 src/prefs-dialog.c:106
+msgid "Chinese"
+msgstr "Kineski"
+
+#: embed/ephy-encodings.c:142
+msgid "Chinese Simplified"
+msgstr "Kineski pojednostavljeni"
+
+#: embed/ephy-encodings.c:143
+msgid "Chinese Traditional"
+msgstr "Kineski Tradicionalni"
+
+#: embed/ephy-encodings.c:144
+msgid "East Asian"
+msgstr "Istočnoazijski"
+
+#: embed/ephy-encodings.c:145 lib/ephy-langs.c:38 src/prefs-dialog.c:126
+msgid "Japanese"
+msgstr "Japanski"
+
+#: embed/ephy-encodings.c:146 lib/ephy-langs.c:39 src/prefs-dialog.c:127
+msgid "Korean"
+msgstr "Korejski"
+
+#: embed/ephy-encodings.c:147 src/prefs-dialog.c:139
+msgid "Russian"
+msgstr "Ruski"
+
+#: embed/ephy-encodings.c:148
+msgid "Universal"
+msgstr "Opšte"
+
+#: embed/ephy-encodings.c:149 src/prefs-dialog.c:148
+msgid "Ukrainian"
+msgstr "Ukrajinski"
+
+#: embed/ephy-history.c:417 src/bookmarks/ephy-bookmarks.c:565
 msgid "All"
 msgstr "Sve"
 
-#: embed/ephy-history.c:555
+#: embed/ephy-history.c:564
 msgid "Others"
 msgstr "Ostali"
 
-#: embed/ephy-history.c:561
+#: embed/ephy-history.c:570
 msgid "Local files"
 msgstr "Lokalne datoteke"
 
@@ -1245,7 +1546,7 @@ msgstr "Kraj tekuće sesije"
 #. * "zh_CN" translation: "zh-cn,zh"
 #. * "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
 #.
-#: embed/mozilla/mozilla-notifiers.cpp:589
+#: embed/mozilla/mozilla-notifiers.cpp:591
 msgid "system-language"
 msgstr "sr-cs,sr-yu,sr,sh"
 
@@ -1258,321 +1559,20 @@ msgstr ""
 "GKonf greška:\n"
 "  %s"
 
-#: lib/egg/egg-editable-toolbar.c:283
+#: lib/egg/egg-editable-toolbar.c:452
 msgid "_Remove Toolbar"
 msgstr "_Ukloni alatke"
 
-#: lib/egg/egg-toolbar-editor.c:449
+#: lib/egg/egg-toolbar-editor.c:467
 msgid "Separator"
 msgstr "Razdvajač"
 
-#: lib/egg/egg-toolbar-editor.c:479
+#: lib/egg/egg-toolbar-editor.c:497
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
 msgstr ""
 "Prevucite stavku među alatke da je dodate, a odvucite je da je uklonite."
-
-#. translators: access keys need only be unique within the same LG_group
-#: lib/ephy-encodings.c:46
-msgid "Arabic (_IBM-864)"
-msgstr "Arapski (_IBM-864)"
-
-#: lib/ephy-encodings.c:47
-msgid "Arabic (ISO-_8859-6)"
-msgstr "Arapski (ISO-_8859-6)"
-
-#: lib/ephy-encodings.c:48
-msgid "Arabic (_MacArabic)"
-msgstr "Arapski (_MacArabic)"
-
-#: lib/ephy-encodings.c:49
-msgid "Arabic (_Windows-1256)"
-msgstr "Arapski (_Windows-1256)"
-
-#: lib/ephy-encodings.c:50
-msgid "Baltic (_ISO-8859-13)"
-msgstr "Baltički (_ISO-8859-13)"
-
-#: lib/ephy-encodings.c:51
-msgid "Baltic (I_SO-8859-4)"
-msgstr "Baltički (I_SO-8859-4)"
-
-#: lib/ephy-encodings.c:52
-msgid "Baltic (_Windows-1257)"
-msgstr "Baltički (_Windows-1257)"
-
-#: lib/ephy-encodings.c:53
-msgid "Central European (_IBM-852)"
-msgstr "Centralnoevropski (_IBM-852)"
-
-#: lib/ephy-encodings.c:54
-msgid "Central European (I_SO-8859-2)"
-msgstr "Centralnoevropski (I_SO-8859-2)"
-
-#: lib/ephy-encodings.c:55
-msgid "Central European (_MacCE)"
-msgstr "Centralnoevropski (_MacCE)"
-
-#: lib/ephy-encodings.c:56
-msgid "Central European (_Windows-1250)"
-msgstr "Centralnoevropski (_Windows-1250)"
-
-#: lib/ephy-encodings.c:57
-msgid "Croatian (Mac_Croatian)"
-msgstr "Hrvatski (Mac_Croatian)"
-
-#: lib/ephy-encodings.c:58
-msgid "Chinese Simplified (_GB18030)"
-msgstr "Kineski pojednostavljeni (_GB18030)"
-
-#: lib/ephy-encodings.c:59
-msgid "Chinese Simplified (G_B2312)"
-msgstr "Kineski pojednostavljeni (G_B2312)"
-
-#: lib/ephy-encodings.c:60
-msgid "Chinese Simplified (GB_K)"
-msgstr "Kineski pojednostavljeni (GB_K)"
-
-#: lib/ephy-encodings.c:61
-msgid "Chinese Simplified (_HZ)"
-msgstr "Kineski pojednostavljeni (_HZ)"
-
-#: lib/ephy-encodings.c:62
-msgid "Chinese Simplified (_ISO-2022-CN)"
-msgstr "Kineski pojednostavljeni (_ISO-2022-CN)"
-
-#: lib/ephy-encodings.c:63
-msgid "Chinese Traditional (Big_5)"
-msgstr "Kineski Tradicionalni (Big_5)"
-
-#: lib/ephy-encodings.c:64
-msgid "Chinese Traditional (Big5-HK_SCS)"
-msgstr "Kineski Tradicionalni (Big5-HK_SCS)"
-
-#: lib/ephy-encodings.c:65
-msgid "Chinese Traditional (_EUC-TW)"
-msgstr "Kineski Tradicionalni (_EUC-TW)"
-
-#: lib/ephy-encodings.c:66
-msgid "Cyrillic (_IBM-855)"
-msgstr "Ćirilica (_IBM-855)"
-
-#: lib/ephy-encodings.c:67
-msgid "Cyrillic (I_SO-8859-5)"
-msgstr "Ćirilica (I_SO-8859-5)"
-
-#: lib/ephy-encodings.c:68
-msgid "Cyrillic (IS_O-IR-111)"
-msgstr "Ćirilica (IS_O-IR-111)"
-
-#: lib/ephy-encodings.c:69
-msgid "Cyrillic (_KOI8-R)"
-msgstr "Ćirilica (_KOI8-R)"
-
-#: lib/ephy-encodings.c:70
-msgid "Cyrillic (_MacCyrillic)"
-msgstr "Ćirilica (_MacCyrillic)"
-
-#: lib/ephy-encodings.c:71
-msgid "Cyrillic (_Windows-1251)"
-msgstr "Ćirilica (_Windows-1251)"
-
-#: lib/ephy-encodings.c:72
-msgid "Cyrillic/Russian (_CP-866)"
-msgstr "Ćirilica/Ruski (_CP-866)"
-
-#: lib/ephy-encodings.c:73
-msgid "Cyrillic/Ukrainian (_KOI8-U)"
-msgstr "Ćirilica/Ukrajinski (_KOI8-U)"
-
-#: lib/ephy-encodings.c:74
-msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
-msgstr "Ćirilica/Ukrajinski (Mac_Ukrainian)"
-
-#: lib/ephy-encodings.c:75
-msgid "Greek (_ISO-8859-7)"
-msgstr "Grčki (_ISO-8859-7)"
-
-#: lib/ephy-encodings.c:76
-msgid "Greek (_MacGreek)"
-msgstr "Grčki (_MacGreek)"
-
-#: lib/ephy-encodings.c:77
-msgid "Greek (_Windows-1253)"
-msgstr "Grčki (_Windows-1253)"
-
-#: lib/ephy-encodings.c:78
-msgid "Gujarati (_MacGujarati)"
-msgstr "Gudžarati (_MacGujarati)"
-
-#: lib/ephy-encodings.c:79
-msgid "Gurmukhi (Mac_Gurmukhi)"
-msgstr "Gurmuki (Mac_Gurmukhi)"
-
-#: lib/ephy-encodings.c:80
-msgid "Hindi (Mac_Devanagari)"
-msgstr "Hindu (Mac_Devanagari)"
-
-#: lib/ephy-encodings.c:81
-msgid "Hebrew (_IBM-862)"
-msgstr "Hebrejski (_IBM-862)"
-
-#: lib/ephy-encodings.c:82
-msgid "Hebrew (IS_O-8859-8-I)"
-msgstr "Hebrejski (IS_O-8859-8-I)"
-
-#: lib/ephy-encodings.c:83
-msgid "Hebrew (_MacHebrew)"
-msgstr "Hebrejski (_MacHebrew)"
-
-#: lib/ephy-encodings.c:84
-msgid "Hebrew (_Windows-1255)"
-msgstr "Hebrejski (_Windows-1255)"
-
-#: lib/ephy-encodings.c:85
-msgid "_Visual Hebrew (ISO-8859-8)"
-msgstr "_Vizuelni Hebrejski (ISO-8859-8)"
-
-#: lib/ephy-encodings.c:86
-msgid "Japanese (_EUC-JP)"
-msgstr "Japanski (_EUC-JP)"
-
-#: lib/ephy-encodings.c:87
-msgid "Japanese (_ISO-2022-JP)"
-msgstr "Japanski (_ISO-2022-JP)"
-
-#: lib/ephy-encodings.c:88
-msgid "Japanese (_Shift-JIS)"
-msgstr "Japanski (_Shift_JIS)"
-
-#: lib/ephy-encodings.c:89
-msgid "Korean (_EUC-KR)"
-msgstr "Korejski (_EUC-KR)"
-
-#: lib/ephy-encodings.c:90
-msgid "Korean (_ISO-2022-KR)"
-msgstr "Korejski (_ISO-2022-KR)"
-
-#: lib/ephy-encodings.c:91
-msgid "Korean (_JOHAB)"
-msgstr "Korejski (_JOHAB)"
-
-#: lib/ephy-encodings.c:92
-msgid "Korean (_UHC)"
-msgstr "Korsejski (_UHC)"
-
-#: lib/ephy-encodings.c:93
-msgid "Turkish (_IBM-857)"
-msgstr "Turski (_IBM-857)"
-
-#: lib/ephy-encodings.c:94
-msgid "Turkish (I_SO-8859-9)"
-msgstr "Turski (I_SO-8859-9)"
-
-#: lib/ephy-encodings.c:95
-msgid "Turkish (_MacTurkish)"
-msgstr "Turski (_MacTurkish)"
-
-#: lib/ephy-encodings.c:96
-msgid "Turkish (_Windows-1254)"
-msgstr "Turski (_Windows-1254)"
-
-#: lib/ephy-encodings.c:97
-msgid "Unicode (UTF-_7)"
-msgstr "Unikod (UTF-_7)"
-
-#: lib/ephy-encodings.c:98
-msgid "Unicode (UTF-_8)"
-msgstr "Unikod (UTF-_8)"
-
-#: lib/ephy-encodings.c:99
-msgid "Vietnamese (_TCVN)"
-msgstr "Vijetnamski (_TCVN)"
-
-#: lib/ephy-encodings.c:100
-msgid "Vietnamese (_VISCII)"
-msgstr "Vijetnamski (_VISCII)"
-
-#: lib/ephy-encodings.c:101
-msgid "Vietnamese (V_PS)"
-msgstr "Vijetnamski (V_PS)"
-
-#: lib/ephy-encodings.c:102
-msgid "Vietnamese (_Windows-1258)"
-msgstr "Vijetnamski (_Windows-1258)"
-
-#: lib/ephy-encodings.c:103
-msgid "Western (_IBM-850)"
-msgstr "Zapadni (_IBM-850)"
-
-#: lib/ephy-encodings.c:104
-msgid "Western (I_SO-8859-1)"
-msgstr "Zapadni (I_SO-8859-1)"
-
-#: lib/ephy-encodings.c:105
-msgid "Western (IS_O-8859-15)"
-msgstr "Zapadni (IS_O-8859-15)"
-
-#: lib/ephy-encodings.c:106
-msgid "Western (_MacRoman)"
-msgstr "Zapadni (_MacRoman)"
-
-#: lib/ephy-encodings.c:107
-msgid "Western (_Windows-1252)"
-msgstr "Zapadni (_Windows-1252)"
-
-#: lib/ephy-encodings.c:108
-msgid "_Armenian (ARMSCII-8)"
-msgstr "_Jermenski (ARMSCII-8)"
-
-#: lib/ephy-encodings.c:109
-msgid "_Celtic (ISO-8859-14)"
-msgstr "_Keltski (ISO-8859-14)"
-
-#: lib/ephy-encodings.c:110
-msgid "_Farsi (MacFarsi)"
-msgstr "_Farsi (MacFarsi)"
-
-#: lib/ephy-encodings.c:111
-msgid "_Georgian (GEOSTD8)"
-msgstr "_Gruzijski (GEOSTD8)"
-
-#: lib/ephy-encodings.c:112
-msgid "_Icelandic (MacIcelandic)"
-msgstr "_Islandski (MacIcelandic)"
-
-#: lib/ephy-encodings.c:113
-msgid "_Nordic (ISO-8859-10)"
-msgstr "_Nordijski (ISO-8859-10)"
-
-#: lib/ephy-encodings.c:114
-msgid "_Romanian (MacRomanian)"
-msgstr "_Rumunski (MacRomanian)"
-
-#: lib/ephy-encodings.c:115
-msgid "R_omanian (ISO-8859-16)"
-msgstr "R_umunski (ISO-8859-16)"
-
-#: lib/ephy-encodings.c:116
-msgid "South _European (ISO-8859-3)"
-msgstr "Južno_evropski (ISO-8859-3)"
-
-#: lib/ephy-encodings.c:117
-msgid "Thai (TIS-_620)"
-msgstr "Tajlandski (TIS-_620)"
-
-#: lib/ephy-encodings.c:119
-msgid "Thai (IS_O-8859-11)"
-msgstr "Tajlandski (IS_O-8859-11)"
-
-#: lib/ephy-encodings.c:120
-msgid "_Thai (Windows-874)"
-msgstr "_Tajlandski (Windows-874)"
-
-#: lib/ephy-encodings.c:122
-msgid "_User Defined"
-msgstr "_Korisnik izabrao"
 
 #: lib/ephy-file-helpers.c:104
 #, c-format
@@ -1607,135 +1607,66 @@ msgstr ""
 msgid "Could not display help: %s"
 msgstr "Ne može da prikaže pomoć: %s"
 
-#: lib/ephy-langs.c:32 src/prefs-dialog.c:94
+#: lib/ephy-langs.c:31 src/prefs-dialog.c:97
 msgid "Arabic"
 msgstr "Arapski"
 
-#: lib/ephy-langs.c:33
+#: lib/ephy-langs.c:32
 msgid "Baltic"
 msgstr "Baltički"
 
-#: lib/ephy-langs.c:34
+#: lib/ephy-langs.c:33
 msgid "Central European"
 msgstr "Centralnoevropski"
 
-#: lib/ephy-langs.c:35
+#: lib/ephy-langs.c:34
 msgid "Cyrillic"
 msgstr "Ćirilica"
 
-#: lib/ephy-langs.c:36
+#: lib/ephy-langs.c:35
 msgid "Devanagari"
 msgstr "Devanagari"
 
-#: lib/ephy-langs.c:37 src/prefs-dialog.c:116
+#: lib/ephy-langs.c:36 src/prefs-dialog.c:119
 msgid "Greek"
 msgstr "Grčki"
 
 # ili je "Hebrejski"?
-#: lib/ephy-langs.c:38 src/prefs-dialog.c:117
+#: lib/ephy-langs.c:37 src/prefs-dialog.c:120
 msgid "Hebrew"
 msgstr "Jevrejski"
 
-#: lib/ephy-langs.c:39 src/prefs-dialog.c:123 src/prefs-dialog.c:162
-msgid "Japanese"
-msgstr "Japanski"
-
-#: lib/ephy-langs.c:40 src/prefs-dialog.c:124 src/prefs-dialog.c:163
-msgid "Korean"
-msgstr "Korejski"
-
-#: lib/ephy-langs.c:41 src/prefs-dialog.c:101 src/prefs-dialog.c:165
+#: lib/ephy-langs.c:40 src/prefs-dialog.c:104
 msgid "Simplified Chinese"
 msgstr "Pojednostaljeni kineski"
 
-#: lib/ephy-langs.c:42 src/prefs-dialog.c:143
+#: lib/ephy-langs.c:41 src/prefs-dialog.c:146
 msgid "Tamil"
 msgstr "Tamil"
 
-#: lib/ephy-langs.c:43
+#: lib/ephy-langs.c:42
 msgid "Thai"
 msgstr "Tajlandski"
 
-#: lib/ephy-langs.c:44 src/prefs-dialog.c:102 src/prefs-dialog.c:166
+#: lib/ephy-langs.c:43 src/prefs-dialog.c:105
 msgid "Traditional Chinese"
 msgstr "Tradicionalni kineski"
 
-#: lib/ephy-langs.c:46
+#: lib/ephy-langs.c:45
 msgid "Traditional Chinese (Hong Kong)"
 msgstr "Tradicionalni kineski (Hong Kong)"
 
-#: lib/ephy-langs.c:48 src/prefs-dialog.c:144
+#: lib/ephy-langs.c:47 src/prefs-dialog.c:147
 msgid "Turkish"
 msgstr "Turski"
 
-#: lib/ephy-langs.c:49
+#: lib/ephy-langs.c:48
 msgid "Unicode"
 msgstr "Unikod"
 
-#: lib/ephy-langs.c:50
+#: lib/ephy-langs.c:49
 msgid "Western"
 msgstr "Zapadni"
-
-#: lib/ephy-langs.c:62
-msgid "_Arabic"
-msgstr "_Arapski"
-
-#: lib/ephy-langs.c:63
-msgid "_Baltic"
-msgstr "_Baltički"
-
-#: lib/ephy-langs.c:64
-msgid "Central _European"
-msgstr "Centralno_evropski"
-
-#: lib/ephy-langs.c:65
-msgid "Chi_nese"
-msgstr "Ki_neski"
-
-#: lib/ephy-langs.c:66
-msgid "_Cyrillic"
-msgstr "_Ćirilica"
-
-#: lib/ephy-langs.c:67
-msgid "_Greek"
-msgstr "_Grčki"
-
-# ili je "Hebrejski"?
-#: lib/ephy-langs.c:68
-msgid "_Hebrew"
-msgstr "_Hebrejski"
-
-#: lib/ephy-langs.c:69
-msgid "_Indian"
-msgstr "_Indijanski"
-
-#: lib/ephy-langs.c:70
-msgid "_Japanese"
-msgstr "_Japanski"
-
-#: lib/ephy-langs.c:71
-msgid "_Korean"
-msgstr "_Korejski"
-
-#: lib/ephy-langs.c:72
-msgid "_Turkish"
-msgstr "_Turski"
-
-#: lib/ephy-langs.c:73
-msgid "_Unicode"
-msgstr "_Unikod"
-
-#: lib/ephy-langs.c:74
-msgid "_Vietnamese"
-msgstr "_Vijetnamski"
-
-#: lib/ephy-langs.c:75
-msgid "_Western"
-msgstr "_Zapadni"
-
-#: lib/ephy-langs.c:76
-msgid "_Other"
-msgstr "_Ostali"
 
 #: lib/ephy-zoom.h:39
 msgid "50%"
@@ -1772,6 +1703,14 @@ msgstr "300%"
 #: lib/ephy-zoom.h:47
 msgid "400%"
 msgstr "400%"
+
+#: lib/widgets/ephy-cell-renderer-progress.c:35 src/ephy-window.c:793
+msgid "Unknown"
+msgstr "Nepoznato"
+
+#: lib/widgets/ephy-cell-renderer-progress.c:98
+msgid "Failed"
+msgstr "Neuspešno"
 
 #: lib/widgets/ephy-zoom-control.c:150
 msgid "_Zoom"
@@ -1822,7 +1761,7 @@ msgstr "Napravi novu temu"
 
 #. File Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:170
-#: src/bookmarks/ephy-bookmarks-editor.c:938 src/ephy-history-window.c:158
+#: src/bookmarks/ephy-bookmarks-editor.c:951 src/ephy-history-window.c:158
 #: src/ephy-history-window.c:725
 msgid "_Open in New Window"
 msgstr "_Otvori u novom prozoru"
@@ -1832,7 +1771,7 @@ msgid "Open the selected bookmark in a new window"
 msgstr "Otvori izabrani obeleživač u novom prozoru"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:173
-#: src/bookmarks/ephy-bookmarks-editor.c:939 src/ephy-history-window.c:161
+#: src/bookmarks/ephy-bookmarks-editor.c:952 src/ephy-history-window.c:161
 #: src/ephy-history-window.c:726
 msgid "Open in New _Tab"
 msgstr "Otvoru u novom _listu"
@@ -1896,7 +1835,7 @@ msgid "Cut the selection"
 msgstr "Iseci izabrano"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:195
-#: src/bookmarks/ephy-bookmarks-editor.c:948 src/ephy-history-window.c:178
+#: src/bookmarks/ephy-bookmarks-editor.c:961 src/ephy-history-window.c:178
 #: src/ephy-history-window.c:735 src/ephy-window.c:98
 msgid "_Copy"
 msgstr "_Umnoži"
@@ -1926,7 +1865,7 @@ msgstr "Izaberi sve obeleživače ili sav tekst"
 
 #. Help Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:206 src/ephy-history-window.c:192
-#: src/ephy-window.c:193
+#: src/ephy-window.c:195
 msgid "_Contents"
 msgstr "_Sadržaj"
 
@@ -1935,12 +1874,12 @@ msgid "Display bookmarks help"
 msgstr "Prikaži pomoć za obeleživače"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:209 src/ephy-history-window.c:195
-#: src/ephy-window.c:196
+#: src/ephy-window.c:198
 msgid "_About"
 msgstr "_O programu"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:210 src/ephy-history-window.c:196
-#: src/ephy-window.c:197
+#: src/ephy-window.c:199
 msgid "Display credits for the web browser creators"
 msgstr "Prikaži zasluge za tvorce ovog veb čitača"
 
@@ -2006,36 +1945,36 @@ msgstr "Konkverorovi obeleživači"
 msgid "Import from a file"
 msgstr "Uvezite iz datoteke"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:933 src/ephy-history-window.c:720
+#: src/bookmarks/ephy-bookmarks-editor.c:946 src/ephy-history-window.c:720
 msgid "_Open in New Windows"
 msgstr "_Otvori u novim prozorima"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:934 src/ephy-history-window.c:721
+#: src/bookmarks/ephy-bookmarks-editor.c:947 src/ephy-history-window.c:721
 msgid "Open in New _Tabs"
 msgstr "Otvori u novim _listovima"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:944 src/ephy-history-window.c:731
+#: src/bookmarks/ephy-bookmarks-editor.c:957 src/ephy-history-window.c:731
 msgid "_Copy Address"
 msgstr "_Umnoži adresu"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1191 src/ephy-history-window.c:1027
+#: src/bookmarks/ephy-bookmarks-editor.c:1204 src/ephy-history-window.c:1029
 msgid "_Search:"
 msgstr "_Pretraga:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1323
-#: src/bookmarks/ephy-topic-action.c:624 src/ephy-window.c:622
+#: src/bookmarks/ephy-bookmarks-editor.c:1336
+#: src/bookmarks/ephy-topic-action.c:624 src/ephy-window.c:612
 msgid "Bookmarks"
 msgstr "Obeleživači"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1406
+#: src/bookmarks/ephy-bookmarks-editor.c:1419
 msgid "Topics"
 msgstr "Teme"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1468 src/ephy-history-window.c:1303
+#: src/bookmarks/ephy-bookmarks-editor.c:1481 src/ephy-history-window.c:1308
 msgid "Title"
 msgstr "Naslov"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1475 src/ephy-history-window.c:1309
+#: src/bookmarks/ephy-bookmarks-editor.c:1488 src/ephy-history-window.c:1314
 msgid "Address"
 msgstr "Adresa"
 
@@ -2076,11 +2015,11 @@ msgstr "Putovanja"
 msgid "Work"
 msgstr "Posao"
 
-#: src/bookmarks/ephy-bookmarks.c:620
+#: src/bookmarks/ephy-bookmarks.c:600
 msgid "Most Visited"
 msgstr "Najposećenije"
 
-#: src/bookmarks/ephy-bookmarks.c:637
+#: src/bookmarks/ephy-bookmarks.c:617
 msgid "Not Categorized"
 msgstr "Nerazvrstano"
 
@@ -2111,6 +2050,22 @@ msgstr "Prazno"
 #: src/ephy-toolbars-model.c:199
 msgid "Untitled"
 msgstr "Neimenovana"
+
+#: src/ephy-encoding-dialog.c:326
+msgid "Encodings"
+msgstr "Kodiranja"
+
+#: src/ephy-encoding-menu.c:387
+msgid "_Other..."
+msgstr "_Ostala..."
+
+#: src/ephy-encoding-menu.c:388
+msgid "Other encodings"
+msgstr "Ostala kodiranja"
+
+#: src/ephy-encoding-menu.c:395
+msgid "_Automatic"
+msgstr "_Samostalno"
 
 #: src/ephy-go-action.c:80 src/ephy-go-action.c:97 src/toolbar.c:373
 msgid "Go"
@@ -2184,13 +2139,13 @@ msgstr ""
 "Čišćenje zapisa o pregledu stranica će trajno ukloniti sve stavke iz "
 "istorijata."
 
-#: src/ephy-history-window.c:1036
+#: src/ephy-history-window.c:1038
 msgid "Today"
 msgstr "Danas"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: src/ephy-history-window.c:1037 src/ephy-history-window.c:1040
-#: src/ephy-history-window.c:1044
+#: src/ephy-history-window.c:1039 src/ephy-history-window.c:1042
+#: src/ephy-history-window.c:1046
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
@@ -2198,11 +2153,11 @@ msgstr[0] "Poslednji %d dan"
 msgstr[1] "Poslednja %d dana"
 msgstr[2] "Poslednjih %d dana"
 
-#: src/ephy-history-window.c:1180
+#: src/ephy-history-window.c:1182
 msgid "History"
 msgstr "Istorijat"
 
-#: src/ephy-history-window.c:1252
+#: src/ephy-history-window.c:1254
 msgid "Sites"
 msgstr "Stranice"
 
@@ -2476,270 +2431,274 @@ msgid "Use the normal text size"
 msgstr "Koristi običnu veličinu teksta"
 
 #: src/ephy-window.c:142
-msgid "_Encoding"
-msgstr "_Kodiranje"
+msgid "Text _Encoding"
+msgstr "_Kodiranje teksta"
 
 #: src/ephy-window.c:143
+msgid "Change the text encoding"
+msgstr "Izmenite kodiranje teksta"
+
+#: src/ephy-window.c:145
 msgid "_Page Source"
 msgstr "_Izvorno izdanje stranice"
 
-#: src/ephy-window.c:144
+#: src/ephy-window.c:146
 msgid "View the source code of the page"
 msgstr "Pogledaj izvorni kod stranice"
 
 #. Bookmarks menu
-#: src/ephy-window.c:148
+#: src/ephy-window.c:150
 msgid "_Add Bookmark..."
 msgstr "_Dodaj obeleživač..."
 
-#: src/ephy-window.c:149 src/ephy-window.c:225
+#: src/ephy-window.c:151 src/ephy-window.c:227
 msgid "Add a bookmark for the current page"
 msgstr "Dodaj obeleživač za tekuću stranicu"
 
-#: src/ephy-window.c:151
+#: src/ephy-window.c:153
 msgid "_Edit Bookmarks"
 msgstr "U_redi obeleživače"
 
-#: src/ephy-window.c:152
+#: src/ephy-window.c:154
 msgid "Open the bookmarks window"
 msgstr "Otvori prozor sa obeleživačima"
 
 #. Go menu
-#: src/ephy-window.c:156
+#: src/ephy-window.c:158
 msgid "_Back"
 msgstr "_Nazad"
 
-#: src/ephy-window.c:157
+#: src/ephy-window.c:159
 msgid "Go to the previous visited page"
 msgstr "Idi na prethodno posećenu stranicu"
 
-#: src/ephy-window.c:159
+#: src/ephy-window.c:161
 msgid "_Forward"
 msgstr "Na_pred"
 
-#: src/ephy-window.c:160
+#: src/ephy-window.c:162
 msgid "Go to the next visited page"
 msgstr "Idi na sledeće posećenu stranicu"
 
-#: src/ephy-window.c:162
+#: src/ephy-window.c:164
 msgid "_Up"
 msgstr "_Iznad"
 
-#: src/ephy-window.c:163
+#: src/ephy-window.c:165
 msgid "Go up one level"
 msgstr "Idi jedan nivo iznad"
 
-#: src/ephy-window.c:165
+#: src/ephy-window.c:167
 msgid "_Home"
 msgstr "_Početak"
 
-#: src/ephy-window.c:166
+#: src/ephy-window.c:168
 msgid "Go to the home page"
 msgstr "Idi na početnu stranicu"
 
-#: src/ephy-window.c:168
+#: src/ephy-window.c:170
 msgid "_Location..."
 msgstr "_Adresa..."
 
-#: src/ephy-window.c:169
+#: src/ephy-window.c:171
 msgid "Go to a specified location"
 msgstr "Idi na navedenu adresu"
 
-#: src/ephy-window.c:171
+#: src/ephy-window.c:173
 msgid "H_istory"
 msgstr "_Istorijat"
 
-#: src/ephy-window.c:172
+#: src/ephy-window.c:174
 msgid "Open the history window"
 msgstr "Otvori prozor istorijata"
 
 #. Tabs menu
-#: src/ephy-window.c:176
+#: src/ephy-window.c:178
 msgid "_Previous Tab"
 msgstr "_Prethodni list"
 
-#: src/ephy-window.c:177
+#: src/ephy-window.c:179
 msgid "Activate previous tab"
 msgstr "Aktiviraj prethodni list"
 
-#: src/ephy-window.c:179
+#: src/ephy-window.c:181
 msgid "_Next Tab"
 msgstr "_Sledeći list"
 
-#: src/ephy-window.c:180
+#: src/ephy-window.c:182
 msgid "Activate next tab"
 msgstr "Aktiviraj sledeći list"
 
-#: src/ephy-window.c:182
+#: src/ephy-window.c:184
 msgid "Move Tab _Left"
 msgstr "Prebaci list _levo"
 
-#: src/ephy-window.c:183
+#: src/ephy-window.c:185
 msgid "Move current tab to left"
 msgstr "Prebaci tekući list levo"
 
-#: src/ephy-window.c:185
+#: src/ephy-window.c:187
 msgid "Move Tab _Right"
 msgstr "Prebaci list _desno"
 
-#: src/ephy-window.c:186
+#: src/ephy-window.c:188
 msgid "Move current tab to right"
 msgstr "Prebaci tekući list desno"
 
-#: src/ephy-window.c:188
+#: src/ephy-window.c:190
 msgid "_Detach Tab"
 msgstr "_Odvoj list"
 
-#: src/ephy-window.c:189
+#: src/ephy-window.c:191
 msgid "Detach current tab"
 msgstr "Odvoj tekući list"
 
-#: src/ephy-window.c:194
+#: src/ephy-window.c:196
 msgid "Display web browser help"
 msgstr "Prikaži pomoć za veb čitač"
 
 #. View Menu
-#: src/ephy-window.c:205
+#: src/ephy-window.c:207
 msgid "_Toolbar"
 msgstr "_Alatke"
 
-#: src/ephy-window.c:206
+#: src/ephy-window.c:208
 msgid "Show or hide toolbar"
 msgstr "Prikaži ili sakrij alatke"
 
-#: src/ephy-window.c:208
+#: src/ephy-window.c:210
 msgid "_Bookmarks Bar"
 msgstr "_Linija sa obeleživačima"
 
-#: src/ephy-window.c:209
+#: src/ephy-window.c:211
 msgid "Show or hide bookmarks bar"
 msgstr "Prikaži ili sakrij liniju sa obeleživačima"
 
-#: src/ephy-window.c:211
+#: src/ephy-window.c:213
 msgid "St_atusbar"
 msgstr "Linija sa st_anjem"
 
-#: src/ephy-window.c:212
+#: src/ephy-window.c:214
 msgid "Show or hide statusbar"
 msgstr "Prikaži ili sakrij liniju stanja"
 
-#: src/ephy-window.c:214
+#: src/ephy-window.c:216
 msgid "_Fullscreen"
 msgstr "_Ceo ekran"
 
-#: src/ephy-window.c:215
+#: src/ephy-window.c:217
 msgid "Browse at full screen"
 msgstr "Čitaj preko celog ekrana"
 
 #. Document
-#: src/ephy-window.c:222
+#: src/ephy-window.c:224
 msgid "_Save Background As..."
 msgstr "_Snimi pozadinu kao..."
 
-#: src/ephy-window.c:224
+#: src/ephy-window.c:226
 msgid "Add Boo_kmark..."
 msgstr "Dodaj obele_živač..."
 
 #. Framed document
-#: src/ephy-window.c:229
+#: src/ephy-window.c:231
 msgid "_Open Frame"
 msgstr "_Otvori okvir"
 
-#: src/ephy-window.c:231
+#: src/ephy-window.c:233
 msgid "Open Frame in _New Window"
 msgstr "Otvori okvir u _novom prozoru"
 
-#: src/ephy-window.c:233
+#: src/ephy-window.c:235
 msgid "Open Frame in New _Tab"
 msgstr "Otvori okvir u novom _listu"
 
 #. Links
-#: src/ephy-window.c:237
+#: src/ephy-window.c:239
 msgid "_Open Link"
 msgstr "_Otvori vezu"
 
-#: src/ephy-window.c:239
+#: src/ephy-window.c:241
 msgid "Open Link in _New Window"
 msgstr "Otvori vezu u _novom prozoru"
 
-#: src/ephy-window.c:241
+#: src/ephy-window.c:243
 msgid "Open Link in New _Tab"
 msgstr "Otvori vezu u novom _listu"
 
-#: src/ephy-window.c:243
+#: src/ephy-window.c:245
 msgid "_Download Link..."
 msgstr "_Preuzmi vezu..."
 
-#: src/ephy-window.c:245
+#: src/ephy-window.c:247
 msgid "_Bookmark Link..."
 msgstr "_Obeleži vezu..."
 
-#: src/ephy-window.c:247
+#: src/ephy-window.c:249
 msgid "_Copy Link Address"
 msgstr "_Umnoži adresu veze"
 
 #. Images
-#: src/ephy-window.c:251
+#: src/ephy-window.c:253
 msgid "Open _Image"
 msgstr "Otvori _sliku"
 
-#: src/ephy-window.c:253
+#: src/ephy-window.c:255
 msgid "Open Image in New _Window"
 msgstr "Otvori sliku u novom _prozoru"
 
-#: src/ephy-window.c:255
+#: src/ephy-window.c:257
 msgid "Open Image in New T_ab"
 msgstr "Otvori sliku u novom _listu"
 
-#: src/ephy-window.c:257
+#: src/ephy-window.c:259
 msgid "_Save Image As..."
 msgstr "_Sačuvaj sliku kao..."
 
-#: src/ephy-window.c:259
+#: src/ephy-window.c:261
 msgid "_Use Image As Background"
 msgstr "Upo_trebi sliku za pozadinu"
 
-#: src/ephy-window.c:261
+#: src/ephy-window.c:263
 msgid "Copy I_mage Address"
 msgstr "Umnoži adresu sli_ke"
 
-#: src/ephy-window.c:518
+#: src/ephy-window.c:508
 msgid "Exit Fullscreen"
 msgstr "Ne koristi ceo ekran"
 
-#: src/ephy-window.c:612 src/window-commands.c:338
+#: src/ephy-window.c:602 src/window-commands.c:338
 msgid "Open"
 msgstr "Otvori"
 
-#: src/ephy-window.c:614 src/window-commands.c:384
+#: src/ephy-window.c:604 src/window-commands.c:384
 msgid "Save As"
 msgstr "Sačuvaj kao"
 
-#: src/ephy-window.c:618
+#: src/ephy-window.c:608
 msgid "Bookmark"
 msgstr "Obeleživač"
 
-#: src/ephy-window.c:803
+#: src/ephy-window.c:796
 msgid "Insecure"
 msgstr "Nebezbedno"
 
-#: src/ephy-window.c:806
+#: src/ephy-window.c:799
 msgid "Broken"
 msgstr "Razbijen"
 
-#: src/ephy-window.c:809
+#: src/ephy-window.c:802
 msgid "Medium"
 msgstr "Osrednji"
 
-#: src/ephy-window.c:813
+#: src/ephy-window.c:806
 msgid "Low"
 msgstr "Nizak"
 
-#: src/ephy-window.c:817
+#: src/ephy-window.c:810
 msgid "High"
 msgstr "Visok"
 
-#: src/ephy-window.c:827
+#: src/ephy-window.c:820
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2748,48 +2707,48 @@ msgstr ""
 "Nivo bezbednosti: %s\n"
 "%s"
 
-#: src/ephy-window.c:833
+#: src/ephy-window.c:826
 #, c-format
 msgid "Security level: %s"
 msgstr "Nivo bezbednosti: %s"
 
-#: src/pdm-dialog.c:257
+#: src/pdm-dialog.c:258
 msgid "Host"
 msgstr "Server"
 
-#: src/pdm-dialog.c:269
+#: src/pdm-dialog.c:270
 msgid "User Name"
 msgstr "Korisničko ime"
 
-#: src/pdm-dialog.c:317
+#: src/pdm-dialog.c:319
 msgid "Domain"
 msgstr "Domen"
 
-#: src/pdm-dialog.c:329
+#: src/pdm-dialog.c:331
 msgid "Name"
 msgstr "Ime"
 
-#: src/pdm-dialog.c:700
+#: src/pdm-dialog.c:702
 msgid "Cookie Properties"
 msgstr "Osobine kolačića"
 
-#: src/pdm-dialog.c:713
+#: src/pdm-dialog.c:715
 msgid "Value:"
 msgstr "Vrednost:"
 
-#: src/pdm-dialog.c:727
+#: src/pdm-dialog.c:729
 msgid "Path:"
 msgstr "Putanja:"
 
-#: src/pdm-dialog.c:741
+#: src/pdm-dialog.c:743
 msgid "Secure:"
 msgstr "Bezbedan:"
 
-#: src/pdm-dialog.c:755
+#: src/pdm-dialog.c:757
 msgid "Expire:"
 msgstr "Ističe:"
 
-#: src/popup-commands.c:324
+#: src/popup-commands.c:317
 msgid "Download link"
 msgstr "Preuzmi vezu"
 
@@ -2824,211 +2783,187 @@ msgstr "Zatvori pregled pred štampu"
 #. * "en_AU" translation: "English, Australia (System setting)" or
 #. *                      "Australian English (System setting)"
 #.
-#: src/prefs-dialog.c:91
+#: src/prefs-dialog.c:94
 msgid "System language"
 msgstr "Jezik na sistemu"
 
-#: src/prefs-dialog.c:92
+#: src/prefs-dialog.c:95
 msgid "Afrikaans"
 msgstr "Afrički"
 
-#: src/prefs-dialog.c:93
+#: src/prefs-dialog.c:96
 msgid "Albanian"
 msgstr "Albanski"
 
-#: src/prefs-dialog.c:95
+#: src/prefs-dialog.c:98
 msgid "Azerbaijani"
 msgstr "Azerbejdžanski"
 
-#: src/prefs-dialog.c:96
+#: src/prefs-dialog.c:99
 msgid "Basque"
 msgstr "Baskijski"
 
-#: src/prefs-dialog.c:97
+#: src/prefs-dialog.c:100
 msgid "Breton"
 msgstr "Bretonski"
 
-#: src/prefs-dialog.c:98
+#: src/prefs-dialog.c:101
 msgid "Bulgarian"
 msgstr "Bugarski"
 
-#: src/prefs-dialog.c:99
+#: src/prefs-dialog.c:102
 msgid "Byelorussian"
 msgstr "Beloruski"
 
-#: src/prefs-dialog.c:100
+#: src/prefs-dialog.c:103
 msgid "Catalan"
 msgstr "Katalonski"
 
-#: src/prefs-dialog.c:103 src/prefs-dialog.c:160
-msgid "Chinese"
-msgstr "Kineski"
-
-#: src/prefs-dialog.c:104
+#: src/prefs-dialog.c:107
 msgid "Croatian"
 msgstr "Hrvatski"
 
-#: src/prefs-dialog.c:105
+#: src/prefs-dialog.c:108
 msgid "Czech"
 msgstr "Češki"
 
-#: src/prefs-dialog.c:106
+#: src/prefs-dialog.c:109
 msgid "Danish"
 msgstr "Danski"
 
-#: src/prefs-dialog.c:107
+#: src/prefs-dialog.c:110
 msgid "Dutch"
 msgstr "Holandski"
 
-#: src/prefs-dialog.c:108
+#: src/prefs-dialog.c:111
 msgid "English"
 msgstr "Engleski"
 
-#: src/prefs-dialog.c:109
+#: src/prefs-dialog.c:112
 msgid "Esperanto"
 msgstr "Esperanto"
 
-#: src/prefs-dialog.c:110
+#: src/prefs-dialog.c:113
 msgid "Estonian"
 msgstr "Estonski"
 
-#: src/prefs-dialog.c:111
+#: src/prefs-dialog.c:114
 msgid "Faeroese"
 msgstr "Farski"
 
-#: src/prefs-dialog.c:112
+#: src/prefs-dialog.c:115
 msgid "Finnish"
 msgstr "Finski"
 
-#: src/prefs-dialog.c:113
+#: src/prefs-dialog.c:116
 msgid "French"
 msgstr "Francuski"
 
-#: src/prefs-dialog.c:114
+#: src/prefs-dialog.c:117
 msgid "Galician"
 msgstr "Galski"
 
-#: src/prefs-dialog.c:115
+#: src/prefs-dialog.c:118
 msgid "German"
 msgstr "Nemački"
 
-#: src/prefs-dialog.c:118
+#: src/prefs-dialog.c:121
 msgid "Hungarian"
 msgstr "Mađarski"
 
-#: src/prefs-dialog.c:119
+#: src/prefs-dialog.c:122
 msgid "Icelandic"
 msgstr "Islandski"
 
-#: src/prefs-dialog.c:120
+#: src/prefs-dialog.c:123
 msgid "Indonesian"
 msgstr "Indonežanski"
 
-#: src/prefs-dialog.c:121
+#: src/prefs-dialog.c:124
 msgid "Irish"
 msgstr "Irski"
 
-#: src/prefs-dialog.c:122
+#: src/prefs-dialog.c:125
 msgid "Italian"
 msgstr "Italijanski"
 
-#: src/prefs-dialog.c:125
+#: src/prefs-dialog.c:128
 msgid "Latvian"
 msgstr "Letonski"
 
-#: src/prefs-dialog.c:126
+#: src/prefs-dialog.c:129
 msgid "Lithuanian"
 msgstr "Litvanski"
 
-#: src/prefs-dialog.c:127
+#: src/prefs-dialog.c:130
 msgid "Macedonian"
 msgstr "Makedonski"
 
-#: src/prefs-dialog.c:128
+#: src/prefs-dialog.c:131
 msgid "Malay"
 msgstr "Malajski"
 
-#: src/prefs-dialog.c:129
+#: src/prefs-dialog.c:132
 msgid "Norwegian/Nynorsk"
 msgstr "Norveški/Ninorsk"
 
-#: src/prefs-dialog.c:130
+#: src/prefs-dialog.c:133
 msgid "Norwegian/Bokmal"
 msgstr "Norveški/Bokmal"
 
-#: src/prefs-dialog.c:131
+#: src/prefs-dialog.c:134
 msgid "Norwegian"
 msgstr "Norveški"
 
-#: src/prefs-dialog.c:132
+#: src/prefs-dialog.c:135
 msgid "Polish"
 msgstr "Poljski"
 
-#: src/prefs-dialog.c:133
+#: src/prefs-dialog.c:136
 msgid "Portuguese"
 msgstr "Portugalski"
 
-#: src/prefs-dialog.c:134
+#: src/prefs-dialog.c:137
 msgid "Portuguese of Brazil"
 msgstr "Portugalski u Brazilu"
 
-#: src/prefs-dialog.c:135
+#: src/prefs-dialog.c:138
 msgid "Romanian"
 msgstr "Rumunski"
 
-#: src/prefs-dialog.c:136 src/prefs-dialog.c:164
-msgid "Russian"
-msgstr "Ruski"
-
-#: src/prefs-dialog.c:137
+#: src/prefs-dialog.c:140
 msgid "Scottish"
 msgstr "Škotski"
 
-#: src/prefs-dialog.c:138
+#: src/prefs-dialog.c:141
 msgid "Serbian"
 msgstr "Srpski"
 
-#: src/prefs-dialog.c:139
+#: src/prefs-dialog.c:142
 msgid "Slovak"
 msgstr "Slovački"
 
-#: src/prefs-dialog.c:140
+#: src/prefs-dialog.c:143
 msgid "Slovenian"
 msgstr "Slovenski"
 
-#: src/prefs-dialog.c:141
+#: src/prefs-dialog.c:144
 msgid "Spanish"
 msgstr "Španski"
 
-#: src/prefs-dialog.c:142
+#: src/prefs-dialog.c:145
 msgid "Swedish"
 msgstr "Švedski"
 
-#: src/prefs-dialog.c:145 src/prefs-dialog.c:168
-msgid "Ukrainian"
-msgstr "Ukrajinski"
-
-#: src/prefs-dialog.c:146
+#: src/prefs-dialog.c:149
 msgid "Vietnamese"
 msgstr "Vijetnamski"
 
-#: src/prefs-dialog.c:147
+#: src/prefs-dialog.c:150
 msgid "Walloon"
 msgstr "Valun"
 
-#: src/prefs-dialog.c:159
-msgid "Off"
-msgstr "Isključeno"
-
-#: src/prefs-dialog.c:161
-msgid "East Asian"
-msgstr "Istočnoazijski"
-
-#: src/prefs-dialog.c:167
-msgid "Universal"
-msgstr "Opšte"
-
-#: src/prefs-dialog.c:903
+#: src/prefs-dialog.c:837
 #, c-format
 msgid "Custom [%s]"
 msgstr "Po izboru [%s]"
@@ -3113,25 +3048,104 @@ msgstr "Idi na adresu navedenu u polju za unos adrese."
 msgid "Check this out!"
 msgstr "Pogledajte ovo!"
 
-#: src/window-commands.c:694
+#: src/window-commands.c:692
 msgid "Toolbar Editor"
 msgstr "Uređivanje alatki"
 
-#: src/window-commands.c:716
+#: src/window-commands.c:714
 msgid "_Add a New Toolbar"
 msgstr "_Dodaj novu paletu alatki"
 
 #. Translator credits
-#: src/window-commands.c:766
+#: src/window-commands.c:764
 msgid "translator_credits"
 msgstr ""
 "Danilo Šegan <danilo@prevod.org>\n"
 "\n"
 "http://www.Prevod.org/"
 
-#: src/window-commands.c:794
+#: src/window-commands.c:792
 msgid "A GNOME browser based on Mozilla"
 msgstr "Gnom veb čitač zasnovan na Mozili"
+
+#~ msgid "<b>Address:</b>"
+#~ msgstr "<b>Adresa:</b>"
+
+#~ msgid "<b>Time Elapsed:</b>"
+#~ msgstr "<b>Proteklo vreme:</b>"
+
+#~ msgid "<b>Time Remaining:</b>"
+#~ msgstr "<b>Preostalo vreme:</b>"
+
+#~ msgid "Download _Details"
+#~ msgstr "_Detalji preuzimanja..."
+
+#~ msgid "_Resume"
+#~ msgstr "_Nastavi"
+
+#~ msgid "%.1f of %.1f MB"
+#~ msgstr "%.1f od %.1f MB"
+
+#~ msgid "%d of %d kB"
+#~ msgstr "%d od %d kB"
+
+#~ msgid "%d kB"
+#~ msgstr "%d kB"
+
+#~ msgid "%s at %.1f kB/s"
+#~ msgstr "%s na %.1f kB/s"
+
+#~ msgid "00.00"
+#~ msgstr "00.00"
+
+#~ msgid "Cancel all pending downloads?"
+#~ msgstr "Otkaži sva zakazana preuzimanja?"
+
+#~ msgid "_User Defined"
+#~ msgstr "_Korisnik izabrao"
+
+#~ msgid "_Arabic"
+#~ msgstr "_Arapski"
+
+#~ msgid "_Baltic"
+#~ msgstr "_Baltički"
+
+#~ msgid "Central _European"
+#~ msgstr "Centralno_evropski"
+
+#~ msgid "Chi_nese"
+#~ msgstr "Ki_neski"
+
+#~ msgid "_Cyrillic"
+#~ msgstr "_Ćirilica"
+
+#~ msgid "_Greek"
+#~ msgstr "_Grčki"
+
+# ili je "Hebrejski"?
+#~ msgid "_Hebrew"
+#~ msgstr "_Hebrejski"
+
+#~ msgid "_Indian"
+#~ msgstr "_Indijanski"
+
+#~ msgid "_Japanese"
+#~ msgstr "_Japanski"
+
+#~ msgid "_Korean"
+#~ msgstr "_Korejski"
+
+#~ msgid "_Turkish"
+#~ msgstr "_Turski"
+
+#~ msgid "_Unicode"
+#~ msgstr "_Unikod"
+
+#~ msgid "_Vietnamese"
+#~ msgstr "_Vijetnamski"
+
+#~ msgid "_Western"
+#~ msgstr "_Zapadni"
 
 #~ msgid "Open in tabs by default."
 #~ msgstr "Uobičajeno otvori u listovima."
@@ -3188,6 +3202,3 @@ msgstr "Gnom veb čitač zasnovan na Mozili"
 
 #~ msgid "Cl_ear Cache"
 #~ msgstr "Očisti odvojeni prostor na _disku"
-
-#~ msgid "_Language encoding:"
-#~ msgstr "_Zapis jezika:"
