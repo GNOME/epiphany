@@ -29,7 +29,6 @@ pref("helpers.global_mime_types_file", "");
 pref("helpers.private_mime_types_file", "");
 
 // use google for keywords
-pref("keyword.URL", "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q=");
 pref("keyword.enabled", true);
 
 // disable usless security warnings

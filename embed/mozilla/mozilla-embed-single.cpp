@@ -204,6 +204,22 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 		return FALSE;
         }
                                                                                                                              
+	nsCOMPtr<nsIPrefBranch> pref;
+	prefService->GetBranch ("", getter_AddRefs(pref));
+	NS_ENSURE_TRUE (pref, FALSE);
+
+	/* We do this before reading the user pref file so that the user
+	 * still can overwrite this pref.
+	 * We don't use the default-prefs.js file since that cannot be
+	 * localised (see bug #144909).
+	 */
+	/* translators: this is the URL that searches from the location
+	 * entry get directed to. The search terms will be _appended_ to it,
+	 * in url-escaped UTF-8; that means that if you're choosing google,
+	 * the 'q=' part needs to come last.
+	 */
+	pref->SetCharPref ("keyword.URL", _("http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="));
+
         /* Load the default user preferences as well.  This also makes the
            prefs to be saved in the user's prefs.js file, instead of messing up
            our global defaults file. */
@@ -212,10 +228,6 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
         {
                 g_warning ("failed to read user preferences, error: %x", rv);
         }
-
-        nsCOMPtr<nsIPrefBranch> pref;
-        prefService->GetBranch ("", getter_AddRefs(pref));
-	NS_ENSURE_TRUE (pref, FALSE);
 
 	/* FIXME We need to do this because mozilla doesnt set product
 	sub for embedding apps */
