@@ -150,7 +150,6 @@ impl_save (EphyEmbedPersist *persist)
 
 	g_return_val_if_fail (!(flags & EMBED_PERSIST_COPY_PAGE)
 			      || embed != NULL, FALSE);	
-	g_return_val_if_fail (filename != NULL, FALSE);
 
 	EphyBrowser *browser = NULL;
 	if (embed)
