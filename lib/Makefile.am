@@ -49,7 +49,6 @@ libephymisc_la_SOURCES = \
 	ephy-file-helpers.c			\
 	ephy-glade.c				\
 	ephy-gui.c				\
-	ephy-gui.h				\
 	ephy-langs.c				\
 	ephy-module-loader.c			\
 	ephy-marshal.c				\
