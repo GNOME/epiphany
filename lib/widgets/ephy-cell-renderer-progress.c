@@ -245,7 +245,7 @@ ephy_cell_renderer_progress_render (GtkCellRenderer *cell,
 	gdk_draw_rectangle (window, gc, TRUE, x, y, w, h);
 
 	gdk_gc_set_rgb_fg_color (gc, &widget->style->bg[GTK_STATE_SELECTED]);
-	perc_w = w * cellprogress->priv->value / 100;
+	perc_w = w * MAX (0, cellprogress->priv->value) / 100;
 	gdk_draw_rectangle (window, gc, TRUE, x, y, perc_w, h);
 
 	layout = gtk_widget_create_pango_layout (widget, cellprogress->priv->text);
