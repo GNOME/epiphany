@@ -53,6 +53,7 @@ EXTRA_DIST = $(NAUTILUS_VIEW_SERVER)	\
 	     $(DESKTOP_IN_FILES)	\
 	     $(about_DATA)		\
 	     $(applications_DATA)	\
+	     $(mimepermission_DATA)	\
 	     $(pkgconfig_DATA)		\
 	     check-mime.py
 
