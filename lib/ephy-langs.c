@@ -34,22 +34,56 @@
 
 static const EphyFontsLanguageInfo font_languages [] =
 {
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Arabic"),				"ar" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Baltic"),				"x-baltic" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Central European"),			"x-central-euro" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Cyrillic"),				"x-cyrillic" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Devanagari"),				"x-devanagari" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Greek"),					"el" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Hebrew"),				"he" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Japanese"),				"ja" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Korean"),				"ko" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Simplified Chinese"),			"zh-CN" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Tamil"),					"x-tamil" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Thai"),					"th" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Traditional Chinese"),			"zh-TW" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Traditional Chinese (Hong Kong)"),	"zh-HK" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Turkish"),				"tr" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Unicode"),				"x-unicode" },
+	/* Translators: The text before the "|" is context to help you decide on
+	 * the correct translation. You MUST OMIT it in the translated string. */
 	{ N_("select fonts for|Western"),				"x-western" }
 };
 static const guint n_font_languages = G_N_ELEMENTS (font_languages);
