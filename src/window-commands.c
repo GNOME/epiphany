@@ -16,6 +16,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+/*
+ * 25 Mar 2003: Added support for help manual : Patanjali Somayaji
+ * 						(patanjali@codito.com)
+ */
+
 #include <config.h>
 
 #include "ephy-shell.h"
@@ -666,7 +671,28 @@ void
 window_cmd_help_contents (EggAction *action,
 			 EphyWindow *window)
 {
-	/* FIXME: Need to implement */
+	GError *err;
+
+	err = NULL;
+	gnome_help_display ("epiphany", NULL, &err);
+
+	if (err != NULL) 
+	{
+		GtkWidget *dialog;
+		dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+				GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_MESSAGE_ERROR,
+				GTK_BUTTONS_CLOSE,
+				_("Could not display help: %s"), err->message);
+
+		g_signal_connect (G_OBJECT (dialog), "response",
+			G_CALLBACK (gtk_widget_destroy),
+			NULL);
+
+		gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+		gtk_widget_show (dialog);
+		g_error_free (err);	
+	}
 }
 
 void

@@ -1,0 +1,217 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+  <!ENTITY legal SYSTEM "legal.xml">
+  <!ENTITY appversion "0.5.0">
+  <!ENTITY manrevision "2.0">
+  <!ENTITY date "Mar 2003">
+  <!ENTITY fr "<application>Epiphany</application>">
+  <!-- Information about the entities
+       The legal.xml file contains legal information, there is no need to edit the file. 
+       Use the appversion entity to specify the version of the application.
+       Use the manrevision entity to specify the revision number of this manual.
+       Use the date entity to specify the release date of this manual.
+       Use the fr entity to specify the name of the application. -->
+]>
+<!-- 
+      (Do not remove this comment block.)
+  Maintained by the GNOME Documentation Project
+  http://developer.GNOME.org/projects/gdp
+  Template version: 2.0 beta
+  Template last modified Jan 30, 2002
+-->
+<!-- =============Document Header ============================= -->
+<article id="index" lang="en">
+<!-- please do not change the id; for translations, change lang to -->
+<!-- appropriate code -->
+  <articleinfo> 
+    <title>Epiphany Manual &manrevision;</title>       
+
+    <copyright> 
+      <year>2003</year> 
+      <holder>Patanjali Somayaji</holder> 
+    </copyright> 
+
+<!-- translators: uncomment this:
+
+  <copyright>
+   <year>2002</year>
+   <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
+  </copyright>
+
+   -->
+<!-- An address can be added to the publisher information.  If a role is 
+     not specified, the publisher/author is the same for all versions of the 
+     document.  -->
+    <publisher> 
+      <publishername> GNOME Documentation Project </publishername> 
+    </publisher> 
+
+   &legal; <!-- This file contains link to license for the
+   documentation (GNU FDL), and other legal stuff such as "NO
+   WARRANTY" statement. Please do not change any of this. -->
+
+    <authorgroup> 
+      <author> 
+	<firstname>Patanjali</firstname> 
+	<surname>Somayaji</surname> 
+	<affiliation> 
+	  <orgname>GNOME Documentation Project</orgname> 
+	  <address> <email>patanjali@codito.com</email> </address> 
+	</affiliation> 
+      </author> 
+    </authorgroup>
+
+
+    <releaseinfo> This manual describes version &appversion; of &fr;.
+    </releaseinfo> 
+  </articleinfo> 
+
+  <indexterm zone="index"> 
+    <primary>Epiphany</primary> 
+  </indexterm> 
+  <indexterm zone="index"> 
+    <primary>epiphany</primary> 
+  </indexterm>
+  <indexterm zone="index"> 
+    <primary>Browser</primary> 
+  </indexterm>
+
+<!-- ============= Document Body ============================= -->
+<!-- ============= Introduction ============================== -->
+<!-- Use the Introduction section to give a brief overview of what
+     the application is and what it does. -->
+  <sect1 id="fr-introduction"> 
+    <title>Introduction</title> 
+    <para>&fr; is a GNOME web browser based on the mozilla rendering 
+	engine. A web browser is more than an application, it is a way 
+	of thinking, it is a way of seeing the world. Epiphany's 
+	principles are simplicity and standards compliance.
+
+   </para>
+    <figure id="fr-add-dialog-fig">
+	<title>Epiphany Screenshot</title>
+	<screenshot> 
+	  <mediaobject> 
+	    <imageobject><imagedata
+		fileref="figures/ephy-screenshot.png" format="PNG"/> 
+	    </imageobject>
+	  </mediaobject>
+	</screenshot>
+      </figure>
+   
+
+   <para>	
+   <itemizedlist>
+    <listitem>
+      <para>Simplicity:</para>
+      <para>
+Epiphany aims to utilize the simplest interface possible for a browser.  Keep
+in mind that simple does not necessarily mean less powerful.  We believe
+the commonly used browsers of today are too big, buggy, and bloated. Epiphany
+addresses simplicity with a small browser designed for the web -- not mail,
+newsgroups, file management, instant messenging or coffee making.  The UNIX
+philosophy is to design small tools that do one thing, and do it well.
+
+Epiphany also address simplicity with modularity to make a light and powerful
+application.  If something can be implemented using external applications
+or components, we use it rather than wasting resources in the web browser.
+Integration will be achived with CORBA, Bonobo, and the ever popular
+command line.  
+
+Mail will be handled with your favorite e-mail application (Evolution, pine,
+mutt, balsa, pronto, whatever).
+      </para>
+    </listitem>
+    <listitem>
+      <para>Standards compliance:</para>
+      <para>
+The introduction of non-standard features in browsers could make it difficult
+or impossible to use alternative products like Epiphany if developers embrace
+them.  Alternative (standards complying) browsers could not be able to
+fully access web sites making use of these features.  The success of
+non-standard features can ultimately lead to forcing one browser, on
+one platform to dominate the market. Standards compliance ensures the 
+freedom of choice.  Epiphany aims to achieve this.
+      </para>
+    </listitem>
+    <listitem>
+      <para>USER INTERFACE LINES</para>
+        <itemizedlist>
+          <listitem>
+            <para>HIG compliance</para>
+              <para>
+Epiphany is going to follow version 1.0 of the gnome 
+user guidelines. Unless there are very seriuos reasons to make an 
+exception not following it will be considered a bug. 
+"I follow the HIG only when I like it" is not a legitimate approach. 
+Any areas where we diverge from the HIG will communicated 
+to the HIG team for future consideration.
+            </para>
+          </listitem>
+          <listitem>
+            <para>Gnome integration</para>
+            <para>
+Epiphany's main goal is to be integrated with the gnome desktop. 
+We dont aim to make epiphany usable outside Gnome. If someone will like 
+to use it anyway, it's just a plus. Ex: Making people happy that 
+don't have control center installed is not a good reason 
+to have mime configuration in epiphany itself.
+            </para>
+          </listitem>
+          <listitem>
+            <para>Simple design</para>
+            <para>
+Feature bloat and user interface clutter is evil :)
+            </para>
+          </listitem>
+          <listitem>
+            <para>Preferences</para>
+            <para>
+We will follow the new gnome policy about preferences. 
+I think Havoc Pennington already explained it a lot 
+better than I could ever do.
+http://www106.pair.com/rhp/free-software-ui.html
+            </para>
+          </listitem>
+          <listitem>
+            <para>User target</para>
+            <para>
+We target non-technical users by design. 
+This happens to be 90% of the user population.
+(Technical details should not exposed in the interface)
+We target web users, we dont directly target web developers.
+A few geek-oriented feautures can be kept as 
+long as they are non-obtrusive.
+            </para>
+          </listitem>
+        </itemizedlist>
+    </listitem>
+  </itemizedlist>
+  </para>
+  </sect1>
+
+<!-- ============= About ================================== -->
+  <sect1 id="fr-about"> 
+    <title>About &fr;</title> 
+
+    <para> &fr; was written by Marco Presenti Gritti 
+      (<email>marco@it.gnome.org</email>). To find more information
+      about &fr;, please visit the <ulink
+      url="http://epiphany.mozdev.org" type="http">Epiphany 
+      Web page</ulink>. 
+    </para>
+    <para>
+      This manual was written by Patanjali Somayaji 
+      (<email>patanjali@codito.com</email>). 
+    </para>
+
+    <para> This program is distributed under the terms of the GNU
+      General Public license as published by the Free Software
+      Foundation; either version 2 of the License, or (at your option)
+      any later version. A copy of this license can be found at this
+      <ulink url="ghelp:gpl" type="help">link</ulink>, or in the file
+      COPYING included with the source code of this program. </para>
+
+  </sect1> 
+</article>
