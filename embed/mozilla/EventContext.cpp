@@ -394,6 +394,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			if (tag.EqualsIgnoreCase("a"))
 			{
 				nsAutoString tmp;
+				nsAutoString substr;
 
 				rv = GatherTextUnder (node, tmp);
 				if (NS_SUCCEEDED(rv))
@@ -401,25 +402,15 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 				nsCOMPtr <nsIDOMHTMLAnchorElement> anchor =
 					do_QueryInterface(node);
-				rv = anchor->GetHref (tmp);
-				if (NS_FAILED(rv))
-					return NS_ERROR_FAILURE;
 
-				nsCOMPtr<nsIURI> uri;
-				NS_NewURI (getter_AddRefs (uri), tmp);
-				if (!uri) return NS_ERROR_FAILURE;
-			
-				nsresult rv;
-				nsCAutoString scheme;
-				rv = uri->GetScheme (scheme);
-				if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
-
-				if (scheme.EqualsIgnoreCase("mailto"))
+				anchor->GetHref (tmp);
+				substr.Assign (Substring (tmp, 0, 7));
+				if (substr.EqualsIgnoreCase("mailto:"))
 				{
 					info->context |= EMBED_CONTEXT_EMAIL_LINK;
 					const nsAString &address = Substring(tmp, 7, tmp.Length()-7);
 					SetStringProperty ("email", address);
-				}	
+				}
 				
 				if (anchor && !tmp.IsEmpty()) 
 				{
