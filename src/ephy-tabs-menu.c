@@ -44,12 +44,6 @@ struct _EphyTabsMenuPrivate
 	guint ui_id;
 };
 
-typedef struct
-{
-	EphyWindow *window;
-	EphyTab *tab;
-} TabsData;
-
 /**
  * Private functions, only availble from this file
  */
@@ -77,10 +71,34 @@ static gpointer g_object_class;
 /**
  * EphyTabsMenu object
  */
-MAKE_GET_TYPE (ephy_tabs_menu,
-	       "EphyTabsMenu", EphyTabsMenu,
-	       ephy_tabs_menu_class_init, ephy_tabs_menu_init,
-	       G_TYPE_OBJECT);
+
+GType
+ephy_tabs_menu_get_type (void)
+{
+        static GType ephy_tabs_menu_type = 0;
+
+        if (ephy_tabs_menu_type == 0)
+        {
+                static const GTypeInfo our_info =
+                {
+                        sizeof (EphyTabsMenuClass),
+                        NULL, /* base_init */
+                        NULL, /* base_finalize */
+                        (GClassInitFunc) ephy_tabs_menu_class_init,
+                        NULL,
+                        NULL, /* class_data */
+                        sizeof (EphyTab),
+                        0, /* n_preallocs */
+                        (GInstanceInitFunc) ephy_tabs_menu_init
+                };
+
+                ephy_tabs_menu_type = g_type_register_static (G_TYPE_OBJECT,
+							      "EphyTabsMenu",
+							      &our_info, 0);
+        }
+
+        return ephy_tabs_menu_type;
+}
 
 static void
 ephy_tabs_menu_class_init (EphyTabsMenuClass *klass)
@@ -193,10 +211,14 @@ ephy_tabs_menu_new (EphyWindow *window)
 }
 
 static void
-ephy_tabs_menu_verb_cb (EggMenuMerge *merge,
-			TabsData *data)
+ephy_tabs_menu_verb_cb (EggAction *action, EphyTab *tab)
 {
-	ephy_window_jump_to_tab (data->window, data->tab);
+	EphyWindow *window;
+
+	g_return_if_fail (IS_EPHY_TAB (tab));
+
+	window = ephy_tab_get_window (tab);	
+	ephy_window_jump_to_tab (window, tab);
 }
 
 
@@ -252,57 +274,54 @@ static void
 ephy_tabs_menu_rebuild (EphyTabsMenu *wrhm)
 {
 	EphyTabsMenuPrivate *p = wrhm->priv;
-	GString *xml;
-	gint i;
-	GList *tabs;
 	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
+	GString *xml;
+	guint i = 0;
+	guint len;
+	GList *tabs, *l;
+	GError *error = NULL;
 
 	LOG ("Rebuilding open tabs menu")
+
+	START_PROFILER ("Rebuilding tabs menu")
 
 	ephy_tabs_menu_clean (wrhm);
 
 	tabs = ephy_window_get_tabs (p->window);
+	len = g_list_length (tabs);
+	if (len == 0) return;
 
-	xml = g_string_new (NULL);
+	/* it's faster to preallocate */
+	xml = g_string_sized_new (52 * len + 105);
+
 	g_string_append (xml, "<Root><menu><submenu name=\"TabsMenu\">"
 			      "<placeholder name=\"TabsOpen\">");
 
 	p->action_group = egg_action_group_new ("TabsActions");
 	egg_menu_merge_insert_action_group (merge, p->action_group, 0);
 
-	for (i = 0; i < g_list_length (tabs); i++)
+	for (l = tabs; l != NULL; l = l->next)
 	{
-		char *verb = g_strdup_printf ("TabsOpen%d", i);
-		char *title_s;
-		const char *title;
-		xmlChar *label_x;
-		EphyTab *child;
-		TabsData *data;
+		gchar *verb = g_strdup_printf ("TabsOpen%d", i);
+		gchar *title_s;
+		const gchar *title;
+		EphyTab *tab;
 		EggAction *action;
 
-		child = g_list_nth_data (tabs, i);
+		tab = (EphyTab *) l->data;
 
-		title = ephy_tab_get_title(child);
+		title = ephy_tab_get_title (tab);
 		title_s = ephy_string_shorten (title, MAX_LABEL_LENGTH);
-		label_x = xmlEncodeSpecialChars (NULL, title_s);
-
-		data = g_new0 (TabsData, 1);
-		data->window = wrhm->priv->window;
-		data->tab = child;
 
 		action = g_object_new (EGG_TYPE_ACTION,
 				       "name", verb,
-				       "label", label_x,
-				       "tooltip", "Hello",
+				       "label", title_s,
+				       "tooltip", title,
 				       "stock_id", NULL,
 				       NULL);
 
-		g_signal_connect_closure
-			(action, "activate",
-			 g_cclosure_new (G_CALLBACK (ephy_tabs_menu_verb_cb),
-					 data,
-					 (GClosureNotify)g_free),
-			 FALSE);
+		g_signal_connect (action, "activate",
+				  G_CALLBACK (ephy_tabs_menu_verb_cb), tab);
 
 		ephy_tabs_menu_set_action_accelerator (p->action_group, action, i);
 
@@ -316,22 +335,19 @@ ephy_tabs_menu_rebuild (EphyTabsMenu *wrhm)
 		g_string_append (xml, verb);
 		g_string_append (xml, "\"/>\n");
 
-		xmlFree (label_x);
 		g_free (title_s);
 		g_free (verb);
+
+		++i;
 	}
 
 	g_string_append (xml, "</placeholder></submenu></menu></Root>");
 
-	if (g_list_length (tabs) > 0)
-	{
-		GError *error = NULL;
-		LOG ("Merging ui\n%s",xml->str);
-		p->ui_id = egg_menu_merge_add_ui_from_string
-			(merge, xml->str, -1, &error);
-	}
+	p->ui_id = egg_menu_merge_add_ui_from_string (merge, xml->str, -1, &error);
 
 	g_string_free (xml, TRUE);
+	
+	STOP_PROFILER ("Rebuilding tabs menu")
 }
 
 void ephy_tabs_menu_update (EphyTabsMenu *wrhm)

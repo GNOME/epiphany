@@ -531,8 +531,6 @@ update_tabs_menu_sensitivity (EphyWindow *window)
 	g_object_set (action, "sensitive", move_right, NULL);
 	action = egg_action_group_get_action (action_group, "TabsDetach");
 	g_object_set (action, "sensitive", detach, NULL);
-
-	ephy_tabs_menu_update (window->priv->tabs_menu);
 }
 
 static void
@@ -1369,11 +1367,11 @@ ephy_window_get_tabs (EphyWindow *window)
 		tab = g_object_get_data (G_OBJECT (w), "EphyTab");
 		g_return_val_if_fail (IS_EPHY_TAB (G_OBJECT (tab)), NULL);
 
-		tabs = g_list_append (tabs, tab);
+		tabs = g_list_prepend (tabs, tab);
 		i++;
 	}
 
-	return tabs;
+	return g_list_reverse (tabs);
 }
 
 static void

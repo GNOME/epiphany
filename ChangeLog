@@ -1,5 +1,17 @@
 2003-05-29  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-tabs-menu.c: (ephy_tabs_menu_get_type),
+	(ephy_tabs_menu_verb_cb), (ephy_tabs_menu_rebuild):
+	
+	Get rid of MAKE_GET_TYPE; make building the tabs menu a little faster.
+	
+	* src/ephy-window.c: (update_tabs_menu_sensitivity),
+	(ephy_window_get_tabs):
+	
+	Remove one unnecessary call to ephy_tabs_update_menu ().
+
+2003-05-29  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-langs.h:
 	* data/glade/prefs-dialog.glade:
 	* src/prefs-dialog.c: (autodetector_info_free), (prefs_dialog_finalize),
