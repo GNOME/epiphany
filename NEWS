@@ -3,8 +3,13 @@ Epiphany 1.3.0
 ==============
 
 [up to and including
-	2004-05-29  Christian Rose  <menthos@menthos.com>
-	* configure.in: Added "tk" to ALL_LINGUAS.
+
+2004-05-29  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-debug.h:
+
+        Use ISO style variable argument macros. Patch by Brian Cameron,
+        part of bug #141319.
 ]
 
 New features
@@ -52,8 +57,7 @@ Code changes
 
 	* Made sure every file includes config.h (Christian)
 	* Use more efficient mozilla string conversion routines (Christian)
-	* Adapt to various mozilla API changes (Marco, Christian, Xan, Piers,
-	  )
+	* Adapt to various mozilla API changes (Marco, Christian, Xan, Piers)
 	* Improve chrome handling (Marco)
 	* Cleanup after making EphyTab a GtkBin (Christian)
 	* Some API cleanups (Adam)
@@ -78,6 +82,7 @@ Code changes
 	* Some fixes for compilation with gcc 2.95 (Christian)
 	* Backport changed from the new gtkcellrendererprogress which
 	  was based on ephy's, to support RTL and fix overflow bug (Christian)
+	* Various solaris portability fixes (Brian Cameron, Christian)
 
 Bug fixes
 
