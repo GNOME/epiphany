@@ -173,8 +173,6 @@ ephy_file_chooser_get_persist_key (EphyFileChooser *dialog)
 	return dialog->priv->persist_key;
 }
 
-/* This function should really be in gtk+, see bug 142142 */
-
 GtkFileFilter *
 ephy_file_chooser_add_pattern_filter (EphyFileChooser *dialog,
 				      const char *title,
@@ -203,8 +201,6 @@ ephy_file_chooser_add_pattern_filter (EphyFileChooser *dialog,
 
 	return filth;
 }
-
-/* This function should really be in gtk+, see bug 142142 */
 
 GtkFileFilter *
 ephy_file_chooser_add_mime_filter (EphyFileChooser *dialog,
