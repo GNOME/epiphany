@@ -267,7 +267,7 @@ ephy_shell_init (EphyShell *gs)
 
 	ephy_debug_init ();
 	ephy_thread_helpers_init ();
-	ephy_node_system_init ();
+	ephy_node_system_init (EPHY_NODE_RESERVED_IDS);
 	ephy_file_helpers_init ();
 	ephy_stock_icons_init ();
 	ephy_ensure_dir_exists (ephy_dot_dir ());

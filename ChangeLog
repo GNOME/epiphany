@@ -1,3 +1,29 @@
+2003-04-13  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/mozilla/default-prefs.js:
+
+	Use google feel like for keywords	
+
+	* lib/ephy-node.c: (ephy_node_new_with_id),
+	(ephy_node_system_init):
+	* lib/ephy-node.h:
+
+	Pass the reserved ids num
+
+	* lib/ephy-types.h:
+	* src/ephy-shell.c: (ephy_shell_init):
+	
+	Increase reserved ids to 100.
+
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init_defaults),
+	(ephy_bookmarks_load), (ephy_bookmarks_init):
+
+	Default keywords and bookmarks (only google smb).
+	Keywords are probably quite sucky, well it's a start ;)
+	Adding more bookmarks could be a i18n pain.
+
+	We should be ready for 0.5.0 now.
+
 2003-04-13  Xan Lopez  <xan@masilla.org>
 
 	* NEWS:

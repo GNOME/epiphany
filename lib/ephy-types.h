@@ -30,6 +30,8 @@ typedef enum
 	G_NOT_IMPLEMENTED
 } gresult;
 
+#define EPHY_NODE_RESERVED_IDS 100
+
 /* Ids of the root nodes of history,
  * bookmarks and favicon cache */
 enum

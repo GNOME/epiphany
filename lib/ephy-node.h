@@ -136,7 +136,7 @@ EphyNode     *ephy_node_get_previous_child  (EphyNode *node,
 					     EphyNode *child);
 
 /* node id services */
-void        ephy_node_system_init           (void);
+void        ephy_node_system_init           (gulong reserved_ids);
 void        ephy_node_system_shutdown       (void);
 
 long        ephy_node_new_id                (void);

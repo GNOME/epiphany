@@ -40,6 +40,29 @@ struct EphyBookmarksPrivate
 	double lower_score;
 };
 
+typedef struct
+{
+	const char *title;
+	const char *location;
+	const char *smart_url;
+} EphyBookmarksBookmarkInfo;
+
+static const EphyBookmarksBookmarkInfo default_bookmarks [] =
+{
+	{ N_("Search the web"), "http://www.google.com", "http://www.google.com/search?q=%s" }
+};
+static int n_default_bookmarks = G_N_ELEMENTS (default_bookmarks);
+
+static const char *default_topics [] =
+{
+	N_("News"),
+	N_("People"),
+	N_("Shop"),
+	N_("Art"),
+	N_("Work")
+};
+static int n_default_topics = G_N_ELEMENTS (default_topics);
+
 static void
 ephy_bookmarks_class_init (EphyBookmarksClass *klass);
 static void
@@ -193,6 +216,24 @@ ephy_bookmarks_class_init (EphyBookmarksClass *klass)
 }
 
 static void
+ephy_bookmarks_init_defaults (EphyBookmarks *eb)
+{
+	int i;
+
+	for (i = 0; i < n_default_topics; i++)
+	{
+		ephy_bookmarks_add_keyword (eb, default_topics[i]);
+	}
+
+	for (i = 0; i < n_default_bookmarks; i++)
+	{
+		ephy_bookmarks_add (eb, default_bookmarks[i].title,
+				    default_bookmarks[i].location,
+				    default_bookmarks[i].smart_url);
+	}
+}
+
+static gboolean
 ephy_bookmarks_load (EphyBookmarks *eb)
 {
 	xmlDocPtr doc;
@@ -200,7 +241,7 @@ ephy_bookmarks_load (EphyBookmarks *eb)
 	char *tmp;
 
 	if (g_file_test (eb->priv->xml_file, G_FILE_TEST_EXISTS) == FALSE)
-		return;
+		return FALSE;
 
 	doc = xmlParseFile (eb->priv->xml_file);
 	g_assert (doc != NULL);
@@ -219,6 +260,8 @@ ephy_bookmarks_load (EphyBookmarks *eb)
 	}
 
 	xmlFreeDoc (doc);
+
+	return TRUE;
 }
 
 static void
@@ -491,7 +534,11 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	g_value_unset (&value);
 	ephy_node_add_child (eb->priv->keywords, eb->priv->favorites);
 
-	ephy_bookmarks_load (eb);
+	if (!ephy_bookmarks_load (eb))
+	{
+		ephy_bookmarks_init_defaults (eb);
+	}
+
 	ephy_bookmarks_emit_data_changed (eb);
 
 	ephy_setup_history_notifiers (eb);

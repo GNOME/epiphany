@@ -2,7 +2,7 @@
 user_pref("mozilla.widget.raise-on-setfocus", false);
 
 // set default search engine
-user_pref("keyword.URL", "http://www.google.com/search?q=");
+user_pref("keyword.URL", "http://www.google.com/search?btnI=I%27m+Feeling+Lucky&q=");
 user_pref("keyword.enabled", true);
 user_pref("security.checkloaduri", false);
 

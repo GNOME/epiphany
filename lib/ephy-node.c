@@ -96,14 +96,12 @@ enum
 	LAST_SIGNAL
 };
 
-#define RESERVED_IDS 10
-
 static GObjectClass *parent_class = NULL;
 
 static guint ephy_node_signals[LAST_SIGNAL] = { 0 };
 
 static GMutex *id_factory_lock = NULL;
-static long id_factory = RESERVED_IDS;
+static long id_factory;
 
 static GStaticRWLock *id_to_node_lock = NULL;
 static GPtrArray *id_to_node;
@@ -398,8 +396,6 @@ EphyNode *
 ephy_node_new_with_id (gulong reserved_id)
 {
 	EphyNode *node;
-
-	g_return_val_if_fail (reserved_id < RESERVED_IDS, NULL);
 
 	node = EPHY_NODE (g_object_new (EPHY_TYPE_NODE,
 				      "id", reserved_id,
@@ -1376,7 +1372,7 @@ ephy_node_get_previous_child (EphyNode *node,
 }
 
 void
-ephy_node_system_init (void)
+ephy_node_system_init (gulong reserved_ids)
 {
 	/* id to node */
 	id_to_node = g_ptr_array_new ();
@@ -1385,7 +1381,7 @@ ephy_node_system_init (void)
 	g_static_rw_lock_init (id_to_node_lock);
 
 	/* id factory */
-	id_factory = RESERVED_IDS;
+	id_factory = reserved_ids;
 	id_factory_lock = g_mutex_new ();
 }
 
