@@ -57,7 +57,7 @@ NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aT
 	rv = aURI->SchemeIs("javascript", &isJavascript);
 	NS_ENSURE_SUCCESS(rv, rv);
 
-	if (isJavascript || aRedirect || !aTopLevel)
+	if (isJavascript || aRedirect || !aToplevel)
 	{
 		return NS_OK;
 	}
