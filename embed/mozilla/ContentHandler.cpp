@@ -28,7 +28,6 @@
 
 #include "nsCOMPtr.h"
 #include "nsString.h"
-#include "nsIURI.h"
 #include "nsIURL.h"
 #include "nsILocalFile.h"
 #include "nsIMIMEInfo.h"
@@ -360,7 +359,6 @@ NS_METHOD GContentHandler::MIMEAskAction (void)
 		if (NS_FAILED (rv)) return rv;
 		rv = mContentHandler->FindHelperApp ();
 		if (NS_FAILED (rv)) return rv;
-		
 	}
 
 	return NS_OK;

@@ -74,7 +74,6 @@ enum
 	PROP_TREEVIEW,
 	PROP_PAUSE_BUTTON,
 	PROP_ABORT_BUTTON,
-	PROP_DETAILS_BUTTON
 };
 
 static const
@@ -221,8 +220,6 @@ download_changed_cb (EphyDownload *download, DownloaderView *dv)
 	row_ref = get_row_from_download (dv, download);
 	g_return_if_fail (row_ref != NULL);
 
-	total =  ephy_download_get_total_progress (download) / 1024;
-
 	/* State special casing */
 	state = ephy_download_get_state (download);
 	switch (state)
@@ -245,7 +242,20 @@ download_changed_cb (EphyDownload *download, DownloaderView *dv)
 		break;
 	}
 
-	size = g_strdup_printf ("%ld kB", total);
+	total = ephy_download_get_total_progress (download)/1024;
+	if (total <= 1024)
+	{
+		size = g_strdup_printf ("%ld kB", total);
+	} 
+	else if (total <= 1024*1024)
+	{
+		size = g_strdup_printf ("%ld MB", total/1024);
+	}
+	else
+	{
+		size = g_strdup_printf ("%ld GB", total/(1024*1024));
+	}
+
 	remaining = format_interval (remaining_secs);
 
 	path = gtk_tree_row_reference_get_path (row_ref);
