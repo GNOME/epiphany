@@ -596,8 +596,10 @@ mozilla_language_notifier(GConfClient *client,
 	GSList *languages, *l;
 	GString *result;
 
-	result = g_string_new ("");
 	languages = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
+	g_return_if_fail (languages != NULL);
+
+	result = g_string_new ("");
 
 	for (l = languages; l != NULL; l = l->next)
 	{
@@ -625,6 +627,9 @@ mozilla_language_notifier(GConfClient *client,
 	mozilla_prefs_set_string ("intl.accept_languages", result->str);
 
 	g_string_free (result, TRUE);
+	
+	g_slist_foreach (languages, (GFunc) g_free, NULL);
+	g_slist_free (languages);
 }
 
 static char *autodetect_charset_prefs[] =
