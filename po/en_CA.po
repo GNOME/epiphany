@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-14 18:56-0500\n"
-"PO-Revision-Date: 2004-12-14 18:56-0400\n"
+"POT-Creation-Date: 2004-12-16 10:55-0500\n"
+"PO-Revision-Date: 2004-12-16 18:56-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -735,7 +735,11 @@ msgstr "Au_todetect:"
 msgid "Choose a l_anguage:"
 msgstr "Choose a l_anguage:"
 
-#: data/glade/prefs-dialog.glade.h:17
+#. Translators: the mnemonic shouldn't conflict with any of the
+#. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
+#. * Select All, Input Methods and Insert Unicode control character.)
+#.
+#: data/glade/prefs-dialog.glade.h:17 lib/widgets/ephy-location-entry.c:365
 msgid "Cl_ear"
 msgstr "Cl_ear"
 
@@ -1000,6 +1004,14 @@ msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d download"
 msgstr[1] "%d downloads"
+
+#: embed/downloader-view.c:487 embed/downloader-view.c:496
+msgid "download status|Unknown"
+msgstr "download status|Unknown"
+
+#: embed/downloader-view.c:490
+msgid "download status|Failed"
+msgstr "download status|Failed"
 
 #: embed/downloader-view.c:550 src/bookmarks/ephy-bookmarks-editor.c:804
 msgid "File"
@@ -1388,16 +1400,16 @@ msgstr "Others"
 msgid "Local files"
 msgstr "Local files"
 
-#: embed/mozilla/ContentHandler.cpp:144
+#: embed/mozilla/ContentHandler.cpp:146
 #: embed/mozilla/EphyHeaderSniffer.cpp:357
 msgid "Save"
 msgstr "Save"
 
-#: embed/mozilla/ContentHandler.cpp:247
+#: embed/mozilla/ContentHandler.cpp:251
 msgid "Download the unsafe file?"
 msgstr "Download the unsafe file?"
 
-#: embed/mozilla/ContentHandler.cpp:248
+#: embed/mozilla/ContentHandler.cpp:254
 msgid ""
 "This type of file could potentially damage your documents or invade your "
 "privacy. It's not safe to open it directly. You can save it instead."
@@ -1405,23 +1417,27 @@ msgstr ""
 "This type of file could potentially damage your documents or invade your "
 "privacy. It's not safe to open it directly. You can save it instead."
 
-#: embed/mozilla/ContentHandler.cpp:255
-msgid "Open the file in another application?"
-msgstr "Open the file in another application?"
+#. translators: %s is the name of the application
+#: embed/mozilla/ContentHandler.cpp:265
+#, c-format
+msgid "Open this file with %s?"
+msgstr "Open this file with %s?"
 
-#: embed/mozilla/ContentHandler.cpp:256
+#. translators: %s is the name of the application
+#: embed/mozilla/ContentHandler.cpp:270
+#, c-format
 msgid ""
 "It's not possible to view this file type directly in the browser. You can "
-"open it with another application or save it."
+"open it with <tt>%s</tt> or save it."
 msgstr ""
-"It's not possible to view this file type directly in the browser. You can "
-"open it with another application or save it."
+"It is not possible to view this file type directly in the browser. You can "
+"open it with <tt>%s</tt> or save it."
 
-#: embed/mozilla/ContentHandler.cpp:262
+#: embed/mozilla/ContentHandler.cpp:280
 msgid "Download the file?"
 msgstr "Download the file?"
 
-#: embed/mozilla/ContentHandler.cpp:263
+#: embed/mozilla/ContentHandler.cpp:283
 msgid ""
 "It's not possible to view this file because there is no application "
 "installed that can open it. You can save it instead."
@@ -1429,7 +1445,7 @@ msgstr ""
 "It's not possible to view this file because there is no application "
 "installed that can open it. You can save it instead."
 
-#: embed/mozilla/ContentHandler.cpp:279
+#: embed/mozilla/ContentHandler.cpp:288
 msgid "_Save As..."
 msgstr "_Save As..."
 
@@ -3491,6 +3507,23 @@ msgstr "Vietnamese"
 #: src/prefs-dialog.c:332
 msgid "Walloon"
 msgstr "Walloon"
+
+#. translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#: src/prefs-dialog.c:1013 src/prefs-dialog.c:1019
+#, c-format
+msgid "language|%s (%s)"
+msgstr "language|%s (%s)"
+
+#. translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: src/prefs-dialog.c:1028 src/prefs-dialog.c:1386
+#, c-format
+msgid "language|User defined (%s)"
+msgstr "language|User defined (%s)"
 
 #: src/prefs-dialog.c:1051
 #, c-format
