@@ -151,22 +151,22 @@ net_stop_cb (EphyEmbed *embed,
 
 static void
 tab_added_cb (GtkWidget *notebook,
-	      GtkWidget *child,
+	      EphyTab *tab,
 	      EphySession *session)
 {
-	g_signal_connect (child, "net_stop",
+	g_signal_connect (ephy_tab_get_embed (tab), "net_stop",
 			  G_CALLBACK (net_stop_cb), session);
 }
 
 static void
 tab_removed_cb (GtkWidget *notebook,
-		GtkWidget *child,
+		EphyTab *tab,
 		EphySession *session)
 {
 	ephy_session_save (session, SESSION_CRASHED);
 
 	g_signal_handlers_disconnect_by_func
-		(child, G_CALLBACK (net_stop_cb), session);
+		(ephy_tab_get_embed (tab), G_CALLBACK (net_stop_cb), session);
 }
 
 static void

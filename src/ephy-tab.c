@@ -1,6 +1,7 @@
 /*
  *  Copyright (C) 2000-2003 Marco Pesenti Gritti
- *  Copyright (C) 2003 Christian Persch
+ *  Copyright (C) 2003, 2004 Christian Persch
+ *  Copyright (C) 2004 Crispin Flowerday
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -61,7 +62,6 @@
 
 struct EphyTabPrivate
 {
-	EphyEmbed *embed;
 	EphyWindow *window;
 	char *status_message;
 	char *link_message;
@@ -146,7 +146,7 @@ ephy_tab_get_type (void)
                         (GInstanceInitFunc) ephy_tab_init
                 };
 
-                ephy_tab_type = g_type_register_static (G_TYPE_OBJECT,
+                ephy_tab_type = g_type_register_static (GTK_TYPE_BIN,
 							"EphyTab",
 							&our_info, 0);
         }
@@ -233,6 +233,40 @@ ephy_tab_get_property (GObject *object,
 }
 
 static void
+ephy_tab_size_allocate (GtkWidget *widget,
+			GtkAllocation *allocation)
+{
+	GtkWidget *child;
+
+	widget->allocation = *allocation;
+
+	child = GTK_BIN (widget)->child;
+
+	if (child && GTK_WIDGET_VISIBLE (child))
+	{
+		gtk_widget_size_allocate (child, allocation);
+	}
+}
+
+static void
+ephy_tab_parent_set (GtkWidget *widget,
+		     GtkWidget *previous_parent)
+{
+	if (widget->parent)
+	{
+		GtkWidget *toplevel;
+		toplevel = gtk_widget_get_toplevel (widget);
+
+		ephy_tab_set_window (EPHY_TAB (widget), EPHY_WINDOW (toplevel));
+	}
+
+	if (GTK_WIDGET_CLASS (parent_class)->parent_set)
+	{
+		GTK_WIDGET_CLASS (parent_class)->parent_set (widget, previous_parent);
+	}
+}
+
+static void
 ephy_tab_action_activate_cb (GtkAction *action, EphyTab *tab)
 {
 	g_return_if_fail (EPHY_IS_TAB (tab));
@@ -248,6 +282,7 @@ static void
 ephy_tab_class_init (EphyTabClass *class)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (class);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(class);
 
         parent_class = g_type_class_peek_parent (class);
 
@@ -255,6 +290,9 @@ ephy_tab_class_init (EphyTabClass *class)
 	object_class->get_property = ephy_tab_get_property;
 	object_class->set_property = ephy_tab_set_property;
 
+	widget_class->size_allocate = ephy_tab_size_allocate;
+	widget_class->parent_set = ephy_tab_parent_set;
+	
 	g_object_class_install_property (object_class,
 					 PROP_ADDRESS,
 					 g_param_spec_string ("address",
@@ -357,31 +395,13 @@ ephy_tab_class_init (EphyTabClass *class)
 }
 
 static void
-ephy_tab_parent_set_cb (GtkWidget *widget, GtkWidget *previous_parent,
-			EphyTab *tab)
-{
-	GtkWidget *toplevel;
-
-	if (widget->parent == NULL) return;
-
-	toplevel = gtk_widget_get_toplevel (widget);
-	ephy_tab_set_window (tab, EPHY_WINDOW (toplevel));
-}
-static void
-ephy_tab_embed_destroy_cb (GtkWidget *widget, EphyTab *tab)
-{
-	LOG ("GtkMozEmbed destroy signal on EphyTab")
-	g_object_unref (tab);
-}
-
-static void
 ephy_tab_finalize (GObject *object)
 {
         EphyTab *tab = EPHY_TAB (object);
 
-	g_idle_remove_by_data (tab->priv->embed);
+	g_idle_remove_by_data (tab);
 
-	if (tab->priv->action)
+	if (tab->priv->action != NULL)
 	{
 		g_object_unref (tab->priv->action);
 	}
@@ -420,11 +440,7 @@ address_has_web_scheme (const char *address)
 EphyTab *
 ephy_tab_new (void)
 {
-	EphyTab *tab;
-
-	tab = EPHY_TAB (g_object_new (EPHY_TYPE_TAB, NULL));
-
-	return tab;
+	return EPHY_TAB (g_object_new (EPHY_TYPE_TAB, NULL));
 }
 
 static void
@@ -469,19 +485,20 @@ ephy_tab_get_embed (EphyTab *tab)
 {
 	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
 
-	return tab->priv->embed;
+	return EPHY_EMBED (gtk_bin_get_child (GTK_BIN (tab)));
 }
 
 EphyTab *
 ephy_tab_for_embed (EphyEmbed *embed)
 {
-	EphyTab *tab;
+	GtkWidget *parent;
 
 	g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
 
-	tab = EPHY_TAB (g_object_get_data (G_OBJECT (embed), "ephy-tab"));
+	parent = GTK_WIDGET (embed)->parent;
+	g_return_val_if_fail (parent != NULL, NULL);
 
-	return tab;
+	return EPHY_TAB (parent);
 }
 
 void
@@ -878,30 +895,38 @@ ephy_tab_new_window_cb (EphyEmbed *embed, EphyEmbed **new_embed,
 	ephy_window_request_chrome (window, chromemask);
 
 	new_tab = ephy_tab_new ();
+	gtk_widget_show (GTK_WIDGET (new_tab));
+
         ephy_window_add_tab (window, new_tab, EPHY_NOTEBOOK_INSERT_GROUPED, FALSE);
 
 	*new_embed = ephy_tab_get_embed (new_tab);
 }
 
 static gboolean
-let_me_resize_hack (gpointer data)
+let_me_resize_hack (gpointer *tab_ptr)
 {
-	gtk_widget_set_size_request (GTK_WIDGET(data),
-				     -1, -1);
+	if (*tab_ptr != NULL)
+	{
+		g_object_remove_weak_pointer (G_OBJECT (*tab_ptr), tab_ptr);
+		gtk_widget_set_size_request (GTK_WIDGET (*tab_ptr), -1, -1);
+
+		g_free (tab_ptr);
+	}
+
 	return FALSE;
 }
 
 static void
 ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
-			  EphyTab *tab)
+			EphyTab *tab)
 {
 	if (visibility)
 	{
-		gtk_widget_show (GTK_WIDGET(embed));
+		gtk_widget_show (GTK_WIDGET (tab));
 	}
 	else
 	{
-		gtk_widget_hide (GTK_WIDGET(embed));
+		gtk_widget_hide (GTK_WIDGET (tab));
 	}
 
 	ephy_tab_set_visibility (tab, visibility);
@@ -922,14 +947,13 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 {
 	GtkWidget *notebook;
 	EphyWindow *window;
-	GtkWidget *widget;
+	gpointer *tab_ptr;
 
 	tab->priv->width = width;
 	tab->priv->height = height;
 
 	window = tab->priv->window;
 	notebook = ephy_window_get_notebook (window);
-	widget = GTK_WIDGET (embed);
 
 	/* Do not resize window with multiple tabs.
 	 * Do not resize window already showed because
@@ -939,14 +963,18 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 	    !tab->priv->visibility)
 	{
 		gtk_widget_set_size_request
-			(widget, width, height);
+			(GTK_WIDGET (tab), width, height);
 
 		/* HACK reset widget requisition after the container
 		 * has been resized. It appears to be the only way
 		 * to have the window sized according to embed
 		 * size correctly.
 		 */
-		g_idle_add (let_me_resize_hack, embed);
+
+		tab_ptr = g_new (gpointer, 1);
+		*tab_ptr = tab;
+		g_object_add_weak_pointer (G_OBJECT (tab), tab_ptr);
+		g_idle_add ((GSourceFunc) let_me_resize_hack, tab_ptr);
 	}
 }
 
@@ -1100,7 +1128,7 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 		g_object_add_weak_pointer (G_OBJECT (tab), weak_ptr);
 
 		gtk_clipboard_request_text
-			(gtk_widget_get_clipboard (GTK_WIDGET (tab->priv->embed),
+			(gtk_widget_get_clipboard (GTK_WIDGET (tab),
 						   GDK_SELECTION_PRIMARY),
 			 (GtkClipboardTextReceivedFunc) clipboard_text_received_cb,
 			 weak_ptr);
@@ -1124,7 +1152,7 @@ ephy_tab_security_change_cb (EphyEmbed *embed, EmbedSecurityLevel level,
 static void
 ephy_tab_init (EphyTab *tab)
 {
-	GObject *embed, *embed_widget;
+	GObject *embed;
 	EphyFaviconCache *cache;
 	char *id;
 
@@ -1150,12 +1178,11 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->setting_zoom = FALSE;
 	tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
 
-	tab->priv->embed = EPHY_EMBED
-		(ephy_embed_factory_new_object ("EphyEmbed"));
-	g_assert (tab->priv->embed != NULL);
+	embed = ephy_embed_factory_new_object ("EphyEmbed");
+	g_assert (embed != NULL);
 
-	embed = G_OBJECT (tab->priv->embed);
-	embed_widget = G_OBJECT (tab->priv->embed);
+	gtk_container_add (GTK_CONTAINER (tab), GTK_WIDGET (embed));
+	gtk_widget_show (GTK_WIDGET (embed));
 
 	id = g_strdup_printf ("Tab%lu", tab_id++);
 
@@ -1169,15 +1196,6 @@ ephy_tab_init (EphyTab *tab)
 	g_signal_connect (tab->priv->action, "activate",
 			  G_CALLBACK (ephy_tab_action_activate_cb), tab);
 
-	/* set a pointer in the embed's widget back to the tab */
-	g_object_set_data (embed_widget, "ephy-tab", tab);
-
-	g_signal_connect_object (embed_widget, "parent_set",
-				 G_CALLBACK (ephy_tab_parent_set_cb),
-				 tab, 0);
-	g_signal_connect_object (embed_widget, "destroy",
-				 G_CALLBACK (ephy_tab_embed_destroy_cb),
-				 tab, 0);
 	g_signal_connect_object (embed, "link_message",
 				 G_CALLBACK (ephy_tab_link_message_cb),
 				 tab, 0);
@@ -1249,7 +1267,7 @@ ephy_tab_update_navigation_flags (EphyTab *tab)
 	EphyEmbed *embed;
 	TabNavigationFlags flags = 0;
 
-	embed = tab->priv->embed;
+	embed = ephy_tab_get_embed (tab);
 
 	if (ephy_embed_can_go_up (embed))
 	{
@@ -1318,7 +1336,7 @@ ephy_tab_set_title (EphyTab *tab, const char *new_title)
 		GnomeVFSURI *uri = NULL;
 		char *address;
 
-		address = ephy_embed_get_location (tab->priv->embed, TRUE);
+		address = ephy_embed_get_location (ephy_tab_get_embed (tab), TRUE);
 
 		if (address)
 		{

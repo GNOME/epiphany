@@ -1058,7 +1058,8 @@ window_cmd_tabs_move_left  (GtkAction *action,
 		GtkWidget *child;
 
 		child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), page);
-		ephy_notebook_move_page (EPHY_NOTEBOOK (notebook), NULL, child, page - 1);
+		ephy_notebook_move_tab (EPHY_NOTEBOOK (notebook), NULL,
+					EPHY_TAB (child), page - 1);
 	}
 }
 
@@ -1078,7 +1079,8 @@ void window_cmd_tabs_move_right (GtkAction *action,
 		GtkWidget *child;
 
 		child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), page);
-		ephy_notebook_move_page (EPHY_NOTEBOOK (notebook), NULL, child, page + 1);
+		ephy_notebook_move_tab (EPHY_NOTEBOOK (notebook), NULL,
+					EPHY_TAB (child), page + 1);
 	}
 }
 
@@ -1087,19 +1089,18 @@ window_cmd_tabs_detach  (GtkAction *action,
 			 EphyWindow *window)
 {
 	EphyTab *tab;
-	GtkWidget *src_page, *nb;
+	GtkWidget *nb;
 	EphyWindow *new_win;
 
 	nb = ephy_window_get_notebook (window);
 	if (gtk_notebook_get_n_pages (GTK_NOTEBOOK (nb)) <= 1) return;
 
 	tab = ephy_window_get_active_tab (window);
-	src_page = GTK_WIDGET (ephy_tab_get_embed (tab));
+
 	new_win = ephy_window_new ();
-	ephy_notebook_move_page (EPHY_NOTEBOOK (ephy_window_get_notebook (window)),
+	ephy_notebook_move_tab (EPHY_NOTEBOOK (ephy_window_get_notebook (window)),
 				EPHY_NOTEBOOK (ephy_window_get_notebook (new_win)),
-				src_page, 0);
-	ephy_tab_set_window (tab, new_win);
+				tab, 0);
 	gtk_widget_show (GTK_WIDGET (new_win));
 }
 

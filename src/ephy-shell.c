@@ -600,8 +600,9 @@ ephy_shell_new_tab (EphyShell *shell,
 	}
 
 	tab = ephy_tab_new ();
+	gtk_widget_show (GTK_WIDGET (tab));
 	embed = ephy_tab_get_embed (tab);
-	gtk_widget_show (GTK_WIDGET(embed));
+
 	ephy_window_add_tab (window, tab,
 			     position,
 			     jump_to);

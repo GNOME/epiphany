@@ -428,11 +428,12 @@ gnv_embed_new_window_cb (EphyEmbed *embed, EphyEmbed **new_embed,
 	
 	window = ephy_window_new ();
 	new_tab = ephy_tab_new ();
+	gtk_widget_show (GTK_WIDGET (new_tab));
+
 	ephy_window_add_tab (window, new_tab, EPHY_NOTEBOOK_INSERT_LAST, FALSE);
 
 	*new_embed = ephy_tab_get_embed (new_tab);
 }
-
 
 static void
 gnv_bonobo_control_activate_cb (BonoboControl *control, gboolean state, EphyNautilusView *view)

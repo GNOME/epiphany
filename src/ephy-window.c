@@ -1563,12 +1563,11 @@ update_tabs_menu_sensitivity (EphyWindow *window)
 }
 
 static void
-tab_added_cb (EphyNotebook *notebook, EphyEmbed *embed, EphyWindow *window)
+tab_added_cb (EphyNotebook *notebook,
+	      EphyTab *tab,
+	      EphyWindow *window)
 {
-	EphyTab *tab;
-
-        g_return_if_fail (EPHY_IS_EMBED (embed));
-	tab = ephy_tab_for_embed (embed);
+        g_return_if_fail (EPHY_IS_TAB (tab));
 
 	window->priv->num_tabs++;
 
@@ -1579,12 +1578,11 @@ tab_added_cb (EphyNotebook *notebook, EphyEmbed *embed, EphyWindow *window)
 }
 
 static void
-tab_removed_cb (EphyNotebook *notebook, EphyEmbed *embed, EphyWindow *window)
+tab_removed_cb (EphyNotebook *notebook,
+		EphyTab *tab,
+		EphyWindow *window)
 {
-	EphyTab *tab;
-
-        g_return_if_fail (EPHY_IS_EMBED (embed));
-	tab = ephy_tab_for_embed (embed);
+        g_return_if_fail (EPHY_IS_TAB (tab));
 
 	g_signal_handlers_disconnect_by_func (G_OBJECT (tab),
 					      G_CALLBACK (sync_tab_visibility),
@@ -1604,18 +1602,18 @@ tab_removed_cb (EphyNotebook *notebook, EphyEmbed *embed, EphyWindow *window)
 }
 
 static void
-tab_detached_cb (EphyNotebook *notebook, GtkWidget *child,
+tab_detached_cb (EphyNotebook *notebook,
+		 EphyTab *tab,
 		 gpointer data)
 {
 	EphyWindow *window;
 
-	g_return_if_fail (EPHY_IS_NOTEBOOK (notebook));
-	g_return_if_fail (EPHY_IS_EMBED (child));
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	window = ephy_window_new ();
-	ephy_notebook_move_page (notebook,
-				 EPHY_NOTEBOOK (ephy_window_get_notebook (window)),
-				 child, 0);
+	ephy_notebook_move_tab (notebook,
+				EPHY_NOTEBOOK (ephy_window_get_notebook (window)),
+				tab, 0);
 	gtk_widget_show (GTK_WIDGET (window));
 }
 
@@ -1623,15 +1621,16 @@ static void
 tabs_reordered_cb (EphyNotebook *notebook, EphyWindow *window)
 {
 	update_tabs_menu_sensitivity (window);
-	ephy_tabs_menu_update (window->priv->tabs_menu);
 }
 
 static gboolean
-tab_delete_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
+tab_delete_cb (EphyNotebook *notebook,
+	       EphyTab *tab,
+	       EphyWindow *window)
 {
-	g_return_val_if_fail (EPHY_IS_EMBED (child), FALSE);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), FALSE);
 
-	if (ephy_embed_has_modified_forms (EPHY_EMBED (child)))
+	if (ephy_embed_has_modified_forms (ephy_tab_get_embed (tab)))
 	{
 		return !confirm_close_with_modified_forms (window);
 	}
@@ -1645,9 +1644,6 @@ setup_notebook (EphyWindow *window)
 	GtkNotebook *notebook;
 
 	notebook = GTK_NOTEBOOK (ephy_notebook_new ());
-	gtk_notebook_set_scrollable (notebook, TRUE);
-	gtk_notebook_set_show_border (notebook, FALSE);
-	gtk_notebook_set_show_tabs (notebook, FALSE);
 
 	g_signal_connect_after (G_OBJECT (notebook), "switch_page",
 				G_CALLBACK (
@@ -2126,21 +2122,18 @@ ephy_window_add_tab (EphyWindow *window,
 
 	widget = GTK_WIDGET(ephy_tab_get_embed (tab));
 
-	ephy_notebook_insert_page (EPHY_NOTEBOOK (window->priv->notebook),
-				   widget, position, jump_to);
+	ephy_notebook_insert_tab (EPHY_NOTEBOOK (window->priv->notebook),
+				  tab, position, jump_to);
 }
 
 void
 ephy_window_jump_to_tab (EphyWindow *window,
-			   EphyTab *tab)
+			 EphyTab *tab)
 {
-	GtkWidget *widget;
 	int page;
 
-	widget = GTK_WIDGET(ephy_tab_get_embed (tab));
-
 	page = gtk_notebook_page_num
-		(window->priv->notebook, widget);
+		(window->priv->notebook, GTK_WIDGET (tab));
 	gtk_notebook_set_current_page
 		(window->priv->notebook, page);
 }
@@ -2148,21 +2141,17 @@ ephy_window_jump_to_tab (EphyWindow *window,
 static EphyTab *
 real_get_active_tab (EphyWindow *window, int page_num)
 {
-	EphyTab *tab;
-	GtkWidget *embed_widget;
+	GtkWidget *tab;
 
 	if (page_num == -1)
 	{
 		page_num = gtk_notebook_get_current_page (window->priv->notebook);
 	}
-	embed_widget = gtk_notebook_get_nth_page (window->priv->notebook,
-						  page_num);
+	tab = gtk_notebook_get_nth_page (window->priv->notebook, page_num);
 
-	g_return_val_if_fail (GTK_IS_WIDGET (embed_widget), NULL);
-	tab = ephy_tab_for_embed (EPHY_EMBED (embed_widget));
 	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
 
-	return tab;
+	return EPHY_TAB (tab);
 }
 
 void
@@ -2186,8 +2175,7 @@ ephy_window_remove_tab (EphyWindow *window,
 		return;
 	}
 
-	ephy_notebook_remove_page (EPHY_NOTEBOOK (window->priv->notebook),
-				   GTK_WIDGET (embed));
+	ephy_notebook_remove_tab (EPHY_NOTEBOOK (window->priv->notebook), tab);
 }
 
 /**
@@ -2264,6 +2252,7 @@ EphyTab *
 ephy_window_get_active_tab (EphyWindow *window)
 {
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+	g_return_val_if_fail (EPHY_IS_TAB (window->priv->active_tab), NULL);
 
 	return window->priv->active_tab;
 }
@@ -2276,35 +2265,33 @@ ephy_window_get_active_embed (EphyWindow *window)
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
 	tab = ephy_window_get_active_tab (window);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
 
-	if (tab)
-	{
-		return ephy_tab_get_embed (tab);
-	}
-
-	return NULL;
+	return ephy_tab_get_embed (tab);
 }
 
+/**
+ * ephy_window_get_tabs:
+ * @window: a #EphyWindow
+ *
+ * Returns the list of #EphyTab:s in the window.
+ *
+ */
 GList *
 ephy_window_get_tabs (EphyWindow *window)
 {
-	GList *tabs = NULL;
-	GtkWidget *w;
-	int i = 0;
+	GtkNotebook *notebook;
+	GList *list = NULL;
+	int i, num;
 
-	while ((w = gtk_notebook_get_nth_page (window->priv->notebook, i)) != NULL)
+	notebook = GTK_NOTEBOOK (window->priv->notebook);
+	num = gtk_notebook_get_n_pages (notebook);
+	for (i = 0; i < num; i++)
 	{
-		EphyTab *tab;
-
-		g_return_val_if_fail (EPHY_IS_EMBED (w), NULL);
-		tab = ephy_tab_for_embed (EPHY_EMBED (w));
-		g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
-
-		tabs = g_list_prepend (tabs, tab);
-		i++;
+		list = g_list_prepend (list, gtk_notebook_get_nth_page (notebook, i));
 	}
 
-	return g_list_reverse (tabs);
+	return g_list_reverse (list);
 }
 
 static void

@@ -1,5 +1,7 @@
 /*
  *  Copyright (C) 2002 Christophe Fergeau
+ *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +23,8 @@
 #ifndef EPHY_NOTEBOOK_H
 #define EPHY_NOTEBOOK_H
 
+#include "ephy-tab.h"
+
 #include <glib.h>
 #include <gtk/gtknotebook.h>
 
@@ -33,21 +37,14 @@ G_BEGIN_DECLS
 #define EPHY_IS_NOTEBOOK_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_NOTEBOOK))
 #define EPHY_NOTEBOOK_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_NOTEBOOK, EphyNotebookClass))
 
-typedef struct EphyNotebookClass EphyNotebookClass;
-typedef struct EphyNotebook EphyNotebook;
-typedef struct EphyNotebookPrivate EphyNotebookPrivate;
-
-typedef enum
-{
-	EPHY_NOTEBOOK_TAB_LOAD_NORMAL,
-	EPHY_NOTEBOOK_TAB_LOAD_LOADING,
-	EPHY_NOTEBOOK_TAB_LOAD_COMPLETED
-} EphyNotebookPageLoadStatus;
+typedef struct EphyNotebookClass	EphyNotebookClass;
+typedef struct EphyNotebook		EphyNotebook;
+typedef struct EphyNotebookPrivate	EphyNotebookPrivate;
 
 enum
 {
-	EPHY_NOTEBOOK_INSERT_LAST = -1,
-	EPHY_NOTEBOOK_INSERT_GROUPED = -2
+	EPHY_NOTEBOOK_INSERT_LAST	= -1,
+	EPHY_NOTEBOOK_INSERT_GROUPED	= -2
 };
 
 struct EphyNotebook
@@ -64,32 +61,32 @@ struct EphyNotebookClass
 
 	/* Signals */
 	void (* tab_added)      (EphyNotebook *notebook,
-				 GtkWidget *child);
+				 EphyTab *tab);
 	void (* tab_removed)    (EphyNotebook *notebook,
-				 GtkWidget *child);
+				 EphyTab *tab);
 	void (* tab_detached)   (EphyNotebook *notebook,
-				 GtkWidget *child);
+				 EphyTab *tab);
 	void (* tabs_reordered) (EphyNotebook *notebook);
 	void (* tab_delete)	(EphyNotebook *notebook,
-				 GtkWidget *child);
+				 EphyTab *tab);
 };
 
 GType		ephy_notebook_get_type		(void);
 
 GtkWidget      *ephy_notebook_new		(void);
 
-void		ephy_notebook_insert_page	(EphyNotebook *nb,
-						 GtkWidget *child,
+void		ephy_notebook_insert_tab	(EphyNotebook *nb,
+						 EphyTab *tab,
 						 int position,
 						 gboolean jump_to);
 
-void		ephy_notebook_remove_page	(EphyNotebook *nb,
-						 GtkWidget *child);
+void		ephy_notebook_remove_tab	(EphyNotebook *nb,
+						 EphyTab *tab);
 
-void            ephy_notebook_move_page         (EphyNotebook *src,
+void            ephy_notebook_move_tab		(EphyNotebook *src,
 						 EphyNotebook *dest,
-						 GtkWidget *src_page,
-						 gint dest_page);
+						 EphyTab *tab,
+						 int dest_position);
 
 void		ephy_notebook_set_show_tabs	(EphyNotebook *nb,
 						 gboolean show_tabs);

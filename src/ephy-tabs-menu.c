@@ -38,10 +38,6 @@
 
 #define MAX_LABEL_LENGTH 30
 
-/**
- * Private data
- */
-
 #define EPHY_TABS_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TABS_MENU, EphyTabsMenuPrivate))
 
 struct _EphyTabsMenuPrivate
@@ -51,9 +47,6 @@ struct _EphyTabsMenuPrivate
 	guint ui_id;
 };
 
-/**
- * Private functions, only availble from this file
- */
 static void	ephy_tabs_menu_class_init	(EphyTabsMenuClass *klass);
 static void	ephy_tabs_menu_init	  	(EphyTabsMenu *menu);
 
@@ -62,10 +55,6 @@ enum
 	PROP_0,
 	PROP_WINDOW
 };
-
-/**
- * EphyTabsMenu object
- */
 
 GType
 ephy_tabs_menu_get_type (void)
@@ -96,13 +85,11 @@ ephy_tabs_menu_get_type (void)
 }
 
 static void
-tab_added_cb (EphyNotebook *notebook, EphyEmbed *embed, EphyTabsMenu *menu)
+tab_added_cb (EphyNotebook *notebook, EphyTab *tab, EphyTabsMenu *menu)
 {
-	EphyTab *tab;
 	GtkAction *action;
 
-        g_return_if_fail (EPHY_IS_EMBED (embed));
-	tab = ephy_tab_for_embed (embed);
+        g_return_if_fail (EPHY_IS_TAB (tab));
 
 	action = GTK_ACTION (ephy_tab_get_action (tab));
 	gtk_action_group_add_action (menu->priv->action_group, action);
@@ -111,17 +98,21 @@ tab_added_cb (EphyNotebook *notebook, EphyEmbed *embed, EphyTabsMenu *menu)
 }
 
 static void
-tab_removed_cb (EphyNotebook *notebook, EphyEmbed *embed, EphyTabsMenu *menu)
+tab_removed_cb (EphyNotebook *notebook, EphyTab *tab, EphyTabsMenu *menu)
 {
-	EphyTab *tab;
 	GtkAction *action;
                                                                                                                              
-        g_return_if_fail (EPHY_IS_EMBED (embed));
-	tab = ephy_tab_for_embed (embed);
+        g_return_if_fail (EPHY_IS_TAB (tab));
 
 	action = GTK_ACTION (ephy_tab_get_action (tab));
 	gtk_action_group_remove_action (menu->priv->action_group, action);
 
+	ephy_tabs_menu_update (menu);
+}
+
+static void
+tabs_reordered_cb (EphyNotebook *notebook, EphyTabsMenu *menu)
+{
 	ephy_tabs_menu_update (menu);
 }
 
@@ -143,6 +134,8 @@ ephy_tabs_menu_set_window (EphyTabsMenu *menu, EphyWindow *window)
 			         G_CALLBACK (tab_added_cb), menu, 0);
 	g_signal_connect_object (notebook, "tab_removed",
 			         G_CALLBACK (tab_removed_cb), menu, 0);
+	g_signal_connect_object (notebook, "tabs_reordered",
+				 G_CALLBACK (tabs_reordered_cb), menu, 0);
 }
 
 static void
@@ -281,7 +274,6 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 	EphyTab *tab;
 	GtkAction *action;
 	guint i = 0;
-	guint num = 0;
 	GList *tabs = NULL, *l;
 
 	g_return_if_fail (EPHY_IS_TABS_MENU (menu));
@@ -296,8 +288,7 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 
 	tabs = ephy_window_get_tabs (p->window);
 
-	num = g_list_length (tabs);
-	if (num == 0) return;
+	if (g_list_length (tabs) == 0) return;
 
 	p->ui_id = gtk_ui_manager_new_merge_id (merge);
 
@@ -305,7 +296,6 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 	{
 		const char *action_name;
 		char *name;
-
 
 		tab = (EphyTab *) l->data;
 		action = GTK_ACTION (ephy_tab_get_action (tab));

@@ -23,7 +23,6 @@
 
 #include "ephy-embed.h"
 #include "ephy-dialog.h"
-#include "ephy-notebook.h"
 
 #include <glib-object.h>
 #include <glib.h>
@@ -66,6 +65,7 @@ typedef enum
 
 /* Include the header down here to resolve circular dependency */
 #include "ephy-tab.h"
+#include "ephy-notebook.h"
 
 GType		  ephy_window_get_type		  (void);
 

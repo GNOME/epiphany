@@ -24,8 +24,7 @@
 
 #include "ephy-embed.h"
 
-#include <glib-object.h>
-#include <gtk/gtkwidget.h>
+#include <gtk/gtkbin.h>
 
 G_BEGIN_DECLS
 
@@ -56,7 +55,7 @@ typedef enum
 
 struct EphyTab
 {
-	GObject parent;
+	GtkBin parent;
 
 	/*< private >*/
 	EphyTabPrivate *priv;
@@ -64,7 +63,7 @@ struct EphyTab
 
 struct EphyTabClass
 {
-	GObjectClass parent_class;
+	GtkBinClass parent_class;
 };
 
 /* Include the header down here to resolve circular dependency */

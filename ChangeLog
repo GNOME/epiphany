@@ -1,3 +1,39 @@
+2004-02-24  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-nautilus-view.c: (gnv_embed_new_window_cb):
+	* src/ephy-notebook.c: (ephy_notebook_class_init),
+	(tab_label_size_request_cb), (ephy_notebook_move_tab), (move_tab),
+	(motion_notify_cb), (move_tab_to_another_notebook),
+	(button_release_cb), (ephy_notebook_switch_page_cb),
+	(ephy_notebook_init), (close_button_clicked_cb), (build_tab_label),
+	(ephy_notebook_insert_tab), (smart_tab_switching_on_closure),
+	(ephy_notebook_remove_tab):
+	* src/ephy-notebook.h:
+	* src/ephy-session.c: (tab_added_cb), (tab_removed_cb):
+	* src/ephy-shell.c: (ephy_shell_new_tab):
+	* src/ephy-tab.c: (ephy_tab_get_type), (ephy_tab_size_allocate),
+	(ephy_tab_parent_set), (ephy_tab_class_init), (ephy_tab_finalize),
+	(ephy_tab_new), (ephy_tab_get_embed), (ephy_tab_for_embed),
+	(ephy_tab_new_window_cb), (let_me_resize_hack),
+	(ephy_tab_visibility_cb), (ephy_tab_size_to_cb),
+	(ephy_tab_dom_mouse_click_cb), (ephy_tab_init),
+	(ephy_tab_update_navigation_flags), (ephy_tab_set_title):
+	* src/ephy-tab.h:
+	* src/ephy-tabs-menu.c: (tab_added_cb), (tab_removed_cb),
+	(tabs_reordered_cb), (ephy_tabs_menu_set_window),
+	(ephy_tabs_menu_update):
+	* src/ephy-window.c: (tab_added_cb), (tab_removed_cb),
+	(tab_detached_cb), (tabs_reordered_cb), (tab_delete_cb),
+	(setup_notebook), (ephy_window_add_tab), (ephy_window_jump_to_tab),
+	(real_get_active_tab), (ephy_window_remove_tab),
+	(ephy_window_get_active_tab), (ephy_window_get_active_embed),
+	(ephy_window_get_tabs):
+	* src/ephy-window.h:
+	* src/window-commands.c: (window_cmd_tabs_move_left),
+	(window_cmd_tabs_move_right), (window_cmd_tabs_detach):
+
+	Make EphyTab inherit from GtkBin, and contain the EphyEmbed as its child.
+
 2004-02-24  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/ephy-tab.c: (address_has_web_scheme):
