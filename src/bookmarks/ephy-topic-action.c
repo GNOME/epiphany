@@ -621,7 +621,7 @@ sync_topic_properties (GtkAction *action, EphyNode *bmk)
 	else
 	{
  	       title = ephy_node_get_property_string
-        	        (bmk, EPHY_NODE_BMK_PROP_LOCATION);
+        	        (bmk, EPHY_NODE_KEYWORD_PROP_NAME);
 	}
 
 	g_object_set (action, "label", title, NULL);
