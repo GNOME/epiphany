@@ -207,12 +207,11 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWidget *gparent = MozillaFindGtkParent (parent);
 
-        g_return_val_if_fail (GTK_IS_WINDOW (gparent), GTK_RESPONSE_CANCEL);
         g_return_val_if_fail (markup_text, GTK_RESPONSE_CANCEL);
         g_return_val_if_fail (!checkbox_text || checkbox_value, GTK_RESPONSE_CANCEL);
 	
 	dialog = gtk_dialog_new_with_buttons ("",
-					      GTK_WINDOW (gparent),
+					      gparent ? GTK_WINDOW (gparent) : NULL,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      NULL);
 

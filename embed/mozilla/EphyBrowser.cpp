@@ -465,7 +465,7 @@ nsresult EphyBrowser::SetZoomOnDocshell (float aZoom, nsIDocShell *DocShell)
 	NS_ENSURE_TRUE (PresContext, NS_ERROR_FAILURE);
 
 #if MOZILLA_SNAPSHOT > 13
-	nsIDeviceContext *DeviceContext(nsnull);
+	nsIDeviceContext *DeviceContext;
 	DeviceContext = PresContext->DeviceContext();
 	NS_ENSURE_TRUE (DeviceContext, NS_ERROR_FAILURE);
 #else				

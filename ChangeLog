@@ -1,5 +1,12 @@
 2004-02-12  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/GtkNSSDialogs.cpp:
+
+	Don't insist on a parent for the dialogue; because there isn't one
+	when we try to load a favicon over https: at startup.
+
+2004-02-12  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-embed-popup-control.c: (save_url),
 	(embed_popup_set_image_as_background_cmd):
 	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_get_type),
