@@ -1,3 +1,18 @@
+2003-09-29  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-state.c: (ephy_states_load):
+	* src/bookmarks/ephy-bookmarks-import.c:
+	(ephy_bookmarks_import_rdf):
+
+	Fix xml doc loading returning NULL on corrupted files.
+
+2003-09-28  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	The file picker dir can be NULL, check before
+	trying to expand tilde.
+
 2003-09-27  Xan Lopez  <xan@masilla.org>
 
 	* configure.in:

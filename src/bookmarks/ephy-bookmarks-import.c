@@ -750,7 +750,12 @@ ephy_bookmarks_import_rdf (EphyBookmarks *bookmarks,
 		return FALSE;
 
 	doc = xmlParseFile (filename);
-	g_assert (doc != NULL);
+	if (doc == NULL)
+	{
+		g_warning ("Failed to re-import bookmarks. You have just lost all your bookmarks!\n");
+		return FALSE;
+	}
+
 	root = xmlDocGetRootElement (doc);
 
 	child = root->children;
