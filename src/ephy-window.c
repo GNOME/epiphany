@@ -302,6 +302,12 @@ static GtkActionEntry ephy_popups_entries [] = {
 	{ "CopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
 
+	/* Email links */
+	{ "SendEmail", GTK_STOCK_OPEN, N_("_Send Email..."),
+	  NULL, NULL, G_CALLBACK (popup_cmd_open_link) },
+	{ "CopyEmailAddress", NULL, N_("_Copy Email Address"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
+
 	/* Images */
 	{ "OpenImage", GTK_STOCK_OPEN, N_("Open _Image"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_open_image) },
@@ -1562,8 +1568,18 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 
 	LOG ("show_embed_popup context %x", context)
 
-	if ((context & EMBED_CONTEXT_LINK) &&
+	if ((context & EMBED_CONTEXT_EMAIL_LINK) &&
 	    (context & EMBED_CONTEXT_IMAGE))
+	{
+		popup = "/EphyImageEmailLinkPopup";
+	}
+	else if (context & EMBED_CONTEXT_EMAIL_LINK)
+	{
+		popup = "/EphyEmailLinkPopup";
+		update_edit_actions_sensitivity (window, TRUE);
+	}
+	else if ((context & EMBED_CONTEXT_LINK) &&
+		 (context & EMBED_CONTEXT_IMAGE))
 	{
 		popup = "/EphyImageLinkPopup";
 	}
