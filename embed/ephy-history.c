@@ -16,11 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *  $Id$
- *
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "ephy-types.h"
@@ -54,6 +53,7 @@ struct EphyHistoryPrivate
 	GHashTable *pages_hash;
 	GStaticRWLock *pages_hash_lock;
 	int autosave_timeout;
+	guint update_hosts_idle;
 };
 
 enum
@@ -380,10 +380,77 @@ periodic_save_cb (EphyHistory *eh)
 	return TRUE;
 }
 
-static gboolean
-unref_empty_host (EphyNode *node)
+static void
+update_host_on_child_remove (EphyNode *node)
 {
-	ephy_node_unref (node);
+	GPtrArray *children;
+	int i, host_last_visit, new_host_last_visit = 0;
+
+	host_last_visit = ephy_node_get_property_int
+			(node, EPHY_NODE_PAGE_PROP_LAST_VISIT);
+
+	children = ephy_node_get_children (node);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+		int last_visit;
+
+		kid = g_ptr_array_index (children, i);
+
+		last_visit = ephy_node_get_property_int
+                        (kid, EPHY_NODE_PAGE_PROP_LAST_VISIT);
+
+		if (last_visit > new_host_last_visit)
+		{
+			new_host_last_visit = last_visit;
+		}
+	}
+	ephy_node_thaw (node);
+
+	if (host_last_visit != new_host_last_visit)
+	{
+		GValue value = { 0, };
+
+		g_value_init (&value, G_TYPE_INT);
+		g_value_set_int (&value, new_host_last_visit);
+		ephy_node_set_property (node, EPHY_NODE_PAGE_PROP_LAST_VISIT,
+				        &value);
+		g_value_unset (&value);
+	}
+}
+
+static gboolean
+update_hosts (EphyHistory *eh)
+{
+	GPtrArray *children;
+	int i;
+	GList *empty = NULL;
+
+	children = ephy_node_get_children (eh->priv->hosts);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+
+		kid = g_ptr_array_index (children, i);
+
+		if (kid != eh->priv->pages)
+		{
+			if (ephy_node_get_n_children (kid) > 0)
+			{
+				update_host_on_child_remove (kid);
+			}
+			else
+			{
+				empty = g_list_prepend (empty, kid);
+			}
+		}
+	}
+	ephy_node_thaw (eh->priv->hosts);
+
+	g_list_foreach (empty, (GFunc)ephy_node_unref, NULL);
+	g_list_free (empty);
+
+	eh->priv->update_hosts_idle = 0;
 
 	return FALSE;
 }
@@ -394,9 +461,10 @@ page_removed_from_host_cb (EphyNode *node,
 		           guint old_index,
 		           EphyHistory *eb)
 {
-	if (ephy_node_get_n_children (node) == 0)
+	if (!eb->priv->update_hosts_idle)
 	{
-		g_idle_add ((GSourceFunc)unref_empty_host, node);
+		eb->priv->update_hosts_idle = g_idle_add
+			((GSourceFunc)update_hosts, eb);
 	}
 }
 
@@ -420,6 +488,8 @@ ephy_history_init (EphyHistory *eb)
 	EphyNodeDb *db;
 
         eb->priv = g_new0 (EphyHistoryPrivate, 1);
+
+	eb->priv->update_hosts_idle = 0;
 
 	db = ephy_node_db_new (EPHY_NODE_DB_HISTORY);
 	eb->priv->db = db;
@@ -503,6 +573,11 @@ ephy_history_finalize (GObject *object)
 	eb = EPHY_HISTORY (object);
 
         g_return_if_fail (eb->priv != NULL);
+
+	if (eb->priv->update_hosts_idle)
+	{
+		g_source_remove (eb->priv->update_hosts_idle);
+	}
 
 	ephy_history_save (eb);
 

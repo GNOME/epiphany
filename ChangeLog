@@ -1,5 +1,14 @@
 2003-12-14  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-history.c: (update_host_on_child_remove),
+	(update_hosts), (page_removed_from_host_cb), (ephy_history_init),
+	(ephy_history_finalize):
+
+	Delete host entry from history when there are no more pages from it
+	stored. Backported from HEAD, fixes bug #129269.
+
+2003-12-14  Christian Persch  <chpe@cvs.gnome.org>
+
 	* NEWS:
 	* configure.in:
 	* embed/mozilla/EphyEventListener.cpp:
