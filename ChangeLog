@@ -1,5 +1,22 @@
 2003-11-06  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* data/epiphany.schemas.in:
+
+	Correct download dir default.
+
+	* embed/ephy-embed-shell.h:
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_init),
+	(ephy_embed_shell_finalize), (ephy_embed_shell_get_encodings),
+	(load_mime_from_xml), (ephy_embed_shell_check_mime):
+
+	Add check_mime api for permissions.
+
+	* embed/mozilla/ContentHandler.cpp:
+
+	First incomplete try at using it.
+
+2003-11-06  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* data/Makefile.am:
 	* data/check-mime.py:
 	* data/mime-types-permissions.xml:

@@ -42,6 +42,13 @@ typedef struct EphyEmbedShellPrivate EphyEmbedShellPrivate;
 
 extern EphyEmbedShell *embed_shell;
 
+typedef enum
+{
+	EPHY_MIME_PERMISSION_SAFE = 1,
+	EPHY_MIME_PERMISSION_UNSAFE = 2,
+	EPHY_MIME_PERMISSION_UNKNOWN = 3
+} EphyMimePermission;
+
 struct EphyEmbedShell
 {
 	GObject parent;
@@ -57,21 +64,24 @@ struct EphyEmbedShellClass
 	GObject     * (* get_downloader_view) (EphyEmbedShell *shell);
 };
 
-GType             ephy_embed_shell_get_type            (void);
+GType               ephy_embed_shell_get_type            (void);
 
-GType             ephy_embed_shell_get_impl            (void);
+GType               ephy_embed_shell_get_impl            (void);
 
-EphyEmbedShell   *ephy_embed_shell_new                 (const char *type);
+EphyEmbedShell     *ephy_embed_shell_new                 (const char *type);
 
-GObject          *ephy_embed_shell_get_favicon_cache   (EphyEmbedShell *ges);
+GObject            *ephy_embed_shell_get_favicon_cache   (EphyEmbedShell *ges);
 
-EphyHistory      *ephy_embed_shell_get_global_history  (EphyEmbedShell *shell);
+EphyHistory        *ephy_embed_shell_get_global_history  (EphyEmbedShell *shell);
 
-GObject          *ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell);
+GObject            *ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell);
 
-GObject		 *ephy_embed_shell_get_encodings       (EphyEmbedShell *shell);
+GObject		   *ephy_embed_shell_get_encodings       (EphyEmbedShell *shell);
 
-EphyEmbedSingle  *ephy_embed_shell_get_embed_single    (EphyEmbedShell *shell);
+EphyEmbedSingle    *ephy_embed_shell_get_embed_single    (EphyEmbedShell *shell);
+
+EphyMimePermission  ephy_embed_shell_check_mime          (EphyEmbedShell *shell,
+							  const char *mime_type);
 
 G_END_DECLS
 

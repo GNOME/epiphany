@@ -35,6 +35,7 @@
 
 #include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
+#include "ephy-embed-shell.h"
 
 #include <libgnomevfs/gnome-vfs-mime.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
@@ -342,11 +343,16 @@ NS_METHOD GContentHandler::MIMEAskAction (void)
 	nsresult rv;
 	gboolean auto_open;
 
+	/* FIXME can we assume mime is not NULL ? */
+
 	auto_open = eel_gconf_get_boolean (CONF_AUTO_OPEN_DOWNLOADS);
 	GContentHandler *mContentHandler = this;
 	GnomeVFSMimeApplication *DefaultApp = gnome_vfs_mime_get_default_application(mMimeType);
+
+	EphyMimePermission permission;
+	permission = ephy_embed_shell_check_mime (embed_shell, mMimeType);
 	
-	if (!auto_open || !DefaultApp)
+	if (!auto_open || !DefaultApp || permission != EPHY_MIME_PERMISSION_SAFE)
 	{
 		nsCOMPtr<nsIHelperAppLauncher> launcher;
 		
