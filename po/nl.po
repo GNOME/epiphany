@@ -3,10 +3,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany\n"
-"POT-Creation-Date: 2003-01-16 11:10+0100\n"
-"PO-Revision-Date: 2003-01-16 17:18+0100\n"
+"POT-Creation-Date: 2003-01-23 11:05+0100\n"
+"PO-Revision-Date: 2003-01-23 21:39+0100\n"
 "Last-Translator: Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>\n"
-"Language-Team: Dutch <vertaling@nl.linux.org>\n"
+"Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,7 +18,7 @@ msgid "Import mozilla bookmarks"
 msgstr "Mozilla's bladwijzers importeren"
 
 # src/newuser_callbacks.c:537
-#: src/ephy-shell.c:146
+#: src/ephy-shell.c:145
 msgid "Bookmarks imported successfully."
 msgstr "Bladwijzers zijn succesvol geïmporteerd."
 
@@ -1324,8 +1324,7 @@ msgid "Paper Details"
 msgstr "Papierdetails"
 
 # src/toolbar.c:286
-#: data/glade/print.glade.h:26 data/ui/epiphany-ui.xml.in.h:58
-#: data/ui/nautilus-epiphany-view.xml.in.h:25
+#: data/glade/print.glade.h:26 data/ui/nautilus-epiphany-view.xml.in.h:25
 msgid "Print"
 msgstr "Afdrukken"
 
@@ -1356,8 +1355,9 @@ msgstr "_Datum"
 # src/bookmarks_editor.c:941
 # src/bookmarks_editor.c:1148
 # src/menubar.c:565
-#: data/glade/print.glade.h:31 data/ui/epiphany-ui.xml.in.h:93
-#: data/ui/nautilus-epiphany-view.xml.in.h:35
+#. Toplevel
+#: data/glade/print.glade.h:31 data/ui/nautilus-epiphany-view.xml.in.h:35
+#: src/ephy-window.c:69
 msgid "_File"
 msgstr "_Bestand"
 
@@ -1427,90 +1427,24 @@ msgstr "Werkbalk bewerken"
 msgid "_Reset to defaults"
 msgstr "_Terugkeren naar standaard"
 
-# src/menubar.c:43
-#: data/ui/epiphany-ui.xml.in.h:1
-msgid "About this application"
-msgstr "Info over dit programma"
-
-# src/menubar.c:43
-#: data/ui/epiphany-ui.xml.in.h:2
-msgid "About..."
-msgstr "Info..."
-
-# src/context.c:64
-# src/history_callbacks.c:165
-# src/misc_callbacks.c:412
-#: data/ui/epiphany-ui.xml.in.h:3
-msgid "Add Bookmark"
-msgstr "Bladwijzer toevoegen"
-
 # src/context.c:75
-#: data/ui/epiphany-ui.xml.in.h:4 data/ui/nautilus-epiphany-view.xml.in.h:1
+#: data/ui/nautilus-epiphany-view.xml.in.h:1
 msgid "Add Bookmark for Frame"
 msgstr "Bladwijzer voor frame toevoegen"
-
-# src/menubar.c:433
-#: data/ui/epiphany-ui.xml.in.h:5
-msgid "Add a bookmark for the current location to the default folder"
-msgstr "Huidige pagina als bladwijzer toevoegen aan de standaardmap"
-
-# src/menubar.c:433
-#: data/ui/epiphany-ui.xml.in.h:6
-msgid "Add a bookmark to the default folder"
-msgstr "Bladwijzer toevoegen aan de standaardmap"
-
-# src/context.c:64
-# src/history_callbacks.c:165
-# src/misc_callbacks.c:412
-#: data/ui/epiphany-ui.xml.in.h:7 src/bookmarks/ephy-new-bookmark.c:230
-msgid "Add bookmark"
-msgstr "Bladwijzer toevoegen"
-
-# src/bookmarks_editor.c:945
-# src/menubar.c:91
-#: data/ui/epiphany-ui.xml.in.h:8
-msgid "Close"
-msgstr "Sluiten"
-
-# ui/bookmarks.glade.h:4
-# ui/epiphany.glade.h:20
-#: data/ui/epiphany-ui.xml.in.h:9
-msgid "Close _Window"
-msgstr "_Venster sluiten"
-
-# src/menubar.c:73
-#: data/ui/epiphany-ui.xml.in.h:10
-msgid "Close the current tab"
-msgstr "Huidige tabblad sluiten"
-
-# src/menubar.c:92
-#: data/ui/epiphany-ui.xml.in.h:11
-msgid "Close the current window"
-msgstr "Huidige venster sluiten"
-
-# src/menubar.c:41
-#: data/ui/epiphany-ui.xml.in.h:12
-msgid "Configure the application"
-msgstr "Configureer het programma"
-
-# ui/epiphany.glade.h:123
-#: data/ui/epiphany-ui.xml.in.h:13
-msgid "Contents"
-msgstr "Inhoud"
 
 # src/context.c:82
 # src/window_callbacks.c:1147
 # src/window_callbacks.c:2882
-#: data/ui/epiphany-ui.xml.in.h:14 data/ui/nautilus-epiphany-view.xml.in.h:2
+#: data/ui/nautilus-epiphany-view.xml.in.h:2
 msgid "Copy"
 msgstr "Kopiëren"
 
-#: data/ui/epiphany-ui.xml.in.h:15 data/ui/nautilus-epiphany-view.xml.in.h:3
+#: data/ui/nautilus-epiphany-view.xml.in.h:3
 msgid "Copy Email Address"
 msgstr "E-mail adres kopiëren"
 
 # src/context.c:69
-#: data/ui/epiphany-ui.xml.in.h:16 data/ui/nautilus-epiphany-view.xml.in.h:4
+#: data/ui/nautilus-epiphany-view.xml.in.h:4 src/ephy-window.c:258
 msgid "Copy Image Location"
 msgstr "Afbeeldingslokatie kopiëren"
 
@@ -1518,514 +1452,12 @@ msgstr "Afbeeldingslokatie kopiëren"
 # src/context.c:63
 # src/history_callbacks.c:162
 # src/misc_callbacks.c:410
-#: data/ui/epiphany-ui.xml.in.h:17 data/ui/nautilus-epiphany-view.xml.in.h:5
+#: data/ui/nautilus-epiphany-view.xml.in.h:5 src/ephy-window.c:242
 msgid "Copy Link Location"
 msgstr "Verwijzing kopiëren"
 
 # src/context.c:69
-#: data/ui/epiphany-ui.xml.in.h:18
-msgid "Copy Page location"
-msgstr "Paginalokatie kopiëren"
-
-# src/menubar.c:38
-#: data/ui/epiphany-ui.xml.in.h:19
-msgid "Copy the selection"
-msgstr "Kopieer selectie"
-
-# src/context.c:81
-# src/window_callbacks.c:1145
-# src/window_callbacks.c:2880
-#: data/ui/epiphany-ui.xml.in.h:20
-msgid "Cu_t"
-msgstr "_Knippen"
-
-# src/context.c:81
-# src/window_callbacks.c:1145
-# src/window_callbacks.c:2880
-#: data/ui/epiphany-ui.xml.in.h:21 data/ui/nautilus-epiphany-view.xml.in.h:8
-msgid "Cut"
-msgstr "Knippen"
-
-# src/menubar.c:37
-#: data/ui/epiphany-ui.xml.in.h:22
-msgid "Cut the selection"
-msgstr "Selectie knippen"
-
-# src/toolbar.c:131
-#: data/ui/epiphany-ui.xml.in.h:23
-msgid "Display the latest content of the current page"
-msgstr "De nieuwste inhoud van de huidige pagina weergeven"
-
-# src/context.c:62
-# src/history_callbacks.c:159
-# src/misc_callbacks.c:408
-#: data/ui/epiphany-ui.xml.in.h:24 data/ui/nautilus-epiphany-view.xml.in.h:10
-msgid "Download Link"
-msgstr "Verwijzing downloaden"
-
-# ui/epiphany.glade.h:80
-#: data/ui/epiphany-ui.xml.in.h:25
-msgid "Edit Ephy preferences"
-msgstr "Ephy voorkeuren bewerken"
-
-# src/menubar.c:442
-#: data/ui/epiphany-ui.xml.in.h:26
-msgid "Edit bookmarks"
-msgstr "Bladwijzerbeheer"
-
-# src/bookmarks_menus.c:525
-# ui/bookmarks.glade.h:47
-#: data/ui/epiphany-ui.xml.in.h:27
-msgid "Edit the main toolbar"
-msgstr "Werkschapsbalk aanpassen"
-
-# src/toolbar.c:351
-#: data/ui/epiphany-ui.xml.in.h:28 data/ui/nautilus-epiphany-view.xml.in.h:11
-msgid "Find"
-msgstr "Zoek"
-
-# src/menubar.c:117
-#: data/ui/epiphany-ui.xml.in.h:29
-msgid "Find Ne_xt"
-msgstr "Zoek _volgende"
-
-# src/menubar.c:208
-#: data/ui/epiphany-ui.xml.in.h:30
-msgid "Find Pre_vious"
-msgstr "Zoek Vo_rige"
-
-#: data/ui/epiphany-ui.xml.in.h:31 data/ui/nautilus-epiphany-view.xml.in.h:12
-msgid "First"
-msgstr "Eerste"
-
-# src/context.c:83
-# src/window_callbacks.c:1149
-# src/window_callbacks.c:2884
-#: data/ui/epiphany-ui.xml.in.h:32 data/ui/nautilus-epiphany-view.xml.in.h:13
-msgid "Last"
-msgstr "Laatste"
-
-#: data/ui/epiphany-ui.xml.in.h:33
-msgid "Load the URL in the location entry"
-msgstr "De URL in de lokatiebalk laden"
-
-#: data/ui/epiphany-ui.xml.in.h:34
-msgid "Move Tab _Left"
-msgstr "Tabblad naar _links verplaatsen"
-
-#: data/ui/epiphany-ui.xml.in.h:35
-msgid "Move Tab _Right"
-msgstr "Tabblad naar _rechts verplaatsen"
-
-# src/menubar.c:54
-#: data/ui/epiphany-ui.xml.in.h:36
-msgid "New _Tab"
-msgstr "Nieuw tabblad"
-
-# ui/preferences.glade.h:272
-#: data/ui/epiphany-ui.xml.in.h:37 data/ui/nautilus-epiphany-view.xml.in.h:14
-msgid "Next"
-msgstr "Volgende"
-
-# ui/epiphany.glade.h:90
-#: data/ui/epiphany-ui.xml.in.h:38
-msgid "Normal Size"
-msgstr "Normale grootte"
-
-# ui/epiphany.glade.h:91
-#: data/ui/epiphany-ui.xml.in.h:39
-msgid "Open"
-msgstr "Open"
-
-# src/menubar.c:34
-#: data/ui/epiphany-ui.xml.in.h:40 data/ui/nautilus-epiphany-view.xml.in.h:15
-msgid "Open Frame"
-msgstr "Frame openen"
-
-# src/context.c:72
-#: data/ui/epiphany-ui.xml.in.h:41
-msgid "Open Frame in New Tab"
-msgstr "Frame in een nieuw tabblad openen"
-
-# src/context.c:71
-#: data/ui/epiphany-ui.xml.in.h:42 data/ui/nautilus-epiphany-view.xml.in.h:16
-msgid "Open Frame in New Window"
-msgstr "Frame in een nieuw venster openen"
-
-# src/context.c:1075
-#: data/ui/epiphany-ui.xml.in.h:43 data/ui/nautilus-epiphany-view.xml.in.h:17
-msgid "Open Image"
-msgstr "Afbeelding openen"
-
-# src/context.c:66
-#: data/ui/epiphany-ui.xml.in.h:44
-msgid "Open Image in New Tab"
-msgstr "Afbeelding in nieuw tabblad openen"
-
-# src/context.c:65
-#: data/ui/epiphany-ui.xml.in.h:45 data/ui/nautilus-epiphany-view.xml.in.h:18
-msgid "Open Image in New Window"
-msgstr "Afbeelding in nieuw venster openen"
-
-# src/menubar.c:443
-#: data/ui/epiphany-ui.xml.in.h:46
-msgid "Open a bookmarks editor"
-msgstr "Bladwijzerbeheer openen"
-
-# src/menubar.c:34
-#: data/ui/epiphany-ui.xml.in.h:47
-msgid "Open a file"
-msgstr "Een bestand openen"
-
-# src/context.c:61
-#: data/ui/epiphany-ui.xml.in.h:48
-msgid "Open in New Tab"
-msgstr "Openen in nieuw tabblad"
-
-# src/context.c:60
-#: data/ui/epiphany-ui.xml.in.h:49 data/ui/nautilus-epiphany-view.xml.in.h:21
-msgid "Open in New Window"
-msgstr "Openen in nieuw venster"
-
-# src/menubar.c:540
-#: data/ui/epiphany-ui.xml.in.h:50
-msgid "Open the Epiphany manual"
-msgstr "De Epiphany handleiding openen"
-
-# src/persistent_data_manager.c:138
-# ui/epiphany.glade.h:94
-#: data/ui/epiphany-ui.xml.in.h:51
-msgid "P_ersonal Data"
-msgstr "P_ersoonlijke informatie"
-
-# ui/preferences.glade.h:142
-#: data/ui/epiphany-ui.xml.in.h:52
-msgid "P_references"
-msgstr "_Voorkeuren"
-
-# src/menubar.c:187
-#: data/ui/epiphany-ui.xml.in.h:53
-msgid "Page Source"
-msgstr "Broncode weergeven"
-
-# src/context.c:83
-# src/window_callbacks.c:1149
-# src/window_callbacks.c:2884
-#: data/ui/epiphany-ui.xml.in.h:54 data/ui/nautilus-epiphany-view.xml.in.h:22
-msgid "Paste"
-msgstr "Plakken"
-
-# src/menubar.c:39
-#: data/ui/epiphany-ui.xml.in.h:55
-msgid "Paste the clipboard"
-msgstr "Plakken vanuit klembord"
-
-# ui/preferences.glade.h:142
-#: data/ui/epiphany-ui.xml.in.h:56 src/prefs-dialog.c:301
-msgid "Preferences"
-msgstr "Voorkeuren"
-
-# src/menubar.c:208
-#: data/ui/epiphany-ui.xml.in.h:57 data/ui/nautilus-epiphany-view.xml.in.h:24
-msgid "Previous"
-msgstr "Vorige"
-
-# src/menubar.c:73
-#: data/ui/epiphany-ui.xml.in.h:59
-msgid "Print the current file"
-msgstr "Huidige bestand afdrukken"
-
-# src/context.c:73
-#: data/ui/epiphany-ui.xml.in.h:60
-msgid "Reload Frame"
-msgstr "Frame herladen"
-
-# src/menubar.c:68
-#: data/ui/epiphany-ui.xml.in.h:61
-msgid "S_end To..."
-msgstr "Verst_uren..."
-
-# src/mozilla/PromptService.cpp:312
-#: data/ui/epiphany-ui.xml.in.h:62
-msgid "Save As"
-msgstr "Opslaan als"
-
-# src/context.c:80
-#: data/ui/epiphany-ui.xml.in.h:63 data/ui/nautilus-epiphany-view.xml.in.h:27
-msgid "Save Background As..."
-msgstr "Achtergrond opslaan als..."
-
-# src/context.c:67
-#: data/ui/epiphany-ui.xml.in.h:64 data/ui/nautilus-epiphany-view.xml.in.h:28
-msgid "Save Image As..."
-msgstr "Afbeelding opslaan als..."
-
-# src/context.c:67
-#: data/ui/epiphany-ui.xml.in.h:65 data/ui/nautilus-epiphany-view.xml.in.h:29
-msgid "Save Page As..."
-msgstr "Pagina opslaan als..."
-
-# src/menubar.c:63
-#: data/ui/epiphany-ui.xml.in.h:66
-msgid "Save _As..."
-msgstr "Opslaan _als..."
-
-# src/menubar.c:203
-#: data/ui/epiphany-ui.xml.in.h:67
-msgid "Save the current file with a different name"
-msgstr "Het huidige bestand onder een andere naam opslaan"
-
-# ui/epiphany.glade.h:171
-#: data/ui/epiphany-ui.xml.in.h:68
-msgid "Search for a string"
-msgstr "Zoek naar tekenreeks"
-
-#: data/ui/epiphany-ui.xml.in.h:69 data/ui/nautilus-epiphany-view.xml.in.h:31
-msgid "Select All"
-msgstr "Alles selecteren"
-
-#: data/ui/epiphany-ui.xml.in.h:70
-msgid "Select _All"
-msgstr "_Alles selecteren"
-
-# src/window.c:985
-#: data/ui/epiphany-ui.xml.in.h:71
-msgid "Select the entire document"
-msgstr "Het hele document selecteren"
-
-#: data/ui/epiphany-ui.xml.in.h:72
-msgid "Show the contents at the normal size"
-msgstr "Standaardafmetingen gebruiken om de informatie te tonen"
-
-#: data/ui/epiphany-ui.xml.in.h:73
-msgid "Show the contents in less detail"
-msgstr "Informatie met minder detail weergeven"
-
-#: data/ui/epiphany-ui.xml.in.h:74
-msgid "Show the contents in more detail"
-msgstr "Informatie met meer detail weergeven"
-
-# src/menubar.c:160
-#: data/ui/epiphany-ui.xml.in.h:75
-msgid "St_atusbar"
-msgstr "St_atusbalk"
-
-# src/toolbar.c:157
-#: data/ui/epiphany-ui.xml.in.h:76
-msgid "Stop current data transfer"
-msgstr "Stop de huidige dataoverdracht"
-
-# src/menubar.c:150
-#: data/ui/epiphany-ui.xml.in.h:77
-msgid "T_oolbar"
-msgstr "_Werkbalk"
-
-# src/menubar.c:150
-#: data/ui/epiphany-ui.xml.in.h:78
-msgid "Toolbar"
-msgstr "Werkbalk"
-
-# src/context.c:68
-#: data/ui/epiphany-ui.xml.in.h:79 data/ui/nautilus-epiphany-view.xml.in.h:33
-msgid "Use Image as Background"
-msgstr "Afbeelding gebruiken als achtergrond"
-
-# src/menubar.c:127
-#: data/ui/epiphany-ui.xml.in.h:80
-msgid "Zoom In"
-msgstr "Inzoomen"
-
-# src/menubar.c:136
-#: data/ui/epiphany-ui.xml.in.h:81
-msgid "Zoom Out"
-msgstr "Uitzoomen"
-
-# src/menubar.c:127
-#: data/ui/epiphany-ui.xml.in.h:82
-msgid "Zoom _In"
-msgstr "_Inzoomen"
-
-# src/menubar.c:136
-#: data/ui/epiphany-ui.xml.in.h:83
-msgid "Zoom _Out"
-msgstr "_Uitzoomen"
-
-# src/menubar.c:43
-#: data/ui/epiphany-ui.xml.in.h:84
-msgid "_About"
-msgstr "_Info"
-
-# src/context.c:64
-# src/history_callbacks.c:165
-# src/misc_callbacks.c:412
-#: data/ui/epiphany-ui.xml.in.h:85
-msgid "_Add Bookmark"
-msgstr "Bl_adwijzer toevoegen"
-
-# src/menubar.c:453
-#: data/ui/epiphany-ui.xml.in.h:86
-msgid "_Back"
-msgstr "Vo_rige"
-
-# src/menubar.c:571
-#: data/ui/epiphany-ui.xml.in.h:87
-msgid "_Bookmarks"
-msgstr "Bla_dwijzers"
-
-# src/window_callbacks.c:2192
-#: data/ui/epiphany-ui.xml.in.h:88
-msgid "_Close Tab"
-msgstr "_Tabblad sluiten"
-
-# ui/epiphany.glade.h:123
-#: data/ui/epiphany-ui.xml.in.h:89
-msgid "_Contents"
-msgstr "_Inhoud"
-
-# src/bookmarks_editor.c:948
-# src/bookmarks_editor.c:1167
-# src/menubar.c:38
-#: data/ui/epiphany-ui.xml.in.h:90
-msgid "_Copy"
-msgstr "Kopiëren"
-
-# ui/preferences.glade.h:272
-#: data/ui/epiphany-ui.xml.in.h:91
-msgid "_Detach Tab"
-msgstr "Tabblad los_scheuren"
-
-# src/bookmarks_editor.c:946
-# src/bookmarks_editor.c:1149
-# src/menubar.c:566
-#: data/ui/epiphany-ui.xml.in.h:92 data/ui/nautilus-epiphany-view.xml.in.h:34
-msgid "_Edit"
-msgstr "Be_werken"
-
-# src/menubar.c:112
-#: data/ui/epiphany-ui.xml.in.h:94 data/ui/nautilus-epiphany-view.xml.in.h:36
-msgid "_Find..."
-msgstr "_Zoek..."
-
-# src/menubar.c:458
-#: data/ui/epiphany-ui.xml.in.h:95
-msgid "_Forward"
-msgstr "Vo_lgende"
-
-# src/menubar.c:165
-#: data/ui/epiphany-ui.xml.in.h:96
-msgid "_Fullscreen"
-msgstr "_Volledig scherm"
-
-# src/menubar.c:570
-#: data/ui/epiphany-ui.xml.in.h:97
-msgid "_Go"
-msgstr "Ga _naar"
-
-# src/menubar.c:573
-#: data/ui/epiphany-ui.xml.in.h:98
-msgid "_Help"
-msgstr "_Hulp"
-
-# src/prefs.c:367
-# src/toolbar.c:273
-# ui/epiphany.glade.h:78
-# ui/preferences.glade.h:88
-#: data/ui/epiphany-ui.xml.in.h:99
-msgid "_History"
-msgstr "_Geschiedenis"
-
-# src/toolbar.c:143
-#: data/ui/epiphany-ui.xml.in.h:100
-msgid "_Home"
-msgstr "_Start"
-
-# ui/epiphany.glade.h:85
-#: data/ui/epiphany-ui.xml.in.h:101
-msgid "_Location..."
-msgstr "_Lokatie..."
-
-# src/mozilla/MyportalProtocolHandler.cpp:221
-#: data/ui/epiphany-ui.xml.in.h:102
-msgid "_My portal"
-msgstr "_Mijn Portaal"
-
-# src/menubar.c:50
-#: data/ui/epiphany-ui.xml.in.h:103
-msgid "_New Window"
-msgstr "_Nieuw venster"
-
-# ui/preferences.glade.h:272
-#: data/ui/epiphany-ui.xml.in.h:104
-msgid "_Next Tab"
-msgstr "_Volgend tabblad"
-
-# ui/epiphany.glade.h:90
-#: data/ui/epiphany-ui.xml.in.h:105
-msgid "_Normal Size"
-msgstr "_Normale grootte"
-
-# src/bookmarks_editor.c:942
-# src/menubar.c:34
-#: data/ui/epiphany-ui.xml.in.h:106
-msgid "_Open..."
-msgstr "_Openen..."
-
-# src/menubar.c:187
-#: data/ui/epiphany-ui.xml.in.h:107
-msgid "_Page Source"
-msgstr "B_ron weergeven"
-
-# src/bookmarks_editor.c:949
-# src/bookmarks_editor.c:1169
-# src/menubar.c:39
-#: data/ui/epiphany-ui.xml.in.h:108
-msgid "_Paste"
-msgstr "Plakken"
-
-# src/menubar.c:208
-#: data/ui/epiphany-ui.xml.in.h:109
-msgid "_Previous Tab"
-msgstr "_Vorig tabblad"
-
-# src/menubar.c:73
-#: data/ui/epiphany-ui.xml.in.h:110 data/ui/nautilus-epiphany-view.xml.in.h:37
-msgid "_Print..."
-msgstr "Af_drukken..."
-
-# src/menubar.c:468
-# ui/preferences.glade.h:262
-#: data/ui/epiphany-ui.xml.in.h:111
-msgid "_Reload"
-msgstr "He_rladen"
-
-# src/menubar.c:477
-#: data/ui/epiphany-ui.xml.in.h:112
-msgid "_Stop"
-msgstr "_Stop"
-
-# src/menubar.c:54
-#: data/ui/epiphany-ui.xml.in.h:113
-msgid "_Tabs"
-msgstr "_Tabbladen"
-
-# src/menubar.c:150
-#: data/ui/epiphany-ui.xml.in.h:114
-msgid "_Toolbar"
-msgstr "_Werkbalk"
-
-#: data/ui/epiphany-ui.xml.in.h:115
-msgid "_Up"
-msgstr "_Omhoog"
-
-# src/bookmarks_editor.c:950
-# src/bookmarks_editor.c:1150
-# src/menubar.c:567
-#: data/ui/epiphany-ui.xml.in.h:116
-msgid "_View"
-msgstr "B_eeld"
-
-# src/context.c:69
-#: data/ui/nautilus-epiphany-view.xml.in.h:6
+#: data/ui/nautilus-epiphany-view.xml.in.h:6 src/ephy-window.c:220
 msgid "Copy Page Location"
 msgstr "Paginalokatie kopiëren"
 
@@ -2034,10 +1466,67 @@ msgstr "Paginalokatie kopiëren"
 msgid "Copy the Selection"
 msgstr "Selectie kopiëren"
 
+# src/context.c:81
+# src/window_callbacks.c:1145
+# src/window_callbacks.c:2880
+#: data/ui/nautilus-epiphany-view.xml.in.h:8
+msgid "Cut"
+msgstr "Knippen"
+
 # src/menubar.c:37
 #: data/ui/nautilus-epiphany-view.xml.in.h:9
 msgid "Cut the Selection"
 msgstr "Selectie knippen"
+
+# src/context.c:62
+# src/history_callbacks.c:159
+# src/misc_callbacks.c:408
+#: data/ui/nautilus-epiphany-view.xml.in.h:10 src/ephy-window.c:238
+msgid "Download Link"
+msgstr "Verwijzing downloaden"
+
+# src/toolbar.c:351
+#: data/ui/nautilus-epiphany-view.xml.in.h:11
+msgid "Find"
+msgstr "Zoek"
+
+#: data/ui/nautilus-epiphany-view.xml.in.h:12
+msgid "First"
+msgstr "Eerste"
+
+# src/context.c:83
+# src/window_callbacks.c:1149
+# src/window_callbacks.c:2884
+#: data/ui/nautilus-epiphany-view.xml.in.h:13
+msgid "Last"
+msgstr "Laatste"
+
+# ui/preferences.glade.h:272
+#: data/ui/nautilus-epiphany-view.xml.in.h:14
+msgid "Next"
+msgstr "Volgende"
+
+# src/menubar.c:34
+#. Framed document
+#: data/ui/nautilus-epiphany-view.xml.in.h:15 src/ephy-window.c:224
+msgid "Open Frame"
+msgstr "Frame openen"
+
+# src/context.c:71
+#: data/ui/nautilus-epiphany-view.xml.in.h:16 src/ephy-window.c:226
+msgid "Open Frame in New Window"
+msgstr "Frame in een nieuw venster openen"
+
+# src/context.c:1075
+#. Images
+#: data/ui/nautilus-epiphany-view.xml.in.h:17 src/ephy-window.c:248
+msgid "Open Image"
+msgstr "Afbeelding openen"
+
+# src/context.c:65
+#: data/ui/nautilus-epiphany-view.xml.in.h:18 src/ephy-window.c:250
+msgid "Open Image in New Window"
+msgstr "Afbeelding in nieuw venster openen"
 
 # src/context.c:1075
 #: data/ui/nautilus-epiphany-view.xml.in.h:19
@@ -2049,25 +1538,84 @@ msgstr "Afbeelding openen met"
 msgid "Open With"
 msgstr "Openen met"
 
+# src/context.c:60
+#: data/ui/nautilus-epiphany-view.xml.in.h:21
+msgid "Open in New Window"
+msgstr "Openen in nieuw venster"
+
+# src/context.c:83
+# src/window_callbacks.c:1149
+# src/window_callbacks.c:2884
+#: data/ui/nautilus-epiphany-view.xml.in.h:22
+msgid "Paste"
+msgstr "Plakken"
+
 # src/menubar.c:39
 #: data/ui/nautilus-epiphany-view.xml.in.h:23
 msgid "Paste the Clipboard"
 msgstr "Plakken vanuit klembord"
+
+# src/menubar.c:208
+#: data/ui/nautilus-epiphany-view.xml.in.h:24
+msgid "Previous"
+msgstr "Vorige"
 
 # src/menubar.c:73
 #: data/ui/nautilus-epiphany-view.xml.in.h:26
 msgid "Print the Current File"
 msgstr "Huidige bestand afdrukken"
 
+# src/context.c:80
+#. Document
+#: data/ui/nautilus-epiphany-view.xml.in.h:27 src/ephy-window.c:218
+msgid "Save Background As..."
+msgstr "Achtergrond opslaan als..."
+
+# src/context.c:67
+#: data/ui/nautilus-epiphany-view.xml.in.h:28 src/ephy-window.c:254
+msgid "Save Image As..."
+msgstr "Afbeelding opslaan als..."
+
+# src/context.c:67
+#: data/ui/nautilus-epiphany-view.xml.in.h:29
+msgid "Save Page As..."
+msgstr "Pagina opslaan als..."
+
 # ui/epiphany.glade.h:171
 #: data/ui/nautilus-epiphany-view.xml.in.h:30
 msgid "Search for a String"
 msgstr "Zoek naar tekenreeks"
 
+#: data/ui/nautilus-epiphany-view.xml.in.h:31
+msgid "Select All"
+msgstr "Alles selecteren"
+
 # src/window.c:985
 #: data/ui/nautilus-epiphany-view.xml.in.h:32
 msgid "Select the Entire Document"
 msgstr "Hele document selecteren"
+
+# src/context.c:68
+#: data/ui/nautilus-epiphany-view.xml.in.h:33 src/ephy-window.c:256
+msgid "Use Image as Background"
+msgstr "Afbeelding gebruiken als achtergrond"
+
+# src/bookmarks_editor.c:946
+# src/bookmarks_editor.c:1149
+# src/menubar.c:566
+#: data/ui/nautilus-epiphany-view.xml.in.h:34 src/ephy-window.c:70
+msgid "_Edit"
+msgstr "Be_werken"
+
+# src/menubar.c:112
+#: data/ui/nautilus-epiphany-view.xml.in.h:36
+msgid "_Find..."
+msgstr "_Zoek..."
+
+# src/menubar.c:73
+#: data/ui/nautilus-epiphany-view.xml.in.h:37 src/ephy-window.c:89
+msgid "_Print..."
+msgstr "Af_drukken..."
 
 #: embed/downloader-view.c:383
 #, c-format
@@ -2088,32 +1636,36 @@ msgstr "%d KB"
 # src/prefs.c:1069
 # src/prefs_callbacks.c:237
 # src/prefs_callbacks.c:407
-#: embed/downloader-view.c:499 embed/downloader-view.c:514
-#: src/ephy-window.c:946
+#: embed/downloader-view.c:499 embed/downloader-view.c:517
+#: src/ephy-window.c:1050
 msgid "Unknown"
 msgstr "Onbekend"
 
+#: embed/downloader-view.c:516
+msgid "00.00"
+msgstr "00.00"
+
 # ui/epiphany.glade.h:2
-#: embed/downloader-view.c:756
+#: embed/downloader-view.c:759
 msgid "%"
 msgstr "%"
 
 # ui/epiphany.glade.h:42
-#: embed/downloader-view.c:766
+#: embed/downloader-view.c:769
 msgid "Filename"
 msgstr "Bestandsnaam"
 
 # ui/epiphany.glade.h:110
-#: embed/downloader-view.c:777
+#: embed/downloader-view.c:780
 msgid "Size"
 msgstr "Grootte"
 
 # ui/epiphany.glade.h:97
-#: embed/downloader-view.c:788
+#: embed/downloader-view.c:791
 msgid "Remaining"
 msgstr "Te gaan"
 
-#: embed/downloader-view.c:1008
+#: embed/downloader-view.c:1011
 msgid "Cancel all pending downloads?"
 msgstr "Alle wachtende downloads stoppen?"
 
@@ -2128,12 +1680,12 @@ msgstr "Geen toepassingen beschikbaar om te openen."
 
 # src/history.c:860
 # src/mozilla_i18n.c:40
-#: embed/ephy-history.c:548
+#: embed/ephy-history.c:552
 msgid "Others"
 msgstr "Anderen"
 
 # src/history.c:845
-#: embed/ephy-history.c:554
+#: embed/ephy-history.c:558
 msgid "Local files"
 msgstr "Lokale bestanden"
 
@@ -2166,19 +1718,19 @@ msgstr "Bewaar met inhoud"
 
 # src/mozilla/FilePicker.cpp:427
 # src/mozilla/FilePickerGfs.cpp:345
-#: embed/mozilla/FilePicker.cpp:366
+#: embed/mozilla/FilePicker.cpp:374
 msgid "The specified path does not exist."
 msgstr "Het aangegeven pad bestaat niet."
 
 # src/mozilla/FilePicker.cpp:446
 # src/mozilla/FilePickerGfs.cpp:364
-#: embed/mozilla/FilePicker.cpp:384
+#: embed/mozilla/FilePicker.cpp:393
 msgid "A file was selected when a folder was expected."
 msgstr "Er is een bestand geselecteerd terwijl een map verwacht werd."
 
 # src/mozilla/FilePicker.cpp:452
 # src/mozilla/FilePickerGfs.cpp:370
-#: embed/mozilla/FilePicker.cpp:390
+#: embed/mozilla/FilePicker.cpp:400
 msgid "A folder was selected when a file was expected."
 msgstr "Er is een map geselecteerd terwijl een bestand verwacht werd."
 
@@ -2197,7 +1749,7 @@ msgstr "Terugkeren"
 msgid "Don't save"
 msgstr "Niet opslaan"
 
-#: embed/mozilla/PromptService.cpp:655 src/window-commands.c:776
+#: embed/mozilla/PromptService.cpp:655 src/window-commands.c:670
 msgid "Epiphany"
 msgstr "Epiphany"
 
@@ -2714,82 +2266,6 @@ msgstr "%A, %B %-d %Y om %-H:%M"
 msgid "%Y-%m-%d"
 msgstr "%d-%m-%Y"
 
-#: lib/toolbar/ephy-tbi-favicon.c:146
-msgid "Drag Handle"
-msgstr "Sleepblokje"
-
-# ui/epiphany.glade.h:85
-#: lib/toolbar/ephy-tbi-location.c:143
-msgid "Location entry"
-msgstr "Lokatiebalk"
-
-# src/prefs.c:367
-# src/toolbar.c:273
-# ui/epiphany.glade.h:78
-# ui/preferences.glade.h:88
-#: lib/toolbar/ephy-tbi-navigation-history.c:174
-msgid "Back History"
-msgstr "Vorige-geschiedenis"
-
-# src/context.c:57
-# src/toolbar.c:117
-#: lib/toolbar/ephy-tbi-navigation-history.c:177
-msgid "Forward History"
-msgstr "Volgende-geschiedenis"
-
-#: lib/toolbar/ephy-tbi-navigation-history.c:180
-msgid "Up Several Levels"
-msgstr "Enkele niveau's omhoog"
-
-# src/bookmarks_editor_callbacks.c:708
-# ui/bookmarks.glade.h:36
-#: lib/toolbar/ephy-tbi-separator.c:134
-msgid "Separator"
-msgstr "Scheidingsteken"
-
-# src/toolbar.c:221
-# ui/preferences.glade.h:183
-#: lib/toolbar/ephy-tbi-spinner.c:146
-msgid "Spinner"
-msgstr "Animatie"
-
-# src/toolbar.c:156
-#: lib/toolbar/ephy-tbi-std-toolitem.c:208
-#: lib/toolbar/ephy-tbi-std-toolitem.c:305
-msgid "Stop"
-msgstr "Stop"
-
-# src/context.c:59
-# src/toolbar.c:130
-#: lib/toolbar/ephy-tbi-std-toolitem.c:211
-#: lib/toolbar/ephy-tbi-std-toolitem.c:312
-msgid "Reload"
-msgstr "Herladen"
-
-# src/toolbar.c:143
-#: lib/toolbar/ephy-tbi-std-toolitem.c:214
-#: lib/toolbar/ephy-tbi-std-toolitem.c:320
-msgid "Home"
-msgstr "Start"
-
-# src/menubar.c:570
-#: lib/toolbar/ephy-tbi-std-toolitem.c:217
-#: lib/toolbar/ephy-tbi-std-toolitem.c:327
-msgid "Go"
-msgstr "Ga _naar"
-
-# src/toolbar.c:78
-#: lib/toolbar/ephy-tbi-std-toolitem.c:220
-#: lib/toolbar/ephy-tbi-std-toolitem.c:334
-msgid "New"
-msgstr "Nieuw"
-
-# src/menubar.c:127
-#: lib/toolbar/ephy-tbi-zoom.c:179 lib/toolbar/ephy-tbi-zoom.c:218
-#: src/toolbar.c:299
-msgid "Zoom"
-msgstr "Zoomen"
-
 # src/bookmarks.c:975
 # src/embed.c:263
 # src/history.c:457
@@ -2797,8 +2273,8 @@ msgstr "Zoomen"
 # src/mozcallbacks.c:225
 # src/window.c:2279
 #. setup label
-#: lib/widgets/ephy-notebook.c:671 src/ephy-tab.c:506 src/ephy-tab.c:920
-#: src/window-commands.c:345
+#: lib/widgets/ephy-notebook.c:671 src/ephy-tab.c:521 src/ephy-tab.c:979
+#: src/window-commands.c:284
 msgid "Untitled"
 msgstr "Naamloos"
 
@@ -2835,6 +2311,13 @@ msgstr "Lokatie"
 #: src/bookmarks/ephy-bookmarks.c:522
 msgid "All"
 msgstr "Alles"
+
+# src/context.c:64
+# src/history_callbacks.c:165
+# src/misc_callbacks.c:412
+#: src/bookmarks/ephy-new-bookmark.c:230
+msgid "Add bookmark"
+msgstr "Bladwijzer toevoegen"
 
 # src/main.c:102
 #: src/ephy-main.c:71
@@ -2937,107 +2420,522 @@ msgstr "icoonnaam voor de mozilla bekijker"
 msgid "mozilla summary info"
 msgstr "mozilla overzicht info"
 
-#: src/ephy-navigation-button.c:148
-msgid "Go up"
-msgstr "Omhoog"
-
-#: src/ephy-navigation-button.c:153
-msgid "Go back"
-msgstr "Vorige"
-
-# src/context.c:57
-# src/toolbar.c:117
-#: src/ephy-navigation-button.c:158
-msgid "Go forward"
-msgstr "Ga naar de volgende"
-
-#: src/ephy-navigation-button.c:257
-msgid "Back (with menu)"
-msgstr "Vorige (met menu)"
-
-# src/context.c:56
-# src/toolbar.c:91
-#: src/ephy-navigation-button.c:258
-msgid "Back"
-msgstr "Vorige"
-
-#: src/ephy-navigation-button.c:262
-msgid "Forward (with menu)"
-msgstr "Volgende (met menu)"
-
-# src/context.c:57
-# src/toolbar.c:117
-#: src/ephy-navigation-button.c:263
-msgid "Forward"
-msgstr "Volgende"
-
-#: src/ephy-navigation-button.c:267
-msgid "Up (with menu)"
-msgstr "Onhoog (met menu)"
-
-#: src/ephy-navigation-button.c:268
-msgid "Up"
-msgstr "Omhoog"
-
 # ui/epiphany.glade.h:109
-#: src/ephy-tab.c:550
+#: src/ephy-tab.c:565
 msgid "site"
 msgstr "pagina"
 
 # src/mozcallbacks.c:400
-#: src/ephy-tab.c:576
+#: src/ephy-tab.c:591
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Doorgestuurd naar %s..."
 
 # src/mozcallbacks.c:405
-#: src/ephy-tab.c:580
+#: src/ephy-tab.c:595
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Data van %s wordt ingelezen..."
 
 # src/mozcallbacks.c:410
-#: src/ephy-tab.c:584
+#: src/ephy-tab.c:599
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Wacht op toestemming van %s..."
 
 # src/mozcallbacks.c:424
-#: src/ephy-tab.c:592
+#: src/ephy-tab.c:607
 #, c-format
 msgid "Loading %s..."
 msgstr "%s wordt geladen..."
 
 # src/mozcallbacks.c:436
-#: src/ephy-tab.c:596
+#: src/ephy-tab.c:611
 msgid "Done."
 msgstr "Klaar."
 
-#: src/ephy-window.c:949
+# src/bookmarks_editor.c:950
+# src/bookmarks_editor.c:1150
+# src/menubar.c:567
+#: src/ephy-window.c:71
+msgid "_View"
+msgstr "B_eeld"
+
+# src/menubar.c:570
+#: src/ephy-window.c:72
+msgid "_Go"
+msgstr "Ga _naar"
+
+# src/menubar.c:54
+#: src/ephy-window.c:73
+msgid "_Tabs"
+msgstr "_Tabbladen"
+
+# src/menubar.c:573
+#: src/ephy-window.c:74
+msgid "_Help"
+msgstr "_Hulp"
+
+# src/menubar.c:50
+#. File menu
+#: src/ephy-window.c:77
+msgid "_New Window"
+msgstr "_Nieuw venster"
+
+# src/menubar.c:54
+#: src/ephy-window.c:78
+msgid "Create a new window"
+msgstr "Nieuwe venster openen"
+
+# src/menubar.c:54
+#: src/ephy-window.c:80
+msgid "New _Tab"
+msgstr "Nieuw tabblad"
+
+# src/menubar.c:54
+#: src/ephy-window.c:81
+msgid "Create a new tab"
+msgstr "Nieuwe tabblad aanmaken"
+
+# src/bookmarks_editor.c:942
+# src/menubar.c:34
+#: src/ephy-window.c:83
+msgid "_Open..."
+msgstr "_Openen..."
+
+# src/menubar.c:34
+#: src/ephy-window.c:84
+msgid "Open a file"
+msgstr "Een bestand openen"
+
+# src/menubar.c:63
+#: src/ephy-window.c:86
+msgid "Save _As..."
+msgstr "Opslaan _als..."
+
+# src/menubar.c:64
+#: src/ephy-window.c:87
+msgid "Save the current page"
+msgstr "Huidige pagina opslaan"
+
+# src/menubar.c:73
+#: src/ephy-window.c:90
+msgid "Print the current page"
+msgstr "Huidige pagina afdrukken"
+
+# src/menubar.c:68
+#: src/ephy-window.c:92
+msgid "S_end To..."
+msgstr "Verst_uren..."
+
+# src/toolbar.c:131
+#: src/ephy-window.c:93 src/ephy-window.c:99 src/ephy-window.c:102
+msgid "Send a link of the current page"
+msgstr "Verwijzing naar de huidige pagina versturen"
+
+# src/context.c:64
+# src/history_callbacks.c:165
+# src/misc_callbacks.c:412
+#: src/ephy-window.c:95
+msgid "_Add Bookmark..."
+msgstr "Bl_adwijzer toevoegen..."
+
+# src/menubar.c:433
+#: src/ephy-window.c:96
+msgid "Add a bookmark for the current page"
+msgstr "Bladwijzer toevoegen voor de huidige pagina"
+
+# src/window_callbacks.c:2192
+#: src/ephy-window.c:98
+msgid "_Close Tab"
+msgstr "_Tabblad sluiten"
+
+# ui/bookmarks.glade.h:4
+# ui/epiphany.glade.h:20
+#: src/ephy-window.c:101
+msgid "Close _Window"
+msgstr "_Venster sluiten"
+
+# src/context.c:81
+# src/window_callbacks.c:1145
+# src/window_callbacks.c:2880
+#. Edit menu
+#: src/ephy-window.c:106
+msgid "Cu_t"
+msgstr "_Knippen"
+
+# src/menubar.c:37
+#: src/ephy-window.c:107
+msgid "Cut the selection"
+msgstr "Selectie knippen"
+
+# src/bookmarks_editor.c:948
+# src/bookmarks_editor.c:1167
+# src/menubar.c:38
+#: src/ephy-window.c:109
+msgid "_Copy"
+msgstr "Kopiëren"
+
+# src/menubar.c:38
+#: src/ephy-window.c:110
+msgid "Copy the selection"
+msgstr "Kopieer selectie"
+
+# src/bookmarks_editor.c:949
+# src/bookmarks_editor.c:1169
+# src/menubar.c:39
+#: src/ephy-window.c:112
+msgid "_Paste"
+msgstr "Plakken"
+
+# src/menubar.c:39
+#: src/ephy-window.c:113
+msgid "Paste clipboard"
+msgstr "Plakken vanuit klembord"
+
+#: src/ephy-window.c:115
+msgid "Select _All"
+msgstr "_Alles selecteren"
+
+# src/window.c:985
+#: src/ephy-window.c:116
+msgid "Select the entire page"
+msgstr "De hele pagina selecteren"
+
+# ui/epiphany.glade.h:149
+#: src/ephy-window.c:118
+msgid "_Find"
+msgstr "_Zoeken"
+
+#: src/ephy-window.c:119
+msgid "Find a string"
+msgstr "Zoeken naar een tekenreeks"
+
+# src/menubar.c:117
+#: src/ephy-window.c:121
+msgid "Find Ne_xt"
+msgstr "Zoek _volgende"
+
+#: src/ephy-window.c:122
+msgid "Find next occurence of the string"
+msgstr "Volgende overeenkomende tekenreeks zoeken"
+
+# src/menubar.c:208
+#: src/ephy-window.c:124
+msgid "Find Pre_vious"
+msgstr "Zoek Vo_rige"
+
+#: src/ephy-window.c:125
+msgid "Find previous occurence of the string"
+msgstr "Vorige overeenkomende tekenreeks zoeken"
+
+# src/persistent_data_manager.c:138
+# ui/epiphany.glade.h:94
+#: src/ephy-window.c:127
+msgid "P_ersonal Data"
+msgstr "P_ersoonlijke informatie"
+
+#: src/ephy-window.c:128
+msgid "View and remove cookies and passwords"
+msgstr "Cookies en wachtwoorden bekijken en verwijderen"
+
+# src/menubar.c:150
+#: src/ephy-window.c:130
+msgid "T_oolbars"
+msgstr "_Werkbalken"
+
+#: src/ephy-window.c:131
+msgid "Costumize toolbars"
+msgstr "Werkbalken bewerken"
+
+# ui/preferences.glade.h:142
+#: src/ephy-window.c:133
+msgid "P_references"
+msgstr "_Voorkeuren"
+
+# GNOME_epiphany_Automation.oaf.in.h:1
+# epiphany.desktop.in.h:2
+#: src/ephy-window.c:134
+msgid "Configure the web browser"
+msgstr "De webbrowser instellen"
+
+# src/menubar.c:477
+#. View menu
+#: src/ephy-window.c:138
+msgid "_Stop"
+msgstr "_Stop"
+
+# src/toolbar.c:157
+#: src/ephy-window.c:139
+msgid "Stop current data transfer"
+msgstr "Stop de huidige dataoverdracht"
+
+# src/menubar.c:468
+# ui/preferences.glade.h:262
+#: src/ephy-window.c:141
+msgid "_Reload"
+msgstr "He_rladen"
+
+# src/toolbar.c:131
+#: src/ephy-window.c:142
+msgid "Display the latest content of the current page"
+msgstr "De nieuwste inhoud van de huidige pagina weergeven"
+
+# src/menubar.c:150
+#: src/ephy-window.c:144
+msgid "_Toolbar"
+msgstr "_Werkbalk"
+
+# src/bookmarks_menus.c:525
+# ui/bookmarks.glade.h:47
+#: src/ephy-window.c:145
+msgid "Show or hide toolbar"
+msgstr "Werkbalk weergeven/verbergen"
+
+# src/menubar.c:160
+#: src/ephy-window.c:147
+msgid "St_atusbar"
+msgstr "St_atusbalk"
+
+#: src/ephy-window.c:148
+msgid "Show or hide statusbar"
+msgstr "Statusbalk weergeven/verbergen"
+
+# src/menubar.c:165
+#: src/ephy-window.c:150
+msgid "_Fullscreen"
+msgstr "_Volledig scherm"
+
+# src/main.c:111
+#: src/ephy-window.c:151
+msgid "Browse at full screen"
+msgstr "Surfen met het volledige scherm"
+
+# src/menubar.c:127
+#: src/ephy-window.c:153
+msgid "Zoom _In"
+msgstr "_Inzoomen"
+
+#: src/ephy-window.c:154
+msgid "Show the contents in more detail"
+msgstr "Informatie met meer detail weergeven"
+
+# src/menubar.c:136
+#: src/ephy-window.c:156
+msgid "Zoom _Out"
+msgstr "_Uitzoomen"
+
+#: src/ephy-window.c:157
+msgid "Show the contents in less detail"
+msgstr "Informatie met minder detail weergeven"
+
+# ui/epiphany.glade.h:90
+#: src/ephy-window.c:159
+msgid "_Normal Size"
+msgstr "_Normale grootte"
+
+#: src/ephy-window.c:160
+msgid "Show the contents at the normal size"
+msgstr "Standaardafmetingen gebruiken om de informatie te tonen"
+
+# src/menubar.c:187
+#: src/ephy-window.c:162
+msgid "_Page Source"
+msgstr "B_ron weergeven"
+
+#: src/ephy-window.c:163
+msgid "View the source code of the page"
+msgstr "De broncode van de pagina bekijken"
+
+# src/menubar.c:453
+#. Go menu
+#: src/ephy-window.c:167
+msgid "_Back"
+msgstr "Vo_rige"
+
+#: src/ephy-window.c:168
+msgid "Go to the previous visited page"
+msgstr "Ga naar de vorige bezochte pagina"
+
+# src/menubar.c:458
+#: src/ephy-window.c:170
+msgid "_Forward"
+msgstr "Vo_lgende"
+
+#: src/ephy-window.c:171
+msgid "Go to the next visited page"
+msgstr "Ga naar de volgende bezochte pagina"
+
+#: src/ephy-window.c:173
+msgid "_Up"
+msgstr "_Omhoog"
+
+# src/bookmarks_editor.c:1056
+#: src/ephy-window.c:174
+msgid "Go up one level"
+msgstr "Eén niveau \"omhoog\" gaan"
+
+# src/toolbar.c:143
+#: src/ephy-window.c:176
+msgid "_Home"
+msgstr "_Start"
+
+# ui/preferences.glade.h:172
+#: src/ephy-window.c:177
+msgid "Go to the home page"
+msgstr "Ga naar de startpagina"
+
+# ui/epiphany.glade.h:85
+#: src/ephy-window.c:179
+msgid "_Location..."
+msgstr "_Lokatie..."
+
+# src/toolbar.c:170
+#: src/ephy-window.c:180
+msgid "Go to a specified location"
+msgstr "Ga naar een bepaalde lokatie"
+
+# src/prefs.c:367
+# src/toolbar.c:273
+# ui/epiphany.glade.h:78
+# ui/preferences.glade.h:88
+#: src/ephy-window.c:182
+msgid "_History"
+msgstr "_Geschiedenis"
+
+#: src/ephy-window.c:183
+msgid "Go to an already visited page"
+msgstr "Ga naar een reeds bezochte pagina"
+
+# src/menubar.c:571
+#: src/ephy-window.c:185
+msgid "_Bookmarks"
+msgstr "Bla_dwijzers"
+
+# src/bookmarks_editor.c:1029
+#: src/ephy-window.c:186
+msgid "Go to a bookmark"
+msgstr "Ga naar een bladwijzerpagina"
+
+# src/menubar.c:208
+#. Tabs menu
+#: src/ephy-window.c:190
+msgid "_Previous Tab"
+msgstr "_Vorig tabblad"
+
+#: src/ephy-window.c:191
+msgid "Activate previous tab"
+msgstr "Vorige tabblad activeren"
+
+# ui/preferences.glade.h:272
+#: src/ephy-window.c:193
+msgid "_Next Tab"
+msgstr "_Volgend tabblad"
+
+#: src/ephy-window.c:194
+msgid "Activate next tab"
+msgstr "Volgende tabblad activeren"
+
+#: src/ephy-window.c:196
+msgid "Move Tab _Left"
+msgstr "Tabblad naar _links verplaatsen"
+
+# src/menubar.c:73
+#: src/ephy-window.c:197
+msgid "Move current tab to left"
+msgstr "Huidige tabblad naar links verplaatsen"
+
+#: src/ephy-window.c:199
+msgid "Move Tab _Right"
+msgstr "Tabblad naar _rechts verplaatsen"
+
+# src/menubar.c:73
+#: src/ephy-window.c:200
+msgid "Move current tab to right"
+msgstr "Huidige tabblad naar rechts verplaatsen"
+
+# ui/preferences.glade.h:272
+#: src/ephy-window.c:202
+msgid "_Detach Tab"
+msgstr "Tabblad los_scheuren"
+
+# src/menubar.c:73
+#: src/ephy-window.c:203
+msgid "Detach current tab"
+msgstr "Huidige tabblad losscheuren"
+
+# src/menubar.c:43
+#. Help menu
+#: src/ephy-window.c:207
+msgid "_About"
+msgstr "_Info"
+
+#: src/ephy-window.c:208
+msgid "Display credits for the web browser creators"
+msgstr "Credits weergeven voor de makers van de webbrowser"
+
+# src/context.c:72
+#: src/ephy-window.c:228
+msgid "Open Frame in New Tab"
+msgstr "Frame in een nieuw tabblad openen"
+
+# ui/epiphany.glade.h:91
+#. Links
+#: src/ephy-window.c:232
+msgid "Open Link"
+msgstr "verwijzing openen"
+
+# src/context.c:60
+#: src/ephy-window.c:234
+msgid "Open Link in New Window"
+msgstr "Verwijzing openen in een nieuw venster"
+
+# src/context.c:61
+#: src/ephy-window.c:236
+msgid "Open Link in New Tab"
+msgstr "Verwijzing openen in een nieuw tabblad"
+
+# src/context.c:64
+# src/history_callbacks.c:165
+# src/misc_callbacks.c:412
+#: src/ephy-window.c:240
+msgid "Add Bookmark"
+msgstr "Bladwijzer toevoegen"
+
+#: src/ephy-window.c:244
+msgid "Copy Email"
+msgstr "E-mail kopiëren"
+
+# src/context.c:66
+#: src/ephy-window.c:252
+msgid "Open Image in New Tab"
+msgstr "Afbeelding in nieuw tabblad openen"
+
+#: src/ephy-window.c:1053
 msgid "Insecure"
 msgstr "Onveilig"
 
 # src/mozilla/mozilla.cpp:996
 # src/persistent_data_manager.c:374
 # src/persistent_data_manager.c:609
-#: src/ephy-window.c:952
+#: src/ephy-window.c:1056
 msgid "Broken"
 msgstr "Gebroken"
 
-#: src/ephy-window.c:955
+#: src/ephy-window.c:1059
 msgid "Medium"
 msgstr "Gemiddeld"
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:1063
 msgid "Low"
 msgstr "Laag"
 
 # src/mozilla/mozilla.cpp:1982
-#: src/ephy-window.c:963
+#: src/ephy-window.c:1067
 msgid "High"
 msgstr "Hoog"
 
-#: src/ephy-window.c:973
+#: src/ephy-window.c:1077
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3046,7 +2944,7 @@ msgstr ""
 "Beveiligingsniveau: %s\n"
 "%s"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:1083
 #, c-format
 msgid "Security level: %s"
 msgstr "Beveiligingsniveau: %s"
@@ -3325,6 +3223,11 @@ msgstr "Interface"
 msgid "Advanced"
 msgstr "Geavanceerd"
 
+# ui/preferences.glade.h:142
+#: src/prefs-dialog.c:301
+msgid "Preferences"
+msgstr "Voorkeuren"
+
 # ui/epiphany.glade.h:51
 #: src/session.c:189
 msgid "Crash Recovery"
@@ -3346,17 +3249,33 @@ msgstr ""
 msgid "You can recover the opened tabs and windows."
 msgstr "U kunt de geopende tabbladen en vensters herstellen."
 
-#: src/window-commands.c:153
+# src/context.c:56
+# src/toolbar.c:91
+#: src/toolbar.c:179
+msgid "Back"
+msgstr "Vorige"
+
+# src/context.c:57
+# src/toolbar.c:117
+#: src/toolbar.c:191
+msgid "Forward"
+msgstr "Volgende"
+
+#: src/toolbar.c:203
+msgid "Up"
+msgstr "Omhoog"
+
+#: src/window-commands.c:147
 msgid "Check this out!"
 msgstr "Kijk hier eens naar!"
 
 # src/window.c:985
-#: src/window-commands.c:381
+#: src/window-commands.c:319
 msgid "Select the file to open"
 msgstr "Selecteer het te openen bestand"
 
 #. Translator credits
-#: src/window-commands.c:766
+#: src/window-commands.c:660
 msgid "translator_credits"
 msgstr ""
 "Vincent van Adrighem\n"
@@ -3367,23 +3286,203 @@ msgstr ""
 #. * copyright character if your character set allows it
 #. * (Hint: iso-8859-1 is one of the character sets that
 #. * has this symbol).
-#: src/window-commands.c:781
+#: src/window-commands.c:675
 msgid "Copyright (C) 2002 Marco Pesenti Gritti"
 msgstr "Copyright © 2002 Marco Pesenti Gritti"
 
 # src/menu_callbacks.c:428
-#: src/window-commands.c:782
+#: src/window-commands.c:676
 msgid "A GNOME browser based on Mozilla"
 msgstr "Een uitgebreide GNOME browser gebaseerd op Mozilla"
 
-#: src/window-commands.c:907
-#, c-format
-msgid ""
-"There was an error displaying help: \n"
-"%s"
-msgstr ""
-"Er is een fout opgetreden bij het weergeven van de hulp:\n"
-"%s"
+# src/menubar.c:43
+#~ msgid "About this application"
+#~ msgstr "Info over dit programma"
+
+# src/menubar.c:43
+#~ msgid "About..."
+#~ msgstr "Info..."
+
+# src/menubar.c:433
+#~ msgid "Add a bookmark for the current location to the default folder"
+#~ msgstr "Huidige pagina als bladwijzer toevoegen aan de standaardmap"
+
+# src/bookmarks_editor.c:945
+# src/menubar.c:91
+#~ msgid "Close"
+#~ msgstr "Sluiten"
+
+# src/menubar.c:92
+#~ msgid "Close the current window"
+#~ msgstr "Huidige venster sluiten"
+
+# src/menubar.c:41
+#~ msgid "Configure the application"
+#~ msgstr "Configureer het programma"
+
+# ui/epiphany.glade.h:123
+#~ msgid "Contents"
+#~ msgstr "Inhoud"
+
+# src/context.c:69
+#~ msgid "Copy Page location"
+#~ msgstr "Paginalokatie kopiëren"
+
+# ui/epiphany.glade.h:80
+#~ msgid "Edit Ephy preferences"
+#~ msgstr "Ephy voorkeuren bewerken"
+
+# src/menubar.c:442
+#~ msgid "Edit bookmarks"
+#~ msgstr "Bladwijzerbeheer"
+
+# src/bookmarks_menus.c:525
+# ui/bookmarks.glade.h:47
+#~ msgid "Edit the main toolbar"
+#~ msgstr "Werkschapsbalk aanpassen"
+
+#~ msgid "Load the URL in the location entry"
+#~ msgstr "De URL in de lokatiebalk laden"
+
+# ui/epiphany.glade.h:90
+#~ msgid "Normal Size"
+#~ msgstr "Normale grootte"
+
+# ui/epiphany.glade.h:91
+#~ msgid "Open"
+#~ msgstr "Open"
+
+# src/menubar.c:443
+#~ msgid "Open a bookmarks editor"
+#~ msgstr "Bladwijzerbeheer openen"
+
+# src/menubar.c:540
+#~ msgid "Open the Epiphany manual"
+#~ msgstr "De Epiphany handleiding openen"
+
+# src/menubar.c:187
+#~ msgid "Page Source"
+#~ msgstr "Broncode weergeven"
+
+# src/context.c:73
+#~ msgid "Reload Frame"
+#~ msgstr "Frame herladen"
+
+# src/mozilla/PromptService.cpp:312
+#~ msgid "Save As"
+#~ msgstr "Opslaan als"
+
+# src/menubar.c:203
+#~ msgid "Save the current file with a different name"
+#~ msgstr "Het huidige bestand onder een andere naam opslaan"
+
+# ui/epiphany.glade.h:171
+#~ msgid "Search for a string"
+#~ msgstr "Zoek naar tekenreeks"
+
+# src/menubar.c:150
+#~ msgid "Toolbar"
+#~ msgstr "Werkbalk"
+
+# src/menubar.c:127
+#~ msgid "Zoom In"
+#~ msgstr "Inzoomen"
+
+# src/menubar.c:136
+#~ msgid "Zoom Out"
+#~ msgstr "Uitzoomen"
+
+# ui/epiphany.glade.h:123
+#~ msgid "_Contents"
+#~ msgstr "_Inhoud"
+
+# src/mozilla/MyportalProtocolHandler.cpp:221
+#~ msgid "_My portal"
+#~ msgstr "_Mijn Portaal"
+
+#~ msgid "Drag Handle"
+#~ msgstr "Sleepblokje"
+
+# ui/epiphany.glade.h:85
+#~ msgid "Location entry"
+#~ msgstr "Lokatiebalk"
+
+# src/prefs.c:367
+# src/toolbar.c:273
+# ui/epiphany.glade.h:78
+# ui/preferences.glade.h:88
+#~ msgid "Back History"
+#~ msgstr "Vorige-geschiedenis"
+
+# src/context.c:57
+# src/toolbar.c:117
+#~ msgid "Forward History"
+#~ msgstr "Volgende-geschiedenis"
+
+#~ msgid "Up Several Levels"
+#~ msgstr "Enkele niveau's omhoog"
+
+# src/bookmarks_editor_callbacks.c:708
+# ui/bookmarks.glade.h:36
+#~ msgid "Separator"
+#~ msgstr "Scheidingsteken"
+
+# src/toolbar.c:221
+# ui/preferences.glade.h:183
+#~ msgid "Spinner"
+#~ msgstr "Animatie"
+
+# src/toolbar.c:156
+#~ msgid "Stop"
+#~ msgstr "Stop"
+
+# src/context.c:59
+# src/toolbar.c:130
+#~ msgid "Reload"
+#~ msgstr "Herladen"
+
+# src/toolbar.c:143
+#~ msgid "Home"
+#~ msgstr "Start"
+
+# src/menubar.c:570
+#~ msgid "Go"
+#~ msgstr "Ga _naar"
+
+# src/toolbar.c:78
+#~ msgid "New"
+#~ msgstr "Nieuw"
+
+# src/menubar.c:127
+#~ msgid "Zoom"
+#~ msgstr "Zoomen"
+
+#~ msgid "Go up"
+#~ msgstr "Omhoog"
+
+#~ msgid "Go back"
+#~ msgstr "Vorige"
+
+# src/context.c:57
+# src/toolbar.c:117
+#~ msgid "Go forward"
+#~ msgstr "Ga naar de volgende"
+
+#~ msgid "Back (with menu)"
+#~ msgstr "Vorige (met menu)"
+
+#~ msgid "Forward (with menu)"
+#~ msgstr "Volgende (met menu)"
+
+#~ msgid "Up (with menu)"
+#~ msgstr "Onhoog (met menu)"
+
+#~ msgid ""
+#~ "There was an error displaying help: \n"
+#~ "%s"
+#~ msgstr ""
+#~ "Er is een fout opgetreden bij het weergeven van de hulp:\n"
+#~ "%s"
 
 # epiphany.desktop.in.h:1
 # sounds/epiphany.soundlist.in.h:1
@@ -4881,11 +4980,6 @@ msgstr ""
 #~ msgid "_Remove all these bookmarks"
 #~ msgstr "Verwi_jder al deze bladwijzers"
 
-# src/bookmarks_menus.c:525
-# ui/bookmarks.glade.h:47
-#~ msgid "_Show as toolbar"
-#~ msgstr "_Weergeven als werkbalk"
-
 # ui/bookmarks.glade.h:48
 #~ msgid "_Smart URL:"
 #~ msgstr "_Slimme URL:"
@@ -4943,10 +5037,6 @@ msgstr ""
 # src/bookmarks_menus.c:462
 #~ msgid "Create a new autobookmarks folder"
 #~ msgstr "Nieuwe a_utobladwijzers map aanmaken"
-
-# src/menubar.c:54
-#~ msgid "Create a new site"
-#~ msgstr "Nieuwe pagina maken"
 
 #~ msgid "Delete"
 #~ msgstr "Verwijderen"
@@ -5147,10 +5237,6 @@ msgstr ""
 #~ msgid "S_ort Folder"
 #~ msgstr "Map s_orteren"
 
-# src/menubar.c:64
-#~ msgid "Save the current file"
-#~ msgstr "Huidige bestand opslaan"
-
 # src/bookmarks_editor.c:1033
 # src/bookmarks_menus.c:529
 #~ msgid "Set _as Default Folder"
@@ -5184,10 +5270,6 @@ msgstr ""
 # src/bookmarks_editor.c:1011
 #~ msgid "Sort a folder of bookmarks recursively (folders first)"
 #~ msgstr "Een map met bladwijzers recursief sorteren (mappen eerst)"
-
-# src/bookmarks_editor.c:1056
-#~ msgid "Sort one level"
-#~ msgstr "Eén niveau diep sorteren"
 
 # src/bookmarks_editor.c:1011
 #~ msgid "Sort recursively (folders first)"
@@ -5224,10 +5306,6 @@ msgstr ""
 #~ msgid "_Delete"
 #~ msgstr "Ver_wijderen"
 
-# src/bookmarks_editor.c:1029
-#~ msgid "_Go to Bookmark Target"
-#~ msgstr "Ga naar bladwijzer_pagina"
-
 #~ msgid "_Import"
 #~ msgstr "_Importeren"
 
@@ -5246,10 +5324,6 @@ msgstr ""
 # src/menu_callbacks.c:1286
 #~ msgid "Open Session..."
 #~ msgstr "Sessie openen..."
-
-# src/toolbar.c:170
-#~ msgid "Open a file from a specified location"
-#~ msgstr "Een bestand openen op een opgegeven lokatie"
 
 # ui/preferences.glade.h:125
 #~ msgid "Open a session"
