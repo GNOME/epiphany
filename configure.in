@@ -281,6 +281,24 @@ AC_COMPILE_IFELSE(
 
 AC_MSG_RESULT([$result])
 
+dnl changed in 1.8a4
+
+AC_MSG_CHECKING([for whether nsIGlobalHistory2::AddURI takes a referrer])
+
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM(
+		[[#include <nsIURI.h>
+		  #include <nsIGlobalHistory.h>
+		  #include <docshell/nsIGlobalHistory2.h>
+		  #include <history/nsIBrowserHistory.h>]],
+		[[nsIBrowserHistory *p;
+		  p->AddURI(nsnull,PR_FALSE,PR_FALSE,nsnull);]]
+	)],
+	[AC_DEFINE([MOZ_NSIBROWSERHISTORY_ADDURI_WITH_REFERRER],[1],[dummy]) result=yes],
+	[result=no])
+
+AC_MSG_RESULT([$result])
+
 dnl Changed from char* to nsACString& in mozilla 1.8a2
 
 AC_MSG_CHECKING([whether nsIProtocolProxyService::ConfigureFromPAC expects nsACString&])
@@ -312,6 +330,11 @@ AC_COMPILE_IFELSE(
 	[result=no])
 
 AC_MSG_RESULT([$result])
+
+dnl changed from nsIXULChromeRegistry in 1.8a4
+
+AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/chrome/nsIChromeRegistrySea.h],
+	[AC_DEFINE([HAVE_CHROME_NSICHROMEREGISTRYSEA_H], [1], [Define if nsIChromeRegistrySea.h exists])])
 
 dnl check for broken reload in GtkMozEmbed
 dnl FIXME: I have NO IDEA how to do this. For now, just always enable our workaround

@@ -71,9 +71,14 @@
 #include <nsIPassword.h>
 #endif
 
+#if defined (HAVE_CHROME_NSICHROMEREGISTRYSEA_H)
+#include <chrome/nsIChromeRegistrySea.h>
+#elif defined(MOZ_NSIXULCHROMEREGISTRY_SELECTSKIN)
+#include <nsIChromeRegistry.h>
+#endif
+
 #ifdef ALLOW_PRIVATE_API
 // FIXME: For setting the locale. hopefully gtkmozembed will do itself soon
-#include <nsIChromeRegistry.h>
 #include <nsILocaleService.h>
 #include <nsIHttpAuthManager.h>
 #include <nsICacheService.h>
@@ -404,11 +409,15 @@ static nsresult
 mozilla_init_chrome (void)
 {
 /* FIXME: can we just omit this on new-toolkit ? */
-#ifdef MOZ_NSIXULCHROMEREGISTRY_SELECTSKIN
+#if defined(MOZ_NSIXULCHROMEREGISTRY_SELECTSKIN) || defined(HAVE_CHROME_NSICHROMEREGISTRYSEA_H)
 	nsresult rv;
 	nsEmbedString uiLang;
 
+#ifdef HAVE_CHROME_NSICHROMEREGISTRYSEA_H
+	nsCOMPtr<nsIChromeRegistrySea> chromeRegistry = do_GetService (NS_CHROMEREGISTRY_CONTRACTID);
+#else
 	nsCOMPtr<nsIXULChromeRegistry> chromeRegistry = do_GetService (NS_CHROMEREGISTRY_CONTRACTID);
+#endif
 	NS_ENSURE_TRUE (chromeRegistry, NS_ERROR_FAILURE);
 
 	// Set skin to 'classic' so we get native scrollbars.
