@@ -30,7 +30,6 @@
 #include "ephy-embed-popup-control.h"
 #include "ephy-nautilus-view.h"
 #include "ephy-embed.h"
-#include "ephy-embed-utils.h"
 #include "find-dialog.h"
 #include "print-dialog.h"
 #include "ephy-encoding-dialog.h"
