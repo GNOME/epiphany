@@ -567,6 +567,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	char *selected_id_str;
 	EggMenuMerge *ui_merge;
 	EggActionGroup *action_group;
+	const char *icon_path;
 	int i;
 
 	g_signal_connect (editor, "delete_event",
@@ -595,6 +596,8 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	editor->priv->ui_merge = ui_merge;
 	editor->priv->action_group = action_group;
 
+	icon_path =  ephy_file ("epiphany-bookmarks.png");
+	gtk_window_set_icon_from_file (GTK_WINDOW (editor), icon_path, NULL);
 	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
 	gtk_widget_set_size_request (GTK_WIDGET (editor), 500, 450);
 
