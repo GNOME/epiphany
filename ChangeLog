@@ -1,5 +1,21 @@
 2004-10-29  Adam Hooper  <adamh@cvs.gnome.org>
 
+	* src/ephy-extensions-manager.c:
+	(ephy_extensions_manager_load_string), (path_to_identifier),
+	(ephy_extensions_manager_load_file), (sync_loaded_extensions),
+	(ephy_extensions_manager_unload_file), (load_file_from_monitor),
+	(dir_changed_cb), (ephy_extensions_manager_load_dir),
+	(active_extensions_notifier), (ephy_extensions_manager_finalize),
+	(ephy_extensions_manager_class_init):
+	* src/ephy-extensions-manager.h:
+
+	Listen for changes to extension directories using
+	gnome_vfs_monitor_add(). Paves the way for drag-and-drop installation
+	of extensions, and makes extensions immediately available when
+	installing via 'make install', 'apt-get install', etc.
+
+2004-10-29  Adam Hooper  <adamh@cvs.gnome.org>
+
 	* data/epiphany-extension.xsd:
 
 	Comment that unfortunately, elements in <extension> must be in order.

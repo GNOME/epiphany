@@ -39,6 +39,9 @@
 #include <libxml/xmlreader.h>
 #include <libxml/xmlschemas.h>
 
+#include <libgnomevfs/gnome-vfs-ops.h>
+#include <libgnomevfs/gnome-vfs-utils.h>
+
 #include <gmodule.h>
 #include <dirent.h>
 #include <string.h>
@@ -55,6 +58,7 @@ struct _EphyExtensionsManagerPrivate
 	GList *data;
 	GList *factories;
 	GList *extensions;
+	GList *dir_monitors;
 	GList *windows;
 	guint active_extensions_notifier_id;
 
@@ -87,6 +91,8 @@ typedef struct
 enum
 {
 	CHANGED,
+	ADDED,
+	REMOVED,
 	LAST_SIGNAL
 };
 
@@ -306,9 +312,9 @@ typedef enum
 } ParserState;
 
 static void
-ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
-				   const char *dir,
-				   const char *filename)
+ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
+				     const char *identifier,
+				     /* const */ char *xml)
 {
 	xmlDocPtr doc;
 	xmlTextReaderPtr reader;
@@ -317,30 +323,14 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 	EphyExtensionInfo *einfo;
 	ExtensionInfo *info;
 	int ret;
-	char *identifier, *dot, *path;
 
-	LOG ("Loading description file '%s'", filename)
-
-	identifier = g_path_get_basename (filename);
-	dot = strstr (identifier, ".xml");
-	g_return_if_fail (dot != NULL);
-	*dot = '\0';
+	LOG ("Loading description file for '%s'", identifier)
 
 	if (g_list_find_custom (manager->priv->data, identifier,
 				(GCompareFunc) find_extension_info) != NULL)
 	{
-		g_warning ("Extension description for '%s' already read!\n",
+		g_warning ("Extension description for '%s' already read!",
 			   identifier);
-		g_free (identifier);
-		return;
-	}
-
-	path = g_build_filename (dir, filename, NULL);
-	if (g_file_test (path, G_FILE_TEST_EXISTS) == FALSE)
-	{
-		g_warning ("'%s' doesn't exist\n", filename);
-		g_free (identifier);
-		g_free (path);
 		return;
 	}
 
@@ -349,13 +339,11 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 	 * put the schema validation on the Doc Tree and then pass that to the
 	 * reader. (maybe switch to RelaxNG?)
 	 */
-	doc = xmlParseFile (path);
-	g_free (path);
+	doc = xmlParseDoc (xml);
 
 	if (doc == NULL)
 	{
-		g_warning ("Couldn't read '%s'\n", filename);
-		g_free (identifier);
+		g_warning ("Couldn't read '%s' data\n", identifier);
 		return;
 	}
 
@@ -363,7 +351,8 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 	{
 		if (xmlSchemaValidateDoc (manager->priv->schema_ctxt, doc))
 		{
-			g_warning ("Validation errors in '%s'\n", filename);
+			g_warning ("Validation errors in '%s' data",
+				   identifier);
 			xmlFreeDoc (doc);
 			return;
 		}
@@ -374,7 +363,7 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 
 	info = g_new0 (ExtensionInfo, 1);
 	einfo = (EphyExtensionInfo *) info;
-	einfo->identifier = identifier;
+	einfo->identifier = g_strdup (identifier);
 	g_datalist_init (&info->loader_attributes);
 
 	ret = xmlTextReaderRead (reader);
@@ -614,6 +603,48 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 	}
 
 	manager->priv->data = g_list_prepend (manager->priv->data, info);
+
+	g_signal_emit (manager, signals[ADDED], 0, info);
+}
+
+static char *
+path_to_identifier (const char *path)
+{
+	char *identifier, *dot;
+
+	identifier = g_path_get_basename (path);
+	dot = strstr (identifier, ".xml");
+	g_return_val_if_fail (dot != NULL, NULL);
+
+	*dot = '\0';
+
+	return identifier;
+}
+
+static void
+ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
+				   const char *path)
+{
+	char *identifier;
+	char *xml;
+	GError *err = NULL;
+
+	g_file_get_contents (path, &xml, NULL, &err);
+
+	if (err != NULL)
+	{
+		g_warning ("Could not read file at '%s': '%s'",
+			   path, err->message);
+		g_error_free (err);
+		return;
+	}
+
+	identifier = path_to_identifier (path);
+	g_return_if_fail (identifier != NULL);
+
+	ephy_extensions_manager_load_string (manager, identifier, xml);
+
+	g_free (identifier);
 }
 
 static int
@@ -755,38 +786,7 @@ unload_extension (EphyExtensionsManager *manager,
 }
 
 static void
-ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
-				  const char *path)
-{
-	DIR *d;
-	struct dirent *e;
-
-	LOG ("Scanning directory '%s'", path)
-
-	START_PROFILER ("Scanning directory")
-
-	d = opendir (path);
-	if (d == NULL)
-	{
-		return;
-	}
-	while ((e = readdir (d)) != NULL)
-	{
-		if (g_str_has_suffix (e->d_name, ".xml"))
-		{
-			ephy_extensions_manager_load_file (manager, path, e->d_name);
-		}
-	}
-	closedir (d);
-
-	STOP_PROFILER ("Scanning directory")
-}
-
-static void
-active_extensions_notifier (GConfClient *client,
-			    guint cnxn_id,
-			    GConfEntry *entry,
-			    EphyExtensionsManager *manager)
+sync_loaded_extensions (EphyExtensionsManager *manager)
 {
 	GSList *active_extensions;
 	GList *l;
@@ -825,6 +825,176 @@ active_extensions_notifier (GConfClient *client,
 
 	g_slist_foreach (active_extensions, (GFunc) g_free, NULL);
 	g_slist_free (active_extensions);
+}
+
+static void
+ephy_extensions_manager_unload_file (EphyExtensionsManager *manager,
+				     const char *path)
+{
+	GList *l;
+	ExtensionInfo *info;
+	char *identifier;
+
+	identifier = path_to_identifier (path);
+
+	l = g_list_find_custom (manager->priv->data, identifier,
+				(GCompareFunc) find_extension_info);
+
+	if (l != NULL)
+	{
+		info = (ExtensionInfo *) l->data;
+
+		manager->priv->data = g_list_remove (manager->priv->data, info);
+
+		if (info->info.active == TRUE)
+		{
+			unload_extension (manager, info);
+		}
+
+		g_signal_emit (manager, signals[REMOVED], 0, info);
+
+		free_extension_info (info);
+	}
+
+	g_free (identifier);
+}
+
+static void
+load_file_from_monitor (EphyExtensionsManager *manager,
+			const char *path)
+{
+	/* When a file is installed, it sometimes gets CREATED empty and then
+	 * gets its contents filled later (for a CHANGED signal). Theoretically
+	 * I suppose we could get a CHANGED signal when the file is half-full,
+	 * but I doubt that'll happen much (the xml files are <1000 bytes). We
+	 * don't want warnings all over the place, so we return from this
+	 * function if the file is empty. (We're assuming that if a file is
+	 * empty it'll be filled soon and this function will be called again.)
+	 *
+	 * Oh, and we return if the extension is already loaded, too.
+	 */
+	char *identifier;
+	char *xml;
+	int len;
+	GError *err = NULL;
+
+	g_file_get_contents (path, &xml, &len, &err);
+
+	if (err != NULL)
+	{
+		g_warning  ("Could not read file at '%s': '%s'",
+			    path, err->message);
+		g_error_free (err);
+		return;
+	}
+
+	if (len == 0) return;
+
+	identifier = path_to_identifier (path);
+	g_return_if_fail (identifier != NULL);
+
+	if (g_list_find_custom (manager->priv->data, identifier,
+				(GCompareFunc) find_extension_info) != NULL)
+	{
+		g_free (identifier);
+		return;
+	}
+
+	ephy_extensions_manager_load_string (manager, identifier, xml);
+
+	g_free (identifier);
+
+	sync_loaded_extensions (manager);
+}
+
+static void
+dir_changed_cb (GnomeVFSMonitorHandle *handle,
+		const char *monitor_uri,
+		const char *info_uri,
+		GnomeVFSMonitorEventType event_type,
+		EphyExtensionsManager *manager)
+{
+	char *path;
+
+	/*
+	 * We only deal with XML files: Add them to the manager when created,
+	 * remove them when deleted.
+	 */
+	if (g_str_has_suffix (info_uri, ".xml") == FALSE) return;
+
+	path = gnome_vfs_get_local_path_from_uri (info_uri);
+
+	switch (event_type)
+	{
+		case GNOME_VFS_MONITOR_EVENT_CREATED:
+		case GNOME_VFS_MONITOR_EVENT_CHANGED:
+			load_file_from_monitor (manager, path);
+			break;
+		case GNOME_VFS_MONITOR_EVENT_DELETED:
+			ephy_extensions_manager_unload_file (manager, path);
+			break;
+		default:
+			break;
+	}
+
+	g_free (path);
+}
+
+static void
+ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
+				  const char *path)
+{
+	DIR *d;
+	struct dirent *e;
+	char *file_path;
+	char *file_uri;
+	GnomeVFSMonitorHandle *monitor;
+	GnomeVFSResult res;
+
+	LOG ("Scanning directory '%s'", path)
+
+	START_PROFILER ("Scanning directory")
+
+	d = opendir (path);
+	if (d == NULL)
+	{
+		return;
+	}
+	while ((e = readdir (d)) != NULL)
+	{
+		if (g_str_has_suffix (e->d_name, ".xml"))
+		{
+			file_path = g_build_filename (path, e->d_name, NULL);
+			ephy_extensions_manager_load_file (manager, file_path);
+			g_free (file_path);
+		}
+	}
+	closedir (d);
+
+	file_uri = gnome_vfs_get_uri_from_local_path (path);
+	res = gnome_vfs_monitor_add (&monitor,
+				     path,
+				     GNOME_VFS_MONITOR_DIRECTORY,
+				     (GnomeVFSMonitorCallback) dir_changed_cb,
+				     manager);
+	g_free (file_uri);
+
+	if (res == GNOME_VFS_OK)
+	{
+		manager->priv->dir_monitors = g_list_prepend
+			(manager->priv->dir_monitors, monitor);
+	}
+
+	STOP_PROFILER ("Scanning directory")
+}
+
+static void
+active_extensions_notifier (GConfClient *client,
+			    guint cnxn_id,
+			    GConfEntry *entry,
+			    EphyExtensionsManager *manager)
+{
+	sync_loaded_extensions (manager);
 }
 
 static void
@@ -928,6 +1098,9 @@ ephy_extensions_manager_finalize (GObject *object)
 
 	eel_gconf_notification_remove (manager->priv->active_extensions_notifier_id);
 
+	g_list_foreach (priv->dir_monitors, (GFunc) gnome_vfs_monitor_cancel, NULL);
+	g_list_free (priv->dir_monitors);
+
 	g_list_foreach (priv->extensions, (GFunc) g_object_unref, NULL);
 	g_list_free (priv->extensions);
 
@@ -1004,6 +1177,26 @@ ephy_extensions_manager_class_init (EphyExtensionsManagerClass *class)
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (EphyExtensionsManagerClass, changed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE,
+			      1,
+			      G_TYPE_POINTER);
+	signals[ADDED] =
+		g_signal_new ("added",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (EphyExtensionsManagerClass, added),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE,
+			      1,
+			      G_TYPE_POINTER);
+	signals[REMOVED] =
+		g_signal_new ("removed",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (EphyExtensionsManagerClass, removed),
 			      NULL, NULL,
 			      g_cclosure_marshal_VOID__POINTER,
 			      G_TYPE_NONE,

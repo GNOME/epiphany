@@ -56,7 +56,11 @@ struct _EphyExtensionsManagerClass
 	GObjectClass parent_class;
 
 	/* Signals */
+	void	(* added)	(EphyExtensionsManager *manager,
+				 EphyExtensionInfo *info);
 	void	(* changed)	(EphyExtensionsManager *manager,
+				 EphyExtensionInfo *info);
+	void	(* removed)	(EphyExtensionsManager *manager,
 				 EphyExtensionInfo *info);
 };
 
