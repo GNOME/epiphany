@@ -245,13 +245,15 @@ sort_bookmarks (gconstpointer a, gconstpointer b)
 #define MAX_LENGTH 32
 
 static gboolean
-can_open_in_tabs (EphyTopicAction *action)
+can_open_in_tabs (EphyNode *node)
 {
 	GPtrArray *children;
+	int priority;
 
-	children = ephy_node_get_children (action->priv->topic_node);
+	priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+	children = ephy_node_get_children (node);
 
-	return (children->len > 1);
+	return (priority != EPHY_NODE_ALL_PRIORITY) && (children->len > 1);
 }
 
 static void
@@ -336,14 +338,20 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 	}
 }
 
+#define TOPIC_NODE_DATA_KEY	"TopicNode"
+
 static void
-open_in_tabs_activate_cb (GtkWidget *menu, EphyTopicAction *action)
+open_in_tabs_activate_cb (GtkWidget *item, EphyTopicAction *action)
 {
+	EphyNode *node;
 	GList *uri_list = NULL;
 	GPtrArray *children;
 	int i;
 
-	children = ephy_node_get_children (action->priv->topic_node);
+	node = g_object_get_data (G_OBJECT (item), TOPIC_NODE_DATA_KEY);
+	g_return_if_fail (node != NULL);
+
+	children = ephy_node_get_children (node);
 	for (i = 0; i < children->len; i++)
 	{
 		const char *address;
@@ -436,13 +444,17 @@ move_right_activate_cb (GtkWidget *menu, GtkWidget *proxy)
 }
 
 static GtkWidget *
-add_open_in_tabs_menu (EphyTopicAction *action, GtkWidget *menu)
+add_open_in_tabs_menu (EphyTopicAction *action,
+		       GtkWidget *menu,
+		       EphyNode *node)
 {
 	GtkWidget *item;
 
 	item = gtk_menu_item_new_with_mnemonic (_("_Open in Tabs"));
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	g_object_set_data (G_OBJECT (item), TOPIC_NODE_DATA_KEY, node);
 
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (open_in_tabs_activate_cb), action);
@@ -459,7 +471,7 @@ build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 
 	append_bookmarks_menu (action, menu, node, TRUE);
 
-	if (can_open_in_tabs (action))
+	if (can_open_in_tabs (node))
 	{
 		GtkWidget *item;
 
@@ -467,7 +479,7 @@ build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 		gtk_widget_show (item);
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
-		add_open_in_tabs_menu (action, menu);
+		add_open_in_tabs_menu (action, menu, node);
 	}
 
 	return menu;
@@ -721,8 +733,8 @@ show_context_menu (EphyTopicAction *action, GtkWidget *proxy,
 
 	menu = gtk_menu_new ();
 
-	item = add_open_in_tabs_menu (action, menu);
-	gtk_widget_set_sensitive (item, can_open_in_tabs (action));
+	item = add_open_in_tabs_menu (action, menu, action->priv->topic_node);
+	gtk_widget_set_sensitive (item, can_open_in_tabs (action->priv->topic_node));
 
 	item = gtk_separator_menu_item_new ();
 	gtk_widget_show (item);
