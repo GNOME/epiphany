@@ -584,7 +584,7 @@ impl_get_font_list (EphyEmbedSingle *shell,
 	mozFontEnumerator = do_CreateInstance("@mozilla.org/gfx/fontenumerator;1");
 	NS_ENSURE_TRUE (mozFontEnumerator, NULL);
 
-	rv = mozFontEnumerator->EnumerateFonts (nsnull, nsnull,
+	rv = mozFontEnumerator->EnumerateFonts (langGroup, nsnull,
 					        &fontCount, &fontArray);
 	NS_ENSURE_SUCCESS (rv, NULL);
 
