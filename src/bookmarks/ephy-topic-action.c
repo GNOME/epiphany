@@ -609,9 +609,20 @@ static void
 sync_topic_properties (GtkAction *action, EphyNode *bmk)
 {
 	const char *title;
+	int priority;
 
-	title = ephy_node_get_property_string
-		(bmk, EPHY_NODE_KEYWORD_PROP_NAME);
+	priority = ephy_node_get_property_int 
+		(bmk, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+
+	if (priority == EPHY_NODE_ALL_PRIORITY)
+	{
+		title = _("Bookmarks");
+	}
+	else
+	{
+ 	       title = ephy_node_get_property_string
+        	        (bmk, EPHY_NODE_BMK_PROP_LOCATION);
+	}
 
 	g_object_set (action, "label", title, NULL);
 }
