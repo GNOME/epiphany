@@ -55,8 +55,9 @@ toolbar_get_property (GObject *object,
                       GParamSpec *pspec);
 
 static GtkTargetEntry drag_targets[] = {
-  { EPHY_DND_TOPIC_TYPE, 0, 0 },
-  { EPHY_DND_BOOKMARK_TYPE, 0, 1 },
+  { EGG_TOOLBAR_ITEM_TYPE, 0, 0 },
+  { EPHY_DND_TOPIC_TYPE, 0, 1 },
+  { EPHY_DND_BOOKMARK_TYPE, 0, 2 },
 };
 static int n_drag_targets = G_N_ELEMENTS (drag_targets);
 

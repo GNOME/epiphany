@@ -18,6 +18,7 @@
 
 #include "statusbar.h"
 #include "ephy-stock-icons.h"
+#include "ephy-string.h"
 
 #include <string.h>
 #include <time.h>
@@ -196,9 +197,17 @@ void
 statusbar_set_message (Statusbar *s,
 		       const char *message)
 {
+	char *tmp1, *tmp2;
+
 	g_return_if_fail (message != NULL);
 
+	tmp1 = ephy_str_strip_chr (message, '\r');
+	tmp2 = ephy_str_strip_chr (tmp1, '\n');
+
 	gtk_statusbar_pop (GTK_STATUSBAR (s), 0);
-	gtk_statusbar_push (GTK_STATUSBAR (s), 0, message);
+	gtk_statusbar_push (GTK_STATUSBAR (s), 0, tmp2);
+
+	g_free (tmp1);
+	g_free (tmp2);
 }
 

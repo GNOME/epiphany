@@ -277,9 +277,9 @@ ephy_nautilus_view_instance_init (EphyNautilusView *view)
 	
 	p->popup_ui = bonobo_control_get_popup_ui_component (p->control);
 	g_assert (BONOBO_IS_UI_COMPONENT (p->popup_ui));
-	bonobo_ui_util_set_ui (p->popup_ui, DATADIR, 
-			       "nautilus-epiphany-view.xml", 
-			       "EphyNutilusView", NULL);
+	bonobo_ui_util_set_ui (p->popup_ui, SHARE_DIR,
+			       "nautilus-epiphany-view.xml",
+			       "EphyNautilusView", NULL);
 	p->popup = ephy_embed_popup_control_new (p->control);
 	ephy_embed_popup_connect_verbs (EPHY_EMBED_POPUP (p->popup), p->popup_ui);
 	g_object_set_data (G_OBJECT (p->popup), "NautilisView", view);
@@ -478,8 +478,8 @@ gnv_bonobo_control_activate_cb (BonoboControl *control, gboolean state, EphyNaut
 	{
 		EphyNautilusViewPrivate *p = view->priv;
 		
-		p->ui = nautilus_view_set_up_ui (NAUTILUS_VIEW (view), DATADIR,
-						 "nautilus-epiphany-view.xml", "EphyNutilusView");
+		p->ui = nautilus_view_set_up_ui (NAUTILUS_VIEW (view), SHARE_DIR,
+						 "nautilus-epiphany-view.xml", "EphyNautilusView");
 		g_return_if_fail (BONOBO_IS_UI_COMPONENT (p->ui));
 		
 		ephy_embed_utils_build_charsets_submenu (p->ui,
