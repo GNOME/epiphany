@@ -121,7 +121,5 @@ BUILT_SOURCES = $(CORBA_SOURCE)
 
 CLEANFILES = $(CORBA_SOURCE)
 
-EXTRA_DIST = $(top_srcdir)/idl/EphyAutomation.idl
-
 dist-hook:
 	cd $(distdir); rm -f $(BUILT_SOURCES)

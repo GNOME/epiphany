@@ -414,6 +414,7 @@ data/art/Makefile
 data/ui/Makefile
 doc/Makefile
 doc/reference/Makefile
+idl/Makefile
 lib/Makefile
 lib/egg/Makefile
 lib/widgets/Makefile
