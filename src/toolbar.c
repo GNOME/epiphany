@@ -81,7 +81,6 @@ struct ToolbarPrivate
 	EggMenuMerge *ui_merge;
 	EggActionGroup *action_group;
 	gboolean visibility;
-	GtkWidget *location_entry;
 	GtkWidget *spinner;
 	GtkWidget *favicon;
 	GtkWidget *go;
@@ -457,6 +456,34 @@ update_toolbar_remove_flag (EphyToolbarsModel *model, gpointer data)
 	}
 }
 
+static GtkWidget *
+get_location_entry (Toolbar *t)
+{
+	EggAction *action;
+	GtkWidget *location;
+
+	action = egg_action_group_get_action
+		(t->priv->action_group, "Location");
+	location = ephy_location_action_get_widget
+		(EPHY_LOCATION_ACTION (action));
+
+	return location;
+}
+
+static void
+location_user_changed_cb (GtkWidget *entry, EphyWindow *window)
+{
+	EphyTab *tab;
+	char *address;
+
+	tab = ephy_window_get_active_tab (window);
+	g_return_if_fail (IS_EPHY_TAB (tab));
+
+	address = ephy_location_entry_get_location (EPHY_LOCATION_ENTRY (entry));
+	ephy_tab_set_location (tab, address, TAB_ADDRESS_EXPIRE_CURRENT);
+	g_free (address);
+}
+
 static void
 toolbar_set_window (Toolbar *t, EphyWindow *window)
 {
@@ -487,6 +514,10 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 		      "MenuMerge", t->priv->ui_merge,
 		      NULL);
 	init_bookmarks_toolbar (t);
+
+	g_signal_connect_object (get_location_entry (t), "user_changed",
+			         G_CALLBACK (location_user_changed_cb),
+			         window, 0);
 }
 
 static void
@@ -539,22 +570,6 @@ toolbar_new (EphyWindow *window)
 	return t;
 }
 
-void
-toolbar_edit_location (Toolbar *t)
-{
-	EggAction *action;
-	GtkWidget *location;
-
-	action = egg_action_group_get_action
-		(t->priv->action_group, "Location");
-	location = ephy_location_action_get_widget
-		(EPHY_LOCATION_ACTION (action));
-	g_return_if_fail (location != NULL);
-
-	ephy_location_entry_edit
-		(EPHY_LOCATION_ENTRY(location));
-}
-
 static void
 location_finished_cb (GtkWidget *location, GtkWidget *toolbar)
 {
@@ -568,14 +583,10 @@ location_finished_cb (GtkWidget *location, GtkWidget *toolbar)
 void
 toolbar_activate_location (Toolbar *t)
 {
-	EggAction *action;
 	GtkWidget *location;
 	GtkWidget *location_tb;
 
-	action = egg_action_group_get_action
-		(t->priv->action_group, "Location");
-	location = ephy_location_action_get_widget
-		(EPHY_LOCATION_ACTION (action));
+	location = get_location_entry (t);
 	g_return_if_fail (location != NULL);
 
 	location_tb = gtk_widget_get_ancestor (location, EGG_TYPE_TOOLBAR);
@@ -618,13 +629,9 @@ void
 toolbar_set_location (Toolbar *t,
 		      const char *alocation)
 {
-	EggAction *action;
 	GtkWidget *location;
 
-	action = egg_action_group_get_action
-		(t->priv->action_group, "Location");
-	location = ephy_location_action_get_widget
-		(EPHY_LOCATION_ACTION (action));
+	location = get_location_entry (t);
 	g_return_if_fail (location != NULL);
 
 	ephy_location_entry_set_location
@@ -650,13 +657,9 @@ toolbar_update_favicon (Toolbar *t)
 char *
 toolbar_get_location (Toolbar *t)
 {
-	EggAction *action;
 	GtkWidget *location;
 
-	action = egg_action_group_get_action
-		(t->priv->action_group, "Location");
-	location = ephy_location_action_get_widget
-		(EPHY_LOCATION_ACTION (action));
+	location = get_location_entry (t);
 	g_return_val_if_fail (location != NULL, NULL);
 
 	return ephy_location_entry_get_location
@@ -666,13 +669,9 @@ toolbar_get_location (Toolbar *t)
 void
 toolbar_clear_location_history (Toolbar *t)
 {
-	EggAction *action;
 	GtkWidget *location;
 
-	action = egg_action_group_get_action
-		(t->priv->action_group, "Location");
-	location = ephy_location_action_get_widget
-		(EPHY_LOCATION_ACTION (action));
+	location = get_location_entry (t),
 	g_return_if_fail (location != NULL);
 
 	ephy_location_entry_clear_history (EPHY_LOCATION_ENTRY (location));

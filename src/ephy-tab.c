@@ -59,6 +59,7 @@ struct EphyTabPrivate
 	int load_percent;
 	gboolean visibility;
 	gboolean load_status;
+	TabAddressExpire address_expire;
 	int cur_requests;
 	int total_requests;
 	int width;
@@ -152,7 +153,8 @@ ephy_tab_set_property (GObject *object,
 
 	{
 		case PROP_ADDRESS:
-			ephy_tab_set_location (tab, g_value_get_string (value));
+			ephy_tab_set_location (tab, g_value_get_string (value),
+					       TAB_ADDRESS_EXPIRE_NOW);
 			break;
 		case PROP_WINDOW:
 			ephy_tab_set_window (tab, g_value_get_object (value));
@@ -421,7 +423,7 @@ ephy_tab_set_link_message (EphyTab *tab, const char *message)
 
 	g_free (tab->priv->link_message);
 	tab->priv->link_message = g_strdup (message);
-	
+
 	g_object_notify (G_OBJECT (tab), "message");
 }
 
@@ -450,7 +452,7 @@ ephy_tab_set_window (EphyTab *tab, EphyWindow *window)
 	if (window != tab->priv->window)
 	{
 		tab->priv->window = window;
-	
+
 		g_object_notify (G_OBJECT (tab), "window");
 	}
 }
@@ -562,11 +564,14 @@ ephy_tab_link_message_cb (EphyEmbed *embed,
 static void
 ephy_tab_address_cb (EphyEmbed *embed, EphyTab *tab)
 {
-	char *address;
+	if (tab->priv->address_expire == TAB_ADDRESS_EXPIRE_NOW)
+	{
+		char *address;
 
-	ephy_embed_get_location (embed, TRUE, &address);
-	ephy_tab_set_location (tab, address);
-	g_free (address);
+		ephy_embed_get_location (embed, TRUE, &address);
+		ephy_tab_set_location (tab, address, TAB_ADDRESS_EXPIRE_NOW);
+		g_free (address);
+	}
 
 	ephy_tab_set_link_message (tab, NULL);
 	ephy_tab_set_icon_address (tab, NULL);
@@ -709,9 +714,10 @@ build_progress_from_requests (EphyTab *tab, EmbedState state)
 static void
 ensure_address (EphyTab *tab, const char *address)
 {
-	if (tab->priv->address == NULL)
-	{
-		ephy_tab_set_location (tab, address);
+	if (tab->priv->address == NULL &&
+	    tab->priv->address_expire == TAB_ADDRESS_EXPIRE_NOW)
+        {
+		ephy_tab_set_location (tab, address, TAB_ADDRESS_EXPIRE_NOW);
 	}
 }
 
@@ -744,7 +750,7 @@ ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 		}
 		else if (state & EMBED_STATE_STOP)
 		{
-			/* tab load completed, save in session */	
+			/* tab load completed, save in session */
 			Session *s;
 			s = ephy_shell_get_session (ephy_shell);
 			session_save (s, SESSION_CRASHED);
@@ -752,6 +758,7 @@ ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 			ephy_tab_set_load_percent (tab, 0);
 			ephy_tab_set_load_status (tab, FALSE);
 			ephy_tab_update_navigation_flags (tab);
+			tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
 		}
 	}
 
@@ -921,7 +928,7 @@ ephy_tab_init (EphyTab *tab)
 	char *id;
 
 	LOG ("EphyTab initialising %p", tab)
-	
+
 	single = ephy_embed_shell_get_embed_single
 		(EPHY_EMBED_SHELL (ephy_shell));
 
@@ -942,7 +949,8 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->link_message = NULL;
 	tab->priv->security_level = STATE_IS_UNKNOWN;
 	tab->priv->status_message = NULL;
-	tab->priv->zoom = 1.0;	
+	tab->priv->zoom = 1.0;
+	tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
 
 	tab->priv->embed = ephy_embed_new (G_OBJECT(single));
 	ephy_embed_shell_add_embed (EPHY_EMBED_SHELL (ephy_shell),
@@ -1063,9 +1071,9 @@ ephy_tab_update_navigation_flags (EphyTab *tab)
 	if (flags != tab->priv->nav_flags)
 	{
 		tab->priv->nav_flags = flags;
-		
+
 		g_object_notify (G_OBJECT (tab), "navigation");
-	}	
+	}
 }
 
 TabNavigationFlags
@@ -1168,13 +1176,24 @@ ephy_tab_get_location (EphyTab *tab)
 
 void
 ephy_tab_set_location (EphyTab *tab,
-		       const char *address)
+		       const char *address,
+		       TabAddressExpire expire)
 {
 	g_return_if_fail (IS_EPHY_TAB (tab));
 
 	if (tab->priv->address) g_free (tab->priv->address);
 	tab->priv->address = g_strdup (address);
-	
+
+	if (expire == TAB_ADDRESS_EXPIRE_CURRENT &&
+	    !tab->priv->load_status)
+	{
+		tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
+	}
+	else
+	{
+		tab->priv->address_expire = expire;
+	}
+
 	g_object_notify (G_OBJECT (tab), "address");
 }
 

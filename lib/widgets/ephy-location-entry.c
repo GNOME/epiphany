@@ -45,7 +45,7 @@ struct _EphyLocationEntryPrivate {
 	gint show_alternatives_timeout;
 	gboolean block_set_autocompletion_key;
 	gboolean going_to_site;
-	gboolean editing;
+	gboolean user_changed;
 
 	gchar *autocompletion_key;
 	gchar *last_completion;
@@ -104,6 +104,7 @@ static gpointer gtk_hbox_class;
 enum EphyLocationEntrySignalsEnum {
 	ACTIVATED,
 	FINISHED,
+	USER_CHANGED,
 	LAST_SIGNAL
 };
 static gint EphyLocationEntrySignals[LAST_SIGNAL];
@@ -141,13 +142,20 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		G_TYPE_NONE,
 		0,
 		G_TYPE_NONE);
+	EphyLocationEntrySignals[USER_CHANGED] = g_signal_new (
+		"user_changed", G_OBJECT_CLASS_TYPE (klass),
+		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST | G_SIGNAL_RUN_CLEANUP,
+                G_STRUCT_OFFSET (EphyLocationEntryClass, user_changed),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__VOID,
+		G_TYPE_NONE,
+		0,
+		G_TYPE_NONE);
 }
 
 static gboolean
 location_focus_out_cb (GtkWidget *widget, GdkEventFocus *event, EphyLocationEntry *w)
 {
-	w->priv->editing = FALSE;
-
 	g_signal_emit (w, EphyLocationEntrySignals[FINISHED], 0);
 
 	return FALSE;
@@ -159,8 +167,8 @@ ephy_location_entry_init (EphyLocationEntry *w)
 	EphyLocationEntryPrivate *p = g_new0 (EphyLocationEntryPrivate, 1);
 	w->priv = p;
 	p->last_action_target = NULL;
-	p->editing = FALSE;
 	p->before_completion = NULL;
+	p->user_changed = TRUE;
 
 	ephy_location_entry_build (w);
 
@@ -355,27 +363,6 @@ position_is_at_end (GtkEditable *editable)
 }
 
 static void
-real_entry_set_location (EphyLocationEntry *w,
-		         const gchar *new_location)
-{
-	EphyLocationEntryPrivate *p = w->priv;
-	int pos;
-
-	g_signal_handlers_block_by_func (G_OBJECT (p->entry),
-				         delete_text_cb, w);
-	gtk_editable_delete_text (GTK_EDITABLE (p->entry), 0, -1);
-	g_signal_handlers_unblock_by_func (G_OBJECT (p->entry),
-				           delete_text_cb, w);
-
-	g_signal_handlers_block_by_func (G_OBJECT (p->entry),
-				         insert_text_cb, w);
-	gtk_editable_insert_text (GTK_EDITABLE (p->entry), new_location, strlen(new_location),
-				  &pos);
-	g_signal_handlers_unblock_by_func (G_OBJECT (p->entry),
-				           insert_text_cb, w);
-}
-
-static void
 delete_text_cb (GtkWidget *editable,
                 int start_pos,
                 int end_pos,
@@ -405,7 +392,6 @@ insert_text_cb (GtkWidget *editable,
 		p->show_alternatives_timeout = 0;
 	}
 
-	w->priv->editing = TRUE;
 	ephy_location_entry_autocompletion_unselect_alternatives (w);
 	if (position_is_at_end (GTK_EDITABLE (editable)))
 	{
@@ -427,7 +413,7 @@ ephy_location_entry_key_press_event_cb (GtkWidget *entry, GdkEventKey *event, Ep
 		ephy_location_entry_autocompletion_hide_alternatives (w);
                 return FALSE;
 	case GDK_Escape:
-		real_entry_set_location (w, p->before_completion);
+		ephy_location_entry_set_location (w, p->before_completion);
 		gtk_editable_set_position (GTK_EDITABLE (p->entry), -1);
 		ephy_location_entry_autocompletion_hide_alternatives (w);
                 return FALSE;
@@ -470,8 +456,6 @@ ephy_location_entry_activate_cb (GtkEntry *entry, EphyLocationEntry *w)
 
 	LOG ("In ephy_location_entry_activate_cb, activating %s", content)
 
-	w->priv->editing = FALSE;
-
 	g_signal_emit (w, EphyLocationEntrySignals[ACTIVATED], 0, content, target);
 	g_signal_emit (w, EphyLocationEntrySignals[FINISHED], 0);
 
@@ -500,10 +484,25 @@ void
 ephy_location_entry_set_location (EphyLocationEntry *w,
 				  const gchar *new_location)
 {
-	if (!w->priv->editing)
-	{
-		real_entry_set_location (w, new_location);
-	}
+	EphyLocationEntryPrivate *p = w->priv;
+	int pos;
+
+	p->user_changed = FALSE;
+
+	g_signal_handlers_block_by_func (G_OBJECT (p->entry),
+				         delete_text_cb, w);
+	gtk_editable_delete_text (GTK_EDITABLE (p->entry), 0, -1);
+	g_signal_handlers_unblock_by_func (G_OBJECT (p->entry),
+				           delete_text_cb, w);
+
+	g_signal_handlers_block_by_func (G_OBJECT (p->entry),
+				         insert_text_cb, w);
+	gtk_editable_insert_text (GTK_EDITABLE (p->entry), new_location, strlen(new_location),
+				  &pos);
+	g_signal_handlers_unblock_by_func (G_OBJECT (p->entry),
+				           insert_text_cb, w);
+
+	p->user_changed = TRUE;
 }
 
 gchar *
@@ -521,11 +520,11 @@ ephy_location_entry_autocompletion_window_url_selected_cb (EphyAutocompletionWin
 {
 	if (target)
 	{
-		real_entry_set_location (w, action ? w->priv->before_completion : target);
+		ephy_location_entry_set_location (w, action ? w->priv->before_completion : target);
 	}
 	else
 	{
-		real_entry_set_location (w, w->priv->before_completion);
+		ephy_location_entry_set_location (w, w->priv->before_completion);
 		gtk_editable_set_position (GTK_EDITABLE (w->priv->entry), -1);
 	}
 }
@@ -589,7 +588,7 @@ ephy_location_entry_autocompletion_window_url_activated_cb (EphyAutocompletionWi
 	}
 	else
 	{
-		real_entry_set_location (w, target);
+		ephy_location_entry_set_location (w, target);
 	}
 
 	content = gtk_editable_get_chars (GTK_EDITABLE(w->priv->entry), 0, -1);
@@ -625,19 +624,6 @@ ephy_location_entry_autocompletion_window_hidden_cb (EphyAutocompletionWindow *a
 		g_source_remove (p->autocompletion_timeout);
 		p->autocompletion_timeout = 0;
 	}
-}
-
-void
-ephy_location_entry_edit (EphyLocationEntry *w)
-{
-	GtkWidget *toplevel;
-
-	w->priv->editing = TRUE;
-
-	toplevel = gtk_widget_get_toplevel (w->priv->entry);
-
-        gtk_window_set_focus (GTK_WINDOW(toplevel),
-                              w->priv->entry);
 }
 
 void
@@ -682,6 +668,11 @@ ephy_location_entry_editable_changed_cb (GtkEditable *editable, EphyLocationEntr
 			g_signal_emit (e, EphyLocationEntrySignals[ACTIVATED], 0, NULL, url);
 			g_free (url);
 		}
+	}
+
+	if (p->user_changed)
+	{
+		g_signal_emit (e, EphyLocationEntrySignals[USER_CHANGED], 0);
 	}
 }
 

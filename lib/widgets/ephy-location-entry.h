@@ -52,7 +52,10 @@ struct _EphyLocationEntryClass
 	void		(*activated)	(EphyLocationEntry *w,
 					 const char *content,
 					 const char *target);
+
 	void		(*finished)	(EphyLocationEntry *w);
+
+	void		(*user_changed)	(EphyLocationEntry *w);
 };
 
 /* Remember: fields are public read-only */
@@ -71,7 +74,6 @@ gchar		       *ephy_location_entry_get_location	(EphyLocationEntry *w);
 void			ephy_location_entry_set_autocompletion  (EphyLocationEntry *w,
 								 EphyAutocompletion *ac);
 void			ephy_location_entry_activate		(EphyLocationEntry *w);
-void			ephy_location_entry_edit		(EphyLocationEntry *w);
 void			ephy_location_entry_clear_history	(EphyLocationEntry *w);
 
 #endif

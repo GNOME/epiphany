@@ -32,7 +32,8 @@ get_event_info (EphyWindow *window)
 {
 	EphyEmbedEvent *info;
 
-	info = EPHY_EMBED_EVENT (g_object_get_data (window, "context_event"));
+	info = EPHY_EMBED_EVENT (g_object_get_data
+		(G_OBJECT (window), "context_event"));
 	g_return_val_if_fail (info != NULL, NULL);
 
 	return info;
@@ -228,7 +229,6 @@ popup_cmd_copy_link_address (EggAction *action,
 	EphyEmbedEvent *event;
 	const char *address;
 	const GValue *value;
-	EphyEmbed *embed;
 
 	event = get_event_info (window);
 	g_return_if_fail (IS_EPHY_EMBED_EVENT (event));

@@ -1,5 +1,36 @@
 2003-06-20  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* embed/mozilla/EphyWrapper.cpp:
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_class_init), (location_focus_out_cb),
+	(ephy_location_entry_init), (insert_text_cb),
+	(ephy_location_entry_key_press_event_cb),
+	(ephy_location_entry_activate_cb),
+	(ephy_location_entry_set_location),
+	(ephy_location_entry_autocompletion_window_url_selected_cb),
+	(ephy_location_entry_autocompletion_window_url_activated_cb),
+	(ephy_location_entry_editable_changed_cb):
+	* lib/widgets/ephy-location-entry.h:
+	* src/ephy-shell.c: (ephy_shell_new_tab):
+	* src/ephy-tab.c: (ephy_tab_set_property),
+	(ephy_tab_set_link_message), (ephy_tab_set_window),
+	(ephy_tab_address_cb), (ensure_address), (ephy_tab_net_state_cb),
+	(ephy_tab_init), (ephy_tab_update_navigation_flags),
+	(ephy_tab_set_location):
+	* src/ephy-tab.h:
+	* src/ephy-window.c: (ephy_window_notebook_switch_page_cb):
+	* src/popup-commands.c: (get_event_info),
+	(popup_cmd_copy_link_address):
+	* src/toolbar.c: (get_location_entry), (location_user_changed_cb),
+	(toolbar_set_window), (toolbar_activate_location),
+	(toolbar_set_location), (toolbar_get_location),
+	(toolbar_clear_location_history):
+	* src/toolbar.h:
+
+	Rewrite the url typed by user overwrite logic to fix bugs.
+
+2003-06-20  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/ephy-tab.c: (ephy_tab_finalize), (ephy_tab_init):
 	* src/ephy-tab.h:
 

@@ -402,9 +402,9 @@ ephy_shell_new_tab (EphyShell *shell,
 	if (flags & EPHY_NEW_TAB_HOME_PAGE ||
 	    flags & EPHY_NEW_TAB_NEW_PAGE)
 	{
-		toolbar_edit_location (toolbar);
-
+		ephy_tab_set_location (tab, "", TAB_ADDRESS_EXPIRE_NEXT);
 		load_homepage (embed);
+		toolbar_activate_location (toolbar);
 	}
 	else if (flags & EPHY_NEW_TAB_OPEN_PAGE)
 	{

@@ -1792,16 +1792,6 @@ ephy_window_get_tabs (EphyWindow *window)
 }
 
 static void
-save_old_embed_status (EphyTab *tab, EphyWindow *window)
-{
-	char *location;
-
-	location = toolbar_get_location (window->priv->toolbar);
-	ephy_tab_set_location (tab, location);
-	g_free (location);
-}
-
-static void
 update_embed_dialogs (EphyWindow *window,
 		      EphyTab *tab)
 {
@@ -1824,21 +1814,13 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 				     guint page_num,
 				     EphyWindow *window)
 {
-	EphyTab *tab, *old_tab;
+	EphyTab *tab;
 
 	g_return_if_fail (IS_EPHY_WINDOW (window));
 	if (window->priv->closing) return;
 
 	/* get the new tab */
 	tab = real_get_active_tab (window, page_num);
-
-	/* update old tab */
-	old_tab = window->priv->active_tab;
-	if (old_tab && tab != old_tab)
-	{
-		g_return_if_fail (IS_EPHY_TAB (G_OBJECT (old_tab)));
-		save_old_embed_status (old_tab, window);
-	}
 
 	/* update new tab */
 	ephy_window_set_active_tab (window, tab);
