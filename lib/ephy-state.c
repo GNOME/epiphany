@@ -124,8 +124,7 @@ ensure_states (void)
 static void
 ephy_state_window_set_size (GtkWidget *window, EphyNode *node)
 {
-	int width;
-	int height;
+	int width, height, w = -1, h = -1;
 	gboolean maximize, size;
 
 	width = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_WIDTH);
@@ -133,7 +132,8 @@ ephy_state_window_set_size (GtkWidget *window, EphyNode *node)
 	maximize = ephy_node_get_property_boolean (node, EPHY_NODE_STATE_PROP_MAXIMIZE);
 	size = ephy_node_get_property_boolean (node, EPHY_NODE_STATE_PROP_SIZE);
 
-	if (size)
+	gtk_window_get_default_size (GTK_WINDOW (window), &w, &h);
+	if (size && w == -1 && h == -1)
 	{
 		GdkScreen *screen;
 		int screen_width, screen_height;
