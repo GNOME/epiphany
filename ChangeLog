@@ -1,5 +1,12 @@
 2004-11-11  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-shell.c: (save_yourself_cb):
+
+	Don't hardcode "epiphany" as argv[0], use g_get_prgname() instead.
+	Fixes bug #118427.
+
+2004-11-11  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-session.c: (ephy_session_close):
 
 	Keep a ref on EphyShell in ephy_session_close(). Otherwise we

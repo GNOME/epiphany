@@ -239,10 +239,12 @@ save_yourself_cb (GnomeClient *client,
 		  gboolean fast,
 		  EphyShell *shell)
 {
-	char *argv[] = { "epiphany", "--load-session", NULL };
+	char *argv[] = { NULL, "--load-session", NULL };
 	char *discard_argv[] = { "rm", "-f", NULL };
 	EphySession *session;
 	char *tmp, *save_to;
+
+	LOG ("save_yourself_cb")
 
 	tmp = g_build_filename (ephy_dot_dir (),
 				"session_gnome-XXXXXX",
@@ -252,6 +254,7 @@ save_yourself_cb (GnomeClient *client,
 
 	session = EPHY_SESSION (ephy_shell_get_session (shell));
 
+	argv[0] = g_get_prgname ();
 	argv[2] = save_to;
 	gnome_client_set_restart_command
 		(client, 3, argv);
@@ -272,6 +275,8 @@ die_cb (GnomeClient* client,
 	EphyShell *shell)
 {
 	EphySession *session;
+
+	LOG ("die_cb")
 
 	session = EPHY_SESSION (ephy_shell_get_session (shell));
 	ephy_session_close (session);
