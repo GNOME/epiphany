@@ -44,6 +44,7 @@ static int n_source_drag_types = G_N_ELEMENTS (source_drag_types);
 static void egg_toolbar_editor_class_init	(EggToolbarEditorClass *klass);
 static void egg_toolbar_editor_init		(EggToolbarEditor *t);
 static void egg_toolbar_editor_finalize         (GObject *object);
+static void update_actions_list			(EggToolbarEditor *editor);
 static void update_editor_sheet                 (EggToolbarEditor *editor);
 
 enum
@@ -161,12 +162,24 @@ egg_toolbar_editor_set_merge (EggToolbarEditor *t,
 }
 
 static void
+toolbar_removed_cb (EggToolbarsModel   *model,
+	            int                 position,
+	            EggToolbarEditor   *editor)
+{
+  update_actions_list (editor);
+  update_editor_sheet (editor);
+}
+
+static void
 egg_toolbar_editor_set_model (EggToolbarEditor *t,
 			      EggToolbarsModel *model)
 {
   g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (t));
 
   t->priv->model = g_object_ref (model);
+
+  g_signal_connect_object (model, "toolbar_removed",
+			   G_CALLBACK (toolbar_removed_cb), t, 0);
 }
 
 static void
@@ -224,14 +237,16 @@ egg_toolbar_editor_class_init (EggToolbarEditorClass *klass)
 							"MenuMerge",
 							"Menu merge",
 							GTK_TYPE_UI_MANAGER,
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE |
+							G_PARAM_CONSTRUCT_ONLY));
  g_object_class_install_property (object_class,
 				  PROP_TOOLBARS_MODEL,
 				  g_param_spec_object ("ToolbarsModel",
 						       "ToolbarsModel",
 						       "Toolbars Model",
 						       EGG_TYPE_TOOLBARS_MODEL,
-						       G_PARAM_READWRITE));
+						       G_PARAM_READWRITE |
+						       G_PARAM_CONSTRUCT_ONLY));
 
   g_type_class_add_private (object_class, sizeof (EggToolbarEditorPrivate));
 }
@@ -581,7 +596,7 @@ egg_toolbar_editor_init (EggToolbarEditor *t)
   setup_editor (t);
 }
 
-void
+static void
 egg_toolbar_editor_add_action (EggToolbarEditor *editor,
 			       const char       *action_name)
 {
@@ -638,6 +653,31 @@ model_has_action (EggToolbarsModel *model, GtkAction *action)
   return FALSE;
 }
 
+static void
+update_actions_list (EggToolbarEditor *editor)
+{
+  GList *l;
+
+  if (editor->priv->actions_list)
+    g_list_free (editor->priv->actions_list);
+
+  /* Remove the already used items */
+  editor->priv->actions_list = NULL;
+
+  for (l = editor->priv->default_actions_list; l != NULL; l = l->next)
+    {
+      GtkAction *action = GTK_ACTION (l->data);
+
+      if (!model_has_action (editor->priv->model, action))
+        {
+          editor->priv->actions_list = g_list_prepend
+		(editor->priv->actions_list, action);
+        }
+    }
+
+  sort_list (editor);
+}
+
 void
 egg_toolbar_editor_load_actions (EggToolbarEditor *editor,
 				 const char       *xml_file)
@@ -662,19 +702,6 @@ egg_toolbar_editor_load_actions (EggToolbarEditor *editor,
 
   xmlFreeDoc (doc);
 
-  /* Remove the already used items */
-  editor->priv->actions_list = g_list_copy (editor->priv->default_actions_list);
-  for (l = editor->priv->default_actions_list; l != NULL; l = l->next)
-    {
-      GtkAction *action = GTK_ACTION (l->data);
-
-      if (model_has_action (editor->priv->model, action))
-        {
-          editor->priv->actions_list = g_list_remove
-		(editor->priv->actions_list, action);
-        }
-    }
-  sort_list (editor);
-
+  update_actions_list (editor);
   update_editor_sheet (editor);
 }

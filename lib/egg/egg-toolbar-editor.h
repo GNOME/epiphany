@@ -56,8 +56,6 @@ struct EggToolbarEditorClass
 GType             egg_toolbar_editor_get_type     (void);
 GtkWidget        *egg_toolbar_editor_new          (GtkUIManager *merge,
 						   EggToolbarsModel *model);
-void              egg_toolbar_editor_add_action   (EggToolbarEditor *editor,
-						   const char       *action_name);
 void              egg_toolbar_editor_load_actions (EggToolbarEditor *editor,
 						   const char       *xml_file);
 

@@ -1,3 +1,13 @@
+2004-02-19  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/egg/egg-toolbar-editor.c: (toolbar_removed_cb),
+	(egg_toolbar_editor_set_model), (egg_toolbar_editor_class_init),
+	(update_actions_list), (egg_toolbar_editor_load_actions):
+	* lib/egg/egg-toolbar-editor.h:
+
+	When removing a toolbar, make its items available again in the toolbar
+	editor. Fixes bug #131182.
+
 2004-02-18  Alexander Winston  <alexander.winston@comcast.net>
 
 	* help/C/epiphany.xml: Fixed typos in the bookmarks explanation.
