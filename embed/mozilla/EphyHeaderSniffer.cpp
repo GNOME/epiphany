@@ -69,8 +69,7 @@
 #include <bonobo/bonobo-i18n.h>
 
 EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,
-		nsIFile* aFile, nsIURI* aURL, nsIDOMDocument* aDocument, nsIInputStream* aPostData,
-                PRBool aBypassCache)
+		nsIFile* aFile, nsIURI* aURL, nsIDOMDocument* aDocument, nsIInputStream* aPostData)
 : mPersist(aPersist)
 , mEmbedPersist(aEmbedPersist)
 , mTmpFile(aFile)
@@ -319,7 +318,7 @@ nsresult EphyHeaderSniffer::InitiateDownload (nsILocalFile *aDestFile)
 	LOG ("Initiating download")
 	return InitiateMozillaDownload (mDocument, mURL, aDestFile,
 					mContentType.get(), mOriginalURI, mEmbedPersist,
-					mBypassCache, mPostData);
+					mPostData, nsnull);
 }
 
 NS_IMETHODIMP EphyHeaderSniffer::Prompt (const PRUnichar *dialogTitle, const PRUnichar *text,

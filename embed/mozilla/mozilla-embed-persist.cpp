@@ -169,7 +169,9 @@ impl_save (EphyEmbedPersist *persist)
 		      "embed", &embed,
 		      "max_size", &max_size,
 		      NULL);
-	
+
+	g_return_val_if_fail (!(flags & EMBED_PERSIST_COPY_PAGE)
+			      || embed != NULL, G_FAILED);	
 	g_return_val_if_fail (filename != NULL, G_FAILED);
 
 	EphyBrowser *browser = NULL;
@@ -244,6 +246,14 @@ impl_save (EphyEmbedPersist *persist)
         	if (NS_FAILED(rv) || !DOMDocument) return G_FAILED;
 	}
 
+
+	/* Get the current page descriptor */
+	nsCOMPtr<nsISupports> pageDescriptor;
+	if (flags & EMBED_PERSIST_COPY_PAGE)
+	{
+	        rv = browser->GetPageDescriptor(getter_AddRefs(pageDescriptor));
+	}
+
 	if (filename == NULL)
 	{
 		/* Create an header sniffer and do the save */
@@ -253,8 +263,7 @@ impl_save (EphyEmbedPersist *persist)
 
 		EphyHeaderSniffer* sniffer = new EphyHeaderSniffer
 			(webPersist, MOZILLA_EMBED_PERSIST (persist),
-			 tmpFile, inURI, DOMDocument, postData,
-			 flags & EMBED_PERSIST_BYPASSCACHE);
+			 tmpFile, inURI, DOMDocument, postData);
 		if (!sniffer) return G_FAILED;
  
 		webPersist->SetProgressListener(sniffer);
@@ -271,8 +280,7 @@ impl_save (EphyEmbedPersist *persist)
 
 		rv =  InitiateMozillaDownload (DOMDocument, inURI, destFile,
 					       nsnull, inURI, MOZILLA_EMBED_PERSIST (persist),
-					       flags & EMBED_PERSIST_BYPASSCACHE,
-					       postData);
+					       postData, pageDescriptor);
 		if (NS_FAILED (rv)) return G_FAILED;
 	}
 

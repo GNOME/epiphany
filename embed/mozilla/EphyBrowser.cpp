@@ -490,23 +490,6 @@ nsresult EphyBrowser::Find (PRBool backwards,
 	return finder->FindNext(didFind);
 }
 
-nsresult EphyBrowser::LoadDocument(nsISupports *aPageDescriptor,
-				     PRUint32 aDisplayType)
-{
-	nsresult rv;
-
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIDocShell> ds;
-	ds = do_GetInterface (mWebBrowser);
-	if (!ds) return NS_ERROR_FAILURE;
-
-	nsCOMPtr<nsIWebPageDescriptor> wpd = do_QueryInterface(ds, &rv);
-	if (!wpd || !NS_SUCCEEDED(rv)) return NS_ERROR_FAILURE;
-
-	return wpd->LoadPage(aPageDescriptor, aDisplayType);
-}
-
 nsresult EphyBrowser::GetPageDescriptor(nsISupports **aPageDescriptor)
 {
 	nsresult rv;

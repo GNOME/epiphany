@@ -53,11 +53,9 @@ typedef enum
 	EPHY_NEW_TAB_HOME_PAGE		= 1 << 0,
 	EPHY_NEW_TAB_NEW_PAGE		= 1 << 1,
 	EPHY_NEW_TAB_OPEN_PAGE		= 1 << 2,
-	EPHY_NEW_TAB_CLONE_PAGE		= 1 << 3,
 
 	/* Page mode */
 	EPHY_NEW_TAB_FULLSCREEN_MODE	= 1 << 4,
-	EPHY_NEW_TAB_SOURCE_MODE	= 1 << 5,
 
 	/* Tabs */
 	EPHY_NEW_TAB_APPEND_GROUPED	= 1 << 6,
@@ -103,6 +101,9 @@ void		    ephy_shell_show_bookmarks_editor (EphyShell *gs,
 
 void		    ephy_shell_show_history_window   (EphyShell *gs,
 						      GtkWidget *parent);
+
+void		    ephy_shell_delete_on_exit        (EphyShell *gs,
+						      const char *path);
 
 G_END_DECLS
 

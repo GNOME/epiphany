@@ -53,6 +53,7 @@
 #include <libgnomeui/gnome-stock-icons.h>
 #include <libgnomeui/gnome-icon-theme.h>
 #include <libgnome/gnome-program.h>
+#include <libgnomevfs/gnome-vfs-mime-handlers.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtktoggleaction.h>
 
@@ -600,18 +601,135 @@ window_cmd_view_zoom_normal (GtkAction *action,
 	ephy_window_set_zoom (window, 1.0);
 }
 
+static GnomeVFSMimeApplication *
+get_editor_application (void)
+{
+	GnomeVFSMimeApplication *app;
+
+	app = gnome_vfs_mime_get_default_application ("text/plain");
+	if (app == NULL)
+	{
+		g_warning ("Cannot find a text editor.");
+	}
+	return app;
+}
+
+static void
+editor_open_uri (const char *address)
+{
+	GList *uris = NULL;
+	char *canonical;
+	GnomeVFSMimeApplication *app;
+
+	canonical = gnome_vfs_make_uri_canonical (address);
+
+	uris = g_list_append (uris, canonical);
+
+	app = get_editor_application ();
+	if (app)
+	{
+		gnome_vfs_mime_application_launch (app, uris);
+		gnome_vfs_mime_application_free (app);
+	}
+
+	g_free (canonical);
+	g_list_free (uris);
+}
+
+static void
+save_source_completed_cb (EphyEmbedPersist *persist)
+{
+	const char *dest;
+
+	dest = ephy_embed_persist_get_dest (persist);
+	g_return_if_fail (dest != NULL);
+
+	ephy_shell_delete_on_exit (ephy_shell, dest);
+
+	editor_open_uri (dest);
+}
+
+static gboolean
+editor_can_open_uri (char *address)
+{
+	GnomeVFSMimeApplication *app;
+	GnomeVFSURI *uri;
+	const char *scheme;
+	gboolean result = FALSE;
+
+	app = get_editor_application ();
+
+	uri = gnome_vfs_uri_new (address);
+	scheme = uri ? gnome_vfs_uri_get_scheme (uri) : NULL;
+
+	/* Open directly only read/write protocols, otherwise
+	   you just get extra network overhead without any advantage */
+	if (scheme && strcmp (scheme, "file") != 0)
+	{
+		scheme = NULL;
+	}
+	
+	if (scheme && app && app->supported_uri_schemes)
+	{
+		if (g_list_find_custom (app->supported_uri_schemes,
+                                        scheme, (GCompareFunc) strcmp))
+		{
+			result = TRUE;
+		}
+	}
+
+	if (uri)
+	{
+		gnome_vfs_uri_unref (uri);
+	}
+
+	return result;
+}
+
+static void
+save_temp_source (EphyEmbed *embed)
+{
+	char *tmp, *base;
+	EphyEmbedPersist *persist;
+
+	base = g_build_filename (g_get_tmp_dir (), "viewsourceXXXXXX", NULL);
+	tmp = ephy_file_tmp_filename (base, "html");
+	g_free (base);
+
+	persist = ephy_embed_persist_new (embed);
+	ephy_embed_persist_set_flags (persist, EMBED_PERSIST_COPY_PAGE |
+				      EMBED_PERSIST_NO_VIEW);
+	ephy_embed_persist_set_dest (persist, tmp);
+
+	g_signal_connect (persist, "completed",
+			  G_CALLBACK (save_source_completed_cb), NULL);
+
+	ephy_embed_persist_save (persist);
+	g_object_unref (persist);
+
+	g_free (tmp);
+}
+
 void
 window_cmd_view_page_source (GtkAction *action,
 			     EphyWindow *window)
 {
-	EphyTab *tab;
+	EphyEmbed *embed;
+	char *address;
 
-	tab = ephy_window_get_active_tab (window);
-	g_return_if_fail (tab != NULL);
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (embed != NULL);
 
-	ephy_shell_new_tab (ephy_shell, window, tab, NULL,
-			    EPHY_NEW_TAB_CLONE_PAGE |
-			    EPHY_NEW_TAB_SOURCE_MODE);
+	ephy_embed_get_location (embed, TRUE, &address);
+
+	if (editor_can_open_uri (address))
+	{
+		editor_open_uri (address);
+	}
+	else
+	{
+		save_temp_source (embed);
+	}
 }
 
 void

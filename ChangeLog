@@ -1,3 +1,29 @@
+2003-10-28  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/ephy-embed-persist.h:
+	* embed/ephy-embed.c:
+	* embed/ephy-embed.h:
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_download):
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/EphyHeaderSniffer.h:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozDownload.h:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-shell.c: (delete_files), (ephy_shell_finalize),
+	(ephy_shell_new_tab), (ephy_shell_delete_on_exit):
+	* src/ephy-shell.h:
+	* src/window-commands.c: (get_editor_application),
+	(editor_open_uri), (save_source_completed_cb),
+	(editor_can_open_uri), (save_temp_source),
+	(window_cmd_view_page_source):
+
+	Open source in the default editor and
+	remove the unused copy api.
+	Add a missing include while at it.
+
 2003-10-27  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* embed/mozilla/EphyBrowser.cpp:

@@ -79,7 +79,7 @@
 nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceUri,
 				  nsILocalFile* inDestFile, const char *contentType,
 				  nsIURI* inOriginalURI, MozillaEmbedPersist *embedPersist,
-				  PRBool bypassCache, nsIInputStream *postData);
+				  nsIInputStream *postData, nsISupports *aCacheKey);
 
 class MozDownload : public nsIDownload,
                     public nsIWebProgressListener

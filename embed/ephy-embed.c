@@ -415,15 +415,6 @@ ephy_embed_reload (EphyEmbed *embed,
 }
 
 gresult
-ephy_embed_copy_page (EphyEmbed *dest,
-		      EphyEmbed *source,
-		      EmbedDisplayType display_type)
-{
-	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (dest);
-	return klass->copy_page (dest, source, display_type);
-}
-
-gresult
 ephy_embed_zoom_set (EphyEmbed *embed,
                      float zoom,
                      gboolean reflow)

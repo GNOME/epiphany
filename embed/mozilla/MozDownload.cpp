@@ -385,9 +385,12 @@ MozDownload::Resume()
 nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI,
 				  nsILocalFile* inDestFile, const char *contentType,
 				  nsIURI* inOriginalURI, MozillaEmbedPersist *embedPersist,
-				  PRBool bypassCache, nsIInputStream *postData)
+				  nsIInputStream *postData, nsISupports *aCacheKey)
 {
 	nsresult rv = NS_OK;
+
+	EmbedPersistFlags ephy_flags;
+	ephy_flags = ephy_embed_persist_get_flags (EPHY_EMBED_PERSIST (embedPersist));
 
 	PRBool isHTML = (domDocument && contentType &&
 			(strcmp (contentType, "text/html") == 0 ||
@@ -410,20 +413,15 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 
 	PRInt32 flags = nsIWebBrowserPersist::PERSIST_FLAGS_NO_CONVERSION | 
                         nsIWebBrowserPersist::PERSIST_FLAGS_REPLACE_EXISTING_FILES;
-	if (bypassCache)
-	{
-		flags |= nsIWebBrowserPersist::PERSIST_FLAGS_BYPASS_CACHE;
-	}
-	else
+	if (ephy_flags & EMBED_PERSIST_COPY_PAGE)
 	{
 		flags |= nsIWebBrowserPersist::PERSIST_FLAGS_FROM_CACHE;
 	}
-
 	webPersist->SetPersistFlags(flags);
-    
-	if (!isHTML)
+
+	if (!isHTML || ephy_flags & EMBED_PERSIST_COPY_PAGE)
 	{
-		rv = webPersist->SaveURI (sourceURI, nsnull, nsnull,
+		rv = webPersist->SaveURI (sourceURI, aCacheKey, nsnull,
 					  postData, nsnull, inDestFile);
 	}
 	else

@@ -384,8 +384,7 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 	persist = ephy_embed_persist_new (NULL);
 
 	ephy_embed_persist_set_dest (persist, dest);
-	ephy_embed_persist_set_flags
-		(persist, EMBED_PERSIST_BYPASSCACHE | EMBED_PERSIST_NO_VIEW);
+	ephy_embed_persist_set_flags (persist, EMBED_PERSIST_NO_VIEW);
 	ephy_embed_persist_set_max_size (persist, 100);
 	ephy_embed_persist_set_source (persist, favicon_url);
 

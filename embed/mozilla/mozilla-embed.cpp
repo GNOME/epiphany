@@ -99,10 +99,6 @@ static gresult
 impl_reload (EphyEmbed *embed, 
              EmbedReloadFlags flags);
 static gresult
-impl_copy_page (EphyEmbed *dest,
-		EphyEmbed *source,
-		EmbedDisplayType display_type);
-static gresult
 impl_zoom_set (EphyEmbed *embed, 
                float zoom, 
                gboolean reflow);
@@ -377,7 +373,6 @@ ephy_embed_init (EphyEmbedClass *embed_class)
 	embed_class->get_title = impl_get_title;
 	embed_class->get_location = impl_get_location;
 	embed_class->reload = impl_reload;
-	embed_class->copy_page = impl_copy_page;
 	embed_class->zoom_set = impl_zoom_set;
 	embed_class->zoom_get = impl_zoom_get;
 	embed_class->shistory_count = impl_shistory_count;
@@ -799,26 +794,6 @@ impl_reload (EphyEmbed *embed,
 			      mflags);
 	
 	return G_OK;
-}
-
-static gresult
-impl_copy_page (EphyEmbed *dest,
-		EphyEmbed *source,
-		EmbedDisplayType display_type)
-{
-	MozillaEmbedPrivate *mpriv_dest = MOZILLA_EMBED(dest)->priv;
-	MozillaEmbedPrivate *mpriv_source = MOZILLA_EMBED(source)->priv;
-
-        nsresult rv;
-
-        nsCOMPtr<nsISupports> pageDescriptor;
-        rv = mpriv_source->browser->GetPageDescriptor(getter_AddRefs(pageDescriptor));
-        if (!pageDescriptor || NS_FAILED(rv)) return G_FAILED;
-
-        rv = mpriv_dest->browser->LoadDocument(pageDescriptor, static_cast<PRUint32>(display_type));
-        if (NS_FAILED(rv)) return G_FAILED;
-
-        return G_OK;
 }
 
 static gresult

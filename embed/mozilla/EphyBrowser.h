@@ -32,6 +32,7 @@
 #include "nsCOMPtr.h"
 #include "nsIDOMEventReceiver.h"
 #include "nsIDOMDocument.h"
+#include "nsIDOMWindow.h"
 #include "nsPIDOMWindow.h"
 #include <gtkmozembed.h>
 
@@ -65,7 +66,6 @@ public:
 	nsresult Find (PRBool bacwards,
 		       PRBool *didFind);
 
-	nsresult LoadDocument(nsISupports *aPageDescriptor, PRUint32 aDisplayType);
 	nsresult GetPageDescriptor(nsISupports **aPageDescriptor);
 
 	nsresult GetSHInfo (PRInt32 *count, PRInt32 *index);

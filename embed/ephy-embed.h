@@ -86,12 +86,6 @@ typedef enum
 	EMBED_RELOAD_BYPASSPROXY = 1 << 3
 } EmbedReloadFlags;
 
-typedef enum
-{
-        DISPLAY_AS_SOURCE = 1U,
-        DISPLAY_NORMAL = 2U
-} EmbedDisplayType;
-
 typedef struct
 {
         gboolean print_to_file;
@@ -223,9 +217,6 @@ struct EphyEmbedClass
 				            char **location);
 	gresult   (* reload)               (EphyEmbed *embed,
 					    EmbedReloadFlags flags);
-	gresult   (* copy_page)		   (EphyEmbed *dest,
-					    EphyEmbed *source,
-					    EmbedDisplayType display_type);
 	gresult   (* zoom_set)             (EphyEmbed *embed,
 					    float zoom,
 					    gboolean reflow);
@@ -320,10 +311,6 @@ gresult       ephy_embed_get_location         (EphyEmbed *embed,
 
 gresult       ephy_embed_reload               (EphyEmbed *embed,
 					       EmbedReloadFlags flags);
-
-gresult	      ephy_embed_copy_page	      (EphyEmbed *dest,
-					       EphyEmbed *source,
-					       EmbedDisplayType display_type);
 
 /* Zoom */
 gresult       ephy_embed_zoom_set             (EphyEmbed *embed,

@@ -76,6 +76,7 @@ struct EphyShellPrivate
 	GtkWidget *bme;
 	GtkWidget *history_window;
 	GList *plugins;
+	GList *del_on_exit;
 };
 
 static void
@@ -279,6 +280,15 @@ ephy_shell_init (EphyShell *gs)
 }
 
 static void
+delete_files (GList *l)
+{
+	for (; l != NULL; l = l->next)
+	{
+		unlink (l->data);
+	}
+}
+
+static void
 ephy_shell_finalize (GObject *object)
 {
         EphyShell *gs = EPHY_SHELL (object);
@@ -287,6 +297,10 @@ ephy_shell_finalize (GObject *object)
 
 	g_list_foreach (gs->priv->plugins, (GFunc)g_type_module_unuse, NULL);
 	g_list_free (gs->priv->plugins);
+
+	delete_files (gs->priv->del_on_exit);
+	g_list_foreach (gs->priv->del_on_exit, (GFunc)g_free, NULL);
+	g_list_free (gs->priv->del_on_exit);
 
 	LOG ("Unref toolbars model")
 	if (gs->priv->toolbars_model)
@@ -460,8 +474,7 @@ ephy_shell_new_tab (EphyShell *shell,
 	}
 
 	grouped = ((flags & EPHY_NEW_TAB_OPEN_PAGE ||
-	            flags & EPHY_NEW_TAB_APPEND_GROUPED ||
-		    flags & EPHY_NEW_TAB_CLONE_PAGE)) &&
+	            flags & EPHY_NEW_TAB_APPEND_GROUPED)) &&
 		  !(flags & EPHY_NEW_TAB_APPEND_LAST);
 
 	if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_embed != NULL)
@@ -494,16 +507,6 @@ ephy_shell_new_tab (EphyShell *shell,
 	{
 		g_assert (url != NULL);
 		ephy_embed_load_url (embed, url);
-	}
-	else if (flags & EPHY_NEW_TAB_CLONE_PAGE)
-	{
-		EmbedDisplayType display_type;
-
-                display_type = (flags & EPHY_NEW_TAB_SOURCE_MODE) ?
-                                DISPLAY_AS_SOURCE : DISPLAY_NORMAL;
-
-		ephy_embed_load_url (embed, "about:blank");
-		ephy_embed_copy_page (embed, previous_embed, display_type);
 	}
 
 	if (flags & EPHY_NEW_TAB_FULLSCREEN_MODE)
@@ -698,3 +701,11 @@ ephy_shell_show_history_window (EphyShell *gs,
 
 	gtk_window_present (GTK_WINDOW (gs->priv->history_window));
 }
+
+void
+ephy_shell_delete_on_exit (EphyShell *gs, const char *path)
+{
+	gs->priv->del_on_exit = g_list_append (gs->priv->del_on_exit,
+					       g_strdup (path));
+}
+
