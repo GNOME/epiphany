@@ -682,7 +682,6 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 	FILE *bf;  /* bookmark file */
 	GString *name, *url;
 	char *parsedname, *topic;
-	EphyNode *keyword;
 	GList *folders = NULL;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
@@ -725,20 +724,25 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 				node = ephy_bookmarks_find_bookmark (bookmarks, url->str);
 			}
 
-			topic = folders_list_to_topic_name (folders);
-			keyword = ephy_bookmarks_find_keyword (bookmarks, topic, FALSE);
-			
-			if (keyword == NULL)
-			{
-				keyword = ephy_bookmarks_add_keyword (bookmarks, topic);
-			}
+			g_return_val_if_fail (node != NULL, FALSE);
 
-			if (node != NULL && keyword != NULL)
+			if (folders != NULL)
 			{
+				EphyNode *keyword;
+
+				topic = folders_list_to_topic_name (folders);
+				g_return_val_if_fail (topic != NULL, FALSE);
+
+				keyword = ephy_bookmarks_find_keyword (bookmarks, topic, FALSE);
+				if (keyword == NULL)
+				{
+					keyword = ephy_bookmarks_add_keyword (bookmarks, topic);
+				}
+				g_free (topic);
+
 				ephy_bookmarks_set_keyword (bookmarks, keyword, node);
 			}
 
-			g_free (topic);
 			g_free (parsedname);
 
 			break;
