@@ -458,7 +458,7 @@ delete_topic_dialog_construct (GtkWindow *parent,
 			       const char *topic)
 {
 	GtkWidget *dialog;
-	
+
 	dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
 					 GTK_DIALOG_MODAL,
 					 GTK_MESSAGE_WARNING,
@@ -614,10 +614,45 @@ add_bookmarks_source (const char *file,
 }
 
 static void
-import_from_file_response_cb (GtkDialog *dialog, gint response,
+import_bookmarks (EphyBookmarksEditor *editor,
+		  const char *filename)
+{
+	if (ephy_bookmarks_import (editor->priv->bookmarks, filename) == FALSE)
+	{
+		GtkWidget *dialog;
+		char *basename;
+
+		basename = g_filename_display_basename (filename);
+		dialog = gtk_message_dialog_new (GTK_WINDOW (editor),
+						 GTK_DIALOG_MODAL,
+						 GTK_MESSAGE_WARNING,
+						 GTK_BUTTONS_OK,
+						 _("Import failed"));
+
+		gtk_window_set_title (GTK_WINDOW (dialog), _("Import Failed"));
+		gtk_message_dialog_format_secondary_text
+			(GTK_MESSAGE_DIALOG (dialog),
+			 _("The bookmarks from \"%s\" were not imported."),
+			 basename);
+
+		gtk_window_group_add_window (GTK_WINDOW (editor)->group,
+					     GTK_WINDOW (dialog));
+
+		gtk_dialog_run (GTK_DIALOG (dialog));
+
+		g_free (basename);
+		gtk_widget_destroy (dialog);
+	}
+}
+
+static void
+import_from_file_response_cb (GtkWidget *dialog,
+			      int response,
 			      EphyBookmarksEditor *editor)
 {
 	char *filename;
+
+	gtk_widget_hide (dialog);
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
@@ -625,13 +660,13 @@ import_from_file_response_cb (GtkDialog *dialog, gint response,
 
 		if (filename != NULL)
 		{
-			ephy_bookmarks_import (editor->priv->bookmarks, filename);			
+			import_bookmarks (editor, filename);			
 
 			g_free (filename);
 		}
 	}
 
-	gtk_widget_destroy (GTK_WIDGET (dialog));
+	gtk_widget_destroy (dialog);
 }
 
 static void
@@ -690,7 +725,7 @@ import_dialog_response_cb (GtkDialog *dialog,
 		}
 		else
 		{
-			ephy_bookmarks_import (editor->priv->bookmarks, filename);
+			import_bookmarks (editor, filename);
 		}
 
 		g_value_unset (&value);
