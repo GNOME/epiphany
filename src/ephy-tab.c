@@ -67,10 +67,13 @@ static void ephy_tab_class_init (EphyTabClass *klass);
 static void ephy_tab_init (EphyTab *tab);
 static void ephy_tab_finalize (GObject *object);
 
+
 enum
 {
 	PROP_0,
-	PROP_EPHY_SHELL
+	PROP_WINDOW,
+	PROP_LOAD_STATUS,
+	PROP_ICON
 };
 
 static GObjectClass *parent_class = NULL;
@@ -106,6 +109,51 @@ ephy_tab_get_type (void)
 }
 
 static void
+ephy_tab_set_property (GObject *object,
+		       guint prop_id,
+		       const GValue *value,
+		       GParamSpec *pspec)
+{
+	EphyTab *tab = EPHY_TAB (object);
+
+	switch (prop_id)
+
+	{
+		case PROP_WINDOW:
+			tab->priv->window = g_value_get_object (value);
+			break;
+		case PROP_LOAD_STATUS:
+			tab->priv->load_status = g_value_get_int (value);
+			break;
+		case PROP_ICON:
+			/* do nothing yet */
+			break;
+		}
+}
+
+static void
+ephy_tab_get_property (GObject *object,
+		      guint prop_id,
+		      GValue *value,
+		      GParamSpec *pspec)
+{
+	EphyTab *tab = EPHY_TAB (object);
+
+	switch (prop_id)
+	{
+		case PROP_WINDOW:
+			g_value_set_object (value, tab->priv->window);
+			break;
+		case PROP_LOAD_STATUS:
+			g_value_set_int (value, tab->priv->load_status);
+			break;
+		case PROP_ICON:
+			g_value_set_string (value, tab->priv->favicon_url);
+			break;
+	}
+}
+
+static void
 ephy_tab_class_init (EphyTabClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -113,6 +161,34 @@ ephy_tab_class_init (EphyTabClass *klass)
         parent_class = g_type_class_peek_parent (klass);
 
         object_class->finalize = ephy_tab_finalize;
+	object_class->get_property = ephy_tab_get_property;
+	object_class->set_property = ephy_tab_set_property;
+
+	g_object_class_install_property (object_class,
+					 PROP_WINDOW,
+					 g_param_spec_object ("EphyWindow",
+							      "EphyWindow",
+							      "The parent EphyWindow",
+							      EPHY_WINDOW_TYPE,
+							      G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_LOAD_STATUS,
+					 g_param_spec_int ("load-status",
+							   "LoadStatus",
+							   "The tab's load status",
+							    TAB_LOAD_NONE,
+							    TAB_LOAD_COMPLETED,
+							    TAB_LOAD_NONE,
+							    G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_ICON,
+					 g_param_spec_string ("icon",
+							      "Icon address",
+							      "The tab icon's address",
+							      "",
+							      G_PARAM_READWRITE));
 }
 
 static void
