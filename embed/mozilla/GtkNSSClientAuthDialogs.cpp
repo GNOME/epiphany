@@ -249,6 +249,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	}
 
 	combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
+	g_object_unref (store);
 
         renderer = gtk_cell_renderer_text_new ();
         gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
