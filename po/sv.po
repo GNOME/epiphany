@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"POT-Creation-Date: 2003-04-12 04:40+0200\n"
-"PO-Revision-Date: 2003-04-12 04:41+0200\n"
+"POT-Creation-Date: 2003-04-14 13:03+0200\n"
+"PO-Revision-Date: 2003-04-14 13:04+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -48,13 +48,21 @@ msgstr "Webbsida"
 msgid "Web Page Viewer"
 msgstr "Webbsidevisare"
 
+#: data/bme.desktop.in.h:1
+msgid "Browse and organize your bookmarks"
+msgstr "Bläddra bland och organisera dina bokmärken"
+
+#: data/bme.desktop.in.h:2
+msgid "Web Bookmarks"
+msgstr "Webbokmärken"
+
 #: data/epiphany.desktop.in.h:1
 msgid "Browse the web"
 msgstr "Surfa på nätet"
 
-#: data/epiphany.desktop.in.h:2 src/ephy-main.c:131
-msgid "Epiphany Web Browser"
-msgstr "Webbläsaren Epiphany"
+#: data/epiphany.desktop.in.h:2
+msgid "Web Browser"
+msgstr "Webbläsare"
 
 #: data/epiphany.schemas.in.h:1
 msgid "Allow Java"
@@ -902,6 +910,7 @@ msgid "_Language encoding:"
 msgstr "_Språkkodning:"
 
 #: data/glade/prefs-dialog.glade.h:65
+#: src/bookmarks/ephy-bookmark-properties.c:338
 msgid "_Location:"
 msgstr "_Adress:"
 
@@ -1135,17 +1144,17 @@ msgstr ""
 
 #: data/starthere/smartbookmarks.xml.in.h:1
 msgid ""
-"Right click the icon and choose \"Add Bookmark\" from the menu list. When "
-"you will type a word in the toolbar entry, a list of your smart bookmarks "
-"will be displayed. Just choose one of them to perform the search. The next "
-"time you type a word, just pressing the Enter key will be enough to perform "
-"the same action."
+"Right click the links and choose \"Bookmark Page...\" from the menu list. "
+"When you will type a word in the toolbar entry, a list of your smart "
+"bookmarks will be displayed. Just choose one of them to perform the search. "
+"The next time you type a word, just pressing the Enter key will be enough to "
+"perform the same action."
 msgstr ""
-"Högerklicka på ikonen och klicka \"Lägg till bokmärke\" från menylistan. När "
-"du skriver in ett ord i verktygsradsfältet kommer en lista med dina smarta "
-"bokmärken att visas. Välj en av dem för att utföra en sökning. Nästa gång du "
-"skriver in ett ord kommer returtangenten att vara tillräckligt för att "
-"utföra samma åtgärd."
+"Högerklicka på länkarna och välj \"Lägg till bokmärke för sidan...\" från "
+"menylistan. När du skriver in ett ord i verktygsradsfältet kommer en lista "
+"med dina smarta bokmärken att visas. Välj en av dem för att utföra en "
+"sökning. Nästa gång du skriver in ett ord kommer returtangenten att vara "
+"tillräckligt för att utföra samma åtgärd."
 
 #: data/starthere/smartbookmarks.xml.in.h:2
 msgid "Smart Bookmarks"
@@ -1787,19 +1796,19 @@ msgstr ""
 "\n"
 "Vill du fortsätta?"
 
-#: lib/ephy-node.c:821 lib/ephy-node.c:827 lib/ephy-node.c:858
+#: lib/ephy-node.c:817 lib/ephy-node.c:823 lib/ephy-node.c:854
 msgid "Never"
 msgstr "Aldrig"
 
-#: lib/ephy-node.c:849
+#: lib/ephy-node.c:845
 msgid "Today at %-H:%M"
 msgstr "Idag klockan %H.%M"
 
-#: lib/ephy-node.c:851
+#: lib/ephy-node.c:847
 msgid "Yesterday at %-H:%M"
 msgstr "Igår klockan %H.%M"
 
-#: lib/ephy-node.c:853
+#: lib/ephy-node.c:849
 msgid "%A, %B %-d %Y at %-H:%M"
 msgstr "%A %-d %B %Y klockan %H.%M"
 
@@ -1820,10 +1829,25 @@ msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
 #. setup label
-#: lib/widgets/ephy-notebook.c:744 src/ephy-tab.c:581 src/ephy-tab.c:1045
+#: lib/widgets/ephy-notebook.c:744 src/ephy-tab.c:580 src/ephy-tab.c:1044
 #: src/window-commands.c:270
 msgid "Untitled"
 msgstr "Namnlös"
+
+#: src/bookmarks/ephy-bookmark-properties.c:230
+#, c-format
+msgid "%s Properties"
+msgstr "Egenskaper för %s"
+
+#: src/bookmarks/ephy-bookmark-properties.c:319
+#: src/bookmarks/ephy-new-bookmark.c:207
+msgid "_Title:"
+msgstr "_Titel:"
+
+#: src/bookmarks/ephy-bookmark-properties.c:361
+#: src/bookmarks/ephy-new-bookmark.c:230
+msgid "To_pics:"
+msgstr "_Ämnen:"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:131
 msgid "_New Topic"
@@ -1890,21 +1914,37 @@ msgstr "Ämnen"
 msgid "Title"
 msgstr "Titel"
 
-#: src/bookmarks/ephy-bookmarks.c:443
+#: src/bookmarks/ephy-bookmarks.c:52
+msgid "Search the web"
+msgstr "Sök på nätet"
+
+#: src/bookmarks/ephy-bookmarks.c:58
+msgid "News"
+msgstr "Nyheter"
+
+#: src/bookmarks/ephy-bookmarks.c:59
+msgid "People"
+msgstr "Personer"
+
+#: src/bookmarks/ephy-bookmarks.c:60
+msgid "Shop"
+msgstr "Handla"
+
+#: src/bookmarks/ephy-bookmarks.c:61
+msgid "Art"
+msgstr "Konst"
+
+#: src/bookmarks/ephy-bookmarks.c:62
+msgid "Work"
+msgstr "Arbete"
+
+#: src/bookmarks/ephy-bookmarks.c:486
 msgid "All"
 msgstr "Allt"
 
-#: src/bookmarks/ephy-bookmarks.c:481
+#: src/bookmarks/ephy-bookmarks.c:524
 msgid "Most Visited"
 msgstr "Mest besökta"
-
-#: src/bookmarks/ephy-new-bookmark.c:207
-msgid "_Title:"
-msgstr "_Titel:"
-
-#: src/bookmarks/ephy-new-bookmark.c:230
-msgid "To_pics:"
-msgstr "_Ämnen:"
 
 #: src/bookmarks/ephy-new-bookmark.c:252
 msgid "New Bookmark"
@@ -1986,6 +2026,10 @@ msgstr "Används internt av nautilusvyn"
 msgid "Launch the bookmarks editor"
 msgstr "Starta bokmärkesredigeraren"
 
+#: src/ephy-main.c:131
+msgid "Epiphany Web Browser"
+msgstr "Webbläsaren Epiphany"
+
 #: src/ephy-main.c:136
 msgid "Ephy"
 msgstr "Epiphany"
@@ -2034,31 +2078,31 @@ msgstr "Import av Konqueror-bokmärken lyckades."
 msgid "Importing Konqueror bookmarks failed."
 msgstr "Import av Konqueror-bokmärken misslyckades."
 
-#: src/ephy-tab.c:625
+#: src/ephy-tab.c:624
 msgid "site"
 msgstr "webbplats"
 
-#: src/ephy-tab.c:651
+#: src/ephy-tab.c:650
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Omdirigerar till %s..."
 
-#: src/ephy-tab.c:655
+#: src/ephy-tab.c:654
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Överför data från %s..."
 
-#: src/ephy-tab.c:659
+#: src/ephy-tab.c:658
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Väntar på auktorisering från %s..."
 
-#: src/ephy-tab.c:667
+#: src/ephy-tab.c:666
 #, c-format
 msgid "Loading %s..."
 msgstr "Läser in %s..."
 
-#: src/ephy-tab.c:671
+#: src/ephy-tab.c:670
 msgid "Done."
 msgstr "Färdig."
 
@@ -2816,6 +2860,9 @@ msgstr ""
 msgid "A GNOME browser based on Mozilla"
 msgstr "En GNOME-webbläsare, baserad på Mozilla"
 
+#~ msgid "Properties"
+#~ msgstr "Egenskaper"
+
 #~ msgid "Open in New Tab"
 #~ msgstr "Öppna i ny flik"
 
@@ -2882,9 +2929,6 @@ msgstr "En GNOME-webbläsare, baserad på Mozilla"
 
 #~ msgid "Delete Topic"
 #~ msgstr "Ta bort ämne"
-
-#~ msgid "Properties"
-#~ msgstr "Egenskaper"
 
 #~ msgid "Password"
 #~ msgstr "Lösenord"
@@ -3146,17 +3190,11 @@ msgstr "En GNOME-webbläsare, baserad på Mozilla"
 #~ msgid "Spinner"
 #~ msgstr "Snurra"
 
-#~ msgid "Stop"
-#~ msgstr "Stopp"
-
 #~ msgid "Reload"
 #~ msgstr "Läs om"
 
 #~ msgid "Home"
 #~ msgstr "Hem"
-
-#~ msgid "New"
-#~ msgstr "Ny"
 
 #~ msgid "Zoom"
 #~ msgstr "Zooma"
@@ -3419,9 +3457,6 @@ msgstr "En GNOME-webbläsare, baserad på Mozilla"
 
 #~ msgid "The exporting process has finished."
 #~ msgstr "Exportprocessen har slutförts."
-
-#~ msgid "There has been an error exporting your bookmarks."
-#~ msgstr "Ett fel har inträffat vid export av dina bokmärken."
 
 #~ msgid "XBEL (Galeon and Konqueror) Bookmarks Import Druid"
 #~ msgstr "Guide för import av XBEL-bokmärken (Galeon och Konqueror)"
@@ -6536,9 +6571,6 @@ msgstr "En GNOME-webbläsare, baserad på Mozilla"
 
 #~ msgid "0"
 #~ msgstr "0"
-
-#~ msgid "Abort"
-#~ msgstr "Avbryt"
 
 #~ msgid "Autoreload"
 #~ msgstr "Läs om automatiskt"
