@@ -37,8 +37,7 @@ ephy_extension_get_type (void)
 	
 		type = g_type_register_static (G_TYPE_INTERFACE,
 					       "EphyExtension",
-					       &our_info,
-					       G_TYPE_FLAG_ABSTRACT);
+					       &our_info, 0);
 	}
 
 	return type;
