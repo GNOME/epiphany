@@ -39,7 +39,7 @@ static char *tmp_dir = NULL;
 static GList *del_on_exit = NULL;
 
 const char *
-ephy_file_tmp_directory (void)
+ephy_file_tmp_dir (void)
 {
 	if (tmp_dir == NULL)
 	{
@@ -57,6 +57,18 @@ ephy_file_tmp_directory (void)
 	}
 
 	return tmp_dir;
+}
+
+char *
+ephy_file_downloads_dir (void)
+{
+	const char *translated_folder;
+
+	/* The name of the default downloads folder */
+	translated_folder = _("Downloads");
+
+	return g_build_filename (g_get_home_dir (), "Desktop",
+				 translated_folder, NULL);
 }
 
 char *

@@ -1087,40 +1087,38 @@ get_download_button_label ()
 	char *key, *label, *downloads_path;
 
 	key = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
-	downloads_path = g_build_path (g_get_home_dir (), "Desktop",
-				       _("Downloads"), NULL);
+	downloads_path = ephy_file_downloads_dir ();
 
-	/* fallback to Home directory */
+	/* fallback to default downloads directory */
 	if (key == NULL)
 	{
-		key = g_strdup ("~");
+		key = ephy_file_downloads_dir ();
 	}
 
 	if (g_utf8_collate (key, "~/Desktop") == 0)
 	{
-		g_free (key);
 		label = g_strdup (_("Desktop")); 
 	}
 	else if (g_utf8_collate (key, "~") == 0)
 	{
-		g_free (key);
 		/* Note that this does NOT refer to the home page but to a
 		 * user's home folder. It should be translated by the same
 		 * term as GTK+'s "Home" string to be consistent with the
 		 * filechooser */
 		label = g_strdup (_("Home"));
 	}
-	else if (g_utf8_collate (key, downloads_path) == 0)
+	else if (g_utf8_collate (key, downloads_path) == 0 ||
+		 g_utf8_collate (key, "Downloads") == 0)
 	{
-		g_free (key);
 		label = g_strdup (_("Downloads"));
 	}
 	else
 	{
-		label = key;
+		label = g_strdup (key);
 	}
 
 	g_free (downloads_path);
+	g_free (key);
 
 	return label;
 }

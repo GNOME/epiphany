@@ -49,6 +49,7 @@
 #include "mozilla-download.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
+#include "ephy-file-helpers.h"
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
 
@@ -549,8 +550,7 @@ GetFilePath (const char *filename)
 	}
 	else if (g_utf8_collate (download_dir, "Downloads") == 0)
 	{
-		tmp = g_build_filename (g_get_home_dir (), "Desktop",
-				        _("Downloads"), NULL);
+		tmp = ephy_file_downloads_dir ();
 		g_free (download_dir);
 		download_dir = tmp;
 	}

@@ -1,3 +1,20 @@
+2004-01-25  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/ephy-file-helpers.c: (ephy_file_tmp_dir),
+	(ephy_file_downloads_dir):
+	* lib/ephy-file-helpers.h:
+
+	Add a way to get the downloads dir with a comment
+	for translators.
+	Use dir instead of directory consistently with
+	the other functions.
+
+	* embed/mozilla/MozDownload.cpp:
+	* src/prefs-dialog.c: (get_download_button_label):
+	* src/window-commands.c: (save_temp_source):
+
+	Use the helper.
+
 2004-01-24  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/window-commands.c: (window_cmd_help_about):

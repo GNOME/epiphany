@@ -739,11 +739,12 @@ save_temp_source (EphyEmbed *embed)
 
 	const char *static_temp_dir;
 
-	static_temp_dir = ephy_file_tmp_directory ();
+	static_temp_dir = ephy_file_tmp_dir ();
 	if (static_temp_dir == NULL)
 	{
 		return;
 	}
+
 	base = g_build_filename (static_temp_dir, "viewsourceXXXXXX", NULL);
 	tmp = ephy_file_tmp_filename (base, "html");
 	g_free (base);
