@@ -554,12 +554,33 @@ import_dialog_response_cb (GtkDialog *dialog, gint response,
 		if (filename == NULL)
 		{
 			EphyFileChooser *dialog;
+			GtkFileFilter *filter;
 
 			dialog = ephy_file_chooser_new (_("Import bookmarks from file"),
 							GTK_WIDGET (editor),
 							GTK_FILE_CHOOSER_ACTION_OPEN,
-							NULL);
-			/* FIXME: set up some filters perhaps ? */
+							NULL, EPHY_FILE_FILTER_NONE);
+
+			ephy_file_chooser_add_mime_filter
+				(dialog,
+				 _("Firefox/Firebird/Mozilla bookmarks"),
+				 "application/x-mozilla-bookmarks", NULL);
+
+			ephy_file_chooser_add_mime_filter
+				(dialog, _("Galeon/Konqueror bookmarks"),
+				 "application/x-xbel", NULL);
+
+			ephy_file_chooser_add_mime_filter
+				(dialog, _("Epiphany bookmarks"),
+				 "text/rdf", NULL);
+
+			filter = ephy_file_chooser_add_pattern_filter (dialog,
+							      _("All Files"),
+							      "*", NULL);
+
+			gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog),
+						     filter);
+
 			g_signal_connect (dialog, "response",
 					  G_CALLBACK (import_from_file_response_cb), editor);
 

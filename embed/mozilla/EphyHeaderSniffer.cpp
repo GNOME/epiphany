@@ -349,7 +349,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 						GTK_WIDGET (window),
 						GTK_FILE_CHOOSER_ACTION_SAVE,
 						key ? key : CONF_STATE_SAVE_DIR,
-						TRUE);
+						EPHY_FILE_FILTER_ALL_SUPPORTED);
 
 		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
                                                    filename);

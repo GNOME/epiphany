@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2003 Christian Persch
+ *  Copyright (C) 2003, 2004 Christian Persch
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <glib-object.h>
 
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkfilefilter.h>
 #include <gtk/gtkfilechooserdialog.h>
 
 G_BEGIN_DECLS
@@ -36,6 +37,16 @@ G_BEGIN_DECLS
 #define EPHY_FILE_CHOOSER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_FILE_CHOOSER, EphyFileChooserClass))
 
 typedef struct EphyFileChooserPrivate EphyFileChooserPrivate;
+
+typedef enum
+{
+	EPHY_FILE_FILTER_ALL_SUPPORTED,
+	EPHY_FILE_FILTER_WEBPAGES,
+	EPHY_FILE_FILTER_IMAGES,
+	EPHY_FILE_FILTER_ALL,
+	EPHY_FILE_FILTER_NONE,
+	EPHY_FILE_FILTER_LAST = EPHY_FILE_FILTER_NONE
+} EphyFileFilterDefault;
 
 typedef struct
 {
@@ -55,12 +66,23 @@ GType		 ephy_file_chooser_get_type		(void);
 EphyFileChooser	*ephy_file_chooser_new			(const char *title,
 							 GtkWidget *parent,
 							 GtkFileChooserAction action,
-							 const char *persist_key);
+							 const char *persist_key,
+							 EphyFileFilterDefault default_filter);
 
 void		 ephy_file_chooser_set_persist_key	(EphyFileChooser *dialog,
 							 const char *key);
 
 const char	*ephy_file_chooser_get_persist_key	(EphyFileChooser *dialog);
+
+GtkFileFilter	*ephy_file_chooser_add_pattern_filter	(EphyFileChooser *dialog,
+							 const char *title,
+							 const char *first_pattern,
+							 ...);
+
+GtkFileFilter	*ephy_file_chooser_add_mime_filter	(EphyFileChooser *dialog,
+							 const char *title,
+							 const char *first_mimetype,
+							 ...);
 
 G_END_DECLS
 

@@ -287,13 +287,21 @@ ephy_print_dialog_browse_button_cb (GtkWidget *widget,
 {
 	GtkWidget *parent;
 	EphyFileChooser *fc;
+	GtkFileFilter *filter;
 
 	parent = ephy_dialog_get_control (dialog, print_props[WINDOW_PROP].id);
 
 	fc = ephy_file_chooser_new (_("Print to"),
 				    GTK_WIDGET (parent),
 				    GTK_FILE_CHOOSER_ACTION_SAVE,
-				    CONF_PRINT_DIR);
+				    CONF_PRINT_DIR, EPHY_FILE_FILTER_NONE);
+
+	filter = ephy_file_chooser_add_mime_filter (fc, _("Postscript files"),
+					   "application/postscript", NULL);
+
+	ephy_file_chooser_add_pattern_filter (fc, _("All Files"), "*", NULL);
+
+	gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (fc), filter);
 
 	g_signal_connect (GTK_DIALOG (fc), "response",
 			  G_CALLBACK (print_filechooser_response_cb),

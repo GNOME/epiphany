@@ -1,4 +1,24 @@
 2004-05-08  Christian Persch  <chpe@cvs.gnome.org>
+	* lib/ephy-file-chooser.c: (ephy_file_chooser_add_pattern_filter),
+	(ephy_file_chooser_add_mime_filter), (ephy_file_chooser_new):
+	* lib/ephy-file-chooser.h:
+
+	Add convenience functions for creating a filter with a bunch of mime
+	types or patterns and add it to a file chooser. Those should really
+	be in gtk+; see bug #142142.
+
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/FilePicker.cpp:
+	* embed/print-dialog.c: (ephy_print_dialog_browse_button_cb):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(import_dialog_response_cb):
+	* src/prefs-dialog.c: (prefs_download_path_button_clicked_cb):
+	* src/window-commands.c: (window_cmd_file_open):
+
+	Add some filters to the file chooser dialogues.
+
+2004-05-08  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/EphyHeaderSniffer.cpp:
 	* embed/mozilla/EphyHeaderSniffer.h:

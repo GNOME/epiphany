@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2003 Marco Pesenti Gritti
- *  Copyright (C) 2003 Christian Persch
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 
 #include <gtk/gtkstock.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
+#include <glib/gi18n.h>
 
 #define EPHY_FILE_CHOOSER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FILE_CHOOSER, EphyFileChooserPrivate))
 
@@ -174,6 +175,68 @@ ephy_file_chooser_get_persist_key (EphyFileChooser *dialog)
 	return dialog->priv->persist_key;
 }
 
+/* This function should really be in gtk+, see bug 142142 */
+
+GtkFileFilter *
+ephy_file_chooser_add_pattern_filter (EphyFileChooser *dialog,
+				      const char *title,
+				      const char *first_pattern,
+				      ...)
+{
+	GtkFileFilter *filth;
+	va_list args;
+	const char *pattern;
+
+	filth = gtk_file_filter_new ();
+
+	va_start (args, first_pattern);
+
+	pattern = first_pattern;
+	while (pattern != NULL)
+	{
+		gtk_file_filter_add_pattern (filth, pattern);
+		pattern = va_arg (args, const char *);
+	}
+	va_end (args);
+
+	gtk_file_filter_set_name (filth, title);
+
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filth);
+
+	return filth;
+}
+
+/* This function should really be in gtk+, see bug 142142 */
+
+GtkFileFilter *
+ephy_file_chooser_add_mime_filter (EphyFileChooser *dialog,
+				   const char *title,
+				   const char *first_mimetype,
+				   ...)
+{
+	GtkFileFilter *filth;
+	va_list args;
+	const char *mimetype;
+
+	filth = gtk_file_filter_new ();
+
+	va_start (args, first_mimetype);
+
+	mimetype = first_mimetype;
+	while (mimetype != NULL)
+	{
+		gtk_file_filter_add_mime_type (filth, mimetype);
+		mimetype = va_arg (args, const char *);
+	}
+	va_end (args);
+
+	gtk_file_filter_set_name (filth, title);
+
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filth);
+
+	return filth;
+}
+
 static void
 ephy_file_chooser_set_property (GObject *object,
 				guint prop_id,
@@ -233,9 +296,13 @@ EphyFileChooser	*
 ephy_file_chooser_new (const char *title,
 		       GtkWidget *parent,
 		       GtkFileChooserAction action,
-		       const char *persist_key)
+		       const char *persist_key,
+		       EphyFileFilterDefault default_filter)
 {
 	EphyFileChooser *dialog;
+	GtkFileFilter *filter[EPHY_FILE_FILTER_LAST];
+
+	g_return_val_if_fail (default_filter >= 0 && default_filter <= EPHY_FILE_FILTER_LAST, NULL);
 
 	dialog = EPHY_FILE_CHOOSER (g_object_new (EPHY_TYPE_FILE_CHOOSER,
 						  "title", title,
@@ -272,6 +339,44 @@ ephy_file_chooser_new (const char *title,
 					NULL);
 		gtk_dialog_set_default_response (GTK_DIALOG (dialog),
 						 GTK_RESPONSE_ACCEPT);
+	}
+
+	if (default_filter != EPHY_FILE_FILTER_NONE)
+	{
+		filter[EPHY_FILE_FILTER_ALL_SUPPORTED] =
+			ephy_file_chooser_add_mime_filter
+				(dialog,
+				 _("All supported types"),
+				 "text/html",
+				 "application/xhtml+xml",
+				 "text/xml",
+				 "image/png",
+				 "image/jpeg",
+				 "image/gif",
+				 NULL);
+
+		filter[EPHY_FILE_FILTER_WEBPAGES] =
+			ephy_file_chooser_add_mime_filter
+				(dialog, _("Web pages"),
+				 "text/html",
+				 "application/xhtml+xml",
+				 "text/xml",
+				 NULL);
+
+		filter[EPHY_FILE_FILTER_IMAGES] =
+			ephy_file_chooser_add_mime_filter
+				(dialog, _("Images"),
+				 "image/png",
+				 "image/jpeg",
+				 "image/gif",
+				 NULL);
+
+		filter[EPHY_FILE_FILTER_ALL] =
+			ephy_file_chooser_add_pattern_filter
+				(dialog, _("All files"), "*", NULL);
+
+		gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog),
+					     filter[default_filter]);
 	}
 
 	if (parent != NULL)

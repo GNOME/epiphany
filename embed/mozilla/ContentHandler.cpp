@@ -140,7 +140,8 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 
 	dialog = ephy_file_chooser_new (_("Save"), parentWindow,
 					GTK_FILE_CHOOSER_ACTION_SAVE,
-					CONF_STATE_SAVE_DIR);
+					CONF_STATE_SAVE_DIR,
+					EPHY_FILE_FILTER_ALL);
 	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
 					   NS_ConvertUTF16toUTF8 (aDefaultFile).get());
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
