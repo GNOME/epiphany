@@ -536,7 +536,7 @@ show_context_menu (EphyBookmarkAction *action,
 		   GdkEventButton *event,
 		   GtkMenuPositionFunc func)
 {
-	GtkWidget *menu, *item;
+	GtkWidget *menu, *item, *image;
 	gboolean last;
 
 	menu = gtk_menu_new ();
@@ -568,8 +568,11 @@ show_context_menu (EphyBookmarkAction *action,
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
-	item = gtk_image_menu_item_new_from_stock (GTK_STOCK_REMOVE, NULL);
+	item = gtk_image_menu_item_new_with_mnemonic (_("_Remove from Toolbar"));
 	gtk_widget_show (item);
+	image = gtk_image_new_from_stock (GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	gtk_widget_show (image);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (remove_activate_cb), proxy);
