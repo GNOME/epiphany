@@ -1,3 +1,12 @@
+2004-01-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/EphyAboutRedirector.cpp:
+	* embed/mozilla/EphyAboutRedirector.h:
+
+	Use NS_ENSURE_SUCCESS/NS_ENSURE_TRUE at appropriate places instead of
+	silent "if (...) return ...;".
+	Really kill "about:options".
+
 2004-01-10  Xan Lopez  <xan@gnome.org>
 
 	* data/ui/epiphany-ui.xml:
@@ -54,7 +63,11 @@
 	* lib/ephy-state.c: Fixed a logic error in using & instead of &&
 	(bug #130919, Dave Jones).
 
+<<<<<<< ChangeLog
+2004-01-08  Chris Lahey  <clahey@ximian.com>
+=======
 2004-01-08  Christopher James Lahey  <clahey@ximian.com>
+>>>>>>> 1.1255
 
 	* embed/mozilla/ContentHandler.cpp (MIMEAskAction): Don't save the
 	file if disable_save_to_disk is on.

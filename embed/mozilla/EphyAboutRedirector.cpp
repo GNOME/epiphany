@@ -36,6 +36,10 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "EphyAboutRedirector.h"
 #include "nsNetCID.h"
 #include "nsIIOService.h"
@@ -68,23 +72,26 @@ EphyAboutRedirector::NewChannel(nsIURI *aURI, nsIChannel **result)
 	NS_ENSURE_ARG(aURI);
 	nsCAutoString path;
     	(void)aURI->GetPath(path);
-	nsresult rv;
-	nsCOMPtr<nsIIOService> ioService(do_GetService(kIOServiceCID, &rv));
-	if (NS_FAILED(rv))
-		return rv;	
+
+	nsCOMPtr<nsIIOService> ioService(do_GetService(kIOServiceCID));
+	NS_ENSURE_TRUE (ioService, NS_ERROR_FAILURE);
 
 	for (int i = 0; i< kRedirTotal; i++) 
 	{
 		if (!PL_strcasecmp(path.get(), kRedirMap[i].id))
 		{
 			nsCOMPtr<nsIChannel> tempChannel;
-			rv = ioService->NewChannel(nsDependentCString(kRedirMap[i].url),
-               			                   nsnull, nsnull, getter_AddRefs(tempChannel));
+			ioService->NewChannel(nsDependentCString(kRedirMap[i].url),
+               			              nsnull, nsnull, getter_AddRefs(tempChannel));
+			NS_ENSURE_TRUE (tempChannel, NS_ERROR_FAILURE);
+
 			*result = tempChannel.get();
 			NS_ADDREF(*result);
-			return rv;
+
+			return NS_OK;
 		}
 	}
+
 	NS_ASSERTION(0, "EphyAboutRedirector called for unknown case");
 	return NS_ERROR_ILLEGAL_VALUE;
 }
@@ -100,4 +107,3 @@ EphyAboutRedirector::Create(nsISupports *aOuter, REFNSIID aIID, void **aResult)
 	NS_RELEASE(about);
 	return rv;
 }
-
