@@ -40,6 +40,8 @@
 #include "window-commands.h"
 #include "ephy-file-helpers.h"
 #include "ephy-debug.h"
+#include "ephy-new-bookmark.h"
+#include "ephy-stock-icons.h"
 
 static GtkTargetEntry page_drag_types [] =
 {
@@ -68,6 +70,10 @@ static void cmd_open_bookmarks_in_tabs    (EggAction *action,
 					   EphyHistoryWindow *editor);
 static void cmd_open_bookmarks_in_browser (EggAction *action,
 					   EphyHistoryWindow *editor);
+static void cmd_delete                    (EggAction *action,
+                                           EphyHistoryWindow *editor);
+static void cmd_bookmark_page             (EggAction *action,
+                                           EphyHistoryWindow *editor);
 static void cmd_clear			  (EggAction *action,
 				           EphyHistoryWindow *editor);
 static void cmd_close			  (EggAction *action,
@@ -119,6 +125,12 @@ static EggActionGroupEntry ephy_history_ui_entries [] = {
 
 	{ "Clear", N_("C_lear History"), GTK_STOCK_CLEAR, NULL,
 	  NULL, G_CALLBACK (cmd_clear), NULL },
+
+	{ "Delete", N_("_Delete"), GTK_STOCK_DELETE, NULL,
+	  NULL, G_CALLBACK (cmd_delete), NULL},
+
+	{ "BookmarkPage", N_("Boo_kmark Page..."), EPHY_STOCK_BOOKMARK_PAGE, "<control>D",
+	  NULL, G_CALLBACK (cmd_bookmark_page), NULL },
 
 	{ "Close", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
 	  NULL, G_CALLBACK (cmd_close), NULL },
@@ -249,14 +261,14 @@ cmd_copy (EggAction *action,
 	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->pages_view)))
 	{
 		GList *selection;
-	
+
 		selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->pages_view));
 
 		if (g_list_length (selection) == 1)
 		{
 			const char *tmp;
 			EphyNode *node = EPHY_NODE (selection->data);
-			tmp = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_LOCATION);	
+			tmp = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_LOCATION);
 			gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), tmp, -1);
 		}
 
@@ -294,6 +306,49 @@ cmd_select_all (EggAction *action,
 		sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (pages_view));
 		gtk_tree_selection_select_all (sel);
 	}
+}
+
+static void
+cmd_delete (EggAction *action,
+            EphyHistoryWindow *editor)
+{
+	if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->pages_view)))
+	{
+		ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->pages_view));
+	}
+}
+
+static void
+cmd_bookmark_page (EggAction *action,
+                   EphyHistoryWindow *editor)
+{
+        GtkWindow *window;
+        EphyBookmarks *bookmarks;
+        GtkWidget *new_bookmark;
+        GList *selection;
+
+        window = GTK_WINDOW(get_target_window (editor));
+        bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+
+        selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->pages_view));
+
+	if (g_list_length (selection) == 1)
+	{
+		const char *location;
+		const char *title;
+		EphyNode *node;
+
+		node = EPHY_NODE (selection->data);
+		location = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_LOCATION);
+		title = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_TITLE);
+		new_bookmark = ephy_new_bookmark_new
+			(bookmarks, window, location);
+		ephy_new_bookmark_set_title
+			(EPHY_NEW_BOOKMARK (new_bookmark), title);
+		gtk_dialog_run (GTK_DIALOG (new_bookmark));
+		gtk_widget_destroy (new_bookmark);
+	}
+	g_list_free (selection);
 }
 
 static void
@@ -417,6 +472,7 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 	gboolean cut, copy, paste, select_all;
 	gboolean pages_focus, pages_selection;
 	gboolean pages_multiple_selection;
+	gboolean delete, bookmark_page;
 	EggActionGroup *action_group;
 	EggAction *action;
 	char *open_in_window_label, *open_in_tab_label, *copy_label;
@@ -428,7 +484,7 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 		(EPHY_NODE_VIEW (editor->priv->pages_view),
 		 &pages_multiple_selection);
 	focus_widget = gtk_window_get_focus (GTK_WINDOW (editor));
-	
+
 	if (GTK_IS_EDITABLE (focus_widget))
 	{
 		gboolean has_selection;
@@ -436,7 +492,7 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 
 		has_selection = gtk_editable_get_selection_bounds
 			(GTK_EDITABLE (focus_widget), NULL, NULL);
-		clipboard_contains_text = gtk_clipboard_wait_is_text_available 
+		clipboard_contains_text = gtk_clipboard_wait_is_text_available
 			(gtk_clipboard_get (GDK_SELECTION_CLIPBOARD));
 
 		cut = has_selection;
@@ -475,6 +531,8 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 
 	open_in_window = (pages_focus && pages_selection);
 	open_in_tab = (pages_focus && pages_selection);
+        delete = (pages_focus && pages_selection);
+	bookmark_page = (pages_focus && pages_selection && !pages_multiple_selection);
 
 	action_group = editor->priv->action_group;
 	action = egg_action_group_get_action (action_group, "OpenInWindow");
@@ -492,6 +550,10 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 	g_object_set (action, "sensitive", paste, NULL);
 	action = egg_action_group_get_action (action_group, "SelectAll");
 	g_object_set (action, "sensitive", select_all, NULL);
+	action = egg_action_group_get_action (action_group, "Delete");
+	g_object_set (action, "sensitive", delete, NULL);
+	action = egg_action_group_get_action (action_group, "BookmarkPage");
+	g_object_set (action, "sensitive", bookmark_page, NULL);
 }
 
 static void
