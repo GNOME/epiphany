@@ -6,9 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"POT-Creation-Date: 2003-08-21 01:21+0200\n"
-"PO-Revision-Date: 2003-08-21 01:55-0100\n"
-"Last-Translator: Samuel Jon Gunnarsson <sammi@techattack.nu>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-04-03 21:50+0000\n"
+"PO-Revision-Date: 2004-03-13 08:55-0000\n"
+"Last-Translator: helgi <helgi@trance.is>\n"
 "Language-Team: Icelandic <gnome@techattack.nu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -18,40 +19,84 @@ msgstr ""
 msgid "Epiphany automation"
 msgstr ""
 
-#: data/GNOME_Epiphany_NautilusView.server.in.h:1
-msgid "Epiphany Nautilus view"
-msgstr ""
-
-#: data/GNOME_Epiphany_NautilusView.server.in.h:2
-msgid "Epiphany Nautilus view factory"
-msgstr ""
-
-#: data/GNOME_Epiphany_NautilusView.server.in.h:3
-msgid "Epiphany content view component"
-msgstr ""
-
-#: data/GNOME_Epiphany_NautilusView.server.in.h:4
-msgid "Epiphany content view component's factory"
-msgstr ""
-
-#: data/GNOME_Epiphany_NautilusView.server.in.h:5
-msgid "View as Web Page"
-msgstr ""
-
-#: data/GNOME_Epiphany_NautilusView.server.in.h:6
-msgid "Web Page"
-msgstr ""
-
-#: data/GNOME_Epiphany_NautilusView.server.in.h:7
-msgid "Web Page Viewer"
-msgstr ""
-
 #: data/bme.desktop.in.h:1
 msgid "Browse and organize your bookmarks"
 msgstr ""
 
 #: data/bme.desktop.in.h:2
 msgid "Web Bookmarks"
+msgstr ""
+
+#: data/epiphany-lockdown.schemas.in.h:1
+msgid ""
+"A list of protocols to be considered safe in addition to the default, when "
+"disable_unsafe_protocols is enabled."
+msgstr ""
+
+#: data/epiphany-lockdown.schemas.in.h:2
+msgid "Additional safe protocols"
+msgstr ""
+
+#: data/epiphany-lockdown.schemas.in.h:3
+msgid "Disable Arbitrary URLs"
+msgstr ""
+
+#: data/epiphany-lockdown.schemas.in.h:4
+msgid "Disable Bookmark Editing"
+msgstr ""
+
+#: data/epiphany-lockdown.schemas.in.h:5
+msgid "Disable History"
+msgstr ""
+
+#: data/epiphany-lockdown.schemas.in.h:6
+#, fuzzy
+msgid "Disable JavaScript chrome control"
+msgstr "Virkja JavaScript"
+
+#: data/epiphany-lockdown.schemas.in.h:7
+msgid "Disable JavaScript's control over window chrome."
+msgstr ""
+
+#: data/epiphany-lockdown.schemas.in.h:8
+#, fuzzy
+msgid "Disable Toolbar Editing"
+msgstr "Tólstikuritill"
+
+#: data/epiphany-lockdown.schemas.in.h:9
+msgid ""
+"Disable all historical information by disabling the back button, not "
+"allowing the history dialog and hiding the most used bookmarks list."
+msgstr ""
+
+#: data/epiphany-lockdown.schemas.in.h:10
+msgid "Disable the user's ability to edit their bookmarks."
+msgstr ""
+
+#: data/epiphany-lockdown.schemas.in.h:11
+msgid "Disable the user's ability to edit toolbars."
+msgstr ""
+
+#: data/epiphany-lockdown.schemas.in.h:12
+msgid "Disable the user's ability to type in a URL to epiphany."
+msgstr ""
+
+#: data/epiphany-lockdown.schemas.in.h:13
+msgid "Disable unsafe protocols"
+msgstr ""
+
+#: data/epiphany-lockdown.schemas.in.h:14
+msgid ""
+"Disables loading of content from unsafe protocols. Safe protocols are http: "
+"and https:."
+msgstr ""
+
+#: data/epiphany-lockdown.schemas.in.h:15
+msgid "Hide menubar by default"
+msgstr ""
+
+#: data/epiphany-lockdown.schemas.in.h:16
+msgid "Hide the menubar by default."
 msgstr ""
 
 #: data/epiphany.desktop.in.h:1
@@ -71,15 +116,16 @@ msgid "Allow popups"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:3
-msgid "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
+msgid ""
+"Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:4
-msgid "Ask for download destination"
+msgid "Always show the tab bar"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:5
-msgid "Ask for download destination."
+msgid "Automatic downloads"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:6
@@ -87,356 +133,486 @@ msgid "Autowrap for find in page"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:7
-msgid "Cookie accept"
+msgid "Browse with caret"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:8
-msgid "Default encoding"
+msgid "Cookie accept"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:9
-msgid "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
+msgid "Default encoding"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:10
-msgid "Default font type"
+msgid ""
+"Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-HKSCS"
+"\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", \"HZ-GB-"
+"2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862\", \"IBM864"
+"\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-"
+"8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", "
+"\"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-"
+"9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", "
+"\"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", "
+"\"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874"
+"\", \"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
+"\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
+"\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
+"\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", "
+"\"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", "
+"\"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", "
+"\"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712"
+"\", \"x-viet-vps\" and \"x-windows-949\"."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:11
-msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
+msgid "Default font type"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:12
+msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
+msgstr ""
+
+#: data/epiphany.schemas.in.h:13
 msgid "Enable Java"
 msgstr "Virkja Java"
 
-#: data/epiphany.schemas.in.h:13
+#: data/epiphany.schemas.in.h:14
 msgid "Enable Java."
 msgstr "Virkja Java."
 
-#: data/epiphany.schemas.in.h:14
+#: data/epiphany.schemas.in.h:15
 msgid "Enable JavaScript"
 msgstr "Virkja JavaScript"
 
-#: data/epiphany.schemas.in.h:15
+#: data/epiphany.schemas.in.h:16
 msgid "Enable JavaScript."
 msgstr "Virkja JavaScript."
 
-#: data/epiphany.schemas.in.h:16
+#: data/epiphany.schemas.in.h:17
 msgid "Filename to print to"
 msgstr ""
 
-#: data/epiphany.schemas.in.h:17
+#: data/epiphany.schemas.in.h:18
 msgid "Filename to print to."
 msgstr ""
 
-#: data/epiphany.schemas.in.h:18
-msgid "For find in page, whether to start again at the beginning after reaching the end of the page."
-msgstr ""
-
 #: data/epiphany.schemas.in.h:19
-msgid "Home page"
+msgid ""
+"For find in page, whether to start again at the beginning after reaching the "
+"end of the page."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:20
+msgid "History pages time range"
+msgstr ""
+
+#: data/epiphany.schemas.in.h:21
+msgid "Home page"
+msgstr ""
+
+#: data/epiphany.schemas.in.h:22
 msgid "ISO-8859-1"
 msgstr "ISO-8859-1"
 
-#: data/epiphany.schemas.in.h:21
+#: data/epiphany.schemas.in.h:23
 msgid "Languages"
 msgstr "Tungumál"
 
-#: data/epiphany.schemas.in.h:22
+#: data/epiphany.schemas.in.h:24
 msgid "Match case for find in page"
 msgstr ""
 
-#: data/epiphany.schemas.in.h:23
+#: data/epiphany.schemas.in.h:25
 msgid "Match case for find in page."
 msgstr ""
 
-#: data/epiphany.schemas.in.h:24
-msgid "Middle click to open the web page pointed to by the currently selected text"
-msgstr ""
-
-#: data/epiphany.schemas.in.h:25
-msgid "Middle clicking on the main view pane will open the web page pointed to by the currently selected text."
-msgstr ""
-
 #: data/epiphany.schemas.in.h:26
-msgid "Open in tabs by default."
+msgid ""
+"Middle click to open the web page pointed to by the currently selected text"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:27
-msgid "Paper type"
+msgid ""
+"Middle clicking on the main view pane will open the web page pointed to by "
+"the currently selected text."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:28
-msgid "Paper type. Supported values are \"A4\", \"Letter\", \"Legal\" and \"Executive\"."
+msgid "Paper type"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:29
-msgid "Preferred languages, two letter codes."
+msgid ""
+"Paper type. Supported values are \"A4\", \"Letter\", \"Legal\" and "
+"\"Executive\"."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:30
-msgid "Printer name"
+msgid "Preferred languages, two letter codes."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:31
-msgid "Printer name."
+msgid "Printer name"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:32
-msgid "Printing bottom margin"
+msgid "Printer name."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:33
-msgid "Printing bottom margin (in mm)."
+msgid "Printing bottom margin"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:34
-msgid "Printing left margin"
+msgid "Printing bottom margin (in mm)."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:35
-msgid "Printing left margin (in mm)."
+msgid "Printing left margin"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:36
-msgid "Printing right margin"
+msgid "Printing left margin (in mm)."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:37
-msgid "Printing right margin (in mm)."
+msgid "Printing right margin"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:38
-msgid "Printing top margin"
+msgid "Printing right margin (in mm)."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:39
-msgid "Printing top margin (in mm)."
+msgid "Printing top margin"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:40
-msgid "Show bookmarks bar by default"
+msgid "Printing top margin (in mm)."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:41
-msgid "Show bookmarks bar by default."
+msgid "Show bookmarks bar by default"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:42
-msgid "Show download details"
+msgid "Show bookmarks bar by default."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:43
-msgid "Show download details."
-msgstr ""
-
-#: data/epiphany.schemas.in.h:44
 msgid "Show statusbar by default"
 msgstr ""
 
-#: data/epiphany.schemas.in.h:45
+#: data/epiphany.schemas.in.h:44
 msgid "Show statusbar by default."
 msgstr ""
 
+#: data/epiphany.schemas.in.h:45
+msgid ""
+"Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
+"\", \"today\"."
+msgstr ""
+
 #: data/epiphany.schemas.in.h:46
-msgid "Show toolbars by default"
+msgid "Show the tab bar also when there is only one tab open."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:47
-msgid "Show toolbars by default."
+msgid "Show toolbars by default"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:48
-msgid "Size of disk cache"
+msgid "Show toolbars by default."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:49
-msgid "Size of disk cache, in MB."
+msgid "Size of disk cache"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:50
-msgid "The currently selected fonts language"
+msgid "Size of disk cache, in MB."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:51
-msgid "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-baltic\" (baltic languages), \"x-central-euro\" (central european languages), \"x-cyrillic\" (languages written with cyrillic alphabet), \"el\" (greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-CN\" (simplified chinese), \"th\" (thai), \"zh-TW\" (traditional chinese), \"tr\" (turkish), \"x-unicode\" (other languages), \"x-western\" (languages written in latin script), \"x-tamil\" (tamil) and \"x-devanagari\" (devanagari)."
+msgid "The bookmark informations shown in the editor view"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:52
-msgid "The encoding autodetector. Empty string means autodetect is off"
+msgid ""
+"The bookmark informations shown in the editor view. Valid values in the list "
+"are \"address\" and \"title\"."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:53
-msgid "The encoding autodetector. Valid entries are \"\" (autodetectors off), \"cjk_parallel_state_machine\" (autodetect east asian encodings), \"ja_parallel_state_machine\" (autodetect japanese encodings), \"ko_parallel_state_machine\" (autodetect korean encodings), \"ruprob\" (autodetect russian encodings), \"ukprob\" (autodetect ukrainian encodings), \"zh_parallel_state_machine\" (autodetect chinese encodings), \"zhcn_parallel_state_machine\" (autodetect simplified chinese encodings), \"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) and \"universal_charset_detector\" (autodetect most encodings)."
+msgid "The currently selected fonts language"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:54
-msgid "Use own colors"
-msgstr "Nota eigin liti"
+msgid ""
+"The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
+"baltic\" (baltic languages), \"x-central-euro\" (central european "
+"languages), \"x-cyrillic\" (languages written with cyrillic alphabet), \"el"
+"\" (greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-CN"
+"\" (simplified chinese), \"th\" (thai), \"zh-TW\" (traditional chinese), \"tr"
+"\" (turkish), \"x-unicode\" (other languages), \"x-western\" (languages "
+"written in latin script), \"x-tamil\" (tamil) and \"x-devanagari"
+"\" (devanagari)."
+msgstr ""
 
 #: data/epiphany.schemas.in.h:55
-msgid "Use own fonts"
-msgstr "Nota eigið letur"
+msgid "The downloads folder"
+msgstr ""
 
 #: data/epiphany.schemas.in.h:56
-msgid "Use tabs"
-msgstr "Nota flipa"
+msgid "The encoding autodetector. Empty string means autodetect is off"
+msgstr ""
 
 #: data/epiphany.schemas.in.h:57
-msgid "Use your own colors instead of the colors the page requests."
+msgid ""
+"The encoding autodetector. Valid entries are \"\" (autodetectors off), "
+"\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
+"\"ja_parallel_state_machine\" (autodetect japanese encodings), "
+"\"ko_parallel_state_machine\" (autodetect korean encodings), \"ruprob"
+"\" (autodetect russian encodings), \"ukprob\" (autodetect ukrainian "
+"encodings), \"zh_parallel_state_machine\" (autodetect chinese encodings), "
+"\"zhcn_parallel_state_machine\" (autodetect simplified chinese encodings), "
+"\"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) "
+"and \"universal_charset_detector\" (autodetect most encodings)."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:58
-msgid "Use your own fonts instead of the fonts the page requests."
+msgid "The page informations shown in the history view"
 msgstr ""
 
 #: data/epiphany.schemas.in.h:59
-msgid "Where to accept cookies from. Possible values are \"anywhere\", \"current site\" and \"nowhere\"."
+msgid ""
+"The page informations shown in the history view. Valid values in the list "
+"are \"address\", \"title\"."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:60
-msgid "Whether to print the date in the footer"
+msgid "The path of the folder where downloads are saved."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:61
-msgid "Whether to print the date in the footer."
+msgid "Use caret browsing mode."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:62
-msgid "Whether to print the page address in the header"
-msgstr ""
+msgid "Use own colors"
+msgstr "Nota eigin liti"
 
 #: data/epiphany.schemas.in.h:63
-msgid "Whether to print the page address in the header."
-msgstr ""
+msgid "Use own fonts"
+msgstr "Nota eigið letur"
 
 #: data/epiphany.schemas.in.h:64
-msgid "Whether to print the page numbers (x of total) in the footer"
+msgid "Use your own colors instead of the colors the page requests."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:65
-msgid "Whether to print the page numbers (x of total) in the footer."
+msgid "Use your own fonts instead of the fonts the page requests."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:66
-msgid "Whether to print the page title in the header"
+msgid ""
+"When files cannot be opened by the browser they are automatically downloaded "
+"to the download folder and opened with the appropriate application."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:67
-msgid "Whether to print the page title in the header."
+msgid ""
+"Where to accept cookies from. Possible values are \"anywhere\", \"current "
+"site\" and \"nowhere\"."
 msgstr ""
 
 #: data/epiphany.schemas.in.h:68
+msgid "Whether to print the date in the footer"
+msgstr ""
+
+#: data/epiphany.schemas.in.h:69
+msgid "Whether to print the date in the footer."
+msgstr ""
+
+#: data/epiphany.schemas.in.h:70
+msgid "Whether to print the page address in the header"
+msgstr ""
+
+#: data/epiphany.schemas.in.h:71
+msgid "Whether to print the page address in the header."
+msgstr ""
+
+#: data/epiphany.schemas.in.h:72
+msgid "Whether to print the page numbers (x of total) in the footer"
+msgstr ""
+
+#: data/epiphany.schemas.in.h:73
+msgid "Whether to print the page numbers (x of total) in the footer."
+msgstr ""
+
+#: data/epiphany.schemas.in.h:74
+msgid "Whether to print the page title in the header"
+msgstr ""
+
+#: data/epiphany.schemas.in.h:75
+msgid "Whether to print the page title in the header."
+msgstr ""
+
+#: data/epiphany.schemas.in.h:76
 msgid "x-western"
 msgstr ""
 
-#: data/glade/epiphany.glade.h:1
-msgid "  "
-msgstr "  "
+#: data/glade/certificate-dialogs.glade.h:1 data/glade/prefs-dialog.glade.h:1
+#: data/glade/print.glade.h:1
+msgid "    "
+msgstr "    "
 
-#: data/glade/epiphany.glade.h:2
-#: data/glade/prefs-dialog.glade.h:2
+#: data/glade/certificate-dialogs.glade.h:2
+msgid "<b>Fingerprints</b>"
+msgstr ""
+
+#: data/glade/certificate-dialogs.glade.h:3
+msgid "<b>Issued By</b>"
+msgstr ""
+
+#: data/glade/certificate-dialogs.glade.h:4
+msgid "<b>Issued To</b>"
+msgstr ""
+
+#: data/glade/certificate-dialogs.glade.h:5
+msgid "<b>Validity</b>"
+msgstr ""
+
+#: data/glade/certificate-dialogs.glade.h:6
+msgid "Certificate _Fields"
+msgstr ""
+
+#: data/glade/certificate-dialogs.glade.h:7
+msgid "Certificate _Hierarchy"
+msgstr ""
+
+#: data/glade/certificate-dialogs.glade.h:8
+msgid "Common Name:"
+msgstr ""
+
+#: data/glade/certificate-dialogs.glade.h:9
+msgid "DYNAMIC"
+msgstr ""
+
+#: data/glade/certificate-dialogs.glade.h:10
+#, fuzzy
+msgid "Details"
+msgstr "Danska"
+
+#: data/glade/certificate-dialogs.glade.h:11
+msgid "Expires On:"
+msgstr ""
+
+#: data/glade/certificate-dialogs.glade.h:12
+msgid "Field _Value"
+msgstr ""
+
+#: data/glade/certificate-dialogs.glade.h:13
+#: data/glade/prefs-dialog.glade.h:25
+msgid "General"
+msgstr "Almennt"
+
+#: data/glade/certificate-dialogs.glade.h:14
+msgid "Issued On:"
+msgstr ""
+
+#: data/glade/certificate-dialogs.glade.h:15
+msgid "MD5 Fingerprint:"
+msgstr ""
+
+#: data/glade/certificate-dialogs.glade.h:16
+#: embed/mozilla/GtkNSSDialogs.cpp:967
+msgid "Organization:"
+msgstr ""
+
+#: data/glade/certificate-dialogs.glade.h:17
+msgid "Organizational Unit:"
+msgstr ""
+
+#: data/glade/certificate-dialogs.glade.h:18
+msgid "SHA1 Fingerprint:"
+msgstr ""
+
+#: data/glade/certificate-dialogs.glade.h:19
+msgid "Serial Number:"
+msgstr ""
+
+#: data/glade/epiphany.glade.h:1
+msgid "      "
+msgstr " "
+
+#: data/glade/epiphany.glade.h:2 data/glade/prefs-dialog.glade.h:2
 #: data/glade/print.glade.h:2
 msgid "*"
 msgstr "*"
 
 #: data/glade/epiphany.glade.h:3
-msgid "<b>Address:</b>"
+msgid "<b>_Automatic</b>"
 msgstr ""
 
 #: data/glade/epiphany.glade.h:4
-msgid "<b>Status:</b>"
+msgid "<b>_Use a different encoding:</b>"
 msgstr ""
 
 #: data/glade/epiphany.glade.h:5
-msgid "<b>Time Elapsed:</b>"
-msgstr ""
-
-#: data/glade/epiphany.glade.h:6
-msgid "<b>Time Remaining:</b>"
-msgstr ""
-
-#: data/glade/epiphany.glade.h:7
-msgid ""
-"<span weight=\"bold\" size=\"larger\">What do you want to do with this file?\n"
-"</span>\n"
-"It's not possible to view this file type directly in the browser:"
-msgstr ""
-
-#: data/glade/epiphany.glade.h:10
 msgid "C_ase sensitive"
 msgstr ""
 
-#: data/glade/epiphany.glade.h:11
-msgid "Choose the file type action"
-msgstr ""
-
-#: data/glade/epiphany.glade.h:12
+#: data/glade/epiphany.glade.h:6
 msgid "Cookies"
 msgstr ""
 
-#: data/glade/epiphany.glade.h:13
-msgid "DYNAMIC"
-msgstr ""
-
-#: data/glade/epiphany.glade.h:14
+#: data/glade/epiphany.glade.h:7
 msgid "Download Manager"
 msgstr ""
 
-#: data/glade/epiphany.glade.h:15
-msgid "Download _Details"
-msgstr ""
-
-#: data/glade/epiphany.glade.h:16
-#: data/ui/nautilus-epiphany-view.xml.in.h:11
-#: src/ephy-window.c:686
+#: data/glade/epiphany.glade.h:8 src/ephy-window.c:1011
 msgid "Find"
 msgstr "Leita"
 
-#: data/glade/epiphany.glade.h:17
+#: data/glade/epiphany.glade.h:9
 msgid "Passwords"
 msgstr "Lykilorð"
 
-#: data/glade/epiphany.glade.h:18
+#: data/glade/epiphany.glade.h:10
 msgid "Personal Data Manager"
 msgstr ""
 
-#: data/glade/epiphany.glade.h:19
-msgid "You can open it with another application or save it on disk."
+#: data/glade/epiphany.glade.h:11
+msgid "Text Encoding"
 msgstr ""
 
-#: data/glade/epiphany.glade.h:20
+#: data/glade/epiphany.glade.h:12 src/ephy-encoding-menu.c:388
+msgid "Use the encoding specified by the document"
+msgstr ""
+
+#: data/glade/epiphany.glade.h:13
 msgid "_Find:"
-msgstr ""
+msgstr "_Leita:"
 
-#: data/glade/epiphany.glade.h:21
+#: data/glade/epiphany.glade.h:14
 msgid "_Next"
 msgstr ""
 
-#: data/glade/epiphany.glade.h:22
-#: embed/downloader-view.c:373
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:280
 msgid "_Pause"
 msgstr ""
 
-#: data/glade/epiphany.glade.h:23
+#: data/glade/epiphany.glade.h:16
 msgid "_Previous"
 msgstr ""
 
-#: data/glade/epiphany.glade.h:24
+#: data/glade/epiphany.glade.h:17
 msgid "_Wrap around"
 msgstr ""
 
-#: data/glade/prefs-dialog.glade.h:1
-#: data/glade/print.glade.h:1
-msgid "    "
-msgstr "    "
-
-#: data/glade/prefs-dialog.glade.h:3
-#: data/glade/print.glade.h:3
+#: data/glade/prefs-dialog.glade.h:3 data/glade/print.glade.h:3
 msgid "<b>Colors</b>"
 msgstr ""
 
@@ -445,23 +621,23 @@ msgid "<b>Cookies</b>"
 msgstr ""
 
 #: data/glade/prefs-dialog.glade.h:5
-msgid "<b>Encodings</b>"
+msgid "<b>Downloads</b>"
 msgstr ""
 
 #: data/glade/prefs-dialog.glade.h:6
-msgid "<b>Fonts</b>"
+msgid "<b>Encodings</b>"
 msgstr ""
 
 #: data/glade/prefs-dialog.glade.h:7
-msgid "<b>Home page</b>"
+msgid "<b>Fonts</b>"
 msgstr ""
 
 #: data/glade/prefs-dialog.glade.h:8
-msgid "<b>Languages</b>"
+msgid "<b>Home page</b>"
 msgstr ""
 
 #: data/glade/prefs-dialog.glade.h:9
-msgid "<b>Tabs</b>"
+msgid "<b>Languages</b>"
 msgstr ""
 
 #: data/glade/prefs-dialog.glade.h:10
@@ -473,141 +649,134 @@ msgid "<b>Web Content</b>"
 msgstr ""
 
 #: data/glade/prefs-dialog.glade.h:12
-msgid "Al_ways use the desktop theme colors"
+msgid "A_utomatically download and open files"
 msgstr ""
 
 #: data/glade/prefs-dialog.glade.h:13
-msgid "Allow _popup windows"
-msgstr ""
+#, fuzzy
+msgid "Add Language"
+msgstr "Tungumál"
 
 #: data/glade/prefs-dialog.glade.h:14
-msgid "Always use _these fonts"
+msgid "Al_ways use the desktop theme colors"
 msgstr ""
 
 #: data/glade/prefs-dialog.glade.h:15
-msgid "Autodetec_t:"
+msgid "Allow popup _windows"
 msgstr ""
 
 #: data/glade/prefs-dialog.glade.h:16
-msgid "Cl_ear"
+msgid "Always use _these fonts"
 msgstr ""
 
 #: data/glade/prefs-dialog.glade.h:17
+msgid "Au_todetect:"
+msgstr ""
+
+#: data/glade/prefs-dialog.glade.h:18
+msgid "Choose a l_anguage:"
+msgstr ""
+
+#: data/glade/prefs-dialog.glade.h:19
+msgid "Cl_ear"
+msgstr ""
+
+#: data/glade/prefs-dialog.glade.h:20
+msgid "De_fault:"
+msgstr ""
+
+#: data/glade/prefs-dialog.glade.h:21
 msgid "Enable Java_Script"
 msgstr "Virkja Java_Script"
 
-#: data/glade/prefs-dialog.glade.h:18
+#: data/glade/prefs-dialog.glade.h:22
 msgid "Enable _Java"
 msgstr "Virkja _Java"
 
-#: data/glade/prefs-dialog.glade.h:19
+#: data/glade/prefs-dialog.glade.h:23
 msgid "Fonts and Colors"
 msgstr "Letur og Litir"
 
-#: data/glade/prefs-dialog.glade.h:20
-#: data/glade/print.glade.h:16
-msgid "General"
-msgstr "Almennt"
+#: data/glade/prefs-dialog.glade.h:24
+#, fuzzy
+msgid "For l_anguage:"
+msgstr "Tungumál"
 
-#: data/glade/prefs-dialog.glade.h:21
+#: data/glade/prefs-dialog.glade.h:26
 msgid "Language"
 msgstr "Tungumál"
 
-#: data/glade/prefs-dialog.glade.h:22
-msgid "Language Editor"
-msgstr "Tungumálaritill"
-
-#: data/glade/prefs-dialog.glade.h:23
+#: data/glade/prefs-dialog.glade.h:27
 msgid "MB"
 msgstr "MB"
 
-#: data/glade/prefs-dialog.glade.h:24
-msgid "Min_imum font size:"
-msgstr ""
-
-#: data/glade/prefs-dialog.glade.h:25
-msgid "Mo_re..."
-msgstr ""
-
-#: data/glade/prefs-dialog.glade.h:26
+#: data/glade/prefs-dialog.glade.h:28
 msgid "Only _from sites you visit"
 msgstr ""
 
-#: data/glade/prefs-dialog.glade.h:27
-msgid "Open in _tabs by default"
-msgstr ""
-
-#: data/glade/prefs-dialog.glade.h:28
+#: data/glade/prefs-dialog.glade.h:29
 msgid "Preferences"
 msgstr ""
 
-#: data/glade/prefs-dialog.glade.h:29
+#: data/glade/prefs-dialog.glade.h:30
 msgid "Privacy"
 msgstr ""
 
-#: data/glade/prefs-dialog.glade.h:30
-msgid "S_ans serif:"
-msgstr ""
-
 #: data/glade/prefs-dialog.glade.h:31
-msgid "Sans Serif"
-msgstr ""
-
-#: data/glade/prefs-dialog.glade.h:32
-msgid "Serif"
-msgstr ""
-
-#: data/glade/prefs-dialog.glade.h:33
 msgid "Set to Current _Page"
 msgstr ""
 
-#: data/glade/prefs-dialog.glade.h:34
+#: data/glade/prefs-dialog.glade.h:32
 msgid "Set to _Blank Page"
 msgstr ""
 
-#: data/glade/prefs-dialog.glade.h:35
-msgid "Si_ze:"
+#: data/glade/prefs-dialog.glade.h:33
+msgid "_Add..."
 msgstr ""
 
-#: data/glade/prefs-dialog.glade.h:36
-msgid "Siz_e:"
-msgstr ""
-
-#: data/glade/prefs-dialog.glade.h:37
-#: src/bookmarks/ephy-bookmark-properties.c:387
+#: data/glade/prefs-dialog.glade.h:34
+#: src/bookmarks/ephy-bookmark-properties.c:371
 msgid "_Address:"
 msgstr ""
 
-#: data/glade/prefs-dialog.glade.h:38
+#: data/glade/prefs-dialog.glade.h:35
 msgid "_Always accept"
 msgstr ""
 
-#: data/glade/prefs-dialog.glade.h:39
-msgid "_Default:"
-msgstr ""
-
-#: data/glade/prefs-dialog.glade.h:40
+#: data/glade/prefs-dialog.glade.h:36
 msgid "_Disk space:"
 msgstr ""
 
+#: data/glade/prefs-dialog.glade.h:37
+msgid "_Down"
+msgstr ""
+
+#: data/glade/prefs-dialog.glade.h:38
+msgid "_Download folder:"
+msgstr ""
+
+#: data/glade/prefs-dialog.glade.h:39
+msgid "_Fixed width:"
+msgstr ""
+
+#: data/glade/prefs-dialog.glade.h:40
+msgid "_Minimum size:"
+msgstr ""
+
 #: data/glade/prefs-dialog.glade.h:41
-msgid "_Language:"
-msgstr ""
-
-#: data/glade/prefs-dialog.glade.h:42
-msgid "_Monospace:"
-msgstr ""
-
-#: data/glade/prefs-dialog.glade.h:43
 msgid "_Never accept"
 msgstr ""
 
-#: data/glade/prefs-dialog.glade.h:44
-msgid "_Proportional:"
+#: data/glade/prefs-dialog.glade.h:42
+msgid "_Remove"
 msgstr ""
 
-#: data/glade/prefs-dialog.glade.h:45
-msgid "_Serif:"
+#: data/glade/prefs-dialog.glade.h:43 src/ephy-window.c:198
+msgid "_Up"
+msgstr ""
+
+#: data/glade/prefs-dialog.glade.h:44
+msgid "_Variable width:"
 msgstr ""
 
 #: data/glade/print.glade.h:4
@@ -651,82 +820,85 @@ msgid "C_olor"
 msgstr ""
 
 #: data/glade/print.glade.h:14
-msgid "Choose a file to print to"
-msgstr ""
-
-#: data/glade/print.glade.h:15
 msgid "E_xecutive"
 msgstr ""
 
-#: data/glade/print.glade.h:17
+#: data/glade/print.glade.h:15
 msgid "L_egal"
 msgstr ""
 
-#: data/glade/print.glade.h:18
+#: data/glade/print.glade.h:16
 msgid "Lan_dscape"
 msgstr ""
 
-#: data/glade/print.glade.h:19
+#: data/glade/print.glade.h:17
 msgid "P_age title"
 msgstr ""
 
-#: data/glade/print.glade.h:20
+#: data/glade/print.glade.h:18
 msgid "P_ortrait"
 msgstr ""
 
-#: data/glade/print.glade.h:21
+#: data/glade/print.glade.h:19
 msgid "P_rinter:"
 msgstr ""
 
-#: data/glade/print.glade.h:22
+#: data/glade/print.glade.h:20
 msgid "Pa_ges"
 msgstr ""
 
-#: data/glade/print.glade.h:23
+#: data/glade/print.glade.h:21
 msgid "Page _numbers"
 msgstr ""
 
-#: data/glade/print.glade.h:24
-msgid "Page a_ddress"
-msgstr ""
-
-#: data/glade/print.glade.h:25
+#: data/glade/print.glade.h:22
 msgid "Paper"
 msgstr ""
 
-#: data/glade/print.glade.h:26
-#: data/ui/nautilus-epiphany-view.xml.in.h:23
-#: src/ephy-window.c:682
+#: data/glade/print.glade.h:23 src/ephy-window.c:1007
 msgid "Print"
 msgstr ""
 
-#: data/glade/print.glade.h:27
+#: data/glade/print.glade.h:24
+msgid "Print Setup"
+msgstr ""
+
+#: data/glade/print.glade.h:25
 msgid "_All pages"
 msgstr ""
 
-#: data/glade/print.glade.h:28
+#: data/glade/print.glade.h:26
 msgid "_Bottom:"
 msgstr ""
 
-#: data/glade/print.glade.h:29
+#: data/glade/print.glade.h:27
+msgid "_Browse..."
+msgstr ""
+
+#: data/glade/print.glade.h:28
 msgid "_Date"
 msgstr ""
 
-#: data/glade/print.glade.h:30
+#: data/glade/print.glade.h:29
 msgid "_File:"
 msgstr ""
 
-#: data/glade/print.glade.h:31
+#: data/glade/print.glade.h:30
 msgid "_Grayscale"
 msgstr ""
 
-#: data/glade/print.glade.h:32
+#: data/glade/print.glade.h:31
 msgid "_Left:"
 msgstr ""
 
-#: data/glade/print.glade.h:33
+#: data/glade/print.glade.h:32
 msgid "_Letter"
 msgstr ""
+
+#: data/glade/print.glade.h:33
+#, fuzzy
+msgid "_Page address"
+msgstr "Afrita vistfang síðu"
 
 #: data/glade/print.glade.h:34
 msgid "_Right:"
@@ -752,653 +924,767 @@ msgstr ""
 msgid "lpr"
 msgstr "lpr"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:1
-msgid "Add Bookmark for Frame"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:2
-msgid "Copy"
-msgstr "Afrita"
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:3
-msgid "Copy Email Address"
-msgstr "Afrita netfang"
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:4
-msgid "Copy Image Address"
-msgstr "Afrita vistfang myndar"
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:5
-msgid "Copy Link Address"
-msgstr "Afrita vistfang tengils"
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:6
-msgid "Copy Page Address"
-msgstr "Afrita vistfang síðu"
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:7
-msgid "Copy the Selection"
-msgstr "Afrita val"
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:8
-msgid "Cut"
-msgstr "Klippa"
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:9
-msgid "Cut the Selection"
-msgstr "Klippa val"
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:10
-#: embed/ephy-embed-popup-control.c:543
-msgid "Download Link"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:12
-#: src/ppview-toolbar.c:89
-msgid "First"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:13
-#: src/ppview-toolbar.c:93
-msgid "Last"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:14
-#: src/ppview-toolbar.c:101
-msgid "Next"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:15
-msgid "Open Frame"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:16
-msgid "Open Frame in New Window"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:17
-msgid "Open Image"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:18
-msgid "Open Image in New Window"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:19
-msgid "Open in New Window"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:20
-msgid "Paste"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:21
-msgid "Paste the Clipboard"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:22
-#: src/ppview-toolbar.c:97
-msgid "Previous"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:24
-msgid "Print the Current File"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:25
-msgid "Save Background As..."
-msgstr "Vista bakgrunn sem..."
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:26
-msgid "Save Image As..."
-msgstr "Vista mynd sem..."
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:27
-msgid "Save Page As..."
-msgstr "Vista síðu sem..."
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:28
-msgid "Search for a String"
-msgstr "Leita eftir streng"
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:29
-msgid "Select All"
-msgstr "Velja allt"
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:30
-msgid "Select the Entire Document"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:31
-msgid "Use Image As Background"
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:32
-#: src/bookmarks/ephy-bookmarks-editor.c:153
-#: src/ephy-history-window.c:125
-#: src/ephy-window.c:66
-msgid "_Edit"
-msgstr ""
-
-#  Toplevel
-#: data/ui/nautilus-epiphany-view.xml.in.h:33
-#: src/bookmarks/ephy-bookmarks-editor.c:152
-#: src/ephy-history-window.c:124
-#: src/ephy-window.c:65
-msgid "_File"
-msgstr "_Skrá"
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:34
-#: src/ephy-window.c:109
-msgid "_Find..."
-msgstr ""
-
-#: data/ui/nautilus-epiphany-view.xml.in.h:35
-#: src/ephy-window.c:86
-msgid "_Print..."
-msgstr ""
-
-#. Hours, Minutes, Seconds
-#: embed/downloader-view.c:216
+#: embed/downloader-view.c:225
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr ""
 
-#. Minutes, Seconds
-#: embed/downloader-view.c:221
+#: embed/downloader-view.c:229
 #, c-format
 msgid "%02u.%02u"
 msgstr ""
 
-#: embed/downloader-view.c:369
+#: embed/downloader-view.c:280
 msgid "_Resume"
 msgstr ""
 
-#: embed/downloader-view.c:391
-#, c-format
-msgid "%.1f of %.1f MB"
-msgstr ""
-
-#: embed/downloader-view.c:397
-#, c-format
-msgid "%d of %d kB"
-msgstr ""
-
-#: embed/downloader-view.c:403
-#, c-format
-msgid "%d kB"
-msgstr ""
-
-#: embed/downloader-view.c:409
-#, c-format
-msgid "%s at %.1f kB/s"
-msgstr ""
-
-#: embed/downloader-view.c:524
-#: embed/downloader-view.c:542
-#: src/ephy-window.c:893
+#: embed/downloader-view.c:343 lib/widgets/ephy-cell-renderer-progress.c:40
+#: src/ephy-window.c:1192
 msgid "Unknown"
 msgstr "Óþekkt"
 
-#: embed/downloader-view.c:541
-msgid "00.00"
-msgstr "00.00"
+#: embed/downloader-view.c:394
+#, c-format
+msgid "About %d second left"
+msgid_plural "About %d seconds left"
+msgstr[0] ""
+msgstr[1] ""
 
-#: embed/downloader-view.c:780
+#: embed/downloader-view.c:402
+#, c-format
+msgid "About %d minute left"
+msgid_plural "About %d minutes left"
+msgstr[0] ""
+msgstr[1] ""
+
+#: embed/downloader-view.c:409
+#, c-format
+msgid "%d download"
+msgid_plural "%d downloads"
+msgstr[0] ""
+msgstr[1] ""
+
+#: embed/downloader-view.c:515
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:790
-msgid "Filename"
-msgstr "Skráarheiti"
+#  Toplevel
+#: embed/downloader-view.c:526 src/bookmarks/ephy-bookmarks-editor.c:647
+#, fuzzy
+msgid "File"
+msgstr "_Skrá"
 
-#: embed/downloader-view.c:801
-msgid "Size"
-msgstr "Stærð"
-
-#: embed/downloader-view.c:812
+#: embed/downloader-view.c:540
 msgid "Remaining"
 msgstr ""
 
-#: embed/downloader-view.c:1019
-msgid "Cancel all pending downloads?"
-msgstr ""
-
-#: embed/ephy-embed-popup-control.c:554
-#: src/popup-commands.c:333
-msgid "Save Image As"
-msgstr "Vista mynd sem"
-
-#: embed/ephy-embed-popup-control.c:668
-msgid "Save Page As"
-msgstr "Vista síðu sem"
-
-#: embed/ephy-embed-popup-control.c:677
-#: src/popup-commands.c:421
-msgid "Save Background As"
-msgstr "Vista bakgrunn sem"
-
-#: embed/ephy-embed-utils.c:167
-msgid "The file has not been saved."
-msgstr ""
-
-#: embed/ephy-embed-utils.c:299
-msgid "No available applications to open the specified file."
-msgstr ""
-
-#: embed/ephy-history.c:441
-#: src/bookmarks/ephy-bookmarks.c:689
-msgid "All"
-msgstr "_Allt"
-
-#: embed/ephy-history.c:590
-msgid "Others"
-msgstr ""
-
-#: embed/ephy-history.c:596
-msgid "Local files"
-msgstr ""
-
-#: embed/mozilla/ContentHandler.cpp:311
-msgid "Select the destination filename"
-msgstr ""
-
-#: embed/mozilla/ExternalProtocolService.cpp:124
-msgid ""
-"Epiphany cannot handle this protocol,\n"
-"and no GNOME default handler is set"
-msgstr ""
-
-#: embed/mozilla/ExternalProtocolService.cpp:138
-msgid ""
-"The protocol specified is not recognised.\n"
-"\n"
-"Would you like to try the GNOME default?"
-msgstr ""
-
-#: embed/mozilla/FilePicker.cpp:356
-msgid "The specified path does not exist."
-msgstr ""
-
-#: embed/mozilla/FilePicker.cpp:375
-msgid "A file was selected when a folder was expected."
-msgstr ""
-
-#: embed/mozilla/FilePicker.cpp:382
-msgid "A folder was selected when a file was expected."
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:75
-msgid "_Arabic"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:76
-msgid "_Baltic"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:77
-msgid "Central _European"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:78
-msgid "Chi_nese"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:79
-msgid "_Cyrillic"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:80
-msgid "_Greek"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:81
-msgid "_Hebrew"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:82
-msgid "_Indian"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:83
-msgid "_Japanese"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:84
-msgid "_Korean"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:85
-msgid "_Turkish"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:86
-msgid "_Unicode"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:87
-msgid "_Vietnamese"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:88
-msgid "_Western"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:89
-msgid "_Other"
-msgstr ""
-
-#. translators: access keys need only be unique within the same LG_group
-#: embed/mozilla/mozilla-embed-single.cpp:108
+#: embed/ephy-encodings.c:63
 msgid "Arabic (_IBM-864)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:109
+#: embed/ephy-encodings.c:64
 msgid "Arabic (ISO-_8859-6)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:110
+#: embed/ephy-encodings.c:65
 msgid "Arabic (_MacArabic)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:111
+#: embed/ephy-encodings.c:66
 msgid "Arabic (_Windows-1256)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:112
+#: embed/ephy-encodings.c:67
 msgid "Baltic (_ISO-8859-13)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:113
+#: embed/ephy-encodings.c:68
 msgid "Baltic (I_SO-8859-4)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:114
+#: embed/ephy-encodings.c:69
 msgid "Baltic (_Windows-1257)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:115
-msgid "Central European (_IBM-852)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:116
-msgid "Central European (I_SO-8859-2)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:117
-msgid "Central European (_MacCE)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:118
-msgid "Central European (_Windows-1250)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:119
-msgid "Croatian (Mac_Croatian)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:120
-msgid "Chinese Simplified (_GB18030)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:121
-msgid "Chinese Simplified (G_B2312)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:122
-msgid "Chinese Simplified (GB_K)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:123
-msgid "Chinese Simplified (_HZ)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:124
-msgid "Chinese Simplified (_ISO-2022-CN)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:125
-msgid "Chinese Traditional (Big_5)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:126
-msgid "Chinese Traditional (Big5-HK_SCS)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:127
-msgid "Chinese Traditional (_EUC-TW)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:128
-msgid "Cyrillic (_IBM-855)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:129
-msgid "Cyrillic (I_SO-8859-5)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:130
-msgid "Cyrillic (IS_O-IR-111)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:131
-msgid "Cyrillic (_KOI8-R)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:132
-msgid "Cyrillic (_MacCyrillic)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:133
-msgid "Cyrillic (_Windows-1251)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:134
-msgid "Cyrillic/Russian (_CP-866)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:135
-msgid "Cyrillic/Ukrainian (_KOI8-U)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:136
-msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:137
-msgid "Greek (_ISO-8859-7)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:138
-msgid "Greek (_MacGreek)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:139
-msgid "Greek (_Windows-1253)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:140
-msgid "Gujarati (_MacGujarati)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:141
-msgid "Gurmukhi (Mac_Gurmukhi)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:142
-msgid "Hindi (Mac_Devanagari)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:143
-msgid "Hebrew (_IBM-862)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:144
-msgid "Hebrew (IS_O-8859-8-I)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:145
-msgid "Hebrew (_MacHebrew)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:146
-msgid "Hebrew (_Windows-1255)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:147
-msgid "_Visual Hebrew (ISO-8859-8)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:148
-msgid "Japanese (_EUC-JP)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:149
-msgid "Japanese (_ISO-2022-JP)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:150
-msgid "Japanese (_Shift-JIS)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:151
-msgid "Korean (_EUC-KR)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:152
-msgid "Korean (_ISO-2022-KR)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:153
-msgid "Korean (_JOHAB)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:154
-msgid "Korean (_UHC)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:155
-msgid "Turkish (_IBM-857)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:156
-msgid "Turkish (I_SO-8859-9)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:157
-msgid "Turkish (_MacTurkish)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:158
-msgid "Turkish (_Windows-1254)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:159
-msgid "Unicode (UTF-_7)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:160
-msgid "Unicode (UTF-_8)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:161
-msgid "Vietnamese (_TCVN)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:162
-msgid "Vietnamese (_VISCII)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:163
-msgid "Vietnamese (V_PS)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:164
-msgid "Vietnamese (_Windows-1258)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:165
-msgid "Western (_IBM-850)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:166
-msgid "Western (I_SO-8859-1)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:167
-msgid "Western (IS_O-8859-15)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:168
-msgid "Western (_MacRoman)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:169
-msgid "Western (_Windows-1252)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:170
+#: embed/ephy-encodings.c:70
 msgid "_Armenian (ARMSCII-8)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:171
-msgid "_Celtic (ISO-8859-14)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:172
-msgid "_Farsi (MacFarsi)"
-msgstr ""
-
-#: embed/mozilla/mozilla-embed-single.cpp:173
+#: embed/ephy-encodings.c:71
 msgid "_Georgian (GEOSTD8)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:174
+#: embed/ephy-encodings.c:72
+msgid "Central European (_IBM-852)"
+msgstr ""
+
+#: embed/ephy-encodings.c:73
+msgid "Central European (I_SO-8859-2)"
+msgstr ""
+
+#: embed/ephy-encodings.c:74
+msgid "Central European (_MacCE)"
+msgstr ""
+
+#: embed/ephy-encodings.c:75
+msgid "Central European (_Windows-1250)"
+msgstr ""
+
+#: embed/ephy-encodings.c:76
+msgid "Chinese Simplified (_GB18030)"
+msgstr ""
+
+#: embed/ephy-encodings.c:77
+msgid "Chinese Simplified (G_B2312)"
+msgstr ""
+
+#: embed/ephy-encodings.c:78
+msgid "Chinese Simplified (GB_K)"
+msgstr ""
+
+#: embed/ephy-encodings.c:79
+msgid "Chinese Simplified (_HZ)"
+msgstr ""
+
+#: embed/ephy-encodings.c:80
+msgid "Chinese Simplified (_ISO-2022-CN)"
+msgstr ""
+
+#: embed/ephy-encodings.c:81
+msgid "Chinese Traditional (Big_5)"
+msgstr ""
+
+#: embed/ephy-encodings.c:82
+msgid "Chinese Traditional (Big5-HK_SCS)"
+msgstr ""
+
+#: embed/ephy-encodings.c:83
+msgid "Chinese Traditional (_EUC-TW)"
+msgstr ""
+
+#: embed/ephy-encodings.c:84
+msgid "Cyrillic (_IBM-855)"
+msgstr ""
+
+#: embed/ephy-encodings.c:85
+msgid "Cyrillic (I_SO-8859-5)"
+msgstr ""
+
+#: embed/ephy-encodings.c:86
+msgid "Cyrillic (IS_O-IR-111)"
+msgstr ""
+
+#: embed/ephy-encodings.c:87
+msgid "Cyrillic (_KOI8-R)"
+msgstr ""
+
+#: embed/ephy-encodings.c:88
+msgid "Cyrillic (_MacCyrillic)"
+msgstr ""
+
+#: embed/ephy-encodings.c:89
+msgid "Cyrillic (_Windows-1251)"
+msgstr ""
+
+#: embed/ephy-encodings.c:90
+msgid "Cyrillic/_Russian (IBM-866)"
+msgstr ""
+
+#: embed/ephy-encodings.c:91
+msgid "Greek (_ISO-8859-7)"
+msgstr ""
+
+#: embed/ephy-encodings.c:92
+msgid "Greek (_MacGreek)"
+msgstr ""
+
+#: embed/ephy-encodings.c:93
+msgid "Greek (_Windows-1253)"
+msgstr ""
+
+#: embed/ephy-encodings.c:94
+msgid "Gujarati (_MacGujarati)"
+msgstr ""
+
+#: embed/ephy-encodings.c:95
+msgid "Gurmukhi (Mac_Gurmukhi)"
+msgstr ""
+
+#: embed/ephy-encodings.c:96
+msgid "Hindi (Mac_Devanagari)"
+msgstr ""
+
+#: embed/ephy-encodings.c:97
+msgid "Hebrew (_IBM-862)"
+msgstr ""
+
+#: embed/ephy-encodings.c:98
+msgid "Hebrew (IS_O-8859-8-I)"
+msgstr ""
+
+#: embed/ephy-encodings.c:99
+msgid "Hebrew (_MacHebrew)"
+msgstr ""
+
+#: embed/ephy-encodings.c:100
+msgid "Hebrew (_Windows-1255)"
+msgstr ""
+
+#: embed/ephy-encodings.c:101
+msgid "_Visual Hebrew (ISO-8859-8)"
+msgstr ""
+
+#: embed/ephy-encodings.c:102
+msgid "Japanese (_EUC-JP)"
+msgstr ""
+
+#: embed/ephy-encodings.c:103
+msgid "Japanese (_ISO-2022-JP)"
+msgstr ""
+
+#: embed/ephy-encodings.c:104
+msgid "Japanese (_Shift-JIS)"
+msgstr ""
+
+#: embed/ephy-encodings.c:105
+msgid "Korean (_EUC-KR)"
+msgstr ""
+
+#: embed/ephy-encodings.c:106
+msgid "Korean (_ISO-2022-KR)"
+msgstr ""
+
+#: embed/ephy-encodings.c:107
+msgid "Korean (_JOHAB)"
+msgstr ""
+
+#: embed/ephy-encodings.c:108
+msgid "Korean (_UHC)"
+msgstr ""
+
+#: embed/ephy-encodings.c:109
+msgid "_Celtic (ISO-8859-14)"
+msgstr ""
+
+#: embed/ephy-encodings.c:110
 msgid "_Icelandic (MacIcelandic)"
 msgstr "Íslenska (Mac_Icelandic)"
 
-#: embed/mozilla/mozilla-embed-single.cpp:175
+#: embed/ephy-encodings.c:111
 msgid "_Nordic (ISO-8859-10)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:176
+#: embed/ephy-encodings.c:112
+msgid "_Persian (MacFarsi)"
+msgstr ""
+
+#: embed/ephy-encodings.c:113
+msgid "Croatian (Mac_Croatian)"
+msgstr ""
+
+#: embed/ephy-encodings.c:114
 msgid "_Romanian (MacRomanian)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:177
+#: embed/ephy-encodings.c:115
 msgid "R_omanian (ISO-8859-16)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:178
+#: embed/ephy-encodings.c:116
 msgid "South _European (ISO-8859-3)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:179
+#: embed/ephy-encodings.c:117
 msgid "Thai (TIS-_620)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:181
+#: embed/ephy-encodings.c:118
 msgid "Thai (IS_O-8859-11)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:182
+#: embed/ephy-encodings.c:119
 msgid "_Thai (Windows-874)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:184
-msgid "_User Defined"
+#: embed/ephy-encodings.c:120
+msgid "Turkish (_IBM-857)"
 msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:923
-msgid "Yes"
-msgstr "_Já"
+#: embed/ephy-encodings.c:121
+msgid "Turkish (I_SO-8859-9)"
+msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:925
-msgid "No"
-msgstr "Nei"
+#: embed/ephy-encodings.c:122
+msgid "Turkish (_MacTurkish)"
+msgstr ""
 
-#: embed/mozilla/mozilla-embed-single.cpp:930
-msgid "End of current session"
+#: embed/ephy-encodings.c:123
+msgid "Turkish (_Windows-1254)"
+msgstr ""
+
+#: embed/ephy-encodings.c:124
+msgid "Unicode (UTF-_8)"
+msgstr ""
+
+#: embed/ephy-encodings.c:125
+msgid "Cyrillic/Ukrainian (_KOI8-U)"
+msgstr ""
+
+#: embed/ephy-encodings.c:126
+msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
+msgstr ""
+
+#: embed/ephy-encodings.c:127
+msgid "Vietnamese (_TCVN)"
+msgstr ""
+
+#: embed/ephy-encodings.c:128
+msgid "Vietnamese (_VISCII)"
+msgstr ""
+
+#: embed/ephy-encodings.c:129
+msgid "Vietnamese (V_PS)"
+msgstr ""
+
+#: embed/ephy-encodings.c:130
+msgid "Vietnamese (_Windows-1258)"
+msgstr ""
+
+#: embed/ephy-encodings.c:131
+msgid "Western (_IBM-850)"
+msgstr ""
+
+#: embed/ephy-encodings.c:132
+#, fuzzy
+msgid "Western (_ISO-8859-1)"
+msgstr "ISO-8859-1"
+
+#: embed/ephy-encodings.c:133
+msgid "Western (IS_O-8859-15)"
+msgstr ""
+
+#: embed/ephy-encodings.c:134
+msgid "Western (_MacRoman)"
+msgstr ""
+
+#: embed/ephy-encodings.c:135
+msgid "Western (_Windows-1252)"
+msgstr ""
+
+#  the following encodings are so rarely used that we don't want to pollute the "related"
+#  * part of the encodings menu with them, so we set the language group to 0 here
+#. the following encodings are so rarely used that we don't want to pollute the "related"
+#. * part of the encodings menu with them, so we set the language group to 0 here
+#.
+#: embed/ephy-encodings.c:140
+msgid "English (_US-ASCII)"
+msgstr ""
+
+#: embed/ephy-encodings.c:141
+msgid "Unicode (UTF-_16 BE)"
+msgstr ""
+
+#: embed/ephy-encodings.c:142
+msgid "Unicode (UTF-1_6 LE)"
+msgstr ""
+
+#: embed/ephy-encodings.c:143
+msgid "Unicode (UTF-_32 BE)"
+msgstr ""
+
+#: embed/ephy-encodings.c:144
+msgid "Unicode (UTF-3_2 LE)"
+msgstr ""
+
+#: embed/ephy-encodings.c:146
+msgid "Off"
+msgstr "Af"
+
+#: embed/ephy-encodings.c:147 src/prefs-dialog.c:117
+msgid "Chinese"
+msgstr ""
+
+#: embed/ephy-encodings.c:148
+msgid "Chinese Simplified"
+msgstr ""
+
+#: embed/ephy-encodings.c:149
+msgid "Chinese Traditional"
+msgstr ""
+
+#: embed/ephy-encodings.c:150
+msgid "East Asian"
+msgstr ""
+
+#: embed/ephy-encodings.c:151 lib/ephy-langs.c:38 src/prefs-dialog.c:137
+msgid "Japanese"
+msgstr "Japanska"
+
+#: embed/ephy-encodings.c:152 lib/ephy-langs.c:39 src/prefs-dialog.c:138
+msgid "Korean"
+msgstr ""
+
+#: embed/ephy-encodings.c:153 src/prefs-dialog.c:150
+msgid "Russian"
+msgstr "Rússneska"
+
+#: embed/ephy-encodings.c:154
+msgid "Universal"
+msgstr ""
+
+#: embed/ephy-encodings.c:155 src/prefs-dialog.c:159
+msgid "Ukrainian"
+msgstr ""
+
+#  translators: this is the title that an unknown encoding will
+#  * be displayed as.
+#. translators: this is the title that an unknown encoding will
+#. * be displayed as.
+#.
+#: embed/ephy-encodings.c:318
+#, c-format
+msgid "Unknown (%s)"
+msgstr "Óþekkt (%s)"
+
+#: embed/ephy-history.c:487 src/bookmarks/ephy-bookmarks.c:645
+msgid "All"
+msgstr "_Allt"
+
+#: embed/ephy-history.c:662
+msgid "Others"
+msgstr ""
+
+#: embed/ephy-history.c:668
+msgid "Local files"
+msgstr ""
+
+#: embed/mozilla/ContentHandler.cpp:128
+#: embed/mozilla/EphyHeaderSniffer.cpp:345
+msgid "Save"
+msgstr "Vista"
+
+#: embed/mozilla/ContentHandler.cpp:247
+msgid "_Save As..."
+msgstr "Vist_a sem..."
+
+#: embed/mozilla/ContentHandler.cpp:264
+msgid "Download the unsafe file?"
+msgstr ""
+
+#: embed/mozilla/ContentHandler.cpp:265
+msgid ""
+"This type of file could potentially damage your documents or invade your "
+"privacy. It's not safe to open it directly. You can save it instead."
+msgstr ""
+
+#: embed/mozilla/ContentHandler.cpp:273
+msgid "Open the file in another application?"
+msgstr ""
+
+#: embed/mozilla/ContentHandler.cpp:274
+msgid ""
+"It's not possible to view this file type directly in the browser. You can "
+"open it with another application or save it."
+msgstr ""
+
+#: embed/mozilla/ContentHandler.cpp:281
+msgid "Download the file?"
+msgstr ""
+
+#: embed/mozilla/ContentHandler.cpp:282
+msgid ""
+"It's not possible to view this file because there is no application "
+"installed that can open it. You can save it instead."
+msgstr ""
+
+#: embed/mozilla/EphyHeaderSniffer.cpp:311
+#: src/bookmarks/ephy-bookmarks-import.c:253 src/ephy-toolbars-model.c:205
+#: src/window-commands.c:342
+msgid "Untitled"
+msgstr "Ónefnt"
+
+#: embed/mozilla/FilePicker.cpp:163
+msgid "All files"
+msgstr ""
+
+#: embed/mozilla/FilePicker.cpp:168
+msgid "HTML files"
+msgstr ""
+
+#: embed/mozilla/FilePicker.cpp:173
+msgid "Text files"
+msgstr ""
+
+#: embed/mozilla/FilePicker.cpp:178
+msgid "Image files"
+msgstr ""
+
+#: embed/mozilla/FilePicker.cpp:183
+msgid "XML files"
+msgstr ""
+
+#: embed/mozilla/FilePicker.cpp:188
+msgid "XUL files"
+msgstr ""
+
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:153
+msgid "_Select Certificate"
+msgstr ""
+
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:192
+#, c-format
+msgid "Choose a certificate to present as identification to %s."
+msgstr ""
+
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:195
+msgid "Select a certificate to identify yourself."
+msgstr ""
+
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:227
+msgid "Certificate _Details"
+msgstr ""
+
+#. Add the buttons
+#: embed/mozilla/GtkNSSDialogs.cpp:225 embed/mozilla/GtkNSSDialogs.cpp:536
+msgid "_View Certificate"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:233
+msgid "_Accept"
+msgstr "_Samþykkja"
+
+#: embed/mozilla/GtkNSSDialogs.cpp:297
+#, c-format
+msgid ""
+"The site %s returned security information for %s. It is possible that "
+"someone is intercepting your communication to obtain your confidential "
+"information."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:303
+#, c-format
+msgid "You should only accept the security information if you trust %s and %s."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:308
+msgid "Accept incorrect security information?"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:340
+#, c-format
+msgid ""
+"Your browser was unable to trust %s. It is possible that someone is "
+"intercepting your communication to obtain your confidential information."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:346
+#, c-format
+msgid ""
+"You should only connect to the site if you are certain you are connected to %"
+"s."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:351
+msgid "Connect to untrusted site?"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:355
+msgid "_Don't show this message again for this site"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:356
+msgid "Co_nnect"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:417
+msgid "Accept expired security information?"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:418
+#, c-format
+msgid "The security information for %s expired on %s."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:424
+msgid "Accept not yet valid security information?"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:425
+#, c-format
+msgid "The security information for %s isn't valid until %s."
+msgstr ""
+
+#. To translators: this a time format that is used while displaying the
+#. * expiry or start date of an SSL certificate, for the format see
+#. * strftime(3)
+#: embed/mozilla/GtkNSSDialogs.cpp:436
+msgid "%a %d %b %Y"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:447
+msgid "You should ensure that your computer's time is correct."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:492
+#, c-format
+msgid "Cannot establish connection to %s."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:495
+#, c-format
+msgid "The certificate revocation list (CRL) from %s needs to be updated."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:500
+msgid "Please ask your system administrator for assistance."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:539
+msgid "_Trust CA"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:551
+#, c-format
+msgid "Trust %s to identify:"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:555
+msgid "Trust new Certificate Authority?"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:556
+msgid ""
+"Before trusting a Certificate Authority (CA) you should verify the "
+"certificate is authentic."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:566
+msgid "_Web sites"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:571
+msgid "_Software developers"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:637
+msgid "Certificate already exists."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:638
+msgid "The certificate has already been imported."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:757
+msgid "_Backup Certificate"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:764
+msgid "Select password."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:765
+msgid "Select a password to protect this certificate."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:777 embed/mozilla/GtkNSSDialogs.cpp:879
+msgid "_Password:"
+msgstr "_Lykilorð:"
+
+#: embed/mozilla/GtkNSSDialogs.cpp:791
+msgid "Con_firm password:"
+msgstr ""
+
+#. TODO: We need a better password quality meter
+#: embed/mozilla/GtkNSSDialogs.cpp:803
+#, fuzzy
+msgid "Password quality:"
+msgstr "Lykilorð"
+
+#: embed/mozilla/GtkNSSDialogs.cpp:860
+msgid "I_mport Certificate"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:868
+msgid "Password required."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:869
+msgid "Enter the password for this certificate."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:947
+msgid "Certificate Revocation list successfully imported."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:948
+msgid "Certificate Revocation list (CRL) imported:"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:970
+#, fuzzy
+msgid "Unit:"
+msgstr "Ónefnt"
+
+#: embed/mozilla/GtkNSSDialogs.cpp:973
+msgid "Next Update:"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:1000
+msgid "Not part of certificate"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:1268
+#, fuzzy
+msgid "Certificate Properties"
+msgstr "Eiginleikar %s"
+
+#: embed/mozilla/GtkNSSDialogs.cpp:1290
+msgid "This certificate has been verified for the following uses:"
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:1293
+msgid "Could not verify this certificate because it has been revoked."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:1296
+msgid "Could not verify this certificate because it has expired."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:1299
+msgid "Could not verify this certificate because it is not trusted."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:1302
+msgid "Could not verify this certificate because the issuer is not trusted."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:1305
+msgid "Could not verify this certificate because the issuer is unknown."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:1308
+msgid ""
+"Could not verify this certificate because the CA certificate is invalid."
+msgstr ""
+
+#: embed/mozilla/GtkNSSDialogs.cpp:1313
+msgid "Could not verify this certificate for unknown reasons."
+msgstr ""
+
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:185
+msgid "Generating Private Key."
+msgstr ""
+
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:186
+msgid ""
+"Please wait while a new private key is generated. This process could take a "
+"few minutes."
+msgstr ""
+
+#: embed/mozilla/mozilla-embed-single.cpp:487
+msgid ""
+"Epiphany can't be used now. Mozilla initialization failed. Check your "
+"MOZILLA_FIVE_HOME environmental variable."
 msgstr ""
 
 #. *
@@ -1412,11 +1698,15 @@ msgstr ""
 #. * "zh_CN" translation: "zh-cn,zh"
 #. * "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
 #.
-#: embed/mozilla/mozilla-notifiers.cpp:605
+#: embed/mozilla/mozilla-notifiers.cpp:737
 msgid "system-language"
 msgstr ""
 
-#: lib/eel-gconf-extensions.c:79
+#: embed/print-dialog.c:293
+msgid "Print to"
+msgstr ""
+
+#: lib/eel-gconf-extensions.c:84
 #, c-format
 msgid ""
 "GConf error:\n"
@@ -1425,34 +1715,54 @@ msgstr ""
 "GConf villa:\n"
 "  %s"
 
-#: lib/egg/egg-editable-toolbar.c:269
+#: lib/eel-gconf-extensions.c:88
+#, c-format
+msgid ""
+"GConf error:\n"
+"  %s\n"
+"All further errors shown only on terminal"
+msgstr ""
+
+#: lib/eel-gconf-extensions.c:92
+msgid "GConf Error"
+msgstr "GConf Villa"
+
+#: lib/egg/egg-editable-toolbar.c:512
 msgid "_Remove Toolbar"
 msgstr ""
 
-#: lib/egg/egg-toolbar-editor.c:427
+#: lib/egg/egg-toolbar-editor.c:559
 msgid "Separator"
 msgstr ""
 
-#: lib/egg/egg-toolbar-editor.c:457
-msgid "Drag an item onto the toolbars above to add it, from the toolbars in the items table to remove it."
+#: lib/egg/egg-toolbar-editor.c:589
+msgid ""
+"Drag an item onto the toolbars above to add it, from the toolbars in the "
+"items table to remove it."
 msgstr ""
 
-#: lib/ephy-file-helpers.c:104
+#  The name of the default downloads folder
+#. The name of the default downloads folder
+#: lib/ephy-file-helpers.c:75 src/prefs-dialog.c:1107
+msgid "Downloads"
+msgstr ""
+
+#: lib/ephy-file-helpers.c:164
 #, c-format
 msgid "Failed to find %s"
 msgstr ""
 
-#: lib/ephy-file-helpers.c:322
+#: lib/ephy-file-helpers.c:229
 #, c-format
 msgid "%s exists, please move it out of the way."
 msgstr ""
 
-#: lib/ephy-file-helpers.c:325
+#: lib/ephy-file-helpers.c:232
 #, c-format
 msgid "Failed to create directory %s."
 msgstr ""
 
-#: lib/ephy-gui.c:76
+#: lib/ephy-gui.c:90
 #, c-format
 msgid ""
 "File %s will be overwritten.\n"
@@ -1461,1150 +1771,1297 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: lib/ephy-gui.c:107
+#: lib/ephy-gui.c:121
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Ekki tókst að sýna hjálp: %s"
 
-#: lib/ephy-langs.c:28
-#: src/prefs-dialog.c:91
+#: lib/ephy-langs.c:31 src/prefs-dialog.c:108
 msgid "Arabic"
 msgstr "Arabíska"
 
-#: lib/ephy-langs.c:29
+#: lib/ephy-langs.c:32
 msgid "Baltic"
 msgstr ""
 
-#: lib/ephy-langs.c:30
+#: lib/ephy-langs.c:33
 msgid "Central European"
 msgstr ""
 
-#: lib/ephy-langs.c:31
+#: lib/ephy-langs.c:34
 msgid "Cyrillic"
 msgstr ""
 
-#: lib/ephy-langs.c:32
+#: lib/ephy-langs.c:35
 msgid "Devanagari"
 msgstr ""
 
-#: lib/ephy-langs.c:33
-#: src/prefs-dialog.c:113
+#: lib/ephy-langs.c:36 src/prefs-dialog.c:130
 msgid "Greek"
 msgstr "Gríska"
 
-#: lib/ephy-langs.c:34
-#: src/prefs-dialog.c:114
+#: lib/ephy-langs.c:37 src/prefs-dialog.c:131
 msgid "Hebrew"
 msgstr ""
 
-#: lib/ephy-langs.c:35
-#: src/prefs-dialog.c:120
-#: src/prefs-dialog.c:159
-msgid "Japanese"
-msgstr "Japanska"
-
-#: lib/ephy-langs.c:36
-#: src/prefs-dialog.c:121
-#: src/prefs-dialog.c:160
-msgid "Korean"
-msgstr ""
-
-#: lib/ephy-langs.c:37
-#: src/prefs-dialog.c:98
-#: src/prefs-dialog.c:162
+#: lib/ephy-langs.c:40 src/prefs-dialog.c:115
 msgid "Simplified Chinese"
 msgstr ""
 
-#: lib/ephy-langs.c:38
-#: src/prefs-dialog.c:140
+#: lib/ephy-langs.c:41 src/prefs-dialog.c:157
 msgid "Tamil"
 msgstr ""
 
-#: lib/ephy-langs.c:39
+#: lib/ephy-langs.c:42
 msgid "Thai"
 msgstr ""
 
-#: lib/ephy-langs.c:40
-#: src/prefs-dialog.c:99
-#: src/prefs-dialog.c:163
+#: lib/ephy-langs.c:43 src/prefs-dialog.c:116
 msgid "Traditional Chinese"
 msgstr ""
 
-#: lib/ephy-langs.c:41
-#: src/prefs-dialog.c:141
+#: lib/ephy-langs.c:44
+msgid "Traditional Chinese (Hong Kong)"
+msgstr ""
+
+#: lib/ephy-langs.c:45 src/prefs-dialog.c:158
 msgid "Turkish"
 msgstr ""
 
-#: lib/ephy-langs.c:42
+#: lib/ephy-langs.c:46
 msgid "Unicode"
 msgstr ""
 
-#: lib/ephy-langs.c:43
+#: lib/ephy-langs.c:47
 msgid "Western"
 msgstr ""
 
-#: lib/ephy-zoom.h:39
+#: lib/ephy-stock-icons.c:54
+msgid "Secure"
+msgstr ""
+
+#: lib/ephy-stock-icons.c:55 src/ephy-window.c:1195
+msgid "Insecure"
+msgstr ""
+
+#: lib/ephy-stock-icons.c:56 src/ephy-history-window.c:1192
+msgid "History"
+msgstr ""
+
+#: lib/ephy-stock-icons.c:57 src/bookmarks/ephy-bookmarks-editor.c:1373
+#: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:1013
+msgid "Bookmarks"
+msgstr "Bókamerki"
+
+#: lib/ephy-stock-icons.c:58 src/toolbar.c:375
+msgid "Address Entry"
+msgstr ""
+
+#: lib/ephy-stock-icons.c:59
+msgid "_Download"
+msgstr ""
+
+#: lib/ephy-zoom.h:41
 msgid "50%"
 msgstr "50%"
 
-#: lib/ephy-zoom.h:40
+#: lib/ephy-zoom.h:42
 msgid "75%"
 msgstr "75%"
 
-#: lib/ephy-zoom.h:41
+#: lib/ephy-zoom.h:43
 msgid "100%"
 msgstr "100%"
 
-#: lib/ephy-zoom.h:42
+#: lib/ephy-zoom.h:44
 msgid "125%"
 msgstr "125%"
 
-#: lib/ephy-zoom.h:43
+#: lib/ephy-zoom.h:45
 msgid "150%"
 msgstr "150%"
 
-#: lib/ephy-zoom.h:44
+#: lib/ephy-zoom.h:46
 msgid "175%"
 msgstr "175%"
 
-#: lib/ephy-zoom.h:45
+#: lib/ephy-zoom.h:47
 msgid "200%"
 msgstr "200%"
 
-#: lib/ephy-zoom.h:46
+#: lib/ephy-zoom.h:48
 msgid "300%"
 msgstr "300%"
 
-#: lib/ephy-zoom.h:47
+#: lib/ephy-zoom.h:49
 msgid "400%"
 msgstr "400%"
 
-#: lib/widgets/ephy-zoom-control.c:145
-msgid "_Zoom"
-msgstr ""
+#  Toplevel
+#: lib/widgets/ephy-cell-renderer-progress.c:103
+#, fuzzy
+msgid "Failed"
+msgstr "_Skrá"
 
-#: src/bookmarks/ephy-bookmark-action.c:212
+#: src/bookmarks/ephy-bookmark-action.c:248
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:245
+#: src/bookmarks/ephy-bookmark-properties.c:230
 #, c-format
 msgid "%s Properties"
 msgstr "Eiginleikar %s"
 
-#: src/bookmarks/ephy-bookmark-properties.c:368
-#: src/bookmarks/ephy-new-bookmark.c:220
+#: src/bookmarks/ephy-bookmark-properties.c:352
+#: src/bookmarks/ephy-new-bookmark.c:216
 msgid "_Title:"
 msgstr "_Titill:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:410
-#: src/bookmarks/ephy-new-bookmark.c:243
+#: src/bookmarks/ephy-bookmark-properties.c:394
+#: src/bookmarks/ephy-new-bookmark.c:239
 msgid "To_pics:"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmark-properties.c:419
+#: src/bookmarks/ephy-bookmark-properties.c:403
 msgid "_Show in bookmarks bar"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:154
-#: src/ephy-history-window.c:126
-#: src/ephy-window.c:67
-msgid "_View"
+#  Toplevel
+#. Toplevel
+#: src/bookmarks/ephy-bookmarks-editor.c:161 src/ephy-history-window.c:151
+#: src/ephy-window.c:83
+msgid "_File"
+msgstr "_Skrá"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:162 src/ephy-history-window.c:152
+#: src/ephy-window.c:84
+msgid "_Edit"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:155
-#: src/ephy-history-window.c:127
-#: src/ephy-window.c:71
+#: src/bookmarks/ephy-bookmarks-editor.c:163 src/ephy-history-window.c:153
+#: src/ephy-window.c:85
+msgid "_View"
+msgstr "_Birta"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:164 src/ephy-history-window.c:154
+#: src/ephy-window.c:90
 msgid "_Help"
 msgstr "_Hjálp"
 
+#  File Menu
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:159
+#: src/bookmarks/ephy-bookmarks-editor.c:168
 msgid "_New Topic"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:160
+#: src/bookmarks/ephy-bookmarks-editor.c:169
 msgid "Create a new topic"
 msgstr ""
 
 #  File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:162
-#: src/bookmarks/ephy-bookmarks-editor.c:853
-#: src/ephy-history-window.c:131
-#: src/ephy-history-window.c:666
+#. File Menu
+#: src/bookmarks/ephy-bookmarks-editor.c:171
+#: src/bookmarks/ephy-bookmarks-editor.c:996 src/ephy-history-window.c:158
+#: src/ephy-history-window.c:738
 msgid "_Open in New Window"
 msgstr "_Opna í nýjum glugga"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:163
+#: src/bookmarks/ephy-bookmarks-editor.c:172
 msgid "Open the selected bookmark in a new window"
 msgstr "Opna valið bókamerki í nýjum glugga"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:165
-#: src/bookmarks/ephy-bookmarks-editor.c:854
-#: src/ephy-history-window.c:134
-#: src/ephy-history-window.c:667
+#: src/bookmarks/ephy-bookmarks-editor.c:174
+#: src/bookmarks/ephy-bookmarks-editor.c:997 src/ephy-history-window.c:161
+#: src/ephy-history-window.c:739
 msgid "Open in New _Tab"
 msgstr "Opna í nýjum _flipa"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:166
+#: src/bookmarks/ephy-bookmarks-editor.c:175
 msgid "Open the selected bookmark in a new tab"
 msgstr "Opna valið bókamerki í nýjum flipa"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:168
+#: src/bookmarks/ephy-bookmarks-editor.c:177
 msgid "_Rename..."
 msgstr "Endu_rnefna..."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:169
+#: src/bookmarks/ephy-bookmarks-editor.c:178
 msgid "Rename the selected bookmark or topic"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:170
-#: src/ephy-history-window.c:137
+#: src/bookmarks/ephy-bookmarks-editor.c:179 src/ephy-history-window.c:164
 msgid "_Delete"
-msgstr ""
+msgstr "_Eyða"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:171
+#: src/bookmarks/ephy-bookmarks-editor.c:180
 msgid "Delete the selected bookmark or topic"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:173
-msgid "_Show in Bookmarks Bar"
-msgstr ""
-
-#: src/bookmarks/ephy-bookmarks-editor.c:174
-msgid "Show the selected bookmark or topic in the bookmarks bar"
-msgstr ""
-
-#: src/bookmarks/ephy-bookmarks-editor.c:176
+#: src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "_Properties"
-msgstr ""
+msgstr "_Stillingar"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:177
+#: src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "View or modify the properties of the selected bookmark"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:179
+#: src/bookmarks/ephy-bookmarks-editor.c:185
 msgid "_Import Bookmarks..."
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:180
+#: src/bookmarks/ephy-bookmarks-editor.c:186
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:182
-#: src/ephy-history-window.c:143
-#: src/ephy-window.c:92
+#: src/bookmarks/ephy-bookmarks-editor.c:188 src/ephy-history-window.c:170
+#: src/ephy-window.c:118
 msgid "_Close"
-msgstr ""
+msgstr "_Loka"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:183
+#: src/bookmarks/ephy-bookmarks-editor.c:189
 msgid "Close the bookmarks window"
 msgstr ""
 
+#  Edit Menu
 #. Edit Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:187
-#: src/ephy-history-window.c:148
-#: src/ephy-window.c:97
+#: src/bookmarks/ephy-bookmarks-editor.c:193 src/ephy-history-window.c:175
+#: src/ephy-window.c:129
 msgid "Cu_t"
-msgstr ""
+msgstr "_Klippa"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:188
-#: src/ephy-history-window.c:149
-#: src/ephy-window.c:98
+#: src/bookmarks/ephy-bookmarks-editor.c:194 src/ephy-history-window.c:176
+#: src/ephy-window.c:130
 msgid "Cut the selection"
-msgstr ""
-
-#: src/bookmarks/ephy-bookmarks-editor.c:190
-#: src/bookmarks/ephy-bookmarks-editor.c:863
-#: src/ephy-history-window.c:151
-#: src/ephy-history-window.c:676
-#: src/ephy-window.c:100
-msgid "_Copy"
-msgstr ""
-
-#: src/bookmarks/ephy-bookmarks-editor.c:191
-#: src/ephy-history-window.c:152
-#: src/ephy-window.c:101
-msgid "Copy the selection"
-msgstr ""
-
-#: src/bookmarks/ephy-bookmarks-editor.c:193
-#: src/ephy-history-window.c:154
-#: src/ephy-window.c:103
-msgid "_Paste"
-msgstr ""
-
-#: src/bookmarks/ephy-bookmarks-editor.c:194
-#: src/ephy-history-window.c:155
-msgid "Paste the clipboard"
-msgstr ""
+msgstr "Klippa val"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:196
-#: src/ephy-history-window.c:157
-#: src/ephy-window.c:106
-msgid "Select _All"
-msgstr ""
+#: src/bookmarks/ephy-bookmarks-editor.c:1006 src/ephy-history-window.c:178
+#: src/ephy-history-window.c:748 src/ephy-window.c:132
+msgid "_Copy"
+msgstr "_Afrita"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:197
+#: src/bookmarks/ephy-bookmarks-editor.c:197 src/ephy-history-window.c:179
+#: src/ephy-window.c:133
+msgid "Copy the selection"
+msgstr "Afrita val"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:199 src/ephy-history-window.c:181
+#: src/ephy-window.c:135
+msgid "_Paste"
+msgstr "_Líma"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:200 src/ephy-history-window.c:182
+msgid "Paste the clipboard"
+msgstr "Líma frá úrklippuborði"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:202 src/ephy-history-window.c:184
+#: src/ephy-window.c:138
+msgid "Select _All"
+msgstr "Velja _Allt"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "Select all bookmarks or text"
 msgstr ""
 
-#. View Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:201
-#: src/ephy-history-window.c:165
-msgid "_Title"
-msgstr ""
-
-#: src/bookmarks/ephy-bookmarks-editor.c:202
-#: src/ephy-history-window.c:166
-msgid "Show only the title column"
-msgstr ""
-
-#: src/bookmarks/ephy-bookmarks-editor.c:204
-#: src/ephy-history-window.c:168
-msgid "_Address"
-msgstr ""
-
-#: src/bookmarks/ephy-bookmarks-editor.c:205
-#: src/ephy-history-window.c:169
-msgid "Show only the address column"
-msgstr ""
-
-#: src/bookmarks/ephy-bookmarks-editor.c:207
-#: src/ephy-history-window.c:171
-msgid "T_itle and Address"
-msgstr ""
-
-#: src/bookmarks/ephy-bookmarks-editor.c:208
-#: src/ephy-history-window.c:172
-msgid "Show both the title and address columns"
-msgstr ""
-
 #  Help Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:212
-#: src/ephy-history-window.c:176
-#: src/ephy-window.c:207
+#. Help Menu
+#: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:192
+#: src/ephy-window.c:229
 msgid "_Contents"
 msgstr "_Innihald"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:213
+#: src/bookmarks/ephy-bookmarks-editor.c:208
 msgid "Display bookmarks help"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:215
-#: src/ephy-history-window.c:179
-#: src/ephy-window.c:210
+#: src/bookmarks/ephy-bookmarks-editor.c:210 src/ephy-history-window.c:195
+#: src/ephy-window.c:232
 msgid "_About"
 msgstr "_Um"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:216
-#: src/ephy-history-window.c:180
-#: src/ephy-window.c:211
+#: src/bookmarks/ephy-bookmarks-editor.c:211 src/ephy-history-window.c:196
+#: src/ephy-window.c:233
 msgid "Display credits for the web browser creators"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:258
+#. File Menu
+#: src/bookmarks/ephy-bookmarks-editor.c:219
+msgid "_Show in Bookmarks Bar"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:220
+msgid "Show the selected bookmark or topic in the bookmarks bar"
+msgstr ""
+
+#  View Menu
+#. View Menu
+#: src/bookmarks/ephy-bookmarks-editor.c:234 src/ephy-history-window.c:211
+msgid "_Title"
+msgstr "_Titill"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:235 src/ephy-history-window.c:212
+msgid "Show only the title column"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:236 src/ephy-history-window.c:215
+msgid "T_itle and Address"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:237 src/ephy-history-window.c:216
+msgid "Show both the title and address columns"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:279
 msgid "Type a topic"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:510
+#: src/bookmarks/ephy-bookmarks-editor.c:558
+msgid "Import bookmarks from file"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:592
 msgid "Import Bookmarks"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:530
-msgid "Choose the bookmarks source:"
+#: src/bookmarks/ephy-bookmarks-editor.c:598
+#, fuzzy
+msgid "I_mport"
+msgstr "Sportið"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:612
+msgid "Import bookmarks from:"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:539
-msgid "Mozilla bookmarks"
-msgstr "Mozilla bókamerki"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:541
-msgid "Galeon bookmarks"
-msgstr "Galeon bókamerki"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:543
-msgid "Konqueror bookmarks"
+#: src/bookmarks/ephy-bookmarks-editor.c:635
+#, fuzzy
+msgid "Firebird"
 msgstr "Konqueror bókamerki"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:848
-#: src/ephy-history-window.c:661
+#: src/bookmarks/ephy-bookmarks-editor.c:637
+msgid "Firefox"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:639
+msgid "Galeon"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:641
+#, fuzzy
+msgid "Konqueror"
+msgstr "Konqueror bókamerki"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:643
+msgid "Mozilla"
+msgstr ""
+
+#: src/bookmarks/ephy-bookmarks-editor.c:991 src/ephy-history-window.c:733
 msgid "_Open in New Windows"
 msgstr "_Opna í nýjum gluggum"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:849
-#: src/ephy-history-window.c:662
+#: src/bookmarks/ephy-bookmarks-editor.c:992 src/ephy-history-window.c:734
 msgid "Open in New _Tabs"
 msgstr "Opna í nýjum flipum"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:859
-#: src/ephy-history-window.c:672
+#: src/bookmarks/ephy-bookmarks-editor.c:1002 src/ephy-history-window.c:744
 msgid "_Copy Address"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1106
-#: src/ephy-history-window.c:877
+#: src/bookmarks/ephy-bookmarks-editor.c:1243 src/ephy-history-window.c:1038
 msgid "_Search:"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1215
-#: src/ephy-window.c:688
-msgid "Bookmarks"
-msgstr "Bókamerki"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:1291
+#: src/bookmarks/ephy-bookmarks-editor.c:1456
 msgid "Topics"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1352
-#: src/ephy-history-window.c:1071
+#: src/bookmarks/ephy-bookmarks-editor.c:1518 src/ephy-history-window.c:1318
 msgid "Title"
-msgstr ""
+msgstr "Titill"
 
-#  This is the adjective, not the verb
-#: src/bookmarks/ephy-bookmarks-menu.c:269
-#: src/bookmarks/ephy-topic-action.c:209
-msgid "Empty"
-msgstr ""
+#: src/bookmarks/ephy-bookmarks-editor.c:1525 src/ephy-history-window.c:1324
+msgid "Address"
+msgstr "Vistfang"
 
 #  Translators you should change these links to respect your locale.
 #  * For instance in .nl these should be
 #  * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#: src/bookmarks/ephy-bookmarks.c:77
+#. Translators you should change these links to respect your locale.
+#. * For instance in .nl these should be
+#. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+#.
+#: src/bookmarks/ephy-bookmarks.c:83
 msgid "Search the web"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks.c:77
+#: src/bookmarks/ephy-bookmarks.c:83
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr ""
 
-#: src/bookmarks/ephy-bookmarks.c:83
+#: src/bookmarks/ephy-bookmarks.c:89
 msgid "Entertainment"
 msgstr "Skemmtun"
 
-#: src/bookmarks/ephy-bookmarks.c:84
+#: src/bookmarks/ephy-bookmarks.c:90
 msgid "News"
 msgstr "Fréttir"
 
-#: src/bookmarks/ephy-bookmarks.c:85
+#: src/bookmarks/ephy-bookmarks.c:91
 msgid "Shopping"
 msgstr "Verslun"
 
-#: src/bookmarks/ephy-bookmarks.c:86
+#: src/bookmarks/ephy-bookmarks.c:92
 msgid "Sports"
 msgstr "Sportið"
 
-#: src/bookmarks/ephy-bookmarks.c:87
+#: src/bookmarks/ephy-bookmarks.c:93
 msgid "Travel"
 msgstr "Ferðalög"
 
-#: src/bookmarks/ephy-bookmarks.c:88
+#: src/bookmarks/ephy-bookmarks.c:94
 msgid "Work"
 msgstr "Vinnan"
 
-#: src/bookmarks/ephy-bookmarks.c:724
+#: src/bookmarks/ephy-bookmarks.c:680
 msgid "Most Visited"
 msgstr "Mest heimsótt"
 
-#: src/bookmarks/ephy-bookmarks.c:741
+#: src/bookmarks/ephy-bookmarks.c:697
 msgid "Not Categorized"
 msgstr ""
 
-#: src/bookmarks/ephy-new-bookmark.c:266
-msgid "New Bookmark"
-msgstr ""
+#: src/bookmarks/ephy-new-bookmark.c:262
+#, fuzzy
+msgid "Add Bookmark"
+msgstr "Bókamerki"
 
 #. FIXME: We "should" use gtk_message dialog here
 #. * but it doesn't support markup of text yet
 #. * so we build our own. See bug 65501.
 #.
-#: src/bookmarks/ephy-new-bookmark.c:311
+#: src/bookmarks/ephy-new-bookmark.c:307
 msgid "Duplicated Bookmark"
 msgstr ""
 
-#: src/bookmarks/ephy-new-bookmark.c:341
+#: src/bookmarks/ephy-new-bookmark.c:337
 #, c-format
 msgid "A bookmark titled %s already exists for this page."
 msgstr ""
 
-#: src/ephy-go-action.c:80
-#: src/ephy-go-action.c:97
-#: src/toolbar.c:348
+#  This is the adjective, not the verb
+#  This is the adjective, not the verb
+#. This is the adjective, not the verb
+#: src/bookmarks/ephy-topic-action.c:233
+msgid "Empty"
+msgstr "Tómt"
+
+#: src/ephy-encoding-dialog.c:330
+msgid "Encodings"
+msgstr ""
+
+#: src/ephy-encoding-menu.c:379
+msgid "_Other..."
+msgstr ""
+
+#: src/ephy-encoding-menu.c:380
+msgid "Other encodings"
+msgstr ""
+
+#: src/ephy-encoding-menu.c:387
+msgid "_Automatic"
+msgstr ""
+
+#: src/ephy-go-action.c:73 src/toolbar.c:409
 msgid "Go"
 msgstr ""
 
-#: src/ephy-history-window.c:132
+#: src/ephy-history-window.c:159
 msgid "Open the selected history link in a new window"
 msgstr ""
 
-#: src/ephy-history-window.c:135
+#: src/ephy-history-window.c:162
 msgid "Open the selected history link in a new tab"
 msgstr ""
 
-#: src/ephy-history-window.c:138
+#: src/ephy-history-window.c:165
 msgid "Delete the selected history link"
 msgstr ""
 
-#: src/ephy-history-window.c:140
+#: src/ephy-history-window.c:167
 msgid "Boo_kmark Link..."
 msgstr ""
 
-#: src/ephy-history-window.c:141
+#: src/ephy-history-window.c:168
 msgid "Bookmark the selected history link"
 msgstr ""
 
-#: src/ephy-history-window.c:144
+#: src/ephy-history-window.c:171
 msgid "Close the history window"
 msgstr ""
 
-#: src/ephy-history-window.c:158
+#: src/ephy-history-window.c:185
 msgid "Select all history links or text"
 msgstr ""
 
-#: src/ephy-history-window.c:160
+#: src/ephy-history-window.c:187
 msgid "C_lear History"
 msgstr ""
 
-#: src/ephy-history-window.c:161
+#: src/ephy-history-window.c:188
 msgid "Clear your browsing history"
 msgstr ""
 
-#: src/ephy-history-window.c:177
+#: src/ephy-history-window.c:193
 msgid "Display history help"
 msgstr ""
 
-#: src/ephy-history-window.c:223
-msgid "Clear history"
+#: src/ephy-history-window.c:213
+msgid "_Address"
 msgstr ""
 
-#: src/ephy-history-window.c:255
+#: src/ephy-history-window.c:214
+msgid "Show only the address column"
+msgstr ""
+
+#: src/ephy-history-window.c:246
+msgid "Clear History"
+msgstr ""
+
+#: src/ephy-history-window.c:276
 msgid "C_lear"
-msgstr ""
+msgstr "Hr_einsa"
 
-#: src/ephy-history-window.c:277
+#: src/ephy-history-window.c:300
 msgid "Clear browsing history?"
 msgstr ""
 
-#: src/ephy-history-window.c:284
-msgid "Clearing the browsing history will cause all history links to be permanently deleted."
+#: src/ephy-history-window.c:307
+msgid ""
+"Clearing the browsing history will cause all history links to be permanently "
+"deleted."
 msgstr ""
 
-#: src/ephy-history-window.c:951
-msgid "History"
-msgstr ""
+#: src/ephy-history-window.c:1047
+msgid "Today"
+msgstr "Í dag"
 
-#: src/ephy-history-window.c:1021
+#. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
+#: src/ephy-history-window.c:1048 src/ephy-history-window.c:1051
+#: src/ephy-history-window.c:1055
+#, c-format
+msgid "Last %d day"
+msgid_plural "Last %d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/ephy-history-window.c:1264
 msgid "Sites"
 msgstr ""
 
-#: src/ephy-history-window.c:1076
-msgid "Address"
-msgstr ""
-
-#: src/ephy-main.c:72
+#: src/ephy-main.c:56
 msgid "Open a new tab in an existing Epiphany window"
 msgstr ""
 
-#: src/ephy-main.c:75
-msgid "Open a new window in an existing Epiphany process"
-msgstr ""
-
-#: src/ephy-main.c:78
-msgid "Do not raise the window when opening a page in an existing Epiphany process"
-msgstr ""
-
-#: src/ephy-main.c:81
+#: src/ephy-main.c:59
 msgid "Run Epiphany in full screen mode"
 msgstr ""
 
-#: src/ephy-main.c:84
-msgid "Attempt to load URL in existing Epiphany window"
-msgstr ""
-
-#: src/ephy-main.c:87
+#: src/ephy-main.c:62
 msgid "Load the given session file"
 msgstr ""
 
-#: src/ephy-main.c:88
+#: src/ephy-main.c:63 src/ephy-main.c:69
 msgid "FILE"
 msgstr "SKRÁ"
 
-#: src/ephy-main.c:90
-msgid "Don't open any windows; instead act as a server for quick startup of new Epiphany instances"
-msgstr ""
-
-#: src/ephy-main.c:94
+#: src/ephy-main.c:65
 msgid "Add a bookmark (don't open any window)"
 msgstr ""
 
-#: src/ephy-main.c:95
+#: src/ephy-main.c:66
 msgid "URL"
 msgstr "URL"
 
-#: src/ephy-main.c:97
-msgid "Close all Epiphany windows"
+#: src/ephy-main.c:68
+msgid "Import bookmarks from the given file"
 msgstr ""
 
-#: src/ephy-main.c:100
-msgid "Same as --close, but exits server mode too"
-msgstr ""
-
-#: src/ephy-main.c:103
-msgid "Used internally by the nautilus view"
-msgstr ""
-
-#: src/ephy-main.c:106
+#: src/ephy-main.c:71
 msgid "Launch the bookmarks editor"
 msgstr ""
 
-#: src/ephy-main.c:127
+#: src/ephy-main.c:74
+msgid "Used internally by the bonobo interface"
+msgstr ""
+
+#: src/ephy-main.c:109
 msgid "Epiphany Web Browser"
 msgstr ""
 
-#: src/ephy-main.c:132
+#: src/ephy-main.c:113
 msgid "Ephy"
 msgstr ""
 
-#: src/ephy-main.c:203
+#: src/ephy-session.c:301
+msgid "Crash Recovery"
+msgstr ""
+
+#: src/ephy-session.c:303
+msgid "_Don't Recover"
+msgstr ""
+
+#: src/ephy-session.c:304
+msgid "_Recover"
+msgstr ""
+
+#: src/ephy-session.c:335
 msgid ""
-"Epiphany can't be used now. Running the command \"bonobo-slay\" from the console may fix the problem. If not, you can try rebooting the computer or installing Epiphany again.\n"
-"\n"
-"Bonobo couldn't locate the GNOME_Epiphany_Automation.server."
+"Epiphany appears to have crashed or been killed the last time it was run."
 msgstr ""
 
-#: src/ephy-shell.c:234
-msgid "Epiphany can't be used now. Mozilla initialization failed. Check your MOZILLA_FIVE_HOME environmental variable."
+#: src/ephy-session.c:341
+msgid "You can recover the opened tabs and windows."
 msgstr ""
 
-#: src/ephy-tab.c:314
-#: src/ephy-tab.c:1012
-#: src/ephy-tab.c:1195
+#: src/ephy-shell.c:345
+msgid ""
+"Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
+"use bonobo-activation-sysconf to configure the search path for bonobo server "
+"files."
+msgstr ""
+
+#: src/ephy-shell.c:352
+msgid ""
+"Epiphany can't be used now, due to an unexpected error from Bonobo when "
+"attempting to register the automation server"
+msgstr ""
+
+#: src/ephy-shell.c:375
+msgid ""
+"Epiphany can't be used now, due to an unexpected error from Bonobo when "
+"attempting to locate the automation object."
+msgstr ""
+
+#: src/ephy-tab.c:358 src/ephy-tab.c:1238 src/ephy-tab.c:1447
 msgid "Blank page"
-msgstr ""
+msgstr "Tóm síða"
 
-#: src/ephy-tab.c:639
+#: src/ephy-tab.c:802
 msgid "site"
 msgstr ""
 
-#: src/ephy-tab.c:663
+#: src/ephy-tab.c:826
 #, c-format
 msgid "Redirecting to %s..."
 msgstr ""
 
-#: src/ephy-tab.c:667
+#: src/ephy-tab.c:830
 #, c-format
 msgid "Transferring data from %s..."
 msgstr ""
 
-#: src/ephy-tab.c:671
+#: src/ephy-tab.c:834
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr ""
 
-#: src/ephy-tab.c:679
+#: src/ephy-tab.c:842
 #, c-format
 msgid "Loading %s..."
 msgstr "Hleð %s..."
 
-#: src/ephy-tab.c:683
-msgid "Done."
-msgstr ""
-
-#: src/ephy-window.c:68
+#: src/ephy-window.c:86
 msgid "_Bookmarks"
 msgstr "_Bókamerki"
 
-#: src/ephy-window.c:69
+#: src/ephy-window.c:87
 msgid "_Go"
 msgstr ""
 
-#: src/ephy-window.c:70
+#: src/ephy-window.c:88
+#, fuzzy
+msgid "T_ools"
+msgstr "Tó_lstikur"
+
+#: src/ephy-window.c:89
 msgid "_Tabs"
 msgstr "_Flipar"
 
 #  File menu
-#: src/ephy-window.c:74
+#. File menu
+#: src/ephy-window.c:94
 msgid "_New Window"
 msgstr "_Nýr gluggi"
 
-#: src/ephy-window.c:75
+#: src/ephy-window.c:95
 msgid "Open a new window"
 msgstr "Opna nýjan glugga"
 
-#: src/ephy-window.c:77
+#: src/ephy-window.c:97
 msgid "New _Tab"
 msgstr "Nýr _Flipi"
 
-#: src/ephy-window.c:78
+#: src/ephy-window.c:98
 msgid "Open a new tab"
 msgstr "Opna nýjan flipa"
 
-#: src/ephy-window.c:80
+#: src/ephy-window.c:100
 msgid "_Open..."
-msgstr ""
+msgstr "_Opna..."
 
-#: src/ephy-window.c:81
+#: src/ephy-window.c:101
 msgid "Open a file"
-msgstr ""
+msgstr "Opna skrá"
 
-#: src/ephy-window.c:83
+#: src/ephy-window.c:103
 msgid "Save _As..."
-msgstr ""
+msgstr "Vist_a sem... "
 
-#: src/ephy-window.c:84
+#: src/ephy-window.c:104
 msgid "Save the current page"
 msgstr ""
 
-#: src/ephy-window.c:87
-msgid "Print the current page"
-msgstr ""
-
-#: src/ephy-window.c:89
-msgid "S_end To..."
-msgstr ""
-
-#: src/ephy-window.c:90
-msgid "Send a link of the current page"
-msgstr ""
-
-#: src/ephy-window.c:93
-msgid "Close this window"
-msgstr ""
-
-#: src/ephy-window.c:104
-msgid "Paste clipboard"
-msgstr ""
+#: src/ephy-window.c:106
+msgid "Print Set_up..."
+msgstr "Prent _uppsetning"
 
 #: src/ephy-window.c:107
-msgid "Select the entire page"
+msgid "Setup the page settings for printing"
 msgstr ""
+
+#: src/ephy-window.c:109
+#, fuzzy
+msgid "Print Pre_view"
+msgstr "Loka prentaraforsýn"
 
 #: src/ephy-window.c:110
-msgid "Find a word or phrase in the page"
-msgstr ""
+#, fuzzy
+msgid "Print preview"
+msgstr "Loka prentaraforsýn"
 
 #: src/ephy-window.c:112
-msgid "Find Ne_xt"
+msgid "_Print..."
 msgstr ""
 
 #: src/ephy-window.c:113
-msgid "Find next occurrence of the word or phrase"
+msgid "Print the current page"
 msgstr ""
 
 #: src/ephy-window.c:115
-msgid "Find Pre_vious"
-msgstr ""
+msgid "S_end To..."
+msgstr "S_enda Til..."
 
 #: src/ephy-window.c:116
-msgid "Find previous occurrence of the word or phrase"
-msgstr ""
-
-#: src/ephy-window.c:118
-msgid "P_ersonal Data"
+msgid "Send a link of the current page"
 msgstr ""
 
 #: src/ephy-window.c:119
+msgid "Close this window"
+msgstr "Loka þessum glugga"
+
+#  Edit menu
+#. Edit menu
+#: src/ephy-window.c:123
+msgid "_Undo"
+msgstr "_Afturkalla"
+
+#: src/ephy-window.c:124
+#, fuzzy
+msgid "Undo the last action"
+msgstr "Afrita val"
+
+#: src/ephy-window.c:126
+msgid "Re_do"
+msgstr ""
+
+#: src/ephy-window.c:127
+msgid "Redo the last undone action"
+msgstr ""
+
+#: src/ephy-window.c:136
+msgid "Paste clipboard"
+msgstr ""
+
+#: src/ephy-window.c:139
+msgid "Select the entire page"
+msgstr ""
+
+#: src/ephy-window.c:141
+msgid "_Find..."
+msgstr ""
+
+#: src/ephy-window.c:142
+msgid "Find a word or phrase in the page"
+msgstr ""
+
+#: src/ephy-window.c:144
+msgid "Find Ne_xt"
+msgstr ""
+
+#: src/ephy-window.c:145
+msgid "Find next occurrence of the word or phrase"
+msgstr ""
+
+#: src/ephy-window.c:147
+msgid "Find Pre_vious"
+msgstr ""
+
+#: src/ephy-window.c:148
+msgid "Find previous occurrence of the word or phrase"
+msgstr ""
+
+#: src/ephy-window.c:150
+msgid "P_ersonal Data"
+msgstr ""
+
+#: src/ephy-window.c:151
 msgid "View and remove cookies and passwords"
 msgstr ""
 
-#: src/ephy-window.c:121
+#: src/ephy-window.c:153
 msgid "T_oolbars"
 msgstr "Tó_lstikur"
 
-#: src/ephy-window.c:122
+#: src/ephy-window.c:154
 msgid "Customize toolbars"
 msgstr ""
 
-#: src/ephy-window.c:124
+#: src/ephy-window.c:156
 msgid "P_references"
 msgstr "Eiginleika_r"
 
-#: src/ephy-window.c:125
+#: src/ephy-window.c:157
 msgid "Configure the web browser"
 msgstr "Stilla vefvafrann"
 
 #  View menu
-#: src/ephy-window.c:129
+#. View menu
+#: src/ephy-window.c:161
 msgid "_Stop"
 msgstr "_Stopp"
 
-#: src/ephy-window.c:130
+#: src/ephy-window.c:162
 msgid "Stop current data transfer"
 msgstr ""
 
-#: src/ephy-window.c:132
+#: src/ephy-window.c:164
 msgid "_Reload"
-msgstr ""
+msgstr "Endu_rhlaða"
 
-#: src/ephy-window.c:133
+#: src/ephy-window.c:165
 msgid "Display the latest content of the current page"
 msgstr ""
 
-#: src/ephy-window.c:135
-msgid "_Toolbar"
-msgstr "_Tólstika"
-
-#: src/ephy-window.c:136
-msgid "Show or hide toolbar"
-msgstr "Sýna eða fela tólstiku"
-
-#: src/ephy-window.c:138
-msgid "_Bookmarks Bar"
-msgstr ""
-
-#: src/ephy-window.c:139
-msgid "Show or hide bookmarks bar"
-msgstr ""
-
-#: src/ephy-window.c:141
-msgid "St_atusbar"
-msgstr ""
-
-#: src/ephy-window.c:142
-msgid "Show or hide statusbar"
-msgstr ""
-
-#: src/ephy-window.c:144
-msgid "_Fullscreen"
-msgstr ""
-
-#: src/ephy-window.c:145
-msgid "Browse at full screen"
-msgstr ""
-
-#: src/ephy-window.c:147
+#: src/ephy-window.c:167
 msgid "Zoom _In"
-msgstr ""
+msgstr "Súma _Inn"
 
-#: src/ephy-window.c:148
+#: src/ephy-window.c:168
 msgid "Increase the text size"
 msgstr ""
 
-#: src/ephy-window.c:150
+#: src/ephy-window.c:170
 msgid "Zoom _Out"
-msgstr ""
+msgstr "Súma _Út"
 
-#: src/ephy-window.c:151
+#: src/ephy-window.c:171
 msgid "Decrease the text size"
 msgstr ""
 
-#: src/ephy-window.c:153
+#: src/ephy-window.c:173
 msgid "_Normal Size"
-msgstr ""
+msgstr "Ve_njuleg Stærð"
 
-#: src/ephy-window.c:154
+#: src/ephy-window.c:174
 msgid "Use the normal text size"
 msgstr ""
 
-#: src/ephy-window.c:156
-msgid "_Encoding"
+#: src/ephy-window.c:176
+msgid "Text _Encoding"
 msgstr ""
 
-#: src/ephy-window.c:157
+#: src/ephy-window.c:177
+msgid "Change the text encoding"
+msgstr ""
+
+#: src/ephy-window.c:179
 msgid "_Page Source"
 msgstr ""
 
-#: src/ephy-window.c:158
+#: src/ephy-window.c:180
 msgid "View the source code of the page"
 msgstr ""
 
 #. Bookmarks menu
-#: src/ephy-window.c:162
+#: src/ephy-window.c:184
 msgid "_Add Bookmark..."
 msgstr ""
 
-#: src/ephy-window.c:163
-#: src/ephy-window.c:224
+#: src/ephy-window.c:185 src/ephy-window.c:264
 msgid "Add a bookmark for the current page"
 msgstr ""
 
-#: src/ephy-window.c:165
+#: src/ephy-window.c:187
 msgid "_Edit Bookmarks"
 msgstr ""
 
-#: src/ephy-window.c:166
+#: src/ephy-window.c:188
 msgid "Open the bookmarks window"
 msgstr ""
 
 #. Go menu
-#: src/ephy-window.c:170
+#: src/ephy-window.c:192
 msgid "_Back"
 msgstr ""
 
-#: src/ephy-window.c:171
+#: src/ephy-window.c:193
 msgid "Go to the previous visited page"
 msgstr ""
 
-#: src/ephy-window.c:173
+#: src/ephy-window.c:195
 msgid "_Forward"
 msgstr ""
 
-#: src/ephy-window.c:174
+#: src/ephy-window.c:196
 msgid "Go to the next visited page"
 msgstr ""
 
-#: src/ephy-window.c:176
-msgid "_Up"
-msgstr ""
-
-#: src/ephy-window.c:177
+#: src/ephy-window.c:199
 msgid "Go up one level"
 msgstr ""
 
-#: src/ephy-window.c:179
+#: src/ephy-window.c:201
 msgid "_Home"
 msgstr "_Heim"
 
-#: src/ephy-window.c:180
+#: src/ephy-window.c:202
 msgid "Go to the home page"
 msgstr ""
 
-#: src/ephy-window.c:182
+#: src/ephy-window.c:204
 msgid "_Location..."
 msgstr ""
 
-#: src/ephy-window.c:183
+#: src/ephy-window.c:205
 msgid "Go to a specified location"
 msgstr ""
 
-#: src/ephy-window.c:185
+#: src/ephy-window.c:207
 msgid "H_istory"
 msgstr ""
 
-#: src/ephy-window.c:186
+#: src/ephy-window.c:208
 msgid "Open the history window"
 msgstr ""
 
 #. Tabs menu
-#: src/ephy-window.c:190
+#: src/ephy-window.c:212
 msgid "_Previous Tab"
 msgstr ""
 
-#: src/ephy-window.c:191
+#: src/ephy-window.c:213
 msgid "Activate previous tab"
 msgstr ""
 
-#: src/ephy-window.c:193
+#: src/ephy-window.c:215
 msgid "_Next Tab"
 msgstr ""
 
-#: src/ephy-window.c:194
+#: src/ephy-window.c:216
 msgid "Activate next tab"
 msgstr ""
 
-#: src/ephy-window.c:196
+#: src/ephy-window.c:218
 msgid "Move Tab _Left"
 msgstr ""
 
-#: src/ephy-window.c:197
+#: src/ephy-window.c:219
 msgid "Move current tab to left"
 msgstr ""
 
-#: src/ephy-window.c:199
+#: src/ephy-window.c:221
 msgid "Move Tab _Right"
 msgstr ""
 
-#: src/ephy-window.c:200
+#: src/ephy-window.c:222
 msgid "Move current tab to right"
 msgstr ""
 
-#: src/ephy-window.c:202
+#: src/ephy-window.c:224
 msgid "_Detach Tab"
 msgstr ""
 
-#: src/ephy-window.c:203
+#: src/ephy-window.c:225
 msgid "Detach current tab"
 msgstr ""
 
-#: src/ephy-window.c:208
+#: src/ephy-window.c:230
 msgid "Display web browser help"
 msgstr ""
 
+#. View Menu
+#: src/ephy-window.c:241
+msgid "_Toolbar"
+msgstr "_Tólstika"
+
+#: src/ephy-window.c:242
+msgid "Show or hide toolbar"
+msgstr "Sýna eða fela tólstiku"
+
+#: src/ephy-window.c:244
+msgid "_Bookmarks Bar"
+msgstr ""
+
+#: src/ephy-window.c:245
+msgid "Show or hide bookmarks bar"
+msgstr ""
+
+#: src/ephy-window.c:247
+msgid "St_atusbar"
+msgstr ""
+
+#: src/ephy-window.c:248
+msgid "Show or hide statusbar"
+msgstr ""
+
+#: src/ephy-window.c:250
+msgid "_Fullscreen"
+msgstr ""
+
+#: src/ephy-window.c:251
+msgid "Browse at full screen"
+msgstr ""
+
+#: src/ephy-window.c:253
+msgid "Selection Caret"
+msgstr ""
+
 #. Document
-#: src/ephy-window.c:221
+#: src/ephy-window.c:261
 msgid "_Save Background As..."
 msgstr ""
 
-#: src/ephy-window.c:223
+#: src/ephy-window.c:263
 msgid "Add Boo_kmark..."
 msgstr ""
 
 #. Framed document
-#: src/ephy-window.c:228
+#: src/ephy-window.c:268
 msgid "_Open Frame"
 msgstr ""
 
-#: src/ephy-window.c:230
+#: src/ephy-window.c:270
 msgid "Open Frame in _New Window"
 msgstr ""
 
-#: src/ephy-window.c:232
+#: src/ephy-window.c:272
 msgid "Open Frame in New _Tab"
 msgstr ""
 
 #. Links
-#: src/ephy-window.c:236
+#: src/ephy-window.c:276
 msgid "_Open Link"
 msgstr ""
 
-#: src/ephy-window.c:238
+#: src/ephy-window.c:278
 msgid "Open Link in _New Window"
 msgstr ""
 
-#: src/ephy-window.c:240
+#: src/ephy-window.c:280
 msgid "Open Link in New _Tab"
 msgstr ""
 
-#: src/ephy-window.c:242
-msgid "_Download Link..."
+#: src/ephy-window.c:282
+msgid "_Download Link"
 msgstr ""
 
-#: src/ephy-window.c:244
+#: src/ephy-window.c:284
+#, fuzzy
+msgid "_Save Link As..."
+msgstr "Vista síðu sem..."
+
+#: src/ephy-window.c:286
 msgid "_Bookmark Link..."
 msgstr ""
 
-#: src/ephy-window.c:246
+#: src/ephy-window.c:288
 msgid "_Copy Link Address"
 msgstr ""
 
+#  Images
 #. Images
-#: src/ephy-window.c:250
+#: src/ephy-window.c:292
 msgid "Open _Image"
 msgstr ""
 
-#: src/ephy-window.c:252
-msgid "Open Image in New _Window"
-msgstr ""
-
-#: src/ephy-window.c:254
-msgid "Open Image in New T_ab"
-msgstr ""
-
-#: src/ephy-window.c:256
+#: src/ephy-window.c:294
 msgid "_Save Image As..."
 msgstr ""
 
-#: src/ephy-window.c:258
+#: src/ephy-window.c:296
 msgid "_Use Image As Background"
 msgstr ""
 
-#: src/ephy-window.c:260
+#: src/ephy-window.c:298
 msgid "Copy I_mage Address"
 msgstr ""
 
-#: src/ephy-window.c:577
+#: src/ephy-window.c:543
 msgid "Exit Fullscreen"
 msgstr ""
 
-#: src/ephy-window.c:678
-#: src/window-commands.c:341
+#: src/ephy-window.c:617
+msgid "Close _Document"
+msgstr ""
+
+#: src/ephy-window.c:645
+msgid "There are unsubmitted changes to form elements."
+msgstr ""
+
+#: src/ephy-window.c:646
+msgid "If you close the document anyway, you will lose that information."
+msgstr ""
+
+#: src/ephy-window.c:1003 src/window-commands.c:395
 msgid "Open"
 msgstr "Opna"
 
-#: src/ephy-window.c:680
-#: src/window-commands.c:382
+#: src/ephy-window.c:1005 src/window-commands.c:420
 msgid "Save As"
-msgstr ""
+msgstr "Vista Sem"
 
-#: src/ephy-window.c:684
+#: src/ephy-window.c:1009
 msgid "Bookmark"
 msgstr "Bókamerki"
 
-#: src/ephy-window.c:896
-msgid "Insecure"
-msgstr ""
-
-#: src/ephy-window.c:899
+#: src/ephy-window.c:1198
 msgid "Broken"
 msgstr ""
 
-#: src/ephy-window.c:902
+#: src/ephy-window.c:1201
 msgid "Medium"
 msgstr "Miðlungs"
 
-#: src/ephy-window.c:906
+#: src/ephy-window.c:1205
 msgid "Low"
 msgstr "Lítið"
 
-#: src/ephy-window.c:910
+#: src/ephy-window.c:1209
 msgid "High"
 msgstr "Mikið"
 
-#: src/ephy-window.c:920
+#: src/ephy-window.c:1219
 #, c-format
 msgid ""
 "Security level: %s\n"
 "%s"
 msgstr ""
 
-#: src/ephy-window.c:926
+#: src/ephy-window.c:1225
 #, c-format
 msgid "Security level: %s"
 msgstr ""
 
-#: src/pdm-dialog.c:253
-msgid "Host"
-msgstr ""
-
-#: src/pdm-dialog.c:265
-msgid "User Name"
-msgstr "Notendanafn"
-
-#: src/pdm-dialog.c:313
+#: src/pdm-dialog.c:411
 msgid "Domain"
 msgstr "Lén"
 
-#: src/pdm-dialog.c:325
+#: src/pdm-dialog.c:423
 msgid "Name"
 msgstr "Heiti"
 
-#: src/pdm-dialog.c:705
+#: src/pdm-dialog.c:664
+msgid "Host"
+msgstr ""
+
+#: src/pdm-dialog.c:676
+msgid "User Name"
+msgstr "Notendanafn"
+
+#: src/pdm-dialog.c:869
 msgid "Cookie Properties"
 msgstr ""
 
-#: src/pdm-dialog.c:718
-msgid "Value:"
-msgstr "Gildi:"
+#  Help Menu
+#: src/pdm-dialog.c:884
+#, fuzzy
+msgid "Content:"
+msgstr "_Innihald"
 
-#: src/pdm-dialog.c:732
+#: src/pdm-dialog.c:899
 msgid "Path:"
 msgstr "Stígur:"
 
-#: src/pdm-dialog.c:746
-msgid "Secure:"
+#: src/pdm-dialog.c:914
+#, fuzzy
+msgid "Send for:"
+msgstr "S_enda Til..."
+
+#: src/pdm-dialog.c:923
+msgid "Encrypted connections only"
 msgstr ""
 
-#: src/pdm-dialog.c:760
-msgid "Expire:"
+#: src/pdm-dialog.c:923
+msgid "Any type of connection"
 msgstr ""
 
-#: src/popup-commands.c:323
+#: src/pdm-dialog.c:929
+msgid "Expires:"
+msgstr ""
+
+#: src/pdm-dialog.c:940
+msgid "End of current session"
+msgstr ""
+
+#: src/popup-commands.c:289 src/popup-commands.c:297
 msgid "Download link"
 msgstr ""
 
-#: src/ppview-toolbar.c:91
+#: src/popup-commands.c:304
+msgid "Save Image As"
+msgstr "Vista mynd sem"
+
+#: src/popup-commands.c:394
+msgid "Save Background As"
+msgstr "Vista bakgrunn sem"
+
+#: src/ppview-toolbar.c:92
+msgid "First"
+msgstr ""
+
+#: src/ppview-toolbar.c:93
 msgid "Go to the first page"
 msgstr ""
 
-#: src/ppview-toolbar.c:95
+#: src/ppview-toolbar.c:96
+msgid "Last"
+msgstr ""
+
+#: src/ppview-toolbar.c:97
 msgid "Go to the last page"
 msgstr ""
 
-#: src/ppview-toolbar.c:99
+#: src/ppview-toolbar.c:100
+msgid "Previous"
+msgstr ""
+
+#: src/ppview-toolbar.c:101
 msgid "Go to the previous page"
 msgstr ""
 
-#: src/ppview-toolbar.c:103
-msgid "Go to next page"
+#: src/ppview-toolbar.c:104
+msgid "Next"
 msgstr ""
 
 #: src/ppview-toolbar.c:105
+msgid "Go to next page"
+msgstr ""
+
+#: src/ppview-toolbar.c:108
 msgid "Close"
 msgstr "Loka"
 
-#: src/ppview-toolbar.c:107
+#: src/ppview-toolbar.c:109
 msgid "Close print preview"
 msgstr "Loka prentaraforsýn"
 
@@ -2615,312 +3072,332 @@ msgstr "Loka prentaraforsýn"
 #. * "en_AU" translation: "English, Australia (System setting)" or
 #. *                      "Australian English (System setting)"
 #.
-#: src/prefs-dialog.c:88
+#: src/prefs-dialog.c:105
 msgid "System language"
 msgstr ""
 
-#: src/prefs-dialog.c:89
+#: src/prefs-dialog.c:106
 msgid "Afrikaans"
 msgstr ""
 
-#: src/prefs-dialog.c:90
+#: src/prefs-dialog.c:107
 msgid "Albanian"
 msgstr ""
 
-#: src/prefs-dialog.c:92
+#: src/prefs-dialog.c:109
 msgid "Azerbaijani"
 msgstr ""
 
-#: src/prefs-dialog.c:93
+#: src/prefs-dialog.c:110
 msgid "Basque"
 msgstr ""
 
-#: src/prefs-dialog.c:94
+#: src/prefs-dialog.c:111
 msgid "Breton"
 msgstr ""
 
-#: src/prefs-dialog.c:95
+#: src/prefs-dialog.c:112
 msgid "Bulgarian"
 msgstr ""
 
-#: src/prefs-dialog.c:96
+#: src/prefs-dialog.c:113
 msgid "Byelorussian"
 msgstr ""
 
-#: src/prefs-dialog.c:97
+#: src/prefs-dialog.c:114
 msgid "Catalan"
 msgstr ""
 
-#: src/prefs-dialog.c:100
-#: src/prefs-dialog.c:157
-msgid "Chinese"
-msgstr ""
-
-#: src/prefs-dialog.c:101
+#: src/prefs-dialog.c:118
 msgid "Croatian"
 msgstr ""
 
-#: src/prefs-dialog.c:102
+#: src/prefs-dialog.c:119
 msgid "Czech"
 msgstr ""
 
-#: src/prefs-dialog.c:103
+#: src/prefs-dialog.c:120
 msgid "Danish"
 msgstr "Danska"
 
-#: src/prefs-dialog.c:104
+#: src/prefs-dialog.c:121
 msgid "Dutch"
 msgstr "Hollenska"
 
-#: src/prefs-dialog.c:105
+#: src/prefs-dialog.c:122
 msgid "English"
 msgstr "Enska"
 
-#: src/prefs-dialog.c:106
+#: src/prefs-dialog.c:123
 msgid "Esperanto"
 msgstr ""
 
-#: src/prefs-dialog.c:107
+#: src/prefs-dialog.c:124
 msgid "Estonian"
 msgstr "Eistnenska"
 
-#: src/prefs-dialog.c:108
+#: src/prefs-dialog.c:125
 msgid "Faeroese"
 msgstr "Færeyska"
 
-#: src/prefs-dialog.c:109
+#: src/prefs-dialog.c:126
 msgid "Finnish"
 msgstr "Finnska"
 
-#: src/prefs-dialog.c:110
+#: src/prefs-dialog.c:127
 msgid "French"
 msgstr "Franska"
 
-#: src/prefs-dialog.c:111
+#: src/prefs-dialog.c:128
 msgid "Galician"
 msgstr ""
 
-#: src/prefs-dialog.c:112
+#: src/prefs-dialog.c:129
 msgid "German"
 msgstr "Þýska"
 
-#: src/prefs-dialog.c:115
+#: src/prefs-dialog.c:132
 msgid "Hungarian"
 msgstr "Ungverska"
 
-#: src/prefs-dialog.c:116
+#: src/prefs-dialog.c:133
 msgid "Icelandic"
 msgstr "Íslenska"
 
-#: src/prefs-dialog.c:117
+#: src/prefs-dialog.c:134
 msgid "Indonesian"
 msgstr "Indónesíska"
 
-#: src/prefs-dialog.c:118
+#: src/prefs-dialog.c:135
 msgid "Irish"
 msgstr "Írska"
 
-#: src/prefs-dialog.c:119
+#: src/prefs-dialog.c:136
 msgid "Italian"
 msgstr "Ítalska"
 
-#: src/prefs-dialog.c:122
+#: src/prefs-dialog.c:139
 msgid "Latvian"
 msgstr ""
 
-#: src/prefs-dialog.c:123
+#: src/prefs-dialog.c:140
 msgid "Lithuanian"
 msgstr ""
 
-#: src/prefs-dialog.c:124
+#: src/prefs-dialog.c:141
 msgid "Macedonian"
 msgstr ""
 
-#: src/prefs-dialog.c:125
+#: src/prefs-dialog.c:142
 msgid "Malay"
 msgstr ""
 
-#: src/prefs-dialog.c:126
+#: src/prefs-dialog.c:143
 msgid "Norwegian/Nynorsk"
 msgstr "Norska/Nýnorska"
 
-#: src/prefs-dialog.c:127
+#: src/prefs-dialog.c:144
 msgid "Norwegian/Bokmal"
 msgstr "Norska/Bókamál"
 
-#: src/prefs-dialog.c:128
+#: src/prefs-dialog.c:145
 msgid "Norwegian"
 msgstr "Norska"
 
-#: src/prefs-dialog.c:129
+#: src/prefs-dialog.c:146
 msgid "Polish"
 msgstr "Pólska"
 
-#: src/prefs-dialog.c:130
+#: src/prefs-dialog.c:147
 msgid "Portuguese"
 msgstr "Portúgalska"
 
-#: src/prefs-dialog.c:131
+#: src/prefs-dialog.c:148
 msgid "Portuguese of Brazil"
 msgstr ""
 
-#: src/prefs-dialog.c:132
+#: src/prefs-dialog.c:149
 msgid "Romanian"
 msgstr ""
 
-#: src/prefs-dialog.c:133
-#: src/prefs-dialog.c:161
-msgid "Russian"
-msgstr "Rússneska"
-
-#: src/prefs-dialog.c:134
+#: src/prefs-dialog.c:151
 msgid "Scottish"
 msgstr "Skoska"
 
-#: src/prefs-dialog.c:135
+#: src/prefs-dialog.c:152
 msgid "Serbian"
 msgstr ""
 
-#: src/prefs-dialog.c:136
+#: src/prefs-dialog.c:153
 msgid "Slovak"
 msgstr ""
 
-#: src/prefs-dialog.c:137
+#: src/prefs-dialog.c:154
 msgid "Slovenian"
 msgstr ""
 
-#: src/prefs-dialog.c:138
+#: src/prefs-dialog.c:155
 msgid "Spanish"
 msgstr "Spænska"
 
-#: src/prefs-dialog.c:139
+#: src/prefs-dialog.c:156
 msgid "Swedish"
 msgstr "Sænska"
 
-#: src/prefs-dialog.c:142
-#: src/prefs-dialog.c:165
-msgid "Ukrainian"
-msgstr ""
-
-#: src/prefs-dialog.c:143
+#: src/prefs-dialog.c:160
 msgid "Vietnamese"
 msgstr "Víetnamska"
 
-#: src/prefs-dialog.c:144
+#: src/prefs-dialog.c:161
 msgid "Walloon"
 msgstr ""
 
-#: src/prefs-dialog.c:156
-msgid "Off"
-msgstr "Af"
-
-#: src/prefs-dialog.c:158
-msgid "East Asian"
-msgstr ""
-
-#: src/prefs-dialog.c:164
-msgid "Universal"
-msgstr ""
-
-#: src/prefs-dialog.c:950
+#: src/prefs-dialog.c:1057
 #, c-format
 msgid "Custom [%s]"
 msgstr ""
 
-#: src/session.c:195
-msgid "Crash Recovery"
+#  Note that this does NOT refer to the home page but to a
+#  * user's home folder. It should be translated by the same
+#  * term as GTK+'s "Home" string to be consistent with the
+#  * filechooser
+#. Note that this does NOT refer to the home page but to a
+#. * user's home folder. It should be translated by the same
+#. * term as GTK+'s "Home" string to be consistent with the
+#. * filechooser
+#: src/prefs-dialog.c:1102
+#, fuzzy
+msgid "Home"
+msgstr "_Heim"
+
+#: src/prefs-dialog.c:1111
+msgid "Desktop"
 msgstr ""
 
-#: src/session.c:197
-msgid "_Don't Recover"
+#: src/prefs-dialog.c:1322
+msgid "Select a directory"
 msgstr ""
 
-#: src/session.c:198
-msgid "_Recover"
-msgstr ""
-
-#: src/session.c:227
-msgid "Epiphany appears to have crashed or been killed the last time it was run."
-msgstr ""
-
-#: src/session.c:233
-msgid "You can recover the opened tabs and windows."
-msgstr ""
-
-#: src/toolbar.c:268
+#: src/toolbar.c:332
 msgid "Back"
-msgstr ""
+msgstr "Til baka"
 
-#: src/toolbar.c:270
+#: src/toolbar.c:334
 msgid "Go back"
 msgstr ""
 
-#: src/toolbar.c:282
+#: src/toolbar.c:346
 msgid "Forward"
 msgstr ""
 
-#: src/toolbar.c:284
+#: src/toolbar.c:348
 msgid "Go forward"
 msgstr ""
 
-#: src/toolbar.c:295
+#: src/toolbar.c:359
 msgid "Up"
 msgstr ""
 
-#: src/toolbar.c:297
+#: src/toolbar.c:361
 msgid "Go up"
 msgstr ""
 
-#: src/toolbar.c:308
-msgid "Spinner"
-msgstr ""
-
-#: src/toolbar.c:318
-msgid "Address Entry"
-msgstr ""
-
-#: src/toolbar.c:320
+#: src/toolbar.c:377
 msgid "Enter a web address to open, or a phrase to search for on the web"
 msgstr ""
 
-#: src/toolbar.c:329
+#: src/toolbar.c:389
 msgid "Zoom"
 msgstr ""
 
-#: src/toolbar.c:330
+#: src/toolbar.c:391
 msgid "Adjust the text size"
 msgstr ""
 
-#: src/toolbar.c:340
+#: src/toolbar.c:401
 msgid "Favicon"
 msgstr ""
 
-#: src/toolbar.c:350
+#: src/toolbar.c:411
 msgid "Go to the address entered in the address entry"
 msgstr ""
 
-#: src/window-commands.c:130
+#: src/window-commands.c:168
 msgid "Check this out!"
 msgstr "Kíktu á þetta!"
 
-#: src/window-commands.c:295
-msgid "Untitled"
-msgstr "Ónefnt"
-
-#: src/window-commands.c:692
+#: src/window-commands.c:851
 msgid "Toolbar Editor"
 msgstr "Tólstikuritill"
 
-#: src/window-commands.c:714
+#: src/window-commands.c:873
 msgid "_Add a New Toolbar"
 msgstr "Bæt_a við nýrri tólstiku"
 
 #. Translator credits
-#: src/window-commands.c:764
-msgid "translator_credits"
+#: src/window-commands.c:924
+#, fuzzy
+msgid "translator-credits"
 msgstr "Samúel Jón Gunnarsson <sammi at techattack dot nu>"
 
-#: src/window-commands.c:792
+#: src/window-commands.c:954
 msgid "A GNOME browser based on Mozilla"
 msgstr "GNOME vafrari byggður á Mozilla"
 
+#~ msgid "Copy"
+#~ msgstr "Afrita"
+
+#~ msgid "Copy Email Address"
+#~ msgstr "Afrita netfang"
+
+#~ msgid "Copy Image Address"
+#~ msgstr "Afrita vistfang myndar"
+
+#~ msgid "Copy Link Address"
+#~ msgstr "Afrita vistfang tengils"
+
+#~ msgid "Copy Page Address"
+#~ msgstr "Afrita vistfang síðu"
+
+#~ msgid "Copy the Selection"
+#~ msgstr "Afrita val"
+
+#~ msgid "Cut"
+#~ msgstr "Klippa"
+
+#~ msgid "Cut the Selection"
+#~ msgstr "Klippa val"
+
+#~ msgid "Save Background As..."
+#~ msgstr "Vista bakgrunn sem..."
+
+#~ msgid "Save Image As..."
+#~ msgstr "Vista mynd sem..."
+
+#~ msgid "Save Page As..."
+#~ msgstr "Vista síðu sem..."
+
+#~ msgid "Search for a String"
+#~ msgstr "Leita eftir streng"
+
+#~ msgid "Select All"
+#~ msgstr "Velja allt"
+
+#~ msgid "Save Page As"
+#~ msgstr "Vista síðu sem"
+
+#, fuzzy
+#~ msgid "_Open"
+#~ msgstr "Opna"
+
+#~ msgid "Mozilla bookmarks"
+#~ msgstr "Mozilla bókamerki"
+
+#~ msgid "Galeon bookmarks"
+#~ msgstr "Galeon bókamerki"
+
+#~ msgid "Yes"
+#~ msgstr "_Já"
+
+#~ msgid "No"
+#~ msgstr "Nei"
