@@ -104,10 +104,7 @@ encodings[] =
 { 
 	/* translators: access keys need only be unique within the same LG_group */
 	{ N_("Arabic (_IBM-864)"),                  "IBM864",                LG_ARABIC },
-	{ N_("Arabic (I_BM-864-I)"),                "IBM864i",               LG_ARABIC },
 	{ N_("Arabic (ISO-_8859-6)"),               "ISO-8859-6",            LG_ARABIC },
-	{ N_("Arabic (I_SO-8859-6-E)"),             "ISO-8859-6-E",          LG_ARABIC },
-	{ N_("Arabic (IS_O-8859-6-I)"),             "ISO-8859-6-I",          LG_ARABIC },
 	{ N_("Arabic (_MacArabic)"),                "x-mac-arabic",          LG_ARABIC },
 	{ N_("Arabic (_Windows-1256)"),             "windows-1256",          LG_ARABIC },
 	{ N_("Baltic (_ISO-8859-13)"),              "ISO-8859-13",           LG_BALTIC },
@@ -123,7 +120,6 @@ encodings[] =
 	{ N_("Chinese Simplified (GB_K)"),          "x-gbk",                 LG_CHINESE },
 	{ N_("Chinese Simplified (_HZ)"),           "HZ-GB-2312",	     LG_CHINESE },
 	{ N_("Chinese Simplified (_ISO-2022-CN)"),  "ISO-2022-CN",           LG_CHINESE },
-	{ N_("Chinese Simplified (_Windows-936)"),  "windows-936",           LG_CHINESE },
 	{ N_("Chinese Traditional (Big_5)"),        "Big5",                  LG_CHINESE },
 	{ N_("Chinese Traditional (Big5-HK_SCS)"),  "Big5-HKSCS",	     LG_CHINESE },
 	{ N_("Chinese Traditional (_EUC-TW)"),      "x-euc-tw",              LG_CHINESE },
@@ -143,7 +139,6 @@ encodings[] =
 	{ N_("Gurmukhi (Mac_Gurmukhi)"),            "x-mac-gurmukhi",        LG_INDIAN },
 	{ N_("Hindi (Mac_Devanagari)"),             "x-mac-devanagari",      LG_INDIAN },
 	{ N_("Hebrew (_IBM-862)"),                  "IBM862",                LG_HEBREW },
-	{ N_("Hebrew (I_SO-8859-8-E)"),             "ISO-8859-8-E",          LG_HEBREW },
 	{ N_("Hebrew (IS_O-8859-8-I)"),             "ISO-8859-8-I",          LG_HEBREW },
 	{ N_("Hebrew (_MacHebrew)"),                "x-mac-hebrew",          LG_HEBREW },
 	{ N_("Hebrew (_Windows-1255)"),             "windows-1255",          LG_HEBREW },
@@ -161,16 +156,10 @@ encodings[] =
 	{ N_("Turkish (_Windows-1254)"),            "windows-1254",          LG_TURKISH },
 	{ N_("Unicode (UTF-_7)"),                   "UTF-7",                 LG_UNICODE },
 	{ N_("Unicode (UTF-_8)"),                   "UTF-8",                 LG_UNICODE },
-	{ N_("Unicode (UTF-1_6BE)"),                "UTF-16BE",              LG_UNICODE },
-	{ N_("Unicode (UTF-16_LE)"),                "UTF-16LE",              LG_UNICODE },
-	{ N_("Unicode (UTF-3_2BE)"),                "UTF-32BE",              LG_UNICODE },
-	{ N_("Unicode (UTF-32L_E)"),                "UTF-32LE",              LG_UNICODE },
-	{ "x-_imap4-modified-utf7",                 "x-imap4-modified-utf7", LG_UNICODE },
 	{ N_("Vietnamese (_TCVN)"),                 "x-viet-tcvn5712",       LG_VIETNAMESE },
 	{ N_("Vietnamese (_VISCII)"),               "VISCII",                LG_VIETNAMESE },
 	{ N_("Vietnamese (V_PS)"),                  "x-viet-vps",            LG_VIETNAMESE },
 	{ N_("Vietnamese (_Windows-1258)"),         "windows-1258",          LG_VIETNAMESE },
-	{ N_("English (_US-ASCII)"),                "us-ascii",              LG_WESTERN },
 	{ N_("Western (_IBM-850)"),                 "IBM850",                LG_WESTERN },
 	{ N_("Western (I_SO-8859-1)"),              "ISO-8859-1",            LG_WESTERN },
 	{ N_("Western (IS_O-8859-15)"),             "ISO-8859-15",           LG_WESTERN },
@@ -187,8 +176,6 @@ encodings[] =
 	{ N_("South European (_ISO-8859-3)"),       "ISO-8859-3",            LG_OTHER },
 	{ N_("_Thai (TIS-620)"),                    "TIS-620",               LG_OTHER },
 	{ N_("_User Defined"),                      "x-user-defined",        LG_OTHER },
-	{ "T._61-8bit",                             "T.61-8bit",             LG_OTHER },
-	{ "x-u-_escaped",                           "x-u-escaped",           LG_OTHER }
 };
 static const guint n_encodings = G_N_ELEMENTS (encodings);
 
