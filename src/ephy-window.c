@@ -661,6 +661,8 @@ setup_window (EphyWindow *window)
 	g_object_set (action, "short_label", _("Print"), NULL);
 	action = egg_action_group_get_action (action_group, "FileBookmarkPage");
 	g_object_set (action, "short_label", _("Bookmark"), NULL);
+	action = egg_action_group_get_action (action_group, "EditFind");
+	g_object_set (action, "short_label", _("Find"), NULL);
 	action = egg_action_group_get_action (action_group, "GoBookmarks");
 	g_object_set (action, "short_label", _("Bookmarks"), NULL);
 
