@@ -122,7 +122,7 @@ popup_cmd_image_in_new_window (EggAction *action,
 
 void
 popup_cmd_bookmark_link (EggAction *action,
-			     EphyWindow *window)
+			 EphyWindow *window)
 {
 	GtkWidget *new_bookmark;
 	EphyBookmarks *bookmarks;
@@ -132,6 +132,7 @@ popup_cmd_bookmark_link (EggAction *action,
 	const GValue *link_rel;
 	const GValue *link;
 	const GValue *link_is_smart;
+	const GValue *linktext;
 	const char *title;
 	const char *location;
 	const char *rel;
@@ -144,15 +145,22 @@ popup_cmd_bookmark_link (EggAction *action,
 	ephy_embed_event_get_property (info, "link", &link);
 	ephy_embed_event_get_property (info, "link_title", &link_title);
 	ephy_embed_event_get_property (info, "link_rel", &link_rel);
+	ephy_embed_event_get_property (info, "linktext", &linktext);
 
-	title = g_value_get_string (link_title);
 	location = g_value_get_string (link);
+	g_return_if_fail (location);
+
 	rel = g_value_get_string (link_rel);
 	is_smart = g_value_get_int (link_is_smart);
 
-	g_return_if_fail (location);
+	title = g_value_get_string (link_title);
 
-	if (!title || !title[0])
+	if (title == NULL || title[0] == '\0')
+	{
+		title = g_value_get_string (linktext);
+	}
+
+	if (title == NULL || title[0] == '\0')
 	{
 		title = location;
 	}

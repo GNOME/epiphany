@@ -52,6 +52,7 @@ private:
 	EphyWrapper *mWrapper;
 	nsCOMPtr<nsIDOMDocument> mDOMDocument;
 
+	nsresult GatherTextUnder (nsIDOMNode* aNode, nsString& aResult);
 	nsresult ResolveBaseURL (nsIDocument *doc, const nsAString &relurl, nsACString &url);
 	nsresult ResolveDocumentURL (nsIDocument *doc, const nsAString &relurl, nsACString &url);
 	nsresult GetEventContext (nsIDOMEventTarget *EventTarget,

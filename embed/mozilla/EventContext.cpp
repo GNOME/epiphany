@@ -58,6 +58,84 @@ nsresult EventContext::Init (EphyWrapper *wrapper)
 	return NS_OK;
 }
 
+nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsString& aResult)
+{
+	nsAutoString text;
+	nsCOMPtr<nsIDOMNode> node;
+	aNode->GetFirstChild(getter_AddRefs(node));
+	PRUint32 depth = 1;
+
+	while (node && depth)
+	{
+		nsCOMPtr<nsIDOMCharacterData> charData(do_QueryInterface(node));
+		PRUint16 nodeType;
+
+		node->GetNodeType(&nodeType);
+		if (charData && nodeType == nsIDOMNode::TEXT_NODE)
+		{
+			/* Add this text to our collection. */
+			text += NS_LITERAL_STRING(" ");
+			nsAutoString data;
+			charData->GetData(data);
+			text += data;
+		}
+		else
+		{
+			nsCOMPtr<nsIDOMHTMLImageElement> img(do_QueryInterface(node));
+			if (img)
+			{
+				nsAutoString altText;
+				img->GetAlt(altText);
+				if (!altText.IsEmpty())
+				{
+					text = altText;
+					break;
+				}
+			}
+		}
+
+		/* Find the next node to test. */
+		PRBool hasChildNodes;
+		node->HasChildNodes(&hasChildNodes);
+		if (hasChildNodes)
+		{
+			nsCOMPtr<nsIDOMNode> temp = node;
+			temp->GetFirstChild(getter_AddRefs(node));
+			depth++;
+		}
+		else
+		{
+			nsCOMPtr<nsIDOMNode> nextSibling;
+			node->GetNextSibling(getter_AddRefs(nextSibling));
+			if (nextSibling)
+			{
+				node = nextSibling;
+			}
+			else
+			{
+				nsCOMPtr<nsIDOMNode> parentNode;
+				node->GetParentNode(getter_AddRefs(parentNode));
+				if (!parentNode)
+				{
+					node = nsnull;
+				}
+				else
+				{
+					nsCOMPtr<nsIDOMNode> nextSibling;
+					parentNode->GetNextSibling(getter_AddRefs(nextSibling));
+					node = nextSibling;
+					depth--;
+				}
+			}
+		}
+	}
+
+	text.CompressWhitespace();
+	aResult = text;
+
+	return NS_OK;
+}
+
 nsresult EventContext::ResolveBaseURL (nsIDocument *doc, const nsAString &relurl, nsACString &url)
 {
 	nsresult rv;
@@ -303,9 +381,14 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			if (tag.Equals(NS_LITERAL_STRING("a"),
 				       nsCaseInsensitiveStringComparator()))
 			{
+				nsAutoString tmp;
+
+				rv = GatherTextUnder (node, tmp);
+				if (NS_SUCCEEDED(rv))
+                                	SetStringProperty ("linktext", tmp);
+
 				nsCOMPtr <nsIDOMHTMLAnchorElement> anchor =
 					do_QueryInterface(node);
-				nsAutoString tmp;
 				rv = anchor->GetHref (tmp);
 				if (NS_FAILED(rv))
 					return NS_ERROR_FAILURE;
