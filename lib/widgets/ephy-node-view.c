@@ -1202,9 +1202,6 @@ ephy_node_view_add_column (EphyNodeView *view,
 	int column;
 	int icon_column;
 
-	g_return_val_if_fail (!(flags & EPHY_NODE_VIEW_EDITABLE) ||
-			      view->priv->editable_renderer == NULL, NULL);
-
 	column = ephy_tree_model_node_add_prop_column
 		(view->priv->nodemodel, value_type, prop_id);
 

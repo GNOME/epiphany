@@ -139,6 +139,9 @@ struct EphyBookmarksEditorPrivate
 	int priority_col;
 	EphyToolbarsModel *tb_model;
 	GHashTable *props_dialogs;
+
+	GtkTreeViewColumn *title_col;
+	GtkTreeViewColumn *address_col;
 };
 
 enum
@@ -196,17 +199,6 @@ static GtkActionEntry ephy_bookmark_popup_entries [] = {
 	  N_("Select all bookmarks or text"), 
 	  G_CALLBACK (cmd_select_all) },
 	
-	/* View Menu */
-/*	{ "ViewTitle", N_("_Title"), NULL, NULL,
-	  N_("Show only the title column"), 
-	  NULL, NULL, RADIO_ACTION, NULL },
-	{ "ViewLocation", N_("_Address"), NULL, NULL,
-	  N_("Show only the address column"), 
-	  NULL, NULL, RADIO_ACTION, "ViewTitle" },
-	{ "ViewTitleLocation", N_("T_itle and Address"), NULL, NULL,
-	  N_("Show both the title and address columns"), 
-	  NULL, NULL, RADIO_ACTION, "ViewTitle" },	*/
-
 	/* Help Menu */	
 	{ "HelpContents", GTK_STOCK_HELP, N_("_Contents"), "F1",
 	  N_("Display bookmarks help"), 
@@ -224,8 +216,24 @@ static GtkToggleActionEntry ephy_bookmark_popup_toggle_entries [] =
 	  N_("Show the selected bookmark or topic in the bookmarks bar"), 
 	  G_CALLBACK (cmd_show_in_bookmarks_bar), FALSE }
 };
-
 static guint ephy_bookmark_popup_n_toggle_entries = G_N_ELEMENTS (ephy_bookmark_popup_toggle_entries);
+
+enum
+{
+	VIEW_TITLE,
+	VIEW_TITLE_AND_ADDRESS
+};
+
+static GtkRadioActionEntry ephy_bookmark_radio_entries [] =
+{
+	/* View Menu */
+	{ "ViewTitle", NULL, N_("_Title"), NULL,
+	  N_("Show only the title column"), VIEW_TITLE },
+	{ "ViewTitleAddress", NULL, N_("T_itle and Address"), NULL,
+	  N_("Show both the title and address columns"),
+	  VIEW_TITLE_AND_ADDRESS } 
+};
+static guint ephy_bookmark_n_radio_entries = G_N_ELEMENTS (ephy_bookmark_radio_entries);
 
 static void
 entry_selection_changed_cb (GtkWidget *widget, GParamSpec *pspec, EphyBookmarksEditor *editor)
@@ -663,6 +671,30 @@ cmd_help_contents (GtkAction *action,
 	ephy_gui_help (GTK_WINDOW (editor), 
 		       "epiphany", 
 		       "ephy-managing-bookmarks");
+}
+
+static void
+cmd_view_columns (GtkAction *action,
+		  GtkRadioAction *current,
+		  EphyBookmarksEditor *editor)
+{
+	int value;
+
+	g_return_if_fail (EPHY_IS_BOOKMARKS_EDITOR (editor));
+
+	value = gtk_radio_action_get_current_value (current);
+
+	switch (value)
+	{
+		case VIEW_TITLE:
+			gtk_tree_view_column_set_visible (editor->priv->title_col, TRUE);
+			gtk_tree_view_column_set_visible (editor->priv->address_col, FALSE);
+			break;
+		case VIEW_TITLE_AND_ADDRESS:
+			gtk_tree_view_column_set_visible (editor->priv->title_col, TRUE);
+			gtk_tree_view_column_set_visible (editor->priv->address_col, TRUE);
+			break;
+	}
 }
 
 GType
@@ -1237,6 +1269,12 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 					     ephy_bookmark_popup_toggle_entries,
 					     ephy_bookmark_popup_n_toggle_entries,
 					     editor);
+	gtk_action_group_add_radio_actions (action_group,
+					    ephy_bookmark_radio_entries,
+					    ephy_bookmark_n_radio_entries,
+					    VIEW_TITLE,
+					    G_CALLBACK (cmd_view_columns), 
+					    editor);
 	gtk_ui_manager_insert_action_group (ui_merge,
 					    action_group, 0);
 	gtk_ui_manager_add_ui_from_file (ui_merge,
@@ -1248,10 +1286,6 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 
 	editor->priv->ui_merge = ui_merge;
 	editor->priv->action_group = action_group;
-
-	/* Fixme: We should implement gconf prefs for monitoring this setting */
-/*	action = gtk_action_group_get_action (action_group, "ViewTitle");
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);*/
 
 	hpaned = gtk_hpaned_new ();
 	gtk_container_set_border_width (GTK_CONTAINER (hpaned), 0);
@@ -1352,12 +1386,17 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 					   bmk_drag_types,
 				           n_bmk_drag_types,
 					   col_id);
-	ephy_node_view_add_column (EPHY_NODE_VIEW (bm_view), _("Title"),
+	editor->priv->title_col = ephy_node_view_add_column
+				  (EPHY_NODE_VIEW (bm_view), _("Title"),
 				   G_TYPE_STRING, EPHY_NODE_BMK_PROP_TITLE, -1,
 				   EPHY_NODE_VIEW_AUTO_SORT |
 				   EPHY_NODE_VIEW_EDITABLE |
 				   EPHY_NODE_VIEW_SEARCHABLE,
 				   provide_favicon);
+	editor->priv->address_col = ephy_node_view_add_column
+				  (EPHY_NODE_VIEW (bm_view), _("Address"),
+				   G_TYPE_STRING, EPHY_NODE_BMK_PROP_LOCATION,
+				   0, -1, NULL);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), bm_view);
 	gtk_widget_show (bm_view);
 	editor->priv->bm_view = bm_view;
