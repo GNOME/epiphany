@@ -23,8 +23,6 @@
 
 void mozilla_notifiers_init         (EphyEmbedSingle *single);
 
-void mozilla_notifiers_set_defaults (void);
-
 void mozilla_notifiers_free         (void);
 
 #endif

@@ -263,9 +263,47 @@ mozilla_proxy_autoconfig_notifier (GConfClient *client,
 		(single, gconf_value_get_string(entry->value));
 }
 
+static void
+add_notification_and_notify (GConfClient		*client,
+			     const char 		*key,
+			     GConfClientNotifyFunc	 func,
+			     gpointer			 user_data)
+{
+	GConfEntry *entry;
+	GError *error = NULL;
+	guint cnxn_id;
+
+	cnxn_id = gconf_client_notify_add (client, key, func, user_data, NULL, &error);
+	if (eel_gconf_handle_error (&error))
+	{
+		if (cnxn_id != EEL_GCONF_UNDEFINED_CONNECTION)
+		{
+			gconf_client_notify_remove (client, cnxn_id);
+		}
+		return;
+	}
+
+	mozilla_notifiers = g_list_append (mozilla_notifiers,
+			                   GUINT_TO_POINTER (cnxn_id));
+
+	entry = gconf_client_get_entry (client, key, NULL, TRUE, &error);
+	if (eel_gconf_handle_error (&error))
+	{
+		return;
+	}
+	g_return_if_fail (entry != NULL);
+
+	if (entry->value != NULL)
+	{
+		func (client, cnxn_id, entry, user_data);
+	}
+	gconf_entry_free (entry);
+}
+
 void 
 mozilla_notifiers_init(EphyEmbedSingle *single) 
 {
+	GConfClient *client = eel_gconf_client_get_global ();
 	int i;
 
 	for (i = 0; conversion_table[i].gconf_key != NULL; i++)
@@ -287,20 +325,20 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 
 		g_assert (func != NULL);
 		
-		ephy_notification_add(
-			conversion_table[i].gconf_key,
-			func,
-			(gpointer)conversion_table[i].mozilla_key,
-			&mozilla_notifiers);
+		add_notification_and_notify
+			(client,
+			 conversion_table[i].gconf_key,
+			 func,
+			 (gpointer)conversion_table[i].mozilla_key);
 	}
 
 	for (i = 0; custom_notifiers[i].gconf_key != NULL; i++)
 	{
-			ephy_notification_add(
-				custom_notifiers[i].gconf_key,
-				custom_notifiers[i].func,
-				(gpointer)single,
-				&mozilla_notifiers);
+		add_notification_and_notify
+			(client,
+			 custom_notifiers[i].gconf_key,
+			 custom_notifiers[i].func,
+			 (gpointer)single);
 	}
 
 	/* fonts notifiers */
@@ -318,35 +356,31 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 			sprintf (key, "%s_%s_%s", CONF_RENDERING_FONT, 
 			 	 types[k], 
                  	 	 lang_encode_item[i]);
-			ephy_notification_add (key,
-						 (GConfClientNotifyFunc)mozilla_font_notifier,
-						  info,
-						  &mozilla_notifiers);
+			add_notification_and_notify (client, key,
+						     (GConfClientNotifyFunc)mozilla_font_notifier,
+						     info);
 			font_infos = g_list_append (font_infos, info);
 		}
 
 		sprintf (key, "%s_%s", CONF_RENDERING_FONT_MIN_SIZE, lang_encode_item[i]);
 		info = g_strconcat ("minimum-size", ".", lang_encode_item[i], NULL);
-		ephy_notification_add (key,
-					 (GConfClientNotifyFunc)mozilla_font_size_notifier,
-					 info,
-				         &mozilla_notifiers);
+		add_notification_and_notify (client, key,
+					     (GConfClientNotifyFunc)mozilla_font_size_notifier,
+					     info);
 		font_infos = g_list_append (font_infos, info);
 
 		sprintf (key, "%s_%s", CONF_RENDERING_FONT_FIXED_SIZE, lang_encode_item[i]);
 		info = g_strconcat ("size.fixed", ".", lang_encode_item[i], NULL);
-		ephy_notification_add (key,
-					 (GConfClientNotifyFunc)mozilla_font_size_notifier,
-					 info,
-				         &mozilla_notifiers);
+		add_notification_and_notify (client, key,
+					     (GConfClientNotifyFunc)mozilla_font_size_notifier,
+					     info);
 		font_infos = g_list_append (font_infos, info);
 
 		sprintf (key, "%s_%s", CONF_RENDERING_FONT_VAR_SIZE, lang_encode_item[i]);
 		info = g_strconcat ("size.variable", ".", lang_encode_item[i], NULL);
-		ephy_notification_add (key,
-					 (GConfClientNotifyFunc)mozilla_font_size_notifier,
-					 info,
-				         &mozilla_notifiers);
+		add_notification_and_notify (client, key,
+					     (GConfClientNotifyFunc)mozilla_font_size_notifier,
+					     info);
 		font_infos = g_list_append (font_infos, info);		
 	}
 }
@@ -366,40 +400,6 @@ mozilla_notifiers_free (void)
 	g_list_free (font_infos);
 }
 
-void 
-mozilla_notifiers_set_defaults(void) 
-{
-	GConfClient* client = eel_gconf_client_get_global();
-	GConfValue* value;
-	int i;
-
-	for (i = 0; conversion_table[i].gconf_key != NULL; i++)
-	{
-		value = gconf_client_get 
-			(client, conversion_table[i].gconf_key, NULL);
-		if (value)
-		{
-			gconf_client_set (client, 
-					  conversion_table[i].gconf_key,
-					  value, NULL);
-			gconf_value_free (value);
-		}
-	}
-
-	for (i = 0; custom_notifiers[i].gconf_key != NULL; i++)
-	{
-		value = gconf_client_get 
-			(client, custom_notifiers[i].gconf_key, NULL);
-		if (value)
-		{
-			gconf_client_set (client, 
-					  custom_notifiers[i].gconf_key,
-					  value, NULL);
-			gconf_value_free (value);
-		}
-	}
-}
-	
 /**
  * generic_mozilla_string_notify: update mozilla pref to match epiphany prefs.
  * 	user_data should match the mozilla key

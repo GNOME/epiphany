@@ -18,6 +18,7 @@
 
 #include "glib.h"
 #include "ephy-string.h"
+#include "ephy-debug.h"
 #include "gtkmozembed.h"
 #include "mozilla-embed-single.h"
 #include "mozilla-prefs.h"
@@ -291,41 +292,6 @@ mozilla_init_profile (void)
 }
 
 static gboolean
-is_new_build (MozillaEmbedSingle *mes)
-{
-	gboolean new_build = FALSE;
-	char *build_test;
-	char *prefs_file;
-	
-	prefs_file = g_build_filename (ephy_dot_dir (), 
-				       MOZILLA_PROFILE_DIR,
-				       MOZILLA_PROFILE_NAME,
-				       MOZILLA_PROFILE_FILE,
-				       NULL);
-
-	/* no mozilla prefs ? or new epiphany build */
-        build_test = eel_gconf_get_string ("/apps/epiphany/gconf_test");
-        if (!g_file_test(mes->priv->user_prefs, G_FILE_TEST_EXISTS) || 
-            build_test == NULL ||
-            strncmp (build_test, __TIME__, 8) != 0)
-        {
-                new_build = TRUE;
-                eel_gconf_set_string ("/apps/epiphany/gconf_test", __TIME__);
-        }
-	
-        g_free (build_test);
-
-	return new_build;
-}
-
-static void
-mozilla_init_prefs (MozillaEmbedSingle *mes)
-{
-	mozilla_set_default_prefs (mes);
-	mozilla_notifiers_set_defaults ();
-}
-
-static gboolean
 have_gnome_url_handler (const gchar *protocol)
 {
 	gchar *key, *cmd;
@@ -368,8 +334,6 @@ mozilla_register_external_protocols (void)
 static void
 mozilla_embed_single_init (MozillaEmbedSingle *mes)
 {
-	gboolean new_build;
- 
  	mes->priv = g_new0 (MozillaEmbedSinglePrivate, 1);
 	mes->priv->charsets_hash = NULL;
 	mes->priv->sorted_charsets_titles = NULL;
@@ -381,23 +345,20 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 				  MOZILLA_PROFILE_FILE,
 				  NULL);
 
-	new_build = is_new_build (mes);
-	
 	/* Pre initialization */
-	mozilla_notifiers_init (EPHY_EMBED_SINGLE (mes));
 	mozilla_init_home ();
 	mozilla_init_profile ();
 	
 	/* Fire up the best */
 	gtk_moz_embed_push_startup ();
 
-	/* Post initialization */
-	if (new_build)
-	{
-		mozilla_init_prefs (mes);
-	}
+	mozilla_set_default_prefs (mes);
 
 	mozilla_load_proxy_prefs (mes);
+
+	START_PROFILER ("Mozilla prefs notifiers")
+	mozilla_notifiers_init (EPHY_EMBED_SINGLE (mes));
+	STOP_PROFILER ("Mozilla prefs notifiers")
 
 	mozilla_init_single (mes);
 	

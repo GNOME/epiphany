@@ -1,3 +1,14 @@
+2003-05-04  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* embed/mozilla/mozilla-notifiers.h:
+
+	Initialize mozilla prefs on startup every time. That is necessary
+	if people change them with gconf-editor. This is a 10 ms regression
+	on startup but ... it's necessary. What worries me more is the 130 ms
+	the notifiers registration takes, that's odd.
+
 2003-05-03 MArk Finlay <sisob@eircom.net>
 	   Marco Pesenti Gritti  <marco@it.gnome.org>
 
