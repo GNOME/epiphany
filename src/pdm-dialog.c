@@ -705,7 +705,7 @@ pdm_dialog_fill_passwords_list (PdmActionInfo *info)
 	manager = EPHY_PASSWORD_MANAGER (ephy_embed_shell_get_embed_single
 			(EPHY_EMBED_SHELL (ephy_shell)));
 
-	list = ephy_password_manager_list (manager);
+	list = ephy_password_manager_list_passwords (manager);
 
 	for (l = list; l != NULL; l = l->next)
 	{
@@ -772,7 +772,7 @@ pdm_dialog_password_remove (PdmActionInfo *info,
 	g_signal_handlers_block_by_func
 		(manager, G_CALLBACK (passwords_changed_cb), info->dialog);
 
-	ephy_password_manager_remove (manager, pinfo);
+	ephy_password_manager_remove_password (manager, pinfo);
 
 	g_signal_handlers_unblock_by_func
 		(manager, G_CALLBACK (passwords_changed_cb), info->dialog);

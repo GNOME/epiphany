@@ -77,13 +77,13 @@ void			ephy_password_info_free		(EphyPasswordInfo *info);
 
 GType 		ephy_password_manager_get_type	(void);
 
-void		ephy_password_manager_add		(EphyPasswordManager *manager,
+void		ephy_password_manager_add_password	(EphyPasswordManager *manager,
 							 EphyPasswordInfo *info);
 
-void		ephy_password_manager_remove		(EphyPasswordManager *manager,
+void		ephy_password_manager_remove_password	(EphyPasswordManager *manager,
 							 EphyPasswordInfo *info);
 
-GList *		ephy_password_manager_list		(EphyPasswordManager *manager);
+GList *		ephy_password_manager_list_passwords	(EphyPasswordManager *manager);
 
 G_END_DECLS
 

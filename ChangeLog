@@ -1,3 +1,16 @@
+2005-01-15  Jean-François rameau  <jframeau@cvs.gnome.org>
+
+	* embed/ephy-password-manager.h:
+	* embed/ephy-password-manager.c:
+	* src/pdm-dialog.c: (pdm_dialog_password_remove),
+	(pdm_dialog_fill_passwords_list)
+
+	Rename the password manager's methods to give better names
+	in the bindings.
+	ephy_password_manager_add    -> ephy_password_manager_add_password
+	ephy_password_manager_remove -> ephy_password_manager_remove_password
+	ephy_password_manager_list   -> ephy_password_manager_list_passwords
+
 2005-01-15  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-editor.c:

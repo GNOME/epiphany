@@ -157,37 +157,37 @@ ephy_password_manager_base_init (gpointer g_class)
 }
 
 /**
- * ephy_password_manager_add:
+ * ephy_password_manager_add_password:
  * @manager: the #EphyPasswordManager
  * @info: a #EphyPasswordInfo
  * 
  * Adds the password entry @info to the the passwords database.
  **/
 void
-ephy_password_manager_add (EphyPasswordManager *manager,
-			   EphyPasswordInfo *info)
+ephy_password_manager_add_password (EphyPasswordManager *manager,
+			            EphyPasswordInfo *info)
 {
 	EphyPasswordManagerIface *iface = EPHY_PASSWORD_MANAGER_GET_IFACE (manager);
 	iface->add (manager, info);
 }
 
 /**
- * ephy_password_manager_remove:
+ * ephy_password_manager_remove_password:
  * @manager: the #EphyPasswordManager
  * @info: a #EphyPasswordInfo
  * 
  * Removes the password entry @info from the passwords database.
  **/
 void
-ephy_password_manager_remove (EphyPasswordManager *manager,
-			      EphyPasswordInfo *info)
+ephy_password_manager_remove_password (EphyPasswordManager *manager,
+			               EphyPasswordInfo *info)
 {
 	EphyPasswordManagerIface *iface = EPHY_PASSWORD_MANAGER_GET_IFACE (manager);
 	iface->remove (manager, info);
 }
 
 /**
- * ephy_password_manager_list:
+ * ephy_password_manager_list_passwords:
  * @manager: the #EphyPasswordManager
  * 
  * Lists all password entries in the passwords database.
@@ -195,7 +195,7 @@ ephy_password_manager_remove (EphyPasswordManager *manager,
  * Return value: the list of password entries
  **/
 GList *
-ephy_password_manager_list (EphyPasswordManager *manager)
+ephy_password_manager_list_passwords(EphyPasswordManager *manager)
 {
 	EphyPasswordManagerIface *iface = EPHY_PASSWORD_MANAGER_GET_IFACE (manager);
 	return iface->list (manager);
