@@ -1,6 +1,7 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen <jorn@nl.linux.org>
- *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003-2004 Marco Pesenti Gritti
+ *  Copyright (C) 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +24,8 @@
 #include "config.h"
 #endif
 
+#include "ephy-favicon-cache.h"
+
 #include <libgnomevfs/gnome-vfs-ops.h>
 #include <string.h>
 #include <time.h>
@@ -31,7 +34,6 @@
 #include "ephy-embed-persist.h"
 #include "ephy-embed-factory.h"
 #include "ephy-file-helpers.h"
-#include "ephy-favicon-cache.h"
 #include "ephy-node-common.h"
 #include "ephy-node.h"
 #include "ephy-debug.h"
@@ -42,7 +44,7 @@
 #define EPHY_FAVICON_CACHE_OBSOLETE_DAYS 30
 
 static void ephy_favicon_cache_class_init (EphyFaviconCacheClass *klass);
-static void ephy_favicon_cache_init	  (EphyFaviconCache *ma);
+static void ephy_favicon_cache_init	  (EphyFaviconCache *cache);
 static void ephy_favicon_cache_finalize	  (GObject *object);
 
 #define EPHY_FAVICON_CACHE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FAVICON_CACHE, EphyFaviconCachePrivate))
@@ -61,6 +63,14 @@ enum
 {
 	CHANGED,
 	LAST_SIGNAL
+};
+
+enum
+{
+	EPHY_NODE_FAVICON_PROP_URL	 = 2,
+	EPHY_NODE_FAVICON_PROP_FILENAME	 = 3,
+	EPHY_NODE_FAVICON_PROP_LAST_USED = 4,
+	EPHY_NODE_FAVICON_PROP_STATE	 = 5
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -115,7 +125,7 @@ ephy_favicon_cache_class_init (EphyFaviconCacheClass *klass)
 			      1,
 			      G_TYPE_STRING);
 
-	g_type_class_add_private (object_class, sizeof(EphyFaviconCachePrivate));
+	g_type_class_add_private (object_class, sizeof (EphyFaviconCachePrivate));
 }
 
 EphyFaviconCache *
@@ -246,30 +256,25 @@ ephy_favicon_cache_init (EphyFaviconCache *cache)
 }
 
 static gboolean
-kill_download (gpointer key,
-	       gpointer value,
-	       gpointer data)
+kill_download (char *key,
+	       EphyEmbedPersist *persist,
+	       EphyFaviconCache *cache)
 {
-	EphyEmbedPersist *persist = EPHY_EMBED_PERSIST (value);
-	EphyFaviconCache *cache = EPHY_FAVICON_CACHE (data);
 	EphyNode *icon;
 
-	ephy_embed_persist_cancel (persist);
-	g_object_unref (persist);
+	/* disconnect "completed" and "cancelled" callbacks */
+	g_signal_handlers_disconnect_matched
+		(persist,G_SIGNAL_MATCH_DATA , 0, 0, NULL, NULL, cache);
 
-	icon = g_hash_table_lookup (cache->priv->icons_hash, (char *)key);
+	/* now cancel the download */
+	ephy_embed_persist_cancel (persist);
+
+	icon = g_hash_table_lookup (cache->priv->icons_hash, key);
+	g_return_val_if_fail (EPHY_IS_NODE (icon), TRUE);
 
 	ephy_node_unref (icon);
 
 	return TRUE;
-}
-
-
-static void
-cleanup_downloads_hash (EphyFaviconCache *cache)
-{
-	g_hash_table_foreach_remove (cache->priv->downloads_hash,
-				     kill_download, cache);
 }
 
 static void
@@ -277,9 +282,10 @@ ephy_favicon_cache_finalize (GObject *object)
 {
 	EphyFaviconCache *cache = EPHY_FAVICON_CACHE (object);
 
-	LOG ("Finalize favicon cache")
+	LOG ("EphyFaviconCache finalising")
 
-	cleanup_downloads_hash (cache);
+	g_hash_table_foreach_remove (cache->priv->downloads_hash,
+				     (GHRFunc) kill_download, cache);
 	remove_obsolete_icons (cache);
 
 	ephy_node_db_write_to_xml_safe
@@ -302,7 +308,7 @@ ephy_favicon_cache_finalize (GObject *object)
 static char *
 favicon_name_build (const char *url)
 {
-	char *result, *slashpos;
+	char *result;
 
 	result = g_filename_from_utf8 (url, -1, NULL, NULL, NULL);
 
@@ -311,12 +317,7 @@ favicon_name_build (const char *url)
 		return NULL;
 	}
 
-	while ((slashpos = strstr (result, "/")) != NULL)
-	{
-		*slashpos = '_';
-	}
-
-	return result;
+	return g_strdelimit (result, "/", '_');
 }
 
 static void
@@ -328,9 +329,33 @@ favicon_download_completed_cb (EphyEmbedPersist *persist,
 	url = ephy_embed_persist_get_source (persist);
 	g_return_if_fail (url != NULL);
 
+	LOG ("Favicon cache download completed for %s", url)
+
 	g_hash_table_remove (cache->priv->downloads_hash, url);
 
 	g_signal_emit (G_OBJECT (cache), signals[CHANGED], 0, url);
+
+	g_object_unref (persist);
+}
+
+static void
+favicon_download_cancelled_cb (EphyEmbedPersist *persist,
+			       EphyFaviconCache *cache)
+{
+	const char *url, *dest;
+
+	url = ephy_embed_persist_get_source (persist);
+	g_return_if_fail (url != NULL);
+
+	LOG ("Favicon cache download cancelled %s", url)
+
+	g_hash_table_remove (cache->priv->downloads_hash, url);
+
+	/* remove a partially downloaded file */
+	dest = ephy_embed_persist_get_dest (persist);
+	gnome_vfs_unlink (dest);
+
+	/* FIXME: re-schedule to try again after n days? */
 
 	g_object_unref (persist);
 }
@@ -361,10 +386,10 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 
 	g_free (dest);
 
-	g_signal_connect (G_OBJECT (persist),
-			  "completed",
-			  G_CALLBACK (favicon_download_completed_cb),
-			  cache);
+	g_signal_connect (G_OBJECT (persist), "completed",
+			  G_CALLBACK (favicon_download_completed_cb), cache);
+	g_signal_connect (G_OBJECT (persist), "cancelled",
+			  G_CALLBACK (favicon_download_cancelled_cb), cache);
 
 	g_hash_table_insert (cache->priv->downloads_hash,
 			     g_strdup (favicon_url), persist);
@@ -439,17 +464,21 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 
 	pixbuf = gdk_pixbuf_new_from_file (pix_file, NULL);
 
-	if (pixbuf &&
-	    (gdk_pixbuf_get_width (pixbuf) > 16 ||
-	     gdk_pixbuf_get_height (pixbuf) > 16))
+	g_free (pix_file);
+
+	if (pixbuf == NULL)
+	{
+		return NULL;
+	}
+
+	if (gdk_pixbuf_get_width (pixbuf) > 16 ||
+	    gdk_pixbuf_get_height (pixbuf) > 16)
 	{
 		GdkPixbuf *scaled = gdk_pixbuf_scale_simple (pixbuf, 16, 16,
 							     GDK_INTERP_NEAREST);
 		g_object_unref (G_OBJECT (pixbuf));
 		pixbuf = scaled;
 	}
-
-	g_free (pix_file);
 
 	return pixbuf;
 }

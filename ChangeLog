@@ -1,5 +1,17 @@
 2004-02-29  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_class_init),
+	(kill_download), (ephy_favicon_cache_finalize),
+	(favicon_name_build), (favicon_download_completed_cb),
+	(favicon_download_cancelled_cb), (ephy_favicon_cache_download),
+	(ephy_favicon_cache_get):
+	* embed/ephy-favicon-cache.h:
+
+	Remove cancelled downloads from the downloads hash; and remove
+	partially downloaded favicons.
+
+2004-02-29  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/ContentHandler.cpp:
 	* embed/mozilla/EphyHeaderSniffer.cpp:
 	* embed/mozilla/FilePicker.cpp:

@@ -1,5 +1,7 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen
+ *  Copyright (C) 2003-2004 Marco Pesenti Gritti
+ *  Copyright (C) 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,11 +20,11 @@
  *  $Id$
  */
 
+#ifndef EPHY_FAVICON_CACHE_H
+#define EPHY_FAVICON_CACHE_H
+
 #include <glib-object.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-
-#ifndef __EPHY_FAVICON_CACHE_H
-#define __EPHY_FAVICON_CACHE_H
 
 G_BEGIN_DECLS
 
@@ -33,37 +35,34 @@ G_BEGIN_DECLS
 #define EPHY_IS_FAVICON_CACHE_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_FAVICON_CACHE))
 #define EPHY_FAVICON_CACHE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_FAVICON_CACHE, EphyFaviconCacheClass))
 
-typedef struct EphyFaviconCachePrivate EphyFaviconCachePrivate;
+typedef struct EphyFaviconCacheClass	EphyFaviconCacheClass;
+typedef struct EphyFaviconCache		EphyFaviconCache;
+typedef struct EphyFaviconCachePrivate	EphyFaviconCachePrivate;
 
-enum
-{
-	EPHY_NODE_FAVICON_PROP_URL = 2,
-	EPHY_NODE_FAVICON_PROP_FILENAME = 3,
-	EPHY_NODE_FAVICON_PROP_LAST_USED = 4
-};
-
-typedef struct
+struct EphyFaviconCache
 {
 	GObject parent;
 
 	/*< private >*/
 	EphyFaviconCachePrivate *priv;
-} EphyFaviconCache;
+};
 
-typedef struct
+struct EphyFaviconCacheClass
 {
 	GObjectClass parent_class;
 
-	void (*changed) (EphyFaviconCache *cache, const char *url);
-} EphyFaviconCacheClass;
+	/* Signals */
+	void (*changed)	(EphyFaviconCache *cache,
+			 const char *url);
+};
 
-GType               ephy_favicon_cache_get_type        (void);
+GType		 ephy_favicon_cache_get_type	(void);
 
-EphyFaviconCache   *ephy_favicon_cache_new             (void);
+EphyFaviconCache *ephy_favicon_cache_new	(void);
 
-GdkPixbuf          *ephy_favicon_cache_get             (EphyFaviconCache *cache,
-						        const char *url);
+GdkPixbuf	 *ephy_favicon_cache_get	(EphyFaviconCache *cache,
+						 const char *url);
 
 G_END_DECLS
 
-#endif /* __EPHY_FAVICON_CACHE_H */
+#endif /* EPHY_FAVICON_CACHE_H */
