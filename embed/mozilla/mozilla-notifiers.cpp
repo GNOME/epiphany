@@ -623,7 +623,7 @@ get_system_language ()
 		}
 	}
 
-	return NULL;
+	return g_strdup ("en");
 }
 
 static void
