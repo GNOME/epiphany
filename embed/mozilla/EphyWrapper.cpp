@@ -726,7 +726,7 @@ nsresult  EphyWrapper::CopyHistoryTo (EphyWrapper *dest)
 	return NS_OK;
 }
 
-nsresult EphyWrapper::ForceCharacterSet (char *charset) 
+nsresult EphyWrapper::ForceCharacterSet (const char *charset) 
 {
 	nsresult result;
 

@@ -296,7 +296,7 @@ print_get_info (EphyDialog *dialog)
         info->pages = g_value_get_int (&pages);
 
 	ephy_dialog_get_value (dialog, COLOR_PROP, &print_color);
-        info->print_color = g_value_get_int (&print_color);
+        info->print_color = !g_value_get_int (&print_color);
 
 	ephy_dialog_get_value (dialog, ORIENTATION_PROP, &orientation);
         info->orientation = g_value_get_int (&orientation);

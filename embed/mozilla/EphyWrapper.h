@@ -75,7 +75,7 @@ public:
 
 	nsresult GoToHistoryIndex (PRInt16 index);
 
-	nsresult ForceCharacterSet (char *charset);
+	nsresult ForceCharacterSet (const char *charset);
 
 	nsresult CanCutSelection(PRBool *result);
 

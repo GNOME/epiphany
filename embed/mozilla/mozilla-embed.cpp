@@ -1169,16 +1169,15 @@ impl_set_charset (EphyEmbed *embed,
 {
 	nsresult result = NS_OK;
 	EphyWrapper *wrapper;
-	char *cset;
-
-	cset = g_strdup (charset);
 	
 	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
 	g_return_val_if_fail (wrapper != NULL, G_FAILED);
 
-	wrapper->ForceCharacterSet (cset);
-
-	g_free (cset);
+	result = wrapper->ForceCharacterSet (charset);
+	if (NS_FAILED (result)) return G_FAILED;
+	
+	gtk_moz_embed_reload (GTK_MOZ_EMBED (embed),
+			      GTK_MOZ_EMBED_FLAG_RELOADCHARSETCHANGE);
 	
 	return NS_SUCCEEDED(result) ? G_OK : G_FAILED;
 }
