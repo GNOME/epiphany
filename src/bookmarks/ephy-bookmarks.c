@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2002, 2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "ephy-bookmarks.h"
@@ -249,54 +249,19 @@ ephy_bookmarks_class_init (EphyBookmarksClass *klass)
 static void
 ephy_bookmarks_save (EphyBookmarks *eb)
 {
-	xmlDocPtr doc;
-	xmlNodePtr root;
-	xmlNodePtr comment;
-	GPtrArray *children;
-	int i;
 
 	LOG ("Saving bookmarks")
 
-	/* save nodes to xml */
-	xmlIndentTreeOutput = TRUE;
-	doc = xmlNewDoc ("1.0");
-
-	root = xmlNewDocNode (doc, NULL, "ephy_bookmarks", NULL);
-	xmlSetProp (root, "version", EPHY_BOOKMARKS_XML_VERSION);
-	xmlDocSetRootElement (doc, root);
-
-	comment = xmlNewDocComment (doc, "Do not rely on this file, it's only for internal use. Use bookmarks.rdf instead.");
-	xmlAddChild (root, comment);
-
-	children = ephy_node_get_children (eb->priv->keywords);
-	for (i = 0; i < children->len; i++)
-	{
-		EphyNode *kid;
-
-		kid = g_ptr_array_index (children, i);
-
-		if (kid != eb->priv->bookmarks &&
-		    kid != eb->priv->favorites &&
-		    kid != eb->priv->notcategorized)
-		{
-			ephy_node_save_to_xml (kid, root);
-		}
-	}
-	ephy_node_thaw (eb->priv->keywords);
-
-	children = ephy_node_get_children (eb->priv->bookmarks);
-	for (i = 0; i < children->len; i++)
-	{
-		EphyNode *kid;
-
-		kid = g_ptr_array_index (children, i);
-
-		ephy_node_save_to_xml (kid, root);
-	}
-	ephy_node_thaw (eb->priv->bookmarks);
-
-	ephy_file_save_xml (eb->priv->xml_file, doc);
-	xmlFreeDoc(doc);
+	ephy_node_db_write_to_xml_safe
+		(eb->priv->db, eb->priv->xml_file,
+		 EPHY_BOOKMARKS_XML_ROOT,
+		 EPHY_BOOKMARKS_XML_VERSION,
+		 "Do not rely on this file, it's only for internal use. Use bookmarks.rdf instead.",
+		 eb->priv->keywords,
+		 3, eb->priv->bookmarks, eb->priv->favorites, eb->priv->notcategorized,
+		 eb->priv->bookmarks,
+		 0,
+		 NULL);
 
 	/* Export bookmarks in rdf */
 	ephy_bookmarks_export_rdf (eb, eb->priv->rdf_file);

@@ -190,41 +190,35 @@ ephy_file_find (const char *path,
 }
 
 gboolean
-ephy_file_save_xml (const char *xml_file, xmlDocPtr doc)
+ephy_file_switch_temp_file (const char *filename,
+			    const char *filename_temp)
 {
-	char *tmp_file;
 	char *old_file;
 	gboolean old_exist;
 	gboolean retval = TRUE;
 
-	tmp_file = g_strconcat (xml_file, ".tmp", NULL);
-	old_file = g_strconcat (xml_file, ".old", NULL);
+	old_file = g_strconcat (filename, ".old", NULL);
 
-	if (xmlSaveFormatFile (tmp_file, doc, 1) <= 0)
-	{
-		g_warning ("Failed to write XML data to %s", tmp_file);
-		goto failed;
-	}
-
-	old_exist = g_file_test (xml_file, G_FILE_TEST_EXISTS);
+	old_exist = g_file_test (filename, G_FILE_TEST_EXISTS);
 
 	if (old_exist)
 	{
-		if (rename (xml_file, old_file) < 0)
+		if (rename (filename, old_file) < 0)
 		{
-			g_warning ("Failed to rename %s to %s", xml_file, old_file);
+			g_warning ("Failed to rename %s to %s", filename, old_file);
 			retval = FALSE;
 			goto failed;
 		}
 	}
 
-	if (rename (tmp_file, xml_file) < 0)
+	if (rename (filename_temp, filename) < 0)
 	{
-		g_warning ("Failed to rename %s to %s", tmp_file, xml_file);
+		g_warning ("Failed to rename %s to %s", filename_temp, filename);
 
-		if (rename (old_file, xml_file) < 0)
+		if (rename (old_file, filename) < 0)
 		{
-			g_warning ("Failed to restore %s from %s", xml_file, tmp_file);
+			g_warning ("Failed to restore %s from %s",
+				   filename, filename_temp);
 		}
 		retval = FALSE;
 		goto failed;
@@ -238,10 +232,8 @@ ephy_file_save_xml (const char *xml_file, xmlDocPtr doc)
 		}
 	}
 
-	failed:
+failed:
 	g_free (old_file);
-	g_free (tmp_file);
 
 	return retval;
 }
-

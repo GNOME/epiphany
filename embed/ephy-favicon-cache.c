@@ -19,7 +19,6 @@
  *  $Id$
  */
 
-#include <libxml/tree.h>
 #include <libgnomevfs/gnome-vfs-ops.h>
 #include <string.h>
 #include <time.h>
@@ -85,8 +84,8 @@ ephy_favicon_cache_get_type (void)
 		};
 
 		ephy_favicon_cache_type = g_type_register_static (G_TYPE_OBJECT,
-								  "EphyFaviconCache",
-								  &our_info, 0);
+								    "EphyFaviconCache",
+								     &our_info, 0);
 	}
 
 	return ephy_favicon_cache_type;
@@ -200,38 +199,6 @@ remove_obsolete_icons (EphyFaviconCache *eb)
 }
 
 static void
-ephy_favicon_cache_save (EphyFaviconCache *eb)
-{
-	xmlDocPtr doc;
-	xmlNodePtr root;
-	GPtrArray *children;
-	int i;
-
-	/* save nodes to xml */
-	xmlIndentTreeOutput = TRUE;
-	doc = xmlNewDoc ("1.0");
-
-	root = xmlNewDocNode (doc, NULL, "ephy_favicons_cache", NULL);
-	xmlSetProp (root, "version", EPHY_FAVICON_CACHE_XML_VERSION);
-	xmlDocSetRootElement (doc, root);
-
-	children = ephy_node_get_children (eb->priv->icons);
-	for (i = 0; i < children->len; i++)
-	{
-		EphyNode *kid;
-
-		kid = g_ptr_array_index (children, i);
-
-		ephy_node_save_to_xml (kid, root);
-	}
-	ephy_node_thaw (eb->priv->icons);
-
-	ephy_file_save_xml (eb->priv->xml_file, doc);
-
-	xmlFreeDoc (doc);
-}
-
-static void
 ephy_favicon_cache_init (EphyFaviconCache *cache)
 {
 	EphyNodeDb *db;
@@ -321,7 +288,13 @@ ephy_favicon_cache_finalize (GObject *object)
 
 	cleanup_downloads_hash (cache);
 	remove_obsolete_icons (cache);
-	ephy_favicon_cache_save (cache);
+
+	ephy_node_db_write_to_xml_safe
+		(cache->priv->db, cache->priv->xml_file,
+		 EPHY_FAVICON_CACHE_XML_ROOT,
+		 EPHY_FAVICON_CACHE_XML_VERSION,
+		 NULL,
+		 cache->priv->icons, 0, NULL);
 
 	g_free (cache->priv->xml_file);
 	g_free (cache->priv->directory);

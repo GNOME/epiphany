@@ -1,7 +1,7 @@
 /*
  *  Copyright (C) 2001 Matthew Mueller
- *            (C) 2002 Jorn Baayen <jorn@nl.linux.org>
- *	      (C) 2003 Marco Pesenti Gritti <mpeseng@tin.it>
+ *  Copyright (C) 2002 Jorn Baayen <jorn@nl.linux.org>
+ *  Copyright (C) 2003 Marco Pesenti Gritti <mpeseng@tin.it>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkpaned.h>
 
-#define STATES_FILE "states.xml"
+#define EPHY_STATES_XML_FILE	"states.xml"
 #define EPHY_STATES_XML_ROOT    "ephy_states"
 #define EPHY_STATES_XML_VERSION "1.0"
 
@@ -50,39 +50,21 @@ static EphyNodeDb *states_db = NULL;
 static void
 ephy_states_save (void)
 {
-	xmlDocPtr doc;
-	xmlNodePtr root;
-	GPtrArray *children;
-	int i;
 	char *xml_file;
 
-	if (states == NULL) return;
-
 	xml_file = g_build_filename (ephy_dot_dir (),
-                                     STATES_FILE,
+				     EPHY_STATES_XML_FILE,
                                      NULL);
 
-	/* save nodes to xml */
-	xmlIndentTreeOutput = TRUE;
-	doc = xmlNewDoc ("1.0");
+	ephy_node_db_write_to_xml_safe
+		(states_db, xml_file,
+		 EPHY_STATES_XML_ROOT,
+		 EPHY_STATES_XML_VERSION,
+		 NULL, /* comment */
+		 states, 0,
+		 NULL);
 
-	root = xmlNewDocNode (doc, NULL, "ephy_states", NULL);
-	xmlSetProp (root, "version", EPHY_STATES_XML_VERSION);
-	xmlDocSetRootElement (doc, root);
-
-	children = ephy_node_get_children (states);
-	for (i = 0; i < children->len; i++)
-	{
-		EphyNode *kid;
-
-		kid = g_ptr_array_index (children, i);
-
-		ephy_node_save_to_xml (kid, root);
-	}
-	ephy_node_thaw (states);
-
-	ephy_file_save_xml (xml_file, doc);
-	g_free (xml_file);
+	g_free (xml_file);	
 }
 
 static EphyNode *
@@ -120,7 +102,7 @@ ensure_states (void)
 		char *xml_file;
 
 		xml_file = g_build_filename (ephy_dot_dir (),
-					     STATES_FILE,
+					     EPHY_STATES_XML_FILE,
 					     NULL);
 
 		states_db = ephy_node_db_new (EPHY_NODE_DB_STATES);

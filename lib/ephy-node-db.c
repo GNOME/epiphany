@@ -1,5 +1,7 @@
 /* 
  *  Copyright (C) 2002 Jorn Baayen <jorn@nl.linux.org>
+ *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,9 +21,14 @@
  */
 
 #include "ephy-node-db.h"
+#include "ephy-file-helpers.h"
 #include "ephy-debug.h"
 
 #include <libxml/xmlreader.h>
+#include <libxml/xmlwriter.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/stat.h>
 
 static void ephy_node_db_class_init (EphyNodeDbClass *klass);
 static void ephy_node_db_init (EphyNodeDb *node);
@@ -323,11 +330,11 @@ ephy_node_db_load_from_file (EphyNodeDb *db,
 	ret = xmlTextReaderRead (reader);
 	while (ret == 1)
 	{
-		xmlChar *name;
+		const xmlChar *name;
 		xmlReaderTypes type;
 		gboolean skip = FALSE;
 
-		name = xmlTextReaderName (reader);
+		name = xmlTextReaderConstName (reader);
 		type = xmlTextReaderNodeType (reader);
 
 		if (xmlStrEqual (name, "node")
@@ -354,15 +361,12 @@ ephy_node_db_load_from_file (EphyNodeDb *db,
 			{
 				success = FALSE;
 				xmlFree (version);
-				xmlFree (name);
 
 				break;
 			}
 
 			xmlFree (version);
 		}
-
-		xmlFree (name);
 
 		/* next one, please */
 		ret = skip ? xmlTextReaderNext (reader)
@@ -374,4 +378,131 @@ ephy_node_db_load_from_file (EphyNodeDb *db,
 	STOP_PROFILER ("loading node db")
 
 	return (success && ret == 0);
+}
+
+static int
+ephy_node_db_write_to_xml_valist (EphyNodeDb *db,
+				  const xmlChar *filename,
+				  const xmlChar *root,
+				  const xmlChar *version,
+				  const xmlChar *comment,
+				  EphyNode *first_node,
+				  va_list argptr)
+{
+	xmlTextWriterPtr writer;
+	EphyNode *node;
+	int ret;
+
+	LOG ("Saving node db to %s", filename)
+
+	START_PROFILER ("Saving node db")
+
+	/* FIXME: do we want to turn compression on ? */
+	writer = xmlNewTextWriterFilename (filename, 0);
+	if (writer == NULL)
+	{
+		return -1;
+	}
+
+	ret = xmlTextWriterStartDocument (writer, "1.0", NULL, NULL);
+	if (ret < 0) goto out;
+
+	ret = xmlTextWriterStartElement (writer, root);
+	if (ret < 0) goto out;
+
+	ret = xmlTextWriterWriteAttribute (writer, "version", version);
+	if (ret < 0) goto out;
+
+	if (comment != NULL)
+	{
+		ret = xmlTextWriterWriteComment (writer, comment);
+		if (ret < 0) goto out;
+	}
+
+	node = first_node;
+	while (node != NULL)
+	{
+		GPtrArray *children;
+		guint n_exceptions, i;
+		GSList *exceptions = NULL;
+
+		n_exceptions = va_arg (argptr, guint);
+		for (i=0; i < n_exceptions; i++)
+		{
+			exceptions = g_slist_prepend (exceptions,
+						      va_arg (argptr, EphyNode *));
+		}
+
+		children = ephy_node_get_children (node);
+		for (i=0; i < children->len; i++)
+		{
+			EphyNode *kid;
+		
+			kid = g_ptr_array_index (children, i);
+		
+			if (g_slist_find (exceptions, kid) == NULL)
+			{
+				ret = ephy_node_write_to_xml (kid, writer);
+				if (ret < 0) break;
+			}
+		}
+		ephy_node_thaw (node);
+		if (ret < 0) break;
+
+		g_slist_free (exceptions);
+
+		node = va_arg (argptr, EphyNode *);
+	}
+	if (ret < 0) goto out;
+
+	ret = xmlTextWriterEndElement (writer); /* root */
+	if (ret < 0) goto out;
+
+	ret = xmlTextWriterEndDocument (writer);
+	if (ret < 0) goto out;
+
+out:
+	xmlFreeTextWriter (writer);
+
+	STOP_PROFILER ("Saving node db")
+
+	return ret >= 0 ? 0 : -1;
+}
+
+int
+ephy_node_db_write_to_xml_safe (EphyNodeDb *db,
+				const xmlChar *filename,
+				const xmlChar *root,
+				const xmlChar *version,
+				const xmlChar *comment,
+				EphyNode *node, ...)
+{
+	va_list argptr;
+	int ret = 0;
+	char *tmp_file;
+
+	tmp_file = g_strconcat (filename, ".tmp", NULL);
+
+	va_start (argptr, node);
+ 
+	ret = ephy_node_db_write_to_xml_valist
+		(db, tmp_file, root, version, comment, node, argptr);
+
+	va_end (argptr);
+
+	if (ret < 0)
+	{
+		g_warning ("Failed to write XML data to %s", tmp_file);
+		goto failed;
+	}
+
+	if (ephy_file_switch_temp_file (filename, tmp_file) == FALSE)
+	{
+		ret = -1;
+	}
+
+failed:
+	g_free (tmp_file);
+
+	return ret;
 }

@@ -43,8 +43,8 @@ GSList     *ephy_file_find               (const char *path,
 	                                  const char *fname,
 	                                  gint maxdepth);
 
-gboolean    ephy_file_save_xml           (const char *xml_file,
-					  xmlDocPtr doc);
+gboolean    ephy_file_switch_temp_file   (const char *filename,
+					  const char *filename_temp);
 
 G_END_DECLS
 

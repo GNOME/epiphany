@@ -1,3 +1,23 @@
+2003-11-08  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_get_type),
+	(ephy_favicon_cache_finalize):
+	* embed/ephy-history.c: (ephy_history_save):
+	* lib/ephy-file-helpers.c: (ephy_file_switch_temp_file):
+	* lib/ephy-file-helpers.h:
+	* lib/ephy-node-db.c: (ephy_node_db_load_from_file),
+	(ephy_node_db_write_to_xml_valist),
+	(ephy_node_db_write_to_xml_safe):
+	* lib/ephy-node-db.h:
+	* lib/ephy-node.c: (write_parent), (ephy_node_write_to_xml):
+	* lib/ephy-node.h:
+	* lib/ephy-state.c: (ephy_states_save), (ensure_states):
+	* src/bookmarks/ephy-bookmarks-export.c: (write_topics_list),
+	(ephy_bookmarks_export_rdf):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_save):
+
+	Port node db saving and RDF export to xml writer api.
+
 2003-11-07  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-favicon-actio.c: (ephy_favicon_action_finalize):

@@ -1,5 +1,7 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen <jorn@nl.linux.org>
+ *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +25,7 @@
 #define EPHY_NODE_H
 
 #include <libxml/tree.h>
+#include <libxml/xmlwriter.h>
 
 G_BEGIN_DECLS
 
@@ -100,8 +103,8 @@ char       *ephy_node_get_property_time     (EphyNode *node,
 					     guint property_id);
 
 /* xml storage */
-void          ephy_node_save_to_xml         (EphyNode *node,
-					     xmlNodePtr parent_xml_node);
+int           ephy_node_write_to_xml	    (EphyNode *node,
+					     xmlTextWriterPtr writer);
 EphyNode     *ephy_node_new_from_xml        (EphyNodeDb *db,
 					     xmlNodePtr xml_node);
 

@@ -25,6 +25,7 @@
 #include "ephy-history.h"
 #include "ephy-file-helpers.h"
 #include "ephy-debug.h"
+#include "ephy-node-db.h"
 #include "ephy-node-common.h"
 
 #include <time.h>
@@ -36,7 +37,7 @@
 #define EPHY_HISTORY_XML_VERSION "1.0"
 
 /* how often to save the history, in milliseconds */
-#define HISTORY_SAVE_INTERVAL (60 * 5 * 1000)
+#define HISTORY_SAVE_INTERVAL (5 * 60 * 1000)
 
 /* if you change this remember to change also the user interface description */
 #define HISTORY_PAGE_OBSOLETE_DAYS 10
@@ -176,12 +177,7 @@ remove_obsolete_pages (EphyHistory *eb)
 static void
 ephy_history_save (EphyHistory *eb)
 {
-	xmlDocPtr doc;
-	xmlNodePtr root;
-	GPtrArray *children;
-	int i;
-
-	LOG ("Saving history")
+	int ret;
 
 	/* only save if there are changes */
 	if (eb->priv->dirty == FALSE)
@@ -189,44 +185,22 @@ ephy_history_save (EphyHistory *eb)
 		return;
 	}
 
-	/* save nodes to xml */
-	xmlIndentTreeOutput = TRUE;
-	doc = xmlNewDoc ("1.0");
+	LOG ("Saving history db")
 
-	root = xmlNewDocNode (doc, NULL, "ephy_history", NULL);
-	xmlSetProp (root, "version", EPHY_HISTORY_XML_VERSION);
-	xmlDocSetRootElement (doc, root);
+	ret = ephy_node_db_write_to_xml_safe
+		(eb->priv->db, eb->priv->xml_file,
+		 EPHY_HISTORY_XML_ROOT,
+		 EPHY_HISTORY_XML_VERSION,
+		 NULL, /* comment */
+		 eb->priv->hosts, 0,
+		 eb->priv->pages, 0,
+		 NULL);
 
-	children = ephy_node_get_children (eb->priv->hosts);
-	for (i = 0; i < children->len; i++)
-	{
-		EphyNode *kid;
-
-		kid = g_ptr_array_index (children, i);
-		if (kid == eb->priv->pages) continue;
-
-		ephy_node_save_to_xml (kid, root);
-	}
-	ephy_node_thaw (eb->priv->hosts);
-
-	children = ephy_node_get_children (eb->priv->pages);
-	for (i = 0; i < children->len; i++)
-	{
-		EphyNode *kid;
-
-		kid = g_ptr_array_index (children, i);
-
-		ephy_node_save_to_xml (kid, root);
-	}
-	ephy_node_thaw (eb->priv->pages);
-
-	if (ephy_file_save_xml (eb->priv->xml_file, doc))
+	if (ret >=0)
 	{
 		/* save was successful */
 		eb->priv->dirty = FALSE;
 	}
-
-	xmlFreeDoc(doc);
 }
 
 static void

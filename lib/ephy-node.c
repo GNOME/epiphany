@@ -1,5 +1,7 @@
 /* 
  *  Copyright (C) 2002 Jorn Baayen <jorn@nl.linux.org>
+ *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,7 +21,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include <glib.h>
@@ -761,122 +763,134 @@ ephy_node_get_property_node (EphyNode *node,
 	return retval;
 }
 
-static void
-save_parent (gulong id,
-	     EphyNodeParent *node_info,
-	     xmlNodePtr xml_node)
+typedef struct
 {
-	xmlNodePtr parent_xml_node;
-	char *xml;
+	xmlTextWriterPtr writer;
+	int ret;
+} ForEachData;
 
-	parent_xml_node = xmlNewChild (xml_node, NULL, "parent", NULL);
+static void
+write_parent (gulong id,
+	      EphyNodeParent *node_info,
+	      ForEachData* data)
+{
+	xmlTextWriterPtr writer = data->writer;
+
+	/* there already was an error, do nothing. this works around
+	 * the fact that g_hash_table_foreach cannot be cancelled.
+	 */
+	if (data->ret < 0) return;
+
+	data->ret = xmlTextWriterStartElement (writer, "parent");
+	if (data->ret < 0) return;
 
 	g_static_rw_lock_reader_lock (node_info->node->lock);
-
-	xml = g_strdup_printf ("%ld", node_info->node->id);
-	xmlSetProp (parent_xml_node, "id", xml);
-	g_free (xml);
-
+	data->ret = xmlTextWriterWriteFormatAttribute
+			(writer, "id", "%ld", node_info->node->id);
 	g_static_rw_lock_reader_unlock (node_info->node->lock);
+	if (data->ret < 0) return;
+
+	data->ret = xmlTextWriterEndElement (writer); /* parent */
+	if (data->ret < 0) return;
 }
 
-void
-ephy_node_save_to_xml (EphyNode *node,
-		       xmlNodePtr parent_xml_node)
+int
+ephy_node_write_to_xml(EphyNode *node,
+		       xmlTextWriterPtr writer)
 {
-	xmlNodePtr xml_node;
-	char *xml;
-	char xml_buf [G_ASCII_DTOSTR_BUF_SIZE];
+	xmlChar xml_buf[G_ASCII_DTOSTR_BUF_SIZE];
 	guint i;
+	int ret;
+	ForEachData data;
 
-	g_return_if_fail (EPHY_IS_NODE (node));
-	g_return_if_fail (parent_xml_node != NULL);
+	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
+	g_return_val_if_fail (writer != NULL, -1);
 
 	g_static_rw_lock_reader_lock (node->lock);
 
-	xml_node = xmlNewChild (parent_xml_node, NULL, "node", NULL);
+	/* start writing the node */
+	ret = xmlTextWriterStartElement (writer, "node");
+	if (ret < 0) goto out;
 
-	xml = g_strdup_printf ("%ld", node->id);
-	xmlSetProp (xml_node, "id", xml);
-	g_free (xml);
+	/* write node id */
+	ret = xmlTextWriterWriteFormatAttribute (writer, "id", "%ld", node->id);
+	if (ret < 0) goto out;
 
-	for (i = 0; i < node->properties->len; i++) {
+	/* write node properties */
+	for (i = 0; i < node->properties->len; i++)
+	{
 		GValue *value;
-		xmlNodePtr value_xml_node;
 
 		value = g_ptr_array_index (node->properties, i);
-		if (value == NULL)
-			continue;
 
-		value_xml_node = xmlNewChild (xml_node, NULL, "property", NULL);
+		if (value == NULL) continue;
 
-		xml = g_strdup_printf ("%d", i);
-		xmlSetProp (value_xml_node, "id", xml);
-		g_free (xml);
+		ret = xmlTextWriterStartElement (writer, "property");
+		if (ret < 0) break;
 
-		xmlSetProp (value_xml_node, "value_type", g_type_name (G_VALUE_TYPE (value)));
+		ret = xmlTextWriterWriteFormatAttribute (writer, "id", "%d", i);
+		if (ret < 0) break;
+
+		ret = xmlTextWriterWriteAttribute
+			(writer, "value_type", g_type_name (G_VALUE_TYPE (value)));
+		if (ret < 0) break;
 
 		switch (G_VALUE_TYPE (value))
 		{
 		case G_TYPE_STRING:
-			xml = xmlEncodeEntitiesReentrant (NULL,
-							  g_value_get_string (value));
-			xmlNodeSetContent (value_xml_node, xml);
-			g_free (xml);
+			ret = xmlTextWriterWriteString
+				(writer, g_value_get_string (value));
 			break;
 		case G_TYPE_BOOLEAN:
-			xml = g_strdup_printf ("%d", g_value_get_boolean (value));
-			xmlNodeSetContent (value_xml_node, xml);
-			g_free (xml);
+			ret = xmlTextWriterWriteFormatString
+				(writer, "%d", g_value_get_boolean (value));
 			break;
 		case G_TYPE_INT:
-			xml = g_strdup_printf ("%d", g_value_get_int (value));
-			xmlNodeSetContent (value_xml_node, xml);
-			g_free (xml);
+			ret = xmlTextWriterWriteFormatString
+				(writer, "%d", g_value_get_int (value));
 			break;
 		case G_TYPE_LONG:
-			xml = g_strdup_printf ("%ld", g_value_get_long (value));
-			xmlNodeSetContent (value_xml_node, xml);
-			g_free (xml);
+			ret = xmlTextWriterWriteFormatString
+				(writer, "%ld", g_value_get_long (value));
 			break;
 		case G_TYPE_FLOAT:
 			g_ascii_dtostr (xml_buf, sizeof (xml_buf), 
 					g_value_get_float (value));
-			xmlNodeSetContent (value_xml_node, xml_buf);
+			ret = xmlTextWriterWriteString (writer, xml_buf);
 			break;
 		case G_TYPE_DOUBLE:
 			g_ascii_dtostr (xml_buf, sizeof (xml_buf),
 					g_value_get_double (value));
-			xmlNodeSetContent (value_xml_node, xml_buf);
+			ret = xmlTextWriterWriteString (writer, xml_buf);
 			break;
-		case G_TYPE_POINTER:
-		{
-			EphyNode *prop_node;
-
-			prop_node = g_value_get_pointer (value);
-
-			g_assert (prop_node != NULL);
-
-			g_static_rw_lock_reader_lock (prop_node->lock);
-
-			xml = g_strdup_printf ("%ld", prop_node->id);
-			xmlNodeSetContent (value_xml_node, xml);
-			g_free (xml);
-
-			g_static_rw_lock_reader_unlock (prop_node->lock);
-			break;
-		}
 		default:
 			g_assert_not_reached ();
 			break;
 		}
+		if (ret < 0) break;
+	
+		ret = xmlTextWriterEndElement (writer); /* property */
+		if (ret < 0) break;
 	}
+	if (ret < 0) goto out;
+
+	/* now write parent node ids */
+	data.writer = writer;
+	data.ret = 0;
 
 	g_hash_table_foreach (node->parents,
-			      (GHFunc) save_parent,
-			      xml_node);
+			      (GHFunc) write_parent,
+			      &data);
+	ret = data.ret;
+	if (ret < 0) goto out;
 
+	ret = xmlTextWriterEndElement (writer); /* node */
+	if (ret < 0) goto out;
+
+out:
 	g_static_rw_lock_reader_unlock (node->lock);
+
+	return ret >= 0 ? 0 : -1;
 }
 
 static inline void

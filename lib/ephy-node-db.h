@@ -1,5 +1,7 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen <jorn@nl.linux.org>
+ *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -60,6 +62,13 @@ gboolean      ephy_node_db_load_from_file	(EphyNodeDb *db,
 						 const char *xml_file,
 						 const xmlChar *xml_root,
 						 const xmlChar *xml_version);
+
+int           ephy_node_db_write_to_xml_safe	(EphyNodeDb *db,
+						 const xmlChar *filename,
+						 const xmlChar *root,
+						 const xmlChar *version,
+						 const xmlChar *comment,
+						 EphyNode *node, ...);
 
 const char   *ephy_node_db_get_name		(EphyNodeDb *db);
 
