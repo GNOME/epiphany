@@ -130,7 +130,7 @@ epiphany_CFLAGS = \
 epiphany_LDFLAGS = -R$(MOZILLA_HOME) -dlopen self
 
 epiphany_LDADD = \
-	$(top_builddir)/src/libephymain.la \
+	libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
 	$(top_builddir)/embed/libephyembedfactory.la \
 	$(top_builddir)/embed/mozilla/libephymozillaembed.la \
