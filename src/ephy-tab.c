@@ -2,6 +2,7 @@
  *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *  Copyright (C) 2003, 2004 Christian Persch
  *  Copyright (C) 2004 Crispin Flowerday
+ *  Copyright (C) 2004 Adam Hooper
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,7 +39,9 @@
 #include "ephy-embed-persist.h"
 #include "ephy-history.h"
 #include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
 #include "ephy-shell.h"
+#include "ephy-permission-manager.h"
 
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
@@ -81,6 +84,8 @@ struct EphyTabPrivate
 	float zoom;
 	gboolean setting_zoom;
 	EmbedSecurityLevel security_level;
+	GSList *hidden_popups;
+	GSList *shown_popups;
 	TabNavigationFlags nav_flags;
 };
 
@@ -98,10 +103,18 @@ enum
 	PROP_MESSAGE,
 	PROP_NAVIGATION,
 	PROP_SECURITY,
+	PROP_HIDDEN_POPUP_COUNT,
+	PROP_DISPLAY_POPUPS,
 	PROP_TITLE,
 	PROP_VISIBLE,
 	PROP_ZOOM
 };
+
+typedef struct
+{
+	char *url;
+	char *features;
+} PopupInfo;
 
 static GObjectClass *parent_class = NULL;
 
@@ -125,6 +138,10 @@ static void	ephy_tab_set_title		(EphyTab *tab,
 						 const char *new_title);
 static void	ephy_tab_set_zoom		(EphyTab *tab,
 						 float zoom);
+static guint	popup_blocker_n_hidden		(EphyTab *tab);
+static gboolean	ephy_tab_get_popups_displayed	(EphyTab *tab);
+static void	ephy_tab_set_popups_displayed	(EphyTab *tab,
+						 gboolean allowed);
 
 /* Class functions */
 
@@ -171,12 +188,17 @@ ephy_tab_set_property (GObject *object,
 			ephy_tab_set_location (tab, g_value_get_string (value),
 					       TAB_ADDRESS_EXPIRE_NOW);
 			break;
+		case PROP_DISPLAY_POPUPS:
+			ephy_tab_set_popups_displayed
+				(tab, g_value_get_boolean (value));
+			break;
 		case PROP_ICON:
 		case PROP_LOAD_PROGRESS:
 		case PROP_LOAD_STATUS:
 		case PROP_MESSAGE:
 		case PROP_NAVIGATION:
 		case PROP_SECURITY:
+		case PROP_HIDDEN_POPUP_COUNT:
 		case PROP_TITLE:
 		case PROP_VISIBLE:
 		case PROP_ZOOM:
@@ -215,6 +237,13 @@ ephy_tab_get_property (GObject *object,
 			break;
 		case PROP_SECURITY:
 			g_value_set_int (value, tab->priv->security_level);
+			break;
+		case PROP_HIDDEN_POPUP_COUNT:
+			g_value_set_int (value, popup_blocker_n_hidden (tab));
+			break;
+		case PROP_DISPLAY_POPUPS:
+			g_value_set_boolean
+				(value, ephy_tab_get_popups_displayed (tab));
 			break;
 		case PROP_TITLE:
 			g_value_set_string (value, tab->priv->title);
@@ -351,6 +380,24 @@ ephy_tab_class_init (EphyTabClass *class)
 							    G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
+					 PROP_HIDDEN_POPUP_COUNT,
+					 g_param_spec_int ("hidden-popup-count",
+							   "Number of Blocked Popups",
+							   "The tab's number of blocked popup windows",
+							    0,
+							    G_MAXINT,
+							    0,
+							    G_PARAM_READABLE));
+
+	g_object_class_install_property (object_class,
+					 PROP_DISPLAY_POPUPS,
+					 g_param_spec_boolean ("popups-allowed",
+						 	       "Popups Allowed",
+							       "Whether popup windows are to be displayed",
+							       FALSE,
+							       G_PARAM_READABLE | G_PARAM_WRITABLE));
+
+	g_object_class_install_property (object_class,
 					 PROP_TITLE,
 					 g_param_spec_string ("title",
 							      "Title",
@@ -380,6 +427,266 @@ ephy_tab_class_init (EphyTabClass *class)
 }
 
 static void
+popups_manager_free_info (PopupInfo *popup)
+{
+	g_free (popup->url);
+	g_free (popup->features);
+	g_free (popup);
+}
+
+static void
+popups_manager_add (EphyTab *tab,
+		    const char *url,
+		    const char *features)
+{
+	PopupInfo *popup;
+
+	LOG ("popups_manager_add: tab %p, url %s, features %s",
+	     tab, url, features)
+
+	g_return_if_fail (EPHY_IS_TAB (tab));
+
+	popup = g_new0 (PopupInfo, 1);
+
+	popup->url = g_strdup (url);
+	popup->features = g_strdup (features);
+
+	tab->priv->hidden_popups = g_slist_prepend
+		(tab->priv->hidden_popups, popup);
+
+	g_object_notify (G_OBJECT (tab), "hidden-popup-count");
+}
+
+static gboolean
+popups_manager_remove_window (EphyTab *tab,
+			      EphyWindow *window)
+{
+	tab->priv->shown_popups = g_slist_remove (tab->priv->shown_popups,
+						  window);
+
+	return FALSE;
+}
+
+static void
+disconnect_popup (EphyWindow *window,
+		  EphyTab *tab)
+{
+	g_signal_handlers_disconnect_by_func
+		(window, G_CALLBACK (popups_manager_remove_window), tab);
+}
+
+static void
+popups_manager_add_window (EphyTab *tab,
+			   EphyWindow *window)
+{
+	LOG ("popups_manager_add_window: tab %p, window %p", tab, window)
+
+	g_return_if_fail (EPHY_IS_TAB (tab));
+	g_return_if_fail (EPHY_IS_WINDOW (window));
+
+	tab->priv->shown_popups = g_slist_prepend
+		(tab->priv->shown_popups, window);
+
+	g_signal_connect_swapped (window, "destroy",
+				  G_CALLBACK (popups_manager_remove_window),
+				  tab);
+}
+
+static gboolean
+ephy_tab_get_popups_displayed (EphyTab *tab)
+{
+	EphyPermissionManager *permission_manager;
+	EphyPermission response;
+	EphyEmbed *embed;
+	char *location;
+	gboolean allow;
+
+	g_return_val_if_fail (EPHY_IS_TAB (tab), FALSE);
+
+	permission_manager = EPHY_PERMISSION_MANAGER
+		(ephy_embed_shell_get_embed_single (embed_shell));
+	g_return_val_if_fail (EPHY_IS_PERMISSION_MANAGER (permission_manager),
+			      FALSE);
+
+	embed = ephy_tab_get_embed (tab);
+	g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
+
+	location = ephy_embed_get_location (embed, TRUE);
+	if (location == NULL) return FALSE; /* FALSE, TRUE... same thing */
+
+	response = ephy_permission_manager_test
+		(permission_manager, location, EPT_POPUP);
+
+	switch (response)
+	{
+		case EPHY_PERMISSION_ALLOWED:
+			allow = TRUE;
+			break;
+		case EPHY_PERMISSION_DENIED:
+			allow = FALSE;
+			break;
+		case EPHY_PERMISSION_DEFAULT:
+		default:
+			allow = eel_gconf_get_boolean
+				(CONF_SECURITY_ALLOW_POPUPS);
+			break;
+	}
+
+	g_free (location);
+
+	LOG ("ephy_tab_get_popups_displayed: tab %p, allowed: %d", tab, allow)
+
+	return allow;
+}
+
+static void
+popups_manager_show (PopupInfo *popup,
+		     EphyTab *tab)
+{
+	EphyEmbed *embed;
+	EphyEmbedSingle *single;
+
+	embed = ephy_tab_get_embed (tab);
+
+	single = EPHY_EMBED_SINGLE
+		(ephy_embed_shell_get_embed_single (embed_shell));
+
+	ephy_embed_single_open_window (single, embed, popup->url,
+				       popup->features);
+
+	popups_manager_free_info (popup);
+}
+
+static void
+popups_manager_show_all (EphyTab *tab)
+{
+	LOG ("popup_blocker_show_all: tab %p", tab)
+
+	g_slist_foreach (tab->priv->hidden_popups,
+			 (GFunc) popups_manager_show, tab);
+	g_slist_free (tab->priv->hidden_popups);
+	tab->priv->hidden_popups = NULL;
+
+	g_object_notify (G_OBJECT (tab), "hidden-popup-count");
+}
+
+static char *
+popups_manager_new_window_info (EphyWindow *window)
+{
+	EphyEmbedChrome chrome;
+	char *features;
+	int w, h;
+
+	g_object_get (window, "chrome", &chrome, NULL);
+	gtk_window_get_size (GTK_WINDOW (window), &w, &h);
+
+	features = g_strdup_printf
+		("width=%d,height=%d,menubar=%d,status=%d,toolbar=%d",
+		 w, h,
+		 (chrome & EPHY_EMBED_CHROME_MENUBAR) > 0,
+		 (chrome & EPHY_EMBED_CHROME_STATUSBAR) > 0,
+		 (chrome & EPHY_EMBED_CHROME_TOOLBAR) > 0);
+
+	return features;
+}
+
+static void
+popups_manager_hide (EphyWindow *window,
+		     EphyTab *parent_tab)
+{
+	EphyEmbed *embed;
+	char *location;
+	char *features;
+
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (EPHY_IS_EMBED (embed));
+
+	location = ephy_embed_get_location (embed, TRUE);
+	if (location == NULL) return;
+
+	features = popups_manager_new_window_info (window);
+
+	popups_manager_add (parent_tab, location, features);
+
+	gtk_widget_destroy (GTK_WIDGET (window));
+
+	g_free (location);
+	g_free (features);
+}
+
+static void
+popups_manager_hide_all (EphyTab *tab)
+{
+	LOG ("popup_blocker_hide_all: tab %p", tab)
+
+	g_slist_foreach (tab->priv->shown_popups,
+			 (GFunc) popups_manager_hide, tab);
+	g_slist_free (tab->priv->shown_popups);
+	tab->priv->shown_popups = NULL;
+}
+
+static void
+ephy_tab_set_popups_displayed (EphyTab *tab,
+			       gboolean allowed)
+{
+	char *location;
+	EphyEmbed *embed;
+	EphyPermissionManager *manager;
+	EphyPermission permission;
+
+	g_return_if_fail (EPHY_IS_TAB (tab));
+
+	embed = ephy_tab_get_embed (tab);
+
+	location = ephy_embed_get_location (embed, TRUE);
+	g_return_if_fail (location != NULL);
+
+	manager = EPHY_PERMISSION_MANAGER
+		(ephy_embed_shell_get_embed_single (embed_shell));
+	g_return_if_fail (EPHY_IS_PERMISSION_MANAGER (manager));
+
+	permission = allowed ? EPHY_PERMISSION_ALLOWED
+			     : EPHY_PERMISSION_DENIED;
+
+	ephy_permission_manager_add (manager, location, EPT_POPUP, permission);
+
+	if (allowed)
+	{
+		popups_manager_show_all (tab);
+	}
+	else
+	{
+		popups_manager_hide_all (tab);
+	}
+
+	g_free (location);
+}
+
+static guint
+popup_blocker_n_hidden (EphyTab *tab)
+{
+	return g_slist_length (tab->priv->hidden_popups);
+}
+
+static void
+popups_manager_reset (EphyTab *tab)
+{
+	g_return_if_fail (EPHY_IS_TAB (tab));
+
+	g_slist_foreach (tab->priv->hidden_popups,
+			 (GFunc) popups_manager_free_info, NULL);
+	g_slist_free (tab->priv->hidden_popups);
+	tab->priv->hidden_popups = NULL;
+
+	g_slist_foreach (tab->priv->shown_popups,
+			 (GFunc) disconnect_popup, tab);
+	g_slist_free (tab->priv->shown_popups);
+	tab->priv->shown_popups = NULL;
+
+	g_object_notify (G_OBJECT (tab), "hidden-popup-count");
+}
+
+static void
 ephy_tab_finalize (GObject *object)
 {
         EphyTab *tab = EPHY_TAB (object);
@@ -396,6 +703,7 @@ ephy_tab_finalize (GObject *object)
 	g_free (tab->priv->icon_address);
 	g_free (tab->priv->link_message);
 	g_free (tab->priv->status_message);
+	popups_manager_reset (tab);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 
@@ -676,6 +984,8 @@ ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 	ephy_tab_set_link_message (tab, NULL);
 	ephy_tab_set_icon_address (tab, NULL);
 	ephy_tab_update_navigation_flags (tab, embed);
+	popups_manager_reset (tab);
+	g_object_notify (G_OBJECT (tab), "popups-allowed");
 }
 
 static void
@@ -954,6 +1264,15 @@ ephy_tab_new_window_cb (EphyEmbed *embed, EphyEmbed **new_embed,
         ephy_window_add_tab (window, new_tab, EPHY_NOTEBOOK_ADD_LAST, FALSE);
 
 	*new_embed = ephy_tab_get_embed (new_tab);
+
+	popups_manager_add_window (tab, window);
+}
+
+static void
+ephy_tab_popup_blocked_cb (EphyEmbed *embed, const char *url,
+			   const char *features, EphyTab *tab)
+{
+	popups_manager_add (tab, url, features);
 }
 
 static gboolean
@@ -1230,6 +1549,8 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->load_status = FALSE;
 	tab->priv->link_message = NULL;
 	tab->priv->security_level = STATE_IS_UNKNOWN;
+	tab->priv->hidden_popups = NULL;
+	tab->priv->shown_popups = NULL;
 	tab->priv->zoom = 1.0;
 	tab->priv->setting_zoom = FALSE;
 	tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
@@ -1269,6 +1590,9 @@ ephy_tab_init (EphyTab *tab)
 				 tab, 0);
 	g_signal_connect_object (embed, "ge_new_window",
 				 G_CALLBACK (ephy_tab_new_window_cb),
+				 tab, 0);
+	g_signal_connect_object (embed, "ge_popup_blocked",
+				 G_CALLBACK (ephy_tab_popup_blocked_cb),
 				 tab, 0);
 	g_signal_connect_object (embed, "visibility",
 				 G_CALLBACK (ephy_tab_visibility_cb),

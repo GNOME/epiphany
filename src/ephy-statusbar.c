@@ -50,6 +50,8 @@ struct EphyStatusbarPrivate
 	GtkWidget *security_icon;
 	GtkWidget *progressbar;
 	GtkWidget *security_evbox;
+	GtkWidget *popups_manager_icon;
+	GtkWidget *popups_manager_evbox;
 };
 
 GType
@@ -118,6 +120,36 @@ create_statusbar_security_icon (EphyStatusbar *s)
 }
 
 static void
+create_statusbar_popups_manager_icon (EphyStatusbar *s)
+{
+	s->popups_manager_frame = gtk_frame_new (NULL);
+	gtk_frame_set_shadow_type (GTK_FRAME (s->popups_manager_frame),
+				   GTK_SHADOW_IN);
+
+	s->priv->popups_manager_icon = gtk_image_new_from_stock
+		(EPHY_STOCK_POPUPS, GTK_ICON_SIZE_MENU);
+
+	s->priv->popups_manager_evbox = gtk_event_box_new ();
+
+	gtk_event_box_set_visible_window
+		(GTK_EVENT_BOX (s->priv->popups_manager_evbox), FALSE);
+
+	gtk_container_add (GTK_CONTAINER (s->popups_manager_frame),
+			   GTK_WIDGET (s->priv->popups_manager_evbox));
+	gtk_container_add (GTK_CONTAINER (s->priv->popups_manager_evbox),
+			   GTK_WIDGET (s->priv->popups_manager_icon));
+
+	gtk_widget_show (s->priv->popups_manager_evbox);
+	gtk_widget_show (s->priv->popups_manager_icon);
+
+	/* note lack of gtk_widget_show (s->popups_manager_frame); */
+
+	gtk_box_pack_start (GTK_BOX (s->priv->icon_container),
+			    GTK_WIDGET (s->popups_manager_frame),
+			    FALSE, TRUE, 0);
+}
+
+static void
 create_statusbar_progress (EphyStatusbar *s)
 {
 	s->priv->progressbar = gtk_progress_bar_new ();
@@ -170,6 +202,7 @@ ephy_statusbar_init (EphyStatusbar *t)
 
 	create_statusbar_progress (t);
 	create_statusbar_security_icon (t);
+	create_statusbar_popups_manager_icon (t);
 
 	/* FIXME: is this the right way ? */
 	sync_shadow_type (t, NULL, NULL);
@@ -202,7 +235,7 @@ ephy_statusbar_new (void)
 
 /**
  * ephy_statusbar_set_security_state:
- * @statusbar: a #EphyStatusbar
+ * @statusbar: an #EphyStatusbar
  * @secure: whether to set the icon to show secure or insecure
  * @tooltip: a string detailing the security state
  * 
@@ -222,6 +255,33 @@ ephy_statusbar_set_security_state (EphyStatusbar *statusbar,
 
 	gtk_tooltips_set_tip (statusbar->tooltips, statusbar->priv->security_evbox,
 			      tooltip, NULL);
+}
+
+/**
+ * ephy_statusbar_set_popups_state:
+ * @statusbar: an #EphyStatusbar
+ * @hidden: %TRUE if popups have been hidden
+ * @tooltip: a string to display as tooltip, or %NULL
+ *
+ * Sets the statusbar's popup-blocker icon's tooltip and visibility.
+ **/
+void
+ephy_statusbar_set_popups_state (EphyStatusbar *statusbar,
+				 gboolean hidden,
+				 const char *tooltip)
+{
+	if (hidden)
+	{
+		gtk_widget_hide (statusbar->popups_manager_frame);
+	}
+	else
+	{
+		gtk_tooltips_set_tip (statusbar->tooltips,
+				      statusbar->priv->popups_manager_evbox,
+				      tooltip, NULL);
+
+		gtk_widget_show (statusbar->popups_manager_frame);
+	}
 }
 
 /**

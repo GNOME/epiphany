@@ -81,6 +81,8 @@ static void ephy_window_view_toolbar_cb         (GtkAction *action,
 			                         EphyWindow *window);
 static void ephy_window_view_bookmarksbar_cb    (GtkAction *action,
 			                         EphyWindow *window);
+static void ephy_window_view_popup_windows_cb	(GtkAction *action,
+						 EphyWindow *window);
 
 static GtkActionEntry ephy_menu_entries [] = {
 
@@ -263,6 +265,9 @@ static GtkToggleActionEntry ephy_menu_toggle_entries [] =
 	{ "ViewFullscreen", STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
 	  N_("Browse at full screen"),
 	  G_CALLBACK (window_cmd_view_fullscreen), FALSE },
+	{ "ViewPopupWindows", EPHY_STOCK_POPUPS, N_("Popup _Windows"), NULL,
+	  N_("Show or hide unrequested popup windows from this site"),
+	  G_CALLBACK (ephy_window_view_popup_windows_cb), FALSE },
 	{ "BrowseWithCaret", NULL, N_("Selection Caret"), "F7",
 	  "",
 	  G_CALLBACK (window_cmd_browse_with_caret), FALSE }
@@ -359,6 +364,7 @@ struct EphyWindowPrivate
 	guint disable_save_to_disk_notifier_id;
 	guint disable_command_line_notifier_id;
 	guint browse_with_caret_notifier_id;
+	guint allow_popups_notifier_id;
 };
 
 enum
@@ -1268,6 +1274,64 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 }
 
 static void
+sync_tab_popup_windows (EphyTab *tab,
+			GParamSpec *pspec,
+			EphyWindow *window)
+{
+	guint num_popups = 0;
+	char *tooltip = NULL;
+
+	g_object_get (G_OBJECT (tab),
+		      "hidden-popup-count", &num_popups,
+		      NULL);
+
+	if (num_popups > 0)
+	{
+		tooltip = g_strdup_printf (ngettext ("%d hidden popup window",
+						     "%d hidden popup windows",
+						     num_popups),
+					   num_popups);
+	}
+
+	ephy_statusbar_set_popups_state
+		(EPHY_STATUSBAR (window->priv->statusbar),
+		 tooltip == NULL,
+		 tooltip);
+
+	g_free (tooltip);
+}
+
+static void
+sync_tab_popups_allowed (EphyTab *tab,
+			 GParamSpec *pspec,
+			 EphyWindow *window)
+{
+	GtkAction *action;
+	gboolean allow;
+
+	g_return_if_fail (EPHY_IS_TAB (tab));
+	g_return_if_fail (EPHY_IS_WINDOW (window));
+
+	action = gtk_action_group_get_action (window->priv->action_group,
+					      "ViewPopupWindows");
+	g_return_if_fail (GTK_IS_ACTION (action));
+
+	g_object_get (G_OBJECT (tab), "popups-allowed", &allow, NULL);
+
+	g_signal_handlers_block_by_func
+		(G_OBJECT (action),
+		 G_CALLBACK (ephy_window_view_popup_windows_cb),
+		 window);
+
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), allow);
+
+	g_signal_handlers_unblock_by_func
+		(G_OBJECT (action),
+		 G_CALLBACK (ephy_window_view_popup_windows_cb),
+		 window);
+}
+
+static void
 sync_tab_load_status (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	GtkAction *action;
@@ -1555,6 +1619,12 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 						      G_CALLBACK (sync_tab_security),
 						      window);
 		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+						      G_CALLBACK (sync_tab_popup_windows),
+						      window);
+		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+						      G_CALLBACK (sync_tab_popups_allowed),
+						      window);
+		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
 						      G_CALLBACK (sync_tab_title),
 						      window);
 		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
@@ -1581,6 +1651,8 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		sync_tab_message	(new_tab, NULL, window);
 		sync_tab_navigation	(new_tab, NULL, window);
 		sync_tab_security	(new_tab, NULL, window);
+		sync_tab_popup_windows	(new_tab, NULL, window);
+		sync_tab_popups_allowed	(new_tab, NULL, window);
 		sync_tab_title		(new_tab, NULL, window);
 		sync_tab_zoom		(new_tab, NULL, window);
 
@@ -1611,6 +1683,14 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_connect_object (G_OBJECT (new_tab),
 					 "notify::security-level",
 					 G_CALLBACK (sync_tab_security),
+					 window, 0);
+		g_signal_connect_object (G_OBJECT (new_tab),
+					 "notify::hidden-popup-count",
+					 G_CALLBACK (sync_tab_popup_windows),
+					 window, 0);
+		g_signal_connect_object (G_OBJECT (new_tab),
+					 "notify::popups-allowed",
+					 G_CALLBACK (sync_tab_popups_allowed),
 					 window, 0);
 		g_signal_connect_object (G_OBJECT (new_tab),
 					 "notify::title",
@@ -1829,6 +1909,9 @@ ephy_window_get_property (GObject *object,
 		case PROP_ACTIVE_TAB:
 			g_value_set_object (value, window->priv->active_tab);
 			break;
+		case PROP_CHROME:
+			g_value_set_flags (value, window->priv->chrome);
+			break;
 	}
 }
 
@@ -1947,6 +2030,28 @@ browse_with_caret_notifier (GConfClient *client,
 }
 
 static void
+allow_popups_notifier (GConfClient *client,
+		       guint cnxn_id,
+		       GConfEntry *entry,
+		       EphyWindow *window)
+{
+	GList *tabs;
+	EphyTab *tab;
+
+	g_return_if_fail (EPHY_IS_WINDOW (window));
+
+	tabs = ephy_window_get_tabs (window);
+
+	for (; tabs; tabs = g_list_next (tabs))
+	{
+		tab = EPHY_TAB (tabs->data);
+		g_return_if_fail (EPHY_IS_TAB (tab));
+
+		g_object_notify (G_OBJECT (tab), "popups-allowed");
+	}
+}
+
+static void
 action_request_forward_cb (GObject *toolbar,
 			   const char *name,
                 	   GObject *bookmarksbar)
@@ -1970,6 +2075,7 @@ ephy_window_init (EphyWindow *window)
 	window->priv->exit_fullscreen_popup = NULL;
 	window->priv->num_tabs = 0;
 	window->priv->has_size = FALSE;
+	window->priv->chrome = EPHY_EMBED_CHROME_ALL;
 	window->priv->should_save_chrome = FALSE;
 	window->priv->mode = EPHY_WINDOW_MODE_NORMAL;
 
@@ -2081,6 +2187,10 @@ ephy_window_init (EphyWindow *window)
 		(CONF_BROWSE_WITH_CARET,
 		 (GConfClientNotifyFunc)browse_with_caret_notifier, window);
 
+	window->priv->allow_popups_notifier_id = eel_gconf_notification_add
+		(CONF_SECURITY_ALLOW_POPUPS,
+		 (GConfClientNotifyFunc)allow_popups_notifier, window);
+
 	/* network status */
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
 	network_status_changed (single,
@@ -2114,6 +2224,7 @@ ephy_window_finalize (GObject *object)
 	eel_gconf_notification_remove (window->priv->disable_save_to_disk_notifier_id);
 	eel_gconf_notification_remove (window->priv->disable_command_line_notifier_id);
 	eel_gconf_notification_remove (window->priv->browse_with_caret_notifier_id);
+	eel_gconf_notification_remove (window->priv->allow_popups_notifier_id);
 
 	if (window->priv->find_dialog)
 	{
@@ -2380,7 +2491,7 @@ ephy_window_remove_tab (EphyWindow *window,
  **/
 void
 ephy_window_load_url (EphyWindow *window,
-			const char *url)
+		      const char *url)
 {
 	EphyEmbed *embed;
 
@@ -2696,4 +2807,28 @@ ephy_window_view_bookmarksbar_cb (GtkAction *action,
 {
 	sync_chrome_with_view_toggle (action, window,
 				      EPHY_EMBED_CHROME_BOOKMARKSBAR);
+}
+
+static void
+ephy_window_view_popup_windows_cb (GtkAction *action,
+				   EphyWindow *window)
+{
+	EphyTab *tab;
+	gboolean allow;
+
+	g_return_if_fail (EPHY_IS_WINDOW (window));
+
+	tab = ephy_window_get_active_tab (window);
+	g_return_if_fail (EPHY_IS_TAB (tab));
+
+	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)))
+	{
+		allow = TRUE;
+	}
+	else
+	{
+		allow = FALSE;
+	}
+
+	g_object_set (G_OBJECT (tab), "popups-allowed", allow, NULL);
 }

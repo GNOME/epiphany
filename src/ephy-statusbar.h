@@ -46,6 +46,7 @@ struct EphyStatusbar
 	/*< public >*/
 	GtkTooltips *tooltips;
 	GtkWidget *security_frame;
+	GtkWidget *popups_manager_frame;
 
 	/*< private >*/
         EphyStatusbarPrivate *priv;
@@ -62,6 +63,10 @@ GtkWidget    *ephy_statusbar_new			(void);
 
 void          ephy_statusbar_set_security_state		(EphyStatusbar *statusbar,
 							 gboolean secure,
+							 const char *tooltip);
+
+void          ephy_statusbar_set_popups_state		(EphyStatusbar *statusbar,
+							 gboolean hidden,
 							 const char *tooltip);
 
 void          ephy_statusbar_set_progress		(EphyStatusbar *statusbar,

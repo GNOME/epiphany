@@ -159,6 +159,7 @@ GTKDOC_CFLAGS = -I$(top_srcdir)/src \
 		-I$(top_srcdir)/embed \
 		-I$(top_srcdir)/embed/mozilla \
 		-I$(top_srcdir)/src/bookmarks \
+		-I$(top_srcdir)/lib/egg \
 		$(EPIPHANY_DEPENDENCY_CFLAGS)
 
 GTKDOC_LIBS = \

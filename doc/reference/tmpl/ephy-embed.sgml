@@ -42,6 +42,14 @@ be done by casting).
 </para>
 
 
+<!-- ##### SIGNAL EphyEmbed::ge-content-change ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL EphyEmbed::ge-context-menu ##### -->
 <para>
 
@@ -103,6 +111,21 @@ be done by casting).
 @arg1: 
 @arg2: 
 
+<!-- ##### SIGNAL EphyEmbed::ge-popup-blocked ##### -->
+<para>
+
+</para>
+
+@ephyembed: the object which received the signal.
+@: 
+@:
+@: 
+@:
+@: 
+@:
+@: 
+@: 
+
 <!-- ##### SIGNAL EphyEmbed::ge-security-change ##### -->
 <para>
 
@@ -135,6 +158,7 @@ be done by casting).
 @popup_blocked: 
 @security_change: 
 @zoom_change: 
+@content_change: 
 @load_url: 
 @stop_load: 
 @reload: 
@@ -162,7 +186,7 @@ be done by casting).
 @has_automatic_encoding: 
 @set_encoding: 
 @print: 
-@print_preview_close: 
+@set_print_preview_mode: 
 @print_preview_n_pages: 
 @print_preview_navigate: 
 @activate: 
@@ -198,14 +222,6 @@ windows opened with JavaScript often use a nonstandard chrome.
 @EPHY_EMBED_CHROME_STATUSBAR: %TRUE for the #EphyEmbed's containing #EphyWindow
 			      to display its statusbar.
 @EPHY_EMBED_CHROME_BOOKMARKSBAR: 
-
-<!-- ##### ENUM EmbedReloadFlags ##### -->
-<para>
-
-</para>
-
-@EMBED_RELOAD_NORMAL: 
-@EMBED_RELOAD_FORCE: Bypass cache and proxy while reloading a web page
 
 <!-- ##### ENUM EmbedPrintPreviewNavType ##### -->
 <para>
@@ -254,6 +270,8 @@ invalid SSL certificate will have an #EmbedSecurityLevel of %STATE_IS_BROKEN.
 </para>
 
 @embed: 
+@force: 
+<!-- # Unused Parameters # -->
 @flags: 
 
 
@@ -410,6 +428,7 @@ invalid SSL certificate will have an #EmbedSecurityLevel of %STATE_IS_BROKEN.
 
 @embed: 
 @zoom: 
+<!-- # Unused Parameters # -->
 @reflow: 
 
 
@@ -458,15 +477,8 @@ invalid SSL certificate will have an #EmbedSecurityLevel of %STATE_IS_BROKEN.
 </para>
 
 @embed: 
+<!-- # Unused Parameters # -->
 @info: 
-
-
-<!-- ##### FUNCTION ephy_embed_print_preview_close ##### -->
-<para>
-
-</para>
-
-@embed: 
 
 
 <!-- ##### FUNCTION ephy_embed_print_preview_n_pages ##### -->

@@ -1,3 +1,47 @@
+2004-06-30  Adam Hooper  <adamh@cvs.gnome.org>
+
+	* data/art/Makefile.am:
+	* data/art/epiphany-popup-hidden.png:
+	* data/art/epiphany-popup-hidden.svg:
+	* data/ui/epiphany-ui.xml:
+	* lib/ephy-stock-icons.c: (ephy_stock_icons_init):
+	* lib/ephy-stock-icons.h:
+	* src/ephy-statusbar.c: (create_statusbar_popups_manager_icon),
+	(ephy_statusbar_init), (ephy_statusbar_set_security_state),
+	(ephy_statusbar_set_popups_state):
+	* src/ephy-statusbar.h:
+	* src/ephy-tab.c: (ephy_tab_set_property), (ephy_tab_get_property),
+	(ephy_tab_class_init), (popups_manager_free_info),
+	(popups_manager_add), (popups_manager_remove_window),
+	(disconnect_popup), (popups_manager_add_window),
+	(ephy_tab_get_popups_displayed), (popups_manager_show),
+	(popups_manager_show_all), (popups_manager_new_window_info),
+	(popups_manager_hide), (popups_manager_hide_all),
+	(ephy_tab_set_popups_displayed), (popup_blocker_n_hidden),
+	(popups_manager_reset), (ephy_tab_finalize), (ephy_tab_address_cb),
+	(ephy_tab_new_window_cb), (ephy_tab_popup_blocked_cb),
+	(ephy_tab_init):
+	* src/ephy-window.c: (sync_tab_popup_windows),
+	(sync_tab_popups_allowed), (ephy_window_set_active_tab),
+	(ephy_window_get_property), (allow_popups_notifier),
+	(ephy_window_init), (ephy_window_finalize), (ephy_window_load_url),
+	(ephy_window_view_bookmarksbar_cb),
+	(ephy_window_view_popup_windows_cb):
+
+	Popup blocking support. View -> Popup Windows.
+
+	* doc/reference/Makefile.am:
+	* doc/reference/epiphany-sections.txt:
+	* doc/reference/tmpl/ephy-embed-single.sgml:
+	* doc/reference/tmpl/ephy-embed.sgml:
+	* doc/reference/tmpl/ephy-permission-manager.sgml:
+	* doc/reference/tmpl/ephy-shell.sgml:
+	* doc/reference/tmpl/ephy-tab.sgml:
+	* doc/reference/tmpl/epiphany-unused.sgml:
+
+	Added a couple of docs, but mostly this is stuff that I imagine
+	nobody ever commits because it's all auto-generated.
+
 2004-06-30  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/bookmarks/ephy-bookmarksbar.c: (open_in_tabs_cb):

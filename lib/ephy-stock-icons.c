@@ -53,6 +53,7 @@ ephy_stock_icons_init (void)
 	{
 		{ EPHY_STOCK_SECURE,	N_("Secure"),		0, 0, NULL },
 		{ EPHY_STOCK_UNSECURE,	N_("Insecure"),		0, 0, NULL },
+		{ EPHY_STOCK_POPUPS,	N_("Popup Windows"),	0, 0, NULL },
 		{ EPHY_STOCK_HISTORY,	N_("History"),		0, 0, NULL },
 		{ EPHY_STOCK_BOOKMARKS, N_("Bookmarks"),	0, 0, NULL },
 		{ EPHY_STOCK_ENTRY,	N_("Address Entry"),	0, 0, NULL },

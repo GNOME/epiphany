@@ -38,12 +38,13 @@ mozilla-embed-event
 </para>
 
 
-<!-- ##### SIGNAL EphyEmbed::ge-popup-blocked ##### -->
+<!-- ##### ENUM EmbedReloadFlags ##### -->
 <para>
 
 </para>
 
-@ephyembed: the object which received the signal.
+@EMBED_RELOAD_NORMAL: 
+@EMBED_RELOAD_FORCE: Bypass cache and proxy while reloading a web page
 
 <!-- ##### SIGNAL EphyEmbedPersist::cancelled ##### -->
 <para>
@@ -107,6 +108,12 @@ mozilla-embed-event
 </para>
 
 
+<!-- ##### ARG EphyTab:blocked-popup-count ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### FUNCTION ephy_embed_get_encoding_info ##### -->
 <para>
 
@@ -121,6 +128,13 @@ mozilla-embed-event
 </para>
 
 @Returns: 
+
+<!-- ##### FUNCTION ephy_embed_print_preview_close ##### -->
+<para>
+
+</para>
+
+@embed: 
 
 <!-- ##### FUNCTION ephy_shell_delete_on_exit ##### -->
 <para>
