@@ -93,14 +93,25 @@ GContentHandler::~GContentHandler()
 
 NS_IMPL_ISUPPORTS1(GContentHandler, nsIHelperAppLauncherDialog)
 
+#ifdef MOZ_NSIHELPERAPPLAUNCHERDIALOG_UNSIGNED
+/* void show (in nsIHelperAppLauncher aLauncher, in nsISupports aContext, in unsigned long aReason); */
+NS_IMETHODIMP
+GContentHandler::Show (nsIHelperAppLauncher *aLauncher,
+		       nsISupports *aContext,
+		       PRUint32 aReason)
+#else
 /* void show (in nsIHelperAppLauncher aLauncher, in nsISupports aContext); */
-NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
-				    nsISupports *aContext,
-				    PRBool aForced)
+NS_IMETHODIMP
+GContentHandler::Show (nsIHelperAppLauncher *aLauncher,
+		       nsISupports *aContext,
+		       PRBool aForced)
+#endif
 {
 	nsresult rv;
 	EphyEmbedSingle *single;
 	gboolean handled = FALSE;
+
+	/* FIXME: handle aForced / aReason argument in some way? */
 
 	mContext = aContext;
 	mLauncher = aLauncher;
