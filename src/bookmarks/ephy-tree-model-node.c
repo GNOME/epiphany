@@ -510,15 +510,16 @@ ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 		break;
 	case EPHY_TREE_MODEL_NODE_COL_TITLE_WEIGHT:
 		g_value_init (value, G_TYPE_INT);
-		/* Only priority ALL (0) has bold text */
-		if (ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_ALL_PRIORITY))
-			g_value_set_int (value, PANGO_WEIGHT_NORMAL);
-		else
+		priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+		if (priority == EPHY_TREE_MODEL_ALL_PRIORITY || 
+		    priority == EPHY_TREE_MODEL_SPECIAL_PRIORITY)
 			g_value_set_int (value, PANGO_WEIGHT_BOLD);
+		else
+			g_value_set_int (value, PANGO_WEIGHT_NORMAL);
 		break;
 	case EPHY_TREE_MODEL_NODE_COL_PRIORITY:
 		g_value_init (value, G_TYPE_INT);
-		priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_ALL_PRIORITY);
+		priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 		if (priority == EPHY_TREE_MODEL_ALL_PRIORITY || 
 		    priority == EPHY_TREE_MODEL_SPECIAL_PRIORITY)
 			g_value_set_int (value, priority);

@@ -1,3 +1,18 @@
+2003-03-24  Xan Lopez  <xan@masilla.org>
+
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_save),
+	(ephy_bookmarks_init):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/bookmarks/ephy-topics-selector.c: (fill_model):
+	* src/bookmarks/ephy-tree-model-node.c:
+	(ephy_tree_model_node_get_value):
+
+	s/EPHY_NODE_KEYWORD_PROP_ALL_PRIORITY/EPHY_NODE_KEYWORD_PROP_PRIORITY/
+	Add a "Most Visited" topic, featuring the 10 most visited bookmarks.
+	Now special topics are bold too.
+
 2003-03-24  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* src/bookmarks/ephy-bookmarks.c: (update_topics_list),

@@ -570,6 +570,11 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	const char *icon_path;
 	int i;
 
+	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
+	
+	icon_path =  ephy_file ("epiphany-bookmarks.png");
+	gtk_window_set_icon_from_file (GTK_WINDOW (editor), icon_path, NULL);
+
 	g_signal_connect (editor, "delete_event",
 			  G_CALLBACK (delete_event_cb), NULL);
 
@@ -595,11 +600,6 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	egg_menu_merge_ensure_update (ui_merge);
 	editor->priv->ui_merge = ui_merge;
 	editor->priv->action_group = action_group;
-
-	icon_path =  ephy_file ("epiphany-bookmarks.png");
-	gtk_window_set_icon_from_file (GTK_WINDOW (editor), icon_path, NULL);
-	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
-	gtk_widget_set_size_request (GTK_WIDGET (editor), 500, 450);
 
 	hbox = gtk_hbox_new (FALSE, 6);
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 6);

@@ -218,7 +218,7 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 
 		kid = g_ptr_array_index (children, i);
 
-		if (kid != eb->priv->bookmarks)
+		if (kid != eb->priv->bookmarks && kid != eb->priv->favorites)
 		{
 			ephy_node_save_to_xml (kid, root);
 		}
@@ -448,7 +448,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	g_value_init (&value, G_TYPE_INT);
 	g_value_set_int (&value, EPHY_TREE_MODEL_ALL_PRIORITY);
 	ephy_node_set_property (eb->priv->bookmarks,
-			EPHY_NODE_KEYWORD_PROP_ALL_PRIORITY,
+			EPHY_NODE_KEYWORD_PROP_PRIORITY,
 			&value);
 	g_value_unset (&value);
 
@@ -465,8 +465,22 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 				 G_OBJECT (eb),
 				 0);
 
+	/* Favorites */
 	eb->priv->favorites = ephy_node_new_with_id (FAVORITES_NODE_ID);
 	ephy_node_ref (eb->priv->favorites);
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, _("Most Visited"));
+	ephy_node_set_property (eb->priv->favorites,
+			        EPHY_NODE_KEYWORD_PROP_NAME,
+			        &value);
+	g_value_unset (&value);
+	g_value_init (&value, G_TYPE_INT);
+	g_value_set_int (&value, EPHY_TREE_MODEL_SPECIAL_PRIORITY);
+	ephy_node_set_property (eb->priv->favorites,
+				EPHY_NODE_KEYWORD_PROP_PRIORITY,
+				&value);
+	g_value_unset (&value);
+	ephy_node_add_child (eb->priv->keywords, eb->priv->favorites);
 
 	ephy_bookmarks_load (eb);
 	ephy_bookmarks_emit_data_changed (eb);

@@ -219,7 +219,7 @@ fill_model (EphyTopicsSelector *editor)
 		}
 
 		real_topic = !ephy_node_get_property_boolean
-			(kid, EPHY_NODE_KEYWORD_PROP_ALL_PRIORITY);
+			(kid, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 
 		if (real_topic)
 		{
