@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000-2003 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2004 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -976,7 +976,7 @@ window_cmd_help_about (GtkAction *action,
 
 	about = gnome_about_new(
 		       "Epiphany", VERSION,
-		       "Copyright \xc2\xa9 2002-2003 Marco Pesenti Gritti",
+		       "Copyright \xc2\xa9 2002-2004 Marco Pesenti Gritti",
 		       _("A GNOME browser based on Mozilla"),
 		       (const char **)authors,
 		       (const char **)documenters,
