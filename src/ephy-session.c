@@ -57,7 +57,7 @@ struct EphySessionPrivate
 	GList *windows;
 	GList *tool_windows;
 	GtkWidget *resume_dialog;
-	gboolean resuming;
+	gboolean dont_save;
 };
 
 #define BOOKMARKS_EDITOR_ID	"BookmarksEditor"
@@ -426,9 +426,9 @@ ephy_session_autoresume (EphySession *session)
 	if (g_file_test (saved_session, G_FILE_TEST_EXISTS)
 	    && offer_to_resume (session))
 	{
-		session->priv->resuming = TRUE;
+		session->priv->dont_save = TRUE;
 		retval = ephy_session_load (session, saved_session);
-		session->priv->resuming = FALSE;
+		session->priv->dont_save = FALSE;
 		ephy_session_save (session, SESSION_CRASHED);
 	}
 
@@ -448,6 +448,7 @@ ephy_session_close (EphySession *session)
 	 * destroying the windows and destroying the tool windows
 	 */
 	g_object_ref (ephy_shell);
+	session->priv->dont_save = TRUE;
 
 	windows	= ephy_session_get_windows (session);
 	g_list_foreach (windows, (GFunc) gtk_widget_destroy, NULL);
@@ -457,6 +458,7 @@ ephy_session_close (EphySession *session)
 	g_list_foreach (windows, (GFunc) gtk_widget_destroy, NULL);
 	g_list_free (windows);	
 
+	session->priv->dont_save = FALSE;
 	g_object_unref (ephy_shell);
 }
 
@@ -581,7 +583,7 @@ ephy_session_save (EphySession *session,
 	char *save_to, *tmp_file;
 	int ret;
 
-	if (session->priv->resuming)
+	if (session->priv->dont_save)
 	{
 		return TRUE;
 	}
