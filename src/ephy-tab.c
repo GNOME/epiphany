@@ -116,10 +116,12 @@ static void	ephy_tab_set_link_message	(EphyTab *tab,
 						 char *message);
 static void	ephy_tab_set_load_percent	(EphyTab *tab,
 						 int percent);
-static void	ephy_tab_update_navigation_flags(EphyTab *tab);
+static void	ephy_tab_update_navigation_flags(EphyTab *tab,
+						 EphyEmbed *embed);
 static void	ephy_tab_set_security_level	(EphyTab *tab,
 						 EmbedSecurityLevel level);
 static void	ephy_tab_set_title		(EphyTab *tab,
+						 EphyEmbed *embed,
 						 const char *new_title);
 static void	ephy_tab_set_zoom		(EphyTab *tab,
 						 float zoom);
@@ -643,7 +645,7 @@ ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 
 	ephy_tab_set_link_message (tab, NULL);
 	ephy_tab_set_icon_address (tab, NULL);
-	ephy_tab_update_navigation_flags (tab);
+	ephy_tab_update_navigation_flags (tab, embed);
 
 	/* restore zoom level */
 	if (address_has_web_scheme (address))
@@ -722,7 +724,7 @@ ephy_tab_title_cb (EphyEmbed *embed, EphyTab *tab)
 
 	title = ephy_embed_get_title (embed);
 
-	ephy_tab_set_title (tab, title);
+	ephy_tab_set_title (tab, embed, title);
 
 	g_free (title);
 }
@@ -853,7 +855,7 @@ build_progress_from_requests (EphyTab *tab, EmbedState state)
 }
 
 static void
-ensure_page_info (EphyTab *tab, const char *address)
+ensure_page_info (EphyTab *tab, EphyEmbed *embed, const char *address)
 {
 	if ((tab->priv->address == NULL || *tab->priv->address == '\0') &&
 	    tab->priv->address_expire == TAB_ADDRESS_EXPIRE_NOW)
@@ -863,7 +865,7 @@ ensure_page_info (EphyTab *tab, const char *address)
 
 	if (tab->priv->title == NULL)
 	{
-		ephy_tab_set_title (tab, NULL);
+		ephy_tab_set_title (tab, embed, NULL);
 	}
 }
 
@@ -879,17 +881,17 @@ ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 		{
 			tab->priv->total_requests = 0;
 			tab->priv->cur_requests = 0;
-			ensure_page_info (tab, uri);
+			ensure_page_info (tab, embed, uri);
 
 			ephy_tab_set_load_percent (tab, 0);
 			ephy_tab_set_load_status (tab, TRUE);
-			ephy_tab_update_navigation_flags (tab);
+			ephy_tab_update_navigation_flags (tab, embed);
 		}
 		else if (state & EMBED_STATE_STOP)
 		{
 			ephy_tab_set_load_percent (tab, 0);
 			ephy_tab_set_load_status (tab, FALSE);
-			ephy_tab_update_navigation_flags (tab);
+			ephy_tab_update_navigation_flags (tab, embed);
 			tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
 		}
 	}
@@ -1042,8 +1044,7 @@ clipboard_text_received_cb (GtkClipboard *clipboard,
 {
 	if (*weak_ptr != NULL && text != NULL)
 	{
-		EphyTab *tab = (EphyTab *) *weak_ptr;
-		EphyEmbed *embed = ephy_tab_get_embed (tab);
+		EphyEmbed *embed = (EphyEmbed *) *weak_ptr;
 
 		ephy_embed_load_url (embed, text);
 	}
@@ -1126,17 +1127,17 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	{
 		/* See bug #133633 for why we do it this way */
 
-		/* We need to make sure we know if the tab is destroyed between
+		/* We need to make sure we know if the embed is destroyed between
 		 * requesting the clipboard contents, and receiving them.
 		 */
 		gpointer *weak_ptr;
 
 		weak_ptr = g_new (gpointer, 1);
-		*weak_ptr = tab;
-		g_object_add_weak_pointer (G_OBJECT (tab), weak_ptr);
+		*weak_ptr = embed;
+		g_object_add_weak_pointer (G_OBJECT (embed), weak_ptr);
 
 		gtk_clipboard_request_text
-			(gtk_widget_get_clipboard (GTK_WIDGET (tab),
+			(gtk_widget_get_clipboard (GTK_WIDGET (embed),
 						   GDK_SELECTION_PRIMARY),
 			 (GtkClipboardTextReceivedFunc) clipboard_text_received_cb,
 			 weak_ptr);
@@ -1270,12 +1271,9 @@ ephy_tab_get_load_percent (EphyTab *tab)
 }
 
 static void
-ephy_tab_update_navigation_flags (EphyTab *tab)
+ephy_tab_update_navigation_flags (EphyTab *tab, EphyEmbed *embed)
 {
-	EphyEmbed *embed;
 	TabNavigationFlags flags = 0;
-
-	embed = ephy_tab_get_embed (tab);
 
 	if (ephy_embed_can_go_up (embed))
 	{
@@ -1330,7 +1328,7 @@ ephy_tab_get_status_message (EphyTab *tab)
 #define MAX_LABEL_LENGTH	32
 
 static void
-ephy_tab_set_title (EphyTab *tab, const char *new_title)
+ephy_tab_set_title (EphyTab *tab, EphyEmbed *embed, const char *new_title)
 {
 	char *title_short, *title_tmp;
 	char *title = NULL;
@@ -1344,7 +1342,7 @@ ephy_tab_set_title (EphyTab *tab, const char *new_title)
 		GnomeVFSURI *uri = NULL;
 		char *address;
 
-		address = ephy_embed_get_location (ephy_tab_get_embed (tab), TRUE);
+		address = ephy_embed_get_location (embed, TRUE);
 
 		if (address)
 		{

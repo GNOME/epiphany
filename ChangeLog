@@ -1,3 +1,13 @@
+2004-03-05  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-tab.c: (ephy_tab_address_cb), (ephy_tab_title_cb),
+	(ensure_page_info), (ephy_tab_net_state_cb),
+	(clipboard_text_received_cb), (ephy_tab_dom_mouse_click_cb),
+	(ephy_tab_update_navigation_flags), (ephy_tab_set_title):
+
+	Don't use ephy_tab_get_embed(), instead use the pointer provided when
+	we connected the callbacks. Hopefully fixes bug #136122.
+
 2004-03-04  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/window-commands.c: (window_cmd_help_about):
