@@ -370,6 +370,7 @@ init_actions_list (EphyLocationAction *action)
 		action->priv->actions = g_list_append
 			(action->priv->actions, kid);
 	}
+	ephy_node_thaw (action->priv->smart_bmks);
 }
 
 static void
