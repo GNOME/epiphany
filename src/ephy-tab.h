@@ -46,6 +46,13 @@ typedef enum
 	TAB_NAV_FORWARD	= 1 << 2,
 } TabNavigationFlags;
 
+typedef enum
+{
+	TAB_ADDRESS_EXPIRE_NOW,
+	TAB_ADDRESS_EXPIRE_NEXT,
+	TAB_ADDRESS_EXPIRE_CURRENT
+} TabAddressExpire;
+
 struct EphyTab
 {
         GObject parent;
@@ -83,7 +90,8 @@ const char *		ephy_tab_get_link_message	(EphyTab *tab);
 int			ephy_tab_get_load_percent	(EphyTab *tab);
 
 void			ephy_tab_set_location		(EphyTab *tab,
-							 const char *location);
+							 const char *location,
+							 TabAddressExpire expire);
 
 const char *		ephy_tab_get_location		(EphyTab *tab);
 
