@@ -199,7 +199,7 @@ EphyHeaderSniffer::OnSecurityChange (nsIWebProgress *aWebProgress, nsIRequest *a
 static void
 filechooser_response_cb (EphyFileChooser *dialog, gint response, EphyHeaderSniffer* sniffer)
 {
-	if (response == EPHY_RESPONSE_SAVE)
+	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		char *filename;
 		GtkWidget *parent = NULL; // FIXME!

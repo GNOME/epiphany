@@ -515,7 +515,7 @@ import_from_file_response_cb (GtkDialog *dialog, gint response,
 {
 	char *filename;
 
-	if (response == EPHY_RESPONSE_OPEN)
+	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 

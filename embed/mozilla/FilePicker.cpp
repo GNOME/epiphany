@@ -110,9 +110,9 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 			
 			gtk_dialog_add_buttons (GTK_DIALOG (mDialog),
 						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-						GTK_STOCK_OPEN, EPHY_RESPONSE_OPEN,
+						GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 						NULL);
-			gtk_dialog_set_default_response (GTK_DIALOG (mDialog), EPHY_RESPONSE_OPEN);
+			gtk_dialog_set_default_response (GTK_DIALOG (mDialog), GTK_RESPONSE_ACCEPT);
 			break;
 
 		case nsIFilePicker::modeOpenMultiple:
@@ -124,9 +124,9 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 
 			gtk_dialog_add_buttons (GTK_DIALOG (mDialog),
 						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-						GTK_STOCK_OPEN, EPHY_RESPONSE_OPEN,
+						GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 						NULL);
-			gtk_dialog_set_default_response (GTK_DIALOG (mDialog), EPHY_RESPONSE_OPEN);
+			gtk_dialog_set_default_response (GTK_DIALOG (mDialog), GTK_RESPONSE_ACCEPT);
 
 			break;
 
@@ -136,9 +136,9 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 	
 			gtk_dialog_add_buttons (GTK_DIALOG (mDialog),
 						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-						GTK_STOCK_SAVE, EPHY_RESPONSE_SAVE,
+						GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
 						NULL);
-			gtk_dialog_set_default_response (GTK_DIALOG (mDialog), EPHY_RESPONSE_SAVE);
+			gtk_dialog_set_default_response (GTK_DIALOG (mDialog), GTK_RESPONSE_ACCEPT);
 			break;
 		default:
 			g_assert_not_reached ();
@@ -385,8 +385,7 @@ NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 
 	switch (response)
 	{
-		case EPHY_RESPONSE_OPEN:
-		case EPHY_RESPONSE_SAVE:
+		case GTK_RESPONSE_ACCEPT:
 			*_retval = nsIFilePicker::returnOK;
 			break;
 		default:

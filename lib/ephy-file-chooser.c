@@ -238,19 +238,19 @@ ephy_file_chooser_new (const char *title,
 	{
 		gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OPEN, EPHY_RESPONSE_OPEN,
+					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 					NULL);
 		gtk_dialog_set_default_response (GTK_DIALOG (dialog),
-						 EPHY_RESPONSE_OPEN);
+						 GTK_RESPONSE_ACCEPT);
 	}
 	else if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
 	{
 		gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_SAVE, EPHY_RESPONSE_SAVE,
+					GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
 					NULL);
 		gtk_dialog_set_default_response (GTK_DIALOG (dialog),
-						 EPHY_RESPONSE_SAVE);
+						 GTK_RESPONSE_ACCEPT);
 	}
 
 	if (parent != NULL)

@@ -1,3 +1,31 @@
+2004-03-29  Federico Mena Quintero  <federico@ximian.com>
+
+	Fixes #138263.
+
+	* lib/ephy-file-chooser.h: Remove EPHY_RESPONSE_OPEN and
+	EPHY_RESPONSE_SAVE; we'll use GTK_RESPONSE_ACCEPT instead.
+
+	* lib/ephy-file-chooser.c (ephy_file_chooser_new): Use
+	GTK_RESPONSE_ACCEPT rather than EPHY_RESPONSE_*.
+
+	* embed/print-dialog.c (print_filechooser_response_cb): Likewise.
+
+	* src/bookmarks/ephy-bookmarks-editor.c
+	(import_from_file_response_cb): Likewise.
+
+	* src/prefs-dialog.c (download_path_response_cb): Likewise.
+
+	* src/window-commands.c (open_response_cb): Likewise.
+
+	* embed/mozilla/ContentHandler.cpp (PromptForSaveToFile):
+	Likewise.
+
+	* embed/mozilla/EphyHeaderSniffer.cpp (filechooser_response_cb):
+	Likewise.
+
+	* embed/mozilla/FilePicker.cpp (Init): Likewise.
+	(Show): Likewise.
+
 2004-03-29  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/epiphany.in:

@@ -1282,7 +1282,7 @@ prefs_homepage_blank_button_clicked_cb (GtkWidget *button,
 static void
 download_path_response_cb (GtkDialog *fc, gint response, EphyDialog *dialog)
 {
-	if (response == EPHY_RESPONSE_OPEN)
+	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		char *dir;
 
