@@ -1106,8 +1106,6 @@ prefs_dialog_init (PrefsDialog *pd)
 
 	pd->priv->switching = FALSE;
 	create_fonts_language_menu (pd);
-	setup_fonts (pd);
-	setup_size_controls (pd);
 	attach_fonts_signals (pd);
 	attach_size_controls_signals (pd);
 	create_languages_list (pd);

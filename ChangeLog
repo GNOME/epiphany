@@ -1,5 +1,13 @@
 2003-07-14  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* configure.in:
+	* src/prefs-dialog.c: (prefs_dialog_init):
+
+	No need to setup fonts on init, it will be done
+	when the default encoding is set.
+
+2003-07-14  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* embed/mozilla/mozilla-embed-single.cpp:
 
 	List all mozilla fonts and not only the language specific,
