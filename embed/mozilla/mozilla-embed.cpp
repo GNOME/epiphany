@@ -72,8 +72,9 @@ static void mozilla_embed_new_window_cb		(GtkMozEmbed *embed,
 						 MozillaEmbed *membed);
 static void mozilla_embed_security_change_cb	(GtkMozEmbed *embed, 
 						 gpointer request,
-						 guint state, MozillaEmbed *membed);
-static EmbedSecurityLevel mozilla_embed_security_level (MozillaEmbed *membed);
+						 PRUint32 state,
+						 MozillaEmbed *membed);
+static EmbedSecurityLevel mozilla_embed_security_level (PRUint32 state);
 
 #define MOZILLA_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED, MozillaEmbedPrivate))
 
@@ -88,7 +89,6 @@ typedef enum
 struct MozillaEmbedPrivate
 {
 	EphyBrowser *browser;
-	guint security_state;
 	MozillaEmbedLoadState load_state;
 };
 
@@ -260,7 +260,6 @@ mozilla_embed_init (MozillaEmbed *embed)
 {
         embed->priv = MOZILLA_EMBED_GET_PRIVATE (embed);
 	embed->priv->browser = new EphyBrowser ();
-	embed->priv->security_state = STATE_IS_UNKNOWN;
 
 	g_signal_connect_object (G_OBJECT (embed), "location",
 				 G_CALLBACK (mozilla_embed_location_changed_cb),
@@ -632,24 +631,23 @@ impl_shistory_go_nth (EphyEmbed *embed,
 }
 
 static void
-impl_get_security_level (EphyEmbed *embed, 
+impl_get_security_level (EphyEmbed *embed,
                          EmbedSecurityLevel *level,
                          char **description)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (embed)->priv;
 
-	g_return_if_fail (description != NULL && level != NULL);
-
-	*description = NULL;
-	*level = STATE_IS_UNKNOWN;
+	if (level) *level = STATE_IS_UNKNOWN;
+	if (description) *description = NULL;
 
 	nsresult rv;
+	PRUint32 state;
 	nsEmbedCString desc;
-	rv = mpriv->browser->GetSecurityDescription (desc);
+	rv = mpriv->browser->GetSecurityInfo (&state, desc);
 	if (NS_FAILED (rv)) return;
 
-	*description = g_strdup (desc.get());
-	*level = mozilla_embed_security_level (MOZILLA_EMBED (embed));
+	if (level) *level = mozilla_embed_security_level (state);
+	if (description) *description = g_strdup (desc.get());
 }
 
 static void
@@ -1083,24 +1081,19 @@ mozilla_embed_new_window_cb (GtkMozEmbed *embed,
 static void
 mozilla_embed_security_change_cb (GtkMozEmbed *embed, 
 				  gpointer requestptr,
-				  guint state, 
+				  PRUint32 state,
 				  MozillaEmbed *membed)
 {
-	EmbedSecurityLevel level;
-
-	membed->priv->browser->SetSecurityInfo (static_cast<nsIRequest*>(requestptr));
-	membed->priv->security_state = state;
-	level = mozilla_embed_security_level (membed);
-
-	g_signal_emit_by_name (membed, "ge_security_change", level);
+	g_signal_emit_by_name (membed, "ge_security_change",
+			       mozilla_embed_security_level (state));
 }
 
 static EmbedSecurityLevel
-mozilla_embed_security_level (MozillaEmbed *membed)
+mozilla_embed_security_level (PRUint32 state)
 {
 	EmbedSecurityLevel level;
 
-	switch (membed->priv->security_state)
+	switch (state)
         {
         case nsIWebProgressListener::STATE_IS_INSECURE:
                 level = STATE_IS_INSECURE;

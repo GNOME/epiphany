@@ -362,6 +362,16 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
  	rv = GetListener();
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
+#ifdef HAVE_MOZILLA_PSM
+	/* FIXME: mozilla sucks! nsWebBrowser already has an instance of this,
+	 * but we cannot get to it!
+	 * See https://bugzilla.mozilla.org/show_bug.cgi?id=94974
+	 */
+	mSecurityInfo = do_CreateInstance(NS_SECURE_BROWSER_UI_CONTRACTID, &rv);
+	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && mSecurityInfo, NS_ERROR_FAILURE);
+	mSecurityInfo->Init (mDOMWindow);
+#endif
+
 	mInitialized = PR_TRUE;
 
 	return AttachListeners();
@@ -1049,40 +1059,21 @@ nsresult EphyBrowser::GetHasModifiedForms (PRBool *modified)
 }
 
 nsresult
-EphyBrowser::SetSecurityInfo (nsIRequest *aRequest)
+EphyBrowser::GetSecurityInfo (PRUint32 *aState, nsACString &aDescription)
 {
 #ifdef HAVE_MOZILLA_PSM
-	/* clear previous security info */
-	mSecurityInfo = nsnull;
-
-	nsCOMPtr<nsIChannel> channel (do_QueryInterface (aRequest));
-	NS_ENSURE_TRUE (channel, NS_ERROR_FAILURE);
-
-	channel->GetSecurityInfo (getter_AddRefs (mSecurityInfo));
-
-	return NS_OK;
-#else
-	return NS_ERROR_NOT_IMPLEMENTED;
-#endif
-}
-
-nsresult
-EphyBrowser::GetSecurityDescription (nsACString &aDescription)
-{
-#ifdef HAVE_MOZILLA_PSM
-	if (!mSecurityInfo) return NS_ERROR_FAILURE;
-
-	nsCOMPtr<nsITransportSecurityInfo> tsInfo (do_QueryInterface (mSecurityInfo));
-	NS_ENSURE_TRUE (tsInfo, NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (mSecurityInfo, NS_ERROR_FAILURE);
 
 	nsresult rv;
-	PRUnichar *tooltip = nsnull;
-	rv = tsInfo->GetShortSecurityDescription (&tooltip);
-	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && tooltip, NS_ERROR_FAILURE);
+	rv = mSecurityInfo->GetState (aState);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-	NS_UTF16ToCString (nsEmbedString (tooltip),
+	nsEmbedString tooltip;
+	rv = mSecurityInfo->GetTooltipText (tooltip);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+	NS_UTF16ToCString (tooltip,
 			   NS_CSTRING_ENCODING_UTF8, aDescription);
-	if (tooltip) nsMemory::Free (tooltip);
 
 	return NS_OK;
 #else
@@ -1094,7 +1085,7 @@ nsresult
 EphyBrowser::ShowCertificate ()
 {
 #ifdef HAVE_MOZILLA_PSM
-	if (!mSecurityInfo) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mSecurityInfo, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsISSLStatusProvider> statusProvider (do_QueryInterface (mSecurityInfo));
 	NS_ENSURE_TRUE (statusProvider, NS_ERROR_FAILURE);
