@@ -2,7 +2,7 @@ SUBDIRS = mozilla
 
 noinst_LTLIBRARIES = libephyembed.la libephyembedfactory.la
 
-headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
+headerdir = $(prefix)/include/epiphany/@EPIPHANY_MAJOR@/epiphany
 header_DATA = \
 	ephy-embed-type-builtins.h	\
 	$(INST_H_FILES)

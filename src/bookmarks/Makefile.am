@@ -1,6 +1,6 @@
 noinst_LTLIBRARIES = libephybookmarks.la
 
-headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
+headerdir = $(prefix)/include/epiphany/@EPIPHANY_MAJOR@/epiphany
 header_DATA = \
 	ephy-bookmarks-type-builtins.h	\
 	$(INST_H_FILES)

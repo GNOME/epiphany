@@ -20,7 +20,7 @@ idl_flags = -I$(LIBBONOBO_IDL) -I$(BONOBO_ACTIVATION_IDL)
 $(CORBA_SOURCE): $(idls) $(ORBIT_IDL)
 	$(ORBIT_IDL) $(idl_flags) $(idls)
 
-headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
+headerdir = $(prefix)/include/epiphany/@EPIPHANY_MAJOR@/epiphany
 header_DATA = \
 	ephy-type-builtins.h	\
 	$(INST_H_FILES)
@@ -102,8 +102,8 @@ libephymain_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/egg		\
 	-I$(top_srcdir)/lib/widgets   	\
 	-I$(top_srcdir)/src/bookmarks   \
-	-DEXTENSIONS_DIR=\""$(libdir)/epiphany-$(EPIPHANY_MAJOR)/extensions"\" 	\
-	-DLOADER_DIR=\""$(libdir)/epiphany-$(EPIPHANY_MAJOR)/loaders"\"		\
+	-DEXTENSIONS_DIR=\""$(libdir)/epiphany/$(EPIPHANY_MAJOR)/extensions"\" 	\
+	-DLOADER_DIR=\""$(libdir)/epiphany/$(EPIPHANY_MAJOR)/loaders"\"		\
 	-DDATADIR=\""$(datadir)"\" 	\
 	$(AM_CPPFLAGS)
 
