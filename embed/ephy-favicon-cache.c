@@ -351,8 +351,6 @@ ephy_favicon_cache_finalize (GObject *object)
 
 	g_return_if_fail (cache->priv != NULL);
 
-	g_object_unref (cache->priv->db);
-
 	cleanup_downloads_hash (cache);
 	remove_obsolete_icons (cache);
 	ephy_favicon_cache_save (cache);
@@ -362,6 +360,8 @@ ephy_favicon_cache_finalize (GObject *object)
 	g_hash_table_destroy (cache->priv->icons_hash);
 	g_static_rw_lock_free (cache->priv->icons_hash_lock);
 	g_hash_table_destroy (cache->priv->downloads_hash);
+
+	g_object_unref (cache->priv->db);
 
 	g_free (cache->priv);
 
