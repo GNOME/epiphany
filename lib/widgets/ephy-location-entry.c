@@ -379,6 +379,11 @@ insert_text_cb (GtkWidget *editable,
 		EphyLocationEntry *w)
 {
 	EphyLocationEntryPrivate *p = w->priv;
+	GtkWidget *window;
+
+	window = gtk_widget_get_toplevel (editable);
+	g_return_if_fail (window != NULL);
+	if (!GTK_WINDOW (window)->has_focus) return;
 
 	if (p->going_to_site) return;
 

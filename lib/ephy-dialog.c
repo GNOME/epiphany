@@ -105,6 +105,7 @@ struct EphyDialogPrivate
 	GtkWidget *container;
 	PropertyInfo *props;
 	gboolean modal;
+	gboolean has_default_size;
 	char *name;
 
 	int spin_item_id;
@@ -795,6 +796,7 @@ ephy_dialog_init (EphyDialog *dialog)
 	dialog->priv->spin_timer = NULL;
 	dialog->priv->name = NULL;
 	dialog->priv->initialized = FALSE;
+	dialog->priv->has_default_size = FALSE;
 }
 
 static void
@@ -1181,9 +1183,14 @@ impl_get_value (EphyDialog *dialog,
 static void
 setup_default_size (EphyDialog *dialog)
 {
-	ephy_state_add_window (dialog->priv->dialog,
-			       dialog->priv->name, -1, -1,
-			       EPHY_STATE_WINDOW_SAVE_SIZE);
+	if (!dialog->priv->has_default_size)
+	{
+		ephy_state_add_window (dialog->priv->dialog,
+				       dialog->priv->name, -1, -1,
+				       EPHY_STATE_WINDOW_SAVE_SIZE);
+	}
+
+	dialog->priv->has_default_size = TRUE;
 }
 
 static gint

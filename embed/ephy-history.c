@@ -37,7 +37,7 @@
 /* how often to save the history, in milliseconds */
 #define HISTORY_SAVE_INTERVAL (60 * 5 * 1000)
 
-#define HISTORY_PAGE_OBSOLETE_DAYS 30
+#define HISTORY_PAGE_OBSOLETE_DAYS 10
 
 struct EphyHistoryPrivate
 {

@@ -1031,7 +1031,7 @@ popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
 
 	*x = event->x;
 	*y = event->y;
-	*push_in = FALSE;
+	*push_in = TRUE;
 }
 
 static void
@@ -1056,6 +1056,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	const GValue *value;
 	gboolean framed, has_background;
 	GtkWidget *widget;
+	EphyEmbedEventType type;
 
 	ephy_embed_event_get_property (event, "framed_page", &value);
 	framed = g_value_get_int (value);
@@ -1103,8 +1104,20 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	g_object_set_data (G_OBJECT (window), "context_event", event);
 	g_signal_connect (widget, "destroy",
 			  G_CALLBACK (popup_destroy_cb), window);
-	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, popup_menu_at_coords, event, 2,
-			gtk_get_current_event_time ());
+
+	ephy_embed_event_get_event_type (event, &type);
+	if (type == EPHY_EMBED_EVENT_KEY)
+	{
+		gtk_menu_popup (GTK_MENU (widget), NULL, NULL,
+				popup_menu_at_coords, event, 2,
+				gtk_get_current_event_time ());
+	}
+	else
+	{
+		gtk_menu_popup (GTK_MENU (widget), NULL, NULL,
+				NULL, NULL, 2,
+				gtk_get_current_event_time ());
+	}
 }
 
 static gint
@@ -1113,7 +1126,6 @@ tab_context_menu_cb (EphyEmbed *embed,
 		     EphyWindow *window)
 {
 	EphyTab *tab;
-	EphyEmbedEventType type;
 
 	g_return_val_if_fail (IS_EPHY_WINDOW (window), FALSE);
 	g_return_val_if_fail (IS_EPHY_EMBED (embed), FALSE);
@@ -1126,19 +1138,7 @@ tab_context_menu_cb (EphyEmbed *embed,
 	window = ephy_tab_get_window (tab);
 	g_return_val_if_fail (window != NULL, FALSE);
 
-	ephy_embed_event_get_event_type (event, &type);
-
-	if (type == EPHY_EMBED_EVENT_MOUSE_BUTTON3)
-	{
-		show_embed_popup (window, tab, event);
-	}
-	else
-	{
-		int x, y;
-
-		ephy_embed_event_get_coords (event, &x, &y); // Why?
-		show_embed_popup (window, tab, event);
-	}
+	show_embed_popup (window, tab, event);
 
 	return FALSE;
 }

@@ -1,3 +1,29 @@
+2003-06-23  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* configure.in:
+
+	Correct translations dir (leftover from galeon)
+
+	* embed/ephy-history.c:
+
+	Lower expire to 10 days, similar to phoenix. Current interface
+	and perf make this a better default.
+
+	* lib/ephy-dialog.c: (ephy_dialog_init), (setup_default_size):
+
+	Make sure to not state_add more than one time
+
+	* lib/widgets/ephy-location-entry.c: (insert_text_cb):
+
+	Do not show autocompletion on not focused window. This is to
+	work around problems with gnome-entry.
+
+	* src/ephy-window.c: (popup_menu_at_coords), (show_embed_popup),
+	(tab_context_menu_cb):
+
+	Do not use custom func to show mouse popups.
+	Fix costum func to be smarter with screen limits.
+
 2003-06-22  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/mozilla-embed-single.cpp: (impl_remove_cookies):
