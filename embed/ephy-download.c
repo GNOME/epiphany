@@ -150,7 +150,10 @@ update_remaining_time (EphyDownload *download)
 
 	if (cur > 0)
 	{
-		download->priv->remaining_time = elapsed_time * (total - cur) / cur;
+		float per_byte_time;
+
+		per_byte_time = (float)elapsed_time / (float)cur;
+		download->priv->remaining_time = time_per_byte * (total - cur);
 	}
 }
 
