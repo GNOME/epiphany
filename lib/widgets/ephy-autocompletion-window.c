@@ -206,7 +206,7 @@ ephy_autocompletion_window_init_widgets (EphyAutocompletionWindow *aw)
 	GtkWidget *frame;
 	GtkWidget *vbox;
 	GdkColor *bg_color;
-	guint32 base, dark;
+	GtkStyle *style;
 	GValue v = { 0 };
 
 	p->window = gtk_window_new (GTK_WINDOW_POPUP);
@@ -257,9 +257,8 @@ ephy_autocompletion_window_init_widgets (EphyAutocompletionWindow *aw)
 	g_value_init (&v, GDK_TYPE_COLOR);
 	g_object_get_property (G_OBJECT (renderer), "cell_background_gdk", &v);
 	bg_color = g_value_peek_pointer (&v);
-	base = ephy_gui_gdk_color_to_rgb (bg_color);
-	dark = ephy_gui_rgb_shift_color (base, 0.15);
-	*bg_color = ephy_gui_gdk_rgb_to_color (dark);
+	style = gtk_widget_get_style (p->window);
+	*bg_color = style->bg[GTK_STATE_NORMAL];
 	g_object_set_property (G_OBJECT (renderer), "cell_background_gdk", &v);
 
 	p->action_col1 = gtk_tree_view_column_new ();

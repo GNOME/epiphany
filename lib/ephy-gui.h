@@ -40,14 +40,6 @@ void		 ephy_gui_gtk_radio_button_set		 (GtkRadioButton *radio_button,
 
 gboolean	ephy_gui_confirm_overwrite_file	         (GtkWidget *parent,
 							  const char *filename);
-
-guint32		ephy_gui_rgb_shift_color		 (guint32 color,
-							  float shift_by);
-
-guint32		ephy_gui_gdk_color_to_rgb		 (const GdkColor *color);
-
-GdkColor	ephy_gui_gdk_rgb_to_color		 (guint32 color);
-
 G_END_DECLS
 
 #endif
