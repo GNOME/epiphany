@@ -1113,7 +1113,6 @@ ephy_tab_get_status_message (EphyTab *tab)
 static void
 ephy_tab_set_title (EphyTab *tab, const char *new_title)
 {
-	GnomeVFSURI *uri;
 	char *title_short = NULL;
 	char *title = NULL;
 
@@ -1123,10 +1122,15 @@ ephy_tab_set_title (EphyTab *tab, const char *new_title)
 
 	if (new_title == NULL || new_title[0] == '\0')
 	{
+		GnomeVFSURI *uri = NULL;
 		char *address;
 
 		ephy_embed_get_location (tab->priv->embed, TRUE, &address);
-		uri = gnome_vfs_uri_new (address);
+
+		if (address)
+		{
+			uri = gnome_vfs_uri_new (address);
+		}
 
 		if (uri)
 		{

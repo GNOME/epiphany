@@ -1,5 +1,30 @@
 2003-06-22  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/ephy-state.c: (ephy_state_window_set_size),
+	(ephy_state_window_set_position), (ephy_state_window_save_size),
+	(ephy_state_window_save_position), (ephy_state_window_save),
+	(window_configure_event_cb), (window_state_event_cb),
+	(ephy_state_add_window):
+
+	When following SAVE_POSITION/SAVE_SIZE flags actually not save
+	them instead of just not restore.
+	Do not use coords value to determine unset state but a boolean
+	flag. (this will restore all saved states to NULL now)
+
+	* lib/ephy-state.h:
+
+	Add a NONE flag, it will restore but not save.
+
+	* src/ephy-tab.c: (ephy_tab_set_title):
+
+	Fix a warning when the url is NULL (popups)
+
+	* src/ephy-window.c: (ephy_window_init), (ephy_window_show):
+
+	Use normal size for not sized popups.
+
+2003-06-22  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* embed/downloader-view.c: (downloader_view_update_details):
 	* embed/mozilla/ProgressListener.cpp:
 	

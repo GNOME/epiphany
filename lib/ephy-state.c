@@ -30,7 +30,6 @@
 #include <gtk/gtkpaned.h>
 
 #define STATES_FILE "states.xml"
-#define WINDOW_POSITION_UNSET -1
 
 enum
 {
@@ -39,7 +38,9 @@ enum
 	EPHY_NODE_STATE_PROP_HEIGHT = 4,
 	EPHY_NODE_STATE_PROP_MAXIMIZE = 5,
 	EPHY_NODE_STATE_PROP_POSITION_X = 6,
-	EPHY_NODE_STATE_PROP_POSITION_Y = 7
+	EPHY_NODE_STATE_PROP_POSITION_Y = 7,
+	EPHY_NODE_STATE_PROP_SIZE = 8,
+	EPHY_NODE_STATE_PROP_POSITION = 9
 };
 
 static EphyNode *states = NULL;
@@ -156,13 +157,14 @@ ephy_state_window_set_size (GtkWidget *window, EphyNode *node)
 {
 	int width;
 	int height;
-	gboolean maximize;
+	gboolean maximize, size;
 
 	width = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_WIDTH);
 	height = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_HEIGHT);
 	maximize = ephy_node_get_property_boolean (node, EPHY_NODE_STATE_PROP_MAXIMIZE);
+	size = ephy_node_get_property_boolean (node, EPHY_NODE_STATE_PROP_SIZE);
 
-	if (width > 0 && height > 0)
+	if (size)
 	{
 		gtk_window_set_default_size
 			(GTK_WINDOW (window), width, height);
@@ -180,7 +182,7 @@ ephy_state_window_set_position (GtkWidget *window, EphyNode *node)
 	GdkScreen *screen;
 	int x, y;
 	int screen_width, screen_height;
-	gboolean maximize;
+	gboolean maximize, size;
 
 	g_return_if_fail (GTK_IS_WINDOW (window));
 
@@ -188,10 +190,10 @@ ephy_state_window_set_position (GtkWidget *window, EphyNode *node)
 	g_return_if_fail (!GTK_WIDGET_VISIBLE (window));
 
 	maximize = ephy_node_get_property_boolean (node, EPHY_NODE_STATE_PROP_MAXIMIZE);
+	size = ephy_node_get_property_boolean (node, EPHY_NODE_STATE_PROP_POSITION);
 
-	/* Don't set the position of the window if it is maximized */	
-
-	if (!maximize)
+	/* Don't set the position of the window if it is maximized */
+	if (!maximize & size)
 	{
 		x = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_POSITION_X);
 		y = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_POSITION_Y);
@@ -200,13 +202,8 @@ ephy_state_window_set_position (GtkWidget *window, EphyNode *node)
 		screen_width  = gdk_screen_get_width  (screen);
 		screen_height = gdk_screen_get_height (screen);
 
-		if ((x >= screen_width) || (y >= screen_height))
-		{
-			x = y = WINDOW_POSITION_UNSET;
-		}
-
-		/* If the window has a saved position set it, otherwise let the WM do it */
-		if ((x != WINDOW_POSITION_UNSET) && (y != WINDOW_POSITION_UNSET))
+		if ((x <= screen_width) && (y <= screen_height) &&
+		    (x >= 0) && (y >= 0))
 		{
 			gtk_window_move (GTK_WINDOW (window), x, y);
 		}
@@ -241,6 +238,12 @@ ephy_state_window_save_size (GtkWidget *window, EphyNode *node)
 		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_HEIGHT,
 				        &value);
 		g_value_unset (&value);
+
+		g_value_init (&value, G_TYPE_BOOLEAN);
+		g_value_set_boolean (&value, TRUE);
+		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_SIZE,
+				        &value);
+		g_value_unset (&value);
 	}
 
 	g_value_init (&value, G_TYPE_BOOLEAN);
@@ -257,15 +260,14 @@ ephy_state_window_save_position (GtkWidget *window, EphyNode *node)
 	gboolean maximize;
 	GdkWindowState state;
 	GValue value = { 0, };
-	
+
 	state = gdk_window_get_state (GTK_WIDGET (window)->window);
 	maximize = ((state & GDK_WINDOW_STATE_MAXIMIZED) > 0);
 
-	/* Don't save the position if maximized */	
-
+	/* Don't save the position if maximized */
 	if (!maximize)
 	{
-        	gtk_window_get_position (GTK_WINDOW (window), &x, &y);
+		gtk_window_get_position (GTK_WINDOW (window), &x, &y);
 
 		g_value_init (&value, G_TYPE_INT);
 		g_value_set_int (&value, x);
@@ -278,6 +280,30 @@ ephy_state_window_save_position (GtkWidget *window, EphyNode *node)
 		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION_Y,
 				        &value);
 		g_value_unset (&value);
+
+		g_value_init (&value, G_TYPE_BOOLEAN);
+		g_value_set_boolean (&value, TRUE);
+		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION,
+				        &value);
+		g_value_unset (&value);
+	}
+}
+
+static void
+ephy_state_window_save (GtkWidget *widget, EphyNode *node)
+{
+	EphyStateWindowFlags flags;
+
+	flags = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "state_flags"));
+
+	if (flags & EPHY_STATE_WINDOW_SAVE_SIZE)
+	{
+		ephy_state_window_save_size (widget, node);
+	}
+
+	if (flags & EPHY_STATE_WINDOW_SAVE_POSITION)
+	{
+		ephy_state_window_save_position (widget, node);
 	}
 }
 
@@ -292,8 +318,7 @@ window_configure_event_cb (GtkWidget *widget,
 
 	if (!(state & GDK_WINDOW_STATE_FULLSCREEN))
 	{
-		ephy_state_window_save_size (widget, node);
-		ephy_state_window_save_position (widget, node);
+		ephy_state_window_save (widget, node);
 	}
 
 	return FALSE;
@@ -306,8 +331,7 @@ window_state_event_cb (GtkWidget *widget,
 {
 	if (!(event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN))
 	{
-		ephy_state_window_save_size (widget, node);
-		ephy_state_window_save_position (widget, node);
+		ephy_state_window_save (widget, node);
 	}
 
 	return FALSE;
@@ -355,33 +379,12 @@ ephy_state_add_window (GtkWidget *window,
 		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_MAXIMIZE,
 				        &value);
 		g_value_unset (&value);
-
-		/* Metacity and presumably any other sane wm won't let
-		 * you drag the titlebar of a window off the screen, so
-		 * we set the inital cordinate to an impossible value (-1,-1)
-		 */
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, WINDOW_POSITION_UNSET);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION_X,
-				        &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, WINDOW_POSITION_UNSET);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_POSITION_Y,
-				        &value);
-		g_value_unset (&value);
 	}
 
-	if (flags & EPHY_STATE_WINDOW_SAVE_SIZE)
-	{
-		ephy_state_window_set_size (window, node);
-	}
+	ephy_state_window_set_size (window, node);
+	ephy_state_window_set_position (window, node);
 
-	if (flags & EPHY_STATE_WINDOW_SAVE_POSITION)
-	{
-		ephy_state_window_set_position (window, node);
-	}
+	g_object_set_data (G_OBJECT (window), "state_flags", GINT_TO_POINTER (flags));
 
 	g_signal_connect (window, "configure_event",
 			  G_CALLBACK (window_configure_event_cb), node);
