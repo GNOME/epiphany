@@ -208,11 +208,35 @@ window_cmd_view_reload (EggAction *action,
 		        EphyWindow *window)
 {
 	EphyEmbed *embed;
+	GdkEvent *event;
+	GdkEventType type;
+	guint state = 0;
+	gboolean force = FALSE;
 
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_reload (embed, EMBED_RELOAD_NORMAL);
+	event = gtk_get_current_event ();
+	type = event->type;
+
+	if (type == GDK_BUTTON_RELEASE)
+	{
+		state = event->button.state; 
+	}
+	else if (type == GDK_KEY_RELEASE)
+	{
+		state = event->key.state;
+	}
+
+	gdk_event_free (event);
+
+	if (state & GDK_SHIFT_MASK)
+	{
+		force = TRUE;
+	}
+
+	ephy_embed_reload (embed, force ? EMBED_RELOAD_NORMAL
+					: EMBED_RELOAD_BYPASSCACHE);
 }
 
 void
