@@ -255,6 +255,9 @@ completion_func (GtkEntryCompletion *completion,
 	g_free (item);
 	g_free (normalized_string);
 	g_free (case_normalized_string);
+	g_free (keywords);
+	g_free (normalized_keywords);
+	g_free (case_normalized_keywords);
 
 	return ret;
 }
