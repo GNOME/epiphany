@@ -63,7 +63,11 @@ ephy_states_load (void)
 		return;
 
 	doc = xmlParseFile (xml_file);
-	g_assert (doc != NULL);
+	if (doc == NULL)
+	{
+		g_warning ("Failed to load state file.\n");
+		return;
+	}
 
 	root = xmlDocGetRootElement (doc);
 
