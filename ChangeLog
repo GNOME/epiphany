@@ -1,5 +1,14 @@
 2004-02-09  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-tab.c: (clipboard_text_received_cb),
+	(ephy_tab_dom_mouse_click_cb):
+
+	Fix the fix for the epiphany equivalent of bug #133633. Don't convert
+	the clipboard contents directly as the souurce may not offer UTF-8 text.
+	Instead request the contents, and gtk+ will convert it for us.
+
+2004-02-09  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/egg/egg-editable-toolbar.c:
 	* embed/ephy-embed-popup-control.c:
 

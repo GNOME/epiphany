@@ -54,6 +54,7 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkuimanager.h>
 #include <gtk/gtkradioaction.h>
+#include <gtk/gtkclipboard.h>
 #include <string.h>
 
 #define EPHY_TAB_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TAB, EphyTabPrivate))
@@ -1008,6 +1009,27 @@ save_property_url (EphyEmbed *embed,
 	g_object_unref (G_OBJECT(persist));
 }
 
+static void
+clipboard_text_received_cb (GtkClipboard *clipboard,
+			    const char *text,
+			    gpointer *weak_ptr)
+{
+	if (*weak_ptr != NULL && text != NULL)
+	{
+		EphyTab *tab = (EphyTab *) *weak_ptr;
+		EphyEmbed *embed = ephy_tab_get_embed (tab);
+
+		ephy_embed_load_url (embed, text);
+	}
+
+	if (*weak_ptr != NULL)
+	{
+		g_object_remove_weak_pointer (G_OBJECT (*weak_ptr), weak_ptr);
+	}
+
+	g_free (weak_ptr);
+}
+
 static gboolean
 ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 			     EphyEmbedEvent *event,
@@ -1076,11 +1098,22 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	/* middle click opens the selection url */
 	else if (is_middle_clickable && is_middle_click && middle_click_opens)
 	{
-		gtk_selection_convert (GTK_WIDGET (window),
-				       GDK_SELECTION_PRIMARY,
-				       /* See bug #133633 */
-				       gdk_atom_intern ("UTF8_STRING", FALSE),
-				       GDK_CURRENT_TIME);
+		/* See bug #133633 for why we do it this way */
+
+		/* We need to make sure we know if the tab is destroyed between
+		 * requesting the clipboard contents, and receiving them.
+		 */
+		gpointer *weak_ptr;
+
+		weak_ptr = g_new (gpointer, 1);
+		*weak_ptr = tab;
+		g_object_add_weak_pointer (G_OBJECT (tab), weak_ptr);
+
+		gtk_clipboard_request_text
+			(gtk_widget_get_clipboard (GTK_WIDGET (tab->priv->embed),
+						   GDK_SELECTION_PRIMARY),
+			 (GtkClipboardTextReceivedFunc) clipboard_text_received_cb,
+			 weak_ptr);
 	}
 	/* we didn't handle the event */
 	else
