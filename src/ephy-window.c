@@ -70,14 +70,12 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 				     GtkNotebookPage *page,
 				     guint page_num,
 				     EphyWindow *window);
-static void
-window_cmd_edit (GtkAction *action, EphyWindow *window);
 
 static GtkActionEntry ephy_menu_entries [] = {
 
 	/* Toplevel */
 	{ "File", NULL, N_("_File") },
-	{ "Edit", NULL, N_("_Edit"), NULL, NULL, G_CALLBACK (window_cmd_edit) },
+	{ "Edit", NULL, N_("_Edit") },
 	{ "View", NULL, N_("_View") },
 	{ "Bookmarks", NULL, N_("_Bookmarks") },
 	{ "Go", NULL, N_("_Go") },
@@ -350,58 +348,6 @@ ephy_window_get_type (void)
         return ephy_window_type;
 }
 
-void
-window_cmd_edit (GtkAction *action,
-		 EphyWindow *window)
-{
-	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
-	GtkActionGroup *action_group;
-	gboolean can_copy, can_cut, can_undo, can_redo;
-
-	if (GTK_IS_EDITABLE (widget))
-	{
-		gboolean has_selection;
-
-		has_selection = gtk_editable_get_selection_bounds
-			(GTK_EDITABLE (widget), NULL, NULL);
-
-		can_copy = has_selection;
-		can_cut = has_selection;
-		can_undo = FALSE;
-		can_redo = FALSE;
-	}
-	else
-	{
-		EphyEmbed *embed;
-
-		embed = ephy_window_get_active_embed (window);
-		g_return_if_fail (embed != NULL);
-
-		ephy_command_manager_get_command_state
-			(EPHY_COMMAND_MANAGER (embed), "cmd_copy", &can_copy);
-		ephy_command_manager_get_command_state
-			(EPHY_COMMAND_MANAGER (embed), "cmd_cut", &can_cut);
-		ephy_command_manager_get_command_state
-			(EPHY_COMMAND_MANAGER (embed), "cmd_undo", &can_undo);
-		ephy_command_manager_get_command_state
-			(EPHY_COMMAND_MANAGER (embed), "cmd_redo", &can_redo);
-	}
-
-	action_group = window->priv->action_group;
-
-	action = gtk_action_group_get_action (action_group, "EditCopy");
-	g_object_set (action, "sensitive", can_copy, NULL);
-
-	action = gtk_action_group_get_action (action_group, "EditCut");
-	g_object_set (action, "sensitive", can_cut, NULL);
-
-	action = gtk_action_group_get_action (action_group, "EditUndo");
-	g_object_set (action, "sensitive", can_undo, NULL);
-
-	action = gtk_action_group_get_action (action_group, "EditRedo");
-	g_object_set (action, "sensitive", can_redo, NULL);
-}
-
 static void
 remove_from_session (EphyWindow *window)
 {
@@ -629,6 +575,90 @@ ephy_window_state_event_cb (GtkWidget *widget, GdkEventWindowState *event, EphyW
 }
 
 static void
+edit_menu_show_cb (GtkWidget *menu,
+		   EphyWindow *window)
+{
+	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+	GtkActionGroup *action_group;
+	GtkAction *action;
+	gboolean can_copy, can_cut, can_undo, can_redo;
+
+	if (GTK_IS_EDITABLE (widget))
+	{
+		gboolean has_selection;
+
+		has_selection = gtk_editable_get_selection_bounds
+			(GTK_EDITABLE (widget), NULL, NULL);
+
+		can_copy = has_selection;
+		can_cut = has_selection;
+		can_undo = FALSE;
+		can_redo = FALSE;
+	}
+	else
+	{
+		EphyEmbed *embed;
+
+		embed = ephy_window_get_active_embed (window);
+		g_return_if_fail (embed != NULL);
+
+		ephy_command_manager_get_command_state
+			(EPHY_COMMAND_MANAGER (embed), "cmd_copy", &can_copy);
+		ephy_command_manager_get_command_state
+			(EPHY_COMMAND_MANAGER (embed), "cmd_cut", &can_cut);
+		ephy_command_manager_get_command_state
+			(EPHY_COMMAND_MANAGER (embed), "cmd_undo", &can_undo);
+		ephy_command_manager_get_command_state
+			(EPHY_COMMAND_MANAGER (embed), "cmd_redo", &can_redo);
+	}
+
+	action_group = window->priv->action_group;
+
+	action = gtk_action_group_get_action (action_group, "EditCopy");
+	g_object_set (action, "sensitive", can_copy, NULL);
+	action = gtk_action_group_get_action (action_group, "EditCut");
+	g_object_set (action, "sensitive", can_cut, NULL);
+	action = gtk_action_group_get_action (action_group, "EditUndo");
+	g_object_set (action, "sensitive", can_undo, NULL);
+	action = gtk_action_group_get_action (action_group, "EditRedo");
+	g_object_set (action, "sensitive", can_redo, NULL);
+}
+
+static void
+edit_menu_hide_cb (GtkWidget *menu,
+		   EphyWindow *window)
+{
+	GtkActionGroup *action_group;
+	GtkAction *action;
+
+	action_group = window->priv->action_group;
+
+	action = gtk_action_group_get_action (action_group, "EditCopy");
+	g_object_set (action, "sensitive", TRUE, NULL);
+	action = gtk_action_group_get_action (action_group, "EditCut");
+	g_object_set (action, "sensitive", TRUE, NULL);
+	action = gtk_action_group_get_action (action_group, "EditUndo");
+	g_object_set (action, "sensitive", TRUE, NULL);
+	action = gtk_action_group_get_action (action_group, "EditRedo");
+	g_object_set (action, "sensitive", TRUE, NULL);
+}
+
+static void
+init_menu_updaters (EphyWindow *window)
+{
+	GtkWidget *edit_menu_item, *edit_menu;
+
+	edit_menu_item = gtk_ui_manager_get_widget
+		(GTK_UI_MANAGER (window->ui_merge), "/menubar/EditMenu");
+	edit_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (edit_menu_item));
+
+	g_signal_connect (edit_menu, "show",
+			  G_CALLBACK (edit_menu_show_cb), window);
+	g_signal_connect (edit_menu, "hide",
+			  G_CALLBACK (edit_menu_hide_cb), window);
+}
+
+static void
 setup_window (EphyWindow *window)
 {
 	GtkActionGroup *action_group;
@@ -703,6 +733,8 @@ setup_window (EphyWindow *window)
         }
 
 	gtk_ui_manager_ensure_update (GTK_UI_MANAGER (window->ui_merge));
+
+	init_menu_updaters (window);
 
 	window->priv->toolbar = toolbar_new (window);
 	gtk_widget_show (GTK_WIDGET (window->priv->toolbar));

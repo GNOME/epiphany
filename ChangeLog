@@ -1,5 +1,14 @@
 2003-11-04  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* src/ephy-window.c: (edit_menu_show_cb), (edit_menu_hide_cb),
+	(init_menu_updaters), (setup_window):
+
+	Yet another sensitivity update strategy. Set sensitivity
+	on menu show and reset it on menu hide, so that accellerators
+	ever work.
+
+2003-11-04  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* src/ephy-window.c: (window_cmd_edit):
 
 	update undo/redo sensitivity
