@@ -599,8 +599,10 @@ mozilla_own_fonts_notifier(GConfClient *client,
 			   GConfEntry *entry,
 			   EphyEmbedSingle *single)
 {
-	mozilla_prefs_set_int("browser.display.use_document_fonts",
-				   !gconf_value_get_bool(entry->value));
+	int value;
+
+	value = gconf_value_get_bool(entry->value) ? 0 : 1;
+	mozilla_prefs_set_int("browser.display.use_document_fonts", value);
 }
 
 static void
