@@ -89,6 +89,8 @@
 #include <nsIIDNService.h>
 #endif
 
+#include <stdlib.h>
+
 #define MOZILLA_PROFILE_DIR  "/mozilla"
 #define MOZILLA_PROFILE_NAME "epiphany"
 #define MOZILLA_PROFILE_FILE "prefs.js"
