@@ -190,7 +190,8 @@ EphyBrowser::EphyBrowser ()
 {
 	mFaviconEventListener = nsnull;
 	mPopupEventListener = nsnull;
-	mEventReceiver = nsnull;	
+	mEventReceiver = nsnull;
+	mInitialized = PR_FALSE;
 }
 
 EphyBrowser::~EphyBrowser ()
@@ -200,6 +201,8 @@ EphyBrowser::~EphyBrowser ()
 nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 {
 	nsresult rv;
+
+	if (mInitialized) return NS_OK;
 
 	gtk_moz_embed_get_nsIWebBrowser (mozembed,
 					 getter_AddRefs(mWebBrowser));
@@ -227,6 +230,8 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 
  	rv = GetListener();
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+	mInitialized = PR_TRUE;
 
 	return AttachListeners();
 }

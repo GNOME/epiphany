@@ -130,6 +130,7 @@ private:
 	nsCOMPtr<nsIDOMWindow> mDOMWindow;
 	EphyFaviconEventListener *mFaviconEventListener;
 	EphyPopupEventListener *mPopupEventListener;
+	PRBool mInitialized;
 
 	nsresult GetListener (void);
 	nsresult AttachListeners (void);
