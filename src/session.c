@@ -558,14 +558,10 @@ parse_embed (xmlNodePtr child, EphyWindow *window)
 			url = xmlGetProp (child, "url");
 			title = xmlGetProp (child, "title");
 
-			tab = ephy_tab_new ();
-		        embed = ephy_tab_get_embed (tab);
-
-			gtk_widget_show (GTK_WIDGET(embed));
-
-			ephy_window_add_tab (window, tab, FALSE, FALSE);
-
-			ephy_embed_load_url (embed, url);
+			ephy_shell_new_tab (ephy_shell, window, NULL, url,
+					    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+					    EPHY_NEW_TAB_DONT_JUMP_TO |
+					    EPHY_NEW_TAB_APPEND_LAST);
 
 			xmlFree (url);
 			xmlFree (title);
