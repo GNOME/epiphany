@@ -24,6 +24,7 @@
 
 #include "ephy-bookmarks.h"
 #include "ephy-file-helpers.h"
+#include "ephy-embed-shell.h"
 #include "ephy-shell.h"
 #include "ephy-history.h"
 #include "ephy-debug.h"
@@ -310,12 +311,10 @@ compute_lower_fav (EphyNode *favorites, double *score)
 {
 	GPtrArray *children;
 	int i;
-	EphyEmbedShell *embed_shell;
 	EphyHistory *history;
 	EphyNode *result = NULL;
 
-	embed_shell = EPHY_EMBED_SHELL (ephy_shell);
-	history = ephy_embed_shell_get_global_history (embed_shell);
+	history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
 
 	*score = DBL_MAX;
 	children = ephy_node_get_children (favorites);
@@ -389,11 +388,9 @@ history_site_visited_cb (EphyHistory *gh, const char *url, EphyBookmarks *eb)
 static void
 ephy_setup_history_notifiers (EphyBookmarks *eb)
 {
-	EphyEmbedShell *embed_shell;
 	EphyHistory *history;
 
-	embed_shell = EPHY_EMBED_SHELL (ephy_shell);
-	history = ephy_embed_shell_get_global_history (embed_shell);
+	history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
 
 	g_signal_connect (history, "visited",
 			  G_CALLBACK (history_site_visited_cb), eb);

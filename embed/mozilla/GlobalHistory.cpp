@@ -14,13 +14,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "ephy-embed-shell.h"
+
 #include "GlobalHistory.h"
 #include "nsString.h"
 
@@ -28,7 +31,7 @@ NS_IMPL_ISUPPORTS2(MozGlobalHistory, nsIGlobalHistory, nsIBrowserHistory)
 
 MozGlobalHistory::MozGlobalHistory ()
 {
-	mGlobalHistory = ephy_embed_shell_get_global_history (embed_shell);
+	mGlobalHistory = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
 }
 
 MozGlobalHistory::~MozGlobalHistory ()

@@ -23,6 +23,8 @@
 #include "ephy-bookmarks.h"
 #include "ephy-node-common.h"
 #include "ephy-file-helpers.h"
+#include "ephy-history.h"
+#include "ephy-embed-shell.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 #include "ephy-string.h"
@@ -202,7 +204,7 @@ impl_get_item_id (EggToolbarsModel *t,
 			node = ephy_bookmarks_add (bookmarks, title, netscape_url[URL]);
 			g_return_val_if_fail (node != NULL, NULL);
 
-			gh = ephy_embed_shell_get_global_history (EPHY_EMBED_SHELL (ephy_shell));
+			gh = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
 			icon = ephy_history_get_icon (gh, netscape_url[URL]);
 
 			if (icon)

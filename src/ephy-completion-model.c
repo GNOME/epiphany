@@ -23,6 +23,7 @@
 #include "ephy-completion-model.h"
 #include "ephy-node.h"
 #include "ephy-shell.h"
+#include "ephy-history.h"
 
 static void ephy_completion_model_class_init (EphyCompletionModelClass *klass);
 static void ephy_completion_model_init (EphyCompletionModel *model);
@@ -230,8 +231,7 @@ ephy_completion_model_init (EphyCompletionModel *model)
 	model->priv = EPHY_COMPLETION_MODEL_GET_PRIVATE (model);
 	model->priv->stamp = g_random_int ();
 
-	history = ephy_embed_shell_get_global_history
-		(EPHY_EMBED_SHELL (ephy_shell));
+	history = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
 	model->priv->history = ephy_history_get_pages (history);
 	connect_signals (model, model->priv->history);
 

@@ -35,6 +35,7 @@
 
 #include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
+#include "ephy-embed-single.h"
 #include "ephy-embed-shell.h"
 
 #include <libgnomevfs/gnome-vfs-mime.h>
@@ -79,7 +80,7 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 	rv = Init ();
 	if (NS_FAILED (rv)) return rv;
 
-	single = ephy_embed_shell_get_embed_single (embed_shell);
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
 	g_signal_emit_by_name (single, "handle_content", mMimeType,
 			       mUrl.get(), &handled);
 

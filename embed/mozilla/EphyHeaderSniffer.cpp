@@ -49,6 +49,8 @@
 #include "EphyHeaderSniffer.h"
 #include "netCore.h"
 
+#include "ephy-embed-single.h"
+#include "ephy-embed-shell.h"
 #include "ephy-file-chooser.h"
 #include "ephy-prefs.h"
 #include "ephy-gui.h"
@@ -101,7 +103,7 @@ EphyHeaderSniffer::HandleContent ()
 	if (mPostData) return NS_ERROR_FAILURE;
 
 	mURL->GetSpec (uriSpec);	
-	single = ephy_embed_shell_get_embed_single (embed_shell);
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
 	g_signal_emit_by_name (single, "handle_content", mContentType.get(),
 			       uriSpec.get(), &handled);
 

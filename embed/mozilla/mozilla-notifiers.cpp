@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2000 Nate Case 
+ *  Copyright (C) 2000 Nate Case
+ *  Copyright (C) 2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,14 +15,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
+#include "ephy-embed-shell.h"
 #include "mozilla-notifiers.h"
 #include "eel-gconf-extensions.h"
 #include "MozRegisterComponents.h"
@@ -36,6 +39,8 @@
 #include <glib/gi18n.h>
 #include <stdlib.h>
 #include <gdk/gdkx.h>
+#include <gtk/gtksettings.h>
+
 #include <nsCOMPtr.h>
 #include <nsIPrefService.h>
 #include <nsIServiceManager.h>

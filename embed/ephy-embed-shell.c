@@ -26,6 +26,7 @@
 #include "ephy-embed-factory.h"
 #include "ephy-marshal.h"
 #include "ephy-file-helpers.h"
+#include "ephy-history.h"
 #include "ephy-favicon-cache.h"
 #include "mozilla-embed-single.h"
 #include "downloader-view.h"
@@ -140,6 +141,8 @@ ephy_embed_shell_finalize (GObject *object)
 GObject *
 ephy_embed_shell_get_favicon_cache (EphyEmbedShell *shell)
 {
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+
 	if (shell->priv->favicon_cache == NULL)
 	{
 		shell->priv->favicon_cache = ephy_favicon_cache_new ();
@@ -148,48 +151,25 @@ ephy_embed_shell_get_favicon_cache (EphyEmbedShell *shell)
 	return G_OBJECT (shell->priv->favicon_cache);
 }
 
-EphyHistory *
+GObject *
 ephy_embed_shell_get_global_history (EphyEmbedShell *shell)
 {
-	EphyEmbedShellClass *klass = EPHY_EMBED_SHELL_GET_CLASS (shell);
-	return klass->get_global_history (shell);
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+
+	if (shell->priv->global_history == NULL)
+	{
+		shell->priv->global_history = ephy_history_new ();
+	}
+
+	return G_OBJECT (shell->priv->global_history);
 }
 
 GObject *
 ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell)
 {
-	EphyEmbedShellClass *klass = EPHY_EMBED_SHELL_GET_CLASS (shell);
-	return klass->get_downloader_view (shell);
-}
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
-EphyEmbedSingle *
-ephy_embed_shell_get_embed_single (EphyEmbedShell *shell)
-{
-
-	if (!shell->priv->embed_single)
-	{
-		shell->priv->embed_single = EPHY_EMBED_SINGLE
-			(ephy_embed_factory_new_object ("EphyEmbedSingle"));
-	}
-
-	return shell->priv->embed_single;
-}
-
-static EphyHistory *
-impl_get_global_history (EphyEmbedShell *shell)
-{
-	if (!shell->priv->global_history)
-	{
-		shell->priv->global_history = ephy_history_new ();
-	}
-
-	return shell->priv->global_history;
-}
-
-static GObject *
-impl_get_downloader_view (EphyEmbedShell *shell)
-{
-	if (!shell->priv->downloader_view)
+	if (shell->priv->downloader_view == NULL)
 	{
 		shell->priv->downloader_view = downloader_view_new ();
 		g_object_add_weak_pointer
@@ -201,8 +181,24 @@ impl_get_downloader_view (EphyEmbedShell *shell)
 }
 
 GObject *
+ephy_embed_shell_get_embed_single (EphyEmbedShell *shell)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+
+	if (shell->priv->embed_single == NULL)
+	{
+		shell->priv->embed_single = EPHY_EMBED_SINGLE
+			(ephy_embed_factory_new_object ("EphyEmbedSingle"));
+	}
+
+	return G_OBJECT (shell->priv->embed_single);
+}
+
+GObject *
 ephy_embed_shell_get_encodings (EphyEmbedShell *shell)
 {
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+
 	if (shell->priv->encodings == NULL)
 	{
 		shell->priv->encodings = ephy_encodings_new ();
@@ -271,6 +267,8 @@ ephy_embed_shell_check_mime (EphyEmbedShell *shell, const char *mime_type)
 	EphyMimePermission permission;
 	gpointer tmp;
 
+	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), EPHY_MIME_PERMISSION_UNKNOWN);
+
 	if (shell->priv->mime_table == NULL)
 	{
 		shell->priv->mime_table = g_hash_table_new_full
@@ -315,9 +313,6 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_embed_shell_finalize;
-
-	klass->get_downloader_view = impl_get_downloader_view;
-	klass->get_global_history = impl_get_global_history;
 
 	g_type_class_add_private (object_class, sizeof (EphyEmbedShellPrivate));
 }

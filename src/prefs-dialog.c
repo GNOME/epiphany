@@ -441,8 +441,7 @@ setup_font_combo (EphyDialog *dialog,
 	char key[255];
 	EphyEmbedSingle *single;
 
-	single = ephy_embed_shell_get_embed_single
-		(EPHY_EMBED_SHELL (ephy_shell));
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
 	fonts = ephy_embed_single_get_font_list (single, code);
 
 	g_snprintf (key, 255, "%s_%s_%s", CONF_RENDERING_FONT, type, code);
@@ -1230,9 +1229,7 @@ prefs_clear_cache_button_clicked_cb (GtkWidget *button,
 {
 	EphyEmbedSingle *single;
 
-	single = ephy_embed_shell_get_embed_single
-		(EPHY_EMBED_SHELL (ephy_shell));
-
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
 	ephy_embed_single_clear_cache (single);
 }
 

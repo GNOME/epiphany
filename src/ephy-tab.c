@@ -24,7 +24,6 @@
 #endif
 
 #include "ephy-tab.h"
-#include "ephy-shell.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-embed-factory.h"
@@ -36,6 +35,9 @@
 #include "ephy-zoom.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-embed-persist.h"
+#include "ephy-history.h"
+#include "ephy-embed-shell.h"
+#include "ephy-shell.h"
 
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
@@ -555,8 +557,8 @@ ephy_tab_set_icon_address (EphyTab *tab, const char *address)
 	if (tab->priv->icon_address)
 	{
 		eb = ephy_shell_get_bookmarks (ephy_shell);
-		history = ephy_embed_shell_get_global_history
-			(EPHY_EMBED_SHELL (ephy_shell));
+		history = EPHY_HISTORY
+			(ephy_embed_shell_get_global_history (embed_shell));
 		ephy_bookmarks_set_icon (eb, tab->priv->address,
 				         tab->priv->icon_address);
 		ephy_history_set_icon (history, tab->priv->address,
@@ -613,8 +615,8 @@ ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 		GValue value = { 0, };
 		float zoom = 1.0, current_zoom;
 
-		history = ephy_embed_shell_get_global_history
-				(EPHY_EMBED_SHELL (ephy_shell));
+		history = EPHY_HISTORY
+			(ephy_embed_shell_get_global_history (embed_shell));
 		host = ephy_history_get_host (history, address);
 
 		if (host != NULL && ephy_node_get_property
@@ -654,8 +656,8 @@ ephy_tab_zoom_changed_cb (EphyEmbed *embed, float zoom, EphyTab *tab)
 		EphyHistory *history;
 		EphyNode *host;
 		GValue value = { 0, };
-		history = ephy_embed_shell_get_global_history
-				(EPHY_EMBED_SHELL (ephy_shell));
+		history = EPHY_HISTORY
+			(ephy_embed_shell_get_global_history (embed_shell));
 		host = ephy_history_get_host (history, address);
 
 		if (host != NULL)

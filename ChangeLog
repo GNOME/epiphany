@@ -1,3 +1,29 @@
+2003-12-29  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_get_favicon_cache),
+	(ephy_embed_shell_get_global_history),
+	(ephy_embed_shell_get_downloader_view),
+	(ephy_embed_shell_get_embed_single),
+	(ephy_embed_shell_get_encodings), (ephy_embed_shell_check_mime),
+	(ephy_embed_shell_class_init):
+	* embed/ephy-embed-shell.h:
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/GlobalHistory.cpp:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* src/bookmarks/ephy-bookmarks.c: (compute_lower_fav),
+	(ephy_setup_history_notifiers):
+	* src/ephy-completion-model.c: (ephy_completion_model_init):
+	* src/ephy-shell.c: (ephy_shell_get_history_window):
+	* src/ephy-tab.c: (ephy_tab_set_icon_address),
+	(ephy_tab_address_cb), (ephy_tab_zoom_changed_cb):
+	* src/ephy-toolbars-model.c: (impl_get_item_id):
+	* src/prefs-dialog.c: (setup_font_combo),
+	(prefs_clear_cache_button_clicked_cb):
+
+	Unified return type of ephy_embed_shell_get_X to be GObject *.
+	Fixed all callers.
+
 2003-12-28  Christian Persch  <chpe@cvs.gnome.org>
 
 	* Makefile.am:

@@ -781,8 +781,8 @@ ephy_shell_get_history_window (EphyShell *shell)
 
 	if (shell->priv->history_window == NULL)
 	{
-		history = ephy_embed_shell_get_global_history
-			(EPHY_EMBED_SHELL (ephy_shell));
+		history = EPHY_HISTORY
+			(ephy_embed_shell_get_global_history (embed_shell));
 		g_assert (history != NULL);
 		shell->priv->history_window = ephy_history_window_new (history);
 

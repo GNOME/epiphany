@@ -21,17 +21,12 @@
 #ifndef EPHY_EMBED_SHELL_H
 #define EPHY_EMBED_SHELL_H
 
-#include "ephy-embed.h"
-#include "ephy-embed-single.h"
-#include "ephy-history.h"
-
 #include <glib-object.h>
 #include <glib.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_EMBED_SHELL		(ephy_embed_shell_get_type ())
-#define EPHY_EMBED_SHELL_IMPL		(ephy_embed_shell_get_impl ())
 #define EPHY_EMBED_SHELL(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_SHELL, EphyEmbedShell))
 #define EPHY_EMBED_SHELL_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellClass))
 #define EPHY_IS_EMBED_SHELL(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_SHELL))
@@ -62,26 +57,22 @@ struct EphyEmbedShell
 struct EphyEmbedShellClass
 {
 	GObjectClass parent_class;
-
-	/* Methods */
-	EphyHistory *	(* get_global_history)	(EphyEmbedShell *shell);
-	GObject     *	(* get_downloader_view)	(EphyEmbedShell *shell);
 };
 
 GType		   ephy_embed_shell_get_type		(void);
 
-GObject		  *ephy_embed_shell_get_favicon_cache	   (EphyEmbedShell *ges);
+GObject		  *ephy_embed_shell_get_favicon_cache	(EphyEmbedShell *ges);
 
-EphyHistory	  *ephy_embed_shell_get_global_history	   (EphyEmbedShell *shell);
+GObject		  *ephy_embed_shell_get_global_history	(EphyEmbedShell *shell);
 
-GObject		  *ephy_embed_shell_get_downloader_view	   (EphyEmbedShell *shell);
+GObject		  *ephy_embed_shell_get_downloader_view	(EphyEmbedShell *shell);
 
-GObject		  *ephy_embed_shell_get_encodings	   (EphyEmbedShell *shell);
+GObject		  *ephy_embed_shell_get_encodings	(EphyEmbedShell *shell);
 
-EphyEmbedSingle	  *ephy_embed_shell_get_embed_single	   (EphyEmbedShell *shell);
+GObject		  *ephy_embed_shell_get_embed_single	(EphyEmbedShell *shell);
 
-EphyMimePermission ephy_embed_shell_check_mime		   (EphyEmbedShell *shell,
-							    const char *mime_type);
+EphyMimePermission ephy_embed_shell_check_mime		(EphyEmbedShell *shell,
+							 const char *mime_type);
 
 G_END_DECLS
 
