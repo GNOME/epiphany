@@ -118,12 +118,14 @@ static void
 tab_removed_cb (EphyNotebook *notebook, GtkWidget *child, EphyTabsMenu *menu)
 {
 	EphyTab *tab;
+	GtkAction *action;
                                                                                                                              
 	g_return_if_fail (EPHY_IS_EMBED (child));
 	tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
-                                                                                                                             
-	gtk_action_group_remove_action (menu->priv->action_group,
-					GTK_ACTION (ephy_tab_get_action (tab)));
+
+	action = GTK_ACTION (ephy_tab_get_action (tab));
+	gtk_radio_action_set_group (GTK_RADIO_ACTION (action), NULL);
+	gtk_action_group_remove_action (menu->priv->action_group, action);
 
 	ephy_tabs_menu_update (menu);
 }
