@@ -311,6 +311,9 @@ toolbar_setup_actions (Toolbar *t)
 			       "label", _("Back"),
 			       "stock_id", GTK_STOCK_GO_BACK,
 			       "tooltip", _("Go back"),
+			       /* this is the tooltip on the Back button's drop-down arrow, which will show
+			        * a menu with all sites you can go 'back' to
+				*/
 			       "arrow-tooltip", _("Back history"),
 			       "window", t->priv->window,
 			       "direction", EPHY_NAVIGATION_DIRECTION_BACK,
@@ -326,6 +329,9 @@ toolbar_setup_actions (Toolbar *t)
 			       "label", _("Forward"),
 			       "stock_id", GTK_STOCK_GO_FORWARD,
 			       "tooltip", _("Go forward"),
+			       /* this is the tooltip on the Forward button's drop-down arrow, which will show
+				* a menu with all sites you can go 'forward' to
+				*/
 			       "arrow-tooltip", _("Forward history"),
 			       "window", t->priv->window,
 			       "direction", EPHY_NAVIGATION_DIRECTION_FORWARD,
@@ -340,6 +346,9 @@ toolbar_setup_actions (Toolbar *t)
 			       "label", _("Up"),
 			       "stock_id", GTK_STOCK_GO_UP,
 			       "tooltip", _("Go up one level"),
+			       /* this is the tooltip on the Up button's drop-down arrow, which will show
+				* a menu with al sites you can go 'up' to
+				*/
 			       "arrow-tooltip", _("List of upper levels"),
 			       "window", t->priv->window,
 			       "direction", EPHY_NAVIGATION_DIRECTION_UP,
