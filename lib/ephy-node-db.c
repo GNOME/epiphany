@@ -82,7 +82,7 @@ ephy_node_db_set_name (EphyNodeDb *db, const char *name)
 	if (ephy_node_databases == NULL)
 	{
 		ephy_node_databases = g_hash_table_new_full
-			(g_str_hash, g_str_equal, NULL, NULL);
+			(g_str_hash, g_str_equal, g_free, NULL);
 	}
 
 	g_hash_table_insert (ephy_node_databases, db->priv->name, db);
@@ -226,6 +226,12 @@ node_from_id_real (EphyNodeDb *db, long id)
 		ret = g_ptr_array_index (db->priv->id_to_node, id);;
 
 	return ret;
+}
+
+const char *
+ephy_node_db_get_name (EphyNodeDb *db)
+{
+	return db->priv->name;
 }
 
 EphyNode *

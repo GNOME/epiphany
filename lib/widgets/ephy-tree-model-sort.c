@@ -250,6 +250,7 @@ each_node_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 		GtkTreeIter iter;
 		GtkTreePath *path = gtk_tree_row_reference_get_path (i->data);
 		EphyNode *node = NULL;
+		EphyNodeDb *db;
 		char *value;
 
 		gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path);
@@ -259,7 +260,10 @@ each_node_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 		if (node == NULL)
 			return;
 
-		value = g_strdup_printf ("%ld", ephy_node_get_id (node));
+		db = ephy_node_get_db (node);
+		value = g_strdup_printf ("%s;%ld",
+					 ephy_node_db_get_name (db),
+					 ephy_node_get_id (node));
 		iteratee (value, -1, -1, -1, -1, data);
 		g_free (value);
 	}

@@ -47,6 +47,8 @@ EphyNode   *ephy_node_new                   (EphyNodeDb *db);
 EphyNode   *ephy_node_new_with_id           (EphyNodeDb *db,
 					     gulong reserved_id);
 
+EphyNodeDb *ephy_node_get_db		    (EphyNode *node);
+
 /* unique node ID */
 long        ephy_node_get_id                (EphyNode *node);
 

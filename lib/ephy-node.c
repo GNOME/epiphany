@@ -345,6 +345,12 @@ ephy_node_new_with_id (EphyNodeDb *db, gulong reserved_id)
 	return node;
 }
 
+EphyNodeDb *
+ephy_node_get_db (EphyNode *node)
+{
+	return node->db;
+}
+
 long
 ephy_node_get_id (EphyNode *node)
 {

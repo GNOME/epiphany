@@ -194,6 +194,18 @@ ephy_location_entry_new (void)
 	return GTK_WIDGET (g_object_new (EPHY_TYPE_LOCATION_ENTRY, NULL));
 }
 
+static gboolean
+ephy_location_entry_button_press_event_cb (GtkWidget *entry, GdkEventButton *event, EphyLocationEntry *w)
+{
+	if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
+	{
+		ephy_location_entry_activate (w);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 static void
 ephy_location_entry_build (EphyLocationEntry *w)
 {
@@ -207,6 +219,8 @@ ephy_location_entry_build (EphyLocationEntry *w)
 
 	g_signal_connect (p->entry, "key-press-event",
 			  G_CALLBACK (ephy_location_entry_key_press_event_cb), w);
+	g_signal_connect (p->entry, "button-press-event",
+			  G_CALLBACK (ephy_location_entry_button_press_event_cb), w);
 
 	g_signal_connect (p->entry, "activate",
 			  G_CALLBACK (ephy_location_entry_activate_cb), w);

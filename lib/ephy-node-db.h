@@ -56,6 +56,8 @@ EphyNodeDb   *ephy_node_db_get_by_name		(const char *name);
 
 EphyNodeDb   *ephy_node_db_new			(const char *name);
 
+const char   *ephy_node_db_get_name		(EphyNodeDb *db);
+
 EphyNode     *ephy_node_db_get_node_from_id	(EphyNodeDb *db,
 						 long id);
 
