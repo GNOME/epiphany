@@ -37,9 +37,8 @@
 #include "GtkNSSKeyPairDialogs.h"
 #endif
 
-#if MOZILLA_SNAPSHOT > 13
+#include <nsMemory.h>
 #include <nsDocShellCID.h>
-#endif
 #include <nsIGenericFactory.h>
 #include <nsIComponentRegistrar.h>
 #include <nsICategoryManager.h>
@@ -72,11 +71,12 @@ RegisterContentPolicy(nsIComponentManager *aCompMgr, nsIFile *aPath,
 		do_GetService(NS_CATEGORYMANAGER_CONTRACTID);
 	NS_ENSURE_TRUE (cm, NS_ERROR_FAILURE);
 
-	nsXPIDLCString oldval;
+	char *oldval;
 	return cm->AddCategoryEntry("content-policy",
 				    EPHY_CONTENT_POLICY_CONTRACTID,
 				    EPHY_CONTENT_POLICY_CONTRACTID,
-				    PR_TRUE, PR_TRUE, getter_Copies (oldval));
+				    PR_TRUE, PR_TRUE, &oldval);
+	nsMemory::Free (oldval);
 }
 
 static const nsModuleComponentInfo sAppComps[] = {
@@ -127,11 +127,7 @@ static const nsModuleComponentInfo sAppComps[] = {
 	{
 		EPHY_GLOBALHISTORY_CLASSNAME,
 		EPHY_GLOBALHISTORY_CID,
-#if MOZILLA_SNAPSHOT > 13
 		NS_GLOBALHISTORY2_CONTRACTID,
-#else
-		NS_GLOBALHISTORY_CONTRACTID,
-#endif
 		MozGlobalHistoryConstructor
 	},
 	{

@@ -32,23 +32,20 @@
 #include "MozillaPrivate.h"
 #include "EphyBrowser.h"
 #include "EventContext.h"
+#include "EphyUtils.h"
 
 #include <gtkmozembed.h>
+#include <nsEmbedString.h>
+#include <nsMemory.h>
 #include <nsIURI.h>
-#include <nsIURL.h>
+#include <nsIChannel.h>
 #include <nsIRequest.h>
 #include <nsIWebProgressListener.h>
-#include <nsIPrintOptions.h>
 #include <nsGfxCIID.h>
 
 #ifdef ALLOW_PRIVATE_API
 /* not sure about this one */
 #include <nsITransportSecurityInfo.h>
-#endif
-
-#ifdef ALLOW_PRIVATE_STRINGS
-#include <nsNetUtil.h>
-#include <nsString.h>
 #endif
 
 static void	mozilla_embed_class_init	(MozillaEmbedClass *klass);
@@ -57,7 +54,6 @@ static void	mozilla_embed_destroy		(GtkObject *object);
 static void	mozilla_embed_finalize		(GObject *object);
 static void	ephy_embed_iface_init		(EphyEmbedIface *iface);
 
-static void mozilla_embed_connect_signals	(MozillaEmbed *membed);
 static void mozilla_embed_location_changed_cb	(GtkMozEmbed *embed,
 						 MozillaEmbed *membed);
 static void mozilla_embed_net_state_all_cb	(GtkMozEmbed *embed,
@@ -85,16 +81,23 @@ static EmbedSecurityLevel mozilla_embed_security_level (MozillaEmbed *membed);
 
 #define MOZILLA_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED, MozillaEmbedPrivate))
 
+typedef enum
+{
+	MOZILLA_EMBED_LOAD_STARTED,
+	MOZILLA_EMBED_LOAD_REDIRECTING,
+	MOZILLA_EMBED_LOAD_LOADING,
+	MOZILLA_EMBED_LOAD_STOPPED
+} MozillaEmbedLoadState;
+
 struct MozillaEmbedPrivate
 {
 	EphyBrowser *browser;
 	nsCOMPtr<nsIRequest> request;
 	gint security_state;
+	MozillaEmbedLoadState load_state;
 };
 
 #define WINDOWWATCHER_CONTRACTID "@mozilla.org/embedcomp/window-watcher;1"
-
-static NS_DEFINE_CID(kPrintOptionsCID, NS_PRINTOPTIONS_CID);
 
 static GObjectClass *parent_class = NULL;
 
@@ -203,9 +206,12 @@ impl_find_set_properties (EphyEmbed *embed,
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
-	mpriv->browser->FindSetProperties
-		((NS_ConvertUTF8toUTF16(search_string)).get(),
-		 case_sensitive, wrap_around); 
+	nsEmbedString searchString;
+	NS_CStringToUTF16 (nsEmbedCString(search_string),
+			   NS_CSTRING_ENCODING_UTF8, searchString);
+
+	mpriv->browser->FindSetProperties (searchString.get(), case_sensitive,
+					   wrap_around); 
 }
 
 static void
@@ -352,44 +358,24 @@ mozilla_embed_get_uri_parent (const char *aUri)
         nsresult rv;
 
         nsCOMPtr<nsIURI> uri;
-        rv = NS_NewURI (getter_AddRefs(uri), aUri);
+        rv = EphyUtils::NewURI (getter_AddRefs(uri), nsEmbedCString(aUri));
         if (NS_FAILED(rv) || !uri) return NULL;
 
-        nsCOMPtr<nsIURL> url = do_QueryInterface(uri, &rv);
-        if (NS_FAILED(rv) || !url) return NULL;
+	nsEmbedCString path;
+	rv = uri->GetPath(path);
+	if (NS_FAILED(rv)) return NULL;
 
-        nsCAutoString dirPath;
-        rv = url->GetDirectory (dirPath);
-        if (NS_FAILED(rv) || !dirPath.Length()) return NULL;
+	if (!path.Length() || strcmp (path.get(), "/") == 0 ||
+	    !strchr (path.get(), '/'))
+	{
+		return NULL;
+	}
 
-        nsCAutoString filePath;
-        rv = url->GetFilePath (filePath);
-        if (NS_FAILED(rv) || !filePath.Length()) return NULL;
+	nsEmbedCString parent;
+	rv = uri->Resolve (nsEmbedCString(".."), parent);
+	if (NS_FAILED(rv)) return NULL;
 
-        PRInt32 pathLength = filePath.Length();
-        PRInt32 trailingSlash = filePath.RFind("/");
-
-        if(pathLength < 2 || trailingSlash == -1)
-        {
-                return NULL;
-        }
-
-        if(trailingSlash != (pathLength-1))
-        {
-                uri->SetPath(dirPath);
-        }
-        else
-        {
-                PRInt32 nextSlash = filePath.RFind("/",PR_FALSE,trailingSlash-1);
-                nsCAutoString parentPath;
-                filePath.Left(parentPath, nextSlash);
-                uri->SetPath(parentPath);
-        }
-
-        nsCAutoString spec;
-        uri->GetSpec(spec);
-
-        return !spec.IsEmpty() ? g_strdup(spec.get()) : NULL;
+	return g_strdup (parent.get()); 
 }
 
 static gboolean
@@ -501,18 +487,18 @@ impl_get_location (EphyEmbed *embed,
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	char *l;
 	nsresult rv;
-	nsCAutoString url;
+	nsEmbedCString url;
 
 	if (toplevel)
 	{
 		rv = mpriv->browser->GetDocumentUrl (url);
-		l = (NS_SUCCEEDED (rv) && !url.IsEmpty()) ?
+		l = (NS_SUCCEEDED (rv) && url.Length()) ?
 		     g_strdup (url.get()) : NULL;	   	
 	}
 	else
 	{
 		rv = mpriv->browser->GetTargetDocumentUrl (url);
-		l = (NS_SUCCEEDED (rv) && !url.IsEmpty()) ?
+		l = (NS_SUCCEEDED (rv) && url.Length()) ?
 		     g_strdup (url.get()) : NULL;	   	
 	}
 
@@ -537,8 +523,7 @@ impl_reload (EphyEmbed *embed,
 
 static void
 impl_set_zoom (EphyEmbed *embed, 
-               float zoom, 
-               gboolean reflow)
+               float zoom) 
 {
 	EphyBrowser *browser;
 	nsresult result;
@@ -548,7 +533,7 @@ impl_set_zoom (EphyEmbed *embed,
 	browser = MOZILLA_EMBED(embed)->priv->browser;
 	g_return_if_fail (browser != NULL);
 
-	result = browser->SetZoom (zoom, reflow);
+	result = browser->SetZoom (zoom);
 
 	if (NS_SUCCEEDED (result))
 	{
@@ -592,7 +577,7 @@ impl_shistory_get_nth (EphyEmbed *embed,
                        char **aTitle)
 {
 	nsresult rv;
-        nsCAutoString url;
+        nsEmbedCString url;
 	PRUnichar *title;
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
@@ -603,14 +588,16 @@ impl_shistory_get_nth (EphyEmbed *embed,
 	
         rv = mpriv->browser->GetSHUrlAtIndex(nth, url);
 
-        *aUrl = (NS_SUCCEEDED (rv) && !url.IsEmpty()) ? g_strdup(url.get()) : NULL;
+        *aUrl = (NS_SUCCEEDED (rv) && url.Length()) ? g_strdup(url.get()) : NULL;
 
 	rv = mpriv->browser->GetSHTitleAtIndex(nth, &title);
 
 	if (title)
 	{
-		*aTitle = g_strdup (NS_ConvertUTF16toUTF8(title).get());
-
+		nsEmbedCString cTitle;
+		NS_UTF16ToCString (nsEmbedString(title),
+				   NS_CSTRING_ENCODING_UTF8, cTitle);
+		*aTitle = g_strdup (cTitle.get());
 		nsMemory::Free (title);
 	}
 	else
@@ -666,13 +653,17 @@ impl_get_security_level (EphyEmbed *embed,
 		nsCOMPtr<nsITransportSecurityInfo> secInfo(do_QueryInterface(info));
 		if (!secInfo) return;
 
-		nsXPIDLString tooltip;
-		result = secInfo->GetShortSecurityDescription(getter_Copies(tooltip));
+		PRUnichar *tooltip;
+		result = secInfo->GetShortSecurityDescription(&tooltip);
 		if (NS_FAILED (result)) return;
 
 		if (tooltip)
 		{
-			*description = g_strdup (NS_ConvertUTF16toUTF8(tooltip).get());
+			nsEmbedCString cTooltip;
+			NS_UTF16ToCString (nsEmbedString(tooltip),
+					   NS_CSTRING_ENCODING_UTF8, cTooltip);
+			*description = g_strdup (cTooltip.get());
+			nsMemory::Free (tooltip);
 		}
 	}
 	
@@ -744,14 +735,14 @@ impl_set_encoding (EphyEmbed *embed,
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	nsresult result;
-	nsCAutoString currEnc;
+	nsEmbedCString currEnc;
 
 	g_return_if_fail (encoding != NULL);
 
 	result = mpriv->browser->GetEncoding (currEnc);
 	if (NS_FAILED (result)) return;
 
-	if (!currEnc.Equals(encoding) ||
+	if (strcmp (currEnc.get(), encoding) != 0 ||
 	    encoding[0] == '\0' && !ephy_embed_has_automatic_encoding (embed))
 	{
 		result = mpriv->browser->ForceEncoding (encoding);
@@ -767,11 +758,11 @@ impl_get_encoding (EphyEmbed *embed)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	nsresult result;
-	nsCAutoString encoding;
+	nsEmbedCString encoding;
 
 	result = mpriv->browser->GetEncoding (encoding);
 
-	if (NS_FAILED (result) || encoding.IsEmpty())
+	if (NS_FAILED (result) || !encoding.Length())
 	{
 		return NULL;
 	}
@@ -784,11 +775,11 @@ impl_has_automatic_encoding (EphyEmbed *embed)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	nsresult result;
-	nsCAutoString encoding;
+	nsEmbedCString encoding;
 
 	result = mpriv->browser->GetForcedEncoding (encoding);
 
-	if (NS_FAILED (result) || encoding.IsEmpty())
+	if (NS_FAILED (result) || !encoding.Length())
 	{
 		return TRUE;
 	}
@@ -820,13 +811,53 @@ mozilla_embed_location_changed_cb (GtkMozEmbed *embed,
 }
 
 static void
+update_load_state (MozillaEmbed *membed, gint state)
+{
+	MozillaEmbedPrivate *priv = membed->priv;
+
+	if (state & GTK_MOZ_EMBED_FLAG_IS_NETWORK)
+	{
+		if (state & GTK_MOZ_EMBED_FLAG_START)
+		{
+			priv->load_state = MOZILLA_EMBED_LOAD_STARTED;
+		}
+		else if (state & GTK_MOZ_EMBED_FLAG_STOP)
+		{
+			priv->load_state = MOZILLA_EMBED_LOAD_STOPPED;
+		}
+	}
+	else if (state & GTK_MOZ_EMBED_FLAG_START &&
+	         state & GTK_MOZ_EMBED_FLAG_IS_REQUEST)
+	{
+		if (priv->load_state == MOZILLA_EMBED_LOAD_REDIRECTING)
+		{
+			priv->load_state = MOZILLA_EMBED_LOAD_STARTED;
+		}
+		else if (priv->load_state != MOZILLA_EMBED_LOAD_LOADING)
+		{
+			priv->load_state = MOZILLA_EMBED_LOAD_LOADING;
+
+			char *address;
+			address = gtk_moz_embed_get_location (GTK_MOZ_EMBED (membed));
+			g_signal_emit_by_name (membed, "ge_content_change", address);
+			g_free (address);
+		}
+	}
+	else if (state & GTK_MOZ_EMBED_FLAG_REDIRECTING &&
+	         priv->load_state == MOZILLA_EMBED_LOAD_STARTED)
+	{
+		priv->load_state = MOZILLA_EMBED_LOAD_REDIRECTING;
+	}
+}
+
+static void
 mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
                                 gint state, guint status, 
 				MozillaEmbed *membed)
 {
 	EmbedState estate = EMBED_STATE_UNKNOWN;
 	int i;
-	
+
 	struct
 	{
 		guint state;
@@ -852,6 +883,8 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 			estate = (EmbedState) (estate | conversion_map[i].embed_state);	
 		}
 	}
+
+	update_load_state (membed, state);
 	
 	g_signal_emit_by_name (membed, "ge_net_state", aURI, estate);
 }
@@ -887,10 +920,8 @@ mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 	if ((info->keycode == nsIDOMKeyEvent::DOM_VK_F10 &&
 	    (info->modifier == GDK_SHIFT_MASK ||
 	     info->modifier == GDK_CONTROL_MASK))
-#if MOZILLA_SNAPSHOT > 14
 	    || (info->keycode == nsIDOMKeyEvent::DOM_VK_CONTEXT_MENU &&
 		!info->modifier)
-#endif
 	   )
 	{
 		/* Translate relative coordinates to absolute values, and try

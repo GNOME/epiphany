@@ -35,39 +35,32 @@
 #include <nsIDOMHTMLBodyElement.h>
 #include <nsIDOMDocument.h>
 
-#ifdef ALLOW_PRIVATE_API
-#include <nsIDocument.h>
-#include <nsString.h>
-#endif
-
 class EventContext
 {
 public:
 	EventContext();
 	~EventContext();
 
-	nsresult Init (EphyBrowser *wrapper);
-
+	nsresult Init              (EphyBrowser *wrapper);
 	nsresult GetMouseEventInfo (nsIDOMMouseEvent *event, MozillaEmbedEvent *info);
-	nsresult GetKeyEventInfo (nsIDOMKeyEvent *event, MozillaEmbedEvent *info);
+	nsresult GetKeyEventInfo   (nsIDOMKeyEvent *event, MozillaEmbedEvent *info);
 	nsresult GetTargetDocument (nsIDOMDocument **domDoc);
 
 private:
 	EphyBrowser *mBrowser;
+	MozillaEmbedEvent *mEmbedEvent;
 	nsCOMPtr<nsIDOMDocument> mDOMDocument;
 
-	nsresult GatherTextUnder (nsIDOMNode* aNode, nsString& aResult);
-	nsresult ResolveBaseURL (nsIDocument *doc, const nsAString &relurl, nsACString &url);
-	nsresult ResolveDocumentURL (nsIDocument *doc, const nsAString &relurl, nsACString &url);
-	nsresult GetEventContext (nsIDOMEventTarget *EventTarget,
-				  MozillaEmbedEvent *info);
-	nsresult GetCSSBackground (nsIDOMNode *node, nsAutoString& url);
-	nsresult IsPageFramed (nsIDOMNode *node, PRBool *Framed);
-	nsresult CheckLinkScheme (const nsAString &link);
-	nsresult SetIntProperty (const char *name, int value);
-	nsresult SetStringProperty (const char *name, const char *value);
-	nsresult SetStringProperty (const char *name, const nsAString &value);
-	MozillaEmbedEvent *mEmbedEvent;
+	nsresult GatherTextUnder    (nsIDOMNode* aNode, nsAString& aResult);
+	nsresult ResolveBaseURL     (const nsAString &relurl, nsACString &url);
+	nsresult GetEventContext    (nsIDOMEventTarget *EventTarget,
+				     MozillaEmbedEvent *info);
+	nsresult GetCSSBackground   (nsIDOMNode *node, nsAString& url);
+	nsresult IsPageFramed       (nsIDOMNode *node, PRBool *Framed);
+	nsresult CheckLinkScheme    (const nsAString &link);
+	nsresult SetIntProperty     (const char *name, int value);
+	nsresult SetStringProperty  (const char *name, const char *value);
+	nsresult SetStringProperty  (const char *name, const nsAString &value);
 };
 
 #endif

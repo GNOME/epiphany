@@ -87,11 +87,7 @@ impl_get_target (EphyDownload *download)
 
 	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
 
-#if MOZILLA_SNAPSHOT < 16
-	mozDownload->GetTarget (getter_AddRefs (targetFile));
-#else
 	mozDownload->GetTargetFile (getter_AddRefs (targetFile));
-#endif
 
 	nsCAutoString tempPathStr;
 	targetFile->GetNativePath (tempPathStr);

@@ -23,8 +23,7 @@
 #endif
 
 #include "EphyBrowser.h"
-#include "GlobalHistory.h"
-#include "ContentHandler.h"
+#include "EphyUtils.h"
 #include "ephy-embed.h"
 #include "ephy-string.h"
 #include "ephy-debug.h"
@@ -37,15 +36,14 @@
 #include "nsISimpleEnumerator.h"
 
 #include "nsIContentViewer.h"
-#include "nsIGlobalHistory.h"
 #include "nsIWebBrowserFind.h"
 #include "nsIWebBrowserFocus.h"
 #include "nsICommandManager.h"
 #include "nsIWebBrowserPrint.h"
+#include "nsIDocCharset.h"
 #include "nsIDocShellTreeItem.h"
 #include "nsIDocShellTreeNode.h"
 #include "nsIDocShellTreeOwner.h"
-#include "nsIDocumentCharsetInfo.h"
 #include "nsIWebPageDescriptor.h"
 #include "nsISHEntry.h"
 #include "nsIHistoryEntry.h"
@@ -56,25 +54,21 @@
 #include "nsIDOMHTMLInputElement.h"
 #include "nsIDOMHTMLTextAreaElement.h"
 #include "nsIDOMDocument.h"
+#include "nsIDOM3Document.h"
 #include "nsIDOMEvent.h"
 #include "nsIDOMEventTarget.h"
 #include "nsIDOMNode.h"
 #include "nsIDOMElement.h"
+#include "nsIDOMWindow2.h"
+#include "nsEmbedString.h"
+#include "nsMemory.h"
 
 #ifdef ALLOW_PRIVATE_API
-#include "nsPIDOMWindow.h"
 #include "nsIMarkupDocumentViewer.h"
-#include "nsIChromeEventHandler.h"
-#include "nsIDOMWindowInternal.h"
 #endif
 
-#ifdef ALLOW_PRIVATE_STRINGS
-#include "nsReadableUtils.h"
-#include "nsIDocument.h"
-#include "nsIDeviceContext.h"
-#include "nsIPresContext.h"
-#include "nsIAtom.h"
-#endif
+static PRUnichar DOMLinkAdded[] = { 'D', 'O', 'M', 'L', 'i', 'n', 'k',
+				    'A', 'd', 'd', 'e', 'd', '\0' };
 
 EphyEventListener::EphyEventListener(void)
 : mOwner(nsnull)
@@ -105,37 +99,41 @@ EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
 	linkElement = do_QueryInterface (node);
 	if (!linkElement) return NS_ERROR_FAILURE;
 
-	NS_NAMED_LITERAL_STRING(attr_rel, "rel");
-	nsAutoString value;
-	result = linkElement->GetAttribute (attr_rel, value);
+	PRUnichar relAttr[] = { 'r', 'e', 'l', '\0' };
+	nsEmbedString value;
+	result = linkElement->GetAttribute (nsEmbedString(relAttr), value);
 	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
 
-	if (value.EqualsIgnoreCase("SHORTCUT ICON") ||
-	    value.EqualsIgnoreCase("ICON"))
+	nsEmbedCString rel;
+	NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, rel);	
+
+	if (g_ascii_strcasecmp (rel.get(), "SHORTCUT ICON") == 0 ||
+	    g_ascii_strcasecmp (rel.get(), "ICON") == 0)
 	{
-		NS_NAMED_LITERAL_STRING(attr_href, "href");
-		nsAutoString value;
-		result = linkElement->GetAttribute (attr_href, value);
-		if (NS_FAILED (result) || value.IsEmpty()) return NS_ERROR_FAILURE;
+		PRUnichar hrefAttr[] = { 'h', 'r', 'e', 'f', '\0' };
+		nsEmbedString value;
+		result = linkElement->GetAttribute (nsEmbedString (hrefAttr), value);
+		if (NS_FAILED (result) || !value.Length()) return NS_ERROR_FAILURE;
+
+		nsEmbedCString link;
+		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, link);
 
 		nsCOMPtr<nsIDOMDocument> domDoc;
 		node->GetOwnerDocument(getter_AddRefs(domDoc));
 		NS_ENSURE_TRUE (domDoc, NS_ERROR_FAILURE);
 
-		nsCOMPtr<nsIDocument> doc = do_QueryInterface (domDoc);
+		nsCOMPtr<nsIDOM3Document> doc = do_QueryInterface (domDoc);
 		NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
 
-#if MOZILLA_SNAPSHOT > 13
-		nsIURI *uri;
-		uri = doc->GetDocumentURI ();
-#elif MOZILLA_SNAPSHOT > 11
-		nsIURI *uri;
-		uri = doc->GetDocumentURL ();
-#endif
-		if (!uri) return NS_ERROR_FAILURE;
+		nsEmbedString spec;
+		result = doc->GetDocumentURI (spec);
+		NS_ENSURE_SUCCESS (result, result);
 
-		const nsACString &link = NS_ConvertUTF16toUTF8(value);
-		nsCAutoString favicon_url;
+		nsCOMPtr<nsIURI> uri;
+		result = EphyUtils::NewURI (getter_AddRefs(uri), spec);
+		NS_ENSURE_SUCCESS (result, result);
+
+		nsEmbedCString favicon_url;
 		result = uri->Resolve (link, favicon_url);
 		if (NS_FAILED (result)) return NS_ERROR_FAILURE;
 		
@@ -210,23 +208,15 @@ EphyBrowser::GetListener (void)
   	if (mEventReceiver) return NS_ERROR_FAILURE;
 
   	nsCOMPtr<nsIDOMWindow> domWindowExternal;
-  	mWebBrowser->GetContentDOMWindow(getter_AddRefs(domWindowExternal));
+  	mWebBrowser->GetContentDOMWindow (getter_AddRefs(domWindowExternal));
   
-  	nsCOMPtr<nsIDOMWindowInternal> domWindow;
-        domWindow = do_QueryInterface(domWindowExternal);
+  	nsCOMPtr<nsIDOMWindow2> domWindow (do_QueryInterface (domWindowExternal));
+	NS_ENSURE_TRUE (domWindow, NS_ERROR_FAILURE);
 	
-	nsCOMPtr<nsPIDOMWindow> piWin(do_QueryInterface(domWindow));
-	NS_ENSURE_TRUE (piWin, NS_ERROR_FAILURE);
+  	nsCOMPtr<nsIDOMEventTarget> rootWindow;
+  	domWindow->GetWindowRoot (getter_AddRefs(rootWindow));
 
-#if MOZILLA_SNAPSHOT >= 18
-  	nsIChromeEventHandler* chromeHandler;
-  	chromeHandler = piWin->GetChromeEventHandler();
-#else
-  	nsCOMPtr<nsIChromeEventHandler> chromeHandler;
-  	piWin->GetChromeEventHandler(getter_AddRefs(chromeHandler));
-#endif
-
-  	mEventReceiver = do_QueryInterface(chromeHandler);
+  	mEventReceiver = do_QueryInterface (rootWindow);
 	NS_ENSURE_TRUE (mEventReceiver, NS_ERROR_FAILURE);
 
 	return NS_OK;
@@ -242,7 +232,7 @@ EphyBrowser::AttachListeners(void)
 	nsCOMPtr<nsIDOMEventTarget> target;
 	target = do_QueryInterface (mEventReceiver);
 
-	rv = target->AddEventListener(NS_LITERAL_STRING("DOMLinkAdded"),
+	rv = target->AddEventListener(nsEmbedString(DOMLinkAdded),
 				      mFaviconEventListener, PR_FALSE);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
@@ -260,7 +250,7 @@ EphyBrowser::DetachListeners(void)
 	target = do_QueryInterface (mEventReceiver);
 	NS_ENSURE_TRUE (target, NS_ERROR_FAILURE);
 
-	rv = target->RemoveEventListener(NS_LITERAL_STRING("DOMLinkAdded"),
+	rv = target->RemoveEventListener(nsEmbedString(DOMLinkAdded),
 					 mFaviconEventListener, PR_FALSE);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
@@ -381,68 +371,18 @@ nsresult EphyBrowser::GoToHistoryIndex (PRInt16 index)
 	return ContentNav->GotoIndex (index);
 }
 
-nsresult EphyBrowser::SetZoom (float aZoom, PRBool reflow)
+nsresult EphyBrowser::SetZoom (float aZoom)
 {
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
-	if (reflow)
-	{
-		nsCOMPtr<nsIContentViewer> contentViewer;	
-		GetContentViewer (getter_AddRefs(contentViewer));
-		NS_ENSURE_TRUE (contentViewer, NS_ERROR_FAILURE);
+	nsCOMPtr<nsIContentViewer> contentViewer;	
+	GetContentViewer (getter_AddRefs(contentViewer));
+	NS_ENSURE_TRUE (contentViewer, NS_ERROR_FAILURE);
 
-		nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
-		NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
+	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
+	NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
 
-		return mdv->SetTextZoom (aZoom);
-	}
-	else
-	{
-		nsCOMPtr<nsIDocShell> DocShell;
-		DocShell = do_GetInterface (mWebBrowser);
-		NS_ENSURE_TRUE (DocShell, NS_ERROR_FAILURE);
-
-		SetZoomOnDocshell (aZoom, DocShell);
-
-		nsCOMPtr<nsIDocShellTreeNode> docShellNode(do_QueryInterface(DocShell));
-		if (docShellNode)
-		{
-			PRInt32 i;
-			PRInt32 n;
-			docShellNode->GetChildCount(&n);
-			for (i=0; i < n; i++) 
-			{
-				nsCOMPtr<nsIDocShellTreeItem> child;
-				docShellNode->GetChildAt(i, getter_AddRefs(child));
-				nsCOMPtr<nsIDocShell> childAsShell(do_QueryInterface(child));
-				if (childAsShell) 
-				{
-					return SetZoomOnDocshell (aZoom, childAsShell);
-				}
-			}
-		}
-	}
-
-	return NS_OK;
-}
-
-nsresult EphyBrowser::SetZoomOnDocshell (float aZoom, nsIDocShell *DocShell)
-{
-	nsCOMPtr<nsIPresContext> PresContext;
-	DocShell->GetPresContext (getter_AddRefs(PresContext));
-	NS_ENSURE_TRUE (PresContext, NS_ERROR_FAILURE);
-
-#if MOZILLA_SNAPSHOT > 13
-	nsIDeviceContext *DeviceContext;
-	DeviceContext = PresContext->DeviceContext();
-	NS_ENSURE_TRUE (DeviceContext, NS_ERROR_FAILURE);
-#else				
-	nsCOMPtr<nsIDeviceContext> DeviceContext;
-	PresContext->GetDeviceContext (getter_AddRefs(DeviceContext));
-	NS_ENSURE_TRUE (DeviceContext, NS_ERROR_FAILURE);
-#endif
-
-	return DeviceContext->SetTextZoom (aZoom);
+	return mdv->SetTextZoom (aZoom);
 }
 
 nsresult EphyBrowser::GetContentViewer (nsIContentViewer **aViewer)
@@ -540,7 +480,7 @@ nsresult EphyBrowser::GetSHTitleAtIndex (PRInt32 index, PRUnichar **title)
 	return NS_OK;
 }
 
-nsresult EphyBrowser::GetSHUrlAtIndex (PRInt32 index, nsCString &url)
+nsresult EphyBrowser::GetSHUrlAtIndex (PRInt32 index, nsACString &url)
 {
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
@@ -559,7 +499,7 @@ nsresult EphyBrowser::GetSHUrlAtIndex (PRInt32 index, nsCString &url)
 
 	nsresult result;
 	result = uri->GetSpec(url);
-	NS_ENSURE_TRUE (NS_SUCCEEDED (result) && !url.IsEmpty(), NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (NS_SUCCEEDED (result) && url.Length(), NS_ERROR_FAILURE);
 
 	return NS_OK;
 }
@@ -608,50 +548,48 @@ nsresult EphyBrowser::GetPageDescriptor(nsISupports **aPageDescriptor)
 	return NS_OK;
 }
 
-nsresult EphyBrowser::GetDocumentUrl (nsCString &url)
+nsresult EphyBrowser::GetDocumentUrl (nsACString &url)
 {
+	nsresult rv;
+
 	NS_ENSURE_TRUE (mDOMWindow, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDOMDocument> DOMDocument;
 	mDOMWindow->GetDocument (getter_AddRefs(DOMDocument));
 	NS_ENSURE_TRUE (DOMDocument, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIDocument> doc = do_QueryInterface(DOMDocument);
+	nsCOMPtr<nsIDOM3Document> doc = do_QueryInterface(DOMDocument);
 	NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
 
-#if MOZILLA_SNAPSHOT > 13
-	nsIURI *uri;
-	uri = doc->GetDocumentURI ();
-#elif MOZILLA_SNAPSHOT > 11
-	nsIURI *uri;
-	uri = doc->GetDocumentURL ();
-#endif
-	NS_ENSURE_TRUE (uri, NS_ERROR_FAILURE);
+	nsEmbedString docURI;
+	rv = doc->GetDocumentURI (docURI);
+	NS_ENSURE_SUCCESS (rv, rv);
 
-	return uri->GetSpec (url);
+	NS_UTF16ToCString (docURI, NS_CSTRING_ENCODING_UTF8, url);
+
+	return NS_OK;
 }
 
-nsresult EphyBrowser::GetTargetDocumentUrl (nsCString &url)
+nsresult EphyBrowser::GetTargetDocumentUrl (nsACString &url)
 {
+	nsresult rv;
+
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
         nsCOMPtr<nsIDOMDocument> DOMDocument;
 	GetTargetDocument (getter_AddRefs(DOMDocument));
 	NS_ENSURE_TRUE (DOMDocument, NS_ERROR_FAILURE);
 
-        nsCOMPtr<nsIDocument> doc = do_QueryInterface(DOMDocument);
+	nsCOMPtr<nsIDOM3Document> doc = do_QueryInterface(DOMDocument);
 	NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
 
-#if MOZILLA_SNAPSHOT > 13
-	nsIURI *uri;
-	uri = doc->GetDocumentURI ();
-#elif MOZILLA_SNAPSHOT > 11
-	nsIURI *uri;
-	uri = doc->GetDocumentURL ();
-#endif
-	NS_ENSURE_TRUE (uri, NS_ERROR_FAILURE);
+	nsEmbedString docURI;
+	rv = doc->GetDocumentURI (docURI);
+	NS_ENSURE_SUCCESS (rv, rv);
 
-	return uri->GetSpec (url);
+	NS_UTF16ToCString (docURI, NS_CSTRING_ENCODING_UTF8, url);
+
+	return NS_OK;
 }
 
 nsresult EphyBrowser::ForceEncoding (const char *encoding) 
@@ -665,22 +603,20 @@ nsresult EphyBrowser::ForceEncoding (const char *encoding)
 	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
 	NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
 
-	return mdv->SetForceCharacterSet (nsDependentCString(encoding));
+	return mdv->SetForceCharacterSet (nsEmbedCString(encoding));
 }
 
 nsresult EphyBrowser::GetEncoding (nsACString &encoding)
 {
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIDOMDocument> domDoc;
-	GetTargetDocument (getter_AddRefs(domDoc));
-	NS_ENSURE_TRUE (domDoc, NS_ERROR_FAILURE);
+	nsCOMPtr<nsIDocCharset> docCharset = do_GetInterface (mWebBrowser);
+	NS_ENSURE_TRUE (docCharset, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIDocument> doc = do_QueryInterface(domDoc);
-	NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
-
-	encoding = doc->GetDocumentCharacterSet ();
-	NS_ENSURE_TRUE (!encoding.IsEmpty(), NS_ERROR_FAILURE);
+	char *charset;
+	docCharset->GetCharset (&charset);
+	encoding = charset;
+	nsMemory::Free (charset);
 
 	return NS_OK;
 }
@@ -740,6 +676,29 @@ nsresult EphyBrowser::GetCommandState (const char *command, PRBool *enabled)
 
 #define NUM_MODIFIED_TEXTFIELDS_REQUIRED	2
 
+PRBool
+EphyBrowser::CompareFormsText (nsAString &aDefaultText, nsAString &aUserText)
+{
+	if (aDefaultText.Length() != aUserText.Length())
+	{
+		return FALSE;
+	}
+
+	/* Mozilla Bug 218277, 195946 and others */
+	const PRUnichar *text = aDefaultText.BeginReading();
+	for (PRUint32 i = 0; i < aDefaultText.Length(); i++)
+	{
+		if (text[i] == 0xa0)
+		{
+			aDefaultText.Replace (i, 1, ' ');
+		}
+	}
+
+	return (memcmp (aDefaultText.BeginReading(),
+		        aUserText.BeginReading(),
+		        aUserText.Length() * sizeof (PRUnichar)) == 0);
+}
+
 nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUint32 *aNumTextFields, PRBool *aHasTextArea)
 {
 	nsCOMPtr<nsIDOMHTMLDocument> htmlDoc = do_QueryInterface(aDomDoc);
@@ -780,14 +739,11 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 			nsCOMPtr<nsIDOMHTMLTextAreaElement> areaElement = do_QueryInterface (domNode);
 			if (areaElement)
 			{
-				nsAutoString default_text, user_text;
-				areaElement->GetDefaultValue (default_text);
-				areaElement->GetValue (user_text);
+				nsEmbedString defaultText, userText;
+				areaElement->GetDefaultValue (defaultText);
+				areaElement->GetValue (userText);
 
-				/* Mozilla Bug 218277, 195946 and others */
-				default_text.ReplaceChar(0xa0, ' ');
-
-				if (!user_text.Equals (default_text))
+				if (!CompareFormsText (defaultText, userText))
 				{
 					*aHasTextArea = PR_TRUE;
 					return NS_OK;
@@ -799,31 +755,31 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 			nsCOMPtr<nsIDOMHTMLInputElement> inputElement = do_QueryInterface(domNode);
 			if (!inputElement) continue;
 	
-			nsAutoString type;
+			nsEmbedString type;
 			inputElement->GetType(type);
 
-			if (type.EqualsIgnoreCase("text"))
+			nsEmbedCString cType;
+			NS_UTF16ToCString (type, NS_CSTRING_ENCODING_UTF8, cType);
+
+			if (g_ascii_strcasecmp (cType.get(), "text") == 0)
 			{
-				nsAutoString default_text, user_text;
+				nsEmbedString defaultText, userText;
 				PRInt32 max_length;
-				inputElement->GetDefaultValue (default_text);
-				inputElement->GetValue (user_text);
+				inputElement->GetDefaultValue (defaultText);
+				inputElement->GetValue (userText);
 				inputElement->GetMaxLength (&max_length);
 
 				/* Guard against arguably broken forms where
-				 * default_text is longer than maxlength
-				 * (user_text is cropped, default_text is not)
+				 * defaultText is longer than maxlength
+				 * (userText is cropped, defaultText is not)
 				 * Mozilla bug 232057
 				 */
-				if (default_text.Length() > (PRUint32)max_length)
+				if (defaultText.Length() > (PRUint32)max_length)
 				{
-					default_text.Truncate (max_length);
+					defaultText.Cut (max_length, PR_UINT32_MAX);
 				}
 
-				/* Mozilla Bug 218277, 195946 and others */
-				default_text.ReplaceChar(0xa0, ' ');
-
-				if (!user_text.Equals (default_text))
+				if (!CompareFormsText (defaultText, userText))
 				{
 					(*aNumTextFields)++;
 					if (*aNumTextFields >= NUM_MODIFIED_TEXTFIELDS_REQUIRED)

@@ -35,6 +35,7 @@
 #include "MozillaPrivate.h"
 
 #include <nsCOMPtr.h>
+#include <nsMemory.h>
 #include <nsIServiceManager.h>
 #include <nsIInterfaceRequestor.h>
 #include <nsIInterfaceRequestorUtils.h>
@@ -46,11 +47,7 @@
 #include <nsICRLInfo.h>
 #include <nsISimpleEnumerator.h>
 #include <nsIArray.h>
-
-#ifdef ALLOW_PRIVATE_STRINGS
-#include <nsReadableUtils.h>
-#include <nsString.h>
-#endif
+#include <nsEmbedString.h>
 
 #include <gconf/gconf-client.h>
 #include <gtk/gtkdialog.h>
@@ -284,17 +281,20 @@ GtkNSSDialogs::ConfirmMismatchDomain (nsIInterfaceRequestor *ctx,
                                       const nsACString &targetURL,
                                       nsIX509Cert *cert, PRBool *_retval)
 {
-	nsAutoString commonName;
 	char *ttTargetUrl, *ttCommonName, *first, *second, *msg;
 	int res;
 
+	nsEmbedString commonName;
 	cert->GetCommonName (commonName);
 
- 	ttTargetUrl = g_strdup_printf ("\"<tt>%s</tt>\"", 
-                                        PromiseFlatCString(targetURL).get());
+	nsEmbedCString cCommonName;
+	NS_UTF16ToCString (commonName,
+			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
-	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
-                                         NS_ConvertUTF16toUTF8(commonName).get());
+ 	ttTargetUrl = g_strdup_printf ("\"<tt>%s</tt>\"", 
+                                       nsEmbedCString(targetURL).get());
+
+	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", cCommonName.get());
 
         first = g_strdup_printf (_("The site %s returned security information for "
 				   "%s. It is possible that someone is intercepting "
@@ -329,14 +329,17 @@ GtkNSSDialogs::ConfirmUnknownIssuer (nsIInterfaceRequestor *ctx,
                                      PRBool *_retval)
 {
 	gboolean accept_perm = FALSE;
-	nsAutoString commonName;
 	char *ttCommonName, *secondary, *tertiary, *msg;
 	int res;
 
+	nsEmbedString commonName;
 	cert->GetCommonName (commonName);
 
-	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
-					NS_ConvertUTF16toUTF8(commonName).get());
+	nsEmbedCString cCommonName;
+	NS_UTF16ToCString (commonName,
+			   NS_CSTRING_ENCODING_UTF8, cCommonName);
+
+	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", cCommonName.get());
 
 	secondary = g_strdup_printf
 		           (_("Your browser was unable to trust %s. "
@@ -394,7 +397,6 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 	PRTime now = PR_Now();
 	PRTime notAfter, notBefore, timeToUse;
 	PRInt64 normalizedTime;
-	nsAutoString commonName;
 	time_t t;
 	struct tm tm;
 	char formattedDate[128];
@@ -428,7 +430,12 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 		timeToUse = notBefore;
 	}
 	
+	nsEmbedString commonName;
 	cert->GetCommonName (commonName);
+
+	nsEmbedCString cCommonName;
+	NS_UTF16ToCString (commonName,
+			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
 	LL_DIV (normalizedTime, timeToUse, PR_USEC_PER_SEC);
 	LL_L2UI (t, normalizedTime);
@@ -439,8 +446,7 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 		  localtime_r (&t, &tm));
 	fdate = g_locale_to_utf8 (formattedDate, -1, NULL, NULL, NULL);
 
-	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
-                                        NS_ConvertUTF16toUTF8(commonName).get());
+	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", cCommonName.get());
 
 	secondary = g_strdup_printf (text, ttCommonName, fdate);
 
@@ -468,7 +474,6 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 {
 	GtkWidget *dialog, *label;
 	char *ttCommonName, *ttTargetUrl, *msg, *primary, *secondary;
-	nsAutoString commonName;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWidget *gparent = MozillaFindGtkParent (parent);
@@ -483,13 +488,17 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 	higgy_setup_dialog (GTK_DIALOG (dialog), GTK_STOCK_DIALOG_ERROR,
 			    &label, NULL);
 
+	nsEmbedString commonName;
 	cert->GetCommonName (commonName);
 
-	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
-					NS_ConvertUTF16toUTF8(commonName).get());
+	nsEmbedCString cCommonName;
+	NS_UTF16ToCString (commonName,
+			   NS_CSTRING_ENCODING_UTF8, cCommonName);
 
-	ttTargetUrl = g_strdup_printf ("\"<tt>%s</tt>\"", 
-				       PromiseFlatCString(targetURL).get());
+	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", cCommonName.get());
+
+	ttTargetUrl = g_strdup_printf ("\"<tt>%s</tt>\"",
+				       nsEmbedCString(targetURL).get());
 
 	primary = g_strdup_printf (_("Cannot establish connection to %s."),
 				   ttTargetUrl);
@@ -545,12 +554,16 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 			    &label, &content_vbox);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 
-	nsAutoString commonName;
+	nsEmbedString commonName;
 	cert->GetCommonName (commonName);
-	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
-					 NS_ConvertUTF16toUTF8(commonName).get());
 
-	tertiary = g_strdup_printf (_("Trust %s to identify:"), ttCommonName );
+	nsEmbedCString cCommonName;
+	NS_UTF16ToCString (commonName,
+			   NS_CSTRING_ENCODING_UTF8, cCommonName);
+
+	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"",  cCommonName.get());
+
+	tertiary = g_strdup_printf (_("Trust %s to identify:"), ttCommonName);
 	g_free (ttCommonName);
 
 	msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s\n\n%s",
@@ -835,8 +848,9 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	}
 	else
 	{
-		gchar * text = gtk_editable_get_chars (GTK_EDITABLE (entry1), 0, -1);
-		CopyUTF8toUTF16 (text, _password);
+		gchar *text = gtk_editable_get_chars (GTK_EDITABLE (entry1), 0, -1);
+		NS_CStringToUTF16 (nsEmbedCString (text),
+			           NS_CSTRING_ENCODING_UTF8, _password);
 		g_free (text);
 		*_retval = PR_TRUE;
 	}
@@ -896,7 +910,8 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	else
 	{
 		gchar * text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
-		CopyUTF8toUTF16 (text, _password);
+		NS_CStringToUTF16 (nsEmbedCString (text),
+			           NS_CSTRING_ENCODING_UTF8, _password);
 		g_free (text);
 		*_retval = PR_TRUE;
 	}
@@ -955,7 +970,7 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
 	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 6);
 
-	nsAutoString org, orgUnit, nextUpdate;
+	nsEmbedString org, orgUnit, nextUpdate;
 	rv = crl->GetOrganization (org);
 	if (NS_FAILED(rv)) return rv;
 
@@ -965,13 +980,19 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
 	rv = crl->GetNextUpdateLocale (nextUpdate);
 	if (NS_FAILED(rv)) return rv;
 
-	label = gtk_label_new (NS_ConvertUTF16toUTF8(org).get());
+	nsEmbedCString cOrg;
+	NS_UTF16ToCString (org, NS_CSTRING_ENCODING_UTF8, cOrg);
+	label = gtk_label_new (cOrg.get());
 	set_table_row (table, 0, _("Organization:"), label);
 
-	label = gtk_label_new (NS_ConvertUTF16toUTF8(orgUnit).get());
+	nsEmbedCString cOrgUnit;
+	NS_UTF16ToCString (orgUnit, NS_CSTRING_ENCODING_UTF8, cOrgUnit);
+	label = gtk_label_new (cOrgUnit.get());
 	set_table_row (table, 1, _("Unit:"), label);
 
-	label = gtk_label_new (NS_ConvertUTF16toUTF8(nextUpdate).get());
+	nsEmbedCString cNextUpdate;
+	NS_UTF16ToCString (nextUpdate, NS_CSTRING_ENCODING_UTF8, cNextUpdate);
+	label = gtk_label_new (cNextUpdate.get());
 	set_table_row (table, 2, _("Next Update:"), label);
 
 	gtk_box_pack_start (GTK_BOX (vbox), higgy_indent_widget (table), FALSE, FALSE, 0);
@@ -989,14 +1010,14 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
  *  Help function to fill in the labels on the General tab
  */
 static void
-set_label_cert_attribute (GladeXML* gxml, const char* label_id, nsAutoString &value)
+set_label_cert_attribute (GladeXML* gxml, const char* label_id, nsAString &value)
 {
 	GtkWidget *label;
 	label = glade_xml_get_widget (gxml, label_id);
 
 	g_return_if_fail (GTK_IS_LABEL (label));
 
-	if (value.IsEmpty()) {
+	if (!value.Length()) {
 		gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
 		char *msg = g_strdup_printf ("<i>&lt;%s&gt;</i>",
 					     _("Not part of certificate"));
@@ -1005,9 +1026,10 @@ set_label_cert_attribute (GladeXML* gxml, const char* label_id, nsAutoString &va
 	}
 	else
 	{
+		nsEmbedCString cValue;
+		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
 		gtk_label_set_use_markup (GTK_LABEL (label), FALSE);
-		gtk_label_set_text (GTK_LABEL (label),
-				    NS_ConvertUTF16toUTF8(value).get());
+		gtk_label_set_text (GTK_LABEL (label), cValue.get());
 	}
 }
 
@@ -1037,15 +1059,18 @@ fill_cert_chain_tree (GtkTreeView *treeview, nsIArray *certChain)
 		gtk_tree_store_append (GTK_TREE_STORE (model), &iter, 
 				       (i == (int)numCerts-1) ? NULL : &parent);
 
-		nsAutoString value;
+		nsEmbedString value;
 		rv = nsCert->GetCommonName (value);
 		if (NS_FAILED(rv)) return FALSE;
 
+		nsEmbedCString cValue;
+		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
+
 		nsIX509Cert *nsCertP = nsCert;
-		if (!value.IsEmpty())
+		if (value.Length())
 		{
 			gtk_tree_store_set (GTK_TREE_STORE(model), &iter,
-					    0, NS_ConvertUTF16toUTF8(value).get(),
+					    0, cValue.get(),
 					    1, nsCertP,
 					    -1);
 		}
@@ -1079,14 +1104,17 @@ fill_cert_chain_tree (GtkTreeView *treeview, nsIArray *certChain)
 static void
 add_asn1_object_to_tree(GtkTreeModel *model, nsIASN1Object *object, GtkTreeIter *parent)
 {
-	nsAutoString dispNameU;
+	nsEmbedString dispNameU;
 	object->GetDisplayName(dispNameU);
+
+	nsEmbedCString cDispNameU;
+	NS_UTF16ToCString (dispNameU, NS_CSTRING_ENCODING_UTF8, cDispNameU);
 
 	GtkTreeIter iter;
 	gtk_tree_store_append (GTK_TREE_STORE (model), &iter, parent);
 
 	gtk_tree_store_set (GTK_TREE_STORE(model), &iter,
-			    0, NS_ConvertUTF16toUTF8(dispNameU).get(),
+			    0, cDispNameU.get(),
 			    1, object,
 			    -1);
 
@@ -1155,14 +1183,16 @@ field_tree_view_selection_changed_cb (GtkTreeSelection *selection,
 	if (gtk_tree_selection_get_selected (selection, &model, &iter))
 	{
 		nsIASN1Object *object;
-		nsAutoString dispValU;
 
 		gtk_tree_model_get (model, &iter, 1, &object, -1);
 
+		nsEmbedString dispValU;
 		object->GetDisplayValue(dispValU);
-		gtk_text_buffer_set_text (text_buffer, 
-					  NS_ConvertUTF16toUTF8(dispValU).get(),
-					  -1);
+
+		nsEmbedCString cDispValU;
+		NS_UTF16ToCString (dispValU, NS_CSTRING_ENCODING_UTF8, cDispValU);
+
+		gtk_text_buffer_set_text (text_buffer, cDispValU.get(), -1);
 	}
 	else
 	{
@@ -1252,7 +1282,7 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 {
 	GtkWidget *dialog, *widget;
 	GladeXML *gxml;
-	nsAutoString value;
+	nsEmbedString value;
 	nsresult rv;
 	PRUint32 verifystate, count;
 	PRUnichar ** usage;
@@ -1327,8 +1357,11 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 		GtkWidget *indent;
 		for (PRUint32 i = 0 ; i < count ; i++)
 		{
-			const nsACString &msg = NS_ConvertUTF16toUTF8 (usage[i]);
-			GtkWidget *label = gtk_label_new(PromiseFlatCString(msg).get());
+			nsEmbedCString msg;
+			NS_UTF16ToCString (nsEmbedString(usage[i]),
+					   NS_CSTRING_ENCODING_UTF8, msg);
+
+			GtkWidget *label = gtk_label_new(msg.get());
 			gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 			gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 			nsMemory::Free (usage[i]);

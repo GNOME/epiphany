@@ -25,15 +25,14 @@
 
 #include "EphyContentPolicy.h"
 
+#include "mozilla-version.h"
+
 #include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 
 #include <nsCOMPtr.h>
 #include <nsIURI.h>
-
-#ifdef ALLOW_PRIVATE_STRINGS
-#include <nsString.h>
-#endif
+#include <nsEmbedString.h>
 
 #define CONF_LOCKDOWN_DISABLE_UNSAFE_PROTOCOLS	"/apps/epiphany/lockdown/disable_unsafe_protocols"
 #define CONF_LOCKDOWN_ADDITIONAL_SAFE_PROTOCOLS	"/apps/epiphany/lockdown/additional_safe_protocols"
@@ -60,7 +59,7 @@ EphyContentPolicy::~EphyContentPolicy()
 	g_slist_free (mSafeProtocols);
 }
 
-#if MOZILLA_SNAPSHOT >= 18
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 NS_IMETHODIMP
 EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 			      nsIURI *aContentLocation,
@@ -78,10 +77,10 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 
 	NS_ENSURE_TRUE (aContentLocation, NS_ERROR_FAILURE);
 
-	nsCAutoString scheme;
+	nsEmbedCString scheme;
 	aContentLocation->GetScheme (scheme);
 
-	nsCAutoString spec;
+	nsEmbedCString spec;
 	aContentLocation->GetSpec (spec);
 
 	LOG ("ShouldLoad type=%d location=%s (scheme %s)", aContentType, spec.get(), scheme.get())
@@ -90,7 +89,7 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 
 	/* Allow the load if the protocol is in safe list, or it's about:blank */
 	if (g_slist_find_custom (mSafeProtocols, scheme.get(), (GCompareFunc) strcmp)
-	    || spec.Equals ("about:blank"))
+	    || strcmp (spec.get(), "about:blank") == 0)
 	{
 		*aDecision = nsIContentPolicy::ACCEPT;
 	}
@@ -128,17 +127,17 @@ NS_IMETHODIMP EphyContentPolicy::ShouldLoad(PRInt32 contentType,
 		return NS_OK;
 	}
 
-	nsCAutoString scheme;
+	nsEmbedCString scheme;
 	contentLocation->GetScheme (scheme);
 
-	nsCAutoString spec;
+	nsEmbedCString spec;
 	contentLocation->GetSpec (spec);
 
 	*_retval = PR_FALSE;
 
 	/* Allow the load if the protocol is in safe list, or it's about:blank */
 	if (g_slist_find_custom (mSafeProtocols, scheme.get(), (GCompareFunc) strcmp)
-	    || spec.Equals ("about:blank"))
+	    || strcmp (spec.get(), "about:blank") == 0)
 	{
 		*_retval = PR_TRUE;
 	}
@@ -159,4 +158,5 @@ NS_IMETHODIMP EphyContentPolicy::ShouldProcess(PRInt32 contentType,
 	*_retval = PR_TRUE;
 	return NS_OK;
 }
-#endif /* MOZILLA_SNAPSHOT >= 18 */
+#endif /* MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1) */
+

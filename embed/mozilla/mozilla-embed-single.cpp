@@ -40,11 +40,14 @@
 #include "ephy-embed-prefs.h"
 #include "MozRegisterComponents.h"
 #include "EphySingle.h"
+#include "EphyUtils.h"
 
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
 #include <nsCOMPtr.h>
+#include <nsMemory.h>
+#include <nsEmbedString.h>
 #include <nsIPrefService.h>
 #include <nsIServiceManager.h>
 #include <nsIIOService.h>
@@ -71,12 +74,7 @@
 #include <nsIHttpAuthManager.h>
 #include <nsICacheService.h>
 #include <nsIFontEnumerator.h>
-#endif
-
-#ifdef ALLOW_PRIVATE_STRINGS
-#include <nsString.h>
-#include <nsReadableUtils.h>
-#include <nsNetUtil.h>
+#include <nsNetCID.h>
 #endif
 
 #define MOZILLA_PROFILE_DIR  "/mozilla"
@@ -190,7 +188,7 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
         /* read our predefined default prefs */
         nsresult rv;
         nsCOMPtr<nsILocalFile> file;
-        NS_NewNativeLocalFile(NS_LITERAL_CSTRING(DEFAULT_PROFILE_FILE),
+        NS_NewNativeLocalFile(nsEmbedCString(DEFAULT_PROFILE_FILE),
 			      PR_TRUE, getter_AddRefs(file));
 	if (!file) return FALSE;
 
@@ -398,13 +396,13 @@ static nsresult
 mozilla_init_chrome (void)
 {
 	nsresult result;
-	nsAutoString uiLang;
+	nsEmbedString uiLang;
 
 	nsCOMPtr<nsIXULChromeRegistry> chromeRegistry = do_GetService (NS_CHROMEREGISTRY_CONTRACTID);
 	NS_ENSURE_TRUE (chromeRegistry, NS_ERROR_FAILURE);
 
 	// Set skin to 'classic' so we get native scrollbars.
-	result = chromeRegistry->SelectSkin (NS_LITERAL_CSTRING("classic/1.0"), PR_FALSE);
+	result = chromeRegistry->SelectSkin (nsEmbedCString("classic/1.0"), PR_FALSE);
 	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
 
 	// set locale
@@ -414,7 +412,10 @@ mozilla_init_chrome (void)
 	result = getUILang(uiLang);
 	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
 
-	return chromeRegistry->SelectLocale (NS_ConvertUTF16toUTF8(uiLang), PR_FALSE);
+	nsEmbedCString cUILang;
+	NS_UTF16ToCString (uiLang, NS_CSTRING_ENCODING_UTF8, cUILang);
+
+	return chromeRegistry->SelectLocale (cUILang, PR_FALSE);
 }
 
 static void
@@ -582,7 +583,10 @@ impl_get_font_list (EphyEmbedSingle *shell,
 	{
 		char *gFontString;
 
-		gFontString = g_strdup (NS_ConvertUTF16toUTF8 (fontArray[i]).get());
+		nsEmbedCString tmp;
+		NS_UTF16ToCString (nsEmbedString(fontArray[i]),
+				   NS_CSTRING_ENCODING_UTF8, tmp);
+		gFontString = g_strdup (tmp.get());
 		l = g_list_prepend (l, gFontString);
 		nsMemory::Free (fontArray[i]);
 	}
@@ -631,9 +635,9 @@ impl_remove_cookie (EphyCookieManager *manager,
 		do_GetService (NS_COOKIEMANAGER_CONTRACTID);
 	if (!cookieManager) return;
 
-	cookieManager->Remove (nsDependentCString(cookie->domain),
-			       nsDependentCString(cookie->name),
-			       nsDependentCString(cookie->path),
+	cookieManager->Remove (nsEmbedCString(cookie->domain),
+			       nsEmbedCString(cookie->name),
+			       nsEmbedCString(cookie->path),
 			       PR_FALSE /* block */);
 }
 
@@ -672,18 +676,22 @@ impl_list_passwords (EphyPasswordManager *manager)
 		passwordEnumerator->GetNext (getter_AddRefs(nsPassword));
 		if (!nsPassword) continue;
 
-		nsCAutoString transfer;
+		nsEmbedCString transfer;
 		rv = nsPassword->GetHost (transfer);
 		if (NS_FAILED (rv)) continue;
 
-		nsAutoString unicodeName;
+		nsEmbedString unicodeName;
 		rv = nsPassword->GetUser (unicodeName);
 		if (NS_FAILED (rv)) continue;
+
+		nsEmbedCString userName;
+		NS_UTF16ToCString (unicodeName,
+				   NS_CSTRING_ENCODING_UTF8, userName);
 
 		EphyPasswordInfo *p = g_new0 (EphyPasswordInfo, 1);
 
 		p->host = g_strdup (transfer.get());
-		p->username = g_strdup(NS_ConvertUTF16toUTF8(unicodeName).get());
+		p->username = g_strdup (userName.get());
 		p->password = NULL;
 
 		passwords = g_list_prepend (passwords, p);
@@ -701,8 +709,10 @@ impl_remove_password (EphyPasswordManager *manager,
                         do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
 	if (!pm) return;
 
-	pm->RemoveUser (nsDependentCString(info->host),
-			NS_ConvertUTF8toUTF16(nsDependentCString(info->username)));
+	nsEmbedString userName;
+	NS_CStringToUTF16 (nsEmbedCString(info->username),
+			   NS_CSTRING_ENCODING_UTF8, userName);
+	pm->RemoveUser (nsEmbedCString(info->host), userName);
 }
 
 static const char *permission_type_string [] =
@@ -726,7 +736,7 @@ impl_permission_manager_add (EphyPermissionManager *manager,
 	if (!pm) return;
 
 	nsCOMPtr<nsIURI> uri;
-        NS_NewURI(getter_AddRefs(uri), host);
+        EphyUtils::NewURI(getter_AddRefs(uri), nsEmbedCString(host));
 	if (!uri) return;
 
 	gboolean allow = (permission == EPHY_PERMISSION_ALLOWED);
@@ -746,7 +756,7 @@ impl_permission_manager_remove (EphyPermissionManager *manager,
 		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID));
 	if (!pm) return;
 
-	pm->Remove (nsDependentCString (host), permission_type_string [type]);
+	pm->Remove (nsEmbedCString (host), permission_type_string [type]);
 }
 
 void
@@ -769,7 +779,7 @@ impl_permission_manager_test (EphyPermissionManager *manager,
 	if (!pm) return EPHY_PERMISSION_DEFAULT;
 
 	nsCOMPtr<nsIURI> uri;
-        NS_NewURI(getter_AddRefs(uri), host);
+        EphyUtils::NewURI(getter_AddRefs(uri), nsEmbedCString (host));
         if (!uri) return EPHY_PERMISSION_DEFAULT;
 
 	nsresult rv;
@@ -818,11 +828,11 @@ impl_permission_manager_list (EphyPermissionManager *manager,
 		if (!perm) continue;
 
 		nsresult rv;
-		nsCAutoString str;
+		nsEmbedCString str;
 		rv = perm->GetType(str);
 		if (NS_FAILED (rv)) continue;
 
-		if (str.Equals(permission_type_string[type]))
+		if (strcmp (str.get(), permission_type_string[type]) == 0)
 		{
 			EphyPermissionInfo *info = 
 				mozilla_permission_to_ephy_permission (perm);

@@ -41,6 +41,8 @@
 
 #ifdef HAVE_MOZILLA_PSM
 
+#include "mozilla-version.h"
+
 #include "MozillaPrivate.h"
 
 #include <nsIServiceManager.h>
@@ -91,7 +93,7 @@ public:
 	NS_DECL_ISUPPORTS
 	NS_DECL_NSIDOMWINDOWINTERNAL
 	NS_DECL_NSIDOMWINDOW
-#if MOZILLA_SNAPSHOT >= 19
+#if (MOZILLA_CHECK_VERSION4 (1, 7, MOZILLA_RC, 3) && !MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)) || MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 2)
 	NS_DECL_NSIDOMWINDOW2
 #endif
 
@@ -101,7 +103,7 @@ public:
 	gboolean close_called;
 };
 
-#if MOZILLA_SNAPSHOT >= 19
+#if (MOZILLA_CHECK_VERSION4 (1, 7, MOZILLA_RC, 3) && !MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)) || MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 2)
 NS_IMPL_ISUPPORTS3(KeyPairHelperWindow, nsIDOMWindowInternal, nsIDOMWindow, nsIDOMWindow2)
 #else
 NS_IMPL_ISUPPORTS2(KeyPairHelperWindow, nsIDOMWindowInternal, nsIDOMWindow)
@@ -248,13 +250,6 @@ NS_IMETHODIMP KeyPairHelperWindow::GetWindow(nsIDOMWindowInternal * *aWindow)
 {
     MOZ_NOT_IMPLEMENTED
 }
-
-#if MOZILLA_SNAPSHOT >= 19
-NS_IMETHODIMP KeyPairHelperWindow::GetWindowRoot(nsIDOMEventTarget * *aEvent)
-{
-    MOZ_NOT_IMPLEMENTED
-}
-#endif
 
 /* readonly attribute nsIDOMWindowInternal self; */
 NS_IMETHODIMP KeyPairHelperWindow::GetSelf(nsIDOMWindowInternal * *aSelf)
@@ -718,5 +713,14 @@ NS_IMETHODIMP KeyPairHelperWindow::SizeToContent()
 {
     MOZ_NOT_IMPLEMENTED
 }
+
+#if (MOZILLA_CHECK_VERSION4 (1, 7, MOZILLA_RC, 3) && !MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)) || MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 2)
+
+NS_IMETHODIMP KeyPairHelperWindow::GetWindowRoot(nsIDOMEventTarget * *aWindowRoot)
+{
+    MOZ_NOT_IMPLEMENTED
+}
+
+#endif
 
 #endif

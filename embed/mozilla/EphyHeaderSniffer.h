@@ -49,10 +49,7 @@
 #include <nsIDOMDocument.h>
 #include <nsIAuthPrompt.h>
 #include <nsIPromptService.h>
-
-#ifdef ALLOW_PRIVATE_STRINGS
-#include <nsString.h>
-#endif
+#include <nsEmbedString.h>
 
 class EphyHeaderSniffer : public nsIWebProgressListener,
 			  public nsIAuthPrompt
@@ -81,8 +78,8 @@ private:
 	nsCOMPtr<nsIURI>           mOriginalURI;
 	nsCOMPtr<nsIDOMDocument>   mDocument;
 	nsCOMPtr<nsIInputStream>   mPostData;
-	nsCString                  mContentType;
-	nsCString                  mContentDisposition;
+	nsEmbedCString             mContentType;
+	nsEmbedCString             mContentDisposition;
 	nsCOMPtr<nsIAuthPrompt>    mAuthPrompt;
 };
 

@@ -249,6 +249,25 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_FLOAT);
+/**
+ * EphyEmbed::ge-content-change:
+ * @embed:
+ * @uri: URI of the new content
+ *
+ * The ::ge_content_change signal is emitted when a new page content
+ * is being loadedinto the browser. It's a good place to do view
+ * related changes, for example to restore the zoom level of a page
+ * or to set an user style sheet.
+ **/
+		g_signal_new ("ge_content_change",
+			      EPHY_TYPE_EMBED,
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (EphyEmbedIface, content_change),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE,
+			      1,
+			      G_TYPE_STRING);
 
 		initialized = TRUE;
 	}
@@ -476,7 +495,6 @@ ephy_embed_reload (EphyEmbed *embed,
  * ephy_embed_set_zoom:
  * @embed: an #EphyEmbed
  * @zoom: the new zoom level
- * @reflow: %TRUE to reload the page
  *
  * Sets the zoom level for a web page.
  *
@@ -486,11 +504,10 @@ ephy_embed_reload (EphyEmbed *embed,
  **/
 void
 ephy_embed_set_zoom (EphyEmbed *embed,
-		     float zoom,
-		     gboolean reflow)
+		     float zoom)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	iface->set_zoom (embed, zoom, reflow);
+	iface->set_zoom (embed, zoom);
 }
 
 /**

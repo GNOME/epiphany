@@ -27,15 +27,12 @@
 
 #include "ephy-debug.h"
 
+#include <nsEmbedString.h>
 #include <nsIURI.h>
 #include <nsIPermissionManager.h>
 #include <nsICookieManager.h>
 #include <nsIServiceManager.h>
 #include <nsICookie2.h>
-
-#ifdef ALLOW_PRIVATE_STRINGS
-#include <nsString.h>
-#endif
 
 NS_IMPL_ISUPPORTS1(EphySingle, nsIObserver)
 
@@ -165,7 +162,7 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 		nsCOMPtr<nsIURI> uri = do_QueryInterface (aSubject);
 		if (uri)
 		{
-			nsCAutoString spec;
+			nsEmbedCString spec;
 			uri->GetSpec (spec);
 
 			g_signal_emit_by_name (EPHY_COOKIE_MANAGER (mOwner), "cookie-rejected", spec.get());
@@ -219,7 +216,7 @@ mozilla_cookie_to_ephy_cookie (nsICookie *cookie)
 {
 	EphyCookie *info = ephy_cookie_new ();
 
-	nsCAutoString transfer;
+	nsEmbedCString transfer;
 
 	cookie->GetHost (transfer);
 	info->domain = g_strdup (transfer.get());
@@ -269,19 +266,19 @@ mozilla_permission_to_ephy_permission (nsIPermission *perm)
 	EphyPermissionType type = (EphyPermissionType) 0;
 
 	nsresult result;
-	nsCAutoString str;
+	nsEmbedCString str;
 	result = perm->GetType(str);
 	NS_ENSURE_SUCCESS (result, NULL);
 
-	if (str.Equals ("cookie"))
+	if (strcmp (str.get(), "cookie") == 0)
 	{
 		type = EPT_COOKIE;
 	}
-	else if (str.Equals ("image"))
+	else if (strcmp (str.get(), "image"))
 	{
 		type = EPT_IMAGE;
 	}
-	else if (str.Equals ("popup"))
+	else if (strcmp (str.get(), "popup"))
 	{
 		type = EPT_POPUP;
 	}		
@@ -303,7 +300,7 @@ mozilla_permission_to_ephy_permission (nsIPermission *perm)
 			break;
 	}
 
-	nsCString host;
+	nsEmbedCString host;
 	perm->GetHost(host);
 
 	return ephy_permission_info_new (host.get(), type, permission);

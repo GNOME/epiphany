@@ -24,10 +24,12 @@
 #endif
 
 #include "EventContext.h"
+#include "EphyUtils.h"
 
 #include <gdk/gdkkeysyms.h>
 
 #include <nsIInterfaceRequestor.h>
+#include <nsEmbedString.h>
 #include <nsIDOMEventTarget.h>
 #include <nsIDOMHTMLInputElement.h>
 #include <nsIDOMHTMLObjectElement.h>
@@ -41,19 +43,14 @@
 #include <nsIDOMHTMLTextAreaElement.h>
 #include <nsIDOMElementCSSInlineStyle.h>
 #include <nsIDOMCSSStyleDeclaration.h>
+#include <nsIDOM3Node.h>
+#include <nsIDOMCSSPrimitiveValue.h>
 
 #ifdef ALLOW_PRIVATE_API
 #include <nsIDOMXULDocument.h>
 #include <nsIDOMNSEvent.h>
 #include <nsIDOMNSHTMLElement.h>
 #endif
-
-#ifdef ALLOW_PRIVATE_STRINGS
-#include <nsIDocument.h>
-#include <nsReadableUtils.h>
-#include <nsNetUtil.h>
-#endif
-
 
 #define KEY_CODE 256
 
@@ -73,9 +70,9 @@ nsresult EventContext::Init (EphyBrowser *browser)
 	return NS_OK;
 }
 
-nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsString& aResult)
+nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsAString& aResult)
 {
-	nsAutoString text;
+	nsEmbedString text;
 	nsCOMPtr<nsIDOMNode> node;
 	aNode->GetFirstChild(getter_AddRefs(node));
 	PRUint32 depth = 1;
@@ -89,8 +86,8 @@ nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsString& aResult)
 		if (charData && nodeType == nsIDOMNode::TEXT_NODE)
 		{
 			/* Add this text to our collection. */
-			text += NS_LITERAL_STRING(" ");
-			nsAutoString data;
+			text += ' ';
+			nsEmbedString data;
 			charData->GetData(data);
 			text += data;
 		}
@@ -99,9 +96,9 @@ nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsString& aResult)
 			nsCOMPtr<nsIDOMHTMLImageElement> img(do_QueryInterface(node));
 			if (img)
 			{
-				nsAutoString altText;
+				nsEmbedString altText;
 				img->GetAlt(altText);
-				if (!altText.IsEmpty())
+				if (altText.Length())
 				{
 					text = altText;
 					break;
@@ -145,46 +142,44 @@ nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsString& aResult)
 		}
 	}
 
-	text.CompressWhitespace();
+	/* FIXME we should trim spaces here */
+
 	aResult = text;
 
 	return NS_OK;
 }
 
-nsresult EventContext::ResolveBaseURL (nsIDocument *doc, const nsAString &relurl, nsACString &url)
+nsresult EventContext::ResolveBaseURL (const nsAString &relurl, nsACString &url)
 {
-#if MOZILLA_SNAPSHOT > 13
-	nsIURI *base;
-	base = doc->GetBaseURI ();
+	nsresult rv;
+
+	nsCOMPtr<nsIDOM3Node> node(do_QueryInterface (mDOMDocument));
+	nsEmbedString spec;
+	node->GetBaseURI (spec);
+
+	nsCOMPtr<nsIURI> base;
+	rv = EphyUtils::NewURI (getter_AddRefs(base), spec);
 	if (!base) return NS_ERROR_FAILURE;
-#elif MOZILLA_SNAPSHOT > 11
-	nsIURI *base;
-	base = doc->GetBaseURL ();
-	if (!base) return NS_ERROR_FAILURE;
-#endif
 
-	return base->Resolve (NS_ConvertUTF16toUTF8(relurl), url);
-}
+	nsEmbedCString cRelURL;
+	NS_UTF16ToCString (relurl, NS_CSTRING_ENCODING_UTF8, cRelURL);	
 
-nsresult EventContext::ResolveDocumentURL (nsIDocument *doc, const nsAString &relurl, nsACString &url)
-{
-#if MOZILLA_SNAPSHOT > 13
-	nsIURI *uri;
-	uri = doc->GetDocumentURI ();
-	if (!uri) return NS_ERROR_FAILURE;
-#elif MOZILLA_SNAPSHOT > 11
-	nsIURI *uri;
-	uri = doc->GetDocumentURL ();
-	if (!uri) return NS_ERROR_FAILURE;
-#endif
-
-	return uri->Resolve (NS_ConvertUTF16toUTF8(relurl), url);
+	return base->Resolve (cRelURL, url);
 }
 
 nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					MozillaEmbedEvent *info)
 {
 	nsresult rv;
+
+	const PRUnichar bgLiteral[] = {'b', 'a', 'c', 'k', 'g', 'r', 'o', 'u',
+				       'n', 'd', '\0'};
+	const PRUnichar hrefLiteral[] = {'h', 'r', 'e', 'f', '\0'};
+	const PRUnichar typeLiteral[] = {'t', 'y', 'p', 'e', '\0'};
+	const PRUnichar xlinknsLiteral[] = {'h', 't', 't', 'p', ':', '/', '/','w',
+				            'w', 'w', '.', 'w', '3', '.', 'o', 'r',
+				            'g', '/', '1', '9', '9', '9', '/', 'x',
+				            'l', 'i', 'n', 'k', '\0'};
 
 	mEmbedEvent = info;
 
@@ -205,9 +200,6 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 	mDOMDocument = domDoc;
 
-	nsCOMPtr<nsIDocument> doc = do_QueryInterface(domDoc, &rv);
-	if (NS_FAILED(rv) || !doc) return NS_ERROR_FAILURE;
-
 	nsCOMPtr<nsIDOMXULDocument> xul_document = do_QueryInterface(domDoc);
 	if (xul_document)
 	{
@@ -225,15 +217,18 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 	nsCOMPtr<nsIDOMHTMLElement> element = do_QueryInterface(node);
 	if ((nsIDOMNode::ELEMENT_NODE == type) && element)
 	{
-		nsAutoString tag;
-		rv = element->GetTagName(tag);
+		nsEmbedString uTag;
+		rv = element->GetTagName(uTag);
 		if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
-		if (tag.EqualsIgnoreCase("img"))
+		nsEmbedCString tag;
+		NS_UTF16ToCString (uTag, NS_CSTRING_ENCODING_UTF8, tag);
+
+		if (g_ascii_strcasecmp (tag.get(), "img") == 0)
 		{
 			info->context |= EMBED_CONTEXT_IMAGE;
 
-			nsAutoString img;
+			nsEmbedString img;
 			nsCOMPtr <nsIDOMHTMLImageElement> image = 
 						do_QueryInterface(node, &rv);
 			if (NS_FAILED(rv) || !image) return NS_ERROR_FAILURE;			
@@ -241,98 +236,73 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			rv = image->GetSrc (img);
 			if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 			SetStringProperty ("image", img);
-
-			rv = image->GetAlt (img);
-			if (NS_SUCCEEDED(rv))
-			{
-				SetStringProperty ("image_alt", img);	
-			}
-
-			rv = image->GetLongDesc (img);
-			if (NS_SUCCEEDED(rv) && !img.IsEmpty())
-			{
-				nsCAutoString imglongdesc;
-                                rv = ResolveDocumentURL (doc, img, imglongdesc);
-                                                                                                                
-                                SetStringProperty ("image_long_desc",
-                                                   NS_ConvertUTF8toUTF16(imglongdesc));
-			}
-
-			int imgwidth, imgheight;
-			rv = image->GetWidth (&imgwidth);
-			rv = image->GetHeight (&imgheight);
-			SetIntProperty ("image_width", imgwidth);
-			SetIntProperty ("image_height", imgheight);
-
-			rv = element->GetTitle (img);
-                        if (NS_SUCCEEDED(rv))
-			{
-				SetStringProperty ("image_title",
-						   img);
-			}
 		}
-		else if (tag.EqualsIgnoreCase("input"))
+		else if (g_ascii_strcasecmp (tag.get(), "input") == 0)
 		{
 			nsCOMPtr<nsIDOMElement> element;
 			element = do_QueryInterface (node);
 			if (!element) return NS_ERROR_FAILURE;
 
-			NS_NAMED_LITERAL_STRING(attr, "type");
-			nsAutoString value;
-			element->GetAttribute (attr, value);
+			nsEmbedString uValue;
+			element->GetAttribute (nsEmbedString(typeLiteral), uValue);
 
-			if (value.EqualsIgnoreCase("image"))
+			nsEmbedCString value;
+			NS_UTF16ToCString (uValue, NS_CSTRING_ENCODING_UTF8, value);
+
+			if (g_ascii_strcasecmp (value.get(), "image") == 0)
 			{
 				info->context |= EMBED_CONTEXT_IMAGE;
 				nsCOMPtr<nsIDOMHTMLInputElement> input;
 				input = do_QueryInterface (node);
 				if (!input) return NS_ERROR_FAILURE;
 
-				nsAutoString img;
+				nsEmbedString img;
 				rv = input->GetSrc (img);
 				if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
-				nsCAutoString cImg;
-				rv = ResolveDocumentURL (doc, img, cImg);
+				nsEmbedCString cImg;
+				rv = ResolveBaseURL (img, cImg);
                                 if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
-				SetStringProperty ("image",
-						   NS_ConvertUTF8toUTF16(cImg));
+				SetStringProperty ("image", cImg.get());
 			}
-			else if (!value.EqualsIgnoreCase("radio")  &&
-				 !value.EqualsIgnoreCase("submit") &&
-				 !value.EqualsIgnoreCase("reset")  &&
-				 !value.EqualsIgnoreCase("hidden") &&
-				 !value.EqualsIgnoreCase("button") &&
-				 !value.EqualsIgnoreCase("checkbox"))
+			else if (g_ascii_strcasecmp (value.get(), "radio") != 0 &&
+				 g_ascii_strcasecmp (value.get(), "submit") != 0 &&
+				 g_ascii_strcasecmp (value.get(), "reset") != 0 &&
+				 g_ascii_strcasecmp (value.get(), "hidden") != 0 &&
+				 g_ascii_strcasecmp (value.get(), "button") != 0 &&
+				 g_ascii_strcasecmp (value.get(), "checkbox") != 0)
 			{
 				info->context |= EMBED_CONTEXT_INPUT;
 			}
 		}
-		else if (tag.EqualsIgnoreCase("textarea"))
+		else if (g_ascii_strcasecmp (tag.get(), "textarea") == 0)
 		{
 			info->context |= EMBED_CONTEXT_INPUT;
 		}
-		else if (tag.EqualsIgnoreCase("object"))
+		else if (g_ascii_strcasecmp (tag.get(), "object") == 0)
 		{
 			nsCOMPtr<nsIDOMHTMLObjectElement> object;
 			object = do_QueryInterface (node);
 			if (!element) return NS_ERROR_FAILURE;
 
-			nsAutoString value;
+			nsEmbedString value;
 			object->GetType(value);
 
+			nsEmbedCString cValue;
+			NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
+
 			// MIME types are always lower case
-			if (Substring (value, 0, 6).Equals(NS_LITERAL_STRING("image/")))
+			if (g_str_has_prefix (cValue.get(), "image/"))
 			{
 				info->context |= EMBED_CONTEXT_IMAGE;
 				
-				nsAutoString img;
+				nsEmbedString img;
 				
 				rv = object->GetData (img);
 				if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 				
-				nsCAutoString cImg;
-				rv = ResolveDocumentURL (doc, img, cImg);
+				nsEmbedCString cImg;
+				rv = ResolveBaseURL (img, cImg);
                                 if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
 				SetStringProperty ("image", cImg.get());
@@ -356,17 +326,18 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 		nsCOMPtr <nsIDOMElement> dom_elem = do_QueryInterface(node);
 		if (dom_elem)
 		{
-			NS_NAMED_LITERAL_STRING(nspace, "http://www.w3.org/1999/xlink");
-			NS_NAMED_LITERAL_STRING(localname_type, "type");
+			nsEmbedString value;
+			dom_elem->GetAttributeNS (nsEmbedString(xlinknsLiteral),
+						  nsEmbedString(typeLiteral), value);
 
-			nsAutoString value;
-			dom_elem->GetAttributeNS (nspace, localname_type, value);
+			nsEmbedCString cValue;
+			NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
 
-			if (value.EqualsIgnoreCase("simple"))
+			if (g_ascii_strcasecmp (cValue.get(), "simple") == 0)
 			{
 				info->context |= EMBED_CONTEXT_LINK;
-				NS_NAMED_LITERAL_STRING (localname_href, "href");
-				dom_elem->GetAttributeNS (nspace, localname_href, value);
+				dom_elem->GetAttributeNS (nsEmbedString(xlinknsLiteral),
+							  nsEmbedString(hrefLiteral), value);
 				
 				SetStringProperty ("link", value);
 				CheckLinkScheme (value);
@@ -380,15 +351,17 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 		element = do_QueryInterface(node);
 		if ((nsIDOMNode::ELEMENT_NODE == type) && element)
 		{
-			nsAutoString tag;
-			rv = element->GetTagName(tag);
+			nsEmbedString uTag;
+			rv = element->GetTagName(uTag);
 			if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
+			nsEmbedCString tag;
+			NS_UTF16ToCString (uTag, NS_CSTRING_ENCODING_UTF8, tag);
+
 			/* Link */
-			if (tag.EqualsIgnoreCase("a"))
+			if (g_ascii_strcasecmp (tag.get(), "a") == 0)
 			{
-				nsAutoString tmp;
-				nsAutoString substr;
+				nsEmbedString tmp;
 
 				rv = GatherTextUnder (node, tmp);
 				if (NS_SUCCEEDED(rv))
@@ -397,16 +370,18 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				nsCOMPtr <nsIDOMHTMLAnchorElement> anchor =
 					do_QueryInterface(node);
 
+				nsEmbedCString href;
 				anchor->GetHref (tmp);
-				substr.Assign (Substring (tmp, 0, 7));
-				if (substr.EqualsIgnoreCase("mailto:"))
+				NS_UTF16ToCString (tmp, NS_CSTRING_ENCODING_UTF8, href);
+
+				if (g_str_has_prefix (href.get(), "mailto:"))
 				{
 					info->context |= EMBED_CONTEXT_EMAIL_LINK;
-					const nsAString &address = Substring(tmp, 7, tmp.Length()-7);
-					SetStringProperty ("email", address);
+					href.Cut (0, 7);
+					SetStringProperty ("email", href.get());
 				}
 				
-				if (anchor && !tmp.IsEmpty()) 
+				if (anchor && tmp.Length()) 
 				{
 					info->context |= EMBED_CONTEXT_LINK;
 
@@ -431,7 +406,10 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					if (NS_SUCCEEDED(rv))
 						SetStringProperty ("link_type", tmp);
 
-					if (tmp.EqualsIgnoreCase("text/smartbookmark"))
+					nsEmbedCString linkType;
+					NS_UTF16ToCString (tmp, NS_CSTRING_ENCODING_UTF8, linkType);
+
+					if (g_ascii_strcasecmp (linkType.get(), "text/smartbookmark") == 0)
 					{
 						SetIntProperty ("link_is_smart", TRUE);
 						
@@ -444,7 +422,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 							if (image)
 							{
-								nsAutoString img;
+								nsEmbedString img;
 								rv = image->GetSrc (img);
 								if (!NS_FAILED(rv))
 								{
@@ -460,19 +438,19 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				}
 			
 			}
-			else if (tag.EqualsIgnoreCase("option"))
+			else if (g_ascii_strcasecmp (tag.get(), "option") == 0)
 			{
 				info->context = EMBED_CONTEXT_NONE;
 				return NS_OK;
 			}
-			if (tag.EqualsIgnoreCase("area"))
+			if (g_ascii_strcasecmp (tag.get(), "area") == 0)
 			{
 				info->context |= EMBED_CONTEXT_LINK;
 				nsCOMPtr <nsIDOMHTMLAreaElement> area =
 						do_QueryInterface(node, &rv);
 				if (NS_SUCCEEDED(rv) && area)
 				{
-					nsAutoString href;
+					nsEmbedString href;
 					rv = area->GetHref (href);
 					if (NS_FAILED(rv))
 						return NS_ERROR_FAILURE;
@@ -481,8 +459,8 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					CheckLinkScheme (href);
 				}
 			}
-			else if (tag.EqualsIgnoreCase("textarea") ||
-				 tag.EqualsIgnoreCase("input"))
+			else if (g_ascii_strcasecmp (tag.get(), "textarea") == 0 ||
+				 g_ascii_strcasecmp (tag.get(), "input") == 0)
 			{
 				info->context |= EMBED_CONTEXT_INPUT;
 			}
@@ -493,15 +471,14 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 			PRBool has_background = PR_FALSE;
 
-			NS_NAMED_LITERAL_STRING(attr, "background");
-			nsAutoString value;
-			domelement->GetAttribute (attr, value);
+			nsEmbedString value;
+			domelement->GetAttribute (nsEmbedString(bgLiteral), value);
 				
-			if (!value.IsEmpty())
+			if (value.Length())
 			{
-				nsCAutoString bgimg;
+				nsEmbedCString bgimg;
 
-				rv = ResolveDocumentURL (doc, value, bgimg);
+				rv = ResolveBaseURL (value, bgimg);
                                 if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
 				SetStringProperty ("background_image", bgimg.get());
@@ -512,14 +489,14 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				bgelement = do_QueryInterface (node);
 				if (bgelement)
 				{
-					nsAutoString value;
+					nsEmbedString value;
 					bgelement->GetBackground (value);
 
-					if (!value.IsEmpty())
+					if (value.Length())
 					{
-						nsCAutoString bgimg;
+						nsEmbedCString bgimg;
 
-						rv = ResolveBaseURL (doc, value, bgimg);
+						rv = ResolveBaseURL (value, bgimg);
                                                 if (NS_FAILED(rv))
                                                         return NS_ERROR_FAILURE;
 
@@ -532,13 +509,13 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 			if (!has_background)
 			{
-				nsAutoString cssurl;
+				nsEmbedString cssurl;
 				rv = GetCSSBackground (node, cssurl);
 				if (NS_SUCCEEDED (rv))
 				{
-					nsCAutoString bgimg;
+					nsEmbedCString bgimg;
 
-                                        rv = ResolveBaseURL (doc, cssurl, bgimg);
+                                        rv = ResolveBaseURL (cssurl, bgimg);
                                         if (NS_FAILED (rv))
                                                 return NS_ERROR_FAILURE;
 					SetStringProperty ("background_image",
@@ -557,9 +534,12 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 	return NS_OK;
 }
 
-nsresult EventContext::GetCSSBackground (nsIDOMNode *node, nsAutoString& url)
+nsresult EventContext::GetCSSBackground (nsIDOMNode *node, nsAString& url)
 {
 	nsresult result;
+
+	const PRUnichar bgimage[] = {'b', 'a', 'c', 'k', 'g', 'r', 'o', 'u', 'n', 'd',
+				     '-', 'i', 'm', 'a', 'g', 'e', '\0'};
 
 	nsCOMPtr<nsIDOMElementCSSInlineStyle> style;
 	style = do_QueryInterface (node);
@@ -569,36 +549,15 @@ nsresult EventContext::GetCSSBackground (nsIDOMNode *node, nsAutoString& url)
 	result = style->GetStyle (getter_AddRefs(decl));
 	if (NS_FAILED(result)) return NS_ERROR_FAILURE;
 
-	nsAutoString value;
-	NS_NAMED_LITERAL_STRING(prop_bgi, "background-image");
-	decl->GetPropertyValue (prop_bgi, value);
+	nsCOMPtr<nsIDOMCSSValue> cssValue;
+	decl->GetPropertyCSSValue (nsEmbedString(bgimage),
+				   getter_AddRefs(cssValue));
+	nsCOMPtr<nsIDOMCSSPrimitiveValue> primitiveValue;
 
-	if (value.IsEmpty())
-	{
-		NS_NAMED_LITERAL_STRING(prop_bg, "background");
-		decl->GetPropertyValue (prop_bg, value);
-		if (value.IsEmpty())
-		{
-			NS_NAMED_LITERAL_STRING(prop_bgr, "background-repeat");
-			decl->GetPropertyValue (prop_bgr, value);
-			if (value.IsEmpty())
-				return NS_ERROR_FAILURE;
-		}
-	}
+	primitiveValue = do_QueryInterface(cssValue);
+	if (!primitiveValue) return NS_ERROR_FAILURE;
 
-	PRInt32 start, end;
-	nsAutoString cssurl;
-
-	NS_NAMED_LITERAL_STRING(startsub, "url(");
-	NS_NAMED_LITERAL_STRING(endsub, ")");
-
-	start = value.Find (startsub) + 4;
-	end = value.Find (endsub);
-
-	if (start == -1 || end == -1)
-		return NS_ERROR_FAILURE;
-
-	url.Assign(Substring (value, start, end - start));
+	primitiveValue->GetStringValue(url);
 
 	return NS_OK;
 }
@@ -643,14 +602,16 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, Mozilla
 	nsCOMPtr<nsIDOMNode> OriginalNode = do_QueryInterface(OriginalTarget);
 	if (!OriginalNode) return NS_ERROR_FAILURE;
 
-	nsAutoString nodename;
+	nsEmbedString nodename;
 	OriginalNode->GetNodeName(nodename);
+	nsEmbedCString cNodeName;
+	NS_UTF16ToCString (nodename, NS_CSTRING_ENCODING_UTF8, cNodeName);
 
-	if (nodename.EqualsIgnoreCase("xul:scrollbarbutton") ||
-	    nodename.EqualsIgnoreCase("xul:thumb")	     ||
-	    nodename.EqualsIgnoreCase("xul:vbox")	     ||
-	    nodename.EqualsIgnoreCase("xul:spacer")	     ||
-	    nodename.EqualsIgnoreCase("xul:slider"))
+	if (g_ascii_strcasecmp (cNodeName.get(), "xul:scrollbarbutton") == 0 ||
+	    g_ascii_strcasecmp (cNodeName.get(), "xul:thumb") == 0 ||
+	    g_ascii_strcasecmp (cNodeName.get(), "xul:vbox") == 0 ||
+	    g_ascii_strcasecmp (cNodeName.get(), "xul:spacer") == 0 ||
+	    g_ascii_strcasecmp (cNodeName.get(), "xul:slider") == 0)
 		return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIDOMEventTarget> EventTarget;
@@ -772,22 +733,22 @@ nsresult EventContext::GetTargetDocument (nsIDOMDocument **domDoc)
 nsresult EventContext::CheckLinkScheme (const nsAString &link)
 {
 	nsCOMPtr<nsIURI> uri;
-	NS_NewURI (getter_AddRefs (uri), link);
+	EphyUtils::NewURI (getter_AddRefs (uri), link);
 	if (!uri) return NS_ERROR_FAILURE;
 
 	nsresult rv;
-	nsCAutoString scheme;
+	nsEmbedCString scheme;
 	rv = uri->GetScheme (scheme);
 	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
-	if (scheme.EqualsIgnoreCase ("http")	 ||
-	    scheme.EqualsIgnoreCase ("https")	 ||
-	    scheme.EqualsIgnoreCase ("ftp")	 ||
-	    scheme.EqualsIgnoreCase ("file")	 ||
-	    scheme.EqualsIgnoreCase ("data")	 ||
-	    scheme.EqualsIgnoreCase ("resource") ||
-	    scheme.EqualsIgnoreCase ("about")	 ||
-	    scheme.EqualsIgnoreCase ("gopher"))
+	if (g_ascii_strcasecmp (scheme.get(), "http") ||
+	    g_ascii_strcasecmp (scheme.get(), "https") ||
+	    g_ascii_strcasecmp (scheme.get(), "ftp") ||
+	    g_ascii_strcasecmp (scheme.get(), "file") ||
+	    g_ascii_strcasecmp (scheme.get(), "data") ||
+	    g_ascii_strcasecmp (scheme.get(), "resource") ||
+	    g_ascii_strcasecmp (scheme.get(), "about") ||
+	    g_ascii_strcasecmp (scheme.get(), "gopher"))
 	{
 		SetIntProperty ("link-has-web-scheme", TRUE);
 	}
@@ -824,5 +785,7 @@ nsresult EventContext::SetStringProperty (const char *name, const char *value)
 
 nsresult EventContext::SetStringProperty (const char *name, const nsAString &value)
 {
-	return SetStringProperty (name, NS_ConvertUTF16toUTF8(value).get());
+	nsEmbedCString cValue;
+	NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, cValue);
+	return SetStringProperty (name, cValue.get());
 }

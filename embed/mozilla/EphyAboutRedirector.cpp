@@ -50,10 +50,7 @@
 #include <nsIServiceManager.h>
 #include <nsCOMPtr.h>
 #include <nsIURI.h>
-
-#ifdef ALLOW_PRIVATE_STRINGS
-#include <nsString.h>
-#endif
+#include <nsEmbedString.h>
 
 static NS_DEFINE_CID(kIOServiceCID, NS_IOSERVICE_CID);
 
@@ -75,7 +72,7 @@ NS_IMETHODIMP
 EphyAboutRedirector::NewChannel(nsIURI *aURI, nsIChannel **result)
 {
 	NS_ENSURE_ARG(aURI);
-	nsCAutoString path;
+	nsEmbedCString path;
     	(void)aURI->GetPath(path);
 
 	nsCOMPtr<nsIIOService> ioService(do_GetService(kIOServiceCID));
@@ -86,7 +83,7 @@ EphyAboutRedirector::NewChannel(nsIURI *aURI, nsIChannel **result)
 		if (strcmp(path.get(), kRedirMap[i].id) == 0)
 		{
 			nsCOMPtr<nsIChannel> tempChannel;
-			ioService->NewChannel(nsDependentCString(kRedirMap[i].url),
+			ioService->NewChannel(nsEmbedCString(kRedirMap[i].url),
                			              nsnull, nsnull, getter_AddRefs(tempChannel));
 			NS_ENSURE_TRUE (tempChannel, NS_ERROR_FAILURE);
 

@@ -171,6 +171,8 @@ struct _EphyEmbedIface
 					 EmbedSecurityLevel level);
 	void	 (* zoom_change)	(EphyEmbed *embed,
 					 float new_zoom);
+	void	 (* content_change)	(EphyEmbed *embed,
+					 const char *uri);
 
 	/* Methods  */
 	void		   (* load_url)			(EphyEmbed *embed,
@@ -204,8 +206,7 @@ struct _EphyEmbedIface
 						  	 EmbedSecurityLevel *level,
 						  	 char **description);
 	void		   (* set_zoom)			(EphyEmbed *embed,
-							 float zoom,
-							 gboolean reflow);
+							 float zoom);
 	float		   (* get_zoom)			(EphyEmbed *embed);
 	void		   (* find_set_properties)	(EphyEmbed *embed,
 							 const char *search_string,
@@ -284,8 +285,7 @@ void		  ephy_embed_get_security_level		(EphyEmbed *embed,
 
 /* Zoom */
 void		  ephy_embed_set_zoom			(EphyEmbed *embed,
-							 float zoom,
-							 gboolean reflow);
+							 float zoom);
 
 float		  ephy_embed_get_zoom			(EphyEmbed *embed);
 

@@ -61,10 +61,6 @@
 #include <nsIRequest.h>
 #include <nsIMIMEInfo.h>
 
-#ifdef ALLOW_PRIVATE_API
-#include <nsString.h>
-#endif
-
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
 /* MozDownload
@@ -103,9 +99,7 @@ public:
 	virtual ~MozDownload();
     
 	NS_DECL_ISUPPORTS
-#if MOZILLA_SNAPSHOT > 15
 	NS_DECL_NSITRANSFER
-#endif
 	NS_DECL_NSIDOWNLOAD
 	NS_DECL_NSIWEBPROGRESSLISTENER
 
@@ -117,25 +111,15 @@ public:
 	nsresult GetCurrentProgress (PRInt32 *aCurrentProgress);
 	nsresult GetTotalProgress   (PRInt32 *aTProgress);
  	nsresult GetElapsedTime     (PRInt64 *aTProgress);
-#if MOZILLA_SNAPSHOT < 16
-	nsresult InitForEmbed       (nsIURI *aSource, nsILocalFile *aTarget,
-				     const PRUnichar *aDisplayName, nsIMIMEInfo *aMIMEInfo,
-				     PRInt64 startTime, nsIWebBrowserPersist *aPersist,
-				     MozillaEmbedPersist *aEmbedPersist, PRInt32 aMaxSize);
-#else
 	nsresult InitForEmbed       (nsIURI *aSource, nsIURI *aTarget,
 				     const PRUnichar *aDisplayName, nsIMIMEInfo *aMIMEInfo,
 				     PRInt64 startTime, nsIWebBrowserPersist *aPersist,
 				     MozillaEmbedPersist *aEmbedPersist, PRInt32 aMaxSize);
-#endif
 
 protected:
 	nsCOMPtr<nsIURI>        mSource;
-#if MOZILLA_SNAPSHOT < 16
-	nsCOMPtr<nsILocalFile>  mDestination;
-#else
 	nsCOMPtr<nsIURI>        mDestination;
-#endif
+
 	nsCOMPtr<nsIMIMEInfo>   mMIMEInfo;
 	PRInt64		    	mLastUpdate;
 	PRInt64                 mStartTime;

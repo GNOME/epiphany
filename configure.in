@@ -143,43 +143,93 @@ fi
 CXXFLAGS=$_SAVE_CXXFLAGS
 AC_LANG_POP(C++)
 
+dnl *********************
+dnl Mozilla version check
+dnl *********************
+
 AC_MSG_CHECKING(for mozilla version)
 MOZILLA_VERSION="`$PKG_CONFIG --modversion mozilla-gtkmozembed`"
 
-dnl allow user to override the autodetected mozilla version
-dnl     - without arguments for cvs head
 AC_ARG_WITH(mozilla-snapshot,
-  AC_HELP_STRING([--with-mozilla-snapshot@<:@=1.6|1.7a|1.7b|1.8a|trunk@:>@],
-		 [Whether to try building against mozilla 1.6|1.7a|1.7b|1.8a|trunk
-		  snapshot. @<:@guessed@:>@]),
+  AC_HELP_STRING([--with-mozilla-snapshot@<:@=1.7|1.8a1|1.8a2|trunk@:>@],
+		 [Which mozilla version to build against, guessed: @<:@guessed@:>@]),
   [autodetect=" (guessed: $MOZILLA_VERSION)"; MOZILLA_VERSION="$withval"])
 
 AC_MSG_RESULT($MOZILLA_VERSION$autodetect)
 
-case "$MOZILLA_VERSION" in
-  1.6) MOZILLA_SNAPSHOT=13 ;;
- 1.7a) MOZILLA_SNAPSHOT=14 ;;
- 1.7b) MOZILLA_SNAPSHOT=15 ;;
-1.7rc1) MOZILLA_SNAPSHOT=15 ;;
-1.7rc2) MOZILLA_SNAPSHOT=16 ;;
-  1.7) MOZILLA_SNAPSHOT=16 ;;
-branch1.7) MOZILLA_SNAPSHOT=16 ;;
- 1.8a) MOZILLA_SNAPSHOT=18 ;;
-1.8a1) MOZILLA_SNAPSHOT=18 ;;
-1.8a2) MOZILLA_SNAPSHOT=19 ;;
-trunk) MOZILLA_SNAPSHOT=19 ;;
-    *) AC_ERROR([
+dnl Test for the "trunk" version
+if test $MOZILLA_VERSION == "trunk"; then
+	MOZILLA_VERSION=99.0 # use a high number
+fi
+
+dnl Split up the version string ( 1.7rc1 -> 1 7 rc 1 )
+version=$(echo $MOZILLA_VERSION | sed -e 's/\(@<:@0-9@:>@\+\|@<:@a-z@:>@\+\)/\1 /g' -e 's/\.//g')
+
+set -- $version;
+
+case $1 in 
+    @<:@0-9@:>@)
+        AC_DEFINE_UNQUOTED(MOZILLA_MAJOR, $1, [Define to the Mozilla major version.])
+	;;
+    *)		
+	AC_ERROR([Invalid mozilla major version component: $1])
+	;;
+esac
+
+case $2 in 
+    @<:@0-9@:>@)
+        AC_DEFINE_UNQUOTED(MOZILLA_MINOR, $2, [Define to the Mozilla minor version.])
+	;;
+    *)		
+	AC_ERROR([Invalid mozilla minor version component: $2])
+	;;
+esac
+
+micro=$3
+type=4
+case $3 in
+    @<:@0-9@:>@) # e.g. 1.4.1
+	;;
+    "")	# e.g. 1.7
+	micro=0	
+	;;
+    a)	type=1
+	micro=$4
+	;;
+
+    b)	type=2
+	micro=$4
+	;;
+
+    rc) type=3
+	micro=$4
+	;;
+    *)
+	AC_ERROR([Invalid mozilla version component: $3])
+esac
+
+if test "$micro" = "" ; then
+  micro=0
+fi
+
+if test "$5" != "" ; then
+  AC_ERROR([Unexpected mozilla version component: $5])
+fi
+
+AC_DEFINE_UNQUOTED(MOZILLA_TYPE, $type, [Define to the Mozilla release type.])
+AC_DEFINE_UNQUOTED(MOZILLA_MICRO, $micro, [Define to the Mozilla micro version.])
+
+if test "$1" -lt 1 -o \( "$1" -eq 1 -a "$2" -lt 7 \) ; then
+    AC_ERROR([
 *****************************************************************************
-Epiphany can be built using Mozilla 1.6, 1.7a, 1.7b, 1.8a or
-trunk snapshot, but the version available is $MOZILLA_VERSION.  
+Epiphany can be built using Mozilla 1.7, 1.8a1, 1.8a2 or trunk
+snapshot, but the version available is $MOZILLA_VERSION.  
 
 When using Mozilla trunk snapshot, a successful build is not guaranteed due 
 to the frequently changing state of the Mozilla interfaces and the limited
 resources of the Epiphany team to support non-release Mozilla snapshots.
 *****************************************************************************])
-esac
-
-AC_DEFINE_UNQUOTED(MOZILLA_SNAPSHOT, $MOZILLA_SNAPSHOT, [Define mozilla snapshot])
+fi
 
 AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/pipnss/nsIX509Cert.h],
 	[AC_DEFINE(HAVE_MOZILLA_PSM, 1,

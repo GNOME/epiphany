@@ -29,11 +29,7 @@
 #include "ephy-history.h"
 
 #include <nsIBrowserHistory.h>
-#if MOZILLA_SNAPSHOT > 13
 #include <nsIGlobalHistory2.h>
-#else
-#include <nsIGlobalHistory.h>
-#endif
 
 #define EPHY_GLOBALHISTORY_CLASSNAME	"Epiphany Global History Implementation"
 
@@ -44,22 +40,14 @@
 	{ 0xb7, 0x9e, 0xf7, 0xaa, 0x49, 0xeb, 0x6a, 0x15}	\
 }
 
-class MozGlobalHistory:
-#if MOZILLA_SNAPSHOT <= 13
-			public nsIGlobalHistory,
-#endif
-			public nsIBrowserHistory
+class MozGlobalHistory: public nsIBrowserHistory
 {
 	public:
 		MozGlobalHistory ();
 		virtual ~MozGlobalHistory();
 
 		NS_DECL_ISUPPORTS
-#if MOZILLA_SNAPSHOT > 13
 		NS_DECL_NSIGLOBALHISTORY2
-#else
-		NS_DECL_NSIGLOBALHISTORY
-#endif
 		NS_DECL_NSIBROWSERHISTORY
 
 	private:

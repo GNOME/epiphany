@@ -35,11 +35,12 @@
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
 
+#include <nsMemory.h>
 #include <nsIURL.h>
 #include <nsILocalFile.h>
 #include <nsIMIMEInfo.h>
 #include <nsIInterfaceRequestorUtils.h>
-#include "nsCExternalHandlerService.h"
+#include <nsCExternalHandlerService.h>
 
 #include "ephy-prefs.h"
 #include "ephy-embed-single.h"
@@ -57,13 +58,13 @@ class GContentHandler;
 
 NS_IMPL_ISUPPORTS1(GContentHandler, nsIHelperAppLauncherDialog)
 
-#if MOZILLA_SNAPSHOT < 18
-GContentHandler::GContentHandler() : mMimeType(nsnull)
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+GContentHandler::GContentHandler()
 {
 	LOG ("GContentHandler ctor (%p)", this)
 }
 #else
-GContentHandler::GContentHandler()
+GContentHandler::GContentHandler() : mMimeType(nsnull)
 {
 	LOG ("GContentHandler ctor (%p)", this)
 }
@@ -73,7 +74,7 @@ GContentHandler::~GContentHandler()
 {
 	LOG ("GContentHandler dtor (%p)", this)
 
-#if MOZILLA_SNAPSHOT < 18
+#if !MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 	nsMemory::Free (mMimeType);
 #endif
 }
@@ -97,11 +98,11 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
-#if MOZILLA_SNAPSHOT < 18
-	g_signal_emit_by_name (single, "handle_content", mMimeType,
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+	g_signal_emit_by_name (single, "handle_content", mMimeType.get(),
 			       mUrl.get(), &handled);
 #else
-	g_signal_emit_by_name (single, "handle_content", mMimeType.get(),
+	g_signal_emit_by_name (single, "handle_content", mMimeType,
 			       mUrl.get(), &handled);
 #endif
 
@@ -128,11 +129,14 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 	EphyFileChooser *dialog;
 	gint response;
 	char *filename;
+	nsEmbedCString defaultFile;
+
+	NS_UTF16ToCString (nsEmbedString (aDefaultFile),
+			   NS_CSTRING_ENCODING_UTF8, defaultFile);
 
 	if (mAction != CONTENT_ACTION_SAVEAS)
 	{
-		return BuildDownloadPath (NS_ConvertUTF16toUTF8 (aDefaultFile).get(),
-					  _retval);
+		return BuildDownloadPath (defaultFile.get(), _retval);
 	}
 
 	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (aWindowContext);
@@ -142,8 +146,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 					GTK_FILE_CHOOSER_ACTION_SAVE,
 					CONF_STATE_SAVE_DIR,
 					EPHY_FILE_FILTER_ALL);
-	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
-					   NS_ConvertUTF16toUTF8 (aDefaultFile).get());
+	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), defaultFile.get());
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 
 	if (response == GTK_RESPONSE_ACCEPT)
@@ -151,7 +154,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 
 		nsCOMPtr <nsILocalFile> destFile (do_CreateInstance(NS_LOCAL_FILE_CONTRACTID));
-		destFile->InitWithNativePath (nsDependentCString (filename));
+		destFile->InitWithNativePath (nsEmbedCString (filename));
 		g_free (filename);
 
 		NS_IF_ADDREF (*_retval = destFile);
@@ -208,7 +211,7 @@ NS_METHOD GContentHandler::CheckAppSupportScheme (void)
 	{
 		char *uri_scheme = (char *)l->data;
 
-		if (mScheme.Equals (uri_scheme))
+		if (strcmp (mScheme.get(), uri_scheme) == 0)
 		{
 			mAppSupportScheme = PR_TRUE;
 		}
@@ -227,10 +230,10 @@ NS_METHOD GContentHandler::Init (void)
 	mLauncher->GetMIMEInfo (getter_AddRefs(MIMEInfo));
 	NS_ENSURE_TRUE (MIMEInfo, NS_ERROR_FAILURE);
 
-#if MOZILLA_SNAPSHOT < 18
-	rv = MIMEInfo->GetMIMEType (&mMimeType);
-#else
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 	rv = MIMEInfo->GetMIMEType (mMimeType);
+#else
+	rv = MIMEInfo->GetMIMEType (&mMimeType);
 #endif
 
 	mLauncher->GetTargetFile (getter_AddRefs(mTempFile));
@@ -345,18 +348,15 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 
 	auto_downloads = eel_gconf_get_boolean (CONF_AUTO_DOWNLOADS);
 
-#if MOZILLA_SNAPSHOT < 18
-	mHelperApp = gnome_vfs_mime_get_default_application (mMimeType);
-#else
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 	mHelperApp = gnome_vfs_mime_get_default_application (mMimeType.get());
-#endif
-	CheckAppSupportScheme ();
-
-#if MOZILLA_SNAPSHOT < 18
-	mPermission = ephy_embed_shell_check_mime (embed_shell, mMimeType);
-#else
 	mPermission = ephy_embed_shell_check_mime (embed_shell, mMimeType.get());
+#else
+	mHelperApp = gnome_vfs_mime_get_default_application (mMimeType);
+	mPermission = ephy_embed_shell_check_mime (embed_shell, mMimeType);
 #endif
+
+	CheckAppSupportScheme ();
 
 	if (auto_downloads)
 	{
@@ -383,23 +383,26 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 
 	if (mAction == CONTENT_ACTION_OPEN)
 	{
+		nsEmbedString desc;
+
+		NS_CStringToUTF16 (nsEmbedCString ("gnome-default"),
+			           NS_CSTRING_ENCODING_UTF8, desc);
+
 		/* HACK we use the application description to ask
 		   MozDownload to open the file when download
 		   is finished */
-#if MOZILLA_SNAPSHOT < 18
-		mimeInfo->SetApplicationDescription
-			(NS_LITERAL_STRING ("gnome-default").get());
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+		mimeInfo->SetApplicationDescription (desc);
 #else
-		mimeInfo->SetApplicationDescription
-			(NS_LITERAL_STRING ("gnome-default"));
+		mimeInfo->SetApplicationDescription (desc.get());
 #endif
 	}
 	else
 	{
-#if MOZILLA_SNAPSHOT < 18
-		mimeInfo->SetApplicationDescription (nsnull);
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+		mimeInfo->SetApplicationDescription (nsEmbedString ());
 #else
-		mimeInfo->SetApplicationDescription (NS_LITERAL_STRING (""));
+		mimeInfo->SetApplicationDescription (nsnull);
 #endif
 	}
 

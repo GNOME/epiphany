@@ -69,10 +69,6 @@
 #include <nsIMIMEHeaderParam.h>
 #include <nsIWindowWatcher.h>
 
-#ifdef ALLOW_PRIVATE_STRINGS
-#include <nsReadableUtils.h>
-#endif
-
 EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,
 		nsIFile* aFile, nsIURI* aURL, nsIDOMDocument* aDocument, nsIInputStream* aPostData)
 : mPersist(aPersist)
@@ -104,7 +100,7 @@ EphyHeaderSniffer::HandleContent ()
 {
 	EphyEmbedSingle *single;
 	gboolean handled = FALSE;
-	nsCString uriSpec;
+	nsEmbedCString uriSpec;
 
 	if (mPostData) return NS_ERROR_FAILURE;
 
@@ -138,7 +134,7 @@ EphyHeaderSniffer::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aReq
 		nsCOMPtr<nsIHttpChannel> httpChannel(do_QueryInterface(channel));
 		if (httpChannel)
 		{
-			httpChannel->GetResponseHeader(nsCAutoString("content-disposition"),
+			httpChannel->GetResponseHeader(nsEmbedCString("content-disposition"),
 						       mContentDisposition);
 		}
     
@@ -218,7 +214,7 @@ filechooser_response_cb (EphyFileChooser *dialog, gint response, EphyHeaderSniff
 		nsCOMPtr<nsILocalFile> destFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
 		if (destFile)
 		{
-			destFile->InitWithNativePath (nsDependentCString (filename));
+			destFile->InitWithNativePath (nsEmbedCString (filename));
 
 			sniffer->InitiateDownload (destFile);
 		}
@@ -242,9 +238,9 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 	flags = ephy_embed_persist_get_flags (EPHY_EMBED_PERSIST (mEmbedPersist));
 	askDownloadDest = flags & EMBED_PERSIST_ASK_DESTINATION;
 
-	nsAutoString defaultFileName;
+	nsEmbedString defaultFileName;
 
-	if (defaultFileName.IsEmpty() && !mContentDisposition.IsEmpty())
+	if (!defaultFileName.Length() && mContentDisposition.Length())
 	{
 		/* 1 Use the HTTP header suggestion. */
 		nsCOMPtr<nsIMIMEHeaderParam> mimehdrpar =
@@ -252,45 +248,46 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		
 		if (mimehdrpar)
 		{
-			nsCAutoString fallbackCharset;
+			nsEmbedCString fallbackCharset;
 			if (mURL)
 			{
 				mURL->GetOriginCharset(fallbackCharset);
 			}
 			
-			nsAutoString fileName;
+			nsEmbedString fileName;
 			
 			rv = mimehdrpar->GetParameter (mContentDisposition, "filename",
 						       fallbackCharset, PR_TRUE, nsnull,
 						       fileName);
-			if (NS_FAILED(rv) || fileName.IsEmpty())
+			if (NS_FAILED(rv) || !fileName.Length())
 			{
 				rv = mimehdrpar->GetParameter (mContentDisposition, "name",
 							       fallbackCharset, PR_TRUE, nsnull,
 							       fileName);
 			}
 
-			if (NS_SUCCEEDED(rv) && !fileName.IsEmpty())
+			if (NS_SUCCEEDED(rv) && fileName.Length())
 			{
 				defaultFileName = fileName;
 			}
 		}
 	}
     
-	if (defaultFileName.IsEmpty())
+	if (!defaultFileName.Length())
 	{
 		/* 2 For file URLs, use the file name. */
 
 		nsCOMPtr<nsIURL> url(do_QueryInterface(mURL));
 		if (url)
 		{
-			nsCAutoString fileNameCString;
+			nsEmbedCString fileNameCString;
 			url->GetFileName(fileNameCString);
-			CopyUTF8toUTF16 (fileNameCString, defaultFileName);
+			NS_CStringToUTF16 (fileNameCString, NS_CSTRING_ENCODING_UTF8,
+					   defaultFileName);
 		}
 	}
     
-	if (defaultFileName.IsEmpty() && mDocument)
+	if (!defaultFileName.Length() && mDocument)
 	{
 		/* 3 Use the title of the document. */
 
@@ -301,22 +298,27 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		}
 	}
     
-	if (defaultFileName.IsEmpty() && mURL)
+	if (!defaultFileName.Length() && mURL)
 	{
 		/* 4 Use the host. */
-		nsCAutoString hostName;
+		nsEmbedCString hostName;
 		mURL->GetHost(hostName);
-		CopyUTF8toUTF16 (hostName, defaultFileName);
+		NS_CStringToUTF16 (hostName, NS_CSTRING_ENCODING_UTF8,
+				   defaultFileName);
 	}
     
 	/* 5 One last case to handle about:blank and other untitled pages. */
-	if (defaultFileName.IsEmpty())
+	if (!defaultFileName.Length())
 	{
-		CopyUTF8toUTF16 (_("Untitled"), defaultFileName);
+		NS_CStringToUTF16 (nsEmbedCString(_("Untitled")),
+				   NS_CSTRING_ENCODING_UTF8, defaultFileName);
 	}
         
 	/* Validate the file name to ensure legality. */
-	char *default_name = g_strdup (NS_ConvertUTF16toUTF8 (defaultFileName).get());
+	nsEmbedCString cDefaultFileName;
+	NS_UTF16ToCString (defaultFileName, NS_CSTRING_ENCODING_UTF8,
+			   cDefaultFileName);
+	char *default_name = g_strdup (cDefaultFileName.get());
 	default_name = g_strdelimit (default_name, "/", ' ');
 
 	const char *key;

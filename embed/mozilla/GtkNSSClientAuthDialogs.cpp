@@ -31,9 +31,7 @@
 #include <nsIServiceManager.h>
 #include <nsIInterfaceRequestor.h>
 #include <nsIInterfaceRequestorUtils.h>
-#ifdef ALLOW_PRIVATE_STRINGS
-#include <nsString.h>
-#endif
+#include <nsEmbedString.h>
 
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkimage.h>
@@ -188,9 +186,10 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 	
 
-	const nsACString &utf8_cn = NS_ConvertUTF16toUTF8(cn);
-	tt_cn = g_strdup_printf ("\"<tt>%s</tt>\"", 
-				 PromiseFlatCString(utf8_cn).get());
+	nsEmbedCString utf8_cn;
+	NS_UTF16ToCString (nsEmbedString (cn),
+			   NS_CSTRING_ENCODING_UTF8, utf8_cn);
+	tt_cn = g_strdup_printf ("\"<tt>%s</tt>\"", utf8_cn.get());
 
 	msg = g_strdup_printf (_("Choose a certificate to present as identification to %s."),
 			       tt_cn);
@@ -206,13 +205,18 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 	for (i = 0; i < count; i++)
 	{
-		const nsACString &certnick = NS_ConvertUTF16toUTF8(certNickList[i]);
-		const nsACString &certdetail = NS_ConvertUTF16toUTF8(certDetailsList[i]);
+		nsEmbedCString certnick;
+		nsEmbedCString certdetail;
+
+		NS_UTF16ToCString (nsEmbedString (certNickList[i]),
+				   NS_CSTRING_ENCODING_UTF8, certnick);
+		NS_UTF16ToCString (nsEmbedString (certDetailsList[i]),
+				   NS_CSTRING_ENCODING_UTF8, certdetail);
 
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
-				    0, PromiseFlatCString(certnick).get(),
-				    1, PromiseFlatCString(certdetail).get(),
+				    0, certnick.get(),
+				    1, certdetail.get(),
 				    -1);
 	}
 

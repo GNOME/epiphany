@@ -34,10 +34,6 @@
 #include <nsIDOMWindow.h>
 #include <nsIPrintSettings.h>
 
-#ifdef ALLOW_PRIVATE_STRINGS
-#include "nsString.h"
-#endif
-
 #ifdef ALLOW_PRIVATE_API
 #include <nsIDocShell.h>
 #include <nsIDOMEventReceiver.h>
@@ -82,7 +78,7 @@ public:
 	nsresult DoCommand (const char *command);
 	nsresult GetCommandState (const char *command, PRBool *enabled);
 
-	nsresult SetZoom (float aTextZoom, PRBool reflow);
+	nsresult SetZoom (float aTextZoom);
 	nsresult GetZoom (float *aTextZoom);
 
 	nsresult Print (nsIPrintSettings *options, PRBool preview);
@@ -101,7 +97,7 @@ public:
 
 	nsresult GetSHInfo (PRInt32 *count, PRInt32 *index);
 	nsresult GetSHTitleAtIndex (PRInt32 index, PRUnichar **title);
-	nsresult GetSHUrlAtIndex (PRInt32 index, nsCString &url);
+	nsresult GetSHUrlAtIndex (PRInt32 index, nsACString &url);
 	nsresult GoToHistoryIndex (PRInt16 index);
 
 	nsresult ForceEncoding (const char *encoding);
@@ -113,8 +109,8 @@ public:
 
 	nsresult GetDocument (nsIDOMDocument **aDOMDocument);
 	nsresult GetTargetDocument (nsIDOMDocument **aDOMDocument);
-	nsresult GetDocumentUrl (nsCString &url);
-	nsresult GetTargetDocumentUrl (nsCString &url);
+	nsresult GetDocumentUrl (nsACString &url);
+	nsresult GetTargetDocumentUrl (nsACString &url);
 
 	nsresult GetHasModifiedForms (PRBool *modified);
 
@@ -130,10 +126,10 @@ private:
 	nsresult GetListener (void);
 	nsresult AttachListeners (void);
 	nsresult DetachListeners (void);
-	nsresult SetZoomOnDocshell (float aZoom, nsIDocShell *DocShell);
 	nsresult GetSHistory (nsISHistory **aSHistory);
 	nsresult GetContentViewer (nsIContentViewer **aViewer);
 	nsresult GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUint32 *aNumTextFields, PRBool *aHasTextArea);
+	PRBool   CompareFormsText (nsAString &aDefaultText, nsAString &aUserText);
 };
 
 #endif

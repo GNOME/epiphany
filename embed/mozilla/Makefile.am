@@ -5,14 +5,12 @@ INCLUDES = \
 	$(MOZILLA_COMPONENT_CFLAGS)			\
 	-I$(MOZILLA_INCLUDE_ROOT)			\
 	-I$(MOZILLA_INCLUDE_ROOT)/chardet		\
-	-I$(MOZILLA_INCLUDE_ROOT)/chrome		\
+	-I$(MOZILLA_INCLUDE_ROOT)/commandhandler	\
 	-I$(MOZILLA_INCLUDE_ROOT)/content		\
 	-I$(MOZILLA_INCLUDE_ROOT)/cookie		\
-	-I$(MOZILLA_INCLUDE_ROOT)/commandhandler	\
 	-I$(MOZILLA_INCLUDE_ROOT)/docshell		\
 	-I$(MOZILLA_INCLUDE_ROOT)/dom			\
 	-I$(MOZILLA_INCLUDE_ROOT)/exthandler		\
-	-I$(MOZILLA_INCLUDE_ROOT)/find			\
 	-I$(MOZILLA_INCLUDE_ROOT)/gfx			\
 	-I$(MOZILLA_INCLUDE_ROOT)/helperAppDlg		\
 	-I$(MOZILLA_INCLUDE_ROOT)/history		\
@@ -22,23 +20,16 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/necko			\
 	-I$(MOZILLA_INCLUDE_ROOT)/nkcache		\
 	-I$(MOZILLA_INCLUDE_ROOT)/pipnss		\
-	-I$(MOZILLA_INCLUDE_ROOT)/pref			\
-	-I$(MOZILLA_INCLUDE_ROOT)/progressDlg		\
 	-I$(MOZILLA_INCLUDE_ROOT)/shistory		\
-	-I$(MOZILLA_INCLUDE_ROOT)/string		\
-	-I$(MOZILLA_INCLUDE_ROOT)/unicharutil		\
 	-I$(MOZILLA_INCLUDE_ROOT)/uriloader		\
-	-I$(MOZILLA_INCLUDE_ROOT)/wallet		\
 	-I$(MOZILLA_INCLUDE_ROOT)/webbrowserpersist	\
 	-I$(MOZILLA_INCLUDE_ROOT)/webbrwsr		\
-	-I$(MOZILLA_INCLUDE_ROOT)/webshell		\
 	-I$(MOZILLA_INCLUDE_ROOT)/widget		\
 	-I$(MOZILLA_INCLUDE_ROOT)/windowwatcher		\
-	-I$(MOZILLA_INCLUDE_ROOT)/xpcom			\
+	-I$(MOZILLA_INCLUDE_ROOT)/xmlextras		\
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 			\
 	-DSHARE_DIR=\"$(pkgdatadir)\"   		\
 	-DALLOW_PRIVATE_API				\
-	-DALLOW_PRIVATE_STRINGS				\
 	-include $(MOZILLA_INCLUDE_ROOT)/mozilla-config.h
 
 if MAINTAINER_MODE
@@ -61,6 +52,8 @@ libephymozillaembed_la_SOURCES = 	\
 	EphyBrowser.h	                \
 	EphySingle.cpp			\
 	EphySingle.h			\
+	EphyUtils.cpp			\
+	EphyUtils.h			\
 	EventContext.cpp                \
 	EventContext.h                  \
 	FilePicker.cpp			\
@@ -92,4 +85,5 @@ libephymozillaembed_la_SOURCES = 	\
 	mozilla-embed-single.cpp	\
 	mozilla-embed-single.h	        \
 	mozilla-notifiers.cpp		\
-	mozilla-notifiers.h
+	mozilla-notifiers.h		\
+	mozilla-version.h

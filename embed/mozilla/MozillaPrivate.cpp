@@ -27,16 +27,12 @@
 
 #include "MozillaPrivate.h"
 
+#include <nsEmbedString.h>
 #include <nsIServiceManagerUtils.h>
 #include <nsIWindowWatcher.h>
 #include <nsIEmbeddingSiteWindow.h>
 #include <nsIWebBrowserChrome.h>
 #include <gtkmozembed.h>
-
-#ifdef ALLOW_PRIVATE_STRINGS
-#include "nsString.h"
-#include "nsReadableUtils.h"
-#endif
 
 GtkWidget *MozillaFindEmbed (nsIDOMWindow *aDOMWindow)
 {
@@ -108,23 +104,44 @@ NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
         options->SetMarginLeft (MM_TO_INCH (info->left_margin));
         options->SetMarginRight (MM_TO_INCH (info->right_margin));
 
-        options->SetPrinterName(NS_LITERAL_STRING("PostScript/default").get());
+	PRUnichar postscript[] = { 'P', 'o', 's', 't', 's', 'c', 'r', 'i',
+				   'p', 't', '/', 'd', 'e', 'f', 'a', 'u',
+				   'l', 't', '\0' };
+        options->SetPrinterName(postscript);
 
-        options->SetHeaderStrLeft(NS_ConvertUTF8toUTF16(info->header_left_string).get());
+	nsEmbedString tmp;
 
-        options->SetHeaderStrCenter(NS_ConvertUTF8toUTF16(info->header_center_string).get());
+	NS_CStringToUTF16 (nsEmbedCString(info->header_left_string),
+			   NS_CSTRING_ENCODING_UTF8, tmp);
+        options->SetHeaderStrLeft (tmp.get());
 
-        options->SetHeaderStrRight(NS_ConvertUTF8toUTF16(info->header_right_string).get());
+	NS_CStringToUTF16 (nsEmbedCString(info->header_center_string),
+			   NS_CSTRING_ENCODING_UTF8, tmp);
+        options->SetHeaderStrCenter (tmp.get());
 
-        options->SetFooterStrLeft(NS_ConvertUTF8toUTF16(info->footer_left_string).get());
+	NS_CStringToUTF16 (nsEmbedCString(info->header_right_string),
+			   NS_CSTRING_ENCODING_UTF8, tmp);
+        options->SetHeaderStrRight (tmp.get());
 
-        options->SetFooterStrCenter(NS_ConvertUTF8toUTF16(info->footer_center_string).get());
+	NS_CStringToUTF16 (nsEmbedCString(info->footer_left_string),
+			   NS_CSTRING_ENCODING_UTF8, tmp);
+        options->SetFooterStrLeft (tmp.get());
 
-        options->SetFooterStrRight(NS_ConvertUTF8toUTF16(info->footer_right_string).get());
+	NS_CStringToUTF16 (nsEmbedCString(info->footer_center_string),
+			   NS_CSTRING_ENCODING_UTF8, tmp);
+        options->SetFooterStrCenter(tmp.get());
 
-        options->SetToFileName (NS_ConvertUTF8toUTF16(info->file).get());
+	NS_CStringToUTF16 (nsEmbedCString(info->footer_right_string),
+			   NS_CSTRING_ENCODING_UTF8, tmp);
+        options->SetFooterStrRight(tmp.get());
 
-	options->SetPrintCommand (NS_ConvertUTF8toUTF16(info->printer).get());
+	NS_CStringToUTF16 (nsEmbedCString(info->file),
+			   NS_CSTRING_ENCODING_UTF8, tmp);
+        options->SetToFileName (tmp.get());
+
+	NS_CStringToUTF16 (nsEmbedCString(info->printer),
+			   NS_CSTRING_ENCODING_UTF8, tmp);
+	options->SetPrintCommand (tmp.get());
 
 	/**
 	 * Work around a mozilla bug where paper size & orientation are ignored
@@ -143,7 +160,10 @@ NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
 
 	/* native paper size formats. Our dialog does not support custom yet */
 	options->SetPaperSize (nsIPrintSettings::kPaperSizeNativeData);
-	options->SetPaperName (NS_ConvertUTF8toUTF16(info->paper).get());
+
+	NS_CStringToUTF16 (nsEmbedCString(info->paper),
+			   NS_CSTRING_ENCODING_UTF8, tmp);
+	options->SetPaperName (tmp.get());
 
         options->SetPrintInColor (info->print_color);
         options->SetOrientation (info->orientation);

@@ -26,7 +26,10 @@
 #include "FilePicker.h"
 #include "MozillaPrivate.h"
 
+#include "mozilla-version.h"
+
 #include <nsCOMPtr.h>
+#include <nsEmbedString.h>
 #include <nsIServiceManager.h>
 #include <nsIURI.h>
 #include <nsIFileURL.h>
@@ -35,12 +38,7 @@
 #include <nsIDOMWindow.h>
 #include <nsNetCID.h>
 
-#ifdef ALLOW_PRIVATE_STRINGS
-#include <nsString.h>
-#include <nsReadableUtils.h>
-#endif
-
-#if MOZILLA_SNAPSHOT < 18
+#if !MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 #include <nsIDOMWindowInternal.h>
 #endif
 
@@ -82,10 +80,10 @@ GFilePicker::~GFilePicker()
 }
 
 /* void init (in nsIDOMWindow parent, in AString title, in short mode); */
-#if MOZILLA_SNAPSHOT < 18
-NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *title, PRInt16 mode)
-#else
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 NS_IMETHODIMP GFilePicker::Init(nsIDOMWindow *parent, const nsAString& title, PRInt16 mode)
+#else
+NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *title, PRInt16 mode)
 #endif
 {
 	LOG ("GFilePicker::Init")
@@ -97,11 +95,13 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindow *parent, const nsAString& title, PR
 		gtk_window_set_transient_for (GTK_WINDOW (mDialog), GTK_WINDOW (pwin));
 	}
 
-#if MOZILLA_SNAPSHOT < 18
-	gtk_window_set_title (GTK_WINDOW (mDialog), NS_ConvertUTF16toUTF8 (title).get());
+	nsEmbedCString cTitle;
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+	NS_UTF16ToCString (title, NS_CSTRING_ENCODING_UTF8, cTitle);
 #else
-	gtk_window_set_title (GTK_WINDOW (mDialog), NS_ConvertUCS2toUTF8(title).get());
+	NS_UTF16ToCString (nsEmbedString(title), NS_CSTRING_ENCODING_UTF8, cTitle);
 #endif
+	gtk_window_set_title (GTK_WINDOW (mDialog), cTitle.get());
 
 	mMode = mode;
 
@@ -200,20 +200,24 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 }
 
 /* void appendFilter (in AString title, in AString filter); */
-#if MOZILLA_SNAPSHOT < 18
-NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar *filter)
-#else
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 NS_IMETHODIMP GFilePicker::AppendFilter(const nsAString& title, const nsAString& filter)
+#else
+NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar *filter)
 #endif
 {
-	LOG ("GFilePicker::AppendFilter title '%s' for '%s'",
-	     NS_ConvertUTF16toUTF8 (title).get(),
-	     NS_ConvertUTF16toUTF8 (filter).get())
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+	if (!filter.Length()) return NS_ERROR_FAILURE;
+#else
+	if (!filter) return NS_ERROR_FAILURE;
+#endif
 
-	NS_ConvertUTF16toUTF8 pattern(filter);
-
-	pattern.StripWhitespace();
-	if (pattern.IsEmpty()) return NS_ERROR_FAILURE;
+	nsEmbedCString pattern;
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+	NS_UTF16ToCString (filter, NS_CSTRING_ENCODING_UTF8, pattern);
+#else
+	NS_UTF16ToCString (nsEmbedString(filter), NS_CSTRING_ENCODING_UTF8, pattern);
+#endif
 
 	char **patterns;
 	patterns = g_strsplit (pattern.get(), ";", -1);
@@ -224,10 +228,17 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const nsAString& title, const nsAString&
 
 	for (int i = 0; patterns[i] != NULL; i++)
 	{
-		gtk_file_filter_add_pattern (filth, patterns[i]);
+		gtk_file_filter_add_pattern (filth, g_strstrip (patterns[i]));
 	}
 
-	gtk_file_filter_set_name (filth, NS_ConvertUTF16toUTF8 (title).get());
+	nsEmbedCString cTitle;
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+	NS_UTF16ToCString (title, NS_CSTRING_ENCODING_UTF8, cTitle);
+#else
+	NS_UTF16ToCString (nsEmbedString(title), NS_CSTRING_ENCODING_UTF8, cTitle);
+#endif
+
+	gtk_file_filter_set_name (filth, cTitle.get());
 
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (mDialog), filth);
 
@@ -237,10 +248,10 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const nsAString& title, const nsAString&
 }
 
 /* attribute AString defaultString; */
-#if MOZILLA_SNAPSHOT < 18
-NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
-#else
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 NS_IMETHODIMP GFilePicker::GetDefaultString(nsAString& aDefaultString)
+#else
+NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
 #endif
 {
 	char *filename, *converted;
@@ -252,10 +263,14 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(nsAString& aDefaultString)
 	{
 		converted = g_filename_to_utf8(filename, -1, NULL, NULL, NULL);
 
-#if MOZILLA_SNAPSHOT < 18
-		*aDefaultString = ToNewUnicode (NS_ConvertUTF8toUTF16 (converted));
+		nsEmbedString defaultString;
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+		NS_CStringToUTF16 (nsEmbedCString(converted),
+				   NS_CSTRING_ENCODING_UTF8, aDefaultString);
 #else
-		CopyUTF8toUTF16 (converted, aDefaultString);
+		NS_CStringToUTF16 (nsEmbedCString(converted),
+				   NS_CSTRING_ENCODING_UTF8, defaultString);
+		*aDefaultString = NS_StringCloneData (defaultString);
 #endif
 	
 		g_free (filename);
@@ -265,40 +280,39 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(nsAString& aDefaultString)
 	return NS_OK;
 }
 
-#if MOZILLA_SNAPSHOT < 18
-NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
-#else
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 NS_IMETHODIMP GFilePicker::SetDefaultString(const nsAString& aDefaultString)
+#else
+NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
 #endif
 {
-#if MOZILLA_SNAPSHOT < 18
-	LOG ("GFilePicker::SetDefaultString to %s",
-	     NS_ConvertUTF16toUTF8 (aDefaultString).get())
-#else
-	LOG ("GFilePicker::SetDefaultString to %s",
-	     NS_ConvertUCS2toUTF8 (aDefaultString).get())
-#endif
-
-#if MOZILLA_SNAPSHOT < 18
-	if (aDefaultString)
-#else
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 	if (aDefaultString.Length())
+#else
+	if (aDefaultString)
 #endif
 	{
+		nsEmbedCString defaultString;
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+		NS_UTF16ToCString (aDefaultString, NS_CSTRING_ENCODING_UTF8,
+				   defaultString);
+#else
+		NS_UTF16ToCString (nsEmbedString(aDefaultString),
+				   NS_CSTRING_ENCODING_UTF8, defaultString);
+#endif
 		/* set_current_name takes UTF-8, not a filename */
 		gtk_file_chooser_set_current_name
-			(GTK_FILE_CHOOSER (mDialog),
-			 NS_ConvertUTF16toUTF8 (aDefaultString).get());
+			(GTK_FILE_CHOOSER (mDialog), defaultString.get());
 	}
 
 	return NS_OK;
 }
 
 /* attribute AString defaultExtension; */
-#if MOZILLA_SNAPSHOT < 18
-NS_IMETHODIMP GFilePicker::GetDefaultExtension(PRUnichar **aDefaultExtension)
-#else
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 NS_IMETHODIMP GFilePicker::GetDefaultExtension(nsAString& aDefaultExtension)
+#else
+NS_IMETHODIMP GFilePicker::GetDefaultExtension(PRUnichar **aDefaultExtension)
 #endif
 {
 	LOG ("GFilePicker::GetDefaultExtension")
@@ -306,15 +320,12 @@ NS_IMETHODIMP GFilePicker::GetDefaultExtension(nsAString& aDefaultExtension)
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-#if MOZILLA_SNAPSHOT < 18
-NS_IMETHODIMP GFilePicker::SetDefaultExtension(const PRUnichar *aDefaultExtension)
-#else
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 NS_IMETHODIMP GFilePicker::SetDefaultExtension(const nsAString& aDefaultExtension)
+#else
+NS_IMETHODIMP GFilePicker::SetDefaultExtension(const PRUnichar *aDefaultExtension)
 #endif
 {
-	LOG ("GFilePicker::SetDefaultExtension to %s",
-	     NS_ConvertUTF16toUTF8(aDefaultExtension).get())
-
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
@@ -345,7 +356,7 @@ NS_IMETHODIMP GFilePicker::GetDisplayDirectory(nsILocalFile **aDisplayDirectory)
 	if (dir != NULL)
 	{
 		nsCOMPtr<nsILocalFile> file = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
-		file->InitWithNativePath (nsDependentCString (dir));
+		file->InitWithNativePath (nsEmbedCString (dir));
 		NS_IF_ADDREF (*aDisplayDirectory = file);
 	
 		g_free (dir);
@@ -356,7 +367,7 @@ NS_IMETHODIMP GFilePicker::GetDisplayDirectory(nsILocalFile **aDisplayDirectory)
 
 NS_IMETHODIMP GFilePicker::SetDisplayDirectory(nsILocalFile *aDisplayDirectory)
 {
-	nsCAutoString dir;
+	nsEmbedCString dir;
 	aDisplayDirectory->GetNativePath (dir);
 
 	LOG ("GFilePicker::SetDisplayDirectory to %s", dir.get())
@@ -379,7 +390,7 @@ NS_IMETHODIMP GFilePicker::GetFile(nsILocalFile **aFile)
 	if (filename != NULL)
 	{
 		nsCOMPtr<nsILocalFile> file = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
-		file->InitWithNativePath (nsDependentCString (filename));
+		file->InitWithNativePath (nsEmbedCString (filename));
 		NS_IF_ADDREF (*aFile = file);
 	
 		g_free (filename);
