@@ -31,7 +31,6 @@
 
 #define STATES_FILE "states.xml"
 #define WINDOW_POSITION_UNSET -1
-#define EPHY_STATES_XML_VERSION "0.1"
 
 enum
 {
@@ -49,13 +48,30 @@ static EphyNodeDb *states_db = NULL;
 static void
 ephy_states_load (void)
 {
+	xmlDocPtr doc;
+	xmlNodePtr root, child;
 	char *xml_file;
 
 	xml_file = g_build_filename (ephy_dot_dir (),
                                      STATES_FILE,
                                      NULL);
 
-	ephy_node_db_load_from_xml (states_db, xml_file);
+	if (g_file_test (xml_file, G_FILE_TEST_EXISTS) == FALSE)
+		return;
+
+	doc = xmlParseFile (xml_file);
+	g_assert (doc != NULL);
+
+	root = xmlDocGetRootElement (doc);
+
+	for (child = root->children; child != NULL; child = child->next)
+	{
+		EphyNode *node;
+
+		node = ephy_node_new_from_xml (states_db, child);
+	}
+
+	xmlFreeDoc (doc);
 
 	g_free (xml_file);
 }
@@ -63,6 +79,10 @@ ephy_states_load (void)
 static void
 ephy_states_save (void)
 {
+	xmlDocPtr doc;
+	xmlNodePtr root;
+	GPtrArray *children;
+	int i;
 	char *xml_file;
 
 	if (states == NULL) return;
@@ -71,8 +91,25 @@ ephy_states_save (void)
                                      STATES_FILE,
                                      NULL);
 
-	ephy_node_db_save_to_xml (states_db, xml_file);
+	/* save nodes to xml */
+	xmlIndentTreeOutput = TRUE;
+	doc = xmlNewDoc ("1.0");
 
+	root = xmlNewDocNode (doc, NULL, "ephy_bookmarks", NULL);
+	xmlDocSetRootElement (doc, root);
+
+	children = ephy_node_get_children (states);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+
+		kid = g_ptr_array_index (children, i);
+
+		ephy_node_save_to_xml (kid, root);
+	}
+	ephy_node_thaw (states);
+
+	xmlSaveFormatFile (xml_file, doc, 1);
 	g_free (xml_file);
 }
 
@@ -108,7 +145,7 @@ ensure_states (void)
 {
 	if (states == NULL)
 	{
-		states_db = ephy_node_db_new ("EphyStates", EPHY_STATES_XML_VERSION);
+		states_db = ephy_node_db_new ("EphyStates");
 		states = ephy_node_new_with_id (states_db, STATES_NODE_ID);
 		ephy_states_load ();
 	}

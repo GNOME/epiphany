@@ -199,7 +199,30 @@ ephy_history_class_init (EphyHistoryClass *klass)
 static void
 ephy_history_load (EphyHistory *eb)
 {
-	ephy_node_db_load_from_xml (eb->priv->db, eb->priv->xml_file);
+	xmlDocPtr doc;
+	xmlNodePtr root, child;
+	char *tmp;
+
+	if (g_file_test (eb->priv->xml_file, G_FILE_TEST_EXISTS) == FALSE)
+		return;
+
+	doc = xmlParseFile (eb->priv->xml_file);
+	g_return_if_fail (doc != NULL);
+
+	root = xmlDocGetRootElement (doc);
+
+	tmp = xmlGetProp (root, "version");
+	g_assert (tmp != NULL && strcmp (tmp, EPHY_HISTORY_XML_VERSION) == 0);
+	g_free (tmp);
+
+	for (child = root->children; child != NULL; child = child->next)
+	{
+		EphyNode *node;
+
+		node = ephy_node_new_from_xml (eb->priv->db, child);
+	}
+
+	xmlFreeDoc (doc);
 }
 
 static gboolean
@@ -248,7 +271,46 @@ remove_obsolete_pages (EphyHistory *eb)
 static void
 ephy_history_save (EphyHistory *eb)
 {
-	ephy_node_db_save_to_xml (eb->priv->db, eb->priv->xml_file);
+	xmlDocPtr doc;
+	xmlNodePtr root;
+	GPtrArray *children;
+	int i;
+
+	LOG ("Saving history")
+
+	/* save nodes to xml */
+	xmlIndentTreeOutput = TRUE;
+	doc = xmlNewDoc ("1.0");
+
+	root = xmlNewDocNode (doc, NULL, "ephy_history", NULL);
+	xmlSetProp (root, "version", EPHY_HISTORY_XML_VERSION);
+	xmlDocSetRootElement (doc, root);
+
+	children = ephy_node_get_children (eb->priv->hosts);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+
+		kid = g_ptr_array_index (children, i);
+		if (kid == eb->priv->pages) continue;
+
+		ephy_node_save_to_xml (kid, root);
+	}
+	ephy_node_thaw (eb->priv->hosts);
+
+	children = ephy_node_get_children (eb->priv->pages);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+
+		kid = g_ptr_array_index (children, i);
+
+		ephy_node_save_to_xml (kid, root);
+	}
+	ephy_node_thaw (eb->priv->pages);
+
+	xmlSaveFormatFile (eb->priv->xml_file, doc, 1);
+	xmlFreeDoc(doc);
 }
 
 static void
@@ -337,7 +399,7 @@ ephy_history_init (EphyHistory *eb)
 
         eb->priv = g_new0 (EphyHistoryPrivate, 1);
 
-	db = ephy_node_db_new ("EphyHistory", EPHY_HISTORY_XML_VERSION);
+	db = ephy_node_db_new ("EphyHistory");
 	eb->priv->db = db;
 
 	eb->priv->xml_file = g_build_filename (ephy_dot_dir (),

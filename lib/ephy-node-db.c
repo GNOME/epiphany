@@ -19,9 +19,6 @@
  */
 
 #include "ephy-node-db.h"
-#include "ephy-debug.h"
-
-#include <unistd.h>
 
 static void ephy_node_db_class_init (EphyNodeDbClass *klass);
 static void ephy_node_db_init (EphyNodeDb *node);
@@ -33,14 +30,12 @@ static void ephy_node_db_finalize (GObject *object);
 enum
 {
 	PROP_0,
-	PROP_NAME,
-	PROP_VERSION
+	PROP_NAME
 };
 
 struct EphyNodeDbPrivate
 {
 	char *name;
-	char *version;
 
 	GMutex *id_factory_lock;
 	long id_factory;
@@ -80,12 +75,6 @@ ephy_node_db_get_type (void)
 }
 
 static void
-ephy_node_db_set_version (EphyNodeDb *db, const char *version)
-{
-	db->priv->version = g_strdup (version);
-}
-
-static void
 ephy_node_db_set_name (EphyNodeDb *db, const char *name)
 {
 	db->priv->name = g_strdup (name);
@@ -113,9 +102,6 @@ ephy_node_db_get_property (GObject *object,
 		case PROP_NAME:
 			g_value_set_string (value, db->priv->name);
 			break;
-		case PROP_VERSION:
-			g_value_set_string (value, db->priv->version);
-			break;
 	}
 }
 
@@ -134,9 +120,6 @@ ephy_node_db_set_property (GObject *object,
 	{
 		case PROP_NAME:
 			ephy_node_db_set_name (db, g_value_get_string (value));
-			break;
-		case PROP_VERSION:
-			ephy_node_db_set_version (db, g_value_get_string (value));
 			break;
 	}
 }
@@ -159,14 +142,6 @@ ephy_node_db_class_init (EphyNodeDbClass *klass)
                                                                "Name",
                                                                NULL,
                                                                G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-                                         PROP_VERSION,
-                                         g_param_spec_string  ("version",
-                                                               "Version",
-                                                               "Version",
-                                                               NULL,
-                                                               G_PARAM_READWRITE));
-
 }
 
 static void
@@ -175,7 +150,6 @@ ephy_node_db_init (EphyNodeDb *db)
 	db->priv = g_new0 (EphyNodeDbPrivate, 1);
 
 	db->priv->name = NULL;
-	db->priv->version = NULL;
 
 	/* id to node */
 	db->priv->id_to_node = g_ptr_array_new ();
@@ -212,7 +186,6 @@ ephy_node_db_finalize (GObject *object)
 	g_mutex_free (db->priv->id_factory_lock);
 
 	g_free (db->priv->name);
-	g_free (db->priv->version);
 
 	g_free (db->priv);
 
@@ -230,13 +203,12 @@ ephy_node_db_get_by_name (const char *name)
 }
 
 EphyNodeDb *
-ephy_node_db_new (const char *name, const char *version)
+ephy_node_db_new (const char *name)
 {
 	EphyNodeDb *db;
 
 	db = EPHY_NODE_DB (g_object_new (EPHY_TYPE_NODE_DB,
 					 "name", name,
-					 "version", version,
 				         NULL));
 
 	g_return_val_if_fail (db->priv != NULL, NULL);
@@ -322,124 +294,4 @@ _ephy_node_db_remove_id (EphyNodeDb *db,
 	db->priv->id_factory = RESERVED_IDS;
 
 	g_static_rw_lock_writer_unlock (db->priv->id_to_node_lock);
-}
-
-gboolean
-ephy_node_db_load_from_xml (EphyNodeDb *db, const char *xml_file)
-{
-	xmlDocPtr doc;
-	xmlNodePtr root, child;
-
-	if (g_file_test (xml_file, G_FILE_TEST_EXISTS) == FALSE)
-	{
-		return FALSE;
-	}
-
-	doc = xmlParseFile (xml_file);
-	g_return_val_if_fail (doc != NULL, FALSE);
-
-	root = xmlDocGetRootElement (doc);
-
-	for (child = root->children; child != NULL; child = child->next)
-	{
-		EphyNode *node;
-
-		node = ephy_node_new_from_xml (db, child);
-	}
-
-	xmlFreeDoc (doc);
-
-	return TRUE;
-}
-
-gboolean
-ephy_node_db_save_to_xml (EphyNodeDb *db, const char *xml_file)
-{
-	xmlDocPtr doc;
-	xmlNodePtr root;
-	GPtrArray *children;
-	int i;
-	char *tmp_file;
-	char *old_file;
-	gboolean old_exist;
-	gboolean retval = TRUE;
-
-	LOG ("Build the xml file %s", xml_file)
-
-	tmp_file = g_strconcat (xml_file, ".tmp", NULL);
-	old_file = g_strconcat (xml_file, ".old", NULL);
-
-	/* save nodes to xml */
-	xmlIndentTreeOutput = TRUE;
-	doc = xmlNewDoc ("1.0");
-
-	root = xmlNewDocNode (doc, NULL, "ephy_node_db", NULL);
-	xmlDocSetRootElement (doc, root);
-
-	xmlSetProp (root, "name", db->priv->name);
-	xmlSetProp (root, "version", db->priv->version);
-
-	g_static_rw_lock_reader_lock (db->priv->id_to_node_lock);
-
-	children = db->priv->id_to_node;
-
-	for (i = RESERVED_IDS; i < children->len; i++)
-	{
-		EphyNode *kid;
-
-		kid = g_ptr_array_index (children, i);
-
-		if (kid)
-		{
-			ephy_node_to_xml (kid, root);
-		}
-	}
-
-	g_static_rw_lock_reader_unlock (db->priv->id_to_node_lock);
-
-	LOG ("Save it")
-
-	if (!xmlSaveFormatFile (tmp_file, doc, 1))
-	{
-		g_warning ("Failed to write XML data to %s", tmp_file);
-		goto failed;
-	}
-
-	old_exist = g_file_test (xml_file, G_FILE_TEST_EXISTS);
-
-	if (old_exist)
-	{
-		if (rename (xml_file, old_file) < 0)
-		{
-			g_warning ("Failed to rename %s to %s", xml_file, old_file);
-			retval = FALSE;
-			goto failed;
-		}
-	}
-
-	if (rename (tmp_file, xml_file) < 0)
-	{
-		g_warning ("Failed to rename %s to %s", tmp_file, xml_file);
-
-		if (rename (old_file, xml_file) < 0)
-		{
-			g_warning ("Failed to restore %s from %s", xml_file, tmp_file);
-		}
-		retval = FALSE;
-		goto failed;
-	}
-
-	if (old_exist)
-	{
-		if (unlink (old_file) < 0)
-		{
-			g_warning ("Failed to delete old file %s", old_file);
-		}
-	}
-
-	failed:
-	g_free (old_file);
-	g_free (tmp_file);
-
-	return retval;
 }

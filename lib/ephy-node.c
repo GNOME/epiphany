@@ -719,8 +719,8 @@ save_parent (gulong id,
 }
 
 void
-ephy_node_to_xml (EphyNode *node,
-		  xmlNodePtr parent_xml_node)
+ephy_node_save_to_xml (EphyNode *node,
+		       xmlNodePtr parent_xml_node)
 {
 	xmlNodePtr xml_node;
 	char *xml;

@@ -1,3 +1,25 @@
+2003-05-25  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_load),
+	(ephy_favicon_cache_save), (ephy_favicon_cache_init),
+	(ephy_favicon_cache_finalize):
+	* embed/ephy-history.c: (ephy_history_load), (ephy_history_save),
+	(ephy_history_init):
+	* lib/ephy-node-db.c: (ephy_node_db_get_property),
+	(ephy_node_db_set_property), (ephy_node_db_class_init),
+	(ephy_node_db_init), (ephy_node_db_finalize), (ephy_node_db_new),
+	(_ephy_node_db_remove_id):
+	* lib/ephy-node-db.h:
+	* lib/ephy-node.c: (ephy_node_save_to_xml):
+	* lib/ephy-node.h:
+	* lib/ephy-state.c: (ephy_states_load), (ephy_states_save),
+	(ensure_states):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_load),
+	(ephy_bookmarks_save), (ephy_bookmarks_init):
+
+	Revert latest node changes. Parents nodes need to be saved
+	first and it's easier to do that in a not generic way :/
+
 2003-05-24  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/egg/eggradiotoolbutton.c:
