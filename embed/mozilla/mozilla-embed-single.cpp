@@ -45,7 +45,7 @@
 #include <nsIIOService.h>
 #include <nsIProtocolProxyService.h>
 #include <nsIAtom.h>
-#include <nsIFontList.h>
+#include <nsIFontEnumerator.h>
 #include <nsISupportsPrimitives.h>
 #include <nsReadableUtils.h>
 #include <nsICookieManager.h>
@@ -795,54 +795,34 @@ impl_get_font_list (EphyEmbedSingle *shell,
 		    char **default_font)
 {
 	nsresult rv;
-
-	nsCOMPtr<nsIFontList> mozFontList;
-	mozFontList = do_CreateInstance("@mozilla.org/gfx/fontlist;1", &rv);
-	if(NS_FAILED(rv)) return G_FAILED;
-
-	nsCOMPtr<nsISimpleEnumerator> fontEnum;
-	mozFontList->AvailableFonts(NS_ConvertUTF8toUCS2(langGroup).get(),
-				    NS_ConvertUTF8toUCS2(fontType).get(),
-				    getter_AddRefs(fontEnum));
-	if(NS_FAILED(rv)) return G_FAILED;
-
+	PRUint32 fontCount;
+	PRUnichar **fontArray;
 	GList *l = NULL;
-	PRBool enumResult;
-	for(fontEnum->HasMoreElements(&enumResult) ;
-	    enumResult == PR_TRUE;
-	    fontEnum->HasMoreElements(&enumResult))
+
+	nsCOMPtr<nsIFontEnumerator> mozFontEnumerator;
+	mozFontEnumerator = do_CreateInstance("@mozilla.org/gfx/fontenumerator;1", &rv);
+	if(NS_FAILED(rv)) return G_FAILED;
+
+	rv = mozFontEnumerator->EnumerateFonts (nsnull, nsnull,
+					        &fontCount, &fontArray);
+	if (NS_FAILED (rv)) return G_FAILED;
+
+	for (int i = 0; i < fontCount; i++)
 	{
-		nsCOMPtr<nsISupportsString> fontName;
-		fontEnum->GetNext(getter_AddRefs(fontName));
-		if(NS_FAILED(rv)) return G_FAILED;
-
-		nsString fontString;
-		fontName->GetData(fontString);
-
 		char *gFontString;
-		gFontString = g_strdup(NS_ConvertUCS2toUTF8(fontString).get());
+
+		gFontString = g_strdup(NS_ConvertUCS2toUTF8 (fontArray[i]).get());
 		l = g_list_prepend (l, gFontString);
+		nsMemory::Free (fontArray[i]);
 	}
+
+	nsMemory::Free (fontArray);
+
 	*fontList = g_list_reverse (l);
 
 	if (default_font != NULL)
 	{
-		char key[255];
-		char *value = NULL;
-		nsCOMPtr<nsIPrefService> prefService;
-
-	        prefService = do_GetService (NS_PREFSERVICE_CONTRACTID);
-		g_return_val_if_fail (prefService != NULL, G_FAILED);
-	
-	        nsCOMPtr<nsIPrefBranch> pref;
-	        prefService->GetBranch ("", getter_AddRefs(pref));
-		g_return_val_if_fail (pref != NULL, G_FAILED);
-
-		sprintf (key, "font.name.%s.%s", fontType, langGroup);
-		
-		pref->GetCharPref (key, &value);
-		*default_font = g_strdup (value);
-		nsMemory::Free (value);
+		*default_font = g_strdup (fontType);
 	}
 
 	return G_OK;

@@ -1,3 +1,13 @@
+2003-07-14  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	List all mozilla fonts and not only the language specific,
+	otherwise we get empty list.
+	Use fontconfig aliases as defaults.
+	This is temporary until we design simpler fonts
+	configuration.
+
 2003-07-14  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/pdm-dialog.c: (pdm_dialog_cookies_properties_button_clicked_cb):
