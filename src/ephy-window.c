@@ -2659,7 +2659,7 @@ ephy_window_activate_location (EphyWindow *window)
  *
  * Shows @widget if it is hidden.
  **/
-void
+static void
 ephy_window_show (GtkWidget *widget)
 {
 	EphyWindow *window = EPHY_WINDOW(widget);
