@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany\n"
-"POT-Creation-Date: 2003-02-13 03:41+0100\n"
+"POT-Creation-Date: 2003-02-15 03:40+0100\n"
 "PO-Revision-Date: 2003-02-13 13:31--100\n"
 "Last-Translator: Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -1434,7 +1434,7 @@ msgid "Copy Email Address"
 msgstr "E-mail adres kopiëren"
 
 # src/context.c:69
-#: data/ui/nautilus-epiphany-view.xml.in.h:4 src/ephy-window.c:250
+#: data/ui/nautilus-epiphany-view.xml.in.h:4
 msgid "Copy Image Location"
 msgstr "Afbeeldingslokatie kopiëren"
 
@@ -1442,12 +1442,12 @@ msgstr "Afbeeldingslokatie kopiëren"
 # src/context.c:63
 # src/history_callbacks.c:162
 # src/misc_callbacks.c:410
-#: data/ui/nautilus-epiphany-view.xml.in.h:5 src/ephy-window.c:234
+#: data/ui/nautilus-epiphany-view.xml.in.h:5
 msgid "Copy Link Location"
 msgstr "Verwijzing kopiëren"
 
 # src/context.c:69
-#: data/ui/nautilus-epiphany-view.xml.in.h:6 src/ephy-window.c:212
+#: data/ui/nautilus-epiphany-view.xml.in.h:6
 msgid "Copy Page Location"
 msgstr "Paginalokatie kopiëren"
 
@@ -1471,7 +1471,7 @@ msgstr "Selectie knippen"
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: data/ui/nautilus-epiphany-view.xml.in.h:10 src/ephy-window.c:230
+#: data/ui/nautilus-epiphany-view.xml.in.h:10
 msgid "Download Link"
 msgstr "Verwijzing downloaden"
 
@@ -1497,8 +1497,7 @@ msgid "Next"
 msgstr "Volgende"
 
 # src/menubar.c:34
-#. Framed document
-#: data/ui/nautilus-epiphany-view.xml.in.h:15 src/ephy-window.c:216
+#: data/ui/nautilus-epiphany-view.xml.in.h:15
 msgid "Open Frame"
 msgstr "Frame openen"
 
@@ -1508,8 +1507,7 @@ msgid "Open Frame in New Window"
 msgstr "Frame in een nieuw venster openen"
 
 # src/context.c:1075
-#. Images
-#: data/ui/nautilus-epiphany-view.xml.in.h:17 src/ephy-window.c:240
+#: data/ui/nautilus-epiphany-view.xml.in.h:17
 msgid "Open Image"
 msgstr "Afbeelding openen"
 
@@ -1556,13 +1554,12 @@ msgid "Print the Current File"
 msgstr "Huidige bestand afdrukken"
 
 # src/context.c:80
-#. Document
-#: data/ui/nautilus-epiphany-view.xml.in.h:27 src/ephy-window.c:210
+#: data/ui/nautilus-epiphany-view.xml.in.h:27
 msgid "Save Background As..."
 msgstr "Achtergrond opslaan als..."
 
 # src/context.c:67
-#: data/ui/nautilus-epiphany-view.xml.in.h:28 src/ephy-window.c:246
+#: data/ui/nautilus-epiphany-view.xml.in.h:28
 msgid "Save Image As..."
 msgstr "Afbeelding opslaan als..."
 
@@ -1586,7 +1583,7 @@ msgid "Select the Entire Document"
 msgstr "Hele document selecteren"
 
 # src/context.c:68
-#: data/ui/nautilus-epiphany-view.xml.in.h:33 src/ephy-window.c:248
+#: data/ui/nautilus-epiphany-view.xml.in.h:33
 msgid "Use Image As Background"
 msgstr "Afbeelding gebruiken als achtergrond"
 
@@ -2285,42 +2282,56 @@ msgstr "Werkbalk toevoegen"
 # src/mozcallbacks.c:225
 # src/window.c:2279
 #. setup label
-#: lib/widgets/ephy-notebook.c:671 src/ephy-tab.c:524 src/ephy-tab.c:982
+#: lib/widgets/ephy-notebook.c:714 src/ephy-tab.c:524 src/ephy-tab.c:982
 #: src/window-commands.c:286
 msgid "Untitled"
 msgstr "Naamloos"
 
+# src/context.c:66
+#: src/bookmarks/ephy-bookmarks-editor.c:95
+msgid "Open In New Tab..."
+msgstr "In nieuw tabblad openen..."
+
+# src/context.c:65
+#: src/bookmarks/ephy-bookmarks-editor.c:98
+msgid "Open In New Browser..."
+msgstr "In nieuwe browser openen..."
+
+#: src/bookmarks/ephy-bookmarks-editor.c:101
+msgid "Remove..."
+msgstr "Verwijderen..."
+
 # ui/epiphany.glade.h:121
-#: src/bookmarks/ephy-bookmarks-editor.c:361
+#: src/bookmarks/ephy-bookmarks-editor.c:476
 #: src/bookmarks/ephy-new-bookmark.c:195
 msgid "Title:"
 msgstr "Titel:"
 
 # ui/epiphany.glade.h:85
-#: src/bookmarks/ephy-bookmarks-editor.c:378
+#: src/bookmarks/ephy-bookmarks-editor.c:493
 msgid "Location:"
 msgstr "Lokatie:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:395
+#: src/bookmarks/ephy-bookmarks-editor.c:510
 #: src/bookmarks/ephy-new-bookmark.c:209
 msgid "Keywords:"
 msgstr "Sleutelwoorden:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:484
+#: src/bookmarks/ephy-bookmarks-editor.c:602
 msgid "Search:"
 msgstr "Zoeken:"
 
 # src/menubar.c:571
-#: src/bookmarks/ephy-bookmarks-editor.c:512
+#: src/bookmarks/ephy-bookmarks-editor.c:651
 msgid "Bookmarks"
 msgstr "Bladwijzers"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:533
+#: src/bookmarks/ephy-bookmarks-editor.c:672
 msgid "Keywords"
 msgstr "Sleutelwoorden"
 
 # ui/epiphany.glade.h:121
-#: src/bookmarks/ephy-bookmarks-editor.c:558 src/history-dialog.c:272
+#: src/bookmarks/ephy-bookmarks-editor.c:697 src/history-dialog.c:272
 msgid "Title"
 msgstr "Titel"
 
@@ -2599,8 +2610,8 @@ msgstr "Verwijzing naar de huidige pagina versturen"
 # src/history_callbacks.c:165
 # src/misc_callbacks.c:412
 #: src/ephy-window.c:84
-msgid "_Add Bookmark..."
-msgstr "Bl_adwijzer toevoegen..."
+msgid "Boo_kmark Page..."
+msgstr "Toevoegen aan bl_adwijzers..."
 
 # src/menubar.c:433
 #: src/ephy-window.c:85
@@ -2947,52 +2958,105 @@ msgstr "Credits weergeven voor de makers van de webbrowser"
 msgid "Type a web address or a word in the field on the left, then click Go"
 msgstr "Type een webadres of een woord in het veld hier links en klik op Ga"
 
+# src/context.c:80
+#. Document
+#: src/ephy-window.c:210
+msgid "_Save Background As..."
+msgstr "Achtergrond _opslaan als..."
+
+# src/context.c:69
+#: src/ephy-window.c:212
+msgid "_Copy Page Location"
+msgstr "Paginalokatie _kopiëren"
+
+# src/menubar.c:34
+#. Framed document
+#: src/ephy-window.c:216
+msgid "_Open Frame"
+msgstr "Frame _openen"
+
 # src/context.c:71
 #: src/ephy-window.c:218
-msgid "Open Frame in New Browser"
-msgstr "Frame in een nieuwe browser openen"
+msgid "Open Frame in _New Browser"
+msgstr "Frame openen in een _nieuwe browser"
 
 # src/context.c:72
 #: src/ephy-window.c:220
-msgid "Open Frame in New Tab"
-msgstr "Frame in een nieuw tabblad openen"
+msgid "Open Frame in New _Tab"
+msgstr "Frame openen in een nieuw _tabblad"
 
 # ui/epiphany.glade.h:91
 #. Links
 #: src/ephy-window.c:224
-msgid "Open Link"
-msgstr "verwijzing openen"
+msgid "_Open Link"
+msgstr "Verwijzing _openen"
 
 # src/context.c:60
 #: src/ephy-window.c:226
-msgid "Open Link in New Browser"
-msgstr "Verwijzing in een nieuwe browser openen"
+msgid "Open Link in _New Browser"
+msgstr "Verwijzing openen in een _nieuwe browser"
 
 # src/context.c:61
 #: src/ephy-window.c:228
-msgid "Open Link in New Tab"
-msgstr "Verwijzing openen in een nieuw tabblad"
+msgid "Open Link in New _Tab"
+msgstr "Verwijzing openen in een nieuw _tabblad"
+
+# src/context.c:62
+# src/history_callbacks.c:159
+# src/misc_callbacks.c:408
+#: src/ephy-window.c:230
+msgid "_Download Link"
+msgstr "Verwijzing _downloaden"
 
 # src/context.c:64
 # src/history_callbacks.c:165
 # src/misc_callbacks.c:412
 #: src/ephy-window.c:232
-msgid "Add Bookmark"
-msgstr "Bladwijzer toevoegen"
+msgid "_Bookmark Link..."
+msgstr "Bl_adwijzer maken van verwijzing..."
+
+# src/bookmarks_menus.c:575
+# src/context.c:63
+# src/history_callbacks.c:162
+# src/misc_callbacks.c:410
+#: src/ephy-window.c:234
+msgid "_Copy Link Location"
+msgstr "Verwijzing _kopiëren"
 
 #: src/ephy-window.c:236
-msgid "Copy Email"
-msgstr "E-mail kopiëren"
+msgid "Copy _Email"
+msgstr "_E-mail kopiëren"
+
+# src/context.c:1075
+#. Images
+#: src/ephy-window.c:240
+msgid "_Open Image"
+msgstr "Afbeelding _openen"
 
 # src/context.c:65
 #: src/ephy-window.c:242
-msgid "Open Image in New Browser"
-msgstr "Afbeelding in nieuwe browser openen"
+msgid "Open Image in _New Browser"
+msgstr "Afbeelding openen in _nieuwe browser"
 
 # src/context.c:66
 #: src/ephy-window.c:244
-msgid "Open Image in New Tab"
-msgstr "Afbeelding in nieuw tabblad openen"
+msgid "Open Image in New _Tab"
+msgstr "Afbeelding openen in nieuw _tabblad"
+
+# src/context.c:67
+#: src/ephy-window.c:246
+msgid "_Save Image As..."
+msgstr "Afbeelding _opslaan als..."
+
+# src/context.c:68
+#: src/ephy-window.c:248
+msgid "Use Image As _Background"
+msgstr "Afbeelding gebruiken als a_chtergrond"
+
+# src/context.c:69
+#: src/ephy-window.c:250
+msgid "_Copy Image Location"
+msgstr "Afbeeldingslokatie _kopiëren"
 
 #: src/ephy-window.c:1048
 msgid "Insecure"
@@ -3406,3 +3470,9 @@ msgstr ""
 #: src/window-commands.c:677
 msgid "A GNOME browser based on Mozilla"
 msgstr "Een uitgebreide GNOME browser gebaseerd op Mozilla"
+
+# src/context.c:64
+# src/history_callbacks.c:165
+# src/misc_callbacks.c:412
+#~ msgid "Add Bookmark"
+#~ msgstr "Bladwijzer toevoegen"
