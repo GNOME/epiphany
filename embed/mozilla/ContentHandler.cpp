@@ -281,8 +281,11 @@ NS_IMETHODIMP GContentHandler::
 	nsCOMPtr<nsILocalFile> saveDir;
 	char *dirName;
 	
-	/* FIXME persist download dir */
-	dirName = g_strdup (g_get_home_dir());
+	dirName = eel_gconf_get_string (CONF_STATE_DOWNLOADING_DIR);
+	if (dirName == NULL)
+	{
+		dirName = g_strdup (g_get_home_dir());
+	}
 
 	saveDir = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
 	saveDir->InitWithPath (NS_ConvertUTF8toUCS2(dirName));
@@ -292,36 +295,41 @@ NS_IMETHODIMP GContentHandler::
 
 	PRInt16 okToSave = nsIFilePicker::returnCancel;
 
-	if (okToSave == nsIFilePicker::returnCancel)
+	nsCOMPtr<nsIFilePicker> filePicker =
+				do_CreateInstance (G_FILEPICKER_CONTRACTID);
+
+	const nsAString &title = NS_ConvertUTF8toUCS2(_("Select the destination filename"));
+
+	filePicker->Init (windowInternal,
+			   PromiseFlatString(title).get(), 
+			   nsIFilePicker::modeSave);
+	filePicker->SetDefaultString (aDefaultFile);
+	filePicker->SetDisplayDirectory (saveDir);
+
+	filePicker->Show (&okToSave);
+
+	if (okToSave == nsIFilePicker::returnOK)
 	{
-		nsCOMPtr<nsIFilePicker> filePicker =
-					do_CreateInstance (G_FILEPICKER_CONTRACTID);
+		filePicker->GetFile (getter_AddRefs(saveFile));
 
-		const nsAString &title = NS_ConvertUTF8toUCS2(_("Select the destination filename"));
+		nsString uFileName;
+		saveFile->GetPath(uFileName);
+		const nsCString &aFileName = NS_ConvertUCS2toUTF8(uFileName);
 
-		filePicker->Init (windowInternal,
-				   PromiseFlatString(title).get(), 
-				   nsIFilePicker::modeSave);
-		filePicker->SetDefaultString (aDefaultFile);
-		filePicker->SetDisplayDirectory (saveDir);
+		char *dir = g_path_get_dirname (aFileName.get());
 
-		filePicker->Show (&okToSave);
+		eel_gconf_set_string (CONF_STATE_DOWNLOADING_DIR, dir);
+		g_free (dir);
 
-		if (okToSave == nsIFilePicker::returnOK)
-		{
-			filePicker->GetFile (getter_AddRefs(saveFile));
-		}
-	}
-
-	if (okToSave == nsIFilePicker::returnCancel)
-		return NS_ERROR_FAILURE;
-	else
-	{
 		nsCOMPtr<nsIFile> directory;
 		rv = saveFile->GetParent (getter_AddRefs(directory));
 
 		NS_IF_ADDREF (*_retval = saveFile);
 		return NS_OK;
+	}
+	else
+	{
+		return NS_ERROR_FAILURE;
 	}
 }
 
