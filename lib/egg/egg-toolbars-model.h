@@ -87,7 +87,7 @@ struct EggToolbarsModelClass
 
 GType		  egg_toolbars_model_get_type       (void);
 EggToolbarsModel *egg_toolbars_model_new	    (void);
-void              egg_toolbars_model_load           (EggToolbarsModel *t,
+gboolean          egg_toolbars_model_load           (EggToolbarsModel *t,
 						     const char *xml_file);
 void              egg_toolbars_model_save           (EggToolbarsModel *t,
 						     const char *xml_file,

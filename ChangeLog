@@ -1,5 +1,26 @@
 2003-11-09  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/session.c: (save_tab):
+
+	Encode entities when saving the session file.
+
+2003-11-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_load):
+	* lib/egg/egg-toolbars-model.h:
+	* src/ephy-toolbars-model.c: (ephy_toolbars_model_set_bookmarks):
+
+	Fix recovery from corrupted toolbar layout file.
+
+2003-11-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/bookmarks/ephy-bookmarks-export.c: (add_topics_list),
+	(ephy_bookmarks_export_rdf):
+
+	Encode entities when exporting to RDF.
+
+2003-11-09  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/session.c: (session_save):
 
 	Don't try to resume the session when there already is

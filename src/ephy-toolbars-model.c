@@ -321,6 +321,7 @@ static void
 ephy_toolbars_model_set_bookmarks (EphyToolbarsModel *model, EphyBookmarks *bookmarks)
 {
 	EggToolbarsModel *egg_model = EGG_TOOLBARS_MODEL (model);
+	gboolean success = FALSE;
 
 	model->priv->bookmarks = bookmarks;
 	g_object_ref (model->priv->bookmarks);
@@ -329,10 +330,11 @@ ephy_toolbars_model_set_bookmarks (EphyToolbarsModel *model, EphyBookmarks *book
 
 	if (g_file_test (model->priv->xml_file, G_FILE_TEST_EXISTS))
 	{
-		egg_toolbars_model_load (egg_model,
+		success = egg_toolbars_model_load (egg_model,
 					 model->priv->xml_file);
 	}
-	else
+
+	if (success == FALSE)
 	{
 		const char *default_xml;
 
