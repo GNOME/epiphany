@@ -218,9 +218,7 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 #endif
 
 		/* ok, we accept this as a valid favicon for this site */
-		char *url = g_strdup (faviconUrl.get());
-		g_signal_emit_by_name (mOwner, "ge_favicon", url);
-		g_free (url);
+		g_signal_emit_by_name (mOwner, "ge_favicon", faviconUrl.get());
 	}
 
 	return NS_OK;
