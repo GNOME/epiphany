@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-19 10:53+0100\n"
+"POT-Creation-Date: 2004-01-21 11:29+0100\n"
 "PO-Revision-Date: 2003-07-28 01:29+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -1573,38 +1573,41 @@ msgstr "Inne"
 msgid "Local files"
 msgstr "Pliki lokalne"
 
-#: embed/mozilla/ContentHandler.cpp:138
+#: embed/mozilla/ContentHandler.cpp:132
 #: embed/mozilla/EphyHeaderSniffer.cpp:314
 msgid "Save"
 msgstr "Zapisz"
 
-#: embed/mozilla/ContentHandler.cpp:368
-msgid "Save As..."
-msgstr "Zapisz jako..."
+#: embed/mozilla/ContentHandler.cpp:251
+msgid "_Save As..."
+msgstr "Z_apisz jako..."
 
-#: embed/mozilla/ContentHandler.cpp:370 src/ephy-window.c:957
-#: src/window-commands.c:390
-msgid "Open"
-msgstr "Otwórz"
+#: embed/mozilla/ContentHandler.cpp:254
+msgid "_Open"
+msgstr "_Otwórz"
 
-#: embed/mozilla/ContentHandler.cpp:385
-msgid "Do you really want to download the file?"
-msgstr "Czy na pewno chcesz pobrać plik?"
+#: embed/mozilla/ContentHandler.cpp:254
+msgid "_Download"
+msgstr "_Pobierz"
 
-#: embed/mozilla/ContentHandler.cpp:386
+#: embed/mozilla/ContentHandler.cpp:269
+msgid "Download the unsafe file?"
+msgstr "Pobrać niebezpieczny plik?"
+
+#: embed/mozilla/ContentHandler.cpp:270
 msgid ""
-"This type of file could potentially damage your documentsor invade your "
-"privacy.It's not safe to open it directly. Youcan save it instead."
+"This type of file could potentially damage your documents or invade your "
+"privacy. It's not safe to open it directly. You can save it instead."
 msgstr ""
 "Ten rodzaj pliku może potencjalnie uszkodzić dokumenty lub naruszyć "
-"prywatność.Bezpośrednie jego otwarcie nie jest bezpieczne. Zamiast tego "
+"prywatność. Bezpośrednie jego otwarcie nie jest bezpieczne. Zamiast tego "
 "można go zapisać."
 
-#: embed/mozilla/ContentHandler.cpp:394
+#: embed/mozilla/ContentHandler.cpp:278
 msgid "Open the file in another application?"
 msgstr "Otworzyć plik za pomocą innej aplikacji?"
 
-#: embed/mozilla/ContentHandler.cpp:395
+#: embed/mozilla/ContentHandler.cpp:279
 msgid ""
 "It's not possible to view this file type directly in the browser. You can "
 "open it with another application or save it."
@@ -1612,14 +1615,14 @@ msgstr ""
 "Nie można wyświetlić pliku bezpośrednio w oknie przeglądarki. Można go "
 "otworzyć za pomocą innej aplikacji lub zapisać."
 
-#: embed/mozilla/ContentHandler.cpp:402
+#: embed/mozilla/ContentHandler.cpp:286
 msgid "Download the file?"
 msgstr "Pobrać plik?"
 
-#: embed/mozilla/ContentHandler.cpp:403
+#: embed/mozilla/ContentHandler.cpp:287
 msgid ""
-"It's not possible to view this file because there is noapplication installed "
-"that can open it.You can save it instead."
+"It's not possible to view this file because there is no application "
+"installed that can open it.You can save it instead."
 msgstr ""
 "Nie można wyświetlić tego pliku z powodu braku zainstalowanej aplikacji "
 "która by to potrafiła. Zamiast tego można go zapisać."
@@ -3147,6 +3150,10 @@ msgstr "Pozostały niewysłane zmiany elementów formularza."
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Jeżeli zamkniesz dokument, stracisz tą informację."
 
+#: src/ephy-window.c:957 src/window-commands.c:390
+msgid "Open"
+msgstr "Otwórz"
+
 #: src/ephy-window.c:959 src/window-commands.c:415
 msgid "Save As"
 msgstr "Zapisz jako"
@@ -3457,7 +3464,7 @@ msgstr "Waloński"
 msgid "Custom [%s]"
 msgstr "Dowolny [%s]"
 
-#: src/prefs-dialog.c:1098
+#: src/prefs-dialog.c:1090
 msgid "Desktop"
 msgstr "Pulpit"
 
@@ -3465,15 +3472,15 @@ msgstr "Pulpit"
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1107
+#: src/prefs-dialog.c:1099
 msgid "Home"
 msgstr "Początek"
 
-#: src/prefs-dialog.c:1112
+#: src/prefs-dialog.c:1104
 msgid "Downloads"
 msgstr "Pobrania"
 
-#: src/prefs-dialog.c:1322
+#: src/prefs-dialog.c:1310
 msgid "Select a directory"
 msgstr "Wybierz katalog"
 
@@ -3545,6 +3552,9 @@ msgstr "GNOME PL Team <translators@gnome.pl>"
 #: src/window-commands.c:969
 msgid "A GNOME browser based on Mozilla"
 msgstr "Przeglądarka WWW GNOME oparta na projekcie Mozilla"
+
+#~ msgid "Do you really want to download the file?"
+#~ msgstr "Czy na pewno chcesz pobrać plik?"
 
 #~ msgid ""
 #~ "Automatically open downloaded files which are \"safe\" to open, like "
