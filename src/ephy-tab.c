@@ -1078,7 +1078,8 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	{
 		gtk_selection_convert (GTK_WIDGET (window),
 				       GDK_SELECTION_PRIMARY,
-				       GDK_SELECTION_TYPE_STRING,
+				       /* See bug #133633 */
+				       gdk_atom_intern ("UTF8_STRING", FALSE),
 				       GDK_CURRENT_TIME);
 	}
 	/* we didn't handle the event */
