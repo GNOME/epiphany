@@ -27,6 +27,7 @@ NOINST_H_FILES = \
 	ephy-zoom.h
 
 TYPES_H_FILES = \
+	ephy-node.h				\
 	ephy-state.h
 
 INST_H_FILES = \
