@@ -391,6 +391,16 @@ drag_data_received_cb (GtkWidget          *widget,
 		       guint               time,
 		       EggEditableToolbar *etoolbar)
 {
+  char *type;
+  char *id;
+
+  GdkAtom target;
+	  
+  target = gtk_drag_dest_find_target (widget, context, NULL);
+  type = egg_toolbars_model_get_item_type (etoolbar->priv->model, target);
+  id = egg_toolbars_model_get_item_id (etoolbar->priv->model, type,
+				       selection_data->data);
+
   /* This function can be called for two reasons
    *
    *  (1) drag_motion() needs an item to pass to
@@ -406,8 +416,7 @@ drag_data_received_cb (GtkWidget          *widget,
     {
       etoolbar->priv->pending = FALSE;
       etoolbar->priv->dragged_item =
-        create_item_from_action (etoolbar, selection_data->data,
-				 data_is_separator (selection_data->data));
+        create_item_from_action (etoolbar, id, data_is_separator (id));
     }
   else
     {
@@ -423,11 +432,6 @@ drag_data_received_cb (GtkWidget          *widget,
 	}
       else
 	{
-	  GdkAtom target;
-	  char *type;
-	  char *id;
-	  
-	  target = gtk_drag_dest_find_target (widget, context, NULL);
 	  type = egg_toolbars_model_get_item_type (etoolbar->priv->model,
 						   target);
 	  id = egg_toolbars_model_get_item_id (etoolbar->priv->model, type,
@@ -435,13 +439,14 @@ drag_data_received_cb (GtkWidget          *widget,
 
 	  egg_toolbars_model_add_item (etoolbar->priv->model,
 				       toolbar_pos, pos, id, type);
-	  g_free (type);
-	  g_free (id);
 	}
       
       gtk_drag_finish (context, TRUE, context->action == GDK_ACTION_MOVE,
 		       time);
     }
+
+  g_free (type);
+  g_free (id);
 }
 
 static void
