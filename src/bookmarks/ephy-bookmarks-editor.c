@@ -589,6 +589,7 @@ add_bookmarks_source (const char *file,
 		}
 		else if (strcmp (p, ".mozilla") == 0)
 		{
+			/* Translators: The %s is the name of a Mozilla profile. */
 			description = g_strdup_printf (_("Mozilla \"%s\" profile"), path[i+1]);
 		}
 		else if (strcmp (p, ".galeon") == 0)
