@@ -598,6 +598,8 @@ ephy_bookmarks_finalize (GObject *object)
 
         g_free (eb->priv);
 
+	LOG ("Bookmarks finalized")
+
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
