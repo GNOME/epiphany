@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifndef EPHY_ZOOM_CONTROL_H
@@ -23,22 +25,16 @@
 
 G_BEGIN_DECLS
 
-/* object forward declarations */
-
-typedef struct _EphyZoomControl EphyZoomControl;
-typedef struct _EphyZoomControlClass EphyZoomControlClass;
-typedef struct _EphyZoomControlPrivate EphyZoomControlPrivate;
-
-/**
- * EphyZoomControl object
- */
-
 #define EPHY_TYPE_ZOOM_CONTROL			(ephy_zoom_control_get_type())
 #define EPHY_ZOOM_CONTROL(object)		(G_TYPE_CHECK_INSTANCE_CAST((object), EPHY_TYPE_ZOOM_CONTROL, EphyZoomControl))
 #define EPHY_ZOOM_CONTROL_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST((klass), EPHY_TYPE_ZOOM_CONTROL, EphyZoomControlClass))
 #define EPHY_IS_ZOOM_CONTROL(object)		(G_TYPE_CHECK_INSTANCE_TYPE((object), EPHY_TYPE_ZOOM_CONTROL))
 #define EPHY_IS_ZOOM_CONTROL_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE((klass), EPHY_TYPE_ZOOM_CONTROL))
 #define EPHY_ZOOM_CONTROL_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_ZOOM_CONTROL, EphyZoomControlClass))
+
+typedef struct _EphyZoomControl		EphyZoomControl;
+typedef struct _EphyZoomControlClass	EphyZoomControlClass;
+typedef struct _EphyZoomControlPrivate	EphyZoomControlPrivate;
 
 struct _EphyZoomControlClass
 {

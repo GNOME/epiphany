@@ -19,27 +19,23 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "ephy-zoom-control.h"
 #include "ephy-marshal.h"
 #include "ephy-zoom.h"
+#include "ephy-debug.h"
 
 #include <gtk/gtk.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkoptionmenu.h>
+#include <gtk/gtkcombobox.h>
 #include <gtk/gtktooltips.h>
 #include <glib/gi18n.h>
 
-/**
- * Private data
- */
- 
 #define EPHY_ZOOM_CONTROL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ZOOM_CONTROL, EphyZoomControlPrivate))
 
 struct _EphyZoomControlPrivate {
-	GtkWidget *option_menu;
+	GtkComboBox *combo;
 	float zoom;
 	guint handler_id;
 };
@@ -66,18 +62,14 @@ static void	ephy_zoom_control_finalize	(GObject *o);
 
 #define MENU_ID "ephy-zoom-control-menu-id"
 
-/**
- * EphyZoomControl object
- */
-
 GType
 ephy_zoom_control_get_type (void)
 {
-        static GType ephy_zoom_control_type = 0;
+	static GType type = 0;
 
-        if (ephy_zoom_control_type == 0)
-        {
-                static const GTypeInfo our_info =
+	if (type == 0)
+	{
+		static const GTypeInfo our_info =
 			{
 				sizeof (EphyZoomControlClass),
 				NULL, /* base_init */
@@ -90,24 +82,20 @@ ephy_zoom_control_get_type (void)
 				(GInstanceInitFunc) ephy_zoom_control_init,
 			};
 
-                ephy_zoom_control_type = g_type_register_static (GTK_TYPE_TOOL_ITEM,
-								 "EphyZoomControl",
-								 &our_info, 0);
-        }
+		type = g_type_register_static (GTK_TYPE_TOOL_ITEM,
+					       "EphyZoomControl",
+					       &our_info, 0);
+	}
 
-        return ephy_zoom_control_type;
+	return type;
 }
 
 static void
-proxy_menu_activate_cb (GtkMenuItem *menu_item, gpointer data)
+proxy_menu_activate_cb (GtkMenuItem *menu_item, EphyZoomControl *control)
 {
-	EphyZoomControl *control;
 	gint index;
 	float zoom;
 
-	g_return_if_fail (EPHY_IS_ZOOM_CONTROL (data));
-	control = EPHY_ZOOM_CONTROL (data);
-	
 	/* menu item was toggled OFF */
 	if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menu_item))) return;
 
@@ -162,12 +150,12 @@ ephy_zoom_control_create_menu_proxy (GtkToolItem *item)
 }
 
 static void
-option_menu_changed_cb (GtkOptionMenu *option_menu, EphyZoomControl *control)
+combo_changed_cb (GtkComboBox *combo, EphyZoomControl *control)
 {
 	gint index;
 	float zoom;
 
-	index = gtk_option_menu_get_history (option_menu);
+	index = gtk_combo_box_get_active (combo);
 	zoom = zoom_levels[index].level;
 
 	if (zoom != control->priv->zoom)
@@ -184,16 +172,17 @@ sync_zoom_cb (EphyZoomControl *control, GParamSpec *pspec, gpointer data)
 
 	index = ephy_zoom_get_zoom_level_index (p->zoom);
 
-	g_signal_handler_block (p->option_menu, p->handler_id);
-	gtk_option_menu_set_history (GTK_OPTION_MENU (p->option_menu), index);
-	g_signal_handler_unblock (p->option_menu, p->handler_id);	
+	g_signal_handler_block (p->combo, p->handler_id);
+	gtk_combo_box_set_active (p->combo, index);
+	g_signal_handler_unblock (p->combo, p->handler_id);	
 }
 
 static void
 ephy_zoom_control_init (EphyZoomControl *control)
 {
 	EphyZoomControlPrivate *p;
-	GtkWidget *item, *menu, *box;
+	GtkComboBox *combo;
+	GtkWidget *box;
 	guint i;
 
 	p = EPHY_ZOOM_CONTROL_GET_PRIVATE (control);
@@ -201,35 +190,29 @@ ephy_zoom_control_init (EphyZoomControl *control)
 
 	p->zoom = 1.0;
 
-	p->option_menu = gtk_option_menu_new ();
-	menu = gtk_menu_new ();
+	combo = GTK_COMBO_BOX (gtk_combo_box_new_text ());
 
 	for (i = 0; i < n_zoom_levels; i++)
 	{
-		item = gtk_menu_item_new_with_label (_(zoom_levels[i].name));
-		gtk_menu_shell_append  (GTK_MENU_SHELL (menu),item);
-
-		gtk_widget_show (item);
+		gtk_combo_box_append_text (combo, _(zoom_levels[i].name));
 	}
 
-	gtk_option_menu_set_menu (GTK_OPTION_MENU (p->option_menu), menu);
-	gtk_widget_show (menu);
-	gtk_widget_show (p->option_menu);
+	p->combo = combo;
+	g_object_ref (combo);
+	gtk_object_sink (GTK_OBJECT (combo));
+	gtk_widget_show (GTK_WIDGET (combo));
 
 	i = ephy_zoom_get_zoom_level_index (p->zoom);
-	gtk_option_menu_set_history (GTK_OPTION_MENU (p->option_menu), i);
-
-	g_object_ref (p->option_menu);
-	gtk_object_sink (GTK_OBJECT (p->option_menu));
+	gtk_combo_box_set_active (combo, i);
 
 	box = gtk_vbox_new (TRUE, 0);
-	gtk_box_pack_start (GTK_BOX (box), p->option_menu, TRUE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET (combo), TRUE, FALSE, 0);
 	gtk_widget_show (box);
 
 	gtk_container_add (GTK_CONTAINER (control), box);
 
-	p->handler_id = g_signal_connect (p->option_menu, "changed",
-					  G_CALLBACK (option_menu_changed_cb), control);
+	p->handler_id = g_signal_connect (combo, "changed",
+					  G_CALLBACK (combo_changed_cb), control);
 	
 	g_signal_connect_object (control, "notify::zoom",
 				 G_CALLBACK (sync_zoom_cb), NULL, 0);
@@ -284,9 +267,8 @@ ephy_zoom_control_set_tooltip (GtkToolItem *tool_item,
 {
 	EphyZoomControl *control = EPHY_ZOOM_CONTROL (tool_item);
 
-	g_return_val_if_fail (EPHY_IS_ZOOM_CONTROL (control), FALSE);
-
-	gtk_tooltips_set_tip (tooltips, control->priv->option_menu, tip_text, tip_private);
+	gtk_tooltips_set_tip (tooltips, GTK_WIDGET (control->priv->combo),
+			      tip_text, tip_private);
 
 	return TRUE;
 }
@@ -321,13 +303,13 @@ ephy_zoom_control_class_init (EphyZoomControlClass *klass)
 
 	signals[ZOOM_TO_LEVEL_SIGNAL] =
 		g_signal_new ("zoom_to_level",
-		              G_TYPE_FROM_CLASS (klass),
-		              G_SIGNAL_RUN_LAST,
-		              G_STRUCT_OFFSET (EphyZoomControlClass,
+			      G_TYPE_FROM_CLASS (klass),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyZoomControlClass,
 					       zoom_to_level),
-		              NULL, NULL,
-		              g_cclosure_marshal_VOID__FLOAT,
-		              G_TYPE_NONE,
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__FLOAT,
+			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_FLOAT);
 
@@ -339,7 +321,7 @@ ephy_zoom_control_finalize (GObject *o)
 {
 	EphyZoomControl *control = EPHY_ZOOM_CONTROL (o);
 
-	g_object_unref (control->priv->option_menu);
+	g_object_unref (control->priv->combo);
 
 	G_OBJECT_CLASS (parent_class)->finalize (o);
 }
