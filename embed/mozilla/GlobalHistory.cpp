@@ -34,7 +34,7 @@
 #include <nsEmbedString.h>
 #undef MOZILLA_STRICT_API
 
-NS_IMPL_ISUPPORTS2(MozGlobalHistory, nsIGlobalHistory2, nsIBrowserHistory)
+NS_IMPL_ISUPPORTS1 (MozGlobalHistory, nsIGlobalHistory2)
 
 MozGlobalHistory::MozGlobalHistory ()
 {
@@ -131,77 +131,3 @@ NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI, const nsAString & aTi
 	
 	return NS_OK;
 }
-
-/* void hidePage (in nsIURI url); */
-NS_IMETHODIMP MozGlobalHistory::HidePage(nsIURI *aURI)
-{
-	return NS_ERROR_NOT_IMPLEMENTED;
-}
-
-#ifdef MOZ_NSIGLOBALHISTORY_NSIURIP
-/* void removePage (in nsIURI aURI); */
-NS_IMETHODIMP MozGlobalHistory::RemovePage(nsIURI *aURI)
-{
-	return NS_ERROR_NOT_IMPLEMENTED;
-}
-
-/* void removePagesFromHost (in AUTF8String aHost, in boolean aEntireDomain); */
-NS_IMETHODIMP MozGlobalHistory::RemovePagesFromHost(const nsACString &aHost, 
-						    PRBool aEntireDomain)
-{
-	return NS_ERROR_NOT_IMPLEMENTED;
-}
-#else
-/* void removePage (in string aURL); */
-NS_IMETHODIMP MozGlobalHistory::RemovePage(const char *aURL)
-{
-	return NS_ERROR_NOT_IMPLEMENTED;
-}
-
-/* void removePagesFromHost (in string aHost, in boolean aEntireDomain); */
-NS_IMETHODIMP MozGlobalHistory::RemovePagesFromHost(const char *aHost, 
-						    PRBool aEntireDomain)
-{
-	return NS_ERROR_NOT_IMPLEMENTED;
-}
-#endif
-
-/* void removeAllPages (); */
-NS_IMETHODIMP MozGlobalHistory::RemoveAllPages()
-{
-	return NS_ERROR_NOT_IMPLEMENTED;
-}
-
-/* readonly attribute AUTF8String lastPageVisited; */
-NS_IMETHODIMP MozGlobalHistory::GetLastPageVisited(nsACString & aLastPageVisited)
-{
-	return NS_ERROR_NOT_IMPLEMENTED;
-}
-
-/* readonly attribute PRUint32 count; */
-NS_IMETHODIMP MozGlobalHistory::GetCount(PRUint32 *aCount)
-{
-    return NS_ERROR_NOT_IMPLEMENTED;
-}
-
-#ifdef MOZ_NSIGLOBALHISTORY_NSIURIP
-/* void markPageAsTyped (in AUTF8String aURI) */
-NS_IMETHODIMP MozGlobalHistory::MarkPageAsTyped(nsIURI *aURI)
-{
-    return NS_ERROR_NOT_IMPLEMENTED;
-}
-#else
-/* void markPageAsTyped (in string url); */
-NS_IMETHODIMP MozGlobalHistory::MarkPageAsTyped(const char *url)
-{
-    return NS_ERROR_NOT_IMPLEMENTED;
-}
-#endif
-
-#ifdef MOZ_NSIBROWSERHISTORY_ADDPAGEWITHDETAILS
-/* void addPageWithDetails (in nsIURI aURI, in wstring aTitle, in long long aLastVisited); */
-NS_IMETHODIMP MozGlobalHistory::AddPageWithDetails(nsIURI *aURI, const PRUnichar *aTitle, PRInt64 aLastVisited)
-{
-	return NS_ERROR_NOT_IMPLEMENTED;
-}
-#endif

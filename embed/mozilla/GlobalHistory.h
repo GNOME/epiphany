@@ -24,7 +24,6 @@
 
 #include "ephy-history.h"
 
-#include <nsIBrowserHistory.h>
 #include <nsIGlobalHistory2.h>
 
 #define EPHY_GLOBALHISTORY_CLASSNAME	"Epiphany Global History Implementation"
@@ -36,7 +35,7 @@
 	{ 0xb7, 0x9e, 0xf7, 0xaa, 0x49, 0xeb, 0x6a, 0x15}	\
 }
 
-class MozGlobalHistory: public nsIBrowserHistory
+class MozGlobalHistory: public nsIGlobalHistory2
 {
 	public:
 		MozGlobalHistory ();
@@ -44,7 +43,6 @@ class MozGlobalHistory: public nsIBrowserHistory
 
 		NS_DECL_ISUPPORTS
 		NS_DECL_NSIGLOBALHISTORY2
-		NS_DECL_NSIBROWSERHISTORY
 
 	private:
 		EphyHistory *mGlobalHistory;
