@@ -244,22 +244,26 @@ toolbars_item_new (const char *id,
 }
 
 static void
-free_toolbar_node (EggToolbarsToolbar *toolbar)
+free_toolbar_node (GNode *toolbar_node)
 {
-  g_return_if_fail (toolbar != NULL);
+  EggToolbarsToolbar *toolbar = toolbar_node->data;
 
   g_free (toolbar->name);
   g_free (toolbar);
+
+  g_node_destroy (toolbar_node);
 }
 
 static void
-free_item_node (EggToolbarsItem *item)
+free_item_node (GNode *item_node)
 {
-  g_return_if_fail (item != NULL);
+  EggToolbarsItem *item = item_node->data;
 
   g_free (item->id);
   g_free (item->type);
   g_free (item);
+
+  g_node_destroy (item_node);
 }
 
 EggTbModelFlags
@@ -607,11 +611,20 @@ egg_toolbars_model_init (EggToolbarsModel *t)
 }
 
 static void
+free_toolbar (GNode *toolbar_node)
+{
+  g_node_children_foreach (toolbar_node, G_TRAVERSE_ALL,
+    			   (GNodeForeachFunc) free_item_node, NULL);
+  free_toolbar_node (toolbar_node);
+}
+
+static void
 egg_toolbars_model_finalize (GObject *object)
 {
   EggToolbarsModel *t = EGG_TOOLBARS_MODEL (object);
-  
-  /* FIXME free nodes */
+
+  g_node_children_foreach (t->priv->toolbars, G_TRAVERSE_ALL,
+    			   (GNodeForeachFunc) free_toolbar, NULL);
   g_node_destroy (t->priv->toolbars);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -639,8 +652,7 @@ egg_toolbars_model_remove_toolbar (EggToolbarsModel   *t,
       node = g_node_nth_child (t->priv->toolbars, position);
       g_return_if_fail (node != NULL);
 
-      free_toolbar_node (node->data);
-      g_node_destroy (node);
+      free_toolbar_node (node);
 
       g_signal_emit (G_OBJECT (t), egg_toolbars_model_signals[TOOLBAR_REMOVED],
 		     0, position);
@@ -662,8 +674,7 @@ egg_toolbars_model_remove_item (EggToolbarsModel *t,
   node = g_node_nth_child (toolbar, position);
   g_return_if_fail (node != NULL);
 
-  free_item_node (node->data);
-  g_node_destroy (node);
+  free_item_node (node);
 
   g_signal_emit (G_OBJECT (t), egg_toolbars_model_signals[ITEM_REMOVED], 0,
 		 toolbar_position, position);

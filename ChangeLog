@@ -1,5 +1,14 @@
 2004-07-31  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/egg/egg-toolbars-model.c: (free_toolbar_node),
+	(free_item_node), (free_toolbar), (egg_toolbars_model_finalize),
+	(egg_toolbars_model_remove_toolbar),
+	(egg_toolbars_model_remove_item):
+
+	Free node data and destroy nodes on finalize.
+
+2004-07-31  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-toolbars-model.c: (update_flags_and_save_changes):
 
 	Correctly clear the not-removable toolbar flag.
