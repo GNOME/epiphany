@@ -277,6 +277,8 @@ egg_tool_button_set_property (GObject         *object,
 	    }
 	  gtk_image_set_from_stock (GTK_IMAGE (button->icon), button->stock_id,
 				    EGG_TOOL_ITEM (button)->icon_size);
+          if (EGG_TOOL_ITEM (button)->style != GTK_TOOLBAR_TEXT)
+            gtk_widget_show (button->icon);
 	}
       break;
     case PROP_ICON_SET:

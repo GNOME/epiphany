@@ -38,6 +38,7 @@
 #include "popup-commands.h"
 #include "egg-toggle-action.h"
 #include "ephy-encoding-menu.h"
+#include "ephy-stock-icons.h"
 
 #include <string.h>
 #include <libgnome/gnome-i18n.h>
@@ -65,7 +66,7 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "FileNewWindow", N_("_New Window"), GTK_STOCK_NEW, "<control>N",
 	  N_("Create a new window"),
 	  G_CALLBACK (window_cmd_file_new_window), NULL },
-	{ "FileNewTab", N_("New _Tab"), NULL, "<shift><control>N",
+	{ "FileNewTab", N_("New _Tab"), EPHY_STOCK_NEW_TAB, "<shift><control>N",
 	  N_("Create a new tab"),
 	  G_CALLBACK (window_cmd_file_new_tab), NULL },
 	{ "FileOpen", N_("_Open..."), GTK_STOCK_OPEN, "<control>O",
@@ -135,7 +136,7 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "ViewStatusbar", N_("St_atusbar"), NULL, NULL,
 	  N_("Show or hide statusbar"),
 	  G_CALLBACK (window_cmd_view_statusbar), NULL, TOGGLE_ACTION },
-	{ "ViewFullscreen", N_("_Fullscreen"), NULL, "F11",
+	{ "ViewFullscreen", N_("_Fullscreen"), EPHY_STOCK_FULLSCREEN, "F11",
 	  N_("Browse at full screen"),
 	  G_CALLBACK (window_cmd_view_fullscreen), NULL, TOGGLE_ACTION},
 	{ "ViewZoomIn", N_("Zoom _In"), GTK_STOCK_ZOOM_IN, "<control>plus",
@@ -168,10 +169,10 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "GoLocation", N_("_Location..."), NULL, "<control>L",
 	  N_("Go to a specified location"),
 	  G_CALLBACK (window_cmd_go_location), NULL },
-	{ "GoHistory", N_("_History"), NULL, "<control>H",
+	{ "GoHistory", N_("_History"), EPHY_STOCK_HISTORY, "<control>H",
 	  N_("Go to an already visited page"),
 	  G_CALLBACK (window_cmd_go_history), NULL },
-	{ "GoBookmarks", N_("_Bookmarks"), NULL, "<control>B",
+	{ "GoBookmarks", N_("_Bookmarks"), EPHY_STOCK_BOOKMARKS, "<control>B",
 	  N_("Go to a bookmark"),
 	  G_CALLBACK (window_cmd_go_bookmarks), NULL },
 

@@ -35,7 +35,11 @@ ephy_stock_icons_init (void)
 	static const char *items[] =
 	{
 		EPHY_STOCK_SECURE,
-		EPHY_STOCK_UNSECURE
+		EPHY_STOCK_UNSECURE,
+		EPHY_STOCK_HISTORY,
+		EPHY_STOCK_BOOKMARKS,
+		EPHY_STOCK_FULLSCREEN,
+		EPHY_STOCK_NEW_TAB
 	};
 
 	factory = gtk_icon_factory_new ();

@@ -47,12 +47,13 @@ static GtkTargetEntry source_drag_types [] =
         { "EPHY_TOOLBAR_BUTTON", 0, 0 }
 };
 
-static void ephy_editable_toolbar_class_init (EphyEditableToolbarClass *klass);
-static void ephy_editable_toolbar_init (EphyEditableToolbar *t);
-static void ephy_editable_toolbar_finalize (GObject *object);
-
-static void do_merge (EphyEditableToolbar *t);
-static void setup_editor (EphyEditableToolbar *etoolbar);
+static void	ephy_editable_toolbar_class_init (EphyEditableToolbarClass *klass);
+static void	ephy_editable_toolbar_init	 (EphyEditableToolbar *t);
+static void	ephy_editable_toolbar_finalize	 (GObject *object);
+static void	do_merge			 (EphyEditableToolbar *t);
+static void	setup_editor			 (EphyEditableToolbar *etoolbar);
+static void	update_editor_sheet		 (EphyEditableToolbar *etoolbar);
+static gboolean update_editor_position		 (EphyEditableToolbar *etoolbar);
 
 enum
 {
@@ -70,13 +71,17 @@ struct EphyEditableToolbarPrivate
 	char *filename;
 
 	GtkWidget *editor;
+	GtkWidget *main_box;
 	GtkWidget *table;
 	GtkWidget *label_zone;
 	GtkWidget *action_zone;
 	GtkWidget *scrolled_window;
 
 	guint ui_id;
-	gboolean ui_dirty;
+
+	gboolean toolbars_dirty;
+	gboolean editor_pos_dirty;
+	gboolean editor_sheet_dirty;
 };
 
 typedef struct
@@ -140,6 +145,12 @@ item_node_new (EggAction *action, gboolean separator)
 	item->separator = separator;
 
 	return item;
+}
+
+static void
+free_node (GNode *node)
+{
+	g_free (node->data);
 }
 
 static EggAction *
@@ -425,7 +436,26 @@ ui_update (gpointer data)
 {
 	EphyEditableToolbar *etoolbar = EPHY_EDITABLE_TOOLBAR (data);
 
-	do_merge (etoolbar);
+	if (etoolbar->priv->toolbars_dirty)
+	{
+		LOG ("Update ui: toolbars")
+		do_merge (etoolbar);
+		etoolbar->priv->toolbars_dirty = FALSE;
+	}
+
+	if (etoolbar->priv->editor_sheet_dirty)
+	{
+		LOG ("Update ui: editor sheet")
+		update_editor_sheet (etoolbar);
+		etoolbar->priv->editor_sheet_dirty = FALSE;
+	}
+
+	if (etoolbar->priv->editor_pos_dirty)
+	{
+		LOG ("Update ui: editor position (in idle)")
+		g_idle_add ((GSourceFunc)update_editor_position, etoolbar);
+		etoolbar->priv->editor_pos_dirty = FALSE;
+	}
 
 	return FALSE;
 }
@@ -433,8 +463,6 @@ ui_update (gpointer data)
 static void
 queue_ui_update (EphyEditableToolbar *etoolbar)
 {
-	etoolbar->priv->ui_dirty = TRUE;
-
 	g_idle_add (ui_update, etoolbar);
 }
 
@@ -475,6 +503,7 @@ drag_data_received_cb (GtkWidget *widget,
 
 	add_action (etoolbar, parent, sibling, type, selection_data->data);
 
+	etoolbar->priv->toolbars_dirty = TRUE;
 	queue_ui_update (etoolbar);
 }
 
@@ -486,8 +515,10 @@ drag_data_delete_cb (GtkWidget *widget,
 	GNode *node;
 
 	node = (GNode *)g_object_get_data (G_OBJECT (widget), "item_node");
-	g_node_unlink (node);
+	free_node (node);
+	g_node_destroy (node);
 
+	etoolbar->priv->toolbars_dirty = TRUE;
 	queue_ui_update (etoolbar);
 }
 
@@ -513,7 +544,7 @@ drag_data_get_cb (GtkWidget *widget,
 }
 
 static void
-setup_toolbar_drag (EphyEditableToolbar *etoolbar, GNode *toolbars)
+setup_toolbars (EphyEditableToolbar *etoolbar, GNode *toolbars)
 {
 	GNode *l1, *l2;
 	int k = 0;
@@ -523,10 +554,12 @@ setup_toolbar_drag (EphyEditableToolbar *etoolbar, GNode *toolbars)
 	{
 		int i = 0;
 		GtkWidget *toolbar;
+		ToolbarNode *node = (ToolbarNode *)l1->data;
 
 		sprintf (path, "/Toolbar%d", k);
 		toolbar = egg_menu_merge_get_widget (etoolbar->priv->merge, path);
 		g_object_set_data (G_OBJECT (toolbar), "toolbar_node", l1);
+		node->widget = toolbar;
 
 		if (!g_object_get_data (G_OBJECT (toolbar), "drag_dest_set"))
 		{
@@ -598,11 +631,10 @@ ensure_toolbars_min_size (EphyEditableToolbar *t)
 
 	for (n = t->priv->toolbars->children; n != NULL; n = n->next)
 	{
+		ToolbarNode *node = (ToolbarNode *) (n->data);
 		GtkWidget *toolbar;
-		char path[255];
 
-		sprintf (path, "/Toolbar%d", i);
-		toolbar = egg_menu_merge_get_widget (t->priv->merge, path);
+		toolbar = node->widget;
 
 		if (g_node_n_children (n) == 0)
 		{
@@ -653,7 +685,7 @@ do_merge (EphyEditableToolbar *t)
 
 	egg_menu_merge_ensure_update (t->priv->merge);
 
-	setup_toolbar_drag (t, t->priv->toolbars);
+	setup_toolbars (t, t->priv->toolbars);
 
 	ensure_toolbars_min_size (t);
 
@@ -739,13 +771,9 @@ ephy_editable_toolbar_init (EphyEditableToolbar *t)
 	t->priv->filename = g_build_filename (ephy_dot_dir (), "toolbar.xml", NULL);
 	t->priv->editor = NULL;
 	t->priv->ui_id = 0;
-	t->priv->ui_dirty = FALSE;
-}
-
-static void
-free_node (GNode *node)
-{
-	g_free (node->data);
+	t->priv->toolbars_dirty = FALSE;
+	t->priv->editor_pos_dirty = FALSE;
+	t->priv->editor_sheet_dirty = FALSE;
 }
 
 static void
@@ -795,6 +823,7 @@ static void
 editor_get_dimensions (EphyEditableToolbar *etoolbar, GtkWidget *toolbar,
 		       int *x, int *y, int *width, int *height)
 {
+	GtkWidget *vbox;
 	GtkBin *popwin;
 	GtkWidget *widget;
 	GtkWidget *table;
@@ -810,6 +839,7 @@ editor_get_dimensions (EphyEditableToolbar *etoolbar, GtkWidget *toolbar,
 	widget = toolbar;
 	popup  = etoolbar->priv->scrolled_window;
 	popwin = GTK_BIN (etoolbar->priv->editor);
+	vbox = etoolbar->priv->main_box;
 	table = etoolbar->priv->table;
 	action_zone = etoolbar->priv->action_zone;
 	label_zone = etoolbar->priv->label_zone;
@@ -826,17 +856,19 @@ editor_get_dimensions (EphyEditableToolbar *etoolbar, GtkWidget *toolbar,
 	*width = MIN (avail_width, requisition.width);
 	*height = MIN (avail_height, requisition.height);
 
-	work_width = (2 * popwin->child->style->xthickness +
+	work_width = (2 * GTK_BIN (popwin)->child->style->xthickness +
 		      2 * GTK_CONTAINER (popwin)->border_width +
 		      2 * GTK_CONTAINER (popwin->child)->border_width +
+		      2 * GTK_CONTAINER (vbox)->border_width +
 		      2 * GTK_CONTAINER (popup)->border_width +
 		      2 * GTK_CONTAINER (GTK_BIN (popup)->child)->border_width +
 		      2 * GTK_BIN (popup)->child->style->xthickness);
 	*width += work_width;
 
-	work_height = (2 * popwin->child->style->ythickness +
+	work_height = (2 * GTK_BIN (popwin)->child->style->ythickness +
 		       2 * GTK_CONTAINER (popwin)->border_width +
 		       2 * GTK_CONTAINER (popwin->child)->border_width +
+		       2 * GTK_CONTAINER (vbox)->border_width +
 		       2 * GTK_CONTAINER (popup)->border_width +
 		       2 * GTK_CONTAINER (GTK_BIN (popup)->child)->border_width +
 		       2 * GTK_BIN (popup)->child->style->ythickness);
@@ -890,6 +922,9 @@ static void
 editor_add_toolbar_cb (GtkWidget *button, EphyEditableToolbar *etoolbar)
 {
 	add_toolbar (etoolbar);
+
+	etoolbar->priv->toolbars_dirty = TRUE;
+	etoolbar->priv->editor_pos_dirty = TRUE;
 	queue_ui_update (etoolbar);
 }
 
@@ -903,7 +938,9 @@ editor_drag_data_received_cb (GtkWidget *widget,
 		              guint time_,
 		              EphyEditableToolbar *etoolbar)
 {
-	setup_editor (etoolbar);
+	etoolbar->priv->editor_sheet_dirty = TRUE;
+	etoolbar->priv->editor_pos_dirty = TRUE;
+	queue_ui_update (etoolbar);
 }
 
 static void
@@ -911,82 +948,86 @@ editor_drag_data_delete_cb (GtkWidget *widget,
                             GdkDragContext *context,
                             EphyEditableToolbar *etoolbar)
 {
-	setup_editor (etoolbar);
+	etoolbar->priv->editor_sheet_dirty = TRUE;
+	etoolbar->priv->editor_pos_dirty = TRUE;
+	queue_ui_update (etoolbar);
 }
 
 static void
 setup_editor (EphyEditableToolbar *etoolbar)
+{
+	GtkWidget *editor;
+	GtkWidget *scrolled_window;
+	GtkWidget *vbox;
+	GtkWidget *label_hbox;
+	GtkWidget *image;
+	GtkWidget *label;
+	GtkWidget *bbox;
+	GtkWidget *button;
+	GtkWidget *frame;
+
+	editor = gtk_window_new (GTK_WINDOW_POPUP);
+	etoolbar->priv->editor = editor;
+	frame = gtk_frame_new (NULL);
+	gtk_widget_show (frame);
+	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
+	gtk_container_add (GTK_CONTAINER (editor), frame);
+	vbox = gtk_vbox_new (FALSE, 12);
+	etoolbar->priv->main_box = vbox;
+	gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
+	gtk_widget_show (vbox);
+	gtk_container_add (GTK_CONTAINER (frame), vbox);
+	scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+	etoolbar->priv->scrolled_window = scrolled_window;
+	gtk_widget_show (scrolled_window);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+					GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
+	label_hbox = gtk_hbox_new (FALSE, 6);
+	etoolbar->priv->label_zone = label_hbox;
+	gtk_widget_show (label_hbox);
+	gtk_box_pack_start (GTK_BOX (vbox), label_hbox, FALSE, FALSE, 0);
+	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
+	gtk_widget_show (image);
+	gtk_box_pack_start (GTK_BOX (label_hbox), image, FALSE, FALSE, 0);
+	label = gtk_label_new (_("Drag an item onto the toolbars above to add it, "
+				 "from the toolbars in the items table to remove it."));
+	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	gtk_widget_show (label);
+	gtk_box_pack_start (GTK_BOX (label_hbox), label, FALSE, TRUE, 0);
+	bbox = gtk_hbutton_box_new ();
+	gtk_box_set_spacing (GTK_BOX (bbox), 10);
+	etoolbar->priv->action_zone = bbox;
+	gtk_widget_show (bbox);
+	gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox),
+			           GTK_BUTTONBOX_END);
+	gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
+	button = gtk_button_new_from_stock (GTK_STOCK_ADD);
+	gtk_widget_show (button);
+	gtk_button_set_label (GTK_BUTTON (button), _("Add Toolbar"));
+	g_signal_connect (button, "clicked",
+			  G_CALLBACK (editor_add_toolbar_cb),
+			  etoolbar);
+	gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
+	button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+	gtk_widget_show (button);
+	g_signal_connect (button, "clicked",
+			  G_CALLBACK (editor_close_cb),
+			  etoolbar);
+	gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
+
+	update_editor_sheet (etoolbar);
+	update_editor_position (etoolbar);
+}
+
+static void
+update_editor_sheet (EphyEditableToolbar *etoolbar)
 {
 	GList *l;
 	GList *to_drag;
 	int x, y, height, width;
 	GtkWidget *table;
 	GtkWidget *viewport;
-	GtkWidget *last_toolbar;
-	GtkWidget *editor;
-	char path[255];
-
-	if (etoolbar->priv->editor == NULL)
-	{
-		GtkWidget *editor;
-		GtkWidget *scrolled_window;
-		GtkWidget *vbox;
-		GtkWidget *label_hbox;
-		GtkWidget *image;
-		GtkWidget *label;
-		GtkWidget *bbox;
-		GtkWidget *button;
-
-		editor = gtk_window_new (GTK_WINDOW_POPUP);
-		gtk_container_set_border_width (GTK_CONTAINER (editor), 12);
-		vbox = gtk_vbox_new (FALSE, 12);
-		gtk_widget_show (vbox);
-		gtk_container_add (GTK_CONTAINER (editor), vbox);
-		scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-		etoolbar->priv->scrolled_window = scrolled_window;
-		gtk_widget_show (scrolled_window);
-		gtk_scrolled_window_set_shadow_type
-			(GTK_SCROLLED_WINDOW(scrolled_window), GTK_SHADOW_IN);
-		gtk_scrolled_window_set_policy
-			(GTK_SCROLLED_WINDOW (scrolled_window),
-                         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-		gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
-		label_hbox = gtk_hbox_new (FALSE, 6);
-		etoolbar->priv->label_zone = label_hbox;
-		gtk_widget_show (label_hbox);
-		gtk_box_pack_start (GTK_BOX (vbox), label_hbox, FALSE, FALSE, 0);
-		image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
-		gtk_widget_show (image);
-		gtk_box_pack_start (GTK_BOX (label_hbox), image, FALSE, FALSE, 0);
-		label = gtk_label_new (_("Drag an item onto the toolbars above to add it.\n"
-					 "Drag an item from the toolbars in the items table"
-					 " to remove it."));
-		gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-		gtk_widget_show (label);
-		gtk_box_pack_start (GTK_BOX (label_hbox), label, FALSE, TRUE, 0);
-		bbox = gtk_hbutton_box_new ();
-		gtk_box_set_spacing (GTK_BOX (bbox), 10);
-		etoolbar->priv->action_zone = bbox;
-		gtk_widget_show (bbox);
-		gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox),
-				           GTK_BUTTONBOX_END);
-		gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
-		button = gtk_button_new_from_stock (GTK_STOCK_ADD);
-		gtk_widget_show (button);
-		gtk_button_set_label (GTK_BUTTON (button), _("Add Toolbar"));
-		g_signal_connect (button, "clicked",
-				  G_CALLBACK (editor_add_toolbar_cb),
-				  etoolbar);
-		gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
-		button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
-		gtk_widget_show (button);
-		g_signal_connect (button, "clicked",
-				  G_CALLBACK (editor_close_cb),
-				  etoolbar);
-		gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
-
-		etoolbar->priv->editor = editor;
-	}
 
 	viewport = GTK_BIN (etoolbar->priv->scrolled_window)->child;
 	if (viewport)
@@ -1064,8 +1105,19 @@ setup_editor (EphyEditableToolbar *etoolbar)
 		}
 	}
 
-	sprintf (path, "/Toolbar%d", g_node_n_children (etoolbar->priv->toolbars) - 1);
-	last_toolbar = egg_menu_merge_get_widget (etoolbar->priv->merge, path);
+	g_list_free (to_drag);
+}
+
+static gboolean
+update_editor_position (EphyEditableToolbar *etoolbar)
+{
+	ToolbarNode *last_node;
+	GtkWidget *last_toolbar;
+	GtkWidget *editor;
+	int x, y, height, width;
+
+	last_node = (ToolbarNode *)(g_node_last_child (etoolbar->priv->toolbars))->data;
+	last_toolbar = last_node->widget;
 	g_assert (EGG_IS_TOOLBAR (last_toolbar));
 
 	editor_get_dimensions (etoolbar, last_toolbar,
@@ -1074,7 +1126,9 @@ setup_editor (EphyEditableToolbar *etoolbar)
 	gtk_widget_set_size_request (GTK_WIDGET (editor), width, height);
 	gtk_window_move (GTK_WINDOW (editor), x, y);
 
-	g_list_free (to_drag);
+	LOG ("Editor moved to %d %d %d %d", x, y, width, height)
+
+	return FALSE;
 }
 
 static gboolean
