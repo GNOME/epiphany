@@ -115,7 +115,7 @@ MozDownload::Init(nsIURI *aSource, nsILocalFile *aTarget, const PRUnichar *aDisp
 	mTotalProgress = 0;
 	mCurrentProgress = 0;
 	mPercentComplete = 0;
-	mInterval = 4000; /* in ms */
+	mInterval = 200000; /* microsec */
 	mLastUpdate = mStartTime;
 	mMIMEInfo = aMIMEInfo;
 
