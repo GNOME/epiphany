@@ -242,6 +242,8 @@ completion_func (GtkEntryCompletion *completion,
 			if (!strncmp (key_prefixed, case_normalized_string,
 				      strlen (key_prefixed)))
 			{
+				g_free (key_prefixed);
+
 				ret = TRUE;
 				break;
 			}
