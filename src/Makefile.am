@@ -20,6 +20,7 @@ INCLUDES = \
 	-DGNOME_DISABLE_DEPRECATED
 
 bin_PROGRAMS = epiphany-bin
+bin_SCRIPTS = epiphany
 
 CXXLD = $(CXX)
 LINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
