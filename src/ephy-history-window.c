@@ -860,6 +860,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 					"vadjustment", NULL,
 					"hscrollbar_policy", GTK_POLICY_AUTOMATIC,
 					"vscrollbar_policy", GTK_POLICY_AUTOMATIC,
+					"shadow_type", GTK_SHADOW_IN,
 					NULL);
 	gtk_paned_add1 (GTK_PANED (hpaned), scrolled_window);
 	gtk_widget_show (scrolled_window);
@@ -900,6 +901,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 					"vadjustment", NULL,
 					"hscrollbar_policy", GTK_POLICY_AUTOMATIC,
 					"vscrollbar_policy", GTK_POLICY_AUTOMATIC,
+					"shadow_type", GTK_SHADOW_IN,
 					NULL);
 	gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
 	gtk_widget_show (scrolled_window);

@@ -202,7 +202,7 @@ ephy_history_load (EphyHistory *eb)
 		return;
 
 	doc = xmlParseFile (eb->priv->xml_file);
-	g_assert (doc != NULL);
+	g_return_if_fail (doc != NULL);
 
 	root = xmlDocGetRootElement (doc);
 

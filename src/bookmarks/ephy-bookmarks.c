@@ -246,7 +246,7 @@ ephy_bookmarks_load (EphyBookmarks *eb)
 		return FALSE;
 
 	doc = xmlParseFile (eb->priv->xml_file);
-	g_assert (doc != NULL);
+	g_return_val_if_fail (doc != NULL, FALSE);
 
 	root = xmlDocGetRootElement (doc);
 

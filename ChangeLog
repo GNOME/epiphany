@@ -1,3 +1,14 @@
+2003-05-03  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/ephy-history.c: (ephy_history_load):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_load):
+	* src/ephy-history-window.c: (ephy_history_window_construct):
+
+	Do not assert on corrupted xml, just warn.
+	Put back views shadows for now.
+
 2003-05-03  Xan Lopez  <xan@masilla.org>
 
 	* NEWS:
