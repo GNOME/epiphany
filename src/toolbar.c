@@ -399,39 +399,24 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 }
 
 static void
-toolbar_style_changed_cb (GtkToolbar *toolbar,
-			  GtkToolbarStyle style,
-			  GtkWidget *spinner)
+fixed_toolbar_reconfigured_cb (GtkToolItem *fixed_item,
+			       EphySpinner *spinner)
 {
-	gboolean small;
+	GtkToolbarStyle style;
+	GtkIconSize size;
 
-	small = (style != GTK_TOOLBAR_BOTH);
+	style = gtk_tool_item_get_toolbar_style (fixed_item);
 
-	ephy_spinner_set_small_mode (EPHY_SPINNER (spinner), small);
-}
-
-static void
-parent_set_cb (GtkWidget *item,
-	       GtkObject *old_parent,
-	       GtkWidget *spinner)
-{
-	if (old_parent != NULL)
+	if (style == GTK_TOOLBAR_BOTH)
 	{
-		g_return_if_fail (GTK_IS_TOOLBAR (old_parent));
-
-		g_signal_handlers_disconnect_by_func
-			(old_parent, G_CALLBACK (toolbar_style_changed_cb),
-			 spinner);
+		size = GTK_ICON_SIZE_INVALID;
+	}
+	else
+	{
+		size = GTK_ICON_SIZE_LARGE_TOOLBAR;
 	}
 
-	if (item->parent)
-	{
-		g_return_if_fail (GTK_IS_TOOLBAR (item->parent));
-
-		g_signal_connect (item->parent, "style_changed",
-				  G_CALLBACK (toolbar_style_changed_cb),
-				  spinner);
-	}
+	ephy_spinner_set_size (spinner, size);
 }
 
 static void
@@ -452,10 +437,10 @@ toolbar_init (Toolbar *t)
 	gtk_container_add (GTK_CONTAINER (item), spinner);
 	gtk_widget_show (GTK_WIDGET (item));
 
-	g_signal_connect (item, "parent_set",
-			  G_CALLBACK (parent_set_cb), spinner);
-
 	egg_editable_toolbar_set_fixed (EGG_EDITABLE_TOOLBAR (t), item);
+
+	g_signal_connect (item, "toolbar-reconfigured",
+			  G_CALLBACK (fixed_toolbar_reconfigured_cb), spinner);
 }
 
 static void

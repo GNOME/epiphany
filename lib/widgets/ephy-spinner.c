@@ -2,7 +2,8 @@
  * Nautilus
  *
  * Copyright (C) 2000 Eazel, Inc.
- * Copyright (C) 2002 Marco Pesenti Gritti
+ * Copyright (C) 2002-2004 Marco Pesenti Gritti
+ * Copyright (C) 2004 Christian Persch
  *
  * Nautilus is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +36,7 @@
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gtk/gtkicontheme.h>
+#include <gtk/gtkiconfactory.h>
 
 #define spinner_DEFAULT_TIMEOUT 100	/* Milliseconds Per Frame */
 
@@ -45,14 +47,12 @@ struct EphySpinnerDetails
 	GList	*image_list;
 	GdkPixbuf *quiescent_pixbuf;
 	GtkIconTheme *icon_theme;
+	GtkIconSize size;
 
 	int	max_frame;
 	int	delay;
 	int	current_frame;
 	guint	timer_task;
-
-	gboolean ready;
-	gboolean small_mode;
 };
 
 static void ephy_spinner_class_init		(EphySpinnerClass *class);
@@ -125,6 +125,11 @@ get_spinner_dimensions (EphySpinner *spinner, int *spinner_width, int* spinner_h
 	GList *image_list;
 	GdkPixbuf *pixbuf;
 
+	if (spinner->details->image_list == NULL)
+	{
+		ephy_spinner_load_images (spinner);
+	}
+
 	current_width = 0;
 	current_height = 0;
 
@@ -186,9 +191,7 @@ ephy_spinner_init (EphySpinner *spinner)
 	spinner->details->max_frame = 0;
 	spinner->details->current_frame = 0;
 	spinner->details->timer_task = 0;
-
-	ephy_spinner_load_images (spinner);
-	gtk_widget_show (widget);
+	spinner->details->size = GTK_ICON_SIZE_INVALID;
 }
 
 /* handler for handling theme changes */
@@ -236,17 +239,18 @@ select_spinner_image (EphySpinner *spinner)
 static int
 ephy_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
 {
-	EphySpinner *spinner;
+	EphySpinner *spinner = EPHY_SPINNER (widget);
 	GdkPixbuf *pixbuf;
 	GdkGC *gc;
 	int x_offset, y_offset, width, height;
 	GdkRectangle pix_area, dest;
 
-	g_return_val_if_fail (EPHY_IS_SPINNER (widget), FALSE);
-
-	spinner = EPHY_SPINNER (widget);
-
 	if (!GTK_WIDGET_DRAWABLE (spinner)) return TRUE;
+
+	if (spinner->details->image_list == NULL)
+	{
+		ephy_spinner_load_images (spinner);
+	}
 
 	pixbuf = select_spinner_image (spinner);
 	if (pixbuf == NULL)
@@ -373,8 +377,6 @@ ephy_spinner_stop (EphySpinner *spinner)
 static void
 ephy_spinner_unload_images (EphySpinner *spinner)
 {
-	GList *current_entry;
-
 	if (spinner->details->quiescent_pixbuf != NULL)
 	{
 		g_object_unref (spinner->details->quiescent_pixbuf);
@@ -382,13 +384,7 @@ ephy_spinner_unload_images (EphySpinner *spinner)
 	}
 
 	/* unref all the images in the list, and then let go of the list itself */
-	current_entry = spinner->details->image_list;
-	while (current_entry != NULL)
-	{
-		g_object_unref (current_entry->data);
-		current_entry = current_entry->next;
-	}
-
+	g_list_foreach (spinner->details->image_list, (GFunc) g_object_unref, NULL);
 	g_list_free (spinner->details->image_list);
 	spinner->details->image_list = NULL;
 
@@ -399,15 +395,24 @@ static GdkPixbuf *
 scale_to_real_size (EphySpinner *spinner, GdkPixbuf *pixbuf)
 {
 	GdkPixbuf *result;
-	int size;
+	int sw, sh, pw, ph;
 
-	size = gdk_pixbuf_get_height (pixbuf);
-
-	if (spinner->details->small_mode)
+	if (spinner->details->size == GTK_ICON_SIZE_INVALID)
 	{
-		result = gdk_pixbuf_scale_simple (pixbuf,
-						  size * 2 / 3,
-						  size * 2 / 3,
+		return g_object_ref (pixbuf);
+	}
+
+	if (!gtk_icon_size_lookup (spinner->details->size, &sw, &sh))
+	{
+		return NULL;
+	}
+
+	pw = gdk_pixbuf_get_width (pixbuf);
+	ph = gdk_pixbuf_get_height (pixbuf);
+
+	if (pw != sw || ph != sh)
+	{
+		result = gdk_pixbuf_scale_simple (pixbuf, sw, sh,
 						  GDK_INTERP_BILINEAR);
 	}
 	else
@@ -513,20 +518,21 @@ ephy_spinner_load_images (EphySpinner *spinner)
 }
 
 /*
- * ephy_spinner_set_small_mode:
+ * ephy_spinner_set_size:
  * @spinner: a #EphySpinner
- * @new_mode: pass true to enable the small mode, false to disable
+ * @size: the size of type %GtkIconSize
  *
- * Set the size mode of the spinner. We need a small mode to deal
- * with only icons toolbars.
+ * Set the size of the spinner. Use %GTK_ICON_SIZE_INVALID to use the
+ * native size of the icon.
  **/
 void
-ephy_spinner_set_small_mode (EphySpinner *spinner, gboolean new_mode)
+ephy_spinner_set_size (EphySpinner *spinner, GtkIconSize size)
 {
-	if (new_mode != spinner->details->small_mode)
+	if (size != spinner->details->size)
 	{
-		spinner->details->small_mode = new_mode;
-		ephy_spinner_load_images (spinner);
+		ephy_spinner_unload_images (spinner);
+
+		spinner->details->size = size;
 
 		gtk_widget_queue_resize (GTK_WIDGET (spinner));
 	}
@@ -537,14 +543,27 @@ ephy_spinner_set_small_mode (EphySpinner *spinner, gboolean new_mode)
 static void
 ephy_spinner_size_request (GtkWidget *widget, GtkRequisition *requisition)
 {
-	int spinner_width, spinner_height;
 	EphySpinner *spinner = EPHY_SPINNER (widget);
+	int width = 0, height = 0;
 
-	get_spinner_dimensions (spinner, &spinner_width, &spinner_height);
+	if (spinner->details->size == GTK_ICON_SIZE_INVALID)
+	{
+		get_spinner_dimensions (spinner, &width, &height);
+	}
+	else
+	{
+		gtk_icon_size_lookup (spinner->details->size, &width, &height);
+	}
+
+	requisition->width = width;
+	requisition->height = height;
 
 	/* allocate some extra margin so we don't butt up against toolbar edges */
-	requisition->width = spinner_width + 4;
-	requisition->height = spinner_height + 4;
+	if (spinner->details->size != GTK_ICON_SIZE_MENU)
+	{
+		requisition->width += 4;
+		requisition->height += 4;
+	}
 }
 
 static void

@@ -36,6 +36,7 @@
 #include "ephy-debug.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-ellipsizing-label.h"
+#include "ephy-spinner.h"
 
 #include <glib-object.h>
 #include <gtk/gtkeventbox.h>
@@ -727,22 +728,23 @@ ephy_notebook_finalize (GObject *object)
 static void
 sync_load_status (EphyTab *tab, GParamSpec *pspec, GtkWidget *proxy)
 {
-	GtkWidget *animation = NULL, *icon = NULL;
+	GtkWidget *spinner, *icon;
 
-	animation = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "loading-image"));
+	spinner = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "spinner"));
 	icon = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "icon"));
-	g_return_if_fail (animation != NULL && icon != NULL);
+	g_return_if_fail (spinner != NULL && icon != NULL);
 
-	switch (ephy_tab_get_load_status (tab))
+	if (ephy_tab_get_load_status (tab))
 	{
-		case TRUE:
-			gtk_widget_hide (icon);
-			gtk_widget_show (animation);
-			break;
-		case FALSE:
-			gtk_widget_hide (animation);
-			gtk_widget_show (icon);
-			break;
+		gtk_widget_hide (icon);
+		gtk_widget_show (spinner);
+		ephy_spinner_start (EPHY_SPINNER (spinner));
+	}
+	else
+	{
+		ephy_spinner_stop (EPHY_SPINNER (spinner));
+		gtk_widget_hide (spinner);
+		gtk_widget_show (icon);
 	}
 }
 
@@ -841,12 +843,9 @@ tab_label_style_set_cb (GtkWidget *label,
 static GtkWidget *
 build_tab_label (EphyNotebook *nb, EphyTab *tab)
 {
-	GtkWidget *label, *hbox, *label_hbox, *close_button, *image;
-	int h, w;
-	GtkWidget *window;
-	GtkWidget *loading_image, *icon;
-	GtkWidget *label_ebox;
-	GdkPixbufAnimation *loading_pixbuf;
+	GtkWidget *window, *hbox, *label_hbox, *label_ebox;
+	GtkWidget *label, *close_button, *image, *spinner, *icon;
+	int h = -1, w = -1;
 
 	window = gtk_widget_get_toplevel (GTK_WIDGET (nb));
 
@@ -877,12 +876,10 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
                           G_CALLBACK (close_button_clicked_cb),
                           tab);
 
-	/* setup load feedback image */
-	/* FIXME: make the animation themeable */
-	loading_pixbuf = gdk_pixbuf_animation_new_from_file (ephy_file ("epiphany-tab-loading.gif"), NULL);
-	loading_image = gtk_image_new_from_animation (loading_pixbuf);
-	g_object_unref (loading_pixbuf);
-	gtk_box_pack_start (GTK_BOX (label_hbox), loading_image, FALSE, FALSE, 0);
+	/* setup load feedback */
+	spinner = ephy_spinner_new ();
+	ephy_spinner_set_size (EPHY_SPINNER (spinner), GTK_ICON_SIZE_MENU);
+	gtk_box_pack_start (GTK_BOX (label_hbox), spinner, FALSE, FALSE, 0);
 
 	/* setup site icon, empty by default */
 	icon = gtk_image_new ();
@@ -909,7 +906,7 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	
 	g_object_set_data (G_OBJECT (hbox), "label", label);
 	g_object_set_data (G_OBJECT (hbox), "label-ebox", label_ebox);
-	g_object_set_data (G_OBJECT (hbox), "loading-image", loading_image);
+	g_object_set_data (G_OBJECT (hbox), "spinner", spinner);
 	g_object_set_data (G_OBJECT (hbox), "icon", icon);
 	g_object_set_data (G_OBJECT (hbox), "close-button", close_button);
 	g_object_set_data (G_OBJECT (hbox), "tooltips", nb->priv->title_tips);

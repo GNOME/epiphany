@@ -1,3 +1,17 @@
+2004-07-02  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/art/Makefile.am:
+	R data/art/epiphany-tab-loading.gif:
+	* lib/widgets/ephy-spinner.c: (get_spinner_dimensions),
+	(ephy_spinner_init), (ephy_spinner_expose),
+	(ephy_spinner_unload_images), (scale_to_real_size),
+	(ephy_spinner_set_size), (ephy_spinner_size_request):
+	* lib/widgets/ephy-spinner.h:
+	* src/ephy-notebook.c: (sync_load_status), (build_tab_label):
+	* src/toolbar.c: (fixed_toolbar_reconfigured_cb), (toolbar_init):
+
+	Remove our tab loading animation and use mini-spinners instead.
+
 2004-07-02  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/bookmarks/ephy-bookmark-action.c:

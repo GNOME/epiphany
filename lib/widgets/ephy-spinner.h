@@ -30,6 +30,7 @@
 #define EPHY_SPINNER_H
 
 #include <gtk/gtkeventbox.h>
+#include <gtk/gtkenums.h>
 
 G_BEGIN_DECLS
 
@@ -63,8 +64,8 @@ void          ephy_spinner_start          (EphySpinner *throbber);
 
 void          ephy_spinner_stop           (EphySpinner *throbber);
 
-void	      ephy_spinner_set_small_mode (EphySpinner *spinner,
-					   gboolean new_mode);
+void	      ephy_spinner_set_size	  (EphySpinner *spinner,
+					   GtkIconSize size);
 
 G_END_DECLS
 
