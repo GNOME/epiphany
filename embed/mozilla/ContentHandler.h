@@ -92,7 +92,6 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	nsCString mScheme;
 
 	PRBool mDownloadCanceled;
-	PRBool mHelperProgress;
 	
 	nsCOMPtr<nsIWebProgressListener> mListener;
 };

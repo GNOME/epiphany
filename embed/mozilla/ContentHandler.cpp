@@ -231,8 +231,7 @@ NS_IMPL_ISUPPORTS1(GContentHandler, nsIHelperAppLauncherDialog)
 
 GContentHandler::GContentHandler() : mUri(nsnull),
 				     mMimeType(nsnull),
-				     mDownloadCanceled(PR_FALSE),
-				     mHelperProgress(PR_FALSE)
+				     mDownloadCanceled(PR_FALSE)
 {
 	NS_INIT_ISUPPORTS();
 	/* member initializers and constructor code */
@@ -333,12 +332,14 @@ NS_IMETHODIMP GContentHandler::
 	}
 }
 
+#if MOZILLA_SNAPSHOT < 9
 /* void showProgressDialog (in nsIHelperAppLauncher aLauncher, in nsISupports aContext); */
 NS_METHOD GContentHandler::ShowProgressDialog(nsIHelperAppLauncher *aLauncher,
 					      nsISupports *aContext)
 {
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 // begin local public methods impl
@@ -403,8 +404,7 @@ NS_METHOD GContentHandler::LaunchHelperApp (void)
 
 NS_METHOD GContentHandler::ShowHelperProgressDialog (void)
 {
-	mHelperProgress = PR_TRUE;
-	return ShowProgressDialog (mLauncher,mContext);
+	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 NS_METHOD GContentHandler::GetLauncher (nsIHelperAppLauncher * *_retval)
