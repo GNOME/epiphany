@@ -1,16 +1,50 @@
-Bookmarks:
-- Consistent use of topics instead of keywords in the code
-- Consistent use of address instead of location in the code where appropriate
-- <campd> nautilus/libnautilus-private/nautilus-tree-view-drag-dest.c. Dest crashes.
+1.0 FIXES
 
-Others:
-- downloader should resize when clicking details, so that the cursor is not moved away from the button
-- make popups less annoying
-- show when bookmarks has updated content
+1. download-view.c: (download_dialog_delete_cb) 
+This is the canel all pending downloads dialog. It should be document
+modal (or in this case technically window modal) but not app modal.
 
-Egg problems:
-- not translated
-- popups not working
-- idle not removed when finalizing menu merge
-- action reffed in menu merge and never unrefed
-- disconnect_proxy does menu stuff without checking it's actually a menu
+2. ephy-embed-utils.c: (ephy_embed_utils_nohandler_dialog_run):
+A dialog to warn the user that no application capable to open the
+specified file are found. Should probably be tab modal or window
+modal, not app modal (it uses both gtk_dialog_run and sets the modal
+window hint, both are bad).
+
+3. ephy-gui.c (ephy_gui_confirm_overwrite_file):
+This dialog should be modal to its parent file selector dialog but not
+to the epiphany application. It uses both gtk_dialog_run and sets the
+modal window hint. also it should be an ok cancel, not yes no dialog.
+
+4. ephy-nautilus-view.c (gnv_cmd_file_print):
+Creates a modal print dialog, although it doesn't really matter
+because of the embedding inside of nautiuls.
+
+5. pdm-dialog.c (show_cookies_properties):
+Uses gtk_dialog_run. Should instead keep a hash table creating a
+one-to-one relationship between a property window and its cookies and
+these dialogs should be destroyed with their parent pdm and not be modal.
+
+6. prefs-dialog.c (prefs_language_more_button_clicked_cb):
+More languages dialog, I'm not sure why its modal. given the new ephy
+prefs layout this could be directly integrated into the prefs window.
+At the very least there is no reason for it to be modal.
+
+1. when you hit tab while viewing a page, mozilla goes through all the
+links in the page (which is good), but when it gets to the end it doesn't
+tab back up to the first toolbar.
+
+2. right/down arrow while keyboard focus is on  the button of a
+smartbookmark should probably give focus to the text entry to be consistent
+with the arrow behavior of other actions.
+
+3. tabbing out of the text entry of a smart bookmark should give focus to
+the next bookmarks bar toolbar item.
+
+4. Using the default toolbar layout, it is impossible to give focus to the
+address entry by tabbing from the toolbar 1 to toolbar 2 because the
+favicon can't be focused.
+
+5. tabing out of the address entry should give focus to the next toolbar
+item (go button in default layout).
+
+6. in arrow buttons, arrow keys should move in between the icon and the arrow.
