@@ -155,7 +155,9 @@ encodings[] =
 	{ N_("_Icelandic (MacIcelandic)"),          "x-mac-icelandic",       LG_OTHER },
 	{ N_("Japanese (_EUC-JP)"),                 "EUC-JP",                LG_JAPANESE },
 	{ N_("Japanese (_ISO-2022-JP)"),            "ISO-2022-JP",           LG_JAPANESE },
-	{ N_("Japanese (_Shift_JIS)"),              "Shift_JIS",             LG_JAPANESE },
+	/* translators: the '__' characters are no mnemonics.
+	 * keep them, they'll show up as '_' in Ephy */
+	{ N_("Japanese (_Shift__JIS)"),              "Shift_JIS",             LG_JAPANESE },
 	{ N_("Korean (_EUC-KR)"),                   "EUC-KR",                LG_KOREAN },
 	{ N_("Korean (_ISO-2022-KR)"),              "ISO-2022-KR",           LG_KOREAN },
 	{ N_("Korean (_JOHAB)"),                    "x-johab",               LG_KOREAN },
