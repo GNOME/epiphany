@@ -574,11 +574,13 @@ toolbar_activate_location (Toolbar *t)
 void
 toolbar_spinner_start (Toolbar *t)
 {
+	ephy_spinner_start (EPHY_SPINNER (t->priv->spinner));
 }
 
 void
 toolbar_spinner_stop (Toolbar *t)
 {
+	ephy_spinner_stop (EPHY_SPINNER (t->priv->spinner));
 }
 
 void
