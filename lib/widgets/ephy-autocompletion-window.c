@@ -650,8 +650,8 @@ hack_tree_view_move_selection (GtkTreeView *tv, GtkTreeView *alternate, int dir)
 	GtkTreeSelection *ts = gtk_tree_view_get_selection (tv);
 	GtkTreeModel *model;
 	GList *selected = NULL;
-	selected = gtk_tree_selection_get_selected_rows (ts, &model);
 	gboolean prev_result = TRUE;
+	selected = gtk_tree_selection_get_selected_rows (ts, &model);
 
 	gtk_tree_selection_unselect_all (ts);
 

@@ -17,6 +17,7 @@
  */
 
 #include "ephy-file-helpers.h"
+#include "ephy-start-here.h"
 
 #include "nsCOMPtr.h"
 #include "nsIFactory.h"
@@ -26,6 +27,7 @@
 #include "nsNetCID.h"
 #include "nsNetUtil.h"
 #include "nsXPComFactory.h"
+#include "nsIStorageStream.h"
 
 static NS_DEFINE_CID(kSimpleURICID,     NS_SIMPLEURI_CID);
 
@@ -110,25 +112,47 @@ NS_IMETHODIMP GStartHereProtocolHandler::NewURI(const nsACString &aSpec,
 NS_IMETHODIMP GStartHereProtocolHandler::NewChannel(nsIURI *aURI,
 					            nsIChannel **_retval)
 {
-    nsresult rv;
+	nsresult rv;
+	EphyStartHere *sh;
+	char *buf;
+	PRUint32 bytesWritten;
+	
+	mURI = aURI;
 
-    nsCAutoString path;
-    rv = aURI->GetPath(path);
-    if (NS_FAILED(rv)) return rv;
+	nsCAutoString path;
+	rv = aURI->GetPath(path);
+	if (NS_FAILED(rv)) return rv;
 
-    char *httpSpec = g_strconcat ("file:///",
-		    		  ephy_file ("start_here.html"),
-				  NULL);
+    	nsCOMPtr<nsIStorageStream> sStream;
+	nsCOMPtr<nsIOutputStream> stream;
+
+	rv = NS_NewStorageStream(16384, (PRUint32)-1, getter_AddRefs(sStream));
+	if (NS_FAILED(rv)) return rv;
+
+	rv = sStream->GetOutputStream(0, getter_AddRefs(stream));
+	if (NS_FAILED(rv)) return rv;
+
+	sh = ephy_start_here_new ();
+	buf = ephy_start_here_get_page (sh, "index");
+	rv = stream->Write (buf, strlen (buf), &bytesWritten);
+	g_free (buf);
+	
+	nsCOMPtr<nsIInputStream> iStream;
+	PRUint32 size;  
     
-    if (!httpSpec) return NS_ERROR_OUT_OF_MEMORY;
-
-    nsCOMPtr<nsIIOService> serv(do_GetIOService(&rv));
-    if (NS_FAILED(rv)) return rv;
-
-    // now we have an HTTP url, give the user an HTTP channel
-    rv = serv->NewChannel(nsDependentCString(httpSpec), nsnull, nsnull, _retval);
-    
-    return rv;
+	rv = sStream->GetLength(&size);
+	if (NS_FAILED(rv)) return rv;
+	
+	rv = sStream->NewInputStream(0, getter_AddRefs(iStream));
+	if (NS_FAILED(rv)) return rv;
+	
+	rv = NS_NewInputStreamChannel(getter_AddRefs(mChannel), mURI,
+				      iStream, NS_LITERAL_CSTRING("text/xml"),
+				      NS_LITERAL_CSTRING("utf-8"), size);
+	
+	NS_IF_ADDREF (*_retval = mChannel);
+	
+	return rv;
 }
 
 /* boolean allowPort (in long port, in string scheme); */

@@ -1,4 +1,4 @@
-SUBDIRS = ui art glade
+SUBDIRS = ui art glade starthere
 
 @INTLTOOL_SERVER_RULE@
 @INTLTOOL_DESKTOP_RULE@
@@ -16,9 +16,6 @@ Applications_DATA = $(DESKTOP_FILES)
 schemadir = $(sysconfdir)/gconf/schemas
 schema_DATA = epiphany.schemas
 
-startheredir = $(pkgdatadir)
-starthere_DATA = start_here.html
-
 EXTRA_DIST = $(glade_DATA)
 
 install-data-local:
@@ -32,6 +29,5 @@ CLEANFILES = $(server_DATA) $(Applications_DATA)
 
 EXTRA_DIST = $(server_in_files)     	\
 	     $(schema_DATA)         	\
-	     $(starthere_DATA)	    	\
 	     $(DESKTOP_IN_FILES)
 
