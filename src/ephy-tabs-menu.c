@@ -149,8 +149,9 @@ tab_added_cb (EphyNotebook *notebook,
 			       NULL);
 
 	sync_tab_title (tab, NULL, action);
-	g_signal_connect (tab, "notify::title",
-			  G_CALLBACK (sync_tab_title), action);
+	/* make sure the action is alive when handling the signal, see bug #169833 */
+	g_signal_connect_object (tab, "notify::title",
+				 G_CALLBACK (sync_tab_title), action, 0);
 
 	gtk_action_group_add_action_with_accel (priv->action_group, action, NULL);
 
