@@ -145,7 +145,6 @@ ephy_cell_renderer_progress_set_property (GObject *object,
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 	}
-	g_object_notify (object, "value");
 }
 
 static void

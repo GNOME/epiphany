@@ -296,7 +296,6 @@ ephy_location_action_set_property (GObject *object,
 			break;
 		case PROP_EDITABLE:
 			action->priv->editable = g_value_get_boolean (value);
-			g_object_notify (G_OBJECT (action), "editable");
 			break;
 	}
 }

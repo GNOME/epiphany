@@ -384,12 +384,10 @@ ephy_bookmark_action_set_property (GObject *object,
 			break;
 		case PROP_SMART_URL:
 			bmk->priv->smart_url = g_value_get_boolean (value);
-			g_object_notify (object, "smarturl");
 			break;
 		case PROP_ICON:
 			g_free (bmk->priv->icon);
 			bmk->priv->icon = g_value_dup_string (value);
-			g_object_notify (object, "icon");
 			break;
 	}
 }

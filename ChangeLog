@@ -1,3 +1,17 @@
+2004-03-08  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-cell-renderer-progress.c:
+	(ephy_cell_renderer_progress_set_property):
+	* lib/widgets/ephy-zoom-action.c: (ephy_zoom_action_set_property):
+	* lib/widgets/ephy-zoom-control.c:
+	(ephy_zoom_control_set_property):
+	* src/bookmarks/ephy-bookmark-action.c:
+	(ephy_bookmark_action_set_property):
+	* src/ephy-favicon-action.c: (ephy_favicon_action_set_property):
+	* src/ephy-location-action.c: (ephy_location_action_set_property):
+
+	Remove unnecessary g_object_notify. RTFM chpe :P
+
 2004-03-08  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.in:
