@@ -153,7 +153,7 @@ update_remaining_time (EphyDownload *download)
 		float per_byte_time;
 
 		per_byte_time = (float)elapsed_time / (float)cur;
-		download->priv->remaining_time = time_per_byte * (total - cur);
+		download->priv->remaining_time = per_byte_time * (total - cur);
 	}
 }
 
