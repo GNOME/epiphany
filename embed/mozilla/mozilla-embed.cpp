@@ -1349,9 +1349,11 @@ mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 	EventContext ctx;
 	ctx.Init (wrapper);
 	rv = ctx.GetKeyEventInfo (ev, info);
-	if (NS_SUCCEEDED(rv) &&
-	    (info->keycode == nsIDOMKeyEvent::DOM_VK_F10 &&
-	     info->modifier == GDK_SHIFT_MASK))
+	if (NS_FAILED (rv)) return G_FAILED;
+
+	if (info->keycode == nsIDOMKeyEvent::DOM_VK_F10 &&
+	    (info->modifier == GDK_SHIFT_MASK ||
+	     info->modifier == GDK_CONTROL_MASK))
 	{
 		/* Translate relative coordinates to absolute values, and try
 		   to avoid covering links by adding a little offset. */
@@ -1360,6 +1362,11 @@ mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 		gdk_window_get_origin (GTK_WIDGET(membed)->window, &x, &y);
 		info->x += x + 6;	
 		info->y += y + 6;
+
+		if (info->modifier == GDK_CONTROL_MASK)
+		{
+			info->context = EMBED_CONTEXT_DOCUMENT;	
+		}
 
 		nsCOMPtr<nsIDOMDocument> doc;
 		rv = ctx.GetTargetDocument (getter_AddRefs(doc));
