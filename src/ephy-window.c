@@ -264,7 +264,6 @@ struct EphyWindowPrivate
 	PPViewToolbar *ppview_toolbar;
 	GtkNotebook *notebook;
 	EphyTab *active_tab;
-	GtkWidget *sidebar;
 	EphyDialog *find_dialog;
 	EmbedChromeMask chrome_mask;
 	gboolean closing;
