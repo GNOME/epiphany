@@ -548,10 +548,6 @@ GetFilePath (const char *filename)
 	if (!download_dir)
 	{
 		/* Emergency download destination */
-		/* FIXME !! prefs-dialog.c::get_download_button_label()
-		 * claims that fallback for key == NULL is the
-		 * downloads dir, not the home dir !
-		 */
 		return g_build_filename (g_get_home_dir (), filename, NULL);
 	}
 
