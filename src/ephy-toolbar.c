@@ -448,12 +448,13 @@ ephy_toolbar_activate_location (EphyToolbar *toolbar)
 		entry = GTK_WIDGET (proxies->data);
 	}
 
-	/* happens when the user has removed the location entry from
-	  * the toolbars, or when it's overflown
-	  * FIXME: if gtkmozembed focus is ever fixed, we want to correct this,
-	  * since then we want to activate the toolbar even if it's hidden.
-	  */
-	if (entry == NULL || !GTK_WIDGET_REALIZED (entry)) return;
+	if (entry == NULL)
+	{
+		/* happens when the user has removed the location entry from
+		 * the toolbars.
+		 */
+		return;
+	}
 
 	g_object_get (G_OBJECT (toolbar), "visible", &visible, NULL);
 	if (visible == FALSE)
