@@ -1,5 +1,13 @@
 2004-02-29  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/EphyHeaderSniffer.cpp: (PerformSave):
+
+	Decode RFC 2231 and RFC 2047 encoded filenames in content-disposition
+	headers. Ported from mozilla Camino, see
+	http://bugzilla.mozilla.org/show_bug.cgi?id=233798 .
+
+2004-02-29  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/MozDownload.cpp: (MozDownload), (~MozDownload):
 
 	Add debug output.

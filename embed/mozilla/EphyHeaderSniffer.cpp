@@ -67,6 +67,9 @@
 #include "nsIMIMEInfo.h"
 #include "nsIDOMHTMLDocument.h"
 #include "nsIDownload.h"
+#if MOZILLA_SNAPSHOT > 10
+#include  "nsIMIMEHeaderParam.h"
+#endif
 
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
@@ -242,6 +245,36 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 	if (defaultFileName.IsEmpty() && !mContentDisposition.IsEmpty())
 	{
 		/* 1 Use the HTTP header suggestion. */
+#if MOZILLA_SNAPSHOT > 10
+		nsCOMPtr<nsIMIMEHeaderParam> mimehdrpar =
+			do_GetService("@mozilla.org/network/mime-hdrparam;1");     
+		
+		if (mimehdrpar)
+		{g_print ("Using nsIMIMEHeaderParam!\n");
+			nsCAutoString fallbackCharset;
+			if (mURL)
+			{
+				mURL->GetOriginCharset(fallbackCharset);
+			}
+			
+			nsAutoString fileName;
+			
+			rv = mimehdrpar->GetParameter (mContentDisposition, "filename",
+						       fallbackCharset, PR_TRUE, nsnull,
+						       fileName);
+			if (NS_FAILED(rv) || fileName.IsEmpty())
+			{
+				rv = mimehdrpar->GetParameter (mContentDisposition, "name",
+							       fallbackCharset, PR_TRUE, nsnull,
+							       fileName);
+			}
+
+			if (NS_SUCCEEDED(rv) && !fileName.IsEmpty())
+			{
+				defaultFileName = fileName;
+			}
+		}
+#else
 		PRInt32 index = mContentDisposition.Find("filename=");
 		if (index >= 0)
 		{
@@ -251,6 +284,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 			mContentDisposition.Right(filename, mContentDisposition.Length() - index);
 			defaultFileName = NS_ConvertUTF8toUCS2(filename);
 		}
+#endif
 	}
     
 	if (defaultFileName.IsEmpty())
@@ -262,6 +296,9 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		{
 			nsCAutoString fileNameCString;
 			url->GetFileName(fileNameCString);
+			/* FIXME: when we can depend on moz >= 1.5, use
+			 * CopyUTF8toUTF16 instead
+			 */
 			defaultFileName = NS_ConvertUTF8toUCS2(fileNameCString);
 		}
 	}
@@ -282,6 +319,9 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		/* 4 Use the host. */
 		nsCAutoString hostName;
 		mURL->GetHost(hostName);
+		/* FIXME: when we can depend on moz >= 1.5, use
+		 * CopyUTF8toUTF16 instead
+		 */
 		defaultFileName = NS_ConvertUTF8toUCS2(hostName);
 	}
     
