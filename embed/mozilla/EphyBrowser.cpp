@@ -604,6 +604,8 @@ nsresult EphyBrowser::GetPageDescriptor(nsISupports **aPageDescriptor)
 
 nsresult EphyBrowser::GetDocumentUrl (nsCString &url)
 {
+	if (!mDOMWindow) return NS_ERROR_FAILURE;
+
 	nsCOMPtr<nsIDOMDocument> DOMDocument;
 	mDOMWindow->GetDocument (getter_AddRefs(DOMDocument));
 	NS_ENSURE_TRUE (DOMDocument, NS_ERROR_FAILURE);
