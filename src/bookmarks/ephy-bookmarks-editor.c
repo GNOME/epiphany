@@ -57,6 +57,7 @@ struct EphyBookmarksEditorPrivate
 	GtkWidget *location_entry;
 	GtkWidget *keywords_entry;
 	GtkWidget *search_entry;
+	GtkWidget *go_button;
 };
 
 enum
@@ -212,6 +213,8 @@ ephy_bookmarks_editor_node_selected_cb (GtkWidget *view,
 		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->title_entry), TRUE);
 		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->keywords_entry), TRUE);
 		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->location_entry), TRUE);
+		/* Activate the Go button */
+		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->go_button), TRUE);
 	}
 	else
 	{
@@ -438,6 +441,9 @@ keyword_node_selected_cb (EphyNodeView *view,
 	else
 	{
 		bookmarks_filter (editor, node);
+		/* Desactivate the Go button */
+		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->go_button),
+				FALSE);
 	}
 }
 
@@ -573,9 +579,12 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			    build_editing_table (editor),
 			    FALSE, FALSE, 0);
 
-	gtk_dialog_add_button (GTK_DIALOG (editor),
+	editor->priv->go_button = gtk_dialog_add_button (GTK_DIALOG (editor),
 				GTK_STOCK_JUMP_TO,
 				RESPONSE_GO);
+	/* The Go button is insensitive by default */
+	gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->go_button), FALSE);
+
 	gtk_dialog_add_button (GTK_DIALOG (editor),
 			       GTK_STOCK_REMOVE,
 			       RESPONSE_REMOVE);
