@@ -1029,7 +1029,7 @@ ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
 		gtk_widget_hide (GTK_WIDGET (tab));
 	}
 
-	tab->priv->visibility = visible;
+	tab->priv->visibility = visibility;
 
 	g_object_notify (G_OBJECT (tab), "visible");
 }
