@@ -403,11 +403,11 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 
 			/* HACK we use the application description to decide
 			   if we have to open the saved file */
-			if (g_str_has_suffix (cDesc.get(), "gnome-default:"))
+			if (g_str_has_prefix (cDesc.get(), "gnome-default:"))
 			{
 				/* Format gnome-default:<usertime>:<helperapp id> */
 				char **str = g_strsplit (cDesc.get(), ":", -1);
-				g_return_val_if_fail (g_strv_length (str) != 3, NS_ERROR_FAILURE);
+				g_return_val_if_fail (g_strv_length (str) == 3, NS_ERROR_FAILURE);
 
 				char *end;
 				guint32 user_time = strtoul (str[1], &end, 0);
