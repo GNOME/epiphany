@@ -541,6 +541,7 @@ gnv_popup_cmd_frame_in_new_window (BonoboUIComponent *uic,
 
 	nautilus_view_open_location_force_new_window (NAUTILUS_VIEW (view),
 						      location, NULL);
+	g_free (location);
 }
 
 void 

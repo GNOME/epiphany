@@ -414,6 +414,7 @@ ephy_shell_new_tab (EphyShell *shell,
 					 &previous_address);
 		toolbar_set_location (toolbar, previous_address);
 		toolbar_edit_location (toolbar);
+		g_free (previous_address);
 
 		load_homepage (embed);
 	}

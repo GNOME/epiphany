@@ -169,6 +169,7 @@ ephy_embed_utils_save (GtkWidget *window,
 
         g_free (dirName);
         g_free (fileName);
+	g_free (target);
 }
 
 /**

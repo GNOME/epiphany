@@ -502,7 +502,7 @@ impl_can_go_up (EphyEmbed *embed)
 	{
 		g_free (s);
 		result = G_OK;
-	}				
+	}
 	else
 	{
 		result = G_FAILED;
@@ -562,12 +562,13 @@ impl_go_up (EphyEmbed *embed)
 	g_return_val_if_fail (uri != NULL, G_FAILED);
 	
 	parent_uri = mozilla_embed_get_uri_parent (uri);
+	g_free (uri);
 	g_return_val_if_fail (parent_uri != NULL, G_FAILED);
 	
 	ephy_embed_load_url (embed, parent_uri);
-	
+
 	g_free (parent_uri);
-	
+
 	return G_OK;
 }
 

@@ -607,6 +607,8 @@ embed_popup_open_frame_cmd (BonoboUIComponent *uic,
 				   FALSE, &location);
 
 	ephy_embed_load_url (popup->priv->embed, location);
+
+	g_free (location);
 }
 
 static void

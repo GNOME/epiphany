@@ -439,6 +439,8 @@ popup_cmd_open_frame (EggAction *action,
 	ephy_embed_get_location (embed, FALSE, &location);
 
 	ephy_embed_load_url (embed, location);
+
+	g_free (location);
 }
 
 void
