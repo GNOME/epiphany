@@ -8,6 +8,4 @@
 
 #include <libegg/menu/egg-menu-merge.h>
 
-#include <libegg/menu/egg-accel-dialog.h>
-
 #endif

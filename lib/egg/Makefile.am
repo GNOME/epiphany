@@ -14,7 +14,6 @@ EGGSOURCES = \
   eggtreemultidnd.c \
   egg-radio-action.c \
   egg-menu-merge.c \
-  egg-accel-dialog.c \
   eggradiotoolbutton.c \
   eggtoggletoolbutton.c \
   eggtoolitem.c	\
@@ -38,7 +37,6 @@ EGGHEADERS = \
   egg-toggle-action.h \
   egg-radio-action.h \
   egg-menu-merge.h \
-  egg-accel-dialog.h \
   eggradiotoolbutton.h \
   eggtoggletoolbutton.h \
   eggtoolitem.h	\

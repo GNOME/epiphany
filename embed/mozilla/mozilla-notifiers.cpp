@@ -245,6 +245,8 @@ mozilla_font_size_notifier (GConfClient *client,
 {
 	char key[255];
 	
+	if (entry->value == NULL) return;
+
 	sprintf (key, "font.%s", pref);
 
 	mozilla_prefs_set_int (key, eel_gconf_get_integer (entry->key));
@@ -314,6 +316,8 @@ mozilla_font_notifier (GConfClient *client,
 {
 	char key[255];
 	char *name;
+
+	if (entry->value == NULL) return;
 	
 	sprintf (key, "font.name.%s", pref);
 
