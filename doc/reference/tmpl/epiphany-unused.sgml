@@ -108,6 +108,25 @@ mozilla-embed-event
 </para>
 
 
+<!-- ##### STRUCT EphyNodeDb ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EphyNodeDb:immutable ##### -->
+<para>
+%TRUE if no #EphyNode<!-- -->s can be added, removed or modified from this
+#EphyNodeDb
+</para>
+
+
+<!-- ##### ARG EphyNodeDb:name ##### -->
+<para>
+A string identifier unique to this #EphyNodeDb
+</para>
+
+
 <!-- ##### ARG EphyTab:blocked-popup-count ##### -->
 <para>
 
@@ -167,6 +186,93 @@ mozilla-embed-event
 
 </para>
 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_glade_widget_new ##### -->
+<para>
+
+</para>
+
+@file: 
+@widget_name: 
+@root: 
+@data: 
+@domain: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_node_db_get_by_name ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_node_db_get_name ##### -->
+<para>
+
+</para>
+
+@db: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_node_db_get_node_from_id ##### -->
+<para>
+
+</para>
+
+@db: 
+@id: 
+@Returns: 
+@Param2: 
+
+<!-- ##### FUNCTION ephy_node_db_is_immutable ##### -->
+<para>
+
+</para>
+
+@db: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_node_db_load_from_file ##### -->
+<para>
+
+</para>
+
+@db: 
+@xml_file: 
+@xml_root: 
+@xml_version: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_node_db_new ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+<!-- ##### FUNCTION ephy_node_db_set_immutable ##### -->
+<para>
+
+</para>
+
+@db: 
+@immutable: 
+
+<!-- ##### FUNCTION ephy_node_db_write_to_xml_safe ##### -->
+<para>
+
+</para>
+
+@db: 
+@filename: 
+@root: 
+@version: 
+@comment: 
+@node: 
+@Varargs: 
 @Returns: 
 
 <!-- ##### FUNCTION ephy_shell_delete_on_exit ##### -->
