@@ -41,7 +41,7 @@ get_event_info (EphyWindow *window)
 }
 
 void
-popup_cmd_link_in_new_window (EggAction *action,
+popup_cmd_link_in_new_window (GtkAction *action,
 		              EphyWindow *window)
 {
 	EphyEmbedEvent *info;
@@ -61,7 +61,7 @@ popup_cmd_link_in_new_window (EggAction *action,
 }
 
 void
-popup_cmd_link_in_new_tab (EggAction *action,
+popup_cmd_link_in_new_tab (GtkAction *action,
 		           EphyWindow *window)
 {
 	EphyEmbedEvent *info;
@@ -81,7 +81,7 @@ popup_cmd_link_in_new_tab (EggAction *action,
 }
 
 void
-popup_cmd_image_in_new_tab (EggAction *action,
+popup_cmd_image_in_new_tab (GtkAction *action,
 			    EphyWindow *window)
 {
 	EphyEmbedEvent *info;
@@ -101,7 +101,7 @@ popup_cmd_image_in_new_tab (EggAction *action,
 }
 
 void
-popup_cmd_image_in_new_window (EggAction *action,
+popup_cmd_image_in_new_window (GtkAction *action,
 			       EphyWindow *window)
 {
 	EphyEmbedEvent *info;
@@ -121,7 +121,7 @@ popup_cmd_image_in_new_window (EggAction *action,
 }
 
 void
-popup_cmd_bookmark_link (EggAction *action,
+popup_cmd_bookmark_link (GtkAction *action,
 			 EphyWindow *window)
 {
 	GtkWidget *new_bookmark;
@@ -179,7 +179,7 @@ popup_cmd_bookmark_link (EggAction *action,
 }
 
 void
-popup_cmd_frame_in_new_tab (EggAction *action,
+popup_cmd_frame_in_new_tab (GtkAction *action,
 			    EphyWindow *window)
 {
 	EphyTab *tab;
@@ -201,7 +201,7 @@ popup_cmd_frame_in_new_tab (EggAction *action,
 }
 
 void
-popup_cmd_frame_in_new_window (EggAction *action,
+popup_cmd_frame_in_new_window (GtkAction *action,
 			       EphyWindow *window)
 {
 	EphyTab *tab;
@@ -232,7 +232,7 @@ popup_cmd_copy_to_clipboard (EphyWindow *window, const char *text)
 }
 
 void
-popup_cmd_copy_link_address (EggAction *action,
+popup_cmd_copy_link_address (GtkAction *action,
 			     EphyWindow *window)
 {
 	EphyEmbedEvent *event;
@@ -257,7 +257,7 @@ popup_cmd_copy_link_address (EggAction *action,
 }
 
 static void
-save_property_url (EggAction *action,
+save_property_url (GtkAction *action,
 		   const char *title,
 		   EphyWindow *window,
 		   gboolean ask_dest,
@@ -298,7 +298,7 @@ save_property_url (EggAction *action,
 }
 
 void
-popup_cmd_open_link (EggAction *action,
+popup_cmd_open_link (GtkAction *action,
 		     EphyWindow *window)
 {
 	EphyEmbedEvent *info;
@@ -317,7 +317,7 @@ popup_cmd_open_link (EggAction *action,
 }
 
 void
-popup_cmd_download_link (EggAction *action,
+popup_cmd_download_link (GtkAction *action,
 			 EphyWindow *window)
 {
 	save_property_url (action, _("Download link"), window,
@@ -327,7 +327,7 @@ popup_cmd_download_link (EggAction *action,
 }
 
 void
-popup_cmd_save_image_as (EggAction *action,
+popup_cmd_save_image_as (GtkAction *action,
 			 EphyWindow *window)
 {
 	save_property_url (action, _("Save Image As"),
@@ -360,7 +360,7 @@ background_download_completed (EphyEmbedPersist *persist,
 }
 
 void
-popup_cmd_set_image_as_background (EggAction *action,
+popup_cmd_set_image_as_background (GtkAction *action,
 				   EphyWindow *window)
 {
 	EphyEmbedEvent *info;
@@ -397,7 +397,7 @@ popup_cmd_set_image_as_background (EggAction *action,
 }
 
 void
-popup_cmd_copy_image_location (EggAction *action,
+popup_cmd_copy_image_location (GtkAction *action,
 			       EphyWindow *window)
 {
 	EphyEmbedEvent *info;
@@ -415,7 +415,7 @@ popup_cmd_copy_image_location (EggAction *action,
 }
 
 void
-popup_cmd_save_background_as (EggAction *action,
+popup_cmd_save_background_as (GtkAction *action,
 			      EphyWindow *window)
 {
 	save_property_url (action, _("Save Background As"),
@@ -423,7 +423,7 @@ popup_cmd_save_background_as (EggAction *action,
 }
 
 void
-popup_cmd_open_frame (EggAction *action,
+popup_cmd_open_frame (GtkAction *action,
 		      EphyWindow *window)
 {
 	char *location;
@@ -440,7 +440,7 @@ popup_cmd_open_frame (EggAction *action,
 }
 
 void
-popup_cmd_open_image (EggAction *action,
+popup_cmd_open_image (GtkAction *action,
 		      EphyWindow *window)
 {
 	EphyEmbedEvent *info;

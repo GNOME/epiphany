@@ -20,7 +20,7 @@
 #define EPHY_BOOKMARK_ACTION_H
 
 #include <gtk/gtk.h>
-#include <egg-action.h>
+#include <gtk/gtkaction.h>
 
 #define EPHY_TYPE_BOOKMARK_ACTION            (ephy_bookmark_action_get_type ())
 #define EPHY_BOOKMARK_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_BOOKMARK_ACTION, EphyBookmarkAction))
@@ -35,20 +35,20 @@ typedef struct EphyBookmarkActionPrivate EphyBookmarkActionPrivate;
 
 struct _EphyBookmarkAction
 {
-	EggAction parent;
+	GtkAction parent;
 	EphyBookmarkActionPrivate *priv;
 };
 
 struct _EphyBookmarkActionClass
 {
-	EggActionClass parent_class;
+	GtkActionClass parent_class;
 
 	void (*go_location) (EphyBookmarkAction *action, char *location);
 };
 
 GType      ephy_bookmark_action_get_type	(void);
 
-EggAction *ephy_bookmark_action_new		(const char *name,
+GtkAction *ephy_bookmark_action_new		(const char *name,
 						 guint id);
 
 #endif

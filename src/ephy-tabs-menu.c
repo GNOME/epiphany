@@ -40,7 +40,7 @@
 struct _EphyTabsMenuPrivate
 {
 	EphyWindow *window;
-	EggActionGroup *action_group;
+	GtkActionGroup *action_group;
 	guint ui_id;
 };
 
@@ -161,18 +161,18 @@ static void
 ephy_tabs_menu_clean (EphyTabsMenu *menu)
 {
 	EphyTabsMenuPrivate *p = menu->priv;
-	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
+	GtkUIManager *merge = GTK_UI_MANAGER (p->window->ui_merge);
 
 	if (p->ui_id > 0)
 	{
-		egg_menu_merge_remove_ui (merge, p->ui_id);
-		egg_menu_merge_ensure_update (merge);
+		gtk_ui_manager_remove_ui (merge, p->ui_id);
+		gtk_ui_manager_ensure_update (merge);
 		p->ui_id = 0;
 	}
 
 	if (p->action_group != NULL)
 	{
-		egg_menu_merge_remove_action_group (merge, p->action_group);
+		gtk_ui_manager_remove_action_group (merge, p->action_group);
 		g_object_unref (p->action_group);
 	}
 }
@@ -185,8 +185,8 @@ ephy_tabs_menu_finalize_impl (GObject *o)
 
 	if (p->action_group != NULL)
 	{
-		egg_menu_merge_remove_action_group
-			(EGG_MENU_MERGE (p->window->ui_merge),
+		gtk_ui_manager_remove_action_group
+			(GTK_UI_MANAGER (p->window->ui_merge),
 			 p->action_group);
 		g_object_unref (p->action_group);
 	}
@@ -205,14 +205,14 @@ ephy_tabs_menu_new (EphyWindow *window)
 					     NULL));
 }
 
-/* This code is from EggActionGroup:
- * Ideally either EggAction should support setting an accelerator from
- * a string or EggActionGroup would support adding single EggActionEntry's
+/* This code is from GtkActionGroup:
+ * Ideally either GtkAction should support setting an accelerator from
+ * a string or GtkActionGroup would support adding single EggActionEntry's
  * to an action group.
  */
 static void
-tab_set_action_accelerator (EggActionGroup *action_group,
-			    EggAction *action,
+tab_set_action_accelerator (GtkActionGroup *action_group,
+			    GtkAction *action,
 			    guint tab_number)
 {
 	char *accel_path = NULL;
@@ -254,9 +254,9 @@ void
 ephy_tabs_menu_update (EphyTabsMenu *menu)
 {
 	EphyTabsMenuPrivate *p;
-	EggMenuMerge *merge;
+	GtkUIManager *merge;
 	EphyTab *tab;
-	EggAction *action;
+	GtkAction *action;
 	GString *xml;
 	guint i = 0;
 	guint num = 0;
@@ -265,7 +265,7 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 
 	g_return_if_fail (EPHY_IS_TABS_MENU (menu));
 	p = menu->priv;
-	merge = EGG_MENU_MERGE (p->window->ui_merge);
+	merge = GTK_UI_MANAGER (p->window->ui_merge);
 	
 	LOG ("Rebuilding open tabs menu")
 
@@ -278,7 +278,7 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 	num = g_list_length (tabs);
 	if (num == 0) return;
 
-	p->action_group = egg_action_group_new ("TabsActions");
+	p->action_group = gtk_action_group_new ("TabsActions");
 
 	/* it's faster to preallocate, MIN is sanity check */
 	xml = g_string_sized_new (44 * MIN (num, 64) + 105);
@@ -289,11 +289,11 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 	for (l = tabs; l != NULL; l = l->next)
 	{
 		tab = (EphyTab *) l->data;
-		action = EGG_ACTION (ephy_tab_get_action (tab));
+		action = GTK_ACTION (ephy_tab_get_action (tab));
 
 		tab_set_action_accelerator (p->action_group, action, i);
 
-		egg_action_group_add_action (p->action_group, action);
+		gtk_action_group_add_action (p->action_group, action);
 
 		g_string_append (xml, "<menuitem name=\"");
 		g_string_append (xml, action->name);
@@ -308,8 +308,8 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 
 	g_string_append (xml, "</placeholder></submenu></menu></Root>");
 
-	egg_menu_merge_insert_action_group (merge, p->action_group, 0);
-	p->ui_id = egg_menu_merge_add_ui_from_string
+	gtk_ui_manager_insert_action_group (merge, p->action_group, 0);
+	p->ui_id = gtk_ui_manager_add_ui_from_string
 				(merge, xml->str, -1, &error);	
 
 	g_string_free (xml, TRUE);

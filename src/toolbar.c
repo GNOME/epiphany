@@ -82,8 +82,8 @@ static GObjectClass *parent_class = NULL;
 struct ToolbarPrivate
 {
 	EphyWindow *window;
-	EggMenuMerge *ui_merge;
-	EggActionGroup *action_group;
+	GtkUIManager *ui_merge;
+	GtkActionGroup *action_group;
 	gboolean visibility;
 	gboolean can_set_location;
 	GtkWidget *spinner;
@@ -121,13 +121,13 @@ toolbar_get_type (void)
 }
 
 static void
-go_location_cb (EggAction *action, char *location, EphyWindow *window)
+go_location_cb (GtkAction *action, char *location, EphyWindow *window)
 {
 	ephy_window_load_url (window, location);
 }
 
 static void
-zoom_to_level_cb (EggAction *action, float zoom, EphyWindow *window)
+zoom_to_level_cb (GtkAction *action, float zoom, EphyWindow *window)
 {
 	ephy_window_set_zoom (window, zoom);
 }
@@ -136,7 +136,7 @@ static void
 bookmark_destroy_cb (EphyNode *node,
 		     Toolbar *t)
 {
-	EggAction *action;
+	GtkAction *action;
 	char *name;
 	EphyToolbarsModel *model;
 	long id;
@@ -146,10 +146,10 @@ bookmark_destroy_cb (EphyNode *node,
 
 	id = ephy_node_get_id (node);
 	name = ephy_toolbars_model_get_action_name (model, id);
-	action = egg_action_group_get_action (t->priv->action_group, name);
+	action = gtk_action_group_get_action (t->priv->action_group, name);
 	if (action)
 	{
-		egg_action_group_remove_action (t->priv->action_group, action);
+		gtk_action_group_remove_action (t->priv->action_group, action);
 	}
 
 	g_free (name);
@@ -159,7 +159,7 @@ static void
 toolbar_ensure_action (Toolbar *t,
 		       const char *name)
 {
-	EggAction *action = NULL;
+	GtkAction *action = NULL;
 	EphyToolbarsModel *model;
 	EphyBookmarks *bookmarks;
 	EphyNode *bmks, *topics;
@@ -192,7 +192,7 @@ toolbar_ensure_action (Toolbar *t,
 
 		g_signal_connect (action, "go_location",
 				  G_CALLBACK (go_location_cb), t->priv->window);
-		egg_action_group_add_action (t->priv->action_group, action);
+		gtk_action_group_add_action (t->priv->action_group, action);
 		g_object_unref (action);
 
 		ephy_node_signal_connect_object (node,
@@ -259,9 +259,9 @@ toolbar_get_property (GObject *object,
 static void
 toolbar_setup_actions (Toolbar *t)
 {
-	EggAction *action;
+	GtkAction *action;
 
-	t->priv->action_group = egg_action_group_new ("SpecialToolbarActions");
+	t->priv->action_group = gtk_action_group_new ("SpecialToolbarActions");
 
 	action = g_object_new (EPHY_TYPE_NAVIGATION_ACTION,
 			       "name", "NavigationBack",
@@ -274,7 +274,7 @@ toolbar_setup_actions (Toolbar *t)
 			       NULL);
 	g_signal_connect (action, "activate",
 			  G_CALLBACK (window_cmd_go_back), t->priv->window);
-	egg_action_group_add_action (t->priv->action_group, action);
+	gtk_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
 
 	action = g_object_new (EPHY_TYPE_NAVIGATION_ACTION,
@@ -287,7 +287,7 @@ toolbar_setup_actions (Toolbar *t)
 			       NULL);
 	g_signal_connect (action, "activate",
 			  G_CALLBACK (window_cmd_go_forward), t->priv->window);
-	egg_action_group_add_action (t->priv->action_group, action);
+	gtk_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
 
 	action = g_object_new (EPHY_TYPE_NAVIGATION_ACTION,
@@ -300,14 +300,14 @@ toolbar_setup_actions (Toolbar *t)
 			       NULL);
 	g_signal_connect (action, "activate",
 			  G_CALLBACK (window_cmd_go_up), t->priv->window);
-	egg_action_group_add_action (t->priv->action_group, action);
+	gtk_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
 
 	action = g_object_new (EPHY_TYPE_SPINNER_ACTION,
 			       "name", "Spinner",
 			       "label", _("Spinner"),
 			       NULL);
-	egg_action_group_add_action (t->priv->action_group, action);
+	gtk_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
 
 	/* FIXME: I'm still waiting for the exact term to 
@@ -321,7 +321,7 @@ toolbar_setup_actions (Toolbar *t)
 			       NULL);
 	g_signal_connect (action, "go_location",
 			  G_CALLBACK (go_location_cb), t->priv->window);
-	egg_action_group_add_action (t->priv->action_group, action);
+	gtk_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
 
 	action = g_object_new (EPHY_TYPE_ZOOM_ACTION,
@@ -332,7 +332,7 @@ toolbar_setup_actions (Toolbar *t)
 			       NULL);
 	g_signal_connect (action, "zoom_to_level",
 			  G_CALLBACK (zoom_to_level_cb), t->priv->window);
-	egg_action_group_add_action (t->priv->action_group, action);
+	gtk_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
 
 	action = g_object_new (EPHY_TYPE_FAVICON_ACTION,
@@ -340,7 +340,7 @@ toolbar_setup_actions (Toolbar *t)
 			       "label", _("Favicon"),
 			       "window", t->priv->window,
 			       NULL);
-	egg_action_group_add_action (t->priv->action_group, action);
+	gtk_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
 
 	action = g_object_new (EPHY_TYPE_GO_ACTION,
@@ -351,7 +351,7 @@ toolbar_setup_actions (Toolbar *t)
 			       NULL);
 	g_signal_connect (action, "activate",
 			  G_CALLBACK (window_cmd_load_location), t->priv->window);
-	egg_action_group_add_action (t->priv->action_group, action);
+	gtk_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
 }
 
@@ -430,10 +430,10 @@ update_toolbar_remove_flag (EphyToolbarsModel *model, gpointer data)
 static GtkWidget *
 get_location_entry (Toolbar *t)
 {
-	EggAction *action;
+	GtkAction *action;
 	GtkWidget *location;
 
-	action = egg_action_group_get_action
+	action = gtk_action_group_get_action
 		(t->priv->action_group, "Location");
 	location = ephy_location_action_get_widget
 		(EPHY_LOCATION_ACTION (action));
@@ -465,10 +465,10 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 	g_return_if_fail (t->priv->window == NULL);
 
 	t->priv->window = window;
-	t->priv->ui_merge = EGG_MENU_MERGE (window->ui_merge);
+	t->priv->ui_merge = GTK_UI_MANAGER (window->ui_merge);
 
 	toolbar_setup_actions (t);
-	egg_menu_merge_insert_action_group (t->priv->ui_merge,
+	gtk_ui_manager_insert_action_group (t->priv->ui_merge,
 					    t->priv->action_group, 1);
 
 	g_signal_connect (t, "action_request",
@@ -510,21 +510,21 @@ toolbar_finalize (GObject *object)
 {
 	Toolbar *t;
 	ToolbarPrivate *p;
-	EggMenuMerge *merge;
+	GtkUIManager *merge;
 
         g_return_if_fail (object != NULL);
         g_return_if_fail (IS_TOOLBAR (object));
 
 	t = TOOLBAR (object);
 	p = t->priv;
-	merge = EGG_MENU_MERGE (t->priv->window->ui_merge);
+	merge = GTK_UI_MANAGER (t->priv->window->ui_merge);
 
         g_return_if_fail (p != NULL);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 
 	g_object_unref (t->priv->action_group);
-	egg_menu_merge_remove_action_group (merge, t->priv->action_group);
+	gtk_ui_manager_remove_action_group (merge, t->priv->action_group);
 
         g_free (t->priv);
 
@@ -581,22 +581,22 @@ toolbar_activate_location (Toolbar *t)
 void
 toolbar_spinner_start (Toolbar *t)
 {
-	EggActionGroup *action_group;
-	EggAction *action;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 
 	action_group = t->priv->action_group;
-	action = egg_action_group_get_action (action_group, "Spinner");
+	action = gtk_action_group_get_action (action_group, "Spinner");
 	g_object_set (action, "throbbing", TRUE, NULL);
 }
 
 void
 toolbar_spinner_stop (Toolbar *t)
 {
-	EggActionGroup *action_group;
-	EggAction *action;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 
 	action_group = t->priv->action_group;
-	action = egg_action_group_get_action (action_group, "Spinner");
+	action = gtk_action_group_get_action (action_group, "Spinner");
 	g_object_set (action, "throbbing", FALSE, NULL);
 }
 
@@ -622,13 +622,13 @@ toolbar_update_favicon (Toolbar *t)
 {
 	EphyTab *tab;
 	const char *url;
-	EggActionGroup *action_group;
-	EggAction *action;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 
 	tab = ephy_window_get_active_tab (t->priv->window);
 	url = ephy_tab_get_icon_address (tab);
 	action_group = t->priv->action_group;
-	action = egg_action_group_get_action (action_group, "Favicon");
+	action = gtk_action_group_get_action (action_group, "Favicon");
 	g_object_set (action, "icon", url, NULL);
 }
 
@@ -658,15 +658,15 @@ toolbar_clear_location_history (Toolbar *t)
 void
 toolbar_update_navigation_actions (Toolbar *t, gboolean back, gboolean forward, gboolean up)
 {
-	EggActionGroup *action_group;
-	EggAction *action;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 
 	action_group = t->priv->action_group;
-	action = egg_action_group_get_action (action_group, "NavigationBack");
+	action = gtk_action_group_get_action (action_group, "NavigationBack");
 	g_object_set (action, "sensitive", back, NULL);
-	action = egg_action_group_get_action (action_group, "NavigationForward");
+	action = gtk_action_group_get_action (action_group, "NavigationForward");
 	g_object_set (action, "sensitive", forward, NULL);
-	action = egg_action_group_get_action (action_group, "NavigationUp");
+	action = gtk_action_group_get_action (action_group, "NavigationUp");
 	g_object_set (action, "sensitive", up, NULL);
 }
 
@@ -722,10 +722,10 @@ toolbar_set_visibility (Toolbar *t,
 void
 toolbar_update_zoom (Toolbar *t, float zoom)
 {
-	EggActionGroup *action_group;
-	EggAction *action;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 
 	action_group = t->priv->action_group;
-	action = egg_action_group_get_action (action_group, "Zoom");
+	action = gtk_action_group_get_action (action_group, "Zoom");
 	g_object_set (action, "zoom", zoom, NULL);
 }

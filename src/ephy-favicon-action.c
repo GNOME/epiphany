@@ -74,7 +74,7 @@ ephy_favicon_action_get_type (void)
 			(GInstanceInitFunc) ephy_favicon_action_init,
 		};
 
-		type = g_type_register_static (EGG_TYPE_ACTION,
+		type = g_type_register_static (GTK_TYPE_ACTION,
 					       "EphyFaviconAction",
 					       &type_info, 0);
 	}
@@ -121,7 +121,7 @@ favicon_drag_data_get_cb (GtkWidget *widget,
 }
 
 static GtkWidget *
-create_tool_item (EggAction *action)
+create_tool_item (GtkAction *action)
 {
 	GtkWidget *image;
 	GtkWidget *ebox;
@@ -153,7 +153,7 @@ create_tool_item (EggAction *action)
 }
 
 static void
-ephy_favicon_action_sync_icon (EggAction *action, GParamSpec *pspec,
+ephy_favicon_action_sync_icon (GtkAction *action, GParamSpec *pspec,
 			       GtkWidget *proxy)
 {
 	EphyFaviconAction *fav_action = EPHY_FAVICON_ACTION (action);
@@ -183,14 +183,14 @@ ephy_favicon_action_sync_icon (EggAction *action, GParamSpec *pspec,
 }
 
 static void
-connect_proxy (EggAction *action, GtkWidget *proxy)
+connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	ephy_favicon_action_sync_icon (action, NULL, proxy);
 	g_signal_connect_object (action, "notify::icon",
 				 G_CALLBACK (ephy_favicon_action_sync_icon),
 				 proxy, 0);
 
-	(* EGG_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
+	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 }
 
 static void
@@ -240,7 +240,7 @@ ephy_favicon_action_get_property (GObject *object,
 static void
 ephy_favicon_action_class_init (EphyFaviconActionClass *class)
 {
-	EggActionClass *action_class;
+	GtkActionClass *action_class;
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
 	object_class->set_property = ephy_favicon_action_set_property;
@@ -248,7 +248,7 @@ ephy_favicon_action_class_init (EphyFaviconActionClass *class)
         object_class->finalize = ephy_favicon_action_finalize;
 
 	parent_class = g_type_class_peek_parent (class);
-	action_class = EGG_ACTION_CLASS (class);
+	action_class = GTK_ACTION_CLASS (class);
 
 	action_class->toolbar_item_type = GTK_TYPE_IMAGE;
 	action_class->create_tool_item = create_tool_item;

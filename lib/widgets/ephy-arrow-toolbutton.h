@@ -21,8 +21,7 @@
 
 #include <glib.h>
 #include <gtk/gtkmenushell.h>
-
-#include "eggtoolbutton.h"
+#include <gtk/gtktoolbutton.h>
 
 G_BEGIN_DECLS
 
@@ -39,13 +38,13 @@ typedef struct EphyArrowToolButtonPrivate EphyArrowToolButtonPrivate;
 
 struct EphyArrowToolButton
 {
-	EggToolButton parent;
+	GtkToolButton parent;
         EphyArrowToolButtonPrivate *priv;
 };
 
 struct EphyArrowToolButtonClass
 {
-        EggToolButtonClass parent_class;
+        GtkToolButtonClass parent_class;
 
 	void (*menu_activated) (EphyArrowToolButton *b);
 };

@@ -60,7 +60,7 @@ ephy_navigation_action_get_type (void)
 			(GInstanceInitFunc) ephy_navigation_action_init,
 		};
 
-		type = g_type_register_static (EGG_TYPE_ACTION,
+		type = g_type_register_static (GTK_TYPE_ACTION,
 					       "EphyNavigationAction",
 					       &type_info, 0);
 	}
@@ -243,14 +243,14 @@ menu_activated_cb (EphyArrowToolButton *w, EphyNavigationAction *b)
 }
 
 static void
-connect_proxy (EggAction *action, GtkWidget *proxy)
+connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	LOG ("Connect navigation action proxy")
 
 	g_signal_connect (proxy, "menu-activated",
 			  G_CALLBACK (menu_activated_cb), action);
 
-	(* EGG_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
+	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 }
 
 static void
@@ -310,7 +310,7 @@ ephy_navigation_action_finalize (GObject *object)
 static void
 ephy_navigation_action_class_init (EphyNavigationActionClass *class)
 {
-	EggActionClass *action_class;
+	GtkActionClass *action_class;
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
 	object_class->finalize = ephy_navigation_action_finalize;
@@ -318,7 +318,7 @@ ephy_navigation_action_class_init (EphyNavigationActionClass *class)
 	object_class->get_property = ephy_navigation_action_get_property;
 
 	parent_class = g_type_class_peek_parent (class);
-	action_class = EGG_ACTION_CLASS (class);
+	action_class = GTK_ACTION_CLASS (class);
 
 	action_class->toolbar_item_type = EPHY_ARROW_TOOLBUTTON_TYPE;
 	action_class->connect_proxy = connect_proxy;

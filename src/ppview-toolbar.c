@@ -59,33 +59,33 @@ struct PPViewToolbarPrivate
 {
 	EphyWindow *window;
 	EmbedChromeMask original_mask;
-	EggMenuMerge *ui_merge;
-	EggActionGroup *action_group;
+	GtkUIManager *ui_merge;
+	GtkActionGroup *action_group;
 	guint ui_id;
 	int current_page;
 };
 
 static void
-toolbar_cmd_ppv_goto_first (EggMenuMerge *merge,
+toolbar_cmd_ppv_goto_first (GtkUIManager *merge,
 			    PPViewToolbar *t);
 
 static void
-toolbar_cmd_ppv_goto_last (EggMenuMerge *merge,
+toolbar_cmd_ppv_goto_last (GtkUIManager *merge,
 			   PPViewToolbar *t);
 
 static void
-toolbar_cmd_ppv_go_back (EggMenuMerge *merge,
+toolbar_cmd_ppv_go_back (GtkUIManager *merge,
 			 PPViewToolbar *t);
 
 static void
-toolbar_cmd_ppv_go_forward (EggMenuMerge *merge,
+toolbar_cmd_ppv_go_forward (GtkUIManager *merge,
 			    PPViewToolbar *t);
 
 static void
-toolbar_cmd_ppv_close (EggMenuMerge *merge,
+toolbar_cmd_ppv_close (GtkUIManager *merge,
 		       PPViewToolbar *t);
 
-static EggActionGroupEntry entries [] = {
+static GtkActionGroupEntry entries [] = {
 	{ "PPVGotoFirst", N_("First"),
 	  GTK_STOCK_GOTO_FIRST, NULL,
 	  N_("Go to the first page"),
@@ -208,8 +208,8 @@ toolbar_update_sensitivity (PPViewToolbar *t)
 	int pages, c_page;
 	EphyWindow *window = t->priv->window;
 	EphyEmbed *embed;
-	EggAction *action;
-	EggActionGroup *action_group = t->priv->action_group;
+	GtkAction *action;
+	GtkActionGroup *action_group = t->priv->action_group;
 
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
@@ -217,13 +217,13 @@ toolbar_update_sensitivity (PPViewToolbar *t)
 	ephy_embed_print_preview_num_pages (embed, &pages);
 	c_page = t->priv->current_page;
 
-	action = egg_action_group_get_action (action_group, "PPVGoBack");
+	action = gtk_action_group_get_action (action_group, "PPVGoBack");
 	g_object_set (action, "sensitive", c_page > 1, NULL);
-	action = egg_action_group_get_action (action_group, "PPVGotoFirst");
+	action = gtk_action_group_get_action (action_group, "PPVGotoFirst");
 	g_object_set (action, "sensitive", c_page > 1, NULL);
-	action = egg_action_group_get_action (action_group, "PPVGoForward");
+	action = gtk_action_group_get_action (action_group, "PPVGoForward");
 	g_object_set (action, "sensitive", c_page < pages, NULL);
-	action = egg_action_group_get_action (action_group, "PPVGotoLast");
+	action = gtk_action_group_get_action (action_group, "PPVGotoLast");
 	g_object_set (action, "sensitive", c_page < pages, NULL);
 }
 
@@ -233,15 +233,15 @@ ppview_toolbar_set_window (PPViewToolbar *t, EphyWindow *window)
 	g_return_if_fail (t->priv->window == NULL);
 
 	t->priv->window = window;
-	t->priv->ui_merge = EGG_MENU_MERGE (t->priv->window->ui_merge);
+	t->priv->ui_merge = GTK_UI_MANAGER (t->priv->window->ui_merge);
 
 	t->priv->original_mask = ephy_window_get_chrome (window);
 
-	t->priv->action_group = egg_action_group_new ("PPViewActions");
-	egg_action_group_add_actions (t->priv->action_group, entries, n_entries);
-	egg_menu_merge_insert_action_group (t->priv->ui_merge,
+	t->priv->action_group = gtk_action_group_new ("PPViewActions");
+	gtk_action_group_add_actions (t->priv->action_group, entries, n_entries);
+	gtk_ui_manager_insert_action_group (t->priv->ui_merge,
 					    t->priv->action_group, 0);
-	t->priv->ui_id = egg_menu_merge_add_ui_from_string
+	t->priv->ui_id = gtk_ui_manager_add_ui_from_string
 		(t->priv->ui_merge, ui_info, -1, NULL);
 
 	toolbar_update_sensitivity (t);
@@ -276,8 +276,8 @@ ppview_toolbar_finalize (GObject *object)
 
         g_return_if_fail (t->priv != NULL);
 
-	egg_menu_merge_remove_ui (t->priv->ui_merge, t->priv->ui_id);
-	egg_menu_merge_remove_action_group (t->priv->ui_merge,
+	gtk_ui_manager_remove_ui (t->priv->ui_merge, t->priv->ui_id);
+	gtk_ui_manager_remove_action_group (t->priv->ui_merge,
 					    t->priv->action_group);
 	g_object_unref (t->priv->action_group);
 
@@ -301,7 +301,7 @@ ppview_toolbar_new (EphyWindow *window)
 }
 
 static void
-toolbar_cmd_ppv_goto_first (EggMenuMerge *merge,
+toolbar_cmd_ppv_goto_first (GtkUIManager *merge,
 			    PPViewToolbar *t)
 {
 	EphyWindow *window = t->priv->window;
@@ -318,7 +318,7 @@ toolbar_cmd_ppv_goto_first (EggMenuMerge *merge,
 }
 
 static void
-toolbar_cmd_ppv_goto_last  (EggMenuMerge *merge,
+toolbar_cmd_ppv_goto_last  (GtkUIManager *merge,
 			    PPViewToolbar *t)
 {
 	EphyWindow *window = t->priv->window;
@@ -353,7 +353,7 @@ clamp_page_limits (PPViewToolbar *t, int page)
 }
 
 static void
-toolbar_cmd_ppv_go_back  (EggMenuMerge *merge,
+toolbar_cmd_ppv_go_back  (GtkUIManager *merge,
 			  PPViewToolbar *t)
 {
 	EphyWindow *window = t->priv->window;
@@ -372,7 +372,7 @@ toolbar_cmd_ppv_go_back  (EggMenuMerge *merge,
 }
 
 static void
-toolbar_cmd_ppv_go_forward (EggMenuMerge *merge,
+toolbar_cmd_ppv_go_forward (GtkUIManager *merge,
 			    PPViewToolbar *t)
 {
 	EphyWindow *window = t->priv->window;
@@ -391,7 +391,7 @@ toolbar_cmd_ppv_go_forward (EggMenuMerge *merge,
 }
 
 static void
-toolbar_cmd_ppv_close (EggMenuMerge *merge,
+toolbar_cmd_ppv_close (GtkUIManager *merge,
 		       PPViewToolbar *t)
 {
 	EphyWindow *window;

@@ -1,7 +1,7 @@
-<Root>
-<menu>
+<ui>
+<menubar>
 
-<submenu name="FileMenu" verb="File">
+<menu name="FileMenu" verb="File">
  	<menuitem name="FileNewTopic" verb="NewTopic"/>
 	<separator name="FileSep1"/>
         <menuitem name="FileOpenInWindow" verb="OpenInWindow"/>
@@ -16,23 +16,21 @@
 	<menuitem name="FileImport" verb="Import"/>
 	<separator name="FileSep5"/>
 	<menuitem name="FileClose" verb="Close"/>
-</submenu>
+</menu>
 
-<submenu name="EditMenu" verb="Edit">
+<menu name="EditMenu" verb="Edit">
 	<menuitem name="EditCut" verb="Cut"/>
 	<menuitem name="EditCopy" verb="Copy"/>
 	<menuitem name="EditPaste" verb="Paste"/>
 	<menuitem name="EditSelectAll" verb="SelectAll"/>
-</submenu>
-
-<submenu name="HelpMenu" verb="Help">
-	<menuitem name="HelpContents" verb="HelpContents"/>
-	<menuitem name="HelpAbout" verb="HelpAbout"/>
-</submenu>
-
 </menu>
 
-<popups>
+<menu name="HelpMenu" verb="Help">
+	<menuitem name="HelpContents" verb="HelpContents"/>
+	<menuitem name="HelpAbout" verb="HelpAbout"/>
+</menu>
+
+</menubar>
 
 <popup name="EphyBookmarkEditorPopup" verb="FakeToplevel">
 	<menuitem name="OpenInWindowBMK" verb="OpenInWindow"/>
@@ -55,5 +53,4 @@
 	<menuitem name="ShowInBookmarksBarTPC" verb="ShowInBookmarksBar"/>
 </popup>
 
-</popups>
-</Root>
+</ui>

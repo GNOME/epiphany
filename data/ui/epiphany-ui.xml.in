@@ -1,6 +1,6 @@
 <Root>
-<menu>
-<submenu name="FileMenu" verb="File">  
+<menubar>
+<menu name="FileMenu" verb="File">  
         <menuitem name="FileNewWindowMenu" verb="FileNewWindow"/>
 	<menuitem name="FileNewTabMenu" verb="FileNewTab"/>
 	<menuitem name="FileOpenMenu" verb="FileOpen"/>
@@ -11,9 +11,9 @@
 	<menuitem name="FileSendToMenu" verb="FileSendTo"/>
 	<separator name="FileSep3"/>
 	<menuitem name="FileCloseWindowMenu" verb="FileCloseWindow"/>
-</submenu>
+</menu>
 
-<submenu name="EditMenu" verb="Edit">
+<menu name="EditMenu" verb="Edit">
         <menuitem name="EditCutMenu" verb="EditCut"/>
         <menuitem name="EditCopyMenu" verb="EditCopy"/>
         <menuitem name="EditPasteMenu" verb="EditPaste"/>
@@ -27,9 +27,9 @@
 	<menuitem name="EditPersonalDataMenu" verb="EditPersonalData"/>
 	<menuitem name="EditToolbarMenu" verb="EditToolbar"/>
 	<menuitem name="EditPrefsMenu" verb="EditPrefs"/> 
-</submenu>
+</menu>
 
-<submenu name="ViewMenu" verb="View">
+<menu name="ViewMenu" verb="View">
 	<menuitem name="ViewToolbarMenu" verb="ViewToolbar"/>
 	<menuitem name="ViewBookmarksBarMenu" verb="ViewBookmarksBar"/>
 	<menuitem name="ViewStatusbarMenu" verb="ViewStatusbar"/>
@@ -44,9 +44,9 @@
 	<separator name="ViewSep3"/>
 	<menuitem name="ViewStopMenu" verb="ViewStop"/> 
 	<menuitem name="ViewReloadMenu" verb="ViewReload"/>
-</submenu>
+</menu>
 
-<submenu name="GoMenu" verb="Go">
+<menu name="GoMenu" verb="Go">
 	<menuitem name="GoBackMenu" verb="GoBack"/>
 	<menuitem name="GoForwardMenu" verb="GoForward"/>
 	<menuitem name="GoUpMenu" verb="GoUp"/>
@@ -56,15 +56,15 @@
 	<separator name="GoSep2"/>
 	<menuitem name="GoLocationMenu" verb="GoLocation"/>
 	<placeholder name="GoFavorites"/>
-</submenu>
+</menu>
 
-<submenu name="BookmarksMenu" verb="Bookmarks">
+<menu name="BookmarksMenu" verb="Bookmarks">
 	<menuitem name="BookmarksAddBookmarkMenu" verb="FileBookmarkPage"/>
 	<menuitem name="BookmarksEditMenu" verb="GoBookmarks"/>
 	<placeholder name="BookmarksTree"/>
-</submenu>
+</menu>
 
-<submenu name="TabsMenu" verb="Tabs">
+<menu name="TabsMenu" verb="Tabs">
 	<menuitem name="TabsPreviousMenu" verb="TabsPrevious"/>
 	<menuitem name="TabsNextMenu" verb="TabsNext"/>
 	<separator name="TabsSep1"/>
@@ -74,15 +74,14 @@
 	<placeholder name="TabsOpen">
 	<separator name="TabsSep2"/>
 	</placeholder>
-</submenu>
-
-<submenu name="HelpMenu" verb="Help">
-	<menuitem name="HelpContentsMenu" verb="HelpContents"/>
-	<menuitem name="HelpAboutMenu" verb="HelpAbout"/>
-</submenu>
 </menu>
 
-<popups>
+<menu name="HelpMenu" verb="Help">
+	<menuitem name="HelpContentsMenu" verb="HelpContents"/>
+	<menuitem name="HelpAboutMenu" verb="HelpAbout"/>
+</menu>
+</menubar>
+
 <popup name="EphyInputPopup" verb="FakeToplevel">
 	<menuitem name="EditCutIP" verb="EditCut"/> 
 	<menuitem name="EditCopyIP" verb="EditCopy"/>
@@ -157,5 +156,4 @@
 	<menuitem name="CopyImageLocationILP" verb="CopyImageLocation"/>
 </popup>
 
-</popups>
-</Root>
+</ui>

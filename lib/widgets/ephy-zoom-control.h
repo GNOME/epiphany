@@ -19,7 +19,7 @@
 #ifndef EPHY_ZOOM_CONTROL_H
 #define EPHY_ZOOM_CONTROL_H
 
-#include "eggtoolitem.h"
+#include <gtk/gtktoolitem.h>
 
 G_BEGIN_DECLS
 
@@ -42,7 +42,7 @@ typedef struct _EphyZoomControlPrivate EphyZoomControlPrivate;
 
 struct _EphyZoomControlClass
 {
-	EggToolItemClass parent_class;
+	GtkToolItemClass parent_class;
 
 	/* signals */
 	void (*zoom_to_level) 	(EphyZoomControl *control, float level);
@@ -50,7 +50,7 @@ struct _EphyZoomControlClass
 
 struct _EphyZoomControl
 {
-	EggToolItem parent_object;
+	GtkToolItem parent_object;
 
 	EphyZoomControlPrivate *priv;
 };

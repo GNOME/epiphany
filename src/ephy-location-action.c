@@ -54,7 +54,7 @@ ephy_location_action_get_type (void)
 			(GInstanceInitFunc) ephy_location_action_init,
 		};
 
-		type = g_type_register_static (EGG_TYPE_ACTION,
+		type = g_type_register_static (GTK_TYPE_ACTION,
 					       "EphyLocationAction",
 					       &type_info, 0);
 	}
@@ -96,7 +96,7 @@ location_url_activate_cb (EphyLocationEntry *entry,
 }
 
 static void
-connect_proxy (EggAction *action, GtkWidget *proxy)
+connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	EphyAutocompletion *ac;
 	EphyLocationEntry *e = EPHY_LOCATION_ENTRY (proxy);
@@ -113,17 +113,17 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
 			  GTK_SIGNAL_FUNC(location_url_activate_cb),
 			  action);
 
-	(* EGG_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
+	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 }
 
 static void
 ephy_location_action_class_init (EphyLocationActionClass *class)
 {
-	EggActionClass *action_class;
+	GtkActionClass *action_class;
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
 	parent_class = g_type_class_peek_parent (class);
-	action_class = EGG_ACTION_CLASS (class);
+	action_class = GTK_ACTION_CLASS (class);
 
 	action_class->toolbar_item_type = EPHY_TYPE_LOCATION_ENTRY;
 	action_class->connect_proxy = connect_proxy;
@@ -150,7 +150,7 @@ ephy_location_action_get_widget (EphyLocationAction *action)
 {
 	GSList *slist;
 
-	slist = EGG_ACTION (action)->proxies;
+	slist = GTK_ACTION (action)->proxies;
 
 	if (slist)
 	{

@@ -20,7 +20,8 @@
 #ifndef EPHY_LOCATION_ENTRY_H
 #define EPHY_LOCATION_ENTRY_H
 
-#include "eggtoolitem.h"
+#include <gtk/gtktoolitem.h>
+
 #include "ephy-autocompletion.h"
 
 /* object forward declarations */
@@ -45,7 +46,7 @@ typedef struct _EphyLocationEntryPrivate EphyLocationEntryPrivate;
 
 struct _EphyLocationEntryClass
 {
-	EggToolItemClass parent_class;
+	GtkToolItemClass parent_class;
 
 	/* signals */
 	void		(*activated)	(EphyLocationEntry *w,
@@ -60,7 +61,7 @@ struct _EphyLocationEntryClass
 /* Remember: fields are public read-only */
 struct _EphyLocationEntry
 {
-	EggToolItem parent_object;
+	GtkToolItem parent_object;
 
 	EphyLocationEntryPrivate *priv;
 };

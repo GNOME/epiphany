@@ -22,6 +22,14 @@
 
 #include <string.h>
 #include <libxml/tree.h>
+#include <gtk/gtkimage.h>
+#include <gtk/gtkeventbox.h>
+#include <gtk/gtkdnd.h>
+#include <gtk/gtkscrolledwindow.h>
+#include <gtk/gtklabel.h>
+#include <gtk/gtktable.h>
+#include <gtk/gtkstock.h>
+#include <gtk/gtkhbox.h>
 
 static GtkTargetEntry dest_drag_types[] = {
   {EGG_TOOLBAR_ITEM_TYPE, 0, 0},
@@ -49,7 +57,7 @@ static GObjectClass *parent_class = NULL;
 
 struct EggToolbarEditorPrivate
 {
-  EggMenuMerge *merge;
+  GtkUIManager *merge;
   EggToolbarsModel *model;
 
   GtkWidget *table;
@@ -86,21 +94,23 @@ egg_toolbar_editor_get_type (void)
   return egg_toolbar_editor_type;
 }
 
-static EggAction *
+static GtkAction *
 find_action (EggToolbarEditor *t,
 	     const char       *name)
 {
-  GList *l = t->priv->merge->action_groups;
-  EggAction *action = NULL;
+  GList *l;
+  GtkAction *action = NULL;
+
+  l = gtk_ui_manager_get_action_groups (t->priv->merge);
 
   g_return_val_if_fail (IS_EGG_TOOLBAR_EDITOR (t), NULL);
   g_return_val_if_fail (name != NULL, NULL);
 
   for (; l != NULL; l = l->next)
     {
-      EggAction *tmp;
+      GtkAction *tmp;
 
-      tmp = egg_action_group_get_action (EGG_ACTION_GROUP (l->data), name);
+      tmp = gtk_action_group_get_action (GTK_ACTION_GROUP (l->data), name);
       if (tmp)
 	action = tmp;
     }
@@ -110,9 +120,9 @@ find_action (EggToolbarEditor *t,
 
 static void
 egg_toolbar_editor_set_merge (EggToolbarEditor *t,
-			      EggMenuMerge     *merge)
+			      GtkUIManager     *merge)
 {
-  g_return_if_fail (EGG_IS_MENU_MERGE (merge));
+  g_return_if_fail (GTK_IS_UI_MANAGER (merge));
   g_return_if_fail (IS_EGG_TOOLBAR_EDITOR (t));
 
   t->priv->merge = merge;
@@ -181,7 +191,7 @@ egg_toolbar_editor_class_init (EggToolbarEditorClass *klass)
 				   g_param_spec_object ("MenuMerge",
 							"MenuMerge",
 							"Menu merge",
-							EGG_TYPE_MENU_MERGE,
+							GTK_TYPE_UI_MANAGER,
 							G_PARAM_READWRITE));
  g_object_class_install_property (object_class,
 				  PROP_TOOLBARS_MODEL,
@@ -206,7 +216,7 @@ egg_toolbar_editor_finalize (GObject *object)
 }
 
 GtkWidget *
-egg_toolbar_editor_new (EggMenuMerge *merge,
+egg_toolbar_editor_new (GtkUIManager *merge,
 			EggToolbarsModel *model)
 {
   EggToolbarEditor *t;
@@ -231,7 +241,7 @@ editor_drag_data_received_cb (GtkWidget          *widget,
 			      guint               time_,
 			      EggToolbarEditor *editor)
 {
-  EggAction *action;
+  GtkAction *action;
 
   g_return_if_fail (IS_EGG_TOOLBAR_EDITOR (editor));
   g_return_if_fail (selection_data != NULL);
@@ -253,10 +263,10 @@ editor_drag_data_delete_cb (GtkWidget          *widget,
 			    GdkDragContext     *context,
 			    EggToolbarEditor *editor)
 {
-  EggAction *action;
+  GtkAction *action;
   g_return_if_fail (IS_EGG_TOOLBAR_EDITOR (editor));
 
-  action = EGG_ACTION (g_object_get_data (G_OBJECT (widget), "egg-action"));
+  action = GTK_ACTION (g_object_get_data (G_OBJECT (widget), "egg-action"));
   if (action)
     {
       editor->priv->actions_list = g_list_remove
@@ -274,14 +284,14 @@ drag_data_get_cb (GtkWidget          *widget,
 		  guint32             time,
 		  EggToolbarEditor   *editor)
 {
-  EggAction *action;
+  GtkAction *action;
   const char *target;
 
-  action = EGG_ACTION (g_object_get_data (G_OBJECT (widget), "egg-action"));
+  action = GTK_ACTION (g_object_get_data (G_OBJECT (widget), "egg-action"));
 
   if (action)
     {
-      target = action->name;
+      target = gtk_action_get_name (action);
     }
   else
     {
@@ -405,12 +415,24 @@ update_editor_sheet (EggToolbarEditor *editor)
 
   for (l = to_drag; l != NULL; l = l->next)
     {
-      EggAction *action = (l->data);
+      GtkAction *action = (l->data);
+      const char *stock_id, *short_label;
+      GValue value = { 0, };
+                                                                                                                             
+      g_value_init (&value, G_TYPE_STRING);
+      g_object_get_property (G_OBJECT (action), "stock_id", &value);
+      stock_id = g_value_get_string (&value);
       icon = gtk_image_new_from_stock
-		(action->stock_id ? action->stock_id : GTK_STOCK_DND,
+		(stock_id ? stock_id : GTK_STOCK_DND,
 		 GTK_ICON_SIZE_LARGE_TOOLBAR);
+      g_value_unset (&value);
+
+      g_value_init (&value, G_TYPE_STRING);
+      g_object_get_property (G_OBJECT (action), "short_label", &value);
+      short_label = g_value_get_string (&value);
       item = editor_create_item (editor, GTK_IMAGE (icon),
-				 action->short_label, GDK_ACTION_MOVE);
+				 short_label, GDK_ACTION_MOVE);
+      g_value_unset (&value);
       g_object_set_data (G_OBJECT (item), "egg-action", action);
       gtk_table_attach_defaults (GTK_TABLE (editor->priv->table),
 		                 item, x, x + 1, y, y + 1);
@@ -477,7 +499,7 @@ static void
 egg_toolbar_editor_add_action (EggToolbarEditor *editor,
 			       const char       *action_name)
 {
-	EggAction *action;
+	GtkAction *action;
 
 	action = find_action (editor, action_name);
 	g_return_if_fail (action != NULL);
@@ -505,7 +527,7 @@ parse_item_list (EggToolbarEditor *t,
 }
 
 static gboolean
-model_has_action (EggToolbarsModel *model, EggAction *action)
+model_has_action (EggToolbarsModel *model, GtkAction *action)
 {
   int i, l, n_items, n_toolbars;
 
@@ -516,10 +538,12 @@ model_has_action (EggToolbarsModel *model, EggAction *action)
       for (l = 0; l < n_items; l++)
         {
           const char *name;
+	  const char *action_name;
           gboolean sep;
 
           name = egg_toolbars_model_item_nth (model, i, l, &sep);
-          if (!sep && strcmp (name, action->name) == 0) return TRUE;
+          action_name = gtk_action_get_name (action);
+          if (!sep && strcmp (name, action_name) == 0) return TRUE;
         }
     }
 
@@ -554,7 +578,7 @@ egg_toolbar_editor_load_actions (EggToolbarEditor *editor,
   editor->priv->actions_list = g_list_copy (editor->priv->default_actions_list);
   for (l = editor->priv->default_actions_list; l != NULL; l = l->next)
     {
-      EggAction *action = EGG_ACTION (l->data);
+      GtkAction *action = GTK_ACTION (l->data);
 
       if (model_has_action (editor->priv->model, action))
         {

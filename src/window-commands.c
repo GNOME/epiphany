@@ -57,21 +57,21 @@ enum
 };
 
 void
-window_cmd_edit_find (EggAction *action,
+window_cmd_edit_find (GtkAction *action,
 		      EphyWindow *window)
 {
 	ephy_window_find (window);
 }
 
 void
-window_cmd_file_print (EggAction *action,
+window_cmd_file_print (GtkAction *action,
 		       EphyWindow *window)
 {
 	ephy_window_print (window);
 }
 
 void
-window_cmd_go_back (EggAction *action,
+window_cmd_go_back (GtkAction *action,
 		    EphyWindow *window)
 {
 	EphyEmbed *embed;
@@ -85,7 +85,7 @@ window_cmd_go_back (EggAction *action,
 }
 
 void
-window_cmd_go_up (EggAction *action,
+window_cmd_go_up (GtkAction *action,
 		  EphyWindow *window)
 {
 	EphyEmbed *embed;
@@ -99,7 +99,7 @@ window_cmd_go_up (EggAction *action,
 }
 
 void
-window_cmd_file_send_to	(EggAction *action,
+window_cmd_file_send_to	(GtkAction *action,
 			 EphyWindow *window)
 {
 	EphyTab *tab;
@@ -142,7 +142,7 @@ window_cmd_file_send_to	(EggAction *action,
 }
 
 void
-window_cmd_go_forward (EggAction *action,
+window_cmd_go_forward (GtkAction *action,
 		       EphyWindow *window)
 {
 	EphyEmbed *embed;
@@ -156,7 +156,7 @@ window_cmd_go_forward (EggAction *action,
 }
 
 void
-window_cmd_go_home (EggAction *action,
+window_cmd_go_home (GtkAction *action,
 		    EphyWindow *window)
 {
 	char *location;
@@ -176,14 +176,14 @@ window_cmd_go_home (EggAction *action,
 }
 
 void
-window_cmd_go_location (EggAction *action,
+window_cmd_go_location (GtkAction *action,
 		        EphyWindow *window)
 {
 	ephy_window_activate_location (window);
 }
 
 void
-window_cmd_view_stop (EggAction *action,
+window_cmd_view_stop (GtkAction *action,
 		      EphyWindow *window)
 {
 	EphyEmbed *embed;
@@ -197,7 +197,7 @@ window_cmd_view_stop (EggAction *action,
 }
 
 void
-window_cmd_view_reload (EggAction *action,
+window_cmd_view_reload (GtkAction *action,
 		        EphyWindow *window)
 {
 	EphyEmbed *embed;
@@ -235,7 +235,7 @@ window_cmd_view_reload (EggAction *action,
 }
 
 void
-window_cmd_file_new_window (EggAction *action,
+window_cmd_file_new_window (GtkAction *action,
 		            EphyWindow *window)
 {
 	EphyTab *tab;
@@ -249,7 +249,7 @@ window_cmd_file_new_window (EggAction *action,
 }
 
 void
-window_cmd_file_new_tab (EggAction *action,
+window_cmd_file_new_tab (GtkAction *action,
 		         EphyWindow *window)
 {
 	EphyTab *tab;
@@ -264,14 +264,14 @@ window_cmd_file_new_tab (EggAction *action,
 }
 
 void
-window_cmd_go_bookmarks (EggAction *action,
+window_cmd_go_bookmarks (GtkAction *action,
 			 EphyWindow *window)
 {
 	ephy_shell_show_bookmarks_editor (ephy_shell, GTK_WIDGET (window));
 }
 
 void
-window_cmd_file_bookmark_page (EggAction *action,
+window_cmd_file_bookmark_page (GtkAction *action,
 			       EphyWindow *window)
 {
 	EphyTab *tab;
@@ -315,7 +315,7 @@ window_cmd_file_bookmark_page (EggAction *action,
 }
 
 void
-window_cmd_file_open (EggAction *action,
+window_cmd_file_open (GtkAction *action,
 		      EphyWindow *window)
 {
 	gchar *dir, *retDir;
@@ -365,7 +365,7 @@ window_cmd_file_open (EggAction *action,
 }
 
 void
-window_cmd_file_save_as (EggAction *action,
+window_cmd_file_save_as (GtkAction *action,
 			 EphyWindow *window)
 {
 	EphyEmbed *embed;
@@ -389,7 +389,7 @@ window_cmd_file_save_as (EggAction *action,
 }
 
 void
-window_cmd_file_close_window (EggAction *action,
+window_cmd_file_close_window (GtkAction *action,
 		              EphyWindow *window)
 {
 	EphyTab *tab;
@@ -401,7 +401,7 @@ window_cmd_file_close_window (EggAction *action,
 }
 
 void
-window_cmd_edit_cut (EggAction *action,
+window_cmd_edit_cut (GtkAction *action,
 		     EphyWindow *window)
 {
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
@@ -421,7 +421,7 @@ window_cmd_edit_cut (EggAction *action,
 }
 
 void
-window_cmd_edit_copy (EggAction *action,
+window_cmd_edit_copy (GtkAction *action,
 		      EphyWindow *window)
 {
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
@@ -442,7 +442,7 @@ window_cmd_edit_copy (EggAction *action,
 }
 
 void
-window_cmd_edit_paste (EggAction *action,
+window_cmd_edit_paste (GtkAction *action,
 		       EphyWindow *window)
 {
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
@@ -463,7 +463,7 @@ window_cmd_edit_paste (EggAction *action,
 }
 
 void
-window_cmd_edit_select_all (EggAction *action,
+window_cmd_edit_select_all (GtkAction *action,
 			    EphyWindow *window)
 {
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
@@ -484,7 +484,7 @@ window_cmd_edit_select_all (EggAction *action,
 }
 
 void
-window_cmd_edit_find_next (EggAction *action,
+window_cmd_edit_find_next (GtkAction *action,
 			   EphyWindow *window)
 {
 	EphyEmbed *embed;
@@ -496,7 +496,7 @@ window_cmd_edit_find_next (EggAction *action,
 }
 
 void
-window_cmd_edit_find_prev (EggAction *action,
+window_cmd_edit_find_prev (GtkAction *action,
 			   EphyWindow *window)
 {
 	EphyEmbed *embed;
@@ -508,7 +508,7 @@ window_cmd_edit_find_prev (EggAction *action,
 }
 
 void
-window_cmd_view_bookmarks_bar (EggAction *action,
+window_cmd_view_bookmarks_bar (GtkAction *action,
 			       EphyWindow *window)
 {
 	EmbedChromeMask mask;
@@ -516,7 +516,7 @@ window_cmd_view_bookmarks_bar (EggAction *action,
 	gboolean current_state;
 
 	mask = ephy_window_get_chrome (window);
-	active = EGG_TOGGLE_ACTION (action)->active;
+	active = GTK_TOGGLE_ACTION (action)->active;
 	current_state = (mask & EMBED_CHROME_BOOKMARKSBARON) > 0;
 
 	if (active != current_state)
@@ -527,7 +527,7 @@ window_cmd_view_bookmarks_bar (EggAction *action,
 }
 
 void
-window_cmd_view_toolbar (EggAction *action,
+window_cmd_view_toolbar (GtkAction *action,
 			 EphyWindow *window)
 {
 	EmbedChromeMask mask;
@@ -535,7 +535,7 @@ window_cmd_view_toolbar (EggAction *action,
 	gboolean current_state;
 
 	mask = ephy_window_get_chrome (window);
-	active = EGG_TOGGLE_ACTION (action)->active;
+	active = GTK_TOGGLE_ACTION (action)->active;
 	current_state = (mask & EMBED_CHROME_TOOLBARON) > 0;
 
 	if (active != current_state)
@@ -546,7 +546,7 @@ window_cmd_view_toolbar (EggAction *action,
 }
 
 void
-window_cmd_view_statusbar (EggAction *action,
+window_cmd_view_statusbar (GtkAction *action,
 			   EphyWindow *window)
 {
 	EmbedChromeMask mask;
@@ -554,7 +554,7 @@ window_cmd_view_statusbar (EggAction *action,
 	gboolean current_state;
 
 	mask = ephy_window_get_chrome (window);
-	active = EGG_TOGGLE_ACTION (action)->active;
+	active = GTK_TOGGLE_ACTION (action)->active;
 	current_state = (mask & EMBED_CHROME_STATUSBARON) > 0;
 
 	if (active != current_state)
@@ -565,10 +565,10 @@ window_cmd_view_statusbar (EggAction *action,
 }
 
 void
-window_cmd_view_fullscreen (EggAction *action,
+window_cmd_view_fullscreen (GtkAction *action,
 			    EphyWindow *window)
 {
-	if (EGG_TOGGLE_ACTION (action)->active)
+	if (GTK_TOGGLE_ACTION (action)->active)
 	{
 		gtk_window_fullscreen (GTK_WINDOW (window));
 	}
@@ -579,28 +579,28 @@ window_cmd_view_fullscreen (EggAction *action,
 }
 
 void
-window_cmd_view_zoom_in	(EggAction *action,
+window_cmd_view_zoom_in	(GtkAction *action,
 			 EphyWindow *window)
 {
 	ephy_window_set_zoom (window, ZOOM_IN);
 }
 
 void
-window_cmd_view_zoom_out (EggAction *action,
+window_cmd_view_zoom_out (GtkAction *action,
 			  EphyWindow *window)
 {
 	ephy_window_set_zoom (window, ZOOM_OUT);
 }
 
 void
-window_cmd_view_zoom_normal (EggAction *action,
+window_cmd_view_zoom_normal (GtkAction *action,
 			     EphyWindow *window)
 {
 	ephy_window_set_zoom (window, 1.0);
 }
 
 void
-window_cmd_view_page_source (EggAction *action,
+window_cmd_view_page_source (GtkAction *action,
 			     EphyWindow *window)
 {
 	EphyTab *tab;
@@ -614,14 +614,14 @@ window_cmd_view_page_source (EggAction *action,
 }
 
 void
-window_cmd_go_history (EggAction *action,
+window_cmd_go_history (GtkAction *action,
 		       EphyWindow *window)
 {
 	ephy_shell_show_history_window (ephy_shell, GTK_WIDGET (window));
 }
 
 void
-window_cmd_edit_personal_data (EggAction *action,
+window_cmd_edit_personal_data (GtkAction *action,
 		               EphyWindow *window)
 {
 	EphyDialog *dialog;
@@ -632,7 +632,7 @@ window_cmd_edit_personal_data (EggAction *action,
 }
 
 void
-window_cmd_edit_prefs (EggAction *action,
+window_cmd_edit_prefs (GtkAction *action,
 		       EphyWindow *window)
 {
 	EphyDialog *dialog;
@@ -675,7 +675,7 @@ toolbar_editor_response_cb (GtkDialog  *dialog,
 }
 
 void
-window_cmd_edit_toolbar (EggAction *action,
+window_cmd_edit_toolbar (GtkAction *action,
 			 EphyWindow *window)
 {
 	GtkWidget *editor;
@@ -694,7 +694,7 @@ window_cmd_edit_toolbar (EggAction *action,
 				      GTK_WINDOW (window));
 
 	editor = egg_toolbar_editor_new
-		(EGG_MENU_MERGE (window->ui_merge),
+		(GTK_UI_MANAGER (window->ui_merge),
 		 EGG_TOOLBARS_MODEL (model));
 	egg_toolbar_editor_load_actions (EGG_TOOLBAR_EDITOR (editor),
 					 ephy_file ("epiphany-toolbar.xml"));
@@ -729,14 +729,14 @@ window_cmd_edit_toolbar (EggAction *action,
 }
 
 void
-window_cmd_help_contents (EggAction *action,
+window_cmd_help_contents (GtkAction *action,
 			 EphyWindow *window)
 {
 	ephy_gui_help (GTK_WINDOW (window), "epiphany", NULL);
 }
 
 void
-window_cmd_help_about (EggAction *action,
+window_cmd_help_about (GtkAction *action,
 		       GtkWidget *window)
 {
 	static GtkWidget *about = NULL;
@@ -813,7 +813,7 @@ window_cmd_help_about (EggAction *action,
 }
 
 void
-window_cmd_tabs_next (EggAction *action,
+window_cmd_tabs_next (GtkAction *action,
 		      EphyWindow *window)
 {
 	GtkNotebook *nb;
@@ -832,7 +832,7 @@ window_cmd_tabs_next (EggAction *action,
 }
 
 void
-window_cmd_tabs_previous (EggAction *action,
+window_cmd_tabs_previous (GtkAction *action,
 			  EphyWindow *window)
 {
 	GtkNotebook *nb;
@@ -851,7 +851,7 @@ window_cmd_tabs_previous (EggAction *action,
 }
 
 void
-window_cmd_tabs_move_left  (EggAction *action,
+window_cmd_tabs_move_left  (GtkAction *action,
 			    EphyWindow *window)
 {
 	GtkWidget *notebook;
@@ -869,7 +869,7 @@ window_cmd_tabs_move_left  (EggAction *action,
 	}
 }
 
-void window_cmd_tabs_move_right (EggAction *action,
+void window_cmd_tabs_move_right (GtkAction *action,
 				 EphyWindow *window)
 {
 	GtkWidget *notebook;
@@ -890,7 +890,7 @@ void window_cmd_tabs_move_right (EggAction *action,
 }
 
 void
-window_cmd_tabs_detach  (EggAction *action,
+window_cmd_tabs_detach  (GtkAction *action,
 			 EphyWindow *window)
 {
 	EphyTab *tab;
@@ -911,7 +911,7 @@ window_cmd_tabs_detach  (EggAction *action,
 }
 
 void
-window_cmd_load_location (EggAction *action,
+window_cmd_load_location (GtkAction *action,
 			  EphyWindow *window)
 {
 	Toolbar *toolbar;

@@ -22,13 +22,13 @@
 
 #include <bonobo/bonobo-i18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
+#include <gtk/gtktoolitem.h>
 
 #include "ephy-bookmark-action.h"
 #include "ephy-bookmarks.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
-#include "eggtoolitem.h"
 #include "ephy-debug.h"
 
 #define MAX_LABEL_LENGTH 30
@@ -83,7 +83,7 @@ ephy_bookmark_action_get_type (void)
 			(GInstanceInitFunc) ephy_bookmark_action_init,
 		};
 
-		type = g_type_register_static (EGG_TYPE_ACTION,
+		type = g_type_register_static (GTK_TYPE_ACTION,
 					       "EphyBookmarkAction",
 					       &type_info, 0);
 	}
@@ -91,13 +91,13 @@ ephy_bookmark_action_get_type (void)
 }
 
 static GtkWidget *
-create_tool_item (EggAction *action)
+create_tool_item (GtkAction *action)
 {
 	GtkWidget *item, *button, *hbox, *label, *icon, *entry;
 
 	LOG ("Creating tool item for action %p", action)
 
-	item = (* EGG_ACTION_CLASS (parent_class)->create_tool_item) (action);
+	item = (* GTK_ACTION_CLASS (parent_class)->create_tool_item) (action);
 
 	hbox = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (hbox);
@@ -132,9 +132,9 @@ create_tool_item (EggAction *action)
 }
 
 static void
-ephy_bookmark_action_sync_smart_url (EggAction *action, GParamSpec *pspec, GtkWidget *proxy)
+ephy_bookmark_action_sync_smart_url (GtkAction *action, GParamSpec *pspec, GtkWidget *proxy)
 {
-	if (EGG_IS_TOOL_ITEM (proxy))
+	if (GTK_IS_TOOL_ITEM (proxy))
 	{
 		GtkWidget *entry;
 		gboolean smart_url;
@@ -154,7 +154,7 @@ ephy_bookmark_action_sync_smart_url (EggAction *action, GParamSpec *pspec, GtkWi
 }
 
 static void
-ephy_bookmark_action_sync_icon (EggAction *action, GParamSpec *pspec, GtkWidget *proxy)
+ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget *proxy)
 {
 	char *icon_location;
 	EphyFaviconCache *cache;
@@ -172,7 +172,7 @@ ephy_bookmark_action_sync_icon (EggAction *action, GParamSpec *pspec, GtkWidget 
 
 	if (pixbuf == NULL) return;
 
-	if (EGG_IS_TOOL_ITEM (proxy))
+	if (GTK_IS_TOOL_ITEM (proxy))
 	{
 		GtkImage *icon;
 
@@ -196,18 +196,24 @@ ephy_bookmark_action_sync_icon (EggAction *action, GParamSpec *pspec, GtkWidget 
 }
 
 static void
-ephy_bookmark_action_sync_label (EggAction *action, GParamSpec *pspec, GtkWidget *proxy)
+ephy_bookmark_action_sync_label (GtkAction *action, GParamSpec *pspec, GtkWidget *proxy)
 {
 	GtkWidget *label;
 	char *label_text;
 	char *title;
+	GValue value = { 0, };
 
 	LOG ("Set bookmark action proxy label to %s", action->label)
-
-	title = ephy_string_shorten (action->label, MAX_LABEL_LENGTH);
+                                                                                                                             
+	g_value_init (&value, G_TYPE_STRING);
+	g_object_get_property (G_OBJECT (action), "label", &value);
+                                                                                                                             
+	title = ephy_string_shorten (g_value_get_string (&value),
+				     MAX_LABEL_LENGTH);
+	g_value_unset (&value);
 
 	if (EPHY_BOOKMARK_ACTION (action)->priv->smart_url
-	    && EGG_IS_TOOL_ITEM (proxy))
+	    && GTK_IS_TOOL_ITEM (proxy))
 	{
 		label_text = g_strdup_printf (_("%s:"), title);
 	}
@@ -216,7 +222,7 @@ ephy_bookmark_action_sync_label (EggAction *action, GParamSpec *pspec, GtkWidget
 		label_text = g_strdup (title);
 	}
 
-	if (EGG_IS_TOOL_ITEM (proxy))
+	if (GTK_IS_TOOL_ITEM (proxy))
 	{
 		label = g_object_get_data (G_OBJECT (proxy), "label");
 		g_return_if_fail (label != NULL);
@@ -238,7 +244,7 @@ ephy_bookmark_action_sync_label (EggAction *action, GParamSpec *pspec, GtkWidget
 }
 
 static void
-activate_cb (GtkWidget *widget, EggAction *action)
+activate_cb (GtkWidget *widget, GtkAction *action)
 {
 	char *location = NULL;
 	char *text = NULL;
@@ -292,7 +298,7 @@ activate_cb (GtkWidget *widget, EggAction *action)
 }
 
 static gboolean
-create_menu_proxy (EggToolItem *item, EggAction *action)
+create_menu_proxy (GtkToolItem *item, GtkAction *action)
 {
 	EphyBookmarkAction *bm_action = EPHY_BOOKMARK_ACTION (action);
 	GtkWidget *menu_item;
@@ -300,14 +306,14 @@ create_menu_proxy (EggToolItem *item, EggAction *action)
 
 	LOG ("create_menu_proxy item %p, action %p", item, action);
 
-	menu_item = EGG_ACTION_GET_CLASS (action)->create_menu_item (action);
+	menu_item = GTK_ACTION_GET_CLASS (action)->create_menu_item (action);
 
-	EGG_ACTION_GET_CLASS (action)->connect_proxy (action, menu_item);
+	GTK_ACTION_GET_CLASS (action)->connect_proxy (action, menu_item);
 
 	menu_id = g_strdup_printf ("ephy-bookmark-action-%d-menu-id",
 				   bm_action->priv->bookmark_id);
 
-	egg_tool_item_set_proxy_menu_item (item, menu_id, menu_item);
+	gtk_tool_item_set_proxy_menu_item (item, menu_id, menu_item);
 
 	g_free (menu_id);
 
@@ -315,13 +321,13 @@ create_menu_proxy (EggToolItem *item, EggAction *action)
 }
 
 static void
-connect_proxy (EggAction *action, GtkWidget *proxy)
+connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	GtkWidget *button, *entry;
 
 	LOG ("Connecting action %p to proxy %p", action, proxy)
 
-	(* EGG_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
+	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 
 	ephy_bookmark_action_sync_label (action, NULL, proxy);
 	g_signal_connect_object (action, "notify::label",
@@ -335,7 +341,7 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
 	g_signal_connect_object (action, "notify::smarturl",
 			         G_CALLBACK (ephy_bookmark_action_sync_smart_url), proxy, 0);
 
-	if (EGG_IS_TOOL_ITEM (proxy))
+	if (GTK_IS_TOOL_ITEM (proxy))
 	{
 		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
 		g_signal_connect (button, "clicked", G_CALLBACK (activate_cb), action);
@@ -424,13 +430,13 @@ ephy_bookmark_action_finalize (GObject *object)
 static void
 ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 {
-	EggActionClass *action_class;
+	GtkActionClass *action_class;
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
 	parent_class = g_type_class_peek_parent (class);
-	action_class = EGG_ACTION_CLASS (class);
+	action_class = GTK_ACTION_CLASS (class);
 
-	action_class->toolbar_item_type = EGG_TYPE_TOOL_ITEM;
+	action_class->toolbar_item_type = GTK_TYPE_TOOL_ITEM;
 	action_class->create_tool_item = create_tool_item;
 	action_class->menu_item_type = GTK_TYPE_IMAGE_MENU_ITEM;
 	action_class->connect_proxy = connect_proxy;
@@ -483,7 +489,7 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 }
 
 static void
-sync_bookmark_properties (EggAction *action, EphyNode *bmk)
+sync_bookmark_properties (GtkAction *action, EphyNode *bmk)
 {
 	const char *title, *location, *icon;
 	gboolean smart_url;
@@ -506,7 +512,7 @@ sync_bookmark_properties (EggAction *action, EphyNode *bmk)
 }
 
 static void
-bookmarks_child_changed_cb (EphyNode *node, EphyNode *child, EggAction *action)
+bookmarks_child_changed_cb (EphyNode *node, EphyNode *child, GtkAction *action)
 {
 	gulong id;
 
@@ -537,19 +543,19 @@ ephy_bookmark_action_init (EphyBookmarkAction *action)
 				         G_OBJECT (action));
 }
 
-EggAction *
+GtkAction *
 ephy_bookmark_action_new (const char *name, guint id)
 {
 	EphyNode *bmk;
 	EphyBookmarks *bookmarks;
-	EggAction *action;
+	GtkAction *action;
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
 	bmk = ephy_bookmarks_get_from_id (bookmarks, id);
 	g_return_val_if_fail (bmk != NULL, NULL);
 
-	action =  EGG_ACTION (g_object_new (EPHY_TYPE_BOOKMARK_ACTION,
+	action =  GTK_ACTION (g_object_new (EPHY_TYPE_BOOKMARK_ACTION,
 				            "name", name,
 					    "bookmark_id", id,
 					    NULL));

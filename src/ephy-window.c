@@ -59,206 +59,203 @@
 #include "egg-menu-merge.h"
 #include "egg-toggle-action.h"
 
-static EggActionGroupEntry ephy_menu_entries [] = {
+static GtkActionGroupEntry ephy_menu_entries [] = {
 
 	/* Toplevel */
-	{ "File", N_("_File"), NULL, NULL, NULL, NULL, NULL },
-	{ "Edit", N_("_Edit"), NULL, NULL, NULL, NULL, NULL },
-	{ "View", N_("_View"), NULL, NULL, NULL, NULL, NULL },
-	{ "Bookmarks", N_("_Bookmarks"), NULL, NULL, NULL, NULL, NULL },
-	{ "Go", N_("_Go"), NULL, NULL, NULL, NULL, NULL },
-	{ "Tabs", N_("_Tabs"), NULL, NULL, NULL, NULL, NULL },
-	{ "Help", N_("_Help"), NULL, NULL, NULL, NULL, NULL },
+	{ "File", NULL, N_("_File") },
+	{ "Edit", NULL, N_("_Edit") },
+	{ "View", NULL, N_("_View") },
+	{ "Bookmarks", NULL, N_("_Bookmarks") },
+	{ "Go", NULL, N_("_Go") },
+	{ "Tabs", NULL, N_("_Tabs") },
+	{ "Help", NULL, N_("_Help") },
 
 	/* File menu */
-	{ "FileNewWindow", N_("_New Window"), GTK_STOCK_NEW, "<control>N",
+	{ "FileNewWindow", GTK_STOCK_NEW, N_("_New Window"), "<control>N",
 	  N_("Open a new window"),
-	  G_CALLBACK (window_cmd_file_new_window), NULL },
-	{ "FileNewTab", N_("New _Tab"), EPHY_STOCK_NEW_TAB, "<control>T",
+	  G_CALLBACK (window_cmd_file_new_window) },
+	{ "FileNewTab", EPHY_STOCK_NEW_TAB, N_("New _Tab"), "<control>T",
 	  N_("Open a new tab"),
-	  G_CALLBACK (window_cmd_file_new_tab), NULL },
-	{ "FileOpen", N_("_Open..."), GTK_STOCK_OPEN, "<control>O",
+	  G_CALLBACK (window_cmd_file_new_tab) },
+	{ "FileOpen", GTK_STOCK_OPEN, N_("_Open..."), "<control>O",
 	  N_("Open a file"),
-	  G_CALLBACK (window_cmd_file_open), NULL },
-	{ "FileSaveAs", N_("Save _As..."), GTK_STOCK_SAVE_AS, "<shift><control>S",
+	  G_CALLBACK (window_cmd_file_open) },
+	{ "FileSaveAs", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><control>S",
 	  N_("Save the current page"),
-	  G_CALLBACK (window_cmd_file_save_as), NULL },
-	{ "FilePrint", N_("_Print..."), GTK_STOCK_PRINT, "<control>P",
+	  G_CALLBACK (window_cmd_file_save_as) },
+	{ "FilePrint", GTK_STOCK_PRINT, N_("_Print..."), "<control>P",
 	  N_("Print the current page"),
-	  G_CALLBACK (window_cmd_file_print), NULL },
-	{ "FileSendTo", N_("S_end To..."), EPHY_STOCK_SEND_LINK, NULL,
+	  G_CALLBACK (window_cmd_file_print) },
+	{ "FileSendTo", EPHY_STOCK_SEND_LINK, N_("S_end To..."), NULL,
 	  N_("Send a link of the current page"),
-	  G_CALLBACK (window_cmd_file_send_to), NULL },
-	{ "FileCloseWindow", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
+	  G_CALLBACK (window_cmd_file_send_to) },
+	{ "FileCloseWindow", GTK_STOCK_CLOSE, N_("_Close"), "<control>W",
 	  N_("Close this window"),
-	  G_CALLBACK (window_cmd_file_close_window), NULL },
+	  G_CALLBACK (window_cmd_file_close_window) },
 
 	/* Edit menu */
-	{ "EditCut", N_("Cu_t"), GTK_STOCK_CUT, "<control>X",
+	{ "EditCut", GTK_STOCK_CUT, N_("Cu_t"), "<control>X",
 	  N_("Cut the selection"),
-	  G_CALLBACK (window_cmd_edit_cut), NULL },
-	{ "EditCopy", N_("_Copy"), GTK_STOCK_COPY, "<control>C",
+	  G_CALLBACK (window_cmd_edit_cut) },
+	{ "EditCopy", GTK_STOCK_COPY, N_("_Copy"), "<control>C",
 	  N_("Copy the selection"),
-	  G_CALLBACK (window_cmd_edit_copy), NULL },
-	{ "EditPaste", N_("_Paste"), GTK_STOCK_PASTE, "<control>V",
+	  G_CALLBACK (window_cmd_edit_copy) },
+	{ "EditPaste", GTK_STOCK_PASTE, N_("_Paste"), "<control>V",
 	  N_("Paste clipboard"),
-	  G_CALLBACK (window_cmd_edit_paste), NULL },
-	{ "EditSelectAll", N_("Select _All"), NULL, "<control>A",
+	  G_CALLBACK (window_cmd_edit_paste) },
+	{ "EditSelectAll", NULL, N_("Select _All"), "<control>A",
 	  N_("Select the entire page"),
-	  G_CALLBACK (window_cmd_edit_select_all), NULL },
-	{ "EditFind", N_("_Find..."), GTK_STOCK_FIND, "<control>F",
+	  G_CALLBACK (window_cmd_edit_select_all) },
+	{ "EditFind", GTK_STOCK_FIND, N_("_Find..."), "<control>F",
 	  N_("Find a word or phrase in the page"),
-	  G_CALLBACK (window_cmd_edit_find), NULL },
-	{ "EditFindNext", N_("Find Ne_xt"), NULL, "<control>G",
+	  G_CALLBACK (window_cmd_edit_find) },
+	{ "EditFindNext", NULL, N_("Find Ne_xt"), "<control>G",
 	  N_("Find next occurrence of the word or phrase"),
-	  G_CALLBACK (window_cmd_edit_find_next), NULL },
-	{ "EditFindPrev", N_("Find Pre_vious"), NULL, "<shift><control>G",
+	  G_CALLBACK (window_cmd_edit_find_next) },
+	{ "EditFindPrev", NULL, N_("Find Pre_vious"), "<shift><control>G",
 	  N_("Find previous occurrence of the word or phrase"),
-	  G_CALLBACK (window_cmd_edit_find_prev), NULL },
-	{ "EditPersonalData", N_("P_ersonal Data"), NULL, NULL,
+	  G_CALLBACK (window_cmd_edit_find_prev) },
+	{ "EditPersonalData", NULL, N_("P_ersonal Data"), NULL,
 	  N_("View and remove cookies and passwords"),
-	  G_CALLBACK (window_cmd_edit_personal_data), NULL },
-	{ "EditToolbar", N_("T_oolbars"), NULL, NULL,
+	  G_CALLBACK (window_cmd_edit_personal_data) },
+	{ "EditToolbar", NULL, N_("T_oolbars"), NULL,
 	  N_("Customize toolbars"),
-	  G_CALLBACK (window_cmd_edit_toolbar), NULL },
-	{ "EditPrefs", N_("P_references"), GTK_STOCK_PREFERENCES, NULL,
+	  G_CALLBACK (window_cmd_edit_toolbar) },
+	{ "EditPrefs", GTK_STOCK_PREFERENCES, N_("P_references"), NULL,
 	  N_("Configure the web browser"),
-	  G_CALLBACK (window_cmd_edit_prefs), NULL },
+	  G_CALLBACK (window_cmd_edit_prefs) },
 
 	/* View menu */
-	{ "ViewStop", N_("_Stop"), GTK_STOCK_STOP, "Escape",
+	{ "ViewStop", GTK_STOCK_STOP, N_("_Stop"), "Escape",
 	  N_("Stop current data transfer"),
-	  G_CALLBACK (window_cmd_view_stop), NULL },
-	{ "ViewReload", N_("_Reload"), GTK_STOCK_REFRESH, "<control>R",
+	  G_CALLBACK (window_cmd_view_stop) },
+	{ "ViewReload", GTK_STOCK_REFRESH, N_("_Reload"), "<control>R",
 	  N_("Display the latest content of the current page"),
-	  G_CALLBACK (window_cmd_view_reload), NULL },
-	{ "ViewToolbar", N_("_Toolbar"), NULL, "<shift><control>T",
+	  G_CALLBACK (window_cmd_view_reload) },
+	{ "ViewToolbar", NULL, N_("_Toolbar"), "<shift><control>T",
 	  N_("Show or hide toolbar"),
-	  G_CALLBACK (window_cmd_view_toolbar), NULL, TOGGLE_ACTION },
-	{ "ViewBookmarksBar", N_("_Bookmarks Bar"), NULL, NULL,
+	  G_CALLBACK (window_cmd_view_toolbar), TOGGLE_ACTION },
+	{ "ViewBookmarksBar", NULL, N_("_Bookmarks Bar"), NULL,
 	  N_("Show or hide bookmarks bar"),
 	  G_CALLBACK (window_cmd_view_bookmarks_bar), NULL, TOGGLE_ACTION },
-	{ "ViewStatusbar", N_("St_atusbar"), NULL, NULL,
+	{ "ViewStatusbar", NULL, N_("St_atusbar"), NULL,
 	  N_("Show or hide statusbar"),
-	  G_CALLBACK (window_cmd_view_statusbar), NULL, TOGGLE_ACTION },
-	{ "ViewFullscreen", N_("_Fullscreen"), EPHY_STOCK_FULLSCREEN, "F11",
+	  G_CALLBACK (window_cmd_view_statusbar), TOGGLE_ACTION },
+	{ "ViewFullscreen", EPHY_STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
 	  N_("Browse at full screen"),
-	  G_CALLBACK (window_cmd_view_fullscreen), NULL, TOGGLE_ACTION},
-	{ "ViewZoomIn", N_("Zoom _In"), GTK_STOCK_ZOOM_IN, "<control>plus",
+	  G_CALLBACK (window_cmd_view_fullscreen), TOGGLE_ACTION},
+	{ "ViewZoomIn", GTK_STOCK_ZOOM_IN, N_("Zoom _In"), "<control>plus",
 	  N_("Increase the text size"),
-	  G_CALLBACK (window_cmd_view_zoom_in), NULL },
-	{ "ViewZoomOut", N_("Zoom _Out"), GTK_STOCK_ZOOM_OUT, "<control>minus",
+	  G_CALLBACK (window_cmd_view_zoom_in) },
+	{ "ViewZoomOut", GTK_STOCK_ZOOM_OUT, N_("Zoom _Out"), "<control>minus",
 	  N_("Decrease the text size"),
-	  G_CALLBACK (window_cmd_view_zoom_out), NULL },
-	{ "ViewZoomNormal", N_("_Normal Size"), GTK_STOCK_ZOOM_100, NULL,
+	  G_CALLBACK (window_cmd_view_zoom_out) },
+	{ "ViewZoomNormal", GTK_STOCK_ZOOM_100, N_("_Normal Size"), NULL,
 	  N_("Use the normal text size"),
-	  G_CALLBACK (window_cmd_view_zoom_normal), NULL },
+	  G_CALLBACK (window_cmd_view_zoom_normal) },
 	{ "ViewEncoding", N_("_Encoding"), NULL, NULL, NULL, NULL, NULL },
-	{ "ViewPageSource", N_("_Page Source"), EPHY_STOCK_VIEWSOURCE, "<control>U",
+	{ "ViewPageSource", EPHY_STOCK_VIEWSOURCE, N_("_Page Source"), "<control>U",
 	  N_("View the source code of the page"),
-	  G_CALLBACK (window_cmd_view_page_source), NULL },
+	  G_CALLBACK (window_cmd_view_page_source) },
 
 	/* Bookmarks menu */
-	{ "FileBookmarkPage", N_("_Add Bookmark..."), EPHY_STOCK_BOOKMARK_PAGE, "<control>D",
+	{ "FileBookmarkPage", EPHY_STOCK_BOOKMARK_PAGE, N_("_Add Bookmark..."), "<control>D",
 	  N_("Add a bookmark for the current page"),
-	  G_CALLBACK (window_cmd_file_bookmark_page), NULL },
-	{ "GoBookmarks", N_("_Edit Bookmarks"), EPHY_STOCK_BOOKMARKS, "<control>B",
+	  G_CALLBACK (window_cmd_file_bookmark_page) },
+	{ "GoBookmarks", EPHY_STOCK_BOOKMARKS, N_("_Edit Bookmarks"), "<control>B",
 	  N_("Open the bookmarks window"),
-	  G_CALLBACK (window_cmd_go_bookmarks), NULL },
+	  G_CALLBACK (window_cmd_go_bookmarks) },
 
 	/* Go menu */
-	{ "GoBack", N_("_Back"), GTK_STOCK_GO_BACK, "<alt>Left",
+	{ "GoBack", GTK_STOCK_GO_BACK, N_("_Back"), "<alt>Left",
 	  N_("Go to the previous visited page"),
-	  G_CALLBACK (window_cmd_go_back), NULL },
-	{ "GoForward", N_("_Forward"), GTK_STOCK_GO_FORWARD, "<alt>Right",
+	  G_CALLBACK (window_cmd_go_back) },
+	{ "GoForward", GTK_STOCK_GO_FORWARD, N_("_Forward"), "<alt>Right",
 	  N_("Go to the next visited page"),
-	  G_CALLBACK (window_cmd_go_forward), NULL },
-	{ "GoUp", N_("_Up"), GTK_STOCK_GO_UP, "<alt>Up",
+	  G_CALLBACK (window_cmd_go_forward) },
+	{ "GoUp", GTK_STOCK_GO_UP, N_("_Up"), "<alt>Up",
 	  N_("Go up one level"),
-	  G_CALLBACK (window_cmd_go_up), NULL },
-	{ "GoHome", N_("_Home"), GTK_STOCK_HOME, "<alt>Home",
+	  G_CALLBACK (window_cmd_go_up) },
+	{ "GoHome", GTK_STOCK_HOME, N_("_Home"), "<alt>Home",
 	  N_("Go to the home page"),
-	  G_CALLBACK (window_cmd_go_home), NULL },
-	{ "GoLocation", N_("_Location..."), NULL, "<control>L",
+	  G_CALLBACK (window_cmd_go_home) },
+	{ "GoLocation", NULL, N_("_Location..."), "<control>L",
 	  N_("Go to a specified location"),
-	  G_CALLBACK (window_cmd_go_location), NULL },
-	{ "GoHistory", N_("H_istory"), EPHY_STOCK_HISTORY, "<control>H",
+	  G_CALLBACK (window_cmd_go_location) },
+	{ "GoHistory", EPHY_STOCK_HISTORY, N_("H_istory"), "<control>H",
 	  N_("Open the history window"),
-	  G_CALLBACK (window_cmd_go_history), NULL },
+	  G_CALLBACK (window_cmd_go_history) },
 
 	/* Tabs menu */
-	{ "TabsPrevious", N_("_Previous Tab"), NULL, "<control>Page_Up",
+	{ "TabsPrevious", NULL, N_("_Previous Tab"), "<control>Page_Up",
 	  N_("Activate previous tab"),
-	  G_CALLBACK (window_cmd_tabs_previous), NULL },
-	{ "TabsNext", N_("_Next Tab"), NULL, "<control>Page_Down",
+	  G_CALLBACK (window_cmd_tabs_previous) },
+	{ "TabsNext", NULL, N_("_Next Tab"), "<control>Page_Down",
 	  N_("Activate next tab"),
-	  G_CALLBACK (window_cmd_tabs_next), NULL },
-	{ "TabsMoveLeft", N_("Move Tab _Left"), NULL, "<shift><control>Page_Up",
+	  G_CALLBACK (window_cmd_tabs_next) },
+	{ "TabsMoveLeft", NULL, N_("Move Tab _Left"), "<shift><control>Page_Up",
 	  N_("Move current tab to left"),
-	  G_CALLBACK (window_cmd_tabs_move_left), NULL },
-	{ "TabsMoveRight", N_("Move Tab _Right"), NULL, "<shift><control>Page_Down",
+	  G_CALLBACK (window_cmd_tabs_move_left) },
+	{ "TabsMoveRight", NULL, N_("Move Tab _Right"), "<shift><control>Page_Down",
 	  N_("Move current tab to right"),
-	  G_CALLBACK (window_cmd_tabs_move_right), NULL },
-	{ "TabsDetach", N_("_Detach Tab"), NULL, "<shift><control>M",
+	  G_CALLBACK (window_cmd_tabs_move_right) },
+	{ "TabsDetach", NULL, N_("_Detach Tab"), "<shift><control>M",
 	  N_("Detach current tab"),
-	  G_CALLBACK (window_cmd_tabs_detach), NULL },
+	  G_CALLBACK (window_cmd_tabs_detach) },
 
 	/* Help menu */
-	{"HelpContents", N_("_Contents"), GTK_STOCK_HELP, "F1",
+	{"HelpContents", GTK_STOCK_HELP, N_("_Contents"), "F1",
 	 N_("Display web browser help"),
-	 G_CALLBACK (window_cmd_help_contents), NULL },
-	{ "HelpAbout", N_("_About"), GNOME_STOCK_ABOUT, NULL,
+	 G_CALLBACK (window_cmd_help_contents) },
+	{ "HelpAbout", GNOME_STOCK_ABOUT, N_("_About"), NULL,
 	  N_("Display credits for the web browser creators"),
-	  G_CALLBACK (window_cmd_help_about), NULL },
+	  G_CALLBACK (window_cmd_help_about) },
 };
 static guint ephy_menu_n_entries = G_N_ELEMENTS (ephy_menu_entries);
 
-static EggActionGroupEntry ephy_popups_entries [] = {
-	/* Toplevel */
-	{ "FakeToplevel", (""), NULL, NULL, NULL, NULL, NULL },
-
+static GtkActionGroupEntry ephy_popups_entries [] = {
 	/* Document */
-	{ "SaveBackgroundAs", N_("_Save Background As..."), NULL, NULL,
-	  NULL, G_CALLBACK (popup_cmd_save_background_as), NULL },
-	{ "ContextBookmarkPage", N_("Add Boo_kmark..."), EPHY_STOCK_BOOKMARK_PAGE, "<control>D",
+	{ "SaveBackgroundAs", NULL, N_("_Save Background As..."), NULL,
+	  NULL, G_CALLBACK (popup_cmd_save_background_as) },
+	{ "ContextBookmarkPage", EPHY_STOCK_BOOKMARK_PAGE, N_("Add Boo_kmark..."), "<control>D",
 	  N_("Add a bookmark for the current page"),
-	  G_CALLBACK (window_cmd_file_bookmark_page), NULL },
+	  G_CALLBACK (window_cmd_file_bookmark_page) },
 
 	/* Framed document */
-	{ "OpenFrame", N_("_Open Frame"), NULL, NULL,
-	  NULL, G_CALLBACK (popup_cmd_open_frame), NULL },
-	{ "OpenFrameInNewWindow", N_("Open Frame in _New Window"), NULL, NULL,
-	  NULL, G_CALLBACK (popup_cmd_frame_in_new_window), NULL },
-	{ "OpenFrameInNewTab", N_("Open Frame in New _Tab"), NULL, NULL,
-	  NULL, G_CALLBACK (popup_cmd_frame_in_new_tab), NULL },
+	{ "OpenFrame", NULL, N_("_Open Frame"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_open_frame) },
+	{ "OpenFrameInNewWindow", NULL, N_("Open Frame in _New Window"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_frame_in_new_window) },
+	{ "OpenFrameInNewTab", NULL, N_("Open Frame in New _Tab"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_frame_in_new_tab) },
 
 	/* Links */
-	{ "OpenLink", N_("_Open Link"), GTK_STOCK_OPEN, NULL,
-	  NULL, G_CALLBACK (popup_cmd_open_link), NULL },
-	{ "OpenLinkInNewWindow", N_("Open Link in _New Window"), NULL, NULL,
-	  NULL, G_CALLBACK (popup_cmd_link_in_new_window), NULL },
-	{ "OpenLinkInNewTab", N_("Open Link in New _Tab"), NULL, NULL,
-	  NULL, G_CALLBACK (popup_cmd_link_in_new_tab), NULL },
-	{ "DownloadLink", N_("_Download Link..."), GTK_STOCK_SAVE, NULL,
-	  NULL, G_CALLBACK (popup_cmd_download_link), NULL },
-	{ "BookmarkLink", N_("_Bookmark Link..."), EPHY_STOCK_BOOKMARK_PAGE, NULL,
+	{ "OpenLink", GTK_STOCK_OPEN, N_("_Open Link"),
+	  NULL, G_CALLBACK (popup_cmd_open_link) },
+	{ "OpenLinkInNewWindow", NULL, N_("Open Link in _New Window"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_link_in_new_window) },
+	{ "OpenLinkInNewTab", NULL, N_("Open Link in New _Tab"),
+	  NULL, G_CALLBACK (popup_cmd_link_in_new_tab) },
+	{ "DownloadLink", GTK_STOCK_SAVE, N_("_Download Link..."), NULL,
+	  NULL, G_CALLBACK (popup_cmd_download_link) },
+	{ "BookmarkLink", EPHY_STOCK_BOOKMARK_PAGE, N_("_Bookmark Link..."), NULL,
 	  NULL, G_CALLBACK (popup_cmd_bookmark_link), NULL },
-	{ "CopyLinkAddress", N_("_Copy Link Address"), NULL, NULL,
+	{ "CopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_link_address), NULL },
 
 	/* Images */
-	{ "OpenImage", N_("Open _Image"), GTK_STOCK_OPEN, NULL,
+	{ "OpenImage", GTK_STOCK_OPEN, N_("Open _Image"), GTK_STOCK_OPEN,
 	  NULL, G_CALLBACK (popup_cmd_open_image), NULL },
-	{ "OpenImageInNewWindow", N_("Open Image in New _Window"), NULL, NULL,
-	  NULL, G_CALLBACK (popup_cmd_image_in_new_window), NULL },
-	{ "OpenImageInNewTab", N_("Open Image in New T_ab"), NULL, NULL,
-	  NULL, G_CALLBACK (popup_cmd_image_in_new_tab), NULL },
-	{ "SaveImageAs", N_("_Save Image As..."), GTK_STOCK_SAVE_AS, NULL,
-	  NULL, G_CALLBACK (popup_cmd_save_image_as), NULL },
-	{ "SetImageAsBackground", N_("_Use Image As Background"), NULL, NULL,
-	  NULL, G_CALLBACK (popup_cmd_set_image_as_background), NULL },
-	{ "CopyImageLocation", N_("Copy I_mage Address"), NULL, NULL,
-	  NULL, G_CALLBACK (popup_cmd_copy_image_location), NULL },
+	{ "OpenImageInNewWindow", NULL, N_("Open Image in New _Window"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_image_in_new_window) },
+	{ "OpenImageInNewTab", NULL, N_("Open Image in New T_ab"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_image_in_new_tab) },
+	{ "SaveImageAs", GTK_STOCK_SAVE_AS, N_("_Save Image As..."), NULL,
+	  NULL, G_CALLBACK (popup_cmd_save_image_as) },
+	{ "SetImageAsBackground", N_("_Use Image As Background"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_set_image_as_background) },
+	{ "CopyImageLocation", N_("Copy I_mage Address"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_copy_image_location) },
 };
 static guint ephy_popups_n_entries = G_N_ELEMENTS (ephy_popups_entries);
 
@@ -270,8 +267,8 @@ struct EphyWindowPrivate
 	GtkWidget *exit_fullscreen_popup;
 	Toolbar *toolbar;
 	GtkWidget *statusbar;
-	EggActionGroup *action_group;
-	EggActionGroup *popups_action_group;
+	GtkActionGroup *action_group;
+	GtkActionGroup *popups_action_group;
 	EphyFavoritesMenu *fav_menu;
 	EphyEncodingMenu *enc_menu;
 	EphyTabsMenu *tabs_menu;
@@ -397,7 +394,7 @@ ephy_window_selection_received_cb (GtkWidget *widget,
 }
 
 static void
-add_widget (EggMenuMerge *merge, GtkWidget *widget, EphyWindow *window)
+add_widget (GtkUIManager *merge, GtkWidget *widget, EphyWindow *window)
 {
 	if (GTK_IS_MENU_SHELL (widget))
 	{
@@ -416,8 +413,8 @@ menu_activate_cb (GtkWidget *widget,
    changes to do this properly */
 #if 0
 	gboolean cut, copy, paste, select_all;
-	EggActionGroup *action_group;
-	EggAction *action;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 	GtkWidget *focus_widget;
 	EphyEmbed *embed;
 
@@ -456,13 +453,13 @@ menu_activate_cb (GtkWidget *widget,
 	}
 
 	action_group = window->priv->action_group;
-	action = egg_action_group_get_action (action_group, "EditCut");
+	action = gtk_action_group_get_action (action_group, "EditCut");
 	g_object_set (action, "sensitive", cut, NULL);
-	action = egg_action_group_get_action (action_group, "EditCopy");
+	action = gtk_action_group_get_action (action_group, "EditCopy");
 	g_object_set (action, "sensitive", copy, NULL);
-	action = egg_action_group_get_action (action_group, "EditPaste");
+	action = gtk_action_group_get_action (action_group, "EditPaste");
 	g_object_set (action, "sensitive", paste, NULL);
-	action = egg_action_group_get_action (action_group, "EditSelectAll");
+	action = gtk_action_group_get_action (action_group, "EditSelectAll");
 	g_object_set (action, "sensitive", select_all, NULL);
 #endif
 }
@@ -615,7 +612,7 @@ ephy_window_state_event_cb (GtkWidget *widget, GdkEventWindowState *event, EphyW
 {
 	if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
 	{
-		EggAction *action;
+		GtkAction *action;
 		gboolean fullscreen;
 
 		fullscreen = event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN;
@@ -629,9 +626,9 @@ ephy_window_state_event_cb (GtkWidget *widget, GdkEventWindowState *event, EphyW
 			ephy_window_unfullscreen (window);
 		}
 
-		action = egg_action_group_get_action (window->priv->action_group,
+		action = gtk_action_group_get_action (window->priv->action_group,
 						      "ViewFullscreen");
-		egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action), fullscreen);
+		egg_toggle_action_set_active (GTK_TOGGLE_ACTION (action), fullscreen);
 	}
 
 	return FALSE;
@@ -640,9 +637,9 @@ ephy_window_state_event_cb (GtkWidget *widget, GdkEventWindowState *event, EphyW
 static void
 setup_window (EphyWindow *window)
 {
-	EggActionGroup *action_group;
-	EggAction *action;
-	EggMenuMerge *merge;
+	GtkActionGroup *action_group;
+	GtkAction *action;
+	GtkUIManager *merge;
 	GtkWidget *menu;
 	int i;
 
@@ -667,47 +664,47 @@ setup_window (EphyWindow *window)
 		ephy_popups_entries[i].user_data = window;
 	}
 
-	merge = egg_menu_merge_new ();
+	merge = gtk_ui_manager_new ();
 
-	action_group = egg_action_group_new ("WindowActions");
-	egg_action_group_add_actions (action_group, ephy_menu_entries,
+	action_group = gtk_action_group_new ("WindowActions");
+	gtk_action_group_add_actions (action_group, ephy_menu_entries,
 				      ephy_menu_n_entries);
-	egg_menu_merge_insert_action_group (merge, action_group, 0);
+	gtk_ui_manager_insert_action_group (merge, action_group, 0);
 	window->priv->action_group = action_group;
-	action = egg_action_group_get_action (action_group, "FileOpen");
+	action = gtk_action_group_get_action (action_group, "FileOpen");
 	g_object_set (action, "short_label", _("Open"), NULL);
-	action = egg_action_group_get_action (action_group, "FileSaveAs");
+	action = gtk_action_group_get_action (action_group, "FileSaveAs");
 	g_object_set (action, "short_label", _("Save As"), NULL);
-	action = egg_action_group_get_action (action_group, "FilePrint");
+	action = gtk_action_group_get_action (action_group, "FilePrint");
 	g_object_set (action, "short_label", _("Print"), NULL);
-	action = egg_action_group_get_action (action_group, "FileBookmarkPage");
+	action = gtk_action_group_get_action (action_group, "FileBookmarkPage");
 	g_object_set (action, "short_label", _("Bookmark"), NULL);
-	action = egg_action_group_get_action (action_group, "EditFind");
+	action = gtk_action_group_get_action (action_group, "EditFind");
 	g_object_set (action, "short_label", _("Find"), NULL);
-	action = egg_action_group_get_action (action_group, "GoBookmarks");
+	action = gtk_action_group_get_action (action_group, "GoBookmarks");
 	g_object_set (action, "short_label", _("Bookmarks"), NULL);
 
-	action = egg_action_group_get_action (action_group, "EditFind");
+	action = gtk_action_group_get_action (action_group, "EditFind");
 	g_object_set (action, "important", TRUE, NULL);
-	action = egg_action_group_get_action (action_group, "GoHome");
+	action = gtk_action_group_get_action (action_group, "GoHome");
 	g_object_set (action, "important", TRUE, NULL);
-	action = egg_action_group_get_action (action_group, "GoBookmarks");
+	action = gtk_action_group_get_action (action_group, "GoBookmarks");
 	g_object_set (action, "important", TRUE, NULL);
 
-	action_group = egg_action_group_new ("PopupsActions");
-	egg_action_group_add_actions (action_group, ephy_popups_entries,
+	action_group = gtk_action_group_new ("PopupsActions");
+	gtk_action_group_add_actions (action_group, ephy_popups_entries,
 				      ephy_popups_n_entries);
-	egg_menu_merge_insert_action_group (merge, action_group, 0);
+	gtk_ui_manager_insert_action_group (merge, action_group, 0);
 	window->priv->popups_action_group = action_group;
 
 	window->ui_merge = G_OBJECT (merge);
 	g_signal_connect (merge, "add_widget", G_CALLBACK (add_widget), window);
-	egg_menu_merge_add_ui_from_file
+	gtk_ui_manager_add_ui_from_file
 		(merge, ephy_file ("epiphany-ui.xml"), NULL);
 	gtk_window_add_accel_group (GTK_WINDOW (window), merge->accel_group);
-	egg_menu_merge_ensure_update (merge);
+	gtk_ui_manager_ensure_update (merge);
 
-	menu = egg_menu_merge_get_widget (merge, "/menu/EditMenu");
+	menu = gtk_ui_manager_get_widget (merge, "/menu/EditMenu");
 	g_signal_connect (menu, "activate", G_CALLBACK (menu_activate_cb), window);
 
 	window->priv->toolbar = toolbar_new (window);
@@ -826,8 +823,8 @@ static void
 sync_tab_navigation (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	TabNavigationFlags flags;
-	EggActionGroup *action_group;
-	EggAction *action;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 	gboolean up = FALSE, back = FALSE, forward = FALSE;
 
 	if (window->priv->closing) return;
@@ -848,11 +845,11 @@ sync_tab_navigation (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	}
 
 	action_group = window->priv->action_group;
-	action = egg_action_group_get_action (action_group, "GoUp");
+	action = gtk_action_group_get_action (action_group, "GoUp");
 	g_object_set (action, "sensitive", up, NULL);
-	action = egg_action_group_get_action (action_group, "GoBack");
+	action = gtk_action_group_get_action (action_group, "GoBack");
 	g_object_set (action, "sensitive", back, NULL);
-	action = egg_action_group_get_action (action_group, "GoForward");
+	action = gtk_action_group_get_action (action_group, "GoForward");
 	g_object_set (action, "sensitive", forward, NULL);
 
 	toolbar_update_navigation_actions (window->priv->toolbar,
@@ -936,11 +933,11 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 static void
 sync_tab_stop (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
-	EggAction *action;
+	GtkAction *action;
 
 	if (window->priv->closing) return;
 
-	action = egg_action_group_get_action (window->priv->action_group, "ViewStop");
+	action = gtk_action_group_get_action (window->priv->action_group, "ViewStop");
 
 	g_object_set (action, "sensitive", ephy_tab_get_load_status (tab), NULL);
 }
@@ -996,8 +993,8 @@ sync_tab_visibility (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 static void
 sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
-	EggActionGroup *action_group;
-	EggAction *action;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
 	float zoom;
 
@@ -1021,11 +1018,11 @@ sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	toolbar_update_zoom (window->priv->toolbar, zoom);
 
 	action_group = window->priv->action_group;
-	action = egg_action_group_get_action (action_group, "ViewZoomIn");
+	action = gtk_action_group_get_action (action_group, "ViewZoomIn");
 	g_object_set (action, "sensitive", can_zoom_in, NULL);
-	action = egg_action_group_get_action (action_group, "ViewZoomOut");
+	action = gtk_action_group_get_action (action_group, "ViewZoomOut");
 	g_object_set (action, "sensitive", can_zoom_out, NULL);
-	action = egg_action_group_get_action (action_group, "ViewZoomNormal");
+	action = gtk_action_group_get_action (action_group, "ViewZoomNormal");
 	g_object_set (action, "sensitive", can_zoom_normal, NULL);
 }
 
@@ -1054,8 +1051,8 @@ popup_destroy_cb (GtkWidget *widget, EphyWindow *window)
 static void
 show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 {
-	EggActionGroup *action_group;
-	EggAction *action;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 	EmbedEventContext context;
 	const char *popup;
 	char *path;
@@ -1101,12 +1098,12 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	}
 
 	action_group = window->priv->popups_action_group;
-	action = egg_action_group_get_action (action_group, "SaveBackgroundAs");
+	action = gtk_action_group_get_action (action_group, "SaveBackgroundAs");
 	g_object_set (action, "sensitive", has_background,
 			      "visible", has_background, NULL);
 
 	path = g_strconcat ("/popups/", popup, NULL);
-	widget = egg_menu_merge_get_widget (EGG_MENU_MERGE (window->ui_merge),
+	widget = gtk_ui_manager_get_widget (GTK_UI_MANAGER (window->ui_merge),
 				            path);
 	g_free (path);
 
@@ -1266,8 +1263,8 @@ static void
 update_tabs_menu_sensitivity (EphyWindow *window)
 {
 	gboolean prev_tab, next_tab, move_left, move_right, detach;
-	EggActionGroup *action_group;
-	EggAction *action;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 	int current;
 	int last;
 
@@ -1281,15 +1278,15 @@ update_tabs_menu_sensitivity (EphyWindow *window)
 		(GTK_NOTEBOOK (window->priv->notebook)) > 1;
 
 	action_group = window->priv->action_group;
-	action = egg_action_group_get_action (action_group, "TabsPrevious");
+	action = gtk_action_group_get_action (action_group, "TabsPrevious");
 	g_object_set (action, "sensitive", prev_tab, NULL);
-	action = egg_action_group_get_action (action_group, "TabsNext");
+	action = gtk_action_group_get_action (action_group, "TabsNext");
 	g_object_set (action, "sensitive", next_tab, NULL);
-	action = egg_action_group_get_action (action_group, "TabsMoveLeft");
+	action = gtk_action_group_get_action (action_group, "TabsMoveLeft");
 	g_object_set (action, "sensitive", move_left, NULL);
-	action = egg_action_group_get_action (action_group, "TabsMoveRight");
+	action = gtk_action_group_get_action (action_group, "TabsMoveRight");
 	g_object_set (action, "sensitive", move_right, NULL);
-	action = egg_action_group_get_action (action_group, "TabsDetach");
+	action = gtk_action_group_get_action (action_group, "TabsDetach");
 	g_object_set (action, "sensitive", detach, NULL);
 }
 
@@ -1495,7 +1492,7 @@ ephy_window_finalize (GObject *object)
 	}
 
 	g_object_unref (window->priv->action_group);
-	egg_menu_merge_remove_action_group (EGG_MENU_MERGE (window->ui_merge),
+	gtk_ui_manager_remove_action_group (GTK_UI_MANAGER (window->ui_merge),
 					    window->priv->action_group);
 	g_object_unref (window->ui_merge);
 
@@ -1556,20 +1553,20 @@ translate_default_chrome (EmbedChromeMask *chrome_mask)
 static void
 update_layout_toggles (EphyWindow *window)
 {
-	EggActionGroup *action_group = EGG_ACTION_GROUP (window->priv->action_group);
+	GtkActionGroup *action_group = GTK_ACTION_GROUP (window->priv->action_group);
 	EmbedChromeMask mask = window->priv->chrome_mask;
-	EggAction *action;
+	GtkAction *action;
 
-	action = egg_action_group_get_action (action_group, "ViewToolbar");
-	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action),
+	action = gtk_action_group_get_action (action_group, "ViewToolbar");
+	egg_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
 				      mask & EMBED_CHROME_TOOLBARON);
 
-	action = egg_action_group_get_action (action_group, "ViewBookmarksBar");
-	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action),
+	action = gtk_action_group_get_action (action_group, "ViewBookmarksBar");
+	egg_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
 				      mask & EMBED_CHROME_BOOKMARKSBARON);
 
-	action = egg_action_group_get_action (action_group, "ViewStatusbar");
-	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action),
+	action = gtk_action_group_get_action (action_group, "ViewStatusbar");
+	egg_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
 				      mask & EMBED_CHROME_STATUSBARON);
 }
 

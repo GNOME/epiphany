@@ -1,4 +1,4 @@
-
+#include "eggmarshalers.h"
 #include	<glib-object.h>
 
 

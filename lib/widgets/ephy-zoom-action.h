@@ -20,7 +20,7 @@
 #ifndef EPHY_ZOOM_ACTION_H
 #define EPHY_ZOOM_ACTION_H
 
-#include <egg-action.h>
+#include <gtk/gtkaction.h>
 
 G_BEGIN_DECLS
 
@@ -37,14 +37,14 @@ typedef struct _EphyZoomActionPrivate	EphyZoomActionPrivate;
 
 struct _EphyZoomAction
 {
-	EggAction parent;
+	GtkAction parent;
 	
 	EphyZoomActionPrivate *priv;
 };
 
 struct _EphyZoomActionClass
 {
-	EggActionClass parent_class;
+	GtkActionClass parent_class;
 
 	void (* zoom_to_level)	(EphyZoomAction *action, float level);
 };

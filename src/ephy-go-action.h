@@ -33,12 +33,12 @@ typedef struct _EphyGoActionClass EphyGoActionClass;
 
 struct _EphyGoAction
 {
-	EggAction parent;
+	GtkAction parent;
 };
 
 struct _EphyGoActionClass
 {
-	EggActionClass parent_class;
+	GtkActionClass parent_class;
 };
 
 GType    ephy_go_action_get_type   (void);

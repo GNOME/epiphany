@@ -33,7 +33,7 @@ struct _EphyFavoritesMenuPrivate
 {
 	EphyWindow *window;
 	EphyBookmarks *bookmarks;
-	EggActionGroup *action_group;
+	GtkActionGroup *action_group;
 	guint ui_id;
 };
 
@@ -83,24 +83,24 @@ static void
 ephy_favorites_menu_clean (EphyFavoritesMenu *wrhm)
 {
 	EphyFavoritesMenuPrivate *p = wrhm->priv;
-	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
+	GtkUIManager *merge = GTK_UI_MANAGER (p->window->ui_merge);
 
 	if (p->ui_id > 0)
 	{
-		egg_menu_merge_remove_ui (merge, p->ui_id);
-		egg_menu_merge_ensure_update (merge);
+		gtk_ui_manager_remove_ui (merge, p->ui_id);
+		gtk_ui_manager_ensure_update (merge);
 		p->ui_id = 0;
 	}
 
 	if (p->action_group != NULL)
 	{
-		egg_menu_merge_remove_action_group (merge, p->action_group);
+		gtk_ui_manager_remove_action_group (merge, p->action_group);
 		g_object_unref (p->action_group);
 	}
 }
 
 static void
-go_location_cb (EggAction *action, char *location, EphyWindow *window)
+go_location_cb (GtkAction *action, char *location, EphyWindow *window)
 {
 	ephy_window_load_url (window, location);
 }
@@ -113,7 +113,7 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 	gint i;
 	EphyNode *fav;
 	GPtrArray *children;
-	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
+	GtkUIManager *merge = GTK_UI_MANAGER (p->window->ui_merge);
 
 	LOG ("Rebuilding favorites menu")
 
@@ -129,14 +129,14 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 			      "<placeholder name=\"GoFavorites\">"
 			      "<separator name=\"GoSep3\"/>");
 
-	p->action_group = egg_action_group_new ("FavoritesActions");
-	egg_menu_merge_insert_action_group (merge, p->action_group, 0);
+	p->action_group = gtk_action_group_new ("FavoritesActions");
+	gtk_ui_manager_insert_action_group (merge, p->action_group, 0);
 
 	for (i = 0; i < children->len; i++)
 	{
 		char *verb;
 		EphyNode *node;
-		EggAction *action;
+		GtkAction *action;
 
 		verb = g_strdup_printf ("GoFav%d", i);
 
@@ -144,7 +144,7 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 
 		action = ephy_bookmark_action_new (verb,
 						   ephy_node_get_id (node));
-		egg_action_group_add_action (p->action_group, action);
+		gtk_action_group_add_action (p->action_group, action);
 		g_object_unref (action);
 		g_signal_connect (action, "go_location",
 				  G_CALLBACK (go_location_cb), p->window);
@@ -166,7 +166,7 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 	{
 		GError *error = NULL;
 		LOG ("Merging ui\n%s",xml->str);
-		p->ui_id = egg_menu_merge_add_ui_from_string
+		p->ui_id = gtk_ui_manager_add_ui_from_string
 			(merge, xml->str, -1, &error);
 	}
 
@@ -248,8 +248,8 @@ ephy_favorites_menu_finalize (GObject *o)
 
 	if (p->action_group != NULL)
 	{
-		egg_menu_merge_remove_action_group
-			(EGG_MENU_MERGE (p->window->ui_merge),
+		gtk_ui_manager_remove_action_group
+			(GTK_UI_MANAGER (p->window->ui_merge),
 			 p->action_group);
 		g_object_unref (p->action_group);
 	}

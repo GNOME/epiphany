@@ -22,11 +22,11 @@
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkcellrendererpixbuf.h>
+#include <gtk/gtktreemodelfilter.h>
 #include <gtk/gtkwindow.h>
 #include <gdk/gdkkeysyms.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 
-#include "eggtreemodelfilter.h"
 #include "ephy-node-view.h"
 #include "ephy-tree-model-sort.h"
 #include "eggtreemultidnd.h"
@@ -236,8 +236,8 @@ get_node_from_path (EphyNodeView *view, GtkTreePath *path)
 	gtk_tree_model_get_iter (view->priv->sortmodel, &iter, path);
 	gtk_tree_model_sort_convert_iter_to_child_iter
 		(GTK_TREE_MODEL_SORT (view->priv->sortmodel), &iter2, &iter);
-	egg_tree_model_filter_convert_iter_to_child_iter
-		(EGG_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
+	gtk_tree_model_filter_convert_iter_to_child_iter
+		(GTK_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
 	node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, &iter);
 
 	return node;
@@ -591,8 +591,8 @@ ephy_node_view_row_activated_cb (GtkTreeView *treeview,
 	gtk_tree_model_get_iter (view->priv->sortmodel, &iter, path);
 	gtk_tree_model_sort_convert_iter_to_child_iter
 		(GTK_TREE_MODEL_SORT (view->priv->sortmodel), &iter2, &iter);
-	egg_tree_model_filter_convert_iter_to_child_iter
-		(EGG_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
+	gtk_tree_model_filter_convert_iter_to_child_iter
+		(GTK_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
 
 	node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, &iter);
 
@@ -957,9 +957,9 @@ ephy_node_view_construct (EphyNodeView *view)
 
 	view->priv->nodemodel = ephy_tree_model_node_new (view->priv->root,
 							  view->priv->filter);
-	view->priv->filtermodel = egg_tree_model_filter_new (GTK_TREE_MODEL (view->priv->nodemodel),
+	view->priv->filtermodel = gtk_tree_model_filter_new (GTK_TREE_MODEL (view->priv->nodemodel),
 							     NULL);
-	egg_tree_model_filter_set_visible_column (EGG_TREE_MODEL_FILTER (view->priv->filtermodel),
+	gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER (view->priv->filtermodel),
 						  EPHY_TREE_MODEL_NODE_COL_VISIBLE);
 	view->priv->sortmodel = ephy_tree_model_sort_new (view->priv->filtermodel);
 	gtk_tree_view_set_model (GTK_TREE_VIEW (view), GTK_TREE_MODEL (view->priv->sortmodel));
@@ -1026,8 +1026,8 @@ cell_renderer_edited (GtkCellRendererText *cell,
 	gtk_tree_model_get_iter (view->priv->sortmodel, &iter, path);
 	gtk_tree_model_sort_convert_iter_to_child_iter
 		(GTK_TREE_MODEL_SORT (view->priv->sortmodel), &iter2, &iter);
-	egg_tree_model_filter_convert_iter_to_child_iter
-		(EGG_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
+	gtk_tree_model_filter_convert_iter_to_child_iter
+		(GTK_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
 	node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, &iter);
 
 	g_value_init (&value, G_TYPE_STRING);
@@ -1317,24 +1317,13 @@ static void
 get_selection (GtkTreeModel *model,
 	       GtkTreePath *path,
 	       GtkTreeIter *iter,
-	       void **data)
+	       gpointer *data)
 {
-	GtkTreeModelSort *sortmodel = GTK_TREE_MODEL_SORT (model);
-	EggTreeModelFilter *filtermodel = EGG_TREE_MODEL_FILTER (sortmodel->child_model);
-	EphyTreeModelNode *nodemodel = EPHY_TREE_MODEL_NODE (filtermodel->child_model);
-	GList **list = (GList **) data;
-	GtkTreeIter *iter2 = gtk_tree_iter_copy (iter);
-	GtkTreeIter iter3;
-	GtkTreeIter iter4;
+	GList **list = data[0];
+	EphyNodeView *view = EPHY_NODE_VIEW (data);
 	EphyNode *node;
 
-	gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (model),
-							&iter3, iter2);
-	egg_tree_model_filter_convert_iter_to_child_iter (filtermodel, &iter4, &iter3);
-
-	node = ephy_tree_model_node_node_from_iter (nodemodel, &iter4);
-
-	gtk_tree_iter_free (iter2);
+	node = get_node_from_path (view, path);
 
 	*list = g_list_prepend (*list, node);
 }
@@ -1344,13 +1333,16 @@ ephy_node_view_get_selection (EphyNodeView *view)
 {
 	GList *list = NULL;
 	GtkTreeSelection *selection;
+	gpointer data[2];
 
 	selection = gtk_tree_view_get_selection	(GTK_TREE_VIEW (view));
 
+	data[0] = &list;
+	data[1] = view;
 	gtk_tree_selection_selected_foreach
 			(selection,
 			 (GtkTreeSelectionForeachFunc) get_selection,
-			 (gpointer) &list);
+			 (gpointer) data);
 
 	return list;
 }
@@ -1375,7 +1367,7 @@ ephy_node_view_remove (EphyNodeView *view)
 	node = g_list_first (list)->data;
 	ephy_tree_model_node_iter_from_node (EPHY_TREE_MODEL_NODE (view->priv->nodemodel),
 					     node, &iter);
-	egg_tree_model_filter_convert_child_iter_to_iter (EGG_TREE_MODEL_FILTER (view->priv->filtermodel),
+	gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (view->priv->filtermodel),
 							  &iter2, &iter);
 	gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT (view->priv->sortmodel),
 							&iter, &iter2);
@@ -1437,7 +1429,7 @@ ephy_node_view_select_node (EphyNodeView *view,
 	g_value_unset (&val);
 	if (visible == FALSE) return;
 
-	egg_tree_model_filter_convert_child_iter_to_iter (EGG_TREE_MODEL_FILTER (view->priv->filtermodel),
+	gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (view->priv->filtermodel),
 							  &iter2, &iter);
 	gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT (view->priv->sortmodel),
 							&iter, &iter2);

@@ -42,13 +42,13 @@ typedef enum
 
 struct _EphyNavigationAction
 {
-	EggAction parent;
+	GtkAction parent;
         EphyNavigationActionPrivate *priv;
 };
 
 struct _EphyNavigationActionClass
 {
-	EggActionClass parent_class;
+	GtkActionClass parent_class;
 };
 
 GType    ephy_navigation_action_get_type   (void);

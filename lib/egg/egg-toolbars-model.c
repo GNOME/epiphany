@@ -135,7 +135,7 @@ egg_toolbars_model_to_xml (EggToolbarsModel *t)
   return doc;
 }
 
-gboolean
+static gboolean
 safe_save_xml (const char *xml_file, xmlDocPtr doc)
 {
 	char *tmp_file;
@@ -314,7 +314,7 @@ egg_toolbars_model_add_separator (EggToolbarsModel *t,
 		 toolbar_position, real_position);
 }
 
-gboolean
+static gboolean
 impl_add_item (EggToolbarsModel    *t,
 	       int		    toolbar_position,
 	       int		    position,
@@ -441,7 +441,7 @@ egg_toolbars_model_load (EggToolbarsModel *t,
   xmlFreeDoc (doc);
 }
 
-char *
+static char *
 impl_get_item_id (EggToolbarsModel *t,
 		  const char       *type,
 		  const char       *name)
@@ -454,7 +454,7 @@ impl_get_item_id (EggToolbarsModel *t,
   return NULL;
 }
 
-char *
+static char *
 impl_get_item_name (EggToolbarsModel *t,
 		    const char       *type,
 		    const char       *id)
@@ -467,7 +467,7 @@ impl_get_item_name (EggToolbarsModel *t,
   return NULL;
 }
 
-char *
+static char *
 impl_get_item_type (EggToolbarsModel *t,
 		    GdkAtom type)
 {

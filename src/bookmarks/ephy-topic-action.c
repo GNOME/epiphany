@@ -22,12 +22,13 @@
 #include <config.h>
 #endif
 
-#include "ephy-node-common.h"
+#include <gtk/gtktoolitem.h>
+
 #include "ephy-topic-action.h"
+#include "ephy-node-common.h"
 #include "ephy-bookmarks.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
-#include "eggtoolitem.h"
 #include "ephy-debug.h"
 #include "ephy-gui.h"
 #include "ephy-string.h"
@@ -76,7 +77,7 @@ ephy_topic_action_get_type (void)
 			(GInstanceInitFunc) ephy_topic_action_init,
 		};
 
-		type = g_type_register_static (EGG_TYPE_ACTION,
+		type = g_type_register_static (GTK_TYPE_ACTION,
 					       "EphyTopicAction",
 					       &type_info, 0);
 	}
@@ -84,7 +85,7 @@ ephy_topic_action_get_type (void)
 }
 
 static GtkWidget *
-create_tool_item (EggAction *action)
+create_tool_item (GtkAction *action)
 {
 	GtkWidget *item;
 	GtkWidget *button;
@@ -92,7 +93,7 @@ create_tool_item (EggAction *action)
 	GtkWidget *hbox;
 	GtkWidget *label;
 
-	item = (* EGG_ACTION_CLASS (parent_class)->create_tool_item) (action);
+	item = (* GTK_ACTION_CLASS (parent_class)->create_tool_item) (action);
 
 	hbox = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (hbox);
@@ -128,7 +129,7 @@ menu_deactivate_cb (GtkMenuShell *ms, GtkWidget *button)
 }
 
 static void
-menu_activate_cb (GtkWidget *item, EggAction *action)
+menu_activate_cb (GtkWidget *item, GtkAction *action)
 {
 	EphyNode *node;
 	const char *location;
@@ -141,13 +142,20 @@ menu_activate_cb (GtkWidget *item, EggAction *action)
 }
 
 static void
-ephy_topic_action_sync_label (EggAction *action, GParamSpec *pspec, GtkWidget *proxy)
+ephy_topic_action_sync_label (GtkAction *action, GParamSpec *pspec, GtkWidget *proxy)
 {
 	GtkWidget *label = NULL;
+	GValue value = { 0, };
+	const char *label_text;
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_object_get_property (G_OBJECT (action), "label", &value);
+
+	label_text = g_value_get_string (&value);
 
 	LOG ("Set bookmark action proxy label to %s", action->label)
 
-	if (EGG_IS_TOOL_ITEM (proxy))
+	if (GTK_IS_TOOL_ITEM (proxy))
 	{
 		label = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "label"));
 	}
@@ -163,10 +171,12 @@ ephy_topic_action_sync_label (EggAction *action, GParamSpec *pspec, GtkWidget *p
 
 	g_return_if_fail (label != NULL);
 
-	if (action->label)
+	if (label_text)
 	{
-		gtk_label_set_label (GTK_LABEL (label), action->label);
+		gtk_label_set_label (GTK_LABEL (label), label_text);
 	}
+
+	g_value_unset (&value);
 }
 
 static int
@@ -445,13 +455,22 @@ button_pressed_cb (GtkWidget *button,
 }
 
 static GtkWidget *
-create_menu_item (EggAction *action)
+create_menu_item (GtkAction *action)
 {
 	GtkWidget *menu, *menu_item;
+	GValue value = { 0, };
+	const char *label_text;
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_object_get_property (G_OBJECT (action), "label", &value);
+
+	label_text = g_value_get_string (&value);
 
 	LOG ("create_menu_item action %p", action)
 
-	menu_item = gtk_menu_item_new_with_label (action->label);
+	menu_item = gtk_menu_item_new_with_label (label_text);
+
+	g_value_unset (&value);
 
 	menu = build_menu (EPHY_TOPIC_ACTION (action));
 	gtk_widget_show (menu);
@@ -462,7 +481,7 @@ create_menu_item (EggAction *action)
 }
 
 static gboolean
-create_menu_proxy (EggToolItem *item, EggAction *action)
+create_menu_proxy (GtkToolItem *item, GtkAction *action)
 {
 	GtkWidget *menu_item;
 	char *menu_id;
@@ -474,7 +493,7 @@ create_menu_proxy (EggToolItem *item, EggAction *action)
 	menu_id = g_strdup_printf ("ephy-topic-action-%d-menu-id",
 				   EPHY_TOPIC_ACTION (action)->priv->topic_id);
 
-	egg_tool_item_set_proxy_menu_item (item, menu_id, menu_item);
+	gtk_tool_item_set_proxy_menu_item (item, menu_id, menu_item);
 
 	g_free (menu_id);
 
@@ -482,19 +501,19 @@ create_menu_proxy (EggToolItem *item, EggAction *action)
 }
 
 static void
-connect_proxy (EggAction *action, GtkWidget *proxy)
+connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	GtkWidget *button;
 
 	LOG ("connect_proxy action %p, proxy %p", action, proxy)
 
-	(* EGG_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
+	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 
 	ephy_topic_action_sync_label (action, NULL, proxy);
 	g_signal_connect_object (action, "notify::label",
 			         G_CALLBACK (ephy_topic_action_sync_label), proxy, 0);
 
-	if (EGG_IS_TOOL_ITEM (proxy))
+	if (GTK_IS_TOOL_ITEM (proxy))
 	{
 		g_signal_connect_object (proxy, "create_menu_proxy",
 					 G_CALLBACK (create_menu_proxy),
@@ -567,13 +586,13 @@ ephy_topic_action_finalize (GObject *object)
 static void
 ephy_topic_action_class_init (EphyTopicActionClass *class)
 {
-	EggActionClass *action_class;
+	GtkActionClass *action_class;
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
 	parent_class = g_type_class_peek_parent (class);
-	action_class = EGG_ACTION_CLASS (class);
+	action_class = GTK_ACTION_CLASS (class);
 
-	action_class->toolbar_item_type = EGG_TYPE_TOOL_ITEM;
+	action_class->toolbar_item_type = GTK_TYPE_TOOL_ITEM;
 	action_class->create_tool_item = create_tool_item;
 	action_class->create_menu_item = create_menu_item;
 	action_class->connect_proxy = connect_proxy;
@@ -605,7 +624,7 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
 }
 
 static void
-sync_topic_properties (EggAction *action, EphyNode *bmk)
+sync_topic_properties (GtkAction *action, EphyNode *bmk)
 {
 	const char *title;
 
@@ -616,7 +635,7 @@ sync_topic_properties (EggAction *action, EphyNode *bmk)
 }
 
 static void
-topic_child_changed_cb (EphyNode *node, EphyNode *child, EggAction *action)
+topic_child_changed_cb (EphyNode *node, EphyNode *child, GtkAction *action)
 {
 	gulong id;
 
@@ -643,19 +662,19 @@ ephy_topic_action_init (EphyTopicAction *action)
 				         G_OBJECT (action));
 }
 
-EggAction *
+GtkAction *
 ephy_topic_action_new (const char *name, guint id)
 {
 	EphyNode *bmk;
 	EphyBookmarks *bookmarks;
-	EggAction *action;
+	GtkAction *action;
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
 	bmk = ephy_bookmarks_get_from_id (bookmarks, id);
 	g_return_val_if_fail (bmk != NULL, NULL);
 
-	action = EGG_ACTION (g_object_new (EPHY_TYPE_TOPIC_ACTION,
+	action = GTK_ACTION (g_object_new (EPHY_TYPE_TOPIC_ACTION,
 					   "topic_id", id,
 					   "name", name,
 					   NULL));

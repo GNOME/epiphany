@@ -57,7 +57,7 @@ ephy_spinner_action_get_type (void)
 			(GInstanceInitFunc) ephy_spinner_action_init,
 		};
 
-		type = g_type_register_static (EGG_TYPE_ACTION,
+		type = g_type_register_static (GTK_TYPE_ACTION,
 					       "EphySpinnerAction",
 					       &type_info, 0);
 	}
@@ -65,7 +65,7 @@ ephy_spinner_action_get_type (void)
 }
 
 static void
-ephy_spinner_action_sync_throbbing (EggAction *action, GParamSpec *pspec,
+ephy_spinner_action_sync_throbbing (GtkAction *action, GParamSpec *pspec,
 			            GtkWidget *proxy)
 {
 	EphySpinner *spinner;
@@ -83,7 +83,7 @@ ephy_spinner_action_sync_throbbing (EggAction *action, GParamSpec *pspec,
 }
 
 static GtkWidget *
-create_tool_item (EggAction *action)
+create_tool_item (GtkAction *action)
 {
 	GtkWidget *item;
 	GtkWidget *spinner;
@@ -93,15 +93,15 @@ create_tool_item (EggAction *action)
 	spinner = ephy_spinner_new ();
 	gtk_widget_show (spinner);
 	gtk_container_add (GTK_CONTAINER (item), spinner);
-	egg_tool_item_set_pack_end (EGG_TOOL_ITEM (item), TRUE);
-	egg_tool_item_set_homogeneous (EGG_TOOL_ITEM (item), FALSE);
+	egg_tool_item_set_pack_end (GTK_TOOL_ITEM (item), TRUE);
+	egg_tool_item_set_homogeneous (GTK_TOOL_ITEM (item), FALSE);
 	g_object_set_data (G_OBJECT (item), "spinner", spinner);
 
 	return item;
 }
 
 static void
-toolbar_style_sync (EggToolbar *toolbar,
+toolbar_style_sync (GtkToolbar *toolbar,
 		    GtkToolbarStyle style,
 		    GtkWidget *proxy)
 {
@@ -117,12 +117,12 @@ toolbar_style_sync (EggToolbar *toolbar,
 static void
 item_parent_set_cb (GtkWidget *item, GtkWidget *previous_parent)
 {
-	EggToolbar *toolbar;
+	GtkToolbar *toolbar;
 	GtkToolbarStyle style;
 
 	if (item->parent == NULL) return;
 
-	toolbar = EGG_TOOLBAR (item->parent);
+	toolbar = GTK_TOOLBAR (item->parent);
 
 	g_signal_connect_object (toolbar, "style_changed",
 			         G_CALLBACK (toolbar_style_sync),
@@ -133,7 +133,7 @@ item_parent_set_cb (GtkWidget *item, GtkWidget *previous_parent)
 }
 
 static void
-connect_proxy (EggAction *action, GtkWidget *proxy)
+connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	g_signal_connect_object (action, "notify::throbbing",
 				 G_CALLBACK (ephy_spinner_action_sync_throbbing),
@@ -142,7 +142,7 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
 			         G_CALLBACK (item_parent_set_cb),
 			         proxy, 0);
 
-	(* EGG_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
+	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 }
 
 static void
@@ -197,11 +197,11 @@ ephy_spinner_action_finalize (GObject *object)
 static void
 ephy_spinner_action_class_init (EphySpinnerActionClass *class)
 {
-	EggActionClass *action_class;
+	GtkActionClass *action_class;
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
 	parent_class = g_type_class_peek_parent (class);
-	action_class = EGG_ACTION_CLASS (class);
+	action_class = GTK_ACTION_CLASS (class);
 
 	action_class->toolbar_item_type = EPHY_SPINNER_TYPE;
 	action_class->create_tool_item = create_tool_item;

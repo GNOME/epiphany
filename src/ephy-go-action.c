@@ -56,7 +56,7 @@ ephy_go_action_get_type (void)
 			(GInstanceInitFunc) ephy_go_action_init,
 		};
 
-		type = g_type_register_static (EGG_TYPE_ACTION,
+		type = g_type_register_static (GTK_TYPE_ACTION,
 					       "EphyGoAction",
 					       &type_info, 0);
 	}
@@ -64,13 +64,13 @@ ephy_go_action_get_type (void)
 }
 
 static void
-activate_cb (GtkWidget *widget, EggAction *action)
+activate_cb (GtkWidget *widget, GtkAction *action)
 {
 	g_signal_emit_by_name (action, "activate");
 }
 
 static GtkWidget *
-create_tool_item (EggAction *action)
+create_tool_item (GtkAction *action)
 {
 	GtkWidget *button;
 	GtkWidget *item;
@@ -90,7 +90,7 @@ create_tool_item (EggAction *action)
 }
 
 static GtkWidget *
-create_menu_item (EggAction *action)
+create_menu_item (GtkAction *action)
 {
 	GtkWidget *menu_item;
 
@@ -102,13 +102,13 @@ create_menu_item (EggAction *action)
 }
 
 static gboolean
-create_menu_proxy_cb (EggToolItem *item, EggAction *action)
+create_menu_proxy_cb (GtkToolItem *item, GtkAction *action)
 {
 	GtkWidget *menu_item;
 
-	menu_item = EGG_ACTION_GET_CLASS (action)->create_menu_item (action);
+	menu_item = GTK_ACTION_GET_CLASS (action)->create_menu_item (action);
 
-	EGG_ACTION_GET_CLASS (action)->connect_proxy (action, menu_item);
+	GTK_ACTION_GET_CLASS (action)->connect_proxy (action, menu_item);
 
 	egg_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
 
@@ -116,13 +116,13 @@ create_menu_proxy_cb (EggToolItem *item, EggAction *action)
 }
 
 static void
-connect_proxy (EggAction *action, GtkWidget *proxy)
+connect_proxy (GtkAction *action, GtkWidget *proxy)
 {	
-	(* EGG_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
+	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 
 	g_return_if_fail (EPHY_IS_GO_ACTION (action));
 
-	if (EGG_IS_TOOL_ITEM (proxy))
+	if (GTK_IS_TOOL_ITEM (proxy))
 	{
 		g_signal_connect (proxy, "create_menu_proxy",
 				  G_CALLBACK (create_menu_proxy_cb), action);
@@ -132,13 +132,13 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
 static void
 ephy_go_action_class_init (EphyGoActionClass *class)
 {
-	EggActionClass *action_class;
+	GtkActionClass *action_class;
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
 	object_class->finalize = ephy_go_action_finalize;
 
 	parent_class = g_type_class_peek_parent (class);
-	action_class = EGG_ACTION_CLASS (class);
+	action_class = GTK_ACTION_CLASS (class);
 
 	action_class->create_tool_item = create_tool_item;
 	action_class->menu_item_type = GTK_TYPE_MENU_ITEM;

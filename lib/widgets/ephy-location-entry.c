@@ -135,7 +135,7 @@ ephy_location_entry_get_type (void)
 			(GInstanceInitFunc) ephy_location_entry_init
 		};
 
-		ephy_location_entry_type = g_type_register_static (EGG_TYPE_TOOL_ITEM,
+		ephy_location_entry_type = g_type_register_static (GTK_TYPE_TOOL_ITEM,
 							           "EphyLocationEntry",
 							           &our_info, 0);
 	}
@@ -144,7 +144,7 @@ ephy_location_entry_get_type (void)
 }
 
 static gboolean
-ephy_location_entry_set_tooltip (EggToolItem *tool_item,
+ephy_location_entry_set_tooltip (GtkToolItem *tool_item,
 				 GtkTooltips *tooltips,
 				 const char *tip_text,
 				 const char *tip_private)
@@ -162,7 +162,7 @@ static void
 ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	EggToolItemClass *tool_item_class = EGG_TOOL_ITEM_CLASS (klass);
+	GtkToolItemClass *tool_item_class = GTK_TOOL_ITEM_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
@@ -224,7 +224,7 @@ ephy_location_entry_init (EphyLocationEntry *w)
 
 	ephy_location_entry_construct_contents (w);
 
-	egg_tool_item_set_expand (EGG_TOOL_ITEM (w), TRUE);
+	gtk_tool_item_set_expand (GTK_TOOL_ITEM (w), TRUE);
 
 	g_signal_connect (w->priv->entry,
 			  "focus_out_event",

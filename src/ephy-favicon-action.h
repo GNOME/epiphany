@@ -35,13 +35,13 @@ typedef struct EphyFaviconActionPrivate EphyFaviconActionPrivate;
 
 struct _EphyFaviconAction
 {
-	EggAction parent;
+	GtkAction parent;
 	EphyFaviconActionPrivate *priv;
 };
 
 struct _EphyFaviconActionClass
 {
-	EggActionClass parent_class;
+	GtkActionClass parent_class;
 };
 
 GType    ephy_favicon_action_get_type   (void);

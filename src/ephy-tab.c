@@ -68,7 +68,7 @@ struct EphyTabPrivate
 	int total_requests;
 	int width;
 	int height;
-	EggAction *action;
+	GtkAction *action;
 	float zoom;
 	EmbedSecurityLevel security_level;
 	TabNavigationFlags nav_flags;
@@ -224,7 +224,7 @@ ephy_tab_get_property (GObject *object,
 }
 
 static void
-ephy_tab_action_activate_cb (EggAction *action, EphyTab *tab)
+ephy_tab_action_activate_cb (GtkAction *action, EphyTab *tab)
 {
 	g_return_if_fail (IS_EPHY_TAB (tab));
 
@@ -1007,7 +1007,7 @@ ephy_tab_init (EphyTab *tab)
 
 	id = g_strdup_printf ("Tab%lu", tab_id++);
 
-	tab->priv->action = g_object_new (EGG_TYPE_ACTION,
+	tab->priv->action = g_object_new (GTK_TYPE_ACTION,
 					  "name", id,
 					  "label", _("Blank page"),
 					  NULL);

@@ -1,3 +1,195 @@
+2003-08-29  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* configure.in:
+	* data/ui/epiphany-bookmark-editor-ui.xml.in:
+	* data/ui/epiphany-history-window-ui.xml.in:
+	* data/ui/epiphany-ui.xml.in:
+	* lib/egg/Makefile.am:
+	* lib/egg/egg-action-group.c:
+	* lib/egg/egg-action-group.h:
+	* lib/egg/egg-action.c:
+	* lib/egg/egg-action.h:
+	* lib/egg/egg-editable-toolbar.c: (find_action),
+	(drag_data_received_cb), (drag_data_delete_cb), (drag_data_get_cb),
+	(create_toolbar), (set_item_drag_source), (create_item),
+	(toolbar_changed_cb), (item_added_cb), (item_removed_cb),
+	(egg_editable_toolbar_construct), (egg_editable_toolbar_set_merge),
+	(egg_editable_toolbar_class_init), (egg_editable_toolbar_new),
+	(egg_editable_toolbar_set_edit_mode),
+	(_egg_editable_toolbar_new_separator_image):
+	* lib/egg/egg-editable-toolbar.h:
+	* lib/egg/egg-menu-merge.c:
+	* lib/egg/egg-menu-merge.h:
+	* lib/egg/egg-menu.h:
+	* lib/egg/egg-radio-action.c:
+	* lib/egg/egg-radio-action.h:
+	* lib/egg/egg-toggle-action.c:
+	* lib/egg/egg-toggle-action.h:
+	* lib/egg/egg-toolbar-editor.c: (find_action),
+	(egg_toolbar_editor_set_merge), (egg_toolbar_editor_class_init),
+	(egg_toolbar_editor_new), (editor_drag_data_received_cb),
+	(editor_drag_data_delete_cb), (drag_data_get_cb),
+	(update_editor_sheet), (egg_toolbar_editor_add_action),
+	(model_has_action), (egg_toolbar_editor_load_actions):
+	* lib/egg/egg-toolbar-editor.h:
+	* lib/egg/egg-toolbars-model.c:
+	* lib/egg/eggmarshalers.c:
+	* lib/egg/eggradiotoolbutton.c:
+	* lib/egg/eggradiotoolbutton.h:
+	* lib/egg/eggseparatortoolitem.c:
+	* lib/egg/eggseparatortoolitem.h:
+	* lib/egg/eggtoggletoolbutton.c:
+	* lib/egg/eggtoggletoolbutton.h:
+	* lib/egg/eggtoolbar.c:
+	* lib/egg/eggtoolbar.h:
+	* lib/egg/eggtoolbutton.c:
+	* lib/egg/eggtoolbutton.h:
+	* lib/egg/eggtoolitem.c:
+	* lib/egg/eggtoolitem.h:
+	* lib/egg/eggtreemodelfilter.c:
+	* lib/egg/eggtreemodelfilter.h:
+	* lib/egg/prop-editor.h:
+	* lib/widgets/ephy-arrow-toolbutton.c:
+	(ephy_arrow_toolbutton_get_type),
+	(ephy_arrow_toolbutton_set_tooltip),
+	(ephy_arrow_toolbutton_class_init), (ephy_arrow_toolbutton_init):
+	* lib/widgets/ephy-arrow-toolbutton.h:
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_get_type), (ephy_location_entry_set_tooltip),
+	(ephy_location_entry_class_init), (ephy_location_entry_init):
+	* lib/widgets/ephy-location-entry.h:
+	* lib/widgets/ephy-node-view.c: (get_node_from_path),
+	(ephy_node_view_row_activated_cb), (ephy_node_view_construct),
+	(cell_renderer_edited), (get_selection),
+	(ephy_node_view_get_selection), (ephy_node_view_remove),
+	(ephy_node_view_select_node):
+	* lib/widgets/ephy-zoom-action.c: (ephy_zoom_action_get_type),
+	(sync_zoom_cb), (connect_proxy), (ephy_zoom_action_class_init):
+	* lib/widgets/ephy-zoom-action.h:
+	* lib/widgets/ephy-zoom-control.c: (ephy_zoom_control_get_type),
+	(ephy_zoom_control_create_menu_proxy),
+	(ephy_zoom_control_set_tooltip), (ephy_zoom_control_class_init):
+	* lib/widgets/ephy-zoom-control.h:
+	* src/bookmarks/ephy-bookmark-action.c:
+	(ephy_bookmark_action_get_type), (create_tool_item),
+	(ephy_bookmark_action_sync_smart_url),
+	(ephy_bookmark_action_sync_icon),
+	(ephy_bookmark_action_sync_label), (activate_cb),
+	(create_menu_proxy), (connect_proxy),
+	(ephy_bookmark_action_class_init), (sync_bookmark_properties),
+	(bookmarks_child_changed_cb), (ephy_bookmark_action_new):
+	* src/bookmarks/ephy-bookmark-action.h:
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_add_topic),
+	(cmd_close), (cmd_rename), (cmd_show_in_bookmarks_bar),
+	(cmd_open_bookmarks_in_tabs), (cmd_open_bookmarks_in_browser),
+	(cmd_delete), (cmd_bookmarks_import), (cmd_bookmark_properties),
+	(cmd_cut), (cmd_copy), (cmd_paste), (cmd_select_all),
+	(cmd_help_contents), (ephy_bookmarks_editor_finalize),
+	(ephy_bookmarks_editor_update_menu),
+	(ephy_bookmarks_editor_show_popup_cb),
+	(keyword_node_show_popup_cb), (add_widget),
+	(ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-bookmarks-menu.c: (ephy_bookmarks_menu_clean),
+	(go_location_cb), (add_bookmarks_menu),
+	(ephy_bookmarks_menu_rebuild), (ephy_bookmarks_menu_finalize):
+	* src/bookmarks/ephy-topic-action.c: (ephy_topic_action_get_type),
+	(create_tool_item), (menu_activate_cb),
+	(ephy_topic_action_sync_label), (create_menu_item),
+	(create_menu_proxy), (connect_proxy),
+	(ephy_topic_action_class_init), (sync_topic_properties),
+	(topic_child_changed_cb), (ephy_topic_action_new):
+	* src/bookmarks/ephy-topic-action.h:
+	* src/ephy-encoding-menu.c: (ephy_encoding_menu_finalize_impl),
+	(ephy_encoding_menu_verb_cb), (build_group), (build_encoding),
+	(ephy_encoding_menu_rebuild):
+	* src/ephy-favicon-action.c: (ephy_favicon_action_get_type),
+	(create_tool_item), (ephy_favicon_action_sync_icon),
+	(connect_proxy), (ephy_favicon_action_class_init):
+	* src/ephy-favicon-action.h:
+	* src/ephy-favorites-menu.c: (ephy_favorites_menu_clean),
+	(go_location_cb), (ephy_favorites_menu_rebuild),
+	(ephy_favorites_menu_finalize):
+	* src/ephy-go-action.c: (ephy_go_action_get_type), (activate_cb),
+	(create_tool_item), (create_menu_item), (create_menu_proxy_cb),
+	(connect_proxy), (ephy_go_action_class_init):
+	* src/ephy-go-action.h:
+	* src/ephy-history-window.c: (cmd_clear), (cmd_close),
+	(cmd_open_bookmarks_in_tabs), (cmd_open_bookmarks_in_browser),
+	(cmd_cut), (cmd_copy), (cmd_paste), (cmd_select_all), (cmd_delete),
+	(cmd_bookmark_link), (cmd_help_contents),
+	(ephy_history_window_finalize), (ephy_history_window_update_menu),
+	(ephy_history_window_show_popup_cb), (add_widget),
+	(ephy_history_window_construct):
+	* src/ephy-location-action.c: (ephy_location_action_get_type),
+	(connect_proxy), (ephy_location_action_class_init),
+	(ephy_location_action_get_widget):
+	* src/ephy-location-action.h:
+	* src/ephy-navigation-action.c: (ephy_navigation_action_get_type),
+	(connect_proxy), (ephy_navigation_action_class_init):
+	* src/ephy-navigation-action.h:
+	* src/ephy-spinner-action.c: (ephy_spinner_action_get_type),
+	(ephy_spinner_action_sync_throbbing), (create_tool_item),
+	(toolbar_style_sync), (item_parent_set_cb), (connect_proxy),
+	(ephy_spinner_action_class_init):
+	* src/ephy-spinner-action.h:
+	* src/ephy-tab.c: (ephy_tab_action_activate_cb), (ephy_tab_init):
+	* src/ephy-tabs-menu.c: (ephy_tabs_menu_clean),
+	(ephy_tabs_menu_finalize_impl), (tab_set_action_accelerator),
+	(ephy_tabs_menu_update):
+	* src/ephy-window.c: (add_widget), (menu_activate_cb),
+	(ephy_window_state_event_cb), (setup_window),
+	(sync_tab_navigation), (sync_tab_stop), (sync_tab_zoom),
+	(show_embed_popup), (update_tabs_menu_sensitivity),
+	(ephy_window_finalize), (update_layout_toggles):
+	* src/popup-commands.c: (popup_cmd_link_in_new_window),
+	(popup_cmd_link_in_new_tab), (popup_cmd_image_in_new_tab),
+	(popup_cmd_image_in_new_window), (popup_cmd_bookmark_link),
+	(popup_cmd_frame_in_new_tab), (popup_cmd_frame_in_new_window),
+	(popup_cmd_copy_link_address), (save_property_url),
+	(popup_cmd_open_link), (popup_cmd_download_link),
+	(popup_cmd_save_image_as), (popup_cmd_set_image_as_background),
+	(popup_cmd_copy_image_location), (popup_cmd_save_background_as),
+	(popup_cmd_open_frame), (popup_cmd_open_image):
+	* src/popup-commands.h:
+	* src/ppview-toolbar.c: (toolbar_update_sensitivity),
+	(ppview_toolbar_set_window), (ppview_toolbar_finalize),
+	(toolbar_cmd_ppv_goto_first), (toolbar_cmd_ppv_goto_last),
+	(toolbar_cmd_ppv_go_back), (toolbar_cmd_ppv_go_forward),
+	(toolbar_cmd_ppv_close):
+	* src/toolbar.c: (go_location_cb), (zoom_to_level_cb),
+	(bookmark_destroy_cb), (toolbar_ensure_action),
+	(toolbar_setup_actions), (get_location_entry),
+	(toolbar_set_window), (toolbar_finalize), (toolbar_spinner_start),
+	(toolbar_spinner_stop), (toolbar_update_favicon),
+	(toolbar_update_navigation_actions), (toolbar_update_zoom):
+	* src/window-commands.c: (window_cmd_edit_find),
+	(window_cmd_file_print), (window_cmd_go_back), (window_cmd_go_up),
+	(window_cmd_file_send_to), (window_cmd_go_forward),
+	(window_cmd_go_home), (window_cmd_go_location),
+	(window_cmd_view_stop), (window_cmd_view_reload),
+	(window_cmd_file_new_window), (window_cmd_file_new_tab),
+	(window_cmd_go_bookmarks), (window_cmd_file_bookmark_page),
+	(window_cmd_file_open), (window_cmd_file_save_as),
+	(window_cmd_file_close_window), (window_cmd_edit_cut),
+	(window_cmd_edit_copy), (window_cmd_edit_paste),
+	(window_cmd_edit_select_all), (window_cmd_edit_find_next),
+	(window_cmd_edit_find_prev), (window_cmd_view_bookmarks_bar),
+	(window_cmd_view_toolbar), (window_cmd_view_statusbar),
+	(window_cmd_view_fullscreen), (window_cmd_view_zoom_in),
+	(window_cmd_view_zoom_out), (window_cmd_view_zoom_normal),
+	(window_cmd_view_page_source), (window_cmd_go_history),
+	(window_cmd_edit_personal_data), (window_cmd_edit_prefs),
+	(window_cmd_edit_toolbar), (window_cmd_help_contents),
+	(window_cmd_help_about), (window_cmd_tabs_next),
+	(window_cmd_tabs_previous), (window_cmd_tabs_move_left),
+	(window_cmd_tabs_move_right), (window_cmd_tabs_detach),
+	(window_cmd_load_location):
+	* src/window-commands.h:
+
+	Part of the gtk 2.3 port. Will finish tomorrow, this break
+	build for now, sorry. If you want a working epiphany
+	use gnome-2-4 branch.
+
 2003-08-24  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* Branched for 2.4

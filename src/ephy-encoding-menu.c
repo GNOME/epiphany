@@ -36,7 +36,7 @@
 struct _EphyEncodingMenuPrivate
 {
 	EphyWindow *window;
-	EggActionGroup *action_group;
+	GtkActionGroup *action_group;
 };
 
 /**
@@ -127,8 +127,8 @@ ephy_encoding_menu_finalize_impl (GObject *o)
 
 	if (p->action_group != NULL)
 	{
-		egg_menu_merge_remove_action_group
-			(EGG_MENU_MERGE (p->window->ui_merge),
+		gtk_ui_manager_remove_action_group
+			(GTK_UI_MANAGER (p->window->ui_merge),
 			 p->action_group);
 		g_object_unref (p->action_group);
 	}
@@ -181,7 +181,7 @@ ephy_encoding_menu_new (EphyWindow *window)
 }
 
 static void
-ephy_encoding_menu_verb_cb (EggAction *action,
+ephy_encoding_menu_verb_cb (GtkAction *action,
 			    EphyEncodingMenu *menu)
 {
 	EphyWindow *window;
@@ -204,21 +204,21 @@ ephy_encoding_menu_verb_cb (EggAction *action,
 }
 
 static void
-build_group (EggActionGroup *action_group,
+build_group (GtkActionGroup *action_group,
 	     GString *xml_string,
 	     const LanguageGroupInfo *info)
 {
 	gchar *tmp;
 	gchar *verb;
-	EggAction *action;
+	GtkAction *action;
 
 	verb = g_strdup_printf ("EncodingGroup%d", info->group);
 
-	action = g_object_new (EGG_TYPE_ACTION,
+	action = g_object_new (GTK_TYPE_ACTION,
 			       "name", verb,
 			       "label", info->title,
 			       NULL);
-	egg_action_group_add_action (action_group, action);
+	gtk_action_group_add_action (action_group, action);
 	g_object_unref (action);
 
 	tmp = g_strdup_printf ("<submenu name=\"%sItem\" verb=\"%s\">\n",
@@ -230,16 +230,16 @@ build_group (EggActionGroup *action_group,
 
 static void
 build_encoding (EphyEncodingMenu *menu,
-		EggActionGroup *action_group,
+		GtkActionGroup *action_group,
 		GString *xml_string,
 		const EncodingInfo *info)
 {
 	char *tmp;
 	char *verb;
-	EggAction *action;
+	GtkAction *action;
 
 	verb = g_strdup_printf ("Encoding%s", info->encoding);
-	action = g_object_new (EGG_TYPE_ACTION,
+	action = g_object_new (GTK_TYPE_ACTION,
 			       "name", verb,
 			       "label", info->title,
 			       NULL);
@@ -247,7 +247,7 @@ build_encoding (EphyEncodingMenu *menu,
 			  G_CALLBACK (ephy_encoding_menu_verb_cb),
 			  menu);
 
-	egg_action_group_add_action (action_group, action);
+	gtk_action_group_add_action (action_group, action);
 	g_object_unref (action);
 
 	tmp = g_strdup_printf ("<menuitem name=\"%sItem\" verb=\"%s\"/>\n",
@@ -263,7 +263,7 @@ ephy_encoding_menu_rebuild (EphyEncodingMenu *wrhm)
 {
 	EphyEmbedSingle *single;
 	EphyEncodingMenuPrivate *p = wrhm->priv;
-	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
+	GtkUIManager *merge = GTK_UI_MANAGER (p->window->ui_merge);
 	GString *xml;
 	GList *groups, *lg, *encodings, *enc;
 
@@ -281,8 +281,8 @@ ephy_encoding_menu_rebuild (EphyEncodingMenu *wrhm)
 			      "<placeholder name=\"ViewEncodingsPlaceholder\">"
 			      "<submenu name=\"ViewEncodingMenu\" verb=\"ViewEncoding\">");
 
-	p->action_group = egg_action_group_new ("EncodingActions");
-	egg_menu_merge_insert_action_group (merge, p->action_group, 0);
+	p->action_group = gtk_action_group_new ("EncodingActions");
+	gtk_ui_manager_insert_action_group (merge, p->action_group, 0);
 
 	for (lg = groups; lg != NULL; lg = lg->next)
         {
@@ -311,7 +311,7 @@ ephy_encoding_menu_rebuild (EphyEncodingMenu *wrhm)
 
 	g_string_append (xml, "</submenu></placeholder></submenu></menu></Root>");
 
-	egg_menu_merge_add_ui_from_string (merge, xml->str, -1, NULL);
+	gtk_ui_manager_add_ui_from_string (merge, xml->str, -1, NULL);
 
 	g_string_free (xml, TRUE);
 }

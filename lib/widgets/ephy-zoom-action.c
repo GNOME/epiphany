@@ -73,7 +73,7 @@ ephy_zoom_action_get_type (void)
 				(GInstanceInitFunc) ephy_zoom_action_init,
 			};
 
-                ephy_zoom_action_type = g_type_register_static (EGG_TYPE_ACTION,
+                ephy_zoom_action_type = g_type_register_static (GTK_TYPE_ACTION,
 								"EphyZoomAction",
 								&our_info, 0);
         }
@@ -92,7 +92,7 @@ zoom_to_level_cb (EphyZoomControl *control,
 }
 
 static void
-sync_zoom_cb (EggAction *action, GParamSpec *pspec, GtkWidget *proxy)
+sync_zoom_cb (GtkAction *action, GParamSpec *pspec, GtkWidget *proxy)
 {
 	EphyZoomAction *zoom_action = EPHY_ZOOM_ACTION (action);
 
@@ -100,14 +100,14 @@ sync_zoom_cb (EggAction *action, GParamSpec *pspec, GtkWidget *proxy)
 }
 
 static void
-connect_proxy (EggAction *action, GtkWidget *proxy)
+connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	g_signal_connect_object (action, "notify::zoom",
 				 G_CALLBACK (sync_zoom_cb), proxy, 0);
 
 	g_signal_connect (proxy, "zoom_to_level", GTK_SIGNAL_FUNC(zoom_to_level_cb), action);
 
-	EGG_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
+	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
 }
 
 static void
@@ -150,7 +150,7 @@ ephy_zoom_action_get_property (GObject *object,
 static void
 ephy_zoom_action_class_init (EphyZoomActionClass *class)
 {
-	EggActionClass *action_class;
+	GtkActionClass *action_class;
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
 	object_class->set_property = ephy_zoom_action_set_property;
@@ -158,7 +158,7 @@ ephy_zoom_action_class_init (EphyZoomActionClass *class)
 	object_class->finalize = ephy_zoom_action_finalize;
 
 	parent_class = g_type_class_peek_parent (class);
-	action_class = EGG_ACTION_CLASS (class);
+	action_class = GTK_ACTION_CLASS (class);
 
 	action_class->toolbar_item_type = EPHY_TYPE_ZOOM_CONTROL;
 	action_class->connect_proxy = connect_proxy;

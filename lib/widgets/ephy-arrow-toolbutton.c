@@ -71,7 +71,7 @@ ephy_arrow_toolbutton_get_type (void)
 				(GInstanceInitFunc) ephy_arrow_toolbutton_init
 			};
 
-                ephy_arrow_toolbutton_type = g_type_register_static (EGG_TYPE_TOOL_BUTTON,
+                ephy_arrow_toolbutton_type = g_type_register_static (GTK_TYPE_TOOL_BUTTON,
 							             "EphyArrowToolButton",
 							             &our_info, 0);
         }
@@ -81,7 +81,7 @@ ephy_arrow_toolbutton_get_type (void)
 
 
 static gboolean
-ephy_arrow_toolbutton_set_tooltip (EggToolItem *tool_item,
+ephy_arrow_toolbutton_set_tooltip (GtkToolItem *tool_item,
 				   GtkTooltips *tooltips,
 				   const char *tip_text,
 				   const char *tip_private)
@@ -99,7 +99,7 @@ static void
 ephy_arrow_toolbutton_class_init (EphyArrowToolButtonClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	EggToolItemClass *tool_item_class = EGG_TOOL_ITEM_CLASS (klass);
+	GtkToolItemClass *tool_item_class = GTK_TOOL_ITEM_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
@@ -204,11 +204,11 @@ ephy_arrow_toolbutton_init (EphyArrowToolButton *arrowtb)
 
 	arrowtb->priv = g_new (EphyArrowToolButtonPrivate, 1);
 
-	egg_tool_item_set_homogeneous (EGG_TOOL_ITEM (arrowtb), FALSE);
+	gtk_tool_item_set_homogeneous (GTK_TOOL_ITEM (arrowtb), FALSE);
 
 	hbox = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (hbox);
-	real_button = EGG_TOOL_BUTTON (arrowtb)->button;
+	real_button = GTK_BIN (arrowtb)->child;
 	g_object_ref (real_button);
 	gtk_container_remove (GTK_CONTAINER (arrowtb), real_button);
 	gtk_container_add (GTK_CONTAINER (hbox), real_button);

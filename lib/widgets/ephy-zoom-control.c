@@ -85,7 +85,7 @@ ephy_zoom_control_get_type (void)
 				(GInstanceInitFunc) ephy_zoom_control_init,
 			};
 
-                ephy_zoom_control_type = g_type_register_static (EGG_TYPE_TOOL_ITEM,
+                ephy_zoom_control_type = g_type_register_static (GTK_TYPE_TOOL_ITEM,
 								 "EphyZoomControl",
 								 &our_info, 0);
         }
@@ -116,7 +116,7 @@ proxy_menu_activate_cb (GtkMenuItem *menu_item, gpointer data)
 }
 
 static gboolean
-ephy_zoom_control_create_menu_proxy (EggToolItem *item)
+ephy_zoom_control_create_menu_proxy (GtkToolItem *item)
 {
 	EphyZoomControl *control = EPHY_ZOOM_CONTROL (item);
 	EphyZoomControlPrivate *p = control->priv;
@@ -150,7 +150,7 @@ ephy_zoom_control_create_menu_proxy (EggToolItem *item)
 
 	g_object_ref (menu_item);
 	gtk_object_sink (GTK_OBJECT (menu_item));
-	egg_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
+	gtk_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
 	g_object_unref (menu_item);
 
 	return TRUE;
@@ -272,7 +272,7 @@ ephy_zoom_control_get_property (GObject *object,
 }
 
 static gboolean
-ephy_zoom_control_set_tooltip (EggToolItem *tool_item,
+ephy_zoom_control_set_tooltip (GtkToolItem *tool_item,
 			       GtkTooltips *tooltips,
 			       const char *tip_text,
 			       const char *tip_private)
@@ -290,12 +290,12 @@ static void
 ephy_zoom_control_class_init (EphyZoomControlClass *klass)
 {
 	GObjectClass *object_class;
-	EggToolItemClass *tool_item_class;
+	GtkToolItemClass *tool_item_class;
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class = (GObjectClass *)klass;
-	tool_item_class = (EggToolItemClass *)klass;
+	tool_item_class = (GtkToolItemClass *)klass;
 
 	object_class->set_property = ephy_zoom_control_set_property;
 	object_class->get_property = ephy_zoom_control_get_property;

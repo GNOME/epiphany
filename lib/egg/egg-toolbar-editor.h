@@ -20,8 +20,8 @@
 #define EGG_TOOLBAR_EDITOR_H
 
 #include <gtk/gtkvbox.h>
+#include <gtk/gtkuimanager.h>
 
-#include "egg-menu-merge.h"
 #include "egg-toolbars-model.h"
 
 G_BEGIN_DECLS
@@ -52,7 +52,7 @@ struct EggToolbarEditorClass
 
 
 GType             egg_toolbar_editor_get_type     (void);
-GtkWidget        *egg_toolbar_editor_new          (EggMenuMerge *merge,
+GtkWidget        *egg_toolbar_editor_new          (GtkUIManager *merge,
 						   EggToolbarsModel *model);
 void              egg_toolbar_editor_load_actions (EggToolbarEditor *editor,
 						   const char       *xml_file);

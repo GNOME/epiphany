@@ -20,8 +20,9 @@
 #define EGG_EDITABLE_TOOLBAR_H
 
 #include "egg-toolbars-model.h"
-#include "egg-menu-merge.h"
 
+#include <gtk/gtkuimanager.h>
+#include <gtk/gtkselection.h>
 #include <gtk/gtkvbox.h>
 
 G_BEGIN_DECLS
@@ -54,7 +55,7 @@ struct EggEditableToolbarClass
 };
 
 GType               egg_editable_toolbar_get_type        (void);
-GtkWidget	   *egg_editable_toolbar_new		 (EggMenuMerge         *merge,
+GtkWidget	   *egg_editable_toolbar_new		 (GtkUIManager         *merge,
 							  EggToolbarsModel     *model);
 void		    egg_editable_toolbar_set_edit_mode	 (EggEditableToolbar   *etoolbar,
 							  gboolean              mode);
@@ -69,7 +70,7 @@ void		    egg_editable_toolbar_set_drag_dest   (EggEditableToolbar   *etoolbar,
 
 /* Private Functions */
 
-GtkWidget 	   *_egg_editable_toolbar_new_separator_image ();
+GtkWidget 	   *_egg_editable_toolbar_new_separator_image (void);
 
 G_END_DECLS
 

@@ -22,7 +22,6 @@
 
 #include "ephy-bookmarks-menu.h"
 #include "ephy-bookmark-action.h"
-#include "egg-menu-merge.h"
 #include "ephy-shell.h"
 #include "ephy-node-common.h"
 #include "ephy-debug.h"
@@ -31,6 +30,7 @@
 #include <stdlib.h>
 #include <libxml/entities.h>
 #include <bonobo/bonobo-i18n.h>
+#include <gtk/gtkuimanager.h>
 
 #define EMPTY_ACTION_NAME "GoBookmarkEmpty"
 
@@ -41,7 +41,7 @@ struct _EphyBookmarksMenuPrivate
 {
 	EphyWindow *window;
 	EphyBookmarks *bookmarks;
-	EggActionGroup *action_group;
+	GtkActionGroup *action_group;
 	guint ui_id;
 	guint update_tag;
 };
@@ -92,24 +92,24 @@ static void
 ephy_bookmarks_menu_clean (EphyBookmarksMenu *menu)
 {
 	EphyBookmarksMenuPrivate *p = menu->priv;
-	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
+	GtkUIManager *merge = GTK_UI_MANAGER (p->window->ui_merge);
 
 	if (p->ui_id > 0)
 	{
-		egg_menu_merge_remove_ui (merge, p->ui_id);
-		egg_menu_merge_ensure_update (merge);
+		gtk_ui_manager_remove_ui (merge, p->ui_id);
+		/* FIXME gtk_ui_manager_ensure_update (merge); */
 		p->ui_id = 0;
 	}
 
 	if (p->action_group != NULL)
 	{
-		egg_menu_merge_remove_action_group (merge, p->action_group);
+		gtk_ui_manager_remove_action_group (merge, p->action_group);
 		g_object_unref (p->action_group);
 	}
 }
 
 static void
-go_location_cb (EggAction *action, char *location, EphyWindow *window)
+go_location_cb (GtkAction *action, char *location, EphyWindow *window)
 {
 	ephy_window_load_url (window, location);
 }
@@ -212,7 +212,7 @@ add_bookmarks_menu (EphyBookmarksMenu *menu, EphyNode *node, GString *xml)
 
 		for (l = node_list; l != NULL; l = l->next)
 		{
-			EggAction *action;
+			GtkAction *action;
 			EphyNode *child;
 			long id;
 			char *verb;
@@ -222,7 +222,7 @@ add_bookmarks_menu (EphyBookmarksMenu *menu, EphyNode *node, GString *xml)
 			verb = g_strdup_printf ("OpenBookmark%ld", id);
 
 			action = ephy_bookmark_action_new (verb, id);
-			egg_action_group_add_action (p->action_group, action);
+			gtk_action_group_add_action (p->action_group, action);
 			g_object_unref (action);
 			g_signal_connect (action, "go_location",
 					  G_CALLBACK (go_location_cb), p->window);
@@ -252,9 +252,9 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 	EphyNode *topics;
 	EphyNode *not_categorized;
 	GPtrArray *children;
-	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
+	GtkUIManager *merge = GTK_UI_MANAGER (p->window->ui_merge);
 	GList *node_list = NULL, *l;
-	EggAction *empty;
+	GtkAction *empty;
 
 	LOG ("Rebuilding bookmarks menu")
 
@@ -271,16 +271,16 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 			      "<placeholder name=\"BookmarksTree\">"
 			      "<separator name=\"BookmarksSep1\"/>");
 
-	p->action_group = egg_action_group_new ("BookmarksActions");
-	egg_menu_merge_insert_action_group (merge, p->action_group, 0);
+	p->action_group = gtk_action_group_new ("BookmarksActions");
+	gtk_ui_manager_insert_action_group (merge, p->action_group, 0);
 
-	empty = g_object_new (EGG_TYPE_ACTION,
+	empty = g_object_new (GTK_TYPE_ACTION,
 			      "name", EMPTY_ACTION_NAME,
 			      /* This is the adjective, not the verb */
 			      "label", _("Empty"),
 			      "sensitive", FALSE,
 			      NULL);
-	egg_action_group_add_action (p->action_group, empty);
+	gtk_action_group_add_action (p->action_group, empty);
 	g_object_unref (empty);
 
 	for (i = 0; i < children->len; ++i)
@@ -307,17 +307,17 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 		char *verb;
 		const char *title;
 		EphyNode *child;
-		EggAction *action;
+		GtkAction *action;
 
 		child = l->data;
 		title = ephy_node_get_property_string (child, EPHY_NODE_KEYWORD_PROP_NAME);
 
 		verb = g_strdup_printf ("OpenTopic%ld", ephy_node_get_id (child));
-		action = g_object_new (EGG_TYPE_ACTION,
+		action = g_object_new (GTK_TYPE_ACTION,
 				       "name", verb,
 				       "label", title,
 				       NULL);
-		egg_action_group_add_action (p->action_group, action);
+		gtk_action_group_add_action (p->action_group, action);
 		g_object_unref (action);
 
 		g_string_append (xml, "<submenu name=\"");
@@ -345,7 +345,7 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 	{
 		GError *error = NULL;
 		LOG ("Merging ui\n%s",xml->str);
-		p->ui_id = egg_menu_merge_add_ui_from_string
+		p->ui_id = gtk_ui_manager_add_ui_from_string
 			(merge, xml->str, -1, &error);
 	}
 
@@ -459,8 +459,8 @@ ephy_bookmarks_menu_finalize (GObject *o)
 
 	if (p->action_group != NULL)
 	{
-		egg_menu_merge_remove_action_group
-			(EGG_MENU_MERGE (p->window->ui_merge),
+		gtk_ui_manager_remove_action_group
+			(GTK_UI_MANAGER (p->window->ui_merge),
 			 p->action_group);
 		g_object_unref (p->action_group);
 	}

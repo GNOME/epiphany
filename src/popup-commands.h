@@ -16,65 +16,66 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "egg-action.h"
+#include <gtk/gtkaction.h>
+
 #include "ephy-window.h"
 
-void popup_cmd_link_in_new_window		(EggAction *action,
+void popup_cmd_link_in_new_window		(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_link_in_new_tab		(EggAction *action,
+void popup_cmd_link_in_new_tab		(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_image_in_new_tab		(EggAction *action,
+void popup_cmd_image_in_new_tab		(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_image_in_new_window	(EggAction *action,
+void popup_cmd_image_in_new_window	(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_bookmark_link	(EggAction *action,
+void popup_cmd_bookmark_link	(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_frame_in_new_tab		(EggAction *action,
+void popup_cmd_frame_in_new_tab		(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_frame_in_new_window	(EggAction *action,
+void popup_cmd_frame_in_new_window	(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_add_frame_bookmark	(EggAction *action,
+void popup_cmd_add_frame_bookmark	(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_view_source		(EggAction *action,
+void popup_cmd_view_source		(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_copy_link_address	(EggAction *action,
+void popup_cmd_copy_link_address	(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_copy_link_location       (EggAction *action,
+void popup_cmd_copy_link_location       (GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_open_link		(EggAction *action,
+void popup_cmd_open_link		(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_download_link		(EggAction *action,
+void popup_cmd_download_link		(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_set_image_as_background  (EggAction *action,
+void popup_cmd_set_image_as_background  (GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_copy_image_location	(EggAction *action,
+void popup_cmd_copy_image_location	(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_save_background_as	(EggAction *action,
+void popup_cmd_save_background_as	(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_open_frame		(EggAction *action,
+void popup_cmd_open_frame		(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_open_image		(EggAction *action,
+void popup_cmd_open_image		(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_download_link		(EggAction *action,
+void popup_cmd_download_link		(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_save_image_as		(EggAction *action,
+void popup_cmd_save_image_as		(GtkAction *action,
 					 EphyWindow *window);

@@ -1,7 +1,7 @@
-<Root>
-<menu>
+<ui>
+<menubar>
 
-<submenu name="FileMenu" verb="File">
+<menu name="FileMenu" verb="File">
         <menuitem name="FileOpenInWindow" verb="OpenInWindow"/>
 	<menuitem name="FileOpenInTab" verb="OpenInTab"/>
 	<separator name="FileSep1"/>
@@ -9,25 +9,23 @@
 	<menuitem name="FileDelete" verb="Delete"/>
 	<separator name="FileSep2"/>
 	<menuitem name="FileClose" verb="Close"/>
-</submenu>
+</menu>
 
-<submenu name="EditMenu" verb="Edit">
+<menu name="EditMenu" verb="Edit">
 	<menuitem name="EditCut" verb="Cut"/>
 	<menuitem name="EditCopy" verb="Copy"/>
 	<menuitem name="EditPaste" verb="Paste"/>
 	<menuitem name="EditSelectAll" verb="SelectAll"/>
 	<separator name="EditSep1"/>
 	<menuitem name="EditClear" verb="Clear"/>
-</submenu>
-
-<submenu name="HelpMenu" verb="Help">
-	<menuitem name="HelpContents" verb="HelpContents"/>
-	<menuitem name="HelpAbout" verb="HelpAbout"/>
-</submenu>
-
 </menu>
 
-<popups>
+<menu name="HelpMenu" verb="Help">
+	<menuitem name="HelpContents" verb="HelpContents"/>
+	<menuitem name="HelpAbout" verb="HelpAbout"/>
+</menu>
+
+</menu>
 
 <popup name="EphyHistoryWindowPopup" verb="FakeToplevel">
 	<menuitem name="OpenInWindowHST" verb="OpenInWindow"/>
@@ -39,5 +37,4 @@
 	<menuitem name="DeleteHST" verb="Delete"/>
 </popup>
 
-</popups>
-</Root>
+</ui>
