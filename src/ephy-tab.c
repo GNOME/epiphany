@@ -1037,8 +1037,9 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	is_left_click = (type == EPHY_EMBED_EVENT_MOUSE_BUTTON1);
 	is_middle_click = (type == EPHY_EMBED_EVENT_MOUSE_BUTTON2);
 
-	middle_click_opens = eel_gconf_get_boolean
-				(CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL);
+	middle_click_opens =
+		eel_gconf_get_boolean (CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL) &&
+		!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL);
 
 	is_link = (context & EMBED_CONTEXT_LINK) != 0;
 	is_image = (context & EMBED_CONTEXT_IMAGE) != 0;

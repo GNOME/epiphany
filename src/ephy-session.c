@@ -648,14 +648,17 @@ ephy_session_load (EphySession *session,
 
 			if (id && xmlStrEqual (BOOKMARKS_EDITOR_ID, id))
 			{
-			       if (!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING))
-			       {
-				       widget = ephy_shell_get_bookmarks_editor (ephy_shell);
-			       }
+				if (!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING))
+				{
+					widget = ephy_shell_get_bookmarks_editor (ephy_shell);
+				}
 			}
 			else if (id && xmlStrEqual (HISTORY_WINDOW_ID, id))
 			{
-				widget = ephy_shell_get_history_window (ephy_shell);
+				if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY))
+				{
+					widget = ephy_shell_get_history_window (ephy_shell);
+				}
 			}
 		}
 

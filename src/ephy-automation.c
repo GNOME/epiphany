@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
  *
@@ -52,6 +53,11 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 
 	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
 	g_return_if_fail (session != NULL);
+
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL))
+	{
+		url = "";
+	}
 
 	if (ephy_session_autoresume (session) && *url == '\0')
 	{

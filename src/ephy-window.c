@@ -334,8 +334,11 @@ struct EphyWindowPrivate
 	guint show_bookmarks_bar_notifier_id;
 	guint show_statusbar_notifier_id;
 	guint hide_menubar_notifier_id;
-	guint disable_save_to_disk_notifier_id;
+	guint disable_arbitrary_url_notifier_id;
 	guint disable_bookmark_editing_notifier_id;
+	guint disable_toolbar_editing_notifier_id;
+	guint disable_history_notifier_id;
+	guint disable_save_to_disk_notifier_id;
 	guint browse_with_caret_notifier_id;
 };
 
@@ -934,7 +937,6 @@ sync_tab_address (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	if (window->priv->closing) return;
 
 	address = ephy_tab_get_location (tab);
-
 	if (address == NULL)
 	{
 		address = "";
@@ -1007,6 +1009,7 @@ sync_tab_navigation (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	gboolean up = FALSE, back = FALSE, forward = FALSE;
+	gboolean disable_arbitrary_url, disable_history;
 
 	if (window->priv->closing) return;
 
@@ -1024,6 +1027,14 @@ sync_tab_navigation (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	{
 		forward = TRUE;
 	}
+
+	disable_arbitrary_url = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL);
+	disable_history = eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY);
+
+	up = up && !disable_arbitrary_url;
+
+	back = back && !disable_history;
+	forward = forward && !disable_history;
 
 	action_group = window->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "GoUp");
@@ -1715,6 +1726,12 @@ update_actions (EphyWindow *window)
 				      eel_gconf_get_boolean (CONF_WINDOWS_SHOW_STATUSBAR));
 	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_STATUSBAR), NULL);
 
+	action = gtk_action_group_get_action (action_group, "GoLocation");
+	g_object_set (action, "sensitive", ! eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL), NULL);
+
+	action = gtk_action_group_get_action (action_group, "GoHistory");
+	g_object_set (action, "sensitive", ! eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY), NULL);
+
 	bookmarks_editable = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING);
 	action = gtk_action_group_get_action (action_group, "GoBookmarks");
 	g_object_set (action, "sensitive", bookmarks_editable, NULL);
@@ -1737,6 +1754,18 @@ update_actions (EphyWindow *window)
 
 	action = gtk_action_group_get_action (popups_action_group, "SetImageAsBackground");
 	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_DESKTOP_BG_PICTURE), NULL);
+
+	action = gtk_action_group_get_action (action_group, "EditToolbar");
+	g_object_set (action, "sensitive", ! eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING), NULL);
+}
+
+static void
+update_navigation (EphyWindow *window)
+{
+	if (window->priv->active_tab)
+	{
+		sync_tab_navigation (window->priv->active_tab, NULL, window);
+	}
 }
 
 static void
@@ -1751,10 +1780,20 @@ chrome_notifier (GConfClient *client,
 
 static void
 actions_notifier (GConfClient *client,
-		 guint cnxn_id,
-		 GConfEntry *entry,
-		 EphyWindow *window)
+		  guint cnxn_id,
+		  GConfEntry *entry,
+		  EphyWindow *window)
 {
+	update_actions(window);
+}
+
+static void
+navigation_notifier (GConfClient *client,
+		   guint cnxn_id,
+		   GConfEntry *entry,
+		   EphyWindow *window)
+{
+	update_navigation(window);
 	update_actions(window);
 }
 
@@ -1864,9 +1903,21 @@ ephy_window_init (EphyWindow *window)
 		(CONF_LOCKDOWN_HIDE_MENUBAR,
 		 (GConfClientNotifyFunc)chrome_notifier, window);
 
+	window->priv->disable_arbitrary_url_notifier_id = eel_gconf_notification_add
+		(CONF_LOCKDOWN_DISABLE_ARBITRARY_URL,
+		 (GConfClientNotifyFunc)navigation_notifier, window);
+
 	window->priv->disable_bookmark_editing_notifier_id = eel_gconf_notification_add
 		(CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING,
 		 (GConfClientNotifyFunc)actions_notifier, window);
+
+	window->priv->disable_toolbar_editing_notifier_id = eel_gconf_notification_add
+		(CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING,
+		 (GConfClientNotifyFunc)actions_notifier, window);
+
+	window->priv->disable_history_notifier_id = eel_gconf_notification_add
+		(CONF_LOCKDOWN_DISABLE_HISTORY,
+		 (GConfClientNotifyFunc)navigation_notifier, window);
 
 	window->priv->disable_save_to_disk_notifier_id = eel_gconf_notification_add
 		(CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK,
@@ -1894,7 +1945,10 @@ ephy_window_finalize (GObject *object)
 	eel_gconf_notification_remove (window->priv->show_bookmarks_bar_notifier_id);
 	eel_gconf_notification_remove (window->priv->show_statusbar_notifier_id);
 	eel_gconf_notification_remove (window->priv->hide_menubar_notifier_id);
+	eel_gconf_notification_remove (window->priv->disable_arbitrary_url_notifier_id);
 	eel_gconf_notification_remove (window->priv->disable_bookmark_editing_notifier_id);
+	eel_gconf_notification_remove (window->priv->disable_toolbar_editing_notifier_id);
+	eel_gconf_notification_remove (window->priv->disable_history_notifier_id);
 	eel_gconf_notification_remove (window->priv->disable_save_to_disk_notifier_id);
 	eel_gconf_notification_remove (window->priv->browse_with_caret_notifier_id);
 

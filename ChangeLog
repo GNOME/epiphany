@@ -1,3 +1,26 @@
+2004-01-09  Christopher James Lahey  <clahey@ximian.com>
+
+	* data/epiphany-lockdown.schemas.in, lib/ephy-prefs.h: Added
+	disable_arbitrary_url, disable_toolbar_editing, and
+	disable_history keys.
+
+	* src/ephy-automation.c (impl_ephy_automation_loadurl): Make this
+	ignore a url given on the command line if disable_arbitrary_url is
+	on.
+
+	* src/ephy-notebook.c (notebook_drag_data_received_cb): Made this
+	ignore drags if disable_arbitrary_url is on.
+
+	* src/ephy-session.c (ephy_session_load): Don't show history
+	window if disable_history is on.
+
+	* src/ephy-tab.c (ephy_tab_dom_mouse_click_cb): Disable middle
+	click to paste url if disable_arbitrary_url is on.
+
+	* src/ephy-window.c: Disable menu actions based on
+	disable_arbitrary_url, disable_toolbar_editing, and
+	disable_history keys.
+
 2004-01-10  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/ContentHandler.cpp:
@@ -70,7 +93,7 @@
 
 	Add "Download Link As" to the link context menu.
 
-2004-01-09    <clahey@ximian.com>
+2004-01-09  Christopher James Lahey  <clahey@ximian.com>
 
 	* src/toolbar.c (update_location_editable): Check if embed is valid
 	here.
@@ -117,11 +140,7 @@
 	* lib/ephy-state.c: Fixed a logic error in using & instead of &&
 	(bug #130919, Dave Jones).
 
-<<<<<<< ChangeLog
-2004-01-08  Chris Lahey  <clahey@ximian.com>
-=======
 2004-01-08  Christopher James Lahey  <clahey@ximian.com>
->>>>>>> 1.1255
 
 	* embed/mozilla/ContentHandler.cpp (MIMEAskAction): Don't save the
 	file if disable_save_to_disk is on.

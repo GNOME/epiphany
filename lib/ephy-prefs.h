@@ -44,7 +44,10 @@ G_BEGIN_DECLS
 #define CONF_STATE_UPLOAD_DIR	      "/apps/epiphany/directories/upload"
 
 /* Lockdown */
+#define CONF_LOCKDOWN_DISABLE_ARBITRARY_URL  "/apps/epiphany/lockdown/disable_arbitrary_url"
 #define CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING  "/apps/epiphany/lockdown/disable_bookmark_editing"
+#define CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING  "/apps/epiphany/lockdown/disable_toolbar_editing"
+#define CONF_LOCKDOWN_DISABLE_HISTORY  "/apps/epiphany/lockdown/disable_history"
 #define CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK	"/desktop/gnome/lockdown/disable_save_to_disk"
 
 /* System prefs */

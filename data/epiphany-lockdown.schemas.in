@@ -48,6 +48,17 @@
         </locale>
       </schema>
       <schema>
+        <key>/schemas/apps/epiphany/lockdown/disable_arbitrary_url</key>
+        <applyto>/apps/epiphany/lockdown/disable_arbitrary_url</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>0</default>
+        <locale name="C">
+        <short>Disable Arbitrary URLs</short>
+        <long>Disable users ability to type in a URL to epiphany.</long>
+        </locale>
+      </schema>
+      <schema>
         <key>/schemas/apps/epiphany/lockdown/disable_bookmark_editing</key>
         <applyto>/apps/epiphany/lockdown/disable_bookmark_editing</applyto>
         <owner>epiphany</owner>
@@ -56,6 +67,28 @@
         <locale name="C">
         <short>Disable Bookmark Editing</short>
         <long>Disable users ability to edit their bookmarks.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/lockdown/disable_toolbar_editing</key>
+        <applyto>/apps/epiphany/lockdown/disable_toolbar_editing</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>0</default>
+        <locale name="C">
+        <short>Disable Toolbar Editing</short>
+        <long>Disable users ability to edit toolbars.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/lockdown/disable_history</key>
+        <applyto>/apps/epiphany/lockdown/disable_history</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>0</default>
+        <locale name="C">
+        <short>Disable History</short>
+        <long>Disable all historical information by disabling the back button, not allowing the history dialog and hiding the favorite bookmarks.</long>
         </locale>
       </schema>
     </schemalist>

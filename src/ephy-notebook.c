@@ -634,6 +634,8 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 
 	g_signal_stop_emission_by_name (widget, "drag_data_received");
 
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL)) return;
+
 	if (selection_data->length <= 0 || selection_data->data == NULL) return;
 
 	if (selection_data->target == gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE))
