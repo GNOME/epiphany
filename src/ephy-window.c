@@ -730,9 +730,10 @@ ephy_window_key_press_event (GtkWidget *widget,
 	guint modifiers = gtk_accelerator_get_default_mod_mask ();
 
 	/* Show and activate the menubar on F10, if it isn't visible,
-	 * unless we're in ppv mode
+	 * unless we're in ppv or lockdown mode
 	 */
         if (window->priv->ppv_mode == FALSE &&
+	    !eel_gconf_get_boolean (CONF_LOCKDOWN_HIDE_MENUBAR) && 
 	    event->keyval == GDK_F10 &&
 	    (event->state & modifiers) == 0)
 	{
