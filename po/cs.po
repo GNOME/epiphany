@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-06 03:16+0100\n"
-"PO-Revision-Date: 2004-02-06 17:34+0100\n"
+"POT-Creation-Date: 2004-02-12 03:12+0100\n"
+"PO-Revision-Date: 2004-02-12 15:36+0100\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -673,7 +673,7 @@ msgstr "_Hledat:"
 msgid "_Next"
 msgstr "_Následující"
 
-#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:533
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:281
 msgid "_Pause"
 msgstr "_Pozastavit"
 
@@ -1032,7 +1032,7 @@ msgid "Cut the Selection"
 msgstr "Vyjmout výběr"
 
 #: data/ui/nautilus-epiphany-view.xml.h:10
-#: embed/ephy-embed-popup-control.c:547
+#: embed/ephy-embed-popup-control.c:551
 msgid "Download Link"
 msgstr "Stáhnout odkaz"
 
@@ -1137,22 +1137,26 @@ msgstr "_Hledat..."
 msgid "_Print..."
 msgstr "Vy_tisknout..."
 
-#: embed/downloader-view.c:225
+#: embed/downloader-view.c:226
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u:%02u"
 
-#: embed/downloader-view.c:229
+#: embed/downloader-view.c:230
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
-#: embed/downloader-view.c:299 lib/widgets/ephy-cell-renderer-progress.c:35
+#: embed/downloader-view.c:281
+msgid "_Resume"
+msgstr "_Obnovit"
+
+#: embed/downloader-view.c:344 lib/widgets/ephy-cell-renderer-progress.c:35
 #: src/ephy-window.c:1147
 msgid "Unknown"
 msgstr "Neznámý"
 
-#: embed/downloader-view.c:348
+#: embed/downloader-view.c:395
 #, c-format
 msgid "About %d second left"
 msgid_plural "About %d seconds left"
@@ -1160,7 +1164,7 @@ msgstr[0] "Zbývá asi %d sekunda"
 msgstr[1] "Zbývají asi %d sekundy"
 msgstr[2] "Zbývá asi %d sekund"
 
-#: embed/downloader-view.c:356
+#: embed/downloader-view.c:403
 #, c-format
 msgid "About %d minute left"
 msgid_plural "About %d minutes left"
@@ -1168,7 +1172,7 @@ msgstr[0] "Zbývá asi %d minuta"
 msgstr[1] "Zbývají asi %d minuty"
 msgstr[2] "Zbývá asi %d minut"
 
-#: embed/downloader-view.c:363
+#: embed/downloader-view.c:410
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -1176,31 +1180,27 @@ msgstr[0] "%d stahování"
 msgstr[1] "%d stahování"
 msgstr[2] "%d stahování"
 
-#: embed/downloader-view.c:461
+#: embed/downloader-view.c:520
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:471
+#: embed/downloader-view.c:531
 msgid "File"
 msgstr "Soubor"
 
-#: embed/downloader-view.c:484
+#: embed/downloader-view.c:545
 msgid "Remaining"
 msgstr "Zbývá"
 
-#: embed/downloader-view.c:528
-msgid "_Resume"
-msgstr "_Obnovit"
-
-#: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:344
+#: embed/ephy-embed-popup-control.c:561 src/popup-commands.c:344
 msgid "Save Image As"
 msgstr "Uložit obrázek jako"
 
-#: embed/ephy-embed-popup-control.c:641
+#: embed/ephy-embed-popup-control.c:645
 msgid "Save Page As"
 msgstr "Uložit stránku jako"
 
-#: embed/ephy-embed-popup-control.c:650 src/popup-commands.c:432
+#: embed/ephy-embed-popup-control.c:654 src/popup-commands.c:432
 msgid "Save Background As"
 msgstr "Uložit pozadí jako"
 
@@ -1567,15 +1567,15 @@ msgstr "Ukrajinské"
 msgid "Unknown (%s)"
 msgstr "Neznámé (%s)"
 
-#: embed/ephy-history.c:485 src/bookmarks/ephy-bookmarks.c:583
+#: embed/ephy-history.c:487 src/bookmarks/ephy-bookmarks.c:612
 msgid "All"
 msgstr "Vše"
 
-#: embed/ephy-history.c:660
+#: embed/ephy-history.c:662
 msgid "Others"
 msgstr "Ostatní"
 
-#: embed/ephy-history.c:666
+#: embed/ephy-history.c:668
 msgid "Local files"
 msgstr "Místní soubory"
 
@@ -1994,7 +1994,7 @@ msgstr ""
 msgid "GConf Error"
 msgstr "Chyba GConf"
 
-#: lib/egg/egg-editable-toolbar.c:504
+#: lib/egg/egg-editable-toolbar.c:510
 msgid "_Remove Toolbar"
 msgstr "_Odstranit lištu nástrojů"
 
@@ -2446,11 +2446,11 @@ msgstr "Cestování"
 msgid "Work"
 msgstr "Práce"
 
-#: src/bookmarks/ephy-bookmarks.c:618
+#: src/bookmarks/ephy-bookmarks.c:647
 msgid "Most Visited"
 msgstr "Nejčastěji navštěvované"
 
-#: src/bookmarks/ephy-bookmarks.c:635
+#: src/bookmarks/ephy-bookmarks.c:664
 msgid "Not Categorized"
 msgstr "Nezařazené"
 
@@ -2675,30 +2675,30 @@ msgstr ""
 "Epiphany nyní nelze použít kvůli neočekávané chybě od Bonobo při pokusu "
 "nalézt objekt automatizace."
 
-#: src/ephy-tab.c:326 src/ephy-tab.c:1140 src/ephy-tab.c:1322
+#: src/ephy-tab.c:327 src/ephy-tab.c:1172 src/ephy-tab.c:1354
 msgid "Blank page"
 msgstr "Prázdná stránka"
 
-#: src/ephy-tab.c:747
+#: src/ephy-tab.c:748
 msgid "site"
 msgstr "server"
 
-#: src/ephy-tab.c:771
+#: src/ephy-tab.c:772
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Přesměrovávám na %s..."
 
-#: src/ephy-tab.c:775
+#: src/ephy-tab.c:776
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Přenáším data z %s..."
 
-#: src/ephy-tab.c:779
+#: src/ephy-tab.c:780
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Čekám na autorizaci z %s..."
 
-#: src/ephy-tab.c:787
+#: src/ephy-tab.c:788
 #, c-format
 msgid "Loading %s..."
 msgstr "Načítám %s..."
@@ -3538,7 +3538,7 @@ msgstr "_Přidat novou lištu nástrojů"
 
 #. Translator credits
 #: src/window-commands.c:953
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr "Miloslav Trmač <mitr@volny.cz>"
 
 #: src/window-commands.c:983
