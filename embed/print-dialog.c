@@ -357,7 +357,6 @@ ephy_print_dialog_new (GtkWidget *parent,
 {
 	EphyDialog *dialog;
 	GtkWidget *window, *button;
-	GdkPixbuf *icon;
 
 	dialog =  EPHY_DIALOG (g_object_new (EPHY_TYPE_EMBED_DIALOG,
 					     "embed", embed,
@@ -375,12 +374,7 @@ ephy_print_dialog_new (GtkWidget *parent,
 			       NULL);
 
 	window = ephy_dialog_get_control (dialog, print_props[WINDOW_PROP].id);
-	icon = gtk_widget_render_icon (window, 
-				       GTK_STOCK_PRINT,
-				       GTK_ICON_SIZE_MENU,
-				       "print_dialog");
-	gtk_window_set_icon (GTK_WINDOW (window), icon);
-	g_object_unref (icon);
+	gtk_window_set_icon_name (GTK_WINDOW (window), GTK_STOCK_PRINT);
 
 	button = ephy_dialog_get_control (dialog, print_props[BROWSE_PROP].id);
 	gtk_widget_set_sensitive (button, eel_gconf_key_is_writable (CONF_PRINT_FILE));
@@ -393,7 +387,6 @@ ephy_print_setup_dialog_new (void)
 {
 	EphyDialog *dialog;
 	GtkWidget *window;
-	GdkPixbuf *icon;
 
 	dialog = EPHY_DIALOG (g_object_new (EPHY_TYPE_DIALOG, NULL));
 
@@ -407,12 +400,7 @@ ephy_print_setup_dialog_new (void)
 			      n_paper_format_enum, paper_format_enum);
 
 	window = ephy_dialog_get_control (dialog, setup_props[SETUP_WINDOW_PROP].id);
-	icon = gtk_widget_render_icon (window,
-				       STOCK_PRINT_SETUP,
-				       GTK_ICON_SIZE_MENU,
-				       "print_setup_dialog");
-	gtk_window_set_icon (GTK_WINDOW (window), icon);
-	g_object_unref (icon);
+	gtk_window_set_icon_name (GTK_WINDOW (window), STOCK_PRINT_SETUP);
 
 	return dialog;
 }
