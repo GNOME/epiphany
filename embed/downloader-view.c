@@ -672,7 +672,8 @@ download_dialog_abort_cb (GtkButton *button, DownloaderView *dv)
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(dv->priv->treeview));
 	
-	gtk_tree_selection_get_selected (selection, &model, &iter);
+	if (!gtk_tree_selection_get_selected (selection, &model, &iter)) return;
+
 	gtk_tree_model_get_value (model, &iter, COL_DOWNLOAD_OBJECT, &val);
 	
 	download = g_value_get_object (&val);
