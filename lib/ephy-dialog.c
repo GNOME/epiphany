@@ -829,10 +829,7 @@ set_info_from_pref (PropertyInfo *info)
 		set_info_from_value (info, &value);
 		g_value_unset (&value);
 	
-		if (eel_gconf_key_is_writable (info->pref) == FALSE)
-		{
-			set_sensitivity (info, FALSE);
-		}
+		set_sensitivity (info, eel_gconf_key_is_writable (info->pref));
 	}
 }
 
