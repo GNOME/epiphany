@@ -183,6 +183,18 @@ ephy_spinner_action_get_property (GObject *object,
 }
 
 static void
+ephy_spinner_action_finalize (GObject *object)
+{
+	EphySpinnerAction *action = EPHY_SPINNER_ACTION (object);
+
+	g_return_if_fail (action->priv != NULL);
+
+	g_free (action->priv);
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
 ephy_spinner_action_class_init (EphySpinnerActionClass *class)
 {
 	EggActionClass *action_class;
@@ -195,6 +207,7 @@ ephy_spinner_action_class_init (EphySpinnerActionClass *class)
 	action_class->create_tool_item = create_tool_item;
 	action_class->connect_proxy = connect_proxy;
 
+	object_class->finalize = ephy_spinner_action_finalize;
 	object_class->set_property = ephy_spinner_action_set_property;
 	object_class->get_property = ephy_spinner_action_get_property;
 

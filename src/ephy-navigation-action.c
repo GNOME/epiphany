@@ -294,11 +294,24 @@ ephy_navigation_action_get_property (GObject *object,
 }
 
 static void
+ephy_navigation_action_finalize (GObject *object)
+{
+	EphyNavigationAction *action = EPHY_NAVIGATION_ACTION (object);
+
+	g_return_if_fail (action->priv != NULL);
+
+	g_free (action->priv);
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
 ephy_navigation_action_class_init (EphyNavigationActionClass *class)
 {
 	EggActionClass *action_class;
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
+	object_class->finalize = ephy_navigation_action_finalize;
 	object_class->set_property = ephy_navigation_action_set_property;
 	object_class->get_property = ephy_navigation_action_get_property;
 

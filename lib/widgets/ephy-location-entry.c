@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2002  Ricardo Fernández Pascual
+ *  Copyright (C) 2002  Ricardo FernÃ¡ndez Pascual
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -693,8 +693,8 @@ ephy_location_entry_editable_changed_cb (GtkEditable *editable, EphyLocationEntr
 		{
 			p->going_to_site = FALSE;
 			g_signal_emit (e, EphyLocationEntrySignals[ACTIVATED], 0, NULL, url);
-			g_free (url);
 		}
+		g_free (url);
 	}
 
 	if (p->user_changed)

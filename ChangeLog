@@ -1,8 +1,20 @@
-2003-06-27  Marco Pesenti Gritti  <marco@it.gnome.org>
+2003-06-28  Christian Persch  <chpe@cvs.gnome.org>
 
-	* src/window-commands.c: (window_cmd_file_open):
+	* src/ephy-navigation-action.c: (ephy_navigation_action_finalize),
+	(ephy_navigation_action_class_init):
+	* src/ephy-spinner-action.c: (ephy_spinner_action_finalize),
+	(ephy_spinner_action_class_init):
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_editable_changed_cb):
 
-	Revert escape/unescape, according to teuf is not necessary ;)
+	Fix mem leaks.
+
+2003-06-28  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-favorites-menu.c: (ephy_favorites_menu_rebuild):
+	* embed/find-dialog.c: (find_get_info):
+
+	Fix mem leaks.
 
 2003-06-27  Marco Pesenti Gritti  <marco@it.gnome.org>
 
