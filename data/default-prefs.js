@@ -36,3 +36,6 @@ pref("keyword.enabled", true);
 pref("security.warn_entering_secure", false);
 pref("security.warn_leaving_secure", false);
 pref("security.warn_submit_insecure", false);
+
+// fonts
+pref("font.size.unit", "pt");

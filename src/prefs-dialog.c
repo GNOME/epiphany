@@ -175,25 +175,16 @@ char *cookies_accept_enum [] =
 };
 static guint n_cookies_accept_enum = G_N_ELEMENTS (cookies_accept_enum);
 
-static const
-char *proportional_enum [] =
-{
-	"serif", "sans-serif"
-};
-static guint n_proportional_enum = G_N_ELEMENTS (proportional_enum);
-
 enum
 {
-	FONT_TYPE_SERIF,
-	FONT_TYPE_SANSSERIF,
+	FONT_TYPE_VARIABLE,
 	FONT_TYPE_MONOSPACE
 };
 
 const
 char *fonts_types[] =
 {
-	"serif",
-	"sans-serif",
+	"variable",
 	"monospace"
 };
 
@@ -223,13 +214,11 @@ enum
 
 	/* Fonts and Colors */
 	FONTS_LANGUAGE_PROP,
-	SERIF_PROP,
-	SANSSERIF_PROP,
+	VARIABLE_PROP,
 	MONOSPACE_PROP,
 	FIXED_SIZE_PROP,
 	VARIABLE_SIZE_PROP,
 	MIN_SIZE_PROP,
-	PROPORTIONAL_PROP,
 	USE_COLORS_PROP,
 	USE_FONTS_PROP,
 
@@ -263,13 +252,11 @@ EphyDialogProperty properties [] =
 
 	/* Fonts and Colors */
 	{ FONTS_LANGUAGE_PROP, "fonts_language_optionmenu", CONF_FONTS_FOR_LANGUAGE, PT_AUTOAPPLY, NULL },
-	{ SERIF_PROP, "serif_combo", NULL, PT_NORMAL, NULL },
-	{ SANSSERIF_PROP, "sansserif_combo", NULL, PT_NORMAL, NULL },
+	{ VARIABLE_PROP, "variable_combo", NULL, PT_NORMAL, NULL },
 	{ MONOSPACE_PROP, "monospace_combo", NULL, PT_NORMAL, NULL },
 	{ FIXED_SIZE_PROP, "fixed_size_spinbutton", NULL, PT_NORMAL, NULL },
 	{ VARIABLE_SIZE_PROP, "variable_size_spinbutton", NULL, PT_NORMAL, NULL },
 	{ MIN_SIZE_PROP, "min_size_spinbutton", NULL, PT_NORMAL, NULL },
-	{ PROPORTIONAL_PROP, "proportional_optionmenu", CONF_RENDERING_DEFAULT_FONT, PT_AUTOAPPLY, NULL },
 	{ USE_COLORS_PROP, "use_colors_checkbutton", CONF_RENDERING_USE_OWN_COLORS, PT_AUTOAPPLY, NULL },
 	{ USE_FONTS_PROP, "use_fonts_checkbutton", CONF_RENDERING_USE_OWN_FONTS, PT_AUTOAPPLY, NULL },
 
@@ -447,7 +434,6 @@ setup_font_menu (PrefsDialog *dialog,
 		 const char *type,
 		 GtkWidget *combo)
 {
-	char *default_font;
 	GList *fonts = NULL;
 	gchar *name;
 	char key[255];
@@ -459,7 +445,7 @@ setup_font_menu (PrefsDialog *dialog,
 
 	ephy_embed_single_get_font_list (single,
 					 get_current_language_code (dialog),
-					 type, &fonts, &default_font);
+					 &fonts);
 
 	/* Get the default font */
 	g_snprintf (key, 255, "%s_%s_%s", CONF_RENDERING_FONT, type,
@@ -467,7 +453,14 @@ setup_font_menu (PrefsDialog *dialog,
 	name = eel_gconf_get_string (key);
 	if (name == NULL)
 	{
-		name = g_strdup (default_font);
+		if (strcmp (type, "variable") == 0)
+		{
+			name = g_strdup ("sans-serif");
+		}
+		else
+		{
+			name = g_strdup ("monospace");
+		}
 	}
 
 	/* set popdown doesnt like NULL */
@@ -489,7 +482,6 @@ setup_font_menu (PrefsDialog *dialog,
 					  &pos);
 	}
 
-	g_free (default_font);
 	g_free (name);
 
 	g_list_foreach (fonts, (GFunc)g_free, NULL);
@@ -551,10 +543,8 @@ attach_font_signal (PrefsDialog *dialog, int prop,
 static void
 attach_fonts_signals (PrefsDialog *dialog)
 {
-	attach_font_signal (dialog, SERIF_PROP,
-			    GINT_TO_POINTER(FONT_TYPE_SERIF));
-	attach_font_signal (dialog, SANSSERIF_PROP,
-			    GINT_TO_POINTER(FONT_TYPE_SANSSERIF));
+	attach_font_signal (dialog, VARIABLE_PROP,
+			    GINT_TO_POINTER(FONT_TYPE_VARIABLE));
 	attach_font_signal (dialog, MONOSPACE_PROP,
 			    GINT_TO_POINTER(FONT_TYPE_MONOSPACE));
 }
@@ -630,15 +620,15 @@ setup_size_controls (PrefsDialog *dialog)
 
 	spin = ephy_dialog_get_control (EPHY_DIALOG(dialog),
 					  FIXED_SIZE_PROP);
-	setup_size_control (dialog, CONF_RENDERING_FONT_FIXED_SIZE, 12, spin);
+	setup_size_control (dialog, CONF_RENDERING_FONT_FIXED_SIZE, 10, spin);
 
 	spin = ephy_dialog_get_control (EPHY_DIALOG(dialog),
 					  VARIABLE_SIZE_PROP);
-	setup_size_control (dialog, CONF_RENDERING_FONT_VAR_SIZE, 16, spin);
+	setup_size_control (dialog, CONF_RENDERING_FONT_VAR_SIZE, 12, spin);
 
 	spin = ephy_dialog_get_control (EPHY_DIALOG(dialog),
 					  MIN_SIZE_PROP);
-	setup_size_control (dialog, CONF_RENDERING_FONT_MIN_SIZE, 0, spin);
+	setup_size_control (dialog, CONF_RENDERING_FONT_MIN_SIZE, 7, spin);
 }
 
 static gint
@@ -655,12 +645,8 @@ setup_fonts (PrefsDialog *dialog)
 	dialog->priv->switching = TRUE;
 
 	combo = ephy_dialog_get_control (EPHY_DIALOG(dialog),
-					 SERIF_PROP);
-	setup_font_menu (dialog, "serif", combo);
-
-	combo = ephy_dialog_get_control (EPHY_DIALOG(dialog),
-					 SANSSERIF_PROP);
-	setup_font_menu (dialog, "sans-serif", combo);
+					 VARIABLE_PROP);
+	setup_font_menu (dialog, "variable", combo);
 
 	combo = ephy_dialog_get_control (EPHY_DIALOG(dialog),
 					 MONOSPACE_PROP);
@@ -1088,8 +1074,6 @@ prefs_dialog_init (PrefsDialog *pd)
 
 	ephy_dialog_add_enum (EPHY_DIALOG (pd), ACCEPT_COOKIES_PROP,
 			      n_cookies_accept_enum, cookies_accept_enum);
-	ephy_dialog_add_enum (EPHY_DIALOG (pd), PROPORTIONAL_PROP,
-			      n_proportional_enum, proportional_enum);
 
 	ephy_dialog_set_size_group (EPHY_DIALOG (pd), lang_size_group,
 				    n_lang_size_group);

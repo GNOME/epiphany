@@ -214,9 +214,7 @@ impl_get_language_groups (EphyEmbedSingle *shell,
 static gresult
 impl_get_font_list (EphyEmbedSingle *shell,
 		    const char *langGroup,
-		    const char *fontType,
-		    GList **fontList,
-		    char **default_font);
+		    GList **fontList);
 static gresult           
 impl_list_cookies (EphyEmbedSingle *shell,
 		   GList **cookies);
@@ -811,9 +809,7 @@ impl_get_language_groups (EphyEmbedSingle *shell,
 static gresult
 impl_get_font_list (EphyEmbedSingle *shell,
 		    const char *langGroup,
-		    const char *fontType,
-		    GList **fontList,
-		    char **default_font)
+		    GList **fontList)
 {
 	nsresult rv;
 	PRUint32 fontCount;
@@ -840,11 +836,6 @@ impl_get_font_list (EphyEmbedSingle *shell,
 	nsMemory::Free (fontArray);
 
 	*fontList = g_list_reverse (l);
-
-	if (default_font != NULL)
-	{
-		*default_font = g_strdup (fontType);
-	}
 
 	return G_OK;
 }

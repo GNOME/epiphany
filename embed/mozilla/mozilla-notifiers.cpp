@@ -440,7 +440,7 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 	for (i = 0; i < n_fonts_languages; i++)
 	{
 		guint k;
-		char *types [] = { "serif", "sans-serif", "cursive", "fantasy", "monospace" };
+		char *types [] = { "variable", "monospace" };
 		char key[255];
 		char *info;
 		

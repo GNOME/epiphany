@@ -1,3 +1,19 @@
+2003-09-09  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* data/default-prefs.js:
+	* data/glade/prefs-dialog.glade:
+	* embed/ephy-embed-single.c: (ephy_embed_single_get_font_list):
+	* embed/ephy-embed-single.h:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* src/prefs-dialog.c: (setup_font_menu), (attach_fonts_signals),
+	(setup_size_controls), (setup_fonts), (prefs_dialog_init):
+
+	First important step in solving the fonts mess.
+	Allow to select the variable width instead of
+	families. Also use points instead of pixels.
+	Set a minimum font size by default.
+
 2003-09-09  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/widgets/Makefile.am:

@@ -127,9 +127,7 @@ struct EphyEmbedSingleClass
 						 GList **encodings);
 	gresult		(* get_font_list)	(EphyEmbedSingle *shell,
 						 const char *langGroup,
-						 const char *fontType,
-						 GList **fontList,
-						 char **default_font);
+						 GList **fontList);
 	gresult         (* list_cookies)        (EphyEmbedSingle *shell,
 						 GList **cokies);
 	gresult         (* remove_cookies)      (EphyEmbedSingle *shell,
@@ -172,9 +170,7 @@ gresult           ephy_embed_single_get_encodings	(EphyEmbedSingle *shell,
 
 gresult           ephy_embed_single_get_font_list       (EphyEmbedSingle *shell,
 							 const char *langGroup,
-							 const char *fontType,
-							 GList **fontList,
-							 char **default_font);
+							 GList **fontList);
 
 /* Cookies */
 gresult           ephy_embed_single_list_cookies        (EphyEmbedSingle *shell,
