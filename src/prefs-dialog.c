@@ -731,9 +731,9 @@ add_lang_dialog_response_cb (GtkWidget *widget,
 	GList *rows, *r;
 
 	g_return_if_fail (dialog != NULL);
-g_print ("response_cb\n");
+
 	if (response == GTK_RESPONSE_OK)
-	{g_print ("response OK");
+	{
 		treeview = GTK_TREE_VIEW (ephy_dialog_get_control
 				(dialog, add_lang_props[LANGUAGE_PROP].id));
 		selection = gtk_tree_view_get_selection (treeview);
@@ -743,7 +743,7 @@ g_print ("response_cb\n");
 		for (r = rows; r != NULL; r = r->next)
 		{
 			GtkTreePath *path = (GtkTreePath *) r->data;
-g_print ("row\n");
+
 			if (gtk_tree_model_get_iter (model, &iter, path))
 			{
 				char *code, *desc;
@@ -752,7 +752,7 @@ g_print ("row\n");
 						    COL_LANG_NAME, &desc,
 						    COL_LANG_CODE, &code,
 						    -1);
-		g_print ("inner! desc %s code %s\n", desc, code);
+
 				language_editor_add (pd, code, desc);
 		
 				g_free (desc);
