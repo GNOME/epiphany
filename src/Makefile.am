@@ -116,7 +116,7 @@ epiphany_LDADD = \
 	$(EPIPHANY_DEPENDENCY_LIBS) \
 	$(INTLLIBS)
 
-epiphany_LDFLAGS = -R$(MOZILLA_HOME)
+epiphany_LDFLAGS = -R$(MOZILLA_HOME) -dlopen self
 
 BUILT_SOURCES = $(CORBA_SOURCE)
 
