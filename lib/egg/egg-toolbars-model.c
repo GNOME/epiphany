@@ -270,7 +270,7 @@ egg_toolbars_model_get_flags (EggToolbarsModel *t,
   EggToolbarsToolbar *toolbar;
 
   toolbar_node = g_node_nth_child (t->priv->toolbars, toolbar_position);
-  g_return_val_if_fail (toolbar_node != NULL, -1);
+  g_return_val_if_fail (toolbar_node != NULL, 0);
 
   toolbar = toolbar_node->data;
 
@@ -364,17 +364,20 @@ parse_item_list (EggToolbarsModel *t,
 	  type = xmlGetProp (child, "type");
           if (type == NULL)
             {
-              type = g_strdup (EGG_TOOLBAR_ITEM_TYPE);
+              type = xmlStrdup (EGG_TOOLBAR_ITEM_TYPE);
             }
 
-          id = egg_toolbars_model_get_item_id (t, type, name);
-	  if (id != NULL)
+	  if (name != NULL && name[0] != '\0' && type != NULL)
 	    {
-	      egg_toolbars_model_add_item (t, position, -1, id, type);
+              id = egg_toolbars_model_get_item_id (t, type, name);
+	      if (id != NULL)
+	        {
+	          egg_toolbars_model_add_item (t, position, -1, id, type);
+                }
+              g_free (id);
             }
 	  xmlFree (name);
-          g_free (type);
-          g_free (id);
+          xmlFree (type);
 	}
       else if (xmlStrEqual (child->name, "separator"))
 	{
@@ -423,7 +426,7 @@ parse_toolbars (EggToolbarsModel *t,
 	  xmlFree (name);
 
 	  style = xmlGetProp (child, "style");
-	  if (style && strcmp (style, "icons-only") == 0)
+	  if (style && xmlStrEqual (style, "icons-only"))
 	    {
 	      egg_toolbars_model_set_flags (t, EGG_TB_MODEL_ICONS_ONLY, 0);
 	    }

@@ -1,5 +1,13 @@
 2004-06-21  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_get_flags),
+	(parse_item_list), (parse_toolbars):
+
+	Check for empty attributes before adding the item when parsing
+	the toolbars file. Should fix bug #144698.
+
+2004-06-21  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-bookmarks-import.c: (ephy_bookmarks_import):
 
 	Allow importing from Epiphany bookmarks format (RDF),
