@@ -1,0 +1,895 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+  <!ENTITY legal SYSTEM "legal.xml">
+  <!ENTITY appversion "1.0">
+  <!ENTITY manrevision "1.0">
+  <!ENTITY date "May 2003">
+  <!ENTITY fr "<application>Epiphany</application>">
+  <!-- Information about the entities
+       The legal.xml file contains legal information, there is no need to edit the file. 
+       Use the appversion entity to specify the version of the application.
+       Use the manrevision entity to specify the revision number of this manual.
+       Use the date entity to specify the release date of this manual.
+       Use the fr entity to specify the name of the application. -->
+]>
+<!-- 
+      (Do not remove this comment block.)
+  Maintained by the GNOME Documentation Project
+  http://developer.GNOME.org/projects/gdp
+  Template version: 2.0 beta
+  Template last modified Jan 30, 2002
+-->
+<!-- =============Document Header ============================= -->
+<article id="index" lang="nl">
+<!-- please do not change the id; for translations, change lang to -->
+<!-- appropriate code -->
+  <articleinfo> 
+    <title>Epiphany handleiding &manrevision;</title>       
+
+    <copyright> 
+      <year>2003</year> 
+      <holder>Patanjali Somayaji</holder> 
+    </copyright>
+    <copyright> 
+      <year>2003</year> 
+      <holder>David Bordoley</holder> 
+    </copyright>
+
+
+  <copyright>
+   <year>2003</year>
+   <holder>Reinout van Schouwen (Nederlandse vertaling)</holder>
+  </copyright>
+
+<!-- An address can be added to the publisher information.  If a role is 
+     not specified, the publisher/author is the same for all versions of the 
+     document.  -->
+    <publisher> 
+      <publishername> GNOME Documentation Project </publishername> 
+    </publisher> 
+
+   &legal; <!-- This file contains link to license for the
+   documentation (GNU FDL), and other legal stuff such as "NO
+   WARRANTY" statement. Please do not change any of this. -->
+
+    <authorgroup> 
+      <author> 
+	<firstname>Patanjali</firstname> 
+	<surname>Somayaji</surname> 
+	<affiliation> 
+	  <orgname>GNOME Documentation Project</orgname> 
+	  <address> <email>patanjali@codito.com</email> </address> 
+	</affiliation> 
+      </author> 
+      <author> 
+	<firstname>David</firstname> 
+	<surname>Bordoley</surname> 
+	<affiliation> 
+	  <orgname>Epiphany Development Team</orgname> 
+	  <address> <email>bordoley@msu.edu</email> </address> 
+	</affiliation> 
+      </author> 
+    </authorgroup>
+
+
+    <releaseinfo> Deze handleiding beslaat versie &appversion; van &fr;.
+    </releaseinfo> 
+  </articleinfo> 
+
+  <indexterm zone="index"> 
+    <primary>Epiphany</primary> 
+  </indexterm> 
+  <indexterm zone="index"> 
+    <primary>epiphany</primary> 
+  </indexterm>
+  <indexterm zone="index"> 
+    <primary>Browser</primary> 
+  </indexterm>
+
+<!-- ============= Document Body ============================= -->
+<!-- ============= Introduction ============================== -->
+<!-- Use the Introduction section to give a brief overview of what
+     the application is and what it does. -->
+  <sect1 id="fr-introduction"> 
+    <title>Introductie</title> 
+    <para>&fr; is een web-browser voor GNOME gebaseerd op het weergave-onderdeel
+	van Mozilla. &fr; richt zich op eenvoud in het gebruik en het in acht nemen
+	van standaarden.
+   </para>
+  </sect1>
+
+<!-- ============= Getting Started =============================== -->
+  <sect1 id="ephy-getting-started">
+      <title>Beginnen met Epiphany</title>
+
+        <sect2 id="ephy-to-open-browser-window">
+          <title>Het openen van een browservenster</title>
+          	<para>U kunt een browservenster openen op de volgende wijzen:
+			</para>
+		<variablelist>
+    		<varlistentry>
+    		<term><guimenu>Toepassingne</guimenu>-menu</term>
+    		<listitem>
+    		<para>Choose 
+    		<menuchoice>
+    		<guisubmenu>Internet</guisubmenu>
+    		<guimenuitem>Web-browser</guimenuitem>
+    		</menuchoice>. </para>
+    		</listitem>
+    		</varlistentry>
+    		<varlistentry>
+    		<term>Opdrachtregel</term>
+    		<listitem>
+    		<para>Tik <command>epiphany</command> in, en druk op <keycap>Enter</keycap>.</para>
+    		</listitem>
+    		</varlistentry>
+    		</variablelist>
+        </sect2>
+        <sect2 id="ephy-to-open-bookmarks">
+          <title>Het openen van het Bladwijzers-venster</title>
+                <para>U kunt het bladwijzers-venster openen op de volgende
+				wijzen:</para>
+		<variablelist>
+    		<varlistentry>
+    		<term><guimenu>Toepassingen</guimenu>-menu</term>
+    		<listitem>
+    		<para>Kies 
+    		<menuchoice>
+    		<guisubmenu>Internet</guisubmenu>
+    		<guimenuitem>Web-bladwijzers</guimenuitem>>
+    		</menuchoice>. </para>
+    		</listitem>
+    		</varlistentry>
+    		<varlistentry>
+    		<term>Opdrachtregel</term>
+    		<listitem>
+    		<para>Tik <command>epiphany -b</command> in, en druk op <keycap>Enter</keycap>.</para>
+    		</listitem>
+    		</varlistentry>
+    		</variablelist>
+        </sect2>
+
+  </sect1>
+
+<!-- ============= Browser Windows ============================ -->
+  <sect1 id="ephy-browser-windows">
+      <title>Browservensters</title>
+      <para>Browservensters stellen u in staat naar verschillende webpagina's te
+	  baderen.
+<xref linkend="ephy-screenshot"/> toont een browservenster welke de startpagina
+weergeeft.</para>
+    <figure id="ephy-screenshot">
+      <title>Browservenster waarin de startpagina wordt weergegeven</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/ephy-screenshot.png" format="PNG"/>
+          </imageobject>
+          <textobject>
+		  <!-- Vertaling van 'Callouts' onduidelijk -->
+            <phrase>Een pagina die wordt weergegeven in een browservenster. 
+			Onderdelen: Menubalk, werkbalk, adres-invoerveld, bladwijzerbalk, weergavegedeelte</phrase>
+          </textobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+    <para><xref linkend="epiphany-TBL-1"/> beschrijft de componenten van een browservenster.</para>
+    <table frame="topbot" id="epiphany-TBL-1">
+      <title>Componenten van het browservenster</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>Component</para>
+            </entry>
+            <entry valign="top">
+              <para>Omschrijving </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry valign="top">
+              <para>Menubalk</para>
+            </entry>
+            <entry valign="top">
+              <para>Bevat menu's die u kunt gebruiken om taken uit te voeren in
+			  een browservenster.</para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>Werkbalk</para>
+            </entry>
+            <entry valign="top">
+              <para>Bevat knoppen die u kunt gebruiken om taken uit te voeren in
+			  een browservenster.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>Adres-invoerveld</para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+			  Uitrol-combinatieveld dat u kunt gebruiken om web-adressen
+			  of zoektermen in te voeren.</para>
+            </entry>
+          </row>
+	<row>
+            <entry colname="colspec0" valign="top">
+              <para>Bladwijzerbalk</para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>Bevat menu's, knoppen en tekstvelden die u kunt gebruiken
+			  voor snelle toegang tot bladwijzers en zoekacties op het web.</para>
+            </entry>
+    </row>
+          <row>
+            <entry valign="top">
+              <para>Weergavegedeelte</para>
+            </entry>
+            <entry valign="top">
+              <para>Geeft de inhoud weer van de bekeken pagina.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>Statusbalk</para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>Geeft statusinformatie weer.</para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <para>Daarnaast kunt u een opduikmenu openen vanuit browservensters. Om dit
+	opduikmenu te openen klikt u met de rechtermuisknop in een browservenster.
+	De items die in dit menu voorkomen zijn afhankelikj van waar u rechts-klikt.
+	Wanneer u bijvoorbeeld rechts-klikt op een verwijzing, dan kunt u kiezen uit
+	items die gerelateerd zijn aan die verwijzing. Wanneer u rechts-klikt op de
+	pagina zelf, dan kunt u items kiezen die gerelateerd zijn aan de weergave
+	van de webpagina.</para>
+  </sect1>
+
+<!-- ============= Browsing the Web =========================== -->
+  <sect1 id="ephy-browsing-web">
+      <title>Bladeren door het Web</title>
+      <para>
+      </para>
+        <sect2 id="using-address-entry">
+          <title>Het gebruik van het adres-invoerveld</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="using-toolbar">
+          <title>Het gebruik van de werkbalk</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="using-bookmarks-bar">
+          <title>Het gebruik van de bladwijzer-werkbalk</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="using-fullscreen-mode">
+          <title>Het gebruik van de volledig-scherm modus</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-open-new-window">
+          <title>Een nieuw venster openen</title>
+          <para>Om een nieuw venster te openen, kiest u 
+		  <menuchoice> <guimenu>Bestand</guimenu> <guimenuitem>Nieuw venster</guimenuitem>
+			 </menuchoice>.
+	  </para>
+        </sect2>
+	<sect2 id="to-open-new-tab">
+          <title>Een nieuw tabblad openen</title>
+          <para>Om een nieuw tabblad te openen, kiest u
+		  <menuchoice> <guimenu>Bestand</guimenu> <guimenuitem>Nieuw tabblad</guimenuitem>
+			 </menuchoice>. Het nieuwe tabblad zal verschijnen aan de
+			 rechterkant van de reeds bestaande tabbladen.
+	  </para>
+	</sect2>
+	<sect2 id="ephy-to-open-file">
+          <title>Het openen van een bestand</title>
+          <para>Om een bestand te openen, kiest u
+		  <menuchoice> <guimenu>Bestand</guimenu> <guimenuitem>Openen...</guimenuitem>
+			 </menuchoice>
+		  om het <guilabel>Bestand openen</guilabel>-dialoogvenster te tonen.
+		  Selecteer het bestand dat u wilt openen, en klik op
+		  <guibutton>OK</guibutton>. Het bestand wordt weergegeven in het
+		  browservenster.</para>
+        </sect2>
+	<sect2 id="to-save-page-to-file">
+          <title>Een pagina opslaan in een bestand</title>
+          <para>Om een pagina in een bestand op te slaan, kiest u 
+		<menuchoice> <guimenu>Bestand</guimenu> <guimenuitem>Opslaan als</guimenuitem> 
+			</menuchoice>. 
+		Voer een naam in voor het bestand in het <guilabel>Opslaan
+		als</guilabel>-dialoogvenster, en klik op <guibutton>OK</guibutton>. </para>
+        </sect2>
+	<sect2 id="to-print-page">
+          <title>Een pagina afdrukken</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-find-text-in-page">
+          <title>Het vinden van tekst in een pagina</title>
+	  <para>Om te zoeken naar een tekenreeks in een pagina, neemt u de volgende
+	  stappen:</para>
+		<orderedlist> 
+		  <listitem><para>Kies 
+				<menuchoice> <guimenu>Bewerken</guimenu>
+				  <guimenuitem>Zoeken</guimenuitem> </menuchoice>
+				om het <guilabel>Zoeken</guilabel>-dialoogvenster weer te geven.</para>
+		  </listitem>
+		  <listitem><para>Voer de tekenreeks in waarnaar u op zoek bent in het
+				<guilabel>Zoek</guilabel>-invoerveld.</para>
+		  </listitem>
+		  <listitem><para>Selecteer de
+		  <guilabel>Hoofdlettergevoelig</guilabel>-optie
+				om slechts die voorkomens van de tekenreeks te vinden die qua
+				hoofd- en kleine letters precies overeenkomen met de tekst die u
+				ingevoerd heeft.</para>
+		  </listitem>
+		  <listitem><para>Selecteer de <guilabel>Doorgaan na documenteinde</guilabel>-optie
+		  om te zoeken tot het eind van de pagina bereikt is, en vervolgens de
+		  zoekactie voort te zetten aan het begin van de pagina.</para>
+		  </listitem>
+		  <listitem><para>Klik op <guibutton>Volgende</guibutton> om in de
+		  pagina te zoeken naar de eerste keer dat de tekenreeks voorkomt. Als
+		  de tekenreeks gevonden wordt, dan wordt de cursor verplaatst naar de
+		  tekenreeks, en wordt deze geselecteerd.</para>
+		  </listitem>
+		  <listitem><para>Om het volgende voorkomen van de tekenreeks te vinden,
+		  klikt u op <guibutton>Volgende</guibutton>.</para>
+		  </listitem>
+		  <listitem><para>Om het vorige voorkomen van de tekenreeks te vinden,
+		  klikt u op <guibutton>Vorige</guibutton>.</para>
+		  </listitem>
+		  <listitem><para>Om de zoekactie te beëindigen, klikt u op
+				<guibutton>Sluiten</guibutton>. </para>
+		  </listitem>
+		</orderedlist>
+        </sect2>	
+	<sect2 id="to-change-zoom">
+	  <title>Het veranderen van de zoomfactor</title>
+	  <para>De volgende methoden kunt u gebruiken om de weergavegrootte van een
+	  pagina aan te passen.</para>
+	  <itemizedlist>
+	  	<listitem><para>Om de weergave van een pagina te vergroten, kiest u 
+	  	<menuchoice>
+		<guimenu>Beeld</guimenu>
+		<guimenuitem>Inzoomen</guimenuitem>
+	  	</menuchoice>.</para>
+		</listitem>
+		<listitem><para>Om de weergave van een pagina te verkleinen, kiest u
+		<menuchoice>
+		<guimenu>Beeld</guimenu>
+		<guimenuitem>Uitzoomen</guimenuitem>
+		</menuchoice>.</para>
+		</listitem>
+		<listitem><para>Om een pagina te bekijken op haar oorspronkelijke
+		grootte, kiest u
+		<menuchoice>
+		<guimenu>Beeld</guimenu>
+		<guimenuitem>Normale grootte</guimenuitem>
+		</menuchoice>. </para>
+		</listitem>
+	  </itemizedlist>
+        </sect2>
+	<sect2 id="to-view-page-source">
+          <title>De broncode van een pagina bekijken</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-open-link">
+          <title>Het openen van een verwijzing</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-open-link-in-window">
+          <title>Het openen van een verwijzing in een nieuw venster</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-open-link-in-tab">
+          <title>Het openen van een verwijzing in een nieuw tabblad</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-download-link">
+          <title>Het downloaden van een verwijzing</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-switch-between-tab">
+          <title>Het schakelen tussen tabbladen</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-move-tabs">
+          <title>Het verplaatsen van tabbladen</title>
+          <para>
+          </para>
+        </sect2>
+  </sect1>
+
+<!-- ============= Managing Your Bookmarks ================ -->
+  <sect1 id="ephy-managing-bookmarks">
+      <title>Het beheer van uw bladwijzers</title>
+      <para>
+      </para>
+	<sect2 id="overview-of-bookmarks">
+          <title>Overzicht van het Epiphany bladwijzerssysteem</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-create-new-bookmark">
+	  <title>Het aanmaken van een nieuwe bladwijzer</title>
+          <para>U kunt op verscheidene manieren een nieuwe bladwijzer
+		  aanmaken.</para>
+		<variablelist>
+    		<varlistentry>
+    		<term>Browservenster</term>
+    		<listitem>
+			<itemizedlist>
+	  		<listitem><para>Om een bladwijzer te maken van de op dit moment
+			bekeken pagina, kiest u
+	  		<menuchoice>
+			<guimenu>Bladwijzers</guimenu>
+			<guimenuitem>Bladwijzer toevoegen...</guimenuitem>
+	  		</menuchoice>.</para>
+			</listitem>
+			<listitem><para>Om een een bladwijzer te maken van een verwijzing in
+			de op dit moment bekeken pagina, klikt u met de rechtermuisknop op
+			de verwijzing en kiest u 
+	  		<menuchoice>
+			<guimenuitem>Bladwijzer maken van verwijzing...</guimenuitem>
+	  		</menuchoice>.</para>
+			</listitem>
+			</itemizedlist>
+    		</listitem>
+    		</varlistentry>
+		<varlistentry>
+		<term>Geschiedenisvenster</term>
+    		<listitem>
+		<para>Om een bladwijzer te maken van de op dit moment geselecteerde
+		geschiedenis-verwijzing, kiest u
+	  	<menuchoice>
+		<guimenu>Bestand</guimenu>
+		<guimenuitem>Bladwijzer maken van verwijzing...</guimenuitem>
+	  	</menuchoice>. Een andere manier is om met de rechtermuisknop te klikken
+		op de geschiedenisverwijzing in het geschiedenisvenster, en dan
+		<guimenuitem>Bladwijzer maken van verwijzing...</guimenuitem>
+		te kiezen.</para>
+		</listitem>
+    		</varlistentry>
+    		</variablelist>
+	
+        </sect2>
+	<sect2 id="to-select-bookmarks">
+          <title>Het selecteren van bladwijzers en onderwerpen</title>
+          <para>U kunt op meerdere manieren bladwijzers en onderwerpen
+		  selecteren.
+		  
+		  <xref linkend="epiphany-TBL-2"/> beschrijft hoe u items kunt selecteren in het
+		  bladwijzersvenster.</para>
+      		<table frame="topbot" id="epiphany-TBL-2">
+        	<title>Het selecteren van items in het bladwijzersvenster</title>
+        	<tgroup cols="2" colsep="0" rowsep="0">
+          	<colspec colname="colspec0" colwidth="36.36*"/>
+          	<colspec colname="colspec2" colwidth="63.64*"/>
+          	<thead>
+            	<row rowsep="1">
+              	<entry valign="top">
+                <para>Taak</para>
+              	</entry>
+              	<entry colname="colspec2" valign="top">
+                <para>Actie</para>
+              	</entry>
+            	</row>
+          	</thead>
+          	<tbody>
+            	<row>
+              	<entry colname="colspec0" valign="top">
+                <para>Selecteer een bladwijzer of onderwerp.</para>
+              	</entry>
+              	<entry colname="colspec2" valign="top">
+                <para>Klik op de bladwijzer of het onderwerp.</para>
+              	</entry>
+            	</row>
+            	<row>
+              	<entry colname="colspec0" valign="top">
+                <para>Selecteer een aaneengesloten groep bladwijzers</para>
+              	</entry>
+              	<entry colname="colspec2" valign="top">
+                <para>Houdt de <keycap>Shift</keycap>-toets ingedrukt. 
+				Klik op de eerste bladwijzer van de groep, en klik vervolgens op
+				de laatste bladwijzer van de groep.</para>
+              	</entry>
+            	</row>
+            	<row>
+              	<entry colname="colspec0" valign="top">
+                <para>Meerdere bladwijzers selecteren</para>
+              	</entry>
+              	<entry colname="colspec2" valign="top">
+                <para>Houdt de <keycap>Ctrl</keycap>-toets ingedrukt.
+				Klik op de bladwijzers die u wenst te selecteren.</para>
+              	</entry>
+            	</row>
+            	<row>
+              	<entry colname="colspec0" valign="top">
+                <para>Alle bladwijzers binnen een onderwerp selecteren</para>
+              	</entry>
+              	<entry colname="colspec2" valign="top">
+                <para>Kies <menuchoice><guimenu>Bewerken</guimenu>
+					<guimenuitem>Alles selecteren</guimenuitem></menuchoice>.</para>
+              	</entry>
+            	</row>
+          	</tbody>
+        	</tgroup>
+      		</table>
+        </sect2>
+	<sect2 id="to-open-bookmark">
+          <title>Het openen van een bladwijzer in een nieuw venster of tabblad</title>
+          <variablelist>
+    		<varlistentry>
+    			<term>Om een bladwijzer in een nieuw venster te openen neemt u
+				de volgende stappen:</term>
+    				<listitem>
+				<orderedlist>
+        			<listitem>
+          			<para>Selecteer de bladwijzer die u wenst te openen.</para>
+        			</listitem>
+        			<listitem>
+          			<para>Kies <menuchoice><guimenu>Bestand</guimenu><guimenuitem>In nieuw venster openen</guimenuitem></menuchoice>. 
+					Een andere manier is om met de rechtermuisknop te klikken op 
+					de bladwijzer, en vervolgens <menuchoice><guimenuitem>In
+					nieuw venster openen</guimenuitem> te kiezen
+					</menuchoice>.</para>
+        			</listitem>
+				</orderedlist>
+				</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Om een bladwijzer in een nieuw tabblad te openen neemt u
+				de volgende stappen:</term>
+				<listitem>
+				<orderedlist>
+        			<listitem>
+          			<para>Selecteer de bladwijzer die u wenst te openen.</para>
+        			</listitem>
+        			<listitem>
+          			<para>Kies <menuchoice><guimenu>Bestand</guimenu>
+					<guimenuitem>In nieuw tabblad openen</guimenuitem></menuchoice>. 
+					Een andere manier is om met de rechtermuisknop te klikken op 
+					de bladwijzer, en vervolgens <menuchoice><guimenuitem>In
+					nieuw tabblad openen</guimenuitem> te kiezen
+					</menuchoice>.</para>
+        			</listitem>
+				</orderedlist>
+				</listitem>
+		</varlistentry>
+	  </variablelist>
+        </sect2>
+	<sect2 id="to-create-new-topic">
+          <title>Het aanmaken van een nieuw onderwerp</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-add-bookmark-to-topic">
+          <title>Het toevoegen van een bladwijzer aan een onderwerp</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-remove-bookmark-from-topic">
+          <title>Het verwijderen van een bladwijzer uit een onderwerp</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-rename-bookmark-or-topic">
+          <title>Het hernoemen van een bladwijzer of onderwerp</title>
+          <para>Om een bladwijzer of onderwerp te hernoemen, neemt u de volgende
+		  stappen:</para>
+      		<orderedlist>
+        	<listitem>
+          	<para>Selecteer de bladwijzer of het onderwerp dat u wilt hernoemen 
+			in het bladwijzersvenster.</para>
+        	</listitem>
+        	<listitem>
+          	<para>Kies <menuchoice><guimenu>Bestand</guimenu><guimenuitem>Hernoemen...</guimenuitem>
+		</menuchoice>. Een andere manier is om met de rechtermuisknop te klikken
+		op de bladwijzer of het onderwerp in het weergavegedeelte, en vervolgens
+		<guimenuitem>Hernoemen...</guimenuitem> te kiezen.
+          	De naam van de bladwijzer of het onderwerp wordt geselecteerd.</para>
+        	</listitem>
+        	<listitem>
+          	<para>Voer een nieuwe naam in voor het onderwerp of de bladwijzer,
+			en druk op <keycap>Enter</keycap>.</para>
+        	</listitem>
+      		</orderedlist>
+        </sect2>
+	<sect2 id="to-delete-bookmark-or-topic">
+          <title>Het verwijderen van een bladwijzer of onderwerp</title>
+          <para>Om bladwijzers of onderwerpen te verwijderen neemt u de volgende
+		  stappen: </para>
+      		<orderedlist>
+        	<listitem>
+          	<para>Selecteer de bladwijzer of het onderwerp dat u wilt
+			verwijderen in het bladwijzersvenster.</para>
+        	</listitem>
+        	<listitem>
+          	<para>Kies <menuchoice><guimenu>Bestand</guimenu><guimenuitem>Verwijderen</guimenuitem></menuchoice>. 
+			Een andere manier is om met de rechtermuisknop te klikken op een
+			bladwijzer of onderwerp in het bladwijzersvenster, en vervolgens 
+			<guimenuitem>Verwijderen</guimenuitem> te kiezen.</para>
+        	</listitem>
+      		</orderedlist>
+        </sect2>
+	<sect2 id="to-edit-bookmark-properties">
+	  <title>Het bewerken van bladwijzereigenschappen</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-search-bookmarks">
+          <title>Het doorzoeken van uw bladwijzers</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-copy-bookmark-address">
+          <title>Het kopiëren van een bladwijzeradres</title>
+          <para>Om het adres van een bladwijzer te kopiëren, neemt u de volgende
+		  stappen:</para>
+      		<orderedlist>
+        	<listitem>
+          	<para>Selecteer de bladwijzer.</para>
+        	</listitem>
+        	<listitem>
+          	<para>Kies <menuchoice><guimenu>Bewerken</guimenu><guimenuitem>Adres kopiëren</guimenuitem></menuchoice>. 
+			Een andere manier is om met de rechtermuisknop te klikken op de
+			bladwijzer, en vervolgens <guimenuitem>Adres kopiëren</guimenuitem>
+			te kiezen.</para>
+        	</listitem>
+      		</orderedlist>
+        </sect2>
+	<sect2 id="to-add-bookmark-or-topic-to-bookmarks-bar">
+          <title>Het toevoegen van een bladwijzer of onderwerp aan de bladwijzerbalk</title>
+          <para>Op de volgende wijzen kunt u een bladwijzer of onderwerp
+		  toevoegen aan de bladwijzerbalk:</para>
+		<variablelist>
+    		<varlistentry>
+    		<term><guimenu>Bestand</guimenu>-menu</term>
+    		<listitem>
+    		<para>Selecteer de bladwijzer of het onderwerp dat u wenst toe te
+			voegen, en kies 
+    		<menuchoice>
+    		<guisubmenu>Bestand</guisubmenu>
+    		<guimenuitem>Tonen in bladwijzerwerkbalk</guimenuitem>
+    		</menuchoice>. </para>
+    		</listitem>
+    		</varlistentry>
+    		<varlistentry>
+    		<term>Slepen en neerzetten</term>
+    		<listitem>
+    		<para>U kunt bladwijzers en onderwerpen slepen vanuit het
+			bladwijzersvenster en neerzetten op de bladwijzerbalk.
+			</para>
+    		</listitem>
+    		</varlistentry>
+    		</variablelist>
+        </sect2>
+	<sect2 id="to-remove-bookmark-or-topic-from-bookmarks-bar">
+          <title>Het verwijderen van een bladwijzer of onderwerp uit de
+		  bladwijzerbalk</title>
+          <para>U kunt een bladwijzer of onderwerp uit de bladwijzerbalk
+		  verwijderen op de volgende wijzen:</para>
+		<variablelist>
+    		<varlistentry>
+    		<term><guimenu>Bestand</guimenu>-menu</term>
+    		<listitem>
+    		<para>Selecteer de bladwijzer of het onderwerp dat u wenst te verwijderen
+			en kies 
+    		<menuchoice>
+    		<guisubmenu>Bestand</guisubmenu>
+    		<guimenuitem>Tonen in bladwijzerwerkbalk</guimenuitem>
+    		</menuchoice>.</para>
+    		</listitem>
+    		</varlistentry>
+    		<varlistentry>
+    		<term>Werkbalkbeheer</term>
+    		<listitem>
+    		<para>U kunt bladwijzers en onderwerpen verwijderen uit de
+			bladwijzerbalk door middel van het werkbalkbeheer zoals beschreven
+			in paragraaf
+		      <xref linkend="to-edit-toolbars"/>.</para>
+    		</listitem>
+    		</varlistentry>
+    		</variablelist>
+        </sect2>
+	<sect2 id="smart-bookmarks">
+          <title>Slimme bladwijzers</title>
+          <para>
+          </para>
+        </sect2>
+  </sect1>
+
+<!-- ============= Managing Your History Links ================ -->
+  <sect1 id="ephy-managing-history">
+      <title>Het beheren van uw geschiedenisverwijzingen</title>
+      <para>
+      </para>
+	<sect2 id="overview-of-history">
+          <title>Overzicht van het Epiphany geschiedenissysteem</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-select-history">
+          <title>Het selecteren van geschiedenisverwijzingen</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-open-history-link">
+          <title>Het openen van een geschiedenisverwijzing in een nieuw venster
+		  of tabblad</title>
+          <variablelist>
+    		<varlistentry>
+    			<term>Om een geschiedenisverwijzing in een nieuw venster te
+				openen neemt u de volgende stappen:</term>
+    				<listitem>
+				<orderedlist>
+        			<listitem>
+          			<para>Selecteer de geschiedenisverwijzing die u wenst te
+					openen.</para>
+        			</listitem>
+        			<listitem>
+          			<para>Kies <menuchoice><guimenu>Bestand</guimenu><guimenuitem>In nieuw venster openen</guimenuitem></menuchoice>. 
+					Een andere manier is om met de rechtermuisknop te klikken op
+					de geschiedenisverwijzing, en vervolgens <guimenuitem>In
+					nieuw venster openen</guimenuitem> te kiezen.
+					</para>
+        			</listitem>
+				</orderedlist>
+				</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Om een geschiedenisverwijzing in een nieuw tabblad te
+				openen neemt u de volgende stappen:</term>
+				<listitem>
+				<orderedlist>
+        			<listitem>
+          			<para>Selecteer de geschiedenisverwijzing die u wenst te
+					openen.</para>
+        			</listitem>
+        			<listitem>
+          			<para>Kies <menuchoice><guimenu>Bestand</guimenu><guimenuitem>In nieuw tabblad openen</guimenuitem></menuchoice>. 
+					Een andere manier is om met de rechtermuisknop te klikken op
+					de geschiedenisverwijzing, en vervolgens <guimenuitem>In
+					nieuw tabblad openen</guimenuitem> te kiezen.
+					</para>
+        			</listitem>
+				</orderedlist>
+				</listitem>
+		</varlistentry>
+	  </variablelist>
+        </sect2>
+	<sect2 id="to-delete-history-link">
+          <title>Een geschiedenisverwijzing verwijderen</title>
+          <para>Om een geschiedenisverwijzing te verwijderen neemt u de volgende
+		  stappen:</para>
+      		<orderedlist>
+        	<listitem>
+          	<para>Selecteer de geschiedenisverwijzing die u wenst te
+			verwijderen.</para>
+        	</listitem>
+        	<listitem>
+          	<para>Kies <menuchoice><guimenu>Bestand</guimenu><guimenuitem>Verwijderen</guimenuitem></menuchoice>.
+			Een andere manier is om met de rechtermuisknop te klikken op de
+			geschiedenisverwijzing, en vervolgens
+			<guimenuitem>Verwijderen</guimenuitem> te kiezen.</para>
+        	</listitem>
+      		</orderedlist>
+        </sect2>
+	<sect2 id="to-search-history">
+          <title>Zoeken in uw geschiedenisverwijzingen</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-copy-history-link-address">
+          <title>Het kopiëren van het adres van een geschiedenisverwijzing</title>
+          <para>Om het adres van een geschiedenisverwijzing te kopiëren, neemt u
+		  de volgende stappen:</para>
+      		<orderedlist>
+        	<listitem>
+          	<para>Selecteer de geschiedenisverwijzing.</para>
+        	</listitem>
+        	<listitem>
+          	<para>kies <menuchoice><guimenu>Bewerken</guimenu><guimenuitem>Adres kopiëren</guimenuitem></menuchoice>. 
+			Een andere manier is om met de rechtermuisknop te klikken op de
+			geschiedenisverwijzing, en vervolgens <guimenuitem>Adres
+			kopiëren</guimenuitem> te kiezen.</para>
+        	</listitem>
+      		</orderedlist>
+        </sect2>
+  </sect1>
+
+<!-- ============= Managing Your Passwords and Cookies ==== -->
+  <sect1 id="ephy-managing-passwords-cookies">
+      <title>Het beheren van uw wachtwoorden en cookies</title>
+      <para>
+      </para>
+  </sect1>
+
+<!-- ============= Using the Download Manager ==== -->
+  <sect1 id="ephy-download-manager">
+      <title>Het gebruik van het downloadbeheer</title>
+      <para>
+      </para>
+  </sect1>
+
+<!-- ============= Customizing Epiphany ==== -->
+  <sect1 id="ephy-customize">
+      <title>Het aanpassen van &fr;</title>
+      <para>
+      </para>
+	<sect2 id="setting-preferences">
+          <title>Het instellen van uw voorkeuren</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-show-hide-window-components">
+          <title>Het tonen en verbergen van browservenster-onderdelen</title>
+            <para>U kunt onderdelen van het browservenster als volgt tonen en
+			verbergen: </para>
+      	    <itemizedlist>
+            <listitem>
+            <para>Om werkbalk te verbergen, kiest u <menuchoice><guimenu>Beeld</guimenu><guimenuitem>Werkbalk</guimenuitem></menuchoice>. 
+			Om de werkbalk weer te tonen, kiest u weer <menuchoice><guimenu>Beeld</guimenu><guimenuitem>Werkbalk</guimenuitem></menuchoice>. </para>
+            </listitem>
+            <listitem>
+			<para>Om bladwijzerbalk te verbergen, kiest u <menuchoice><guimenu>Beeld</guimenu><guimenuitem>Bladwijzerbalk</guimenuitem></menuchoice>. 
+			Om de bladwijzerbalk weer te tonen, kiest u weer <menuchoice><guimenu>Beeld</guimenu><guimenuitem>Bladwijzerbalk</guimenuitem></menuchoice>. </para>            </listitem>
+            <listitem>
+            <para>Om statusbalk te verbergen, kiest u <menuchoice><guimenu>Beeld</guimenu><guimenuitem>Statusbalk</guimenuitem></menuchoice>. 
+			Om de statusbalk weer te tonen, kiest u weer <menuchoice><guimenu>Beeld</guimenu><guimenuitem>Statusbalk</guimenuitem></menuchoice>. </para>
+           </listitem> 
+           </itemizedlist>
+        </sect2>
+	<sect2 id="to-edit-toolbars">
+          <title>Het bewerken van uw werkbalken</title>
+          <para>
+          </para>
+        </sect2>
+  </sect1>
+
+<!-- ============= About ================================== -->
+  <sect1 id="fr-about"> 
+    <title>About &fr;</title> 
+
+    <para> &fr; is geschreven door Marco Presenti Gritti 
+      (<email>marco@it.gnome.org</email>). U kunt meer informatie over
+      &fr; vinden op de <ulink
+      url="http://epiphany.mozdev.org" type="http">Epiphany 
+      webpagina</ulink>. 
+    </para>
+    <para>
+      Deze handleiding is geschreven door David Bordoley (<email>bordoley@msu.edu</email>)
+	  en Patanjali Somayaji (<email>patanjali@codito.com</email>). 
+    </para>
+
+    <para> Dit programma wordt verspreid onder de voorwaarden van de GNU 
+      General Public license zoals deze gepubliceerd is door de Free Software
+      Foundation; ofwel versie 2 van de Licentie, ofwel (al naar gelang uw
+	  wensen) een willekeurige nieuwere versie. Een exemplaar van deze licentie
+	  kunt u vinden op deze <ulink url="ghelp:gpl" type="help">webpagina</ulink>,
+	  of in het bestand COPYING dat bijgesloten is bij de broncode van dit
+	  programma. </para>
+
+  </sect1> 
+</article>
