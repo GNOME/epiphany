@@ -38,7 +38,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
-#include <glib/gi18n.h>
 #include <stdlib.h>
 #include <gdk/gdkx.h>
 #include <gtk/gtksettings.h>
@@ -47,6 +46,7 @@
 #include <nsEmbedString.h>
 #include <nsIPrefService.h>
 #include <nsIServiceManager.h>
+/* we don't use glib/gi18n.h here because we need gnome_i18n_get_language_list() */
 #include <libgnome/gnome-i18n.h>
 
 #ifdef ALLOW_PRIVATE_API

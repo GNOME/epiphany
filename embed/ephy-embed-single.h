@@ -59,8 +59,6 @@ struct _EphyEmbedSingleIface
 	void	 (* set_offline_mode)    (EphyEmbedSingle *shell,
 					  gboolean offline);
 	gboolean (* get_offline_mode)	 (EphyEmbedSingle *single);
-	void	 (* load_proxy_autoconf) (EphyEmbedSingle *shell,
-					  const char* url);
 	GList *	 (* get_font_list)	 (EphyEmbedSingle *shell,
 					  const char *langGroup);
 };
