@@ -1,5 +1,13 @@
 2004-10-05  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-tab.c: (ephy_tab_size_allocate), (ephy_tab_map),
+	(ephy_tab_class_init):
+
+	Don't size-allocate unmapped tabs, fixing slow resizes.
+	Fixes bug #128191.
+
+2004-10-05  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.ac:
 	* lib/egg/Makefile.am:
 	R lib/egg/eggdropdowntoolbutton.c:
