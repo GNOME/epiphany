@@ -342,6 +342,26 @@ elide_underscores (const gchar *original)
   return result;
 }
 
+static void
+set_drag_cursor (GtkWidget *widget)
+{
+  GdkCursor *cursor;
+  GdkPixbuf *pixbuf;
+
+  pixbuf = gdk_pixbuf_new_from_file (CURSOR_DIR "/art/hand-open.png", NULL);
+  cursor = gdk_cursor_new_from_pixbuf (gdk_display_get_default (), pixbuf, 0, 0);
+
+  gdk_window_set_cursor (widget->window, cursor);
+  gdk_cursor_unref (cursor);
+  g_object_unref (pixbuf);
+}
+
+static void
+event_box_realize_cb (GtkWidget *widget)
+{
+	set_drag_cursor (widget);
+}
+
 static GtkWidget *
 editor_create_item (EggToolbarEditor *editor,
 		    GtkImage	     *icon,
@@ -355,18 +375,25 @@ editor_create_item (EggToolbarEditor *editor,
   GtkImageType type;
 
   event_box = gtk_event_box_new ();
+  gtk_event_box_set_visible_window (GTK_EVENT_BOX (event_box), FALSE);
   gtk_widget_show (event_box);
   gtk_drag_source_set (event_box,
 		       GDK_BUTTON1_MASK,
 		       source_drag_types, n_source_drag_types, action);
-  g_signal_connect (event_box, "drag_begin",
-		    G_CALLBACK (drag_begin_cb), NULL);
-  g_signal_connect (event_box, "drag_end",
-		    G_CALLBACK (drag_end_cb), NULL);
   g_signal_connect (event_box, "drag_data_get",
 		    G_CALLBACK (drag_data_get_cb), editor);
   g_signal_connect (event_box, "drag_data_delete",
 		    G_CALLBACK (editor_drag_data_delete_cb), editor);
+  g_signal_connect_after (event_box, "realize",
+		          G_CALLBACK (event_box_realize_cb), NULL);
+
+  if (action == GDK_ACTION_MOVE)
+    {
+      g_signal_connect (event_box, "drag_begin",
+		        G_CALLBACK (drag_begin_cb), NULL);
+      g_signal_connect (event_box, "drag_end",
+		        G_CALLBACK (drag_end_cb), NULL);
+    }
 
   type = gtk_image_get_storage_type (icon);
   if (type == GTK_IMAGE_STOCK)
