@@ -378,9 +378,10 @@ ephy_toolbars_group_to_string (EphyToolbarsGroup *t)
 	for (l1 = tl->children; l1 != NULL; l1 = l1->next)
 	{
 		int i = 0;
+		EphyToolbarsToolbar *toolbar = l1->data;
 
 		g_string_append_printf
-			(s, "<dockitem name=\"Toolbar%d\">\n", k);
+			(s, "<dockitem name=\"%s\">\n", toolbar->id);
 
 		for (l2 = l1->children; l2 != NULL; l2 = l2->next)
 		{
@@ -519,7 +520,7 @@ ephy_toolbars_group_remove_item	(EphyToolbarsGroup *t,
 	node = g_node_find (t->priv->toolbars, G_IN_ORDER, G_TRAVERSE_ALL, item);
 	g_return_if_fail (node != NULL);
 	toolbar = node->parent;
-	free_toolbar_node (node->data);
+	free_item_node (node->data);
 	g_node_destroy (node);
 
 	if (g_node_n_children (toolbar) == 0)

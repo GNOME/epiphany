@@ -1,3 +1,16 @@
+2003-02-27  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/widgets/ephy-editable-toolbar.c: (editor_close),
+	(editor_add_toolbar), (dialog_response_cb), (setup_editor):
+
+	Fix toolbar removal.
+
+	* lib/widgets/ephy-toolbars-group.c:
+	(ephy_toolbars_group_to_string), (ephy_toolbars_group_remove_item):
+	
+	Use a real GtkDialog for the editor, nicer code and good window placement.
+	Just hope we dont have to change this again :/
+
 2003-02-26  Xan Lopez  <xan@masilla.org>
 
 	* src/ephy-window.c:
