@@ -261,8 +261,6 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 		ret = xmlTextWriterEndElement (writer); /* item */
 
 		g_free (link);
-
-		i++;
 	}
 	ephy_node_thaw (bmks);
 	if (ret < 0) goto out;
