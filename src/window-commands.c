@@ -752,7 +752,7 @@ window_cmd_help_about (EggAction *action,
 		"Marco Pesenti Gritti <marco@gnome.org>",
 		"Xan Lopez <xan@masilla.org>",
 		"David Bordoley <bordoley@msu.edu>",
-		"Christian Persch <chpe+epiphany@stud.uni-saarland.de>",
+		"Christian Persch <chpe@gnome.org>",
 		NULL
 	};
 
