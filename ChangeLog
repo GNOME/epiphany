@@ -1,5 +1,16 @@
 2003-06-15  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/MozillaPrivate.cpp: (MozillaCollatePrintSettings):
+	* embed/ephy-embed.h:
+	* embed/print-dialog.c: (print_dialog_init), (print_free_info),
+	(print_get_info):
+	* data/epiphany.schemas.in:
+	* data/glade/print.glade:
+
+	Convert dialog to metric units and default paper to A4. Fixes #112619
+
+2003-06-15  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/session.c: (do_session_resume):
 	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_download),
 	(ephy_favicon_cache_get):

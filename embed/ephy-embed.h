@@ -108,11 +108,11 @@ typedef struct
         gboolean print_to_file;
         gchar *printer;
         gchar *file;
-        gint paper;
-        gdouble top_margin;
-        gdouble bottom_margin;
-        gdouble left_margin;
-        gdouble right_margin;
+        gchar *paper;
+        gint top_margin;
+        gint bottom_margin;
+        gint left_margin;
+        gint right_margin;
         gint pages;
         gint from_page;
         gint to_page;

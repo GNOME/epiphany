@@ -230,44 +230,44 @@
         <key>/schemas/apps/epiphany/dialogs/print_top_margin</key>
         <applyto>/apps/epiphany/dialogs/print_top_margin</applyto>
         <owner>epiphany</owner>
-        <type>float</type>
-        <default>0.5</default>
+        <type>int</type>
+        <default>10</default>
         <locale name="C">
         <short>Printing top margin</short>
-        <long>Printing top margin (in inches).</long>
+        <long>Printing top margin (in mm).</long>
         </locale>
       </schema>
       <schema>
         <key>/schemas/apps/epiphany/dialogs/print_bottom_margin</key>
         <applyto>/apps/epiphany/dialogs/print_bottom_margin</applyto>
         <owner>epiphany</owner>
-        <type>float</type>
-        <default>0.5</default>
+        <type>int</type>
+        <default>10</default>
         <locale name="C">
         <short>Printing bottom margin</short>
-        <long>Printing bottom margin (in inches).</long>
+        <long>Printing bottom margin (in mm).</long>
         </locale>
       </schema>
       <schema>
         <key>/schemas/apps/epiphany/dialogs/print_left_margin</key>
         <applyto>/apps/epiphany/dialogs/print_left_margin</applyto>
         <owner>epiphany</owner>
-        <type>float</type>
-        <default>0.5</default>
+        <type>int</type>
+        <default>10</default>
         <locale name="C">
         <short>Printing left margin</short>
-        <long>Printing left margin (in inches).</long>
+        <long>Printing left margin (in mm).</long>
         </locale>
       </schema>
       <schema>
         <key>/schemas/apps/epiphany/dialogs/print_right_margin</key>
         <applyto>/apps/epiphany/dialogs/print_right_margin</applyto>
         <owner>epiphany</owner>
-        <type>float</type>
-        <default>0.5</default>
+        <type>int</type>
+        <default>10</default>
         <locale name="C">
         <short>Printing right margin</short>
-        <long>Printing right margin (in inches).</long>
+        <long>Printing right margin (in mm).</long>
         </locale>
       </schema>
       <schema>
@@ -339,11 +339,12 @@
         <key>/schemas/apps/epiphany/dialogs/print_paper</key>
         <applyto>/apps/epiphany/dialogs/print_paper</applyto>
         <owner>epiphany</owner>
-        <type>int</type>
-        <default>0</default>
+        <type>string</type>
+        <default>A4</default>
         <locale name="C">
         <short>Paper type</short>
-        <long>Paper type: letter, legal, executive, A4.</long>
+        <long>Paper type. Supported values are "A4", "Letter", "Legal"
+	and "Executive".</long>
         </locale>
       </schema>
      <schema>

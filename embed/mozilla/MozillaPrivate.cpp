@@ -37,6 +37,7 @@ GtkWidget *MozillaFindGtkParent (nsIDOMWindow *aDOMWindow)
 	return gtk_widget_get_toplevel (GTK_WIDGET(mozembed));
 }
 
+#define MM_TO_INCH(x)		(((double) x) / 25.4)
 
 NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
 				       nsIPrintSettings *options)
@@ -46,11 +47,6 @@ NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
                 nsIPrintSettings::kSelectedFrame,
                 nsIPrintSettings::kEachFrameSep
         };
-	/* these should match the order of the radiobuttons in the dialog 
-	 * and the paper names in the default print provider PS*/
-	const static char *PaperSizeNames[] = {
-		"Letter","Legal","Executive","A4"
-	};
 
 
         switch (info->pages)
@@ -68,10 +64,10 @@ NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
                 break;
         }
 
-        options->SetMarginTop (info->top_margin);
-        options->SetMarginBottom (info->bottom_margin);
-        options->SetMarginLeft (info->left_margin);
-        options->SetMarginRight (info->right_margin);
+        options->SetMarginTop (MM_TO_INCH (info->top_margin));
+        options->SetMarginBottom (MM_TO_INCH (info->bottom_margin));
+        options->SetMarginLeft (MM_TO_INCH (info->left_margin));
+        options->SetMarginRight (MM_TO_INCH (info->right_margin));
 
         options->SetPrinterName(NS_LITERAL_STRING("PostScript/default").get());
 
@@ -95,8 +91,7 @@ NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
 
 	/* native paper size formats. Our dialog does not support custom yet */
 	options->SetPaperSize (nsIPrintSettings::kPaperSizeNativeData);
-	int tps = (info->paper >= 0 || info->paper < 4) ? info->paper : 0;
-	options->SetPaperName (NS_ConvertUTF8toUCS2(PaperSizeNames[tps]).get());
+	options->SetPaperName (NS_ConvertUTF8toUCS2(info->paper).get());
 
         options->SetPrintInColor (info->print_color);
         options->SetOrientation (info->orientation);

@@ -95,7 +95,7 @@ EphyDialogProperty properties [] =
 	{ PRINTON_PROP, "printer_radiobutton", CONF_PRINT_PRINTON, PT_NORMAL, NULL },
 	{ PRINTER_PROP, "printer_entry", CONF_PRINT_PRINTER, PT_NORMAL, NULL },
 	{ FILE_PROP, "file_entry", CONF_PRINT_FILE, PT_NORMAL, NULL },
-	{ PAPER_PROP,"letter_radiobutton", CONF_PRINT_PAPER, PT_NORMAL, NULL },
+	{ PAPER_PROP,"A4_radiobutton", CONF_PRINT_PAPER, PT_NORMAL, NULL },
 	{ TOP_PROP, "top_spinbutton", CONF_PRINT_TOP_MARGIN, PT_NORMAL, NULL },
         { BOTTOM_PROP, "bottom_spinbutton", CONF_PRINT_BOTTOM_MARGIN, PT_NORMAL, NULL },
 	{ LEFT_PROP,"left_spinbutton", CONF_PRINT_LEFT_MARGIN, PT_NORMAL, NULL },
@@ -112,6 +112,13 @@ EphyDialogProperty properties [] =
 
 	{ -1, NULL, NULL }
 };
+
+static const
+char *paper_format_enum [] =
+{
+	"A4", "Letter", "Legal", "Executive"
+};
+static guint n_paper_format_enum = G_N_ELEMENTS (paper_format_enum);
 
 static guint print_dialog_signals[LAST_SIGNAL] = { 0 };
 
@@ -179,6 +186,9 @@ print_dialog_init (PrintDialog *dialog)
 				 "print.glade", "print_dialog");
 
 	dialog->priv->window = ephy_dialog_get_control (EPHY_DIALOG(dialog), WINDOW_PROP);
+
+	ephy_dialog_add_enum (EPHY_DIALOG (dialog), PAPER_PROP,
+			      n_paper_format_enum, paper_format_enum);
 	
 	icon = gtk_widget_render_icon (dialog->priv->window, 
 						      GTK_STOCK_PRINT,
@@ -244,6 +254,7 @@ print_free_info (EmbedPrintInfo *info)
 {
 	g_free (info->printer);
 	g_free (info->file);
+	g_free (info->paper);
 	g_free (info->header_left_string);
 	g_free (info->header_right_string);
 	g_free (info->footer_left_string);
@@ -303,7 +314,7 @@ print_get_info (EphyDialog *dialog)
         info->to_page = g_value_get_float (&to_page);
 
 	ephy_dialog_get_value (dialog, PAPER_PROP, &paper);
-        info->paper = g_value_get_int (&paper);
+        info->paper = g_strdup (paper_format_enum[g_value_get_int (&paper)]);
 
 	ephy_dialog_get_value (dialog, ALL_PAGES_PROP, &pages);
         info->pages = g_value_get_int (&pages);

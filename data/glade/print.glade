@@ -609,15 +609,34 @@
 			  <property name="spacing">6</property>
 
 			  <child>
+			    <widget class="GtkRadioButton" id="A4_radiobutton">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="label" translatable="yes">A_4</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="active">True</property>
+			      <property name="inconsistent">False</property>
+			      <property name="draw_indicator">True</property>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+
+			  <child>
 			    <widget class="GtkRadioButton" id="letter_radiobutton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">_Letter (8.5&quot; x 11&quot;)</property>
+			      <property name="label" translatable="yes">_Letter</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
+			      <property name="group">A4_radiobutton</property>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
@@ -630,13 +649,13 @@
 			    <widget class="GtkRadioButton" id="legal_radiobutton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">L_egal (8.5&quot; x 14&quot;)</property>
+			      <property name="label" translatable="yes">L_egal</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
-			      <property name="group">letter_radiobutton</property>
+			      <property name="group">A4_radiobutton</property>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
@@ -649,32 +668,13 @@
 			    <widget class="GtkRadioButton" id="executive_radiobutton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">E_xecutive (7.25&quot; x 10.5&quot;)</property>
+			      <property name="label" translatable="yes">E_xecutive</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
-			      <property name="group">letter_radiobutton</property>
-			    </widget>
-			    <packing>
-			      <property name="padding">0</property>
-			      <property name="expand">False</property>
-			      <property name="fill">False</property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkRadioButton" id="A4_radiobutton">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">A_4 (8.27&quot; x 11.69&quot;)</property>
-			      <property name="use_underline">True</property>
-			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="active">True</property>
-			      <property name="inconsistent">False</property>
-			      <property name="draw_indicator">True</property>
-			      <property name="group">letter_radiobutton</property>
+			      <property name="group">A4_radiobutton</property>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
@@ -1056,7 +1056,7 @@
 		  <child>
 		    <widget class="GtkLabel" id="label261">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">&lt;b&gt;Margins (Inches)&lt;/b&gt;</property>
+		      <property name="label" translatable="yes">&lt;b&gt;Margins (in mm)&lt;/b&gt;</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1214,13 +1214,13 @@
 			    <widget class="GtkSpinButton" id="bottom_spinbutton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="climb_rate">0.1</property>
-			      <property name="digits">1</property>
+			      <property name="climb_rate">1</property>
+			      <property name="digits">0</property>
 			      <property name="numeric">True</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.6 0 100 0.1 10 10</property>
+			      <property name="adjustment">10 0 100 1 10 10</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -1235,13 +1235,13 @@
 			    <widget class="GtkSpinButton" id="left_spinbutton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="climb_rate">0.1</property>
-			      <property name="digits">1</property>
+			      <property name="climb_rate">1</property>
+			      <property name="digits">0</property>
 			      <property name="numeric">True</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.5 0 100 0.1 10 10</property>
+			      <property name="adjustment">10 0 100 1 10 10</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -1256,13 +1256,13 @@
 			    <widget class="GtkSpinButton" id="top_spinbutton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="climb_rate">0.1</property>
-			      <property name="digits">1</property>
+			      <property name="climb_rate">1</property>
+			      <property name="digits">0</property>
 			      <property name="numeric">True</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.3 0 100 0.1 10 10</property>
+			      <property name="adjustment">10 0 100 1 10 10</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -1277,13 +1277,13 @@
 			    <widget class="GtkSpinButton" id="right_spinbutton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="climb_rate">0.1</property>
-			      <property name="digits">1</property>
+			      <property name="climb_rate">1</property>
+			      <property name="digits">0</property>
 			      <property name="numeric">True</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.5 0 100 0.1 10 10</property>
+			      <property name="adjustment">10 0 100 1 10 10</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
