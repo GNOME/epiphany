@@ -1,5 +1,12 @@
 2004-04-14  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-file-chooser.c: (ephy_file_chooser_constructor),
+	(ephy_file_chooser_class_init):
+
+	Add "Downloads" folder shortcut to our file chooser dialogues.
+
+2004-04-14  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-tab.c: (ephy_tab_new_window_cb),
 	(ephy_tab_visibility_cb), (ephy_tab_destroy_brsr_cb):
 
@@ -12,6 +19,8 @@
 	* src/ephy-encoding-menu.c: (add_action):
 	* src/ephy-favorites-menu.c: (ephy_favorites_menu_rebuild):
 	* src/ephy-tabs-menu.c: (tab_added_cb):
+
+	Set the action's accel_path, fixes bug #139641 for ephy.
 
 2004-04-09  Christian Persch  <chpe@cvs.gnome.org>
 

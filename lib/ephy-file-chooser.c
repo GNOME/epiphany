@@ -101,6 +101,26 @@ ephy_file_chooser_init (EphyFileChooser *dialog)
 	dialog->priv->persist_key = NULL;
 }
 
+static GObject *
+ephy_file_chooser_constructor (GType type,
+			       guint n_construct_properties,
+			       GObjectConstructParam *construct_params)
+
+{
+	GObject *object;
+	char *downloads_dir;
+
+	object = parent_class->constructor (type, n_construct_properties,
+					    construct_params);
+
+	downloads_dir = ephy_file_downloads_dir ();
+	gtk_file_chooser_add_shortcut_folder
+		(GTK_FILE_CHOOSER (object), downloads_dir, NULL);
+	g_free (downloads_dir);
+
+	return object;
+}
+
 static void
 ephy_file_chooser_finalize (GObject *object)
 {
@@ -193,6 +213,7 @@ ephy_file_chooser_class_init (EphyFileChooserClass *klass)
 
 	parent_class = g_type_class_peek_parent (klass);
 
+	object_class->constructor = ephy_file_chooser_constructor;
 	object_class->finalize = ephy_file_chooser_finalize;
 	object_class->get_property = ephy_file_chooser_get_property;
 	object_class->set_property = ephy_file_chooser_set_property;
