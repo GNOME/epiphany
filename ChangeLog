@@ -1,6 +1,12 @@
 2004-06-14  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/bookmarks/ephy-new-bookmark.c: (duplicate_dialog_construct):
+
+	Use g_markup_print_escaed().
+
+2004-06-14  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/bookmarks/ephy-new-bookmark.c: (duplicate_dialog_construct):
 	* src/bookmarks/ephy-topic-action.c: (build_topics_menu):
 
 	Escape strings before using them with markup in labels.
