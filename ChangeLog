@@ -1,3 +1,10 @@
+2004-07-17  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/print-dialog.c: (ephy_print_dialog_browse_button_cb):
+
+	Since the print dialogue is modal the filechooser needs to be modal
+	too. Fixes bug #147628.
+
 2004-07-14  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* lib/widgets/ephy-node-view.c: (compare_string_values),

@@ -277,6 +277,7 @@ ephy_print_dialog_browse_button_cb (GtkWidget *widget,
 			  G_CALLBACK (print_filechooser_response_cb),
 			  dialog);
 
+	gtk_window_set_modal (GTK_WINDOW (fc), TRUE);
 	gtk_widget_show (GTK_WIDGET (fc));
 }
 
