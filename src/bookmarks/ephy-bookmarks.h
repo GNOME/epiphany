@@ -25,7 +25,6 @@
 #include <glib-object.h>
 
 #include "ephy-node.h"
-#include "egg-toolbars-model.h"
 
 G_BEGIN_DECLS
 
@@ -74,7 +73,7 @@ EphyBookmarks    *ephy_bookmarks_new			(void);
 EphyNode	 *ephy_bookmarks_get_from_id		(EphyBookmarks *eb,
 							 long id);
 
-EggToolbarsModel *ephy_bookmarks_get_toolbars_model	(EphyBookmarks *eb);
+GObject		 *ephy_bookmarks_get_toolbars_model	(EphyBookmarks *eb);
 
 /* Bookmarks */
 

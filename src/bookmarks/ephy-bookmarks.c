@@ -207,7 +207,7 @@ get_item_data_forward_cb (EggToolbarsModel *model,
 	return retval;
 }
 
-EggToolbarsModel *
+GObject *
 ephy_bookmarks_get_toolbars_model (EphyBookmarks *eb)
 {
 	g_return_val_if_fail (EPHY_IS_BOOKMARKS (eb), NULL);
@@ -240,7 +240,7 @@ ephy_bookmarks_get_toolbars_model (EphyBookmarks *eb)
 		}
 	}
 
-	return EGG_TOOLBARS_MODEL (eb->priv->toolbars_model);
+	return G_OBJECT (eb->priv->toolbars_model);
 }
 
 static void

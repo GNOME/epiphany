@@ -356,7 +356,7 @@ ephy_bookmarksbar_set_property (GObject *object,
 		case PROP_BOOKMARKS:
 			toolbar->priv->bookmarks = g_value_get_object (value);
 			toolbar->priv->toolbars_model =
-				ephy_bookmarks_get_toolbars_model (toolbar->priv->bookmarks);
+				EGG_TOOLBARS_MODEL (ephy_bookmarks_get_toolbars_model (toolbar->priv->bookmarks));
 			break;
 		case PROP_WINDOW:
 			ephy_bookmarksbar_set_window (toolbar, g_value_get_object (value));
