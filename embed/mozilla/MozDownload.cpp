@@ -465,7 +465,7 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 	EmbedPersistFlags ephy_flags;
 	ephy_flags = ephy_embed_persist_get_flags (EPHY_EMBED_PERSIST (embedPersist));
 
-	PRBool isHTML = (domDocument && contentType &&
+	PRBool isHTML = (contentType &&
 			(strcmp (contentType, "text/html") == 0 ||
 			 strcmp (contentType, "text/xml") == 0 ||
 			 strcmp (contentType, "application/xhtml+xml") == 0));
@@ -486,7 +486,7 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 
 	PRInt32 flags = nsIWebBrowserPersist::PERSIST_FLAGS_REPLACE_EXISTING_FILES;
 
-	if (!isHTML)
+	if (!domDocument && !isHTML && !(ephy_flags & EMBED_PERSIST_COPY_PAGE))
 	{
 		flags |= nsIWebBrowserPersist::PERSIST_FLAGS_NO_CONVERSION;
 	}
@@ -496,50 +496,39 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 	}
 	webPersist->SetPersistFlags(flags);
 
-	if (!isHTML || ephy_flags & EMBED_PERSIST_COPY_PAGE)
+	if (!domDocument || !isHTML || ephy_flags & EMBED_PERSIST_COPY_PAGE)
 	{
 		rv = webPersist->SaveURI (sourceURI, aCacheKey, nsnull,
 					  postData, nsnull, inDestFile);
 	}
 	else
 	{
-		if (!domDocument) return rv;  /* should never happen */
-    
 		PRInt32 encodingFlags = 0;
 		nsCOMPtr<nsILocalFile> filesFolder;
 
-    		if (!contentType || strcmp (contentType, "text/plain") != 0)
-		{
-			/**
-			 * Construct a directory path to hold the associated files; mozilla
-			 * will create the directory as needed.
-			 */
+		/**
+		 * Construct a directory path to hold the associated files; mozilla
+		 * will create the directory as needed.
+		 */
 
-			filesFolder = do_CreateInstance("@mozilla.org/file/local;1");
-			nsAutoString unicodePath;
-			inDestFile->GetPath(unicodePath);
-			filesFolder->InitWithPath(unicodePath);
+		filesFolder = do_CreateInstance("@mozilla.org/file/local;1");
+		nsAutoString unicodePath;
+		inDestFile->GetPath(unicodePath);
+		filesFolder->InitWithPath(unicodePath);
       
-			nsAutoString leafName;
-			filesFolder->GetLeafName(leafName);
-			nsAutoString nameMinusExt(leafName);
-			PRInt32 index = nameMinusExt.RFind(".");
-			if (index >= 0)
-			{
-				nameMinusExt.Left(nameMinusExt, index);
-			}
-
-			nameMinusExt += NS_LITERAL_STRING (" ");
-			nameMinusExt += NS_ConvertUTF8toUTF16 (_("Files"));
- 
-			filesFolder->SetLeafName(nameMinusExt);
-		}
-		else
+		nsAutoString leafName;
+		filesFolder->GetLeafName(leafName);
+		nsAutoString nameMinusExt(leafName);
+		PRInt32 index = nameMinusExt.RFind(".");
+		if (index >= 0)
 		{
-			encodingFlags |= nsIWebBrowserPersist::ENCODE_FLAGS_FORMATTED |
-					 nsIWebBrowserPersist::ENCODE_FLAGS_ABSOLUTE_LINKS |
-					 nsIWebBrowserPersist::ENCODE_FLAGS_NOFRAMES_CONTENT;
+			nameMinusExt.Left(nameMinusExt, index);
 		}
+
+		nameMinusExt += NS_LITERAL_STRING (" ");
+		nameMinusExt += NS_ConvertUTF8toUTF16 (_("Files"));
+ 
+		filesFolder->SetLeafName(nameMinusExt);
 
 		rv = webPersist->SaveDocument (domDocument, inDestFile, filesFolder,
 					       contentType, encodingFlags, 80);
