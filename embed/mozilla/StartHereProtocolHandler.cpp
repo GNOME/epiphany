@@ -124,10 +124,24 @@ NS_IMETHODIMP GStartHereProtocolHandler::NewChannel(nsIURI *aURI,
 	rv = aURI->GetPath(path);
 	if (NS_FAILED(rv)) return rv;
 
-	if (g_str_has_prefix (path.get(), "import-bookmarks"))
+	if (g_str_has_prefix (path.get(), "import-mozilla-bookmarks"))
 	{
-		g_signal_emit_by_name (embed_shell, "command", "import-bookmarks",
+		g_signal_emit_by_name (embed_shell, "command", "import-mozilla-bookmarks",
 				       path.get() + strlen ("import-bookmarks?"));
+		return NS_ERROR_FAILURE;
+	}
+	else if (g_str_has_prefix (path.get(), "import-galeon-bookmarks"))
+	{
+		g_signal_emit_by_name (embed_shell, "command",
+				       "import-galeon-bookmarks",
+				       path.get() + strlen ("import-galeon-bookmarks?"));
+		return NS_ERROR_FAILURE;
+	}
+	else if (g_str_has_prefix (path.get(), "import-konqueror-bookmarks"))
+	{
+		g_signal_emit_by_name (embed_shell, "command",
+				       "import-konqueror-bookmarks",
+				       path.get() + strlen ("import-konqueror-bookmarks?"));
 		return NS_ERROR_FAILURE;
 	}
 	else if (g_str_has_prefix (path.get(), "configure-network"))

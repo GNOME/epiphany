@@ -133,7 +133,7 @@ ephy_shell_command_cb (EphyEmbedShell *shell,
 
 	bookmarks = ephy_shell_get_bookmarks (EPHY_SHELL (shell));
 
-	if (strcmp (command, "import-bookmarks") == 0)
+	if (strcmp (command, "import-mozilla-bookmarks") == 0)
 	{
 		ephy_bookmarks_import_mozilla (bookmarks, param);
 
@@ -143,6 +143,54 @@ ephy_shell_command_cb (EphyEmbedShell *shell,
                          GTK_MESSAGE_ERROR,
                          GTK_BUTTONS_OK,
                          _("Bookmarks imported successfully."));
+		gtk_dialog_run (GTK_DIALOG (dialog));
+		gtk_widget_destroy (dialog);
+	}
+	else if (strcmp (command, "import-galeon-bookmarks") == 0)
+	{
+		if (ephy_bookmarks_import_xbel (bookmarks, param,
+						_("Galeon")))
+		{
+			dialog = gtk_message_dialog_new
+				(NULL,
+				 GTK_DIALOG_MODAL,
+				 GTK_MESSAGE_INFO,
+				 GTK_BUTTONS_OK,
+				 _("Galeon bookmarks imported successfully."));
+		}
+		else
+		{
+			dialog = gtk_message_dialog_new
+				(NULL,
+				 GTK_DIALOG_MODAL,
+				 GTK_MESSAGE_ERROR,
+				 GTK_BUTTONS_OK,
+				 _("Importing Galeon bookmarks failed."));
+		}
+		gtk_dialog_run (GTK_DIALOG (dialog));
+		gtk_widget_destroy (dialog);
+	}
+	else if (strcmp (command, "import-konqueror-bookmarks") == 0)
+	{
+		if (ephy_bookmarks_import_xbel (bookmarks, param,
+						_("Konqueror")))
+		{
+			dialog = gtk_message_dialog_new
+				(NULL,
+				 GTK_DIALOG_MODAL,
+				 GTK_MESSAGE_INFO,
+				 GTK_BUTTONS_OK,
+				 _("Konqueror bookmarks imported successfully."));
+		}
+		else
+		{
+			dialog = gtk_message_dialog_new
+				(NULL,
+				 GTK_DIALOG_MODAL,
+				 GTK_MESSAGE_ERROR,
+				 GTK_BUTTONS_OK,
+				 _("Importing Konqueror bookmarks failed."));
+		}
 		gtk_dialog_run (GTK_DIALOG (dialog));
 		gtk_widget_destroy (dialog);
 	}

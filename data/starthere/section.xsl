@@ -57,7 +57,7 @@
 <xsl:template match="action">
 <a href="start-here:{@id}?{@param}">
   <xsl:apply-templates/>
-</a>
+</a><br/>
 </xsl:template>
 
 <xsl:template match="smartbookmark">

@@ -23,6 +23,12 @@
 #include "ephy-bookmarks-import.h"
 #include "ephy-string.h"
 
+typedef struct _XbelInfo
+{
+	char *title;
+	char *smarturl;
+} XbelInfo;
+
 static char *
 build_keyword (const char *folder)
 {
@@ -69,6 +75,146 @@ mozilla_parse_bookmarks (EphyBookmarks *bookmarks,
 	}
 }
 
+
+static void
+xbel_parse_single_bookmark (EphyBookmarks *bookmarks,
+			    xmlNodePtr node, XbelInfo *xbel)
+{
+	xmlNodePtr child = node;
+
+	while (child != NULL)
+	{
+		if (xmlStrEqual (child->name, "title"))
+		{
+			xbel->title = xmlNodeGetContent (child);
+		}
+		else if (xmlStrEqual (child->name, "info"))
+		{
+			xbel_parse_single_bookmark (bookmarks,
+						    child->children,
+						    xbel);
+		}
+		else if (xmlStrEqual (child->name, "metadata"))
+		{
+			xbel_parse_single_bookmark (bookmarks,
+						    child->children,
+						    xbel);
+		}
+		else if (xmlStrEqual (child->name, "smarturl"))
+		{
+			xbel->smarturl = xmlNodeGetContent (child);
+		}
+		
+		child = child->next;
+	}
+}
+
+static void
+xbel_parse_folder (EphyBookmarks *bookmarks,
+		   xmlNodePtr node,
+		   const char *default_keyword)
+{
+	xmlNodePtr child = node;
+	xmlChar *keyword = g_strdup (default_keyword);
+
+	while (child != NULL)
+	{
+		if (xmlStrEqual (child->name, "title"))
+		{
+			xmlChar *tmp;
+
+			tmp = xmlNodeGetContent (child);
+
+			g_free (keyword);
+			keyword = build_keyword (tmp);
+			xmlFree (tmp);
+		}
+		else if (xmlStrEqual (child->name, "bookmark"))
+		{
+			XbelInfo *xbel;
+			xmlChar *url;
+
+			xbel = g_new0 (XbelInfo, 1);
+			xbel->title = NULL;
+			xbel->smarturl = NULL;
+
+			url = xmlGetProp (child, "href");
+
+			xbel_parse_single_bookmark (bookmarks,
+						    child->children,
+						    xbel);
+
+			
+			ephy_bookmarks_add (bookmarks,
+					    xbel->title,
+					    url,
+					    xbel->smarturl,
+					    keyword);
+
+			if (url)
+				xmlFree (url);
+
+
+			if (xbel && xbel->title)
+				xmlFree (xbel->title);
+
+			if (xbel && xbel->smarturl)
+				xmlFree (xbel->smarturl);
+
+			g_free (xbel);
+		}
+		else if (xmlStrEqual (child->name, "folder"))
+		{
+			xbel_parse_folder (bookmarks,
+					   child->children,
+					   keyword);
+
+			if (keyword)
+			{
+				g_free (keyword);
+				keyword = NULL;
+			}
+		}
+		
+		child = child->next;
+	}
+
+	g_free (keyword);
+}
+
+
+static void
+xbel_parse_bookmarks (EphyBookmarks *bookmarks,
+		      xmlNodePtr node,
+		      const char *default_keyword)
+{
+	xmlNodePtr child = node;
+
+	while (child != NULL)
+	{
+		if (xmlStrEqual (child->name, "xbel"))
+		{
+			xbel_parse_bookmarks (bookmarks,
+					      child->children,
+					      default_keyword);
+		}
+		else if (xmlStrEqual (child->name, "folder"))
+		{
+			xbel_parse_folder (bookmarks,
+					   child->children,
+					   default_keyword);
+		}
+		else if (xmlStrEqual (child->name, "bookmark"))
+		{
+			xbel_parse_folder (bookmarks,
+					   child,
+					   default_keyword);
+		}
+
+		child = child->next;
+	}
+}
+
 gboolean
 ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 			       const char *filename)
@@ -88,6 +234,28 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 
 	g_free (keyword);
         xmlFreeDoc (doc);
+
+	return TRUE;
+}
+
+gboolean
+ephy_bookmarks_import_xbel (EphyBookmarks *bookmarks,
+			    const char *filename,
+			    const char *default_keyword)
+{
+	xmlDocPtr doc;
+	xmlNodePtr child;
+
+	if (g_file_test (filename, G_FILE_TEST_EXISTS) == FALSE)
+		return FALSE;
+
+	doc = xmlParseFile (filename);
+	g_assert (doc != NULL);
+
+	child = doc->children;
+	xbel_parse_bookmarks (bookmarks, child, default_keyword);
+
+	xmlFreeDoc (doc);
 
 	return TRUE;
 }

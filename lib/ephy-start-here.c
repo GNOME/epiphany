@@ -220,6 +220,45 @@ mozilla_bookmarks (void)
 	return result;
 }
 
+static char *
+galeon_bookmarks (void)
+{
+	GSList *l;
+	char *dir;
+	char *result;
+
+	dir = g_build_filename (g_get_home_dir (), ".galeon", NULL);
+	l = ephy_file_find  (dir, "bookmarks.xbel", 4);
+	g_free (dir);
+
+	result = l ? g_strdup (l->data) : NULL;
+
+	g_slist_foreach (l, (GFunc) g_free, NULL);
+	g_slist_free (l);
+
+	return result;
+}
+
+static char *
+konqueror_bookmarks (void)
+{
+	GSList *l;
+	char *dir;
+	char *result;
+
+	dir = g_build_filename (g_get_home_dir (), ".kde", "share",
+				"apps", "konqueror", NULL);
+	l = ephy_file_find  (dir, "bookmarks.xml", 4);
+	g_free (dir);
+
+	result = l ? g_strdup (l->data) : NULL;
+
+	g_slist_foreach (l, (GFunc) g_free, NULL);
+	g_slist_free (l);
+
+	return result;
+}
+
 static void
 attach_content (EphyStartHere *sh, xmlNodePtr node, xmlChar *id)
 {
@@ -232,12 +271,35 @@ attach_content (EphyStartHere *sh, xmlNodePtr node, xmlChar *id)
 		if (bmk_file)
 		{
 			child = xmlNewDocNode (sh->priv->doc, NULL, "action",
-					       _("Import mozilla bookmarks"));
-			xmlSetProp (child, "id", "import-bookmarks");
+					       _("Import Mozilla bookmarks"));
+			xmlSetProp (child, "id", "import-mozilla-bookmarks");
 			xmlSetProp (child, "param", bmk_file);
 			xmlAddChild (node, child);
 		}
 		g_free (bmk_file);
+
+		bmk_file = galeon_bookmarks ();
+		if (bmk_file)
+		{
+			child = xmlNewDocNode (sh->priv->doc, NULL, "action",
+					       _("Import Galeon bookmarks"));
+			xmlSetProp (child, "id", "import-galeon-bookmarks");
+			xmlSetProp (child, "param", bmk_file);
+			xmlAddChild (node, child);
+		}
+		g_free (bmk_file);
+
+		bmk_file = konqueror_bookmarks ();
+		if (bmk_file)
+		{
+			child = xmlNewDocNode (sh->priv->doc, NULL, "action",
+					       _("Import Konqueror bookmarks"));
+			xmlSetProp (child, "id", "import-konqueror-bookmarks");
+			xmlSetProp (child, "param", bmk_file);
+			xmlAddChild (node, child);
+		}
+		g_free (bmk_file);
+
 	}
 }
 
