@@ -1,4 +1,4 @@
-/*
+ /*
  *  Copyright (C) 200-2003 Marco Pesenti Gritti
  *  Copyright (C) 2003, 2004 Christian Persch
  *
@@ -1494,11 +1494,6 @@ prefs_dialog_init (PrefsDialog *pd)
 
 	ephy_dialog_add_enum (dialog, properties[ACCEPT_COOKIES_PROP].id,
 			      n_cookies_accept_enum, cookies_accept_enum);
-
-	ephy_dialog_set_size_group (dialog,
-				    properties[DEFAULT_ENCODING_LABEL_PROP].id,
-				    properties[AUTO_ENCODING_LABEL_PROP].id,
-				    NULL);
 
 	ephy_dialog_get_controls
 		(dialog,
