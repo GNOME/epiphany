@@ -41,7 +41,11 @@
 #include <nsIRequest.h>
 
 #ifdef ALLOW_PRIVATE_API
-#include "nsIContentViewer.h"
+#include <nsIContentViewer.h>
+#endif
+
+#ifdef HAVE_MOZILLA_PSM
+#include <nsISecureBrowserUI.h>
 #endif
 
 class EphyEventListener : public nsIDOMEventListener
@@ -136,8 +140,7 @@ public:
 
 	nsresult GetHasModifiedForms (PRBool *modified);
 
-	nsresult SetSecurityInfo (nsIRequest *aRequest);
-	nsresult GetSecurityDescription (nsACString &aDescription);
+	nsresult GetSecurityInfo (PRUint32 *aState, nsACString &aDescription);
 	nsresult ShowCertificate ();
 
 	nsCOMPtr<nsIWebBrowser> mWebBrowser;
@@ -146,7 +149,7 @@ private:
 	nsCOMPtr<nsIDOMDocument> mTargetDocument;
 	nsCOMPtr<nsIDOMEventTarget> mEventTarget;
 	nsCOMPtr<nsIDOMWindow> mDOMWindow;
-	nsCOMPtr<nsISupports> mSecurityInfo;
+	nsCOMPtr<nsISecureBrowserUI> mSecurityInfo;
 	EphyFaviconEventListener *mFaviconEventListener;
 	EphyPopupBlockEventListener *mPopupBlockEventListener;
 	EphyModalAlertEventListener *mModalAlertListener;
