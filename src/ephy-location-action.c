@@ -406,6 +406,40 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 	g_type_class_add_private (object_class, sizeof (EphyLocationActionPrivate));
 }
 
+static int
+compare_actions (gconstpointer a,
+		 gconstpointer b)
+{
+        EphyNode *node_a = (EphyNode *)a;
+        EphyNode *node_b = (EphyNode *)b;
+	const char *title1, *title2;
+	int retval;
+
+	title1 = ephy_node_get_property_string (node_a, EPHY_NODE_BMK_PROP_TITLE);
+	title2 = ephy_node_get_property_string (node_b, EPHY_NODE_BMK_PROP_TITLE);
+
+	if (title1 == NULL)
+	{
+		retval = -1;
+	}
+	else if (title2 == NULL)
+	{
+		retval = 1;
+	}
+	else
+	{
+		char *str_a, *str_b;
+
+		str_a = g_utf8_casefold (title1, -1);
+		str_b = g_utf8_casefold (title2, -1);
+		retval = g_utf8_collate (str_a, str_b);
+		g_free (str_a);
+		g_free (str_b);
+	}
+
+	return retval;
+}
+
 static void
 init_actions_list (EphyLocationAction *action)
 {
@@ -419,9 +453,12 @@ init_actions_list (EphyLocationAction *action)
 
 		kid = g_ptr_array_index (children, i);
 
-		action->priv->actions = g_list_append
+		action->priv->actions = g_list_prepend
 			(action->priv->actions, kid);
 	}
+
+	action->priv->actions =
+		g_list_sort (action->priv->actions, (GCompareFunc) compare_actions);
 }
 
 static void
