@@ -33,6 +33,11 @@
 #include <nsICookieManager.h>
 #include <nsIServiceManager.h>
 #include <nsICookie2.h>
+#include <nsIServiceManager.h>
+
+#ifdef ALLOW_PRIVATE_API
+#include <nsIIDNService.h>
+#endif
 
 NS_IMPL_ISUPPORTS2(EphySingle, nsIObserver, nsISupportsWeakReference)
 
@@ -231,12 +236,23 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 EphyCookie *
 mozilla_cookie_to_ephy_cookie (nsICookie *cookie)
 {
-	EphyCookie *info = ephy_cookie_new ();
+	EphyCookie *info;
 
 	nsEmbedCString transfer;
 
 	cookie->GetHost (transfer);
-	info->domain = g_strdup (transfer.get());
+
+	nsCOMPtr<nsIIDNService> idnService
+		(do_GetService ("@mozilla.org/network/idn-service;1"));
+	NS_ENSURE_TRUE (idnService, nsnull);
+
+	nsEmbedCString decoded;
+	/* ToUTF8 never fails, no need to check return value */
+	idnService->ConvertACEtoUTF8 (transfer, decoded);
+
+	info = ephy_cookie_new ();
+	info->domain = g_strdup (decoded.get());
+
 	cookie->GetName (transfer);
 	info->name = g_strdup (transfer.get());
 	cookie->GetValue (transfer);
@@ -305,5 +321,12 @@ mozilla_permission_to_ephy_permission (nsIPermission *perm)
 	nsEmbedCString host;
 	perm->GetHost(host);
 
-	return ephy_permission_info_new (host.get(), type.get(), permission);
+	nsCOMPtr<nsIIDNService> idnService
+		(do_GetService ("@mozilla.org/network/idn-service;1"));
+	NS_ENSURE_TRUE (idnService, nsnull);
+
+	nsEmbedCString decodedHost;
+	idnService->ConvertACEtoUTF8 (host, decodedHost);
+
+	return ephy_permission_info_new (decodedHost.get(), type.get(), permission);
 }

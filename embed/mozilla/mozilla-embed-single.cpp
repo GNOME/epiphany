@@ -78,6 +78,7 @@
 #include <nsICacheService.h>
 #include <nsIFontEnumerator.h>
 #include <nsNetCID.h>
+#include <nsIIDNService.h>
 #endif
 
 #define MOZILLA_PROFILE_DIR  "/mozilla"
@@ -655,6 +656,7 @@ impl_list_cookies (EphyCookieManager *manager)
 		if (NS_FAILED (result) || !keks) continue;
 
 		EphyCookie *cookie = mozilla_cookie_to_ephy_cookie (keks);
+		if (!cookie) continue;
 
 		cookies = g_list_prepend (cookies, cookie);
 	}       
@@ -670,7 +672,16 @@ impl_remove_cookie (EphyCookieManager *manager,
 		do_GetService (NS_COOKIEMANAGER_CONTRACTID);
 	if (!cookieManager) return;
 
-	cookieManager->Remove (nsEmbedCString(cookie->domain),
+	nsCOMPtr<nsIIDNService> idnService
+		(do_GetService ("@mozilla.org/network/idn-service;1"));
+	NS_ENSURE_TRUE (idnService, );
+
+	nsresult rv;
+	nsEmbedCString host;
+	rv = idnService->ConvertUTF8toACE (nsEmbedCString(cookie->domain), host);
+	NS_ENSURE_SUCCESS (rv, );
+
+	cookieManager->Remove (host,
 			       nsEmbedCString(cookie->name),
 			       nsEmbedCString(cookie->path),
 			       PR_FALSE /* block */);
@@ -698,6 +709,10 @@ impl_list_passwords (EphyPasswordManager *manager)
 			do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
 	if (!passwordManager) return NULL;
 
+	nsCOMPtr<nsIIDNService> idnService
+		(do_GetService ("@mozilla.org/network/idn-service;1"));
+	NS_ENSURE_TRUE (idnService, NULL);
+
 	nsCOMPtr<nsISimpleEnumerator> passwordEnumerator;
 	passwordManager->GetEnumerator (getter_AddRefs(passwordEnumerator));
 	NS_ENSURE_TRUE (passwordEnumerator, NULL);
@@ -715,6 +730,9 @@ impl_list_passwords (EphyPasswordManager *manager)
 		rv = nsPassword->GetHost (transfer);
 		if (NS_FAILED (rv)) continue;
 
+		nsEmbedCString host;
+		idnService->ConvertACEtoUTF8 (transfer, host);
+
 		nsEmbedString unicodeName;
 		rv = nsPassword->GetUser (unicodeName);
 		if (NS_FAILED (rv)) continue;
@@ -725,7 +743,7 @@ impl_list_passwords (EphyPasswordManager *manager)
 
 		EphyPasswordInfo *p = g_new0 (EphyPasswordInfo, 1);
 
-		p->host = g_strdup (transfer.get());
+		p->host = g_strdup (host.get());
 		p->username = g_strdup (userName.get());
 		p->password = NULL;
 
@@ -744,10 +762,19 @@ impl_remove_password (EphyPasswordManager *manager,
                         do_GetService (NS_PASSWORDMANAGER_CONTRACTID);
 	if (!pm) return;
 
+	nsCOMPtr<nsIIDNService> idnService
+		(do_GetService ("@mozilla.org/network/idn-service;1"));
+	NS_ENSURE_TRUE (idnService, );
+
+	nsresult rv;
+	nsEmbedCString host;
+	rv = idnService->ConvertUTF8toACE (nsEmbedCString(info->host), host);
+	NS_ENSURE_SUCCESS (rv, );
+
 	nsEmbedString userName;
 	NS_CStringToUTF16 (nsEmbedCString(info->username),
 			   NS_CSTRING_ENCODING_UTF8, userName);
-	pm->RemoveUser (nsEmbedCString(info->host), userName);
+	pm->RemoveUser (host, userName);
 }
 
 static void
