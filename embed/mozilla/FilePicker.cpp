@@ -53,10 +53,8 @@
 
 #include "nsCRT.h"
 #include "nsCOMPtr.h"
-#include "nsIFactory.h"
 #include "nsISupportsArray.h"
 #include "nsIServiceManager.h"
-#include "nsXPComFactory.h"
 
 #include "nsString.h"
 #include "nsXPIDLString.h"
@@ -493,26 +491,4 @@ NS_METHOD GFilePicker::HandleFilePickerResult(PRInt16 *retval)
 	return NS_OK;
 }
 
-//------------------------------------------------------------------------------
 
-NS_DEF_FACTORY (GFilePicker, GFilePicker);
-
-/**
- * NS_NewFilePickerFactory:
- */ 
-nsresult NS_NewFilePickerFactory(nsIFactory** aFactory)
-{
-	NS_ENSURE_ARG_POINTER(aFactory);
-	*aFactory = nsnull;
-
-	nsGFilePickerFactory *result = new nsGFilePickerFactory;
-	if (result == NULL)
-	{
-		return NS_ERROR_OUT_OF_MEMORY;
-	}
-    
-	NS_ADDREF(result);
-	*aFactory = result;
-
-	return NS_OK;
-}

@@ -20,6 +20,9 @@
 #define StartHereProtocolHandler_h__
 
 #include "nsError.h"
+#include "nsIProtocolHandler.h"
+#include "nsCOMPtr.h"
+#include "nsIChannel.h"
 
 #define G_START_HERE_PROTOCOLHANDLER_CID		\
 { /* a3a7b6e5-7a92-431d-87e6-3bef8e7ada51*/		\
@@ -31,8 +34,16 @@
 #define G_START_HERE_PROTOCOLHANDLER_CONTRACTID NS_NETWORK_PROTOCOL_CONTRACTID_PREFIX "start-here"
 #define G_START_HERE_PROTOCOLHANDLER_CLASSNAME "Epiphany's start here protocol handler"
 
-class nsIFactory;
+class GStartHereProtocolHandler : public nsIProtocolHandler
+{
+  public:
+	NS_DECL_ISUPPORTS
+	NS_DECL_NSIPROTOCOLHANDLER
 
-extern nsresult NS_NewStartHereHandlerFactory(nsIFactory** aFactory);
+	GStartHereProtocolHandler (void);
+	virtual ~GStartHereProtocolHandler();
 
-#endif // MyportalProtocolHandler_h__
+	nsCOMPtr<nsIChannel> mChannel;
+};
+
+#endif // StarthereProtocolHandler_h__

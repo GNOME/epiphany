@@ -28,7 +28,6 @@
 #include <nsIDOMWindow.h>
 #include <nsIWindowWatcher.h>
 #include <nsIServiceManager.h>
-#include <nsXPComFactory.h>
 
 #include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
@@ -149,28 +148,6 @@ NS_IMETHODIMP GExternalProtocolService::LoadUrl(nsIURI *aURL)
 	{
 		return NS_ERROR_FAILURE;
 	}
-
-	return NS_OK;
-}
-
-NS_DEF_FACTORY (GExternalProtocolService, GExternalProtocolService);
-
-/**
- * NS_NewExternalProtocolServiceFactory:
- */ 
-nsresult NS_NewExternalProtocolServiceFactory(nsIFactory** aFactory)
-{
-	NS_ENSURE_ARG_POINTER(aFactory);
-	*aFactory = nsnull;
-
-	nsGExternalProtocolServiceFactory *result = new nsGExternalProtocolServiceFactory;
-	if (result == NULL)
-	{
-		return NS_ERROR_OUT_OF_MEMORY;
-	}
-    
-	NS_ADDREF(result);
-	*aFactory = result;
 
 	return NS_OK;
 }

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2001 Philip Langdale
+ *  Copyright (C) 2001,2002,2003 Philip Langdale
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,39 +20,159 @@
 #include <config.h>
 #endif
 
-#include "EphyAboutRedirector.h"
-#include "StartHereProtocolHandler.h"
 #include "ContentHandler.h"
-#include "ExternalProtocolService.h"
 #include "FilePicker.h"
 #include "FtpProtocolHandler.h"
+#include "StartHereProtocolHandler.h"
+#include "GlobalHistory.h"
 #include "IRCProtocolHandler.h"
 #include "MailtoProtocolHandler.h"
 #include "PrintingPromptService.h"
 #include "ProgressListener.h"
+#include "ExternalProtocolService.h"
+#include "EphyAboutRedirector.h"
 
-#include <nsIFactory.h>
-#include <nsIComponentManager.h>
+#include <nsIGenericFactory.h>
+#include <nsIComponentRegistrar.h>
 #include <nsCOMPtr.h>
+#include <nsILocalFile.h>
 
 #include <glib.h>
 
-static NS_DEFINE_CID(kContentHandlerCID, G_CONTENTHANDLER_CID);
-static NS_DEFINE_CID(kProtocolServiceCID, G_EXTERNALPROTOCOLSERVICE_CID);
-static NS_DEFINE_CID(kFilePickerCID, G_FILEPICKER_CID);
-static NS_DEFINE_CID(kStartHereProcotolHandlerCID, G_START_HERE_PROTOCOLHANDLER_CID);
-static NS_DEFINE_CID(kEphyAboutRedirectorCID, EPHY_ABOUT_REDIRECTOR_CID);
-static NS_DEFINE_CID(knsFtpProtocolHandlerCID, NS_FTPPROTOCOLHANDLER_CID);
-static NS_DEFINE_CID(kFtpHandlerCID, G_FTP_PROTOCOL_CID);
-static NS_DEFINE_CID(kIRCHandlerCID, G_IRC_PROTOCOL_CID);
-static NS_DEFINE_CID(kMailtoHandlerCID, G_MAILTO_PROTOCOL_CID);
-static NS_DEFINE_CID(kPrintingPromptServiceCID, G_PRINTINGPROMPTSERVICE_CID);
-static NS_DEFINE_CID(kProgressDialogCID, G_PROGRESSDIALOG_CID);
+NS_GENERIC_FACTORY_CONSTRUCTOR(EphyAboutRedirector)
+NS_GENERIC_FACTORY_CONSTRUCTOR(GStartHereProtocolHandler)
+NS_GENERIC_FACTORY_CONSTRUCTOR(GProgressListener)
+NS_GENERIC_FACTORY_CONSTRUCTOR(GFilePicker)
+NS_GENERIC_FACTORY_CONSTRUCTOR(GContentHandler)
+NS_GENERIC_FACTORY_CONSTRUCTOR(MozGlobalHistory)
+NS_GENERIC_FACTORY_CONSTRUCTOR(GPrintingPromptService)
+NS_GENERIC_FACTORY_CONSTRUCTOR(GIRCProtocolHandler)
+NS_GENERIC_FACTORY_CONSTRUCTOR(GFtpProtocolHandler)
 
-//RegisterFactory is local
-NS_METHOD RegisterFactory (nsresult (aFactoryFunc)(nsIFactory** aFactory),
-			   const nsCID & aClass, const char *aClassName,
-			   const char *aContractID, PRBool aReplace);
+static const nsModuleComponentInfo sAppComps[] = {
+	{
+		G_PROGRESSDIALOG_CLASSNAME,
+		G_PROGRESSDIALOG_CID,
+		G_PROGRESSDIALOG_CONTRACTID,
+		GProgressListenerConstructor
+	},
+	{
+		G_PROGRESSDIALOG_CLASSNAME,
+		G_PROGRESSDIALOG_CID,
+		NS_DOWNLOAD_CONTRACTID,
+		GProgressListenerConstructor
+	},
+	{
+		G_FILEPICKER_CLASSNAME,
+		G_FILEPICKER_CID,
+		G_FILEPICKER_CONTRACTID,
+		GFilePickerConstructor
+	},
+	{
+		NS_IHELPERAPPLAUNCHERDLG_CLASSNAME,
+		G_CONTENTHANDLER_CID,
+		NS_IHELPERAPPLAUNCHERDLG_CONTRACTID,
+		GContentHandlerConstructor
+	},
+	{
+		EPHY_GLOBALHISTORY_CLASSNAME,
+		EPHY_GLOBALHISTORY_CID,
+		NS_GLOBALHISTORY_CONTRACTID,
+		MozGlobalHistoryConstructor
+	},
+	{
+		G_PRINTINGPROMPTSERVICE_CLASSNAME,
+		G_PRINTINGPROMPTSERVICE_CID,
+		G_PRINTINGPROMPTSERVICE_CONTRACTID,
+		GPrintingPromptServiceConstructor
+	},
+	{
+		G_IRC_PROTOCOL_CLASSNAME,
+		G_IRC_PROTOCOL_CID,
+		G_IRC_PROTOCOL_CONTRACTID,
+		GIRCProtocolHandlerConstructor
+	},
+	{
+		G_IRC_CONTENT_CLASSNAME,
+		G_IRC_PROTOCOL_CID,
+		G_IRC_CONTENT_CONTRACTID,
+		GIRCProtocolHandlerConstructor
+	},
+	{
+		G_FTP_CONTENT_CLASSNAME,
+		G_FTP_PROTOCOL_CID,
+		G_FTP_CONTENT_CONTRACTID,
+		GFtpProtocolHandlerConstructor
+	},
+	{
+		G_START_HERE_PROTOCOLHANDLER_CLASSNAME,
+		G_START_HERE_PROTOCOLHANDLER_CID,
+		G_START_HERE_PROTOCOLHANDLER_CONTRACTID,
+		GStartHereProtocolHandlerConstructor
+	},
+	{
+		EPHY_ABOUT_REDIRECTOR_CLASSNAME,
+		EPHY_ABOUT_REDIRECTOR_CID,
+		EPHY_ABOUT_REDIRECTOR_EPIPHANY_CONTRACTID,
+		EphyAboutRedirectorConstructor
+	},
+	{
+		EPHY_ABOUT_REDIRECTOR_CLASSNAME,
+		EPHY_ABOUT_REDIRECTOR_CID,
+		EPHY_ABOUT_REDIRECTOR_OPTIONS_CONTRACTID,
+		EphyAboutRedirectorConstructor
+	},
+	{
+		EPHY_ABOUT_REDIRECTOR_CLASSNAME,
+		EPHY_ABOUT_REDIRECTOR_CID,
+		EPHY_ABOUT_REDIRECTOR_CONSPIRACY_CONTRACTID,
+		EphyAboutRedirectorConstructor
+	},
+	{
+		EPHY_ABOUT_REDIRECTOR_CLASSNAME,
+		EPHY_ABOUT_REDIRECTOR_CID,
+		EPHY_ABOUT_REDIRECTOR_MARCO_CONTRACTID,
+		EphyAboutRedirectorConstructor
+	}
+};
+
+static const int sNumAppComps = sizeof(sAppComps) / sizeof(nsModuleComponentInfo);
+
+static const nsModuleComponentInfo sFtpComps = {
+	G_FTP_PROTOCOL_CLASSNAME,
+	G_FTP_PROTOCOL_CID,
+	G_FTP_PROTOCOL_CONTRACTID,
+	GFtpProtocolHandlerConstructor
+};
+
+NS_GENERIC_FACTORY_CONSTRUCTOR(GMailtoProtocolHandler)
+
+static const nsModuleComponentInfo sMailtoComps[] = {
+	{
+		G_MAILTO_PROTOCOL_CLASSNAME,
+		G_MAILTO_PROTOCOL_CID,
+		G_MAILTO_PROTOCOL_CONTRACTID,
+		GMailtoProtocolHandlerConstructor
+	},
+	{
+		G_MAILTO_CONTENT_CLASSNAME,
+		G_MAILTO_PROTOCOL_CID,
+		G_MAILTO_CONTENT_CONTRACTID,
+		GMailtoProtocolHandlerConstructor
+	}
+};
+
+static const int sNumMailtoComps = sizeof(sMailtoComps) / sizeof(nsModuleComponentInfo);
+
+static const nsModuleComponentInfo sModuleComps[] = {
+	{
+		 G_EXTERNALPROTOCOLSERVICE_CLASSNAME,
+		 G_EXTERNALPROTOCOLSERVICE_CID,
+		 NS_EXTERNALPROTOCOLSERVICE_CONTRACTID
+	}
+};
+
+static NS_DEFINE_CID(knsFtpProtocolHandlerCID, NS_FTPPROTOCOLHANDLER_CID);
 
 //Annoying globals to track the mozilla ftp handler so it can be restored.
 static PRBool ftpRegistered = PR_FALSE;
@@ -66,121 +186,63 @@ mozilla_register_components (void)
 	gboolean ret = TRUE;
 	nsresult rv;
 
-        rv = RegisterFactory (NS_NewProgressListenerFactory, kProgressDialogCID,
-                              G_PROGRESSDIALOG_CLASSNAME,
-                              NS_DOWNLOAD_CONTRACTID, PR_TRUE);
-        if (NS_FAILED(rv)) ret = FALSE;
+	nsCOMPtr<nsIComponentRegistrar> cr;
+	rv = NS_GetComponentRegistrar(getter_AddRefs(cr));
+	NS_ENSURE_SUCCESS(rv, rv);
 
-	rv = RegisterFactory (NS_NewContentHandlerFactory, kContentHandlerCID,
-			      NS_IHELPERAPPLAUNCHERDLG_CLASSNAME,
-			      NS_IHELPERAPPLAUNCHERDLG_CONTRACTID, PR_TRUE);
-	if (NS_FAILED(rv)) ret = FALSE;
-	
-	rv = RegisterFactory   (NS_NewExternalProtocolServiceFactory,
-				kProtocolServiceCID,
-				G_EXTERNALPROTOCOLSERVICE_CLASSNAME,
-				NS_EXTERNALPROTOCOLSERVICE_CONTRACTID,
-				PR_TRUE);
-	if (NS_FAILED(rv)) ret = FALSE;
+	for (int i = 0; i < sNumAppComps; i++)
+	{
+		nsCOMPtr<nsIGenericFactory> componentFactory;
+		rv = NS_NewGenericFactory(getter_AddRefs(componentFactory),
+					  &(sAppComps[i]));
+		if (NS_FAILED(rv))
+		{
+			ret = FALSE;
+			continue;  // don't abort registering other components
+		}
 
-	rv = RegisterFactory (NS_NewFilePickerFactory, kFilePickerCID,
-			      G_FILEPICKER_CLASSNAME, G_FILEPICKER_CONTRACTID,
-			      PR_TRUE);
-	if (NS_FAILED(rv)) ret = FALSE;
-
-	rv = RegisterFactory (NS_NewStartHereHandlerFactory,
-			      kStartHereProcotolHandlerCID,
-			      G_START_HERE_PROTOCOLHANDLER_CLASSNAME,
-			      G_START_HERE_PROTOCOLHANDLER_CONTRACTID,
-			      PR_TRUE);
-	if (NS_FAILED(rv)) ret = FALSE;
-
-	rv = RegisterFactory (NS_NewEphyAboutRedirectorFactory,
-			      kEphyAboutRedirectorCID,
-			      EPHY_ABOUT_REDIRECTOR_CLASSNAME,
-			      EPHY_ABOUT_REDIRECTOR_OPTIONS_CONTRACTID,
-			      PR_TRUE);
-	if (NS_FAILED(rv)) ret = FALSE;
-
-	rv = RegisterFactory (NS_NewEphyAboutRedirectorFactory,
-			      kEphyAboutRedirectorCID,
-			      EPHY_ABOUT_REDIRECTOR_CLASSNAME,
-			      EPHY_ABOUT_REDIRECTOR_EPIPHANY_CONTRACTID,
-			      PR_TRUE);
-	if (NS_FAILED(rv)) ret = FALSE;
-
-	rv = RegisterFactory (NS_NewEphyAboutRedirectorFactory,
-			      kEphyAboutRedirectorCID,
-			      EPHY_ABOUT_REDIRECTOR_CLASSNAME,
-			      EPHY_ABOUT_REDIRECTOR_MARCO_CONTRACTID,
-			      PR_TRUE);
-	if (NS_FAILED(rv)) ret = FALSE;
-
-	rv = RegisterFactory (NS_NewEphyAboutRedirectorFactory,
-			      kEphyAboutRedirectorCID,
-			      EPHY_ABOUT_REDIRECTOR_CLASSNAME,
-			      EPHY_ABOUT_REDIRECTOR_CONSPIRACY_CONTRACTID,
-			      PR_TRUE);
-	if (NS_FAILED(rv)) ret = FALSE;
-
-
-        rv = RegisterFactory (NS_NewFtpHandlerFactory, kFtpHandlerCID,
-			      G_FTP_CONTENT_CLASSNAME, G_FTP_CONTENT_CONTRACTID,
-			      PR_TRUE);
-	if (NS_FAILED(rv)) ret = FALSE;
-
-        rv = RegisterFactory (NS_NewIRCHandlerFactory, kIRCHandlerCID,
-			      G_IRC_PROTOCOL_CLASSNAME,   
-			      G_IRC_PROTOCOL_CONTRACTID, PR_TRUE);
-        if (NS_FAILED(rv)) ret = FALSE;
-
-        rv = RegisterFactory (NS_NewIRCHandlerFactory, kIRCHandlerCID,
-			      G_IRC_CONTENT_CLASSNAME,   
-			      G_IRC_CONTENT_CONTRACTID, PR_TRUE);        
-        if (NS_FAILED(rv)) ret = FALSE;
-
-	rv = RegisterFactory (NS_NewPrintingPromptServiceFactory,
-			      kPrintingPromptServiceCID,
-			      G_PRINTINGPROMPTSERVICE_CLASSNAME, 
-			      G_PRINTINGPROMPTSERVICE_CONTRACTID, PR_TRUE);
-	if (NS_FAILED(rv)) ret = FALSE;
+		rv = cr->RegisterFactory(sAppComps[i].mCID,
+					 sAppComps[i].mDescription,
+					 sAppComps[i].mContractID,
+					 componentFactory);
+		if (NS_FAILED(rv))
+			ret = FALSE;
+	}
 
 	return ret;
-}
-
-NS_METHOD RegisterFactory (nsresult (aFactoryFunc)(nsIFactory** aFactory),
-			   const nsCID & aClass, const char *aClassName,
-			   const char *aContractID, PRBool aReplace)
-{
-	nsresult rv = NS_OK;
-
-	nsCOMPtr<nsIFactory> factory;
-	rv = aFactoryFunc(getter_AddRefs(factory));
-	if (NS_FAILED(rv)) return rv;
-	rv = nsComponentManager::RegisterFactory(aClass, aClassName,
-						 aContractID,
-						 factory, aReplace);
-	return rv;
 }
 
 /**
  * mozilla_register_FtpProtocolHandler: Register Ftp Protocol Handler
  */
-extern "C" gboolean 
-mozilla_register_FtpProtocolHandler (void)
+extern "C" gboolean mozilla_register_FtpProtocolHandler (void)
 {
 	if (ftpRegistered == PR_TRUE) return TRUE;
 
 	nsresult rv = NS_OK;
-     
-        rv = nsComponentManager::FindFactory (knsFtpProtocolHandlerCID,
-                                              getter_AddRefs(nsFtpFactory));
+
+	nsCOMPtr<nsIComponentManager> cm;
+	rv = NS_GetComponentManager(getter_AddRefs(cm));
+	if (NS_FAILED(rv) || !cm) return FALSE;
+
+	rv = cm->GetClassObject(knsFtpProtocolHandlerCID,
+				NS_GET_IID(nsIFactory),
+				getter_AddRefs(nsFtpFactory));
         if (NS_FAILED(rv)) return FALSE;
 
-	rv = RegisterFactory (NS_NewFtpHandlerFactory, kFtpHandlerCID,
-			      G_FTP_PROTOCOL_CLASSNAME, 
-			      G_FTP_PROTOCOL_CONTRACTID, PR_TRUE);  
+	nsCOMPtr<nsIGenericFactory> ftpFactory;
+	rv = NS_NewGenericFactory(getter_AddRefs(ftpFactory),
+				  &sFtpComps);
+	if (NS_FAILED(rv) || !ftpFactory) return FALSE;
 
+	nsCOMPtr<nsIComponentRegistrar> cr;
+	rv = NS_GetComponentRegistrar(getter_AddRefs(cr));
+	if (NS_FAILED(rv) || !cr) return FALSE;
+
+	rv = cr->RegisterFactory(sFtpComps.mCID,
+				 sFtpComps.mDescription,
+				 sFtpComps.mContractID,
+				 ftpFactory);  
 	if (NS_FAILED(rv)) return FALSE;
 
 	ftpRegistered = PR_TRUE;
@@ -190,17 +252,20 @@ mozilla_register_FtpProtocolHandler (void)
 /**
  * mozilla_unregister_FtpProtocolHandler: Unregister Ftp Protocol Handler
  */
-extern "C" gboolean 
-mozilla_unregister_FtpProtocolHandler (void)
+extern "C" gboolean mozilla_unregister_FtpProtocolHandler (void)
 {
 	if (ftpRegistered == PR_FALSE) return FALSE;
         
         nsresult rv = NS_OK;
-	
-	rv = nsComponentManager::RegisterFactory(knsFtpProtocolHandlerCID,
-						 NS_FTPPROTOCOLHANDLER_CLASSNAME,
-						 G_FTP_PROTOCOL_CONTRACTID,
-						 nsFtpFactory, PR_TRUE);
+
+	nsCOMPtr<nsIComponentRegistrar> cr;
+	rv = NS_GetComponentRegistrar(getter_AddRefs(cr));
+	if (NS_FAILED(rv) || !cr) return FALSE;
+
+	rv = cr->RegisterFactory(knsFtpProtocolHandlerCID,
+				 NS_FTPPROTOCOLHANDLER_CLASSNAME,
+				 G_FTP_PROTOCOL_CONTRACTID,
+				 nsFtpFactory);
 
 	ftpRegistered = PR_FALSE;
         return NS_SUCCEEDED (rv) ? TRUE : FALSE;
@@ -212,15 +277,30 @@ mozilla_unregister_FtpProtocolHandler (void)
 extern "C" gboolean 
 mozilla_register_MailtoProtocolHandler (void)
 {
-        nsresult rv = NS_OK;
+	gboolean retVal = TRUE;
+        nsresult rv;
 
-        rv = RegisterFactory (NS_NewMailtoHandlerFactory, kMailtoHandlerCID,
-			      G_MAILTO_PROTOCOL_CLASSNAME,   
-			      G_MAILTO_PROTOCOL_CONTRACTID, PR_TRUE);
-        if (NS_FAILED(rv)) return FALSE;
+	nsCOMPtr<nsIComponentRegistrar> cr;
+	rv = NS_GetComponentRegistrar(getter_AddRefs(cr));
+	if (NS_FAILED(rv) || !cr) return FALSE;
 
-        rv = RegisterFactory (NS_NewMailtoHandlerFactory, kMailtoHandlerCID,
-			      G_MAILTO_CONTENT_CLASSNAME,   
-			      G_MAILTO_CONTENT_CONTRACTID, PR_TRUE);        
-        return NS_SUCCEEDED (rv) ? TRUE : FALSE;
+	for (int i = 0; i < sNumMailtoComps; i++)
+	{
+		nsCOMPtr<nsIGenericFactory> componentFactory;
+		rv = NS_NewGenericFactory(getter_AddRefs(componentFactory),
+					  &(sMailtoComps[i]));
+		if (NS_FAILED(rv))
+		{
+			retVal = FALSE;
+			continue;  // don't abort registering other components
+		}
+
+		rv = cr->RegisterFactory(sMailtoComps[i].mCID,
+					 sMailtoComps[i].mDescription,
+					 sMailtoComps[i].mContractID,
+					 componentFactory);
+		if (NS_FAILED(rv))
+			retVal = FALSE;
+	}
+	return retVal;
 }

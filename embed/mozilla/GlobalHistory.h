@@ -20,12 +20,32 @@
 #define __GlobalHistory_h
 
 #include "nsError.h"
+#include "nsIGlobalHistory.h"
+#include "nsIBrowserHistory.h"
 
-#define GALEON_GLOBALHISTORY_CID \
+#define EPHY_GLOBALHISTORY_CLASSNAME \
+ "Epiphany's Global History Implementation"
+
+#define EPHY_GLOBALHISTORY_CID \
  { 0xbe0c42c1, 0x39d4, 0x4271, { 0xb7, 0x9e, 0xf7, 0xaa, 0x49, 0xeb, 0x6a, 0x15}}
 
-class nsIFactory;
+/**
+ * class GlobalHistory:
+ *
+ */
+class MozGlobalHistory: public nsIGlobalHistory,
+	public nsIBrowserHistory
+{
+	public:
+		MozGlobalHistory ();
+		virtual ~MozGlobalHistory();
 
-extern nsresult NS_NewGlobalHistoryFactory(nsIFactory** aFactory);
+		NS_DECL_ISUPPORTS
+		NS_DECL_NSIGLOBALHISTORY
+		NS_DECL_NSIBROWSERHISTORY
+
+	private:
+		EphyHistory *mGlobalHistory;
+};
 
 #endif

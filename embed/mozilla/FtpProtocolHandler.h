@@ -22,6 +22,7 @@
 #include "nsError.h"
 #include "nsIProtocolHandler.h"
 #include "nsCURILoader.h"
+#include "BaseProtocolContentHandler.h"
 
 #define G_FTP_PROTOCOL_CID                           \
 { /* 5a48bdf4-a422-4eb4-b073-0fc3bee8e670 */         \
@@ -45,8 +46,14 @@
 }
 #define NS_FTPPROTOCOLHANDLER_CLASSNAME "The FTP Protocol Handler"
 
-class nsIFactory;
-
-extern nsresult NS_NewFtpHandlerFactory(nsIFactory** aFactory); 
+class GFtpProtocolHandler : public GBaseProtocolContentHandler
+{
+  public:
+	NS_DECL_ISUPPORTS
+	GFtpProtocolHandler() : GBaseProtocolContentHandler("ftp")
+				{NS_INIT_ISUPPORTS();};
+	virtual ~GFtpProtocolHandler() {};
+	/* additional members */
+};
 
 #endif // __FtpProtocolHandler_h__

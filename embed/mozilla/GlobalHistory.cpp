@@ -17,43 +17,16 @@
  */
 
 #include "ephy-embed-shell.h"
-
+#include "GlobalHistory.h"
 #include "nsCOMPtr.h"
 #include "nsISupportsArray.h"
 #include "nsIFactory.h"
 #include "nsIServiceManager.h"
-#include "nsXPComFactory.h"
 #include "nsString.h"
 #include "nsReadableUtils.h"
-#include "nsIGlobalHistory.h"
-#include "nsIBrowserHistory.h"
 #include "nsIRequestObserver.h"
 
-/**
- * class GlobalHistory: 
- *
- */
-class MozGlobalHistory: public nsIGlobalHistory,
-	public nsIBrowserHistory
-{
-	public:
-		MozGlobalHistory ();
-  		virtual ~MozGlobalHistory();
-
-		NS_DECL_ISUPPORTS
-		NS_DECL_NSIGLOBALHISTORY
-		NS_DECL_NSIBROWSERHISTORY
-
-	private:
-		EphyHistory *mGlobalHistory;
-};
-
-NS_IMPL_ADDREF(MozGlobalHistory)
-NS_IMPL_RELEASE(MozGlobalHistory)
-NS_INTERFACE_MAP_BEGIN(MozGlobalHistory)
-  NS_INTERFACE_MAP_ENTRY(nsIGlobalHistory)
-  NS_INTERFACE_MAP_ENTRY(nsIBrowserHistory)
-NS_INTERFACE_MAP_END
+NS_IMPL_ISUPPORTS2(MozGlobalHistory, nsIGlobalHistory, nsIBrowserHistory)
 
 MozGlobalHistory::MozGlobalHistory ()
 {
@@ -149,21 +122,3 @@ NS_IMETHODIMP MozGlobalHistory::MarkPageAsTyped(const char *url)
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-NS_DEF_FACTORY (MozGlobalHistory, MozGlobalHistory);
-
-nsresult NS_NewGlobalHistoryFactory(nsIFactory** aFactory)
-{
-	NS_ENSURE_ARG_POINTER(aFactory);
-	*aFactory = nsnull;
-
-	nsMozGlobalHistoryFactory *result = new nsMozGlobalHistoryFactory;
-	if (result == NULL)
-	{
-		return NS_ERROR_OUT_OF_MEMORY;
-	}
-    
-	NS_ADDREF(result);
-	*aFactory = result;
-
-	return NS_OK;
-}

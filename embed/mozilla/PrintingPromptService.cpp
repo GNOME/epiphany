@@ -25,27 +25,12 @@
 #include "print-dialog.h"
 #include "ephy-embed.h"
 #include "MozillaPrivate.h"
+#include "PrintingPromptService.h"
 
 #include <nsIPrintSettings.h>
 #include <nsCOMPtr.h>
-#include <nsIFactory.h>
 #include <nsString.h>
 #include <nsIServiceManager.h>
-#include <nsXPComFactory.h>
-
-#include <nsIPrintingPromptService.h>
-
-/* Header file */
-class GPrintingPromptService : public nsIPrintingPromptService
-{
-public:
-  NS_DECL_ISUPPORTS
-  NS_DECL_NSIPRINTINGPROMPTSERVICE
-
-  GPrintingPromptService();
-  virtual ~GPrintingPromptService();
-  /* additional members */
-};
 
 /* Implementation file */
 NS_IMPL_ISUPPORTS1(GPrintingPromptService, nsIPrintingPromptService)
@@ -101,26 +86,4 @@ NS_IMETHODIMP GPrintingPromptService::ShowPageSetup(nsIDOMWindow *parent, nsIPri
 NS_IMETHODIMP GPrintingPromptService::ShowPrinterProperties(nsIDOMWindow *parent, const PRUnichar *printerName, nsIPrintSettings *printSettings)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
-}
-
-NS_DEF_FACTORY (GPrintingPromptService, GPrintingPromptService);
-
-/**
- * NS_NewPromptServiceFactory:
- */ 
-nsresult NS_NewPrintingPromptServiceFactory(nsIFactory** aFactory)
-{
-	NS_ENSURE_ARG_POINTER(aFactory);
-	*aFactory = nsnull;
-
-	nsGPrintingPromptServiceFactory *result = new nsGPrintingPromptServiceFactory;
-	if (result == NULL)
-	{
-		return NS_ERROR_OUT_OF_MEMORY;
-	}
-    
-	NS_ADDREF(result);
-	*aFactory = result;
-  
-	return NS_OK;
 }

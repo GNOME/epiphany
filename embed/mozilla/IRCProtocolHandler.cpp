@@ -16,43 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "nsIFactory.h"
-#include "nsXPComFactory.h"
-
-#include "BaseProtocolContentHandler.h"
-
-class GIRCProtocolHandler : public GBaseProtocolContentHandler
-{
-  public:
-	NS_DECL_ISUPPORTS
-	GIRCProtocolHandler() : GBaseProtocolContentHandler("irc")
-				   {NS_INIT_ISUPPORTS();};
-	virtual ~GIRCProtocolHandler() {};
-	/* additional members */
-};
+#include "IRCProtocolHandler.h"
 
 /* Implementation file */
 NS_IMPL_ISUPPORTS2 (GIRCProtocolHandler, nsIProtocolHandler, nsIContentHandler)
 
-NS_DEF_FACTORY (GIRCProtocolHandler, GIRCProtocolHandler);
-
-/**
- * NS_NewIRCHandlerFactory:
- */ 
-nsresult NS_NewIRCHandlerFactory(nsIFactory** aFactory)
-{
-	NS_ENSURE_ARG_POINTER(aFactory);
-	*aFactory = nsnull;
-
-	nsGIRCProtocolHandlerFactory *result = 
-					new nsGIRCProtocolHandlerFactory;
-	if (result == NULL)
-	{
-		return NS_ERROR_OUT_OF_MEMORY;
-	}
-    
-	NS_ADDREF(result);
-	*aFactory = result;
-
-	return NS_OK;
-}

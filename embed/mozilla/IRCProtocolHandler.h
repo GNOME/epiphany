@@ -20,6 +20,7 @@
 #define __IRCProtocolHandler_h__
     
 #include "nsError.h"
+#include "BaseProtocolContentHandler.h"
 #include "nsIProtocolHandler.h"
 #include "nsCURILoader.h"
 
@@ -36,8 +37,14 @@
 				 "application-x-gnome-irc"
 #define G_IRC_CONTENT_CLASSNAME "Epiphany's irc Content Handler"
 
-class nsIFactory;
-
-extern nsresult NS_NewIRCHandlerFactory(nsIFactory** aFactory); 
+class GIRCProtocolHandler : public GBaseProtocolContentHandler
+{
+  public:
+	NS_DECL_ISUPPORTS
+	GIRCProtocolHandler() : GBaseProtocolContentHandler("irc")
+				   {NS_INIT_ISUPPORTS();};
+	virtual ~GIRCProtocolHandler() {};
+	/* additional members */
+};
 
 #endif // __IRCProtocolHandler_h__

@@ -100,26 +100,14 @@ nsresult EphyWrapper::Init (GtkMozEmbed *mozembed)
 	nsCOMPtr<nsIDocShellHistory> dsHistory = do_QueryInterface (DocShell);
 	if (!dsHistory) return NS_ERROR_FAILURE;
 
-	static NS_DEFINE_CID(kGlobalHistoryCID, GALEON_GLOBALHISTORY_CID);
-
-	nsCOMPtr<nsIFactory> GHFactory;
-	result = NS_NewGlobalHistoryFactory(getter_AddRefs(GHFactory));
-	if (NS_FAILED(result)) return NS_ERROR_FAILURE;
-
-	result = nsComponentManager::RegisterFactory(kGlobalHistoryCID,
-						     "Global history",
-						     NS_GLOBALHISTORY_CONTRACTID,
-						     GHFactory,
-						     PR_TRUE);
-
-	nsCOMPtr<nsIGlobalHistory> inst =  
-		do_GetService(NS_GLOBALHISTORY_CONTRACTID, &result);
-	
 	mEventListener = new EphyEventListener();
 	mEventListener->Init (EPHY_EMBED (mozembed));
  	GetListener();
 	AttachListeners();
-	
+
+	nsCOMPtr<nsIGlobalHistory> inst =  
+	do_GetService(NS_GLOBALHISTORY_CONTRACTID, &result);
+
 	return dsHistory->SetGlobalHistory(inst);
 }
 

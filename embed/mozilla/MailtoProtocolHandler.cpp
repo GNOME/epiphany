@@ -16,49 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "nsIFactory.h"
-#include "nsXPComFactory.h"
-#include "nsString.h"
-#include "nsIURI.h"
-#include "nsNetUtil.h"
-#include "nsIExternalProtocolService.h"
-#include "nsCExternalHandlerService.h"
-#include "nsCRT.h"
-
-#include "BaseProtocolContentHandler.h"
-
-class GMailtoProtocolHandler : public GBaseProtocolContentHandler
-{
-  public:
-	NS_DECL_ISUPPORTS
-	GMailtoProtocolHandler() : GBaseProtocolContentHandler("mailto")
-				   {NS_INIT_ISUPPORTS();};
-	virtual ~GMailtoProtocolHandler() {};
-  private:
-};
+#include "MailtoProtocolHandler.h"
 
 /* Implementation file */
 NS_IMPL_ISUPPORTS2 (GMailtoProtocolHandler, nsIProtocolHandler, nsIContentHandler)
 
-NS_DEF_FACTORY (GMailtoProtocolHandler, GMailtoProtocolHandler);
-
-/**
- * NS_NewMailtoHandlerFactory:
- */ 
-nsresult NS_NewMailtoHandlerFactory(nsIFactory** aFactory)
-{
-	NS_ENSURE_ARG_POINTER(aFactory);
-	*aFactory = nsnull;
-
-	nsGMailtoProtocolHandlerFactory *result = 
-					new nsGMailtoProtocolHandlerFactory;
-	if (result == NULL)
-	{
-		return NS_ERROR_OUT_OF_MEMORY;
-	}
-    
-	NS_ADDREF(result);
-	*aFactory = result;
-
-	return NS_OK;
-}

@@ -33,8 +33,6 @@
 #include "nsXPIDLString.h"
 #include "nsIChannel.h"
 #include "nsIFTPChannel.h"
-#include "nsIFactory.h"
-#include "nsXPComFactory.h"
 #include "nsIMIMEInfo.h"
 #include "nsCOMPtr.h"
 
@@ -687,28 +685,6 @@ nsresult GProgressListener::Abort (void)
 	}
 
 	return NS_OK;
-}
-
-NS_DEF_FACTORY (GProgressListener, GProgressListener);
-
-/**
- * NS_NewProgressListenerFactory:
- */ 
-nsresult NS_NewProgressListenerFactory(nsIFactory** aFactory)
-{
-        NS_ENSURE_ARG_POINTER(aFactory);
-        *aFactory = nsnull;
-
-        nsGProgressListenerFactory *result = new nsGProgressListenerFactory;
-        if (result == NULL)
-        {
-                return NS_ERROR_OUT_OF_MEMORY;
-        }
-    
-        NS_ADDREF(result);
-        *aFactory = result;
-
-        return NS_OK;
 }
 
 static void

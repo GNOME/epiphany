@@ -22,29 +22,15 @@
 
 #include <string.h>
 
-#include "nsCOMPtr.h"
-#include "nsIFactory.h"
+#include "StartHereProtocolHandler.h"
 #include "nsIIOService.h"
 #include "nsIServiceManager.h"
 #include "nsIURI.h"
 #include "nsNetCID.h"
 #include "nsNetUtil.h"
-#include "nsXPComFactory.h"
 #include "nsIStorageStream.h"
 
 static NS_DEFINE_CID(kSimpleURICID,     NS_SIMPLEURI_CID);
-
-class GStartHereProtocolHandler : public nsIProtocolHandler
-{
-  public:
-	NS_DECL_ISUPPORTS
-	NS_DECL_NSIPROTOCOLHANDLER
-
-	GStartHereProtocolHandler (void);
-	virtual ~GStartHereProtocolHandler();
-
-	nsCOMPtr<nsIChannel> mChannel;
-};
 
 /* Implementation file */
 NS_IMPL_ISUPPORTS1 (GStartHereProtocolHandler, nsIProtocolHandler)
@@ -199,24 +185,3 @@ NS_IMETHODIMP GStartHereProtocolHandler::AllowPort(PRInt32 port, const char *sch
 	return NS_OK;
 }
 
-NS_DEF_FACTORY (GStartHereProtocolHandler, GStartHereProtocolHandler);
-
-/**
- * NS_NewStartHereProtocolHandlerFactory:
- */ 
-nsresult NS_NewStartHereHandlerFactory(nsIFactory** aFactory)
-{
-	NS_ENSURE_ARG_POINTER(aFactory);
-	*aFactory = nsnull;
-
-	nsGStartHereProtocolHandlerFactory *result = new nsGStartHereProtocolHandlerFactory;
-	if (result == NULL)
-	{
-		return NS_ERROR_OUT_OF_MEMORY;
-	}
-    
-	NS_ADDREF(result);
-	*aFactory = result;
-
-	return NS_OK;
-}

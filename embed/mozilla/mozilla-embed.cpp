@@ -979,6 +979,8 @@ impl_shistory_get_nth (EphyEmbed *embed,
 
 	*aTitle = g_strdup (NS_ConvertUCS2toUTF8(title).get());
 
+	nsMemory::Free (title);
+
 	return G_OK;
 }
 

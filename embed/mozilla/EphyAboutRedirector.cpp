@@ -102,24 +102,3 @@ EphyAboutRedirector::Create(nsISupports *aOuter, REFNSIID aIID, void **aResult)
 	return rv;
 }
 
-NS_DEF_FACTORY (EphyAboutRedirector, EphyAboutRedirector);
-
-/**
- * NS_NewEphyAboutRedirectorFactory:
- */ 
-nsresult NS_NewEphyAboutRedirectorFactory(nsIFactory** aFactory)
-{
-	NS_ENSURE_ARG_POINTER(aFactory);
-	*aFactory = nsnull;
-
-	nsEphyAboutRedirectorFactory *result = new nsEphyAboutRedirectorFactory;
-	if (result == NULL)
-	{
-		return NS_ERROR_OUT_OF_MEMORY;
-	}
-    
-	NS_ADDREF(result);
-	*aFactory = result;
-
-	return NS_OK;
-}

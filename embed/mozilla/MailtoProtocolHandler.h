@@ -22,6 +22,7 @@
 #include "nsError.h"
 #include "nsIProtocolHandler.h"
 #include "nsCURILoader.h"
+#include "BaseProtocolContentHandler.h"
 
 #define G_MAILTO_PROTOCOL_CID                        \
 { /* aabe33d3-7455-4d8f-87e7-43e4541ace4d */         \
@@ -36,8 +37,14 @@
 				 "application-x-gnome-mailto"
 #define G_MAILTO_CONTENT_CLASSNAME "Epiphany's mailto Content Handler"
 
-class nsIFactory;
-
-extern nsresult NS_NewMailtoHandlerFactory(nsIFactory** aFactory); 
+class GMailtoProtocolHandler : public GBaseProtocolContentHandler
+{
+  public:
+	NS_DECL_ISUPPORTS
+	GMailtoProtocolHandler() : GBaseProtocolContentHandler("mailto")
+				   {NS_INIT_ISUPPORTS();};
+	virtual ~GMailtoProtocolHandler() {};
+  private:
+};
 
 #endif // __MailtoProtocolHandler_h__
