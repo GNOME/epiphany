@@ -66,31 +66,11 @@ window_cmd_edit_find (EggAction *action,
 	ephy_dialog_show (dialog);
 }
 
-static void
-print_dialog_preview_cb (PrintDialog *dialog,
-			 EphyWindow *window)
-{
-	ephy_window_set_chrome (window, EMBED_CHROME_PPVIEWTOOLBARON);
-}
-
 void
 window_cmd_file_print (EggAction *action,
 		       EphyWindow *window)
 {
-	EphyDialog *dialog;
-	EphyEmbed *embed;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	dialog = print_dialog_new_with_parent (GTK_WIDGET(window),
-					       embed, NULL);
-	g_signal_connect (G_OBJECT(dialog),
-			  "preview",
-			  G_CALLBACK (print_dialog_preview_cb),
-			  window);
-	ephy_dialog_set_modal (dialog, TRUE);
-	ephy_dialog_show (dialog);
+	ephy_window_print (window);
 }
 
 void

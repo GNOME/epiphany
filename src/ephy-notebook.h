@@ -85,6 +85,9 @@ void            ephy_notebook_move_page         (EphyNotebook *src,
 						 GtkWidget *src_page,
 						 gint dest_page);
 
+void		ephy_notebook_set_show_tabs	(EphyNotebook *nb,
+						 gboolean show_tabs);
+
 G_END_DECLS
 
 #endif /* EPHY_NOTEBOOK_H */

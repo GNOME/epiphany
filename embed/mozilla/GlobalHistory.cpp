@@ -22,13 +22,7 @@
 
 #include "ephy-embed-shell.h"
 #include "GlobalHistory.h"
-#include "nsCOMPtr.h"
-#include "nsISupportsArray.h"
-#include "nsIFactory.h"
-#include "nsIServiceManager.h"
 #include "nsString.h"
-#include "nsReadableUtils.h"
-#include "nsIRequestObserver.h"
 
 NS_IMPL_ISUPPORTS2(MozGlobalHistory, nsIGlobalHistory, nsIBrowserHistory)
 

@@ -102,8 +102,6 @@ void		  ephy_window_activate_location	  (EphyWindow *window);
 void		  ephy_window_update_control	  (EphyWindow *window,
 						   ControlID control);
 
-void		  ephy_window_update_all_controls (EphyWindow *window);
-
 EphyTab		 *ephy_window_get_active_tab	  (EphyWindow *window);
 
 EphyEmbed	 *ephy_window_get_active_embed	  (EphyWindow *window);
@@ -115,6 +113,8 @@ Toolbar		 *ephy_window_get_toolbar	  (EphyWindow *window);
 /* Dialogs */
 
 EphyDialog       *ephy_window_get_find_dialog	  (EphyWindow *window);
+
+void		  ephy_window_print		  (EphyWindow *window);
 
 G_END_DECLS
 

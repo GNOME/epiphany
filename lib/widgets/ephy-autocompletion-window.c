@@ -28,7 +28,6 @@
 #include <gtk/gtkframe.h>
 
 #include "ephy-autocompletion-window.h"
-#include "ephy-gobject-misc.h"
 #include "ephy-string.h"
 #include "ephy-marshal.h"
 #include "ephy-gui.h"
@@ -100,13 +99,33 @@ enum EphyAutocompletionWindowSignalsEnum {
 };
 static gint EphyAutocompletionWindowSignals[EPHY_AUTOCOMPLETION_WINDOW_LAST_SIGNAL];
 
-/**
- * AutocompletionWindow object
- */
+GType
+ephy_autocompletion_window_get_type (void)
+{
+	static GType ephy_autocompletion_window_type = 0;
 
-MAKE_GET_TYPE (ephy_autocompletion_window, "EphyAutocompletionWindow", EphyAutocompletionWindow,
-	       ephy_autocompletion_window_class_init,
-	       ephy_autocompletion_window_init, G_TYPE_OBJECT);
+	if (ephy_autocompletion_window_type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyAutocompletionWindowClass),
+			NULL,
+			NULL,
+			(GClassInitFunc) ephy_autocompletion_window_class_init,
+			NULL,
+			NULL,
+			sizeof (EphyAutocompletionWindow),
+			0,
+			(GInstanceInitFunc) ephy_autocompletion_window_init
+		};
+
+		ephy_autocompletion_window_type = g_type_register_static (G_TYPE_OBJECT,
+							                  "EphyAutocompletionWindow",
+							                  &our_info, 0);
+	}
+
+	return ephy_autocompletion_window_type;
+}
 
 static void
 ephy_autocompletion_window_class_init (EphyAutocompletionWindowClass *klass)

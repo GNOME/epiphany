@@ -21,7 +21,6 @@
 #endif
 
 #include "ephy-encoding-menu.h"
-#include "ephy-gobject-misc.h"
 #include "ephy-string.h"
 #include "egg-menu-merge.h"
 #include "ephy-shell.h"
@@ -64,14 +63,33 @@ enum
 
 static gpointer g_object_class;
 
-/**
- * EphyEncodingMenu object
- */
-MAKE_GET_TYPE (ephy_encoding_menu,
-	       "EphyEncodingMenu", EphyEncodingMenu,
-	       ephy_encoding_menu_class_init, ephy_encoding_menu_init,
-	       G_TYPE_OBJECT);
+GType
+ephy_encoding_menu_get_type (void)
+{
+	static GType ephy_encoding_menu_type = 0;
 
+	if (ephy_encoding_menu_type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyEncodingMenuClass),
+			NULL,
+			NULL,
+			(GClassInitFunc) ephy_encoding_menu_class_init,
+			NULL,
+			NULL,
+			sizeof (EphyEncodingMenu),
+			0,
+			(GInstanceInitFunc) ephy_encoding_menu_init
+		};
+
+		ephy_encoding_menu_type = g_type_register_static (G_TYPE_OBJECT,
+							          "EphyEncodingMenu",
+							          &our_info, 0);
+	}
+
+	return ephy_encoding_menu_type;
+}
 static void
 ephy_encoding_menu_class_init (EphyEncodingMenuClass *klass)
 {

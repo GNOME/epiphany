@@ -26,10 +26,10 @@
 #include "ephy-bookmarks-menu.h"
 #include "ephy-favorites-menu.h"
 #include "ephy-state.h"
-#include "ephy-gobject-misc.h"
 #include "ppview-toolbar.h"
 #include "window-commands.h"
 #include "find-dialog.h"
+#include "print-dialog.h"
 #include "ephy-shell.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
@@ -277,6 +277,7 @@ struct EphyWindowPrivate
 	GtkNotebook *notebook;
 	EphyTab *active_tab;
 	EphyDialog *find_dialog;
+	EphyDialog *print_dialog;
 	EmbedChromeMask chrome_mask;
 	gboolean closing;
 	gboolean is_fullscreen;
@@ -1476,10 +1477,12 @@ ephy_window_finalize (GObject *object)
 
 	if (window->priv->find_dialog)
 	{
-		g_signal_handlers_disconnect_by_func (window->priv->find_dialog,
-						      G_CALLBACK (sync_find_dialog),
-						      window);
 		g_object_unref (G_OBJECT (window->priv->find_dialog));
+	}
+
+	if (window->priv->print_dialog)
+	{
+		g_object_unref (G_OBJECT (window->priv->print_dialog));
 	}
 
 	g_object_unref (window->priv->fav_menu);
@@ -1802,6 +1805,7 @@ update_embed_dialogs (EphyWindow *window,
 {
 	EphyEmbed *embed;
 	EphyDialog *find_dialog = window->priv->find_dialog;
+	EphyDialog *print_dialog = window->priv->print_dialog;
 
 	embed = ephy_tab_get_embed (tab);
 
@@ -1809,6 +1813,13 @@ update_embed_dialogs (EphyWindow *window,
 	{
 		ephy_embed_dialog_set_embed
 			(EPHY_EMBED_DIALOG(find_dialog),
+			 embed);
+	}
+
+	if (print_dialog)
+	{
+		ephy_embed_dialog_set_embed
+			(EPHY_EMBED_DIALOG(print_dialog),
 			 embed);
 	}
 }
@@ -1861,6 +1872,38 @@ ephy_window_get_find_dialog (EphyWindow *window)
 	window->priv->find_dialog = dialog;
 
 	return dialog;
+}
+
+static void
+print_dialog_preview_cb (EphyDialog *dialog,
+			 EphyWindow *window)
+{
+	ephy_window_set_chrome (window, EMBED_CHROME_PPVIEWTOOLBARON);
+	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (window->priv->notebook), FALSE);
+}
+
+void
+ephy_window_print (EphyWindow *window)
+{
+	EphyDialog *dialog;
+	EphyEmbed *embed;
+
+	if (window->priv->print_dialog)
+	{
+		dialog = window->priv->print_dialog;
+	}
+	else
+	{
+		embed = ephy_window_get_active_embed (window);
+		dialog = print_dialog_new_with_parent (GTK_WIDGET(window),
+						       embed, NULL);
+		g_signal_connect (G_OBJECT(dialog),
+				  "preview",
+				  G_CALLBACK (print_dialog_preview_cb),
+				  window);
+	}
+
+	ephy_dialog_show (EPHY_DIALOG (dialog));
 }
 
 void

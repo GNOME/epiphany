@@ -1084,7 +1084,7 @@ impl_print (EphyEmbed *embed,
 
         nsCOMPtr<nsIPrintSettings> options;
         result = wrapper->GetPrintSettings(getter_AddRefs(options));
-        g_assert (NS_SUCCEEDED (result));
+        if (!NS_SUCCEEDED (result)) return G_FAILED;
 
 	MozillaCollatePrintSettings(info, options);
 

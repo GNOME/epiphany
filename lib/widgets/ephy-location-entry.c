@@ -19,7 +19,6 @@
 #include "ephy-location-entry.h"
 #include "ephy-autocompletion-window.h"
 #include "ephy-marshal.h"
-#include "ephy-gobject-misc.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-debug.h"
@@ -109,13 +108,33 @@ enum EphyLocationEntrySignalsEnum {
 };
 static gint EphyLocationEntrySignals[LAST_SIGNAL];
 
-/**
- * EphyLocationEntry object
- */
+GType
+ephy_location_entry_get_type (void)
+{
+	static GType ephy_location_entry_type = 0;
 
-MAKE_GET_TYPE (ephy_location_entry, "EphyLocationEntry", EphyLocationEntry,
-	       ephy_location_entry_class_init,
-	       ephy_location_entry_init, GTK_TYPE_HBOX);
+	if (ephy_location_entry_type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyLocationEntryClass),
+			NULL,
+			NULL,
+			(GClassInitFunc) ephy_location_entry_class_init,
+			NULL,
+			NULL,
+			sizeof (EphyLocationEntry),
+			0,
+			(GInstanceInitFunc) ephy_location_entry_init
+		};
+
+		ephy_location_entry_type = g_type_register_static (GTK_TYPE_HBOX,
+							           "EphyLocationEntry",
+							           &our_info, 0);
+	}
+
+	return ephy_location_entry_type;
+}
 
 static void
 ephy_location_entry_class_init (EphyLocationEntryClass *klass)

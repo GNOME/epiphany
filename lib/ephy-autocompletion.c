@@ -20,7 +20,6 @@
 #include <stdlib.h>
 
 #include "ephy-autocompletion.h"
-#include "ephy-gobject-misc.h"
 #include "ephy-marshal.h"
 #include "ephy-debug.h"
 
@@ -92,12 +91,33 @@ enum EphyAutocompletionSignalsEnum {
 };
 static gint EphyAutocompletionSignals[EPHY_AUTOCOMPLETION_LAST_SIGNAL];
 
-/**
- * Autocompletion object
- */
+GType
+ephy_autocompletion_get_type (void)
+{
+	static GType ephy_autocompletion_type = 0;
 
-MAKE_GET_TYPE (ephy_autocompletion, "EphyAutocompletion", EphyAutocompletion,
-       ephy_autocompletion_class_init, ephy_autocompletion_init, G_TYPE_OBJECT);
+	if (ephy_autocompletion_type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyAutocompletionClass),
+			NULL,
+			NULL,
+			(GClassInitFunc) ephy_autocompletion_class_init,
+			NULL,
+			NULL,
+			sizeof (EphyAutocompletion),
+			0,
+			(GInstanceInitFunc) ephy_autocompletion_init
+		};
+
+		ephy_autocompletion_type = g_type_register_static (G_TYPE_OBJECT,
+							           "EphyAutocompletion",
+							           &our_info, 0);
+	}
+
+	return ephy_autocompletion_type;
+}
 
 static void
 ephy_autocompletion_class_init (EphyAutocompletionClass *klass)

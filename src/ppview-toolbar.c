@@ -380,11 +380,15 @@ toolbar_cmd_ppv_close (EggMenuMerge *merge,
 {
 	EphyWindow *window = t->priv->window;
 	EphyEmbed *embed;
+	EphyNotebook *notebook;
 
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
 	ephy_window_set_chrome (t->priv->window, t->priv->original_mask);
+
+	notebook = ephy_window_get_notebook (window);
+	ephy_notebook_set_show_tabs (notebook, TRUE);
 
 	ephy_embed_print_preview_close (embed);
 }

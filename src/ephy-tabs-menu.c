@@ -21,7 +21,6 @@
 #endif
 
 #include "ephy-tabs-menu.h"
-#include "ephy-gobject-misc.h"
 #include "ephy-string.h"
 #include "egg-menu-merge.h"
 #include "ephy-marshal.h"

@@ -31,7 +31,6 @@ libephy_la_SOURCES = \
 	ephy-file-helpers.h			\
 	ephy-glade.c				\
 	ephy-glade.h				\
-	ephy-gobject-misc.h			\
 	ephy-gui.c				\
 	ephy-gui.h				\
 	ephy-langs.h				\
