@@ -107,9 +107,6 @@ void	           ephy_node_view_enable_drag_dest    (EphyNodeView *view,
 
 void		   ephy_node_view_edit		      (EphyNodeView *view);
 
-gboolean	   ephy_node_view_is_editing	      (EphyNodeView *view,
-						       int property);
-
 gboolean	   ephy_node_view_is_target	      (EphyNodeView *view);
 
 G_END_DECLS

@@ -759,6 +759,7 @@ ephy_node_view_add_column (EphyNodeView *view,
 		view->priv->editable_renderer = renderer;
 		view->priv->editable_column = gcolumn;
 		view->priv->editable_node_column = column;
+		view->priv->editable_property = prop_id;
 		g_signal_connect (renderer, "edited", G_CALLBACK (cell_renderer_edited), view);
 	}
 
@@ -800,12 +801,15 @@ ephy_node_view_add_column (EphyNodeView *view,
 		int scol;
 		GList *order = NULL;
 
-		scol = ephy_tree_model_node_add_func_column
-			(view->priv->nodemodel, G_TYPE_INT,
-			 (EphyTreeModelNodeValueFunc) provide_priority,
-			 view);
+		if (priority_prop_id >= 0)
+		{
+			scol = ephy_tree_model_node_add_func_column
+				(view->priv->nodemodel, G_TYPE_INT,
+				 (EphyTreeModelNodeValueFunc) provide_priority,
+				 view);
+			order = g_list_append (order, GINT_TO_POINTER (scol));
+		}
 
-		order = g_list_append (order, GINT_TO_POINTER (scol));
 		order = g_list_append (order, GINT_TO_POINTER (column));
 		gtk_tree_sortable_set_default_sort_func
 			(GTK_TREE_SORTABLE (view->priv->sortmodel),
@@ -925,7 +929,7 @@ ephy_node_view_remove (EphyNodeView *view)
 	gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT (view->priv->sortmodel),
 							&iter, &iter2);
 	iter2 = iter;
-	
+
 	if (gtk_tree_model_iter_next (GTK_TREE_MODEL (view->priv->sortmodel), &iter))
 	{
 		path = gtk_tree_model_get_path (GTK_TREE_MODEL (view->priv->sortmodel), &iter);
@@ -1033,15 +1037,6 @@ ephy_node_view_edit (EphyNodeView *view)
 
 	g_list_foreach (rows, (GFunc)gtk_tree_path_free, NULL);
         g_list_free (rows);
-}
-
-gboolean
-ephy_node_view_is_editing (EphyNodeView *view,
-			   int property)
-{
-	view->priv->editable_property = property;
-
-	return view->priv->editing;
 }
 
 gboolean
