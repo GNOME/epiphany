@@ -212,6 +212,8 @@ ephy_bookmarks_get_toolbars_model (EphyBookmarks *eb)
 {
 	g_return_val_if_fail (EPHY_IS_BOOKMARKS (eb), NULL);
 
+	LOG ("ephy_bookmarks_get_toolbars_model")
+
 	if (eb->priv->toolbars_model == NULL)
 	{
 		GObject *toolbars_model;

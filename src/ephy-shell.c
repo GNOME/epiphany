@@ -653,6 +653,8 @@ ephy_shell_get_bookmarks (EphyShell *shell)
 GObject *
 ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
 {
+	LOG ("ephy_shell_get_toolbars_model fs=%d", fullscreen)
+
 	if (fullscreen)
 	{
 		if (shell->priv->fs_toolbars_model == NULL)
