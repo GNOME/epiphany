@@ -1097,7 +1097,7 @@ egg_tree_model_filter_row_inserted (GtkTreeModel *c_model,
 {
   EggTreeModelFilter *filter = EGG_TREE_MODEL_FILTER (data);
   GtkTreePath *path;
-  GtkTreePath *real_path;
+  GtkTreePath *real_path = NULL;
   GtkTreeIter iter;
 
   GtkTreeIter real_c_iter;
@@ -1276,14 +1276,19 @@ done_and_emit:
 								FALSE, TRUE);
 
   if (!path)
-    return;
+    goto done;
 
   egg_tree_model_filter_increment_stamp (filter);
 
   gtk_tree_model_get_iter (GTK_TREE_MODEL (data), &iter, path);
   gtk_tree_model_row_inserted (GTK_TREE_MODEL (data), path, &iter);
 
+  gtk_tree_path_free (path);
+
 done:
+  if (real_path)
+    gtk_tree_path_free (real_path);
+
   if (free_c_path)
     gtk_tree_path_free (c_path);
 }
