@@ -840,13 +840,15 @@ impl_permission_manager_list (EphyPermissionManager *manager,
 	return list;
 }
 
-void
-mozilla_embed_single_open_window (EphyEmbedSingle *single,
-			          EphyEmbed *parent,
-			          const char *address,
-			          const char *features)
+static void
+impl_open_window (EphyEmbedSingle *single,
+		  EphyEmbed *parent,
+		  const char *address,
+		  const char *features)
 {
 	nsCOMPtr<nsIDOMWindow> domWindow;
+	nsCOMPtr<nsIDOMWindow> dummy;
+
 	if (parent)
 	{
 		EphyBrowser *browser;
@@ -858,7 +860,8 @@ mozilla_embed_single_open_window (EphyEmbedSingle *single,
 	}
 
 	nsCOMPtr<nsIWindowWatcher> wWatch(do_GetService ("@mozilla.org/embedcomp/window-watcher;1"));
-	wWatch->OpenWindow (domWindow, address, "", features, nsnull, nsnull);
+	wWatch->OpenWindow (domWindow, address, "", features, nsnull,
+			    getter_AddRefs (dummy));
 }
 
 static void
@@ -881,6 +884,7 @@ ephy_embed_single_iface_init (EphyEmbedSingleIface *iface)
 	iface->set_offline_mode = impl_set_offline_mode;
 	iface->load_proxy_autoconf = impl_load_proxy_autoconf;
 	iface->get_font_list = impl_get_font_list;
+	iface->open_window = impl_open_window;
 }
 
 static void

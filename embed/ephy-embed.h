@@ -160,7 +160,9 @@ struct _EphyEmbedIface
 					 EphyEmbedEvent *event);
 	gboolean (* dom_mouse_down)	(EphyEmbed *embed,
 					 EphyEmbedEvent *event);
-	void	 (* popup_blocked)	(EphyEmbed *embed);
+	void	 (* popup_blocked)	(EphyEmbed *embed,
+					 const char *address,
+					 const char *features);
 	void	 (* security_change)	(EphyEmbed *embed,
 					 EmbedSecurityLevel level);
 	void	 (* zoom_change)	(EphyEmbed *embed,

@@ -170,6 +170,20 @@ ephy_embed_single_get_font_list (EphyEmbedSingle *single,
 	return iface->get_font_list (single, lang_group);
 }
 
+/**
+ * ephy_embed_single_open_window:
+ * @single: the #EphyEmbedSingle
+ * @parent: the requested window's parent #EphyEmbed
+ * @address: the URL to load
+ * @features: a Javascript features string
+ *
+ * Opens a new window, as if it were opened in @parent using the Javascript
+ * method and arguments: <code>window.open(&quot;@address&quot;,
+ * &quot;_blank&quot;, &quot;@features&quot;);</code>.
+ * 
+ * Use ephy_shell_new_tab() unless this handling of the @features string is
+ * required.
+ */
 void
 ephy_embed_single_open_window (EphyEmbedSingle *single,
 			       EphyEmbed *parent,

@@ -102,6 +102,25 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_POINTER,
 			      G_TYPE_INT);
 /**
+ * EphyEmbed::ge-popup-blocked:
+ * @embed:
+ * @address: The requested URL
+ * @features: The requested features: for example, "height=400,width=200"
+ *
+ * The ::ge_popup_blocked signal is emitted when the viewed web page requests
+ * a popup window (with javascript:open()) but popup windows are not allowed.
+ **/
+		g_signal_new ("ge_popup_blocked",
+			      EPHY_TYPE_EMBED,
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (EphyEmbedIface, popup_blocked),
+			      NULL, NULL,
+			      ephy_marshal_VOID__STRING_STRING,
+			      G_TYPE_NONE,
+			      2,
+			      G_TYPE_POINTER,
+			      G_TYPE_POINTER);
+/**
  * EphyEmbed::ge-context-menu:
  * @embed:
  * @event: the #EphyEmbedEvent which triggered this signal
@@ -142,7 +161,7 @@ ephy_embed_base_init (gpointer g_class)
  * @address: the new URL @embed is visiting
  *
  * The ::ge_location signal is emitted when @embed begins to load a new web
- * page. For example, if the user clicks on a link or enters an address of if
+ * page. For example, if the user clicks on a link or enters an address or if
  * the previous web page had JavaScript or a META REFRESH tag.
  *
  * The ::ge_location signal will be emitted even when @embed is simply
