@@ -1,4 +1,61 @@
 ==============
+Epiphany 1.5.6
+==============
+
+Code changes
+
+	* Move new-window signal to the embed single, and new window creation
+	  from EphyTab to EphyShell
+	* Make EphyWindow implement EphyLink interface
+	* Make ephy-link.h public
+
+Bug fixes
+
+	* Better wording for the import-failed dialogue
+	* Default security.warn_submit_insecure.show_once to false
+	* Fix sidebar signal emission
+	* Fix "Go Up" not to omit the directory if the uri references a file [#165094]
+	* Alert the user when sidebar extension is not activated [#162685]
+	* Don't show the Leave Fullscreen button in lockdown fullscreen mode [#165256]
+	* Switch to fullscreen toolbar also in lockdown fullscreen mode [#165256]
+	* Fix reference counting problem in extensions manager
+	* Disable DownloadLinkAs and SetAsBackground if saving to disk is disabled
+	* Add lock fullscreen key to schemas file and improve key descriptions
+	* Fix LOG() statements for non-gcc varargs case
+	* Some sparse fixes
+	* Add title signal handler for XUL dialogues
+	* Ungrab the pointer when moving tab between notebooks [#165797]
+	* Set "Clear" context menu entry insensitive in lockdown mode [#165540]
+	* Don't weak ref the shell when it's finalised already [#165542]
+	* Chain up to GtkWindow's keypress handler in EphyWindow
+	* Don't show the menubar with F10 in lockdown mode [#165550]
+	* Don't disable print preview if print setup is locked down [#165552]
+	* Re-enable typeaheadfind autostart [#141963, #165811]
+	* Plug some mem leaks
+	* Force new windows in tabs in lockdown fs mode [#165566]
+	* Don't copy params with the email address [#144469]
+	* Don't exit when DBUS restarts
+	* Forward startup IO to the already-running ephy instance [#150085]
+
+Documentation
+
+	* Update documentation.
+
+
+Contributors:
+Piers Cornwell, Crispin Flowerday, Adam Hooper,
+Christian Persch and Jean-François Rameau; and the translators
+Vladimir Petkov (bg), Jordi Mallach (ca), Miloslav Trmac (cs),
+Hendrik Richter (de), Nikos Charonitakis (el), Adam Weinberger (en_CA),
+David Lodge (en_GB), Francisco Javier F. Serrador (es),
+Pauli Virtanen (fi), Takeshi AIHANA (ja), Changwoo Ryu (ko),
+Žygimantas Beručka (lt), Kjartan Maraas (nb), Reinout van Schouwen (nl),
+Kjartan Maraas (no), Afonso Celso Medina (pt_BR), Duarte Loreto (pt),
+Leonid Kanter (ru), Marcel Telka (sk), Laurent Dhima (sq),
+Christian Rose (sv) and Liu Songhe (zh_CN).
+
+
+==============
 Epiphany 1.5.5
 ==============
 
