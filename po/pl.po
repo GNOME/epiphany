@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-13 12:24+0100\n"
+"POT-Creation-Date: 2004-02-20 13:20+0100\n"
 "PO-Revision-Date: 2003-07-28 01:29+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -37,7 +37,7 @@ msgstr "Epiphany - komponent podglądu treści"
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:3
 msgid "View as Web Page"
-msgstr "Wyświetlanie jako Strona WWW"
+msgstr "Wyświetlanie jako strona WWW"
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:4
 msgid "Web Page"
@@ -60,8 +60,8 @@ msgid ""
 "A list of protocols to be considered safe in addition to the default, when "
 "disable_unsafe_protocols is enabled."
 msgstr ""
-"Lista dodatkowych protokołół w stosunku do domyślnego, uznawanych za "
-"bezpieczne kiedy ustawione jest disable_unsafe_protocols."
+"Lista dodatkowych protokołów w stosunku do domyślnego, uznawanych za "
+"bezpieczne po ustawieniu zmiennej disable_unsafe_protocols."
 
 #: data/epiphany-lockdown.schemas.in.h:2
 msgid "Additional safe protocols"
@@ -157,7 +157,7 @@ msgstr ""
 
 #: data/epiphany.schemas.in.h:4
 msgid "Always show the tab bar"
-msgstr "Wyświetlanie zawsze zakładki"
+msgstr "Wyświetlanie zawsze paska zakładek"
 
 #: data/epiphany.schemas.in.h:5
 msgid "Automatic downloads"
@@ -255,7 +255,7 @@ msgid ""
 "For find in page, whether to start again at the beginning after reaching the "
 "end of the page."
 msgstr ""
-"Określa, czy przeszukując stronę, zacząć od początku po osiągnięciu jej "
+"Określa, czy przeszukując stronę, rozpocząć od początku po osiągnięciu jej "
 "końca."
 
 #: data/epiphany.schemas.in.h:20
@@ -381,7 +381,7 @@ msgstr ""
 #: data/epiphany.schemas.in.h:46
 msgid "Show the tab bar also when there is only one tab open."
 msgstr ""
-"Wyświetlanie paska zakładek również gdy jest tylko jedna zakładka otwarta."
+"Wyświetlanie paska zakładek również gdy tylko jedna zakładka jest otwarta."
 
 #: data/epiphany.schemas.in.h:47
 msgid "Show toolbars by default"
@@ -436,12 +436,16 @@ msgstr ""
 "devanagari\" (dewanagari)."
 
 #: data/epiphany.schemas.in.h:55
+msgid "The downloads folder"
+msgstr "Folder pobierania"
+
+#: data/epiphany.schemas.in.h:56
 msgid "The encoding autodetector. Empty string means autodetect is off"
 msgstr ""
 "Automatyczne wykrywanie kodowania. Pusta wartość oznacza wyłączenie "
 "autowykrywania"
 
-#: data/epiphany.schemas.in.h:56
+#: data/epiphany.schemas.in.h:57
 msgid ""
 "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
 "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
@@ -462,11 +466,11 @@ msgstr ""
 "uproszczone), \"zhtw_parallel_state_machine\" (kodowania chińskie "
 "tradycyjne) i \"universal_charset_detector\" (większość kodowań)."
 
-#: data/epiphany.schemas.in.h:57
+#: data/epiphany.schemas.in.h:58
 msgid "The page informations shown in the history view"
 msgstr "Informacje strony wyświetlane w widoku historii"
 
-#: data/epiphany.schemas.in.h:58
+#: data/epiphany.schemas.in.h:59
 msgid ""
 "The page informations shown in the history view. Valid values in the list "
 "are \"address\", \"title\"."
@@ -474,30 +478,34 @@ msgstr ""
 "Informacje strony wyświetlane w widoku historii. Poprawnymi wartościami na "
 "liście są \"address\" (adres) i \"title\" (tytuł)."
 
+#: data/epiphany.schemas.in.h:60
+msgid "The path of the folder where downloads are saved."
+msgstr "Ścieżka folderu gdzie są zapisywane pobrania."
+
 # FIXME - czy to ma sens?
-#: data/epiphany.schemas.in.h:59
+#: data/epiphany.schemas.in.h:61
 msgid "Use caret browsing mode."
 msgstr "Użycie przeglądania w trybie korektorskim"
 
-#: data/epiphany.schemas.in.h:60
+#: data/epiphany.schemas.in.h:62
 msgid "Use own colors"
 msgstr "Własne kolory"
 
-#: data/epiphany.schemas.in.h:61
+#: data/epiphany.schemas.in.h:63
 msgid "Use own fonts"
 msgstr "Własne czcionki"
 
-#: data/epiphany.schemas.in.h:62
+#: data/epiphany.schemas.in.h:64
 msgid "Use your own colors instead of the colors the page requests."
 msgstr ""
 "Wykorzystuje domyślne kolory zamiast kolorów ustawianych przez dokument."
 
-#: data/epiphany.schemas.in.h:63
+#: data/epiphany.schemas.in.h:65
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr ""
 "Wykorzystuje domyślne czcionki zamiast czcionek ustawianych przez dokument."
 
-#: data/epiphany.schemas.in.h:64
+#: data/epiphany.schemas.in.h:66
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -506,7 +514,7 @@ msgstr ""
 "automatycznie pobrane do folderu pobrań i otwarte przy użyciu odpowiedniej "
 "aplikacji."
 
-#: data/epiphany.schemas.in.h:65
+#: data/epiphany.schemas.in.h:67
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
@@ -515,39 +523,39 @@ msgstr ""
 "\" (ze wszystkich miejsc), \"current site\" (bieżąca witryna) i \"nowhere"
 "\" (znikąd)."
 
-#: data/epiphany.schemas.in.h:66
+#: data/epiphany.schemas.in.h:68
 msgid "Whether to print the date in the footer"
 msgstr "Określa czy należy drukować datę w stopce"
 
-#: data/epiphany.schemas.in.h:67
+#: data/epiphany.schemas.in.h:69
 msgid "Whether to print the date in the footer."
 msgstr "Określa czy należy drukować datę w stopce."
 
-#: data/epiphany.schemas.in.h:68
+#: data/epiphany.schemas.in.h:70
 msgid "Whether to print the page address in the header"
 msgstr "Określa czy należy drukować adres strony w nagłówku"
 
-#: data/epiphany.schemas.in.h:69
+#: data/epiphany.schemas.in.h:71
 msgid "Whether to print the page address in the header."
 msgstr "Określa czy należy drukować adres strony w nagłówku."
 
-#: data/epiphany.schemas.in.h:70
+#: data/epiphany.schemas.in.h:72
 msgid "Whether to print the page numbers (x of total) in the footer"
 msgstr "Określa czy należy drukować numery stron (x ze wszystkich) w stopce"
 
-#: data/epiphany.schemas.in.h:71
+#: data/epiphany.schemas.in.h:73
 msgid "Whether to print the page numbers (x of total) in the footer."
 msgstr "Określa czy należy drukować numery stron (x ze wszystkich) w stopce."
 
-#: data/epiphany.schemas.in.h:72
+#: data/epiphany.schemas.in.h:74
 msgid "Whether to print the page title in the header"
 msgstr "Określa czy należy drukować tytuł strony w nagłówku"
 
-#: data/epiphany.schemas.in.h:73
+#: data/epiphany.schemas.in.h:75
 msgid "Whether to print the page title in the header."
 msgstr "Określa czy należy drukować tytuł strony w nagłówku."
 
-#: data/epiphany.schemas.in.h:74
+#: data/epiphany.schemas.in.h:76
 msgid "x-western"
 msgstr "x-western"
 
@@ -660,7 +668,7 @@ msgid "Download Manager"
 msgstr "Menedżer pobierania"
 
 #: data/glade/epiphany.glade.h:8 data/ui/nautilus-epiphany-view.xml.h:11
-#: src/ephy-window.c:966
+#: src/ephy-window.c:951
 msgid "Find"
 msgstr "Znajdź"
 
@@ -688,7 +696,7 @@ msgstr "_Znajdź:"
 msgid "_Next"
 msgstr "_Naprzód"
 
-#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:281
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:280
 msgid "_Pause"
 msgstr "_Wstrzymaj"
 
@@ -942,7 +950,7 @@ msgid "Paper"
 msgstr "Papier"
 
 #: data/glade/print.glade.h:23 data/ui/nautilus-epiphany-view.xml.h:23
-#: src/ephy-window.c:962
+#: src/ephy-window.c:947
 msgid "Print"
 msgstr "Wydrukuj"
 
@@ -1152,26 +1160,26 @@ msgstr "_Znajdź..."
 msgid "_Print..."
 msgstr "Wy_drukuj..."
 
-#: embed/downloader-view.c:226
+#: embed/downloader-view.c:225
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: embed/downloader-view.c:230
+#: embed/downloader-view.c:229
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: embed/downloader-view.c:281
+#: embed/downloader-view.c:280
 msgid "_Resume"
 msgstr "_Wznów"
 
-#: embed/downloader-view.c:344 lib/widgets/ephy-cell-renderer-progress.c:35
-#: src/ephy-window.c:1147
+#: embed/downloader-view.c:343 lib/widgets/ephy-cell-renderer-progress.c:35
+#: src/ephy-window.c:1132
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: embed/downloader-view.c:395
+#: embed/downloader-view.c:394
 #, c-format
 msgid "About %d second left"
 msgid_plural "About %d seconds left"
@@ -1179,7 +1187,7 @@ msgstr[0] "Pozostała około %d sekunda"
 msgstr[1] "Pozostały około %d sekundy"
 msgstr[2] "Pozostało około %d sekund"
 
-#: embed/downloader-view.c:403
+#: embed/downloader-view.c:402
 #, c-format
 msgid "About %d minute left"
 msgid_plural "About %d minutes left"
@@ -1187,7 +1195,7 @@ msgstr[0] "Pozostała około %d minuta"
 msgstr[1] "Pozostały około %d minuty"
 msgstr[2] "Pozostało około %d minut"
 
-#: embed/downloader-view.c:410
+#: embed/downloader-view.c:409
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
@@ -1195,15 +1203,15 @@ msgstr[0] "%d pobranie"
 msgstr[1] "%d pobrania"
 msgstr[2] "%d pobrań"
 
-#: embed/downloader-view.c:520
+#: embed/downloader-view.c:513
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:531
+#: embed/downloader-view.c:524
 msgid "File"
 msgstr "Plik"
 
-#: embed/downloader-view.c:545
+#: embed/downloader-view.c:538
 msgid "Remaining"
 msgstr "Pozostało"
 
@@ -1611,11 +1619,11 @@ msgstr "_Otwórz"
 msgid "_Download"
 msgstr "_Pobierz"
 
-#: embed/mozilla/ContentHandler.cpp:284
+#: embed/mozilla/ContentHandler.cpp:286
 msgid "Download the unsafe file?"
 msgstr "Pobrać niebezpieczny plik?"
 
-#: embed/mozilla/ContentHandler.cpp:285
+#: embed/mozilla/ContentHandler.cpp:287
 msgid ""
 "This type of file could potentially damage your documents or invade your "
 "privacy. It's not safe to open it directly. You can save it instead."
@@ -1624,11 +1632,11 @@ msgstr ""
 "prywatność. Bezpośrednie jego otwarcie nie jest bezpieczne. Zamiast tego "
 "można go zapisać."
 
-#: embed/mozilla/ContentHandler.cpp:293
+#: embed/mozilla/ContentHandler.cpp:295
 msgid "Open the file in another application?"
 msgstr "Otworzyć plik za pomocą innej aplikacji?"
 
-#: embed/mozilla/ContentHandler.cpp:294
+#: embed/mozilla/ContentHandler.cpp:296
 msgid ""
 "It's not possible to view this file type directly in the browser. You can "
 "open it with another application or save it."
@@ -1636,11 +1644,11 @@ msgstr ""
 "Nie można wyświetlić pliku bezpośrednio w oknie przeglądarki. Można go "
 "otworzyć za pomocą innej aplikacji lub zapisać."
 
-#: embed/mozilla/ContentHandler.cpp:301
+#: embed/mozilla/ContentHandler.cpp:303
 msgid "Download the file?"
 msgstr "Pobrać plik?"
 
-#: embed/mozilla/ContentHandler.cpp:302
+#: embed/mozilla/ContentHandler.cpp:304
 msgid ""
 "It's not possible to view this file because there is no application "
 "installed that can open it. You can save it instead."
@@ -1673,27 +1681,27 @@ msgstr ""
 "\n"
 "Wypróbować domyślną akcję GNOME?"
 
-#: embed/mozilla/FilePicker.cpp:149
+#: embed/mozilla/FilePicker.cpp:156
 msgid "All files"
 msgstr "Wszytkie pliki"
 
-#: embed/mozilla/FilePicker.cpp:154
+#: embed/mozilla/FilePicker.cpp:161
 msgid "HTML files"
 msgstr "Pliki HTML"
 
-#: embed/mozilla/FilePicker.cpp:159
+#: embed/mozilla/FilePicker.cpp:166
 msgid "Text files"
 msgstr "Pliki tekstowe"
 
-#: embed/mozilla/FilePicker.cpp:164
+#: embed/mozilla/FilePicker.cpp:171
 msgid "Image files"
 msgstr "Pliki obrazów"
 
-#: embed/mozilla/FilePicker.cpp:169
+#: embed/mozilla/FilePicker.cpp:176
 msgid "XML files"
 msgstr "Pliki XML"
 
-#: embed/mozilla/FilePicker.cpp:174
+#: embed/mozilla/FilePicker.cpp:181
 msgid "XUL files"
 msgstr "Pliki XUL"
 
@@ -1995,7 +2003,7 @@ msgstr "pl"
 msgid "Print to"
 msgstr "Wydrukuj do"
 
-#: lib/eel-gconf-extensions.c:79
+#: lib/eel-gconf-extensions.c:82
 #, c-format
 msgid ""
 "GConf error:\n"
@@ -2004,7 +2012,7 @@ msgstr ""
 "Błąd programu GConf:\n"
 "  %s"
 
-#: lib/eel-gconf-extensions.c:83
+#: lib/eel-gconf-extensions.c:86
 #, c-format
 msgid ""
 "GConf error:\n"
@@ -2015,7 +2023,7 @@ msgstr ""
 "  %s\n"
 "Wszystkie późniejsze błędy wyświetlono tylko na terminalu"
 
-#: lib/eel-gconf-extensions.c:87
+#: lib/eel-gconf-extensions.c:90
 msgid "GConf Error"
 msgstr "Błąd programu GConf"
 
@@ -2023,11 +2031,11 @@ msgstr "Błąd programu GConf"
 msgid "_Remove Toolbar"
 msgstr "_Usuń pasek narzędziowy"
 
-#: lib/egg/egg-toolbar-editor.c:535
+#: lib/egg/egg-toolbar-editor.c:552
 msgid "Separator"
 msgstr "Separator"
 
-#: lib/egg/egg-toolbar-editor.c:565
+#: lib/egg/egg-toolbar-editor.c:582
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
@@ -2418,7 +2426,7 @@ msgid "_Search:"
 msgstr "Z_najdź:"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:1357
-#: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:968
+#: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:953
 msgid "Bookmarks"
 msgstr "Ulubione"
 
@@ -3160,55 +3168,55 @@ msgstr "Wykorzystaj obraz j_ako tło"
 msgid "Copy I_mage Address"
 msgstr "Skopiuj adres ob_razu"
 
-#: src/ephy-window.c:599
+#: src/ephy-window.c:584
 msgid "Exit Fullscreen"
 msgstr "Zakończ tryb pełnoekranowy"
 
-#: src/ephy-window.c:673
+#: src/ephy-window.c:658
 msgid "_Close document"
 msgstr "Zamkn_ij dokument"
 
-#: src/ephy-window.c:700
+#: src/ephy-window.c:685
 msgid "There are unsubmitted changes to form elements."
 msgstr "Pozostały niewysłane zmiany elementów formularza."
 
-#: src/ephy-window.c:701
+#: src/ephy-window.c:686
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Jeżeli zamkniesz dokument, stracisz tą informację."
 
-#: src/ephy-window.c:958 src/window-commands.c:392
+#: src/ephy-window.c:943 src/window-commands.c:392
 msgid "Open"
 msgstr "Otwórz"
 
-#: src/ephy-window.c:960 src/window-commands.c:417
+#: src/ephy-window.c:945 src/window-commands.c:417
 msgid "Save As"
 msgstr "Zapisz jako"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:949
 msgid "Bookmark"
 msgstr "Ulubione"
 
-#: src/ephy-window.c:1150
+#: src/ephy-window.c:1135
 msgid "Insecure"
 msgstr "Niepewny"
 
-#: src/ephy-window.c:1153
+#: src/ephy-window.c:1138
 msgid "Broken"
 msgstr "Złamany"
 
-#: src/ephy-window.c:1156
+#: src/ephy-window.c:1141
 msgid "Medium"
 msgstr "Średni"
 
-#: src/ephy-window.c:1160
+#: src/ephy-window.c:1145
 msgid "Low"
 msgstr "Niski"
 
-#: src/ephy-window.c:1164
+#: src/ephy-window.c:1149
 msgid "High"
 msgstr "Wysoki"
 
-#: src/ephy-window.c:1174
+#: src/ephy-window.c:1159
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3217,7 +3225,7 @@ msgstr ""
 "Poziom bezpieczeństwa: %s\n"
 "%s"
 
-#: src/ephy-window.c:1180
+#: src/ephy-window.c:1165
 #, c-format
 msgid "Security level: %s"
 msgstr "Poziom bezpieczeństwa: %s"
