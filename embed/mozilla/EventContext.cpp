@@ -191,7 +191,7 @@ nsresult EventContext::Unescape (const nsACString &aEscaped, nsACString &aUnesca
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	nsEmbedString unescaped;
-	rv = escaper->UnEscapeNonAsciiURI (encoding, aEscaped, unescaped);
+	rv = escaper->UnEscapeURIForUI (encoding, aEscaped, unescaped);
 	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && unescaped.Length(), NS_ERROR_FAILURE);
 
 	NS_UTF16ToCString (unescaped, NS_CSTRING_ENCODING_UTF8, aUnescaped);
