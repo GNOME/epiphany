@@ -188,18 +188,26 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 /* void appendFilter (in wstring title, in wstring filter); */
 NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar *filter)
 {
-	GtkFileFilter *filth;
-
 	LOG ("GFilePicker::AppendFilter title '%s' for '%s'",
 	     NS_ConvertUCS2toUTF8 (title).get(),
 	     NS_ConvertUCS2toUTF8 (filter).get())
 
-	filth = gtk_file_filter_new ();
+	nsCAutoString pattern = NS_ConvertUCS2toUTF8 (filter);
+	pattern.StripWhitespace();
+
+	char **patterns = g_strsplit (pattern.get(), ";", -1);
+
+	GtkFileFilter *filth = gtk_file_filter_new ();
+
+	for (int i = 0; patterns[i] != NULL; i++)
+	{
+		gtk_file_filter_add_pattern (filth, patterns[i]);
+	}
 
 	gtk_file_filter_set_name (filth, NS_ConvertUCS2toUTF8(title).get());
-	gtk_file_filter_add_pattern (filth, NS_ConvertUCS2toUTF8(filter).get());
-
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (mDialog), filth);
+
+	g_strfreev (patterns);
 
 	return NS_OK;
 }
