@@ -1058,12 +1058,14 @@ update_actions_sensitivity (EphyWindow *window)
 	g_object_set (action, "sensitive", save_to_disk, NULL);
 	action = gtk_action_group_get_action (popups_action_group, "DownloadLink");
 	g_object_set (action, "sensitive", save_to_disk, NULL);
+	action = gtk_action_group_get_action (popups_action_group, "DownloadLinkAs");
+	g_object_set (action, "sensitive", save_to_disk, NULL);
 	action = gtk_action_group_get_action (popups_action_group, "SaveBackgroundAs");
 	g_object_set (action, "sensitive", save_to_disk, NULL);
 	action = gtk_action_group_get_action (popups_action_group, "SaveImageAs");
 	g_object_set (action, "sensitive", save_to_disk, NULL);
 	action = gtk_action_group_get_action (popups_action_group, "SetImageAsBackground");
-	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_DESKTOP_BG_PICTURE), NULL);
+	g_object_set (action, "sensitive", save_to_disk && eel_gconf_key_is_writable (CONF_DESKTOP_BG_PICTURE), NULL);
 
 	action = gtk_action_group_get_action (action_group, "EditToolbar");
 	g_object_set (action, "sensitive", ! eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_TOOLBAR_EDITING), NULL);
