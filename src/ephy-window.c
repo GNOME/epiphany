@@ -1523,6 +1523,7 @@ static void
 update_window_visibility (EphyWindow *window)
 {
 	GList *l, *tabs;
+	gboolean visible = FALSE;
 
 	tabs = ephy_window_get_tabs (window);
 	for (l = tabs; l != NULL; l = l->next)
@@ -1532,13 +1533,17 @@ update_window_visibility (EphyWindow *window)
 
 		if (ephy_tab_get_visibility (tab))
 		{
-			gtk_widget_show (GTK_WIDGET(window));
-			return;
+			visible = TRUE;
+			break;
 		}
 	}
 	g_list_free (tabs);
 
-	if (GTK_WIDGET_VISIBLE (GTK_WIDGET (window)))
+	if (visible)
+	{
+		gtk_widget_show (GTK_WIDGET(window));
+	}
+	else
 	{
 		gtk_widget_hide (GTK_WIDGET (window));
 	}
