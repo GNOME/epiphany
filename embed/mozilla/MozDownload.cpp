@@ -488,7 +488,7 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 
 	if (!isHTML)
 	{
-		flags |= nsIWebBrowserPersist::PERSIST_NO_CONVERSION;
+		flags |= nsIWebBrowserPersist::PERSIST_FLAGS_NO_CONVERSION;
 	}
 	if (ephy_flags & EMBED_PERSIST_COPY_PAGE)
 	{
