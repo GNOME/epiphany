@@ -1090,6 +1090,12 @@ get_download_button_label ()
 	downloads_path = g_build_path (g_get_home_dir (), "Desktop",
 				       _("Downloads"), NULL);
 
+	/* fallback to Home directory */
+	if (key == NULL)
+	{
+		key = g_strdup ("~");
+	}
+
 	if (g_utf8_collate (key, "~/Desktop") == 0)
 	{
 		g_free (key);
