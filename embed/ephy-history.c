@@ -14,6 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
+ *
  */
 
 #ifdef HAVE_CONFIG_H
@@ -588,7 +591,7 @@ ephy_history_add_host (EphyHistory *eh, EphyNode *page)
 		host_locations = g_list_append (host_locations,
 						g_strdup ("about:blank"));
 	}
-	else if (strcmp (url, "file") == 0)
+	else if (strcmp (scheme, "file") == 0)
 	{
 		host_name = _("Local files");
 		host_locations = g_list_append (host_locations,
@@ -599,10 +602,9 @@ ephy_history_add_host (EphyHistory *eh, EphyNode *page)
 		char *location;
 		char *tmp;
 
-		location = g_strconcat (gnome_vfs_uri_get_scheme (vfs_uri),
+		location = g_strconcat (scheme,
 					"://", host_name, "/", NULL);
 		host_locations = g_list_append (host_locations, location);
-
 
 		if (g_str_has_prefix (host_name, "www."))
 		{
