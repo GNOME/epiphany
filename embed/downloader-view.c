@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -88,6 +90,7 @@ typedef struct
 	gchar *source;
 	gchar *dest;
 	DownloadStatus status;
+	gboolean download_started;
 
 	GtkTreeRowReference *ref;
 } DownloadDetails;
@@ -97,6 +100,7 @@ typedef struct
 	gboolean is_paused;
 	gboolean can_abort;
 	gboolean can_open;
+	gboolean can_pause;
 	DownloaderViewPrivate *priv;
 } ControlsInfo;
 
@@ -326,6 +330,8 @@ controls_info_foreach (GtkTreeModel *model,
 	info->is_paused |= (details->status == DOWNLOAD_STATUS_PAUSED);
 	info->can_abort |= (details->status != DOWNLOAD_STATUS_COMPLETED);
 	info->can_open |= (details->status == DOWNLOAD_STATUS_COMPLETED);
+	info->can_pause |= ((details->status != DOWNLOAD_STATUS_COMPLETED) &&
+			   (details->download_started == TRUE));
 }
 
 static void
@@ -340,7 +346,7 @@ downloader_view_update_controls (DownloaderViewPrivate *priv)
 	info->priv = priv;
 
 	/* initial conditions */
-	info->is_paused = info->can_abort = info->can_open = FALSE;
+	info->is_paused = info->can_abort = info->can_open = info->can_pause = FALSE;
 
 	if (selection)
 	{
@@ -352,8 +358,7 @@ downloader_view_update_controls (DownloaderViewPrivate *priv)
 
 	/* setup buttons */
 	gtk_widget_set_sensitive (priv->open_button, info->can_open);
-	gtk_widget_set_sensitive (priv->pause_button, info->can_abort);
-	/* As long as we can abort, we can pause/resume */
+	gtk_widget_set_sensitive (priv->pause_button, info->can_pause);
 	gtk_widget_set_sensitive (priv->abort_button, info->can_abort);
 
 	if (info->is_paused)
@@ -473,9 +478,22 @@ downloader_view_set_download_info (DownloaderViewPrivate *priv,
 			    COL_FILENAME, details->filename,
 			    -1);
 
+	/* Pause Activation */
+
+	if (details->download_started == FALSE &&
+	    details->status != DOWNLOAD_STATUS_COMPLETED &&
+	    details->size_total != -1)
+	{
+		details->download_started = TRUE;
+		downloader_view_update_controls (priv);
+	}
+		
 	/* Progress */
 	if (details->status == DOWNLOAD_STATUS_COMPLETED)
+	{
 		details->progress = 1;
+	}
+	
 	sprintf (buffer, "%.1f%%",
 		 details->progress > 0 ?
 		 details->progress * 100.0 :
@@ -571,6 +589,7 @@ downloader_view_add_download (DownloaderView *dv,
 	details->size_total = -1;
 	details->size_done = -1;
 	details->progress = -1;
+	details->download_started = FALSE;
 	dv->priv->show_details = FALSE;
 
 	g_hash_table_insert (dv->priv->details_hash,
