@@ -31,8 +31,6 @@
 #endif
 
 #include "ephy-spinner.h"
-#include "ephy-string.h"
-#include "ephy-file-helpers.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gtk/gtkicontheme.h>
