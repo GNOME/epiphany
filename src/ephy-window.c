@@ -1077,10 +1077,10 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	{
 		popup = "EphyImagePopup";
 	}
-	else if (context & EMBED_CONTEXT_INPUT)
+/*	else if (context & EMBED_CONTEXT_INPUT)
 	{
 		popup = "EphyInputPopup";
-	}
+	}*/
 	else
 	{
 		popup = framed ? "EphyFramedDocumentPopup" :
