@@ -235,7 +235,7 @@ tab_set_action_accelerator (GtkActionGroup *action_group,
 			    guint tab_number)
 {
 	const char *action_name, *action_group_name;
-	char *accel_path = NULL;
+	char *accel_path;
 	char accel[7];
 	gint accel_number;
 	guint accel_key;
@@ -269,6 +269,8 @@ tab_set_action_accelerator (GtkActionGroup *action_group,
 	{
 		gtk_accel_map_change_entry (accel_path, 0, 0, TRUE);
 	}
+
+	g_free (accel_path);
 }
 
 void
