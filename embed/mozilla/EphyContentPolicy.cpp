@@ -59,7 +59,7 @@ EphyContentPolicy::~EphyContentPolicy()
 	g_slist_free (mSafeProtocols);
 }
 
-#ifdef MOZ_NSICONTENTPOLICY_VARIANT == 2
+#if MOZ_NSICONTENTPOLICY_VARIANT == 2
 NS_IMETHODIMP
 EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 			      nsIURI *aContentLocation,
