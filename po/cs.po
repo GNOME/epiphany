@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-07 11:33+0100\n"
-"PO-Revision-Date: 2004-12-07 18:00+0100\n"
+"POT-Creation-Date: 2004-12-13 19:36+0100\n"
+"PO-Revision-Date: 2004-12-13 22:15+0100\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1019,6 +1019,14 @@ msgstr[0] "%d stahování"
 msgstr[1] "%d stahování"
 msgstr[2] "%d stahování"
 
+#: embed/downloader-view.c:487 embed/downloader-view.c:496
+msgid "download status|Unknown"
+msgstr "download status|Neznámý"
+
+#: embed/downloader-view.c:490
+msgid "download status|Failed"
+msgstr "download status|Selhal"
+
 #: embed/downloader-view.c:550 src/bookmarks/ephy-bookmarks-editor.c:804
 msgid "File"
 msgstr "Soubor"
@@ -1934,7 +1942,7 @@ msgstr "Historie"
 
 #: lib/ephy-stock-icons.c:58 src/bookmarks/ephy-bookmarks-editor.c:687
 #: src/bookmarks/ephy-bookmarks-editor.c:1557
-#: src/bookmarks/ephy-topic-action.c:926 src/ephy-window.c:1161
+#: src/bookmarks/ephy-topic-action.c:921 src/ephy-window.c:1161
 msgid "Bookmarks"
 msgstr "Záložky"
 
@@ -1982,29 +1990,29 @@ msgstr "300 %"
 msgid "400%"
 msgstr "400 %"
 
-#: src/bookmarks/ephy-bookmark-action.c:293
+#: src/bookmarks/ephy-bookmark-action.c:288
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: src/bookmarks/ephy-bookmark-action.c:546
+#: src/bookmarks/ephy-bookmark-action.c:539
 #: src/bookmarks/ephy-bookmarks-editor.c:181
 #: src/bookmarks/ephy-bookmarks-editor.c:1170 src/ephy-history-window.c:175
 #: src/ephy-history-window.c:713
 msgid "Open in New _Tab"
 msgstr "Otevřít v nové _kartě"
 
-#: src/bookmarks/ephy-bookmark-action.c:552
+#: src/bookmarks/ephy-bookmark-action.c:545
 msgid "Open in New _Window"
 msgstr "Otevřít v novém _okně"
 
-#: src/bookmarks/ephy-bookmark-action.c:583
-#: src/bookmarks/ephy-topic-action.c:779
+#: src/bookmarks/ephy-bookmark-action.c:576
+#: src/bookmarks/ephy-topic-action.c:774
 msgid "Move _Left"
 msgstr "Přesunout do_leva"
 
-#: src/bookmarks/ephy-bookmark-action.c:590
-#: src/bookmarks/ephy-topic-action.c:786
+#: src/bookmarks/ephy-bookmark-action.c:583
+#: src/bookmarks/ephy-topic-action.c:781
 msgid "Move Ri_ght"
 msgstr "Přesunout dop_rava"
 
@@ -2388,11 +2396,11 @@ msgid "Duplicated Bookmark"
 msgstr "Duplikovaná záložka"
 
 #. This is the adjective, not the verb
-#: src/bookmarks/ephy-topic-action.c:273
+#: src/bookmarks/ephy-topic-action.c:268
 msgid "Empty"
 msgstr "Prázdné"
 
-#: src/bookmarks/ephy-topic-action.c:451
+#: src/bookmarks/ephy-topic-action.c:446
 msgid "_Open in Tabs"
 msgstr "_Otevřít v kartách"
 
@@ -3483,6 +3491,23 @@ msgstr "Vietnamština"
 #: src/prefs-dialog.c:333
 msgid "Walloon"
 msgstr "Walloon"
+
+#. translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#: src/prefs-dialog.c:1011 src/prefs-dialog.c:1017
+#, c-format
+msgid "language|%s (%s)"
+msgstr "language|%s (%s)"
+
+#. translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: src/prefs-dialog.c:1026 src/prefs-dialog.c:1384
+#, c-format
+msgid "language|User defined (%s)"
+msgstr "language|Uživatelem definovaný (%s)"
 
 #: src/prefs-dialog.c:1049
 #, c-format
