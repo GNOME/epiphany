@@ -59,7 +59,7 @@ EphyContentPolicy::~EphyContentPolicy()
 	g_slist_free (mSafeProtocols);
 }
 
-#ifdef MOZ_NSICONTENTPOLICY_VARIANT_2
+#ifdef MOZ_NSICONTENTPOLICY_VARIANT == 2
 NS_IMETHODIMP
 EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 			      nsIURI *aContentLocation,
@@ -158,4 +158,4 @@ NS_IMETHODIMP EphyContentPolicy::ShouldProcess(PRInt32 contentType,
 	*_retval = PR_TRUE;
 	return NS_OK;
 }
-#endif /* MOZ_NSICONTENTPOLICY_VARIANT_2 || MOZ_NSICONTENTPOLICY_VARIANT_3 */
+#endif /* MOZ_NSICONTENTPOLICY_VARIANT == 2 */
