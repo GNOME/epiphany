@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#include <libgnome/gnome-i18n.h>
+
 #include "ephy-bookmark-action.h"
 #include "ephy-bookmarks.h"
 #include "ephy-shell.h"
@@ -153,25 +155,30 @@ ephy_bookmark_action_sync_icon (EggAction *action, GParamSpec *pspec, GtkWidget 
 		gtk_image_set_from_pixbuf (icon, pixbuf);
 		g_object_unref (pixbuf);
 	}
-	else
-	{
-		gtk_image_set_from_stock (icon,
-					  GTK_STOCK_JUMP_TO,
-					  GTK_ICON_SIZE_MENU);
-	}
 }
 
 static void
 ephy_bookmark_action_sync_label (EggAction *action, GParamSpec *pspec, GtkWidget *proxy)
 {
 	GtkLabel *label;
+	gchar *toolbar_label;
 
 	LOG ("Set bookmark action proxy label to %s", action->label)
 
 	label = GTK_LABEL (g_object_get_data (G_OBJECT (proxy), "label"));
 	g_return_if_fail (label != NULL);
 
-	gtk_label_set_label (label, action->label);
+	if (EPHY_BOOKMARK_ACTION (action)->priv->smart_url)
+ 	{
+		toolbar_label = g_strdup_printf (_("%s:"), action->label);
+	}
+	else
+	{
+		toolbar_label = g_strdup (action->label);
+	}
+
+	gtk_label_set_label (label, toolbar_label);
+	g_free (toolbar_label);
 }
 
 static void
