@@ -71,7 +71,7 @@ ephy_stock_icons_init (void)
 		gtk_icon_set_add_source (icon_set, icon_source);
 		gtk_icon_factory_add (factory, items[i], icon_set);
 		gtk_icon_set_unref (icon_set);
-		g_free (icon_source);
+		gtk_icon_source_free (icon_source);
 	}
 
 	for (i = 0; i < (int) G_N_ELEMENTS (icon_theme_items); i++)
@@ -82,7 +82,7 @@ ephy_stock_icons_init (void)
 		gtk_icon_set_add_source (icon_set, icon_source);
 		gtk_icon_factory_add (factory, icon_theme_items[i], icon_set);
 		gtk_icon_set_unref (icon_set);
-		g_free (icon_source);
+		gtk_icon_source_free (icon_source);
 	}
 
 	g_object_unref (G_OBJECT (factory));
