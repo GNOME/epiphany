@@ -46,6 +46,12 @@ struct _EphyExtensionIface
 					 EphyWindow *window);
 	void	(* detach_window)	(EphyExtension *extension,
 					 EphyWindow *window);
+	void	(* attach_tab)		(EphyExtension *extension,
+					 EphyWindow *window,
+					 EphyTab *tab);
+	void	(* detach_tab)		(EphyExtension *extension,
+					 EphyWindow *window,
+					 EphyTab *tab);
 };
 
 GType	ephy_extension_get_type		(void);
@@ -55,6 +61,14 @@ void	ephy_extension_attach_window	(EphyExtension *extension,
 
 void	ephy_extension_detach_window	(EphyExtension *extension,
 					 EphyWindow *window);
+
+void	ephy_extension_attach_tab	(EphyExtension *extension,
+					 EphyWindow *window,
+					 EphyTab *tab);
+
+void	ephy_extension_detach_tab	(EphyExtension *extension,
+					 EphyWindow *window,
+					 EphyTab *tab);
 
 G_END_DECLS
 

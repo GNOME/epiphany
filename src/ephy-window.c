@@ -2007,6 +2007,7 @@ tab_added_cb (EphyNotebook *notebook,
 	      EphyTab *tab,
 	      EphyWindow *window)
 {
+	EphyExtension *manager;
 	EphyEmbed *embed;
 
         g_return_if_fail (EPHY_IS_TAB (tab));
@@ -2023,6 +2024,10 @@ tab_added_cb (EphyNotebook *notebook,
 
 	g_signal_connect_after (embed, "ge-modal-alert",
 				G_CALLBACK (modal_alert_cb), window);
+
+	/* Let the extensions attach themselves to the tab */
+	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
+	ephy_extension_attach_tab (manager, window, tab);
 }
 
 static void
@@ -2030,9 +2035,14 @@ tab_removed_cb (EphyNotebook *notebook,
 		EphyTab *tab,
 		EphyWindow *window)
 {
+	EphyExtension *manager;
 	EphyEmbed *embed;
 
         g_return_if_fail (EPHY_IS_TAB (tab));
+
+	/* Let the extensions remove themselves from the tab */
+	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
+	ephy_extension_detach_tab (manager, window, tab);
 
 	g_signal_handlers_disconnect_by_func (G_OBJECT (tab),
 					      G_CALLBACK (sync_tab_visibility),

@@ -742,12 +742,21 @@ get_loader_for_type (EphyExtensionsManager *manager,
 	return NULL;
 }
 
-
 static void
 attach_window (EphyWindow *window,
 	       EphyExtension *extension)
 {
+	GList *tabs, *l;
+
 	ephy_extension_attach_window (extension, window);
+
+	tabs = ephy_window_get_tabs (window);
+	for (l = tabs; l; l = l->next)
+	{
+		ephy_extension_attach_tab (extension, window,
+					   EPHY_TAB (l->data));
+	}
+	g_list_free (tabs);
 }
 
 static void
@@ -805,6 +814,16 @@ static void
 detach_window (EphyWindow *window,
 	       EphyExtension *extension)
 {
+	GList *tabs, *l;
+
+	tabs = ephy_window_get_tabs (window);
+	for (l = tabs; l; l = l->next)
+	{
+		ephy_extension_detach_tab (extension, window,
+					   EPHY_TAB (l->data));
+	}
+	g_list_free (tabs);
+
 	ephy_extension_detach_window (extension, window);
 }
 
@@ -1225,6 +1244,13 @@ ephy_extensions_manager_finalize (GObject *object)
 }
 
 static void
+attach_extension_to_window (EphyExtension *extension,
+			    EphyWindow *window)
+{
+	attach_window (window, extension);
+}
+
+static void
 impl_attach_window (EphyExtension *extension,
 		    EphyWindow *window)
 {
@@ -1233,7 +1259,7 @@ impl_attach_window (EphyExtension *extension,
 	LOG ("Attach")
 
 	g_list_foreach (manager->priv->extensions,
-			(GFunc) ephy_extension_attach_window, window);
+			(GFunc) attach_extension_to_window, window);
 
 	manager->priv->windows = g_list_prepend (manager->priv->windows, window);
 }
@@ -1243,6 +1269,7 @@ impl_detach_window (EphyExtension *extension,
 		    EphyWindow *window)
 {
 	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (extension);
+	GList *tabs, *l;
 
 	LOG ("Detach")
 
@@ -1250,9 +1277,59 @@ impl_detach_window (EphyExtension *extension,
 
 	g_object_ref (window);
 
+	/* Detach tabs (uses impl_detach_tab) */
+	tabs = ephy_window_get_tabs (window);
+	for (l = tabs; l; l = l->next)
+	{
+		ephy_extension_detach_tab (extension, window,
+					   EPHY_TAB (l->data));
+	}
+	g_list_free (tabs);
+
+	/* Then detach the window */
 	g_list_foreach (manager->priv->extensions,
 			(GFunc) ephy_extension_detach_window, window);
 
+	g_object_unref (window);
+}
+
+static void
+impl_attach_tab (EphyExtension *extension,
+		 EphyWindow *window,
+		 EphyTab *tab)
+{
+	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (extension);
+	GList *l;
+
+	LOG ("Attach tab");
+
+	for (l = manager->priv->extensions; l; l = l->next)
+	{
+		ephy_extension_attach_tab (EPHY_EXTENSION (l->data),
+					   window, tab);
+	}
+}
+
+static void
+impl_detach_tab (EphyExtension *extension,
+		 EphyWindow *window,
+		 EphyTab *tab)
+{
+	EphyExtensionsManager *manager = EPHY_EXTENSIONS_MANAGER (extension);
+	GList *l;
+
+	LOG ("Detach Tab");
+
+	g_object_ref (window);
+	g_object_ref (tab);
+
+	for (l = manager->priv->extensions; l; l = l->next)
+	{
+		ephy_extension_detach_tab (EPHY_EXTENSION (l->data),
+					   window, tab);
+	}
+
+	g_object_unref (tab);
 	g_object_unref (window);
 }
 
@@ -1261,6 +1338,8 @@ ephy_extensions_manager_iface_init (EphyExtensionIface *iface)
 {
 	iface->attach_window = impl_attach_window;
 	iface->detach_window = impl_detach_window;
+	iface->attach_tab    = impl_attach_tab;
+	iface->detach_tab    = impl_detach_tab;
 }
 
 static void

@@ -1,3 +1,18 @@
+2004-12-17  Adam Hooper  <adamh@cvs.gnome.org>
+
+	* src/ephy-extension.c: (ephy_extension_attach_window),
+	(ephy_extension_detach_window), (ephy_extension_attach_tab),
+	(ephy_extension_detach_tab):
+	* src/ephy-extension.h:
+	* src/ephy-extensions-manager.c: (attach_window), (detach_window),
+	(attach_extension_to_window), (impl_attach_window),
+	(impl_detach_window), (impl_attach_tab), (impl_detach_tab),
+	(ephy_extensions_manager_iface_init):
+	* src/ephy-window.c: (tab_added_cb), (tab_removed_cb):
+
+	Add attach_tab and detach_tab functions to extension interface (bug
+	#153732). Thanks to Crispin for almost all of the code.
+
 2004-12-17  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/prefs-dialog.c:

@@ -50,7 +50,10 @@ ephy_extension_attach_window (EphyExtension *extension,
 			      EphyWindow *window)
 {
 	EphyExtensionIface *iface = EPHY_EXTENSION_GET_IFACE (extension);
-	iface->attach_window (extension, window);
+	if (iface->attach_window)
+	{
+		iface->attach_window (extension, window);
+	}
 }
 
 void
@@ -58,5 +61,32 @@ ephy_extension_detach_window (EphyExtension *extension,
 			      EphyWindow *window)
 {
 	EphyExtensionIface *iface = EPHY_EXTENSION_GET_IFACE (extension);
-	iface->detach_window (extension, window);
+	if (iface->detach_window)
+	{
+		iface->detach_window (extension, window);
+	}
+}
+
+void
+ephy_extension_attach_tab (EphyExtension *extension,
+			   EphyWindow *window,
+			   EphyTab *tab)
+{
+	EphyExtensionIface *iface = EPHY_EXTENSION_GET_IFACE (extension);
+	if (iface->attach_tab)
+	{
+		iface->attach_tab (extension, window, tab);
+	}
+}
+
+void
+ephy_extension_detach_tab (EphyExtension *extension,
+			   EphyWindow *window,
+			   EphyTab *tab)
+{
+	EphyExtensionIface *iface = EPHY_EXTENSION_GET_IFACE (extension);
+	if (iface->detach_tab)
+	{
+		iface->detach_tab (extension, window, tab);
+	}
 }
