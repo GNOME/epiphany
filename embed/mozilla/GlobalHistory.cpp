@@ -129,20 +129,7 @@ NS_IMETHODIMP MozGlobalHistory::SetPageTitle(nsIURI *aURI, const nsAString & aTi
 /* void hidePage (in nsIURI url); */
 NS_IMETHODIMP MozGlobalHistory::HidePage(nsIURI *aURI)
 {
-	NS_ENSURE_ARG (aURI);
-
-	nsEmbedCString spec;
-	aURI->GetSpec(spec);
-
-	EphyNode *page;
-	page = ephy_history_get_page (mGlobalHistory, spec.get());
-
-	if (page)
-	{
-		ephy_node_unref (page);
-	}
-
-	return NS_OK;
+	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* void removePage (in string aURL); */

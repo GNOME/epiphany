@@ -2,6 +2,14 @@
 
 	* embed/mozilla/GlobalHistory.cpp:
 
+	Remove implementation of ::HidePage again, it's really not used
+	anyway in mozilla (history load listener is the only place, and it's
+	not build, not even updated for API changes).
+
+2004-06-20  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/GlobalHistory.cpp:
+
 	Implement GlobalHistory2::HidePage, fixes bug #142143.
 
 2004-06-20  Christian Persch  <chpe@cvs.gnome.org>
