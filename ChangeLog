@@ -1,3 +1,8 @@
+2004-11-11  James Henstridge  <james@jamesh.id.au>
+
+	* src/ephy-extensions-manager.c (load_file_from_monitor): make len
+	a gsize rather than an int to fix compilation on 64-bit systems.
+
 2004-11-11  Xan Lopez  <xan@gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-editor.c:

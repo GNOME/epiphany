@@ -933,7 +933,7 @@ load_file_from_monitor (EphyExtensionsManager *manager,
 	 */
 	char *identifier;
 	char *xml;
-	int len;
+	gsize len;
 	GError *err = NULL;
 
 	g_file_get_contents (path, &xml, &len, &err);
