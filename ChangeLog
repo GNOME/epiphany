@@ -1,5 +1,14 @@
 2004-10-17  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-node.c: (signal_object_weak_notify),
+	(destroy_signal_data), (ephy_node_destroy),
+	(ephy_node_new_with_id), (ephy_node_unref):
+
+	Fix EphyNode callback data destruction. Patch by Peter Harvey,
+	fixes bug #152718.
+
+2004-10-17  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/Makefile.am:
 	R lib/ephy-module-loader.c:
 	R lib/ephy-module-loader.h:

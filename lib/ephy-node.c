@@ -169,33 +169,6 @@ ephy_node_emit_signal (EphyNode *node, EphyNodeSignalType type, ...)
 	va_end (data.valist);
 }
 
-static void
-ephy_node_finalize (EphyNode *node)
-{
-	guint i;
-
-	g_hash_table_destroy (node->signals);
-	node->signals = NULL;
-
-	for (i = 0; i < node->properties->len; i++) {
-		GValue *val;
-
-		val = g_ptr_array_index (node->properties, i);
-
-		if (val != NULL) {
-			g_value_unset (val);
-			g_free (val);
-		}
-	}
-	g_ptr_array_free (node->properties, TRUE);
-
-	g_hash_table_destroy (node->parents);
-
-	g_ptr_array_free (node->children, TRUE);
-
-	g_free (node);
-}
-
 static inline void
 real_remove_child (EphyNode *node,
 		   EphyNode *child,
@@ -250,13 +223,12 @@ static void
 signal_object_weak_notify (EphyNodeSignalData *signal_data,
                            GObject *where_the_object_was)
 {
+        signal_data->data = NULL;
 	ephy_node_signal_disconnect (signal_data->node, signal_data->id);
 }
 
 static void
-unref_signal_objects (long id,
-	              EphyNodeSignalData *signal_data,
-	              EphyNode *node)
+destroy_signal_data (EphyNodeSignalData *signal_data)
 {
 	if (signal_data->data)
 	{
@@ -264,20 +236,24 @@ unref_signal_objects (long id,
 				     (GWeakNotify)signal_object_weak_notify,
 				     signal_data);
 	}
+        
+        g_free (signal_data);
 }
 
 static void
-ephy_node_dispose (EphyNode *node)
+ephy_node_destroy (EphyNode *node)
 {
 	guint i;
 
 	ephy_node_emit_signal (node, EPHY_NODE_DESTROY);
 
-	/* remove from DAG */
+        /* Remove from parents. */
 	g_hash_table_foreach (node->parents,
 			      (GHFunc) remove_child,
 			      node);
+	g_hash_table_destroy (node->parents);
 
+        /* Remove children. */
 	for (i = 0; i < node->children->len; i++) {
 		EphyNode *child;
 
@@ -285,12 +261,28 @@ ephy_node_dispose (EphyNode *node)
 
 		real_remove_child (node, child, FALSE, TRUE);
 	}
+	g_ptr_array_free (node->children, TRUE);
+        
+        /* Remove signals. */
+	g_hash_table_destroy (node->signals);
 
-	g_hash_table_foreach (node->signals,
-			      (GHFunc) unref_signal_objects,
-			      node);
-
+        /* Remove id. */
 	_ephy_node_db_remove_id (node->db, node->id);
+
+        /* Remove properties. */
+	for (i = 0; i < node->properties->len; i++) {
+		GValue *val;
+
+		val = g_ptr_array_index (node->properties, i);
+
+		if (val != NULL) {
+			g_value_unset (val);
+			g_free (val);
+		}
+	}
+	g_ptr_array_free (node->properties, TRUE);
+
+	g_free (node);
 }
 
 EphyNode *
@@ -328,15 +320,13 @@ ephy_node_new_with_id (EphyNodeDb *db, guint reserved_id)
 
 	node->children = g_ptr_array_new ();
 
-	node->parents = g_hash_table_new_full (int_hash,
-					       int_equal,
-					       NULL,
-					       g_free);
+	node->parents = g_hash_table_new_full
+          (int_hash, int_equal, NULL, g_free);
 
-	node->signals = g_hash_table_new_full (int_hash,
-					       int_equal,
-					       NULL,
-					       g_free);
+	node->signals = g_hash_table_new_full
+          (int_hash, int_equal, NULL,
+           (GDestroyNotify)destroy_signal_data);
+
 	node->signal_id = 0;
 
 	_ephy_node_db_add_id (db, reserved_id, node);
@@ -380,8 +370,7 @@ ephy_node_unref (EphyNode *node)
 	node->ref_count--;
 
 	if (node->ref_count <= 0) {
-		ephy_node_dispose (node);
-		ephy_node_finalize (node);
+		ephy_node_destroy (node);
 	}
 }
 
