@@ -22,6 +22,7 @@
 #include "print-dialog.h"
 #include "ephy-embed-dialog.h"
 #include "ephy-file-chooser.h"
+#include "ephy-stock-icons.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 
@@ -348,7 +349,7 @@ ephy_print_setup_dialog_new (void)
 
 	window = ephy_dialog_get_control (dialog, setup_props[SETUP_WINDOW_PROP].id);
 	icon = gtk_widget_render_icon (window,
-				       GTK_STOCK_PROPERTIES,
+				       STOCK_PRINT_SETUP,
 				       GTK_ICON_SIZE_MENU,
 				       "print_setup_dialog");
 	gtk_window_set_icon (GTK_WINDOW (window), icon);

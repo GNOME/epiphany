@@ -40,7 +40,8 @@ ephy_stock_icons_init (void)
 		STOCK_FULLSCREEN,
 		STOCK_VIEW_SOURCE,
 		STOCK_SEND_MAIL,
-		STOCK_ADD_BOOKMARK
+		STOCK_ADD_BOOKMARK,
+		STOCK_PRINT_SETUP
 	};
 
 	static const char *items[] =
