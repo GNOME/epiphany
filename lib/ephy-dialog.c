@@ -462,7 +462,7 @@ static void
 set_editable_from_value (PropertyInfo *info, const GValue *value)
 {
 	char *text = NULL;
-	int pos;
+	int pos = 0; /* insertion position */
 
 	g_return_if_fail (GTK_IS_EDITABLE (info->widget));
 
