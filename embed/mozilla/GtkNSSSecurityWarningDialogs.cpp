@@ -90,7 +90,7 @@ GtkNSSSecurityWarningDialogs::ConfirmEnteringSecure (nsIInterfaceRequestor *aCon
 		  GTK_BUTTONS_OK,
 		  GTK_RESPONSE_OK,
 		  _("Security Notice"),
-		  _("This page is loaded over a secure connection."),
+		  _("This page is loaded over a secure connection"),
 		  _("You can always see the security status of a page from "
 		    "the padlock icon on the statusbar."),
 		  nsnull, _retval);
@@ -109,7 +109,7 @@ GtkNSSSecurityWarningDialogs::ConfirmEnteringWeak (nsIInterfaceRequestor *aConte
 		  GTK_BUTTONS_OK,
 		  GTK_RESPONSE_OK,
 		  _("Security Warning"),
-		  _("This page is loaded over a low security connection."),
+		  _("This page is loaded over a low security connection"),
 		  _("Any information you see or enter on this page could "
 		    "easily be intercepted by a third party."),
 		  nsnull, _retval);
@@ -137,7 +137,7 @@ GtkNSSSecurityWarningDialogs::ConfirmMixedMode (nsIInterfaceRequestor *aContext,
 		  GTK_BUTTONS_OK,
 		  GTK_RESPONSE_OK,
 		  _("Security Warning"),
-		  _("Some parts of this page are loaded over an insecure connection."),
+		  _("Some parts of this page are loaded over an insecure connection"),
 		  _("Some information you see or enter will be sent over an insecure "
 		    "connection, and could easily be intercepted by a third party."),
 		  nsnull, _retval);
