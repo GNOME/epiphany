@@ -67,8 +67,6 @@ struct EphyNotebookPrivate
 	gint x_start, y_start;
 	gboolean drag_in_progress;
 	gboolean show_tabs;
-	EphyNotebook *src_notebook;
-	gint src_page;
 };
 
 static void ephy_notebook_init           (EphyNotebook *notebook);
@@ -374,13 +372,9 @@ ephy_notebook_move_page (EphyNotebook *src, EphyNotebook *dest,
 }
 
 static void
-drag_start (EphyNotebook *notebook,
-	    EphyNotebook *src_notebook,
-	    gint src_page)
+drag_start (EphyNotebook *notebook)
 {
 	notebook->priv->drag_in_progress = TRUE;
-	notebook->priv->src_notebook = src_notebook;
-	notebook->priv->src_page = src_page;
 
 	/* get a new cursor, if necessary */
 	if (!cursor) cursor = gdk_cursor_new (GDK_FLEUR);
@@ -404,8 +398,6 @@ drag_stop (EphyNotebook *notebook)
 	}
 
 	notebook->priv->drag_in_progress = FALSE;
-	notebook->priv->src_notebook = NULL;
-	notebook->priv->src_page = -1;
 	if (notebook->priv->motion_notify_handler_id != 0)
 	{
 		g_signal_handler_disconnect (G_OBJECT (notebook),
@@ -446,23 +438,19 @@ motion_notify_cb (EphyNotebook *notebook, GdkEventMotion *event,
 	gint page_num;
 	gint result;
 
-	/* If the notebook only has one tab, we don't want to do
-	 * anything since ephy can't handle empty notebooks
-	 */
-	if (g_list_length (GTK_NOTEBOOK (notebook)->children) <= 1) {
-		return FALSE;
-	}
-
-	if ((notebook->priv->drag_in_progress == FALSE)
-	    && (gtk_drag_check_threshold (GTK_WIDGET (notebook),
-					  notebook->priv->x_start,
-					  notebook->priv->y_start,
-					  event->x_root, event->y_root)))
+	if (notebook->priv->drag_in_progress == FALSE)
 	{
-		gint cur_page;
-
-		cur_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
-		drag_start (notebook, notebook, cur_page);
+		if (gtk_drag_check_threshold (GTK_WIDGET (notebook),
+					      notebook->priv->x_start,
+					      notebook->priv->y_start,
+					      event->x_root, event->y_root))
+		{
+			drag_start (notebook);
+		}
+		else
+		{
+			return FALSE;
+		}
 	}
 
 	result = find_notebook_and_tab_at_pos ((gint)event->x_root,
@@ -498,20 +486,20 @@ move_tab_to_another_notebook(EphyNotebook *src,
 	 * to that new notebook, and let this notebook handle the
 	 * drag
 	*/
-	g_assert (dest != NULL);
+	g_assert (EPHY_IS_NOTEBOOK (dest));
 	g_assert (dest != src);
 
-	/* Move the widgets (tab label and tab content) to the new
-	 * notebook
-	 */
 	cur_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (src));
 	child    = gtk_notebook_get_nth_page (GTK_NOTEBOOK (src), cur_page);
-	ephy_notebook_move_page (src, dest, child, dest_page);
 
-	/* "Give" drag handling to the new notebook */
-	drag_start (dest, src->priv->src_notebook, src->priv->src_page);
+	/* stop drag in origin window */
 	drag_stop (src);
 	gtk_grab_remove (GTK_WIDGET (src));
+
+	ephy_notebook_move_page (src, dest, child, dest_page);
+
+	/* start drag handling in dest notebook */
+	drag_start (dest);
 
 	dest->priv->motion_notify_handler_id =
 		g_signal_connect (G_OBJECT (dest),
@@ -535,7 +523,8 @@ button_release_cb (EphyNotebook *notebook, GdkEventButton *event,
 		cur_page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
 						      cur_page_num);
 
-		if (!is_in_notebook_window (notebook, event->x_root, event->y_root))
+		if (!is_in_notebook_window (notebook, event->x_root, event->y_root)
+		    && gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) > 1)
 		{
 			/* Tab was detached */
 			g_signal_emit (G_OBJECT (notebook),
@@ -742,8 +731,6 @@ ephy_notebook_init (EphyNotebook *notebook)
 
 	notebook->priv->drag_in_progress = FALSE;
 	notebook->priv->motion_notify_handler_id = 0;
-	notebook->priv->src_notebook = NULL;
-	notebook->priv->src_page = -1;
 	notebook->priv->focused_pages = NULL;
 	notebook->priv->opened_tabs = NULL;
 	notebook->priv->show_tabs = TRUE;

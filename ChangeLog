@@ -1,3 +1,14 @@
+2003-09-15  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-notebook.c: (drag_start), (drag_stop),
+	(motion_notify_cb), (move_tab_to_another_notebook),
+	(button_release_cb), (ephy_notebook_init):
+
+	Enable dragging the tab from a single-tab window too.
+
+	Correctly honour the drag threshold when starting a drag
+	(ported from galeon, tanks go to Crispin).
+
 2003-09-14  Christian Persch  <chpe@cvs.gnome.org>
 
 	* data/default-prefs.js:
