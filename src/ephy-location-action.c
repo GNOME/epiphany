@@ -271,10 +271,12 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 					 G_CALLBACK (user_changed_cb), action, 0);
 	}
 
-	/* we need to connect to this before chaining up, since gtkaction's
+	/* FIXME: when porting to gtk+ 2.6, use "visible-overflown" 
+	 * property on GtkAction instead.
+	 * we need to connect to this before chaining up, since gtkaction's
 	 * connect_proxy connects a routine there which uses create_menu_item
 	 * method to generate a menu proxy (and create_menu_item CANNOT return
-	 * NULL. See bug #133446.)
+	 * NULL. See bug #133446.
 	 */
 	g_signal_connect_object (proxy, "create_menu_proxy",
 				 G_CALLBACK (create_menu_proxy_cb),
