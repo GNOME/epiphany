@@ -188,7 +188,7 @@ NS_IMETHODIMP MozGlobalHistory::HidePage(const char *aURL)
 
 #if MOZILLA_SNAPSHOT >= 20
 /* void removePage (in nsIURI aURL); */
-NS_IMETHODIMP MozGlobalHistory::RemovePage(nsIRUI *aURI)
+NS_IMETHODIMP MozGlobalHistory::RemovePage(nsIURI *aURI)
 {
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
