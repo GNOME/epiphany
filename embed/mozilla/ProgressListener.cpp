@@ -647,6 +647,9 @@ nsresult GProgressListener::Resume (void)
 
 nsresult GProgressListener::Abort (void)
 {
+	PRBool notify;
+	
+	notify = (mAction == ACTION_OBJECT_NOTIFY);
         mAction = ACTION_NONE;
 
         if (mIsPaused)
@@ -666,17 +669,24 @@ nsresult GProgressListener::Abort (void)
 
         if (mPersist)
         {
-                return mPersist->CancelSave ();
+                mPersist->CancelSave ();
         }
-
-        if (mLauncher)
+        else if (mLauncher)
         {
-                return mLauncher->Cancel ();
+                mLauncher->Cancel ();
         }
         else
         {
                 return NS_ERROR_FAILURE;
         }
+
+	if (notify)
+	{	
+		mozilla_embed_persist_cancelled
+			(MOZILLA_EMBED_PERSIST (mEphyPersist));	
+	}
+
+	return NS_OK;
 }
 
 NS_DEF_FACTORY (GProgressListener, GProgressListener);

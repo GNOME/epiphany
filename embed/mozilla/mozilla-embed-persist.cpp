@@ -122,6 +122,13 @@ void
 mozilla_embed_persist_completed (MozillaEmbedPersist *persist)
 {
 	g_signal_emit_by_name (persist, "completed");
+	g_object_unref (persist);
+}
+
+void
+mozilla_embed_persist_cancelled (MozillaEmbedPersist *persist)
+{
+	g_object_unref (persist);
 }
 
 static gresult 
@@ -132,6 +139,8 @@ impl_cancel (EphyEmbedPersist *persist)
 	if (!bpersist) return G_FAILED;
 
 	bpersist->CancelSave ();
+
+	g_object_unref (persist);
 
 	return G_OK;
 }
@@ -147,6 +156,8 @@ impl_save (EphyEmbedPersist *persist)
 	EphyEmbed *embed;
 	EmbedPersistFlags flags;
 	EphyWrapper *wrapper = NULL;
+
+	g_object_ref (persist);
 	
 	g_object_get (persist,
 		      "source", &uri,        

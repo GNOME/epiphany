@@ -19,7 +19,7 @@
 #include <config.h>
 
 #include "ephy-embed-persist.h"
-
+#include "ephy-debug.h"
 #include "mozilla-embed.h"
 #include "mozilla-embed-persist.h"
 
@@ -281,6 +281,8 @@ ephy_embed_persist_init (EphyEmbedPersist *persist)
 	persist->priv->src = NULL;
 	persist->priv->dir = NULL;
 	persist->priv->handler = NULL;
+
+	LOG ("Embed persist init")
 }
 
 static void
@@ -305,6 +307,8 @@ ephy_embed_persist_finalize (GObject *object)
 	}
 
 	g_free (persist->priv);
+
+	LOG ("Embed persist finalize")
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }

@@ -53,6 +53,8 @@ GType               mozilla_embed_persist_get_type   (void);
 
 void		    mozilla_embed_persist_completed  (MozillaEmbedPersist *persist);
 
+void		    mozilla_embed_persist_cancelled  (MozillaEmbedPersist *persist);
+
 G_END_DECLS
 
 #endif

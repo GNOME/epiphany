@@ -1,3 +1,13 @@
+2003-03-15  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/ephy-embed-persist.c: (ephy_embed_persist_init),
+	(ephy_embed_persist_finalize):
+	* embed/mozilla/ProgressListener.cpp:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed-persist.h:
+
+	Keep a ref on EmbedPersist while save is in progress.
+
 2003-03-15  Christian Persch <christian@hpersch.de>
 
 	* embed/ephy-embed-utils.c: (ephy_embed_utils_save):
