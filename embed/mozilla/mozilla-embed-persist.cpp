@@ -156,6 +156,9 @@ impl_save (EphyEmbedPersist *persist)
 	if (embed)
 	{
 		browser = (EphyBrowser *) _mozilla_embed_get_ephy_browser (MOZILLA_EMBED(embed));
+
+		g_object_unref (embed);
+
 		NS_ENSURE_TRUE (browser, FALSE);
 	}
 	/* we must have one of uri or browser */
