@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2000, 2001, 2002, 2003 Marco Pesenti Gritti
- *  Copyright (C) 2003 Christian Persch
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -319,7 +319,8 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 	ephy_dialog_construct (EPHY_DIALOG (dialog),
 			       properties,
 			       ephy_file ("epiphany.glade"),
-			       "encoding_dialog");
+			       "encoding_dialog",
+			       NULL);
 
 	dialog->priv->filter = ephy_node_filter_new ();
 

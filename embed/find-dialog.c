@@ -1,5 +1,7 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen
+ *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -254,7 +256,9 @@ find_dialog_init (FindDialog *dialog)
 	ephy_dialog_construct (EPHY_DIALOG(dialog),
 			       properties,
 			       ephy_file ("epiphany.glade"),
-			       "find_dialog");
+			       "find_dialog",
+			       NULL);
+
 	update_navigation_controls (dialog, TRUE, TRUE);
 
 	window = ephy_dialog_get_control (EPHY_DIALOG (dialog),

@@ -1,6 +1,7 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen
  *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -786,7 +787,8 @@ pdm_dialog_init (PdmDialog *dialog)
 	ephy_dialog_construct (EPHY_DIALOG(dialog),
 			       properties,
 			       ephy_file ("epiphany.glade"),
-			       "pdm_dialog");
+			       "pdm_dialog",
+			       NULL);
 
 	/**
 	 * Group all Properties and Remove buttons in the same size group to

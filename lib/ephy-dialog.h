@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2000-2003 Marco Pesenti Gritti
- *  Copyright (C) 2003 Christian Persch
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -66,7 +66,8 @@ struct EphyDialogClass
 	void	(* construct)	(EphyDialog *dialog,
 				 const EphyDialogProperty *properties,
 				 const char *file,
-				 const char *name);
+				 const char *name,
+				 const char *domain);
 	void	(* show)	(EphyDialog *dialog);
 };
 
@@ -87,7 +88,8 @@ EphyDialog     *ephy_dialog_new_with_parent	(GtkWidget *parent_window);
 void		ephy_dialog_construct		(EphyDialog *dialog,
 						 const EphyDialogProperty *properties,
 						 const char *file,
-						 const char *name);
+						 const char *name,
+						 const char *domain);
 
 void		ephy_dialog_add_enum		(EphyDialog *dialog,
 						 const char *id,

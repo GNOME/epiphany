@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen
- *  Copyright (C) 2003 Christian Persch
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -330,8 +330,11 @@ ephy_print_dialog_new (GtkWidget *parent,
 		g_object_set (G_OBJECT (dialog), "parent-window", parent, NULL);
 	}
 
-	ephy_dialog_construct (dialog,  print_props,
-			       ephy_file ("print.glade"), "print_dialog");
+	ephy_dialog_construct (dialog, 
+			       print_props,
+			       ephy_file ("print.glade"),
+			       "print_dialog",
+			       NULL);
 
 	window = ephy_dialog_get_control (dialog, print_props[WINDOW_PROP].id);
 	icon = gtk_widget_render_icon (window, 
@@ -359,9 +362,11 @@ ephy_print_setup_dialog_new (void)
 
 	dialog = EPHY_DIALOG (g_object_new (EPHY_TYPE_DIALOG, NULL));
 
-	ephy_dialog_construct (dialog, setup_props,
+	ephy_dialog_construct (dialog,
+			       setup_props,
 			       ephy_file ("print.glade"),
-			       "print_setup_dialog");
+			       "print_setup_dialog",
+			       NULL);
 
 	ephy_dialog_add_enum (dialog, setup_props[PAPER_PROP].id,
 			      n_paper_format_enum, paper_format_enum);

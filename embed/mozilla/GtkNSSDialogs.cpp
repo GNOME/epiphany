@@ -1256,7 +1256,7 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 
 	gxml = ephy_glade_widget_new (ephy_file ("certificate-dialogs.glade"),
 				      "viewcert_dialog",
-				      &dialog, NULL);
+				      &dialog, NULL, NULL);
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
 	GtkWidget *gparent = MozillaFindGtkParent (parent);

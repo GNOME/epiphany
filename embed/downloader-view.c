@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2004 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Xan Lopez
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -434,7 +435,8 @@ downloader_view_build_ui (DownloaderView *dv)
 	ephy_dialog_construct (d,
                                properties,
 			       ephy_file ("epiphany.glade"),
-                               "download_manager_dialog");
+                               "download_manager_dialog",
+			       NULL);
 
 	/* lookup needed widgets */
 	priv->window = ephy_dialog_get_control(d, properties[PROP_WINDOW].id);

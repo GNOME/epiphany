@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 200-2003 Marco Pesenti Gritti
- *  Copyright (C) 2003 Christian Persch
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -795,9 +795,11 @@ setup_add_language_dialog (PrefsDialog *pd)
 					     "parent-window", window,
 					     NULL));
 
-	ephy_dialog_construct (dialog,  add_lang_props,
+	ephy_dialog_construct (dialog, 
+			       add_lang_props,
 			       ephy_file ("prefs-dialog.glade"),
-			       "add_language_dialog");
+			       "add_language_dialog",
+			       NULL);
 
 	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
@@ -1147,7 +1149,8 @@ prefs_dialog_init (PrefsDialog *pd)
 	ephy_dialog_construct (dialog,
 			       properties,
 			       ephy_file ("prefs-dialog.glade"),
-			       "prefs_dialog");
+			       "prefs_dialog",
+			       NULL);
 
 	ephy_dialog_add_enum (dialog, properties[ACCEPT_COOKIES_PROP].id,
 			      n_cookies_accept_enum, cookies_accept_enum);

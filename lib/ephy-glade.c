@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000 Marco Pesenti Gritti
+ *  Copyright (C) 2000, 2004 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "ephy-glade.h"
@@ -34,15 +36,18 @@ glade_signal_connect_func (const gchar *cb_name, GObject *obj,
  * signals attached and data set to the provided parameter.
  */
 GladeXML *
-ephy_glade_widget_new (const char *file, const char *widget_name,
-		       GtkWidget **root, gpointer data)
+ephy_glade_widget_new (const char *file,
+		       const char *widget_name,
+		       GtkWidget **root,
+		       gpointer data,
+		       const char *domain)
 {
 	GladeXML *gxml;
 
 	/* build the widget */
 	/* note that libglade automatically caches the parsed file,
 	 * so we don't need to worry about the efficiency of this */
-	gxml = glade_xml_new (file, widget_name, NULL);
+	gxml = glade_xml_new (file, widget_name, domain);
 	g_return_val_if_fail (gxml != NULL, NULL);
 
 	/* lookup the root widget if requested */
