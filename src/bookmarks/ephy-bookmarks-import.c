@@ -14,12 +14,21 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <glib.h>
 #include <libxml/HTMLtree.h>
+#include <libxml/xmlreader.h>
 #include <string.h>
 #include <libgnomevfs/gnome-vfs-mime-utils.h>
+
+#include <bonobo/bonobo-i18n.h>
 
 #include "ephy-bookmarks-import.h"
 #include "ephy-debug.h"
@@ -36,12 +45,6 @@ typedef enum
 	NS_SEPARATOR,
 	NS_UNKNOWN
 } NSItemType;
-
-typedef struct _XbelInfo
-{
-	char *title;
-	char *smarturl;
-} XbelInfo;
 
 static EphyNode *
 bookmark_add (EphyBookmarks *bookmarks,
@@ -103,112 +106,284 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 	return FALSE;
 }
 
-static void
-xbel_parse_single_bookmark (EphyBookmarks *bookmarks,
-			    xmlNodePtr node, XbelInfo *xbel)
+/* XBEL import */
+
+typedef enum
 {
-	xmlNodePtr child = node;
+	STATE_FOLDER,
+	STATE_BOOKMARK,
+	STATE_TITLE,
+	STATE_DESC,
+	STATE_INFO,
+	STATE_METADATA,
+	STATE_SMARTURL
+} EphyXBELImporterState;
 
-	while (child != NULL)
+static EphyNode *
+xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader)
+{
+	EphyXBELImporterState state = STATE_BOOKMARK;
+	EphyNode *node;
+	xmlChar *title = NULL;
+	xmlChar *address = NULL;
+	int ret = 1;
+
+	while (ret == 1)
 	{
-		if (xmlStrEqual (child->name, "title"))
+		xmlChar *tag;
+		xmlReaderTypes type;
+
+		tag = xmlTextReaderName (reader);
+		g_return_val_if_fail (tag != NULL, NULL);
+
+		type = xmlTextReaderNodeType (reader);
+
+		if (xmlStrEqual (tag, "#text"))
 		{
-			xbel->title = xmlNodeGetContent (child);
+			if (state == STATE_TITLE && title == NULL)
+			{
+				title = xmlTextReaderValue (reader);
+			}
+			else if (state == STATE_SMARTURL)
+			{
+				xmlFree (address);
+				address = xmlTextReaderValue (reader);
+			}
+			else
+			{
+				/* eat it */
+			}
 		}
-		else if (xmlStrEqual (child->name, "info"))
+		else if (xmlStrEqual (tag, "bookmark"))
 		{
-			xbel_parse_single_bookmark (bookmarks,
-						    child->children,
-						    xbel);
+			if (type == XML_READER_TYPE_ELEMENT && state == STATE_BOOKMARK && address == NULL)
+			{
+				address = xmlTextReaderGetAttribute (reader, "href");
+			}
+			else if (type == XML_READER_TYPE_END_ELEMENT && state == STATE_BOOKMARK)
+			{
+				/* we're done */
+
+				break;
+			}
 		}
-		else if (xmlStrEqual (child->name, "metadata"))
+		else if (xmlStrEqual (tag, "title"))
 		{
-			xbel_parse_single_bookmark (bookmarks,
-						    child->children,
-						    xbel);
+			if (type == XML_READER_TYPE_ELEMENT && state == STATE_BOOKMARK && title == NULL)
+			{
+				state = STATE_TITLE;
+			}
+			else if (type == XML_READER_TYPE_END_ELEMENT && state == STATE_TITLE)
+			{
+				state = STATE_BOOKMARK;
+			}
 		}
-		else if (xmlStrEqual (child->name, "smarturl"))
+		else if (xmlStrEqual (tag, "desc"))
 		{
-			xbel->smarturl = xmlNodeGetContent (child);
+			if (type == XML_READER_TYPE_ELEMENT && state == STATE_BOOKMARK)
+			{
+				state = STATE_DESC;
+			}
+			else if (type == XML_READER_TYPE_END_ELEMENT && state == STATE_DESC)
+			{
+				state = STATE_BOOKMARK;
+			}
+		}
+		else if (xmlStrEqual (tag, "info"))
+		{
+			if (type == XML_READER_TYPE_ELEMENT && state == STATE_BOOKMARK)
+			{
+				state = STATE_INFO;
+			}
+			else if (type == XML_READER_TYPE_END_ELEMENT && state == STATE_INFO)
+			{
+				state = STATE_BOOKMARK;
+			}
+		}
+		else if (xmlStrEqual (tag, "metadata"))
+		{
+			if (type == XML_READER_TYPE_ELEMENT && state == STATE_INFO)
+			{
+				state = STATE_METADATA;
+			}
+			else if (type == XML_READER_TYPE_END_ELEMENT && state == STATE_METADATA)
+			{
+				state = STATE_INFO;
+			}
+		}
+		else if (xmlStrEqual (tag, "smarturl"))
+		{
+			if (type == XML_READER_TYPE_ELEMENT && state == STATE_METADATA)
+			{
+				state = STATE_SMARTURL;
+			}
+			else if (type == XML_READER_TYPE_END_ELEMENT && state == STATE_SMARTURL)
+			{
+				state = STATE_METADATA;
+			}
 		}
 
-		child = child->next;
+		xmlFree (tag);
+
+		/* next one, please */
+		ret = xmlTextReaderRead (reader);
 	}
+
+	g_return_val_if_fail (address != NULL, NULL);
+
+	if (title == NULL)
+	{
+		title = xmlStrdup (_("Untitled"));
+	}
+
+	node = bookmark_add (eb, title, address, NULL);
+	if (node == NULL)
+	{
+		/* probably a duplicate */
+		node = ephy_bookmarks_find_bookmark (eb, address);		
+	}
+
+	xmlFree (title);
+	xmlFree (address);
+
+	return node;
 }
 
-static void
-xbel_parse_folder (EphyBookmarks *bookmarks,
-		   xmlNodePtr node)
+static GList *
+xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader)
 {
-	xmlNodePtr child = node;
-	xmlChar *keyword = NULL;
+	EphyXBELImporterState state = STATE_FOLDER;
+	EphyNode *keyword;
+	GList *list = NULL, *l;
+	xmlChar *title = NULL;
+	int ret;
 
-	while (child != NULL)
+	ret = xmlTextReaderRead (reader);
+
+	while (ret == 1)
 	{
-		if (xmlStrEqual (child->name, "title"))
+		xmlChar *tag;
+		xmlReaderTypes type;
+
+		tag = xmlTextReaderName (reader);
+		type = xmlTextReaderNodeType (reader);
+
+		if (tag == NULL)
 		{
-			keyword = xmlNodeGetContent (child);
+			/* shouldn't happen but does anyway :) */
 		}
-		else if (xmlStrEqual (child->name, "bookmark"))
+		else if (xmlStrEqual (tag, "#text"))
 		{
-			XbelInfo *xbel;
-			xmlChar *url;
-
-			xbel = g_new0 (XbelInfo, 1);
-			xbel->title = NULL;
-			xbel->smarturl = NULL;
-
-			url = xmlGetProp (child, "href");
-
-			xbel_parse_single_bookmark (bookmarks,
-						    child->children,
-						    xbel);
-
-			bookmark_add (bookmarks, xbel->title, url, keyword);
-
-			xmlFree (url);
-
-			if (xbel && xbel->title)
-				xmlFree (xbel->title);
-
-			if (xbel && xbel->smarturl)
-				xmlFree (xbel->smarturl);
-
-			g_free (xbel);
+			if (state == STATE_TITLE && title == NULL)
+			{
+				title = xmlTextReaderValue (reader);
+			}
+			else
+			{
+				/* eat it */
+			}
 		}
-		else if (xmlStrEqual (child->name, "folder"))
+		else if (xmlStrEqual (tag, "bookmark") && type == 1 && state == STATE_FOLDER)
 		{
-			xbel_parse_folder (bookmarks,
-					   child->children);
+			EphyNode *node;
 
-			g_free (keyword);
-			keyword = NULL;
+			node = xbel_parse_bookmark (eb, reader);
+
+			if (EPHY_IS_NODE (node))
+			{
+				list = g_list_prepend (list, node);
+			}
+		}
+		else if ((xmlStrEqual (tag, "folder") || xmlStrEqual (tag, "xbel"))
+			&& state == STATE_FOLDER)
+		{
+			if (type == XML_READER_TYPE_ELEMENT)
+			{
+				GList *sublist;
+
+				sublist = xbel_parse_folder (eb, reader);
+
+				list = g_list_concat (list, sublist);
+			}
+			else if (type == XML_READER_TYPE_END_ELEMENT)
+			{
+				/* we're done */
+
+				break;
+			}
+		}
+		else if (xmlStrEqual (tag, "title"))
+		{
+			if (type == XML_READER_TYPE_ELEMENT && state == STATE_FOLDER)
+			{
+				state = STATE_TITLE;
+			}
+			else if (type == XML_READER_TYPE_END_ELEMENT && state == STATE_TITLE)
+			{
+				state = STATE_FOLDER;
+			}
+		}
+		else if (xmlStrEqual (tag, "info"))
+		{
+			if (type == XML_READER_TYPE_ELEMENT && state == STATE_FOLDER)
+			{
+				state = STATE_INFO;
+			}
+			else if (type == XML_READER_TYPE_END_ELEMENT && state == STATE_INFO)
+			{
+				state = STATE_FOLDER;
+			}
+		}
+		else if (xmlStrEqual (tag, "desc"))
+		{
+			if (type == XML_READER_TYPE_ELEMENT && state == STATE_FOLDER)
+			{
+				state = STATE_DESC;
+			}
+			else if (type == XML_READER_TYPE_END_ELEMENT && state == STATE_DESC)
+			{
+				state = STATE_FOLDER;
+			}
+		}
+		else
+		{
+			/* eat it */
 		}
 
-		child = child->next;
+		xmlFree (tag);
+
+		/* next one, please */
+		ret = xmlTextReaderRead (reader);
 	}
 
-	g_free (keyword);
-}
-
-
-static void
-xbel_parse_bookmarks (EphyBookmarks *bookmarks,
-		      xmlNodePtr node)
-{
-	xmlNodePtr child = node;
-
-	while (child != NULL)
+	/* tag all bookmarks in the list with keyword %title */
+	if (title == NULL)
 	{
-		if (xmlStrEqual (child->name, "xbel"))
-		{
-			xbel_parse_folder (bookmarks,
-					   child->children);
-		}
-
-		child = child->next;
+		title = xmlStrdup (_("Untitled"));
 	}
+
+	keyword = ephy_bookmarks_find_keyword (eb, title, FALSE);
+
+	if (keyword == NULL)
+	{
+		keyword = ephy_bookmarks_add_keyword (eb, title);
+	}
+
+	xmlFree (title);
+
+	g_return_val_if_fail (EPHY_IS_NODE (keyword), list);
+
+	for (l = list; l != NULL; l = l->next)
+	{
+		EphyNode *node = (EphyNode *) l->data;
+
+		ephy_bookmarks_set_keyword (eb, keyword, node);
+	}
+
+	return list;
 }
+
+/* Mozilla/Netscape import */
 
 static gchar *
 gul_general_read_line_from_file (FILE *f)
@@ -430,19 +605,21 @@ gboolean
 ephy_bookmarks_import_xbel (EphyBookmarks *bookmarks,
 			    const char *filename)
 {
-	xmlDocPtr doc;
-	xmlNodePtr child;
+	xmlTextReaderPtr reader;
+	GList *list;
 
 	if (g_file_test (filename, G_FILE_TEST_EXISTS) == FALSE)
+	{
 		return FALSE;
+	}
+	
+	reader = xmlNewTextReaderFilename (filename);
+	g_return_val_if_fail (reader != NULL, FALSE);
 
-	doc = xmlParseFile (filename);
-	g_assert (doc != NULL);
+	list = xbel_parse_folder (bookmarks, reader);
 
-	child = doc->children;
-	xbel_parse_bookmarks (bookmarks, child);
-
-	xmlFreeDoc (doc);
+	g_list_free (list);
+	xmlFreeTextReader (reader);
 
 	return TRUE;
 }

@@ -452,13 +452,14 @@ static void
 add_bookmarks_source_menu (GtkWidget *menu,
 			   const char *desc,
 			   const char *dir,
-			   const char *filename)
+			   const char *filename,
+			   int max_depth)
 {
 	GSList *l;
 	char *path;
 
 	path = g_build_filename (g_get_home_dir (), dir, NULL);
-	l = ephy_file_find  (path, filename, 4);
+	l = ephy_file_find  (path, filename, max_depth);
 	g_free (path);
 
 	if (l)
@@ -537,11 +538,11 @@ cmd_bookmarks_import (EggAction *action,
 	gtk_widget_show (menu);
 
 	add_bookmarks_source_menu (menu, _("Mozilla bookmarks"),
-				   MOZILLA_BOOKMARKS_DIR, "bookmarks.html");
+				   MOZILLA_BOOKMARKS_DIR, "bookmarks.html", 4);
 	add_bookmarks_source_menu (menu, _("Galeon bookmarks"),
-				   GALEON_BOOKMARKS_DIR, "bookmarks.xbel");
+				   GALEON_BOOKMARKS_DIR, "bookmarks.xbel", 0);
 	add_bookmarks_source_menu (menu, _("Konqueror bookmarks"),
-				   KDE_BOOKMARKS_DIR, "bookmarks.xml");
+				   KDE_BOOKMARKS_DIR, "bookmarks.xml", 0);
 
 	option_menu = gtk_option_menu_new ();
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);

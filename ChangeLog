@@ -1,3 +1,14 @@
+2003-09-11  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.in:
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(add_bookmarks_source_menu), (cmd_bookmarks_import):
+	* src/bookmarks/ephy-bookmarks-import.c: (xbel_parse_bookmark),
+	(xbel_parse_folder), (ephy_bookmarks_import_xbel):
+
+	Fix XBEL bookmarks import to actually import all bookmarks,
+	and to look for the file in the right place. Backported from HEAD,
+	fixes bug 120804
 2003-09-05  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* configure.in:

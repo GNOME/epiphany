@@ -15,8 +15,10 @@ dnl put the ACLOCAL flags in the Makefile
 ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
 LIBBONOBOUI_REQUIRED=2.1.1
+LIBXML_REQUIRED=2.5.9
 
 AC_SUBST(LIBBONOBOUI_REQUIRED)
+AC_SUBST(LIBXML_REQUIRED)
 
 AC_ENABLE_SHARED(yes)
 AC_ENABLE_STATIC(no)
@@ -64,7 +66,7 @@ fi
 AC_MSG_RESULT($enable_nautilus_view)
 AM_CONDITIONAL(ENABLE_NAUTILUS_VIEW, test "x$enable_nautilus_view" = "xyes")
 
-PKG_CHECK_MODULES(EPIPHANY_DEPENDENCY, gtk+-2.0 libxml-2.0 libgnomeui-2.0 libglade-2.0 bonobo-activation-2.0 libbonoboui-2.0 >= $LIBBONOBOUI_REQUIRED ORBit-2.0 libglade-2.0 gnome-vfs-2.0 gnome-vfs-module-2.0 gconf-2.0 $nautilusview_pkgs)
+PKG_CHECK_MODULES(EPIPHANY_DEPENDENCY, gtk+-2.0 libxml-2.0 >= $LIBXML_REQUIRED libgnomeui-2.0 libglade-2.0 bonobo-activation-2.0 libbonoboui-2.0 >= $LIBBONOBOUI_REQUIRED ORBit-2.0 libglade-2.0 gnome-vfs-2.0 gnome-vfs-module-2.0 gconf-2.0 $nautilusview_pkgs)
 AC_SUBST(EPIPHANY_DEPENDENCY_CFLAGS)
 AC_SUBST(EPIPHANY_DEPENDENCY_LIBS)
 
