@@ -220,8 +220,13 @@ EphyBrowser::GetListener (void)
 	nsCOMPtr<nsPIDOMWindow> piWin(do_QueryInterface(domWindow));
 	NS_ENSURE_TRUE (piWin, NS_ERROR_FAILURE);
 
+#if MOZILLA_SNAPSHOT > 15
+  	nsIChromeEventHandler* chromeHandler;
+  	chromeHandler = piWin->GetChromeEventHandler();
+#else
   	nsCOMPtr<nsIChromeEventHandler> chromeHandler;
   	piWin->GetChromeEventHandler(getter_AddRefs(chromeHandler));
+#endif
 
   	mEventReceiver = do_QueryInterface(chromeHandler);
 	NS_ENSURE_TRUE (mEventReceiver, NS_ERROR_FAILURE);
