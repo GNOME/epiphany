@@ -177,7 +177,7 @@ ephy_tbi_favicon_add_to_bonobo_tb_impl (EphyTbItem *i, BonoboUIComponent *ui,
 {
 	GtkWidget *w = ephy_tb_item_get_widget (i);
 	gtk_widget_show (w);
-	ephy_bonobo_add_numbered_control (ui, w, index, container_path);
+	ephy_bonobo_add_numbered_widget (ui, w, index, container_path);
 }
 
 static void

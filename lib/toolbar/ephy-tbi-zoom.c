@@ -251,7 +251,7 @@ ephy_tbi_zoom_add_to_bonobo_tb_impl (EphyTbItem *i, BonoboUIComponent *ui,
 	GtkWidget *w = ephy_tb_item_get_widget (i);
 	EphyTbiZoomPrivate *p = EPHY_TBI_ZOOM (i)->priv;
 	gtk_widget_show (w);
-	ephy_bonobo_add_numbered_control (ui, p->hbox, index, container_path);
+	ephy_bonobo_add_numbered_widget (ui, p->hbox, index, container_path);
 	ephy_tbi_zoom_setup_label (EPHY_TBI_ZOOM (i));
 }
 
