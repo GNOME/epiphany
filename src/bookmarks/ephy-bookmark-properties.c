@@ -297,8 +297,11 @@ set_window_icon (EphyBookmarkProperties *editor)
 					       NULL);
 	}
 
-	gtk_window_set_icon (GTK_WINDOW (editor), icon);
-	g_object_unref (icon);
+	if (icon != NULL)
+	{
+		gtk_window_set_icon (GTK_WINDOW (editor), icon);
+		g_object_unref (icon);
+	}
 }
 
 static void
