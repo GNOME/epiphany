@@ -66,8 +66,7 @@ MozillaPrivate::GetPrinterList ()
 		rv = printer->GetData(data);
 		NS_ENSURE_SUCCESS(rv, nsnull);
 
-		const nsACString& cData = NS_ConvertUCS2toUTF8 (data);
-		printers = g_list_prepend (printers, g_strdup (PromiseFlatCString (cData).get()));
+		printers = g_list_prepend (printers, g_strdup (NS_ConvertUCS2toUTF8 (data).get()));
 	}
 
 	return g_list_reverse (printers);
