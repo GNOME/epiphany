@@ -230,7 +230,17 @@ sort_bookmarks (gconstpointer a, gconstpointer b)
 
 #define MAX_LENGTH 32
 
-static guint
+static gboolean
+can_open_in_tabs (EphyTopicAction *action)
+{
+	GPtrArray *children;
+
+	children = ephy_node_get_children (action->priv->topic_node);
+
+	return (children->len > 1);
+}
+
+static void
 append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node, gboolean show_empty)
 {
         EphyFaviconCache *cache;
@@ -250,7 +260,7 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 		gtk_widget_show (item);
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
-		return FALSE;
+		return;
 	}
 	else
 	{
@@ -310,8 +320,6 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 
 		g_list_free (node_list);
 	}
-
-	return children->len;
 }
 
 static void
@@ -361,7 +369,7 @@ remove_activate_cb (GtkWidget *menu, GtkWidget *proxy)
 	egg_toolbars_model_remove_item (model, 0, pos);
 }
 
-static void
+static GtkWidget *
 add_open_in_tabs_menu (EphyTopicAction *action, GtkWidget *menu)
 {
 	GtkWidget *item;
@@ -372,19 +380,20 @@ add_open_in_tabs_menu (EphyTopicAction *action, GtkWidget *menu)
 
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (open_in_tabs_activate_cb), action);
+
+	return item;
 }
 
 static GtkWidget *
 build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 {
 	GtkWidget *menu;
-	guint n_bookmarks;
 
 	menu = gtk_menu_new ();
 
-	n_bookmarks = append_bookmarks_menu (action, menu, node, TRUE);
+	append_bookmarks_menu (action, menu, node, TRUE);
 
-	if (n_bookmarks > 1)
+	if (can_open_in_tabs (action))
 	{
 		GtkWidget *item;
 
@@ -569,7 +578,8 @@ show_context_menu (EphyTopicAction *action, GtkWidget *proxy,
 
 	menu = gtk_menu_new ();
 
-	add_open_in_tabs_menu (action, menu);
+	item = add_open_in_tabs_menu (action, menu);
+	gtk_widget_set_sensitive (item, can_open_in_tabs (action));
 
 	item = gtk_separator_menu_item_new ();
 	gtk_widget_show (item);
