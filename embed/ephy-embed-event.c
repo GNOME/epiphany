@@ -113,7 +113,7 @@ ephy_embed_event_get_event_type (EphyEmbedEvent *event)
 	return iface->get_type (event);
 }
 
-EmbedEventContext
+EphyEmbedEventContext
 ephy_embed_event_get_context (EphyEmbedEvent *event)
 {
 	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);

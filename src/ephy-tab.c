@@ -73,7 +73,7 @@ struct _EphyTabPrivate
 	int load_percent;
 	gboolean visibility;
 	gboolean load_status;
-	TabAddressExpire address_expire;
+	EphyTabAddressExpire address_expire;
 	int cur_requests;
 	int total_requests;
 	int width;
@@ -81,11 +81,11 @@ struct _EphyTabPrivate
 	GtkToggleAction *action;
 	float zoom;
 	gboolean setting_zoom;
-	EmbedSecurityLevel security_level;
+	EphyEmbedSecurityLevel security_level;
 	GSList *hidden_popups;
 	GSList *shown_popups;
-	TabNavigationFlags nav_flags;
-	EmbedDocumentType document_type;
+	EphyTabNavigationFlags nav_flags;
+	EphyEmbedDocumentType document_type;
 };
 
 static void ephy_tab_class_init		(EphyTabClass *klass);
@@ -132,7 +132,7 @@ static void	ephy_tab_set_load_percent	(EphyTab *tab,
 static void	ephy_tab_update_navigation_flags(EphyTab *tab,
 						 EphyEmbed *embed);
 static void	ephy_tab_set_security_level	(EphyTab *tab,
-						 EmbedSecurityLevel level);
+						 EphyEmbedSecurityLevel level);
 static void	ephy_tab_set_title		(EphyTab *tab,
 						 EphyEmbed *embed,
 						 const char *new_title);
@@ -156,7 +156,7 @@ ephy_tab_address_expire_get_type (void)
                    { TAB_ADDRESS_EXPIRE_CURRENT, "TAB_ADDRESS_EXPIRE_CURRENT", "expire-current" },
                    { 0, NULL, NULL }
                 };
-		type = g_enum_register_static ("TabAddressExpire", values);
+		type = g_enum_register_static ("EphyTabAddressExpire", values);
 	}
 	return type;
 }
@@ -175,7 +175,7 @@ ephy_tab_navigation_flags_get_type (void)
                    { TAB_NAV_FORWARD, "TAB_NAV_FORWARD", "forward" },
                    { 0, NULL, NULL }
                 };
-		type = g_flags_register_static ("TabNavigationFlags", values);
+		type = g_flags_register_static ("EphyTabNavigationFlags", values);
 	}
 	return type;
 }
@@ -846,9 +846,9 @@ ephy_tab_set_load_status (EphyTab *tab, gboolean status)
  *
  * Returns the type of the document loaded in @tab.
  *
- * Return value: the #EmbedDocumentType
+ * Return value: the #EphyEmbedDocumentType
  **/
-EmbedDocumentType
+EphyEmbedDocumentType
 ephy_tab_get_document_type (EphyTab *tab)
 {
 	g_return_val_if_fail (EPHY_IS_TAB (tab), EMBED_DOCUMENT_OTHER);
@@ -1125,7 +1125,7 @@ ephy_tab_content_change_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 
 static void
 ephy_tab_document_type_cb (EphyEmbed *embed,
-			   EmbedDocumentType type,
+			   EphyEmbedDocumentType type,
 			   EphyTab *tab)
 {
 	if (tab->priv->document_type != type)
@@ -1207,7 +1207,7 @@ build_load_percent (int requests_done, int requests_total)
 }
 
 static void
-update_net_state_message (EphyTab *tab, const char *uri, EmbedNetState flags)
+update_net_state_message (EphyTab *tab, const char *uri, EphyEmbedNetState flags)
 {
 	GnomeVFSURI *vfs_uri = NULL;
 	const char *msg = NULL;
@@ -1273,7 +1273,7 @@ out:
 }
 
 static void
-build_progress_from_requests (EphyTab *tab, EmbedNetState state)
+build_progress_from_requests (EphyTab *tab, EphyEmbedNetState state)
 {
 	int load_percent;
 
@@ -1313,7 +1313,7 @@ ensure_page_info (EphyTab *tab, EphyEmbed *embed, const char *address)
 static void
 ephy_tab_net_state_cb (EphyEmbed *embed,
 		       const char *uri,
-		       EmbedNetState state,
+		       EphyEmbedNetState state,
 		       EphyTab *tab)
 {
 	update_net_state_message (tab, uri, state);
@@ -1538,7 +1538,7 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 			     EphyTab *tab)
 {
 	EphyEmbedEventType type;
-	EmbedEventContext context;
+	EphyEmbedEventContext context;
 	guint modifier;
 	gboolean handled = TRUE;
 	gboolean with_control, with_shift, is_left_click, is_middle_click;
@@ -1623,7 +1623,7 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 }
 
 static void
-ephy_tab_security_change_cb (EphyEmbed *embed, EmbedSecurityLevel level,
+ephy_tab_security_change_cb (EphyEmbed *embed, EphyEmbedSecurityLevel level,
 			       EphyTab *tab)
 {
 	ephy_tab_set_security_level (tab, level);
@@ -1761,7 +1761,7 @@ ephy_tab_get_load_percent (EphyTab *tab)
 static void
 ephy_tab_update_navigation_flags (EphyTab *tab, EphyEmbed *embed)
 {
-	TabNavigationFlags flags = 0;
+	EphyTabNavigationFlags flags = 0;
 
 	if (ephy_embed_can_go_up (embed))
 	{
@@ -1794,7 +1794,7 @@ ephy_tab_update_navigation_flags (EphyTab *tab, EphyEmbed *embed)
  *
  * Return value: @tab's navigation flags
  **/
-TabNavigationFlags
+EphyTabNavigationFlags
 ephy_tab_get_navigation_flags (EphyTab *tab)
 {
 	g_return_val_if_fail (EPHY_IS_TAB (tab), 0);
@@ -1946,7 +1946,7 @@ ephy_tab_get_location (EphyTab *tab)
 void
 ephy_tab_set_location (EphyTab *tab,
 		       const char *address,
-		       TabAddressExpire expire)
+		       EphyTabAddressExpire expire)
 {
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
@@ -1967,7 +1967,7 @@ ephy_tab_set_location (EphyTab *tab,
 }
 
 static void
-ephy_tab_set_security_level (EphyTab *tab, EmbedSecurityLevel level)
+ephy_tab_set_security_level (EphyTab *tab, EphyEmbedSecurityLevel level)
 {
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
@@ -1984,7 +1984,7 @@ ephy_tab_set_security_level (EphyTab *tab, EmbedSecurityLevel level)
  *
  * Return value: @tab's loaded page's security level
  **/
-EmbedSecurityLevel
+EphyEmbedSecurityLevel
 ephy_tab_get_security_level (EphyTab *tab)
 {
 	g_return_val_if_fail (EPHY_IS_TAB (tab), STATE_IS_UNKNOWN);

@@ -74,7 +74,7 @@ static void mozilla_embed_security_change_cb	(GtkMozEmbed *embed,
 						 gpointer request,
 						 PRUint32 state,
 						 MozillaEmbed *membed);
-static EmbedSecurityLevel mozilla_embed_security_level (PRUint32 state);
+static EphyEmbedSecurityLevel mozilla_embed_security_level (PRUint32 state);
 
 #define MOZILLA_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED, MozillaEmbedPrivate))
 
@@ -632,7 +632,7 @@ impl_shistory_go_nth (EphyEmbed *embed,
 
 static void
 impl_get_security_level (EphyEmbed *embed,
-                         EmbedSecurityLevel *level,
+                         EphyEmbedSecurityLevel *level,
                          char **description)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (embed)->priv;
@@ -688,7 +688,7 @@ impl_print_preview_n_pages (EphyEmbed *embed)
 
 static void
 impl_print_preview_navigate (EphyEmbed *embed,
-			     EmbedPrintPreviewNavType type,
+			     EphyEmbedPrintPreviewNavType type,
 			     int page)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
@@ -836,13 +836,13 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
                                 gint state, guint status, 
 				MozillaEmbed *membed)
 {
-	EmbedNetState estate = EMBED_STATE_UNKNOWN;
+	EphyEmbedNetState estate = EMBED_STATE_UNKNOWN;
 	int i;
 
 	struct
 	{
 		guint state;
-		EmbedNetState embed_state;
+		EphyEmbedNetState embed_state;
 	}
 	conversion_map [] =
 	{
@@ -861,7 +861,7 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 	{
 		if (state & conversion_map[i].state)
 		{
-			estate = (EmbedNetState) (estate | conversion_map[i].embed_state);	
+			estate = (EphyEmbedNetState) (estate | conversion_map[i].embed_state);	
 		}
 	}
 
@@ -1097,10 +1097,10 @@ mozilla_embed_security_change_cb (GtkMozEmbed *embed,
 			       mozilla_embed_security_level (state));
 }
 
-static EmbedSecurityLevel
+static EphyEmbedSecurityLevel
 mozilla_embed_security_level (PRUint32 state)
 {
-	EmbedSecurityLevel level;
+	EphyEmbedSecurityLevel level;
 
 	switch (state)
         {

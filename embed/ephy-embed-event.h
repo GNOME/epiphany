@@ -50,7 +50,7 @@ typedef enum
         EMBED_CONTEXT_INPUT    = 1 << 5,
         EMBED_CONTEXT_XUL      = 1 << 7,
 	EMBED_CONTEXT_EMAIL_LINK = 1 << 8
-} EmbedEventContext;
+} EphyEmbedEventContext;
 
 typedef enum
 {
@@ -66,7 +66,7 @@ struct _EphyEmbedEventIface
 
 	/* Methods */
 	EphyEmbedEventType	(* get_type)		(EphyEmbedEvent *event);
-	EmbedEventContext	(* get_context)		(EphyEmbedEvent *event);
+	EphyEmbedEventContext	(* get_context)		(EphyEmbedEvent *event);
 	guint			(* get_modifier)	(EphyEmbedEvent *event);
 	void			(* get_coordinates)	(EphyEmbedEvent *event,
 							 guint *x,
@@ -87,7 +87,7 @@ GType			ephy_embed_event_type_get_type 		(void);
 
 EphyEmbedEventType	ephy_embed_event_get_event_type	(EphyEmbedEvent *event);
 
-EmbedEventContext	ephy_embed_event_get_context	(EphyEmbedEvent *event);
+EphyEmbedEventContext	ephy_embed_event_get_context	(EphyEmbedEvent *event);
 
 guint			ephy_embed_event_get_modifier	(EphyEmbedEvent *event);
 

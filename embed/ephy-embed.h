@@ -37,10 +37,10 @@ G_BEGIN_DECLS
 #define EPHY_EMBED_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EMBED, EphyEmbedIface))
 
 #define EPHY_TYPE_EMBED_NET_STATE	(ephy_embed_net_state_get_type ())
-#define EPHY_TYPE_EMBED_CHROME_MASK     (ephy_embed_chrome_get_type ())
-#define EPHY_TYPE_EMBED_PPV_NAVIGATION	(ephy_embed_ppv_navigation_get_type ())
+#define EPHY_TYPE_EMBED_CHROME          (ephy_embed_chrome_get_type ())
 #define EPHY_TYPE_EMBED_SECURITY_LEVEL	(ephy_embed_security_level_get_type ())
 #define EPHY_TYPE_EMBED_DOCUMENT_TYPE	(ephy_embed_document_type_get_type ())
+#define EPHY_TYPE_EMBED_PRINT_PREVIEW_NAV_TYPE	(ephy_embed_ppv_navigation_get_type ())
 
 typedef struct _EphyEmbed	EphyEmbed;
 typedef struct _EphyEmbedIface	EphyEmbedIface;
@@ -58,7 +58,7 @@ typedef enum
 	EMBED_STATE_IS_DOCUMENT		= 1 << 6,
 	EMBED_STATE_IS_NETWORK		= 1 << 7,
 	EMBED_STATE_IS_WINDOW		= 1 << 8
-} EmbedNetState;
+} EphyEmbedNetState;
 
 typedef enum
 {
@@ -80,7 +80,7 @@ typedef enum
 	PRINTPREVIEW_NEXT_PAGE		= 2,
 	PRINTPREVIEW_HOME		= 3,
 	PRINTPREVIEW_END		= 4
-} EmbedPrintPreviewNavType;
+} EphyEmbedPrintPreviewNavType;
 
 typedef enum
 {
@@ -90,7 +90,7 @@ typedef enum
 	STATE_IS_SECURE_LOW,
 	STATE_IS_SECURE_MED,
 	STATE_IS_SECURE_HIGH
-} EmbedSecurityLevel;
+} EphyEmbedSecurityLevel;
 
 typedef enum
 {
@@ -98,7 +98,7 @@ typedef enum
 	EMBED_DOCUMENT_XML,
 	EMBED_DOCUMENT_IMAGE,
 	EMBED_DOCUMENT_OTHER
-} EmbedDocumentType;
+} EphyEmbedDocumentType;
 
 struct _EphyEmbedIface
 {
@@ -126,7 +126,7 @@ struct _EphyEmbedIface
 					 const char *location);
 	void	 (* net_state)		(EphyEmbed *embed,
 					 const char *uri,
-					 EmbedNetState state);
+					 EphyEmbedNetState state);
 	gboolean (* dom_mouse_click)	(EphyEmbed *embed,
 					 EphyEmbedEvent *event);
 	gboolean (* dom_mouse_down)	(EphyEmbed *embed,
@@ -135,7 +135,7 @@ struct _EphyEmbedIface
 					 const char *address,
 					 const char *features);
 	void	 (* security_change)	(EphyEmbed *embed,
-					 EmbedSecurityLevel level);
+					 EphyEmbedSecurityLevel level);
 	void	 (* zoom_change)	(EphyEmbed *embed,
 					 float new_zoom);
 	void	 (* content_change)	(EphyEmbed *embed,
@@ -143,7 +143,7 @@ struct _EphyEmbedIface
 	gboolean (* modal_alert)	(EphyEmbed *embed);
 	void	 (* modal_alert_closed)	(EphyEmbed *embed);
 	void	 (* document_type)	(EphyEmbed *embed,
-					 EmbedDocumentType type);
+					 EphyEmbedDocumentType type);
 	EphyEmbed * (* new_window)	(EphyEmbed *embed,
 					 EphyEmbedChrome chromemask);
 
@@ -176,7 +176,7 @@ struct _EphyEmbedIface
 	void		   (* shistory_go_nth)		(EphyEmbed *embed,
 							 int nth);
 	void		   (* get_security_level)	(EphyEmbed *embed,
-						  	 EmbedSecurityLevel *level,
+						  	 EphyEmbedSecurityLevel *level,
 						  	 char **description);
 	void		   (* show_page_certificate)	(EphyEmbed *embed);
 	void		   (* set_zoom)			(EphyEmbed *embed,
@@ -197,7 +197,7 @@ struct _EphyEmbedIface
 							 gboolean mode);
 	int		   (* print_preview_n_pages)	(EphyEmbed *embed);
 	void		   (* print_preview_navigate)	(EphyEmbed *embed,
-							 EmbedPrintPreviewNavType type,
+							 EphyEmbedPrintPreviewNavType type,
 							 int page);
 	void		   (* activate)			(EphyEmbed *embed);
 	gboolean	   (* has_modified_forms)	(EphyEmbed *embed);
@@ -262,7 +262,7 @@ void		  ephy_embed_shistory_go_nth		(EphyEmbed *embed,
 							 int nth);
 
 void		  ephy_embed_get_security_level		(EphyEmbed *embed,
-							 EmbedSecurityLevel *level,
+							 EphyEmbedSecurityLevel *level,
 						 	 char **description);
 
 void		  ephy_embed_show_page_certificate	(EphyEmbed *embed);
@@ -299,7 +299,7 @@ void		  ephy_embed_set_print_preview_mode	(EphyEmbed *embed,
 int		  ephy_embed_print_preview_n_pages	(EphyEmbed *embed);
 
 void		  ephy_embed_print_preview_navigate	(EphyEmbed *embed,
-							 EmbedPrintPreviewNavType type,
+							 EphyEmbedPrintPreviewNavType type,
 							 int page);
 
 /* Misc. utility */

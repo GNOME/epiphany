@@ -47,14 +47,14 @@ typedef enum
 	TAB_NAV_UP	= 1 << 0,
 	TAB_NAV_BACK	= 1 << 1,
 	TAB_NAV_FORWARD	= 1 << 2
-} TabNavigationFlags;
+} EphyTabNavigationFlags;
 
 typedef enum
 {
 	TAB_ADDRESS_EXPIRE_NOW,
 	TAB_ADDRESS_EXPIRE_NEXT,
 	TAB_ADDRESS_EXPIRE_CURRENT
-} TabAddressExpire;
+} EphyTabAddressExpire;
 
 struct _EphyTab
 {
@@ -83,7 +83,7 @@ EphyEmbed              *ephy_tab_get_embed		(EphyTab *tab);
 
 EphyTab		       *ephy_tab_for_embed		(EphyEmbed *embed);
 
-EmbedDocumentType	ephy_tab_get_document_type	(EphyTab *tab);
+EphyEmbedDocumentType	ephy_tab_get_document_type	(EphyTab *tab);
 
 const char             *ephy_tab_get_icon_address	(EphyTab *tab);
 
@@ -96,13 +96,13 @@ int			ephy_tab_get_load_percent	(EphyTab *tab);
 
 void			ephy_tab_set_location		(EphyTab *tab,
 							 const char *location,
-							 TabAddressExpire expire);
+							 EphyTabAddressExpire expire);
 
 const char             *ephy_tab_get_location		(EphyTab *tab);
 
-TabNavigationFlags	ephy_tab_get_navigation_flags	(EphyTab *tab);
+EphyTabNavigationFlags	ephy_tab_get_navigation_flags	(EphyTab *tab);
 
-EmbedSecurityLevel	ephy_tab_get_security_level	(EphyTab *tab);
+EphyEmbedSecurityLevel	ephy_tab_get_security_level	(EphyTab *tab);
 
 void			ephy_tab_get_size		(EphyTab *tab,
 							 int *width,

@@ -49,7 +49,7 @@ struct EphyEmbedPersistPrivate
 	char *persist_key;
 	EphyEmbed *embed;
 	long max_size;
-	EmbedPersistFlags flags;
+	EphyEmbedPersistFlags flags;
 	GtkWindow *fc_parent;
 };
 
@@ -110,7 +110,7 @@ ephy_embed_persist_set_dest (EphyEmbedPersist *persist,
  * Sets the #EphyEmbed from which @persist will download data.
  *
  * An #EphyEmbed is absolutely required to download if @persist's
- * #EmbedPersistFlags include %EMBED_PERSIST_COPY_PAGE. Regardless, an
+ * #EphyEmbedPersistFlags include %EMBED_PERSIST_COPY_PAGE. Regardless, an
  * #EphyEmbed should be set for <emphasis>every</emphasis> #EphyEmbedPersist,
  * since it determines request information such as the referring page.
  **/
@@ -162,13 +162,13 @@ ephy_embed_persist_set_fc_parent (EphyEmbedPersist *persist,
 /**
  * ephy_embed_persist_set_flags:
  * @persist: an #EphyEmbedPersist
- * @value: the desired #EmbedPersistFlags
+ * @value: the desired #EphyEmbedPersistFlags
  *
  * Sets the flags to be used for @persist's download.
  **/
 void
 ephy_embed_persist_set_flags (EphyEmbedPersist *persist,
-			      EmbedPersistFlags value)
+			      EphyEmbedPersistFlags value)
 {
 	g_return_if_fail (EPHY_IS_EMBED_PERSIST (persist));
 
@@ -299,11 +299,11 @@ ephy_embed_persist_get_fc_parent (EphyEmbedPersist *persist)
  * ephy_embed_persist_get_flags:
  * @persist: an #EphyEmbedPersist
  *
- * Returns @persist's #EmbedPersistFlags.
+ * Returns @persist's #EphyEmbedPersistFlags.
  *
- * Return value: @persist's #EmbedPersistFlags
+ * Return value: @persist's #EphyEmbedPersistFlags
  **/
-EmbedPersistFlags
+EphyEmbedPersistFlags
 ephy_embed_persist_get_flags (EphyEmbedPersist *persist)
 {
 	g_return_val_if_fail (EPHY_IS_EMBED_PERSIST (persist), 0);
@@ -591,7 +591,7 @@ ephy_embed_persist_cancel (EphyEmbedPersist *persist)
  *
  * Begins saving the file specified in @persist.
  *
- * If @persist's #EmbedPersistFlags include %EMBED_PERSIST_ASK_DESTINATION, a
+ * If @persist's #EphyEmbedPersistFlags include %EMBED_PERSIST_ASK_DESTINATION, a
  * filechooser dialog will be shown first.
  *
  * The file will continue to download in the background until either the
@@ -615,7 +615,7 @@ ephy_embed_persist_save (EphyEmbedPersist *persist)
  *
  * The download is synchronous. An #EphyEmbed must be specified with
  * ephy_embed_persist_set_embed(). The function implicitly assumes that
- * @persist's #EmbedPersistFlags include %EMBED_PERSIST_COPY_PAGE. If @persist's
+ * @persist's #EphyEmbedPersistFlags include %EMBED_PERSIST_COPY_PAGE. If @persist's
  * #EphyEmbed has not finished downloading, this function will only return the
  * portion of data which has already been downloaded.
  *

@@ -237,7 +237,7 @@ filechooser_response_cb (EphyFileChooser *dialog, gint response, EphyHeaderSniff
 nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 {
 	nsresult rv;
-	EmbedPersistFlags flags;
+	EphyEmbedPersistFlags flags;
 	PRBool askDownloadDest;
 
 	mOriginalURI = inOriginalURI;

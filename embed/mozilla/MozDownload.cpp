@@ -100,7 +100,7 @@ MozDownload::Init(nsIURI *aSource, nsIURI *aTarget, const PRUnichar *aDisplayNam
 
 	if (mEmbedPersist)
 	{
-		EmbedPersistFlags flags;
+		EphyEmbedPersistFlags flags;
 
 		flags = ephy_embed_persist_get_flags (EPHY_EMBED_PERSIST (mEmbedPersist));
 
@@ -523,7 +523,7 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 {
 	nsresult rv = NS_OK;
 
-	EmbedPersistFlags ephy_flags;
+	EphyEmbedPersistFlags ephy_flags;
 	ephy_flags = ephy_embed_persist_get_flags (EPHY_EMBED_PERSIST (embedPersist));
 
 	PRBool isHTML = (contentType &&

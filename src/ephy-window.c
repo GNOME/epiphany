@@ -1214,7 +1214,7 @@ sync_tab_document_type (EphyTab *tab,
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
-	EmbedDocumentType type;
+	EphyEmbedDocumentType type;
 	gboolean can_find, enable;
 
 	/* update zoom actions */
@@ -1297,7 +1297,7 @@ sync_tab_message (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 static void
 sync_tab_navigation (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
-	TabNavigationFlags flags;
+	EphyTabNavigationFlags flags;
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	gboolean up = FALSE, back = FALSE, forward = FALSE;
@@ -1344,7 +1344,7 @@ static void
 sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	EphyEmbed *embed;
-	EmbedSecurityLevel level;
+	EphyEmbedSecurityLevel level;
 	char *description = NULL;
 	char *state = NULL;
 	char *tooltip;
@@ -1540,7 +1540,7 @@ sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
-	EmbedDocumentType type;
+	EphyEmbedDocumentType type;
 	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE, can_zoom;
 	float zoom;
 
@@ -1637,7 +1637,7 @@ get_name_from_address_value (const GValue *value)
 static void
 update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
 {
-	EmbedEventContext context;
+	EphyEmbedEventContext context;
 	GtkActionGroup *group = window->priv->popups_action_group;
 	const GValue *value;
 	GtkAction *action;
@@ -1733,7 +1733,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
-	EmbedEventContext context;
+	EphyEmbedEventContext context;
 	const char *popup;
 	const GValue *value;
 	gboolean framed, has_background, can_open_in_new;
@@ -2318,7 +2318,7 @@ ephy_window_class_init (EphyWindowClass *klass)
 					 g_param_spec_flags ("chrome",
 							     "chrome",
 							     "Window chrome",
-							     EPHY_TYPE_EMBED_CHROME_MASK,
+							     EPHY_TYPE_EMBED_CHROME,
 							     EPHY_EMBED_CHROME_ALL,
 							     G_PARAM_CONSTRUCT_ONLY |
 							     G_PARAM_READWRITE));

@@ -1,3 +1,35 @@
+2005-01-03  Crispin Flowerday  <gnome@flowerday.cx>
+
+	* embed/ephy-embed-event.c:
+	* embed/ephy-embed-event.h:
+	* embed/ephy-embed-persist.c: (ephy_embed_persist_set_flags):
+	* embed/ephy-embed-persist.h:
+	* embed/ephy-embed.c: (ephy_embed_base_init),
+	(ephy_embed_get_security_level),
+	(ephy_embed_print_preview_navigate):
+	* embed/ephy-embed.h:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/mozilla-embed-event.cpp:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-tab.c: (ephy_tab_address_expire_get_type),
+	(ephy_tab_navigation_flags_get_type), (ephy_tab_document_type_cb),
+	(update_net_state_message), (build_progress_from_requests),
+	(ephy_tab_net_state_cb), (ephy_tab_dom_mouse_click_cb),
+	(ephy_tab_security_change_cb), (ephy_tab_update_navigation_flags),
+	(ephy_tab_set_location), (ephy_tab_set_security_level):
+	* src/ephy-tab.h:
+	* src/ephy-window.c: (sync_tab_document_type),
+	(sync_tab_navigation), (sync_tab_security), (sync_tab_zoom),
+	(update_popups_tooltips), (show_embed_popup),
+	(ephy_window_class_init):
+	* src/popup-commands.c: (popup_cmd_copy_link_address):
+
+	Ensure that flags and enums start with 'Ephy'
+	
 2005-01-03  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-tab.c: (ephy_tab_get_property), (ephy_tab_class_init):

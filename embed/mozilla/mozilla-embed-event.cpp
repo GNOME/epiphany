@@ -118,10 +118,10 @@ impl_get_type (EphyEmbedEvent *event)
 	return ((MozillaEmbedEvent *) event)->type;
 }
 
-static EmbedEventContext
+static EphyEmbedEventContext
 impl_get_context (EphyEmbedEvent *event)
 {
-	return (EmbedEventContext) ((MozillaEmbedEvent *) event)->context;
+	return (EphyEmbedEventContext) ((MozillaEmbedEvent *) event)->context;
 }
 
 static guint

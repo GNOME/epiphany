@@ -194,7 +194,7 @@ ephy_embed_base_init (gpointer g_class)
 			      ephy_marshal_OBJECT__FLAGS,
 			      G_TYPE_OBJECT,
 			      1,
-			      EPHY_TYPE_EMBED_CHROME_MASK);
+			      EPHY_TYPE_EMBED_CHROME);
 /**
  * EphyEmbed::ge-popup-blocked:
  * @embed:
@@ -326,7 +326,7 @@ ephy_embed_base_init (gpointer g_class)
 /**
  * EphyEmbed::ge-security-change:
  * @embed:
- * @level: @embed's new #EmbedSecurityLevel
+ * @level: @embed's new #EphyEmbedSecurityLevel
  *
  * The ::ge_security_change signal is emitted when the security level of @embed
  * changes. For example, this will happen when the user browses from an
@@ -770,12 +770,12 @@ ephy_embed_shistory_go_nth (EphyEmbed *embed,
  * @level: return value of security level
  * @description: return value of the description of the security level
  *
- * Fetches the #EmbedSecurityLevel and a newly-allocated string description
+ * Fetches the #EphyEmbedSecurityLevel and a newly-allocated string description
  * of the security state of @embed.
  **/
 void
 ephy_embed_get_security_level (EphyEmbed *embed,
-			       EmbedSecurityLevel *level,
+			       EphyEmbedSecurityLevel *level,
 			       char **description)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
@@ -945,7 +945,7 @@ ephy_embed_print_preview_n_pages (EphyEmbed *embed)
  **/
 void
 ephy_embed_print_preview_navigate (EphyEmbed *embed,
-				   EmbedPrintPreviewNavType type,
+				   EphyEmbedPrintPreviewNavType type,
 				   int page)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);

@@ -159,7 +159,7 @@ popup_cmd_copy_link_address (GtkAction *action,
 			     EphyWindow *window)
 {
 	EphyEmbedEvent *event;
-	EmbedEventContext context;
+	EphyEmbedEventContext context;
 	const char *address;
 	const GValue *value;
 

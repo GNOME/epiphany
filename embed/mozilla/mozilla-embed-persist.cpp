@@ -138,7 +138,7 @@ impl_save (EphyEmbedPersist *persist)
 	char *uri;
 	long max_size;
 	EphyEmbed *embed;
-	EmbedPersistFlags flags;
+	EphyEmbedPersistFlags flags;
 	EphyEmbedSingle *single;
 
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
@@ -284,7 +284,7 @@ impl_to_string (EphyEmbedPersist *persist)
 {
 	EphyEmbed *embed;
 	nsCOMPtr<nsIDOMDocument> DOMDocument;
-	EmbedPersistFlags flags;
+	EphyEmbedPersistFlags flags;
 	EphyBrowser *browser;
 	nsresult rv = NS_OK;
 

@@ -147,7 +147,7 @@ public:
 	nsresult GetSecurityInfo (PRUint32 *aState, nsACString &aDescription);
 	nsresult ShowCertificate ();
 
-        EmbedDocumentType GetDocumentType ();
+        EphyEmbedDocumentType GetDocumentType ();
 
 	nsCOMPtr<nsIWebBrowser> mWebBrowser;
 private:
