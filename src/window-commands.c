@@ -247,7 +247,7 @@ void
 window_cmd_go_bookmarks (EggAction *action,
 			 EphyWindow *window)
 {
-	ephy_shell_show_bookmarks_editor (ephy_shell);
+	ephy_shell_show_bookmarks_editor (ephy_shell, GTK_WIDGET (window));
 }
 
 void
@@ -616,7 +616,7 @@ void
 window_cmd_go_history (EggAction *action,
 		       EphyWindow *window)
 {
-	ephy_shell_show_history_window (ephy_shell);
+	ephy_shell_show_history_window (ephy_shell, GTK_WIDGET (window));
 }
 
 void

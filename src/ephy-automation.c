@@ -177,7 +177,7 @@ static void
 impl_ephy_automation_open_bookmarks_editor (PortableServer_Servant _servant,
 					    CORBA_Environment * ev)
 {
-	ephy_shell_show_bookmarks_editor (ephy_shell);
+	ephy_shell_show_bookmarks_editor (ephy_shell, NULL);
 }
 
 static void

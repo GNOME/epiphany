@@ -1,5 +1,18 @@
 2003-04-28  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* src/ephy-automation.c:
+	(impl_ephy_automation_open_bookmarks_editor):
+	* src/ephy-shell.c: (ephy_shell_show_bookmarks_editor),
+	(ephy_shell_show_history_window):
+	* src/ephy-shell.h:
+	* src/window-commands.c: (window_cmd_go_bookmarks),
+	(window_cmd_go_history):
+
+	Actually pass a parent to history/bookmarks window, where
+	to open the url. Bad who regressed this ;)
+
+2003-04-28  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* lib/egg/egg-menu-merge.c: (egg_menu_merge_finalize),
 	(egg_menu_merge_class_init):
 

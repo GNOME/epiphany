@@ -77,29 +77,31 @@ struct EphyShellClass
         EphyEmbedShellClass parent_class;
 };
 
-GType               ephy_shell_get_type            (void);
+GType               ephy_shell_get_type              (void);
 
-EphyShell	   *ephy_shell_new                 (void);
+EphyShell	   *ephy_shell_new                   (void);
 
-EphyWindow	   *ephy_shell_get_active_window   (EphyShell *gs);
+EphyWindow	   *ephy_shell_get_active_window     (EphyShell *gs);
 
-EphyTab            *ephy_shell_new_tab	           (EphyShell *shell,
-						    EphyWindow *parent_window,
-						    EphyTab *previous_tab,
-						    const char *url,
-						    EphyNewTabFlags flags);
+EphyTab            *ephy_shell_new_tab	             (EphyShell *shell,
+						      EphyWindow *parent_window,
+						      EphyTab *previous_tab,
+						      const char *url,
+						      EphyNewTabFlags flags);
 
-Session		   *ephy_shell_get_session	   (EphyShell *gs);
+Session		   *ephy_shell_get_session	     (EphyShell *gs);
 
-EphyAutocompletion *ephy_shell_get_autocompletion  (EphyShell *gs);
+EphyAutocompletion *ephy_shell_get_autocompletion    (EphyShell *gs);
 
-EphyBookmarks      *ephy_shell_get_bookmarks       (EphyShell *gs);
+EphyBookmarks      *ephy_shell_get_bookmarks         (EphyShell *gs);
 
-EphyToolbarsModel  *ephy_shell_get_toolbars_model  (EphyShell *gs);
+EphyToolbarsModel  *ephy_shell_get_toolbars_model    (EphyShell *gs);
 
-void		    ephy_shell_show_bookmarks_editor (EphyShell *gs);
+void		    ephy_shell_show_bookmarks_editor (EphyShell *gs,
+						      GtkWidget *parent);
 
-void		    ephy_shell_show_history_window   (EphyShell *gs);
+void		    ephy_shell_show_history_window   (EphyShell *gs,
+						      GtkWidget *parent);
 
 G_END_DECLS
 

@@ -688,7 +688,8 @@ bookmarks_hide_cb (GtkWidget *widget, gpointer data)
 }
 
 void
-ephy_shell_show_bookmarks_editor (EphyShell *gs)
+ephy_shell_show_bookmarks_editor (EphyShell *gs,
+				  GtkWidget *parent)
 {
 	EphyBookmarks *bookmarks;
 
@@ -707,6 +708,12 @@ ephy_shell_show_bookmarks_editor (EphyShell *gs)
 		g_object_ref (ephy_shell);
 	}
 
+	if (parent)
+	{
+		ephy_bookmarks_editor_set_parent
+			(EPHY_BOOKMARKS_EDITOR (gs->priv->bme), parent);
+	}
+
 	gtk_window_present (GTK_WINDOW (gs->priv->bme));
 }
 
@@ -718,7 +725,8 @@ history_window_hide_cb (GtkWidget *widget, gpointer data)
 }
 
 void
-ephy_shell_show_history_window (EphyShell *gs)
+ephy_shell_show_history_window (EphyShell *gs,
+				GtkWidget *parent)
 {
 	EphyHistory *history;
 
@@ -736,6 +744,12 @@ ephy_shell_show_history_window (EphyShell *gs)
 	{
 		LOG ("Ref shell for history window")
 		g_object_ref (ephy_shell);
+	}
+
+	if (parent)
+	{
+		ephy_history_window_set_parent
+			(EPHY_HISTORY_WINDOW (gs->priv->history_window), parent);
 	}
 
 	gtk_window_present (GTK_WINDOW (gs->priv->history_window));
