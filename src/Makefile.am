@@ -112,13 +112,8 @@ epiphany_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
 	-I$(top_srcdir)/embed 		\
 	-I$(top_srcdir)/lib   		\
-	-I$(top_srcdir)/lib/egg		\
-	-I$(top_srcdir)/lib/widgets   	\
 	-I$(top_srcdir)/src/bookmarks   \
-	-DSHARE_DIR=\"$(pkgdatadir)\" 	\
-	-DEXTENSIONS_DIR=\""$(libdir)/epiphany-$(EPIPHANY_MAJOR)/extensions"\" 	\
 	-DDATADIR=\""$(datadir)"\" 	\
-	-DPIXMAP_DIR=\""$(datadir)/pixmaps"\"	\
 	$(AM_CPPFLAGS)
 
 epiphany_CFLAGS = \
