@@ -698,7 +698,7 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, EphyEmb
 	if (mod_key) info->modifier |= GDK_SHIFT_MASK;
 
 	aMouseEvent->GetMetaKey(&mod_key);
-	if (mod_key) info->modifier |= GDK_Meta_L;
+	if (mod_key) info->modifier |= GDK_MOD2_MASK;
 	
 	aMouseEvent->GetCtrlKey(&mod_key);
 	if (mod_key) info->modifier |= GDK_CONTROL_MASK;
@@ -758,7 +758,7 @@ nsresult EventContext::GetKeyEventInfo (nsIDOMKeyEvent *aKeyEvent, EphyEmbedEven
 	if (mod_key) info->modifier |= GDK_SHIFT_MASK;
 
 	aKeyEvent->GetMetaKey(&mod_key);
-	if (mod_key) info->modifier |= GDK_Meta_L;
+	if (mod_key) info->modifier |= GDK_MOD2_MASK;
 	
 	aKeyEvent->GetCtrlKey(&mod_key);
 	if (mod_key) info->modifier |= GDK_CONTROL_MASK;

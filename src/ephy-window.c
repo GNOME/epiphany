@@ -1727,6 +1727,15 @@ ephy_window_set_print_preview (EphyWindow *window, gboolean enabled)
 	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (window->priv->notebook), !enabled);
 }
 
+
+GtkWidget *
+ephy_window_get_toolbar (EphyWindow *window)
+{
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+
+	return GTK_WIDGET (window->priv->toolbar);
+}
+
 GtkWidget *
 ephy_window_get_notebook (EphyWindow *window)
 {
@@ -2042,10 +2051,4 @@ ephy_window_set_zoom (EphyWindow *window,
 	{
 		ephy_embed_zoom_set (embed, zoom, TRUE);
 	}
-}
-
-Toolbar *
-ephy_window_get_toolbar (EphyWindow *window)
-{
-	return window->priv->toolbar;
 }

@@ -1,3 +1,21 @@
+2003-12-25  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-window.c: (ephy_window_get_toolbar),
+	(ephy_window_set_zoom):
+	* src/ephy-window.h:
+	* src/window-commands.c: (window_cmd_edit_toolbar),
+	(window_cmd_load_location):
+
+	Bring ephy_window_get_toolbar signature in line with
+	ephy_window_get_[statusbar|notebook].
+
+2003-12-24  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/EventContext.cpp:
+
+	GDK_Meta_L is a keycode, not a modifier code.
+	Map meta to GDK_MOD2_MASK.
+
 2003-12-23  David Bordoley  <bordoley@msu.edu>
 
 	* help/C/epiphany.xml:

@@ -78,6 +78,8 @@ void		  ephy_window_request_chrome	  (EphyWindow *window,
 void		  ephy_window_set_print_preview	  (EphyWindow *window,
 						   gboolean enabled);
 
+GtkWidget	 *ephy_window_get_toolbar	  (EphyWindow *window);
+
 GtkWidget	 *ephy_window_get_notebook	  (EphyWindow *window);
 
 GtkWidget	 *ephy_window_get_statusbar	  (EphyWindow *window);
@@ -106,8 +108,6 @@ EphyTab		 *ephy_window_get_active_tab	  (EphyWindow *window);
 EphyEmbed	 *ephy_window_get_active_embed	  (EphyWindow *window);
 
 GList		 *ephy_window_get_tabs		  (EphyWindow *window);
-
-Toolbar		 *ephy_window_get_toolbar	  (EphyWindow *window);
 
 void		  ephy_window_find		  (EphyWindow *window);
 

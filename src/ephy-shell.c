@@ -590,7 +590,7 @@ ephy_shell_new_tab (EphyShell *shell,
 		window = ephy_window_new ();
 	}
 
-	toolbar = ephy_window_get_toolbar (window);
+	toolbar = EPHY_TOOLBAR (ephy_window_get_toolbar (window));
 
 	if (previous_tab)
 	{

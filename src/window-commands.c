@@ -852,7 +852,7 @@ window_cmd_edit_toolbar (GtkAction *action,
 {
 	GtkWidget *editor;
 	EphyToolbarsModel *model;
-	Toolbar *t;
+	GtkWidget *t;
 	GtkWidget *dialog;
 
 	model = EPHY_TOOLBARS_MODEL
@@ -1095,7 +1095,7 @@ window_cmd_load_location (GtkAction *action,
 	Toolbar *toolbar;
 	const char *location;
 
-	toolbar = ephy_window_get_toolbar (window);
+	toolbar = EPHY_TOOLBAR (ephy_window_get_toolbar (window));
 	location = toolbar_get_location (toolbar);
 
 	if (location)
