@@ -243,9 +243,9 @@ completion_func (GtkEntryCompletion *completion,
 	model = gtk_entry_completion_get_model (completion);
 
 	gtk_tree_model_get (model, iter,
-			    le->priv->text_col, &item, -1);
-	gtk_tree_model_get (model, iter,
-			    le->priv->keywords_col, &keywords, -1);
+			    le->priv->text_col, &item,
+			    le->priv->keywords_col, &keywords,
+			    -1);
 
 	if (!strncmp (key, item, strlen (key)))
 	{

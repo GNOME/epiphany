@@ -42,7 +42,7 @@
 #include <libgnomevfs/gnome-vfs-utils.h>
 
 #define EPHY_BOOKMARKS_XML_ROOT    "ephy_bookmarks"
-#define EPHY_BOOKMARKS_XML_VERSION "1.01"
+#define EPHY_BOOKMARKS_XML_VERSION "1.02"
 #define BOOKMARKS_SAVE_DELAY (3 * 1000)
 #define MAX_FAVORITES_NUM 10
 
