@@ -5,6 +5,7 @@ INCLUDES = \
 	$(MOZILLA_COMPONENT_CFLAGS)			\
 	-I$(MOZILLA_INCLUDE_ROOT)			\
 	-I$(MOZILLA_INCLUDE_ROOT)/appcomps		\
+	-I$(MOZILLA_INCLUDE_ROOT)/caps			\
 	-I$(MOZILLA_INCLUDE_ROOT)/chardet		\
 	-I$(MOZILLA_INCLUDE_ROOT)/chrome		\
 	-I$(MOZILLA_INCLUDE_ROOT)/content		\
@@ -16,6 +17,7 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/find			\
 	-I$(MOZILLA_INCLUDE_ROOT)/gfx			\
 	-I$(MOZILLA_INCLUDE_ROOT)/helperAppDlg		\
+	-I$(MOZILLA_INCLUDE_ROOT)/js			\
 	-I$(MOZILLA_INCLUDE_ROOT)/history		\
 	-I$(MOZILLA_INCLUDE_ROOT)/layout		\
 	-I$(MOZILLA_INCLUDE_ROOT)/locale		\
@@ -37,6 +39,7 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/widget		\
 	-I$(MOZILLA_INCLUDE_ROOT)/windowwatcher		\
 	-I$(MOZILLA_INCLUDE_ROOT)/xpcom			\
+	-I$(MOZILLA_INCLUDE_ROOT)/xpconnect		\
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 			\
 	-DSHARE_DIR=\"$(pkgdatadir)\"   		\
 	-DALLOW_PRIVATE_API				\

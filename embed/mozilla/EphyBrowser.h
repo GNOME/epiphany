@@ -62,9 +62,6 @@ class EphyFaviconEventListener : public EphyEventListener
 {
 public:
 	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
-
-private:
-	nsresult HandleFaviconLink (nsIDOMNode *node);
 };
 
 class EphyPopupEventListener : public EphyEventListener

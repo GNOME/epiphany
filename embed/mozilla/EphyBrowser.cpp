@@ -90,6 +90,9 @@
 #include "ContentHandler.h"
 #include "MozillaPrivate.h"
 #include "print-dialog.h"
+#include "nsIScriptSecurityManager.h"
+#include "nsIServiceManager.h"
+#include "nsIContentPolicy.h"
 
 #if MOZILLA_SNAPSHOT >= 17
 #include "nsIDOMWindow2.h"
@@ -115,32 +118,32 @@ EphyEventListener::Init(EphyEmbed *aOwner)
 	return NS_OK;
 }
 
-nsresult
-EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
+NS_IMETHODIMP
+EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 {
-	nsresult result;
+	nsCOMPtr<nsIDOMEventTarget> eventTarget;
+	aDOMEvent->GetTarget(getter_AddRefs(eventTarget));
+
+	nsCOMPtr<nsIDOMNode> node = do_QueryInterface(eventTarget);
+	NS_ENSURE_TRUE (node, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDOMElement> linkElement;
 	linkElement = do_QueryInterface (node);
 	if (!linkElement) return NS_ERROR_FAILURE;
 
+	nsresult rv;
 	NS_NAMED_LITERAL_STRING(attr_rel, "rel");
 	nsAutoString value;
-	result = linkElement->GetAttribute (attr_rel, value);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	rv = linkElement->GetAttribute (attr_rel, value);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-#if MOZILLA_SNAPSHOT >= 20
-	if (value.LowerCaseEqualsASCII("shortcut icon") ||
-	    value.LowerCaseEqualsASCII("icon"))
-#else
 	if (value.EqualsIgnoreCase("SHORTCUT ICON") ||
 	    value.EqualsIgnoreCase("ICON"))
-#endif
 	{
 		NS_NAMED_LITERAL_STRING(attr_href, "href");
 		nsAutoString value;
-		result = linkElement->GetAttribute (attr_href, value);
-		if (NS_FAILED (result) || value.IsEmpty()) return NS_ERROR_FAILURE;
+		rv = linkElement->GetAttribute (attr_href, value);
+		if (NS_FAILED (rv) || value.IsEmpty()) return NS_ERROR_FAILURE;
 
 		nsCOMPtr<nsIDOMDocument> domDoc;
 		node->GetOwnerDocument(getter_AddRefs(domDoc));
@@ -150,41 +153,56 @@ EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
 		NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
 
 #if MOZILLA_SNAPSHOT > 13
-		nsIURI *uri;
-		uri = doc->GetDocumentURI ();
+		nsIURI *docUri;
+		docUri = doc->GetDocumentURI ();
 #elif MOZILLA_SNAPSHOT > 11
-		nsIURI *uri;
-		uri = doc->GetDocumentURL ();
+		nsIURI *docUri;
+		docUri = doc->GetDocumentURL ();
 #else
-		nsCOMPtr<nsIURI> uri;
-		doc->GetDocumentURL(getter_AddRefs(uri));
+		nsCOMPtr<nsIURI> docUri;
+		doc->GetDocumentURL (getter_AddRefs (docUri));
 #endif
-		if (!uri) return NS_ERROR_FAILURE;
+		NS_ENSURE_TRUE (docUri, NS_ERROR_FAILURE);
 
 		const nsACString &link = NS_ConvertUCS2toUTF8(value);
-		nsCAutoString favicon_url;
-		result = uri->Resolve (link, favicon_url);
-		if (NS_FAILED (result)) return NS_ERROR_FAILURE;
-		
-		char *url = g_strdup (favicon_url.get());
+		nsCAutoString faviconUrl;
+		rv = docUri->Resolve (link, faviconUrl);
+		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+		nsCOMPtr<nsIURI> favUri;
+		NS_NewURI (getter_AddRefs (favUri), faviconUrl);
+		NS_ENSURE_TRUE (favUri, NS_ERROR_FAILURE);
+
+		/* check if load is allowed */
+		nsCOMPtr<nsIScriptSecurityManager> secMan
+			(do_GetService("@mozilla.org/scriptsecuritymanager;1"));
+		/* refuse if we can't check */
+		NS_ENSURE_TRUE (secMan, NS_OK);
+
+		rv = secMan->CheckLoadURI(docUri, favUri,
+					  nsIScriptSecurityManager::STANDARD);
+		/* failure means it didn't pass the security check */
+		if (NS_FAILED (rv)) return NS_OK;
+
+		/* security check passed, now check with content policy */
+		nsCOMPtr<nsIContentPolicy> policy =
+			do_GetService("@mozilla.org/layout/content-policy;1");
+		/* refuse if we can't check */
+		NS_ENSURE_TRUE (policy, NS_OK);
+
+		PRBool shouldLoad = PR_FALSE;
+		rv = policy->ShouldLoad (nsIContentPolicy::IMAGE,
+					 favUri, eventTarget,
+					 nsnull /* FIXME: DOM window*/,
+					 &shouldLoad);
+		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+		if (!shouldLoad) return NS_OK;
+
+		/* ok, we accept this as a valid favicon for this site */
+		char *url = g_strdup (faviconUrl.get());
 		g_signal_emit_by_name (mOwner, "ge_favicon", url);
 		g_free (url);
 	}
-
-	return NS_OK;
-}	
-
-NS_IMETHODIMP
-EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
-{
-	nsCOMPtr<nsIDOMEventTarget> eventTarget;
-
-	aDOMEvent->GetTarget(getter_AddRefs(eventTarget));
-
-	nsCOMPtr<nsIDOMNode> node = do_QueryInterface(eventTarget);
-	NS_ENSURE_TRUE (node, NS_ERROR_FAILURE);
-
-	HandleFaviconLink (node);
 
 	return NS_OK;
 }
