@@ -56,6 +56,20 @@ type_from_id (const char *object_id)
 	return result;
 }
 
+/**
+ * ephy_embed_factory_new_object:
+ * @object_id: identifier of the object to create
+ * 
+ * Create an instance of the object identified by
+ * object_id string. Valid ids are EphyEmbed, EphyEmbedPersist,
+ * EphyEmbedSingle.
+ * We use a factory instead of creating instances directly
+ * to keep the embed implementation abstract. All the embed
+ * objects should be based on an interface and created by
+ * this factory.
+ * 
+ * Return value: the object instance
+ **/
 GObject	*
 ephy_embed_factory_new_object (const char *object_id)
 {

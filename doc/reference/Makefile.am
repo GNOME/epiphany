@@ -71,7 +71,6 @@ IGNORE_HFILES = \
 	ephy-embed-popup-control.h \
 	ephy-embed-prefs.h \
 	ephy-embed-shell.h \
-	ephy-embed-single.h \
 	ephy-encodings.h \
 	ephy-favicon-cache.h \
 	ephy-history.h \
