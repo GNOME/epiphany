@@ -378,8 +378,10 @@ language_editor_add (LanguageEditor *editor,
 			if (c && strcmp (code, c) == 0)
 			{
 				/* already in list, no need to add again */
+				g_free (c);
 				return;
 			}
+			g_free (c);
 		}
 		while (gtk_tree_model_iter_next (editor->priv->model, &iter));
 	}
