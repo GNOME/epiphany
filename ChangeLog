@@ -1,3 +1,38 @@
+2003-11-14  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* data/GNOME_Epiphany_Automation.server.in:
+	* data/GNOME_Epiphany_NautilusView.server.in:
+
+	Use an unique factory for both interfaces.
+
+	* data/ui/Makefile.am:
+
+	Do not try to merge translations in nautilus xml.
+
+	* src/ephy-nautilus-view.c: (disconnected_idle),
+	(control_disconnected_cb), (ephy_nautilus_view_instance_init),
+	(ephy_nautilus_view_finalize):
+
+	Unref the view on control disconnected, not on finalize.
+
+	* src/ephy-main.c: (main):
+
+	Add a server mode argument, used internally by bonobo interface.
+	Free popt context only when no more necessary.
+
+	* src/ephy-automation.c:
+	* src/ephy-automation.h:
+	* src/ephy-shell.c: (ephy_nautilus_view_new),
+	(ephy_automation_factory_cb), (ephy_automation_factory_new),
+	(ephy_shell_init), (path_from_command_line_arg), (open_urls),
+	(server_timeout), (ephy_shell_startup), (ephy_shell_finalize),
+	(ephy_shell_new_tab):
+	* src/ephy-shell.h:
+
+	When running in server mode unref (and so exit) on a timeout.
+
+	Expand args passed to the command line.
+
 2003-11-13  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* embed/ephy-embed-shell.c: (ephy_embed_shell_get_embed_single):

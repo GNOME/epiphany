@@ -139,6 +139,20 @@ BonoboUIVerb ephy_verbs [] = {
 BONOBO_CLASS_BOILERPLATE (EphyNautilusView, ephy_nautilus_view,
 			  NautilusView, NAUTILUS_TYPE_VIEW)
 
+static gboolean
+disconnected_idle (EphyShell *shell)
+{
+	g_object_unref (shell);
+
+	return FALSE;
+}
+
+static void
+control_disconnected_cb (BonoboControl *control)
+{
+	g_idle_add ((GSourceFunc)disconnected_idle, ephy_shell);
+}
+
 static void
 ephy_nautilus_view_instance_init (EphyNautilusView *view)
 {
@@ -148,6 +162,7 @@ ephy_nautilus_view_instance_init (EphyNautilusView *view)
 	float *levels;
 	gchar **names;
 	guint i;
+	BonoboControl *control;
 
 	single = ephy_embed_shell_get_embed_single
 		(EPHY_EMBED_SHELL (ephy_shell));
@@ -155,15 +170,13 @@ ephy_nautilus_view_instance_init (EphyNautilusView *view)
 	view->priv = p;
 	view->priv->embed = ephy_embed_new (G_OBJECT (single));
 
-	g_object_ref (G_OBJECT (ephy_shell));
-
 	g_signal_connect (view->priv->embed, "ge_link_message",
 			  G_CALLBACK (gnv_embed_link_message_cb), 
 			  view);
 	g_signal_connect (view->priv->embed, "ge_location",
 			  G_CALLBACK (gnv_embed_location_cb), 
 			  view);
-	g_signal_connect (view->priv->embed, "ge_title",
+	g_signal_connect (view->priv->embed, "title",
 			  G_CALLBACK (gnv_embed_title_cb), 
 			  view);
 	g_signal_connect (view->priv->embed, "ge_new_window",
@@ -190,7 +203,12 @@ ephy_nautilus_view_instance_init (EphyNautilusView *view)
 	g_signal_connect (G_OBJECT (view), "stop_loading",
 			  G_CALLBACK (gnv_stop_loading_cb), NULL);
 
-        g_signal_connect (G_OBJECT (nautilus_view_get_bonobo_control (NAUTILUS_VIEW (view))),
+	control = nautilus_view_get_bonobo_control (NAUTILUS_VIEW (view));	
+	g_object_ref (ephy_shell);
+
+	g_signal_connect (control, "disconnected",
+			  G_CALLBACK (control_disconnected_cb), NULL);
+        g_signal_connect (control,
                           "activate",
                           G_CALLBACK (gnv_bonobo_control_activate_cb), view);
 
@@ -276,8 +294,6 @@ ephy_nautilus_view_finalize (GObject *object)
 	g_free (p->location);
 
 	GNOME_CALL_PARENT (G_OBJECT_CLASS, finalize, (object));
-
-	g_object_unref (G_OBJECT (ephy_shell));
 }
 
 static void

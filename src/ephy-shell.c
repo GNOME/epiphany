@@ -50,15 +50,13 @@
 #include <unistd.h>
 
 #ifdef ENABLE_NAUTILUS_VIEW
-
 #include <bonobo/bonobo-generic-factory.h>
 #include "ephy-nautilus-view.h"
-
-#define EPHY_NAUTILUS_VIEW_OAFIID "OAFIID:GNOME_Epiphany_NautilusViewFactory"
-
 #endif
 
+#define EPHY_NAUTILUS_VIEW_IID "OAFIID:GNOME_Epiphany_NautilusView"
 #define AUTOMATION_IID "OAFIID:GNOME_Epiphany_Automation"
+#define SERVER_TIMEOUT 60000
 
 #define EPHY_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHELL, EphyShellPrivate))
 
@@ -73,6 +71,7 @@ struct EphyShellPrivate
 	GtkWidget *bme;
 	GtkWidget *history_window;
 	GList *del_on_exit;
+	guint server_timeout;
 };
 
 static void
@@ -81,17 +80,6 @@ static void
 ephy_shell_init (EphyShell *gs);
 static void
 ephy_shell_finalize (GObject *object);
-
-#ifdef ENABLE_NAUTILUS_VIEW
-
-static void
-ephy_nautilus_view_init_factory (EphyShell *gs);
-static BonoboObject *
-ephy_nautilus_view_new (BonoboGenericFactory *factory,
-			  const char *id,
-			  EphyShell *gs);
-
-#endif
 
 static GObjectClass *parent_class = NULL;
 
@@ -151,6 +139,60 @@ ephy_shell_class_init (EphyShellClass *klass)
 	g_type_class_add_private (object_class, sizeof(EphyShellPrivate));
 }
 
+#ifdef ENABLE_NAUTILUS_VIEW
+
+static BonoboObject *
+ephy_nautilus_view_new (EphyShell *gs)
+{
+	EphyNautilusView *view;
+
+	view = EPHY_NAUTILUS_VIEW
+		(ephy_nautilus_view_new_component (gs));
+
+	return BONOBO_OBJECT (view);
+}
+
+#endif
+
+static BonoboObject *
+ephy_automation_factory_cb (BonoboGenericFactory *this_factory,
+			    const char *iid,
+			    EphyShell *es)
+{
+	if (strcmp (iid, AUTOMATION_IID) == 0)
+	{
+		return BONOBO_OBJECT (g_object_new (EPHY_TYPE_AUTOMATION, NULL));
+	}
+#ifdef ENABLE_NAUTILUS_VIEW
+	else if (strcmp (iid, EPHY_NAUTILUS_VIEW_IID) == 0)
+	{
+		return ephy_nautilus_view_new (es);
+	}
+#endif
+
+	g_assert_not_reached ();
+
+	return NULL;
+}
+
+
+static BonoboGenericFactory *
+ephy_automation_factory_new (EphyShell *es)
+{
+	BonoboGenericFactory *factory;
+	GClosure *factory_closure;
+
+	factory = g_object_new (bonobo_generic_factory_get_type (), NULL);
+
+	factory_closure = g_cclosure_new
+		(G_CALLBACK (ephy_automation_factory_cb), es, NULL);
+
+	bonobo_generic_factory_construct_noreg
+		(factory, AUTOMATION_FACTORY_IID, factory_closure);
+
+	return factory;
+}
+
 static void
 ephy_shell_init (EphyShell *gs)
 {
@@ -165,13 +207,29 @@ ephy_shell_init (EphyShell *gs)
 	gs->priv->toolbars_model = NULL;
 	gs->priv->fs_toolbars_model = NULL;
 	gs->priv->extensions_manager = NULL;
+	gs->priv->server_timeout = 0;
 
 	ephy_shell = gs;
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
 				   (gpointer *)ptr);
 
 	/* Instantiate the automation factory */
-	gs->priv->automation_factory = ephy_automation_factory_new ();
+	gs->priv->automation_factory = ephy_automation_factory_new (gs);
+}
+
+static char *
+path_from_command_line_arg (const char *arg)
+{
+	char path[PATH_MAX];
+
+	if (realpath (arg, path) != NULL)
+	{
+		return g_strdup (path);
+	}
+	else
+	{
+		return g_strdup (arg);
+	}
 }
 
 static void
@@ -193,11 +251,25 @@ open_urls (GNOME_EphyAutomation automation,
 	{
 		for (i = 0; args[i] != NULL; i++)
 		{
+			char *path;
+
+			path = path_from_command_line_arg (args[i]);
+
 			GNOME_EphyAutomation_loadurl
-				(automation, args[i], fullscreen,
+				(automation, path, fullscreen,
 				 existing_window, new_tab, ev);
+
+			g_free (path);
 		}
 	}
+}
+
+static gboolean
+server_timeout (EphyShell *gs)
+{
+	g_object_unref (gs);
+
+	return FALSE;
 }
 
 gboolean
@@ -212,10 +284,6 @@ ephy_shell_startup (EphyShell *gs,
 	Bonobo_RegistrationResult result;
 
 	ephy_ensure_dir_exists (ephy_dot_dir ());
-
-#ifdef ENABLE_NAUTILUS_VIEW
-	ephy_nautilus_view_init_factory (gs);
-#endif
 
 	CORBA_exception_init (&ev);
 
@@ -246,8 +314,14 @@ ephy_shell_startup (EphyShell *gs,
 			g_assert_not_reached ();
 	}
 
-	if (result == Bonobo_ACTIVATION_REG_SUCCESS ||
-            result == Bonobo_ACTIVATION_REG_ALREADY_ACTIVE)
+	if (flags & EPHY_SHELL_STARTUP_SERVER)
+	{
+		g_object_ref (gs);
+		gs->priv->server_timeout = g_timeout_add
+			(SERVER_TIMEOUT, (GSourceFunc)server_timeout, gs);
+	}
+	else if (result == Bonobo_ACTIVATION_REG_SUCCESS ||
+                 result == Bonobo_ACTIVATION_REG_ALREADY_ACTIVE)
 	{
 		automation = bonobo_activation_activate_from_id (AUTOMATION_IID,
 						                 0, NULL, &ev);
@@ -315,6 +389,11 @@ ephy_shell_finalize (GObject *object)
         EphyShell *gs = EPHY_SHELL (object);
 
 	g_assert (ephy_shell == NULL);
+
+	if (gs->priv->server_timeout > 0)
+	{
+		g_source_remove (gs->priv->server_timeout);
+	}
 
 	/* this will unload the extensions */
 	LOG ("Unref extension manager")
@@ -486,51 +565,6 @@ ephy_shell_new_tab (EphyShell *shell,
 
         return tab;
 }
-
-#ifdef ENABLE_NAUTILUS_VIEW
-
-static void
-ephy_nautilus_view_all_controls_dead (void)
-{
-        if (!bonobo_control_life_get_count ())
-	{
-		g_object_unref (G_OBJECT (ephy_shell));
-	}
-}
-
-static void
-ephy_nautilus_view_init_factory (EphyShell *gs)
-{
-	BonoboGenericFactory *ephy_nautilusview_factory;
-	
-	ephy_nautilusview_factory = bonobo_generic_factory_new
-		(EPHY_NAUTILUS_VIEW_OAFIID,
-		 (BonoboFactoryCallback) ephy_nautilus_view_new, gs);
-	if (!BONOBO_IS_GENERIC_FACTORY (ephy_nautilusview_factory))
-	{
-		g_warning ("Couldn't create the factory!");
-		return;
-	}
-
-	bonobo_control_life_set_callback (ephy_nautilus_view_all_controls_dead);
-}
-
-static BonoboObject *
-ephy_nautilus_view_new (BonoboGenericFactory *factory, const char *id,
-			  EphyShell *gs)
-{
-	EphyNautilusView *view;
-
-	view = EPHY_NAUTILUS_VIEW (
-		ephy_nautilus_view_new_component (gs));
-
-	bonobo_control_life_instrument (
-		nautilus_view_get_bonobo_control (NAUTILUS_VIEW (view)));
-
-	return BONOBO_OBJECT (view);
-}
-
-#endif
 
 /**
  * ephy_shell_get_session:

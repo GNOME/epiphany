@@ -41,7 +41,7 @@ static gboolean open_in_existing = FALSE;
 static gboolean open_in_new_tab = FALSE;
 static gboolean open_fullscreen = FALSE;
 static gboolean open_as_bookmarks_editor = FALSE;
-static gboolean open_as_nautilus_view = FALSE;
+static gboolean server_mode = FALSE;
 
 static const char *session_filename = NULL;
 static const char *bookmark_url = NULL;
@@ -64,11 +64,11 @@ static struct poptOption popt_options[] =
 	{ "import-bookmarks", '\0', POPT_ARG_STRING, &bookmarks_file,
 	  0, N_("Import bookmarks from the given file"),
 	  N_("FILE") },
-	{ "nautilus-view", 'v', POPT_ARG_NONE, &open_as_nautilus_view, 0,
-	  N_("Used internally by the nautilus view"),
-	  NULL },
 	{ "bookmarks-editor", 'b', POPT_ARG_NONE, &open_as_bookmarks_editor, 0,
 	  N_("Launch the bookmarks editor"),
+	  NULL },
+	{ "server", 's', POPT_ARG_NONE, &server_mode, 0,
+	  N_("Used internally by the bonobo interface"),
 	  NULL },
 	{ NULL, 0, 0, NULL, 0, NULL, NULL }
 };
@@ -111,7 +111,6 @@ main (int argc, char *argv[])
                                g_value_init (&context_as_value, G_TYPE_POINTER));
         context = g_value_get_pointer (&context_as_value);
         args = poptGetArgs (context);
-	poptFreeContext (context);
 
 	startup_flags = 0;
 	string_arg = NULL;
@@ -131,10 +130,6 @@ main (int argc, char *argv[])
 	{
 		startup_flags |= EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR;
 	}
-	else if (open_as_nautilus_view)
-	{
-		startup_flags |= EPHY_SHELL_STARTUP_NAUTILUS_VIEW;
-	}
 	else if (session_filename != NULL)
 	{
 		startup_flags |= EPHY_SHELL_STARTUP_SESSION;
@@ -149,6 +144,10 @@ main (int argc, char *argv[])
 	{
 		startup_flags |= EPHY_SHELL_STARTUP_ADD_BOOKMARK;
 		string_arg = bookmark_url;
+	}
+	else if (server_mode)
+	{
+		startup_flags |= EPHY_SHELL_STARTUP_SERVER;
 	}
 
 	gnome_vfs_init ();
@@ -186,6 +185,7 @@ main (int argc, char *argv[])
 	ephy_state_save ();
 	ephy_file_helpers_shutdown ();
 	gnome_vfs_shutdown ();
+	poptFreeContext (context);
 
 	return 0;
 }

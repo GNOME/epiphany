@@ -1,6 +1,5 @@
 uixmldir = $(pkgdatadir)
-uixml_in_files = nautilus-epiphany-view.xml.in
-uixml_DATA = $(uixml_in_files:.xml.in=.xml)
+uixml_DATA = nautilus-epiphany-view.xml
 
 xmldir = $(pkgdatadir)
 xml_DATA = \
@@ -10,8 +9,4 @@ xml_DATA = \
 	epiphany-toolbar.xml		\
 	epiphany-history-window-ui.xml
 
-@INTLTOOL_XML_RULE@
-
-EXTRA_DIST = $(uixml_in_files) $(xml_DATA)
-
-CLEANFILES = $(uixml_DATA)
+EXTRA_DIST = $(uixml_DATA) $(xml_DATA)

@@ -48,8 +48,6 @@ typedef struct
 
 GType			 ephy_automation_get_type	(void);
 
-BonoboGenericFactory	*ephy_automation_factory_new	(void);
-
 G_END_DECLS
 
 #endif /* _EPHY_AUTOMATION_H_ */

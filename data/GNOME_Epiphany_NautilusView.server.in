@@ -1,14 +1,6 @@
 <oaf_info>
 
-<oaf_server iid="OAFIID:GNOME_Epiphany_NautilusViewFactory" type="exe" location="epiphany --nautilus-view">
-	<oaf_attribute name="repo_ids" type="stringv">
-		<item value="IDL:GNOME/ObjectFactory:1.0"/>
-	</oaf_attribute>
-	<oaf_attribute name="name" type="string" _value="Epiphany Nautilus view factory"/>
-	<oaf_attribute name="description" type="string" _value="Epiphany content view component's factory"/>
-</oaf_server>
-
-<oaf_server iid="OAFIID:GNOME_Epiphany_NautilusView" type="factory" location="OAFIID:GNOME_Epiphany_NautilusViewFactory">
+<oaf_server iid="OAFIID:GNOME_Epiphany_NautilusView" type="factory" location="OAFIID:GNOME_Epiphany_Automation_Factory">
 	<oaf_attribute name="repo_ids" type="stringv">
 		<item value="IDL:Bonobo/Unknown:1.0"/>
 		<item value="IDL:Bonobo/Control:1.0"/>

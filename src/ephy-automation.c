@@ -36,31 +36,6 @@ static void ephy_automation_class_init (EphyAutomationClass *klass);
 
 static GObjectClass *parent_class = NULL;
 
-static BonoboObject *
-ephy_automation_factory_cb (BonoboGenericFactory *this_factory,
-			    const char *iid,
-			    gpointer user_data)
-{
-	return BONOBO_OBJECT (g_object_new (EPHY_TYPE_AUTOMATION, NULL));
-}
-
-BonoboGenericFactory *
-ephy_automation_factory_new (void)
-{
-	BonoboGenericFactory *factory;
-	GClosure *factory_closure;
-
-	factory = g_object_new (bonobo_generic_factory_get_type (), NULL);
-
-	factory_closure = g_cclosure_new
-		(G_CALLBACK (ephy_automation_factory_cb), NULL, NULL);
-
-	bonobo_generic_factory_construct_noreg
-		(factory, AUTOMATION_FACTORY_IID, factory_closure);
-
-	return factory;
-}
-
 static void
 impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 			      const CORBA_char *url,
