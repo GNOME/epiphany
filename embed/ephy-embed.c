@@ -335,7 +335,8 @@ ephy_embed_can_go_up (EphyEmbed *embed)
  * "http://www.example.com/dir/subdir/", "http://www.example.com/dir/" and
  * "http://www.example.com/".
  *
- * Returns: a list of URLs higher up in @embed's web page's directory hierarchy
+ * Return value: a list of URLs higher up in @embed's web page's directory
+ * hierarchy
  **/
 GSList *
 ephy_embed_get_go_up_list (EphyEmbed *embed)
@@ -532,8 +533,8 @@ ephy_embed_shistory_n_items  (EphyEmbed *embed)
  * @embed: an #EphyEmbed
  * @nth: index of the desired page in @embed's browser history
  * @is_relative: if %TRUE, add @embed's current history position to @nth
- * @url: return value of the history entry's URL
- * @title: return value of the history entry's title
+ * @url: returned value of the history entry's URL
+ * @title: returned value of the history entry's title
  *
  * Returns the @url and @title of the @nth item in @embed's session history.
  * If @is_relative is %TRUE, @nth is an offset from the browser's current
@@ -627,6 +628,8 @@ ephy_embed_find_set_properties  (EphyEmbed *embed,
  * @backwards: %FALSE to search forwards in the document
  *
  * Equivalent to pressing "Next" in @embed's Find dialog.
+ *
+ * Return value: %TRUE if a next match was found
  **/
 gboolean
 ephy_embed_find_next (EphyEmbed *embed,
