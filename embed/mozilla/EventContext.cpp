@@ -365,6 +365,10 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 							}
 						}
 					}
+					else
+					{
+						SetIntProperty ("link_is_smart", FALSE);
+					}
 #ifdef NOT_PORTED
 					/* Get the text of the link */
 					info->linktext = mozilla_get_link_text (node);

@@ -162,7 +162,7 @@ popup_cmd_bookmark_link (EggAction *action,
 	{
 		new_bookmark = ephy_new_bookmark_new
 			(bookmarks, GTK_WINDOW (window),
-			 rel ? rel : location);
+			 is_smart ? rel : location);
 		ephy_new_bookmark_set_title
 			(EPHY_NEW_BOOKMARK (new_bookmark), title);
 		gtk_widget_show (new_bookmark);
