@@ -145,6 +145,7 @@ build_topics_menu (EphyTopicAction *action, GtkWidget *button)
 	GPtrArray *children;
 	int i;
 	EphyNode *node;
+       EphyFaviconCache *cache;
 
 	node = ephy_node_get_from_id (action->priv->topic_id);
 
@@ -152,18 +153,36 @@ build_topics_menu (EphyTopicAction *action, GtkWidget *button)
 	g_signal_connect (menu, "deactivate",
 			  G_CALLBACK (menu_deactivate_cb), button);
 
+       cache = ephy_embed_shell_get_favicon_cache
+               (EPHY_EMBED_SHELL (ephy_shell));
+
 	children = ephy_node_get_children (node);
 	for (i = 0; i < children->len; i++)
 	{
 		EphyNode *kid;
+               const char *icon_location;
 		const char *title;
 
 		kid = g_ptr_array_index (children, i);
 
+               icon_location = ephy_node_get_property_string
+                       (kid, EPHY_NODE_BMK_PROP_ICON);
 		title = ephy_node_get_property_string
 			(kid, EPHY_NODE_BMK_PROP_TITLE);
 
-		item = gtk_menu_item_new_with_label (title);
+               item = gtk_image_menu_item_new_with_label (title);
+               if (icon_location) {
+                       GdkPixbuf *icon;
+                       GtkWidget *image;
+                       icon = ephy_favicon_cache_get (cache, icon_location);
+                       g_assert (icon != NULL);
+                       image = gtk_image_new_from_pixbuf (icon);
+                       gtk_widget_show (image);
+                       gtk_image_menu_item_set_image
+                               (GTK_IMAGE_MENU_ITEM (item), image);
+                       g_object_unref (icon);
+               }
+
 		g_object_set_data (G_OBJECT (item), "node", kid);
 		g_signal_connect (item, "activate",
 				  G_CALLBACK (menu_activate_cb), action);
