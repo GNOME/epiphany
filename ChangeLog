@@ -1,3 +1,40 @@
+2003-06-16  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/ui/nautilus-epiphany-view.xml.in:
+
+	Remove some obsolete entries.
+
+	* embed/Makefile.am:
+	* embed/ephy-embed-event.c: (ephy_embed_event_init),
+	(ephy_embed_event_get_event_type):
+	* embed/ephy-embed-event.h:
+
+	Make more generic and allow to make distinction
+	between mouse and key events.
+
+	* embed/ephy-embed-popup-bw.c:
+	* embed/ephy-embed-popup-bw.h:
+
+	Remove, unused.
+
+	* embed/ephy-embed.c: (ephy_embed_base_init):
+	* embed/ephy-embed.h:
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Emit context signals only when necessary,
+	get rid of unused mouse_down signal.
+
+	* embed/ephy-embed-popup-control.c:
+	(ephy_embed_popup_control_show_impl):
+	* embed/mozilla/EventContext.cpp:
+	* src/ephy-nautilus-view.c: (ephy_nautilus_view_instance_init),
+	(gnv_embed_dom_mouse_click_cb), (gnv_embed_context_menu_cb):
+	* src/ephy-tab.c: (ephy_tab_dom_mouse_click_cb),
+	(ephy_tab_context_menu_cb):
+
+	Use new event api.
+
+
 2003-06-15  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/ephy-embed-event.c: (ephy_embed_event_init):

@@ -525,7 +525,22 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, EphyEmb
 	/* casting 32-bit guint* to PRUint16* below will break on big-endian */
 	PRUint16 btn;
 	aMouseEvent->GetButton (&btn);
-	info->mouse_button = (guint)btn;
+
+	switch (btn)
+	{
+		case 0:
+			info->type = EPHY_EMBED_EVENT_MOUSE_BUTTON1;
+		break;
+		case 1:
+			info->type = EPHY_EMBED_EVENT_MOUSE_BUTTON2;
+		break;
+		case 2:
+			info->type = EPHY_EMBED_EVENT_MOUSE_BUTTON3;
+		break;
+
+		default:
+			g_warning ("Unknown mouse button");
+	}
 
 	/* OTOH, casting only between (un)signedness is safe */
 	aMouseEvent->GetScreenX ((PRInt32*)&info->x);
@@ -589,6 +604,8 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, EphyEmb
 nsresult EventContext::GetKeyEventInfo (nsIDOMKeyEvent *aKeyEvent, EphyEmbedEvent *info)
 {
 	nsresult rv;
+
+	info->type = EPHY_EMBED_EVENT_KEY;
 
 	PRUint32 keyCode;
 	rv = aKeyEvent->GetKeyCode(&keyCode);

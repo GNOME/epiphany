@@ -44,7 +44,10 @@ static void		gnv_embed_new_window_cb			(EphyEmbed *embed,
 static void		gnv_embed_link_message_cb 		(EphyEmbed *embed, 
 								 const char *message,
 								 EphyNautilusView *view);
-static gint		gnv_embed_dom_mouse_down_cb		(EphyEmbed *embed,
+static gint		gnv_embed_dom_mouse_click_cb		(EphyEmbed *embed,
+								 EphyEmbedEvent *event,
+								 EphyNautilusView *view);
+static void		gnv_embed_context_menu_cb		(EphyEmbed *embed,
 								 EphyEmbedEvent *event,
 								 EphyNautilusView *view);
 static void		gnv_embed_zoom_change_cb 		(EphyNautilusView *embed,
@@ -195,9 +198,13 @@ ephy_nautilus_view_instance_init (EphyNautilusView *view)
 			  GTK_SIGNAL_FUNC (gnv_embed_dom_mouse_click_cb), 
 			  view);
 */
-	g_signal_connect (view->priv->embed, "ge_dom_mouse_down", 
-			  GTK_SIGNAL_FUNC (gnv_embed_dom_mouse_down_cb), 
+	g_signal_connect (view->priv->embed, "ge_dom_mouse_click", 
+			  GTK_SIGNAL_FUNC (gnv_embed_dom_mouse_click_cb), 
 			  view);
+	g_signal_connect (view->priv->embed, "ge_context_menu", 
+			  GTK_SIGNAL_FUNC (gnv_embed_context_menu_cb), 
+			  view);
+
 /*
 	g_signal_connect (view->priv->embed, "ge_security_change",
 			  GTK_SIGNAL_FUNC (gnv_embed_security_change_cb), 
@@ -314,29 +321,19 @@ ephy_nautilus_view_class_init (EphyNautilusViewClass *class)
 	G_OBJECT_CLASS (class)->finalize = ephy_nautilus_view_finalize;
 }
 
-
-
 static gint
-gnv_embed_dom_mouse_down_cb (EphyEmbed *embed,
-			     EphyEmbedEvent *event,
-			     EphyNautilusView *view)
+gnv_embed_dom_mouse_click_cb (EphyEmbed *embed,
+			      EphyEmbedEvent *event,
+			      EphyNautilusView *view)
 {
-	EphyNautilusViewPrivate *p = view->priv;
-	int button;
+	EphyEmbedEventType type;
 	EmbedEventContext context;
 
-	ephy_embed_event_get_mouse_button (event, &button);
-	ephy_embed_event_get_context (event, &context); 
+	ephy_embed_event_get_event_type (event, &type);
+	ephy_embed_event_get_context (event, &context);
 
-	if (button == 2)
-	{
-		ephy_embed_popup_set_event (EPHY_EMBED_POPUP (p->popup), event);
-		ephy_embed_popup_show (EPHY_EMBED_POPUP (p->popup), embed);
-		return TRUE;
-
-	}
-	else if (button == 1
-		 && (context & EMBED_CONTEXT_LINK))
+	if (type == EPHY_EMBED_EVENT_MOUSE_BUTTON2
+	    && (context & EMBED_CONTEXT_LINK))
 	{
 		const GValue *value;
 		const gchar *url;
@@ -350,6 +347,19 @@ gnv_embed_dom_mouse_down_cb (EphyEmbed *embed,
 	}
 
 	return FALSE;
+}
+
+static void
+gnv_embed_context_menu_cb (EphyEmbed *embed,
+			   EphyEmbedEvent *event,
+			   EphyNautilusView *view)
+{
+	EphyNautilusViewPrivate *p = view->priv;
+	EmbedEventContext context;
+
+	ephy_embed_event_get_context (event, &context);
+	ephy_embed_popup_set_event (EPHY_EMBED_POPUP (p->popup), event);
+	ephy_embed_popup_show (EPHY_EMBED_POPUP (p->popup), embed);
 }
 
 static void

@@ -29,8 +29,6 @@ libephyembed_la_SOURCES = \
 	ephy-embed-persist.h		\
 	ephy-embed-popup.c		\
 	ephy-embed-popup.h		\
-	ephy-embed-popup-bw.c		\
-	ephy-embed-popup-bw.h		\
 	ephy-embed-popup-control.c	\
 	ephy-embed-popup-control.h	\
 	ephy-embed-prefs.h		\

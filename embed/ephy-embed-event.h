@@ -50,6 +50,14 @@ typedef enum
 	EMBED_CONTEXT_EMAIL_LINK = 1 << 8
 } EmbedEventContext;
 
+typedef enum
+{
+	EPHY_EMBED_EVENT_MOUSE_BUTTON1,
+	EPHY_EMBED_EVENT_MOUSE_BUTTON2,
+	EPHY_EMBED_EVENT_MOUSE_BUTTON3,
+	EPHY_EMBED_EVENT_KEY
+} EphyEmbedEventType;
+
 struct EphyEmbedEvent
 {
         GObject parent;
@@ -57,7 +65,7 @@ struct EphyEmbedEvent
 
 	/* Public to the embed implementations */
 	guint modifier;
-	guint mouse_button;
+	EphyEmbedEventType type;
 	guint context;
 	guint x, y;
 	guint keycode;
@@ -74,8 +82,8 @@ EphyEmbedEvent   *ephy_embed_event_new			(void);
 
 guint		  ephy_embed_event_get_modifier		(EphyEmbedEvent *event);
 
-gresult		  ephy_embed_event_get_mouse_button	(EphyEmbedEvent *event,
-							 guint *mouse_button);
+gresult		  ephy_embed_event_get_event_type	(EphyEmbedEvent *event,
+							 EphyEmbedEventType *type);
 
 gresult		  ephy_embed_event_get_coords		(EphyEmbedEvent *event,
 							 guint *x, guint *y);

@@ -956,7 +956,7 @@ ephy_tab_dom_mouse_click_cb  (EphyEmbed *embed,
 			      EphyTab *tab)
 {
 	EphyWindow *window;
-	int button;
+	EphyEmbedEventType type;
 	EmbedEventContext context;
 
 	g_assert (IS_EPHY_EMBED_EVENT(event));
@@ -964,10 +964,10 @@ ephy_tab_dom_mouse_click_cb  (EphyEmbed *embed,
 	window = ephy_tab_get_window (tab);
 	g_return_val_if_fail (window != NULL, FALSE);
 
-	ephy_embed_event_get_mouse_button (event, &button);
+	ephy_embed_event_get_event_type (event, &type);
 	ephy_embed_event_get_context (event, &context);
 
-	if (button == 1
+	if (type == EPHY_EMBED_EVENT_MOUSE_BUTTON2
 	    && (context & EMBED_CONTEXT_LINK))
 	{
 		const GValue *value;
@@ -977,7 +977,7 @@ ephy_tab_dom_mouse_click_cb  (EphyEmbed *embed,
 				      g_value_get_string (value),
 				      EPHY_NEW_TAB_OPEN_PAGE);
 	}
-	else if (button == 1 &&
+	else if (type == EPHY_EMBED_EVENT_MOUSE_BUTTON2 &&
 		 eel_gconf_get_boolean (CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL) &&
 		 !(context & EMBED_CONTEXT_LINK
 		   || context & EMBED_CONTEXT_EMAIL_LINK
@@ -999,20 +999,20 @@ ephy_tab_context_menu_cb  (EphyEmbed *embed,
 			   EphyTab *tab)
 {
 	EphyWindow *window;
-	int button;
+	EphyEmbedEventType type;
 
 	g_assert (IS_EPHY_EMBED_EVENT(event));
 
 	window = ephy_tab_get_window (tab);
 	g_return_val_if_fail (window != NULL, FALSE);
 
-	ephy_embed_event_get_mouse_button (event, &button);
+	ephy_embed_event_get_event_type (event, &type);
 
-	if (button == 2)
+	if (type == EPHY_EMBED_EVENT_MOUSE_BUTTON3)
 	{
 		ephy_tab_show_embed_popup (tab, event);
 	}
-	else if (button == -1)
+	else
 	{
 		int x, y;
 

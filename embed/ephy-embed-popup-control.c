@@ -166,21 +166,18 @@ ephy_embed_popup_control_show_impl (EphyEmbedPopup *pp,
 				    EphyEmbed *embed)
 {
 	EphyEmbedPopupControl *p = EPHY_EMBED_POPUP_CONTROL (pp);
-	EphyEmbedEvent *event = ephy_embed_popup_get_event (pp);
 	BonoboUIComponent *uic = bonobo_control_get_popup_ui_component (p->priv->control);
 	const char *path;
 	char *path_dst;
-	guint button;
 
-	ephy_embed_event_get_mouse_button (event, &button);
 	ephy_embed_popup_set_embed (pp, embed);
 	path = ephy_embed_popup_get_popup_path (pp);
-	path_dst = g_strdup_printf ("/popups/button%d", button);
+	path_dst = g_strdup_printf ("/popups/button%d", 2);
 
 	/* this is a hack because bonobo apis for showing popups are broken */
 	ephy_bonobo_replace_path (uic, path, path_dst);
 
-	bonobo_control_do_popup (p->priv->control, button,
+	bonobo_control_do_popup (p->priv->control, 2,
 				 gtk_get_current_event_time ());
 
 	g_free (path_dst);

@@ -1334,12 +1334,6 @@ mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 
 	gboolean ret = FALSE;
 
-	// Just check for Shift-F10 so that we know to popup the context menu.
-	//
-	// The DOM_VK_* keycodes are not compatible with the keycodes defined
-	// in GDK, so making a generic dom_key_down signal is probably not
-	// worth the trouble.
-
 	nsresult rv;
 	EventContext ctx;
 	ctx.Init (wrapper);
@@ -1348,8 +1342,8 @@ mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 	    (info->keycode == nsIDOMKeyEvent::DOM_VK_F10 &&
 	     info->modifier == GDK_SHIFT_MASK))
 	{
-		// Translate relative coordinates to absolute values, and try
-		// to avoid covering links by adding a little offset.
+		/* Translate relative coordinates to absolute values, and try
+		   to avoid covering links by adding a little offset. */
 
 		int x, y;
 		gdk_window_get_origin (GTK_WIDGET(membed)->window, &x, &y);
@@ -1381,9 +1375,8 @@ mozilla_embed_destroy_brsr_cb (GtkMozEmbed *embed,
 }
 
 static gint
-mozilla_embed_emit_mouse_signal (MozillaEmbed *membed,
-				 gpointer dom_event,
-				 const char *signal_name)
+mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event, 
+				  MozillaEmbed *membed)
 {
 	EphyEmbedEvent *info;
 	EventContext event_context;
@@ -1398,6 +1391,7 @@ mozilla_embed_emit_mouse_signal (MozillaEmbed *membed,
 	
 	event_context.Init (wrapper);
         result = event_context.GetMouseEventInfo (static_cast<nsIDOMMouseEvent*>(dom_event), info);
+
 	if (NS_SUCCEEDED(result))
 	{
 		nsCOMPtr<nsIDOMDocument> domDoc;
@@ -1407,7 +1401,7 @@ mozilla_embed_emit_mouse_signal (MozillaEmbed *membed,
 			result = wrapper->PushTargetDocument (domDoc);
 			if (NS_SUCCEEDED(result))
 			{
-				g_signal_emit_by_name (membed, signal_name, 
+				g_signal_emit_by_name (membed, "ge_dom_mouse_click", 
 						       info, &return_value); 
 				wrapper->PopTargetDocument ();
 			}
@@ -1416,34 +1410,51 @@ mozilla_embed_emit_mouse_signal (MozillaEmbed *membed,
 	}
 
 	g_object_unref (info);
-	
-	return return_value;
-}
 
-static gint
-mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event, 
-				  MozillaEmbed *membed)
-{
-	return mozilla_embed_emit_mouse_signal
-		(membed, dom_event, "ge_dom_mouse_click");
+	return return_value;
 }
 
 static gint
 mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event, 
 				 MozillaEmbed *membed)
 {
-	int ret;
+	EphyEmbedEvent *info;
+	EventContext event_context;
+	gint return_value = 0;
+	EphyWrapper *wrapper;
+	nsresult result;
+	EphyEmbedEventType type;
 
-	ret =  mozilla_embed_emit_mouse_signal
-		(membed, dom_event, "ge_dom_mouse_down");
+	info = ephy_embed_event_new ();
+	
+	wrapper = MOZILLA_EMBED(membed)->priv->wrapper;
+	g_return_val_if_fail (wrapper != NULL, G_FAILED);
+	
+	event_context.Init (wrapper);
+        result = event_context.GetMouseEventInfo (static_cast<nsIDOMMouseEvent*>(dom_event), info);
 
-	if (!ret)
+	ephy_embed_event_get_event_type (info, &type);
+
+	if (NS_SUCCEEDED(result) && (type == EPHY_EMBED_EVENT_MOUSE_BUTTON3))
 	{
-		ret = mozilla_embed_emit_mouse_signal
-	                (membed, dom_event, "ge_context_menu");
+		nsCOMPtr<nsIDOMDocument> domDoc;
+		result = event_context.GetTargetDocument (getter_AddRefs(domDoc));
+		if (NS_SUCCEEDED(result))
+		{
+			result = wrapper->PushTargetDocument (domDoc);
+			if (NS_SUCCEEDED(result))
+			{
+				g_signal_emit_by_name (membed, "ge_context_menu", 
+						       info, &return_value); 
+				wrapper->PopTargetDocument ();
+			}
+		}
+
 	}
 
-	return ret;
+	g_object_unref (info);
+
+	return return_value;
 }
 
 static void

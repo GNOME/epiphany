@@ -87,7 +87,6 @@ ephy_embed_event_init (EphyEmbedEvent *event)
 
 	event->priv->props = g_hash_table_new_full (g_str_hash, g_str_equal,
 						    g_free, free_g_value);
-	event->mouse_button = -1;
 }
 
 static void
@@ -129,10 +128,10 @@ ephy_embed_event_get_modifier (EphyEmbedEvent *event)
 }
 
 gresult
-ephy_embed_event_get_mouse_button (EphyEmbedEvent *event,
-				   guint *mouse_button)
+ephy_embed_event_get_event_type (EphyEmbedEvent *event,
+				 EphyEmbedEventType *type)
 {
-	*mouse_button = event->mouse_button;
+	*type = event->type;
 	return G_OK;
 }
 
