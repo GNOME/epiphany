@@ -31,6 +31,9 @@
 #include <nsIServiceManager.h>
 #include <nsIInterfaceRequestor.h>
 #include <nsIInterfaceRequestorUtils.h>
+#ifdef ALLOW_PRIVATE_STRINGS
+#include <nsString.h>
+#endif
 
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkimage.h>

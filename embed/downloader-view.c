@@ -70,7 +70,6 @@ struct DownloaderViewPrivate
 typedef struct
 {
 	gboolean is_paused;
-	gboolean can_abort;
 	DownloaderViewPrivate *priv;
 } ControlsInfo;
 

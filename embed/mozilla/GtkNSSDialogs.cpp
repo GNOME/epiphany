@@ -49,6 +49,7 @@
 
 #ifdef ALLOW_PRIVATE_STRINGS
 #include <nsReadableUtils.h>
+#include <nsString.h>
 #endif
 
 #include <gconf/gconf-client.h>
