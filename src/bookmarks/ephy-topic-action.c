@@ -686,13 +686,39 @@ button_toggled_cb (GtkWidget *button,
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
 	{
 		GtkWidget *menu;
+		GdkEvent *event;
+		guint32 event_time = 0;
+		guint event_button = 0;
 
 		menu = build_menu (action);
 		g_signal_connect (menu, "deactivate",
 				  G_CALLBACK (menu_deactivate_cb), button);
-		gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-				ephy_gui_menu_position_under_widget,
-				button, 1, gtk_get_current_event_time ());
+
+		event = gtk_get_current_event ();
+		if (event != NULL)
+		{
+			if (event->type == GDK_BUTTON_PRESS)
+			{
+				event_button = ((GdkEventButton *) event)->button;
+				event_time = ((GdkEventButton *) event)->time;
+			}
+
+			gdk_event_free (event);
+		}
+
+		if (event_button == 0)
+		{
+			gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+					ephy_gui_menu_position_under_widget,
+					button, 0 , gtk_get_current_event_time ());
+			gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
+		}
+		else
+		{
+			gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+					ephy_gui_menu_position_under_widget,
+					button, event_button, event_time);
+		}
 
 		g_object_set_data (G_OBJECT (button), "popup", menu);
 	}
@@ -723,7 +749,9 @@ create_menu_item (GtkAction *action)
 }
 
 static void
-show_context_menu (EphyTopicAction *action, GtkWidget *proxy,
+show_context_menu (EphyTopicAction *action,
+		   GtkWidget *proxy,
+		   GdkEventButton *event,
 		   GtkMenuPositionFunc func)
 {
 	GtkWidget *menu, *item;
@@ -763,8 +791,17 @@ show_context_menu (EphyTopicAction *action, GtkWidget *proxy,
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (move_right_activate_cb), proxy);
 
-	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, func, proxy, 3,
-			gtk_get_current_event_time ());
+	if (event != NULL)
+	{
+		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, func, proxy,
+				event->button, event->time);
+	}
+	else
+	{
+		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, func, proxy, 0,
+				gtk_get_current_event_time ());
+		gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
+	}
 }
 
 static gboolean
@@ -772,7 +809,7 @@ popup_menu_cb (GtkWidget *widget, EphyTopicAction *action)
 {
 	if (gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))
         {
-                show_context_menu (action, widget,
+                show_context_menu (action, widget, NULL,
 				   ephy_gui_menu_position_under_widget);
 		return TRUE;
         }
@@ -832,7 +869,7 @@ button_press_cb (GtkWidget *widget,
 	else if (event->button == 3 &&
 	         gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))	
 	{
-		show_context_menu (action, widget, NULL);
+		show_context_menu (action, widget, event, NULL);
 		return TRUE;
 	}
 

@@ -1581,14 +1581,19 @@ ephy_node_view_popup (EphyNodeView *view, GtkWidget *menu)
 	{
 		if (event->type == GDK_KEY_PRESS)
 		{
+			GdkEventKey *key = (GdkEventKey *) event;
+
 			gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
 					ephy_gui_menu_position_tree_selection,
-					view, 2, gtk_get_current_event_time ());
+					view, 0, key->time);
+			gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
 		}
-		else
+		else if (event->type == GDK_BUTTON_PRESS)
 		{
+			GdkEventButton *button = (GdkEventButton *) event;
+
 			gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL,
-					NULL, 2, gtk_get_current_event_time ());
+					NULL, button->button, button->time);
 		}
 
 		gdk_event_free (event);

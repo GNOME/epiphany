@@ -1,5 +1,17 @@
 2004-11-07  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_popup):
+	* src/bookmarks/ephy-bookmark-action.c: (show_context_menu),
+	(popup_menu_cb), (button_press_cb):
+	* src/bookmarks/ephy-topic-action.c: (button_toggled_cb),
+	(show_context_menu), (popup_menu_cb), (button_press_cb):
+	* src/ephy-window.c: (show_embed_popup):
+
+	When popping up the context menu with keyboard, select the first
+	menu item. Fixes bug #154907.
+
+2004-11-07  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/ContentHandler.cpp:
 
 	Use GtkMessageDialog here.
