@@ -269,7 +269,11 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 		rv = element->GetTagName(tag);
 		if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
+#if MOZILLA_SNAPSHOT >= 20
+		if (tag.LowerCaseEqualsASCII ("img"))
+#else
 		if (tag.EqualsIgnoreCase("img"))
+#endif
 		{
 			info->context |= EMBED_CONTEXT_IMAGE;
 
@@ -311,7 +315,11 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 						   img);
 			}
 		}
+#if MOZILLA_SNAPSHOT >= 20
+		else if (tag.LowerCaseEqualsASCII("input"))
+#else
 		else if (tag.EqualsIgnoreCase("input"))
+#endif
 		{
 			nsCOMPtr<nsIDOMElement> element;
 			element = do_QueryInterface (node);
@@ -321,7 +329,11 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			nsAutoString value;
 			element->GetAttribute (attr, value);
 
+#if MOZILLA_SNAPSHOT >= 20
+			if (value.LowerCaseEqualsASCII("image"))
+#else
 			if (value.EqualsIgnoreCase("image"))
+#endif
 			{
 				info->context |= EMBED_CONTEXT_IMAGE;
 				nsCOMPtr<nsIDOMHTMLInputElement> input;
@@ -338,21 +350,38 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				SetStringProperty ("image",
 						   NS_ConvertUTF8toUCS2(cImg));
 			}
+#if MOZILLA_SNAPSHOT >= 20
+			else if (!value.LowerCaseEqualsASCII("radio")  &&
+				 !value.LowerCaseEqualsASCII("submit") &&
+				 !value.LowerCaseEqualsASCII("reset")  &&
+				 !value.LowerCaseEqualsASCII("hidden") &&
+				 !value.LowerCaseEqualsASCII("button") &&
+				 !value.LowerCaseEqualsASCII("checkbox"))
+#else
 			else if (!value.EqualsIgnoreCase("radio")  &&
 				 !value.EqualsIgnoreCase("submit") &&
 				 !value.EqualsIgnoreCase("reset")  &&
 				 !value.EqualsIgnoreCase("hidden") &&
 				 !value.EqualsIgnoreCase("button") &&
 				 !value.EqualsIgnoreCase("checkbox"))
+#endif
 			{
 				info->context |= EMBED_CONTEXT_INPUT;
 			}
 		}
+#if MOZILLA_SNAPSHOT >= 20
+		else if (tag.LowerCaseEqualsASCII("textarea"))
+#else
 		else if (tag.EqualsIgnoreCase("textarea"))
+#endif
 		{
 			info->context |= EMBED_CONTEXT_INPUT;
 		}
+#if MOZILLA_SNAPSHOT >= 20
+		else if (tag.LowerCaseEqualsASCII("object"))
+#else
 		else if (tag.EqualsIgnoreCase("object"))
+#endif
 		{
 			nsCOMPtr<nsIDOMHTMLObjectElement> object;
 			object = do_QueryInterface (node);
@@ -362,7 +391,11 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			object->GetType(value);
 
 			// MIME types are always lower case
+#if MOZILLA_SNAPSHOT >= 20
+			if (Substring (value, 0, 6).EqualsASCII("image/"))
+#else
 			if (Substring (value, 0, 6).Equals(NS_LITERAL_STRING("image/")))
+#endif
 			{
 				info->context |= EMBED_CONTEXT_IMAGE;
 				
@@ -402,7 +435,11 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			nsAutoString value;
 			dom_elem->GetAttributeNS (nspace, localname_type, value);
 
+#if MOZILLA_SNAPSHOT >= 20
+			if (value.LowerCaseEqualsASCII("simple"))
+#else
 			if (value.EqualsIgnoreCase("simple"))
+#endif
 			{
 				info->context |= EMBED_CONTEXT_LINK;
 				NS_NAMED_LITERAL_STRING (localname_href, "href");
@@ -425,7 +462,11 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
 			/* Link */
+#if MOZILLA_SNAPSHOT >= 20
+			if (tag.LowerCaseEqualsASCII("a"))
+#else
 			if (tag.EqualsIgnoreCase("a"))
+#endif
 			{
 				nsAutoString tmp;
 				nsAutoString substr;
@@ -439,7 +480,11 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 				anchor->GetHref (tmp);
 				substr.Assign (Substring (tmp, 0, 7));
+#if MOZILLA_SNAPSHOT >= 20
+				if (substr.LowerCaseEqualsASCII("mailto:"))
+#else
 				if (substr.EqualsIgnoreCase("mailto:"))
+#endif
 				{
 					const nsAString &address = Substring(tmp, 7, tmp.Length()-7);
 
@@ -477,7 +522,11 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					if (NS_SUCCEEDED(rv))
 						SetStringProperty ("link_type", tmp);
 
+#if MOZILLA_SNAPSHOT >= 20
+					if (tmp.LowerCaseEqualsASCII("text/smartbookmark"))
+#else
 					if (tmp.EqualsIgnoreCase("text/smartbookmark"))
+#endif
 					{
 						SetIntProperty ("link_is_smart", TRUE);
 						
@@ -506,12 +555,20 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				}
 			
 			}
+#if MOZILLA_SNAPSHOT >= 20
+			else if (tag.LowerCaseEqualsASCII("option"))
+#else
 			else if (tag.EqualsIgnoreCase("option"))
+#endif
 			{
 				info->context = EMBED_CONTEXT_NONE;
 				return NS_OK;
 			}
+#if MOZILLA_SNAPSHOT >= 20
+			if (tag.LowerCaseEqualsASCII("area"))
+#else
 			if (tag.EqualsIgnoreCase("area"))
+#endif
 			{
 				info->context |= EMBED_CONTEXT_LINK;
 				nsCOMPtr <nsIDOMHTMLAreaElement> area =
@@ -527,8 +584,13 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					CheckLinkScheme (href);
 				}
 			}
+#if MOZILLA_SNAPSHOT >= 20
+			else if (tag.LowerCaseEqualsASCII("textarea") ||
+				 tag.LowerCaseEqualsASCII("input"))
+#else
 			else if (tag.EqualsIgnoreCase("textarea") ||
 				 tag.EqualsIgnoreCase("input"))
+#endif
 			{
 				info->context |= EMBED_CONTEXT_INPUT;
 			}
@@ -692,11 +754,19 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, Mozilla
 	nsAutoString nodename;
 	OriginalNode->GetNodeName(nodename);
 
+#if MOZILLA_SNAPSHOT >= 20
+	if (nodename.LowerCaseEqualsASCII("xul:scrollbarbutton") ||
+	    nodename.LowerCaseEqualsASCII("xul:thumb")	     ||
+	    nodename.LowerCaseEqualsASCII("xul:vbox")	     ||
+	    nodename.LowerCaseEqualsASCII("xul:spacer")	     ||
+	    nodename.LowerCaseEqualsASCII("xul:slider"))
+#else
 	if (nodename.EqualsIgnoreCase("xul:scrollbarbutton") ||
 	    nodename.EqualsIgnoreCase("xul:thumb")	     ||
 	    nodename.EqualsIgnoreCase("xul:vbox")	     ||
 	    nodename.EqualsIgnoreCase("xul:spacer")	     ||
 	    nodename.EqualsIgnoreCase("xul:slider"))
+#endif
 		return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIDOMEventTarget> EventTarget;
@@ -826,6 +896,16 @@ nsresult EventContext::CheckLinkScheme (const nsAString &link)
 	rv = uri->GetScheme (scheme);
 	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
+#if MOZILLA_SNAPSHOT >= 20
+	if (scheme.LowerCaseEqualsASCII ("http")	 ||
+	    scheme.LowerCaseEqualsASCII ("https")	 ||
+	    scheme.LowerCaseEqualsASCII ("ftp")	 ||
+	    scheme.LowerCaseEqualsASCII ("file")	 ||
+	    scheme.LowerCaseEqualsASCII ("data")	 ||
+	    scheme.LowerCaseEqualsASCII ("resource") ||
+	    scheme.LowerCaseEqualsASCII ("about")	 ||
+	    scheme.LowerCaseEqualsASCII ("gopher"))
+#else
 	if (scheme.EqualsIgnoreCase ("http")	 ||
 	    scheme.EqualsIgnoreCase ("https")	 ||
 	    scheme.EqualsIgnoreCase ("ftp")	 ||
@@ -834,6 +914,7 @@ nsresult EventContext::CheckLinkScheme (const nsAString &link)
 	    scheme.EqualsIgnoreCase ("resource") ||
 	    scheme.EqualsIgnoreCase ("about")	 ||
 	    scheme.EqualsIgnoreCase ("gopher"))
+#endif
 	{
 		SetIntProperty ("link-has-web-scheme", TRUE);
 	}

@@ -128,8 +128,13 @@ EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
 	result = linkElement->GetAttribute (attr_rel, value);
 	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
 
+#if MOZILLA_SNAPSHOT >= 20
+	if (value.LowerCaseEqualsASCII("shortcut icon") ||
+	    value.LowerCaseEqualsASCII("icon"))
+#else
 	if (value.EqualsIgnoreCase("SHORTCUT ICON") ||
 	    value.EqualsIgnoreCase("ICON"))
+#endif
 	{
 		NS_NAMED_LITERAL_STRING(attr_href, "href");
 		nsAutoString value;
@@ -1000,7 +1005,11 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 			nsAutoString type;
 			inputElement->GetType(type);
 
+#if MOZILLA_SNAPSHOT >= 20
+			if (type.LowerCaseEqualsASCII("text"))
+#else
 			if (type.EqualsIgnoreCase("text"))
+#endif
 			{
 				nsAutoString default_text, user_text;
 				PRInt32 max_length;
