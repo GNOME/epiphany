@@ -63,7 +63,6 @@ public:
 	nsresult GetMainDocumentUrl (nsCString &url);
 	nsresult GetDocumentUrl (nsCString &url);
 
-	nsresult ReloadDocument ();
 	nsresult LoadDocument(nsISupports *aPageDescriptor, PRUint32 aDisplayType);
 	nsresult GetPageDescriptor(nsISupports **aPageDescriptor);
 
@@ -88,9 +87,6 @@ public:
 	nsresult CopySelection(void);
 
 	nsresult Paste(void);
-
-	nsresult Activate ();
-	nsresult Deactivate ();
 
 	nsresult GetMainDOMDocument (nsIDOMDocument **aDOMDocument);
 

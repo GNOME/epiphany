@@ -539,21 +539,6 @@ nsresult EphyWrapper::GetWebNavigation(nsIWebNavigation **aWebNavigation)
 	return NS_OK;
 }
 
-nsresult EphyWrapper::ReloadDocument ()
-{
-	nsresult result;
-
-	nsCOMPtr<nsIWebNavigation> wn;
-	result = GetWebNavigation(getter_AddRefs(wn));
-	if (!wn || !NS_SUCCEEDED (result)) return NS_ERROR_FAILURE;
-
-	result = wn->Reload (nsIWebNavigation::LOAD_FLAGS_BYPASS_CACHE | 
-			     nsIWebNavigation::LOAD_FLAGS_BYPASS_PROXY);
-	if (!NS_SUCCEEDED (result)) return NS_ERROR_FAILURE;
-
-	return NS_OK;
-}
-
 nsresult EphyWrapper::LoadDocument(nsISupports *aPageDescriptor,
 				     PRUint32 aDisplayType)
 {
