@@ -30,6 +30,7 @@
 #include "ephy-gui.h"
 #include "ephy-ellipsizing-label.h"
 #include "ephy-debug.h"
+#include "ephy-state.h"
 
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkliststore.h>
@@ -868,62 +869,67 @@ show_cookies_properties (PdmDialog *dialog,
 		  GTK_WINDOW(parent),
 		  GTK_DIALOG_MODAL,
 		  GTK_STOCK_CLOSE, 0, NULL);
+	ephy_state_add_window (GTK_WIDGET (gdialog), "cookie_properties", 
+			       -1, -1, EPHY_STATE_WINDOW_SAVE_SIZE | EPHY_STATE_WINDOW_SAVE_POSITION);
 	gtk_dialog_set_has_separator (GTK_DIALOG(gdialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER(gdialog), 6);
 
 	table = gtk_table_new (2, 4, FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER(table), 5);
-	gtk_table_set_row_spacings (GTK_TABLE(table), 6);
-	gtk_table_set_col_spacings (GTK_TABLE(table), 12);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
+	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
+	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
 	gtk_widget_show (table);
 
-	str = g_strconcat ("<b>", _("Value:"), "</b>", NULL);
+	str = g_strconcat ("<b>", _("Content:"), "</b>", NULL);
 	label = gtk_label_new (str);
 	g_free (str);
-	gtk_label_set_use_markup (GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC(label), 0, 0);
+	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
 			  GTK_FILL, GTK_FILL, 0, 0);
 
 	label = ephy_ellipsizing_label_new (info->value);
-	gtk_misc_set_alignment (GTK_MISC(label), 0, 0);
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 0, 1);
 
 	str = g_strconcat ("<b>", _("Path:"), "</b>", NULL);
-	label = gtk_label_new (str);
+	label = ephy_ellipsizing_label_new (str);
 	g_free (str);
-	gtk_label_set_use_markup (GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC(label), 0, 0);
+	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			  GTK_FILL, GTK_FILL, 0, 0);
 
 	label = gtk_label_new (info->path);
-	gtk_misc_set_alignment (GTK_MISC(label), 0, 0);
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 1, 2);
 
 	str = g_strconcat ("<b>", _("Secure:"), "</b>", NULL);
 	label = gtk_label_new (str);
 	g_free (str);
-	gtk_label_set_use_markup (GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC(label), 0, 0);
+	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
 			  GTK_FILL, GTK_FILL, 0, 0);
 
 	label = gtk_label_new (info->is_secure ? _("Yes") : _("No") );
-	gtk_misc_set_alignment (GTK_MISC(label), 0, 0);
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 2, 3);
 
-	str = g_strconcat ("<b>", _("Expire:"), "</b>", NULL);
+	str = g_strconcat ("<b>", _("Expires:"), "</b>", NULL);
 	label = gtk_label_new (str);
 	g_free (str);
-	gtk_label_set_use_markup (GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC(label), 0, 0);
+	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
 			  GTK_FILL, GTK_FILL, 0, 0);
@@ -938,7 +944,8 @@ show_cookies_properties (PdmDialog *dialog,
 	}
 	label = gtk_label_new (str);
 	g_free (str);
-	gtk_misc_set_alignment (GTK_MISC(label), 0, 0.5);
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 3, 4);
 
