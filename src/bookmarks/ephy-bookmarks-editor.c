@@ -470,6 +470,8 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			       GTK_STOCK_CLOSE,
 			       GTK_RESPONSE_CLOSE);
 	gtk_dialog_set_default_response (GTK_DIALOG (editor), GTK_RESPONSE_CLOSE);
+
+	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
 }
 
 GtkWidget *
