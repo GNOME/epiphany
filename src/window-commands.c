@@ -318,10 +318,7 @@ void
 window_cmd_file_open (EggAction *action,
 		      EphyWindow *window)
 {
-	gchar *dir, *retDir;
-        gchar *file;
-        GnomeVFSURI *uri;
-	GtkWidget *wmain;
+	char *dir, *ret_dir, *file;
 	EphyEmbedShell *embed_shell;
 	gresult result;
 	EphyEmbedSingle *single;
@@ -331,35 +328,37 @@ window_cmd_file_open (EggAction *action,
 
 	embed_shell = EPHY_EMBED_SHELL (ephy_shell);
 
-	wmain = GTK_WIDGET (window);
-	g_return_if_fail (wmain != NULL);
-
         dir = eel_gconf_get_string (CONF_STATE_OPEN_DIR);
 
 	result = ephy_embed_single_show_file_picker
-		(single, wmain,
+		(single, GTK_WIDGET (window),
 		 _("Open"),
                  dir, NULL, modeOpen,
                  &file, NULL, NULL);
 
-	uri = gnome_vfs_uri_new (file);
-	if (uri)
+	/* persist directory choice */
+	/* Fix for bug 122780:
+	 * if the user selected a directory, or aborted with no filename typed,
+	 * g_path_get_dirname and gnome_vfs_uri_extract_dirname strip the last
+	 * path component, so test if the returned file is actually a directory.
+	 */
+	if (g_file_test (file, G_FILE_TEST_IS_DIR))
 	{
-		retDir = gnome_vfs_uri_extract_dirname (uri);
-
-		/* set default open dir */
-		eel_gconf_set_string (CONF_STATE_OPEN_DIR,
-				      retDir);
-
-		g_free (retDir);
-		gnome_vfs_uri_unref (uri);
-
-		if (result == G_OK)
-		{
-			ephy_window_load_url(window, file);
-	        }
+		ret_dir = g_strdup (file);
+	}
+	else
+	{
+		ret_dir = g_path_get_dirname (file);
 	}
 
+	eel_gconf_set_string (CONF_STATE_OPEN_DIR, ret_dir);
+
+	if (result == G_OK)
+	{
+		ephy_window_load_url(window, file);
+        }
+
+	g_free (ret_dir);
 	g_free (file);
         g_free (dir);
 }

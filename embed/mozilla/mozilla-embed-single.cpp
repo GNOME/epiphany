@@ -36,6 +36,7 @@
 
 #include <time.h>
 #include <libgnome/gnome-i18n.h>
+#include <libgnomevfs/gnome-vfs-utils.h>
 #include <string.h>
 #include <nsICacheService.h>
 #include <nsCOMPtr.h>
@@ -1058,15 +1059,14 @@ impl_show_file_picker (EphyEmbedSingle *shell,
 
         GFilePicker *filePicker = new GFilePicker (file_formats);
 
-	/* FIXME sane path: expand tilde ... */
-        expanded_directory = g_strdup (directory);
+        expanded_directory = gnome_vfs_expand_initial_tilde (directory);
 
         /* make sure the directory exists, and use the home directory
          * otherwise */
         if (!expanded_directory ||
             !g_file_test (expanded_directory, G_FILE_TEST_IS_DIR))
         {
-                if (expanded_directory) g_free (expanded_directory);
+                g_free (expanded_directory);
                 expanded_directory = g_strdup (g_get_home_dir());
         }
 
