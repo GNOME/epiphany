@@ -60,7 +60,9 @@ public:
 	NS_DECL_ISUPPORTS
 	NS_DECL_NSIWEBPROGRESSLISTENER
 	NS_DECL_NSIAUTHPROMPT
-  
+
+	nsresult InitiateDownload (nsILocalFile *aDestFile);
+
 protected:
 	nsresult PerformSave (nsIURI* inOriginalURI);
 
@@ -69,6 +71,7 @@ private:
 	MozillaEmbedPersist       *mEmbedPersist;
 	nsCOMPtr<nsIFile>          mTmpFile;
 	nsCOMPtr<nsIURI>           mURL;
+	nsCOMPtr<nsIURI>           mOriginalURI;
 	nsCOMPtr<nsIDOMDocument>   mDocument;
 	nsCOMPtr<nsIInputStream>   mPostData;
 	PRBool                     mBypassCache;

@@ -51,6 +51,9 @@
 
 #include "ephy-file-chooser.h"
 #include "ephy-prefs.h"
+#include "ephy-gui.h"
+#include "eel-gconf-extensions.h"
+#include "ephy-debug.h"
 
 #include "nsReadableUtils.h"
 #include "nsIChannel.h"
@@ -72,14 +75,18 @@ EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmb
 , mEmbedPersist(aEmbedPersist)
 , mTmpFile(aFile)
 , mURL(aURL)
+, mOriginalURI(nsnull)
 , mDocument(aDocument)
 , mPostData(aPostData)
 {
 	mPrompt = do_GetService("@mozilla.org/embedcomp/prompt-service;1");
+
+	LOG ("EphyHeaderSniffer constructor")
 }
 
 EphyHeaderSniffer::~EphyHeaderSniffer()
 {
+	LOG ("EphyHeaderSniffer destructor")
 }
 
 NS_IMPL_ISUPPORTS2(EphyHeaderSniffer, nsIWebProgressListener, nsIAuthPrompt)
@@ -164,15 +171,47 @@ EphyHeaderSniffer::OnSecurityChange (nsIWebProgress *aWebProgress, nsIRequest *a
 	return NS_OK;
 }
 
+static void
+filechooser_response_cb (EphyFileChooser *dialog, gint response, EphyHeaderSniffer* sniffer)
+{
+	if (response == EPHY_RESPONSE_SAVE)
+	{
+		char *filename;
+		GtkWidget *parent = NULL; // FIXME!
+
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+
+		LOG ("Filename %s", filename)
+
+		if (filename &&
+		    ephy_gui_confirm_overwrite_file (parent, filename) == TRUE)
+		{
+			nsCOMPtr<nsILocalFile> destFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
+			if (destFile)
+			{
+				destFile->InitWithNativePath (nsDependentCString (filename));
+			
+				sniffer->InitiateDownload (destFile);
+			}
+		}
+	}
+
+	// FIXME how to inform user of failed save ?
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
 nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 {
 	nsresult rv;
 	EmbedPersistFlags flags;
 	PRBool askDownloadDest;
 
+	mOriginalURI = inOriginalURI;
+
 	flags = ephy_embed_persist_get_flags (EPHY_EMBED_PERSIST (mEmbedPersist));
 	askDownloadDest = flags & EMBED_PERSIST_ASK_DESTINATION;
- 
+
 	nsAutoString defaultFileName;
 
 	if (defaultFileName.IsEmpty() && !mContentDisposition.IsEmpty())
@@ -236,29 +275,50 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		}
 	}
 
+	const char *key;
+	key = ephy_embed_persist_get_persist_key (EPHY_EMBED_PERSIST (mEmbedPersist));
+
 	if (askDownloadDest)
 	{
-		/* FIXME */
+		EphyFileChooser *dialog;
+		GtkWindow *window;
+		const char *title;
+		int response;
+
+		title = ephy_embed_persist_get_fc_title (EPHY_EMBED_PERSIST (mEmbedPersist));
+		window = ephy_embed_persist_get_fc_parent (EPHY_EMBED_PERSIST (mEmbedPersist));
+
+		dialog = ephy_file_chooser_new (title ? title: _("Save"),
+						GTK_WIDGET (window),
+						GTK_FILE_CHOOSER_ACTION_SAVE,
+						key ? key : CONF_STATE_DOWNLOADING_DIR);
+
+		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
+						   NS_ConvertUCS2toUTF8 (defaultFileName).get());
+
+		g_signal_connect (dialog, "response",
+				  G_CALLBACK (filechooser_response_cb), this);
+
+		gtk_widget_show (GTK_WIDGET (dialog));
+
+		return NS_OK;
 	}
-	else
-	{
-		/* FIXME build path from download dir */
-	}
-           
-	if (defaultFileName.IsEmpty())
-	{
-		defaultFileName.AssignWithConversion(_("Untitled"));
-	}
-        
+
 	/* FIXME ask user if overwriting ? */
 
 	/* FIXME: how to inform user of failed save ? */
         nsCOMPtr<nsILocalFile> destFile;
        	rv = NS_NewLocalFile(defaultFileName, PR_TRUE, getter_AddRefs(destFile)); 
-        if (NS_FAILED(rv) || !destFile) return NS_ERROR_FAILURE;
+	if (NS_FAILED(rv) || !destFile) return NS_ERROR_FAILURE;
 
-	return InitiateMozillaDownload (mDocument, mURL, destFile,
-					mContentType.get(), inOriginalURI, mEmbedPersist,
+	return InitiateDownload (destFile);
+}
+
+nsresult EphyHeaderSniffer::InitiateDownload (nsILocalFile *aDestFile)
+{
+	LOG ("Initiating download")
+	return InitiateMozillaDownload (mDocument, mURL, aDestFile,
+					mContentType.get(), mOriginalURI, mEmbedPersist,
 					mBypassCache, mPostData);
 }
 

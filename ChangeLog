@@ -1,3 +1,10 @@
+2003-10-27  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/EphyHeaderSniffer.h:
+
+	Implement filechooser for ASK_DESTINATION.
+
 2003-10-27  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* embed/mozilla/EphyBrowser.cpp:
@@ -90,6 +97,12 @@
 	Update spinner on toolbar style change.
 	Fix a typo in toolbars creation that wa causing fs toolbar
 	to be hidden.
+
+2003-10-26  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/toolbar.c: (toolbar_init), (toolbar_finalize):
+
+	Fix refounting of the spinner.
 
 2003-10-26  Christian Persch  <chpe@cvs.gnome.org>
 
