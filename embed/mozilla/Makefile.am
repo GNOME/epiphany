@@ -11,6 +11,8 @@ libephymozillaembed_la_SOURCES = 	\
 	EphyBrowser.h	                \
 	EphyHistoryListener.cpp		\
 	EphyHistoryListener.h		\
+	EphySidebar.cpp			\
+	EphySidebar.h			\
 	EphySingle.cpp			\
 	EphySingle.h			\
 	EphyUtils.cpp			\
@@ -78,6 +80,7 @@ mozilla_include_subdirs = \
 	pipboot			\
 	pipnss			\
 	shistory		\
+	sidebar			\
 	uriloader		\
 	uconv			\
 	webbrowserpersist	\

@@ -28,6 +28,7 @@
 #include "PrintingPromptService.h"
 #include "MozDownload.h"
 #include "EphyContentPolicy.h"
+#include "EphySidebar.h"
 
 #ifdef ENABLE_FILEPICKER
 #include "FilePicker.h"
@@ -55,6 +56,7 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GContentHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(MozGlobalHistory)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GPrintingPromptService)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyContentPolicy)
+NS_GENERIC_FACTORY_CONSTRUCTOR(EphySidebar)
 
 #ifdef ENABLE_FILEPICKER
 NS_GENERIC_FACTORY_CONSTRUCTOR(GFilePicker)
@@ -84,6 +86,20 @@ RegisterContentPolicy(nsIComponentManager *aCompMgr, nsIFile *aPath,
 	if (oldval)
 		nsMemory::Free (oldval);
 	return rv;
+}
+
+static NS_METHOD
+RegisterSidebar(nsIComponentManager *aCompMgr, nsIFile *aPath,
+                const char *registryLocation, const char *componentType,
+                const nsModuleComponentInfo *info)
+{
+	nsCOMPtr<nsICategoryManager> cm =
+		do_GetService(NS_CATEGORYMANAGER_CONTRACTID);
+	NS_ENSURE_TRUE (cm, NS_ERROR_FAILURE);
+
+	return cm->AddCategoryEntry("JavaScript global property",
+				    "sidebar", NS_SIDEBAR_CONTRACTID,
+				    PR_FALSE, PR_TRUE, nsnull);
 }
 
 static const nsModuleComponentInfo sAppComps[] = {
@@ -151,6 +167,13 @@ static const nsModuleComponentInfo sAppComps[] = {
 		EPHY_CONTENT_POLICY_CONTRACTID,
 		EphyContentPolicyConstructor,
 		RegisterContentPolicy
+	},
+	{
+		EPHY_SIDEBAR_CLASSNAME,
+		EPHY_SIDEBAR_CID,
+		NS_SIDEBAR_CONTRACTID,
+		EphySidebarConstructor,
+		RegisterSidebar
 	},
 };
 

@@ -48,6 +48,11 @@ struct _EphyEmbedSingleIface
 	void	 (* network_status) (EphyEmbedSingle *single,
 				     gboolean offline);
 
+
+         gboolean (* add_sidebar)   (EphyEmbedSingle *single,
+				     const char * url,
+				     const char * title);
+
 	/* Methods */
 
 	GtkWidget *	  (* open_window)	(EphyEmbedSingle *single,

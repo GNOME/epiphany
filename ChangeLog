@@ -1,3 +1,16 @@
+2005-01-01  Crispin Flowerday  <gnome@flowerday.cx>
+
+	* embed/ephy-embed-single.c: (ephy_embed_single_iface_init):
+	* embed/ephy-embed-single.h:
+	* embed/mozilla/EphySidebar.cpp:
+	* embed/mozilla/EphySidebar.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozRegisterComponents.cpp:
+
+	Add an "add-sidebar" signal on the EphyEmbedSingle interface,
+	it gets emitted when a user clicks on a link that wants
+	to add a url to the sidebar.
+
 2005-01-01  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.ac:
