@@ -33,6 +33,9 @@
 #include "ephy-toolbars-model.h"
 #include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
+#include "ephy-prefs.h"
+
+#include "eel-gconf-extensions.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -61,6 +64,8 @@ struct EphyBookmarksPrivate
 	EphyNode *smartbookmarks;
 	EphyNode *lower_fav;
 	double lower_score;
+
+	guint disable_bookmark_editing_notifier_id;
 };
 
 typedef struct
@@ -497,6 +502,23 @@ topics_removed_cb (EphyNode *node,
 }
 
 static void
+update_bookmark_editing (EphyBookmarks *eb)
+{
+	g_object_set (G_OBJECT (eb->priv->db),
+		      "immutable", eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING),
+		      NULL);
+}
+
+static void
+disable_bookmark_editing_notifier (GConfClient *client,
+				   guint cnxn_id,
+				   GConfEntry *entry,
+				   EphyBookmarks *eb)
+{
+	update_bookmark_editing (eb);
+}
+
+static void
 ephy_bookmarks_init (EphyBookmarks *eb)
 {
 	GValue value = { 0, };
@@ -599,6 +621,11 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 		}
 	}
 
+	eb->priv->disable_bookmark_editing_notifier_id = eel_gconf_notification_add
+		(CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING,
+		 (GConfClientNotifyFunc)disable_bookmark_editing_notifier, eb);
+	update_bookmark_editing (eb);
+
 	ephy_setup_history_notifiers (eb);
 	ephy_bookmarks_update_favorites (eb);
 }
@@ -607,6 +634,8 @@ static void
 ephy_bookmarks_finalize (GObject *object)
 {
 	EphyBookmarks *eb = EPHY_BOOKMARKS (object);
+
+	eel_gconf_notification_remove (eb->priv->disable_bookmark_editing_notifier_id);
 
 	if (eb->priv->save_timeout_id != 0)
 	{
@@ -684,6 +713,8 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	GValue value = { 0, };
 
 	bm = ephy_node_new (eb->priv->db);
+
+	if (bm == NULL) return NULL;
 
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, title);
@@ -937,6 +968,8 @@ ephy_bookmarks_add_keyword (EphyBookmarks *eb,
 	GValue value = { 0, };
 
 	key = ephy_node_new (eb->priv->db);
+
+	if (key == NULL) return NULL;
 
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, name);

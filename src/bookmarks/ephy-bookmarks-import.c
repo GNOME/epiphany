@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright (C) 2003 Marco Pesenti Gritti
  *
@@ -32,6 +33,9 @@
 
 #include "ephy-bookmarks-import.h"
 #include "ephy-debug.h"
+#include "ephy-prefs.h"
+
+#include "eel-gconf-extensions.h"
 
 /**
  * NSItemType: netscape bookmark item type
@@ -59,6 +63,8 @@ bookmark_add (EphyBookmarks *bookmarks,
 
 	bmk = ephy_bookmarks_add (bookmarks, title, address);
 
+	if (bmk == NULL) return NULL;
+
 	if (topic_name)
 	{
 		topic = ephy_bookmarks_find_keyword (bookmarks, topic_name, FALSE);
@@ -67,7 +73,10 @@ bookmark_add (EphyBookmarks *bookmarks,
 			topic = ephy_bookmarks_add_keyword (bookmarks, topic_name);
 		}
 
-		ephy_bookmarks_set_keyword (bookmarks, topic, bmk);
+		if (topic != NULL)
+		{
+			ephy_bookmarks_set_keyword (bookmarks, topic, bmk);
+		}
 	}
 
 	return bmk;
@@ -78,6 +87,8 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 		       const char *filename)
 {
 	char *type;
+
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
 
 	type = gnome_vfs_get_mime_type (filename);
 
@@ -371,7 +382,7 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader)
 
 	xmlFree (title);
 
-	g_return_val_if_fail (EPHY_IS_NODE (keyword), list);
+	if (keyword == NULL) return list;
 
 	for (l = list; l != NULL; l = l->next)
 	{
@@ -565,10 +576,16 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 			       const char *filename)
 {
 	FILE *bf;  /* bookmark file */
-	GString *name = g_string_new (NULL);
+	GString *name;
 	gchar *parsedname;
 	GString *url = g_string_new (NULL);
 	GList *folders = NULL, *l;
+
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
+
+	name = g_string_new (NULL);
+	url = g_string_new (NULL);
+
 
 	if (!(bf = fopen (filename, "r"))) {
 		g_warning ("Failed to open file: %s\n", filename);
@@ -637,6 +654,8 @@ ephy_bookmarks_import_xbel (EphyBookmarks *bookmarks,
 {
 	xmlTextReaderPtr reader;
 	GList *list;
+
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
 
 	if (g_file_test (filename, G_FILE_TEST_EXISTS) == FALSE)
 	{
@@ -758,7 +777,10 @@ parse_rdf_item (EphyBookmarks *bookmarks,
 			topic = ephy_bookmarks_add_keyword (bookmarks, topic_name);
 		}
 
-		ephy_bookmarks_set_keyword (bookmarks, topic, bmk);
+		if (topic != NULL)
+		{
+			ephy_bookmarks_set_keyword (bookmarks, topic, bmk);
+		}
 	}
 
 	xmlFree (title);
@@ -775,6 +797,8 @@ ephy_bookmarks_import_rdf (EphyBookmarks *bookmarks,
 	xmlDocPtr doc;
 	xmlNodePtr child;
 	xmlNodePtr root;
+
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
 
 	if (g_file_test (filename, G_FILE_TEST_EXISTS) == FALSE)
 		return FALSE;

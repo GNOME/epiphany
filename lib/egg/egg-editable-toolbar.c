@@ -419,8 +419,7 @@ drag_data_received_cb (GtkWidget          *widget,
 	  
   target = gtk_drag_dest_find_target (widget, context, NULL);
   type = egg_toolbars_model_get_item_type (etoolbar->priv->model, target);
-  id = egg_toolbars_model_get_item_id (etoolbar->priv->model, type,
-				       selection_data->data);
+  id = egg_toolbars_model_get_item_id (etoolbar->priv->model, type, selection_data->data);
 
   /* This function can be called for two reasons
    *
@@ -432,6 +431,13 @@ drag_data_received_cb (GtkWidget          *widget,
    *  (2) The drag has finished, and drag_drop() wants us to
    *      actually add a new item to the toolbar.
    */
+
+  if (id == NULL)
+    {
+      etoolbar->priv->pending = FALSE;
+      g_free (type);
+      return;
+    }
 
   if (etoolbar->priv->pending)
     {
@@ -453,11 +459,6 @@ drag_data_received_cb (GtkWidget          *widget,
 	}
       else
 	{
-	  type = egg_toolbars_model_get_item_type (etoolbar->priv->model,
-						   target);
-	  id = egg_toolbars_model_get_item_id (etoolbar->priv->model, type,
-					       selection_data->data);
-
 	  egg_toolbars_model_add_item (etoolbar->priv->model,
 				       toolbar_pos, pos, id, type);
 	}
@@ -591,8 +592,11 @@ toolbar_drag_motion_cb (GtkWidget          *widget,
       /* The handler will make sure the item is created */
       gtk_drag_get_data (widget, context, target, time);
 
-      g_assert (etoolbar->priv->dragged_item);
       g_assert (!etoolbar->priv->pending);
+
+      if (etoolbar->priv->dragged_item == NULL) {
+	return TRUE;
+      }
 
       g_object_ref (etoolbar->priv->dragged_item);
       gtk_object_sink (GTK_OBJECT (etoolbar->priv->dragged_item));

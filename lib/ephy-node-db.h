@@ -73,6 +73,8 @@ int           ephy_node_db_write_to_xml_safe	(EphyNodeDb *db,
 
 const char   *ephy_node_db_get_name		(EphyNodeDb *db);
 
+gboolean      ephy_node_db_is_immutable		(EphyNodeDb *db);
+
 EphyNode     *ephy_node_db_get_node_from_id	(EphyNodeDb *db,
 						 long id);
 

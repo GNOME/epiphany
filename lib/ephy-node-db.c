@@ -40,7 +40,8 @@ static void ephy_node_db_finalize (GObject *object);
 enum
 {
 	PROP_0,
-	PROP_NAME
+	PROP_NAME,
+	PROP_IMMUTABLE,
 };
 
 #define EPHY_NODE_DB_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NODE_DB, EphyNodeDbPrivate))
@@ -48,6 +49,7 @@ enum
 struct EphyNodeDbPrivate
 {
 	char *name;
+	gboolean immutable;
 
 	long id_factory;
 
@@ -97,6 +99,7 @@ ephy_node_db_set_name (EphyNodeDb *db, const char *name)
 	g_hash_table_insert (ephy_node_databases, db->priv->name, db);
 }
 
+
 static void
 ephy_node_db_get_property (GObject *object,
                            guint prop_id,
@@ -111,6 +114,9 @@ ephy_node_db_get_property (GObject *object,
 	{
 		case PROP_NAME:
 			g_value_set_string (value, db->priv->name);
+			break;
+		case PROP_IMMUTABLE:
+			g_value_set_boolean (value, db->priv->immutable);
 			break;
 	}
 }
@@ -130,6 +136,10 @@ ephy_node_db_set_property (GObject *object,
 	{
 		case PROP_NAME:
 			ephy_node_db_set_name (db, g_value_get_string (value));
+			break;
+		case PROP_IMMUTABLE:
+			db->priv->immutable = g_value_get_boolean (value);
+			g_object_notify (G_OBJECT (db), "immutable");
 			break;
 	}
 }
@@ -152,6 +162,14 @@ ephy_node_db_class_init (EphyNodeDbClass *klass)
                                                                "Name",
                                                                NULL,
                                                                G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+                                         PROP_IMMUTABLE,
+                                         g_param_spec_boolean  ("immutable",
+								"Immutable",
+								"Immutable",
+								FALSE,
+								G_PARAM_READWRITE));
 
 	g_type_class_add_private (object_class, sizeof (EphyNodeDbPrivate));
 }
@@ -229,6 +247,12 @@ ephy_node_db_get_name (EphyNodeDb *db)
 	return db->priv->name;
 }
 
+gboolean
+ephy_node_db_is_immutable (EphyNodeDb *db)
+{
+	return db->priv->immutable;
+}
+
 EphyNode *
 ephy_node_db_get_node_from_id (EphyNodeDb *db, long id)
 {
@@ -284,6 +308,7 @@ ephy_node_db_load_from_file (EphyNodeDb *db,
 {
 	xmlTextReaderPtr reader;
 	gboolean success = TRUE;
+	gboolean was_immutable;
 	int ret;
 
 	LOG ("ephy_node_db_load_from_file %s", xml_file)
@@ -300,6 +325,9 @@ ephy_node_db_load_from_file (EphyNodeDb *db,
 	{
 		return FALSE;
 	}
+
+	was_immutable = db->priv->immutable;
+	db->priv->immutable = FALSE;
 
 	ret = xmlTextReaderRead (reader);
 	while (ret == 1)
@@ -348,6 +376,8 @@ ephy_node_db_load_from_file (EphyNodeDb *db,
 	}
 
 	xmlFreeTextReader (reader);
+
+	db->priv->immutable = was_immutable;
 
 	STOP_PROFILER ("loading node db")
 

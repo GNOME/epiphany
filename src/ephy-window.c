@@ -333,6 +333,7 @@ struct EphyWindowPrivate
 	guint show_statusbar_notifier_id;
 	guint hide_menubar_notifier_id;
 	guint disable_save_to_disk_notifier_id;
+	guint disable_bookmark_editing_notifier_id;
 	guint browse_with_caret_notifier_id;
 };
 
@@ -1695,7 +1696,7 @@ update_actions (EphyWindow *window)
 	GtkActionGroup *action_group = GTK_ACTION_GROUP (window->priv->action_group);
 	GtkActionGroup *popups_action_group = GTK_ACTION_GROUP (window->priv->popups_action_group);
 	GtkAction *action;
-	gboolean save_to_disk;
+	gboolean bookmarks_editable, save_to_disk;
 
 	action = gtk_action_group_get_action (action_group, "ViewToolbar");
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
@@ -1711,6 +1712,16 @@ update_actions (EphyWindow *window)
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
 				      eel_gconf_get_boolean (CONF_WINDOWS_SHOW_STATUSBAR));
 	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_STATUSBAR), NULL);
+
+	bookmarks_editable = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING);
+	action = gtk_action_group_get_action (action_group, "GoBookmarks");
+	g_object_set (action, "sensitive", bookmarks_editable, NULL);
+	action = gtk_action_group_get_action (action_group, "FileBookmarkPage");
+	g_object_set (action, "sensitive", bookmarks_editable, NULL);
+	action = gtk_action_group_get_action (popups_action_group, "ContextBookmarkPage");
+	g_object_set (action, "sensitive", bookmarks_editable, NULL);
+	action = gtk_action_group_get_action (popups_action_group, "BookmarkLink");
+	g_object_set (action, "sensitive", bookmarks_editable, NULL);
 
 	save_to_disk = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK);
 	action = gtk_action_group_get_action (action_group, "FileSaveAs");
@@ -1851,6 +1862,10 @@ ephy_window_init (EphyWindow *window)
 		(CONF_LOCKDOWN_HIDE_MENUBAR,
 		 (GConfClientNotifyFunc)chrome_notifier, window);
 
+	window->priv->disable_bookmark_editing_notifier_id = eel_gconf_notification_add
+		(CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING,
+		 (GConfClientNotifyFunc)actions_notifier, window);
+
 	window->priv->disable_save_to_disk_notifier_id = eel_gconf_notification_add
 		(CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK,
 		 (GConfClientNotifyFunc)actions_notifier, window);
@@ -1877,6 +1892,7 @@ ephy_window_finalize (GObject *object)
 	eel_gconf_notification_remove (window->priv->show_bookmarks_bar_notifier_id);
 	eel_gconf_notification_remove (window->priv->show_statusbar_notifier_id);
 	eel_gconf_notification_remove (window->priv->hide_menubar_notifier_id);
+	eel_gconf_notification_remove (window->priv->disable_bookmark_editing_notifier_id);
 	eel_gconf_notification_remove (window->priv->disable_save_to_disk_notifier_id);
 	eel_gconf_notification_remove (window->priv->browse_with_caret_notifier_id);
 

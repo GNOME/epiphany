@@ -277,6 +277,8 @@ ephy_node_new (EphyNodeDb *db)
 
 	g_return_val_if_fail (EPHY_IS_NODE_DB (db), NULL);
 
+	if (ephy_node_db_is_immutable (db)) return NULL;
+
 	id = _ephy_node_db_new_id (db);
 
 	return ephy_node_new_with_id (db, id);
@@ -288,6 +290,8 @@ ephy_node_new_with_id (EphyNodeDb *db, gulong reserved_id)
 	EphyNode *node;
 
 	g_return_val_if_fail (EPHY_IS_NODE_DB (db), NULL);
+
+	if (ephy_node_db_is_immutable (db)) return NULL;
 
 	node = g_new0 (EphyNode, 1);
 
@@ -396,6 +400,8 @@ ephy_node_set_property (EphyNode *node,
 	g_return_if_fail (EPHY_IS_NODE (node));
 	g_return_if_fail (property_id >= 0);
 	g_return_if_fail (value != NULL);
+
+	if (ephy_node_db_is_immutable (node->db)) return;
 
 	new = g_new0 (GValue, 1);
 	g_value_init (new, G_VALUE_TYPE (value));
@@ -759,11 +765,13 @@ ephy_node_new_from_xml (EphyNodeDb *db, xmlNodePtr xml_node)
 	g_return_val_if_fail (EPHY_IS_NODE_DB (db), NULL);
 	g_return_val_if_fail (xml_node != NULL, NULL);
 
+	if (ephy_node_db_is_immutable (db)) return NULL; 
+
 	xml = xmlGetProp (xml_node, "id");
 	if (xml == NULL)
 		return NULL;
 	id = atol (xml);
-	g_free (xml);
+	xmlFree (xml);
 
 	node = ephy_node_new_with_id (db, id);
 
@@ -775,7 +783,7 @@ ephy_node_new_from_xml (EphyNodeDb *db, xmlNodePtr xml_node)
 			xml = xmlGetProp (xml_child, "id");
 			g_assert (xml != NULL);
 			parent_id = atol (xml);
-			g_free (xml);
+			xmlFree (xml);
 
 			parent = ephy_node_db_get_node_from_id (db, parent_id);
 
@@ -792,11 +800,11 @@ ephy_node_new_from_xml (EphyNodeDb *db, xmlNodePtr xml_node)
 
 			xml = xmlGetProp (xml_child, "id");
 			property_id = atoi (xml);
-			g_free (xml);
+			xmlFree (xml);
 
 			xml = xmlGetProp (xml_child, "value_type");
 			value_type = g_type_from_name (xml);
-			g_free (xml);
+			xmlFree (xml);
 
 			xml = xmlNodeGetContent (xml_child);
 			value = g_new0 (GValue, 1);
@@ -838,7 +846,7 @@ ephy_node_new_from_xml (EphyNodeDb *db, xmlNodePtr xml_node)
 
 			real_set_property (node, property_id, value);
 
-			g_free (xml);
+			xmlFree (xml);
 		}
 	}
 
@@ -852,6 +860,8 @@ ephy_node_add_child (EphyNode *node,
 		     EphyNode *child)
 {
 	g_return_if_fail (EPHY_IS_NODE (node));
+
+	if (ephy_node_db_is_immutable (node->db)) return;
 	
 	real_add_child (node, child);
 
@@ -863,6 +873,8 @@ ephy_node_remove_child (EphyNode *node,
 		        EphyNode *child)
 {
 	g_return_if_fail (EPHY_IS_NODE (node));
+
+	if (ephy_node_db_is_immutable (node->db)) return;
 
 	real_remove_child (node, child, TRUE, TRUE);
 }
@@ -905,6 +917,8 @@ ephy_node_sort_children (EphyNode *node,
 {
 	GPtrArray *newkids;
 	int i, *new_order;
+
+	if (ephy_node_db_is_immutable (node->db)) return;
 
 	g_return_if_fail (EPHY_IS_NODE (node));
 	g_return_if_fail (compare_func != NULL);
@@ -952,6 +966,8 @@ ephy_node_reorder_children (EphyNode *node,
 
 	g_return_if_fail (EPHY_IS_NODE (node));
 	g_return_if_fail (new_order != NULL);
+
+	if (ephy_node_db_is_immutable (node->db)) return;
 
 	newkids = g_ptr_array_new ();
 	g_ptr_array_set_size (newkids, node->children->len);

@@ -1,3 +1,25 @@
+2004-01-09  Christopher James Lahey  <clahey@ximian.com>
+
+	* data/epiphany-lockdown.schemas.in, lib/ephy-prefs.h: Added
+	disable_bookmark_editing key.
+
+	* lib/ephy-node-db.c, ephy-node-db.h, ephy-node.c: Added immutable
+	property.
+
+	* lib/egg/egg-editable-toolbar.c (drag_data_received_cb,
+	toolbar_drag_motion_cb), src/ephy-toolbars-model.c
+	(impl_get_item_id): Made these handle immutable models/node_dbs.
+
+	* src/ephy-automation.c, src/ephy-session.c: Don't show the
+	bookmark editor if disabled.
+
+	* src/ephy-window.c: Disable a bunch of menus if bookmark editing
+	is disabled.
+
+	* src/bookmarks/ephy-bookmarks-import.c,
+	src/bookmarks/ephy-bookmarks.c: Disable bookmark editing and
+	importing is key is set.  Uses immutable property.
+
 2004-01-09  Christian Persch  <chpe@cvs.gnome.org>
 
 	* data/epiphany.schemas.in:
@@ -18,7 +40,7 @@
 	* lib/ephy-state.c: Fixed a logic error in using & instead of &&
 	(bug #130919, Dave Jones).
 
-2004-01-08    <clahey@ximian.com>
+2004-01-08  Christopher James Lahey  <clahey@ximian.com>
 
 	* embed/mozilla/ContentHandler.cpp (MIMEAskAction): Don't save the
 	file if disable_save_to_disk is on.

@@ -202,20 +202,22 @@ impl_get_item_id (EggToolbarsModel *t,
 			}
 
 			node = ephy_bookmarks_add (bookmarks, title, netscape_url[URL]);
-			g_return_val_if_fail (node != NULL, NULL);
 
-			gh = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
-			icon = ephy_history_get_icon (gh, netscape_url[URL]);
-
-			if (icon)
+			if (node != NULL)
 			{
-				ephy_bookmarks_set_icon (bookmarks, netscape_url[URL], icon);
+				gh = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
+				icon = ephy_history_get_icon (gh, netscape_url[URL]);
+
+				if (icon)
+				{
+					ephy_bookmarks_set_icon (bookmarks, netscape_url[URL], icon);
+				}
 			}
 		}
 
 		g_strfreev (netscape_url);
 
-		g_return_val_if_fail (node != NULL, NULL);
+		if (node == NULL) return NULL;
 
 		return ephy_toolbars_model_get_action_name
 			(model, ephy_node_get_id (node));

@@ -27,6 +27,8 @@
 #include "ephy-session.h"
 #include "ephy-bookmarks.h"
 #include "ephy-bookmarks-import.h"
+#include "eel-gconf-extensions.h"
+#include "ephy-prefs.h"
 
 #include <string.h>
 #include <bonobo/bonobo-main.h>
@@ -128,6 +130,7 @@ impl_ephy_automation_open_bookmarks_editor (PortableServer_Servant _servant,
 {
 	GtkWidget *editor;
 
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return;
 	editor = ephy_shell_get_bookmarks_editor (ephy_shell);
 
 	gtk_window_present (GTK_WINDOW (editor));

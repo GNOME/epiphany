@@ -33,6 +33,8 @@
 #include "ephy-bookmarks-editor.h"
 #include "ephy-string.h"
 #include "ephy-file-helpers.h"
+#include "eel-gconf-extensions.h"
+#include "ephy-prefs.h"
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
@@ -646,7 +648,10 @@ ephy_session_load (EphySession *session,
 
 			if (id && xmlStrEqual (BOOKMARKS_EDITOR_ID, id))
 			{
-				widget = ephy_shell_get_bookmarks_editor (ephy_shell);
+			       if (!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING))
+			       {
+				       widget = ephy_shell_get_bookmarks_editor (ephy_shell);
+			       }
 			}
 			else if (id && xmlStrEqual (HISTORY_WINDOW_ID, id))
 			{
