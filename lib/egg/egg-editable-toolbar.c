@@ -58,7 +58,7 @@ enum
 {
   PROP_0,
   PROP_TOOLBARS_MODEL,
-  PROP_MENU_MERGE
+  PROP_UI_MANAGER
 };
 
 enum
@@ -75,7 +75,7 @@ static GObjectClass *parent_class = NULL;
 
 struct EggEditableToolbarPrivate
 {
-  GtkUIManager *merge;
+  GtkUIManager *manager;
   EggToolbarsModel *model;
   gboolean edit_mode;
   GtkWidget *selected_toolbar;
@@ -178,7 +178,7 @@ find_action (EggEditableToolbar *t,
   GList *l;
   GtkAction *action = NULL;
 
-  l = gtk_ui_manager_get_action_groups (t->priv->merge);
+  l = gtk_ui_manager_get_action_groups (t->priv->manager);
 
   g_return_val_if_fail (name != NULL, NULL);
 
@@ -902,7 +902,7 @@ egg_editable_toolbar_construct (EggEditableToolbar *t)
   EggToolbarsModel *model = t->priv->model;
 
   g_return_if_fail (model != NULL);
-  g_return_if_fail (t->priv->merge != NULL);
+  g_return_if_fail (t->priv->manager != NULL);
 
   n_toolbars = egg_toolbars_model_n_toolbars (model);
 
@@ -1003,7 +1003,7 @@ egg_editable_toolbar_set_model (EggEditableToolbar *toolbar,
 
   g_return_if_fail (EGG_IS_TOOLBARS_MODEL (model));
   g_return_if_fail (EGG_IS_EDITABLE_TOOLBAR (toolbar));
-  g_return_if_fail (toolbar->priv->merge);
+  g_return_if_fail (toolbar->priv->manager);
 
   if (toolbar->priv->model == model) return;
 
@@ -1032,13 +1032,12 @@ egg_editable_toolbar_set_model (EggEditableToolbar *toolbar,
 }
 
 static void
-egg_editable_toolbar_set_merge (EggEditableToolbar *t,
-				GtkUIManager       *merge)
+egg_editable_toolbar_set_ui_manager (EggEditableToolbar *t,
+				     GtkUIManager       *manager)
 {
-  g_return_if_fail (GTK_IS_UI_MANAGER (merge));
-  g_return_if_fail (EGG_IS_EDITABLE_TOOLBAR (t));
+  g_return_if_fail (GTK_IS_UI_MANAGER (manager));
 
-  t->priv->merge = g_object_ref (merge);
+  t->priv->manager = g_object_ref (manager);
 }
 
 static void
@@ -1051,8 +1050,8 @@ egg_editable_toolbar_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_MENU_MERGE:
-      egg_editable_toolbar_set_merge (t, g_value_get_object (value));
+    case PROP_UI_MANAGER:
+      egg_editable_toolbar_set_ui_manager (t, g_value_get_object (value));
       break;
     case PROP_TOOLBARS_MODEL:
       egg_editable_toolbar_set_model (t, g_value_get_object (value));
@@ -1073,8 +1072,8 @@ egg_editable_toolbar_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_MENU_MERGE:
-      g_value_set_object (value, t->priv->merge);
+    case PROP_UI_MANAGER:
+      g_value_set_object (value, t->priv->manager);
       break;
     case PROP_TOOLBARS_MODEL:
       g_value_set_object (value, t->priv->model);
@@ -1105,16 +1104,16 @@ egg_editable_toolbar_class_init (EggEditableToolbarClass *klass)
 		  G_TYPE_NONE, 1, G_TYPE_STRING);
 
   g_object_class_install_property (object_class,
-				   PROP_MENU_MERGE,
-				   g_param_spec_object ("MenuMerge",
-							"MenuMerge",
-							"Menu merge",
+				   PROP_UI_MANAGER,
+				   g_param_spec_object ("ui-manager",
+							"UI-Mmanager",
+							"UI Manager",
 							GTK_TYPE_UI_MANAGER,
 							G_PARAM_READWRITE));
   g_object_class_install_property (object_class,
 				   PROP_TOOLBARS_MODEL,
-				   g_param_spec_object ("ToolbarsModel",
-							"ToolbarsModel",
+				   g_param_spec_object ("model",
+							"Model",
 							"Toolbars Model",
 							EGG_TYPE_TOOLBARS_MODEL,
 							G_PARAM_READWRITE));
@@ -1138,9 +1137,9 @@ egg_editable_toolbar_finalize (GObject *object)
       g_object_unref (t->priv->fixed_toolbar);
     }
 
-  if (t->priv->merge)
+  if (t->priv->manager)
     {
-      g_object_unref (t->priv->merge);
+      g_object_unref (t->priv->manager);
     }
 
   if (t->priv->model)
@@ -1153,22 +1152,23 @@ egg_editable_toolbar_finalize (GObject *object)
 }
 
 GtkWidget *
-egg_editable_toolbar_new (GtkUIManager     *merge)
+egg_editable_toolbar_new (GtkUIManager     *manager)
 {
   return GTK_WIDGET (g_object_new (EGG_TYPE_EDITABLE_TOOLBAR,
-				   "MenuMerge", merge,
+				   "ui-manager", manager,
 				   NULL));
 }
 
 GtkWidget *
-egg_editable_toolbar_new_with_model (GtkUIManager     *merge,
+egg_editable_toolbar_new_with_model (GtkUIManager     *manager,
 				     EggToolbarsModel *model)
 {
   return GTK_WIDGET (g_object_new (EGG_TYPE_EDITABLE_TOOLBAR,
-				   "MenuMerge", merge,
-				   "ToolbarsModel", model,
+				   "ui-manager", manager,
+				   "model", model,
 				   NULL));
 }
+
 gboolean
 egg_editable_toolbar_get_edit_mode (EggEditableToolbar *etoolbar)
 {
@@ -1470,4 +1470,3 @@ egg_editable_toolbar_get_model (EggEditableToolbar *etoolbar)
 {
   return etoolbar->priv->model;
 }
-

@@ -470,7 +470,7 @@ toolbar_new (EphyWindow *window)
 {
 	return EPHY_TOOLBAR (g_object_new (EPHY_TYPE_TOOLBAR,
 					   "window", window,
-					   "MenuMerge", window->ui_merge,
+					   "ui-manager", window->ui_merge,
 					   NULL));
 }
 

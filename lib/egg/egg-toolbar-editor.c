@@ -52,7 +52,7 @@ static void update_editor_sheet                 (EggToolbarEditor *editor);
 enum
 {
   PROP_0,
-  PROP_MENU_MERGE,
+  PROP_UI_MANAGER,
   PROP_TOOLBARS_MODEL
 };
 
@@ -62,7 +62,7 @@ static GObjectClass *parent_class = NULL;
 
 struct EggToolbarEditorPrivate
 {
-  GtkUIManager *merge;
+  GtkUIManager *manager;
   EggToolbarsModel *model;
 
   GtkWidget *table;
@@ -130,7 +130,7 @@ find_action (EggToolbarEditor *t,
   GList *l;
   GtkAction *action = NULL;
 
-  l = gtk_ui_manager_get_action_groups (t->priv->merge);
+  l = gtk_ui_manager_get_action_groups (t->priv->manager);
 
   g_return_val_if_fail (EGG_IS_TOOLBAR_EDITOR (t), NULL);
   g_return_val_if_fail (name != NULL, NULL);
@@ -148,13 +148,12 @@ find_action (EggToolbarEditor *t,
 }
 
 static void
-egg_toolbar_editor_set_merge (EggToolbarEditor *t,
-			      GtkUIManager     *merge)
+egg_toolbar_editor_set_ui_manager (EggToolbarEditor *t,
+				   GtkUIManager     *manager)
 {
-  g_return_if_fail (GTK_IS_UI_MANAGER (merge));
-  g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (t));
+  g_return_if_fail (GTK_IS_UI_MANAGER (manager));
 
-  t->priv->merge = g_object_ref (merge);
+  t->priv->manager = g_object_ref (manager);
 }
 
 static void
@@ -188,8 +187,8 @@ egg_toolbar_editor_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_MENU_MERGE:
-      egg_toolbar_editor_set_merge (t, g_value_get_object (value));
+    case PROP_UI_MANAGER:
+      egg_toolbar_editor_set_ui_manager (t, g_value_get_object (value));
       break;
     case PROP_TOOLBARS_MODEL:
       egg_toolbar_editor_set_model (t, g_value_get_object (value));
@@ -207,8 +206,8 @@ egg_toolbar_editor_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_MENU_MERGE:
-      g_value_set_object (value, t->priv->merge);
+    case PROP_UI_MANAGER:
+      g_value_set_object (value, t->priv->manager);
       break;
     case PROP_TOOLBARS_MODEL:
       g_value_set_object (value, t->priv->model);
@@ -228,17 +227,17 @@ egg_toolbar_editor_class_init (EggToolbarEditorClass *klass)
   object_class->get_property = egg_toolbar_editor_get_property;
 
   g_object_class_install_property (object_class,
-				   PROP_MENU_MERGE,
-				   g_param_spec_object ("MenuMerge",
-							"MenuMerge",
-							"Menu merge",
+				   PROP_UI_MANAGER,
+				   g_param_spec_object ("ui-manager",
+							"UI-Manager",
+							"UI Manager",
 							GTK_TYPE_UI_MANAGER,
 							G_PARAM_READWRITE |
 							G_PARAM_CONSTRUCT_ONLY));
  g_object_class_install_property (object_class,
 				  PROP_TOOLBARS_MODEL,
-				  g_param_spec_object ("ToolbarsModel",
-						       "ToolbarsModel",
+				  g_param_spec_object ("model",
+						       "Model",
 						       "Toolbars Model",
 						       EGG_TYPE_TOOLBARS_MODEL,
 						       G_PARAM_READWRITE |
@@ -252,9 +251,9 @@ egg_toolbar_editor_finalize (GObject *object)
 {
   EggToolbarEditor *editor = EGG_TOOLBAR_EDITOR (object);
 
-  if (editor->priv->merge)
+  if (editor->priv->manager)
     {
-      g_object_unref (editor->priv->merge);
+      g_object_unref (editor->priv->manager);
     }
 
   if (editor->priv->model)
@@ -269,12 +268,12 @@ egg_toolbar_editor_finalize (GObject *object)
 }
 
 GtkWidget *
-egg_toolbar_editor_new (GtkUIManager *merge,
+egg_toolbar_editor_new (GtkUIManager *manager,
 			EggToolbarsModel *model)
 {
   return GTK_WIDGET (g_object_new (EGG_TYPE_TOOLBAR_EDITOR,
-				   "MenuMerge", merge,
-				   "ToolbarsModel", model,
+				   "ui-manager", manager,
+				   "model", model,
 				   NULL));
 }
 
@@ -594,7 +593,7 @@ egg_toolbar_editor_init (EggToolbarEditor *t)
 {
   t->priv = EGG_TOOLBAR_EDITOR_GET_PRIVATE (t);
 
-  t->priv->merge = NULL;
+  t->priv->manager = NULL;
   t->priv->default_actions_list = NULL;
   t->priv->actions_list = NULL;
 

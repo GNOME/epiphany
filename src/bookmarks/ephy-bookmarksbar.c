@@ -299,8 +299,8 @@ ephy_bookmarksbar_set_window (EphyBookmarksBar *toolbar,
 					    toolbar->priv->action_group, -1);
 
 	g_object_set (G_OBJECT (toolbar),
-		      "MenuMerge", manager,
-		      "ToolbarsModel", model,
+		      "ui-manager", manager,
+		      "model", model,
 		      NULL);
 
 	g_signal_connect_after (model, "toolbar_added",

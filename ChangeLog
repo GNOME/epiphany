@@ -1,5 +1,30 @@
 2004-08-09  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/egg/egg-editable-toolbar.c: (find_action),
+	(egg_editable_toolbar_construct), (egg_editable_toolbar_set_model),
+	(egg_editable_toolbar_set_ui_manager),
+	(egg_editable_toolbar_set_property),
+	(egg_editable_toolbar_get_property),
+	(egg_editable_toolbar_class_init), (egg_editable_toolbar_finalize),
+	(egg_editable_toolbar_new), (egg_editable_toolbar_new_with_model),
+	(egg_editable_toolbar_get_model):
+	* lib/egg/egg-editable-toolbar.h:
+	* lib/egg/egg-toolbar-editor.c: (find_action),
+	(egg_toolbar_editor_set_ui_manager),
+	(egg_toolbar_editor_set_property),
+	(egg_toolbar_editor_get_property), (egg_toolbar_editor_class_init),
+	(egg_toolbar_editor_finalize), (egg_toolbar_editor_new),
+	(egg_toolbar_editor_init):
+	* lib/egg/egg-toolbar-editor.h:
+	* src/bookmarks/ephy-bookmarksbar.c:
+	(ephy_bookmarksbar_set_window):
+	* src/toolbar.c: (toolbar_new):
+
+	Fix object property naming leftover from EggMenuMerge days, to
+	UI manager.
+
+2004-08-09  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/egg/egg-editable-toolbar.c:
 	(egg_editable_toolbar_deconstruct):
 
