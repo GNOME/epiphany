@@ -1491,8 +1491,6 @@ ephy_dialog_new (void)
 EphyDialog *
 ephy_dialog_new_with_parent (GtkWidget *parent_window)
 {
-	g_return_val_if_fail (parent_window != NULL, NULL);
-
 	return EPHY_DIALOG (g_object_new (EPHY_TYPE_DIALOG,
 					  "parent-window", parent_window,
 					  NULL));

@@ -24,7 +24,6 @@
 #endif
 
 #include "print-dialog.h"
-#include "ephy-embed-dialog.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-shell.h"
 #include "ephy-file-chooser.h"
@@ -374,14 +373,7 @@ ephy_print_dialog_new (GtkWidget *parent,
 	GtkCellRenderer *renderer;
 	EphyEmbedSingle *single;
 
-	dialog =  EPHY_DIALOG (g_object_new (EPHY_TYPE_EMBED_DIALOG,
-					     "embed", embed,
-					     NULL));
-
-	if (parent != NULL)
-	{
-		g_object_set (G_OBJECT (dialog), "parent-window", parent, NULL);
-	}
+	dialog =  ephy_dialog_new_with_parent (parent);
 
 	ephy_dialog_construct (dialog, 
 			       print_props,
