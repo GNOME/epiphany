@@ -1320,6 +1320,12 @@ static gint
 mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 		               MozillaEmbed *membed)
 {
+	if (dom_event == NULL)
+	{
+		g_warning ("mozilla_embed_dom_key_down_cb: domevent NULL");
+		return FALSE;
+	}
+
 	nsCOMPtr<nsIDOMKeyEvent> ev = static_cast<nsIDOMKeyEvent*>(dom_event);
 	if (!ev)
 	{
@@ -1384,6 +1390,12 @@ mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event,
 	EphyWrapper *wrapper;
 	nsresult result;
 
+	if (dom_event == NULL)
+	{
+		g_warning ("mozilla_embed_dom_mouse_click_cb: domevent NULL");
+		return FALSE;
+	}
+
 	info = ephy_embed_event_new ();
 	
 	wrapper = MOZILLA_EMBED(membed)->priv->wrapper;
@@ -1425,11 +1437,17 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 	nsresult result;
 	EphyEmbedEventType type;
 
+	if (dom_event == NULL)
+	{
+		g_warning ("mozilla_embed_dom_mouse_down_cb: domevent NULL");
+		return FALSE;
+	}
+
 	info = ephy_embed_event_new ();
 	
 	wrapper = MOZILLA_EMBED(membed)->priv->wrapper;
 	g_return_val_if_fail (wrapper != NULL, G_FAILED);
-	
+
 	event_context.Init (wrapper);
         result = event_context.GetMouseEventInfo (static_cast<nsIDOMMouseEvent*>(dom_event), info);
 

@@ -1,3 +1,10 @@
+2003-06-26  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/mozilla-embed.cpp: (mozilla_embed_dom_key_down_cb),
+	(mozilla_embed_dom_mouse_down_cb), (mozilla_embed_dom_mouse_click_cb):
+
+	Check dom_event, emit warning and return if it is NULL.
+
 2003-06-26  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* src/ephy-window.c: (tab_added_cb):
