@@ -824,9 +824,10 @@ impl_get_value (EphyDialog *dialog,
 	}
 	else if (GTK_IS_EDITABLE (widget))
 	{
+		gchar *text = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
 		g_value_init (value, G_TYPE_STRING);
-		g_value_set_string (value, gtk_editable_get_chars
-				    (GTK_EDITABLE (widget), 0, -1));
+		g_value_set_string (value, text);
+		g_free (text);
 	}
 	else if (GTK_IS_OPTION_MENU (widget))
 	{

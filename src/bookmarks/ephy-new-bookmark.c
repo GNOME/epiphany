@@ -174,6 +174,8 @@ ephy_new_bookmark_add (EphyNewBookmark *new_bookmark)
 					 new_bookmark->priv->icon);
 	}
 
+	g_free (title);
+
 	ephy_bookmarks_save (new_bookmark->priv->bookmarks);
 }
 
