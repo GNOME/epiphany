@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-01 22:47+0100\n"
-"PO-Revision-Date: 2004-02-01 22:48+0100\n"
+"POT-Creation-Date: 2004-02-19 22:24+0100\n"
+"PO-Revision-Date: 2004-02-19 22:24+0100\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -606,7 +606,7 @@ msgid "MD5 Fingerprint:"
 msgstr "MD5-fingeraftryk:"
 
 #: data/glade/certificate-dialogs.glade.h:16
-#: embed/mozilla/GtkNSSDialogs.cpp:965
+#: embed/mozilla/GtkNSSDialogs.cpp:964
 msgid "Organization:"
 msgstr "Organisation:"
 
@@ -652,7 +652,7 @@ msgid "Download Manager"
 msgstr "Overføringer"
 
 #: data/glade/epiphany.glade.h:8 data/ui/nautilus-epiphany-view.xml.h:11
-#: src/ephy-window.c:966
+#: src/ephy-window.c:951
 msgid "Find"
 msgstr "Søg"
 
@@ -681,7 +681,7 @@ msgstr "_Find:"
 msgid "_Next"
 msgstr "_Næste"
 
-#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:531
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:280
 msgid "_Pause"
 msgstr "_Pause"
 
@@ -730,28 +730,28 @@ msgid "<b>Web Content</b>"
 msgstr "<b>Indhold</b>"
 
 #: data/glade/prefs-dialog.glade.h:12
+msgid "A_utomatically download and open files"
+msgstr "Hent og åbn _automatisk filer"
+
+#: data/glade/prefs-dialog.glade.h:13
 msgid "Add Language"
 msgstr "Tilføj sprog"
 
-#: data/glade/prefs-dialog.glade.h:13
+#: data/glade/prefs-dialog.glade.h:14
 msgid "Al_ways use the desktop theme colors"
 msgstr "Benyt al_tid disse farver"
 
-#: data/glade/prefs-dialog.glade.h:14
+#: data/glade/prefs-dialog.glade.h:15
 msgid "Allow popup _windows"
 msgstr "Tillad pop op-_vinduer"
 
-#: data/glade/prefs-dialog.glade.h:15
+#: data/glade/prefs-dialog.glade.h:16
 msgid "Always use _these fonts"
 msgstr "Benyt altid _disse skrifttyper"
 
-#: data/glade/prefs-dialog.glade.h:16
+#: data/glade/prefs-dialog.glade.h:17
 msgid "Au_todetect:"
 msgstr "_Gæt automatisk:"
-
-#: data/glade/prefs-dialog.glade.h:17
-msgid "Automatically download and open files"
-msgstr "Hent og åbn automatisk filer"
 
 #: data/glade/prefs-dialog.glade.h:18
 msgid "Choose a l_anguage:"
@@ -935,7 +935,7 @@ msgid "Paper"
 msgstr "Papir"
 
 #: data/glade/print.glade.h:23 data/ui/nautilus-epiphany-view.xml.h:23
-#: src/ephy-window.c:962
+#: src/ephy-window.c:947
 msgid "Print"
 msgstr "Udskriv"
 
@@ -1040,7 +1040,7 @@ msgid "Cut the Selection"
 msgstr "Klip det markerede"
 
 #: data/ui/nautilus-epiphany-view.xml.h:10
-#: embed/ephy-embed-popup-control.c:547
+#: embed/ephy-embed-popup-control.c:551
 msgid "Download Link"
 msgstr "Hent fra henvisning"
 
@@ -1145,67 +1145,67 @@ msgstr "_Søgning..."
 msgid "_Print..."
 msgstr "_Udskriv..."
 
-#: embed/downloader-view.c:223
+#: embed/downloader-view.c:225
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u:%02u"
 
-#: embed/downloader-view.c:227
+#: embed/downloader-view.c:229
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
-#: embed/downloader-view.c:297 lib/widgets/ephy-cell-renderer-progress.c:35
-#: src/ephy-window.c:1147
+#: embed/downloader-view.c:280
+msgid "_Resume"
+msgstr "_Genoptag"
+
+#: embed/downloader-view.c:343 lib/widgets/ephy-cell-renderer-progress.c:35
+#: src/ephy-window.c:1132
 msgid "Unknown"
 msgstr "Ukendt"
 
-#: embed/downloader-view.c:346
+#: embed/downloader-view.c:394
 #, c-format
 msgid "About %d second left"
 msgid_plural "About %d seconds left"
 msgstr[0] "Omtrent %d sekund tilbage"
 msgstr[1] "Omtrent %d sekunder tilbage"
 
-#: embed/downloader-view.c:354
+#: embed/downloader-view.c:402
 #, c-format
 msgid "About %d minute left"
 msgid_plural "About %d minutes left"
 msgstr[0] "Omtrent %d minut tilbage"
 msgstr[1] "Omtrent %d minutter tilbage"
 
-#: embed/downloader-view.c:361
+#: embed/downloader-view.c:409
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d overføring"
 msgstr[1] "%d overføringer"
 
-#: embed/downloader-view.c:459
+#: embed/downloader-view.c:513
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:469
+#: embed/downloader-view.c:524
 msgid "File"
 msgstr "Fil"
 
-#: embed/downloader-view.c:482
+#: embed/downloader-view.c:538
 msgid "Remaining"
 msgstr "Resterende"
 
-#: embed/downloader-view.c:526
-msgid "_Resume"
-msgstr "_Genoptag"
-
-#: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:344
+#: embed/ephy-embed-popup-control.c:561 src/popup-commands.c:344
 msgid "Save Image As"
 msgstr "Gem billede som"
 
-#: embed/ephy-embed-popup-control.c:641
+#: embed/ephy-embed-popup-control.c:647
 msgid "Save Page As"
 msgstr "Gem side som"
 
-#: embed/ephy-embed-popup-control.c:650 src/popup-commands.c:432
+#: embed/ephy-embed-popup-control.c:656 src/popup-commands.c:434
 msgid "Save Background As"
 msgstr "Gem baggrund som"
 
@@ -1572,20 +1572,20 @@ msgstr "Ukrainsk"
 msgid "Unknown (%s)"
 msgstr "Ukendt (%s)"
 
-#: embed/ephy-history.c:485 src/bookmarks/ephy-bookmarks.c:583
+#: embed/ephy-history.c:487 src/bookmarks/ephy-bookmarks.c:612
 msgid "All"
 msgstr "Alt"
 
-#: embed/ephy-history.c:660
+#: embed/ephy-history.c:662
 msgid "Others"
 msgstr "Andre"
 
-#: embed/ephy-history.c:666
+#: embed/ephy-history.c:668
 msgid "Local files"
 msgstr "Lokale filer"
 
 #: embed/mozilla/ContentHandler.cpp:135
-#: embed/mozilla/EphyHeaderSniffer.cpp:314
+#: embed/mozilla/EphyHeaderSniffer.cpp:316
 msgid "Save"
 msgstr "Gem"
 
@@ -1601,11 +1601,11 @@ msgstr "_Åbn"
 msgid "_Download"
 msgstr "_Hent"
 
-#: embed/mozilla/ContentHandler.cpp:284
+#: embed/mozilla/ContentHandler.cpp:286
 msgid "Download the unsafe file?"
 msgstr "Hent den usikre fil?"
 
-#: embed/mozilla/ContentHandler.cpp:285
+#: embed/mozilla/ContentHandler.cpp:287
 msgid ""
 "This type of file could potentially damage your documents or invade your "
 "privacy. It's not safe to open it directly. You can save it instead."
@@ -1614,11 +1614,11 @@ msgstr ""
 "dit privatliv. Det er ikke sikkert at åbne den direkte. Du kan gemme den i "
 "stedet."
 
-#: embed/mozilla/ContentHandler.cpp:293
+#: embed/mozilla/ContentHandler.cpp:295
 msgid "Open the file in another application?"
 msgstr "Åbn filen i et andet program?"
 
-#: embed/mozilla/ContentHandler.cpp:294
+#: embed/mozilla/ContentHandler.cpp:296
 msgid ""
 "It's not possible to view this file type directly in the browser. You can "
 "open it with another application or save it."
@@ -1626,19 +1626,19 @@ msgstr ""
 "Det er ikke muligt at vise denne filtype direkte i surfningsprogrammet. Du "
 "kan åbne filen med et andet program eller gemme den."
 
-#: embed/mozilla/ContentHandler.cpp:301
+#: embed/mozilla/ContentHandler.cpp:303
 msgid "Download the file?"
 msgstr "Hent filen?"
 
-#: embed/mozilla/ContentHandler.cpp:302
+#: embed/mozilla/ContentHandler.cpp:304
 msgid ""
 "It's not possible to view this file because there is no application "
-"installed that can open it.You can save it instead."
+"installed that can open it. You can save it instead."
 msgstr ""
-"Det er ikke muligt at vise denne fil fordi der ikke er installeret et "
-"program der kan åbne den. Du kan gemme den i stedet."
+"Det er ikke muligt at vise denne fil fordi der ikke er et program "
+"installeret der kan åbne den. Du kan gemme den i stedet."
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:289
+#: embed/mozilla/EphyHeaderSniffer.cpp:291
 #: src/bookmarks/ephy-bookmarks-import.c:247
 #: src/bookmarks/ephy-bookmarks-import.c:373 src/ephy-toolbars-model.c:201
 #: src/window-commands.c:342
@@ -1663,27 +1663,27 @@ msgstr ""
 "\n"
 "Vil du prøve med det forvalgte alternativ i Gnome?"
 
-#: embed/mozilla/FilePicker.cpp:149
+#: embed/mozilla/FilePicker.cpp:156
 msgid "All files"
 msgstr "Alle filer"
 
-#: embed/mozilla/FilePicker.cpp:154
+#: embed/mozilla/FilePicker.cpp:161
 msgid "HTML files"
 msgstr "HTML-filer"
 
-#: embed/mozilla/FilePicker.cpp:159
+#: embed/mozilla/FilePicker.cpp:166
 msgid "Text files"
 msgstr "Tekstfiler"
 
-#: embed/mozilla/FilePicker.cpp:164
+#: embed/mozilla/FilePicker.cpp:171
 msgid "Image files"
 msgstr "Billedfiler"
 
-#: embed/mozilla/FilePicker.cpp:169
+#: embed/mozilla/FilePicker.cpp:176
 msgid "XML files"
 msgstr "XML-filer"
 
-#: embed/mozilla/FilePicker.cpp:174
+#: embed/mozilla/FilePicker.cpp:181
 msgid "XUL files"
 msgstr "XUL-filer"
 
@@ -1705,15 +1705,15 @@ msgid "Certificate _Details"
 msgstr "Certifikat_detaljer"
 
 #. Add the buttons
-#: embed/mozilla/GtkNSSDialogs.cpp:223 embed/mozilla/GtkNSSDialogs.cpp:534
+#: embed/mozilla/GtkNSSDialogs.cpp:222 embed/mozilla/GtkNSSDialogs.cpp:533
 msgid "_View Certificate"
 msgstr "_Vis certifikat"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:231
+#: embed/mozilla/GtkNSSDialogs.cpp:230
 msgid "_Accept"
 msgstr "_Acceptér"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:295
+#: embed/mozilla/GtkNSSDialogs.cpp:294
 #, c-format
 msgid ""
 "The site %s returned security information for %s. It is possible that "
@@ -1724,17 +1724,17 @@ msgstr ""
 "nogen forsøger at opsnappe din kommunikation for at få fat i fortrolige "
 "oplysninger."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:301
+#: embed/mozilla/GtkNSSDialogs.cpp:300
 #, c-format
 msgid "You should only accept the security information if you trust %s and %s."
 msgstr ""
 "Du bør kun acceptere sikkerhedsoplysningerne hvis du stoler på %s og %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:306
+#: embed/mozilla/GtkNSSDialogs.cpp:305
 msgid "Accept incorrect security information?"
 msgstr "Acceptér ukorrekte sikkerhedsoplysninger?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:338
+#: embed/mozilla/GtkNSSDialogs.cpp:337
 #, c-format
 msgid ""
 "Your browser was unable to trust %s. It is possible that someone is "
@@ -1744,7 +1744,7 @@ msgstr ""
 "tænkes at nogen forsøger at opsnappe din kommunikation for at få fat i "
 "fortrolige oplysninger."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:344
+#: embed/mozilla/GtkNSSDialogs.cpp:343
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to %"
@@ -1752,32 +1752,32 @@ msgid ""
 msgstr ""
 "Du bør kun tilslutte til stedet hvis du er ikke på at du er forbundet til %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:349
+#: embed/mozilla/GtkNSSDialogs.cpp:348
 msgid "Connect to untrusted site?"
 msgstr "Tilslut til mistroet sted?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:353
+#: embed/mozilla/GtkNSSDialogs.cpp:352
 msgid "_Don't show this message again for this site"
 msgstr "_Vis ikke denne meddelelse igen for dette sted"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:354
+#: embed/mozilla/GtkNSSDialogs.cpp:353
 msgid "Co_nnect"
 msgstr "_Tilslut"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:415
+#: embed/mozilla/GtkNSSDialogs.cpp:414
 msgid "Accept expired security information?"
 msgstr "Acceptér udløbede sikkerhedsoplysninger?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:416
+#: embed/mozilla/GtkNSSDialogs.cpp:415
 #, c-format
 msgid "The security information for %s expired on %s."
 msgstr "Sikkerhedsoplysningerne for %s udløb %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:422
+#: embed/mozilla/GtkNSSDialogs.cpp:421
 msgid "Accept not yet valid security information?"
 msgstr "Acceptér endnu ugyldige sikkerhedsoplysninger?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:423
+#: embed/mozilla/GtkNSSDialogs.cpp:422
 #, c-format
 msgid "The security information for %s isn't valid until %s."
 msgstr "Sikkerhedsoplysninger for %s er ikke gyldig før %s."
@@ -1785,42 +1785,42 @@ msgstr "Sikkerhedsoplysninger for %s er ikke gyldig før %s."
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: embed/mozilla/GtkNSSDialogs.cpp:434
+#: embed/mozilla/GtkNSSDialogs.cpp:433
 msgid "%a %d %b %Y"
 msgstr "%a %d %b %Y"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:445
+#: embed/mozilla/GtkNSSDialogs.cpp:444
 msgid "You should ensure that your computer's time is correct."
 msgstr "Sikr dig at din maskines tid er sat korrekt."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:490
+#: embed/mozilla/GtkNSSDialogs.cpp:489
 #, c-format
 msgid "Cannot establish connection to %s."
 msgstr "Kan ikke etablere tilslutning til %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:493
+#: embed/mozilla/GtkNSSDialogs.cpp:492
 #, c-format
 msgid "The certificate revocation list (CRL) from %s needs to be updated."
 msgstr "Certifikatophævelseslisten (CRL) fra %s skal opdateres."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:498
+#: embed/mozilla/GtkNSSDialogs.cpp:497
 msgid "Please ask your system administrator for assistance."
 msgstr "Spørg din systemadministrator for hjælp."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:537
+#: embed/mozilla/GtkNSSDialogs.cpp:536
 msgid "_Trust CA"
 msgstr "_Stol på myndighed"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:549
+#: embed/mozilla/GtkNSSDialogs.cpp:548
 #, c-format
 msgid "Trust %s to identify:"
 msgstr "Stol på %s for at identificere:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:553
+#: embed/mozilla/GtkNSSDialogs.cpp:552
 msgid "Trust new Certificate Authority?"
 msgstr "Stol på ny certifikatsmyndighed?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:554
+#: embed/mozilla/GtkNSSDialogs.cpp:553
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1828,115 +1828,115 @@ msgstr ""
 "Før du stoler på en certifikatsmyndighed (CA), bør du kontrollere at "
 "certifikatet er autentisk."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:564
+#: embed/mozilla/GtkNSSDialogs.cpp:563
 msgid "_Web sites"
 msgstr "_Netsteder"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:569
+#: embed/mozilla/GtkNSSDialogs.cpp:568
 msgid "_Software developers"
 msgstr "_Programudviklere"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:635
+#: embed/mozilla/GtkNSSDialogs.cpp:634
 msgid "Certificate already exists."
 msgstr "Certifikat eksisterer allerede."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:636
+#: embed/mozilla/GtkNSSDialogs.cpp:635
 msgid "The certificate has already been imported."
 msgstr "Certifikatet er allerede blevet importeret."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:755
+#: embed/mozilla/GtkNSSDialogs.cpp:754
 msgid "_Backup Certificate"
 msgstr "_Sikkerhedskopier certifikat"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:762
+#: embed/mozilla/GtkNSSDialogs.cpp:761
 msgid "Select password."
 msgstr "Vælg adgangskode."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:763
+#: embed/mozilla/GtkNSSDialogs.cpp:762
 msgid "Select a password to protect this certificate."
 msgstr "Vælg en adgangskode for at beskytte dette certifikat."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:775 embed/mozilla/GtkNSSDialogs.cpp:877
+#: embed/mozilla/GtkNSSDialogs.cpp:774 embed/mozilla/GtkNSSDialogs.cpp:876
 msgid "_Password:"
 msgstr "_Adgangskode:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:789
+#: embed/mozilla/GtkNSSDialogs.cpp:788
 msgid "Con_firm password:"
 msgstr "_Bekræft adgangskode:"
 
 #. TODO: We need a better password quality meter
-#: embed/mozilla/GtkNSSDialogs.cpp:801
+#: embed/mozilla/GtkNSSDialogs.cpp:800
 msgid "Password quality:"
 msgstr "Adgangskodekvalitet:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:858
+#: embed/mozilla/GtkNSSDialogs.cpp:857
 msgid "I_mport Certificate"
 msgstr "_Importér certifikat"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:866
+#: embed/mozilla/GtkNSSDialogs.cpp:865
 msgid "Password required."
 msgstr "Adgangskode påkrævet."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:867
+#: embed/mozilla/GtkNSSDialogs.cpp:866
 msgid "Enter the password for this certificate."
 msgstr "Indtast adgangskoden for dette certifikat."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:945
+#: embed/mozilla/GtkNSSDialogs.cpp:944
 msgid "Certificate Revocation list successfully imported."
 msgstr "Certifikatophævelsesliste importeret."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:946
+#: embed/mozilla/GtkNSSDialogs.cpp:945
 msgid "Certificate Revocation list (CRL) imported:"
 msgstr "Certifikatophævelsesliste (CRL) importeret:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:968
+#: embed/mozilla/GtkNSSDialogs.cpp:967
 msgid "Unit:"
 msgstr "Enhed:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:971
+#: embed/mozilla/GtkNSSDialogs.cpp:970
 msgid "Next Update:"
 msgstr "Næste opdatering:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:998
+#: embed/mozilla/GtkNSSDialogs.cpp:997
 msgid "Not part of certificate"
 msgstr "Ikke en del af certifikat"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1266
+#: embed/mozilla/GtkNSSDialogs.cpp:1265
 msgid "Certificate Properties"
 msgstr "Certifikategenskaber"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1288
+#: embed/mozilla/GtkNSSDialogs.cpp:1287
 msgid "This certificate has been verified for the following uses:"
 msgstr "Dette certifikat er blevet godkendt til følgende brug:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1291
+#: embed/mozilla/GtkNSSDialogs.cpp:1290
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "Kunne ikke godkende dette certifikat fordi det er blevet tilbagekaldt."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1294
+#: embed/mozilla/GtkNSSDialogs.cpp:1293
 msgid "Could not verify this certificate because it has expired."
 msgstr "Kunne ikke godkende dette certifikat fordi det er udløbet."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1297
+#: embed/mozilla/GtkNSSDialogs.cpp:1296
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "Kunne ikke godkende dette certifikat fordi der ikke stoles på det."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1300
+#: embed/mozilla/GtkNSSDialogs.cpp:1299
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr ""
 "Kunne ikke godkende dette certifikat fordi der ikke stoles på udgiveren."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1303
+#: embed/mozilla/GtkNSSDialogs.cpp:1302
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "Kunne ikke godkende dette certifikat fordi udgiveren er ukendt."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1306
+#: embed/mozilla/GtkNSSDialogs.cpp:1305
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 "Kunne ikke godkende dette certifikat fordi CA-certifikatet er ugyldigt."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1311
+#: embed/mozilla/GtkNSSDialogs.cpp:1310
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Kunne ikke godkende dette certifikat af ukendte grunde."
 
@@ -2003,15 +2003,15 @@ msgstr ""
 msgid "GConf Error"
 msgstr "GConf-fejl"
 
-#: lib/egg/egg-editable-toolbar.c:504
+#: lib/egg/egg-editable-toolbar.c:510
 msgid "_Remove Toolbar"
 msgstr "_Fjern værktøjslinje"
 
-#: lib/egg/egg-toolbar-editor.c:535
+#: lib/egg/egg-toolbar-editor.c:552
 msgid "Separator"
 msgstr "Adskiller"
 
-#: lib/egg/egg-toolbar-editor.c:565
+#: lib/egg/egg-toolbar-editor.c:582
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
@@ -2020,21 +2020,21 @@ msgstr ""
 "værktøjslinjerne til tabellen for at fjerne det."
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:71 src/prefs-dialog.c:1113
+#: lib/ephy-file-helpers.c:72 src/prefs-dialog.c:1107
 msgid "Downloads"
 msgstr "Overføringer"
 
-#: lib/ephy-file-helpers.c:143
+#: lib/ephy-file-helpers.c:149
 #, c-format
 msgid "Failed to find %s"
 msgstr "Kunne ikke finde %s"
 
-#: lib/ephy-file-helpers.c:208
+#: lib/ephy-file-helpers.c:214
 #, c-format
 msgid "%s exists, please move it out of the way."
 msgstr "%s eksisterer, flyt den et andet sted hen."
 
-#: lib/ephy-file-helpers.c:211
+#: lib/ephy-file-helpers.c:217
 #, c-format
 msgid "Failed to create directory %s."
 msgstr "Kunne ikke oprette kataloget %s."
@@ -2157,11 +2157,7 @@ msgstr "400%"
 msgid "Failed"
 msgstr "Mislykket"
 
-#: lib/widgets/ephy-zoom-control.c:138
-msgid "_Zoom"
-msgstr "_Zoom"
-
-#: src/bookmarks/ephy-bookmark-action.c:219
+#: src/bookmarks/ephy-bookmark-action.c:221
 #, c-format
 msgid "%s:"
 msgstr "%s:"
@@ -2408,7 +2404,7 @@ msgid "_Search:"
 msgstr "_Søg:"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:1357
-#: src/bookmarks/ephy-topic-action.c:621 src/ephy-window.c:968
+#: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:953
 msgid "Bookmarks"
 msgstr "Bogmærker"
 
@@ -2461,11 +2457,11 @@ msgstr "Rejser"
 msgid "Work"
 msgstr "Arbejde"
 
-#: src/bookmarks/ephy-bookmarks.c:618
+#: src/bookmarks/ephy-bookmarks.c:647
 msgid "Most Visited"
 msgstr "Mest besøgte"
 
-#: src/bookmarks/ephy-bookmarks.c:635
+#: src/bookmarks/ephy-bookmarks.c:664
 msgid "Not Categorized"
 msgstr "Ikke kategoriseret"
 
@@ -2507,7 +2503,7 @@ msgstr "Andre kodninger"
 msgid "_Automatic"
 msgstr "_Automatisk"
 
-#: src/ephy-go-action.c:80 src/ephy-go-action.c:97 src/toolbar.c:409
+#: src/ephy-go-action.c:73 src/toolbar.c:409
 msgid "Go"
 msgstr "Kør"
 
@@ -2560,7 +2556,7 @@ msgid "Show only the address column"
 msgstr "Vis kun adressekolonnen"
 
 #: src/ephy-history-window.c:246
-msgid "Clear history"
+msgid "Clear History"
 msgstr "Ryd historik"
 
 #: src/ephy-history-window.c:278
@@ -2600,47 +2596,47 @@ msgstr "Historik"
 msgid "Sites"
 msgstr "Steder"
 
-#: src/ephy-main.c:52
+#: src/ephy-main.c:55
 msgid "Open a new tab in an existing Epiphany window"
 msgstr "Åbn et nyt faneblad i et eksisterende Epiphany-vindue"
 
-#: src/ephy-main.c:55
+#: src/ephy-main.c:58
 msgid "Run Epiphany in full screen mode"
 msgstr "Kør Epiphany i fuldskærmstilstand"
 
-#: src/ephy-main.c:58
+#: src/ephy-main.c:61
 msgid "Load the given session file"
 msgstr "Indlæs den angivne sessionsfil"
 
-#: src/ephy-main.c:59 src/ephy-main.c:65
+#: src/ephy-main.c:62 src/ephy-main.c:68
 msgid "FILE"
 msgstr "FIL"
 
-#: src/ephy-main.c:61
+#: src/ephy-main.c:64
 msgid "Add a bookmark (don't open any window)"
 msgstr "Tilføj et bogmærke (åbn ikke noget vindue)"
 
-#: src/ephy-main.c:62
+#: src/ephy-main.c:65
 msgid "URL"
 msgstr "Adresse"
 
-#: src/ephy-main.c:64
+#: src/ephy-main.c:67
 msgid "Import bookmarks from the given file"
 msgstr "Importér bogmærker fra den givne fil"
 
-#: src/ephy-main.c:67
+#: src/ephy-main.c:70
 msgid "Launch the bookmarks editor"
 msgstr "Start bogmærkeredigeringen"
 
-#: src/ephy-main.c:70
+#: src/ephy-main.c:73
 msgid "Used internally by the bonobo interface"
 msgstr "Bruges internt af Bonobo-grænsefladen"
 
-#: src/ephy-main.c:100
+#: src/ephy-main.c:108
 msgid "Epiphany Web Browser"
 msgstr "Epiphany - internetsurfning"
 
-#: src/ephy-main.c:104
+#: src/ephy-main.c:112
 msgid "Ephy"
 msgstr "Epiphany"
 
@@ -2656,14 +2652,14 @@ msgstr "Genopret _ikke"
 msgid "_Recover"
 msgstr "_Genopret"
 
-#: src/ephy-session.c:331
+#: src/ephy-session.c:332
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr ""
 "Epiphany ser ud til at være gået ned eller blevet dræbt sidst programmet "
 "blev kørt."
 
-#: src/ephy-session.c:337
+#: src/ephy-session.c:338
 msgid "You can recover the opened tabs and windows."
 msgstr "Du kan genoprette de åbnede faneblade og vinduer."
 
@@ -2693,30 +2689,30 @@ msgstr ""
 "Epiphany kan ikke bruges i øjeblikket pga. en uventet fejl fra Bonobo ved "
 "forsøg på at finde automatiseringsobjektet."
 
-#: src/ephy-tab.c:326 src/ephy-tab.c:1140 src/ephy-tab.c:1322
+#: src/ephy-tab.c:327 src/ephy-tab.c:1172 src/ephy-tab.c:1354
 msgid "Blank page"
 msgstr "Tom side"
 
-#: src/ephy-tab.c:747
+#: src/ephy-tab.c:748
 msgid "site"
 msgstr "sted"
 
-#: src/ephy-tab.c:771
+#: src/ephy-tab.c:772
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Omdirigeret til %s..."
 
-#: src/ephy-tab.c:775
+#: src/ephy-tab.c:776
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Overfører data fra %s..."
 
-#: src/ephy-tab.c:779
+#: src/ephy-tab.c:780
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Venter på godkendelse fra %s..."
 
-#: src/ephy-tab.c:787
+#: src/ephy-tab.c:788
 #, c-format
 msgid "Loading %s..."
 msgstr "Henter %s..."
@@ -3149,56 +3145,56 @@ msgstr "Benyt billede som _baggrund"
 msgid "Copy I_mage Address"
 msgstr "Kopiér b_illedadresse"
 
-#: src/ephy-window.c:599
+#: src/ephy-window.c:584
 msgid "Exit Fullscreen"
 msgstr "Afslut fuldskærm"
 
-#: src/ephy-window.c:673
+#: src/ephy-window.c:658
 msgid "_Close document"
 msgstr "_Luk dokument"
 
-#: src/ephy-window.c:700
+#: src/ephy-window.c:685
 msgid "There are unsubmitted changes to form elements."
 msgstr "Der er ændringer i formularelementer som ikke er blevet sendt."
 
-#: src/ephy-window.c:701
+#: src/ephy-window.c:686
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Hvis du lukker dokumentet alligevel, vil du miste de oplysninger."
 
-#: src/ephy-window.c:958 src/window-commands.c:392
+#: src/ephy-window.c:943 src/window-commands.c:392
 msgid "Open"
 msgstr "Åbn"
 
-#: src/ephy-window.c:960 src/window-commands.c:417
+#: src/ephy-window.c:945 src/window-commands.c:417
 msgid "Save As"
 msgstr "Gem som"
 
 # udsagnsord
-#: src/ephy-window.c:964
+#: src/ephy-window.c:949
 msgid "Bookmark"
 msgstr "Bogmærk"
 
-#: src/ephy-window.c:1150
+#: src/ephy-window.c:1135
 msgid "Insecure"
 msgstr "Usikker"
 
-#: src/ephy-window.c:1153
+#: src/ephy-window.c:1138
 msgid "Broken"
 msgstr "Ødelagt"
 
-#: src/ephy-window.c:1156
+#: src/ephy-window.c:1141
 msgid "Medium"
 msgstr "Mellem"
 
-#: src/ephy-window.c:1160
+#: src/ephy-window.c:1145
 msgid "Low"
 msgstr "Lav"
 
-#: src/ephy-window.c:1164
+#: src/ephy-window.c:1149
 msgid "High"
 msgstr "Høj"
 
-#: src/ephy-window.c:1174
+#: src/ephy-window.c:1159
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3207,7 +3203,7 @@ msgstr ""
 "Sikkerhedsniveau: %s\n"
 "%s"
 
-#: src/ephy-window.c:1180
+#: src/ephy-window.c:1165
 #, c-format
 msgid "Security level: %s"
 msgstr "Sikkerhedsniveau: %s"
@@ -3475,24 +3471,24 @@ msgstr "Vietnamesisk"
 msgid "Walloon"
 msgstr "Walesisk"
 
-#: src/prefs-dialog.c:1055
+#: src/prefs-dialog.c:1057
 #, c-format
 msgid "Custom [%s]"
 msgstr "Brugerdefineret [%s]"
-
-#: src/prefs-dialog.c:1100
-msgid "Desktop"
-msgstr "Skrivebord"
 
 #. Note that this does NOT refer to the home page but to a
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1108
+#: src/prefs-dialog.c:1102
 msgid "Home"
 msgstr "Hjem"
 
-#: src/prefs-dialog.c:1323
+#: src/prefs-dialog.c:1111
+msgid "Desktop"
+msgstr "Skrivebord"
+
+#: src/prefs-dialog.c:1322
 msgid "Select a directory"
 msgstr "Vælg en mappe"
 
@@ -3562,12 +3558,18 @@ msgstr "_Tilføj en ny værktøjslinje"
 
 #. Translator credits
 #: src/window-commands.c:953
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr "Ole Laursen <olau@hardworking.dk>"
 
 #: src/window-commands.c:983
 msgid "A GNOME browser based on Mozilla"
 msgstr "Et surfningsprogram til Gnome baseret på Mozilla."
+
+#~ msgid "_Zoom"
+#~ msgstr "_Zoom"
+
+#~ msgid "Clear history"
+#~ msgstr "Ryd historik"
 
 #~ msgid ""
 #~ "Automatically open downloaded files which are \"safe\" to open, like "
