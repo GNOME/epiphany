@@ -40,6 +40,7 @@
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtkicontheme.h>
+#include <gtk/gtkiconfactory.h>
 #include <libgnomeui/gnome-icon-lookup.h>
 #include <glib/gi18n.h>
 
@@ -448,8 +449,10 @@ downloader_view_add_download (DownloaderView *dv,
 	GtkTreeSelection *selection;
 	GtkTreePath *path;
 	GtkIconTheme *theme;
+	GtkIconInfo *icon_info;
 	GdkPixbuf *pixbuf;
 	char *mime, *icon_name;
+	int width = 16, height = 16;
 
 	g_object_ref (download);
 
@@ -477,6 +480,9 @@ downloader_view_add_download (DownloaderView *dv,
 	g_signal_connect_object (download, "changed",
 				 G_CALLBACK (download_changed_cb), dv, 0);
 
+	/* Show it already */
+	ephy_dialog_show (EPHY_DIALOG (dv));
+	
 	mime =  ephy_download_get_mime (download);
 	if (mime == NULL) return;
 
@@ -485,28 +491,25 @@ downloader_view_add_download (DownloaderView *dv,
 				       mime, GNOME_ICON_LOOKUP_FLAGS_NONE, NULL);
 	g_free (mime);
 	
-	if (!g_path_is_absolute (icon_name))
-	{
-		GtkIconInfo *icon_info;
+	gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height);
+	width *= 2;
+	height *= 2;
 
-		icon_info = gtk_icon_theme_lookup_icon (theme, icon_name, 0, 0);
-		g_free (icon_name);
-
-		if (icon_info == NULL) return;
-
-		icon_name = g_strdup (gtk_icon_info_get_filename (icon_info));
-		gtk_icon_info_free (icon_info);
-	}
-	
-	pixbuf = gdk_pixbuf_new_from_file (icon_name, NULL);
+	icon_info = gtk_icon_theme_lookup_icon (theme, icon_name, width, height);
 	g_free (icon_name);
-	if (pixbuf == NULL) return;
+	if (icon_info == NULL) return;
 
+	icon_name = g_strdup (gtk_icon_info_get_filename (icon_info));
+	gtk_icon_info_free (icon_info);
+	
+	pixbuf = gdk_pixbuf_new_from_file_at_size (icon_name, width, height, NULL);
 	gtk_list_store_set (GTK_LIST_STORE (dv->priv->model),
 			    &iter, COL_IMAGE, pixbuf, -1);
-	g_object_unref (pixbuf);
+	if (pixbuf)
+	{
+		g_object_unref (pixbuf);
+	}
 
-	ephy_dialog_show (EPHY_DIALOG (dv));
 }
 
 static void
