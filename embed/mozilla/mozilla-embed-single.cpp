@@ -45,6 +45,7 @@
 #include "EphySingle.h"
 #include "EphyBrowser.h"
 #include "EphyUtils.h"
+#include "MozillaPrivate.h"
 
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
@@ -898,28 +899,31 @@ impl_permission_manager_list (EphyPermissionManager *manager,
 	return list;
 }
 
-static void
+static GtkWidget * 
 impl_open_window (EphyEmbedSingle *single,
 		  EphyEmbed *parent,
 		  const char *address,
+		  const char *name,
 		  const char *features)
 {
 	nsCOMPtr<nsIDOMWindow> domWindow;
-	nsCOMPtr<nsIDOMWindow> dummy;
 
 	if (parent)
 	{
 		EphyBrowser *browser;
 
 		browser = (EphyBrowser *) _mozilla_embed_get_ephy_browser (MOZILLA_EMBED(parent));
-		g_return_if_fail (browser != NULL);
+		g_return_val_if_fail (browser != NULL, NULL);
 
 		browser->GetDOMWindow (getter_AddRefs (domWindow));
 	}
 
 	nsCOMPtr<nsIWindowWatcher> wWatch(do_GetService ("@mozilla.org/embedcomp/window-watcher;1"));
-	wWatch->OpenWindow (domWindow, address, "", features, nsnull,
-			    getter_AddRefs (dummy));
+	nsCOMPtr<nsIDOMWindow> newWindow;
+	wWatch->OpenWindow (domWindow, address, name, features, nsnull,
+			    getter_AddRefs (newWindow));
+
+	return MozillaFindEmbed (newWindow);
 }
 
 static void

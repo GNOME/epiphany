@@ -551,7 +551,7 @@ popups_manager_show (PopupInfo *popup,
 	single = EPHY_EMBED_SINGLE
 		(ephy_embed_shell_get_embed_single (embed_shell));
 
-	ephy_embed_single_open_window (single, embed, popup->url,
+	ephy_embed_single_open_window (single, embed, popup->url, "",
 				       popup->features);
 
 	popups_manager_free_info (popup);

@@ -50,37 +50,39 @@ struct _EphyEmbedSingleIface
 
 	/* Methods */
 
-	void	 (* open_window)	 (EphyEmbedSingle *single,
-					  EphyEmbed *parent,
-					  const char *address,
-					  const char *features);
-	void	 (* clear_cache)         (EphyEmbedSingle *shell);
-	void	 (* clear_auth_cache)	 (EphyEmbedSingle *shell);
-	void	 (* set_offline_mode)    (EphyEmbedSingle *shell,
-					  gboolean offline);
-	gboolean (* get_offline_mode)	 (EphyEmbedSingle *single);
-	GList *	 (* get_font_list)	 (EphyEmbedSingle *shell,
-					  const char *langGroup);
-};
-
-GType	 ephy_embed_single_get_type		(void);
-
-void	 ephy_embed_single_open_window		(EphyEmbedSingle *single,
+	GtkWidget *	(* open_window)		(EphyEmbedSingle *single,
 						 EphyEmbed *parent,
 						 const char *address,
+						 const char *name,
 						 const char *features);
-
-void	 ephy_embed_single_clear_cache		(EphyEmbedSingle *single);
-
-void	 ephy_embed_single_clear_auth_cache	(EphyEmbedSingle *single);
-
-void	 ephy_embed_single_set_offline_mode	(EphyEmbedSingle *single,
+	void		(* clear_cache)		(EphyEmbedSingle *shell);
+	void		(* clear_auth_cache)	(EphyEmbedSingle *shell);
+	void		(* set_offline_mode)	(EphyEmbedSingle *shell,
 						 gboolean offline);
+	gboolean	(* get_offline_mode)	(EphyEmbedSingle *single);
+	GList *		(* get_font_list)	(EphyEmbedSingle *shell,
+						 const char *langGroup);
+};
 
-gboolean ephy_embed_single_get_offline_mode	(EphyEmbedSingle *single);
+GType		ephy_embed_single_get_type		(void);
 
-GList	*ephy_embed_single_get_font_list	(EphyEmbedSingle *single,
-						 const char *lang_group);
+GtkWidget      *ephy_embed_single_open_window		(EphyEmbedSingle *single,
+							 EphyEmbed *parent,
+							 const char *address,
+							 const char *name,
+							 const char *features);
+
+void		ephy_embed_single_clear_cache		(EphyEmbedSingle *single);
+
+void		ephy_embed_single_clear_auth_cache	(EphyEmbedSingle *single);
+
+void		ephy_embed_single_set_offline_mode	(EphyEmbedSingle *single,
+							 gboolean offline);
+
+gboolean	ephy_embed_single_get_offline_mode	(EphyEmbedSingle *single);
+
+GList		*ephy_embed_single_get_font_list	(EphyEmbedSingle *single,
+							 const char *lang_group);
 
 G_END_DECLS
 

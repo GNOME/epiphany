@@ -190,21 +190,26 @@ ephy_embed_single_get_font_list (EphyEmbedSingle *single,
  * @single: the #EphyEmbedSingle
  * @parent: the requested window's parent #EphyEmbed
  * @address: the URL to load
+ * @name: a name for the window
  * @features: a Javascript features string
  *
  * Opens a new window, as if it were opened in @parent using the Javascript
  * method and arguments: <code>window.open(&quot;@address&quot;,
  * &quot;_blank&quot;, &quot;@features&quot;);</code>.
  * 
- * Use ephy_shell_new_tab() unless this handling of the @features string is
+ * Returns: the new embed. This is either a #EphyEmbed, or, when @features specified
+ * "chrome", a #GtkMozEmbed.
+ *
+ * NOTE: Use ephy_shell_new_tab() unless this handling of the @features string is
  * required.
  */
-void
+GtkWidget *
 ephy_embed_single_open_window (EphyEmbedSingle *single,
 			       EphyEmbed *parent,
 			       const char *address,
+			       const char *name,
 			       const char *features)
 {
 	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
-	return iface->open_window (single, parent, address, features);
+	return iface->open_window (single, parent, address, name, features);
 }
