@@ -29,15 +29,15 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_PERMISSION_MANAGER		(ephy_permission_manager_get_type ())
 #define EPHY_PERMISSION_MANAGER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_PERMISSION_MANAGER, EphyPermissionManager))
-#define EPHY_PERMISSION_MANAGER_IFACE(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_PERMISSION_MANAGER, EphyPermissionManagerIFace))
+#define EPHY_PERMISSION_MANAGER_IFACE(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_PERMISSION_MANAGER, EphyPermissionManagerIface))
 #define EPHY_IS_PERMISSION_MANAGER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_PERMISSION_MANAGER))
 #define EPHY_IS_PERMISSION_MANAGER_IFACE(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_PERMISSION_MANAGER))
-#define EPHY_PERMISSION_MANAGER_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_PERMISSION_MANAGER, EphyPermissionManagerIFace))
+#define EPHY_PERMISSION_MANAGER_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_PERMISSION_MANAGER, EphyPermissionManagerIface))
 
 #define EPHY_TYPE_PERMISSION_INFO		(ephy_permission_info_get_type ())
 
 typedef struct EphyPermissionManager		EphyPermissionManager;
-typedef struct EphyPermissionManagerIFace	EphyPermissionManagerIFace;
+typedef struct EphyPermissionManagerIface	EphyPermissionManagerIface;
 
 typedef enum
 {
@@ -60,7 +60,7 @@ typedef struct
 	EphyPermission permission;
 } EphyPermissionInfo;
 
-struct EphyPermissionManagerIFace
+struct EphyPermissionManagerIface
 {
 	GTypeInterface base_iface;
 

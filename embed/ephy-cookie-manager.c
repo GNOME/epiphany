@@ -109,7 +109,7 @@ ephy_cookie_manager_get_type (void)
 	{
 		static const GTypeInfo our_info =
 		{
-			sizeof (EphyCookieManagerIFace),
+			sizeof (EphyCookieManagerIface),
 			ephy_cookie_manager_base_init,
 			NULL,
 		};
@@ -140,7 +140,7 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 	g_signal_new ("cookie-added",
 		      EPHY_TYPE_COOKIE_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
-		      G_STRUCT_OFFSET (EphyCookieManagerIFace, added),
+		      G_STRUCT_OFFSET (EphyCookieManagerIface, added),
 		      NULL, NULL,
 		      g_cclosure_marshal_VOID__BOXED,
 		      G_TYPE_NONE,
@@ -157,7 +157,7 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 	g_signal_new ("cookie-changed",
 		      EPHY_TYPE_COOKIE_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
-		      G_STRUCT_OFFSET (EphyCookieManagerIFace, changed),
+		      G_STRUCT_OFFSET (EphyCookieManagerIface, changed),
 		      NULL, NULL,
 		      g_cclosure_marshal_VOID__BOXED,
 		      G_TYPE_NONE,
@@ -174,7 +174,7 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 	g_signal_new ("cookie-deleted",
 		      EPHY_TYPE_COOKIE_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
-		      G_STRUCT_OFFSET (EphyCookieManagerIFace, deleted),
+		      G_STRUCT_OFFSET (EphyCookieManagerIface, deleted),
 		      NULL, NULL,
 		      g_cclosure_marshal_VOID__BOXED,
 		      G_TYPE_NONE,
@@ -191,7 +191,7 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 	g_signal_new ("cookie-rejected",
 		      EPHY_TYPE_COOKIE_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
-		      G_STRUCT_OFFSET (EphyCookieManagerIFace, rejected),
+		      G_STRUCT_OFFSET (EphyCookieManagerIface, rejected),
 		      NULL, NULL,
 		      g_cclosure_marshal_VOID__STRING,
 		      G_TYPE_NONE,
@@ -208,7 +208,7 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 	g_signal_new ("cookies-cleared",
 		      EPHY_TYPE_COOKIE_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
-		      G_STRUCT_OFFSET (EphyCookieManagerIFace, cleared),
+		      G_STRUCT_OFFSET (EphyCookieManagerIface, cleared),
 		      NULL, NULL,
 		      g_cclosure_marshal_VOID__VOID,
 		      G_TYPE_NONE,
@@ -229,7 +229,7 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 GList *
 ephy_cookie_manager_list_cookies (EphyCookieManager *manager)
 {
-	EphyCookieManagerIFace *iface = EPHY_COOKIE_MANAGER_GET_IFACE (manager);
+	EphyCookieManagerIface *iface = EPHY_COOKIE_MANAGER_GET_IFACE (manager);
 	return iface->list (manager);
 }
 
@@ -244,7 +244,7 @@ void
 ephy_cookie_manager_remove_cookie (EphyCookieManager *manager,
 				   const EphyCookie *cookie)
 {
-	EphyCookieManagerIFace *iface = EPHY_COOKIE_MANAGER_GET_IFACE (manager);
+	EphyCookieManagerIface *iface = EPHY_COOKIE_MANAGER_GET_IFACE (manager);
 	iface->remove (manager, cookie);
 }
 
@@ -257,6 +257,6 @@ ephy_cookie_manager_remove_cookie (EphyCookieManager *manager,
 void
 ephy_cookie_manager_clear (EphyCookieManager *manager)
 {
-	EphyCookieManagerIFace *iface = EPHY_COOKIE_MANAGER_GET_IFACE (manager);
+	EphyCookieManagerIface *iface = EPHY_COOKIE_MANAGER_GET_IFACE (manager);
 	iface->clear (manager);
 }

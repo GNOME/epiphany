@@ -99,10 +99,10 @@ struct MozillaEmbedSinglePrivate
 };
 
 static void mozilla_embed_single_class_init	(MozillaEmbedSingleClass *klass);
-static void ephy_embed_single_iface_init	(EphyEmbedSingleIFace *iface);
-static void ephy_cookie_manager_iface_init	(EphyCookieManagerIFace *iface);
-static void ephy_password_manager_iface_init	(EphyPasswordManagerIFace *iface);
-static void ephy_permission_manager_iface_init	(EphyPermissionManagerIFace *iface);
+static void ephy_embed_single_iface_init	(EphyEmbedSingleIface *iface);
+static void ephy_cookie_manager_iface_init	(EphyCookieManagerIface *iface);
+static void ephy_password_manager_iface_init	(EphyPasswordManagerIface *iface);
+static void ephy_permission_manager_iface_init	(EphyPermissionManagerIface *iface);
 static void mozilla_embed_single_init		(MozillaEmbedSingle *ges);
 
 static GObjectClass *parent_class = NULL;
@@ -877,7 +877,7 @@ mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 }
 
 static void
-ephy_embed_single_iface_init (EphyEmbedSingleIFace *iface)
+ephy_embed_single_iface_init (EphyEmbedSingleIface *iface)
 {
 	iface->clear_cache = impl_clear_cache;
 	iface->clear_auth_cache = impl_clear_auth_cache;
@@ -887,7 +887,7 @@ ephy_embed_single_iface_init (EphyEmbedSingleIFace *iface)
 }
 
 static void
-ephy_cookie_manager_iface_init (EphyCookieManagerIFace *iface)
+ephy_cookie_manager_iface_init (EphyCookieManagerIface *iface)
 {
 	iface->list = impl_list_cookies;
 	iface->remove = impl_remove_cookie;
@@ -895,7 +895,7 @@ ephy_cookie_manager_iface_init (EphyCookieManagerIFace *iface)
 }
 
 static void
-ephy_password_manager_iface_init (EphyPasswordManagerIFace *iface)
+ephy_password_manager_iface_init (EphyPasswordManagerIface *iface)
 {
 	iface->add = NULL; /* not implemented yet */
 	iface->remove = impl_remove_password;
@@ -903,7 +903,7 @@ ephy_password_manager_iface_init (EphyPasswordManagerIFace *iface)
 }
 
 static void
-ephy_permission_manager_iface_init (EphyPermissionManagerIFace *iface)
+ephy_permission_manager_iface_init (EphyPermissionManagerIface *iface)
 {
 	iface->add = impl_permission_manager_add;
 	iface->remove = impl_permission_manager_remove;

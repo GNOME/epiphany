@@ -41,7 +41,7 @@ ephy_embed_event_get_type (void)
 	{
 		static const GTypeInfo our_info =
 		{
-			sizeof (EphyEmbedEventIFace),
+			sizeof (EphyEmbedEventIface),
 			ephy_embed_event_base_init,
 			NULL,
 		};
@@ -66,21 +66,21 @@ ephy_embed_event_base_init (gpointer g_class)
 EphyEmbedEventType
 ephy_embed_event_get_event_type (EphyEmbedEvent *event)
 {
-	EphyEmbedEventIFace *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
+	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
 	return iface->get_type (event);
 }
 
 EmbedEventContext
 ephy_embed_event_get_context (EphyEmbedEvent *event)
 {
-	EphyEmbedEventIFace *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
+	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
 	return iface->get_context (event);
 }
 
 guint
 ephy_embed_event_get_modifier (EphyEmbedEvent *event)
 {
-	EphyEmbedEventIFace *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
+	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
 	return iface->get_modifier (event);
 }
 
@@ -88,7 +88,7 @@ void
 ephy_embed_event_get_coords (EphyEmbedEvent *event,
 			     guint *x, guint *y)
 {
-	EphyEmbedEventIFace *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
+	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
 	iface->get_coordinates (event, x, y);
 }
 
@@ -97,7 +97,7 @@ ephy_embed_event_get_property	(EphyEmbedEvent *event,
 				 const char *name,
 				 const GValue **value)
 {
-	EphyEmbedEventIFace *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
+	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
 	iface->get_property (event, name, value);
 }
 
@@ -105,13 +105,13 @@ gboolean
 ephy_embed_event_has_property	(EphyEmbedEvent *event,
 				 const char *name)
 {
-	EphyEmbedEventIFace *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
+	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
 	return iface->has_property (event, name);
 }
 
 gpointer
 ephy_embed_event_get_dom_event (EphyEmbedEvent *event)
 {
-	EphyEmbedEventIFace *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
+	EphyEmbedEventIface *iface = EPHY_EMBED_EVENT_GET_IFACE (event);
 	return iface->get_dom_event (event);
 }

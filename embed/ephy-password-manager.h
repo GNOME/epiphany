@@ -29,15 +29,15 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_PASSWORD_MANAGER		(ephy_password_manager_get_type ())
 #define EPHY_PASSWORD_MANAGER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_PASSWORD_MANAGER, EphyPasswordManager))
-#define EPHY_PASSWORD_MANAGER_IFACE(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_PASSWORD_MANAGER, EphyPasswordManagerIFace))
+#define EPHY_PASSWORD_MANAGER_IFACE(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_PASSWORD_MANAGER, EphyPasswordManagerIface))
 #define EPHY_IS_PASSWORD_MANAGER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_PASSWORD_MANAGER))
 #define EPHY_IS_PASSWORD_MANAGER_IFACE(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_PASSWORD_MANAGER))
-#define EPHY_PASSWORD_MANAGER_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_PASSWORD_MANAGER, EphyPasswordManagerIFace))
+#define EPHY_PASSWORD_MANAGER_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_PASSWORD_MANAGER, EphyPasswordManagerIface))
 
 #define EPHY_TYPE_PASSWORD_INFO			(ephy_password_info_get_type ())
 
 typedef struct EphyPasswordManager	EphyPasswordManager;
-typedef struct EphyPasswordManagerIFace	EphyPasswordManagerIFace;
+typedef struct EphyPasswordManagerIface	EphyPasswordManagerIface;
 
 typedef struct
 {
@@ -46,7 +46,7 @@ typedef struct
 	char *password;
 } EphyPasswordInfo;
 
-struct EphyPasswordManagerIFace
+struct EphyPasswordManagerIface
 {
 	GTypeInterface base_iface;
 

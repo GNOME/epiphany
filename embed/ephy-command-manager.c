@@ -36,7 +36,7 @@ ephy_command_manager_get_type (void)
 	{
 		static const GTypeInfo our_info =
 		{
-			sizeof (EphyCommandManagerIFace),
+			sizeof (EphyCommandManagerIface),
 			ephy_command_manager_base_init,
 			NULL,
 		};
@@ -60,7 +60,7 @@ ephy_command_manager_base_init (gpointer g_class)
 		g_signal_new ("command_changed",
 			      EPHY_TYPE_COMMAND_MANAGER,
 			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyCommandManagerIFace, command_changed),
+			      G_STRUCT_OFFSET (EphyCommandManagerIface, command_changed),
 			      NULL, NULL,
 			      g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE,
@@ -75,7 +75,7 @@ void
 ephy_command_manager_do_command (EphyCommandManager *manager,
 				 const char *command)
 {
-	EphyCommandManagerIFace *iface = EPHY_COMMAND_MANAGER_GET_IFACE (manager);
+	EphyCommandManagerIface *iface = EPHY_COMMAND_MANAGER_GET_IFACE (manager);
 	iface->do_command (manager, command);
 }
 
@@ -83,6 +83,6 @@ gboolean
 ephy_command_manager_can_do_command (EphyCommandManager *manager,
 					const char *command)
 {
-	EphyCommandManagerIFace *iface = EPHY_COMMAND_MANAGER_GET_IFACE (manager);
+	EphyCommandManagerIface *iface = EPHY_COMMAND_MANAGER_GET_IFACE (manager);
 	return iface->can_do_command (manager, command);
 }

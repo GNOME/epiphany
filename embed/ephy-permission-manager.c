@@ -113,7 +113,7 @@ ephy_permission_manager_get_type (void)
 	{
 		static const GTypeInfo our_info =
 		{
-		sizeof (EphyPermissionManagerIFace),
+		sizeof (EphyPermissionManagerIface),
 		ephy_permission_manager_base_init,
 		NULL,
 		};
@@ -145,7 +145,7 @@ ephy_permission_manager_base_init (gpointer g_class)
 	g_signal_new ("permission-added",
 		      EPHY_TYPE_PERMISSION_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
-		      G_STRUCT_OFFSET (EphyPermissionManagerIFace, added),
+		      G_STRUCT_OFFSET (EphyPermissionManagerIface, added),
 		      NULL, NULL,
 		      g_cclosure_marshal_VOID__BOXED,
 		      G_TYPE_NONE,
@@ -163,7 +163,7 @@ ephy_permission_manager_base_init (gpointer g_class)
 	g_signal_new ("permission-changed",
 		      EPHY_TYPE_PERMISSION_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
-		      G_STRUCT_OFFSET (EphyPermissionManagerIFace, changed),
+		      G_STRUCT_OFFSET (EphyPermissionManagerIface, changed),
 		      NULL, NULL,
 		      g_cclosure_marshal_VOID__BOXED,
 		      G_TYPE_NONE,
@@ -181,7 +181,7 @@ ephy_permission_manager_base_init (gpointer g_class)
 	g_signal_new ("permission-deleted",
 		      EPHY_TYPE_PERMISSION_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
-		      G_STRUCT_OFFSET (EphyPermissionManagerIFace, deleted),
+		      G_STRUCT_OFFSET (EphyPermissionManagerIface, deleted),
 		      NULL, NULL,
 		      g_cclosure_marshal_VOID__BOXED,
 		      G_TYPE_NONE,
@@ -198,7 +198,7 @@ ephy_permission_manager_base_init (gpointer g_class)
 	g_signal_new ("permissions-cleared",
 		      EPHY_TYPE_PERMISSION_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
-		      G_STRUCT_OFFSET (EphyPermissionManagerIFace, cleared),
+		      G_STRUCT_OFFSET (EphyPermissionManagerIface, cleared),
 		      NULL, NULL,
 		      g_cclosure_marshal_VOID__VOID,
 		      G_TYPE_NONE,
@@ -224,7 +224,7 @@ ephy_permission_manager_add (EphyPermissionManager *manager,
 			     EphyPermissionType type,
 			     EphyPermission permission)
 {
-	EphyPermissionManagerIFace *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
+	EphyPermissionManagerIface *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
 	iface->add (manager, host, type, permission);
 }
 
@@ -242,7 +242,7 @@ ephy_permission_manager_remove (EphyPermissionManager *manager,
 				const char *host,
 				EphyPermissionType type)
 {
-	EphyPermissionManagerIFace *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
+	EphyPermissionManagerIface *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
 	iface->remove (manager, host, type);
 }
 
@@ -255,7 +255,7 @@ ephy_permission_manager_remove (EphyPermissionManager *manager,
 void
 ephy_permission_manager_clear (EphyPermissionManager *manager)
 {
-	EphyPermissionManagerIFace *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
+	EphyPermissionManagerIface *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
 	iface->clear (manager);
 }
 
@@ -275,7 +275,7 @@ ephy_permission_manager_test (EphyPermissionManager *manager,
 			      const char *host,
 			      EphyPermissionType type)
 {
-	EphyPermissionManagerIFace *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
+	EphyPermissionManagerIface *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
 	return iface->test (manager, host, type);
 }
 
@@ -293,6 +293,6 @@ GList *
 ephy_permission_manager_list (EphyPermissionManager *manager,
 			      EphyPermissionType type)
 {
-	EphyPermissionManagerIFace *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
+	EphyPermissionManagerIface *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
 	return iface->list (manager, type);
 }

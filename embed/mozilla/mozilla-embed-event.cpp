@@ -37,7 +37,7 @@ struct MozillaEmbedEventPrivate
 
 static void mozilla_embed_event_class_init	(MozillaEmbedEventClass *klass);
 static void mozilla_embed_event_init		(MozillaEmbedEvent *event);
-static void ephy_embed_event_iface_init		(EphyEmbedEventIFace *iface);
+static void ephy_embed_event_iface_init		(EphyEmbedEventIface *iface);
 
 static GObjectClass *parent_class = NULL;
 
@@ -184,7 +184,7 @@ mozilla_embed_event_finalize (GObject *object)
 }
 
 static void
-ephy_embed_event_iface_init (EphyEmbedEventIFace *iface)
+ephy_embed_event_iface_init (EphyEmbedEventIface *iface)
 {
 	iface->get_type = impl_get_type;
 	iface->get_context = impl_get_context;

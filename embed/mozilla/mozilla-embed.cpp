@@ -44,7 +44,7 @@
 static void	mozilla_embed_class_init	(MozillaEmbedClass *klass);
 static void	mozilla_embed_init		(MozillaEmbed *gs);
 static void	mozilla_embed_destroy		(GtkObject *object);
-static void	ephy_embed_iface_init		(EphyEmbedIFace *iface);
+static void	ephy_embed_iface_init		(EphyEmbedIface *iface);
 
 static void mozilla_embed_connect_signals	(MozillaEmbed *membed);
 static void mozilla_embed_location_changed_cb	(GtkMozEmbed *embed,
@@ -110,7 +110,7 @@ impl_manager_can_do_command (EphyCommandManager *manager,
 }
 
 static void
-ephy_command_manager_iface_init (EphyCommandManagerIFace *iface)
+ephy_command_manager_iface_init (EphyCommandManagerIface *iface)
 {
 	iface->do_command = impl_manager_do_command;
 	iface->can_do_command = impl_manager_can_do_command;
@@ -1068,7 +1068,7 @@ mozilla_embed_security_level (MozillaEmbed *membed)
 }
 
 static void
-ephy_embed_iface_init (EphyEmbedIFace *iface)
+ephy_embed_iface_init (EphyEmbedIface *iface)
 {
 	iface->load_url = impl_load_url; 
 	iface->stop_load = impl_stop_load;

@@ -115,7 +115,7 @@ ephy_password_manager_get_type (void)
 	{
 		static const GTypeInfo our_info =
 		{
-			sizeof (EphyPasswordManagerIFace),
+			sizeof (EphyPasswordManagerIface),
 			NULL,
 			NULL,
 		};
@@ -140,7 +140,7 @@ void
 ephy_password_manager_add (EphyPasswordManager *manager,
 			   EphyPasswordInfo *info)
 {
-	EphyPasswordManagerIFace *iface = EPHY_PASSWORD_MANAGER_GET_IFACE (manager);
+	EphyPasswordManagerIface *iface = EPHY_PASSWORD_MANAGER_GET_IFACE (manager);
 	iface->add (manager, info);
 }
 
@@ -155,7 +155,7 @@ void
 ephy_password_manager_remove (EphyPasswordManager *manager,
 			      EphyPasswordInfo *info)
 {
-	EphyPasswordManagerIFace *iface = EPHY_PASSWORD_MANAGER_GET_IFACE (manager);
+	EphyPasswordManagerIface *iface = EPHY_PASSWORD_MANAGER_GET_IFACE (manager);
 	iface->remove (manager, info);
 }
 
@@ -170,6 +170,6 @@ ephy_password_manager_remove (EphyPasswordManager *manager,
 GList *
 ephy_password_manager_list (EphyPasswordManager *manager)
 {
-	EphyPasswordManagerIFace *iface = EPHY_PASSWORD_MANAGER_GET_IFACE (manager);
+	EphyPasswordManagerIface *iface = EPHY_PASSWORD_MANAGER_GET_IFACE (manager);
 	return iface->list (manager);
 }

@@ -29,15 +29,15 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_COOKIE_MANAGER		(ephy_cookie_manager_get_type ())
 #define EPHY_COOKIE_MANAGER(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_COOKIE_MANAGER, EphyCookieManager))
-#define EPHY_COOKIE_MANAGER_IFACE(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_COOKIE_MANAGER, EphyCookieManagerIFace))
+#define EPHY_COOKIE_MANAGER_IFACE(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_COOKIE_MANAGER, EphyCookieManagerIface))
 #define EPHY_IS_COOKIE_MANAGER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_COOKIE_MANAGER))
 #define EPHY_IS_COOKIE_MANAGER_IFACE(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_COOKIE_MANAGER))
-#define EPHY_COOKIE_MANAGER_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_COOKIE_MANAGER, EphyCookieManagerIFace))
+#define EPHY_COOKIE_MANAGER_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_COOKIE_MANAGER, EphyCookieManagerIface))
 
 #define EPHY_TYPE_COOKIE			(ephy_cookie_get_type ())
 
 typedef struct EphyCookieManager	EphyCookieManager;
-typedef struct EphyCookieManagerIFace	EphyCookieManagerIFace;
+typedef struct EphyCookieManagerIface	EphyCookieManagerIface;
 
 typedef enum
 {
@@ -72,7 +72,7 @@ typedef struct
 	guint p3p_policy : 3;
 } EphyCookie;
 
-struct EphyCookieManagerIFace
+struct EphyCookieManagerIface
 {
 	GTypeInterface base_iface;
 

@@ -36,7 +36,7 @@ ephy_embed_single_get_type (void)
 	{
 		static const GTypeInfo our_info =
 		{
-			sizeof (EphyEmbedSingleIFace),
+			sizeof (EphyEmbedSingleIface),
 			ephy_embed_single_iface_init,
 			NULL,
 		};
@@ -71,7 +71,7 @@ ephy_embed_single_iface_init (gpointer g_class)
 	g_signal_new ("handle_content",
 		      EPHY_TYPE_EMBED_SINGLE,
 		      G_SIGNAL_RUN_LAST,
-		      G_STRUCT_OFFSET (EphyEmbedSingleIFace, handle_content),
+		      G_STRUCT_OFFSET (EphyEmbedSingleIface, handle_content),
 		      g_signal_accumulator_true_handled, NULL,
 		      ephy_marshal_BOOLEAN__STRING_STRING,
 		      G_TYPE_BOOLEAN,
@@ -92,7 +92,7 @@ ephy_embed_single_iface_init (gpointer g_class)
 void
 ephy_embed_single_clear_cache (EphyEmbedSingle *single)
 {
-	EphyEmbedSingleIFace *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
+	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
 	iface->clear_cache (single);
 }
 
@@ -105,7 +105,7 @@ ephy_embed_single_clear_cache (EphyEmbedSingle *single)
 void
 ephy_embed_single_clear_auth_cache (EphyEmbedSingle *single)
 {
-	EphyEmbedSingleIFace *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
+	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
 	iface->clear_auth_cache (single);
 }
 
@@ -120,7 +120,7 @@ void
 ephy_embed_single_set_offline_mode (EphyEmbedSingle *single,
 				    gboolean offline)
 {
-	EphyEmbedSingleIFace *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
+	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
 	iface->set_offline_mode (single, offline);
 }
 
@@ -135,7 +135,7 @@ void
 ephy_embed_single_load_proxy_autoconf (EphyEmbedSingle *single,
 				       const char* address)
 {
-	EphyEmbedSingleIFace *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
+	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
 	iface->load_proxy_autoconf (single, address);
 }
 
@@ -153,6 +153,6 @@ GList *
 ephy_embed_single_get_font_list (EphyEmbedSingle *single,
 				 const char *langGroup)
 {
-	EphyEmbedSingleIFace *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
+	EphyEmbedSingleIface *iface = EPHY_EMBED_SINGLE_GET_IFACE (single);
 	return iface->get_font_list (single, langGroup);
 }

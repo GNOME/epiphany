@@ -29,12 +29,12 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_EMBED_EVENT			(ephy_embed_event_get_type ())
 #define EPHY_EMBED_EVENT(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_EVENT, EphyEmbedEvent))
-#define EPHY_EMBED_EVENT_IFACE(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventIFace))
+#define EPHY_EMBED_EVENT_IFACE(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventIface))
 #define EPHY_IS_EMBED_EVENT(o)			(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_EVENT))
 #define EPHY_IS_EMBED_EVENT_IFACE(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_EVENT))
-#define EPHY_EMBED_EVENT_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventIFace))
+#define EPHY_EMBED_EVENT_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventIface))
 
-typedef struct EphyEmbedEventIFace	EphyEmbedEventIFace;
+typedef struct EphyEmbedEventIface	EphyEmbedEventIface;
 typedef struct EphyEmbedEvent		EphyEmbedEvent;
 
 typedef enum
@@ -57,7 +57,7 @@ typedef enum
 	EPHY_EMBED_EVENT_KEY
 } EphyEmbedEventType;
 
-struct EphyEmbedEventIFace
+struct EphyEmbedEventIface
 {
 	GTypeInterface parent_iface;
 
