@@ -54,6 +54,7 @@
 #include "ephy-favicon-cache.h"
 #include "ephy-link.h"
 #include "ephy-gui.h"
+#include "ephy-notebook.h"
 
 #include <string.h>
 #include <glib/gi18n.h>

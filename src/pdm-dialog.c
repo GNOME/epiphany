@@ -40,7 +40,7 @@
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkliststore.h>
 #include <gtk/gtkcellrenderertext.h>
-
+#include <gtk/gtknotebook.h>
 #include <glib/gi18n.h>
 
 #include <time.h>

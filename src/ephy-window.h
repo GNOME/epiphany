@@ -21,10 +21,8 @@
 #ifndef EPHY_WINDOW_H
 #define EPHY_WINDOW_H
 
-#include "ephy-notebook.h"
 #include "ephy-embed.h"
 #include "ephy-tab.h"
-#include "ephy-dialog.h"
 
 #include <glib-object.h>
 #include <glib.h>

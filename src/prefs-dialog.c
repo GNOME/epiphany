@@ -56,6 +56,7 @@
 #include <gtk/gtkimage.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtknotebook.h>
 #include <string.h>
 
 #define CONF_FONTS_FOR_LANGUAGE	"/apps/epiphany/dialogs/preferences_font_language"

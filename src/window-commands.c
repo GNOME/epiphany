@@ -42,6 +42,7 @@
 #include "ephy-state.h"
 #include "ephy-gui.h"
 #include "ephy-zoom.h"
+#include "ephy-notebook.h"
 #include "egg-toolbars-model.h"
 #include "egg-editable-toolbar.h"
 #include "egg-toolbar-editor.h"

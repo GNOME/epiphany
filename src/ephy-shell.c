@@ -50,6 +50,7 @@
 #include <gtk/gtksignal.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmessagedialog.h>
+#include <gtk/gtknotebook.h>
 #include <dirent.h>
 #include <unistd.h>
 #include <libgnomeui/gnome-client.h>
