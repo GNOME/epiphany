@@ -46,11 +46,17 @@ ephy_file_tmp_dir (void)
 		char *partial_name;
 		char *full_name;
 
-		partial_name = g_strconcat ("epiphany-", g_get_user_name (), "-XXXXXX", NULL);
-		full_name = g_build_filename (g_get_tmp_dir (), partial_name, NULL);
+		partial_name = g_strconcat ("epiphany-", g_get_user_name (),
+					    "-XXXXXX", NULL);
+		full_name = g_build_filename (g_get_tmp_dir (), partial_name,
+					      NULL);
 		tmp_dir = mkdtemp (full_name);
-		g_free(partial_name);
-		g_free (full_name);
+		g_free (partial_name);
+
+		if (tmp_dir == NULL)
+		{
+			g_free (full_name);
+		}
 	}
 
 	return tmp_dir;

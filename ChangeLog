@@ -1,3 +1,9 @@
+2004-01-25  Adam Hooper  <adamh@cvs.gnome.org>
+
+	* lib/ephy-file-helpers.c: (ephy_file_tmp_dir):
+
+	mkdtemp() modifies *template in-place. So it shouldn't be freed.
+
 2004-01-25  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-tabs-menu.c: (tab_set_action_accelerator):
