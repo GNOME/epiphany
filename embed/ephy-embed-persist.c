@@ -58,14 +58,6 @@ struct EphyEmbedPersistPrivate
 static void	ephy_embed_persist_class_init	(EphyEmbedPersistClass *klass);
 static void	ephy_embed_persist_init		(EphyEmbedPersist *ges);
 
-enum
-{
-	COMPLETED,
-	LAST_SIGNAL
-};
-
-static guint ephy_embed_persist_signals[LAST_SIGNAL] = { 0 };
-
 static GObjectClass *parent_class = NULL;
 
 GType
@@ -349,15 +341,14 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 	object_class->get_property = ephy_embed_persist_get_property;
 
 	/* init signals */
-	ephy_embed_persist_signals[COMPLETED] =
-		g_signal_new ("completed",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyEmbedPersistClass, completed),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
+	g_signal_new ("completed",
+		      G_OBJECT_CLASS_TYPE (object_class),
+		      G_SIGNAL_RUN_LAST,
+		      G_STRUCT_OFFSET (EphyEmbedPersistClass, completed),
+		      NULL, NULL,
+		      g_cclosure_marshal_VOID__VOID,
+		      G_TYPE_NONE,
+		      0);
 
 	g_object_class_install_property (object_class,
 					 PROP_DEST,

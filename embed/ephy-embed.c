@@ -28,29 +28,7 @@
 #include "mozilla-embed-single.h"
 #include "mozilla-embed.h"
 
-enum
-{
-	NEW_WINDOW,
-	CONTEXT_MENU,
-	FAVICON,
-	LOCATION,
-	TITLE,
-	PROGRESS,
-	NET_STATE,
-	VISIBILITY,
-	DESTROY_BRSR,
-	OPEN_URI,
-	SIZE_TO,
-	DOM_MOUSE_CLICK,
-	DOM_MOUSE_DOWN,
-	SECURITY_CHANGE,
-	ZOOM_CHANGE,
-	LAST_SIGNAL
-};
-
-static guint ephy_embed_signals[LAST_SIGNAL] = { 0 };
-
-static void	ephy_embed_base_init (gpointer base_class);
+static void ephy_embed_base_init (gpointer base_class);
 
 GType
 ephy_embed_get_type (void)
@@ -82,7 +60,6 @@ ephy_embed_base_init (gpointer g_class)
 
 	if (!initialized)
 	{
-	ephy_embed_signals[NEW_WINDOW] =
 		g_signal_new ("ge_new_window",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_FIRST,
@@ -93,7 +70,6 @@ ephy_embed_base_init (gpointer g_class)
 			      2,
 			      G_TYPE_POINTER,
 			      G_TYPE_INT);
-	ephy_embed_signals[CONTEXT_MENU] =
 		g_signal_new ("ge_context_menu",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_LAST,
@@ -103,7 +79,6 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_BOOLEAN,
 			      1,
 			      G_TYPE_OBJECT);
-	ephy_embed_signals[FAVICON] =
 		g_signal_new ("ge_favicon",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_FIRST,
@@ -113,7 +88,6 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_STRING);
-	ephy_embed_signals[LOCATION] =
 		g_signal_new ("ge_location",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_FIRST,
@@ -123,7 +97,6 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_STRING);
-	ephy_embed_signals[NET_STATE] =
 		g_signal_new ("ge_net_state",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_FIRST,
@@ -134,7 +107,6 @@ ephy_embed_base_init (gpointer g_class)
 			      2,
 			      G_TYPE_STRING,
 			      G_TYPE_INT);
-	ephy_embed_signals[OPEN_URI] =
 		g_signal_new ("ge_open_uri",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_LAST,
@@ -144,7 +116,6 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_INT,
 			      1,
 			      G_TYPE_STRING);
-	ephy_embed_signals[DOM_MOUSE_CLICK] =
 		g_signal_new ("ge_dom_mouse_click",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_LAST,
@@ -154,7 +125,6 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_BOOLEAN,
 			      1,
 			      G_TYPE_POINTER);
-	ephy_embed_signals[DOM_MOUSE_DOWN] =
 		g_signal_new ("ge_dom_mouse_down",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_LAST,
@@ -164,7 +134,6 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_BOOLEAN,
 			      1,
 			      G_TYPE_POINTER);
-	ephy_embed_signals[SECURITY_CHANGE] =
 		g_signal_new ("ge_security_change",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_LAST,
@@ -174,7 +143,6 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_INT);
-	ephy_embed_signals[ZOOM_CHANGE] =
 		g_signal_new ("ge_zoom_change",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_LAST,
@@ -184,7 +152,7 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_FLOAT);
-	initialized = TRUE;
+		initialized = TRUE;
 	}
 }
 

@@ -1,5 +1,13 @@
 2003-11-20  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* embed/ephy-command-manager.c: (ephy_command_manager_base_init):
+	* embed/ephy-embed-persist.c: (ephy_embed_persist_class_init):
+	* embed/ephy-embed.c: (ephy_embed_base_init):
+
+	Not necessary to store signal id in an array for interfaces.
+
+2003-11-20  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* src/ephy-session.c: (ephy_session_save):
 
 	hrm misplaced free in last commit

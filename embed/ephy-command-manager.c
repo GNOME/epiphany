@@ -24,16 +24,8 @@
 
 #include "ephy-command-manager.h"
 
-enum
-{
-	COMMAND_CHANGED,
-	LAST_SIGNAL
-};
-
 static void
 ephy_command_manager_base_init (gpointer base_class);
-
-static guint ephy_command_manager_signals[LAST_SIGNAL] = { 0 };
 
 GType
 ephy_command_manager_get_type (void)
@@ -65,7 +57,6 @@ ephy_command_manager_base_init (gpointer g_class)
 
 	if (!initialized)
 	{
-	ephy_command_manager_signals[COMMAND_CHANGED] =
                 g_signal_new ("command_changed",
                               EPHY_TYPE_COMMAND_MANAGER,
                               G_SIGNAL_RUN_FIRST,
@@ -75,7 +66,7 @@ ephy_command_manager_base_init (gpointer g_class)
 			      G_TYPE_NONE,
                               1,
                               G_TYPE_STRING);
-	initialized = TRUE;
+		initialized = TRUE;
 	}
 }
 
