@@ -29,6 +29,7 @@
 #include "eggtoolitem.h"
 #include "ephy-debug.h"
 #include "ephy-gui.h"
+#include "ephy-string.h"
 
 static void ephy_topic_action_init       (EphyTopicAction *action);
 static void ephy_topic_action_class_init (EphyTopicActionClass *class);
@@ -187,6 +188,8 @@ sort_bookmarks (gconstpointer a, gconstpointer b)
 	return retval;
 }
 
+#define MAX_LENGTH 32
+
 static GtkWidget *
 build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 {
@@ -226,6 +229,7 @@ build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 			EphyNode *kid;
                 	const char *icon_location;
 			const char *title;
+			char *title_short;
 	
 			kid = (EphyNode*)l->data;
 	
@@ -234,9 +238,10 @@ build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 			title = ephy_node_get_property_string
 				(kid, EPHY_NODE_BMK_PROP_TITLE);
 			if (title == NULL) continue;
-			LOG ("Create menu for bookmark %s", title)
+			title_short = ephy_string_shorten (title, MAX_LENGTH);
+			LOG ("Create menu for bookmark %s", title_short)
 	
-			item = gtk_image_menu_item_new_with_label (title);
+			item = gtk_image_menu_item_new_with_label (title_short);
 			if (icon_location)
 			{
 				GdkPixbuf *icon;
@@ -258,6 +263,8 @@ build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 					  G_CALLBACK (menu_activate_cb), action);
 			gtk_widget_show (item);
 			gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+			g_free (title_short);
 		}
 
 		g_list_free (node_list);
