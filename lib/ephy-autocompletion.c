@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2002  Ricardo Fern·ndez Pascual
+ *  Copyright (C) 2002  Ricardo Fern√°ndez Pascual
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,6 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
+ *
  */
 
 #include <string.h>
@@ -180,6 +183,8 @@ ephy_autocompletion_finalize_impl (GObject *o)
 	g_free (p->key_lengths);
 	g_strfreev (p->prefixes);
 	g_free (p->prefix_lengths);
+
+	g_free (p);
 
 	G_OBJECT_CLASS (g_object_class)->finalize (o);
 
