@@ -242,7 +242,7 @@ void
 popup_cmd_download_link (GtkAction *action,
 			 EphyWindow *window)
 {
-	save_property_url (action, _("Download link"), window, 
+	save_property_url (action, _("Download Link"), window, 
 			   FALSE, "link");
 }
 
@@ -250,7 +250,7 @@ void
 popup_cmd_download_link_as (GtkAction *action,
 			    EphyWindow *window)
 {
-	save_property_url (action, _("Download link"), window, 
+	save_property_url (action, _("Save Link As"), window, 
 			   TRUE, "link");
 }
 void
