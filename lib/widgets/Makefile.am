@@ -13,7 +13,7 @@ noinst_LTLIBRARIES = libephywidgets.la
 
 libephywidgets_la_SOURCES = \
 	eggtreemodelfilter.c			\
-	eggtreemodelfilter.h
+	eggtreemodelfilter.h			\
 	eggtreemultidnd.c			\
 	eggtreemultidnd.h			\
 	ephy-autocompletion-window.c		\
