@@ -1,3 +1,13 @@
+2003-06-13  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* src/bookmarks/ephy-bookmarks-import.c:
+	(gul_general_read_line_from_file), (gul_string_ascii_strcasestr),
+	(ns_get_bookmark_item), (ns_parse_bookmark_item),
+	(ephy_bookmarks_import_mozilla):
+
+	Do not use libxml to parse mozilla bookmarks.
+	Use the galeon parser instead, ugly but works.
+
 2003-06-13  Piers Cornwell  <piersc@cogs.susx.ac.uk>
  
  	* data/glade/prefs-dialog.glade:
