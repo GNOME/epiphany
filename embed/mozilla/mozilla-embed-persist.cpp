@@ -24,6 +24,7 @@
 
 #include "mozilla-embed-persist.h"
 #include "mozilla-embed.h"
+#include "ephy-embed-shell.h"
 #include "EphyBrowser.h"
 #include "EphyHeaderSniffer.h"
 #include "MozDownload.h"
@@ -85,7 +86,6 @@ static void
 mozilla_embed_persist_init (MozillaEmbedPersist *persist)
 {
         persist->priv = MOZILLA_EMBED_PERSIST_GET_PRIVATE (persist);
-
       	persist->priv->mPersist = do_CreateInstance (NS_WEBBROWSERPERSIST_CONTRACTID);
 }
 
@@ -264,6 +264,17 @@ impl_save (EphyEmbedPersist *persist)
 	return TRUE;
 }
 
+static GObject *
+mozilla_embed_persist_constructor (GType type, guint n_construct_properties,
+			           GObjectConstructParam *construct_params)
+{
+	/* we depend on single because of mozilla initialization */
+	ephy_embed_shell_get_embed_single (embed_shell);
+
+	return parent_class->constructor (type, n_construct_properties,
+					  construct_params);
+}
+
 static void
 mozilla_embed_persist_class_init (MozillaEmbedPersistClass *klass)
 {
@@ -273,6 +284,7 @@ mozilla_embed_persist_class_init (MozillaEmbedPersistClass *klass)
         parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
 	
         object_class->finalize = mozilla_embed_persist_finalize;
+	object_class->constructor = mozilla_embed_persist_constructor;
 
 	persist_class->save = impl_save;
 	persist_class->cancel = impl_cancel;

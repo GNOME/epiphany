@@ -243,8 +243,6 @@ struct EphyEmbedClass
 
 GType		  ephy_embed_get_type			(void);
 
-EphyEmbed	 *ephy_embed_new			(GObject *single);
-
 /* Base */
 void		  ephy_embed_load_url			(EphyEmbed *embed,
 							 const char *url);

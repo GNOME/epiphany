@@ -20,6 +20,7 @@
  */
 
 #include "ephy-embed-popup-control.h"
+#include "ephy-embed-factory.h"
 #include "ephy-embed-persist.h"
 #include "ephy-bonobo-extensions.h"
 #include "ephy-prefs.h"
@@ -488,7 +489,8 @@ save_url (EphyEmbedPopupControl *popup,
 	widget = GTK_WIDGET (popup->priv->embed);
 	window = gtk_widget_get_toplevel (widget);
 
-	persist = ephy_embed_persist_new (popup->priv->embed);
+	persist = EPHY_EMBED_PERSIST
+		(ephy_embed_factory_new_object ("EphyEmbedPersist"));
 
 	ephy_embed_persist_set_fc_title (persist, title);
 	ephy_embed_persist_set_fc_parent (persist,GTK_WINDOW (window));
@@ -593,7 +595,8 @@ embed_popup_set_image_as_background_cmd (BonoboUIComponent *uic,
 	ephy_embed_event_get_property (info, "image", &value);
 	location = g_value_get_string (value);
 
-	persist = ephy_embed_persist_new (popup->priv->embed);
+	persist = EPHY_EMBED_PERSIST
+		(ephy_embed_factory_new_object ("EphyEmbedPersist"));
 
 	base = g_path_get_basename (location);
 	dest = g_build_filename (ephy_dot_dir (), base, NULL);

@@ -73,8 +73,6 @@ struct EphyEmbedPersistClass
 
 GType			 ephy_embed_persist_get_type	(void);
 
-EphyEmbedPersist	*ephy_embed_persist_new			(EphyEmbed *embed);
-
 gboolean		 ephy_embed_persist_save		(EphyEmbedPersist *persist);
 
 void			 ephy_embed_persist_cancel		(EphyEmbedPersist *persist);

@@ -1,3 +1,31 @@
+2003-11-22  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* doc/reference/Makefile.am:
+	* embed/Makefile.am:
+	* embed/ephy-embed-persist.c: (ephy_embed_persist_save):
+	* embed/ephy-embed-persist.h:
+	* embed/ephy-embed-popup-control.c: (save_url),
+	(embed_popup_set_image_as_background_cmd):
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_get_embed_single):
+	* embed/ephy-embed.c:
+	* embed/ephy-embed.h:
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_download):
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-embed-single.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/Makefile.am:
+	* src/ephy-nautilus-view.c: (ephy_nautilus_view_instance_init):
+	* src/ephy-tab.c: (ephy_tab_init):
+	* src/popup-commands.c: (save_property_url),
+	(popup_cmd_set_image_as_background):
+	* src/window-commands.c: (window_cmd_file_save_as),
+	(save_temp_source):
+
+	Add a factory to create embed objects and use it.
+	Deal with dependency of mozilla-embed and mozilla-embed-persist
+	on mozilla-embed-single internally.
+
 2003-11-22  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/mozilla-embed-single.cpp:

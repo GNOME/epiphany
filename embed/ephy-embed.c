@@ -156,14 +156,6 @@ ephy_embed_base_init (gpointer g_class)
 	}
 }
 
-EphyEmbed *
-ephy_embed_new (GObject *single)
-{
-	g_assert (MOZILLA_IS_EMBED_SINGLE (single));
-
-	return EPHY_EMBED (g_object_new (MOZILLA_TYPE_EMBED, NULL));
-}
-
 void
 ephy_embed_load_url (EphyEmbed *embed,
 		     const char *url)

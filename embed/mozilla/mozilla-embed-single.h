@@ -54,8 +54,6 @@ struct MozillaEmbedSingleClass
 
 GType             mozilla_embed_single_get_type	     (void);
 
-EphyEmbedSingle  *mozilla_embed_single_new	     (void);
-
 G_END_DECLS
 
 #endif

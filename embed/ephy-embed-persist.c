@@ -435,11 +435,3 @@ ephy_embed_persist_save (EphyEmbedPersist *persist)
 	EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);
 	return klass->save (persist);
 }
-
-EphyEmbedPersist *
-ephy_embed_persist_new (EphyEmbed *embed)
-{
-	return EPHY_EMBED_PERSIST (g_object_new (MOZILLA_TYPE_EMBED_PERSIST,
-						 "embed", embed,
-						 NULL));
-}

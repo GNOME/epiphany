@@ -21,6 +21,7 @@
 #include <config.h>
 
 #include "ephy-embed-shell.h"
+#include "ephy-embed-factory.h"
 #include "ephy-marshal.h"
 #include "ephy-file-helpers.h"
 #include "ephy-favicon-cache.h"
@@ -209,7 +210,8 @@ ephy_embed_shell_get_embed_single (EphyEmbedShell *shell)
 
 	if (!shell->priv->embed_single)
 	{
-		shell->priv->embed_single = mozilla_embed_single_new ();
+		shell->priv->embed_single = EPHY_EMBED_SINGLE
+			(ephy_embed_factory_new_object ("EphyEmbedSingle"));
 	}
 
 	return shell->priv->embed_single;

@@ -23,6 +23,7 @@
 #endif
 
 #include "ephy-shell.h"
+#include "ephy-embed-factory.h"
 #include "ephy-embed-persist.h"
 #include "ephy-debug.h"
 #include "ephy-command-manager.h"
@@ -378,8 +379,10 @@ window_cmd_file_save_as (GtkAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	persist = ephy_embed_persist_new (embed);
+	persist = EPHY_EMBED_PERSIST
+		(ephy_embed_factory_new_object ("EphyEmbedPersist"));
 
+	ephy_embed_persist_set_embed (persist, embed);
 	ephy_embed_persist_set_fc_title (persist, _("Save As"));
 	ephy_embed_persist_set_fc_parent (persist,GTK_WINDOW (window));
 	ephy_embed_persist_set_flags
@@ -736,7 +739,10 @@ save_temp_source (EphyEmbed *embed)
 	tmp = ephy_file_tmp_filename (base, "html");
 	g_free (base);
 
-	persist = ephy_embed_persist_new (embed);
+	persist = EPHY_EMBED_PERSIST
+		(ephy_embed_factory_new_object ("EphyEmbedPersist"));
+
+	ephy_embed_persist_set_embed (persist, embed);
 	ephy_embed_persist_set_flags (persist, EMBED_PERSIST_COPY_PAGE |
 				      EMBED_PERSIST_NO_VIEW);
 	ephy_embed_persist_set_dest (persist, tmp);

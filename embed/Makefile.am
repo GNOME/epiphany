@@ -13,7 +13,7 @@ INCLUDES += -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED \
 	-DGNOME_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED $(WARN_CFLAGS)
 endif
 
-noinst_LTLIBRARIES = libephyembed.la
+noinst_LTLIBRARIES = libephyembed.la libephyembedfactory.la
 
 headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
 header_DATA = $(INST_H_FILES)
@@ -63,4 +63,6 @@ libephyembed_la_SOURCES = \
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
 
-libephyembed_la_LIBADD = $(top_builddir)/embed/mozilla/libephymozillaembed.la
+libephyembedfactory_la_SOURCES =	\
+	ephy-embed-factory.c		\
+	ephy-embed-factory.h

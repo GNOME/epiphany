@@ -27,6 +27,7 @@
 #include <bonobo/bonobo-ui-util.h>
 #include <string.h>
 
+#include "ephy-embed-factory.h"
 #include "ephy-embed-popup-control.h"
 #include "ephy-nautilus-view.h"
 #include "ephy-embed.h"
@@ -157,17 +158,15 @@ ephy_nautilus_view_instance_init (EphyNautilusView *view)
 {
 	GtkWidget *w;
 	EphyNautilusViewPrivate *p = EPHY_NAUTILUS_VIEW_GET_PRIVATE (view);
-	EphyEmbedSingle *single;
 	float *levels;
 	gchar **names;
 	guint i;
 	BonoboControl *control;
 
-	single = ephy_embed_shell_get_embed_single
-		(EPHY_EMBED_SHELL (ephy_shell));
-
 	view->priv = p;
-	view->priv->embed = ephy_embed_new (G_OBJECT (single));
+
+	view->priv->embed = EPHY_EMBED
+		(ephy_embed_factory_new_object ("EphyEmbed"));
 
 	g_signal_connect (view->priv->embed, "link_message",
 			  G_CALLBACK (gnv_embed_link_message_cb), 

@@ -173,12 +173,6 @@ mozilla_embed_single_get_type (void)
         return type;
 }
 
-EphyEmbedSingle *
-mozilla_embed_single_new (void)
-{
-	return EPHY_EMBED_SINGLE (g_object_new (MOZILLA_TYPE_EMBED_SINGLE, NULL));
-}
-
 static gboolean
 mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 {

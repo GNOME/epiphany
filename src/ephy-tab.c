@@ -26,6 +26,7 @@
 #include "ephy-shell.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
+#include "ephy-embed-factory.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-debug.h"
 #include "ephy-string.h"
@@ -1035,14 +1036,10 @@ static void
 ephy_tab_init (EphyTab *tab)
 {
 	GObject *embed, *embed_widget;
-	EphyEmbedSingle *single;
 	EphyFaviconCache *cache;
 	char *id;
 
 	LOG ("EphyTab initialising %p", tab)
-
-	single = ephy_embed_shell_get_embed_single
-		(EPHY_EMBED_SHELL (ephy_shell));
 
 	tab->priv = EPHY_TAB_GET_PRIVATE (tab);
 
@@ -1065,7 +1062,8 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->setting_zoom = FALSE;
 	tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
 
-	tab->priv->embed = ephy_embed_new (G_OBJECT(single));
+	tab->priv->embed = EPHY_EMBED
+		(ephy_embed_factory_new_object ("EphyEmbed"));
 	g_assert (tab->priv->embed != NULL);
 
 	embed = G_OBJECT (tab->priv->embed);

@@ -19,10 +19,9 @@
  */
 
 #include "mozilla-embed.h"
-
+#include "ephy-embed-shell.h"
 #include "ephy-command-manager.h"
 #include "ephy-string.h"
-#include "ephy-embed.h"
 #include "ephy-debug.h"
 
 #include "MozillaPrivate.h"
@@ -247,6 +246,17 @@ mozilla_embed_realize (GtkWidget *widget)
 	}
 }
 
+static GObject *
+mozilla_embed_constructor (GType type, guint n_construct_properties,
+			   GObjectConstructParam *construct_params)
+{
+	/* we depend on single because of mozilla initialization */
+	ephy_embed_shell_get_embed_single (embed_shell);
+
+	return parent_class->constructor (type, n_construct_properties,
+					  construct_params);
+}
+
 static void
 mozilla_embed_class_init (MozillaEmbedClass *klass)
 {
@@ -255,6 +265,8 @@ mozilla_embed_class_init (MozillaEmbedClass *klass)
      	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass); 
 
 	parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
+
+	object_class->constructor = mozilla_embed_constructor;
 
 	gtk_object_class->destroy = mozilla_embed_destroy;
 
@@ -267,7 +279,6 @@ static void
 mozilla_embed_init (MozillaEmbed *embed)
 {
         embed->priv = MOZILLA_EMBED_GET_PRIVATE (embed);
-
 	embed->priv->browser = new EphyBrowser ();
 	embed->priv->security_state = -1;
 
