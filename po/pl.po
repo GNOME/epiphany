@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-12 14:19+0100\n"
+"POT-Creation-Date: 2004-01-13 08:30+0100\n"
 "PO-Revision-Date: 2003-07-28 01:29+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -81,11 +81,11 @@ msgstr "Wyłączenie historii"
 
 #: data/epiphany-lockdown.schemas.in.h:6
 msgid "Disable JavaScript chrome control"
-msgstr ""
+msgstr "Wyłączenie sterowania chrome za pomocą JavaScript"
 
 #: data/epiphany-lockdown.schemas.in.h:7
 msgid "Disable JavaScript's control over window chrome."
-msgstr ""
+msgstr "Wyłącza sterowanie chrome okna za pomocą JavaScript."
 
 #: data/epiphany-lockdown.schemas.in.h:8
 msgid "Disable Toolbar Editing"
@@ -687,7 +687,7 @@ msgstr "_Znajdź:"
 msgid "_Next"
 msgstr "_Naprzód"
 
-#: data/glade/epiphany.glade.h:15
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:506
 msgid "_Pause"
 msgstr "_Wstrzymaj"
 
@@ -752,25 +752,22 @@ msgid "Always use _these fonts"
 msgstr "_Używanie zawsze tych czcionek"
 
 #: data/glade/prefs-dialog.glade.h:16
-#, fuzzy
 msgid "Au_todetect:"
-msgstr "A_utomatyczne rozpoznawanie kodowania:"
+msgstr "Au_tomatyczne wykrywanie:"
 
 #: data/glade/prefs-dialog.glade.h:17
 msgid "Automatically open \"safe\" downloads"
-msgstr ""
+msgstr "Automatycznie otwieranie \"bezpiecznych\" pobrań"
 
 #: data/glade/prefs-dialog.glade.h:18
-#, fuzzy
 msgid "Choose a l_anguage:"
-msgstr "Dla ję_zyka:"
+msgstr "Wybór język_a:"
 
 #: data/glade/prefs-dialog.glade.h:19
 msgid "Cl_ear"
 msgstr "_Wyczyść"
 
 #: data/glade/prefs-dialog.glade.h:20
-#, fuzzy
 msgid "De_fault:"
 msgstr "_Domyślne:"
 
@@ -819,9 +816,8 @@ msgid "Set to _Blank Page"
 msgstr "Ustaw na p_ustą stronę"
 
 #: data/glade/prefs-dialog.glade.h:33
-#, fuzzy
 msgid "_Add..."
-msgstr "_Znajdź..."
+msgstr "D_odaj..."
 
 #: data/glade/prefs-dialog.glade.h:34
 #: src/bookmarks/ephy-bookmark-properties.c:371
@@ -837,32 +833,28 @@ msgid "_Disk space:"
 msgstr "Przes_trzeń na dysku:"
 
 #: data/glade/prefs-dialog.glade.h:37
-#, fuzzy
 msgid "_Down"
-msgstr "Gotowe."
+msgstr "_Dół"
 
 #: data/glade/prefs-dialog.glade.h:38
-#, fuzzy
 msgid "_Download folder:"
-msgstr "Pobiera odnośnik"
+msgstr "Fol_der pobierania:"
 
 #: data/glade/prefs-dialog.glade.h:39
 msgid "_Fixed width:"
 msgstr "_Stała szerokość:"
 
 #: data/glade/prefs-dialog.glade.h:40
-#, fuzzy
 msgid "_Minimum size:"
-msgstr "Min_imalny rozmiar:"
+msgstr "_Minimalny rozmiar:"
 
 #: data/glade/prefs-dialog.glade.h:41
 msgid "_Never accept"
 msgstr "_Nigdy"
 
 #: data/glade/prefs-dialog.glade.h:42
-#, fuzzy
 msgid "_Remove"
-msgstr "_Przywróć"
+msgstr "_Usuń"
 
 #: data/glade/prefs-dialog.glade.h:43 src/ephy-window.c:190
 msgid "_Up"
@@ -1187,12 +1179,8 @@ msgid "Remaining"
 msgstr "Pozostało"
 
 #: embed/downloader-view.c:501
-msgid "Resume"
-msgstr "Wznów"
-
-#: embed/downloader-view.c:506
-msgid "Pause"
-msgstr "Wstrzymaj"
+msgid "_Resume"
+msgstr "_Wznów"
 
 #: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:341
 msgid "Save Image As"
@@ -1573,15 +1561,15 @@ msgstr "Ukraiński"
 msgid "Unknown (%s)"
 msgstr "Nieznane (%s)"
 
-#: embed/ephy-history.c:482 src/bookmarks/ephy-bookmarks.c:587
+#: embed/ephy-history.c:485 src/bookmarks/ephy-bookmarks.c:587
 msgid "All"
 msgstr "Wszystko"
 
-#: embed/ephy-history.c:655
+#: embed/ephy-history.c:658
 msgid "Others"
 msgstr "Inne"
 
-#: embed/ephy-history.c:661
+#: embed/ephy-history.c:664
 msgid "Local files"
 msgstr "Pliki lokalne"
 
@@ -1701,6 +1689,8 @@ msgid ""
 "You should only connect to the site if you are certain you are connected to %"
 "s."
 msgstr ""
+"Ze stroną powinno się połączyć tylko wtedy gdy istnieje pewność, że jest się "
+"połączonym z %s."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:348
 msgid "Connect to untrusted site?"
@@ -1725,12 +1715,12 @@ msgstr "Informacja o zabezpieczeniach dla %s uległa przeterminowaniu dnia %s."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:421
 msgid "Accept not yet valid security information?"
-msgstr ""
+msgstr "Zaakceptować jeszcze nie ważną informację o zabezpieczeniach?"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:422
 #, c-format
 msgid "The security information for %s isn't valid until %s."
-msgstr ""
+msgstr "Informacja o zabezpieczeniach dla %s będzie ważna od %s."
 
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
@@ -1759,52 +1749,52 @@ msgstr "Poproś administratora systemu o pomoc."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:536
 msgid "_Trust CA"
-msgstr ""
+msgstr "_Zaufaj CA"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:548
 #, c-format
 msgid "Trust %s to identify:"
-msgstr ""
+msgstr "Zaufaj %s przy identyfikacji:"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:552
 msgid "Trust new Certificate Authority?"
-msgstr ""
+msgstr "Zaufać nowemu ośrodkowi certyfikacji?"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:553
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
 msgstr ""
+"Przed zaufaniem ośrodkowi autoryzacji (CA) należy sprawdzić autentyczność "
+"certyfikatu."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:563
-#, fuzzy
 msgid "_Web sites"
-msgstr "_Zachodnie"
+msgstr "_Witryny www"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:568
 msgid "_Software developers"
-msgstr ""
+msgstr "_Programiści"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:634
 msgid "Certificate already exists."
-msgstr ""
+msgstr "Certyfikat już istnieje."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:635
-#, fuzzy
 msgid "The certificate has already been imported."
-msgstr "Plik nie został zapisany."
+msgstr "Certyfikat został już zaimportowny."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:754
 msgid "_Backup Certificate"
-msgstr ""
+msgstr "_Zapisz kopię certyfikatu"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:761
 msgid "Select password."
-msgstr ""
+msgstr "Wybierz hasło."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:762
 msgid "Select a password to protect this certificate."
-msgstr ""
+msgstr "Wybierz hasło chroniące ten certyfikat."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:774 embed/mozilla/GtkNSSDialogs.cpp:876
 msgid "_Password:"
@@ -1829,15 +1819,16 @@ msgstr "Wymagane jest hasło."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:866
 msgid "Enter the password for this certificate."
-msgstr ""
+msgstr "Wprowadź hasło dla tego certyfikatu."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:944
 msgid "Certificate Revocation list successfully imported."
 msgstr ""
+"Lista unieważnionych certyfikatów (CRL) została pomyślnie zaimportowana."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:945
 msgid "Certificate Revocation list (CRL) imported:"
-msgstr ""
+msgstr "Lista unieważnionych certyfikatów (CRL) została zaimportowana:"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:967
 msgid "Unit:"
@@ -1857,46 +1848,54 @@ msgstr "Właściwości certyfikatu"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1287
 msgid "This certificate has been verified for the following uses:"
-msgstr ""
+msgstr "Ten certyfikat został zweryfikowany do następującego użycia:"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1290
 msgid "Could not verify this certificate because it has been revoked."
 msgstr ""
+"Nie można zweryfikować tego certyfikatu ponieważ został on unieważniony."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1293
 msgid "Could not verify this certificate because it has expired."
-msgstr ""
+msgstr "Nie można zweryfikować tego certyfikatu ponieważ wygasł."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1296
 msgid "Could not verify this certificate because it is not trusted."
-msgstr ""
+msgstr "Nie można zweryfikować tego certyfikatu ponieważ nie jest on zaufany."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1299
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr ""
+"Nie można zweryfikować tego certyfikatu ponieważ jego wydawca nie jest "
+"zaufany."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1302
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr ""
+"Nie można zweryfikować tego certyfikatu ponieważ jego wydawca jest nieznany."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1305
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
+"Nie można zweryfikować tego certyfikatu ponieważ centrum atoryzacyjne "
+"certyfikatu jest nieprawidłowe."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1310
 msgid "Could not verify this certificate for unknown reasons."
-msgstr ""
+msgstr "Nie można zweryfikować tego certyfikatu z nieznanego powodu."
 
 #: embed/mozilla/GtkNSSKeyPairDialogs.cpp:181
 msgid "Generating Private Key."
-msgstr ""
+msgstr "Generowanie klucza prywatnego."
 
 #: embed/mozilla/GtkNSSKeyPairDialogs.cpp:182
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
 msgstr ""
+"Poczekaj chwilę aż nowy klucz prywatny zostanie wygenerowany. Ten proces "
+"może zająć kilka minut."
 
 #: embed/mozilla/mozilla-embed-single.cpp:501
 msgid ""
@@ -2622,37 +2621,41 @@ msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to register the automation server"
 msgstr ""
+"Nie można teraz użyć programu Epiphany, ze względu na niespodziewany błąd "
+"programu Bonobo podczas próby rejestracji serwera automatyzacji"
 
 #: src/ephy-shell.c:387
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
 msgstr ""
+"Nie można teraz użyć programu Epiphany, ze względu na niespodziewany błąd "
+"programu Bonobo podczas próby rejestracji obiektu automatyzacji."
 
-#: src/ephy-tab.c:326 src/ephy-tab.c:1137 src/ephy-tab.c:1319
+#: src/ephy-tab.c:326 src/ephy-tab.c:1138 src/ephy-tab.c:1320
 msgid "Blank page"
 msgstr "Pusta strona"
 
-#: src/ephy-tab.c:744
+#: src/ephy-tab.c:745
 msgid "site"
 msgstr "witryny"
 
-#: src/ephy-tab.c:768
+#: src/ephy-tab.c:769
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Przekierowanie do %s..."
 
-#: src/ephy-tab.c:772
+#: src/ephy-tab.c:773
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Pobieranie danych z %s..."
 
-#: src/ephy-tab.c:776
+#: src/ephy-tab.c:777
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Oczekiwanie na autoryzację od %s..."
 
-#: src/ephy-tab.c:784
+#: src/ephy-tab.c:785
 #, c-format
 msgid "Loading %s..."
 msgstr "Wczytywanie %s..."
@@ -3087,15 +3090,15 @@ msgstr "Zakończ tryb pełnoekranowy"
 
 #: src/ephy-window.c:671
 msgid "_Close document"
-msgstr ""
+msgstr "Zamkn_ij dokument"
 
 #: src/ephy-window.c:698
 msgid "There are unsubmitted changes to form elements."
-msgstr ""
+msgstr "Pozostały niewysłane zmiany elementów formularza."
 
 #: src/ephy-window.c:699
 msgid "If you close the document anyway, you will lose that information."
-msgstr ""
+msgstr "Jeżeli zamkniesz dokument, stracisz tą informację."
 
 #: src/ephy-window.c:894 src/window-commands.c:390
 msgid "Open"
@@ -3184,7 +3187,6 @@ msgid "No"
 msgstr "Nie"
 
 #: src/pdm-dialog.c:926
-#, fuzzy
 msgid "Expires:"
 msgstr "Traci ważność:"
 
@@ -3414,21 +3416,19 @@ msgstr "Dowolny [%s]"
 
 #: src/prefs-dialog.c:1095
 msgid "Desktop"
-msgstr ""
+msgstr "Pulpit"
 
 #. Note that this does NOT refer to the home page but to a
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
 #: src/prefs-dialog.c:1104
-#, fuzzy
 msgid "Home"
-msgstr "_Początek"
+msgstr "Początek"
 
 #: src/prefs-dialog.c:1314
-#, fuzzy
 msgid "Select a directory"
-msgstr "Utworzenie katalogu %s nie powiodło się."
+msgstr "Wybierz katalog"
 
 #: src/toolbar.c:332
 msgid "Back"
@@ -3498,3 +3498,6 @@ msgstr "GNOME PL Team <translators@gnome.pl>"
 #: src/window-commands.c:969
 msgid "A GNOME browser based on Mozilla"
 msgstr "Przeglądarka WWW GNOME oparta na projekcie Mozilla"
+
+#~ msgid "Pause"
+#~ msgstr "Wstrzymaj"
