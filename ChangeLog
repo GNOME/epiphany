@@ -1,5 +1,12 @@
 2004-07-31  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-window.c: (update_exit_fullscreen_popup_position),
+	(size_changed_cb), (ephy_window_destroy), (add_widget):
+
+	Disconnect from screen's size-changed on finalize too.
+
+2004-07-31  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/EphyBrowser.cpp:
 
 	Use nsIDOMWindow2 to get the event target for mozilla >= 1.7rc3.

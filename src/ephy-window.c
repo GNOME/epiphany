@@ -391,6 +391,33 @@ ephy_window_get_type (void)
 }
 
 static void
+update_exit_fullscreen_popup_position (EphyWindow *window)
+{
+	GdkRectangle screen_rect;
+        int popup_height;
+
+        g_return_if_fail (window->priv->exit_fullscreen_popup != NULL);
+
+        gtk_window_get_size (GTK_WINDOW (window->priv->exit_fullscreen_popup),
+                             NULL, &popup_height);
+
+        gdk_screen_get_monitor_geometry (gdk_screen_get_default (),
+                        gdk_screen_get_monitor_at_window
+                        (gdk_screen_get_default (),
+                         GTK_WIDGET (window)->window),
+                         &screen_rect);
+
+        gtk_window_move (GTK_WINDOW (window->priv->exit_fullscreen_popup),
+                        screen_rect.x, screen_rect.height - popup_height);
+}
+
+static void
+size_changed_cb (GdkScreen *screen, EphyWindow *window)
+{
+	update_exit_fullscreen_popup_position (window);
+}
+
+static void
 ephy_window_destroy (GtkObject *gtkobject)
 {
 	EphyWindow *window = EPHY_WINDOW (gtkobject);
@@ -410,6 +437,10 @@ ephy_window_destroy (GtkObject *gtkobject)
 
 	if (window->priv->exit_fullscreen_popup)
 	{
+		g_signal_handlers_disconnect_by_func
+			(gdk_screen_get_default (),
+			 G_CALLBACK (size_changed_cb), window);
+
 		gtk_widget_destroy (window->priv->exit_fullscreen_popup);
 		window->priv->exit_fullscreen_popup = NULL;
 	}
@@ -422,33 +453,6 @@ add_widget (GtkUIManager *merge, GtkWidget *widget, EphyWindow *window)
 {
 	gtk_box_pack_start (GTK_BOX (window->priv->menu_dock),
 			    widget, FALSE, FALSE, 0);
-}
-
-static void
-update_exit_fullscreen_popup_position (EphyWindow *window)
-{
-	GdkRectangle screen_rect;
-	int popup_height;
-
-	g_return_if_fail (window->priv->exit_fullscreen_popup != NULL);
-
-	gtk_window_get_size (GTK_WINDOW (window->priv->exit_fullscreen_popup),
-                             NULL, &popup_height);
-
-	gdk_screen_get_monitor_geometry (gdk_screen_get_default (),
-                        gdk_screen_get_monitor_at_window
-                        (gdk_screen_get_default (),
-                         GTK_WIDGET (window)->window),
-                         &screen_rect);
-
-	gtk_window_move (GTK_WINDOW (window->priv->exit_fullscreen_popup),
-                        screen_rect.x, screen_rect.height - popup_height);
-}
-
-static void
-size_changed_cb (GdkScreen *screen, EphyWindow *window)
-{
-	update_exit_fullscreen_popup_position (window);
 }
 
 static void
