@@ -69,6 +69,7 @@ struct EphyNodeViewPrivate
 
 	int searchable_data_column;
 
+	gboolean drag_started;
 	int drag_button;
 	int drag_x;
         int drag_y;
@@ -247,8 +248,6 @@ drag_motion_cb (GtkWidget *widget,
 	gboolean res;
 	EphyNodeViewPriority priority;
 
-	g_signal_stop_emission_by_name (widget, "drag_motion");
-
 	res = gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
 					         x, y, &path, &pos);
 	if (!res) return TRUE;
@@ -285,8 +284,6 @@ drag_drop_cb (GtkWidget *widget,
 {
 	GdkAtom target;
 
-	g_signal_stop_emission_by_name (widget, "drag_drop");
-
 	target = gtk_drag_dest_find_target (widget, context,
 					    view->priv->drag_targets);
 
@@ -311,8 +308,6 @@ drag_data_received_cb (GtkWidget *widget,
 	GtkTreePath *path = NULL;
 	GtkTreeViewDropPosition pos;
 
-	g_signal_stop_emission_by_name (widget, "drag_data_received");
-
 	if (gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
 					       x, y, &path, &pos))
 	{
@@ -329,6 +324,8 @@ drag_data_received_cb (GtkWidget *widget,
 
 		gtk_tree_path_free (path);
 	}
+
+	g_signal_stop_emission_by_name (widget, "drag_data_received");
 
 	return TRUE;
 }
@@ -538,6 +535,38 @@ stop_drag_check (EphyNodeView *view)
         view->priv->drag_button = 0;
 }
 
+static gboolean
+button_event_modifies_selection (GdkEventButton *event)
+{
+	return (event->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) != 0;
+}
+
+static void
+did_not_drag (EphyNodeView *view,
+              GdkEventButton *event)
+{
+        GtkTreeView *tree_view;
+        GtkTreeSelection *selection;
+        GtkTreePath *path;
+                                                                                                                              
+        tree_view = GTK_TREE_VIEW (view);
+        selection = gtk_tree_view_get_selection (tree_view);
+                                                                                                                              
+        if (gtk_tree_view_get_path_at_pos (tree_view, event->x, event->y,
+                                           &path, NULL, NULL, NULL))
+	{
+                if((event->button == 1 || event->button == 2) &&
+                   gtk_tree_selection_path_is_selected (selection, path) &&
+                   !button_event_modifies_selection (event))
+		{
+                        gtk_tree_selection_unselect_all (selection);
+                        gtk_tree_selection_select_path (selection, path);
+                }
+                                                                                                                              
+                gtk_tree_path_free (path);
+        }                                                                                                              
+}
+
 static void
 drag_data_get_cb (GtkWidget *widget,
                   GdkDragContext *context,
@@ -577,6 +606,11 @@ button_release_cb (GtkWidget *widget,
         if (event->button == view->priv->drag_button)
 	{
 		stop_drag_check (view);
+		if (!view->priv->drag_started)
+		{
+                        did_not_drag (view, event);
+                        return TRUE;
+                }
         }
         return FALSE;
 }
@@ -606,6 +640,7 @@ motion_notify_cb (GtkWidget *widget,
                                  (GdkEvent*)event);
 
 			stop_drag_check (view);
+			view->priv->drag_started = TRUE;
 
 			ref_list = get_selection_refs (GTK_TREE_VIEW (widget));
 			g_object_set_data_full (G_OBJECT (context),
@@ -618,12 +653,6 @@ motion_notify_cb (GtkWidget *widget,
 	}
 
 	return TRUE;
-}
-
-static gboolean
-button_event_modifies_selection (GdkEventButton *event)
-{
-	return (event->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) != 0;
 }
 
 static gboolean
@@ -672,6 +701,7 @@ ephy_node_view_button_press_cb (GtkWidget *treeview,
 		}
 		else if (event->button == 1)
 		{
+			view->priv->drag_started = FALSE;
 			view->priv->drag_button = event->button;
 	                view->priv->drag_x = event->x;
 	                view->priv->drag_y = event->y;

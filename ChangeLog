@@ -1,3 +1,15 @@
+2003-08-19  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-node-view.c: (drag_motion_cb), (drag_drop_cb),
+	(drag_data_received_cb), (button_event_modifies_selection),
+	(did_not_drag), (button_release_cb), (motion_notify_cb),
+	(ephy_node_view_button_press_cb):
+
+	Stop signals only when necessary on drag dest custom
+	implementation.
+	Make click on multiple selection deselect all but the
+	clicked element.
+
 2003-08-19  Marco Pesenti Gritti  <marco@.gnome.org>
 
 	* embed/ephy-embed.c: (ephy_embed_activate):
