@@ -122,6 +122,9 @@ ephy_bookmarks_import (EphyBookmarks *bookmarks,
 
 typedef enum
 {
+	STATE_START,
+	STATE_STOP,
+	STATE_XBEL,
 	STATE_FOLDER,
 	STATE_BOOKMARK,
 	STATE_TITLE,
@@ -306,7 +309,7 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader)
 				list = g_list_prepend (list, node);
 			}
 		}
-		else if ((xmlStrEqual (tag, "folder") || xmlStrEqual (tag, "xbel"))
+		else if ((xmlStrEqual (tag, "folder"))
 			&& state == STATE_FOLDER)
 		{
 			if (type == XML_READER_TYPE_ELEMENT)
@@ -393,6 +396,93 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader)
 	}
 
 	return list;
+}
+
+static void
+xbel_parse_xbel (EphyBookmarks *eb, xmlTextReaderPtr reader)
+{
+	EphyXBELImporterState state = STATE_XBEL;
+	int ret;
+
+	ret = xmlTextReaderRead (reader);
+
+	while (ret == 1 && state != STATE_STOP)
+	{
+		xmlChar *tag;
+		xmlReaderTypes type;
+
+		tag = xmlTextReaderName (reader);
+		type = xmlTextReaderNodeType (reader);
+
+		if (tag == NULL)
+		{
+			/* shouldn't happen but does anyway :( */
+		}
+		else if (xmlStrEqual (tag, "bookmark") && type == XML_READER_TYPE_ELEMENT
+			 && state == STATE_FOLDER)
+		{
+			/* this will eat the </bookmark> too */
+			xbel_parse_bookmark (eb, reader);
+		}
+		else if (xmlStrEqual (tag, "folder") && type == XML_READER_TYPE_ELEMENT
+			 && state == STATE_XBEL)
+		{
+			GList *list;
+
+			/* this will eat the </folder> too */
+			list = xbel_parse_folder (eb, reader);
+
+			g_list_free (list);
+		}
+		else if ((xmlStrEqual (tag, "xbel")) && type == XML_READER_TYPE_ELEMENT
+			 && state == STATE_START)
+		{
+			state = STATE_XBEL;
+		}
+		else if ((xmlStrEqual (tag, "xbel")) && type == XML_READER_TYPE_END_ELEMENT
+			 && state == STATE_XBEL)
+		{
+			state = STATE_STOP;
+		}
+		else if (xmlStrEqual (tag, "title"))
+		{
+			if (type == XML_READER_TYPE_ELEMENT && state == STATE_XBEL)
+			{
+				state = STATE_TITLE;
+			}
+			else if (type == XML_READER_TYPE_END_ELEMENT && state == STATE_TITLE)
+			{
+				state = STATE_XBEL;
+			}
+		}
+		else if (xmlStrEqual (tag, "info"))
+		{
+			if (type == XML_READER_TYPE_ELEMENT && state == STATE_XBEL)
+			{
+				state = STATE_INFO;
+			}
+			else if (type == XML_READER_TYPE_END_ELEMENT && state == STATE_INFO)
+			{
+				state = STATE_XBEL;
+			}
+		}
+		else if (xmlStrEqual (tag, "desc"))
+		{
+			if (type == XML_READER_TYPE_ELEMENT && state == STATE_XBEL)
+			{
+				state = STATE_DESC;
+			}
+			else if (type == XML_READER_TYPE_END_ELEMENT && state == STATE_DESC)
+			{
+				state = STATE_XBEL;
+			}
+		}
+
+		xmlFree (tag);
+
+		/* next one, please */
+		ret = xmlTextReaderRead (reader);
+	}
 }
 
 /* Mozilla/Netscape import */
@@ -659,7 +749,6 @@ ephy_bookmarks_import_xbel (EphyBookmarks *bookmarks,
 			    const char *filename)
 {
 	xmlTextReaderPtr reader;
-	GList *list;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
 
@@ -674,9 +763,8 @@ ephy_bookmarks_import_xbel (EphyBookmarks *bookmarks,
 		return FALSE;
 	}
 
-	list = xbel_parse_folder (bookmarks, reader);
+	xbel_parse_xbel (bookmarks, reader);
 
-	g_list_free (list);
 	xmlFreeTextReader (reader);
 
 	return TRUE;
