@@ -522,6 +522,7 @@ nsresult EphyBrowser::GetDocumentUrl (nsCString &url)
 	nsCOMPtr<nsIURI> uri;
 	doc->GetDocumentURL(getter_AddRefs(uri));
 #endif
+	if (!uri) return NS_ERROR_FAILURE;
 
 	return uri->GetSpec (url);
 }
@@ -545,10 +546,9 @@ nsresult EphyBrowser::GetTargetDocumentUrl (nsCString &url)
         nsCOMPtr<nsIURI> uri;
         doc->GetDocumentURL(getter_AddRefs(uri));
 #endif
+	if (!uri) return NS_ERROR_FAILURE;
 
-        uri->GetSpec (url);
-
-        return NS_OK;
+	return uri->GetSpec (url);
 }
 
 nsresult EphyBrowser::ForceEncoding (const char *encoding) 
