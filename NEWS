@@ -1,4 +1,69 @@
 ==============
+Epiphany 1.5.5
+==============
+
+New features
+
+
+Interface improvements
+
+	* Improved the fullscreen interface: show security and status indicator
+	  in the popup, use new stock icon; and show it only if the toolbar is
+	  hidden; otherwise embed it in the toolbar [#153270, #164676]
+	* Added favicon and security icon to location entry [#116482, #149506]
+	* Renamed Remove action on bookmarksbar context menu [#162132]
+	* Don't focus the zoom combo on click
+	* Don't use <tt> in the strings [#163378]
+	* Fix button text and capitalisation in the confirm-redirect-update
+	  dialogue [#164131]
+	* Unify accels to Open in New _Window[s] [#164130]
+	* Show profile name for mozilla bookmarks, so we can distinguish
+	  between different profiles. Don't show firefox bookmarks as mozilla
+	  bookmarks [#143982]
+	* Ellipsize the value and path labels in the cookie content dialogue
+
+Code changes
+
+	* Add GDK_ACTION_ASK, and prefer _NETSCAPE_URL over uri-list drag types,
+	  to match the new Nautilus _NETSCAPE_URL DnD behaviour [#163937]
+	* Simplify cookie struct
+	* Add a function to get the default ephy_shell, making it easier for
+	  bindings to get it
+	* Add boxed type for EphyNode
+	* Rename the password manager's methods to give better names in the bindings
+	* Remove useless ephy_node_get_property_time method
+	* Make ephy-bookmarks.h's enum a named enum, generate type.[ch] for it and
+	  make sure our enum type is registered
+	* Added ephy_statusbar_remove_widget()
+	* Add proper _NETSCAPE_URL drag support, supplying the URL as well as the
+	  title [#163937]
+	* Default typeaheadfindsea to on [#157435]
+	* Set typeaheadfind.autostart to off [#141963]
+	* Don't allow javascript to capture the context menu call
+	* Divert the contract ID of the nsSecureBrowserUIImpl class [#164670]
+
+Documentation
+
+	* Some gtk-doc fixes
+
+Bug fixes
+
+	* Fix parallel (make -j) builds
+	* Fix primary text of confirm-close command not to have a period
+	* Remove stamp files also on make clean
+	* Fix mem leak [#164302]
+	* Really make confirm-overwrite dialogue have a parent window [#164189]
+
+Contributors:
+Jorn Baayen, Piers Cornwell, Crispin Flowerday, Adam Hooper, Tomasz Kłoczko,
+Jean-François Rameau, and Matthew Schick, and the translators
+Vladimir Petkov (bg), Miloslav Trmac (cs), Rhys Jones (cy), Frank Arnold (de),
+Adam Weinberger (en_CA), Francisco Javier F. Serrador (es), Ivar Smolin (et),
+Takeshi AIHANA (ja), Žygimantas Beručka (lt), Marcel Telka (sk),
+Laurent Dhima (sq), Christian Rose (sv) and Liu Songhe (zh_CN)
+
+
+==============
 Epiphany 1.5.4
 ==============
 
