@@ -147,7 +147,7 @@ ephy_bookmarks_editor_dispose (GObject *object)
 			G_OBJECT_CLASS (parent_class)->dispose (object);
 			return;
 		}
-		
+
 		selected_id = ephy_node_get_id (EPHY_NODE (selection->data));
 		if (selected_id >= 0)
 		{
@@ -156,7 +156,7 @@ ephy_bookmarks_editor_dispose (GObject *object)
 					      selected_id_str);
 			g_free (selected_id_str);
 		}
-		
+
 		g_list_free (selection);
 
 		editor->priv->key_view = NULL;
@@ -208,7 +208,7 @@ ephy_bookmarks_editor_node_selected_cb (GtkWidget *view,
 		gtk_entry_set_text (GTK_ENTRY (editor->priv->keywords_entry),
 				    keywords ? g_strdup (keywords) : "");
 		gtk_entry_set_text (GTK_ENTRY (editor->priv->location_entry),
-				    location ? g_strdup (location) : "");	
+				    location ? g_strdup (location) : "");
 		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->title_entry), TRUE);
 		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->keywords_entry), TRUE);
 		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->location_entry), TRUE);
@@ -253,7 +253,7 @@ ephy_bookmarks_editor_go_to_location (EphyBookmarksEditor *editor)
 	if (selection != NULL)
 	{
 		EphyNode *bm = EPHY_NODE (selection->data);
-		
+
 		location = ephy_node_get_property_string (bm,
 				EPHY_NODE_BMK_PROP_LOCATION);
 		g_return_if_fail (location != NULL);
@@ -513,7 +513,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 
 	gtk_dialog_set_has_separator (GTK_DIALOG (editor), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (editor), 6);
-	gtk_widget_set_size_request (GTK_WIDGET (editor), 600, 400);
+	gtk_widget_set_size_request (GTK_WIDGET (editor), 500, 400);
 	g_signal_connect (G_OBJECT (editor),
 			  "response",
 			  G_CALLBACK (ephy_bookmarks_editor_response_cb),
@@ -533,7 +533,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	ephy_node_view_add_column (key_view, _("Keywords"),
 			           EPHY_TREE_MODEL_NODE_COL_KEYWORD, FALSE);
 	gtk_box_pack_start (GTK_BOX (hbox), GTK_WIDGET (key_view), FALSE, TRUE, 0);
-	gtk_widget_set_size_request (GTK_WIDGET (key_view), 180, -1);
+	gtk_widget_set_size_request (GTK_WIDGET (key_view), 130, -1);
 	gtk_widget_show (GTK_WIDGET (key_view));
 	editor->priv->key_view = key_view;
 	g_signal_connect (G_OBJECT (key_view),
