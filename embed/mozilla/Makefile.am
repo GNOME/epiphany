@@ -12,7 +12,7 @@ libephymozillaembed_la_SOURCES = 	\
 	EphyBrowser.cpp                 \
 	EphyBrowser.h	                \
 	EphyHistoryListener.cpp		\
-	EphyHIstoryListener.h		\
+	EphyHistoryListener.h		\
 	EphySingle.cpp			\
 	EphySingle.h			\
 	EphyUtils.cpp			\
