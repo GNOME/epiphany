@@ -1,5 +1,12 @@
 2004-03-05  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+
+	Replace filename validity check, it was making the filename invalid
+	UTF-16. Simply convert to UTF-8 beforehand and check for "/" chars.
+
+2004-03-05  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-tab.c: (ephy_tab_address_cb), (ephy_tab_title_cb),
 	(ensure_page_info), (ephy_tab_net_state_cb),
 	(clipboard_text_received_cb), (ephy_tab_dom_mouse_click_cb),

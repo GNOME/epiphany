@@ -332,25 +332,22 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 	}
         
 	/* Validate the file name to ensure legality. */
-	for (PRUint32 i = 0; i < defaultFileName.Length(); i++)
-	{
-		if (defaultFileName[i] == ':' || defaultFileName[i] == '/')
-		{
-			defaultFileName.SetCharAt(i, PRUnichar(' '));
-		}
-	}
+	char *default_name = g_strdup (NS_ConvertUCS2toUTF8 (defaultFileName).get());
+	default_name = g_strdelimit (default_name, "/", ' ');
 
 	const char *key;
 	key = ephy_embed_persist_get_persist_key (EPHY_EMBED_PERSIST (mEmbedPersist));
 
         char *filename;
-        filename = gnome_vfs_unescape_string (NS_ConvertUCS2toUTF8 (defaultFileName).get(), NULL);
-        
+        filename = gnome_vfs_unescape_string (default_name, NULL);
+
         if (!g_utf8_validate (filename, -1, NULL))
         {
                 g_free (filename);
-                filename = g_strdup (NS_ConvertUCS2toUTF8(defaultFileName).get());
+                filename = g_strdup (default_name);
         }
+
+	g_free (default_name);
 
 	if (askDownloadDest)
 	{
