@@ -134,8 +134,8 @@ typedef enum
 	STATE_SMARTURL
 } EphyXBELImporterState;
 
-static EphyNode *
-xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader)
+static int
+xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader, EphyNode **ret_node)
 {
 	EphyXBELImporterState state = STATE_BOOKMARK;
 	EphyNode *node;
@@ -145,11 +145,11 @@ xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader)
 
 	while (ret == 1)
 	{
-		xmlChar *tag;
+		const xmlChar *tag;
 		xmlReaderTypes type;
 
-		tag = xmlTextReaderName (reader);
-		g_return_val_if_fail (tag != NULL, NULL);
+		tag = xmlTextReaderConstName (reader);
+		g_return_val_if_fail (tag != NULL, ret);
 
 		type = xmlTextReaderNodeType (reader);
 
@@ -238,13 +238,14 @@ xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader)
 			}
 		}
 
-		xmlFree (tag);
-
 		/* next one, please */
 		ret = xmlTextReaderRead (reader);
 	}
 
-	g_return_val_if_fail (address != NULL, NULL);
+	if (address == NULL)
+	{
+		return ret;
+	}
 
 	if (title == NULL)
 	{
@@ -261,11 +262,13 @@ xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader)
 	xmlFree (title);
 	xmlFree (address);
 
-	return node;
+	*ret_node = node;
+
+	return ret;
 }
 
-static GList *
-xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader)
+static int
+xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, GList **ret_list)
 {
 	EphyXBELImporterState state = STATE_FOLDER;
 	EphyNode *keyword;
@@ -277,10 +280,10 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader)
 
 	while (ret == 1)
 	{
-		xmlChar *tag;
+		const xmlChar *tag;
 		xmlReaderTypes type;
 
-		tag = xmlTextReaderName (reader);
+		tag = xmlTextReaderConstName (reader);
 		type = xmlTextReaderNodeType (reader);
 
 		if (tag == NULL)
@@ -300,25 +303,29 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader)
 		}
 		else if (xmlStrEqual (tag, "bookmark") && type == 1 && state == STATE_FOLDER)
 		{
-			EphyNode *node;
+			EphyNode *node = NULL;
 
-			node = xbel_parse_bookmark (eb, reader);
+			ret = xbel_parse_bookmark (eb, reader, &node);
 
 			if (EPHY_IS_NODE (node))
 			{
 				list = g_list_prepend (list, node);
 			}
+
+			if (ret != 1) break;
 		}
 		else if ((xmlStrEqual (tag, "folder"))
 			&& state == STATE_FOLDER)
 		{
 			if (type == XML_READER_TYPE_ELEMENT)
 			{
-				GList *sublist;
+				GList *sublist = NULL;
 
-				sublist = xbel_parse_folder (eb, reader);
+				ret = xbel_parse_folder (eb, reader, &sublist);
 
 				list = g_list_concat (list, sublist);
+				
+				if (ret != 1) break;
 			}
 			else if (type == XML_READER_TYPE_END_ELEMENT)
 			{
@@ -365,8 +372,6 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader)
 			/* eat it */
 		}
 
-		xmlFree (tag);
-
 		/* next one, please */
 		ret = xmlTextReaderRead (reader);
 	}
@@ -374,7 +379,8 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader)
 	/* tag all bookmarks in the list with keyword %title */
 	if (title == NULL || title[0] == '\0')
 	{
-		return list;
+		*ret_list = list;
+		return ret;
 	}
 
 	keyword = ephy_bookmarks_find_keyword (eb, title, FALSE);
@@ -386,7 +392,11 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader)
 
 	xmlFree (title);
 
-	if (keyword == NULL) return list;
+	if (keyword == NULL)
+	{
+		*ret_list = list;
+		return ret;
+	}
 
 	for (l = list; l != NULL; l = l->next)
 	{
@@ -395,10 +405,12 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader)
 		ephy_bookmarks_set_keyword (eb, keyword, node);
 	}
 
-	return list;
+	*ret_list = list;
+
+	return ret;
 }
 
-static void
+static int
 xbel_parse_xbel (EphyBookmarks *eb, xmlTextReaderPtr reader)
 {
 	EphyXBELImporterState state = STATE_XBEL;
@@ -408,10 +420,10 @@ xbel_parse_xbel (EphyBookmarks *eb, xmlTextReaderPtr reader)
 
 	while (ret == 1 && state != STATE_STOP)
 	{
-		xmlChar *tag;
+		const xmlChar *tag;
 		xmlReaderTypes type;
 
-		tag = xmlTextReaderName (reader);
+		tag = xmlTextReaderConstName (reader);
 		type = xmlTextReaderNodeType (reader);
 
 		if (tag == NULL)
@@ -421,18 +433,24 @@ xbel_parse_xbel (EphyBookmarks *eb, xmlTextReaderPtr reader)
 		else if (xmlStrEqual (tag, "bookmark") && type == XML_READER_TYPE_ELEMENT
 			 && state == STATE_FOLDER)
 		{
+			EphyNode *node = NULL;
+
 			/* this will eat the </bookmark> too */
-			xbel_parse_bookmark (eb, reader);
+			ret = xbel_parse_bookmark (eb, reader, &node);
+
+			if (ret != 1) break;
 		}
 		else if (xmlStrEqual (tag, "folder") && type == XML_READER_TYPE_ELEMENT
 			 && state == STATE_XBEL)
 		{
-			GList *list;
+			GList *list = NULL;
 
 			/* this will eat the </folder> too */
-			list = xbel_parse_folder (eb, reader);
+			ret = xbel_parse_folder (eb, reader, &list);
 
 			g_list_free (list);
+
+			if (ret != 1) break;
 		}
 		else if ((xmlStrEqual (tag, "xbel")) && type == XML_READER_TYPE_ELEMENT
 			 && state == STATE_START)
@@ -478,11 +496,11 @@ xbel_parse_xbel (EphyBookmarks *eb, xmlTextReaderPtr reader)
 			}
 		}
 
-		xmlFree (tag);
-
 		/* next one, please */
 		ret = xmlTextReaderRead (reader);
 	}
+
+	return ret;
 }
 
 /* Mozilla/Netscape import */
@@ -749,6 +767,7 @@ ephy_bookmarks_import_xbel (EphyBookmarks *bookmarks,
 			    const char *filename)
 {
 	xmlTextReaderPtr reader;
+	int ret;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
 
@@ -763,11 +782,11 @@ ephy_bookmarks_import_xbel (EphyBookmarks *bookmarks,
 		return FALSE;
 	}
 
-	xbel_parse_xbel (bookmarks, reader);
+	ret = xbel_parse_xbel (bookmarks, reader);
 
 	xmlFreeTextReader (reader);
 
-	return TRUE;
+	return ret >= 0 ? TRUE : FALSE;
 }
 
 #define OLD_RDF_TEMPORARY_HACK

@@ -1,5 +1,14 @@
 2004-03-06  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-import.c: (xbel_parse_bookmark),
+	(xbel_parse_folder), (xbel_parse_xbel),
+	(ephy_bookmarks_import_xbel):
+
+	Really always check the return value of xmlTextReaderRead(), don't advance
+	if it's != 1. Fixes bug #136151.
+
+2004-03-06  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-notebook.c: (notebook_drag_data_received_cb):
 
 	Fix crash when dragging a link to a tab label; I forgot to change
