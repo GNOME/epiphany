@@ -27,7 +27,7 @@ desktop_DATA = $(DESKTOP_FILES)
 applicationsdir = $(datadir)/application-registry
 applications_DATA = epiphany.applications
 
-schemadir = $(sysconfdir)/gconf/schemas
+schemadir = $(GCONF_SCHEMA_FILE_DIR)
 schema_in_files = epiphany.schemas.in epiphany-lockdown.schemas.in
 schema_DATA = epiphany.schemas epiphany-lockdown.schemas
 
@@ -41,11 +41,13 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = epiphany-1.0.pc
 
 install-data-local:
+if GCONF_SCHEMAS_INSTALL
 	if test -z "$(DESTDIR)" ; then \
 	for p in $(schema_DATA) ; do \
 	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(top_builddir)/data/$$p; \
 	done \
         fi
+endif
 
 EXTRA_DIST = $(NAUTILUS_VIEW_SERVER)	\
 	     $(server_in_files)     	\
