@@ -1,0 +1,56 @@
+<ui>
+<menubar>
+
+<menu name="FileMenu" action="File">
+ 	<menuitem name="FileNewTopic" action="NewTopic"/>
+	<separator name="FileSep1"/>
+        <menuitem name="FileOpenInWindow" action="OpenInWindow"/>
+	<menuitem name="FileOpenInTab" action="OpenInTab"/>
+	<separator name="FileSep2"/>
+	<menuitem name="FileRename" action="Rename"/>
+	<menuitem name="FileDelete" action="Delete"/>
+	<separator name="FileSep3"/>
+	<menuitem name="FileShowInBookmarksBar" action="ShowInBookmarksBar"/>
+	<menuitem name="FileProperties" action="Properties"/>
+	<separator name="FileSep4"/>
+	<menuitem name="FileImport" action="Import"/>
+	<separator name="FileSep5"/>
+	<menuitem name="FileClose" action="Close"/>
+</menu>
+
+<menu name="EditMenu" action="Edit">
+	<menuitem name="EditCut" action="Cut"/>
+	<menuitem name="EditCopy" action="Copy"/>
+	<menuitem name="EditPaste" action="Paste"/>
+	<menuitem name="EditSelectAll" action="SelectAll"/>
+</menu>
+
+<menu name="HelpMenu" action="Help">
+	<menuitem name="HelpContents" action="HelpContents"/>
+	<menuitem name="HelpAbout" action="HelpAbout"/>
+</menu>
+
+</menubar>
+
+<popup name="EphyBookmarkEditorPopup" action="PopupAction">
+	<menuitem name="OpenInWindowBMK" action="OpenInWindow"/>
+	<menuitem name="OpenInTabBMK" action="OpenInTab"/>
+	<separator name="BookmarksPopupSep1"/>
+	<menuitem name="CopyBMK" action="Copy"/>
+	<separator name="BookmarksPopupSep2"/>
+	<menuitem name="RenameBMK" action="Rename"/>
+	<menuitem name="DeleteBMK" action="Delete"/>
+	<separator name="BookmarksPopupSep3"/>
+	<menuitem name="ShowInBookmarksBarBMK" action="ShowInBookmarksBar"/>
+	<separator name="BookmarksPopupSep4"/>
+	<menuitem name="BMKProperties" action="Properties"/>
+</popup>
+
+<popup name="EphyBookmarkKeywordPopup" action="PopupAction">
+	<menuitem name="RenameTPC" action="Rename"/>
+	<menuitem name="DeleteTPC" action="Delete"/>
+	<separator name="TopicPopupSep3"/>
+	<menuitem name="ShowInBookmarksBarTPC" action="ShowInBookmarksBar"/>
+</popup>
+
+</ui>

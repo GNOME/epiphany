@@ -1,3 +1,41 @@
+2003-09-19  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* data/ui/Makefile.am:
+	* data/ui/epiphany-bookmark-editor-ui.xml.in:
+	* data/ui/epiphany-fs-toolbar.xml:
+	* data/ui/epiphany-history-window-ui.xml.in:
+	* data/ui/epiphany-toolbar.xml.in:
+	* data/ui/epiphany-ui.xml.in:
+
+	Do not use .in for not to translate files.
+
+	* lib/egg/egg-editable-toolbar.c: (create_toolbar),
+	(toolbars_clean), (egg_editable_toolbar_construct),
+	(egg_editable_toolbar_set_model), (egg_editable_toolbar_set_merge):
+	* lib/egg/egg-toolbars-model.c: (parse_toolbars):
+
+	Handle change of properties correctly. Add a toolbar
+	style property in the xml.
+
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(ephy_bookmark_properties_init):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_init):
+	* src/ephy-shell.c: (ephy_shell_init), (ephy_shell_finalize),
+	(ephy_shell_get_toolbars_model):
+	* src/ephy-shell.h:
+	* src/ephy-window.c: (ephy_window_fullscreen),
+	(ephy_window_unfullscreen):
+	* src/toolbar.c: (bookmark_destroy_cb), (toolbar_ensure_action),
+	(init_bookmarks_toolbar), (init_normal_mode),
+	(init_fullscreen_mode), (window_state_event_cb),
+	(toolbar_set_window), (toolbar_set_visibility):
+	* src/toolbar.h:
+	* src/window-commands.c: (toolbar_editor_response_cb),
+	(window_cmd_edit_toolbar):
+
+	Special, more compact, toolbar layout for fullscreen.
+
 2003-09-18  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/ephy-favicon-action.c: (ephy_favicon_action_class_init):

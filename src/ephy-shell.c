@@ -69,6 +69,7 @@ struct EphyShellPrivate
 	EphyAutocompletion *autocompletion;
 	EphyBookmarks *bookmarks;
 	EphyToolbarsModel *toolbars_model;
+	EggToolbarsModel *fs_toolbars_model;
 	GtkWidget *bme;
 	GtkWidget *history_window;
 	GList *plugins;
@@ -204,6 +205,7 @@ ephy_shell_init (EphyShell *gs)
 	gs->priv->bme = NULL;
 	gs->priv->history_window = NULL;
 	gs->priv->toolbars_model = NULL;
+	gs->priv->fs_toolbars_model = NULL;
 	gs->priv->plugins = NULL;
 
 	ephy_shell = gs;
@@ -261,6 +263,12 @@ ephy_shell_finalize (GObject *object)
 	if (gs->priv->toolbars_model)
 	{
 		g_object_unref (G_OBJECT (gs->priv->toolbars_model));
+	}
+
+	LOG ("Unref fullscreen toolbars model")
+	if (gs->priv->fs_toolbars_model)
+	{
+		g_object_unref (G_OBJECT (gs->priv->fs_toolbars_model));
 	}
 
 	LOG ("Unref session")
@@ -563,21 +571,38 @@ ephy_shell_get_bookmarks (EphyShell *gs)
 }
 
 GObject *
-ephy_shell_get_toolbars_model (EphyShell *gs)
+ephy_shell_get_toolbars_model (EphyShell *gs, gboolean fullscreen)
 {
-	if (gs->priv->toolbars_model == NULL)
+	if (fullscreen)
 	{
-		EphyBookmarks *bookmarks;
+		if (gs->priv->fs_toolbars_model == NULL)
+		{
+			const char *xml;
 
-		bookmarks = ephy_shell_get_bookmarks (gs);
+			gs->priv->fs_toolbars_model = egg_toolbars_model_new ();
+			xml = ephy_file ("epiphany-fs-toolbar.xml");
+			egg_toolbars_model_load (gs->priv->fs_toolbars_model, xml);
+		}
 
-		gs->priv->toolbars_model = ephy_toolbars_model_new (bookmarks);
-
-		g_object_set (bookmarks, "toolbars_model",
-			      gs->priv->toolbars_model, NULL);
+		return G_OBJECT (gs->priv->fs_toolbars_model);
 	}
+	else
+	{
+		if (gs->priv->toolbars_model == NULL)
+		{
+			EphyBookmarks *bookmarks;
 
-	return G_OBJECT (gs->priv->toolbars_model);
+			bookmarks = ephy_shell_get_bookmarks (gs);
+
+			gs->priv->toolbars_model = ephy_toolbars_model_new (bookmarks);
+
+			g_object_set (bookmarks, "toolbars_model",
+				      gs->priv->toolbars_model, NULL);
+		}
+
+
+		return G_OBJECT (gs->priv->toolbars_model);
+	}
 }
 
 static void

@@ -42,7 +42,6 @@
 #include "ephy-encoding-menu.h"
 #include "ephy-tabs-menu.h"
 #include "ephy-stock-icons.h"
-#include "ephy-toolbars-model.h"
 #include "session.h"
 #include "ephy-favicon-cache.h"
 
@@ -497,13 +496,8 @@ static void
 ephy_window_fullscreen (EphyWindow *window)
 {
 	GtkWidget *popup, *button, *icon, *label, *hbox;
-	EphyToolbarsModel *tmodel;
 
 	window->priv->is_fullscreen = TRUE;
-
-	tmodel = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell));
-	ephy_toolbars_model_set_flag (tmodel, EGG_TB_MODEL_ICONS_ONLY);
 
 	popup = gtk_window_new (GTK_WINDOW_POPUP);
 	window->priv->exit_fullscreen_popup = popup;
@@ -541,13 +535,7 @@ ephy_window_fullscreen (EphyWindow *window)
 static void
 ephy_window_unfullscreen (EphyWindow *window)
 {
-	EphyToolbarsModel *tmodel;
-
 	window->priv->is_fullscreen = FALSE;
-
-	tmodel = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell));
-	ephy_toolbars_model_unset_flag (tmodel, EGG_TB_MODEL_ICONS_ONLY);
 
 	g_signal_handlers_disconnect_by_func (G_OBJECT (gdk_screen_get_default ()),
                                               G_CALLBACK (size_changed_cb),

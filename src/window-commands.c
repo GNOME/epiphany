@@ -663,7 +663,7 @@ toolbar_editor_response_cb (GtkDialog  *dialog,
 		break;
 	case RESPONSE_ADD_TOOLBAR:
 		model = EPHY_TOOLBARS_MODEL
-			(ephy_shell_get_toolbars_model (ephy_shell));
+			(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
 		n = egg_toolbars_model_n_toolbars (EGG_TOOLBARS_MODEL (model));
 		egg_toolbars_model_add_toolbar (EGG_TOOLBARS_MODEL (model),
 						n - 1, "UserCreated");
@@ -684,7 +684,7 @@ window_cmd_edit_toolbar (GtkAction *action,
 	GtkWidget *dialog;
 
 	model = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell));
+		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
 	t = ephy_window_get_toolbar (window);
 
 	dialog = gtk_dialog_new ();

@@ -144,7 +144,7 @@ bookmark_destroy_cb (EphyNode *node,
 	long id;
 
 	model = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell));
+		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
 
 	id = ephy_node_get_id (node);
 	name = ephy_toolbars_model_get_action_name (model, id);
@@ -167,7 +167,7 @@ toolbar_ensure_action (Toolbar *t,
 	EphyNode *bmks, *topics;
 
 	model = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell));
+		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	bmks = ephy_bookmarks_get_bookmarks (bookmarks);
 	topics = ephy_bookmarks_get_keywords (bookmarks);
@@ -373,7 +373,7 @@ init_bookmarks_toolbar (Toolbar *t)
 	int i, n_toolbars;
 
 	model = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell));
+		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
 	n_toolbars = egg_toolbars_model_n_toolbars
 		(EGG_TOOLBARS_MODEL (model));
 
@@ -461,25 +461,12 @@ location_user_changed_cb (GtkWidget *entry, Toolbar *t)
 }
 
 static void
-toolbar_set_window (Toolbar *t, EphyWindow *window)
+init_normal_mode (Toolbar *t)
 {
 	EphyToolbarsModel *model;
 
-	g_return_if_fail (t->priv->window == NULL);
-
-	t->priv->window = window;
-	t->priv->ui_merge = GTK_UI_MANAGER (window->ui_merge);
-
-	toolbar_setup_actions (t);
-	gtk_ui_manager_insert_action_group (t->priv->ui_merge,
-					    t->priv->action_group, 1);
-
-	g_signal_connect (t, "action_request",
-			  G_CALLBACK (action_request_cb),
-			  NULL);
-
 	model = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell));
+		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
 	g_signal_connect (EGG_TOOLBARS_MODEL (model), "toolbar_added",
 			  G_CALLBACK (update_toolbar_remove_flag),
 			  NULL);
@@ -488,9 +475,67 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 			  NULL);
 	g_object_set (G_OBJECT (t),
 		      "ToolbarsModel", model,
-		      "MenuMerge", t->priv->ui_merge,
 		      NULL);
 	init_bookmarks_toolbar (t);
+}
+
+static void
+init_fullscreen_mode (Toolbar *t)
+{
+	EggToolbarsModel *model;
+	
+	model = EGG_TOOLBARS_MODEL
+		(ephy_shell_get_toolbars_model (ephy_shell, TRUE));
+
+	g_object_set (G_OBJECT (t),
+		      "ToolbarsModel", model,
+		      NULL);
+}
+
+static gboolean
+window_state_event_cb (GtkWidget *widget, GdkEventWindowState *event, Toolbar *t)
+{
+	if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
+	{
+		gboolean fullscreen;
+
+		fullscreen = event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN;
+		if (fullscreen)
+		{
+			init_fullscreen_mode (t);
+		}
+		else
+		{
+			init_normal_mode (t);
+		}
+	}
+
+	return FALSE;
+}
+
+static void
+toolbar_set_window (Toolbar *t, EphyWindow *window)
+{
+	g_return_if_fail (t->priv->window == NULL);
+
+	t->priv->window = window;
+	t->priv->ui_merge = GTK_UI_MANAGER (window->ui_merge);
+
+	toolbar_setup_actions (t);
+	gtk_ui_manager_insert_action_group (t->priv->ui_merge,
+					    t->priv->action_group, 1);
+	g_signal_connect (t, "action_request",
+			  G_CALLBACK (action_request_cb),
+			  NULL);
+	g_signal_connect_object (window, "window-state-event",
+			         G_CALLBACK (window_state_event_cb),
+			         t, 0);
+
+	g_object_set (G_OBJECT (t),
+		      "MenuMerge", t->priv->ui_merge,
+		      NULL);
+
+	init_normal_mode (t);
 
 	g_signal_connect_object (get_location_entry (t), "user_changed",
 			         G_CALLBACK (location_user_changed_cb),
@@ -673,7 +718,7 @@ toolbar_set_visibility (Toolbar *t,
 	int i, n_toolbars;
 
 	model = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell));
+		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
 	n_toolbars = egg_toolbars_model_n_toolbars
 		(EGG_TOOLBARS_MODEL (model));
 

@@ -1,0 +1,159 @@
+<ui>
+<menubar>
+<menu name="FileMenu" action="File">  
+        <menuitem name="FileNewWindowMenu" action="FileNewWindow"/>
+	<menuitem name="FileNewTabMenu" action="FileNewTab"/>
+	<menuitem name="FileOpenMenu" action="FileOpen"/>
+	<separator name="FileSep1"/>	
+        <menuitem name="FileSaveAsMenu" action="FileSaveAs"/>
+	<separator name="FileSep2"/>
+	<menuitem name="FilePrintMenu" action="FilePrint"/>
+	<menuitem name="FileSendToMenu" action="FileSendTo"/>
+	<separator name="FileSep3"/>
+	<menuitem name="FileCloseWindowMenu" action="FileCloseWindow"/>
+</menu>
+
+<menu name="EditMenu" action="Edit">
+        <menuitem name="EditCutMenu" action="EditCut"/>
+        <menuitem name="EditCopyMenu" action="EditCopy"/>
+        <menuitem name="EditPasteMenu" action="EditPaste"/>
+	<separator name="EditSep1"/> 
+        <menuitem name="EditSelectAllMenu" action="EditSelectAll"/>
+	<separator name="EditSep2"/>
+	<menuitem name="EditFindMenu" action="EditFind"/>
+	<menuitem name="EditFindNextMenu" action="EditFindNext"/> 
+	<menuitem name="EditFindPrevMenu" action="EditFindPrev"/>
+	<separator name="EditSep3"/>
+	<menuitem name="EditPersonalDataMenu" action="EditPersonalData"/>
+	<menuitem name="EditToolbarMenu" action="EditToolbar"/>
+	<menuitem name="EditPrefsMenu" action="EditPrefs"/> 
+</menu>
+
+<menu name="ViewMenu" action="View">
+	<menuitem name="ViewToolbarMenu" action="ViewToolbar"/>
+	<menuitem name="ViewBookmarksBarMenu" action="ViewBookmarksBar"/>
+	<menuitem name="ViewStatusbarMenu" action="ViewStatusbar"/>
+	<menuitem name="ViewFullscreenMenu" action="ViewFullscreen"/>
+	<separator name="ViewSep1"/>
+	<menuitem name="ViewZoomInMenu" action="ViewZoomIn"/>
+	<menuitem name="ViewZoomOutMenu" action="ViewZoomOut"/>
+	<menuitem name="ViewZoomNormalMenu" action="ViewZoomNormal"/>
+	<separator name="ViewSep2"/>
+	<placeholder name="ViewEncodingsPlaceholder"/>
+	<menuitem name="ViewPageSourceMenu" action="ViewPageSource"/>
+	<separator name="ViewSep3"/>
+	<menuitem name="ViewStopMenu" action="ViewStop"/> 
+	<menuitem name="ViewReloadMenu" action="ViewReload"/>
+</menu>
+
+<menu name="GoMenu" action="Go">
+	<menuitem name="GoBackMenu" action="GoBack"/>
+	<menuitem name="GoForwardMenu" action="GoForward"/>
+	<menuitem name="GoUpMenu" action="GoUp"/>
+	<separator name="GoSep1"/>
+	<menuitem name="GoHomeMenu" action="GoHome"/>	
+	<menuitem name="GoHistoryMenu" action="GoHistory"/>
+	<separator name="GoSep2"/>
+	<menuitem name="GoLocationMenu" action="GoLocation"/>
+	<separator name="GoSep3"/>
+</menu>
+
+<menu name="BookmarksMenu" action="Bookmarks">
+	<menuitem name="BookmarksAddBookmarkMenu" action="FileBookmarkPage"/>
+	<menuitem name="BookmarksEditMenu" action="GoBookmarks"/>
+	<separator name="BookmarksSep1"/>
+</menu>
+
+<menu name="TabsMenu" action="Tabs">
+	<menuitem name="TabsPreviousMenu" action="TabsPrevious"/>
+	<menuitem name="TabsNextMenu" action="TabsNext"/>
+	<separator name="TabsSep1"/>
+	<menuitem name="TabsMoveLeftMenu" action="TabsMoveLeft"/>
+	<menuitem name="TabsMoveRightMenu" action="TabsMoveRight"/>
+        <menuitem name="TabsDetachMenu" action="TabsDetach"/>
+	<placeholder name="TabsOpen">
+	<separator name="TabsSep2"/>
+	</placeholder>
+</menu>
+
+<menu name="HelpMenu" action="Help">
+	<menuitem name="HelpContentsMenu" action="HelpContents"/>
+	<menuitem name="HelpAboutMenu" action="HelpAbout"/>
+</menu>
+</menubar>
+
+<popup name="EphyInputPopup" action="PopupAction">
+	<menuitem name="EditCutIP" action="EditCut"/> 
+	<menuitem name="EditCopyIP" action="EditCopy"/>
+	<menuitem name="EditPasteIP" action="EditPaste"/>
+</popup>
+<popup name="EphyTextPopup" action="PopupAction">
+	<menuitem name="EditCopyTP" action="EditCopy"/>
+</popup>
+<popup name="EphyDocumentPopup" action="PopupAction">
+	<menuitem name="GoBackDP" action="GoBack"/>
+	<menuitem name="GoForwardDP" action="GoForward"/>
+	<menuitem name="GoReloadDP" action="ViewReload"/>
+	<separator name="DPSep1"/>
+	<menuitem name="EditCopyDP" action="EditCopy"/>
+	<separator name="DPSep2"/>
+	<menuitem name="SavePageAsDP" action="FileSaveAs"/>
+	<menuitem name="SaveBackgroundAsDP" action="SaveBackgroundAs"/>
+	<menuitem name="BookmarkPageDP" action="ContextBookmarkPage"/>
+</popup>
+
+<popup name="EphyFramedDocumentPopup" action="PopupAction">
+	<menuitem name="GoBackFDP" action="GoBack"/>
+	<menuitem name="GoForwardFDP" action="GoForward"/>
+	<menuitem name="GoReloadFDP" action="ViewReload"/>
+	<separator name="FDPSep1"/>
+	<menuitem name="EditCopyFDP" action="EditCopy"/>
+	<separator name="FDPSep2"/>
+	<menuitem name="SavePageAsFDP" action="FileSaveAs"/>
+	<menuitem name="SaveBackgroundAsFDP" action="SaveBackgroundAs"/>
+	<menuitem name="BookmarkPageFDP" action="ContextBookmarkPage"/>
+	<separator name="FDBSep3"/>
+	<menuitem name="OpenFrameFDP" action="OpenFrame"/>
+	<menuitem name="OpenFrameInNewWindowFDP" action="OpenFrameInNewWindow"/>
+	<menuitem name="OpenFrameInNewTabFDP" action="OpenFrameInNewTab"/>
+</popup>
+
+<popup name="EphyLinkPopup" action="PopupAction">
+	<menuitem name="OpenLinkLP" action="OpenLink"/>
+        <menuitem name="OpenLinkInNewWindowLP" action="OpenLinkInNewWindow"/>
+	<menuitem name="OpenLinkInNewTabLP" action="OpenLinkInNewTab"/>
+	<separator name="LPSep1"/>
+	<menuitem name="DownloadLinkLP" action="DownloadLink"/>
+	<menuitem name="BookmarkLinkLP" action="BookmarkLink"/>
+	<menuitem name="CopyLinkAddressLP" action="CopyLinkAddress"/>
+</popup>
+
+<popup name="EphyImagePopup" action="PopupAction">
+	<menuitem name="OpenImageIP" action="OpenImage"/>
+	<menuitem name="OpenImageInNewWindowIP" action="OpenImageInNewWindow"/>
+	<menuitem name="OpenImageInNewTabIP" action="OpenImageInNewTab"/>
+	<separator name="IPSep1"/>
+	<menuitem name="SaveImageAsIP" action="SaveImageAs"/>
+	<menuitem name="SetImageAsBackgroundIP" action="SetImageAsBackground"/>
+	<menuitem name="CopyImageLocationIP" action="CopyImageLocation"/>
+</popup>
+
+<popup name="EphyImageLinkPopup" action="PopupAction">
+	<menuitem name="OpenLinkILP" action="OpenLink"/>
+        <menuitem name="OpenLinkInNewWindowILP" action="OpenLinkInNewWindow"/>
+	<menuitem name="OpenLinkInNewTabILP" action="OpenLinkInNewTab"/>
+	<separator name="ILPSep1"/>
+	<menuitem name="DownloadLinkILP" action="DownloadLink"/>
+	<menuitem name="BookmarkLinkILP" action="BookmarkLink"/>
+	<menuitem name="CopyLinkAddressILP" action="CopyLinkAddress"/>
+	<separator name="ILPSep2"/>
+	<menuitem name="OpenImageILP" action="OpenImage"/>
+	<menuitem name="OpenImageInNewWindowILP" action="OpenImageInNewWindow"/>
+	<menuitem name="OpenImageInNewTabILP" action="OpenImageInNewTab"/>
+	<separator name="ILPSep3"/>
+	<menuitem name="SaveImageAsILP" action="SaveImageAs"/>
+	<menuitem name="SetImageAsBackgroundILP" action="SetImageAsBackground"/>
+	<menuitem name="CopyImageLocationILP" action="CopyImageLocation"/>
+</popup>
+
+</ui>

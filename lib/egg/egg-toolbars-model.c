@@ -410,11 +410,19 @@ parse_toolbars (EggToolbarsModel *t,
       if (xmlStrEqual (child->name, "toolbar"))
 	{
 	  xmlChar *name;
+	  xmlChar *style;
 	  int position;
 
 	  name = xmlGetProp (child, "name");
 	  position = egg_toolbars_model_add_toolbar (t, -1, name);
 	  xmlFree (name);
+
+	  style = xmlGetProp (child, "style");
+	  if (style && strcmp (style, "icons-only") == 0)
+	    {
+	      egg_toolbars_model_set_flags (t, EGG_TB_MODEL_ICONS_ONLY, 0);
+	    }
+	  xmlFree (style);
 
 	  parse_item_list (t, child->children, position);
 	}
