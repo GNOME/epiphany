@@ -23,13 +23,8 @@
 #endif
 
 #include "ProgressListener.h"
-
 #include "ephy-file-helpers.h"
 #include "mozilla-embed-persist.h"
-
-#include <libgnome/gnome-exec.h>
-#include <libgnome/gnome-i18n.h>
-
 #include "nsXPIDLString.h"
 #include "nsIMIMEInfo.h"
 #include "nsCOMPtr.h"
@@ -64,19 +59,19 @@ GProgressListener::~GProgressListener ()
 }
 
 NS_METHOD GProgressListener::InitForPersist (nsIWebBrowserPersist *aPersist,
-					      nsIDOMWindow *aParent, 
-					      nsIURI *aURI,
-					      nsIFile *aFile,
-					      DownloadAction aAction,
-					      EphyEmbedPersist *ephyPersist,
-					      PRBool noDialog,
-					      PRInt64 aTimeDownloadStarted)
+					     nsIDOMWindow *aParent, 
+					     nsIURI *aURI,
+					     nsIFile *aFile,
+					     DownloadAction aAction,
+					     EphyEmbedPersist *ephyPersist,
+					     PRBool Dialog,
+					     PRInt64 aTimeDownloadStarted)
 {
 	nsresult rv;
 	/* fill in download details */
 	mAction = aAction;
 	mParent = aParent;
-	mNoDialog = noDialog;
+	mDialog = Dialog;
 	mUri = aURI;
 	mFile = aFile;
 	mPersist = aPersist;
@@ -89,60 +84,61 @@ NS_METHOD GProgressListener::InitForPersist (nsIWebBrowserPersist *aPersist,
 	/* pick up progress messages */
 	mPersist->SetProgressListener (this);
 
-	/* done */
 	return rv;
 }
 
 NS_METHOD GProgressListener::PrivateInit (void)
 {
-	nsresult rv;
-
-	/* setup this download */
-	mInterval            = 500000;     /* in microsecs == 500ms == 0.5s */
+	mInterval            = 500000;     /* in microsecs, 0.5s */
 	mPriorKRate          = 0;
 	mRateChanges         = 0;
 	mRateChangeLimit     = 2;          /* only update rate every second */
 	mIsPaused            = PR_FALSE;
 	mAbort               = PR_FALSE;
-	PRInt64 now          = PR_Now ();
-	mLastUpdate          = now;
-
-	mStartTime           = now; //Stupid mozilla race condition
+	mStartTime           = PR_Now ();
+	mLastUpdate          = mStartTime;
 	mElapsed             = 0;
 
-	if (!mNoDialog)
+	if (mDialog)
 	{
 		gchar *filename, *source, *dest;
 		nsAutoString uTmp;
 		nsCAutoString cTmp;
+		nsresult rv;
 
 		rv = mFile->GetLeafName (uTmp);
+		if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 		filename = g_strdup (NS_ConvertUCS2toUTF8(uTmp).get());
 
 		rv = mFile->GetPath (uTmp);
+		if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 		dest = g_strdup (NS_ConvertUCS2toUTF8(uTmp).get());
 
 		rv = mUri->GetSpec (cTmp);
+		if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 		source = g_strdup (cTmp.get());
-		DownloaderView *dv;
-		dv = ephy_embed_shell_get_downloader_view (embed_shell);
-		downloader_view_add_download (dv, filename, source, dest, (gpointer)this);
-		g_signal_connect (G_OBJECT (dv), 
+
+		mDownloaderView = ephy_embed_shell_get_downloader_view (embed_shell);
+		downloader_view_add_download (mDownloaderView, filename, source,
+					      dest, (gpointer)this);
+		g_free (source);
+		g_free (dest);
+		g_free (filename);
+
+		g_signal_connect (G_OBJECT (mDownloaderView), 
 				  "download_remove",
 				  G_CALLBACK (download_remove_cb),
 				  this);
-		g_signal_connect (G_OBJECT (dv), 
+		g_signal_connect (G_OBJECT (mDownloaderView), 
 				  "download_pause",
 				  G_CALLBACK (download_pause_cb),
 				  this);
-		g_signal_connect (G_OBJECT (dv), 
+		g_signal_connect (G_OBJECT (mDownloaderView), 
 				  "download_resume",
 				  G_CALLBACK (download_resume_cb),
 				  this);
-		mDownloaderView = dv;
 	}
 
-	/* done */
 	return NS_OK;
 }
 
@@ -169,7 +165,7 @@ NS_IMETHODIMP GProgressListener::Init(nsIURI *aSource,
 				  ACTION_SAVEFORHELPER : ACTION_NONE;
 		}
 	}
-        mNoDialog = 0;
+        mDialog = TRUE;
 
         return PrivateInit();
 }
@@ -177,7 +173,7 @@ NS_IMETHODIMP GProgressListener::Init(nsIURI *aSource,
 NS_IMETHODIMP GProgressListener::Open(nsIDOMWindow *aParent)
 {
         mParent = aParent;
-        mNoDialog = 0;
+        mDialog = TRUE;
 
         return NS_OK;
 }
@@ -270,12 +266,12 @@ NS_IMETHODIMP GProgressListener::GetDialog(nsIDOMWindow * *aDialog)
 /* attribute PRBool cancelDownloadOnClose; */
 NS_IMETHODIMP  GProgressListener::GetCancelDownloadOnClose(PRBool *aCancelDownloadOnClose)
 {
-    return NS_ERROR_NOT_IMPLEMENTED;
+	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 NS_IMETHODIMP  GProgressListener::SetCancelDownloadOnClose(PRBool aCancelDownloadOnClose)
 {
-    return NS_ERROR_NOT_IMPLEMENTED;
+	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 NS_IMETHODIMP GProgressListener::LaunchHandler (PersistHandlerInfo *handler)
@@ -312,16 +308,16 @@ NS_IMETHODIMP GProgressListener::LaunchHandler (PersistHandlerInfo *handler)
  *		       in unsigned long aStatus);
  */
 NS_IMETHODIMP GProgressListener::OnStateChange (nsIWebProgress *aWebProgress,
-						 nsIRequest *aRequest,
-						 PRUint32 aStateFlags,
-						 PRUint32 aStatus)
+						nsIRequest *aRequest,
+						PRUint32 aStateFlags,
+						PRUint32 aStatus)
 {
 	if (mAbort) return NS_ERROR_FAILURE;
 
 	if (aStateFlags & nsIWebProgressListener::STATE_STOP)
 	{
 
-		if (!mNoDialog)
+		if (mDialog)
 		{
 			downloader_view_set_download_status (mDownloaderView, 
 							     DOWNLOAD_STATUS_COMPLETED, 
@@ -361,7 +357,6 @@ NS_IMETHODIMP GProgressListener::OnStateChange (nsIWebProgress *aWebProgress,
 		}		
 	}
 
-	/* done */
 	return NS_OK;
 }
 
@@ -385,7 +380,7 @@ NS_IMETHODIMP GProgressListener::
 
 	/* FIXME maxsize check here */
 
-	if (mNoDialog) return NS_OK;
+	if (!mDialog) return NS_OK;
 
 	mRequest = aRequest;
 
@@ -448,8 +443,8 @@ NS_IMETHODIMP GProgressListener::
 		{
 			mRateChanges = 0;
 		}
-		
-		 speed = currentKRate;
+
+		speed = currentKRate;
 	}
 	
 	/* compute time remaining */
@@ -469,7 +464,6 @@ NS_IMETHODIMP GProgressListener::
 					       progress,
 					       (gpointer)this);
 
-	/* done */
 	return NS_OK;
 }
 
@@ -478,7 +472,7 @@ NS_IMETHODIMP GProgressListener::
 			OnLocationChange(nsIWebProgress *aWebProgress,
 					 nsIRequest *aRequest, nsIURI *location)
 {
-    return NS_OK;
+	return NS_OK;
 }
 
 /* void onStatusChange (in nsIWebProgress aWebProgress, in nsIRequest aRequest, in nsresult aStatus, in wstring aMessage); */
@@ -487,7 +481,7 @@ NS_IMETHODIMP GProgressListener::
 				       nsIRequest *aRequest, nsresult aStatus,
 				       const PRUnichar *aMessage)
 {
-    return NS_OK;
+	return NS_OK;
 }
 
 /* void onSecurityChange (in nsIWebProgress aWebProgress, in nsIRequest aRequest, in long state); */
@@ -496,7 +490,7 @@ NS_IMETHODIMP GProgressListener::
 					 nsIRequest *aRequest,
 					 PRUint32 state)
 {
-    return NS_OK;
+	return NS_OK;
 }
 
 //---------------------------------------------------------------------------

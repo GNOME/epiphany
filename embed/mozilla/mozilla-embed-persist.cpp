@@ -261,7 +261,7 @@ impl_save (EphyEmbedPersist *persist)
                    	                   uri, file, 
                            	           ACTION_OBJECT_NOTIFY,
 					   persist,
-					   !(flags & EMBED_PERSIST_SHOW_PROGRESS));
+					   (flags & EMBED_PERSIST_SHOW_PROGRESS));
 
 		rv = bpersist->SaveDocument (DOMDocument, file, path, nsnull, 0, 0);
 		if (NS_FAILED(rv)) return G_FAILED;
@@ -272,7 +272,7 @@ impl_save (EphyEmbedPersist *persist)
                  	                   linkURI, file,
                          	           ACTION_OBJECT_NOTIFY,
                                  	   persist, 
-					   !(flags & EMBED_PERSIST_SHOW_PROGRESS));
+					   (flags & EMBED_PERSIST_SHOW_PROGRESS));
 
 		rv = bpersist->SaveURI (linkURI, nsnull, nsnull, nsnull, nsnull, file);
 		if (NS_FAILED(rv)) return G_FAILED;

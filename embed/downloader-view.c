@@ -405,7 +405,7 @@ downloader_view_update_details (DownloaderViewPrivate *priv,
 
 	if (details->speed > 0)
 	{
-		sprintf (buffer, "%s at %.1f KB/s", buffer, details->speed);
+		sprintf (buffer, _("%s at %.1f KB/s"), buffer, details->speed);
 	}
 	gtk_label_set_text (GTK_LABEL (priv->details_status),
 			    buffer);

@@ -29,13 +29,11 @@
 #include "nsIExternalHelperAppService.h"
 #include "nsCExternalHandlerService.h"
 #include "nsIWebBrowserPersist.h"
-#include "nsCOMPtr.h"
 #include "nsWeakReference.h"
 #include "nsIURI.h"
 #include "nsILocalFile.h"
 #include "nsIDOMWindow.h"
 #include "nsIRequest.h"
-#include "nsIMIMEInfo.h"
 #include "nsIDownload.h"
 #include "nsIObserver.h"
 #include "nsIProgressDialog.h"
@@ -71,7 +69,7 @@ class GProgressListener : public nsIProgressDialog,
 				  nsIFile *aFile,
 				  DownloadAction aAction,
 				  EphyEmbedPersist *ephyPersist,
-				  PRBool noDialog,
+				  PRBool Dialog,
 				  PRInt64 aTimeDownloadStarted = 0);
 	nsresult Pause (void);
 	nsresult Resume (void);
@@ -108,8 +106,8 @@ class GProgressListener : public nsIProgressDialog,
 	PRInt32 mRateChangeLimit;
 
 	PRBool mIsPaused;
-	gboolean mNoDialog;
 	PRBool mAbort;
+	gboolean mDialog;
 
 	DownloadAction mAction;
 	
