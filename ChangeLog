@@ -1,3 +1,10 @@
+2004-12-30  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/window-commands.c: (window_cmd_file_send_to):
+
+	Use gnome_vfs_url_show() for Send To, not ephy_embed_load_url() which
+        shows that annoying confirmation dialogue. Fixes bug #162532.
+
 2004-12-26  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/FilePicker.cpp:
