@@ -500,6 +500,8 @@ setup_window (EphyWindow *window)
 	g_object_set (action, "short_label", N_("Print"), NULL);
 	action = egg_action_group_get_action (action_group, "FileBookmarkPage");
 	g_object_set (action, "short_label", N_("Bookmark"), NULL);
+	action = egg_action_group_get_action (action_group, "ViewZoomNormal");
+	g_object_set (action, "sensitive", FALSE, NULL);
 
 	action_group = egg_action_group_new ("PopupsActions");
 	egg_action_group_add_actions (action_group, ephy_popups_entries,
@@ -1232,6 +1234,37 @@ update_find_control (EphyWindow *window)
 }
 
 static void
+update_tabs (EphyWindow *window)
+{
+	gboolean prev_tab, next_tab, move_left, move_right, detach;
+	EggActionGroup *action_group;
+	EggAction *action;
+	int current;
+	int last;
+
+	current = gtk_notebook_get_current_page
+		(GTK_NOTEBOOK (window->priv->notebook));
+	last = gtk_notebook_get_n_pages
+		(GTK_NOTEBOOK (window->priv->notebook)) - 1;
+	prev_tab = move_left = (current > 0);
+	next_tab = move_right = (current < last);
+	detach = gtk_notebook_get_n_pages
+		(GTK_NOTEBOOK (window->priv->notebook)) > 1;
+
+	action_group = window->priv->action_group;
+	action = egg_action_group_get_action (action_group, "TabsPrevious");
+	g_object_set (action, "sensitive", prev_tab, NULL);
+	action = egg_action_group_get_action (action_group, "TabsNext");
+	g_object_set (action, "sensitive", next_tab, NULL);
+	action = egg_action_group_get_action (action_group, "TabsMoveLeft");
+	g_object_set (action, "sensitive", move_left, NULL);
+	action = egg_action_group_get_action (action_group, "TabsMoveRight");
+	g_object_set (action, "sensitive", move_right, NULL);
+	action = egg_action_group_get_action (action_group, "TabsDetach");
+	g_object_set (action, "sensitive", detach, NULL);
+}
+
+static void
 update_window_visibility (EphyWindow *window)
 {
 	GList *l, *tabs;
@@ -1286,6 +1319,9 @@ ephy_window_update_control (EphyWindow *window,
 
 	switch (control)
 	{
+	case TabsControl:
+		update_tabs (window);
+		break;
 	case StatusbarMessageControl:
 		update_status_message (window);
 		break;
@@ -1345,6 +1381,7 @@ ephy_window_update_all_controls (EphyWindow *window)
 		update_security (window);
 		update_find_control (window);
 		update_spinner_control (window);
+		update_tabs (window);
 	}
 }
 
@@ -1489,6 +1526,9 @@ ephy_window_set_zoom (EphyWindow *window,
 		      gint zoom)
 {
 	EphyEmbed *embed;
+	gboolean zoom_out, zoom_normal;
+	EggActionGroup *action_group;
+	EggAction *action;
 
         g_return_if_fail (IS_EPHY_WINDOW (window));
 
@@ -1496,6 +1536,14 @@ ephy_window_set_zoom (EphyWindow *window,
         g_return_if_fail (embed != NULL);
 
         ephy_embed_zoom_set (embed, zoom, TRUE);
+
+	zoom_normal = (zoom != 100);
+	zoom_out = (zoom > 0);
+	action_group = window->priv->action_group;
+	action = egg_action_group_get_action (action_group, "ViewZoomOut");
+	g_object_set (action, "sensitive", zoom_out, NULL);
+	action = egg_action_group_get_action (action_group, "ViewZoomNormal");
+	g_object_set (action, "sensitive", zoom_normal, NULL);
 }
 
 Toolbar *
