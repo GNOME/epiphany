@@ -203,8 +203,6 @@ ephy_bookmark_action_sync_label (GtkAction *action, GParamSpec *pspec, GtkWidget
 	char *title;
 	GValue value = { 0, };
 
-	LOG ("Set bookmark action proxy label to %s", action->label)
-                                                                                                                             
 	g_value_init (&value, G_TYPE_STRING);
 	g_object_get_property (G_OBJECT (action), "label", &value);
                                                                                                                              

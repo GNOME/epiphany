@@ -1,56 +1,56 @@
 <ui>
 <menubar>
 
-<menu name="FileMenu" verb="File">
- 	<menuitem name="FileNewTopic" verb="NewTopic"/>
+<menu name="FileMenu" action="File">
+ 	<menuitem name="FileNewTopic" action="NewTopic"/>
 	<separator name="FileSep1"/>
-        <menuitem name="FileOpenInWindow" verb="OpenInWindow"/>
-	<menuitem name="FileOpenInTab" verb="OpenInTab"/>
+        <menuitem name="FileOpenInWindow" action="OpenInWindow"/>
+	<menuitem name="FileOpenInTab" action="OpenInTab"/>
 	<separator name="FileSep2"/>
-	<menuitem name="FileRename" verb="Rename"/>
-	<menuitem name="FileDelete" verb="Delete"/>
+	<menuitem name="FileRename" action="Rename"/>
+	<menuitem name="FileDelete" action="Delete"/>
 	<separator name="FileSep3"/>
-	<menuitem name="FileShowInBookmarksBar" verb="ShowInBookmarksBar"/>
-	<menuitem name="FileProperties" verb="Properties"/>
+	<menuitem name="FileShowInBookmarksBar" action="ShowInBookmarksBar"/>
+	<menuitem name="FileProperties" action="Properties"/>
 	<separator name="FileSep4"/>
-	<menuitem name="FileImport" verb="Import"/>
+	<menuitem name="FileImport" action="Import"/>
 	<separator name="FileSep5"/>
-	<menuitem name="FileClose" verb="Close"/>
+	<menuitem name="FileClose" action="Close"/>
 </menu>
 
-<menu name="EditMenu" verb="Edit">
-	<menuitem name="EditCut" verb="Cut"/>
-	<menuitem name="EditCopy" verb="Copy"/>
-	<menuitem name="EditPaste" verb="Paste"/>
-	<menuitem name="EditSelectAll" verb="SelectAll"/>
+<menu name="EditMenu" action="Edit">
+	<menuitem name="EditCut" action="Cut"/>
+	<menuitem name="EditCopy" action="Copy"/>
+	<menuitem name="EditPaste" action="Paste"/>
+	<menuitem name="EditSelectAll" action="SelectAll"/>
 </menu>
 
-<menu name="HelpMenu" verb="Help">
-	<menuitem name="HelpContents" verb="HelpContents"/>
-	<menuitem name="HelpAbout" verb="HelpAbout"/>
+<menu name="HelpMenu" action="Help">
+	<menuitem name="HelpContents" action="HelpContents"/>
+	<menuitem name="HelpAbout" action="HelpAbout"/>
 </menu>
 
 </menubar>
 
-<popup name="EphyBookmarkEditorPopup" verb="FakeToplevel">
-	<menuitem name="OpenInWindowBMK" verb="OpenInWindow"/>
-	<menuitem name="OpenInTabBMK" verb="OpenInTab"/>
+<popup name="EphyBookmarkEditorPopup" action="PopupAction">
+	<menuitem name="OpenInWindowBMK" action="OpenInWindow"/>
+	<menuitem name="OpenInTabBMK" action="OpenInTab"/>
 	<separator name="BookmarksPopupSep1"/>
-	<menuitem name="CopyBMK" verb="Copy"/>
+	<menuitem name="CopyBMK" action="Copy"/>
 	<separator name="BookmarksPopupSep2"/>
-	<menuitem name="RenameBMK" verb="Rename"/>
-	<menuitem name="DeleteBMK" verb="Delete"/>
+	<menuitem name="RenameBMK" action="Rename"/>
+	<menuitem name="DeleteBMK" action="Delete"/>
 	<separator name="BookmarksPopupSep3"/>
-	<menuitem name="ShowInBookmarksBarBMK" verb="ShowInBookmarksBar"/>
+	<menuitem name="ShowInBookmarksBarBMK" action="ShowInBookmarksBar"/>
 	<separator name="BookmarksPopupSep4"/>
-	<menuitem name="BMKProperties" verb="Properties"/>
+	<menuitem name="BMKProperties" action="Properties"/>
 </popup>
 
-<popup name="EphyBookmarkKeywordPopup" verb="FakeToplevel">
-	<menuitem name="RenameTPC" verb="Rename"/>
-	<menuitem name="DeleteTPC" verb="Delete"/>
+<popup name="EphyBookmarkKeywordPopup" action="PopupAction">
+	<menuitem name="RenameTPC" action="Rename"/>
+	<menuitem name="DeleteTPC" action="Delete"/>
 	<separator name="TopicPopupSep3"/>
-	<menuitem name="ShowInBookmarksBarTPC" verb="ShowInBookmarksBar"/>
+	<menuitem name="ShowInBookmarksBarTPC" action="ShowInBookmarksBar"/>
 </popup>
 
 </ui>

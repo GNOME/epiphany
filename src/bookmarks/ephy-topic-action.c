@@ -153,8 +153,6 @@ ephy_topic_action_sync_label (GtkAction *action, GParamSpec *pspec, GtkWidget *p
 
 	label_text = g_value_get_string (&value);
 
-	LOG ("Set bookmark action proxy label to %s", action->label)
-
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
 		label = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "label"));

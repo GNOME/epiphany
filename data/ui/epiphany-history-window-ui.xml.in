@@ -1,40 +1,40 @@
 <ui>
 <menubar>
 
-<menu name="FileMenu" verb="File">
-        <menuitem name="FileOpenInWindow" verb="OpenInWindow"/>
-	<menuitem name="FileOpenInTab" verb="OpenInTab"/>
+<menu name="FileMenu" action="File">
+        <menuitem name="FileOpenInWindow" action="OpenInWindow"/>
+	<menuitem name="FileOpenInTab" action="OpenInTab"/>
 	<separator name="FileSep1"/>
-	<menuitem name="FileBookmarkLink" verb="BookmarkLink"/>
-	<menuitem name="FileDelete" verb="Delete"/>
+	<menuitem name="FileBookmarkLink" action="BookmarkLink"/>
+	<menuitem name="FileDelete" action="Delete"/>
 	<separator name="FileSep2"/>
-	<menuitem name="FileClose" verb="Close"/>
+	<menuitem name="FileClose" action="Close"/>
 </menu>
 
-<menu name="EditMenu" verb="Edit">
-	<menuitem name="EditCut" verb="Cut"/>
-	<menuitem name="EditCopy" verb="Copy"/>
-	<menuitem name="EditPaste" verb="Paste"/>
-	<menuitem name="EditSelectAll" verb="SelectAll"/>
+<menu name="EditMenu" action="Edit">
+	<menuitem name="EditCut" action="Cut"/>
+	<menuitem name="EditCopy" action="Copy"/>
+	<menuitem name="EditPaste" action="Paste"/>
+	<menuitem name="EditSelectAll" action="SelectAll"/>
 	<separator name="EditSep1"/>
-	<menuitem name="EditClear" verb="Clear"/>
+	<menuitem name="EditClear" action="Clear"/>
 </menu>
 
-<menu name="HelpMenu" verb="Help">
-	<menuitem name="HelpContents" verb="HelpContents"/>
-	<menuitem name="HelpAbout" verb="HelpAbout"/>
+<menu name="HelpMenu" action="Help">
+	<menuitem name="HelpContents" action="HelpContents"/>
+	<menuitem name="HelpAbout" action="HelpAbout"/>
 </menu>
 
 </menu>
 
-<popup name="EphyHistoryWindowPopup" verb="FakeToplevel">
-	<menuitem name="OpenInWindowHST" verb="OpenInWindow"/>
-	<menuitem name="OpenInTabHST" verb="OpenInTab"/>
+<popup name="EphyHistoryWindowPopup" action="PopupMenu">
+	<menuitem name="OpenInWindowHST" action="OpenInWindow"/>
+	<menuitem name="OpenInTabHST" action="OpenInTab"/>
 	<separator name="HistoryPopupSep1"/>
-	<menuitem name="CopyHST" verb="Copy"/>
+	<menuitem name="CopyHST" action="Copy"/>
 	<separator name="HistoryPopupSep2"/>
-	<menuitem name="BookmarkLinkHST" verb="BookmarkLink"/>
-	<menuitem name="DeleteHST" verb="Delete"/>
+	<menuitem name="BookmarkLinkHST" action="BookmarkLink"/>
+	<menuitem name="DeleteHST" action="Delete"/>
 </popup>
 
 </ui>

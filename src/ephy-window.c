@@ -69,7 +69,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "Go", NULL, N_("_Go") },
 	{ "Tabs", NULL, N_("_Tabs") },
 	{ "Help", NULL, N_("_Help") },
-	{ "PopupMenu", NULL, NULL },
+	{ "PopupMenu", NULL, "" },
 
 	/* File menu */
 	{ "FileNewWindow", GTK_STOCK_NEW, N_("_New Window"), "<control>N",
@@ -264,7 +264,6 @@ struct EphyWindowPrivate
 {
 	GtkWidget *main_vbox;
 	GtkWidget *menu_dock;
-	GtkWidget *menubar;
 	GtkWidget *exit_fullscreen_popup;
 	Toolbar *toolbar;
 	GtkWidget *statusbar;
@@ -397,11 +396,6 @@ ephy_window_selection_received_cb (GtkWidget *widget,
 static void
 add_widget (GtkUIManager *merge, GtkWidget *widget, EphyWindow *window)
 {
-	if (GTK_IS_MENU_SHELL (widget))
-	{
-		window->priv->menubar = widget;
-	}
-
 	gtk_box_pack_start (GTK_BOX (window->priv->menu_dock),
 			    widget, FALSE, FALSE, 0);
 }
@@ -440,17 +434,22 @@ exit_fullscreen_button_clicked_cb (GtkWidget *button, EphyWindow *window)
 static void
 update_chromes_visibility (EphyWindow *window, EmbedChromeMask flags)
 {
+	GtkWidget *menubar;
 	gboolean fullscreen;
 
 	fullscreen = window->priv->is_fullscreen;
 
+	menubar = gtk_ui_manager_get_widget
+		(GTK_UI_MANAGER (window->ui_merge), "/menubar");
+	g_assert (menubar != NULL);
+
 	if (!fullscreen && flags & EMBED_CHROME_MENUBARON)
 	{
-		gtk_widget_show (window->priv->menubar);
+		gtk_widget_show (menubar);
 	}
 	else
 	{
-		gtk_widget_hide (window->priv->menubar);
+		gtk_widget_hide (menubar);
 	}
 
 	toolbar_set_visibility (window->priv->toolbar,
@@ -583,6 +582,7 @@ setup_window (EphyWindow *window)
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	GtkUIManager *merge;
+	GError *err = NULL;
 
 	window->priv->main_vbox = gtk_vbox_new (FALSE, 0);
 	gtk_widget_show (window->priv->main_vbox);
@@ -615,12 +615,14 @@ setup_window (EphyWindow *window)
 	action = gtk_action_group_get_action (action_group, "GoBookmarks");
 	g_object_set (action, "short_label", _("Bookmarks"), NULL);
 
+/*
 	action = gtk_action_group_get_action (action_group, "EditFind");
 	g_object_set (action, "important", TRUE, NULL);
 	action = gtk_action_group_get_action (action_group, "GoHome");
 	g_object_set (action, "important", TRUE, NULL);
 	action = gtk_action_group_get_action (action_group, "GoBookmarks");
 	g_object_set (action, "important", TRUE, NULL);
+*/
 
 	action_group = gtk_action_group_new ("PopupsActions");
 	gtk_action_group_add_actions (action_group, ephy_popups_entries,
@@ -630,16 +632,22 @@ setup_window (EphyWindow *window)
 
 	window->ui_merge = G_OBJECT (merge);
 	g_signal_connect (merge, "add_widget", G_CALLBACK (add_widget), window);
-	gtk_ui_manager_add_ui_from_file
-		(merge, ephy_file ("epiphany-ui.xml"), NULL);
 	gtk_window_add_accel_group (GTK_WINDOW (window),
 				    gtk_ui_manager_get_accel_group (merge));
 
+	gtk_ui_manager_add_ui_from_file
+		(merge, ephy_file ("epiphany-ui.xml"), &err);
+	if (err != NULL)
+	{
+		g_warning ("Could not merge epiphany-ui.xml: %s", err->message);
+		g_clear_error (&err);
+        }
+
 	window->priv->toolbar = toolbar_new (window);
 	gtk_widget_show (GTK_WIDGET (window->priv->toolbar));
-	gtk_box_pack_start (GTK_BOX (window->priv->menu_dock),
-			    GTK_WIDGET (window->priv->toolbar),
-			    FALSE, FALSE, 0);
+	gtk_box_pack_end (GTK_BOX (window->priv->menu_dock),
+			  GTK_WIDGET (window->priv->toolbar),
+			  FALSE, FALSE, 0);
 	g_signal_connect (window,
 			  "selection-received",
 			  G_CALLBACK (ephy_window_selection_received_cb),
@@ -1029,7 +1037,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	g_object_set (action, "sensitive", has_background,
 			      "visible", has_background, NULL);
 
-	path = g_strconcat ("/popups/", popup, NULL);
+	path = g_strconcat ("/", popup, NULL);
 	widget = gtk_ui_manager_get_widget (GTK_UI_MANAGER (window->ui_merge),
 				            path);
 	g_free (path);
