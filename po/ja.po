@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-15 02:22+0900\n"
-"PO-Revision-Date: 2005-01-15 02:20+0900\n"
+"POT-Creation-Date: 2005-01-16 11:25+0900\n"
+"PO-Revision-Date: 2005-01-16 11:24+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -620,7 +620,7 @@ msgid "MD5 Fingerprint:"
 msgstr "MD5 指紋:"
 
 #: data/glade/certificate-dialogs.glade.h:15
-#: embed/mozilla/GtkNSSDialogs.cpp:1024
+#: embed/mozilla/GtkNSSDialogs.cpp:1005
 msgid "Organization:"
 msgstr "組織 (O):"
 
@@ -1034,13 +1034,13 @@ msgstr[1] "%d 個ダウンロード"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/downloader-view.c:521 embed/downloader-view.c:534
 msgid "download status|Unknown"
-msgstr "ダウンロードの状況|不明"
+msgstr "不明"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/downloader-view.c:526
 msgid "download status|Failed"
-msgstr "ダウンロードの状況|失敗"
+msgstr "失敗"
 
 #: embed/downloader-view.c:588 src/bookmarks/ephy-bookmarks-editor.c:791
 msgid "File"
@@ -1533,21 +1533,21 @@ msgstr "XUL ファイル"
 msgid "_Select Certificate"
 msgstr "証明書の選択(_S)"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:203
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:202
 #, c-format
-msgid "Choose a certificate to present as identification to %s."
-msgstr "%s の身元情報を提供する証明書を選択して下さい。"
+msgid "Choose a certificate to present as identification to \"%s\"."
+msgstr "\"%s\" の身元情報を提供する証明書を選択して下さい。"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:206
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:205
 msgid "Select a certificate to identify yourself."
 msgstr "あなた自身を識別する証明書を選択して下さい。"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:244
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:242
 msgid "Certificate _Details"
 msgstr "証明書の詳細"
 
 #. Add the buttons
-#: embed/mozilla/GtkNSSDialogs.cpp:231 embed/mozilla/GtkNSSDialogs.cpp:555
+#: embed/mozilla/GtkNSSDialogs.cpp:231 embed/mozilla/GtkNSSDialogs.cpp:539
 msgid "_View Certificate"
 msgstr "証明書の表示(_V)"
 
@@ -1555,226 +1555,230 @@ msgstr "証明書の表示(_V)"
 msgid "_Accept"
 msgstr "受け入れる(_A)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:306
+#: embed/mozilla/GtkNSSDialogs.cpp:303
 #, c-format
 msgid ""
-"The site %s returned security information for %s. It is possible that "
-"someone is intercepting your communication to obtain your confidential "
+"The site \"%s\" returned security information for \"%s\". It is possible "
+"that someone is intercepting your communication to obtain your confidential "
 "information."
 msgstr ""
-"サイト %s が %s のセキュリティ情報を返してきました。誰かがあなたの機密情報を"
-"入手するために通信内容を傍受するおそれがあります。"
+"サイト \"%s\" が \"%s\" のセキュリティ情報を返してきました。誰かがあなたの機"
+"密情報を入手するために通信内容を傍受するおそれがあります。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:312
+#: embed/mozilla/GtkNSSDialogs.cpp:309
 #, c-format
-msgid "You should only accept the security information if you trust %s and %s."
-msgstr "%s と %s を信用する場合はセキュリティ情報のみ受け入れて下さい。"
+msgid ""
+"You should only accept the security information if you trust \"%s\" and \"%s"
+"\"."
+msgstr ""
+"\"%s\" と \"%s\" を信用する場合はセキュリティ情報のみ受け入れて下さい。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:317
+#: embed/mozilla/GtkNSSDialogs.cpp:314
 msgid "Accept incorrect security information?"
 msgstr "不確かなセキュリティ情報を受け入れますか？"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:352
+#: embed/mozilla/GtkNSSDialogs.cpp:345
 #, c-format
 msgid ""
-"It was not possible to automatically trust %s. It is possible that someone "
-"is intercepting your communication to obtain your confidential information."
+"It was not possible to automatically trust \"%s\". It is possible that "
+"someone is intercepting your communication to obtain your confidential "
+"information."
 msgstr ""
-"自動的に %s を信用できませんでした。誰かがあなたの機密情報を入手するために通"
-"信内容を傍受するおそれがあります。"
+"自動的に \"%s\" を信用できませんでした。誰かがあなたの機密情報を入手するため"
+"に通信内容を傍受するおそれがあります。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:358
+#: embed/mozilla/GtkNSSDialogs.cpp:351
 #, c-format
 msgid ""
-"You should only connect to the site if you are certain you are connected to %"
-"s."
+"You should only connect to the site if you are certain you are connected to "
+"\"%s\"."
 msgstr ""
-"%s に接続していると確信がある場合に、そのサイトへ接続のみ行って下さい。"
+"\"%s\" に接続していると確信がある場合に、そのサイトへ接続のみ行って下さい。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:363
+#: embed/mozilla/GtkNSSDialogs.cpp:356
 msgid "Connect to untrusted site?"
 msgstr "信用できないサイトに接続しますか？"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:367
+#: embed/mozilla/GtkNSSDialogs.cpp:360
 msgid "_Don't show this message again for this site"
 msgstr "このサイトに対して、このメッセージを次回から表示しない(_D)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:368
+#: embed/mozilla/GtkNSSDialogs.cpp:361
 msgid "Co_nnect"
 msgstr "接続する(_N)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:428
+#: embed/mozilla/GtkNSSDialogs.cpp:420
 msgid "Accept expired security information?"
 msgstr "期限切れのセキュリティ情報を受け入れますか？"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:429
+#: embed/mozilla/GtkNSSDialogs.cpp:421
 #, c-format
-msgid "The security information for %s expired on %s."
-msgstr "%s のセキュリティ情報は %s で有効期限が切れています。"
+msgid "The security information for \"%s\" expired on %s."
+msgstr "\"%s\" のセキュリティ情報は %s で有効期限が切れています。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:435
+#: embed/mozilla/GtkNSSDialogs.cpp:427
 msgid "Accept not yet valid security information?"
 msgstr "まだ不正なセキュリティ情報を受け入れますか？"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:436
+#: embed/mozilla/GtkNSSDialogs.cpp:428
 #, c-format
-msgid "The security information for %s isn't valid until %s."
-msgstr "%s のセキュリティ情報は %s まで不正な状態にあります。"
+msgid "The security information for \"%s\" isn't valid until %s."
+msgstr "\"%s\" のセキュリティ情報は %s まで不正な状態にあります。"
 
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: embed/mozilla/GtkNSSDialogs.cpp:452
+#: embed/mozilla/GtkNSSDialogs.cpp:444
 msgid "%a %d %b %Y"
 msgstr "%Y年%b %d日 (%a)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:462
+#: embed/mozilla/GtkNSSDialogs.cpp:452
 msgid "You should ensure that your computer's time is correct."
 msgstr "お使いのコンピュータの時刻が正しいことを確認して下さい。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:512
+#: embed/mozilla/GtkNSSDialogs.cpp:498
 #, c-format
-msgid "Cannot establish connection to %s."
-msgstr "%s への接続を確立できません。"
+msgid "Cannot establish connection to \"%s\"."
+msgstr "\"%s\" への接続を確立できません。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:515
+#: embed/mozilla/GtkNSSDialogs.cpp:501
 #, c-format
-msgid "The certificate revocation list (CRL) from %s needs to be updated."
-msgstr "%s の証明書失効リスト (CRL) を更新する必要があります。"
+msgid "The certificate revocation list (CRL) from \"%s\" needs to be updated."
+msgstr "\"%s\" の証明書失効リスト (CRL) を更新する必要があります。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:520
+#: embed/mozilla/GtkNSSDialogs.cpp:506
 msgid "Please ask your system administrator for assistance."
 msgstr "システム管理者にヘルプを依頼して下さい。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:558
+#: embed/mozilla/GtkNSSDialogs.cpp:542
 msgid "_Trust CA"
 msgstr "CA を信用する(_T)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:582
+#: embed/mozilla/GtkNSSDialogs.cpp:564
 #, c-format
-msgid "Trust %s to identify:"
-msgstr "身元を証明するために %s を信用する:"
+msgid "Trust \"%s\" to identify:"
+msgstr "身元を証明するために \"%s\" を信用する:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:586
+#: embed/mozilla/GtkNSSDialogs.cpp:567
 msgid "Trust new Certificate Authority?"
 msgstr "新しい認証局 (CA) を信用しますか？"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:587
+#: embed/mozilla/GtkNSSDialogs.cpp:568
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
 msgstr ""
 "認証局 (CA) を信用する前に証明書が信頼できるかどうか確認する必要があります。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:597
+#: embed/mozilla/GtkNSSDialogs.cpp:578
 msgid "_Web sites"
 msgstr "ウェブ・サイト(_W)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:602
+#: embed/mozilla/GtkNSSDialogs.cpp:583
 msgid "_Software developers"
 msgstr "ソフトウェアの開発者(_S)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:675
+#: embed/mozilla/GtkNSSDialogs.cpp:656
 msgid "Certificate already exists."
 msgstr "証明書は既に存在します。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:676
+#: embed/mozilla/GtkNSSDialogs.cpp:657
 msgid "The certificate has already been imported."
 msgstr "証明書は既にインポートされています。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:801
+#: embed/mozilla/GtkNSSDialogs.cpp:782
 msgid "_Backup Certificate"
 msgstr "証明書のバックアップ(_B)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:808
+#: embed/mozilla/GtkNSSDialogs.cpp:789
 msgid "Select password."
 msgstr "パスワードを選択して下さい。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:809
+#: embed/mozilla/GtkNSSDialogs.cpp:790
 msgid "Select a password to protect this certificate."
 msgstr "この証明書を保護するパスワードを選択して下さい。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:821 embed/mozilla/GtkNSSDialogs.cpp:931
+#: embed/mozilla/GtkNSSDialogs.cpp:802 embed/mozilla/GtkNSSDialogs.cpp:912
 msgid "_Password:"
 msgstr "パスワード(_P):"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:835
+#: embed/mozilla/GtkNSSDialogs.cpp:816
 msgid "Con_firm password:"
 msgstr "パスワードの確認(_F):"
 
 #. TODO: We need a better password quality meter
-#: embed/mozilla/GtkNSSDialogs.cpp:847
+#: embed/mozilla/GtkNSSDialogs.cpp:828
 msgid "Password quality:"
 msgstr "パスワードの品質:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:904
+#: embed/mozilla/GtkNSSDialogs.cpp:885
 msgid "I_mport Certificate"
 msgstr "証明書のインポート(_M)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:920
+#: embed/mozilla/GtkNSSDialogs.cpp:901
 msgid "Password required."
 msgstr "パスワードが必要です。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:921
+#: embed/mozilla/GtkNSSDialogs.cpp:902
 msgid "Enter the password for this certificate."
 msgstr "この証明書のパスワードを入力して下さい。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1002
+#: embed/mozilla/GtkNSSDialogs.cpp:983
 msgid "Certificate Revocation list successfully imported."
 msgstr "証明書失効リストのインポートが完了しました。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1003
+#: embed/mozilla/GtkNSSDialogs.cpp:984
 msgid "Certificate Revocation list (CRL) imported:"
 msgstr "インポートする証明書失効リスト (CRL):"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1029
+#: embed/mozilla/GtkNSSDialogs.cpp:1010
 msgid "Unit:"
 msgstr "単位:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1034
+#: embed/mozilla/GtkNSSDialogs.cpp:1015
 msgid "Next Update:"
 msgstr "次回の更新:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1061
+#: embed/mozilla/GtkNSSDialogs.cpp:1042
 msgid "Not part of certificate"
 msgstr "証明書の一部ではありません"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1347
+#: embed/mozilla/GtkNSSDialogs.cpp:1328
 msgid "Certificate Properties"
 msgstr "証明書のプロパティ"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1369
+#: embed/mozilla/GtkNSSDialogs.cpp:1350
 msgid "This certificate has been verified for the following uses:"
 msgstr "この証明書は次の使用に対して確認済みです:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1372
+#: embed/mozilla/GtkNSSDialogs.cpp:1353
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "この証明書は失効しているので、正しいかものか確認できませんでした。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1375
+#: embed/mozilla/GtkNSSDialogs.cpp:1356
 msgid "Could not verify this certificate because it has expired."
 msgstr ""
 "この証明書は有効期限が切れているので、正しいものか確認できませんでした。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1378
+#: embed/mozilla/GtkNSSDialogs.cpp:1359
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "この証明書は信用されていないので、正しいものか確認できませんでした。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1381
+#: embed/mozilla/GtkNSSDialogs.cpp:1362
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr ""
 "この証明書は発行者が信用されていないので、正しいものか確認できませんでした。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1384
+#: embed/mozilla/GtkNSSDialogs.cpp:1365
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "この証明書は発行者が不明なため、正しいものか確認できませんでした。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1387
+#: embed/mozilla/GtkNSSDialogs.cpp:1368
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr "この証明書は CA 証明書が不正なので、正しいものか確認できませんでした。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1392
+#: embed/mozilla/GtkNSSDialogs.cpp:1373
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "この証明書は不明な理由で正しいものか確認できませんでした。"
 
@@ -1938,20 +1942,24 @@ msgstr "フォルダ %s を作成できませんでした。"
 
 #: lib/ephy-gui.c:209
 #, c-format
-msgid "A file %s already exists."
-msgstr "ファイル %s は既に存在します。"
+msgid "Overwrite \"%s\"?"
+msgstr "\"%s\" を上書きしますか？"
 
 #: lib/ephy-gui.c:213
-msgid "If you choose to overwrite this file, the contents will be lost."
-msgstr "このファイルを上書きすると、その内容が失われます。"
+msgid ""
+"A file with this name already exists. If you choose to overwrite this file, "
+"the contents will be lost."
+msgstr ""
+"同名のファイルが存在します。このファイルを上書きすると、その内容が失われま"
+"す。"
 
 #: lib/ephy-gui.c:217
 msgid "_Overwrite"
 msgstr "上書きする(_O)"
 
 #: lib/ephy-gui.c:219
-msgid "Overwrite File"
-msgstr "ファイルの上書き"
+msgid "Overwrite File?"
+msgstr "ファイルの上書き？"
 
 #: lib/ephy-gui.c:255
 #, c-format
@@ -2099,16 +2107,23 @@ msgstr "%s:"
 
 #: src/bookmarks/ephy-bookmark-action.c:545
 #: src/bookmarks/ephy-bookmarks-editor.c:181
-#: src/bookmarks/ephy-bookmarks-editor.c:1155 src/ephy-history-window.c:174
+#: src/bookmarks/ephy-bookmarks-editor.c:1155
+#: src/bookmarks/ephy-topic-action.c:448 src/ephy-history-window.c:174
 #: src/ephy-history-window.c:714
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "新しいタブで開く(_T)"
 msgstr[1] "新しい複数のタブで開く(_T)"
 
+#. File Menu
 #: src/bookmarks/ephy-bookmark-action.c:551
+#: src/bookmarks/ephy-bookmarks-editor.c:178
+#: src/bookmarks/ephy-bookmarks-editor.c:1152 src/ephy-history-window.c:171
+#: src/ephy-history-window.c:711
 msgid "Open in New _Window"
-msgstr "新しいウィンドウで開く(_W)"
+msgid_plural "Open in New _Windows"
+msgstr[0] "新しいウィンドウで開く(_W)"
+msgstr[1] "新しい複数のウィンドウで開く(_W)"
 
 #: src/bookmarks/ephy-bookmark-action.c:572
 #: src/bookmarks/ephy-topic-action.c:770
@@ -2174,15 +2189,6 @@ msgstr "新しいトピック(_N)"
 #: src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Create a new topic"
 msgstr "新しいトピックを作成します"
-
-#. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:178
-#: src/bookmarks/ephy-bookmarks-editor.c:1152 src/ephy-history-window.c:171
-#: src/ephy-history-window.c:711
-msgid "_Open in New Window"
-msgid_plural "_Open in New Windows"
-msgstr[0] "新しいウィンドウで開く(_O)"
-msgstr[1] "新しい複数のウィンドウで開く(_O)"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Open the selected bookmark in a new window"
@@ -2488,19 +2494,19 @@ msgstr "ブックマーク \"%s\" を更新しますか？"
 #. translators: the %s is a URL
 #: src/bookmarks/ephy-bookmarks.c:541
 #, c-format
-msgid "The bookmarked page has moved to <tt>%s</tt>."
-msgstr "ブックマークしたページは <tt>%s</tt> へ移動しました。"
+msgid "The bookmarked page has moved to \"%s\"."
+msgstr "ブックマークしたページは \"%s\" へ移動しました。"
 
 #: src/bookmarks/ephy-bookmarks.c:545
-msgid "_Don't update bookmark"
+msgid "_Don't Update"
 msgstr "更新しない(_D)"
 
 #: src/bookmarks/ephy-bookmarks.c:547
-msgid "_Update bookmark"
+msgid "_Update"
 msgstr "更新する(_U)"
 
 #: src/bookmarks/ephy-bookmarks.c:550
-msgid "Update bookmark?"
+msgid "Update Bookmark?"
 msgstr "ブックマークを更新しますか？"
 
 #. Translators: The text before the "|" is context to help you decide on
@@ -2545,12 +2551,6 @@ msgstr "重複したブックマーク"
 #: src/bookmarks/ephy-topic-action.c:264
 msgid "Empty"
 msgstr "空"
-
-#: src/bookmarks/ephy-topic-action.c:448
-msgid "_Open in New Tab"
-msgid_plural "_Open in New Tabs"
-msgstr[0] "新しいタブで開く(_O)"
-msgstr[1] "新しい複数のタブで開く(_O)"
 
 #: src/ephy-encoding-dialog.c:310
 msgid "Encodings"
@@ -3286,8 +3286,8 @@ msgid "Open link in this window"
 msgstr "このウィンドウの中にリンク先を開きます"
 
 #: src/ephy-window.c:318
-msgid "Open Link in _New Window"
-msgstr "リンク先を新しいウィンドウで開く(_N)"
+msgid "Open Link in New _Window"
+msgstr "リンク先を新しいウィンドウで開く(_W)"
 
 #: src/ephy-window.c:319
 msgid "Open link in a new window"
@@ -3349,7 +3349,7 @@ msgid "Copy I_mage Address"
 msgstr "画像のアドレスをコピー(_M)"
 
 #: src/ephy-window.c:662
-msgid "There are unsubmitted changes to form elements."
+msgid "There are unsubmitted changes to form elements"
 msgstr "フォームに提出されていない変更点があります。"
 
 #: src/ephy-window.c:666
@@ -3398,6 +3398,7 @@ msgstr "セキュリティのレベル: %s"
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
 msgstr[0] "%d 個のポップアップ・ウィンドウを隠す"
+msgstr[1] "%d 個のポップアップ・ウィンドウを隠す"
 
 #: src/ephy-window.c:1629
 #, c-format
@@ -3788,7 +3789,7 @@ msgstr "繁体字中国語"
 #: src/prefs-dialog.c:1016 src/prefs-dialog.c:1024
 #, c-format
 msgid "language|%s (%s)"
-msgstr "言語|%s (%s)"
+msgstr "%s (%s)"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -3798,13 +3799,14 @@ msgstr "言語|%s (%s)"
 #: src/prefs-dialog.c:1035 src/prefs-dialog.c:1393
 #, c-format
 msgid "language|User defined (%s)"
-msgstr "言語|ユーザ定義 (%s)"
+msgstr "ユーザ定義 (%s)"
 
 #: src/prefs-dialog.c:1058
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "システム言語 (%s)"
+msgstr[1] "システム言語 (%s)"
 
 #: src/prefs-dialog.c:1441
 msgid "Home"
