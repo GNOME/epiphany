@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifndef MOZREGISTERCOMPONENTS_H
@@ -21,10 +23,4 @@
 
 gboolean mozilla_register_components		(void);
 
-gboolean mozilla_register_FtpProtocolHandler	(void);
-
-gboolean mozilla_unregister_FtpProtocolHandler	(void);
-
-gboolean mozilla_register_MailtoProtocolHandler (void);
-
-#endif // MOZREGISTERCOMPONENTS_H
+#endif /* MOZREGISTERCOMPONENTS_H */

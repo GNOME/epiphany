@@ -1,3 +1,15 @@
+2004-04-18  Christian Biesinger  <cbiesinger@web.de>
+ 
+ 	* embed/mozilla/ExternalProtocolHandlers.cpp:
+ 	* embed/mozilla/ExternalProtocolHandlers.h:
+ 	* embed/mozilla/Makefile.am:
+ 	* embed/mozilla/MozRegisterComponents.cpp:
+ 	* embed/mozilla/MozRegisterComponents.h:
+ 	* embed/mozilla/mozilla-embed-single.cpp:
+ 
+ 	Eliminate ExternalProtocolHandlers in favor of setting prefs to make Mozilla
+ 	not handle the protocols internally. (Backported from HEAD.)
+ 
 2004-05-06  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.in:

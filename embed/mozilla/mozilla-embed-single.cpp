@@ -1,4 +1,4 @@
-/*
+/*  vim:set ts=8 noet sw=8:
  *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *  Copyright (C) 2003 Christian Persch
  *
@@ -104,6 +104,7 @@ static void ephy_cookie_manager_iface_init	(EphyCookieManagerIface *iface);
 static void ephy_password_manager_iface_init	(EphyPasswordManagerIface *iface);
 static void ephy_permission_manager_iface_init	(EphyPermissionManagerIface *iface);
 static void mozilla_embed_single_init		(MozillaEmbedSingle *ges);
+static gboolean have_gnome_url_handler		(const gchar *protocol);
 
 static GObjectClass *parent_class = NULL;
 
@@ -219,6 +220,19 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	sub for embedding apps */
 	pref->SetCharPref ("general.useragent.vendor", "Epiphany");
 	pref->SetCharPref ("general.useragent.vendorSub", VERSION);
+
+	/* Make sure that Mozilla does not handle these protocols internally */
+	pref->SetBoolPref("network.protocol-handler.external.news", TRUE);
+	pref->SetBoolPref("network.protocol-handler.external.mailto", TRUE);
+	pref->SetBoolPref("network.protocol-handler.external.irc", TRUE);
+	if (have_gnome_url_handler ("ftp"))
+	{
+		pref->SetBoolPref("network.protocol-handler.external.ftp", TRUE);
+	}
+	else
+	{
+		pref->SetBoolPref("network.protocol-handler.external.ftp", FALSE);
+	}
 
 	return TRUE;
 }
@@ -359,20 +373,6 @@ have_gnome_url_handler (const gchar *protocol)
 	return rv;
 }
 
-static void
-mozilla_register_external_protocols (void)
-{
-	/* FIXME register only when needed */
-	if (have_gnome_url_handler ("ftp"))
-	{
-		mozilla_register_FtpProtocolHandler ();
-	}
-	else
-	{
-		mozilla_unregister_FtpProtocolHandler ();
-	}
-}
-
 static nsresult
 getUILang (nsAString& aUILang)
 {
@@ -466,8 +466,6 @@ init_services (MozillaEmbedSingle *single)
 	STOP_PROFILER ("Mozilla prefs notifiers")
 
 	mozilla_register_components ();
-
-	mozilla_register_external_protocols ();
 
 	mozilla_init_observer (single);
 

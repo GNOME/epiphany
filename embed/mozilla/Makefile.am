@@ -63,8 +63,6 @@ libephymozillaembed_la_SOURCES = 	\
 	EphySingle.h			\
 	EventContext.cpp                \
 	EventContext.h                  \
-	ExternalProtocolHandlers.cpp	\
-	ExternalProtocolHandlers.h	\
 	ExternalProtocolService.cpp     \
 	ExternalProtocolService.h	\
 	FilePicker.cpp			\
