@@ -834,7 +834,7 @@ remove_focus_monitor (EphyHistoryWindow *editor, GtkWidget *widget)
                                              editor);
 }
 
-static void
+static gboolean
 ephy_history_window_show_popup_cb (GtkWidget *view,
 				   EphyHistoryWindow *editor)
 {
@@ -844,6 +844,8 @@ ephy_history_window_show_popup_cb (GtkWidget *view,
 					    "/EphyHistoryWindowPopup");
 	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
 			gtk_get_current_event_time ());
+
+	return TRUE;
 }
 
 static gboolean
@@ -1350,7 +1352,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 			  G_CALLBACK (ephy_history_window_node_activated_cb),
 			  editor);
 	g_signal_connect (G_OBJECT (pages_view),
-			  "show_popup",
+			  "popup_menu",
 			  G_CALLBACK (ephy_history_window_show_popup_cb),
 			  editor);
 	g_signal_connect (G_OBJECT (pages_view),
@@ -1505,4 +1507,3 @@ ephy_history_window_dispose (GObject *object)
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
-
