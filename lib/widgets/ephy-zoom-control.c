@@ -27,6 +27,7 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkoptionmenu.h>
+#include <gtk/gtktooltips.h>
 #include <bonobo/bonobo-i18n.h>
 
 /**
@@ -270,6 +271,21 @@ ephy_zoom_control_get_property (GObject *object,
 	}
 }
 
+static gboolean
+ephy_zoom_control_set_tooltip (EggToolItem *tool_item,
+			       GtkTooltips *tooltips,
+			       const char *tip_text,
+			       const char *tip_private)
+{
+	EphyZoomControl *control = EPHY_ZOOM_CONTROL (tool_item);
+
+	g_return_val_if_fail (EPHY_IS_ZOOM_CONTROL (control), FALSE);
+
+	gtk_tooltips_set_tip (tooltips, control->priv->option_menu, tip_text, tip_private);
+
+	return TRUE;
+}
+
 static void
 ephy_zoom_control_class_init (EphyZoomControlClass *klass)
 {
@@ -286,6 +302,7 @@ ephy_zoom_control_class_init (EphyZoomControlClass *klass)
 	object_class->finalize = ephy_zoom_control_finalize;
 
 	tool_item_class->create_menu_proxy = ephy_zoom_control_create_menu_proxy;
+	tool_item_class->set_tooltip = ephy_zoom_control_set_tooltip;
 
 	g_object_class_install_property (object_class,
 					 PROP_ZOOM,
