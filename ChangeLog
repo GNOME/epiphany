@@ -1,5 +1,19 @@
 2003-06-04  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* src/bookmarks/Makefile.am:
+	* src/bookmarks/ephy-bookmark-action.c: (connect_proxy):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_class_init),
+	(bookmarks_changed_cb), (bookmarks_removed_cb),
+	(ephy_bookmarks_set_keyword), (ephy_bookmarks_unset_keyword),
+	(ephy_bookmarks_get_favorites),
+	(ephy_bookmarks_get_not_categorized):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/ephy-window.c: (ephy_window_init), (ephy_window_finalize):
+
+	Implement bookmarks menu, might need to be optimized later.
+
+2003-06-04  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* data/ui/epiphany-ui.xml.in:
 
 	Add a bookmarks menu. (still not the tree)

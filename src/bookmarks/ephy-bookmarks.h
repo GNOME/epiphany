@@ -57,10 +57,7 @@ struct EphyBookmarksClass
 {
         GObjectClass parent_class;
 
-	void (* bookmark_remove) (EphyBookmarks *eb,
-			          long id);
-	void (* topic_remove)    (EphyBookmarks *eb,
-			          long id);
+	void (* tree_changed) (EphyBookmarks *eb);
 };
 
 GType		ephy_bookmarks_get_type		(void);
@@ -123,6 +120,8 @@ EphyNode       *ephy_bookmarks_get_favorites	(EphyBookmarks *eb);
 EphyNode       *ephy_bookmarks_get_keywords	(EphyBookmarks *eb);
 
 EphyNode       *ephy_bookmarks_get_bookmarks	(EphyBookmarks *eb);
+
+EphyNode       *ephy_bookmarks_get_not_categorized (EphyBookmarks *eb);
 
 G_END_DECLS
 

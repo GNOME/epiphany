@@ -89,6 +89,15 @@ enum
 	PROP_TOOLBARS_MODEL
 };
 
+/* Signals */
+enum
+{
+	TREE_CHANGED,
+	LAST_SIGNAL
+};
+
+static guint ephy_bookmarks_signals[LAST_SIGNAL] = { 0 };
+
 static void
 ephy_bookmarks_class_init (EphyBookmarksClass *klass);
 static void
@@ -287,6 +296,16 @@ ephy_bookmarks_class_init (EphyBookmarksClass *klass)
         object_class->finalize = ephy_bookmarks_finalize;
 	object_class->set_property = ephy_bookmarks_set_property;
 	object_class->get_property = ephy_bookmarks_get_property;
+
+	ephy_bookmarks_signals[TREE_CHANGED] =
+		g_signal_new ("tree_changed",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyBookmarksClass, tree_changed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
 
 	g_object_class_install_property (object_class,
                                          PROP_TOOLBARS_MODEL,
@@ -513,6 +532,7 @@ bookmarks_changed_cb (EphyNode *node,
 		      EphyBookmarks *eb)
 {
 	ephy_bookmarks_emit_data_changed (eb);
+	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
 }
 
 static void
@@ -522,6 +542,7 @@ bookmarks_removed_cb (EphyNode *node,
 		      EphyBookmarks *eb)
 {
 	ephy_bookmarks_emit_data_changed (eb);
+	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
 }
 
 static char *
@@ -1083,6 +1104,8 @@ ephy_bookmarks_set_keyword (EphyBookmarks *eb,
 
 	update_topics_list (bookmark, list);
 	g_free (list);
+
+	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
 }
 
 void
@@ -1109,6 +1132,8 @@ ephy_bookmarks_unset_keyword (EphyBookmarks *eb,
 
 	update_topics_list (bookmark, list);
 	g_free (list);
+
+	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
 }
 
 EphyNode *
@@ -1127,6 +1152,12 @@ EphyNode *
 ephy_bookmarks_get_favorites (EphyBookmarks *eb)
 {
 	return eb->priv->favorites;
+}
+
+EphyNode *
+ephy_bookmarks_get_not_categorized (EphyBookmarks *eb)
+{
+	return eb->priv->notcategorized;
 }
 
 EphyNode *

@@ -287,7 +287,8 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
 		g_signal_connect (proxy, "activate", G_CALLBACK (activate_cb), action);
 	}
 
-	if (EPHY_BOOKMARK_ACTION (action)->priv->smart_url)
+	if (EPHY_BOOKMARK_ACTION (action)->priv->smart_url &&
+	    EGG_IS_TOOL_ITEM (proxy))
 	{
 		GtkWidget *entry;
 

@@ -23,6 +23,7 @@
 #endif
 
 #include "ephy-window.h"
+#include "ephy-bookmarks-menu.h"
 #include "ephy-favorites-menu.h"
 #include "ephy-state.h"
 #include "ephy-gobject-misc.h"
@@ -269,6 +270,7 @@ struct EphyWindowPrivate
 	EphyFavoritesMenu *fav_menu;
 	EphyEncodingMenu *enc_menu;
 	EphyTabsMenu *tabs_menu;
+	EphyBookmarksMenu *bmk_menu;
 	PPViewToolbar *ppview_toolbar;
 	GtkNotebook *notebook;
 	EphyTab *active_tab;
@@ -604,6 +606,7 @@ ephy_window_init (EphyWindow *window)
 	window->priv->tabs_menu = ephy_tabs_menu_new (window);
 	window->priv->fav_menu = ephy_favorites_menu_new (window);
 	window->priv->enc_menu = ephy_encoding_menu_new (window);
+	window->priv->bmk_menu = ephy_bookmarks_menu_new (window);
 
 	/* Once window is fully created, add it to the session list*/
 	session_add_window (session, window);
@@ -663,6 +666,7 @@ ephy_window_finalize (GObject *object)
 	g_object_unref (window->priv->fav_menu);
 	g_object_unref (window->priv->enc_menu);
 	g_object_unref (window->priv->tabs_menu);
+	g_object_unref (window->priv->bmk_menu);
 
 	if (window->priv->ppview_toolbar)
 	{
