@@ -35,13 +35,16 @@
 #include "ephy-file-helpers.h"
 #include "ephy-debug.h"
 
+#include <libxml/tree.h>
 #include <libxml/xmlreader.h>
+#include <libxml/xmlschemas.h>
 
 #include <gmodule.h>
 #include <dirent.h>
 #include <string.h>
 
-#define CONF_LOADED_EXTENSIONS "/apps/epiphany/general/active_extensions"
+#define CONF_LOADED_EXTENSIONS	"/apps/epiphany/general/active_extensions"
+#define SCHEMA_FILE		"/epiphany-extension.xsd"
 
 #define EPHY_EXTENSIONS_MANAGER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EXTENSIONS_MANAGER, EphyExtensionsManagerPrivate))
 
@@ -54,6 +57,9 @@ struct _EphyExtensionsManagerPrivate
 	GList *extensions;
 	GList *windows;
 	guint active_extensions_notifier_id;
+
+	xmlSchemaPtr schema;
+	xmlSchemaValidCtxtPtr schema_ctxt;
 };
 
 typedef struct
@@ -307,6 +313,7 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 				   const char *dir,
 				   const char *filename)
 {
+	xmlDocPtr doc;
 	xmlTextReaderPtr reader;
 	ParserState state = STATE_START;
 	GQuark attr_quark = 0;
@@ -339,16 +346,34 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 		g_free (path);
 		return;
 	}
-	
-	reader = xmlNewTextReaderFilename (path);
+
+	/* FIXME: Ideally we'd put the schema validator in the reader. libxml2
+	 * doesn't seem to support that at this point in time, so we've got to
+	 * put the schema validation on the Doc Tree and then pass that to the
+	 * reader. (maybe switch to RelaxNG?)
+	 */
+	doc = xmlParseFile (path);
 	g_free (path);
 
-	if (reader == NULL)
+	if (doc == NULL)
 	{
 		g_warning ("Couldn't read '%s'\n", filename);
 		g_free (identifier);
 		return;
 	}
+
+	if (manager->priv->schema_ctxt)
+	{
+		if (xmlSchemaValidateDoc (manager->priv->schema_ctxt, doc))
+		{
+			g_warning ("Validation errors in '%s'\n", filename);
+			xmlFreeDoc (doc);
+			return;
+		}
+	}
+	
+	reader = xmlReaderWalker (doc);
+	g_return_if_fail (reader != NULL);
 
 	info = g_new0 (ExtensionInfo, 1);
 	einfo = (EphyExtensionInfo *) info;
@@ -580,6 +605,7 @@ ephy_extensions_manager_load_file (EphyExtensionsManager *manager,
 	}
 
 	xmlFreeTextReader (reader);
+	xmlFreeDoc (doc);
 
 	/* sanity check */
 	if (ret < 0 || state != STATE_STOP ||
@@ -647,7 +673,6 @@ static void
 load_extension (EphyExtensionsManager *manager,
 		ExtensionInfo *info)
 {
-
 	EphyLoader *loader;
 
 	g_return_if_fail (info->extension == NULL);
@@ -797,6 +822,63 @@ active_extensions_notifier (GConfClient *client,
 }
 
 static void
+xml_error_cb (EphyExtensionsManager *manager,
+	      const char *msg,
+	      ...)
+
+{
+	va_list args;
+
+	va_start (args, msg);
+	g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING, msg, args);
+	va_end(args);
+}
+
+static void
+init_schema_ctxt (EphyExtensionsManager *manager)
+{
+	xmlSchemaParserCtxtPtr parse_ctxt;
+	const char *filename;
+
+	manager->priv->schema = NULL;
+	manager->priv->schema_ctxt = NULL;
+
+	filename = ephy_file (SCHEMA_FILE);
+	g_return_if_fail (filename != NULL);
+
+	parse_ctxt = xmlSchemaNewParserCtxt (filename);
+	if (parse_ctxt == NULL)
+	{
+		g_warning ("Error opening extensions description schema file "
+			   "\"" SCHEMA_FILE "\"");
+		return;
+	}
+
+	manager->priv->schema = xmlSchemaParse (parse_ctxt);
+	xmlSchemaFreeParserCtxt (parse_ctxt);
+	if (manager->priv->schema == NULL)
+	{
+		g_warning ("Error parsing extensions description schema file "
+			   "\"" SCHEMA_FILE "\"");
+		return;
+	}
+
+	manager->priv->schema_ctxt = xmlSchemaNewValidCtxt
+		(manager->priv->schema);
+	if (manager->priv->schema == NULL)
+	{
+		g_warning ("Error creating extensions description schema "
+			   "validation context for \"" SCHEMA_FILE "\"");
+		return;
+	}
+
+	xmlSchemaSetValidErrors (manager->priv->schema_ctxt,
+				 (xmlSchemaValidityErrorFunc) xml_error_cb,
+				 (xmlSchemaValidityWarningFunc) xml_error_cb,
+				 manager);
+}
+
+static void
 ephy_extensions_manager_init (EphyExtensionsManager *manager)
 {
 	char *path;
@@ -804,6 +886,8 @@ ephy_extensions_manager_init (EphyExtensionsManager *manager)
 	manager->priv = EPHY_EXTENSIONS_MANAGER_GET_PRIVATE (manager);
 
 	LOG ("EphyExtensionsManager initialising")
+
+	init_schema_ctxt (manager);
 
 	/* load the extensions descriptions */
 	path = g_build_filename (ephy_dot_dir (), "extensions", NULL);
@@ -840,6 +924,15 @@ ephy_extensions_manager_finalize (GObject *object)
 	g_list_free (priv->data);
 
 	g_list_free (priv->windows);
+
+	if (priv->schema)
+	{
+		xmlSchemaFree (priv->schema);
+	}
+	if (priv->schema_ctxt)
+	{
+		xmlSchemaFreeValidCtxt (priv->schema_ctxt);
+	}
 
 	parent_class->finalize (object);
 }

@@ -7,21 +7,7 @@
 		</xsd:documentation>
 	</xsd:annotation>
 
-	<xsd:element name="extension-list" type="ExtensionListType"/>
-
-	<xsd:complexType name="ExtensionListType">
-		<xsd:annotation>
-			<xsd:documentation xml:lang="en">
-				List of extensions. Each extension has its set
-				of metadata.
-			</xsd:documentation>
-		</xsd:annotation>
-		<xsd:sequence>
-			<xsd:element name="extension"
-				     type="ExtensionType"
-				     minOccurs="1"/>
-		</xsd:sequence>
-	</xsd:complexType>
+	<xsd:element name="extension" type="ExtensionType"/>
 
 	<xsd:complexType name="ExtensionType">
 		<xsd:annotation>
@@ -30,50 +16,19 @@
 			</xsd:documentation>
 		</xsd:annotation>
 		<xsd:sequence>
-			<xsd:element name="filename"
-				     type="ExtensionFilenameType"
-				     minOccurs="1" maxOccurs="1"/>
-			<xsd:element name="name"
-				     type="xsd:string"
-				     minOccurs="1" maxOccurs="1"/>
-			<xsd:element name="description"
-				     type="xsd:string"
-				     minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="description" type="xsd:string"/>
+			<xsd:element name="author" type="AuthorType"
+				     maxOccurs="unbounded"/>
+			<xsd:element name="url" type="xsd:anyURI"
+				     minOccurs="0"/>
 			<xsd:element name="version"
-				     type="ExtensionVersionType"
-				     minOccurs="1" maxOccurs="1"/>
-<!--
-			<xsd:element name="min-epiphany-version"
-				     type="EpiphanyVersionType"
-				     maxOccurs="1"/>
-			<xsd:element name="max-epiphany-version"
-				     type="EpiphanyVersionType"
-				     maxOccurs="1"/>
-			<xsd:element name="min-mozilla-version"
-				     type="MozillaVersionType"
-				     maxOccurs="1"/>
-			<xsd:element name="max-mozilla-version"
-				     type="MozillaVersionType"
-				     maxOccurs="1"/>
--->
-			<xsd:element name="author" type="AuthorType"/>
-			<xsd:element name="url" type="xsd:anyURI"/>
+				     type="ExtensionVersionType"/>
+			<xsd:element name="gettext-domain" type="xsd:string"/>
+			<xsd:element name="locale-directory" type="xsd:string"/>
+			<xsd:element name="loader" type="LoaderType"/>
 		</xsd:sequence>
 	</xsd:complexType>
-
-	<xsd:simpleType name="ExtensionFilenameType">
-		<xsd:annotation>
-			<xsd:documentation xml:lang="en">
-				The &quot;core&quot; of the extension's
-				filename. For example, use &quot;gestures&quot;
-				for an extension with a shared object name of
-				&quot;libgesturesextension.so&quot;.
-			</xsd:documentation>
-		</xsd:annotation>
-		<xsd:restriction base="xsd:string">
-			<xsd:pattern value="[a-zA-Z0-9_-]+"/>
-		</xsd:restriction>
-	</xsd:simpleType>
 
 	<xsd:simpleType name="ExtensionVersionType">
 		<xsd:annotation>
@@ -81,101 +36,42 @@
 				The version of the extension's API. For most
 				extensions, this number will remain at
 				&quot;1&quot; indefinitely. The only reason to
-				increase it would be if any GObject classess
+				increase it would be if any GObject classes
 				within the extension change parents.
 			</xsd:documentation>
 		</xsd:annotation>
 		<xsd:restriction base="xsd:positiveInteger"/>
 	</xsd:simpleType>
 
-<!--
-	<xsd:complexType name="EpiphanyVersionType">
-		<xsd:annotation>
-			<xsd:documentation xml:lang="en">
-				An Epiphany version (major.minor.micro).
-				Extensions may function properly across a range
-				of Epiphany versions, as long as the relevant
-				parts of the Epiphany API have not changed.
-			</xsd:documentation>
-		</xsd:annotation>
-		<xsd:sequence>
-			<xsd:element name="major"
-				     type="xsd:positiveInteger"
-				     minOccurs="1" maxOccurs="1"/>
-			<xsd:element name="minor"
-				     type="xsd:positiveInteger"
-				     minOccurs="1" maxOccurs="1"/>
-			<xsd:element name="micro"
-				     type="xsd:positiveInteger"
-				     minOccurs="1" maxOccurs="1"/>
-		</xsd:sequence>
-	</xsd:complexType>
-
-	<xsd:complexType name="MozillaVersionType">
-		<xsd:annotation>
-			<xsd:documentation xml:lang="en">
-				A Mozilla version (major, minor, type, micro).
-				Extensions my function properly across a range
-				of Mozilla versions, as long as the relevant
-				parts of the Mozilla API have not changed.
-			</xsd:documentation>
-		</xsd:annotation>
-		<xsd:sequence>
-			<xsd:element name="major"
-				     type="xsd:positiveInteger"
-				     minOccurs="1" maxOccurs="1"/>
-			<xsd:element name="minor"
-				     type="xsd:positiveInteger"
-				     minOccurs="1" maxOccurs="1"/>
-			<xsd:element name="type"
-				     type="MozillaVersionTypeType"
-				     minOccurs="1" maxOccurs="1"/>
-			<xsd:element name="micro"
-				     type="xsd:positiveInteger"
-				     minOccurs="1" maxOccurs="1"/>
-		</xsd:sequence>
-	</xsd:complexType>
-
-	<xsd:simpleType name="MozillaVersionTypeType">
-		<xsd:annotation>
-			<xsd:documentation xml:lang="en">
-				The &quot;type&quot; of a Mozilla version. 1
-				means Alpha, 2 means Beta, 3 means RC and 4
-				means release.
-			</xsd:documentation>
-		</xsd:annotation>
-		<xsd:restriction base="xsd:positiveInteger">
-			<xsd:minInclusive value="1"/>
-			<xsd:maxInclusive value="4"/>
-		</xsd:restriction>
-	</xsd:simpleType>
--->
-
-	<xsd:complexType name="AuthorType">
+	<xsd:simpleType name="AuthorType">
 		<xsd:annotation>
 			<xsd:documentation xml:lang="en">
 				An extension author -- a name and (optionally)
 				an email address.
 			</xsd:documentation>
 		</xsd:annotation>
-		<xsd:sequence>
-			<xsd:element name="name"
-				     type="xsd:normalizedString"
-				     minOccurs="1" maxOccurs="1"/>
-			<xsd:element name="email"
-				     type="EmailType"
-				     maxOccurs="1"/>
-		</xsd:sequence>
-	</xsd:complexType>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
 
-	<xsd:simpleType name="EmailType">
+	<xsd:complexType name="LoaderType">
 		<xsd:annotation>
 			<xsd:documentation xml:lang="en">
-				An email address
+				The type of loader to use for the extension.
+				For example, &quot;shlib&quot;.
 			</xsd:documentation>
 		</xsd:annotation>
-		<xsd:restriction base="xsd:string">
-			<xsd:pattern value="[\.a-zA-Z0-9_-]+@([a-zA-Z0-9_-])+(([a-zA-Z0-9_-])*\.([a-zA-Z0-9_-])+)+"/>
-		</xsd:restriction>
-	</xsd:simpleType>
+		<xsd:sequence>
+			<xsd:element name="attribute" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="xsd:string">
+							<xsd:attribute name="name" type="xsd:ID"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="xsd:ID" use="required"/>
+	</xsd:complexType>
+
 </xsd:schema>
