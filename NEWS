@@ -21,6 +21,12 @@ Code changes
 	  use dying shell (Marco)
 	* Use GtkIconTheme (Marco)
 	* Use ngettext where useful (Christian)
+	* New implementation of location entry using GtkComboBox (Marco)
+	* New downloads implementation (user interface being worked on) (Xan, Marco)
+	* Remove our custom implementation and use gtk api for
+	  empty bookmarks menu (Marco, credits to Matthias Clasen for gtk implementation)
+	* Make the favourites menu self-updating (Christian)
+	* Port history and bookmarks combos to new api (Marco)
 
 New features
 	
@@ -31,6 +37,8 @@ New features
 	* History time filter (Marco)
 	* Import bookmarks from Firebird (Christian)
 	* Ability to import bookmarks from a custom file (Marco)
+	* Allow dragging of tabs to a window even when the tabs bar is not
+          shown. (Christian)
 
 Interface improvements
 
@@ -45,6 +53,23 @@ Interface improvements
 	* Use radio buttons for tabs menu (Marco)
 	* Fix spacing in a few dialogs (Marco)
 	* Better icons on mime dialog (Marco)
+	* Case insensitive bookmarks matching in autocompletion
+	  (Marco, credits to Kristian Rietveld for rocking new widget)
+	* Show bookmarks at the top of autocompletion list (Marco)
+	* Speedup history dialog (Marco)
+	* Visual progress bar in downloader (Marco)
+	* Better encoding menu interface. Show most common/most used
+	  entry in the menu, split the others out to a dialog. Allow
+	  to revert to Automatic. Show current selected encoding with
+	  radio buttons (Christian, credits to Matthew Thomas for user
+	  interface ideas)
+	* Toolbar editor improvements. Show a different cursor when
+	  hovering the items. Pickup and drop behavior. Make space
+	  for the item instead of showing a line (Marco, credits to
+	  Soeren Sandmann for gtk changes)
+	* Make location a normal entry, removing the hard to click,
+	  vastly unused arrow for typed urls. (Marco)
+	* Focus bookmarks search entry by default (Ettore Perazzoli)
 
 Bugfixes
 
@@ -59,6 +84,33 @@ Bugfixes
 	* Fix compilation on Solaris (Marco)
 	* Set a MOZ_PLUGIN_PATH default. (Christopher James Lahey)
 	* Fix a warning when printing to a file (Christian)
+	* Fix intermittent nautilus view activation failure (Mark McLoughlin)
+	* Fix downloads with authentication (Marco)
+	* Fix history clear, sometimes sites was not removed
+	  completely (Marco)
+	* Fix some treeview model leaks (Christian, Marco)
+
+Translations
+
+	* cs (Miloslav Trmac)
+	* en_GB (Christian Persch)
+	* fr (Eric Seigne)
+	* ga (Paul Duffy)
+	* hi (Guntupalli Karunakar)
+	* hu (Andras Timar)
+	* lt (Zygimantas Berucka)
+	* ml (Abel Cheung)
+	* mn (Sanlig Badral)
+	* nl (Vincent van Adrighem)
+	* pt_BR (Evandro Fernandes Giovanini)
+	* ro (Misu Moldovan)
+	* sk (Marcel Telka)
+	* sq (Laurent Dhima)
+	* sr.po (Danilo Segan)
+	* sr@Latn.po (Danilo Segan)
+	* sv (Christian Rose)
+	* ta (Dinesh Nadarajah)
+	* vi (Pablo Saratxaga)
 
 ==============
 Epiphany 0.9.2
