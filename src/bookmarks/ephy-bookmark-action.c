@@ -24,6 +24,7 @@
 #include <libgnomevfs/gnome-vfs-uri.h>
 
 #include "ephy-bookmark-action.h"
+#include "ephy-bookmark-toolitem.h"
 #include "ephy-bookmarks.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
@@ -87,56 +88,6 @@ ephy_bookmark_action_get_type (void)
 					       &type_info, 0);
 	}
 	return type;
-}
-
-static GtkWidget *
-create_menu_item (EggAction *action)
-{
-	GtkWidget *item;
-
-	item = gtk_image_menu_item_new ();
-
-	return item;
-}
-
-static GtkWidget *
-create_tool_item (EggAction *action)
-{
-	GtkWidget *item, *button, *hbox, *label,
-		  *icon, *entry;
-
-	item = (* EGG_ACTION_CLASS (parent_class)->create_tool_item) (action);
-
-	hbox = gtk_hbox_new (FALSE, 0);
-	gtk_widget_show (hbox);
-	gtk_container_add (GTK_CONTAINER (item), hbox);
-
-	button = gtk_button_new ();
-	gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-	gtk_widget_show (button);
-	gtk_container_add (GTK_CONTAINER (hbox), button);
-	g_object_set_data (G_OBJECT (item), "button", button);
-
-	entry = gtk_entry_new ();
-	gtk_widget_set_size_request (entry, 120, -1);
-	gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
-	g_object_set_data (G_OBJECT (item), "entry", entry);
-
-	hbox = gtk_hbox_new (FALSE, 0);
-	gtk_widget_show (hbox);
-	gtk_container_add (GTK_CONTAINER (button), hbox);
-
-	icon = gtk_image_new ();
-	gtk_widget_show (icon);
-	gtk_box_pack_start (GTK_BOX (hbox), icon, TRUE, TRUE, 0);
-	g_object_set_data (G_OBJECT (item), "icon", icon);
-
-	label = gtk_label_new (NULL);
-	gtk_widget_show (label);
-	gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
-	g_object_set_data (G_OBJECT (item), "label", label);
-
-	return item;
 }
 
 static void
@@ -304,6 +255,8 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
 {
 	GtkWidget *button, *entry;
 
+	LOG ("Connecting action %p to proxy %p", action, proxy)
+
 	(* EGG_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 
 	ephy_bookmark_action_sync_label (action, NULL, proxy);
@@ -411,9 +364,8 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 	parent_class = g_type_class_peek_parent (class);
 	action_class = EGG_ACTION_CLASS (class);
 
-	action_class->toolbar_item_type = EGG_TYPE_TOOL_ITEM;
-	action_class->create_tool_item = create_tool_item;
-	action_class->create_menu_item = create_menu_item;
+	action_class->toolbar_item_type = EPHY_TYPE_BOOKMARK_TOOLITEM;
+	action_class->menu_item_type = GTK_TYPE_IMAGE_MENU_ITEM;
 	action_class->connect_proxy = connect_proxy;
 
 	object_class->finalize = ephy_bookmark_action_finalize;

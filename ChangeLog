@@ -1,3 +1,13 @@
+2003-06-11  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/bookmarks/ephy-bookmark-toolitem.h:
+	* src/bookmarks/ephy-bookmark-toolitem.c:
+	* src/bookmarks/ephy-bookmark-action.c: (create_tool_item),
+	(create_menu_item), (ephy_bookmark_action_class_init):
+
+	Moved bookmark tool item creation to a dedicated tool item. That way we
+	can provide toolbar overflow menu items.
+
 2003-06-11  Xan Lopez  <xan@masilla.org>
 
 	* lib/widgets/ephy-node-view.c: (ephy_node_view_select_node):
