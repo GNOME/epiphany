@@ -1,3 +1,14 @@
+2003-07-19  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/mozilla-embed-single.c: (getUILang),
+	(mozilla_init_chrome), (mozilla_embed_single_init_services):
+
+	Set the chrome locale on startup. That means that if the correct lang
+	pack is installed, dialogues coming from mozilla will be translated.
+	Set skin to 'classic' on startup, so we get native scrollbars.
+
+	Ported from galeon.
+
 2003-07-18  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/mozilla/mozilla-embed-single.cpp:

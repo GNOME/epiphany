@@ -55,6 +55,10 @@
 #include <nsCCookieManager.h>
 #include <nsCPasswordManager.h>
 
+// FIXME: For setting the locale. hopefully gtkmozembed will do itself soon
+#include <nsIChromeRegistry.h>
+#include <nsILocaleService.h>
+
 #define MOZILLA_PROFILE_DIR  "/mozilla"
 #define MOZILLA_PROFILE_NAME "epiphany"
 #define MOZILLA_PROFILE_FILE "prefs.js"
@@ -536,15 +540,77 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 				  NULL);
 }
 
+static nsresult
+getUILang (nsAString& aUILang)
+{
+	nsresult result;
+
+	nsCOMPtr<nsILocaleService> localeService = do_GetService (NS_LOCALESERVICE_CONTRACTID, &result);
+	if (NS_FAILED (result) || !localeService)
+	{
+		g_warning ("Could not get locale service!\n");
+		return NS_ERROR_FAILURE;
+	}
+
+	nsXPIDLString uiLang;
+	result = localeService->GetLocaleComponentForUserAgent (getter_Copies(uiLang));
+	aUILang = uiLang;
+	if (NS_FAILED (result))
+	{
+		g_warning ("Could not determine locale!\n");
+		return NS_ERROR_FAILURE;
+	}
+
+	return NS_OK;
+}
+
+static nsresult
+mozilla_init_chrome (void)
+{
+	nsresult result;
+	nsAutoString uiLang;
+
+	nsCOMPtr<nsIXULChromeRegistry> chromeRegistry = do_GetService (NS_CHROMEREGISTRY_CONTRACTID, &result);
+	if (NS_FAILED (result) || !chromeRegistry)
+	{
+		g_warning ("Could not get the chrome registry!\n");
+		return NS_ERROR_FAILURE;
+	}
+
+	// Set skin to 'classic' so we get native scrollbars.
+	result = chromeRegistry->SelectSkin (NS_LITERAL_CSTRING("classic/1.0"), PR_FALSE);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+
+	// set locale
+	chromeRegistry->SetRuntimeProvider(PR_TRUE);
+
+	result = getUILang(uiLang);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+
+	result = chromeRegistry->SelectLocale (NS_ConvertUCS2toUTF8(uiLang), PR_FALSE);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+
+	return NS_OK;
+}
+
 gboolean
 mozilla_embed_single_init_services (MozillaEmbedSingle *single)
 {
+	nsresult result;
+
 	/* Pre initialization */
 	mozilla_init_home ();
 	mozilla_init_profile ();
 	
 	/* Fire up the best */
 	gtk_moz_embed_push_startup ();
+
+	/* Until gtkmozembed does this itself */
+	result = mozilla_init_chrome ();
+	if (NS_FAILED (result))
+	{
+		g_warning ("Failed to set locale and skin.\n");
+	}
 
 	mozilla_init_single (single);
 
