@@ -197,5 +197,5 @@ stamp-ephy-type-builtins.h: $(INST_H_FILES) $(NOINST_H_FILES)
 	&& echo timestamp > $(@F)
 
 CLEANFILES = $(BUILT_SOURCES)
-DISTCLEANFILES = $(BUILT_SOURCES)
+DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)

@@ -84,8 +84,8 @@ BUILT_SOURCES = \
 	ephy-embed-type-builtins.c	\
 	ephy-embed-type-builtins.h
 
-CLEAN_FILES = $(BUILT_SOURCES)
-DISTCLEAN_FILES = $(BUILT_SOURCES)
+CLEANFILES = $(BUILT_SOURCES)
+DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 
 stamp_files = \

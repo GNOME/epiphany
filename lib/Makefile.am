@@ -96,8 +96,8 @@ BUILT_SOURCES = \
 	ephy-marshal.c			\
 	ephy-marshal.h
 
-CLEAN_FILES = $(BUILT_SOURCES)
-DISTCLEAN_FILES = $(BUILT_SOURCES)
+CLEANFILES = $(BUILT_SOURCES)
+DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 
 stamp_files = \
