@@ -1,6 +1,21 @@
 2003-07-13  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* Makefile.am:
+
+	Add plugins dir
+
+	* plugins/sample/Makefile.am:
+	* plugins/sample/sample.c: (window_focus_in_cb):
+
+	Make it compile with not installed headers
+
+	* src/Makefile.am:
+
+	Remove an obsolete include dir
+
+2003-07-13  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* Makefile.am:
 	* configure.in:
 	* embed/Makefile.am:
 	* embed/ephy-embed-shell.c: (ephy_embed_shell_get_favicon_cache),

@@ -20,8 +20,8 @@
 #include <gmodule.h>
 #include <glib-object.h>
 
-#include "epiphany/ephy-shell.h"
-#include "epiphany/session.h"
+#include "ephy-shell.h"
+#include "session.h"
 
 static void
 bmk_added (EphyNode *node, EphyNode *child)
@@ -53,13 +53,15 @@ switch_page_cb (GtkWidget *widget)
 	g_print ("New active tab is %p\n", tab);
 }
 
-static void
+static gboolean
 window_focus_in_cb (GtkWidget *widget, GdkEventFocus *event)
 {
 	EphyTab *tab;
 
 	tab = ephy_window_get_active_tab (EPHY_WINDOW (widget));
 	g_print ("New active tab is %p\n", tab);
+
+	return FALSE;
 }
 
 static void

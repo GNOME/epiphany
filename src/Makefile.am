@@ -5,7 +5,6 @@ INCLUDES = \
 	-I$(top_srcdir)/lib   		\
 	-I$(top_srcdir)/lib/egg		\
 	-I$(top_srcdir)/lib/widgets   	\
-	-I$(top_srcdir)/lib/toolbar     \
 	-I$(top_srcdir)/src/bookmarks   \
 	$(WARN_CFLAGS)			\
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\

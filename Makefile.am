@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = lib embed src data po help
+SUBDIRS = lib embed src data po help plugins
 
 distcleancheck_listfiles = find . -type f -print | grep -v 'omf\.out'
 
