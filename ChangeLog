@@ -1,3 +1,24 @@
+2004-02-25  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/ephy-embed-persist.c: (ephy_embed_persist_set_max_size),
+	(ephy_embed_persist_set_property),
+	(ephy_embed_persist_get_property), (ephy_embed_persist_init),
+	(ephy_embed_persist_class_init):
+	* embed/ephy-embed-persist.h:
+
+	Make max size property use long / bytes.
+
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_download):
+
+	Correct to use bytes.
+
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozDownload.h:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+
+	Actually respect the max_size property.
+
 2004-02-24  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-tab.c: (let_me_resize_hack), (ephy_tab_size_to_cb):

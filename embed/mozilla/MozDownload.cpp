@@ -63,7 +63,9 @@
 const char* const persistContractID = "@mozilla.org/embedding/browser/nsWebBrowserPersist;1";
 
 MozDownload::MozDownload() :
-	mGotFirstStateChange(false), mIsNetworkTransfer(false),
+	mMaxSize(-1),
+	mGotFirstStateChange(false),
+	mIsNetworkTransfer(false),
 	mStatus(NS_OK),
 	mEmbedPersist(nsnull),
 	mDownloadState(EPHY_DOWNLOAD_DOWNLOADING)
@@ -79,9 +81,10 @@ NS_IMPL_ISUPPORTS2(MozDownload, nsIDownload, nsIWebProgressListener)
 NS_IMETHODIMP
 MozDownload::InitForEmbed (nsIURI *aSource, nsILocalFile *aTarget, const PRUnichar *aDisplayName,
 		           nsIMIMEInfo *aMIMEInfo, PRInt64 startTime, nsIWebBrowserPersist *aPersist,
-		           MozillaEmbedPersist *aEmbedPersist)
+		           MozillaEmbedPersist *aEmbedPersist, PRInt32 aMaxSize)
 {
 	mEmbedPersist = aEmbedPersist;
+	mMaxSize = aMaxSize;
 	return Init (aSource, aTarget, aDisplayName, aMIMEInfo, startTime, aPersist);
 }
 
@@ -355,6 +358,13 @@ MozDownload::OnProgressChange(nsIWebProgress *aWebProgress, nsIRequest *aRequest
 			      PRInt32 aCurSelfProgress, PRInt32 aMaxSelfProgress,
 			      PRInt32 aCurTotalProgress, PRInt32 aMaxTotalProgress)
 {
+	if (mMaxSize >= 0 &&
+	    ((aMaxTotalProgress > 0 && mMaxSize > aMaxTotalProgress) ||
+	     mMaxSize > aCurTotalProgress))
+	{
+		Cancel ();
+	}
+
 	if (!mRequest)
 		mRequest = aRequest;
 
@@ -449,7 +459,8 @@ MozDownload::Resume()
 nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI,
 				  nsILocalFile* inDestFile, const char *contentType,
 				  nsIURI* inOriginalURI, MozillaEmbedPersist *embedPersist,
-				  nsIInputStream *postData, nsISupports *aCacheKey)
+				  nsIInputStream *postData, nsISupports *aCacheKey,
+				  PRInt32 aMaxSize)
 {
 	nsresult rv = NS_OK;
 
@@ -472,7 +483,7 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 	MozDownload *downloader = new MozDownload ();
 	/* dlListener attaches to its progress dialog here, which gains ownership */
 	rv = downloader->InitForEmbed (inOriginalURI, inDestFile, fileDisplayName.get(),
-				       nsnull, timeNow, webPersist, embedPersist);
+				       nsnull, timeNow, webPersist, embedPersist, aMaxSize);
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	PRInt32 flags = nsIWebBrowserPersist::PERSIST_FLAGS_REPLACE_EXISTING_FILES;

@@ -133,7 +133,7 @@ impl_save (EphyEmbedPersist *persist)
 	nsresult rv;
 	char *filename;
 	char *uri;
-	int max_size;
+	long max_size;
 	EphyEmbed *embed;
 	EmbedPersistFlags flags;
 	PRUint32 persistFlags = 0;
@@ -257,7 +257,7 @@ impl_save (EphyEmbedPersist *persist)
 
 		rv =  InitiateMozillaDownload (DOMDocument, inURI, destFile,
 					       nsnull, inURI, MOZILLA_EMBED_PERSIST (persist),
-					       postData, pageDescriptor);
+					       postData, pageDescriptor, max_size);
 		if (NS_FAILED (rv)) return FALSE;
 	}
 

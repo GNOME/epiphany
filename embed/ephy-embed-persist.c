@@ -50,7 +50,7 @@ struct EphyEmbedPersistPrivate
 	char *fc_title;
 	char *persist_key;
 	EphyEmbed *embed;
-	int max_size;
+	long max_size;
 	EmbedPersistFlags flags;
 	GtkWindow *fc_parent;
 };
@@ -135,7 +135,7 @@ ephy_embed_persist_set_flags (EphyEmbedPersist *persist,
 
 void
 ephy_embed_persist_set_max_size (EphyEmbedPersist *persist,
-				 int value)
+				 long value)
 {
 	g_return_if_fail (EPHY_IS_EMBED_PERSIST (persist));
 
@@ -250,7 +250,7 @@ ephy_embed_persist_set_property (GObject *object,
 			ephy_embed_persist_set_flags (persist, g_value_get_int (value));
 			break;
 		case PROP_MAX_SIZE:
-			ephy_embed_persist_set_max_size (persist, g_value_get_int (value));
+			ephy_embed_persist_set_max_size (persist, g_value_get_long (value));
 			break;
 		case PROP_PERSISTKEY:
 			ephy_embed_persist_set_persist_key (persist, g_value_get_string (value));
@@ -287,7 +287,7 @@ ephy_embed_persist_get_property (GObject *object,
 			g_value_set_int (value, ephy_embed_persist_get_flags (persist));
 			break;
 		case PROP_MAX_SIZE:
-			g_value_set_int (value, ephy_embed_persist_get_max_size (persist));
+			g_value_set_long (value, ephy_embed_persist_get_max_size (persist));
 			break;
 		case PROP_PERSISTKEY:
 			g_value_set_string (value, ephy_embed_persist_get_persist_key (persist));
@@ -310,7 +310,7 @@ ephy_embed_persist_init (EphyEmbedPersist *persist)
 	persist->priv->fc_title = NULL;
 	persist->priv->fc_parent = NULL;
 	persist->priv->flags = 0;
-	persist->priv->max_size = 0;
+	persist->priv->max_size = -1;
 	persist->priv->persist_key = NULL;
 }
 
@@ -395,11 +395,11 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 
 	g_object_class_install_property (object_class,
 					 PROP_MAX_SIZE,
-					 g_param_spec_int    ("max_size",
+					 g_param_spec_long   ("max_size",
 							      "Maxsize",
 							      "Maximum size of the file",
 							      0,
-							      G_MAXINT,
+							      G_MAXLONG,
 							      0,
 							      G_PARAM_READWRITE));
 

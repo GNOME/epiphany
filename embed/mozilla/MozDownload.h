@@ -83,7 +83,8 @@
 nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceUri,
 				  nsILocalFile* inDestFile, const char *contentType,
 				  nsIURI* inOriginalURI, MozillaEmbedPersist *embedPersist,
-				  nsIInputStream *postData, nsISupports *aCacheKey);
+				  nsIInputStream *postData, nsISupports *aCacheKey,
+				  PRInt32 aMaxSize);
 nsresult BuildDownloadPath (const char *defaultFileName, nsILocalFile **_retval);
 
 class MozDownload : public nsIDownload,
@@ -108,7 +109,7 @@ public:
 	nsresult InitForEmbed       (nsIURI *aSource, nsILocalFile *aTarget,
 				     const PRUnichar *aDisplayName, nsIMIMEInfo *aMIMEInfo,
 				     PRInt64 startTime, nsIWebBrowserPersist *aPersist,
-				     MozillaEmbedPersist *aEmbedPersist);
+				     MozillaEmbedPersist *aEmbedPersist, PRInt32 aMaxSize);
 
 protected:
 	nsCOMPtr<nsIURI>        mSource;
@@ -121,6 +122,7 @@ protected:
 	PRInt32                 mPercentComplete;
 	PRInt32                 mTotalProgress;
 	PRInt32                 mCurrentProgress;
+	PRInt32			mMaxSize;
 
 	bool                    mGotFirstStateChange, mIsNetworkTransfer;
 	nsresult                mStatus;

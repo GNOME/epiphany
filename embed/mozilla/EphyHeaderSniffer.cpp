@@ -353,7 +353,7 @@ nsresult EphyHeaderSniffer::InitiateDownload (nsILocalFile *aDestFile)
 	LOG ("Initiating download")
 	return InitiateMozillaDownload (mDocument, mURL, aDestFile,
 					mContentType.get(), mOriginalURI, mEmbedPersist,
-					mPostData, nsnull);
+					mPostData, nsnull, -1);
 }
 
 NS_IMETHODIMP EphyHeaderSniffer::Prompt (const PRUnichar *dialogTitle, const PRUnichar *text,

@@ -94,7 +94,7 @@ void			 ephy_embed_persist_set_flags		(EphyEmbedPersist *persist,
 								 EmbedPersistFlags value);
 
 void			 ephy_embed_persist_set_max_size	(EphyEmbedPersist *persist,
-								 int value);
+								 long value);
 
 void			 ephy_embed_persist_set_persist_key	(EphyEmbedPersist *persist,
 								 const char *value);
