@@ -28,12 +28,13 @@ G_BEGIN_DECLS
 #define EPHY_STOCK_HISTORY         "epiphany-history"
 #define EPHY_STOCK_BOOKMARKS       "epiphany-bookmarks"
 #define EPHY_STOCK_BOOKMARK_PAGE   "epiphany-bookmark-page"
-#define EPHY_STOCK_NEW_TAB         "epiphany-new-tab"
-#define EPHY_STOCK_FULLSCREEN      "epiphany-fullscreen"
-#define EPHY_STOCK_VIEWSOURCE      "epiphany-viewsource"
-#define EPHY_STOCK_SEND_LINK       "epiphany-send-link"
 #define EPHY_STOCK_ENTRY	   "epiphany-entry"
 #define EPHY_STOCK_DOWNLOAD	   "epiphany-download"
+
+#define STOCK_NEW_TAB		   "stock_new-tab"
+#define STOCK_FULLSCREEN	   "stock_fullscreen"
+#define STOCK_VIEW_SOURCE	   "stock_view-html-source"
+#define STOCK_SEND_MAIL		   "stock_mail_send"
 
 void ephy_stock_icons_init (void);
 

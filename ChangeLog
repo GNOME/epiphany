@@ -1,3 +1,18 @@
+2003-11-21  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/ephy-stock-icons.c: (ephy_stock_icons_init):
+	* lib/ephy-stock-icons.h:
+
+	Pass a source based on filename instead of pixbuf
+	for our own icon set, so that they are created only
+	when necessary.
+	Add code to insert icon theme icons in our icon set
+	and use icon theme icons when possible.
+
+	* src/ephy-window.c:
+
+	Update icons id.
+
 2003-11-20  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* data/glade/prefs-dialog.glade:

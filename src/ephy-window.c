@@ -87,7 +87,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "FileNewWindow", GTK_STOCK_NEW, N_("_New Window"), "<control>N",
 	  N_("Open a new window"),
 	  G_CALLBACK (window_cmd_file_new_window) },
-	{ "FileNewTab", EPHY_STOCK_NEW_TAB, N_("New _Tab"), "<control>T",
+	{ "FileNewTab", STOCK_NEW_TAB, N_("New _Tab"), "<control>T",
 	  N_("Open a new tab"),
 	  G_CALLBACK (window_cmd_file_new_tab) },
 	{ "FileOpen", GTK_STOCK_OPEN, N_("_Open..."), "<control>O",
@@ -99,7 +99,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "FilePrint", GTK_STOCK_PRINT, N_("_Print..."), "<control>P",
 	  N_("Print the current page"),
 	  G_CALLBACK (window_cmd_file_print) },
-	{ "FileSendTo", EPHY_STOCK_SEND_LINK, N_("S_end To..."), NULL,
+	{ "FileSendTo", STOCK_SEND_MAIL, N_("S_end To..."), NULL,
 	  N_("Send a link of the current page"),
 	  G_CALLBACK (window_cmd_file_send_to) },
 	{ "FileCloseWindow", GTK_STOCK_CLOSE, N_("_Close"), "<control>W",
@@ -163,7 +163,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "ViewEncoding", NULL, N_("Text _Encoding"), NULL,
 	  N_("Change the text encoding"),
 	  NULL },
-	{ "ViewPageSource", EPHY_STOCK_VIEWSOURCE, N_("_Page Source"), "<control>U",
+	{ "ViewPageSource", STOCK_VIEW_SOURCE, N_("_Page Source"), "<control>U",
 	  N_("View the source code of the page"),
 	  G_CALLBACK (window_cmd_view_page_source) },
 
@@ -234,7 +234,7 @@ static GtkToggleActionEntry ephy_menu_toggle_entries [] =
 	{ "ViewStatusbar", NULL, N_("St_atusbar"), NULL,
 	  N_("Show or hide statusbar"),
 	  G_CALLBACK (window_cmd_view_statusbar), TRUE },
-	{ "ViewFullscreen", EPHY_STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
+	{ "ViewFullscreen", STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
 	  N_("Browse at full screen"),
 	  G_CALLBACK (window_cmd_view_fullscreen), FALSE}
 };

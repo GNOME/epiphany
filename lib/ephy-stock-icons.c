@@ -30,7 +30,17 @@ void
 ephy_stock_icons_init (void)
 {
 	GtkIconFactory *factory;
+	GtkIconSet *icon_set;
+	GtkIconSource *icon_source;
 	int i;
+
+	static const char *icon_theme_items[] =
+	{
+		STOCK_NEW_TAB,
+		STOCK_FULLSCREEN,
+		STOCK_VIEW_SOURCE,
+		STOCK_SEND_MAIL
+	};
 
 	static const char *items[] =
 	{
@@ -39,10 +49,6 @@ ephy_stock_icons_init (void)
 		EPHY_STOCK_HISTORY,
 		EPHY_STOCK_BOOKMARKS,
 		EPHY_STOCK_BOOKMARK_PAGE,
-		EPHY_STOCK_FULLSCREEN,
-		EPHY_STOCK_NEW_TAB,
-		EPHY_STOCK_VIEWSOURCE,
-		EPHY_STOCK_SEND_LINK,
 		EPHY_STOCK_ENTRY,
 		EPHY_STOCK_DOWNLOAD
 	};
@@ -52,19 +58,30 @@ ephy_stock_icons_init (void)
 
 	for (i = 0; i < (int) G_N_ELEMENTS (items); i++)
 	{
-		GtkIconSet *icon_set;
-		GdkPixbuf *pixbuf;
 		char *fn;
 
+		icon_set = gtk_icon_set_new ();
+		icon_source = gtk_icon_source_new ();
+
 		fn = g_strconcat (items[i], ".png", NULL);
-		pixbuf = gdk_pixbuf_new_from_file (ephy_file (fn), NULL);
+		gtk_icon_source_set_filename (icon_source, ephy_file (fn));
 		g_free (fn);
 
-		icon_set = gtk_icon_set_new_from_pixbuf (pixbuf);
+		gtk_icon_set_add_source (icon_set, icon_source);
 		gtk_icon_factory_add (factory, items[i], icon_set);
 		gtk_icon_set_unref (icon_set);
+		g_free (icon_source);
+	}
 
-		g_object_unref (G_OBJECT (pixbuf));
+	for (i = 0; i < (int) G_N_ELEMENTS (icon_theme_items); i++)
+	{
+		icon_set = gtk_icon_set_new ();
+		icon_source = gtk_icon_source_new ();
+		gtk_icon_source_set_icon_name (icon_source, icon_theme_items[i]);
+		gtk_icon_set_add_source (icon_set, icon_source);
+		gtk_icon_factory_add (factory, icon_theme_items[i], icon_set);
+		gtk_icon_set_unref (icon_set);
+		g_free (icon_source);
 	}
 
 	g_object_unref (G_OBJECT (factory));
