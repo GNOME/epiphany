@@ -15,7 +15,7 @@ dnl You should have received a copy of the GNU General Public License along
 dnl with this program; if not, write to the Free Software Foundation, Inc.,
 dnl 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 
-AC_INIT([GNOME Web Browser],[1.5.2.90],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+AC_INIT([GNOME Web Browser],[1.5.3],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
 
@@ -43,9 +43,9 @@ fi
 
 AC_PROG_INTLTOOL([0.29])
 
-GLIB_REQUIRED=2.5.6
-PANGO_REQUIRED=1.6.0
-GTK_REQUIRED=2.5.7
+GLIB_REQUIRED=2.6.0
+PANGO_REQUIRED=1.8.0
+GTK_REQUIRED=2.6.0
 LIBXML_REQUIRED=2.6.12
 LIBXSLT_REQUIRED=1.1.7
 LIBGNOMEVFS_REQUIRED=2.3.1
