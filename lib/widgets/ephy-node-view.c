@@ -354,6 +354,7 @@ drag_motion_cb (GtkWidget *widget,
 		EphyNodeView *view)
 {
 	EphyNode *node;
+	GdkAtom target;
 	GtkTreePath *path;
 	GtkTreeViewDropPosition pos;
 	guint action = 0;
@@ -367,9 +368,10 @@ drag_motion_cb (GtkWidget *widget,
 		get_drag_data (view, context, time);
 	}
 
+	target = gtk_drag_dest_find_target (widget, context, NULL);
 	node = get_node_from_path (view, path);
 
-	if (node)
+	if (target != GDK_NONE && node != NULL)
 	{
 		priority = ephy_node_get_property_int
 				(node, view->priv->priority_prop_id);
