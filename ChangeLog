@@ -1,5 +1,19 @@
 2004-11-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/widgets/ephy-location-entry.c: (ephy_location_entry_init),
+	(ephy_location_entry_activate):
+	* src/ephy-location-action.c: (ephy_location_action_class_init):
+	* src/ephy-window.c: (ephy_window_init):
+	* src/toolbar.c: (toolbar_class_init), (toolbar_finalize),
+	(maybe_finish_activation_cb), (toolbar_activate_location),
+	(toolbar_update_zoom), (toolbar_new):
+	* src/toolbar.h:
+
+	Don't deactivate the toolbar when another item in the same toolbar
+	gains focus. Fixes bug #155650.
+
+2004-11-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/downloader-view.c: (update_status_icon):
 
 	Remove seconds remaining display from tooltip of tray icon.

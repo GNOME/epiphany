@@ -63,6 +63,14 @@ enum
 	PROP_WINDOW
 };
 
+enum
+{
+	ACTIVATION_FINISHED,
+	LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 static GObjectClass *parent_class = NULL;
 
 #define CONF_LOCKDOWN_DISABLE_ARBITRARY_URL  "/apps/epiphany/lockdown/disable_arbitrary_url"
@@ -76,6 +84,7 @@ struct ToolbarPrivate
 	gboolean updating_address;
 	GtkWidget *spinner;
 	guint disable_arbitrary_url_notifier_id;
+	gulong set_focus_handler;
 };
 
 GType
@@ -249,6 +258,16 @@ toolbar_class_init (ToolbarClass *klass)
 	object_class->get_property = toolbar_get_property;
 	widget_class->realize = toolbar_realize;
 	widget_class->unrealize = toolbar_unrealize;
+
+	signals[ACTIVATION_FINISHED] =
+                g_signal_new ("activation-finished",
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              G_SIGNAL_RUN_FIRST,
+                              G_STRUCT_OFFSET (ToolbarClass, activation_finished),
+                              NULL, NULL,
+                              g_cclosure_marshal_VOID__VOID,
+                              G_TYPE_NONE,
+                              0);
 
 	g_object_class_install_property (object_class,
                                          PROP_WINDOW,
@@ -454,6 +473,12 @@ toolbar_finalize (GObject *object)
 	Toolbar *t = EPHY_TOOLBAR (object);
 	EggEditableToolbar *eggtoolbar = EGG_EDITABLE_TOOLBAR (object);
 
+	if (t->priv->set_focus_handler != 0)
+	{
+		g_signal_handler_disconnect (t->priv->window,
+					     t->priv->set_focus_handler);
+	}
+
 	eel_gconf_notification_remove
 		(t->priv->disable_arbitrary_url_notifier_id);
 
@@ -470,26 +495,70 @@ toolbar_finalize (GObject *object)
 	LOG ("Toolbar finalized")
 }
 
-Toolbar *
-toolbar_new (EphyWindow *window)
+static void 
+maybe_finish_activation_cb (EphyWindow *window,
+			    GtkWidget *widget,
+			    Toolbar *toolbar)
 {
-	return EPHY_TOOLBAR (g_object_new (EPHY_TYPE_TOOLBAR,
-					   "window", window,
-					   "ui-manager", ephy_window_get_ui_manager (window),
-					   NULL));
+	GtkWidget *wtoolbar = GTK_WIDGET (toolbar);
+
+	while (widget != NULL && widget != wtoolbar)
+	{
+		widget = widget->parent;
+	}
+
+	/* if widget == toolbar, the new focus widget is in the toolbar, so we
+	 * don't deactivate.
+	 */
+	if (widget != wtoolbar)
+	{
+		g_signal_handler_disconnect (window,
+					     toolbar->priv->set_focus_handler);
+		toolbar->priv->set_focus_handler = 0;
+
+		g_signal_emit (toolbar, signals[ACTIVATION_FINISHED], 0);
+	}
 }
 
 void
-toolbar_activate_location (Toolbar *t)
+toolbar_activate_location (Toolbar *toolbar)
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
+	GSList *proxies;
+	GtkWidget *entry = NULL;
+	gboolean visible;
 
-	action_group = t->priv->action_group;
+	action_group = toolbar->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "Location");
 
-	gtk_action_activate (action);
-}
+	proxies = gtk_action_get_proxies (action);
+
+	if (proxies != NULL && EPHY_IS_LOCATION_ENTRY (proxies->data))
+	{
+		entry = GTK_WIDGET (proxies->data);
+	}
+
+	if (entry == NULL)
+	{
+		/* happens when the user has removed the location entry from
+		 * the toolbars.
+		 */
+		return;
+	}
+
+	ephy_location_entry_activate (EPHY_LOCATION_ENTRY (entry));
+
+	g_object_get (G_OBJECT (toolbar), "visible", &visible, NULL);
+	if (visible == FALSE)
+	{
+		gtk_widget_show (GTK_WIDGET (toolbar));
+		toolbar->priv->set_focus_handler =
+			g_signal_connect (toolbar->priv->window, "set-focus",
+					  G_CALLBACK (maybe_finish_activation_cb),
+					  toolbar);
+	}
+}	
 
 void
 toolbar_spinner_start (Toolbar *t)
@@ -571,4 +640,13 @@ toolbar_update_zoom (Toolbar *t, float zoom)
 	action_group = t->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "Zoom");
 	g_object_set (action, "zoom", zoom, NULL);
+}
+
+Toolbar *
+toolbar_new (EphyWindow *window)
+{
+	return EPHY_TOOLBAR (g_object_new (EPHY_TYPE_TOOLBAR,
+					   "window", window,
+					   "ui-manager", ephy_window_get_ui_manager (window),
+					   NULL));
 }

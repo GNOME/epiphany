@@ -328,20 +328,6 @@ ephy_location_action_get_property (GObject *object,
 }
 
 static void
-ephy_location_action_activate (GtkAction *action)
-{
-	GSList *proxies;
-
-	/* Note: this makes sense only for a single proxy */
-	proxies = gtk_action_get_proxies (action);
-
-	if (proxies && EPHY_IS_LOCATION_ENTRY (proxies->data))
-	{
-		ephy_location_entry_activate (EPHY_LOCATION_ENTRY (proxies->data));
-	}
-}
-
-static void
 ephy_location_action_class_init (EphyLocationActionClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -356,7 +342,6 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 	action_class->toolbar_item_type = EPHY_TYPE_LOCATION_ENTRY;
 	action_class->connect_proxy = connect_proxy;
 	action_class->disconnect_proxy = disconnect_proxy;
-	action_class->activate = ephy_location_action_activate;
 
 	signals[GO_LOCATION] =
                 g_signal_new ("go_location",
