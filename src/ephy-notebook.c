@@ -1092,6 +1092,8 @@ ephy_notebook_remove_tab (EphyNotebook *nb,
 	{
 		GtkWidget *window;
 		window = gtk_widget_get_toplevel (GTK_WIDGET (nb));
+
+		g_signal_emit (G_OBJECT (nb), signals[TAB_REMOVED], 0, tab);
 		gtk_widget_destroy (window);
 		return;
 	}

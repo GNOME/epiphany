@@ -1,5 +1,13 @@
 2004-05-19  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-notebook.c: (ephy_notebook_remove_tab):
+	* src/ephy-window.c: (tab_removed_cb):
+
+        Emit the "tab_removed" signal also for the window's last tab.
+        Part of bug #142078.
+
+2004-05-19  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/ephy-cell-renderer-progress.c:
 	(ephy_cell_renderer_progress_render):
 
