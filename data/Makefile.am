@@ -21,8 +21,6 @@ schema_DATA = epiphany.schemas
 aboutdir = $(pkgdatadir)
 about_DATA = epiphany.html
 
-EXTRA_DIST = $(glade_DATA)
-
 install-data-local:
 	if test -z "$(DESTDIR)" ; then \
 	for p in $(schema_DATA) ; do \
@@ -34,5 +32,6 @@ CLEANFILES = $(server_DATA) $(Applications_DATA) $(schema_DATA)
 
 EXTRA_DIST = $(server_in_files)     	\
 	     $(schema_in_files)         \
-	     $(DESKTOP_IN_FILES)
+	     $(DESKTOP_IN_FILES)	\
+	     $(about_DATA)
 
