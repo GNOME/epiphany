@@ -34,7 +34,7 @@ struct EphyTopicActionPrivate
 enum
 {
 	PROP_0,
-	PROP_BOOKMARK_ID
+	PROP_TOPIC_ID
 };
 
 enum
@@ -310,7 +310,7 @@ ephy_topic_action_set_property (GObject *object,
 
 	switch (prop_id)
 	{
-		case PROP_BOOKMARK_ID:
+		case PROP_TOPIC_ID:
 			bmk->priv->topic_id = g_value_get_int (value);
 			break;
 	}
@@ -328,7 +328,7 @@ ephy_topic_action_get_property (GObject *object,
 
 	switch (prop_id)
 	{
-		case PROP_BOOKMARK_ID:
+		case PROP_TOPIC_ID:
 			g_value_set_boolean (value, bmk->priv->topic_id);
 			break;
 	}
@@ -381,7 +381,7 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
 			      G_TYPE_STRING);
 
 	g_object_class_install_property (object_class,
-                                         PROP_BOOKMARK_ID,
+                                         PROP_TOPIC_ID,
                                          g_param_spec_int ("topic_id",
                                                            "topic_id",
                                                            "topic_id",
@@ -392,30 +392,63 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
 }
 
 static void
+sync_topic_properties (EggAction *action, EphyNode *bmk)
+{
+	const char *title;
+
+	title = ephy_node_get_property_string
+		(bmk, EPHY_NODE_KEYWORD_PROP_NAME);
+
+	g_object_set (action, "label", title, NULL);
+}
+
+static void
+topic_child_changed_cb (EphyNode *node, EphyNode *child, EggAction *action)
+{
+	gulong id;
+
+	id = EPHY_TOPIC_ACTION (action)->priv->topic_id;
+
+	if (id == ephy_node_get_id (child))
+	{
+		sync_topic_properties (action, child);
+	}
+}
+
+static void
 ephy_topic_action_init (EphyTopicAction *action)
 {
+	EphyBookmarks *bookmarks;
+	EphyNode *node;
+
 	action->priv = g_new0 (EphyTopicActionPrivate, 1);
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	node = ephy_bookmarks_get_keywords (bookmarks);
+	g_signal_connect_object (node, "child_changed",
+				 G_CALLBACK (topic_child_changed_cb),
+				 action, 0);
 }
 
 EggAction *
 ephy_topic_action_new (const char *name, guint id)
 {
 	EphyNode *bmk;
-	const char *title;
 	EphyBookmarks *bookmarks;
+	EggAction *action;
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
 	bmk = ephy_node_get_from_id (id);
 	g_return_val_if_fail (bmk != NULL, NULL);
 
-	title = ephy_node_get_property_string
-		(bmk, EPHY_NODE_KEYWORD_PROP_NAME);
+	action = EGG_ACTION (g_object_new (EPHY_TYPE_TOPIC_ACTION,
+					   "topic_id", id,
+					   "name", name,
+					   NULL));
 
-	return EGG_ACTION (g_object_new (EPHY_TYPE_TOPIC_ACTION,
-					 "topic_id", id,
-					 "name", name,
-					 "label", title,
-					 NULL));
+	sync_topic_properties (action, bmk);
+
+	return action;
 }
 

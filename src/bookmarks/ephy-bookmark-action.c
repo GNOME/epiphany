@@ -365,26 +365,9 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 }
 
 static void
-ephy_bookmark_action_init (EphyBookmarkAction *action)
+sync_bookmark_properties (EggAction *action, EphyNode *bmk)
 {
-	action->priv = g_new0 (EphyBookmarkActionPrivate, 1);
-
-	action->priv->location = NULL;
-	action->priv->smart_url = NULL;
-	action->priv->icon = NULL;
-}
-
-EggAction *
-ephy_bookmark_action_new (const char *name, guint id)
-{
-	EphyNode *bmk;
 	const char *title, *location, *smart_url, *icon;
-	EphyBookmarks *bookmarks;
-
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-
-	bmk = ephy_node_get_from_id (id);
-	g_return_val_if_fail (bmk != NULL, NULL);
 
 	icon = ephy_node_get_property_string
 		(bmk, EPHY_NODE_BMK_PROP_ICON);
@@ -396,12 +379,66 @@ ephy_bookmark_action_new (const char *name, guint id)
 		(bmk, EPHY_NODE_BMK_PROP_SMART_LOCATION);
 	if (smart_url && *smart_url == '\0') smart_url = NULL;
 
-	return EGG_ACTION (g_object_new (EPHY_TYPE_BOOKMARK_ACTION,
-					 "name", name,
-					 "label", title,
-					 "location", location,
-					 "smart_url", smart_url,
-					 "icon", icon,
-					 NULL));
+	g_object_set (action,
+		      "label", title,
+		      "location", location,
+		      "smart_url", smart_url,
+		      "icon", icon,
+		      NULL);
+}
+
+static void
+bookmarks_child_changed_cb (EphyNode *node, EphyNode *child, EggAction *action)
+{
+	gulong id;
+
+	id = EPHY_BOOKMARK_ACTION (action)->priv->bookmark_id;
+
+	if (id == ephy_node_get_id (child))
+	{
+		sync_bookmark_properties (action, child);
+	}
+}
+
+static void
+ephy_bookmark_action_init (EphyBookmarkAction *action)
+{
+	EphyBookmarks *bookmarks;
+	EphyNode *node;
+
+	action->priv = g_new0 (EphyBookmarkActionPrivate, 1);
+
+	action->priv->location = NULL;
+	action->priv->smart_url = NULL;
+	action->priv->icon = NULL;
+
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	node = ephy_bookmarks_get_bookmarks (bookmarks);
+	g_signal_connect_object (node, "child_changed",
+				 G_CALLBACK (bookmarks_child_changed_cb),
+				 action, 0);
+}
+
+EggAction *
+ephy_bookmark_action_new (const char *name, guint id)
+{
+	EphyNode *bmk;
+	EphyBookmarks *bookmarks;
+	EggAction *action;
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+
+	bmk = ephy_node_get_from_id (id);
+	g_return_val_if_fail (bmk != NULL, NULL);
+
+	action =  EGG_ACTION (g_object_new (EPHY_TYPE_BOOKMARK_ACTION,
+				            "name", name,
+					    "bookmark_id", id,
+					    NULL));
+
+	sync_bookmark_properties (action, bmk);
+
+	return action;
 }
 
