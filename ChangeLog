@@ -1,3 +1,34 @@
+2004-02-11  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/ephy-node.c: (callback), (child_changed),
+	(ephy_node_set_property):
+
+	Pass the property id to the changed signal.
+
+	* lib/ephy-node.h:
+
+	Cleanup.
+
+	* embed/ephy-history.c: (hosts_changed_cb), (pages_changed_cb):
+	* lib/widgets/ephy-location-entry.c: (completion_func):
+	* lib/widgets/ephy-tree-model-node.c: (root_child_changed_cb):
+	* src/bookmarks/ephy-bookmark-action.c:
+	(bookmarks_child_changed_cb):
+	* src/bookmarks/ephy-bookmarks-menu.c: (topic_child_changed_cb):
+	* src/bookmarks/ephy-topic-action.c: (topic_child_changed_cb):
+	* src/ephy-completion-model.c: (root_child_changed_cb):
+	* src/ephy-location-action.c: (actions_child_changed_cb):
+
+	Fixup changed signals signature.
+
+	* src/bookmarks/ephy-bookmarks.c: (update_bookmark_keywords),
+	(bookmarks_changed_cb), (bookmark_is_categorized),
+	(topics_removed_cb), (ephy_bookmarks_set_keyword),
+	(ephy_bookmarks_unset_keyword):
+
+	Cleanup keywords building, normalize and case fold it, add
+	the title words as keywords too.
+
 2004-02-11  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/mozilla-embed-persist.cpp: (impl_save):

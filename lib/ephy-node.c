@@ -50,6 +50,12 @@ typedef struct
 	guint index;
 } EphyNodeParent;
 
+typedef struct
+{
+	EphyNode *node;
+	guint property_id;
+} EphyNodeChange;
+
 struct EphyNode
 {
 	int ref_count;
@@ -106,8 +112,25 @@ callback (long id, EphyNodeSignalData *data, gpointer *dummy)
 		break;
 
 		case EPHY_NODE_CHILD_ADDED:
+		{
+			EphyNode *node;
+
+			node = va_arg (valist, EphyNode *);
+		
+			data->callback (data->node, node, data->data);
+		}
+		break;
+
 		case EPHY_NODE_CHILD_CHANGED:
-			data->callback (data->node, va_arg (valist, EphyNode *), data->data);
+		{
+			EphyNode *node;
+			guint property_id;
+
+			node = va_arg (valist, EphyNode *);
+			property_id = va_arg (valist, guint);
+		
+			data->callback (data->node, node, property_id, data->data);
+		}
 		break;
 
 		case EPHY_NODE_CHILD_REMOVED:
@@ -365,9 +388,10 @@ ephy_node_unref (EphyNode *node)
 static void
 child_changed (gulong id,
 	       EphyNodeParent *node_info,
-	       EphyNode *node)
+	       EphyNodeChange *change)
 {
-	ephy_node_emit_signal (node_info->node, EPHY_NODE_CHILD_CHANGED, node);
+	ephy_node_emit_signal (node_info->node, EPHY_NODE_CHILD_CHANGED,
+			       change->node, change->property_id);
 }
 
 static inline void
@@ -396,6 +420,7 @@ ephy_node_set_property (EphyNode *node,
 		        const GValue *value)
 {
 	GValue *new;
+	EphyNodeChange change;
 
 	g_return_if_fail (EPHY_IS_NODE (node));
 	g_return_if_fail (property_id >= 0);
@@ -409,9 +434,11 @@ ephy_node_set_property (EphyNode *node,
 
 	real_set_property (node, property_id, new);
 
+	change.node = node;
+	change.property_id = property_id;
 	g_hash_table_foreach (node->parents,
 			      (GHFunc) child_changed,
-			      node);
+			      &change);
 }
 
 gboolean

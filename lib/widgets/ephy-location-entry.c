@@ -201,8 +201,6 @@ completion_func (GtkEntryCompletion *completion,
 	int i;
 	char *item = NULL;
 	char *keywords = NULL;
-	char *normalized_string, *normalized_keywords;
-	char *case_normalized_string, *case_normalized_keywords;
 	gboolean ret = FALSE;
 	EphyLocationEntry *le = EPHY_LOCATION_ENTRY (data);
 	GtkTreeModel *model;
@@ -214,16 +212,11 @@ completion_func (GtkEntryCompletion *completion,
 	gtk_tree_model_get (model, iter,
 			    le->priv->keywords_col, &keywords, -1);
 
-	normalized_string = g_utf8_normalize (item, -1, G_NORMALIZE_ALL);
-	case_normalized_string = g_utf8_casefold (normalized_string, -1);
-	normalized_keywords = g_utf8_normalize (keywords, -1, G_NORMALIZE_ALL);
-	case_normalized_keywords = g_utf8_casefold (normalized_keywords, -1);
-
-	if (!strncmp (key, case_normalized_string, strlen (key)))
+	if (!strncmp (key, item, strlen (key)))
 	{
 		ret = TRUE;
 	}
-	else if (strstr (case_normalized_keywords, key))
+	else if (strstr (keywords, key))
 	{
 		ret = TRUE;
 	}
@@ -235,8 +228,7 @@ completion_func (GtkEntryCompletion *completion,
 
 			key_prefixed = g_strconcat (web_prefixes[i], key, NULL);
 
-			if (!strncmp (key_prefixed, case_normalized_string,
-				      strlen (key_prefixed)))
+			if (!strncmp (key_prefixed, item, strlen (key_prefixed)))
 			{
 				g_free (key_prefixed);
 
@@ -249,11 +241,7 @@ completion_func (GtkEntryCompletion *completion,
 	}
 
 	g_free (item);
-	g_free (normalized_string);
-	g_free (case_normalized_string);
 	g_free (keywords);
-	g_free (normalized_keywords);
-	g_free (case_normalized_keywords);
 
 	return ret;
 }

@@ -36,12 +36,12 @@ typedef struct EphyNode EphyNode;
 
 typedef enum
 {
-	EPHY_NODE_DESTROY,           /* RBNode *node */
-	EPHY_NODE_RESTORED,          /* RBNode *node */
-	EPHY_NODE_CHILD_ADDED,       /* RBNode *node, RBNode *child */
-	EPHY_NODE_CHILD_CHANGED,     /* RBNode *node, RBNode *child */
-	EPHY_NODE_CHILD_REMOVED,     /* RBNode *node, RBNode *child, guint old_index */
-	EPHY_NODE_CHILDREN_REORDERED /* RBNode *node, int *new_order */
+	EPHY_NODE_DESTROY,           /* EphyNode *node */
+	EPHY_NODE_RESTORED,          /* EphyNode *node */
+	EPHY_NODE_CHILD_ADDED,       /* EphyNode *node, EphyNode *child */
+	EPHY_NODE_CHILD_CHANGED,     /* EphyNode *node, EphyNode *child, guint property_id */
+	EPHY_NODE_CHILD_REMOVED,     /* EphyNode *node, EphyNode *child, guint old_index */
+	EPHY_NODE_CHILDREN_REORDERED /* EphyNode *node, int *new_order */
 } EphyNodeSignalType;
 
 #include "ephy-node-db.h"
@@ -104,20 +104,16 @@ EphyNode     *ephy_node_new_from_xml        (EphyNodeDb *db,
 					     xmlNodePtr xml_node);
 
 /* DAG structure */
-void        ephy_node_add_child             (EphyNode *node,
+void          ephy_node_add_child           (EphyNode *node,
 					     EphyNode *child);
-void        ephy_node_remove_child          (EphyNode *node,
+void          ephy_node_remove_child        (EphyNode *node,
 					     EphyNode *child);
-void	    ephy_node_sort_children	    (EphyNode *node,
+void	      ephy_node_sort_children	    (EphyNode *node,
 					     GCompareFunc compare_func);
-gboolean    ephy_node_has_child             (EphyNode *node,
+gboolean      ephy_node_has_child           (EphyNode *node,
 					     EphyNode *child);
-
-void	    ephy_node_reorder_children	    (EphyNode *node,
+void	      ephy_node_reorder_children    (EphyNode *node,
 					     int *new_order);
-
-/* Note that ephy_node_get_children freezes the node; you'll have to thaw it when done.
- * This is to prevent the data getting changed from another thread. */
 GPtrArray    *ephy_node_get_children        (EphyNode *node);
 int           ephy_node_get_n_children      (EphyNode *node);
 EphyNode     *ephy_node_get_nth_child       (EphyNode *node,

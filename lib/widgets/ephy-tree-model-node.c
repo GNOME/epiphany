@@ -174,6 +174,7 @@ ephy_tree_model_node_update_node (EphyTreeModelNode *model,
 static void
 root_child_changed_cb (EphyNode *node,
 		       EphyNode *child,
+		       guint property_id,
 		       EphyTreeModelNode *model)
 {
 	ephy_tree_model_node_update_node (model, child, -1);

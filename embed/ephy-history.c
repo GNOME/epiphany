@@ -301,6 +301,7 @@ hosts_removed_cb (EphyNode *node,
 static void
 hosts_changed_cb (EphyNode *node,
 		  EphyNode *child,
+		  guint property_id,
 		  EphyHistory *eb)
 {
 	eb->priv->dirty = TRUE;
@@ -333,6 +334,7 @@ pages_removed_cb (EphyNode *node,
 static void
 pages_changed_cb (EphyNode *node,
 		  EphyNode *child,
+		  guint property_id,
 		  EphyHistory *eb)
 {
 	eb->priv->dirty = TRUE;
