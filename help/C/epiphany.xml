@@ -96,133 +96,57 @@
   <sect1 id="fr-introduction"> 
     <title>Introduction</title> 
     <para>&fr; is a GNOME web browser based on the mozilla rendering 
-	engine. A web browser is more than an application, it is a way 
-	of thinking, it is a way of seeing the world. Epiphany's 
-	principles are simplicity and standards compliance.
-
+	engine. &fr; aims to be a simple to use	and standards compliant.
    </para>
-    <figure id="fr-add-dialog-fig">
-	<title>Epiphany Screenshot</title>
-	<screenshot> 
-	  <mediaobject> 
-	    <imageobject><imagedata
-		fileref="figures/ephy-screenshot.png" format="PNG"/> 
-	    </imageobject>
-	  </mediaobject>
-	</screenshot>
-      </figure>
-   
-
-   <para>	
-   <itemizedlist>
-    <listitem>
-      <para>Simplicity:</para>
-      <para>
-Epiphany aims to utilize the simplest interface possible for a browser.  Keep
-in mind that simple does not necessarily mean less powerful.  We believe
-the commonly used browsers of today are too big, buggy, and bloated. Epiphany
-addresses simplicity with a small browser designed for the web -- not mail,
-newsgroups, file management, instant messenging or coffee making.  The UNIX
-philosophy is to design small tools that do one thing, and do it well.
-
-Epiphany also address simplicity with modularity to make a light and powerful
-application.  If something can be implemented using external applications
-or components, we use it rather than wasting resources in the web browser.
-Integration will be achived with CORBA, Bonobo, and the ever popular
-command line.  
-
-Mail will be handled with your favorite e-mail application (Evolution, pine,
-mutt, balsa, pronto, whatever).
-      </para>
-    </listitem>
-    <listitem>
-      <para>Standards compliance:</para>
-      <para>
-The introduction of non-standard features in browsers could make it difficult
-or impossible to use alternative products like Epiphany if developers embrace
-them.  Alternative (standards complying) browsers could not be able to
-fully access web sites making use of these features.  The success of
-non-standard features can ultimately lead to forcing one browser, on
-one platform to dominate the market. Standards compliance ensures the 
-freedom of choice.  Epiphany aims to achieve this.
-      </para>
-    </listitem>
-    <listitem>
-      <para>USER INTERFACE LINES</para>
-        <itemizedlist>
-          <listitem>
-            <para>HIG compliance</para>
-              <para>
-Epiphany is going to follow version 1.0 of the gnome 
-user guidelines. Unless there are very seriuos reasons to make an 
-exception not following it will be considered a bug. 
-"I follow the HIG only when I like it" is not a legitimate approach. 
-Any areas where we diverge from the HIG will communicated 
-to the HIG team for future consideration.
-            </para>
-          </listitem>
-          <listitem>
-            <para>Gnome integration</para>
-            <para>
-Epiphany's main goal is to be integrated with the gnome desktop. 
-We dont aim to make epiphany usable outside Gnome. If someone will like 
-to use it anyway, it's just a plus. Ex: Making people happy that 
-don't have control center installed is not a good reason 
-to have mime configuration in epiphany itself.
-            </para>
-          </listitem>
-          <listitem>
-            <para>Simple design</para>
-            <para>
-Feature bloat and user interface clutter is evil :)
-            </para>
-          </listitem>
-          <listitem>
-            <para>Preferences</para>
-            <para>
-We will follow the new gnome policy about preferences. 
-I think Havoc Pennington already explained it a lot 
-better than I could ever do.
-http://www106.pair.com/rhp/free-software-ui.html
-            </para>
-          </listitem>
-          <listitem>
-            <para>User target</para>
-            <para>
-We target non-technical users by design. 
-This happens to be 90% of the user population.
-(Technical details should not exposed in the interface)
-We target web users, we dont directly target web developers.
-A few geek-oriented feautures can be kept as 
-long as they are non-obtrusive.
-            </para>
-          </listitem>
-        </itemizedlist>
-    </listitem>
-  </itemizedlist>
-  </para>
   </sect1>
 
 <!-- ============= Getting Started =============================== -->
   <sect1 id="ephy-getting-started">
       <title>Getting Started</title>
-      <para>
-      </para>
 
-        <sect2 id="ephy-to-start">
-          <title>To Start &fr;</title>
-          <para>
-          </para>
+        <sect2 id="ephy-to-open-browser-window">
+          <title>To Open a Browser Window</title>
+          	<para>You can open a browser window in the following ways:</para>
+		<variablelist>
+    		<varlistentry>
+    		<term><guimenu>Applications</guimenu> menu</term>
+    		<listitem>
+    		<para>Choose 
+    		<menuchoice>
+    		<guisubmenu>Internet</guisubmenu>
+    		<guimenuitem>Web Browser</guimenuitem>
+    		</menuchoice>. </para>
+    		</listitem>
+    		</varlistentry>
+    		<varlistentry>
+    		<term>Command line</term>
+    		<listitem>
+    		<para>Type <command>epiphany</command>, then press <keycap>Return</keycap>.</para>
+    		</listitem>
+    		</varlistentry>
+    		</variablelist>
         </sect2>
         <sect2 id="ephy-to-open-bookmarks">
-          <title>To Open Your Bookmarks</title>
-          <para>
-          </para>
-        </sect2>
-        <sect2 id="ephy-to-open-file">
-          <title>To Open a File</title>
-          <para>
-          </para>
+          <title>To Open the Bookmarks Window</title>
+                <para>You can open the bookmarks window in the following ways:</para>
+		<variablelist>
+    		<varlistentry>
+    		<term><guimenu>Applications</guimenu> menu</term>
+    		<listitem>
+    		<para>Choose 
+    		<menuchoice>
+    		<guisubmenu>Internet</guisubmenu>
+    		<guimenuitem>Web Bookmarks</guimenuitem>
+    		</menuchoice>. </para>
+    		</listitem>
+    		</varlistentry>
+    		<varlistentry>
+    		<term>Command line</term>
+    		<listitem>
+    		<para>Type <command>epiphany -b</command>, then press <keycap>Return</keycap>.</para>
+    		</listitem>
+    		</varlistentry>
+    		</variablelist>
         </sect2>
 
   </sect1>
@@ -268,6 +192,15 @@ long as they are non-obtrusive.
           <title>To Open a New Tab</title>
           <para>
           </para>
+	<sect2 id="ephy-to-open-file">
+          <title>To Open a File</title>
+          <para>To open a file, choose 
+		  <menuchoice> <guimenu>File</guimenu> <guimenuitem>Open...</guimenuitem>
+			 </menuchoice>
+		  to display the <guilabel>Open File</guilabel> dialog. Select the file
+		  that you want to open, then click <guibutton>OK</guibutton>. The file is
+		  displayed in the browser window. </para>
+        </sect2>
         </sect2>
 	<sect2 id="to-open-link">
           <title>To Open a Link</title>
@@ -346,6 +279,11 @@ long as they are non-obtrusive.
           <para>
           </para>
         </sect2>
+	<sect2 id="to-creating-new-bookmark">
+	  <title>To Create a New Bookmark</title>
+          <para>
+          </para>
+        </sect2>
 	<sect2 id="to-select-bookmarks">
           <title>To Select Bookmarks</title>
           <para>
@@ -378,6 +316,11 @@ long as they are non-obtrusive.
         </sect2>
 	<sect2 id="to-delete-bookmark-or-topic">
           <title>To Delete a Bookmark or Topic</title>
+          <para>
+          </para>
+        </sect2>
+	<sect2 id="to-edit-bookmark-properties">
+	  <title>To Edit a Bookmark's Properties</title>
           <para>
           </para>
         </sect2>
