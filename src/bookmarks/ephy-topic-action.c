@@ -79,6 +79,7 @@ create_tool_item (EggAction *action)
 {
 	GtkWidget *item;
 	GtkWidget *button;
+	GtkWidget *arrow;
 	GtkWidget *hbox;
 	GtkWidget *label;
 
@@ -93,6 +94,9 @@ create_tool_item (EggAction *action)
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (hbox), button);
 	g_object_set_data (G_OBJECT (item), "button", button);
+	
+	arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
+	gtk_widget_show (arrow);
 
 	hbox = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (hbox);
@@ -101,6 +105,7 @@ create_tool_item (EggAction *action)
 	label = gtk_label_new (NULL);
 	gtk_widget_show (label);
 	gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (hbox), arrow, TRUE, TRUE, 0);
 	g_object_set_data (G_OBJECT (item), "label", label);
 
 	return item;
