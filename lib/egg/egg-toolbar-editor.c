@@ -268,6 +268,9 @@ egg_toolbar_editor_finalize (GObject *object)
       g_object_unref (editor->priv->model);
     }
 
+  g_list_free (editor->priv->default_actions_list);
+  g_list_free (editor->priv->actions_list);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
