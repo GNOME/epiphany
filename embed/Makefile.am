@@ -32,6 +32,7 @@ INST_H_FILES = \
 	ephy-cookie-manager.h		\
 	ephy-embed.h			\
 	ephy-embed-event.h		\
+	ephy-embed-factory.h		\
 	ephy-embed-persist.h		\
 	ephy-embed-prefs.h		\
 	ephy-embed-single.h		\
