@@ -989,7 +989,7 @@ setup_editor (EggEditableToolbar *etoolbar,
   gtk_box_pack_start (GTK_BOX (label_hbox), label, FALSE, TRUE, 0);
 
   gtk_dialog_add_button (GTK_DIALOG (editor),
-			 _("Add Toolbar"), RESPONSE_ADD_TOOLBAR);
+			 _("_Add a New Toolbar"), RESPONSE_ADD_TOOLBAR);
   gtk_dialog_add_button (GTK_DIALOG (editor),
 			 GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
 
@@ -1008,6 +1008,32 @@ add_to_list (EggToolbarsItem  *item,
   *l = g_list_append (*l, item);
 }
 
+static gchar *
+elide_underscores (const gchar *original)
+{
+  gchar *q, *result;
+  const gchar *p;
+  gboolean last_underscore;
+
+  q = result = g_malloc (strlen (original) + 1);
+  last_underscore = FALSE;
+  
+  for (p = original; *p; p++)
+    {
+      if (!last_underscore && *p == '_')
+	last_underscore = TRUE;
+      else
+	{
+	  last_underscore = FALSE;
+	  *q++ = *p;
+	}
+    }
+  
+  *q = '\0';
+  
+  return result;
+}
+
 static GtkWidget *
 editor_create_item (EggEditableToolbar *etoolbar,
 		    const char         *stock_id,
@@ -1018,6 +1044,7 @@ editor_create_item (EggEditableToolbar *etoolbar,
   GtkWidget *vbox;
   GtkWidget *icon;
   GtkWidget *label;
+  gchar *label_no_mnemonic = NULL;
 
   event_box = gtk_event_box_new ();
   gtk_widget_show (event_box);
@@ -1038,8 +1065,9 @@ editor_create_item (EggEditableToolbar *etoolbar,
 	 GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show (icon);
   gtk_box_pack_start (GTK_BOX (vbox), icon, FALSE, TRUE, 0);
-
-  label = gtk_label_new_with_mnemonic (label_text);
+  label_no_mnemonic = elide_underscores (label_text);
+  label = gtk_label_new (label_no_mnemonic);
+  g_free (label_no_mnemonic);
   gtk_widget_show (label);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
 
@@ -1093,7 +1121,7 @@ update_editor_sheet (EggEditableToolbar *etoolbar)
       g_return_if_fail (action != NULL);
 
       item = editor_create_item (etoolbar, action->stock_id,
-				 action->label, GDK_ACTION_MOVE);
+				 action->short_label, GDK_ACTION_MOVE);
       g_object_set_data (G_OBJECT (item), "egg-action", action);
       gtk_table_attach_defaults (GTK_TABLE (etoolbar->priv->table),
 		                 item, x, x + 1, y, y + 1);

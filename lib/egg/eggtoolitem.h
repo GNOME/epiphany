@@ -54,6 +54,7 @@ struct _EggToolItem
   guint expandable : 1;
   guint pack_end : 1;
   guint use_drag_window : 1;
+  guint overflow_item : 1;
 };
 
 struct _EggToolItemClass
