@@ -55,13 +55,13 @@ ephy_permission_info_get_type (void)
 EphyPermissionInfo *
 ephy_permission_info_new (const char *host,
 			  EphyPermissionType type,
-			  gboolean allowed)
+			  EphyPermission permission)
 {
 	EphyPermissionInfo *info = g_new0 (EphyPermissionInfo, 1);
 
 	info->host = g_strdup (host);
 	info->type = type;
-	info->allowed = allowed;
+	info->permission = permission;
 
 	return info;
 }
@@ -79,7 +79,7 @@ ephy_permission_info_copy (const EphyPermissionInfo *info)
 
 	copy->host = g_strdup (info->host);
 	copy->type = info->type;
-	copy->allowed = info->allowed;
+	copy->permission = info->permission;
 
 	return copy;
 }
@@ -213,7 +213,7 @@ ephy_permission_manager_base_init (gpointer g_class)
  * @manager: the #EphyPermissionManager
  * @host: a host name
  * @type: a #EphyPermissionType
- * @allow: the permission itself
+ * @permission: either #EPHY_PERMISSION_ALLOWED or #EPHY_PERMISSION_DENIED
  * 
  * Adds the permission @allow of type @type for host @host to the permissions
  * database.
@@ -222,10 +222,10 @@ void
 ephy_permission_manager_add (EphyPermissionManager *manager,
 			     const char *host,
 			     EphyPermissionType type,
-			     gboolean allow)
+			     EphyPermission permission)
 {
 	EphyPermissionManagerIFace *iface = EPHY_PERMISSION_MANAGER_GET_IFACE (manager);
-	iface->add (manager, host, type, allow);
+	iface->add (manager, host, type, permission);
 }
 
 /**
@@ -265,11 +265,12 @@ ephy_permission_manager_clear (EphyPermissionManager *manager)
  * @host: a host name
  * @type: a #EphyPermissionType
  * 
- * Tests whether the host @host is allowed to do the action specified by @type.
- * 
- * Return value: TRUE if allowed
+ * Gets the permission of @host for type @type. If there is no entry
+ * for this type for @host, it will return #EPHY_PERMISSION_DEFAULT.
+ *
+ * Return value: the permission of type #EphyPermission
  **/
-gboolean
+EphyPermission
 ephy_permission_manager_test (EphyPermissionManager *manager,
 			      const char *host,
 			      EphyPermissionType type)

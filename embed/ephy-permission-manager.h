@@ -46,11 +46,18 @@ typedef enum
 	EPT_POPUP
 } EphyPermissionType;
 
+typedef enum
+{
+	EPHY_PERMISSION_ALLOWED,
+	EPHY_PERMISSION_DENIED,
+	EPHY_PERMISSION_DEFAULT
+} EphyPermission;
+
 typedef struct
 {
 	char *host;
 	EphyPermissionType type;
-	gboolean allowed;
+	EphyPermission permission;
 } EphyPermissionInfo;
 
 struct EphyPermissionManagerIFace
@@ -70,12 +77,12 @@ struct EphyPermissionManagerIFace
 	void		(* add)		(EphyPermissionManager *manager,
 					 const char *host,
 					 EphyPermissionType type,
-					 gboolean allow);
+					 EphyPermission permission);
 	void		(* remove)	(EphyPermissionManager *manager,
 					 const char *host,
 					 EphyPermissionType type);
 	void		(* clear)	(EphyPermissionManager *manager);
-	gboolean	(* test)	(EphyPermissionManager *manager,
+	EphyPermission	(* test)	(EphyPermissionManager *manager,
 					 const char *host,
 					 EphyPermissionType type);
 	GList *		(* list)	(EphyPermissionManager *manager,
@@ -88,7 +95,7 @@ GType			ephy_permission_info_get_type	(void);
 
 EphyPermissionInfo     *ephy_permission_info_new	(const char *host,
 							 EphyPermissionType type,
-							 gboolean allowed);
+							 EphyPermission permission);
 
 EphyPermissionInfo     *ephy_permission_info_copy	(const EphyPermissionInfo *info);
 
@@ -101,7 +108,7 @@ GType 		ephy_permission_manager_get_type	(void);
 void		ephy_permission_manager_add		(EphyPermissionManager *manager,
 							 const char *host,
 							 EphyPermissionType type,
-							 gboolean allow);
+							 EphyPermission permission);
 
 void		ephy_permission_manager_remove		(EphyPermissionManager *manager,
 							 const char *host,
@@ -109,7 +116,7 @@ void		ephy_permission_manager_remove		(EphyPermissionManager *manager,
 
 void		ephy_permission_manager_clear		(EphyPermissionManager *manager);
 
-gboolean	ephy_permission_manager_test		(EphyPermissionManager *manager,
+EphyPermission	ephy_permission_manager_test		(EphyPermissionManager *manager,
 							 const char *host,
 							 EphyPermissionType type);
 

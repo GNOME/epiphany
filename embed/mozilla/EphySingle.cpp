@@ -301,21 +301,23 @@ mozilla_permission_to_ephy_permission (nsIPermission *perm)
 
 	PRUint32 cap;
 	perm->GetCapability(&cap);
-	gboolean allowed;
+	EphyPermission permission;
 	switch (cap)
 	{
 		case nsIPermissionManager::ALLOW_ACTION:
-			allowed = TRUE;
+			permission = EPHY_PERMISSION_ALLOWED;
 			break;
 		case nsIPermissionManager::DENY_ACTION:
+			permission = EPHY_PERMISSION_DENIED;
+			break;
 		case nsIPermissionManager::UNKNOWN_ACTION:
 		default :
-			allowed = FALSE;
+			permission = EPHY_PERMISSION_DEFAULT;
 			break;
 	}
 
 	nsCString host;
 	perm->GetHost(host);
 
-	return ephy_permission_info_new (host.get(), type, allowed);
+	return ephy_permission_info_new (host.get(), type, permission);
 }

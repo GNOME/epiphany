@@ -730,8 +730,11 @@ void
 impl_permission_manager_add (EphyPermissionManager *manager,
 			     const char *host,
 			     EphyPermissionType type,
-			     gboolean allow)
+			     EphyPermission permission)
 {
+	/* can only set allow or deny */
+	g_return_if_fail (permission != EPHY_PERMISSION_DEFAULT);
+
 	nsresult result;
         nsCOMPtr<nsIPermissionManager> pm
 		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID, &result));
@@ -740,6 +743,8 @@ impl_permission_manager_add (EphyPermissionManager *manager,
 	nsCOMPtr<nsIURI> uri;
         result = NS_NewURI(getter_AddRefs(uri), host);
         if (NS_FAILED(result) || !uri) return;
+
+	gboolean allow = (permission == EPHY_PERMISSION_ALLOWED);
 
 	pm->Add (uri,
 #if MOZILLA_SNAPSHOT >= 10
@@ -781,7 +786,7 @@ impl_permission_manager_clear (EphyPermissionManager *manager)
 	}
 }
 
-gboolean
+EphyPermission
 impl_permission_manager_test (EphyPermissionManager *manager,
 			      const char *host,
 			      EphyPermissionType type)
@@ -789,11 +794,11 @@ impl_permission_manager_test (EphyPermissionManager *manager,
 	nsresult result;
         nsCOMPtr<nsIPermissionManager> pm
 		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID, &result));
-	if (NS_FAILED (result) || !pm) return FALSE;
+	if (NS_FAILED (result) || !pm) return EPHY_PERMISSION_DEFAULT;
 
 	nsCOMPtr<nsIURI> uri;
         result = NS_NewURI(getter_AddRefs(uri), host);
-        if (NS_FAILED(result) || !uri) return FALSE;
+        if (NS_FAILED(result) || !uri) return EPHY_PERMISSION_DEFAULT;
 
 	PRUint32 action;
 #if MOZILLA_SNAPSHOT >= 10
@@ -801,22 +806,25 @@ impl_permission_manager_test (EphyPermissionManager *manager,
 #else
 	result = pm->TestPermission (uri, type, &action);
 #endif
-	if (NS_FAILED (result)) return FALSE;
+	if (NS_FAILED (result)) return EPHY_PERMISSION_DEFAULT;
 
-	gboolean allow;
+	EphyPermission permission;
+
 	switch (action)
 	{
 		case nsIPermissionManager::ALLOW_ACTION:
-			allow = TRUE;
+			permission = EPHY_PERMISSION_ALLOWED;
 			break;
 		case nsIPermissionManager::DENY_ACTION:
+			permission = EPHY_PERMISSION_DENIED;
+			break;
 		case nsIPermissionManager::UNKNOWN_ACTION:
 		default:
-			allow = FALSE;
+			permission = EPHY_PERMISSION_DEFAULT;
 			break;
 	}
 
-	return allow;
+	return permission;
 }
 
 GList *
