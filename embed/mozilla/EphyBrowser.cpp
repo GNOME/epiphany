@@ -78,9 +78,9 @@
 #endif
 
 EphyEventListener::EphyEventListener(void)
+: mOwner(nsnull)
 {
 	LOG ("EphyEventListener ctor (%p)", this)
-	mOwner = nsnull;
 }
 
 EphyEventListener::~EphyEventListener()
@@ -164,10 +164,10 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 }
 
 EphyBrowser::EphyBrowser ()
+: mFaviconEventListener(nsnull)
+, mPopupEventListener(nsnull)
+, mInitialized(PR_FALSE)
 {
-	mFaviconEventListener = nsnull;
-	mEventReceiver = nsnull;
-	mInitialized = PR_FALSE;
 }
 
 EphyBrowser::~EphyBrowser ()
@@ -256,10 +256,11 @@ EphyBrowser::DetachListeners(void)
 {
 	nsresult rv;
 
-	NS_ENSURE_TRUE (mEventReceiver, NS_ERROR_FAILURE);
-	
+	if (!mEventReceiver) return NS_OK;
+
 	nsCOMPtr<nsIDOMEventTarget> target;
 	target = do_QueryInterface (mEventReceiver);
+	NS_ENSURE_TRUE (target, NS_ERROR_FAILURE);
 
 	rv = target->RemoveEventListener(NS_LITERAL_STRING("DOMLinkAdded"),
 					 mFaviconEventListener, PR_FALSE);
@@ -365,6 +366,7 @@ nsresult EphyBrowser::Destroy ()
 
       	mWebBrowser = nsnull;
 	mDOMWindow = nsnull;
+	mEventReceiver = nsnull;
 
 	mInitialized = PR_FALSE;
 
