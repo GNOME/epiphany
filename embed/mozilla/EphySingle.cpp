@@ -32,9 +32,7 @@
 #include <nsIPermissionManager.h>
 #include <nsICookieManager.h>
 #include <nsIServiceManager.h>
-#if MOZILLA_SNAPSHOT > 9
 #include <nsICookie2.h>
-#endif
 
 NS_IMPL_ISUPPORTS1(EphySingle, nsIObserver)
 
@@ -245,23 +243,19 @@ mozilla_cookie_to_ephy_cookie (nsICookie *cookie)
 	cookie->GetExpires (&dateTime);
 	info->expires = dateTime;
 
-#if MOZILLA_SNAPSHOT > 9
 	nsCOMPtr<nsICookie2> cookie2 = do_QueryInterface (cookie);
-	if (cookie2)
+	NS_ENSURE_TRUE (cookie2, info);
+		
+	PRBool isSession;
+	cookie2->GetIsSession (&isSession);
+	info->is_session = isSession != PR_FALSE;
+		
+	if (!isSession)
 	{
-		
-		PRBool isSession;
-		cookie2->GetIsSession (&isSession);
-		info->is_session = isSession != PR_FALSE;
-		
-		if (!isSession)
-		{
-			PRInt64 expiry;
-			cookie2->GetExpiry (&expiry);
-			info->real_expires = expiry;
-		}
+		PRInt64 expiry;
+		cookie2->GetExpiry (&expiry);
+		info->real_expires = expiry;
 	}
-#endif
 
 	return info;
 }
@@ -272,7 +266,6 @@ mozilla_permission_to_ephy_permission (nsIPermission *perm)
 	EphyPermissionType type = (EphyPermissionType) 0;
 
 	nsresult result;
-#if MOZILLA_SNAPSHOT >= 10
 	nsCAutoString str;
 	result = perm->GetType(str);
 	NS_ENSURE_SUCCESS (result, NULL);
@@ -289,13 +282,6 @@ mozilla_permission_to_ephy_permission (nsIPermission *perm)
 	{
 		type = EPT_POPUP;
 	}		
-#else
-	PRUint32 num;
-	result = perm->GetType(&num);
-	NS_ENSURE_SUCCESS (result, NULL);
-
-	type = (EphyPermissionType) num;
-#endif
 
 	PRUint32 cap;
 	perm->GetCapability(&cap);

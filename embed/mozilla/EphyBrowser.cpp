@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000-2003 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2004 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -136,9 +136,6 @@ EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
 #elif MOZILLA_SNAPSHOT > 11
 		nsIURI *uri;
 		uri = doc->GetDocumentURL ();
-#else
-		nsCOMPtr<nsIURI> uri;
-		doc->GetDocumentURL(getter_AddRefs(uri));
 #endif
 		if (!uri) return NS_ERROR_FAILURE;
 
@@ -646,9 +643,6 @@ nsresult EphyBrowser::GetDocumentUrl (nsCString &url)
 #elif MOZILLA_SNAPSHOT > 11
 	nsIURI *uri;
 	uri = doc->GetDocumentURL ();
-#else
-	nsCOMPtr<nsIURI> uri;
-	doc->GetDocumentURL(getter_AddRefs(uri));
 #endif
 	NS_ENSURE_TRUE (uri, NS_ERROR_FAILURE);
 
@@ -670,9 +664,6 @@ nsresult EphyBrowser::GetTargetDocumentUrl (nsCString &url)
 #elif MOZILLA_SNAPSHOT > 11
 	nsIURI *uri;
 	uri = doc->GetDocumentURL ();
-#else
-        nsCOMPtr<nsIURI> uri;
-        doc->GetDocumentURL(getter_AddRefs(uri));
 #endif
 	NS_ENSURE_TRUE (uri, NS_ERROR_FAILURE);
 
@@ -689,11 +680,7 @@ nsresult EphyBrowser::ForceEncoding (const char *encoding)
 	NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
 
 	nsresult result;
-#if MOZILLA_SNAPSHOT > 9 
 	result = mdv->SetForceCharacterSet (nsDependentCString(encoding));
-#else
-	result = mdv->SetForceCharacterSet (NS_ConvertUTF8toUCS2(encoding).get());
-#endif
 
 	return result;
 }
@@ -728,12 +715,7 @@ nsresult EphyBrowser::GetEncodingInfo (EphyEncodingInfo **infoptr)
 	*infoptr = info;
 
 	PRInt32 source;
-#if MOZILLA_SNAPSHOT > 11
 	source = doc->GetDocumentCharacterSetSource ();
-#else
-	result = doc->GetDocumentCharacterSetSource (&source);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
-#endif
 	info->encoding_source = (EphyEncodingSource) source;
 
 	nsCOMPtr<nsIDocShell> ds;
@@ -772,26 +754,11 @@ nsresult EphyBrowser::GetEncodingInfo (EphyEncodingInfo **infoptr)
 	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
 	NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
 
-#if MOZILLA_SNAPSHOT > 11
 	const nsACString& charsetEnc = doc->GetDocumentCharacterSet ();
 	NS_ENSURE_TRUE (!charsetEnc.IsEmpty(), NS_ERROR_FAILURE);
 
 	info->encoding = g_strdup (PromiseFlatCString(charsetEnc).get());
-#elif MOZILLA_SNAPSHOT >= 10
-	nsCAutoString charsetEnc;	
-	result = doc->GetDocumentCharacterSet (charsetEnc);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
 
-	info->encoding = g_strdup (charsetEnc.get());
-#else
-	nsAutoString charsetEnc;
-	result = doc->GetDocumentCharacterSet (charsetEnc);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
-
-	info->encoding = g_strdup (NS_ConvertUCS2toUTF8(charsetEnc).get());
-#endif
-
-#if MOZILLA_SNAPSHOT >= 10
 	nsCAutoString enc;
 	
 	result = mdv->GetDefaultCharacterSet (enc);
@@ -809,25 +776,6 @@ nsresult EphyBrowser::GetEncodingInfo (EphyEncodingInfo **infoptr)
 	result = mdv->GetPrevDocCharacterSet (enc);
 	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
 	info->prev_doc_encoding = g_strdup (enc.get());
-#else
-	PRUnichar *str;
-
-	result = mdv->GetDefaultCharacterSet (&str);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
-	info->default_encoding = g_strdup (NS_ConvertUCS2toUTF8(str).get());
-
-	result = mdv->GetForceCharacterSet (&str);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
-	info->forced_encoding = g_strdup (NS_ConvertUCS2toUTF8(str).get());
-
-	result = mdv->GetHintCharacterSet (&str);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
-	info->hint_encoding = g_strdup (NS_ConvertUCS2toUTF8(str).get());
-
-	result = mdv->GetPrevDocCharacterSet (&str);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
-	info->prev_doc_encoding = g_strdup (NS_ConvertUCS2toUTF8(str).get());
-#endif
 
 	mdv->GetHintCharacterSetSource (&source);
 	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);

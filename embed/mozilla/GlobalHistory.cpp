@@ -159,7 +159,7 @@ NS_IMETHODIMP MozGlobalHistory::GetLastPageVisited(char **aLastPageVisited)
 }
 #endif
 
-#if MOZILLA_SNAPSHOT > 8 && MOZILLA_SNAPSHOT < 14
+#if MOZILLA_SNAPSHOT < 14
 NS_IMETHODIMP MozGlobalHistory::SetLastPageVisited(const char *aLastPageVisited)
 {
         return NS_ERROR_NOT_IMPLEMENTED;

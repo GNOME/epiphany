@@ -1338,13 +1338,11 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	{
 		popup = "/EphyImagePopup";
 	}
-#if MOZILLA_SNAPSHOT > 12
 	else if (context & EMBED_CONTEXT_INPUT)
 	{
 		showing_edit_actions = TRUE;
 		popup = "/EphyInputPopup";
 	}
-#endif
 	else
 	{
 		showing_edit_actions = TRUE;

@@ -1,10 +1,8 @@
-# Remove appcomps dir when 1.4 is deprecated
 INCLUDES = \
 	-I$(top_srcdir)/lib	    			\
 	-I$(top_srcdir)/embed	    			\
 	-I$(top_srcdir)		    			\
 	$(MOZILLA_COMPONENT_CFLAGS)			\
-	-I$(MOZILLA_INCLUDE_ROOT)/appcomps		\
 	-I$(MOZILLA_INCLUDE_ROOT)/chardet		\
 	-I$(MOZILLA_INCLUDE_ROOT)/chrome		\
 	-I$(MOZILLA_INCLUDE_ROOT)/content		\
@@ -63,8 +61,6 @@ libephymozillaembed_la_SOURCES = 	\
 	EventContext.h                  \
 	ExternalProtocolHandlers.cpp	\
 	ExternalProtocolHandlers.h	\
-	ExternalProtocolService.cpp     \
-	ExternalProtocolService.h	\
 	FilePicker.cpp			\
 	FilePicker.h                    \
 	GlobalHistory.cpp               \

@@ -67,9 +67,7 @@
 #include "nsIMIMEInfo.h"
 #include "nsIDOMHTMLDocument.h"
 #include "nsIDownload.h"
-#if MOZILLA_SNAPSHOT > 10
 #include  "nsIMIMEHeaderParam.h"
-#endif
 
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
@@ -245,7 +243,6 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 	if (defaultFileName.IsEmpty() && !mContentDisposition.IsEmpty())
 	{
 		/* 1 Use the HTTP header suggestion. */
-#if MOZILLA_SNAPSHOT > 10
 		nsCOMPtr<nsIMIMEHeaderParam> mimehdrpar =
 			do_GetService("@mozilla.org/network/mime-hdrparam;1");     
 		
@@ -274,17 +271,6 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 				defaultFileName = fileName;
 			}
 		}
-#else
-		PRInt32 index = mContentDisposition.Find("filename=");
-		if (index >= 0)
-		{
-			/* Take the substring following the prefix. */
-			index += strlen ("filename=");
-			nsCAutoString filename;
-			mContentDisposition.Right(filename, mContentDisposition.Length() - index);
-			defaultFileName = NS_ConvertUTF8toUCS2(filename);
-		}
-#endif
 	}
     
 	if (defaultFileName.IsEmpty())

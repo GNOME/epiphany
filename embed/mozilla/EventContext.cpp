@@ -154,14 +154,6 @@ nsresult EventContext::ResolveBaseURL (nsIDocument *doc, const nsAString &relurl
 	nsIURI *base;
 	base = doc->GetBaseURL ();
 	if (!base) return NS_ERROR_FAILURE;
-#elif MOZILLA_SNAPSHOT > 9 
-	nsCOMPtr<nsIURI> base;
-	rv = doc->GetBaseURL (getter_AddRefs(base));
-	if (NS_FAILED(rv)) return rv;
-#else
-	nsCOMPtr<nsIURI> base;
-	rv = doc->GetBaseURL (*getter_AddRefs(base));
-	if (NS_FAILED(rv)) return rv;
 #endif
 
 	return base->Resolve (NS_ConvertUCS2toUTF8(relurl), url);
@@ -178,10 +170,6 @@ nsresult EventContext::ResolveDocumentURL (nsIDocument *doc, const nsAString &re
 	nsIURI *uri;
 	uri = doc->GetDocumentURL ();
 	if (!uri) return NS_ERROR_FAILURE;
-#else
-	nsCOMPtr<nsIURI> uri;
-	rv = doc->GetDocumentURL(getter_AddRefs(uri));
-	if (NS_FAILED(rv)) return rv;
 #endif
 
 	return uri->Resolve (NS_ConvertUCS2toUTF8(relurl), url);

@@ -58,16 +58,8 @@
 #include <nsIPassword.h>
 #include <nsIPasswordManager.h>
 #include <nsIPassword.h>
-#if MOZILLA_SNAPSHOT > 9
 #include <nsICookie2.h>
-#else
-#include <nsICookie.h>
-#endif
-#if MOZILLA_SNAPSHOT > 12
 #include <nsICookieManager.h>
-#else
-#include <nsCCookieManager.h>
-#endif
 #include <nsCPasswordManager.h>
 #include <nsIPermission.h>
 #include <nsIPermissionManager.h>
@@ -385,13 +377,7 @@ getUILang (nsAString& aUILang)
 		return NS_ERROR_FAILURE;
 	}
 
-#if MOZILLA_SNAPSHOT >= 12
 	result = localeService->GetLocaleComponentForUserAgent (aUILang);
-#else
-	nsXPIDLString uiLang;
-	result = localeService->GetLocaleComponentForUserAgent (getter_Copies(uiLang));
-	aUILang.Assign (uiLang);
-#endif
 
 	if (NS_FAILED (result))
 	{
@@ -739,11 +725,7 @@ impl_permission_manager_add (EphyPermissionManager *manager,
 	gboolean allow = (permission == EPHY_PERMISSION_ALLOWED);
 
 	pm->Add (uri,
-#if MOZILLA_SNAPSHOT >= 10
 		 permission_type_string [type],
-#else
-		 type,
-#endif
 		 allow ? (PRUint32) nsIPermissionManager::ALLOW_ACTION :
 			 (PRUint32) nsIPermissionManager::DENY_ACTION);
 }
@@ -757,11 +739,7 @@ impl_permission_manager_remove (EphyPermissionManager *manager,
 		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID));
 	if (!pm) return;
 
-#if MOZILLA_SNAPSHOT >= 10
 	pm->Remove (nsDependentCString (host), permission_type_string [type]);
-#else
-	pm->Remove (nsDependentCString (host), type);
-#endif
 }
 
 void
@@ -789,11 +767,7 @@ impl_permission_manager_test (EphyPermissionManager *manager,
 
 	nsresult rv;
 	PRUint32 action;
-#if MOZILLA_SNAPSHOT >= 10
 	rv = pm->TestPermission (uri, permission_type_string [type], &action);
-#else
-	rv = pm->TestPermission (uri, type, &action);
-#endif
 	NS_ENSURE_SUCCESS (rv, EPHY_PERMISSION_DEFAULT);
 
 	EphyPermission permission;
@@ -837,19 +811,11 @@ impl_permission_manager_list (EphyPermissionManager *manager,
 		if (!perm) continue;
 
 		nsresult rv;
-#if MOZILLA_SNAPSHOT >= 10
 		nsCAutoString str;
 		rv = perm->GetType(str);
 		if (NS_FAILED (rv)) continue;
 
 		if (str.Equals(permission_type_string[type]))
-#else
-		PRUint32 num;
-		rv = perm->GetType(&num);
-		if (NS_FAILED (rv)) continue;
-
-		if ((PRUint32) num == (PRUint32) type)
-#endif
 		{
 			EphyPermissionInfo *info = 
 				mozilla_permission_to_ephy_permission (perm);
