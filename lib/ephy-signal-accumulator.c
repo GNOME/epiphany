@@ -48,3 +48,14 @@ ephy_signal_accumulator_object (GSignalInvocationHint *ihint,
 
 	return TRUE;
 }
+
+gboolean
+ephy_signal_accumulator_string (GSignalInvocationHint *ihint,
+			        GValue *return_accu,
+			        const GValue *handler_return,
+			        gpointer accu_data)
+{
+	g_value_copy (handler_return, return_accu);
+	
+	return g_value_get_string (handler_return) == NULL;
+}

@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include "toolbar.h"
-#include "ephy-favicon-action.h"
 #include "ephy-link.h"
 #include "ephy-go-action.h"
 #include "ephy-home-action.h"
@@ -376,6 +375,7 @@ toolbar_setup_actions (Toolbar *t)
 			       "stock_id", EPHY_STOCK_ENTRY,
 			       "tooltip", _("Enter a web address to open, or a phrase to search for on the web"),
 			       "visible-overflown", FALSE,
+			       "window", t->priv->window,
 			       NULL);
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), t);
@@ -394,16 +394,6 @@ toolbar_setup_actions (Toolbar *t)
 			       NULL);
 	g_signal_connect (action, "zoom_to_level",
 			  G_CALLBACK (zoom_to_level_cb), t->priv->window);
-	gtk_action_group_add_action (t->priv->action_group, action);
-	g_object_unref (action);
-
-	action = g_object_new (EPHY_TYPE_FAVICON_ACTION,
-			       "name", "Favicon",
-			       "label", _("Favicon"),
-			       "tooltip", _("Drag and drop this icon to create a link to this page"),
-			       "window", t->priv->window,
-			       "visible-overflown", FALSE,
-			       NULL);
 	gtk_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
 
@@ -618,18 +608,15 @@ toolbar_set_location (Toolbar *t,
 }
 
 void
-toolbar_update_favicon (Toolbar *t)
+toolbar_update_favicon (Toolbar *t,
+			const char *icon)
 {
-	EphyTab *tab;
-	const char *url;
 	GtkActionGroup *action_group;
 	GtkAction *action;
 
-	tab = ephy_window_get_active_tab (t->priv->window);
-	url = ephy_tab_get_icon_address (tab);
 	action_group = t->priv->action_group;
-	action = gtk_action_group_get_action (action_group, "Favicon");
-	g_object_set (action, "icon", url, NULL);
+	action = gtk_action_group_get_action (action_group, "Location");
+	g_object_set (action, "icon", icon, NULL);
 }
 
 const char *

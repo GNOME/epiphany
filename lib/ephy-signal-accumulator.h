@@ -30,6 +30,10 @@ gboolean ephy_signal_accumulator_object (GSignalInvocationHint *ihint,
 					 const GValue *handler_return,
 					 gpointer accu_data);
 
+gboolean ephy_signal_accumulator_string	(GSignalInvocationHint *ihint,
+					 GValue *return_accu,
+					 const GValue *handler_return,
+					 gpointer accu_data);
 
 G_END_DECLS
 

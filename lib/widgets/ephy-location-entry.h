@@ -25,6 +25,7 @@
 
 #include "ephy-node.h"
 
+#include <gtk/gtkwidget.h>
 #include <gtk/gtktoolitem.h>
 #include <gtk/gtktreemodel.h>
 
@@ -45,7 +46,11 @@ struct _EphyLocationEntryClass
 {
 	GtkToolItemClass parent_class;
 
-	void		(*user_changed)	(EphyLocationEntry *le);
+	/* Signals */
+	void	(*user_changed)	  (EphyLocationEntry *entry);
+	/* for getting the drag data */
+	char *	(* get_location)  (EphyLocationEntry *entry);
+	char *	(* get_title)     (EphyLocationEntry *entry);
 };
 
 struct _EphyLocationEntry
@@ -73,6 +78,10 @@ void		ephy_location_entry_set_location	(EphyLocationEntry *le,
 const char     *ephy_location_entry_get_location	(EphyLocationEntry *le);
 
 void		ephy_location_entry_activate		(EphyLocationEntry *le);
+
+GtkWidget      *ephy_location_entry_get_entry		(EphyLocationEntry *entry);
+
+GtkWidget      *ephy_location_entry_get_image		(EphyLocationEntry *entry);
 
 G_END_DECLS
 

@@ -1262,7 +1262,7 @@ sync_tab_icon (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 
 	gtk_window_set_icon (GTK_WINDOW (window), pixbuf);
 
-	toolbar_update_favicon (window->priv->toolbar);
+	toolbar_update_favicon (window->priv->toolbar, address);
 
 	if (pixbuf)
 	{

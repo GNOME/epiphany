@@ -1,3 +1,48 @@
+2005-01-08  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/ui/epiphany-toolbar.xml:
+	* lib/ephy-marshal.list:
+	* lib/ephy-signal-accumulator.c: (ephy_signal_accumulator_string):
+	* lib/ephy-signal-accumulator.h:
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_set_tooltip),
+	(ephy_location_entry_class_init), (editable_changed_cb),
+	(each_url_get_data_binder), (favicon_drag_data_get_cb),
+	(ephy_location_entry_construct_contents),
+	(ephy_location_entry_activate), (ephy_location_entry_get_entry),
+	(ephy_location_entry_get_image):
+	* lib/widgets/ephy-location-entry.h:
+	* src/Makefile.am:
+	* src/ephy-favicon-action.c:
+	* src/ephy-favicon-action.h:
+	* src/ephy-location-action.c: (sync_address), (sync_editable),
+	(sync_icon), (get_location_cb), (get_title_cb),
+	(remove_completion_actions), (add_completion_actions),
+	(connect_proxy), (disconnect_proxy),
+	(ephy_location_action_set_property),
+	(ephy_location_action_get_property),
+	(ephy_location_action_class_init), (ephy_location_action_init),
+	(ephy_location_action_finalize):
+	* src/ephy-window.c: (sync_tab_icon):
+	* src/toolbar.c: (toolbar_setup_actions), (toolbar_update_favicon):
+	* src/toolbar.h:
+
+	Unify the location and favicon actions.
+	
+	* src/window-commands.c: (window_cmd_help_about):
+
+	Add translator comment to the translation-credits string.
+
+2005-01-07  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/Makefile.am:
+	* lib/Makefile.am:
+	* lib/egg/Makefile.am:
+	* src/Makefile.am:
+
+	Avoid unnecessary rebuilts of the generated enum .h files by using
+	stamp files.
+
 2005-01-07  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_get_type),

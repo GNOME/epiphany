@@ -24,22 +24,28 @@
 #include "ephy-location-action.h"
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
+#include "ephy-favicon-cache.h"
 #include "ephy-completion-model.h"
 #include "ephy-link.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtkentry.h>
+#include <gtk/gtkstock.h>
+#include <gtk/gtkimage.h>
 #include <gtk/gtkentrycompletion.h>
 
 #define EPHY_LOCATION_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_LOCATION_ACTION, EphyLocationActionPrivate))
 
 struct _EphyLocationActionPrivate
 {
+	EphyWindow *window;
 	GList *actions;
 	char *address;
 	gboolean editable;
 	EphyNode *smart_bmks;
 	EphyBookmarks *bookmarks;
+	char *icon;
+	EphyFaviconCache *cache;
 };
 
 static void ephy_location_action_init       (EphyLocationAction *action);
@@ -55,7 +61,9 @@ enum
 {
 	PROP_0,
 	PROP_ADDRESS,
-	PROP_EDITABLE
+	PROP_EDITABLE,
+	PROP_ICON,
+	PROP_WINDOW
 };
 
 static GObjectClass *parent_class = NULL;
@@ -148,83 +156,139 @@ user_changed_cb (GtkWidget *proxy, EphyLocationAction *action)
 }
 
 static void
-sync_address (GtkAction *act, GParamSpec *pspec, GtkWidget *proxy)
+sync_address (GtkAction *gaction,
+	      GParamSpec *pspec,
+	      GtkWidget *proxy)
 {
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (act);
+	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
+	EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (proxy);
 
-	LOG ("sync_address")
+	LOG ("sync_address %s", action->priv->address)
 
-	g_return_if_fail (EPHY_IS_LOCATION_ENTRY (proxy));
 	g_signal_handlers_block_by_func (proxy, G_CALLBACK (user_changed_cb), action);
-	ephy_location_entry_set_location (EPHY_LOCATION_ENTRY (proxy),
-					  action->priv->address);
+	ephy_location_entry_set_location (lentry, action->priv->address);
 	g_signal_handlers_unblock_by_func (proxy, G_CALLBACK (user_changed_cb), action);
 }
 
 static void
-sync_editable (GtkAction *act, GParamSpec *pspec, GtkWidget *proxy)
+sync_editable (GtkAction *gaction,
+	       GParamSpec *pspec,
+	       GtkWidget *proxy)
 {
-	EphyLocationAction *action = EPHY_LOCATION_ACTION (act);
+	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
+	EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (proxy);
 	GtkWidget *entry;
 
-	entry = GTK_BIN (proxy)->child;
+	entry = ephy_location_entry_get_entry (lentry);
 	gtk_editable_set_editable (GTK_EDITABLE (entry), action->priv->editable);
 }
 
 static void
-remove_completion_actions (GtkAction *action, GtkWidget *proxy)
+sync_icon (GtkAction *gaction,
+	   GParamSpec *pspec,
+	   GtkWidget *proxy)
 {
+	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
+	EphyLocationActionPrivate *priv = action->priv;
+	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (proxy);
+	GtkWidget *image;
+	GdkPixbuf *pixbuf;
+
+	image = ephy_location_entry_get_image (entry);
+	pixbuf = ephy_favicon_cache_get (priv->cache, priv->icon);
+
+	if (pixbuf != NULL)
+	{
+		gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
+		g_object_unref (pixbuf);
+	}
+	else
+	{
+		gtk_image_set_from_stock (GTK_IMAGE (image),
+					  GTK_STOCK_NEW,
+					  GTK_ICON_SIZE_MENU);
+	}
+}
+
+static char *
+get_location_cb (EphyLocationEntry *entry,
+		EphyLocationAction *action)
+{
+	EphyEmbed *embed;
+	
+	embed = ephy_window_get_active_embed (action->priv->window);
+	
+	return ephy_embed_get_location (embed, TRUE);
+}
+
+static char *
+get_title_cb (EphyLocationEntry *entry,
+	      EphyLocationAction *action)
+{
+	EphyTab *tab;
+
+	tab = ephy_window_get_active_tab (action->priv->window);
+
+	return g_strdup (ephy_tab_get_title (tab));
+}
+
+static void
+remove_completion_actions (GtkAction *gaction,
+			   GtkWidget *proxy)
+{
+	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
+	EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (proxy);
 	GtkWidget *entry;
 	GtkEntryCompletion *completion;
-	EphyLocationAction *la = EPHY_LOCATION_ACTION (action);
 	GList *l;
 
-	entry = GTK_BIN (proxy)->child;
+	entry = ephy_location_entry_get_entry (lentry);
 	completion = gtk_entry_get_completion (GTK_ENTRY (entry));
 
-	for (l = la->priv->actions; l != NULL; l = l->next)
+	for (l = action->priv->actions; l != NULL; l = l->next)
 	{
 		gtk_entry_completion_delete_action (completion, 0);
 	}
 
 	g_signal_handlers_disconnect_by_func
-			(completion, G_CALLBACK (action_activated_cb), la);
+			(completion, G_CALLBACK (action_activated_cb), action);
 }
 
 static void
-add_completion_actions (GtkAction *action, GtkWidget *proxy)
+add_completion_actions (GtkAction *gaction,
+			GtkWidget *proxy)
 {
+	EphyLocationAction *action = EPHY_LOCATION_ACTION (gaction);
+	EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (proxy);
 	GtkWidget *entry;
 	GtkEntryCompletion *completion;
-	EphyLocationAction *la = EPHY_LOCATION_ACTION (action);
 	GList *l;
 
-	entry = GTK_BIN (proxy)->child;
+	entry = ephy_location_entry_get_entry (lentry);
 	completion = gtk_entry_get_completion (GTK_ENTRY (entry));
 
-	for (l = la->priv->actions; l != NULL; l = l->next)
+	for (l = action->priv->actions; l != NULL; l = l->next)
 	{
 		EphyNode *bmk = l->data;
 		const char *title;
 		int index;
 
-		index = g_list_position (la->priv->actions, l);
+		index = g_list_position (action->priv->actions, l);
 		title = ephy_node_get_property_string
 	                (bmk, EPHY_NODE_BMK_PROP_TITLE);
 		gtk_entry_completion_insert_action_text (completion, index, (char*)title);
 	}
 
 	g_signal_connect (completion, "action_activated",
-			  G_CALLBACK (action_activated_cb), la);
+			  G_CALLBACK (action_activated_cb), action);
 }
 
 static void
 connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
-	LOG ("Connect proxy")
-
 	if (EPHY_IS_LOCATION_ENTRY (proxy))
 	{
+		EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (proxy);
 		EphyCompletionModel *model;
 		GtkWidget *entry;
 
@@ -244,13 +308,20 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 		sync_editable (action, NULL, proxy);
 		g_signal_connect_object (action, "notify::editable",
 					 G_CALLBACK (sync_editable), proxy, 0);
+		sync_icon (action, NULL, proxy);
+		g_signal_connect_object (action, "notify::icon",
+					 G_CALLBACK (sync_icon), proxy, 0);
 
-		entry = GTK_BIN (proxy)->child;
+		entry = ephy_location_entry_get_entry (lentry);
 		g_signal_connect_object (entry, "activate",
 					 G_CALLBACK (location_url_activate_cb),
 					 action, 0);
 		g_signal_connect_object (proxy, "user_changed",
 					 G_CALLBACK (user_changed_cb), action, 0);
+		g_signal_connect_object (proxy, "get-location",
+					 G_CALLBACK (get_location_cb), action, 0);
+		g_signal_connect_object (proxy, "get-title",
+					 G_CALLBACK (get_title_cb), action, 0);
 	}
 
 	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
@@ -259,25 +330,22 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 static void
 disconnect_proxy (GtkAction *action, GtkWidget *proxy)
 {
-	LOG ("Disconnect proxy")
+	GTK_ACTION_CLASS (parent_class)->disconnect_proxy (action, proxy);
 
 	if (EPHY_IS_LOCATION_ENTRY (proxy))
 	{
+		EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (proxy);
 		GtkWidget *entry;
 
-		entry = GTK_BIN (proxy)->child;
+		entry = ephy_location_entry_get_entry (lentry);
 
-		g_signal_handlers_disconnect_by_func
-			(action, G_CALLBACK (sync_address), proxy);
-
-		g_signal_handlers_disconnect_by_func
-			(entry, G_CALLBACK (location_url_activate_cb), action);
-
-		g_signal_handlers_disconnect_by_func
-			(proxy, G_CALLBACK (user_changed_cb), action);
+		g_signal_handlers_disconnect_matched (action, G_SIGNAL_MATCH_DATA,
+						      0, 0, NULL, NULL, proxy);
+		g_signal_handlers_disconnect_matched (proxy, G_SIGNAL_MATCH_DATA,
+						      0, 0, NULL, NULL, action);
+		g_signal_handlers_disconnect_matched (entry, G_SIGNAL_MATCH_DATA,
+						      0, 0, NULL, NULL, action);
 	}
-
-	GTK_ACTION_CLASS (parent_class)->disconnect_proxy (action, proxy);
 }
 
 static void
@@ -295,6 +363,13 @@ ephy_location_action_set_property (GObject *object,
 			break;
 		case PROP_EDITABLE:
 			action->priv->editable = g_value_get_boolean (value);
+			break;
+		case PROP_ICON:
+			g_free (action->priv->icon);
+			action->priv->icon = g_value_dup_string (value);
+			break;
+		case PROP_WINDOW:
+			action->priv->window = EPHY_WINDOW (g_value_get_object (value));
 			break;
 	}
 }
@@ -314,6 +389,12 @@ ephy_location_action_get_property (GObject *object,
 			break;
 		case PROP_EDITABLE:
 			g_value_set_boolean (value, action->priv->editable);
+			break;
+		case PROP_ICON:
+			g_value_set_string (value, action->priv->icon);
+			break;
+		case PROP_WINDOW:
+			/* not readable */
 			break;
 	}
 }
@@ -349,6 +430,22 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							       TRUE,
 							       G_PARAM_READWRITE));
 
+	g_object_class_install_property (object_class,
+					 PROP_ICON,
+					 g_param_spec_string  ("icon",
+							       "Icon",
+							       "The icon",
+							       NULL,
+							       G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_WINDOW,
+					 g_param_spec_object ("window",
+							      "Window",
+							      "The navigation window",
+							      G_TYPE_OBJECT,
+							      G_PARAM_WRITABLE |
+							      G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (EphyLocationActionPrivate));
 }
@@ -482,16 +579,22 @@ ephy_location_action_init (EphyLocationAction *action)
 			                 EPHY_NODE_CHILD_CHANGED,
 			                 (EphyNodeCallback)actions_child_changed_cb,
 			                 G_OBJECT (action));
+
+	action->priv->cache = EPHY_FAVICON_CACHE
+		(ephy_embed_shell_get_favicon_cache (embed_shell));
+	g_object_ref (action->priv->cache);
 }
 
 static void
 ephy_location_action_finalize (GObject *object)
 {
 	EphyLocationAction *action = EPHY_LOCATION_ACTION (object);
+	EphyLocationActionPrivate *priv = action->priv;
 
-	g_list_free (action->priv->actions);
-
-	g_free (action->priv->address);
+	g_list_free (priv->actions);
+	g_free (priv->address);
+	g_free (action->priv->icon);
+	g_object_unref (priv->cache);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

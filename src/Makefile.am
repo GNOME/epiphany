@@ -29,7 +29,6 @@ NOINST_H_FILES = \
 	ephy-automation.h		\
 	ephy-encoding-dialog.h		\
 	ephy-encoding-menu.h		\
-	ephy-favicon-action.h		\
 	ephy-go-action.h		\
 	ephy-history-window.h		\
 	ephy-home-action.h		\
@@ -65,7 +64,6 @@ libephymain_la_SOURCES = \
 	ephy-encoding-menu.c		\
 	ephy-extension.c		\
 	ephy-extensions-manager.c	\
-	ephy-favicon-action.c		\
 	ephy-go-action.c		\
 	ephy-home-action.c		\
 	ephy-history-window.c		\
