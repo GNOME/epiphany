@@ -123,6 +123,8 @@ statusbar_init (Statusbar *t)
         t->priv = g_new0 (StatusbarPrivate, 1);
 
 	t->priv->tooltips = gtk_tooltips_new ();
+	g_object_ref (G_OBJECT (t->priv->tooltips));
+	gtk_object_sink (GTK_OBJECT (t->priv->tooltips));
 
 	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (t), FALSE);
 
@@ -142,7 +144,7 @@ statusbar_finalize (GObject *object)
 
         g_return_if_fail (t->priv != NULL);
 
-	gtk_object_destroy (GTK_OBJECT (t->priv->tooltips));
+	g_object_unref (t->priv->tooltips);
 
         g_free (t->priv);
 
