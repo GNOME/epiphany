@@ -16,7 +16,6 @@ header_DATA = $(INST_H_FILES)
 
 NOINST_H_FILES = \
 	eel-gconf-extensions.h			\
-	ephy-bonobo-extensions.h		\
 	ephy-debug.h				\
 	ephy-dnd.h				\
 	ephy-file-chooser.h			\
@@ -41,7 +40,6 @@ INST_H_FILES = \
 
 libephymisc_la_SOURCES = \
 	eel-gconf-extensions.c			\
-	ephy-bonobo-extensions.c		\
 	ephy-debug.c				\
 	ephy-dialog.c				\
 	ephy-dnd.c				\

@@ -13,10 +13,6 @@ INCLUDES = \
 	-DPIXMAP_DIR=\""$(datadir)/pixmaps"\" 		\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"
 
-if ENABLE_NAUTILUS_VIEW
-INCLUDES += $(NAUTILUS_DEPENDENCY_CFLAGS)
-endif
-
 if MAINTAINER_MODE
 INCLUDES += -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED \
 	-DGNOME_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED $(WARN_CFLAGS)
@@ -42,14 +38,6 @@ idl_flags = -I$(LIBBONOBO_IDL) -I$(BONOBO_ACTIVATION_IDL)
 
 $(CORBA_SOURCE): $(idls) $(ORBIT_IDL)
 	$(ORBIT_IDL) $(idl_flags) $(idls)
-
-if ENABLE_NAUTILUS_VIEW
-nautilus_view_sources = \
-	ephy-nautilus-view.c \
-	ephy-nautilus-view.h
-else
-nautilus_view_sources =
-endif
 
 headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
 header_DATA = $(INST_H_FILES)
@@ -85,7 +73,6 @@ INST_H_FILES = 				    		\
 
 libephymain_la_SOURCES =				\
 	$(CORBA_SOURCE)				 	\
-	$(nautilus_view_sources)			\
 	ephy-automation.c				\
 	ephy-completion-model.c				\
 	ephy-completion-model.h				\
@@ -132,10 +119,6 @@ epiphany_bin_LDADD = \
 	$(MOZILLA_COMPONENT_LIBS)	\
 	$(EPIPHANY_DEPENDENCY_LIBS) \
 	$(INTLLIBS)
-
-if ENABLE_NAUTILUS_VIEW
-epiphany_bin_LDADD += $(NAUTILUS_DEPENDENCY_LIBS)
-endif
 
 BUILT_SOURCES = $(CORBA_SOURCE)
 

@@ -53,12 +53,6 @@
 #include <unistd.h>
 #include <libgnomeui/gnome-client.h>
 
-#ifdef ENABLE_NAUTILUS_VIEW
-#include <bonobo/bonobo-generic-factory.h>
-#include "ephy-nautilus-view.h"
-#endif
-
-#define EPHY_NAUTILUS_VIEW_IID "OAFIID:GNOME_Epiphany_NautilusView"
 #define AUTOMATION_IID "OAFIID:GNOME_Epiphany_Automation"
 #define SERVER_TIMEOUT 60000
 
@@ -151,12 +145,6 @@ ephy_automation_factory_cb (BonoboGenericFactory *this_factory,
 	{
 		return BONOBO_OBJECT (g_object_new (EPHY_TYPE_AUTOMATION, NULL));
 	}
-#ifdef ENABLE_NAUTILUS_VIEW
-	else if (strcmp (iid, EPHY_NAUTILUS_VIEW_IID) == 0)
-	{
-		return BONOBO_OBJECT (ephy_nautilus_view_new_component (shell));
-	}
-#endif
 
 	g_assert_not_reached ();
 

@@ -131,7 +131,6 @@ IGNORE_HFILES = \
 	ephy-go-action.h \
 	ephy-history-window.h \
 	ephy-location-action.h \
-	ephy-nautilus-view.h \
 	ephy-navigation-action.h \
 	ephy-notebook.h \
 	ephy-statusbar.h \
@@ -176,10 +175,6 @@ GTKDOC_LIBS = \
 	$(MOZILLA_COMPONENT_LIBS)	\
 	$(EPIPHANY_DEPENDENCY_LIBS) \
 	$(INTLLIBS)
-
-if ENABLE_NAUTILUS_VIEW
-GTKDOC_LIBS += $(NAUTILUS_DEPENDENCY_LIBS)
-endif
 
 # If you need to override some of the declarations, place them in the
 # $(DOC_MODULE)-overrides.txt file and uncomment the second line here.

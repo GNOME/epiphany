@@ -6,14 +6,6 @@ SUBDIRS = ui art glade
 
 dist_pkgdata_DATA = default-prefs.js
 
-NAUTILUS_VIEW_SERVER = GNOME_Epiphany_NautilusView.server.in
-
-if ENABLE_NAUTILUS_VIEW
-nautilus_server_in_files = $(NAUTILUS_VIEW_SERVER)
-nautilus_server_DATA = GNOME_Epiphany_NautilusView.server
-nautilus_serverdir = $(libdir)/bonobo/servers
-endif
-
 server_in_files = GNOME_Epiphany_Automation.server.in
 server_DATA = GNOME_Epiphany_Automation.server
 serverdir = $(libdir)/bonobo/servers
@@ -49,7 +41,7 @@ if GCONF_SCHEMAS_INSTALL
         fi
 endif
 
-EXTRA_DIST = $(NAUTILUS_VIEW_SERVER)	\
+EXTRA_DIST = \
 	     $(server_in_files)     	\
 	     $(schema_in_files)         \
 	     $(DESKTOP_IN_FILES)	\
@@ -60,7 +52,6 @@ EXTRA_DIST = $(NAUTILUS_VIEW_SERVER)	\
 	     check-mime.py
 
 DISTCLEANFILES = \
-	$(nautilus_server_DATA) \
 	$(server_DATA)		\
 	$(Applications_DATA)	\
 	$(schema_DATA)		\
