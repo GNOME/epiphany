@@ -1,3 +1,30 @@
+2003-04-13  Vincent Untz  <vincent@vuntz.net>
+
+	* src/prefs-dialog.c: (prefs_dialog_show_help):
+
+	Declare all the variables before the first instruction. Fixes a
+	compilation problem under gcc 2.95.
+
+2003-04-15  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/ephy-types.h:
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_save),
+	(ephy_bookmarks_init), (ephy_bookmarks_finalize),
+	(ephy_bookmarks_add), (get_topics_list), (update_topics_list),
+	(ephy_bookmarks_set_keyword), (ephy_bookmarks_unset_keyword):
+	* src/bookmarks/ephy-tree-model-node.c:
+	(ephy_tree_model_node_update_node):
+
+2003-04-15  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/ephy-types.h:
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_save),
+	(ephy_bookmarks_init), (ephy_bookmarks_finalize),
+	(ephy_bookmarks_add), (get_topics_list), (update_topics_list),
+	(ephy_bookmarks_set_keyword), (ephy_bookmarks_unset_keyword):
+	* src/bookmarks/ephy-tree-model-node.c:
+	(ephy_tree_model_node_update_node):
+
 2003-04-14  Hasbullah Bin Pit  <sebol@ikhlas.com>
 
         * configure.in(ALL_LINGUAS): Added "ms".

@@ -701,6 +701,8 @@ ephy_tree_model_node_update_node (EphyTreeModelNode *model,
 		path = get_path_real (model, node);
 	}
 
+	LOG ("Updating row")
+
 	gtk_tree_model_row_changed (GTK_TREE_MODEL (model), path, &iter);
 	gtk_tree_path_free (path);
 }

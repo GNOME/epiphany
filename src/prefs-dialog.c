@@ -241,9 +241,8 @@ prefs_dialog_show_page (PrefsDialog *pd,
 static void
 prefs_dialog_show_help (PrefsDialog *pd)
 {
-	GError *err;
+	GError *err = NULL;
 	gint id;
-	err = NULL;
 	gchar *help_preferences[] = {
 		"ephy-preferences-appearance",
 		"ephy-preferences-general",
