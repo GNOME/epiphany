@@ -68,7 +68,8 @@ enum
 	EPHY_NODE_FAVICON_PROP_URL	 = 2,
 	EPHY_NODE_FAVICON_PROP_FILENAME	 = 3,
 	EPHY_NODE_FAVICON_PROP_LAST_USED = 4,
-	EPHY_NODE_FAVICON_PROP_STATE	 = 5
+	EPHY_NODE_FAVICON_PROP_STATE	 = 5,
+	EPHY_NODE_FAVICON_PROP_CHECKED	 = 6
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -404,6 +405,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 	GValue value = { 0, };
 	char *pix_file;
 	GdkPixbuf *pixbuf;
+	gboolean valid = FALSE;
 
 	if (url == NULL) return NULL;
 
@@ -457,6 +459,50 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 		(cache->priv->directory,
 		 ephy_node_get_property_string (icon, EPHY_NODE_FAVICON_PROP_FILENAME),
 		 NULL);
+
+	/* Check for supported icon types */
+	if (ephy_node_get_property (icon, EPHY_NODE_FAVICON_PROP_CHECKED, &value))
+	{
+		valid = g_value_get_boolean (&value);
+		g_value_unset (&value);
+	}
+	else
+	{
+		GnomeVFSFileInfo *info;
+
+		/* Sniff mime type and check if it's safe to open */
+		info = gnome_vfs_file_info_new ();
+		if (gnome_vfs_get_file_info (pix_file, info,
+					     GNOME_VFS_FILE_INFO_GET_MIME_TYPE |
+					     GNOME_VFS_FILE_INFO_FORCE_SLOW_MIME_TYPE) == GNOME_VFS_OK &&
+		    (info->valid_fields & GNOME_VFS_FILE_INFO_FIELDS_MIME_TYPE) &&
+		    info->mime_type != NULL)
+		{
+			valid = strcmp (info->mime_type, "image/x-ico") == 0 ||
+				strcmp (info->mime_type, "image/png") == 0 ||
+				strcmp (info->mime_type, "image/gif") == 0;
+		}
+		gnome_vfs_file_info_unref (info);
+
+		g_value_init (&value, G_TYPE_BOOLEAN);
+		g_value_set_boolean (&value, valid);
+		ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_CHECKED, &value);
+		g_value_unset (&value);
+
+		/* remove invalid files from cache */
+		if (valid == FALSE)
+		{
+			gnome_vfs_unlink (pix_file);
+		}
+
+		LOG ("%s icon file %s", valid ? "Validated" : "Invalidated", pix_file);
+	}
+
+	if (valid == FALSE)
+	{
+		g_free (pix_file);
+		return NULL;
+	}
 
 	LOG ("Create pixbuf for %s", pix_file);
 
