@@ -1,3 +1,11 @@
+2004-03-03  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/bookmarks/ephy-bookmark-action.c: (favicon_cache_changed_cb),
+	(ephy_bookmark_action_sync_icon), (ephy_bookmark_action_init):
+
+	If the favicon isn't ready when we need it, connect to the favicon
+	cache's ::changed signal to show it when we have it. Fixes bug #135855.
+
 2004-03-02  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/ephy-tab.c: (ephy_tab_destroy_brsr_cb):

@@ -33,6 +33,8 @@
 #include "ephy-string.h"
 #include "ephy-debug.h"
 
+#include <string.h>
+
 #define MAX_LABEL_LENGTH 32
 
 static void ephy_bookmark_action_init       (EphyBookmarkAction *action);
@@ -46,6 +48,7 @@ struct EphyBookmarkActionPrivate
 	char *location;
 	gboolean smart_url;
 	char *icon;
+	guint cache_connection;
 };
 
 enum
@@ -159,13 +162,28 @@ ephy_bookmark_action_sync_smart_url (GtkAction *action, GParamSpec *pspec, GtkWi
 }
 
 static void
+favicon_cache_changed_cb (EphyFaviconCache *cache,
+			  const char *icon,
+			  EphyBookmarkAction *action)
+{
+	if (action->priv->icon && strcmp (icon, action->priv->icon) == 0)
+	{
+		g_signal_handler_disconnect (cache, action->priv->cache_connection);
+		action->priv->cache_connection = 0;
+
+		g_object_notify (G_OBJECT (action), "icon");
+	}
+}
+
+static void
 ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget *proxy)
 {
+	EphyBookmarkAction *bma = EPHY_BOOKMARK_ACTION (action);
 	char *icon_location;
 	EphyFaviconCache *cache;
 	GdkPixbuf *pixbuf = NULL;
 
-	icon_location = EPHY_BOOKMARK_ACTION (action)->priv->icon;
+	icon_location = bma->priv->icon;
 
 	cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache
 		(EPHY_EMBED_SHELL (ephy_shell)));
@@ -173,6 +191,15 @@ ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget 
 	if (icon_location)
 	{
 		pixbuf = ephy_favicon_cache_get (cache, icon_location);
+
+		if (pixbuf == NULL && bma->priv->cache_connection == 0)
+		{
+			bma->priv->cache_connection =
+				g_signal_connect_object
+					(cache, "changed",
+					 G_CALLBACK (favicon_cache_changed_cb),
+					 action, 0);
+		}
 	}
 
 	if (pixbuf == NULL) return;
@@ -557,6 +584,7 @@ ephy_bookmark_action_init (EphyBookmarkAction *action)
 
 	action->priv->location = NULL;
 	action->priv->icon = NULL;
+	action->priv->cache_connection = 0;
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	node = ephy_bookmarks_get_bookmarks (bookmarks);
