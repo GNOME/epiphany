@@ -1158,7 +1158,7 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->has_modified_forms = impl_has_modified_forms;
 }
 
-void
+static void
 xul_visibility_cb (GtkWidget *embed, gboolean visibility, GtkWidget *window)
 {
 	if (visibility)
@@ -1171,10 +1171,21 @@ xul_visibility_cb (GtkWidget *embed, gboolean visibility, GtkWidget *window)
 	}
 }
 
-void
+static void
 xul_size_to_cb (GtkWidget *embed, gint width, gint height, gpointer dummy)
 {
 	gtk_widget_set_size_request (embed, width, height);
+}
+
+static void
+xul_new_window_cb (GtkMozEmbed *embed,
+		   GtkMozEmbed **retval, 
+		   guint chrome_mask,
+		   gpointer dummy)
+{
+        g_assert (chrome_mask & GTK_MOZ_EMBED_FLAG_OPENASCHROME);
+
+        *retval = _mozilla_embed_new_xul_dialog ();
 }
 
 GtkMozEmbed *
@@ -1195,6 +1206,9 @@ _mozilla_embed_new_xul_dialog (void)
 				 window, (GConnectFlags) 0);
 	g_signal_connect_object (embed, "size_to",
 				 G_CALLBACK (xul_size_to_cb),
+				 NULL, (GConnectFlags) 0);
+	g_signal_connect_object (embed, "new_window",
+				 G_CALLBACK (xul_new_window_cb),
 				 NULL, (GConnectFlags) 0);
 
 	return GTK_MOZ_EMBED (embed);
