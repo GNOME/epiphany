@@ -327,7 +327,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 	NS_UTF16ToCString (defaultFileName, NS_CSTRING_ENCODING_UTF8,
 			   cDefaultFileName);
 	char *default_name = g_strdup (cDefaultFileName.get());
-	default_name = g_strdelimit (default_name, "/", ' ');
+	default_name = g_strdelimit (default_name, "/\\:", ' ');
 
 	const char *key;
 	key = ephy_embed_persist_get_persist_key (EPHY_EMBED_PERSIST (mEmbedPersist));
