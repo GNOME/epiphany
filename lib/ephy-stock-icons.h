@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 #define STOCK_NEW_TAB		   "stock_new-tab"
 #define STOCK_FULLSCREEN	   "stock_fullscreen"
 #define STOCK_VIEW_SOURCE	   "stock_view-html-source"
-#define STOCK_SEND_MAIL		   "stock_mail_send"
+#define STOCK_SEND_MAIL		   "stock_mail-send"
 #define STOCK_ADD_BOOKMARK	   "stock_add-bookmark"
 #define STOCK_PRINT_SETUP	   "stock_print-setup"
 
