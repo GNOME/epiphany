@@ -154,7 +154,14 @@ struct EphyEmbedClass
 
 	/* Signals that we inherit from gtkmozembed
 	 *
-	 * void (* net_stop) (GtkMozEmbed *embed);
+	 * void (* net_stop)     (GtkMozEmbed *embed);
+	 * void (* title)        (EphyEmbed *embed);
+	 * void (* visibility)   (EphyEmbed *embed,
+	 *			  gboolean visibility);
+	 * void (* destroy_brsr) (EphyEmbed *embed);
+	 * void (* size_to)      (EphyEmbed *embed,
+	 *			  gint width,
+	 *			  gint height);
 	 */	
 
 	gint (* context_menu)	 (EphyEmbed *embed,
@@ -167,25 +174,14 @@ struct EphyEmbedClass
 				  const char *status);
 	void (* location)        (EphyEmbed *embed,
 				  const char *location);
-	void (* title)           (EphyEmbed *embed);
-	void (* progress)        (EphyEmbed *embed,
-				  const char *uri,
-				  gint curprogress,
-				  gint maxprogress);
 	void (* net_state)       (EphyEmbed *embed,
 				  const char *uri,
 				  EmbedState state);
 	void (* new_window)      (EphyEmbed *embed,
 				  EphyEmbed **new_embed,
 				  EmbedChromeMask chromemask);
-	void (* visibility)      (EphyEmbed *embed,
-				  gboolean visibility);
-	void (* destroy_brsr)    (EphyEmbed *embed);
 	gint (* open_uri)        (EphyEmbed *embed,
 				  const char *uri);
-	void (* size_to)         (EphyEmbed *embed,
-				  gint width,
-				  gint height);
 	gint (* dom_mouse_click) (EphyEmbed *embed,
 				  EphyEmbedEvent *event);
 	gint (* dom_mouse_down)  (EphyEmbed *embed,

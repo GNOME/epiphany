@@ -1,5 +1,19 @@
 2003-11-09  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* embed/ephy-embed.c: (ephy_embed_base_init):
+	* embed/ephy-embed.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-tab.c: (ephy_tab_init):
+
+	Do not connect and reemit same signal for nothing.
+	Remove unused/expensive progress signal.
+
+	* src/session.c: (session_save):
+
+	Unlink session file when all windows are removed.
+
+2003-11-09  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* embed/ephy-embed.h:
 	* idl/EphyAutomation.idl:
 	* src/ephy-automation.c: (impl_ephy_automation_loadurl),

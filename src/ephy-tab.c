@@ -1104,7 +1104,7 @@ ephy_tab_init (EphyTab *tab)
 	g_signal_connect (embed, "ge_location",
 			  G_CALLBACK (ephy_tab_address_cb),
 			  tab);
-	g_signal_connect (embed, "ge_title",
+	g_signal_connect (embed, "title",
 			  G_CALLBACK (ephy_tab_title_cb),
 			  tab);
 	g_signal_connect (embed, "ge_zoom_change",
@@ -1116,16 +1116,16 @@ ephy_tab_init (EphyTab *tab)
 	g_signal_connect (embed, "ge_new_window",
 			  G_CALLBACK (ephy_tab_new_window_cb),
 			  tab);
-	g_signal_connect (embed, "ge_visibility",
+	g_signal_connect (embed, "visibility",
 			  G_CALLBACK (ephy_tab_visibility_cb),
 			  tab);
-	g_signal_connect (embed, "ge_destroy_brsr",
+	g_signal_connect (embed, "destroy_browser",
 			  G_CALLBACK (ephy_tab_destroy_brsr_cb),
 			  tab);
 	g_signal_connect (embed, "ge_open_uri",
 			  G_CALLBACK (ephy_tab_open_uri_cb),
 			  tab);
-	g_signal_connect (embed, "ge_size_to",
+	g_signal_connect (embed, "size_to",
 			  G_CALLBACK (ephy_tab_size_to_cb),
 			  tab);
 	g_signal_connect (embed, "ge_dom_mouse_click",

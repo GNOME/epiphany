@@ -444,6 +444,12 @@ session_save (Session *session,
         xmlDocPtr doc;
 	char *save_to;
 
+	if (session->priv->windows == NULL)
+	{
+		session_delete (session, filename);
+		return;
+	}
+
 	save_to = get_session_filename (filename);
 
         doc = xmlNewDoc ("1.0");

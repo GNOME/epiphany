@@ -145,27 +145,6 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_STRING);
-	ephy_embed_signals[TITLE] =
-		g_signal_new ("ge_title",
-			      EPHY_TYPE_EMBED,
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyEmbedClass, title),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
-	ephy_embed_signals[PROGRESS] =
-		g_signal_new ("ge_progress",
-			      EPHY_TYPE_EMBED,
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyEmbedClass, progress),
-			      NULL, NULL,
-			      ephy_marshal_VOID__STRING_INT_INT,
-			      G_TYPE_NONE,
-			      3,
-			      G_TYPE_STRING,
-			      G_TYPE_INT,
-			      G_TYPE_INT);
 	ephy_embed_signals[NET_STATE] =
 		g_signal_new ("ge_net_state",
 			      EPHY_TYPE_EMBED,
@@ -177,25 +156,6 @@ ephy_embed_base_init (gpointer g_class)
 			      2,
 			      G_TYPE_STRING,
 			      G_TYPE_INT);
-	ephy_embed_signals[VISIBILITY] =
-		g_signal_new ("ge_visibility",
-			      EPHY_TYPE_EMBED,
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyEmbedClass, visibility),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_BOOLEAN);
-	ephy_embed_signals[DESTROY_BRSR] =
-		g_signal_new ("ge_destroy_brsr",
-			      EPHY_TYPE_EMBED,
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyEmbedClass, destroy_brsr),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
 	ephy_embed_signals[OPEN_URI] =
 		g_signal_new ("ge_open_uri",
 			      EPHY_TYPE_EMBED,
@@ -206,17 +166,6 @@ ephy_embed_base_init (gpointer g_class)
 			      G_TYPE_INT,
 			      1,
 			      G_TYPE_STRING);
-	ephy_embed_signals[SIZE_TO] =
-		g_signal_new ("ge_size_to",
-			      EPHY_TYPE_EMBED,
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyEmbedClass, size_to),
-			      NULL, NULL,
-			      ephy_marshal_VOID__INT_INT,
-			      G_TYPE_NONE,
-			      2,
-			      G_TYPE_INT,
-			      G_TYPE_INT);
 	ephy_embed_signals[DOM_MOUSE_CLICK] =
 		g_signal_new ("ge_dom_mouse_click",
 			      EPHY_TYPE_EMBED,

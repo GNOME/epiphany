@@ -97,16 +97,11 @@ static const struct
 signal_connections[] =
 {
 	{ "location",        (void *) mozilla_embed_location_changed_cb  },
-        { "title",           (void *) mozilla_embed_title_changed_cb     },
         { "net_state_all",   (void *) mozilla_embed_net_state_all_cb     },
-        { "progress_all",    (void *) mozilla_embed_progress_cb          },
         { "link_message",    (void *) mozilla_embed_link_message_cb      },
         { "js_status",       (void *) mozilla_embed_js_status_cb         },
-        { "visibility",      (void *) mozilla_embed_visibility_cb        },
-        { "destroy_browser", (void *) mozilla_embed_destroy_brsr_cb      },
         { "dom_mouse_click", (void *) mozilla_embed_dom_mouse_click_cb   },
 	{ "dom_mouse_down",  (void *) mozilla_embed_dom_mouse_down_cb    },
-        { "size_to",         (void *) mozilla_embed_size_to_cb           },
         { "new_window",      (void *) mozilla_embed_new_window_cb        },
         { "security_change", (void *) mozilla_embed_security_change_cb   },
 	{ "dom_key_down",    (void *) mozilla_embed_dom_key_down_cb      },
@@ -779,15 +774,6 @@ mozilla_embed_location_changed_cb (GtkMozEmbed *embed,
 }
 
 static void
-mozilla_embed_title_changed_cb (GtkMozEmbed *embed, 
-				MozillaEmbed *membed)
-{
-	g_return_if_fail (MOZILLA_IS_EMBED (membed));
-	g_return_if_fail (GTK_IS_WIDGET (embed));
-	g_signal_emit_by_name (membed, "ge_title");
-}
-
-static void
 mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
                                 gint state, guint status, 
 				MozillaEmbed *membed)
@@ -825,15 +811,6 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 }
 
 static void
-mozilla_embed_progress_cb (GtkMozEmbed *embed, const char *aURI,
-                           gint curprogress, gint maxprogress, 
-			   MozillaEmbed *membed)
-{
-	g_signal_emit_by_name (membed, "ge_progress", aURI, 
-			       curprogress, maxprogress);
-}
-
-static void
 mozilla_embed_link_message_cb (GtkMozEmbed *embed, 
 			       MozillaEmbed *membed)
 {
@@ -855,13 +832,6 @@ mozilla_embed_js_status_cb (GtkMozEmbed *embed,
 	
 	g_signal_emit_by_name (membed, "ge_js_status",
 			       NS_ConvertUCS2toUTF8(status).get());
-}
-
-static void
-mozilla_embed_visibility_cb (GtkMozEmbed *embed, gboolean visibility, 
-			     MozillaEmbed *membed)
-{
-	g_signal_emit_by_name (membed, "ge_visibility", visibility); 
 }
 
 static gint
@@ -925,13 +895,6 @@ mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 
 	g_object_unref (info);
 	return ret;
-}
-
-static void
-mozilla_embed_destroy_brsr_cb (GtkMozEmbed *embed, 
-			       MozillaEmbed *membed)
-{
-	g_signal_emit_by_name (membed, "ge_destroy_brsr"); 
 }
 
 static gint
@@ -1027,13 +990,6 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 	g_object_unref (info);
 
 	return return_value;
-}
-
-static void
-mozilla_embed_size_to_cb (GtkMozEmbed *embed, gint width, gint height, 
-			  MozillaEmbed *membed)
-{
-	g_signal_emit_by_name (membed, "ge_size_to", width, height);
 }
 
 static void
