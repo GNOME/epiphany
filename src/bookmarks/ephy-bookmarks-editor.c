@@ -1397,8 +1397,6 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	ephy_state_add_paned  (GTK_WIDGET (hpaned),
 			       "bookmarks_paned",
 		               130);
-
-	gtk_widget_grab_focus (editor->priv->search_entry);
 }
 
 void
