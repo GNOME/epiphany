@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-21 00:20+0100\n"
-"PO-Revision-Date: 2003-12-21 01:31+0100\n"
+"POT-Creation-Date: 2003-12-22 20:39+0100\n"
+"PO-Revision-Date: 2003-12-22 20:40+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -54,8 +54,8 @@ msgid ""
 "A list of protocols to be considered safe in addition to the default, when "
 "disable_unsafe_protocols is enabled."
 msgstr ""
-"Lista e protokollëve që duhen konsideruar të sigurt si shtesë ndaj të prezgjedhurve, kur "
-"disaktivo_protokollët_epasigurt është aktivuar."
+"Lista e protokollëve që duhen konsideruar të sigurt si shtesë ndaj të "
+"prezgjedhurve, kur disaktivo_protokollët_epasigurt është aktivuar."
 
 #: data/epiphany-lockdown.schemas.in.h:2
 msgid "Additional safe protocols"
@@ -78,8 +78,8 @@ msgid ""
 "Disables loading of content from unsafe protocols. Safe protocols are http: "
 "and https:."
 msgstr ""
-"Ç'aktivon ngarkimin e të dhënave nga protokollët e pasigurt. Protokollë të sigurt janë http: "
-"dhe https:."
+"Ç'aktivon ngarkimin e të dhënave nga protokollët e pasigurt. Protokollë të "
+"sigurt janë http: dhe https:."
 
 #: data/epiphany-lockdown.schemas.in.h:7
 msgid "Hide menubar by default"
@@ -124,8 +124,8 @@ msgid ""
 "Automatically open downloaded files which are \"safe\" to open, like videos, "
 "images, text documents, compressed files, etc."
 msgstr ""
-"Hap automatikisht files e shkarkuar të konsideruar \"të sigurt\" për tu hapur, si video, "
-"imazhe, dokumente teksti, files të kompresuar, etj."
+"Hap automatikisht files e shkarkuar të konsideruar \"të sigurt\" për tu "
+"hapur, si video, imazhe, dokumente teksti, files të kompresuar, etj."
 
 #: data/epiphany.schemas.in.h:7
 msgid "Autowrap for find in page"
@@ -579,12 +579,12 @@ msgid "*"
 msgstr "*"
 
 #: data/glade/epiphany.glade.h:3
-msgid "<b>Use a different _encoding:</b>"
-msgstr "<b>Përdor një _kodifikim tjetër:</b>"
-
-#: data/glade/epiphany.glade.h:4
 msgid "<b>_Automatic</b>"
 msgstr "<b>_Automatikisht</b>"
+
+#: data/glade/epiphany.glade.h:4
+msgid "<b>_Use a different encoding:</b>"
+msgstr "<b>_Përdor një kodifikim tjetër:</b>"
 
 #: data/glade/epiphany.glade.h:5
 msgid "C_ase sensitive"
@@ -1117,6 +1117,14 @@ msgstr "File"
 #: embed/downloader-view.c:457
 msgid "Remaining"
 msgstr "E mbetur"
+
+#: embed/downloader-view.c:501
+msgid "Resume"
+msgstr "Resume"
+
+#: embed/downloader-view.c:506
+msgid "Pause"
+msgstr "Pauzë"
 
 #: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:334
 msgid "Save Image As"
@@ -1667,8 +1675,8 @@ msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
 msgstr ""
-"Përpara se të pranoni një Autoritet të certifikuar (CA) është mirë të vërtetoni "
-"vërtetësinë e certifikatës."
+"Përpara se të pranoni një Autoritet të certifikuar (CA) është mirë të "
+"vërtetoni vërtetësinë e certifikatës."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:562
 msgid "_Web sites"
@@ -1769,7 +1777,9 @@ msgstr "Nuk do t'a verifikoj këtë certifikatë pasi nuk është e sigurt."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1298
 msgid "Could not verify this certificate because the issuer is not trusted."
-msgstr "Kjo certifikatë nuk do të verifikohet pasi pronari i saj nuk është i besueshëm."
+msgstr ""
+"Kjo certifikatë nuk do të verifikohet pasi pronari i saj nuk është i "
+"besueshëm."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1301
 msgid "Could not verify this certificate because the issuer is unknown."
@@ -1792,8 +1802,8 @@ msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
 msgstr ""
-"Ju lutem durim derisa çelsi i ri privat të jetë krijuar. Ky proces mund të zgjasë "
-"disa minuta."
+"Ju lutem durim derisa çelsi i ri privat të jetë krijuar. Ky proces mund të "
+"zgjasë disa minuta."
 
 #: embed/mozilla/mozilla-embed-single.cpp:507
 msgid ""
@@ -2506,19 +2516,26 @@ msgid ""
 "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
 "use bonobo-activation-sysconf to configure the search path for bonobo server "
 "files."
-msgstr "Bonobo nuk arrin të gejë file GNOME_Epiphany_Automation.server. Mund të përdorësh bonobo-activation-sysconf për të konfiguruar pozicionin e kërkimit për files e server-it bonobo."
+msgstr ""
+"Bonobo nuk arrin të gejë file GNOME_Epiphany_Automation.server. Mund të "
+"përdorësh bonobo-activation-sysconf për të konfiguruar pozicionin e kërkimit "
+"për files e server-it bonobo."
 
 #: src/ephy-shell.c:364
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to register the automation server"
-msgstr "Epiphany nuk mund të përdoret tani, për shkak të një difekti të papritur nga Bonobo gjatë përpjekjes për të regjistruar server-in automatizues."
+msgstr ""
+"Epiphany nuk mund të përdoret tani, për shkak të një difekti të papritur nga "
+"Bonobo gjatë përpjekjes për të regjistruar server-in automatizues."
 
 #: src/ephy-shell.c:387
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
-msgstr "Epiphany nuk mund të përdoret tani, për shkak të një difekti të papritur nga Bonobo gjatë përpjekjes për të gjetur objektin automatizues."
+msgstr ""
+"Epiphany nuk mund të përdoret tani, për shkak të një difekti të papritur nga "
+"Bonobo gjatë përpjekjes për të gjetur objektin automatizues."
 
 #: src/ephy-tab.c:324 src/ephy-tab.c:1122 src/ephy-tab.c:1304
 msgid "Blank page"
