@@ -124,7 +124,6 @@ ephy_embed_single_iface_init (gpointer g_class)
  * @address: the address of the content
  * @requesting_address: the address of the requesting content (may be empty)
  * @mime_type_guess: a guess of the mime type of the content (may be empty)
- * @mime_type: the MIME type of the content
  *
  * The ::check-content signal is emitted when Epiphany loads any content from
  * anywhere.
