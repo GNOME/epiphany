@@ -1,3 +1,12 @@
+2003-09-24  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-shell.c: (ephy_shell_finalize),
+	(ephy_shell_get_session):
+	* src/session.c: (session_new), (save_tab), (parse_embed),
+	(session_remove_window):
+
+	Don't destroy the session when all windows are closed.
+
 2003-09-24  Xan Lopez  <xan@masilla.org>
 
 	* configure.in:

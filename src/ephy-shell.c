@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000, 2001, 2002, 2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -300,10 +300,6 @@ ephy_shell_finalize (GObject *object)
 	LOG ("Unref session")
 	if (gs->priv->session)
 	{
-		g_return_if_fail (EPHY_IS_SESSION(gs->priv->session));
-		g_object_remove_weak_pointer
-			(G_OBJECT(gs->priv->session),
-                         (gpointer *)&gs->priv->session);
 		g_object_unref (G_OBJECT (gs->priv->session));
 	}
 
@@ -558,9 +554,6 @@ ephy_shell_get_session (EphyShell *gs)
 	if (!gs->priv->session)
 	{
 		gs->priv->session = session_new ();
-		g_object_add_weak_pointer
-			(G_OBJECT(gs->priv->session),
-                         (gpointer *)&gs->priv->session);
 	}
 
 	return G_OBJECT (gs->priv->session);

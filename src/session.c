@@ -428,11 +428,7 @@ session_finalize (GObject *object)
 Session *
 session_new (void)
 {
-	Session *t;
-
-	t = EPHY_SESSION (g_object_new (EPHY_TYPE_SESSION, NULL));
-
-	return t;
+	return EPHY_SESSION (g_object_new (EPHY_TYPE_SESSION, NULL));
 }
 
 static void
@@ -443,7 +439,6 @@ save_tab (EphyWindow *window,
 {
 	EmbedChromeMask chrome;
 	char *location;
-	const char *title;
         xmlNodePtr embed_node;
 	EphyEmbed *embed;
 
@@ -453,12 +448,7 @@ save_tab (EphyWindow *window,
         if (chrome & EMBED_CHROME_OPENASCHROME) return;
 
 	/* make a new XML node */
-        embed_node = xmlNewDocNode (doc, NULL,
-                                    "embed", NULL);
-
-        /* store title in the node */
-	title = ephy_tab_get_title (tab);
-	xmlSetProp (embed_node, "title", title);
+        embed_node = xmlNewDocNode (doc, NULL, "embed", NULL);
 
         /* otherwise, use the actual location. */
 	embed = ephy_tab_get_embed (tab);
@@ -553,13 +543,11 @@ parse_embed (xmlNodePtr child, EphyWindow *window)
 	{
 		if (strcmp (child->name, "embed") == 0)
 		{
-			char *url;
-			char *title;
+			xmlChar *url;
 
 			g_return_if_fail (window != NULL);
 
 			url = xmlGetProp (child, "url");
-			title = xmlGetProp (child, "title");
 
 			ephy_shell_new_tab (ephy_shell, window, NULL, url,
 					    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
@@ -567,7 +555,6 @@ parse_embed (xmlNodePtr child, EphyWindow *window)
 					    EPHY_NEW_TAB_APPEND_LAST);
 
 			xmlFree (url);
-			xmlFree (title);
 		}
 
 		child = child->next;
@@ -689,12 +676,5 @@ session_remove_window (Session *session,
 	g_object_unref (window);
 
 	session_save (session, SESSION_CRASHED);
-
-	/* autodestroy of the session, necessay to avoid
-	 * conflicts with the nautilus view */
-	if (session->priv->windows == NULL)
-	{
-		g_object_unref (session);
-	}
 }
 
