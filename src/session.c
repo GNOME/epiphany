@@ -188,9 +188,10 @@ crashed_resume_dialog (Session *session)
 	dialog = gtk_dialog_new_with_buttons
 		(_("Crash Recovery"), NULL,
 		 GTK_DIALOG_NO_SEPARATOR,
-		 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		 _("_Don't Recover"), GTK_RESPONSE_CANCEL,
 		 _("_Recover"), GTK_RESPONSE_OK,
 		 NULL);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 6);
 	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 12);

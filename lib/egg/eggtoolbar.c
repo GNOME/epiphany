@@ -33,7 +33,7 @@
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtktoolbar.h>
 
-#define DEFAULT_IPADDING 0
+#define DEFAULT_IPADDING 2
 #define DEFAULT_SPACE_SIZE  5
 #define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
 
@@ -313,8 +313,6 @@ egg_toolbar_init (EggToolbar *toolbar)
   
   GTK_WIDGET_SET_FLAGS (toolbar, GTK_NO_WINDOW);
   GTK_WIDGET_UNSET_FLAGS (toolbar, GTK_CAN_FOCUS);
-
-  gtk_container_set_border_width (GTK_CONTAINER (toolbar), 1);
 
   priv = g_new0 (EggToolbarPrivate, 1);
   g_object_set_data (G_OBJECT (toolbar), PRIVATE_KEY, priv);
