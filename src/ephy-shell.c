@@ -44,13 +44,13 @@
 #include "ephy-automation.h"
 
 #include <string.h>
-#include <libgnomeui/gnome-client.h>
 #include <bonobo/bonobo-main.h>
 #include <glib/gi18n.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmessagedialog.h>
 #include <dirent.h>
+#include <unistd.h>
 #include <libgnomevfs/gnome-vfs-init.h>
 #include <gtk/gtkicontheme.h>
 #include <glade/glade-init.h>

@@ -26,10 +26,10 @@
 #include "ephy-file-helpers.h"
 #include "EphyAutomation.h"
 
-#include <libbonoboui.h>
-#include <libgnome/gnome-program.h>
 #include <libgnomeui/gnome-ui-init.h>
-#include <gtk/gtkwindow.h>
+#include <gtk/gtkmessagedialog.h>
+#include <libgnome/gnome-program.h>
+#include <bonobo/bonobo-main.h>
 
 #define EPHY_FACTORY_OAFIID "OAFIID:GNOME_Epiphany_Automation_Factory"
 

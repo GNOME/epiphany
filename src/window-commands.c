@@ -51,8 +51,6 @@
 #include <glib/gi18n.h>
 #include <libgnomeui/gnome-about.h>
 #include <libgnomeui/gnome-stock-icons.h>
-#include <libgnomeui/gnome-icon-theme.h>
-#include <libgnome/gnome-program.h>
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtktoggleaction.h>
@@ -897,9 +895,10 @@ window_cmd_help_about (GtkAction *action,
 	static GtkWidget *about = NULL;
 	GtkWidget** ptr;
 	GdkPixbuf *icon;
-	char *icon_path;
+	const char *icon_path;
 	GdkPixbuf *logo;
-	GnomeIconTheme *icon_theme;
+	GtkIconTheme *icon_theme;
+	GtkIconInfo *icon_info;
 
 	static gchar *authors[] = {
 		"Marco Pesenti Gritti <marco@gnome.org>",
@@ -925,21 +924,24 @@ window_cmd_help_about (GtkAction *action,
 		return;
 	}
 
-	icon_theme = gnome_icon_theme_new ();
-	icon_path = gnome_icon_theme_lookup_icon (icon_theme, "web-browser",
-						  -1, NULL, NULL);
-	g_object_unref (icon_theme);
+	icon_theme = gtk_icon_theme_get_default ();
+	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "web-browser", -1, 0);
 
-	if (icon_path)
+	if (icon_info)
 	{
+
+		icon_path = gtk_icon_info_get_filename (icon_info);
+		g_return_if_fail (icon_path != NULL);
+
 		logo = gdk_pixbuf_new_from_file (icon_path, NULL);
-		g_free (icon_path);
 	}
 	else
 	{
 		logo = NULL;
 		g_warning ("Web browser gnome icon not found");
 	}
+
+	g_object_unref (icon_theme);
 
 	about = gnome_about_new(
 		       "Epiphany", VERSION,
