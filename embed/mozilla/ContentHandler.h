@@ -86,7 +86,7 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	nsCOMPtr<nsIFile> mTempFile;
 	nsCOMPtr<nsISupports> mContext;
 
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 	char *mMimeType;
 #else
 	nsCString mMimeType;
