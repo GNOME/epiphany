@@ -32,7 +32,7 @@
 #include <gtk/gtktoolbar.h>
 #include <gtk/gtktoolitem.h>
 #include <gtk/gtkseparatortoolitem.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 static void egg_editable_toolbar_class_init	(EggEditableToolbarClass *klass);

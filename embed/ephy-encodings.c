@@ -30,7 +30,7 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #define EPHY_ENCODINGS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODINGS, EphyEncodingsPrivate))

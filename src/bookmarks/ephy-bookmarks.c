@@ -35,7 +35,7 @@
 #include "session.h"
 
 #include <string.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
 #define EPHY_BOOKMARKS_XML_ROOT    "ephy_bookmarks"

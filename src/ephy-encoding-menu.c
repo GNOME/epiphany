@@ -37,7 +37,7 @@
 #include <gtk/gtktoggleaction.h>
 #include <gtk/gtkradioaction.h>
 #include <gtk/gtkuimanager.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #define EPHY_ENCODING_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODING_MENU, EphyEncodingMenuPrivate))

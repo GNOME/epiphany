@@ -37,7 +37,7 @@
 #include "ephy-encodings.h"
 #include "ephy-debug.h"
 
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>

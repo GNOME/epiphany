@@ -46,7 +46,7 @@
 #include <string.h>
 #include <libgnomeui/gnome-client.h>
 #include <bonobo/bonobo-main.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmessagedialog.h>

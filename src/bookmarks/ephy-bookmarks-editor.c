@@ -34,7 +34,7 @@
 #include <gtk/gtkuimanager.h>
 #include <gtk/gtktoggleaction.h>
 #include <gdk/gdkkeysyms.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 #include <string.h>

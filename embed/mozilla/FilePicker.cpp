@@ -57,7 +57,7 @@
 #include <gtk/gtkfilefilter.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkmessagedialog.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <libgnome/gnome-util.h>
 
 NS_IMPL_ISUPPORTS1(GFilePicker, nsIFilePicker)

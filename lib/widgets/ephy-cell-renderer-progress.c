@@ -21,7 +21,7 @@
 
 #include <config.h>
 #include <stdlib.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 
 #include "ephy-cell-renderer-progress.h"
 

@@ -66,7 +66,7 @@
 #include "nsIDOMHTMLDocument.h"
 #include "nsIDownload.h"
 
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
 EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,

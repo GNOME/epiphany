@@ -31,7 +31,7 @@
 #include "ephy-file-helpers.h"
 
 #include <string.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <gtk/gtkclipboard.h>
 
 static EphyEmbedEvent *

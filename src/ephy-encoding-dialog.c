@@ -38,7 +38,7 @@
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtkdialog.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 enum

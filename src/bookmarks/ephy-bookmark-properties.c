@@ -39,7 +39,7 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtkmisc.h>
 #include <gtk/gtkscrolledwindow.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 
 static void ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass);
 static void ephy_bookmark_properties_init (EphyBookmarkProperties *editor);

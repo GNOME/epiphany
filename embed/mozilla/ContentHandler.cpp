@@ -38,7 +38,7 @@
 
 #include <libgnomevfs/gnome-vfs-mime.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 
 class GContentHandler;
 

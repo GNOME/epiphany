@@ -29,7 +29,7 @@
 
 //#include <libxml/entities.h>
 #include <glib/gprintf.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <gtk/gtkuimanager.h>
 
 #define BOOKMARKS_MENU_PATH "/menubar/BookmarksMenu"

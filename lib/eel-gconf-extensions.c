@@ -25,7 +25,7 @@
 #include <config.h>
 #include "eel-gconf-extensions.h"
 
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <gconf/gconf-client.h>
 #include <gconf/gconf.h>
 #include <string.h>

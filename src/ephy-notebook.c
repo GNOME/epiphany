@@ -47,7 +47,7 @@
 #include <gtk/gtkimage.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkiconfactory.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 
 #define AFTER_ALL_TABS -1

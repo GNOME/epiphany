@@ -28,7 +28,7 @@
 #include <string.h>
 #include <libgnomevfs/gnome-vfs-mime-utils.h>
 
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 
 #include "ephy-bookmarks-import.h"
 #include "ephy-debug.h"

@@ -29,7 +29,7 @@
 #include "ephy-gui.h"
 
 #include <string.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkuimanager.h>

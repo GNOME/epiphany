@@ -32,7 +32,7 @@
 #include <gtk/gtkliststore.h>
 #include <gtk/gtkcellrenderertext.h>
 
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 
 typedef struct PdmActionInfo PdmActionInfo;
 

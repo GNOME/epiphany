@@ -29,7 +29,7 @@
 #include <gtk/gtkmain.h>
 #include <string.h>
 #include <bonobo/bonobo-ui-component.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <gtk/gtkclipboard.h>
 #include <libgnome/gnome-exec.h>
 

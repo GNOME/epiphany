@@ -28,7 +28,7 @@
 #include "ephy-string.h"
 
 #include <string.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 
 static void ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass);
 static void ephy_toolbars_model_init       (EphyToolbarsModel *t);

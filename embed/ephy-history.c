@@ -29,7 +29,7 @@
 
 #include <time.h>
 #include <string.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 
 #define EPHY_HISTORY_XML_ROOT	 "ephy_history"

@@ -28,7 +28,7 @@
 #include "ephy-zoom.h"
 
 #include <glib-object.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 
 #define EPHY_ZOOM_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ZOOM_ACTION, EphyZoomActionPrivate))
 

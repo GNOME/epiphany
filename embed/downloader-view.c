@@ -33,7 +33,7 @@
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkliststore.h>
 #include <gtk/gtktreeviewcolumn.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <libgnomeui/gnome-dialog-util.h>
 #include <libgnomeui/gnome-dialog.h>
 #include <gtk/gtkprogressbar.h>

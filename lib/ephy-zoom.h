@@ -24,7 +24,7 @@
 #endif
 
 #include <glib.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 
 G_BEGIN_DECLS
 

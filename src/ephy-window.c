@@ -47,7 +47,7 @@
 #include "ephy-favicon-cache.h"
 
 #include <string.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <gtk/gtk.h>

@@ -29,7 +29,7 @@
 #include <gtk/gtkstock.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtkeditable.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #include "ephy-new-bookmark.h"

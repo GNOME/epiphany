@@ -24,7 +24,7 @@
 
 #include "ephy-langs.h"
 
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 
 static const EphyFontsLanguageInfo font_languages [] =
 {

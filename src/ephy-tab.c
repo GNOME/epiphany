@@ -35,7 +35,7 @@
 #include "session.h"
 #include "ephy-favicon-cache.h"
 
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkbutton.h>

@@ -44,7 +44,7 @@
 #include "ephy-toolbars-model.h"
 
 #include <string.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 #include <gtk/gtkuimanager.h>
 #include <gtk/gtktoolbar.h>
 

@@ -30,7 +30,7 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkoptionmenu.h>
 #include <gtk/gtktooltips.h>
-#include <bonobo/bonobo-i18n.h>
+#include <glib/gi18n.h>
 
 /**
  * Private data
