@@ -141,7 +141,7 @@ topic_destroy_cb (EphyNode *node,
 	model = ephy_shell_get_toolbars_model (ephy_shell);
 
 	id = ephy_node_get_id (node);
-	name = g_strdup_printf ("GoTopicId%ld", ephy_node_get_id (node));
+	name = ephy_toolbars_model_get_action_name (model, TRUE, id);
 	action = egg_action_group_get_action (t->priv->action_group, name);
 	if (action)
 	{
@@ -164,7 +164,7 @@ bookmark_destroy_cb (EphyNode *node,
 	model = ephy_shell_get_toolbars_model (ephy_shell);
 
 	id = ephy_node_get_id (node);
-	name = g_strdup_printf ("GoBookmarkId%ld", id);
+	name = ephy_toolbars_model_get_action_name (model, FALSE, id);
 	action = egg_action_group_get_action (t->priv->action_group, name);
 	if (action)
 	{
@@ -180,46 +180,66 @@ toolbar_ensure_action (Toolbar *t,
 		       const char *name)
 {
 	EggAction *action = NULL;
-	long id = 0;
 	EphyBookmarks *bookmarks;
 
 	LOG ("Ensure action %s", name)
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
-	if (g_str_has_prefix (name, "GoBookmarkId"))
+	if (g_str_has_prefix (name, "GoBookmark-"))
 	{
 		EphyNode *node;
 
-		if (!ephy_string_to_int (name + strlen ("GoBookmarkId"), &id))
-		{
-			return;
-		}
-
 		LOG ("Create action %s", name)
 
-		action = ephy_bookmark_action_new (name, id);
+		node = ephy_bookmarks_find_bookmark
+			(bookmarks, name + strlen ("GoBookmark-"));
+		g_return_if_fail (node != NULL);
+
+		action = ephy_bookmark_action_new (name, ephy_node_get_id (node));
 		g_signal_connect (action, "go_location",
 				  G_CALLBACK (go_location_cb), t->priv->window);
 		egg_action_group_add_action (t->priv->action_group, action);
 		g_object_unref (action);
 
-		node = ephy_bookmarks_get_from_id (bookmarks, id);
 		ephy_node_signal_connect_object (node,
 					         EPHY_NODE_DESTROY,
 					         (EphyNodeCallback) bookmark_destroy_cb,
 					         G_OBJECT (t));
 	}
-	else if (g_str_has_prefix (name, "GoTopicId"))
+	else if (g_str_has_prefix (name, "GoTopic-"))
 	{
 		EphyNode *node;
 
-		if (!ephy_string_to_int (name + strlen ("GoTopicId"), &id))
+		LOG ("Create action %s", name)
+
+		node = ephy_bookmarks_find_keyword
+			(bookmarks, name + strlen ("GoTopic-"), FALSE);
+		g_return_if_fail (node != NULL);
+
+		action = ephy_topic_action_new (name, ephy_node_get_id (node));
+		g_signal_connect (action, "go_location",
+				  G_CALLBACK (go_location_cb),
+				  t->priv->window);
+		egg_action_group_add_action (t->priv->action_group, action);
+		g_object_unref (action);
+
+		ephy_node_signal_connect_object (node,
+					         EPHY_NODE_DESTROY,
+					         (EphyNodeCallback) topic_destroy_cb,
+					         G_OBJECT (t));
+	}
+	else if (g_str_has_prefix (name, "GoSpecialTopic-"))
+	{
+		EphyNode *node;
+		long id;
+
+		LOG ("Create action %s", name)
+
+		if (!ephy_string_to_int (name + strlen ("GoSpecialTopic-"), &id))
 		{
 			return;
 		}
-
-		LOG ("Create action %s", name)
 
 		action = ephy_topic_action_new (name, id);
 		g_signal_connect (action, "go_location",
