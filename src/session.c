@@ -543,9 +543,6 @@ session_save (Session *session,
 static void
 parse_embed (xmlNodePtr child, EphyWindow *window)
 {
-	EphyTab *tab;
-	EphyEmbed *embed;
-
 	while (child != NULL)
 	{
 		if (strcmp (child->name, "embed") == 0)
