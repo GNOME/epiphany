@@ -22,6 +22,7 @@
 #include "ephy-gobject-misc.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
+#include "ephy-debug.h"
 
 #include <gtk/gtkentry.h>
 #include <gtk/gtkwindow.h>
@@ -29,11 +30,6 @@
 #include <gtk/gtkmain.h>
 #include <libgnomeui/gnome-entry.h>
 #include <string.h>
-
-//#define DEBUG_MSG(x) g_print x
-#define DEBUG_MSG(x)
-
-#define NOT_IMPLEMENTED g_warning ("not implemented: " G_STRLOC);
 
 /**
  * Private data
@@ -156,7 +152,7 @@ ephy_location_entry_finalize_impl (GObject *o)
 		g_object_unref (G_OBJECT (p->autocompletion_window));
 	}
 
-	DEBUG_MSG (("EphyLocationEntry finalized\n"));
+	LOG ("EphyLocationEntry finalized")
 
 	g_free (p);
 	G_OBJECT_CLASS (gtk_hbox_class)->finalize (o);
@@ -238,7 +234,7 @@ ephy_location_entry_autocompletion_show_alternatives_to (EphyLocationEntry *w)
 
 	if (p->autocompletion)
 	{
-		DEBUG_MSG (("+ephy_location_entry_autocompletion_show_alternatives_to\n"));
+		LOG ("Show alternatives")
 		ephy_location_entry_set_autocompletion_key (w);
 		ephy_location_entry_autocompletion_show_alternatives (w);
 	}
@@ -285,7 +281,7 @@ ephy_location_entry_autocompletion_to (EphyLocationEntry *w)
 	gchar *text;
 	gchar *common_prefix;
 
-	DEBUG_MSG (("in ephy_location_entry_autocompletion_to\n"));
+	LOG ("Autocompletion to")
 
 	ephy_location_entry_set_autocompletion_key (w);
 
@@ -301,8 +297,8 @@ ephy_location_entry_autocompletion_to (EphyLocationEntry *w)
 		    || send != text_len)
 		{
 			/* the user is editing the entry, don't mess it */
-			DEBUG_MSG (("The user seems editing the text: pos = %d, strlen (text) = %d, sstart = %d, send = %d\n",
-				    pos, strlen (text), sstart, send));
+			LOG ("The user seems editing the text: pos = %d, strlen (text) = %d, sstart = %d, send = %d",
+			     pos, strlen (text), sstart, send)
 			p->autocompletion_timeout = 0;
 			return FALSE;
 		}
@@ -310,7 +306,7 @@ ephy_location_entry_autocompletion_to (EphyLocationEntry *w)
 
 	common_prefix = ephy_autocompletion_get_common_prefix (p->autocompletion);
 
-	DEBUG_MSG (("common_prefix: %s\n", common_prefix));
+	LOG ("common_prefix: %s", common_prefix)
 
 	if (common_prefix && (!p->before_completion || p->before_completion[0] == '\0'))
 	{
@@ -503,7 +499,7 @@ ephy_location_entry_activate_cb (GtkEntry *entry, EphyLocationEntry *w)
 
 	ephy_location_entry_autocompletion_hide_alternatives (w);
 
-	DEBUG_MSG (("In ephy_location_entry_activate_cb, activating %s\n", content));
+	LOG ("In ephy_location_entry_activate_cb, activating %s", content)
 
 	g_signal_emit (w, EphyLocationEntrySignals[ACTIVATED], 0, target, content);
 	g_free (content);
@@ -515,7 +511,7 @@ ephy_location_entry_autocompletion_sources_changed_cb (EphyAutocompletion *aw,
 {
 	EphyLocationEntryPrivate *p = w->priv;
 
-	DEBUG_MSG (("in ephy_location_entry_autocompletion_sources_changed_cb\n"));
+	LOG ("in ephy_location_entry_autocompletion_sources_changed_cb")
 
         if (p->autocompletion_timeout == 0
 	    && p->last_completion
@@ -613,7 +609,7 @@ ephy_location_entry_autocompletion_window_url_activated_cb (EphyAutocompletionWi
 
 	content = gtk_editable_get_chars (GTK_EDITABLE(w->priv->entry), 0, -1);
 
-	DEBUG_MSG (("In location_entry_autocompletion_window_url_activated_cb, going to %s\n", content));
+	LOG ("In location_entry_autocompletion_window_url_activated_cb, going to %s", content);
 
 	ephy_location_entry_autocompletion_hide_alternatives (w);
 
@@ -625,11 +621,11 @@ ephy_location_entry_autocompletion_window_url_activated_cb (EphyAutocompletionWi
 
 static void
 ephy_location_entry_autocompletion_window_hidden_cb (EphyAutocompletionWindow *aw,
-						       EphyLocationEntry *w)
+						     EphyLocationEntry *w)
 {
 	EphyLocationEntryPrivate *p = w->priv;
 
-	DEBUG_MSG (("In location_entry_autocompletion_window_hidden_cb\n"));
+	LOG ("In location_entry_autocompletion_window_hidden_cb");
 
 	p->autocompletion_window_visible = FALSE;
 

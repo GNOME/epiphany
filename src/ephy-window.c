@@ -36,6 +36,7 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-embed-utils.h"
+#include "ephy-debug.h"
 
 #include <string.h>
 #include <bonobo/bonobo-window.h>
@@ -595,9 +596,7 @@ ephy_window_finalize (GObject *object)
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 
-#ifdef DEBUG_MARCO
-	g_print ("Ephy Window finalized %p\n", window);
-#endif
+	LOG ("Ephy Window finalized %p", window)
 
 	g_object_unref (ephy_shell);
 }

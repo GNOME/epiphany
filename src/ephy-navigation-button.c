@@ -20,19 +20,17 @@
 #include "config.h"
 #endif
 
-#include <libgnome/gnome-i18n.h>
 #include "ephy-gobject-misc.h"
 #include "ephy-marshal.h"
 #include "ephy-tb-button.h"
 #include "ephy-gui.h"
 #include "ephy-string.h"
 #include "ephy-navigation-button.h"
+#include "ephy-debug.h"
+
 #include <gtk/gtkstock.h>
 #include <string.h>
-
-#define NOT_IMPLEMENTED g_warning ("not implemented: " G_STRLOC);
-//#define DEBUG_MSG(x) g_print x
-#define DEBUG_MSG(x)
+#include <libgnome/gnome-i18n.h>
 
 /**
  * Private data
@@ -124,7 +122,7 @@ ephy_navigation_button_finalize_impl (GObject *o)
 
 	g_free (p);
 
-	DEBUG_MSG (("EphyNavigationButton finalized\n"));
+	LOG ("EphyNavigationButton finalized")
 
 	G_OBJECT_CLASS (ephy_tb_item_class)->finalize (o);
 }

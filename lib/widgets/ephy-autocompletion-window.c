@@ -33,6 +33,7 @@
 #include "ephy-string.h"
 #include "ephy-marshal.h"
 #include "ephy-gui.h"
+#include "ephy-debug.h"
 
 /* This is copied from gtkscrollbarwindow.c */
 #define DEFAULT_SCROLLBAR_SPACING  3
@@ -43,15 +44,6 @@
 
 #define MAX_VISIBLE_ROWS 9
 #define MAX_COMPLETION_ALTERNATIVES 7
-
-//#define DEBUG_MSG(x) g_print x
-#define DEBUG_MSG(x)
-
-//#define DEBUG_TIME
-
-#ifdef DEBUG_TIME
-#include <glib/gtimer.h>
-#endif
 
 /**
  * Private data
@@ -378,10 +370,9 @@ ephy_autocompletion_window_get_dimensions (EphyAutocompletionWindow *aw,
                           popup->vscrollbar->requisition.height);
 
 	row_height = list_requisition.height / MAX (aw->priv->view_nitems, 1);
-	DEBUG_MSG (("Real list requisition %d, Items %d\n", list_requisition.height, aw->priv->view_nitems));
+	LOG ("Real list requisition %d, Items %d", list_requisition.height, aw->priv->view_nitems)
 	list_requisition.height = MIN (row_height * MAX_VISIBLE_ROWS, list_requisition.height);
-	DEBUG_MSG (("Row Height %d, Fake list requisition %d\n",
-		   row_height, list_requisition.height));
+	LOG ("Row Height %d, Fake list requisition %d", row_height, list_requisition.height)
 
 	do
 	{
@@ -439,15 +430,8 @@ ephy_autocompletion_window_fill_store_chunk (EphyAutocompletionWindow *aw)
 	guint nmatches;
 	guint last;
 	guint completion_nitems = 0, action_nitems = 0, substring_nitems = 0;
-#ifdef DEBUG_TIME
-	GTimer *timer;
-#endif
-	DEBUG_MSG (("ACW: Filling the list from %d\n", last));
 
-#ifdef DEBUG_TIME
-	timer = g_timer_new ();
-	g_timer_start (timer);
-#endif
+	START_PROFILER ("Fill store")
 
 	nmatches = ephy_autocompletion_get_num_matches (p->autocompletion);
 	matches = ephy_autocompletion_get_matches_sorted_by_score (p->autocompletion,
@@ -510,10 +494,7 @@ ephy_autocompletion_window_fill_store_chunk (EphyAutocompletionWindow *aw)
 
 	p->last_added_match = last;
 
-#ifdef DEBUG_TIME
-	DEBUG_MSG (("ACW: %f elapsed filling the gtkliststore\n", g_timer_elapsed (timer, NULL)));
-	g_timer_destroy (timer);
-#endif
+	STOP_PROFILER ("Fill store")
 }
 
 void
@@ -522,10 +503,6 @@ ephy_autocompletion_window_show (EphyAutocompletionWindow *aw)
 	EphyAutocompletionWindowPrivate *p = aw->priv;
 	gint x, y, height, width;
 	guint nmatches;
-#ifdef DEBUG_TIME
-	GTimer *timer1;
-	GTimer *timer2;
-#endif
 
 	g_return_if_fail (p->window);
 	g_return_if_fail (p->autocompletion);
@@ -537,16 +514,7 @@ ephy_autocompletion_window_show (EphyAutocompletionWindow *aw)
 		return;
 	}
 
-#ifdef DEBUG_TIME
-	DEBUG_MSG (("ACW: showing window.\n"));
-	timer1 = g_timer_new ();
-	g_timer_start (timer1);
-#endif
-
-#ifdef DEBUG_TIME
-	timer2 = g_timer_new ();
-	g_timer_start (timer2);
-#endif
+	START_PROFILER ("Showing window")
 
 	ephy_autocompletion_window_fill_store_chunk (aw);
 
@@ -561,23 +529,10 @@ ephy_autocompletion_window_show (EphyAutocompletionWindow *aw)
 		p->active_tree_view = p->tree_view;
 	}
 
-#ifdef DEBUG_TIME
-	DEBUG_MSG (("ACW: %f elapsed creating liststore\n", g_timer_elapsed (timer2, NULL)));
-#endif
-
 	gtk_tree_view_set_model (p->tree_view, GTK_TREE_MODEL (p->list_store));
 	gtk_tree_view_set_model (p->action_tree_view, GTK_TREE_MODEL (p->action_list_store));
 
-#ifdef DEBUG_TIME
-	g_timer_start (timer2);
-#endif
-
 	ephy_autocompletion_window_get_dimensions (aw, &x, &y, &width, &height);
-
-#ifdef DEBUG_TIME
-	DEBUG_MSG (("ACW: %f elapsed calculating dimensions\n", g_timer_elapsed (timer2, NULL)));
-	g_timer_destroy (timer2);
-#endif
 
 	gtk_widget_set_size_request (GTK_WIDGET (p->window), width,
 				     height);
@@ -613,10 +568,8 @@ ephy_autocompletion_window_show (EphyAutocompletionWindow *aw)
 	gtk_tree_view_scroll_to_point (GTK_TREE_VIEW (p->tree_view), 0, 0);
 
 	gtk_widget_grab_focus (GTK_WIDGET (p->tree_view));
-#ifdef DEBUG_TIME
-	DEBUG_MSG (("ACW: %f elapsed showing window\n", g_timer_elapsed (timer1, NULL)));
-	g_timer_destroy (timer1);
-#endif
+
+	STOP_PROFILER ("Showing window")
 }
 
 static gboolean
@@ -789,8 +742,6 @@ ephy_autocompletion_window_key_press_cb (GtkWidget *widget,
 
 	if (dest_widget != widget)
 	{
-		//DEBUG_MSG (("Resending event\n"));
-
 		tmp_event = *event;
 		gtk_widget_event (dest_widget, (GdkEvent *)&tmp_event);
 
@@ -798,11 +749,6 @@ ephy_autocompletion_window_key_press_cb (GtkWidget *widget,
 	}
 	else
 	{
-		if (widget == GTK_WIDGET (p->tree_view))
-		{
-			//DEBUG_MSG (("on the tree view "));
-		}
-		//DEBUG_MSG (("Ignoring event\n"));
 		return FALSE;
 	}
 

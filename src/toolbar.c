@@ -17,10 +17,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-//#define DEBUG_MSG(x) g_print x
-#define DEBUG_MSG(x)
-#define NOT_IMPLEMENTED g_warning ("not implemented: " G_STRLOC);
-
 #include "toolbar.h"
 #include "ephy-spinner.h"
 #include "ephy-window.h"
@@ -35,6 +31,7 @@
 #include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-navigation-button.h"
+#include "ephy-debug.h"
 
 #include <string.h>
 #include <bonobo/bonobo-i18n.h>
@@ -362,7 +359,7 @@ toolbar_get_widgets (Toolbar *t)
 	const gchar *nav_buttons_ids[] = {"back", "back_menu", "up", "up_menu", "forward", "forward_menu" };
 	guint i;
 
-	DEBUG_MSG (("in toolbar_get_widgets\n"));
+	LOG ("in toolbar_get_widgets");
 
 	g_return_if_fail (IS_TOOLBAR (t));
 	p = t->priv;
@@ -417,7 +414,7 @@ toolbar_get_widgets (Toolbar *t)
 		{
 			if (EPHY_IS_NAVIGATION_BUTTON (it))
 			{
-				DEBUG_MSG (("    got a navigation button\n"));
+				LOG ("got a navigation button")
 				p->navigation_buttons = g_slist_prepend (p->navigation_buttons, g_object_ref (it));
 				if (p->window)
 				{
@@ -439,7 +436,7 @@ toolbar_get_widgets (Toolbar *t)
 		g_object_ref (p->location_entry);
 		toolbar_setup_location_entry (t, p->location_entry);
 
-		DEBUG_MSG (("    got a location entry\n"));
+		LOG ("got a location entry")
 	}
 
 	it = ephy_toolbar_get_item_by_id (gt, "favicon");
@@ -449,7 +446,7 @@ toolbar_get_widgets (Toolbar *t)
 		g_object_ref (p->favicon_ebox);
 		toolbar_setup_favicon_ebox (t, p->favicon_ebox);
 
-		DEBUG_MSG (("    got a favicon ebox\n"));
+		LOG ("got a favicon ebox")
 	}
 
 	it = ephy_toolbar_get_item_by_id (gt, "spinner");
@@ -459,7 +456,7 @@ toolbar_get_widgets (Toolbar *t)
 		g_object_ref (p->spinner);
 		toolbar_setup_spinner (t, p->spinner);
 
-		DEBUG_MSG (("    got a spinner\n"));
+		LOG ("got a spinner")
 	}
 
 	it = ephy_toolbar_get_item_by_id (gt, "zoom");
@@ -469,7 +466,7 @@ toolbar_get_widgets (Toolbar *t)
 		g_object_ref (p->zoom_spinbutton);
 		toolbar_setup_zoom_spinbutton (t, p->zoom_spinbutton);
 
-		DEBUG_MSG (("    got a zoom control\n"));
+		LOG ("got a zoom control")
 	}
 
 	/* update the controls */

@@ -20,12 +20,10 @@
 #include "ephy-file-helpers.h"
 #include "ephy-shell.h"
 #include "ephy-history.h"
+#include "ephy-debug.h"
 
 #include <string.h>
 #include <libgnome/gnome-i18n.h>
-
-//#define DEBUG_MSG(x) g_print x
-#define DEBUG_MSG(x)
 
 #define EPHY_BOOKMARKS_XML_VERSION "0.1"
 
@@ -194,10 +192,11 @@ ephy_bookmarks_clean_empty_keywords (EphyBookmarks *eb)
 
 	for (tmp = l; tmp != NULL; tmp = tmp->next)
 	{
-		DEBUG_MSG (("Remove empty keyword: %s\n",
-				ephy_node_get_property_string (kid,
-				   EPHY_NODE_KEYWORD_PROP_NAME)));
-		g_object_unref (EPHY_NODE (tmp->data));
+		EphyNode *node = EPHY_NODE (tmp->data);
+		LOG ("Remove empty keyword: %s",
+		     ephy_node_get_property_string (node,
+			     EPHY_NODE_KEYWORD_PROP_NAME))
+		g_object_unref (node);
 	}
 	g_list_free (l);
 
@@ -241,7 +240,7 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 	GPtrArray *children;
 	int i;
 
-	DEBUG_MSG (("Saving bookmarks\n"));
+	LOG ("Saving bookmarks")
 
 	/* save nodes to xml */
 	xmlIndentTreeOutput = TRUE;
@@ -853,7 +852,7 @@ ephy_bookmarks_find_keyword (EphyBookmarks *eb,
 
 		if (g_utf8_strlen (name, -1) == 0)
 		{
-			DEBUG_MSG (("Empty name, no keyword matches.\n"));
+			LOG ("Empty name, no keyword matches.")
 			return NULL;
 		}
 
@@ -905,7 +904,7 @@ diff_keywords (char **ks1, char **ks2)
 	{
 		gboolean found = FALSE;
 
-		DEBUG_MSG (("Diff keywords, keyword:\"%s\"\n", ks1[i]));
+		LOG ("Diff keywords, keyword:\"%s\"", ks1[i])
 
 		for (j = 0; ks2 != NULL && ks2[j] != NULL; j++)
 		{

@@ -20,16 +20,14 @@
 #include "config.h"
 #endif
 
-#include <libgnome/gnome-i18n.h>
 #include "ephy-gobject-misc.h"
 #include "ephy-marshal.h"
 #include "ephy-bonobo-extensions.h"
 #include "ephy-tbi.h"
-#include <string.h>
+#include "ephy-debug.h"
 
-#define NOT_IMPLEMENTED g_warning ("not implemented: " G_STRLOC);
-//#define DEBUG_MSG(x) g_print x
-#define DEBUG_MSG(x)
+#include <string.h>
+#include <libgnome/gnome-i18n.h>
 
 /**
  * Private data
@@ -100,7 +98,7 @@ ephy_tbi_finalize_impl (GObject *o)
 					      (gpointer *) &it->window);
 	}
 
-	DEBUG_MSG (("EphyTbi finalized\n"));
+	LOG ("EphyTbi finalized")
 
 	G_OBJECT_CLASS (ephy_tb_item_class)->finalize (o);
 }

@@ -1,3 +1,63 @@
+2003-01-12  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* configure.in:
+	* doc/debugging.txt:
+	* embed/ephy-embed-utils.c:
+	(ephy_embed_utils_build_charsets_submenu):
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_init):
+	* embed/ephy-history.c: (ephy_history_save):
+	* embed/mozilla/mozilla-embed.cpp:
+	* lib/ephy-autocompletion.c: (ephy_autocompletion_reset),
+	(ephy_autocompletion_get_common_prefix),
+	(ephy_autocompletion_refine_matches),
+	(ephy_autocompletion_update_matches_full),
+	(ephy_autocompletion_sort_by_score),
+	(ephy_autocompletion_data_changed_cb), (acma_grow):
+	* lib/ephy-debug.c: (log_module), (ephy_debug_init),
+	(ephy_profiler_new), (ephy_should_profile), (ephy_profiler_dump),
+	(ephy_profiler_free), (ephy_profiler_start), (ephy_profiler_stop):
+	* lib/ephy-debug.h:
+	* lib/ephy-filesystem-autocompletion.c:
+	(ephy_filesystem_autocompletion_finalize_impl),
+	(gfa_load_directory_cb),
+	(ephy_filesystem_autocompletion_set_current_dir),
+	(ephy_filesystem_autocompletion_set_base_dir):
+	* lib/ephy-start-here.c:
+	* lib/widgets/ephy-autocompletion-window.c:
+	(ephy_autocompletion_window_get_dimensions),
+	(ephy_autocompletion_window_fill_store_chunk),
+	(ephy_autocompletion_window_show),
+	(ephy_autocompletion_window_key_press_cb):
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_finalize_impl),
+	(ephy_location_entry_autocompletion_show_alternatives_to),
+	(ephy_location_entry_autocompletion_to),
+	(ephy_location_entry_activate_cb),
+	(ephy_location_entry_autocompletion_sources_changed_cb),
+	(ephy_location_entry_autocompletion_window_url_activated_cb),
+	(ephy_location_entry_autocompletion_window_hidden_cb):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	* src/bookmarks/ephy-bookmarks.c:
+	(ephy_bookmarks_clean_empty_keywords), (ephy_bookmarks_save),
+	(ephy_bookmarks_find_keyword), (diff_keywords):
+	* src/bookmarks/ephy-keywords-entry.c: (try_to_expand_keyword):
+	* src/bookmarks/ephy-new-bookmark.c: (ephy_new_bookmark_set_title):
+	* src/ephy-favorites-menu.c: (ephy_favorites_menu_rebuild):
+	* src/ephy-nautilus-view.c: (gnv_cmd_set_charset), (if):
+	* src/ephy-navigation-button.c:
+	(ephy_navigation_button_finalize_impl):
+	* src/ephy-shell.c: (ephy_shell_finalize):
+	* src/ephy-tab.c: (ephy_tab_embed_destroy_cb), (ephy_tab_finalize):
+	* src/ephy-tbi.c: (ephy_tbi_finalize_impl):
+	* src/ephy-window.c: (ephy_window_finalize):
+	* src/toolbar.c: (toolbar_get_widgets):
+
+	Implement profiler helpers. Complete ephy-debug
+	implementation and document it.
+	Fixup all the damned DEBUG_MSG mess. toolbar/ is
+	still borked since I'm not mantaining that code atm (just
+	keeping it updated with galeon).
+
 2003-01-12  Andras Timar  <timar@gnome.hu>
 
 	* configure.in: Added de, hu and nl to ALL_LINGUAS.

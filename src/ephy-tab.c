@@ -20,17 +20,13 @@
 #include "config.h"
 #endif
 
-#define DEBUG_MSG(x) g_print x
-//#define DEBUG_MSG(x)
-
-#define NOT_IMPLEMENTED g_warning ("not implemented: " G_STRLOC);
-
 #include "ephy-tab.h"
 #include "ephy-shell.h"
 #include "ephy-embed-popup-bw.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-embed-prefs.h"
+#include "ephy-debug.h"
 
 #include <bonobo/bonobo-i18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
@@ -182,9 +178,7 @@ ephy_tab_parent_set_cb (GtkWidget *widget, GtkWidget *previous_parent,
 static void
 ephy_tab_embed_destroy_cb (GtkWidget *widget, EphyTab *tab)
 {
-#ifdef DEBUG_MARCO
-	g_print ("GtkMozEmbed destroy signal on EphyTab\n");
-#endif
+	LOG ("GtkMozEmbed destroy signal on EphyTab")
 	g_object_unref (tab);
 }
 
@@ -290,9 +284,7 @@ ephy_tab_finalize (GObject *object)
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 
-#ifdef DEBUG_MARCO
-	g_print ("EphyTab finalized %p\n", tab);
-#endif
+	LOG ("EphyTab finalized %p", tab)
 }
 
 /* Public functions */

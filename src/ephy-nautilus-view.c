@@ -30,10 +30,7 @@
 #include "print-dialog.h"
 #include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
-
-#define NOT_IMPLEMENTED g_warning ("not implemented: " G_STRLOC);
-#define DEBUG_MSG(x) g_print x
-//#define DEBUG_MSG(x)
+#include "ephy-debug.h"
 
 static void		gnv_embed_location_cb 			(EphyEmbed *embed, 
 								 EphyNautilusView *view);
@@ -566,7 +563,7 @@ gnv_cmd_set_charset (BonoboUIComponent *uic,
 
 	p = view->priv;
 	
-	DEBUG_MSG ((data->encoding));
+	LOG ("Set charset %s", data->encoding)
 	ephy_embed_set_charset (p->embed, data->encoding);
 }
 
@@ -783,13 +780,13 @@ vfs_open_cb (GnomeVFSAsyncHandle *handle, GnomeVFSResult result, gpointer data)
 {
 	EphyNautilusView *view = data;
 
-	DEBUG_MSG (("+%s GnomeVFSResult: %u\n", G_GNUC_FUNCTION, (unsigned)result));
+	LOG ("+%s GnomeVFSResult: %u", G_GNUC_FUNCTION, (unsigned)result)
 
 	if (result != GNOME_VFS_OK)
 	{
 		gtk_moz_embed_close_stream (GTK_MOZ_EMBED (view->priv->embed->mozembed));
 		/* NOTE: the view may go away after a call to report_load_failed */
-		DEBUG_MSG ((">nautilus_view_report_load_failed\n"));
+		LOG (">nautilus_view_report_load_failed")
 		nautilus_view_report_load_failed (view->priv->nautilus_view);
 	} else {
 		if (view->priv->vfs_read_buffer == NULL) {
@@ -798,7 +795,7 @@ vfs_open_cb (GnomeVFSAsyncHandle *handle, GnomeVFSResult result, gpointer data)
 		gtk_moz_embed_open_stream (GTK_MOZ_EMBED (view->priv->embed->mozembed), "file:///", "text/html");
 		gnome_vfs_async_read (handle, view->priv->vfs_read_buffer, VFS_READ_BUFFER_SIZE, vfs_read_cb, view);
 	}
-	DEBUG_MSG (("-%s\n", G_GNUC_FUNCTION));
+	LOG ("-%s", G_GNUC_FUNCTION);
 }
 
 /**
@@ -815,7 +812,7 @@ vfs_read_cb (GnomeVFSAsyncHandle *handle, GnomeVFSResult result, gpointer buffer
 {
 	EphyNautilusView *view = data;
 
-	DEBUG_MSG (("+%s %ld/%ld bytes\n", G_GNUC_FUNCTION, (long)bytes_requested, (long) bytes_read));
+	LOG ("+%s %ld/%ld bytes", G_GNUC_FUNCTION, (long)bytes_requested, (long) bytes_read)
 
 	if (bytes_read != 0) {
 		gtk_moz_embed_append_data (GTK_MOZ_EMBED (view->priv->embed->mozembed), buffer, bytes_read);
@@ -829,15 +826,15 @@ vfs_read_cb (GnomeVFSAsyncHandle *handle, GnomeVFSResult result, gpointer buffer
 		
 		gnome_vfs_async_close (handle, (GnomeVFSAsyncCloseCallback) gtk_true, NULL);
 
-		DEBUG_MSG ((">nautilus_view_report_load_complete\n"));
+		LOG (">nautilus_view_report_load_complete")
 		nautilus_view_report_load_complete (view->priv->nautilus_view);
 
-		DEBUG_MSG (("=%s load complete\n", G_GNUC_FUNCTION));
+		LOG ("=%s load complete", G_GNUC_FUNCTION)
     	} else {
 		gnome_vfs_async_read (handle, view->priv->vfs_read_buffer, VFS_READ_BUFFER_SIZE, vfs_read_cb, view);
 	}
 
-	DEBUG_MSG (("-%s\n", G_GNUC_FUNCTION));
+	LOG ("-%s", G_GNUC_FUNCTION)
 }
 
 /***********************************************************************************/
@@ -875,7 +872,7 @@ navigate_mozilla_to_nautilus_uri (EphyNautilusView *view,
 		 * premature realization may cause other issues)
 		 */
 		
-		DEBUG_MSG (("=%s: Postponing navigation request to widget realization\n", G_GNUC_FUNCTION));
+		LOG ("=%s: Postponing navigation request to widget realization", G_GNUC_FUNCTION)
 		/* Note that view->priv->uri is still set below */
 	} else {
 		if (should_mozilla_load_uri_directly (uri)) {
@@ -891,7 +888,7 @@ navigate_mozilla_to_nautilus_uri (EphyNautilusView *view,
 			old_uri = view->priv->embed->location;
 
 			if (old_uri != NULL && uris_identical (uri, old_uri)) {
-				DEBUG_MSG (("=%s uri's identical, telling ephy to reload\n", G_GNUC_FUNCTION));
+				LOG ("=%s uri's identical, telling ephy to reload", G_GNUC_FUNCTION)
 				embed_reload (view->priv->embed,
 					      GTK_MOZ_EMBED_FLAG_RELOADBYPASSCACHE);
 			} else {
@@ -899,7 +896,7 @@ navigate_mozilla_to_nautilus_uri (EphyNautilusView *view,
 			}
 
 		} else {
-			DEBUG_MSG (("=%s loading URI via gnome-vfs\n", G_GNUC_FUNCTION));
+			LOG ("=%s loading URI via gnome-vfs", G_GNUC_FUNCTION)
 			gnome_vfs_async_open (&(view->priv->vfs_handle), uri,
 					      GNOME_VFS_OPEN_READ, GNOME_VFS_PRIORITY_DEFAULT, 
 					      vfs_open_cb, view);
@@ -909,7 +906,7 @@ navigate_mozilla_to_nautilus_uri (EphyNautilusView *view,
 	g_free (view->priv->uri);
 	view->priv->uri = g_strdup (uri);
 
-	DEBUG_MSG (("=%s current URI is now '%s'\n", G_GNUC_FUNCTION, view->priv->uri));
+	LOG ("=%s current URI is now '%s'", G_GNUC_FUNCTION, view->priv->uri)
 }
 
 /*

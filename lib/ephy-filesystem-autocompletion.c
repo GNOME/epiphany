@@ -23,14 +23,10 @@
 #include "ephy-autocompletion-source.h"
 #include "ephy-filesystem-autocompletion.h"
 #include "ephy-gobject-misc.h"
+#include "ephy-debug.h"
+
 #include <string.h>
-
 #include  <libgnomevfs/gnome-vfs-async-ops.h>
-
-#define NOT_IMPLEMENTED g_warning ("not implemented: " G_STRLOC);
-
-//#define DEBUG_MSG(x) g_print x
-#define DEBUG_MSG(x)
 
 /**
  * Private data
@@ -104,7 +100,7 @@ ephy_filesystem_autocompletion_finalize_impl (GObject *o)
 	EphyFilesystemAutocompletion *as = GUL_FILESYSTEM_AUTOCOMPLETION (o);
 	EphyFilesystemAutocompletionPrivate *p = as->priv;
 
-	DEBUG_MSG (("in ephy_filesystem_autocompletion_finalize_impl\n"));
+	LOG ("Finalize")
 
 	g_free (p->basic_key);
 	g_free (p->basic_key_dir);
@@ -193,7 +189,7 @@ gfa_load_directory_cb (GnomeVFSAsyncHandle *handle,
 
 	g_return_if_fail (p->load_handle == handle);
 
-	DEBUG_MSG (("gfa_load_directory_cb, entries_read == %d\n", entries_read));
+	LOG ("entries_read == %d", entries_read)
 
 	if (entries_read <= 0)
 	{
@@ -221,7 +217,7 @@ gfa_load_directory_cb (GnomeVFSAsyncHandle *handle,
 			gchar *f = g_strconcat (cd, i->name, NULL);
 			p->files = g_slist_prepend (p->files, f);
 			
-			DEBUG_MSG (("+ %s\n", f));
+			LOG ("+ %s", f)
 		}
 	}
 
@@ -262,14 +258,14 @@ ephy_filesystem_autocompletion_set_current_dir (EphyFilesystemAutocompletion *fa
 	
 	if (!cd_uri)
 	{
-		DEBUG_MSG (("Can't load dir %s\n", d));
+		LOG ("Can't load dir %s", d)
 		return;
 	}
 
 	g_free (p->current_dir);
 	p->current_dir = gnome_vfs_uri_to_string (cd_uri, GNOME_VFS_URI_HIDE_NONE);
 
-	DEBUG_MSG (("Loading dir: %s\n", p->current_dir));
+	LOG ("Loading dir: %s", p->current_dir)
 
 	gnome_vfs_async_load_directory_uri (&p->load_handle,
 					    cd_uri,
@@ -336,7 +332,7 @@ ephy_filesystem_autocompletion_set_base_dir (EphyFilesystemAutocompletion *fa, c
 	if (p->base_dir_uri)
 	{
 		gchar *t = gnome_vfs_uri_to_string (p->base_dir_uri, GNOME_VFS_URI_HIDE_NONE);
-		DEBUG_MSG (("base_dir: %s\n", t));
+		LOG ("base_dir: %s", t)
 		g_free (t);
 	}
 }

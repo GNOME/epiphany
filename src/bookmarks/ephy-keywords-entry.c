@@ -19,13 +19,9 @@
 #include "ephy-keywords-entry.h"
 #include "ephy-marshal.h"
 #include "ephy-gobject-misc.h"
+#include "ephy-debug.h"
 
 #include <gdk/gdkkeysyms.h>
-
-//#define DEBUG_MSG(x) g_print x
-#define DEBUG_MSG(x)
-
-#define NOT_IMPLEMENTED g_warning ("not implemented: " G_STRLOC);
 
 /**
  * Private data
@@ -99,7 +95,7 @@ try_to_expand_keyword (GtkEditable *editable)
 	entry_text = gtk_editable_get_chars (editable, 0, -1);
 	g_return_if_fail (entry_text != NULL);
 
-	DEBUG_MSG (("Entry text \"%s\"\n", entry_text));
+	LOG ("Entry text \"%s\"", entry_text)
 
 	user_text = g_utf8_strrchr (entry_text, -1, ' ');
 
@@ -114,7 +110,7 @@ try_to_expand_keyword (GtkEditable *editable)
 		user_text = entry_text;
 	}
 
-	DEBUG_MSG (("User text \"%s\"\n", user_text));
+	LOG ("User text \"%s\"", user_text)
 
 	node = ephy_bookmarks_find_keyword (entry->priv->bookmarks,
 					    user_text, TRUE);
@@ -123,7 +119,7 @@ try_to_expand_keyword (GtkEditable *editable)
 		expand_text = ephy_node_get_property_string
 			(node, EPHY_NODE_KEYWORD_PROP_NAME);
 
-		DEBUG_MSG (("Expand text %s\n", expand_text));
+		LOG ("Expand text %s", expand_text)
 
 		expand_text_length = g_utf8_strlen (expand_text, -1);
 		user_text_length = g_utf8_strlen (user_text, -1);
@@ -137,7 +133,7 @@ try_to_expand_keyword (GtkEditable *editable)
 	}
 	else
 	{
-		DEBUG_MSG (("No expansion.\n"));
+		LOG ("No expansion.")
 	}
 
 	g_free (entry_text);

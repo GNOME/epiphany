@@ -20,12 +20,13 @@
 #include "gtkmozembed_internal.h"
 #include "ephy-string.h"
 #include "ephy-embed.h"
+#include "ephy-debug.h"
 #include "mozilla-embed.h"
 #include "MozillaPrivate.h"
 #include "EphyWrapper.h"
 #include "EventContext.h"
-#include "nsIWindowWatcher.h"
 
+#include <nsIWindowWatcher.h>
 #include <nsIURI.h>
 #include <nsIURL.h>
 #include <nsNetUtil.h>
@@ -418,9 +419,7 @@ mozilla_embed_finalize (GObject *object)
 	
         G_OBJECT_CLASS (parent_class)->finalize (object);
 
-#ifdef DEBUG_MARCO
-	g_print ("MozillaEmbed finalized %p\n", embed);
-#endif
+	LOG ("MozillaEmbed finalized %p\n", embed)
 }
 
 gpointer

@@ -257,15 +257,11 @@ ephy_shell_finalize (GObject *object)
 	ephy_file_helpers_shutdown ();
 	ephy_node_system_shutdown ();
 
-#ifdef DEBUG_MARCO
-	g_print ("Ephy shell finalized\n");
-#endif
+	LOG ("Ephy shell finalized")
 
 	bonobo_main_quit ();
 
-#ifdef DEBUG_MARCO
-	g_print ("Bonobo quit done\n");
-#endif
+	LOG ("Bonobo quit done")
 }
 
 EphyShell *

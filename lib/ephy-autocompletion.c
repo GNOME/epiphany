@@ -22,17 +22,7 @@
 #include "ephy-autocompletion.h"
 #include "ephy-gobject-misc.h"
 #include "ephy-marshal.h"
-
-#define NOT_IMPLEMENTED g_warning ("not implemented: " G_STRLOC);
-
-//#define DEBUG_MSG(x) g_print x
-#define DEBUG_MSG(x)
-
-//#define DEBUG_TIME
-
-#ifdef DEBUG_TIME
-#include <glib/gtimer.h>
-#endif
+#include "ephy-debug.h"
 
 /**
  * Private data
@@ -181,18 +171,15 @@ static void
 ephy_autocompletion_reset (EphyAutocompletion *ac)
 {
 	EphyAutocompletionPrivate *p = ac->priv;
-#ifdef DEBUG_TIME
-	GTimer *timer = g_timer_new ();
-	g_timer_start (timer);
-#endif
+
+	START_PROFILER ("Resetting autocompletion")
+
 	acma_destroy (&p->matches);
 	g_free (p->common_prefix);
 	p->common_prefix = NULL;
 	p->status = GAS_NEEDS_FULL_UPDATE;
-#ifdef DEBUG_TIME
-	DEBUG_MSG (("AC: %f elapsed resetting\n", g_timer_elapsed (timer, NULL)));
-	g_timer_destroy (timer);
-#endif
+
+	STOP_PROFILER ("Resetting autocompletion")
 }
 
 EphyAutocompletion *
@@ -277,10 +264,9 @@ ephy_autocompletion_get_common_prefix (EphyAutocompletion *ac)
 	{
 		guint common_length = 0;
 		guint i;
-#ifdef DEBUG_TIME
-		GTimer *timer = g_timer_new ();
-		g_timer_start (timer);
-#endif
+
+		START_PROFILER ("Get Common Prefix")
+
 		for (i = 0; i < p->matches.num_matches; i++)
 		{
 			EphyAutocompletionMatch *mi = &p->matches.array[i];
@@ -307,10 +293,8 @@ ephy_autocompletion_get_common_prefix (EphyAutocompletion *ac)
 				p->common_prefix = g_strndup (realmatch, common_length);
 			}
 		}
-#ifdef DEBUG_TIME
-		DEBUG_MSG (("AC: %f elapsed calculating common prefix\n", g_timer_elapsed (timer, NULL)));
-		g_timer_destroy (timer);
-#endif
+
+		STOP_PROFILER ("Get Common Prefix")
 	}
 	return g_strdup (p->common_prefix);
 }
@@ -354,14 +338,9 @@ ephy_autocompletion_refine_matches (EphyAutocompletion *ac)
 	guint i;
 	gchar *key0 = p->keys[0];
 	guint key0l = p->key_lengths[0];
-#ifdef DEBUG_TIME
-	GTimer *timer = g_timer_new ();
-#endif
-	DEBUG_MSG (("AC: refining\n"));
 
-#ifdef DEBUG_TIME
-	g_timer_start (timer);
-#endif
+	START_PROFILER ("Refine matches")
+
 	acma_init (&newmatches);
 
 	p->changed = FALSE;
@@ -386,11 +365,7 @@ ephy_autocompletion_refine_matches (EphyAutocompletion *ac)
 	acma_destroy (&oldmatches);
 	p->matches = newmatches;
 
-#ifdef DEBUG_TIME
-	DEBUG_MSG (("AC: %f elapsed refining\n", g_timer_elapsed (timer, NULL)));
-	g_timer_destroy (timer);
-#endif
-	DEBUG_MSG (("AC: %d matches\n", p->matches.num_matches));
+	STOP_PROFILER ("Refine matches")
 }
 
 static void
@@ -466,16 +441,9 @@ ephy_autocompletion_update_matches_full (EphyAutocompletion *ac)
 {
 	EphyAutocompletionPrivate *p = ac->priv;
 	GSList *li;
-#ifdef DEBUG_TIME
-	GTimer *timer = g_timer_new ();
-#endif
 
-	DEBUG_MSG (("AC: fully updating\n"));
-	ephy_autocompletion_reset (ac);
+	START_PROFILER ("Update full")
 
-#ifdef DEBUG_TIME
-	g_timer_start (timer);
-#endif
 	for (li = p->sources; li; li = li->next)
 	{
 		EphyAutocompletionSource *s = EPHY_AUTOCOMPLETION_SOURCE (li->data);
@@ -485,15 +453,13 @@ ephy_autocompletion_update_matches_full (EphyAutocompletion *ac)
 						    ephy_autocompletion_update_matches_full_item,
 						    p);
 	}
-#ifdef DEBUG_TIME
-	DEBUG_MSG (("AC: %f elapsed fully updating\n", g_timer_elapsed (timer, NULL)));
-	g_timer_destroy (timer);
-#endif
+
+	STOP_PROFILER ("Update full")
 
 	p->sorted = FALSE;
 	p->changed = TRUE;
 
-	DEBUG_MSG (("AC: %d matches, fully updated\n", p->matches.num_matches));
+	LOG ("AC: %d matches, fully updated", p->matches.num_matches);
 }
 
 static gint
@@ -521,9 +487,7 @@ static gboolean
 ephy_autocompletion_sort_by_score (EphyAutocompletion *ac)
 {
 	EphyAutocompletionPrivate *p = ac->priv;
-#ifdef DEBUG_TIME
-	GTimer *timer;
-#endif
+
 	gint (*comparer) (EphyAutocompletionMatch *m1, EphyAutocompletionMatch *m2);
 
 	if (p->sort_alpha)
@@ -538,11 +502,8 @@ ephy_autocompletion_sort_by_score (EphyAutocompletion *ac)
 	ephy_autocompletion_update_matches (ac);
 	if (p->changed == FALSE) return FALSE;
 
-	DEBUG_MSG (("AC: sorting\n"));
-#ifdef DEBUG_TIME
-	timer = g_timer_new ();
-	g_timer_start (timer);
-#endif
+	START_PROFILER ("Sorting")
+
 	if (p->matches.num_matches > 0)
 	{
 		qsort (p->matches.array, p->matches.num_matches,
@@ -552,10 +513,8 @@ ephy_autocompletion_sort_by_score (EphyAutocompletion *ac)
 
 	p->sorted = TRUE;
 
-#ifdef DEBUG_TIME
-	DEBUG_MSG (("AC: %f elapsed sorting by score\n", g_timer_elapsed (timer, NULL)));
-	g_timer_destroy (timer);
-#endif
+	STOP_PROFILER ("Sorting")
+
 	return TRUE;
 }
 
@@ -563,7 +522,7 @@ static void
 ephy_autocompletion_data_changed_cb (EphyAutocompletionSource *s,
 				     EphyAutocompletion *ac)
 {
-	DEBUG_MSG (("AC: data changed, reseting\n"));
+	LOG ("Data changed, resetting");
 	ephy_autocompletion_reset (ac);
 
 	g_signal_emit (ac, EphyAutocompletionSignals[EPHY_AUTOCOMPLETION_SOURCES_CHANGED], 0);
@@ -663,5 +622,3 @@ acma_grow (ACMatchArray *a)
 	a->array_size = new_size;
 	a->array = new_array;
 }
-
-

@@ -21,6 +21,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-bonobo-extensions.h"
 #include "ephy-gui.h"
+#include "ephy-debug.h"
 
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkmessagedialog.h>
@@ -222,9 +223,9 @@ add_verbs (BonoboUIComponent *ui_component,
  **/
 void
 ephy_embed_utils_build_charsets_submenu (BonoboUIComponent *ui_component,
-					   const char *path,
-					   BonoboUIVerbFn fn,
-					   gpointer data)
+					 const char *path,
+					 BonoboUIVerbFn fn,
+					 gpointer data)
 {
 	GList *groups;
 	GString *xml_string;
@@ -232,13 +233,7 @@ ephy_embed_utils_build_charsets_submenu (BonoboUIComponent *ui_component,
 	int group_index = 0;
 	int charset_index = 0;
 
-#ifdef DEBUG_MARCO
-	GTimer *timer;
-	gulong s;
-
-	timer = g_timer_new ();
-	g_timer_start(timer);
-#endif
+	START_PROFILER ("Charsets menu")
 
 	g_return_if_fail (IS_EPHY_EMBED_SHELL (embed_shell));
 	g_return_if_fail (ephy_embed_shell_get_charset_groups (embed_shell, &groups) == G_OK);
@@ -287,11 +282,7 @@ ephy_embed_utils_build_charsets_submenu (BonoboUIComponent *ui_component,
 	g_list_free (groups);
 	g_string_free (xml_string, TRUE);
 
-#ifdef DEBUG_MARCO
-	g_timer_stop (timer);
-	g_timer_elapsed (timer, &s);
-	g_print ("Time to build charset menu: %f\n", (double)(s)/1000000);
-#endif
+	STOP_PROFILER ("Charsets menu")
 }
 
 /**

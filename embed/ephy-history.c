@@ -20,14 +20,12 @@
 #include "ephy-history.h"
 #include "ephy-file-helpers.h"
 #include "ephy-autocompletion-source.h"
+#include "ephy-debug.h"
 
 #include <time.h>
 #include <string.h>
 #include <libgnome/gnome-i18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
-
-//#define DEBUG_MSG(x) g_print x
-#define DEBUG_MSG(x)
 
 #define EPHY_HISTORY_XML_VERSION "0.1"
 
@@ -272,7 +270,7 @@ ephy_history_save (EphyHistory *eb)
 	GPtrArray *children;
 	int i;
 
-	DEBUG_MSG (("Saving history\n"));
+	LOG ("Saving history\n")
 
 	/* save nodes to xml */
 	xmlIndentTreeOutput = TRUE;

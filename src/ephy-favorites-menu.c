@@ -26,14 +26,11 @@
 #include "ephy-bonobo-extensions.h"
 #include "ephy-marshal.h"
 #include "ephy-shell.h"
+#include "ephy-debug.h"
 
 #include <string.h>
 #include <stdlib.h>
 #include <libxml/entities.h>
-
-#define NOT_IMPLEMENTED g_warning ("not implemented: " G_STRLOC);
-//#define DEBUG_MSG(x) g_print x
-#define DEBUG_MSG(x)
 
 #define MAX_LABEL_LENGTH 30
 
@@ -213,7 +210,7 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 
 	ephy_bonobo_clear_path (uic, p->path);
 
-	DEBUG_MSG (("Rebuilding recent history menu\n"));
+	LOG ("Rebuilding recent history menu")
 
 	fav = ephy_bookmarks_get_favorites (p->bookmarks);
 	children = ephy_node_get_children (fav);
@@ -260,7 +257,7 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 	ephy_node_thaw (fav);
 
 	g_string_append (xml, "</placeholder>\n");
-	DEBUG_MSG (("\n%s\n", xml->str));
+
 	if (children->len > 0)
 	{
 		bonobo_ui_component_set (uic, p->path,

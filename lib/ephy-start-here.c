@@ -23,9 +23,6 @@
 #include "ephy-start-here.h"
 #include "ephy-file-helpers.h"
 
-//#define DEBUG_MSG(x) g_print x
-#define DEBUG_MSG(x)
-
 struct EphyStartHerePrivate
 {
 	const GList *langs;

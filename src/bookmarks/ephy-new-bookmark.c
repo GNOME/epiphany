@@ -28,9 +28,7 @@
 
 #include "ephy-new-bookmark.h"
 #include "ephy-keywords-entry.h"
-
-//#define DEBUG_MSG(x) g_print x
-#define DEBUG_MSG(x)
+#include "ephy-debug.h"
 
 static void ephy_new_bookmark_class_init (EphyNewBookmarkClass *klass);
 static void ephy_new_bookmark_init (EphyNewBookmark *editor);
@@ -332,7 +330,7 @@ void
 ephy_new_bookmark_set_title (EphyNewBookmark *bookmark,
 			     const char *title)
 {
-	DEBUG_MSG (("Setting new bookmark title to: \"%s\"", title));
+	LOG ("Setting new bookmark title to: \"%s\"", title)
 	gtk_entry_set_text (GTK_ENTRY (bookmark->priv->title_entry),
 			    g_strdup (title));
 }

@@ -279,8 +279,10 @@ ephy_favicon_cache_init (EphyFaviconCache *cache)
 			                            g_str_equal);
 	cache->priv->icons_hash_lock = g_new0 (GStaticRWLock, 1);
 	g_static_rw_lock_init (cache->priv->icons_hash_lock);
-	cache->priv->downloads_hash = g_hash_table_new (g_str_hash,
-			                                g_str_equal);
+	cache->priv->downloads_hash = g_hash_table_new_full (g_str_hash,
+			                                     g_str_equal,
+							     g_free,
+							     NULL);
 
 	/* Icons */
 	cache->priv->icons = ephy_node_new_with_id (ICONS_NODE_ID);

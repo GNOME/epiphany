@@ -19,21 +19,55 @@
 #ifndef EPHY_DEBUG_H
 #define EPHY_DEBUG_H
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <glib.h>
 
 G_BEGIN_DECLS
 
-#ifdef DISABLE_LOGGING
-#define LOG()
-#else
-#define LOG(msg, args...)					\
-g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,				\
-       "[ %s ] " msg,						\
-       __FILE__,						\
-       args);
+#ifndef GNOME_ENABLE_DEBUG
+#define DISABLE_LOGGING
+#define DISABLE_PROFILING
 #endif
 
-void	ephy_debug_init	(void);
+#ifdef DISABLE_LOGGING
+#define LOG(msg, ...)
+#else
+#define LOG(msg, ...)						\
+g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,				\
+       "[ %s ] " msg,						\
+       __FILE__, ##__VA_ARGS__);
+#endif
+
+#ifdef DISABLE_PROFILING
+#define START_PROFILER(name)
+#define STOP_PROFILER(name)
+#else
+#define START_PROFILER(name)	\
+ephy_profiler_start (name, __FILE__);
+#define STOP_PROFILER(name)	\
+ephy_profiler_stop (name);
+#endif
+
+typedef struct
+{
+	GTimer *timer;
+	char *name;
+	char *module;
+} EphyProfiler;
+
+void		ephy_debug_init		(void);
+
+#ifndef DISABLE_PROFILING
+
+void		ephy_profiler_start	(const char *name,
+					 const char *module);
+
+void		ephy_profiler_stop	(const char *name);
+
+#endif
 
 G_END_DECLS
 

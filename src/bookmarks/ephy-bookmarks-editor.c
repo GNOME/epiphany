@@ -32,9 +32,6 @@
 #include "ephy-keywords-entry.h"
 #include "ephy-dnd.h"
 
-//#define DEBUG_MSG(x) g_print x
-#define DEBUG_MSG(x)
-
 static void ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass);
 static void ephy_bookmarks_editor_init (EphyBookmarksEditor *editor);
 static void ephy_bookmarks_editor_finalize (GObject *object);
