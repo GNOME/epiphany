@@ -1,14 +1,34 @@
+2003-05-27  Xan Lopez  <xan@masilla.org>
+
+	* lib/ephy-node.c: (ephy_node_get_id), (ephy_node_ref),
+	(ephy_node_unref), (ephy_node_freeze), (ephy_node_thaw),
+	(ephy_node_set_property), (ephy_node_get_property),
+	(ephy_node_get_property_string), (ephy_node_get_property_boolean),
+	(ephy_node_get_property_long), (ephy_node_get_property_int),
+	(ephy_node_get_property_double), (ephy_node_get_property_float),
+	(ephy_node_get_property_node), (ephy_node_save_to_xml),
+	(ephy_node_new_from_xml), (ephy_node_add_child),
+	(ephy_node_remove_child), (ephy_node_has_child),
+	(ephy_node_sort_children), (ephy_node_reorder_children),
+	(ephy_node_get_children), (ephy_node_get_n_children),
+	(ephy_node_get_nth_child), (ephy_node_get_child_index),
+	(ephy_node_get_next_child), (ephy_node_get_previous_child),
+	(ephy_node_signal_connect_object), (ephy_node_signal_disconnect):
+	* lib/ephy-node.h:
+
+	Lots of safety checks on node functions.
+
 2003-05-26  Christian Persch  <chpe@cvs.gnome.org>
 
-* embed/mozilla/mozilla-i18n.h:
-* embed/mozilla/mozilla-i18n.c:
-* embed/mozilla/mozilla-embed-single.c: (fill_charsets_list),
-(impl_get_charset_titles):
-* embed/mozilla/mozilla-notifiers.c: (mozilla_notifiers_init):
-* lib/ephy-langs.h:
-* src/prefs-dialog.c: (setup_font_menu):
+	* embed/mozilla/mozilla-i18n.h:
+	* embed/mozilla/mozilla-i18n.c:
+	* embed/mozilla/mozilla-embed-single.c: (fill_charsets_list),
+	(impl_get_charset_titles):
+	* embed/mozilla/mozilla-notifiers.c: (mozilla_notifiers_init):
+	* lib/ephy-langs.h:
+	* src/prefs-dialog.c: (setup_font_menu):
 
-Refactored the charset and language groups strings.
+	Refactored the charset and language groups strings.
 
 2003-05-26  Christian Persch  <chpe@cvs.gnome.org>
 

@@ -26,6 +26,10 @@
 
 G_BEGIN_DECLS
 
+/* convenience macro to check node validity */
+
+#define EPHY_IS_NODE(o)	(o != NULL)
+
 typedef struct EphyNode EphyNode;
 
 typedef enum
