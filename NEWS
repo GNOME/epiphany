@@ -1,4 +1,69 @@
 ==============
+Epiphany 0.6.1
+==============
+
+Code changes
+
+	* Initialize mozilla prefs on startup, so changing gconf prefs while
+	  epiphany is not running works again (Marco)
+	* Convenience function to display help, avoid a lot
+	  of code duplication (Dave Bordoley)
+	* Rework prefs dialog code to use a notebook directly from glade
+	  and to fit in one file (Marco)
+	* Export bookmarks in rdf format, will be more useful when
+	  it will be possible to import it (Marco, Edd Dumbill)
+	* Use gtk api for fullscreen (Marco)
+
+New features
+
+	* Drag and drop of links to tabs (Christian Persch)
+	* Wrote the structure of the help and 30% of the contents (Dave Bordoley)
+	* Security preferences (Marco)
+	* Autodetect the user primary language (Marco)
+	* Show a list of tabs at the bottom of tabs menu (Dave Bordoley)
+
+Interface improvements
+
+	* ctrl+u show page source (Marco)
+	* Use address as title when the page is untitled (Christian Persch)
+	* Confirmation dialog for clearing history (Jon Svendsen)
+	* Improve find dialog readability (Dave Bordoley)
+	* Use the term Adress instead of Location as discussed
+	  with docs guys (Dave Bordoley)
+	* Show bookmarks icons in the toolbar only when there
+	  is a specific one (Dave Bordoley)
+	* Do not show empty submenus for empty topics, show
+	  an "Empty" insensitive item instead (Lee Willis)
+	* Some cleanups of the preferences dialog, work in progress (Marco)
+	* Alphabetical sort of bookmarks menu (Xan Lopez)
+	* Show the full page title in tooltip on the tab label (Christian Persch)
+	* Warn the user when he is trying to add an already existent bookmark (Xan Lopez)
+	* On Go->Location, show the toolbar if it's hidden, and hide it again
+	  when the user finished to type (Marco)
+
+Bugfixes
+
+	* Remove toolbar for context menu works (Marco)
+	* Insert new toolbars before the bookmarks toolbar (Marco)
+	* Improve default topics, add google smart bookmark
+	  to the toolbar by default (Dave Bordoley)
+	* Fix menu sensitivity for the history dialog (Marco)
+	* Fix leak in bookmarks importing and improve speed.
+	  This make importing large collection of bookmarks
+	  actually possible  (Osma Ahvenlampi)
+	* Use AM_CXX_FLAGS instead of CXX_FLAGS, make
+	  life easier to packagers (Edd Dumbill)
+	* Fix 64 bit problems (Jeremy Katz)
+	* Middle click actions on click event, not on mouse down (Marco)
+	* Fix leak of tooltips in the statusbar (Christian Persch)
+	* Fix smartbookmarks and non ascii characters (Marco)
+	* Fix external handlers like mailto, ftp ... (Marco)
+	* Make uncategorized special topic work consistently (Xan Lopez)
+	* Do not save position for browser windows (Dave Bordoley)
+	* Make our string ellipsizing helper utf8 save (Christian Persch)
+	* Various internationalization fixes (Christian Neumair)
+
+==============
 Epiphany 0.6.0
 ==============
 
