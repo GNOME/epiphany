@@ -1,3 +1,16 @@
+2003-04-23  Xan Lopez  <xan@masilla.org>
+
+	* idl/EphyAutomation.idl:
+	* src/ephy-automation.c: (impl_ephy_automation_loadurl):
+	* src/ephy-main.c: (ephy_main_start):
+
+	Remove --geometry option, we weren't respecting it anyway (this
+	patch patronized by marco's "DropDropDrop" project).
+
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_delete):
+
+	Fix leak.
+
 2003-04-23  Christian Neumair  <chris@gnome-de.org>
 
 	* src/ephy-window.c (setup_window):
