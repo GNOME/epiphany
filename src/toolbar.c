@@ -311,11 +311,11 @@ toolbar_setup_actions (Toolbar *t)
 }
 
 static void
-action_added_cb (EphyToolbarsModel *model,
-		 char *action_name,
-		 Toolbar *t)
+action_request_cb (EggEditableToolbar *etoolbar,
+		   char *action_name,
+		   gpointer data)
 {
-	toolbar_ensure_action (t, action_name);
+	toolbar_ensure_action (TOOLBAR (etoolbar), action_name);
 }
 
 static void
@@ -342,6 +342,9 @@ init_bookmarks_toolbar (Toolbar *t)
 				(EGG_EDITABLE_TOOLBAR (t),
 				 drag_targets, n_drag_targets,
 				 t_name);
+			egg_toolbars_model_set_flags
+				(EGG_TOOLBARS_MODEL (model),
+				 i, EGG_TB_MODEL_NOT_REMOVABLE);
 		}
 	}
 }
@@ -350,7 +353,6 @@ static void
 toolbar_set_window (Toolbar *t, EphyWindow *window)
 {
 	EphyToolbarsModel *model;
-	char *xml_file;
 
 	g_return_if_fail (t->priv->window == NULL);
 
@@ -361,27 +363,11 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 	egg_menu_merge_insert_action_group (t->priv->ui_merge,
 					    t->priv->action_group, 1);
 
+	g_signal_connect (t, "action_request",
+			  G_CALLBACK (action_request_cb),
+			  NULL);
+
 	model = ephy_shell_get_toolbars_model (ephy_shell);
-	g_return_if_fail (model != NULL);
-	g_signal_connect_object (model, "action_added",
-			         G_CALLBACK (action_added_cb),
-				 t, 0);
-
-	xml_file = g_build_filename (ephy_dot_dir (),
-                                     "toolbar.xml",
-                                     NULL);
-	if (g_file_test (xml_file, G_FILE_TEST_EXISTS))
-	{
-		egg_toolbars_model_load
-			(EGG_TOOLBARS_MODEL (model), xml_file);
-	}
-	else
-	{
-		egg_toolbars_model_load (EGG_TOOLBARS_MODEL (model),
-					 ephy_file ("epiphany-toolbar.xml"));
-	}
-	g_free (xml_file);
-
 	g_object_set (G_OBJECT (t),
 		      "ToolbarsModel", model,
 		      "MenuMerge", t->priv->ui_merge,

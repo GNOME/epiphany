@@ -37,7 +37,7 @@
 #include "eggmarshalers.h"
 #include <gtk/gtkmain.h>
 
-#define DEFAULT_IPADDING 0
+#define DEFAULT_IPADDING 1
 #define DEFAULT_SPACE_SIZE  5
 #define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
 

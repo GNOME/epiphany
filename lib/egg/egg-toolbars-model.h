@@ -37,6 +37,11 @@ typedef struct EggToolbarsModelClass EggToolbarsModelClass;
 typedef struct EggToolbarsModel EggToolbarsModel;
 typedef struct EggToolbarsModelPrivate EggToolbarsModelPrivate;
 
+typedef enum
+{
+	EGG_TB_MODEL_NOT_REMOVABLE = 1
+} EggTbModelFlags;
+
 struct EggToolbarsModel
 {
   GObject parent_object;
@@ -76,6 +81,11 @@ void              egg_toolbars_model_save           (EggToolbarsModel *t,
 						     const char *xml_file);
 int               egg_toolbars_model_add_toolbar    (EggToolbarsModel *t,
 						     const char       *name);
+EggTbModelFlags   egg_toolbars_model_get_flags      (EggToolbarsModel *t,
+						     int               toolbar_position);
+void              egg_toolbars_model_set_flags      (EggToolbarsModel *t,
+						     EggTbModelFlags   flags,
+						     int               toolbar_position);
 void              egg_toolbars_model_add_separator  (EggToolbarsModel *t,
 						     int               toolbar_position,
 						     int               position);

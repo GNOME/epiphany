@@ -29,6 +29,8 @@ static void egg_editable_toolbar_class_init	(EggEditableToolbarClass *klass);
 static void egg_editable_toolbar_init		(EggEditableToolbar *t);
 static void egg_editable_toolbar_finalize	(GObject *object);
 
+#define MIN_TOOLBAR_HEIGHT 20
+
 static GtkTargetEntry source_drag_types[] = {
   {EGG_TOOLBAR_ITEM_TYPE, 0, 0},
 };
@@ -45,6 +47,14 @@ enum
   PROP_TOOLBARS_MODEL,
   PROP_MENU_MERGE
 };
+
+enum
+{
+	ACTION_REQUEST,
+	LAST_SIGNAL
+};
+
+static guint egg_editable_toolbar_signals[LAST_SIGNAL] = { 0 };
 
 static GObjectClass *parent_class = NULL;
 
@@ -243,6 +253,9 @@ popup_toolbar_context_menu_cb (GtkWidget          *toolbar,
 
   if (t->priv->edit_mode)
     {
+      EggTbModelFlags flags;
+      int position;
+
       t->priv->selected_toolbar = toolbar;
 
       menu = gtk_menu_new ();
@@ -257,8 +270,17 @@ popup_toolbar_context_menu_cb (GtkWidget          *toolbar,
 	                G_CALLBACK (remove_toolbar_cb),
 		        t);
 
+      position = get_toolbar_position (t, toolbar);
+      flags = egg_toolbars_model_get_flags (t->priv->model, position);
+      if (flags && EGG_TB_MODEL_NOT_REMOVABLE)
+        {
+          gtk_widget_set_sensitive (GTK_WIDGET (item), FALSE);
+        }
+
       gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 2,
 		      gtk_get_current_event_time ());
+
+      t->priv->selected_toolbar = NULL;
     }
 }
 
@@ -301,6 +323,8 @@ create_item (EggEditableToolbar *t,
     }
   else
     {
+      g_signal_emit (G_OBJECT (t), egg_editable_toolbar_signals[ACTION_REQUEST],
+		     0, action_name);
       action = find_action (t, action_name);
       item = egg_action_create_tool_item (action);
     }
@@ -330,7 +354,7 @@ toolbar_added_cb (EggToolbarsModel   *model,
   GtkWidget *toolbar;
 
   toolbar = create_toolbar (t);
-  gtk_widget_set_size_request (toolbar, -1, 20);
+  gtk_widget_set_size_request (toolbar, -1, MIN_TOOLBAR_HEIGHT);
   gtk_box_pack_start (GTK_BOX (t), toolbar, FALSE, FALSE, 0);
 
   /* FIXME reorder to match position */
@@ -379,6 +403,7 @@ item_removed_cb (EggToolbarsModel   *model,
 
   if (egg_toolbars_model_n_items (model, toolbar_position) == 0)
   {
+    gtk_widget_set_size_request (toolbar, -1, MIN_TOOLBAR_HEIGHT);
     egg_toolbars_model_remove_toolbar (model, toolbar_position);
   }
 }
@@ -427,6 +452,11 @@ egg_editable_toolbar_construct (EggEditableToolbar *t)
           item = create_item (t, model, i, l);
 	  egg_toolbar_insert (EGG_TOOLBAR (toolbar),
 			      EGG_TOOL_ITEM (item), l);
+        }
+
+      if (n_items == 0)
+        {
+            gtk_widget_set_size_request (toolbar, -1, MIN_TOOLBAR_HEIGHT);
         }
     }
 }
@@ -491,6 +521,14 @@ egg_editable_toolbar_class_init (EggEditableToolbarClass *klass)
   object_class->finalize = egg_editable_toolbar_finalize;
   object_class->set_property = egg_editable_toolbar_set_property;
   object_class->get_property = egg_editable_toolbar_get_property;
+
+  egg_editable_toolbar_signals[ACTION_REQUEST] =
+    g_signal_new ("action_request",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (EggEditableToolbarClass, action_request),
+		  NULL, NULL, g_cclosure_marshal_VOID__STRING,
+		  G_TYPE_NONE, 1, G_TYPE_STRING);
 
   g_object_class_install_property (object_class,
 				   PROP_MENU_MERGE,

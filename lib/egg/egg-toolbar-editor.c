@@ -60,6 +60,7 @@ struct EggToolbarEditorPrivate
   GtkWidget *table;
   GtkWidget *scrolled_window;
 
+  GList *default_actions_list;
   GList *actions_list;
 };
 
@@ -247,8 +248,12 @@ editor_drag_data_received_cb (GtkWidget          *widget,
 
   action = find_action (editor, (const char *)selection_data->data);
   g_return_if_fail (action != NULL);
-  editor->priv->actions_list = g_list_append
-	(editor->priv->actions_list, action);
+
+  if (g_list_find (editor->priv->default_actions_list, action))
+    {
+      editor->priv->actions_list = g_list_append
+	    (editor->priv->actions_list, action);
+    }
 
   update_editor_sheet (editor);
 }
@@ -504,6 +509,7 @@ egg_toolbar_editor_init (EggToolbarEditor *t)
   t->priv = g_new0 (EggToolbarEditorPrivate, 1);
 
   t->priv->merge = NULL;
+  t->priv->default_actions_list = NULL;
   t->priv->actions_list = NULL;
 
   setup_editor (t);
@@ -518,8 +524,8 @@ egg_toolbar_editor_add_action (EggToolbarEditor *editor,
 	action = find_action (editor, action_name);
 	g_return_if_fail (action != NULL);
 
-	editor->priv->actions_list = g_list_append
-		(editor->priv->actions_list, action);
+	editor->priv->default_actions_list = g_list_append
+		(editor->priv->default_actions_list, action);
 }
 
 static void
@@ -569,7 +575,7 @@ egg_toolbar_editor_load_actions (EggToolbarEditor *editor,
   xmlDocPtr doc;
   xmlNodePtr root;
   xmlNodePtr child;
-  GList *l, *tmp;
+  GList *l;
 
   doc = xmlParseFile (xml_file);
   root = xmlDocGetRootElement (doc);
@@ -587,18 +593,17 @@ egg_toolbar_editor_load_actions (EggToolbarEditor *editor,
   xmlFreeDoc (doc);
 
   /* Remove the already used items */
-  tmp = g_list_copy (editor->priv->actions_list);
-  for (l = editor->priv->actions_list; l != NULL; l = l->next)
+  editor->priv->actions_list = g_list_copy (editor->priv->default_actions_list);
+  for (l = editor->priv->default_actions_list; l != NULL; l = l->next)
     {
       EggAction *action = EGG_ACTION (l->data);
 
       if (model_has_action (editor->priv->model, action))
         {
-          tmp = g_list_remove (tmp, action);
+          editor->priv->actions_list = g_list_remove
+		(editor->priv->actions_list, action);
         }
     }
-  g_list_free (editor->priv->actions_list);
-  editor->priv->actions_list = tmp;
 
   update_editor_sheet (editor);
 }

@@ -44,9 +44,6 @@ struct EphyToolbarsModel
 struct EphyToolbarsModelClass
 {
   EggToolbarsModelClass parent_class;
-
-  void (* action_added)      (EggToolbarsModel *group,
-			      char *action_name);
 };
 
 GType		   ephy_toolbars_model_get_type        (void);

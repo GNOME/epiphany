@@ -1,3 +1,27 @@
+2003-04-27  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/egg/egg-editable-toolbar.c:
+	* lib/egg/egg-editable-toolbar.h:
+	* lib/egg/egg-toolbar-editor.c:
+	* lib/egg/egg-toolbars-model.c:
+	* lib/egg/egg-toolbars-model.h:
+	* lib/egg/eggtoolbar.c:
+
+	update
+
+	* src/ephy-shell.c: (save_toolbars),
+	(ephy_shell_get_toolbars_model):
+	* src/ephy-toolbars-model.c: (impl_add_item),
+	(ephy_toolbars_model_class_init):
+	* src/ephy-toolbars-model.h:
+	* src/toolbar.c: (action_request_cb), (init_bookmarks_toolbar),
+	(toolbar_set_window):
+
+	Load the toolbars model in EphyShell so bookmarks editor
+	alone can use it.
+	Update the actions on a new editable toolbar signal,
+	actions are per toolbar, not per model.
+
 2003-04-27  David Bordoley <bordoley@msu.edu>
 
 	* lib/egg/egg-editable-toolbar.c:

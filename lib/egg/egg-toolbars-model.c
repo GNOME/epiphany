@@ -38,6 +38,7 @@ enum
 typedef struct
 {
   char *name;
+  EggTbModelFlags flags;
 } EggToolbarsToolbar;
 
 typedef struct
@@ -145,6 +146,7 @@ toolbars_toolbar_new (const char *name)
 
   toolbar = g_new0 (EggToolbarsToolbar, 1);
   toolbar->name = g_strdup (name);
+  toolbar->flags = 0;
 
   return toolbar;
 }
@@ -180,6 +182,37 @@ free_item_node (EggToolbarsItem *item)
 
   g_free (item->action_name);
   g_free (item);
+}
+
+EggTbModelFlags
+egg_toolbars_model_get_flags (EggToolbarsModel *t,
+			      int               toolbar_position)
+{
+  GNode *toolbar_node;
+  EggToolbarsToolbar *toolbar;
+
+  toolbar_node = g_node_nth_child (t->priv->toolbars, toolbar_position);
+  g_return_val_if_fail (toolbar_node != NULL, -1);
+
+  toolbar = toolbar_node->data;
+
+  return toolbar->flags;
+}
+
+void
+egg_toolbars_model_set_flags (EggToolbarsModel *t,
+			      EggTbModelFlags   flags,
+			      int               toolbar_position)
+{
+  GNode *toolbar_node;
+  EggToolbarsToolbar *toolbar;
+
+  toolbar_node = g_node_nth_child (t->priv->toolbars, toolbar_position);
+  g_return_if_fail (toolbar_node != NULL);
+
+  toolbar = toolbar_node->data;
+
+  toolbar->flags = flags;
 }
 
 void
@@ -402,16 +435,23 @@ egg_toolbars_model_remove_toolbar (EggToolbarsModel   *t,
 				   int                 position)
 {
   GNode *node;
+  EggTbModelFlags flags;
 
   g_return_if_fail (IS_EGG_TOOLBARS_MODEL (t));
 
-  node = g_node_nth_child (t->priv->toolbars, position);
-  g_return_if_fail (node != NULL);
+  flags = egg_toolbars_model_get_flags (t, position);
 
-  free_toolbar_node (node->data);
-  g_node_destroy (node);
+  if (!(flags && EGG_TB_MODEL_NOT_REMOVABLE))
+    {
+      node = g_node_nth_child (t->priv->toolbars, position);
+      g_return_if_fail (node != NULL);
 
-  g_signal_emit (G_OBJECT (t), egg_toolbars_model_signals[TOOLBAR_REMOVED], 0, position);
+      free_toolbar_node (node->data);
+      g_node_destroy (node);
+
+      g_signal_emit (G_OBJECT (t), egg_toolbars_model_signals[TOOLBAR_REMOVED],
+		     0, position);
+    }
 }
 
 void

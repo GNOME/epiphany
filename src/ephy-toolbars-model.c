@@ -34,8 +34,6 @@ enum
   LAST_SIGNAL
 };
 
-static guint ephy_toolbars_model_signals[LAST_SIGNAL] = { 0 };
-
 static GObjectClass *parent_class = NULL;
 
 struct EphyToolbarsModelPrivate
@@ -108,9 +106,6 @@ impl_add_item (EggToolbarsModel *t,
 
 	res = action_name ? action_name : name;
 
-	g_signal_emit (G_OBJECT (t),
-		       ephy_toolbars_model_signals[ACTION_ADDED], 0, res);
-
 	EGG_TOOLBARS_MODEL_CLASS (parent_class)->add_item
 		(t, toolbar_position, position, type, res);
 
@@ -130,14 +125,6 @@ ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass)
 	object_class->finalize = ephy_toolbars_model_finalize;
 
 	etm_class->add_item = impl_add_item;
-
-	ephy_toolbars_model_signals[ACTION_ADDED] =
-	g_signal_new ("action_added",
-		      G_OBJECT_CLASS_TYPE (object_class),
-		      G_SIGNAL_RUN_LAST,
-		      G_STRUCT_OFFSET (EphyToolbarsModelClass, action_added),
-		      NULL, NULL, g_cclosure_marshal_VOID__STRING,
-		      G_TYPE_NONE, 1, G_TYPE_STRING);
 }
 
 static void

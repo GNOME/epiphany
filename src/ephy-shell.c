@@ -287,7 +287,7 @@ save_toolbars (EggToolbarsModel *model)
 	char *xml_file;
 
 	xml_file = g_build_filename (ephy_dot_dir (),
-                                     "toolbar.xml",
+                                     "ephy-toolbar.xml",
                                      NULL);
 	egg_toolbars_model_save (model, xml_file);
 	g_free (xml_file);
@@ -654,7 +654,27 @@ ephy_shell_get_toolbars_model (EphyShell *gs)
 {
 	if (gs->priv->toolbars_model == NULL)
 	{
+		char *xml_file;
+		EggToolbarsModel *model;
+
 		gs->priv->toolbars_model = ephy_toolbars_model_new ();
+		model = EGG_TOOLBARS_MODEL (gs->priv->toolbars_model);
+
+		xml_file = g_build_filename (ephy_dot_dir (),
+		                             "ephy-toolbar.xml",
+		                             NULL);
+		if (g_file_test (xml_file, G_FILE_TEST_EXISTS))
+		{
+			egg_toolbars_model_load (model, xml_file);
+		}
+		else
+		{
+			const char *default_xml;
+
+			default_xml = ephy_file ("epiphany-toolbar.xml");
+			egg_toolbars_model_load (model, default_xml);
+		}
+		g_free (xml_file);
 	}
 
 	return gs->priv->toolbars_model;
