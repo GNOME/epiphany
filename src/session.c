@@ -467,7 +467,6 @@ save_tab (EphyWindow *window,
 	const char *title;
         xmlNodePtr embed_node;
 	EphyEmbed *embed;
-	xmlChar *encoded_link, *encoded_title;
 
 	chrome = ephy_window_get_chrome (window);
 
@@ -480,16 +479,12 @@ save_tab (EphyWindow *window,
 
         /* store title in the node */
 	title = ephy_tab_get_title (tab);
-	encoded_title = xmlEncodeEntitiesReentrant (doc, title);
-	xmlSetProp (embed_node, "title", encoded_title);
-	xmlFree (encoded_title);
+	xmlSetProp (embed_node, "title", title);
 
         /* otherwise, use the actual location. */
 	embed = ephy_tab_get_embed (tab);
 	ephy_embed_get_location (embed, TRUE, &location);
-	encoded_link = xmlEncodeEntitiesReentrant (doc, location);
-        xmlSetProp (embed_node, "url", encoded_link);
-	xmlFree (encoded_link);
+        xmlSetProp (embed_node, "url", location);
 	g_free (location);
 
 	/* insert node into the tree */
