@@ -239,7 +239,7 @@ ephy_print_dialog_response_cb (GtkWidget *widget,
 
 			break;
 		case GTK_RESPONSE_HELP:
-			ephy_gui_help (GTK_WINDOW (dialog), "epiphany", "to-print-page");
+			ephy_gui_help (GTK_WINDOW (widget), "epiphany", "to-print-page");
 			return;
 		default:
 			break;
