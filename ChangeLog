@@ -1,3 +1,14 @@
+2004-01-23  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-embed.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/window-commands.c: (window_cmd_view_reload):
+
+	Use both BYPASS_CACHE and BYPASS_PROXY on force-reload.
+	Unified the handling in mozilla-embed by introducing
+	EMBED_RELOAD_FORCE, and killed EMBED_RELOAD_BYPASS_[CACHE|PROXY]
+	since we now always use both together.
+
 2004-01-22  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/ephy-encodings.c:

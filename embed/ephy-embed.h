@@ -75,9 +75,8 @@ typedef enum
 
 typedef enum
 {
-	EMBED_RELOAD_NORMAL	 = 1 << 1,
-	EMBED_RELOAD_BYPASSCACHE = 1 << 2,
-	EMBED_RELOAD_BYPASSPROXY = 1 << 3
+	EMBED_RELOAD_NORMAL	= 1 << 0,
+	EMBED_RELOAD_FORCE	= 1 << 1
 } EmbedReloadFlags;
 
 typedef struct

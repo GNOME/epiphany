@@ -506,19 +506,10 @@ impl_reload (EphyEmbed *embed,
 	guint32 mflags;
 
 	mflags = GTK_MOZ_EMBED_FLAG_RELOADNORMAL;
-	
-	if ((flags & EMBED_RELOAD_BYPASSCACHE) &&
-	    (flags & EMBED_RELOAD_BYPASSPROXY))
+
+	if (flags & EMBED_RELOAD_FORCE)
 	{
 		mflags = GTK_MOZ_EMBED_FLAG_RELOADBYPASSPROXYANDCACHE;
-	}
-	else if (flags & EMBED_RELOAD_BYPASSCACHE)
-	{
-		mflags = GTK_MOZ_EMBED_FLAG_RELOADBYPASSCACHE;
-	}
-	else if (flags & EMBED_RELOAD_BYPASSPROXY)
-	{
-		mflags = GTK_MOZ_EMBED_FLAG_RELOADBYPASSPROXY;
 	}
 	
 	gtk_moz_embed_reload (GTK_MOZ_EMBED(embed),
