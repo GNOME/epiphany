@@ -36,6 +36,9 @@ gboolean ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 gboolean ephy_bookmarks_import_xbel    (EphyBookmarks *bookmarks,
 					const char *filename);
 
+gboolean ephy_bookmarks_import_rdf     (EphyBookmarks *bookmarks,
+					const char *filename);
+
 G_END_DECLS
 
 #endif

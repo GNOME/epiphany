@@ -43,7 +43,7 @@ typedef struct _XbelInfo
 	char *smarturl;
 } XbelInfo;
 
-static void
+static EphyNode *
 bookmark_add (EphyBookmarks *bookmarks,
 	      const char *title,
 	      const char *address,
@@ -52,7 +52,7 @@ bookmark_add (EphyBookmarks *bookmarks,
 	EphyNode *topic;
 	EphyNode *bmk;
 
-	if (ephy_bookmarks_find_bookmark (bookmarks, address)) return;
+	if (ephy_bookmarks_find_bookmark (bookmarks, address)) return NULL;
 
 	bmk = ephy_bookmarks_add (bookmarks, title, address);
 
@@ -66,6 +66,8 @@ bookmark_add (EphyBookmarks *bookmarks,
 
 		ephy_bookmarks_set_keyword (bookmarks, topic, bmk);
 	}
+
+	return bmk;
 }
 
 gboolean
@@ -439,6 +441,147 @@ ephy_bookmarks_import_xbel (EphyBookmarks *bookmarks,
 
 	child = doc->children;
 	xbel_parse_bookmarks (bookmarks, child);
+
+	xmlFreeDoc (doc);
+
+	return TRUE;
+}
+
+#define OLD_RDF_TEMPORARY_HACK
+
+static void
+parse_rdf_subjects (xmlNodePtr node,
+		    GList **subjects)
+{
+	xmlChar *subject;
+
+#ifdef OLD_RDF_TEMPORARY_HACK
+	xmlNode *child;
+
+	child = node->children;
+
+	while (child != NULL)
+	{
+		if (xmlStrEqual (child->name, "Bag"))
+		{
+			child = child->children;
+
+			while (child != NULL)
+			{
+				if (xmlStrEqual (child->name, "li"))
+				{
+					subject = xmlNodeGetContent (child);
+					*subjects = g_list_append (*subjects, subject);
+				}
+
+				child = child->next;
+			}
+
+			return;
+		}
+
+		child = child->next;
+	}
+#endif
+
+	subject = xmlNodeGetContent (node);
+
+	if (subject)
+	{
+		*subjects = g_list_append (*subjects, subject);
+	}
+}
+
+static void
+parse_rdf_item (EphyBookmarks *bookmarks,
+		xmlNodePtr node)
+{
+	xmlChar *title = NULL;
+	xmlChar *link = NULL;
+	GList *subjects = NULL, *l = NULL;
+	xmlNode *child;
+	EphyNode *bmk;
+
+	child = node->children;
+
+#ifdef OLD_RDF_TEMPORARY_HACK
+	link = xmlGetProp (node, "about");
+#endif
+
+	while (child != NULL)
+	{
+		if (xmlStrEqual (child->name, "title"))
+		{
+			title = xmlNodeGetContent (child);
+		}
+#ifndef OLD_RDF_TEMPORARY_HACK
+		else if (xmlStrEqual (child->name, "link"))
+		{
+			link = xmlNodeGetContent (child);
+		}
+#endif
+		else if (xmlStrEqual (child->name, "subject"))
+		{
+			parse_rdf_subjects (child, &subjects);
+		}
+
+		child = child->next;
+	}
+
+	bmk = bookmark_add (bookmarks, title, link, NULL);
+	if (bmk)
+	{
+		l = subjects;
+	}
+
+	for (; l != NULL; l = l->next)
+	{
+		char *topic_name = l->data;
+		EphyNode *topic;
+
+		topic = ephy_bookmarks_find_keyword (bookmarks, topic_name, FALSE);
+
+		if (topic == NULL)
+		{
+			topic = ephy_bookmarks_add_keyword (bookmarks, topic_name);
+		}
+
+		ephy_bookmarks_set_keyword (bookmarks, topic, bmk);
+	}
+
+	xmlFree (title);
+	xmlFree (link);
+
+	g_list_foreach (subjects, (GFunc)xmlFree, NULL);
+	g_list_free (subjects);
+}
+
+gboolean
+ephy_bookmarks_import_rdf (EphyBookmarks *bookmarks,
+			   const char *filename)
+{
+	xmlDocPtr doc;
+	xmlNodePtr child;
+	xmlNodePtr root;
+
+	if (g_file_test (filename, G_FILE_TEST_EXISTS) == FALSE)
+		return FALSE;
+
+	doc = xmlParseFile (filename);
+	g_assert (doc != NULL);
+	root = xmlDocGetRootElement (doc);
+
+	child = root->children;
+
+	while (child != NULL)
+	{
+		if (xmlStrEqual (child->name, "item"))
+		{
+			parse_rdf_item (bookmarks, child);
+		}
+
+		child = child->next;
+	}
 
 	xmlFreeDoc (doc);
 

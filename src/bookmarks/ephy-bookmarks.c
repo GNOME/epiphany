@@ -31,12 +31,13 @@
 #include "ephy-node-common.h"
 #include "ephy-toolbars-model.h"
 #include "ephy-bookmarks-export.h"
+#include "ephy-bookmarks-import.h"
 
 #include <string.h>
 #include <bonobo/bonobo-i18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
-#define EPHY_BOOKMARKS_XML_VERSION "0.1"
+#define EPHY_BOOKMARKS_XML_VERSION "1.0"
 #define BOOKMARKS_SAVE_DELAY (3 * 1000)
 #define MAX_FAVORITES_NUM 10
 
@@ -47,6 +48,7 @@ struct EphyBookmarksPrivate
 	gboolean dirty;
 	guint save_timeout_id;
 	char *xml_file;
+	char *rdf_file;
 	EphyNodeDb *db;
 	EphyNode *bookmarks;
 	EphyNode *keywords;
@@ -313,6 +315,7 @@ ephy_bookmarks_load (EphyBookmarks *eb)
 	xmlDocPtr doc;
 	xmlNodePtr root, child;
 	char *tmp;
+	gboolean result = TRUE;
 
 	if (g_file_test (eb->priv->xml_file, G_FILE_TEST_EXISTS) == FALSE)
 		return FALSE;
@@ -323,7 +326,12 @@ ephy_bookmarks_load (EphyBookmarks *eb)
 	root = xmlDocGetRootElement (doc);
 
 	tmp = xmlGetProp (root, "version");
-	g_assert (tmp != NULL && strcmp (tmp, EPHY_BOOKMARKS_XML_VERSION) == 0);
+	if (tmp != NULL && strcmp (tmp, EPHY_BOOKMARKS_XML_VERSION) != 0)
+	{
+		g_warning ("Old bookmarks database format detected");
+		child = NULL;
+		result = FALSE;
+	}
 	g_free (tmp);
 
 	for (child = root->children; child != NULL; child = child->next)
@@ -335,7 +343,7 @@ ephy_bookmarks_load (EphyBookmarks *eb)
 
 	xmlFreeDoc (doc);
 
-	return TRUE;
+	return result;
 }
 
 static void
@@ -343,9 +351,9 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 {
 	xmlDocPtr doc;
 	xmlNodePtr root;
+	xmlNodePtr comment;
 	GPtrArray *children;
 	int i;
-	char *rdf_file;
 
 	LOG ("Saving bookmarks")
 
@@ -356,6 +364,9 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 	root = xmlNewDocNode (doc, NULL, "ephy_bookmarks", NULL);
 	xmlSetProp (root, "version", EPHY_BOOKMARKS_XML_VERSION);
 	xmlDocSetRootElement (doc, root);
+
+	comment = xmlNewDocComment (doc, "Do not rely on this file, it's only for internal use. Use bookmarks.rdf instead.");
+	xmlAddChild (root, comment);
 
 	children = ephy_node_get_children (eb->priv->keywords);
 	for (i = 0; i < children->len; i++)
@@ -388,11 +399,7 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 	xmlFreeDoc(doc);
 
 	/* Export bookmarks in rdf */
-	rdf_file = g_build_filename (ephy_dot_dir (),
-				     "bookmarks.rdf",
-				     NULL);
-	ephy_bookmarks_export_rdf (eb, rdf_file);
-	g_free (rdf_file);
+	ephy_bookmarks_export_rdf (eb, eb->priv->rdf_file);
 }
 
 static gboolean
@@ -667,7 +674,10 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	eb->priv->dirty = FALSE;
 	eb->priv->save_timeout_id = 0;
 	eb->priv->xml_file = g_build_filename (ephy_dot_dir (),
-					       "bookmarks.xml",
+					       "ephy-bookmarks.xml",
+					       NULL);
+	eb->priv->rdf_file = g_build_filename (ephy_dot_dir (),
+					       "bookmarks.rdf",
 					       NULL);
 
 	/* Bookmarks */
@@ -739,7 +749,13 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	g_value_unset (&value);
 	ephy_node_add_child (eb->priv->keywords, eb->priv->notcategorized);
 
-	eb->priv->init_defaults = !ephy_bookmarks_load (eb);
+	if (!ephy_bookmarks_load (eb))
+	{
+		if (!ephy_bookmarks_import_rdf (eb, eb->priv->rdf_file))
+		{
+			eb->priv->init_defaults = !ephy_bookmarks_load (eb);
+		}
+	}
 
 	ephy_bookmarks_emit_data_changed (eb);
 
@@ -777,6 +793,9 @@ ephy_bookmarks_finalize (GObject *object)
 		g_object_remove_weak_pointer (G_OBJECT(eb->priv->toolbars_model),
 					      (gpointer *)&eb->priv->toolbars_model);
 	}
+
+	g_free (eb->priv->xml_file);
+	g_free (eb->priv->rdf_file);
 
         g_free (eb->priv);
 

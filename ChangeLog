@@ -1,5 +1,30 @@
 2003-07-10  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-export.c: (add_topics_list),
+	(ephy_bookmarks_export_rdf):
+
+	Some minor changes in rdf format (thanks to Edd Dumbill),
+	and use namespaces in the code.
+
+	* src/bookmarks/ephy-bookmarks-import.c: (bookmark_add),
+	(ephy_bookmarks_import_xbel), (parse_rdf_subjects),
+	(parse_rdf_item), (ephy_bookmarks_import_rdf):
+	* src/bookmarks/ephy-bookmarks-import.h:
+
+	Add an rdf importer.
+
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_load),
+	(ephy_bookmarks_save), (ephy_bookmarks_init),
+	(ephy_bookmarks_finalize):
+
+	Update db to 1.0, import bookmarks from the rdf first time.
+
+	WARNING Backup your bookmarks.rdf file before using this
+	and let me know if you get any problems. (esp if you had a
+	< 0.7.3 epiphany version).
+
+2003-07-10  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* data/ui/epiphany-toolbar.xml.in:
 	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_load),
 	(ephy_favicon_cache_init):
