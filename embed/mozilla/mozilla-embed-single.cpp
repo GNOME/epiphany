@@ -596,8 +596,6 @@ mozilla_init_chrome (void)
 gboolean
 mozilla_embed_single_init_services (MozillaEmbedSingle *single)
 {
-	nsresult result;
-
 	/* Pre initialization */
 	mozilla_init_home ();
 	mozilla_init_profile ();
@@ -606,11 +604,7 @@ mozilla_embed_single_init_services (MozillaEmbedSingle *single)
 	gtk_moz_embed_push_startup ();
 
 	/* Until gtkmozembed does this itself */
-	result = mozilla_init_chrome ();
-	if (NS_FAILED (result))
-	{
-		g_warning ("Failed to set locale and skin.\n");
-	}
+	mozilla_init_chrome ();
 
 	mozilla_init_single (single);
 
