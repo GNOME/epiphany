@@ -508,10 +508,7 @@ ephy_bookmarks_editor_node_selected_cb (EphyNodeView *view,
 				        EphyNode *node,
 					EphyBookmarksEditor *editor)
 {
-	if (node != NULL)
-	{
-		ephy_bookmarks_editor_update_menu (editor, node, view);
-	}
+	ephy_bookmarks_editor_update_menu (editor, node, view);
 }
 
 static void
@@ -558,8 +555,8 @@ keyword_node_selected_cb (EphyNodeView *view,
 	else
 	{
 		bookmarks_filter (editor, node);
-		ephy_bookmarks_editor_update_menu (editor, node, view);
 	}
+	ephy_bookmarks_editor_update_menu (editor, node, view);
 
 }
 
@@ -905,35 +902,76 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor,
 				   EphyNodeView *view)
 {
 	int priority;
-	gresult delete, rename;
+	gboolean delete, rename, properties;
 	EggAction *action;
 	EggActionGroup *action_group;
 	GList *selection;
 
 	g_return_if_fail (editor != NULL);
-	g_return_if_fail (node != NULL);
 
-	priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-
-	if (priority == EPHY_BOOKMARKS_KEYWORD_ALL_PRIORITY ||
-	    priority == EPHY_BOOKMARKS_KEYWORD_SPECIAL_PRIORITY)
+	/* Unselection */
+	if (node == NULL)
 	{
-		delete = rename = G_FAILED;
+		selection = ephy_node_view_get_selection (editor->priv->bm_view);
+		if (!selection)
+		{
+			rename = delete = properties = FALSE;
+		}
+		else
+		{
+			delete = properties = TRUE;
+			if (g_list_length (selection) > 1)
+			{
+				rename = FALSE;
+			}
+			else
+			{
+				rename = TRUE;
+			}
+		}
+		g_list_free (selection);
 	}
+	/* Selection */
 	else
 	{
-		delete = G_OK;
-		selection = ephy_node_view_get_selection (editor->priv->bm_view);
-		if (g_list_length (selection) > 1)
-			rename = G_FAILED;
+		priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+		
+		if (priority == EPHY_BOOKMARKS_KEYWORD_ALL_PRIORITY ||
+		    priority == EPHY_BOOKMARKS_KEYWORD_SPECIAL_PRIORITY)
+		{
+			delete = rename = properties = FALSE;
+		}
 		else
-			rename = G_OK;
-		g_list_free (selection);
+		{
+			if (view == editor->priv->key_view)
+			{
+				properties = FALSE;
+			}
+			else
+			{
+				properties = TRUE;
+			}
+			
+			delete = TRUE;
+			selection = ephy_node_view_get_selection (editor->priv->bm_view);
+			if (g_list_length (selection) > 1)
+			{
+				rename = FALSE;
+			}
+			else
+			{
+				rename = TRUE;
+			}
+			g_list_free (selection);
+		}
+
 	}
 
 	action_group = editor->priv->action_group;
 	action = egg_action_group_get_action (action_group, "Rename");
-	g_object_set (action, "sensitive", !rename, NULL);
+	g_object_set (action, "sensitive", rename, NULL);
 	action = egg_action_group_get_action (action_group, "Delete");
-	g_object_set (action, "sensitive", !delete, NULL);
+	g_object_set (action, "sensitive", delete, NULL);
+	action = egg_action_group_get_action (action_group, "Properties");
+	g_object_set (action, "sensitive", properties, NULL);
 }
