@@ -3,7 +3,6 @@ INCLUDES = \
 	-I$(top_srcdir)/lib	    			\
 	-I$(top_srcdir)/embed	    			\
 	-I$(top_srcdir)		    			\
-	$(WARN_CXXFLAGS)				\
 	$(MOZILLA_COMPONENT_CFLAGS)			\
 	-I$(MOZILLA_INCLUDE_ROOT)/appcomps		\
 	-I$(MOZILLA_INCLUDE_ROOT)/chardet		\
@@ -36,14 +35,14 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/widget		\
 	-I$(MOZILLA_INCLUDE_ROOT)/windowwatcher		\
 	-I$(MOZILLA_INCLUDE_ROOT)/xpcom			\
-	$(GCONF_CFLAGS)					\
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 			\
-	-DG_DISABLE_DEPRECATED          		\
-        -DGDK_DISABLE_DEPRECATED        		\
-        -DGDK_PIXBUF_DISABLE_DEPRECATED 		\
-        -DGNOME_DISABLE_DEPRECATED			\
 	-DSHARE_DIR=\"$(pkgdatadir)\"   		\
 	-include $(MOZILLA_INCLUDE_ROOT)/mozilla-config.h
+
+if MAINTAINER_MODE
+INCLUDES += -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED \
+	-DGNOME_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED $(WARN_CXXFLAGS)
+endif
 
 noinst_LTLIBRARIES = libephymozillaembed.la
 

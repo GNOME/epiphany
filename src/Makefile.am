@@ -6,17 +6,17 @@ INCLUDES = \
 	-I$(top_srcdir)/lib/egg		\
 	-I$(top_srcdir)/lib/widgets   	\
 	-I$(top_srcdir)/src/bookmarks   \
-	$(WARN_CFLAGS)			\
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
 	-DSHARE_DIR=\"$(pkgdatadir)\" 	\
 	-DEXTENSIONS_DIR=\""$(libdir)/epiphany/extensions"\" 	\
 	-DDATADIR=\""$(datadir)"\" 	\
 	-DPIXMAP_DIR=\""$(datadir)/pixmaps"\" 		\
-	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
-	-DG_DISABLE_DEPRECATED		\
-	-DGDK_DISABLE_DEPRECATED	\
-	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
-	-DGNOME_DISABLE_DEPRECATED
+	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"
+
+if MAINTAINER_MODE
+INCLUDES += -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED \
+	-DGNOME_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED $(WARN_CFLAGS)
+endif
 
 bin_PROGRAMS = epiphany-bin
 bin_SCRIPTS = epiphany
