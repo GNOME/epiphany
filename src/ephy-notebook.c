@@ -43,6 +43,8 @@ struct EphyNotebookPrivate
 
 	EphyNotebookPageLoadStatus current_status;
 
+	GtkTooltips *title_tips;
+
 	/* Used during tab drag'n'drop */
 	gulong motion_notify_handler_id;
 	gint x_start, y_start;
@@ -297,18 +299,6 @@ tab_label_set_size (GtkWidget *window, GtkWidget *label)
 	if (label_width < TAB_MIN_SIZE) label_width = TAB_MIN_SIZE;
 
 	gtk_widget_set_size_request (label, label_width, -1);
-}
-
-static GtkWidget *
-tab_get_label (EphyNotebook *nb, GtkWidget *child)
-{
-	GtkWidget *hbox, *label;
-
-	hbox = gtk_notebook_get_tab_label (GTK_NOTEBOOK (nb),
-					   child);
-	label = g_object_get_data (G_OBJECT (hbox), "label");
-
-	return label;
 }
 
 static void
@@ -694,6 +684,10 @@ ephy_notebook_init (EphyNotebook *notebook)
 
 	notebook->priv->current_status = EPHY_NOTEBOOK_TAB_LOAD_NORMAL;
 
+	notebook->priv->title_tips = gtk_tooltips_new ();
+	g_object_ref (G_OBJECT (notebook->priv->title_tips));
+	gtk_object_sink (GTK_OBJECT (notebook->priv->title_tips));
+
 	notebook->priv->drag_in_progress = FALSE;
 	notebook->priv->motion_notify_handler_id = 0;
 	notebook->priv->src_notebook = NULL;
@@ -735,6 +729,7 @@ ephy_notebook_finalize (GObject *object)
 		g_list_free (notebook->priv->focused_pages);
 	}
 	g_list_free (notebook->priv->opened_tabs);
+	g_object_unref (notebook->priv->title_tips);
 
 	g_free (notebook->priv);
 }
@@ -821,6 +816,7 @@ tab_build_label (EphyNotebook *nb, GtkWidget *child)
 	GClosure *closure;
 	GtkWidget *window;
 	GtkWidget *loading_image, *icon;
+	GtkWidget *label_ebox;
 	GdkPixbufAnimation *loading_pixbuf;
 
 	window = gtk_widget_get_toplevel (GTK_WIDGET (nb));
@@ -852,10 +848,12 @@ tab_build_label (EphyNotebook *nb, GtkWidget *child)
 	gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, FALSE, 0);
 
 	/* setup label */
+	label_ebox = gtk_event_box_new ();
         label = gtk_label_new (_("Untitled"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.00, 0.5);
         gtk_misc_set_padding (GTK_MISC (label), 4, 0);
-	gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (hbox), label_ebox, TRUE, TRUE, 0);
+	gtk_container_add (GTK_CONTAINER (label_ebox), label);
 
 	tab_label_set_size (GTK_WIDGET (window), hbox);
 
@@ -877,11 +875,13 @@ tab_build_label (EphyNotebook *nb, GtkWidget *child)
                           child);
 
 	gtk_widget_show (hbox);
+	gtk_widget_show (label_ebox);
 	gtk_widget_show (label);
 	gtk_widget_show (image);
 	gtk_widget_show (close_button);
 
 	g_object_set_data (G_OBJECT (hbox), "label", label);
+	g_object_set_data (G_OBJECT (hbox), "label-ebox", label_ebox);
 	g_object_set_data (G_OBJECT (hbox), "loading-image", loading_image);
 	g_object_set_data (G_OBJECT (hbox), "icon", icon);
 
@@ -997,6 +997,11 @@ ephy_notebook_remove_page (EphyNotebook *nb,
 {
 	int position, cur;
 	gboolean last_tab;
+	GtkWidget *hbox, *ebox;
+
+	hbox = gtk_notebook_get_tab_label (GTK_NOTEBOOK (nb), child);
+	ebox = GTK_WIDGET (g_object_get_data (G_OBJECT (hbox), "label-ebox"));
+	gtk_tooltips_set_tip (GTK_TOOLTIPS (nb->priv->title_tips), ebox, NULL, NULL);
 
 	last_tab = gtk_notebook_get_nth_page (GTK_NOTEBOOK (nb), 1) == NULL;
 	if (last_tab)
@@ -1032,8 +1037,13 @@ ephy_notebook_set_page_title (EphyNotebook *nb,
 			     GtkWidget *child,
 			     const char *title)
 {
-	GtkWidget *label;
+	GtkWidget *hbox, *ebox, *label;
 
-	label = tab_get_label (nb, child);
+	hbox = gtk_notebook_get_tab_label (GTK_NOTEBOOK (nb), child);
+
+	label = GTK_WIDGET (g_object_get_data (G_OBJECT (hbox), "label"));
 	gtk_label_set_label (GTK_LABEL (label), title);
+
+	ebox = GTK_WIDGET (g_object_get_data (G_OBJECT (hbox), "label-ebox"));
+	gtk_tooltips_set_tip (GTK_TOOLTIPS (nb->priv->title_tips), ebox, title, NULL);
 }
