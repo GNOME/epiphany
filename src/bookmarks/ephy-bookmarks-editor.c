@@ -458,17 +458,13 @@ delete_topic_dialog_construct (GtkWindow *parent,
 			       const char *topic)
 {
 	GtkWidget *dialog;
-	char *str;
-
-	str = g_strdup_printf (_("Delete topic %s?"), topic);
 	
 	dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
 					 GTK_DIALOG_MODAL,
 					 GTK_MESSAGE_WARNING,
 					 GTK_BUTTONS_CANCEL,
-					 str);
-	
-	g_free (str);
+					 _("Delete topic \"%s\"?"),
+					 topic);
 	
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Delete this topic?"));
 	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
