@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-16 01:39+0100\n"
-"PO-Revision-Date: 2005-01-16 01:45+0100\n"
+"POT-Creation-Date: 2005-01-20 15:57+0100\n"
+"PO-Revision-Date: 2005-01-20 15:58+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1049,7 +1049,7 @@ msgstr "Desconocido"
 msgid "download status|Failed"
 msgstr "Falló"
 
-#: embed/downloader-view.c:588 src/bookmarks/ephy-bookmarks-editor.c:791
+#: embed/downloader-view.c:588 src/bookmarks/ephy-bookmarks-editor.c:838
 msgid "File"
 msgstr "Archivo"
 
@@ -1457,7 +1457,7 @@ msgid "Local files"
 msgstr "Archivos locales"
 
 #: embed/mozilla/ContentHandler.cpp:147
-#: embed/mozilla/EphyHeaderSniffer.cpp:357
+#: embed/mozilla/EphyHeaderSniffer.cpp:358
 msgid "Save"
 msgstr "Guardar"
 
@@ -1505,14 +1505,14 @@ msgstr ""
 msgid "_Save As..."
 msgstr "Guardar c_omo..."
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:320
-#: src/bookmarks/ephy-bookmarks-import.c:250
+#: embed/mozilla/EphyHeaderSniffer.cpp:321
+#: src/bookmarks/ephy-bookmarks-import.c:245
 #: src/bookmarks/ephy-bookmarksbar-model.c:350 src/window-commands.c:316
 msgid "Untitled"
 msgstr "Sin título"
 
 #: embed/mozilla/FilePicker.cpp:148 embed/print-dialog.c:337
-#: lib/ephy-file-chooser.c:371 src/bookmarks/ephy-bookmarks-editor.c:634
+#: lib/ephy-file-chooser.c:371 src/bookmarks/ephy-bookmarks-editor.c:680
 msgid "All files"
 msgstr "Todos los archivos"
 
@@ -1961,7 +1961,9 @@ msgstr "¿Desea sobreescribir «%s»?"
 msgid ""
 "A file with this name already exists. If you choose to overwrite this file, "
 "the contents will be lost."
-msgstr "Ya existe un archivo con este nombre. Si elige sobreescribir este archivo, se perderá el contenido."
+msgstr ""
+"Ya existe un archivo con este nombre. Si elige sobreescribir este archivo, "
+"se perderá el contenido."
 
 #: lib/ephy-gui.c:217
 msgid "_Overwrite"
@@ -1976,97 +1978,131 @@ msgstr "¿Desea sobreescribir el archivo?"
 msgid "Could not display help: %s"
 msgstr "No se pudo mostrar la ayuda: %s"
 
-#: lib/ephy-langs.c:37
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:39
 msgid "select fonts for|Arabic"
 msgstr "Árabe"
 
-#: lib/ephy-langs.c:38
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:42
 msgid "select fonts for|Baltic"
 msgstr "Báltico"
 
-#: lib/ephy-langs.c:39
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:45
 msgid "select fonts for|Central European"
 msgstr "Centroeuropeo"
 
-#: lib/ephy-langs.c:40
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:48
 msgid "select fonts for|Cyrillic"
 msgstr "Cirílico"
 
-#: lib/ephy-langs.c:41
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:51
 msgid "select fonts for|Devanagari"
 msgstr "Devanagari"
 
-#: lib/ephy-langs.c:42
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:54
 msgid "select fonts for|Greek"
 msgstr "Griego"
 
-#: lib/ephy-langs.c:43
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:57
 msgid "select fonts for|Hebrew"
 msgstr "Hebreo"
 
-#: lib/ephy-langs.c:44
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:60
 msgid "select fonts for|Japanese"
 msgstr "Japonés"
 
-#: lib/ephy-langs.c:45
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:63
 msgid "select fonts for|Korean"
 msgstr "Coreano"
 
-#: lib/ephy-langs.c:46
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:66
 msgid "select fonts for|Simplified Chinese"
 msgstr "Chino simplificado"
 
-#: lib/ephy-langs.c:47
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:69
 msgid "select fonts for|Tamil"
 msgstr "Tamil"
 
-#: lib/ephy-langs.c:48
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:72
 msgid "select fonts for|Thai"
 msgstr "Tailandés"
 
-#: lib/ephy-langs.c:49
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:75
 msgid "select fonts for|Traditional Chinese"
 msgstr "Chino tradicional"
 
-#: lib/ephy-langs.c:50
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:78
 msgid "select fonts for|Traditional Chinese (Hong Kong)"
 msgstr "Chino tradicional (Hong Kong)"
 
-#: lib/ephy-langs.c:51
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:81
 msgid "select fonts for|Turkish"
 msgstr "Turco"
 
-#: lib/ephy-langs.c:52
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:84
 msgid "select fonts for|Unicode"
 msgstr "Unicode"
 
-#: lib/ephy-langs.c:53
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: lib/ephy-langs.c:87
 msgid "select fonts for|Western"
 msgstr "Occidental"
 
-#: lib/ephy-stock-icons.c:55
+#: lib/ephy-stock-icons.c:56
 msgid "Close Tab"
 msgstr "Cerrar solapa"
 
-#: lib/ephy-stock-icons.c:56
+#: lib/ephy-stock-icons.c:57
 msgid "Popup Windows"
 msgstr "Ventanas emergentes"
 
-#: lib/ephy-stock-icons.c:57 src/ephy-history-window.c:1194
+#: lib/ephy-stock-icons.c:58 src/ephy-history-window.c:1194
 msgid "History"
 msgstr "Histórico"
 
-#: lib/ephy-stock-icons.c:58 src/bookmarks/ephy-bookmarks-editor.c:674
-#: src/bookmarks/ephy-bookmarks-editor.c:1535
+#: lib/ephy-stock-icons.c:59 src/bookmarks/ephy-bookmarks-editor.c:720
+#: src/bookmarks/ephy-bookmarks-editor.c:1582
 #: src/bookmarks/ephy-topic-action.c:930 src/ephy-window.c:1133
 msgid "Bookmarks"
 msgstr "Marcadores"
 
-#: lib/ephy-stock-icons.c:59 src/ephy-toolbar.c:348
+#: lib/ephy-stock-icons.c:60 src/ephy-toolbar.c:348
 msgid "Address Entry"
 msgstr "Entrada de dirección"
 
-#: lib/ephy-stock-icons.c:60
+#: lib/ephy-stock-icons.c:61
 msgid "_Download"
 msgstr "_Descargar"
 
@@ -2117,7 +2153,7 @@ msgstr "%s:"
 
 #: src/bookmarks/ephy-bookmark-action.c:545
 #: src/bookmarks/ephy-bookmarks-editor.c:181
-#: src/bookmarks/ephy-bookmarks-editor.c:1155
+#: src/bookmarks/ephy-bookmarks-editor.c:1202
 #: src/bookmarks/ephy-topic-action.c:448 src/ephy-history-window.c:174
 #: src/ephy-history-window.c:714
 msgid "Open in New _Tab"
@@ -2128,7 +2164,7 @@ msgstr[1] "Abrir en _solapas nuevas"
 #. File Menu
 #: src/bookmarks/ephy-bookmark-action.c:551
 #: src/bookmarks/ephy-bookmarks-editor.c:178
-#: src/bookmarks/ephy-bookmarks-editor.c:1152 src/ephy-history-window.c:171
+#: src/bookmarks/ephy-bookmarks-editor.c:1199 src/ephy-history-window.c:171
 #: src/ephy-history-window.c:711
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -2269,7 +2305,7 @@ msgid "Cut the selection"
 msgstr "Corta la selección"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:206
-#: src/bookmarks/ephy-bookmarks-editor.c:1165 src/ephy-history-window.c:191
+#: src/bookmarks/ephy-bookmarks-editor.c:1212 src/ephy-history-window.c:191
 #: src/ephy-history-window.c:724 src/ephy-window.c:159
 msgid "_Copy"
 msgstr "_Copiar"
@@ -2370,89 +2406,92 @@ msgstr ""
 msgid "_Delete Topic"
 msgstr "_Borrar tema"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:615
+#: src/bookmarks/ephy-bookmarks-editor.c:580
+msgid "Firefox"
+msgstr "Firefox"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:584
+#: src/bookmarks/ephy-bookmarks-editor.c:588
+msgid "Firebird"
+msgstr "Firebird"
+
+#. Translators: The %s is the name of a Mozilla profile.
+#: src/bookmarks/ephy-bookmarks-editor.c:593
+#, c-format
+msgid "Mozilla \"%s\" profile"
+msgstr "Perfil de «%s» de Mozilla"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:597
+msgid "Galeon"
+msgstr "Galeon"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:601
+msgid "Konqueror"
+msgstr "Konqueror"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:661
 msgid "Import bookmarks from file"
 msgstr "Importar marcadores de un archivo"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:622
-msgid "Firefox/Firebird/Mozilla bookmarks"
-msgstr "Marcadores de /Firefox/Firebird/Mozilla"
+#: src/bookmarks/ephy-bookmarks-editor.c:668
+msgid "Firefox/Mozilla bookmarks"
+msgstr "Marcadores de Firefox/Mozilla"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:626
+#: src/bookmarks/ephy-bookmarks-editor.c:672
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Marcadores de Galeon/Konqueror"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:630
+#: src/bookmarks/ephy-bookmarks-editor.c:676
 msgid "Epiphany bookmarks"
 msgstr "Marcadores de Epiphany"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:664
+#: src/bookmarks/ephy-bookmarks-editor.c:710
 msgid "Export Bookmarks"
 msgstr "Exportar marcadores"
 
 #. Make a format selection combo & label
-#: src/bookmarks/ephy-bookmarks-editor.c:677
+#: src/bookmarks/ephy-bookmarks-editor.c:723
 msgid "File format:"
 msgstr "Formato de archivo:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:680
+#: src/bookmarks/ephy-bookmarks-editor.c:726
 msgid "Epiphany (RDF)"
 msgstr "Epiphany (RDF)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:681
+#: src/bookmarks/ephy-bookmarks-editor.c:727
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:751
+#: src/bookmarks/ephy-bookmarks-editor.c:798
 msgid "Import Bookmarks"
 msgstr "Importar marcadores"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:757
+#: src/bookmarks/ephy-bookmarks-editor.c:804
 msgid "I_mport"
 msgstr "I_mportar"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:771
+#: src/bookmarks/ephy-bookmarks-editor.c:818
 msgid "Import bookmarks from:"
 msgstr "Importar marcadores de un archivo:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:779
-msgid "Firebird"
-msgstr "Firebird"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:781
-msgid "Firefox"
-msgstr "Firefox"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:783
-msgid "Galeon"
-msgstr "Galeon"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:785
-msgid "Konqueror"
-msgstr "Konqueror"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:787
-msgid "Mozilla"
-msgstr "Mozilla"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:1161 src/ephy-history-window.c:720
+#: src/bookmarks/ephy-bookmarks-editor.c:1208 src/ephy-history-window.c:720
 msgid "_Copy Address"
 msgstr "_Copiar dirección"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1402 src/ephy-history-window.c:1036
+#: src/bookmarks/ephy-bookmarks-editor.c:1449 src/ephy-history-window.c:1036
 msgid "_Search:"
 msgstr "_Buscar:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1613
+#: src/bookmarks/ephy-bookmarks-editor.c:1660
 #: src/bookmarks/ephy-topics-selector.c:198
 msgid "Topics"
 msgstr "Temas"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1678 src/ephy-history-window.c:1323
+#: src/bookmarks/ephy-bookmarks-editor.c:1725 src/ephy-history-window.c:1323
 msgid "Title"
 msgstr "Título"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1684 src/ephy-history-window.c:1329
+#: src/bookmarks/ephy-bookmarks-editor.c:1731 src/ephy-history-window.c:1329
 msgid "Address"
 msgstr "Dirección"
 
@@ -2576,7 +2615,7 @@ msgstr "Otras codificaciones"
 msgid "_Automatic"
 msgstr "_Automático"
 
-#: src/ephy-fullscreen-popup.c:282 src/ephy-toolbar.c:655
+#: src/ephy-fullscreen-popup.c:283 src/ephy-toolbar.c:655
 msgid "Leave Fullscreen"
 msgstr "Salir del modo a pantalla completa"
 
@@ -3852,6 +3891,9 @@ msgstr "Epiphany"
 #: src/window-commands.c:810
 msgid "translator-credits"
 msgstr "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
+
+#~ msgid "Mozilla"
+#~ msgstr "Mozilla"
 
 #~ msgid "A file %s already exists."
 #~ msgstr "Ya existe un archivo llamado %s."
