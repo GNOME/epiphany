@@ -555,7 +555,8 @@ ephy_tab_icon_cache_changed_cb (EphyFaviconCache *cache,
 	GdkPixbuf *pixbuf = NULL;
 
 	/* is this for us? */
-	if (strcmp (tab->priv->icon_address, address) != 0) return;
+	if (tab->priv->icon_address == NULL ||
+	    strcmp (tab->priv->icon_address, address) != 0) return;
 
 	/* notify */
 	g_object_notify (G_OBJECT (tab), "icon");
