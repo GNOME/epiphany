@@ -1104,6 +1104,17 @@ xul_new_window_cb (GtkMozEmbed *embed,
         *retval = _mozilla_embed_new_xul_dialog ();
 }
 
+static void
+xul_title_cb (GtkMozEmbed *embed,
+	      GtkWindow *window)
+{
+	char *title;
+
+	title = gtk_moz_embed_get_title (embed);
+	gtk_window_set_title (window, title);
+	g_free (title);
+}
+
 GtkMozEmbed *
 _mozilla_embed_new_xul_dialog (void)
 {
@@ -1126,6 +1137,9 @@ _mozilla_embed_new_xul_dialog (void)
 	g_signal_connect_object (embed, "new_window",
 				 G_CALLBACK (xul_new_window_cb),
 				 NULL, (GConnectFlags) 0);
+	g_signal_connect_object (embed, "title",
+				 G_CALLBACK (xul_title_cb),
+				 window, (GConnectFlags) 0);
 
 	return GTK_MOZ_EMBED (embed);
 }
