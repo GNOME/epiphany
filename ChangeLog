@@ -1,5 +1,15 @@
 2004-08-31  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-main.c: (main):
+	* src/ephy-shell.c: (ephy_shell_init), (ephy_shell_startup),
+	(ephy_shell_finalize):
+	* src/ephy-shell.h:
+
+	Remove -s mode which I forgot to remove when removing the
+	nautilus view.
+
+2004-08-31  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/downloader-view.c: (update_download_row),
 	(progress_cell_data_func), (downloader_view_build_ui):
 	* embed/ephy-download.h:

@@ -56,7 +56,6 @@
 #include <libgnomeui/gnome-client.h>
 
 #define AUTOMATION_IID "OAFIID:GNOME_Epiphany_Automation"
-#define SERVER_TIMEOUT 60000
 
 #define EPHY_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHELL, EphyShellPrivate))
 
@@ -74,7 +73,6 @@ struct EphyShellPrivate
 	GObject *prefs_dialog;
 	GObject *print_setup_dialog;
 	GList *del_on_exit;
-	guint server_timeout;
 };
 
 EphyShell *ephy_shell = NULL;
@@ -186,7 +184,6 @@ ephy_shell_init (EphyShell *shell)
 	shell->priv->toolbars_model = NULL;
 	shell->priv->fs_toolbars_model = NULL;
 	shell->priv->extensions_manager = NULL;
-	shell->priv->server_timeout = 0;
 
 	/* globally accessible singleton */
 	g_assert (ephy_shell == NULL);
@@ -243,14 +240,6 @@ open_urls (GNOME_EphyAutomation automation,
 			g_free (path);
 		}
 	}
-}
-
-static gboolean
-server_timeout (EphyShell *shell)
-{
-	g_object_unref (shell);
-
-	return FALSE;
 }
 
 static gboolean
@@ -359,13 +348,7 @@ ephy_shell_startup (EphyShell *shell,
 			g_assert_not_reached ();
 	}
 
-	if (flags & EPHY_SHELL_STARTUP_SERVER)
-	{
-		g_object_ref (shell);
-		shell->priv->server_timeout = g_timeout_add
-			(SERVER_TIMEOUT, (GSourceFunc)server_timeout, shell);
-	}
-	else if (result == Bonobo_ACTIVATION_REG_SUCCESS ||
+	if (result == Bonobo_ACTIVATION_REG_SUCCESS ||
 		 result == Bonobo_ACTIVATION_REG_ALREADY_ACTIVE)
 	{
 		automation = bonobo_activation_activate_from_id (AUTOMATION_IID,
@@ -427,11 +410,6 @@ ephy_shell_finalize (GObject *object)
 	EphyShell *shell = EPHY_SHELL (object);
 
 	g_assert (ephy_shell == NULL);
-
-	if (shell->priv->server_timeout > 0)
-	{
-		g_source_remove (shell->priv->server_timeout);
-	}
 
 	/* this will unload the extensions */
 	LOG ("Unref extension manager")
