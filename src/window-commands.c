@@ -334,7 +334,7 @@ open_response_cb (GtkDialog *dialog, gint response, EphyWindow *window)
 
 		if (converted != NULL)
 		{
-			ephy_window_load_url(window, uri);
+			ephy_window_load_url(window, converted);
 		}
 
 		g_free (converted);
