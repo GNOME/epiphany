@@ -43,7 +43,7 @@ endif
 headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
 header_DATA = $(INST_H_FILES)
 
-NO_INST_H_FILES =					\
+NOINST_H_FILES =					\
 	ephy-automation.h				\
 	ephy-encoding-menu.h				\
 	ephy-favicon-action.h				\
@@ -58,6 +58,7 @@ NO_INST_H_FILES =					\
 	ephy-toolbars-model.h				\
 	language-editor.h				\
 	pdm-dialog.h					\
+	popup-commands.h				\
 	prefs-dialog.h					\
 	ppview-toolbar.h				\
 	statusbar.h					\

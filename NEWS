@@ -1,4 +1,86 @@
 ==============
+Epiphany 0.8.0
+==============
+
+Code changes
+
+	* Replace "0" with "false" in .desktop Terminal entries
+	  (Jordi Mallach)
+	* Fix node signal emission to work on Freebsd and alpha
+	  (Christian Persch)
+	* Sync content handler api with mozilla head (Xan Lopez)
+	* Remove use of acconfig.h (Marco)
+	* Gconf schema cleanups (Christian Persch)
+	* Remove last bits of nautilus theme support from the
+	  spinner code (Christian Persch)
+	* Use url/name to store topics and bookmarks in the toolbar
+	  configuration. This is more manteinable but toolbar
+	  settings are lost (Marco)
+	* Improve bookmarks rdf format (Marco, Edd Dumbill)
+	* Freeze all xml formats and update version to 1.0.
+	  Bookmarks are reimported from the rdf.
+	* Fix saving of smart bookmarks on the rdf (Lee Willis)
+	* Very simple plugin framework, unused for now (Marco)
+	* Cleanup header dependencies. Now we have a basic set
+	  of independent headers that will be useful for the
+	  plugins. (Marco)
+
+Interface improvements
+
+	* Remove ellipses from find toolbar item (Dave Bordoley)
+	* Tooltip for location entry, navigation buttons,
+	  go button (Christian Persch)
+	* Use normal google search for keywords instead of feel
+	  lucky (Marco)
+	* Implement toolbar overflow menu item for bookmark
+	  topics (Christian Persch)
+	* Use the browser icon from gnome icon theme (Marco)
+	* Ellipsise the bookmarks titles in topics menus (Christian Persch)
+	* Show an alert when mozilla cant start instead of crashing (Marco)
+	* Ever save bookmarks when changed (Marco)
+	* Implement toolbar overflow menu item for the
+	  go button (Christian Persch)
+	* Show the document context menu on ctrl+f10 (Marco)
+	* Fast search for bookmarks and history.
+	  Pressing a key will make ephy select the first entry begining with
+          that character (Xan Lopez)
+	* Shorten session history menu items (Christian Persch)
+	* Delete key remove personal data manager entries (Xan Lopez)
+	* Higgy titles for all file pickers (Marco)
+
+Bugfixes
+
+	* Fix bug with location entry no more sensible on clicks (Marco)
+	* Fix utf8 handling in the preferences dialog (Christian Persch)
+	* Fix a lot of memory leaks (Christian Persch)
+	* Add a news:// protocol handler (Marco)
+	* Rewrite autocompletion selection logic (Marco)
+	* Fix Tab key binding in location entry (Marco)
+	* Fix page load progress update logic (Christian Persch)
+	* Update the spinner when a tab is removed (Christian Persch)
+	* Sync autocompletion searches color with theme changes
+	  (Dave Bordoley)
+	* Fall back to about:blank when first page load fails (Marco)
+	* Actually show the list of fonts in preference dialog
+	  entries (Marco)
+
+Updated translations
+
+	* ar (Arafat Medini)
+	* da (Ole Laursen)
+	* de (Christian Neumair)
+	* en_GB (Christian Persch)
+	* es (Francisco Javier F. Serrador)
+	* ms (Hasbullah Bin Pit)
+	* nl (Vincent van Adrighem)
+	* pt_BR (Evandro Fernandes Giovanini)
+	* ru (Valek Filippov)
+	* sr (Danilo Segan)
+	* sr@Latn (Danilo Segan)
+	* sv (Christian Rose)
+	* zh_CN (Wang Jian)
+
+==============
 Epiphany 0.7.3
 ==============
 
