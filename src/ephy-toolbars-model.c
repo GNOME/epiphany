@@ -18,6 +18,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "ephy-toolbars-model.h"
 #include "ephy-dnd.h"
 #include "ephy-bookmarks.h"

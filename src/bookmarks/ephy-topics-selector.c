@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2002 Marco Pesenti Gritti <mpeseng@tin.it>
+ *  Copyright (C) 2002-2004 Marco Pesenti Gritti <mpeseng@tin.it>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,7 +15,12 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
+ *  $Id$
  */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "ephy-topics-selector.h"
 #include "ephy-debug.h"

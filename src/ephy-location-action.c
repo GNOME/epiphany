@@ -19,6 +19,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "ephy-location-action.h"
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
@@ -271,7 +275,7 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 	/* we need to connect to this before chaining up, since gtkaction's
 	 * connect_proxy connects a routine there which uses create_menu_item
 	 * method to generate a menu proxy (and create_menu_item CANNOT return
-	 * NULL. See bug #133446.
+	 * NULL. See bug #133446.)
 	 */
 	g_signal_connect_object (proxy, "create_menu_proxy",
 				 G_CALLBACK (create_menu_proxy_cb),
@@ -315,7 +319,6 @@ ephy_location_action_set_property (GObject *object,
 			break;
 		case PROP_EDITABLE:
 			action->priv->editable = g_value_get_boolean (value);
-			g_object_notify (G_OBJECT (action), "editable");
 			break;
 	}
 }

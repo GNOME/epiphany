@@ -18,6 +18,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "ephy-favicon-action.h"
 #include "ephy-window.h"
 #include "ephy-tab.h"
@@ -215,7 +219,6 @@ ephy_favicon_action_set_property (GObject *object,
 		case PROP_ICON:
 			g_free (fav->priv->icon);
 			fav->priv->icon = g_value_dup_string (value);
-			g_object_notify(object, "icon");
 			break;
 	}
 }
