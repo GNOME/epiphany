@@ -353,12 +353,6 @@ impl_show (EphyDialog *dialog)
 	find_dialog->priv->window = ephy_dialog_get_control (dialog, WINDOW_PROP);
 	find_get_info (dialog);
 
-	/* Focus the text entry.  This will correctly select or leave
-	 * unselected the existing text in the entry depending on the
-	 * 'gtk-entry-select-on-focus = 0 / 1' setting in user's gtkrc.
-	 */
-	gtk_widget_grab_focus (ephy_dialog_get_control (dialog, WORD_PROP));
-
 	icon = gtk_widget_render_icon (find_dialog->priv->window, 
 						      GTK_STOCK_FIND,
 						      GTK_ICON_SIZE_MENU,
@@ -367,6 +361,12 @@ impl_show (EphyDialog *dialog)
 	g_object_unref (icon);
 
 	EPHY_DIALOG_CLASS (parent_class)->show (dialog);
+
+	/* Focus the text entry.  This will correctly select or leave
+	 * unselected the existing text in the entry depending on the
+	 * 'gtk-entry-select-on-focus = 0 / 1' setting in user's gtkrc.
+	 */
+	gtk_widget_grab_focus (ephy_dialog_get_control (dialog, WORD_PROP));
 }
 
 static void
