@@ -37,6 +37,8 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/xpcom			\
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 			\
 	-DSHARE_DIR=\"$(pkgdatadir)\"   		\
+	-DALLOW_PRIVATE_API				\
+	-DALLOW_PRIVATE_STRINGS				\
 	-include $(MOZILLA_INCLUDE_ROOT)/mozilla-config.h
 
 if MAINTAINER_MODE
