@@ -726,10 +726,24 @@ ephy_window_key_press_event (GtkWidget *widget,
 {
 	EphyWindow *window = EPHY_WINDOW (widget);
 	GtkWidget *menubar;
-	guint modifiers = gtk_accelerator_get_default_mod_mask ();
+	guint keyval = GDK_F10;
+	guint modifier = 0;
+	guint mask = gtk_accelerator_get_default_mod_mask ();
+	char *accel = NULL;
 
-	/* Show and activate the menubar on F10, if it isn't visible */
-        if (event->keyval == GDK_F10 && (event->state & modifiers) == 0)
+	g_object_get (gtk_widget_get_settings (widget),
+		      "gtk-menu-bar-accel", &accel,
+		      NULL);
+
+	if (accel != NULL)
+	{
+		gtk_accelerator_parse (accel, &keyval, &modifier);
+
+		g_free (accel);
+	}
+
+	/* Show and activate the menubar, if it isn't visible */
+        if (event->keyval == keyval && (event->state & mask) == (modifier & mask))
 	{
 		menubar = gtk_ui_manager_get_widget
 			(GTK_UI_MANAGER (window->ui_merge), "/menubar");
