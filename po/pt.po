@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.2\n"
-"POT-Creation-Date: 2003-03-30 21:10+0100\n"
-"PO-Revision-Date: 2003-03-30 21:15+0000\n"
+"POT-Creation-Date: 2003-04-13 17:33+0100\n"
+"PO-Revision-Date: 2003-04-13 17:35+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -46,11 +46,19 @@ msgstr "Página Web"
 msgid "Web Page Viewer"
 msgstr "Visualizador Página Web"
 
+#: data/bme.desktop.in.h:1
+msgid "Browse and organize your bookmarks"
+msgstr "Navegue e organize os seus marcadores"
+
+#: data/bme.desktop.in.h:2
+msgid "Epiphany Bookmarks Editor"
+msgstr "Editor Marcadores Epiphany"
+
 #: data/epiphany.desktop.in.h:1
 msgid "Browse the web"
 msgstr "Navegar na web"
 
-#: data/epiphany.desktop.in.h:2 src/ephy-main.c:127
+#: data/epiphany.desktop.in.h:2 src/ephy-main.c:131
 msgid "Epiphany Web Browser"
 msgstr "Browser Web Epiphany"
 
@@ -904,6 +912,7 @@ msgid "_Language encoding:"
 msgstr "_Codificação idioma:"
 
 #: data/glade/prefs-dialog.glade.h:65
+#: src/bookmarks/ephy-bookmark-properties.c:338
 msgid "_Location:"
 msgstr "_Localização:"
 
@@ -979,7 +988,7 @@ msgstr "<b>Tamanho</b>"
 msgid "A_4 (8.27\" x 11.69\")"
 msgstr "A_4 (8,27\" x 11,691\")"
 
-#: data/glade/print.glade.h:12 src/prefs-dialog.c:262
+#: data/glade/print.glade.h:12 src/prefs-dialog.c:306
 msgid "Appearance"
 msgstr "Aparência"
 
@@ -995,7 +1004,7 @@ msgstr "E_xecutivo (7.25\" x 10.5\")"
 msgid "G_rayscale"
 msgstr "Escala Cin_za"
 
-#: data/glade/print.glade.h:16 src/prefs-dialog.c:261
+#: data/glade/print.glade.h:16 src/prefs-dialog.c:305
 msgid "General"
 msgstr "Geral"
 
@@ -1057,7 +1066,7 @@ msgstr "_Data"
 
 #. Toplevel
 #: data/glade/print.glade.h:31 data/ui/nautilus-epiphany-view.xml.in.h:35
-#: src/bookmarks/ephy-bookmarks-editor.c:128 src/ephy-window.c:58
+#: src/bookmarks/ephy-bookmarks-editor.c:127 src/ephy-window.c:58
 msgid "_File"
 msgstr "_Ficheiro"
 
@@ -1289,7 +1298,7 @@ msgid "Use Image As Background"
 msgstr "Utilizar Imagem Como Fundo"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:34
-#: src/bookmarks/ephy-bookmarks-editor.c:129 src/ephy-window.c:59
+#: src/bookmarks/ephy-bookmarks-editor.c:128 src/ephy-window.c:59
 msgid "_Edit"
 msgstr "_Editar"
 
@@ -1317,7 +1326,7 @@ msgid "%d KB"
 msgstr "%d KB"
 
 #: embed/downloader-view.c:502 embed/downloader-view.c:520
-#: src/ephy-window.c:1017
+#: src/ephy-window.c:1014
 msgid "Unknown"
 msgstr "Desconhecido"
 
@@ -1345,7 +1354,7 @@ msgstr "Restante"
 msgid "Cancel all pending downloads?"
 msgstr "Cancelar todos os downloads em curso?"
 
-#: embed/ephy-embed-utils.c:133 embed/mozilla/ContentHandler.cpp:302
+#: embed/ephy-embed-utils.c:133 embed/mozilla/ContentHandler.cpp:300
 msgid "Select the destination filename"
 msgstr "Seleccionar o nome ficheiro destino"
 
@@ -1361,7 +1370,7 @@ msgstr "Outros"
 msgid "Local files"
 msgstr "Ficheiros locais"
 
-#: embed/mozilla/ExternalProtocolService.cpp:121
+#: embed/mozilla/ExternalProtocolService.cpp:120
 msgid ""
 "Epiphany cannot handle this protocol,\n"
 "and no GNOME default handler is set"
@@ -1369,7 +1378,7 @@ msgstr ""
 "Epiphany é incapaz de utilizar este protocolo,\n"
 "e não existe nenhum gestor GNOME por omissão"
 
-#: embed/mozilla/ExternalProtocolService.cpp:135
+#: embed/mozilla/ExternalProtocolService.cpp:134
 msgid ""
 "The protocol specified is not recognised.\n"
 "\n"
@@ -1379,19 +1388,19 @@ msgstr ""
 "\n"
 "Deseja tentar o gestor por omissão GNOME?"
 
-#: embed/mozilla/FilePicker.cpp:261
+#: embed/mozilla/FilePicker.cpp:259
 msgid "Save with content"
 msgstr "Gravar com conteudo"
 
-#: embed/mozilla/FilePicker.cpp:374
+#: embed/mozilla/FilePicker.cpp:372
 msgid "The specified path does not exist."
 msgstr "O caminho especificado não existe."
 
-#: embed/mozilla/FilePicker.cpp:393
+#: embed/mozilla/FilePicker.cpp:391
 msgid "A file was selected when a folder was expected."
 msgstr "Foi seleccionado um ficheiro quando era esperada uma pasta."
 
-#: embed/mozilla/FilePicker.cpp:400
+#: embed/mozilla/FilePicker.cpp:398
 msgid "A folder was selected when a file was expected."
 msgstr "Foi seleccionada uma pasta quando era esperada um ficheiro."
 
@@ -1788,19 +1797,19 @@ msgstr ""
 "\n"
 "Deseja continuar?"
 
-#: lib/ephy-node.c:821 lib/ephy-node.c:827 lib/ephy-node.c:858
+#: lib/ephy-node.c:817 lib/ephy-node.c:823 lib/ephy-node.c:854
 msgid "Never"
 msgstr "Nunca"
 
-#: lib/ephy-node.c:849
+#: lib/ephy-node.c:845
 msgid "Today at %-H:%M"
 msgstr "Hoje às %-H:%M"
 
-#: lib/ephy-node.c:851
+#: lib/ephy-node.c:847
 msgid "Yesterday at %-H:%M"
 msgstr "Ontem às %-H:%M"
 
-#: lib/ephy-node.c:853
+#: lib/ephy-node.c:849
 msgid "%A, %B %-d %Y at %-H:%M"
 msgstr "%A, %B %-d %Y às %-H:%M"
 
@@ -1820,115 +1829,125 @@ msgstr "Importar marcadores Konqueror"
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
-#. Popups
-#: lib/widgets/ephy-editable-toolbar.c:66
-msgid "_Remove Toolbar"
-msgstr "_Remover Barra Ferramentas"
-
-#: lib/widgets/ephy-editable-toolbar.c:68
-msgid "_Edit Toolbars..."
-msgstr "_Editar Barra Ferramentas..."
-
-#: lib/widgets/ephy-editable-toolbar.c:1001
-msgid ""
-"Drag an item onto the toolbars above to add it, from the toolbars in the "
-"items table to remove it."
-msgstr ""
-"Arraste um item sobre a barra de ferramentas para o adicionar, da barra para "
-"a tabela de itens para o remover."
-
-#: lib/widgets/ephy-editable-toolbar.c:1008
-msgid "Add Toolbar"
-msgstr "Adicionar Barra Ferramentas"
-
 #. setup label
-#: lib/widgets/ephy-notebook.c:714 src/ephy-tab.c:521 src/ephy-tab.c:985
-#: src/window-commands.c:306
+#: lib/widgets/ephy-notebook.c:744 src/ephy-tab.c:581 src/ephy-tab.c:1045
+#: src/window-commands.c:270
 msgid "Untitled"
 msgstr "Sem título"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:132
-msgid "_New Topic"
-msgstr "_Novo Tópico"
+#: src/bookmarks/ephy-bookmark-properties.c:230
+#, c-format
+msgid "%s Properties"
+msgstr "Propriedades %s"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:135
-msgid "_Open In New Window"
-msgstr "Abrir Em Nova _Janela"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:138
-msgid "Open In New _Tab"
-msgstr "Abrir em Nova _Aba"
-
-#. Edit menu
-#: src/bookmarks/ephy-bookmarks-editor.c:141 src/ephy-window.c:92
-msgid "Cu_t"
-msgstr "Cor_tar"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:144 src/ephy-window.c:95
-msgid "_Copy"
-msgstr "_Copiar"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:147 src/ephy-window.c:98
-msgid "_Paste"
-msgstr "Co_lar"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:150 src/ephy-window.c:101
-msgid "Select _All"
-msgstr "Seleccionar T_udo"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:153
-msgid "_Rename"
-msgstr "_Renomear"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:156
-msgid "_Delete"
-msgstr "_Apagar"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:159
-msgid "_Properties"
-msgstr "_Propriedades"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:162 src/ephy-window.c:87
-msgid "_Close"
-msgstr "_Fechar"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:174
-msgid "Type a topic"
-msgstr "Insira um tópico"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:623
-msgid "_Search:"
-msgstr "_Procurar:"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:688
-msgid "Bookmarks"
-msgstr "Marcadores"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:739
-msgid "Topics"
-msgstr "Tópicos"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:782 src/history-dialog.c:306
-msgid "Title"
-msgstr "Título"
-
-#: src/bookmarks/ephy-bookmarks.c:395
-msgid "All"
-msgstr "Tudo"
-
-#: src/bookmarks/ephy-bookmarks.c:428
-msgid "Most Visited"
-msgstr "Mais Visitado"
-
-#: src/bookmarks/ephy-new-bookmark.c:206
+#: src/bookmarks/ephy-bookmark-properties.c:319
+#: src/bookmarks/ephy-new-bookmark.c:207
 msgid "_Title:"
 msgstr "_Título:"
 
-#: src/bookmarks/ephy-new-bookmark.c:220
+#: src/bookmarks/ephy-bookmark-properties.c:361
+#: src/bookmarks/ephy-new-bookmark.c:230
 msgid "To_pics:"
 msgstr "Tó_picos:"
 
-#: src/bookmarks/ephy-new-bookmark.c:242
+#: src/bookmarks/ephy-bookmarks-editor.c:131
+msgid "_New Topic"
+msgstr "_Novo Tópico"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:134
+msgid "_Open in New Window"
+msgstr "Abrir em Nova _Janela"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:137
+msgid "Open in New _Tab"
+msgstr "Abrir em Nova _Aba"
+
+#. Edit menu
+#: src/bookmarks/ephy-bookmarks-editor.c:140 src/ephy-window.c:92
+msgid "Cu_t"
+msgstr "Cor_tar"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:143 src/ephy-window.c:95
+msgid "_Copy"
+msgstr "_Copiar"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:146 src/ephy-window.c:98
+msgid "_Paste"
+msgstr "Co_lar"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:149 src/ephy-window.c:101
+msgid "Select _All"
+msgstr "Seleccionar T_udo"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:152
+msgid "_Rename"
+msgstr "_Renomear"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:155
+msgid "_Delete"
+msgstr "_Apagar"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:158
+msgid "_Properties"
+msgstr "_Propriedades"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:161 src/ephy-window.c:87
+msgid "_Close"
+msgstr "_Fechar"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:173
+msgid "Type a topic"
+msgstr "Insira um tópico"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:715
+msgid "_Search:"
+msgstr "_Procurar:"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:780
+msgid "Bookmarks"
+msgstr "Marcadores"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:842
+msgid "Topics"
+msgstr "Tópicos"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:896 src/history-dialog.c:306
+msgid "Title"
+msgstr "Título"
+
+#: src/bookmarks/ephy-bookmarks.c:52
+msgid "Search the web"
+msgstr "Procurar na web"
+
+#: src/bookmarks/ephy-bookmarks.c:58
+msgid "News"
+msgstr "Notícias"
+
+#: src/bookmarks/ephy-bookmarks.c:59
+msgid "People"
+msgstr "Pessoas"
+
+#: src/bookmarks/ephy-bookmarks.c:60
+msgid "Shop"
+msgstr "Compras"
+
+#: src/bookmarks/ephy-bookmarks.c:61
+msgid "Art"
+msgstr "Arte"
+
+#: src/bookmarks/ephy-bookmarks.c:62
+msgid "Work"
+msgstr "Trabalho"
+
+#: src/bookmarks/ephy-bookmarks.c:486
+msgid "All"
+msgstr "Tudo"
+
+#: src/bookmarks/ephy-bookmarks.c:524
+msgid "Most Visited"
+msgstr "Mais Visitado"
+
+#: src/bookmarks/ephy-new-bookmark.c:252
 msgid "New Bookmark"
 msgstr "Novo Marcador"
 
@@ -1936,35 +1955,35 @@ msgstr "Novo Marcador"
 msgid "Go"
 msgstr "Ir"
 
-#: src/ephy-main.c:71
+#: src/ephy-main.c:72
 msgid "Open a new tab in an existing Ephy window"
 msgstr "Abrir uma nova aba numa janela Ephy existente"
 
-#: src/ephy-main.c:74
+#: src/ephy-main.c:75
 msgid "Open a new window in an existing Ephy process"
 msgstr "Abrir uma nova janela num processo Ephy existente"
 
-#: src/ephy-main.c:77
+#: src/ephy-main.c:78
 msgid "Do not raise the window when opening a page in an existing Ephy process"
 msgstr "Não elevar a janela ao abrir uma página num processo Ephy existente"
 
-#: src/ephy-main.c:80
+#: src/ephy-main.c:81
 msgid "Run Ephy in full screen mode"
 msgstr "Executar Ephy em modo ecrã completo"
 
-#: src/ephy-main.c:83
+#: src/ephy-main.c:84
 msgid "Attempt to load URL in existing Ephy window"
 msgstr "Tentar ler URL em janela Ephy existente"
 
-#: src/ephy-main.c:86
+#: src/ephy-main.c:87
 msgid "Load the given session file"
 msgstr "Ler o ficheiro de sessão indicado"
 
-#: src/ephy-main.c:87
+#: src/ephy-main.c:88
 msgid "FILE"
 msgstr "FICHEIRO"
 
-#: src/ephy-main.c:89
+#: src/ephy-main.c:90
 msgid ""
 "Don't open any windows; instead act as a server for quick startup of new "
 "Ephy instances"
@@ -1972,15 +1991,15 @@ msgstr ""
 "Não abrir quaisquer janelas; em vez disso agir como servidor para abertura "
 "rápida de novas instâncias Ephy"
 
-#: src/ephy-main.c:93
+#: src/ephy-main.c:94
 msgid "Add a bookmark (don't open any window)"
 msgstr "Adicionar marcador (não abrir qualquer janela)"
 
-#: src/ephy-main.c:94
+#: src/ephy-main.c:95
 msgid "URL"
 msgstr "URL"
 
-#: src/ephy-main.c:96
+#: src/ephy-main.c:97
 msgid ""
 "Create the initial window with the given geometry.\n"
 "see X(1) for the GEOMETRY format"
@@ -1988,27 +2007,31 @@ msgstr ""
 "Criar a janela inicial com a geometria indicada.\n"
 "Consulte X(1) para o formato GEOMETRIA"
 
-#: src/ephy-main.c:98
+#: src/ephy-main.c:99
 msgid "GEOMETRY"
 msgstr "GEOMETRIA"
 
-#: src/ephy-main.c:100
+#: src/ephy-main.c:101
 msgid "Close all Ephy windows"
 msgstr "Fechar todas as janelas Ephy"
 
-#: src/ephy-main.c:103
+#: src/ephy-main.c:104
 msgid "Same as --close, but exits server mode too"
 msgstr "Mesmo que --close, mas sai também de modo servidor"
 
-#: src/ephy-main.c:106
+#: src/ephy-main.c:107
 msgid "Used internally by the nautilus view"
 msgstr "Utilizado internamente pela vista nautilus"
 
-#: src/ephy-main.c:132
+#: src/ephy-main.c:110
+msgid "Launch the bookmarks editor"
+msgstr "Iniciar o editor de marcadores"
+
+#: src/ephy-main.c:136
 msgid "Ephy"
 msgstr "Ephy"
 
-#: src/ephy-main.c:292
+#: src/ephy-main.c:302
 msgid "Ephy already running, using existing process"
 msgstr "Ephy já em execução, a utilizar processo existente"
 
@@ -2020,63 +2043,63 @@ msgstr "nome de ícone para vista mozilla"
 msgid "mozilla summary info"
 msgstr "info resumo mozilla"
 
-#: src/ephy-shell.c:151
+#: src/ephy-shell.c:153
 msgid "Mozilla bookmarks imported successfully."
 msgstr "Marcadores Mozilla importados com sucesso."
 
-#: src/ephy-shell.c:160
+#: src/ephy-shell.c:162
 msgid "Importing Mozilla bookmarks failed."
 msgstr "Importação de marcadores Mozzila falhou."
 
-#: src/ephy-shell.c:168
+#: src/ephy-shell.c:170
 msgid "Galeon"
 msgstr "Galeon"
 
-#: src/ephy-shell.c:175
+#: src/ephy-shell.c:177
 msgid "Galeon bookmarks imported successfully."
 msgstr "Marcadores Galeon importados com sucesso."
 
-#: src/ephy-shell.c:184
+#: src/ephy-shell.c:186
 msgid "Importing Galeon bookmarks failed."
 msgstr "Importação de marcadores Galeon falhou."
 
-#: src/ephy-shell.c:192
+#: src/ephy-shell.c:194
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: src/ephy-shell.c:199
+#: src/ephy-shell.c:201
 msgid "Konqueror bookmarks imported successfully."
 msgstr "Marcadores Konqueror importados com sucesso."
 
-#: src/ephy-shell.c:208
+#: src/ephy-shell.c:210
 msgid "Importing Konqueror bookmarks failed."
 msgstr "Importação de marcadores Konqueror falhou."
 
-#: src/ephy-tab.c:565
+#: src/ephy-tab.c:625
 msgid "site"
 msgstr "página"
 
-#: src/ephy-tab.c:591
+#: src/ephy-tab.c:651
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "A redireccionar para %s..."
 
-#: src/ephy-tab.c:595
+#: src/ephy-tab.c:655
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "A transferir dados de %s..."
 
-#: src/ephy-tab.c:599
+#: src/ephy-tab.c:659
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "A aguardar autorização de %s..."
 
-#: src/ephy-tab.c:607
+#: src/ephy-tab.c:667
 #, c-format
 msgid "Loading %s..."
 msgstr "A ler %s..."
 
-#: src/ephy-tab.c:611
+#: src/ephy-tab.c:671
 msgid "Done."
 msgstr "Terminado."
 
@@ -2481,27 +2504,27 @@ msgstr "utilizar Imagem Como _Fundo"
 msgid "_Copy Image Location"
 msgstr "_Copiar Localização Imagem"
 
-#: src/ephy-window.c:1020
+#: src/ephy-window.c:1017
 msgid "Insecure"
 msgstr "Inseguro"
 
-#: src/ephy-window.c:1023
+#: src/ephy-window.c:1020
 msgid "Broken"
 msgstr "Quebrado"
 
-#: src/ephy-window.c:1026
+#: src/ephy-window.c:1023
 msgid "Medium"
 msgstr "Média"
 
-#: src/ephy-window.c:1030
+#: src/ephy-window.c:1027
 msgid "Low"
 msgstr "Baixa"
 
-#: src/ephy-window.c:1034
+#: src/ephy-window.c:1031
 msgid "High"
 msgstr "Alta"
 
-#: src/ephy-window.c:1044
+#: src/ephy-window.c:1041
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2510,7 +2533,7 @@ msgstr ""
 "Nível segurança: %s\n"
 "%s"
 
-#: src/ephy-window.c:1050
+#: src/ephy-window.c:1047
 #, c-format
 msgid "Security level: %s"
 msgstr "Nível segurança: %s"
@@ -2763,15 +2786,20 @@ msgstr "Fechar"
 msgid "Close print preview"
 msgstr "Fechar antevisão de impressão"
 
-#: src/prefs-dialog.c:263
+#: src/prefs-dialog.c:265 src/window-commands.c:650
+#, c-format
+msgid "Could not display help: %s"
+msgstr "Incapaz de mostrar ajuda: %s"
+
+#: src/prefs-dialog.c:307
 msgid "User Interface"
 msgstr "Interface Utilizador"
 
-#: src/prefs-dialog.c:264
+#: src/prefs-dialog.c:308
 msgid "Advanced"
 msgstr "Avançado"
 
-#: src/prefs-dialog.c:307
+#: src/prefs-dialog.c:352
 msgid "Preferences"
 msgstr "Preferências"
 
@@ -2797,15 +2825,15 @@ msgstr ""
 msgid "You can recover the opened tabs and windows."
 msgstr "Pode recuperar as abas e janelas abertas."
 
-#: src/toolbar.c:313
+#: src/toolbar.c:319
 msgid "Back"
 msgstr "Atrás"
 
-#: src/toolbar.c:325
+#: src/toolbar.c:331
 msgid "Forward"
 msgstr "Frente"
 
-#: src/toolbar.c:337
+#: src/toolbar.c:343
 msgid "Up"
 msgstr "Acima"
 
@@ -2813,23 +2841,37 @@ msgstr "Acima"
 msgid "Check this out!"
 msgstr "Verifique isto!"
 
-#: src/window-commands.c:346
+#: src/window-commands.c:310
 msgid "Select the file to open"
 msgstr "Seleccione o ficheiro a abrir"
 
-#: src/window-commands.c:686
-#, c-format
-msgid "Could not display help: %s"
-msgstr "Incapaz de mostrar ajuda: %s"
-
 #. Translator credits
-#: src/window-commands.c:715
+#: src/window-commands.c:680
 msgid "translator_credits"
 msgstr "Duarte Loreto <happyguy_pt@hotmail.com>"
 
-#: src/window-commands.c:727
+#: src/window-commands.c:692
 msgid "A GNOME browser based on Mozilla"
 msgstr "Um browser GNOME baseado no Mozilla"
+
+#~ msgid "_Remove Toolbar"
+#~ msgstr "_Remover Barra Ferramentas"
+
+#~ msgid "_Edit Toolbars..."
+#~ msgstr "_Editar Barra Ferramentas..."
+
+#~ msgid ""
+#~ "Drag an item onto the toolbars above to add it, from the toolbars in the "
+#~ "items table to remove it."
+#~ msgstr ""
+#~ "Arraste um item sobre a barra de ferramentas para o adicionar, da barra "
+#~ "para a tabela de itens para o remover."
+
+#~ msgid "Add Toolbar"
+#~ msgstr "Adicionar Barra Ferramentas"
+
+#~ msgid "_Open In New Window"
+#~ msgstr "Abrir Em Nova _Janela"
 
 #~ msgid "_Rename Bookmark"
 #~ msgstr "_Renomear Marcador"
