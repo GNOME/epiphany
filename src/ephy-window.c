@@ -61,6 +61,7 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "File", N_("_File"), NULL, NULL, NULL, NULL, NULL },
 	{ "Edit", N_("_Edit"), NULL, NULL, NULL, NULL, NULL },
 	{ "View", N_("_View"), NULL, NULL, NULL, NULL, NULL },
+	{ "Bookmarks", N_("_Bookmarks"), NULL, NULL, NULL, NULL, NULL },
 	{ "Go", N_("_Go"), NULL, NULL, NULL, NULL, NULL },
 	{ "Tabs", N_("_Tabs"), NULL, NULL, NULL, NULL, NULL },
 	{ "Help", N_("_Help"), NULL, NULL, NULL, NULL, NULL },
@@ -84,9 +85,6 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "FileSendTo", N_("S_end To..."), EPHY_STOCK_SEND_LINK, NULL,
 	  N_("Send a link of the current page"),
 	  G_CALLBACK (window_cmd_file_send_to), NULL },
-	{ "FileBookmarkPage", N_("Boo_kmark Page..."), EPHY_STOCK_BOOKMARK_PAGE, "<control>D",
-	  N_("Add a bookmark for the current page"),
-	  G_CALLBACK (window_cmd_file_bookmark_page), NULL },
 	{ "FileCloseWindow", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
 	  N_("Close this window"),
 	  G_CALLBACK (window_cmd_file_close_window), NULL },
@@ -156,6 +154,14 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	  N_("View the source code of the page"),
 	  G_CALLBACK (window_cmd_view_page_source), NULL },
 
+	/* Bookmarks menu */
+	{ "FileBookmarkPage", N_("_Add Bookmark"), EPHY_STOCK_BOOKMARK_PAGE, "<control>D",
+	  N_("Add a bookmark for the current page"),
+	  G_CALLBACK (window_cmd_file_bookmark_page), NULL },
+	{ "GoBookmarks", N_("_Edit Bookmarks"), EPHY_STOCK_BOOKMARKS, "<control>B",
+	  N_("Go to a bookmark"),
+	  G_CALLBACK (window_cmd_go_bookmarks), NULL },
+
 	/* Go menu */
 	{ "GoBack", N_("_Back"), GTK_STOCK_GO_BACK, "<alt>Left",
 	  N_("Go to the previous visited page"),
@@ -175,9 +181,6 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "GoHistory", N_("H_istory"), EPHY_STOCK_HISTORY, "<control>H",
 	  N_("Go to an already visited page"),
 	  G_CALLBACK (window_cmd_go_history), NULL },
-	{ "GoBookmarks", N_("Boo_kmarks"), EPHY_STOCK_BOOKMARKS, "<control>B",
-	  N_("Go to a bookmark"),
-	  G_CALLBACK (window_cmd_go_bookmarks), NULL },
 
 	/* Tabs menu */
 	{ "TabsPrevious", N_("_Previous Tab"), NULL, "<control>Page_Up",

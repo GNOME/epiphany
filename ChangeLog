@@ -1,3 +1,29 @@
+2003-06-04  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/ui/epiphany-ui.xml.in:
+
+	Add a bookmarks menu. (still not the tree)
+
+	* src/bookmarks/ephy-bookmark-action.c: (create_menu_item),
+	(ephy_bookmark_action_sync_icon),
+	(ephy_bookmark_action_sync_label), (activate_cb), (connect_proxy),
+	(ephy_bookmark_action_class_init):
+
+	Implement create_menu_item.
+
+	* src/ephy-favorites-menu.c: (ephy_favorites_menu_get_type),
+	(go_location_cb), (ephy_favorites_menu_rebuild),
+	(ephy_favorites_menu_set_property),
+	(ephy_favorites_menu_get_property),
+	(ephy_favorites_menu_class_init), (ephy_favorites_menu_init),
+	(ephy_favorites_menu_finalize), (ephy_favorites_menu_new):
+
+	Use bookmark action.
+
+	* src/ephy-window.c:
+
+	Change verbs for bookmarks menu.
+
 2003-06-03  Piers Cornwell  <piersc@cogs.susx.ac.uk>
 
 	* data/conspiracy.xhtml:

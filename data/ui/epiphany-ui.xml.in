@@ -10,8 +10,6 @@
 	<menuitem name="FilePrintMenu" verb="FilePrint"/>
 	<menuitem name="FileSendToMenu" verb="FileSendTo"/>
 	<separator name="FileSep3"/>
-	<menuitem name="FileBookmarkPageMenu" verb="FileBookmarkPage"/>
-	<separator name="FileSep4"/>
 	<menuitem name="FileCloseWindowMenu" verb="FileCloseWindow"/>
 </submenu>
 
@@ -48,6 +46,12 @@
 	<menuitem name="ViewReloadMenu" verb="ViewReload"/>
 </submenu>
 
+<submenu name="BookmarksMenu" verb="Bookmarks">
+	<menuitem name="BookmarksAddBookmarkMenu" verb="FileBookmarkPage"/>
+	<menuitem name="BookmarksEditMenu" verb="GoBookmarks"/>
+	<placeholder name="BookmarksTree"/>
+</submenu>
+
 <submenu name="GoMenu" verb="Go">
 	<menuitem name="GoBackMenu" verb="GoBack"/>
 	<menuitem name="GoForwardMenu" verb="GoForward"/>
@@ -55,7 +59,6 @@
 	<separator name="GoSep1"/>
 	<menuitem name="GoHomeMenu" verb="GoHome"/>	
 	<menuitem name="GoHistoryMenu" verb="GoHistory"/>
-	<menuitem name="GoBookmarksMenu" verb="GoBookmarks"/>
 	<separator name="GoSep2"/>
 	<menuitem name="GoLocationMenu" verb="GoLocation"/>
 	<placeholder name="GoFavorites"/>
