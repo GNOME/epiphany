@@ -23,7 +23,6 @@
 #include "ContentHandler.h"
 #include "FilePicker.h"
 #include "FtpProtocolHandler.h"
-#include "StartHereProtocolHandler.h"
 #include "GlobalHistory.h"
 #include "IRCProtocolHandler.h"
 #include "MailtoProtocolHandler.h"
@@ -40,7 +39,6 @@
 #include <glib.h>
 
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyAboutRedirector)
-NS_GENERIC_FACTORY_CONSTRUCTOR(GStartHereProtocolHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GProgressListener)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GFilePicker)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GContentHandler)
@@ -110,12 +108,6 @@ static const nsModuleComponentInfo sAppComps[] = {
 		G_FTP_PROTOCOL_CID,
 		G_FTP_CONTENT_CONTRACTID,
 		GFtpProtocolHandlerConstructor
-	},
-	{
-		G_START_HERE_PROTOCOLHANDLER_CLASSNAME,
-		G_START_HERE_PROTOCOLHANDLER_CID,
-		G_START_HERE_PROTOCOLHANDLER_CONTRACTID,
-		GStartHereProtocolHandlerConstructor
 	},
 	{
 		EPHY_ABOUT_REDIRECTOR_CLASSNAME,

@@ -64,9 +64,6 @@ void		     ephy_new_bookmark_set_title    (EphyNewBookmark *bookmark,
 void		     ephy_new_bookmark_set_icon     (EphyNewBookmark *bookmark,
 						     const char *icon);
 
-void		     ephy_new_bookmark_set_smarturl (EphyNewBookmark *bookmark,
-						     const char *url);
-
 gulong		     ephy_new_bookmark_get_id       (EphyNewBookmark *bookmark);
 
 G_END_DECLS

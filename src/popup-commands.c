@@ -164,11 +164,10 @@ popup_cmd_bookmark_link (EggAction *action,
 					 location))
 	{
 		new_bookmark = ephy_new_bookmark_new
-			(bookmarks, GTK_WINDOW (window), location);
+			(bookmarks, GTK_WINDOW (window),
+			 rel ? rel : location);
 		ephy_new_bookmark_set_title
 			(EPHY_NEW_BOOKMARK (new_bookmark), title);
-		ephy_new_bookmark_set_smarturl
-			(EPHY_NEW_BOOKMARK (new_bookmark), rel);
 		gtk_widget_show (new_bookmark);
 	}
 }

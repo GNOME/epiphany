@@ -256,7 +256,13 @@ title_entry_changed_cb (GtkWidget *entry, EphyBookmarkProperties *props)
 static void
 location_entry_changed_cb (GtkWidget *entry, EphyBookmarkProperties *props)
 {
-	update_entry (props, entry, EPHY_NODE_BMK_PROP_LOCATION);
+	char *text;
+
+	text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
+	ephy_bookmarks_set_address (props->priv->bookmarks,
+				    props->priv->bookmark,
+			            text);
+	g_free (text);
 }
 
 static void

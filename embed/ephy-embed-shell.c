@@ -26,12 +26,6 @@
 
 #include <string.h>
 
-enum
-{
-	COMMAND,
-	LAST_SIGNAL
-};
-
 struct EphyEmbedShellPrivate
 {
 	EphyHistory *global_history;
@@ -54,7 +48,6 @@ static DownloaderView *
 impl_get_downloader_view (EphyEmbedShell *shell);
 
 static GObjectClass *parent_class = NULL;
-static guint ephy_embed_shell_signals[LAST_SIGNAL] = { 0 };
 
 EphyEmbedShell *embed_shell;
 
@@ -96,18 +89,6 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
         object_class->finalize = ephy_embed_shell_finalize;
 	klass->get_downloader_view = impl_get_downloader_view;
 	klass->get_global_history = impl_get_global_history;
-
-	ephy_embed_shell_signals[COMMAND] =
-                g_signal_new ("command",
-                              G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (EphyEmbedShellClass, command),
-                              NULL, NULL,
-                              ephy_marshal_VOID__STRING_STRING,
-                              G_TYPE_NONE,
-                              2,
-                              G_TYPE_STRING,
-			      G_TYPE_STRING);
 }
 
 static void

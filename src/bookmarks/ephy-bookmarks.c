@@ -68,7 +68,7 @@ static const EphyBookmarksBookmarkInfo default_bookmarks [] =
 	 * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 	 */
 
-	{ N_("Search the web"), N_("http://www.google.com"), N_("http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8") }
+	{ N_("Search the web"), N_("http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8") }
 };
 static int n_default_bookmarks = G_N_ELEMENTS (default_bookmarks);
 
@@ -169,29 +169,20 @@ ephy_bookmarks_autocompletion_source_foreach (EphyAutocompletionSource *source,
 	for (i = 0; i < children->len; i++)
 	{
 		EphyNode *kid;
-		const char *url, *smart_url, *title, *keywords;
+		const char *url, *title, *keywords;
+		gboolean smart_url;
 
 		kid = g_ptr_array_index (children, i);
 		url = ephy_node_get_property_string
 			(kid, EPHY_NODE_BMK_PROP_LOCATION);
-		smart_url = ephy_node_get_property_string
-			(kid, EPHY_NODE_BMK_PROP_SMART_LOCATION);
+		smart_url = ephy_node_get_property_boolean
+			(kid, EPHY_NODE_BMK_PROP_HAS_SMART_ADDRESS);
 		title = ephy_node_get_property_string
 			(kid, EPHY_NODE_BMK_PROP_TITLE);
 		keywords = ephy_node_get_property_string
 			(kid, EPHY_NODE_BMK_PROP_KEYWORDS);
 
-		if (smart_url == NULL ||
-		    g_utf8_strlen (smart_url, -1) == 0)
-		{
-			smart_url = NULL;
-		}
-
-		func (source,
-		      smart_url ? NULL : keywords,
-		      title,
-		      smart_url ? smart_url : url,
-		      (smart_url != NULL),
+		func (source, keywords, title, url, smart_url,
 		      TRUE, 0, data);
 	}
 	ephy_node_thaw (eb->priv->bookmarks);
@@ -224,8 +215,7 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 	for (i = 0; i < n_default_bookmarks; i++)
 	{
 		ephy_bookmarks_add (eb, default_bookmarks[i].title,
-				    default_bookmarks[i].location,
-				    default_bookmarks[i].smart_url);
+				    default_bookmarks[i].location);
 
 		node = ephy_bookmarks_find_bookmark (eb, default_bookmarks[i].location);
 		if (node == NULL) break;
@@ -584,6 +574,7 @@ static void
 update_topics_list (EphyNode *bookmark, const char *list)
 {
 	GValue value = { 0, };
+
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, list);
 	ephy_node_set_property (bookmark, EPHY_NODE_BMK_PROP_KEYWORDS,
@@ -763,11 +754,28 @@ ephy_bookmarks_new ()
 	return tab;
 }
 
+static void
+update_has_smart_address (EphyNode *bmk, const char *address)
+{
+	gboolean smart = FALSE;
+	GValue value = { 0, };
+
+	if (address)
+	{
+		smart = strstr (address, "%s") != NULL;
+	}
+
+	g_value_init (&value, G_TYPE_BOOLEAN);
+	g_value_set_boolean (&value, smart);
+	ephy_node_set_property (bmk, EPHY_NODE_BMK_PROP_HAS_SMART_ADDRESS,
+			        &value);
+	g_value_unset (&value);
+}
+
 EphyNode *
 ephy_bookmarks_add (EphyBookmarks *eb,
 		    const char *title,
-		    const char *url,
-		    const char *smart_url)
+		    const char *url)
 {
 	EphyNode *bm;
 	GValue value = { 0, };
@@ -786,11 +794,7 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 			        &value);
 	g_value_unset (&value);
 
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, smart_url);
-	ephy_node_set_property (bm, EPHY_NODE_BMK_PROP_SMART_LOCATION,
-			        &value);
-	g_value_unset (&value);
+	update_has_smart_address (bm, url);
 
 	ephy_node_add_child (eb->priv->bookmarks, bm);
 	ephy_node_add_child (eb->priv->notcategorized, bm);
@@ -799,6 +803,22 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
 
 	return bm;
+}
+
+void
+ephy_bookmarks_set_address (EphyBookmarks *eb,
+			    EphyNode *bookmark,
+			    const char *address)
+{
+	GValue value = { 0, };
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, address);
+	ephy_node_set_property (bookmark, EPHY_NODE_BMK_PROP_LOCATION,
+			        &value);
+	g_value_unset (&value);
+
+	update_has_smart_address (bookmark, address);
 }
 
 EphyNode*

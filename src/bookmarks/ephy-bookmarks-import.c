@@ -19,9 +19,10 @@
 #include <glib.h>
 #include <libxml/HTMLtree.h>
 #include <string.h>
+#include <libgnomevfs/gnome-vfs-mime-utils.h>
 
 #include "ephy-bookmarks-import.h"
-#include "ephy-string.h"
+#include "ephy-debug.h"
 
 typedef struct _XbelInfo
 {
@@ -47,6 +48,28 @@ set_folder (EphyBookmarks *bookmarks,
 	return topic;
 }
 
+gboolean
+ephy_bookmarks_import (EphyBookmarks *bookmarks,
+		       const char *filename)
+{
+	char *type;
+
+	type = gnome_vfs_get_mime_type (filename);
+
+	LOG ("Importing bookmarks of type %s", type)
+
+	if (type == NULL) return FALSE;
+
+	if (strcmp (type, "application/x-mozilla-bookmarks") == 0)
+	{
+		return ephy_bookmarks_import_mozilla (bookmarks, filename);
+	}
+	else
+	{
+		return ephy_bookmarks_import_xbel (bookmarks, filename);
+	}
+}
+
 static void
 mozilla_parse_bookmarks (EphyBookmarks *bookmarks,
 		         htmlNodePtr node,
@@ -69,8 +92,7 @@ mozilla_parse_bookmarks (EphyBookmarks *bookmarks,
 			url = xmlGetProp (child, "href");
 			bmk = ephy_bookmarks_add (bookmarks,
 					          title,
-					          url,
-					          NULL);
+					          url);
 			set_folder (bookmarks, bmk, *keyword);
 			xmlFree (title);
 			xmlFree (url);
@@ -119,11 +141,10 @@ xbel_parse_single_bookmark (EphyBookmarks *bookmarks,
 
 static void
 xbel_parse_folder (EphyBookmarks *bookmarks,
-		   xmlNodePtr node,
-		   const char *default_keyword)
+		   xmlNodePtr node)
 {
 	xmlNodePtr child = node;
-	xmlChar *keyword = g_strdup (default_keyword);
+	xmlChar *keyword = NULL;
 
 	while (child != NULL)
 	{
@@ -147,15 +168,16 @@ xbel_parse_folder (EphyBookmarks *bookmarks,
 						    child->children,
 						    xbel);
 
+			/* FIXME need to import also smart bookmark */
 			bmk = ephy_bookmarks_add (bookmarks,
 					          xbel->title,
-					          url,
-					          xbel->smarturl);
-			set_folder (bookmarks, bmk, keyword);
+					          url);
+			if (keyword)
+			{
+				set_folder (bookmarks, bmk, keyword);
+			}
 
-			if (url)
-				xmlFree (url);
-
+			xmlFree (url);
 
 			if (xbel && xbel->title)
 				xmlFree (xbel->title);
@@ -168,11 +190,10 @@ xbel_parse_folder (EphyBookmarks *bookmarks,
 		else if (xmlStrEqual (child->name, "folder"))
 		{
 			xbel_parse_folder (bookmarks,
-					   child->children,
-					   keyword);
+					   child->children);
 
 			g_free (keyword);
-			keyword = g_strdup (default_keyword);
+			keyword = NULL;
 		}
 
 		child = child->next;
@@ -184,8 +205,7 @@ xbel_parse_folder (EphyBookmarks *bookmarks,
 
 static void
 xbel_parse_bookmarks (EphyBookmarks *bookmarks,
-		      xmlNodePtr node,
-		      const char *default_keyword)
+		      xmlNodePtr node)
 {
 	xmlNodePtr child = node;
 
@@ -194,8 +214,7 @@ xbel_parse_bookmarks (EphyBookmarks *bookmarks,
 		if (xmlStrEqual (child->name, "xbel"))
 		{
 			xbel_parse_folder (bookmarks,
-					   child->children,
-					   default_keyword);
+					   child->children);
 		}
 
 		child = child->next;
@@ -229,8 +248,7 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 
 gboolean
 ephy_bookmarks_import_xbel (EphyBookmarks *bookmarks,
-			    const char *filename,
-			    const char *default_keyword)
+			    const char *filename)
 {
 	xmlDocPtr doc;
 	xmlNodePtr child;
@@ -242,7 +260,7 @@ ephy_bookmarks_import_xbel (EphyBookmarks *bookmarks,
 	g_assert (doc != NULL);
 
 	child = doc->children;
-	xbel_parse_bookmarks (bookmarks, child, default_keyword);
+	xbel_parse_bookmarks (bookmarks, child);
 
 	xmlFreeDoc (doc);
 

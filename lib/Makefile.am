@@ -48,8 +48,6 @@ libephy_la_SOURCES = \
 	ephy-prefs.h				\
 	ephy-prefs-utils.c			\
 	ephy-prefs-utils.h			\
-	ephy-start-here.c			\
-	ephy-start-here.h			\
 	ephy-state.c				\
 	ephy-state.h				\
 	ephy-string.c				\

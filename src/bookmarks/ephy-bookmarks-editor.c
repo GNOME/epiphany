@@ -35,6 +35,7 @@
 
 #include "ephy-bookmarks-editor.h"
 #include "ephy-bookmark-properties.h"
+#include "ephy-bookmarks-import.h"
 #include "ephy-node-common.h"
 #include "ephy-node-view.h"
 #include "ephy-window.h"
@@ -100,6 +101,8 @@ static void cmd_show_in_bookmarks_bar     (EggAction *action,
 static void cmd_delete			  (EggAction *action,
 				           EphyBookmarksEditor *editor);
 static void cmd_bookmark_properties	  (EggAction *action,
+					   EphyBookmarksEditor *editor);
+static void cmd_bookmarks_import	  (EggAction *action,
 					   EphyBookmarksEditor *editor);
 static void cmd_add_topic		  (EggAction *action,
 					   EphyBookmarksEditor *editor);
@@ -171,6 +174,9 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 	{ "Properties", N_("_Properties"), GTK_STOCK_PROPERTIES, "<alt>Return",
 	  N_("View or modify the properties of the selected bookmark"), 
 	  G_CALLBACK (cmd_bookmark_properties), NULL },
+	{ "Import", N_("_Import bookmarks..."), NULL, NULL,
+	  N_("Import bookmarks from another browser or a bookmarks file"), 
+	  G_CALLBACK (cmd_bookmarks_import), NULL },
 	{ "Close", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
 	  N_("Close the bookmarks window"), 
 	  G_CALLBACK (cmd_close), NULL },
@@ -438,6 +444,112 @@ show_properties_dialog (EphyBookmarksEditor *editor, EphyNode *node)
 	}
 
 	gtk_window_present (GTK_WINDOW (dialog));
+}
+
+static void
+add_bookmarks_source_menu (GtkWidget *menu,
+			   const char *desc,
+			   const char *dir,
+			   const char *filename)
+{
+	GSList *l;
+	char *path;
+
+	path = g_build_filename (g_get_home_dir (), dir, NULL);
+	l = ephy_file_find  (path, filename, 4);
+	g_free (path);
+
+	if (l)
+	{
+		GtkWidget *item;
+
+		item = gtk_menu_item_new_with_label (desc);
+		gtk_widget_show (item);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+		g_object_set_data_full (G_OBJECT (item), "bookmarks_file",
+					g_strdup (l->data), g_free);
+	}
+
+	g_slist_foreach (l, (GFunc) g_free, NULL);
+	g_slist_free (l);
+}
+
+static void
+import_dialog_response_cb (GtkDialog *dialog, gint response,
+			   GtkWidget *optionmenu)
+{
+	if (response == GTK_RESPONSE_OK)
+	{
+		char *filename;
+		GtkWidget *item, *menu;
+		EphyBookmarks *bookmarks;
+
+		menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (optionmenu));
+		item = gtk_menu_get_active (GTK_MENU (menu));
+		filename = g_object_get_data (G_OBJECT (item), "bookmarks_file");
+
+		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+		ephy_bookmarks_import (bookmarks, filename);
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static void
+cmd_bookmarks_import (EggAction *action,
+		      EphyBookmarksEditor *editor)
+{
+	GtkWidget *dialog;
+	GtkWidget *label;
+	GtkWidget *vbox;
+	GtkWidget *menu;
+	GtkWidget *option_menu;
+
+	dialog = gtk_dialog_new_with_buttons (_("Import Bookmarks"),
+					     GTK_WINDOW (editor),
+					     GTK_DIALOG_DESTROY_WITH_PARENT |
+					     GTK_DIALOG_NO_SEPARATOR,
+					     GTK_STOCK_CANCEL,
+					     GTK_RESPONSE_CANCEL,
+					     GTK_STOCK_OK,
+					     GTK_RESPONSE_OK,
+					     NULL);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+	gtk_container_set_border_width (GTK_CONTAINER (dialog), 6);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 12);
+
+	vbox = gtk_vbox_new (FALSE, 6);
+	gtk_widget_show (vbox);
+	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), vbox,
+			    TRUE, TRUE, 0);
+
+	label = gtk_label_new (_("Choose the bookmarks source:"));
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+	gtk_widget_show (label);
+
+	menu = gtk_menu_new ();
+	gtk_widget_show (menu);
+
+	add_bookmarks_source_menu (menu, _("Mozilla bookmarks"),
+				   ".mozilla", "bookmarks.html");
+	add_bookmarks_source_menu (menu, _("Galeon bookmarks"),
+				   ".galeon", "bookmarks.xbel");
+	add_bookmarks_source_menu (menu, _("Konqueror bookmarks"),
+				   ".kde/share/apps/konqueror",
+				   "bookmarks.xml");
+
+	option_menu = gtk_option_menu_new ();
+	gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
+	gtk_widget_show (option_menu);
+	gtk_box_pack_start (GTK_BOX (vbox), option_menu, TRUE, TRUE, 0);
+
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (import_dialog_response_cb),
+			  option_menu);
+
+	gtk_widget_show (dialog);
 }
 
 static void

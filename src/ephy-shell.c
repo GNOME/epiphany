@@ -127,84 +127,6 @@ ephy_shell_class_init (EphyShellClass *klass)
 }
 
 static void
-ephy_shell_command_cb (EphyEmbedShell *shell,
-		       char *command,
-		       char *param,
-		       gpointer data)
-{
-	EphyBookmarks *bookmarks;
-	GtkWidget *dialog;
-	const gchar *message = NULL;
-	GtkMessageType message_type = GTK_MESSAGE_INFO;
-	EphyWindow *window;
-
-	bookmarks = ephy_shell_get_bookmarks (EPHY_SHELL (shell));
-
-	if (strcmp (command, "import-mozilla-bookmarks") == 0)
-	{
-		if (ephy_bookmarks_import_mozilla (bookmarks, param))
-		{
-			message_type =  GTK_MESSAGE_INFO;
-			message = _("Mozilla bookmarks imported successfully.");
-		}
-		else
-		{
-			message_type = GTK_MESSAGE_ERROR;
-			message = _("Importing Mozilla bookmarks failed.");
-		}
-	}
-	else if (strcmp (command, "import-galeon-bookmarks") == 0)
-	{
-		if (ephy_bookmarks_import_xbel (bookmarks, param,
-						_("Galeon")))
-		{
-			message_type = GTK_MESSAGE_INFO;
-			message = _("Galeon bookmarks imported successfully.");
-		}
-		else
-		{
-			message_type = GTK_MESSAGE_ERROR;
-			message = _("Importing Galeon bookmarks failed.");
-		}
-	}
-	else if (strcmp (command, "import-konqueror-bookmarks") == 0)
-	{
-		if (ephy_bookmarks_import_xbel (bookmarks, param,
-						_("Konqueror")))
-		{
-			message_type = GTK_MESSAGE_INFO;
-			message = _("Konqueror bookmarks imported successfully.");
-		}
-		else
-		{
-			message_type = GTK_MESSAGE_ERROR;
-			message = _("Importing Konqueror bookmarks failed.");
-		}
-	}
-	else if (strcmp (command, "configure-network") == 0)
-	{
-		ephy_file_launch_application ("gnome-network-preferences",
-					      NULL,
-					      FALSE);
-	}
-
-	if (message != NULL)
-	{
-		window = ephy_shell_get_active_window (EPHY_SHELL (shell));
-		dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-				 		 GTK_DIALOG_DESTROY_WITH_PARENT,
-				 		 message_type,
-				 		 GTK_BUTTONS_OK,
-				 		 message);
-		gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
-		g_signal_connect_swapped (G_OBJECT (dialog), "response",
-                           		  G_CALLBACK (gtk_widget_destroy),
-                           		  G_OBJECT (dialog));
-		gtk_widget_show (dialog);
-	}
-}
-
-static void
 ephy_shell_new_window_cb (EphyEmbedShell *shell,
 			  EphyEmbed **new_embed,
                           EmbedChromeMask chromemask,
@@ -252,11 +174,6 @@ ephy_shell_init (EphyShell *gs)
 	g_signal_connect (G_OBJECT (single),
 			  "new_window_orphan",
 			  G_CALLBACK(ephy_shell_new_window_cb),
-			  NULL);
-
-	g_signal_connect (G_OBJECT (gs),
-			  "command",
-			  G_CALLBACK(ephy_shell_command_cb),
 			  NULL);
 
 	ephy_init_services (gs);

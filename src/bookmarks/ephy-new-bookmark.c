@@ -54,7 +54,6 @@ struct EphyNewBookmarkPrivate
 {
 	EphyBookmarks *bookmarks;
 	char *location;
-	char *smarturl;
 	char *icon;
 	gulong id;
 
@@ -140,7 +139,6 @@ ephy_new_bookmark_finalize (GObject *object)
 	g_return_if_fail (editor->priv != NULL);
 
 	g_free (editor->priv->location);
-	g_free (editor->priv->smarturl);
 	g_free (editor->priv->icon);
 
 	g_free (editor->priv);
@@ -160,8 +158,7 @@ ephy_new_bookmark_add (EphyNewBookmark *new_bookmark)
 	title = gtk_editable_get_chars
 		(GTK_EDITABLE (new_bookmark->priv->title_entry), 0, -1);
 	node = ephy_bookmarks_add (new_bookmark->priv->bookmarks, title,
-			           new_bookmark->priv->location,
-			           new_bookmark->priv->smarturl);
+			           new_bookmark->priv->location);
 	new_bookmark->priv->id = ephy_node_get_id (node);
 
 	ephy_topics_selector_set_bookmark (selector, node);
@@ -466,7 +463,6 @@ ephy_new_bookmark_init (EphyNewBookmark *editor)
 {
 	editor->priv = g_new0 (EphyNewBookmarkPrivate, 1);
 	editor->priv->location = NULL;
-	editor->priv->smarturl = NULL;
 	editor->priv->icon = NULL;
 	editor->priv->id = 0;
 }
@@ -478,14 +474,6 @@ ephy_new_bookmark_set_title (EphyNewBookmark *bookmark,
 	LOG ("Setting new bookmark title to: \"%s\"", title)
 	gtk_entry_set_text (GTK_ENTRY (bookmark->priv->title_entry),
 			    g_strdup (title));
-}
-
-void
-ephy_new_bookmark_set_smarturl (EphyNewBookmark *bookmark,
-			        const char *url)
-{
-	g_free (bookmark->priv->smarturl);
-	bookmark->priv->smarturl = g_strdup (url);
 }
 
 void

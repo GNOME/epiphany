@@ -1,3 +1,48 @@
+2003-06-09  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/epiphany.schemas.in:
+	* data/ui/epiphany-bookmark-editor-ui.xml.in:
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_class_init):
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozRegisterComponents.cpp:
+	* lib/Makefile.am:
+	* src/bookmarks/ephy-bookmark-action.c: (create_tool_item),
+	(ephy_bookmark_action_sync_smart_url), (entry_activated_cb),
+	(activate_cb), (connect_proxy),
+	(ephy_bookmark_action_set_property),
+	(ephy_bookmark_action_finalize), (ephy_bookmark_action_class_init),
+	(sync_bookmark_properties), (ephy_bookmark_action_init):
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(location_entry_changed_cb):
+	* src/bookmarks/ephy-bookmarks-editor.c: (show_properties_dialog),
+	(add_bookmarks_source_menu), (import_dialog_response_cb),
+	(cmd_bookmarks_import):
+	* src/bookmarks/ephy-bookmarks-import.c: (ephy_bookmarks_import),
+	(mozilla_parse_bookmarks), (xbel_parse_folder),
+	(xbel_parse_bookmarks), (ephy_bookmarks_import_xbel):
+	* src/bookmarks/ephy-bookmarks-import.h:
+	* src/bookmarks/ephy-bookmarks.c:
+	(ephy_bookmarks_autocompletion_source_foreach),
+	(ephy_bookmarks_init_defaults), (update_topics_list),
+	(update_has_smart_address), (ephy_bookmarks_add),
+	(ephy_bookmarks_set_address):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/bookmarks/ephy-new-bookmark.c: (ephy_new_bookmark_finalize),
+	(ephy_new_bookmark_add), (ephy_new_bookmark_init),
+	(ephy_new_bookmark_set_title):
+	* src/bookmarks/ephy-new-bookmark.h:
+	* src/ephy-shell.c: (ephy_shell_init):
+	* src/popup-commands.c: (popup_cmd_bookmark_link):
+
+	Get rid of starthere: and default to google, as discussed
+	with Seth.
+	Add a way to import bookmarks from the editor. (you still
+	cant specificy a file, that's sort of low priority for me, but
+	we have a plan on how to do it).
+	Allow to edit smart bookmarks in the user interface. The address
+	field is used and when there is a %s, it's considered a smart
+	url. (like mozilla does it).
+
 2003-06-08  Piers Cornwell  <piersc@cogs.susx.ac.uk>
  
  	* data/ui/epiphany-ui.xml.in:

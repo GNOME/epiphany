@@ -23,12 +23,14 @@
 
 G_BEGIN_DECLS
 
+gboolean ephy_bookmarks_import         (EphyBookmarks *bookmarks,
+					const char *filename);
+
 gboolean ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 					const char *filename);
 
 gboolean ephy_bookmarks_import_xbel    (EphyBookmarks *bookmarks,
-					const char *filename,
-					const char *default_keyword);
+					const char *filename);
 
 G_END_DECLS
 

@@ -87,8 +87,6 @@ libephymozillaembed_la_SOURCES = 	\
 	PrintProgressListener.h         \
 	ProgressListener.cpp		\
 	ProgressListener.h		\
-	StartHereProtocolHandler.cpp	\
-	StartHereProtocolHandler.h	\
 	mozilla-embed.cpp	        \
 	mozilla-embed.h			\
 	mozilla-embed-persist.cpp       \
