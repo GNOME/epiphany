@@ -23,13 +23,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <gtk/gtkversion.h>
 
 #if !GTK_CHECK_VERSION (2, 5, 1)
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "ephy-label.h"
 
