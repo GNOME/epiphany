@@ -1,6 +1,7 @@
 /*
  *  Copyright (C) 2000-2004 Marco Pesenti Gritti
  *  Copyright (C) 2003, 2004 Christian Persch
+ *  Copyright (C) 2004 Crispin Flowerday
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,11 +46,15 @@
 #include <nsIDOMCSSStyleDeclaration.h>
 #include <nsIDOM3Node.h>
 #include <nsIDOMCSSPrimitiveValue.h>
+#include <nsIDOMNodeList.h>
+#include <nsIDOMDocumentView.h>
+#include <nsIDOMAbstractView.h>
 
 #ifdef ALLOW_PRIVATE_API
 #include <nsIDOMXULDocument.h>
 #include <nsIDOMNSEvent.h>
 #include <nsIDOMNSHTMLElement.h>
+#include <nsIDOMViewCSS.h>
 #endif
 
 #define KEY_CODE 256
@@ -180,6 +185,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				            'w', 'w', '.', 'w', '3', '.', 'o', 'r',
 				            'g', '/', '1', '9', '9', '9', '/', 'x',
 				            'l', 'i', 'n', 'k', '\0'};
+	const PRUnichar bodyLiteral[] = { 'b', 'o', 'd', 'y', '\0' };
 
 	mEmbedEvent = info;
 
@@ -213,6 +219,8 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 	PRUint16 type;
 	rv = node->GetNodeType(&type);
 	if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
+
+	PRBool has_background = PR_FALSE;
 
 	nsCOMPtr<nsIDOMHTMLElement> element = do_QueryInterface(node);
 	if ((nsIDOMNode::ELEMENT_NODE == type) && element)
@@ -313,6 +321,35 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				return NS_OK;
 			}
 		}
+		else if (g_ascii_strcasecmp (tag.get(), "html") == 0)
+		{
+			/* Clicked on part of the page without a <body>, so
+			 * look for a background image in the body tag */
+			nsCOMPtr<nsIDOMNodeList> nodeList;
+
+			rv = mDOMDocument->GetElementsByTagName (nsEmbedString(bodyLiteral),
+								 getter_AddRefs (nodeList));
+			if (NS_SUCCEEDED (rv) && nodeList)
+			{
+				nsCOMPtr<nsIDOMNode> bodyNode;
+				nodeList->Item (0, getter_AddRefs (bodyNode));
+
+				nsEmbedString cssurl;
+				rv = GetCSSBackground (bodyNode, cssurl);
+				if (NS_SUCCEEDED (rv))
+				{
+					nsEmbedCString bgimg;
+					rv = ResolveBaseURL (cssurl, bgimg);
+					if (NS_FAILED (rv))
+						return NS_ERROR_FAILURE;
+
+					SetStringProperty ("background_image",
+							   bgimg.get());
+
+					has_background = PR_TRUE;
+				}
+			}
+ 		}
 	}
 
 	/* Is page framed ? */
@@ -465,48 +502,6 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				info->context |= EMBED_CONTEXT_INPUT;
 			}
 
-			nsCOMPtr<nsIDOMElement> domelement;
-			domelement = do_QueryInterface (node);
-			if (!domelement) return NS_ERROR_FAILURE;
-
-			PRBool has_background = PR_FALSE;
-
-			nsEmbedString value;
-			domelement->GetAttribute (nsEmbedString(bgLiteral), value);
-				
-			if (value.Length())
-			{
-				nsEmbedCString bgimg;
-
-				rv = ResolveBaseURL (value, bgimg);
-                                if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
-
-				SetStringProperty ("background_image", bgimg.get());
-			}
-			else
-			{
-				nsCOMPtr<nsIDOMHTMLBodyElement> bgelement;
-				bgelement = do_QueryInterface (node);
-				if (bgelement)
-				{
-					nsEmbedString value;
-					bgelement->GetBackground (value);
-
-					if (value.Length())
-					{
-						nsEmbedCString bgimg;
-
-						rv = ResolveBaseURL (value, bgimg);
-                                                if (NS_FAILED(rv))
-                                                        return NS_ERROR_FAILURE;
-
-						SetStringProperty ("background_image",
-						   bgimg.get());
-						has_background = PR_TRUE;
-					}
-				}
-			}
-
 			if (!has_background)
 			{
 				nsEmbedString cssurl;
@@ -522,6 +517,8 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 						           bgimg.get());
 					if (NS_FAILED (rv))
 						return NS_ERROR_FAILURE;
+
+					has_background = PR_TRUE;
 				}
 			}
 		}
@@ -536,28 +533,44 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 nsresult EventContext::GetCSSBackground (nsIDOMNode *node, nsAString& url)
 {
-	nsresult result;
+	nsresult rv;
 
 	const PRUnichar bgimage[] = {'b', 'a', 'c', 'k', 'g', 'r', 'o', 'u', 'n', 'd',
 				     '-', 'i', 'm', 'a', 'g', 'e', '\0'};
 
-	nsCOMPtr<nsIDOMElementCSSInlineStyle> style;
-	style = do_QueryInterface (node);
-	if (!style) return NS_ERROR_FAILURE;
+	nsCOMPtr<nsIDOMElement> element = do_QueryInterface (node);
+	NS_ENSURE_TRUE (element, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsIDOMDocumentView> docView = do_QueryInterface (mDOMDocument);
+	NS_ENSURE_TRUE (docView, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsIDOMAbstractView> abstractView;
+	docView->GetDefaultView (getter_AddRefs (abstractView));
+
+	nsCOMPtr<nsIDOMViewCSS> viewCSS = do_QueryInterface (abstractView);
+	NS_ENSURE_TRUE (viewCSS, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDOMCSSStyleDeclaration> decl;
-	result = style->GetStyle (getter_AddRefs(decl));
-	if (NS_FAILED(result)) return NS_ERROR_FAILURE;
+	viewCSS->GetComputedStyle (element, nsEmbedString(),
+				   getter_AddRefs (decl));
+	NS_ENSURE_TRUE (decl, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIDOMCSSValue> cssValue;
+	nsCOMPtr<nsIDOMCSSValue> CSSValue;
 	decl->GetPropertyCSSValue (nsEmbedString(bgimage),
-				   getter_AddRefs(cssValue));
-	nsCOMPtr<nsIDOMCSSPrimitiveValue> primitiveValue;
+				   getter_AddRefs (CSSValue));
 
-	primitiveValue = do_QueryInterface(cssValue);
+	nsCOMPtr<nsIDOMCSSPrimitiveValue> primitiveValue = 
+		do_QueryInterface (CSSValue);
 	if (!primitiveValue) return NS_ERROR_FAILURE;
+	
+	PRUint16 type;
+	rv = primitiveValue->GetPrimitiveType (&type);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-	primitiveValue->GetStringValue(url);
+	if (type != nsIDOMCSSPrimitiveValue::CSS_URI) return NS_ERROR_FAILURE;
+
+	rv = primitiveValue->GetStringValue (url);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	return NS_OK;
 }
