@@ -161,7 +161,7 @@ encodings[] =
 	{ N_("Korean (_JOHAB)"),                    "x-johab",               LG_KOREAN },
 	{ N_("Korean (_UHC)"),                      "x-windows-949",         LG_KOREAN },
 	{ N_("_Nordic (ISO-8859-10)"),              "ISO-8859-10",           LG_OTHER },
-	{ N_("_Romanian (_MacRomanian)"),            "x-mac-romanian",        LG_OTHER },
+	{ N_("Romanian (_MacRomanian)"),            "x-mac-romanian",        LG_OTHER },
 	{ N_("R_omanian (ISO-8859-16)"),            "ISO-8859-16",           LG_OTHER },
 	{ N_("South European (_ISO-8859-3)"),       "ISO-8859-3",            LG_OTHER },
 	{ N_("_Thai (TIS-620)"),                    "TIS-620",               LG_OTHER },
