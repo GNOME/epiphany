@@ -19,7 +19,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "glib.h"
@@ -384,9 +384,14 @@ getUILang (nsAString& aUILang)
 		return NS_ERROR_FAILURE;
 	}
 
+#if MOZILLA_SNAPSHOT >= 12
+	result = localeService->GetLocaleComponentForUserAgent (aUILang);
+#else
 	nsXPIDLString uiLang;
 	result = localeService->GetLocaleComponentForUserAgent (getter_Copies(uiLang));
 	aUILang = uiLang;
+#endif
+
 	if (NS_FAILED (result))
 	{
 		g_warning ("Could not determine locale!\n");
