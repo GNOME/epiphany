@@ -412,7 +412,7 @@ ephy_completion_model_get_value (GtkTreeModel *tree_model,
 static guint
 ephy_completion_model_get_flags (GtkTreeModel *tree_model)
 {
-	return 0;
+	return GTK_TREE_MODEL_ITERS_PERSIST | GTK_TREE_MODEL_LIST_ONLY;
 }
 
 static gboolean
