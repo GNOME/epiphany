@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 10:55-0500\n"
-"PO-Revision-Date: 2004-12-16 18:56-0400\n"
+"POT-Creation-Date: 2004-12-17 20:24-0500\n"
+"PO-Revision-Date: 2004-12-17 18:56-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -113,7 +113,7 @@ msgstr "Hide the menubar by default."
 msgid "Browse the web"
 msgstr "Browse the web"
 
-#: data/epiphany.desktop.in.h:2 src/ephy-main.c:116
+#: data/epiphany.desktop.in.h:2 src/ephy-main.c:139
 msgid "Epiphany Web Browser"
 msgstr "Epiphany Web Browser"
 
@@ -659,7 +659,7 @@ msgstr "_Find:"
 msgid "_Next"
 msgstr "_Next"
 
-#: data/glade/epiphany.glade.h:13 embed/downloader-view.c:283
+#: data/glade/epiphany.glade.h:13 embed/downloader-view.c:313
 msgid "_Pause"
 msgstr "_Pause"
 
@@ -980,48 +980,52 @@ msgstr "_to:"
 msgid "fr_om:"
 msgstr "fr_om:"
 
-#: embed/downloader-view.c:228
+#: embed/downloader-view.c:180
+msgid "_Show Downloader..."
+msgstr "_Show Downloader..."
+
+#: embed/downloader-view.c:258
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: embed/downloader-view.c:232
+#: embed/downloader-view.c:262
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: embed/downloader-view.c:283
+#: embed/downloader-view.c:313
 msgid "_Resume"
 msgstr "_Resume"
 
-#: embed/downloader-view.c:340 src/ephy-window.c:1332
+#: embed/downloader-view.c:370 src/ephy-window.c:1332
 msgid "Unknown"
 msgstr "Unknown"
 
-#: embed/downloader-view.c:374
+#: embed/downloader-view.c:404
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "%d download"
 msgstr[1] "%d downloads"
 
-#: embed/downloader-view.c:487 embed/downloader-view.c:496
+#: embed/downloader-view.c:517 embed/downloader-view.c:526
 msgid "download status|Unknown"
 msgstr "download status|Unknown"
 
-#: embed/downloader-view.c:490
+#: embed/downloader-view.c:520
 msgid "download status|Failed"
 msgstr "download status|Failed"
 
-#: embed/downloader-view.c:550 src/bookmarks/ephy-bookmarks-editor.c:804
+#: embed/downloader-view.c:580 src/bookmarks/ephy-bookmarks-editor.c:804
 msgid "File"
 msgstr "File"
 
-#: embed/downloader-view.c:572
+#: embed/downloader-view.c:602
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:583
+#: embed/downloader-view.c:613
 msgid "Remaining"
 msgstr "Remaining"
 
@@ -1420,18 +1424,18 @@ msgstr ""
 #. translators: %s is the name of the application
 #: embed/mozilla/ContentHandler.cpp:265
 #, c-format
-msgid "Open this file with %s?"
-msgstr "Open this file with %s?"
+msgid "Open this file with \"%s\"?"
+msgstr "Open this file with \"%s\"?"
 
 #. translators: %s is the name of the application
 #: embed/mozilla/ContentHandler.cpp:270
 #, c-format
 msgid ""
 "It's not possible to view this file type directly in the browser. You can "
-"open it with <tt>%s</tt> or save it."
+"open it with \"%s\" or save it."
 msgstr ""
 "It is not possible to view this file type directly in the browser. You can "
-"open it with <tt>%s</tt> or save it."
+"open it with \"%s\" or save it."
 
 #: embed/mozilla/ContentHandler.cpp:280
 msgid "Download the file?"
@@ -1823,24 +1827,24 @@ msgstr "%s exists, please move it out of the way."
 msgid "Failed to create directory %s."
 msgstr "Failed to create directory %s."
 
-#: lib/ephy-gui.c:158
+#: lib/ephy-gui.c:192
 #, c-format
 msgid "A file %s already exists."
 msgstr "A file %s already exists."
 
-#: lib/ephy-gui.c:162
+#: lib/ephy-gui.c:196
 msgid "If you choose to overwrite this file, the contents will be lost."
 msgstr "If you choose to overwrite this file, the contents will be lost."
 
-#: lib/ephy-gui.c:166
+#: lib/ephy-gui.c:200
 msgid "_Overwrite"
 msgstr "_Overwrite"
 
-#: lib/ephy-gui.c:168
+#: lib/ephy-gui.c:202
 msgid "Overwrite File"
 msgstr "Overwrite File"
 
-#: lib/ephy-gui.c:198
+#: lib/ephy-gui.c:232
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Could not display help: %s"
@@ -1928,7 +1932,7 @@ msgstr "Close Tab"
 msgid "Popup Windows"
 msgstr "Popup Windows"
 
-#: lib/ephy-stock-icons.c:57 src/ephy-history-window.c:1193
+#: lib/ephy-stock-icons.c:57 src/ephy-history-window.c:1198
 msgid "History"
 msgstr "History"
 
@@ -1990,7 +1994,7 @@ msgstr "%s:"
 #: src/bookmarks/ephy-bookmark-action.c:539
 #: src/bookmarks/ephy-bookmarks-editor.c:181
 #: src/bookmarks/ephy-bookmarks-editor.c:1170 src/ephy-history-window.c:175
-#: src/ephy-history-window.c:713
+#: src/ephy-history-window.c:718
 msgid "Open in New _Tab"
 msgstr "Open in New _Tab"
 
@@ -2061,7 +2065,7 @@ msgstr "Create a new topic"
 #. File Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:178
 #: src/bookmarks/ephy-bookmarks-editor.c:1169 src/ephy-history-window.c:172
-#: src/ephy-history-window.c:712
+#: src/ephy-history-window.c:717
 msgid "_Open in New Window"
 msgstr "_Open in New Window"
 
@@ -2135,7 +2139,7 @@ msgstr "Cut the selection"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:206
 #: src/bookmarks/ephy-bookmarks-editor.c:1179 src/ephy-history-window.c:192
-#: src/ephy-history-window.c:722 src/ephy-window.c:144
+#: src/ephy-history-window.c:727 src/ephy-window.c:144
 msgid "_Copy"
 msgstr "_Copy"
 
@@ -2300,19 +2304,19 @@ msgstr "Konqueror"
 msgid "Mozilla"
 msgstr "Mozilla"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1164 src/ephy-history-window.c:707
+#: src/bookmarks/ephy-bookmarks-editor.c:1164 src/ephy-history-window.c:712
 msgid "_Open in New Windows"
 msgstr "_Open in New Windows"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1165 src/ephy-history-window.c:708
+#: src/bookmarks/ephy-bookmarks-editor.c:1165 src/ephy-history-window.c:713
 msgid "Open in New _Tabs"
 msgstr "Open in New _Tabs"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1175 src/ephy-history-window.c:718
+#: src/bookmarks/ephy-bookmarks-editor.c:1175 src/ephy-history-window.c:723
 msgid "_Copy Address"
 msgstr "_Copy Address"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1416 src/ephy-history-window.c:1035
+#: src/bookmarks/ephy-bookmarks-editor.c:1416 src/ephy-history-window.c:1040
 msgid "_Search:"
 msgstr "_Search:"
 
@@ -2321,11 +2325,11 @@ msgstr "_Search:"
 msgid "Topics"
 msgstr "Topics"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1700 src/ephy-history-window.c:1322
+#: src/bookmarks/ephy-bookmarks-editor.c:1700 src/ephy-history-window.c:1327
 msgid "Title"
 msgstr "Title"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1706 src/ephy-history-window.c:1328
+#: src/bookmarks/ephy-bookmarks-editor.c:1706 src/ephy-history-window.c:1333
 msgid "Address"
 msgstr "Address"
 
@@ -2500,68 +2504,68 @@ msgstr ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 
-#: src/ephy-history-window.c:266
+#: src/ephy-history-window.c:265
 msgid "C_lear"
 msgstr "C_lear"
 
-#: src/ephy-history-window.c:269
+#: src/ephy-history-window.c:274
 msgid "Clear History"
 msgstr "Clear History"
 
-#: src/ephy-history-window.c:1044
+#: src/ephy-history-window.c:1049
 msgid "Last 30 Minutes"
 msgstr "Last 30 Minutes"
 
-#: src/ephy-history-window.c:1045
+#: src/ephy-history-window.c:1050
 msgid "Today"
 msgstr "Today"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: src/ephy-history-window.c:1046 src/ephy-history-window.c:1049
-#: src/ephy-history-window.c:1053
+#: src/ephy-history-window.c:1051 src/ephy-history-window.c:1054
+#: src/ephy-history-window.c:1058
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
 msgstr[0] "Last %d day"
 msgstr[1] "Last %d days"
 
-#: src/ephy-history-window.c:1260
+#: src/ephy-history-window.c:1265
 msgid "Sites"
 msgstr "Sites"
 
-#: src/ephy-main.c:52
+#: src/ephy-main.c:54
 msgid "Open a new tab in an existing Epiphany window"
 msgstr "Open a new tab in an existing Epiphany window"
 
-#: src/ephy-main.c:55
+#: src/ephy-main.c:57
 msgid "Run Epiphany in full screen mode"
 msgstr "Run Epiphany in full screen mode"
 
-#: src/ephy-main.c:58
+#: src/ephy-main.c:60
 msgid "Load the given session file"
 msgstr "Load the given session file"
 
-#: src/ephy-main.c:59 src/ephy-main.c:65
+#: src/ephy-main.c:61 src/ephy-main.c:67
 msgid "FILE"
 msgstr "FILE"
 
-#: src/ephy-main.c:61
+#: src/ephy-main.c:63
 msgid "Add a bookmark (don't open any window)"
 msgstr "Add a bookmark (don't open any window)"
 
-#: src/ephy-main.c:62
+#: src/ephy-main.c:64
 msgid "URL"
 msgstr "URL"
 
-#: src/ephy-main.c:64
+#: src/ephy-main.c:66
 msgid "Import bookmarks from the given file"
 msgstr "Import bookmarks from the given file"
 
-#: src/ephy-main.c:67
+#: src/ephy-main.c:69
 msgid "Launch the bookmarks editor"
 msgstr "Launch the bookmarks editor"
 
-#: src/ephy-main.c:112
+#: src/ephy-main.c:135
 msgid "Ephy"
 msgstr "Ephy"
 
@@ -3405,8 +3409,8 @@ msgid "Irish"
 msgstr "Irish"
 
 #: src/prefs-dialog.c:300
-msgid "Scottish"
-msgstr "Scottish"
+msgid "Scots Gaelic"
+msgstr "Scots Gaelic"
 
 #: src/prefs-dialog.c:301
 msgid "Galician"
@@ -3621,11 +3625,11 @@ msgstr "Toolbar Editor"
 msgid "_Add a New Toolbar"
 msgstr "_Add a New Toolbar"
 
-#: src/window-commands.c:909
+#: src/window-commands.c:898
 msgid "Epiphany"
 msgstr "Epiphany"
 
-#: src/window-commands.c:914
+#: src/window-commands.c:903
 msgid "translator-credits"
 msgstr ""
 "Maintainer: Adam Weinberger <adamw@gnome.org>\n"
