@@ -407,6 +407,7 @@ entry_populate_popup_cb (GtkEntry *entry,
 			 GtkMenu *menu,
 			 EphyLocationEntry *lentry)
 {
+	EphyLocationEntryPrivate *priv = lentry->priv;
 	GtkWidget *image;
 	GtkWidget *menuitem;
 	GList *children, *item;
@@ -424,6 +425,8 @@ entry_populate_popup_cb (GtkEntry *entry,
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM(menuitem), image);
 	g_signal_connect (menuitem , "activate",
 			  G_CALLBACK (entry_clear_activate_cb), lentry);
+	gtk_widget_set_sensitive (menuitem,
+		       		  gtk_editable_get_editable (GTK_EDITABLE (priv->entry)));
 	gtk_widget_show (menuitem);
 
 	/* search for the 2nd separator (the one after Select All) in the context
