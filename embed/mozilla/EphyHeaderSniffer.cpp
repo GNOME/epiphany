@@ -324,46 +324,10 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 
 		return NS_OK;
 	}
-	/* FIXME ask user if overwriting ? */
-
 	/* FIXME: how to inform user of failed save ? */
 
-	download_dir = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
-	if (!download_dir)
-	{
-		/* Emergency download destination */
-		download_dir = g_strdup (g_get_home_dir ());
-	}
-
-	if (!strcmp (download_dir, "Desktop"))
-	{
-		if (eel_gconf_get_boolean (CONF_DESKTOP_IS_HOME_DIR))
-		{
-			path = g_build_filename 
-				(g_get_home_dir (),
-				 NS_ConvertUCS2toUTF8 (defaultFileName).get(),
-				 NULL);
-		}
-		else
-		{
-			path = g_build_filename 
-				(g_get_home_dir (), "Desktop",
-				 NS_ConvertUCS2toUTF8 (defaultFileName).get(),
-				 NULL);
-		}
-	}
-	else
-	{
-		path = g_build_filename
-			(gnome_vfs_expand_initial_tilde (download_dir),
-			 NS_ConvertUCS2toUTF8 (defaultFileName).get(),
-			 NULL);
-	}
-	g_free (download_dir);
-			
-        nsCOMPtr<nsILocalFile> destFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
-	destFile->InitWithNativePath (nsDependentCString (path));
-	g_free (path);
+	nsILocalFile *destFile;
+	BuildDownloadPath (NS_ConvertUCS2toUTF8 (defaultFileName).get(), &destFile);
 
 	return InitiateDownload (destFile);
 }

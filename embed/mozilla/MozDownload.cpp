@@ -43,6 +43,9 @@
 
 #include "MozDownload.h"
 #include "mozilla-download.h"
+#include "eel-gconf-extensions.h"
+#include "ephy-prefs.h"
+#include <libgnomevfs/gnome-vfs-utils.h>
 
 #include "nsIExternalHelperAppService.h"
 #include "nsDirectoryServiceDefs.h"
@@ -472,3 +475,70 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
   
 	return rv;
 }
+
+static char*
+GetFilePath (const char *filename)
+{
+	char *path, *download_dir;
+
+	download_dir = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
+	if (!download_dir)
+	{
+		/* Emergency download destination */
+		download_dir = g_strdup (g_get_home_dir ());
+	}
+
+	if (!strcmp (download_dir, "Desktop"))
+	{
+		if (eel_gconf_get_boolean (CONF_DESKTOP_IS_HOME_DIR))
+		{
+			path = g_build_filename 
+				(g_get_home_dir (),
+				 filename,
+				 NULL);
+		}
+		else
+		{
+			path = g_build_filename 
+				(g_get_home_dir (), "Desktop",
+				 filename,
+				 NULL);
+		}
+	}
+	else
+	{
+		path = g_build_filename
+			(gnome_vfs_expand_initial_tilde (download_dir),
+			 filename,
+			 NULL);
+	}
+	g_free (download_dir);
+
+	return path;
+}
+
+nsresult BuildDownloadPath (const char *defaultFileName, nsILocalFile **_retval)
+{
+	char *path;
+	int i = 0;
+
+	path = GetFilePath (defaultFileName);
+	
+	while (g_file_test (path, G_FILE_TEST_EXISTS))
+	{
+		g_free (path);
+
+		char *tmp_path;
+		tmp_path = g_strdup_printf ("%s.%d", defaultFileName,  ++i);
+		path = GetFilePath (tmp_path);
+		g_free (tmp_path);
+	}
+
+	nsCOMPtr <nsILocalFile> destFile (do_CreateInstance(NS_LOCAL_FILE_CONTRACTID));
+	destFile->InitWithNativePath (nsDependentCString (path));
+	g_free (path);
+
+	NS_IF_ADDREF (*_retval = destFile);
+	return NS_OK;
+}
+

@@ -80,6 +80,7 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceUri
 				  nsILocalFile* inDestFile, const char *contentType,
 				  nsIURI* inOriginalURI, MozillaEmbedPersist *embedPersist,
 				  nsIInputStream *postData, nsISupports *aCacheKey);
+nsresult BuildDownloadPath (const char *defaultFileName, nsILocalFile **_retval);
 
 class MozDownload : public nsIDownload,
                     public nsIWebProgressListener
