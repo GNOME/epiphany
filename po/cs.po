@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany VERSION\n"
-"POT-Creation-Date: 2003-05-29 12:01+0200\n"
-"PO-Revision-Date: 2003-05-29 14:58+0200\n"
+"POT-Creation-Date: 2003-05-30 03:58+0200\n"
+"PO-Revision-Date: 2003-05-30 14:17+0200\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -327,38 +327,63 @@ msgid "Size of memory cache, in KB."
 msgstr "Velikost cache v paměti v KB."
 
 #: data/epiphany.schemas.in.h:55
+msgid "The charset autodetector. Empty string means autodetect is off"
+msgstr ""
+"Autodetektor znakové sady. Prázdný řetězec znamená, že autodetekce je vypnuta"
+
+#: data/epiphany.schemas.in.h:56
+msgid ""
+"The charset autodetector. Valid entries are <empty string> (autodetectors "
+"off), cjk_parallel_state_machine (autodetect east asian encodings), "
+"ja_parallel_state_machine (autodetect japanese encodings), "
+"ko_parallel_state_machine (autodetect korean encodings), ruprob (autodetect "
+"russian encodings), ukprob (autodetect ukrainian encodings), "
+"zh_parallel_state_machine (autodetect chinese encodings), "
+"zhcn_parallel_state_machine (autodetect simplified chinese encodings) and "
+"zhtw_parallel_state_machine (autodetect traditional chinese encodings)."
+msgstr ""
+"Autodetektor znakové sady. Platné hodnoty jsou <prázdný řetězec> "
+"(autodetektoři vypnuti), cjk_parallel_state_machine (autodetekovat "
+"východoasijská kódování), ja_parallel_state_machine (autodetekovat japonská "
+"kódování), ko_parallel_state_machine (autodetekovat korejská kódování), "
+"ruprob (autodetekovat ruská kódování), ukprob (autodetekovat ukrajinská "
+"kódování), zh_parallel_state_machine (autodetekovat čínská kódování), "
+"zhcn_parallel_state_machine (autodetekovat zjednodušená čínská kódování) and "
+"zhtw_parallel_state_machine (autodetekovat tradiční čínská kódování)."
+
+#: data/epiphany.schemas.in.h:57
 msgid "Underline links"
 msgstr "Podtrhávat odkazy"
 
-#: data/epiphany.schemas.in.h:56
+#: data/epiphany.schemas.in.h:58
 msgid "Underline links."
 msgstr "Podtrhávat odkazy."
 
-#: data/epiphany.schemas.in.h:57
+#: data/epiphany.schemas.in.h:59
 msgid "Use own colors"
 msgstr "Používat vlastní barvy"
 
-#: data/epiphany.schemas.in.h:58
+#: data/epiphany.schemas.in.h:60
 msgid "Use own fonts"
 msgstr "POužívat vlastní písma"
 
-#: data/epiphany.schemas.in.h:59
+#: data/epiphany.schemas.in.h:61
 msgid "Use tabs"
 msgstr "Používat karty"
 
-#: data/epiphany.schemas.in.h:60
+#: data/epiphany.schemas.in.h:62
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Používat vaše vlastní barvy místo barev, které požaduje stránka."
 
-#: data/epiphany.schemas.in.h:61
+#: data/epiphany.schemas.in.h:63
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Používat vaše vlastní písma místo písem, které požaduje stránka."
 
-#: data/epiphany.schemas.in.h:62
+#: data/epiphany.schemas.in.h:64
 msgid "When to compare cached copy"
 msgstr "Kdy porovnávat kešovanou kopii"
 
-#: data/epiphany.schemas.in.h:63
+#: data/epiphany.schemas.in.h:65
 msgid ""
 "When to compare cached copy to web copy. Possible values are 0 (once per "
 "session), 1 (every time), 2 (never), 3 (automatic)."
@@ -366,7 +391,7 @@ msgstr ""
 "Kdy porovávvat kešovanou kopii s kopií z WWW. Možné hodnoty jsou 0 (jednou "
 "za sezení), 1 (pokaždé), 2 (nikdy), 3 (automaticky)."
 
-#: data/epiphany.schemas.in.h:64
+#: data/epiphany.schemas.in.h:66
 msgid ""
 "Where to accept cookies from. Possible values are 0 (anywhere), 1 (from "
 "current server only), 2 (nowhere)"
@@ -374,19 +399,19 @@ msgstr ""
 "Odkud přijímat koláčky. Možné hodnoty jsou 0 (odkudkoli), 1 (jen z "
 "aktuálního serveru), 2 (odnikud)"
 
-#: data/epiphany.schemas.in.h:65
+#: data/epiphany.schemas.in.h:67
 msgid "Whether to print the date in the footer."
 msgstr "Jestli v patičce tisknout datum."
 
-#: data/epiphany.schemas.in.h:66
+#: data/epiphany.schemas.in.h:68
 msgid "Whether to print the page address in the header"
 msgstr "Jestli v patičce tisknout adresu stránky"
 
-#: data/epiphany.schemas.in.h:67
+#: data/epiphany.schemas.in.h:69
 msgid "Whether to print the page numbers (x of total) in the footer."
 msgstr "Jestli v patičce tisknout číska stránek (x z celkem)."
 
-#: data/epiphany.schemas.in.h:68
+#: data/epiphany.schemas.in.h:70
 msgid "Whether to print the page title in the header."
 msgstr "Jestli v hlavičce tisknout nadpis stránky."
 
@@ -484,7 +509,7 @@ msgstr "_Předchozí"
 
 #: data/glade/epiphany.glade.h:24
 msgid "_Wrap around"
-msgstr "_Přecházet přes okraj"
+msgstr "Přecházet přes _okraj"
 
 #: data/glade/prefs-dialog.glade.h:1 data/glade/print.glade.h:1
 msgid "    "
@@ -532,7 +557,7 @@ msgstr "Pokročilé"
 
 #: data/glade/prefs-dialog.glade.h:13
 msgid "Al_ways use the desktop theme colors"
-msgstr "_Vždy používat barvy tématu pracovní plochy"
+msgstr "Vždy používat _barvy tématu pracovní plochy"
 
 #: data/glade/prefs-dialog.glade.h:14
 msgid "Allow _popup windows"
@@ -547,239 +572,151 @@ msgid "Appearance"
 msgstr "Vzhled"
 
 #: data/glade/prefs-dialog.glade.h:17
-#: embed/mozilla/mozilla-embed-single.cpp:74 src/prefs-dialog.c:87
-msgid "Arabic"
-msgstr "Arabské"
-
-#: data/glade/prefs-dialog.glade.h:18
 msgid "Autodetec_t encoding:"
 msgstr "Auto_detekovat kódování:"
 
-#: data/glade/prefs-dialog.glade.h:19
-#: embed/mozilla/mozilla-embed-single.cpp:75
-msgid "Baltic"
-msgstr "Baltské"
-
-#: data/glade/prefs-dialog.glade.h:20
-#: embed/mozilla/mozilla-embed-single.cpp:76
-msgid "Central European"
-msgstr "Středoevropské"
-
-#: data/glade/prefs-dialog.glade.h:21
-#: embed/mozilla/mozilla-embed-single.cpp:77 src/prefs-dialog.c:94
-msgid "Chinese"
-msgstr "Čínské"
-
-#: data/glade/prefs-dialog.glade.h:22
+#: data/glade/prefs-dialog.glade.h:18
 msgid "Clear _Disk Cache"
 msgstr "Vymazat cache na _disku"
 
-#: data/glade/prefs-dialog.glade.h:23
+#: data/glade/prefs-dialog.glade.h:19
 msgid "Clear _Memory Cache"
 msgstr "Vymazat cache v _paměti"
 
-#: data/glade/prefs-dialog.glade.h:24
+#: data/glade/prefs-dialog.glade.h:20
 msgid "Compare page:"
 msgstr "Porovnat stránku:"
 
-#: data/glade/prefs-dialog.glade.h:25
-#: embed/mozilla/mozilla-embed-single.cpp:78
-msgid "Cyrillic"
-msgstr "Azbuka"
-
-#: data/glade/prefs-dialog.glade.h:26
+#: data/glade/prefs-dialog.glade.h:21
 msgid "Dis_k cache:"
 msgstr "Cache na _disku:"
 
-#: data/glade/prefs-dialog.glade.h:27
+#: data/glade/prefs-dialog.glade.h:22
 msgid "E_very time"
 msgstr "Po_každé"
 
-#: data/glade/prefs-dialog.glade.h:28
-msgid "East asian"
-msgstr "Východoasijské"
-
-#: data/glade/prefs-dialog.glade.h:29
+#: data/glade/prefs-dialog.glade.h:23
 msgid "Enable Java_Script"
 msgstr "Povojit Java_Script"
 
-#: data/glade/prefs-dialog.glade.h:30
+#: data/glade/prefs-dialog.glade.h:24
 msgid "Enable _Java"
 msgstr "Povolit _Javu"
 
-#: data/glade/prefs-dialog.glade.h:31 data/glade/print.glade.h:16
+#: data/glade/prefs-dialog.glade.h:25 data/glade/print.glade.h:16
 msgid "General"
 msgstr "Obecné"
 
-#: data/glade/prefs-dialog.glade.h:32
-#: embed/mozilla/mozilla-embed-single.cpp:79 src/prefs-dialog.c:107
-msgid "Greek"
-msgstr "Řecké"
-
-#: data/glade/prefs-dialog.glade.h:33
-#: embed/mozilla/mozilla-embed-single.cpp:80 src/prefs-dialog.c:108
-msgid "Hebrew"
-msgstr "Hebrejské"
-
-#: data/glade/prefs-dialog.glade.h:34
-#: embed/mozilla/mozilla-embed-single.cpp:82 src/prefs-dialog.c:114
-msgid "Japanese"
-msgstr "Japonské"
-
-#: data/glade/prefs-dialog.glade.h:35
-#: embed/mozilla/mozilla-embed-single.cpp:83 src/prefs-dialog.c:115
-msgid "Korean"
-msgstr "Korejské"
-
-#: data/glade/prefs-dialog.glade.h:36
+#: data/glade/prefs-dialog.glade.h:26
 msgid "Lan_guage:"
 msgstr "_Jazyk:"
 
-#: data/glade/prefs-dialog.glade.h:37
+#: data/glade/prefs-dialog.glade.h:27
 msgid "Language Editor"
 msgstr "Editor jazyků"
 
-#: data/glade/prefs-dialog.glade.h:38
+#: data/glade/prefs-dialog.glade.h:28
 msgid "Language:"
 msgstr "Jazyk:"
 
-#: data/glade/prefs-dialog.glade.h:39
+#: data/glade/prefs-dialog.glade.h:29
 msgid "Memor_y cache:"
 msgstr "Cache v _paměti:"
 
-#: data/glade/prefs-dialog.glade.h:40
+#: data/glade/prefs-dialog.glade.h:30
 msgid "Min_imum font size:"
-msgstr "Mi_nimální velikost písma:"
+msgstr "M_inimální velikost písma:"
 
-#: data/glade/prefs-dialog.glade.h:41
-msgid "Off"
-msgstr "Vypnuto"
-
-#: data/glade/prefs-dialog.glade.h:42
+#: data/glade/prefs-dialog.glade.h:31
 msgid "Once per _session"
 msgstr "Jednou za _sezení"
 
-#: data/glade/prefs-dialog.glade.h:43
+#: data/glade/prefs-dialog.glade.h:32
 msgid "Open in _tabs by default"
 msgstr "Otevírat implicitně v _kartách."
 
-#: data/glade/prefs-dialog.glade.h:44
+#: data/glade/prefs-dialog.glade.h:33
 msgid "Preferences"
 msgstr "Nastavení"
 
-#: data/glade/prefs-dialog.glade.h:45 src/prefs-dialog.c:127
-msgid "Russian"
-msgstr "Ruské"
-
-#: data/glade/prefs-dialog.glade.h:46
+#: data/glade/prefs-dialog.glade.h:34
 msgid "S_ans serif:"
 msgstr "_Bezpatkové:"
 
-#: data/glade/prefs-dialog.glade.h:47
+#: data/glade/prefs-dialog.glade.h:35
 msgid "Sans Serif"
 msgstr "Bezpatkové"
 
-#: data/glade/prefs-dialog.glade.h:48
+#: data/glade/prefs-dialog.glade.h:36
 msgid "Security"
 msgstr "Zabezpečení"
 
-#: data/glade/prefs-dialog.glade.h:49
+#: data/glade/prefs-dialog.glade.h:37
 msgid "Serif"
 msgstr "Serif"
 
-#: data/glade/prefs-dialog.glade.h:50
+#: data/glade/prefs-dialog.glade.h:38
 msgid "Set to Current _Page"
 msgstr "Nastavit na aktuální _stránku"
 
-#: data/glade/prefs-dialog.glade.h:51
+#: data/glade/prefs-dialog.glade.h:39
 msgid "Set to _Blank Page"
-msgstr "Nastavit na _prázdnou stránku"
+msgstr "Nastavit na p_rázdnou stránku"
 
-#: data/glade/prefs-dialog.glade.h:52
+#: data/glade/prefs-dialog.glade.h:40
 msgid "Si_ze:"
 msgstr "_Velikost:"
 
-#: data/glade/prefs-dialog.glade.h:53
-msgid "Simplified Chinese"
-msgstr "Zjednodušené čínské"
-
-#: data/glade/prefs-dialog.glade.h:54
+#: data/glade/prefs-dialog.glade.h:41
 msgid "Siz_e:"
 msgstr "_Velikost:"
 
-#: data/glade/prefs-dialog.glade.h:55
-msgid "Thai"
-msgstr "Thajské"
-
-#: data/glade/prefs-dialog.glade.h:56
-msgid "Traditional Chinese"
-msgstr "Trandiční čínské"
-
-#: data/glade/prefs-dialog.glade.h:57
-#: embed/mozilla/mozilla-embed-single.cpp:84 src/prefs-dialog.c:135
-msgid "Turkish"
-msgstr "Turecké"
-
-#: data/glade/prefs-dialog.glade.h:58 src/prefs-dialog.c:136
-msgid "Ukrainian"
-msgstr "Ukrajinské"
-
-#: data/glade/prefs-dialog.glade.h:59
-#: embed/mozilla/mozilla-embed-single.cpp:85
-msgid "Unicode"
-msgstr "Unicode"
-
-#: data/glade/prefs-dialog.glade.h:60
-#: embed/mozilla/mozilla-embed-single.cpp:87
-msgid "Western"
-msgstr "Západní"
-
-#: data/glade/prefs-dialog.glade.h:61
+#: data/glade/prefs-dialog.glade.h:42
 #: src/bookmarks/ephy-bookmark-properties.c:378
 msgid "_Address:"
 msgstr "_Adresa:"
 
-#: data/glade/prefs-dialog.glade.h:62
+#: data/glade/prefs-dialog.glade.h:43
 msgid "_Always accept"
 msgstr "_Vždy přijímat"
 
-#: data/glade/prefs-dialog.glade.h:63
+#: data/glade/prefs-dialog.glade.h:44
 msgid "_Automatically"
 msgstr "_Automaticky"
 
-#: data/glade/prefs-dialog.glade.h:64
+#: data/glade/prefs-dialog.glade.h:45
 msgid "_Default encoding:"
 msgstr "_Implicitní kódování:"
 
-#: data/glade/prefs-dialog.glade.h:65
+#: data/glade/prefs-dialog.glade.h:46
 msgid "_Language encoding:"
 msgstr "Kódování _jazyka:"
 
-#: data/glade/prefs-dialog.glade.h:66
+#: data/glade/prefs-dialog.glade.h:47
 msgid "_Monospace:"
 msgstr "_Neproporcionální:"
 
-#: data/glade/prefs-dialog.glade.h:67
+#: data/glade/prefs-dialog.glade.h:48
 msgid "_More..."
 msgstr "_Více..."
 
-#: data/glade/prefs-dialog.glade.h:68
+#: data/glade/prefs-dialog.glade.h:49
 msgid "_Never"
 msgstr "_Nikdy"
 
-#: data/glade/prefs-dialog.glade.h:69
+#: data/glade/prefs-dialog.glade.h:50
 msgid "_Never accept"
 msgstr "_Nikdy nepřijímat"
 
-#: data/glade/prefs-dialog.glade.h:70
+#: data/glade/prefs-dialog.glade.h:51
 msgid "_Proportional:"
-msgstr "_Proporcionální:"
+msgstr "P_roporcionální:"
 
-#: data/glade/prefs-dialog.glade.h:71
+#: data/glade/prefs-dialog.glade.h:52
 msgid "_Serif:"
 msgstr "_Patkové:"
 
-#: data/glade/prefs-dialog.glade.h:72
+#: data/glade/prefs-dialog.glade.h:53
 msgid "kB"
 msgstr "kB"
 
@@ -845,7 +782,7 @@ msgstr "_Tiskárna:"
 
 #: data/glade/print.glade.h:21
 msgid "Pa_ges"
-msgstr "_Stránky"
+msgstr "Strán_ky"
 
 #: data/glade/print.glade.h:22
 msgid "Page _numbers"
@@ -902,7 +839,7 @@ msgstr "_Pravý"
 
 #: data/glade/print.glade.h:35
 msgid "_Selection"
-msgstr "_Výběr"
+msgstr "Vý_běr"
 
 #: data/glade/print.glade.h:36
 msgid "_Top:"
@@ -1174,7 +1111,7 @@ msgid "%d KB"
 msgstr "%d KB"
 
 #: embed/downloader-view.c:517 embed/downloader-view.c:535
-#: src/ephy-window.c:1020
+#: src/ephy-window.c:1018
 msgid "Unknown"
 msgstr "Neznámý"
 
@@ -1252,13 +1189,64 @@ msgstr "Byl vybrán soubor, když byl očekáván adresář."
 msgid "A folder was selected when a file was expected."
 msgstr "Byl vybrán adresář, když byl očekáván soubor."
 
+#: embed/mozilla/mozilla-embed-single.cpp:74 src/prefs-dialog.c:87
+msgid "Arabic"
+msgstr "Arabské"
+
+#: embed/mozilla/mozilla-embed-single.cpp:75
+msgid "Baltic"
+msgstr "Baltské"
+
+#: embed/mozilla/mozilla-embed-single.cpp:76
+msgid "Central European"
+msgstr "Středoevropské"
+
+#: embed/mozilla/mozilla-embed-single.cpp:77 src/prefs-dialog.c:94
+#: src/prefs-dialog.c:151
+msgid "Chinese"
+msgstr "Čínské"
+
+#: embed/mozilla/mozilla-embed-single.cpp:78
+msgid "Cyrillic"
+msgstr "Azbuka"
+
+#: embed/mozilla/mozilla-embed-single.cpp:79 src/prefs-dialog.c:107
+msgid "Greek"
+msgstr "Řecké"
+
+#: embed/mozilla/mozilla-embed-single.cpp:80 src/prefs-dialog.c:108
+msgid "Hebrew"
+msgstr "Hebrejské"
+
 #: embed/mozilla/mozilla-embed-single.cpp:81
 msgid "Indian"
 msgstr "Indické"
 
+#: embed/mozilla/mozilla-embed-single.cpp:82 src/prefs-dialog.c:114
+#: src/prefs-dialog.c:153
+msgid "Japanese"
+msgstr "Japonské"
+
+#: embed/mozilla/mozilla-embed-single.cpp:83 src/prefs-dialog.c:115
+#: src/prefs-dialog.c:154
+msgid "Korean"
+msgstr "Korejské"
+
+#: embed/mozilla/mozilla-embed-single.cpp:84 src/prefs-dialog.c:135
+msgid "Turkish"
+msgstr "Turecké"
+
+#: embed/mozilla/mozilla-embed-single.cpp:85
+msgid "Unicode"
+msgstr "Unicode"
+
 #: embed/mozilla/mozilla-embed-single.cpp:86
 msgid "Vietnamese"
 msgstr "Vietnamské"
+
+#: embed/mozilla/mozilla-embed-single.cpp:87
+msgid "Western"
+msgstr "Západní"
 
 #: embed/mozilla/mozilla-embed-single.cpp:88
 msgid "Other"
@@ -1266,107 +1254,107 @@ msgstr "Jiné"
 
 #: embed/mozilla/mozilla-embed-single.cpp:106
 msgid "Arabic (IBM-864)"
-msgstr "Arabská (IBM-864)"
+msgstr "Arabské (IBM-864)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:107
 msgid "Arabic (IBM-864-I)"
-msgstr "Arabská (IBM-864-I)"
+msgstr "Arabské (IBM-864-I)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:108
 msgid "Arabic (ISO-8859-6)"
-msgstr "Arabská (ISO-8859-6)"
+msgstr "Arabské (ISO-8859-6)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:109
 msgid "Arabic (ISO-8859-6-E)"
-msgstr "Arabská (ISO-8859-6-E)"
+msgstr "Arabské (ISO-8859-6-E)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:110
 msgid "Arabic (ISO-8859-6-I)"
-msgstr "Arabská (ISO-8859-6-I)"
+msgstr "Arabské (ISO-8859-6-I)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:111
 msgid "Arabic (MacArabic)"
-msgstr "Arabská (MacArabic)"
+msgstr "Arabské (MacArabic)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:112
 msgid "Arabic (Windows-1256)"
-msgstr "Arabská (Windows-1256)"
+msgstr "Arabské (Windows-1256)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:113
 msgid "Armenian (ARMSCII-8)"
-msgstr "Arménská (ARMSCII-8)"
+msgstr "Arménské (ARMSCII-8)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:114
 msgid "Baltic (ISO-8859-13)"
-msgstr "Baltská (ISO-8859-13)"
+msgstr "Baltské (ISO-8859-13)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:115
 msgid "Baltic (ISO-8859-4)"
-msgstr "Baltská (ISO-8859-4)"
+msgstr "Baltské (ISO-8859-4)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:116
 msgid "Baltic (Windows-1257)"
-msgstr "Baltská (Windows-1257)"
+msgstr "Baltské (Windows-1257)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:117
 msgid "Celtic (ISO-8859-14)"
-msgstr "Keltská (ISO-8859-14)"
+msgstr "Keltské (ISO-8859-14)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:118
 msgid "Central European (IBM-852)"
-msgstr "Středoevropská (IBM-852)"
+msgstr "Středoevropské (IBM-852)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:119
 msgid "Central European (ISO-8859-2)"
-msgstr "Středoevropská (ISO-8859-2)"
+msgstr "Středoevropské (ISO-8859-2)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:120
 msgid "Central European (MacCE)"
-msgstr "Středoevropská (MacCE)"
+msgstr "Středoevropské (MacCE)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:121
 msgid "Central European (Windows-1250)"
-msgstr "Středoevropská (Windows-1250)"
+msgstr "Středoevropské (Windows-1250)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:122
 msgid "Chinese Simplified (GB18030)"
-msgstr "Zjednodušená čínská (GB18030)"
+msgstr "Zjednodušené čínské (GB18030)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:123
 msgid "Chinese Simplified (GB2312)"
-msgstr "Zjednodušená čínská (GB2312)"
+msgstr "Zjednodušené čínské (GB2312)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:124
 msgid "Chinese Simplified (GBK)"
-msgstr "Zjednodušená čínská (GBK)"
+msgstr "Zjednodušené čínské (GBK)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:125
 msgid "Chinese Simplified (HZ)"
-msgstr "Zjednodušená čínská (HZ)"
+msgstr "Zjednodušené čínské (HZ)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:126
 msgid "Chinese Simplified (ISO-2022-CN)"
-msgstr "Zjednodušená čínská (ISO-2022-CN)"
+msgstr "Zjednodušené čínské (ISO-2022-CN)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:127
 msgid "Chinese Simplified (Windows-936)"
-msgstr "Zjednodušená čínská (Windows-936)"
+msgstr "Zjednodušené čínské (Windows-936)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:128
 msgid "Chinese Traditional (Big5)"
-msgstr "Tradiční čínská (Big5)"
+msgstr "Tradiční čínské (Big5)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:129
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr "Tradiční čínská (Big5-HKSCS)"
+msgstr "Tradiční čínské (Big5-HKSCS)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:130
 msgid "Chinese Traditional (EUC-TW)"
-msgstr "Tradiční čínská (EUC-TW)"
+msgstr "Tradiční čínské (EUC-TW)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:131
 msgid "Croatian (MacCroatian)"
-msgstr "Chorvatská (MacCroatian)"
+msgstr "Chorvatské (MacCroatian)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:132
 msgid "Cyrillic (IBM-855)"
@@ -1394,19 +1382,19 @@ msgstr "Azbuka (Windows-1251)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:138
 msgid "Cyrillic/Russian (CP-866)"
-msgstr "Azbuka/Ruská (CP-866)"
+msgstr "Azbuka/Ruské (CP-866)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:139
 msgid "Cyrillic/Ukrainian (KOI8-U)"
-msgstr "Azbuka/Ukrajinská (KOI8-U)"
+msgstr "Azbuka/Ukrajinské (KOI8-U)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:140
 msgid "Cyrillic/Ukrainian (MacUkrainian)"
-msgstr "Azbuka/Ukrajinská (MacUkrainian)"
+msgstr "Azbuka/Ukrajinské (MacUkrainian)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:141
 msgid "English (US-ASCII)"
-msgstr "Anglická (US-ASCII)"
+msgstr "Anglické (US-ASCII)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:142
 msgid "Farsi (MacFarsi)"
@@ -1418,15 +1406,15 @@ msgstr "Georgian (GEOSTD8)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:144
 msgid "Greek (ISO-8859-7)"
-msgstr "Řecká (ISO-8859-7)"
+msgstr "Řecké (ISO-8859-7)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:145
 msgid "Greek (MacGreek)"
-msgstr "Řecká (MacGreek)"
+msgstr "Řecké (MacGreek)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:146
 msgid "Greek (Windows-1253)"
-msgstr "Řecká (Windows-1253)"
+msgstr "Řecké (Windows-1253)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:147
 msgid "Gujarati (MacGujarati)"
@@ -1438,95 +1426,95 @@ msgstr "Gurmukhi (MacGurmukhi)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:149
 msgid "Hebrew (IBM-862)"
-msgstr "Hebrejská (IBM-862)"
+msgstr "Hebrejské (IBM-862)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:150
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr "Hebrejská (ISO-8859-8-E)"
+msgstr "Hebrejské (ISO-8859-8-E)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:151
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr "Hebrejská (ISO-8859-8-I)"
+msgstr "Hebrejské (ISO-8859-8-I)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:152
 msgid "Hebrew (MacHebrew)"
-msgstr "Hebrejská (MacHebrew)"
+msgstr "Hebrejské (MacHebrew)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:153
 msgid "Hebrew (Windows-1255)"
-msgstr "Hebrejská (Windows-1255)"
+msgstr "Hebrejské (Windows-1255)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:154
 msgid "Hindi (MacDevanagari)"
-msgstr "Hindská (MacDevanagari)"
+msgstr "Hindské (MacDevanagari)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:155
 msgid "Icelandic (MacIcelandic)"
-msgstr "Islandská (MacIcelandic)"
+msgstr "Islandské (MacIcelandic)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:156
 msgid "Japanese (EUC-JP)"
-msgstr "Japonská (EUC-JP)"
+msgstr "Japonské (EUC-JP)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:157
 msgid "Japanese (ISO-2022-JP)"
-msgstr "Japonská (ISO-2022-JP)"
+msgstr "Japonské (ISO-2022-JP)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:158
 msgid "Japanese (Shift_JIS)"
-msgstr "Japonská (Shift_JIS)"
+msgstr "Japonské (Shift_JIS)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:159
 msgid "Korean (EUC-KR)"
-msgstr "Korejská (EUC-KR)"
+msgstr "Korejské (EUC-KR)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:160
 msgid "Korean (ISO-2022-KR)"
-msgstr "Korejská (ISO-2022-KR)"
+msgstr "Korejské (ISO-2022-KR)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:161
 msgid "Korean (JOHAB)"
-msgstr "Korejská (JOHAB)"
+msgstr "Korejské (JOHAB)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:162
 msgid "Korean (UHC)"
-msgstr "Korejská (UHC)"
+msgstr "Korejské (UHC)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:163
 msgid "Nordic (ISO-8859-10)"
-msgstr "Severská (ISO-8859-10)"
+msgstr "Severské (ISO-8859-10)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:164
 msgid "Romanian (MacRomanian)"
-msgstr "Rumunská (MacRomanian)"
+msgstr "Rumunské (MacRomanian)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:165
 msgid "Romanian (ISO-8859-16)"
-msgstr "Rumunská (ISO-8859-16)"
+msgstr "Rumunské (ISO-8859-16)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:166
 msgid "South European (ISO-8859-3)"
-msgstr "Jihoevropská (ISO-8859-3)"
+msgstr "Jihoevropské (ISO-8859-3)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:167
 msgid "Thai (TIS-620)"
-msgstr "Thaiská (TIS-620)"
+msgstr "Thaiské (TIS-620)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:168
 msgid "Turkish (IBM-857)"
-msgstr "Turecká (IBM-857)"
+msgstr "Turecké (IBM-857)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:169
 msgid "Turkish (ISO-8859-9)"
-msgstr "Turecká (ISO-8859-9)"
+msgstr "Turecké (ISO-8859-9)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:170
 msgid "Turkish (MacTurkish)"
-msgstr "Turecká (MacTurkish)"
+msgstr "Turecké (MacTurkish)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:171
 msgid "Turkish (Windows-1254)"
-msgstr "Turecká (Windows-1254)"
+msgstr "Turecké (Windows-1254)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:172
 msgid "Unicode (UTF-7)"
@@ -1554,27 +1542,27 @@ msgstr "Unicode (UTF-32LE)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:178
 msgid "User Defined"
-msgstr "Uživatelem definovaná"
+msgstr "Uživatelem definované"
 
 #: embed/mozilla/mozilla-embed-single.cpp:179
 msgid "Vietnamese (TCVN)"
-msgstr "Vietnamská (TCVN)"
+msgstr "Vietnamské (TCVN)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:180
 msgid "Vietnamese (VISCII)"
-msgstr "Vietnamská (VISCII)"
+msgstr "Vietnamské (VISCII)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:181
 msgid "Vietnamese (VPS)"
-msgstr "Vietnamská (VPS)"
+msgstr "Vietnamské (VPS)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:182
 msgid "Vietnamese (Windows-1258)"
-msgstr "Vietnamská (Windows-1258)"
+msgstr "Vietnamské (Windows-1258)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:183
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr "Vizuální hebrejská (ISO-8859-8)"
+msgstr "Vizuální hebrejské (ISO-8859-8)"
 
 #: embed/mozilla/mozilla-embed-single.cpp:184
 msgid "Western (IBM-850)"
@@ -1608,7 +1596,7 @@ msgstr "Ne"
 msgid "End of current session"
 msgstr "Konec aktuálního sezení"
 
-#: embed/mozilla/mozilla-notifiers.cpp:724
+#: embed/mozilla/mozilla-notifiers.cpp:715
 msgid "Default (recommended)"
 msgstr "Implicitní (doporučené)"
 
@@ -1623,7 +1611,7 @@ msgstr ""
 
 #: lib/egg/egg-editable-toolbar.c:263
 msgid "_Remove Toolbar"
-msgstr "_Odstranit lištu nástrojů"
+msgstr "_Odstranit nástrojovou lištu"
 
 #: lib/egg/egg-toolbar-editor.c:427
 msgid "Separator"
@@ -1634,8 +1622,8 @@ msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
 msgstr ""
-"Přetáhněte položku na lišty nástrojů pro její přidání, z lišt nástrojů do "
-"tabulky položek pro její odebrání."
+"Přetáhněte položku na nástrojové lišty pro její přidání, z nástrojových lišt "
+"do tabulky položek pro její odebrání."
 
 #: lib/ephy-file-helpers.c:104
 #, c-format
@@ -1756,7 +1744,7 @@ msgstr "_Témata:"
 
 #: src/bookmarks/ephy-bookmark-properties.c:410
 msgid "_Show in bookmarks bar"
-msgstr "_Zobrazovat v liště záložek"
+msgstr "Zobrazovat v _liště záložek"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:150 src/ephy-history-window.c:127
 #: src/ephy-window.c:63
@@ -1808,7 +1796,7 @@ msgstr "Přejmenovat vybranou záložku nebo téma"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:166 src/ephy-history-window.c:138
 msgid "_Delete"
-msgstr "_Odstranit"
+msgstr "Od_stranit"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:167
 msgid "Delete the selected bookmark or topic"
@@ -1816,7 +1804,7 @@ msgstr "Odstranit vybranou záložku nebo téma"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:169
 msgid "_Show in Bookmarks Bar"
-msgstr "_Zobrazovat v liště záložek"
+msgstr "Zobrazovat v _liště záložek"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:170
 msgid "Show the selected bookmark or topic in the bookmarks bar"
@@ -1873,7 +1861,7 @@ msgstr "Vložit schránku"
 #: src/bookmarks/ephy-bookmarks-editor.c:189 src/ephy-history-window.c:158
 #: src/ephy-window.c:104
 msgid "Select _All"
-msgstr "Vybrat _vše"
+msgstr "Vy_brat vše"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "Select all bookmarks or text"
@@ -2292,7 +2280,7 @@ msgstr "Vytisknout aktuální stránku"
 
 #: src/ephy-window.c:84
 msgid "S_end To..."
-msgstr "_Odeslat..."
+msgstr "Ode_slat..."
 
 #: src/ephy-window.c:85
 msgid "Send a link of the current page"
@@ -2300,7 +2288,7 @@ msgstr "Odeslat odkaz na aktuální stránku"
 
 #: src/ephy-window.c:87
 msgid "Boo_kmark Page..."
-msgstr "Přidat stránku do _záložek..."
+msgstr "_Přidat stránku do záložek..."
 
 #: src/ephy-window.c:88
 msgid "Add a bookmark for the current page"
@@ -2352,15 +2340,15 @@ msgstr "Zobrazit a odstranit koláčky a hesla"
 
 #: src/ephy-window.c:119
 msgid "T_oolbars"
-msgstr "Lišty _nástrojů"
+msgstr "_Nástrojové lišty"
 
 #: src/ephy-window.c:120
 msgid "Customize toolbars"
-msgstr "Upravit lišty nástrojů"
+msgstr "Upravit nástrojové lišty"
 
 #: src/ephy-window.c:122
 msgid "P_references"
-msgstr "_Nastavení"
+msgstr "Na_stavení"
 
 #: src/ephy-window.c:123
 msgid "Configure the web browser"
@@ -2369,7 +2357,7 @@ msgstr "Nastavit prohlížeč WWW"
 #. View menu
 #: src/ephy-window.c:127
 msgid "_Stop"
-msgstr "_Zastavit"
+msgstr "Za_stavit"
 
 #: src/ephy-window.c:128
 msgid "Stop current data transfer"
@@ -2385,11 +2373,11 @@ msgstr "Zobrazit nejnovější obsah aktuální stránky"
 
 #: src/ephy-window.c:133
 msgid "_Toolbar"
-msgstr "Lišta _nástrojů"
+msgstr "_Nástrojová lišta"
 
 #: src/ephy-window.c:134
 msgid "Show or hide toolbar"
-msgstr "Zobrazit nebo skrýt lištu nástrojů"
+msgstr "Zobrazit nebo skrýt nástrojovou lištu"
 
 #: src/ephy-window.c:136
 msgid "_Bookmarks Bar"
@@ -2433,7 +2421,7 @@ msgstr "Zobrazit obsah méně detailně"
 
 #: src/ephy-window.c:151
 msgid "_Normal Size"
-msgstr "_Normální velikost"
+msgstr "Nor_mální velikost"
 
 #: src/ephy-window.c:152
 msgid "Show the contents at the normal size"
@@ -2445,7 +2433,7 @@ msgstr "_Kódování"
 
 #: src/ephy-window.c:155
 msgid "_Page Source"
-msgstr "_Zdroj stránky"
+msgstr "Z_droj stránky"
 
 #: src/ephy-window.c:156
 msgid "View the source code of the page"
@@ -2502,7 +2490,7 @@ msgstr "Jít na již navštívenou stránku"
 
 #: src/ephy-window.c:178
 msgid "Boo_kmarks"
-msgstr "_Záložky"
+msgstr "Zá_ložky"
 
 #: src/ephy-window.c:179
 msgid "Go to a bookmark"
@@ -2637,27 +2625,27 @@ msgstr "Uložit jako"
 msgid "Bookmark"
 msgstr "Záložka"
 
-#: src/ephy-window.c:1023
+#: src/ephy-window.c:1021
 msgid "Insecure"
 msgstr "Nezabezpečeno"
 
-#: src/ephy-window.c:1026
+#: src/ephy-window.c:1024
 msgid "Broken"
 msgstr "Poškozeno"
 
-#: src/ephy-window.c:1029
+#: src/ephy-window.c:1027
 msgid "Medium"
 msgstr "Střední"
 
-#: src/ephy-window.c:1033
+#: src/ephy-window.c:1031
 msgid "Low"
 msgstr "Nízká"
 
-#: src/ephy-window.c:1037
+#: src/ephy-window.c:1035
 msgid "High"
 msgstr "Vysoká"
 
-#: src/ephy-window.c:1047
+#: src/ephy-window.c:1045
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2666,7 +2654,7 @@ msgstr ""
 "Úroveň zabezpečení: %s\n"
 "%s"
 
-#: src/ephy-window.c:1053
+#: src/ephy-window.c:1051
 #, c-format
 msgid "Security level: %s"
 msgstr "Úroveň zabezpečení: %s"
@@ -2879,6 +2867,10 @@ msgstr "Brazilská portugalština"
 msgid "Romanian"
 msgstr "Rumunština"
 
+#: src/prefs-dialog.c:127 src/prefs-dialog.c:155
+msgid "Russian"
+msgstr "Ruské"
+
 #: src/prefs-dialog.c:128
 msgid "Scottish"
 msgstr "Skotština"
@@ -2907,6 +2899,10 @@ msgstr "Švédština"
 msgid "Tamil"
 msgstr "Tamil"
 
+#: src/prefs-dialog.c:136 src/prefs-dialog.c:158
+msgid "Ukrainian"
+msgstr "Ukrajinské"
+
 #: src/prefs-dialog.c:137
 msgid "Vietnamian"
 msgstr "Vietnamština"
@@ -2915,7 +2911,23 @@ msgstr "Vietnamština"
 msgid "Walloon"
 msgstr "Walloon"
 
-#: src/prefs-dialog.c:707
+#: src/prefs-dialog.c:150
+msgid "Off"
+msgstr "Vypnuto"
+
+#: src/prefs-dialog.c:152
+msgid "East asian"
+msgstr "Východoasijské"
+
+#: src/prefs-dialog.c:156
+msgid "Simplified Chinese"
+msgstr "Zjednodušené čínské"
+
+#: src/prefs-dialog.c:157
+msgid "Traditional Chinese"
+msgstr "Trandiční čínské"
+
+#: src/prefs-dialog.c:895
 #, c-format
 msgid "Custom [%s]"
 msgstr "Vlastní [%s]"
