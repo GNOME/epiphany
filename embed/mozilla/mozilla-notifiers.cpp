@@ -138,10 +138,6 @@ conversion_table [] =
 {
 	{ CONF_SECURITY_JAVA_ENABLED, BOOL_PREF, "security.enable_java"},
 	{ CONF_SECURITY_JAVASCRIPT_ENABLED, BOOL_PREF, "javascript.enabled"},
-	{ CONF_RENDERING_BG_COLOR, STRING_PREF, "browser.display.background_color"},
-	{ CONF_RENDERING_TEXT_COLOR, STRING_PREF, "browser.display.foreground_color"},
-	{ CONF_RENDERING_UNVISITED_LINKS, STRING_PREF, "browser.anchor_color"},
-	{ CONF_RENDERING_VISITED_LINKS, STRING_PREF, "browser.visited_color"},
 	{ CONF_RENDERING_UNDERLINE_LINKS, BOOL_PREF, "browser.underline_anchors"},
 	{ CONF_NETWORK_PROXY_AUTO_URL, STRING_PREF, "network.proxy.autoconfig_url"},
 	{ CONF_NETWORK_HTTP_PROXY, STRING_PREF, "network.proxy.http"},
@@ -157,7 +153,6 @@ conversion_table [] =
 	{ CONF_NETWORK_DISK_CACHE, INT_PREF, "browser.cache.disk.capacity"},
 	{ CONF_NETWORK_CACHE_COMPARE, INT_PREF, "browser.cache.check_doc_frequency"},
 	{ CONF_SECURITY_COOKIES_ACCEPT, BOOL_PREF, "network.cookie.warnAboutCookies"},
-	{ CONF_RENDERING_USE_SYSTEM_COLORS, BOOL_PREF, "browser.display.use_system_colors"},
 	{ NULL, 0, NULL }
 };
 

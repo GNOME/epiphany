@@ -22,3 +22,6 @@ user_pref("network.dir.generate_html", true);
 user_pref("security.warn_entering_secure", false);
 user_pref("security.warn_leaving_secure", false);
 user_pref("security.warn_submit_insecure", false);
+
+// Always use the system colors if a page doesn't specify its own.
+user_pref("browser.display.use_system_colors", true);

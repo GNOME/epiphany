@@ -1,3 +1,15 @@
+2003-05-19  David Bordoley  <bordoley@msu.edu>
+
+	* data/epiphany.schemas.in:
+	* data/glade/prefs-dialog.glade:
+	* embed/ephy-embed-prefs.h:
+	* embed/mozilla/default-prefs.js:
+	* embed/mozilla/mozilla-notifiers.cpp: (conversion_table []):
+	* src/prefs-dialog.c: (properties []):
+
+	Remove fine grain color settings. Always use the system theme
+	colors in the case where a page doesn't set it own colors.	
+
 2003-05-18  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* Makefile.am:
