@@ -188,9 +188,12 @@ ephy_file_helpers_shutdown (void)
 	g_list_free (del_on_exit);
 	del_on_exit = NULL;
 
-	rmdir (tmp_dir);
-	g_free (tmp_dir);
-	tmp_dir = NULL;
+	if (tmp_dir != NULL)
+	{
+		rmdir (tmp_dir);
+		g_free (tmp_dir);
+		tmp_dir = NULL;
+	}
 
 	g_free (dot_dir);
 	dot_dir = NULL;
