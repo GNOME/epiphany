@@ -53,6 +53,7 @@
 #include "ephy-search-entry.h"
 #include "session.h"
 #include "ephy-favicon-cache.h"
+#include "eel-gconf-extensions.h"
 
 static GtkTargetEntry page_drag_types [] =
 {
@@ -99,6 +100,7 @@ static void cmd_help_contents		  (GtkAction *action,
 					   EphyHistoryWindow *editor);
 
 #define EPHY_HISTORY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_HISTORY_WINDOW, EphyHistoryWindowPrivate))
+#define CONF_HISTORY_DATE_FILTER "/apps/epiphany/dialogs/history_date_filter"
 
 struct EphyHistoryWindowPrivate
 {
@@ -106,12 +108,15 @@ struct EphyHistoryWindowPrivate
 	GtkWidget *sites_view;
 	GtkWidget *pages_view;
 	EphyNodeFilter *pages_filter;
+	EphyNodeFilter *sites_filter;
+	GtkWidget *time_optionmenu;
 	GtkWidget *search_entry;
 	GtkWidget *main_vbox;
 	GtkWidget *window;
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
 	GtkWidget *confirmation_dialog;
+	EphyNode *selected_site;
 };
 
 enum
@@ -119,6 +124,19 @@ enum
 	PROP_0,
 	PROP_HISTORY
 };
+
+enum
+{
+	TIME_EVER,
+	TIME_TODAY,
+	TIME_LAST_TWO_DAYS,
+	TIME_LAST_THREE_DAYS
+};
+
+#define TIME_EVER_STRING "ever"
+#define TIME_TODAY_STRING "today"
+#define TIME_LAST_TWO_DAYS_STRING "last_two_days"
+#define TIME_LAST_THREE_DAYS_STRING "last_three_days"
 
 static GObjectClass *parent_class = NULL;
 
@@ -163,17 +181,6 @@ static GtkActionEntry ephy_history_ui_entries [] = {
 	{ "Clear", GTK_STOCK_CLEAR, N_("C_lear History"), NULL,
 	  N_("Clear your browsing history"),
 	  G_CALLBACK (cmd_clear) },
-
-	/* View Menu */
-/*	{ "ViewTitle", NULL, N_("_Title"), NULL,
-	  N_("Show only the title column"),
-	  NULL, NULL, RADIO_ACTION, NULL },
-	{ "ViewLocation", NULL, N_("_Address"), NULL,
-	  N_("Show only the address column"),
-	  NULL, NULL, RADIO_ACTION, "ViewTitle" },
-	{ "ViewTitleLocation", N_("T_itle and Address"), NULL, NULL,
-	  N_("Show both the title and address columns"),
-	  NULL, NULL, RADIO_ACTION, "ViewTitle" },*/
 
 	/* Help Menu */
 	{ "HelpContents", GTK_STOCK_HELP, N_("_Contents"), "F1",
@@ -576,6 +583,7 @@ ephy_history_window_finalize (GObject *object)
 	EphyHistoryWindow *editor = EPHY_HISTORY_WINDOW (object);
 
 	g_object_unref (G_OBJECT (editor->priv->pages_filter));
+	g_object_unref (G_OBJECT (editor->priv->sites_filter));
 
 	g_object_unref (editor->priv->action_group);
 	g_object_unref (editor->priv->ui_merge);
@@ -758,18 +766,6 @@ ephy_history_window_show_popup_cb (GtkWidget *view,
 			gtk_get_current_event_time ());
 }
 
-static void
-pages_filter (EphyHistoryWindow *editor,
-	      EphyNode *site)
-{
-	ephy_node_filter_empty (editor->priv->pages_filter);
-	ephy_node_filter_add_expression (editor->priv->pages_filter,
-				         ephy_node_filter_expression_new (EPHY_NODE_FILTER_EXPRESSION_HAS_PARENT,
-								          site),
-				         0);
-	ephy_node_filter_done_changing (editor->priv->pages_filter);
-}
-
 static gboolean
 key_pressed_cb (EphyNodeView *view,
 		GdkEventKey *event,
@@ -790,11 +786,116 @@ key_pressed_cb (EphyNodeView *view,
 }
 
 static void
+add_by_site_filter (EphyHistoryWindow *editor, EphyNodeFilter *filter, int level)
+{
+	if (editor->priv->selected_site == NULL) return;
+
+	ephy_node_filter_add_expression
+		(filter, ephy_node_filter_expression_new
+				(EPHY_NODE_FILTER_EXPRESSION_HAS_PARENT,
+				 editor->priv->selected_site),
+		 level);
+}
+
+#define SEC_PER_DAY (60 * 60 * 24)
+
+static void
+add_by_date_filter (EphyHistoryWindow *editor, EphyNodeFilter *filter, int level,
+		    EphyNode *equals)
+{
+	GTime now, cmp_time, days;
+	int time_range;
+
+	/* FIXME this is probably wrong for timezones */
+
+	time_range = gtk_option_menu_get_history
+		(GTK_OPTION_MENU (editor->priv->time_optionmenu));
+
+	now = time (NULL);
+	days = now / SEC_PER_DAY;
+
+	switch (time_range)
+	{
+		case TIME_EVER:
+			return;
+		case TIME_TODAY:
+			break;
+		case TIME_LAST_TWO_DAYS:
+			days -= 1;
+			break;
+		case TIME_LAST_THREE_DAYS:
+			days -= 2;
+			break;
+	}
+
+	cmp_time = days * SEC_PER_DAY;
+
+	ephy_node_filter_add_expression
+		(filter, ephy_node_filter_expression_new
+				(EPHY_NODE_FILTER_EXPRESSION_INT_PROP_BIGGER_THAN,
+				 EPHY_NODE_PAGE_PROP_LAST_VISIT, cmp_time),
+		 level);
+
+	if (equals == NULL) return;
+
+	ephy_node_filter_add_expression
+		(filter, ephy_node_filter_expression_new
+				(EPHY_NODE_FILTER_EXPRESSION_EQUALS, equals),
+		 0);
+}
+
+static void
+add_by_word_filter (EphyHistoryWindow *editor, EphyNodeFilter *filter, int level)
+{
+	const char *search_text;
+
+	search_text = gtk_entry_get_text (GTK_ENTRY (editor->priv->search_entry));
+	if (search_text == NULL) return;
+
+	ephy_node_filter_add_expression
+		(filter, ephy_node_filter_expression_new
+				(EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_CONTAINS,
+				 EPHY_NODE_PAGE_PROP_TITLE, search_text),
+		 level);
+
+	ephy_node_filter_add_expression
+		(filter, ephy_node_filter_expression_new
+				(EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_CONTAINS,
+				 EPHY_NODE_PAGE_PROP_LOCATION, search_text),
+		 level);
+}
+
+static void
+setup_filters (EphyHistoryWindow *editor)
+{
+	GDK_THREADS_ENTER ();
+
+	ephy_node_filter_empty (editor->priv->pages_filter);
+
+	add_by_date_filter (editor, editor->priv->pages_filter, 0, NULL);
+	add_by_word_filter (editor, editor->priv->pages_filter, 1);
+	add_by_site_filter (editor, editor->priv->pages_filter, 2);
+
+	ephy_node_filter_done_changing (editor->priv->pages_filter);
+
+	ephy_node_filter_empty (editor->priv->sites_filter);
+
+	add_by_date_filter (editor, editor->priv->sites_filter, 0,
+			    ephy_history_get_pages (editor->priv->history));
+
+	ephy_node_filter_done_changing (editor->priv->sites_filter);
+
+	GDK_THREADS_LEAVE ();
+}
+
+static void
 site_node_selected_cb (EphyNodeView *view,
 		       EphyNode *node,
 		       EphyHistoryWindow *editor)
 {
 	EphyNode *pages;
+
+	editor->priv->selected_site = node;
 
 	if (node == NULL)
 	{
@@ -804,7 +905,7 @@ site_node_selected_cb (EphyNodeView *view,
 	else
 	{
 		ephy_search_entry_clear (EPHY_SEARCH_ENTRY (editor->priv->search_entry));
-		pages_filter (editor, node);
+		setup_filters (editor);
 	}
 }
 
@@ -825,31 +926,22 @@ search_entry_search_cb (GtkWidget *entry, char *search_text, EphyHistoryWindow *
 		 G_CALLBACK (site_node_selected_cb),
 		 editor);
 
-	GDK_THREADS_ENTER ();
+	setup_filters (editor);
+}
 
-	ephy_node_filter_empty (editor->priv->pages_filter);
-	ephy_node_filter_add_expression (editor->priv->pages_filter,
-				         ephy_node_filter_expression_new (EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_CONTAINS,
-								          EPHY_NODE_PAGE_PROP_TITLE,
-								          search_text),
-				         0);
-	ephy_node_filter_add_expression (editor->priv->pages_filter,
-				         ephy_node_filter_expression_new (EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_CONTAINS,
-								          EPHY_NODE_PAGE_PROP_LOCATION,
-								          search_text),
-				         0);
-	ephy_node_filter_done_changing (editor->priv->pages_filter);
-
-	GDK_THREADS_LEAVE ();
+static void
+time_optionmenu_changed_cb (GtkWidget *optionmenu, EphyHistoryWindow *editor)
+{
+	setup_filters (editor);
 }
 
 static GtkWidget *
 build_search_box (EphyHistoryWindow *editor)
 {
-	GtkWidget *box;
-	GtkWidget *label;
-	GtkWidget *entry;
+	GtkWidget *box, *label, *entry;
+	GtkWidget *optionmenu, *menu, *item;
 	char *str;
+	int time_range;
 
 	box = gtk_hbox_new (FALSE, 6);
 	gtk_container_set_border_width (GTK_CONTAINER (box), 6);
@@ -860,9 +952,6 @@ build_search_box (EphyHistoryWindow *editor)
 	add_entry_monitor (editor, entry);
 	editor->priv->search_entry = entry;
 	gtk_widget_show (entry);
-	g_signal_connect (G_OBJECT (entry), "search",
-			  G_CALLBACK (search_entry_search_cb),
-			  editor);
 
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -872,10 +961,62 @@ build_search_box (EphyHistoryWindow *editor)
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
 	gtk_widget_show (label);
 
+	optionmenu = gtk_option_menu_new ();
+	gtk_widget_show (optionmenu);
+	menu = gtk_menu_new ();
+	gtk_widget_show (menu);
+	item = gtk_menu_item_new_with_mnemonic (_("Ever"));
+	gtk_widget_show (item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	gtk_widget_show (item);
+	item = gtk_menu_item_new_with_mnemonic (_("Today"));
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	gtk_widget_show (item);
+	item = gtk_menu_item_new_with_mnemonic (_("Last two days"));
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	gtk_widget_show (item);
+	item = gtk_menu_item_new_with_mnemonic (_("Last three days"));
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	gtk_widget_show (item);
+	gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu), menu);
+
+	str = eel_gconf_get_string (CONF_HISTORY_DATE_FILTER);
+	if (str && strcmp (TIME_TODAY_STRING, str) == 0)
+	{
+		time_range = TIME_TODAY;
+	}
+	else if (str && strcmp (TIME_LAST_TWO_DAYS_STRING, str) == 0)
+	{
+		time_range = TIME_LAST_TWO_DAYS;
+	}
+	else if (str && strcmp (TIME_LAST_THREE_DAYS_STRING, str) == 0)
+	{
+		time_range = TIME_LAST_THREE_DAYS;
+	}
+	else
+	{
+		time_range = TIME_EVER;
+	}
+	g_free (str);
+
+	gtk_option_menu_set_history (GTK_OPTION_MENU (optionmenu),
+				     time_range);
+
+	editor->priv->time_optionmenu = optionmenu;
+
 	gtk_box_pack_start (GTK_BOX (box),
 			    label, FALSE, TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (box),
 			    entry, TRUE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (box),
+			    optionmenu, FALSE, TRUE, 0);
+
+	g_signal_connect (optionmenu, "changed",
+			  G_CALLBACK (time_optionmenu_changed_cb),
+			  editor);
+	g_signal_connect (G_OBJECT (entry), "search",
+			  G_CALLBACK (search_entry_search_cb),
+			  editor);
 
 	return box;
 }
@@ -971,10 +1112,6 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	editor->priv->ui_merge = ui_merge;
 	editor->priv->action_group = action_group;
 
-	/* Fixme: We should implement gconf prefs for monitoring this setting */
-/*	action = gtk_action_group_get_action (action_group, "ViewTitle");
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);*/
-
 	hpaned = gtk_hpaned_new ();
 	gtk_container_set_border_width (GTK_CONTAINER (hpaned), 0);
 	gtk_box_pack_end (GTK_BOX (editor->priv->main_vbox), hpaned,
@@ -994,14 +1131,13 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 					NULL);
 	gtk_paned_add1 (GTK_PANED (hpaned), scrolled_window);
 	gtk_widget_show (scrolled_window);
-	sites_view = ephy_node_view_new (node, NULL);
+	editor->priv->sites_filter = ephy_node_filter_new ();
+	sites_view = ephy_node_view_new (node, editor->priv->sites_filter);
 	add_focus_monitor (editor, sites_view);
 	col_id = ephy_node_view_add_data_column (EPHY_NODE_VIEW (sites_view),
 					         G_TYPE_STRING,
 					         EPHY_NODE_PAGE_PROP_LOCATION,
 						 NULL, NULL);
-	ephy_node_view_select_node (EPHY_NODE_VIEW (sites_view),
-				    ephy_history_get_pages (editor->priv->history));
 	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (sites_view),
 					   page_drag_types,
 				           n_page_drag_types, col_id);
@@ -1017,6 +1153,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	gtk_container_add (GTK_CONTAINER (scrolled_window), sites_view);
 	gtk_widget_show (sites_view);
 	editor->priv->sites_view = sites_view;
+
 	g_signal_connect (G_OBJECT (sites_view),
 			  "node_selected",
 			  G_CALLBACK (site_node_selected_cb),
@@ -1069,6 +1206,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	gtk_container_add (GTK_CONTAINER (scrolled_window), pages_view);
 	gtk_widget_show (pages_view);
 	editor->priv->pages_view = pages_view;
+
 	g_signal_connect (G_OBJECT (pages_view),
 			  "node_activated",
 			  G_CALLBACK (ephy_history_window_node_activated_cb),
@@ -1093,6 +1231,9 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	ephy_state_add_paned  (GTK_WIDGET (hpaned),
 			       "history_paned",
 		               130);
+
+	ephy_node_view_select_node (EPHY_NODE_VIEW (sites_view),
+				    ephy_history_get_pages (editor->priv->history));
 }
 
 void
@@ -1176,6 +1317,34 @@ ephy_history_window_init (EphyHistoryWindow *editor)
 }
 
 static void
+save_date_filter (EphyHistoryWindow *editor)
+{
+	const char *time_string = NULL;
+	int time_range;
+
+	time_range = gtk_option_menu_get_history
+		(GTK_OPTION_MENU (editor->priv->time_optionmenu));
+
+	switch (time_range)
+	{
+		case TIME_EVER:
+			time_string = TIME_EVER_STRING;
+			break;
+		case TIME_TODAY:
+			time_string = TIME_TODAY_STRING;
+			break;
+		case TIME_LAST_TWO_DAYS:
+			time_string = TIME_LAST_TWO_DAYS_STRING;
+			break;
+		case TIME_LAST_THREE_DAYS:
+			time_string = TIME_LAST_THREE_DAYS_STRING;
+			break;
+	}
+
+	eel_gconf_set_string (CONF_HISTORY_DATE_FILTER, time_string);
+}
+
+static void
 ephy_history_window_dispose (GObject *object)
 {
 	EphyHistoryWindow *editor;
@@ -1192,6 +1361,8 @@ ephy_history_window_dispose (GObject *object)
 		remove_focus_monitor (editor, editor->priv->search_entry);
 
 		editor->priv->sites_view = NULL;
+
+		save_date_filter (editor);
 	}
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);

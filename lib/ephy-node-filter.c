@@ -228,7 +228,7 @@ ephy_node_filter_evaluate (EphyNodeFilter *filter,
 			}
 		}
 
-		if (handled == FALSE)
+		if (list != NULL && handled == FALSE)
 			return FALSE;
 	}
 	

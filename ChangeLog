@@ -1,5 +1,18 @@
 2003-09-26  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* data/epiphany.schemas.in:
+	* lib/ephy-node-filter.c: (ephy_node_filter_evaluate):
+	* src/ephy-history-window.c: (ephy_history_window_finalize),
+	(add_by_site_filter), (add_by_date_filter), (add_by_word_filter),
+	(setup_filters), (site_node_selected_cb), (search_entry_search_cb),
+	(time_optionmenu_changed_cb), (build_search_box),
+	(ephy_history_window_construct), (save_date_filter),
+	(ephy_history_window_dispose):
+
+	Implement history time filter
+
+2003-09-26  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* src/ephy-window.c:
 
 	Remove unused includes, they was causing warnings on solaris
