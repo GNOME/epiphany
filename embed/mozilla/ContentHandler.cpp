@@ -253,19 +253,22 @@ NS_METHOD GContentHandler::MIMEConfirmAction (PRBool autoDownload)
 {
 	GtkWidget *dialog;
 	GtkWidget *hbox, *vbox, *label, *image;
+	const char *action_label;
 	char *text;
 	int response;
 
 	nsCOMPtr<nsIDOMWindow> parentDOMWindow = do_GetInterface (mContext);
 	GtkWindow *parentWindow = GTK_WINDOW (MozillaFindGtkParent(parentDOMWindow));
 
+	action_label =  (mAction == CONTENT_ACTION_OPEN) ||
+			(mAction == CONTENT_ACTION_OPEN_TMP) ?
+			_("_Open") : _("_Download");
+
 	dialog = gtk_dialog_new_with_buttons
 		("", parentWindow, GTK_DIALOG_NO_SEPARATOR,
 		 _("_Save As..."), CONTENT_ACTION_SAVEAS,
 		 GTK_STOCK_CANCEL, CONTENT_ACTION_NONE,
-		 mAction == CONTENT_ACTION_OPEN ?
-		 _("_Open") : _("_Download"), mAction,
-		 NULL);
+		 action_label, mAction, NULL);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), (guint)mAction);
 	
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
