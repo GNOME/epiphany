@@ -330,6 +330,39 @@ topic_clicked (GtkTreeView *tree_view,
 	return FALSE;
 }
 
+static gboolean
+topic_key_pressed (GtkTreeView *tree_view, 
+		   GdkEventKey *event,
+		   EphyTopicsSelector *selector)
+{
+	GtkTreeSelection *sel = NULL;
+	GtkTreeIter iter;
+	GtkTreePath *path = NULL;
+	gchar *path_str;
+
+	switch (event->keyval) 
+	{
+	case GDK_space:
+	case GDK_Return:
+	case GDK_KP_Enter:
+		sel = gtk_tree_view_get_selection (tree_view);
+		
+		if (gtk_tree_selection_get_selected (sel, NULL, &iter))
+		{
+			path = gtk_tree_model_get_path (selector->priv->model, &iter);
+			path_str = gtk_tree_path_to_string (path);
+			topic_toggled (NULL, path_str, selector);
+			g_free(path_str);
+		}
+		return TRUE;
+
+	default:
+		break;
+	}
+	
+	return FALSE;	
+}
+
 static void
 ephy_topics_build_ui (EphyTopicsSelector *editor)
 {
@@ -358,6 +391,8 @@ ephy_topics_build_ui (EphyTopicsSelector *editor)
 		("Description", renderer, "text", COL_TOPIC, NULL);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
 	
+	g_signal_connect (G_OBJECT (treeview), "key_press_event",
+			  G_CALLBACK (topic_key_pressed), editor);
 	g_signal_connect (G_OBJECT (treeview), "button_press_event",
 			  G_CALLBACK (topic_clicked), editor);
 	fill_model (editor);

@@ -96,12 +96,6 @@ enum
 	PROP_BOOKMARKS
 };
 
-enum
-{
-	RESPONSE_REMOVE,
-	RESPONSE_GO
-};
-
 static GtkTargetEntry topic_drag_types [] =
 {
         { EPHY_DND_TOPIC_TYPE, 0, 0 }
@@ -481,21 +475,6 @@ ephy_bookmarks_editor_show_popup_cb (GtkWidget *view,
 }	
 
 static void
-ephy_bookmarks_editor_key_pressed_cb (GtkWidget *view,
-				      GdkEventKey *event,
-				      EphyBookmarksEditor *editor)
-{
-	switch (event->keyval)
-	{
-	case GDK_Delete:
-		ephy_node_view_remove (editor->priv->bm_view);
-		break;
-	default:
-		break;
-	}
-}
-
-static void
 ephy_bookmarks_editor_node_activated_cb (GtkWidget *view,
 				         EphyNode *node,
 					 EphyBookmarksEditor *editor)
@@ -527,14 +506,15 @@ bookmarks_filter (EphyBookmarksEditor *editor,
 }
 
 static void
-keyword_node_key_pressed_cb (GtkWidget *view,
-			     GdkEventKey *event,
-			     EphyBookmarksEditor *editor)
+key_pressed_cb (GtkWidget *widget,
+		GdkEventKey *event,
+		EphyNodeView *view)
 {
 	switch (event->keyval)
 	{
 	case GDK_Delete:
-		ephy_node_view_remove (editor->priv->key_view);
+	case GDK_KP_Delete:
+		ephy_node_view_remove (view);
 		break;
 
 	default:
@@ -719,8 +699,8 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	editor->priv->key_view = key_view;
 	g_signal_connect (G_OBJECT (key_view),
 			  "key_press_event",
-			  G_CALLBACK (keyword_node_key_pressed_cb),
-			  editor);
+			  G_CALLBACK (key_pressed_cb),
+			  editor->priv->key_view);
 	g_signal_connect (G_OBJECT (key_view),
 			  "node_selected",
 			  G_CALLBACK (keyword_node_selected_cb),
@@ -747,15 +727,15 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	ephy_node_view_set_hinted (bm_view, TRUE);
 	ephy_node_view_enable_drag_source (bm_view, NULL, 0, EPHY_NODE_BMK_PROP_LOCATION);
 	ephy_node_view_add_icon_column (bm_view, EPHY_TREE_MODEL_NODE_COL_ICON);
-	ephy_node_view_add_column (bm_view, _("Bookmarks"),
+	ephy_node_view_add_column (bm_view, _("Title"),
 				   EPHY_TREE_MODEL_NODE_COL_BOOKMARK, TRUE, TRUE);
 	gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (bm_view), TRUE, TRUE, 0);
 	gtk_widget_show (GTK_WIDGET (bm_view));
 	editor->priv->bm_view = bm_view;
 	g_signal_connect (G_OBJECT (bm_view),
 			  "key_press_event",
-			  G_CALLBACK (ephy_bookmarks_editor_key_pressed_cb),
-			  editor);
+			  G_CALLBACK (key_pressed_cb),
+			  editor->priv->bm_view);
 	g_signal_connect (G_OBJECT (bm_view),
 			  "node_activated",
 			  G_CALLBACK (ephy_bookmarks_editor_node_activated_cb),
