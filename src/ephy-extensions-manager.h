@@ -49,6 +49,7 @@ struct EphyExtensionsManager
 {
 	GObject parent_instance;
 
+	/*< private >*/
 	EphyExtensionsManagerPrivate *priv;
 };
 

@@ -39,6 +39,7 @@ struct _EphyZoomAction
 {
 	GtkAction parent;
 	
+	/*< private >*/
 	EphyZoomActionPrivate *priv;
 };
 

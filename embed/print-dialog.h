@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifndef PRINT_DIALOG_H
@@ -40,11 +42,14 @@ typedef struct PrintDialogPrivate PrintDialogPrivate;
 
 struct PrintDialog
 {
-        EphyEmbedDialog parent;
-        PrintDialogPrivate *priv;
-        //FIXME: These should be gobject properties
-        gboolean only_collect_info;
-        EmbedPrintInfo **ret_info;
+	EphyEmbedDialog parent;
+
+	/*< private >*/
+	PrintDialogPrivate *priv;
+
+	//FIXME: These should be gobject properties
+	gboolean only_collect_info;
+	EmbedPrintInfo **ret_info;
 };
 
 struct PrintDialogClass

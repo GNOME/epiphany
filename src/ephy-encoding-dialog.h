@@ -44,6 +44,8 @@ typedef struct EphyEncodingDialogPrivate	EphyEncodingDialogPrivate;
 struct EphyEncodingDialog
 {
 	EphyEmbedDialog parent;
+
+	/*< private >*/
 	EphyEncodingDialogPrivate *priv;
 };
 

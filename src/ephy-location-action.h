@@ -40,6 +40,7 @@ struct _EphyLocationAction
 {
 	GtkAction parent;
 
+	/*< private >*/
 	EphyLocationActionPrivate *priv;
 };
 

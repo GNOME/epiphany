@@ -47,6 +47,7 @@ struct _EphyBookmarksMenu
 {
 	GObject parent_object;
 
+	/*< private >*/
 	EphyBookmarksMenuPrivate *priv;
 };
 

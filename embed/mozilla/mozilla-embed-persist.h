@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifndef MOZILLA_EMBED_PERSIST_H
@@ -39,20 +41,22 @@ typedef struct MozillaEmbedPersistPrivate MozillaEmbedPersistPrivate;
 
 struct MozillaEmbedPersist
 {
-        EphyEmbedPersist parent;
-        MozillaEmbedPersistPrivate *priv;
+	EphyEmbedPersist parent;
+
+	/*< private >*/
+	MozillaEmbedPersistPrivate *priv;
 };
 
 struct MozillaEmbedPersistClass
 {
-        EphyEmbedPersistClass parent_class;
+	EphyEmbedPersistClass parent_class;
 };
 
-GType               mozilla_embed_persist_get_type   (void);
+GType	mozilla_embed_persist_get_type	(void);
 
-void		    mozilla_embed_persist_completed  (MozillaEmbedPersist *persist);
+void	mozilla_embed_persist_completed	(MozillaEmbedPersist *persist);
 
-void		    mozilla_embed_persist_cancelled  (MozillaEmbedPersist *persist);
+void	mozilla_embed_persist_cancelled	(MozillaEmbedPersist *persist);
 
 G_END_DECLS
 

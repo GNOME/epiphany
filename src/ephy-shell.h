@@ -92,6 +92,8 @@ typedef enum
 struct EphyShell
 {
 	EphyEmbedShell parent;
+
+	/*< private >*/
 	EphyShellPrivate *priv;
 };
 

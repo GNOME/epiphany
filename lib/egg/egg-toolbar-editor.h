@@ -42,6 +42,8 @@ typedef struct EggToolbarEditorPrivate EggToolbarEditorPrivate;
 struct EggToolbarEditor
 {
   GtkVBox parent_object;
+
+  /*< private >*/
   EggToolbarEditorPrivate *priv;
 };
 

@@ -115,6 +115,8 @@ enum
 typedef struct
 {
 	GObject parent;
+
+	/*< private >*/
 	EphyEncodingsPrivate *priv;
 } EphyEncodings;
 

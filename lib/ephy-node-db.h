@@ -41,6 +41,7 @@ struct EphyNodeDb
 {
 	GObject parent;
 
+	/*< private >*/
 	EphyNodeDbPrivate *priv;
 };
 

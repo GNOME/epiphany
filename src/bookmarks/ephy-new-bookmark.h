@@ -40,6 +40,7 @@ typedef struct
 {
 	GtkDialog parent;
 
+	/*< private >*/
 	EphyNewBookmarkPrivate *priv;
 } EphyNewBookmark;
 

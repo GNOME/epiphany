@@ -46,6 +46,8 @@ enum
 typedef struct
 {
 	GtkFileChooserDialog parent;
+
+	/*< private >*/
 	EphyFileChooserPrivate *priv;
 } EphyFileChooser;
 

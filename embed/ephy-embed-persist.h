@@ -53,6 +53,8 @@ typedef enum
 struct EphyEmbedPersist
 {
 	GObject parent;
+
+	/*< private >*/
 	EphyEmbedPersistPrivate *priv;
 };
 

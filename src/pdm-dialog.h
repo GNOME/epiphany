@@ -38,6 +38,8 @@ typedef struct PdmDialogPrivate PdmDialogPrivate;
 struct PdmDialog
 {
         EphyDialog parent;
+
+	/*< private >*/
         PdmDialogPrivate *priv;
 };
 

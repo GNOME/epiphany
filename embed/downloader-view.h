@@ -41,6 +41,8 @@ typedef struct DownloaderViewPrivate DownloaderViewPrivate;
 struct DownloaderView
 {
         EphyDialog parent;
+
+	/*< private >*/
         DownloaderViewPrivate *priv;
 };
 

@@ -41,6 +41,8 @@ typedef struct LanguageEditorPrivate LanguageEditorPrivate;
 struct LanguageEditor
 {
         EphyDialog parent;
+
+	/*< private >*/
         LanguageEditorPrivate *priv;
 };
 

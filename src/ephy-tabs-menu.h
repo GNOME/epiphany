@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifndef EPHY_TABS_MENU_H
@@ -39,19 +41,19 @@ struct _EphyTabsMenuClass
 	GObjectClass parent_class;
 };
 
-/* Remember: fields are public read-only */
 struct _EphyTabsMenu
 {
 	GObject parent_object;
 
+	/*< private >*/
 	EphyTabsMenuPrivate *priv;
 };
 
-GType              ephy_tabs_menu_get_type		(void);
+GType		ephy_tabs_menu_get_type		(void);
 
-EphyTabsMenu	  *ephy_tabs_menu_new			(EphyWindow *window);
+EphyTabsMenu   *ephy_tabs_menu_new		(EphyWindow *window);
 
-void		   ephy_tabs_menu_update		(EphyTabsMenu *menu);
+void		ephy_tabs_menu_update		(EphyTabsMenu *menu);
 
 G_END_DECLS
 

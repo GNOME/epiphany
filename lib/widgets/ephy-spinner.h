@@ -23,6 +23,7 @@
  *
  * This is the header file for the throbber on the location bar
  *
+ * $Id$
  */
 
 #ifndef EPHY_SPINNER_H
@@ -45,6 +46,8 @@ typedef struct EphySpinnerDetails EphySpinnerDetails;
 
 struct EphySpinner {
 	GtkEventBox parent;
+
+	/*< private >*/
 	EphySpinnerDetails *details;
 };
 
@@ -53,14 +56,16 @@ struct EphySpinnerClass {
 };
 
 GType         ephy_spinner_get_type       (void);
+
 GtkWidget    *ephy_spinner_new            (void);
+
 void          ephy_spinner_start          (EphySpinner *throbber);
+
 void          ephy_spinner_stop           (EphySpinner *throbber);
+
 void	      ephy_spinner_set_small_mode (EphySpinner *spinner,
 					   gboolean new_mode);
 
 G_END_DECLS
 
 #endif /* EPHY_SPINNER_H */
-
-

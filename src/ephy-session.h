@@ -46,6 +46,7 @@ struct EphySession
 {
         GObject parent;
 
+	/*< private >*/
         EphySessionPrivate *priv;
 };
 

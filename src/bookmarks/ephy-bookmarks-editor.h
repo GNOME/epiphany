@@ -41,6 +41,7 @@ typedef struct
 {
 	GtkWindow parent;
 
+	/*< private >*/
 	EphyBookmarksEditorPrivate *priv;
 } EphyBookmarksEditor;
 

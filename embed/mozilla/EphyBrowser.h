@@ -18,8 +18,8 @@
  *  $Id$
  */
 
-#ifndef EPHY_WRAPPER_H
-#define EPHY_WRAPPER_H
+#ifndef EPHY_BROWSER_H
+#define EPHY_BROWSER_H
 
 #include "ephy-encodings.h"
 

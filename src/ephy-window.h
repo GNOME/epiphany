@@ -44,9 +44,11 @@ typedef struct Toolbar Toolbar;
 struct EphyWindow
 {
         GtkWindow parent;
+	/*< private >*/
         EphyWindowPrivate *priv;
 
 	/* Public to toolbar and statusbar, dont use outside */
+	/*< public >*/
 	GObject *ui_merge;
 };
 

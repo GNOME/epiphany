@@ -48,6 +48,8 @@ typedef enum
 struct EggToolbarsModel
 {
   GObject parent_object;
+
+  /*< private >*/
   EggToolbarsModelPrivate *priv;
 };
 

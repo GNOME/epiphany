@@ -36,6 +36,8 @@ typedef struct EphyTopicActionPrivate EphyTopicActionPrivate;
 struct _EphyTopicAction
 {
 	GtkAction parent;
+
+	/*< private >*/
 	EphyTopicActionPrivate *priv;
 };
 

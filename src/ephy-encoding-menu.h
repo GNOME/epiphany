@@ -47,6 +47,7 @@ struct _EphyEncodingMenu
 {
 	GObject parent_object;
 
+	/*< private >*/
 	EphyEncodingMenuPrivate *priv;
 };
 

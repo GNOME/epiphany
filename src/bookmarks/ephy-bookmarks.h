@@ -49,6 +49,8 @@ enum
 struct EphyBookmarks
 {
         GObject parent;
+
+	/*< private >*/
         EphyBookmarksPrivate *priv;
 };
 

@@ -58,6 +58,8 @@ typedef enum
 struct EphyEmbedEvent
 {
         GObject parent;
+
+	/*< private >*/
         EphyEmbedEventPrivate *priv;
 
 	/* Public to the embed implementations */

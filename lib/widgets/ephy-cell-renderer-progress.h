@@ -41,6 +41,8 @@ enum
 struct _EphyCellRendererProgress
 {
 	GtkCellRenderer parent_instance;
+
+	/*< private >*/
 	EphyCellRendererProgressPrivate *priv;
 };
 

@@ -39,6 +39,8 @@ typedef struct EphyArrowToolButtonPrivate EphyArrowToolButtonPrivate;
 struct EphyArrowToolButton
 {
 	GtkToolButton parent;
+
+	/*< private >*/
         EphyArrowToolButtonPrivate *priv;
 };
 

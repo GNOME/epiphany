@@ -40,6 +40,8 @@ typedef struct PrefsDialogPrivate PrefsDialogPrivate;
 struct PrefsDialog
 {
         EphyDialog parent;
+
+	/*< private >*/
         PrefsDialogPrivate *priv;
 };
 

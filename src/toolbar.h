@@ -40,6 +40,8 @@ typedef struct ToolbarPrivate ToolbarPrivate;
 struct Toolbar
 {
         EggEditableToolbar parent_object;
+
+	/*< private >*/
         ToolbarPrivate *priv;
 };
 

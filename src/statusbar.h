@@ -37,6 +37,8 @@ typedef struct StatusbarPrivate StatusbarPrivate;
 struct Statusbar
 {
         GtkStatusbar parent;
+
+	/*< private >*/
         StatusbarPrivate *priv;
 };
 

@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2002 Olivier Martin <omartin@ifrance.com>
- *            (C) 2002 Jorn Baayen <jorn@nl.linux.org>
+ *  Copyright (C) 2002 Jorn Baayen <jorn@nl.linux.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ typedef struct
 {
 	GObject parent;
 
+	/*< private >*/
 	EphyNodeFilterPrivate *priv;
 } EphyNodeFilter;
 

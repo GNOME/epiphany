@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,6 +15,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifndef EPHY_TAB_H
@@ -41,7 +44,7 @@ typedef enum
 {
 	TAB_NAV_UP	= 1 << 0,
 	TAB_NAV_BACK	= 1 << 1,
-	TAB_NAV_FORWARD	= 1 << 2,
+	TAB_NAV_FORWARD	= 1 << 2
 } TabNavigationFlags;
 
 typedef enum
@@ -53,8 +56,10 @@ typedef enum
 
 struct EphyTab
 {
-        GObject parent;
-        EphyTabPrivate *priv;
+	GObject parent;
+
+	/*< private >*/
+	EphyTabPrivate *priv;
 };
 
 struct EphyTabClass

@@ -45,6 +45,7 @@ typedef struct
 {
 	GtkLabel parent;
 
+	/*< private >*/
 	EphyEllipsizingLabelPrivate *priv;
 } EphyEllipsizingLabel;
 

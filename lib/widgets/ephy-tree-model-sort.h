@@ -39,6 +39,7 @@ typedef struct
 {
 	GtkTreeModelSort parent;
 
+	/*< private >*/
 	EphyTreeModelSortPrivate *priv;
 } EphyTreeModelSort;
 

@@ -40,6 +40,7 @@ typedef struct
 {
 	GtkTreeView parent;
 
+	/*< private >*/
 	EphyTopicsSelectorPrivate *priv;
 } EphyTopicsSelector;
 

@@ -42,25 +42,6 @@ typedef struct EphyEmbedSingle EphyEmbedSingle;
 typedef struct EphyEmbedSinglePrivate EphyEmbedSinglePrivate;
 
 /**
- * FilePickerMode: What mode FilePicker should run in
- */
-
-typedef enum
-{
-	modeOpen = 0,
-	modeSave = 1,
-	modeGetFolder =2
-} FilePickerMode;
-
-typedef struct
-{
-	/* description of the file format */
-	gchar *description;
-	/* tipical sufixes, NULL terminated */
-	gchar **extensions;
-} FileFormat;
-
-/**
  * Cookie: the type of cookies
  */
 typedef struct
@@ -100,6 +81,8 @@ typedef enum
 struct EphyEmbedSingle
 {
 	GObject parent;
+
+	/*< private >*/
 	EphyEmbedSinglePrivate *priv;
 };
 

@@ -52,6 +52,7 @@ struct _EphyZoomControl
 {
 	GtkToolItem parent_object;
 
+	/*< private >*/
 	EphyZoomControlPrivate *priv;
 };
 

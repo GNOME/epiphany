@@ -53,6 +53,7 @@ struct _EphyLocationEntry
 {
 	GtkToolItem parent_object;
 
+	/*< private >*/
 	EphyLocationEntryPrivate *priv;
 };
 

@@ -20,7 +20,6 @@
  *  $Id$
  */
 
-
 #ifndef EPHY_NODE_H
 #define EPHY_NODE_H
 

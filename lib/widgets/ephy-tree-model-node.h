@@ -49,6 +49,7 @@ typedef struct
 {
 	GObject parent;
 
+	/*< private >*/
 	EphyTreeModelNodePrivate *priv;
 } EphyTreeModelNode;
 

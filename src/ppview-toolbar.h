@@ -40,6 +40,8 @@ typedef struct PPViewToolbarPrivate PPViewToolbarPrivate;
 struct PPViewToolbar
 {
         GObject parent;
+
+	/*< private >*/
         PPViewToolbarPrivate *priv;
 };
 

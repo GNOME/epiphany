@@ -36,6 +36,8 @@ typedef struct EphyBookmarkActionPrivate EphyBookmarkActionPrivate;
 struct _EphyBookmarkAction
 {
 	GtkAction parent;
+
+	/*< private >*/
 	EphyBookmarkActionPrivate *priv;
 };
 

@@ -1,7 +1,7 @@
 /*
  *  Copyright (C) 2001 Matthew Mueller
- *            (C) 2002 Jorn Baayen <jorn@nl.linux.org>
- *	      (C) 2003 Marco Pesenti Gritti <mpeseng@tin.it>
+ *  Copyright (C) 2002 Jorn Baayen <jorn@nl.linux.org>
+ *  Copyright (C) 2003 Marco Pesenti Gritti <mpeseng@tin.it>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
+ *  $Id$
  */
 
 #ifndef EPHY_STATE_H

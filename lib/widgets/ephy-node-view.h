@@ -42,6 +42,7 @@ typedef struct
 {
 	GtkTreeView parent;
 
+	/*< private >*/
 	EphyNodeViewPrivate *priv;
 } EphyNodeView;
 

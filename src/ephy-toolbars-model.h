@@ -37,13 +37,15 @@ typedef struct EphyToolbarsModelPrivate EphyToolbarsModelPrivate;
 
 struct EphyToolbarsModel
 {
-  EggToolbarsModel parent_object;
-  EphyToolbarsModelPrivate *priv;
+	EggToolbarsModel parent_object;
+
+	/*< private >*/
+	EphyToolbarsModelPrivate *priv;
 };
 
 struct EphyToolbarsModelClass
 {
-  EggToolbarsModelClass parent_class;
+	EggToolbarsModelClass parent_class;
 };
 
 GType		   ephy_toolbars_model_get_type        (void);

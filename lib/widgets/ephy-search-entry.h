@@ -38,6 +38,7 @@ typedef struct
 {
 	GtkEntry parent;
 
+	/*< private >*/
 	EphySearchEntryPrivate *priv;
 } EphySearchEntry;
 
