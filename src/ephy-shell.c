@@ -634,4 +634,3 @@ ephy_shell_show_history_window (EphyShell *gs,
 
 	gtk_window_present (GTK_WINDOW (gs->priv->history_window));
 }
-

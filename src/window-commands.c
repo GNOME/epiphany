@@ -301,7 +301,7 @@ window_cmd_file_bookmark_page (EggAction *action,
 		title = g_strdup (_("Untitled"));
 	}
 
-	icon = ephy_tab_get_favicon_url (tab);
+	icon = ephy_tab_get_icon_address (tab);
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	if (ephy_new_bookmark_is_unique (bookmarks, GTK_WINDOW (window),

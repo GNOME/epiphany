@@ -1061,6 +1061,4 @@ ephy_notebook_set_page_title (EphyNotebook *nb,
 
 	ebox = GTK_WIDGET (g_object_get_data (G_OBJECT (hbox), "label-ebox"));
 	gtk_tooltips_set_tip (GTK_TOOLTIPS (nb->priv->title_tips), ebox, title, NULL);
-
-	g_signal_emit (G_OBJECT (nb), ephy_notebook_signals[TABS_CHANGED], 0);
 }

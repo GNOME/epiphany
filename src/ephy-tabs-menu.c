@@ -47,23 +47,14 @@ struct _EphyTabsMenuPrivate
 /**
  * Private functions, only availble from this file
  */
-static void	ephy_tabs_menu_class_init	  (EphyTabsMenuClass *klass);
-static void	ephy_tabs_menu_init	  (EphyTabsMenu *wrhm);
-static void	ephy_tabs_menu_finalize_impl (GObject *o);
-static void	ephy_tabs_menu_rebuild	  (EphyTabsMenu *wrhm);
-static void     ephy_tabs_menu_set_property  (GObject *object,
-						   guint prop_id,
-						   const GValue *value,
-						   GParamSpec *pspec);
-static void	ephy_tabs_menu_get_property  (GObject *object,
-						   guint prop_id,
-						   GValue *value,
-						   GParamSpec *pspec);
+static void	ephy_tabs_menu_class_init	(EphyTabsMenuClass *klass);
+static void	ephy_tabs_menu_init	  	(EphyTabsMenu *menu);
+static void	ephy_tabs_menu_finalize_impl 	(GObject *o);
 
 enum
 {
 	PROP_0,
-	PROP_EPHY_WINDOW
+	PROP_WINDOW
 };
 
 static gpointer g_object_class;
@@ -101,6 +92,38 @@ ephy_tabs_menu_get_type (void)
 }
 
 static void
+ephy_tabs_menu_set_property (GObject *object,
+			     guint prop_id,
+			     const GValue *value,
+			     GParamSpec *pspec)
+{
+        EphyTabsMenu *m = EPHY_TABS_MENU (object);
+
+        switch (prop_id)
+        {
+                case PROP_WINDOW:
+                        m->priv->window = g_value_get_object (value);
+                        break;
+        }
+}
+
+static void
+ephy_tabs_menu_get_property (GObject *object,
+                             guint prop_id,
+                             GValue *value,
+                             GParamSpec *pspec)
+{
+        EphyTabsMenu *m = EPHY_TABS_MENU (object);
+
+        switch (prop_id)
+        {
+                case PROP_WINDOW:
+                        g_value_set_object (value, m->priv->window);
+                        break;
+        }
+}
+
+static void
 ephy_tabs_menu_class_init (EphyTabsMenuClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -112,28 +135,32 @@ ephy_tabs_menu_class_init (EphyTabsMenuClass *klass)
 	object_class->get_property = ephy_tabs_menu_get_property;
 
 	g_object_class_install_property (object_class,
-                                         PROP_EPHY_WINDOW,
+                                         PROP_WINDOW,
                                          g_param_spec_object ("EphyWindow",
                                                               "EphyWindow",
                                                               "Parent window",
                                                               EPHY_WINDOW_TYPE,
-                                                              G_PARAM_READWRITE));
+                                                              G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
 }
 
 static void
-ephy_tabs_menu_init (EphyTabsMenu *wrhm)
+ephy_tabs_menu_init (EphyTabsMenu *menu)
 {
-	EphyTabsMenuPrivate *p = g_new0 (EphyTabsMenuPrivate, 1);
-	wrhm->priv = p;
+	EphyTabsMenuPrivate *p;
+	
+	p = g_new0 (EphyTabsMenuPrivate, 1);
+	
+	menu->priv = p;
 
-	wrhm->priv->ui_id = 0;
-	wrhm->priv->action_group = NULL;
+	menu->priv->ui_id = 0;
+	menu->priv->action_group = NULL;
 }
 
 static void
-ephy_tabs_menu_clean (EphyTabsMenu *wrhm)
+ephy_tabs_menu_clean (EphyTabsMenu *menu)
 {
-	EphyTabsMenuPrivate *p = wrhm->priv;
+	EphyTabsMenuPrivate *p = menu->priv;
 	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
 
 	if (p->ui_id > 0)
@@ -153,8 +180,8 @@ ephy_tabs_menu_clean (EphyTabsMenu *wrhm)
 static void
 ephy_tabs_menu_finalize_impl (GObject *o)
 {
-	EphyTabsMenu *wrhm = EPHY_TABS_MENU (o);
-	EphyTabsMenuPrivate *p = wrhm->priv;
+	EphyTabsMenu *menu = EPHY_TABS_MENU (o);
+	EphyTabsMenuPrivate *p = menu->priv;
 
 	if (p->action_group != NULL)
 	{
@@ -169,59 +196,14 @@ ephy_tabs_menu_finalize_impl (GObject *o)
 	G_OBJECT_CLASS (g_object_class)->finalize (o);
 }
 
-static void
-ephy_tabs_menu_set_property (GObject *object,
-				  guint prop_id,
-				  const GValue *value,
-				  GParamSpec *pspec)
-{
-        EphyTabsMenu *m = EPHY_TABS_MENU (object);
-
-        switch (prop_id)
-        {
-                case PROP_EPHY_WINDOW:
-                        m->priv->window = g_value_get_object (value);
-			ephy_tabs_menu_rebuild (m);
-                        break;
-        }
-}
-
-static void
-ephy_tabs_menu_get_property (GObject *object,
-                                  guint prop_id,
-                                  GValue *value,
-                                  GParamSpec *pspec)
-{
-        EphyTabsMenu *m = EPHY_TABS_MENU (object);
-
-        switch (prop_id)
-        {
-                case PROP_EPHY_WINDOW:
-                        g_value_set_object (value, m->priv->window);
-                        break;
-        }
-}
 
 EphyTabsMenu *
 ephy_tabs_menu_new (EphyWindow *window)
 {
-	EphyTabsMenu *ret = g_object_new (EPHY_TYPE_TABS_MENU,
-					       "EphyWindow", window,
-					       NULL);
-	return ret;
+	return EPHY_TABS_MENU (g_object_new (EPHY_TYPE_TABS_MENU,
+					     "EphyWindow", window,
+					     NULL));
 }
-
-static void
-ephy_tabs_menu_verb_cb (EggAction *action, EphyTab *tab)
-{
-	EphyWindow *window;
-
-	g_return_if_fail (IS_EPHY_TAB (tab));
-
-	window = ephy_tab_get_window (tab);	
-	ephy_window_jump_to_tab (window, tab);
-}
-
 
 /* This code is from EggActionGroup:
  * Ideally either EggAction should support setting an accelerator from
@@ -229,129 +211,102 @@ ephy_tabs_menu_verb_cb (EggAction *action, EphyTab *tab)
  * to an action group.
  */
 static void
-ephy_tabs_menu_set_action_accelerator (EggActionGroup *action_group,
-				       EggAction *action,
-				       int tab_number)
+tab_set_action_accelerator (EggActionGroup *action_group,
+			    EggAction *action,
+			    guint tab_number)
 {
-	gchar *accel_path;
+	char *accel_path = NULL;
+	char accel[7];
 	gint accel_number;
-
-	g_return_if_fail (tab_number >= 0);
+	guint accel_key;
+	GdkModifierType accel_mods;
 
 	/* set the accel path for the menu item */
-	accel_path = g_strconcat ("<Actions>/", action_group->name, "/", action->name, NULL);
+	accel_path = g_strconcat ("<Actions>/", action_group->name, "/",
+				  action->name, NULL);
 
 	/* Only the first ten tabs get accelerators starting from 1 through 0 */
-	if (tab_number == 9)
+	if (tab_number < 10)
 	{
-		accel_number = 0;
-	}
-	else
-	{
-		accel_number = (tab_number + 1);
-	}
+		accel_key = 0;
+		accel_number = (tab_number + 1) % 10;
 
-	if (accel_number < 10)
-	{
-		guint accel_key = 0;
-		GdkModifierType accel_mods;
-		gchar* accelerator;
+		snprintf (accel, 7, "<alt>%d", accel_number);
 
-		accelerator = g_strdup_printf ("<alt>%d", accel_number);
+		gtk_accelerator_parse (accel, &accel_key, &accel_mods);
 
-		gtk_accelerator_parse (accelerator, &accel_key,
-					&accel_mods);
-		if (accel_key)
-			gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
-
-		g_free (accelerator);
+		if (accel_key != 0)
+		{
+			gtk_accel_map_change_entry (accel_path, accel_key,
+						    accel_mods, TRUE);
+		}
 	}
 
 	action->accel_quark = g_quark_from_string (accel_path);
 	g_free (accel_path);
 }
 
-static void
-ephy_tabs_menu_rebuild (EphyTabsMenu *wrhm)
+void
+ephy_tabs_menu_update (EphyTabsMenu *menu)
 {
-	EphyTabsMenuPrivate *p = wrhm->priv;
-	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
+	EphyTabsMenuPrivate *p;
+	EggMenuMerge *merge;
+	EphyTab *tab;
+	EggAction *action;
 	GString *xml;
 	guint i = 0;
-	guint len;
-	GList *tabs, *l;
+	guint num = 0;
+	GList *tabs = NULL, *l;
 	GError *error = NULL;
 
+	g_return_if_fail (EPHY_IS_TABS_MENU (menu));
+	p = menu->priv;
+	merge = EGG_MENU_MERGE (p->window->ui_merge);
+	
 	LOG ("Rebuilding open tabs menu")
 
 	START_PROFILER ("Rebuilding tabs menu")
 
-	ephy_tabs_menu_clean (wrhm);
+	ephy_tabs_menu_clean (menu);
 
 	tabs = ephy_window_get_tabs (p->window);
-	len = g_list_length (tabs);
-	if (len == 0) return;
 
-	/* it's faster to preallocate */
-	xml = g_string_sized_new (52 * len + 105);
+	num = g_list_length (tabs);
+	if (num == 0) return;
+
+	p->action_group = egg_action_group_new ("TabsActions");
+
+	/* it's faster to preallocate, MIN is sanity check */
+	xml = g_string_sized_new (44 * MIN (num, 64) + 105);
 
 	g_string_append (xml, "<Root><menu><submenu name=\"TabsMenu\">"
 			      "<placeholder name=\"TabsOpen\">");
 
-	p->action_group = egg_action_group_new ("TabsActions");
-	egg_menu_merge_insert_action_group (merge, p->action_group, 0);
-
 	for (l = tabs; l != NULL; l = l->next)
 	{
-		gchar *verb = g_strdup_printf ("TabsOpen%d", i);
-		gchar *title_s;
-		const gchar *title;
-		EphyTab *tab;
-		EggAction *action;
-
 		tab = (EphyTab *) l->data;
+		action = ephy_tab_get_action (tab);
 
-		title = ephy_tab_get_title (tab);
-		title_s = ephy_string_shorten (title, MAX_LABEL_LENGTH);
-
-		action = g_object_new (EGG_TYPE_ACTION,
-				       "name", verb,
-				       "label", title_s,
-				       "tooltip", title,
-				       "stock_id", NULL,
-				       NULL);
-
-		g_signal_connect (action, "activate",
-				  G_CALLBACK (ephy_tabs_menu_verb_cb), tab);
-
-		ephy_tabs_menu_set_action_accelerator (p->action_group, action, i);
+		tab_set_action_accelerator (p->action_group, action, i);
 
 		egg_action_group_add_action (p->action_group, action);
-		g_object_unref (action);
 
 		g_string_append (xml, "<menuitem name=\"");
-		g_string_append (xml, verb);
-		g_string_append (xml, "Menu");
-		g_string_append (xml, "\" verb=\"");
-		g_string_append (xml, verb);
+		g_string_append (xml, action->name);
+		g_string_append (xml, "Menu\" verb=\"");
+		g_string_append (xml, action->name);
 		g_string_append (xml, "\"/>\n");
-
-		g_free (title_s);
-		g_free (verb);
 
 		++i;
 	}
 
 	g_string_append (xml, "</placeholder></submenu></menu></Root>");
 
-	p->ui_id = egg_menu_merge_add_ui_from_string (merge, xml->str, -1, &error);
+	egg_menu_merge_insert_action_group (merge, p->action_group, 0);
+	p->ui_id = egg_menu_merge_add_ui_from_string
+				(merge, xml->str, -1, &error);	
 
 	g_string_free (xml, TRUE);
-	
-	STOP_PROFILER ("Rebuilding tabs menu")
-}
 
-void ephy_tabs_menu_update (EphyTabsMenu *wrhm)
-{
-	ephy_tabs_menu_rebuild (wrhm);
+	STOP_PROFILER ("Rebuilding tabs menu")
 }

@@ -640,7 +640,7 @@ toolbar_update_favicon (Toolbar *t)
 	EggAction *action;
 
 	tab = ephy_window_get_active_tab (t->priv->window);
-	url = ephy_tab_get_favicon_url (tab);
+	url = ephy_tab_get_icon_address (tab);
 	action_group = t->priv->action_group;
 	action = egg_action_group_get_action (action_group, "Favicon");
 	g_object_set (action, "icon", url, NULL);

@@ -1,3 +1,44 @@
+2003-06-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-notebook.c: (ephy_notebook_set_page_title):
+
+	Do not emit the TABS_CHANGED signal; the tab's egg action will itself
+	take care of updating the menu entry.
+
+	* src/ephy-tab.h:
+	* src/eph-tab.c: (ephy_tab_set_property), (ephy_tab_get_property)
+	(ephy_tab_class_init):
+
+	Object properties for tab address, icon-address, load-progress,
+	load-status, message, security, title, window and zoom.
+
+	* src/ephy-tab.c: (ephy_tab_action_activate_cb), (ephy_tab_get_action),
+	(ephy_tab_init):
+
+	Augment the tab by an egg action for use in the tabs menu.
+
+	* src/ephy-tab.c: (ephy_tab_set_load_status),
+	(ephy_tab_set_link_message), (ephy_tab_set_favicon),
+	(ephy_tab_icon_cache_changed_cb), (ephy_tab_set_icon_address),
+	(ephy_get_icon_address), (ephy_tab_favicon_cb), (ephy_tab_address_cb),
+	(ephy_tab_title_cb), (build_net_state_message), (ensure_address),
+	(ephy_tab_net_state_cb), (ephy_tab_security_change_cb),
+	(ephy_tab_set_load_percent), (ephy_tab_get_load_percent),
+	(ephy_tab_get_status_message), (ephy_tab_set_title),
+	(ephy_tab_set_location), (ephy_tab_set_security_level),
+	(ephy_tab_get_security_level), (ephy_tab_set_zoom),
+	(ephy_tab_get_zoom):
+
+	Getters/setters for the tab's object properties. Use the setters in the
+	callbacks instead of setting the values directly.
+
+	* src/ephy-tabs-menu.c: (ephy_tabs_menu_set_action_accelerator),
+	(ephy_tabs_menu_update):
+
+	Use the tab's egg action directly instead of dummy egg actions.
+	This makes updating the tab titles in the tabs menu work
+	automagically.
+
 2003-06-09  Xan Lopez  <xan@masilla.org>
 
 	* src/window-commands.c: (window_cmd_file_send_to),

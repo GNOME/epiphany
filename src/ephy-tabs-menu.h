@@ -55,7 +55,7 @@ GType              ephy_tabs_menu_get_type		(void);
 
 EphyTabsMenu	  *ephy_tabs_menu_new			(EphyWindow *window);
 
-void		   ephy_tabs_menu_update		(EphyTabsMenu *wrhm);
+void		   ephy_tabs_menu_update		(EphyTabsMenu *menu);
 
 #endif
 

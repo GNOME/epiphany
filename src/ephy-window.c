@@ -1290,7 +1290,7 @@ update_favicon_control (EphyWindow *window)
 	cache = ephy_embed_shell_get_favicon_cache
 		(EPHY_EMBED_SHELL (ephy_shell));
 
-	location = ephy_tab_get_favicon_url (tab);
+	location = ephy_tab_get_icon_address (tab);
 	if (location)
 	{
 		pixbuf = ephy_favicon_cache_get (cache, location);
