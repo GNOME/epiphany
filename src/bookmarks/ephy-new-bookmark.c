@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "ephy-new-bookmark.h"
+#include "ephy-bookmarks.h"
 #include "ephy-state.h"
 #include "ephy-topics-selector.h"
 #include "ephy-debug.h"
@@ -52,6 +53,8 @@ static void ephy_new_bookmark_get_property (GObject *object,
 						guint prop_id,
 						GValue *value,
 						GParamSpec *pspec);
+
+#define DATA_KEY	"EphyNode"
 
 #define EPHY_NEW_BOOKMARK_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NEW_BOOKMARK, EphyNewBookmarkPrivate))
 
@@ -304,20 +307,24 @@ duplicate_dialog_construct (GtkWindow *parent,
 			    const char *title)
 {
 	GtkWidget *dialog;
-	char *str, *tmp_str, *tmp_title;
+	char *str, *tmp_str;
 
-	tmp_title = g_markup_printf_escaped ("<b>%s</b>", title);
-	tmp_str = g_strdup_printf (_("A bookmark titled %s already exists for this page."),
-				   tmp_title);
-	str = g_strconcat ("<big>", tmp_str, "</big>", NULL);
+	tmp_str = g_markup_printf_escaped (_("You already have a bookmark titled \"%s\" for this page."),
+				   	   title);
+	str = g_strconcat ("<span weight=\"bold\" size=\"larger\">", tmp_str, "</span>", NULL);
 
 	dialog = gtk_message_dialog_new
 		(GTK_WINDOW (parent), GTK_DIALOG_DESTROY_WITH_PARENT,
-		 GTK_MESSAGE_INFO, GTK_BUTTONS_OK, NULL);
+		 GTK_MESSAGE_INFO, GTK_BUTTONS_NONE, NULL);
 	gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog), str);
-	g_free (tmp_title);
 	g_free (tmp_str);
 	g_free (str);
+
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       _("_View Properties"), GTK_RESPONSE_ACCEPT);
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       GTK_STOCK_OK, GTK_RESPONSE_OK);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Duplicated Bookmark"));
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
@@ -326,16 +333,28 @@ duplicate_dialog_construct (GtkWindow *parent,
 }
 
 static void
-duplicate_bookmark_response_cb (EphyNewBookmark *new_bookmark,
-	     			int response_id,
-	     			gpointer user_data)
+duplicate_bookmark_response_cb (GtkWidget *dialog,
+	     			int response,
+	     			EphyBookmarks *bookmarks)
 {
-	switch (response_id)
+	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		case GTK_RESPONSE_OK:
-			gtk_widget_destroy (GTK_WIDGET (new_bookmark));
-			break;
+		EphyNode *node;
+		GtkWidget *parent;
+
+		node = g_object_get_data (G_OBJECT (dialog), DATA_KEY);
+		parent = GTK_WIDGET (gtk_window_get_transient_for (GTK_WINDOW (dialog)));
+		ephy_bookmarks_show_bookmark_properties (bookmarks, node, parent);
 	}
+
+	gtk_widget_destroy (dialog);
+}
+
+static void
+duplicated_node_destroy_cb (EphyNode *node,
+			    GtkWidget *dialog)
+{
+	gtk_widget_destroy (dialog);
 }
 
 gboolean
@@ -354,10 +373,14 @@ ephy_new_bookmark_is_unique (EphyBookmarks *bookmarks,
 		title = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE);
 		dialog = duplicate_dialog_construct (parent, title);
 		gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
+		g_object_set_data (G_OBJECT (dialog), DATA_KEY, node);
 		g_signal_connect (G_OBJECT (dialog),
 			  	  "response",
 			  	  G_CALLBACK (duplicate_bookmark_response_cb),
-			  	  dialog);
+			  	  bookmarks);
+		ephy_node_signal_connect_object (node, EPHY_NODE_DESTROY,
+						 (EphyNodeCallback) duplicated_node_destroy_cb,
+						 G_OBJECT (dialog));
 		gtk_widget_show (GTK_WIDGET (dialog));
 		return FALSE;
 	}
