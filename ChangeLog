@@ -1,3 +1,10 @@
+2003-01-10  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_insert_from_url):
+
+	Download favicon only when it's not already on disk. As side effect
+	avoid most crashes on exit. Still need to really fix that.
+
 2003-01-09  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* data/Makefile.am:

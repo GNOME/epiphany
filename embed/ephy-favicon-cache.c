@@ -324,8 +324,8 @@ ephy_favicon_cache_dest (EphyFaviconCache *cache, const char *url)
 
 void
 ephy_favicon_cache_insert_from_url (EphyFaviconCache *cache,
-				      const char *url,
-				      const char *favicon_url)
+				    const char *url,
+				    const char *favicon_url)
 {
 	EphyEmbedPersist *persist;
 	char *dest;
@@ -336,6 +336,8 @@ ephy_favicon_cache_insert_from_url (EphyFaviconCache *cache,
 
 	dest = ephy_favicon_cache_dest (cache, favicon_url);
 	g_return_if_fail (dest != NULL);
+
+	if (g_file_test (dest, G_FILE_TEST_EXISTS)) return;
 
 	persist = ephy_embed_persist_new (NULL);
 
