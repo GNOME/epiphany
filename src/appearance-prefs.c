@@ -220,7 +220,8 @@ setup_font_menu (AppearancePrefs *dialog,
 
 	g_free (default_font);
 
-	/* FIXME free the list */
+	g_list_foreach (fonts, (GFunc)g_free, NULL);
+	g_list_free (fonts);
 }
 
 static void

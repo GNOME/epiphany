@@ -38,32 +38,6 @@ gint		 ephy_gui_gtk_radio_button_get		 (GtkRadioButton *radio_button);
 void		 ephy_gui_gtk_radio_button_set		 (GtkRadioButton *radio_button,
 							  gint index);
 
-GList		*ephy_gui_treeview_get_selection_refs	 (GtkTreeView *treeview);
-
-GtkWidget	*ephy_gui_append_new_menuitem		 (GtkWidget  *menu,
-							  const char *mnemonic,
-							  GCallback   callback,
-							  gpointer    data);
-
-GtkWidget	*ephy_gui_append_new_menuitem_stock	 (GtkWidget  *menu,
-							  const char *stock_id,
-							  GCallback   callback,
-							  gpointer    data);
-
-GtkWidget	*ephy_gui_append_new_menuitem_stock_icon (GtkWidget *menu,
-							  const char *stock_id,
-							  const char *mnemonic,
-							  GCallback callback,
-							  gpointer data);
-
-GtkWidget      *ephy_gui_append_new_check_menuitem       (GtkWidget  *menu,
-                                                          const char *mnemonic,
-                                                          gboolean value,
-                                                          GCallback callback,
-                                                          gpointer data);
-
-GtkWidget      *ephy_gui_append_separator	         (GtkWidget *menu);
-
 gboolean	ephy_gui_confirm_overwrite_file	         (GtkWidget *parent,
 							  const char *filename);
 

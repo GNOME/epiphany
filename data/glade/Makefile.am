@@ -1,7 +1,6 @@
 glade_DATA = \
 	epiphany.glade  	\
 	prompts.glade		\
-	toolbar-editor.glade	\
 	prefs-dialog.glade	\
 	print.glade
 

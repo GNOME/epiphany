@@ -611,7 +611,8 @@ ephy_autocompletion_window_button_press_event_cb (GtkWidget *widget,
 }
 
 static GtkTreeView *
-hack_tree_view_move_selection (GtkTreeView *tv, GtkTreeView *alternate, int dir)
+hack_tree_view_move_selection (EphyAutocompletionWindow *aw, GtkTreeView *tv,
+			       GtkTreeView *alternate, int dir)
 {
 	GtkTreeSelection *ts = gtk_tree_view_get_selection (tv);
 	GtkTreeModel *model;
@@ -632,6 +633,8 @@ hack_tree_view_move_selection (GtkTreeView *tv, GtkTreeView *alternate, int dir)
 	{
 		GtkTreePath *p = selected->data;
 		int i;
+		gboolean exit = FALSE;
+
 		if (dir > 0)
 		{
 			for (i = 0; i < dir; ++i)
@@ -652,10 +655,18 @@ hack_tree_view_move_selection (GtkTreeView *tv, GtkTreeView *alternate, int dir)
 			gtk_tree_selection_select_path (ts, p);
 			gtk_tree_view_scroll_to_cell (tv, p, NULL, FALSE, 0, 0);
 		}
-	}
+		else
+		{
+			g_signal_emit (aw, EphyAutocompletionWindowSignals
+				       [SELECTED], 0, NULL, FALSE);
+			exit = TRUE;
+		}
 
-	g_list_foreach (selected, (GFunc) gtk_tree_path_free, NULL);
-	g_list_free (selected);
+		g_list_foreach (selected, (GFunc) gtk_tree_path_free, NULL);
+		g_list_free (selected);
+
+		if (exit) return NULL;
+	}
 
 	if (!prev_result)
 	{
@@ -680,7 +691,7 @@ hack_tree_view_move_selection (GtkTreeView *tv, GtkTreeView *alternate, int dir)
 	}
 	else if (gtk_tree_selection_count_selected_rows (ts) == 0)
 	{
-		hack_tree_view_move_selection (alternate, tv, dir);
+		hack_tree_view_move_selection (aw, alternate, tv, dir);
 		return alternate;
 	}
 
@@ -704,19 +715,19 @@ ephy_autocompletion_window_key_press_hack (EphyAutocompletionWindow *aw,
 	{
 	case GDK_Up:
 		p->active_tree_view = hack_tree_view_move_selection
-			(tree_view, alt, -1);
+			(aw, tree_view, alt, -1);
 		break;
 	case GDK_Down:
 		p->active_tree_view = hack_tree_view_move_selection
-			(tree_view, alt, +1);
+			(aw, tree_view, alt, +1);
 		break;
 	case GDK_Page_Down:
 		p->active_tree_view = hack_tree_view_move_selection
-			(tree_view, alt, +5);
+			(aw, tree_view, alt, +5);
 		break;
 	case GDK_Page_Up:
 		p->active_tree_view = hack_tree_view_move_selection
-			(tree_view, alt, -5);
+			(aw, tree_view, alt, -5);
 		break;
 	case GDK_Return:
 	case GDK_space:

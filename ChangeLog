@@ -1,5 +1,40 @@
 2003-02-28  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* data/glade/Makefile.am:
+	* data/glade/toolbar-editor.glade:
+
+	Remove old toolbar editor ui
+
+	* lib/ephy-autocompletion.c: (ephy_autocompletion_update_matches):
+
+	Remove an obsolete FIXME
+
+	* lib/ephy-gui.c:
+	* lib/ephy-gui.h:
+
+	Remove some functions that was used only in galeon bookmarks
+
+	* lib/widgets/ephy-autocompletion-window.c:
+	(hack_tree_view_move_selection),
+	(ephy_autocompletion_window_key_press_hack):
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_autocompletion_window_url_selected_cb):
+
+	Up on the top border of the autocompl window goes back to the entry
+
+	* src/appearance-prefs.c: (setup_font_menu):
+
+	Free fonts list
+
+	* src/ephy-tab.c: (ephy_tab_parent_set_cb),
+	(ephy_tab_set_visibility):
+	* src/window-commands.c: (window_cmd_tabs_move_left),
+	(window_cmd_tabs_move_right):
+
+	Implement tabs moving
+
+2003-02-28  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/bookmarks/ephy-node-view.c: (ephy_node_view_sort_func):
 
 	fix compilation

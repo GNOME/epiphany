@@ -325,7 +325,6 @@ ephy_autocompletion_update_matches (EphyAutocompletion *ac)
 	}
 	if (p->status == GAS_NEEDS_REFINE)
 	{
-		/* FIXME we do full update for now */
 		ephy_autocompletion_refine_matches (ac);
 	}
 

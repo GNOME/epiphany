@@ -168,9 +168,6 @@ ephy_tab_parent_set_cb (GtkWidget *widget, GtkWidget *previous_parent,
 {
 	GtkWidget *toplevel;
 
-	/* FIXME maybe we dont need to set the tab parent explicitly
-	 * anymore with this callback taking care of it */
-
 	if (widget->parent == NULL) return;
 
 	toplevel = gtk_widget_get_toplevel (widget);
@@ -431,11 +428,9 @@ ephy_tab_get_size (EphyTab *tab, int *width, int *height)
 
 static void
 ephy_tab_set_visibility (EphyTab *tab,
-                           gboolean visible)
+                         gboolean visible)
 {
 	g_return_if_fail (tab->priv->window != NULL);
-
-	/* FIXME show/hide the tab widget */
 
 	tab->priv->visibility = visible;
 }

@@ -725,11 +725,39 @@ void
 window_cmd_tabs_move_left  (EggAction *action,
 			    EphyWindow *window)
 {
+	GtkWidget *notebook;
+	int page;
+
+	notebook = ephy_window_get_notebook (window);
+	page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+
+	if (page > 0)
+	{
+		GtkWidget *child;
+
+		child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), page);
+		gtk_notebook_reorder_child (GTK_NOTEBOOK (notebook), child, page - 1);
+	}
 }
 
 void window_cmd_tabs_move_right (EggAction *action,
 				 EphyWindow *window)
 {
+	GtkWidget *notebook;
+	int page;
+	int last_page;
+
+	notebook = ephy_window_get_notebook (window);
+	page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+	last_page = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) - 1;
+
+	if (page != last_page)
+	{
+		GtkWidget *child;
+
+		child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), page);
+		gtk_notebook_reorder_child (GTK_NOTEBOOK (notebook), child, page + 1);
+	}
 }
 
 void

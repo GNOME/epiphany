@@ -478,7 +478,15 @@ ephy_location_entry_autocompletion_window_url_selected_cb (EphyAutocompletionWin
 						           int action,
 						           EphyLocationEntry *w)
 {
-	real_entry_set_location (w, action ? w->priv->before_completion : target);
+	if (target)
+	{
+		real_entry_set_location (w, action ? w->priv->before_completion : target);
+	}
+	else
+	{
+		real_entry_set_location (w, w->priv->before_completion);
+		gtk_editable_set_position (GTK_EDITABLE (w->priv->entry), -1);
+	}
 }
 
 void
