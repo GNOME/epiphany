@@ -372,12 +372,11 @@ entry_populate_popup_cb (GtkEntry *entry,
 	 * menu, and insert this menu item before it.
 	 * It's a bit of a hack, but there seems to be no better way to do it :/
 	 */
-	children = gtk_container_get_children (GTK_CONTAINER (menu));
+	children = GTK_MENU_SHELL (menu)->children;
 	for (item = children; item != NULL && sep < 2; item = item->next, pos++)
 	{
 		if (GTK_IS_SEPARATOR_MENU_ITEM (item->data)) sep++;
 	}
-	g_list_free (children);
 
 	gtk_menu_shell_insert (GTK_MENU_SHELL (menu), menuitem, pos - 1);
 }
