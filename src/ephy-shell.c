@@ -63,12 +63,6 @@ struct EphyShellPrivate
 	GtkWidget *history_window;
 };
 
-enum
-{
-        STARTPAGE_HOME,
-        STARTPAGE_LAST
-};
-
 static void
 ephy_shell_class_init (EphyShellClass *klass);
 static void
@@ -360,7 +354,6 @@ ephy_init_services (EphyShell *gs)
 	/* preload the prefs */
 	/* it also enables notifiers support */
 	eel_gconf_monitor_add ("/apps/epiphany");
-	eel_gconf_monitor_add ("/apps/nautilus/preferences");
 	eel_gconf_monitor_add ("/system/proxy");
 
 #ifdef ENABLE_NAUTILUS_VIEW
@@ -371,58 +364,21 @@ ephy_init_services (EphyShell *gs)
 
 }
 
-static char *
-build_homepage_url (EphyShell *gs,
-		    EphyEmbed *previous_embed)
+static void
+load_homepage (EphyEmbed *embed)
 {
-        const gchar *last_page_url;
-        gchar *home_page_url;
-        gint page_type;
-        EphyHistory *gh;
-	char *result = NULL;
+	char *home;
 
-        if (previous_embed == NULL)
-        {
-                page_type = STARTPAGE_HOME;
-        }
-        else
-        {
-                page_type = STARTPAGE_LAST;
-        }
+	home = eel_gconf_get_string(CONF_GENERAL_HOMEPAGE);
 
-        /* return the appropriate page */
-        if (page_type == STARTPAGE_HOME)
-        {
-                /* get location of home page */
-                home_page_url = eel_gconf_get_string(CONF_GENERAL_HOMEPAGE);
-		result = home_page_url;
-        }
-	else if (page_type == STARTPAGE_LAST)
+	if (home == NULL)
 	{
-		if (previous_embed != NULL)
-		{
-			ephy_embed_get_location (previous_embed,
-						 TRUE,
-						 &result);
-		}
-
-		if (result == NULL)
-		{
-			/* get location of last page */
-			gh = ephy_embed_shell_get_global_history
-				(EPHY_EMBED_SHELL (gs));
-			last_page_url = ephy_history_get_last_page (gh);
-			result = g_strdup (last_page_url);
-		}
+		home = g_strdup ("about:blank");
 	}
 
-	if (result == NULL)
-	{
-		/* even in case of error, it's a good default */
-		result = g_strdup ("about:blank");
-	}
+	ephy_embed_load_url (embed, home);
 
-	return result;
+	g_free (home);
 }
 
 /**
@@ -478,14 +434,14 @@ ephy_shell_new_tab (EphyShell *shell,
 	EphyEmbed *previous_embed = NULL;
 	GtkWidget *nb;
 	gint position;
+	Toolbar *toolbar;
 
 	in_new_window = !eel_gconf_get_boolean (CONF_TABS_TABBED);
 
 	if (flags & EPHY_NEW_TAB_IN_NEW_WINDOW) in_new_window = TRUE;
 	if (flags & EPHY_NEW_TAB_IN_EXISTING_WINDOW) in_new_window = FALSE;
 
-	if (flags & EPHY_NEW_TAB_JUMP) jump_to = TRUE;
-	if (flags & EPHY_NEW_TAB_DONT_JUMP_TO) jump_to = FALSE;
+	jump_to = (flags & EPHY_NEW_TAB_JUMP);
 
 	if (!in_new_window && parent_window != NULL)
 	{
@@ -495,6 +451,8 @@ ephy_shell_new_tab (EphyShell *shell,
 	{
 		window = ephy_window_new ();
 	}
+
+	toolbar = ephy_window_get_toolbar (window);
 
 	if (previous_tab)
 	{
@@ -523,30 +481,23 @@ ephy_shell_new_tab (EphyShell *shell,
 			     jump_to);
 	gtk_widget_show (GTK_WIDGET(window));
 
-	if (flags & EPHY_NEW_TAB_HOME_PAGE ||
-	    flags & EPHY_NEW_TAB_NEW_PAGE)
-	{
-		Toolbar *toolbar;
-
-		toolbar = ephy_window_get_toolbar (window);
-		toolbar_edit_location (toolbar);
-	}
-
 	if (flags & EPHY_NEW_TAB_HOME_PAGE)
 	{
-		char *homepage;
+		toolbar_edit_location (toolbar);
 
-		homepage = build_homepage_url (shell, previous_embed);
-		g_assert (homepage != NULL);
-
-		ephy_embed_load_url (embed, homepage);
-
-		g_free (homepage);
+		load_homepage (embed);
 	}
 	else if (flags & EPHY_NEW_TAB_NEW_PAGE)
 	{
-		ephy_embed_load_url (embed, "about:blank");
-		ephy_embed_copy_page (embed, previous_embed, DISPLAY_NORMAL);
+		char *previous_address = NULL;
+
+		g_return_val_if_fail (previous_embed != NULL, NULL);
+		ephy_embed_get_location (previous_embed, TRUE,
+					 &previous_address);
+		toolbar_set_location (toolbar, previous_address);
+		toolbar_edit_location (toolbar);
+
+		load_homepage (embed);
 	}
 	else if (flags & EPHY_NEW_TAB_OPEN_PAGE)
 	{

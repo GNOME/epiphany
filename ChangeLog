@@ -1,5 +1,31 @@
 2003-06-04  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-menu.c:
+	(ephy_bookmarks_menu_rebuild), (do_updates),
+	(bookmarks_tree_changed_cb), (ephy_bookmarks_menu_init):
+	* src/bookmarks/ephy-bookmarks.c: (bookmarks_changed_cb),
+	(topics_removed_cb), (ephy_bookmarks_add):
+
+	Make sure to rebuild on add bookmark and on topic removal.
+	Update on idle, so things like importing bookmarks doesnt
+	take two days.
+
+	* src/ephy-notebook.c: (notebook_drag_data_received_cb):
+	* src/ephy-shell.c: (ephy_init_services), (load_homepage),
+	(ephy_shell_new_tab):
+	* src/ephy-shell.h:
+	* src/ephy-window.c: (setup_window):
+	* src/session.c: (parse_embed):
+
+	Drop NOT_JUMP_TO flag, we dont have a pref anymore.
+
+	On new page instead of really clone the page, just clone
+	the url (put it in the address entry). So if the user need it
+	it's easy to load, but there are not the inacceptable slow
+	downs of real cloning. Let's see how this works ...
+
+2003-06-04  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/bookmarks/Makefile.am:
 	* src/bookmarks/ephy-bookmark-action.c: (connect_proxy):
 	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_class_init),

@@ -677,8 +677,7 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 						  tab, url,
 						  EPHY_NEW_TAB_OPEN_PAGE |
 						  EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-						  EPHY_NEW_TAB_APPEND_LAST |
-						  EPHY_NEW_TAB_DONT_JUMP_TO);
+						  EPHY_NEW_TAB_APPEND_LAST);
 		}
 
 		g_free (url);

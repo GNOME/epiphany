@@ -532,7 +532,6 @@ bookmarks_changed_cb (EphyNode *node,
 		      EphyBookmarks *eb)
 {
 	ephy_bookmarks_emit_data_changed (eb);
-	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
 }
 
 static void
@@ -624,6 +623,8 @@ topics_removed_cb (EphyNode *node,
 		g_free (list);
 	}
 	ephy_node_thaw (child);
+
+	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
 }
 
 static void
@@ -795,6 +796,7 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	ephy_node_add_child (eb->priv->notcategorized, bm);
 
 	ephy_bookmarks_emit_data_changed (eb);
+	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
 
 	return bm;
 }

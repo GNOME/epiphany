@@ -42,6 +42,7 @@ struct _EphyBookmarksMenuPrivate
 	EphyBookmarks *bookmarks;
 	EggActionGroup *action_group;
 	guint ui_id;
+	guint update_tag;
 };
 
 /**
@@ -322,7 +323,10 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 		g_free (verb);
 	}
 
-	add_bookmarks_menu (menu, not_categorized, xml);
+	if (ephy_node_get_n_children (not_categorized) > 0)
+	{
+		add_bookmarks_menu (menu, not_categorized, xml);
+	}
 
 	g_string_append (xml, "</placeholder></submenu></menu></Root>");
 
@@ -392,10 +396,23 @@ ephy_bookmarks_menu_class_init (EphyBookmarksMenuClass *klass)
                                                               G_PARAM_READWRITE));
 }
 
+static gboolean
+do_updates (EphyBookmarksMenu *menu)
+{
+	ephy_bookmarks_menu_rebuild (menu);
+
+	menu->priv->update_tag = 0;
+
+	return FALSE;
+}
+
 static void
 bookmarks_tree_changed_cb (EphyBookmarks *bookmarks, EphyBookmarksMenu *menu)
 {
-	ephy_bookmarks_menu_rebuild (menu);
+	if (menu->priv->update_tag == 0)
+	{
+		menu->priv->update_tag = g_idle_add((GSourceFunc)do_updates, menu);
+	}
 }
 
 static void
@@ -412,6 +429,7 @@ ephy_bookmarks_menu_init (EphyBookmarksMenu *menu)
 
 	menu->priv->ui_id = -1;
 	menu->priv->action_group = NULL;
+	menu->priv->update_tag = 0;
 }
 
 static void
