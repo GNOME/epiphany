@@ -2,7 +2,7 @@
 Epiphany 1.1.1
 ==============
 
-[up to 2003/11/24]
+[up to 2003/12/06 19:40]
 
 Code changes
 
@@ -57,7 +57,17 @@ Code changes
 	* Don't build external protocol handlers with mozilla 1.6, it has
 	  its own (Marco)
 	* Merge exthandler/content implementation (Marco)
-
+	* Refactored PDM dialogue implementation (Christian)
+	* Lockdown: disable loading from unsafe protocols (Christian)
+	* Port zoom control to new GtkComboBox (Christian)
+	* Show time remaining in download tray icon tooltip (Marco)
+	* Lockdown: disable chrome changes from js (Marco, Christopher Lahey)
+	* Port EphyDialog and all users to new GtkComboBox (Christian)
+	* Remove GtkOptionMenu support from EphyDialog (Christian)
+	* Re-enable deprecation when in maintainer mode (Marco)
+	* Port GtkNSSClientAuthDialogs to new GtkComboBox (Christian)
+	* Remove some unused includes (Marco, Christian)
+	
 New features
 
 	* Improved downloader (Marco, Xan)
@@ -65,6 +75,7 @@ New features
 	* Undo/Redo in forms (Dave, Marco)
 	* Gtk+ NSS Auth Dialogues (Crispin Flowerday, from galeon)
 	* Tray icon support for downloader (Marco)
+	* Beginnings of lockdown mode (Marco, Christian, Christopher Lahey)
 
 Interface improvements
 
@@ -82,6 +93,9 @@ Interface improvements
 	* Update commands sensitivity in menus (Marco)
 	* Auto-open of downloads (Marco, Xan)
 	* Implement UI for download folder and auto-open (Xan)
+	* New layout for downloader (Marco)
+	* Make prefs and PDM dialogues global (Christian)
+	* Improved cookie properties dialogue (Piers Cornwell)
 
 Bugfixes
 
@@ -152,6 +166,17 @@ Bugfixes
 	* User ephy filechooser in download folder picker (Xan)
 	* Fix RDF export to export 100% instead of only 50% of bookmarks
 	  (Christian)
+	* Fix cookie manager signal marshaller type (Christian)
+	* Restore copy and paste menu items on form fields (Marco)
+	* Live updates of cookies list in PDM dialogue (Christian)
+	* Don't blindly overwrite files when downloading (Xan)
+	* Fix some mem leaks (Christian)
+	* Fix ephy_embed_get_location() on an unrealized widget (Marco)
+	* Monitor /system/http_proxy for proxy changes (Christian)
+	* Set pref widget sensitivity from gconf key writeablility (Christian)
+	* Fix strftime(3) usage (Christian)
+	* Fix GtkExpander state persistence in NSS dialogue (Christian)
+	* Remove duplicate signal from EphyEmbed (Christian)
 
 Documentation
 
@@ -159,6 +184,8 @@ Documentation
 	* Some new sections documented (Piers Cornwell)
 	* Some docs fixes (Dave)
 	* Beginnings of API documentation (Marco, Christian)
+	* Document preferences and downloader (Piers Cornwell)
+	* Document security and certificates section (Piers Cornwell)	
 
 Translations
 	* Christian Neumair (de)
