@@ -94,6 +94,4 @@ libephymozillaembed_la_SOURCES = 	\
 	mozilla-embed-single.cpp	\
 	mozilla-embed-single.h	        \
 	mozilla-notifiers.cpp		\
-	mozilla-notifiers.h		\
-	nsUnicharUtils.cpp		\
-	nsUnicharUtils.h
+	mozilla-notifiers.h

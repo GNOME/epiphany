@@ -1,3 +1,18 @@
+2004-02-21  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/mozilla/Makefile.am:
+
+	Actually remove nsUnicharUtils.*
+
+	* embed/mozilla/mozilla-embed-persist.cpp:
+
+	Use our helper to construct tmp file name: fix
+	security issue.
+
+	* src/window-commands.c: (save_temp_source):
+
+	Cosmetic change
+
 2004-02-20  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/EventContext.cpp:

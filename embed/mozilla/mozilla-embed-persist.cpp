@@ -25,6 +25,7 @@
 #include "mozilla-embed-persist.h"
 #include "mozilla-embed.h"
 #include "ephy-embed-shell.h"
+#include "ephy-file-helpers.h"
 #include "EphyBrowser.h"
 #include "EphyHeaderSniffer.h"
 #include "MozDownload.h"
@@ -162,21 +163,15 @@ impl_save (EphyEmbedPersist *persist)
 	g_assert (browser != NULL || uri != NULL);
 
 	/* Get a temp filename to save to */
-	nsCOMPtr<nsIProperties> dirService(do_GetService(NS_DIRECTORY_SERVICE_CONTRACTID));
-	NS_ENSURE_TRUE (dirService, FALSE);
+	char *tmp_filename, *base;
+	base = g_build_filename (g_get_tmp_dir (), "sav-XXXXXX", NULL);
+	tmp_filename = ephy_file_tmp_filename (base, "html");
+	if (tmp_filename == NULL) return FALSE;
+	g_free (base);
 
-	nsCOMPtr<nsIFile> tmpFile;
-	dirService->Get("TmpD", NS_GET_IID(nsIFile), getter_AddRefs(tmpFile));
-	if (!tmpFile) return FALSE;
-
-	/* FIXME: make this filename non-guessable */
-	static short unsigned int tmpRandom = 0;
-	nsAutoString tmpNo;
-	tmpNo.AppendInt(tmpRandom++);
-	nsAutoString saveFile(NS_LITERAL_STRING("-sav"));
-	saveFile += tmpNo;
-	saveFile += NS_LITERAL_STRING("tmp");
-	tmpFile->Append(saveFile);
+	nsCOMPtr<nsILocalFile> tmpFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
+	tmpFile->InitWithNativePath (nsDependentCString (tmp_filename));
+	g_free (tmp_filename);
 
 	/* Get the uri to save to */
 	nsCOMPtr<nsIURI> inURI;
