@@ -1,3 +1,11 @@
+2003-03-23  James Willcox  <jwillcox@gnome.org>
+
+	* lib/ephy-autocompletion.c:
+	(ephy_autocompletion_update_matches_full_item):
+
+	Guard against "item" being NULL.  Fixes a crash when typing in the
+	location bar.
+
 2003-03-23  David Bordoley <bordoley@msu.edu>
 
 	* src/bookmarks/ephy-bookmarks-editor.c:
