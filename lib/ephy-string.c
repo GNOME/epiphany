@@ -100,16 +100,6 @@ ephy_string_to_int (const char *string, gulong *integer)
 	return TRUE;
 }
 
-/**
- * ephy_str_strip_chr:
- * Remove all occurrences of a character from a string.
- *
- * @source: The string to be stripped.
- * @remove_this: The char to remove from @source
- *
- * Return value: A copy of @source, after removing all occurrences
- * of @remove_this.
- */
 char *
 ephy_string_blank_chr (char *source)
 {
