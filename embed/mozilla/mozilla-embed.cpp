@@ -1138,6 +1138,8 @@ impl_print (EphyEmbed *embed,
 
 	result = wrapper->Print(options, info->preview);
 
+	options->SetPrintSilent (PR_FALSE);
+
 	return NS_SUCCEEDED (result) ? G_OK : G_FAILED;
 }
 

@@ -1,5 +1,12 @@
 2003-11-02  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Unset silent after printing, otherwise the next time we print
+	from js, the dialogue will not be shown.
+
+2003-11-02  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-dialog.c: (impl_run):
 
 	Initialise the dialogue on run too.
