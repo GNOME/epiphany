@@ -235,7 +235,6 @@ drag_data_get_cb (GtkWidget          *widget,
 		  guint32             time,
 		  EggEditableToolbar *etoolbar)
 {
-  GtkAction *action;
   const char *id, *type;
   char *target;
 
@@ -293,7 +292,6 @@ set_item_drag_source (EggToolbarsModel *model,
 		      const char       *type)
 {
   GtkTargetEntry target_entry;
-  char *data;
   const char *id;
 
   target_entry.target = (char *)type;
@@ -999,8 +997,6 @@ void
 egg_editable_toolbar_set_model (EggEditableToolbar *toolbar,
 				EggToolbarsModel   *model)
 {
-  GtkWidget *widget = GTK_WIDGET (toolbar);
-
   g_return_if_fail (EGG_IS_TOOLBARS_MODEL (model));
   g_return_if_fail (EGG_IS_EDITABLE_TOOLBAR (toolbar));
   g_return_if_fail (toolbar->priv->manager);
