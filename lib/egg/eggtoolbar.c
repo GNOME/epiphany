@@ -494,10 +494,14 @@ static void
 egg_toolbar_finalize (GObject *object)
 {
   EggToolbar *toolbar = EGG_TOOLBAR (object);
+  EggToolbarPrivate *priv;
 
   if (toolbar->tooltips)
     g_object_unref (GTK_OBJECT (toolbar->tooltips));
 
+  priv = g_object_get_data (object, PRIVATE_KEY);
+  g_free (priv);
+  
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 

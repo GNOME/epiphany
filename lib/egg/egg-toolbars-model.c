@@ -126,6 +126,7 @@ egg_toolbars_model_to_xml (EggToolbarsModel *t)
 	      name = egg_toolbars_model_get_item_name (t, item->type, item->id);
 	      xmlSetProp (node, "type", item->type);
 	      xmlSetProp (node, "name", name);
+	      g_free (name);
 	    }
 	}
     }
