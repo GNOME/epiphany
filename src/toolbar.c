@@ -207,8 +207,8 @@ toolbar_realize (GtkWidget *widget)
 
 	GTK_WIDGET_CLASS (parent_class)->realize (widget);
 
-	g_signal_connect (model, "toolbar_added",
-			  G_CALLBACK (toolbar_added_cb), toolbar);
+	g_signal_connect_after (model, "toolbar_added",
+				G_CALLBACK (toolbar_added_cb), toolbar);
 
 	/* now that the toolbar has been constructed, set drag dests */
 	n_toolbars = egg_toolbars_model_n_toolbars (model);

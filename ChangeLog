@@ -1,5 +1,15 @@
 2004-06-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarksbar.c:
+	(ephy_bookmarksbar_set_window):
+	* src/toolbar.c: (toolbar_realize):
+
+	Use g_signal_connect_after to connect to the toolbar_added
+	signal, otherwise the toolbar isn't created yet and we crash
+	when trying to set the drag dests on a newly added toolbar.
+
+2004-06-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* doc/reference/tmpl/ephy-permission-manager.sgml:
 	* embed/ephy-permission-manager.c: (ephy_permission_info_new),
 	(ephy_permission_info_copy), (ephy_permission_manager_add),
