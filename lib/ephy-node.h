@@ -38,6 +38,7 @@ typedef enum
 {
 	EPHY_NODE_DESTROY,           /* EphyNode *node */
 	EPHY_NODE_RESTORED,          /* EphyNode *node */
+	EPHY_NODE_CHANGED,           /* EphyNode *node, guint property_id */
 	EPHY_NODE_CHILD_ADDED,       /* EphyNode *node, EphyNode *child */
 	EPHY_NODE_CHILD_CHANGED,     /* EphyNode *node, EphyNode *child, guint property_id */
 	EPHY_NODE_CHILD_REMOVED,     /* EphyNode *node, EphyNode *child, guint old_index */
@@ -64,6 +65,11 @@ void        ephy_node_unref                 (EphyNode *node);
 
 /* signals */
 int         ephy_node_signal_connect_object (EphyNode *node,
+					     EphyNodeSignalType type,
+					     EphyNodeCallback callback,
+					     GObject *object);
+
+guint       ephy_node_signal_disconnect_object (EphyNode *node,
 					     EphyNodeSignalType type,
 					     EphyNodeCallback callback,
 					     GObject *object);

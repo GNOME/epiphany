@@ -1,3 +1,45 @@
+2004-10-24  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-node.c: (callback), (ephy_node_set_property),
+	(ephy_node_signal_connect_object), (match_signal_data),
+	(ephy_node_signal_disconnect_object):
+	* lib/ephy-node.h:
+
+	Add EPHY_NODE_CHANGED signal. Patch by Peter Harvey.
+
+	* src/bookmarks/ephy-bookmark-action.c: (favicon_cache_changed_cb),
+	(ephy_bookmark_action_sync_icon),
+	(ephy_bookmark_action_sync_label), (open_in_tab_activate_cb),
+	(open_in_window_activate_cb), (activate_cb), (drag_data_get_cb),
+	(properties_activate_cb), (bookmark_changed_cb),
+	(bookmark_destroy_cb), (ephy_bookmark_action_set_bookmark),
+	(ephy_bookmark_action_set_property),
+	(ephy_bookmark_action_get_property),
+	(ephy_bookmark_action_finalize), (ephy_bookmark_action_class_init),
+	(smart_child_added_cb), (smart_child_removed_cb),
+	(ephy_bookmark_action_init), (ephy_bookmark_action_new):
+	* src/bookmarks/ephy-bookmark-action.h:
+	* src/bookmarks/ephy-bookmarks-menu.c: (add_action_for_bookmark):
+	* src/bookmarks/ephy-bookmarksbar.c:
+	(ephy_bookmarksbar_action_request):
+	* src/bookmarks/ephy-favorites-menu.c:
+	(ephy_favorites_menu_rebuild):
+	* src/bookmarks/ephy-topic-action.c: (build_menu),
+	(topic_changed_cb), (ephy_topic_action_set_topic),
+	(ephy_topic_action_set_property), (ephy_topic_action_get_property),
+	(ephy_topic_action_class_init), (ephy_topic_action_init),
+	(ephy_topic_action_new):
+	* src/bookmarks/ephy-topic-action.h:
+
+	Changed ephy_[bookmark|topic]_action_new from node-id to node. Saves one
+	round-trip node->node-id->node.
+
+	Save lots of strdups by using the node's properties directly, instead of
+	storing them again in the action.
+
+	Listen to changes on the node itself, not for child-changed on the
+	bookmarks node.
+
 2004-10-23  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/mozilla-embed-single.cpp: (mozilla_embed_single_dispose):

@@ -50,9 +50,8 @@ static GtkTargetEntry drag_targets[] =
 };
 static int n_drag_targets = G_N_ELEMENTS (drag_targets);
 
-struct EphyTopicActionPrivate
+struct _EphyTopicActionPrivate
 {
-	guint topic_id;
 	EphyNode *topic_node;
 
 	guint motion_handler;
@@ -64,7 +63,7 @@ struct EphyTopicActionPrivate
 enum
 {
 	PROP_0,
-	PROP_TOPIC_ID
+	PROP_TOPIC
 };
 
 enum
@@ -574,7 +573,7 @@ build_topics_menu (EphyTopicAction *action)
 static GtkWidget *
 build_menu (EphyTopicAction *action)
 {
-	if (action->priv->topic_id == BOOKMARKS_NODE_ID)
+	if (ephy_node_get_id (action->priv->topic_node) == BOOKMARKS_NODE_ID)
 	{
 		return build_topics_menu (action);
 	}
@@ -863,17 +862,51 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 	}
 }
 
+
 static void
-ephy_topic_action_set_topic_id (EphyTopicAction *action, guint id)
+topic_changed_cb (EphyNode *node,
+		  guint property_id,
+		  EphyTopicAction *action)
 {
-	EphyBookmarks *bookmarks;
-	EphyNode *node;
+	if (property_id == EPHY_NODE_KEYWORD_PROP_NAME)
+	{
+		GValue value = { 0, };
+		const char *tmp;
+		char *title;
+		int priority;
 
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	node = ephy_bookmarks_get_from_id (bookmarks, id);
+		priority = ephy_node_get_property_int 
+			(node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 
+		if (priority == EPHY_NODE_ALL_PRIORITY)
+		{
+			tmp = _("Bookmarks");
+		}
+		else
+		{
+			tmp = ephy_node_get_property_string
+				(node, EPHY_NODE_KEYWORD_PROP_NAME);
+		}
+
+		title = ephy_string_double_underscores (tmp);
+
+		g_value_init(&value, G_TYPE_STRING);
+		g_value_take_string (&value, title);
+		g_object_set_property (G_OBJECT (action), "label", &value);
+		g_value_unset (&value);
+	}
+}
+
+static void
+ephy_topic_action_set_topic (EphyTopicAction *action,
+			     EphyNode *node)
+{
 	action->priv->topic_node = node;
-	action->priv->topic_id = id;
+
+	topic_changed_cb (node, EPHY_NODE_KEYWORD_PROP_NAME, action);
+	ephy_node_signal_connect_object (node, EPHY_NODE_CHANGED,
+				         (EphyNodeCallback) topic_changed_cb,
+				         G_OBJECT (action));
 }
 
 static void
@@ -888,8 +921,8 @@ ephy_topic_action_set_property (GObject *object,
 
 	switch (prop_id)
 	{
-		case PROP_TOPIC_ID:
-			ephy_topic_action_set_topic_id (topic, g_value_get_int (value));
+		case PROP_TOPIC:
+			ephy_topic_action_set_topic (topic, g_value_get_pointer (value));
 			break;
 	}
 }
@@ -900,16 +933,8 @@ ephy_topic_action_get_property (GObject *object,
                                    GValue *value,
                                    GParamSpec *pspec)
 {
-	EphyTopicAction *bmk;
-
-	bmk = EPHY_TOPIC_ACTION (object);
-
-	switch (prop_id)
-	{
-		case PROP_TOPIC_ID:
-			g_value_set_boolean (value, bmk->priv->topic_id);
-			break;
-	}
+	/* no readable properties */
+	g_return_if_reached ();
 }
 
 static void
@@ -962,95 +987,30 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
                               1,
 			      G_TYPE_POINTER);
 
-	g_object_class_install_property (object_class,
-                                         PROP_TOPIC_ID,
-                                         g_param_spec_int ("topic_id",
-                                                           "topic_id",
-                                                           "topic_id",
-							   0,
-							   G_MAXINT,
-                                                           0,
-                                                           G_PARAM_READWRITE));
+	g_object_class_install_property
+		(object_class,
+		 PROP_TOPIC,
+		 g_param_spec_pointer ("topic",
+				       "Topic",
+				       "Topic",
+				       G_PARAM_WRITABLE |
+				       G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof(EphyTopicActionPrivate));
 }
 
 static void
-sync_topic_properties (GtkAction *action, EphyNode *bmk)
-{
-	const char *tmp;
-	char *title;
-	int priority;
-
-	priority = ephy_node_get_property_int 
-		(bmk, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-
-	if (priority == EPHY_NODE_ALL_PRIORITY)
-	{
-		tmp = _("Bookmarks");
-	}
-	else
-	{
-		tmp = ephy_node_get_property_string
-        	        (bmk, EPHY_NODE_KEYWORD_PROP_NAME);
-	}
-
-	title = ephy_string_double_underscores (tmp);
-
-	g_object_set (action, "label", title, NULL);
-
-	g_free (title);
-}
-
-static void
-topic_child_changed_cb (EphyNode *node,
-			EphyNode *child,
-			guint property_id,
-			GtkAction *action)
-{
-	guint id;
-
-	id = EPHY_TOPIC_ACTION (action)->priv->topic_id;
-
-	if (id == ephy_node_get_id (child))
-	{
-		sync_topic_properties (action, child);
-	}
-}
-
-static void
 ephy_topic_action_init (EphyTopicAction *action)
 {
-	EphyBookmarks *bookmarks;
-	EphyNode *node;
-
 	action->priv = EPHY_TOPIC_ACTION_GET_PRIVATE (action);
-
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	node = ephy_bookmarks_get_keywords (bookmarks);
-	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_CHANGED,
-				         (EphyNodeCallback) topic_child_changed_cb,
-				         G_OBJECT (action));
 }
 
 GtkAction *
-ephy_topic_action_new (const char *name, guint id)
+ephy_topic_action_new (const char *name,
+		       EphyNode *node)
 {
-	EphyNode *bmk;
-	EphyBookmarks *bookmarks;
-	GtkAction *action;
-
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-
-	bmk = ephy_bookmarks_get_from_id (bookmarks, id);
-	g_return_val_if_fail (bmk != NULL, NULL);
-
-	action = GTK_ACTION (g_object_new (EPHY_TYPE_TOPIC_ACTION,
-					   "topic_id", id,
-					   "name", name,
-					   NULL));
-
-	sync_topic_properties (action, bmk);
-
-	return action;
+	return g_object_new (EPHY_TYPE_TOPIC_ACTION,
+			     "name", name,
+			     "topic", node,
+			     NULL);
 }

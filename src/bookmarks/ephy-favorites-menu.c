@@ -144,8 +144,7 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *menu)
 
 		node = g_ptr_array_index (children, i);
 
-		action = ephy_bookmark_action_new (verb,
-						   ephy_node_get_id (node));
+		action = ephy_bookmark_action_new (verb, node);
 		gtk_action_set_accel_path (action, accel_path);
 		gtk_action_group_add_action (p->action_group, action);
 		g_object_unref (action);

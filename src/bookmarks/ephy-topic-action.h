@@ -24,6 +24,8 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkaction.h>
 
+#include "ephy-node.h"
+
 #define EPHY_TYPE_TOPIC_ACTION            (ephy_topic_action_get_type ())
 #define EPHY_TOPIC_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_TOPIC_ACTION, EphyTopicAction))
 #define EPHY_TOPIC_ACTION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_TOPIC_ACTION, EphyTopicActionClass))
@@ -31,9 +33,9 @@
 #define EPHY_IS_TOPIC_ACTION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), EPHY_TYPE_TOPIC_ACTION))
 #define EPHY_TOPIC_ACTION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_TOPIC_ACTION, EphyTopicActionClass))
 
-typedef struct _EphyTopicAction       EphyTopicAction;
-typedef struct _EphyTopicActionClass  EphyTopicActionClass;
-typedef struct EphyTopicActionPrivate EphyTopicActionPrivate;
+typedef struct _EphyTopicAction		EphyTopicAction;
+typedef struct _EphyTopicActionClass	EphyTopicActionClass;
+typedef struct _EphyTopicActionPrivate	EphyTopicActionPrivate;
 
 struct _EphyTopicAction
 {
@@ -59,6 +61,6 @@ struct _EphyTopicActionClass
 GType      ephy_topic_action_get_type	(void);
 
 GtkAction *ephy_topic_action_new	(const char *name,
-					 guint id);
+					 EphyNode *node);
 
 #endif

@@ -232,14 +232,14 @@ ephy_bookmarksbar_action_request (EggEditableToolbar *eggtoolbar,
 
 		if (ephy_node_has_child (topics, node))
 		{
-			action = ephy_topic_action_new (name, ephy_node_get_id (node));
+			action = ephy_topic_action_new (name, node);
 
 			g_signal_connect (action, "open_in_tabs",
 					  G_CALLBACK (open_in_tabs_cb), toolbar);
 		}
 		else if (ephy_node_has_child (bmks, node))
 		{
-			action = ephy_bookmark_action_new (name, ephy_node_get_id (node));
+			action = ephy_bookmark_action_new (name, node);
 		}
 
 		g_return_if_fail (action != NULL);

@@ -23,6 +23,7 @@
 
 #include <gtk/gtk.h>
 #include <gtk/gtkaction.h>
+#include "ephy-node.h"
 
 #define EPHY_TYPE_BOOKMARK_ACTION            (ephy_bookmark_action_get_type ())
 #define EPHY_BOOKMARK_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_BOOKMARK_ACTION, EphyBookmarkAction))
@@ -57,6 +58,6 @@ struct _EphyBookmarkActionClass
 GType      ephy_bookmark_action_get_type	(void);
 
 GtkAction *ephy_bookmark_action_new		(const char *name,
-						 guint id);
+						 EphyNode *node);
 
 #endif

@@ -111,6 +111,16 @@ callback (long id, EphyNodeSignalData *data, gpointer *dummy)
 			data->callback (data->node, data->data);
 		break;
 
+		case EPHY_NODE_CHANGED:
+		{
+			guint property_id;
+
+			property_id = va_arg (valist, guint);
+		
+			data->callback (data->node, property_id, data->data);
+		}
+		break;
+
 		case EPHY_NODE_CHILD_ADDED:
 		{
 			EphyNode *node;
@@ -428,6 +438,8 @@ ephy_node_set_property (EphyNode *node,
 	g_hash_table_foreach (node->parents,
 			      (GHFunc) child_changed,
 			      &change);
+    
+	ephy_node_emit_signal (node, EPHY_NODE_CHANGED, property_id);
 }
 
 gboolean
@@ -1149,6 +1161,35 @@ ephy_node_signal_connect_object (EphyNode *node,
 	node->signal_id++;
 
 	return ret;
+}
+
+static gboolean
+match_signal_data (gpointer key, EphyNodeSignalData *signal_data,
+                   EphyNodeSignalData *user_data)
+{
+        return (user_data->data == signal_data->data &&
+                user_data->type == signal_data->type &&
+                user_data->callback == signal_data->callback);
+                
+}
+
+guint
+ephy_node_signal_disconnect_object (EphyNode *node,
+                                    EphyNodeSignalType type,
+                                    EphyNodeCallback callback,
+                                    GObject *object)
+{
+        EphyNodeSignalData user_data;
+        
+	g_return_val_if_fail (node->signals, 0);
+
+        user_data.callback = callback;
+        user_data.type = type;
+        user_data.data = object;
+        
+        return g_hash_table_foreach_remove (node->signals,
+                                            (GHRFunc)match_signal_data,
+                                            &user_data);
 }
 
 void

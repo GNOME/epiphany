@@ -183,7 +183,7 @@ add_action_for_bookmark (EphyBookmarksMenu *menu,
 	g_snprintf (verb, sizeof (verb), BMK_VERB_FORMAT, id);
 	g_snprintf (apath, sizeof (apath), BMK_ACCEL_PATH_PREFIX "%s", verb);
 
-	action = ephy_bookmark_action_new (verb, id);
+	action = ephy_bookmark_action_new (verb, bmk);
 
 	gtk_action_set_accel_path (action, apath);
 
