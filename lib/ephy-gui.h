@@ -38,8 +38,6 @@ void		ephy_gui_help				 (GtkWindow *parent,
 							  const char *file_name,
 							  const char *link_id);
 
-GdkPixbuf      *ephy_gui_get_pixbuf_from_mime_type	 (const char *mime_type,
-							  int size);
 G_END_DECLS
 
 #endif
