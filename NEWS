@@ -1,4 +1,68 @@
 ==============
+Epiphany 0.7
+==============
+
+Code changes
+
+	* Extend node api to allow to branch different databases, deobjectify
+        nodes for better perfomance, smarter id factory. (Marco)
+	* Use stock icons instead of the files directly to set window
+          border icons. (Dave Bordoley)
+	* Cleanup zoom code (Christian Persch)
+	* Cleanup tab opening logic (Marco)
+	* Rewrite large parts of the encodings/languages code (Christian Persch)
+	* Use the spinner icon from gnome-icon-theme (Marco)
+	* Start to cleanup schemas for 1.0 (Christian Persch)
+	* Use bookmark action for the most used bookmarks menu (Marco)
+
+New features
+
+	* Zoom control for the toolbar (Christian Persch)
+	* Holding shift and pressing reload button bypass the cache (Christian Persch)
+	* Implement a traditional bookmarks menu (Marco)
+	* Exit fullscreen button (Marco)
+
+Interface improvements
+
+	* Remove fine grain color settings. Always use the system theme
+          colors (Dave Bordoley)
+	* Remove the on new page pref, try to make it behave in a way
+	  that fit all cases. (Dave Bordoley)
+	* Made (hopefully) all dialogs HIG compliant (Christian Neumair)
+	* Make find dialog unresizable (Xan Lopez)
+	* Make double click select the whole address in toolbar entry (Marco)
+	* Cleanup downloader ui and remove keep open option (Christian Neumair)
+	* Tweak mozilla default settings. Don't fetch sidebar whats related stuff.
+          Line Wrap View->Source. CTRL-Mousewheel scrolls by one page.
+          Enable Image Auto-Resizing. (Dave Bordoley)
+	* Activate the menu on button press down (Dave Bordoley)
+	* Several interface fixes in print dialog (Piers Cornwell)
+	* Add accellerators on the encoding menus (Piers Cornwell)
+	
+Bugfixes
+	* Mark download time format strings for translation (Christian Neumair)
+	* Make xml saving low disk safe (Marco)
+	* Fix crashes on node removal (Marco)
+	* Rebuild tabs menu only when necessary (Christian Persch)
+	* Fix crash on download pause (Xan Lopez)
+	* Ever ask for path when saving a file, persist the path
+	  also on Cancel (Marco)
+
+Updated translations
+
+	* be (Dmitry G. Mastrukov)
+	* cs (Miloslav Trmac)
+	* da (Ole Laursen)
+	* es (Pablo Gonzalo del Campo)
+	* li (Mathieu van Woerkom)
+	* ja (Takayuki KUSANO)
+	* nl (Vincent van Adrighem)
+	* pt (Duarte Loreto)
+	* se (Christian Neumair)
+	* sv (Christian Rose)
+	* vi (Pablo Saratxaga)
+
+==============
 Epiphany 0.6.1
 ==============
 
