@@ -147,7 +147,6 @@ static gresult
 impl_save (EphyEmbedPersist *persist)
 {
 	nsresult rv;
-	nsAutoString s;
 	char *filename;
 	char *uri;
 	int max_size;
@@ -168,7 +167,13 @@ impl_save (EphyEmbedPersist *persist)
 		      NULL);
 	
 	g_return_val_if_fail (filename != NULL, G_FAILED);
-	
+
+	EphyWrapper *wrapper;
+
+	g_return_val_if_fail (embed != NULL, G_FAILED);
+        wrapper = (EphyWrapper *) mozilla_embed_get_ephy_wrapper (MOZILLA_EMBED(embed));
+	g_return_val_if_fail (wrapper != NULL, G_FAILED);
+
 	nsCOMPtr<nsIWebBrowserPersist> webPersist =
 		MOZILLA_EMBED_PERSIST (persist)->priv->mPersist;
 	if (!webPersist) return G_FAILED;
@@ -188,13 +193,20 @@ impl_save (EphyEmbedPersist *persist)
 
 	/* Get the uri to save to */
 	nsCOMPtr<nsIURI> inURI;
+	nsCAutoString sURI;
+
 	if (uri)
 	{
-		nsAutoString s;
-        	s.AssignWithConversion(uri);
-	      	rv = NS_NewURI(getter_AddRefs(inURI), s);
-      		if (NS_FAILED(rv) || !inURI) return G_FAILED;
+		sURI.Assign (uri);
 	}
+	else
+	{
+		rv = wrapper->GetDocumentUrl (sURI);
+		if (NS_FAILED(rv)) return G_FAILED;
+	}
+
+      	rv = NS_NewURI(getter_AddRefs(inURI), sURI);
+	if (NS_FAILED(rv) || !inURI) return G_FAILED;
 
 	/* Filename to save to */
 	nsAutoString inFilename;
@@ -203,13 +215,7 @@ impl_save (EphyEmbedPersist *persist)
 	nsCOMPtr<nsIDOMDocument> DOMDocument;
 	nsCOMPtr<nsIInputStream> postData;
 	if (!uri)
-	{
-		EphyWrapper *wrapper;
-
-		g_return_val_if_fail (embed != NULL, G_FAILED);
-	        wrapper = (EphyWrapper *) mozilla_embed_get_ephy_wrapper (MOZILLA_EMBED(embed));
-		g_return_val_if_fail (wrapper != NULL, G_FAILED);
-		
+	{		
 		/* Get the DOM document */
 		if (flags & EMBED_PERSIST_MAINDOC)
 		{
