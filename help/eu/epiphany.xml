@@ -1,0 +1,781 @@
+<?xml version="1.0"?> 
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [  <!ENTITY legal SYSTEM "legal.xml"> 
+<!ENTITY appversion "1.0"> 
+<!ENTITY manrevision "1.0"> 
+<!ENTITY date "2003ko maiatza"> 
+<!ENTITY fr "<application>Epiphany</application>"> 
+<!-- Information about the entities
+       The legal.xml file contains legal information, there is no need to edit the file. 
+       Use the appversion entity to specify the version of the application.
+       Use the manrevision entity to specify the revision number of this manual.
+       Use the date entity to specify the release date of this manual.
+       Use the fr entity to specify the name of the application. -->]> 
+<!-- 
+      (Do not remove this comment block.)
+  Maintained by the GNOME Documentation Project
+  http://developer.GNOME.org/projects/gdp
+  Template version: 2.0 beta
+  Template last modified Jan 30, 2002
+--> 
+<!-- =============Document Header ============================= --> 
+<article id="index" lang="eu"> 
+<!-- please do not change the id; for translations, change lang to --> 
+<!-- appropriate code --> 
+  <articleinfo> 
+    <title>Epiphany-ren eskuliburuaren &manrevision; bertsioa</title> 
+    <copyright> 
+      <year>2003</year> 
+      <holder>Patanjali Somayaji</holder> 
+    </copyright> 
+    <copyright> 
+      <year>2003</year> 
+      <holder>David Bordoley</holder> 
+    </copyright> 
+  
+<!-- translators: uncomment this:   --> 
+
+  <copyright>
+   <year>2002</year>
+   <holder>Hizkuntza Politikarako Sailburuordetza <email>hizkpol@ej-gv.es</email> (euskarazko itzulpena)</holder>
+  </copyright>
+
+
+  
+<!-- An address can be added to the publisher information.  If a role is 
+     not specified, the publisher/author is the same for all versions of the 
+     document.  --> 
+    <publisher> 
+      <publishername>GNOMEren dokumentazio-proiektua</publishername> 
+    </publisher>&legal; 
+  
+<!-- This file contains link to license for the
+   documentation (GNU FDL), and other legal stuff such as "NO
+   WARRANTY" statement. Please do not change any of this. --> 
+    <authorgroup> 
+      <author> 
+        <firstname>Patanjali</firstname> 
+        <surname>Somayaji</surname> 
+        <affiliation> 
+          <orgname>GNOMEren dokumentazio-proiektua</orgname> 
+          <address> <email>patanjali@codito.com</email> </address> 
+        </affiliation> 
+      </author> 
+      <author> 
+        <firstname>David</firstname> 
+        <surname>Bordoley</surname> 
+        <affiliation> 
+          <orgname>Epiphany garatzeko taldea</orgname> 
+          <address> <email>bordoley@msu.edu</email> </address> 
+        </affiliation> 
+      </author> 
+    </authorgroup> 
+    <releaseinfo>Eskuliburu honetan &fr;-ren &appversion; bertsioa azaltzen da.</releaseinfo> 
+  </articleinfo> 
+  <indexterm zone="index"> 
+    <primary>Epiphany</primary> 
+  </indexterm> 
+  <indexterm zone="index"> 
+    <primary>epiphany</primary> 
+  </indexterm> 
+  <indexterm zone="index"> 
+    <primary>Arakatzailea</primary> 
+  </indexterm> 
+<!-- ============= Document Body ============================= --> 
+<!-- ============= Introduction ============================== --> 
+<!-- Use the Introduction section to give a brief overview of what
+     the application is and what it does. --> 
+  <sect1 id="fr-introduction"> 
+    <title>Sarrera</title> 
+    <para>Mozilla-ren errendatze-motorrean oinarritutako GNOMEren web arakatzailea da &fr;. Erabilerraza izatea eta estandarrak betetzea da &fr;-ren helburua.</para> 
+  </sect1> 
+<!-- ============= Getting Started =============================== --> 
+  <sect1 id="ephy-getting-started"> 
+    <title>Erabiltzen hasteko</title> 
+    <sect2 id="ephy-to-open-browser-window"> 
+      <title>Arakatzailearen leihoa irekitzeko</title> 
+      <para>Era hauetan ireki dezakezu arakatzailearen leihoa:</para> 
+      <variablelist> 
+        <varlistentry> 
+          <term><guimenu>Aplikazioak</guimenu> menua</term> 
+          <listitem> 
+            <para>Aukeratu <menuchoice> <guisubmenu>Internet</guisubmenu> <guimenuitem>Web arakatzailea</guimenuitem> </menuchoice>.</para> 
+          </listitem> 
+        </varlistentry> 
+        <varlistentry> 
+          <term>Komando-lerroa</term> 
+          <listitem> 
+            <para>Idatzi <command>epiphany</command>, eta sakatu <keycap>Sartu</keycap>.</para> 
+          </listitem> 
+        </varlistentry> 
+      </variablelist> 
+    </sect2> 
+    <sect2 id="ephy-to-open-bookmarks"> 
+      <title>Laster-marken leihoa irekitzeko</title> 
+      <para>Era hauetan ireki dezakezu laster-marken leihoa:</para> 
+      <variablelist> 
+        <varlistentry> 
+          <term> 
+            <guimenu>Aplikazioak</guimenu>menua 
+          </term> 
+          <listitem> 
+            <para>Aukeratu <menuchoice> <guisubmenu>Internet</guisubmenu> <guimenuitem>Web-eko laster-markak</guimenuitem> </menuchoice>.</para> 
+          </listitem> 
+        </varlistentry> 
+        <varlistentry> 
+          <term>Komando-lerroa</term> 
+          <listitem> 
+            <para>Idatzi <command>epiphany -b</command>, eta sakatu <keycap>Sartu</keycap>.</para> 
+          </listitem> 
+        </varlistentry> 
+        <varlistentry> 
+          <term><guimenu>Laster-marken</guimenu> menutik </term> <listitem> 
+            <para>&fr;-ren leiho nagusian aukeratu <menuchoice> <guimenu>Laster-markak</guimenu> <guimenuitem>Editatu laster-markak</guimenuitem></menuchoice>.</para> 
+          </listitem> 
+        </varlistentry> 
+        <varlistentry> 
+          <term>&fr;-ren tresna-barratik</term> 
+          <listitem> 
+            <para>Egin klik leiho nagusiko tresna-barrako Laster-marken botoian.</para> 
+          </listitem> 
+        </varlistentry> 
+      </variablelist> 
+    </sect2> 
+  </sect1> 
+<!-- ============= Browser Windows ============================ --> 
+  <sect1 id="ephy-browser-windows"> 
+    <title>Arakatzailearen leihoak</title> 
+    <para>Arakatzailearen leihoen bidez web orriak araka ditzakezu. <xref linkend="ephy-screenshot"/> irudian etxeko orria erakusten duen arakatzaile-leiho bat ikusten da.</para> 
+    <figure id="ephy-screenshot"> 
+      <title>Etxeko orria erakusten duen arakatzaile-leihoa</title> 
+      <screenshot> 
+        <mediaobject> 
+          <imageobject> 
+          <imagedata fileref="figures/ephy-screenshot.png" format="PNG"/></imageobject> 
+          <textobject> 
+            <phrase>Arakatzaile-leihoan bistaratzen ari den orri bat. Legendak: Menu-barra, tresna-barra, helbide-sarrera, laster-marken barra, ikusteko panela.</phrase> 
+          </textobject> 
+        </mediaobject> 
+      </screenshot> 
+    </figure> 
+    <para> <xref linkend="epiphany-TBL-1"/> taulan arakatzaile-leihoaren osagaiak azaltzen dira.</para> 
+    <table frame="topbot" id="epiphany-TBL-1"> 
+      <title>Arakatzaile-leihoaren osagaiak</title> 
+      <tgroup cols="2" colsep="0" rowsep="0"> 
+        <colspec colname="colspec0" colwidth="29.39*"/> 
+          <colspec colname="colspec1" colwidth="70.61*"/> 
+            <thead> 
+              <row rowsep="1"> 
+                <entry valign="top"> 
+                  <para>Osagaia</para> 
+                </entry> 
+                <entry valign="top"> 
+                  <para>Azalpena</para> 
+                </entry> 
+              </row> 
+            </thead> 
+            <tbody> 
+              <row> 
+                <entry valign="top"> 
+                  <para>Menu-barra</para> 
+                </entry> 
+                <entry valign="top"> 
+                  <para>Arakatzaile-leihoan egiten diren atazei dagozkien menuak biltzen ditu.</para> 
+                </entry> 
+              </row> 
+              <row> 
+                <entry valign="top"> 
+                  <para>Tresna-barra</para> 
+                </entry> 
+                <entry valign="top"> 
+                  <para>Arakatzaile-leihoan egiten diren atazei dagozkien botoiak biltzen ditu.</para> 
+                </entry> 
+              </row> 
+              <row> 
+                <entry colname="colspec0" valign="top"> 
+                  <para>Helbide-sarrera</para> 
+                </entry> 
+                <entry colname="colspec1" valign="top"> 
+                  <para>Web-eko helbideak edo bilatu beharreko hitzak idazteko erabiltzen den goitibeherako konbinazio-koadroa.</para> 
+                </entry> 
+              </row> 
+              <row> 
+                <entry colname="colspec0" valign="top"> 
+                  <para>Laster-marken barra</para> 
+                </entry> 
+                <entry colname="colspec1" valign="top"> 
+                  <para>Laster-marketara eta web-eko bilaketetara bizkor joateko erabiltzen dituzun menuak, botoiak eta testu-eremuak biltzen ditu.</para> 
+                </entry> 
+              </row> 
+              <row> 
+                <entry valign="top"> 
+                  <para>Ikusteko panela</para> 
+                </entry> 
+                <entry valign="top"> 
+                  <para>Orrien edukia erakusten du.</para> 
+                </entry> 
+              </row> 
+              <row> 
+                <entry colname="colspec0" valign="top"> 
+                  <para>Egoera-barra</para> 
+                </entry> 
+                <entry colname="colspec1" valign="top"> 
+                  <para>Egoerari buruzko informazioa erakusten du.</para> 
+                </entry> 
+              </row> 
+            </tbody> 
+          </tgroup> 
+        </table> 
+        <para>Arakatzaile-leihotik laster-menuak ere ireki daitezke. Laster-menua irekitzeko, egin klik eskuineko botoiaz arakatzaile-leihoan. Menu horretako elementuak aldatu egingo dira eskuin-botoiz klik non egin, han. Adibidez, esteka batean eskuin-klika egiten duzunean, estekari buruzko elementuak azalduko dira. Web orrian bertan eskuin-klika egiten duzunean, web orria ikusteko aukerak azalduko zaizkizu laster-menuan.</para> 
+      </sect1> 
+    
+<!-- ============= Browsing the Web =========================== --> 
+      <sect1 id="ephy-browsing-web"> 
+        <title>Web-a arakatzea</title> 
+        <para> 
+        </para> 
+        <sect2 id="using-address-entry"> 
+          <title>Helbide-sarreraren erabilera</title> 
+          <para>Web-eko helbideak edo bilatu nahi diren hitzak idazteko erabiltzen da helbide-sarrera. Helbide-sarreran idazten diren hitzak laster-marken datu-basean eta historiaren datu-basean bilatzen dira. Baten bat aurkitzen badu, goitibeherako zerrendan erakutsiko du, zuk hauta dezazun. Hautatutako web orria arakatzailearen leihoan edo fitxan kargatuko da.</para> 
+          <para>Laster-marken gai bat edo laster-marketan biltegiratutako helbide edo titulu batean azaltzen den hitz bat idatz dezakezu. Hitz horiek laster-marken datu-basean bilatuko dira. Informazio gehiago nahi izanez gero, ikus <xref linkend="overview-of-bookmarks"/>.</para>        </sect2> 
+        <sect2 id="using-toolbar"> 
+          <title>Tresna-barraren erabilera</title> 
+          <para> 
+          </para> 
+        </sect2> 
+        <sect2 id="using-bookmarks-bar"> 
+          <title>Laster-marken barraren erabilera</title> 
+          <para> 
+          </para> 
+        </sect2> 
+        <sect2 id="using-fullscreen-mode"> 
+          <title>Pantaila osoko moduaren erabilera</title> 
+          <para> 
+          </para> 
+        </sect2> 
+        <sect2 id="to-open-new-window"> 
+          <title>Leiho berri bat irekitzeko</title> 
+          <para>Leiho berri bat irekitzeko, aukeratu <menuchoice> <guimenu>Fitxategia</guimenu> <guimenuitem>Leiho berria</guimenuitem></menuchoice>.</para> 
+        </sect2> 
+        <sect2 id="to-open-new-tab"> 
+          <title>Fitxa berri bat irekitzeko</title> 
+          <para>FItxa berri bat irekitzeko, aukeratu <menuchoice> <guimenu>Fitxategia</guimenu> <guimenuitem>Fitxa berria</guimenuitem></menuchoice>. Fitxa berria lehendik daudenen eskuinean kokatuko da.</para> 
+        </sect2> 
+        <sect2 id="ephy-to-open-file"> 
+          <title>Fitxategi bat irekitzeko</title> 
+          <para>Fitxategi bat irekitzeko, aukeratu <menuchoice><guimenu>Fitxategia</guimenu> <guimenuitem>Ireki...</guimenuitem> </menuchoice>, eta <guilabel>Ireki fitxategia</guilabel> elkarrizketa-koadroa irekiko da. Hautatu ireki nahi duzun fitxategia, eta sakatu <guibutton>Ados</guibutton>. Fitxategia arakatzailearen leihoan bistaratuko da.</para> 
+        </sect2> 
+        <sect2 id="to-save-page-to-file"> 
+          <title>Orri bat fitxategi batean gordetzeko</title> 
+          <para>Orri bat fitxategi batean gordetzeko, aukeratu <menuchoice><guimenu>Fitxategia</guimenu> <guimenuitem>Gorde honela</guimenuitem></menuchoice>. Idatzi fitxategiari eman nahi diozun izena <guilabel>Gorde honela</guilabel> elkarrizketa-koadroan eta sakatu <guibutton>Ados</guibutton>.</para> 
+        </sect2> 
+        <sect2 id="to-print-page"> 
+          <title>Orri bat inprimatzeko</title> 
+          <para> </para> 
+        </sect2> 
+        <sect2 id="to-find-text-in-page"> 
+          <title>Orrian testua bilatzeko</title> 
+          <para>Orrian testu-kate bat bilatzeko, jarraitu urrats hauek:</para> 
+          <orderedlist> 
+            <listitem> 
+              <para>Aukeratu <menuchoice> <guimenu>Editatu</guimenu> <guimenuitem>Bilatu</guimenuitem></menuchoice>, eta <guilabel>Bilatu</guilabel> elkarrizketa-koadroa irekiko da.</para> 
+            </listitem> 
+            <listitem> 
+              <para>Idatzi bilatu nahi duzun katea <guilabel>Bilatu</guilabel> eremuan.</para> 
+            </listitem> 
+            <listitem> 
+              <para>Bilaketan maiuskulak eta minuskulak bereiztea nahi baduzu, hautatu <guilabel>Maiuskula/minuskula</guilabel> aukera.</para> 
+            </listitem> 
+            <listitem> 
+              <para>Orriaren bukaerara iristen denean orriaren hasieratik bilatzen jarraitzea nahi baduzu, hautatu <guilabel>Itzulbiratu</guilabel> aukera.</para> 
+            </listitem> 
+            <listitem> 
+              <para>Katearen lehen agerraldia bilatzen hasteko egin klik <guibutton>Hurrengoa</guibutton> botoian. Katea aurkitzen badu, kurtsorea kate horretara joango da, eta katea hautatuta geratuko da.</para> 
+            </listitem> 
+            <listitem> 
+              <para>Katearen hurrengo agerraldia bilatzeko, egin klik <guibutton>Hurrengoa</guibutton> botoian.</para> 
+            </listitem> 
+            <listitem> 
+              <para>Katearen aurreko agerraldia bilatzeko, egin klik <guibutton>Aurrekoa</guibutton> botoian.</para> 
+            </listitem> 
+            <listitem> 
+              <para>Bilaketa amaitzeko, egin klik <guibutton>Itxi</guibutton> botoian.</para> 
+            </listitem> 
+          </orderedlist> 
+        </sect2> 
+        <sect2 id="to-change-zoom"> 
+          <title>Zoom-faktorea aldatzeko</title> 
+          <para>Orriaren ikuspegia aldatzeko, metodo hauek erabil ditzakezu:</para> 
+          <itemizedlist> 
+            <listitem> 
+              <para>Orria handiago ikusteko, aukeratu <menuchoice><guimenu>Ikusi</guimenu> <guimenuitem>Handiagotu</guimenuitem></menuchoice>.</para> 
+            </listitem> 
+            <listitem> 
+              <para>Orria txikiago ikusteko, aukeratu <menuchoice><guimenu>Ikusi</guimenu> <guimenuitem>Txikiagotu</guimenuitem></menuchoice>.</para> 
+            </listitem> 
+            <listitem> 
+              <para>Orria bere benetako tamainan ikusteko, aukeratu <menuchoice> <guimenu>Ikusi</guimenu> <guimenuitem>Tamaina normala</guimenuitem></menuchoice>.</para> 
+            </listitem> 
+          </itemizedlist> 
+        </sect2> 
+        <sect2 id="to-view-page-source"> 
+          <title>Orriaren iturburua ikusteko</title> 
+          <para> </para> 
+        </sect2> 
+        <sect2 id="to-open-link"> 
+          <title>Esteka bat irekitzeko</title> 
+          <para> </para> 
+        </sect2> 
+        <sect2 id="to-open-link-in-window"> 
+          <title>Esteka bat leiho berri batean irekitzeko</title> 
+          <para> </para> 
+        </sect2> 
+        <sect2 id="to-open-link-in-tab"> 
+          <title>Esteka bat fitxa berri batean irekitzeko</title> 
+          <para> </para> 
+        </sect2> 
+        <sect2 id="to-download-link"> 
+          <title>Esteka bat deskargatzeko</title> 
+          <para> </para> 
+        </sect2> 
+        <sect2 id="to-switch-between-tab"> 
+          <title>Fitxa batetik bestera joateko</title> 
+          <para> </para> 
+        </sect2> 
+        <sect2 id="to-move-tabs"> 
+          <title>Fitxak lekuz aldatzeko</title> 
+          <para> </para> 
+        </sect2> 
+      </sect1> 
+    
+<!-- ============= Managing Your Bookmarks ================ --> 
+      <sect1 id="ephy-managing-bookmarks"> 
+        <title>Laster-markak kudeatzea</title> 
+        <para> </para> 
+        <sect2 id="overview-of-bookmarks"> 
+          <title>Epiphany-ren laster-marken sistemaren azalpen orokorra</title> 
+          <para>&fr;-ren laster-marken sistema dezente urruntzen da arakatzaile gehienek erabiltzen duten fitxategi-karpeta hierarkikoen metodotik. Diseinua bi printzipio nagusitan oinarritzen da: <itemizedlist> <listitem>Ahalik eta interfazerik sinpleena duen arakatzaile bat eraikitzea. </listitem> <listitem>Erabiltzaileak bisitatu nahi dituen guneen helbideak gogoratu beharrik ez izatea. </listitem> </itemizedlist></para> 
+          <para>Laster-markak hierarkikoki antolatzeko modua ez da egokia jende askorentzat. Horren ordez, &fr;-k datu-basearen antzerako egitura erabiltzen du. Laster-marka batekin erlazionatutako helbidea gordetzean, asoziatutako metadatu batzuekin batera gordetzen da. Metadatu horiek gero laster-marka bilatzeko erabiliko dira. &fr;-ren etorkizuneko bertsioetan datu-base horren bidez laster-markak bilatu eta eskuratzeko modu erosoak eskainiko dira.</para> 
+          <para>&fr;-ren laster-marken sisteman, helbide bakoitza gai batekin edo gehiagorekin asoziatuta antolatzen dira helbideak. Adibidez, batek <ulink type="http" url="http://developer.gnome.org">GNOMEren garatzaileen etxeko orria</ulink>ren laster-marka gorde nahi badu, beste edozein arakatzailetan, honelatsu gordeko luke hierarkian: <programlisting>Garapena -> GNOME -> GNOMEren garatzaileen etxeko orria </programlisting></para> 
+          <para>&fr;-n orri bera bi gairekin asozia liteke: <programlisting>Garapena -> GNOMEren garatzaileen etxeko orria GNOME -> GNOMEren garatzaileen etxeko orria</programlisting>Laster-marka hori atzitzeko, "GNOME" edo "Garapena" gaia idatz dezake orain erabiltzaileak helbide-barran. Gainerako hitzetako edozein ere idatz daiteke helbide-barran: "GNOME", "garatzaileen", "etxeko", edo "orria". Metodo bata zein bestea erabili, aurkitutako laster-marken zerrenda erakutsiko du &fr;-k. Laster-markak atzitzeko modu guztien berri izateko, ikus <xref linkend="to-access-a-bookmark"/></para> 
+          <para> 
+          	<note>
+          		<title>Azpigairik ez</title> 
+            	<para>Gai-maila bakarra onartzen du &fr;-k. Gaiek ezin dute azpigairik izan.</para> 
+	         </note> 
+	       </para> 
+      </sect2> 
+      <sect2 id="to-access-a-bookmark"> 
+        <title>Laster-markak atzitzeko</title> 
+        <para>Laster-markak atzitzeko bide nagusia laster-marken leihoa da. Laster-marken leihoa irekitzeko, ikus <xref            linkend="ephy-to-open-bookmarks"/>. Laster-markak antolatzeko leiho bereizi bat erabiltzen da, errazagoa delako horrela nabigatzea, eta bilatzeko eta editatzeko funtzionalitateak leku berean eduki daitezkeelako. Laster-markak zuzenean edita daitezke mahaigainetik. Leku berean, laster-markaren titulua edita daiteke orain, gaiak gehitu, laster-markak kendu, gai gehiagorekin asoziatu arrastatu eta jareginez, laster-markaren propietateak editatu, etab.</para> 
+        <para>Honela ere atzi daitezke laster-markak: <itemizedlist> <listitem>Leiho nagusiko helbide-barran gai bat idatzita, kategoria horretako laster-markak agertuko dira goibeherako zerrenda batean. </listitem> <listitem>Helbide-barran idazten diren hitzak automatikoki bilatzen dira laster-marken datu-basean eta bat datozen laster-markak goitibeherako zerrenda batean ematen dira, helbide-barraren azpian. </listitem> <listitem><guimenu>Laster-markak</guimenu> menu-elementuak gai guztien menua ematen du. Horko azpimenuetatik atzi daitezke gai horiekin erlazionatutako laster-markak. Laster-markak atzitzeko modu hau da metodo tradizionaletik hurbilen dagoena, eta bateragarritasunaren izenean ematen da. </listitem> <listitem>Laster-marken barratik ere atzi ditzakezu laster-markak. Laster-marken barra gehitzeko, aukeratu <menuchoice><guimenu>Ikusi</guimenu> <guimenuitem>Laster-marken barra</guimenuitem></menuchoice>. Hala ere, barran azaltzeko, gai eta laster-marka bakoitza banaka konfiguratu behar da Laster-marken elkarrizketa-koadroan. Gehien erabiltzen diren laster-markak antolatzeko egiten da hori. </listitem> </itemizedlist> 
+        </para> 
+      </sect2> 
+      <sect2 id="to-create-new-bookmark"> 
+        <title>Laster-marka berria sortzeko</title> 
+        <para>Hainbat modutan sor ditzakezu laster-marka berriak 
+        </para> 
+        <variablelist> 
+          <varlistentry> 
+            <term>Arakatzailearen leihoan</term> 
+            <listitem> 
+              <itemizedlist> 
+                <listitem> 
+                  <para>Unean ikusten ari zaren orriari laster-marka jartzeko, aukeratu <menuchoice><guimenu>Laster-markak</guimenu> <guimenuitem>Gehitu laster-marka</guimenuitem></menuchoice>. 
+                  </para> 
+                </listitem> 
+                <listitem> 
+                  <para>Unean ikusten ari zaren orriko esteka bati laster-marka jartzeko, egin klik estekan eskuineko botoiaz eta aukeratu <menuchoice><guimenuitem>Jarri laster-marka estekari...</guimenuitem></menuchoice>. 
+                  </para> 
+                </listitem> 
+              </itemizedlist> 
+            </listitem> 
+          </varlistentry> 
+          <varlistentry> 
+            <term>Historiaren leihoan</term> 
+            <listitem> 
+              <para>Unean hautatuta dagoen historiako esteka bati laster-marka jartzeko, aukeratu <menuchoice><guimenu>Fitxategia</guimenu> <guimenuitem>Jarri laster-marka estekari...</guimenuitem></menuchoice>. Bestela, egin klik eskuineko botoiaz historiaren leihoko historiako estekan eta aukeratu <guimenuitem>Jarri laster-marka estekari...</guimenuitem>.. 
+              </para> 
+            </listitem> 
+          </varlistentry> 
+        </variablelist> 
+      </sect2> 
+      <sect2 id="to-select-bookmarks"> 
+        <title>Laster-markak eta Gaiak hautatzeko</title> 
+        <para>Modu askotan hauta ditzakezu laster-markak eta gaiak. <xref linkend="epiphany-TBL-2"/> taulan azaltzen da nola hautatzen diren elementuak laster-marken leihoan. 
+        </para> 
+        <table frame="topbot" id="epiphany-TBL-2"> 
+          <title>Laster-marken leihoan elementuak hautatzea</title> 
+          <tgroup cols="2" colsep="0" rowsep="0"> 
+            <colspec colname="colspec0" colwidth="36.36*"/> 
+              <colspec colname="colspec2" colwidth="63.64*"/> 
+                <thead> 
+                  <row rowsep="1"> 
+                    <entry valign="top"> 
+                      <para>Ataza</para> 
+                    </entry> 
+                    <entry colname="colspec2" valign="top"> 
+                      <para>Ekintza</para> 
+                    </entry> 
+                  </row> 
+                </thead> 
+                <tbody> 
+                  <row> 
+                    <entry colname="colspec0" valign="top"> 
+                      <para>Laster-marka bat edo gai bat hautatu</para> 
+                    </entry> 
+                    <entry colname="colspec2" valign="top"> 
+                      <para>Egin klik laster-markan edo gaian</para> 
+                    </entry> 
+                  </row> 
+                  <row> 
+                    <entry colname="colspec0" valign="top"> 
+                      <para>Elkarren ondoko laster-marka batzuk hautatu</para> 
+                    </entry> 
+                    <entry colname="colspec2" valign="top"> 
+                      <para>Sakatu <keycap>Maius</keycap> tekla eta ez askatu. Egin klik multzoko lehen laster-markan, eta egin klik multzoko azkenekoan.</para> 
+                    </entry> 
+                  </row> 
+                  <row> 
+                    <entry colname="colspec0" valign="top"> 
+                      <para>Hainbat laster-marka hautatu</para> 
+                    </entry> 
+                    <entry colname="colspec2" valign="top"> 
+                      <para>Sakatu <keycap>Ktrl</keycap> tekla eta ez askatu. Egin klik banan-banan hautatu nahi dituzun laster-marketan.</para> 
+                    </entry> 
+                  </row> 
+                  <row> 
+                    <entry colname="colspec0" valign="top"> 
+                      <para>Gai bateko laster-marka guztiak hautat</para> 
+                    </entry> 
+                    <entry colname="colspec2" valign="top"> 
+                      <para>Aukeratu <menuchoice> <guimenu>Editatu</guimenu> <guimenuitem>Hautatu dena</guimenuitem></menuchoice>.</para> 
+                    </entry> 
+                  </row> 
+                </tbody> 
+              </tgroup> 
+            </table> 
+          </sect2> 
+          <sect2 id="to-open-bookmark"> 
+            <title>Laster-marka bat leiho edo fitxa berri batean irekitzeko</title> 
+            <variablelist> 
+              <varlistentry> 
+                <term>Laster-marka bat leiho berri batean irekitzeko, egin urrats hauek:</term> 
+                <listitem> 
+                  <orderedlist> 
+                    <listitem> 
+                      <para>Hautatu ireki nahi duzun laster-marka. 
+                      </para> 
+                    </listitem> 
+                    <listitem> 
+                      <para>Aukeratu <menuchoice> <guimenu>Fitxategia</guimenu> <guimenuitem>Ireki leiho berrian</guimenuitem></menuchoice>. Bestela, egin klik laster-markan eskuineko botoiaz, eta aukeratu <menuchoice><guimenuitem>Ireki leiho berrian</guimenuitem></menuchoice>. 
+                      </para> 
+                    </listitem> 
+                  </orderedlist> 
+                </listitem> 
+              </varlistentry> 
+              <varlistentry> 
+                <term>Laster-marka bat fitxa berri batean irekitzeko, egin urrats hauek:</term> 
+                <listitem> 
+                  <orderedlist> 
+                    <listitem> 
+                      <para>Hautatu ireki nahi duzun laster-marka. 
+                      </para> 
+                    </listitem> 
+                    <listitem> 
+                      <para>Aukeratu <menuchoice> <guimenu>Fitxategia</guimenu> <guimenuitem>Ireki fitxa berrian</guimenuitem></menuchoice>. Bestela, egin klik laster-markan eskuineko botoiaz, eta aukeratu <menuchoice><guimenuitem>Ireki fitxa berrian</guimenuitem></menuchoice>. 
+                      </para> 
+                    </listitem> 
+                  </orderedlist> 
+                </listitem> 
+              </varlistentry> 
+            </variablelist> 
+          </sect2> 
+          <sect2 id="to-create-new-topic"> 
+            <title>Gai berria sortzeko</title> 
+            <para>Gai berria sortzeko, aukeratu <menuchoice><guimenu>Fitxategia</guimenu> <guimenuitem>Gai berria</guimenuitem></menuchoice> Laster-marken leihoan. Gai berria sortuko da, eta izena eman beharko diozu. 
+            </para> 
+          </sect2> 
+          <sect2 id="to-add-bookmark-to-topic"> 
+            <title>Laster-marka bat gai batean gehitzeko</title> 
+            <para> 
+            </para> 
+          </sect2> 
+          <sect2 id="to-remove-bookmark-from-topic"> 
+            <title>Laster-marka bat gai batetik kentzeko</title> 
+            <para> 
+            </para> 
+          </sect2> 
+          <sect2 id="to-rename-bookmark-or-topic"> 
+            <title>Laster-marka bati edo gai bati izena aldatzeko</title> 
+            <para>Laster-marka bati edo gai bati izena aldatzeko, egin urrats hauek: 
+            </para> 
+            <orderedlist> 
+              <listitem> 
+                <para>Laster-marken leihoan, hautatu izena aldatu nahi diozun laster-marka edo gaia. 
+                </para> 
+              </listitem> 
+              <listitem> 
+                <para>Aukeratu <menuchoice><guimenu>Fitxategia</guimenu> <guimenuitem>Izena aldatu... </guimenuitem></menuchoice>. Bestela, ikusteko panelean egin klik eskuineko botoiaz laster-markan edo gaian, eta aukeratu <guimenuitem>Izena aldatu...</guimenuitem>. Laster-markaren edo gaiaren izena hautatuta egongo da. 
+                </para> 
+              </listitem> 
+              <listitem> 
+                <para>Idatzi gaiari edo laster-markari eman nahi diozun izena, eta sakatu <keycap>Sartu</keycap>. 
+                </para> 
+              </listitem> 
+            </orderedlist> 
+          </sect2> 
+          <sect2 id="to-delete-bookmark-or-topic"> 
+            <title>Laster-marka bat edo gai bat ezabatzeko</title> 
+            <para>Laster-marka bat edo gai bat ezabatzeko, egin urrats hauek: 
+            </para> 
+            <orderedlist> 
+              <listitem> 
+                <para>Laster-marken leihoan, hautatu ezabatu nahi duzun laster-marka edo gaia. 
+                </para> 
+              </listitem> 
+              <listitem> 
+                <para>Aukeratu <menuchoice><guimenu>Fitxategia</guimenu> <guimenuitem>Ezabatu</guimenuitem></menuchoice>. Bestela, ikusteko panelean egin klik eskuineko botoiaz laster-markan edo gaian, eta aukeratu <guimenuitem>Ezabatu</guimenuitem>. 
+                </para> 
+              </listitem> 
+            </orderedlist> 
+          </sect2> 
+          <sect2 id="to-edit-bookmark-properties"> 
+            <title>Laster-marka baten propietateak editatzeko</title> 
+            <para> 
+            </para> 
+          </sect2> 
+          <sect2 id="to-search-bookmarks"> 
+            <title>Laster-markak bilatzeko</title> 
+            <para> 
+            </para> 
+          </sect2> 
+          <sect2 id="to-copy-bookmark-address"> 
+            <title>Laster-marka baten helbidea kopiatzeko</title> 
+            <para>Laster-marka baten helbidea kopiatzeko, egin urrats hauek: 
+            </para> 
+            <orderedlist> 
+              <listitem> 
+                <para>Hautatu laster-marka.</para> 
+              </listitem> 
+              <listitem> 
+                <para>Aukeratu <menuchoice> <guimenu>Editatu</guimenu> <guimenuitem>Kopiatu helbidea</guimenuitem></menuchoice>. Bestela, egin klik eskuineko botoiaz laster-markan, eta aukeratu <guimenuitem>Kopiatu helbidea</guimenuitem>. 
+                </para> 
+              </listitem> 
+            </orderedlist> 
+          </sect2> 
+          <sect2 id="to-add-bookmark-or-topic-to-bookmarks-bar"> 
+            <title>Laster-marka bat edo gai bat laster-marken barran gehitzeko</title> 
+            <para>Laster-marka bat edo gai bat laster-marken barran gehitzeko, honela egin dezakezu: 
+            </para> 
+            <variablelist> 
+              <varlistentry> 
+                <term><guimenu>Fitxategia</guimenu> menua</term> 
+                <listitem> 
+                  <para>Hautatu gehitu nahi duzun laster-marka edo gaia, eta aukeratu <menuchoice><guisubmenu>Fitxategia</guisubmenu> <guimenuitem>Erakutsi laster-marken barran</guimenuitem></menuchoice>. 
+                  </para> 
+                </listitem> 
+              </varlistentry> 
+              <varlistentry> 
+                <term>Arrastatu eta jareginez</term> 
+                <listitem> 
+                  <para>Laster-markak eta gaiak laster-marken leihotik laster-marken barrara arrasta ditzakezu, eta bertan jaregin. 
+                  </para> 
+                </listitem> 
+              </varlistentry> 
+            </variablelist> 
+          </sect2> 
+          <sect2 id="to-remove-bookmark-or-topic-from-bookmarks-bar"> 
+            <title>Laster-marka bat edo gai bat laster-marken barratik kentzeko</title> 
+            <para>Laster-marka bat edo gai bat laster-marken barratik kentzeko, honela egin dezakezu: 
+            </para> 
+            <variablelist> 
+              <varlistentry> 
+                <term><guimenu>Fitxategia</guimenu> menua </term> 
+                <listitem> 
+                  <para>Hautatu kendu nahi duzun laster-marka edo gaia, eta aukeratu <menuchoice><guisubmenu>Fitxategia</guisubmenu> <guimenuitem>Erakutsi laster-marken barran</guimenuitem></menuchoice>. 
+                  </para> 
+                </listitem> 
+              </varlistentry> 
+              <varlistentry> 
+                <term>Tresna-barraren editorea</term> 
+                <listitem> 
+                  <para>Laster-markak eta gaiak laster-marken barratik kentzeko, tresna-barren editorea erabil dezakezu, <xref linkend="to-edit-toolbars"/> atalean azaltzen den moduan. 
+                  </para> 
+                </listitem> 
+              </varlistentry> 
+            </variablelist> 
+          </sect2> 
+          <sect2 id="smart-bookmarks"> 
+            <title>Laster-marka finak</title> 
+            <para> 
+            </para> 
+          </sect2> 
+        </sect1> 
+      
+<!-- ============= Managing Your History Links ================ --> 
+        <sect1 id="ephy-managing-history"> 
+          <title>Historiako estekak kudeatzea</title> 
+          <para> 
+          </para> 
+          <sect2 id="overview-of-history"> 
+            <title>Epiphany-ren historiaren sistemaren azalpen orokorra</title> 
+            <para>Epiphany-k zuk bisitatutako kokalekuei buruzko informazio historikoa biltzen du. Informazio hori datu-base batean gordetzen du, gero atzitu ahal izateko. 
+            </para> 
+            <para>Leiho nagusiko helbide-barran idazten duzunean, zuk idatzi ahala &fr;-k historiaren eta laster-marken datu-basean begiratzen du, gordetako kokalekuen tituluetan edo helbideetan bat datorrenik ote dagoen ikusteko. Aurkitzen dituenak helbide-barraren azpian erakusten ditu. 
+            </para> 
+            <para>Historiaren leihoa irekita kudea dezakezu historia. Leiho horretan bilaketak egin ditzakezu historian, eta berriro bisitatu nahi ez dituzun helbideak ezabatu. 
+            </para> 
+            <para> <xref linkend="ephy-history-window-screenshot"/> irudian historiaren leihoa ikusten da. 
+            </para> 
+            <figure id="ephy-history-window-screenshot"> 
+              <title>Historiaren leihoa</title> 
+              <screenshot> 
+                <mediaobject> 
+                  <imageobject> 
+                  <imagedata                  fileref="figures/ephy-history-window-screenshot.png"                  format="PNG"/> 
+                  </imageobject> 
+                </mediaobject> 
+              </screenshot> 
+            </figure> 
+          </sect2> 
+          <sect2 id="to-select-history"> 
+            <title>Historiako estekak hautatzeko</title> 
+            <para>Historiaren leihoa irekitzeko, hautatu <menuchoice><guimenu>Joan</guimenu> <guimenuitem>Historia</guimenuitem></menuchoice>. Historiako estekak bila ditzakezu, edo leiho edo fitxa berri batean ireki, edo datu-basetik historia ezabatu. 
+            </para> 
+          </sect2> 
+          <sect2 id="to-open-history-link"> 
+            <title>Historiako esteka bat leiho edo fitxa berri batean irekitzeko</title> 
+            <variablelist> 
+              <varlistentry> 
+                <term>Historiako esteka bat leiho berri batean irekitzeko, egin urrats hauek: 
+                </term> 
+                <listitem> 
+                  <orderedlist> 
+                    <listitem> 
+                      <para>Hautatu ireki nahi duzun historiako esteka. 
+                      </para> 
+                    </listitem> 
+                    <listitem> 
+                      <para>Aukeratu <menuchoice> <guimenu>Fitxategia</guimenu> <guimenuitem>Ireki leiho berrian</guimenuitem></menuchoice>. Bestela, egin klik historiako estekan eskuineko botoiaz, eta aukeratu <menuchoice><guimenuitem>Ireki leiho berrian</guimenuitem></menuchoice>. 
+                      </para> 
+                    </listitem> 
+                  </orderedlist> 
+                </listitem> 
+              </varlistentry> 
+              <varlistentry> 
+                <term>Historiako esteka bat fitxa berri batean irekitzeko, egin urrats hauek:</term> 
+                <listitem> 
+                  <orderedlist> 
+                    <listitem> 
+                      <para>Hautatu ireki nahi duzun historiako esteka. 
+                      </para> 
+                    </listitem> 
+                    <listitem> 
+                      <para>Aukeratu <menuchoice> <guimenu>Fitxategia</guimenu> <guimenuitem>Ireki fitxa berrian</guimenuitem></menuchoice>. Bestela, egin klik historiako estekan eskuineko botoiaz, eta aukeratu <menuchoice><guimenuitem>Ireki fitxa berrian</guimenuitem></menuchoice>. 
+                      </para> 
+                    </listitem> 
+                  </orderedlist> 
+                </listitem> 
+              </varlistentry> 
+            </variablelist> 
+          </sect2> 
+          <sect2 id="to-delete-history-link"> 
+            <title>Historiako esteka bat ezabatzeko</title> 
+            <para>Historiako esteka bat ezabatzeko, egin urrats hauek: 
+            </para> 
+            <orderedlist> 
+              <listitem> 
+                <para>Hautatu ezabatu nahi duzun historiako esteka. 
+                </para> 
+              </listitem> 
+              <listitem> 
+                <para>Aukeratu <menuchoice><guimenu>Fitxategia</guimenu> <guimenuitem>Ezabatu</guimenuitem></menuchoice>. Bestela, egin klik eskuineko botoiaz historiako estekan, eta aukeratu <guimenuitem>Ezabatu</guimenuitem>. 
+                </para> 
+              </listitem> 
+            </orderedlist> 
+          </sect2> 
+          <sect2 id="to-search-history"> 
+            <title>Historiako estekak bilatzeko</title> 
+            <para>Idatzi bilatu nahi duzuna historiaren leihoan. Historiaren datu-basean ezer aurkitzen badu, beheko zerrendan azalduko da emaitza. Esteka horiek leiho edo fitxa berrian ireki daitezke, edo estekaren helbidea kopia daiteke beste aplikazioren batean itsasteko. 
+            </para> 
+            <para>Bestela, &fr;-ren leihoko helbide-sarreran idazten duzun guztia historiaren datu-basearekin konparatzen da, eta bat datozen helbideak goitibeherako zerrenda batean erakusten dira, laster-marken datu-baseko emaitzekin batera. 
+            </para> 
+          </sect2> 
+          <sect2 id="to-copy-history-link-address"> 
+            <title>Historiako esteka baten helbidea kopiatzeko</title> 
+            <para>Historiako esteka baten helbidea kopiatzeko, egin urrats hauek: 
+            </para> 
+            <orderedlist> 
+              <listitem> 
+                <para>Hautatu historiako esteka  
+                </para> 
+              </listitem> 
+              <listitem> 
+                <para>Aukeratu <menuchoice> <guimenu>Editatu</guimenu> <guimenuitem>Kopiatu helbidea</guimenuitem></menuchoice>. Bestela, egin klik eskuineko botoiaz historiako estekan, eta aukeratu <guimenuitem>Kopiatu helbidea</guimenuitem>. 
+                </para> 
+              </listitem> 
+            </orderedlist> 
+          </sect2> 
+        </sect1> 
+      
+<!-- ============= Managing Your Passwords and Cookies ==== --> 
+        <sect1 id="ephy-managing-passwords-cookies"> 
+          <title>Pasahitzak eta cookie-ak kudeatzea</title> 
+          <para> 
+          </para> 
+        </sect1> 
+      
+<!-- ============= Using the Download Manager ==== --> 
+        <sect1 id="ephy-download-manager"> 
+          <title>Deskarga-kudeatzailearen erabilera</title> 
+          <para> 
+          </para> 
+        </sect1> 
+      
+<!-- ============= Customizing Epiphany ==== --> 
+        <sect1 id="ephy-customize"> 
+          <title>&fr; pertsonalizatzea</title> 
+          <para> 
+          </para> 
+          <sect2 id="setting-preferences"> 
+            <title>Hobespenak ezartzea</title> 
+            <para> 
+            </para> 
+          </sect2> 
+          <sect2 id="to-show-hide-window-components"> 
+            <title>Arakatzaile-leihoaren osagaiak erakutsi eta ezkutatzeko</title> 
+            <para>Honela egin dezakezu: 
+            </para> 
+            <itemizedlist> 
+              <listitem> 
+                <para>Tresna-barrak ezkutatzeko, aukeratu <menuchoice><guimenu>Ikusi</guimenu> <guimenuitem>Tresna-barrak</guimenuitem> </menuchoice>. Tresna-barra berriz ere bistaratzeko, aukeratu <menuchoice><guimenu>Ikusi</guimenu> <guimenuitem>Tresna-barrak</guimenuitem></menuchoice> berriro. 
+                </para> 
+              </listitem> 
+              <listitem> 
+                <para>Laster-marken barra ezkutatzeko, aukeratu <menuchoice><guimenu>Ikusi</guimenu> <guimenuitem>Laster-marken barra</guimenuitem></menuchoice>. Laster-marken barra bistaratzeko, aukeratu <menuchoice><guimenu>Ikusi</guimenu> <guimenuitem>Laster-marken barra</guimenuitem></menuchoice> berriro. 
+                </para> 
+              </listitem> 
+              <listitem> 
+                <para>Egoera-barra ezkutatzeko, aukeratu <menuchoice><guimenu>Ikusi</guimenu> <guimenuitem>Egoera-barra</guimenuitem> </menuchoice>. Egoera-barra berriz ere bistaratzeko, aukeratu <menuchoice><guimenu>Ikusi</guimenu> <guimenuitem>Egoera-barra</guimenuitem></menuchoice> berriro. 
+                </para> 
+              </listitem> 
+            </itemizedlist> 
+          </sect2> 
+          <sect2 id="to-edit-toolbars"> 
+            <title>Tresna-barrak editatzeko</title> 
+            <para> 
+            </para> 
+          </sect2> 
+        </sect1> 
+      
+<!-- ============= About ================================== --> 
+        <sect1 id="fr-about"> 
+          <title>&fr;-ri buruz</title> 
+          <para>&fr; Marco Presenti Gritti-k idatzi du (<email>marco@it.gnome.org</email>). &fr;-ri buruko informazio gehiago nahi baduzu, bisitatu <ulink      url="http://epiphany.mozdev.org" type="http">Epiphany-ren web orria</ulink>. 
+          </para> 
+          <para>Eskuliburu hau David Bordoley-k (<email>bordoley@msu.edu</email>) eta Patanjali Somayaji-k (<email>patanjali@codito.com </email>) idatzi dute. 
+          </para> 
+          <para>Programa hau Free Software Foundation-ek argitaratutako GNU Lizentzia Publiko Orokorraren 2. bertsioan, edo (nahiago baduzu) bertsio berriago batean, jasotako baldintzen arabera banatzen da. Lizentzia horren kopia <ulink url="ghelp:gpl" type="help">esteka</ulink> honetan, edo programa honen iturburu-kodean sartutako COPYING fitxategian aurkituko duzu. 
+          </para> 
+        </sect1> 
+      </article> 
