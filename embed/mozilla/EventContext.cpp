@@ -266,7 +266,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 	if ((nsIDOMNode::ELEMENT_NODE == type) && element)
 	{
 		nsAutoString tag;
-		rv = element->GetTagName(tag);
+		rv = element->GetLocalName(tag);
 		if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
 #if MOZILLA_SNAPSHOT >= 20
@@ -458,7 +458,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 		if ((nsIDOMNode::ELEMENT_NODE == type) && element)
 		{
 			nsAutoString tag;
-			rv = element->GetTagName(tag);
+			rv = element->GetLocalName(tag);
 			if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 
 			/* Link */
