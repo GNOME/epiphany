@@ -1,5 +1,5 @@
-/* 
- *  Copyright (C) 2002 Jorn Baayen <jorn@nl.linux.org>
+/*
+ *  Copyright (C) 2003 Marco Pesenti Gritti <mpeseng@tin.it>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ static GObjectClass *parent_class = NULL;
 static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 	/* Toplevel */
 	{ "FakeToplevel", (""), NULL, NULL, NULL, NULL, NULL },
-	
+
 	{ "OpenInWindow", N_("Open In _New Window"), GTK_STOCK_OPEN, NULL,
 	  NULL, G_CALLBACK (popup_cmd_open_bookmarks_in_browser), NULL },
 
@@ -149,7 +149,7 @@ popup_cmd_open_bookmarks_in_browser (EggAction *action,
 	{
 		EphyNode *node = EPHY_NODE (l->data);
 		const char *location;
-		
+
 		location = ephy_node_get_property_string (node,
 						EPHY_NODE_BMK_PROP_LOCATION);
 
@@ -294,8 +294,11 @@ ephy_bookmarks_editor_node_selected_cb (GtkWidget *view,
 	const char *title;
 	const char *keywords;
 	const char *location;
+	GList *selection;
 
-	if (node != NULL)
+	selection = ephy_node_view_get_selection (editor->priv->bm_view);
+
+	if (node != NULL && g_list_length (selection) == 1)
 	{
 		g_assert (EPHY_IS_NODE (node));
 
@@ -316,6 +319,8 @@ ephy_bookmarks_editor_node_selected_cb (GtkWidget *view,
 		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->location_entry), TRUE);
 		/* Activate the Go button */
 		gtk_widget_set_sensitive (GTK_WIDGET (editor->priv->go_button), TRUE);
+
+		g_list_free (selection);
 	}
 	else
 	{
@@ -333,11 +338,11 @@ ephy_bookmarks_editor_show_popup_cb (GtkWidget *view,
 				     EphyBookmarksEditor *editor)
 {
 	GtkWidget *widget;
-	
-	widget = egg_menu_merge_get_widget (editor->priv->ui_merge, 
+
+	widget = egg_menu_merge_get_widget (editor->priv->ui_merge,
 					    "/popups/EphyBookmarkEditorPopup");
 	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
-			gtk_get_current_event_time ());	
+			gtk_get_current_event_time ());
 }
 
 static void
@@ -345,7 +350,7 @@ ephy_bookmarks_editor_key_pressed_cb (GtkWidget *view,
 				      GdkEventKey *event,
 				      EphyBookmarksEditor *editor)
 {
-	switch (event->keyval) 
+	switch (event->keyval)
 	{
 	case GDK_Delete:
 		ephy_node_view_remove (editor->priv->bm_view);
@@ -353,7 +358,6 @@ ephy_bookmarks_editor_key_pressed_cb (GtkWidget *view,
 	default:
 		break;
 	}
-	
 }
 
 static void
@@ -424,7 +428,7 @@ update_prop_from_entry (EphyBookmarksEditor *editor,
 	GValue value = { 0, };
 
 	selection = ephy_node_view_get_selection (editor->priv->bm_view);
-	if (selection != NULL)
+	if (selection != NULL && g_list_length (selection) == 1)
 	{
 		EphyNode *bm = EPHY_NODE (selection->data);
 		char *tmp;
@@ -669,7 +673,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 
 	gtk_dialog_set_has_separator (GTK_DIALOG (editor), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (editor), 6);
-	gtk_widget_set_size_request (GTK_WIDGET (editor), 500, 400);
+	gtk_widget_set_size_request (GTK_WIDGET (editor), 500, 450);
 	g_signal_connect (G_OBJECT (editor),
 			  "response",
 			  G_CALLBACK (ephy_bookmarks_editor_response_cb),
