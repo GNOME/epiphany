@@ -300,7 +300,7 @@ save_yourself_cb  (GnomeClient *client,
                    gboolean fast,
 		   Session *session)
 {
-	char *argv[] = { "ephy", "--load-session", NULL };
+	char *argv[] = { "epiphany", "--load-session", NULL };
 	char *discard_argv[] = { "rm", "-r", NULL };
 
 	argv[2] = get_session_filename (SESSION_GNOME);
