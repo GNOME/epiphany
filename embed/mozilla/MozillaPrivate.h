@@ -20,7 +20,7 @@
 #include <nsIPrintSettings.h>
 #include <nsIDOMWindow.h>
 
-#include "ephy-embed.h"
+#include "print-dialog.h"
 
 GtkWidget *MozillaFindEmbed	(nsIDOMWindow *aDOMWindow);
 

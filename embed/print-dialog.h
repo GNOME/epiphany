@@ -31,6 +31,42 @@
 
 G_BEGIN_DECLS
 
+typedef struct
+{
+	gboolean print_to_file;
+	char *printer;
+	char *file;
+	char *paper;
+	int top_margin;
+	int bottom_margin;
+	int left_margin;
+	int right_margin;
+	int pages;
+	int from_page;
+	int to_page;
+	int frame_type;
+	int orientation;
+	gboolean print_color;
+
+	/*
+	 * &T - title
+	 * &U - Document URL
+	 * &D - Date/Time
+	 * &P - Page Number
+	 * &PT - Page Number with total Number of Pages (example: 1 of 34)
+	 *
+	 * So, if headerLeftStr = "&T" the title and the document URL
+	 * will be printed out on the top left-hand side of each page.
+	 */
+	char *header_left_string;
+	char *header_center_string;
+	char *header_right_string;
+	char *footer_left_string;
+	char *footer_center_string;
+	char *footer_right_string;
+}
+EmbedPrintInfo;
+
 EphyDialog	*ephy_print_dialog_new		(GtkWidget *parent,
 						 EphyEmbed *embed);
 
