@@ -1,5 +1,16 @@
 2005-01-03  Christian Persch  <chpe@cvs.gnome.org>
 
+	* data/epiphany-1.6.pc.in:
+
+	Add loader directory to the .pc file.
+
+	* src/ephy-extensions-manager.c: (sanitise_type),
+	(get_loader_for_type), (ephy_extensions_manager_finalize):
+
+	Load new loaders with the sblib loader.
+
+2005-01-03  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-window.h:
 
 	Remove ephy_window_print().

@@ -707,12 +707,30 @@ find_loader (const LoaderInfo *info,
 	return strcmp (info->type, type);
 }
 
+static char *
+sanitise_type (const char *string)
+{
+	char *str, *p;
+
+	str = g_strdup (string);
+	for (p = str; *p != '\0'; p++)
+	{
+		if (!g_ascii_isalpha (*p)) *p = '-';
+	}
+
+	return str;
+}
+
 static EphyLoader *
 get_loader_for_type (EphyExtensionsManager *manager,
-		      const char *type)
+		     const char *type)
 {
 	LoaderInfo *info;
 	GList *l;
+	GData *attr = NULL;
+	char *path, *name, *stype;
+	EphyLoader *shlib_loader;
+	GObject *loader;
 
 	LOG ("Looking for loader for type '%s'", type)
 
@@ -736,7 +754,33 @@ get_loader_for_type (EphyExtensionsManager *manager,
 		return g_object_ref (info->loader);
 	}
 
-	/* try to load a loader */
+	stype = sanitise_type (type);
+	name = g_strconcat ("lib", stype, "loader.", G_MODULE_SUFFIX, NULL);
+	path = g_build_filename (LOADER_DIR, name, NULL);
+	g_datalist_init (&attr);
+	g_datalist_set_data (&attr, "library", path);
+
+	shlib_loader = get_loader_for_type (manager, "shlib");
+	g_return_val_if_fail (shlib_loader != NULL, NULL);
+
+	loader = ephy_loader_get_object (shlib_loader, &attr);
+	g_datalist_clear (&attr);
+	g_free (stype);
+	g_free (name);
+	g_free (path);
+
+	if (EPHY_IS_LOADER (loader))
+	{
+		info = g_new (LoaderInfo, 1);
+		info->type = g_strdup (type);
+		info->loader = EPHY_LOADER (loader);
+
+		manager->priv->factories =
+			g_list_append (manager->priv->factories, info);
+
+		return g_object_ref (info->loader);
+	}
+
 	g_return_val_if_reached (NULL);
 
 	return NULL;
@@ -1225,6 +1269,7 @@ ephy_extensions_manager_finalize (GObject *object)
 	g_list_foreach (priv->extensions, (GFunc) g_object_unref, NULL);
 	g_list_free (priv->extensions);
 
+	/* FIXME release loaded loaders */
 	g_list_foreach (priv->factories, (GFunc) free_loader_info, NULL);
 	g_list_free (priv->factories);
 
