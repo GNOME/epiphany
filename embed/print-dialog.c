@@ -82,7 +82,8 @@ enum
 	TO_PROP,
 	FROM_PROP,
 	COLOR_PROP,
-	ORIENTATION_PROP
+	ORIENTATION_PROP,
+	PREVIEW_PROP
 };
 
 enum
@@ -112,6 +113,7 @@ EphyDialogProperty properties [] =
 	{ FROM_PROP, "from_spinbutton", NULL, PT_NORMAL, NULL },
 	{ COLOR_PROP, "print_color_radiobutton", CONF_PRINT_COLOR, PT_NORMAL, NULL },
 	{ ORIENTATION_PROP, "orient_p_radiobutton", CONF_PRINT_ORIENTATION, PT_NORMAL, NULL },
+	{ PREVIEW_PROP, "preview_button", NULL, PT_NORMAL, NULL },
 
 	{ -1, NULL, NULL }
 };
@@ -228,8 +230,18 @@ print_dialog_new (EphyEmbed *embed,
 				     "embed", embed,
 				     NULL));
 
-	if (!embed) dialog->only_collect_info = TRUE;
-	dialog->ret_info = ret_info;
+	if (ret_info != NULL)
+	{
+		GtkWidget *button;
+
+		dialog->only_collect_info = TRUE;
+		dialog->ret_info = ret_info;
+
+		/* disappear preview button  */
+		button = ephy_dialog_get_control (EPHY_DIALOG (dialog),
+						  PREVIEW_PROP);
+		gtk_widget_hide (button);
+	}
 
 	return EPHY_DIALOG(dialog);
 }
@@ -246,8 +258,18 @@ print_dialog_new_with_parent (GtkWidget *window,
 				     "ParentWindow", window,
 				     NULL));
 
-	if (!embed) dialog->only_collect_info = TRUE;
-	dialog->ret_info = ret_info;
+	if (ret_info != NULL)
+	{
+		GtkWidget *button;
+
+		dialog->only_collect_info = TRUE;
+		dialog->ret_info = ret_info;
+
+		/* disappear preview button */
+		button = ephy_dialog_get_control (EPHY_DIALOG (dialog),
+						  PREVIEW_PROP);
+		gtk_widget_hide (button);
+	}
 
 	return EPHY_DIALOG(dialog);
 }
@@ -391,6 +413,8 @@ print_dialog_print (EphyDialog *dialog)
 	if(PRINT_DIALOG(dialog)->only_collect_info && PRINT_DIALOG(dialog)->ret_info)
 	{
 		*(PRINT_DIALOG(dialog)->ret_info) = info;
+
+		return;
 	}
 	else
 	{
@@ -437,6 +461,11 @@ void
 print_cancel_button_cb (GtkWidget *widget,
 			EphyDialog *dialog)
 {
+	if (PRINT_DIALOG (dialog)->only_collect_info)
+	{
+		return;
+	}
+
 	g_object_unref (G_OBJECT(dialog));
 }
 
@@ -451,9 +480,6 @@ void
 print_preview_button_cb (GtkWidget *widget,
 		         EphyDialog *dialog)
 {
-	//FIXME: Don't show preview button at all.
 	if(!(PRINT_DIALOG(dialog)->only_collect_info))
 		print_dialog_preview (dialog);
 }
-
-

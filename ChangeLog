@@ -1,3 +1,12 @@
+2003-11-02  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/PrintingPromptService.cpp:
+	* embed/print-dialog.c: (print_dialog_new),
+	(print_dialog_new_with_parent), (print_dialog_print),
+	(print_cancel_button_cb), (print_preview_button_cb):
+
+	Don't unref print dialogue twice when shown from mozilla.
+
 2003-10-31  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/MozillaPrivate.cpp:
