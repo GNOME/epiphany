@@ -80,6 +80,12 @@ void window_cmd_file_send_to	(GtkAction *action,
 void window_cmd_file_close_window (GtkAction *action,
 				    EphyWindow *window);
 
+void window_cmd_edit_undo	(GtkAction *action,
+				 EphyWindow *window);
+
+void window_cmd_edit_redo	(GtkAction *action,
+				 EphyWindow *window);
+
 void window_cmd_edit_cut	(GtkAction *action,
 				 EphyWindow *window);
 

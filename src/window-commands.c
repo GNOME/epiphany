@@ -399,6 +399,40 @@ window_cmd_file_close_window (GtkAction *action,
 }
 
 void
+window_cmd_edit_undo (GtkAction *action,
+		      EphyWindow *window)
+{
+	GtkWidget *widget;
+	GtkWidget *embed;
+
+	widget = gtk_window_get_focus (GTK_WINDOW (window));
+	embed = gtk_widget_get_ancestor (widget, EPHY_TYPE_EMBED);
+
+	if (embed)
+	{
+		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed), 
+						 "cmd_undo");
+	}
+}
+
+void
+window_cmd_edit_redo (GtkAction *action,
+		      EphyWindow *window)
+{
+	GtkWidget *widget;
+	GtkWidget *embed;
+
+	widget = gtk_window_get_focus (GTK_WINDOW (window));
+	embed = gtk_widget_get_ancestor (widget, EPHY_TYPE_EMBED);
+
+	if (embed)
+	{
+		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed), 
+						 "cmd_redo");
+	}
+}
+
+void
 window_cmd_edit_cut (GtkAction *action,
 		     EphyWindow *window)
 {

@@ -109,6 +109,12 @@ static GtkActionEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_file_close_window) },
 
 	/* Edit menu */
+	{ "EditUndo", GTK_STOCK_UNDO, N_("_Undo"), "<control>Z",
+	  N_("Undo the last action"),
+	  G_CALLBACK (window_cmd_edit_undo) },
+	{ "EditRedo", GTK_STOCK_REDO, N_("Re_do"), "<shift><control>Z",
+	  N_("Redo the last undone action"),
+	  G_CALLBACK (window_cmd_edit_redo) },
 	{ "EditCut", GTK_STOCK_CUT, N_("Cu_t"), "<control>X",
 	  N_("Cut the selection"),
 	  G_CALLBACK (window_cmd_edit_cut) },
@@ -350,7 +356,7 @@ window_cmd_edit (GtkAction *action,
 {
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
 	GtkActionGroup *action_group;
-	gboolean can_copy, can_cut;
+	gboolean can_copy, can_cut, can_undo, can_redo;
 
 	if (GTK_IS_EDITABLE (widget))
 	{
@@ -361,6 +367,8 @@ window_cmd_edit (GtkAction *action,
 
 		can_copy = has_selection;
 		can_cut = has_selection;
+		can_undo = FALSE;
+		can_redo = FALSE;
 	}
 	else
 	{
@@ -373,6 +381,10 @@ window_cmd_edit (GtkAction *action,
 			(EPHY_COMMAND_MANAGER (embed), "cmd_copy", &can_copy);
 		ephy_command_manager_get_command_state
 			(EPHY_COMMAND_MANAGER (embed), "cmd_cut", &can_cut);
+		ephy_command_manager_get_command_state
+			(EPHY_COMMAND_MANAGER (embed), "cmd_undo", &can_undo);
+		ephy_command_manager_get_command_state
+			(EPHY_COMMAND_MANAGER (embed), "cmd_redo", &can_redo);
 	}
 
 	action_group = window->priv->action_group;
@@ -382,6 +394,12 @@ window_cmd_edit (GtkAction *action,
 
 	action = gtk_action_group_get_action (action_group, "EditCut");
 	g_object_set (action, "sensitive", can_cut, NULL);
+
+	action = gtk_action_group_get_action (action_group, "EditUndo");
+	g_object_set (action, "sensitive", can_undo, NULL);
+
+	action = gtk_action_group_get_action (action_group, "EditRedo");
+	g_object_set (action, "sensitive", can_redo, NULL);
 }
 
 static void
