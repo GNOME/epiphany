@@ -23,6 +23,7 @@
 #include "ephy-debug.h"
 #include "ephy-tree-model-node.h"
 #include "ephy-node-view.h"
+#include "ephy-toolbars-model.h"
 
 #include <string.h>
 #include <libgnome/gnome-i18n.h>
@@ -51,16 +52,22 @@ typedef struct
 
 static const EphyBookmarksBookmarkInfo default_bookmarks [] =
 {
-	{ N_("Search the web"), "http://www.google.com", "http://www.google.com/search?q=%s" }
+	/* Translators you should change these links to respect your locale.
+	 * For instance in .nl these should be
+	 * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
+	 */
+
+	{ N_("Search the web"), N_("http://www.google.com"), N_("http://www.google.com/search?q=%s") }
 };
 static int n_default_bookmarks = G_N_ELEMENTS (default_bookmarks);
 
 static const char *default_topics [] =
 {
+	N_("Entertainment"),
 	N_("News"),
-	N_("People"),
-	N_("Shop"),
-	N_("Art"),
+	N_("Shopping"),
+	N_("Sports"),
+	N_("Travel"),
 	N_("Work")
 };
 static int n_default_topics = G_N_ELEMENTS (default_topics);
@@ -221,6 +228,10 @@ static void
 ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 {
 	int i;
+	int id;
+	EphyToolbarsModel *model;
+
+	model = ephy_shell_get_toolbars_model (ephy_shell);
 
 	for (i = 0; i < n_default_topics; i++)
 	{
@@ -232,6 +243,9 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 		ephy_bookmarks_add (eb, default_bookmarks[i].title,
 				    default_bookmarks[i].location,
 				    default_bookmarks[i].smart_url);
+		
+		id = ephy_bookmarks_get_bookmark_id (eb, default_bookmarks[i].location);
+		ephy_toolbars_model_add_bookmark (model, FALSE, id);
 	}
 }
 

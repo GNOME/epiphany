@@ -98,7 +98,7 @@ create_tool_item (EggAction *action)
 	arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
 	gtk_widget_show (arrow);
 
-	hbox = gtk_hbox_new (FALSE, 6);
+	hbox = gtk_hbox_new (FALSE, 3);
 	gtk_widget_show (hbox);
 	gtk_container_add (GTK_CONTAINER (button), hbox);
 

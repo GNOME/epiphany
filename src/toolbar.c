@@ -353,6 +353,38 @@ init_bookmarks_toolbar (Toolbar *t)
 }
 
 static void
+update_toolbar_remove_flag (EphyToolbarsModel *model, gpointer data)
+{
+	int i, n_toolbars;
+	int not_removable = 0;
+
+	n_toolbars = egg_toolbars_model_n_toolbars
+		(EGG_TOOLBARS_MODEL (model));
+
+	/* If there is only one toolbar and the bookmarks bar */
+	if (n_toolbars <= 2)
+	{
+		not_removable = EGG_TB_MODEL_NOT_REMOVABLE;
+	}
+
+	for (i = 0; i < n_toolbars; i++)
+	{
+		const char *t_name;
+
+		t_name = egg_toolbars_model_toolbar_nth
+			(EGG_TOOLBARS_MODEL (model), i);
+		g_return_if_fail (t_name != NULL);
+
+		if (!(strcmp (t_name, "BookmarksBar") == 0))
+		{
+			egg_toolbars_model_set_flags
+				(EGG_TOOLBARS_MODEL (model),
+				 not_removable, i);
+		}
+	}
+}
+
+static void
 toolbar_set_window (Toolbar *t, EphyWindow *window)
 {
 	EphyToolbarsModel *model;
@@ -371,6 +403,12 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 			  NULL);
 
 	model = ephy_shell_get_toolbars_model (ephy_shell);
+	g_signal_connect (EGG_TOOLBARS_MODEL (model), "toolbar_added",
+			  G_CALLBACK (update_toolbar_remove_flag),
+			  NULL);
+	g_signal_connect (EGG_TOOLBARS_MODEL (model), "toolbar_removed",
+			  G_CALLBACK (update_toolbar_remove_flag),
+			  NULL);
 	g_object_set (G_OBJECT (t),
 		      "ToolbarsModel", model,
 		      "MenuMerge", t->priv->ui_merge,

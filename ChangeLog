@@ -1,3 +1,24 @@
+2003-05-05  David Adam Bordoley <bordoley@msu.edu>
+
+	* src/toolbar.c: (update_toolbar_remove_flag),
+	(toolbar_set_window):
+
+	If there is only one "toolbar" make it non-removable.
+
+	* src/bookmarks/ephy-bookmarks.c: (default_bookmarks []),
+	(default_topics []), (ephy_bookmarks_init_defaults):
+	
+	Make the default topic similar to safari's. Mark
+	the default google smartbookmark for translation and
+	include a comment instructing translators how to properly
+	translate it. Add the google smartbookmark to the 
+	bookmarks bar by default.
+
+	* src/bookmarks/ephy-topic-action.c: (create_tool_item):
+
+	Change the space between the topic and it arrow to 3px.
+	6px seemed like too much.
+
 2003-05-05  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/egg/egg-editable-toolbar.c:
