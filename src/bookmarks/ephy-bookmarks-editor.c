@@ -800,15 +800,12 @@ ephy_bookmarks_editor_node_activated_cb (GtkWidget *view,
 					 EphyBookmarksEditor *editor)
 {
 	const char *location;
-	EphyWindow *window;
 
 	location = ephy_node_get_property_string
 		(node, EPHY_NODE_BMK_PROP_LOCATION);
 	g_return_if_fail (location != NULL);
 
-	window = EPHY_WINDOW (get_target_window (editor));
-
-	ephy_shell_new_tab (ephy_shell, window, NULL, location,
+	ephy_shell_new_tab (ephy_shell, NULL, NULL, location,
 			    EPHY_NEW_TAB_OPEN_PAGE);
 }
 

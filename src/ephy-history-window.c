@@ -596,14 +596,11 @@ ephy_history_window_node_activated_cb (GtkWidget *view,
 					 EphyHistoryWindow *editor)
 {
 	const char *location;
-	EphyWindow *window;
 
 	location = ephy_node_get_property_string
 		(node, EPHY_NODE_PAGE_PROP_LOCATION);
 	g_return_if_fail (location != NULL);
 
-	window = EPHY_WINDOW (get_target_window (editor));
-	
 	ephy_shell_new_tab (ephy_shell, NULL, NULL, location,
 			    EPHY_NEW_TAB_OPEN_PAGE);
 }
