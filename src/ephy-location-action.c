@@ -129,16 +129,15 @@ action_activated_cb (GtkEntryCompletion *completion,
 }
 
 static void
-location_url_activate_cb (EphyLocationEntry *entry,
+location_url_activate_cb (GtkEntry *entry,
 			  EphyLocationAction *action)
 {
-	char *content;
+	const char *content;
 
-	content = gtk_editable_get_chars (GTK_EDITABLE(entry), 0, -1);
+	content = gtk_entry_get_text (entry);
 	if (content)
 	{
 		g_signal_emit (action, signals[GO_LOCATION], 0, content);
-		g_free (content);
 	}
 }
 
@@ -291,11 +290,15 @@ disconnect_proxy (GtkAction *action, GtkWidget *proxy)
 
 	if (EPHY_IS_LOCATION_ENTRY (proxy))
 	{
+		GtkWidget *entry;
+
+		entry = GTK_BIN (proxy)->child;
+
 		g_signal_handlers_disconnect_by_func
 			(action, G_CALLBACK (sync_address), proxy);
 
 		g_signal_handlers_disconnect_by_func
-			(proxy, G_CALLBACK (location_url_activate_cb), action);
+			(entry, G_CALLBACK (location_url_activate_cb), action);
 
 		g_signal_handlers_disconnect_by_func
 			(proxy, G_CALLBACK (user_changed_cb), action);
@@ -527,6 +530,6 @@ ephy_location_action_set_address (EphyLocationAction *action,
 	LOG ("set_address %s", address)
 
 	g_free (action->priv->address);
-	action->priv->address = g_strdup (address ? address : "");
+	action->priv->address = g_strdup (address);
 	g_object_notify (G_OBJECT (action), "address");
 }

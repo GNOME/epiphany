@@ -1,5 +1,13 @@
 2004-03-27  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-location-action.c: (location_url_activate_cb),
+	(disconnect_proxy), (ephy_location_action_set_address):
+
+	Correctly disconnect the handler not from the proxy but from the entry
+	itself. Rationalise away one strdup.
+
+2004-03-27  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-stock-icons.c: (ephy_stock_icons_init):
 
 	Register our stock icons.
