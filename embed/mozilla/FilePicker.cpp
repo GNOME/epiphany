@@ -406,6 +406,7 @@ NS_METHOD GFilePicker::SanityCheck (PRBool *retIsSane)
 
 		gtk_window_set_modal (GTK_WINDOW(errorDialog), TRUE);
 		gtk_dialog_run (GTK_DIALOG(errorDialog));
+		gtk_widget_destroy (errorDialog);
 		*retIsSane = PR_FALSE;
 	}
 	g_free (errorText);

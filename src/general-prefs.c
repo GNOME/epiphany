@@ -242,6 +242,7 @@ create_default_charset_menu (GeneralPrefs *dialog)
 	/* init value */
 	charsets = l;
 	value = eel_gconf_get_string (CONF_LANGUAGE_DEFAULT_CHARSET);
+	g_return_if_fail (value != NULL);
 	charsets = g_list_find_custom (charsets, (gconstpointer)value,
 				       (GCompareFunc)find_charset_in_list_cmp);
 	gtk_option_menu_set_history (GTK_OPTION_MENU(optionmenu),
