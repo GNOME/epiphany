@@ -1,5 +1,13 @@
 2003-06-22  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* embed/downloader-view.c: (downloader_view_update_details):
+	* embed/mozilla/ProgressListener.cpp:
+	
+	Pass elapsed times in seconds, more consistent and avoid
+	overflow.
+
+2003-06-22  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/ephy-tab.c: (ensure_page_info), (ephy_tab_net_state_cb),
 	(ephy_tab_init):
 

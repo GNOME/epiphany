@@ -410,7 +410,7 @@ downloader_view_update_details (DownloaderViewPrivate *priv,
 	gtk_label_set_text (GTK_LABEL (priv->details_status),
 			    buffer);
 
-	format_time (buffer, details->elapsed/1000000);
+	format_time (buffer, details->elapsed);
 	gtk_label_set_text (GTK_LABEL (priv->details_elapsed),
 			    buffer);
 
