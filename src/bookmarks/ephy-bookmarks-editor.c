@@ -47,7 +47,6 @@
 #include <string.h>
 
 #include "ephy-bookmarks-editor.h"
-#include "ephy-bookmark-properties.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-node-common.h"
 #include "ephy-node-view.h"
@@ -149,7 +148,6 @@ struct EphyBookmarksEditorPrivate
 	GtkActionGroup *action_group;
 	int priority_col;
 	EphyBookmarksBarModel *tb_model;
-	GHashTable *props_dialogs;
 
 	GtkTreeViewColumn *title_col;
 	GtkTreeViewColumn *address_col;
@@ -479,31 +477,11 @@ cmd_delete (GtkAction *action,
 }
 
 static void
-prop_dialog_destroy_cb (GtkWidget *dialog, EphyBookmarksEditor *editor)
+show_properties_dialog (EphyBookmarksEditor *editor,
+			EphyNode *bookmark)
 {
-	EphyNode *node;
-
-	node = ephy_bookmark_properties_get_node (EPHY_BOOKMARK_PROPERTIES (dialog));
-	g_hash_table_remove (editor->priv->props_dialogs, node);
-}
-
-static void
-show_properties_dialog (EphyBookmarksEditor *editor, EphyNode *node)
-{
-	GtkWidget *dialog;
-
-	dialog = g_hash_table_lookup (editor->priv->props_dialogs, node);
-
-	if (!dialog)
-	{
-		dialog = ephy_bookmark_properties_new
-			(editor->priv->bookmarks, node, GTK_WINDOW (editor));
-		g_signal_connect (dialog, "destroy",
-				  G_CALLBACK (prop_dialog_destroy_cb), editor);
-		g_hash_table_insert (editor->priv->props_dialogs, node, dialog);
-	}
-
-	gtk_window_present (GTK_WINDOW (dialog));
+	ephy_bookmarks_show_bookmark_properties
+		(editor->priv->bookmarks, bookmark, GTK_WIDGET (editor));
 }
 
 static void
@@ -927,8 +905,6 @@ ephy_bookmarks_editor_finalize (GObject *object)
                         (G_OBJECT(editor->priv->window),
                          (gpointer *)&editor->priv->window);
 	}
-
-	g_hash_table_destroy (editor->priv->props_dialogs);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -1682,8 +1658,6 @@ ephy_bookmarks_editor_init (EphyBookmarksEditor *editor)
 {
 	editor->priv = EPHY_BOOKMARKS_EDITOR_GET_PRIVATE (editor);
 
-	editor->priv->props_dialogs = g_hash_table_new (g_direct_hash,
-                                                        g_direct_equal);
 	editor->priv->tb_model = EPHY_BOOKMARKSBAR_MODEL
 		(ephy_bookmarks_get_toolbars_model
 			(ephy_shell_get_bookmarks (ephy_shell)));

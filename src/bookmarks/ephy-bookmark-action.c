@@ -32,7 +32,6 @@
 #include "ephy-dnd.h"
 #include "ephy-bookmarksbar.h"
 #include "ephy-bookmarks.h"
-#include "ephy-bookmark-properties.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
@@ -57,8 +56,6 @@ struct EphyBookmarkActionPrivate
 	EphyNode *node;
 	gboolean smart_url;
 	guint cache_handler;
-	GtkWidget *prop_dialog;	
-
 	guint motion_handler;
 	gint drag_x;
 	gint drag_y;
@@ -523,25 +520,18 @@ move_right_activate_cb (GtkWidget *menu, GtkWidget *proxy)
 }
 
 static void
-properties_activate_cb (GtkWidget *menu, EphyBookmarkAction *action)
+properties_activate_cb (GtkWidget *menu,
+			EphyBookmarkAction *action)
 {
 	GtkWidget *window, *proxy;
 	EphyBookmarks *bookmarks;
-	EphyBookmarkActionPrivate *p = action->priv;
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	proxy = g_object_get_data (G_OBJECT (menu), "proxy");
 	window = gtk_widget_get_toplevel (proxy);
 
-	if (p->prop_dialog == NULL)
-	{
-		p->prop_dialog = ephy_bookmark_properties_new
-				(bookmarks, p->node, GTK_WINDOW (window));
-		g_object_add_weak_pointer (G_OBJECT (p->prop_dialog),
-					   (gpointer)&p->prop_dialog);
-	}
-
-	gtk_widget_show (p->prop_dialog);
+	ephy_bookmarks_show_bookmark_properties
+		(bookmarks, action->priv->node, window);
 }
 
 static void
@@ -741,11 +731,7 @@ bookmark_changed_cb (EphyNode *node,
 static void
 bookmark_destroy_cb (EphyNode *node, EphyBookmarkAction *action)
 {
-	if (action->priv->prop_dialog != NULL)
-	{
-		gtk_widget_destroy (action->priv->prop_dialog);
-		action->priv->node = NULL;
-	}
+	action->priv->node = NULL;
 }
 
 static void
@@ -831,17 +817,11 @@ ephy_bookmark_action_get_property (GObject *object,
 static void
 ephy_bookmark_action_finalize (GObject *object)
 {
-        EphyBookmarkAction *eba = EPHY_BOOKMARK_ACTION (object);
-
-	if (eba->priv->prop_dialog)
-	{
-		g_object_remove_weak_pointer (G_OBJECT (eba->priv->prop_dialog),
-					      (gpointer)&eba->priv->prop_dialog);
-	}
+ /*       EphyBookmarkAction *eba = EPHY_BOOKMARK_ACTION (object);*/
 
 	LOG ("Bookmark action %p finalized", object)
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	parent_class->finalize (object);
 }
 
 static void
