@@ -737,7 +737,7 @@ save_temp_source (EphyEmbed *embed)
 	char *tmp, *base;
 	EphyEmbedPersist *persist;
 
-	char *static_temp_dir;
+	const char *static_temp_dir;
 
 	static_temp_dir = ephy_file_tmp_directory ();
 	if (static_temp_dir == NULL)

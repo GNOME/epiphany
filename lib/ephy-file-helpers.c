@@ -38,7 +38,7 @@ static char *dot_dir = NULL;
 static char *tmp_dir = NULL;
 static GList *del_on_exit = NULL;
 
-char *
+const char *
 ephy_file_tmp_directory (void)
 {
 	if (tmp_dir == NULL)

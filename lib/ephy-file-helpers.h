@@ -34,7 +34,7 @@ void        ephy_file_helpers_init       (void);
 
 void        ephy_file_helpers_shutdown   (void);
 
-char       *ephy_file_tmp_directory	 (void);
+const char *ephy_file_tmp_directory	 (void);
 char       *ephy_file_tmp_filename	 (const char *base,
 					  const char *extension);
 
