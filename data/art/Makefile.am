@@ -5,6 +5,7 @@ art_DATA = \
 	epiphany-fullscreen.png	\
 	epiphany-bookmarks.png	\
 	epiphany-entry.png \
+	epiphany-download.png \
 	epiphany-history.png	\
 	epiphany-new-tab.png	\
 	epiphany-viewsource.png \

@@ -58,6 +58,7 @@ struct DownloaderViewPrivate
 	gboolean show_details;
 
 	/* Widgets */
+	GtkWidget *window;
 	GtkWidget *treeview;
 	GtkWidget *details_file;
 	GtkWidget *details_location;
@@ -101,6 +102,7 @@ typedef struct
 
 enum
 {
+	PROP_WINDOW,
 	PROP_TREEVIEW,
 	PROP_KEEP_OPEN,
 	PROP_DETAILS_FRAME,
@@ -120,6 +122,7 @@ enum
 static const
 EphyDialogProperty properties [] =
 {
+	{ PROP_WINDOW, "download_manager_dialog", NULL, PT_NORMAL, NULL},
         { PROP_TREEVIEW, "clist", NULL, PT_NORMAL, NULL },
 	{ PROP_KEEP_OPEN, "keep_open_check", CONF_DOWNLOADING_KEEP_OPEN, PT_NORMAL, NULL },
 	{ PROP_DETAILS_FRAME, "details_frame", NULL, PT_NORMAL, NULL },
@@ -706,6 +709,7 @@ downloader_view_build_ui (DownloaderView *dv)
 	GtkCellRenderer *renderer;
 	GtkTreeSelection *selection;
 	GtkWidget *details_table;
+	const char *icon_path;
 	EphyDialog *d = EPHY_DIALOG (dv);
 
 	ephy_dialog_construct (d,
@@ -714,6 +718,7 @@ downloader_view_build_ui (DownloaderView *dv)
                                "download_manager_dialog");
 
 	/* lookup needed widgets */
+	priv->window = ephy_dialog_get_control(d, PROP_WINDOW);
 	priv->treeview = ephy_dialog_get_control (d, PROP_TREEVIEW);
 	priv->details_status = ephy_dialog_get_control (d, PROP_DETAILS_STATUS);
 	priv->details_elapsed = ephy_dialog_get_control (d, PROP_DETAILS_ELAPSED);
@@ -804,6 +809,9 @@ downloader_view_build_ui (DownloaderView *dv)
                           G_CALLBACK (downloader_treeview_selection_changed_cb), dv);
 
 	priv->model = GTK_TREE_MODEL (liststore);
+
+	icon_path =  ephy_file ("epiphany-download.png");
+	gtk_window_set_icon_from_file (GTK_WINDOW(priv->window), icon_path, NULL);
 }
 
 static void
