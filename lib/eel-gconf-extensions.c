@@ -87,7 +87,6 @@ eel_gconf_handle_error (GError **error)
 						     "All further errors shown "
 						     "only on terminal"),
 						   (*error)->message);
-			g_error (message, _("GConf Error"), NULL);
 			g_free (message);
 		}
 		g_error_free (*error);
