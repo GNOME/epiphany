@@ -37,6 +37,7 @@
 #include "nsIDownload.h"
 #include "nsIObserver.h"
 #include "nsIProgressDialog.h"
+#include "nsIMIMEInfo.h"
 
 #include "ContentHandler.h"
 

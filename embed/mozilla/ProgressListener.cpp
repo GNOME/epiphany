@@ -26,7 +26,6 @@
 #include "ephy-file-helpers.h"
 #include "mozilla-embed-persist.h"
 #include "nsXPIDLString.h"
-#include "nsIMIMEInfo.h"
 #include "nsCOMPtr.h"
 
 static void
