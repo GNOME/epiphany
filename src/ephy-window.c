@@ -615,14 +615,12 @@ setup_window (EphyWindow *window)
 	action = gtk_action_group_get_action (action_group, "GoBookmarks");
 	g_object_set (action, "short_label", _("Bookmarks"), NULL);
 
-/*
 	action = gtk_action_group_get_action (action_group, "EditFind");
-	g_object_set (action, "important", TRUE, NULL);
+	g_object_set (action, "is_important", TRUE, NULL);
 	action = gtk_action_group_get_action (action_group, "GoHome");
-	g_object_set (action, "important", TRUE, NULL);
+	g_object_set (action, "is_important", TRUE, NULL);
 	action = gtk_action_group_get_action (action_group, "GoBookmarks");
-	g_object_set (action, "important", TRUE, NULL);
-*/
+	g_object_set (action, "is_important", TRUE, NULL);
 
 	action_group = gtk_action_group_new ("PopupsActions");
 	gtk_action_group_add_actions (action_group, ephy_popups_entries,
@@ -643,9 +641,7 @@ setup_window (EphyWindow *window)
 		g_clear_error (&err);
         }
 
-	/* FIXME trick to force update */
-	gtk_ui_manager_get_widget (GTK_UI_MANAGER (window->ui_merge),
-				   "/menubar");
+	gtk_ui_manager_ensure_update (GTK_UI_MANAGER (window->ui_merge));
 
 	window->priv->toolbar = toolbar_new (window);
 	gtk_widget_show (GTK_WIDGET (window->priv->toolbar));

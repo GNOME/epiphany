@@ -1238,6 +1238,8 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 				         NULL);
 	gtk_window_add_accel_group (GTK_WINDOW (editor), 
 				    gtk_ui_manager_get_accel_group (ui_merge));
+	gtk_ui_manager_ensure_update (ui_merge);
+
 	editor->priv->ui_merge = ui_merge;
 	editor->priv->action_group = action_group;
 
