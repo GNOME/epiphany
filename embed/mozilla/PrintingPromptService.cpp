@@ -30,6 +30,8 @@
 #include "ephy-command-manager.h"
 #include "MozillaPrivate.h"
 #include "PrintingPromptService.h"
+#include "eel-gconf-extensions.h"
+#include "ephy-prefs.h"
 
 #include <nsIPrintSettings.h>
 #include <nsCOMPtr.h>
@@ -51,41 +53,50 @@ GPrintingPromptService::~GPrintingPromptService()
 NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIWebBrowserPrint *webBrowserPrint, nsIPrintSettings *printSettings)
 {
 	EphyDialog *dialog;
-	nsresult rv = NS_ERROR_ABORT;
 
-	GtkWidget *gtkParent = MozillaFindGtkParent(parent);
-	NS_ENSURE_TRUE (gtkParent, NS_ERROR_FAILURE);
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINTING))
+	{
+		return NS_ERROR_ABORT;
+	}
 
 	EphyEmbed *embed = EPHY_EMBED (MozillaFindEmbed (parent));
 	NS_ENSURE_TRUE (embed, NS_ERROR_FAILURE);
 
-	dialog = ephy_print_dialog_new (gtkParent, embed, TRUE);
-	ephy_dialog_set_modal (dialog, TRUE);
-
-	int ret = ephy_dialog_run (dialog);
-	if (ret == GTK_RESPONSE_OK)
+	if (!(eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP) ||
+	      eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_COMMAND_LINE)))
 	{
-		EmbedPrintInfo *info;
+		GtkWidget *gtkParent = MozillaFindGtkParent(parent);
+		NS_ENSURE_TRUE (gtkParent, NS_ERROR_FAILURE);
 
-		info = ephy_print_get_print_info ();
+		dialog = ephy_print_dialog_new (gtkParent, embed, TRUE);
+		ephy_dialog_set_modal (dialog, TRUE);
 
-		/* work around mozilla bug which borks when printing selection without having one */
-		if (info->pages == 2 && ephy_command_manager_can_do_command
-			(EPHY_COMMAND_MANAGER (embed), "cmd_copy") == FALSE)
+		int ret = ephy_dialog_run (dialog);
+
+		g_object_unref (dialog);
+
+		if (ret != GTK_RESPONSE_OK)
 		{
-			info->pages = 0;
+			return NS_ERROR_ABORT;
 		}
-
-		MozillaCollatePrintSettings (info, printSettings);
-
-		ephy_print_info_free (info);
-
-		rv = NS_OK;
 	}
 
-	g_object_unref (dialog);
+	EmbedPrintInfo *info;
 
-	return rv;
+	info = ephy_print_get_print_info ();
+
+	/* work around mozilla bug which borks when printing selection without having one */
+	if (info->pages == 2 && ephy_command_manager_can_do_command
+	    (EPHY_COMMAND_MANAGER (embed), "cmd_copy") == FALSE)
+	{
+		info->pages = 0;
+	}
+
+	MozillaCollatePrintSettings (info, printSettings);
+
+	ephy_print_info_free (info);
+
+	return NS_OK;
 }
 
 /* void showProgress (in nsIDOMWindow parent, in nsIWebBrowserPrint webBrowserPrint, in nsIPrintSettings printSettings, in nsIObserver openDialogObserver, in boolean isForPrinting, out nsIWebProgressListener webProgressListener, out nsIPrintProgressParams printProgressParams, out boolean notifyOnOpen); */
@@ -100,6 +111,13 @@ NS_IMETHODIMP GPrintingPromptService::ShowPageSetup(nsIDOMWindow *parent, nsIPri
 {
 	EphyDialog *dialog;
 	nsresult rv = NS_ERROR_ABORT;
+
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINTING) ||
+	    eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP) ||
+	    eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_COMMAND_LINE))
+	{
+		return rv;
+	}
 
 	dialog = ephy_print_setup_dialog_new ();
 	ephy_dialog_set_modal (dialog, TRUE);

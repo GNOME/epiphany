@@ -338,7 +338,10 @@ struct EphyWindowPrivate
 	guint disable_bookmark_editing_notifier_id;
 	guint disable_toolbar_editing_notifier_id;
 	guint disable_history_notifier_id;
+	guint disable_printing_notifier_id;
+	guint disable_print_setup_notifier_id;
 	guint disable_save_to_disk_notifier_id;
+	guint disable_command_line_notifier_id;
 	guint browse_with_caret_notifier_id;
 };
 
@@ -1710,6 +1713,7 @@ update_actions (EphyWindow *window)
 	GtkActionGroup *popups_action_group = GTK_ACTION_GROUP (window->priv->popups_action_group);
 	GtkAction *action;
 	gboolean bookmarks_editable, save_to_disk;
+	gboolean printing, print_setup;
 
 	action = gtk_action_group_get_action (action_group, "ViewToolbar");
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
@@ -1751,6 +1755,16 @@ update_actions (EphyWindow *window)
 	g_object_set (action, "sensitive", save_to_disk, NULL);
 	action = gtk_action_group_get_action (popups_action_group, "SaveImageAs");
 	g_object_set (action, "sensitive", save_to_disk, NULL);
+
+	printing = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINTING);
+	print_setup = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP) &&
+		!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_COMMAND_LINE);
+	action = gtk_action_group_get_action (action_group, "FilePrintSetup");
+	g_object_set (action, "sensitive", printing && print_setup, NULL);
+	action = gtk_action_group_get_action (action_group, "FilePrintPreview");
+	g_object_set (action, "sensitive", printing && print_setup, NULL);
+	action = gtk_action_group_get_action (action_group, "FilePrint");
+	g_object_set (action, "sensitive", printing, NULL);
 
 	action = gtk_action_group_get_action (popups_action_group, "SetImageAsBackground");
 	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_DESKTOP_BG_PICTURE), NULL);
@@ -1919,8 +1933,20 @@ ephy_window_init (EphyWindow *window)
 		(CONF_LOCKDOWN_DISABLE_HISTORY,
 		 (GConfClientNotifyFunc)navigation_notifier, window);
 
+	window->priv->disable_printing_notifier_id = eel_gconf_notification_add
+		(CONF_LOCKDOWN_DISABLE_PRINTING,
+		 (GConfClientNotifyFunc)actions_notifier, window);
+
+	window->priv->disable_print_setup_notifier_id = eel_gconf_notification_add
+		(CONF_LOCKDOWN_DISABLE_PRINT_SETUP,
+		 (GConfClientNotifyFunc)actions_notifier, window);
+
 	window->priv->disable_save_to_disk_notifier_id = eel_gconf_notification_add
 		(CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK,
+		 (GConfClientNotifyFunc)actions_notifier, window);
+
+	window->priv->disable_command_line_notifier_id = eel_gconf_notification_add
+		(CONF_LOCKDOWN_DISABLE_COMMAND_LINE,
 		 (GConfClientNotifyFunc)actions_notifier, window);
 
 	/* other notifiers */
@@ -1949,7 +1975,10 @@ ephy_window_finalize (GObject *object)
 	eel_gconf_notification_remove (window->priv->disable_bookmark_editing_notifier_id);
 	eel_gconf_notification_remove (window->priv->disable_toolbar_editing_notifier_id);
 	eel_gconf_notification_remove (window->priv->disable_history_notifier_id);
+	eel_gconf_notification_remove (window->priv->disable_printing_notifier_id);
+	eel_gconf_notification_remove (window->priv->disable_print_setup_notifier_id);
 	eel_gconf_notification_remove (window->priv->disable_save_to_disk_notifier_id);
+	eel_gconf_notification_remove (window->priv->disable_command_line_notifier_id);
 	eel_gconf_notification_remove (window->priv->browse_with_caret_notifier_id);
 
 	if (window->priv->find_dialog)
@@ -2296,6 +2325,29 @@ ephy_window_find (EphyWindow *window)
 void
 ephy_window_print (EphyWindow *window)
 {
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINTING))
+	{
+		return;
+	}
+
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_PRINT_SETUP) ||
+	    eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_COMMAND_LINE))
+	{
+		EphyEmbed *embed;
+		EmbedPrintInfo *info;
+
+		info = ephy_print_get_print_info ();
+
+		embed = ephy_window_get_active_embed (window);
+		g_return_if_fail (EPHY_IS_EMBED (embed));
+
+		ephy_embed_print (embed, info);
+
+		ephy_print_info_free (info);
+
+		return;
+	}
+
 	if (window->priv->print_dialog == NULL)
 	{
 		EphyDialog *dialog;

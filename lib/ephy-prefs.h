@@ -50,6 +50,9 @@ G_BEGIN_DECLS
 #define CONF_LOCKDOWN_DISABLE_HISTORY		"/apps/epiphany/lockdown/disable_history"
 #define CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK	"/desktop/gnome/lockdown/disable_save_to_disk"
 #define CONF_LOCKDOWN_DISABLE_HISTORY		"/apps/epiphany/lockdown/disable_history"
+#define CONF_LOCKDOWN_DISABLE_PRINTING		"/desktop/gnome/lockdown/disable_printing"
+#define CONF_LOCKDOWN_DISABLE_PRINT_SETUP	"/desktop/gnome/lockdown/disable_print_setup"
+#define CONF_LOCKDOWN_DISABLE_COMMAND_LINE	"/desktop/gnome/lockdown/disable_command_line"
 
 /* System prefs */
 #define CONF_DESKTOP_FTP_HANDLER	"/desktop/gnome/url-handlers/ftp/command"
