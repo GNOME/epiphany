@@ -215,6 +215,25 @@ ephy_autocompletion_window_finalize_impl (GObject *o)
 	G_OBJECT_CLASS (g_object_class)->finalize (o);
 }
 
+static gboolean
+set_renderer_bg_color (GtkWidget *widget, 
+		       GtkStyle *previous_style,
+		       GtkCellRenderer *renderer)
+{
+	GValue v = { 0 };
+	GdkColor *bg_color;
+	GtkStyle *style;
+
+	g_value_init (&v, GDK_TYPE_COLOR);
+	g_object_get_property (G_OBJECT (renderer), "cell_background_gdk", &v);
+	bg_color = g_value_peek_pointer (&v);
+	style = gtk_widget_get_style (widget);
+	*bg_color = style->bg[GTK_STATE_NORMAL];
+	g_object_set_property (G_OBJECT (renderer), "cell_background_gdk", &v);
+
+	return FALSE;
+}
+			
 static void
 ephy_autocompletion_window_init_widgets (EphyAutocompletionWindow *aw)
 {
@@ -223,9 +242,6 @@ ephy_autocompletion_window_init_widgets (EphyAutocompletionWindow *aw)
 	GtkCellRenderer *renderer;
 	GtkWidget *frame;
 	GtkWidget *vbox;
-	GdkColor *bg_color;
-	GtkStyle *style;
-	GValue v = { 0 };
 
 	p->window = gtk_window_new (GTK_WINDOW_POPUP);
 	gtk_window_set_resizable (GTK_WINDOW (p->window), FALSE);
@@ -272,12 +288,9 @@ ephy_autocompletion_window_init_widgets (EphyAutocompletionWindow *aw)
 
 	renderer = gtk_cell_renderer_text_new ();
 
-	g_value_init (&v, GDK_TYPE_COLOR);
-	g_object_get_property (G_OBJECT (renderer), "cell_background_gdk", &v);
-	bg_color = g_value_peek_pointer (&v);
-	style = gtk_widget_get_style (p->window);
-	*bg_color = style->bg[GTK_STATE_NORMAL];
-	g_object_set_property (G_OBJECT (renderer), "cell_background_gdk", &v);
+	set_renderer_bg_color (p->window, NULL, renderer);
+	g_signal_connect (G_OBJECT (p->window), "style-set",
+			 G_CALLBACK (set_renderer_bg_color), G_OBJECT (renderer));
 
 	p->action_col1 = gtk_tree_view_column_new ();
 	gtk_tree_view_column_pack_start (p->action_col1, renderer, TRUE);
