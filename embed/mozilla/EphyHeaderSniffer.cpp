@@ -231,7 +231,6 @@ filechooser_response_cb (EphyFileChooser *dialog, gint response, EphyHeaderSniff
 nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 {
 	nsresult rv;
-	char *path, *download_dir;
 	EmbedPersistFlags flags;
 	PRBool askDownloadDest;
 
@@ -354,7 +353,6 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		EphyFileChooser *dialog;
 		GtkWindow *window;
 		const char *title;
-		int response;
 
 		title = ephy_embed_persist_get_fc_title (EPHY_EMBED_PERSIST (mEmbedPersist));
 		window = ephy_embed_persist_get_fc_parent (EPHY_EMBED_PERSIST (mEmbedPersist));

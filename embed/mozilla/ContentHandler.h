@@ -21,6 +21,10 @@
 #ifndef __ContentHandler_h
 #define __ContentHandler_h
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "ephy-embed-shell.h"
 
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
@@ -82,7 +86,7 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	nsCOMPtr<nsIFile> mTempFile;
 	nsCOMPtr<nsISupports> mContext;
 
-#if MOZILLA_SNAPSHOT < 16
+#if MOZILLA_SNAPSHOT < 18
 	char *mMimeType;
 #else
 	nsCString mMimeType;

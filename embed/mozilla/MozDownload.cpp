@@ -114,7 +114,6 @@ MozDownload::Init(nsIURI *aSource, nsIURI *aTarget, const PRUnichar *aDisplayNam
 #endif
 {
 	PRBool addToView = PR_TRUE;
-	nsresult rv;
 
 	if (mEmbedPersist)
 	{
@@ -605,7 +604,7 @@ static char*
 GetFilePath (const char *filename)
 {
 	char *path = NULL;
-	char *download_dir, *converted_dp, *expanded, *tmp;
+	char *download_dir, *converted_dp, *expanded;
 
 	download_dir = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
 
