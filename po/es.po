@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-15 13:27+0100\n"
-"PO-Revision-Date: 2005-01-15 13:28+0100\n"
+"POT-Creation-Date: 2005-01-16 01:39+0100\n"
+"PO-Revision-Date: 2005-01-16 01:45+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -627,7 +627,7 @@ msgid "MD5 Fingerprint:"
 msgstr "Huella MD5:"
 
 #: data/glade/certificate-dialogs.glade.h:15
-#: embed/mozilla/GtkNSSDialogs.cpp:1024
+#: embed/mozilla/GtkNSSDialogs.cpp:1005
 msgid "Organization:"
 msgstr "Organización:"
 
@@ -1540,21 +1540,21 @@ msgstr "Archivos XUL"
 msgid "_Select Certificate"
 msgstr "_Seleccionar certificado"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:203
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:202
 #, c-format
-msgid "Choose a certificate to present as identification to %s."
-msgstr "Elija un certificado para presentar como identificación a %s."
+msgid "Choose a certificate to present as identification to \"%s\"."
+msgstr "Elija un certificado para presentar como identificación para «%s»."
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:206
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:205
 msgid "Select a certificate to identify yourself."
 msgstr "Seleccione un certificado para identificarse a sí mismo."
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:244
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:242
 msgid "Certificate _Details"
 msgstr "Detalles del _certificado"
 
 #. Add the buttons
-#: embed/mozilla/GtkNSSDialogs.cpp:231 embed/mozilla/GtkNSSDialogs.cpp:555
+#: embed/mozilla/GtkNSSDialogs.cpp:231 embed/mozilla/GtkNSSDialogs.cpp:539
 msgid "_View Certificate"
 msgstr "_Ver certificado"
 
@@ -1562,114 +1562,117 @@ msgstr "_Ver certificado"
 msgid "_Accept"
 msgstr "_Aceptar"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:306
+#: embed/mozilla/GtkNSSDialogs.cpp:303
 #, c-format
 msgid ""
-"The site %s returned security information for %s. It is possible that "
-"someone is intercepting your communication to obtain your confidential "
+"The site \"%s\" returned security information for \"%s\". It is possible "
+"that someone is intercepting your communication to obtain your confidential "
 "information."
 msgstr ""
-"El sitio %s devolvió información de seguridad para %s. Es posible que \n"
-"alguien esté interceptando su comunicación para obtener su información\n"
+"El sitio «%s» devolvió información de seguridad para «%s». Es posible que "
+"alguien esté interceptando su comunicación para obtener su información "
 "confidencial."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:312
+#: embed/mozilla/GtkNSSDialogs.cpp:309
 #, c-format
-msgid "You should only accept the security information if you trust %s and %s."
-msgstr "Debería aceptar la información de seguridad sólo si confía en %s y %s."
+msgid ""
+"You should only accept the security information if you trust \"%s\" and \"%s"
+"\"."
+msgstr "Debería aceptar la información de seguridad sólo si confía en «%s» y «%s»."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:317
+#: embed/mozilla/GtkNSSDialogs.cpp:314
 msgid "Accept incorrect security information?"
 msgstr "¿Desea aceptar la información de seguridad incorrecta?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:352
+#: embed/mozilla/GtkNSSDialogs.cpp:345
 #, c-format
 msgid ""
-"It was not possible to automatically trust %s. It is possible that someone "
-"is intercepting your communication to obtain your confidential information."
+"It was not possible to automatically trust \"%s\". It is possible that "
+"someone is intercepting your communication to obtain your confidential "
+"information."
 msgstr ""
-"No es posible confiar automáticamente en %s. Es posible que alguien esté "
+"No es posible confiar automáticamente en «%s». Es posible que alguien esté "
 "intentando interceptar su comunicación para obtener su información "
 "confidencial."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:358
+#: embed/mozilla/GtkNSSDialogs.cpp:351
 #, c-format
 msgid ""
-"You should only connect to the site if you are certain you are connected to %"
-"s."
+"You should only connect to the site if you are certain you are connected to "
+"\"%s\"."
 msgstr ""
 "Debería conectar con el sitio sólo si tiene la certeza de que está conectado "
-"a %s."
+"a «%s»."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:363
+#: embed/mozilla/GtkNSSDialogs.cpp:356
 msgid "Connect to untrusted site?"
 msgstr "¿Quiere conectar con el sitio no confiado?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:367
+#: embed/mozilla/GtkNSSDialogs.cpp:360
 msgid "_Don't show this message again for this site"
 msgstr "_No mostrar este mensaje de nuevo para el sitio"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:368
+#: embed/mozilla/GtkNSSDialogs.cpp:361
 msgid "Co_nnect"
 msgstr "Co_nectar"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:428
+#: embed/mozilla/GtkNSSDialogs.cpp:420
 msgid "Accept expired security information?"
 msgstr "¿Desea aceptar la información de seguridad caducada?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:429
+#: embed/mozilla/GtkNSSDialogs.cpp:421
 #, c-format
-msgid "The security information for %s expired on %s."
-msgstr "La información de seguridad para %s caducó el %s"
+msgid "The security information for \"%s\" expired on %s."
+msgstr "La información de seguridad para «%s» caducó el %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:435
+#: embed/mozilla/GtkNSSDialogs.cpp:427
 msgid "Accept not yet valid security information?"
 msgstr "¿Desea aceptar la información de seguridad aún no válida?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:436
+#: embed/mozilla/GtkNSSDialogs.cpp:428
 #, c-format
-msgid "The security information for %s isn't valid until %s."
-msgstr "La información de seguridad para %s no es válida hasta %s."
+msgid "The security information for \"%s\" isn't valid until %s."
+msgstr "La información de seguridad para «%s» no es válida hasta %s."
 
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: embed/mozilla/GtkNSSDialogs.cpp:452
+#: embed/mozilla/GtkNSSDialogs.cpp:444
 msgid "%a %d %b %Y"
 msgstr "%a, %d de %b de %Y"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:462
+#: embed/mozilla/GtkNSSDialogs.cpp:452
 msgid "You should ensure that your computer's time is correct."
 msgstr "Debería asegurarse de que la hora de su equipo es correcta."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:512
+#: embed/mozilla/GtkNSSDialogs.cpp:498
 #, c-format
-msgid "Cannot establish connection to %s."
-msgstr "No se puede establecer una conexión con %s."
+msgid "Cannot establish connection to \"%s\"."
+msgstr "No se puede establecer una conexión con «%s»."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:515
+#: embed/mozilla/GtkNSSDialogs.cpp:501
 #, c-format
-msgid "The certificate revocation list (CRL) from %s needs to be updated."
-msgstr "La lista de revocación de certificados (CRL) de %s necesita ser actualizada."
+msgid "The certificate revocation list (CRL) from \"%s\" needs to be updated."
+msgstr "La lista de revocación de certificados (CRL) de «%s» necesita actualizarse."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:520
+#: embed/mozilla/GtkNSSDialogs.cpp:506
 msgid "Please ask your system administrator for assistance."
 msgstr "Pida ayuda a su administrador de sistemas."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:558
+#: embed/mozilla/GtkNSSDialogs.cpp:542
 msgid "_Trust CA"
 msgstr "_Confiar en la AC"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:582
+#: embed/mozilla/GtkNSSDialogs.cpp:564
 #, c-format
-msgid "Trust %s to identify:"
-msgstr "Confiar en %s para identificar:"
+msgid "Trust \"%s\" to identify:"
+msgstr "Confiar en «%s» para identificar:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:586
+#: embed/mozilla/GtkNSSDialogs.cpp:567
 msgid "Trust new Certificate Authority?"
 msgstr "¿Confiar en la Autoridad de Certificación nueva?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:587
+#: embed/mozilla/GtkNSSDialogs.cpp:568
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1677,114 +1680,114 @@ msgstr ""
 "Antes de confiar en una Autoridad de Certificación (AC) debería verificar "
 "que el certificado es auténtico."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:597
+#: embed/mozilla/GtkNSSDialogs.cpp:578
 msgid "_Web sites"
 msgstr "Sitios _web"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:602
+#: embed/mozilla/GtkNSSDialogs.cpp:583
 msgid "_Software developers"
 msgstr "Desarrolladores de _software"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:675
+#: embed/mozilla/GtkNSSDialogs.cpp:656
 msgid "Certificate already exists."
 msgstr "El certificado ya existe."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:676
+#: embed/mozilla/GtkNSSDialogs.cpp:657
 msgid "The certificate has already been imported."
 msgstr "El certificado ya ha sido importado."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:801
+#: embed/mozilla/GtkNSSDialogs.cpp:782
 msgid "_Backup Certificate"
 msgstr "_Copia de respaldo del certificado"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:808
+#: embed/mozilla/GtkNSSDialogs.cpp:789
 msgid "Select password."
 msgstr "Seleccionar contraseña."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:809
+#: embed/mozilla/GtkNSSDialogs.cpp:790
 msgid "Select a password to protect this certificate."
 msgstr "Seleccione una contraseña para proteger este certificado."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:821 embed/mozilla/GtkNSSDialogs.cpp:931
+#: embed/mozilla/GtkNSSDialogs.cpp:802 embed/mozilla/GtkNSSDialogs.cpp:912
 msgid "_Password:"
 msgstr "_Contraseña:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:835
+#: embed/mozilla/GtkNSSDialogs.cpp:816
 msgid "Con_firm password:"
 msgstr "Con_firmar contraseña:"
 
 #. TODO: We need a better password quality meter
-#: embed/mozilla/GtkNSSDialogs.cpp:847
+#: embed/mozilla/GtkNSSDialogs.cpp:828
 msgid "Password quality:"
 msgstr "Calidad de la contraseña:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:904
+#: embed/mozilla/GtkNSSDialogs.cpp:885
 msgid "I_mport Certificate"
 msgstr "I_mportar certificado"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:920
+#: embed/mozilla/GtkNSSDialogs.cpp:901
 msgid "Password required."
 msgstr "Contraseña requerida."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:921
+#: embed/mozilla/GtkNSSDialogs.cpp:902
 msgid "Enter the password for this certificate."
 msgstr "Introduzca la contraseña para este certificado."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1002
+#: embed/mozilla/GtkNSSDialogs.cpp:983
 msgid "Certificate Revocation list successfully imported."
 msgstr "Lista de revocación de certificados importada exitosamente."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1003
+#: embed/mozilla/GtkNSSDialogs.cpp:984
 msgid "Certificate Revocation list (CRL) imported:"
 msgstr "Lista de revocación de certificados (CRL) importada:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1029
+#: embed/mozilla/GtkNSSDialogs.cpp:1010
 msgid "Unit:"
 msgstr "Unidad:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1034
+#: embed/mozilla/GtkNSSDialogs.cpp:1015
 msgid "Next Update:"
 msgstr "Siguiente actualización:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1061
+#: embed/mozilla/GtkNSSDialogs.cpp:1042
 msgid "Not part of certificate"
 msgstr "No es parte del certificado"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1347
+#: embed/mozilla/GtkNSSDialogs.cpp:1328
 msgid "Certificate Properties"
 msgstr "Propiedades de certificados"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1369
+#: embed/mozilla/GtkNSSDialogs.cpp:1350
 msgid "This certificate has been verified for the following uses:"
 msgstr "Este certificado ha sido verificado para los usos siguientes:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1372
+#: embed/mozilla/GtkNSSDialogs.cpp:1353
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "No se pudo verificar este certificado porque ha sido revocado."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1375
+#: embed/mozilla/GtkNSSDialogs.cpp:1356
 msgid "Could not verify this certificate because it has expired."
 msgstr "No se pudo verificar este certificado porque ha caducado."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1378
+#: embed/mozilla/GtkNSSDialogs.cpp:1359
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "No se pudo verificar este certificado porque no se confía en él."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1381
+#: embed/mozilla/GtkNSSDialogs.cpp:1362
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr "No se pudo verificar este certificado porque no se confía en el emisor."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1384
+#: embed/mozilla/GtkNSSDialogs.cpp:1365
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "No se pudo verificar este certificado porque el emisor es desconocido."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1387
+#: embed/mozilla/GtkNSSDialogs.cpp:1368
 msgid "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 "No se pudo verificar este certificado porque el certificado de la AC es "
 "inválido."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1392
+#: embed/mozilla/GtkNSSDialogs.cpp:1373
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "No se pudo verificar este certificado por razones desconocidas."
 
@@ -1951,25 +1954,27 @@ msgstr "Falló al crear el directorio: %s."
 
 #: lib/ephy-gui.c:209
 #, c-format
-msgid "A file %s already exists."
-msgstr "Ya existe un archivo llamado %s."
+msgid "Overwrite \"%s\"?"
+msgstr "¿Desea sobreescribir «%s»?"
 
 #: lib/ephy-gui.c:213
-msgid "If you choose to overwrite this file, the contents will be lost."
-msgstr "Si elige sobreescribir este archivo, se perderán los contenidos."
+msgid ""
+"A file with this name already exists. If you choose to overwrite this file, "
+"the contents will be lost."
+msgstr "Ya existe un archivo con este nombre. Si elige sobreescribir este archivo, se perderá el contenido."
 
 #: lib/ephy-gui.c:217
 msgid "_Overwrite"
 msgstr "_Sobreescribir"
 
 #: lib/ephy-gui.c:219
-msgid "Overwrite File"
-msgstr "Sobreescribir archivo"
+msgid "Overwrite File?"
+msgstr "¿Desea sobreescribir el archivo?"
 
 #: lib/ephy-gui.c:255
 #, c-format
 msgid "Could not display help: %s"
-msgstr "No se pudo mostrar la ayuda.: %s"
+msgstr "No se pudo mostrar la ayuda: %s"
 
 #: lib/ephy-langs.c:37
 msgid "select fonts for|Arabic"
@@ -2112,16 +2117,23 @@ msgstr "%s:"
 
 #: src/bookmarks/ephy-bookmark-action.c:545
 #: src/bookmarks/ephy-bookmarks-editor.c:181
-#: src/bookmarks/ephy-bookmarks-editor.c:1155 src/ephy-history-window.c:174
+#: src/bookmarks/ephy-bookmarks-editor.c:1155
+#: src/bookmarks/ephy-topic-action.c:448 src/ephy-history-window.c:174
 #: src/ephy-history-window.c:714
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Abrir en una _solapa nueva"
 msgstr[1] "Abrir en _solapas nuevas"
 
+#. File Menu
 #: src/bookmarks/ephy-bookmark-action.c:551
+#: src/bookmarks/ephy-bookmarks-editor.c:178
+#: src/bookmarks/ephy-bookmarks-editor.c:1152 src/ephy-history-window.c:171
+#: src/ephy-history-window.c:711
 msgid "Open in New _Window"
-msgstr "Abrir en una _ventana nueva"
+msgid_plural "Open in New _Windows"
+msgstr[0] "Abrir en una _ventana nueva"
+msgstr[1] "Abrir en _ventanas nuevas"
 
 #: src/bookmarks/ephy-bookmark-action.c:572
 #: src/bookmarks/ephy-topic-action.c:770
@@ -2187,15 +2199,6 @@ msgstr "Tema _nuevo"
 #: src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Create a new topic"
 msgstr "Crear un tema nuevo"
-
-#. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:178
-#: src/bookmarks/ephy-bookmarks-editor.c:1152 src/ephy-history-window.c:171
-#: src/ephy-history-window.c:711
-msgid "_Open in New Window"
-msgid_plural "_Open in New Windows"
-msgstr[0] "_Abrir en una ventana nueva"
-msgstr[1] "_Abrir en ventanas nuevas"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Open the selected bookmark in a new window"
@@ -2499,19 +2502,19 @@ msgstr "¿Quiere actualizar el marcador «%s»?"
 #. translators: the %s is a URL
 #: src/bookmarks/ephy-bookmarks.c:541
 #, c-format
-msgid "The bookmarked page has moved to <tt>%s</tt>."
-msgstr "La página marcada se ha movido a <tt>%s</tt>."
+msgid "The bookmarked page has moved to \"%s\"."
+msgstr "La página marcada se ha movido a «%s»."
 
 #: src/bookmarks/ephy-bookmarks.c:545
-msgid "_Don't update bookmark"
-msgstr "_No actualizar el marcador"
+msgid "_Don't Update"
+msgstr "_No actualizar"
 
 #: src/bookmarks/ephy-bookmarks.c:547
-msgid "_Update bookmark"
-msgstr "_Actualizar marcador"
+msgid "_Update"
+msgstr "_Actualizar"
 
 #: src/bookmarks/ephy-bookmarks.c:550
-msgid "Update bookmark?"
+msgid "Update Bookmark?"
 msgstr "¿Quiere actualizar el marcador?"
 
 #. Translators: The text before the "|" is context to help you decide on
@@ -2556,12 +2559,6 @@ msgstr "Marcador duplicado"
 #: src/bookmarks/ephy-topic-action.c:264
 msgid "Empty"
 msgstr "Vacío"
-
-#: src/bookmarks/ephy-topic-action.c:448
-msgid "_Open in New Tab"
-msgid_plural "_Open in New Tabs"
-msgstr[0] "Abrir en una _solapa nueva"
-msgstr[1] "Abrir en _solapas nuevas"
 
 #: src/ephy-encoding-dialog.c:310
 msgid "Encodings"
@@ -3300,7 +3297,7 @@ msgid "Open link in this window"
 msgstr "Abre el enlace en esta ventana"
 
 #: src/ephy-window.c:318
-msgid "Open Link in _New Window"
+msgid "Open Link in New _Window"
 msgstr "Abrir enlace en una _ventana nueva"
 
 #: src/ephy-window.c:319
@@ -3364,8 +3361,8 @@ msgid "Copy I_mage Address"
 msgstr "Copiar dirección de la i_magen"
 
 #: src/ephy-window.c:662
-msgid "There are unsubmitted changes to form elements."
-msgstr "Hay cambios no enviados en los elementos del formulario."
+msgid "There are unsubmitted changes to form elements"
+msgstr "Hay cambios no enviados en los elementos del formulario"
 
 #: src/ephy-window.c:666
 msgid "If you close the document anyway, you will lose that information."
@@ -3855,6 +3852,22 @@ msgstr "Epiphany"
 #: src/window-commands.c:810
 msgid "translator-credits"
 msgstr "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
+
+#~ msgid "A file %s already exists."
+#~ msgstr "Ya existe un archivo llamado %s."
+
+#~ msgid "_Open in New Window"
+#~ msgid_plural "_Open in New Windows"
+#~ msgstr[0] "_Abrir en una ventana nueva"
+#~ msgstr[1] "_Abrir en ventanas nuevas"
+
+#~ msgid "_Update bookmark"
+#~ msgstr "_Actualizar marcador"
+
+#~ msgid "_Open in New Tab"
+#~ msgid_plural "_Open in New Tabs"
+#~ msgstr[0] "Abrir en una _solapa nueva"
+#~ msgstr[1] "Abrir en _solapas nuevas"
 
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Salir de pantalla completa"
