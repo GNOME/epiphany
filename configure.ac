@@ -15,14 +15,13 @@ dnl You should have received a copy of the GNU General Public License along
 dnl with this program; if not, write to the Free Software Foundation, Inc.,
 dnl 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 
-AC_INIT([GNOME Web browser], [1.5.0],
-        [http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+AC_INIT([GNOME Web Browser],[1.5.0],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
 
-AC_PREREQ([2.57])
+AC_PREREQ([2.59])
 
-AM_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([configure.ac])
 
 EPIPHANY_MAJOR=1.5
@@ -96,11 +95,11 @@ AC_SUBST([BONOBO_ACTIVATION_IDL])
 
 dnl whether to build with DEBUG defined
 AC_ARG_WITH([mozilla-debug],
-	    AC_HELP_STRING([--mozilla-debug],[Whether mozilla is a debug build]),
+	    AS_HELP_STRING([--mozilla-debug],[Whether mozilla is a debug build]),
 	    [AM_CXXFLAGS="-DDEBUG $AM_CXXFLAGS"])
 
 AC_ARG_ENABLE([cpp-rtti],
-	      AC_HELP_STRING([--enable-cpp-rtti],[Enable C++ RTTI]),[],
+	      AS_HELP_STRING([--enable-cpp-rtti],[Enable C++ RTTI]),[],
 	      [enable_cpp_rtti=no])
 
 if test "x$enable_cpp_rtti" = "xno"; then
@@ -132,7 +131,7 @@ AC_MSG_CHECKING([which mozilla to use])
 
 MOZILLA=
 AC_ARG_WITH([mozilla],
-	AC_HELP_STRING([--with-mozilla@<:@=mozilla|firefox|thunderbird@:>@],
+	AS_HELP_STRING([--with-mozilla@<:@=mozilla|firefox|thunderbird@:>@],
 		       [Whether to use mozilla, firefox or thunderbird gtkmozembed (default: mozilla)]),
 	[MOZILLA="$withval"])
 
@@ -193,14 +192,15 @@ AM_CXXFLAGS="$AM_CXXFLAGS -fshort-wchar"
 CXXFLAGS="$CXXFLAGS $AM_CXXFLAGS"
 
 AC_CACHE_CHECK([for compiler -fshort-wchar option],
-    ac_cv_have_usable_wchar_option,
-    [AC_TRY_RUN([#include <stddef.h>
-                 int main () {
-                   return (sizeof(wchar_t) != 2) ||
-                          (wchar_t)-1 < (wchar_t) 0 ; } ],
-                ac_cv_have_usable_wchar_option="yes",
-                ac_cv_have_usable_wchar_option="no",
-                ac_cv_have_usable_wchar_option="maybe")])
+	ac_cv_have_usable_wchar_option,
+	[AC_RUN_IFELSE([AC_LANG_SOURCE(
+		[[#include <stddef.h>
+		  int main () {
+		    return (sizeof(wchar_t) != 2) || (wchar_t)-1 < (wchar_t) 0 ;
+		  } ]])],
+		[ac_cv_have_usable_wchar_option="yes"],
+		[ac_cv_have_usable_wchar_option="no"],
+		[ac_cv_have_usable_wchar_option="maybe"])])
 
 if test "$ac_cv_have_usable_wchar_option" != "yes"; then
     AM_CXXFLAGS=$_SAVE_AM_CXXFLAGS
