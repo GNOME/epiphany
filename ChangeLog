@@ -1,3 +1,10 @@
+2005-02-13  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/egg/eggstatusicon.c: (egg_status_icon_init),
+	(egg_status_icon_finalize):
+
+	Keep a ref on the tray icon. Should fix bug #166143.
+
 2005-02-12  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-tabs-menu.c: (tab_added_cb), (tab_removed_cb),

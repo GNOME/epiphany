@@ -248,6 +248,8 @@ egg_status_icon_init (EggStatusIcon *status_icon)
   status_icon->priv->size       = G_MAXINT;
 
   status_icon->tray_icon = GTK_WIDGET (egg_tray_icon_new (NULL));
+  g_object_ref (status_icon->tray_icon);
+  gtk_object_sink (GTK_OBJECT (status_icon->tray_icon));
 
   gtk_widget_add_events (GTK_WIDGET (status_icon->tray_icon),
 			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
@@ -289,6 +291,7 @@ egg_status_icon_finalize (GObject *object)
   status_icon->priv->tooltips = NULL;
 
   gtk_widget_destroy (status_icon->tray_icon);
+  g_object_unref (status_icon->tray_icon);
 
   g_free (status_icon->priv);
 
