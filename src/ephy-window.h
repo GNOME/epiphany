@@ -61,11 +61,6 @@ typedef enum
 	FullscreenMode
 } EphyWindowMode;
 
-typedef enum
-{
-	FavoritesControl
-} ControlID;
-
 /* Include the header down here to resolve circular dependency */
 #include "ephy-tab.h"
 
@@ -98,9 +93,6 @@ void		  ephy_window_set_zoom		  (EphyWindow *window,
 						   float zoom);
 
 void		  ephy_window_activate_location	  (EphyWindow *window);
-
-void		  ephy_window_update_control	  (EphyWindow *window,
-						   ControlID control);
 
 EphyTab		 *ephy_window_get_active_tab	  (EphyWindow *window);
 

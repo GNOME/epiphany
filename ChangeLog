@@ -1,3 +1,21 @@
+2003-10-18  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/bookmarks/ephy-bookmarks.c: (add_to_favorites),
+	(history_site_visited_cb):
+	* src/ephy-favorites-menu.c: (ephy_favorites_menu_get_type),
+	(ephy_favorites_menu_clean), (ephy_favorites_menu_rebuild),
+	(ephy_favorites_menu_set_property),
+	(ephy_favorites_menu_get_property),
+	(ephy_favorites_menu_class_init), (do_updates), (fav_removed_cb),
+	(fav_added_cb), (ephy_favorites_menu_init),
+	(ephy_favorites_menu_finalize), (ephy_favorites_menu_new):
+	* src/ephy-favorites-menu.h:
+	* src/ephy-window.c:
+	* src/ephy-window.h:
+
+	Get rid of the last vestige of ephy_window_update_control(), and make
+	the favourites menu self-updating.
+
 2003-10-18  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/ephy-window.c: (setup_window):

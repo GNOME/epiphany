@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2002  Ricardo Fern·ndez Pascual
+ *  Copyright (C) 2002  Ricardo Fern√°ndez Pascual
+ *  Copyright (C) 2003  Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,29 +22,24 @@
 
 #include "ephy-window.h"
 
-/* object forward declarations */
+G_BEGIN_DECLS
+
+#define EPHY_TYPE_FAVORITES_MENU		(ephy_favorites_menu_get_type())
+#define EPHY_FAVORITES_MENU(object)		(G_TYPE_CHECK_INSTANCE_CAST((object), EPHY_TYPE_FAVORITES_MENU, EphyFavoritesMenu))
+#define EPHY_FAVORITES_MENU_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST((klass), EPHY_TYPE_FAVORITES_MENU, EphyFavoritesMenuClass))
+#define EPHY_IS_FAVORITES_MENU(object)		(G_TYPE_CHECK_INSTANCE_TYPE((object), EPHY_TYPE_FAVORITES_MENU))
+#define EPHY_IS_FAVORITES_MENU_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE((klass), EPHY_TYPE_FAVORITES_MENU))
+#define EPHY_FAVORITES_MENU_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_FAVORITES_MENU, EphyFavoritesMenuClass))
 
 typedef struct _EphyFavoritesMenu EphyFavoritesMenu;
 typedef struct _EphyFavoritesMenuClass EphyFavoritesMenuClass;
 typedef struct _EphyFavoritesMenuPrivate EphyFavoritesMenuPrivate;
-
-/**
- * Editor object
- */
-
-#define EPHY_TYPE_FAVORITES_MENU	(ephy_favorites_menu_get_type())
-#define EPHY_FAVORITES_MENU(object)	(G_TYPE_CHECK_INSTANCE_CAST((object), EPHY_TYPE_FAVORITES_MENU, EphyFavoritesMenu))
-#define EPHY_FAVORITES_MENU_CLASS(klass)(G_TYPE_CHECK_CLASS_CAST((klass), EPHY_TYPE_FAVORITES_MENU, EphyFavoritesMenuClass))
-#define EPHY_IS_FAVORITES_MENU(object)	(G_TYPE_CHECK_INSTANCE_TYPE((object), EPHY_TYPE_FAVORITES_MENU))
-#define EPHY_IS_FAVORITES_MENU_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), EPHY_TYPE_FAVORITES_MENU))
-#define EPHY_FAVORITES_MENU_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_FAVORITES_MENU, EphyFavoritesMenuClass))
 
 struct _EphyFavoritesMenuClass
 {
 	GObjectClass parent_class;
 };
 
-/* Remember: fields are public read-only */
 struct _EphyFavoritesMenu
 {
 	GObject parent_object;
@@ -51,11 +47,10 @@ struct _EphyFavoritesMenu
 	EphyFavoritesMenuPrivate *priv;
 };
 
-GType              ephy_favorites_menu_get_type		(void);
+GType		   ephy_favorites_menu_get_type		(void);
 
 EphyFavoritesMenu *ephy_favorites_menu_new		(EphyWindow *window);
 
-void		   ephy_favorites_menu_update		(EphyFavoritesMenu *wrhm);
+G_END_DECLS
 
 #endif
-

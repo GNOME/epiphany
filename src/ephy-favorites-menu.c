@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2002  Ricardo Fernández Pascual
+ *  Copyright (C) 2003  Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,10 +31,6 @@
 #include <gtk/gtkuimanager.h>
 #include <glib/gprintf.h>
 
-/**
- * Private data
- */
-
 #define EPHY_FAVORITES_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FAVORITES_MENU, EphyFavoritesMenuPrivate))
 
 struct _EphyFavoritesMenuPrivate
@@ -42,19 +39,17 @@ struct _EphyFavoritesMenuPrivate
 	EphyBookmarks *bookmarks;
 	GtkActionGroup *action_group;
 	guint ui_id;
+	guint update_tag;
 };
 
-/**
- * Private functions, only availble from this file
- */
 static void	ephy_favorites_menu_class_init	  (EphyFavoritesMenuClass *klass);
-static void	ephy_favorites_menu_init	  (EphyFavoritesMenu *wrhm);
+static void	ephy_favorites_menu_init	  (EphyFavoritesMenu *menu);
 static void	ephy_favorites_menu_finalize      (GObject *o);
 
 enum
 {
 	PROP_0,
-	PROP_EPHY_WINDOW
+	PROP_WINDOW
 };
 
 static gpointer parent_class;
@@ -62,34 +57,34 @@ static gpointer parent_class;
 GType
 ephy_favorites_menu_get_type (void)
 {
-        static GType ephy_favorites_menu_type = 0;
+	static GType ephy_favorites_menu_type = 0;
 
-        if (ephy_favorites_menu_type == 0)
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (EphyFavoritesMenuClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) ephy_favorites_menu_class_init,
-                        NULL,
-                        NULL, /* class_data */
-                        sizeof (EphyFavoritesMenu),
-                        0, /* n_preallocs */
-                        (GInstanceInitFunc) ephy_favorites_menu_init
-                };
+	if (ephy_favorites_menu_type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyFavoritesMenuClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			(GClassInitFunc) ephy_favorites_menu_class_init,
+			NULL,
+			NULL, /* class_data */
+			sizeof (EphyFavoritesMenu),
+			0, /* n_preallocs */
+			(GInstanceInitFunc) ephy_favorites_menu_init
+		};
 
-                ephy_favorites_menu_type = g_type_register_static (G_TYPE_OBJECT,
-							           "EphyFavoritesMenu",
-							           &our_info, 0);
-        }
-        return ephy_favorites_menu_type;
+		ephy_favorites_menu_type = g_type_register_static (G_TYPE_OBJECT,
+								   "EphyFavoritesMenu",
+								   &our_info, 0);
+	}
+	return ephy_favorites_menu_type;
 }
 
 static void
-ephy_favorites_menu_clean (EphyFavoritesMenu *wrhm)
+ephy_favorites_menu_clean (EphyFavoritesMenu *menu)
 {
-	EphyFavoritesMenuPrivate *p = wrhm->priv;
+	EphyFavoritesMenuPrivate *p = menu->priv;
 	GtkUIManager *merge = GTK_UI_MANAGER (p->window->ui_merge);
 
 	if (p->ui_id > 0)
@@ -113,9 +108,9 @@ go_location_cb (GtkAction *action, char *location, EphyWindow *window)
 }
 
 static void
-ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
+ephy_favorites_menu_rebuild (EphyFavoritesMenu *menu)
 {
-	EphyFavoritesMenuPrivate *p = wrhm->priv;
+	EphyFavoritesMenuPrivate *p = menu->priv;
 	gint i;
 	EphyNode *fav;
 	GPtrArray *children;
@@ -125,7 +120,7 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 
 	START_PROFILER ("Rebuild favorites menu")
 
-	ephy_favorites_menu_clean (wrhm);
+	ephy_favorites_menu_clean (menu);
 
 	fav = ephy_bookmarks_get_favorites (p->bookmarks);
 	children = ephy_node_get_children (fav);
@@ -169,31 +164,31 @@ ephy_favorites_menu_set_property (GObject *object,
 				  const GValue *value,
 				  GParamSpec *pspec)
 {
-        EphyFavoritesMenu *m = EPHY_FAVORITES_MENU (object);
+	EphyFavoritesMenu *menu = EPHY_FAVORITES_MENU (object);
 
-        switch (prop_id)
-        {
-                case PROP_EPHY_WINDOW:
-                        m->priv->window = g_value_get_object (value);
-			ephy_favorites_menu_rebuild (m);
-                        break;
-        }
+	switch (prop_id)
+	{
+		case PROP_WINDOW:
+			menu->priv->window = g_value_get_object (value);
+			ephy_favorites_menu_rebuild (menu);
+			break;
+	}
 }
 
 static void
 ephy_favorites_menu_get_property (GObject *object,
-                                  guint prop_id,
-                                  GValue *value,
-                                  GParamSpec *pspec)
+				  guint prop_id,
+				  GValue *value,
+				  GParamSpec *pspec)
 {
-        EphyFavoritesMenu *m = EPHY_FAVORITES_MENU (object);
+	EphyFavoritesMenu *menu = EPHY_FAVORITES_MENU (object);
 
-        switch (prop_id)
-        {
-                case PROP_EPHY_WINDOW:
-                        g_value_set_object (value, m->priv->window);
-                        break;
-        }
+	switch (prop_id)
+	{
+		case PROP_WINDOW:
+			g_value_set_object (value, menu->priv->window);
+			break;
+	}
 }
 
 
@@ -209,9 +204,9 @@ ephy_favorites_menu_class_init (EphyFavoritesMenuClass *klass)
 	object_class->get_property = ephy_favorites_menu_get_property;
 
 	g_object_class_install_property (object_class,
-                                         PROP_EPHY_WINDOW,
-                                         g_param_spec_object ("EphyWindow",
-                                                              "EphyWindow",
+					 PROP_WINDOW,
+					 g_param_spec_object ("window",
+							      "Window",
 							      "Parent window",
 							      EPHY_TYPE_WINDOW,
 							      G_PARAM_READWRITE |
@@ -220,26 +215,71 @@ ephy_favorites_menu_class_init (EphyFavoritesMenuClass *klass)
 	g_type_class_add_private (object_class, sizeof(EphyFavoritesMenuPrivate));
 }
 
-static void
-ephy_favorites_menu_init (EphyFavoritesMenu *wrhm)
+static gboolean
+do_updates (EphyFavoritesMenu *menu)
 {
-	EphyFavoritesMenuPrivate *p = EPHY_FAVORITES_MENU_GET_PRIVATE (wrhm);
-	wrhm->priv = p;
+	ephy_favorites_menu_rebuild (menu);
 
-	wrhm->priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	wrhm->priv->ui_id = 0;
-	wrhm->priv->action_group = NULL;
+	menu->priv->update_tag = 0;
+
+	/* don't run again */
+	return FALSE;
+}
+
+static void
+fav_removed_cb (EphyNode *node,
+		EphyNode *child,
+		guint old_index,
+		EphyFavoritesMenu *menu)
+{
+	if (menu->priv->update_tag == 0)
+	{
+		menu->priv->update_tag = g_idle_add((GSourceFunc)do_updates, menu);
+	}
+}
+
+static void
+fav_added_cb (EphyNode *node,
+	      EphyNode *child,
+	      EphyFavoritesMenu *menu)
+{
+	if (menu->priv->update_tag == 0)
+	{
+		menu->priv->update_tag = g_idle_add((GSourceFunc)do_updates, menu);
+	}
+}
+
+static void
+ephy_favorites_menu_init (EphyFavoritesMenu *menu)
+{
+	EphyFavoritesMenuPrivate *p = EPHY_FAVORITES_MENU_GET_PRIVATE (menu);
+	EphyNode *fav;
+	menu->priv = p;
+
+	menu->priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	menu->priv->ui_id = 0;
+	menu->priv->update_tag = 0;
+	menu->priv->action_group = NULL;
+
+	fav = ephy_bookmarks_get_favorites (menu->priv->bookmarks);
+	ephy_node_signal_connect_object (fav,
+				         EPHY_NODE_CHILD_REMOVED,
+				         (EphyNodeCallback) fav_removed_cb,
+				         G_OBJECT (menu));
+	ephy_node_signal_connect_object (fav,
+				         EPHY_NODE_CHILD_ADDED,
+				         (EphyNodeCallback) fav_added_cb,
+				         G_OBJECT (menu));
 }
 
 static void
 ephy_favorites_menu_finalize (GObject *o)
 {
-	EphyFavoritesMenu *wrhm = EPHY_FAVORITES_MENU (o);
-	EphyFavoritesMenuPrivate *p = wrhm->priv;
+	EphyFavoritesMenu *menu = EPHY_FAVORITES_MENU (o);
 
-	if (p->action_group != NULL)
+	if (menu->priv->action_group != NULL)
 	{
-		g_object_unref (p->action_group);
+		g_object_unref (menu->priv->action_group);
 	}
 
 	G_OBJECT_CLASS (parent_class)->finalize (o);
@@ -248,13 +288,7 @@ ephy_favorites_menu_finalize (GObject *o)
 EphyFavoritesMenu *
 ephy_favorites_menu_new (EphyWindow *window)
 {
-	EphyFavoritesMenu *ret = g_object_new (EPHY_TYPE_FAVORITES_MENU,
-					       "EphyWindow", window,
-					       NULL);
-	return ret;
-}
-
-void ephy_favorites_menu_update	(EphyFavoritesMenu *wrhm)
-{
-	ephy_favorites_menu_rebuild (wrhm);
+	return g_object_new (EPHY_TYPE_FAVORITES_MENU,
+			     "window", window,
+			     NULL);
 }

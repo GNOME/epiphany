@@ -397,7 +397,7 @@ add_to_favorites (EphyBookmarks *eb, EphyNode *node, EphyHistory *eh)
 	url = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
 	score = get_history_item_score (eh, url);
 	full_menu = ephy_node_get_n_children (eb->priv->favorites)
-		    > MAX_FAVORITES_NUM;
+		    >= MAX_FAVORITES_NUM;
 	if (full_menu && score < eb->priv->lower_score) return FALSE;
 
 	if (eb->priv->lower_fav && full_menu)
@@ -413,23 +413,6 @@ add_to_favorites (EphyBookmarks *eb, EphyNode *node, EphyHistory *eh)
 }
 
 static void
-update_favorites_menus ()
-{
-	Session *session;
-	const GList *l;
-
-	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
-	l = session_get_windows (session);
-
-	for (; l != NULL; l = l->next)
-	{
-		EphyWindow *window = EPHY_WINDOW (l->data);
-
-		ephy_window_update_control (window, FavoritesControl);
-	}
-}
-
-static void
 history_site_visited_cb (EphyHistory *gh, const char *url, EphyBookmarks *eb)
 {
 	EphyNode *node;
@@ -437,10 +420,7 @@ history_site_visited_cb (EphyHistory *gh, const char *url, EphyBookmarks *eb)
 	node = ephy_bookmarks_find_bookmark (eb, url);
 	if (node == NULL) return;
 
-	if (add_to_favorites (eb, node, gh))
-	{
-		update_favorites_menus ();
-	}
+	add_to_favorites (eb, node, gh);
 }
 
 static void

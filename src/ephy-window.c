@@ -1696,29 +1696,6 @@ ephy_window_show (GtkWidget *widget)
 	GTK_WIDGET_CLASS (parent_class)->show (widget);
 }
 
-static void
-update_favorites_control (EphyWindow *window)
-{
-	ephy_favorites_menu_update (window->priv->fav_menu);
-}
-
-void
-ephy_window_update_control (EphyWindow *window,
-			      ControlID control)
-{
-	g_return_if_fail (EPHY_IS_WINDOW (window));
-
-	switch (control)
-	{
-	case FavoritesControl:
-		update_favorites_control (window);
-		break;
-	default:
-		g_warning ("unknown control specified for updating");
-		break;
-	}
-}
-
 EphyTab *
 ephy_window_get_active_tab (EphyWindow *window)
 {
