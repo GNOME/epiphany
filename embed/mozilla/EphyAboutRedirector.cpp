@@ -91,6 +91,8 @@ EphyAboutRedirector::NewChannel(nsIURI *aURI, nsIChannel **result)
                			              nsnull, nsnull, getter_AddRefs(tempChannel));
 			NS_ENSURE_TRUE (tempChannel, NS_ERROR_FAILURE);
 
+			tempChannel->SetOriginalURI(aURI);
+
 			*result = tempChannel.get();
 			NS_ADDREF(*result);
 
