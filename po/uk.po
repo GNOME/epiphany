@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-01 18:37+0200\n"
-"PO-Revision-Date: 2005-03-01 12:57+0300\n"
+"POT-Creation-Date: 2005-03-05 12:12+0100\n"
+"PO-Revision-Date: 2005-03-05 12:57+0300\n"
 "Last-Translator: Maxim Dziumanenko <mvd@mylinux.com.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1036,6 +1036,18 @@ msgid_plural "%d downloads"
 msgstr[0] "%d завантаження"
 msgstr[1] "%d завантаження"
 msgstr[2] "%d завантажень"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: embed/downloader-view.c:521 embed/downloader-view.c:534
+msgid "download status|Unknown"
+msgstr "Невідомо"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: embed/downloader-view.c:526
+msgid "download status|Failed"
+msgstr "Помилка"
 
 #: embed/downloader-view.c:588 src/bookmarks/ephy-bookmarks-editor.c:875
 msgid "File"
@@ -2563,6 +2575,27 @@ msgstr "_Оновити"
 msgid "Update Bookmark?"
 msgstr "Оновити закладку?"
 
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains all bookmarks
+#: src/bookmarks/ephy-bookmarks.c:796
+msgid "bookmarks|All"
+msgstr "Усі"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains the most used bookmarks
+#: src/bookmarks/ephy-bookmarks.c:832
+msgid "bookmarks|Most Visited"
+msgstr "Найчастіше відвідувані"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. Translators: this topic contains the not categorized bookmarks
+#: src/bookmarks/ephy-bookmarks.c:851
+msgid "bookmarks|Not Categorized"
+msgstr "Не впорядковано"
+
 #: src/bookmarks/ephy-new-bookmark.c:275
 msgid "Add Bookmark"
 msgstr "Додати закладку"
@@ -3830,6 +3863,29 @@ msgstr "Китайська спрощена"
 #: src/prefs-dialog.c:336
 msgid "Traditional Chinese"
 msgstr "Китайська традиційна"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. * Translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#: src/prefs-dialog.c:1016 src/prefs-dialog.c:1024
+#, c-format
+msgid "language|%s (%s)"
+msgstr "%s (%s)"
+
+#. Translators: The text before the "|" is context to help you decide on
+#. * the correct translation. You MUST OMIT it in the translated string.
+#. * Translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: src/prefs-dialog.c:1035 src/prefs-dialog.c:1393
+#, c-format
+msgid "language|User defined (%s)"
+msgstr "Визначена користувачем (%s)"
 
 #: src/prefs-dialog.c:1058
 #, c-format
