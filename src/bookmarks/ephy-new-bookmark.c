@@ -315,6 +315,8 @@ duplicate_dialog_construct (GtkWindow *parent,
 		(GTK_WINDOW (parent), GTK_DIALOG_DESTROY_WITH_PARENT,
 		 GTK_MESSAGE_INFO, GTK_BUTTONS_OK, NULL);
 	gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog), str);
+	g_free (tmp_title);
+	g_free (tmp_str);
 	g_free (str);
 
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Duplicated Bookmark"));
