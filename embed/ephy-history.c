@@ -32,7 +32,7 @@
 #include <bonobo/bonobo-i18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 
-#define EPHY_HISTORY_XML_VERSION "0.1"
+#define EPHY_HISTORY_XML_VERSION "1.0"
 
 /* how often to save the history, in milliseconds */
 #define HISTORY_SAVE_INTERVAL (60 * 5 * 1000)
@@ -201,7 +201,6 @@ ephy_history_load (EphyHistory *eb)
 {
 	xmlDocPtr doc;
 	xmlNodePtr root, child;
-	char *tmp;
 
 	if (g_file_test (eb->priv->xml_file, G_FILE_TEST_EXISTS) == FALSE)
 		return;
@@ -210,10 +209,6 @@ ephy_history_load (EphyHistory *eb)
 	g_return_if_fail (doc != NULL);
 
 	root = xmlDocGetRootElement (doc);
-
-	tmp = xmlGetProp (root, "version");
-	g_assert (tmp != NULL && strcmp (tmp, EPHY_HISTORY_XML_VERSION) == 0);
-	g_free (tmp);
 
 	for (child = root->children; child != NULL; child = child->next)
 	{
@@ -419,7 +414,7 @@ ephy_history_init (EphyHistory *eb)
 
         eb->priv = g_new0 (EphyHistoryPrivate, 1);
 
-	db = ephy_node_db_new ("EphyHistory");
+	db = ephy_node_db_new (EPHY_NODE_DB_HISTORY);
 	eb->priv->db = db;
 
 	eb->priv->xml_file = g_build_filename (ephy_dot_dir (),
