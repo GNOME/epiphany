@@ -1197,7 +1197,6 @@ impl_get_encoding (EphyEmbed *embed,
 {
 	nsresult result;
 	EphyWrapper *wrapper;
-	nsCAutoString enc;
 
 	g_return_val_if_fail (encoding != NULL, G_FAILED);
 	*encoding = NULL;
@@ -1205,12 +1204,9 @@ impl_get_encoding (EphyEmbed *embed,
 	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
 	g_return_val_if_fail (wrapper != NULL, G_FAILED);
 
-	result = wrapper->GetEncoding (enc);
-	if (NS_FAILED (result)) return G_FAILED;
+	result = wrapper->GetEncoding (encoding);
 
-	*encoding = g_strdup (enc.get());
-
-	return G_OK;
+	return NS_SUCCEEDED(result) ? G_OK : G_FAILED;
 }
 
 static void

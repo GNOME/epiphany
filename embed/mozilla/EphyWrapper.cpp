@@ -752,7 +752,7 @@ nsresult EphyWrapper::PopTargetDocument ()
 	return NS_OK;
 }
 
-nsresult EphyWrapper::GetEncoding (nsCString &aEncoding)
+nsresult EphyWrapper::GetEncoding (char **aEncoding)
 {
 	nsresult result;
 
@@ -762,6 +762,20 @@ nsresult EphyWrapper::GetEncoding (nsCString &aEncoding)
 
 	nsCOMPtr<nsIDocument> doc = do_QueryInterface(domDoc, &result);
 	if (NS_FAILED (result) || !doc) return NS_ERROR_FAILURE;
-	
-	return doc->GetDocumentCharacterSet (aEncoding);
+
+#if MOZILLA_SNAPSHOT >= 10
+	nsCAutoString enc;	
+	result = doc->GetDocumentCharacterSet (enc);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+
+	*aEncoding = g_strdup (enc.get());
+#else
+	nsAutoString enc;
+	result = doc->GetDocumentCharacterSet (enc);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+
+	*aEncoding = g_strdup (NS_ConvertUCS2toUTF8(enc).get());
+#endif
+
+	return NS_OK;
 }

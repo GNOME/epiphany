@@ -78,7 +78,7 @@ public:
 
 	nsresult ForceEncoding (const char *encoding);
 
-	nsresult GetEncoding (nsCString &aEncoding);
+	nsresult GetEncoding (char **aEncoding);
 
 	nsresult CanCutSelection(PRBool *result);
 
