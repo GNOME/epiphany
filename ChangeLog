@@ -1,5 +1,13 @@
 2004-05-15  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-dialog.c: (set_value_from_editable),
+	(set_value_from_radiobuttongroup), (set_value_from_spin_button),
+	(set_value_from_togglebutton), (set_combo_box_from_value):
+
+	Fix mem leak.
+
+2004-05-15  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/egg/egg-toolbar-editor.c: (egg_toolbar_editor_finalize):
 
 	Fix mem leaks.

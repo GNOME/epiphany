@@ -254,6 +254,7 @@ set_value_from_editable (PropertyInfo *info, GValue *value)
 			break;
 		default:
 			retval = FALSE;
+			g_value_unset (value);
 			g_warning ("Unsupported value type for editable %s", info->id);
 			break;
 	}
@@ -346,16 +347,17 @@ set_value_from_radiobuttongroup (PropertyInfo *info, GValue *value)
 	index = get_radio_button_active_index (info->widget);
 	g_return_val_if_fail (index >= 0, FALSE);
 
-	g_value_init (value, info->data_type);
 	if (info->data_type == G_TYPE_STRING)
 	{
 		g_return_val_if_fail (info->string_enum != NULL, FALSE);
 		g_return_val_if_fail (g_list_nth_data (info->string_enum, index) != NULL, FALSE);
 
+		g_value_init (value, G_TYPE_STRING);
 		g_value_set_string (value, (char*) g_list_nth_data (info->string_enum, index));
 	}
 	else if (info->data_type == G_TYPE_INT)
 	{
+		g_value_init (value, G_TYPE_INT);
 		g_value_set_int (value, index);
 	}
 	else
@@ -380,13 +382,14 @@ set_value_from_spin_button (PropertyInfo *info, GValue *value)
 
 	is_int = (gtk_spin_button_get_digits (GTK_SPIN_BUTTON(info->widget)) == 0);
 
-	g_value_init (value, info->data_type);
 	if (info->data_type == G_TYPE_INT && is_int)
 	{
+		g_value_init (value, G_TYPE_INT);
 		g_value_set_int (value, (int) f);
 	}
 	else if (info->data_type == G_TYPE_FLOAT)
 	{
+		g_value_init (value, G_TYPE_FLOAT);
 		g_value_set_float (value, f);
 	}
 	else
@@ -408,9 +411,9 @@ set_value_from_togglebutton (PropertyInfo *info, GValue *value)
 
 	active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (info->widget));
 
-	g_value_init (value, info->data_type);
 	if (info->data_type == G_TYPE_BOOLEAN)
 	{
+		g_value_init (value, info->data_type);
 		g_value_set_boolean (value, active);
 	}
 	else
@@ -585,6 +588,7 @@ set_combo_box_from_value (PropertyInfo *info, const  GValue *value)
 		else
 		{
 			char *v;
+
 			gtk_combo_box_set_active (GTK_COMBO_BOX (info->widget), -1);
 
 			v = g_strdup_value_contents (value);
