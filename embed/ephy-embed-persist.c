@@ -436,7 +436,7 @@ ephy_embed_persist_set_property (GObject *object,
 			ephy_embed_persist_set_flags (persist, g_value_get_flags (value));
 			break;
 		case PROP_MAX_SIZE:
-			ephy_embed_persist_set_max_size (persist, g_value_get_long (value));
+			ephy_embed_persist_set_max_size (persist, g_value_get_int64 (value));
 			break;
 		case PROP_PERSISTKEY:
 			ephy_embed_persist_set_persist_key (persist, g_value_get_string (value));
@@ -476,7 +476,7 @@ ephy_embed_persist_get_property (GObject *object,
 			g_value_set_flags (value, ephy_embed_persist_get_flags (persist));
 			break;
 		case PROP_MAX_SIZE:
-			g_value_set_long (value, ephy_embed_persist_get_max_size (persist));
+			g_value_set_int64 (value, ephy_embed_persist_get_max_size (persist));
 			break;
 		case PROP_PERSISTKEY:
 			g_value_set_string (value, ephy_embed_persist_get_persist_key (persist));
