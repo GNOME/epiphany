@@ -172,7 +172,7 @@ remove_completion_actions (GtkAction *action, GtkWidget *proxy)
 	EphyLocationAction *la = EPHY_LOCATION_ACTION (action);
 	GList *l;
 
-	entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (proxy));
+	entry = GTK_BIN (proxy)->child;
 	completion = gtk_entry_get_completion (GTK_ENTRY (entry));
 
 	for (l = la->priv->actions; l != NULL; l = l->next)
@@ -195,7 +195,7 @@ add_completion_actions (GtkAction *action, GtkWidget *proxy)
 	EphyLocationAction *la = EPHY_LOCATION_ACTION (action);
 	GList *l;
 
-	entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (proxy));
+	entry = GTK_BIN (proxy)->child;
 	completion = gtk_entry_get_completion (GTK_ENTRY (entry));
 
 	for (l = la->priv->actions; l != NULL; l = l->next)
@@ -238,7 +238,7 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 		g_signal_connect_object (action, "notify::address",
 					 G_CALLBACK (sync_address), proxy, 0);
 
-		entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (proxy));
+		entry = GTK_BIN (proxy)->child;
 		g_signal_connect_object (entry, "activate",
 					 G_CALLBACK (location_url_activate_cb),
 					 action, 0);
@@ -477,23 +477,4 @@ ephy_location_action_set_address (EphyLocationAction *action,
 	g_free (action->priv->address);
 	action->priv->address = g_strdup (address ? address : "");
 	g_object_notify (G_OBJECT (action), "address");
-}
-
-static void
-clear_history (GtkWidget *proxy, gpointer user_data)
-{
-	if (EPHY_IS_LOCATION_ENTRY (proxy))
-	{
-		ephy_location_entry_clear_history (EPHY_LOCATION_ENTRY (proxy));
-	}
-}
-
-void
-ephy_location_action_clear_history (EphyLocationAction *action)
-{
-	GSList *proxies;
-
-	proxies = gtk_action_get_proxies (GTK_ACTION (action));
-
-	g_slist_foreach (proxies, (GFunc) clear_history, NULL);
 }

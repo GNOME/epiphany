@@ -63,8 +63,6 @@ void          toolbar_set_location              (Toolbar *t,
 
 void	      toolbar_activate_location		(Toolbar *t);
 
-void	      toolbar_clear_location_history	(Toolbar *t);
-
 void          toolbar_update_favicon            (Toolbar *t);
 
 void	      toolbar_update_navigation_actions (Toolbar *t,

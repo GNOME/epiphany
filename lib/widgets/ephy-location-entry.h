@@ -60,8 +60,6 @@ GType			ephy_location_entry_get_type		(void);
 
 GtkWidget              *ephy_location_entry_new			(void);
 
-GtkWidget	       *ephy_location_entry_get_entry		(EphyLocationEntry *le);
-
 void			ephy_location_entry_set_completion	(EphyLocationEntry *le,
 								 GtkTreeModel *model,
 								 guint text_col,
@@ -75,7 +73,5 @@ void			ephy_location_entry_set_location	(EphyLocationEntry *le,
 const char	       *ephy_location_entry_get_location	(EphyLocationEntry *le);
 
 void			ephy_location_entry_activate		(EphyLocationEntry *le);
-
-void			ephy_location_entry_clear_history	(EphyLocationEntry *le);
 
 #endif

@@ -57,8 +57,6 @@ const char     *ephy_location_action_get_address	(EphyLocationAction *action);
 void		ephy_location_action_set_address	(EphyLocationAction *action,
 							 const char *address);
 
-void		ephy_location_action_clear_history	(EphyLocationAction *action);
-
 G_END_DECLS
 
 #endif

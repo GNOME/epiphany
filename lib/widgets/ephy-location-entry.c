@@ -24,11 +24,8 @@
 #include "ephy-location-entry.h"
 #include "ephy-marshal.h"
 #include "ephy-debug.h"
-#include "ephy-file-helpers.h"
 
 #include <gtk/gtktoolbar.h>
-#include <gtk/gtkliststore.h>
-#include <gtk/gtkcomboboxentry.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkcellrenderertext.h>
@@ -40,15 +37,10 @@
 
 struct _EphyLocationEntryPrivate
 {
-	EphyTreeModelNode *combo_model;
-	GtkWidget *combo;
 	GtkWidget *entry;
 	char *before_completion;
 	gboolean user_changed;
 	gboolean activation_mode;
-	EphyNodeDb *combo_db;
-	EphyNode *combo_root;
-	char *xml_file;
 
 	guint text_col;
 	guint action_col;
@@ -68,7 +60,6 @@ static int n_web_prefixes = G_N_ELEMENTS (web_prefixes);
 
 static void ephy_location_entry_class_init (EphyLocationEntryClass *klass);
 static void ephy_location_entry_init (EphyLocationEntry *le);
-static void ephy_location_entry_finalize (GObject *o);
 
 static GObjectClass *parent_class = NULL;
 
@@ -144,8 +135,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 
 	parent_class = g_type_class_peek_parent (klass);
 
-	object_class->finalize = ephy_location_entry_finalize;
-
 	tool_item_class->set_tooltip = ephy_location_entry_set_tooltip;
 
 	EphyLocationEntrySignals[USER_CHANGED] = g_signal_new (
@@ -205,91 +194,6 @@ entry_button_press_cb (GtkWidget *entry, GdkEventButton *event, EphyLocationEntr
 	}
 
 	return FALSE;
-}
-
-static void
-add_to_history (EphyLocationEntry *le, const char *text)
-{
-	GPtrArray *children;
-	int i, l, n_items, index = -1;
-	int *order;
-
-	/* check if it already exists */
-	children = ephy_node_get_children (le->priv->combo_root);
-	n_items = children->len;
-        for (i = 0; i < n_items; i++)
-        {
-                 EphyNode *kid;
-                 const char *node_text;
-                                                                                                                             
-                 kid = g_ptr_array_index (children, i);
-                 node_text = ephy_node_get_property_string
-			(kid, EPHY_NODE_LOC_HISTORY_PROP_TEXT);
- 
-                 if (strcmp (text, node_text) == 0)
-                 {
-			index = i;
-			break;
-                 }
-        }
-        ephy_node_thaw (le->priv->combo_root);
-
-	/* it doesnt exist, add it */
-	if (index < 0)
-	{
-		GValue value = { 0, };
-		EphyNode *node;
-
-		node = ephy_node_new (le->priv->combo_db);
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, text);
-	        ephy_node_set_property (node, EPHY_NODE_LOC_HISTORY_PROP_TEXT,
-	                                &value);
-
-		if (n_items >= MAX_LOC_HISTORY_ITEMS)
-		{
-			EphyNode *last;
-
-			last = ephy_node_get_nth_child
-				(le->priv->combo_root, n_items - 1);
-			ephy_node_remove_child (le->priv->combo_root, last);
-		}
-
-		ephy_node_add_child (le->priv->combo_root, node);
-	}
-
-	/* move it at the top */
-	n_items = ephy_node_get_n_children (le->priv->combo_root);
-	order = g_new0 (int, n_items);
-	l = 1;
-	if (index == -1) index = n_items -1;
-	for (i = 0; i < n_items; i++)
-	{
-		if (index != i)
-		{
-			order[i] = l;
-			l++;
-		}
-		else
-		{
-			order[i] = 0;
-		}
-	}
-	ephy_node_reorder_children (le->priv->combo_root, order);
-	g_free (order);
-}
-
-static void
-entry_activate_cb (GtkEntry *entry, EphyLocationEntry *le)
-{
-	char *content;
-
-	content = gtk_editable_get_chars (GTK_EDITABLE(entry), 0, -1);
-	if (content)
-	{
-		add_to_history (le, content);
-		g_free (content);
-	}
 }
 
 static gboolean
@@ -376,26 +280,17 @@ static void
 ephy_location_entry_construct_contents (EphyLocationEntry *le)
 {
 	EphyLocationEntryPrivate *p = le->priv;
-	int combo_text_col;
 
 	LOG ("EphyLocationEntry constructing contents %p", le)
 
-	p->combo_model = ephy_tree_model_node_new (p->combo_root, NULL);
-	combo_text_col = ephy_tree_model_node_add_prop_column
-		(p->combo_model, G_TYPE_STRING, EPHY_NODE_LOC_HISTORY_PROP_TEXT);
-
-	p->combo = gtk_combo_box_entry_new (GTK_TREE_MODEL (p->combo_model),
-					    combo_text_col);
-	gtk_container_add (GTK_CONTAINER (le), p->combo);
-	gtk_widget_show (p->combo);
-	p->entry = GTK_BIN (p->combo)->child;
+	p->entry = gtk_entry_new ();
+	gtk_container_add (GTK_CONTAINER (le), p->entry);
+	gtk_widget_show (p->entry);
 
 	g_signal_connect (p->entry, "button_press_event",
 			  G_CALLBACK (entry_button_press_cb), le);
 	g_signal_connect (p->entry, "changed",
 			  G_CALLBACK (editable_changed_cb), le);
-	g_signal_connect (p->entry, "activate",
-			  G_CALLBACK (entry_activate_cb), le);
 }
 
 static void
@@ -410,15 +305,6 @@ ephy_location_entry_init (EphyLocationEntry *le)
 
 	p->user_changed = TRUE;
 	p->activation_mode = FALSE;
-	p->combo_db = ephy_node_db_new ("NodeDB");
-	p->combo_root = ephy_node_new_with_id
-		(p->combo_db, LOCATION_HISTORY_NODE_ID);
-	p->xml_file = g_build_filename (ephy_dot_dir (),
-                                        "ephy-location-history.xml",
-                                        NULL);
-	ephy_node_db_load_from_file (p->combo_db, p->xml_file,
-                                     EPHY_LOC_HISTORY_XML_ROOT,
-                                     EPHY_LOC_HISTORY_XML_VERSION);
 
 	ephy_location_entry_construct_contents (le);
 
@@ -427,51 +313,6 @@ ephy_location_entry_init (EphyLocationEntry *le)
 	g_signal_connect (le->priv->entry,
 	       		  "focus_out_event",
                           G_CALLBACK (location_focus_out_cb), le);
-}
-
-static void
-save_location_history (EphyLocationEntry *le)
-{
-	xmlDocPtr doc;
-	xmlNodePtr root;
-	GPtrArray *children;
-	int i;
-
-	xmlIndentTreeOutput = TRUE;
-
-	doc = xmlNewDoc ("1.0");
-	root = xmlNewDocNode (doc, NULL, EPHY_LOC_HISTORY_XML_ROOT, NULL);
-	xmlSetProp (root, "version", EPHY_LOC_HISTORY_XML_VERSION);
-	xmlDocSetRootElement (doc, root);
-        
-	children = ephy_node_get_children (le->priv->combo_root);
-	for (i = 0; i < children->len; i++)
-        {
-                EphyNode *kid;
-                                                                                                                             
-                kid = g_ptr_array_index (children, i);
-                                                                                                                             
-		ephy_node_save_to_xml (kid, root);
-        }
-        ephy_node_thaw (le->priv->combo_root);
-
-	ephy_file_save_xml (le->priv->xml_file, doc);
-	xmlFreeDoc(doc);
-}
-
-static void
-ephy_location_entry_finalize (GObject *o)
-{
-	EphyLocationEntry *le;
-	
-	le = EPHY_LOCATION_ENTRY (o);
-
-	save_location_history (le);
-	g_free (le->priv->xml_file);
-
-	LOG ("EphyLocationEntry finalized")
-
-	G_OBJECT_CLASS (parent_class)->finalize (o);
 }
 
 GtkWidget *
@@ -579,23 +420,3 @@ ephy_location_entry_activate (EphyLocationEntry *le)
         gtk_window_set_focus (GTK_WINDOW(toplevel),
                               le->priv->entry);
 }
-
-void
-ephy_location_entry_clear_history (EphyLocationEntry *le)
-{
-	EphyNode *node;
-                                                                                                                             
-	while ((node = ephy_node_get_nth_child (le->priv->combo_root, 0)) != NULL)
-	{
-		ephy_node_unref (node);
-	}
-
-	save_location_history (le);
-}
-
-GtkWidget *
-ephy_location_entry_get_entry (EphyLocationEntry *le)
-{
-	return le->priv->entry;
-}
-

@@ -223,24 +223,10 @@ static void
 confirmation_dialog_response_cb (GtkDialog *dialog, gint response,
 				 EphyHistoryWindow *editor)
 {
-	const GList *windows;
-	Session *session;
-
 	gtk_widget_destroy (GTK_WIDGET (dialog));
 
 	if (response != GTK_RESPONSE_OK)
 		return;
-
-	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
-	windows = session_get_windows (session);
-
-	for (; windows != NULL; windows = windows->next)
-	{
-		Toolbar *t;
-
-		t = ephy_window_get_toolbar (EPHY_WINDOW (windows->data));
-		toolbar_clear_location_history (t);
-	}
 
 	ephy_history_clear (editor->priv->history);
 }

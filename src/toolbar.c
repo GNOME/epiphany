@@ -644,18 +644,6 @@ toolbar_get_location (Toolbar *t)
 }
 
 void
-toolbar_clear_location_history (Toolbar *t)
-{
-	GtkActionGroup *action_group;
-	GtkAction *action;
-
-	action_group = t->priv->action_group;
-	action = gtk_action_group_get_action (action_group, "Location");
-
-	ephy_location_action_clear_history (EPHY_LOCATION_ACTION (action));
-}
-
-void
 toolbar_update_navigation_actions (Toolbar *t, gboolean back, gboolean forward, gboolean up)
 {
 	GtkActionGroup *action_group;
