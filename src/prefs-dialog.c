@@ -518,6 +518,9 @@ struct PrefsDialogPrivate
 #endif
 };
 
+/* gtk+' gettext domain */
+#define GTK_DOMAIN "gtk20"
+
 static GObjectClass *parent_class = NULL;
 
 GType
@@ -1429,24 +1432,17 @@ get_download_button_label ()
 
 	if (key == NULL || g_utf8_collate (key, "~") == 0)
 	{
-		/* Note that this does NOT refer to the home page but to a
-		 * user's home folder. It should be translated by the same
-		 * term as GTK+'s "Home" string to be consistent with the
-		 * filechooser */
-		label = g_strdup (_("Home"));
+		label = g_strdup (dgettext (GTK_DOMAIN, "Home"));
 	}
 	else if ((converted_dp != NULL && g_utf8_collate (key, converted_dp) == 0) ||
 		 g_utf8_collate (key, "Downloads") == 0)
 	{
 		label = g_strdup (_("Downloads"));
 	}
-	else if (g_utf8_collate (key, "~/Desktop") == 0)
+	else if (g_utf8_collate (key, "~/Desktop") == 0 ||
+	         g_utf8_collate (key, "Desktop") == 0)
 	{
-		label = g_strdup (_("Desktop")); 
-	}
-	else if (g_utf8_collate (key, "Desktop") == 0)
-	{
-		label = g_strdup (_("Desktop")); 
+		label = g_strdup (dgettext (GTK_DOMAIN, "Desktop"));
 	}
 	else
 	{
