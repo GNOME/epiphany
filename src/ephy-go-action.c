@@ -85,9 +85,12 @@ connect_proxy (GtkAction *action,
 {      
 	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
 
-	g_signal_connect_object (GTK_BIN (proxy)->child, "clicked",
-				 G_CALLBACK (gtk_action_activate), action,
-				 G_CONNECT_SWAPPED);
+	if (GTK_IS_TOOL_ITEM (proxy))
+	{
+		g_signal_connect_object (GTK_BIN (proxy)->child, "clicked",
+					 G_CALLBACK (gtk_action_activate), action,
+					 G_CONNECT_SWAPPED);
+	}
 }
 
 static void
