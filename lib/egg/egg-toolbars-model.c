@@ -361,17 +361,20 @@ parse_item_list (EggToolbarsModel *t,
 	  type = xmlGetProp (child, "type");
           if (type == NULL)
             {
-              type = g_strdup (EGG_TOOLBAR_ITEM_TYPE);
+              type = xmlStrdup (EGG_TOOLBAR_ITEM_TYPE);
             }
 
-          id = egg_toolbars_model_get_item_id (t, type, name);
-	  if (id != NULL)
+	  if (name != NULL && name[0] != '\0' && type != NULL)
 	    {
-	      egg_toolbars_model_add_item (t, position, -1, id, type);
-            }
+              id = egg_toolbars_model_get_item_id (t, type, name);
+	      if (id != NULL)
+	        {
+	          egg_toolbars_model_add_item (t, position, -1, id, type);
+                }
+	      g_free (id);
+	    }
 	  xmlFree (name);
-          g_free (type);
-          g_free (id);
+	  xmlFree (type);
 	}
       else if (xmlStrEqual (child->name, "separator"))
 	{
