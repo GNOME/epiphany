@@ -1,3 +1,22 @@
+2003-11-30  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/Makefile.am:
+	* lib/Makefile.am:
+	* lib/widgets/Makefile.am:
+	* src/Makefile.am:
+	* src/bookmarks/Makefile.am:
+
+	Readd gtk deprecates (only in maintainer mode).
+
+	* src/ephy-location-action.c: (sync_editable):
+
+	Use not deprecated api.
+
+	* lib/ephy-dialog.c: (set_value_from_info), (set_info_from_value),
+	(connect_signals), (init_props):
+
+	Remove optionmenu deprecated control.
+
 2003-11-30  Christian Persch  <chpe@cvs.gnome.org>
 
 	* data/epiphany-lockdown.schemas.in:

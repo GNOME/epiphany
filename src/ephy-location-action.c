@@ -173,7 +173,7 @@ sync_editable (GtkAction *act, GParamSpec *pspec, GtkWidget *proxy)
 	GtkWidget *entry;
 
 	entry = GTK_BIN (proxy)->child;
-	gtk_entry_set_editable (GTK_ENTRY (entry), action->priv->editable);
+	gtk_editable_set_editable (GTK_EDITABLE (entry), action->priv->editable);
 }
 
 static void

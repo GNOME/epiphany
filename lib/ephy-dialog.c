@@ -52,7 +52,6 @@ typedef enum
 	PT_TOGGLEBUTTON,
 	PT_RADIOBUTTON,
 	PT_SPINBUTTON,
-	PT_OPTIONMENU,
 	PT_COMBOBOX,
 	PT_EDITABLE,
 	PT_UNKNOWN
@@ -264,34 +263,6 @@ set_value_from_editable (PropertyInfo *info, GValue *value)
 }
 
 static void
-set_value_from_optionmenu (PropertyInfo *info, GValue *value)
-{
-	int index;
-
-	g_return_if_fail (GTK_IS_OPTION_MENU (info->widget));
-
-	index = gtk_option_menu_get_history (GTK_OPTION_MENU (info->widget));
-	g_return_if_fail (index >= 0);
-
-	g_value_init (value, info->data_type);
-
-	if (info->data_type == G_TYPE_STRING)
-	{
-		g_return_if_fail (info->string_enum != NULL);
-
-		g_value_set_string (value, g_list_nth_data (info->string_enum, index));
-	}
-	else if (info->data_type == G_TYPE_INT)
-	{
-		g_value_set_int (value, index);
-	}
-	else
-	{
-		g_warning ("Unsupported data type for optionmenu %s\n", info->id);
-	}
-}
-
-static void
 set_value_from_combobox (PropertyInfo *info, GValue *value)
 {
 	int index;
@@ -455,9 +426,6 @@ set_value_from_info (PropertyInfo *info, GValue *value)
 		case PT_EDITABLE:
 			set_value_from_editable (info, value);
 			break;
-		case PT_OPTIONMENU:
-			set_value_from_optionmenu (info, value);
-			break;
 		case PT_COMBOBOX:
 			set_value_from_combobox (info, value);
 			break;
@@ -531,26 +499,6 @@ get_index_from_value (const GValue *value, GList *string_enum)
 	}
 
 	return index;
-}
-
-static void
-set_optionmenu_from_value (PropertyInfo *info, const GValue *value)
-{
-	int index;
-
-	g_return_if_fail (GTK_IS_OPTION_MENU (info->widget));
-
-	index = get_index_from_value (value, info->string_enum);
-	if (index < 0)
-	{
-		info->sane_state = FALSE;
-		g_warning ("Index < 0 when setting optionmenu %s\n", info->id);
-		return;
-	}
-
-	info->sane_state = TRUE;
-
-	gtk_option_menu_set_history (GTK_OPTION_MENU (info->widget), index);
 }
 
 static gboolean
@@ -749,9 +697,6 @@ set_info_from_value (PropertyInfo *info, const GValue *value)
 		case PT_EDITABLE:
 			set_editable_from_value (info, value);
 			break;
-		case PT_OPTIONMENU:
-			set_optionmenu_from_value (info, value);
-			break;
 		case PT_COMBOBOX:
 			set_combo_box_from_value (info, value);
 			break;
@@ -924,10 +869,6 @@ connect_signals (gpointer key, PropertyInfo *info, EphyDialog *dialog)
 					  G_CALLBACK (spinbutton_changed_cb),
 					  info);
 			break;
-		case PT_OPTIONMENU:
-			g_signal_connect (G_OBJECT (info->widget), "changed",
-					  G_CALLBACK (changed_cb), info);
-			break;
 		case PT_COMBOBOX:
 			g_signal_connect (G_OBJECT (info->widget), "changed",
 					  G_CALLBACK (changed_cb), info);
@@ -967,12 +908,7 @@ init_props (EphyDialog *dialog, const EphyDialogProperty *properties, GladeXML *
 
 		info->widget = glade_xml_get_widget (gxml, info->id);
 		
-		if (GTK_IS_OPTION_MENU (info->widget))
-		{
-			info->widget_type = PT_OPTIONMENU;
-			info->data_type = G_TYPE_INT;
-		}
-		else if (GTK_IS_COMBO_BOX (info->widget))
+		if (GTK_IS_COMBO_BOX (info->widget))
 		{
 			info->widget_type = PT_COMBOBOX;
 			info->data_type = G_TYPE_INT;
