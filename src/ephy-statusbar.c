@@ -162,7 +162,7 @@ create_statusbar_progress (EphyStatusbar *s)
 
 static void
 sync_shadow_type (EphyStatusbar *statusbar,
-		  GParamSpec *pspec,
+		  GtkStyle *previous_style,
 		  gpointer dummy)
 {
 	GtkShadowType shadow;
@@ -206,8 +206,7 @@ ephy_statusbar_init (EphyStatusbar *t)
 
 	/* FIXME: is this the right way ? */
 	sync_shadow_type (t, NULL, NULL);
-	g_signal_connect (t, "notify::shadow-type",
-			  G_CALLBACK (sync_shadow_type), NULL);
+	g_signal_connect (t, "style-set", G_CALLBACK (sync_shadow_type), NULL);
 }
 
 static void
