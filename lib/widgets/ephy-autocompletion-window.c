@@ -222,6 +222,7 @@ ephy_autocompletion_window_init_widgets (EphyAutocompletionWindow *aw)
 
 	p->tree_view = GTK_TREE_VIEW (gtk_tree_view_new ());
 	gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (p->tree_view));
+	gtk_widget_realize (GTK_WIDGET (p->tree_view));
 
 	renderer = gtk_cell_renderer_text_new ();
 	p->col1 = gtk_tree_view_column_new ();
@@ -654,12 +655,15 @@ hack_tree_view_move_selection (GtkTreeView *tv, GtkTreeView *alternate, int dir)
 
 		model = gtk_tree_view_get_model (alternate);
 		c = gtk_tree_model_iter_n_children (model, NULL);
-		gtk_tree_model_iter_nth_child (model, &iter, NULL, c - 1);
-		p = gtk_tree_model_get_path (model, &iter);
-		selection = gtk_tree_view_get_selection (alternate);
-		gtk_tree_selection_select_path (selection, p);
-		gtk_tree_view_scroll_to_cell (alternate, p, NULL, FALSE, 0, 0);
-		gtk_tree_path_free (p);
+		if (c > 0)
+		{
+			gtk_tree_model_iter_nth_child (model, &iter, NULL, c - 1);
+			p = gtk_tree_model_get_path (model, &iter);
+			selection = gtk_tree_view_get_selection (alternate);
+			gtk_tree_selection_select_path (selection, p);
+			gtk_tree_view_scroll_to_cell (alternate, p, NULL, FALSE, 0, 0);
+			gtk_tree_path_free (p);
+		}
 		return alternate;
 	}
 	else if (gtk_tree_selection_count_selected_rows (ts) == 0)
