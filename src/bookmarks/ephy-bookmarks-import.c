@@ -421,8 +421,6 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 	g_string_free (name, TRUE);
 	g_string_free (url, TRUE);
 
-	ephy_bookmarks_save (bookmarks);
-
 	return TRUE;
 }
 
@@ -443,8 +441,6 @@ ephy_bookmarks_import_xbel (EphyBookmarks *bookmarks,
 	xbel_parse_bookmarks (bookmarks, child);
 
 	xmlFreeDoc (doc);
-
-	ephy_bookmarks_save (bookmarks);
 
 	return TRUE;
 }

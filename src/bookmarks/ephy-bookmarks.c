@@ -37,13 +37,15 @@
 #include <libgnomevfs/gnome-vfs-utils.h>
 
 #define EPHY_BOOKMARKS_XML_VERSION "0.1"
-
+#define BOOKMARKS_SAVE_DELAY (3 * 1000)
 #define MAX_FAVORITES_NUM 10
 
 struct EphyBookmarksPrivate
 {
 	EphyToolbarsModel *toolbars_model;
 	gboolean init_defaults;
+	gboolean dirty;
+	guint save_timeout_id;
 	char *xml_file;
 	EphyNodeDb *db;
 	EphyNode *bookmarks;
@@ -222,8 +224,6 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 		id = ephy_node_get_id (node);
 		ephy_toolbars_model_add_bookmark (eb->priv->toolbars_model, FALSE, id);
 	}
-
-	ephy_bookmarks_save (eb);
 }
 
 static void
@@ -338,7 +338,7 @@ ephy_bookmarks_load (EphyBookmarks *eb)
 	return TRUE;
 }
 
-void
+static void
 ephy_bookmarks_save (EphyBookmarks *eb)
 {
 	xmlDocPtr doc;
@@ -393,6 +393,29 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 				     NULL);
 	ephy_bookmarks_export_rdf (eb, rdf_file);
 	g_free (rdf_file);
+}
+
+static gboolean
+save_bookmarks_delayed (EphyBookmarks *bookmarks)
+{
+	ephy_bookmarks_save (bookmarks);
+	bookmarks->priv->dirty = FALSE;
+	bookmarks->priv->save_timeout_id = 0;
+
+	return FALSE;
+}
+
+static void
+ephy_bookmarks_set_dirty (EphyBookmarks *bookmarks)
+{
+	if (!bookmarks->priv->dirty)
+	{
+		bookmarks->priv->dirty = TRUE;
+		bookmarks->priv->save_timeout_id =
+			g_timeout_add (BOOKMARKS_SAVE_DELAY,
+			               (GSourceFunc) save_bookmarks_delayed,
+				       bookmarks);
+	}
 }
 
 static double
@@ -522,6 +545,7 @@ bookmarks_changed_cb (EphyNode *node,
 		      EphyBookmarks *eb)
 {
 	ephy_bookmarks_emit_data_changed (eb);
+	ephy_bookmarks_set_dirty (eb);
 }
 
 static void
@@ -532,6 +556,7 @@ bookmarks_removed_cb (EphyNode *node,
 {
 	ephy_bookmarks_emit_data_changed (eb);
 	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
+	ephy_bookmarks_set_dirty (eb);
 }
 
 static char *
@@ -629,7 +654,8 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 
 	db = ephy_node_db_new ("EphyBookmarks");
 	eb->priv->db = db;
-
+	eb->priv->dirty = FALSE;
+	eb->priv->save_timeout_id = 0;
 	eb->priv->xml_file = g_build_filename (ephy_dot_dir (),
 					       "bookmarks.xml",
 					       NULL);
@@ -722,6 +748,11 @@ ephy_bookmarks_finalize (GObject *object)
 
         g_return_if_fail (eb->priv != NULL);
 
+	if (eb->priv->save_timeout_id != 0)
+	{
+		g_source_remove (eb->priv->save_timeout_id);
+	}
+
 	ephy_bookmarks_save (eb);
 
 	ephy_node_unref (eb->priv->bookmarks);
@@ -801,6 +832,7 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 
 	ephy_bookmarks_emit_data_changed (eb);
 	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
+	ephy_bookmarks_save (eb);
 
 	return bm;
 }

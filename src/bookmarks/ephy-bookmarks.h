@@ -69,8 +69,6 @@ EphyNode	*ephy_bookmarks_get_from_id     (EphyBookmarks *eb,
 
 /* Bookmarks */
 
-void		 ephy_bookmarks_save		(EphyBookmarks *eb);
-
 EphyNode        *ephy_bookmarks_add		(EphyBookmarks *eb,
 						 const char *title,
 						 const char *url);

@@ -29,7 +29,7 @@
 #include "ephy-node.h"
 #include "ephy-debug.h"
 
-#define EPHY_FAVICON_CACHE_XML_VERSION "0.1"
+#define EPHY_FAVICON_CACHE_XML_VERSION "1.0"
 
 #define EPHY_FAVICON_CACHE_OBSOLETE_DAYS 30
 
@@ -124,7 +124,6 @@ ephy_favicon_cache_load (EphyFaviconCache *eb)
 {
 	xmlDocPtr doc;
 	xmlNodePtr root, child;
-	char *tmp;
 
 	if (g_file_test (eb->priv->xml_file, G_FILE_TEST_EXISTS) == FALSE)
 		return;
@@ -133,10 +132,6 @@ ephy_favicon_cache_load (EphyFaviconCache *eb)
 	g_assert (doc != NULL);
 
 	root = xmlDocGetRootElement (doc);
-
-	tmp = xmlGetProp (root, "version");
-	g_assert (tmp != NULL && strcmp (tmp, EPHY_FAVICON_CACHE_XML_VERSION) == 0);
-	g_free (tmp);
 
 	for (child = root->children; child != NULL; child = child->next)
 	{
@@ -265,7 +260,7 @@ ephy_favicon_cache_init (EphyFaviconCache *cache)
 
 	cache->priv = g_new0 (EphyFaviconCachePrivate, 1);
 
-	db = ephy_node_db_new ("EphyFaviconCache");
+	db = ephy_node_db_new (EPHY_NODE_DB_SITEICONS);
 	cache->priv->db = db;
 
 	cache->priv->xml_file = g_build_filename (ephy_dot_dir (),
