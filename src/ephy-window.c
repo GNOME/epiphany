@@ -52,6 +52,7 @@
 #include "ephy-stock-icons.h"
 #include "ephy-extension.h"
 #include "ephy-favicon-cache.h"
+#include "ephy-gui.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -661,6 +662,8 @@ confirm_close_with_modified_forms (EphyWindow *window)
 					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					      _("Close _Document"), GTK_RESPONSE_OK,
 					      NULL);
+
+	ephy_gui_set_default_window_icon (GTK_WINDOW (dialog));
 	
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);

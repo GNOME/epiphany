@@ -36,6 +36,8 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkmain.h>
+#include <gtk/gtkwindow.h>
+#include <gtk/gtkversion.h>
 
 /* Styles for tab labels */
 GtkStyle *loading_text_style = NULL;
@@ -112,6 +114,8 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 					GTK_RESPONSE_CANCEL,
 					_("_Overwrite"), GTK_RESPONSE_ACCEPT,
 					NULL);
+	ephy_gui_set_default_window_icon (GTK_WINDOW (dialog));
+
 	hbox = gtk_hbox_new (FALSE, 6);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, TRUE, TRUE, 12);
 	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_DIALOG);
@@ -245,4 +249,43 @@ ephy_gui_is_middle_click (void)
 	}
 
 	return new_tab;
+}
+
+void
+ephy_gui_set_default_window_icon (GtkWindow *window)
+{
+#if GTK_CHECK_VERSION (2, 5, 4)
+	gtk_window_set_icon_name (window, "web-browser");
+#else
+	const char *icon_path;
+	GdkPixbuf *icon = NULL;
+	GtkIconTheme *icon_theme;
+	GtkIconInfo *icon_info;
+
+	icon_theme = gtk_icon_theme_get_default ();
+	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "web-browser", -1, 0);
+
+	if (icon_info != NULL)
+	{
+		icon_path = gtk_icon_info_get_filename (icon_info);
+
+		if (icon_path != NULL)
+		{
+			icon = gdk_pixbuf_new_from_file (icon_path, NULL);
+		}
+
+		gtk_icon_info_free (icon_info);
+	}
+	else
+	{
+		g_warning ("Web browser gnome icon not found");
+	}
+
+	gtk_window_set_icon (GTK_WINDOW (about), icon);
+
+	if (icon != NULL)
+	{
+		g_object_unref (icon);
+	}
+#endif
 }

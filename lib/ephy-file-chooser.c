@@ -119,6 +119,8 @@ ephy_file_chooser_constructor (GType type,
 		(GTK_FILE_CHOOSER (object), downloads_dir, NULL);
 	g_free (downloads_dir);
 
+	ephy_gui_set_default_window_icon (GTK_WINDOW (object));
+
 	return object;
 }
 

@@ -325,7 +325,8 @@ duplicate_dialog_construct (GtkWindow *parent,
 					      GTK_STOCK_OK,
 					      GTK_RESPONSE_OK,
 					      NULL);
-	
+	ephy_gui_set_default_window_icon (GTK_WINDOW (dialog));
+
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14);

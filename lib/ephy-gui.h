@@ -49,6 +49,8 @@ void		ephy_gui_help				 (GtkWindow *parent,
 							  const char *file_name,
 							  const char *link_id);
 
+void		ephy_gui_set_default_window_icon	 (GtkWindow *window);
+
 G_END_DECLS
 
 #endif

@@ -1206,6 +1206,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 				       GTK_ICON_SIZE_MENU,
 				       NULL);
 	gtk_window_set_icon (GTK_WINDOW(editor), icon);
+	g_object_unref (icon);
 
 	g_signal_connect (editor, "delete_event",
 			  G_CALLBACK (delete_event_cb), NULL);
