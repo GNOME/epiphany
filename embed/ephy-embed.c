@@ -55,9 +55,9 @@ ephy_embed_chrome_get_type (void)
 GType
 ephy_embed_get_type (void)
 {
-	static GType ephy_embed_type = 0;
+	static GType type = 0;
 
-	if (ephy_embed_type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GTypeInfo our_info =
 		{
@@ -66,13 +66,12 @@ ephy_embed_get_type (void)
 			NULL,
 		};
 
-		ephy_embed_type = g_type_register_static (G_TYPE_INTERFACE,
-							  "EphyEmbed",
-							  &our_info,
-							  (GTypeFlags)0);
+		type = g_type_register_static (G_TYPE_INTERFACE,
+					       "EphyEmbed",
+					       &our_info, (GTypeFlags)0);
 	}
 
-	return ephy_embed_type;
+	return type;
 }
 
 static void

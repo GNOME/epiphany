@@ -67,10 +67,12 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_node_db_get_type (void)
 {
-	static GType ephy_node_db_type = 0;
+	static GType type = 0;
 
-	if (ephy_node_db_type == 0) {
-		static const GTypeInfo our_info = {
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GTypeInfo our_info =
+		{
 			sizeof (EphyNodeDbClass),
 			NULL,
 			NULL,
@@ -82,12 +84,12 @@ ephy_node_db_get_type (void)
 			(GInstanceInitFunc) ephy_node_db_init
 		};
 
-		ephy_node_db_type = g_type_register_static (G_TYPE_OBJECT,
-						       "EphyNodeDb",
-						       &our_info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT,
+					       "EphyNodeDb",
+					       &our_info, 0);
 	}
 
-	return ephy_node_db_type;
+	return type;
 }
 
 static void

@@ -31,12 +31,9 @@
 #include <nsEmbedString.h>
 #include <nsMemory.h>
 
-static void
-mozilla_download_class_init (MozillaDownloadClass *klass);
-static void
-mozilla_download_init (MozillaDownload *ges);
-static void
-mozilla_download_finalize (GObject *object);
+static void mozilla_download_class_init	(MozillaDownloadClass *klass);
+static void mozilla_download_init	(MozillaDownload *ges);
+static void mozilla_download_finalize	(GObject *object);
 
 enum
 {
@@ -56,9 +53,9 @@ static GObjectClass *parent_class = NULL;
 GType
 mozilla_download_get_type (void)
 {
-       static GType mozilla_download_type = 0;
+       static GType type = 0;
 
-        if (mozilla_download_type == 0)
+        if (G_UNLIKELY (type == 0))
         {
                 static const GTypeInfo our_info =
                 {
@@ -73,13 +70,12 @@ mozilla_download_get_type (void)
                         (GInstanceInitFunc) mozilla_download_init
                 };
 
-                mozilla_download_type = 
-				g_type_register_static (EPHY_TYPE_DOWNLOAD,
-                                                        "MozillaDownload",
-                                                        &our_info, (GTypeFlags)0);
+                type = g_type_register_static (EPHY_TYPE_DOWNLOAD,
+					       "MozillaDownload",
+					       &our_info, (GTypeFlags)0);
         }
 
-        return mozilla_download_type;
+        return type;
 }
 
 static char *

@@ -81,9 +81,9 @@ struct ToolbarPrivate
 GType
 toolbar_get_type (void)
 {
-        static GType toolbar_type = 0;
+        static GType type = 0;
 
-        if (toolbar_type == 0)
+        if (G_UNLIKELY (type == 0))
         {
                 static const GTypeInfo our_info =
                 {
@@ -98,13 +98,12 @@ toolbar_get_type (void)
                         (GInstanceInitFunc) toolbar_init
                 };
 
-                toolbar_type = g_type_register_static (EGG_TYPE_EDITABLE_TOOLBAR,
-						       "Toolbar",
-						       &our_info, 0);
+                type = g_type_register_static (EGG_TYPE_EDITABLE_TOOLBAR,
+					       "Toolbar",
+					       &our_info, 0);
         }
 
-        return toolbar_type;
-
+        return type;
 }
 
 static void

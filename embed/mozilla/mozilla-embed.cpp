@@ -128,9 +128,9 @@ ephy_command_manager_iface_init (EphyCommandManagerIface *iface)
 GType 
 mozilla_embed_get_type (void)
 {
-        static GType mozilla_embed_type = 0;
+        static GType type = 0;
 
-        if (mozilla_embed_type == 0)
+        if (G_UNLIKELY (type == 0))
         {
                 static const GTypeInfo our_info =
                 {
@@ -159,19 +159,19 @@ mozilla_embed_get_type (void)
         		NULL
      		 };
 	
-                mozilla_embed_type = g_type_register_static (GTK_TYPE_MOZ_EMBED,
-							     "MozillaEmbed",
-							     &our_info, 
-							     (GTypeFlags)0);
-		g_type_add_interface_static (mozilla_embed_type,
+                type = g_type_register_static (GTK_TYPE_MOZ_EMBED,
+					       "MozillaEmbed",
+					       &our_info, 
+					       (GTypeFlags)0);
+		g_type_add_interface_static (type,
                                    	     EPHY_TYPE_EMBED,
                                    	     &embed_info);
-		g_type_add_interface_static (mozilla_embed_type,
+		g_type_add_interface_static (type,
                                    	     EPHY_TYPE_COMMAND_MANAGER,
                                    	     &ephy_command_manager_info);
         }
 
-        return mozilla_embed_type;
+        return type;
 }
 
 static gboolean

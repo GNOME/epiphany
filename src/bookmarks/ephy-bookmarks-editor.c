@@ -849,9 +849,9 @@ cmd_view_columns (GtkAction *action,
 GType
 ephy_bookmarks_editor_get_type (void)
 {
-	static GType ephy_bookmarks_editor_type = 0;
+	static GType type = 0;
 
-	if (ephy_bookmarks_editor_type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GTypeInfo our_info =
 		{
@@ -866,12 +866,12 @@ ephy_bookmarks_editor_get_type (void)
 			(GInstanceInitFunc) ephy_bookmarks_editor_init
 		};
 
-		ephy_bookmarks_editor_type = g_type_register_static (GTK_TYPE_WINDOW,
-							             "EphyBookmarksEditor",
-							             &our_info, 0);
+		type = g_type_register_static (GTK_TYPE_WINDOW,
+					       "EphyBookmarksEditor",
+					       &our_info, 0);
 	}
 
-	return ephy_bookmarks_editor_type;
+	return type;
 }
 
 static void

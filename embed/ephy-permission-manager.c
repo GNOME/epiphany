@@ -34,7 +34,7 @@ ephy_permission_info_get_type (void)
 {
 	static GType type = 0;
 
-	if (type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		type = g_boxed_type_register_static ("EphyPermissionInfo",
 						     (GBoxedCopyFunc) ephy_permission_info_copy,
@@ -109,7 +109,7 @@ ephy_permission_manager_get_type (void)
 {
        static GType type = 0;
 
-	if (type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GTypeInfo our_info =
 		{

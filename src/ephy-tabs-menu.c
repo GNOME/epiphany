@@ -62,9 +62,9 @@ enum
 GType
 ephy_tabs_menu_get_type (void)
 {
-        static GType ephy_tabs_menu_type = 0;
+        static GType type = 0;
 
-        if (ephy_tabs_menu_type == 0)
+        if (G_UNLIKELY (type == 0))
         {
                 static const GTypeInfo our_info =
                 {
@@ -79,12 +79,12 @@ ephy_tabs_menu_get_type (void)
                         (GInstanceInitFunc) ephy_tabs_menu_init
                 };
 
-                ephy_tabs_menu_type = g_type_register_static (G_TYPE_OBJECT,
-							      "EphyTabsMenu",
-							      &our_info, 0);
+                type = g_type_register_static (G_TYPE_OBJECT,
+					       "EphyTabsMenu",
+					       &our_info, 0);
         }
 
-        return ephy_tabs_menu_type;
+        return type;
 }
 
 static void

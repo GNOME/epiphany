@@ -59,9 +59,9 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_embed_dialog_get_type (void)
 {
-        static GType ephy_embed_dialog_type = 0;
+        static GType type = 0;
 
-        if (ephy_embed_dialog_type == 0)
+        if (G_UNLIKELY (type == 0))
         {
                 static const GTypeInfo our_info =
                 {
@@ -76,12 +76,12 @@ ephy_embed_dialog_get_type (void)
                         (GInstanceInitFunc) ephy_embed_dialog_init
                 };
 
-                ephy_embed_dialog_type = g_type_register_static (EPHY_TYPE_DIALOG,
-								 "EphyEmbedDialog",
-								 &our_info, 0);
+                type = g_type_register_static (EPHY_TYPE_DIALOG,
+					       "EphyEmbedDialog",
+					       &our_info, 0);
         }
 
-        return ephy_embed_dialog_type;
+        return type;
 }
 
 static void

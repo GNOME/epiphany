@@ -70,9 +70,9 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_encoding_menu_get_type (void)
 {
-	static GType ephy_encoding_menu_type = 0;
+	static GType type = 0;
 
-	if (ephy_encoding_menu_type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GTypeInfo our_info =
 		{
@@ -87,12 +87,12 @@ ephy_encoding_menu_get_type (void)
 			(GInstanceInitFunc) ephy_encoding_menu_init
 		};
 
-		ephy_encoding_menu_type = g_type_register_static (G_TYPE_OBJECT,
-								  "EphyEncodingMenu",
-								  &our_info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT,
+					       "EphyEncodingMenu",
+					       &our_info, 0);
 	}
 
-	return ephy_encoding_menu_type;
+	return type;
 }
 
 static void

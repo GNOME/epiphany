@@ -129,9 +129,9 @@ static GObjectClass *parent_class = NULL;
 GType
 downloader_view_get_type (void)
 {
-       static GType downloader_view_type = 0;
+       static GType type = 0;
 
-	if (downloader_view_type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GTypeInfo our_info =
 		{
@@ -146,12 +146,12 @@ downloader_view_get_type (void)
 			(GInstanceInitFunc) downloader_view_init
 		};
 
-		downloader_view_type = g_type_register_static (EPHY_TYPE_DIALOG,
-							       "DownloaderView",
-							       &our_info, 0);
+		type = g_type_register_static (EPHY_TYPE_DIALOG,
+					       "DownloaderView",
+					       &our_info, 0);
 	}
 
-	return downloader_view_type;
+	return type;
 }
 
 static void

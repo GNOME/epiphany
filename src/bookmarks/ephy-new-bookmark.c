@@ -83,9 +83,9 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_new_bookmark_get_type (void)
 {
-	static GType ephy_new_bookmark_type = 0;
+	static GType type = 0;
 
-	if (ephy_new_bookmark_type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GTypeInfo our_info =
 		{
@@ -100,12 +100,12 @@ ephy_new_bookmark_get_type (void)
 			(GInstanceInitFunc) ephy_new_bookmark_init
 		};
 
-		ephy_new_bookmark_type = g_type_register_static (GTK_TYPE_DIALOG,
-							             "EphyNewBookmark",
-							             &our_info, 0);
+		type = g_type_register_static (GTK_TYPE_DIALOG,
+					       "EphyNewBookmark",
+					       &our_info, 0);
 	}
 
-	return ephy_new_bookmark_type;
+	return type;
 }
 
 static void

@@ -67,9 +67,9 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_tree_model_node_get_type (void)
 {
-	static GType ephy_tree_model_node_type = 0;
+	static GType type = 0;
 
-	if (ephy_tree_model_node_type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GTypeInfo our_info =
 		{
@@ -91,16 +91,16 @@ ephy_tree_model_node_get_type (void)
 			NULL
 		};
 
-		ephy_tree_model_node_type = g_type_register_static (G_TYPE_OBJECT,
-								  "EphyTreeModelNode",
-								  &our_info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT,
+					       "EphyTreeModelNode",
+					       &our_info, 0);
 
-		g_type_add_interface_static (ephy_tree_model_node_type,
+		g_type_add_interface_static (type,
 					     GTK_TYPE_TREE_MODEL,
 					     &tree_model_info);
 	}
 
-	return ephy_tree_model_node_type;
+	return type;
 }
 
 static void

@@ -1,5 +1,98 @@
 2004-10-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/downloader-view.c: (downloader_view_get_type):
+	* embed/ephy-command-manager.c: (ephy_command_manager_get_type):
+	* embed/ephy-cookie-manager.c: (ephy_cookie_get_type),
+	(ephy_cookie_manager_get_type):
+	* embed/ephy-download.c: (ephy_download_get_type):
+	* embed/ephy-embed-dialog.c: (ephy_embed_dialog_get_type):
+	* embed/ephy-embed-event.c: (ephy_embed_event_get_type):
+	* embed/ephy-embed-persist.c: (ephy_embed_persist_get_type):
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_get_type):
+	* embed/ephy-embed-single.c: (ephy_embed_single_get_type):
+	* embed/ephy-embed.c: (ephy_embed_get_type):
+	* embed/ephy-encodings.c: (ephy_encodings_get_type):
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_get_type):
+	* embed/ephy-history.c: (ephy_history_get_type):
+	* embed/ephy-password-manager.c: (ephy_password_info_get_type),
+	(ephy_password_manager_get_type):
+	* embed/ephy-permission-manager.c: (ephy_permission_info_get_type),
+	(ephy_permission_manager_get_type):
+	* embed/find-dialog.c: (find_dialog_get_type):
+	* embed/mozilla/mozilla-download.cpp:
+	* embed/mozilla/mozilla-embed-event.cpp:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* lib/egg/egg-editable-toolbar.c: (egg_editable_toolbar_get_type):
+	* lib/egg/egg-toolbar-editor.c: (egg_toolbar_editor_get_type):
+	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_get_type):
+	* lib/ephy-dialog.c: (ephy_dialog_get_type):
+	* lib/ephy-file-chooser.c: (ephy_file_chooser_get_type):
+	* lib/ephy-loader.c: (ephy_loader_get_type):
+	* lib/ephy-module.c: (ephy_module_get_type):
+	* lib/ephy-node-db.c: (ephy_node_db_get_type):
+	* lib/ephy-node-filter.c: (ephy_node_filter_get_type):
+	* lib/ephy-shlib-loader.c: (ephy_shlib_loader_get_type):
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_get_type):
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_get_type):
+	* lib/widgets/ephy-search-entry.c: (ephy_search_entry_get_type):
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_cache_get_type),
+	(ephy_spinner_get_type):
+	* lib/widgets/ephy-tree-model-node.c:
+	(ephy_tree_model_node_get_type):
+	* lib/widgets/ephy-tree-model-sort.c:
+	(ephy_tree_model_sort_get_type):
+	* lib/widgets/ephy-zoom-action.c: (ephy_zoom_action_get_type):
+	* lib/widgets/ephy-zoom-control.c: (ephy_zoom_control_get_type):
+	* src/bookmarks/ephy-bookmark-action.c:
+	(ephy_bookmark_action_get_type):
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(ephy_bookmark_properties_get_type):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_get_type):
+	* src/bookmarks/ephy-bookmarks-menu.c:
+	(ephy_bookmarks_menu_get_type):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_get_type):
+	* src/bookmarks/ephy-bookmarksbar-model.c:
+	(ephy_bookmarksbar_model_get_type):
+	* src/bookmarks/ephy-bookmarksbar.c: (ephy_bookmarksbar_get_type):
+	* src/bookmarks/ephy-favorites-menu.c:
+	(ephy_favorites_menu_get_type):
+	* src/bookmarks/ephy-new-bookmark.c: (ephy_new_bookmark_get_type):
+	* src/bookmarks/ephy-topic-action.c: (ephy_topic_action_get_type):
+	* src/bookmarks/ephy-topics-selector.c:
+	(ephy_topics_selector_get_type):
+	* src/ephy-completion-model.c: (ephy_completion_model_get_type):
+	* src/ephy-encoding-dialog.c: (ephy_encoding_dialog_get_type):
+	* src/ephy-encoding-menu.c: (ephy_encoding_menu_get_type):
+	* src/ephy-extension.c: (ephy_extension_get_type):
+	* src/ephy-extensions-manager.c:
+	(ephy_extensions_manager_get_type):
+	* src/ephy-favicon-action.c: (ephy_favicon_action_get_type):
+	* src/ephy-go-action.c: (ephy_go_action_get_type):
+	* src/ephy-history-window.c: (ephy_history_window_get_type):
+	* src/ephy-location-action.c: (ephy_location_action_get_type):
+	* src/ephy-navigation-action.c: (ephy_navigation_action_get_type):
+	* src/ephy-notebook.c: (ephy_notebook_get_type):
+	* src/ephy-session.c: (ephy_session_get_type):
+	* src/ephy-shell.c: (ephy_shell_get_type):
+	* src/ephy-statusbar.c: (ephy_statusbar_get_type):
+	* src/ephy-tab.c: (ephy_tab_get_type):
+	* src/ephy-tabs-menu.c: (ephy_tabs_menu_get_type):
+	* src/ephy-toolbars-model.c: (ephy_toolbars_model_get_type):
+	* src/ephy-window.c: (ephy_window_get_type):
+	* src/pdm-dialog.c: (pdm_dialog_get_type):
+	* src/ppview-toolbar.c: (ppview_toolbar_get_type):
+	* src/prefs-dialog.c: (prefs_dialog_get_type):
+	* src/toolbar.c: (toolbar_get_type):
+
+	Annotate "if (type == 0)" in get_type functions with G_UNLIKELY,
+	like the G_TYPE_DEFINE macros do.
+
+2004-10-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/ephy-node-view.c: (drag_data_received_cb):
 	* src/ephy-notebook.c: (notebook_drag_data_received_cb):
 

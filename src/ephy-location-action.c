@@ -74,7 +74,7 @@ ephy_location_action_get_type (void)
 {
 	static GType type = 0;
 
-	if (!type)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GTypeInfo type_info =
 		{
@@ -93,6 +93,7 @@ ephy_location_action_get_type (void)
 					       "EphyLocationAction",
 					       &type_info, 0);
 	}
+
 	return type;
 }
 

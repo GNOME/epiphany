@@ -148,9 +148,9 @@ static void	ephy_tab_set_popups_allowed	(EphyTab *tab,
 GType
 ephy_tab_get_type (void)
 {
-        static GType ephy_tab_type = 0;
+        static GType type = 0;
 
-        if (ephy_tab_type == 0)
+        if (G_UNLIKELY (type == 0))
         {
                 static const GTypeInfo our_info =
                 {
@@ -165,12 +165,12 @@ ephy_tab_get_type (void)
                         (GInstanceInitFunc) ephy_tab_init
                 };
 
-                ephy_tab_type = g_type_register_static (GTK_TYPE_BIN,
-							"EphyTab",
-							&our_info, 0);
+                type = g_type_register_static (GTK_TYPE_BIN,
+					       "EphyTab",
+					       &our_info, 0);
         }
 
-        return ephy_tab_type;
+        return type;
 }
 
 static void

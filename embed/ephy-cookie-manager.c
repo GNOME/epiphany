@@ -30,7 +30,7 @@ ephy_cookie_get_type (void)
 {
 	static GType type = 0;
 
-	if (type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		type = g_boxed_type_register_static ("EphyCookie",
 						     (GBoxedCopyFunc) ephy_cookie_copy,
@@ -105,7 +105,7 @@ ephy_cookie_manager_get_type (void)
 {
        static GType type = 0;
 
-	if (type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GTypeInfo our_info =
 		{

@@ -82,9 +82,9 @@ EphyDialogProperty properties [] =
 GType
 find_dialog_get_type (void)
 {
-        static GType find_dialog_type = 0;
+        static GType type = 0;
 
-        if (find_dialog_type == 0)
+        if (G_UNLIKELY (type == 0))
         {
                 static const GTypeInfo our_info =
                 {
@@ -99,12 +99,12 @@ find_dialog_get_type (void)
                         (GInstanceInitFunc) find_dialog_init
                 };
 
-                find_dialog_type = g_type_register_static (EPHY_TYPE_EMBED_DIALOG,
-						           "FindDialog",
-						           &our_info, 0);
+                type = g_type_register_static (EPHY_TYPE_EMBED_DIALOG,
+					       "FindDialog",
+					       &our_info, 0);
         }
 
-        return find_dialog_type;
+        return type;
 
 }
 

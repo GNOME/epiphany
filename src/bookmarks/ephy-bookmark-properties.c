@@ -79,9 +79,9 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_bookmark_properties_get_type (void)
 {
-	static GType ephy_bookmark_properties_type = 0;
+	static GType type = 0;
 
-	if (ephy_bookmark_properties_type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GTypeInfo our_info =
 		{
@@ -96,12 +96,12 @@ ephy_bookmark_properties_get_type (void)
 			(GInstanceInitFunc) ephy_bookmark_properties_init
 		};
 
-		ephy_bookmark_properties_type = g_type_register_static (GTK_TYPE_DIALOG,
-							                "EphyBookmarkProperties",
-							                &our_info, 0);
+		type = g_type_register_static (GTK_TYPE_DIALOG,
+					       "EphyBookmarkProperties",
+					       &our_info, 0);
 	}
 
-	return ephy_bookmark_properties_type;
+	return type;
 }
 
 static void

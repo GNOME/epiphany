@@ -598,9 +598,9 @@ cmd_view_columns (GtkAction *action,
 GType
 ephy_history_window_get_type (void)
 {
-	static GType ephy_history_window_type = 0;
+	static GType type = 0;
 
-	if (ephy_history_window_type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GTypeInfo our_info =
 		{
@@ -615,12 +615,12 @@ ephy_history_window_get_type (void)
 			(GInstanceInitFunc) ephy_history_window_init
 		};
 
-		ephy_history_window_type = g_type_register_static (GTK_TYPE_WINDOW,
-							             "EphyHistoryWindow",
-							             &our_info, 0);
+		type = g_type_register_static (GTK_TYPE_WINDOW,
+					       "EphyHistoryWindow",
+					       &our_info, 0);
 	}
 
-	return ephy_history_window_type;
+	return type;
 }
 
 static void

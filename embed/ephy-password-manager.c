@@ -34,7 +34,7 @@ ephy_password_info_get_type (void)
 {
 	static GType type = 0;
 
-	if (type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		type = g_boxed_type_register_static ("EphyPasswordInfo",
 						     (GBoxedCopyFunc) ephy_password_info_copy,
@@ -113,7 +113,7 @@ ephy_password_manager_get_type (void)
 {
        static GType type = 0;
 
-	if (type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GTypeInfo our_info =
 		{

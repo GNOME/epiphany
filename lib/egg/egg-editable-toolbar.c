@@ -90,9 +90,9 @@ struct EggEditableToolbarPrivate
 GType
 egg_editable_toolbar_get_type (void)
 {
-  static GType egg_editable_toolbar_type = 0;
+  static GType type = 0;
 
-  if (egg_editable_toolbar_type == 0)
+  if (G_UNLIKELY (type == 0))
     {
       static const GTypeInfo our_info = {
 	sizeof (EggEditableToolbarClass),
@@ -106,12 +106,12 @@ egg_editable_toolbar_get_type (void)
 	(GInstanceInitFunc) egg_editable_toolbar_init
       };
 
-      egg_editable_toolbar_type = g_type_register_static (GTK_TYPE_VBOX,
-							  "EggEditableToolbar",
-							  &our_info, 0);
+      type = g_type_register_static (GTK_TYPE_VBOX,
+				     "EggEditableToolbar",
+				     &our_info, 0);
     }
 
-  return egg_editable_toolbar_type;
+  return type;
 }
 
 static int

@@ -53,9 +53,9 @@ static guint ephy_search_entry_signals[LAST_SIGNAL] = { 0 };
 GType
 ephy_search_entry_get_type (void)
 {
-	static GType ephy_search_entry_type = 0;
+	static GType type = 0;
 
-	if (ephy_search_entry_type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GTypeInfo our_info =
 		{
@@ -70,12 +70,12 @@ ephy_search_entry_get_type (void)
 			(GInstanceInitFunc) ephy_search_entry_init
 		};
 
-		ephy_search_entry_type = g_type_register_static (GTK_TYPE_ENTRY,
-							         "EphySearchEntry",
-							         &our_info, 0);
+		type = g_type_register_static (GTK_TYPE_ENTRY,
+					       "EphySearchEntry",
+					       &our_info, 0);
 	}
 
-	return ephy_search_entry_type;
+	return type;
 }
 
 static void

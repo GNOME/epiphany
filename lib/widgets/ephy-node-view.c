@@ -111,9 +111,9 @@ static guint ephy_node_view_signals[LAST_SIGNAL] = { 0 };
 GType
 ephy_node_view_get_type (void)
 {
-	static GType ephy_node_view_type = 0;
+	static GType type = 0;
 
-	if (ephy_node_view_type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GTypeInfo our_info =
 		{
@@ -128,12 +128,12 @@ ephy_node_view_get_type (void)
 			(GInstanceInitFunc) ephy_node_view_init
 		};
 
-		ephy_node_view_type = g_type_register_static (GTK_TYPE_TREE_VIEW,
-							      "EphyNodeView",
-							      &our_info, 0);
+		type = g_type_register_static (GTK_TYPE_TREE_VIEW,
+					       "EphyNodeView",
+					       &our_info, 0);
 	}
 
-	return ephy_node_view_type;
+	return type;
 }
 
 static void

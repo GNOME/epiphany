@@ -93,9 +93,9 @@ enum
 GType
 ephy_location_entry_get_type (void)
 {
-	static GType ephy_location_entry_type = 0;
+	static GType type = 0;
 
-	if (ephy_location_entry_type == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GTypeInfo our_info =
 		{
@@ -110,12 +110,12 @@ ephy_location_entry_get_type (void)
 			(GInstanceInitFunc) ephy_location_entry_init
 		};
 
-		ephy_location_entry_type = g_type_register_static (GTK_TYPE_TOOL_ITEM,
-							           "EphyLocationEntry",
-							           &our_info, 0);
+		type = g_type_register_static (GTK_TYPE_TOOL_ITEM,
+					       "EphyLocationEntry",
+					       &our_info, 0);
 	}
 
-	return ephy_location_entry_type;
+	return type;
 }
 
 static gboolean

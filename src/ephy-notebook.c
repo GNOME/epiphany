@@ -106,9 +106,9 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_notebook_get_type (void)
 {
-        static GType ephy_notebook_type = 0;
+        static GType type = 0;
 
-        if (ephy_notebook_type == 0)
+        if (G_UNLIKELY (type == 0))
         {
                 static const GTypeInfo our_info =
 			{
@@ -123,12 +123,12 @@ ephy_notebook_get_type (void)
 				(GInstanceInitFunc) ephy_notebook_init
 			};
 
-                ephy_notebook_type = g_type_register_static (GTK_TYPE_NOTEBOOK,
-							     "EphyNotebook",
-							     &our_info, 0);
+                type = g_type_register_static (GTK_TYPE_NOTEBOOK,
+					       "EphyNotebook",
+					       &our_info, 0);
         }
 
-        return ephy_notebook_type;
+        return type;
 }
 
 static void

@@ -62,9 +62,9 @@ static GObjectClass *parent_class = NULL;
 GType
 mozilla_embed_persist_get_type (void)
 {
-       static GType mozilla_embed_persist_type = 0;
+       static GType type = 0;
 
-        if (mozilla_embed_persist_type == 0)
+        if (G_UNLIKELY (type == 0))
         {
                 static const GTypeInfo our_info =
                 {
@@ -79,13 +79,12 @@ mozilla_embed_persist_get_type (void)
                         (GInstanceInitFunc) mozilla_embed_persist_init
                 };
 
-                mozilla_embed_persist_type = 
-				g_type_register_static (EPHY_TYPE_EMBED_PERSIST,
-                                                        "MozillaEmbedPersist",
-                                                        &our_info, (GTypeFlags)0);
+                type = g_type_register_static (EPHY_TYPE_EMBED_PERSIST,
+					       "MozillaEmbedPersist",
+					       &our_info, (GTypeFlags) 0);
         }
 
-        return mozilla_embed_persist_type;
+        return type;
 }
 
 static void
