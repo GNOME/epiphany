@@ -255,12 +255,27 @@ ephy_node_view_button_press_cb (GtkTreeView *treeview,
 			        GdkEventButton *event,
 			        EphyNodeView *view)
 {
+	GtkTreePath *path;
+	GtkTreeSelection *selection;
+	
 	if (event->button == 3)
 	{
 		g_signal_emit (G_OBJECT (view), ephy_node_view_signals[SHOW_POPUP], 0);
-		/* the event is handled, don't propagate it further (we avoid
-		 * changing the view with the right click this way) */
-		return TRUE;
+		if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (treeview),
+						   event->x,
+						   event->y,
+						   &path,
+						   NULL, NULL, NULL))
+		{
+			selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
+			if (gtk_tree_selection_path_is_selected (selection, path))
+			{
+				/* We handle the event (so the view won't be
+				 * changed by the user click) because the user
+				 * clicked on an already selected element */
+				return TRUE;
+			}
+		}
 	}
 
 	return FALSE;
