@@ -1,5 +1,39 @@
 2004-02-20  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/egg/egg-editable-toolbar.c: (popup_toolbar_context_menu_cb):
+
+	Fix logic error, spotted by Crispin.
+
+	* lib/egg/egg-toolbars-model.h:
+
+	Make it clear that EggTbModelFlags is a bitfield enum.
+
+2004-02-20  Christian Persch  <chpe@cvs.gnome.org>
+
+	* doc/reference/tmpl/EphyContentPolicy.sgml:
+	* doc/reference/tmpl/EphySingle.sgml:
+	* doc/reference/tmpl/ephy-cookie-manager.sgml:
+	* doc/reference/tmpl/ephy-embed-factory.sgml:
+	* doc/reference/tmpl/ephy-embed-single.sgml:
+	* doc/reference/tmpl/ephy-password-manager.sgml:
+	* doc/reference/tmpl/ephy-permission-manager.sgml:
+	* doc/reference/tmpl/ephy-session.sgml:
+	* doc/reference/tmpl/ephy-shell.sgml:
+	* doc/reference/tmpl/mozilla-embed-event.sgml:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/Makefile.am:
+	* lib/ephy-debug.c:
+	* lib/ephy-dialog.c: (connect_signals):
+	* lib/ephy-file-helpers.c:
+	* lib/ephy-file-helpers.h:
+	* lib/ephy-glade.c:
+	* lib/ephy-glade.h:
+	* lib/ephy-gui.c:
+	* lib/ephy-gui.h:
+
+2004-02-20  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/eel-gconf-extensions.c:
 
 	#ifdef HAVE_CONFIG_H the inclusion of config.h.

@@ -519,7 +519,7 @@ popup_toolbar_context_menu_cb (GtkWidget          *toolbar,
 
       position = get_toolbar_position (t, toolbar);
       flags = egg_toolbars_model_get_flags (t->priv->model, position);
-      if (flags && EGG_TB_MODEL_NOT_REMOVABLE)
+      if (flags & EGG_TB_MODEL_NOT_REMOVABLE)
         {
           gtk_widget_set_sensitive (GTK_WIDGET (item), FALSE);
         }
