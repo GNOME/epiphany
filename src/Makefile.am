@@ -122,7 +122,6 @@ epiphany_bin_LDADD = \
 	$(top_builddir)/src/libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
 	$(top_builddir)/embed/libephyembed.la \
-	$(top_builddir)/embed/mozilla/libephymozillaembed.la \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
