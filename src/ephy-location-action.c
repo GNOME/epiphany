@@ -454,6 +454,8 @@ ephy_location_action_finalize (GObject *object)
 	g_list_free (action->priv->actions);
 
 	g_free (action->priv->address);
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 const char *
