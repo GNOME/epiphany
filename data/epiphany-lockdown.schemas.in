@@ -5,7 +5,7 @@
         <applyto>/apps/epiphany/lockdown/disable_javascript_chrome</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
-        <default>0</default>
+        <default>false</default>
         <locale name="C">
         <short>Disable JavaScript chrome control</short>
         <long>Disable JavaScript's control over window chrome.</long>
@@ -16,10 +16,35 @@
         <applyto>/apps/epiphany/lockdown/hide_menubar</applyto>
         <owner>epiphany</owner>
         <type>bool</type>
-        <default>0</default>
+        <default>false</default>
         <locale name="C">
         <short>Hide menubar by default</short>
         <long>Hide the menubar by default.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/lockdown/disable_unsafe_protocols</key>
+        <applyto>/apps/epiphany/lockdown/disable_unsafe_protocols</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>false</default>
+        <locale name="C">
+        <short>Disable unsafe protocols</short>
+        <long>Disables loading of content from unsafe protocols. Safe protocols
+	are http: and https:.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/lockdown/additional_safe_protocols</key>
+        <applyto>/apps/epiphany/lockdown/additional_safe_protocols</applyto>
+        <owner>epiphany</owner>
+        <type>list</type>
+	<list_type>string</list_type>
+        <default>[]</default>
+        <locale name="C">
+        <short>Additional safe protocols</short>
+        <long>A list of protocols to be considered safe in addition to the
+	default, when disable_unsafe_protocols is enabled.</long>
         </locale>
       </schema>
     </schemalist>
