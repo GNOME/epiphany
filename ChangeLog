@@ -1,3 +1,13 @@
+2003-07-22  Christian Persch  <chpe@cvs.gnome.org>
+ 
+	* lib/egg/eggtoolbar.c: (egg_toolbar_finalize):
+ 
+ 	Fix mem leak.
+
+ 	* lib/egg/eggtoolbutton.c: (egg_tool_button_finalize):
+ 
+ 	Fix mem leaks. Backported patch from gtk, bug #117312.
+
 2003-07-22  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* src/bookmarks/ephy-topic-action.c: (sort_bookmarks),

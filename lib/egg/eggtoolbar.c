@@ -82,6 +82,7 @@ enum {
 };
 
 static void egg_toolbar_init       (EggToolbar      *toolbar);
+static void egg_toolbar_finalize   (GObject         *object);
 static void egg_toolbar_class_init (EggToolbarClass *klass);
 
 static void egg_toolbar_set_property (GObject      *object,
@@ -283,6 +284,7 @@ egg_toolbar_class_init (EggToolbarClass *klass)
   
   gobject_class->set_property = egg_toolbar_set_property;
   gobject_class->get_property = egg_toolbar_get_property;
+  gobject_class->finalize = egg_toolbar_finalize;
 
   widget_class->button_press_event = egg_toolbar_button_press;
   widget_class->expose_event = egg_toolbar_expose;
@@ -486,6 +488,18 @@ egg_toolbar_class_init (EggToolbarClass *klass)
 
   add_ctrl_tab_bindings (binding_set, 0, GTK_DIR_RIGHT);
   add_ctrl_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_LEFT);
+}
+
+static void
+egg_toolbar_finalize (GObject *object)
+{
+  EggToolbar *toolbar = EGG_TOOLBAR (object);
+  GList *list;
+
+  if (toolbar->tooltips)
+    g_object_unref (GTK_OBJECT (toolbar->tooltips));
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
