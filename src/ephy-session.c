@@ -325,6 +325,7 @@ offer_to_resume (EphySession *session)
 			    TRUE, TRUE, 0);
 
 	label = gtk_label_new (NULL);
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 	gtk_widget_show (label);
@@ -335,6 +336,7 @@ offer_to_resume (EphySession *session)
 	g_free (str);
 
 	label = gtk_label_new (_("You can recover the opened tabs and windows."));
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_widget_show (label);
 	gtk_box_pack_start (GTK_BOX (vbox), label,
