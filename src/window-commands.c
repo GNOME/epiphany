@@ -95,6 +95,8 @@ window_cmd_file_print_preview (GtkAction *action,
 
 	ephy_embed_print (embed, info);
 
+	ephy_print_info_free (info);
+
 	ephy_window_set_print_preview (window, TRUE);
 }
 
