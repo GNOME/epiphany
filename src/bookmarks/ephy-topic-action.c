@@ -126,6 +126,7 @@ create_tool_item (GtkAction *action)
 	button = gtk_toggle_button_new ();
 	gtk_widget_add_events (GTK_WIDGET (button), GDK_BUTTON1_MOTION_MASK);
 	gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+	gtk_button_set_focus_on_click (GTK_BUTTON (button), FALSE);
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (hbox), button);
 	g_object_set_data (G_OBJECT (item), "button", button);
@@ -442,8 +443,13 @@ add_open_in_tabs_menu (EphyTopicAction *action,
 		       EphyNode *node)
 {
 	GtkWidget *item;
+	const char *label;
 
-	item = gtk_menu_item_new_with_mnemonic (_("_Open in Tabs"));
+	label = ngettext ("_Open in New Tab",
+			  "_Open in New Tabs",
+			  ephy_node_get_n_children (node));
+
+	item = gtk_menu_item_new_with_mnemonic (label);
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
