@@ -821,6 +821,7 @@ nsresult EventContext::CheckLinkScheme (const nsAString &link)
 	    scheme.EqualsIgnoreCase ("https") ||
 	    scheme.EqualsIgnoreCase ("ftp")   ||
 	    scheme.EqualsIgnoreCase ("file")  ||
+	    scheme.EqualsIgnoreCase ("data")  ||
 	    scheme.EqualsIgnoreCase ("about") ||
 	    scheme.EqualsIgnoreCase ("gopher"))
 	{

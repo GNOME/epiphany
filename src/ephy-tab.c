@@ -412,6 +412,7 @@ address_has_web_scheme (const char *address)
 				  strcmp (scheme, "https") == 0 ||
 				  strcmp (scheme, "ftp") == 0 ||
 				  strcmp (scheme, "file") == 0 ||
+				  strcmp (scheme, "data") == 0 ||
 				  strcmp (scheme, "about") == 0 ||
 				  strcmp (scheme, "gopher") == 0);
 
