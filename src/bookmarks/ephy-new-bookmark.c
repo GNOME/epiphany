@@ -213,7 +213,7 @@ build_editing_table (EphyNewBookmark *editor)
 	gtk_label_set_markup (GTK_LABEL (label), str);
 	g_free (str);
 	gtk_widget_show (label);
-	topics_selector = ephy_topics_selector_new (editor->priv->bookmarks);
+	topics_selector = ephy_topics_selector_new (editor->priv->bookmarks, NULL);
 	gtk_widget_show (topics_selector);
 	editor->priv->topics_selector = topics_selector;
 

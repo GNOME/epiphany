@@ -201,7 +201,7 @@ fill_model (EphyTopicsSelector *editor)
 	{
 		EphyNode *kid;
 		const char *name;
-		gboolean has_keyword;
+		gboolean has_keyword = FALSE;
 		gboolean real_topic;
 		GtkTreeIter iter;
 
@@ -209,7 +209,14 @@ fill_model (EphyTopicsSelector *editor)
 
 		name = ephy_node_get_property_string
 			(kid, EPHY_NODE_KEYWORD_PROP_NAME);
-		has_keyword = FALSE;
+
+		if (editor->priv->bookmark != NULL)
+		{
+			has_keyword = ephy_bookmarks_has_keyword
+				(editor->priv->bookmarks, kid,
+				 editor->priv->bookmark);
+		}
+
 		real_topic = !ephy_node_get_property_boolean
 			(kid, EPHY_NODE_KEYWORD_PROP_ALL_PRIORITY);
 
@@ -242,6 +249,7 @@ topic_toggled (GtkCellRendererToggle *cell,
 
 	gtk_list_store_set (GTK_LIST_STORE (model), &iter,
 			    COL_HAS_TOPIC, has_topic, -1);
+	ephy_topics_selector_apply (selector);
 }
 
 void
@@ -328,7 +336,8 @@ ephy_topics_selector_init (EphyTopicsSelector *editor)
 }
 
 GtkWidget *
-ephy_topics_selector_new (EphyBookmarks *bookmarks)
+ephy_topics_selector_new (EphyBookmarks *bookmarks,
+			  EphyNode *bookmark)
 {
 	EphyTopicsSelector *editor;
 
@@ -337,6 +346,7 @@ ephy_topics_selector_new (EphyBookmarks *bookmarks)
 	editor = EPHY_TOPICS_SELECTOR (g_object_new
 			(EPHY_TYPE_TOPIC_SELECTOR,
 			 "bookmarks", bookmarks,
+			 "bookmark", bookmark,
 			 "hadjustment", NULL,
 			 "vadjustment", NULL,
 			 "hscrollbar_policy", GTK_POLICY_AUTOMATIC,

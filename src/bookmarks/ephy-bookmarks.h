@@ -89,6 +89,10 @@ EphyNode       *ephy_bookmarks_find_keyword     (EphyBookmarks *eb,
 			                         const char *name,
 						 gboolean partial_match);
 
+gboolean        ephy_bookmarks_has_keyword      (EphyBookmarks *eb,
+						 EphyNode *keyword,
+						 EphyNode *bookmark);
+
 void            ephy_bookmarks_set_keyword      (EphyBookmarks *eb,
 						 EphyNode *keyword,
 						 EphyNode *bookmark);

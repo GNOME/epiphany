@@ -1,12 +1,25 @@
-
 <Root>
-<popups>
+<menu>
+<submenu name="FileMenu" verb="File">
+ 	<menuitem name="FileNewTopic" verb="NewTopic"/>
+	<separator name="FileSep1"/>
+        <menuitem name="FileOpenInWindow" verb="OpenInWindow"/>
+	<menuitem name="FileOpenInTab" verb="OpenInTab"/>
+	<separator name="FileSep2"/>
+	<menuitem name="FileRenameBookmark" verb="RenameBookmark"/>
+	<menuitem name="FileRemoveBookmark" verb="RemoveBookmark"/>
+	<menuitem name="FileRemoveTopic" verb="RemoveTopic"/>
+	<separator name="FileSep3"/>
+	<menuitem name="FileProperties" verb="Properties"/>
+</submenu>
+</menu>
 
+<popups>
 <popup name="EphyBookmarkEditorPopup" verb="FakeToplevel">
 	<menuitem name="OpenInWindowBMK" verb="OpenInWindow"/>
 	<menuitem name="OpenInTabBMK" verb="OpenInTab"/>
 	<separator name="BookmarksPopupSep1"/>
-	<menuitem name="RemoveBMK" verb="Remove"/>
+	<menuitem name="RemoveBMK" verb="RemoveBookmark"/>
 	<separator name="BookmarksPopupSep2"/>
 	<menuitem name="BMKProperties" verb="Properties"/>
 </popup>

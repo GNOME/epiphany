@@ -50,7 +50,8 @@ typedef struct
 
 GType		     ephy_topics_selector_get_type        (void);
 
-GtkWidget	    *ephy_topics_selector_new             (EphyBookmarks *bookmarks);
+GtkWidget	    *ephy_topics_selector_new             (EphyBookmarks *bookmarks,
+							   EphyNode *bookmark);
 
 void		     ephy_topics_selector_set_bookmark    (EphyTopicsSelector *selector,
 							   EphyNode *bookmark);

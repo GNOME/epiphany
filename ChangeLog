@@ -1,6 +1,26 @@
 2003-03-22  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* data/ui/epiphany-bookmark-editor-ui.xml.in:
+	* src/bookmarks/ephy-bookmark-properties.c: (update_entry),
+	(title_entry_changed_cb), (location_entry_changed_cb), (build_ui):
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_add_topic),
+	(cmd_remove_topic), (cmd_rename_bookmark),
+	(cmd_open_bookmarks_in_tabs), (cmd_open_bookmarks_in_browser),
+	(cmd_remove_bookmarks), (cmd_bookmark_properties), (add_widget),
+	(ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-bookmarks.c: (bookmarks_removed_cb),
+	(ephy_bookmarks_has_keyword), (ephy_bookmarks_unset_keyword):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/bookmarks/ephy-new-bookmark.c: (build_editing_table):
+	* src/bookmarks/ephy-topics-selector.c: (fill_model),
+	(topic_toggled), (ephy_topics_selector_new):
+	* src/bookmarks/ephy-topics-selector.h:
+
+	Some more bookmarks work ...
+
+2003-03-22  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/ui/epiphany-bookmark-editor-ui.xml.in:
 	* src/bookmarks/Makefile.am:
 	* src/bookmarks/ephy-bookmark-properties.c:
 	(ephy_bookmark_properties_get_type),

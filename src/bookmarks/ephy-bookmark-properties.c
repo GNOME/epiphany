@@ -200,10 +200,39 @@ bookmark_properties_response_cb (GtkDialog *dialog,
 }
 
 static void
+update_entry (EphyBookmarkProperties *props, GtkWidget *entry, guint prop)
+{
+	GValue value = { 0, };
+	char *text;
+
+	text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, text);
+	ephy_node_set_property (props->priv->bookmark,
+			        prop,
+			        &value);
+	g_value_unset (&value);
+	g_free (text);
+}
+
+static void
+title_entry_changed_cb (GtkWidget *entry, EphyBookmarkProperties *props)
+{
+	update_entry (props, entry, EPHY_NODE_BMK_PROP_TITLE);
+}
+
+static void
+location_entry_changed_cb (GtkWidget *entry, EphyBookmarkProperties *props)
+{
+	update_entry (props, entry, EPHY_NODE_BMK_PROP_LOCATION);
+}
+
+static void
 build_ui (EphyBookmarkProperties *editor)
 {
 	GtkWidget *table, *label, *entry, *topics_selector;
 	char *str;
+	const char *tmp;
 
 	g_signal_connect (G_OBJECT (editor),
 			  "response",
@@ -229,6 +258,11 @@ build_ui (EphyBookmarkProperties *editor)
 	g_free (str);
 	gtk_widget_show (label);
 	entry = gtk_entry_new ();
+	tmp = ephy_node_get_property_string (editor->priv->bookmark,
+					     EPHY_NODE_BMK_PROP_TITLE);
+	gtk_entry_set_text (GTK_ENTRY (entry), tmp);
+	g_signal_connect (entry, "changed",
+			  G_CALLBACK (title_entry_changed_cb), editor);
 	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 	editor->priv->title_entry = entry;
 	gtk_widget_set_size_request (entry, 200, -1);
@@ -243,6 +277,11 @@ build_ui (EphyBookmarkProperties *editor)
 	g_free (str);
 	gtk_widget_show (label);
 	entry = gtk_entry_new ();
+	tmp = ephy_node_get_property_string (editor->priv->bookmark,
+					     EPHY_NODE_BMK_PROP_LOCATION);
+	gtk_entry_set_text (GTK_ENTRY (entry), tmp);
+	g_signal_connect (entry, "changed",
+			  G_CALLBACK (location_entry_changed_cb), editor);
 	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 	editor->priv->location_entry = entry;
 	gtk_widget_show (entry);
@@ -255,7 +294,8 @@ build_ui (EphyBookmarkProperties *editor)
 	gtk_label_set_markup (GTK_LABEL (label), str);
 	g_free (str);
 	gtk_widget_show (label);
-	topics_selector = ephy_topics_selector_new (editor->priv->bookmarks);
+	topics_selector = ephy_topics_selector_new (editor->priv->bookmarks,
+						    editor->priv->bookmark);
 	gtk_widget_show (topics_selector);
 	editor->priv->topics_selector = topics_selector;
 

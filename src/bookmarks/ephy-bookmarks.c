@@ -163,42 +163,6 @@ ephy_bookmarks_class_init (EphyBookmarksClass *klass)
         object_class->finalize = ephy_bookmarks_finalize;
 }
 
-static gboolean
-ephy_bookmarks_clean_empty_keywords (EphyBookmarks *eb)
-{
-	GPtrArray *children;
-	int i;
-	GList *l = NULL, *tmp;
-
-	children = ephy_node_get_children (eb->priv->keywords);
-	ephy_node_thaw (eb->priv->keywords);
-	for (i = 0; i < children->len; i++)
-	{
-		EphyNode *kid;
-
-		kid = g_ptr_array_index (children, i);
-
-		if (ephy_node_get_n_children (kid) == 0)
-		{
-			l = g_list_append (l, kid);
-		}
-	}
-
-	if (l == NULL) return FALSE;
-
-	for (tmp = l; tmp != NULL; tmp = tmp->next)
-	{
-		EphyNode *node = EPHY_NODE (tmp->data);
-		LOG ("Remove empty keyword: %s",
-		     ephy_node_get_property_string (node,
-			     EPHY_NODE_KEYWORD_PROP_NAME))
-		g_object_unref (node);
-	}
-	g_list_free (l);
-
-	return FALSE;
-}
-
 static void
 ephy_bookmarks_load (EphyBookmarks *eb)
 {
@@ -439,7 +403,6 @@ bookmarks_removed_cb (EphyNode *node,
 		      EphyBookmarks *eb)
 {
 	ephy_bookmarks_emit_data_changed (eb);
-	g_idle_add ((GSourceFunc)ephy_bookmarks_clean_empty_keywords, eb);
 }
 
 static void
@@ -854,6 +817,14 @@ ephy_bookmarks_find_keyword (EphyBookmarks *eb,
 	return node;
 }
 
+gboolean
+ephy_bookmarks_has_keyword (EphyBookmarks *eb,
+			    EphyNode *keyword,
+			    EphyNode *bookmark)
+{
+	return ephy_node_has_child (keyword, bookmark);
+}
+
 void
 ephy_bookmarks_set_keyword (EphyBookmarks *eb,
 			    EphyNode *keyword,
@@ -872,7 +843,6 @@ ephy_bookmarks_unset_keyword (EphyBookmarks *eb,
 	if (!ephy_node_has_child (keyword, bookmark)) return;
 
 	ephy_node_remove_child (keyword, bookmark);
-	ephy_bookmarks_clean_empty_keywords (eb);
 }
 
 EphyNode *
