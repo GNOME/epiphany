@@ -206,7 +206,7 @@ build_editing_table (EphyNewBookmark *editor)
 
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	str = g_strconcat ("<b>", _("Keywords:"), "</b>", NULL);
+	str = g_strconcat ("<b>", _("Topics:"), "</b>", NULL);
 	gtk_label_set_markup (GTK_LABEL (label), str);
 	g_free (str);
 	gtk_widget_show (label);
