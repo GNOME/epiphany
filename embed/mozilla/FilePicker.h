@@ -24,6 +24,7 @@
 
 #include <nsIFilePicker.h>
 #include <nsISupports.h>
+#include <nsEmbedString.h>
 
 #include "ephy-file-chooser.h"
 
@@ -54,6 +55,7 @@ public:
 private:
 	EphyFileChooser *mDialog;
 	PRInt16 mMode;
+	nsEmbedString mDefaultString;
 };
 
 #endif

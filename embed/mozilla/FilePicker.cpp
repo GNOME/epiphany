@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2001 Philip Langdale
- *  Copyright (C) 2003 Christian Persch
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -241,25 +241,11 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
 
 	LOG ("GFilePicker::GetDefaultString")
 
-	char *filename, *converted;
-	filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (mDialog));
-	if (filename != NULL)
-	{
-		converted = g_filename_to_utf8(filename, -1, NULL, NULL, NULL);
-
-		nsEmbedString defaultString;
 #if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
-		NS_CStringToUTF16 (nsEmbedCString(converted),
-				   NS_CSTRING_ENCODING_UTF8, aDefaultString);
+	aDefaultString = mDefaultString;
 #else
-		NS_CStringToUTF16 (nsEmbedCString(converted),
-				   NS_CSTRING_ENCODING_UTF8, defaultString);
-		*aDefaultString = NS_StringCloneData (defaultString);
+	*aDefaultString = NS_StringCloneData (mDefaultString);
 #endif
-	
-		g_free (filename);
-		g_free (converted);
-	}
 
 	return NS_OK;
 }
@@ -272,24 +258,17 @@ NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
 {
 	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
 
-	if (mMode != nsIFilePicker::modeSave) return NS_ERROR_FAILURE;
+	mDefaultString.Assign (aDefaultString);
 
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
-	if (aDefaultString.Length())
-#else
-	if (aDefaultString)
-#endif
+	if (mMode == nsIFilePicker::modeSave)
 	{
 		nsEmbedCString defaultString;
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
-		NS_UTF16ToCString (aDefaultString, NS_CSTRING_ENCODING_UTF8,
+		NS_UTF16ToCString (mDefaultString, NS_CSTRING_ENCODING_UTF8,
 				   defaultString);
-#else
-		NS_UTF16ToCString (nsEmbedString(aDefaultString),
-				   NS_CSTRING_ENCODING_UTF8, defaultString);
-#endif
 
 		LOG ("GFilePicker::SetDefaultString %s", defaultString.get())
+
+		if (!defaultString.Length()) return NS_ERROR_FAILURE;
 
 		/* set_current_name takes UTF-8, not a filename */
 		gtk_file_chooser_set_current_name
@@ -367,8 +346,22 @@ NS_IMETHODIMP GFilePicker::SetDisplayDirectory(nsILocalFile *aDisplayDirectory)
 
 	LOG ("GFilePicker::SetDisplayDirectory to %s", dir.get())
 
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (mDialog),
-					     dir.get());
+	if (mDefaultString.Length() && mMode != nsIFilePicker::modeSave)
+	{
+		nsEmbedCString defaultString;
+		NS_UTF16ToCString (mDefaultString, NS_CSTRING_ENCODING_NATIVE_FILESYSTEM,
+				   defaultString);
+
+		char *filename = g_build_filename (dir.get(), defaultString.get(), NULL);
+		LOG ("Setting filename to %s", filename);
+		gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (mDialog), filename);
+		g_free (filename);
+	}
+	else
+	{
+		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (mDialog),
+						     dir.get());
+	}
 
 	return NS_OK;
 }
