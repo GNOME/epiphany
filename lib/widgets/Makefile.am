@@ -14,8 +14,6 @@ noinst_LTLIBRARIES = libephywidgets.la
 libephywidgets_la_SOURCES = \
 	ephy-arrow-toolbutton.c			\
 	ephy-arrow-toolbutton.h			\
-	ephy-autocompletion-window.c		\
-	ephy-autocompletion-window.h		\
 	ephy-ellipsizing-label.c		\
 	ephy-ellipsizing-label.h		\
 	ephy-location-entry.c			\

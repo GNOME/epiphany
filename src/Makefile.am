@@ -81,6 +81,8 @@ epiphany_bin_SOURCES = 				    	\
 	$(CORBA_SOURCE)				 	\
 	$(nautilus_view_sources)			\
 	ephy-automation.c				\
+	ephy-completion-model.c				\
+	ephy-completion-model.h				\
 	ephy-encoding-menu.c				\
 	ephy-favicon-action.c				\
 	ephy-favorites-menu.c				\

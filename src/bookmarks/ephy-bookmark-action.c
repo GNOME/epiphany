@@ -487,13 +487,17 @@ sync_bookmark_properties (GtkAction *action, EphyNode *bmk)
 	const char *tmp, *location, *icon;
 	char *title;
 	gboolean smart_url;
+	EphyBookmarks *bookmarks;
+	EphyNode *smart_bmks;
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	smart_bmks = ephy_bookmarks_get_smart_bookmarks (bookmarks);
 
 	icon = ephy_node_get_property_string
 		(bmk, EPHY_NODE_BMK_PROP_ICON);
 	location = ephy_node_get_property_string
 		(bmk, EPHY_NODE_BMK_PROP_LOCATION);
-	smart_url = ephy_node_get_property_boolean
-		(bmk, EPHY_NODE_BMK_PROP_HAS_SMART_ADDRESS);
+	smart_url = ephy_node_has_child (smart_bmks, bmk);
 	tmp = ephy_node_get_property_string
 		(bmk, EPHY_NODE_BMK_PROP_TITLE);
 	title = ephy_string_double_underscores (tmp);

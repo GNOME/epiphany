@@ -32,7 +32,6 @@
 #include "ephy-toolbars-model.h"
 #include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
-#include "ephy-autocompletion.h"
 #include "session.h"
 
 #include <string.h>
@@ -40,7 +39,7 @@
 #include <libgnomevfs/gnome-vfs-utils.h>
 
 #define EPHY_BOOKMARKS_XML_ROOT    "ephy_bookmarks"
-#define EPHY_BOOKMARKS_XML_VERSION "1.0"
+#define EPHY_BOOKMARKS_XML_VERSION "1.01"
 #define BOOKMARKS_SAVE_DELAY (3 * 1000)
 #define MAX_FAVORITES_NUM 10
 
@@ -59,6 +58,7 @@ struct EphyBookmarksPrivate
 	EphyNode *keywords;
 	EphyNode *favorites;
 	EphyNode *notcategorized;
+	EphyNode *smartbookmarks;
 	EphyNode *lower_fav;
 	double lower_score;
 };
@@ -112,8 +112,6 @@ static void
 ephy_bookmarks_init (EphyBookmarks *tab);
 static void
 ephy_bookmarks_finalize (GObject *object);
-static void
-ephy_bookmarks_autocompletion_source_init (EphyAutocompletionSourceIface *iface);
 
 static GObjectClass *parent_class = NULL;
 
@@ -137,76 +135,12 @@ ephy_bookmarks_get_type (void)
                         (GInstanceInitFunc) ephy_bookmarks_init
                 };
 
-		static const GInterfaceInfo autocompletion_source_info =
-		{
-			(GInterfaceInitFunc) ephy_bookmarks_autocompletion_source_init,
-			NULL,
-			NULL
-		};
-
                 ephy_bookmarks_type = g_type_register_static (G_TYPE_OBJECT,
 							      "EphyBookmarks",
 							      &our_info, 0);
-
-		g_type_add_interface_static (ephy_bookmarks_type,
-					     EPHY_TYPE_AUTOCOMPLETION_SOURCE,
-					     &autocompletion_source_info);
         }
 
         return ephy_bookmarks_type;
-}
-
-static void
-ephy_bookmarks_autocompletion_source_set_basic_key (EphyAutocompletionSource *source,
-						    const gchar *basic_key)
-{
-	/* nothing to do here */
-}
-
-static void
-ephy_bookmarks_autocompletion_source_foreach (EphyAutocompletionSource *source,
-					      const gchar *current_text,
-					      EphyAutocompletionSourceForeachFunc func,
-					      gpointer data)
-{
-	GPtrArray *children;
-	int i;
-	EphyBookmarks *eb = EPHY_BOOKMARKS (source);
-
-	children = ephy_node_get_children (eb->priv->bookmarks);
-	for (i = 0; i < children->len; i++)
-	{
-		EphyNode *kid;
-		const char *url, *title, *keywords;
-		gboolean smart_url;
-
-		kid = g_ptr_array_index (children, i);
-		url = ephy_node_get_property_string
-			(kid, EPHY_NODE_BMK_PROP_LOCATION);
-		smart_url = ephy_node_get_property_boolean
-			(kid, EPHY_NODE_BMK_PROP_HAS_SMART_ADDRESS);
-		title = ephy_node_get_property_string
-			(kid, EPHY_NODE_BMK_PROP_TITLE);
-		keywords = ephy_node_get_property_string
-			(kid, EPHY_NODE_BMK_PROP_KEYWORDS);
-
-		func (source, keywords, title, url, smart_url,
-		      !smart_url, 0, data);
-	}
-	ephy_node_thaw (eb->priv->bookmarks);
-}
-
-static void
-ephy_bookmarks_emit_data_changed (EphyBookmarks *eb)
-{
-	g_signal_emit_by_name (eb, "data-changed");
-}
-
-static void
-ephy_bookmarks_autocompletion_source_init (EphyAutocompletionSourceIface *iface)
-{
-	iface->foreach = ephy_bookmarks_autocompletion_source_foreach;
-	iface->set_basic_key = ephy_bookmarks_autocompletion_source_set_basic_key;
 }
 
 static void
@@ -527,7 +461,6 @@ bookmarks_changed_cb (EphyNode *node,
 		      EphyNode *child,
 		      EphyBookmarks *eb)
 {
-	ephy_bookmarks_emit_data_changed (eb);
 	ephy_bookmarks_save_delayed (eb, BOOKMARKS_SAVE_DELAY);
 }
 
@@ -537,7 +470,6 @@ bookmarks_removed_cb (EphyNode *node,
 		      guint old_index,
 		      EphyBookmarks *eb)
 {
-	ephy_bookmarks_emit_data_changed (eb);
 	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
 	ephy_bookmarks_save_delayed (eb, BOOKMARKS_SAVE_DELAY);
 }
@@ -715,6 +647,10 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	g_value_unset (&value);
 	ephy_node_add_child (eb->priv->keywords, eb->priv->notcategorized);
 
+	/* Smart bookmarks */
+	eb->priv->smartbookmarks = ephy_node_new_with_id (db, SMARTBOOKMARKS_NODE_ID);
+	ephy_node_ref (eb->priv->smartbookmarks);
+
 	if (ephy_node_db_load_from_file (eb->priv->db, eb->priv->xml_file,
 					 EPHY_BOOKMARKS_XML_ROOT,
 					 EPHY_BOOKMARKS_XML_VERSION) == FALSE)
@@ -724,8 +660,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 			eb->priv->init_defaults = TRUE;
 		}
 	}
-
-	ephy_bookmarks_emit_data_changed (eb);
 
 	ephy_setup_history_notifiers (eb);
 	ephy_bookmarks_update_favorites (eb);
@@ -775,21 +709,32 @@ ephy_bookmarks_new ()
 }
 
 static void
-update_has_smart_address (EphyNode *bmk, const char *address)
+update_has_smart_address (EphyBookmarks *bookmarks, EphyNode *bmk, const char *address)
 {
+	EphyNode *smart_bmks;
 	gboolean smart = FALSE;
-	GValue value = { 0, };
+
+	smart_bmks = bookmarks->priv->smartbookmarks;
 
 	if (address)
 	{
 		smart = strstr (address, "%s") != NULL;
 	}
 
-	g_value_init (&value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&value, smart);
-	ephy_node_set_property (bmk, EPHY_NODE_BMK_PROP_HAS_SMART_ADDRESS,
-			        &value);
-	g_value_unset (&value);
+	if (smart)
+	{
+		if (!ephy_node_has_child (smart_bmks, bmk))
+		{
+			ephy_node_add_child (smart_bmks, bmk);
+		}
+	}
+	else
+	{
+		if (ephy_node_has_child (smart_bmks, bmk))
+		{
+			ephy_node_add_child (smart_bmks, bmk);
+		}
+	}
 }
 
 EphyNode *
@@ -814,12 +759,11 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 			        &value);
 	g_value_unset (&value);
 
-	update_has_smart_address (bm, url);
+	update_has_smart_address (eb, bm, url);
 
 	ephy_node_add_child (eb->priv->bookmarks, bm);
 	ephy_node_add_child (eb->priv->notcategorized, bm);
 
-	ephy_bookmarks_emit_data_changed (eb);
 	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
 	ephy_bookmarks_save_delayed (eb, 0);
 
@@ -839,7 +783,7 @@ ephy_bookmarks_set_address (EphyBookmarks *eb,
 			        &value);
 	g_value_unset (&value);
 
-	update_has_smart_address (bookmark, address);
+	update_has_smart_address (eb, bookmark, address);
 }
 
 EphyNode *
@@ -1232,6 +1176,12 @@ ephy_bookmarks_unset_keyword (EphyBookmarks *eb,
 	g_free (list);
 
 	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
+}
+
+EphyNode *
+ephy_bookmarks_get_smart_bookmarks (EphyBookmarks *eb)
+{
+	return eb->priv->smartbookmarks;
 }
 
 EphyNode *

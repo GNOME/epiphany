@@ -41,7 +41,6 @@
 #include "session.h"
 #include "downloader-view.h"
 #include "ephy-toolbars-model.h"
-#include "ephy-autocompletion.h"
 #include "ephy-automation.h"
 
 #include <string.h>
@@ -71,7 +70,6 @@ struct EphyShellPrivate
 {
 	BonoboGenericFactory *automation_factory;
 	Session *session;
-	EphyAutocompletion *autocompletion;
 	EphyBookmarks *bookmarks;
 	EphyToolbarsModel *toolbars_model;
 	EggToolbarsModel *fs_toolbars_model;
@@ -306,12 +304,6 @@ ephy_shell_finalize (GObject *object)
 	if (gs->priv->session)
 	{
 		g_object_unref (G_OBJECT (gs->priv->session));
-	}
-
-	LOG ("Unref autocompletion")
-	if (gs->priv->autocompletion)
-	{
-		g_object_unref (gs->priv->autocompletion);
 	}
 
 	LOG ("Unref Bookmarks Editor");
@@ -562,31 +554,6 @@ ephy_shell_get_session (EphyShell *gs)
 	}
 
 	return G_OBJECT (gs->priv->session);
-}
-
-GObject *
-ephy_shell_get_autocompletion (EphyShell *gs)
-{
-	EphyShellPrivate *p = gs->priv;
-
-	if (!p->autocompletion)
-	{
-		static const gchar *prefixes[] = {
-			EPHY_AUTOCOMPLETION_USUAL_WEB_PREFIXES,
-			NULL
-		};
-
-		EphyHistory *gh = ephy_embed_shell_get_global_history (EPHY_EMBED_SHELL (gs));
-		EphyBookmarks *bmk = ephy_shell_get_bookmarks (gs);
-		p->autocompletion = ephy_autocompletion_new ();
-		ephy_autocompletion_set_prefixes (p->autocompletion, prefixes);
-
-		ephy_autocompletion_add_source (p->autocompletion,
-						EPHY_AUTOCOMPLETION_SOURCE (gh));
-		ephy_autocompletion_add_source (p->autocompletion,
-						EPHY_AUTOCOMPLETION_SOURCE (bmk));
-	}
-	return G_OBJECT (p->autocompletion);
 }
 
 EphyBookmarks *

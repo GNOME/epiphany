@@ -123,6 +123,195 @@
 
 	Use new gtk api for empty submenus
 
+2003-10-07  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* src/ephy-completion-model.c: (node_iter_from_node),
+	(ephy_completion_model_init), (ephy_completion_model_get_value),
+	(ephy_completion_model_get_iter), (ephy_completion_model_get_path),
+	(ephy_completion_model_iter_next),
+	(ephy_completion_model_iter_children),
+	(ephy_completion_model_iter_n_children),
+	(ephy_completion_model_iter_nth_child):
+
+	Add stamp.
+
+2003-10-06  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-location-entry.c: (completion_func),
+	(match_selected_cb), (ephy_location_entry_construct_contents),
+	(ephy_location_entry_init), (sort_func),
+	(ephy_location_entry_set_completion):
+	* lib/widgets/ephy-location-entry.h:
+	* src/Makefile.am:
+	* src/ephy-completion-model.c: (ephy_completion_model_class_init),
+	(root_child_removed_cb), (node_iter_from_node), (get_path_real),
+	(root_child_added_cb), (root_child_changed_cb), (connect_signals),
+	(ephy_completion_model_init),
+	(ephy_completion_model_get_column_type), (init_text_col),
+	(init_action_col), (init_keywords_col), (init_relevance_col),
+	(ephy_completion_model_get_value),
+	(ephy_completion_model_get_iter):
+	* src/ephy-location-action.c: (connect_proxy):
+
+	Implement our own completion model. The big part of the
+	new location entry impl is done. When gtk completion will
+	be fixed I'll be able to merge this on head.
+
+2003-10-05  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_class_init), (entry_activate_cb):
+	* lib/widgets/ephy-location-entry.h:
+
+	Remove the activated signal.
+
+	* src/ephy-location-action.c: (action_activated_cb),
+	(location_url_activate_cb), (remove_completion_actions),
+	(add_completion_actions), (connect_proxy),
+	(ephy_location_action_init):
+
+	Just use entry activate signal. Implement smart
+	bookmarks activation.
+
+2003-10-05  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/ephy-node-common.h:
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_get_entry):
+	* lib/widgets/ephy-location-entry.h:
+	* src/bookmarks/ephy-bookmark-action.c: (sync_bookmark_properties):
+	* src/bookmarks/ephy-bookmarks-export.c:
+	(ephy_bookmarks_export_rdf):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init),
+	(update_has_smart_address), (ephy_bookmarks_add),
+	(ephy_bookmarks_set_address), (ephy_bookmarks_unset_keyword),
+	(ephy_bookmarks_get_smart_bookmarks):
+	* src/bookmarks/ephy-bookmarks.h:
+
+	Modify smart bookmarks to use a separate root instead
+	of a property.
+
+	* src/ephy-location-action.c: (remove_completion_actions),
+	(add_completion_actions), (connect_proxy), (init_actions_list),
+	(update_actions_list), (actions_child_removed_cb),
+	(actions_child_added_cb), (actions_child_changed_cb),
+	(ephy_location_action_init), (ephy_location_action_finalize):
+
+	Implement smart bookmarks as location actions.
+
+2003-10-05  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-location-entry.c: (add_to_history),
+	(entry_activate_cb), (ephy_location_entry_construct_contents),
+	(ephy_location_entry_init), (save_location_history),
+	(ephy_location_entry_finalize),
+	(ephy_location_entry_clear_history):
+	
+	Implement location history.
+
+	* lib/widgets/ephy-tree-model-node.c: (root_children_reordered_cb):
+
+	Fixup reorder notification.
+
+2003-10-03  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-location-entry.c: (match_selected_cb),
+	(ephy_location_entry_construct_contents),
+	(ephy_location_entry_add_completion):
+
+	Do not create multiple gtk completions, open the
+	url when a match is selected.
+
+2003-10-02  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/egg/Makefile.am:
+	* lib/egg/eggtreemodelunion.c:
+	* lib/egg/eggtreemodelunion.h:
+
+	Add from libegg.
+
+	* lib/widgets/ephy-location-entry.c: (completion_func),
+	(ephy_location_entry_construct_contents),
+	(ephy_location_entry_add_completion):
+	* lib/widgets/ephy-location-entry.h:
+	* lib/widgets/ephy-tree-model-node.c:
+	(ephy_tree_model_node_get_value):
+	* src/ephy-location-action.c: (connect_proxy):
+
+	Merge bookmarks in autocompletion and implement
+	case unsensitive match.
+
+2003-10-02  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-location-entry.c: (completion_func),
+	(ephy_location_entry_init), (ephy_location_entry_add_completion):
+
+	Costum match function to deal with prefixes.
+
+	* lib/widgets/ephy-tree-model-node.c:
+	(ephy_tree_model_node_get_column_type),
+	(ephy_tree_model_node_get_value):
+
+	Fix column indexes.
+
+2003-10-01  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-location-entry.c: (entry_button_press_cb),
+	(ephy_location_entry_construct_contents):
+
+	Put back double click -> select all
+
+2003-10-01  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-location-entry.c: (location_focus_out_cb),
+	(ephy_location_entry_construct_contents),
+	(ephy_location_entry_init), (ephy_location_entry_finalize),
+	(ephy_location_entry_add_completion),
+	(ephy_location_entry_set_location),
+	(ephy_location_entry_get_location), (ephy_location_entry_activate),
+	(ephy_location_entry_clear_history):
+	* lib/widgets/ephy-location-entry.h:
+
+	cleanups
+
+2003-10-01  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/ephy-history.c: (ephy_history_get_type),
+	(ephy_history_init), (ephy_history_visited):
+	* lib/Makefile.am:
+	* lib/ephy-autocompletion-source.c:
+	* lib/ephy-autocompletion-source.h:
+	* lib/ephy-autocompletion.c:
+	* lib/ephy-autocompletion.h:
+	* lib/widgets/Makefile.am:
+	* lib/widgets/ephy-autocompletion-window.c:
+	* lib/widgets/ephy-autocompletion-window.h:
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_get_type),
+	(bookmarks_changed_cb), (bookmarks_removed_cb),
+	(ephy_bookmarks_init), (ephy_bookmarks_add):
+
+	Remove old implementation completely
+
+2003-10-01  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_class_init), (editable_changed_cb),
+	(entry_activate_cb), (ephy_location_entry_construct_contents),
+	(ephy_location_entry_init), (ephy_location_entry_finalize),
+	(ephy_location_entry_new), (ephy_location_entry_add_completion),
+	(ephy_location_entry_set_location),
+	(ephy_location_entry_clear_history):
+	* lib/widgets/ephy-location-entry.h:
+	* lib/widgets/ephy-tree-model-node.c:
+	(ephy_tree_model_node_add_prop_column),
+	(ephy_tree_model_node_add_func_column):
+	* src/ephy-location-action.c: (connect_proxy):
+	* src/ephy-shell.c: (ephy_shell_finalize),
+	(ephy_shell_get_session):
+	* src/ephy-shell.h:
+
+	Beginning of new location entry implementation
+
 2003-09-30  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* data/epiphany.schemas.in:

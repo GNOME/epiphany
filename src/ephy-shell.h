@@ -93,8 +93,6 @@ EphyTab            *ephy_shell_new_tab	             (EphyShell *shell,
 
 GObject		   *ephy_shell_get_session	     (EphyShell *gs);
 
-GObject            *ephy_shell_get_autocompletion    (EphyShell *gs);
-
 EphyBookmarks      *ephy_shell_get_bookmarks         (EphyShell *gs);
 
 GObject		   *ephy_shell_get_toolbars_model    (EphyShell *gs,

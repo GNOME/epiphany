@@ -16,8 +16,6 @@ header_DATA = $(INST_H_FILES)
 
 NOINST_H_FILES = \
 	eel-gconf-extensions.h			\
-	ephy-autocompletion.h			\
-	ephy-autocompletion-source.h		\
 	ephy-bonobo-extensions.h		\
 	ephy-debug.h				\
 	ephy-dnd.h				\
@@ -44,10 +42,6 @@ INST_H_FILES = \
 libephy_la_SOURCES = \
 	eel-gconf-extensions.c			\
 	eel-gconf-extensions.h			\
-	ephy-autocompletion.c			\
-	ephy-autocompletion.h			\
-	ephy-autocompletion-source.c		\
-	ephy-autocompletion-source.h		\
 	ephy-bonobo-extensions.h		\
 	ephy-bonobo-extensions.c		\
 	ephy-debug.c				\

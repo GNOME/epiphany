@@ -42,7 +42,6 @@ enum
 	EPHY_NODE_BMK_PROP_LOCATION = 3,
 	EPHY_NODE_BMK_PROP_KEYWORDS = 4,
 	EPHY_NODE_KEYWORD_PROP_NAME = 5,
-	EPHY_NODE_BMK_PROP_HAS_SMART_ADDRESS = 9,
 	EPHY_NODE_BMK_PROP_ICON = 7,
 	EPHY_NODE_KEYWORD_PROP_PRIORITY = 8
 };
@@ -126,6 +125,8 @@ EphyNode       *ephy_bookmarks_get_keywords	(EphyBookmarks *eb);
 EphyNode       *ephy_bookmarks_get_bookmarks	(EphyBookmarks *eb);
 
 EphyNode       *ephy_bookmarks_get_not_categorized (EphyBookmarks *eb);
+
+EphyNode       *ephy_bookmarks_get_smart_bookmarks (EphyBookmarks *eb);
 
 G_END_DECLS
 

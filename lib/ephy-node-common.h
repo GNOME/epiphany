@@ -37,7 +37,8 @@ enum
 	STATES_NODE_ID = 4,
 	HOSTS_NODE_ID = 5,
 	PAGES_NODE_ID = 6,
-	ICONS_NODE_ID = 9
+	ICONS_NODE_ID = 9,
+	SMARTBOOKMARKS_NODE_ID = 10
 };
 
 typedef enum

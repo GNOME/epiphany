@@ -25,7 +25,6 @@
 #include "ephy-types.h"
 #include "ephy-history.h"
 #include "ephy-file-helpers.h"
-#include "ephy-autocompletion-source.h"
 #include "ephy-debug.h"
 #include "ephy-node-common.h"
 
@@ -75,8 +74,6 @@ static void
 ephy_history_init (EphyHistory *tab);
 static void
 ephy_history_finalize (GObject *object);
-static void
-ephy_history_autocompletion_source_init (EphyAutocompletionSourceIface *iface);
 
 static GObjectClass *parent_class = NULL;
 
@@ -102,84 +99,12 @@ ephy_history_get_type (void)
                         (GInstanceInitFunc) ephy_history_init
                 };
 
-		static const GInterfaceInfo autocompletion_source_info =
-		{
-			(GInterfaceInitFunc) ephy_history_autocompletion_source_init,
-			NULL,
-			NULL
-		};
-
                 ephy_history_type = g_type_register_static (G_TYPE_OBJECT,
 							      "EphyHistory",
 							      &our_info, 0);
-
-		g_type_add_interface_static (ephy_history_type,
-					     EPHY_TYPE_AUTOCOMPLETION_SOURCE,
-					     &autocompletion_source_info);
         }
 
         return ephy_history_type;
-}
-
-static void
-ephy_history_autocompletion_source_set_basic_key (EphyAutocompletionSource *source,
-						  const gchar *basic_key)
-{
-	/* nothing to do here */
-}
-
-static void
-ephy_history_autocompletion_source_foreach (EphyAutocompletionSource *source,
-					    const gchar *current_text,
-					    EphyAutocompletionSourceForeachFunc func,
-					    gpointer data)
-{
-	GPtrArray *children;
-	int i;
-	EphyHistory *eb = EPHY_HISTORY (source);
-	GTime now;
-
-	now = time (NULL);
-
-	children = ephy_node_get_children (eb->priv->pages);
-	for (i = 0; i < children->len; i++)
-	{
-		EphyNode *kid;
-		const char *url, *title;
-		int last_visit, visits;
-		guint32 score;
-
-		kid = g_ptr_array_index (children, i);
-		g_assert (kid != NULL);
-
-		url = ephy_node_get_property_string
-			(kid, EPHY_NODE_PAGE_PROP_LOCATION);
-		title = ephy_node_get_property_string
-			(kid, EPHY_NODE_PAGE_PROP_TITLE);
-		last_visit = ephy_node_get_property_int
-			(kid, EPHY_NODE_PAGE_PROP_LAST_VISIT);
-		visits = ephy_node_get_property_int
-			(kid, EPHY_NODE_PAGE_PROP_VISITS);
-		score = MAX (visits - ((now - last_visit) >> 15), 1);
-
-		func (source, url,
-		      url, url, FALSE,
-		      FALSE, score, data);
-	}
-	ephy_node_thaw (eb->priv->pages);
-}
-
-static void
-ephy_history_emit_data_changed (EphyHistory *eb)
-{
-	g_signal_emit_by_name (eb, "data-changed");
-}
-
-static void
-ephy_history_autocompletion_source_init (EphyAutocompletionSourceIface *iface)
-{
-	iface->foreach = ephy_history_autocompletion_source_foreach;
-	iface->set_basic_key = ephy_history_autocompletion_source_set_basic_key;
 }
 
 static void
@@ -520,7 +445,6 @@ ephy_history_init (EphyHistory *eb)
 	ephy_node_db_load_from_file (eb->priv->db, eb->priv->xml_file,
 				     EPHY_HISTORY_XML_ROOT,
 				     EPHY_HISTORY_XML_VERSION);
-	ephy_history_emit_data_changed (eb);
 
 	g_hash_table_foreach (eb->priv->hosts_hash,
 			      (GHFunc) connect_page_removed_from_host,
@@ -765,7 +689,6 @@ ephy_history_visited (EphyHistory *eh, EphyNode *node)
 	eh->priv->last_page = node;
 
 	g_signal_emit (G_OBJECT (eh), ephy_history_signals[VISITED], 0, url);
-	ephy_history_emit_data_changed (eh);
 }
 
 int

@@ -73,8 +73,7 @@ void
 ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 			   const char *filename)
 {
-	EphyNode *bmks;
-	EphyNode *topics;
+	EphyNode *bmks, *topics, *smart_bmks;
 	xmlDocPtr doc;
 	xmlNodePtr root, xml_node, channel_node, channel_seq_node;
 	xmlNsPtr ephy_ns, rdf_ns, dc_ns;
@@ -110,6 +109,7 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 
 	bmks = ephy_bookmarks_get_bookmarks (bookmarks);
 	topics = ephy_bookmarks_get_keywords (bookmarks);
+	smart_bmks = ephy_bookmarks_get_smart_bookmarks (bookmarks);
 
 	children = ephy_node_get_children (bmks);
 	for (i = 0; i < children->len; i++)
@@ -123,8 +123,7 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 
 		kid = g_ptr_array_index (children, i);
 
-		smart_url = ephy_node_get_property_boolean
-			(kid, EPHY_NODE_BMK_PROP_HAS_SMART_ADDRESS);
+		smart_url = ephy_node_has_child (smart_bmks, kid);
 		url = ephy_node_get_property_string
 			(kid, EPHY_NODE_BMK_PROP_LOCATION);
 		title = ephy_node_get_property_string
