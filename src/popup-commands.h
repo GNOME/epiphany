@@ -31,15 +31,6 @@ void popup_cmd_link_in_new_tab		(GtkAction *action,
 void popup_cmd_bookmark_link	(GtkAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_frame_in_new_tab		(GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_frame_in_new_window	(GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_add_frame_bookmark	(GtkAction *action,
-					 EphyWindow *window);
-
 void popup_cmd_view_source		(GtkAction *action,
 					 EphyWindow *window);
 

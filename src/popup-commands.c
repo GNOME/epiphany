@@ -145,50 +145,6 @@ popup_cmd_bookmark_link (GtkAction *action,
 	}
 }
 
-void
-popup_cmd_frame_in_new_tab (GtkAction *action,
-			    EphyWindow *window)
-{
-	EphyTab *tab;
-	EphyEmbed *embed;
-	char *location;
-
-	tab = ephy_window_get_active_tab (window);
-
-	embed = ephy_window_get_active_embed (window);
-
-	location = ephy_embed_get_location (embed, FALSE);
-
-	ephy_shell_new_tab (ephy_shell, window, tab,
-			    location,
-			    EPHY_NEW_TAB_OPEN_PAGE |
-			    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
-
-	g_free (location);
-}
-
-void
-popup_cmd_frame_in_new_window (GtkAction *action,
-			       EphyWindow *window)
-{
-	EphyTab *tab;
-	EphyEmbed *embed;
-	char *location;
-
-	tab = ephy_window_get_active_tab (window);
-
-	embed = ephy_window_get_active_embed (window);
-
-	location = ephy_embed_get_location (embed, FALSE);
-
-	ephy_shell_new_tab (ephy_shell, NULL, tab,
-			    location,
-			    EPHY_NEW_TAB_OPEN_PAGE |
-			    EPHY_NEW_TAB_IN_NEW_WINDOW);
-
-	g_free (location);
-}
-
 static void
 popup_cmd_copy_to_clipboard (EphyWindow *window, const char *text)
 {
