@@ -412,15 +412,16 @@ ephy_window_get_type (void)
 }
 
 static void
-update_exit_fullscreen_popup_position (EphyWindow *window)
+update_fullscreen_popup (EphyWindow *window)
 {
 	GtkWidget *popup = window->priv->exit_fullscreen_popup;
-	GdkRectangle screen_rect;
 	int popup_width, popup_height;
+	GdkRectangle screen_rect;
 
 	g_return_if_fail (popup != NULL);
 
-	gtk_window_get_size (GTK_WINDOW (popup), &popup_width, &popup_height);
+	popup_width = popup->requisition.width;
+	popup_height = popup->requisition.height;
 
 	/* FIXME multihead */
 	gdk_screen_get_monitor_geometry (gdk_screen_get_default (),
@@ -446,7 +447,7 @@ static void
 screen_size_changed_cb (GdkScreen *screen,
 			EphyWindow *window)
 {
-	update_exit_fullscreen_popup_position (window);
+	update_fullscreen_popup (window);
 }
 
 static void
@@ -552,6 +553,12 @@ sync_chromes_visibility (EphyWindow *window)
 }
 
 static void
+fullscreen_popup_size_request_cb (GtkWidget *popup, GtkRequisition *req, EphyWindow *window)
+{
+	update_fullscreen_popup (window);
+}
+
+static void
 ephy_window_fullscreen (EphyWindow *window)
 {
 	GtkWidget *popup, *button, *icon, *label, *hbox;
@@ -593,8 +600,10 @@ ephy_window_fullscreen (EphyWindow *window)
 	/* FIXME multihead */
 	g_signal_connect (gdk_screen_get_default (), "size-changed",
 			  G_CALLBACK (screen_size_changed_cb), window);
+	g_signal_connect (popup, "size_request",
+			  G_CALLBACK (fullscreen_popup_size_request_cb), window);
 
-	update_exit_fullscreen_popup_position (window);
+	update_fullscreen_popup (window);
 
 	gtk_widget_show (popup);
 
