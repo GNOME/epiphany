@@ -40,7 +40,7 @@
 #include "ephy-stock-icons.h"
 
 #include <string.h>
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <gtk/gtk.h>

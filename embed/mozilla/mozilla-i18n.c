@@ -18,7 +18,7 @@
 
 #include "mozilla-i18n.h"
 
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 
 const char *lgroups[] = {
         N_("Arabic"),

@@ -16,6 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "ephy-types.h"
 #include "ephy-history.h"
 #include "ephy-file-helpers.h"
@@ -25,7 +29,7 @@
 
 #include <time.h>
 #include <string.h>
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 
 #define EPHY_HISTORY_XML_VERSION "0.1"

@@ -21,7 +21,6 @@
 #include <config.h>
 #include <gtk/gtktreeview.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <libgnome/gnome-i18n.h>
 #include <time.h>
 #include <string.h>
 

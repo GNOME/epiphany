@@ -16,6 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "pdm-dialog.h"
 #include "ephy-shell.h"
 #include "ephy-embed-shell.h"
@@ -25,6 +29,7 @@
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkliststore.h>
 #include <gtk/gtkcellrenderertext.h>
+
 #include <bonobo/bonobo-i18n.h>
 
 typedef struct PdmActionInfo PdmActionInfo;
@@ -609,7 +614,7 @@ show_cookies_properties (PdmDialog *dialog,
 	gtk_table_set_col_spacings (GTK_TABLE(table), 10);
 	gtk_widget_show (table);
 
-	str = g_strconcat ("<b>", _("Value"), "</b>", NULL);
+	str = g_strconcat ("<b>", _("Value:"), "</b>", NULL);
 	label = gtk_label_new (str);
 	g_free (str);
 	gtk_label_set_use_markup (GTK_LABEL(label), TRUE);
@@ -623,7 +628,7 @@ show_cookies_properties (PdmDialog *dialog,
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 0, 1);
 
-	str = g_strconcat ("<b>", _("Path"), "</b>", NULL);
+	str = g_strconcat ("<b>", _("Path:"), "</b>", NULL);
 	label = gtk_label_new (str);
 	g_free (str);
 	gtk_label_set_use_markup (GTK_LABEL(label), TRUE);
@@ -637,7 +642,7 @@ show_cookies_properties (PdmDialog *dialog,
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 1, 2);
 
-	str = g_strconcat ("<b>", _("Secure"), "</b>", NULL);
+	str = g_strconcat ("<b>", _("Secure:"), "</b>", NULL);
 	label = gtk_label_new (str);
 	g_free (str);
 	gtk_label_set_use_markup (GTK_LABEL(label), TRUE);
@@ -651,7 +656,7 @@ show_cookies_properties (PdmDialog *dialog,
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 2, 3);
 
-	str = g_strconcat ("<b>", _("Expire"), "</b>", NULL);
+	str = g_strconcat ("<b>", _("Expire:"), "</b>", NULL);
 	label = gtk_label_new (str);
 	g_free (str);
 	gtk_label_set_use_markup (GTK_LABEL(label), TRUE);

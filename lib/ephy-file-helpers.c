@@ -27,7 +27,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <glib.h>
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 #include <libgnome/gnome-init.h>
 #include <libgnome/gnome-exec.h>
 

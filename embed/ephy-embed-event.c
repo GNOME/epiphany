@@ -18,7 +18,6 @@
 
 #include "ephy-embed-event.h"
 
-#include <bonobo/bonobo-i18n.h>
 #include <glib/ghash.h>
 #include <gtk/gtktypeutils.h>
 

@@ -17,6 +17,10 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <gtk/gtktable.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkstock.h>
@@ -24,7 +28,7 @@
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
 #include <gdk/gdkkeysyms.h>
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <string.h>
 

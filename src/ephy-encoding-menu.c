@@ -27,7 +27,7 @@
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 
 /**
  * Private data

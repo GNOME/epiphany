@@ -220,7 +220,8 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 
 	xml = g_string_new (NULL);
 	g_string_append (xml, "<Root><menu><submenu name=\"GoMenu\">"
-			      "<placeholder name=\"GoFavorites\">");
+			      "<placeholder name=\"GoFavorites\">"
+			      "<separator name=\"GoSep3\"/>");
 
 	p->action_group = egg_action_group_new ("FavoritesActions");
 	egg_menu_merge_insert_action_group (merge, p->action_group, 0);

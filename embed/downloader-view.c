@@ -16,6 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "downloader-view.h"
 #include "ephy-gui.h"
 #include "ephy-prefs.h"
@@ -27,7 +31,7 @@
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkliststore.h>
 #include <gtk/gtktreeviewcolumn.h>
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 #include <libgnomeui/gnome-dialog-util.h>
 #include <libgnomeui/gnome-dialog.h>
 #include <gtk/gtkprogressbar.h>
@@ -356,11 +360,11 @@ downloader_view_update_controls (DownloaderViewPrivate *priv)
 
 	if (info->is_paused)
 	{
-		gtk_button_set_label (GTK_BUTTON (priv->pause_button), _("Resume"));
+		gtk_button_set_label (GTK_BUTTON (priv->pause_button), _("_Resume"));
 	}
 	else
 	{
-		gtk_button_set_label (GTK_BUTTON (priv->pause_button), _("Pause"));
+		gtk_button_set_label (GTK_BUTTON (priv->pause_button), _("_Pause"));
 	}
 	
 	g_free (info);

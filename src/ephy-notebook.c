@@ -16,6 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "ephy-notebook.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
@@ -28,7 +32,7 @@
 
 #include <gtk/gtk.h>
 #include <glib-object.h>
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 
 #define AFTER_ALL_TABS -1

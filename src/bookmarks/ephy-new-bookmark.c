@@ -17,6 +17,10 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <gtk/gtktable.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkentry.h>
@@ -25,7 +29,7 @@
 #include <gtk/gtkstock.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtkeditable.h>
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 
 #include "ephy-new-bookmark.h"
 #include "ephy-state.h"

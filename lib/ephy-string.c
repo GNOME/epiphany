@@ -16,12 +16,16 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "ephy-string.h"
 
+#include <errno.h>
 #include <string.h>
 #include <glib.h>
-#include <libgnome/libgnome.h>
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 #include <libgnomevfs/gnome-vfs-mime.h>
 #include <libxml/parser.h>
 

@@ -16,12 +16,16 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "ephy-gui.h"
 #include "eel-gconf-extensions.h"
 
 #include <ctype.h>
 #include <string.h>
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 #include <libgnome/gnome-help.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtkmessagedialog.h>

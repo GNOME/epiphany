@@ -29,7 +29,7 @@
 #include <gconf/gconf-client.h>
 #include <gconf/gconf.h>
 #include <gtk/gtkwidget.h>
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 #include <gtk/gtkmessagedialog.h>
 
 static GConfClient *global_gconf_client = NULL;

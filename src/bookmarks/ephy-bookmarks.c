@@ -18,6 +18,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "ephy-bookmarks.h"
 #include "ephy-file-helpers.h"
 #include "ephy-shell.h"
@@ -29,7 +33,7 @@
 #include "ephy-bookmarks-export.h"
 
 #include <string.h>
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
 #define EPHY_BOOKMARKS_XML_VERSION "0.1"

@@ -17,10 +17,14 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "ephy-go-action.h"
 
 #include <gtk/gtk.h>
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 #include "eggtoolitem.h"
 #include "ephy-debug.h"
 
@@ -71,7 +75,7 @@ create_tool_item (EggAction *action)
 
 	item = GTK_WIDGET (egg_tool_item_new ());
 
-	button = gtk_button_new_with_label (N_("Go"));
+	button = gtk_button_new_with_label (_("Go"));
 	gtk_button_set_relief(GTK_BUTTON (button), GTK_RELIEF_NONE);
 	
 	g_signal_connect (G_OBJECT (button), "clicked",

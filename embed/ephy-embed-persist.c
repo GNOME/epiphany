@@ -23,8 +23,6 @@
 #include "mozilla-embed.h"
 #include "mozilla-embed-persist.h"
 
-#include <bonobo/bonobo-i18n.h>
-
 enum
 {
         COMPLETED,

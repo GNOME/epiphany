@@ -16,7 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libgnome/gnome-i18n.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkscrolledwindow.h>

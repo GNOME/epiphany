@@ -17,6 +17,10 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "ephy-bookmark-properties.h"
 #include "ephy-topics-selector.h"
 #include "ephy-debug.h"
@@ -33,7 +37,7 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtkmisc.h>
 #include <gtk/gtkscrolledwindow.h>
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 
 static void ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass);
 static void ephy_bookmark_properties_init (EphyBookmarkProperties *editor);

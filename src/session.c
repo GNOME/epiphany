@@ -16,6 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "session.h"
 #include "ephy-shell.h"
 #include "ephy-tab.h"
@@ -25,7 +29,7 @@
 #include "ephy-file-helpers.h"
 #include "eel-gconf-extensions.h"
 
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 #include <string.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkimage.h>

@@ -23,7 +23,6 @@
 #include <gtk/gtkcellrendererpixbuf.h>
 #include <gtk/gtkwindow.h>
 #include <gdk/gdkkeysyms.h>
-#include <libgnome/gnome-i18n.h>
 
 #include "eggtreemodelfilter.h"
 #include "ephy-node-view.h"

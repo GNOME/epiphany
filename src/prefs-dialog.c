@@ -29,7 +29,7 @@
 #include "eel-gconf-extensions.h"
 #include "language-editor.h"
 
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
@@ -650,7 +650,7 @@ create_default_charset_menu (PrefsDialog *dialog)
 		CharsetInfo *info = (CharsetInfo *) charsets->data;
 		GtkWidget *item;
 
-		item = gtk_menu_item_new_with_label (info->title);
+		item = gtk_menu_item_new_with_label (_(info->title));
 		gtk_menu_shell_append (GTK_MENU_SHELL(menu),
 				       item);
 		gtk_widget_show (item);
@@ -687,12 +687,12 @@ general_prefs_new_language_menu (PrefsDialog *dialog)
 	{
 		GtkWidget *item;
 
-		item = gtk_menu_item_new_with_label (languages[i].name);
+		item = gtk_menu_item_new_with_label (_(languages[i].name));
 		gtk_menu_shell_append (GTK_MENU_SHELL(menu),
 				       item);
 		gtk_widget_show (item);
 		g_object_set_data (G_OBJECT(item), "desc",
-				   languages[i].name);
+				   _(languages[i].name));
 	}
 
 	return menu;
@@ -901,7 +901,7 @@ fill_language_editor (LanguageEditor *le)
 		}
 
 		/* FIXME unsafe, bad prefs could cause it to access random memory */
-		language_editor_add (le, languages[i].name, i);
+		language_editor_add (le, _(languages[i].name), i);
 	}
 }
 

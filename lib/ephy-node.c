@@ -19,7 +19,7 @@
  */
 
 #include <config.h>
-#include <libgnome/gnome-i18n.h>
+#include <bonobo/bonobo-i18n.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>

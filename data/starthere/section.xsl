@@ -10,7 +10,7 @@
 <xsl:template match="section">
 <html>
   <head>
-  <title><xsl:value-of select="@name"/></title>
+  <xsl:apply-templates/>
   <style type="text/css">
     body {
 	    margin-left: 150;
@@ -55,6 +55,10 @@
     <xsl:apply-templates/>
   </body>
 </html>
+</xsl:template>
+
+<xsl:template match="pagetitle">
+  <title><xsl:apply-templates/></title>
 </xsl:template>
 
 <xsl:template match="content">

@@ -16,7 +16,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libgnome/gnome-i18n.h>
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include <bonobo/bonobo-i18n.h>
 
 #include "ephy-bookmark-action.h"
 #include "ephy-bookmarks.h"

@@ -18,6 +18,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "ephy-node-common.h"
 #include "ephy-topic-action.h"
 #include "ephy-bookmarks.h"

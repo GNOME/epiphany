@@ -1,3 +1,69 @@
+2003-05-17  Christian Neumair  <chris@gnome-de.org>
+
+	(#112781)
+
+	* data/starthere/index.xml.in
+	* data/starthere/section.xsl
+	* data/starthere/smartbookmarks.xml.in:
+	
+	i18nized page title and links, fixed semantic inconsistency.
+
+	* data/ui/epiphany-ui.xml.in
+	* src/ephy-favorites-menu.c:
+
+	Only construct Go menu's third separator if there are menu items added
+	after it.
+
+	* embed/downloader-view.c:
+
+	Re-added mnemonics to pause/resume button.
+
+	* embed/mozilla/mozilla-i18n.c
+	* embed/mozilla/mozilla-notifiers.cpp
+	* embed/downloader-view.c
+	* embed/ephy-embed-event.c
+	* embed/ephy-embed-persist.c
+	* embed/ephy-embed-utils.c
+	* embed/ephy-history.c
+	* lib/widgets/ephy-autocompletion-window.c
+	* lib/widgets/ephy-node-view.c
+	* lib/widgets/ephy-tree-model-node.c
+	* lib/eel-gconf-extensions.c
+	* lib/ephy-file-helpers.c
+	* lib/ephy-gui.c
+	* lib/ephy-node.c
+	* lib/ephy-start-here.c
+	* lib/ephy-string.c
+	* src/bookmarks/ephy-bookmark-action.c
+	* src/bookmarks/ephy-bookmark-properties.c
+	* src/bookmarks/ephy-bookmarks-editor.c
+	* src/bookmarks/ephy-bookmarks.c
+	* src/bookmarks/ephy-new-bookmark.c
+	* src/bookmarks/ephy-topic-action.c
+	* src/ephy-encoding-menu.c
+	* src/ephy-history-window.c
+	* src/ephy-notebook.c
+	* src/ephy-window.c
+	* src/ppview-toolbar.c
+	* src/session.c
+	* src/toolbar.c:
+	
+	Various i18n include fixes, inter alia included config.h where
+	required.
+
+	* src/ephy-go-action.c:
+	
+	Ditto, plus fixed gettext call.
+
+	* src/pdm-dialog.c:
+
+	Ditto, plus some slight string fixes.
+
+	* src/prefs-dialog.c:
+	
+	Ditto, plus added some gettext calls to localize language and encoding
+	selection.
+
 2003-05-17 David Bordoley <bordoley@msu.edu>
 	   Marco Pesenti Gritti  <marco@it.gnome.org>
 
