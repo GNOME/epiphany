@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "ephy-bookmarks.h"
+#include "ephy-bookmarks-type-builtins.h"
 #include "ephy-file-helpers.h"
 #include "ephy-embed-shell.h"
 #include "ephy-shell.h"
@@ -138,6 +139,10 @@ ephy_bookmarks_get_type (void)
                         0, /* n_preallocs */
                         (GInstanceInitFunc) ephy_bookmarks_init
                 };
+		volatile GType flags_type; /* work around gcc's optimiser */
+      
+		/* make sure the flags type is known */
+	      	flags_type = EPHY_TYPE_BOOKMARK_PROPERTY;
 
                 type = g_type_register_static (G_TYPE_OBJECT,
 					       "EphyBookmarks",

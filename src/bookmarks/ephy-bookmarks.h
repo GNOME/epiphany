@@ -42,7 +42,7 @@ typedef struct _EphyBookmarksPrivate	EphyBookmarksPrivate;
 
 #define	BOOKMARKS_HIERARCHY_SEP	"->"
 
-enum
+typedef enum
 {
 	EPHY_NODE_BMK_PROP_TITLE	= 2,
 	EPHY_NODE_BMK_PROP_LOCATION	= 3,
@@ -50,7 +50,7 @@ enum
 	EPHY_NODE_KEYWORD_PROP_NAME	= 5,
 	EPHY_NODE_BMK_PROP_ICON		= 7,
 	EPHY_NODE_KEYWORD_PROP_PRIORITY	= 8
-};
+} EphyBookmarkProperty;
 
 struct _EphyBookmarks
 {

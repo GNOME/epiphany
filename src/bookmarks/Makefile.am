@@ -1,7 +1,9 @@
 noinst_LTLIBRARIES = libephybookmarks.la
 
 headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
-header_DATA = $(INST_H_FILES)
+header_DATA = \
+	ephy-bookmarks-type-builtins.h	\
+	$(INST_H_FILES)
 
 INST_H_FILES = \
 	ephy-bookmarks.h
@@ -21,6 +23,7 @@ NOINST_H_FILES =		 	\
 	ephy-topics-selector.h
 
 libephybookmarks_la_SOURCES = 		\
+	$(BUILT_SOURCES)		\
 	ephy-bookmarks.c		\
 	ephy-bookmark-action.c		\
 	ephy-bookmarks-editor.c		\
@@ -37,6 +40,54 @@ libephybookmarks_la_SOURCES = 		\
 	$(NOINST_H_FILES)		\
 	$(INST_H_FILES)
 
+BUILT_SOURCES =	$(TYPES_SOURCE)
+
+TYPES_SOURCE = \
+	ephy-bookmarks-type-builtins.c	\
+	ephy-bookmarks-type-builtins.h
+
+stamp_files = \
+	stamp-ephy-bookmarks-type-builtins.c	\
+	stamp-ephy-bookmarks-type-builtins.h
+
+ephy-bookmarks-type-builtins.c: stamp-ephy-bookmarks-type-builtins.c
+	@true
+stamp-ephy-bookmarks-type-builtins.c: $(INST_H_FILES) $(NOINST_H_FILES)
+	( cd $(srcdir) && $(GLIB_MKENUMS) \
+		--fhead "#include \"ephy-bookmarks-type-builtins.h\"\n\n" \
+		--fprod "\n/* enumerations from \"@filename@\" */" \
+		--fprod "\n#include \"@filename@\"" \
+		--vhead "static const G@Type@Value _@enum_name@_values[] = {" \
+		--vprod "  { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+		--vtail "  { 0, NULL, NULL }\n};\n\n" \
+		--vtail "GType\n@enum_name@_get_type (void)\n{\n" \
+		--vtail "  static GType type = 0;\n\n" \
+		--vtail "  if (G_UNLIKELY (type == 0))\n" \
+		--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n\n" \
+		--vtail "  return type;\n}\n\n" \
+		$(^F) ) > xgen-$(@F) \
+	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
+	&& rm -f xgen-$(@F) \
+	&& echo timestamp > $(@F)
+
+ephy-bookmarks-type-builtins.h: stamp-ephy-bookmarks-type-builtins.h
+	@true
+stamp-ephy-bookmarks-type-builtins.h: $(INST_H_FILES) $(NOINST_H_FILES)
+	( cd $(srcdir) && $(GLIB_MKENUMS) \
+		--fhead "#ifndef EPHY_BOOKMARKS_TYPE_BUILTINS_H\n" \
+		--fhead "#define EPHY_BOOKMARKS_TYPE_BUILTINS_H 1\n\n" \
+		--fhead "#include <glib-object.h>\n\n" \
+		--fhead "G_BEGIN_DECLS\n\n" \
+		--ftail "G_END_DECLS\n\n" \
+		--ftail "#endif /* EPHY_TYPE_BUILTINS_H */\n" \
+		--fprod "\n/* --- @filename@ --- */" \
+		--eprod "#define EPHY_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
+		--eprod "GType @enum_name@_get_type (void);\n" \
+		$(^F) ) > xgen-$(@F) \
+	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
+	&& rm -f xgen-$(@F) \
+	&& echo timestamp > $(@F)
+
 libephybookmarks_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
 	-I$(top_srcdir)/lib		\
@@ -49,3 +100,7 @@ libephybookmarks_la_CPPFLAGS = \
 libephybookmarks_la_CFLAGS = \
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
 	$(AM_CFLAGS)
+
+CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
+DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
+MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
