@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -350,7 +352,8 @@ ephy_window_selection_received_cb (GtkWidget *widget,
 	if (location != NULL && strcmp (location, "about:blank") != 0)
 	{
 		ephy_shell_new_tab (ephy_shell, window, tab,
-					selection_data->data, 0);
+					selection_data->data, 
+					EPHY_NEW_TAB_OPEN_PAGE);
 	}
 	else
 	{

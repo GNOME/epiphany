@@ -368,8 +368,8 @@ duplicate_bookmark_response_cb (EphyNewBookmark *new_bookmark,
 
 gboolean
 ephy_new_bookmark_is_unique (EphyBookmarks *bookmarks,
-				 GtkWindow *parent,
-				 const char *address)
+			     GtkWindow *parent,
+			     const char *address)
 {
 	EphyNode *node;
 
