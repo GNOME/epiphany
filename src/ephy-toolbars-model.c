@@ -121,7 +121,9 @@ update_flags_and_save_changes (EphyToolbarsModel *model)
 		g_return_if_fail (t_name != NULL);
 
 		flags = egg_toolbars_model_get_flags (eggmodel, i);
-		egg_toolbars_model_set_flags (eggmodel, i, flags | flag);
+		flags &= ~EGG_TB_MODEL_NOT_REMOVABLE;
+		flags |= flag;
+		egg_toolbars_model_set_flags (eggmodel, i, flags);
 	}
 
 	save_changes (model);
