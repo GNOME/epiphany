@@ -1,3 +1,20 @@
+2005-02-06  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_class_init), (lock_button_press_event_cb),
+	(ephy_location_entry_construct_contents):
+
+	Don't set the lock icon as drag source. Actually emit the lock-clicked
+	signal when pressed.
+
+	* lib/widgets/ephy-location-entry.h:
+	* src/ephy-location-action.c: (lock_clicked_cb), (connect_proxy),
+	(ephy_location_action_class_init):
+	* src/ephy-location-action.h:
+	* src/ephy-toolbar.c: (lock_clicked_cb), (ephy_toolbar_set_window):
+
+	Actually forward the lock-clicked signal to the toolbar.
+
 2005-02-04  Jean-François Rameau  <jframeau@cvs.gnome.org>
 
 	* lib/ephy-dbus.c: (ephy_dbus_connect_to_system_bus,
