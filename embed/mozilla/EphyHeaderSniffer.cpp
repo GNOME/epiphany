@@ -371,6 +371,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 nsresult EphyHeaderSniffer::InitiateDownload (nsILocalFile *aDestFile)
 {
 	LOG ("Initiating download")
+
 	return InitiateMozillaDownload (mDocument, mURL, aDestFile,
 					mContentType.get(), mOriginalURI, mEmbedPersist,
 					mPostData, nsnull, -1);

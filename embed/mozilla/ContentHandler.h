@@ -82,7 +82,11 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	nsCOMPtr<nsIFile> mTempFile;
 	nsCOMPtr<nsISupports> mContext;
 
-	char *mMimeType;	
+#if MOZILLA_SNAPSHOT < 16
+	char *mMimeType;
+#else
+	nsCString mMimeType;
+#endif	
 	PRBool mAppSupportScheme;
 	GnomeVFSMimeApplication *mHelperApp;
 	ContentAction mAction;

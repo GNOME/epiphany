@@ -1,9 +1,24 @@
+2004-04-27  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* configure.in:
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/ContentHandler.h:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/EventContext.h:
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozDownload.h:
+	* embed/mozilla/mozilla-download.cpp:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+
+	Nice mess of defines to support 1.8a. Damn.
+
 2004-04-27  Christian Persch  <chpe@cvs.gnome.org>
 
-        * src/ephy-window.c: (ephy_window_delete_event_cb):
+	* src/ephy-window.c: (ephy_window_delete_event_cb):
 
-        Exit print preview mode before closing a window. Fixes a crasher;
-        Epiphany equivalent of galeon bug #121298.
+	Exit print preview mode before closing a window. Fixes a crasher;
+	Epiphany equivalent of galeon bug #121298.
 
 2004-04-26  Marco Pesenti Gritti  <marco@gnome.org>
 
@@ -63,7 +78,7 @@
 	* lib/ephy-dialog.h:
 	* src/prefs-dialog.c: (setup_font_combo):
 
-        Fix font selection combo box issues; fixes bug #138560.
+	Fix font selection combo box issues; fixes bug #138560.
 
 2004-04-18  Christian Persch  <chpe@cvs.gnome.org>
 
@@ -79,8 +94,8 @@
 	* src/ephy-window.c: (ephy_window_set_chrome),
 	(ephy_window_set_property), (ephy_window_class_init):
 
-        Fix chrome for new windows opened from _blank target.
-        Fixes bug #139512.
+	Fix chrome for new windows opened from _blank target.
+	Fixes bug #139512.
 
 2004-04-17  Marco Pesenti Gritti  <marco@gnome.org>
 

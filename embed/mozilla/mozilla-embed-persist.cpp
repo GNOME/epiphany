@@ -38,6 +38,7 @@
 #include <nsIHistoryEntry.h>
 #include <nsISHEntry.h>
 #include <nsIDocumentEncoder.h>
+#include <nsIDocument.h>
 
 static void
 mozilla_embed_persist_class_init (MozillaEmbedPersistClass *klass);

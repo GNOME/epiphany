@@ -33,6 +33,7 @@
 #include "nsIDOMElementCSSInlineStyle.h"
 #include "nsIDOMCSSStyleDeclaration.h"
 #include "nsIDOMDocument.h"
+#include "nsIDocument.h"
 #include "EphyBrowser.h"
 
 #include "ephy-embed.h"

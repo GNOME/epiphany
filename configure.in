@@ -143,8 +143,8 @@ MOZILLA_VERSION="`$PKG_CONFIG --modversion mozilla-gtkmozembed`"
 dnl allow user to override the autodetected mozilla version
 dnl     - without arguments for cvs head
 AC_ARG_WITH(mozilla-snapshot,
-  AC_HELP_STRING([--with-mozilla-snapshot@<:@=1.6|1.7a|1.7b|trunk@:>@],
-		 [Whether to try building against mozilla 1.6|1.7a|1.7b|trunk
+  AC_HELP_STRING([--with-mozilla-snapshot@<:@=1.6|1.7a|1.7b|1.8a|trunk@:>@],
+		 [Whether to try building against mozilla 1.6|1.7a|1.7b|1.8a|trunk
 		  snapshot. @<:@guessed@:>@]),
   [autodetect=" (guessed: $MOZILLA_VERSION)"; MOZILLA_VERSION="$withval"])
 
@@ -155,10 +155,11 @@ case "$MOZILLA_VERSION" in
  1.7a) MOZILLA_SNAPSHOT=14 ;;
  1.7b) MOZILLA_SNAPSHOT=15 ;;
   1.7) MOZILLA_SNAPSHOT=15 ;;
-trunk) MOZILLA_SNAPSHOT=15 ;;
+ 1.8a) MOZILLA_SNAPSHOT=16 ;;
+trunk) MOZILLA_SNAPSHOT=16 ;;
     *) AC_ERROR([
 *****************************************************************************
-Epiphany can be built using Mozilla 1.6, 1.7a, 1.7b, or
+Epiphany can be built using Mozilla 1.6, 1.7a, 1.7b, 1.8a or
 trunk snapshot, but the version available is $MOZILLA_VERSION.  
 
 When using Mozilla trunk snapshot, a successful build is not guaranteed due 

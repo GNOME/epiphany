@@ -85,8 +85,12 @@ GFilePicker::~GFilePicker()
 	}
 }
 
-/* void init (in nsIDOMWindowInternal parent, in wstring title, in short mode); */
-NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *title, PRInt16 mode)
+/* void init (in nsIDOMWindow parent, in AString title, in short mode); */
+#if MOZILLA_SNAPSHOT < 16
+NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, PRUnichar *title, PRInt16 mode)
+#else
+NS_IMETHODIMP GFilePicker::Init(nsIDOMWindow *parent, const nsAString& title, PRInt16 mode)
+#endif
 {
 	LOG ("GFilePicker::Init")
 
@@ -97,7 +101,11 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 		gtk_window_set_transient_for (GTK_WINDOW (mDialog), GTK_WINDOW (pwin));
 	}
 
+#if MOZILLA_SNAPSHOT < 16
 	gtk_window_set_title (GTK_WINDOW (mDialog), NS_ConvertUTF16toUTF8 (title).get());
+#else
+	gtk_window_set_title (GTK_WINDOW (mDialog), NS_ConvertUCS2toUTF8(title).get());
+#endif
 
 	mMode = mode;
 
@@ -159,46 +167,90 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 
 	if (filterMask & nsIFilePicker::filterAll)
 	{
+#if MOZILLA_SNAPSHOT < 16
 		AppendFilter (NS_ConvertUTF8toUTF16 (_("All files")).get(),
 			      NS_LITERAL_STRING ("*").get());
+#else
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("All files")),
+			      NS_LITERAL_STRING ("*"));
+#endif
 	}
 	if (filterMask & nsIFilePicker::filterHTML)
 	{
+#if MOZILLA_SNAPSHOT < 16
 		AppendFilter (NS_ConvertUTF8toUTF16 (_("HTML files")).get(),
 			      NS_LITERAL_STRING ("*.html; *.htm; *.shtml; *.xhtml").get());
+#else
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("HTML files")),
+			      NS_LITERAL_STRING ("*.html; *.htm; *.shtml; *.xhtml"));
+#endif
 	}
 	if (filterMask & nsIFilePicker::filterText)
 	{
+#if MOZILLA_SNAPSHOT < 16
 		AppendFilter (NS_ConvertUTF8toUTF16 (_("Text files")).get(),
 			      NS_LITERAL_STRING ("*.txt; *.text").get());
+#else
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("Text files")),
+			      NS_LITERAL_STRING ("*.txt; *.text"));
+#endif
 	}
 	if (filterMask & nsIFilePicker::filterImages)
 	{
-		AppendFilter (NS_ConvertUTF8toUTF16 (_("Image files")).get(),
-			      NS_LITERAL_STRING ("*.png; *.gif; *.jpeg; *.jpg").get());
+#if MOZILLA_SNAPSHOT < 16
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("Image files")),
+			      NS_LITERAL_STRING ("*.png; *.gif; *.jpeg; *.jpg"));
+#else
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("Image files")),
+			      NS_LITERAL_STRING ("*.png; *.gif; *.jpeg; *.jpg"));
+#endif
 	}
 	if (filterMask & nsIFilePicker::filterXML)
 	{
-		AppendFilter (NS_ConvertUTF8toUTF16 (_("XML files")).get(),
-			      NS_LITERAL_STRING ("*.xml").get());
+#if MOZILLA_SNAPSHOT < 16
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("XML files")),
+			      NS_LITERAL_STRING ("*.xml"));
+#else
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("XML files")),
+			      NS_LITERAL_STRING ("*.xml"));
+#endif
 	}
 	if (filterMask & nsIFilePicker::filterXUL)
 	{
+#if MOZILLA_SNAPSHOT < 16
 		AppendFilter (NS_ConvertUTF8toUTF16 (_("XUL files")).get(),
 			      NS_LITERAL_STRING ("*.xul").get());
+#else
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("XUL files")),
+			      NS_LITERAL_STRING ("*.xul"));
+#endif
 	}
 
 	return NS_OK;
 }
 
-/* void appendFilter (in wstring title, in wstring filter); */
+/* void appendFilter (in AString title, in AString filter); */
+#if MOZILLA_SNAPSHOT < 16
 NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar *filter)
+#else
+NS_IMETHODIMP GFilePicker::AppendFilter(const nsAString& title, const nsAString& filter)
+#endif
 {
+#if MOZILLA_SNAPHOST < 16
 	LOG ("GFilePicker::AppendFilter title '%s' for '%s'",
 	     NS_ConvertUTF16toUTF8 (title).get(),
 	     NS_ConvertUTF16toUTF8 (filter).get())
+#else
+	LOG ("GFilePicker::AppendFilter title '%s' for '%s'",
+	     NS_ConvertUCS2toUTF8 (title),
+	     NS_ConvertUCS2toUTF8 (filter))
+#endif
 
+#if MOZILLA_SNAPHOST < 16
 	NS_ConvertUTF16toUTF8 pattern(filter);
+#else
+	NS_ConvertUCS2toUTF8 pattern(filter);
+#endif
 	pattern.StripWhitespace();
 	if (pattern.IsEmpty()) return NS_ERROR_FAILURE;
 
@@ -211,7 +263,11 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar 
 		gtk_file_filter_add_pattern (filth, patterns[i]);
 	}
 
+#if MOZILLA_SNAPHOST < 16
 	gtk_file_filter_set_name (filth, NS_ConvertUTF16toUTF8(title).get());
+#else
+	gtk_file_filter_set_name (filth, NS_ConvertUCS2toUTF8(title).get());
+#endif
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (mDialog), filth);
 
 	g_strfreev (patterns);
@@ -219,8 +275,12 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar 
 	return NS_OK;
 }
 
-/* attribute wstring defaultString; */
+/* attribute AString defaultString; */
+#if MOZILLA_SNAPSHOT < 16
 NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
+#else
+NS_IMETHODIMP GFilePicker::GetDefaultString(nsAString& aDefaultString)
+#endif
 {
 	char *filename, *converted;
 
@@ -231,7 +291,7 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
 	{
 		converted = g_filename_to_utf8(filename, -1, NULL, NULL, NULL);
 
-		*aDefaultString = ToNewUnicode (NS_ConvertUTF8toUTF16 (converted));
+		aDefaultString = NS_ConvertUTF8toUTF16 (converted);
 	
 		g_free (filename);
 		g_free (converted);
@@ -240,31 +300,54 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
 	return NS_OK;
 }
 
+#if MOZILLA_SNAPSHOT < 16
 NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
+#else
+NS_IMETHODIMP GFilePicker::SetDefaultString(const nsAString& aDefaultString)
+#endif
 {
+#if MOZILLA_SNAPSHOT < 16
 	LOG ("GFilePicker::SetDefaultString to %s",
 	     NS_ConvertUTF16toUTF8 (aDefaultString).get())
+#else
+	LOG ("GFilePicker::SetDefaultString to %s",
+	     NS_ConvertUCS2toUTF8 (aDefaultString).get())
+#endif
 
-	if (aDefaultString)
+	if (aDefaultString.Length())
 	{
 		/* set_current_name takes UTF-8, not a filename */
+#if MOZILLA_SNAPSHOT < 16
 		gtk_file_chooser_set_current_name
 			(GTK_FILE_CHOOSER (mDialog),
 			 NS_ConvertUTF16toUTF8 (aDefaultString).get());
+#else
+		gtk_file_chooser_set_current_name
+			(GTK_FILE_CHOOSER (mDialog),
+			 NS_ConvertUCS2toUTF8 (aDefaultString).get());
+#endif
 	}
 
 	return NS_OK;
 }
 
-/* attribute wstring defaultExtension; */
+/* attribute AString defaultExtension; */
+#if MOZILLA_SNAPSHOT < 16
 NS_IMETHODIMP GFilePicker::GetDefaultExtension(PRUnichar **aDefaultExtension)
+#else
+NS_IMETHODIMP GFilePicker::GetDefaultExtension(nsAString& aDefaultExtension)
+#endif
 {
 	LOG ("GFilePicker::GetDefaultExtension")
 
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
+#if MOZILLA_SNAPSHOT < 16
 NS_IMETHODIMP GFilePicker::SetDefaultExtension(const PRUnichar *aDefaultExtension)
+#else
+NS_IMETHODIMP GFilePicker::SetDefaultExtension(const nsAString& aDefaultExtension)
+#endif
 {
 	LOG ("GFilePicker::SetDefaultExtension to %s",
 	     NS_ConvertUTF16toUTF8(aDefaultExtension).get())
