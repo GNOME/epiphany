@@ -20,7 +20,7 @@
 #define EPHY_TOPIC_ACTION_H
 
 #include <gtk/gtk.h>
-#include <egg-action.h>
+#include <gtk/gtkaction.h>
 
 #define EPHY_TYPE_TOPIC_ACTION            (ephy_topic_action_get_type ())
 #define EPHY_TOPIC_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_TOPIC_ACTION, EphyTopicAction))
@@ -35,20 +35,20 @@ typedef struct EphyTopicActionPrivate EphyTopicActionPrivate;
 
 struct _EphyTopicAction
 {
-	EggAction parent;
+	GtkAction parent;
 	EphyTopicActionPrivate *priv;
 };
 
 struct _EphyTopicActionClass
 {
-	EggActionClass parent_class;
+	GtkActionClass parent_class;
 
 	void (*go_location) (EphyTopicAction *action, char *location);
 };
 
 GType      ephy_topic_action_get_type	(void);
 
-EggAction *ephy_topic_action_new	(const char *name,
+GtkAction *ephy_topic_action_new	(const char *name,
 					 guint id);
 
 #endif
