@@ -959,6 +959,9 @@ ephy_notebook_add_tab (EphyNotebook *nb,
 
 	if (jump_to)
 	{
+		/* The signal handler may have reordered the tabs */
+		position = gtk_notebook_page_num (GTK_NOTEBOOK (nb), GTK_WIDGET(tab));
+
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (nb),
 					       position);
 		g_object_set_data (G_OBJECT (tab), "jump_to",

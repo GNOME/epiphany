@@ -1,5 +1,13 @@
 2004-08-26  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-notebook.c: (ephy_notebook_add_tab):
+
+	Get the position of the new tab after the tab_added signal was emitted,
+	to get it right in the case the signal handler reorders the tabs.
+	Patch by Justin Wake.
+
+2004-08-26  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-window.c: (update_actions_sensitivity):
 
 	Make "FileSave" action obey lockdown too. Fixes bug #151039.
