@@ -1221,6 +1221,7 @@ setup_view_cert_tree (GtkWidget *dialog, GladeXML*gxml, nsIArray *certChain)
 						  G_TYPE_STRING,
 						  G_TYPE_POINTER);
 	gtk_tree_view_set_model (GTK_TREE_VIEW (chain_tree_view), GTK_TREE_MODEL (store));
+	g_object_unref (store);
 
 
 	renderer = gtk_cell_renderer_text_new ();
@@ -1242,6 +1243,7 @@ setup_view_cert_tree (GtkWidget *dialog, GladeXML*gxml, nsIArray *certChain)
 				    G_TYPE_STRING,
 				    G_TYPE_POINTER);
 	gtk_tree_view_set_model (GTK_TREE_VIEW (field_tree_view), GTK_TREE_MODEL (store));
+	g_object_unref (store);
 
 
 	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (field_tree_view),
