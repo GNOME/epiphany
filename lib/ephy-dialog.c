@@ -1112,6 +1112,14 @@ setup_default_size (EphyDialog *dialog)
 static gint
 impl_run (EphyDialog *dialog)
 {
+	if (dialog->priv->props && !dialog->priv->initialized)
+	{
+		load_props (dialog->priv->props);
+		prefs_connect_signals (dialog);
+		prefs_set_sensitivity (dialog->priv->props);
+		dialog->priv->initialized = TRUE;
+	}
+
 	setup_default_size (dialog);
 
 	return gtk_dialog_run (GTK_DIALOG(dialog->priv->dialog));
