@@ -1659,12 +1659,7 @@ tab_removed_cb (EphyNotebook *notebook,
 
 	window->priv->num_tabs--;
 
-	if (window->priv->num_tabs == 0)
-	{
-		/* removed the last tab, close the window */
-		gtk_widget_destroy (GTK_WIDGET (window));
-	}
-	else
+	if (window->priv->num_tabs > 0)
 	{
 		update_tabs_menu_sensitivity (window);
 	}
