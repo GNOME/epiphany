@@ -325,9 +325,9 @@ impl_add_item (EggToolbarsModel    *t,
   EggToolbarsItem *item;
   int real_position;
 
-  g_return_if_fail (IS_EGG_TOOLBARS_MODEL (t));
-  g_return_if_fail (id != NULL);
-  g_return_if_fail (type != NULL);
+  g_return_val_if_fail (IS_EGG_TOOLBARS_MODEL (t), FALSE);
+  g_return_val_if_fail (id != NULL, FALSE);
+  g_return_val_if_fail (type != NULL, FALSE);
 
   parent_node = g_node_nth_child (t->priv->toolbars, toolbar_position);
   item = toolbars_item_new (id, type, FALSE);
