@@ -14,10 +14,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include <gtk/gtkdialog.h>
@@ -53,8 +55,9 @@ NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIW
 	EmbedPrintInfo *info;
 
 	GtkWidget *gtkParent = MozillaFindGtkParent(parent);
+	EphyEmbed *embed = EPHY_EMBED (MozillaFindEmbed (parent));
 
-	dialog = print_dialog_new_with_parent (gtkParent, NULL, &info);
+	dialog = print_dialog_new_with_parent (gtkParent, embed, &info);
 	ephy_dialog_set_modal (dialog, TRUE);
 
 	gint ret = ephy_dialog_run (dialog);
