@@ -28,7 +28,6 @@
 #include "ephy-bookmarks-import.h"
 
 #include <string.h>
-#include <bonobo/bonobo-generic-factory.h>
 #include <bonobo/bonobo-main.h>
 #include <bonobo/bonobo-context.h>
 
@@ -75,18 +74,20 @@ ephy_automation_factory (BonoboGenericFactory *this_factory,
         return BONOBO_OBJECT(a);
 }
 
-BonoboObject *
-ephy_automation_new (void)
+BonoboGenericFactory *
+ephy_automation_factory_new (void)
 {
-	BonoboGenericFactory   *factory;
+	BonoboGenericFactory *factory;
 
 	factory = bonobo_generic_factory_new (EPHY_FACTORY_OAFIID,
 					      ephy_automation_factory,
 					      NULL);
+	if (factory == NULL)
+	{
+		g_warning ("Could not initialize EphyAutomation factory");
+	}
 
-	g_return_val_if_fail (factory != NULL, NULL);
-
-	return BONOBO_OBJECT (factory);
+	return factory;
 }
 
 static void

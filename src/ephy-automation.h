@@ -21,8 +21,7 @@
 
 #include "EphyAutomation.h"
 
-#include <bonobo/bonobo-control.h>
-#include <bonobo/bonobo-object.h>
+#include <bonobo/bonobo-generic-factory.h>
 
 G_BEGIN_DECLS
 
@@ -43,9 +42,9 @@ typedef struct {
         POA_GNOME_EphyAutomation__epv epv;
 } EphyAutomationClass;
 
-GType          ephy_automation_get_type (void);
+GType			 ephy_automation_get_type	(void);
 
-BonoboObject  *ephy_automation_new      (void);
+BonoboGenericFactory	*ephy_automation_factory_new	(void);
 
 G_END_DECLS
 

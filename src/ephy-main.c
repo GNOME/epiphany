@@ -29,15 +29,10 @@
 #include <libbonoboui.h>
 #include <libgnome/gnome-program.h>
 #include <libgnomeui/gnome-ui-init.h>
-#include <libgnomeui/gnome-icon-theme.h>
 #include <gtk/gtkwindow.h>
-#include <libgnomevfs/gnome-vfs-init.h>
-#include <glade/glade-init.h>
 
 #define EPHY_FACTORY_OAFIID "OAFIID:GNOME_Epiphany_Automation_Factory"
 
-static gboolean
-ephy_main_automation_init (void);
 static gint
 ephy_main_translate_url_arguments (poptContext context, gchar ***urls);
 static gboolean
@@ -59,7 +54,6 @@ static gboolean ephy_server_mode    = FALSE;
 static gboolean open_as_bookmarks_editor = FALSE; /* --bookmarks-editor	*/
 static gboolean open_as_nautilus_view = FALSE;
 
-static BonoboObject *automation_object;
 static gint n_urls;
 static gchar **url;
 static gboolean first_instance;
@@ -120,7 +114,7 @@ main (int argc, char *argv[])
 	poptContext context;
         GValue context_as_value = { 0 };
 	GnomeProgram *program;
-	char *file;
+	CORBA_Object factory;
 
 #ifdef ENABLE_NLS
 	/* Initialize the i18n stuff */
@@ -148,38 +142,25 @@ main (int argc, char *argv[])
 
 	g_value_unset (&context_as_value);
 
-	first_instance = ephy_main_automation_init ();
+	factory = bonobo_activation_activate_from_id
+		(EPHY_FACTORY_OAFIID,
+		 Bonobo_ACTIVATION_FLAG_EXISTING_ONLY,
+		 NULL, NULL);
 
-	if (first_instance)
+	if (factory != NULL)
 	{
-		GnomeIconTheme *icon_theme;
-
-		gnome_vfs_init ();
-
-		glade_gnome_init ();
+		first_instance = FALSE;
+		ephy_main_start (NULL);
+	}
+	else
+	{
+		first_instance = TRUE;
 
 		ephy_shell_new ();
-
-		icon_theme = gnome_icon_theme_new ();
-		file = gnome_icon_theme_lookup_icon (icon_theme, "web-browser",
-						     -1, NULL, NULL);
-		g_object_unref (icon_theme);
-
-		if (file)
-		{
-			gtk_window_set_default_icon_from_file (file, NULL);
-			g_free (file);
-		}
-		else
-		{
-			g_warning ("Web browser gnome icon not found");
-		}
 
 		g_idle_add ((GSourceFunc) ephy_main_start, NULL);
 
 		bonobo_main ();
-
-		gnome_vfs_shutdown ();
 	}
 
 	return 0;
@@ -294,28 +275,6 @@ ephy_main_start (gpointer data)
 	gdk_notify_startup_complete ();
 
 	return FALSE;
-}
-
-static gboolean
-ephy_main_automation_init (void)
-{
-	CORBA_Object factory;
-
-	factory = bonobo_activation_activate_from_id
-		(EPHY_FACTORY_OAFIID,
-		 Bonobo_ACTIVATION_FLAG_EXISTING_ONLY,
-		 NULL, NULL);
-
-	if (!factory)
-	{
-		automation_object = ephy_automation_new ();
-		return TRUE;
-	}
-	else
-	{
-		ephy_main_start (NULL);
-		return FALSE;
-	}
 }
 
 /**

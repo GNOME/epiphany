@@ -42,6 +42,7 @@
 #include "downloader-view.h"
 #include "ephy-toolbars-model.h"
 #include "ephy-autocompletion.h"
+#include "ephy-automation.h"
 
 #include <string.h>
 #include <libgnomeui/gnome-client.h>
@@ -51,6 +52,9 @@
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmessagedialog.h>
 #include <dirent.h>
+#include <libgnomevfs/gnome-vfs-init.h>
+#include <libgnomeui/gnome-icon-theme.h>
+#include <glade/glade-init.h>
 
 #ifdef ENABLE_NAUTILUS_VIEW
 
@@ -65,6 +69,7 @@
 
 struct EphyShellPrivate
 {
+	BonoboGenericFactory *automation_factory;
 	Session *session;
 	EphyAutocompletion *autocompletion;
 	EphyBookmarks *bookmarks;
@@ -197,6 +202,8 @@ ephy_shell_init (EphyShell *gs)
 {
 	EphyEmbedSingle *single;
 	EphyShell **ptr = &ephy_shell;
+	GnomeIconTheme *icon_theme;
+	char *file;
 
 	gs->priv = EPHY_SHELL_GET_PRIVATE (gs);
 
@@ -212,6 +219,8 @@ ephy_shell_init (EphyShell *gs)
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
 				   (gpointer *)ptr);
 
+	gnome_vfs_init ();
+	glade_gnome_init ();
 	ephy_debug_init ();
 	ephy_thread_helpers_init ();
 	ephy_file_helpers_init ();
@@ -247,6 +256,23 @@ ephy_shell_init (EphyShell *gs)
 	}
 
 	ephy_shell_load_plugins (gs);
+
+	icon_theme = gnome_icon_theme_new ();
+	file = gnome_icon_theme_lookup_icon (icon_theme, "web-browser",
+					     -1, NULL, NULL);
+	g_object_unref (icon_theme);
+
+	if (file)
+	{
+		gtk_window_set_default_icon_from_file (file, NULL);
+		g_free (file);
+	}
+	else
+	{
+		g_warning ("Web browser gnome icon not found");
+	}
+
+	gs->priv->automation_factory = ephy_automation_factory_new ();
 }
 
 static void
@@ -309,6 +335,12 @@ ephy_shell_finalize (GObject *object)
 
 	ephy_state_save ();
 	ephy_file_helpers_shutdown ();
+	gnome_vfs_shutdown ();
+
+	if (gs->priv->automation_factory)
+	{
+		bonobo_object_unref (gs->priv->automation_factory);
+	}
 
 	LOG ("Ephy shell finalized")
 

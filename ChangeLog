@@ -1,3 +1,16 @@
+2003-09-23  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* src/ephy-automation.c: (ephy_automation_factory_new):
+	* src/ephy-automation.h:
+	* src/ephy-main.c: (main), (ephy_main_start):
+	* src/ephy-shell.c: (ephy_shell_init), (ephy_shell_finalize):
+
+	Refactor initialization/automation code. Now all the code
+	used by the first instance is in ephy_shell, all the code
+	used by other instances is in ephy_main.
+	Unref the factory before quitting so we dont risk new
+	automation object are created and used with a dead shell.
+
 2003-09-23  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-editor.c:
