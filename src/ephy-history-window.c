@@ -76,7 +76,7 @@ static void cmd_open_bookmarks_in_browser (EggAction *action,
 					   EphyHistoryWindow *editor);
 static void cmd_delete                    (EggAction *action,
                                            EphyHistoryWindow *editor);
-static void cmd_bookmark_page             (EggAction *action,
+static void cmd_bookmark_link             (EggAction *action,
                                            EphyHistoryWindow *editor);
 static void cmd_clear			  (EggAction *action,
 				           EphyHistoryWindow *editor);
@@ -133,9 +133,9 @@ static EggActionGroupEntry ephy_history_ui_entries [] = {
 	{ "Delete", N_("_Delete"), GTK_STOCK_DELETE, NULL,
 	  N_("Delete the selected history link"),
 	  G_CALLBACK (cmd_delete), NULL },
-	{ "BookmarkPage", N_("Boo_kmark Page..."), EPHY_STOCK_BOOKMARK_PAGE, "<control>D",
+	{ "BookmarkLink", N_("Boo_kmark Link..."), EPHY_STOCK_BOOKMARK_PAGE, "<control>D",
 	  N_("Bookmark the selected history link"),
-	  G_CALLBACK (cmd_bookmark_page), NULL },
+	  G_CALLBACK (cmd_bookmark_link), NULL },
 	{ "Close", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
 	  N_("Close the history window"),
 	  G_CALLBACK (cmd_close), NULL },
@@ -440,7 +440,7 @@ cmd_delete (EggAction *action,
 }
 
 static void
-cmd_bookmark_page (EggAction *action,
+cmd_bookmark_link (EggAction *action,
                    EphyHistoryWindow *editor)
 {
         GtkWindow *window;
