@@ -156,16 +156,11 @@ void
 window_cmd_go_home (EggAction *action,
 		    EphyWindow *window)
 {
-	EphyEmbed *embed;
 	char *location;
 
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
 	location = eel_gconf_get_string (CONF_GENERAL_HOMEPAGE);
-	g_return_if_fail (location != NULL);
 
-	ephy_embed_load_url (embed, location);
+	ephy_window_load_url (window, location ? location : "about:blank");
 
 	g_free (location);
 }

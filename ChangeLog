@@ -1,3 +1,15 @@
+2003-06-26  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* src/bookmarks/ephy-bookmarks-menu.c: (go_location_cb):
+	* src/ephy-favorites-menu.c: (go_location_cb):
+	* src/ephy-navigation-action.c: (activate_up_menu_item_cb):
+	* src/ephy-shell.c: (ephy_shell_new_tab):
+	* src/toolbar.c: (go_location_cb):
+	* src/window-commands.c: (window_cmd_go_home):
+
+	Use window_load_url when useful. Right now just a cleanup
+	but will be useful when mozilla focus will stop to suck.
+
 2003-06-26  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/mozilla-embed-single.cpp:

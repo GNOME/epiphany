@@ -403,8 +403,8 @@ ephy_shell_new_tab (EphyShell *shell,
 	    flags & EPHY_NEW_TAB_NEW_PAGE)
 	{
 		ephy_tab_set_location (tab, "", TAB_ADDRESS_EXPIRE_NEXT);
-		load_homepage (embed);
 		toolbar_activate_location (toolbar);
+		load_homepage (embed);
 	}
 	else if (flags & EPHY_NEW_TAB_OPEN_PAGE)
 	{

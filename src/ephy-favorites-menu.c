@@ -102,12 +102,7 @@ ephy_favorites_menu_clean (EphyFavoritesMenu *wrhm)
 static void
 go_location_cb (EggAction *action, char *location, EphyWindow *window)
 {
-	EphyEmbed *embed;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	ephy_embed_load_url (embed, location);
+	ephy_window_load_url (window, location);
 }
 
 static void

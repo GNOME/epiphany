@@ -117,7 +117,7 @@ activate_up_menu_item_cb (GtkWidget *menu, EphyWindow *window)
 	url = g_slist_nth_data (l, go_nth);
 	if (url)
 	{
-		ephy_embed_load_url (embed, url);
+		ephy_window_load_url (window, url);
 	}
 
 	g_slist_foreach (l, (GFunc) g_free, NULL);
