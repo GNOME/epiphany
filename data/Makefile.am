@@ -6,8 +6,16 @@ SUBDIRS = ui art glade
 
 dist_pkgdata_DATA = default-prefs.js
 
-server_in_files = GNOME_Epiphany_Automation.server.in GNOME_Epiphany_NautilusView.server.in
-server_DATA = GNOME_Epiphany_Automation.server GNOME_Epiphany_NautilusView.server
+NAUTILUS_VIEW_SERVER = GNOME_Epiphany_NautilusView.server.in
+
+if ENABLE_NAUTILUS_VIEW
+nautilus_server_in_files = $(NAUTILUS_VIEW_SERVER)
+nautilus_server_DATA = GNOME_Epiphany_NautilusView.server
+nautilus_serverdir = $(libdir)/bonobo/servers
+endif
+
+server_in_files = GNOME_Epiphany_Automation.server.in
+server_DATA = GNOME_Epiphany_Automation.server
 serverdir = $(libdir)/bonobo/servers
 
 DESKTOP_IN_FILES= epiphany.desktop.in bme.desktop.in
@@ -36,12 +44,18 @@ install-data-local:
 	done \
         fi
 
-EXTRA_DIST = $(server_in_files)     	\
+EXTRA_DIST = $(NAUTILUS_VIEW_SERVER)	\
+	     $(server_in_files)     	\
 	     $(schema_in_files)         \
 	     $(DESKTOP_IN_FILES)	\
 	     $(about_DATA)		\
 	     $(applications_DATA)	\
 	     $(pkgconfig_DATA)
 
-
-DISTCLEANFILES = $(server_DATA) $(Applications_DATA) $(schema_DATA) $(pkgconfig_DATA) $(DESKTOP_FILES)
+DISTCLEANFILES = \
+	$(nautilus_server_DATA) \
+	$(server_DATA)		\
+	$(Applications_DATA)	\
+	$(schema_DATA)		\
+	$(pkgconfig_DATA)	\
+	$(DESKTOP_FILES)
