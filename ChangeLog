@@ -1,5 +1,15 @@
 2004-07-11  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* src/bookmarks/ephy-bookmark-action.c: (drag_begin_cb),
+	(drag_end_cb), (connect_proxy):
+	* src/bookmarks/ephy-topic-action.c: (drag_begin_cb),
+	(drag_end_cb), (connect_proxy):
+
+	Hide the item when dragging it like we do for normal
+	toolbars.
+
+2004-07-11  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* src/bookmarks/ephy-topic-action.c: (create_tool_item),
 	(menu_deactivate_cb), (remove_from_model), (remove_activate_cb),
 	(drag_data_get_cb), (drag_data_delete_cb), (stop_drag_check),
