@@ -38,6 +38,7 @@ NOINST_H_FILES = \
 	ephy-navigation-action.h	\
 	ephy-tabs-menu.h		\
 	ephy-toolbars-model.h		\
+	ephy-toolbar-editor.h		\
 	pdm-dialog.h			\
 	popup-commands.h		\
 	prefs-dialog.h			\
@@ -79,6 +80,7 @@ libephymain_la_SOURCES = \
 	ephy-tab.h			\
 	ephy-tabs-menu.c		\
 	ephy-toolbars-model.c		\
+	ephy-toolbar-editor.c		\
 	ephy-window.c			\
 	pdm-dialog.c			\
 	popup-commands.c		\
@@ -91,6 +93,7 @@ libephymain_la_SOURCES = \
 
 libephymain_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
+	-I$(top_builddir)/lib/egg	\
 	-I$(top_builddir)/embed		\
 	-I$(top_srcdir)/embed 		\
 	-I$(top_srcdir)/lib   		\

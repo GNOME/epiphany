@@ -40,6 +40,7 @@
 #include "ephy-session.h"
 #include "downloader-view.h"
 #include "egg-toolbars-model.h"
+#include "eggtypebuiltins.h"
 #include "ephy-toolbars-model.h"
 #include "ephy-automation.h"
 #include "print-dialog.h"
@@ -69,6 +70,7 @@ struct _EphyShellPrivate
 	EphySession *session;
 	EphyBookmarks *bookmarks;
 	EggToolbarsModel *toolbars_model;
+	guint toolbar_style_notifier_id;
 	EggToolbarsModel *fs_toolbars_model;
 	EphyExtensionsManager *extensions_manager;
 	GObject *dbus_service;
@@ -434,6 +436,10 @@ ephy_shell_finalize (GObject *object)
 
 	LOG ("Unref toolbars model")
 	if (shell->priv->toolbars_model)
+	if (shell->priv->toolbar_style_notifier_id != 0)
+	{
+		eel_gconf_notification_remove (shell->priv->toolbar_style_notifier_id);
+	}
 	{
 		g_object_unref (shell->priv->toolbars_model);
 	}
@@ -647,6 +653,44 @@ ephy_shell_get_bookmarks (EphyShell *shell)
 	return shell->priv->bookmarks;
 }
 
+static void
+toolbar_style_notifier (GConfClient *client,
+			guint cnxn_id,
+			GConfEntry *entry,
+			EphyShell *shell)
+{
+	EggToolbarsModel *model = shell->priv->toolbars_model;
+	GFlagsClass *flags_class;
+	const GFlagsValue *value;
+	EggTbModelFlags flags, new_flags = 0;
+	char *pref;
+	int i, n_toolbars;
+
+	g_return_if_fail (model != NULL);
+
+	pref = eel_gconf_get_string (CONF_INTERFACE_TOOLBAR_STYLE);
+	if (pref != NULL)
+	{
+		flags_class = g_type_class_ref (EGG_TYPE_TB_MODEL_FLAGS);
+		value = g_flags_get_value_by_nick (flags_class, pref);
+		if (value != NULL)
+		{
+			new_flags = value->value;
+		}
+		g_type_class_unref (flags_class);
+	}
+	new_flags &= EGG_TB_MODEL_STYLES_MASK;
+
+	n_toolbars = egg_toolbars_model_n_toolbars (model);
+	for (i = 0; i < n_toolbars; i++)
+	{
+		flags = egg_toolbars_model_get_flags (model, i);
+		flags &= ~EGG_TB_MODEL_STYLES_MASK;
+		flags |= new_flags;
+		egg_toolbars_model_set_flags (model, i, new_flags);
+	}
+}
+
 GObject *
 ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
 {
@@ -689,6 +733,12 @@ ephy_shell_get_toolbars_model (EphyShell *shell, gboolean fullscreen)
 			/* ok, now we can load the model */
 			ephy_toolbars_model_load
 				(EPHY_TOOLBARS_MODEL (shell->priv->toolbars_model));
+
+			toolbar_style_notifier (NULL, 0, NULL, shell);
+			shell->priv->toolbar_style_notifier_id = eel_gconf_notification_add
+				(CONF_INTERFACE_TOOLBAR_STYLE,
+				 (GConfClientNotifyFunc) toolbar_style_notifier, shell);
+
 		}
 
 		return G_OBJECT (shell->priv->toolbars_model);

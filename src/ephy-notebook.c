@@ -841,9 +841,6 @@ tab_label_style_set_cb (GtkWidget *label,
 	char_width = pango_font_metrics_get_approximate_digit_width (metrics);
 	pango_font_metrics_unref (metrics);
 
-	LOG ("tab_label_size_request_cb label %p char_width %d total %d",
-	     label, char_width, TAB_WIDTH_N_CHARS * PANGO_PIXELS (char_width))
-
 	gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (label),
 					   GTK_ICON_SIZE_MENU, &w, &h);
 

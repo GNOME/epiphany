@@ -33,6 +33,7 @@ G_BEGIN_DECLS
 #define CONF_WINDOWS_SHOW_BOOKMARKS_BAR		"/apps/epiphany/general/show_bookmarks_bar"
 #define CONF_WINDOWS_SHOW_STATUSBAR		"/apps/epiphany/general/show_statusbar"
 #define CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL	"/apps/epiphany/general/middle_click_open_url"
+#define CONF_INTERFACE_TOOLBAR_STYLE		"/apps/epiphany/general/toolbar_style"
 #define CONF_AUTO_DOWNLOADS			"/apps/epiphany/general/automatic_downloads"
 #define CONF_DESKTOP_IS_HOME_DIR		"/apps/nautilus/preferences/desktop_is_home_dir"
 

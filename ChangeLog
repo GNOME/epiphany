@@ -1,5 +1,20 @@
 2005-01-10  Christian Persch  <chpe@cvs.gnome.org>
 
+	* data/epiphany.schemas.in:
+	* lib/ephy-prefs.h:
+	* src/Makefile.am:
+	* src/ephy-notebook.c: (tab_label_style_set_cb):
+	* src/ephy-shell.c: (ephy_shell_finalize),
+	(toolbar_style_notifier), (ephy_shell_get_toolbars_model):
+	A src/ephy-toolbar-editor.c:
+	A src/ephy-toolbar-editor.h:
+	* src/window-commands.c: (window_cmd_edit_toolbar):
+
+	Move toolbar editor dialogue into its own class, and implement a
+	toolbar style override there. Fixes bug #102520.
+
+2005-01-10  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/egg/egg-editable-toolbar.c: (toolbar_changed_cb),
 	(egg_editable_toolbar_construct):
 	* lib/egg/egg-toolbars-model.c: (parse_toolbars):
