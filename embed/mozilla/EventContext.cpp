@@ -817,10 +817,11 @@ nsresult EventContext::CheckLinkScheme (const nsAString &link)
 	rv = uri->GetScheme (scheme);
 	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
-	if (scheme.EqualsIgnoreCase ("http") ||
+	if (scheme.EqualsIgnoreCase ("http")  ||
 	    scheme.EqualsIgnoreCase ("https") ||
-	    scheme.EqualsIgnoreCase ("ftp") ||
-	    scheme.EqualsIgnoreCase ("file") ||
+	    scheme.EqualsIgnoreCase ("ftp")   ||
+	    scheme.EqualsIgnoreCase ("file")  ||
+	    scheme.EqualsIgnoreCase ("about") ||
 	    scheme.EqualsIgnoreCase ("gopher"))
 	{
 		SetIntProperty ("link-has-web-scheme", TRUE);
