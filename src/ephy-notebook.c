@@ -78,7 +78,6 @@ static void move_tab_to_another_notebook (EphyNotebook *src,
 
 /* Local variables */
 static GdkCursor *cursor = NULL;
-static GList *notebooks  = NULL;
 
 static GtkTargetEntry url_drag_types [] = 
 {
@@ -204,36 +203,36 @@ is_in_notebook_window (EphyNotebook *notebook,
 static EphyNotebook *
 find_notebook_at_pointer (gint abs_x, gint abs_y)
 {
-	GList *l;
+	GdkWindow *win_at_pointer, *toplevel_win;
+	gpointer toplevel = NULL;
 	gint x, y;
-	GdkWindow *win_at_pointer = gdk_window_at_pointer (&x, &y);
-	GdkWindow *parent_at_pointer = NULL;
 
+	win_at_pointer = gdk_window_at_pointer (&x, &y);
 	if (win_at_pointer == NULL)
 	{
 		/* We are outside all windows containing a notebook */
 		return NULL;
 	}
 
-	gdk_window_get_toplevel (win_at_pointer);
-	/* When we are in the notebook event window, win_at_pointer will be
-	   this event window, and the toplevel window we are interested in
-	   will be its parent
-	*/
-	parent_at_pointer = gdk_window_get_parent (win_at_pointer);
+	toplevel_win = gdk_window_get_toplevel (win_at_pointer);
 
-	for (l = notebooks; l != NULL; l = l->next)
+	/* get the GtkWidget which owns the toplevel GdkWindow */
+	gdk_window_get_user_data (toplevel_win, &toplevel);
+
+	/* toplevel should be an EphyWindow */
+	if (toplevel != NULL && EPHY_IS_WINDOW (toplevel))
 	{
-		EphyNotebook *nb = EPHY_NOTEBOOK (l->data);
-		GdkWindow *win = GTK_WIDGET (nb)->window;
+		EphyNotebook *notebook;
 
-		win = gdk_window_get_toplevel (win);
-		if (((win == win_at_pointer) || (win == parent_at_pointer))
-		    && is_in_notebook_window (nb, abs_x, abs_y))
+		notebook = EPHY_NOTEBOOK (ephy_window_get_notebook
+					    (EPHY_WINDOW (toplevel)));
+
+		if (is_in_notebook_window (notebook, abs_x, abs_y))
 		{
-			return nb;
+			return notebook;
 		}
 	}
+
 	return NULL;
 }
 
@@ -735,8 +734,6 @@ ephy_notebook_init (EphyNotebook *notebook)
 	notebook->priv->opened_tabs = NULL;
 	notebook->priv->show_tabs = TRUE;
 
-	notebooks = g_list_append (notebooks, notebook);
-
 	g_signal_connect (notebook, "button-press-event",
 			  (GCallback)button_press_cb, NULL);
 	g_signal_connect (notebook, "button-release-event",
@@ -765,8 +762,6 @@ static void
 ephy_notebook_finalize (GObject *object)
 {
 	EphyNotebook *notebook = EPHY_NOTEBOOK (object);
-
-	notebooks = g_list_remove (notebooks, notebook);
 
 	eel_gconf_notification_remove (notebook->priv->tabs_vis_notifier_id);
 
