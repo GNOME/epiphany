@@ -122,11 +122,10 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
 
 	g_object_class_install_property (object_class,
 					 PROP_BOOKMARK,
-					 g_param_spec_object ("bookmark",
-							      "Bookmark",
-							      "Bookmark",
-							      EPHY_TYPE_NODE,
-							      G_PARAM_READWRITE));
+					 g_param_spec_pointer ("bookmark",
+							       "Bookmark",
+							       "Bookmark",
+							       G_PARAM_READWRITE));
 }
 
 static void
@@ -172,7 +171,7 @@ ephy_bookmark_properties_set_property (GObject *object,
 		break;
 	case PROP_BOOKMARK:
 		ephy_bookmark_properties_set_bookmark
-			(selector, g_value_get_object (value));
+			(selector, g_value_get_pointer (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

@@ -427,9 +427,9 @@ ephy_bookmark_action_init (EphyBookmarkAction *action)
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	node = ephy_bookmarks_get_bookmarks (bookmarks);
-	g_signal_connect_object (node, "child_changed",
-				 G_CALLBACK (bookmarks_child_changed_cb),
-				 action, 0);
+	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_CHANGED,
+				         (EphyNodeCallback) bookmarks_child_changed_cb,
+				         G_OBJECT (action));
 }
 
 EggAction *
@@ -441,7 +441,7 @@ ephy_bookmark_action_new (const char *name, guint id)
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
-	bmk = ephy_node_get_from_id (id);
+	bmk = ephy_bookmarks_get_from_id (bookmarks, id);
 	g_return_val_if_fail (bmk != NULL, NULL);
 
 	action =  EGG_ACTION (g_object_new (EPHY_TYPE_BOOKMARK_ACTION,

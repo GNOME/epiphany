@@ -91,7 +91,7 @@ impl_add_item (EggToolbarsModel *t,
 
 		topic = TRUE;
 		nodes = ephy_dnd_node_list_extract_nodes (name);
-		id = ephy_node_get_id (EPHY_NODE (nodes->data));
+		id = ephy_node_get_id (nodes->data);
 		action_name = g_strdup_printf ("GoTopicId%d", id);
 		g_list_free (nodes);
 	}
@@ -100,7 +100,7 @@ impl_add_item (EggToolbarsModel *t,
 		GList *nodes;
 
 		nodes = ephy_dnd_node_list_extract_nodes (name);
-		id = ephy_node_get_id (EPHY_NODE (nodes->data));
+		id = ephy_node_get_id (nodes->data);
 		action_name = g_strdup_printf ("GoBookmarkId%d", id);
 		g_list_free (nodes);
 	}

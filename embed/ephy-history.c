@@ -42,6 +42,7 @@
 struct EphyHistoryPrivate
 {
 	char *xml_file;
+	EphyNodeDb *db;
 	EphyNode *hosts;
 	EphyNode *pages;
 	EphyNode *last_page;
@@ -142,7 +143,7 @@ ephy_history_autocompletion_source_foreach (EphyAutocompletionSource *source,
 		guint32 score;
 
 		kid = g_ptr_array_index (children, i);
-		g_assert (EPHY_IS_NODE (kid));
+		g_assert (kid != NULL);
 
 		url = ephy_node_get_property_string
 			(kid, EPHY_NODE_PAGE_PROP_LOCATION);
@@ -218,7 +219,7 @@ ephy_history_load (EphyHistory *eb)
 	{
 		EphyNode *node;
 
-		node = ephy_node_new_from_xml (child);
+		node = ephy_node_new_from_xml (eb->priv->db, child);
 	}
 
 	xmlFreeDoc (doc);
@@ -370,7 +371,7 @@ pages_removed_cb (EphyNode *node,
 	g_static_rw_lock_writer_unlock (eb->priv->pages_hash_lock);
 
 	host_id = ephy_node_get_property_int (child, EPHY_NODE_PAGE_PROP_HOST_ID);
-	host = ephy_node_get_from_id (host_id);
+	host = ephy_node_db_get_node_from_id (eb->priv->db, host_id);
 	children = ephy_node_get_n_children (host);
 
 	LOG ("Check host children: %d", children)
@@ -394,8 +395,12 @@ static void
 ephy_history_init (EphyHistory *eb)
 {
 	GValue value = { 0, };
+	EphyNodeDb *db;
 
         eb->priv = g_new0 (EphyHistoryPrivate, 1);
+
+	db = ephy_node_db_new ("EphyHistory");
+	eb->priv->db = db;
 
 	eb->priv->xml_file = g_build_filename (ephy_dot_dir (),
 					       "ephy-history.xml",
@@ -412,7 +417,7 @@ ephy_history_init (EphyHistory *eb)
 	g_static_rw_lock_init (eb->priv->hosts_hash_lock);
 
 	/* Pages */
-	eb->priv->pages = ephy_node_new_with_id (PAGES_NODE_ID);
+	eb->priv->pages = ephy_node_new_with_id (db, PAGES_NODE_ID);
 	ephy_node_ref (eb->priv->pages);
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, _("All"));
@@ -429,30 +434,26 @@ ephy_history_init (EphyHistory *eb)
 			        EPHY_NODE_PAGE_PROP_PRIORITY,
 			        &value);
 	g_value_unset (&value);
-	g_signal_connect_object (G_OBJECT (eb->priv->pages),
-				 "child_added",
-				 G_CALLBACK (pages_added_cb),
-				 G_OBJECT (eb),
-				 0);
-	g_signal_connect_object (G_OBJECT (eb->priv->pages),
-				 "child_removed",
-				 G_CALLBACK (pages_removed_cb),
-				 G_OBJECT (eb),
-				 0);
+	ephy_node_signal_connect_object (eb->priv->pages,
+					 EPHY_NODE_CHILD_ADDED,
+				         (EphyNodeCallback) pages_added_cb,
+					 G_OBJECT (eb));
+	ephy_node_signal_connect_object (eb->priv->pages,
+					 EPHY_NODE_CHILD_REMOVED,
+				         (EphyNodeCallback) pages_removed_cb,
+					 G_OBJECT (eb));
 
 	/* Hosts */
-	eb->priv->hosts = ephy_node_new_with_id (HOSTS_NODE_ID);
+	eb->priv->hosts = ephy_node_new_with_id (db, HOSTS_NODE_ID);
 	ephy_node_ref (eb->priv->hosts);
-	g_signal_connect_object (G_OBJECT (eb->priv->hosts),
-				 "child_added",
-				 G_CALLBACK (hosts_added_cb),
-				 G_OBJECT (eb),
-				 0);
-	g_signal_connect_object (G_OBJECT (eb->priv->hosts),
-				 "child_removed",
-				 G_CALLBACK (hosts_removed_cb),
-				 G_OBJECT (eb),
-				 0);
+	ephy_node_signal_connect_object (eb->priv->hosts,
+					 EPHY_NODE_CHILD_ADDED,
+				         (EphyNodeCallback) hosts_added_cb,
+					 G_OBJECT (eb));
+	ephy_node_signal_connect_object (eb->priv->hosts,
+					 EPHY_NODE_CHILD_REMOVED,
+				         (EphyNodeCallback) hosts_removed_cb,
+					 G_OBJECT (eb));
 
 	ephy_node_add_child (eb->priv->hosts, eb->priv->pages);
 
@@ -481,6 +482,8 @@ ephy_history_finalize (GObject *object)
 
 	ephy_node_unref (eb->priv->pages);
 	ephy_node_unref (eb->priv->hosts);
+
+	g_object_unref (eb->priv->db);
 
 	g_hash_table_destroy (eb->priv->pages_hash);
 	g_static_rw_lock_free (eb->priv->pages_hash_lock);
@@ -610,7 +613,7 @@ ephy_history_add_host (EphyHistory *eh, EphyNode *page)
 
 	if (!host)
 	{
-		host = ephy_node_new ();
+		host = ephy_node_new (eh->priv->db);
 		g_value_init (&value, G_TYPE_STRING);
 		g_value_set_string (&value, host_name);
 		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_TITLE,
@@ -656,7 +659,7 @@ ephy_history_visited (EphyHistory *eh, EphyNode *node)
 
 	now = time (NULL);
 
-	g_assert (EPHY_IS_NODE (node));
+	g_assert (node != NULL);
 
 	url = ephy_node_get_property_string
 		(node, EPHY_NODE_PAGE_PROP_LOCATION);
@@ -686,7 +689,10 @@ ephy_history_visited (EphyHistory *eh, EphyNode *node)
 	host_id = ephy_node_get_property_int (node, EPHY_NODE_PAGE_PROP_HOST_ID);
 	if (host_id >= 0)
 	{
-		ephy_history_host_visited (eh, ephy_node_get_from_id (host_id), now);
+		EphyNode *host;
+
+		host = ephy_node_db_get_node_from_id (eh->priv->db, host_id);
+		ephy_history_host_visited (eh, host, now);
 	}
 
 	eh->priv->last_page = node;
@@ -727,7 +733,7 @@ ephy_history_add_page (EphyHistory *eb,
 		return;
 	}
 
-	bm = ephy_node_new ();
+	bm = ephy_node_new (eb->priv->db);
 
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, url);

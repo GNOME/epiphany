@@ -315,7 +315,7 @@ cmd_show_in_bookmarks_bar (EggAction *action,
 		return;
 	}
 
-	node = EPHY_NODE (selection->data);
+	node = selection->data;
 	id = ephy_node_get_id (node);
 	state = EGG_TOGGLE_ACTION (action)->active;
 
@@ -346,7 +346,7 @@ cmd_open_bookmarks_in_tabs (EggAction *action,
 
 	for (l = selection; l; l = l->next)
 	{
-		EphyNode *node = EPHY_NODE (l->data);
+		EphyNode *node = l->data;
 		const char *location;
 
 		location = ephy_node_get_property_string (node,
@@ -372,7 +372,7 @@ cmd_open_bookmarks_in_browser (EggAction *action,
 
 	for (l = selection; l; l = l->next)
 	{
-		EphyNode *node = EPHY_NODE (l->data);
+		EphyNode *node = l->data;
 		const char *location;
 
 		location = ephy_node_get_property_string (node,
@@ -400,7 +400,7 @@ cmd_delete (EggAction *action,
 		EphyNode *node;
 
 		selected = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->key_view));
-		node = EPHY_NODE (selected->data);
+		node = selected->data;
 		priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 
 		if (priority == -1) priority = EPHY_NODE_NORMAL_PRIORITY;
@@ -452,7 +452,7 @@ cmd_bookmark_properties (EggAction *action,
 
 	for (l = selection; l; l = l->next)
 	{
-		EphyNode *node = EPHY_NODE (l->data);
+		EphyNode *node = l->data;
 		show_properties_dialog (editor, node);
 	}
 
@@ -491,7 +491,7 @@ cmd_copy (EggAction *action,
 		if (g_list_length (selection) == 1)
 		{
 			const char *tmp;
-			EphyNode *node = EPHY_NODE (selection->data);
+			EphyNode *node = selection->data;
 			tmp = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
 			gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), tmp, -1);
 		}
@@ -632,7 +632,6 @@ ephy_bookmarks_editor_node_activated_cb (GtkWidget *view,
 	const char *location;
 	EphyWindow *window;
 
-	g_return_if_fail (EPHY_IS_NODE (node));
 	location = ephy_node_get_property_string
 		(node, EPHY_NODE_BMK_PROP_LOCATION);
 	g_return_if_fail (location != NULL);
@@ -707,7 +706,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	selected = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->key_view));
 	if (key_focus && selected)
 	{
-		EphyNode *node = EPHY_NODE (selected->data);
+		EphyNode *node = selected->data;
 		EphyNodePriority priority;
 		gulong id;
 
@@ -726,7 +725,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	selected = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->bm_view));
 	if (bmk_focus && selected)
 	{
-		EphyNode *node = EPHY_NODE (selected->data);
+		EphyNode *node = selected->data;
 		gulong id;
 
 		id = ephy_node_get_id (node);
@@ -874,7 +873,7 @@ ephy_bookmarks_editor_dispose (GObject *object)
 			return;
 		}
 
-		selected_id = ephy_node_get_id (EPHY_NODE (selection->data));
+		selected_id = ephy_node_get_id (selection->data);
 		if (selected_id >= 0)
 		{
 			selected_id_str = g_strdup_printf ("%ld", selected_id);
@@ -1065,11 +1064,9 @@ node_dropped_cb (EphyNodeView *view, EphyNode *node,
 {
 	GList *l;
 
-	g_return_if_fail (EPHY_IS_NODE (node));
-
 	for (l = nodes; l != NULL; l = l->next)
 	{
-		EphyNode *bmk = EPHY_NODE (l->data);
+		EphyNode *bmk = l->data;
 
 		ephy_bookmarks_set_keyword (editor->priv->bookmarks, node, bmk);
 	}
@@ -1290,7 +1287,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 		return;
 	}
 
-	selected_node = ephy_node_get_from_id (selected_id);
+	selected_node = ephy_bookmarks_get_from_id (editor->priv->bookmarks, selected_id);
 	if (selected_node != NULL)
 	{
 		ephy_node_view_select_node (EPHY_NODE_VIEW (key_view), selected_node);

@@ -321,7 +321,7 @@ cmd_open_bookmarks_in_tabs (EggAction *action,
 
 	for (l = selection; l; l = l->next)
 	{
-		EphyNode *node = EPHY_NODE (l->data);
+		EphyNode *node = l->data;
 		const char *location;
 
 		location = ephy_node_get_property_string (node,
@@ -347,7 +347,7 @@ cmd_open_bookmarks_in_browser (EggAction *action,
 
 	for (l = selection; l; l = l->next)
 	{
-		EphyNode *node = EPHY_NODE (l->data);
+		EphyNode *node = l->data;
 		const char *location;
 
 		location = ephy_node_get_property_string (node,
@@ -392,7 +392,7 @@ cmd_copy (EggAction *action,
 		if (g_list_length (selection) == 1)
 		{
 			const char *tmp;
-			EphyNode *node = EPHY_NODE (selection->data);
+			EphyNode *node = selection->data;
 			tmp = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_LOCATION);
 			gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), tmp, -1);
 		}
@@ -463,7 +463,7 @@ cmd_bookmark_link (EggAction *action,
 		const char *title;
 		EphyNode *node;
 
-		node = EPHY_NODE (selection->data);
+		node = selection->data;
 		location = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_LOCATION);
 		title = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_TITLE);
 		if (ephy_new_bookmark_is_unique (bookmarks, GTK_WINDOW (window),
@@ -577,7 +577,6 @@ ephy_history_window_node_activated_cb (GtkWidget *view,
 	const char *location;
 	EphyWindow *window;
 
-	g_return_if_fail (EPHY_IS_NODE (node));
 	location = ephy_node_get_property_string
 		(node, EPHY_NODE_PAGE_PROP_LOCATION);
 	g_return_if_fail (location != NULL);
@@ -683,7 +682,7 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 	g_object_set (action, "sensitive", select_all, NULL);
 	action = egg_action_group_get_action (action_group, "Delete");
 	g_object_set (action, "sensitive", delete, NULL);
-	action = egg_action_group_get_action (action_group, "BookmarkPage");
+	action = egg_action_group_get_action (action_group, "BookmarkLink");
 	g_object_set (action, "sensitive", bookmark_page, NULL);
 }
 

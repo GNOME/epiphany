@@ -18,55 +18,37 @@
  *  $Id$
  */
 
+
 #ifndef EPHY_NODE_H
 #define EPHY_NODE_H
-
-#include <glib-object.h>
 
 #include <libxml/tree.h>
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_NODE         (ephy_node_get_type ())
-#define EPHY_NODE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_NODE, EphyNode))
-#define EPHY_NODE_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_NODE, EphyNodeClass))
-#define EPHY_IS_NODE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_NODE))
-#define EPHY_IS_NODE_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_NODE))
-#define EPHY_NODE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_NODE, EphyNodeClass))
+typedef struct EphyNode EphyNode;
 
-typedef struct EphyNodePrivate EphyNodePrivate;
-
-typedef struct
+typedef enum
 {
-	GObject parent;
+	EPHY_NODE_DESTROYED,         /* RBNode *node */
+	EPHY_NODE_RESTORED,          /* RBNode *node */
+	EPHY_NODE_CHILD_ADDED,       /* RBNode *node, RBNode *child */
+	EPHY_NODE_CHILD_CHANGED,     /* RBNode *node, RBNode *child */
+	EPHY_NODE_CHILD_REMOVED,     /* RBNode *node, RBNode *child */
+	EPHY_NODE_CHILDREN_REORDERED /* RBNode *node, int *new_order */
+} EphyNodeSignalType;
 
-	EphyNodePrivate *priv;
-} EphyNode;
+#include "ephy-node-db.h"
 
-typedef struct
-{
-	GObjectClass parent;
+typedef void (*EphyNodeCallback) (EphyNode *node, ...);
 
-	/* signals */
-	void (*destroyed)       (EphyNode *node);
-	void (*restored)        (EphyNode *node);
+EphyNode   *ephy_node_new                   (EphyNodeDb *db);
 
-	void (*child_added)     (EphyNode *node, EphyNode *child);
-	void (*child_changed)   (EphyNode *node, EphyNode *child);
-	void (*children_reordered) (EphyNode *node, int *new_order);
-	void (*child_removed)   (EphyNode *node, EphyNode *child);
-} EphyNodeClass;
-
-GType       ephy_node_get_type              (void);
-
-EphyNode   *ephy_node_new                   (void);
-
-EphyNode   *ephy_node_new_with_id           (gulong reserved_id);
+EphyNode   *ephy_node_new_with_id           (EphyNodeDb *db,
+					     gulong reserved_id);
 
 /* unique node ID */
 long        ephy_node_get_id                (EphyNode *node);
-
-EphyNode   *ephy_node_get_from_id           (gulong id);
 
 /* refcounting */
 void        ephy_node_ref                   (EphyNode *node);
@@ -76,13 +58,16 @@ void        ephy_node_unref                 (EphyNode *node);
 void        ephy_node_freeze                (EphyNode *node);
 void        ephy_node_thaw                  (EphyNode *node);
 
-/* property interface */
-enum
-{
-	EPHY_NODE_PROP_NAME          = 0,
-	EPHY_NODE_PROP_NAME_SORT_KEY = 1
-};
+/* signals */
+int         ephy_node_signal_connect_object (EphyNode *node,
+					     EphyNodeSignalType type,
+					     EphyNodeCallback callback,
+					     GObject *object);
 
+void        ephy_node_signal_disconnect     (EphyNode *node,
+					     int signal_id);
+
+/* properties */
 void        ephy_node_set_property          (EphyNode *node,
 				             guint property_id,
 				             const GValue *value);
@@ -111,7 +96,8 @@ char       *ephy_node_get_property_time     (EphyNode *node,
 /* xml storage */
 void          ephy_node_save_to_xml         (EphyNode *node,
 					     xmlNodePtr parent_xml_node);
-EphyNode     *ephy_node_new_from_xml        (xmlNodePtr xml_node);
+EphyNode     *ephy_node_new_from_xml        (EphyNodeDb *db,
+					     xmlNodePtr xml_node);
 
 /* DAG structure */
 void        ephy_node_add_child             (EphyNode *node,
@@ -138,12 +124,6 @@ EphyNode     *ephy_node_get_next_child      (EphyNode *node,
 					     EphyNode *child);
 EphyNode     *ephy_node_get_previous_child  (EphyNode *node,
 					     EphyNode *child);
-
-/* node id services */
-void        ephy_node_system_init           (gulong reserved_ids);
-void        ephy_node_system_shutdown       (void);
-
-long        ephy_node_new_id                (void);
 
 G_END_DECLS
 

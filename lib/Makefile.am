@@ -41,6 +41,8 @@ libephy_la_SOURCES = \
 	ephy-node-filter.c			\
 	ephy-node-filter.h			\
 	ephy-node-common.h			\
+	ephy-node-db.c				\
+	ephy-node-db.h				\
 	ephy-prefs.h				\
 	ephy-prefs-utils.c			\
 	ephy-prefs-utils.h			\

@@ -1,3 +1,89 @@
+2003-05-19  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/Makefile.am:
+	* lib/ephy-dnd.c: (ephy_dnd_node_list_extract_nodes):
+	* lib/ephy-node.c: (write_lock_to_read_lock),
+	(read_lock_to_write_lock), (lock_gdk), (unlock_gdk), (callback),
+	(ephy_node_emit_signal), (ephy_node_finalize), (real_remove_child),
+	(remove_child), (signal_object_weak_notify),
+	(unref_signal_objects), (ephy_node_dispose), (ephy_node_new),
+	(ephy_node_new_with_id), (ephy_node_get_id), (ephy_node_ref),
+	(ephy_node_unref), (ephy_node_freeze), (ephy_node_thaw),
+	(child_changed), (real_set_property), (ephy_node_set_property),
+	(ephy_node_get_property), (ephy_node_get_property_string),
+	(ephy_node_get_property_boolean), (ephy_node_get_property_long),
+	(ephy_node_get_property_int), (ephy_node_get_property_double),
+	(ephy_node_get_property_float), (ephy_node_get_property_node),
+	(save_parent), (ephy_node_save_to_xml), (real_add_child),
+	(ephy_node_new_from_xml), (ephy_node_add_child),
+	(ephy_node_remove_child), (ephy_node_has_child),
+	(ephy_node_real_get_child_index), (ephy_node_sort_children),
+	(ephy_node_reorder_children), (ephy_node_get_children),
+	(ephy_node_get_n_children), (ephy_node_get_nth_child),
+	(get_child_index_real), (ephy_node_get_child_index),
+	(ephy_node_get_next_child), (ephy_node_get_previous_child),
+	(ephy_node_signal_connect_object), (ephy_node_signal_disconnect):
+	* lib/ephy-node.h:
+	* lib/ephy-state.c: (ephy_states_load), (ensure_states),
+	(ephy_state_add_window), (ephy_state_add_paned), (ephy_state_save):
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_class_init),
+	(ephy_node_view_selection_changed_cb),
+	(ephy_node_view_set_property), (ephy_node_view_get_property),
+	(ephy_node_view_remove):
+	* lib/widgets/ephy-tree-model-node.c:
+	(ephy_tree_model_node_class_init),
+	(ephy_tree_model_node_set_property),
+	(ephy_tree_model_node_get_property),
+	(ephy_tree_model_node_get_value), (ephy_tree_model_node_get_path),
+	(ephy_tree_model_node_iter_next),
+	(ephy_tree_model_node_node_from_iter):
+	* src/bookmarks/ephy-bookmark-action.c:
+	(ephy_bookmark_action_init), (ephy_bookmark_action_new):
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(ephy_bookmark_properties_class_init),
+	(ephy_bookmark_properties_set_property):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(cmd_show_in_bookmarks_bar), (cmd_open_bookmarks_in_tabs),
+	(cmd_open_bookmarks_in_browser), (cmd_delete),
+	(cmd_bookmark_properties), (cmd_copy),
+	(ephy_bookmarks_editor_node_activated_cb),
+	(ephy_bookmarks_editor_update_menu),
+	(ephy_bookmarks_editor_dispose), (node_dropped_cb),
+	(ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-bookmarks-export.c: (add_topics_list):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_load),
+	(ephy_bookmarks_init), (ephy_bookmarks_add),
+	(ephy_bookmarks_add_keyword), (ephy_bookmarks_get_from_id):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/bookmarks/ephy-topic-action.c: (menu_activate_cb),
+	(sort_bookmarks), (sort_topics), (build_menu),
+	(ephy_topic_action_init), (ephy_topic_action_new):
+	* src/bookmarks/ephy-topics-selector.c:
+	(ephy_topics_selector_class_init),
+	(ephy_topics_selector_set_property),
+	(ephy_topics_selector_get_property):
+	* src/ephy-history-window.c: (cmd_open_bookmarks_in_tabs),
+	(cmd_open_bookmarks_in_browser), (cmd_copy), (cmd_bookmark_link),
+	(ephy_history_window_node_activated_cb),
+	(ephy_history_window_update_menu):
+	* src/ephy-shell.c: (ephy_shell_init), (ephy_shell_finalize):
+	* src/ephy-toolbars-model.c: (impl_add_item):
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_load),
+	(ephy_favicon_cache_init), (ephy_favicon_cache_finalize),
+	(ephy_favicon_cache_get):
+	* embed/ephy-history.c:
+	(ephy_history_autocompletion_source_foreach), (ephy_history_load),
+	(pages_removed_cb), (ephy_history_init), (ephy_history_finalize),
+	(ephy_history_add_host), (ephy_history_visited),
+	(ephy_history_add_page):
+
+	Ok biggest commit of ephy history.
+	Extend node api to allow to branch different databases, deobjectify
+	nodes for better perfomance, smarted id factory.
+	Convert code to use the new api.
+	This will very likely break something, please backup your bookmarks (the .xml)
+	and report them.
+
 2003-05-19  David Bordoley  <bordoley@msu.edu>
 
 	* data/epiphany.schemas.in:

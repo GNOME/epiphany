@@ -41,6 +41,7 @@ struct EphyFaviconCachePrivate
 {
 	char *directory;
 	char *xml_file;
+	EphyNodeDb *db;
 	EphyNode *icons;
 	GHashTable *icons_hash;
 	GStaticRWLock *icons_hash_lock;
@@ -141,7 +142,7 @@ ephy_favicon_cache_load (EphyFaviconCache *eb)
 	{
 		EphyNode *node;
 
-		node = ephy_node_new_from_xml (child);
+		node = ephy_node_new_from_xml (eb->priv->db, child);
 	}
 
 	xmlFreeDoc (doc);
@@ -258,7 +259,12 @@ ephy_favicon_cache_save (EphyFaviconCache *eb)
 static void
 ephy_favicon_cache_init (EphyFaviconCache *cache)
 {
+	EphyNodeDb *db;
+
 	cache->priv = g_new0 (EphyFaviconCachePrivate, 1);
+
+	db = ephy_node_db_new ("EphyFaviconCache");
+	cache->priv->db = db;
 
 	cache->priv->xml_file = g_build_filename (ephy_dot_dir (),
 					          "ephy-favicon-cache.xml",
@@ -286,18 +292,16 @@ ephy_favicon_cache_init (EphyFaviconCache *cache)
 							     NULL);
 
 	/* Icons */
-	cache->priv->icons = ephy_node_new_with_id (ICONS_NODE_ID);
+	cache->priv->icons = ephy_node_new_with_id (db, ICONS_NODE_ID);
 	ephy_node_ref (cache->priv->icons);
-	g_signal_connect_object (G_OBJECT (cache->priv->icons),
-				 "child_added",
-				 G_CALLBACK (icons_added_cb),
-				 G_OBJECT (cache),
-				 0);
-	g_signal_connect_object (G_OBJECT (cache->priv->icons),
-				 "child_removed",
-				 G_CALLBACK (icons_removed_cb),
-				 G_OBJECT (cache),
-				 0);
+	ephy_node_signal_connect_object (cache->priv->icons,
+				         EPHY_NODE_CHILD_ADDED,
+				         (EphyNodeCallback) icons_added_cb,
+				         G_OBJECT (cache));
+	ephy_node_signal_connect_object (cache->priv->icons,
+				         EPHY_NODE_CHILD_REMOVED,
+				         (EphyNodeCallback) icons_removed_cb,
+				         G_OBJECT (cache));
 
 	ephy_favicon_cache_load (cache);
 }
@@ -344,6 +348,8 @@ ephy_favicon_cache_finalize (GObject *object)
 	cache = EPHY_FAVICON_CACHE (object);
 
 	g_return_if_fail (cache->priv != NULL);
+
+	g_object_unref (cache->priv->db);
 
 	cleanup_downloads_hash (cache);
 	remove_obsolete_icons (cache);
@@ -447,7 +453,7 @@ ephy_favicon_cache_get (EphyFaviconCache *cache,
 
 		filename = favicon_name_build (url);
 
-		icon = ephy_node_new ();
+		icon = ephy_node_new (cache->priv->db);
 		g_value_init (&value, G_TYPE_STRING);
 		g_value_set_string (&value, url);
 		ephy_node_set_property (icon, EPHY_NODE_FAVICON_PROP_URL,

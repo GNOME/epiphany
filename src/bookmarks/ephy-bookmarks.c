@@ -43,6 +43,7 @@
 struct EphyBookmarksPrivate
 {
 	char *xml_file;
+	EphyNodeDb *db;
 	EphyNode *bookmarks;
 	EphyNode *keywords;
 	EphyNode *favorites;
@@ -284,7 +285,7 @@ ephy_bookmarks_load (EphyBookmarks *eb)
 	{
 		EphyNode *node;
 
-		node = ephy_node_new_from_xml (child);
+		node = ephy_node_new_from_xml (eb->priv->db, child);
 	}
 
 	xmlFreeDoc (doc);
@@ -581,15 +582,19 @@ static void
 ephy_bookmarks_init (EphyBookmarks *eb)
 {
 	GValue value = { 0, };
+	EphyNodeDb *db;
 
         eb->priv = g_new0 (EphyBookmarksPrivate, 1);
+
+	db = ephy_node_db_new ("EphyBookmarks");
+	eb->priv->db = db;
 
 	eb->priv->xml_file = g_build_filename (ephy_dot_dir (),
 					       "bookmarks.xml",
 					       NULL);
 
 	/* Bookmarks */
-	eb->priv->bookmarks = ephy_node_new_with_id (BOOKMARKS_NODE_ID);
+	eb->priv->bookmarks = ephy_node_new_with_id (db, BOOKMARKS_NODE_ID);
 	ephy_node_ref (eb->priv->bookmarks);
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, _("All"));
@@ -597,19 +602,17 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 			        EPHY_NODE_KEYWORD_PROP_NAME,
 			        &value);
 	g_value_unset (&value);
-	g_signal_connect_object (G_OBJECT (eb->priv->bookmarks),
-				 "child_removed",
-				 G_CALLBACK (bookmarks_removed_cb),
-				 G_OBJECT (eb),
-				 0);
-	g_signal_connect_object (G_OBJECT (eb->priv->bookmarks),
-				 "child_changed",
-				 G_CALLBACK (bookmarks_changed_cb),
-				 G_OBJECT (eb),
-				 0);
+	ephy_node_signal_connect_object (eb->priv->bookmarks,
+				         EPHY_NODE_CHILD_REMOVED,
+				         (EphyNodeCallback) bookmarks_removed_cb,
+				         G_OBJECT (eb));
+	ephy_node_signal_connect_object (eb->priv->bookmarks,
+				         EPHY_NODE_CHILD_CHANGED,
+				         (EphyNodeCallback) bookmarks_changed_cb,
+				         G_OBJECT (eb));
 
 	/* Keywords */
-	eb->priv->keywords = ephy_node_new_with_id (KEYWORDS_NODE_ID);
+	eb->priv->keywords = ephy_node_new_with_id (db, KEYWORDS_NODE_ID);
 	ephy_node_ref (eb->priv->keywords);
 	g_value_init (&value, G_TYPE_INT);
 	g_value_set_int (&value, EPHY_NODE_ALL_PRIORITY);
@@ -617,17 +620,16 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 			        EPHY_NODE_KEYWORD_PROP_PRIORITY,
 			        &value);
 	g_value_unset (&value);
-	g_signal_connect_object (G_OBJECT (eb->priv->keywords),
-				 "child_removed",
-				 G_CALLBACK (topics_removed_cb),
-				 G_OBJECT (eb),
-				 0);
+	ephy_node_signal_connect_object (eb->priv->keywords,
+				         EPHY_NODE_CHILD_REMOVED,
+				         (EphyNodeCallback) topics_removed_cb,
+				         G_OBJECT (eb));
 
 	ephy_node_add_child (eb->priv->keywords,
 			     eb->priv->bookmarks);
 
 	/* Favorites */
-	eb->priv->favorites = ephy_node_new_with_id (FAVORITES_NODE_ID);
+	eb->priv->favorites = ephy_node_new_with_id (db, FAVORITES_NODE_ID);
 	ephy_node_ref (eb->priv->favorites);
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, _("Most Visited"));
@@ -644,7 +646,7 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	ephy_node_add_child (eb->priv->keywords, eb->priv->favorites);
 
 	/* Not categorized */
-	eb->priv->notcategorized = ephy_node_new_with_id (BMKS_NOTCATEGORIZED_NODE_ID);
+	eb->priv->notcategorized = ephy_node_new_with_id (db, BMKS_NOTCATEGORIZED_NODE_ID);
 	ephy_node_ref (eb->priv->notcategorized);
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, _("Not Categorized"));
@@ -715,7 +717,7 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	EphyNode *bm;
 	GValue value = { 0, };
 
-	bm = ephy_node_new ();
+	bm = ephy_node_new (eb->priv->db);
 
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, title);
@@ -952,7 +954,7 @@ ephy_bookmarks_add_keyword (EphyBookmarks *eb,
 	EphyNode *key;
 	GValue value = { 0, };
 
-	key = ephy_node_new ();
+	key = ephy_node_new (eb->priv->db);
 
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, name);
@@ -1094,3 +1096,8 @@ ephy_bookmarks_get_favorites (EphyBookmarks *eb)
 	return eb->priv->favorites;
 }
 
+EphyNode *
+ephy_bookmarks_get_from_id (EphyBookmarks *eb, long id)
+{
+	return ephy_node_db_get_node_from_id (eb->priv->db, id);
+}

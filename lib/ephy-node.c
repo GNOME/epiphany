@@ -30,35 +30,14 @@
 #include "ephy-string.h"
 #include "ephy-thread-helpers.h"
 
-static void ephy_node_class_init (EphyNodeClass *klass);
-static void ephy_node_init (EphyNode *node);
-static void ephy_node_finalize (GObject *object);
-static void ephy_node_dispose (GObject *object);
-static void ephy_node_set_object_property (GObject *object,
-			                   guint prop_id,
-			                   const GValue *value,
-			                   GParamSpec *pspec);
-static void ephy_node_get_object_property (GObject *object,
-			                   guint prop_id,
-			                   GValue *value,
-			                   GParamSpec *pspec);
-static inline void id_factory_set_to (gulong new_factory_pos);
-static inline void real_set_property (EphyNode *node,
-		                      guint property_id,
-		                      GValue *value);
-static inline void real_remove_child (EphyNode *node,
-		                      EphyNode *child,
-			              gboolean remove_from_parent,
-			              gboolean remove_from_child);
-static inline void real_add_child (EphyNode *node,
-		                   EphyNode *child);
-static inline void read_lock_to_write_lock (EphyNode *node);
-static inline void write_lock_to_read_lock (EphyNode *node);
-static inline void lock_gdk (void);
-static inline void unlock_gdk (void);
-static inline EphyNode *node_from_id_real (gulong id);
-static inline int get_child_index_real (EphyNode *node,
-		                        EphyNode *child);
+typedef struct
+{
+	EphyNode *node;
+	int id;
+	EphyNodeCallback callback;
+	EphyNodeSignalType type;
+	gpointer data;
+} EphyNodeSignalData;
 
 typedef struct
 {
@@ -66,7 +45,7 @@ typedef struct
 	guint index;
 } EphyNodeParent;
 
-struct EphyNodePrivate
+struct EphyNode
 {
 	GStaticRWLock *lock;
 
@@ -78,141 +57,46 @@ struct EphyNodePrivate
 
 	GHashTable *parents;
 	GPtrArray *children;
+
+	GHashTable *signals;
+	int signal_id;
+
+	EphyNodeDb *db;
 };
 
-enum
+/* evillish hacks to temporarily readlock->writelock and v.v. */
+static inline void
+write_lock_to_read_lock (EphyNode *node)
 {
-	PROP_0,
-	PROP_ID
-};
+	g_static_mutex_lock (&node->lock->mutex);
+	node->lock->read_counter++;
+	g_static_mutex_unlock (&node->lock->mutex);
 
-enum
-{
-	DESTROYED,
-	RESTORED,
-	CHILD_ADDED,
-	CHILD_CHANGED,
-	CHILD_REMOVED,
-	CHILDREN_REORDERED,
-	LAST_SIGNAL
-};
-
-static GObjectClass *parent_class = NULL;
-
-static guint ephy_node_signals[LAST_SIGNAL] = { 0 };
-
-static GMutex *id_factory_lock = NULL;
-static long id_factory;
-
-static GStaticRWLock *id_to_node_lock = NULL;
-static GPtrArray *id_to_node;
-
-GType
-ephy_node_get_type (void)
-{
-	static GType ephy_node_type = 0;
-
-	if (ephy_node_type == 0) {
-		static const GTypeInfo our_info = {
-			sizeof (EphyNodeClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_node_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyNode),
-			0,
-			(GInstanceInitFunc) ephy_node_init
-		};
-
-		ephy_node_type = g_type_register_static (G_TYPE_OBJECT,
-						       "EphyNode",
-						       &our_info, 0);
-	}
-
-	return ephy_node_type;
+	g_static_rw_lock_writer_unlock (node->lock);
 }
 
-static void
-ephy_node_class_init (EphyNodeClass *klass)
+static inline void
+read_lock_to_write_lock (EphyNode *node)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	g_static_mutex_lock (&node->lock->mutex);
+	node->lock->read_counter--;
+	g_static_mutex_unlock (&node->lock->mutex);
 
-	parent_class = g_type_class_peek_parent (klass);
+	g_static_rw_lock_writer_lock (node->lock);
+}
 
-	object_class->finalize = ephy_node_finalize;
-	object_class->dispose  = ephy_node_dispose;
+static inline void
+lock_gdk (void)
+{
+	if (ephy_thread_helpers_in_main_thread () == FALSE)
+		GDK_THREADS_ENTER ();
+}
 
-	object_class->set_property = ephy_node_set_object_property;
-	object_class->get_property = ephy_node_get_object_property;
-
-	g_object_class_install_property (object_class,
-					 PROP_ID,
-					 g_param_spec_long ("id",
-							    "Node ID",
-							    "Node ID",
-							    0, G_MAXLONG, 0,
-							    G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-	ephy_node_signals[DESTROYED] =
-		g_signal_new ("destroyed",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyNodeClass, destroyed),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
-	ephy_node_signals[RESTORED] =
-		g_signal_new ("restored",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyNodeClass, restored),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
-
-	ephy_node_signals[CHILD_ADDED] =
-		g_signal_new ("child_added",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyNodeClass, child_added),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
-			      G_TYPE_NONE,
-			      1,
-			      EPHY_TYPE_NODE);
-	ephy_node_signals[CHILD_CHANGED] =
-		g_signal_new ("child_changed",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyNodeClass, child_changed),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
-			      G_TYPE_NONE,
-			      1,
-			      EPHY_TYPE_NODE);
-	ephy_node_signals[CHILD_REMOVED] =
-		g_signal_new ("child_removed",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyNodeClass, child_removed),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
-			      G_TYPE_NONE,
-			      1,
-			      EPHY_TYPE_NODE);
-	ephy_node_signals[CHILDREN_REORDERED] =
-		g_signal_new ("children_reordered",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyNodeClass, children_reordered),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__POINTER,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_POINTER);
+static inline void
+unlock_gdk (void)
+{
+	if (ephy_thread_helpers_in_main_thread () == FALSE)
+		GDK_THREADS_LEAVE ();
 }
 
 static gboolean
@@ -229,61 +113,124 @@ int_hash (gconstpointer a)
 }
 
 static void
-ephy_node_init (EphyNode *node)
+callback (long id, EphyNodeSignalData *data, gpointer *user_data)
 {
-	node->priv = g_new0 (EphyNodePrivate, 1);
+	va_list valist = (va_list) user_data[0];
+	EphyNodeSignalType type = GPOINTER_TO_INT (user_data[1]);
 
-	node->priv->lock = g_new0 (GStaticRWLock, 1);
-	g_static_rw_lock_init (node->priv->lock);
+	if (data->type != type) return;
 
-	node->priv->ref_count = 0;
+	switch (data->type)
+	{
+		case EPHY_NODE_DESTROYED:
+		case EPHY_NODE_RESTORED:
+			data->callback (data->node, data->data);
+		break;
 
-	node->priv->id = -1;
+		case EPHY_NODE_CHILD_ADDED:
+		case EPHY_NODE_CHILD_CHANGED:
+		case EPHY_NODE_CHILD_REMOVED:
+			data->callback (data->node, va_arg (valist, EphyNode *), data->data);
+		break;
 
-	node->priv->properties = g_ptr_array_new ();
-
-	node->priv->parents = g_hash_table_new_full (int_hash,
-						     int_equal,
-						     NULL,
-						     g_free);
-
-	node->priv->children = g_ptr_array_new ();
+		case EPHY_NODE_CHILDREN_REORDERED:
+			data->callback (data->node, va_arg (valist, int *), data->data);
+		break;
+	}
 }
 
 static void
-ephy_node_finalize (GObject *object)
+ephy_node_emit_signal (EphyNode *node, EphyNodeSignalType type, ...)
 {
-	EphyNode *node;
+	va_list valist;
+	gpointer data[2];
+
+	va_start (valist, type);
+
+	data[0] = (gpointer)valist;
+	data[1] = GINT_TO_POINTER (type);
+	g_hash_table_foreach (node->signals,
+			      (GHFunc) callback,
+			      data);
+	va_end (valist);
+}
+
+static void
+ephy_node_finalize (EphyNode *node)
+{
 	guint i;
 
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (EPHY_IS_NODE (object));
+	g_hash_table_destroy (node->signals);
+	node->signals = NULL;
 
-	node = EPHY_NODE (object);
-
-	g_return_if_fail (node->priv != NULL);
-
-	for (i = 0; i < node->priv->properties->len; i++) {
+	for (i = 0; i < node->properties->len; i++) {
 		GValue *val;
 
-		val = g_ptr_array_index (node->priv->properties, i);
+		val = g_ptr_array_index (node->properties, i);
 
 		if (val != NULL) {
 			g_value_unset (val);
 			g_free (val);
 		}
 	}
-	g_ptr_array_free (node->priv->properties, FALSE);
+	g_ptr_array_free (node->properties, FALSE);
 
-	g_hash_table_destroy (node->priv->parents);
+	g_hash_table_destroy (node->parents);
 
-	g_ptr_array_free (node->priv->children, FALSE);
+	g_ptr_array_free (node->children, FALSE);
 
-	g_static_rw_lock_free (node->priv->lock);
+	g_static_rw_lock_free (node->lock);
 
-	g_free (node->priv);
+	g_free (node);
+}
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+static inline void
+real_remove_child (EphyNode *node,
+		   EphyNode *child,
+		   gboolean remove_from_parent,
+		   gboolean remove_from_child)
+{
+	EphyNodeParent *node_info;
+
+	node_info = g_hash_table_lookup (child->parents,
+			                 GINT_TO_POINTER (node->id));
+
+	if (remove_from_parent) {
+		guint i;
+
+		g_ptr_array_remove_index (node->children,
+					  node_info->index);
+
+		/* correct indices on kids */
+		for (i = node_info->index; i < node->children->len; i++) {
+			EphyNode *borked_node;
+			EphyNodeParent *borked_node_info;
+
+			borked_node = g_ptr_array_index (node->children, i);
+
+			g_static_rw_lock_writer_lock (borked_node->lock);
+
+			borked_node_info = g_hash_table_lookup (borked_node->parents,
+						                GINT_TO_POINTER (node->id));
+			borked_node_info->index--;
+
+			g_static_rw_lock_writer_unlock (borked_node->lock);
+		}
+	}
+
+	if (remove_from_child) {
+		g_hash_table_remove (child->parents,
+				     GINT_TO_POINTER (node->id));
+	}
+
+	write_lock_to_read_lock (node);
+	write_lock_to_read_lock (child);
+
+	ephy_node_emit_signal (node, EPHY_NODE_CHILD_REMOVED, child);
+
+	read_lock_to_write_lock (node);
+	read_lock_to_write_lock (child);
+
 }
 
 static void
@@ -291,128 +238,109 @@ remove_child (long id,
 	      EphyNodeParent *node_info,
 	      EphyNode *node)
 {
-	g_static_rw_lock_writer_lock (node_info->node->priv->lock);
+	g_static_rw_lock_writer_lock (node_info->node->lock);
 
 	real_remove_child (node_info->node, node, TRUE, FALSE);
 
-	g_static_rw_lock_writer_unlock (node_info->node->priv->lock);
+	g_static_rw_lock_writer_unlock (node_info->node->lock);
 }
 
 static void
-ephy_node_dispose (GObject *object)
+signal_object_weak_notify (EphyNodeSignalData *signal_data,
+                           GObject *where_the_object_was)
 {
-	EphyNode *node;
+	ephy_node_signal_disconnect (signal_data->node, signal_data->id);
+}
+
+static void
+unref_signal_objects (long id,
+	              EphyNodeSignalData *signal_data,
+	              EphyNode *node)
+{
+	g_object_weak_unref (G_OBJECT (signal_data->data),
+			     (GWeakNotify)signal_object_weak_notify,
+			     signal_data);
+}
+
+static void
+ephy_node_dispose (EphyNode *node)
+{
 	guint i;
 
-	node = EPHY_NODE (object);
-
-	/* remove from id table */
-	g_static_rw_lock_writer_lock (id_to_node_lock);
-
-	g_ptr_array_index (id_to_node, node->priv->id) = NULL;
-
-	g_static_rw_lock_writer_unlock (id_to_node_lock);
+	_ephy_node_db_remove_id (node->db, node->id);
 
 	lock_gdk ();
 
 	/* remove from DAG */
-	g_hash_table_foreach (node->priv->parents,
+	g_hash_table_foreach (node->parents,
 			      (GHFunc) remove_child,
 			      node);
 
-	for (i = 0; i < node->priv->children->len; i++) {
+	g_hash_table_foreach (node->signals,
+			      (GHFunc) unref_signal_objects,
+			      node);
+
+	for (i = 0; i < node->children->len; i++) {
 		EphyNode *child;
 
-		child = g_ptr_array_index (node->priv->children, i);
+		child = g_ptr_array_index (node->children, i);
 
-		g_static_rw_lock_writer_lock (child->priv->lock);
+		g_static_rw_lock_writer_lock (child->lock);
 
 		real_remove_child (node, child, FALSE, TRUE);
-		
-		g_static_rw_lock_writer_unlock (child->priv->lock);
+
+		g_static_rw_lock_writer_unlock (child->lock);
 	}
 
-	g_static_rw_lock_writer_unlock (node->priv->lock);
+	g_static_rw_lock_writer_unlock (node->lock);
 
-	g_signal_emit (G_OBJECT (node), ephy_node_signals[DESTROYED], 0);
+	ephy_node_emit_signal (node, EPHY_NODE_DESTROYED);
 
 	unlock_gdk ();
-
-	G_OBJECT_CLASS (parent_class)->dispose (object);
-}
-
-static void
-ephy_node_set_object_property (GObject *object,
-		             guint prop_id,
-		             const GValue *value,
-		             GParamSpec *pspec)
-{
-	EphyNode *node = EPHY_NODE (object);
-
-	switch (prop_id)
-	{
-	case PROP_ID:
-		node->priv->id = g_value_get_long (value);
-
-		g_static_rw_lock_writer_lock (id_to_node_lock);
-
-		/* resize array if needed */
-		if (node->priv->id >= id_to_node->len)
-			g_ptr_array_set_size (id_to_node, node->priv->id + 1);
-
-		g_ptr_array_index (id_to_node, node->priv->id) = node;
-
-		g_static_rw_lock_writer_unlock (id_to_node_lock);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
-}
-
-static void
-ephy_node_get_object_property (GObject *object,
-		             guint prop_id,
-		             GValue *value,
-		             GParamSpec *pspec)
-{
-	EphyNode *node = EPHY_NODE (object);
-
-	switch (prop_id)
-	{
-	case PROP_ID:
-		g_value_set_long (value, node->priv->id);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
 }
 
 EphyNode *
-ephy_node_new (void)
+ephy_node_new (EphyNodeDb *db)
 {
-	EphyNode *node;
+	long id;
 
-	node = EPHY_NODE (g_object_new (EPHY_TYPE_NODE,
-				      "id", ephy_node_new_id (),
-				      NULL));
+	id = _ephy_node_db_new_id (db);
 
-	g_return_val_if_fail (node->priv != NULL, NULL);
-
-	return node;
+	return ephy_node_new_with_id (db, id);
 }
 
 EphyNode *
-ephy_node_new_with_id (gulong reserved_id)
+ephy_node_new_with_id (EphyNodeDb *db, gulong reserved_id)
 {
 	EphyNode *node;
 
-	node = EPHY_NODE (g_object_new (EPHY_TYPE_NODE,
-				      "id", reserved_id,
-				      NULL));
+	node = g_new0 (EphyNode, 1);
 
-	g_return_val_if_fail (node->priv != NULL, NULL);
+	node->lock = g_new0 (GStaticRWLock, 1);
+	g_static_rw_lock_init (node->lock);
+
+	node->ref_count = 0;
+
+	node->id = reserved_id;
+
+	node->db = db;
+
+	node->properties = g_ptr_array_new ();
+
+	node->children = g_ptr_array_new ();
+
+	node->parents = g_hash_table_new_full (int_hash,
+					       int_equal,
+					       NULL,
+					       g_free);
+
+	node->signals = g_hash_table_new_full (int_hash,
+					       int_equal,
+					       NULL,
+					       g_free);
+	node->signal_id = 0;
+
+	_ephy_node_db_add_id (db, reserved_id, node);
 
 	return node;
 }
@@ -421,39 +349,12 @@ long
 ephy_node_get_id (EphyNode *node)
 {
 	long ret;
-	
-	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
 
-	g_static_rw_lock_reader_lock (node->priv->lock);
+	g_static_rw_lock_reader_lock (node->lock);
 
-	ret = node->priv->id;
+	ret = node->id;
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
-
-	return ret;
-}
-
-static inline EphyNode *
-node_from_id_real (gulong id)
-{
-	EphyNode *ret = NULL;
-	
-	if (id < id_to_node->len)
-		ret = g_ptr_array_index (id_to_node, id);;
-
-	return ret;
-}
-
-EphyNode *
-ephy_node_get_from_id (gulong id)
-{
-	EphyNode *ret = NULL;
-
-	g_static_rw_lock_reader_lock (id_to_node_lock);
-
-	ret = node_from_id_real (id);
-	
-	g_static_rw_lock_reader_unlock (id_to_node_lock);
+	g_static_rw_lock_reader_unlock (node->lock);
 
 	return ret;
 }
@@ -461,45 +362,38 @@ ephy_node_get_from_id (gulong id)
 void
 ephy_node_ref (EphyNode *node)
 {
-	g_return_if_fail (EPHY_IS_NODE (node));
+	g_static_rw_lock_writer_lock (node->lock);
 
-	g_static_rw_lock_writer_lock (node->priv->lock);
+	node->ref_count++;
 
-	node->priv->ref_count++;
-
-	g_static_rw_lock_writer_unlock (node->priv->lock);
+	g_static_rw_lock_writer_unlock (node->lock);
 }
 
 void
 ephy_node_unref (EphyNode *node)
 {
-	g_return_if_fail (EPHY_IS_NODE (node));
+	g_static_rw_lock_writer_lock (node->lock);
 
-	g_static_rw_lock_writer_lock (node->priv->lock);
+	node->ref_count--;
 
-	node->priv->ref_count--;
-
-	if (node->priv->ref_count <= 0) {
-		g_object_unref (G_OBJECT (node));
+	if (node->ref_count <= 0) {
+		ephy_node_dispose (node);
+		ephy_node_finalize (node);
 	} else {
-		g_static_rw_lock_writer_unlock (node->priv->lock);
+		g_static_rw_lock_writer_unlock (node->lock);
 	}
 }
 
-void 
+void
 ephy_node_freeze (EphyNode *node)
 {
-	g_return_if_fail (EPHY_IS_NODE (node));
-
-	g_static_rw_lock_reader_lock (node->priv->lock);
+	g_static_rw_lock_reader_lock (node->lock);
 }
 
 void
 ephy_node_thaw (EphyNode *node)
 {
-	g_return_if_fail (EPHY_IS_NODE (node));
-	
-	g_static_rw_lock_reader_unlock (node->priv->lock);
+	g_static_rw_lock_reader_unlock (node->lock);
 }
 
 static void
@@ -507,11 +401,11 @@ child_changed (gulong id,
 	       EphyNodeParent *node_info,
 	       EphyNode *node)
 {
-	g_static_rw_lock_reader_lock (node_info->node->priv->lock);
+	g_static_rw_lock_reader_lock (node_info->node->lock);
 
-	g_signal_emit (G_OBJECT (node_info->node), ephy_node_signals[CHILD_CHANGED], 0, node);
+	ephy_node_emit_signal (node_info->node, EPHY_NODE_CHILD_CHANGED, node);
 
-	g_static_rw_lock_reader_unlock (node_info->node->priv->lock);
+	g_static_rw_lock_reader_unlock (node_info->node->lock);
 }
 
 static inline void
@@ -521,17 +415,17 @@ real_set_property (EphyNode *node,
 {
 	GValue *old;
 
-	if (property_id >= node->priv->properties->len) {
-		g_ptr_array_set_size (node->priv->properties, property_id + 1);
+	if (property_id >= node->properties->len) {
+		g_ptr_array_set_size (node->properties, property_id + 1);
 	}
 
-	old = g_ptr_array_index (node->priv->properties, property_id);
+	old = g_ptr_array_index (node->properties, property_id);
 	if (old != NULL) {
 		g_value_unset (old);
 		g_free (old);
 	}
-	
-	g_ptr_array_index (node->priv->properties, property_id) = value;
+
+	g_ptr_array_index (node->properties, property_id) = value;
 }
 
 void
@@ -540,14 +434,13 @@ ephy_node_set_property (EphyNode *node,
 		        const GValue *value)
 {
 	GValue *new;
-	
-	g_return_if_fail (EPHY_IS_NODE (node));
+
 	g_return_if_fail (property_id >= 0);
 	g_return_if_fail (value != NULL);
 
 	lock_gdk ();
 
-	g_static_rw_lock_writer_lock (node->priv->lock);
+	g_static_rw_lock_writer_lock (node->lock);
 
 	new = g_new0 (GValue, 1);
 	g_value_init (new, G_VALUE_TYPE (value));
@@ -557,12 +450,12 @@ ephy_node_set_property (EphyNode *node,
 
 	write_lock_to_read_lock (node);
 
-	g_hash_table_foreach (node->priv->parents,
+	g_hash_table_foreach (node->parents,
 			      (GHFunc) child_changed,
 			      node);
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
-	
+	g_static_rw_lock_reader_unlock (node->lock);
+
 	unlock_gdk ();
 }
 
@@ -572,28 +465,27 @@ ephy_node_get_property (EphyNode *node,
 		        GValue *value)
 {
 	GValue *ret;
-	
-	g_return_val_if_fail (EPHY_IS_NODE (node), FALSE);
+
 	g_return_val_if_fail (property_id >= 0, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
-	
-	g_static_rw_lock_reader_lock (node->priv->lock);
 
-	if (property_id >= node->priv->properties->len) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+	g_static_rw_lock_reader_lock (node->lock);
+
+	if (property_id >= node->properties->len) {
+		g_static_rw_lock_reader_unlock (node->lock);
 		return FALSE;
 	}
 
-	ret = g_ptr_array_index (node->priv->properties, property_id);
+	ret = g_ptr_array_index (node->properties, property_id);
 	if (ret == NULL) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+		g_static_rw_lock_reader_unlock (node->lock);
 		return FALSE;
 	}
-	
+
 	g_value_init (value, G_VALUE_TYPE (ret));
 	g_value_copy (ret, value);
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
+	g_static_rw_lock_reader_unlock (node->lock);
 
 	return TRUE;
 }
@@ -604,27 +496,26 @@ ephy_node_get_property_string (EphyNode *node,
 {
 	GValue *ret;
 	const char *retval;
-	
-	g_return_val_if_fail (EPHY_IS_NODE (node), NULL);
+
 	g_return_val_if_fail (property_id >= 0, NULL);
 
-	g_static_rw_lock_reader_lock (node->priv->lock);
+	g_static_rw_lock_reader_lock (node->lock);
 
-	if (property_id >= node->priv->properties->len) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+	if (property_id >= node->properties->len) {
+		g_static_rw_lock_reader_unlock (node->lock);
 		return NULL;
 	}
 
-	ret = g_ptr_array_index (node->priv->properties, property_id);
+	ret = g_ptr_array_index (node->properties, property_id);
 	if (ret == NULL) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+		g_static_rw_lock_reader_unlock (node->lock);
 		return NULL;
 	}
-	
+
 	retval = g_value_get_string (ret);
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
-	
+	g_static_rw_lock_reader_unlock (node->lock);
+
 	return retval;
 }
 
@@ -634,26 +525,25 @@ ephy_node_get_property_boolean (EphyNode *node,
 {
 	GValue *ret;
 	gboolean retval;
-	
-	g_return_val_if_fail (EPHY_IS_NODE (node), FALSE);
+
 	g_return_val_if_fail (property_id >= 0, FALSE);
 
-	g_static_rw_lock_reader_lock (node->priv->lock);
+	g_static_rw_lock_reader_lock (node->lock);
 
-	if (property_id >= node->priv->properties->len) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+	if (property_id >= node->properties->len) {
+		g_static_rw_lock_reader_unlock (node->lock);
 		return FALSE;
 	}
 
-	ret = g_ptr_array_index (node->priv->properties, property_id);
+	ret = g_ptr_array_index (node->properties, property_id);
 	if (ret == NULL) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+		g_static_rw_lock_reader_unlock (node->lock);
 		return FALSE;
 	}
-	
+
 	retval = g_value_get_boolean (ret);
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
+	g_static_rw_lock_reader_unlock (node->lock);
 
 	return retval;
 }
@@ -664,26 +554,25 @@ ephy_node_get_property_long (EphyNode *node,
 {
 	GValue *ret;
 	long retval;
-	
-	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
+
 	g_return_val_if_fail (property_id >= 0, -1);
 
-	g_static_rw_lock_reader_lock (node->priv->lock);
+	g_static_rw_lock_reader_lock (node->lock);
 
-	if (property_id >= node->priv->properties->len) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+	if (property_id >= node->properties->len) {
+		g_static_rw_lock_reader_unlock (node->lock);
 		return -1;
 	}
 
-	ret = g_ptr_array_index (node->priv->properties, property_id);
+	ret = g_ptr_array_index (node->properties, property_id);
 	if (ret == NULL) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+		g_static_rw_lock_reader_unlock (node->lock);
 		return -1;
 	}
-	
+
 	retval = g_value_get_long (ret);
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
+	g_static_rw_lock_reader_unlock (node->lock);
 
 	return retval;
 }
@@ -694,26 +583,25 @@ ephy_node_get_property_int (EphyNode *node,
 {
 	GValue *ret;
 	int retval;
-	
-	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
+
 	g_return_val_if_fail (property_id >= 0, -1);
 
-	g_static_rw_lock_reader_lock (node->priv->lock);
+	g_static_rw_lock_reader_lock (node->lock);
 
-	if (property_id >= node->priv->properties->len) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+	if (property_id >= node->properties->len) {
+		g_static_rw_lock_reader_unlock (node->lock);
 		return -1;
 	}
 
-	ret = g_ptr_array_index (node->priv->properties, property_id);
+	ret = g_ptr_array_index (node->properties, property_id);
 	if (ret == NULL) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+		g_static_rw_lock_reader_unlock (node->lock);
 		return -1;
 	}
-	
+
 	retval = g_value_get_int (ret);
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
+	g_static_rw_lock_reader_unlock (node->lock);
 
 	return retval;
 }
@@ -724,26 +612,25 @@ ephy_node_get_property_double (EphyNode *node,
 {
 	GValue *ret;
 	double retval;
-	
-	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
+
 	g_return_val_if_fail (property_id >= 0, -1);
 
-	g_static_rw_lock_reader_lock (node->priv->lock);
+	g_static_rw_lock_reader_lock (node->lock);
 
-	if (property_id >= node->priv->properties->len) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+	if (property_id >= node->properties->len) {
+		g_static_rw_lock_reader_unlock (node->lock);
 		return -1;
 	}
 
-	ret = g_ptr_array_index (node->priv->properties, property_id);
+	ret = g_ptr_array_index (node->properties, property_id);
 	if (ret == NULL) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+		g_static_rw_lock_reader_unlock (node->lock);
 		return -1;
 	}
-	
+
 	retval = g_value_get_double (ret);
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
+	g_static_rw_lock_reader_unlock (node->lock);
 
 	return retval;
 }
@@ -754,26 +641,25 @@ ephy_node_get_property_float (EphyNode *node,
 {
 	GValue *ret;
 	float retval;
-	
-	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
+
 	g_return_val_if_fail (property_id >= 0, -1);
 
-	g_static_rw_lock_reader_lock (node->priv->lock);
+	g_static_rw_lock_reader_lock (node->lock);
 
-	if (property_id >= node->priv->properties->len) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+	if (property_id >= node->properties->len) {
+		g_static_rw_lock_reader_unlock (node->lock);
 		return -1;
 	}
 
-	ret = g_ptr_array_index (node->priv->properties, property_id);
+	ret = g_ptr_array_index (node->properties, property_id);
 	if (ret == NULL) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+		g_static_rw_lock_reader_unlock (node->lock);
 		return -1;
 	}
-	
+
 	retval = g_value_get_float (ret);
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
+	g_static_rw_lock_reader_unlock (node->lock);
 
 	return retval;
 }
@@ -784,86 +670,25 @@ ephy_node_get_property_node (EphyNode *node,
 {
 	GValue *ret;
 	EphyNode *retval;
-	
-	g_return_val_if_fail (EPHY_IS_NODE (node), NULL);
+
 	g_return_val_if_fail (property_id >= 0, NULL);
 
-	g_static_rw_lock_reader_lock (node->priv->lock);
+	g_static_rw_lock_reader_lock (node->lock);
 
-	if (property_id >= node->priv->properties->len) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+	if (property_id >= node->properties->len) {
+		g_static_rw_lock_reader_unlock (node->lock);
 		return NULL;
 	}
 
-	ret = g_ptr_array_index (node->priv->properties, property_id);
+	ret = g_ptr_array_index (node->properties, property_id);
 	if (ret == NULL) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
+		g_static_rw_lock_reader_unlock (node->lock);
 		return NULL;
 	}
-	
+
 	retval = g_value_get_pointer (ret);
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
-
-	return retval;
-}
-
-char *
-ephy_node_get_property_time (EphyNode *node,
-			     guint property_id)
-{
-	GValue *ret;
-	long mtime;
-	char *retval;
-	
-	g_return_val_if_fail (EPHY_IS_NODE (node), NULL);
-	g_return_val_if_fail (property_id >= 0, NULL);
-
-	g_static_rw_lock_reader_lock (node->priv->lock);
-
-	if (property_id >= node->priv->properties->len) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
-		return g_strdup (_("Never"));
-	}
-
-	ret = g_ptr_array_index (node->priv->properties, property_id);
-	if (ret == NULL) {
-		g_static_rw_lock_reader_unlock (node->priv->lock);
-		return g_strdup (_("Never"));
-	}
-	
-	mtime = g_value_get_long (ret);
-
-	if (retval >= 0) {
-		GDate *now, *file_date;
-		guint32 file_date_age;
-		const char *format = NULL;
-
-		now = g_date_new ();
-		g_date_set_time (now, time (NULL));
-
-		file_date = g_date_new ();
-		g_date_set_time (file_date, mtime);
-
-		file_date_age = (g_date_get_julian (now) - g_date_get_julian (file_date));
-
-		g_date_free (file_date);
-		g_date_free (now);
-
-		if (file_date_age == 0) {
-			format = _("Today at %-H:%M");
-		} else if (file_date_age == 1) {
-			format = _("Yesterday at %-H:%M");
-		} else {
-			format = _("%A, %B %-d %Y at %-H:%M");
-		}
-
-		retval = ephy_string_time_to_string (file_date, format);
-	} else {
-		retval = g_strdup (_("Never"));
-	}
-
-	g_static_rw_lock_reader_unlock (node->priv->lock);
+	g_static_rw_lock_reader_unlock (node->lock);
 
 	return retval;
 }
@@ -878,13 +703,13 @@ save_parent (gulong id,
 
 	parent_xml_node = xmlNewChild (xml_node, NULL, "parent", NULL);
 
-	g_static_rw_lock_reader_lock (node_info->node->priv->lock);
+	g_static_rw_lock_reader_lock (node_info->node->lock);
 
-	xml = g_strdup_printf ("%ld", node_info->node->priv->id);
+	xml = g_strdup_printf ("%ld", node_info->node->id);
 	xmlSetProp (parent_xml_node, "id", xml);
 	g_free (xml);
-	
-	g_static_rw_lock_reader_unlock (node_info->node->priv->lock);
+
+	g_static_rw_lock_reader_unlock (node_info->node->lock);
 }
 
 void
@@ -895,24 +720,23 @@ ephy_node_save_to_xml (EphyNode *node,
 	char *xml;
 	guint i;
 
-	g_return_if_fail (EPHY_IS_NODE (node));
 	g_return_if_fail (parent_xml_node != NULL);
-	
-	g_static_rw_lock_reader_lock (node->priv->lock);
+
+	g_static_rw_lock_reader_lock (node->lock);
 
 	xml_node = xmlNewChild (parent_xml_node, NULL, "node", NULL);
 
-	xml = g_strdup_printf ("%ld", node->priv->id);
+	xml = g_strdup_printf ("%ld", node->id);
 	xmlSetProp (xml_node, "id", xml);
 	g_free (xml);
 
 	xmlSetProp (xml_node, "type", G_OBJECT_TYPE_NAME (node));
 
-	for (i = 0; i < node->priv->properties->len; i++) {
+	for (i = 0; i < node->properties->len; i++) {
 		GValue *value;
 		xmlNodePtr value_xml_node;
 
-		value = g_ptr_array_index (node->priv->properties, i);
+		value = g_ptr_array_index (node->properties, i);
 		if (value == NULL)
 			continue;
 
@@ -965,13 +789,13 @@ ephy_node_save_to_xml (EphyNode *node,
 
 			g_assert (prop_node != NULL);
 
-			g_static_rw_lock_reader_lock (prop_node->priv->lock);
-			
-			xml = g_strdup_printf ("%ld", prop_node->priv->id);
+			g_static_rw_lock_reader_lock (prop_node->lock);
+
+			xml = g_strdup_printf ("%ld", prop_node->id);
 			xmlNodeSetContent (value_xml_node, xml);
 			g_free (xml);
-			
-			g_static_rw_lock_reader_unlock (prop_node->priv->lock);
+
+			g_static_rw_lock_reader_unlock (prop_node->lock);
 			break;
 		}
 		default:
@@ -980,25 +804,46 @@ ephy_node_save_to_xml (EphyNode *node,
 		}
 	}
 
-	g_hash_table_foreach (node->priv->parents,
+	g_hash_table_foreach (node->parents,
 			      (GHFunc) save_parent,
 			      xml_node);
-	
-	g_static_rw_lock_reader_unlock (node->priv->lock);
+
+	g_static_rw_lock_reader_unlock (node->lock);
+}
+
+static inline void
+real_add_child (EphyNode *node,
+		EphyNode *child)
+{
+	EphyNodeParent *node_info;
+
+	if (g_hash_table_lookup (child->parents,
+				 GINT_TO_POINTER (node->id)) != NULL) {
+		return;
+	}
+
+	g_ptr_array_add (node->children, child);
+
+	node_info = g_new0 (EphyNodeParent, 1);
+	node_info->node  = node;
+	node_info->index = node->children->len - 1;
+
+	g_hash_table_insert (child->parents,
+			     GINT_TO_POINTER (node->id),
+			     node_info);
 }
 
 /* this function assumes it's safe to not lock anything while loading,
  * this is at least true for the case where we're loading the library xml file
  * from the main loop */
 EphyNode *
-ephy_node_new_from_xml (xmlNodePtr xml_node)
+ephy_node_new_from_xml (EphyNodeDb *db, xmlNodePtr xml_node)
 {
 	EphyNode *node;
 	xmlNodePtr xml_child;
 	char *xml;
 	long id;
-	GType type;
-	
+
 	g_return_val_if_fail (xml_node != NULL, NULL);
 
 	xml = xmlGetProp (xml_node, "id");
@@ -1007,17 +852,7 @@ ephy_node_new_from_xml (xmlNodePtr xml_node)
 	id = atol (xml);
 	g_free (xml);
 
-	id_factory_set_to (id);
-
-	xml = xmlGetProp (xml_node, "type");
-	type = g_type_from_name (xml);
-	g_free (xml);
-
-	node = EPHY_NODE (g_object_new (type,
-				      "id", id,
-				      NULL));
-
-	g_return_val_if_fail (node->priv != NULL, NULL);
+	node = ephy_node_new_with_id (db, id);
 
 	for (xml_child = xml_node->children; xml_child != NULL; xml_child = xml_child->next) {
 		if (strcmp (xml_child->name, "parent") == 0) {
@@ -1029,14 +864,13 @@ ephy_node_new_from_xml (xmlNodePtr xml_node)
 			parent_id = atol (xml);
 			g_free (xml);
 
-			parent = node_from_id_real (parent_id);
+			parent = ephy_node_db_get_node_from_id (db, parent_id);
 
 			if (parent != NULL)
 			{
 				real_add_child (parent, node);
-				
-				g_signal_emit (G_OBJECT (parent), ephy_node_signals[CHILD_ADDED],
-					       0, node);
+
+				ephy_node_emit_signal (parent, EPHY_NODE_CHILD_ADDED, node);
 			}
 		} else if (strcmp (xml_child->name, "property") == 0) {
 			GType value_type;
@@ -1046,7 +880,7 @@ ephy_node_new_from_xml (xmlNodePtr xml_node)
 			xml = xmlGetProp (xml_child, "id");
 			property_id = atoi (xml);
 			g_free (xml);
-			
+
 			xml = xmlGetProp (xml_child, "value_type");
 			value_type = g_type_from_name (xml);
 			g_free (xml);
@@ -1054,7 +888,7 @@ ephy_node_new_from_xml (xmlNodePtr xml_node)
 			xml = xmlNodeGetContent (xml_child);
 			value = g_new0 (GValue, 1);
 			g_value_init (value, value_type);
-			
+
 			switch (value_type)
 			{
 			case G_TYPE_STRING:
@@ -1079,8 +913,8 @@ ephy_node_new_from_xml (xmlNodePtr xml_node)
 			{
 				EphyNode *property_node;
 
-				property_node = node_from_id_real (atol (xml));
-				
+				property_node = ephy_node_db_get_node_from_id (db, atol (xml));
+
 				g_value_set_pointer (value, property_node);
 				break;
 			}
@@ -1088,130 +922,53 @@ ephy_node_new_from_xml (xmlNodePtr xml_node)
 				g_assert_not_reached ();
 				break;
 			}
-			
+
 			real_set_property (node, property_id, value);
-	
+
 			g_free (xml);
 		}
 	}
 
-	g_signal_emit (G_OBJECT (node), ephy_node_signals[RESTORED], 0);
+	ephy_node_emit_signal (node, EPHY_NODE_RESTORED);
 
 	return node;
-}
-
-static inline void
-real_add_child (EphyNode *node,
-		EphyNode *child)
-{
-	EphyNodeParent *node_info;
-
-	if (g_hash_table_lookup (child->priv->parents,
-				 GINT_TO_POINTER (node->priv->id)) != NULL) {
-		return;
-	}
-
-	g_ptr_array_add (node->priv->children, child);
-
-	node_info = g_new0 (EphyNodeParent, 1);
-	node_info->node  = node;
-	node_info->index = node->priv->children->len - 1;
-
-	g_hash_table_insert (child->priv->parents,
-			     GINT_TO_POINTER (node->priv->id),
-			     node_info);
 }
 
 void
 ephy_node_add_child (EphyNode *node,
 		     EphyNode *child)
 {
-	g_return_if_fail (EPHY_IS_NODE (node));
-	g_return_if_fail (EPHY_IS_NODE (child));
-
 	lock_gdk ();
 
-	g_static_rw_lock_writer_lock (node->priv->lock);
-	g_static_rw_lock_writer_lock (child->priv->lock);
+	g_static_rw_lock_writer_lock (node->lock);
+	g_static_rw_lock_writer_lock (child->lock);
 
 	real_add_child (node, child);
 
 	write_lock_to_read_lock (node);
 	write_lock_to_read_lock (child);
 
-	g_signal_emit (G_OBJECT (node), ephy_node_signals[CHILD_ADDED], 0, child);
+	ephy_node_emit_signal (node, EPHY_NODE_CHILD_ADDED, child);
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
-	g_static_rw_lock_reader_unlock (child->priv->lock);
-	
+	g_static_rw_lock_reader_unlock (node->lock);
+	g_static_rw_lock_reader_unlock (child->lock);
+
 	unlock_gdk ();
-}
-
-static inline void
-real_remove_child (EphyNode *node,
-		   EphyNode *child,
-		   gboolean remove_from_parent,
-		   gboolean remove_from_child)
-{
-	EphyNodeParent *node_info;
-	
-	node_info = g_hash_table_lookup (child->priv->parents,
-			                 GINT_TO_POINTER (node->priv->id));
-
-	if (remove_from_parent) {
-		guint i;
-
-		g_ptr_array_remove_index (node->priv->children,
-					  node_info->index);
-
-		/* correct indices on kids */
-		for (i = node_info->index; i < node->priv->children->len; i++) {
-			EphyNode *borked_node;
-			EphyNodeParent *borked_node_info;
-		
-			borked_node = g_ptr_array_index (node->priv->children, i);
-
-			g_static_rw_lock_writer_lock (borked_node->priv->lock);
-
-			borked_node_info = g_hash_table_lookup (borked_node->priv->parents,
-						                GINT_TO_POINTER (node->priv->id));
-			borked_node_info->index--;
-
-			g_static_rw_lock_writer_unlock (borked_node->priv->lock);
-		}
-	}
-
-	if (remove_from_child) {
-		g_hash_table_remove (child->priv->parents,
-				     GINT_TO_POINTER (node->priv->id));
-	}
-
-	write_lock_to_read_lock (node);
-	write_lock_to_read_lock (child);
-
-	g_signal_emit (G_OBJECT (node), ephy_node_signals[CHILD_REMOVED], 0, child);
-
-	read_lock_to_write_lock (node);
-	read_lock_to_write_lock (child);
-
 }
 
 void
 ephy_node_remove_child (EphyNode *node,
 		        EphyNode *child)
 {
-	g_return_if_fail (EPHY_IS_NODE (node));
-	g_return_if_fail (EPHY_IS_NODE (child));
-
 	lock_gdk ();
 
-	g_static_rw_lock_writer_lock (node->priv->lock);
-	g_static_rw_lock_writer_lock (child->priv->lock);
+	g_static_rw_lock_writer_lock (node->lock);
+	g_static_rw_lock_writer_lock (child->lock);
 
 	real_remove_child (node, child, TRUE, TRUE);
 
-	g_static_rw_lock_writer_unlock (node->priv->lock);
-	g_static_rw_lock_writer_unlock (child->priv->lock);
+	g_static_rw_lock_writer_unlock (node->lock);
+	g_static_rw_lock_writer_unlock (child->lock);
 
 	unlock_gdk ();
 }
@@ -1222,17 +979,14 @@ ephy_node_has_child (EphyNode *node,
 {
 	gboolean ret;
 
-	g_return_val_if_fail (EPHY_IS_NODE (node), FALSE);
-	g_return_val_if_fail (EPHY_IS_NODE (child), FALSE);
+	g_static_rw_lock_reader_lock (node->lock);
+	g_static_rw_lock_reader_lock (child->lock);
 
-	g_static_rw_lock_reader_lock (node->priv->lock);
-	g_static_rw_lock_reader_lock (child->priv->lock);
+	ret = (g_hash_table_lookup (child->parents,
+				    GINT_TO_POINTER (node->id)) != NULL);
 
-	ret = (g_hash_table_lookup (child->priv->parents,
-				    GINT_TO_POINTER (node->priv->id)) != NULL);
-	
-	g_static_rw_lock_reader_unlock (node->priv->lock);
-	g_static_rw_lock_reader_unlock (child->priv->lock);
+	g_static_rw_lock_reader_unlock (node->lock);
+	g_static_rw_lock_reader_unlock (child->lock);
 
 	return ret;
 }
@@ -1244,14 +998,14 @@ ephy_node_real_get_child_index (EphyNode *node,
 	EphyNodeParent *node_info;
 	int ret;
 
-	node_info = g_hash_table_lookup (child->priv->parents,
-					 GINT_TO_POINTER (node->priv->id));
+	node_info = g_hash_table_lookup (child->parents,
+					 GINT_TO_POINTER (node->id));
 
 	if (node_info == NULL)
 		return -1;
 
 	ret = node_info->index;
-	
+
 	return ret;
 }
 
@@ -1261,23 +1015,22 @@ ephy_node_sort_children (EphyNode *node,
 {
 	GPtrArray *newkids;
 	int i, *new_order;
-	
-	g_return_if_fail (EPHY_IS_NODE (node));
+
 	g_return_if_fail (compare_func != NULL);
 
 	lock_gdk ();
 
-	g_static_rw_lock_writer_lock (node->priv->lock);
+	g_static_rw_lock_writer_lock (node->lock);
 
 	newkids = g_ptr_array_new ();
-	g_ptr_array_set_size (newkids, node->priv->children->len);
+	g_ptr_array_set_size (newkids, node->children->len);
 
 	/* dup the array */
-	for (i = 0; i < node->priv->children->len; i++)
+	for (i = 0; i < node->children->len; i++)
 	{
-		g_ptr_array_index (newkids, i) = g_ptr_array_index (node->priv->children, i);
+		g_ptr_array_index (newkids, i) = g_ptr_array_index (node->children, i);
 	}
-	
+
 	g_ptr_array_sort (newkids, compare_func);
 
 	new_order = g_new (int, newkids->len);
@@ -1290,62 +1043,62 @@ ephy_node_sort_children (EphyNode *node,
 
 		child = g_ptr_array_index (newkids, i);
 		new_order[ephy_node_real_get_child_index (node, child)] = i;
-		node_info = g_hash_table_lookup (child->priv->parents,
-					         GINT_TO_POINTER (node->priv->id));
+		node_info = g_hash_table_lookup (child->parents,
+					         GINT_TO_POINTER (node->id));
 		node_info->index = i;
-	}	
+	}
 
-	g_ptr_array_free (node->priv->children, FALSE);
-	node->priv->children = newkids;
-	
+	g_ptr_array_free (node->children, FALSE);
+	node->children = newkids;
+
 	write_lock_to_read_lock (node);
-	
-	g_signal_emit (G_OBJECT (node), ephy_node_signals[CHILDREN_REORDERED], 0, new_order);
+
+	ephy_node_emit_signal (node, EPHY_NODE_CHILDREN_REORDERED, new_order);
+
 	g_free (new_order);
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
+	g_static_rw_lock_reader_unlock (node->lock);
 
 	unlock_gdk ();
 }
 
 void
 ephy_node_reorder_children (EphyNode *node,
- 			    int *new_order)
+			    int *new_order)
 {
 	GPtrArray *newkids;
 	int i;
 
-	g_return_if_fail (EPHY_IS_NODE (node));
 	g_return_if_fail (new_order != NULL);
 
 	lock_gdk ();
 
-	g_static_rw_lock_writer_lock (node->priv->lock);
+	g_static_rw_lock_writer_lock (node->lock);
 
 	newkids = g_ptr_array_new ();
-	g_ptr_array_set_size (newkids, node->priv->children->len);
+	g_ptr_array_set_size (newkids, node->children->len);
 
-	for (i = 0; i < node->priv->children->len; i++) {
+	for (i = 0; i < node->children->len; i++) {
 		EphyNode *child;
 		EphyNodeParent *node_info;
 
-		child = g_ptr_array_index (node->priv->children, i);
+		child = g_ptr_array_index (node->children, i);
 
 		g_ptr_array_index (newkids, new_order[i]) = child;
 
-		node_info = g_hash_table_lookup (child->priv->parents,
-					         GINT_TO_POINTER (node->priv->id));
+		node_info = g_hash_table_lookup (child->parents,
+					         GINT_TO_POINTER (node->id));
 		node_info->index = new_order[i];
 	}
 
-	g_ptr_array_free (node->priv->children, FALSE);
-	node->priv->children = newkids;
+	g_ptr_array_free (node->children, FALSE);
+	node->children = newkids;
 
 	write_lock_to_read_lock (node);
 
-	g_signal_emit (G_OBJECT (node), ephy_node_signals[CHILDREN_REORDERED], 0, new_order);
+	ephy_node_emit_signal (node, EPHY_NODE_CHILDREN_REORDERED, new_order);
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
+	g_static_rw_lock_reader_unlock (node->lock);
 
 	unlock_gdk ();
 }
@@ -1353,11 +1106,9 @@ ephy_node_reorder_children (EphyNode *node,
 GPtrArray *
 ephy_node_get_children (EphyNode *node)
 {
-	g_return_val_if_fail (EPHY_IS_NODE (node), NULL);
+	g_static_rw_lock_reader_lock (node->lock);
 
-	g_static_rw_lock_reader_lock (node->priv->lock);
-
-	return node->priv->children;
+	return node->children;
 }
 
 int
@@ -1365,13 +1116,11 @@ ephy_node_get_n_children (EphyNode *node)
 {
 	int ret;
 
-	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
+	g_static_rw_lock_reader_lock (node->lock);
 
-	g_static_rw_lock_reader_lock (node->priv->lock);
-	
-	ret = node->priv->children->len;
-	
-	g_static_rw_lock_reader_unlock (node->priv->lock);
+	ret = node->children->len;
+
+	g_static_rw_lock_reader_unlock (node->lock);
 
 	return ret;
 }
@@ -1381,20 +1130,19 @@ ephy_node_get_nth_child (EphyNode *node,
 		         guint n)
 {
 	EphyNode *ret;
-	
-	g_return_val_if_fail (EPHY_IS_NODE (node), NULL);
+
 	g_return_val_if_fail (n >= 0, NULL);
 
-	g_static_rw_lock_reader_lock (node->priv->lock);
+	g_static_rw_lock_reader_lock (node->lock);
 
-	if (n < node->priv->children->len) {
-		ret = g_ptr_array_index (node->priv->children, n);
+	if (n < node->children->len) {
+		ret = g_ptr_array_index (node->children, n);
 	} else {
 		ret = NULL;
 	}
-	
-	g_static_rw_lock_reader_unlock (node->priv->lock);
-	
+
+	g_static_rw_lock_reader_unlock (node->lock);
+
 	return ret;
 }
 
@@ -1404,8 +1152,8 @@ get_child_index_real (EphyNode *node,
 {
 	EphyNodeParent *node_info;
 
-	node_info = g_hash_table_lookup (child->priv->parents,
-					 GINT_TO_POINTER (node->priv->id));
+	node_info = g_hash_table_lookup (child->parents,
+					 GINT_TO_POINTER (node->id));
 
 	if (node_info == NULL)
 		return -1;
@@ -1419,17 +1167,14 @@ ephy_node_get_child_index (EphyNode *node,
 			   EphyNode *child)
 {
 	int ret;
-	
-	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
-	g_return_val_if_fail (EPHY_IS_NODE (child), -1);
 
-	g_static_rw_lock_reader_lock (node->priv->lock);
-	g_static_rw_lock_reader_lock (child->priv->lock);
+	g_static_rw_lock_reader_lock (node->lock);
+	g_static_rw_lock_reader_lock (child->lock);
 
 	ret = ephy_node_real_get_child_index (node, child);
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
-	g_static_rw_lock_reader_unlock (child->priv->lock);
+	g_static_rw_lock_reader_unlock (node->lock);
+	g_static_rw_lock_reader_unlock (child->lock);
 
 	return ret;
 }
@@ -1440,23 +1185,20 @@ ephy_node_get_next_child (EphyNode *node,
 {
 	EphyNode *ret;
 	guint idx;
-	
-	g_return_val_if_fail (EPHY_IS_NODE (node), NULL);
-	g_return_val_if_fail (EPHY_IS_NODE (child), NULL);
 
-	g_static_rw_lock_reader_lock (node->priv->lock);
-	g_static_rw_lock_reader_lock (child->priv->lock);
+	g_static_rw_lock_reader_lock (node->lock);
+	g_static_rw_lock_reader_lock (child->lock);
 
 	idx = get_child_index_real (node, child);
 
-	if ((idx + 1) < node->priv->children->len) {
-		ret = g_ptr_array_index (node->priv->children, idx + 1);
+	if ((idx + 1) < node->children->len) {
+		ret = g_ptr_array_index (node->children, idx + 1);
 	} else {
 		ret = NULL;
 	}
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
-	g_static_rw_lock_reader_unlock (child->priv->lock);
+	g_static_rw_lock_reader_unlock (node->lock);
+	g_static_rw_lock_reader_unlock (child->lock);
 
 	return ret;
 }
@@ -1467,107 +1209,56 @@ ephy_node_get_previous_child (EphyNode *node,
 {
 	EphyNode *ret;
 	int idx;
-	
-	g_return_val_if_fail (EPHY_IS_NODE (node), NULL);
-	g_return_val_if_fail (EPHY_IS_NODE (child), NULL);
 
-	g_static_rw_lock_reader_lock (node->priv->lock);
-	g_static_rw_lock_reader_lock (child->priv->lock);
+	g_static_rw_lock_reader_lock (node->lock);
+	g_static_rw_lock_reader_lock (child->lock);
 
 	idx = get_child_index_real (node, child);
 
 	if ((idx - 1) >= 0) {
-		ret = g_ptr_array_index (node->priv->children, idx - 1);
+		ret = g_ptr_array_index (node->children, idx - 1);
 	} else {
 		ret = NULL;
 	}
 
-	g_static_rw_lock_reader_unlock (node->priv->lock);
-	g_static_rw_lock_reader_unlock (child->priv->lock);
+	g_static_rw_lock_reader_unlock (node->lock);
+	g_static_rw_lock_reader_unlock (child->lock);
+
+	return ret;
+}
+
+int
+ephy_node_signal_connect_object (EphyNode *node,
+				 EphyNodeSignalType type,
+				 EphyNodeCallback callback,
+				 GObject *object)
+{
+	EphyNodeSignalData *signal_data;
+	int ret;
+
+	signal_data = g_new0 (EphyNodeSignalData, 1);
+	signal_data->node = node;
+	signal_data->id = node->signal_id;
+	signal_data->callback = callback;
+	signal_data->type = type;
+	signal_data->data = object;
+
+	g_hash_table_insert (node->signals,
+			     GINT_TO_POINTER (node->signal_id),
+			     signal_data);
+	g_object_weak_ref (object, (GWeakNotify)signal_object_weak_notify,
+			   signal_data);
+	ret = node->signal_id;
+	node->signal_id++;
 
 	return ret;
 }
 
 void
-ephy_node_system_init (gulong reserved_ids)
+ephy_node_signal_disconnect (EphyNode *node,
+			     int signal_id)
 {
-	/* id to node */
-	id_to_node = g_ptr_array_new ();
-
-	id_to_node_lock = g_new0 (GStaticRWLock, 1);
-	g_static_rw_lock_init (id_to_node_lock);
-
-	/* id factory */
-	id_factory = reserved_ids;
-	id_factory_lock = g_mutex_new ();
+	 g_hash_table_remove (node->signals,
+                              GINT_TO_POINTER (signal_id));
 }
 
-void
-ephy_node_system_shutdown (void)
-{
-	g_ptr_array_free (id_to_node, FALSE);
-
-	g_static_rw_lock_free (id_to_node_lock);
-
-	g_mutex_free (id_factory_lock);
-}
-
-long
-ephy_node_new_id (void)
-{
-	long ret;
-
-	g_mutex_lock (id_factory_lock);
-
-	id_factory++;
-
-	ret = id_factory;
-
-	g_mutex_unlock (id_factory_lock);
-
-	return ret;
-}
-
-static void
-id_factory_set_to (gulong new_factory_pos)
-{
-	if (new_factory_pos > id_factory)
-	{
-		id_factory = new_factory_pos + 1;
-	}
-}
-
-/* evillish hacks to temporarily readlock->writelock and v.v. */
-static inline void
-write_lock_to_read_lock (EphyNode *node)
-{
-	g_static_mutex_lock (&node->priv->lock->mutex);
-	node->priv->lock->read_counter++;
-	g_static_mutex_unlock (&node->priv->lock->mutex);
-
-	g_static_rw_lock_writer_unlock (node->priv->lock);
-}
-
-static inline void
-read_lock_to_write_lock (EphyNode *node)
-{
-	g_static_mutex_lock (&node->priv->lock->mutex);
-	node->priv->lock->read_counter--;
-	g_static_mutex_unlock (&node->priv->lock->mutex);
-
-	g_static_rw_lock_writer_lock (node->priv->lock);
-}
-
-static inline void
-lock_gdk (void)
-{
-	if (ephy_thread_helpers_in_main_thread () == FALSE)
-		GDK_THREADS_ENTER ();
-}
-
-static inline void
-unlock_gdk (void)
-{
-	if (ephy_thread_helpers_in_main_thread () == FALSE)
-		GDK_THREADS_LEAVE ();
-}

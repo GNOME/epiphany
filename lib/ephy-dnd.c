@@ -110,13 +110,17 @@ ephy_dnd_drag_data_get (GtkWidget *widget,
 GList *
 ephy_dnd_node_list_extract_nodes (const char *node_list)
 {
+	EphyNodeDb *db;
 	GList *result = NULL;
 	char **nodes;
 	int i;
 
 	nodes = g_strsplit (node_list, ";", -1);
 
-	for (i = 0; nodes[i] != NULL; i++)
+	db = ephy_node_db_get_by_name (nodes[i]);
+	g_return_val_if_fail (db != NULL, NULL);
+
+	for (i = 1; nodes[i] != NULL; i++)
 	{
 		gulong id;
 
@@ -124,7 +128,7 @@ ephy_dnd_node_list_extract_nodes (const char *node_list)
 		{
 			EphyNode *node;
 
-			node = ephy_node_get_from_id (id);
+			node = ephy_node_db_get_node_from_id (db, id);
 			g_return_val_if_fail (node != NULL, NULL);
 			result = g_list_append (result, node);
 		}

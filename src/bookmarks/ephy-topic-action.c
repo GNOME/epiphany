@@ -130,7 +130,7 @@ menu_activate_cb (GtkWidget *item, EggAction *action)
 	EphyNode *node;
 	const char *location;
 
-	node = EPHY_NODE (g_object_get_data (G_OBJECT (item), "node"));
+	node = g_object_get_data (G_OBJECT (item), "node");
 	location = ephy_node_get_property_string
 		(node, EPHY_NODE_BMK_PROP_LOCATION);
 	g_signal_emit (action, ephy_topic_action_signals[GO_LOCATION],
@@ -158,9 +158,6 @@ sort_bookmarks (gconstpointer a, gconstpointer b)
 	char *str_a = NULL;
 	char *str_b = NULL;
 	int retval;
-
-	g_return_val_if_fail (EPHY_IS_NODE (node_a), 1);
-	g_return_val_if_fail (EPHY_IS_NODE (node_b), -1);
 
 	str_a = g_utf8_casefold (ephy_node_get_property_string (node_a, EPHY_NODE_BMK_PROP_TITLE),
 				 -1);
@@ -264,9 +261,6 @@ sort_topics (gconstpointer a, gconstpointer b)
 	char *str_b = NULL;
 	int retval;
 
-	g_return_val_if_fail (EPHY_IS_NODE (node_a), 1);
-	g_return_val_if_fail (EPHY_IS_NODE (node_b), -1);
-
 	priority_a = ephy_node_get_property_int (node_a, EPHY_NODE_KEYWORD_PROP_PRIORITY);	
 	priority_b = ephy_node_get_property_int (node_b, EPHY_NODE_KEYWORD_PROP_PRIORITY);	
 
@@ -366,21 +360,20 @@ static GtkWidget *
 build_menu (EphyTopicAction *action)
 {
 	EphyNode *node;
+	EphyBookmarks *bookmarks;
 
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
 	if (action->priv->topic_id == BOOKMARKS_NODE_ID)
 	{
-		EphyBookmarks *bookmarks;
-
 		LOG ("Build all bookmarks crap menu")
 
-		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 		node = ephy_bookmarks_get_keywords (bookmarks);
 		return build_topics_menu (action, node);
 	}
 	else
 	{
-		node = ephy_node_get_from_id (action->priv->topic_id);
+		node = ephy_bookmarks_get_from_id (bookmarks, action->priv->topic_id);
 		return build_bookmarks_menu (action, node);
 	}
 }
@@ -546,9 +539,9 @@ ephy_topic_action_init (EphyTopicAction *action)
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	node = ephy_bookmarks_get_keywords (bookmarks);
-	g_signal_connect_object (node, "child_changed",
-				 G_CALLBACK (topic_child_changed_cb),
-				 action, 0);
+	ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_CHANGED,
+				         (EphyNodeCallback) topic_child_changed_cb,
+				         G_OBJECT (action));
 }
 
 EggAction *
@@ -560,7 +553,7 @@ ephy_topic_action_new (const char *name, guint id)
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
-	bmk = ephy_node_get_from_id (id);
+	bmk = ephy_bookmarks_get_from_id (bookmarks, id);
 	g_return_val_if_fail (bmk != NULL, NULL);
 
 	action = EGG_ACTION (g_object_new (EPHY_TYPE_TOPIC_ACTION,

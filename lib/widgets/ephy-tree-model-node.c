@@ -164,10 +164,9 @@ ephy_tree_model_node_class_init (EphyTreeModelNodeClass *klass)
 
 	g_object_class_install_property (object_class,
 					 PROP_ROOT,
-					 g_param_spec_object ("root",
+					 g_param_spec_pointer ("root",
 							      "Root node",
 							      "Root node",
-							      EPHY_TYPE_NODE,
 							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 	g_object_class_install_property (object_class,
 					 PROP_FILTER,
@@ -248,33 +247,28 @@ ephy_tree_model_node_set_property (GObject *object,
 	switch (prop_id)
 	{
 	case PROP_ROOT:
-		model->priv->root = g_value_get_object (value);
+		model->priv->root = g_value_get_pointer (value);
 
-		g_signal_connect_object (G_OBJECT (model->priv->root),
-				         "child_added",
-				         G_CALLBACK (root_child_added_cb),
-				         G_OBJECT (model),
-					 0);
-		g_signal_connect_object (G_OBJECT (model->priv->root),
-				         "child_removed",
-				         G_CALLBACK (root_child_removed_cb),
-				         G_OBJECT (model),
-					 0);
-		g_signal_connect_object (G_OBJECT (model->priv->root),
-				         "child_changed",
-				         G_CALLBACK (root_child_changed_cb),
-				         G_OBJECT (model),
-					 0);
-		g_signal_connect_object (G_OBJECT (model->priv->root),
-					 "children_reordered",
-					 G_CALLBACK (root_children_reordered_cb),
-					 G_OBJECT (model),
-					 0);
-		g_signal_connect_object (G_OBJECT (model->priv->root),
-				         "destroyed",
-				         G_CALLBACK (root_destroyed_cb),
-				         G_OBJECT (model),
-					 0);
+		ephy_node_signal_connect_object (model->priv->root,
+				                 EPHY_NODE_CHILD_ADDED,
+				                 (EphyNodeCallback) root_child_added_cb,
+				                 G_OBJECT (model));
+		ephy_node_signal_connect_object (model->priv->root,
+				                 EPHY_NODE_CHILD_REMOVED,
+				                 (EphyNodeCallback) root_child_removed_cb,
+				                 G_OBJECT (model));
+		ephy_node_signal_connect_object (model->priv->root,
+				                 EPHY_NODE_CHILD_CHANGED,
+				                 (EphyNodeCallback) root_child_changed_cb,
+				                 G_OBJECT (model));
+		ephy_node_signal_connect_object (model->priv->root,
+				                 EPHY_NODE_CHILDREN_REORDERED,
+				                 (EphyNodeCallback) root_children_reordered_cb,
+				                 G_OBJECT (model));
+		ephy_node_signal_connect_object (model->priv->root,
+				                 EPHY_NODE_DESTROYED,
+				                 (EphyNodeCallback) root_destroyed_cb,
+				                 G_OBJECT (model));
 
 		break;
 	case PROP_FILTER:
@@ -306,7 +300,7 @@ ephy_tree_model_node_get_property (GObject *object,
 	switch (prop_id)
 	{
 	case PROP_ROOT:
-		g_value_set_object (value, model->priv->root);
+		g_value_set_pointer (value, model->priv->root);
 		break;
 	case PROP_FILTER:
 		g_value_set_object (value, model->priv->filter);
@@ -411,12 +405,11 @@ ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 	g_return_if_fail (EPHY_IS_TREE_MODEL_NODE (tree_model));
 	g_return_if_fail (iter != NULL);
 	g_return_if_fail (iter->stamp == model->stamp);
-	g_return_if_fail (EPHY_IS_NODE (iter->user_data));
 
 	if (model->priv->root == NULL)
 		return;
 
-	node = EPHY_NODE (iter->user_data);
+	node = iter->user_data;
 
 	if (column == EPHY_TREE_MODEL_NODE_COL_VISIBLE)
 	{
@@ -530,7 +523,7 @@ ephy_tree_model_node_get_path (GtkTreeModel *tree_model,
 	if (model->priv->root == NULL)
 		return NULL;
 
-	node = EPHY_NODE (iter->user_data);
+	node = iter->user_data;
 
 	if (node == model->priv->root)
 		return gtk_tree_path_new ();
@@ -552,7 +545,7 @@ ephy_tree_model_node_iter_next (GtkTreeModel *tree_model,
 	if (model->priv->root == NULL)
 		return FALSE;
 
-	node = EPHY_NODE (iter->user_data);
+	node = iter->user_data;
 
 	if (node == model->priv->root)
 		return FALSE;
@@ -648,7 +641,7 @@ EphyNode *
 ephy_tree_model_node_node_from_iter (EphyTreeModelNode *model,
 				     GtkTreeIter *iter)
 {
-	return EPHY_NODE (iter->user_data);
+	return iter->user_data;
 }
 
 void

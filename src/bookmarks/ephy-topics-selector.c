@@ -114,11 +114,10 @@ ephy_topics_selector_class_init (EphyTopicsSelectorClass *klass)
 
 	g_object_class_install_property (object_class,
 					 PROP_BOOKMARK,
-					 g_param_spec_object ("bookmark",
-							      "Bookmark",
-							      "Bookmark",
-							      EPHY_TYPE_NODE,
-							      G_PARAM_READWRITE));
+					 g_param_spec_pointer ("bookmark",
+							       "Bookmark",
+							       "Bookmark",
+							       G_PARAM_READWRITE));
 }
 
 static void
@@ -164,7 +163,7 @@ ephy_topics_selector_set_property (GObject *object,
 		break;
 	case PROP_BOOKMARK:
 		ephy_topics_selector_set_bookmark
-			(selector, g_value_get_object (value));
+			(selector, g_value_get_pointer (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -183,7 +182,7 @@ ephy_topics_selector_get_property (GObject *object,
 	switch (prop_id)
 	{
 	case PROP_BOOKMARK:
-		g_value_set_object (value, selector);
+		g_value_set_pointer (value, selector);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

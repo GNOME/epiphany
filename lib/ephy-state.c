@@ -21,7 +21,7 @@
 
 #include "ephy-state.h"
 #include "ephy-file-helpers.h"
-#include "ephy-node.h"
+#include "ephy-node-db.h"
 #include "ephy-types.h"
 #include "ephy-node-common.h"
 
@@ -43,6 +43,7 @@ enum
 };
 
 static EphyNode *states = NULL;
+static EphyNodeDb *states_db = NULL;
 
 static void
 ephy_states_load (void)
@@ -67,7 +68,7 @@ ephy_states_load (void)
 	{
 		EphyNode *node;
 
-		node = ephy_node_new_from_xml (child);
+		node = ephy_node_new_from_xml (states_db, child);
 	}
 
 	xmlFreeDoc (doc);
@@ -144,7 +145,8 @@ ensure_states (void)
 {
 	if (states == NULL)
 	{
-		states = ephy_node_new_with_id (STATES_NODE_ID);
+		states_db = ephy_node_db_new ("EphyStates");
+		states = ephy_node_new_with_id (states_db, STATES_NODE_ID);
 		ephy_states_load ();
 	}
 }
@@ -315,7 +317,7 @@ ephy_state_add_window (GtkWidget *window,
 	{
 		GValue value = { 0, };
 
-		node = ephy_node_new ();
+		node = ephy_node_new (states_db);
 		ephy_node_add_child (states, node);
 
 		g_value_init (&value, G_TYPE_STRING);
@@ -369,10 +371,10 @@ ephy_state_add_window (GtkWidget *window,
 		ephy_state_window_set_position (window, node);
 	}
 
-	g_signal_connect_object (window, "configure_event",
-			         G_CALLBACK (window_configure_event_cb), node, 0);
-	g_signal_connect_object (window, "window_state_event",
-			         G_CALLBACK (window_state_event_cb), node, 0);
+	g_signal_connect (window, "configure_event",
+			  G_CALLBACK (window_configure_event_cb), node);
+	g_signal_connect (window, "window_state_event",
+			  G_CALLBACK (window_state_event_cb), node);
 }
 
 static gboolean
@@ -409,7 +411,7 @@ ephy_state_add_paned (GtkWidget *paned,
 	{
 		GValue value = { 0, };
 
-		node = ephy_node_new ();
+		node = ephy_node_new (states_db);
 		ephy_node_add_child (states, node);
 
 		g_value_init (&value, G_TYPE_STRING);
@@ -428,8 +430,8 @@ ephy_state_add_paned (GtkWidget *paned,
 	width = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_WIDTH);
 	gtk_paned_set_position (GTK_PANED (paned), width);
 
-	g_signal_connect_object (paned, "size_allocate",
-			         G_CALLBACK (paned_size_allocate_cb), node, 0);
+	g_signal_connect (paned, "size_allocate",
+			  G_CALLBACK (paned_size_allocate_cb), node);
 }
 
 void
@@ -437,5 +439,7 @@ ephy_state_save (void)
 {
 	ephy_states_save ();
 	ephy_node_unref (states);
+	g_object_unref (states_db);
 	states = NULL;
+	states_db = NULL;
 }

@@ -67,11 +67,14 @@ GType		ephy_bookmarks_get_type		(void);
 
 EphyBookmarks  *ephy_bookmarks_new		(void);
 
+EphyNode	*ephy_bookmarks_get_from_id     (EphyBookmarks *eb,
+						 long id);
+
 /* Bookmarks */
 
-void		ephy_bookmarks_save		(EphyBookmarks *eb);
+void		 ephy_bookmarks_save		(EphyBookmarks *eb);
 
-EphyNode       *ephy_bookmarks_add		(EphyBookmarks *eb,
+EphyNode        *ephy_bookmarks_add		(EphyBookmarks *eb,
 						 const char *title,
 						 const char *url,
 						 const char *smart_url);

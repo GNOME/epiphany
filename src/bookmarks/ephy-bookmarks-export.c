@@ -57,7 +57,7 @@ add_topics_list (EphyNode *topics, EphyNode *bmk, xmlNodePtr parent)
 	for (l = bmks; l != NULL; l = l->next)
 	{
 		const char *name;
-		EphyNode *node = EPHY_NODE (l->data);
+		EphyNode *node = l->data;
 
 		name = ephy_node_get_property_string
 			(node, EPHY_NODE_KEYWORD_PROP_NAME);
