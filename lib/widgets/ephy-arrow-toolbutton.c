@@ -103,22 +103,30 @@ button_state_changed_cb (GtkWidget *widget,
 	EphyArrowToolButtonPrivate *p = b->priv;
 	GtkWidget *button;
 	GtkStateType state = GTK_WIDGET_STATE (widget);
-	GtkStateType other;
-
-	if (state == GTK_STATE_ACTIVE ||
-	    state == GTK_STATE_SELECTED ||
-	    state == GTK_STATE_INSENSITIVE)
-	{
-		return;
-	}
 
 	button = (widget == p->arrow_widget) ? p->button : p->arrow_widget;
-	other = GTK_WIDGET_STATE (button);
 
-	if (state != other)
+	g_signal_handlers_block_by_func
+		(G_OBJECT (button),
+		 G_CALLBACK (button_state_changed_cb),
+		 b);
+	if (state == GTK_STATE_PRELIGHT &&
+	    previous_state != GTK_STATE_ACTIVE)
 	{
 		gtk_widget_set_state (button, state);
 	}
+	else if (state == GTK_STATE_NORMAL)
+	{
+		 gtk_widget_set_state (button, state);
+	}
+	else if (state == GTK_STATE_ACTIVE)
+	{
+		gtk_widget_set_state (button, GTK_STATE_NORMAL);
+	}
+	g_signal_handlers_unblock_by_func
+		(G_OBJECT (button),
+		 G_CALLBACK (button_state_changed_cb),
+		 b);
 }
 
 static void
