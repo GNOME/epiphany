@@ -76,22 +76,11 @@ gboolean
 eel_gconf_handle_error (GError **error)
 {
 	char *message;
-	static gboolean shown_dialog = FALSE;
 	
 	g_return_val_if_fail (error != NULL, FALSE);
 
 	if (*error != NULL) {
 		g_warning (_("GConf error:\n  %s"), (*error)->message);
-		if (! shown_dialog) {
-			shown_dialog = TRUE;
-
-			message = g_strdup_printf (_("GConf error:\n  %s\n"
-						     "All further errors shown "
-						     "only on terminal"),
-						   (*error)->message);
-			g_error (message, _("GConf Error"), NULL);
-			g_free (message);
-		}
 		g_error_free (*error);
 		*error = NULL;
 
