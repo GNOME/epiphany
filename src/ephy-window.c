@@ -621,13 +621,9 @@ save_window_chrome (EphyWindow *window)
 {
 	EmbedChromeMask flags = window->priv->chrome_mask;
 
-	if (flags & EMBED_CHROME_OPENASPOPUP)
-	{
-	}
-	else if (flags & EMBED_CHROME_PPVIEWTOOLBARON)
-	{
-	}
-	else
+	if (!(flags & EMBED_CHROME_OPENASPOPUP) &&
+	    !(flags & EMBED_CHROME_PPVIEWTOOLBARON) &&
+	    !(flags & EMBED_CHROME_OPENASFULLSCREEN))
 	{
 		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR,
 				       flags & EMBED_CHROME_BOOKMARKSBARON);
