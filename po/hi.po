@@ -1,7 +1,5 @@
 # translation of epiphany.HEAD.hi.po to Hindi
 # This file is distributed under the same license as the PACKAGE package.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
-# G Karunakar <karunakar@freedomink.org>, 2003.
 # Ravishankar Shrivastava <raviratlami@yahoo.com>, 2004.
 #
 msgid ""
@@ -9,13 +7,14 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD.hi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-07-21 17:57+0530\n"
-"PO-Revision-Date: 2004-07-18 14:12+0530\n"
+"PO-Revision-Date: 2004-08-02 13:23+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@yahoo.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.3\n"
+"X-Generator: KBabel 1.3.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: data/GNOME_Epiphany_Automation.server.in.h:1
 msgid "Epiphany automation"
@@ -26,9 +25,8 @@ msgid "Browse and organize your bookmarks"
 msgstr "अपने पसंद ब्राउज़ कर संघठित करें"
 
 #: data/bme.desktop.in.h:2
-#, fuzzy
 msgid "Epiphany Web Bookmarks"
-msgstr "एपिफेनी पसंद"
+msgstr "एपिफेनी वेब पसंद"
 
 #: data/bme.desktop.in.h:3
 msgid "Web Bookmarks"
@@ -1005,22 +1003,22 @@ msgstr "अज्ञात"
 #, c-format
 msgid "About %d second left"
 msgid_plural "About %d seconds left"
-msgstr[0] ""
+msgstr[0] "%d क्षण बाकी"
 msgstr[1] ""
 
 #: embed/downloader-view.c:414
 #, c-format
 msgid "About %d minute left"
 msgid_plural "About %d minutes left"
-msgstr[0] ""
+msgstr[0] " %d मिनिट बाकी"
 msgstr[1] ""
 
 #: embed/downloader-view.c:421
-#, fuzzy, c-format
+#, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
-msgstr[0] "डाउनलोड (_D)"
-msgstr[1] "डाउनलोड (_D)"
+msgstr[0] "%d डाउनलोड"
+msgstr[1] "%d डाउनलोडें"
 
 #: embed/downloader-view.c:561 src/bookmarks/ephy-bookmarks-editor.c:691
 msgid "File"
@@ -1940,9 +1938,8 @@ msgid "Insecure"
 msgstr "असुरक्षित"
 
 #: lib/ephy-stock-icons.c:56
-#, fuzzy
 msgid "Popup Windows"
-msgstr "पॉपअप विंडो स्वीकारें (_w)"
+msgstr "पॉपअप विंडो"
 
 #: lib/ephy-stock-icons.c:57 src/ephy-history-window.c:1200
 msgid "History"
@@ -2028,21 +2025,18 @@ msgstr "नए टैब में खोलें (_T)"
 
 #  File Menu
 #: src/bookmarks/ephy-bookmark-action.c:539
-#, fuzzy
 msgid "Open in New _Window"
-msgstr "नए विंडो  में खोलें (_O)"
+msgstr "नए विंडो में खोलें (_W)"
 
 #: src/bookmarks/ephy-bookmark-action.c:570
 #: src/bookmarks/ephy-topic-action.c:742
-#, fuzzy
 msgid "Move _Left"
-msgstr "टैब बायें ले जाएँ (_L)"
+msgstr "बायें ले जाएँ (_L)"
 
 #: src/bookmarks/ephy-bookmark-action.c:577
 #: src/bookmarks/ephy-topic-action.c:749
-#, fuzzy
 msgid "Move Ri_ght"
-msgstr "टैब दाएँ ले जाएँ (_R)"
+msgstr " दाएँ ले जाएँ (gR)"
 
 #: src/bookmarks/ephy-bookmark-properties.c:232
 #, c-format
@@ -2396,9 +2390,8 @@ msgid "Empty"
 msgstr "रिक्त"
 
 #: src/bookmarks/ephy-topic-action.c:444
-#, fuzzy
 msgid "_Open in Tabs"
-msgstr "नए टैब में खोलें (_T)"
+msgstr "टैब में खोलें (_O)"
 
 #: src/ephy-encoding-dialog.c:315
 msgid "Encodings"
@@ -2496,7 +2489,7 @@ msgstr "आज"
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
-msgstr[0] ""
+msgstr[0] "आखरी %d दिन"
 msgstr[1] ""
 
 #  keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
@@ -2952,11 +2945,11 @@ msgstr "वेब ब्राउज़र मदद दिखाएँ"
 #. File Menu
 #: src/ephy-window.c:251
 msgid "_Work Offline"
-msgstr ""
+msgstr "ऑफ़लाइन कार्य (_W)"
 
 #: src/ephy-window.c:252
 msgid "Toggle network status"
-msgstr ""
+msgstr "नेटवर्क स्थिति बदलें"
 
 #  View Menu
 #. View Menu
@@ -2993,13 +2986,12 @@ msgid "Browse at full screen"
 msgstr "फुल स्क्रीन में ब्राउज़ करें"
 
 #: src/ephy-window.c:268
-#, fuzzy
 msgid "Popup _Windows"
-msgstr "पॉपअप विंडो स्वीकारें (_w)"
+msgstr "पॉपअप विंडो काWें (_w)"
 
 #: src/ephy-window.c:269
 msgid "Show or hide unrequested popup windows from this site"
-msgstr ""
+msgstr "इस साइट के अनचाहे पॉपअप विंडो दिखाएँ या छुपाएँ"
 
 # libgnomeprintui/gnome-print-dialog.c:242
 #: src/ephy-window.c:271
@@ -3129,10 +3121,10 @@ msgid "Security level: %s"
 msgstr "सुरक्षा स्तरः %s"
 
 #: src/ephy-window.c:1349
-#, fuzzy, c-format
+#, c-format
 msgid "%d hidden popup window"
 msgid_plural "%d hidden popup windows"
-msgstr[0] "पॉपअप विंडो स्वीकारें (_w)"
+msgstr[0] "%d छुपाप विंडो स्वीकारे)"
 msgstr[1] "पॉपअप विंडो स्वीकारें (_w)"
 
 #: src/pdm-dialog.c:416
@@ -3193,7 +3185,7 @@ msgstr "वर्तमान सत्र की समाप्ति"
 
 #: src/popup-commands.c:245 src/popup-commands.c:253
 msgid "Download link"
-msgstr "लिंक डाउनलोड करें"
+msgstr "डाउनलोड लिंक"
 
 #: src/popup-commands.c:260
 msgid "Save Image As"
@@ -3526,3 +3518,6 @@ msgstr "रविशंकर श्रीवास्तव (raviratlami@yahoo.
 #: src/window-commands.c:976
 msgid "A GNOME browser based on Mozilla"
 msgstr "मोज़िला पर आधारित एक गनोम ब्राउज़र "
+
+#~ msgid "Save Link As"
+#~ msgstr "लिंक इस रूप में सहेजें"
