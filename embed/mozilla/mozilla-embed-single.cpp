@@ -260,6 +260,9 @@ static gresult control_encodings_list (void);
 struct MozillaEmbedSinglePrivate
 {
 	char *user_prefs;
+	
+	/* monitor this widget for theme changes*/
+	GtkWidget *theme_window;
 };
 
 static NS_DEFINE_CID(kJVMManagerCID, NS_JVMMANAGER_CID);
@@ -355,8 +358,11 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	pref->SetBoolPref ("security.warn_leaving_secure", PR_FALSE);
 	pref->SetBoolPref ("security.warn_submit_insecure", PR_FALSE);
 
-	/* Always use the system colors if a page doesn't specify its own. */
-	pref->SetBoolPref ("browser.display.use_system_colors", PR_TRUE);
+	/* FIXME: We should change this back to true when mozilla bugs
+         * 207000 and 207001 are fixed.
+	 */
+	/* Make sure this is off, we monitor for theme changes and set colors. */
+	pref->SetBoolPref ("browser.display.use_system_colors", PR_FALSE);
 
 	/* Smooth scrolling on */
 	pref->SetBoolPref ("general.smoothScroll", PR_TRUE);
@@ -365,8 +371,12 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	pref->SetBoolPref ("browser.blink_allowed", PR_FALSE);
 	pref->SetBoolPref ("browser.display.enable_marquee", PR_FALSE);
 
+	/* FIXME: We disable this for now, because enough people complained
+	 * and there are some moz bugs. We either need a user visible pref
+	 * or need to revert to enabling by default for a11y
+         */
 	/* Enable Browsing with the Caret */
-	pref->SetBoolPref ("accessibility.browsewithcaret", PR_TRUE);
+	/*pref->SetBoolPref ("accessibility.browsewithcaret", PR_TRUE);*/
 
 	/* Don't Fetch the Sidebar whats related information, since we don't use it */
 	pref->SetBoolPref ("browser.related.enabled", PR_FALSE);
@@ -382,6 +392,69 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	/* Enable Image Auto-Resizing */
 	pref->SetBoolPref ("browser.enable_automatic_image_resizing", PR_TRUE);
 }
+
+static char *
+color_to_string (GdkColor color)
+{
+	return g_strdup_printf ("#%.2x%.2x%.2x",
+			       color.red >> 8,
+			       color.green >> 8,
+			       color.blue >> 8);
+}
+
+static void
+mozilla_update_colors (GtkWidget *window,
+                       GtkStyle *previous_style,
+                       MozillaEmbedSingle *mes)
+{
+	nsCOMPtr<nsIPrefService> prefService;
+	GdkColor color;
+	char *str;
+
+        prefService = do_GetService (NS_PREFSERVICE_CONTRACTID);
+	g_return_if_fail (prefService != NULL);
+
+        nsCOMPtr<nsIPrefBranch> pref;
+        prefService->GetBranch ("", getter_AddRefs(pref));
+	g_return_if_fail (pref != NULL);
+
+	/* Set the bg color to the text bg color*/
+	color = window->style->base[GTK_STATE_NORMAL];
+	str = color_to_string (color);
+	pref->SetCharPref ("browser.display.background_color", str);		
+	g_free (str);
+
+	/* Set the text color */
+	color = window->style->text[GTK_STATE_NORMAL];
+	str = color_to_string (color);	
+	pref->SetCharPref ("browser.display.foreground_color", str);	
+	g_free (str);
+
+	/* FIXME: We should probably monitor and set link color here too,
+	 * but i'm not really sure what to do about that yet
+	 */
+}
+
+static void
+mozilla_setup_colors (MozillaEmbedSingle *mes)
+{
+	GtkWidget *window;
+
+	/* Create a random window to monitor for theme changes */
+	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	mes->priv->theme_window = window;
+	gtk_widget_realize (window);
+	gtk_widget_ensure_style (window);
+
+	/* monitor theme changes*/
+	g_signal_connect (G_OBJECT (window), "style-set",
+			  G_CALLBACK (mozilla_update_colors), mes);
+	
+	/* Initialize the colors */
+	mozilla_update_colors (window, NULL, mes);
+
+	mes->priv->theme_window = window;
+}			
 
 static void
 mozilla_init_single (MozillaEmbedSingle *mes)
@@ -482,6 +555,11 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 
 	mozilla_set_default_prefs (mes);
 
+	/* FIXME: This should be removed when mozilla
+	 * bugs 207000 and 207001 are fixed.
+	 */
+	mozilla_setup_colors (mes);
+
 	START_PROFILER ("Mozilla prefs notifiers")
 	mozilla_notifiers_init (EPHY_EMBED_SINGLE (mes));
 	STOP_PROFILER ("Mozilla prefs notifiers")
@@ -564,6 +642,8 @@ mozilla_embed_single_finalize (GObject *object)
 	gtk_moz_embed_pop_startup ();
 
 	g_free (mes->priv->user_prefs);
+
+	gtk_widget_destroy (mes->priv->theme_window);
 	
         g_free (mes->priv);
 }

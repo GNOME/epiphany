@@ -1,3 +1,21 @@
+2003-06-04  David Bordoley  <bordoley@msu.edu>
+
+	* data/ui/epiphany-ui.xml.in:
+
+	Move the bookmarks menu after go. There is a slight
+	inconsistency in the HIG, but this is the intended order.
+
+	* embed/mozilla/mozilla-embed-single.cpp: (MozillaEmbedSinglePrivate),
+	(mozilla_set_default_prefs), (color_to_string), 
+	(mozilla_update_colors), (mozilla_setup_colors), 
+	(mozilla_embed_single_init), (mozilla_embed_single_finalize):
+
+	Disable caret browsing for now since enough people complain. 
+	We really need a visible pref for this though. Oh you need to reset
+	this in about:config to actually turn it off. 
+	Monitor theme changes and set the background and text colors based
+	on the theme text entry colors.
+
 2003-06-04  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-menu.c:
