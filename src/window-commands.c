@@ -648,7 +648,12 @@ static void
 toolbar_editor_destroy_cb (GtkWidget *tbe,
 			   Toolbar *t)
 {
+	GtkWidget *window;
+
+	window = gtk_widget_get_toplevel (GTK_WIDGET (t));
+
 	egg_editable_toolbar_set_edit_mode (EGG_EDITABLE_TOOLBAR (t), FALSE);
+	ephy_window_update_all_controls (EPHY_WINDOW (window));
 }
 
 static void

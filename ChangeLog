@@ -1,5 +1,16 @@
 2003-05-03  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* data/ui/epiphany-bookmark-editor-ui.xml.in:
+	* data/ui/epiphany-history-window-ui.xml.in:
+
+	Hide view menus in the xml, not working.
+
+	* src/window-commands.c: (toolbar_editor_destroy_cb):
+
+	Update ui after tb editing, so location is not lost.
+
+2003-05-03  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/ephy-nautilus-view.c: (ephy_nautilus_view_instance_init),
 	(gnv_bonobo_control_activate_cb):
 
