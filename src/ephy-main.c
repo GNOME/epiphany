@@ -111,7 +111,10 @@ main (int argc, char *argv[])
 
 	g_set_application_name (_("Epiphany Web Browser"));
 
-        g_object_get_property (G_OBJECT (program),
+	/* Set default window icon */
+	gtk_window_set_default_icon_name ("web-browser");
+
+	g_object_get_property (G_OBJECT (program),
                                GNOME_PARAM_POPT_CONTEXT,
                                g_value_init (&context_as_value, G_TYPE_POINTER));
         context = g_value_get_pointer (&context_as_value);
