@@ -675,7 +675,7 @@ ephy_bookmarks_get_bookmark_id (EphyBookmarks *eb,
 	}
 	else
 	{
-		return -1;
+		return 0;
 	}
 }
 

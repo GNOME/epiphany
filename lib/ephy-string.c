@@ -156,9 +156,6 @@ ephy_str_to_int (const char *string, gulong *integer)
 	if ((result == G_MINLONG || result == G_MAXLONG) && errno == ERANGE) {
 		return FALSE;
 	}
-	if (result < G_MININT || result > G_MAXINT) {
-		return FALSE;
-	}
 
 	/* Check that all the trailing characters are spaces. */
 	while (*parse_end != '\0') {

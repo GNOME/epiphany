@@ -992,8 +992,8 @@ update_node (EggMenuMerge *self, GNode *node)
 	  goto recurse_children;
 	}
       
-      if (info->action)
-	g_object_unref (info->action);
+/*      if (info->action)
+	g_object_unref (info->action);*/
       info->action = action;
 /*      if (info->action)
 	g_object_ref (info->action);*/

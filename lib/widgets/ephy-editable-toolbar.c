@@ -88,7 +88,6 @@ typedef struct
 {
 	gboolean separator;
 	EggAction *action;
-	char *type;
 } ItemNode;
 
 GType
@@ -132,14 +131,13 @@ toolbar_node_new (void)
 }
 
 static ItemNode *
-item_node_new (EggAction *action, const char *type, gboolean separator)
+item_node_new (EggAction *action, gboolean separator)
 {
 	ItemNode *item;
 
 	item = g_new0 (ItemNode, 1);
 	item->action = action;
 	item->separator = separator;
-	item->type = type ? g_strdup (type) : NULL;
 
 	return item;
 }
@@ -188,8 +186,6 @@ impl_get_action (EphyEditableToolbar *etoolbar,
 {
 	EggAction *action;
 
-	LOG ("Getting an action");
-
 	if (type == NULL)
 	{
 		action = find_action (etoolbar, name);
@@ -218,9 +214,10 @@ add_action (EphyEditableToolbar *t,
 	if (!separator)
 	{
 		action = ephy_editable_toolbar_get_action (t, type, name);
+		g_return_if_fail (action != NULL);
 	}
 
-	item = item_node_new (action, type, separator);
+	item = item_node_new (action, separator);
 	node = g_node_new (item);
 
 	g_node_insert_before (parent, sibling, node);
@@ -236,14 +233,11 @@ parse_item_list (EphyEditableToolbar *t,
 		if (xmlStrEqual (child->name, "toolitem"))
 		{
 			xmlChar *verb;
-			xmlChar *type;
 
 			verb = xmlGetProp (child, "verb");
-			type = xmlGetProp (child, "type");
-			add_action (t, parent, NULL, type, verb);
+			add_action (t, parent, NULL, NULL, verb);
 
 			xmlFree (verb);
-			xmlFree (type);
 		}
 		else if (xmlStrEqual (child->name, "separator"))
 		{
@@ -367,10 +361,6 @@ toolbar_list_to_xml (EphyEditableToolbar *t, GNode *tl)
 			{
 				node = xmlNewChild (tnode, NULL, "toolitem", NULL);
 				xmlSetProp (node, "verb", item->action->name);
-				if (item->type)
-				{
-					xmlSetProp (node, "type", item->type);
-				}
 			}
 		}
 	}
@@ -628,6 +618,17 @@ ensure_toolbars_min_size (EphyEditableToolbar *t)
 }
 
 static void
+ephy_editable_toolbar_save (EphyEditableToolbar *t)
+{
+	xmlDocPtr doc;
+
+	doc = toolbar_list_to_xml (t, t->priv->toolbars);
+	xmlSaveFormatFile (t->priv->filename, doc, 1);
+	xmlFreeDoc (doc);
+}
+
+
+static void
 do_merge (EphyEditableToolbar *t)
 {
 	char *str;
@@ -655,6 +656,8 @@ do_merge (EphyEditableToolbar *t)
 	setup_toolbar_drag (t, t->priv->toolbars);
 
 	ensure_toolbars_min_size (t);
+
+	ephy_editable_toolbar_save (t);
 
 	g_free (str);
 }
@@ -740,13 +743,9 @@ ephy_editable_toolbar_init (EphyEditableToolbar *t)
 }
 
 static void
-ephy_editable_toolbar_save (EphyEditableToolbar *t)
+free_node (GNode *node)
 {
-	xmlDocPtr doc;
-
-	doc = toolbar_list_to_xml (t, t->priv->toolbars);
-	xmlSaveFormatFile (t->priv->filename, doc, 1);
-	xmlFreeDoc (doc);
+	g_free (node->data);
 }
 
 static void
@@ -757,7 +756,17 @@ ephy_editable_toolbar_finalize (GObject *object)
         g_return_if_fail (object != NULL);
         g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (object));
 
-	ephy_editable_toolbar_save (t);
+	if (t->priv->editor)
+	{
+		gtk_widget_destroy (t->priv->editor);
+	}
+
+	g_node_children_foreach (t->priv->available_actions, G_IN_ORDER,
+				 (GNodeForeachFunc)free_node, NULL);
+	g_node_children_foreach (t->priv->toolbars, G_IN_ORDER,
+				 (GNodeForeachFunc)free_node, NULL);
+	g_node_destroy (t->priv->available_actions);
+	g_node_destroy (t->priv->toolbars);
 
 	g_free (t->priv->filename);
 

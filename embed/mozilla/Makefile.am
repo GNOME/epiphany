@@ -30,6 +30,7 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/progressDlg \
 	-I$(MOZILLA_INCLUDE_ROOT)/sidebar \
 	-I$(MOZILLA_INCLUDE_ROOT)/shistory \
+	-I$(MOZILLA_INCLUDE_ROOT)/history \
 	-I$(MOZILLA_INCLUDE_ROOT)/uconv \
 	-I$(MOZILLA_INCLUDE_ROOT)/uriloader \
 	-I$(MOZILLA_INCLUDE_ROOT)/unicharutil \
@@ -40,6 +41,7 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/widget \
 	-I$(MOZILLA_INCLUDE_ROOT)/windowwatcher \
 	-I$(MOZILLA_INCLUDE_ROOT)/typeaheadfind \
+	-I$(MOZILLA_INCLUDE_ROOT)/toolkitcomps \
 	$(GCONF_CFLAGS) \
 	$(EPIPHANY_DEPENDENCY_CFLAGS) \
 	-DLIB_DIR=\"$(pkglibdir)\" \

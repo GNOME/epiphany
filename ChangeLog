@@ -1,5 +1,33 @@
 2003-01-30  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* data/ui/epiphany-toolbar.xml.in:
+	* embed/mozilla/EphyWrapper.cpp:
+	* embed/mozilla/Makefile.am:
+	* lib/egg/egg-action.c: (disconnect_proxy):
+	* lib/egg/egg-menu-merge.c: (update_node):
+	* lib/ephy-dnd.c: (ephy_dnd_uri_list_extract_uris):
+	* lib/ephy-dnd.h:
+	* lib/ephy-string.c: (ephy_str_to_int):
+	* lib/widgets/ephy-editable-toolbar.c: (item_node_new),
+	(impl_get_action), (add_action), (parse_item_list),
+	(toolbar_list_to_xml), (ephy_editable_toolbar_save), (do_merge),
+	(free_node), (ephy_editable_toolbar_finalize):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_get_bookmark_id):
+	* src/bookmarks/ephy-new-bookmark.c: (ephy_new_bookmark_add),
+	(ephy_new_bookmark_response_cb), (ephy_new_bookmark_init),
+	(ephy_new_bookmark_set_icon), (ephy_new_bookmark_get_id):
+	* src/bookmarks/ephy-new-bookmark.h:
+	* src/popup-commands.c: (popup_cmd_add_link_bookmark):
+	* src/toolbar.c: (get_bookmark_action), (toolbar_get_action):
+	* src/window-commands.c: (window_cmd_file_add_bookmark):
+
+	Allow to drag also normal urls in the toolbars.
+	Commit some fixes I did to the eggmenu stuff, now
+	toolbar editor should work well, please start
+	reporting bugs :)
+
+2003-01-30  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* lib/ephy-dnd.c: (ephy_dnd_url_drag_source_set),
 	(ephy_dnd_enable_model_drag_source):
 	* lib/ephy-dnd.h:

@@ -32,6 +32,7 @@
 #include "window-commands.h"
 #include "ephy-string.h"
 #include "ephy-debug.h"
+#include "ephy-new-bookmark.h"
 
 #include <string.h>
 
@@ -111,6 +112,25 @@ go_location_cb (EggAction *action, char *location, EphyWindow *window)
 }
 
 static EggAction *
+get_bookmark_action (Toolbar *t, EphyBookmarks *bookmarks, gulong id)
+{
+	char action_name[255];
+	EggAction *action;
+
+	LOG ("Creating action for bookmark id %ld", id)
+
+	snprintf (action_name, 255, "GoBookmarkId%ld", id);
+	action = ephy_bookmark_action_new (action_name, id);
+
+	g_signal_connect (action, "go_location",
+			  G_CALLBACK (go_location_cb), t->priv->window);
+	egg_action_group_add_action (t->priv->action_group, action);
+	g_object_unref (action);
+
+	return action;
+}
+
+static EggAction *
 toolbar_get_action (EphyEditableToolbar *etoolbar,
 		    const char *type,
 		    const char *name)
@@ -120,22 +140,52 @@ toolbar_get_action (EphyEditableToolbar *etoolbar,
 	EphyBookmarks *bookmarks;
 	gulong id = 0;
 
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+
 	if (type && (strcmp (type, EPHY_DND_URL_TYPE) == 0))
 	{
-		char action_name[255];
+		GtkWidget *new_bookmark;
+		const char *url;
+		const char *title = NULL;
+		GList *uris;
 
-		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-		id = ephy_bookmarks_get_bookmark_id (bookmarks, name);
+		uris = ephy_dnd_uri_list_extract_uris (name);
+		g_return_val_if_fail (uris != NULL, NULL);
+		url = (const char *)uris->data;
+		if (uris->next)
+		{
+			title = (const char *)uris->next->data;
+		}
 
-		snprintf (action_name, 255, "GoBookmarkId%ld", id);
-		action = ephy_bookmark_action_new (name, id);
+		id = ephy_bookmarks_get_bookmark_id (bookmarks, url);
 
-		g_signal_connect (action, "go_location",
-				  G_CALLBACK (go_location_cb), t->priv->window);
-		egg_action_group_add_action (t->priv->action_group, action);
-		g_object_unref (action);
+		if (id == 0)
+		{
+			new_bookmark = ephy_new_bookmark_new
+				(bookmarks, GTK_WINDOW (t->priv->window), url);
+			ephy_new_bookmark_set_title (EPHY_NEW_BOOKMARK (new_bookmark),
+						     title);
+			gtk_dialog_run (GTK_DIALOG (new_bookmark));
+			id = ephy_new_bookmark_get_id (EPHY_NEW_BOOKMARK (new_bookmark));
+			gtk_widget_destroy (new_bookmark);
+		}
+
+		g_return_val_if_fail (id != 0, NULL);
+
+		action = get_bookmark_action (t, bookmarks, id);
+
+		g_list_foreach (uris, (GFunc)g_free, NULL);
+		g_list_free (uris);
 	}
-	else
+	else if (g_str_has_prefix (name, "GoBookmarkId"))
+	{
+		if (ephy_str_to_int (name + strlen ("GoBookmarkId"), &id))
+		{
+			action = get_bookmark_action (t, bookmarks, id);
+		}
+	}
+
+	if (action == NULL)
 	{
 		action = EPHY_EDITABLE_TOOLBAR_CLASS
 			(parent_class)->get_action (etoolbar, type, name);

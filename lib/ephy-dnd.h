@@ -59,6 +59,7 @@ void     ephy_dnd_url_drag_source_set		(GtkWidget *widget);
 
 void	 ephy_dnd_enable_model_drag_source      (GtkWidget *treeview);
 
+GList   *ephy_dnd_uri_list_extract_uris         (const char *uri_list);
 
 G_END_DECLS
 
