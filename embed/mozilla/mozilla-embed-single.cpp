@@ -48,8 +48,6 @@
 #include <nsIProtocolProxyService.h>
 #include <nsIJVMManager.h>
 #include <nsIAtom.h>
-#include <nsICharsetConverterManager.h>
-#include <nsICharsetConverterManager2.h>
 #include <nsIFontList.h>
 #include <nsISupportsPrimitives.h>
 #include <nsReadableUtils.h>
