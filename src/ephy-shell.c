@@ -699,12 +699,19 @@ ephy_shell_get_extensions_manager (EphyShell *es)
 
 	if (es->priv->extensions_manager == NULL)
 	{
+		char *path;
+
 		/* Instantiate extensions manager */
 		es->priv->extensions_manager = ephy_extensions_manager_new ();
 
 		/* load the extensions */
 		ephy_extensions_manager_load_dir (es->priv->extensions_manager,
 						  EXTENSIONS_DIR);
+
+		path = g_build_filename (ephy_dot_dir (), "extensions", NULL);
+		ephy_extensions_manager_load_dir (es->priv->extensions_manager,
+						  path);
+		g_free (path);
 	}
 
 	return G_OBJECT (es->priv->extensions_manager);
