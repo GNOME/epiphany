@@ -196,7 +196,7 @@ ephy_node_db_finalize (GObject *object)
 		g_hash_table_destroy (ephy_node_databases);
 	}
 
-	g_ptr_array_free (db->priv->id_to_node, FALSE);
+	g_ptr_array_free (db->priv->id_to_node, TRUE);
 
 	g_free (db->priv->name);
 
