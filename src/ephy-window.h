@@ -21,6 +21,7 @@
 #ifndef EPHY_WINDOW_H
 #define EPHY_WINDOW_H
 
+#include "ephy-notebook.h"
 #include "ephy-embed.h"
 #include "ephy-tab.h"
 #include "ephy-dialog.h"
@@ -38,9 +39,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_WINDOW_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_WINDOW))
 #define EPHY_WINDOW_GET_CLASS(o)(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_WINDOW, EphyWindowClass))
 
-typedef struct EphyWindowClass EphyWindowClass;
-typedef struct _EphyWindow EphyWindow;
-typedef struct EphyWindowPrivate EphyWindowPrivate;
+typedef struct _EphyWindowClass		EphyWindowClass;
+typedef struct _EphyWindow		EphyWindow;
+typedef struct _EphyWindowPrivate	EphyWindowPrivate;
 
 struct _EphyWindow
 {
@@ -52,13 +53,10 @@ struct _EphyWindow
 	GObject *ui_merge;
 };
 
-struct EphyWindowClass
+struct _EphyWindowClass
 {
         GtkWindowClass parent_class;
 };
-
-/* Include the header down here to resolve circular dependency */
-#include "ephy-notebook.h"
 
 GType		  ephy_window_get_type		  (void);
 

@@ -321,7 +321,7 @@ static guint ephy_popups_n_entries = G_N_ELEMENTS (ephy_popups_entries);
 
 #define EPHY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WINDOW, EphyWindowPrivate))
 
-struct EphyWindowPrivate
+struct _EphyWindowPrivate
 {
 	GtkWidget *main_vbox;
 	GtkWidget *menu_dock;
