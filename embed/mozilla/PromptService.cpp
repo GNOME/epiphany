@@ -227,8 +227,6 @@ NS_IMETHODIMP CPromptService::AddButton (GtkWidget *dialog,
 	const char *btitle;
 	const nsACString &utf8string = NS_ConvertUCS2toUTF8 (title);
 
-	g_print ("%d", type);
-	
 	switch (type)
 	{
 		case BUTTON_TITLE_OK:
@@ -715,7 +713,7 @@ set_check_button_size_to_label (GtkWidget *check_button,
 
 	if (r.width <= label_r.width) return;
 	
-	gtk_widget_set_size_request (label, r.width, 0);
+	gtk_widget_set_size_request (label, r.width, -1);
 }
 
 /**

@@ -653,7 +653,9 @@ tab_build_label (EphyNotebook *nb, GtkWidget *child)
 
 	gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &w, &h);
 
-	hbox = gtk_hbox_new (FALSE, 0);
+	/* set hbox spacing and label padding (see below) so that there's an
+	 * equal amount of space around the label */
+	hbox = gtk_hbox_new (FALSE, 4);
 
 	/* setup close button */
 	close_button = gtk_button_new ();

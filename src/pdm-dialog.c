@@ -556,6 +556,7 @@ show_cookies_properties (PdmDialog *dialog,
 	GtkWidget *label;
 	GtkWidget *parent;
 	GtkWidget *dialog_vbox;
+	char *str;
 
 	parent = ephy_dialog_get_control (EPHY_DIALOG(dialog),
 					  PROP_DIALOG);
@@ -574,7 +575,9 @@ show_cookies_properties (PdmDialog *dialog,
 	gtk_table_set_col_spacings (GTK_TABLE(table), 10);
 	gtk_widget_show (table);
 
-	label = gtk_label_new (_("<b>Value</b>"));
+	str = g_strconcat ("<b>", _("Value"), "</b>", NULL);
+	label = gtk_label_new (str);
+	g_free (str);
 	gtk_label_set_use_markup (GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC(label), 0, 0);
 	gtk_widget_show (label);
@@ -586,7 +589,9 @@ show_cookies_properties (PdmDialog *dialog,
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 0, 1);
 
-	label = gtk_label_new (_("<b>Path</b>"));
+	str = g_strconcat ("<b>", _("Path"), "</b>", NULL);
+	label = gtk_label_new (str);
+	g_free (str);
 	gtk_label_set_use_markup (GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC(label), 0, 0);
 	gtk_widget_show (label);
@@ -598,7 +603,9 @@ show_cookies_properties (PdmDialog *dialog,
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 1, 2);
 
-	label = gtk_label_new (_("<b>Secure</b>"));
+	str = g_strconcat ("<b>", _("Secure"), "</b>", NULL);
+	label = gtk_label_new (str);
+	g_free (str);
 	gtk_label_set_use_markup (GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC(label), 0, 0);
 	gtk_widget_show (label);
@@ -610,7 +617,9 @@ show_cookies_properties (PdmDialog *dialog,
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 2, 3);
 
-	label = gtk_label_new (_("<b>Expire</b>"));
+	str = g_strconcat ("<b>", _("Expire"), "</b>", NULL);
+	label = gtk_label_new (str);
+	g_free (str);
 	gtk_label_set_use_markup (GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC(label), 0, 0);
 	gtk_widget_show (label);

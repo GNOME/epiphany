@@ -175,6 +175,7 @@ static GtkWidget *
 build_editing_table (EphyNewBookmark *editor)
 {
 	GtkWidget *table, *label, *entry;
+	char *str;
 
 	table = gtk_table_new (2, 2, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 6);
@@ -183,7 +184,9 @@ build_editing_table (EphyNewBookmark *editor)
 
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_markup (GTK_LABEL (label), _("<b>Title:</b>"));
+	str = g_strconcat ("<b>", _("Title:"), "</b>", NULL);
+	gtk_label_set_markup (GTK_LABEL (label), str);
+	g_free (str);
 	gtk_widget_show (label);
 	entry = gtk_entry_new ();
 	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
@@ -195,7 +198,9 @@ build_editing_table (EphyNewBookmark *editor)
 
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_markup (GTK_LABEL (label), _("<b>Keywords:</b>"));
+	str = g_strconcat ("<b>", _("Keywords:"), "</b>", NULL);
+	gtk_label_set_markup (GTK_LABEL (label), str);
+	g_free (str);
 	gtk_widget_show (label);
 	entry = ephy_keywords_entry_new ();
 	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);

@@ -172,7 +172,7 @@ ephy_tbi_zoom_get_widget_impl (EphyTbItem *i)
 
 	if (!p->widget)
 	{
-		p->widget = gtk_spin_button_new_with_range (1, 999, 10);
+		p->widget = gtk_spin_button_new_with_range (10, 990, 10);
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON (p->widget), 100);
 		g_object_ref (p->widget);
 		gtk_object_sink (GTK_OBJECT (p->widget));

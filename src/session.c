@@ -183,6 +183,7 @@ crashed_resume_dialog (Session *session)
 	GtkWidget *vbox;
 	GtkWidget *hbox;
 	GtkWidget *image;
+	char *str;
 
 	dialog = gtk_dialog_new_with_buttons
 		(_("Crash Recovery"), NULL,
@@ -215,10 +216,11 @@ crashed_resume_dialog (Session *session)
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 	gtk_widget_show (label);
-	gtk_label_set_markup (GTK_LABEL (label),
-			      _("<b>Epiphany appears to have crashed or been killed the last time it was run.</b>"));
-	gtk_box_pack_start (GTK_BOX (vbox), label,
-			    TRUE, TRUE, 0);
+	str = g_strconcat ("<b>", _("Epiphany appears to have crashed or been killed the last time it was run."),
+			   "</b>", NULL);
+	gtk_label_set_markup (GTK_LABEL (label), str);
+	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+	g_free (str);
 
 	label = gtk_label_new (_("You can recover the opened tabs and windows."));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);

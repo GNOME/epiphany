@@ -1313,9 +1313,8 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 {
 	EphyTab *tab, *old_tab;
 
-	if (window->priv->closing) return;
-
 	g_return_if_fail (IS_EPHY_WINDOW (window));
+	if (window->priv->closing) return;
 
 	/* get the new tab */
 	tab = real_get_active_tab (window, page_num);
