@@ -152,14 +152,29 @@ ephy_statusbar_finalize (GObject *object)
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+/**
+ * ephy_statusbar_new:
+ * 
+ * Creates a new #EphyStatusbar.
+ * 
+ * Return value: the new #EphyStatusbar object
+ **/
 GtkWidget *
 ephy_statusbar_new (void)
 {
 	return GTK_WIDGET (g_object_new (EPHY_TYPE_STATUSBAR, NULL));
 }
 
+/**
+ * ephy_statusbar_set_security_state:
+ * @statusbar: a #EphyStatusbar
+ * @secure: whether to set the icon to show secure or insecure
+ * @tooltip: a string detailing the security state
+ * 
+ * Sets the statusbar's security icon and its tooltip.
+ **/
 void
-ephy_statusbar_set_security_state (EphyStatusbar *t,
+ephy_statusbar_set_security_state (EphyStatusbar *statusbar,
 				   gboolean secure,
 				   const char *tooltip)
 {
@@ -167,30 +182,47 @@ ephy_statusbar_set_security_state (EphyStatusbar *t,
 
 	stock = secure ? EPHY_STOCK_SECURE : EPHY_STOCK_UNSECURE;
 
-	gtk_image_set_from_stock (GTK_IMAGE (t->priv->security_icon), stock,
+	gtk_image_set_from_stock (GTK_IMAGE (statusbar->priv->security_icon), stock,
 				  GTK_ICON_SIZE_MENU);
 
-	gtk_tooltips_set_tip (t->priv->tooltips, t->priv->security_evbox,
+	gtk_tooltips_set_tip (statusbar->priv->tooltips, statusbar->priv->security_evbox,
 			      tooltip, NULL);
 }
 
+/**
+ * ephy_statusbar_set_progress:
+ * @statusbar: a #EphyStatusbar
+ * @progress: the progress as an integer between 0 and 100, or -1 to show
+ * interminate progress
+ * 
+ * Sets the statusbar's progress.
+ **/
 void
-ephy_statusbar_set_progress (EphyStatusbar *t,
+ephy_statusbar_set_progress (EphyStatusbar *statusbar,
 			     int progress)
 {
 	if (progress == -1)
 	{
-		gtk_progress_bar_pulse (GTK_PROGRESS_BAR(t->priv->progressbar));
+		gtk_progress_bar_pulse (GTK_PROGRESS_BAR (statusbar->priv->progressbar));
 	}
 	else
 	{
 		float fraction;
 		fraction = (float)(progress) / 100;
-		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(t->priv->progressbar),
+		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (statusbar->priv->progressbar),
 					       fraction);
 	}
 }
 
+/**
+ * ephy_statusbar_add_widget:
+ * @statusbar: a #EphyStatusbar
+ * @widget: a #GtkWidget
+ * 
+ * Adds the @widget to the statusbar. Use this function whenever you want to
+ * add a widget to the statusbar. You can remove the widget again with
+ * gtk_container_remove().
+ **/
 void
 ephy_statusbar_add_widget (EphyStatusbar *statusbar,
 			   GtkWidget *widget)
