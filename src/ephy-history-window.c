@@ -122,41 +122,56 @@ static EggActionGroupEntry ephy_history_ui_entries [] = {
 
 	/* File Menu */
 	{ "OpenInWindow", N_("_Open in New Window"), GTK_STOCK_OPEN, "<control>O",
-	  NULL, G_CALLBACK (cmd_open_bookmarks_in_browser), NULL },
+	  N_("Open the selected history item in a new window"), 
+	  G_CALLBACK (cmd_open_bookmarks_in_browser), NULL },
 	{ "OpenInTab", N_("Open in New _Tab"), NULL, "<shift><control>O",
-	  NULL, G_CALLBACK (cmd_open_bookmarks_in_tabs), NULL },
+	  N_("Open the selected history item in a new tab"), 
+	  G_CALLBACK (cmd_open_bookmarks_in_tabs), NULL },
 	{ "Delete", N_("_Delete"), GTK_STOCK_DELETE, NULL,
-	  NULL, G_CALLBACK (cmd_delete), NULL},
+	  N_("Delete the selected history item"), 
+	  G_CALLBACK (cmd_delete), NULL },
 	{ "BookmarkPage", N_("Boo_kmark Page..."), EPHY_STOCK_BOOKMARK_PAGE, "<control>D",
-	  NULL, G_CALLBACK (cmd_bookmark_page), NULL },
+	  N_("Bookmark the selected history item"), 
+	  G_CALLBACK (cmd_bookmark_page), NULL },
 	{ "Close", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
-	  NULL, G_CALLBACK (cmd_close), NULL },
+	  N_("Close the history window"), 
+	  G_CALLBACK (cmd_close), NULL },
 	
 	/* Edit Menu */
 	{ "Cut", N_("Cu_t"), GTK_STOCK_CUT, "<control>X",
-	  NULL, G_CALLBACK (cmd_cut), NULL },
+	  N_("Cut the selection"), 
+	  G_CALLBACK (cmd_cut), NULL },
 	{ "Copy", N_("_Copy"), GTK_STOCK_COPY, "<control>C",
-	  NULL, G_CALLBACK (cmd_copy), NULL },
+	  N_("Copy the selection"), 
+	  G_CALLBACK (cmd_copy), NULL },
 	{ "Paste", N_("_Paste"), GTK_STOCK_PASTE, "<control>V",
-	  NULL, G_CALLBACK (cmd_paste), NULL },
+	  N_("Paste the clipboard"), 
+	  G_CALLBACK (cmd_paste), NULL },
 	{ "SelectAll", N_("Select _All"), NULL, "<control>A",
-	  NULL, G_CALLBACK (cmd_select_all), NULL },
+	  N_("Select all history items or text"), 
+	  G_CALLBACK (cmd_select_all), NULL },
 	{ "Clear", N_("C_lear History"), GTK_STOCK_CLEAR, NULL,
-	  NULL, G_CALLBACK (cmd_clear), NULL },
-
+	  N_("Clear your browsing history"), 
+	  G_CALLBACK (cmd_clear), NULL },
+	
 	/* View Menu */
 	{ "ViewTitle", N_("_Title"), NULL, NULL,
-	  NULL, NULL, NULL, RADIO_ACTION, NULL },
+	  N_("Show only the title column"), 
+	  NULL, NULL, RADIO_ACTION, NULL },
 	{ "ViewLocation", N_("_Location"), NULL, NULL,
-	  NULL, NULL, NULL, RADIO_ACTION, "ViewTitle" },
+	  N_("Show only the location column"), 
+	  NULL, NULL, RADIO_ACTION, "ViewTitle" },
 	{ "ViewTitleLocation", N_("T_itle and Location"), NULL, NULL,
-	  NULL, NULL, NULL, RADIO_ACTION, "ViewTitle" },	
-
-	/* Help Menu */
+	  N_("Show both the title and location columns"), 
+	  NULL, NULL, RADIO_ACTION, "ViewTitle" },
+		
+	/* Help Menu */	
 	{ "HelpContents", N_("_Contents"), GTK_STOCK_HELP, "F1",
-	  NULL, G_CALLBACK (cmd_help_contents), NULL },
+	  N_("Display history help"), 
+	  G_CALLBACK (cmd_help_contents), NULL },
 	{ "HelpAbout", N_("_About"), GNOME_STOCK_ABOUT, NULL,
-	  NULL, G_CALLBACK (window_cmd_help_about), NULL },
+	  N_("Display credits for the web browser creators"),
+	  G_CALLBACK (window_cmd_help_about), NULL },
 };
 static guint ephy_history_ui_n_entries = G_N_ELEMENTS (ephy_history_ui_entries);
 
