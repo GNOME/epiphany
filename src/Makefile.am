@@ -50,6 +50,8 @@ epiphany_SOURCES = 				    	\
 	ephy-encoding-menu.h				\
 	ephy-favicon-action.c				\
 	ephy-favicon-action.h				\
+	ephy-go-action.c				\
+	ephy-go-action.h				\
 	ephy-favorites-menu.c				\
 	ephy-favorites-menu.h				\
 	ephy-history-model.c				\

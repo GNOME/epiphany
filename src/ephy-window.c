@@ -197,11 +197,6 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "HelpAbout", N_("_About"), GNOME_STOCK_ABOUT, NULL,
 	  N_("Display credits for the web browser creators"),
 	  G_CALLBACK (window_cmd_help_about), NULL },
-
-	/* Toolbar only */
-	{ "LoadLocation", N_("_Go"), GTK_STOCK_JUMP_TO, NULL,
-	  N_("Type a web address or a word in the field on the left, then click Go"),
-	  G_CALLBACK (window_cmd_load_location), NULL },
 };
 static guint ephy_menu_n_entries = G_N_ELEMENTS (ephy_menu_entries);
 

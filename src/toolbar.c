@@ -27,6 +27,7 @@
 #include "ephy-spinner-action.h"
 #include "ephy-location-action.h"
 #include "ephy-favicon-action.h"
+#include "ephy-go-action.h"
 #include "ephy-navigation-action.h"
 #include "ephy-bookmark-action.h"
 #include "window-commands.h"
@@ -70,6 +71,7 @@ struct ToolbarPrivate
 	GtkWidget *location_entry;
 	GtkWidget *spinner;
 	GtkWidget *favicon;
+	GtkWidget *go;
 };
 
 GType
@@ -321,6 +323,16 @@ toolbar_setup_actions (Toolbar *t)
 			       "label", "Favicon",
 			       "window", t->priv->window,
 			       NULL);
+	egg_action_group_add_action (t->priv->action_group, action);
+	g_object_unref (action);
+
+	action = g_object_new (EPHY_TYPE_GO_ACTION,
+			       "name", "ToolbarGo",
+			       "label", "Go",
+			       "stock_id", GTK_STOCK_JUMP_TO,
+			       NULL);
+	g_signal_connect (action, "activate",
+			  G_CALLBACK (window_cmd_load_location), t->priv->window);
 	egg_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
 }
