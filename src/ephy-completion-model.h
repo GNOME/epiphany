@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 
 typedef struct EphyCompletionModelPrivate EphyCompletionModelPrivate;
 
-enum
+typedef enum
 {
 	EPHY_COMPLETION_TEXT_COL,
 	EPHY_COMPLETION_ACTION_COL,
