@@ -1,3 +1,25 @@
+2003-07-10  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/ui/epiphany-toolbar.xml.in:
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_load),
+	(ephy_favicon_cache_init):
+	* embed/ephy-history.c: (ephy_history_load), (ephy_history_init):
+	* lib/ephy-node-common.h:
+	* lib/ephy-state.c: (ensure_states):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init):
+	* src/ephy-toolbars-model.c: (ephy_toolbars_model_get_action_name),
+	(impl_add_item), (ephy_toolbars_model_remove_bookmark),
+	(ephy_toolbars_model_add_bookmark),
+	(ephy_toolbars_model_has_bookmark):
+	* src/ephy-toolbars-model.h:
+	* src/toolbar.c: (topic_destroy_cb), (bookmark_destroy_cb),
+	(toolbar_ensure_action):
+
+	Use url/name to store topics and bookmarks in the xml instead of
+	an id that would be hard to mantain. This unfortunately means
+	users will lose their toolbar settings.
+	Freeze formats for 1.0, only bookmarks left.
+
 2003-07-07  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-window.c: (sync_tab_load_status), (tab_removed_cb):
