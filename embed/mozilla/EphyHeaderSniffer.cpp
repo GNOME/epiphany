@@ -40,6 +40,7 @@
 #include "EphyHeaderSniffer.h"
 #include "netCore.h"
 
+#include "nsReadableUtils.h"
 #include "nsIChannel.h"
 #include "nsIHttpChannel.h"
 #include "nsIURL.h"
@@ -64,13 +65,14 @@ EphyHeaderSniffer::EphyHeaderSniffer(nsIWebBrowserPersist* aPersist, MozillaEmbe
 , mDefaultFilename(aSuggestedFilename)
 , mBypassCache(aBypassCache)
 {
+	mPrompt = do_GetService("@mozilla.org/embedcomp/prompt-service;1");
 }
 
 EphyHeaderSniffer::~EphyHeaderSniffer()
 {
 }
 
-NS_IMPL_ISUPPORTS1(EphyHeaderSniffer, nsIWebProgressListener)
+NS_IMPL_ISUPPORTS2(EphyHeaderSniffer, nsIWebProgressListener, nsIAuthPrompt)
 
 // Implementation of nsIWebProgressListener
 /* void onStateChange (in nsIWebProgress aWebProgress, in nsIRequest aRequest, in long aStateFlags, in unsigned long aStatus); */
@@ -249,4 +251,43 @@ nsresult EphyHeaderSniffer::InitiateDownload(nsISupports* inSourceData, nsILocal
   }
   
   return rv;
+}
+
+NS_IMETHODIMP EphyHeaderSniffer::Prompt (const PRUnichar *dialogTitle, const PRUnichar *text,
+				         const PRUnichar *passwordRealm, PRUint32 savePassword,
+				         const PRUnichar *defaultText, PRUnichar **result, PRBool *_retval)
+{
+	PRBool checkValue;
+
+	if (defaultText) *result = ToNewUnicode(nsDependentString(defaultText));
+	checkValue = savePassword;
+
+	return mPrompt->Prompt (nsnull, dialogTitle, text, result,
+				passwordRealm, &checkValue, _retval);
+}                                                                                                                            
+
+NS_IMETHODIMP EphyHeaderSniffer::PromptUsernameAndPassword (const PRUnichar *dialogTitle, const PRUnichar *text,
+						            const PRUnichar *passwordRealm, PRUint32 savePassword,
+						            PRUnichar **user, PRUnichar **pwd, PRBool *_retval)
+{
+	PRBool checkValue;
+
+	*_retval = savePassword;
+	checkValue = savePassword;
+
+	return mPrompt->PromptUsernameAndPassword (nsnull, dialogTitle, text, user, pwd,
+						   passwordRealm, &checkValue, _retval);
+}
+
+NS_IMETHODIMP EphyHeaderSniffer::PromptPassword (const PRUnichar *dialogTitle, const PRUnichar *text,
+					         const PRUnichar *passwordRealm, PRUint32 savePassword,
+					         PRUnichar **pwd, PRBool *_retval)
+{
+	PRBool checkValue;
+
+	*_retval = savePassword;
+	checkValue = savePassword;
+
+	return mPrompt->PromptPassword (nsnull, dialogTitle, text, pwd,
+					passwordRealm, &checkValue, _retval);
 }

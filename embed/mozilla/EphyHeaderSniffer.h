@@ -45,9 +45,12 @@
 #include "nsILocalFile.h"
 #include "nsIInputStream.h"
 #include "nsIDOMDocument.h"
+#include "nsIAuthPrompt.h"
+#include "nsIPromptService.h"
 
 // Implementation of a header sniffer class that is used when saving Web pages and images.
-class EphyHeaderSniffer : public nsIWebProgressListener
+class EphyHeaderSniffer : public nsIWebProgressListener,
+			  public nsIAuthPrompt
 {
 public:
     EphyHeaderSniffer(nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,
@@ -58,6 +61,7 @@ public:
 
     NS_DECL_ISUPPORTS
     NS_DECL_NSIWEBPROGRESSLISTENER
+    NS_DECL_NSIAUTHPROMPT
   
 protected:
 
@@ -76,5 +80,6 @@ private:
     PRBool                    mBypassCache;
     nsCString                 mContentType;
     nsCString                 mContentDisposition;
+    nsCOMPtr<nsIPromptService> mPrompt;
 };
 
