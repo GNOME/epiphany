@@ -708,14 +708,7 @@ impl_remove_password (EphyPasswordManager *manager,
 	pm->RemoveUser (nsEmbedCString(info->host), userName);
 }
 
-static const char *permission_type_string [] =
-{
-	"cookie",
-	"image",
-	"popup"
-};
-
-void
+static void
 impl_permission_manager_add (EphyPermissionManager *manager,
 			     const char *host,
 			     const char *type,
@@ -740,7 +733,7 @@ impl_permission_manager_add (EphyPermissionManager *manager,
 			 (PRUint32) nsIPermissionManager::DENY_ACTION);
 }
 
-void
+static void
 impl_permission_manager_remove (EphyPermissionManager *manager,
 				const char *host,
 				const char *type)
@@ -752,7 +745,7 @@ impl_permission_manager_remove (EphyPermissionManager *manager,
 	pm->Remove (nsEmbedCString (host), type);
 }
 
-void
+static void
 impl_permission_manager_clear (EphyPermissionManager *manager)
 {
         nsCOMPtr<nsIPermissionManager> pm
