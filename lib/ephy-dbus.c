@@ -102,7 +102,7 @@ ephy_dbus_connect_to_system_bus_cb (gpointer user_data)
 
 	ephy_dbus_connect_to_system_bus (dbus);
 
-	return dbus->priv->system_bus != NULL;
+	return dbus->priv->system_bus == NULL;
 }
 
 static DBusHandlerResult
@@ -177,6 +177,7 @@ ephy_dbus_connect_to_system_bus (EphyDbus *dbus)
 		dbus_error_free (&error);
 		return;
 	}
+	dbus_connection_set_exit_on_disconnect (bus, FALSE);
 	dbus_connection_setup_with_g_main (bus, NULL);
 
 	dbus_connection_add_filter (bus, system_filter_func, dbus, NULL);
@@ -226,6 +227,7 @@ ephy_dbus_connect_to_session_bus (EphyDbus *dbus)
 
 	dbus_bus_acquire_service (bus, epiphany_dbus_service, 0, NULL);
 
+	dbus_connection_set_exit_on_disconnect (bus, FALSE);
 	dbus_connection_setup_with_g_main (bus, NULL);
 
 	dbus->priv->session_bus = bus;
