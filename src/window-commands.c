@@ -644,19 +644,6 @@ window_cmd_view_zoom_normal (GtkAction *action,
 	ephy_window_set_zoom (window, 1.0);
 }
 
-static GnomeVFSMimeApplication *
-get_editor_application (void)
-{
-	GnomeVFSMimeApplication *app;
-
-	app = gnome_vfs_mime_get_default_application ("text/plain");
-	if (app == NULL)
-	{
-		g_warning ("Cannot find a text editor.");
-	}
-	return app;
-}
-
 static void
 editor_open_uri (const char *address)
 {
@@ -668,11 +655,17 @@ editor_open_uri (const char *address)
 
 	uris = g_list_append (uris, canonical);
 
-	app = get_editor_application ();
+	app = gnome_vfs_mime_get_default_application ("text/plain");
 	if (app)
 	{
 		gnome_vfs_mime_application_launch (app, uris);
 		gnome_vfs_mime_application_free (app);
+	}
+	else
+	{
+		/* FIXME We should really warn the user here */
+
+		g_warning ("Cannot find a text editor.");
 	}
 
 	g_free (canonical);
@@ -690,48 +683,6 @@ save_source_completed_cb (EphyEmbedPersist *persist)
 	ephy_file_delete_on_exit (dest);
 
 	editor_open_uri (dest);
-}
-
-static gboolean
-editor_can_open_uri (char *address)
-{
-	GnomeVFSMimeApplication *app;
-	GnomeVFSURI *uri;
-	const char *scheme;
-	gboolean result = FALSE;
-
-	app = get_editor_application ();
-
-	uri = gnome_vfs_uri_new (address);
-	scheme = uri ? gnome_vfs_uri_get_scheme (uri) : NULL;
-
-	/* Open directly only read/write protocols, otherwise
-	   you just get extra network overhead without any advantage */
-	if (scheme && strcmp (scheme, "file") != 0)
-	{
-		scheme = NULL;
-	}
-	
-	if (scheme && app && app->supported_uri_schemes)
-	{
-		if (g_list_find_custom (app->supported_uri_schemes,
-                                        scheme, (GCompareFunc) strcmp))
-		{
-			result = TRUE;
-		}
-	}
-
-	if (uri)
-	{
-		gnome_vfs_uri_unref (uri);
-	}
-
-	if (app)
-	{
-		gnome_vfs_mime_application_free (app);
-	}
-
-	return result;
 }
 
 static void
@@ -778,13 +729,15 @@ window_cmd_view_page_source (GtkAction *action,
 {
 	EphyEmbed *embed;
 	char *address;
+	char *scheme;
 
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
 	address = ephy_embed_get_location (embed, TRUE);
+	scheme = gnome_vfs_get_uri_scheme (address);
 
-	if (editor_can_open_uri (address))
+	if (strcmp (scheme, "file") == 0)
 	{
 		editor_open_uri (address);
 	}
@@ -793,6 +746,7 @@ window_cmd_view_page_source (GtkAction *action,
 		save_temp_source (embed);
 	}
 
+	g_free (scheme);
 	g_free (address);
 }
 

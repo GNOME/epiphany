@@ -1,3 +1,19 @@
+2004-11-25  Marco Pesenti Gritti  <marco@gnome.org>
+
+	reviewed by: Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/Makefile.am:
+	* lib/widgets/Makefile.am:
+	* src/Makefile.am:
+	* src/bookmarks/Makefile.am:
+
+	Fix build out of src directory.
+
+	* src/window-commands.c: (editor_open_uri),
+	(window_cmd_view_page_source):
+
+	Rework the code to not use deprecated API.
+
 2004-11-25  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/prefs-dialog.c: (create_language_section):
