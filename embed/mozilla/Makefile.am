@@ -105,34 +105,3 @@ libephymozillaembed_la_CXXFLAGS = \
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 		\
 	$(AM_CXXFLAGS)
 
-#	-I$(MOZILLA_INCLUDE_ROOT)			\
-#	-I$(MOZILLA_INCLUDE_ROOT)/caps			\
-#	-I$(MOZILLA_INCLUDE_ROOT)/chardet		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/commandhandler	\
-#	-I$(MOZILLA_INCLUDE_ROOT)/content		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/cookie		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/docshell		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/dom			\
-#	-I$(MOZILLA_INCLUDE_ROOT)/exthandler		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/gfx			\
-#	-I$(MOZILLA_INCLUDE_ROOT)/helperAppDlg		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/js			\
-#	-I$(MOZILLA_INCLUDE_ROOT)/history		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/layout		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/locale		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/mimetype		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/necko			\
-#	-I$(MOZILLA_INCLUDE_ROOT)/nkcache		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/passwordmgr		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/pipboot		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/pipnss		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/shistory		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/uriloader		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/uconv			\
-#	-I$(MOZILLA_INCLUDE_ROOT)/webbrowserpersist	\
-#	-I$(MOZILLA_INCLUDE_ROOT)/webbrwsr		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/widget		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/windowwatcher		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/xmlextras		\
-#	-I$(MOZILLA_INCLUDE_ROOT)/xpcom			\
-#	-I$(MOZILLA_INCLUDE_ROOT)/xpconnect
