@@ -46,10 +46,7 @@ void popup_cmd_add_frame_bookmark	(EggAction *action,
 void popup_cmd_view_source		(EggAction *action,
 					 EphyWindow *window);
 
-void popup_cmd_copy_page_location       (EggAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_copy_email		(EggAction *action,
+void popup_cmd_copy_link_address	(EggAction *action,
 					 EphyWindow *window);
 
 void popup_cmd_copy_link_location       (EggAction *action,
@@ -81,4 +78,3 @@ void popup_cmd_download_link		(EggAction *action,
 
 void popup_cmd_save_image_as		(EggAction *action,
 					 EphyWindow *window);
-

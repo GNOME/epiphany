@@ -240,10 +240,8 @@ static EggActionGroupEntry ephy_popups_entries [] = {
 	  NULL, G_CALLBACK (popup_cmd_download_link), NULL },
 	{ "BookmarkLink", N_("_Bookmark Link..."), EPHY_STOCK_BOOKMARK_PAGE, NULL,
 	  NULL, G_CALLBACK (popup_cmd_bookmark_link), NULL },
-	{ "CopyLinkLocation", N_("_Copy Link Address"), NULL, NULL,
-	  NULL, G_CALLBACK (popup_cmd_copy_link_location), NULL },
-	{ "CopyEmail", N_("Copy _Email Address"), NULL, NULL,
-	  NULL, G_CALLBACK (popup_cmd_copy_email), NULL },
+	{ "CopyLinkAddress", N_("_Copy Link Address"), NULL, NULL,
+	  NULL, G_CALLBACK (popup_cmd_copy_link_address), NULL },
 
 	/* Images */
 	{ "OpenImage", N_("Open _Image"), GTK_STOCK_OPEN, NULL,

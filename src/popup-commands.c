@@ -226,39 +226,29 @@ popup_cmd_copy_to_clipboard (EphyWindow *window, const char *text)
 }
 
 void
-popup_cmd_copy_email (EggAction *action,
-                      EphyWindow *window)
+popup_cmd_copy_link_address (EggAction *action,
+			     EphyWindow *window)
 {
-	EphyEmbedEvent *info;
-	const char *location;
+	EphyEmbedEvent *event;
+	const char *address;
 	const GValue *value;
 	EphyEmbed *embed;
 
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
+	event = get_event_info (window);
+	g_return_if_fail (IS_EPHY_EMBED_EVENT (event));
 
-	info = get_event_info (window);
-	ephy_embed_event_get_property (info, "email", &value);
-	location = g_value_get_string (value);
-	popup_cmd_copy_to_clipboard (window, location);
-}
-
-void
-popup_cmd_copy_link_location (EggAction *action,
-			      EphyWindow *window)
-{
-	EphyEmbedEvent *info;
-	const char *location;
-	const GValue *value;
-	EphyEmbed *embed;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	info = get_event_info (window);
-	ephy_embed_event_get_property (info, "link", &value);
-	location = g_value_get_string (value);
-	popup_cmd_copy_to_clipboard (window, location);
+	if (event->context & EMBED_CONTEXT_EMAIL_LINK)
+	{
+		ephy_embed_event_get_property (event, "email", &value);
+		address = g_value_get_string (value);
+		popup_cmd_copy_to_clipboard (window, address);
+	}
+	else if (event->context & EMBED_CONTEXT_LINK)
+	{
+		ephy_embed_event_get_property (event, "link", &value);
+		address = g_value_get_string (value);
+		popup_cmd_copy_to_clipboard (window, address);
+	}
 }
 
 static void
@@ -461,4 +451,3 @@ popup_cmd_open_image (EggAction *action,
 
 	ephy_embed_load_url (embed, location);
 }
-
