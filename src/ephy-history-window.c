@@ -930,7 +930,7 @@ provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 	}
 
 	g_value_init (value, GDK_TYPE_PIXBUF);
-	g_value_set_object (value, pixbuf);
+	g_value_set_object_take_ownership (value, pixbuf);
 }
 
 static void
