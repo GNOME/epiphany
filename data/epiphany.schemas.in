@@ -47,18 +47,6 @@
         reaching the end of the page</long>
         </locale>
       </schema>
-      <schema>
-        <key>/schemas/apps/epiphany/filtering/allow_popups</key>
-        <applyto>/apps/epiphany/filtering/allow_popups</applyto>
-        <owner>epiphany</owner>
-        <type>bool</type>
-        <default>true</default>
-        <locale name="C">
-        <short>Allow popups</short>
-        <long>Allow sites to open new windows using JavaScript (if JavaScript
-        is enabled).</long>
-        </locale>
-      </schema>
      <schema>
         <key>/schemas/apps/epiphany/rendering/use_own_colors</key>
         <applyto>/apps/epiphany/rendering/use_own_colors</applyto>
@@ -205,30 +193,6 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphany/filtering/image_loading_type</key>
-        <applyto>/apps/epiphany/filtering/image_loading_type</applyto>
-        <owner>epiphany</owner>
-        <type>int</type>
-        <default>0</default>
-        <locale name="C">
-        <short>When to load images</short>
-        <long>When to load images. Possible values are 0 (always), 1 (from
-        current server only), 2 (never)</long>
-        </locale>
-      </schema>
-      <schema>
-        <key>/schemas/apps/epiphany/filtering/animate_type</key>
-        <applyto>/apps/epiphany/filtering/animate_type</applyto>
-        <owner>epiphany</owner>
-        <type>int</type>
-        <default>0</default>
-        <locale name="C">
-        <short>Image animation type</short>
-        <long>Image animation type.  Possible values are 0 (continuously), 1
-        (once through), 2 (never)</long>
-        </locale>
-      </schema>
-      <schema>
         <key>/schemas/apps/epiphany/rendering/default_charset</key>
         <applyto>/apps/epiphany/rendering/default_charset</applyto>
         <owner>epiphany</owner>
@@ -282,28 +246,6 @@
         <locale name="C">
         <short>Show download details</short>
         <long>Show download details</long>
-        </locale>
-      </schema>
-     <schema>
-        <key>/schemas/apps/epiphany/filtering/java_enabled</key>
-        <applyto>/apps/epiphany/filtering/java_enabled</applyto>
-        <owner>epiphany</owner>
-        <type>bool</type>
-        <default>1</default>
-        <locale name="C">
-        <short>Allow Java</short>
-        <long>Allow Java.</long>
-        </locale>
-      </schema>
-      <schema>
-        <key>/schemas/apps/epiphany/filtering/javascript_enabled</key>
-        <applyto>/apps/epiphany/filtering/javascript_enabled</applyto>
-        <owner>epiphany</owner>
-        <type>bool</type>
-        <default>1</default>
-        <locale name="C">
-        <short>Allow JavaScript</short>
-        <long>Allow JavaScript.</long>
         </locale>
       </schema>
      <schema>
@@ -362,41 +304,6 @@
         <locale name="C">
         <short>Languages</short>
         <long>Preferred languages, two letter codes.</long>
-        </locale>
-      </schema>
-     <schema>
-        <key>/schemas/apps/epiphany/filterin/passwords_save</key>
-        <applyto>/apps/epiphany/filtering/passwords_save</applyto>
-        <owner>epiphany</owner>
-        <type>bool</type>
-        <default>true</default>
-        <locale name="C">
-        <short>Save passwords</short>
-        <long>Save passwords.</long>
-        </locale>
-      </schema>
-     <schema>
-        <key>/schemas/apps/epiphany/history/expire</key>
-        <applyto>/apps/epiphany/history/expire</applyto>
-        <owner>epiphany</owner>
-        <type>int</type>
-        <default>30</default>
-        <locale name="C">
-        <short>Expire history</short>
-        <long>Expire history after how many days.</long>
-        </locale>
-      </schema>
-      <schema>
-        <key>/schemas/apps/epiphany/history/search_time</key>
-        <applyto>/apps/epiphany/history/search_time</applyto>
-        <owner>epiphany</owner>
-        <type>int</type>
-        <default>1</default>
-        <locale name="C">
-        <short>History search time</short>
-        <long>Show only history entries from a particular time.  Possible
-        values are 0 (all items), 1 (today), 2 (yesterday), 3 (two days ago), 4
-        (this week), 5 (this month).</long>
         </locale>
       </schema>
      <schema>
@@ -576,7 +483,7 @@
         </locale>
       </schema>
       <schema>
-        <key>/schemas/apps/epiphay/security/cookie_accept</key>
+        <key>/schemas/apps/epiphany/security/cookie_accept</key>
         <applyto>/apps/epiphany/security/cookie_accept</applyto>
         <owner>epiphany</owner>
         <type>int</type>
