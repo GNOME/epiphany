@@ -44,7 +44,6 @@ struct _EggTreeMultiDragSourceIface
 
   gboolean     (* drag_data_get)        (EggTreeMultiDragSource   *drag_source,
                                          GList                    *path_list,
-					 guint			   info,
                                          GtkSelectionData         *selection_data);
 
   gboolean     (* drag_data_delete)     (EggTreeMultiDragSource *drag_source,
@@ -67,7 +66,6 @@ gboolean egg_tree_multi_drag_source_drag_data_delete (EggTreeMultiDragSource *dr
  */
 gboolean egg_tree_multi_drag_source_drag_data_get    (EggTreeMultiDragSource *drag_source,
 						      GList                  *path_list,
-						      guint		      info,
 						      GtkSelectionData       *selection_data);
 void     egg_tree_multi_drag_add_drag_support        (GtkTreeView            *tree_view);
 

@@ -37,7 +37,6 @@ static gboolean ephy_tree_model_sort_multi_row_draggable (EggTreeMultiDragSource
 							  GList *path_list);
 static gboolean ephy_tree_model_sort_multi_drag_data_get (EggTreeMultiDragSource *drag_source,
 							  GList *path_list,
-							  guint info,
 							  GtkSelectionData *selection_data);
 static gboolean ephy_tree_model_sort_multi_drag_data_delete (EggTreeMultiDragSource *drag_source,
 							     GList *path_list);
@@ -269,7 +268,6 @@ each_node_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 static gboolean
 ephy_tree_model_sort_multi_drag_data_get (EggTreeMultiDragSource *drag_source,
 					  GList *path_list,
-					  guint info,
 					  GtkSelectionData *selection_data)
 {
 	GdkAtom target;
@@ -285,7 +283,7 @@ ephy_tree_model_sort_multi_drag_data_get (EggTreeMultiDragSource *drag_source,
 		icontext[1] = drag_source;
 
 		ephy_dnd_drag_data_get (NULL, NULL, selection_data,
-			info, 0, &icontext, each_node_get_data_binder);
+			0, &icontext, each_node_get_data_binder);
 
 	}
 	else
@@ -296,7 +294,7 @@ ephy_tree_model_sort_multi_drag_data_get (EggTreeMultiDragSource *drag_source,
 		icontext[1] = drag_source;
 
 		ephy_dnd_drag_data_get (NULL, NULL, selection_data,
-			info, 0, &icontext, each_url_get_data_binder);
+			0, &icontext, each_url_get_data_binder);
 	}
 
 	return TRUE;

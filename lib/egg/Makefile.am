@@ -10,6 +10,8 @@ EGGSOURCES = \
   egg-action.c \
   egg-action-group.c \
   egg-toggle-action.c \
+  eggtreemodelfilter.c \
+  eggtreemultidnd.c \
   egg-radio-action.c \
   egg-menu-merge.c \
   egg-accel-dialog.c \
@@ -19,14 +21,16 @@ EGGSOURCES = \
   eggseparatortoolitem.c \
   eggtoolbar.c \
   eggtoolbutton.c \
-  eggmarshalers.c \
   egg-editable-toolbar.c \
   egg-toolbars-group.c
 
 libegg_la_SOURCES = \
-  $(EGGSOURCES)
+  $(EGGSOURCES) \
+  eggmarshalers.c
 
 EGGHEADERS = \
+  eggtreemodelfilter.h \
+  eggtreemultidnd.h \
   egg-menu.h \
   egg-action.h \
   egg-action-group.h \
@@ -40,12 +44,12 @@ EGGHEADERS = \
   eggseparatortoolitem.h \
   eggtoolbar.h \
   eggtoolbutton.h \
-  eggmarshalers.h \
   egg-editable-toolbar.h \
   egg-toolbars-group.h
 
 noinst_HEADERS = \
   $(EGGHEADERS) \
+  eggmarshalers.h \
   eggintl.h
 
 eggmarshalers.h:

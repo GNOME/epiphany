@@ -55,6 +55,8 @@ struct _EggTreeModelFilter
   GtkTreeModel *child_model;
   gint zero_ref_count;
 
+  guint root_level_visible;
+
   GtkTreePath *virtual_root;
 
   EggTreeModelFilterVisibleFunc visible_func;
@@ -86,7 +88,7 @@ struct _EggTreeModelFilterClass
 };
 
 GType   egg_tree_model_filter_get_type			(void);
-GtkTreeModel *	egg_tree_model_filter_new			(GtkTreeModel                 *child_model,
+GtkTreeModel *egg_tree_model_filter_new			(GtkTreeModel                 *child_model,
 							 GtkTreePath                  *root);
 void	egg_tree_model_filter_set_visible_func		(EggTreeModelFilter           *filter,
 							 EggTreeModelFilterVisibleFunc func,
@@ -115,7 +117,7 @@ GtkTreePath *egg_tree_model_filter_convert_child_path_to_path	(EggTreeModelFilte
 GtkTreePath *egg_tree_model_filter_convert_path_to_child_path	(EggTreeModelFilter *path,
 								 GtkTreePath        *filter_path);
 
-
+void    egg_tree_model_filter_refilter                  (EggTreeModelFilter           *filter);
 void	egg_tree_model_filter_clear_cache		(EggTreeModelFilter           *filter);
 
 G_END_DECLS

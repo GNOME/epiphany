@@ -22,16 +22,8 @@
 #include <gtk/gtksignal.h>
 #include <string.h>
 
-/****** NOTE NOTE NOTE WARNING WARNING ******
- *
- * This is *unstable* code. Don't use it in any project. This warning
- * will be removed when this treemodel works.
- */
-
-/*#define VERBOSE 1*/
-
-/* removed this when you add support for i18n */
-#define _
+/* FIXME: remove this when we move it to GTK+ */
+#include "eggintl.h"
 
 /* ITER FORMAT:
  *
@@ -268,16 +260,16 @@ egg_tree_model_filter_class_init (EggTreeModelFilterClass *filter_class)
   g_object_class_install_property (object_class,
 				   PROP_CHILD_MODEL,
 				   g_param_spec_object ("child_model",
-							"The child model",
-							"The model for the TreeModelFilter to filter",
+							_("The child model"),
+							_("The model for the filtermodel to filter"),
 							GTK_TYPE_TREE_MODEL,
 							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (object_class,
 				   PROP_VIRTUAL_ROOT,
 				   g_param_spec_boxed ("virtual_root",
-						       "The virtual root",
-						       "The virtual root (relative to the child model) for this filtermodel",
+						       _("The virtual root"),
+						       _("The virtual root (relative to the child model) for this filtermodel"),
 						       GTK_TYPE_TREE_PATH,
 						       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
@@ -389,10 +381,6 @@ egg_tree_model_filter_build_level (EggTreeModelFilter *filter,
             return;
           length = gtk_tree_model_iter_n_children (filter->child_model, &root);
 
-#ifdef VERBOSE
-          g_print ("-- vroot %d children\n", length);
-#endif
-
           if (gtk_tree_model_iter_children (filter->child_model, &iter, &root) == FALSE)
             return;
         }
@@ -427,10 +415,6 @@ egg_tree_model_filter_build_level (EggTreeModelFilter *filter,
 
   g_return_if_fail (length > 0);
 
-#ifdef VERBOSE
-  g_print ("-- building new level with %d childs\n", length);
-#endif
-
   new_level = g_new (FilterLevel, 1);
   new_level->array = g_array_sized_new (FALSE, FALSE,
                                         sizeof (FilterElt),
@@ -454,12 +438,11 @@ egg_tree_model_filter_build_level (EggTreeModelFilter *filter,
     }
   filter->zero_ref_count++;
 
-#ifdef VERBOSE
-  g_print ("_build_level: zero ref count on filter is now %d\n",
-	   filter->zero_ref_count);
-#endif
-
   i = 0;
+
+  if (!new_level->parent_level)
+    filter->root_level_visible = 0;
+
   do
     {
       if (egg_tree_model_filter_visible (filter, &iter))
@@ -476,6 +459,9 @@ egg_tree_model_filter_build_level (EggTreeModelFilter *filter,
             filter_elt.iter = iter;
 
           g_array_append_val (new_level->array, filter_elt);
+
+	  if (!new_level->parent_level)
+	    filter->root_level_visible++;
         }
       i++;
     }
@@ -510,17 +496,15 @@ egg_tree_model_filter_free_level (EggTreeModelFilter *filter,
       filter->zero_ref_count--;
     }
 
-#ifdef VERBOSE
-  g_print ("freeing level\n");
-  g_print ("zero ref count is %d\n", filter->zero_ref_count);
-#endif
-
   for (i = 0; i < filter_level->array->len; i++)
     {
       if (g_array_index (filter_level->array, FilterElt, i).children)
         egg_tree_model_filter_free_level (filter,
                                           FILTER_LEVEL (g_array_index (filter_level->array, FilterElt, i).children));
     }
+
+  if (!filter_level->parent_level)
+    filter->root_level_visible = 0;
 
   if (filter_level->parent_elt)
     filter_level->parent_elt->children = NULL;
@@ -688,10 +672,6 @@ egg_tree_model_filter_fetch_child (EggTreeModelFilter *filter,
   GtkTreeIter c_parent_iter;
   FilterElt elt;
 
-#ifdef VERBOSE
-  g_print ("_fetch_child: for offset %d\n", offset);
-#endif
-
   /* check if child exists and is visible */
   if (level->parent_elt)
     {
@@ -783,10 +763,6 @@ egg_tree_model_filter_remove_node (EggTreeModelFilter *filter,
   length = level->array->len;
   offset = elt->offset;
 
-#ifdef VERBOSE
-  g_print ("|___ removing node\n");
-#endif
-
   /* ref counting */
   while (elt->ref_count > 0)
     egg_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
@@ -815,9 +791,6 @@ egg_tree_model_filter_remove_node (EggTreeModelFilter *filter,
   if (length == 1)
     {
       /* kill the level */
-#ifdef VERBOSE
-      g_print ("killing level ...\n");
-#endif
       egg_tree_model_filter_free_level (filter, level);
 
       if (!filter->root)
@@ -826,10 +799,6 @@ egg_tree_model_filter_remove_node (EggTreeModelFilter *filter,
     }
   else
     {
-#ifdef VERBOSE
-      g_print ("removing the node...\n");
-#endif
-
       /* remove the node */
       for (i = 0; i < level->array->len; i++)
         if (elt->offset == g_array_index (level->array, FilterElt, i).offset)
@@ -866,10 +835,6 @@ emit_has_child_toggled:
 
       ppath = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &piter);
 
-#ifdef VERBOSE
-      g_print ("emitting has_child_toggled (by _filter_remove)\n");
-#endif
-
       gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (filter),
 					    ppath, &piter);
       gtk_tree_path_free (ppath);
@@ -884,17 +849,8 @@ egg_tree_model_filter_update_childs (EggTreeModelFilter *filter,
   GtkTreeIter c_iter;
   GtkTreeIter iter;
 
-#ifdef VERBOSE
-  g_print ("~~ a node came back, search childs\n");
-#endif
-
   if (!elt->visible)
-    {
-#ifdef VERBOSE
-      g_print (" + given elt not visible -- bailing out\n");
-#endif
-      return;
-    }
+    return;
 
   iter.stamp = filter->stamp;
   iter.user_data = level;
@@ -962,8 +918,11 @@ egg_tree_model_filter_row_changed (GtkTreeModel *c_model,
        * here, not sure.
        */
       if (root)
-        for (i = 0; i < root->array->len; i++)
-	  g_array_index (root->array, FilterElt, i).visible = FALSE;
+        {
+          for (i = 0; i < root->array->len; i++)
+	    g_array_index (root->array, FilterElt, i).visible = FALSE;
+	  filter->root_level_visible = 0;
+	}
     }
 
   path = egg_real_tree_model_filter_convert_child_path_to_path (filter,
@@ -982,22 +941,22 @@ egg_tree_model_filter_row_changed (GtkTreeModel *c_model,
 
   if (elt->visible == TRUE && new == FALSE)
     {
-#ifdef VERBOSE
-      g_print ("visible to false -> delete row\n");
-#endif
       egg_tree_model_filter_remove_node (filter, &iter, TRUE);
+
+      if (!level->parent_level)
+	filter->root_level_visible--;
     }
   else if (elt->visible == FALSE && new == TRUE)
     {
       GtkTreeIter childs;
 
-#ifdef VERBOSE
-      g_print ("visible to true -> insert row\n");
-#endif
-
       elt->visible = TRUE;
 
       egg_tree_model_filter_increment_stamp (filter);
+
+      if (!level->parent_level)
+	filter->root_level_visible++;
+
       /* update stamp */
       gtk_tree_model_get_iter (GTK_TREE_MODEL (filter), &iter, path);
       gtk_tree_model_row_inserted (GTK_TREE_MODEL (filter), path, &iter);
@@ -1007,18 +966,11 @@ egg_tree_model_filter_row_changed (GtkTreeModel *c_model,
     }
   else if (elt->visible == FALSE && new == FALSE)
     {
-#ifdef VERBOSE
-      g_print ("remove node in silence\n");
-#endif
       egg_tree_model_filter_remove_node (filter, &iter, FALSE);
     }
   else
     {
       GtkTreeIter childs;
-
-#ifdef VERBOSE
-      g_print ("no change in visibility -- pass row_changed\n");
-#endif
 
       gtk_tree_model_row_changed (GTK_TREE_MODEL (filter), path, &iter);
 
@@ -1169,6 +1121,17 @@ egg_tree_model_filter_row_inserted (GtkTreeModel *c_model,
   /* let's try to insert the value */
   offset = gtk_tree_path_get_indices (real_path)[gtk_tree_path_get_depth (real_path) - 1];
 
+  /* update the offsets, yes if we didn't insert the node above, there will
+   * be a gap here. This will be filled with the node (via fetch_child) when
+   * it becomes visible
+   */
+  for (i = 0; i < level->array->len; i++)
+    {
+      FilterElt *e = &g_array_index (level->array, FilterElt, i);
+      if ((e->offset >= offset))
+	e->offset++;
+    }
+
   /* only insert when visible */
   if (egg_tree_model_filter_visible (filter, &real_c_iter))
     {
@@ -1176,6 +1139,7 @@ egg_tree_model_filter_row_inserted (GtkTreeModel *c_model,
 
       if (EGG_TREE_MODEL_FILTER_CACHE_CHILD_ITERS (filter))
 	felt.iter = real_c_iter;
+
       felt.offset = offset;
       felt.zero_ref_count = 0;
       felt.ref_count = 0;
@@ -1188,19 +1152,17 @@ egg_tree_model_filter_row_inserted (GtkTreeModel *c_model,
 
       g_array_insert_val (level->array, i, felt);
       index = i;
+
+      if (!level->parent_level)
+	filter->root_level_visible++;
     }
 
-  /* update the offsets, yes if we didn't insert the node above, there will
-   * be a gap here. This will be filled with the node (via fetch_child) when
-   * it becomes visible
-   */
+  /* another iteration to update the references of childs to parents. */
   for (i = 0; i < level->array->len; i++)
     {
       FilterElt *e = &g_array_index (level->array, FilterElt, i);
-      if ((e->offset >= offset) && i != index)
-	e->offset++;
       if (e->children)
-	e->children->parent_elt = e;
+        e->children->parent_elt = e;
     }
 
   /* don't emit the signal if we aren't visible */
@@ -1222,10 +1184,6 @@ done_and_emit:
 
   gtk_tree_model_get_iter (GTK_TREE_MODEL (data), &iter, path);
   gtk_tree_model_row_inserted (GTK_TREE_MODEL (data), path, &iter);
-
-#ifdef VERBOSE
-  g_print ("inserted row with offset %d\n", index);
-#endif
 
 done:
   if (free_c_path)
@@ -1426,6 +1384,9 @@ egg_tree_model_filter_row_deleted (GtkTreeModel *c_model,
   elt = FILTER_ELT (iter.user_data2);
   offset = elt->offset;
 
+  if (!level->parent_level && elt->visible)
+    filter->root_level_visible--;
+
   if (emit_signal)
     {
       if (level->ref_count == 0 && level != filter->root)
@@ -1495,10 +1456,6 @@ egg_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
   GArray *new_array;
 
   g_return_if_fail (new_order != NULL);
-
-#ifdef VERBOSE
-  g_print ("filter: reordering\n");
-#endif
 
   if (c_path == NULL || gtk_tree_path_get_indices (c_path) == NULL)
     {
@@ -1884,6 +1841,10 @@ egg_tree_model_filter_iter_children (GtkTreeModel *model,
       if (FILTER_ELT (parent->user_data2)->children == NULL)
         return FALSE;
 
+      /* empty array? */
+      if (FILTER_ELT (parent->user_data2)->children->array->len <= 0)
+	return FALSE;
+
       iter->stamp = filter->stamp;
       iter->user_data = FILTER_ELT (parent->user_data2)->children;
       iter->user_data2 = FILTER_LEVEL (iter->user_data)->array->data;
@@ -1917,6 +1878,9 @@ egg_tree_model_filter_iter_has_child (GtkTreeModel *model,
     egg_tree_model_filter_build_level (filter, FILTER_LEVEL (iter->user_data),
                                        elt);
 
+  /* FIXME: we should prolly count the visible nodes here, just like in
+   * _iter_n_children.
+   */
   if (elt->children && elt->children->array->len > 0)
     return TRUE;
 
@@ -1938,22 +1902,11 @@ egg_tree_model_filter_iter_n_children (GtkTreeModel *model,
 
   if (!iter)
     {
-      int i = 0;
-      int count = 0;
-      GArray *a;
-
       if (!filter->root)
         egg_tree_model_filter_build_level (filter, NULL, NULL);
 
-      a = FILTER_LEVEL (filter->root)->array;
-
       /* count visible nodes */
-
-      for (i = 0; i < a->len; i++)
-	if (g_array_index (a, FilterElt, i).visible)
-	  count++;
-
-      return count;
+      return filter->root_level_visible;
     }
 
   elt = FILTER_ELT (iter->user_data2);
@@ -1972,7 +1925,6 @@ egg_tree_model_filter_iter_n_children (GtkTreeModel *model,
       GArray *a = elt->children->array;
 
       /* count visible nodes */
-
       for (i = 0; i < a->len; i++)
 	if (g_array_index (a, FilterElt, i).visible)
 	  count++;
@@ -2085,13 +2037,6 @@ egg_tree_model_filter_ref_node (GtkTreeModel *model,
       while (parent_level);
       filter->zero_ref_count--;
     }
-
-#ifdef VERBOSE
-  g_print ("reffed %p\n", iter->user_data2);
-  g_print ("zero ref count is now %d\n", filter->zero_ref_count);
-  if (filter->zero_ref_count < 0)
-    g_warning ("zero_ref_count < 0.");
-#endif
 }
 
 static void
@@ -2143,11 +2088,6 @@ egg_tree_model_filter_real_unref_node (GtkTreeModel *model,
         }
       filter->zero_ref_count++;
     }
-
-#ifdef VERBOSE
-  g_print ("unreffed %p\n", iter->user_data2);
-  g_print ("zero ref count is now %d\n", filter->zero_ref_count);
-#endif
 }
 
 /* bits and pieces */
@@ -2225,6 +2165,16 @@ egg_tree_model_filter_set_root (EggTreeModelFilter *filter,
 
 /* public API */
 
+/**
+ * egg_tree_model_filter_new:
+ * @child_model: A #GtkTreeModel.
+ * @root: A #GtkTreePath or %NULL.
+ *
+ * Creates a new #GtkTreeModel, with @child_model as the child_model
+ * and @root as the virtual root.
+ *
+ * Return value: A new #GtkTreeModel.
+ */
 GtkTreeModel *
 egg_tree_model_filter_new (GtkTreeModel *child_model,
                            GtkTreePath  *root)
@@ -2242,6 +2192,14 @@ egg_tree_model_filter_new (GtkTreeModel *child_model,
   return retval;
 }
 
+/**
+ * egg_tree_model_filter_get_model:
+ * @filter: A #EggTreeModelFilter.
+ *
+ * Returns a pointer to the child model of @filter.
+ *
+ * Return value: A pointer to a #GtkTreeModel.
+ */
 GtkTreeModel *
 egg_tree_model_filter_get_model (EggTreeModelFilter *filter)
 {
@@ -2250,6 +2208,17 @@ egg_tree_model_filter_get_model (EggTreeModelFilter *filter)
   return filter->child_model;
 }
 
+/**
+ * egg_tree_model_filter_set_visible_func:
+ * @filter: A #EggTreeModelFilter.
+ * @func: A #EggTreeModelFilterVisibleFunc, the visible function.
+ * @data: User data to pass to the visible function, or %NULL.
+ * @destroy: Destroy notifier of @data, or %NULL.
+ *
+ * Sets the visible function used when filtering the @filter to be @func. The
+ * function should return %TRUE if the given row should be visible and
+ * %FALSE otherwise.
+ */
 void
 egg_tree_model_filter_set_visible_func (EggTreeModelFilter            *filter,
                                         EggTreeModelFilterVisibleFunc  func,
@@ -2275,6 +2244,18 @@ egg_tree_model_filter_set_visible_func (EggTreeModelFilter            *filter,
   filter->visible_method_set = TRUE;
 }
 
+/**
+ * egg_tree_model_filter_set_modify_func:
+ * @filter: A #EggTreeModelFilter.
+ * @n_columns: The number of columns in the filter model.
+ * @types: The #GType<!-- -->s of the columns.
+ * @func: A #EggTreeModelFilterModifyFunc, or %NULL.
+ * @data: User data to pass to the modify function, or %NULL.
+ * @destroy: Destroy notifier of @data, or %NULL.
+ *
+ * Sets the @filter to have @n_columns columns with @types. If @func
+ * is not %NULL, it will set @func to be the modify function of @filter.
+ */
 void
 egg_tree_model_filter_set_modify_func (EggTreeModelFilter           *filter,
                                        gint                          n_columns,
@@ -2305,6 +2286,16 @@ egg_tree_model_filter_set_modify_func (EggTreeModelFilter           *filter,
   filter->modify_func_set = TRUE;
 }
 
+/**
+ * egg_tree_model_filter_set_visible_column:
+ * @filter: A #EggTreeModelFilter.
+ * @column: A #gint which is the column containing the visible information.
+ *
+ * Sets @column of the child_model to be the column where @filter should
+ * look for visibility information. @columns should be a column of type
+ * %G_TYPE_BOOLEAN, where %TRUE means that a row is visible, and %FALSE
+ * if not.
+ */
 void
 egg_tree_model_filter_set_visible_column (EggTreeModelFilter *filter,
                                           gint column)
@@ -2319,6 +2310,16 @@ egg_tree_model_filter_set_visible_column (EggTreeModelFilter *filter,
 }
 
 /* conversion */
+
+/**
+ * egg_tree_model_filter_convert_child_iter_to_iter:
+ * @filter: A #EggTreeModelFilter.
+ * @filter_iter: An uninitialized #GtkTreeIter.
+ * @child_iter: A valid #GtkTreeIter pointing to a row on the child model.
+ *
+ * Sets @filter_iter to point to the row in @filter that corresponds to the
+ * row pointed at by @child_iter.
+ */
 void
 egg_tree_model_filter_convert_child_iter_to_iter (EggTreeModelFilter *filter,
                                                   GtkTreeIter        *filter_iter,
@@ -2345,6 +2346,14 @@ egg_tree_model_filter_convert_child_iter_to_iter (EggTreeModelFilter *filter,
   gtk_tree_path_free (path);
 }
 
+/**
+ * egg_tree_model_filter_convert_iter_to_child_iter:
+ * @filter: A #EggTreeModelFilter.
+ * @child_iter: An uninitialized #GtkTreeIter.
+ * @filter_iter: A valid #GtkTreeIter pointing to a row on @filter.
+ *
+ * Sets @child_iter to point to the row pointed to by @filter_iter.
+ */
 void
 egg_tree_model_filter_convert_iter_to_child_iter (EggTreeModelFilter *filter,
                                                   GtkTreeIter        *child_iter,
@@ -2479,6 +2488,18 @@ egg_real_tree_model_filter_convert_child_path_to_path (EggTreeModelFilter *filte
   return retval;
 }
 
+/**
+ * egg_tree_model_filter_convert_child_path_to_path:
+ * @filter: A #EggTreeModelFilter.
+ * @child_path: A #GtkTreePath to convert.
+ *
+ * Converts @child_path to a path relative to @filter. That is, @child_path
+ * points to a path in the child model. The rerturned path will point to the
+ * same row in the filtered model. If @child_path isn't a valid path on the
+ * child model, then %NULL is returned.
+ *
+ * Return value: A newly allocated #GtkTreePath, or %NULL.
+ */
 GtkTreePath *
 egg_tree_model_filter_convert_child_path_to_path (EggTreeModelFilter *filter,
                                                   GtkTreePath        *child_path)
@@ -2490,6 +2511,18 @@ egg_tree_model_filter_convert_child_path_to_path (EggTreeModelFilter *filter,
                                                                 TRUE);
 }
 
+/**
+ * egg_tree_model_filter_convert_path_to_child_path:
+ * @filter: A #EggTreeModelFilter.
+ * @filter_path: A #GtkTreePath to convert.
+ *
+ * Converts @filter_path to a path on the child model of @filter. That is,
+ * @filter_path points to a location in @filter. The returned path will
+ * point to the same location in the model not being filtered. If @filter_path
+ * does not point to a location in the child model, %NULL is returned.
+ *
+ * Return value: A newly allocated #GtkTreePath, or %NULL.
+ */
 GtkTreePath *
 egg_tree_model_filter_convert_path_to_child_path (EggTreeModelFilter *filter,
                                                   GtkTreePath        *filter_path)
@@ -2549,6 +2582,49 @@ egg_tree_model_filter_convert_path_to_child_path (EggTreeModelFilter *filter,
   return retval;
 }
 
+static gboolean
+egg_tree_model_filter_refilter_helper (GtkTreeModel *model,
+                                       GtkTreePath  *path,
+                                       GtkTreeIter  *iter,
+                                       gpointer      data)
+{
+  gtk_tree_model_row_changed (model, path, iter);
+
+  return FALSE;
+}
+
+/**
+ * egg_tree_model_filter_refilter:
+ * @filter: A #EggTreeModelFilter.
+ *
+ * Emits ::row_changed for each row in the child model, which causes
+ * the filter to re-evaluate whether a row is visible or not.
+ */
+void
+egg_tree_model_filter_refilter (EggTreeModelFilter *filter)
+{
+  g_return_if_fail (EGG_IS_TREE_MODEL_FILTER (filter));
+
+  if (!filter->root)
+    return;
+
+  /* S L O W */
+  gtk_tree_model_foreach (filter->child_model,
+                          egg_tree_model_filter_refilter_helper,
+			  filter);
+}
+
+/**
+ * egg_tree_model_filter_clear_cache:
+ * @filter: A #EggTreeModelFilter.
+ *
+ * This function should almost never be called. It clears the @filter
+ * of any cached iterators that haven't been reffed with
+ * gtk_tree_model_ref_node(). This might be useful if the child model
+ * being filtered is static (and doesn't change often) and there has been
+ * a lot of unreffed access to nodes. As a side effect of this function,
+ * all unreffed itters will be invalid.
+ */
 void
 egg_tree_model_filter_clear_cache (EggTreeModelFilter *filter)
 {

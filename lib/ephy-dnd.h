@@ -43,7 +43,6 @@ typedef void (* EphyDragEachSelectedItemIterator)   (EphyDragEachSelectedItemDat
 gboolean ephy_dnd_drag_data_get			(GtkWidget *widget,
 						 GdkDragContext *context,
 						 GtkSelectionData *selection_data,
-						 guint info,
 						 guint32 time,
 						 gpointer container_context,
 						 EphyDragEachSelectedItemIterator each_selected_item_iterator);

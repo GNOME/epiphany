@@ -106,7 +106,7 @@ favicon_drag_data_get_cb (GtkWidget *widget,
         g_return_if_fail (context != NULL);
 
         ephy_dnd_drag_data_get (widget, context, selection_data,
-                info, time, window, each_url_get_data_binder);
+                time, window, each_url_get_data_binder);
 }
 
 static GtkWidget *

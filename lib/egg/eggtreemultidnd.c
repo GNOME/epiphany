@@ -22,7 +22,6 @@
 #include <gtk/gtksignal.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkmain.h>
-#include <gtk/gtkstock.h>
 #include "eggtreemultidnd.h"
 
 #define EGG_TREE_MULTI_DND_STRING "EggTreeMultiDndString"
@@ -150,7 +149,6 @@ egg_tree_multi_drag_source_drag_data_delete (EggTreeMultiDragSource *drag_source
 gboolean
 egg_tree_multi_drag_source_drag_data_get    (EggTreeMultiDragSource *drag_source,
 					     GList                  *path_list,
-					     guint		     info,
 					     GtkSelectionData  *selection_data)
 {
   EggTreeMultiDragSourceIface *iface = EGG_TREE_MULTI_DRAG_SOURCE_GET_IFACE (drag_source);
@@ -160,7 +158,7 @@ egg_tree_multi_drag_source_drag_data_get    (EggTreeMultiDragSource *drag_source
   g_return_val_if_fail (path_list != NULL, FALSE);
   g_return_val_if_fail (selection_data != NULL, FALSE);
 
-  return (* iface->drag_data_get) (drag_source, path_list, info, selection_data);
+  return (* iface->drag_data_get) (drag_source, path_list, selection_data);
 }
 
 static void
@@ -281,7 +279,6 @@ egg_tree_multi_drag_drag_data_get (GtkWidget        *widget,
     {
       egg_tree_multi_drag_source_drag_data_get (EGG_TREE_MULTI_DRAG_SOURCE (model),
 						path_list,
-						info,
 						selection_data);
     }
 }
@@ -311,30 +308,23 @@ egg_tree_multi_drag_motion_event (GtkWidget      *widget,
 
       if (di == NULL)
 	return FALSE;
-
+      
       selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (widget));
       stop_drag_check (widget);
       gtk_tree_selection_selected_foreach (selection, selection_foreach, &path_list);
       path_list = g_list_reverse (path_list);
       model = gtk_tree_view_get_model (GTK_TREE_VIEW (widget));
-
       if (egg_tree_multi_drag_source_row_draggable (EGG_TREE_MULTI_DRAG_SOURCE (model), path_list))
 	{
+
 	  context = gtk_drag_begin (widget,
 				    di->source_target_list,
 				    di->source_actions,
 				    priv_data->pressed_button,
 				    (GdkEvent*)event);
 	  set_context_data (context, path_list);
+	  gtk_drag_set_icon_default (context);
 
-	  if (g_list_length (path_list) > 1)
-	  {
-	    gtk_drag_set_icon_stock (context, GTK_STOCK_DND_MULTIPLE, -2, -2);
-	  }
-	  else
-	  {
-	    gtk_drag_set_icon_stock (context, GTK_STOCK_DND, -2, -2);
-	  }
 	}
       else
 	{
@@ -357,9 +347,6 @@ egg_tree_multi_drag_button_press_event (GtkWidget      *widget,
   GtkTreeSelection *selection;
   EggTreeMultiDndData *priv_data;
 
-  if (event->button == 3)
-    return FALSE;
-  
   tree_view = GTK_TREE_VIEW (widget);
   priv_data = g_object_get_data (G_OBJECT (tree_view), EGG_TREE_MULTI_DND_STRING);
   if (priv_data == NULL)

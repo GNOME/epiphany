@@ -30,6 +30,9 @@ for FILE in $EGGFILES; do
       if test -e $EGGDIR/util/$FILE ; then
           SRCFILE=$EGGDIR/util/$FILE
       fi
+      if test -e $EGGDIR/treeviewutils/$FILE ; then
+          SRCFILE=$EGGDIR/treeviewutils/$FILE
+      fi
   fi
   if cmp -s $SRCFILE $FILE; then
      echo "File $FILE is unchanged"

@@ -13,10 +13,6 @@ INCLUDES = \
 noinst_LTLIBRARIES = libephywidgets.la
 
 libephywidgets_la_SOURCES = \
-	eggtreemodelfilter.c			\
-	eggtreemodelfilter.h			\
-	eggtreemultidnd.c			\
-	eggtreemultidnd.h			\
 	ephy-arrow-toolbutton.c			\
 	ephy-arrow-toolbutton.h			\
 	ephy-autocompletion-window.c		\
