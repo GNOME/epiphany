@@ -282,7 +282,7 @@ ephy_encoding_menu_rebuild (EphyEncodingMenu *wrhm)
 	ephy_embed_single_get_language_groups (single, &groups);
 
 	xml = g_string_new (NULL);
-	g_string_append (xml, "<ui><menubar><menu name=\"ViewMenu\">"
+	g_string_append (xml, "<ui><menubar><menu name=\"ViewMenu\" action=\"View\">"
 			      "<placeholder name=\"ViewEncodingsPlaceholder\">"
 			      "<menu name=\"ViewEncodingMenu\" action=\"ViewEncoding\">");
 
