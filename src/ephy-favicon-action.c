@@ -80,28 +80,6 @@ ephy_favicon_action_get_type (void)
 	return type;
 }
 
-static GtkWidget *
-create_tool_item (EggAction *action)
-{
-	GtkWidget *image;
-	GtkWidget *ebox;
-	GtkWidget *item;
-
-	item = GTK_WIDGET (egg_tool_item_new ());
-
-        ebox = gtk_event_box_new ();
-	image = gtk_image_new ();
-	gtk_container_add (GTK_CONTAINER (ebox), image);
-	gtk_container_set_border_width (GTK_CONTAINER (ebox), 2);
-	gtk_container_add (GTK_CONTAINER (item), ebox);
-	gtk_widget_show (image);
-	gtk_widget_show (ebox);
-
-	g_object_set_data (G_OBJECT (item), "image", image);
-
-	return item;
-}
-
 static void
 each_url_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 			  gpointer iterator_context, gpointer data)
@@ -129,6 +107,38 @@ favicon_drag_data_get_cb (GtkWidget *widget,
 
         ephy_dnd_drag_data_get (widget, context, selection_data,
                 info, time, window, each_url_get_data_binder);
+}
+
+static GtkWidget *
+create_tool_item (EggAction *action)
+{
+	GtkWidget *image;
+	GtkWidget *ebox;
+	GtkWidget *item;
+
+	item = GTK_WIDGET (egg_tool_item_new ());
+
+	ebox = gtk_event_box_new ();
+	image = gtk_image_new ();
+	gtk_container_add (GTK_CONTAINER (ebox), image);
+	gtk_container_set_border_width (GTK_CONTAINER (ebox), 2);
+	gtk_container_add (GTK_CONTAINER (item), ebox);
+	gtk_widget_show (image);
+	gtk_widget_show (ebox);
+
+	g_object_set_data (G_OBJECT (item), "image", image);
+
+	gtk_drag_source_set (ebox,
+                             GDK_BUTTON1_MASK,
+                             url_drag_types,
+                             n_url_drag_types,
+                             GDK_ACTION_COPY);
+	g_signal_connect (ebox,
+			  "drag_data_get",
+			  G_CALLBACK (favicon_drag_data_get_cb),
+			  EPHY_FAVICON_ACTION (action)->priv->window);
+
+	return item;
 }
 
 static void
@@ -164,16 +174,7 @@ ephy_favicon_action_sync_icon (EggAction *action, GParamSpec *pspec,
 static void
 connect_proxy (EggAction *action, GtkWidget *proxy)
 {
-	gtk_drag_source_set (proxy,
-                             GDK_BUTTON1_MASK,
-                             url_drag_types,
-                             n_url_drag_types,
-                             GDK_ACTION_COPY);
 	ephy_favicon_action_sync_icon (action, NULL, proxy);
-	g_signal_connect (proxy,
-			  "drag_data_get",
-			  G_CALLBACK (favicon_drag_data_get_cb),
-			  EPHY_FAVICON_ACTION (action)->priv->window);
 	g_signal_connect_object (action, "notify::icon",
 				 G_CALLBACK (ephy_favicon_action_sync_icon),
 				 proxy, 0);

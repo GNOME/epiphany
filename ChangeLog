@@ -1,3 +1,21 @@
+2003-04-05  Christian Persch <chpe@stud.uni-saarland.de>
+
+	* src/ephy-favicon-action.c: (create_tool_item), (connect_proxy):
+
+	Set drag source on the event box, to avoid conflicts with toolbars
+	drag and drop.
+
+2003-04-05  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/egg/egg-editable-toolbar.c:
+	* lib/egg/egg-editable-toolbar.h:
+
+	Update from egg.
+
+	* src/toolbar.c: (toolbar_init):
+
+	Use the new api to add drag types. Bookmarks dnd working again.
+
 2003-04-04  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* configure.in:

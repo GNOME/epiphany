@@ -21,16 +21,11 @@
 #include "eggtoolitem.h"
 #include "eggtoolbar.h"
 #include "eggseparatortoolitem.h"
+#include "eggintl.h"
 
 #include <string.h>
 
-#ifndef _
-#  define _(s) (s)
-#endif
-
-#ifndef N_
-#  define N_(s) (s)
-#endif
+#define EGG_TOOLBAR_ITEM_TYPE "application/x-toolbar-item"
 
 enum
 {
@@ -38,12 +33,13 @@ enum
 };
 
 static GtkTargetEntry dest_drag_types[] = {
-  {"application/x-toolbar-item", 0, X_TOOLBAR_ITEM},
+  {EGG_TOOLBAR_ITEM_TYPE, 0, X_TOOLBAR_ITEM},
 };
+
 static int n_dest_drag_types = G_N_ELEMENTS (dest_drag_types);
 
 static GtkTargetEntry source_drag_types[] = {
-  {"application/x-toolbar-item", 0, X_TOOLBAR_ITEM},
+  {EGG_TOOLBAR_ITEM_TYPE, 0, X_TOOLBAR_ITEM},
 };
 
 static int n_source_drag_types = G_N_ELEMENTS (source_drag_types);
@@ -109,6 +105,8 @@ struct EggEditableToolbarPrivate
   EggActionGroup *popup_action_group;
 
   GList *actions_list;
+
+  GList *drag_types;
 };
 
 typedef struct
@@ -245,6 +243,8 @@ drag_data_received_cb (GtkWidget          *widget,
   const char *type = NULL;
   EggAction *action = NULL;
   int pos;
+  GdkAtom target;
+  GList *l;
 
   g_return_if_fail (IS_EGG_EDITABLE_TOOLBAR (etoolbar));
 
@@ -256,9 +256,19 @@ drag_data_received_cb (GtkWidget          *widget,
   /* HACK placeholder are implemented as separators */
   pos = pos / 3 + 1;
 
-  /* FIXME custom dnd types */
+  target = gtk_drag_dest_find_target (widget, context, NULL);
 
-  if (type)
+  for (l = etoolbar->priv->drag_types; l != NULL; l = l->next)
+    {
+      char *drag_type = (char *)l->data;
+
+      if (gdk_atom_intern (drag_type, FALSE) == target)
+        {
+          type = drag_type;
+        }
+    }
+
+  if (strcmp (type, EGG_TOOLBAR_ITEM_TYPE) != 0)
     {
       char *name;
 
@@ -461,6 +471,8 @@ disconnect_item_drag_source (EggToolbarsItem    *item,
 
       egg_tool_item_set_use_drag_window (EGG_TOOL_ITEM (toolitem), FALSE);
 
+      gtk_drag_source_unset (toolitem);
+
       g_signal_handlers_disconnect_by_func (toolitem,
 					    G_CALLBACK (drag_data_get_cb),
 					    etoolbar);
@@ -543,6 +555,25 @@ popup_toolbar_context_menu (EggToolbar      *toolbar,
 		  gtk_get_current_event_time ());
 }
 
+static GtkTargetList *
+get_dest_targets (EggEditableToolbar *etoolbar)
+{
+  GList *l;
+  GtkTargetList *targets;
+  int i;
+
+  targets = gtk_target_list_new (NULL, 0);
+
+  for (l = etoolbar->priv->drag_types; l != NULL; l = l->next)
+    {
+      char *type = (char *)l->data;
+      gtk_target_list_add (targets, gdk_atom_intern (type, FALSE), 0, i);
+      i++;
+    }
+
+  return targets;
+}
+
 static void
 setup_toolbar (EggToolbarsToolbar *toolbar,
 	       EggEditableToolbar *etoolbar)
@@ -559,11 +590,16 @@ setup_toolbar (EggToolbarsToolbar *toolbar,
 
   if (!g_object_get_data (G_OBJECT (widget), "drag_dest_set"))
     {
+      GtkTargetList *targets;
+
       g_object_set_data (G_OBJECT (widget), "drag_dest_set",
 			 GINT_TO_POINTER (TRUE));
       gtk_drag_dest_set (widget, GTK_DEST_DEFAULT_ALL,
-			 dest_drag_types, n_dest_drag_types,
+			 NULL, 0,
 			 GDK_ACTION_MOVE | GDK_ACTION_COPY);
+      targets = get_dest_targets (etoolbar);
+      gtk_drag_dest_set_target_list (widget, targets);
+      gtk_target_list_unref (targets);
       g_signal_connect (widget, "drag_data_received",
 			G_CALLBACK (drag_data_received_cb), etoolbar);
     }
@@ -789,6 +825,9 @@ egg_editable_toolbar_init (EggEditableToolbar *t)
   t->priv->editor_sheet_dirty = FALSE;
   t->priv->edit_mode = FALSE;
   t->priv->actions_list = NULL;
+  t->priv->drag_types = NULL;
+
+  egg_editable_toolbar_add_drag_type (t, EGG_TOOLBAR_ITEM_TYPE);
 
   for (i = 0; i < egg_toolbar_popups_n_entries; i++)
     {
@@ -822,6 +861,12 @@ egg_editable_toolbar_finalize (GObject *object)
   if (t->priv->editor)
     {
       gtk_widget_destroy (t->priv->editor);
+    }
+
+  if (t->priv->drag_types)
+    {
+      g_list_foreach (t->priv->drag_types, (GFunc)g_free, NULL);
+      g_list_free (t->priv->drag_types);
     }
 
   g_object_unref (t->priv->popup_action_group);
@@ -1129,6 +1174,14 @@ egg_editable_toolbar_edit (EggEditableToolbar *etoolbar,
 
   setup_editor (etoolbar, window);
   show_editor (etoolbar);
+}
+
+void
+egg_editable_toolbar_add_drag_type (EggEditableToolbar *etoolbar,
+				    const char         *drag_type)
+{
+  etoolbar->priv->drag_types = g_list_append
+	(etoolbar->priv->drag_types, g_strdup (drag_type));
 }
 
 char *

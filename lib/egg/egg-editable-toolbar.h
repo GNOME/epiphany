@@ -67,6 +67,8 @@ char		   *egg_editable_toolbar_get_action_name (EggEditableToolbar *etoolbar,
 					                  const char         *data);
 EggAction	   *egg_editable_toolbar_get_action	 (EggEditableToolbar *etoolbar,
 							  const char         *name);
+void		    egg_editable_toolbar_add_drag_type   (EggEditableToolbar *etoolbar,
+							  const char         *drag_type);
 
 G_END_DECLS
 

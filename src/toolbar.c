@@ -405,6 +405,11 @@ toolbar_init (Toolbar *t)
 	t->priv->ui_merge = NULL;
 	t->priv->visibility = TRUE;
 
+	egg_editable_toolbar_add_drag_type (EGG_EDITABLE_TOOLBAR (t),
+					    EPHY_DND_TOPIC_TYPE);
+	egg_editable_toolbar_add_drag_type (EGG_EDITABLE_TOOLBAR (t),
+					    EPHY_DND_URL_TYPE);
+
 	if (group == NULL)
 	{
 		char *user;
