@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-08-16 19:26+0300\n"
-"PO-Revision-Date: 2003-08-16 15:32+0200\n"
+"POT-Creation-Date: 2003-09-03 21:45+0300\n"
+"PO-Revision-Date: 2003-08-31 14:44+0300\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@hut.fi>\n"
 "Language-Team: Gnome Finnish Translation Team <gnome-fi-laatu@lists."
 "sourceforge.net>\n"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: data/epiphany.schemas.in.h:29
 msgid "Preferred languages, two letter codes."
-msgstr "Suositut kielet, kaksikirjaimiset koodit."
+msgstr "Suositut kielet kaksikirjaimisina koodeina."
 
 #: data/epiphany.schemas.in.h:30
 msgid "Printer name"
@@ -280,11 +280,11 @@ msgstr "Näytä kirjanmerkkipalkki oletusarvoisesti."
 
 #: data/epiphany.schemas.in.h:42
 msgid "Show download details"
-msgstr "Näytä tallennuksen yksityiskohdat"
+msgstr "Näytä tallennustiedot"
 
 #: data/epiphany.schemas.in.h:43
 msgid "Show download details."
-msgstr "Näytä tallennuksen yksityiskohdat."
+msgstr "Näytä tallennustiedot."
 
 #: data/epiphany.schemas.in.h:44
 msgid "Show statusbar by default"
@@ -308,7 +308,7 @@ msgstr "Levyvälimuistin koko"
 
 #: data/epiphany.schemas.in.h:49
 msgid "Size of disk cache, in MB."
-msgstr "Välivaraston koko (Mt)."
+msgstr "Levyvälimuistin koko (Mt)."
 
 #: data/epiphany.schemas.in.h:50
 msgid "The currently selected fonts language"
@@ -484,7 +484,7 @@ msgstr "Tallennusten hallinta"
 
 #: data/glade/epiphany.glade.h:15
 msgid "Download _Details"
-msgstr "Tallennuksen _yksityiskohdat"
+msgstr "Tallennus_tiedot"
 
 #: data/glade/epiphany.glade.h:16 data/ui/nautilus-epiphany-view.xml.in.h:11
 #: src/ephy-window.c:686
@@ -694,7 +694,7 @@ msgstr "_Älä hyväksy koskaan"
 
 #: data/glade/prefs-dialog.glade.h:44
 msgid "_Proportional:"
-msgstr "E_pätasavälinen:"
+msgstr "E_pätasalevyinen:"
 
 #: data/glade/prefs-dialog.glade.h:45
 msgid "_Serif:"
@@ -1040,7 +1040,7 @@ msgstr "Koko"
 msgid "Remaining"
 msgstr "Jäljellä"
 
-#: embed/downloader-view.c:1016
+#: embed/downloader-view.c:1019
 msgid "Cancel all pending downloads?"
 msgstr "Peru kaikki odottavat tiedostojen lataukset?"
 
@@ -1062,9 +1062,9 @@ msgstr "Tiedosto ei tallentunut."
 
 #: embed/ephy-embed-utils.c:299
 msgid "No available applications to open the specified file."
-msgstr "Ei ole sovelluksia, joilla annettu tiedosto avautuisi."
+msgstr "Ei löydy sovellusta, jolla tämän tiedoston voi avata."
 
-#: embed/ephy-history.c:441 src/bookmarks/ephy-bookmarks.c:689
+#: embed/ephy-history.c:441 src/bookmarks/ephy-bookmarks.c:691
 msgid "All"
 msgstr "Kaikki"
 
@@ -1104,13 +1104,11 @@ msgstr "Annettu polku ei ole olemassa."
 
 #: embed/mozilla/FilePicker.cpp:375
 msgid "A file was selected when a folder was expected."
-msgstr ""
-"Tiedosto valittiin, vaikka valitun kohteen olisi pitänyt olla hakemisto."
+msgstr "Valitsit tiedoston, vaikka piti valita hakemisto."
 
 #: embed/mozilla/FilePicker.cpp:382
 msgid "A folder was selected when a file was expected."
-msgstr ""
-"Hakemisto valittiin, vaikka valitun kohteen olisi pitänyt olla tiedosto."
+msgstr "Valitsit hakemiston, vaikka piti valita tiedosto."
 
 #: embed/mozilla/mozilla-embed-single.cpp:75
 msgid "_Arabic"
@@ -1576,7 +1574,7 @@ msgstr "kyrillinen"
 
 #: lib/ephy-langs.c:32
 msgid "Devanagari"
-msgstr "Devanagari"
+msgstr "devanagari"
 
 #: lib/ephy-langs.c:33 src/prefs-dialog.c:113
 msgid "Greek"
@@ -1660,7 +1658,7 @@ msgstr "400%"
 
 #: lib/widgets/ephy-zoom-control.c:145
 msgid "_Zoom"
-msgstr "_Näyttösuhde"
+msgstr "_Mittakaava"
 
 #: src/bookmarks/ephy-bookmark-action.c:212
 #, c-format
@@ -1913,8 +1911,8 @@ msgid "Title"
 msgstr "Otsikko"
 
 #. This is the adjective, not the verb
-#: src/bookmarks/ephy-bookmarks-menu.c:269
-#: src/bookmarks/ephy-topic-action.c:209
+#: src/bookmarks/ephy-bookmarks-menu.c:280
+#: src/bookmarks/ephy-topic-action.c:222
 msgid "Empty"
 msgstr "Tyhjä"
 
@@ -1955,11 +1953,11 @@ msgstr "Matkat"
 msgid "Work"
 msgstr "Työ"
 
-#: src/bookmarks/ephy-bookmarks.c:724
+#: src/bookmarks/ephy-bookmarks.c:726
 msgid "Most Visited"
 msgstr "Eniten vierailtu"
 
-#: src/bookmarks/ephy-bookmarks.c:741
+#: src/bookmarks/ephy-bookmarks.c:743
 msgid "Not Categorized"
 msgstr "Luokittelematon"
 
@@ -2346,7 +2344,7 @@ msgstr "Selaa kokoruututilassa"
 
 #: src/ephy-window.c:147
 msgid "Zoom _In"
-msgstr "_Suurenna"
+msgstr "_Lähennä"
 
 #: src/ephy-window.c:148
 msgid "Increase the text size"
@@ -2354,7 +2352,7 @@ msgstr "Kasvata tekstin kokoa"
 
 #: src/ephy-window.c:150
 msgid "Zoom _Out"
-msgstr "_Pienennä"
+msgstr "L_oitonna"
 
 #: src/ephy-window.c:151
 msgid "Decrease the text size"
@@ -2567,11 +2565,11 @@ msgstr "Kopioi kuvan _osoite"
 msgid "Exit Fullscreen"
 msgstr "Poistu kokoruututilasta"
 
-#: src/ephy-window.c:678 src/window-commands.c:331
+#: src/ephy-window.c:678 src/window-commands.c:341
 msgid "Open"
 msgstr "Avaa"
 
-#: src/ephy-window.c:680 src/window-commands.c:372
+#: src/ephy-window.c:680 src/window-commands.c:382
 msgid "Save As"
 msgstr "Tallenna nimellä"
 
@@ -2953,7 +2951,7 @@ msgstr "Kirjoita avattava WWW-osoite tai tekstiä jota etsiä WWW:stä"
 
 #: src/toolbar.c:329
 msgid "Zoom"
-msgstr "Suurennos"
+msgstr "Mittakaava"
 
 #: src/toolbar.c:330
 msgid "Adjust the text size"
@@ -2967,30 +2965,30 @@ msgstr "Kuvake"
 msgid "Go to the address entered in the address entry"
 msgstr "Siirry osoitteeseen, joka on osoitekenttässä"
 
-#: src/window-commands.c:126
+#: src/window-commands.c:130
 msgid "Check this out!"
 msgstr "Katso tämä!"
 
-#: src/window-commands.c:285
+#: src/window-commands.c:295 src/ephy-toolbars-model.c:197
 msgid "Untitled"
 msgstr "Nimetön"
 
-#: src/window-commands.c:682
+#: src/window-commands.c:692
 msgid "Toolbar Editor"
 msgstr "Työkalupalkkimuokkain"
 
-#: src/window-commands.c:704
+#: src/window-commands.c:714
 msgid "_Add a New Toolbar"
 msgstr "_Lisää uusi työkalupalkki"
 
 #. Translator credits
-#: src/window-commands.c:754
+#: src/window-commands.c:764
 msgid "translator_credits"
 msgstr ""
 "Pauli Virtanen, 2003\n"
 "\n"
 "http://gnome-fi.sourceforge.net/"
 
-#: src/window-commands.c:782
+#: src/window-commands.c:792
 msgid "A GNOME browser based on Mozilla"
 msgstr "Mozillaan perustuva GNOMEn WWW-selain"
