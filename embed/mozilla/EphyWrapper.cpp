@@ -848,21 +848,23 @@ nsresult EphyWrapper::GetEncodingInfo (EphyEncodingInfo **infoptr)
 	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
 	info->prev_doc_encoding = g_strdup (enc.get());
 #else
-	result = mdv->GetDefaultCharacterSet (enc);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
-	info->default_encoding = g_strdup (NS_ConvertUCS2toUTF8(enc).get());
+	PRUnichar *str;
 
-	result = mdv->GetForceCharacterSet (enc);
+	result = mdv->GetDefaultCharacterSet (&str);
 	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
-	info->forced_encoding = g_strdup (NS_ConvertUCS2toUTF8(enc).get());
+	info->default_encoding = g_strdup (NS_ConvertUCS2toUTF8(str).get());
 
-	result = mdv->GetHintCharacterSet (enc);
+	result = mdv->GetForceCharacterSet (&str);
 	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
-	info->hint_encoding = g_strdup (NS_ConvertUCS2toUTF8(enc).get());
+	info->forced_encoding = g_strdup (NS_ConvertUCS2toUTF8(str).get());
 
-	result = mdv->GetPrevDocCharacterSet (enc);
+	result = mdv->GetHintCharacterSet (&str);
 	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
-	info->prev_doc__encoding = g_strdup (NS_ConvertUCS2toUTF8(enc).get());
+	info->hint_encoding = g_strdup (NS_ConvertUCS2toUTF8(str).get());
+
+	result = mdv->GetPrevDocCharacterSet (&str);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	info->prev_doc_encoding = g_strdup (NS_ConvertUCS2toUTF8(str).get());
 #endif
 
 	mdv->GetHintCharacterSetSource (&source);
