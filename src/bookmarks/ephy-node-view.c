@@ -642,7 +642,7 @@ ephy_node_view_add_icon_column (EphyNodeView *view,
 					     "pixbuf", column,
 					     NULL);
 	gtk_tree_view_column_set_sizing (gcolumn,
-					 GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+					 GTK_TREE_VIEW_COLUMN_GROW_ONLY);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (view),
 				     gcolumn);
 }
