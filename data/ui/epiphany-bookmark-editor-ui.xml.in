@@ -6,17 +6,19 @@
 	<separator name="FileSep1"/>
         <menuitem name="FileOpenInWindow" verb="OpenInWindow"/>
 	<menuitem name="FileOpenInTab" verb="OpenInTab"/>
-	<separator name="FileSep3"/>
+	<separator name="FileSep2"/>
+	<menuitem name="FileRename" verb="Rename"/>
+	<menuitem name="FileDelete" verb="Delete"/>
 	<menuitem name="FileProperties" verb="Properties"/>
+	<separator name="FileSep3"/>
 	<menuitem name="FileClose" verb="Close"/>
 </submenu>
 
 <submenu name="EditMenu" verb="Edit">
-	<menuitem name="EditRenameBookmark" verb="RenameBookmark"/>
-	<menuitem name="EditRenameTopic" verb="RenameTopic"/>
-	<separator name="FileSep1"/>
-	<menuitem name="FileRemoveBookmark" verb="RemoveBookmark"/>
-	<menuitem name="FileRemoveTopic" verb="RemoveTopic"/>
+	<menuitem name="EditCut" verb="Cut"/>
+	<menuitem name="EditCopy" verb="Copy"/>
+	<menuitem name="EditPaste" verb="Paste"/>
+	<menuitem name="EditSelectAll" verb="SelectAll"/>
 </submenu>
 
 </menu>
@@ -27,11 +29,16 @@
 	<menuitem name="OpenInWindowBMK" verb="OpenInWindow"/>
 	<menuitem name="OpenInTabBMK" verb="OpenInTab"/>
 	<separator name="BookmarksPopupSep1"/>
-	<menuitem name="RemoveBMK" verb="RemoveBookmark"/>
-	<menuitem name="RenameBMK" verb="RenameBookmark"/>
+	<menuitem name="RenameBMK" verb="Rename"/>
+	<menuitem name="DeleteBMK" verb="Delete"/>
 	<separator name="BookmarksPopupSep2"/>
 	<menuitem name="BMKProperties" verb="Properties"/>
 </popup>
-	
+
+<popup name="EphyBookmarkKeywordPopup" verb="FakeToplevel">
+	<menuitem name="RenameTPC" verb="Rename"/>
+	<menuitem name="DeleteTPC" verb="Delete"/>
+</popup>
+
 </popups>
 </Root>

@@ -23,7 +23,9 @@
 #include <gtk/gtkliststore.h>
 #include <gtk/gtkcellrenderertoggle.h>
 #include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtktreeselection.h>
 #include <gtk/gtktreeview.h>
+#include <gdk/gdkkeysyms.h>
 
 static void ephy_topics_selector_class_init (EphyTopicsSelectorClass *klass);
 static void ephy_topics_selector_init (EphyTopicsSelector *editor);
@@ -295,6 +297,39 @@ ephy_topics_selector_apply (EphyTopicsSelector *editor)
 	while (gtk_tree_model_iter_next (model, &iter));
 }
 
+static gboolean
+set_sort_column_id (GtkListStore *model)
+{
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
+					      COL_TOPIC,
+					      GTK_SORT_ASCENDING);
+	return FALSE;
+}
+
+static gboolean
+topic_clicked (GtkTreeView *tree_view, 
+		GdkEventButton *event,
+		EphyTopicsSelector *selector)
+{
+	GtkTreePath *path;
+
+	if (event->window != gtk_tree_view_get_bin_window (tree_view))
+		return FALSE;
+	
+	if (gtk_tree_view_get_path_at_pos (tree_view,
+					   (gint) event->x,
+					   (gint) event->y,
+					   &path, NULL,
+					   NULL, NULL))
+	{
+		gchar *path_str = gtk_tree_path_to_string (path);
+		topic_toggled (NULL, path_str, selector);
+		g_free(path_str);
+	}
+	
+	return FALSE;
+}
+
 static void
 ephy_topics_build_ui (EphyTopicsSelector *editor)
 {
@@ -308,13 +343,12 @@ ephy_topics_build_ui (EphyTopicsSelector *editor)
 
 	treeview = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (treeview), FALSE);
+	g_idle_add ((GSourceFunc) set_sort_column_id, model);
 	gtk_widget_show (treeview);
 	g_object_unref (model);
 
 	/* Has topic column */
 	renderer = gtk_cell_renderer_toggle_new ();
-	g_signal_connect (renderer, "toggled",
-                          G_CALLBACK (topic_toggled), editor);
 	column = gtk_tree_view_column_new_with_attributes
 		("", renderer, "active", COL_HAS_TOPIC, NULL);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
@@ -323,7 +357,9 @@ ephy_topics_build_ui (EphyTopicsSelector *editor)
 	column = gtk_tree_view_column_new_with_attributes
 		("Description", renderer, "text", COL_TOPIC, NULL);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
-
+	
+	g_signal_connect (G_OBJECT (treeview), "button_press_event",
+			  G_CALLBACK (topic_clicked), editor);
 	fill_model (editor);
 
 	gtk_container_add (GTK_CONTAINER (editor), treeview);

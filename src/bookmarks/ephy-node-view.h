@@ -74,6 +74,10 @@ void	      ephy_node_view_remove		      (EphyNodeView *view);
 
 GList        *ephy_node_view_get_selection            (EphyNodeView *view);
 
+void	      ephy_node_view_select_all		      (EphyNodeView *view);
+
+gboolean      ephy_node_view_has_focus		      (EphyNodeView *view);
+
 void	      ephy_node_view_set_browse_mode	      (EphyNodeView *view);
 
 void	      ephy_node_view_select_node              (EphyNodeView *view,

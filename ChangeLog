@@ -1,3 +1,22 @@
+2003-03-27  David Bordoley <bordoley@msu.edu>
+	
+	* data/ui/epiphany-bookmark-editor-ui.xml.in:
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_rename),
+	(cmd_delete), (cmd_cut), (cmd_copy), (cmd_paste),
+	(cmd_select_all), (keyword_node_key_pressed_cb),
+	(keyword_node_show_popup_cb), (ephy_bookmarks_editor_construct):
+	Reorganize the menus a bit. Unifiy topic/bookmarks 
+	rename/delete items. Add text editting menu items
+	to the edit menu. Add a topic context menu. 	
+
+	* src/bookmarks/ephy-node-view.[c-h]: (ephy_node_view_select_all),
+	(ephy_node_view_has_focus):
+	New functions.
+
+	* src/bookmarks/ephy-topics-selector.c: (set_sort_column_id),
+	(topic_clicked), (ephy_topics_build_ui):
+	Sort topics case insensitively. Add/remove topics using a single click.
+
 2003-03-26  Patanjali Somayaji <patanjali@codito.com>
 	
 	Added help support, help manual and scrollkeeper updates

@@ -22,6 +22,7 @@
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkcellrendererpixbuf.h>
+#include <gtk/gtkwindow.h>
 #include <libgnome/gnome-i18n.h>
 
 #include "eggtreemodelfilter.h"
@@ -658,6 +659,30 @@ ephy_node_view_get_selection (EphyNodeView *view)
 					     (void **) &list);
 
 	return list;
+}
+
+void
+ephy_node_view_select_all (EphyNodeView *view)
+{
+	GtkTreeSelection *sel = gtk_tree_view_get_selection (view->priv->treeview);
+	gtk_tree_selection_select_all (sel);
+}
+
+gboolean
+ephy_node_view_has_focus (EphyNodeView *view)
+{
+	GtkWidget *window;
+	GtkWidget *focused_widget;
+	
+	window = gtk_widget_get_toplevel (view->priv->treeview);
+	focused_widget = gtk_window_get_focus (GTK_WINDOW(window));
+	
+	if (view->priv->treeview  == focused_widget)
+	{
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 void
