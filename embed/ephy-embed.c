@@ -151,7 +151,7 @@ ephy_embed_base_init (gpointer g_class)
 		g_signal_new ("ge_context_menu",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyEmbedIface, dom_context_menu),
+			      G_STRUCT_OFFSET (EphyEmbedIface, context_menu),
 			      g_signal_accumulator_true_handled, NULL,
 			      ephy_marshal_BOOLEAN__OBJECT,
 			      G_TYPE_BOOLEAN,

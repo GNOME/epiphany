@@ -2430,20 +2430,6 @@ open_bookmark_cb (EphyBookmarksMenu *menu,
 }
 
 static void
-ensure_window_group (EphyWindow *window)
-{
-	GtkWindowGroup *group;
-
-	group = GTK_WINDOW (window)->group;
-	if (group == NULL)
-	{
-		group = gtk_window_group_new ();
-		gtk_window_group_add_window (group, GTK_WINDOW (window));
-		g_object_unref (group);
-	}
-}
-
-static void
 ephy_window_init (EphyWindow *window)
 {
 	EphyExtension *manager;
