@@ -756,12 +756,16 @@ set_pref_from_info_and_emit (PropertyInfo *info)
 static void
 togglebutton_clicked_cb (GtkWidget *widget, PropertyInfo *info)
 {
+	info->sane_state = TRUE;
+
 	set_pref_from_info_and_emit (info);
 }
 
 static void
 radiobutton_clicked_cb (GtkWidget *widget, PropertyInfo *info)
 {
+	info->sane_state = TRUE;
+
 	if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(widget)))
 	{
 		return;
@@ -795,6 +799,8 @@ spinbutton_timeout_cb (PropertyInfo *info)
 		 * changes made directly in the entry are accepted
 		 * and set in the pref. Otherwise the old value is used */
 		gtk_spin_button_update (GTK_SPIN_BUTTON (info->widget));
+
+		info->sane_state = TRUE;
 
 		set_pref_from_info_and_emit (info);
 
@@ -832,6 +838,8 @@ spinbutton_changed_cb (GtkWidget *widget, PropertyInfo *info)
 static void
 changed_cb (GtkWidget *widget, PropertyInfo *info)
 {
+	info->sane_state = TRUE;
+
 	set_pref_from_info_and_emit (info);
 }
 
