@@ -243,7 +243,7 @@ enum
 	MEMORY_CACHE_PROP
 };
 
-#define CONF_FONTS_FOR_LANGUAGE	"/apps/epiphany/dialogs/preferences_fonts_for_lang"
+#define CONF_FONTS_FOR_LANGUAGE	"/apps/epiphany/dialogs/preferences_font_language"
 
 static const
 EphyDialogProperty properties [] =
@@ -664,7 +664,8 @@ create_fonts_language_menu (PrefsDialog *dialog)
 	guint i;
 	guint n_fonts_languages;
 	const FontsLanguageInfo *fonts_language;
-	
+	char **lang_codes;
+
 	n_fonts_languages = ephy_langs_get_n_font_languages ();
 	fonts_language = ephy_langs_get_font_languages ();
 
@@ -699,9 +700,18 @@ create_fonts_language_menu (PrefsDialog *dialog)
 
 	gtk_option_menu_set_menu (GTK_OPTION_MENU(optionmenu), menu);
 
-	/* FIXME: find a way to set this to the user's current locale's lang */
-	gtk_option_menu_set_history (GTK_OPTION_MENU (optionmenu),
-				     dialog->priv->language);
+	lang_codes = g_new0 (char *, n_fonts_languages);
+	for (i = 0; i < n_fonts_languages; i++)
+	{
+		lang_codes[i] = fonts_language[i].code;
+	}
+	ephy_dialog_add_enum (EPHY_DIALOG (dialog), FONTS_LANGUAGE_PROP,
+			      n_fonts_languages, (const char **) lang_codes);
+	g_free (lang_codes);
+
+	dialog->priv->language =
+		gtk_option_menu_get_history (GTK_OPTION_MENU (optionmenu));
+
 	g_signal_connect (optionmenu, "changed",
 			  G_CALLBACK (fonts_language_optionmenu_changed_cb),
 			  dialog);
