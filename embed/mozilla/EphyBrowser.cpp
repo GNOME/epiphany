@@ -216,6 +216,7 @@ EphyPopupBlockEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 NS_IMETHODIMP
 EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 {
+#ifdef MOZ_NSIDOMNSEVENT_GETISTRUSTED
 	NS_ENSURE_TRUE (mOwner, NS_ERROR_FAILURE);
 
 	/* make sure the event is trusted */
@@ -251,6 +252,7 @@ EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 	{
 		g_signal_emit_by_name (mOwner, "ge-modal-alert-closed");
 	}
+#endif
 
 	return NS_OK;
 }
