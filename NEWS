@@ -1,4 +1,73 @@
 ===============
+Epiphany 1.1.11
+===============
+
+[ up to and including ChangeLog rev 1.1499 ]
+
+Code changes
+	* Change EphyTab to a GtkBin containing the MozillaEmbed widget
+	  (Christian)
+	* Backup bookmarks files before overwriting them when loading failed (Christian)
+	* Adapt to changed Mozilla API (1.7b) (Christian)
+
+Bugfixes
+	* Fix check if link can be opened in new tab (Marco)
+	* Unescape the suggested filename in the filechooser (Xan)
+	* Respect max-size property of EphyEmbedPersist (Marco)
+	* Don't show "about:blank" to the user (Marco)
+	* Replace entities in imported folder names from mozilla (Christian)
+	* Fix for gtk+ filechooser API change (Christian)
+	* Don't make windows larger than the screen (Marco)
+	* Fix check for firebird bookmarks directory (Xan)
+	* Fix toolbar dnd to the location entry (Marco)
+	* XBEL bookmarks importer fixes (Christian)
+	* Fix uncategorising a bookmark (Marco)
+	* Don't restore windows in reverse order (Marco)
+	* Fix filename decoding in Content-Disposition headers (Christian)
+	* Fix double-unref of failed/cancelled favicon downloads (Christian)
+	* Fix "Open" button label in content handler (Marco)
+	* Fix MozDownload lifecycle bug, was crashing on aborting downloads (Marco)
+	* Fix EphyDownload lifecycle interaction with MozDownload bug (Christian)
+	* Check for NULL subtree before trying to parse it on node db load (Christian)
+	* Activate the downloader tray icon with double-click not single-click (Marco)
+	* Ensure we always have a BookmarksBar in the toolbars model (Christian)
+	* Fix smart bookmark property update on bmk location change (Christian)
+	* Fix smart bookmark property sync on toolbar item (Christian)
+	* Don't show two resume dialogues, just raise the existing one (Marco)
+	* Don't remember filechooser size, fixes dialogue sizing in Save mode (Christian)
+	* Don't ask about unsubmitted changes when the embed is closed from js (Marco)
+	* Fix favicon updating in bookmarks menu and toolbar (Christian)
+	* Fix bookmarks re-categorising by dnd (Christian)
+	* Fix high CPU usage on download by lowering update interval (Christian)
+	* Fix "About" dialogue icon (Christian)
+	* Fix crash when closing a still-loading popup (Christian)
+	* Fix filename validation not to produce invalid unicode string (Christian)
+	* Don't assume Desktop location, check with gconf pref (Christian)
+	* Fix unsubmitted change check code not to return error for XUL documents (Christian)
+	* Fix user-changed accelerator persistence (Christian)
+	* Also pop up context menu from Menu key (Christian)
+
+Translations
+	* Mətin Əmirov (az)
+	* Ole Laursen (da)
+	* Κώστας Παπαδήμας (el)
+	* Priit Laes (et)
+	* Pauli Virtanen (fi)
+	* Christophe Merlet (fr)
+	* रविशंकर श्रीवास्तव (hi)
+	* Laszlo Dvornik (hu)
+	* Francesco Marletta (it)
+	* Changwoo Ryu (ko)
+	* Žygimantas Beručka (lt)
+	* Hasbullah Bin Pit (ms)
+	* Reinout van Schouwen (nl)
+	* Kjartan Maraas (no)
+	* Duarte Loreto (pt)
+	* Laurent Dhima (sq)
+	* Christian Rose (sv)
+
+
+===============
 Epiphany 1.1.10
 ===============
 
