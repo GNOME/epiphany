@@ -79,6 +79,8 @@
 	
 	<cmd name="GoGo" _label="_Go"
 	     _tip="Load the URL in the location entry"/>
+	
+	<cmd name="EPOpenLink" _label="Open"/>
 
 	<cmd name="EPOpenInNewWindow" _label="Open in New Window"/>
 	
@@ -375,22 +377,24 @@
 	
 	<popup name="EphyEmbedElementPopup">
 		<placeholder name="LinkItems">
-        		<menuitem name="EPOpenInNewWindow" 
+        		<menuitem name="EPOpenLink" 
 			 pixtype="stock" pixname="gtk-open"
 			 verb=""/>
 
+        		<menuitem name="EPOpenInNewWindow" verb=""/>
+
 			<menuitem name="EPOpenInNewTab" verb=""/>
-			
-			<menuitem name="EPCopyLinkLocation" 
-			 pixtype="stock" pixname="gtk-copy"	
-			 verb=""/>
-
+	
 			<menuitem name="EPDownloadLink" verb=""/>
-
+			
 			<menuitem name="EPAddBookmark" 
 			 pixtype="stock" pixname="gtk-add"
 			 verb=""/>
-		</placeholder>
+
+			<menuitem name="EPCopyLinkLocation" 
+			 pixtype="stock" pixname="gtk-copy"	
+			 verb=""/>
+			</placeholder>
 		<placeholder name="EmailLinkItems">
 			<menuitem name="EPCopyEmail" 
 			 pixtype="stock" pixname="gtk-copy"	

@@ -3,6 +3,9 @@ art_DATA = \
 	epiphany-unsecure.png	\
 	epiphany.png
 
+appicon_DATA = epiphany.png
+appicondir = $(datadir)/pixmaps
+
 artdir = $(pkgdatadir)/art
 
-EXTRA_DIST = $(art_DATA)
+EXTRA_DIST = $(appicon_DATA) $(art_DATA)

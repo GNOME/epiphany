@@ -797,7 +797,6 @@ window_cmd_set_charset (BonoboUIComponent *uic,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	g_print (data->encoding);
 	ephy_embed_set_charset (embed, data->encoding);
 }
 

@@ -65,6 +65,10 @@ embed_popup_copy_link_location_cmd (BonoboUIComponent *uic,
 				    EphyEmbedPopup *popup,
                                     const char* verbname);
 static void
+embed_popup_open_link_cmd (BonoboUIComponent *uic,
+			   EphyEmbedPopup *popup,
+                           const char* verbname);
+static void
 embed_popup_download_link_cmd (BonoboUIComponent *uic,
 			       EphyEmbedPopup *popup,
                                const char* verbname);
@@ -122,6 +126,7 @@ static GObjectClass *parent_class = NULL;
 BonoboUIVerb embed_popup_verbs [] = {
 	BONOBO_UI_VERB ("EPCopyLinkLocation", (BonoboUIVerbFn)embed_popup_copy_link_location_cmd),
 	BONOBO_UI_VERB ("EPDownloadLink", (BonoboUIVerbFn)embed_popup_download_link_cmd),
+	BONOBO_UI_VERB ("EPOpenLink", (BonoboUIVerbFn)embed_popup_open_link_cmd),
 	BONOBO_UI_VERB ("EPOpenImage", (BonoboUIVerbFn)embed_popup_open_image_cmd),
 	BONOBO_UI_VERB ("EPSaveImageAs", (BonoboUIVerbFn)embed_popup_save_image_as_cmd),
 	BONOBO_UI_VERB ("EPSetImageAsBackground", (BonoboUIVerbFn)embed_popup_set_image_as_background_cmd),
@@ -431,6 +436,22 @@ ephy_embed_popup_get_popup_path (EphyEmbedPopup *p)
 }
 
 /* commands */
+
+static void
+embed_popup_open_link_cmd (BonoboUIComponent *uic,
+			   EphyEmbedPopup *popup,
+                           const char* verbname)
+{
+	EphyEmbedEvent *info;
+	const char *location;
+	GValue *value;
+
+	info = ephy_embed_popup_get_event (popup);
+	ephy_embed_event_get_property (info, "link", &value);
+	location = g_value_get_string (value);
+
+	ephy_embed_load_url (popup->priv->embed, location);
+}
 
 static void
 embed_popup_download_link_cmd (BonoboUIComponent *uic,

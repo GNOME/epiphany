@@ -116,6 +116,7 @@ main (int argc, char *argv[])
 	poptContext context;
         GValue context_as_value = { 0 };
 	GnomeProgram *program;
+	char *file;
 
 #ifdef ENABLE_NLS
 	/* Initialize the i18n stuff */
@@ -150,8 +151,11 @@ main (int argc, char *argv[])
 
 		ephy_shell_new ();
 
-		gtk_window_set_default_icon_from_file
-			(ephy_file ("epiphany.png"), NULL);
+		file = gnome_program_locate_file
+			(NULL, GNOME_FILE_DOMAIN_APP_PIXMAP,
+			 "epiphany.png", TRUE, NULL);
+		gtk_window_set_default_icon_from_file (file, NULL);
+		g_free (file);
 
 		g_idle_add ((GSourceFunc) ephy_main_start, NULL);
 
