@@ -1,5 +1,13 @@
 2004-11-11  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-session.c: (ephy_session_close):
+
+	Keep a ref on EphyShell in ephy_session_close(). Otherwise we
+	get a crash when the session manager sends us the "die" signal,
+	and we don't have a tool window (bme, history) open.
+
+2004-11-11  Christian Persch  <chpe@cvs.gnome.org>
+
         * embed/ephy-history.c: (remove_obsolete_pages):
         * src/bookmarks/ephy-bookmarks.c: (clear_favorites):
 
