@@ -270,6 +270,7 @@ print_get_info (EphyDialog *dialog)
 	GValue page_url = {0, };
 	GValue date = {0, };
 	GValue page_numbers = {0, };
+	const char *filename;
 
 	info = g_new0 (EmbedPrintInfo, 1);
 
@@ -282,7 +283,15 @@ print_get_info (EphyDialog *dialog)
 	g_value_unset (&printer);
 
 	ephy_dialog_get_value (dialog, FILE_PROP, &file);
-	info->file = gnome_vfs_expand_initial_tilde (g_value_get_string (&file));
+	filename = g_value_get_string (&file);
+	if (filename != NULL)
+	{
+		info->file = gnome_vfs_expand_initial_tilde (g_value_get_string (&file));
+	}
+	else
+	{
+		info->file = NULL;
+	}
 	g_value_unset (&file);
 
 	ephy_dialog_get_value (dialog, BOTTOM_PROP, &bottom_margin);
