@@ -40,7 +40,7 @@ typedef struct EphyBookmarksClass	EphyBookmarksClass;
 typedef struct EphyBookmarks		EphyBookmarks;
 typedef struct EphyBookmarksPrivate	EphyBookmarksPrivate;
 
-#define	BOOKMARKS_HIERARCHY_SEP	"/"
+#define	BOOKMARKS_HIERARCHY_SEP	"->"
 
 enum
 {
