@@ -19,7 +19,8 @@
         <default>false</default>
         <locale name="C">
         <short>Hide menubar by default</short>
-        <long>Hide the menubar by default.</long>
+        <long>Hide the menubar by default. The menubar can still be accessed
+        using F10.</long>
         </locale>
       </schema>
       <schema>
@@ -31,7 +32,7 @@
         <locale name="C">
         <short>Disable unsafe protocols</short>
         <long>Disables loading of content from unsafe protocols. Safe protocols
-	are http: and https:.</long>
+	are http and https.</long>
         </locale>
       </schema>
       <schema>
@@ -54,8 +55,8 @@
         <type>bool</type>
         <default>0</default>
         <locale name="C">
-        <short>Disable Arbitrary URLs</short>
-        <long>Disable the user's ability to type in a URL to epiphany.</long>
+        <short>Disable arbitrary URLs</short>
+        <long>Disable the user's ability to type in a URL to Epiphany.</long>
         </locale>
       </schema>
       <schema>
@@ -65,8 +66,8 @@
         <type>bool</type>
         <default>0</default>
         <locale name="C">
-        <short>Disable Bookmark Editing</short>
-        <long>Disable the user's ability to edit their bookmarks.</long>
+        <short>Disable bookmark editing</short>
+        <long>Disable the user's ability to add or edit bookmarks.</long>
         </locale>
       </schema>
       <schema>
@@ -76,7 +77,7 @@
         <type>bool</type>
         <default>0</default>
         <locale name="C">
-        <short>Disable Toolbar Editing</short>
+        <short>Disable toolbar editing</short>
         <long>Disable the user's ability to edit toolbars.</long>
         </locale>
       </schema>
@@ -87,8 +88,21 @@
         <type>bool</type>
         <default>0</default>
         <locale name="C">
-        <short>Disable History</short>
-        <long>Disable all historical information by disabling the back button, not allowing the history dialog and hiding the most used bookmarks list.</long>
+        <short>Disable history</short>
+        <long>Disable all historical information by disabling back and
+        forward navigation, not allowing the history dialog and hiding the 
+        most used bookmarks list.</long>
+        </locale>
+      </schema>
+      <schema>
+        <key>/schemas/apps/epiphany/lockdown/fullscreen</key>
+        <applyto>/apps/epiphany/lockdown/fullscreen</applyto>
+        <owner>epiphany</owner>
+        <type>bool</type>
+        <default>0</default>
+        <locale name="C">
+        <short>Lock in fullscreen mode</short>
+        <long>Locks Epiphany in fullscreen mode.</long>
         </locale>
       </schema>
     </schemalist>
