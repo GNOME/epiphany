@@ -28,7 +28,6 @@
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
 #include "ephy-embed-shell.h"
-#include "eggdropdowntoolbutton.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtkimage.h>
@@ -36,6 +35,7 @@
 #include <gtk/gtkimagemenuitem.h>
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkmenu.h>
+#include <gtk/gtkmenutoolbutton.h>
 
 #define NTH_DATA_KEY	"GoNTh"
 #define URL_DATA_KEY	"GoURL"
@@ -267,7 +267,7 @@ build_up_menu (EphyNavigationAction *action)
 }
 
 static void
-menu_activated_cb (EggDropdownToolButton *button,
+menu_activated_cb (GtkMenuToolButton *button,
 		   EphyNavigationAction *action)
 {
 	GtkMenuShell *menu = NULL;
@@ -288,7 +288,7 @@ menu_activated_cb (EggDropdownToolButton *button,
 			break;
 	}
 
-	egg_dropdown_tool_button_set_menu (button, menu);
+	gtk_menu_tool_button_set_menu (button, menu);
 }
 
 static void
@@ -296,9 +296,15 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	LOG ("Connect navigation action proxy")
 
-	if (EGG_IS_DROPDOWN_TOOL_BUTTON (proxy))
+	if (GTK_IS_MENU_TOOL_BUTTON (proxy))
 	{
-		g_signal_connect (proxy, "menu-activated",
+		GtkWidget *menu;
+
+		/* set dummy menu so the arrow gets sensitive */
+		menu = gtk_menu_new ();
+		gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (proxy), menu);
+
+		g_signal_connect (proxy, "show-menu",
 				  G_CALLBACK (menu_activated_cb), action);
 	}
 
@@ -364,7 +370,7 @@ ephy_navigation_action_class_init (EphyNavigationActionClass *class)
 
 	parent_class = g_type_class_peek_parent (class);
 
-	action_class->toolbar_item_type = EGG_TYPE_DROPDOWN_TOOL_BUTTON;
+	action_class->toolbar_item_type = GTK_TYPE_MENU_TOOL_BUTTON;
 	action_class->connect_proxy = connect_proxy;
 
 	g_object_class_install_property (object_class,
