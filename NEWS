@@ -66,6 +66,11 @@ Code changes
 	* Use ellipsising labels to shorten the bookmarks and topics titles [#147765]
 	* Avoid strdups in entry completion func [Peter Harvey]
 	* Make bookmarks menu take a configurable path where to merge its UI
+	* Allow localised extensions names and descriptions
+	* Disable description file validation for now
+	* Fix node signal [dis]connection while a signal emission is running
+	* Make sure there's only one properties dialogue per bookmark [#148398]
+	* Remove remaining time from tooltip of tray icon [#145955]
 
 Bug fixes
 
@@ -99,6 +104,8 @@ Bug fixes
 	* Don't open all bookmarks in tabs [#156843]
 	* Depend on libxml >= 2.6.12, for its fix of bug #150647
 	* Fix restoring window size on crash recovery [#156881]
+	* Fix crash when deleting bookmark with open properties dialogue [#155880]
+	* Fix activation of the Go button while in toolbar activation mode [#155650]
 
 Documentation updates
 
