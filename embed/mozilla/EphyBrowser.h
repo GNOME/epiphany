@@ -34,6 +34,10 @@
 #include <nsIDOMWindow.h>
 #include <nsIPrintSettings.h>
 
+#ifdef ALLOW_PRIVATE_STRINGS
+#include "nsString.h"
+#endif
+
 #ifdef ALLOW_PRIVATE_API
 #include <nsIDocShell.h>
 #include <nsIDOMEventReceiver.h>

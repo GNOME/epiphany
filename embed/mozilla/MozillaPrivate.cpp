@@ -33,6 +33,11 @@
 #include <nsIWebBrowserChrome.h>
 #include <gtkmozembed.h>
 
+#ifdef ALLOW_PRIVATE_STRINGS
+#include "nsString.h"
+#include "nsReadableUtils.h"
+#endif
+
 GtkWidget *MozillaFindEmbed (nsIDOMWindow *aDOMWindow)
 {
 	if (!aDOMWindow) return nsnull;

@@ -69,7 +69,6 @@
 #endif
 
 #ifdef ALLOW_PRIVATE_STRINGS
-#include "nsString.h"
 #include "nsReadableUtils.h"
 #include "nsIDocument.h"
 #include "nsIDeviceContext.h"
