@@ -50,6 +50,8 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-file-helpers.h"
+#include "ephy-debug.h"
+
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
 
@@ -68,10 +70,12 @@ MozDownload::MozDownload() :
 	mEmbedPersist(nsnull),
 	mDownloadState(EPHY_DOWNLOAD_DOWNLOADING)
 {
+	LOG ("MozDownload ctor (%p)", (void *) this)
 }
 
 MozDownload::~MozDownload()
 {
+	LOG ("MozDownload dtor (%p)", (void *) this)
 }
 
 NS_IMPL_ISUPPORTS2(MozDownload, nsIDownload, nsIWebProgressListener)
@@ -272,7 +276,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 
 	if (NS_FAILED(aStatus) && NS_SUCCEEDED(mStatus))
         	mStatus = aStatus;
-  
+
 	/* We will get this even in the event of a cancel */
 	if (aStateFlags & STATE_STOP)
 	{
