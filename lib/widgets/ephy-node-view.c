@@ -656,6 +656,8 @@ cell_renderer_edited (GtkCellRendererText *cell,
 			        view->priv->editable_property,
 			        &value);
 	g_value_unset (&value);
+
+	gtk_tree_path_free (path);
 }
 
 static int
