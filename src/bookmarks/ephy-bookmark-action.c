@@ -233,7 +233,7 @@ activate_cb (GtkWidget *widget, EggAction *action)
 
 		if (uri)
 		{
-			location = g_strdup (gnome_vfs_uri_get_scheme (uri));
+			location = g_strdup (gnome_vfs_uri_get_host_name (uri));
 			gnome_vfs_uri_unref (uri);
 		}
 	}
