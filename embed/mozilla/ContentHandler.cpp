@@ -331,7 +331,6 @@ NS_IMETHODIMP GContentHandler::
 NS_METHOD GContentHandler::ShowProgressDialog(nsIHelperAppLauncher *aLauncher,
 					      nsISupports *aContext)
 {
-	g_print ("GContentHandler::ShowProgressDialog is depreciated!\n");
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 

@@ -419,7 +419,7 @@ mozilla_embed_finalize (GObject *object)
 	
         G_OBJECT_CLASS (parent_class)->finalize (object);
 
-	LOG ("MozillaEmbed finalized %p\n", embed)
+	LOG ("MozillaEmbed finalized %p", embed)
 }
 
 gpointer
