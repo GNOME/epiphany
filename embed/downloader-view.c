@@ -511,7 +511,10 @@ downloader_view_set_download_info (DownloaderViewPrivate *priv,
 	}
 	else
 	{
-		sprintf (buffer, _("Unknown"));
+		sprintf (buffer,
+			 details->progress > 0 ?
+		 	 _("00.00") :
+		 	 _("Unknown"));
 	}
 	gtk_list_store_set (GTK_LIST_STORE (priv->model),
 			    iter,

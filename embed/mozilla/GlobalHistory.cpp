@@ -149,6 +149,15 @@ NS_IMETHODIMP MozGlobalHistory::MarkPageAsTyped(const char *url)
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
+/* Described by mozilla.org as a temporary ugly hack. We will never need to
+ * implement it. It is here to allow compilation.
+ */
+/* void outputReferrerURL (in string aURL, in string aReferrer); */
+NS_IMETHODIMP MozGlobalHistory::OutputReferrerURL(const char *aURL, const char *aReferrer)
+{
+	return NS_ERROR_NOT_IMPLEMENTED;
+}
+	
 NS_DEF_FACTORY (MozGlobalHistory, MozGlobalHistory);
 
 nsresult NS_NewGlobalHistoryFactory(nsIFactory** aFactory)
