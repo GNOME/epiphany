@@ -397,15 +397,13 @@ ephy_shell_new_tab (EphyShell *shell,
 	EphyWindow *window;
 	EphyTab *tab;
 	EphyEmbed *embed;
-	gboolean in_new_window;
+	gboolean in_new_window = TRUE;
 	gboolean grouped;
 	gboolean jump_to;
 	EphyEmbed *previous_embed = NULL;
 	GtkWidget *nb;
 	gint position;
 	Toolbar *toolbar;
-
-	in_new_window = !eel_gconf_get_boolean (CONF_TABS_TABBED);
 
 	if (flags & EPHY_NEW_TAB_IN_NEW_WINDOW) in_new_window = TRUE;
 	if (flags & EPHY_NEW_TAB_IN_EXISTING_WINDOW) in_new_window = FALSE;

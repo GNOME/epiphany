@@ -209,7 +209,6 @@ enum
 	NOTEBOOK_PROP,
 
 	/* General */
-	OPEN_IN_TABS_PROP,
 	HOMEPAGE_ENTRY_PROP,
 
 	/* Fonts and Colors */
@@ -247,7 +246,6 @@ EphyDialogProperty properties [] =
 	{ NOTEBOOK_PROP, "prefs_notebook", NULL, PT_NORMAL, NULL },
 
 	/* General */
-	{ OPEN_IN_TABS_PROP, "open_in_tabs_checkbutton", CONF_TABS_TABBED, PT_AUTOAPPLY, NULL },
 	{ HOMEPAGE_ENTRY_PROP, "homepage_entry", CONF_GENERAL_HOMEPAGE, PT_AUTOAPPLY, NULL },
 
 	/* Fonts and Colors */

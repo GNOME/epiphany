@@ -905,7 +905,8 @@ open_link_in_new_tab (EphyTab *tab,
 	{
 		ephy_shell_new_tab (ephy_shell, window, tab,
 				    link_address,
-				    EPHY_NEW_TAB_OPEN_PAGE);
+				    EPHY_NEW_TAB_OPEN_PAGE |
+				    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 	}
 	else
 	{

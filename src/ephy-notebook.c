@@ -716,7 +716,7 @@ update_tabs_visibility (EphyNotebook *nb, gboolean before_inserting)
 
 	if (before_inserting) num++;
 
-	show_tabs = (eel_gconf_get_boolean (CONF_TABS_TABBED) || num > 1) &&
+	show_tabs = (eel_gconf_get_boolean (CONF_ALWAYS_SHOW_TABS_BAR) || num > 1) &&
 		    nb->priv->show_tabs == TRUE;
 
 	gtk_notebook_set_show_tabs (GTK_NOTEBOOK (nb), show_tabs);
@@ -770,7 +770,7 @@ ephy_notebook_init (EphyNotebook *notebook)
                            GDK_ACTION_MOVE | GDK_ACTION_COPY);
 
 	notebook->priv->tabs_vis_notifier_id = eel_gconf_notification_add
-		(CONF_TABS_TABBED,
+		(CONF_ALWAYS_SHOW_TABS_BAR,
 		 (GConfClientNotifyFunc)tabs_visibility_notifier, notebook);
 }
 

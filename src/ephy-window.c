@@ -720,38 +720,6 @@ sync_tab_load_progress (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 }
 
 static void
-sync_tab_load_status (EphyTab *dummy, GParamSpec *pspec, EphyWindow *window)
-{
-	gboolean spin = FALSE;
-	GList *tabs, *l;
-
-	if (window->priv->closing) return;
-
-	tabs = ephy_window_get_tabs (window);
-	for (l = tabs; l != NULL; l = l->next)
-	{
-		EphyTab *tab = EPHY_TAB(l->data);
-		g_return_if_fail (EPHY_IS_TAB(tab));
-
-		if (ephy_tab_get_load_status (tab))
-		{
-			spin = TRUE;
-			break;
-		}
-	}
-	g_list_free (tabs);
-
-	if (spin)
-	{
-		toolbar_spinner_start (window->priv->toolbar);
-	}
-	else
-	{
-		toolbar_spinner_stop (window->priv->toolbar);
-	}
-}
-
-static void
 sync_tab_message (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	if (window->priv->closing) return;
@@ -872,15 +840,26 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 }
 
 static void
-sync_tab_stop (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
+sync_tab_load_status (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	GtkAction *action;
+	gboolean status;
 
 	if (window->priv->closing) return;
 
 	action = gtk_action_group_get_action (window->priv->action_group, "ViewStop");
 
-	g_object_set (action, "sensitive", ephy_tab_get_load_status (tab), NULL);
+	status = ephy_tab_get_load_status (tab);
+	g_object_set (action, "sensitive", status, NULL);
+
+	if (status)
+	{
+		toolbar_spinner_start (window->priv->toolbar);
+	}
+	else
+	{
+		toolbar_spinner_stop (window->priv->toolbar);
+	}
 }
 
 static void
@@ -1118,7 +1097,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 						      G_CALLBACK (sync_tab_load_progress),
 						      window);
 		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
-						      G_CALLBACK (sync_tab_stop),
+						      G_CALLBACK (sync_tab_load_status),
 						      window);
 		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
 						      G_CALLBACK (sync_tab_message),
@@ -1149,7 +1128,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		sync_tab_address	(new_tab, NULL, window);
 		sync_tab_icon		(new_tab, NULL, window);
 		sync_tab_load_progress	(new_tab, NULL, window);
-		sync_tab_stop		(new_tab, NULL, window);
+		sync_tab_load_status	(new_tab, NULL, window);
 		sync_tab_message	(new_tab, NULL, window);
 		sync_tab_navigation	(new_tab, NULL, window);
 		sync_tab_security	(new_tab, NULL, window);
@@ -1169,8 +1148,12 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 					 G_CALLBACK (sync_tab_load_progress),
 					 window, 0);
 		g_signal_connect_object (G_OBJECT (new_tab),
+					 "notify::load-progress",
+					 G_CALLBACK (sync_tab_load_progress),
+					 window, 0);
+		g_signal_connect_object (G_OBJECT (new_tab),
 					 "notify::load-status",
-					 G_CALLBACK (sync_tab_stop),
+					 G_CALLBACK (sync_tab_load_status),
 					 window, 0);
 		g_signal_connect_object (G_OBJECT (new_tab),
 					 "notify::message",
@@ -1250,9 +1233,6 @@ tab_added_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
 
 	update_tabs_menu (window);
 
-	sync_tab_load_status (tab, NULL, window);
-	g_signal_connect_object (G_OBJECT (tab), "notify::load-status",
-				 G_CALLBACK (sync_tab_load_status), window, 0);
 	g_signal_connect_object (G_OBJECT (tab), "notify::visible",
 				 G_CALLBACK (sync_tab_visibility), window, 0);
 }
@@ -1266,15 +1246,10 @@ tab_removed_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
 	tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
 
 	g_signal_handlers_disconnect_by_func (G_OBJECT (tab),
-					      G_CALLBACK (sync_tab_load_status),
-					      window);	
-	g_signal_handlers_disconnect_by_func (G_OBJECT (tab),
 					      G_CALLBACK (sync_tab_visibility),
 					      window);	
 
 	window->priv->num_tabs--;
-
-	sync_tab_load_status (NULL, NULL, window);
 
 	if (window->priv->num_tabs == 0)
 	{
