@@ -31,12 +31,8 @@ static EphyEmbedEvent *
 get_event_info (EphyWindow *window)
 {
 	EphyEmbedEvent *info;
-	EphyTab *tab;
 
-	tab = ephy_window_get_active_tab (window);
-	g_return_val_if_fail (tab != NULL, NULL);
-
-	info = ephy_tab_get_event (tab);
+	info = EPHY_EMBED_EVENT (g_object_get_data (window, "context_event"));
 	g_return_val_if_fail (info != NULL, NULL);
 
 	return info;

@@ -1,3 +1,19 @@
+2003-06-20  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* src/ephy-tab.c: (ephy_tab_finalize), (ephy_tab_init):
+	* src/ephy-tab.h:
+
+	Get rid of get/set _event, reformat the header.
+
+	* src/pdm-dialog.c:
+
+	Fix compilation warning.
+
+	* src/ephy-window.c: (popup_destroy_cb), (show_embed_popup):
+	* src/popup-commands.c: (get_event_info):
+
+	Less invasive way to access the event info from the callbacks.
+
 2003-06-20  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-tab.h:

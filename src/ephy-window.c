@@ -1035,6 +1035,17 @@ popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
 }
 
 static void
+popup_destroy_cb (GtkWidget *widget, EphyWindow *window)
+{
+	EphyEmbedEvent *event;
+
+	event = EPHY_EMBED_EVENT (g_object_get_data (G_OBJECT (window), "context_event"));
+	g_object_set_data (G_OBJECT (window), "context_event", NULL);
+
+	g_object_unref (event);
+}
+
+static void
 show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 {
 	EggActionGroup *action_group;
@@ -1088,7 +1099,10 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 
 	g_return_if_fail (widget != NULL);
 
-	ephy_tab_set_event (tab, event);
+	g_object_ref (event);
+	g_object_set_data (G_OBJECT (window), "context_event", event);
+	g_signal_connect (widget, "destroy",
+			  G_CALLBACK (popup_destroy_cb), window);
 	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, popup_menu_at_coords, event, 2,
 			gtk_get_current_event_time ());
 }

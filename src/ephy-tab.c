@@ -51,7 +51,6 @@ struct EphyTabPrivate
 {
 	EphyEmbed *embed;
 	EphyWindow *window;
-	EphyEmbedEvent *event;
 	char *status_message;
 	char *link_message;
 	char *icon_address;
@@ -367,11 +366,6 @@ ephy_tab_finalize (GObject *object)
 
 	g_idle_remove_by_data (tab->priv->embed);
 
-	if (tab->priv->event)
-	{
-		g_object_unref (tab->priv->event);
-	}
-
 	if (tab->priv->action)
 	{
 		g_object_unref (tab->priv->action);
@@ -467,14 +461,6 @@ ephy_tab_get_window (EphyTab *tab)
 	g_return_val_if_fail (IS_EPHY_TAB (tab), NULL);
 
 	return tab->priv->window;
-}
-
-EphyEmbedEvent *
-ephy_tab_get_event (EphyTab *tab)
-{
-	g_return_val_if_fail (IS_EPHY_TAB (tab), NULL);
-
-	return tab->priv->event;
 }
 
 void
@@ -876,15 +862,6 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 	g_list_free (tabs);
 }
 
-void
-ephy_tab_set_event (EphyTab *tab,
-		    EphyEmbedEvent *event)
-{
-	if (tab->priv->event) g_object_unref (tab->priv->event);
-	g_object_ref (event);
-	tab->priv->event = event;
-}
-
 static gint
 ephy_tab_dom_mouse_click_cb  (EphyEmbed *embed,
 			      EphyEmbedEvent *event,
@@ -951,7 +928,6 @@ ephy_tab_init (EphyTab *tab)
         tab->priv = g_new0 (EphyTabPrivate, 1);
 
 	tab->priv->window = NULL;
-	tab->priv->event = NULL;
 	tab->priv->status_message = NULL;
 	tab->priv->link_message = NULL;
 	tab->priv->total_requests = 0;

@@ -60,56 +60,51 @@ struct EphyTabClass
 /* Include the header down here to resolve circular dependency */
 #include "ephy-window.h"
 
-GType		ephy_tab_get_type		(void);
+GType			ephy_tab_get_type		(void);
 
-EphyTab	*	ephy_tab_new			(void);
+EphyTab	*		ephy_tab_new			(void);
 
-EggAction * 	ephy_tab_get_action		(EphyTab *tab);
+EggAction *		ephy_tab_get_action		(EphyTab *tab);
 
-EphyEmbed *	ephy_tab_get_embed		(EphyTab *tab);
+EphyEmbed *		ephy_tab_get_embed		(EphyTab *tab);
 
-void		ephy_tab_set_event		(EphyTab *tab,
-						 EphyEmbedEvent *event);
+void			ephy_tab_set_window		(EphyTab *tab,
+							 EphyWindow *window);
 
-EphyEmbedEvent *ephy_tab_get_event		(EphyTab *tab);
+EphyWindow *		ephy_tab_get_window		(EphyTab *tab);
 
-void		ephy_tab_set_window		(EphyTab *tab,
-						 EphyWindow *window);
+const char *		ephy_tab_get_icon_address	(EphyTab *tab);
 
-EphyWindow *	ephy_tab_get_window		(EphyTab *tab);
+gboolean		ephy_tab_get_load_status	(EphyTab *tab);
 
-const char *	ephy_tab_get_icon_address	(EphyTab *tab);
-
-gboolean	ephy_tab_get_load_status	(EphyTab *tab);
-
-const char *	ephy_tab_get_link_message	(EphyTab *tab);
+const char *		ephy_tab_get_link_message	(EphyTab *tab);
 
 
-int		ephy_tab_get_load_percent	(EphyTab *tab);
+int			ephy_tab_get_load_percent	(EphyTab *tab);
 
-void		ephy_tab_set_location		(EphyTab *tab,
-						 const char *location);
+void			ephy_tab_set_location		(EphyTab *tab,
+							 const char *location);
 
-const char *	ephy_tab_get_location		(EphyTab *tab);
+const char *		ephy_tab_get_location		(EphyTab *tab);
 
 TabNavigationFlags	ephy_tab_get_navigation_flags	(EphyTab *tab);
-						 
+
 EmbedSecurityLevel	ephy_tab_get_security_level	(EphyTab *tab);
 
-void		ephy_tab_get_size		(EphyTab *tab,
-						 int *width,
-						 int *height);
+void			ephy_tab_get_size		(EphyTab *tab,
+							 int *width,
+							 int *height);
 
-const char *	ephy_tab_get_status_message	(EphyTab *tab);
+const char *		ephy_tab_get_status_message	(EphyTab *tab);
 
-const char *	ephy_tab_get_title		(EphyTab *tab);
+const char *		ephy_tab_get_title		(EphyTab *tab);
 
-void		ephy_tab_set_visibility		(EphyTab *tab,
-						 gboolean visible);
+void			ephy_tab_set_visibility		(EphyTab *tab,
+							 gboolean visible);
 
-gboolean	ephy_tab_get_visibility		(EphyTab *tab);
+gboolean		ephy_tab_get_visibility		(EphyTab *tab);
 
-float 		ephy_tab_get_zoom 		(EphyTab *tab);
+float			ephy_tab_get_zoom		(EphyTab *tab);
 
 G_END_DECLS
 

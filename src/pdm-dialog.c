@@ -55,6 +55,8 @@ pdm_dialog_cookies_treeview_selection_changed_cb (GtkTreeSelection *selection,
 void
 pdm_dialog_passwords_treeview_selection_changed_cb (GtkTreeSelection *selection,
 						    PdmDialog *dialog);
+void
+pdm_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data);
 
 static GObjectClass *parent_class = NULL;
 
