@@ -872,19 +872,55 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 	g_list_free (tabs);
 }
 
+static void
+open_link_in_new_tab (EphyTab *tab,
+		      const char *link_address)
+{
+	GnomeVFSURI *uri;
+	const char *scheme;
+	EphyWindow *window;
+	gboolean new_tab = FALSE;
+
+	window = ephy_tab_get_window (tab);
+	g_return_if_fail (window != NULL);
+
+	uri = gnome_vfs_uri_new (link_address);
+	if (uri != NULL)
+	{
+		scheme = gnome_vfs_uri_get_scheme (uri);
+
+		new_tab = (strcmp (scheme, "http") == 0 ||
+	                   strcmp (scheme, "ftp") == 0 ||
+	                   strcmp (scheme, "file") == 0);
+
+		gnome_vfs_uri_unref (uri);
+	}
+
+	if (new_tab)
+	{
+		ephy_shell_new_tab (ephy_shell, window, tab,
+				    link_address,
+				    EPHY_NEW_TAB_OPEN_PAGE);
+	}
+	else
+	{
+		ephy_window_load_url (window, link_address);
+	}
+}
+
 static gint
 ephy_tab_dom_mouse_click_cb  (EphyEmbed *embed,
 			      EphyEmbedEvent *event,
 			      EphyTab *tab)
 {
-	EphyWindow *window;
 	EphyEmbedEventType type;
 	EmbedEventContext context;
-
-	g_assert (IS_EPHY_EMBED_EVENT(event));
+	EphyWindow *window;
 
 	window = ephy_tab_get_window (tab);
 	g_return_val_if_fail (window != NULL, FALSE);
+
+	g_assert (IS_EPHY_EMBED_EVENT(event));
 
 	ephy_embed_event_get_event_type (event, &type);
 	ephy_embed_event_get_context (event, &context);
@@ -893,11 +929,11 @@ ephy_tab_dom_mouse_click_cb  (EphyEmbed *embed,
 	    && (context & EMBED_CONTEXT_LINK))
 	{
 		const GValue *value;
+		const char *link_address;
 
 		ephy_embed_event_get_property (event, "link", &value);
-		ephy_shell_new_tab (ephy_shell, window, tab,
-				      g_value_get_string (value),
-				      EPHY_NEW_TAB_OPEN_PAGE);
+		link_address = g_value_get_string (value);
+		open_link_in_new_tab (tab, link_address);
 	}
 	else if (type == EPHY_EMBED_EVENT_MOUSE_BUTTON2 &&
 		 eel_gconf_get_boolean (CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL) &&
