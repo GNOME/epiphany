@@ -107,7 +107,7 @@ EphyHistoryListener::OnStateChange (nsIWebProgress *aWebProgress,
 
 	nsEmbedCString location;
 	rv = httpChannel->GetResponseHeader
-		(NS_LITERAL_CSTRING ("Location"), location);
+		(nsEmbedCString ("Location"), location);
 	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && location.Length(), rv);
 
 	nsCOMPtr<nsIURI> toURI;
