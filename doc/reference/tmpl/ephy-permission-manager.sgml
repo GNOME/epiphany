@@ -9,11 +9,25 @@ ephy-permission-manager
 
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
+
+<!-- ##### MACRO EPHY_PERMISSION_MANAGER_IFACE ##### -->
+<para>
+
+</para>
+
+@k: 
+
+
+<!-- ##### MACRO EPHY_IS_PERMISSION_MANAGER_IFACE ##### -->
+<para>
+
+</para>
+
+@k: 
 
 
 <!-- ##### MACRO EPHY_TYPE_PERMISSION_INFO ##### -->
@@ -30,7 +44,16 @@ ephy-permission-manager
 
 @EPT_COOKIE: 
 @EPT_IMAGE: 
-@EPT_PASSWORD: 
+@EPT_POPUP: 
+
+<!-- ##### ENUM EphyPermission ##### -->
+<para>
+
+</para>
+
+@EPHY_PERMISSION_ALLOWED: 
+@EPHY_PERMISSION_DENIED: 
+@EPHY_PERMISSION_DEFAULT: 
 
 <!-- ##### FUNCTION ephy_permission_info_new ##### -->
 <para>
@@ -39,8 +62,10 @@ ephy-permission-manager
 
 @host: 
 @type: 
-@allowed: 
+@permission: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@allowed: 
 
 
 <!-- ##### FUNCTION ephy_permission_info_copy ##### -->
@@ -76,6 +101,8 @@ ephy-permission-manager
 @manager: 
 @host: 
 @type: 
+@permission: 
+<!-- # Unused Parameters # -->
 @allow: 
 
 
