@@ -126,7 +126,9 @@ IGNORE_HFILES = \
 	popup-commands.h \
 	ppview-toolbar.h \
 	prefs-dialog.h \
-	toolbar.h \
+	ephy-toolbar.h \
+	ephy-fullscreen-popup.h \
+	ephy-link.h \
 	window-commands.h
 
 # Images to copy into HTML directory.
@@ -142,11 +144,14 @@ extra_files =
 # if $(DOC_MODULE).types is non-empty.
 GTKDOC_CFLAGS = -I$(top_srcdir)/src \
 		-I$(top_srcdir)/lib \
+		-I$(top_builddir)/lib \
 		-I$(top_srcdir)/lib/widgets \
 		-I$(top_srcdir)/embed \
+		-I$(top_builddir)/embed \
 		-I$(top_srcdir)/embed/mozilla \
 		-I$(top_srcdir)/src/bookmarks \
 		-I$(top_srcdir)/lib/egg \
+		-I$(top_builddir)/lib/egg \
 		$(EPIPHANY_DEPENDENCY_CFLAGS)
 
 GTKDOC_LIBS = \
