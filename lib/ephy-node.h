@@ -100,9 +100,6 @@ float       ephy_node_get_property_float    (EphyNode *node,
 					     guint property_id);
 EphyNode   *ephy_node_get_property_node     (EphyNode *node,
 					     guint property_id);
-/* free return value */
-char       *ephy_node_get_property_time     (EphyNode *node,
-					     guint property_id);
 
 /* xml storage */
 int           ephy_node_write_to_xml	    (EphyNode *node,
