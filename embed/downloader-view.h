@@ -90,7 +90,6 @@ void            downloader_view_set_download_progress (DownloaderView *dv,
 						       gint size_total,
 						       gint size_done,
 						       gfloat progress,
-						       gboolean can_pause,
 						       gpointer persist_object);
 
 #ifdef __cplusplus

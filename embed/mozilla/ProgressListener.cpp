@@ -31,8 +31,6 @@
 #include <libgnome/gnome-i18n.h>
 
 #include "nsXPIDLString.h"
-#include "nsIChannel.h"
-#include "nsIFTPChannel.h"
 #include "nsIMIMEInfo.h"
 #include "nsCOMPtr.h"
 
@@ -134,8 +132,6 @@ NS_METHOD GProgressListener::PrivateInit (void)
 	mPriorKRate          = 0;
 	mRateChanges         = 0;
 	mRateChangeLimit     = 2;          /* only update rate every second */
-	mCheckedCanPause     = PR_FALSE;
-	mCanPause            = PR_FALSE;
 	mIsPaused            = PR_FALSE;
 	mAbort               = PR_FALSE;
 	PRInt64 now          = PR_Now ();
@@ -423,16 +419,6 @@ NS_IMETHODIMP GProgressListener::
 
 	if (mNoDialog) return NS_OK;
 
-	if (!mCheckedCanPause)
-	{
-		mCheckedCanPause = PR_TRUE;
-
-		nsresult rv;
-		nsCOMPtr<nsIFTPChannel> channel = 
-			do_QueryInterface (aRequest, &rv);
-
-		mCanPause = (NS_SUCCEEDED (rv) ? PR_TRUE : PR_FALSE);
-	}
 	mRequest = aRequest;
 
 	PRInt64 now = PR_Now ();
@@ -518,7 +504,6 @@ NS_IMETHODIMP GProgressListener::
 					       totalKBytes,
 					       currentKBytes,
 					       progress,
-					       mCanPause,
 					       (gpointer)this);
 
 	/* done */
@@ -607,7 +592,7 @@ nsresult GProgressListener::Pause (void)
 {
         nsresult rv;
 
-        if (mCanPause && !mIsPaused)
+        if (!mIsPaused)
         {
                 rv = mRequest->Suspend ();
                 if (NS_SUCCEEDED (rv))
@@ -627,7 +612,7 @@ nsresult GProgressListener::Resume (void)
 {
         nsresult rv;
 
-        if (mCanPause && mIsPaused)
+        if (mIsPaused)
         {
                 rv = mRequest->Resume ();
                 if (NS_SUCCEEDED (rv))

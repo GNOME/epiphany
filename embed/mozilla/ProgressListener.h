@@ -112,8 +112,6 @@ class GProgressListener : public nsIProgressDialog,
 	PRInt32 mRateChanges;
 	PRInt32 mRateChangeLimit;
 
-	PRBool mCheckedCanPause;
-	PRBool mCanPause;
 	PRBool mIsPaused;
 	gboolean mNoDialog;
 	PRBool mAbort;

@@ -1,3 +1,16 @@
+2003-04-19  Xan Lopez  <xan@masilla.org>
+
+	* embed/downloader-view.c: (controls_info_foreach),
+	(downloader_view_update_controls),
+	(downloader_view_set_download_info),
+	(downloader_view_set_download_progress):
+	* embed/downloader-view.h:
+	* embed/mozilla/ProgressListener.cpp:
+	* embed/mozilla/ProgressListener.h:
+
+	Assume Pause/Resume is available for every channel, "fixes" resume for
+	HTTP among others. Drop some useless code.
+
 2003-04-19  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/mozilla/FilePicker.cpp:

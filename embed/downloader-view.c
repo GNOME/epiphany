@@ -82,7 +82,6 @@ typedef struct
 	gint size_total;
 	gint size_done;
 	gfloat progress;
-	gboolean can_pause;
 	gchar *filename;
 	gchar *source;
 	gchar *dest;
@@ -94,7 +93,6 @@ typedef struct
 typedef struct
 {
 	gboolean can_resume;
-	gboolean can_pause;
 	gboolean can_abort;
 	gboolean can_open;
 	DownloaderViewPrivate *priv;
@@ -330,7 +328,6 @@ controls_info_foreach (GtkTreeModel *model,
 	details = g_hash_table_lookup (info->priv->details_hash,
 				       persist_object);
 
-	info->can_pause |= details->can_pause;
 	info->can_resume |= (details->status == DOWNLOAD_STATUS_PAUSED);
 	info->can_abort |= (details->status != DOWNLOAD_STATUS_COMPLETED);
 	info->can_open |= (details->status == DOWNLOAD_STATUS_COMPLETED);
@@ -348,8 +345,7 @@ downloader_view_update_controls (DownloaderViewPrivate *priv)
 	info->priv = priv;
 
 	/* initial conditions */
-	info->can_pause = info->can_resume = info->can_abort
-		= info->can_open = FALSE;
+	info->can_resume = info->can_abort = info->can_open = FALSE;
 
 	if (selection)
 	{
@@ -360,7 +356,7 @@ downloader_view_update_controls (DownloaderViewPrivate *priv)
 	}
 
 	/* setup buttons */
-	gtk_widget_set_sensitive (priv->pause_button, info->can_pause);
+	gtk_widget_set_sensitive (priv->pause_button, TRUE);
 	gtk_widget_set_sensitive (priv->resume_button, info->can_resume);
 	gtk_widget_set_sensitive (priv->abort_button, info->can_abort);
 	gtk_widget_set_sensitive (priv->open_button, info->can_open);
@@ -519,6 +515,7 @@ downloader_view_set_download_info (DownloaderViewPrivate *priv,
 		 	 _("00.00") :
 		 	 _("Unknown"));
 	}
+	
 	gtk_list_store_set (GTK_LIST_STORE (priv->model),
 			    iter,
 			    COL_REMAINING, buffer,
@@ -644,7 +641,6 @@ downloader_view_set_download_progress (DownloaderView *dv,
 				       gint size_total,
 				       gint size_done,
 				       gfloat progress,
-				       gboolean can_pause,
 				       gpointer persist_object)
 {
 	DownloadDetails *details;
@@ -659,7 +655,6 @@ downloader_view_set_download_progress (DownloaderView *dv,
 	details->speed = speed;
 	details->size_total = size_total;
 	details->size_done = size_done;
-	details->can_pause = can_pause;
 	details->progress = progress;
 
 	gtk_tree_model_get_iter (GTK_TREE_MODEL (dv->priv->model),
