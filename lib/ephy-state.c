@@ -64,8 +64,8 @@ ephy_state_save_window (GtkWidget *window,
 	gchar *buf;
 
 	state = gdk_window_get_state (GTK_WIDGET (window)->window);
-	maximized = state && GDK_WINDOW_STATE_MAXIMIZED;
-
+	maximized = ((state & GDK_WINDOW_STATE_MAXIMIZED) > 0);
+		
 	buf = g_strdup_printf (CONF_GUL_STATE_PATH "/%s/maximized",name);
 	eel_gconf_set_boolean (buf, maximized);
 	g_free (buf);
