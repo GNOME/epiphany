@@ -85,3 +85,6 @@ pref("network.protocol-handler.external.webcal", true);
 // disable xpinstall
 pref("xpinstall.enabled", false);
 
+// enable typeahead find
+pref("accessibility.typeaheadfind", true);
+
