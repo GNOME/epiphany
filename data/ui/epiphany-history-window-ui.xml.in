@@ -5,8 +5,8 @@
         <menuitem name="FileOpenInWindow" verb="OpenInWindow"/>
 	<menuitem name="FileOpenInTab" verb="OpenInTab"/>
 	<separator name="FileSep1"/>
-	<menuitem name="FileDelete" verb="Delete"/>
 	<menuitem name="FileBookmarkPage" verb="BookmarkPage"/>
+	<menuitem name="FileDelete" verb="Delete"/>
 	<separator name="FileSep2"/>
 	<menuitem name="FileClose" verb="Close"/>
 </submenu>
@@ -36,9 +36,13 @@
 <popups>
 
 <popup name="EphyHistoryWindowPopup" verb="FakeToplevel">
-	<menuitem name="OpenInWindowBMK" verb="OpenInWindow"/>
-	<menuitem name="OpenInTabBMK" verb="OpenInTab"/>
-	<menuitem name="CopyBMK" verb="Copy"/>
+	<menuitem name="OpenInWindowHST" verb="OpenInWindow"/>
+	<menuitem name="OpenInTabHST" verb="OpenInTab"/>
+	<separator name="HistoryPopupSep1"/>
+	<menuitem name="CopyHST" verb="Copy"/>
+	<separator name="HistoryPopupSep2"/>
+	<menuitem name="BookmarkPageHST" verb="BookmarkPage"/>
+	<menuitem name="DeleteHST" verb="Delete"/>
 </popup>
 
 </popups>
