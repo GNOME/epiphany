@@ -1,5 +1,12 @@
 2003-06-10  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-menu.c: (ephy_bookmarks_menu_init),
+	(ephy_bookmarks_menu_finalize):
+
+	Dont try to update menus of dead windows ;)
+
+2003-06-10  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/bookmarks/ephy-topics-selector.c:
 	(ephy_topics_selector_apply), (topic_clicked), (topic_key_pressed),
 	(ephy_topics_build_ui), (ephy_topics_selector_new):

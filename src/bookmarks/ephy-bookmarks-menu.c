@@ -428,9 +428,9 @@ ephy_bookmarks_menu_init (EphyBookmarksMenu *menu)
 	menu->priv = p;
 
 	menu->priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	g_signal_connect (menu->priv->bookmarks, "tree_changed",
-			  G_CALLBACK (bookmarks_tree_changed_cb),
-			  menu);
+	g_signal_connect_object (menu->priv->bookmarks, "tree_changed",
+			         G_CALLBACK (bookmarks_tree_changed_cb),
+			         menu, 0);
 
 	menu->priv->ui_id = 0;
 	menu->priv->action_group = NULL;
@@ -442,6 +442,11 @@ ephy_bookmarks_menu_finalize (GObject *o)
 {
 	EphyBookmarksMenu *menu = EPHY_BOOKMARKS_MENU (o);
 	EphyBookmarksMenuPrivate *p = menu->priv;
+
+	if (menu->priv->update_tag != 0)
+	{
+		g_source_remove (menu->priv->update_tag);
+	}
 
 	if (p->action_group != NULL)
 	{
