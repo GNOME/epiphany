@@ -24,12 +24,21 @@
 
 #include "ephy-debug.h"
 
-#include <string.h>
-
 #ifndef DISABLE_PROFILING
+
+#include <glib/gbacktrace.h>
+#include <string.h>
+#include <stdio.h>
+#include <signal.h>
 
 static GHashTable *ephy_profilers_hash = NULL;
 static const char *ephy_profile_modules = NULL;
+static const char *ephy_debug_break = NULL;
+
+#ifdef HAVE_DUMPSTACKTOFILE
+#define DumpStackToFile(f) _Z15DumpStackToFileP8_IO_FILE(f)
+extern void _Z15DumpStackToFileP8_IO_FILE (FILE *f);
+#endif
 
 #endif
 
@@ -76,15 +85,60 @@ log_module (const gchar *log_domain,
 	}
 }
 
+static void 
+trap_handler (const char *log_domain,
+	      GLogLevelFlags log_level,
+	      const char *message,
+	      gpointer user_data)
+{
+	g_log_default_handler (log_domain, log_level, message, user_data);
+
+	if (ephy_debug_break != NULL &&
+	    (log_level & (G_LOG_LEVEL_WARNING |
+			  G_LOG_LEVEL_ERROR |
+			  G_LOG_LEVEL_CRITICAL |
+			  G_LOG_FLAG_FATAL)))
+	{
+		if (strcmp (ephy_debug_break, "stack") == 0)
+		{
+#ifdef HAVE_DUMPSTACKTOFILE
+			DumpStackToFile (stderr);
+#else
+			g_on_error_stack_trace (g_get_prgname ());
+#endif
+		}
+		else if (strcmp (ephy_debug_break, "trap") == 0)
+		{
+			G_BREAKPOINT ();
+		}
+		else if (strcmp (ephy_debug_break, "suspend") == 0)
+		{
+			g_print ("Suspending program; attach with the debugger.\n");
+
+			raise (SIGSTOP);
+		}
+		else if (strcmp (ephy_debug_break, "abort") == 0)
+		{
+			raise (SIGABRT);
+		}
+	}
+}
+
 #endif
 
 void
 ephy_debug_init (void)
 {
 #ifndef DISABLE_LOGGING
+	const char *debug_break;
+
 	ephy_log_modules = g_getenv ("EPHY_LOG_MODULES");
+	ephy_debug_break = g_getenv ("EPHY_DEBUG_BREAK");
+
+	g_log_set_default_handler (trap_handler, NULL);
 
 	g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, log_module, NULL);
+
 #endif
 #ifndef DISABLE_PROFILING
 	ephy_profile_modules = g_getenv ("EPHY_PROFILE_MODULES");

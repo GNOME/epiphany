@@ -364,6 +364,20 @@ AC_DEFINE([GTKMOZEMBED_BROKEN_RELOAD],[1],[Define if GtkMozEmbed has broken relo
 
 AC_MSG_RESULT([couldn't autodetect, assuming yes])
 
+dnl check if mozilla's stack walker is accessible
+
+AC_MSG_CHECKING([for DumpStackToFile])
+
+AC_LINK_IFELSE(
+	AC_LANG_PROGRAM(
+		[[#include <stdio.h>]],
+		[[extern void _Z15DumpStackToFileP8_IO_FILE (FILE *f);]]),
+	[AC_DEFINE([HAVE_DUMPSTACKTOFILE], [1], [Define if DumpStackToFile is found]) result=yes],
+	[result=no])
+
+AC_MSG_RESULT([$result])
+
+dnl restore flags
 CXXFLAGS=$_SAVE_CXXFLAGS
 AC_LANG_POP(C++)
 
