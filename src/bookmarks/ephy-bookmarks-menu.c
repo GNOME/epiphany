@@ -25,7 +25,6 @@
 #include "ephy-bookmark-action.h"
 #include "ephy-shell.h"
 #include "ephy-node-common.h"
-#include "ephy-string.h"
 #include "ephy-marshal.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
@@ -33,6 +32,8 @@
 #include <glib/gprintf.h>
 #include <glib/gi18n.h>
 #include <gtk/gtkuimanager.h>
+#include <gtk/gtklabel.h>
+#include <gtk/gtkmenuitem.h>
 #include <string.h>
 
 #define EPHY_BOOKMARKS_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARKS_MENU, EphyBookmarksMenuPrivate))
@@ -129,6 +130,8 @@ connect_proxy_cb (GtkActionGroup *action_group,
 		GtkLabel *label;
 
 		label = (GtkLabel *) ((GtkBin *) proxy)->child;
+
+		gtk_label_set_use_underline (label, FALSE);
 		gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
 		gtk_label_set_max_width_chars (label, LABEL_WIDTH_CHARS);
         }
@@ -374,19 +377,17 @@ create_submenu (EphyBookmarksMenu *menu,
 	GtkAction *action;
 	char verb[FOLDER_VERB_FORMAT_LENGTH];
 	char apath[strlen (FOLDER_ACCEL_PATH_PREFIX) + FOLDER_VERB_FORMAT_LENGTH];
-	const char *tmp;
-	char *title, *folder;
+	const char *title;
+	char *folder;
 	char **folders;
 	GString *path;
 	guint phash, fhash;
 	int i;
 
-	tmp = ephy_node_get_property_string (topic, EPHY_NODE_KEYWORD_PROP_NAME);
-	g_return_val_if_fail (tmp != NULL, NULL);
+	title = ephy_node_get_property_string (topic, EPHY_NODE_KEYWORD_PROP_NAME);
+	g_return_val_if_fail (title != NULL, NULL);
 
-	title = ephy_string_double_underscores (tmp);
 	folders = g_strsplit (title, BOOKMARKS_HIERARCHY_SEP, -1);
-	g_free (title);
 
 	/* occurs if topic name was "" or BOOKMARKS_HIERARCHY_SEP */
 	if (folders == NULL || folders[0] == NULL)
