@@ -187,7 +187,7 @@ impl_get_mime (EphyDownload *download)
 	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
 
 	mozDownload->GetMIMEInfo (getter_AddRefs(mime));
-        if (!mime) return NULL;
+        if (!mime) return g_strdup ("application/octet-stream");
 
 #if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
         mime->GetMIMEType(mimeType);

@@ -484,7 +484,6 @@ downloader_view_add_download (DownloaderView *dv,
 	ephy_dialog_show (EPHY_DIALOG (dv));
 	
 	mime =  ephy_download_get_mime (download);
-	if (mime == NULL) return;
 
 	theme = gtk_icon_theme_get_default ();
 	icon_name = gnome_icon_lookup (theme, NULL, NULL, NULL, NULL,
