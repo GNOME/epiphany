@@ -515,10 +515,12 @@ cmd_bookmarks_import (EggAction *action,
 					     GTK_RESPONSE_OK,
 					     NULL);
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-	gtk_container_set_border_width (GTK_CONTAINER (dialog), 6);
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 12);
+	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 2);
 
 	vbox = gtk_vbox_new (FALSE, 6);
+	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 	gtk_widget_show (vbox);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), vbox,
 			    TRUE, TRUE, 0);
