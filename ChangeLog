@@ -1,3 +1,14 @@
+2005-02-28  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/MozDownload.cpp:
+
+	NULL check. Fixes bug #165999.
+
+	* src/ephy-main.c: (slowly_and_stupidly_obtain_timestamp), (main):
+
+	Try to get an approximation to the launch time if DESKTOP_STARTUP_ID
+	is not set. Fixes bug #168820, patch by Elijah Newren.
+
 2005-02-27  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.ac:

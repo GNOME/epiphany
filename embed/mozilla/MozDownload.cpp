@@ -763,6 +763,8 @@ nsresult BuildDownloadPath (const char *defaultFileName, nsILocalFile **_retval)
 	}
 
 	nsCOMPtr <nsILocalFile> destFile (do_CreateInstance(NS_LOCAL_FILE_CONTRACTID));
+	NS_ENSURE_TRUE (destFile, NS_ERROR_FAILURE);
+
 	destFile->InitWithNativePath (nsEmbedCString (path));
 	g_free (path);
 

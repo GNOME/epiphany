@@ -32,6 +32,7 @@
 #include <gtk/gtkaboutdialog.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmessagedialog.h>
+#include <gdk/gdkx.h>
 #include <libgnome/gnome-program.h>
 #include <bonobo/bonobo-main.h>
 #include <glib/gi18n.h>
@@ -39,6 +40,7 @@
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <libxml/xmlversion.h>
 #include <errno.h>
+#include <string.h>
 
 static gboolean open_in_existing = FALSE;
 static gboolean open_in_new_tab = FALSE;
@@ -140,6 +142,57 @@ idle_unref (GObject *object)
 	return FALSE;
 }
 
+/* Copied from libnautilus/nautilus-program-choosing.c; Needed in case
+ * we have no DESKTOP_STARTUP_ID (with its accompanying timestamp).
+ */
+static Time
+slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
+{
+	Window xwindow;
+	XEvent event;
+	
+	{
+		XSetWindowAttributes attrs;
+		Atom atom_name;
+		Atom atom_type;
+		char* name;
+		
+		attrs.override_redirect = True;
+		attrs.event_mask = PropertyChangeMask | StructureNotifyMask;
+		
+		xwindow =
+			XCreateWindow (xdisplay,
+				       RootWindow (xdisplay, 0),
+				       -100, -100, 1, 1,
+				       0,
+				       CopyFromParent,
+				       CopyFromParent,
+				       CopyFromParent,
+				       CWOverrideRedirect | CWEventMask,
+				       &attrs);
+		
+		atom_name = XInternAtom (xdisplay, "WM_NAME", TRUE);
+		g_assert (atom_name != None);
+		atom_type = XInternAtom (xdisplay, "STRING", TRUE);
+		g_assert (atom_type != None);
+		
+		name = "Fake Window";
+		XChangeProperty (xdisplay, 
+				 xwindow, atom_name,
+				 atom_type,
+				 8, PropModeReplace, name, strlen (name));
+	}
+	
+	XWindowEvent (xdisplay,
+		      xwindow,
+		      PropertyChangeMask,
+		      &event);
+	
+	XDestroyWindow(xdisplay, xwindow);
+	
+	return event.xproperty.time;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -173,6 +226,10 @@ main (int argc, char *argv[])
                                       GNOME_PARAM_HUMAN_READABLE_NAME, _("Ephy"),
 				      GNOME_PARAM_APP_DATADIR, DATADIR,
                                       NULL);
+
+	/* Get a timestamp manually if need be */
+	if (user_time == 0)
+		user_time = slowly_and_stupidly_obtain_timestamp (gdk_display);
 
 	g_set_application_name (_("Epiphany Web Browser"));
 
