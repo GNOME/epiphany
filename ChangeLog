@@ -2,6 +2,13 @@
 
 	* embed/mozilla/mozilla-embed-persist.cpp:
 
+	Whenever we have one, pass the cache key to the persist object.
+	That way we don't re-fetch the page on save. Fixes bug #141652.
+
+2004-05-03  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/mozilla-embed-persist.cpp:
+
 	Fix a mem leak; thanks to Crispin for spotting it.
 
 2004-05-03  Patanjali Somayaji <patanjali@codito.com>
