@@ -1,4 +1,5 @@
 INCLUDES = \
+  -I$(top_builddir)/lib/egg \
   $(EPIPHANY_DEPENDENCY_CFLAGS) \
   -DCURSOR_DIR=\"$(pkgdatadir)/art\" \
   -DGTK_DISABLE_DEPRECATED \
@@ -35,18 +36,10 @@ noinst_HEADERS = \
   eggintl.h
 
 eggmarshalers.h: eggmarshalers.list
-	cd $(srcdir) \
-	&& $(GLIB_GENMARSHAL) --prefix=_egg_marshal eggmarshalers.list --header > xgen-emh \
-	&& cp xgen-emh eggmarshalers.h \
-	&& rm -f xgen-emh xgen-emh~
+	$(GLIB_GENMARSHAL) --prefix=_egg_marshal $(srcdir)/eggmarshalers.list --header > eggmarshalers.h
 
 eggmarshalers.c: eggmarshalers.list
-	cd $(srcdir) \
-	&& $(GLIB_GENMARSHAL) --prefix=_egg_marshal eggmarshalers.list --body > xgen-emc \
-	&& cp xgen-emc eggmarshalers.c \
-	&& rm -f xgen-emc xgen-emc~
-
-egg-marshal.c: eggmarshalers.h eggmarshalers.c
+	$(GLIB_GENMARSHAL) --prefix=_egg_marshal $(srcdir)/eggmarshalers.list --body > eggmarshalers.c
 
 EXTRA_DIST=			\
 	eggmarshalers.list
