@@ -70,8 +70,7 @@ create_tool_item (EggAction *action)
 
 	LOG ("Create location toolitem")
 
-	item = (* EGG_ACTION_CLASS (parent_class)->create_tool_item) (action);
-
+	item = GTK_WIDGET (egg_tool_item_new ());//(* EGG_ACTION_CLASS (parent_class)->create_tool_item) (action);
 	location = ephy_location_entry_new ();
 	gtk_container_add (GTK_CONTAINER (item), location);
 	egg_tool_item_set_expandable (EGG_TOOL_ITEM (item), TRUE);
@@ -141,7 +140,7 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 	parent_class = g_type_class_peek_parent (class);
 	action_class = EGG_ACTION_CLASS (class);
 
-	action_class->toolbar_item_type = EGG_TYPE_TOOL_ITEM;
+	action_class->toolbar_item_type = EPHY_TYPE_LOCATION_ENTRY;
 	action_class->create_tool_item = create_tool_item;
 	action_class->connect_proxy = connect_proxy;
 

@@ -1,3 +1,27 @@
+2003-01-27  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* configure.in:
+	* data/ui/epiphany-toolbar.xml.in:
+	* lib/widgets/ephy-editable-toolbar.c: (copy_toolbars),
+	(is_action_in_toolbars), (is_separator),
+	(find_toolbar_from_widget), (add_action_to_list),
+	(parse_item_list), (toolbar_list_to_xml), (toolbar_list_to_string),
+	(drag_data_received_cb), (drag_motion_cb), (drag_drop_cb),
+	(setup_toolbar_drag), (do_merge),
+	(ephy_editable_toolbar_set_merge), (ephy_editable_toolbar_init),
+	(ephy_editable_toolbar_finalize), (drag_data_get_cb),
+	(build_to_drag_actions_list), (setup_editor),
+	(set_all_actions_sensitive), (ephy_editable_toolbar_edit):
+	* src/ephy-favicon-action.c: (create_tool_item),
+	(ephy_favicon_action_class_init):
+	* src/ephy-location-action.c: (create_tool_item),
+	(ephy_location_action_class_init):
+	* src/ephy-spinner-action.c: (create_tool_item),
+	(ephy_spinner_action_class_init):
+
+	Implement dragging from the editor. It's stilly buggy
+	but I didnt expect to get that working so soon :)
+
 2003-01-26  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* configure.in:

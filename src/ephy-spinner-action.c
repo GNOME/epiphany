@@ -88,7 +88,7 @@ create_tool_item (EggAction *action)
 	GtkWidget *spinner;
 	GtkWidget *button;
 
-	item = (* EGG_ACTION_CLASS (parent_class)->create_tool_item) (action);
+	item = GTK_WIDGET (egg_tool_item_new ());
 
 	button = gtk_button_new ();
 	gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
@@ -160,7 +160,7 @@ ephy_spinner_action_class_init (EphySpinnerActionClass *class)
 	parent_class = g_type_class_peek_parent (class);
 	action_class = EGG_ACTION_CLASS (class);
 
-	action_class->toolbar_item_type = EGG_TYPE_TOOL_ITEM;
+	action_class->toolbar_item_type = EPHY_SPINNER_TYPE;
 	action_class->create_tool_item = create_tool_item;
 	action_class->connect_proxy = connect_proxy;
 
