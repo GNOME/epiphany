@@ -511,7 +511,7 @@ load_homepage (EphyEmbed *embed)
  * @url: an url to load or %NULL
  *
  * Create a new tab and the parent window when necessary.
- * Ever use this function to open urls in new window/tabs.
+ * Use this function to open urls in new window/tabs.
  *
  * ReturnValue: the created #EphyTab
  **/

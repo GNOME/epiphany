@@ -29,12 +29,14 @@
 
 #include <libgnomeui/gnome-ui-init.h>
 #include <libgnomeui/gnome-app-helper.h>
+#include <gtk/gtkaboutdialog.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmessagedialog.h>
 #include <libgnome/gnome-program.h>
 #include <bonobo/bonobo-main.h>
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-init.h>
+#include <libgnomevfs/gnome-vfs-utils.h>
 #include <libxml/xmlversion.h>
 
 static gboolean open_in_existing = FALSE;
@@ -68,6 +70,23 @@ static struct poptOption popt_options[] =
 	  NULL },
 	{ NULL, 0, 0, NULL, 0, NULL, NULL }
 };
+
+static void
+handle_url (GtkAboutDialog *about,
+	    const char *link,
+	    gpointer data)
+{
+	ephy_shell_new_tab (ephy_shell, NULL, NULL, link,
+			    EPHY_NEW_TAB_OPEN_PAGE);
+}
+
+static void
+handle_email (GtkAboutDialog *about,
+	      const char *link,
+	      gpointer data)
+{
+	gnome_vfs_url_show (link);
+}
 
 static void
 shell_weak_notify (gpointer data,
@@ -165,6 +184,10 @@ main (int argc, char *argv[])
 	eel_gconf_monitor_add ("/apps/epiphany/general");
 	eel_gconf_monitor_add ("/apps/epiphany/lockdown");
 	eel_gconf_monitor_add ("/desktop/gnome/lockdown");
+
+	/* Extensions may want these, so don't initialize in window-cmds */
+	gtk_about_dialog_set_url_hook (handle_url, NULL, NULL);
+	gtk_about_dialog_set_email_hook (handle_email, NULL, NULL);
 
 	bonobo_activate ();
 

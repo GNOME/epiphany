@@ -1,5 +1,13 @@
 2004-12-17  Adam Hooper  <adamh@cvs.gnome.org>
 
+	* src/ephy-main.c: (handle_url), (handle_email), (main):
+	* src/ephy-shell.c:
+	* src/window-commands.c: (window_cmd_help_about):
+
+	Use gtk_show_about_dialog(), and handle urls and mailto.
+
+2004-12-17  Adam Hooper  <adamh@cvs.gnome.org>
+
 	* src/ephy-extension.c: (ephy_extension_attach_window),
 	(ephy_extension_detach_window), (ephy_extension_attach_tab),
 	(ephy_extension_detach_tab):

@@ -52,11 +52,11 @@
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
+#include <gtk/gtkaboutdialog.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtktoggleaction.h>
-#include <gtk/gtkaboutdialog.h>
 #include <glib/gi18n.h>
 
 enum
@@ -879,9 +879,6 @@ void
 window_cmd_help_about (GtkAction *action,
 		       GtkWidget *window)
 {
-	static GtkWidget *about = NULL;
-	GtkWidget** ptr;
-
 	static char *authors[] = {
 		"Marco Pesenti Gritti <marco@gnome.org>",
 		"Xan Lopez <xan@gnome.org>",
@@ -890,42 +887,23 @@ window_cmd_help_about (GtkAction *action,
 		NULL
 	};
 
-	char *documenters[] = {
+	static char *documenters[] = {
 		"Patanjali Somayaji <patanjali@codito.com>",
 		"David Bordoley <bordoley@msu.edu>",
 		"Piers Cornwell <piers@gnome.org>", 
 		NULL
 	};
 
-	if (about != NULL)
-	{
-		gtk_window_present (GTK_WINDOW (about));
-
-		return;
-	}
-
-
-	about = g_object_new (GTK_TYPE_ABOUT_DIALOG,
-			      "name", _("Epiphany"),
-			      "version", VERSION,
-			      "copyright", "Copyright \xc2\xa9 2002-2004 Marco Pesenti Gritti",
-			      "authors", authors,
-			      "documenters", documenters,
-			      "translator-credits", _("translator-credits"),
-			      "logo-icon-name", "web-browser",
-			      NULL);
-
-	gtk_window_set_icon_name (GTK_WINDOW (about), "web-browser");
-
-	g_signal_connect (about, "response", G_CALLBACK (gtk_widget_destroy), NULL);
-
-	gtk_window_set_transient_for (GTK_WINDOW (about), GTK_WINDOW (window));
-	gtk_window_set_destroy_with_parent (GTK_WINDOW (about), TRUE);
-
-	ptr = &about;
-	g_object_add_weak_pointer (G_OBJECT (about), (gpointer *)ptr);
-
-	gtk_window_present (GTK_WINDOW (about));
+	gtk_show_about_dialog (GTK_WINDOW (window),
+			       "name", _("Epiphany"),
+			       "version", VERSION,
+			       "copyright", "Copyright \xc2\xa9 2002-2004 Marco Pesenti Gritti",
+			       "authors", authors,
+			       "documenters", documenters,
+			       "translator-credits", _("translator-credits"),
+			       "logo-icon-name", "web-browser",
+			       "website", "http://www.gnome.org/projects/epiphany",
+			       NULL);
 }
 
 void
