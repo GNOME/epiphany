@@ -957,6 +957,8 @@ window_cmd_help_about (GtkAction *action,
 		       strcmp (translator_credits, "translator-credits") != 0 ? translator_credits : NULL,
 		       logo);
 
+	gtk_window_set_icon (GTK_WINDOW (about), logo);
+
 	if (logo != NULL)
 	{
 		g_object_unref (logo);
