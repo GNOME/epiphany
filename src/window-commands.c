@@ -747,6 +747,7 @@ window_cmd_help_about (EggAction *action,
 		       GtkWidget *window)
 {
 	static GtkWidget *about = NULL;
+	GtkWidget** ptr;
 	GdkPixbuf *icon;
 	const char *icon_path;
 	GdkPixbuf *logo;
@@ -800,7 +801,8 @@ window_cmd_help_about (EggAction *action,
 	gtk_window_set_icon (GTK_WINDOW (about), icon);
 	g_object_unref(icon);
 
-	g_object_add_weak_pointer (G_OBJECT (about), (gpointer *)&about);
+	ptr = &about;
+	g_object_add_weak_pointer (G_OBJECT (about), (gpointer *)ptr);
 	gtk_widget_show (about);
 }
 

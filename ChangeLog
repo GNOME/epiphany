@@ -1,3 +1,9 @@
+2003-06-08  Jeremy Katz  <katzj@redhat.com>
+
+	* src/ephy-shell.c (ephy_shell_init): Explicitly create pointer to
+	avoid strict aliasing warnings with gcc 3.3.
+	* src/window-commands.c (window_cmd_help_about): Likewise.
+
 2003-06-08  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-window.c: (update_favicon_control),

@@ -227,6 +227,7 @@ static void
 ephy_shell_init (EphyShell *gs)
 {
 	EphyEmbedSingle *single;
+	EphyShell **ptr = &ephy_shell;
 
         gs->priv = g_new0 (EphyShellPrivate, 1);
 	gs->priv->session = NULL;
@@ -237,7 +238,7 @@ ephy_shell_init (EphyShell *gs)
 
 	ephy_shell = gs;
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
-				   (gpointer *)&ephy_shell);
+				   (gpointer *)ptr);
 
 	ephy_debug_init ();
 	ephy_thread_helpers_init ();
