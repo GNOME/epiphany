@@ -1,5 +1,29 @@
 2003-11-24  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/pdm-dialog.c: (pdm_dialog_get_type), (pdm_dialog_class_init),
+	(action_treeview_selection_changed_cb), (pdm_cmd_delete_selection),
+	(pdm_key_pressed_cb), (pdm_dialog_remove_button_clicked_cb),
+	(setup_action), (cookies_treeview_selection_changed_cb),
+	(pdm_dialog_cookies_construct), (cookie_added_cb),
+	(cookie_changed_cb), (cookie_deleted_cb), (cookies_cleared_cb),
+	(pdm_dialog_fill_cookies_list), (pdm_dialog_cookies_destruct),
+	(pdm_dialog_cookie_add), (pdm_dialog_cookie_remove),
+	(pdm_dialog_passwords_construct), (password_added_cb),
+	(password_changed_cb), (password_deleted_cb),
+	(passwords_cleared_cb), (pdm_dialog_fill_passwords_list),
+	(pdm_dialog_passwords_destruct), (pdm_dialog_password_add),
+	(pdm_dialog_password_remove), (sync_notebook_tab),
+	(pdm_dialog_init), (pdm_dialog_finalize),
+	(show_cookies_properties),
+	(pdm_dialog_cookies_properties_button_clicked_cb),
+	(pdm_dialog_response_cb), (pdm_dialog_new):
+
+	Refactored pdm dialogue code. Use new boxed cookie/password info
+	types. Hook up to the single signals to get notified on password/
+	cookie updates [actual updating code to be written :)].
+
+2003-11-24  Christian Persch  <chpe@cvs.gnome.org>
+
 	* data/Makefile.am:
 
 	Added $(mimepermission_DATA) to EXTRA_DIST.

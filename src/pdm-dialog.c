@@ -25,11 +25,11 @@
 
 #include "pdm-dialog.h"
 #include "ephy-shell.h"
-#include "ephy-embed-shell.h"
 #include "ephy-cookie-manager.h"
 #include "ephy-password-manager.h"
 #include "ephy-gui.h"
 #include "ephy-ellipsizing-label.h"
+#include "ephy-debug.h"
 
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkliststore.h>
@@ -40,45 +40,25 @@
 #include <time.h>
 
 typedef struct PdmActionInfo PdmActionInfo;
-
-typedef void (* PDM_add) (PdmActionInfo *info, gpointer data);
-typedef void (* PDM_remove) (PdmActionInfo *info, GList *data);
-typedef void (* PDM_free) (PdmActionInfo *info, GList *data);
-
-static void pdm_dialog_class_init (PdmDialogClass *klass);
-static void pdm_dialog_init (PdmDialog *dialog);
-static void pdm_dialog_finalize (GObject *object);
-
-static void pdm_cmd_delete_selection (PdmActionInfo *action);
-
-/* Glade callbacks */
-void
-pdm_dialog_close_button_clicked_cb (GtkWidget *button,
-			            PdmDialog *dialog);
-void
-pdm_dialog_cookies_properties_button_clicked_cb (GtkWidget *button,
-						 PdmDialog *dialog);
-void
-pdm_dialog_cookies_treeview_selection_changed_cb (GtkTreeSelection *selection,
-						  PdmDialog *dialog);
-void
-pdm_dialog_passwords_treeview_selection_changed_cb (GtkTreeSelection *selection,
-						    PdmDialog *dialog);
-void
-pdm_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data);
-
-static GObjectClass *parent_class = NULL;
-
+	
 struct PdmActionInfo
 {
-	PDM_add add;
-	PDM_remove remove;
-	PDM_free free;
-	GtkWidget *treeview;
-	GList *list;
+	/* Methods */
+	void (* construct)	(PdmActionInfo *info);
+	void (* destruct)	(PdmActionInfo *info);
+	void (* fill)		(PdmActionInfo *info);
+	void (* add)		(PdmActionInfo *info,
+				 gpointer data);
+	void (* remove)		(PdmActionInfo *info,
+				 gpointer data);
+
+	/* Data */
+	PdmDialog *dialog;
+	GtkTreeView *treeview;
+	GtkTreeModel *model;
 	int remove_id;
 	int data_col;
-	PdmDialog *dialog;
+	gboolean filled;
 };
 
 #define EPHY_PDM_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_PDM_DIALOG, PdmDialogPrivate))
@@ -106,6 +86,7 @@ enum
 {
 	COL_COOKIES_HOST,
 	COL_COOKIES_NAME,
+	COL_COOKIES_PATH,
 	COL_COOKIES_DATA
 };
 
@@ -132,42 +113,61 @@ EphyDialogProperty properties [] =
 	{ -1, NULL, NULL }
 };
 
+static void pdm_dialog_class_init	(PdmDialogClass *klass);
+static void pdm_dialog_init		(PdmDialog *dialog);
+static void pdm_dialog_finalize		(GObject *object);
+
+/* Glade callbacks */
+void pdm_dialog_close_button_clicked_cb 		(GtkWidget *button,
+							 PdmDialog *dialog);
+void pdm_dialog_cookies_properties_button_clicked_cb	(GtkWidget *button,
+							 PdmDialog *dialog);
+void pdm_dialog_cookies_treeview_selection_changed_cb	(GtkTreeSelection *selection,
+							 PdmDialog *dialog);
+void pdm_dialog_passwords_treeview_selection_changed_cb	(GtkTreeSelection *selection,
+							 PdmDialog *dialog);
+void pdm_dialog_response_cb (GtkDialog *widget,
+			     int response,
+			     PdmDialog *dialog);
+
+static GObjectClass *parent_class = NULL;
+
 GType 
 pdm_dialog_get_type (void)
 {
-        static GType type = 0;
+	static GType type = 0;
 
-        if (type == 0)
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (PdmDialogClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) pdm_dialog_class_init,
-                        NULL,
-                        NULL, /* class_data */
-                        sizeof (PdmDialog),
-                        0, /* n_preallocs */
-                        (GInstanceInitFunc) pdm_dialog_init
-                };
+	if (type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (PdmDialogClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			(GClassInitFunc) pdm_dialog_class_init,
+			NULL,
+			NULL, /* class_data */
+			sizeof (PdmDialog),
+			0, /* n_preallocs */
+			(GInstanceInitFunc) pdm_dialog_init
+		};
 
 		type = g_type_register_static (EPHY_TYPE_DIALOG,
 					       "PdmDialog",
 					       &our_info, 0);
-        }
+	}
 
-        return type;
+	return type;
 }
 
 static void
 pdm_dialog_class_init (PdmDialogClass *klass)
 {
-        GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-        parent_class = g_type_class_peek_parent (klass);
+	parent_class = g_type_class_peek_parent (klass);
 
-        object_class->finalize = pdm_dialog_finalize;
+	object_class->finalize = pdm_dialog_finalize;
 
 	g_type_class_add_private (object_class, sizeof(PdmDialogPrivate));
 }
@@ -199,22 +199,8 @@ pdm_dialog_show_help (PdmDialog *pd)
 }
 
 static void
-cookies_treeview_selection_changed_cb (GtkTreeSelection *selection,
-                                       PdmDialog *dialog)
-{
-	GtkWidget *widget;
-	EphyDialog *d = EPHY_DIALOG(dialog);
-	gboolean has_selection;
-
-	has_selection = gtk_tree_selection_count_selected_rows (selection) == 1;
-
-	widget = ephy_dialog_get_control (d, PROP_COOKIES_PROPERTIES);
-	gtk_widget_set_sensitive (widget, has_selection);
-}
-
-static void
 action_treeview_selection_changed_cb (GtkTreeSelection *selection,
-                                      PdmActionInfo *action)
+				      PdmActionInfo *action)
 {
 	GtkWidget *widget;
 	EphyDialog *d = EPHY_DIALOG(action->dialog);
@@ -226,138 +212,11 @@ action_treeview_selection_changed_cb (GtkTreeSelection *selection,
 	gtk_widget_set_sensitive (widget, has_selection);
 }
 
-static GtkWidget *
-setup_passwords_treeview (PdmDialog *dialog)
-{
-
-	GtkTreeView *treeview;
-        GtkListStore *liststore;
-        GtkCellRenderer *renderer;
-        GtkTreeViewColumn *column;
-	GtkTreeSelection *selection;
-
-	treeview = GTK_TREE_VIEW(ephy_dialog_get_control
-				 (EPHY_DIALOG(dialog),
-				 PROP_PASSWORDS_TREEVIEW));
-
-        /* set tree model */
-        liststore = gtk_list_store_new (3,
-                                        G_TYPE_STRING,
-                                        G_TYPE_STRING,
-                                        G_TYPE_POINTER);
-        gtk_tree_view_set_model (treeview, GTK_TREE_MODEL(liststore));
-        gtk_tree_view_set_headers_visible (treeview, TRUE);
-	selection = gtk_tree_view_get_selection (treeview);
-	gtk_tree_selection_set_mode (selection,
-				     GTK_SELECTION_MULTIPLE);
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (liststore),
-					      COL_PASSWORDS_HOST,
-					      GTK_SORT_ASCENDING);
-	g_object_unref (liststore);
-
-        renderer = gtk_cell_renderer_text_new ();
-
-        gtk_tree_view_insert_column_with_attributes (treeview,
-                                                     COL_PASSWORDS_HOST,
-						     _("Host"),
-                                                     renderer,
-                                                     "text", COL_PASSWORDS_HOST,
-                                                     NULL);
-        column = gtk_tree_view_get_column (treeview, COL_PASSWORDS_HOST);
-        gtk_tree_view_column_set_resizable (column, TRUE);
-        gtk_tree_view_column_set_reorderable (column, TRUE);
-        gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
-        gtk_tree_view_column_set_sort_column_id (column, COL_PASSWORDS_HOST);
-
-        gtk_tree_view_insert_column_with_attributes (treeview,
-                                                     COL_PASSWORDS_USER,
-						     _("User Name"),
-                                                     renderer,
-                                                     "text", COL_PASSWORDS_USER,
-                                                     NULL);
-        column = gtk_tree_view_get_column (treeview, COL_PASSWORDS_USER);
-        gtk_tree_view_column_set_resizable (column, TRUE);
-        gtk_tree_view_column_set_reorderable (column, TRUE);
-        gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
-        gtk_tree_view_column_set_sort_column_id (column, COL_PASSWORDS_USER);
-
-	return GTK_WIDGET (treeview);
-}
-
-static GtkWidget *
-setup_cookies_treeview (PdmDialog *dialog)
-{
-	GtkTreeView *treeview;
-        GtkListStore *liststore;
-        GtkCellRenderer *renderer;
-        GtkTreeViewColumn *column;
-	GtkTreeSelection *selection;
-
-	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
-				  (EPHY_DIALOG(dialog),
-				  PROP_COOKIES_TREEVIEW));
-
-        /* set tree model */
-        liststore = gtk_list_store_new (3,
-                                        G_TYPE_STRING,
-                                        G_TYPE_STRING,
-                                        G_TYPE_POINTER);
-        gtk_tree_view_set_model (treeview, GTK_TREE_MODEL(liststore));
-        gtk_tree_view_set_headers_visible (treeview, TRUE);
-	selection = gtk_tree_view_get_selection (treeview);
-	gtk_tree_selection_set_mode (selection,
-				     GTK_SELECTION_MULTIPLE);
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (liststore),
-					      COL_COOKIES_HOST,
-					      GTK_SORT_ASCENDING);
-	g_object_unref (liststore);
-
-	g_signal_connect (selection, "changed",
-			  G_CALLBACK(cookies_treeview_selection_changed_cb),
-			  dialog);
-
-	renderer = gtk_cell_renderer_text_new ();
-
-	gtk_tree_view_insert_column_with_attributes (treeview,
-                                                     COL_COOKIES_HOST,
-						     _("Domain"),
-                                                     renderer,
-                                                     "text", COL_COOKIES_HOST,
-                                                     NULL);
-        column = gtk_tree_view_get_column (treeview, COL_COOKIES_HOST);
-        gtk_tree_view_column_set_resizable (column, TRUE);
-        gtk_tree_view_column_set_reorderable (column, TRUE);
-        gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
-        gtk_tree_view_column_set_sort_column_id (column, COL_COOKIES_HOST);
-
-        gtk_tree_view_insert_column_with_attributes (treeview,
-                                                     COL_COOKIES_NAME,
-						     _("Name"),
-                                                     renderer,
-                                                     "text", COL_COOKIES_NAME,
-                                                     NULL);
-        column = gtk_tree_view_get_column (treeview, COL_COOKIES_NAME);
-        gtk_tree_view_column_set_resizable (column, TRUE);
-        gtk_tree_view_column_set_reorderable (column, TRUE);
-        gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
-        gtk_tree_view_column_set_sort_column_id (column, COL_COOKIES_NAME);
-
-	return GTK_WIDGET(treeview);
-}
-
-static void
-pdm_dialog_remove_button_clicked_cb (GtkWidget *button,
-				     PdmActionInfo *action)
-{
-	pdm_cmd_delete_selection (action);
-}
-
 static void
 pdm_cmd_delete_selection (PdmActionInfo *action)
 {
 
 	GList *llist, *rlist = NULL, *l, *r;
-	GList *remove_list = NULL;
 	GtkTreeModel *model;
 	GtkTreeSelection *selection;
 	GtkTreePath *path;
@@ -402,33 +261,20 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 	
 	for (r = rlist; r != NULL; r = r->next)
 	{
-		gpointer data;
-		GValue val = {0, };
+		GValue val = { 0, };
 
 		path = gtk_tree_row_reference_get_path
 			((GtkTreeRowReference *)r->data);
 
-		gtk_tree_model_get_iter
-			(model, &iter, path);
-		gtk_tree_model_get_value
-			(model, &iter, action->data_col, &val);
-		data = g_value_get_pointer (&val);
+		gtk_tree_model_get_iter (model, &iter, path);
+		gtk_tree_model_get_value (model, &iter, action->data_col, &val);
+		action->remove (action, g_value_get_boxed (&val));
 		g_value_unset (&val);
 
-		gtk_list_store_remove (GTK_LIST_STORE(model),
-				       &iter);
-
-		action->list = g_list_remove (action->list, data);
-		remove_list = g_list_append (remove_list, data);
+		gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
 
 		gtk_tree_row_reference_free ((GtkTreeRowReference *)r->data);
 		gtk_tree_path_free (path);
-	}
-
-	if (remove_list)
-	{
-		action->remove (action, remove_list);
-		action->free (action, remove_list);
 	}
 
 	g_list_foreach (llist, (GFunc)gtk_tree_path_free, NULL);
@@ -459,6 +305,7 @@ pdm_key_pressed_cb (GtkTreeView *treeview,
 	if (event->keyval == GDK_Delete || event->keyval == GDK_KP_Delete)
 	{
 		pdm_cmd_delete_selection (action);
+
 		return TRUE;
 	}
 
@@ -466,26 +313,27 @@ pdm_key_pressed_cb (GtkTreeView *treeview,
 }
 
 static void
+pdm_dialog_remove_button_clicked_cb (GtkWidget *button,
+				     PdmActionInfo *action)
+{
+	pdm_cmd_delete_selection (action);
+}
+
+static void
 setup_action (PdmActionInfo *action)
 {
-	GList *l;
 	GtkWidget *widget;
 	GtkTreeSelection *selection;
-
-	for (l = action->list; l != NULL; l = l->next)
-	{
-		action->add (action, l->data);
-	}
 
 	widget = ephy_dialog_get_control (EPHY_DIALOG(action->dialog),
 					  action->remove_id);
 	g_signal_connect (widget, "clicked",
-			  G_CALLBACK(pdm_dialog_remove_button_clicked_cb),
+			  G_CALLBACK (pdm_dialog_remove_button_clicked_cb),
 			  action);
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(action->treeview));
 	g_signal_connect (selection, "changed",
-			  G_CALLBACK(action_treeview_selection_changed_cb),
+			  G_CALLBACK (action_treeview_selection_changed_cb),
 			  action);
 
 	g_signal_connect (G_OBJECT (action->treeview),
@@ -495,149 +343,397 @@ setup_action (PdmActionInfo *action)
 
 }
 
+/* "Cookies" tab */
+
 static void
-pdm_dialog_cookie_add (PdmActionInfo *info,
-		       gpointer cookie)
+cookies_treeview_selection_changed_cb (GtkTreeSelection *selection,
+				       PdmDialog *dialog)
 {
-	GtkListStore *store;
-	GtkTreeIter iter;
-	EphyCookie *cinfo = (EphyCookie *)cookie;
+	GtkWidget *widget;
+	EphyDialog *d = EPHY_DIALOG(dialog);
+	gboolean has_selection;
 
-	store = GTK_LIST_STORE(gtk_tree_view_get_model
-			       (GTK_TREE_VIEW(info->treeview)));
+	has_selection = gtk_tree_selection_count_selected_rows (selection) == 1;
 
-	gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store,
-                            &iter,
-			    COL_COOKIES_HOST, cinfo->domain,
-                            COL_COOKIES_NAME, cinfo->name,
-			    COL_COOKIES_DATA, cinfo,
-                            -1);
+	widget = ephy_dialog_get_control (d, PROP_COOKIES_PROPERTIES);
+	gtk_widget_set_sensitive (widget, has_selection);
 }
 
 static void
-pdm_dialog_password_add (PdmActionInfo *info,
-			 gpointer password)
+pdm_dialog_cookies_construct (PdmActionInfo *info)
 {
+	PdmDialog *dialog = info->dialog;
+	GtkTreeView *treeview;
+	GtkListStore *liststore;
+	GtkCellRenderer *renderer;
+	GtkTreeViewColumn *column;
+	GtkTreeSelection *selection;
+
+	LOG ("pdm_dialog_cookies_construct")
+
+	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
+			(EPHY_DIALOG (dialog), PROP_COOKIES_TREEVIEW));
+
+	/* set tree model */
+	liststore = gtk_list_store_new (4,
+					G_TYPE_STRING,
+					G_TYPE_STRING,
+					G_TYPE_STRING,
+					EPHY_TYPE_COOKIE);
+	gtk_tree_view_set_model (treeview, GTK_TREE_MODEL(liststore));
+	gtk_tree_view_set_headers_visible (treeview, TRUE);
+	selection = gtk_tree_view_get_selection (treeview);
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (liststore),
+					      COL_COOKIES_HOST,
+					      GTK_SORT_ASCENDING);
+	info->model = GTK_TREE_MODEL (liststore);
+	g_object_unref (liststore);
+
+	g_signal_connect (selection, "changed",
+			  G_CALLBACK(cookies_treeview_selection_changed_cb),
+			  dialog);
+
+	renderer = gtk_cell_renderer_text_new ();
+
+	gtk_tree_view_insert_column_with_attributes (treeview,
+						     COL_COOKIES_HOST,
+						     _("Domain"),
+						     renderer,
+						     "text", COL_COOKIES_HOST,
+						     NULL);
+	column = gtk_tree_view_get_column (treeview, COL_COOKIES_HOST);
+	gtk_tree_view_column_set_resizable (column, TRUE);
+	gtk_tree_view_column_set_reorderable (column, TRUE);
+	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+	gtk_tree_view_column_set_sort_column_id (column, COL_COOKIES_HOST);
+
+	gtk_tree_view_insert_column_with_attributes (treeview,
+						     COL_COOKIES_NAME,
+						     _("Name"),
+						     renderer,
+						     "text", COL_COOKIES_NAME,
+						     NULL);
+	column = gtk_tree_view_get_column (treeview, COL_COOKIES_NAME);
+	gtk_tree_view_column_set_resizable (column, TRUE);
+	gtk_tree_view_column_set_reorderable (column, TRUE);
+	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+	gtk_tree_view_column_set_sort_column_id (column, COL_COOKIES_NAME);
+
+	info->treeview = treeview;
+
+	setup_action (info);
+}
+
+static void
+cookie_added_cb (EphyCookieManager *manager,
+		 gpointer data,
+		 PdmDialog *dialog)
+{
+	LOG ("cookie_added_cb")
+}
+
+static void
+cookie_changed_cb (EphyCookieManager *manager,
+		   gpointer data,
+		   PdmDialog *dialog)
+{
+	LOG ("cookie_changed_cb")
+}
+
+static void
+cookie_deleted_cb (EphyCookieManager *manager,
+		   gpointer data,
+		   PdmDialog *dialog)
+{
+	LOG ("cookie_deleted_cb")
+}
+
+static void
+cookies_cleared_cb (EphyCookieManager *manager,
+		    PdmDialog *dialog)
+{
+	LOG ("cookies_cleared_cb")
+}
+
+static void
+pdm_dialog_fill_cookies_list (PdmActionInfo *info)
+{
+	EphyCookieManager *manager;
+	GList *list, *l;
+
+	g_assert (info->filled == FALSE);
+
+	manager = EPHY_COOKIE_MANAGER (ephy_embed_shell_get_embed_single
+			(EPHY_EMBED_SHELL (ephy_shell)));
+
+	list = ephy_cookie_manager_list_cookies (manager);
+
+	for (l = list; l != NULL; l = l->next)
+	{
+		info->add (info, l->data);
+	}
+
+	/* the element data has been consumed, so we need only to free the list */
+	g_list_free (list);
+
+	info->filled = TRUE;
+
+	/* Now connect the callbacks on the EphyCookieManager */
+	g_signal_connect_object (manager, "added",
+				 G_CALLBACK (cookie_added_cb), info->dialog, 0);
+	g_signal_connect_object (manager, "changed",
+				 G_CALLBACK (cookie_changed_cb), info->dialog, 0);
+	g_signal_connect_object (manager, "deleted",
+				 G_CALLBACK (cookie_deleted_cb), info->dialog, 0);
+	g_signal_connect_object (manager, "cleared",
+			  	 G_CALLBACK (cookies_cleared_cb), info->dialog, 0);
+}
+
+static void
+pdm_dialog_cookies_destruct (PdmActionInfo *info)
+{
+}
+
+static void
+pdm_dialog_cookie_add (PdmActionInfo *info,
+		       gpointer data)
+{
+	EphyCookie *cookie = (EphyCookie *) data;
 	GtkListStore *store;
 	GtkTreeIter iter;
-	EphyPasswordInfo *pinfo = (EphyPasswordInfo *)password;
+	GValue value = { 0, };
 
-	store = GTK_LIST_STORE(gtk_tree_view_get_model
-			       (GTK_TREE_VIEW(info->treeview)));
+	store = GTK_LIST_STORE(info->model);
 
 	gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store,
-                            &iter,
-                            COL_PASSWORDS_HOST, pinfo->host,
-                            COL_PASSWORDS_USER, pinfo->username,
-			    COL_PASSWORDS_DATA, pinfo,
-                            -1);
+	gtk_list_store_set (store, &iter,
+			    COL_COOKIES_HOST, cookie->domain,
+			    COL_COOKIES_NAME, cookie->name,
+			    COL_COOKIES_PATH, cookie->path,
+			    -1);
+
+	g_value_init (&value, EPHY_TYPE_COOKIE);
+	g_value_take_boxed (&value, cookie);
+	gtk_list_store_set_value (store, &iter, COL_COOKIES_DATA, &value);
+	g_value_unset (&value);
 }
 
 static void
 pdm_dialog_cookie_remove (PdmActionInfo *info,
-			  GList *data)
+			  gpointer data)
 {
-	EphyEmbedSingle *single;
-	GList *l;
+	EphyCookie *cookie = (EphyCookie *) data;
+	EphyCookieManager *manager;
 
-	single = ephy_embed_shell_get_embed_single
-			(EPHY_EMBED_SHELL (ephy_shell));
+	manager = EPHY_COOKIE_MANAGER (ephy_embed_shell_get_embed_single
+			(EPHY_EMBED_SHELL (ephy_shell)));
 
-	for (l = data; l != NULL; l = l ->next)
+	ephy_cookie_manager_remove_cookie (manager, cookie);
+}
+
+/* "Passwords" tab */
+
+static void
+pdm_dialog_passwords_construct (PdmActionInfo *info)
+{
+	PdmDialog *dialog = info->dialog;
+	GtkTreeView *treeview;
+	GtkListStore *liststore;
+	GtkCellRenderer *renderer;
+	GtkTreeViewColumn *column;
+	GtkTreeSelection *selection;
+
+	LOG ("pdm_dialog_passwords_construct")
+
+	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
+			(EPHY_DIALOG(dialog), PROP_PASSWORDS_TREEVIEW));
+
+	/* set tree model */
+	liststore = gtk_list_store_new (3,
+					G_TYPE_STRING,
+					G_TYPE_STRING,
+					EPHY_TYPE_PASSWORD_INFO);
+	gtk_tree_view_set_model (treeview, GTK_TREE_MODEL(liststore));
+	gtk_tree_view_set_headers_visible (treeview, TRUE);
+	selection = gtk_tree_view_get_selection (treeview);
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (liststore),
+					      COL_PASSWORDS_HOST,
+					      GTK_SORT_ASCENDING);
+	info->model = GTK_TREE_MODEL (liststore);
+	g_object_unref (liststore);
+
+	renderer = gtk_cell_renderer_text_new ();
+
+	gtk_tree_view_insert_column_with_attributes (treeview,
+						     COL_PASSWORDS_HOST,
+						     _("Host"),
+						     renderer,
+						     "text", COL_PASSWORDS_HOST,
+						     NULL);
+	column = gtk_tree_view_get_column (treeview, COL_PASSWORDS_HOST);
+	gtk_tree_view_column_set_resizable (column, TRUE);
+	gtk_tree_view_column_set_reorderable (column, TRUE);
+	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+	gtk_tree_view_column_set_sort_column_id (column, COL_PASSWORDS_HOST);
+
+	gtk_tree_view_insert_column_with_attributes (treeview,
+						     COL_PASSWORDS_USER,
+						     _("User Name"),
+						     renderer,
+						     "text", COL_PASSWORDS_USER,
+						     NULL);
+	column = gtk_tree_view_get_column (treeview, COL_PASSWORDS_USER);
+	gtk_tree_view_column_set_resizable (column, TRUE);
+	gtk_tree_view_column_set_reorderable (column, TRUE);
+	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+	gtk_tree_view_column_set_sort_column_id (column, COL_PASSWORDS_USER);
+
+	info->treeview = treeview;
+
+	setup_action (info);
+}
+
+static void
+password_added_cb (EphyPasswordManager *manager,
+		   gpointer data,
+		   PdmDialog *dialog)
+{
+	LOG ("password_added_cb")
+}
+
+static void
+password_changed_cb (EphyPasswordManager *manager,
+		     gpointer data,
+		     PdmDialog *dialog)
+{
+	LOG ("password_changed_cb")
+}
+
+static void
+password_deleted_cb (EphyPasswordManager *manager,
+		     gpointer data,
+		     PdmDialog *dialog)
+{
+	LOG ("password_deleted_cb")
+}
+
+static void
+passwords_cleared_cb (EphyPasswordManager *manager,
+		      PdmDialog *dialog)
+{
+	LOG ("password_cleared_cb")
+}
+
+static void
+pdm_dialog_fill_passwords_list (PdmActionInfo *info)
+{
+	EphyPasswordManager *manager;
+	GList *list, *l;
+
+	g_assert (info->filled == FALSE);
+
+	manager = EPHY_PASSWORD_MANAGER (ephy_embed_shell_get_embed_single
+			(EPHY_EMBED_SHELL (ephy_shell)));
+
+	list = ephy_password_manager_list (manager);
+
+	for (l = list; l != NULL; l = l->next)
 	{
-		EphyCookie *cookie = (EphyCookie *) l->data;
-
-		ephy_cookie_manager_remove_cookie
-			(EPHY_COOKIE_MANAGER (single), cookie);
+		info->add (info, l->data);
 	}
+
+	/* the element data has been consumed, so we need only to free the list */
+	g_list_free (list);
+
+	info->filled = TRUE;
+
+	/* now connect the callbacks on the EphyPasswordManager */
+	g_signal_connect_object (manager, "added",
+				 G_CALLBACK (password_added_cb), info->dialog, 0);
+	g_signal_connect_object (manager, "changed",
+				 G_CALLBACK (password_changed_cb), info->dialog, 0);
+	g_signal_connect_object (manager, "deleted",
+				 G_CALLBACK (password_deleted_cb), info->dialog, 0);
+	g_signal_connect_object (manager, "cleared",
+				 G_CALLBACK (passwords_cleared_cb), info->dialog, 0);
+}
+
+static void
+pdm_dialog_passwords_destruct (PdmActionInfo *info)
+{
+}
+
+static void
+pdm_dialog_password_add (PdmActionInfo *info,
+			 gpointer data)
+{
+	EphyPasswordInfo *pinfo = (EphyPasswordInfo *) data;
+	GtkListStore *store;
+	GtkTreeIter iter;
+	GValue value = { 0, };
+
+	store = GTK_LIST_STORE (info->model);
+
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store,
+			    &iter,
+			    COL_PASSWORDS_HOST, pinfo->host,
+			    COL_PASSWORDS_USER, pinfo->username,
+			    -1);
+
+	g_value_init (&value, EPHY_TYPE_PASSWORD_INFO);
+	g_value_take_boxed (&value, pinfo);
+	gtk_list_store_set_value (store, &iter, COL_PASSWORDS_DATA, &value);
+	g_value_unset (&value);
 }
 
 static void
 pdm_dialog_password_remove (PdmActionInfo *info,
-			    GList *data)
+			    gpointer data)
 {
-	EphyEmbedSingle *single;
-	GList *l;
+	EphyPasswordInfo *pinfo = (EphyPasswordInfo *) data;
+	EphyPasswordManager *manager;
 
-	single = ephy_embed_shell_get_embed_single
-		(EPHY_EMBED_SHELL (ephy_shell));
+	manager = EPHY_PASSWORD_MANAGER (ephy_embed_shell_get_embed_single
+			(EPHY_EMBED_SHELL (ephy_shell)));
 
-	for (l = data; l != NULL; l = l->next)
-	{
-		EphyPasswordInfo *info = (EphyPasswordInfo *) l->data;
-
-		ephy_password_manager_remove (EPHY_PASSWORD_MANAGER (single), info);
-	}
+	ephy_password_manager_remove (manager, pinfo);
 }
 
-static void
-pdm_dialog_cookies_free (PdmActionInfo *info,
-			 GList *data)
-{
-	GList *l;
+/* common routines */
 
-	l = data ? data : info->list;
-	for (; l != NULL; l = l->next)
+static void
+sync_notebook_tab (GtkWidget *notebook,
+		   GtkNotebookPage *page,
+		   int page_num,
+		   PdmDialog *dialog)
+{
+	/* Lazily fill the list store */
+	if (page_num == 0 && dialog->priv->cookies->filled == FALSE)
 	{
-		EphyCookie *cookie = (EphyCookie *) l->data;
-
-		ephy_cookie_free (cookie);
+		dialog->priv->cookies->fill (dialog->priv->cookies);
 	}
-}
-
-static void
-pdm_dialog_passwords_free (PdmActionInfo *info,
-			   GList *data)
-{
-	GList *l;
-
-	l = data ? data : info->list;
-	for (; l != NULL; l = l->next)
+	else if (page_num == 1 && dialog->priv->passwords->filled == FALSE)
 	{
-		EphyPasswordInfo *pinfo = (EphyPasswordInfo *) l->data;
-
-		ephy_password_info_free (pinfo);
+		dialog->priv->passwords->fill (dialog->priv->passwords);
 	}
-}
-
-/* Group all Properties and Remove buttons in the same size group to avoid the
- * little jerk you get otherwise when switching pages because one set of
- * buttons is wider than another. */
-static void
-group_button_allocations (EphyDialog *dialog)
-{
-       const gint props[] =
-       {
-               PROP_COOKIES_REMOVE,
-               PROP_COOKIES_PROPERTIES,
-               PROP_PASSWORDS_REMOVE
-       };
-       GtkSizeGroup *size_group;
-       guint i;
-
-       size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-
-       for (i = 0; i < G_N_ELEMENTS (props); ++i)
-       {
-               GtkWidget *w;
-               w = ephy_dialog_get_control (dialog, props[i]);
-               gtk_size_group_add_widget (size_group,  w);
-       }
 }
 
 static void
 pdm_dialog_init (PdmDialog *dialog)
 {
-	PdmActionInfo *cookies;
-	PdmActionInfo *passwords;
-	GtkWidget *cookies_tv;
-	GtkWidget *passwords_tv;
-	EphyEmbedSingle *single;
+	PdmActionInfo *cookies, *passwords;
+	GtkWidget *notebook;
 
-	single = ephy_embed_shell_get_embed_single
-		(EPHY_EMBED_SHELL (ephy_shell));
+	const int props[] =
+	{
+		PROP_COOKIES_REMOVE,
+		PROP_COOKIES_PROPERTIES,
+		PROP_PASSWORDS_REMOVE
+	};
+	const guint n_props = G_N_ELEMENTS (props);
 
 	dialog->priv = EPHY_PDM_DIALOG_GET_PRIVATE (dialog);
 
@@ -645,40 +741,49 @@ pdm_dialog_init (PdmDialog *dialog)
 	dialog->priv->passwords = NULL;
 
 	ephy_dialog_construct (EPHY_DIALOG(dialog),
-                               properties,
-                               "epiphany.glade",
-                               "pdm_dialog");
+			       properties,
+			       "epiphany.glade",
+			       "pdm_dialog");
 
-	group_button_allocations (EPHY_DIALOG (dialog));
-
-	cookies_tv = setup_cookies_treeview (dialog);
-	passwords_tv = setup_passwords_treeview (dialog);
+	/**
+	 * Group all Properties and Remove buttons in the same size group to
+	 * avoid the little jerk you get otherwise when switching pages because
+	 * one set of buttons is wider than another.
+	 */
+	ephy_dialog_set_size_group (EPHY_DIALOG (dialog), (int*) props, n_props);
 
 	cookies = g_new0 (PdmActionInfo, 1);
-	cookies->list =
-		ephy_cookie_manager_list_cookies (EPHY_COOKIE_MANAGER (single));
-	cookies->dialog = dialog;
-	cookies->remove_id = PROP_COOKIES_REMOVE;
+	cookies->construct = pdm_dialog_cookies_construct;
+	cookies->destruct = pdm_dialog_cookies_destruct;
+	cookies->fill = pdm_dialog_fill_cookies_list;
 	cookies->add = pdm_dialog_cookie_add;
 	cookies->remove = pdm_dialog_cookie_remove;
-	cookies->free = pdm_dialog_cookies_free;
-	cookies->treeview = cookies_tv;
+	cookies->dialog = dialog;
+	cookies->remove_id = PROP_COOKIES_REMOVE;
 	cookies->data_col = COL_COOKIES_DATA;
-	setup_action (cookies);
+	cookies->filled = FALSE;
 
 	passwords = g_new0 (PdmActionInfo, 1);
-	passwords->list = ephy_password_manager_list (EPHY_PASSWORD_MANAGER (single));
-	passwords->dialog = dialog;
-	passwords->remove_id = PROP_PASSWORDS_REMOVE;
+	passwords->construct = pdm_dialog_passwords_construct;
+	passwords->destruct = pdm_dialog_passwords_destruct;
+	passwords->fill = pdm_dialog_fill_passwords_list;
 	passwords->add = pdm_dialog_password_add;
 	passwords->remove = pdm_dialog_password_remove;
-	passwords->free = pdm_dialog_passwords_free;
-	passwords->treeview = passwords_tv;
+	passwords->dialog = dialog;
+	passwords->remove_id = PROP_PASSWORDS_REMOVE;
 	passwords->data_col = COL_PASSWORDS_DATA;
-	setup_action (passwords);
+	passwords->filled = FALSE;
 
 	dialog->priv->cookies = cookies;
 	dialog->priv->passwords = passwords;
+
+	cookies->construct (cookies);
+	passwords->construct (passwords);
+
+	notebook = ephy_dialog_get_control (EPHY_DIALOG (dialog), PROP_NOTEBOOK);
+	sync_notebook_tab (notebook, NULL, 0, dialog);
+	g_signal_connect (G_OBJECT (notebook), "switch_page",
+			  G_CALLBACK (sync_notebook_tab), dialog);
 }
 
 static void
@@ -686,21 +791,13 @@ pdm_dialog_finalize (GObject *object)
 {
 	PdmDialog *dialog = EPHY_PDM_DIALOG (object);
 
-	pdm_dialog_passwords_free (dialog->priv->passwords, NULL);
-	pdm_dialog_cookies_free (dialog->priv->cookies, NULL);
+	dialog->priv->cookies->destruct (dialog->priv->cookies);
+	dialog->priv->passwords->destruct (dialog->priv->passwords);
 
 	g_free (dialog->priv->passwords);
 	g_free (dialog->priv->cookies);
 
-        G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-EphyDialog *
-pdm_dialog_new (GtkWidget *window)
-{
-	return EPHY_DIALOG (g_object_new (EPHY_TYPE_PDM_DIALOG,
-					  "ParentWindow", window,
-					  NULL));
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
@@ -798,8 +895,8 @@ show_cookies_properties (PdmDialog *dialog,
 
 	dialog_vbox = GTK_DIALOG(gdialog)->vbox;
 	gtk_box_pack_start (GTK_BOX(dialog_vbox),
-                            table,
-                            FALSE, FALSE, 0);
+			    table,
+			    FALSE, FALSE, 0);
 
 	gtk_dialog_run (GTK_DIALOG(gdialog));
 
@@ -816,37 +913,48 @@ pdm_dialog_cookies_properties_button_clicked_cb (GtkWidget *button,
 	GtkTreePath *path;
 	EphyCookie *cookie;
 	GList *l;
-	GtkWidget *treeview = dialog->priv->cookies->treeview;
 	GtkTreeSelection *selection;
 
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
+	selection = gtk_tree_view_get_selection (dialog->priv->cookies->treeview);
 	l = gtk_tree_selection_get_selected_rows
 		(selection, &model);
 
 	path = (GtkTreePath *)l->data;
-        gtk_tree_model_get_iter (model, &iter, path);
+	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_model_get_value
 		(model, &iter, COL_COOKIES_DATA, &val);
-	cookie = (EphyCookie *) g_value_get_pointer (&val);
-	g_value_unset (&val);
+	cookie = (EphyCookie *) g_value_get_boxed (&val);
 
 	show_cookies_properties (dialog, cookie);
+
+	g_value_unset (&val);
 
 	g_list_foreach (l, (GFunc)gtk_tree_path_free, NULL);
 	g_list_free (l);
 }
 
 void
-pdm_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data)
+pdm_dialog_response_cb (GtkDialog *widget,
+			gint response,
+			PdmDialog *dialog)
 {
-	if (response_id == GTK_RESPONSE_CLOSE)
+	switch (response)
 	{
-		gtk_widget_destroy (GTK_WIDGET(dialog));
+		case GTK_RESPONSE_CLOSE:
+			g_object_unref (dialog);
+			break;
+		case GTK_RESPONSE_HELP:
+			pdm_dialog_show_help (dialog);
+			break;
+		default:
+			break;
 	}
-	else if (response_id == GTK_RESPONSE_HELP)
-	{
-		g_return_if_fail (EPHY_IS_PDM_DIALOG (data));
+}
 
-		pdm_dialog_show_help (EPHY_PDM_DIALOG (data));
-	}
+EphyDialog *
+pdm_dialog_new (GtkWidget *window)
+{
+	return EPHY_DIALOG (g_object_new (EPHY_TYPE_PDM_DIALOG,
+					  "ParentWindow", window,
+					  NULL));
 }
