@@ -1,3 +1,23 @@
+2003-07-06  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* src/bookmarks/ephy-bookmarks-import.c:
+	(ephy_bookmarks_import_mozilla), (ephy_bookmarks_import_xbel):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init_defaults),
+	(save_bookmarks_delayed), (ephy_bookmarks_set_dirty),
+	(bookmarks_changed_cb), (bookmarks_removed_cb),
+	(ephy_bookmarks_init), (ephy_bookmarks_finalize),
+	(ephy_bookmarks_add):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/bookmarks/ephy-new-bookmark.c: (ephy_new_bookmark_add):
+	* src/ephy-shell.c: (ephy_shell_finalize),
+	(ephy_shell_get_toolbars_model):
+	* src/ephy-toolbars-model.c: (item_added), (item_removed),
+	(toolbar_added), (toolbar_removed), (ephy_toolbars_model_init),
+	(ephy_toolbars_model_finalize):
+
+	Make sure we ever save bookmarks after changes, so they dont
+	get lost on crashes.
+
 2003-07-06  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/widgets/ephy-node-view.c: (ephy_node_view_button_press_cb),
