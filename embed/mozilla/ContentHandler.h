@@ -21,6 +21,10 @@
 #ifndef __ContentHandler_h
 #define __ContentHandler_h
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "ephy-embed-shell.h"
 
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
