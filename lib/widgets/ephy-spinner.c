@@ -246,6 +246,7 @@ ephy_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	EphySpinner *spinner;
 	GdkPixbuf *pixbuf;
+	GdkGC *gc;
 	int x_offset, y_offset, width, height;
 	GdkRectangle pix_area, dest;
 
@@ -277,14 +278,13 @@ ephy_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
 		return FALSE;
 	}
 
-	gdk_pixbuf_render_to_drawable_alpha (
-		pixbuf, widget->window,
-		dest.x - x_offset, dest.y - y_offset,
-		dest.x, dest.y,
-		dest.width, dest.height,
-		GDK_PIXBUF_ALPHA_BILEVEL, 128,
-		GDK_RGB_DITHER_MAX,
-		0, 0);
+	gc = gdk_gc_new (widget->window);
+	gdk_draw_pixbuf (widget->window, gc, pixbuf,
+			 dest.x - x_offset, dest.y - y_offset,
+			 dest.x, dest.y,
+			 dest.width, dest.height,
+			 GDK_RGB_DITHER_MAX, 0, 0);
+	g_object_unref (gc);
 
 	g_object_unref (pixbuf);
 
