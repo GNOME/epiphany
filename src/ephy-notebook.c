@@ -32,9 +32,10 @@
 #include "ephy-embed.h"
 #include "ephy-window.h"
 #include "ephy-shell.h"
-#include "ephy-debug.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-spinner.h"
+#include "ephy-link.h"
+#include "ephy-debug.h"
 
 #include <glib-object.h>
 #include <gtk/gtkeventbox.h>
@@ -55,6 +56,8 @@
 
 #define AFTER_ALL_TABS -1
 #define NOT_IN_APP_WINDOWS -2
+
+#define INSANE_NUMBER_OF_URLS 20
 
 #define EPHY_NOTEBOOK_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NOTEBOOK, EphyNotebookPrivate))
 
@@ -103,11 +106,11 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_notebook_get_type (void)
 {
-        static GType type = 0;
+	static GType type = 0;
 
-        if (G_UNLIKELY (type == 0))
-        {
-                static const GTypeInfo our_info =
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GTypeInfo our_info =
 			{
 				sizeof (EphyNotebookClass),
 				NULL, /* base_init */
@@ -120,12 +123,22 @@ ephy_notebook_get_type (void)
 				(GInstanceInitFunc) ephy_notebook_init
 			};
 
-                type = g_type_register_static (GTK_TYPE_NOTEBOOK,
-					       "EphyNotebook",
-					       &our_info, 0);
-        }
+		static const GInterfaceInfo link_info =
+		{
+			NULL,
+			NULL,
+			NULL
+		};
 
-        return type;
+	type = g_type_register_static (GTK_TYPE_NOTEBOOK,
+				       "EphyNotebook",
+				       &our_info, 0);
+	g_type_add_interface_static (type,
+				     EPHY_TYPE_LINK,
+				     &link_info);
+	}
+
+	return type;
 }
 
 static void
@@ -575,6 +588,7 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 				guint info, guint time, EphyTab *tab)
 {
 	EphyWindow *window;
+	GtkWidget *notebook;
 
 	g_signal_stop_emission_by_name (widget, "drag_data_received");
 
@@ -583,33 +597,36 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 	if (selection_data->length <= 0 || selection_data->data == NULL) return;
 
 	window = EPHY_WINDOW (gtk_widget_get_toplevel (widget));
+	notebook = ephy_window_get_notebook (window);
 
 	if (selection_data->target == gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE))
 	{
-		char *uris[2] = { NULL, NULL };
 		char **split;
 
 		/* URL_TYPE has format: url \n title */
 		split = g_strsplit (selection_data->data, "\n", 2);
-		if (split != NULL && split[0] != NULL)
+		if (split != NULL && split[0] != NULL && split[0][0] != '\0')
 		{
-			uris[0] = split[0];
-			ephy_window_load_in_tabs (window, tab, uris);
+			ephy_link_open (EPHY_LINK (notebook), split[0], tab,
+					tab ? 0 : EPHY_LINK_NEW_TAB);
 		}
 		g_strfreev (split);
 	}
 	else if (selection_data->target == gdk_atom_intern (EPHY_DND_URI_LIST_TYPE, FALSE))
 	{
 		char **uris;
+		int i;
 
 		uris = gtk_selection_data_get_uris (selection_data);
+		if (uris == NULL) return;
 
-		if (uris != NULL)
+		for (i = 0; uris[i] != NULL && i < INSANE_NUMBER_OF_URLS; i++)
 		{
-			ephy_window_load_in_tabs (window, tab, uris);
-
-			g_strfreev (uris);
+			tab = ephy_link_open (EPHY_LINK (notebook), uris[i],
+					      tab, i == 0 ? 0 : EPHY_LINK_NEW_TAB);
 		}
+
+		g_strfreev (uris);
 	}
 	else
 	{

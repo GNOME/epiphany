@@ -343,7 +343,6 @@ static guint ephy_popups_n_entries = G_N_ELEMENTS (ephy_popups_entries);
 
 #define CONF_LOCKDOWN_HIDE_MENUBAR "/apps/epiphany/lockdown/hide_menubar"
 #define CONF_DESKTOP_BG_PICTURE "/desktop/gnome/background/picture_filename"
-#define INSANE_NUMBER_OF_URLS 20
 
 #define BOOKMARKS_MENU_PATH "/menubar/BookmarksMenu"
 
@@ -2418,6 +2417,11 @@ open_link_cb (EphyLink *link,
 
 	g_return_val_if_fail (address != NULL, NULL);
 
+	if (tab == NULL)
+	{
+		tab = ephy_window_get_active_tab (window);
+	}
+
 	if (flags != 0)
 	{
 		EphyNewTabFlags ntflags = EPHY_NEW_TAB_OPEN_PAGE;
@@ -2437,15 +2441,19 @@ open_link_cb (EphyLink *link,
 
 		new_tab = ephy_shell_new_tab
 				(ephy_shell,
-				 tab ? EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (tab)))
-				     : window,
-				 tab ? tab : ephy_window_get_active_tab (window),
-				 address, ntflags);
+				 EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (tab))),
+				 tab, address, ntflags);
 	}
 	else
 	{
-		ephy_window_load_url (window, address);
-		new_tab = ephy_window_get_active_tab (window);
+		EphyEmbed *embed;
+		
+		embed = ephy_tab_get_embed (tab);
+
+		ephy_embed_load_url (embed, address);
+		ephy_embed_activate (embed);
+
+		new_tab = tab;
 	}
 
 	return new_tab;
@@ -2473,6 +2481,8 @@ ephy_window_init (EphyWindow *window)
 	setup_ui_manager (window);
 
 	window->priv->notebook = setup_notebook (window);
+	g_signal_connect (window->priv->notebook, "open-link",
+			  G_CALLBACK (open_link_cb), window);
 	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
 			    GTK_WIDGET (window->priv->notebook),
 			    TRUE, TRUE, 0);
@@ -3129,46 +3139,6 @@ ephy_window_set_zoom (EphyWindow *window,
 	if (zoom != current_zoom)
 	{
 		ephy_embed_set_zoom (embed, zoom);
-	}
-}
-
-void
-ephy_window_load_in_tabs (EphyWindow *window,
-			  EphyTab *tab,
-			  char **uris)
-{
-	EphyEmbed *embed = NULL;
-	guint num;
-
-	g_return_if_fail (uris != NULL);
-
-	if (tab != NULL)
-	{
-		embed = ephy_tab_get_embed (tab);
-		g_return_if_fail (EPHY_IS_EMBED (embed));
-	}
-
-	for (num = 0; uris[num] != NULL && num < INSANE_NUMBER_OF_URLS; num++)
-	{
-		const char *url = uris[num];
-	
-		if (num == 0 && embed != NULL)
-		{
-			/**
-			 * The first url is special: if the drag was to an
-			 * existing tab, load it there
-			 */
-			ephy_embed_load_url (embed, url);
-		}
-		else
-		{
-			tab = ephy_shell_new_tab (ephy_shell, window,
-						  tab, url,
-						  EPHY_NEW_TAB_OPEN_PAGE |
-						  EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-						  (tab ? EPHY_NEW_TAB_APPEND_AFTER :
-							 EPHY_NEW_TAB_APPEND_LAST));
-		}
 	}
 }
 

@@ -1,5 +1,16 @@
 2004-12-24  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-notebook.c: (ephy_notebook_get_type),
+	(notebook_drag_data_received_cb):
+	* src/ephy-window.c: (open_link_cb), (ephy_window_init),
+	(ephy_window_set_zoom):
+	* src/ephy-window.h:
+
+	Remove obsolete ephy_window_load_in_tabs() and use generic
+	link opening framework instead.
+
+2004-12-24  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-topic-action.c: (append_bookmarks_menu),
 	(open_in_tabs_activate_cb):
 
