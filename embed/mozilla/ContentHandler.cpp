@@ -176,6 +176,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 	else
 	{
 		gtk_widget_destroy (GTK_WIDGET (dialog));
+		g_free (filename);
 
 		return NS_ERROR_FAILURE;
 	}
