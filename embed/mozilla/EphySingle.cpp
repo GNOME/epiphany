@@ -276,14 +276,6 @@ mozilla_cookie_to_ephy_cookie (nsICookie *cookie)
 	cookie->GetIsSecure (&isSecure);
 	info->is_secure = isSecure != PR_FALSE;
 
-	nsCookieStatus status;
-	cookie->GetStatus (&status);
-	info->p3p_state = (EphyCookieP3PState) status;
-
-	nsCookiePolicy policy;
-	cookie->GetPolicy (&policy);
-	info->p3p_policy = (EphyCookieP3PPolicy) policy;
-
 	PRUint64 dateTime;
 	cookie->GetExpires (&dateTime);
 	info->expires = dateTime;

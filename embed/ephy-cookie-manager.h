@@ -1,4 +1,4 @@
-/*
+	/*
  *  Copyright (C) 2003 Marco Pesenti Gritti
  *  Copyright (C) 2003 Christian Persch
  *
@@ -39,25 +39,6 @@ G_BEGIN_DECLS
 typedef struct _EphyCookieManager	EphyCookieManager;
 typedef struct _EphyCookieManagerIface	EphyCookieManagerIface;
 
-typedef enum
-{
-	EPHY_COOKIE_P3P_STATE_UNKNOWN,
-	EPHY_COOKIE_P3P_STATE_ACCEPTED,
-	EPHY_COOKIE_P3P_STATE_DOWNGRADED,
-	EPHY_COOKIE_P3P_STATE_FLAGGED,
-	EPHY_COOKIE_P3P_STATE_REJECTED
-} EphyCookieP3PState;
-
-typedef enum
-{
-	EPHY_COOKIE_P3P_POLICY_UNKNOWN,
-	EPHY_COOKIE_P3P_POLICY_NONE,
-	EPHY_COOKIE_P3P_POLICY_NO_CONSENT,
-	EPHY_COOKIE_P3P_POLICY_IMPLICIT_CONSENT,
-	EPHY_COOKIE_P3P_POLICY_EXPLICIT_CONSENT,
-	EPHY_COOKIE_P3P_POLICY_NO_II,
-} EphyCookieP3PPolicy;
-
 typedef struct
 {
 	char *name;
@@ -66,8 +47,6 @@ typedef struct
 	char *path;
 	gulong expires;
 	glong real_expires;
-	EphyCookieP3PState p3p_state;
-	EphyCookieP3PPolicy p3p_policy;
         guint is_secure : 1;
         guint is_session : 1;
 } EphyCookie;

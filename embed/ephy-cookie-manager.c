@@ -68,8 +68,6 @@ ephy_cookie_copy (const EphyCookie *cookie)
 	copy->real_expires = cookie->real_expires;
 	copy->is_secure = cookie->is_secure;
 	copy->is_session = cookie->is_session;
-	copy->p3p_state = cookie->p3p_state;
-	copy->p3p_policy = cookie->p3p_policy;
 
 	return copy;
 }
