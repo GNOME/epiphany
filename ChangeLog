@@ -1,3 +1,16 @@
+2003-11-08  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_update_menu):
+	* src/ephy-history-window.c: (ephy_history_window_show),
+	(ephy_history_window_class_init),
+	(ephy_history_window_update_menu):
+
+	Focus history entry on _show.
+	Do not try to update paste menu item using the wait
+	api, it can cause a crash on a timeout and anyway
+	it's incosistent what we do in main window.
+
 2003-11-08  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_get_type),
