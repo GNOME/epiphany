@@ -121,7 +121,15 @@ extern void _egg_marshal_BOOLEAN__OBJECT_STRING_STRING (GClosure     *closure,
                                                         gpointer      invocation_hint,
                                                         gpointer      marshal_data);
 
-/* STRING:POINTER (eggmarshalers.list:18) */
+/* BOOLEAN:ENUM,INT (eggmarshalers.list:18) */
+extern void _egg_marshal_BOOLEAN__ENUM_INT (GClosure     *closure,
+                                            GValue       *return_value,
+                                            guint         n_param_values,
+                                            const GValue *param_values,
+                                            gpointer      invocation_hint,
+                                            gpointer      marshal_data);
+
+/* STRING:POINTER (eggmarshalers.list:19) */
 extern void _egg_marshal_STRING__POINTER (GClosure     *closure,
                                           GValue       *return_value,
                                           guint         n_param_values,
@@ -129,7 +137,7 @@ extern void _egg_marshal_STRING__POINTER (GClosure     *closure,
                                           gpointer      invocation_hint,
                                           gpointer      marshal_data);
 
-/* STRING:STRING,STRING (eggmarshalers.list:19) */
+/* STRING:STRING,STRING (eggmarshalers.list:20) */
 extern void _egg_marshal_STRING__STRING_STRING (GClosure     *closure,
                                                 GValue       *return_value,
                                                 guint         n_param_values,
