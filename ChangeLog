@@ -1,3 +1,9 @@
+2003-07-03  Jeremy Katz  <katzj@redhat.com>
+
+	* lib/ephy-node.c (callback): Must use va_copy when assigning
+	valist on arches where varargs are implemented as an array type
+	(such as AMD64)
+
 2003-07-03  Xan Lopez  <xan@masilla.org>
 
 	* embed/mozilla/ContentHandler.cpp:

@@ -126,7 +126,7 @@ callback (long id, EphyNodeSignalData *data, gpointer *dummy)
 
 	user_data = (ENESCData *) dummy;
 
-	valist = user_data->valist;
+	va_copy(valist, user_data->valist);
 
 	if (data->type != user_data->type) return;
 
@@ -158,6 +158,8 @@ callback (long id, EphyNodeSignalData *data, gpointer *dummy)
 			data->callback (data->node, va_arg (valist, int *), data->data);
 		break;
 	}
+
+        va_end(valist);
 }
 
 static void
