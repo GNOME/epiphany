@@ -22,6 +22,7 @@
 
 #include "ephy-bookmarks-toolbar.h"
 #include "ephy-bookmark-action.h"
+#include "ephy-topic-action.h"
 #include "ephy-gobject-misc.h"
 #include "egg-menu-merge.h"
 #include "ephy-shell.h"
@@ -101,14 +102,34 @@ ephy_bookmarks_toolbar_class_init (EphyBookmarksToolbarClass *klass)
 }
 
 static void
+bookmarks_changed_cb (EphyNode *node,
+		      EphyNode *child,
+		      EphyBookmarksToolbar *bt)
+{
+	/* FIXME this is updating way too often, be smarter */
+
+	ephy_bookmarks_toolbar_update (bt);
+}
+
+static void
 ephy_bookmarks_toolbar_init (EphyBookmarksToolbar *wrhm)
 {
 	EphyBookmarksToolbarPrivate *p = g_new0 (EphyBookmarksToolbarPrivate, 1);
+	EphyNode *bms, *topics;
+
 	wrhm->priv = p;
 
 	wrhm->priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	wrhm->priv->ui_id = -1;
 	wrhm->priv->action_group = NULL;
+
+	bms = ephy_bookmarks_get_bookmarks (p->bookmarks);
+	topics = ephy_bookmarks_get_keywords (p->bookmarks);
+
+	g_signal_connect (bms, "child_changed",
+			  G_CALLBACK (bookmarks_changed_cb), wrhm);
+	g_signal_connect (topics, "child_changed",
+			  G_CALLBACK (bookmarks_changed_cb), wrhm);
 }
 
 static void
@@ -120,7 +141,6 @@ ephy_bookmarks_toolbar_clean (EphyBookmarksToolbar *wrhm)
 	if (p->ui_id >= 0)
 	{
 		egg_menu_merge_remove_ui (merge, p->ui_id);
-		egg_menu_merge_ensure_update (merge);
 	}
 
 	if (p->action_group != NULL)
@@ -182,6 +202,17 @@ ephy_bookmarks_toolbar_get_property (GObject *object,
         }
 }
 
+static void
+go_location_cb (EggAction *action, char *location, EphyWindow *window)
+{
+	EphyEmbed *embed;
+
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (embed != NULL);
+
+	ephy_embed_load_url (embed, location);
+}
+
 EphyBookmarksToolbar *
 ephy_bookmarks_toolbar_new (EphyWindow *window)
 {
@@ -192,22 +223,39 @@ ephy_bookmarks_toolbar_new (EphyWindow *window)
 }
 
 static void
+add_toolitem (const char *verb,
+	      GString *xml)
+{
+	static int name_id = 0;
+
+	name_id++;
+
+	g_string_append (xml, "<toolitem name=\"");
+	g_string_append_printf (xml, "Name%d", name_id);
+	g_string_append (xml, "Menu");
+	g_string_append (xml, "\" verb=\"");
+	g_string_append (xml, verb);
+	g_string_append (xml, "\"/>\n");
+}
+
+static void
 ephy_bookmarks_toolbar_rebuild (EphyBookmarksToolbar *wrhm)
 {
 	EphyBookmarksToolbarPrivate *p = wrhm->priv;
 	GString *xml;
-	gint i;
 	EphyNode *bms;
-	GPtrArray *children;
+	EphyNode *topics;
 	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
 	GError *error = NULL;
+	GPtrArray *children;
+	gint i;
 
 	LOG ("Rebuilding recent history menu")
 
 	ephy_bookmarks_toolbar_clean (wrhm);
 
 	bms = ephy_bookmarks_get_bookmarks (p->bookmarks);
-	children = ephy_node_get_children (bms);
+	topics = ephy_bookmarks_get_keywords (p->bookmarks);
 
 	xml = g_string_new (NULL);
 	g_string_append (xml, "<Root><dockitem name=\"BookmarksToolbar\">");
@@ -215,6 +263,39 @@ ephy_bookmarks_toolbar_rebuild (EphyBookmarksToolbar *wrhm)
 	p->action_group = egg_action_group_new ("BookmarksToolbar");
 	egg_menu_merge_insert_action_group (merge, p->action_group, 0);
 
+	children = ephy_node_get_children (topics);
+	for (i = 0; i < children->len; i++)
+	{
+		gulong id;
+		char *verb;
+		EphyNode *child;
+		EggAction *action;
+		gboolean in_toolbar;
+
+		child = g_ptr_array_index (children, i);
+
+		in_toolbar = ephy_node_get_property_boolean
+			(child, EPHY_NODE_BMK_PROP_SHOW_IN_TOOLBAR);
+		if (!in_toolbar) continue;
+
+		id = ephy_node_get_id (child);
+		verb = g_strdup_printf ("GoBookmark%ld", id);
+
+		action = ephy_topic_action_new (verb, id);
+		egg_action_group_add_action (p->action_group, action);
+		g_object_unref (action);
+
+		g_signal_connect (action, "go_location",
+				  G_CALLBACK (go_location_cb),
+				  p->window);
+
+		add_toolitem (verb, xml);
+
+		g_free (verb);
+	}
+	ephy_node_thaw (topics);
+
+	children = ephy_node_get_children (bms);
 	for (i = 0; i < children->len; i++)
 	{
 		gulong id;
@@ -236,16 +317,14 @@ ephy_bookmarks_toolbar_rebuild (EphyBookmarksToolbar *wrhm)
 		egg_action_group_add_action (p->action_group, action);
 		g_object_unref (action);
 
-		g_string_append (xml, "<toolitem name=\"");
-		g_string_append (xml, verb);
-		g_string_append (xml, "Menu");
-		g_string_append (xml, "\" verb=\"");
-		g_string_append (xml, verb);
-		g_string_append (xml, "\"/>\n");
+		g_signal_connect (action, "go_location",
+				  G_CALLBACK (go_location_cb),
+				  p->window);
+
+		add_toolitem (verb, xml);
 
 		g_free (verb);
 	}
-
 	ephy_node_thaw (bms);
 
 	g_string_append (xml, "</dockitem></Root>");
@@ -254,10 +333,13 @@ ephy_bookmarks_toolbar_rebuild (EphyBookmarksToolbar *wrhm)
 	p->ui_id = egg_menu_merge_add_ui_from_string
 		(merge, xml->str, -1, &error);
 
+	egg_menu_merge_ensure_update (merge);
+
 	g_string_free (xml, TRUE);
 }
 
-void ephy_bookmarks_toolbar_update	(EphyBookmarksToolbar *wrhm)
+void
+ephy_bookmarks_toolbar_update (EphyBookmarksToolbar *wrhm)
 {
 	ephy_bookmarks_toolbar_rebuild (wrhm);
 }

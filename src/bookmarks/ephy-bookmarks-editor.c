@@ -41,6 +41,7 @@
 #include "ephy-file-helpers.h"
 #include "egg-action-group.h"
 #include "egg-menu-merge.h"
+#include "egg-toggle-action.h"
 #include "popup-commands.h"
 #include "ephy-state.h"
 #include "window-commands.h"
@@ -86,6 +87,8 @@ static void search_entry_changed_cb       (GtkWidget *entry,
 static void cmd_open_bookmarks_in_tabs    (EggAction *action,
 					   EphyBookmarksEditor *editor);
 static void cmd_open_bookmarks_in_browser (EggAction *action,
+					   EphyBookmarksEditor *editor);
+static void cmd_show_in_the_toolbar       (EggAction *action,
 					   EphyBookmarksEditor *editor);
 static void cmd_delete			  (EggAction *action,
 				           EphyBookmarksEditor *editor);
@@ -145,6 +148,9 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 
 	{ "OpenInTab", N_("Open in New _Tab"), NULL, "<shift><control>O",
 	  NULL, G_CALLBACK (cmd_open_bookmarks_in_tabs), NULL },
+
+	{ "ShowInToolbar", N_("Show in the Toolbar"), NULL, NULL,
+	  NULL, G_CALLBACK (cmd_show_in_the_toolbar), NULL, TOGGLE_ACTION },
 
 	{ "Cut", N_("Cu_t"), GTK_STOCK_CUT, "<control>X",
 	  NULL, G_CALLBACK (cmd_cut), NULL },
@@ -223,6 +229,44 @@ get_target_window (EphyBookmarksEditor *editor)
 	{
 		return GTK_WIDGET (ephy_shell_get_active_window (ephy_shell));
 	}
+}
+
+static void
+cmd_show_in_the_toolbar (EggAction *action,
+		         EphyBookmarksEditor *editor)
+{
+	EphyNode *node;
+	GList *selection;
+	GValue value = { 0, };
+	gboolean state;
+
+	if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->bm_view)))
+	{
+		selection = ephy_node_view_get_selection
+			(EPHY_NODE_VIEW (editor->priv->bm_view));
+	}
+	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->key_view)))
+	{
+		selection = ephy_node_view_get_selection
+			(EPHY_NODE_VIEW (editor->priv->key_view));
+	}
+	else
+	{
+		return;
+	}
+
+	node = EPHY_NODE (selection->data);
+
+	state = EGG_TOGGLE_ACTION (action)->active;
+
+	g_value_init (&value, G_TYPE_BOOLEAN);
+	g_value_set_boolean (&value, state);
+	ephy_node_set_property (node,
+			        EPHY_NODE_BMK_PROP_SHOW_IN_TOOLBAR,
+			        &value);
+	g_value_unset (&value);
+
+	g_list_free (selection);
 }
 
 static void
@@ -337,14 +381,14 @@ cmd_copy (EggAction *action,
 	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->bm_view)))
 	{
 		GList *selection;
-	
+
 		selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->bm_view));
 
 		if (g_list_length (selection) == 1)
 		{
 			const char *tmp;
 			EphyNode *node = EPHY_NODE (selection->data);
-			tmp = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);	
+			tmp = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
 			gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), tmp, -1);
 		}
 
@@ -510,6 +554,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	gboolean key_normal = FALSE;
 	gboolean bmk_multiple_selection;
 	gboolean cut, copy, paste, select_all;
+	gboolean can_show_in_toolbar, show_in_toolbar = FALSE;
 	EggActionGroup *action_group;
 	EggAction *action;
 	GList *selected;
@@ -533,7 +578,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 
 		has_selection = gtk_editable_get_selection_bounds
 			(GTK_EDITABLE (focus_widget), NULL, NULL);
-		clipboard_contains_text = gtk_clipboard_wait_is_text_available 
+		clipboard_contains_text = gtk_clipboard_wait_is_text_available
 			(gtk_clipboard_get (GDK_SELECTION_CLIPBOARD));
 
 		cut = has_selection;
@@ -553,12 +598,27 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	if (key_focus && selected)
 	{
 		EphyNode *node = EPHY_NODE (selected->data);
-		EphyNodeViewPriority priority;;
+		EphyNodeViewPriority priority;
 
 		priority = ephy_node_get_property_int
 			(node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 		if (priority == -1) priority = EPHY_NODE_VIEW_NORMAL_PRIORITY;
 		key_normal = (priority == EPHY_NODE_VIEW_NORMAL_PRIORITY);
+
+		show_in_toolbar = ephy_node_get_property_boolean
+			(node, EPHY_NODE_BMK_PROP_SHOW_IN_TOOLBAR);
+
+		g_list_free (selected);
+	}
+
+	selected = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->bm_view));
+	if (bmk_focus && selected)
+	{
+		EphyNode *node = EPHY_NODE (selected->data);
+
+		show_in_toolbar = ephy_node_get_property_boolean
+			(node, EPHY_NODE_BMK_PROP_SHOW_IN_TOOLBAR);
+
 		g_list_free (selected);
 	}
 
@@ -589,6 +649,8 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	delete = (bmk_focus && bmk_selection) ||
 		 (key_selection && key_focus && key_normal);
 	properties = (bmk_focus && bmk_selection && !bmk_multiple_selection);
+	can_show_in_toolbar = (bmk_focus && bmk_selection && !bmk_multiple_selection) ||
+		 (key_selection && key_focus);
 
 	action_group = editor->priv->action_group;
 	action = egg_action_group_get_action (action_group, "OpenInWindow");
@@ -612,6 +674,9 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	g_object_set (action, "sensitive", paste, NULL);
 	action = egg_action_group_get_action (action_group, "SelectAll");
 	g_object_set (action, "sensitive", select_all, NULL);
+	action = egg_action_group_get_action (action_group, "ShowInToolbar");
+	g_object_set (action, "sensitive", can_show_in_toolbar, NULL);
+	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action), show_in_toolbar);
 }
 
 static void
