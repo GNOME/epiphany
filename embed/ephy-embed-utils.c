@@ -120,6 +120,7 @@ ephy_embed_utils_save (GtkWidget *window,
 		else
 		{
 			g_free (retPath);
+			retPath = NULL;
 			ask_dest = TRUE;
 		}
 	}

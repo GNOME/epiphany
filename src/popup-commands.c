@@ -291,6 +291,8 @@ save_property_url (EggAction *action,
 			       ask_dest,
                                FALSE,
                                persist);
+
+	g_object_unref (G_OBJECT(persist));
 }
 
 void
