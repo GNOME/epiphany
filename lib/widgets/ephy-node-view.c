@@ -400,7 +400,7 @@ drag_data_received_cb (GtkWidget *widget,
 
 		node = get_node_from_path (view, path);
 
-		uris = g_uri_list_extract_uris (selection_data->data);
+		uris = gtk_selection_data_get_uris (selection_data);
 
 		if (uris != NULL)
 		{

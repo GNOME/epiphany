@@ -621,7 +621,7 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 	{
 		char **uris;
 
-		uris = g_uri_list_extract_uris (selection_data->data);
+		uris = gtk_selection_data_get_uris (selection_data);
 
 		if (uris != NULL)
 		{
