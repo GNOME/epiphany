@@ -19,7 +19,6 @@
 #include "EphyWrapper.h"
 #include "GlobalHistory.h"
 #include "ProgressListener.h"
-#include "PrintProgressListener.h"
 #include "ephy-embed.h"
 #include "ephy-string.h"
 
@@ -193,8 +192,7 @@ nsresult EphyWrapper::Print (nsIPrintSettings *options, PRBool preview)
 
 	if (!preview)
 	{
-		GPrintListener *listener = new GPrintListener();
-		result = print->Print (options, listener);
+		result = print->Print (options, nsnull);
 	}
 	else
 	{

@@ -73,8 +73,6 @@ libephymozillaembed_la_SOURCES = 	\
 	MozRegisterComponents.h         \
 	PrintingPromptService.cpp	\
 	PrintingPromptService.h		\
-	PrintProgressListener.cpp       \
-	PrintProgressListener.h         \
 	ProgressListener.cpp		\
 	ProgressListener.h		\
 	mozilla-embed.cpp	        \
