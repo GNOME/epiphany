@@ -166,7 +166,7 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "GoLocation", N_("_Location..."), NULL, "<control>L",
 	  N_("Go to a specified location"),
 	  G_CALLBACK (window_cmd_go_location), NULL },
-	{ "GoHistory", N_("_History"), EPHY_STOCK_HISTORY, "<control>H",
+	{ "GoHistory", N_("H_istory"), EPHY_STOCK_HISTORY, "<control>H",
 	  N_("Go to an already visited page"),
 	  G_CALLBACK (window_cmd_go_history), NULL },
 	{ "GoBookmarks", N_("_Bookmarks"), EPHY_STOCK_BOOKMARKS, "<control>B",
@@ -191,6 +191,9 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_tabs_detach), NULL },
 
 	/* Help menu */
+	{"HelpContents", N_("_Contents"), GTK_STOCK_HELP, "F1",
+	 N_("Display web browser help"),
+	 G_CALLBACK (window_cmd_help_contents), NULL },
 	{ "HelpAbout", N_("_About"), GNOME_STOCK_ABOUT, NULL,
 	  N_("Display credits for the web browser creators"),
 	  G_CALLBACK (window_cmd_help_about), NULL },

@@ -131,6 +131,9 @@ void window_cmd_edit_prefs      (EggAction *action,
 void window_cmd_edit_toolbar	(EggAction *action,
 				 EphyWindow *window);
 
+void window_cmd_help_contents (EggAction *action,
+				 EphyWindow *window);
+
 void window_cmd_help_about      (EggAction *action,
 				 EphyWindow *window);
 

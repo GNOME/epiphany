@@ -646,6 +646,13 @@ window_cmd_edit_toolbar (EggAction *action,
 	ephy_editable_toolbar_edit (EPHY_EDITABLE_TOOLBAR (toolbar));
 }
 
+void 
+window_cmd_help_contents (EggAction *action,
+			 EphyWindow *window)
+{
+	/* FIXME: Need to implement */
+}
+
 void
 window_cmd_help_about (EggAction *action,
 		       EphyWindow *window)
