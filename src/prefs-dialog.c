@@ -99,6 +99,7 @@ struct
 }
 languages [] =
 {
+	{ N_("System language"), "system" },
 	{ N_("Afrikaans"), "ak" },
 	{ N_("Albanian"), "sq" },
 	{ N_("Arabic"), "ar" },

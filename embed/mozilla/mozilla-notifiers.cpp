@@ -509,45 +509,65 @@ mozilla_allow_popups_notifier(GConfClient *client,
 					!new_val);
 }
 
+static char *
+get_system_language ()
+{
+	const GList *sys_langs;
+
+	sys_langs = gnome_i18n_get_language_list ("LC_MESSAGES");
+
+	if (sys_langs)
+	{
+		char *lang = (char *)sys_langs->data;
+
+		/* FIXME this probably need to be smarter */
+		if (strcmp (lang, "C") != 0)
+		{
+			return g_strndup (lang, 2);
+		}
+	}
+
+	return NULL;
+}
+
 static void
 mozilla_language_notifier(GConfClient *client,
 			  guint cnxn_id,
 			  GConfEntry *entry,
 			  EphyEmbedSingle *single)
 {
-	gchar *languages;
-	GSList *language_list ,*cur_lang_list;
-	
-	language_list = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
+	GSList *languages, *l;
+	GString *result;
 
-	languages = NULL;
-	cur_lang_list = language_list;
-	while (cur_lang_list != NULL) {
-		char *lang, *tmp;
+	result = g_string_new ("");
+	languages = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
 
-		lang = g_strdup((char *)cur_lang_list->data);
-		
-		if (languages == NULL)
-			languages = lang;
-		else {
-			tmp = languages;
-			languages = g_strconcat(languages, ",", lang, NULL);
-			g_free(lang);
-			g_free(tmp);
-		}
-		g_free(cur_lang_list->data);
-		cur_lang_list = cur_lang_list->next;
-	}
-
-	if (languages == NULL)
+	for (l = languages; l != NULL; l = l->next)
 	{
-		languages = g_strdup ("");
+		char *lang = (char *)l->data;
+
+		if (strcmp (lang, "system") == 0)
+		{
+			char *sys_lang;
+			
+			sys_lang = get_system_language ();
+			if (sys_lang)
+			{
+				g_string_append (result, sys_lang);
+				g_free (sys_lang);
+			}
+		}
+		else
+		{
+			g_string_append (result, (char *)l->data);
+		}
+
+		if (l->next) g_string_append (result, ",");
 	}
+	
+	mozilla_prefs_set_string ("intl.accept_languages", result->str);
 
-	mozilla_prefs_set_string ("intl.accept_languages", languages);
-	g_free (languages);
-
-	g_slist_free(language_list);
+	g_string_free (result, TRUE);
 }
 
 static char *autodetect_charset_prefs[] =
