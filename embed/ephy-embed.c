@@ -212,8 +212,8 @@ ephy_embed_base_init (gpointer g_class)
 			      ephy_marshal_VOID__STRING_STRING,
 			      G_TYPE_NONE,
 			      2,
-			      G_TYPE_POINTER,
-			      G_TYPE_POINTER);
+			      G_TYPE_STRING,
+			      G_TYPE_STRING);
 /**
  * EphyEmbed::ge-context-menu:
  * @embed:
