@@ -124,7 +124,6 @@ encoding_entries [] =
 	{ N_("Turkish (_MacTurkish)"),              "x-mac-turkish",         LG_TURKISH,	FALSE },
 	{ N_("Turkish (_Windows-1254)"),            "windows-1254",          LG_TURKISH,	FALSE },
 	{ N_("Unicode (UTF-_8)"),                   "UTF-8",                 LG_UNICODE,	FALSE },
-	{ N_("Unicode (UTF-_7)"),                   "UTF-7",                 LG_UNICODE,	FALSE },
 	{ N_("Cyrillic/Ukrainian (_KOI8-U)"),       "KOI8-U",                LG_UKRAINIAN,	FALSE },
 	{ N_("Cyrillic/Ukrainian (Mac_Ukrainian)"), "x-mac-ukrainian",       LG_UKRAINIAN,	FALSE },
 	{ N_("Vietnamese (_TCVN)"),                 "x-viet-tcvn5712",       LG_VIETNAMESE,	FALSE },
@@ -142,7 +141,7 @@ encoding_entries [] =
 	 */
 	{ N_("English (_US-ASCII)"),                "us-ascii",              0,			FALSE },
 	{ N_("Unicode (UTF-_16 BE)"),               "UTF-16BE",              0,			FALSE },
-	{ N_("Unicode (UTF-1_6 LE)"),               "UTF-16LE",              0,			FALSE},
+	{ N_("Unicode (UTF-1_6 LE)"),               "UTF-16LE",              0,			FALSE },
 	{ N_("Unicode (UTF-_32 BE)"),               "UTF-32BE",              0,			FALSE },
 	{ N_("Unicode (UTF-3_2 LE)"),               "UTF-32LE",              0,			FALSE },
 
