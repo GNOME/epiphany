@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany 1.1.5\n"
+"Project-Id-Version: epiphany 1.1.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-01 03:46+0900\n"
-"PO-Revision-Date: 2004-02-01 03:46+0900\n"
+"POT-Creation-Date: 2004-02-10 20:28+0900\n"
+"PO-Revision-Date: 2004-02-10 20:35+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -664,7 +664,7 @@ msgstr "찾기(_F):"
 msgid "_Next"
 msgstr "다음(_N)"
 
-#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:538
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:533
 msgid "_Pause"
 msgstr "일시 중지(_P)"
 
@@ -952,7 +952,7 @@ msgstr "흑백(_G)"
 
 #: data/glade/print.glade.h:31
 msgid "_Left:"
-msgstr "왼쪽(_F):"
+msgstr "왼쪽(_L):"
 
 #: data/glade/print.glade.h:32
 msgid "_Letter"
@@ -1023,7 +1023,7 @@ msgid "Cut the Selection"
 msgstr "선택한 것을 잘라냅니다"
 
 #: data/ui/nautilus-epiphany-view.xml.h:10
-#: embed/ephy-embed-popup-control.c:547
+#: embed/ephy-embed-popup-control.c:551
 msgid "Download Link"
 msgstr "바로가기 내려받기"
 
@@ -1128,64 +1128,64 @@ msgstr "찾기(_F)..."
 msgid "_Print..."
 msgstr "인쇄(_P)..."
 
-#: embed/downloader-view.c:230
+#: embed/downloader-view.c:225
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: embed/downloader-view.c:234
+#: embed/downloader-view.c:229
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: embed/downloader-view.c:304 lib/widgets/ephy-cell-renderer-progress.c:35
+#: embed/downloader-view.c:299 lib/widgets/ephy-cell-renderer-progress.c:35
 #: src/ephy-window.c:1147
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: embed/downloader-view.c:353
+#: embed/downloader-view.c:348
 #, c-format
 msgid "About %d second left"
 msgid_plural "About %d seconds left"
 msgstr[0] "약 %d초 남았습니다"
 
-#: embed/downloader-view.c:361
+#: embed/downloader-view.c:356
 #, c-format
 msgid "About %d minute left"
 msgid_plural "About %d minutes left"
 msgstr[0] "약 %d분 남았습니다"
 
-#: embed/downloader-view.c:368
+#: embed/downloader-view.c:363
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
 msgstr[0] "내려받기 %d개"
 
-#: embed/downloader-view.c:466
+#: embed/downloader-view.c:461
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:476
+#: embed/downloader-view.c:471
 msgid "File"
 msgstr "파일"
 
-#: embed/downloader-view.c:489
+#: embed/downloader-view.c:484
 msgid "Remaining"
 msgstr "남은 시간"
 
-#: embed/downloader-view.c:533
+#: embed/downloader-view.c:528
 msgid "_Resume"
 msgstr "계속(_R)"
 
-#: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:344
+#: embed/ephy-embed-popup-control.c:561 src/popup-commands.c:344
 msgid "Save Image As"
 msgstr "다른 이름으로 그림 저장"
 
-#: embed/ephy-embed-popup-control.c:641
+#: embed/ephy-embed-popup-control.c:645
 msgid "Save Page As"
 msgstr "다른 이름으로 페이지 저장"
 
-#: embed/ephy-embed-popup-control.c:650 src/popup-commands.c:432
+#: embed/ephy-embed-popup-control.c:654 src/popup-commands.c:432
 msgid "Save Background As"
 msgstr "다른 이름으로 바탕그림 저장"
 
@@ -1463,23 +1463,23 @@ msgstr "베트남어 (_Windows-1258)"
 
 #: embed/ephy-encodings.c:133
 msgid "Western (_IBM-850)"
-msgstr "서양어 (_IBM-850)"
+msgstr "서유럽어 (_IBM-850)"
 
 #: embed/ephy-encodings.c:134
 msgid "Western (_ISO-8859-1)"
-msgstr "서양어 (_ISO-8859-1)"
+msgstr "서유럽어 (_ISO-8859-1)"
 
 #: embed/ephy-encodings.c:135
 msgid "Western (IS_O-8859-15)"
-msgstr "서양어 (IS_O-8859-15)"
+msgstr "서유럽어 (IS_O-8859-15)"
 
 #: embed/ephy-encodings.c:136
 msgid "Western (_MacRoman)"
-msgstr "서양어 (_MacRoman)"
+msgstr "서유럽어 (_MacRoman)"
 
 #: embed/ephy-encodings.c:137
 msgid "Western (_Windows-1252)"
-msgstr "서양어 (_Windows-1252)"
+msgstr "서유럽어 (_Windows-1252)"
 
 #. the following encodings are so rarely used that we don't want to pollute the "related"
 #. * part of the encodings menu with them, so we set the language group to 0 here
@@ -1612,10 +1612,8 @@ msgstr "파일을 내려받으시겠습니까?"
 #: embed/mozilla/ContentHandler.cpp:302
 msgid ""
 "It's not possible to view this file because there is no application "
-"installed that can open it.You can save it instead."
-msgstr ""
-"이 파일은 볼 수 없습니다. 이 파일을 열 수 있는 프로그램이 설치되어 있지 않습"
-"니다. 대신에 저장할 수 있습니다."
+"installed that can open it. You can save it instead."
+msgstr "이 파일은 볼 수 없습니다. 이 파일을 열 수 있는 프로그램이 설치되어 있지 않습니다. 대신에 저장할 수 있습니다."
 
 #: embed/mozilla/EphyHeaderSniffer.cpp:289
 #: src/bookmarks/ephy-bookmarks-import.c:247
@@ -1762,7 +1760,7 @@ msgstr "%s에 대한 보안 정보가 %s까지는 유효하지 않습니다."
 #. * strftime(3)
 #: embed/mozilla/GtkNSSDialogs.cpp:434
 msgid "%a %d %b %Y"
-msgstr "%Y년 %b %d일 %a"
+msgstr "%Y년 %b %-d일 (%a)"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:445
 msgid "You should ensure that your computer's time is correct."
@@ -1973,7 +1971,7 @@ msgstr ""
 msgid "GConf Error"
 msgstr "GConf 오류"
 
-#: lib/egg/egg-editable-toolbar.c:504
+#: lib/egg/egg-editable-toolbar.c:510
 msgid "_Remove Toolbar"
 msgstr "도구 모음 지우기(_R)"
 
@@ -1990,7 +1988,7 @@ msgstr ""
 "지워집니다."
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:71 src/prefs-dialog.c:1113
+#: lib/ephy-file-helpers.c:71 src/prefs-dialog.c:1115
 msgid "Downloads"
 msgstr "내려받기"
 
@@ -2085,7 +2083,7 @@ msgstr "유니코드"
 
 #: lib/ephy-langs.c:49
 msgid "Western"
-msgstr "서양어"
+msgstr "서유럽어"
 
 #: lib/ephy-zoom.h:41
 msgid "50%"
@@ -2127,11 +2125,7 @@ msgstr "400%"
 msgid "Failed"
 msgstr "실패함"
 
-#: lib/widgets/ephy-zoom-control.c:138
-msgid "_Zoom"
-msgstr "크기 조절(_Z)"
-
-#: src/bookmarks/ephy-bookmark-action.c:219
+#: src/bookmarks/ephy-bookmark-action.c:221
 #, c-format
 msgid "%s:"
 msgstr "%s:"
@@ -2376,7 +2370,7 @@ msgid "_Search:"
 msgstr "찾기(_S):"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:1357
-#: src/bookmarks/ephy-topic-action.c:621 src/ephy-window.c:968
+#: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:968
 msgid "Bookmarks"
 msgstr "책갈피"
 
@@ -2475,7 +2469,7 @@ msgstr "그 외 인코딩"
 msgid "_Automatic"
 msgstr "자동(_A)"
 
-#: src/ephy-go-action.c:80 src/ephy-go-action.c:97 src/toolbar.c:409
+#: src/ephy-go-action.c:73 src/toolbar.c:409
 msgid "Go"
 msgstr "이동"
 
@@ -2513,7 +2507,7 @@ msgstr "기록 비우기(_L)"
 
 #: src/ephy-history-window.c:188
 msgid "Clear your browsing history"
-msgstr "방문기록을 비웁니다"
+msgstr "방문 기록을 비웁니다"
 
 #: src/ephy-history-window.c:193
 msgid "Display history help"
@@ -2528,8 +2522,8 @@ msgid "Show only the address column"
 msgstr "칸에 주소만 보입니다"
 
 #: src/ephy-history-window.c:246
-msgid "Clear history"
-msgstr "기록을 비웁니다"
+msgid "Clear History"
+msgstr "방문 기록 비우기"
 
 #: src/ephy-history-window.c:278
 msgid "C_lear"
@@ -2543,7 +2537,7 @@ msgstr "방문 기록을 비우시겠습니까?"
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
-msgstr "방문기록을 지우면 모든 방문 연결이 완전히 지워지게 됩니다."
+msgstr "방문 기록을 지우면 모든 방문 연결이 완전히 지워지게 됩니다."
 
 #: src/ephy-history-window.c:1047
 msgid "Today"
@@ -2579,7 +2573,7 @@ msgstr "주어진 세션파일을 읽어들입니다"
 
 #: src/ephy-main.c:59 src/ephy-main.c:65
 msgid "FILE"
-msgstr "파일"
+msgstr "<파일>"
 
 #: src/ephy-main.c:61
 msgid "Add a bookmark (don't open any window)"
@@ -2621,12 +2615,12 @@ msgstr "복구하지 않기(_D)"
 msgid "_Recover"
 msgstr "복구하기(_R)"
 
-#: src/ephy-session.c:331
+#: src/ephy-session.c:332
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr "Epiphany가 마지막으로 작동할 때 비정상적으로 죽은 것 같습니다."
 
-#: src/ephy-session.c:337
+#: src/ephy-session.c:338
 msgid "You can recover the opened tabs and windows."
 msgstr "열었던 탭과 창을 복구할 수 있습니다."
 
@@ -2655,33 +2649,33 @@ msgstr ""
 "Epiphany를 지금 사용할 수 없습니다. 자동화 오브젝트를 찾는 데 보노보에 예상"
 "치 못한 오류가 발생했습니다."
 
-#: src/ephy-tab.c:326 src/ephy-tab.c:1140 src/ephy-tab.c:1322
+#: src/ephy-tab.c:327 src/ephy-tab.c:1174 src/ephy-tab.c:1356
 msgid "Blank page"
 msgstr "빈 페이지"
 
-#: src/ephy-tab.c:747
+#: src/ephy-tab.c:748
 msgid "site"
 msgstr "사이트"
 
-#: src/ephy-tab.c:771
+#: src/ephy-tab.c:772
 #, c-format
 msgid "Redirecting to %s..."
-msgstr "%s(으)로 재지정 하는 중..."
+msgstr "%s 사이트로 다시 연결하는 중입니다..."
 
-#: src/ephy-tab.c:775
+#: src/ephy-tab.c:776
 #, c-format
 msgid "Transferring data from %s..."
-msgstr "%s에서 데이터 받는 중..."
+msgstr "%s에서 데이터를 받는 중입니다..."
 
-#: src/ephy-tab.c:779
+#: src/ephy-tab.c:780
 #, c-format
 msgid "Waiting for authorization from %s..."
-msgstr "%s에서 인증받기를 기다리는 중..."
+msgstr "%s에서 인증받기를 기다리는 중입니다..."
 
-#: src/ephy-tab.c:787
+#: src/ephy-tab.c:788
 #, c-format
 msgid "Loading %s..."
-msgstr "%s을(를) 읽는 중..."
+msgstr "%s 사이트를 읽는 중입니다..."
 
 #: src/ephy-window.c:79
 msgid "_Bookmarks"
@@ -3226,19 +3220,19 @@ msgstr "바로가기 내려받기"
 
 #: src/ppview-toolbar.c:93
 msgid "Go to the first page"
-msgstr "첫 페이지로 가기"
+msgstr "첫 페이지로 갑니다"
 
 #: src/ppview-toolbar.c:97
 msgid "Go to the last page"
-msgstr "마지막 둘러본 페이지로 가기"
+msgstr "마지막 페이지로 갑니다"
 
 #: src/ppview-toolbar.c:101
 msgid "Go to the previous page"
-msgstr "이전 페이지로 가기"
+msgstr "이전 페이지로 갑니다"
 
 #: src/ppview-toolbar.c:105
 msgid "Go to next page"
-msgstr "다음 페이지로 가기"
+msgstr "다음 페이지로 갑니다"
 
 #: src/ppview-toolbar.c:108
 msgid "Close"
@@ -3305,7 +3299,7 @@ msgstr "덴마크어"
 
 #: src/prefs-dialog.c:121
 msgid "Dutch"
-msgstr "네델란드어"
+msgstr "네덜란드어"
 
 #: src/prefs-dialog.c:122
 msgid "English"
@@ -3435,12 +3429,12 @@ msgstr "베트남어"
 msgid "Walloon"
 msgstr "왈룬어"
 
-#: src/prefs-dialog.c:1055
+#: src/prefs-dialog.c:1057
 #, c-format
 msgid "Custom [%s]"
 msgstr "사용자 정의 [%s]"
 
-#: src/prefs-dialog.c:1100
+#: src/prefs-dialog.c:1102
 msgid "Desktop"
 msgstr "바탕 화면"
 
@@ -3448,11 +3442,11 @@ msgstr "바탕 화면"
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1108
+#: src/prefs-dialog.c:1110
 msgid "Home"
 msgstr "홈"
 
-#: src/prefs-dialog.c:1323
+#: src/prefs-dialog.c:1325
 msgid "Select a directory"
 msgstr "디렉토리를 선택하십시오"
 
@@ -3524,3 +3518,9 @@ msgstr "차영호 <ganadist at mizi.com>, 2003"
 #: src/window-commands.c:983
 msgid "A GNOME browser based on Mozilla"
 msgstr "모질라 기반 그놈 브라우저"
+
+#~ msgid "_Zoom"
+#~ msgstr "크기 조절(_Z)"
+
+#~ msgid "Clear history"
+#~ msgstr "기록을 비웁니다"
