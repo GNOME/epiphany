@@ -298,16 +298,6 @@ prefs_build_notebook (PrefsDialog *pd)
 	}
 }
 
-static gboolean
-prefs_dialog_configure_event_cb (GtkWidget *widget,
-				 GdkEventConfigure *event,
-				 gpointer data)
-{
-	ephy_state_save_window (widget, "prefs_dialog");
-
-	return FALSE;
-}
-
 static void
 prefs_dialog_init (PrefsDialog *pd)
 {
@@ -316,13 +306,8 @@ prefs_dialog_init (PrefsDialog *pd)
 	gtk_window_set_title (GTK_WINDOW(pd), _("Preferences"));
 	gtk_dialog_set_has_separator (GTK_DIALOG(pd), FALSE);
 
-	ephy_state_load_window (GTK_WIDGET(pd),
-			       "prefs_dialog", -1, -1, FALSE);
-
-	g_signal_connect (pd,
-			  "configure_event",
-			  G_CALLBACK (prefs_dialog_configure_event_cb),
-			  NULL);
+	ephy_state_add_window (GTK_WIDGET(pd),
+			       "prefs_dialog", -1, -1);
 
 	prefs_build_notebook (pd);
 }

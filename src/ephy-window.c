@@ -268,7 +268,6 @@ struct EphyWindowPrivate
 	EphyDialog *history_dialog;
 	EphyDialog *history_sidebar;
 	EmbedChromeMask chrome_mask;
-	gboolean has_default_size;
 	gboolean closing;
 };
 
@@ -378,36 +377,6 @@ ephy_window_selection_received_cb (GtkWidget *widget,
 }
 
 static void
-save_window_state (GtkWidget *win)
-{
-	EphyWindow *window = EPHY_WINDOW (win);
-
-	if (!(window->priv->chrome_mask & EMBED_CHROME_OPENASPOPUP) &&
-	    !(window->priv->chrome_mask & EMBED_CHROME_OPENASFULLSCREEN))
-	{
-		ephy_state_save_window (win, "main_window");
-	}
-}
-
-static gboolean
-ephy_window_configure_event_cb (GtkWidget *widget,
-				GdkEventConfigure *event,
-				gpointer data)
-{
-	save_window_state (widget);
-	return FALSE;
-}
-
-static gboolean
-ephy_window_state_event_cb (GtkWidget *widget,
-			    GdkEventWindowState *event,
-			    gpointer data)
-{
-	save_window_state (widget);
-	return FALSE;
-}
-
-static void
 add_widget (EggMenuMerge *merge, GtkWidget *widget, EphyWindow *window)
 {
 	if (GTK_IS_MENU_SHELL (widget))
@@ -478,10 +447,6 @@ setup_window (EphyWindow *window)
 			 "key-press-event",
                          G_CALLBACK(ephy_window_key_press_event_cb),
                          window);
-	g_signal_connect (window, "configure_event",
-			  G_CALLBACK (ephy_window_configure_event_cb), NULL);
-	g_signal_connect (window, "window_state_event",
-			  G_CALLBACK (ephy_window_state_event_cb), NULL);
 	g_signal_connect (window,
 			  "selection-received",
 			  G_CALLBACK (ephy_window_selection_received_cb),
@@ -530,7 +495,6 @@ ephy_window_init (EphyWindow *window)
 	window->priv->active_tab = NULL;
 	window->priv->chrome_mask = 0;
 	window->priv->closing = FALSE;
-	window->priv->has_default_size = FALSE;
 	window->priv->ppview_toolbar = NULL;
 	window->priv->toolbars = NULL;
 
@@ -973,12 +937,13 @@ ephy_window_show (GtkWidget *widget)
 	tab = ephy_window_get_active_tab (window);
 	if (tab) ephy_tab_get_size (tab, &w, &h);
 
-	if (!window->priv->has_default_size && w == -1 && h == -1)
+	if (!(window->priv->chrome_mask & EMBED_CHROME_OPENASPOPUP) &&
+	    !(window->priv->chrome_mask & EMBED_CHROME_OPENASFULLSCREEN) &&
+	    !GTK_WIDGET_VISIBLE (widget))
 	{
-		ephy_state_load_window (GTK_WIDGET(window),
+		ephy_state_add_window (GTK_WIDGET(window),
 				       "main_window",
-			               600, 500, TRUE);
-		window->priv->has_default_size = TRUE;
+			               600, 500);
 	}
 
 	GTK_WIDGET_CLASS (parent_class)->show (widget);

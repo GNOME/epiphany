@@ -1,6 +1,7 @@
 /*
  *  Copyright (C) 2001 Matthew Mueller
  *            (C) 2002 Jorn Baayen <jorn@nl.linux.org>
+ *	      (C) 2003 Marco Pesenti Gritti <mpeseng@tin.it>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,29 +16,22 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *  
- *  $Id$
+ *
  */
 
 #ifndef EPHY_STATE_H
 #define EPHY_STATE_H
 
+#include "gtk/gtkwidget.h"
+
 G_BEGIN_DECLS
 
-void ephy_state_save_window	(GtkWidget *window,
-				 const gchar *name);
-
-void ephy_state_load_window	(GtkWidget *window,
-				 const gchar *name,
+void ephy_state_add_window	(GtkWidget *window,
+				 const char *name,
 				 int default_width,
-				 int default_heigth,
-				 gboolean position);
+				 int default_heigth);
 
-void ephy_state_save_pane_pos	(GtkWidget *pane,
-				 const gchar *name);
-
-void ephy_state_load_pane_pos	(GtkWidget *pane,
-				 const gchar *name);
+void ephy_state_save		(void);
 
 G_END_DECLS
 

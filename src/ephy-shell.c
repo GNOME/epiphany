@@ -21,6 +21,7 @@
 #endif
 
 #include "ephy-shell.h"
+#include "ephy-state.h"
 #include "ephy-embed-shell.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
@@ -324,6 +325,7 @@ ephy_shell_finalize (GObject *object)
 
         g_free (gs->priv);
 
+	ephy_state_save ();
 	ephy_file_helpers_shutdown ();
 	ephy_node_system_shutdown ();
 

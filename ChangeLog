@@ -1,3 +1,21 @@
+2003-03-18  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/ephy-dialog.c: (setup_default_size):
+	* lib/ephy-state.c: (ephy_states_load), (ephy_states_save),
+	(find_by_name), (ensure_states), (ephy_state_window_set_size),
+	(ephy_state_window_save_size), (window_configure_event_cb),
+	(window_state_event_cb), (ephy_state_add_window),
+	(ephy_state_save):
+	* lib/ephy-state.h:
+	* lib/ephy-types.h:
+	* src/ephy-shell.c: (ephy_shell_finalize):
+	* src/ephy-window.c: (setup_window), (ephy_window_init),
+	(ephy_window_show):
+	* src/prefs-dialog.c: (prefs_dialog_init):
+
+	Reimplement ephystate using xml and make it easier to use.
+	-> remove some duplicate code
+
 2003-03-17  Jon Svendsen  <jon-sven@frisurf.no>
 
 	* lib/ephy-state.c: (ephy_state_save_window):

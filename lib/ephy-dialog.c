@@ -837,26 +837,11 @@ impl_get_value (EphyDialog *dialog,
 	}
 }
 
-static gboolean
-ephy_dialog_configure_event_cb (GtkWidget *widget,
-				GdkEventConfigure *event,
-				EphyDialog *dialog)
-{
-	ephy_state_save_window (widget, dialog->priv->name);
-
-	return FALSE;
-}
-
 static void
 setup_default_size (EphyDialog *dialog)
 {
-	ephy_state_load_window (dialog->priv->dialog,
-			        dialog->priv->name, -1, -1, FALSE);
-
-	g_signal_connect (dialog->priv->dialog,
-			  "configure_event",
-			  G_CALLBACK (ephy_dialog_configure_event_cb),
-			  dialog);
+	ephy_state_add_window (dialog->priv->dialog,
+			       dialog->priv->name, -1, -1);
 }
 
 static gint
