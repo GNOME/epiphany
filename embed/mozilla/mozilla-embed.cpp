@@ -468,11 +468,12 @@ impl_go_up (EphyEmbed *embed)
 	
 	parent_uri = mozilla_embed_get_uri_parent (uri);
 	g_free (uri);
-	g_return_if_fail (parent_uri != NULL);
 
-	ephy_embed_load_url (embed, parent_uri);
-
-	g_free (parent_uri);
+	if (parent_uri)
+	{
+		ephy_embed_load_url (embed, parent_uri);
+		g_free (parent_uri);
+	}
 }
 
 static char *
