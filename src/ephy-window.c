@@ -294,8 +294,8 @@ static GtkActionEntry ephy_popups_entries [] = {
 
 	/* Framed document */
 
-	{ "OpenFrame", NULL, N_("_Open Frame"), NULL,
-	  N_("Open frame in this window"),
+	{ "OpenFrame", NULL, N_("Show Only This _Frame"), NULL,
+	  N_("Show only this frame in this window"),
 	  G_CALLBACK (popup_cmd_open_frame) },
 
 	/* Links */
