@@ -58,6 +58,7 @@ struct RedirEntry {
 static RedirEntry kRedirMap[] = {
 	{ "epiphany", "file://" SHARE_DIR "/epiphany.html" },
 	{ "options", "http://epiphany.mozdev.org/about/options.html" },
+	{ "marco", "http://mpgritti.oltrelinux.com" }
 };
 static const int kRedirTotal = sizeof(kRedirMap)/sizeof(*kRedirMap);
 

@@ -135,6 +135,11 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 		flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
 	}
 
+	if (fullscreen)
+	{
+		flags |= EPHY_NEW_TAB_FULLSCREEN;
+	}
+
 	ephy_shell_new_tab (ephy_shell, window, NULL, load_page,
 			    flags);
 

@@ -111,6 +111,13 @@ mozilla_register_components (void)
 			      PR_TRUE);
 	if (NS_FAILED(rv)) ret = FALSE;
 
+	rv = RegisterFactory (NS_NewEphyAboutRedirectorFactory,
+			      kEphyAboutRedirectorCID,
+			      EPHY_ABOUT_REDIRECTOR_CLASSNAME,
+			      EPHY_ABOUT_REDIRECTOR_MARCO_CONTRACTID,
+			      PR_TRUE);
+	if (NS_FAILED(rv)) ret = FALSE;
+
         rv = RegisterFactory (NS_NewFtpHandlerFactory, kFtpHandlerCID,
 			      G_FTP_CONTENT_CLASSNAME, G_FTP_CONTENT_CONTRACTID,
 			      PR_TRUE);

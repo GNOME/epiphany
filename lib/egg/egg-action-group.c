@@ -2,9 +2,7 @@
 #include "egg-toggle-action.h"
 #include "egg-radio-action.h"
 
-#ifndef _
-# define _(s) (s)
-#endif
+#define _(String) gettext (String)
 
 static void egg_action_group_init       (EggActionGroup *self);
 static void egg_action_group_class_init (EggActionGroupClass *class);

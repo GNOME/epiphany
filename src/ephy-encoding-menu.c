@@ -27,6 +27,8 @@
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 
+#include <libgnome/gnome-i18n.h>
+
 /**
  * Private data
  */
@@ -188,7 +190,7 @@ build_group (EggActionGroup *action_group, GString *xml_string, const char *grou
 
 	action = g_object_new (EGG_TYPE_ACTION,
 			       "name", verb,
-			       "label", group,
+			       "label", _(group),
 			       NULL);
 	egg_action_group_add_action (action_group, action);
 	g_object_unref (action);
@@ -214,7 +216,7 @@ build_charset (EggActionGroup *action_group,
 	verb = g_strdup_printf ("Charset%d", index);
 	action = g_object_new (EGG_TYPE_ACTION,
 			       "name", verb,
-			       "label", info->title,
+			       "label", _(info->title),
 			       NULL);
 	g_signal_connect_closure
 		(action, "activate",

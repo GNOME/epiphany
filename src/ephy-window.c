@@ -36,7 +36,6 @@
 #include "statusbar.h"
 #include "toolbar.h"
 #include "popup-commands.h"
-#include "egg-toggle-action.h"
 #include "ephy-encoding-menu.h"
 #include "ephy-stock-icons.h"
 
@@ -51,6 +50,7 @@
 #include <gdk/gdkkeysyms.h>
 #include "egg-action-group.h"
 #include "egg-menu-merge.h"
+#include "egg-toggle-action.h"
 
 static EggActionGroupEntry ephy_menu_entries [] = {
 

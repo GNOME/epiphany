@@ -56,6 +56,7 @@ NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
         switch (info->pages)
         {
         case 0:
+		options->SetPrintRange (nsIPrintSettings::kRangeAllPages);
                 break;
         case 1:
                 options->SetPrintRange (nsIPrintSettings::kRangeSpecifiedPageRange);

@@ -523,6 +523,12 @@ ephy_shell_new_tab (EphyShell *shell,
 		ephy_embed_load_url (embed, url);
 	}
 
+	if (flags & EPHY_NEW_TAB_FULLSCREEN)
+	{
+		ephy_window_set_chrome (window, EMBED_CHROME_OPENASFULLSCREEN |
+				        EMBED_CHROME_DEFAULT);
+	}
+
         return tab;
 }
 
