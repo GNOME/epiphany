@@ -318,7 +318,7 @@ ephy_node_new_with_id (EphyNodeDb *db, gulong reserved_id)
 
 	node = g_new0 (EphyNode, 1);
 
-	node->ref_count = 0;
+	node->ref_count = 1;
 
 	node->id = reserved_id;
 

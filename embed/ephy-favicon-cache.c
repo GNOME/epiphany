@@ -240,7 +240,6 @@ ephy_favicon_cache_init (EphyFaviconCache *cache)
 
 	/* Icons */
 	cache->priv->icons = ephy_node_new_with_id (db, ICONS_NODE_ID);
-	ephy_node_ref (cache->priv->icons);
 	ephy_node_signal_connect_object (cache->priv->icons,
 					 EPHY_NODE_CHILD_ADDED,
 					 (EphyNodeCallback) icons_added_cb,

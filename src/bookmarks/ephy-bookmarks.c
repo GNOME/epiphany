@@ -640,7 +640,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 
 	/* Bookmarks */
 	eb->priv->bookmarks = ephy_node_new_with_id (db, BOOKMARKS_NODE_ID);
-	ephy_node_ref (eb->priv->bookmarks);
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, _("All"));
 	ephy_node_set_property (eb->priv->bookmarks,
@@ -658,7 +657,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 
 	/* Keywords */
 	eb->priv->keywords = ephy_node_new_with_id (db, KEYWORDS_NODE_ID);
-	ephy_node_ref (eb->priv->keywords);
 	g_value_init (&value, G_TYPE_INT);
 	g_value_set_int (&value, EPHY_NODE_ALL_PRIORITY);
 	ephy_node_set_property (eb->priv->bookmarks,
@@ -675,7 +673,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 
 	/* Favorites */
 	eb->priv->favorites = ephy_node_new_with_id (db, FAVORITES_NODE_ID);
-	ephy_node_ref (eb->priv->favorites);
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, _("Most Visited"));
 	ephy_node_set_property (eb->priv->favorites,
@@ -692,7 +689,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 
 	/* Not categorized */
 	eb->priv->notcategorized = ephy_node_new_with_id (db, BMKS_NOTCATEGORIZED_NODE_ID);
-	ephy_node_ref (eb->priv->notcategorized);
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, _("Not Categorized"));
 	ephy_node_set_property (eb->priv->notcategorized,
@@ -709,7 +705,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 
 	/* Smart bookmarks */
 	eb->priv->smartbookmarks = ephy_node_new_with_id (db, SMARTBOOKMARKS_NODE_ID);
-	ephy_node_ref (eb->priv->smartbookmarks);
 
 	if (g_file_test (eb->priv->xml_file, G_FILE_TEST_EXISTS) == FALSE
 	    && g_file_test (eb->priv->rdf_file, G_FILE_TEST_EXISTS) == FALSE)

@@ -448,10 +448,6 @@ ephy_encodings_init (EphyEncodings *encodings)
 	encodings->priv->encodings = ephy_node_new_with_id (db, ENCODINGS_NODE_ID);
 	encodings->priv->detectors = ephy_node_new_with_id (db, DETECTORS_NODE_ID);
 
-	ephy_node_ref (encodings->priv->root);
-	ephy_node_ref (encodings->priv->encodings);
-	ephy_node_ref (encodings->priv->detectors);
-
 	/* now fill the db */
 	for (i = 0; i < n_encoding_entries; i++)
 	{

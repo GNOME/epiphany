@@ -482,7 +482,6 @@ ephy_history_init (EphyHistory *eb)
 
 	/* Pages */
 	eb->priv->pages = ephy_node_new_with_id (db, PAGES_NODE_ID);
-	ephy_node_ref (eb->priv->pages);
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, _("All"));
 	ephy_node_set_property (eb->priv->pages,
@@ -513,7 +512,6 @@ ephy_history_init (EphyHistory *eb)
 
 	/* Hosts */
 	eb->priv->hosts = ephy_node_new_with_id (db, HOSTS_NODE_ID);
-	ephy_node_ref (eb->priv->hosts);
 	ephy_node_signal_connect_object (eb->priv->hosts,
 					 EPHY_NODE_CHILD_ADDED,
 				         (EphyNodeCallback) hosts_added_cb,

@@ -1,3 +1,13 @@
+2004-04-09  Adam Hooper  <adamh@cvs.gnome.org>
+
+	* embed/ephy-encodings.c: (ephy_encodings_init):
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_init):
+	* embed/ephy-history.c: (ephy_history_init):
+	* lib/ephy-node.c: (ephy_node_new_with_id):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init):
+
+	Make ephy-node refcount initialize to 1 and not 0.
+
 2004-04-09  Guntupalli Karunakar  <karunakar@freedomink.org>
 
         * configure.in: Added "gu" (Gujarati) to ALL_LINGUAS.
