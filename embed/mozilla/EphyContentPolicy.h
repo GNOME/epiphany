@@ -23,6 +23,7 @@
 #define EPHY_CONTENT_POLICY_H
 
 #include <glib.h>
+#include <glib-object.h>
 
 #include <nsISupports.h>
 #include <nsIContentPolicy.h>
@@ -47,6 +48,7 @@ public:
 	EphyContentPolicy();
 	virtual ~EphyContentPolicy();
 private:
+	GObject *mEmbedSingle;
 	gboolean mLocked;
 	GSList *mSafeProtocols;
 };

@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "ephy-embed-single.h"
+#include "ephy-embed-type-builtins.h"
 #include "ephy-marshal.h"
 
 static void ephy_embed_single_iface_init (gpointer g_class);
@@ -115,6 +116,34 @@ ephy_embed_single_iface_init (gpointer g_class)
 		      2,
 		      G_TYPE_STRING,
 		      G_TYPE_STRING);
+
+/**
+ * EphyEmbedSingle::check_content:
+ * @single:
+ * @type: the type of content
+ * @address: the address of the content
+ * @requesting_address: the address of the requesting content (may be empty)
+ * @mime_type_guess: a guess of the mime type of the content (may be empty)
+ * @mime_type: the MIME type of the content
+ *
+ * The ::check-content signal is emitted when Epiphany loads any content from
+ * anywhere.
+ *
+ * If a connected callback returns %TRUE, the
+ * signal emission will stop, and the load be aborted.
+ **/
+	g_signal_new ("check_content",
+		      EPHY_TYPE_EMBED_SINGLE,
+		      G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+		      G_STRUCT_OFFSET (EphyEmbedSingleIface, check_content),
+		      g_signal_accumulator_true_handled, NULL,
+		      ephy_marshal_BOOLEAN__ENUM_STRING_STRING_STRING,
+		      G_TYPE_BOOLEAN,
+		      4,
+		      EPHY_TYPE_CONTENT_CHECK_TYPE,
+		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+		      G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 	initialised = TRUE;
 	}

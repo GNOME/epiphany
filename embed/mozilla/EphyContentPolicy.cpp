@@ -25,6 +25,8 @@
 
 #include "EphyContentPolicy.h"
 
+#include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 
@@ -49,6 +51,8 @@ EphyContentPolicy::EphyContentPolicy()
 	mSafeProtocols = g_slist_prepend (mSafeProtocols, g_strdup ("https"));
 	mSafeProtocols = g_slist_prepend (mSafeProtocols, g_strdup ("http"));
 
+	mEmbedSingle = ephy_embed_shell_get_embed_single (embed_shell);
+	g_return_if_fail (mEmbedSingle);
 }
 
 EphyContentPolicy::~EphyContentPolicy()
@@ -69,32 +73,45 @@ EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 			      nsISupports *aExtra,
 			      PRInt16 *aDecision)
 {
-	if (!mLocked)
+	NS_ENSURE_ARG (aContentLocation);
+
+	nsEmbedCString contentScheme;
+	aContentLocation->GetScheme (contentScheme);
+
+	nsEmbedCString contentSpec;
+	aContentLocation->GetSpec (contentSpec);
+
+	/* first general lockdown check */
+	if (mLocked &&
+	    !g_slist_find_custom (mSafeProtocols, contentScheme.get(), (GCompareFunc) strcmp) &&
+	    strcmp (contentSpec.get(), "about:blank") != 0)
 	{
-		*aDecision = nsIContentPolicy::ACCEPT;
+		*aDecision = nsIContentPolicy::REJECT_REQUEST;
 		return NS_OK;
 	}
 
-	NS_ENSURE_TRUE (aContentLocation, NS_ERROR_FAILURE);
+	nsEmbedCString requestingSpec;
+	if (aRequestingLocation)
+	{
+		aRequestingLocation->GetSpec (requestingSpec);
+	}
 
-	nsEmbedCString scheme;
-	aContentLocation->GetScheme (scheme);
+	gboolean result = FALSE;
+	g_signal_emit_by_name (mEmbedSingle, "check-content",
+			       (EphyContentCheckType) aContentType,
+			       contentSpec.get(),
+			       requestingSpec.get(),
+			       nsEmbedCString(aMimeTypeGuess).get(),
+			       &result);
 
-	nsEmbedCString spec;
-	aContentLocation->GetSpec (spec);
-
-	LOG ("ShouldLoad type=%d location=%s (scheme %s)", aContentType, spec.get(), scheme.get())
-
-	*aDecision = nsIContentPolicy::REJECT_REQUEST;
-
-	/* Allow the load if the protocol is in safe list, or it's about:blank */
-	if (g_slist_find_custom (mSafeProtocols, scheme.get(), (GCompareFunc) strcmp)
-	    || strcmp (spec.get(), "about:blank") == 0)
+	if (result)
+	{
+		*aDecision = nsIContentPolicy::REJECT_REQUEST;
+	}
+	else
 	{
 		*aDecision = nsIContentPolicy::ACCEPT;
 	}
-
-	LOG ("Decision: %sallowing load", *aDecision >= 0 ? "" : "DIS")
 
 	return NS_OK;
 }
@@ -115,32 +132,70 @@ EphyContentPolicy::ShouldProcess(PRUint32 aContentType,
 #else
 
 /* boolean shouldLoad (in PRInt32 contentType, in nsIURI contentLocation, in nsISupports ctxt, in nsIDOMWindow window); */
-NS_IMETHODIMP EphyContentPolicy::ShouldLoad(PRInt32 contentType,
-					    nsIURI *contentLocation,
-					    nsISupports *ctxt,
-					    nsIDOMWindow *window,
+NS_IMETHODIMP EphyContentPolicy::ShouldLoad(PRInt32 aContentType,
+					    nsIURI *aContentLocation,
+					    nsISupports *aContext,
+					    nsIDOMWindow *aWindow,
 					    PRBool *_retval)
 {
-	if (!mLocked)
+	NS_ENSURE_ARG (aContentLocation);
+
+	nsEmbedCString contentScheme;
+	aContentLocation->GetScheme (contentScheme);
+
+	nsEmbedCString contentSpec;
+	aContentLocation->GetSpec (contentSpec);
+
+	/* first general lockdown check */
+	if (mLocked &&
+	    !g_slist_find_custom (mSafeProtocols, contentScheme.get(), (GCompareFunc) strcmp) &&
+	    strcmp (contentSpec.get(), "about:blank") != 0)
 	{
-		*_retval = PR_TRUE;
+		*_retval = PR_FALSE;
 		return NS_OK;
 	}
 
-	nsEmbedCString scheme;
-	contentLocation->GetScheme (scheme);
-
-	nsEmbedCString spec;
-	contentLocation->GetSpec (spec);
-
-	*_retval = PR_FALSE;
-
-	/* Allow the load if the protocol is in safe list, or it's about:blank */
-	if (g_slist_find_custom (mSafeProtocols, scheme.get(), (GCompareFunc) strcmp)
-	    || strcmp (spec.get(), "about:blank") == 0)
+	/* translate to variant-2 types */
+	EphyContentCheckType type;
+	switch (aContentType)
 	{
-		*_retval = PR_TRUE;
+		case nsIContentPolicy::SCRIPT:
+			type = EPHY_CONTENT_CHECK_TYPE_SCRIPT;
+			break;
+		case nsIContentPolicy::IMAGE:
+			type = EPHY_CONTENT_CHECK_TYPE_IMAGE;
+			break;
+		case nsIContentPolicy::STYLESHEET:
+			type = EPHY_CONTENT_CHECK_TYPE_STYLESHEET;
+			break;
+		case nsIContentPolicy::OBJECT:
+			type = EPHY_CONTENT_CHECK_TYPE_OBJECT;
+			break;
+		case nsIContentPolicy::SUBDOCUMENT:
+			type = EPHY_CONTENT_CHECK_TYPE_SUBDOCUMENT;
+			break;
+		case nsIContentPolicy::CONTROL_TAG:
+			type = EPHY_CONTENT_CHECK_TYPE_REFRESH;
+			break;
+		case nsIContentPolicy::DOCUMENT:
+			type = EPHY_CONTENT_CHECK_TYPE_DOCUMENT;
+			break;
+		case nsIContentPolicy::OTHER:
+		case nsIContentPolicy::RAW_URL:
+		default:
+			type = EPHY_CONTENT_CHECK_TYPE_OTHER;
+			break;
 	}
+
+	gboolean result = FALSE;
+	g_signal_emit_by_name (mEmbedSingle, "check-content",
+			       type,
+			       contentSpec.get(),
+			       "",
+			       "",
+			       &result);
+
+	*_retval = !result;
 
 	return NS_OK;
 }
