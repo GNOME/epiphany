@@ -1,6 +1,5 @@
 INCLUDES = \
   $(EPIPHANY_DEPENDENCY_CFLAGS) \
-  $(WARN_CFLAGS)		\
   -DCURSOR_DIR=\"$(pkgdatadir)\" \
   -DGTK_DISABLE_DEPRECATED \
   -DGDK_DISABLE_DEPRECATED \
@@ -12,7 +11,10 @@ EGGSOURCES = \
   eggtreemultidnd.c \
   egg-editable-toolbar.c \
   egg-toolbars-model.c \
-  egg-toolbar-editor.c
+  egg-toolbar-editor.c \
+  eggstatusicon.c \
+  eggtrayicon.c \
+  eggtraymanager.c
 
 libegg_la_SOURCES = \
   $(EGGSOURCES) \
@@ -22,7 +24,10 @@ EGGHEADERS = \
   eggtreemultidnd.h \
   egg-editable-toolbar.h \
   egg-toolbars-model.h \
-  egg-toolbar-editor.h
+  egg-toolbar-editor.h \
+  eggstatusicon.h \
+  eggtrayicon.h \
+  eggtraymanager.h
 
 noinst_HEADERS = \
   $(EGGHEADERS) \

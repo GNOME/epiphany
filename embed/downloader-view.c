@@ -30,6 +30,8 @@
 #include "ephy-cell-renderer-progress.h"
 #include "ephy-stock-icons.h"
 
+#include <eggstatusicon.h>
+#include <eggtraymanager.h>
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkliststore.h>
 #include <gtk/gtktreeviewcolumn.h>
@@ -56,9 +58,10 @@ struct DownloaderViewPrivate
 	/* Widgets */
 	GtkWidget *window;
 	GtkWidget *treeview;
-
 	GtkWidget *pause_button;
 	GtkWidget *abort_button;
+
+	EggStatusIcon *status_icon;
 };
 
 typedef struct
@@ -148,6 +151,25 @@ downloader_view_class_init (DownloaderViewClass *klass)
 }
 
 static void
+status_icon_activated (EggStatusIcon *icon, DownloaderView *dv)
+{
+	gtk_widget_show (dv->priv->window);
+}
+
+static void
+show_status_icon (DownloaderView *dv)
+{
+	GdkPixbuf *pixbuf;
+
+	pixbuf = gdk_pixbuf_new_from_file (ephy_file ("epiphany-download.png"), NULL);
+	dv->priv->status_icon = egg_status_icon_new_from_pixbuf (pixbuf);
+	g_object_unref (pixbuf);
+
+	g_signal_connect (dv->priv->status_icon, "activate",
+			  G_CALLBACK (status_icon_activated), dv);
+}
+
+static void
 downloader_view_init (DownloaderView *dv)
 {
         dv->priv = EPHY_DOWNLOADER_VIEW_GET_PRIVATE (dv);
@@ -158,6 +180,8 @@ downloader_view_init (DownloaderView *dv)
 
 	downloader_view_build_ui (dv);
 
+	show_status_icon (dv);
+
 	g_object_ref (embed_shell);
 }
 
@@ -165,8 +189,11 @@ static void
 downloader_view_finalize (GObject *object)
 {
 	DownloaderView *dv = EPHY_DOWNLOADER_VIEW (object);
+
+	g_object_unref (dv->priv->status_icon);
 	g_hash_table_destroy (dv->priv->downloads_hash);
 	g_object_unref (embed_shell);
+
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -525,5 +552,10 @@ gboolean
 download_dialog_delete_cb (GtkWidget *window, GdkEventAny *event,
 			   DownloaderView *dv)
 {
+	if (egg_tray_manager_check_running (gdk_screen_get_default ()))
+	{
+		gtk_widget_hide (dv->priv->window);
+	}
+
 	return TRUE;
 }
