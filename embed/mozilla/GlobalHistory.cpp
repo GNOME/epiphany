@@ -53,11 +53,7 @@ NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aT
 	nsresult rv;
 	NS_ENSURE_ARG (aURI);
 
-	PRBool isJavascript;
-	rv = aURI->SchemeIs("javascript", &isJavascript);
-	NS_ENSURE_SUCCESS(rv, rv);
-
-	if (isJavascript || aRedirect || !aToplevel)
+	if (aRedirect || !aToplevel)
 	{
 		return NS_OK;
 	}
@@ -78,15 +74,16 @@ NS_IMETHODIMP MozGlobalHistory::AddURI(nsIURI *aURI, PRBool aRedirect, PRBool aT
 
 	if (!isHTTP && !isHTTPS)
 	{
-		PRBool isAbout, isViewSource, isChrome, isData;
+		PRBool isJavascript, isAbout, isViewSource, isChrome, isData;
 
-		rv = aURI->SchemeIs("about", &isAbout);
+		rv = aURI->SchemeIs("javascript", &isJavascript);
+		rv |= aURI->SchemeIs("about", &isAbout);
 		rv |= aURI->SchemeIs("view-source", &isViewSource);
 		rv |= aURI->SchemeIs("chrome", &isChrome);
 		rv |= aURI->SchemeIs("data", &isData);
 		NS_ENSURE_SUCCESS(rv, NS_ERROR_FAILURE);
 
-		if (isAbout || isViewSource || isChrome || isData)
+		if (isJavascript || isAbout || isViewSource || isChrome || isData)
 		{
 		      return NS_OK;
 		}
