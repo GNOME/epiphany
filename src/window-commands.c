@@ -797,7 +797,10 @@ window_cmd_help_about (EggAction *action,
 		       strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,
 		       logo);
 
-	g_object_unref (logo);
+	if (logo != NULL)
+	{
+		g_object_unref (logo);
+	}
 
 	gtk_window_set_transient_for (GTK_WINDOW (about),
 				      GTK_WINDOW (window));
