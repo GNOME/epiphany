@@ -19,6 +19,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "ephy-embed-popup-control.h"
 #include "ephy-embed-factory.h"
 #include "ephy-embed-persist.h"
