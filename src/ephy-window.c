@@ -1295,6 +1295,11 @@ update_favicon_control (EphyWindow *window)
 	gtk_window_set_icon (GTK_WINDOW (window), pixbuf);
 
 	toolbar_update_favicon (window->priv->toolbar);
+
+	if (pixbuf)
+	{
+		g_object_unref (pixbuf);
+	}
 }
 
 static void
@@ -1345,6 +1350,7 @@ static void
 update_spinner_control (EphyWindow *window)
 {
 	GList *l, *tabs;
+	gboolean spin = FALSE;
 
 	tabs = ephy_window_get_tabs (window);
 	for (l = tabs; l != NULL; l = l->next)
@@ -1354,13 +1360,19 @@ update_spinner_control (EphyWindow *window)
 
 		if (ephy_tab_get_load_status (tab) & TAB_LOAD_STARTED)
 		{
-			toolbar_spinner_start (window->priv->toolbar);
-			return;
+			spin = TRUE;
 		}
 	}
 	g_list_free (tabs);
 
-	toolbar_spinner_stop (window->priv->toolbar);
+	if (spin)
+	{
+		toolbar_spinner_start (window->priv->toolbar);
+	}
+	else
+	{
+		toolbar_spinner_stop (window->priv->toolbar);
+	}
 }
 
 void
