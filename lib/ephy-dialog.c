@@ -34,7 +34,6 @@
 #include <string.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtkradiobutton.h>
-#include <gtk/gtkoptionmenu.h>
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkeditable.h>

@@ -33,6 +33,7 @@
 #include <gtk/gtkliststore.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <glib/gi18n.h>
+#include <string.h>
 
 enum
 {
@@ -360,6 +361,28 @@ language_editor_add (LanguageEditor *editor,
 		     const char *desc)
 {
 	GtkTreeIter iter;
+
+	g_return_if_fail (code != NULL && desc != NULL);
+
+	/* first check that the code isn't already in the list */
+	if (gtk_tree_model_get_iter_first (editor->priv->model, &iter))
+	{
+		do
+		{
+			char *c;
+
+			gtk_tree_model_get (editor->priv->model, &iter,
+					    COL_DATA, &c,
+					    -1);
+
+			if (c && strcmp (code, c) == 0)
+			{
+				/* already in list, no need to add again */
+				return;
+			}
+		}
+		while (gtk_tree_model_iter_next (editor->priv->model, &iter));
+	}
 
 	gtk_list_store_append (GTK_LIST_STORE (editor->priv->model), &iter);
 

@@ -594,10 +594,26 @@ create_language_menu (EphyDialog *dialog)
 	GtkTreeIter iter;
 	GtkCellRenderer *renderer;
 	int i;
-	GSList *list, *l;
+	GSList *list, *l, *ulist = NULL;
 
 	/* init value from first element of the list */
 	list = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
+
+	/* uniquify list */
+	for (l = list; l != NULL; l = l->next)
+	{
+		if (g_slist_find_custom (ulist, l->data, (GCompareFunc) strcmp) == NULL)
+		{
+			ulist = g_slist_prepend (ulist, l->data);
+		}
+		else
+		{
+			g_free (l->data);
+		}
+	}
+	g_slist_free (list);
+	list = g_slist_reverse (ulist);
+	eel_gconf_set_string_list (CONF_RENDERING_LANGUAGE, list);
 
 	combo = GTK_COMBO_BOX (ephy_dialog_get_control
 			(dialog, properties[LANGUAGE_PROP].id));
