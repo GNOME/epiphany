@@ -62,7 +62,7 @@ nsresult EventContext::ResolveBaseURL (nsIDocument *doc, const nsAString &relurl
 {
 	nsresult rv;
 	nsCOMPtr<nsIURI> base;
-#if MOZILLA_SNAPSHOT > 9
+#if MOZILLA_SNAPSHOT > 8
 	rv = doc->GetBaseURL (getter_AddRefs(base));
 #else
 	rv = doc->GetBaseURL (*getter_AddRefs(base));
