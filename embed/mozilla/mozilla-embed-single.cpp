@@ -578,7 +578,7 @@ impl_load_proxy_autoconf (EphyEmbedSingle *shell,
                 do_GetService ("@mozilla.org/network/protocol-proxy-service;1");
 	if (!pps) return;
 
-#if MOZILLA_SNAPSHOT >= 19
+#if MOZILLA_SNAPSHOT >= 20
 	pps->ConfigureFromPAC (nsDependentCString (url));
 #else
 	pps->ConfigureFromPAC (url);

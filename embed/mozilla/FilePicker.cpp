@@ -38,7 +38,7 @@
 #include <nsString.h>
 #include <nsReadableUtils.h>
 
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 #include <nsIDOMWindowInternal.h>
 #endif
 
@@ -80,7 +80,7 @@ GFilePicker::~GFilePicker()
 }
 
 /* void init (in nsIDOMWindow parent, in AString title, in short mode); */
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *title, PRInt16 mode)
 #else
 NS_IMETHODIMP GFilePicker::Init(nsIDOMWindow *parent, const nsAString& title, PRInt16 mode)
@@ -161,7 +161,7 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 
 	if (filterMask & nsIFilePicker::filterAll)
 	{
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 		AppendFilter (NS_ConvertUTF8toUCS2 (_("All files")).get(),
 			      NS_LITERAL_STRING ("*").get());
 #else
@@ -171,7 +171,7 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 	}
 	if (filterMask & nsIFilePicker::filterHTML)
 	{
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 		AppendFilter (NS_ConvertUTF8toUCS2 (_("HTML files")).get(),
 			      NS_LITERAL_STRING ("*.html; *.htm; *.shtml; *.xhtml").get());
 #else
@@ -181,7 +181,7 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 	}
 	if (filterMask & nsIFilePicker::filterText)
 	{
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 		AppendFilter (NS_ConvertUTF8toUCS2 (_("Text files")).get(),
 			      NS_LITERAL_STRING ("*.txt; *.text").get());
 #else
@@ -191,7 +191,7 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 	}
 	if (filterMask & nsIFilePicker::filterImages)
 	{
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 		AppendFilter (NS_ConvertUTF8toUCS2 (_("Image files")).get(),
 			      NS_LITERAL_STRING ("*.png; *.gif; *.jpeg; *.jpg").get());
 #else
@@ -201,7 +201,7 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 	}
 	if (filterMask & nsIFilePicker::filterXML)
 	{
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 		AppendFilter (NS_ConvertUTF8toUCS2 (_("XML files")).get(),
 			      NS_LITERAL_STRING ("*.xml").get());
 #else
@@ -211,7 +211,7 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 	}
 	if (filterMask & nsIFilePicker::filterXUL)
 	{
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 		AppendFilter (NS_ConvertUTF8toUCS2 (_("XUL files")).get(),
 			      NS_LITERAL_STRING ("*.xul").get());
 #else
@@ -224,7 +224,7 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 }
 
 /* void appendFilter (in AString title, in AString filter); */
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar *filter)
 #else
 NS_IMETHODIMP GFilePicker::AppendFilter(const nsAString& title, const nsAString& filter)
@@ -264,7 +264,7 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const nsAString& title, const nsAString&
 }
 
 /* attribute AString defaultString; */
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
 #else
 NS_IMETHODIMP GFilePicker::GetDefaultString(nsAString& aDefaultString)
@@ -272,7 +272,7 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(nsAString& aDefaultString)
 {
 	LOG ("GFilePicker::GetDefaultString")
 
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 	*aDefaultString = ToNewUnicode (mDefaultString);
 #else
 	aDefaultString = mDefaultString;
@@ -281,7 +281,7 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(nsAString& aDefaultString)
 	return NS_OK;
 }
 
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
 #else
 NS_IMETHODIMP GFilePicker::SetDefaultString(const nsAString& aDefaultString)
@@ -310,7 +310,7 @@ NS_IMETHODIMP GFilePicker::SetDefaultString(const nsAString& aDefaultString)
 }
 
 /* attribute AString defaultExtension; */
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 NS_IMETHODIMP GFilePicker::GetDefaultExtension(PRUnichar **aDefaultExtension)
 #else
 NS_IMETHODIMP GFilePicker::GetDefaultExtension(nsAString& aDefaultExtension)
@@ -321,7 +321,7 @@ NS_IMETHODIMP GFilePicker::GetDefaultExtension(nsAString& aDefaultExtension)
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 NS_IMETHODIMP GFilePicker::SetDefaultExtension(const PRUnichar *aDefaultExtension)
 #else
 NS_IMETHODIMP GFilePicker::SetDefaultExtension(const nsAString& aDefaultExtension)

@@ -58,7 +58,7 @@ class GContentHandler;
 
 NS_IMPL_ISUPPORTS1(GContentHandler, nsIHelperAppLauncherDialog)
 
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 GContentHandler::GContentHandler() : mMimeType(nsnull)
 {
 	LOG ("GContentHandler ctor (%p)", this)
@@ -74,7 +74,7 @@ GContentHandler::~GContentHandler()
 {
 	LOG ("GContentHandler dtor (%p)", this)
 
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 	nsMemory::Free (mMimeType);
 #endif
 }
@@ -103,7 +103,7 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 	NS_ENSURE_SUCCESS (rv, rv);
 
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 	g_signal_emit_by_name (single, "handle_content", mMimeType,
 			       mUrl.get(), &handled);
 #else
@@ -251,7 +251,7 @@ NS_METHOD GContentHandler::Init (void)
 	mLauncher->GetMIMEInfo (getter_AddRefs(MIMEInfo));
 	NS_ENSURE_TRUE (MIMEInfo, NS_ERROR_FAILURE);
 
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 	rv = MIMEInfo->GetMIMEType (&mMimeType);
 #else
 	rv = MIMEInfo->GetMIMEType (mMimeType);
@@ -376,14 +376,14 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 
 	auto_downloads = eel_gconf_get_boolean (CONF_AUTO_DOWNLOADS);
 
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 	mHelperApp = gnome_vfs_mime_get_default_application (mMimeType);
 #else
 	mHelperApp = gnome_vfs_mime_get_default_application (mMimeType.get());
 #endif
 	CheckAppSupportScheme ();
 
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 	mPermission = ephy_embed_shell_check_mime (embed_shell, mMimeType);
 #else
 	mPermission = ephy_embed_shell_check_mime (embed_shell, mMimeType.get());
@@ -417,7 +417,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 		/* HACK we use the application description to ask
 		   MozDownload to open the file when download
 		   is finished */
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 		mimeInfo->SetApplicationDescription
 			(NS_LITERAL_STRING ("gnome-default").get());
 #else
@@ -427,7 +427,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	}
 	else
 	{
-#if MOZILLA_SNAPSHOT < 18
+#if MOZILLA_SNAPSHOT < 20
 		mimeInfo->SetApplicationDescription (nsnull);
 #else
 		mimeInfo->SetApplicationDescription (NS_LITERAL_STRING (""));

@@ -77,6 +77,7 @@ if test "x$enable_nautilus_view" = "xyes"; then
   PKG_CHECK_MODULES(NAUTILUS_DEPENDENCY, libnautilus >= $LIBNAUTILUS_REQUIRED, \
   		    [AC_DEFINE(ENABLE_NAUTILUS_VIEW, 1, [Define if the nautilus view has to be built])], \
 		    [enable_nautilus_view=no])
+  AC_MSG_NOTICE([WARNING: nautilus view is deprecated and unsupported])
 fi
 AC_SUBST(NAUTILUS_DEPENDENCY_CFLAGS)
 AC_SUBST(NAUTILUS_DEPENDENCY_LIBS)
@@ -185,8 +186,8 @@ MOZILLA_VERSION="`$PKG_CONFIG --modversion mozilla-gtkmozembed`"
 dnl allow user to override the autodetected mozilla version
 dnl     - without arguments for cvs head
 AC_ARG_WITH(mozilla-snapshot,
-  AC_HELP_STRING([--with-mozilla-snapshot@<:@=1.4|1.4.1|1.4.2|1.5|1.5.1|1.6|1.7|1.7.1|1.7.2|1.8a2|trunk@:>@],
-		 [Whether to try building against mozilla 1.4|1.4.1|1.4.2|1.5|1.5.1|1.6|1.7|1.7.1|1.7.2|1.8a2|trunk
+  AC_HELP_STRING([--with-mozilla-snapshot@<:@=1.4|1.4.1|1.4.2|1.5|1.5.1|1.6|1.7|1.7.1|1.7.2|1.7.3|1.8a3|trunk@:>@],
+		 [Whether to try building against mozilla 1.4|1.4.1|1.4.2|1.5|1.5.1|1.6|1.7|1.7.1|1.7.2|1.7.3|1.8a3|trunk
 		  @<:@guessed@:>@]),
   [autodetect=" (guessed: $MOZILLA_VERSION)"; MOZILLA_VERSION="$withval"])
 
@@ -197,18 +198,17 @@ case "$MOZILLA_VERSION" in
 1.4.1) MOZILLA_SNAPSHOT=9 ;;
 1.4.2) MOZILLA_SNAPSHOT=9 ;;
 1.4.3) MOZILLA_SNAPSHOT=9 ;;
+1.4.4) MOZILLA_SNAPSHOT=9 ;;
   1.5) MOZILLA_SNAPSHOT=11 ;;
 1.5.1) MOZILLA_SNAPSHOT=11 ;;
   1.6) MOZILLA_SNAPSHOT=13 ;;
   1.7) MOZILLA_SNAPSHOT=17 ;;
 1.7.1) MOZILLA_SNAPSHOT=17 ;;
 1.7.2) MOZILLA_SNAPSHOT=17 ;;
-1.7.3) MOZILLA_SNAPSHOT=17 ;;
-1.7.4) MOZILLA_SNAPSHOT=17 ;;
-1.7.5) MOZILLA_SNAPSHOT=17 ;;
-branch1.7) MOZILLA_SNAPSHOT=17 ;;
-1.8a1) MOZILLA_SNAPSHOT=18 ;;
-1.8a2) MOZILLA_SNAPSHOT=19 ;;
+1.7.3) MOZILLA_SNAPSHOT=18 ;;
+1.7.4) MOZILLA_SNAPSHOT=18 ;;
+1.7.5) MOZILLA_SNAPSHOT=18 ;;
+branch1.7) MOZILLA_SNAPSHOT=18 ;;
 1.8a3) MOZILLA_SNAPSHOT=20 ;;
 1.8a4) MOZILLA_SNAPSHOT=21 ;;
  1.8b) MOZILLA_SNAPSHOT=21 ;;
@@ -219,7 +219,7 @@ trunk) MOZILLA_SNAPSHOT=21 ;;
     *) AC_ERROR([
 *****************************************************************************
 Epiphany can be built using Mozilla 1.4, 1.4.1, 1.4.2, 1.5, 1.5.1, 1.6,  1.7,
-1.7.1, 1.7.2, 1.8a2, 1.8a3, or trunk, but the version available is $MOZILLA_VERSION.  
+1.7.1, 1.7.2, 1.7.3, 1.8a3, or trunk, but the version available is $MOZILLA_VERSION.  
 *****************************************************************************])
 esac
 

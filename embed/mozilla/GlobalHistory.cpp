@@ -186,7 +186,7 @@ NS_IMETHODIMP MozGlobalHistory::HidePage(const char *aURL)
 }
 #endif /* MOZILLA_SNAPSHOT > 13 */
 
-#if MOZILLA_SNAPSHOT >= 20
+#if MOZILLA_SNAPSHOT >= 18
 /* void removePage (in nsIURI aURL); */
 NS_IMETHODIMP MozGlobalHistory::RemovePage(nsIURI *aURI)
 {
@@ -248,7 +248,7 @@ NS_IMETHODIMP MozGlobalHistory::GetCount(PRUint32 *aCount)
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-#if MOZILLA_SNAPSHOT >= 20
+#if MOZILLA_SNAPSHOT >= 18
 /* void markPageAsTyped (in nsIURI url); */
 NS_IMETHODIMP MozGlobalHistory::MarkPageAsTyped(nsIURI *aURI)
 {

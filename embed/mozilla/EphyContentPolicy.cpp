@@ -57,7 +57,7 @@ EphyContentPolicy::~EphyContentPolicy()
 	g_slist_free (mSafeProtocols);
 }
 
-#if MOZILLA_SNAPSHOT >= 18
+#if MOZILLA_SNAPSHOT >= 20
 NS_IMETHODIMP
 EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 			      nsIURI *aContentLocation,
@@ -164,4 +164,4 @@ NS_IMETHODIMP EphyContentPolicy::ShouldProcess(PRInt32 contentType,
 	*_retval = PR_TRUE;
 	return NS_OK;
 }
-#endif /* MOZILLA_SNAPSHOT >= 18 */
+#endif /* MOZILLA_SNAPSHOT >= 20 */
