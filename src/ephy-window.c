@@ -590,7 +590,6 @@ ephy_window_fullscreen (EphyWindow *window)
 
 	gtk_widget_show (popup);
 
-
 	egg_editable_toolbar_set_model
 		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
 		 EGG_TOOLBARS_MODEL (
@@ -2145,6 +2144,7 @@ ephy_window_init (EphyWindow *window)
 {
 	EphyExtension *manager;
 	EphyEmbedSingle *single;
+	EggToolbarsModel *model;
 
 	LOG ("EphyWindow initialising %p", window)
 
@@ -2188,6 +2188,13 @@ ephy_window_init (EphyWindow *window)
 	window->priv->enc_menu = ephy_encoding_menu_new (window);
 	window->priv->bmk_menu = ephy_bookmarks_menu_new (window);
 
+	/* get the toolbars model *before* getting the bookmarksbar model
+	 * (via ephy_bookmarsbar_new()), so that the toolbars model is
+	 * instantiated *before* the bookmarksbarmodel, to make forwarding
+	 * works. See bug #151267.
+	 */
+	model= EGG_TOOLBARS_MODEL (ephy_shell_get_toolbars_model (ephy_shell, FALSE));
+
 	/* create the toolbars */
 	window->priv->toolbar = toolbar_new (window);
 	window->priv->bookmarksbar = ephy_bookmarksbar_new (window);
@@ -2218,9 +2225,7 @@ ephy_window_init (EphyWindow *window)
 	 * the toolbar
 	 */
 	egg_editable_toolbar_set_model
-		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar),
-		 EGG_TOOLBARS_MODEL
-			 (ephy_shell_get_toolbars_model (ephy_shell, FALSE)));
+		(EGG_EDITABLE_TOOLBAR (window->priv->toolbar), model);
 
 	g_signal_connect (window, "window-state-event",
 			  G_CALLBACK (ephy_window_state_event_cb),
