@@ -221,18 +221,9 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	pref->SetCharPref ("general.useragent.vendor", "Epiphany");
 	pref->SetCharPref ("general.useragent.vendorSub", VERSION);
 
-	/* Make sure that Mozilla does not handle these protocols internally */
-	pref->SetBoolPref("network.protocol-handler.external.news", TRUE);
-	pref->SetBoolPref("network.protocol-handler.external.mailto", TRUE);
-	pref->SetBoolPref("network.protocol-handler.external.irc", TRUE);
-	if (have_gnome_url_handler ("ftp"))
-	{
-		pref->SetBoolPref("network.protocol-handler.external.ftp", TRUE);
-	}
-	else
-	{
-		pref->SetBoolPref("network.protocol-handler.external.ftp", FALSE);
-	}
+	/* Open ftp uris with an external handler if one is setup */
+	pref->SetBoolPref("network.protocol-handler.external.ftp",
+			  have_gnome_url_handler ("ftp"));
 
 	return TRUE;
 }
