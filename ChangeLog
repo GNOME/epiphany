@@ -1,3 +1,13 @@
+2003-12-14  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-nautilus-view.c: (ephy_nautilus_view_finalize),
+	(gnv_cmd_select_encoding), (gnv_cmd_file_print),
+	(gnv_cmd_edit_find):
+
+	Fix mem leaks.
+	Fix a crash when finalizing a nautilus view after having
+	used the find dialogue.
+
 2003-12-13  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-import.c:

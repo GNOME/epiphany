@@ -280,6 +280,8 @@ ephy_nautilus_view_finalize (GObject *object)
 
 	if (p->find_dialog)
 	{
+		g_object_remove_weak_pointer (G_OBJECT (p->find_dialog),
+					      (gpointer *) &p->find_dialog);
 		g_object_unref (p->find_dialog);
 	}
 
@@ -531,7 +533,8 @@ gnv_cmd_select_encoding (BonoboUIComponent *uic,
 					    NULL));
 
 	ephy_dialog_set_modal (dialog, TRUE);
-	ephy_dialog_show (dialog);
+	ephy_dialog_run (dialog);
+	g_object_unref (dialog);
 }
 
 static void
@@ -545,7 +548,8 @@ gnv_cmd_file_print (BonoboUIComponent *uic,
 	dialog = ephy_print_dialog_new (NULL, p->embed, FALSE);
 
 	ephy_dialog_set_modal (dialog, TRUE);
-	ephy_dialog_show (dialog);
+	ephy_dialog_run (dialog);
+	g_object_unref (dialog);
 }
 
 static void
@@ -555,9 +559,11 @@ gnv_cmd_edit_find (BonoboUIComponent *uic,
 {
 	EphyNautilusViewPrivate *p = view->priv;
 
-	if (!p->find_dialog)
+	if (p->find_dialog == NULL)
 	{
 		p->find_dialog = find_dialog_new (p->embed);
+		g_object_add_weak_pointer (G_OBJECT (p->find_dialog),
+					   (gpointer *) &p->find_dialog);
 	}
 
 	ephy_dialog_show (p->find_dialog);
