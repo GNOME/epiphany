@@ -207,8 +207,6 @@ activate_choice (EphyEncodingDialog *dialog)
 	gboolean is_automatic;
 	gresult result;
 
-	LOG ("going manual")
-
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
@@ -251,15 +249,6 @@ ephy_encoding_dialog_response_cb (GtkWidget *widget,
 				  gint response,
 				  EphyEncodingDialog *dialog)
 {
-	switch (response)
-	{
-		case GTK_RESPONSE_OK:
-			activate_choice (dialog);
-			break;
-		default:
-			break;
-	}
-
 	g_object_unref (dialog);
 }
 
@@ -276,6 +265,8 @@ view_node_selected_cb (EphyNodeView *view,
 
 	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), MANUAL_PROP);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+
+	activate_choice (dialog);
 }
 
 static void
@@ -295,6 +286,16 @@ view_node_activated_cb (GtkWidget *view,
 	activate_choice (dialog);
 
 	g_object_unref (dialog);
+}
+
+static void
+automatic_toggled_cb (GtkToggleButton *button, EphyEncodingDialog *dialog)
+{
+	if (gtk_toggle_button_get_active (button)
+	    && dialog->priv->update_tag == FALSE)
+	{
+		activate_choice (dialog);
+	}
 }
 
 static void
@@ -352,6 +353,9 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 
 	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), AUTOMATIC_PROP);
 	gtk_label_set_use_markup (GTK_LABEL (GTK_BIN (button)->child), TRUE);
+	g_signal_connect (button, "toggled",
+			  G_CALLBACK (automatic_toggled_cb), dialog);
+
 	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), MANUAL_PROP);
 	gtk_label_set_use_markup (GTK_LABEL (GTK_BIN (button)->child), TRUE);
 
