@@ -679,7 +679,7 @@ ephy_session_load (EphySession *session,
 			}
 			else if (id && xmlStrEqual (HISTORY_WINDOW_ID, id))
 			{
-				if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY))
+				if (!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY))
 				{
 					widget = ephy_shell_get_history_window (ephy_shell);
 				}
