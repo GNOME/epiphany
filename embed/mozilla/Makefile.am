@@ -71,6 +71,8 @@ libephymozillaembed_la_SOURCES = 	\
 	FilePicker.h                    \
 	GlobalHistory.cpp               \
 	GlobalHistory.h                 \
+	GtkNSSClientAuthDialogs.cpp	\
+	GtkNSSClientAuthDialogs.h	\
 	GtkNSSDialogs.cpp		\
 	GtkNSSDialogs.h			\
 	GtkNSSKeyPairDialogs.cpp	\

@@ -43,6 +43,10 @@ void ephy_state_add_paned	(GtkWidget *paned,
 				 const char *name,
 				 int default_width);
 
+void ephy_state_add_expander	(GtkWidget *expander,
+				 const char *name,
+				 gboolean default_state);
+
 void ephy_state_save		(void);
 
 G_END_DECLS

@@ -1,3 +1,19 @@
+2003-11-17  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
+	* embed/mozilla/GtkNSSClientAuthDialogs.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozRegisterComponents.cpp:
+	* lib/ephy-state.c: (ephy_state_add_paned), (expander_activate_cb),
+	(ephy_state_add_expander):
+	* lib/ephy-state.h:
+
+	Ported the Crispin's GtkNSSClientAuthDialogs from galeon.
+	Changes:
+	- use GtkExpander instead of the CDDB disclosure thingy
+	- persist state in ephy-state
+	- assing a mnemonic to expander label.
+
 2003-11-17  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* embed/mozilla/EphyBrowser.cpp:

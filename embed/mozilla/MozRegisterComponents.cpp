@@ -30,6 +30,7 @@
 #include "EphyAboutRedirector.h"
 
 #ifdef HAVE_MOZILLA_PSM
+#include "GtkNSSClientAuthDialogs.h"
 #include "GtkNSSDialogs.h"
 #include "GtkNSSKeyPairDialogs.h"
 #endif
@@ -53,6 +54,7 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GNewsProtocolHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GExternalProtocolService)
 
 #ifdef HAVE_MOZILLA_PSM
+NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSClientAuthDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSKeyPairDialogs)
 #endif
@@ -77,6 +79,12 @@ static const nsModuleComponentInfo sAppComps[] = {
 		GFilePickerConstructor
 	},
 #ifdef HAVE_MOZILLA_PSM
+	{
+		GTK_NSSCLIENTAUTHDIALOGS_CLASSNAME,
+		GTK_NSSCLIENTAUTHDIALOGS_CID,
+		NS_CLIENTAUTHDIALOGS_CONTRACTID,
+		GtkNSSClientAuthDialogsConstructor
+	},
 	{
 		GTK_NSSDIALOGS_CLASSNAME,
 		GTK_NSSDIALOGS_CID,
