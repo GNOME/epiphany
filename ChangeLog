@@ -1,5 +1,12 @@
 2003-07-04  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-node.c: (callback):
+
+	Use G_VA_COPY macro from glib instead of va_copy, (hopefully)
+	fixing the va_ problem for good.
+
+2003-07-04  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-favicon-cache.c: (favicon_download_completed_cb):
 
 	Remove the persist object from the hash table before emitting the

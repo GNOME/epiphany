@@ -18,7 +18,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
+
 #include <bonobo/bonobo-i18n.h>
 #include <stdlib.h>
 #include <string.h>
@@ -126,7 +129,7 @@ callback (long id, EphyNodeSignalData *data, gpointer *dummy)
 
 	user_data = (ENESCData *) dummy;
 
-	va_copy(valist, user_data->valist);
+	G_VA_COPY(valist, user_data->valist);
 
 	if (data->type != user_data->type) return;
 
