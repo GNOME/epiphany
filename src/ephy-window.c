@@ -103,7 +103,7 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "EditSelectAll", N_("Select _All"), NULL, "<control>A",
 	  N_("Select the entire page"),
 	  G_CALLBACK (window_cmd_edit_select_all), NULL },
-	{ "EditFind", N_("_Find"), GTK_STOCK_FIND, "<control>F",
+	{ "EditFind", N_("_Find..."), GTK_STOCK_FIND, "<control>F",
 	  N_("Find a string"),
 	  G_CALLBACK (window_cmd_edit_find), NULL },
 	{ "EditFindNext", N_("Find Ne_xt"), NULL, "<control>G",

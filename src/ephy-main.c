@@ -68,32 +68,32 @@ static struct poptOption popt_options[] =
 	{ NULL, '\0', POPT_ARG_INCLUDE_TABLE, &bonobo_activation_popt_options, 0, NULL,
 	  NULL },
 	{ "new-tab", 'n', POPT_ARG_NONE, &open_in_new_tab, 0,
-	  N_("Open a new tab in an existing Ephy window"),
+	  N_("Open a new tab in an existing Epiphany window"),
 	  NULL },
 	{ "new-window", 'w', POPT_ARG_NONE, &open_in_new_window, 0,
-	  N_("Open a new window in an existing Ephy process"),
+	  N_("Open a new window in an existing Epiphany process"),
 	  NULL },
 	{ "noraise", '\0', POPT_ARG_NONE, &noraise, 0,
-	  N_("Do not raise the window when opening a page in an existing Ephy process"),
+	  N_("Do not raise the window when opening a page in an existing Epiphany process"),
 	  NULL },
 	{ "fullscreen", 'f', POPT_ARG_NONE, &open_fullscreen, 0,
-	  N_("Run Ephy in full screen mode"),
+	  N_("Run Epiphany in full screen mode"),
 	  NULL },
 	{ "existing", 'x', POPT_ARG_NONE, &open_in_existing, 0,
-	  N_("Attempt to load URL in existing Ephy window"),
+	  N_("Attempt to load URL in existing Epiphany window"),
 	  NULL },
 	{ "load-session", 'l', POPT_ARG_STRING, &session_filename, 0,
 	  N_("Load the given session file"),
 	  N_("FILE") },
 	{ "server", 's', POPT_ARG_NONE, &ephy_server_mode, 0,
 	  N_("Don't open any windows; instead act as a server "
-	     "for quick startup of new Ephy instances"),
+	     "for quick startup of new Epiphany instances"),
 	  NULL },
 	{ "add-bookmark", 't', POPT_ARG_STRING, &bookmark_url,
 	  0, N_("Add a bookmark (don't open any window)"),
 	  N_("URL")},
 	{ "close", 'c', POPT_ARG_NONE, &close_option, 0,
-	  N_("Close all Ephy windows"),
+	  N_("Close all Epiphany windows"),
 	  NULL },
 	{ "quit", 'q', POPT_ARG_NONE, &quit_option, 0,
 	  N_("Same as --close, but exits server mode too"),
@@ -186,12 +186,12 @@ ephy_main_start (gpointer data)
                          GTK_DIALOG_MODAL,
                          GTK_MESSAGE_ERROR,
                          GTK_BUTTONS_CLOSE,
-                         "Ephy can't be used now. "
+                         _("Epiphany can't be used now. "
                          "Running the command \"bonobo-slay\" "
                          "from the console may fix the problem. If not, "
                          "you can try rebooting the computer or "
-                         "installing Ephy again.\n\n"
-                         "Bonobo couldn't locate the GNOME_Epiphany_Automation.server. ");
+                         "installing Epiphany again.\n\n"
+                         "Bonobo couldn't locate the GNOME_Epiphany_Automation.server."));
 		gtk_dialog_run (GTK_DIALOG (dialog));
 
 	}
@@ -290,7 +290,6 @@ ephy_main_automation_init (void)
 	else
 	{
 		ephy_main_start (NULL);
-		g_message (_("Ephy already running, using existing process"));
 		return FALSE;
 	}
 }
