@@ -65,6 +65,12 @@ static void ephy_session_class_init	(EphySessionClass *klass);
 static void ephy_session_iface_init	(EphyExtensionIface *iface);
 static void ephy_session_init		(EphySession *session);
 
+enum
+{
+	PROP_0,
+	PROP_ACTIVE_WINDOW
+};
+
 static GObjectClass *parent_class = NULL;
 
 GType
@@ -177,6 +183,25 @@ tabs_reordered_cb (GtkWidget *notebook,
 	ephy_session_save (session, SESSION_CRASHED);
 }
 
+static gboolean
+window_focus_in_event_cb (EphyWindow *window,
+			  GdkEventFocus *event,
+			  EphySession *session)
+{
+	LOG ("focus-in-event for window %p", window)
+
+	g_return_val_if_fail (g_list_find (session->priv->windows, window) != NULL, FALSE);
+
+	/* move the active window to the front of the list */
+	session->priv->windows = g_list_remove (session->priv->windows, window);
+	session->priv->windows = g_list_prepend (session->priv->windows, window);
+
+	g_object_notify (G_OBJECT (session), "active-window");
+
+	/* propagate event */
+	return FALSE;
+}
+
 static void
 impl_attach_window (EphyExtension *extension,
 		    EphyWindow *window)
@@ -188,6 +213,9 @@ impl_attach_window (EphyExtension *extension,
 
 	session->priv->windows = g_list_append (session->priv->windows, window);
 	ephy_session_save (session, SESSION_CRASHED);
+
+	g_signal_connect (window, "focus-in-event",
+			  G_CALLBACK (window_focus_in_event_cb), session);
 
 	notebook = ephy_window_get_notebook (window);
 	g_signal_connect (notebook, "tab_added",
@@ -274,6 +302,33 @@ ephy_session_iface_init (EphyExtensionIface *iface)
 }
 
 static void
+ephy_session_set_property (GObject *object,
+			   guint prop_id,
+			   const GValue *value,
+			   GParamSpec *pspec)
+{
+	/* no writeable properties */
+}
+
+static void
+ephy_session_get_property (GObject *object,
+			   guint prop_id,
+			   GValue *value,
+			   GParamSpec *pspec)
+{
+	EphySession *session = EPHY_SESSION (object);
+
+	switch (prop_id)
+	{
+		case PROP_ACTIVE_WINDOW:
+			g_value_set_object (value, ephy_session_get_active_window (session));
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+	}
+}
+
+static void
 ephy_session_class_init (EphySessionClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -282,6 +337,17 @@ ephy_session_class_init (EphySessionClass *class)
 
 	object_class->dispose = ephy_session_dispose;
 	object_class->finalize = ephy_session_finalize;
+	object_class->get_property = ephy_session_get_property;
+	object_class->set_property = ephy_session_set_property;
+
+	g_object_class_install_property
+		(object_class,
+		 PROP_ACTIVE_WINDOW,
+		 g_param_spec_object ("active-window",
+		 		      "Active Window",
+		 		      "The active window",
+				       EPHY_TYPE_WINDOW,
+				       G_PARAM_READABLE));
 
 	g_type_class_add_private (object_class, sizeof (EphySessionPrivate));
 }
