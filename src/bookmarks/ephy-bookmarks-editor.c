@@ -1069,15 +1069,15 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		 rename, delete, properties;
 	const gchar *open_in_window_label, *open_in_tab_label, *copy_label;
 	gboolean bmk_focus, key_focus;
-	gboolean key_selection, bmk_selection;
+	gboolean key_selection, bmk_selection, single_bmk_selected;
 	gboolean key_normal = FALSE;
-	gboolean bmk_multiple_selection;
 	gboolean cut, copy, paste, select_all;
 	gboolean can_show_in_bookmarks_bar, show_in_bookmarks_bar = FALSE;
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	GList *selected;
 	GtkWidget *focus_widget;
+	int num_bmk_selected;
 
 	LOG ("Update menu sensitivity")
 
@@ -1086,11 +1086,14 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	key_focus = ephy_node_view_is_target
 		(EPHY_NODE_VIEW (editor->priv->key_view));
 	focus_widget = gtk_window_get_focus (GTK_WINDOW (editor));
-	bmk_selection = ephy_node_view_has_selection
-		(EPHY_NODE_VIEW (editor->priv->bm_view),
-		 &bmk_multiple_selection);
-	key_selection = ephy_node_view_has_selection
-		(EPHY_NODE_VIEW (editor->priv->key_view), NULL);
+
+	num_bmk_selected = gtk_tree_selection_count_selected_rows
+		 (gtk_tree_view_get_selection (GTK_TREE_VIEW (editor->priv->bm_view)));
+	bmk_selection = num_bmk_selected > 0;
+	single_bmk_selected = num_bmk_selected == 1;
+
+	key_selection = gtk_tree_selection_count_selected_rows
+		 (gtk_tree_view_get_selection (GTK_TREE_VIEW (editor->priv->key_view))) > 0;
 
 	if (GTK_IS_EDITABLE (focus_widget))
 	{
@@ -1107,7 +1110,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	else
 	{
 		cut = FALSE;
-		copy = (bmk_focus && !bmk_multiple_selection && bmk_selection);
+		copy = (bmk_focus && single_bmk_selected);
 		paste = FALSE;
 		select_all = bmk_focus;
 	}
@@ -1146,16 +1149,12 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		g_list_free (selected);
 	}
 
-	if (bmk_multiple_selection)
-	{
-		open_in_window_label = N_("_Open in New Windows");
-		open_in_tab_label = N_("Open in New _Tabs");
-	}
-	else
-	{
-		open_in_window_label = _("_Open in New Window");
-		open_in_tab_label = _("Open in New _Tab");
-	}
+	open_in_window_label = ngettext ("_Open in New Window",
+					 "_Open in New Windows",
+					 num_bmk_selected);
+	open_in_tab_label = ngettext ("Open in New _Tab",
+				      "Open in New _Tabs",
+				      num_bmk_selected);
 
 	if (bmk_focus)
 	{
@@ -1168,21 +1167,21 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 
 	open_in_window = (bmk_focus && bmk_selection);
 	open_in_tab = (bmk_focus && bmk_selection);
-	rename = (bmk_focus && bmk_selection && !bmk_multiple_selection) ||
+	rename = (bmk_focus && single_bmk_selected) ||
 		 (key_selection && key_focus && key_normal);
 	delete = (bmk_focus && bmk_selection) ||
 		 (key_selection && key_focus && key_normal);
-	properties = (bmk_focus && bmk_selection && !bmk_multiple_selection);
-	can_show_in_bookmarks_bar = (bmk_focus && bmk_selection && !bmk_multiple_selection) ||
+	properties = (bmk_focus && single_bmk_selected);
+	can_show_in_bookmarks_bar = (bmk_focus && single_bmk_selected) ||
 		 (key_selection && key_focus);
 
 	action_group = editor->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "OpenInWindow");
-	g_object_set (action, "sensitive", open_in_window, NULL);
-	g_object_set (action, "label", open_in_window_label, NULL);
+	g_object_set (action, "sensitive", open_in_window,
+			      "label", open_in_window_label, NULL);
 	action = gtk_action_group_get_action (action_group, "OpenInTab");
-	g_object_set (action, "sensitive", open_in_tab, NULL);
-	g_object_set (action, "label", open_in_tab_label, NULL);
+	g_object_set (action, "sensitive", open_in_tab,
+			      "label", open_in_tab_label, NULL);
 	action = gtk_action_group_get_action (action_group, "Rename");
 	g_object_set (action, "sensitive", rename, NULL);
 	action = gtk_action_group_get_action (action_group, "Delete");
@@ -1192,8 +1191,8 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	action = gtk_action_group_get_action (action_group, "Cut");
 	g_object_set (action, "sensitive", cut, NULL);
 	action = gtk_action_group_get_action (action_group, "Copy");
-	g_object_set (action, "sensitive", copy, NULL);
-	g_object_set (action, "label", copy_label, NULL);
+	g_object_set (action, "sensitive", copy,
+			      "label", copy_label, NULL);
 	action = gtk_action_group_get_action (action_group, "Paste");
 	g_object_set (action, "sensitive", paste, NULL);
 	action = gtk_action_group_get_action (action_group, "SelectAll");

@@ -105,9 +105,6 @@ void		   ephy_node_view_set_priority        (EphyNodeView *view,
 
 void		   ephy_node_view_remove              (EphyNodeView *view);
 
-gboolean           ephy_node_view_has_selection       (EphyNodeView *view,
-						       gboolean *multiple);
-
 GList             *ephy_node_view_get_selection       (EphyNodeView *view);
 
 void	           ephy_node_view_select_node         (EphyNodeView *view,

@@ -1478,23 +1478,6 @@ ephy_node_view_is_target (EphyNodeView *view)
 	return gtk_widget_is_focus (GTK_WIDGET (view));
 }
 
-gboolean
-ephy_node_view_has_selection (EphyNodeView *view, gboolean *multiple)
-{
-	GtkTreeSelection *selection;
-	int rows;
-
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
-	rows = gtk_tree_selection_count_selected_rows (selection);
-
-	if (multiple)
-	{
-		*multiple = rows > 1;
-	}
-
-	return rows > 0;
-}
-
 static gboolean
 filter_visible_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
 {

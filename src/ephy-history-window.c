@@ -672,9 +672,9 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 {
 	gboolean open_in_window, open_in_tab;
 	gboolean cut, copy, paste, select_all;
-	gboolean pages_focus, pages_selection;
-	gboolean pages_multiple_selection;
+	gboolean pages_focus, pages_selection, single_page_selected;
 	gboolean delete, bookmark_page;
+	int num_pages_selected;
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	char *open_in_window_label, *open_in_tab_label, *copy_label;
@@ -682,9 +682,11 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 
 	pages_focus = ephy_node_view_is_target
 		(EPHY_NODE_VIEW (editor->priv->pages_view));
-	pages_selection = ephy_node_view_has_selection
-		(EPHY_NODE_VIEW (editor->priv->pages_view),
-		 &pages_multiple_selection);
+	num_pages_selected = gtk_tree_selection_count_selected_rows
+		 (gtk_tree_view_get_selection (GTK_TREE_VIEW (editor->priv->pages_view)));
+	pages_selection = num_pages_selected > 0;
+	single_page_selected = num_pages_selected == 1;
+
 	focus_widget = gtk_window_get_focus (GTK_WINDOW (editor));
 
 	if (GTK_IS_EDITABLE (focus_widget))
@@ -702,21 +704,17 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 	else
 	{
 		cut = FALSE;
-		copy = (pages_focus && !pages_multiple_selection && pages_selection);
+		copy = (pages_focus && single_page_selected);
 		paste = FALSE;
 		select_all = pages_focus;
 	}
 
-	if (pages_multiple_selection)
-	{
-		open_in_window_label = N_("_Open in New Windows");
-		open_in_tab_label = N_("Open in New _Tabs");
-	}
-	else
-	{
-		open_in_window_label = _("_Open in New Window");
-		open_in_tab_label = _("Open in New _Tab");
-	}
+	open_in_window_label = ngettext ("_Open in New Window",
+					 "_Open in New Windows",
+					 num_pages_selected);
+	open_in_tab_label = ngettext ("Open in New _Tab",
+				      "Open in New _Tabs",
+				      num_pages_selected);
 
 	if (pages_focus)
 	{
@@ -727,24 +725,23 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 		copy_label = _("_Copy");
 	}
 
-
 	open_in_window = (pages_focus && pages_selection);
 	open_in_tab = (pages_focus && pages_selection);
         delete = (pages_focus && pages_selection);
-	bookmark_page = (pages_focus && pages_selection && !pages_multiple_selection);
+	bookmark_page = (pages_focus && single_page_selected);
 
 	action_group = editor->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "OpenInWindow");
-	g_object_set (action, "sensitive", open_in_window, NULL);
-	g_object_set (action, "label", open_in_window_label, NULL);
+	g_object_set (action, "sensitive", open_in_window,
+			      "label", open_in_window_label, NULL);
 	action = gtk_action_group_get_action (action_group, "OpenInTab");
-	g_object_set (action, "sensitive", open_in_tab, NULL);
-	g_object_set (action, "label", open_in_tab_label, NULL);
+	g_object_set (action, "sensitive", open_in_tab,
+			      "label", open_in_tab_label, NULL);
 	action = gtk_action_group_get_action (action_group, "Cut");
 	g_object_set (action, "sensitive", cut, NULL);
 	action = gtk_action_group_get_action (action_group, "Copy");
-	g_object_set (action, "sensitive", copy, NULL);
-	g_object_set (action, "label", copy_label, NULL);
+	g_object_set (action, "sensitive", copy,
+			      "label", copy_label, NULL);
 	action = gtk_action_group_get_action (action_group, "Paste");
 	g_object_set (action, "sensitive", paste, NULL);
 	action = gtk_action_group_get_action (action_group, "SelectAll");
