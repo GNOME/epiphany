@@ -215,12 +215,6 @@ ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget 
 		}
 	}
 
-	if (pixbuf == NULL)
-	{
-		pixbuf = gtk_widget_render_icon (proxy, GTK_STOCK_JUMP_TO,
-					         GTK_ICON_SIZE_MENU, NULL);
-	}
-
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
 		GtkImage *icon;
@@ -228,9 +222,15 @@ ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget 
 		icon = GTK_IMAGE (g_object_get_data (G_OBJECT (proxy), "icon"));
 		g_return_if_fail (icon != NULL);
 
+		if (pixbuf == NULL)
+		{
+			pixbuf = gtk_widget_render_icon (proxy, GTK_STOCK_JUMP_TO,
+					                 GTK_ICON_SIZE_MENU, NULL);
+		}
+
 		gtk_image_set_from_pixbuf (icon, pixbuf);
 	}
-	else if (GTK_IS_MENU_ITEM (proxy))
+	else if (GTK_IS_MENU_ITEM (proxy) && pixbuf)
 	{
 		GtkWidget *image;
 
@@ -241,7 +241,10 @@ ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget 
 			(GTK_IMAGE_MENU_ITEM (proxy), image);
 	}
 
-	g_object_unref (pixbuf);
+	if (pixbuf)
+	{
+		g_object_unref (pixbuf);
+	}
 }
 
 static void
