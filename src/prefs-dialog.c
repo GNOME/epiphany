@@ -297,7 +297,7 @@ languages [] =
 	{ "fo",		N_("Faeroese") },
 	{ "fr",		N_("French") },
 	{ "ga",		N_("Irish") },
-	{ "gd",		N_("Scottish") },
+	{ "gd",		N_("Scots Gaelic") },
 	{ "gl",		N_("Galician") },
 	{ "he",		N_("Hebrew") },
 	{ "hr",		N_("Croatian") },
