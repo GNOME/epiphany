@@ -1,5 +1,12 @@
 2004-09-04  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-navigation-action.c: (connect_proxy):
+
+	Only connect menu-activated signal to an arrow toolbutton,
+	not on menu items. Fixes bug #151648.
+
+2004-09-04  Christian Persch  <chpe@cvs.gnome.org>
+
 	* data/ui/epiphany-ui.xml:
 	* src/ephy-window.c: (show_embed_popup):
 
