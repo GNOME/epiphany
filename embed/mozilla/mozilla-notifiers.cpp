@@ -1,6 +1,5 @@
 /*
  *  Copyright (C) 2000 Nate Case 
- *  Copyright (C) 2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,8 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -745,12 +742,14 @@ get_system_language ()
 		char *lang = (char *)sys_langs->data;
 
 		/* FIXME this probably need to be smarter */
+		/* FIXME this can be up to 8 chars, not just 2 */
 		if (strcmp (lang, "C") != 0)
 		{
 			return g_strndup (lang, 2);
 		}
 	}
 
+	/* fallback to english */
 	return g_strdup ("en");
 }
 
@@ -760,43 +759,68 @@ mozilla_language_notifier(GConfClient *client,
 			  GConfEntry *entry,
 			  EphyEmbedSingle *single)
 {
-	GSList *languages, *l;
+	GSList *languages, *l, *ulist = NULL;
 	GString *result;
 
 	languages = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
-	if (languages == NULL) return;
 
 	result = g_string_new ("");
 
+	/* substitute the system language */
+	l = g_slist_find_custom (languages, "system", (GCompareFunc) strcmp);
+	if (l != NULL)
+	{
+		char *sys_lang;
+		int index;
+
+		index = g_slist_position (languages, l);
+		g_free (l->data);
+		languages = g_slist_delete_link (languages, l);
+
+		sys_lang = get_system_language ();
+
+		if (sys_lang)
+		{
+			char **s;
+			int i = 0;
+
+			s = g_strsplit (sys_lang, ",", -1);
+			while (s[i] != NULL)
+			{
+				languages = g_slist_insert (languages, g_strdup (s[i]), index);
+
+				index ++;
+				i++;
+			}
+
+			g_strfreev (s);
+		}		
+	}
+
+	/* now make a list of unique entries */
 	for (l = languages; l != NULL; l = l->next)
 	{
-		char *lang = (char *)l->data;
+		if (g_slist_find_custom (ulist, l->data, (GCompareFunc) strcmp) == NULL)
+		{
+			ulist = g_slist_prepend (ulist, l->data);
+		}
+	}
+	ulist = g_slist_reverse (ulist);
 
-		if (strcmp (lang, "system") == 0)
-		{
-			char *sys_lang;
-			
-			sys_lang = get_system_language ();
-			if (sys_lang)
-			{
-				g_string_append (result, sys_lang);
-				g_free (sys_lang);
-			}
-		}
-		else
-		{
-			g_string_append (result, (char *)l->data);
-		}
+	for (l = ulist; l != NULL; l = l->next)
+	{
+		g_string_append (result, (char *)l->data);
 
 		if (l->next) g_string_append (result, ",");
 	}
-	
+
 	mozilla_prefs_set_string ("intl.accept_languages", result->str);
 
 	g_string_free (result, TRUE);
-	
+
 	g_slist_foreach (languages, (GFunc) g_free, NULL);
 	g_slist_free (languages);
+	g_slist_free (ulist);
 }
 
 static void

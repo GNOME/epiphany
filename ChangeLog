@@ -1,5 +1,26 @@
 2003-12-18  Christian Persch  <chpe@cvs.gnome.org>
 
+	* data/glade/prefs-dialog.glade:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* src/Makefile.am:
+	* src/language-editor.c:
+	* src/language-editor.h:
+	* src/prefs-dialog.c: (prefs_dialog_finalize),
+	(prefs_dialog_class_init), (language_editor_add),
+	(language_editor_update_pref), (language_editor_update_buttons),
+	(add_lang_dialog_response_cb), (setup_add_language_dialog),
+	(language_editor_add_button_clicked_cb),
+	(language_editor_remove_button_clicked_cb),
+	(language_editor_up_button_clicked_cb),
+	(language_editor_down_button_clicked_cb),
+	(language_editor_treeview_drag_end_cb),
+	(language_editor_selection_changed_cb), (create_language_section),
+	(prefs_dialog_init):
+
+	In-line the language editor in the prefs dialogue.
+
+2003-12-18  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-encodings.c: (ephy_encoding_info_is_automatic):
 	* embed/ephy-encodings.h:
 	* src/ephy-encoding-dialog.c: (sync_embed_cb):

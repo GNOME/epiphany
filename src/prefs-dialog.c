@@ -34,7 +34,6 @@
 #include "ephy-shell.h"
 #include "ephy-gui.h"
 #include "eel-gconf-extensions.h"
-#include "language-editor.h"
 #include "ephy-langs.h"
 #include "ephy-encodings.h"
 #include "ephy-debug.h"
@@ -78,6 +77,14 @@ void prefs_language_more_button_clicked_cb	(GtkWidget *button,
 						 EphyDialog *dialog);
 void prefs_download_path_button_clicked_cb	(GtkWidget *button,
 						 EphyDialog *dialog);
+void language_editor_add_button_clicked_cb	(GtkWidget *button,
+						 PrefsDialog *pd);
+void language_editor_remove_button_clicked_cb	(GtkWidget *button,
+						 PrefsDialog *pd);
+void language_editor_up_button_clicked_cb	(GtkWidget *button,
+						 PrefsDialog *pd);
+void language_editor_down_button_clicked_cb	(GtkWidget *button,
+						 PrefsDialog *pd);
 
 static const
 struct
@@ -229,11 +236,13 @@ enum
 	/* Language */
 	AUTO_ENCODING_PROP,
 	DEFAULT_ENCODING_PROP,
-	LANGUAGE_PROP,
-	LANGUAGE_LABEL_PROP,
 	DEFAULT_ENCODING_LABEL_PROP,
 	AUTO_ENCODING_LABEL_PROP,
-	LANGUAGE_MORE_PROP
+	LANGUAGE_ADD_BUTTON_PROP,
+	LANGUAGE_REMOVE_BUTTON_PROP,
+	LANGUAGE_UP_BUTTON_PROP,
+	LANGUAGE_DOWN_BUTTON_PROP,
+	LANGUAGE_TREEVIEW_PROP
 };
 
 static const
@@ -269,11 +278,28 @@ EphyDialogProperty properties [] =
 	/* Languages */
 	{ "auto_encoding_combo",	CONF_LANGUAGE_AUTODETECT_ENCODING,	PT_AUTOAPPLY,	G_TYPE_STRING },
 	{ "default_encoding_combo",	CONF_LANGUAGE_DEFAULT_ENCODING,		PT_AUTOAPPLY,	G_TYPE_STRING },
-	{ "language_combo",		NULL,					PT_NORMAL,	G_TYPE_STRING },
-	{ "language_label",		NULL,					PT_NORMAL,	0 },
 	{ "default_encoding_label",	NULL,					PT_NORMAL,	0 },
 	{ "auto_encoding_label",	NULL,					PT_NORMAL,	0 },
-	{ "language_more_button", 	NULL,					PT_NORMAL,	0 },
+	{ "lang_add_button",		NULL,					PT_NORMAL,	0 },
+	{ "lang_remove_button",		NULL,					PT_NORMAL,	0 },
+	{ "lang_up_button",		NULL,					PT_NORMAL,	0 },
+	{ "lang_down_button",		NULL,					PT_NORMAL,	0 },
+	{ "lang_treeview",		NULL,					PT_NORMAL,	0 },
+
+	{ NULL }
+};
+
+enum
+{
+	LANGUAGE_DIALOG,
+	LANGUAGE_PROP
+};
+
+static const
+EphyDialogProperty add_lang_props [] =
+{
+	{ "add_language_dialog", NULL,	PT_NORMAL,	0 },
+	{ "languages_treeview",	 NULL,	PT_NORMAL,	G_TYPE_STRING },
 
 	{ NULL }
 };
@@ -300,6 +326,13 @@ enum
 
 struct PrefsDialogPrivate
 {
+	GtkTreeView *lang_treeview;
+	GtkTreeModel *lang_model;
+	EphyDialog *add_lang_dialog;
+	GtkWidget *lang_add_button;
+	GtkWidget *lang_remove_button;
+	GtkWidget *lang_up_button;
+	GtkWidget *lang_down_button;
 };
 
 static GObjectClass *parent_class = NULL;
@@ -333,11 +366,29 @@ prefs_dialog_get_type (void)
 }
 
 static void
+prefs_dialog_finalize (GObject *object)
+{
+	PrefsDialog *dialog = EPHY_PREFS_DIALOG (object);
+
+	if (dialog->priv->add_lang_dialog != NULL)
+	{
+		g_object_remove_weak_pointer
+			(G_OBJECT (dialog->priv->add_lang_dialog),
+			(gpointer *) &dialog->priv->add_lang_dialog);
+		g_object_unref (dialog->priv->add_lang_dialog);
+	}
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
 prefs_dialog_class_init (PrefsDialogClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
+
+	object_class->finalize = prefs_dialog_finalize;
 
 	g_type_class_add_private (object_class, sizeof(PrefsDialogPrivate));
 }
@@ -571,64 +622,176 @@ create_node_combo (EphyDialog *dialog,
 }
 
 static void
-language_combo_changed_cb (GtkComboBox *combo,
-			   EphyDialog *dialog)
+language_editor_add (PrefsDialog *pd,
+		     const char *code,
+		     const char *desc)
 {
-	GValue value = { 0, };
-	GSList *list;
+	GtkTreeIter iter;
 
-	list = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
-	/* delete the first list item */
-	list = g_slist_remove_link (list, list);
+	g_return_if_fail (code != NULL && desc != NULL);
 
-	ephy_dialog_get_value (dialog, properties[LANGUAGE_PROP].id, &value);
+	if (gtk_tree_model_get_iter_first (pd->priv->lang_model, &iter))
+	{
+		do
+		{
+			char *c;
 
-	/* add the new language code upfront */
-	list = g_slist_prepend (list, g_value_dup_string (&value));
-	g_value_unset (&value);
+			gtk_tree_model_get (pd->priv->lang_model, &iter,
+					    COL_LANG_CODE, &c,
+					    -1);
 
-	eel_gconf_set_string_list (CONF_RENDERING_LANGUAGE, list);
+			if (strcmp (code, c) == 0)
+			{
+				g_free (c);
 
-	g_slist_foreach (list, (GFunc) g_free, NULL);
-	g_slist_free (list);
+				/* already in list, don't allow a duplicate */
+				return;
+			}
+			g_free (c);
+		}
+		while (gtk_tree_model_iter_next (pd->priv->lang_model, &iter));
+	}
+
+	gtk_list_store_append (GTK_LIST_STORE (pd->priv->lang_model), &iter);
+	
+	gtk_list_store_set (GTK_LIST_STORE (pd->priv->lang_model), &iter,
+			    COL_LANG_NAME, desc,
+			    COL_LANG_CODE, code,
+			    -1);
 }
 
 static void
-create_language_menu (EphyDialog *dialog)
+language_editor_update_pref (PrefsDialog *pd)
 {
-	GtkWidget *combo, *button;
+	GtkTreeIter iter;
+	GSList *codes = NULL;
+
+	if (gtk_tree_model_get_iter_first (pd->priv->lang_model, &iter))
+	{
+		do
+		{
+			char *code;
+		
+			gtk_tree_model_get (pd->priv->lang_model, &iter,
+					    COL_LANG_CODE, &code,
+					    -1);
+
+			codes = g_slist_prepend (codes, code);
+		}
+		while (gtk_tree_model_iter_next (pd->priv->lang_model, &iter));
+	}
+
+	codes = g_slist_reverse (codes);
+	eel_gconf_set_string_list (CONF_RENDERING_LANGUAGE, codes);
+
+	g_slist_foreach (codes, (GFunc) g_free, NULL);
+	g_slist_free (codes);
+}
+
+static void
+language_editor_update_buttons (PrefsDialog *dialog)
+{
+	GtkTreeSelection *selection;
+	GtkTreeModel *model;
+	GtkTreePath *path;
+	GtkTreeIter iter;
+	int selected;
+
+	selection = gtk_tree_view_get_selection (dialog->priv->lang_treeview);
+
+	gtk_widget_set_sensitive (dialog->priv->lang_remove_button, FALSE);
+	gtk_widget_set_sensitive (dialog->priv->lang_up_button, FALSE);
+	gtk_widget_set_sensitive (dialog->priv->lang_down_button, FALSE);
+	
+	if (gtk_tree_selection_get_selected (selection, &model, &iter))
+	{
+		path = gtk_tree_model_get_path (model, &iter);
+	
+		selected = gtk_tree_path_get_indices (path)[0];
+	
+		gtk_widget_set_sensitive (dialog->priv->lang_remove_button, TRUE);
+		gtk_widget_set_sensitive (dialog->priv->lang_up_button, selected > 0);
+		gtk_widget_set_sensitive (dialog->priv->lang_down_button,
+			selected < gtk_tree_model_iter_n_children (model, NULL) - 1);
+
+		gtk_tree_path_free (path);
+	}
+}
+
+static void
+add_lang_dialog_response_cb (GtkWidget *widget,
+			     int response,
+			     PrefsDialog *pd)
+{
+	EphyDialog *dialog = pd->priv->add_lang_dialog;
+	GtkTreeView *treeview;
+	GtkTreeModel *model;
+	GtkTreeSelection *selection;
+	GtkTreeIter iter;
+	GList *rows, *r;
+
+	g_return_if_fail (dialog != NULL);
+g_print ("response_cb\n");
+	if (response == GTK_RESPONSE_OK)
+	{g_print ("response OK");
+		treeview = GTK_TREE_VIEW (ephy_dialog_get_control
+				(dialog, add_lang_props[LANGUAGE_PROP].id));
+		selection = gtk_tree_view_get_selection (treeview);
+
+		rows = gtk_tree_selection_get_selected_rows (selection, &model);
+
+		for (r = rows; r != NULL; r = r->next)
+		{
+			GtkTreePath *path = (GtkTreePath *) r->data;
+g_print ("row\n");
+			if (gtk_tree_model_get_iter (model, &iter, path))
+			{
+				char *code, *desc;
+				
+				gtk_tree_model_get (model, &iter,
+						    COL_LANG_NAME, &desc,
+						    COL_LANG_CODE, &code,
+						    -1);
+		g_print ("inner! desc %s code %s\n", desc, code);
+				language_editor_add (pd, code, desc);
+		
+				g_free (desc);
+				g_free (code);
+			}
+		}			
+
+		g_list_foreach (rows, (GFunc) gtk_tree_path_free, NULL);
+		g_list_free (rows);
+
+		language_editor_update_pref (pd);
+		language_editor_update_buttons (pd);
+	}
+
+	g_object_unref (dialog);
+}
+
+static EphyDialog *
+setup_add_language_dialog (PrefsDialog *pd)
+{
+	EphyDialog *dialog;
+	GtkWidget *window;
 	GtkListStore *store;
 	GtkTreeModel *sortmodel;
-	GtkTreeIter iter;
+	GtkTreeView *treeview;
 	GtkCellRenderer *renderer;
+	GtkTreeViewColumn *column;
+	GtkTreeSelection *selection;
+	GtkTreeIter iter;
 	int i;
-	GSList *list, *l, *ulist = NULL;
-	gboolean sensitive;
 
-	/* init value from first element of the list */
-	list = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
-	sensitive = eel_gconf_key_is_writable (CONF_RENDERING_LANGUAGE);
+	window = ephy_dialog_get_control (EPHY_DIALOG (pd), properties[WINDOW_PROP].id);
 
-	/* uniquify list */
-	for (l = list; l != NULL; l = l->next)
-	{
-		if (g_slist_find_custom (ulist, l->data, (GCompareFunc) strcmp) == NULL)
-		{
-			ulist = g_slist_prepend (ulist, l->data);
-		}
-		else
-		{
-			g_free (l->data);
-		}
-	}
-	g_slist_free (list);
-	list = g_slist_reverse (ulist);
-	eel_gconf_set_string_list (CONF_RENDERING_LANGUAGE, list);
+	dialog =  EPHY_DIALOG (g_object_new (EPHY_TYPE_DIALOG,
+					     "parent-window", window,
+					     NULL));
 
-	button = ephy_dialog_get_control (dialog, properties[LANGUAGE_MORE_PROP].id);
-	gtk_widget_set_sensitive (button, sensitive);
-	combo = ephy_dialog_get_control (dialog, properties[LANGUAGE_PROP].id);
-	gtk_widget_set_sensitive (combo, sensitive);
+	ephy_dialog_construct (dialog,  add_lang_props,
+			       "prefs-dialog.glade", "add_language_dialog");
 
 	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
@@ -642,13 +805,234 @@ create_language_menu (EphyDialog *dialog)
 				    -1);
 	}
 
-	/* add additional list items */
+	sortmodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
+	gtk_tree_sortable_set_sort_column_id
+		(GTK_TREE_SORTABLE (sortmodel), COL_LANG_NAME, GTK_SORT_ASCENDING);
+
+	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
+			(dialog, add_lang_props[LANGUAGE_PROP].id));
+
+	gtk_tree_view_set_reorderable (GTK_TREE_VIEW (treeview), FALSE);
+
+	gtk_tree_view_set_model (treeview, sortmodel);
+
+	gtk_tree_view_set_headers_visible (treeview, FALSE);
+
+	renderer = gtk_cell_renderer_text_new ();
+
+	gtk_tree_view_insert_column_with_attributes (treeview,
+						     0, "Language",
+						     renderer,
+						     "text", 0,
+						     NULL);
+	column = gtk_tree_view_get_column (treeview, 0);
+	gtk_tree_view_column_set_resizable (column, TRUE);
+	gtk_tree_view_column_set_sort_column_id (column, COL_LANG_NAME);
+
+	selection = gtk_tree_view_get_selection (treeview);
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+
+	window = ephy_dialog_get_control (dialog, add_lang_props[LANGUAGE_DIALOG].id);
+	g_signal_connect (window, "response",
+			  G_CALLBACK (add_lang_dialog_response_cb), pd);
+
+	g_object_unref (store);
+	g_object_unref (sortmodel);
+
+	return dialog;
+}
+
+void
+language_editor_add_button_clicked_cb (GtkWidget *button,
+				       PrefsDialog *pd)
+{
+	if (pd->priv->add_lang_dialog == NULL)
+	{
+		pd->priv->add_lang_dialog = setup_add_language_dialog (pd);
+
+		g_object_add_weak_pointer
+			(G_OBJECT (pd->priv->add_lang_dialog),
+			(gpointer *) &pd->priv->add_lang_dialog);;
+	}
+
+	ephy_dialog_show (pd->priv->add_lang_dialog);
+}
+
+void
+language_editor_remove_button_clicked_cb (GtkWidget *button,
+					  PrefsDialog *pd)
+{
+	GtkTreeSelection *selection;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+
+	selection = gtk_tree_view_get_selection (pd->priv->lang_treeview);
+
+	if (gtk_tree_selection_get_selected (selection, &model, &iter))
+	{
+		gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
+	}
+
+	language_editor_update_pref (pd);
+	language_editor_update_buttons (pd);
+}
+
+void
+language_editor_up_button_clicked_cb (GtkWidget *button,
+				      PrefsDialog *pd)
+{
+	GtkTreeSelection *selection;
+	GtkTreeModel *model;
+	GtkTreeIter iter, iter_prev;
+	GtkTreePath *path;
+
+	selection = gtk_tree_view_get_selection (pd->priv->lang_treeview);
+
+	if (gtk_tree_selection_get_selected (selection, &model, &iter))
+	{
+		path = gtk_tree_model_get_path (model, &iter);
+
+		if (!gtk_tree_path_prev (path))
+		{
+			gtk_tree_path_free (path);
+			return;
+		}
+
+		gtk_tree_model_get_iter (model, &iter_prev, path);
+
+		gtk_list_store_swap (GTK_LIST_STORE (model), &iter_prev, &iter);
+
+		gtk_tree_path_free (path);
+	}
+
+	language_editor_update_pref (pd);
+	language_editor_update_buttons (pd);
+}
+
+void
+language_editor_down_button_clicked_cb (GtkWidget *button,
+					PrefsDialog *pd)
+{
+	GtkTreeSelection *selection;
+	GtkTreeModel *model;
+	GtkTreeIter iter, iter_next;
+	GtkTreePath *path;
+
+
+	selection = gtk_tree_view_get_selection (pd->priv->lang_treeview);
+
+	if (gtk_tree_selection_get_selected (selection, &model, &iter))
+	{
+		path = gtk_tree_model_get_path (model, &iter);
+
+		gtk_tree_path_next (path);
+
+		gtk_tree_model_get_iter (model, &iter_next, path);
+
+		gtk_list_store_swap (GTK_LIST_STORE (model), &iter, &iter_next);
+
+		gtk_tree_path_free (path);
+	}
+
+	language_editor_update_pref (pd);
+	language_editor_update_buttons (pd);
+}
+
+static void
+language_editor_treeview_drag_end_cb (GtkWidget *widget,
+				      GdkDragContext *context,
+				      PrefsDialog *dialog)
+{
+	language_editor_update_pref (dialog);
+	language_editor_update_buttons (dialog);
+}
+
+static void
+language_editor_selection_changed_cb (GtkTreeSelection *selection,
+				      PrefsDialog *dialog)
+{
+	language_editor_update_buttons (dialog);
+}
+
+static void
+create_language_section (EphyDialog *dialog)
+{
+	PrefsDialog *pd = EPHY_PREFS_DIALOG (dialog);
+	GtkListStore *store;
+	GtkTreeView *treeview;
+	GtkCellRenderer *renderer;
+	GtkTreeViewColumn *column;
+	GtkTreeSelection *selection;
+	GSList *list, *l, *ulist = NULL;
+
+	/* setup the languages treeview */
+	treeview = GTK_TREE_VIEW (ephy_dialog_get_control
+			(dialog, properties[LANGUAGE_TREEVIEW_PROP].id));
+	pd->priv->lang_treeview = treeview;
+
+	gtk_tree_view_set_reorderable (GTK_TREE_VIEW (treeview), TRUE);
+
+	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+
+	pd->priv->lang_model = GTK_TREE_MODEL (store);
+
+	gtk_tree_view_set_model (treeview, pd->priv->lang_model);
+	g_object_unref (store);
+
+	gtk_tree_view_set_headers_visible (treeview, FALSE);
+
+	renderer = gtk_cell_renderer_text_new ();
+
+	gtk_tree_view_insert_column_with_attributes (treeview,
+						     0, "Language",
+						     renderer,
+						     "text", 0,
+						     NULL);
+	column = gtk_tree_view_get_column (treeview, 0);
+	gtk_tree_view_column_set_resizable (column, TRUE);
+	gtk_tree_view_column_set_sort_column_id (column, COL_LANG_NAME);
+
+	selection = gtk_tree_view_get_selection (treeview);
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
+
+	/* Connect treeview signals */
+	g_signal_connect (G_OBJECT (treeview), "drag_end",
+			  G_CALLBACK (language_editor_treeview_drag_end_cb), pd);
+	g_signal_connect (G_OBJECT (selection), "changed",
+			  G_CALLBACK (language_editor_selection_changed_cb), pd);
+
+	pd->priv->lang_add_button = ephy_dialog_get_control
+		(dialog, properties[LANGUAGE_ADD_BUTTON_PROP].id);
+	pd->priv->lang_remove_button = ephy_dialog_get_control
+		(dialog, properties[LANGUAGE_REMOVE_BUTTON_PROP].id);
+	pd->priv->lang_up_button = ephy_dialog_get_control
+		(dialog, properties[LANGUAGE_UP_BUTTON_PROP].id);
+	pd->priv->lang_down_button = ephy_dialog_get_control
+		(dialog, properties[LANGUAGE_DOWN_BUTTON_PROP].id);
+
+	list = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
+
+	/* uniquify list */
 	for (l = list; l != NULL; l = l->next)
+	{
+		if (g_slist_find_custom (ulist, l->data, (GCompareFunc) strcmp) == NULL)
+		{
+			ulist = g_slist_prepend (ulist, g_strdup (l->data));
+		}
+	}
+	ulist = g_slist_reverse (ulist);
+
+	/* if modified, write back */
+	if (g_slist_length (ulist) != g_slist_length (list))
+	{
+		eel_gconf_set_string_list (CONF_RENDERING_LANGUAGE, ulist);
+	}
+
+	/* Fill languages editor */
+	for (l = ulist; l != NULL; l = l->next)
 	{
 		const char *code = (const char *) l->data;
 		int i;
-
-		if (code == NULL) continue;
 
 		for (i = 0; i < n_languages; i++)
 		{
@@ -661,50 +1045,32 @@ create_language_menu (EphyDialog *dialog)
 			char *text;
 
 			text = g_strdup_printf (_("Custom [%s]"), code);
-			gtk_list_store_append (store, &iter);
-			gtk_list_store_set (store, &iter,
-					    COL_LANG_NAME, text,
-					    COL_LANG_CODE, code,
-					    -1);
+			language_editor_add (pd, code, text);
 			g_free (text);
+		}
+		else
+		{
+			language_editor_add (pd, code, _(languages[i].name));
 		}
 	}
 
-	sortmodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
-	gtk_tree_sortable_set_sort_column_id
-		(GTK_TREE_SORTABLE (sortmodel), COL_LANG_NAME, GTK_SORT_ASCENDING);
+	language_editor_update_buttons (pd);
 
-	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), sortmodel);
-
-	ephy_dialog_set_data_column
-		(dialog, properties[LANGUAGE_PROP].id, COL_LANG_CODE);
-
-        renderer = gtk_cell_renderer_text_new ();
-        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
-        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
-                                        "text", COL_LANG_NAME,
-                                        NULL);
-
-	g_signal_connect (combo, "changed",
-			  G_CALLBACK (language_combo_changed_cb), dialog);
-
-	/* set combo from first element of the list */
-	if (list && list->data)
+	/* Lockdown if key is not writable */
+	if (eel_gconf_key_is_writable (CONF_RENDERING_LANGUAGE) == FALSE)
 	{
-		const char *code = (const char *) list->data;
-		GValue value = { 0, };
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, code);
-		ephy_dialog_set_value (dialog, properties[LANGUAGE_PROP].id, &value);
-		g_value_unset (&value);
+		gtk_widget_set_sensitive (pd->priv->lang_add_button, FALSE);
+		gtk_widget_set_sensitive (pd->priv->lang_remove_button, FALSE);
+		gtk_widget_set_sensitive (pd->priv->lang_up_button, FALSE);
+		gtk_widget_set_sensitive (pd->priv->lang_down_button, FALSE);
+		gtk_widget_set_sensitive (GTK_WIDGET (pd->priv->lang_treeview), FALSE);
 	}
 
 	g_slist_foreach (list, (GFunc) g_free, NULL);
 	g_slist_free (list);
 
-	g_object_unref (store);
-	g_object_unref (sortmodel);
+	g_slist_foreach (ulist, (GFunc) g_free, NULL);
+	g_slist_free (ulist);
 }
 
 static char*
@@ -770,7 +1136,6 @@ prefs_dialog_init (PrefsDialog *pd)
 			      n_cookies_accept_enum, cookies_accept_enum);
 
 	ephy_dialog_set_size_group (dialog,
-				    properties[LANGUAGE_LABEL_PROP].id,
 				    properties[DEFAULT_ENCODING_LABEL_PROP].id,
 				    properties[AUTO_ENCODING_LABEL_PROP].id,
 				    NULL);
@@ -818,7 +1183,7 @@ prefs_dialog_init (PrefsDialog *pd)
 			   ephy_encodings_get_detectors (encodings),
 			   CONF_LANGUAGE_AUTODETECT_ENCODING, "");
 
-	create_language_menu (dialog);
+	create_language_section	(dialog);
 
 	create_download_path_label (dialog);
 }
@@ -887,80 +1252,6 @@ prefs_homepage_blank_button_clicked_cb (GtkWidget *button,
 					EphyDialog *dialog)
 {
 	set_homepage_entry (dialog, NULL);
-}
-
-static void
-language_dialog_changed_cb (LanguageEditor *le,
-			    GSList *list,
-			    EphyDialog *dialog)
-{
-	LOG ("language_dialog_changed_cb")
-
-	if (list && list->data)
-	{
-		GValue value = { 0, };
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, (char *) list->data);
-		ephy_dialog_set_value (dialog, properties[LANGUAGE_PROP].id, &value);
-		g_value_unset (&value);
-	}
-
-	eel_gconf_set_string_list (CONF_RENDERING_LANGUAGE, list);
-}
-
-void
-prefs_language_more_button_clicked_cb (GtkWidget *button,
-				       EphyDialog *dialog)
-{
-	LanguageEditor *editor;
-	GtkWidget *window, *combo;
-	GtkTreeModel *model;
-	GSList *codes, *l;
-
-	window = ephy_dialog_get_control (dialog, properties[WINDOW_PROP].id);
-	combo = ephy_dialog_get_control (dialog, properties[LANGUAGE_PROP].id);
-	model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
-
-	editor = language_editor_new (window);
-	language_editor_set_model (editor, model);
-
-	codes = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
-	for (l = codes; l != NULL; l = l->next)
-	{
-		const char *code = (const char *) l->data;
-		int i;
-
-		if (code == NULL) continue;
-
-		for (i = 0; i < n_languages; i++)
-		{
-			if (strcmp (languages[i].code, code) == 0) break;
-		}
-
-		if (i == n_languages)
-		{
-			char *desc;
-			desc = g_strdup_printf (_("Custom [%s]"), code);
-			language_editor_add (editor, code, desc);\
-			g_free (desc);
-		}
-		else
-		{
-			language_editor_add (editor, code, _(languages[i].name));
-		}
-	}
-	g_slist_foreach (codes, (GFunc) g_free, NULL);
-	g_slist_free (codes);
-
-	/* FIXME: make it only modal to prefs dialogue, not to all windows */
-	ephy_dialog_set_modal (EPHY_DIALOG (editor), TRUE);
-
-	g_signal_connect (editor, "list-changed",
-			  G_CALLBACK (language_dialog_changed_cb),
-			  dialog);
-
-	ephy_dialog_show (EPHY_DIALOG (editor));
 }
 
 static void

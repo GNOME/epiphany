@@ -63,7 +63,6 @@ NOINST_H_FILES =					\
 	ephy-navigation-action.h			\
 	ephy-tabs-menu.h				\
 	ephy-toolbars-model.h				\
-	language-editor.h				\
 	pdm-dialog.h					\
 	popup-commands.h				\
 	prefs-dialog.h					\
@@ -105,7 +104,6 @@ libephymain_la_SOURCES =				\
 	ephy-toolbars-model.c				\
 	ephy-toolbars-model.h				\
 	ephy-window.c					\
-	language-editor.c				\
 	pdm-dialog.c					\
 	popup-commands.c				\
 	prefs-dialog.c					\
