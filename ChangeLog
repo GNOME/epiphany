@@ -1,5 +1,13 @@
 2003-02-12  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/widgets/ephy-ellipsizing-label.c: (ellipsize_string):
+	* lib/widgets/ephy-toolbars-group.c:
+	(ephy_toolbars_group_to_string):
+
+	Use g_string_free in the correct way
+
+2003-02-12  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/bookmarks/ephy-bookmarks-editor.c:
 	(ephy_bookmarks_editor_dispose),
 	(ephy_bookmarks_editor_node_selected_cb),

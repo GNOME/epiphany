@@ -372,9 +372,7 @@ ephy_toolbars_group_to_string (EphyToolbarsGroup *t)
 	}
 	g_string_append (s, "</Root>");
 
-	result = s->str;
-
-	g_string_free (s, FALSE);
+	result = g_string_free (s, FALSE);
 
 	return result;
 }

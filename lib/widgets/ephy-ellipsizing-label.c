@@ -331,8 +331,8 @@ ellipsize_string (const char *string,
 					g_utf8_strlen (string, -1));
 	}
 
-	result = str->str;
-	g_string_free (str, FALSE);
+	result = g_string_free (str, FALSE);
+
 	return result;
 }
 
