@@ -1,5 +1,13 @@
 2004-02-11  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* lib/widgets/ephy-location-entry.c: (keyword_match),
+	(completion_func):
+
+	Better keyword matching function. Should match only words
+	(not middle parts of them) and maybe be a bit faster.
+
+2004-02-11  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* lib/ephy-node.c: (callback), (child_changed),
 	(ephy_node_set_property):
 

@@ -193,6 +193,41 @@ entry_button_press_cb (GtkWidget *entry, GdkEventButton *event, EphyLocationEntr
 }
 
 static gboolean
+keyword_match (const char *list,
+	       const char *keyword)
+{
+	const char *p;
+	gsize keyword_len;
+
+	p = list;
+	keyword_len = strlen (keyword);
+
+	while (*p)
+	{
+		int i;
+
+		for (i = 0; i < keyword_len; i++)
+		{
+			if (p[i] == ' ')
+				goto next_char;
+
+			if (p[i] != keyword[i])
+				goto next_token;
+		}
+	  
+		return TRUE;
+	  
+		next_token:
+		while (*p != ' ') p++;
+
+		next_char:
+		if (*p) p++;
+	}
+
+	return FALSE;
+}
+
+static gboolean
 completion_func (GtkEntryCompletion *completion,
                  const char *key,
 		 GtkTreeIter *iter,
@@ -216,7 +251,7 @@ completion_func (GtkEntryCompletion *completion,
 	{
 		ret = TRUE;
 	}
-	else if (strstr (keywords, key))
+	else if (keyword_match (keywords, key))
 	{
 		ret = TRUE;
 	}
