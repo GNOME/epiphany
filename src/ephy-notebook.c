@@ -191,27 +191,6 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 	g_type_class_add_private (object_class, sizeof(EphyNotebookPrivate));
 }
 
-static gboolean
-is_in_notebook_window (EphyNotebook *notebook,
-		       gint abs_x, gint abs_y)
-{
-	gint x, y;
-	gint rel_x, rel_y;
-	gint width, height;
-	GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET(notebook));
-	GdkWindow *window = GTK_WIDGET(toplevel)->window;
-
-	gdk_window_get_origin (window, &x, &y);
-	rel_x = abs_x - x;
-	rel_y = abs_y - y;
-
-	x = GTK_WIDGET(notebook)->allocation.x;
-	y = GTK_WIDGET(notebook)->allocation.y;
-	height = GTK_WIDGET(notebook)->allocation.height;
-	width  = GTK_WIDGET(notebook)->allocation.width;
-	return ((rel_x>=x) && (rel_y>=y) && (rel_x<=x+width) && (rel_y<=y+height));
-}
-
 static EphyNotebook *
 find_notebook_at_pointer (gint abs_x, gint abs_y)
 {
@@ -219,6 +198,7 @@ find_notebook_at_pointer (gint abs_x, gint abs_y)
 	gpointer toplevel = NULL;
 	gint x, y;
 
+	/* FIXME multi-head */
 	win_at_pointer = gdk_window_at_pointer (&x, &y);
 	if (win_at_pointer == NULL)
 	{
@@ -234,18 +214,22 @@ find_notebook_at_pointer (gint abs_x, gint abs_y)
 	/* toplevel should be an EphyWindow */
 	if (toplevel != NULL && EPHY_IS_WINDOW (toplevel))
 	{
-		EphyNotebook *notebook;
-
-		notebook = EPHY_NOTEBOOK (ephy_window_get_notebook
-					    (EPHY_WINDOW (toplevel)));
-
-		if (is_in_notebook_window (notebook, abs_x, abs_y))
-		{
-			return notebook;
-		}
+		return EPHY_NOTEBOOK (ephy_window_get_notebook
+					(EPHY_WINDOW (toplevel)));
 	}
 
 	return NULL;
+}
+
+static gboolean
+is_in_notebook_window (EphyNotebook *notebook,
+		       gint abs_x, gint abs_y)
+{
+	EphyNotebook *nb_at_pointer;
+
+	nb_at_pointer = find_notebook_at_pointer (abs_x, abs_y);
+
+	return nb_at_pointer == notebook;
 }
 
 static gint

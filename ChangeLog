@@ -1,5 +1,13 @@
 2004-11-07  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-notebook.c: (find_notebook_at_pointer),
+	(is_in_notebook_window):
+
+	Don't detach the tab when releasing the mouse button while still
+	over the same window. Fixes bug #143954.
+
+2004-11-07  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/ephy-node-view.c: (ephy_node_view_popup):
 	* src/bookmarks/ephy-bookmark-action.c: (show_context_menu),
 	(popup_menu_cb), (button_press_cb):
