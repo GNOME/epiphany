@@ -92,6 +92,8 @@ ephy_bookmarks_menu_clean (EphyBookmarksMenu *menu)
 {
 	EphyBookmarksMenuPrivate *p = menu->priv;
 
+	START_PROFILER ("Cleaning bookmarks menu")
+
 	if (p->ui_id > 0)
 	{
 		gtk_ui_manager_remove_ui (p->merge, p->ui_id);
@@ -104,6 +106,8 @@ ephy_bookmarks_menu_clean (EphyBookmarksMenu *menu)
 		gtk_ui_manager_remove_action_group (p->merge, p->action_group);
 		g_object_unref (p->action_group);
 	}
+
+	STOP_PROFILER ("Cleaning bookmarks menu")
 }
 
 static void
@@ -234,9 +238,9 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 
 	LOG ("Rebuilding bookmarks menu")
 
-	START_PROFILER ("Rebuilding bookmarks menu")
-
 	ephy_bookmarks_menu_clean (menu);
+
+	START_PROFILER ("Rebuilding bookmarks menu")
 
 	topics = ephy_bookmarks_get_keywords (p->bookmarks);
 	not_categorized = ephy_bookmarks_get_not_categorized (p->bookmarks);
