@@ -457,6 +457,191 @@ Translation updates
 
 
 ==============
+Epiphany 1.4.8
+==============
+
+Changes
+
+	* Fix crash when closing window while filepicker is up [#156816]
+	* Use gnome_vfs_url_show() for Send To [#162532]
+	* Set selection mode to BROWSE in topics selector [#162331]
+	* We don't need to implement nsIBrowserHistory
+	* Don't focus the close-tab button on click [#119461]
+	* Don't store more than 5 hidden popups [Adam Hooper, #160863]
+	* Fix a mem leak [#164302]
+	* Really make confirm-overwrite dialogue have a parent window [#164189]
+	* Rename EphyTab's "visible" property to not clash with GtkWidget property
+	* Default typeaheadfindsea to on [#157435]
+	* Switch to fullscreen toolbar also in lockdown fullscreen mode [#165256]
+	* Disable DownloadLinkAs and SetAsBackground if saving to disk is disabled
+	* Don't crash if we need to open an orphan non-chrome window [part of #165445]
+	* Some sparse fixes
+	* Ungrab the pointer when moving tab between notebooks [#165797]
+	* Don't weak ref the shell when it's finalised already [#165542]
+	* Don't show the menubar with F10 in lockdown mode [#165550]
+	* Don't disable print preview if print setup is locked down [#165552]
+	* Adapt to mozilla API changes
+	* Implement nsIWebProgressListener [#165328]
+	* Fix window destruction [#165992]
+
+
+==============
+Epiphany 1.4.7
+==============
+
+Changes
+
+	* Use stock icon for "Open In New Tab" in History Window and Bookmarks Editor
+	* Don't offer to resume if there are open windows [#160345]
+	* Deactivate the context menu on window close [#156812]
+	* Fix build in !MOZILLA_HAVE_PSM case
+	* Make the extensions modules resident [#160945]
+	* Disable Print and Print Preview while still loading the page [#116344]
+	* Correct language code for Afrikaans
+	* Adapt to changed mozilla APIs
+	* Wrap the label in the Confirm Overwrite dialogue [#161771]
+	
+Translation updates
+
+	* Ercin Eker (tr)
+
+
+==============
+Epiphany 1.4.6
+==============
+
+Changes
+
+	* Fix wrong certificate stored (Christian) [#158453]
+	* Disallow favicon links from subframes (Christian)
+	* Fix opening of content when not downloading automatically (Marco) [#158466]
+	* Add --disable-filepicker configure option (Christian)
+	* Fix tabs menu ordering when using the tab-groups extension (Christian)
+	* Fix event context computation (Christian)
+	* Adapt to mozilla API changes (Christian; patch adapted from a galeon patch
+	  by Crispin Flowerday)
+	* Fix out-of-srcdir build (Marco, Christian)
+	* Don't raise windows when using --new-tab (Christian) [#158923]
+
+Translation updates
+
+	* Jordi Mallach (ca)
+
+
+==============
+Epiphany 1.4.5
+==============
+
+Changes
+
+	* Fix session remove command
+	* Fix import of bookmarks in root folder [#152443]
+	* Activate tray icon with double-click [#152899]
+	* Add manpage (Jordi Mallach) [#156067]
+	* Don't open all bookmarks in new tabs [#156843]
+	* When showing a modal alert put up by a web page,
+	  switch the window to that tab
+	* Emit ::tab-removed after the tab has been removed [#151607]
+	* Fix disconnect on node destroy [Peter Harvey]
+	* Fix node signal [dis]connection while signal emission is running
+	* Make sure there's only one properties diaogue per bookmark [#148398]
+	* Fix crash when removing bookmark with open properties dialogue [#155880]
+	* Fix toolbar activation [#155650]
+	* Check favicon urls with script sec manager and content policy
+	* Fix zoom control so that it shows tooltips again [#155826]
+	* Make the tooltip on the zoom control also work on Ctrl-F1
+	* When popping up the context menu with keyboard, select the first item [#154907]
+	* Sanitise the embed popup position [#157162]
+	* Fix button sensitivity setting in language editor not to first
+	* Fix history date filter to work correctly in time zones != UTC
+	* Better positioning for the context menu popup in a treeview (Crispin Flowerday)
+	* Fix opening content with external content handlers (Marco)
+	* Remove remaining time tooltip from tray icon [#145955]
+	* Fix hang after importing bookmarks from command line [#136170]
+	* Fix crash when no tool windows are open when the session manager
+	  sends us the "die" signal
+	* Fix opening anchored links in new tabs [#156854]
+	* Adapted to Mozilla API changes
+	* Fix a freed memory read
+
+Documentation translations
+
+	* Add manual translation into Finnish, by Pauli Virtanen
+
+Translation updates
+
+	* Ole Laursen (da)
+	* Žygimantas Beručka (lt)
+	* Leonid Kanter (ru)
+
+
+==============
+Epiphany 1.4.4
+==============
+
+Bug fixes
+
+	* Add a list of printers to the print dialog. Fix printing
+	  in several recent ditributions. (Marco)
+	* Remove duplicate AC_PROG_INTLTOOL (Christian) [#155028]
+	* Fix a crash when rebuilding bookmarks menu (Christian) [#154805]
+
+==============
+Epiphany 1.4.3
+==============
+
+Bug fixes
+
+	* Fix compilation with gtk+ 2.4.x.
+
+
+==============
+Epiphany 1.4.2
+==============
+
+Bug fixes
+
+	* Set dialogs icon to default ephy icon (Christian)
+	* Fix slow resize of the window with many tabs (Christian)
+	* Don't allow activation of the hidden menubar
+	  in print preview mode. (Christian)
+	* Recognise "Desktop" special downloads directory. (Christian) [#152926]
+	* Backwards compatibility with old mozilla plugins
+	  location (Marco)
+
+Translation updates
+
+	* Changwoo Ryu (ko)
+	* Gareth Owen (en_GB)
+
+==============
+Epiphany 1.4.1
+==============
+
+Code changes
+
+	* Adapt to mozilla API changes (Christian)
+
+Bug fixes
+
+	* Auto-check new topics (Marco) [#151925]
+	* Don't accept dragged toolbar items from other apps (Marco) [#152388]
+	* Fix toolbar overflow menu items (Christian) [#151648]
+	* Fix for too small tab close buttons (Marco) [#144772]
+	* Enable conversion for favicon downloads (Marco) [#152866]
+	* Fix overflow in remaining time calculation (Jhon Spray, Marco) [#153136]
+	* Fix some mem leaks (Christian)
+	* Fix ephy-bookmarks.h header (Christian) [#153766]
+	* Fix compiler warnings (Christian)
+
+Translation updates
+
+	* Adam Weinberger (en_CA)
+	* Olivier Cortes (fr)
+	* Francesco Marletta (it)
+
+
+==============
 Epiphany 1.4.0
 ==============
 
@@ -997,6 +1182,18 @@ Translations
 	* อิสริยะ ไพรีพ่ายฤทธิ์ (th)
 	* Pablo Saratxaga (wa)
 	* Liu Songhe (zh_CN)
+
+
+===============
+Epiphany 1.2.10
+===============
+
+Changes
+
+	* Fix proxy PAC loading (Christian) 
+	* When showing a modal alert put up by a web page, switch the window
+	  to that tab (Christian)
+	* Check favicon urls with script sec manager and content policy
 
 
 ==============
