@@ -135,7 +135,10 @@ EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
 		nsCOMPtr<nsIDocument> doc = do_QueryInterface (domDoc);
 		NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
 
-#if MOZILLA_SNAPSHOT > 11
+#if MOZILLA_SNAPSHOT > 13
+		nsIURI *uri;
+		uri = doc->GetDocumentURI ();
+#elif MOZILLA_SNAPSHOT > 11
 		nsIURI *uri;
 		uri = doc->GetDocumentURL ();
 #else
@@ -631,7 +634,10 @@ nsresult EphyBrowser::GetDocumentUrl (nsCString &url)
 	nsCOMPtr<nsIDocument> doc = do_QueryInterface(DOMDocument);
 	NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
 
-#if MOZILLA_SNAPSHOT > 11
+#if MOZILLA_SNAPSHOT > 13
+	nsIURI *uri;
+	uri = doc->GetDocumentURI ();
+#elif MOZILLA_SNAPSHOT > 11
 	nsIURI *uri;
 	uri = doc->GetDocumentURL ();
 #else
@@ -652,7 +658,10 @@ nsresult EphyBrowser::GetTargetDocumentUrl (nsCString &url)
         nsCOMPtr<nsIDocument> doc = do_QueryInterface(DOMDocument);
 	NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
 
-#if MOZILLA_SNAPSHOT > 11
+#if MOZILLA_SNAPSHOT > 13
+	nsIURI *uri;
+	uri = doc->GetDocumentURI ();
+#elif MOZILLA_SNAPSHOT > 11
 	nsIURI *uri;
 	uri = doc->GetDocumentURL ();
 #else

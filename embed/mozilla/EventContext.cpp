@@ -145,10 +145,14 @@ nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsString& aResult)
 nsresult EventContext::ResolveBaseURL (nsIDocument *doc, const nsAString &relurl, nsACString &url)
 {
 	nsresult rv;
-#if MOZILLA_SNAPSHOT > 11
+#if MOZILLA_SNAPSHOT > 13
+	nsIURI *base;
+	base = doc->GetBaseURI ();
+	if (!base) return NS_ERROR_FAILURE;
+#elif MOZILLA_SNAPSHOT > 11
 	nsIURI *base;
 	base = doc->GetBaseURL ();
-	if (base == NULL) return NS_ERROR_FAILURE;
+	if (!base) return NS_ERROR_FAILURE;
 #elif MOZILLA_SNAPSHOT > 9 
 	nsCOMPtr<nsIURI> base;
 	rv = doc->GetBaseURL (getter_AddRefs(base));
@@ -165,10 +169,14 @@ nsresult EventContext::ResolveBaseURL (nsIDocument *doc, const nsAString &relurl
 nsresult EventContext::ResolveDocumentURL (nsIDocument *doc, const nsAString &relurl, nsACString &url)
 {
 	nsresult rv;
-#if MOZILLA_SNAPSHOT > 11
+#if MOZILLA_SNAPSHOT > 13
+	nsIURI *uri;
+	uri = doc->GetDocumentURI ();
+	if (!uri) return NS_ERROR_FAILURE;
+#elif MOZILLA_SNAPSHOT > 11
 	nsIURI *uri;
 	uri = doc->GetDocumentURL ();
-	if (uri == NULL) return NS_ERROR_FAILURE;
+	if (!uri) return NS_ERROR_FAILURE;
 #else
 	nsCOMPtr<nsIURI> uri;
 	rv = doc->GetDocumentURL(getter_AddRefs(uri));
