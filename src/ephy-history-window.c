@@ -127,10 +127,10 @@ enum
 
 enum
 {
-	TIME_EVER,
 	TIME_TODAY,
 	TIME_LAST_TWO_DAYS,
-	TIME_LAST_THREE_DAYS
+	TIME_LAST_THREE_DAYS,
+	TIME_EVER
 };
 
 #define TIME_EVER_STRING "ever"
@@ -965,10 +965,6 @@ build_search_box (EphyHistoryWindow *editor)
 	gtk_widget_show (optionmenu);
 	menu = gtk_menu_new ();
 	gtk_widget_show (menu);
-	item = gtk_menu_item_new_with_mnemonic (_("Ever"));
-	gtk_widget_show (item);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	gtk_widget_show (item);
 	item = gtk_menu_item_new_with_mnemonic (_("Today"));
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
@@ -978,6 +974,9 @@ build_search_box (EphyHistoryWindow *editor)
 	item = gtk_menu_item_new_with_mnemonic (_("Last three days"));
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
+	item = gtk_menu_item_new_with_mnemonic (_("Last ten days"));
+	gtk_widget_show (item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu), menu);
 
 	str = eel_gconf_get_string (CONF_HISTORY_DATE_FILTER);

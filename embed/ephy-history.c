@@ -40,6 +40,7 @@
 /* how often to save the history, in milliseconds */
 #define HISTORY_SAVE_INTERVAL (60 * 5 * 1000)
 
+/* if you change this remember to change also the user interface description */
 #define HISTORY_PAGE_OBSOLETE_DAYS 10
 
 #define EPHY_HISTORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_HISTORY, EphyHistoryPrivate))
