@@ -807,6 +807,9 @@ update_fixed (EggEditableToolbar *t)
       gtk_box_pack_end (GTK_BOX (dock), toolbar, FALSE, TRUE, 0);
 
       gtk_widget_show (toolbar);
+  
+      gtk_widget_set_size_request (dock, -1, -1);
+      gtk_widget_queue_resize_no_redraw (dock);
     }
 }
 

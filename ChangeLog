@@ -1,5 +1,12 @@
 2005-02-23  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/egg/egg-editable-toolbar.c: (update_fixed):
+
+	Unset size request if the fixed toolbar is present. That way
+	we don't truncate the 0th toolbar when it only contains the spinner.
+
+2005-02-23  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/egg/egg-editable-toolbar.c: (toolbar_removed_cb):
 
 	Unparent the fixed toolbar before destroying the dock.
