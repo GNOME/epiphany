@@ -26,7 +26,6 @@
 #include "ephy-debug.h"
 #include "gtkmozembed.h"
 #include "mozilla-embed-single.h"
-#include "ephy-prefs.h"
 #include "ephy-file-helpers.h"
 #include "mozilla-notifiers.h"
 #include "ephy-langs.h"

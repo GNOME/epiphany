@@ -33,7 +33,6 @@
 #include <nsIWindowWatcher.h>
 #include <nsIServiceManager.h>
 
-#include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
 
 #include "ExternalProtocolService.h"

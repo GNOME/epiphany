@@ -24,7 +24,6 @@
 
 #include "downloader-view.h"
 #include "ephy-gui.h"
-#include "ephy-prefs.h"
 #include "ephy-ellipsizing-label.h"
 #include "ephy-file-helpers.h"
 #include "ephy-embed-shell.h"

@@ -46,7 +46,6 @@
 #include "ephy-node-view.h"
 #include "ephy-window.h"
 #include "ephy-dnd.h"
-#include "ephy-prefs.h"
 #include "ephy-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-file-chooser.h"

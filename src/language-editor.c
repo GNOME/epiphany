@@ -20,7 +20,6 @@
 
 #include "language-editor.h"
 #include "ephy-gui.h"
-#include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
 
 #include <gtk/gtklabel.h>

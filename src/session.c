@@ -26,7 +26,6 @@
 #include "ephy-shell.h"
 #include "ephy-tab.h"
 #include "ephy-window.h"
-#include "ephy-prefs.h"
 #include "ephy-string.h"
 #include "ephy-file-helpers.h"
 #include "eel-gconf-extensions.h"
