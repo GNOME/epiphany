@@ -25,6 +25,8 @@
 #include "ephy-file-helpers.h"
 #include "ephy-embed-shell.h"
 #include "ephy-stock-icons.h"
+#include "ephy-gui.h"
+#include "ephy-debug.h"
 
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <eggstatusicon.h>
@@ -39,6 +41,10 @@
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtkiconfactory.h>
+#include <gtk/gtkmenuitem.h>
+#include <gtk/gtkmenushell.h>
+#include <gtk/gtkmenu.h>
+#include <gtk/gtkmain.h>
 #include <libgnomeui/gnome-icon-lookup.h>
 #include <glib/gi18n.h>
 
@@ -157,9 +163,31 @@ downloader_view_class_init (DownloaderViewClass *klass)
 }
 
 static void
-status_icon_activated (EggStatusIcon *icon, DownloaderView *dv)
+show_downloader_cb (DownloaderView *dv)
 {
 	gtk_window_present (GTK_WINDOW (dv->priv->window));
+}
+
+static gboolean
+status_icon_popup_menu_cb (EggStatusIcon *icon,
+                           DownloaderView *dv)
+{
+        GtkWidget *menu, *item;
+	guint button = 0;
+
+	menu = gtk_menu_new ();
+
+	item = gtk_menu_item_new_with_mnemonic (_("_Show Downloader..."));
+	g_signal_connect_swapped (item, "activate",
+				  G_CALLBACK (show_downloader_cb), dv);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	gtk_widget_show_all (menu);
+
+	gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+			ephy_gui_menu_position_on_panel, icon->tray_icon,
+			button, gtk_get_current_event_time ());
+
+	return TRUE;
 }
 
 static void
@@ -171,8 +199,10 @@ show_status_icon (DownloaderView *dv)
 	dv->priv->status_icon = egg_status_icon_new_from_pixbuf (pixbuf);
 	g_object_unref (pixbuf);
 
-	g_signal_connect (dv->priv->status_icon, "activate",
-			  G_CALLBACK (status_icon_activated), dv);
+	g_signal_connect_swapped (dv->priv->status_icon, "activate",
+				  G_CALLBACK (show_downloader_cb), dv);
+	g_signal_connect (dv->priv->status_icon, "popup-menu",
+			  G_CALLBACK(status_icon_popup_menu_cb), dv);
 }
 
 static void

@@ -101,7 +101,7 @@ static gboolean egg_status_icon_button_press     (EggStatusIcon  *status_icon,
 						  GdkEventButton *event);
 static void     egg_status_icon_disable_blinking (EggStatusIcon  *status_icon);
 static void     egg_status_icon_reset_image_data (EggStatusIcon  *status_icon);
-					   
+static gboolean emit_popup_menu_signal           (EggStatusIcon  *status_icon);					   
 
 static GObjectClass *parent_class = NULL;
 static guint status_icon_signals [LAST_SIGNAL] = { 0 };
@@ -218,15 +218,13 @@ egg_status_icon_class_init (EggStatusIconClass *klass)
   status_icon_signals [POPUP_MENU_SIGNAL] =
     g_signal_new ("popup-menu",
 		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (EggStatusIconClass, popup_menu),
+		  g_signal_accumulator_true_handled,
 		  NULL,
-		  NULL,
-		  _egg_marshal_VOID__UINT_UINT,
-		  G_TYPE_NONE,
-		  2,
-		  G_TYPE_UINT,
-		  G_TYPE_UINT);
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_BOOLEAN,
+		  0);
 
   status_icon_signals [SIZE_CHANGED_SIGNAL] =
     g_signal_new ("size-changed",
@@ -249,23 +247,24 @@ egg_status_icon_init (EggStatusIcon *status_icon)
   status_icon->priv->image_type = GTK_IMAGE_EMPTY;
   status_icon->priv->size       = G_MAXINT;
 
-  status_icon->priv->tray_icon = GTK_WIDGET (egg_tray_icon_new (NULL));
+  status_icon->tray_icon = GTK_WIDGET (egg_tray_icon_new (NULL));
 
-  gtk_widget_add_events (GTK_WIDGET (status_icon->priv->tray_icon),
+  gtk_widget_add_events (GTK_WIDGET (status_icon->tray_icon),
 			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 
-  g_signal_connect_swapped (status_icon->priv->tray_icon, "button-press-event",
+  g_signal_connect_swapped (status_icon->tray_icon, "button-press-event",
 			    G_CALLBACK (egg_status_icon_button_press), status_icon);
-
+  g_signal_connect_swapped (status_icon->tray_icon, "popup-menu",
+                            G_CALLBACK (emit_popup_menu_signal), status_icon);
   status_icon->priv->image = gtk_image_new ();
-  gtk_container_add (GTK_CONTAINER (status_icon->priv->tray_icon),
+  gtk_container_add (GTK_CONTAINER (status_icon->tray_icon),
 		     status_icon->priv->image);
 
   g_signal_connect_swapped (status_icon->priv->image, "size-allocate",
 			    G_CALLBACK (egg_status_icon_size_allocate), status_icon);
 
   gtk_widget_show (status_icon->priv->image);
-  gtk_widget_show (status_icon->priv->tray_icon);
+  gtk_widget_show (status_icon->tray_icon);
 
   status_icon->priv->tooltips = gtk_tooltips_new ();
   g_object_ref (status_icon->priv->tooltips);
@@ -289,7 +288,7 @@ egg_status_icon_finalize (GObject *object)
     g_object_unref (status_icon->priv->tooltips);
   status_icon->priv->tooltips = NULL;
 
-  gtk_widget_destroy (status_icon->priv->tray_icon);
+  gtk_widget_destroy (status_icon->tray_icon);
 
   g_free (status_icon->priv);
 
@@ -402,22 +401,19 @@ egg_status_icon_new_from_animation (GdkPixbufAnimation *animation)
 static void
 emit_activate_signal (EggStatusIcon *status_icon)
 {
-  g_signal_emit (status_icon,
-		 status_icon_signals [ACTIVATE_SIGNAL], 0);
+  g_signal_emit (status_icon, status_icon_signals [ACTIVATE_SIGNAL], 0);
 }
 
-#ifdef UNUSED
-static void
-emit_popup_menu_signal (EggStatusIcon *status_icon,
-			guint          button,
-			guint32        activate_time)
+static gboolean
+emit_popup_menu_signal (EggStatusIcon *status_icon)
 {
-  g_signal_emit (status_icon,
-		 status_icon_signals [POPUP_MENU_SIGNAL], 0,
-		 button,
-		 activate_time);
+  gboolean retval = FALSE;
+
+  g_signal_emit (status_icon, status_icon_signals [POPUP_MENU_SIGNAL], 0,
+		 &retval);
+
+  return retval;
 }
-#endif
 
 static gboolean
 emit_size_changed_signal (EggStatusIcon *status_icon,
@@ -534,7 +530,7 @@ egg_status_icon_size_allocate (EggStatusIcon *status_icon,
   GtkOrientation orientation;
   gint size;
 
-  orientation = egg_tray_icon_get_orientation (EGG_TRAY_ICON (status_icon->priv->tray_icon));
+  orientation = egg_tray_icon_get_orientation (EGG_TRAY_ICON (status_icon->tray_icon));
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     size = allocation->height;
@@ -558,13 +554,18 @@ static gboolean
 egg_status_icon_button_press (EggStatusIcon  *status_icon,
 			      GdkEventButton *event)
 {
+  gboolean handled = FALSE;
   if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
     {
       emit_activate_signal (status_icon);
-      return TRUE;
+      handled = TRUE;
+    }
+  else if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    {
+      handled = emit_popup_menu_signal (status_icon);
     }
 
-  return FALSE;
+  return handled;
 }
 
 static void
@@ -692,7 +693,7 @@ egg_status_icon_set_tooltip (EggStatusIcon *status_icon,
   g_return_if_fail (EGG_IS_STATUS_ICON (status_icon));
 
   gtk_tooltips_set_tip (status_icon->priv->tooltips,
-			status_icon->priv->tray_icon,
+			status_icon->tray_icon,
 			tooltip_text,
 			tooltip_private);
 }

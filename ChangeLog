@@ -1,5 +1,21 @@
 2004-12-16  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/downloader-view.c: (show_downloader_cb),
+	(status_icon_popup_menu_cb), (show_status_icon):
+	* lib/egg/eggstatusicon.c: (egg_status_icon_class_init),
+	(egg_status_icon_init), (egg_status_icon_finalize),
+	(emit_activate_signal), (emit_popup_menu_signal),
+	(egg_status_icon_size_allocate), (egg_status_icon_button_press),
+	(egg_status_icon_set_tooltip):
+	* lib/egg/eggstatusicon.h:
+	* lib/ephy-gui.c: (ephy_gui_menu_position_under_widget),
+	(ephy_gui_menu_position_on_panel):
+	* lib/ephy-gui.h:
+
+	Implement context menu on tray icon, as per HIG. Fixes bug #152903.
+
+2004-12-16  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-history-window.c: (confirmation_dialog_construct):
 
 	Add stock icon to the "Clear" button.

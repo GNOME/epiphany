@@ -44,6 +44,9 @@ struct _EggStatusIcon
 {
   GObject               parent_instance;
 
+  /*< public >*/
+  GtkWidget *tray_icon;
+  /*< private >*/
   EggStatusIconPrivate *priv;
 };
 
@@ -52,9 +55,7 @@ struct _EggStatusIconClass
   GObjectClass parent_class;
 
   void     (* activate)     (EggStatusIcon *status_icon);
-  void     (* popup_menu)   (EggStatusIcon *status_icon,
-			     guint          buttton,
-			     guint32        activate_time);
+  gboolean (* popup_menu)   (EggStatusIcon *status_icon);
   gboolean (* size_changed) (EggStatusIcon *status_icon,
 			     gint           size);
 };
