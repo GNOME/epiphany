@@ -39,6 +39,7 @@
 #include <gtk/gtkclipboard.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtktreemodelsort.h>
+#include <gtk/gtkmessagedialog.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <libgnomeui/gnome-stock-icons.h>
@@ -446,6 +447,39 @@ cmd_open_bookmarks_in_browser (GtkAction *action,
 	g_list_free (selection);
 }
 
+static GtkWidget*
+delete_topic_dialog_construct (GtkWindow *parent, const char *topic)
+{
+	GtkWidget *dialog;
+	GtkWindowGroup *group;
+
+	dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
+					 GTK_DIALOG_MODAL,
+					 GTK_MESSAGE_WARNING,
+					 GTK_BUTTONS_CANCEL,
+					 _("Delete topic?"));
+	
+	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+			_("Deleting this topic will cause all its bookmarks to become "
+			"uncategorized, unless they also belong to other topics. "
+			"The bookmarks will not be deleted."));
+	gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Delete Topic"), GTK_RESPONSE_ACCEPT);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+
+	group = GTK_WINDOW (parent)->group;
+
+	if (group == NULL)
+	{
+		group = gtk_window_group_new ();
+		gtk_window_group_add_window (group, GTK_WINDOW (parent));
+		g_object_unref (group);
+	}
+
+	gtk_window_group_add_window (group, GTK_WINDOW (dialog));
+
+        return dialog;
+}
+
 static void
 cmd_delete (GtkAction *action,
 	    EphyBookmarksEditor *editor)
@@ -468,7 +502,23 @@ cmd_delete (GtkAction *action,
 
 		if (priority == EPHY_NODE_NORMAL_PRIORITY)
 		{
-			ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->key_view));
+			GtkWidget *dialog;
+			const char *title;
+			int response;
+
+			title = ephy_node_get_property_string (node, EPHY_NODE_KEYWORD_PROP_NAME);
+			dialog = delete_topic_dialog_construct (GTK_WINDOW (editor), title);
+
+			
+			response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+			gtk_widget_destroy (dialog);
+
+			if (response == GTK_RESPONSE_ACCEPT)
+			{
+				ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->key_view));
+			}
+				
 		}
 		g_list_free (selected);
 	}
