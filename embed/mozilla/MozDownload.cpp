@@ -52,7 +52,6 @@
 #include "nsDirectoryServiceUtils.h"
 #include "nsIRequest.h"
 #include "netCore.h"
-#include "nsIObserver.h"
 
 const char* const persistContractID = "@mozilla.org/embedding/browser/nsWebBrowserPersist;1";
 
