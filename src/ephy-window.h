@@ -22,6 +22,7 @@
 #include "ephy-embed.h"
 #include "ephy-dialog.h"
 #include "ephy-notebook.h"
+
 #include <glib-object.h>
 #include <glib.h>
 #include <gtk/gtkwindow.h>

@@ -1024,9 +1024,116 @@ sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 }
 
 static void
+popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
+		      gpointer user_data)
+{
+	EphyEmbedEvent *event = user_data;
+
+	*x = event->x;
+	*y = event->y;
+	*push_in = FALSE;
+}
+
+static void
+show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
+{
+	EggActionGroup *action_group;
+	EggAction *action;
+	EmbedEventContext context;
+	const char *popup;
+	char *path;
+	const GValue *value;
+	gboolean framed, has_background;
+	GtkWidget *widget;
+
+	ephy_embed_event_get_property (event, "framed_page", &value);
+	framed = g_value_get_int (value);
+
+	has_background = ephy_embed_event_has_property (event, "background_image");
+
+	ephy_embed_event_get_context (event, &context);
+
+	if ((context & EMBED_CONTEXT_LINK) &&
+	    (context & EMBED_CONTEXT_IMAGE))
+	{
+		popup = "EphyImageLinkPopup";
+	}
+	else if (context & EMBED_CONTEXT_LINK)
+	{
+		popup = "EphyLinkPopup";
+	}
+	else if (context & EMBED_CONTEXT_IMAGE)
+	{
+		popup = "EphyImagePopup";
+	}
+	else if (context & EMBED_CONTEXT_INPUT)
+	{
+		popup = "EphyInputPopup";
+	}
+	else
+	{
+		popup = framed ? "EphyFramedDocumentPopup" :
+				 "EphyDocumentPopup";
+	}
+
+	action_group = window->priv->popups_action_group;
+	action = egg_action_group_get_action (action_group, "SaveBackgroundAs");
+	g_object_set (action, "sensitive", has_background,
+			      "visible", has_background, NULL);
+
+	path = g_strconcat ("/popups/", popup, NULL);
+	widget = egg_menu_merge_get_widget (EGG_MENU_MERGE (window->ui_merge),
+				            path);
+	g_free (path);
+
+	g_return_if_fail (widget != NULL);
+
+	ephy_tab_set_event (tab, event);
+	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, popup_menu_at_coords, event, 2,
+			gtk_get_current_event_time ());
+}
+
+static gint
+tab_context_menu_cb (EphyEmbed *embed,
+		     EphyEmbedEvent *event,
+		     EphyWindow *window)
+{
+	EphyTab *tab;
+	EphyEmbedEventType type;
+
+	g_return_val_if_fail (IS_EPHY_WINDOW (window), FALSE);
+	g_return_val_if_fail (IS_EPHY_EMBED (embed), FALSE);
+	g_assert (IS_EPHY_EMBED_EVENT(event));
+
+	tab = EPHY_TAB (g_object_get_data (G_OBJECT (embed), "EphyTab"));
+	g_return_val_if_fail (IS_EPHY_TAB (tab), FALSE);
+	g_return_val_if_fail (window->priv->active_tab == tab, FALSE);
+
+	window = ephy_tab_get_window (tab);
+	g_return_val_if_fail (window != NULL, FALSE);
+
+	ephy_embed_event_get_event_type (event, &type);
+
+	if (type == EPHY_EMBED_EVENT_MOUSE_BUTTON3)
+	{
+		show_embed_popup (window, tab, event);
+	}
+	else
+	{
+		int x, y;
+
+		ephy_embed_event_get_coords (event, &x, &y); // Why?
+		show_embed_popup (window, tab, event);
+	}
+
+	return FALSE;
+}
+
+static void
 ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 {
 	EphyTab *old_tab;
+	EphyEmbed *embed;
 
 	g_return_if_fail (IS_EPHY_WINDOW (window));
 	if (ephy_tab_get_window (new_tab) != window) return;
@@ -1063,6 +1170,11 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 						      window);
 		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
 						      G_CALLBACK (sync_tab_zoom),
+						      window);
+
+		embed = ephy_tab_get_embed (old_tab);
+		g_signal_handlers_disconnect_by_func (G_OBJECT (embed),
+						      G_CALLBACK (tab_context_menu_cb),
 						      window);
 	}
 
@@ -1115,6 +1227,11 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_connect_object (G_OBJECT (new_tab),
 					 "notify::zoom",
 					 G_CALLBACK (sync_tab_zoom),
+					 window, 0);
+
+		embed = ephy_tab_get_embed (new_tab);
+		g_signal_connect_object (embed, "ge_context_menu",
+					 G_CALLBACK (tab_context_menu_cb),
 					 window, 0);
 	}
 }
@@ -1461,6 +1578,8 @@ ephy_window_set_chrome (EphyWindow *window,
 GtkWidget *
 ephy_window_get_notebook (EphyWindow *window)
 {
+	g_return_val_if_fail (IS_EPHY_WINDOW (window), NULL);
+
 	return GTK_WIDGET (window->priv->notebook);
 }
 

@@ -68,6 +68,9 @@ EggAction * 	ephy_tab_get_action		(EphyTab *tab);
 
 EphyEmbed *	ephy_tab_get_embed		(EphyTab *tab);
 
+void		ephy_tab_set_event		(EphyTab *tab,
+						 EphyEmbedEvent *event);
+
 EphyEmbedEvent *ephy_tab_get_event		(EphyTab *tab);
 
 void		ephy_tab_set_window		(EphyTab *tab,

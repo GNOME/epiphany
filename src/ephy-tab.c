@@ -876,78 +876,13 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 	g_list_free (tabs);
 }
 
-static void
+void
 ephy_tab_set_event (EphyTab *tab,
 		    EphyEmbedEvent *event)
 {
 	if (tab->priv->event) g_object_unref (tab->priv->event);
 	g_object_ref (event);
 	tab->priv->event = event;
-}
-
-static void
-popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
-		      gpointer user_data)
-{
-	EphyEmbedEvent *event = user_data;
-
-	*x = event->x;
-	*y = event->y;
-	*push_in = FALSE;
-}
-
-static void
-ephy_tab_show_embed_popup (EphyTab *tab, EphyEmbedEvent *event)
-{
-	EmbedEventContext context;
-	const char *popup;
-	const GValue *value;
-	gboolean framed;
-	EphyWindow *window;
-	char *path;
-	GtkWidget *widget;
-
-	g_return_if_fail (IS_EPHY_TAB (tab));
-	window = tab->priv->window;
-
-	ephy_embed_event_get_property (event, "framed_page", &value);
-	framed = g_value_get_int (value);
-
-	ephy_embed_event_get_context (event, &context);
-
-	if ((context & EMBED_CONTEXT_LINK) &&
-	    (context & EMBED_CONTEXT_IMAGE))
-	{
-		popup = "EphyImageLinkPopup";
-	}
-	else if (context & EMBED_CONTEXT_LINK)
-	{
-		popup = "EphyLinkPopup";
-	}
-	else if (context & EMBED_CONTEXT_IMAGE)
-	{
-		popup = "EphyImagePopup";
-	}
-	else if (context & EMBED_CONTEXT_INPUT)
-	{
-		popup = "EphyInputPopup";
-	}
-	else
-	{
-		popup = framed ? "EphyFramedDocumentPopup" :
-				 "EphyDocumentPopup";
-	}
-
-	path = g_strconcat ("/popups/", popup, NULL);
-	widget = egg_menu_merge_get_widget (EGG_MENU_MERGE (window->ui_merge),
-				            path);
-	g_free (path);
-
-	g_return_if_fail (widget != NULL);
-
-	ephy_tab_set_event (tab, event);
-	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, popup_menu_at_coords, event, 2,
-			gtk_get_current_event_time ());
 }
 
 static gint
@@ -988,36 +923,6 @@ ephy_tab_dom_mouse_click_cb  (EphyEmbed *embed,
 				       GDK_SELECTION_PRIMARY,
 				       GDK_SELECTION_TYPE_STRING,
 				       GDK_CURRENT_TIME);
-	}
-
-	return FALSE;
-}
-
-static gint
-ephy_tab_context_menu_cb  (EphyEmbed *embed,
-			   EphyEmbedEvent *event,
-			   EphyTab *tab)
-{
-	EphyWindow *window;
-	EphyEmbedEventType type;
-
-	g_assert (IS_EPHY_EMBED_EVENT(event));
-
-	window = ephy_tab_get_window (tab);
-	g_return_val_if_fail (window != NULL, FALSE);
-
-	ephy_embed_event_get_event_type (event, &type);
-
-	if (type == EPHY_EMBED_EVENT_MOUSE_BUTTON3)
-	{
-		ephy_tab_show_embed_popup (tab, event);
-	}
-	else
-	{
-		int x, y;
-
-		ephy_embed_event_get_coords (event, &x, &y);
-		ephy_tab_show_embed_popup (tab, event);
 	}
 
 	return FALSE;
@@ -1118,9 +1023,6 @@ ephy_tab_init (EphyTab *tab)
 			  tab);
 	g_signal_connect (embed, "ge_size_to",
 			  G_CALLBACK (ephy_tab_size_to_cb),
-			  tab);
-	g_signal_connect (embed, "ge_context_menu",
-			  G_CALLBACK (ephy_tab_context_menu_cb),
 			  tab);
 	g_signal_connect (embed, "ge_dom_mouse_click",
 			  G_CALLBACK (ephy_tab_dom_mouse_click_cb),

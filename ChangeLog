@@ -1,3 +1,15 @@
+2003-06-20  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-tab.h:
+	* src/ephy-tab.c: (popup_menu_at_coords), (ephy_tab_show_embed_popup),
+	(ephy_tab_context_menu_cb), (ephy_tab_set_event):
+	* src/ephy-window.c: (popup_menu_at_coords), (show_embed_popup),
+	(tab_context_menu_cb), (ephy_window_set_active_tab):
+
+	Move the context popup menu to ephy-window.c.
+	If there's no background image, disable the SaveBackgroundAs
+	menu entry.
+
 2003-06-19  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/mozilla/EphyWrapper.cpp:
