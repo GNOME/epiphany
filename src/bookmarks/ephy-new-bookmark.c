@@ -164,8 +164,7 @@ ephy_new_bookmark_add (EphyNewBookmark *new_bookmark)
 			           new_bookmark->priv->location);
 	new_bookmark->priv->id = ephy_node_get_id (node);
 
-	ephy_topics_selector_set_bookmark (selector, node);
-	ephy_topics_selector_apply (selector);
+	ephy_topics_selector_apply (selector, node);
 
 	if (new_bookmark->priv->icon)
 	{

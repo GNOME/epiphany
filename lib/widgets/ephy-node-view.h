@@ -65,6 +65,7 @@ typedef struct
 {
 	GtkTreeViewClass parent;
 
+	void (*node_toggled)	    (EphyNodeView *view, EphyNode *node, gboolean checked);
 	void (*node_activated)      (EphyNodeView *view, EphyNode *node);
 	void (*node_selected)       (EphyNodeView *view, EphyNode *node);
 	void (*node_dropped)        (EphyNodeView *view, EphyNode *node, GList *uris);
@@ -77,6 +78,10 @@ GtkWidget         *ephy_node_view_new                 (EphyNode *root,
 					               EphyNodeFilter *filter);
 
 void	           ephy_node_view_enable_dnd	      (EphyNodeView *view);
+
+void		   ephy_node_view_add_toggle	      (EphyNodeView *view,
+						       EphyTreeModelNodeValueFunc value_func,
+						       gpointer data);
 
 GtkTreeViewColumn *ephy_node_view_add_column	      (EphyNodeView *view,
 						       const char  *title,

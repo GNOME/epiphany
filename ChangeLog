@@ -1,5 +1,34 @@
 2004-07-23  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* lib/ephy-marshal.list:
+	* lib/widgets/ephy-node-view.c: (path_toggled),
+	(ephy_node_view_key_press_cb), (get_selection_refs),
+	(ephy_node_view_button_press_cb), (cell_renderer_edited),
+	(renderer_editing_canceled_cb), (ephy_node_view_add_column),
+	(ephy_node_view_init), (ephy_node_view_edit),
+	(ephy_node_view_constructor), (ephy_node_view_add_toggle),
+	(ephy_node_view_class_init):
+	* lib/widgets/ephy-node-view.h:
+
+	Add support for toggles. When editing is canceled remove
+	the node.
+
+	* src/bookmarks/ephy-new-bookmark.c: (ephy_new_bookmark_add):
+	* src/bookmarks/ephy-topics-selector.c:
+	(ephy_topics_selector_get_type),
+	(ephy_topics_selector_set_bookmarks),
+	(ephy_topics_selector_set_property), (ephy_topics_selector_apply),
+	(provide_toggle), (ephy_topics_selector_constructor),
+	(topic_destroy_cb), (node_toggled_cb), (ephy_topics_selector_init),
+	(ephy_topics_selector_new), (ephy_topics_selector_new_topic),
+	(ephy_topics_selector_class_init):
+	* src/bookmarks/ephy-topics-selector.h:
+
+	Use EphyNodeView instead of a list store. Share a lot of code
+	and we get updating for free. Fix bug #144770
+
+2004-07-23  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* lib/widgets/ephy-node-view.c: (filter_changed_cb),
 	(ephy_node_view_set_filter), (ephy_node_view_set_property),
 	(ephy_node_view_init), (ephy_node_view_select_node),

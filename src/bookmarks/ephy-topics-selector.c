@@ -24,40 +24,20 @@
 
 #include "ephy-topics-selector.h"
 #include "ephy-debug.h"
-#include "ephy-node-view.h"
-#include "ephy-gui.h"
 
 #include <glib/gi18n.h>
-#include <gtk/gtkliststore.h>
-#include <gtk/gtkcellrenderertoggle.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtktreeview.h>
-#include <gtk/gtkwindow.h>
-#include <gdk/gdkkeysyms.h>
 
 static void ephy_topics_selector_class_init (EphyTopicsSelectorClass *klass);
 static void ephy_topics_selector_init (EphyTopicsSelector *editor);
-static void ephy_topics_selector_set_property (GObject *object,
-		                               guint prop_id,
-		                               const GValue *value,
-		                               GParamSpec *pspec);
-static void ephy_topics_selector_get_property (GObject *object,
-		                               guint prop_id,
-		                               GValue *value,
-		                               GParamSpec *pspec);
 
 #define EPHY_TOPICS_SELECTOR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOPICS_SELECTOR, EphyTopicsSelectorPrivate))
 
 struct EphyTopicsSelectorPrivate
 {
 	EphyBookmarks *bookmarks;
-	GtkTreeModel *model;
 	EphyNode *bookmark;
-
-	GtkCellRenderer *renderer;
-	GtkTreeViewColumn *column;
-	GtkTreePath *edited_path;
+	EphyNodeFilter *filter;
+	GList *topics;
 };
 
 enum
@@ -65,13 +45,6 @@ enum
 	PROP_0,
 	PROP_BOOKMARKS,
 	PROP_BOOKMARK
-};
-
-enum
-{
-	COL_HAS_TOPIC,
-	COL_TOPIC,
-	COL_NODE
 };
 
 static GObjectClass *parent_class = NULL;
@@ -96,7 +69,7 @@ ephy_topics_selector_get_type (void)
 			(GInstanceInitFunc) ephy_topics_selector_init
 		};
 
-		ephy_topics_selector_type = g_type_register_static (GTK_TYPE_TREE_VIEW,
+		ephy_topics_selector_type = g_type_register_static (EPHY_TYPE_NODE_VIEW,
 							            "EphyTopicsSelector",
 							            &our_info, 0);
 	}
@@ -105,34 +78,6 @@ ephy_topics_selector_get_type (void)
 }
 
 static void
-ephy_topics_selector_class_init (EphyTopicsSelectorClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
-
-	object_class->set_property = ephy_topics_selector_set_property;
-	object_class->get_property = ephy_topics_selector_get_property;
-
-	g_object_class_install_property (object_class,
-					 PROP_BOOKMARKS,
-					 g_param_spec_object ("bookmarks",
-							      "Bookmarks set",
-							      "Bookmarks set",
-							      EPHY_TYPE_BOOKMARKS,
-							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-	g_object_class_install_property (object_class,
-					 PROP_BOOKMARK,
-					 g_param_spec_pointer ("bookmark",
-							       "Bookmark",
-							       "Bookmark",
-							       G_PARAM_READWRITE));
-
-	g_type_class_add_private (object_class, sizeof(EphyTopicsSelectorPrivate));
-}
-
-void
 ephy_topics_selector_set_bookmark (EphyTopicsSelector *selector,
 				   EphyNode *bookmark)
 {
@@ -141,6 +86,13 @@ ephy_topics_selector_set_bookmark (EphyTopicsSelector *selector,
 	selector->priv->bookmark = bookmark;
 
 	g_object_notify (G_OBJECT (selector), "bookmark");
+}
+
+static void
+ephy_topics_selector_set_bookmarks (EphyTopicsSelector *selector,
+				    EphyBookmarks *bookmarks)
+{
+	selector->priv->bookmarks = bookmarks;
 }
 
 static void
@@ -154,7 +106,8 @@ ephy_topics_selector_set_property (GObject *object,
 	switch (prop_id)
 	{
 	case PROP_BOOKMARKS:
-		selector->priv->bookmarks = g_value_get_object (value);
+		ephy_topics_selector_set_bookmarks
+			(selector, g_value_get_object (value));
 		break;
 	case PROP_BOOKMARK:
 		ephy_topics_selector_set_bookmark
@@ -185,265 +138,129 @@ ephy_topics_selector_get_property (GObject *object,
 	}
 }
 
-static void
-fill_model (EphyTopicsSelector *editor)
-{
-	GPtrArray *children;
-	int i;
-	EphyNode *keywords;
-	GtkListStore *model = GTK_LIST_STORE (editor->priv->model);
-
-	keywords = ephy_bookmarks_get_keywords (editor->priv->bookmarks);
-
-	children = ephy_node_get_children (keywords);
-	for (i = 0; i < children->len; i++)
-	{
-		EphyNode *kid;
-		const char *name;
-		gboolean has_keyword = FALSE;
-		int priority;
-		GtkTreeIter iter;
-
-		kid = g_ptr_array_index (children, i);
-
-		name = ephy_node_get_property_string
-			(kid, EPHY_NODE_KEYWORD_PROP_NAME);
-
-		if (editor->priv->bookmark != NULL)
-		{
-			has_keyword = ephy_bookmarks_has_keyword
-				(editor->priv->bookmarks, kid,
-				 editor->priv->bookmark);
-		}
-
-		priority = ephy_node_get_property_int
-			(kid, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-		if (priority == -1) priority = EPHY_NODE_VIEW_NORMAL_PRIORITY;
-
-		if (priority == EPHY_NODE_VIEW_NORMAL_PRIORITY)
-		{
-			gtk_list_store_append (model, &iter);
-			gtk_list_store_set (model, &iter,
-					    COL_HAS_TOPIC, has_keyword,
-					    COL_TOPIC, name,
-					    COL_NODE, kid,
-					    -1);
-		}
-	}
-}
-
-static void
-topic_toggled (GtkTreePath *path,
-               EphyTopicsSelector *selector)
-{
-	GtkTreeModel *model = selector->priv->model;
-	GtkTreeIter iter;
-	gboolean has_topic;
-
-	gtk_tree_model_get_iter (model, &iter, path);
-	gtk_tree_model_get (model, &iter, COL_HAS_TOPIC, &has_topic, -1);
-	has_topic = !has_topic;
-
-	gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-			    COL_HAS_TOPIC, has_topic, -1);
-	ephy_topics_selector_apply (selector);
-}
-
 void
-ephy_topics_selector_apply (EphyTopicsSelector *editor)
+ephy_topics_selector_apply (EphyTopicsSelector *selector, EphyNode *bookmark)
 {
-	GtkTreeIter iter;
-	GtkTreeModel *model = editor->priv->model;
+	GList *l;
 
-	LOG ("Update topics")
-
-	if (editor->priv->bookmark == NULL) return;
-
-	if (!gtk_tree_model_get_iter_first (model, &iter))
+	for (l = selector->priv->topics; l != NULL; l = l->next)
 	{
-		return;
+		EphyNode *node = l->data;
+
+		ephy_bookmarks_set_keyword (selector->priv->bookmarks,
+					    node, bookmark);
+	}
+}
+
+static void
+provide_toggle (EphyNode *node, GValue *value, gpointer data)
+{
+	EphyTopicsSelector *selector = EPHY_TOPICS_SELECTOR (data);
+	gboolean result = FALSE;
+
+	g_value_init (value, G_TYPE_BOOLEAN);
+
+	if (selector->priv->bookmark)
+	{
+		result = ephy_node_has_child (node, selector->priv->bookmark);
+	}
+	else
+	{
+		result = (g_list_find (selector->priv->topics, node) != NULL);
 	}
 
-	do
+	g_value_set_boolean (value, result);
+}
+
+static GObject *
+ephy_topics_selector_constructor (GType type, guint n_construct_properties,
+                                  GObjectConstructParam *construct_params)
+
+{
+	GObject *object;
+	EphyTopicsSelector *selector;
+	EphyTopicsSelectorPrivate *priv;
+
+	object = parent_class->constructor (type, n_construct_properties,
+                                            construct_params);
+	selector = EPHY_TOPICS_SELECTOR (object);
+	priv = EPHY_TOPICS_SELECTOR_GET_PRIVATE (object);
+
+	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (selector), FALSE);
+
+	ephy_node_view_add_toggle (EPHY_NODE_VIEW (selector),
+				   provide_toggle, selector);
+	ephy_node_view_add_column (EPHY_NODE_VIEW (selector), "Topics",
+				   G_TYPE_STRING,
+				   EPHY_NODE_KEYWORD_PROP_NAME,
+				   EPHY_NODE_VIEW_SHOW_PRIORITY |
+				   EPHY_NODE_VIEW_EDITABLE |
+				   EPHY_NODE_VIEW_SEARCHABLE, NULL);
+
+	return object;
+}
+
+static void
+topic_destroy_cb (EphyNode *node, EphyTopicsSelector *selector)
+{
+	selector->priv->topics = g_list_remove
+				(selector->priv->topics, node);
+}
+
+static void
+node_toggled_cb (EphyTopicsSelector *selector, EphyNode *node,
+		 gboolean checked, gpointer data)
+{
+	if (selector->priv->bookmark)
 	{
-		GValue value = { 0, };
-		gboolean has_topic;
-		EphyNode *node;
-
-		gtk_tree_model_get_value (model, &iter, COL_HAS_TOPIC, &value);
-		has_topic = g_value_get_boolean (&value);
-		g_value_unset (&value);
-
-		gtk_tree_model_get_value (model, &iter, COL_NODE, &value);
-		node = g_value_get_pointer (&value);
-		g_value_unset (&value);
-
-		if (has_topic)
+		if (checked)
 		{
-			ephy_bookmarks_set_keyword (editor->priv->bookmarks,
+			ephy_bookmarks_set_keyword (selector->priv->bookmarks,
 						    node,
-						    editor->priv->bookmark);
+						    selector->priv->bookmark);
 		}
 		else
 		{
-			ephy_bookmarks_unset_keyword (editor->priv->bookmarks,
+			ephy_bookmarks_unset_keyword (selector->priv->bookmarks,
 						      node,
-						      editor->priv->bookmark);
+						      selector->priv->bookmark);
 		}
 	}
-	while (gtk_tree_model_iter_next (model, &iter));
-}
-
-static gboolean
-topic_clicked (GtkTreeView *tree_view,
-	       GdkEventButton *event,
-	       EphyTopicsSelector *selector)
-{
-	GtkTreePath *path = NULL;
-
-	if (event->window != gtk_tree_view_get_bin_window (tree_view))
-		return FALSE;
-
-	if (gtk_tree_view_get_path_at_pos (tree_view,
-					   (gint) event->x,
-					   (gint) event->y,
-					   &path, NULL,
-					   NULL, NULL))
+	else
 	{
-		topic_toggled (path, selector);
-
-		gtk_tree_path_free (path);
-	}
-
-	return FALSE;
-}
-
-static gboolean
-topic_key_pressed (GtkTreeView *tree_view,
-		   GdkEventKey *event,
-		   EphyTopicsSelector *selector)
-{
-	GtkTreeSelection *sel = NULL;
-	GtkTreeIter iter;
-	GtkTreePath *path;
-	guint32 unicode;
-
-	switch (event->keyval)
-	{
-	case GDK_space:
-	case GDK_Return:
-	case GDK_KP_Enter:
-		sel = gtk_tree_view_get_selection (tree_view);
-
-		if (gtk_tree_selection_get_selected (sel, NULL, &iter))
+		if (checked)
 		{
-			path = gtk_tree_model_get_path (selector->priv->model, &iter);
-
-			topic_toggled (path, selector);
-
-			gtk_tree_path_free (path);
+			selector->priv->topics = g_list_append
+					(selector->priv->topics, node);
+			ephy_node_signal_connect_object (node, EPHY_NODE_DESTROY,
+				 			 (EphyNodeCallback) topic_destroy_cb,
+							 G_OBJECT (selector));
 		}
-		return TRUE;
-
-	default:
-		break;
+		else
+		{
+			selector->priv->topics = g_list_remove
+					(selector->priv->topics, node);
+		}
 	}
-
-	unicode = gdk_keyval_to_unicode (event->keyval);
-	if (unicode)
-	{
-		return ephy_gui_select_row_by_key (tree_view, COL_TOPIC, unicode);
-	}
-
-	return FALSE;
 }
 
 static void
-renderer_edited_cb (GtkCellRendererText *cell,
-                    const char *path_str,
-                    const char *new_text,
-                    EphyTopicsSelector *selector)
+ephy_topics_selector_init (EphyTopicsSelector *selector)
 {
-	GtkTreePath *path;
-	GtkTreeIter iter;
-	EphyNode *topic;
+	selector->priv = EPHY_TOPICS_SELECTOR_GET_PRIVATE (selector);
+	selector->priv->bookmark = NULL;
+	selector->priv->topics = NULL;
 
-	path = gtk_tree_path_new_from_string (path_str);
-	gtk_tree_model_get_iter (selector->priv->model, &iter, path);
+	selector->priv->filter = ephy_node_filter_new ();
+	ephy_node_filter_add_expression (selector->priv->filter,
+				         ephy_node_filter_expression_new (EPHY_NODE_FILTER_EXPRESSION_INT_PROP_EQUALS,
+								          EPHY_NODE_KEYWORD_PROP_PRIORITY,
+									  EPHY_NODE_VIEW_NORMAL_PRIORITY),
+				         0);
+	g_object_set (selector, "filter", selector->priv->filter, NULL);
 
-	topic = ephy_bookmarks_add_keyword (selector->priv->bookmarks, new_text);
-	gtk_list_store_set (GTK_LIST_STORE (selector->priv->model), &iter,
-			    COL_HAS_TOPIC, TRUE,
-			    COL_TOPIC, new_text,
-			    COL_NODE, topic,
-			    -1);
-	gtk_tree_path_free (path);
-
-	g_object_set (G_OBJECT (cell), "editable", FALSE, NULL);
-	gtk_tree_path_free (selector->priv->edited_path);
-}
-
-static void
-renderer_editing_canceled_cb (GtkCellRendererText *cell,
-                              EphyTopicsSelector *selector)
-{
-	GtkTreeIter iter;
-
-	gtk_tree_model_get_iter (selector->priv->model, &iter,
-				 selector->priv->edited_path);
-	gtk_list_store_remove (GTK_LIST_STORE (selector->priv->model), &iter);
-
-	g_object_set (G_OBJECT (cell), "editable", FALSE, NULL);
-	gtk_tree_path_free (selector->priv->edited_path);
-}
-
-static void
-ephy_topics_build_ui (EphyTopicsSelector *editor)
-{
-	GtkListStore *model;
-	GtkCellRenderer *renderer;
-	GtkTreeViewColumn *column;
-
-	model = gtk_list_store_new (3, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_POINTER);
-	editor->priv->model = GTK_TREE_MODEL (model);
-
-	gtk_tree_view_set_model (GTK_TREE_VIEW (editor), GTK_TREE_MODEL (model));
-	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (editor), FALSE);
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
-					      COL_TOPIC,
-					      GTK_SORT_ASCENDING);
-	g_object_unref (model);
-
-	/* Has topic column */
-	renderer = gtk_cell_renderer_toggle_new ();
-	column = gtk_tree_view_column_new_with_attributes
-		("", renderer, "active", COL_HAS_TOPIC, NULL);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (editor), column);
-
-	renderer = gtk_cell_renderer_text_new ();
-	editor->priv->renderer = renderer;
-	column = gtk_tree_view_column_new_with_attributes
-		("Description", renderer, "text", COL_TOPIC, NULL);
-	editor->priv->column = column;
-	gtk_tree_view_append_column (GTK_TREE_VIEW (editor), column);
-	g_signal_connect (renderer, "edited",
-			  G_CALLBACK (renderer_edited_cb), editor);
-	g_signal_connect (renderer, "editing-canceled",
-			  G_CALLBACK (renderer_editing_canceled_cb), editor);
-
-	g_signal_connect (G_OBJECT (editor), "key_press_event",
-			  G_CALLBACK (topic_key_pressed), editor);
-	g_signal_connect (G_OBJECT (editor), "button_press_event",
-			  G_CALLBACK (topic_clicked), editor);
-	fill_model (editor);
-}
-
-static void
-ephy_topics_selector_init (EphyTopicsSelector *editor)
-{
-	editor->priv = EPHY_TOPICS_SELECTOR_GET_PRIVATE (editor);
-
-	editor->priv->bookmark = NULL;
+	g_signal_connect (selector, "node_toggled",
+			  G_CALLBACK (node_toggled_cb), NULL);
 }
 
 GtkWidget *
@@ -451,16 +268,17 @@ ephy_topics_selector_new (EphyBookmarks *bookmarks,
 			  EphyNode *bookmark)
 {
 	EphyTopicsSelector *editor;
+	EphyNode *root;
 
 	g_assert (bookmarks != NULL);
 
+	root = ephy_bookmarks_get_keywords (bookmarks);
 	editor = EPHY_TOPICS_SELECTOR (g_object_new
 			(EPHY_TYPE_TOPICS_SELECTOR,
 			 "bookmarks", bookmarks,
 			 "bookmark", bookmark,
+			 "root", root,
 			 NULL));
-
-	ephy_topics_build_ui (editor);
 
 	return GTK_WIDGET (editor);
 }
@@ -468,22 +286,39 @@ ephy_topics_selector_new (EphyBookmarks *bookmarks,
 void
 ephy_topics_selector_new_topic (EphyTopicsSelector *selector)
 {
-	GtkTreePath *path;
-	GtkTreeIter iter;
+	EphyNode *node;
 
-	g_object_set (G_OBJECT (selector->priv->renderer),
-                      "editable", TRUE, NULL);
+	node = ephy_bookmarks_add_keyword
+			(selector->priv->bookmarks, _("Type a topic"));
+	ephy_node_view_select_node (EPHY_NODE_VIEW (selector), node);
+	ephy_node_view_edit (EPHY_NODE_VIEW (selector));
+}
 
-	gtk_list_store_append (GTK_LIST_STORE (selector->priv->model), &iter);
-	gtk_list_store_set (GTK_LIST_STORE (selector->priv->model), &iter,
-			    COL_HAS_TOPIC, FALSE,
-			    COL_TOPIC, _("Type a topic"),
-			    COL_NODE, NULL,
-			    -1);
+static void
+ephy_topics_selector_class_init (EphyTopicsSelectorClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	path = gtk_tree_model_get_path (selector->priv->model, &iter);
-	gtk_widget_grab_focus (GTK_WIDGET (selector));
-	gtk_tree_view_set_cursor (GTK_TREE_VIEW (selector), path,
-				  selector->priv->column, TRUE);
-	selector->priv->edited_path = path;
+	parent_class = g_type_class_peek_parent (klass);
+
+	object_class->set_property = ephy_topics_selector_set_property;
+	object_class->get_property = ephy_topics_selector_get_property;
+	object_class->constructor = ephy_topics_selector_constructor;
+
+	g_object_class_install_property (object_class,
+					 PROP_BOOKMARKS,
+					 g_param_spec_object ("bookmarks",
+							      "Bookmarks set",
+							      "Bookmarks set",
+							      EPHY_TYPE_BOOKMARKS,
+							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+	g_object_class_install_property (object_class,
+					 PROP_BOOKMARK,
+					 g_param_spec_pointer ("bookmark",
+							       "Bookmark",
+							       "Bookmark",
+							       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof(EphyTopicsSelectorPrivate));
 }

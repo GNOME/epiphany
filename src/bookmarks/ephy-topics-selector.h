@@ -22,8 +22,7 @@
 #define EPHY_TOPICS_SELECTOR_H
 
 #include "ephy-bookmarks.h"
-
-#include <gtk/gtktreeview.h>
+#include "ephy-node-view.h"
 
 G_BEGIN_DECLS
 
@@ -38,7 +37,7 @@ typedef struct EphyTopicsSelectorPrivate EphyTopicsSelectorPrivate;
 
 typedef struct
 {
-	GtkTreeView parent;
+	EphyNodeView parent;
 
 	/*< private >*/
 	EphyTopicsSelectorPrivate *priv;
@@ -46,7 +45,7 @@ typedef struct
 
 typedef struct
 {
-	GtkTreeViewClass parent;
+	EphyNodeViewClass parent;
 } EphyTopicsSelectorClass;
 
 GType		     ephy_topics_selector_get_type        (void);
@@ -54,12 +53,10 @@ GType		     ephy_topics_selector_get_type        (void);
 GtkWidget	    *ephy_topics_selector_new             (EphyBookmarks *bookmarks,
 							   EphyNode *bookmark);
 
-void		     ephy_topics_selector_set_bookmark    (EphyTopicsSelector *selector,
-							   EphyNode *bookmark);
-
 void		     ephy_topics_selector_new_topic	  (EphyTopicsSelector *selector);
 
-void		     ephy_topics_selector_apply		  (EphyTopicsSelector *selector);
+void		     ephy_topics_selector_apply		  (EphyTopicsSelector *selector,
+							   EphyNode *bookmark);
 
 
 G_END_DECLS
