@@ -262,14 +262,14 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 			(parentWindow, GTK_DIALOG_DESTROY_WITH_PARENT,
 			 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
 			 /* translators: %s is the name of the application */
-			 _("Open this file with %s?"),
+			 _("Open this file with \"%s\"?"),
 			 mHelperApp->name);
 		gtk_message_dialog_format_secondary_markup
 			(GTK_MESSAGE_DIALOG (dialog),
 			 /* translators: %s is the name of the application */
 			 _("It's not possible to view this file type "
 			   "directly in the browser. You can open it with "
-			   "<tt>%s</tt> or save it."),
+			   "\"%s\" or save it."),
 			   mHelperApp->name);
 	}
 	else
