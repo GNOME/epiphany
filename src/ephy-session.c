@@ -44,7 +44,6 @@
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
 #include <libgnomevfs/gnome-vfs-ops.h>
-#include <libgnomeui/gnome-client.h>
 #include <libxml/tree.h>
 #include <libxml/xmlwriter.h>
 
@@ -58,7 +57,6 @@ struct EphySessionPrivate
 #define BOOKMARKS_EDITOR_ID	"BookmarksEditor"
 #define HISTORY_WINDOW_ID	"HistoryWindow"
 #define SESSION_CRASHED		"type:session_crashed"
-#define SESSION_GNOME		"type:session_gnome"
 
 static void ephy_session_class_init	(EphySessionClass *klass);
 static void ephy_session_iface_init	(EphyExtensionClass *iface);
@@ -120,16 +118,6 @@ get_session_filename (const char *filename)
 		save_to = g_build_filename (ephy_dot_dir (),
 					    "session_crashed.xml",
 					    NULL);
-	}
-	else if (strcmp (filename, SESSION_GNOME) == 0)
-	{
-		char *tmp;
-
-		tmp = g_build_filename (ephy_dot_dir (),
-					"session_gnome-XXXXXX",
-					NULL);
-		save_to = ephy_file_tmp_filename (tmp, "xml");
-		g_free (tmp);
 	}
 	else
 	{
@@ -223,70 +211,6 @@ impl_detach_window (EphyExtension *extension,
 	 */
 }
 
-static gboolean
-save_yourself_cb (GnomeClient *client,
-		  gint phase,
-		  GnomeSaveStyle save_style,
-		  gboolean shutdown,
-		  GnomeInteractStyle interact_style,
-		  gboolean fast,
-		  EphySession *session)
-{
-	char *argv[] = { "epiphany", "--load-session", NULL };
-	char *discard_argv[] = { "rm", "-r", NULL };
-
-	argv[2] = get_session_filename (SESSION_GNOME);
-	gnome_client_set_restart_command
-		(client, 3, argv);
-
-	discard_argv[2] = argv[2];
-	gnome_client_set_discard_command (client, 3,
-					  discard_argv);
-
-	ephy_session_save (session, argv[2]);
-
-	g_free (argv[2]);
-
-	return TRUE;
-}
-
-static void
-die_cb (GnomeClient* client,
-	EphySession *session)
-{
-	ephy_session_close (session);
-}
-
-static void
-gnome_session_attach (EphySession *session)
-{
-	GnomeClient *client;
-
-	client = gnome_master_client ();
-
-	g_signal_connect (G_OBJECT (client),
-			  "save_yourself",
-			  G_CALLBACK (save_yourself_cb),
-			  session);
-	g_signal_connect (G_OBJECT (client),
-			  "die",
-			  G_CALLBACK (die_cb),
-			  session);
-}
-
-static void
-gnome_session_detach (EphySession *session)
-{
-	GnomeClient *client;
-
-	client = gnome_master_client ();
-
-	g_signal_handlers_disconnect_by_func
-		(G_OBJECT (client), G_CALLBACK (save_yourself_cb), session);
-	g_signal_handlers_disconnect_by_func
-		(G_OBJECT (client), G_CALLBACK (die_cb), session);
-}
-
 static void
 ensure_session_directory (void)
 {
@@ -314,8 +238,6 @@ ephy_session_init (EphySession *session)
 	session->priv->windows = NULL;
 
 	ensure_session_directory ();
-
-	gnome_session_attach (session);
 }
 
 static void
@@ -334,8 +256,6 @@ ephy_session_finalize (GObject *object)
 	EphySession *session = EPHY_SESSION (object);
 
 	LOG ("EphySession finalising")
-
-	gnome_session_detach (session);
 
 	g_list_free (session->priv->windows);
 

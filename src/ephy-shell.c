@@ -48,6 +48,7 @@
 #include <gtk/gtkmessagedialog.h>
 #include <dirent.h>
 #include <unistd.h>
+#include <libgnomeui/gnome-client.h>
 
 #ifdef ENABLE_NAUTILUS_VIEW
 #include <bonobo/bonobo-generic-factory.h>
@@ -272,6 +273,70 @@ server_timeout (EphyShell *gs)
 	return FALSE;
 }
 
+static gboolean
+save_yourself_cb (GnomeClient *client,
+		  gint phase,
+		  GnomeSaveStyle save_style,
+		  gboolean shutdown,
+		  GnomeInteractStyle interact_style,
+		  gboolean fast,
+		  EphyShell *shell)
+{
+	char *argv[] = { "epiphany", "--load-session", NULL };
+	char *discard_argv[] = { "rm", "-r", NULL };
+	EphySession *session;
+	char *tmp, *save_to;
+
+	tmp = g_build_filename (ephy_dot_dir (),
+				"session_gnome-XXXXXX",
+				NULL);
+	save_to = ephy_file_tmp_filename (tmp, "xml");
+	g_free (tmp);
+
+	session = EPHY_SESSION (ephy_shell_get_session (shell));
+
+	argv[2] = save_to;
+	gnome_client_set_restart_command
+		(client, 3, argv);
+
+	discard_argv[2] = save_to;
+	gnome_client_set_discard_command (client, 3,
+					  discard_argv);
+
+	ephy_session_save (session, save_to);
+
+	g_free (save_to);
+
+	return TRUE;
+}
+
+static void
+die_cb (GnomeClient* client,
+	EphyShell *shell)
+{
+	EphySession *session;
+
+	session = EPHY_SESSION (ephy_shell_get_session (shell));
+	ephy_session_close (session);
+}
+
+static void
+gnome_session_init (EphyShell *shell)
+{
+	GnomeClient *client;
+
+	client = gnome_master_client ();
+
+	g_signal_connect (G_OBJECT (client),
+			  "save_yourself",
+			  G_CALLBACK (save_yourself_cb),
+			  shell);
+	g_signal_connect (G_OBJECT (client),
+			  "die",
+			  G_CALLBACK (die_cb),
+			  shell);
+}
+
 gboolean
 ephy_shell_startup (EphyShell *gs,
 		    EphyShellStartupFlags flags,
@@ -366,6 +431,8 @@ ephy_shell_startup (EphyShell *gs,
 		{
 			bonobo_object_release_unref (automation, &ev);
 		}
+
+		gnome_session_init (gs);
 	}
 
 	CORBA_exception_free (&ev);
