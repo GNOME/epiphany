@@ -4,6 +4,8 @@ SUBDIRS = ui art glade
 @INTLTOOL_DESKTOP_RULE@
 @INTLTOOL_SCHEMAS_RULE@
 
+dist_pkgdata_DATA = default-prefs.js
+
 server_in_files = GNOME_Epiphany_Automation.server.in GNOME_Epiphany_NautilusView.server.in
 server_DATA = GNOME_Epiphany_Automation.server GNOME_Epiphany_NautilusView.server
 serverdir = $(libdir)/bonobo/servers
