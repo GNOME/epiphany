@@ -796,9 +796,9 @@ ephy_shell_get_history_window (EphyShell *gs)
 		gs->priv->history_window = ephy_history_window_new (history);
 
 		g_signal_connect (gs->priv->history_window, "show",
-				  G_CALLBACK (toolwindow_show_cb), NULL);
+				  G_CALLBACK (toolwindow_show_cb), gs);
 		g_signal_connect (gs->priv->history_window, "hide",
-				  G_CALLBACK (toolwindow_hide_cb), NULL);
+				  G_CALLBACK (toolwindow_hide_cb), gs);
 	}
 
 	return gs->priv->history_window;
