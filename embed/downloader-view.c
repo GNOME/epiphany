@@ -285,12 +285,13 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 
 	if (total != -1)
 	{
-		char *total_progress;
+		char *total_progress, *name;
 
+		name = ephy_download_get_name (download);
 		total_progress = gnome_vfs_format_file_size_for_display (total);
-		file = g_strdup_printf ("%s\n%s of %s",
-					ephy_download_get_name (download),
+		file = g_strdup_printf ("%s\n%s of %s", name,
 					cur_progress, total_progress);
+		g_free (name);
 		g_free (total_progress);
 	}
 	else
