@@ -1,16 +1,16 @@
 # French translation of epiphany.
-# Copyright (C) 2000-2002 Free Software Foundation, Inc.
+# Copyright (C) 2000-2003 Free Software Foundation, Inc.
 # maintainer: Christophe Fergeau <teuf@users.sourceforge.net>, 2000-2002.
-# Christophe Merlet (RedFox) <redfox@redfoxcenter.org>, 2001-2002.
+# Christophe Merlet (RedFox) <redfox@redfoxcenter.org>, 2001-2003.
 # Cedric De Wilde <daique@tiscalinet.be>, 2001.
-# This file was
+# Laurent Richard <laurent.richard@lilit.be>, 2003.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany\n"
-"POT-Creation-Date: 2003-02-20 21:57+0100\n"
-"PO-Revision-Date: 2003-01-30 14:09+0100\n"
-"Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
+"Project-Id-Version: epiphany 0.5.0\n"
+"POT-Creation-Date: 2003-03-24 22:22+0100\n"
+"PO-Revision-Date: 2003-03-24 21:57+0100\n"
+"Last-Translator: Laurent Richard <laurent.richard@lilit.be>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,14 +29,12 @@ msgid "Epiphany Nautilus view factory"
 msgstr "Fabrique pour la vue Epiphany pour Nautilus"
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:3
-#, fuzzy
 msgid "Epiphany content view component"
-msgstr "Vue Galeon"
+msgstr "Vue Epiphany"
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:4
-#, fuzzy
 msgid "Epiphany content view component's factory"
-msgstr "Fabrique de vues Galeon"
+msgstr "Fabrique de vues Epiphany"
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:5
 msgid "View as Web Page"
@@ -48,13 +46,13 @@ msgstr "Page Web"
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:7
 msgid "Web Page Viewer"
-msgstr "Visualiseur de pages Web"
+msgstr "Visionneur de pages Web"
 
 #: data/epiphany.desktop.in.h:1
 msgid "Browse the web"
 msgstr "Navigue sur Internet"
 
-#: data/epiphany.desktop.in.h:2
+#: data/epiphany.desktop.in.h:2 src/ephy-main.c:127
 msgid "Epiphany Web Browser"
 msgstr "Navigateur Web Epiphany"
 
@@ -113,7 +111,7 @@ msgstr "Type de la police par défaut"
 #: data/epiphany.schemas.in.h:13
 msgid "Default font type. Possible values are 0 (serif), 1 (sans-serif)"
 msgstr ""
-"Type par défaut des polices. Valeurs possibles : 0 (serif), 1 (sans-serif)"
+"Type par défaut des polices. Valeurs possibles : 0 (serif), 1 (sans-serif)"
 
 #: data/epiphany.schemas.in.h:14
 msgid "Default page background color"
@@ -132,28 +130,24 @@ msgid "Default page text color in #RRGGBB hex format."
 msgstr "Couleur par défaut du texte au format #RRVVBB."
 
 #: data/epiphany.schemas.in.h:18
-#, fuzzy
 msgid "Default sidebar page"
-msgstr "_Largeur par défaut de la zone de texte"
+msgstr "Page par défaut pour la barre latérale"
 
 #: data/epiphany.schemas.in.h:19
-#, fuzzy
 msgid "Default sidebar page."
-msgstr "_Largeur par défaut de la zone de texte"
+msgstr "Page par défaut pour la barre latérale."
 
 #: data/epiphany.schemas.in.h:20
-#, fuzzy
 msgid "Default sidebar size"
-msgstr "Jeu de caractères par défaut"
+msgstr "Taille par défaut de la barre latérale"
 
 #: data/epiphany.schemas.in.h:21
 msgid "Default sidebar size."
 msgstr "Taille par défaut de la barre latérale."
 
 #: data/epiphany.schemas.in.h:22
-#, fuzzy
 msgid "Default spinner theme"
-msgstr "_Largeur par défaut de la zone de texte"
+msgstr "Thème par défaut de l'animation"
 
 #: data/epiphany.schemas.in.h:23
 msgid "Default unvisited link color"
@@ -178,18 +172,20 @@ msgstr "Nom de fichier dans lequel imprimer"
 #: data/epiphany.schemas.in.h:28
 msgid "Filename to print to."
 msgstr ""
-"Nom du fichier à utiliser lorsque l'utilisateur choisit « imprimer dans un "
-"fichier »"
+"Nom du fichier à utiliser lorsque l'utilisateur choisit « imprimer dans un "
+"fichier »"
 
 #: data/epiphany.schemas.in.h:29
 msgid ""
 "For find in page, whether to start again at the beginning after reaching the "
 "end of the page"
 msgstr ""
+"Lors d'une recherche, possibilité de recommencer au début après avoir "
+"atteint la fin de la page"
 
 #: data/epiphany.schemas.in.h:30
 msgid "History search time"
-msgstr ""
+msgstr "Historique du temps de recherche"
 
 #: data/epiphany.schemas.in.h:31
 msgid "Home page"
@@ -204,7 +200,7 @@ msgid ""
 "Image animation type. Possible values are 0 (continuously), 1 (once "
 "through), 2 (never)"
 msgstr ""
-"Animation des images. Valeurs possibles : 0 (animation continue), 1 (jouer "
+"Animation des images. Valeurs possibles : 0 (animation continue), 1 (jouer "
 "une seule fois l'animation), 2 (jamais d'animation)"
 
 #: data/epiphany.schemas.in.h:34
@@ -247,7 +243,7 @@ msgstr "Indique si la recherche est sensible à la casse"
 
 #: data/epiphany.schemas.in.h:42
 msgid "New page type"
-msgstr ""
+msgstr "Type de la  nouvelle page"
 
 #: data/epiphany.schemas.in.h:43
 msgid "No proxy for"
@@ -271,7 +267,7 @@ msgstr "Type de papier"
 
 #: data/epiphany.schemas.in.h:48
 msgid "Paper type: 0 (Letter), 1 (Legal), 2 (Executive), 3 (A4)."
-msgstr "Type de papier : 0 (Letter), 1 (Legal), 2 (Executive), 3 (A4)"
+msgstr "Type de papier : 0 (Letter), 1 (Legal), 2 (Executive), 3 (A4)"
 
 #: data/epiphany.schemas.in.h:49
 msgid "Preferred languages, two letter codes."
@@ -283,7 +279,7 @@ msgstr "Pages à imprimer"
 
 #: data/epiphany.schemas.in.h:51
 msgid "Print range: 0 (all pages), 1 (specific range)."
-msgstr ""
+msgstr "Pages à imprimer : 0 (toutes les pages), 1 (nombre de pages précis)."
 
 #: data/epiphany.schemas.in.h:52
 msgid "Printer name"
@@ -334,7 +330,6 @@ msgid "Save passwords."
 msgstr "Enregistrer les mots de passe."
 
 #: data/epiphany.schemas.in.h:64
-#, fuzzy
 msgid "Show download details"
 msgstr "Informations détaillées sur le téléchargement..."
 
@@ -428,19 +423,17 @@ msgid ""
 "0 (home page), 1 (last page), 2 (blank)"
 msgstr ""
 "Page à afficher au lors de l'ouverture d'une nouvelle fenêtre. Les valeurs "
-"possibles sont : 0 (page d'accueil), 1 (dernière page visitée), 2 (page "
+"possibles sont : 0 (page d'accueil), 1 (dernière page visitée), 2 (page "
 "blanche)"
 
 #: data/epiphany.schemas.in.h:85
-#, fuzzy
 msgid ""
 "URL for the user's home page. Displayed on start up and when a new window or "
 "tab is created"
 msgstr ""
 "URL de la page d'accueil de l'utilisateur. Cette page est affichée lors du "
-"démarrage de Galeon et quand un nouvel onglet ou une nouvelle fenêtre est "
-"ouvert (en fonction du réglage de /apps/galeon/Browsing/General/"
-"startpage_type et /apps/galeon/Browsing/General/newpage_type)"
+"démarrage de Epiphany et quand un nouvel onglet ou une nouvelle fenêtre est "
+"ouvert"
 
 #: data/epiphany.schemas.in.h:86
 msgid "Underline links"
@@ -476,23 +469,27 @@ msgstr ""
 
 #: data/epiphany.schemas.in.h:93
 msgid "When to compare cached copy"
-msgstr ""
+msgstr "Quand comparer la copie cachée"
 
 #: data/epiphany.schemas.in.h:94
 msgid ""
 "When to compare cached copy to web copy. Possible values are 0 (once per "
 "session), 1 (every time), 2 (never), 3 (automatic)."
 msgstr ""
+"Quand comparer la copie cachée à la copie web. Les valeurs sont 0 (une seule "
+"fois par session), 1 (chaque fois), 2 (jamais), 3 (automatiquement)."
 
 #: data/epiphany.schemas.in.h:95
 msgid "When to load images"
-msgstr ""
+msgstr "Quand charger les images"
 
 #: data/epiphany.schemas.in.h:96
 msgid ""
 "When to load images. Possible values are 0 (always), 1 (from current server "
 "only), 2 (never)"
 msgstr ""
+"Quand charger les images. Les valeurs possibles sont 0 (toujours), 1 (du "
+"serveur actuel uniquement), 2 (jamais)"
 
 #: data/epiphany.schemas.in.h:97
 msgid "Whether to print the date in the footer."
@@ -517,34 +514,34 @@ msgstr ""
 msgid "  "
 msgstr "  "
 
-#: data/glade/epiphany.glade.h:2 data/glade/prefs-dialog.glade.h:3
-#: data/glade/print.glade.h:2 data/glade/prompts.glade.h:1
+#: data/glade/epiphany.glade.h:2 data/glade/prefs-dialog.glade.h:2
+#: data/glade/print.glade.h:2
 msgid "*"
 msgstr "*"
 
 #: data/glade/epiphany.glade.h:3
 msgid "<b>File:</b>"
-msgstr "<b>Fichier :</b>"
+msgstr "<b>Fichier :</b>"
 
 #: data/glade/epiphany.glade.h:4
 msgid "<b>Find text in the document:</b>"
-msgstr "<b>Rechercher : </b>"
+msgstr "<b>Rechercher : </b>"
 
 #: data/glade/epiphany.glade.h:5
 msgid "<b>Location:</b>"
-msgstr "<b>Emplacement :</b>"
+msgstr "<b>Emplacement :</b>"
 
 #: data/glade/epiphany.glade.h:6
 msgid "<b>Status:</b>"
-msgstr "<b>Statut :</b>"
+msgstr "<b>Statut :</b>"
 
 #: data/glade/epiphany.glade.h:7
 msgid "<b>Time Elapsed:</b>"
-msgstr "<b>Temps écoulé :</b>"
+msgstr "<b>Temps écoulé :</b>"
 
 #: data/glade/epiphany.glade.h:8
 msgid "<b>Time Remaining:</b>"
-msgstr "<b>Temps restant :</b>"
+msgstr "<b>Temps restant :</b>"
 
 #: data/glade/epiphany.glade.h:9
 msgid ""
@@ -554,8 +551,8 @@ msgid ""
 "It's not possible to view this file type directly in the browser:"
 msgstr ""
 "<span weight=\"bold\" size=\"larger\">Que souhaitez-vous faire avec ce "
-"fichier ? </span>\n"
-"Il ne peut pas être affiché directement dans le navigateur :"
+"fichier ? </span>\n"
+"Il ne peut pas être affiché directement dans le navigateur :"
 
 #: data/glade/epiphany.glade.h:12
 msgid "Automatically _wrap around"
@@ -573,14 +570,13 @@ msgstr "Choisissez l'action à effectuer pour ce type de fichier"
 msgid "Cookies"
 msgstr "Cookies"
 
-#: data/glade/epiphany.glade.h:16 data/glade/prompts.glade.h:2
+#: data/glade/epiphany.glade.h:16
 msgid "DYNAMIC"
 msgstr "DYNAMIQUE"
 
 #: data/glade/epiphany.glade.h:17
-#, fuzzy
 msgid "Download _details..."
-msgstr "Informations détaillées sur le téléchargement..."
+msgstr "Informations _détaillées sur le téléchargement..."
 
 #: data/glade/epiphany.glade.h:18
 msgid "Downloading"
@@ -620,7 +616,7 @@ msgstr "Aujourd'hui"
 
 #: data/glade/epiphany.glade.h:27
 msgid "Two weeks"
-msgstr ""
+msgstr "Deux semaines"
 
 #: data/glade/epiphany.glade.h:28
 msgid "Week"
@@ -632,7 +628,7 @@ msgstr "Vous pouvez l'ouvrir avec une autre application ou l'enregistrer."
 
 #: data/glade/epiphany.glade.h:30
 msgid "_Find:"
-msgstr "_Rechercher : "
+msgstr "_Rechercher :"
 
 #: data/glade/epiphany.glade.h:31
 msgid "_Keep the dialog open"
@@ -660,317 +656,308 @@ msgstr "_Continuer"
 
 #: data/glade/epiphany.glade.h:37
 msgid "_Time:"
-msgstr "_Date : "
+msgstr "_Date :"
 
-#: data/glade/prefs-dialog.glade.h:1
-msgid "   "
-msgstr "   "
-
-#: data/glade/prefs-dialog.glade.h:2 data/glade/print.glade.h:1
+#: data/glade/prefs-dialog.glade.h:1 data/glade/print.glade.h:1
 msgid "    "
 msgstr "    "
 
-#: data/glade/prefs-dialog.glade.h:4
+#: data/glade/prefs-dialog.glade.h:3
 msgid "<b>Caches</b>"
 msgstr "<b>Caches</b>"
 
-#: data/glade/prefs-dialog.glade.h:5 data/glade/print.glade.h:3
+#: data/glade/prefs-dialog.glade.h:4 data/glade/print.glade.h:3
 msgid "<b>Colors</b>"
 msgstr "<b>Couleurs</b>"
 
-#: data/glade/prefs-dialog.glade.h:6
+#: data/glade/prefs-dialog.glade.h:5
 msgid "<b>Fonts</b>"
 msgstr "<b>Polices</b>"
 
-#: data/glade/prefs-dialog.glade.h:7
+#: data/glade/prefs-dialog.glade.h:6
 msgid "<b>Home page</b>"
 msgstr "<b>Page d'accueil</b>"
 
-#: data/glade/prefs-dialog.glade.h:8
+#: data/glade/prefs-dialog.glade.h:7
 msgid "<b>Language</b>"
 msgstr "<b>Langues</b>"
 
-#: data/glade/prefs-dialog.glade.h:9
+#: data/glade/prefs-dialog.glade.h:8
 msgid "<b>Links</b>"
-msgstr "<b>Liens :</b>"
+msgstr "<b>Liens :</b>"
 
-#: data/glade/prefs-dialog.glade.h:10
+#: data/glade/prefs-dialog.glade.h:9
 msgid "<b>On New Page</b>"
 msgstr "<b>Lors de l'ouverture d'une nouvelle page</b>"
 
-#: data/glade/prefs-dialog.glade.h:11
-#, fuzzy
-msgid "<b>Spinner</b>"
-msgstr "<b>Expire</b>"
-
-#: data/glade/prefs-dialog.glade.h:12
+#: data/glade/prefs-dialog.glade.h:10
 msgid "<b>Tabs</b>"
 msgstr "<b>Onglets</b>"
 
-#: data/glade/prefs-dialog.glade.h:13
+#: data/glade/prefs-dialog.glade.h:11
 msgid "Al_ways use these colors"
 msgstr "_Toujours utiliser ces couleurs"
 
-#: data/glade/prefs-dialog.glade.h:14
-msgid "Always us_e these fonts"
+#: data/glade/prefs-dialog.glade.h:12
+msgid "Always use t_hese fonts"
 msgstr "Toujours utiliser ces _polices"
 
-#: data/glade/prefs-dialog.glade.h:15 embed/mozilla/mozilla-i18n.c:24
+#: data/glade/prefs-dialog.glade.h:13 embed/mozilla/mozilla-i18n.c:24
 #: src/general-prefs.c:88
 msgid "Arabic"
 msgstr "Arabe"
 
-#: data/glade/prefs-dialog.glade.h:16
+#: data/glade/prefs-dialog.glade.h:14
 msgid "Autodetec_t encoding:"
-msgstr "Détection _automatique de la table de caractères :"
+msgstr "Détection _automatique de la table de caractères :"
 
-#: data/glade/prefs-dialog.glade.h:17 embed/mozilla/mozilla-i18n.c:25
+#: data/glade/prefs-dialog.glade.h:15 embed/mozilla/mozilla-i18n.c:25
 msgid "Baltic"
 msgstr "Baltique"
 
-#: data/glade/prefs-dialog.glade.h:18 embed/mozilla/mozilla-i18n.c:26
+#: data/glade/prefs-dialog.glade.h:16 embed/mozilla/mozilla-i18n.c:26
 msgid "Central European"
 msgstr "Europe centrale"
 
-#: data/glade/prefs-dialog.glade.h:19 embed/mozilla/mozilla-i18n.c:27
+#: data/glade/prefs-dialog.glade.h:17 embed/mozilla/mozilla-i18n.c:27
 #: src/general-prefs.c:95
 msgid "Chinese"
 msgstr "Chinois"
 
-#: data/glade/prefs-dialog.glade.h:20
+#: data/glade/prefs-dialog.glade.h:18
 msgid "Clear _Disk Cache"
 msgstr "Vider le _cache disque"
 
-#: data/glade/prefs-dialog.glade.h:21
+#: data/glade/prefs-dialog.glade.h:19
 msgid "Clear _Memory Cache"
 msgstr "Vider le cache _mémoire"
 
-#: data/glade/prefs-dialog.glade.h:22 embed/mozilla/mozilla-i18n.c:28
+#: data/glade/prefs-dialog.glade.h:20
+msgid "Compare page:"
+msgstr "Comparer la page :"
+
+#: data/glade/prefs-dialog.glade.h:21 embed/mozilla/mozilla-i18n.c:28
 msgid "Cyrillic"
 msgstr "Cyrillique"
 
-#: data/glade/prefs-dialog.glade.h:23
+#: data/glade/prefs-dialog.glade.h:22
 msgid "Dis_k cache:"
-msgstr "Cache _disque :"
+msgstr "Cache _disque :"
 
-#: data/glade/prefs-dialog.glade.h:24
+#: data/glade/prefs-dialog.glade.h:23
 msgid "E_very time"
 msgstr "À _chaque fois"
 
-#: data/glade/prefs-dialog.glade.h:25
+#: data/glade/prefs-dialog.glade.h:24
 msgid "East asian"
 msgstr "Asiatique de l'est"
 
-#: data/glade/prefs-dialog.glade.h:26 embed/mozilla/mozilla-i18n.c:29
+#: data/glade/prefs-dialog.glade.h:25 embed/mozilla/mozilla-i18n.c:29
 #: src/general-prefs.c:108
 msgid "Greek"
 msgstr "Grec"
 
-#: data/glade/prefs-dialog.glade.h:27 embed/mozilla/mozilla-i18n.c:30
+#: data/glade/prefs-dialog.glade.h:26 embed/mozilla/mozilla-i18n.c:30
 #: src/general-prefs.c:109
 msgid "Hebrew"
 msgstr "Hébreu"
 
-#: data/glade/prefs-dialog.glade.h:28 embed/mozilla/mozilla-i18n.c:32
+#: data/glade/prefs-dialog.glade.h:27 embed/mozilla/mozilla-i18n.c:32
 #: src/general-prefs.c:115
 msgid "Japanese"
 msgstr "Japonais"
 
-#: data/glade/prefs-dialog.glade.h:29 embed/mozilla/mozilla-i18n.c:33
+#: data/glade/prefs-dialog.glade.h:28 embed/mozilla/mozilla-i18n.c:33
 #: src/general-prefs.c:116
 msgid "Korean"
 msgstr "Coréen"
 
-#: data/glade/prefs-dialog.glade.h:30
+#: data/glade/prefs-dialog.glade.h:29
 msgid "Lan_guage:"
-msgstr "Langue :"
+msgstr "Lan_gue :"
 
-#: data/glade/prefs-dialog.glade.h:31
+#: data/glade/prefs-dialog.glade.h:30
 msgid "Language"
 msgstr "Langues"
 
-#: data/glade/prefs-dialog.glade.h:32
+#: data/glade/prefs-dialog.glade.h:31
 msgid "Languages editor"
 msgstr "Éditeur de langues"
 
-#: data/glade/prefs-dialog.glade.h:33
+#: data/glade/prefs-dialog.glade.h:32
 msgid "Memor_y cache:"
-msgstr "Cache _mémoire :"
+msgstr "Cache _mémoire :"
+
+#: data/glade/prefs-dialog.glade.h:33
+msgid "Min_imum font size:"
+msgstr "Taille _minimale pour les polices :"
 
 #: data/glade/prefs-dialog.glade.h:34
-msgid "Min_imum font size:"
-msgstr "Taille _minimale pour les polices :"
-
-#: data/glade/prefs-dialog.glade.h:35
 msgid "Off"
 msgstr "Désactivée"
 
-#: data/glade/prefs-dialog.glade.h:36
+#: data/glade/prefs-dialog.glade.h:35
 msgid "Once per _session"
 msgstr "Une fois par _session"
 
-#: data/glade/prefs-dialog.glade.h:37
+#: data/glade/prefs-dialog.glade.h:36
 msgid "Open _popups in tabs"
 msgstr "Ouvrir les _popups dans des onglets"
 
-#: data/glade/prefs-dialog.glade.h:38
+#: data/glade/prefs-dialog.glade.h:37
 msgid "Pick the background color"
 msgstr "Choisissez une couleur de fond"
 
-#: data/glade/prefs-dialog.glade.h:39
+#: data/glade/prefs-dialog.glade.h:38
 msgid "Pick the text color"
 msgstr "Choisissez la couleur du texte"
 
-#: data/glade/prefs-dialog.glade.h:40
+#: data/glade/prefs-dialog.glade.h:39
 msgid "Pick the unvisited link color"
 msgstr "Choisissez une couleur pour les liens non visités"
 
-#: data/glade/prefs-dialog.glade.h:41
+#: data/glade/prefs-dialog.glade.h:40
 msgid "Pick the visited link color"
 msgstr "Choisissez la couleur des liens visités"
 
-#: data/glade/prefs-dialog.glade.h:42 src/general-prefs.c:128
+#: data/glade/prefs-dialog.glade.h:41 src/general-prefs.c:128
 msgid "Russian"
 msgstr "Russe"
 
-#: data/glade/prefs-dialog.glade.h:43
+#: data/glade/prefs-dialog.glade.h:42
 msgid "S_ans serif:"
-msgstr "S_ans Serif :"
+msgstr "S_ans Serif :"
 
-#: data/glade/prefs-dialog.glade.h:44
+#: data/glade/prefs-dialog.glade.h:43
 msgid "Sans Serif"
 msgstr "Sans Serif"
 
-#: data/glade/prefs-dialog.glade.h:45
+#: data/glade/prefs-dialog.glade.h:44
 msgid "Serif"
 msgstr "Serif"
+
+#: data/glade/prefs-dialog.glade.h:45
+msgid "Set to Current _Page"
+msgstr "Choisir la page _actuelle"
 
 #: data/glade/prefs-dialog.glade.h:46
 msgid "Set to _Blank Page"
 msgstr "Utiliser une page _vide"
 
 #: data/glade/prefs-dialog.glade.h:47
-msgid "Set to _Current Page"
-msgstr "Choisir la page _courante"
-
-#: data/glade/prefs-dialog.glade.h:48
 msgid "Show blan_k page"
 msgstr "Afficher une page v_ide"
 
-#: data/glade/prefs-dialog.glade.h:49
+#: data/glade/prefs-dialog.glade.h:48
 msgid "Show hom_e page"
 msgstr "Afficher la _page de démarrage"
 
-#: data/glade/prefs-dialog.glade.h:50
+#: data/glade/prefs-dialog.glade.h:49
 msgid "Show la_st page"
 msgstr "Afficher la d_ernière page visitée"
 
-#: data/glade/prefs-dialog.glade.h:51
+#: data/glade/prefs-dialog.glade.h:50
 msgid "Si_ze:"
-msgstr "_Taille"
+msgstr "_Taille :"
 
-#: data/glade/prefs-dialog.glade.h:52
+#: data/glade/prefs-dialog.glade.h:51
 msgid "Simplified Chinese"
 msgstr "Chinois simplifié"
 
-#: data/glade/prefs-dialog.glade.h:53
+#: data/glade/prefs-dialog.glade.h:52
 msgid "Siz_e:"
-msgstr "_Taille :"
+msgstr "_Taille :"
 
-#: data/glade/prefs-dialog.glade.h:54
+#: data/glade/prefs-dialog.glade.h:53
 msgid "Thai"
 msgstr "Thai"
 
-#: data/glade/prefs-dialog.glade.h:55
+#: data/glade/prefs-dialog.glade.h:54
 msgid "Traditional Chinese"
 msgstr "Chinois traditionnel"
 
-#: data/glade/prefs-dialog.glade.h:56 embed/mozilla/mozilla-i18n.c:34
+#: data/glade/prefs-dialog.glade.h:55 embed/mozilla/mozilla-i18n.c:34
 #: src/general-prefs.c:136
 msgid "Turkish"
 msgstr "Turc"
 
-#: data/glade/prefs-dialog.glade.h:57 src/general-prefs.c:137
+#: data/glade/prefs-dialog.glade.h:56 src/general-prefs.c:137
 msgid "Ukrainian"
 msgstr "Ukrainien"
 
-#: data/glade/prefs-dialog.glade.h:58 embed/mozilla/mozilla-i18n.c:35
+#: data/glade/prefs-dialog.glade.h:57 embed/mozilla/mozilla-i18n.c:35
 msgid "Unicode"
 msgstr "Unicode"
 
-#: data/glade/prefs-dialog.glade.h:59
+#: data/glade/prefs-dialog.glade.h:58
 msgid "Use s_ystem colors"
 msgstr "Utiliser les couleurs du _système"
 
-#: data/glade/prefs-dialog.glade.h:60 embed/mozilla/mozilla-i18n.c:37
+#: data/glade/prefs-dialog.glade.h:59 embed/mozilla/mozilla-i18n.c:37
 msgid "Western"
 msgstr "Occidental"
 
-#: data/glade/prefs-dialog.glade.h:61
+#: data/glade/prefs-dialog.glade.h:60
 msgid "_Automatically"
 msgstr "_Automatiquement"
 
-#: data/glade/prefs-dialog.glade.h:62
+#: data/glade/prefs-dialog.glade.h:61
 msgid "_Background"
 msgstr "Arrière-_plan"
 
+#: data/glade/prefs-dialog.glade.h:62
+msgid "_Default encoding:"
+msgstr "_Encodage par défaut :"
+
 #: data/glade/prefs-dialog.glade.h:63
-msgid "_Compare page:"
-msgstr "_Vérifier la validité de la page :"
+msgid "_Jump to new tabs automatically"
+msgstr "_Afficher automatiquement les nouveaux onglets"
 
 #: data/glade/prefs-dialog.glade.h:64
-msgid "_Default encoding:"
-msgstr "_Encodage par défaut :"
+msgid "_Language encoding:"
+msgstr "Encod_age :"
 
 #: data/glade/prefs-dialog.glade.h:65
-msgid "_Jump to new tabs automatically"
-msgstr "Afficher automatiquement les nouveaux onglets"
+msgid "_Location:"
+msgstr "_Emplacement :"
 
 #: data/glade/prefs-dialog.glade.h:66
-msgid "_Language encoding:"
-msgstr "Encod_age :"
+msgid "_Monospace:"
+msgstr "Espacement _fixe :"
 
 #: data/glade/prefs-dialog.glade.h:67
-msgid "_Location:"
-msgstr "Emplacement :"
-
-#: data/glade/prefs-dialog.glade.h:68
-msgid "_Monospace:"
-msgstr "Espacement _fixe :"
-
-#: data/glade/prefs-dialog.glade.h:69
 msgid "_More..."
 msgstr "_Plus..."
 
-#: data/glade/prefs-dialog.glade.h:70
+#: data/glade/prefs-dialog.glade.h:68
 msgid "_Never"
 msgstr "_Jamais"
 
-#: data/glade/prefs-dialog.glade.h:71
+#: data/glade/prefs-dialog.glade.h:69
 msgid "_Open in tabs by default"
 msgstr "Ouvrir les _nouvelles fenêtres dans des onglets"
 
-#: data/glade/prefs-dialog.glade.h:72
+#: data/glade/prefs-dialog.glade.h:70
 msgid "_Proportional:"
-msgstr "_Proportionnel"
+msgstr "_Proportionnel :"
 
-#: data/glade/prefs-dialog.glade.h:73
+#: data/glade/prefs-dialog.glade.h:71
 msgid "_Serif:"
-msgstr "_Serif :"
+msgstr "_Serif :"
 
-#: data/glade/prefs-dialog.glade.h:74
+#: data/glade/prefs-dialog.glade.h:72
 msgid "_Text"
 msgstr "_Texte"
 
-#: data/glade/prefs-dialog.glade.h:75
+#: data/glade/prefs-dialog.glade.h:73
 msgid "_Unvisited link"
 msgstr "Lien _non visité"
 
-#: data/glade/prefs-dialog.glade.h:76
+#: data/glade/prefs-dialog.glade.h:74
 msgid "_Visited link"
 msgstr "Lien _visité"
 
-#: data/glade/prefs-dialog.glade.h:77
+#: data/glade/prefs-dialog.glade.h:75
 msgid "kB"
 msgstr "ko"
 
@@ -991,9 +978,8 @@ msgid "<b>Orientation</b>"
 msgstr "<b>Orientation</b>"
 
 #: data/glade/print.glade.h:8
-#, fuzzy
 msgid "<b>Pages range</b>"
-msgstr "<b>Lors de l'ouverture d'une nouvelle page</b>"
+msgstr "<b>Pages</b>"
 
 #: data/glade/print.glade.h:9
 msgid "<b>Printer</b>"
@@ -1007,7 +993,7 @@ msgstr "<b>Taille</b>"
 msgid "A_4 (8.27\" x 11.69\")"
 msgstr "A_4 (21x29,7cm)"
 
-#: data/glade/print.glade.h:12 src/prefs-dialog.c:247
+#: data/glade/print.glade.h:12 src/prefs-dialog.c:262
 msgid "Appearance"
 msgstr "Apparence"
 
@@ -1023,7 +1009,7 @@ msgstr ""
 msgid "G_rayscale"
 msgstr "_Niveaux de gris"
 
-#: data/glade/print.glade.h:16 src/prefs-dialog.c:246
+#: data/glade/print.glade.h:16 src/prefs-dialog.c:261
 msgid "General"
 msgstr "Général"
 
@@ -1085,7 +1071,7 @@ msgstr "_Date"
 
 #. Toplevel
 #: data/glade/print.glade.h:31 data/ui/nautilus-epiphany-view.xml.in.h:35
-#: src/ephy-window.c:58
+#: src/bookmarks/ephy-bookmarks-editor.c:104 src/ephy-window.c:58
 msgid "_File"
 msgstr "_Fichier"
 
@@ -1111,7 +1097,7 @@ msgstr "_Haut"
 
 #: data/glade/print.glade.h:37
 msgid "from:"
-msgstr "De "
+msgstr "De  :"
 
 #: data/glade/print.glade.h:38
 msgid "lpr"
@@ -1119,31 +1105,7 @@ msgstr "lpr"
 
 #: data/glade/print.glade.h:39
 msgid "to:"
-msgstr "à "
-
-#: data/glade/prompts.glade.h:3
-msgid "Password"
-msgstr "Mot de passe"
-
-#: data/glade/prompts.glade.h:4
-msgid "Username"
-msgstr "Nom de l'utilisateur"
-
-#: data/glade/toolbar-editor.glade.h:1
-msgid "<b>Cu_rrent Controls</b>"
-msgstr "<b>Contrôles actuellement utilisés</b>"
-
-#: data/glade/toolbar-editor.glade.h:2
-msgid "<b>_Available Controls</b>"
-msgstr "<b>Contrôles disponibles</b>"
-
-#: data/glade/toolbar-editor.glade.h:3
-msgid "Toolbar Editor"
-msgstr "Éditeur de barre d'outils"
-
-#: data/glade/toolbar-editor.glade.h:4
-msgid "_Reset to defaults"
-msgstr "_Valeurs par défaut"
+msgstr "à :"
 
 #: data/starthere/index.xml.in.h:1
 msgid "Getting started"
@@ -1156,12 +1118,10 @@ msgid ""
 msgstr ""
 
 #: data/starthere/index.xml.in.h:3
-#, fuzzy
 msgid "Proxy configuration"
 msgstr "Configuration avancée du proxy"
 
 #: data/starthere/index.xml.in.h:4
-#, fuzzy
 msgid "The web browser"
 msgstr "Ouvrir une nouvelle fenêtre de navigation"
 
@@ -1170,6 +1130,8 @@ msgid ""
 "To import bookmarks from another browser installed on your system just click "
 "on one of the links below:"
 msgstr ""
+"Pour importer les signets d'autres navigateurs installé sur votre système, "
+"cliquez sur un des liens ci-dessous :"
 
 #: data/starthere/index.xml.in.h:6
 msgid ""
@@ -1189,9 +1151,8 @@ msgid ""
 msgstr ""
 
 #: data/starthere/smartbookmarks.xml.in.h:2
-#, fuzzy
 msgid "Smart Bookmarks"
-msgstr "Nouveau _signet"
+msgstr "Signets paramètrés"
 
 #: data/starthere/smartbookmarks.xml.in.h:3
 msgid ""
@@ -1272,7 +1233,6 @@ msgid "Open Image"
 msgstr "Ouvrir l'image"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:18
-#, fuzzy
 msgid "Open Image With"
 msgstr "Ouvrir l'image avec"
 
@@ -1329,11 +1289,11 @@ msgid "Select the Entire Document"
 msgstr "Sélectionner la totalité du document"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:33
-#, fuzzy
 msgid "Use Image As Background"
 msgstr "Utiliser l'image comme fond d'écran"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:34 src/ephy-window.c:59
+#: data/ui/nautilus-epiphany-view.xml.in.h:34
+#: src/bookmarks/ephy-bookmarks-editor.c:105 src/ephy-window.c:59
 msgid "_Edit"
 msgstr "É_diter"
 
@@ -1345,75 +1305,72 @@ msgstr "_Rechercher..."
 msgid "_Print..."
 msgstr "Im_primer..."
 
-#: embed/downloader-view.c:383
+#: embed/downloader-view.c:386
 #, c-format
 msgid "%.1f of %.1f MB"
 msgstr "%.1f sur %.1f Mo"
 
-#: embed/downloader-view.c:389
+#: embed/downloader-view.c:392
 #, c-format
 msgid "%d of %d KB"
 msgstr "%d sur %d ko"
 
-#: embed/downloader-view.c:395
+#: embed/downloader-view.c:398
 #, c-format
 msgid "%d KB"
 msgstr "%d ko"
 
-#: embed/downloader-view.c:499 embed/downloader-view.c:517
-#: src/ephy-window.c:1046
+#: embed/downloader-view.c:502 embed/downloader-view.c:520
+#: src/ephy-window.c:1006
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: embed/downloader-view.c:516
-#, fuzzy
+#: embed/downloader-view.c:519
 msgid "00.00"
 msgstr "00:00.00"
 
-#: embed/downloader-view.c:759
+#: embed/downloader-view.c:764
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:769
+#: embed/downloader-view.c:774
 msgid "Filename"
 msgstr "Nom du fichier"
 
-#: embed/downloader-view.c:780
+#: embed/downloader-view.c:785
 msgid "Size"
 msgstr "Taille"
 
-#: embed/downloader-view.c:791
+#: embed/downloader-view.c:796
 msgid "Remaining"
 msgstr "Restant"
 
-#: embed/downloader-view.c:1011
+#: embed/downloader-view.c:1019
 msgid "Cancel all pending downloads?"
-msgstr "Annuler tous les téléchargements en attente ?"
+msgstr "Annuler tous les téléchargements en attente ?"
 
-#: embed/ephy-embed-utils.c:132 embed/mozilla/ContentHandler.cpp:302
+#: embed/ephy-embed-utils.c:133 embed/mozilla/ContentHandler.cpp:302
 msgid "Select the destination filename"
 msgstr "Choisissez le nom du fichier cible"
 
-#: embed/ephy-embed-utils.c:316
+#: embed/ephy-embed-utils.c:317
 msgid "No available applications to open the specified file."
 msgstr "Pas d'application disponible pour ouvrir le fichier spécifié."
 
 #: embed/ephy-history.c:552
-#, fuzzy
 msgid "Others"
-msgstr "Autre"
+msgstr "Autres"
 
 #: embed/ephy-history.c:558
 msgid "Local files"
 msgstr "Fichiers locaux"
 
 #: embed/mozilla/ExternalProtocolService.cpp:121
-#, fuzzy
 msgid ""
 "Epiphany cannot handle this protocol,\n"
 "and no GNOME default handler is set"
 msgstr ""
-"Galeon ne sait pas utiliser ce protocole \n"
+"Epiphany ne sait pas utiliser ce protocole \n"
 "et GNOME ne fournit aucun gestionnaire par défaut"
 
 #: embed/mozilla/ExternalProtocolService.cpp:135
@@ -1423,7 +1380,7 @@ msgid ""
 "Would you like to try the GNOME default?"
 msgstr ""
 "Le protocole spécifié n'est pas reconnu.\n"
-"Voulez-vous essayer celui proposé par GNOME ?"
+"Voulez-vous essayer celui proposé par GNOME ?"
 
 #: embed/mozilla/FilePicker.cpp:261
 msgid "Save with content"
@@ -1440,22 +1397,6 @@ msgstr "Un fichier a été selectionné au lieu d'un dossier"
 #: embed/mozilla/FilePicker.cpp:400
 msgid "A folder was selected when a file was expected."
 msgstr "Un dossier a été selectionné à la place d'un fichier"
-
-#: embed/mozilla/PromptService.cpp:248
-msgid "Save"
-msgstr "Enregistrer"
-
-#: embed/mozilla/PromptService.cpp:251
-msgid "Revert"
-msgstr "Retour"
-
-#: embed/mozilla/PromptService.cpp:254
-msgid "Don't save"
-msgstr "Ne pas enregistrer"
-
-#: embed/mozilla/PromptService.cpp:661
-msgid "Epiphany"
-msgstr ""
 
 #: embed/mozilla/mozilla-embed-single.cpp:760
 msgid "Yes"
@@ -1819,13 +1760,13 @@ msgid ""
 "GConf error:\n"
 "  %s"
 msgstr ""
-"Erreur de GConf : \n"
+"Erreur de GConf : \n"
 " %s"
 
 #: lib/ephy-file-helpers.c:104
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find %s"
-msgstr "Échec lors de la connexion au site."
+msgstr "Échec lors de la recherche de %s"
 
 #: lib/ephy-file-helpers.c:322
 #, c-format
@@ -1833,11 +1774,11 @@ msgid "%s exists, please move it out of the way."
 msgstr ""
 
 #: lib/ephy-file-helpers.c:325
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create directory %s."
-msgstr "Échec lors de la connexion au site."
+msgstr "Échec lors de la création du dossier %s."
 
-#: lib/ephy-gui.c:249
+#: lib/ephy-gui.c:135
 #, c-format
 msgid ""
 "File %s will be overwritten.\n"
@@ -1846,9 +1787,9 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 "Le fichier %s va être écrasé. \n"
-"Si vous répondez « Oui », son contenu sera perdu.\n"
+"Si vous répondez « Oui », son contenu sera perdu.\n"
 "\n"
-"Voulez-vous continuer ?"
+"Voulez-vous continuer ?"
 
 #: lib/ephy-node.c:821 lib/ephy-node.c:827 lib/ephy-node.c:858
 msgid "Never"
@@ -1856,134 +1797,155 @@ msgstr "Jamais"
 
 #: lib/ephy-node.c:849
 msgid "Today at %-H:%M"
-msgstr ""
+msgstr "Aujourd'hui à %-H:%M"
 
 #: lib/ephy-node.c:851
-#, fuzzy
 msgid "Yesterday at %-H:%M"
-msgstr "Hier"
+msgstr "Hier à %-H:%M"
 
 #: lib/ephy-node.c:853
 msgid "%A, %B %-d %Y at %-H:%M"
-msgstr ""
+msgstr "%A, %B %-d %Y à %-H:%M"
 
-#: lib/ephy-start-here.c:274
-#, fuzzy
+#: lib/ephy-start-here.c:275
 msgid "Import Mozilla bookmarks"
 msgstr "Signets Mozilla"
 
-#: lib/ephy-start-here.c:285
-#, fuzzy
+#: lib/ephy-start-here.c:286
 msgid "Import Galeon bookmarks"
-msgstr "Signets importés :"
+msgstr "Signets Galeon"
 
-#: lib/ephy-start-here.c:296
-#, fuzzy
+#: lib/ephy-start-here.c:297
 msgid "Import Konqueror bookmarks"
-msgstr "Signets importés :"
+msgstr "Signets Konqueror"
 
 #: lib/ephy-string.c:115
 msgid "%Y-%m-%d"
 msgstr "%d/%m/%Y"
 
-#: lib/widgets/ephy-editable-toolbar.c:753
+#. Popups
+#: lib/widgets/ephy-editable-toolbar.c:72
+msgid "_Remove Toolbar"
+msgstr "_Supprimer la barre d'outils"
+
+#: lib/widgets/ephy-editable-toolbar.c:74
+msgid "_Edit Toolbars..."
+msgstr "É_diter les barres d'outils"
+
+#: lib/widgets/ephy-editable-toolbar.c:984
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
 msgstr ""
 
-#: lib/widgets/ephy-editable-toolbar.c:767
-#, fuzzy
+#: lib/widgets/ephy-editable-toolbar.c:991
 msgid "Add Toolbar"
-msgstr "Barre d'outils"
+msgstr "Ajouter une barre d'outils"
 
 #. setup label
-#: lib/widgets/ephy-notebook.c:714 src/ephy-tab.c:524 src/ephy-tab.c:985
-#: src/window-commands.c:269
+#: lib/widgets/ephy-notebook.c:714 src/ephy-tab.c:521 src/ephy-tab.c:985
+#: src/window-commands.c:301
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:95
-#, fuzzy
-msgid "Open In _New Window"
-msgstr "Ouvrir dans une nouvelle fenêtre"
+#: src/bookmarks/ephy-bookmarks-editor.c:108
+msgid "_New Topic"
+msgstr "_Nouveau sujet"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:98
-#, fuzzy
+#: src/bookmarks/ephy-bookmarks-editor.c:111
+msgid "_Open In New Window"
+msgstr "_Ouvrir dans une nouvelle fenêtre"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:114
 msgid "Open In New _Tab"
 msgstr "Ouvrir dans un nouvel _onglet"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:101
-msgid "_Remove"
-msgstr "_Supprimer"
+#: src/bookmarks/ephy-bookmarks-editor.c:117
+msgid "_Rename Bookmark"
+msgstr "_Renommer le signet"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:476
-#: src/bookmarks/ephy-new-bookmark.c:195
-#, fuzzy
-msgid "Title:"
-msgstr "Titre"
+#: src/bookmarks/ephy-bookmarks-editor.c:120
+msgid "R_ename Topic"
+msgstr "R_enommer le sujet"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:493
-#, fuzzy
-msgid "Location:"
-msgstr "Emplacement :"
+#: src/bookmarks/ephy-bookmarks-editor.c:123
+msgid "_Delete Bookmark"
+msgstr "S_upprimer le signet"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:510
-#: src/bookmarks/ephy-new-bookmark.c:209
-msgid "Keywords:"
-msgstr ""
+#: src/bookmarks/ephy-bookmarks-editor.c:126
+msgid "D_elete Topic"
+msgstr "E_ffacer le sujet"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:602
-#, fuzzy
+#: src/bookmarks/ephy-bookmarks-editor.c:129
+msgid "_Properties"
+msgstr "_Propriétés"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:132 src/ephy-window.c:87
+msgid "_Close"
+msgstr "_Fermer"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:144
+msgid "Type a topic"
+msgstr "Saisissez un sujet"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:525
 msgid "Search:"
-msgstr "_Rechercher : "
+msgstr "Rechercher :"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:651
+#: src/bookmarks/ephy-bookmarks-editor.c:573
+#: src/bookmarks/ephy-bookmarks-editor.c:645
 msgid "Bookmarks"
 msgstr "Signets"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:672
-msgid "Keywords"
-msgstr ""
+#: src/bookmarks/ephy-bookmarks-editor.c:617
+msgid "Topics"
+msgstr "Sujets"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:697 src/history-dialog.c:288
-msgid "Title"
-msgstr "Titre"
-
-#: src/bookmarks/ephy-bookmarks.c:465
+#: src/bookmarks/ephy-bookmarks.c:429
 msgid "All"
 msgstr "Tout"
 
-#: src/bookmarks/ephy-new-bookmark.c:231
-msgid "Add bookmark"
-msgstr "Ajouter un signet"
+#: src/bookmarks/ephy-bookmarks.c:472
+msgid "Most Visited"
+msgstr "Le plus visité"
+
+#: src/bookmarks/ephy-new-bookmark.c:199
+msgid "Title:"
+msgstr "Titre :"
+
+#: src/bookmarks/ephy-new-bookmark.c:213
+msgid "Topics:"
+msgstr "Sujets :"
+
+#: src/bookmarks/ephy-new-bookmark.c:235
+msgid "New Bookmark"
+msgstr "Nouveau signet"
+
+#: src/ephy-go-action.c:74
+msgid "Go"
+msgstr "Aller à"
 
 #: src/ephy-main.c:71
-#, fuzzy
 msgid "Open a new tab in an existing Ephy window"
-msgstr "Ouvre un nouvel onglet dans une fenêtre Galeon existante"
+msgstr "Ouvre un nouvel onglet dans une fenêtre Epiphany existante"
 
 #: src/ephy-main.c:74
-#, fuzzy
 msgid "Open a new window in an existing Ephy process"
-msgstr "Ouvre une nouvelle fenêtre dans un processus Galeon existant"
+msgstr "Ouvre une nouvelle fenêtre dans un processus Epiphany existant"
 
 #: src/ephy-main.c:77
-#, fuzzy
 msgid "Do not raise the window when opening a page in an existing Ephy process"
 msgstr ""
 "Ne pas passer la fenêtre au premier plan lors de l'ouverture d'une page dans "
-"une instance de  Galeon existante"
+"une instance de Epiphany existante"
 
 #: src/ephy-main.c:80
-#, fuzzy
 msgid "Run Ephy in full screen mode"
-msgstr "Lancer Galeon en mode plein écran"
+msgstr "Lancer Epiphany en mode plein écran"
 
 #: src/ephy-main.c:83
-#, fuzzy
 msgid "Attempt to load URL in existing Ephy window"
-msgstr "Essaye d'ouvrir une URL dans une fenêtre Galeon existante"
+msgstr "Essaye d'ouvrir une URL dans une fenêtre Epiphany existante"
 
 #: src/ephy-main.c:86
 msgid "Load the given session file"
@@ -1994,13 +1956,12 @@ msgid "FILE"
 msgstr "FICHIER"
 
 #: src/ephy-main.c:89
-#, fuzzy
 msgid ""
 "Don't open any windows; instead act as a server for quick startup of new "
 "Ephy instances"
 msgstr ""
 "Ne pas ouvrir de fenêtre; agir comme un serveur pour un démarrage plus "
-"rapide de Galeon"
+"rapide de Epiphany"
 
 #: src/ephy-main.c:93
 msgid "Add a bookmark (don't open any window)"
@@ -2011,7 +1972,6 @@ msgid "URL"
 msgstr "URL"
 
 #: src/ephy-main.c:96
-#, fuzzy
 msgid ""
 "Create the initial window with the given geometry.\n"
 "see X(1) for the GEOMETRY format"
@@ -2024,9 +1984,8 @@ msgid "GEOMETRY"
 msgstr "GÉOMÉTRIE"
 
 #: src/ephy-main.c:100
-#, fuzzy
 msgid "Close all Ephy windows"
-msgstr "Fermer toutes les fenêtres de Galeon"
+msgstr "Fermer toutes les fenêtres de Epiphany"
 
 #: src/ephy-main.c:103
 msgid "Same as --close, but exits server mode too"
@@ -2036,15 +1995,15 @@ msgstr "Même fonctionnement que --close, mais quitte aussi le mode serveur"
 msgid "Used internally by the nautilus view"
 msgstr "Utiliser en interne par la vue Nautilus"
 
-#: src/ephy-main.c:131
+#: src/ephy-main.c:132
 msgid "Ephy"
-msgstr ""
+msgstr "Epiphany"
 
-#: src/ephy-main.c:291
-#, fuzzy
+#: src/ephy-main.c:292
 msgid "Ephy already running, using existing process"
 msgstr ""
-"Galeon est déjà en cours de fonctionnement, utilisation du processus existant"
+"Epiphany est déjà en cours de fonctionnement, utilisation du processus "
+"existant"
 
 #: src/ephy-nautilus-view.c:744
 msgid "name of icon for the mozilla view"
@@ -2054,70 +2013,63 @@ msgstr "nom de l'icône pour la vue Mozilla"
 msgid "mozilla summary info"
 msgstr "Informations Mozilla"
 
-#: src/ephy-shell.c:149
-#, fuzzy
+#: src/ephy-shell.c:151
 msgid "Mozilla bookmarks imported successfully."
-msgstr "Import des signets au format Mozilla"
+msgstr "Import des signets au format Mozilla réussi avec succès"
 
-#: src/ephy-shell.c:158
-#, fuzzy
+#: src/ephy-shell.c:160
 msgid "Importing Mozilla bookmarks failed."
-msgstr "L'import des signets a échoué"
+msgstr "L'import des signets Mozilla a échoué"
 
-#: src/ephy-shell.c:166
+#: src/ephy-shell.c:168
 msgid "Galeon"
 msgstr "Galeon"
 
-#: src/ephy-shell.c:173
-#, fuzzy
+#: src/ephy-shell.c:175
 msgid "Galeon bookmarks imported successfully."
-msgstr "Edition des signets"
+msgstr "Import des signets au format Galeon réussi avec succès"
 
-#: src/ephy-shell.c:182
-#, fuzzy
+#: src/ephy-shell.c:184
 msgid "Importing Galeon bookmarks failed."
-msgstr "L'import des signets a échoué"
+msgstr "L'import des signets Galeon a échoué"
 
-#: src/ephy-shell.c:190
-#, fuzzy
+#: src/ephy-shell.c:192
 msgid "Konqueror"
-msgstr "Exporter les signets au format Konqueror"
+msgstr "Konqueror"
 
-#: src/ephy-shell.c:197
-#, fuzzy
+#: src/ephy-shell.c:199
 msgid "Konqueror bookmarks imported successfully."
-msgstr "Exportation au format Konqueror"
+msgstr "Import des signets au format Konqueror réussi avec succès"
 
-#: src/ephy-shell.c:206
-#, fuzzy
+#: src/ephy-shell.c:208
 msgid "Importing Konqueror bookmarks failed."
-msgstr "L'import des signets a échoué"
+msgstr "L'import des signets Konqueror a échoué"
 
-#: src/ephy-tab.c:568
+#: src/ephy-tab.c:565
 msgid "site"
 msgstr "site"
 
-#: src/ephy-tab.c:594
+#: src/ephy-tab.c:591
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Redirection vers %s..."
 
-#: src/ephy-tab.c:598
+#: src/ephy-tab.c:595
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Transfert de données depuis %s..."
 
-#: src/ephy-tab.c:602
+#: src/ephy-tab.c:599
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "En attente d'autorisation de %s..."
 
-#: src/ephy-tab.c:610
+#: src/ephy-tab.c:607
 #, c-format
 msgid "Loading %s..."
 msgstr "Chargement de %s..."
 
-#: src/ephy-tab.c:614
+#: src/ephy-tab.c:611
 msgid "Done."
 msgstr "Fini."
 
@@ -2125,8 +2077,7 @@ msgstr "Fini."
 msgid "_View"
 msgstr "_Vue"
 
-#. Toolbar only
-#: src/ephy-window.c:61 src/ephy-window.c:202
+#: src/ephy-window.c:61
 msgid "_Go"
 msgstr "A_ller à"
 
@@ -2180,28 +2131,20 @@ msgid "S_end To..."
 msgstr "En_voyer à..."
 
 #: src/ephy-window.c:82
-#, fuzzy
 msgid "Send a link of the current page"
-msgstr "Arrête le chargement de la page courante"
+msgstr "Envoyer un lien de la page courante"
 
 #: src/ephy-window.c:84
-#, fuzzy
 msgid "Boo_kmark Page..."
-msgstr "Nom du signet"
+msgstr "A_jouter aux signets..."
 
 #: src/ephy-window.c:85
-#, fuzzy
 msgid "Add a bookmark for the current page"
 msgstr "Ajoute un signet vers la page courante dans le dossier par défaut"
 
-#: src/ephy-window.c:87
-msgid "_Close"
-msgstr "_Fermer"
-
 #: src/ephy-window.c:88
-#, fuzzy
 msgid "Close this window"
-msgstr "Fer_mer cette fenêtre"
+msgstr "Fermer cette fenêtre"
 
 #. Edit menu
 #: src/ephy-window.c:92
@@ -2214,7 +2157,7 @@ msgstr "Couper la sélection"
 
 #: src/ephy-window.c:95
 msgid "_Copy"
-msgstr "Co_pier"
+msgstr "_Copier"
 
 #  Vérifier le contexte
 #: src/ephy-window.c:96
@@ -2226,7 +2169,6 @@ msgid "_Paste"
 msgstr "C_oller"
 
 #: src/ephy-window.c:99
-#, fuzzy
 msgid "Paste clipboard"
 msgstr "Coller le contenu du presse-papiers"
 
@@ -2235,19 +2177,16 @@ msgid "Select _All"
 msgstr "_Tout sélectionner"
 
 #: src/ephy-window.c:102
-#, fuzzy
 msgid "Select the entire page"
 msgstr "Sélectionne la totalité du document"
 
 #: src/ephy-window.c:104
-#, fuzzy
 msgid "_Find"
-msgstr "_Rechercher : "
+msgstr "_Rechercher"
 
 #: src/ephy-window.c:105
-#, fuzzy
 msgid "Find a string"
-msgstr "Filtrage"
+msgstr "Rechercher une chaîne"
 
 #: src/ephy-window.c:107
 msgid "Find Ne_xt"
@@ -2255,7 +2194,7 @@ msgstr "Chercher le _suivant"
 
 #: src/ephy-window.c:108
 msgid "Find next occurence of the string"
-msgstr ""
+msgstr "Rechercher la prochaine occurence de la chaîne"
 
 #: src/ephy-window.c:110
 msgid "Find Pre_vious"
@@ -2263,35 +2202,31 @@ msgstr "_Chercher le précédent"
 
 #: src/ephy-window.c:111
 msgid "Find previous occurence of the string"
-msgstr ""
+msgstr "Rechercher la précedente occurence de la chaîne"
 
 #: src/ephy-window.c:113
 msgid "P_ersonal Data"
 msgstr "Données _personnelles"
 
 #: src/ephy-window.c:114
-#, fuzzy
 msgid "View and remove cookies and passwords"
-msgstr "Visualisation et suppression des cookies stockés sur votre ordinateur"
+msgstr "Affiche et supprime des cookies et mots de passe"
 
 #: src/ephy-window.c:116
-#, fuzzy
 msgid "T_oolbars"
 msgstr "_Barre d'outils"
 
 #: src/ephy-window.c:117
-#, fuzzy
-msgid "Costumize toolbars"
-msgstr "Créer une barre d'outils ?"
+msgid "Customize toolbars"
+msgstr "Personnaliser les barre d'outils"
 
 #: src/ephy-window.c:119
 msgid "P_references"
 msgstr "P_références"
 
 #: src/ephy-window.c:120
-#, fuzzy
 msgid "Configure the web browser"
-msgstr "Configurer Galeon"
+msgstr "Configurer le navigateur"
 
 #. View menu
 #: src/ephy-window.c:124
@@ -2315,27 +2250,24 @@ msgid "_Toolbar"
 msgstr "Barre d'_outils"
 
 #: src/ephy-window.c:131
-#, fuzzy
 msgid "Show or hide toolbar"
-msgstr "Afficher la barre de _liens"
+msgstr "Afficher ou cacher la barre d'outils"
 
 #: src/ephy-window.c:133
 msgid "St_atusbar"
-msgstr "Barre d'-état"
+msgstr "Barre d'é_tat"
 
 #: src/ephy-window.c:134
-#, fuzzy
 msgid "Show or hide statusbar"
-msgstr "Afficher la barre d'é_tat"
+msgstr "Afficher ou cacher la barre d'état"
 
 #: src/ephy-window.c:136
 msgid "_Fullscreen"
 msgstr "_Plein écran"
 
 #: src/ephy-window.c:137
-#, fuzzy
 msgid "Browse at full screen"
-msgstr "Afficher la barre latérale en mode plein écran"
+msgstr "Naviguer en mode plein écran"
 
 #: src/ephy-window.c:139
 msgid "Zoom _In"
@@ -2343,15 +2275,15 @@ msgstr "Zoom a_vant"
 
 #: src/ephy-window.c:140
 msgid "Show the contents in more detail"
-msgstr ""
+msgstr "Afficher le contenu plus en détails"
 
 #: src/ephy-window.c:142
 msgid "Zoom _Out"
-msgstr "Zoom _arrière"
+msgstr "Zoom a_rrière"
 
 #: src/ephy-window.c:143
 msgid "Show the contents in less detail"
-msgstr ""
+msgstr "Afficher le contenu moins en détails"
 
 #: src/ephy-window.c:145
 msgid "_Normal Size"
@@ -2359,7 +2291,7 @@ msgstr "Taille _normale"
 
 #: src/ephy-window.c:146
 msgid "Show the contents at the normal size"
-msgstr ""
+msgstr "Afficher le contenu en taille normale"
 
 #: src/ephy-window.c:148
 msgid "_Encoding"
@@ -2370,9 +2302,8 @@ msgid "_Page Source"
 msgstr "_Source de la page"
 
 #: src/ephy-window.c:150
-#, fuzzy
 msgid "View the source code of the page"
-msgstr "Visualise le code source de la page actuelle"
+msgstr "Affiche le code source de la page actuelle"
 
 #. Go menu
 #: src/ephy-window.c:154
@@ -2380,34 +2311,30 @@ msgid "_Back"
 msgstr "A_rrière"
 
 #: src/ephy-window.c:155
-#, fuzzy
 msgid "Go to the previous visited page"
-msgstr "Afficher le signet précédent"
+msgstr "Aller à la page visitée précédente"
 
 #: src/ephy-window.c:157
 msgid "_Forward"
 msgstr "A_vant"
 
 #: src/ephy-window.c:158
-#, fuzzy
 msgid "Go to the next visited page"
-msgstr "Infos sur les pages visitées"
+msgstr "Va à la page visitée suivante"
 
 #: src/ephy-window.c:160
 msgid "_Up"
 msgstr "_Haut"
 
 #: src/ephy-window.c:161
-#, fuzzy
 msgid "Go up one level"
-msgstr "Tri sur un niveau"
+msgstr "Monte d'un niveau"
 
 #: src/ephy-window.c:163
 msgid "_Home"
 msgstr "_Accueil"
 
 #: src/ephy-window.c:164
-#, fuzzy
 msgid "Go to the home page"
 msgstr "Aller à la page de démarrage"
 
@@ -2416,29 +2343,24 @@ msgid "_Location..."
 msgstr "_Emplacement..."
 
 #: src/ephy-window.c:167
-#, fuzzy
 msgid "Go to a specified location"
 msgstr "Ouvre un fichier depuis l'emplacement spécifié"
 
 #: src/ephy-window.c:169
-#, fuzzy
 msgid "H_istory"
-msgstr "Historique"
+msgstr "H_istorique"
 
 #: src/ephy-window.c:170
-#, fuzzy
 msgid "Go to an already visited page"
-msgstr "Infos sur les pages visitées"
+msgstr "Aller sur une page déjà visitée"
 
 #: src/ephy-window.c:172
-#, fuzzy
 msgid "Boo_kmarks"
-msgstr "Signets"
+msgstr "_Signets"
 
 #: src/ephy-window.c:173
-#, fuzzy
 msgid "Go to a bookmark"
-msgstr "Retourner à un emplacement marqué"
+msgstr "Retourner à un emplacement marqué d'un signet"
 
 #. Tabs menu
 #: src/ephy-window.c:177
@@ -2446,7 +2368,6 @@ msgid "_Previous Tab"
 msgstr "Onglet _précédent"
 
 #: src/ephy-window.c:178
-#, fuzzy
 msgid "Activate previous tab"
 msgstr "Afficher le signet précédent"
 
@@ -2455,7 +2376,6 @@ msgid "_Next Tab"
 msgstr "Onglet suiva_nt"
 
 #: src/ephy-window.c:181
-#, fuzzy
 msgid "Activate next tab"
 msgstr "Afficher l'onglet suivant"
 
@@ -2464,25 +2384,22 @@ msgid "Move Tab _Left"
 msgstr "Déplacer l'onglet (_gauche ou haut)"
 
 #: src/ephy-window.c:184
-#, fuzzy
 msgid "Move current tab to left"
-msgstr "Déplace l'onglet courant vers la gauche ou vers le haut"
+msgstr "Déplace l'onglet courant vers la gauche"
 
 #: src/ephy-window.c:186
 msgid "Move Tab _Right"
 msgstr "Déplacer l'onglet (_droite ou bas)"
 
 #: src/ephy-window.c:187
-#, fuzzy
 msgid "Move current tab to right"
-msgstr "Déplace l'onglet courant vers la droite ou vers le bas"
+msgstr "Déplace l'onglet courant vers la droite"
 
 #: src/ephy-window.c:189
 msgid "_Detach Tab"
 msgstr "_Détacher l'onglet"
 
 #: src/ephy-window.c:190
-#, fuzzy
 msgid "Detach current tab"
 msgstr "Fermer l'onglet courant"
 
@@ -2493,7 +2410,7 @@ msgstr "_Contenu de l'aide"
 
 #: src/ephy-window.c:195
 msgid "Display web browser help"
-msgstr ""
+msgstr "Afficher l'aide du navigateur"
 
 #: src/ephy-window.c:197
 msgid "_About"
@@ -2501,139 +2418,117 @@ msgstr "À _propos"
 
 #: src/ephy-window.c:198
 msgid "Display credits for the web browser creators"
-msgstr ""
-
-#: src/ephy-window.c:203
-msgid "Type a web address or a word in the field on the left, then click Go"
-msgstr ""
+msgstr "Affiche les noms des créateurs du navigateur"
 
 #. Document
-#: src/ephy-window.c:213
-#, fuzzy
+#: src/ephy-window.c:208
 msgid "_Save Background As..."
-msgstr "Enregistrer le fond sous..."
+msgstr "_Enregistrer l'arrière-plan sous..."
 
 #. Framed document
-#: src/ephy-window.c:217
-#, fuzzy
+#: src/ephy-window.c:212
 msgid "_Open Frame"
-msgstr "Ouvrir le cadre"
+msgstr "_Ouvrir le cadre"
 
-#: src/ephy-window.c:219
-#, fuzzy
+#: src/ephy-window.c:214
 msgid "Open Frame in _New Window"
-msgstr "Ouvrir le cadre dans une nouvelle fenêtre"
+msgstr "Ouvrir le cadre dans une _nouvelle fenêtre"
 
-#: src/ephy-window.c:221
-#, fuzzy
+#: src/ephy-window.c:216
 msgid "Open Frame in New _Tab"
-msgstr "Ouvrir le cadre dans un nouvel onglet"
+msgstr "Ouvrir le cadre dans un nouvel _onglet"
 
 #. Links
-#: src/ephy-window.c:225
-#, fuzzy
+#: src/ephy-window.c:220
 msgid "_Open Link"
-msgstr "Ouvrir URL"
+msgstr "_Ouvrir le lien"
 
-#: src/ephy-window.c:227
-#, fuzzy
+#: src/ephy-window.c:222
 msgid "Open Link in _New Window"
-msgstr "Ouvrir dans une nouvelle fenêtre"
+msgstr "Ouvrir dans une _nouvelle fenêtre"
 
-#: src/ephy-window.c:229
-#, fuzzy
+#: src/ephy-window.c:224
 msgid "Open Link in New _Tab"
 msgstr "Ouvrir dans un nouvel _onglet"
 
-#: src/ephy-window.c:231
-#, fuzzy
+#: src/ephy-window.c:226
 msgid "_Download Link"
-msgstr "Télécharger ce lien"
+msgstr "_Télécharger ce lien"
 
-#: src/ephy-window.c:233
-#, fuzzy
+#: src/ephy-window.c:228
 msgid "_Bookmark Link..."
 msgstr "_Signets"
 
 #  Vérifier le contexte
-#: src/ephy-window.c:235
-#, fuzzy
+#: src/ephy-window.c:230
 msgid "_Copy Link Location"
-msgstr "Copier l'adresse du lien"
+msgstr "_Copier l'adresse du lien"
 
-#: src/ephy-window.c:237
-#, fuzzy
+#: src/ephy-window.c:232
 msgid "Copy _Email"
-msgstr "Copier l'adresse email"
+msgstr "Copier l'adresse é_lectronique"
 
 #. Images
-#: src/ephy-window.c:241
-#, fuzzy
+#: src/ephy-window.c:236
 msgid "_Open Image"
-msgstr "Ouvrir l'image"
+msgstr "_Ouvrir l'image"
 
-#: src/ephy-window.c:243
-#, fuzzy
+#: src/ephy-window.c:238
 msgid "Open Image in _New Window"
-msgstr "Ouvrir l'image dans une nouvelle fenêtre"
+msgstr "Ouvrir l'image dans une _nouvelle fenêtre"
 
-#: src/ephy-window.c:245
-#, fuzzy
+#: src/ephy-window.c:240
 msgid "Open Image in New _Tab"
-msgstr "Ouvrir l'image dans un nouvel onglet"
+msgstr "Ouvrir l'image dans un nouvel _onglet"
 
-#: src/ephy-window.c:247
-#, fuzzy
+#: src/ephy-window.c:242
 msgid "_Save Image As..."
-msgstr "Enregistrer l'image sous..."
+msgstr "_Enregistrer l'image sous..."
 
-#: src/ephy-window.c:249
-#, fuzzy
+#: src/ephy-window.c:244
 msgid "Use Image As _Background"
-msgstr "Utiliser l'image comme fond d'écran"
+msgstr "Utiliser l'image comme _arrière-plan"
 
 #  Vérifier le contexte
-#: src/ephy-window.c:251
-#, fuzzy
+#: src/ephy-window.c:246
 msgid "_Copy Image Location"
-msgstr "Copier l'adresse de l'image"
+msgstr "_Copier l'adresse de l'image"
 
-#: src/ephy-window.c:1049
+#: src/ephy-window.c:1009
 msgid "Insecure"
 msgstr "Non sécurisé"
 
-#: src/ephy-window.c:1052
+#: src/ephy-window.c:1012
 msgid "Broken"
 msgstr "Invalide"
 
-#: src/ephy-window.c:1055
+#: src/ephy-window.c:1015
 msgid "Medium"
 msgstr "Moyen"
 
-#: src/ephy-window.c:1059
+#: src/ephy-window.c:1019
 msgid "Low"
 msgstr "Faible"
 
-#: src/ephy-window.c:1063
+#: src/ephy-window.c:1023
 msgid "High"
 msgstr "Haut"
 
-#: src/ephy-window.c:1073
+#: src/ephy-window.c:1033
 #, c-format
 msgid ""
 "Security level: %s\n"
 "%s"
 msgstr ""
-"Niveau de sécurité : %s\n"
+"Niveau de sécurité : %s\n"
 "%s"
 
-#: src/ephy-window.c:1079
+#: src/ephy-window.c:1039
 #, c-format
 msgid "Security level: %s"
-msgstr "Niveau de sécurité : %s"
+msgstr "Niveau de sécurité : %s"
 
 #: src/general-prefs.c:86
-#, fuzzy
 msgid "Afrikaans"
 msgstr "Afrikaans (af)"
 
@@ -2813,12 +2708,15 @@ msgstr "Vietnamien"
 msgid "Walloon"
 msgstr "Wallon"
 
-#: src/history-dialog.c:289
+#: src/history-dialog.c:292
+msgid "Title"
+msgstr "Titre"
+
+#: src/history-dialog.c:293
 msgid "Location"
 msgstr "Emplacement"
 
-#: src/history-dialog.c:290
-#, fuzzy
+#: src/history-dialog.c:294
 msgid "Last Visit"
 msgstr "Dernière visite"
 
@@ -2838,132 +2736,161 @@ msgstr "Domaine"
 msgid "Name"
 msgstr "Nom"
 
-#: src/pdm-dialog.c:572
+#: src/pdm-dialog.c:599
 msgid "Cookie properties"
 msgstr "Propriétés du cookie"
 
-#: src/pdm-dialog.c:585
-#, fuzzy
+#: src/pdm-dialog.c:612
 msgid "Value"
-msgstr "Faux"
+msgstr "Valeur"
 
-#: src/pdm-dialog.c:599
-#, fuzzy
+#: src/pdm-dialog.c:626
 msgid "Path"
-msgstr "Chemin : "
+msgstr "Chemin"
 
-#: src/pdm-dialog.c:613
-#, fuzzy
+#: src/pdm-dialog.c:640
 msgid "Secure"
-msgstr "Non sécurisé"
+msgstr "Sécurisé"
 
-#: src/pdm-dialog.c:627
-#, fuzzy
+#: src/pdm-dialog.c:654
 msgid "Expire"
-msgstr "Date d'expiration "
+msgstr "Date d'expiration"
 
 #: src/ppview-toolbar.c:88
-#, fuzzy
 msgid "Go to the first page"
-msgstr "Ouvre le site de Galeon"
+msgstr "Aller à la page de démarrage"
 
 #: src/ppview-toolbar.c:92
-#, fuzzy
 msgid "Go to the last page"
-msgstr "Ouvre le site de Galeon"
+msgstr "Aller à la dernière page"
 
 #: src/ppview-toolbar.c:96
-#, fuzzy
 msgid "Go to the previous page"
-msgstr "Afficher le signet précédent"
+msgstr "Afficher la page précédente"
 
 #: src/ppview-toolbar.c:100
-#, fuzzy
 msgid "Go to next page"
-msgstr "Aller à la page de démarrage"
+msgstr "Aller à la page suivante"
 
 #: src/ppview-toolbar.c:102
 msgid "Close"
 msgstr "Fermer"
 
 #: src/ppview-toolbar.c:104
-#, fuzzy
 msgid "Close print preview"
-msgstr "Impression couleur"
+msgstr "Fermer l'aperçu avant impression"
 
-#: src/prefs-dialog.c:248
+#: src/prefs-dialog.c:263
 msgid "User Interface"
 msgstr "Interface utilisateur"
 
-#: src/prefs-dialog.c:249
+#: src/prefs-dialog.c:264
 msgid "Advanced"
 msgstr "Avancé"
 
-#: src/prefs-dialog.c:301
+#: src/prefs-dialog.c:307
 msgid "Preferences"
 msgstr "Préférences"
 
 #: src/session.c:189
-#, fuzzy
 msgid "Crash Recovery"
-msgstr "Galeon : récupération des plantages"
+msgstr "Récupération des plantages"
 
 #: src/session.c:191
-#, fuzzy
 msgid "_Don't Recover"
-msgstr "_Rétablissement de la session précédente : "
+msgstr "_Ne pas rétablir"
 
 #: src/session.c:192
-#, fuzzy
 msgid "_Recover"
-msgstr "_Revenir"
+msgstr "_Rétablir"
 
 #: src/session.c:220
-#, fuzzy
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr ""
-"<b>Galeon a apparemment planté ou n'a pas été quitté correctement la "
-"dernière fois que vous l'avez utilisé.</b>"
+"Epipany a apparemment planté ou n'a pas été quitté correctement la dernière "
+"fois que vous l'avez utilisé."
 
 #: src/session.c:226
-#, fuzzy
 msgid "You can recover the opened tabs and windows."
-msgstr "Affiche l'onglet courant dans une nouvelle fenêtre"
+msgstr "Vous pouvez rétablir les onglets ainsi que les fenêtres ouvertes"
 
-#: src/toolbar.c:269
+#: src/toolbar.c:272
 msgid "Back"
 msgstr "Arrière"
 
-#: src/toolbar.c:281
+#: src/toolbar.c:284
 msgid "Forward"
 msgstr "Avant"
 
-#: src/toolbar.c:293
+#: src/toolbar.c:296
 msgid "Up"
 msgstr "Haut"
 
-#: src/window-commands.c:132
+#: src/window-commands.c:134
 msgid "Check this out!"
-msgstr "Va visiter ce site !"
+msgstr "Va visiter ce site !"
 
-#: src/window-commands.c:309
+#: src/window-commands.c:341
 msgid "Select the file to open"
 msgstr "Sélectionner le fichier à ouvrir"
 
 #. Translator credits
-#: src/window-commands.c:655
+#: src/window-commands.c:689
 msgid "translator_credits"
 msgstr ""
 "Mainteneur :\n"
 "Christophe Fergeau <teuf@users.sourceforge.net>\n"
 "\n"
-"Contributeur :\n"
-"Christophe Merlet (RedFox) <redfox@redfoxcenter.org>"
+"Contributeurs :\n"
+"Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
+"Laurent Richard (Kouran) <laurent.richard@lilit.be>"
 
-#: src/window-commands.c:667
+#: src/window-commands.c:701
 msgid "A GNOME browser based on Mozilla"
 msgstr "Un navigateur GNOME dérivé de Mozilla"
+
+#~ msgid "Add bookmark"
+#~ msgstr "Ajouter un signet"
+
+#~ msgid "   "
+#~ msgstr "   "
+
+#~ msgid "<b>Spinner</b>"
+#~ msgstr "<b>Animation</b>"
+
+#~ msgid "Password"
+#~ msgstr "Mot de passe"
+
+#~ msgid "Username"
+#~ msgstr "Nom de l'utilisateur"
+
+#~ msgid "<b>Cu_rrent Controls</b>"
+#~ msgstr "<b>Contrôles actuellement utilisés</b>"
+
+#~ msgid "<b>_Available Controls</b>"
+#~ msgstr "<b>Contrôles disponibles</b>"
+
+#~ msgid "Toolbar Editor"
+#~ msgstr "Éditeur de barre d'outils"
+
+#~ msgid "_Reset to defaults"
+#~ msgstr "_Valeurs par défaut"
+
+#~ msgid "Save"
+#~ msgstr "Enregistrer"
+
+#~ msgid "Revert"
+#~ msgstr "Retour"
+
+#~ msgid "Don't save"
+#~ msgstr "Ne pas enregistrer"
+
+#~ msgid "_Remove"
+#~ msgstr "_Supprimer"
+
+#~ msgid "Location:"
+#~ msgstr "Emplacement :"
 
 #~ msgid "Web Page (Galeon)"
 #~ msgstr "Page Web (Galeon)"
@@ -3002,9 +2929,8 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "New folder"
 #~ msgstr "Nouveau dossier"
 
-#, fuzzy
 #~ msgid "New Smart Site"
-#~ msgstr "Nouveau site"
+#~ msgstr "Nouveau site paramètré"
 
 #~ msgid "New Autobookmarks Folder"
 #~ msgstr "Nouveau dossier de signets automatiques"
@@ -3043,7 +2969,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 
 #  Vérifier le contexte
 #~ msgid "Chosen location:"
-#~ msgstr "Emplacement choisi :"
+#~ msgstr "Emplacement choisi :"
 
 #~ msgid "Bookmarks Exported"
 #~ msgstr "Signets exportés"
@@ -3076,18 +3002,16 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Ces signets viennent d'être importés."
 
 #~ msgid "Current bookmarks:"
-#~ msgstr "Signets actuels :"
+#~ msgstr "Signets actuels :"
 
 #~ msgid "Automatic merge"
 #~ msgstr "Fusion automatique"
 
-#, fuzzy
 #~ msgid "Automatically merged bookmarks"
-#~ msgstr "_Recommencer automatiquement au début du document"
+#~ msgstr "Signets fusionnés automatiquement"
 
-#, fuzzy
 #~ msgid "Merged bookmarks:"
-#~ msgstr "Rechercher des signets"
+#~ msgstr "Signets fusionnés :"
 
 #~ msgid "Bookmarks Imported"
 #~ msgstr "Signets importés"
@@ -3127,15 +3051,14 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Dossier sans titre"
 
 #~ msgid "Use \"%s\" to open the selected item"
-#~ msgstr "Utiliser « %s » pour ouvrir l'élément sélectionné"
+#~ msgstr "Utiliser « %s » pour ouvrir l'élément sélectionné"
 
 #~ msgid "Error: "
-#~ msgstr "Erreur : "
+#~ msgstr "Erreur : "
 
 #~ msgid "Warning: "
-#~ msgstr "Avertissement : "
+#~ msgstr "Avertissement : "
 
-#, fuzzy
 #~ msgid "Allow prompts"
 #~ msgstr "Autoriser les _popups"
 
@@ -3202,7 +3125,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Largeur des colonnes de l'éditeur de signets."
 
 #~ msgid "Clear smart bookmarks after use."
-#~ msgstr "Effacer les signets paramétrés après utilisation"
+#~ msgstr "Effacer les signets paramètrés après utilisation"
 
 #~ msgid ""
 #~ "Color (in #RRGGBB hex format) of new tab titles for tabs that have "
@@ -3320,7 +3243,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "a float, so: 0 (1.0), 1 (1.1)."
 #~ msgstr ""
 #~ "Version du protocole HTTP. Attention, les valeurs à utiliser sont des "
-#~ "entiers : 0 pour HTTP1.0 et 1 pour HTTP1.1"
+#~ "entiers : 0 pour HTTP1.0 et 1 pour HTTP1.1"
 
 #~ msgid "Height of the bookmarks editor"
 #~ msgstr "Hauteur de l'éditeur de signets"
@@ -3342,7 +3265,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "How wide (in pixels) to make smart bookmark's entry fields in toolbars by "
 #~ "default"
 #~ msgstr ""
-#~ "Largeur par défaut (en pixel) de l'entrée de texte des signets paramétrés"
+#~ "Largeur par défaut (en pixel) de l'entrée de texte des signets paramètrés"
 
 #~ msgid "Indicates if the prefs have been migrated to GNOME2.2 settings"
 #~ msgstr ""
@@ -3377,7 +3300,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid ""
 #~ "Proxy mode. Possible values are 0 (no proxy), 1 (manual), 2 (automatic)."
 #~ msgstr ""
-#~ "Type de proxy. Les valeurs possibles sont : 0 (pas de proxy), 1 "
+#~ "Type de proxy. Les valeurs possibles sont : 0 (pas de proxy), 1 "
 #~ "(configuration manuelle), 2 (configuration automatique)."
 
 #~ msgid "Recently saved sessions"
@@ -3461,13 +3384,11 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Session open confirmation"
 #~ msgstr "Confirmation lors de l'ouverture d'une session"
 
-#, fuzzy
 #~ msgid "Shorten autobookmarks to length"
 #~ msgstr "_Longueur maximale des noms"
 
-#, fuzzy
 #~ msgid "Shorten autobookmarks to length (in chars)."
-#~ msgstr "Afficher la barre de signets"
+#~ msgstr "Longueur maximale des noms (en caractères)."
 
 #~ msgid "Show autocompletions alternatives list automatically"
 #~ msgstr "Afficher la liste des complétions possibles automatiquement"
@@ -3494,10 +3415,10 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "que l'URL est affichée dans une bulle d'aide."
 
 #~ msgid "Smart bookmark entry width"
-#~ msgstr "Largeur de la zone de texte des signets paramétrés"
+#~ msgstr "Largeur de la zone de texte des signets paramètrés"
 
 #~ msgid "Smart bookmarks history"
-#~ msgstr "Historique des signets paramétrés"
+#~ msgstr "Historique des signets paramètrés"
 
 #~ msgid "Startpage type"
 #~ msgstr "Type de la page de démarrage"
@@ -3510,14 +3431,14 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "title of page), 1 (always ask user)"
 #~ msgstr ""
 #~ "Titre à utiliser lors de la création d'un nouveau signet. Les valeurs "
-#~ "possibles sont : 0 (utiliser le titre de la page) et 1 (toujours demander "
+#~ "possibles sont : 0 (utiliser le titre de la page) et 1 (toujours demander "
 #~ "à l'utilisateur)"
 
 #~ msgid ""
 #~ "Type of page to show on startup. Possible values are: 0 (home page), 1 "
 #~ "(last page), 2 (blank)"
 #~ msgstr ""
-#~ "Page à afficher au démarrage. Les valeurs possibles sont : 0 (page "
+#~ "Page à afficher au démarrage. Les valeurs possibles sont : 0 (page "
 #~ "d'accueil), 1 (dernière page visitée), 2 (page blanche)"
 
 #~ msgid "Use default step with alt modifier"
@@ -3553,11 +3474,9 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Use gnome protocol settings to handle mailto: links"
 #~ msgstr "Utiliser le réglage de GNOME pour gérer les liens mailto:"
 
-#, fuzzy
 #~ msgid "User-agent"
 #~ msgstr "Nom de l'utilisateur"
 
-#, fuzzy
 #~ msgid "User-agent."
 #~ msgstr "Nom de l'utilisateur"
 
@@ -3628,11 +3547,9 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Helper Applications"
 #~ msgstr "Choisissez l'application à utiliser"
 
-#, fuzzy
 #~ msgid "Accept cookie from %s?"
-#~ msgstr "Accepter les _cookies"
+#~ msgstr "Accepter les _cookies de %s ?"
 
-#, fuzzy
 #~ msgid "Cookie Details"
 #~ msgstr "Propriétés du cookie"
 
@@ -3675,11 +3592,9 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "URL Clicked"
 #~ msgstr "Clic sur une URL"
 
-#, fuzzy
 #~ msgid "Go up"
 #~ msgstr "Déplacer vers le haut"
 
-#, fuzzy
 #~ msgid "Go forward"
 #~ msgstr "Avant"
 
@@ -3690,7 +3605,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr ""
 #~ "Un fichier contenant apparemment des signets enregistrés par Galeon 1 a "
 #~ "été trouvé. Galeon 1 n'enregistrait pas les caractères non-ASCII "
-#~ "correctement. Voulez-vous que Galeon tente de corriger ces signets ?"
+#~ "correctement. Voulez-vous que Galeon tente de corriger ces signets ?"
 
 #~ msgid "Transferring data from %s (%d kB loaded)"
 #~ msgstr "Transfert de données depuis %s (%d ko chargés)"
@@ -3715,7 +3630,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Visualiseur"
 
 #~ msgid "Always Use"
-#~ msgstr "Toujours utiliser ?"
+#~ msgstr "Toujours utiliser ?"
 
 #~ msgid "Save to disk"
 #~ msgstr "Enregistrer sur disque"
@@ -3744,7 +3659,6 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Status"
 #~ msgstr "Statut"
 
-#, fuzzy
 #~ msgid "can set cookies"
 #~ msgstr "Accepter les _cookies"
 
@@ -3765,13 +3679,13 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Yanko Kaneti <yaneti@declera.com>"
 
 #~ msgid "Graphic arts:"
-#~ msgstr "Graphismes :"
+#~ msgstr "Graphismes :"
 
 #~ msgid ""
 #~ "There was an error displaying help: \n"
 #~ "%s"
 #~ msgstr ""
-#~ "Erreur lors de l'affichage de l'aide : \n"
+#~ "Erreur lors de l'affichage de l'aide : \n"
 #~ "%s"
 
 #~ msgid "Add to context menu"
@@ -3886,13 +3800,13 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Remarques"
 
 #~ msgid "Parameter's encoding"
-#~ msgstr "Encodage des paramétres"
+#~ msgstr "Encodage des paramètres"
 
 #~ msgid "SHIFT_JIS"
 #~ msgstr "SHIFT_JIS"
 
 #~ msgid "Smart URL"
-#~ msgstr "URL paramétrée"
+#~ msgstr "URL paramètrée"
 
 #~ msgid "Smart entry width"
 #~ msgstr "Largeur de la zone de texte"
@@ -3910,7 +3824,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "VISCII"
 
 #~ msgid "Added: "
-#~ msgstr "Ajouté : "
+#~ msgstr "Ajouté : "
 
 #~ msgid "Alias"
 #~ msgstr "Alias"
@@ -3951,31 +3865,31 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Rechercher un signet dont"
 
 #~ msgid "Find:"
-#~ msgstr "Rechercher :"
+#~ msgstr "Rechercher :"
 
 #~ msgid "Folder"
 #~ msgstr "Dossier"
 
 #~ msgid "Modified:"
-#~ msgstr "Modifié : "
+#~ msgstr "Modifié :"
 
 #~ msgid "N_icknames:"
-#~ msgstr "A_bréviation :"
+#~ msgstr "A_bréviation :"
 
 #~ msgid "N_otes:"
-#~ msgstr "Re_marques :"
+#~ msgstr "Re_marques :"
 
 #~ msgid "Name:"
-#~ msgstr "Nom :"
+#~ msgstr "Nom :"
 
 #~ msgid "New item"
 #~ msgstr "Nouvel élément"
 
 #~ msgid "Nicknames:"
-#~ msgstr "Abréviations"
+#~ msgstr "Abréviations :"
 
 #~ msgid "Notes:"
-#~ msgstr "Remarques :"
+#~ msgstr "Remarques :"
 
 #~ msgid "Remove"
 #~ msgstr "Supprimer"
@@ -3987,7 +3901,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Séparateur"
 
 #~ msgid "Set size of smart bookmark entry"
-#~ msgstr "Régler la taille de l'entrée des signets paramétrés"
+#~ msgstr "Régler la taille de l'entrée des signets paramètrés"
 
 #~ msgid "Set to default"
 #~ msgstr "Valeur par défaut"
@@ -4002,20 +3916,20 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "The following bookmarks will be deleted. Please, make sure that no "
 #~ "important information will be lost."
 #~ msgstr ""
-#~ "Les signets suivants vont être supprimés. Veuillez-vous assurer que vous "
+#~ "Les signets suivants vont être supprimés. Veuillez vous assurer que vous "
 #~ "n'effacez aucune information importante."
 
 #~ msgid "URL:"
-#~ msgstr "URL :"
+#~ msgstr "URL :"
 
 #~ msgid "Visited:"
-#~ msgstr "Visité"
+#~ msgstr "Visité :"
 
 #~ msgid "_Add to context menu"
 #~ msgstr "_Ajouter au  menu contextuel"
 
 #~ msgid "_Name:"
-#~ msgstr "Nom :"
+#~ msgstr "Nom :"
 
 #~ msgid "_Remove all these bookmarks"
 #~ msgstr "_Supprimer tous ces signets"
@@ -4024,10 +3938,10 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Afficher comme _barre d'outil"
 
 #~ msgid "_Smart URL:"
-#~ msgstr "_URL paramétrée :"
+#~ msgstr "_URL paramètrée :"
 
 #~ msgid "_URL:"
-#~ msgstr "_URL :"
+#~ msgstr "_URL :"
 
 #~ msgid "contains"
 #~ msgstr "contient"
@@ -4068,12 +3982,8 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Create a new site"
 #~ msgstr "Créer un nouveau signet"
 
-#, fuzzy
 #~ msgid "Create a new smart site"
-#~ msgstr "Créer un nouveau signet"
-
-#~ msgid "Delete"
-#~ msgstr "Effacer"
+#~ msgstr "Créer un nouveau signet paramètré"
 
 #~ msgid "Delete selected bookmarks"
 #~ msgstr "Effacer les signets sélectionnés"
@@ -4114,9 +4024,8 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Helps exporting your Galeon bookmarks to Netscape"
 #~ msgstr "Vous aide à exporter vos signets Galeon vers Netscape"
 
-#, fuzzy
 #~ msgid "Helps importing your Galeon or Konqueror bookmarks into Galeon"
-#~ msgstr "Vous aide à importer vos signets Netscape vers Galeon"
+#~ msgstr "Vous aide à importer vos signets Konqueror vers Galeon"
 
 #~ msgid "Helps importing your Netscape bookmarks into Galeon"
 #~ msgstr "Vous aide à importer vos signets Netscape vers Galeon"
@@ -4175,9 +4084,6 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "New Boo_kmark"
 #~ msgstr "Nouveau _signet"
 
-#~ msgid "New Bookmark"
-#~ msgstr "Nouveau signet"
-
 #~ msgid "New Folder"
 #~ msgstr "Nouveau dossier"
 
@@ -4196,9 +4102,6 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 
 #~ msgid "P_roperties"
 #~ msgstr "_Propriétés"
-
-#~ msgid "Properties"
-#~ msgstr "Propriétés"
 
 #~ msgid "Rec_ursively (folders first)"
 #~ msgstr "Récursivement (_dossiers en tête)"
@@ -4306,7 +4209,6 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Contents"
 #~ msgstr "Contenu"
 
-#, fuzzy
 #~ msgid "Edit Bookmarks"
 #~ msgstr "É_diter les signets"
 
@@ -4376,7 +4278,6 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "_History"
 #~ msgstr "_Historique"
 
-#, fuzzy
 #~ msgid "_My Portal"
 #~ msgstr "Mon Portail"
 
@@ -4390,7 +4291,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "_Texte ALTernatif"
 
 #~ msgid "C_ommand:"
-#~ msgstr "C_ommande :"
+#~ msgstr "C_ommande :"
 
 #, fuzzy
 #~ msgid "Cookie Sites"
@@ -4412,7 +4313,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Propriétés de l'élément"
 
 #~ msgid "Forms on this page:"
-#~ msgstr "Formulaires sur cete page : "
+#~ msgstr "Formulaires sur cete page :"
 
 #~ msgid "I_mage properties"
 #~ msgstr "Propriétés de l'i_mage"
@@ -4421,7 +4322,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Ti_tre de l'image"
 
 #~ msgid "Images on this page:"
-#~ msgstr "Images sur cette page :"
+#~ msgstr "Images sur cette page :"
 
 #~ msgid "Javascript console"
 #~ msgstr "Console JavaScript"
@@ -4439,7 +4340,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "_Titre du lien"
 
 #~ msgid "Links on this page:"
-#~ msgstr "Liens sur cette page :"
+#~ msgstr "Liens sur cette page :"
 
 #~ msgid "Month"
 #~ msgstr "Mois"
@@ -4460,7 +4361,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Démarrer Galeon"
 
 #~ msgid "Stylesheets on this page:"
-#~ msgstr "Feuilles de style sur cette page :"
+#~ msgstr "Feuilles de style sur cette page :"
 
 #~ msgid "Target lan_guage"
 #~ msgstr "Langue de la _cible"
@@ -4649,9 +4550,6 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Home"
 #~ msgstr "Accueil"
 
-#~ msgid "Go"
-#~ msgstr "Aller à"
-
 #~ msgid "Erroneous button"
 #~ msgstr "Bouton erronné"
 
@@ -4719,9 +4617,8 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Import From Konqueror"
 #~ msgstr "Importer les signets de Konqueror"
 
-#, fuzzy
 #~ msgid "Application:"
-#~ msgstr "Applications"
+#~ msgstr "Applications :"
 
 #~ msgid "Network"
 #~ msgstr "Réseau"
@@ -4754,28 +4651,28 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "_Autre application"
 
 #~ msgid "<b>Bookmarks</b>"
-#~ msgstr "<b>Signets :</b>"
+#~ msgstr "<b>Signets :</b>"
 
 #~ msgid "<b>Proxies</b>"
 #~ msgstr "<b>Proxy</b>"
 
 #~ msgid "<i>Example: .gnome.org, .mozilla.org</i>"
-#~ msgstr "<i>Exemple : .gnome.org, .mozilla.org</i>"
+#~ msgstr "<i>Exemple : .gnome.org, .mozilla.org</i>"
 
 #~ msgid "Autoconfigure _URL:"
 #~ msgstr "_URL pour la configuration automatique"
 
 #~ msgid "N_o proxy for:"
-#~ msgstr "_Pas de proxy pour :"
+#~ msgstr "_Pas de proxy pour :"
 
 #~ msgid "Pick the color for visited links"
 #~ msgstr "Choisissez une couleur pour les liens déjà visités"
 
 #~ msgid "Port:"
-#~ msgstr "Port :"
+#~ msgstr "Port :"
 
 #~ msgid "Soc_ks host:"
-#~ msgstr "Hôte soc_ks :"
+#~ msgstr "Hôte soc_ks :"
 
 #~ msgid "U_nderline links"
 #~ msgstr "So_uligner les liens"
@@ -4787,19 +4684,19 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Connexion _directe"
 
 #~ msgid "_FTP proxy:"
-#~ msgstr "Proxy _FTP :"
+#~ msgstr "Proxy _FTP :"
 
 #~ msgid "_HTTP proxy:"
-#~ msgstr "Proxy _HTTP :"
+#~ msgstr "Proxy _HTTP :"
 
 #~ msgid "_Manual configuration"
 #~ msgstr "Configuration _manuelle"
 
 #~ msgid "_SSL proxy:"
-#~ msgstr "Proxy _SSL :"
+#~ msgstr "Proxy _SSL :"
 
 #~ msgid "_Show history for Smart Bookmarks"
-#~ msgstr "Afficher l'_historique des signets paramétrés"
+#~ msgstr "Afficher l'_historique des signets paramètrés"
 
 #~ msgid "<b>Print frames</b>"
 #~ msgstr "<b>Imprimer les cadres</b>"
@@ -4833,7 +4730,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Supprimer ce signet"
 
 #~ msgid "disabled"
-#~ msgstr "Désactivé"
+#~ msgstr "désactivé"
 
 #, fuzzy
 #~ msgid "#000000"
@@ -4850,63 +4747,51 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "0"
 
 #~ msgid "0.5"
-#~ msgstr "0.5"
+#~ msgstr "0,5"
 
-#, fuzzy
 #~ msgid "2"
-#~ msgstr "0"
+#~ msgstr "2"
 
-#, fuzzy
 #~ msgid "20"
-#~ msgstr "0"
+#~ msgstr "20"
 
-#, fuzzy
 #~ msgid "3"
-#~ msgstr "0"
+#~ msgstr "3"
 
-#, fuzzy
 #~ msgid "30"
-#~ msgstr "0"
+#~ msgstr "30"
 
-#, fuzzy
 #~ msgid "Insert new tab after current tab"
-#~ msgstr "_Insérer les nouveaux onglets à droite"
+#~ msgstr "_Insérer les nouveaux onglets à la suite du signet actuel"
 
-#, fuzzy
 #~ msgid "Insert new tab after current tab instead of at the end of the list."
-#~ msgstr "_Insérer les nouveaux onglets à droite"
+#~ msgstr ""
+#~ "_Insérer les nouveaux onglets à la suite du signet actuel plutôt qu'à la "
+#~ "fin de la liste."
 
-#, fuzzy
 #~ msgid "Show bookmarks toolbars by default"
-#~ msgstr "Afficher la barre de signets"
+#~ msgstr "Afficher la barre de signets par défaut"
 
-#, fuzzy
 #~ msgid "Show bookmarks toolbars by default."
-#~ msgstr "Afficher la barre de signets"
+#~ msgstr "Afficher la barre de signets par défaut."
 
-#, fuzzy
 #~ msgid "Show bookmarks toolbars in full screen mode"
-#~ msgstr "Afficher la barre de signets"
+#~ msgstr "Afficher la barre de signets en mode plein écran"
 
-#, fuzzy
 #~ msgid "Show bookmarks toolbars in full screen mode."
-#~ msgstr "Afficher la barre de signets"
+#~ msgstr "Afficher la barre de signets en mode plein écran."
 
-#, fuzzy
 #~ msgid "Show menubar by default"
-#~ msgstr "Afficher la barre de menu"
+#~ msgstr "Afficher la barre de menu par défaut"
 
-#, fuzzy
 #~ msgid "Show menubar by default."
-#~ msgstr "Afficher la barre de menu"
+#~ msgstr "Afficher la barre de menu par défaut."
 
-#, fuzzy
 #~ msgid "Show menubar in full screen mode"
-#~ msgstr "Lancer Galeon en mode plein écran"
+#~ msgstr "Afficher la barre de menu en mode plein écran"
 
-#, fuzzy
 #~ msgid "Show menubar in full screen mode."
-#~ msgstr "Lancer Galeon en mode plein écran"
+#~ msgstr "Afficher la barre de menu en mode plein écran."
 
 #, fuzzy
 #~ msgid "[]"
@@ -4919,19 +4804,15 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "darxget %s"
 #~ msgstr "darxget %s"
 
-#, fuzzy
 #~ msgid "galeon"
 #~ msgstr "Galeon"
 
-#, fuzzy
 #~ msgid "history"
 #~ msgstr "Historique"
 
-#, fuzzy
 #~ msgid "http://www.gnome.org"
-#~ msgstr "http://larousse.compuserve.com"
+#~ msgstr "http://www.gnome.org"
 
-#, fuzzy
 #~ msgid "true"
 #~ msgstr "Vrai"
 
@@ -4939,7 +4820,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Valeur GNOME par défaut"
 
 #~ msgid "MIME type: %s"
-#~ msgstr "Types MIME : %s"
+#~ msgstr "Types MIME : %s"
 
 #~ msgid "?Subject=Check%20this%20out%21"
 #~ msgstr "?Subject=Regarde%20cette%20page%21"
@@ -4971,9 +4852,6 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 
 #~ msgid "_Import bookmarks..."
 #~ msgstr "_Importer les signets..."
-
-#~ msgid "_Remove bookmark"
-#~ msgstr "_Supprimer le signet"
 
 #~ msgid "Java_script Console"
 #~ msgstr "Console Java_Script"
@@ -5025,7 +4903,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Co_mmande"
 
 #~ msgid "Download _Folder:"
-#~ msgstr "Dossier de _téléchargement :"
+#~ msgstr "Dossier de _téléchargement :"
 
 #~ msgid "File type"
 #~ msgstr "Type de fichier"
@@ -5037,7 +4915,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Gnome"
 
 #~ msgid "Mail _handler:"
-#~ msgstr "Gestionnaire de _courrier électronique :"
+#~ msgstr "Gestionnaire de _courrier électronique :"
 
 #~ msgid "Mime types"
 #~ msgstr "Types Mime"
@@ -5063,7 +4941,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "_Cursive"
 
 #~ msgid "_Default charset:"
-#~ msgstr "Jeu de caractères par _défaut :"
+#~ msgstr "Jeu de caractères par _défaut :"
 
 #~ msgid "_Downloader runs in a terminal window"
 #~ msgstr "_Lancer le gestionnaire de téléchargements dans un terminal"
@@ -5072,7 +4950,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Gestionnaire de téléchargement _externe"
 
 #~ msgid "_Fantasy:"
-#~ msgstr "_Fantasy :"
+#~ msgstr "_Fantasy :"
 
 #~ msgid "_Insert new tabs after current tab"
 #~ msgstr "_Insérer les nouveaux onglets à droite"
@@ -5234,7 +5112,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "We can create a toolbar which contains some useful web searches now\n"
 #~ "(you can edit this later from the bookmarks editor)."
 #~ msgstr ""
-#~ "Galeon utilise des « Signets paramétrés » pour faciliter\n"
+#~ "Galeon utilise des « Signets paramètrés » pour faciliter\n"
 #~ "les recherches sur Internet.\n"
 #~ "Galeon peut créer maintenant une barre d'outils contenant de tels "
 #~ "signets\n"
@@ -5293,7 +5171,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "Les pages suivantes vous aideront à configurer Galeon."
 
 #~ msgid "What do you want to do with it?"
-#~ msgstr "Que souhaitez-vous faire ?"
+#~ msgstr "Que souhaitez-vous faire ?"
 
 #~ msgid "_Always do the same with this type of file"
 #~ msgstr "Lancer par _défaut avec ce type de fichier"
@@ -5302,7 +5180,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "_Bookmarklets (a besoin de JavaScript)"
 
 #~ msgid "_Create Smart Bookmarks toolbar?"
-#~ msgstr "_Créer une barre de signets paramétrés ?"
+#~ msgstr "_Créer une barre de signets paramètrés ?"
 
 #~ msgid "_Dictionary"
 #~ msgstr "_Dictionnaire"
@@ -5368,9 +5246,8 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Fonts"
 #~ msgstr "Polices"
 
-#, fuzzy
 #~ msgid "Helpers"
-#~ msgstr "Visualiseur"
+#~ msgstr "Aides"
 
 #~ msgid "Proxies"
 #~ msgstr "Proxies"
@@ -5432,29 +5309,24 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Paused"
 #~ msgstr "Suspendu"
 
-#, fuzzy
 #~ msgid "Resuming ..."
 #~ msgstr "Reprise..."
 
-#, fuzzy
 #~ msgid "Completed"
-#~ msgstr "Complétion"
+#~ msgstr "Terminé"
 
 #  Vérifier le contexte
 #~ msgid "Copy source location"
 #~ msgstr "Copier l'adresse"
 
-#, fuzzy
 #~ msgid "Source"
-#~ msgstr "URL"
+#~ msgstr "Source"
 
-#, fuzzy
 #~ msgid "Url of the document to save"
-#~ msgstr "Sélectionner le fichier à sauvegarder"
+#~ msgstr "Adresse du document à sauvegarder"
 
-#, fuzzy
 #~ msgid "Destination directory"
-#~ msgstr "Destination"
+#~ msgstr "Dossier de destination"
 
 #, fuzzy
 #~ msgid "Maxsize"
@@ -5538,9 +5410,8 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "TIME"
 #~ msgstr "DURÉE"
 
-#, fuzzy
 #~ msgid "Nautilus"
-#~ msgstr "Thème Nautilus"
+#~ msgstr "Nautilus"
 
 #~ msgid "Remove entry"
 #~ msgstr "Supprimer l'entrée"
@@ -5550,7 +5421,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "Are you sure you want to do this?"
 #~ msgstr ""
 #~ "Vous êtes sur le point d'effacer l'historique.\n"
-#~ "Êtes-vous sûr ?"
+#~ "Êtes-vous sûr ?"
 
 #~ msgid "Show everything"
 #~ msgstr "Afficher tout"
@@ -5585,9 +5456,6 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Help"
 #~ msgstr "Aide"
 
-#~ msgid "Top"
-#~ msgstr "Haut"
-
 #~ msgid "Search"
 #~ msgstr "Rechercher"
 
@@ -5595,7 +5463,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Auteur"
 
 #~ msgid "Translation:"
-#~ msgstr "Traduction : Christophe Fergeau <teuf@users.sourceforge.net>"
+#~ msgstr "Traduction : Christophe Fergeau <teuf@users.sourceforge.net>"
 
 #~ msgid "Exit the program"
 #~ msgstr "Quitter le programme"
@@ -5642,22 +5510,19 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Find _next"
 #~ msgstr "_Suivant"
 
-#, fuzzy
 #~ msgid ""
 #~ "Search for the next occurrence of a word or phrase in the current page"
 #~ msgstr ""
 #~ "Recherche la prochaine occurrence d'un mot ou d'une phrase dans la page "
 #~ "courante"
 
-#, fuzzy
 #~ msgid "Find pre_vious"
 #~ msgstr "Précédent"
 
-#, fuzzy
 #~ msgid ""
 #~ "Search for the previous occurrence of a word or phrase in the current page"
 #~ msgstr ""
-#~ "Recherche la prochaine occurrence d'un mot ou d'une phrase dans la page "
+#~ "Recherche la précédente occurrence d'un mot ou d'une phrase dans la page "
 #~ "courante"
 
 #~ msgid "Select all text in the current page"
@@ -5859,9 +5724,6 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Add a bookmark for the current page to a specified folder"
 #~ msgstr "Ajoute un signet vers la page courante dans le dossier spécifié"
 
-#~ msgid "_Edit bookmarks..."
-#~ msgstr "É_diter les signets"
-
 #~ msgid "Go back in history"
 #~ msgstr "Affiche l'élément précédent de l'historique"
 
@@ -6042,7 +5904,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "URLs récupérées le %d/%m/%Y %X"
 
 #~ msgid "Couldn't load session from \"%s\""
-#~ msgstr "Impossible de charger la session à partir de « %s »"
+#~ msgstr "Impossible de charger la session à partir de « %s »"
 
 #~ msgid "Set current page as home page"
 #~ msgstr "Choisir la page courante comme page d'accueil"
@@ -6077,7 +5939,6 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Refresh icon"
 #~ msgstr "Recharger l'icone"
 
-#, fuzzy
 #~ msgid "Delete this session"
 #~ msgstr "Supprimer cette session"
 
@@ -6154,7 +6015,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr ""
 #~ "Si vous ouvrez une session, toutes les fenêtres actuellement ouvertes "
 #~ "seront fermées.\n"
-#~ "Êtes-vous sûr de vouloir continuer ?"
+#~ "Êtes-vous sûr de vouloir continuer ?"
 
 #~ msgid "P_assword Sites"
 #~ msgstr "_Sites ayant des mots de passe"
@@ -6212,7 +6073,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "Are you sure you want to close it?"
 #~ msgstr ""
 #~ "Il y a plusieurs onglets ouverts dans cette fenêtre.\n"
-#~ "Êtes-vous sûr de vouloir la fermer ?"
+#~ "Êtes-vous sûr de vouloir la fermer ?"
 
 #~ msgid "Two days ago"
 #~ msgstr "Il y a deux jours"
@@ -6250,20 +6111,17 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "_Server secure"
 #~ msgstr "_Serveur sécurisé"
 
-#, fuzzy
 #~ msgid "BookmarksBar"
-#~ msgstr "Signets"
+#~ msgstr "Barre des signets"
 
-#, fuzzy
 #~ msgid "Create a new document"
-#~ msgstr "Ouvre un nouvel onglet"
+#~ msgstr "Créer un nouveau document"
 
-#, fuzzy
 #~ msgid "Refresh"
-#~ msgstr "Recharger l'icone"
+#~ msgstr "Rafraichir"
 
 #~ msgid "%s = URL, %f = destination folder"
-#~ msgstr "%s : URL, %f : dossier cible"
+#~ msgstr "%s : URL, %f : dossier cible"
 
 #~ msgid "1.0"
 #~ msgstr "1.0"
@@ -6345,7 +6203,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Icônes seulement"
 
 #~ msgid "Identif_y as"
-#~ msgstr "_Identification du navigateur : "
+#~ msgstr "_Identification du navigateur :"
 
 #~ msgid "Image Loading"
 #~ msgstr "Chargement des images"
@@ -6421,7 +6279,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Déplacement de"
 
 #~ msgid "Set to \"_My Portal\""
-#~ msgstr "Choisir « Mon _portail »"
+#~ msgstr "Choisir « Mon _portail »"
 
 #~ msgid "Shorten all _names by dropping common prefixes"
 #~ msgstr "Réduire tous les noms en supprimant les préfi_xes usuels"
@@ -6430,10 +6288,10 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Réduire les noms longs en supprimant les _voyelles"
 
 #~ msgid "Shorten names to fixed _width"
-#~ msgstr "Utiliser une taille fixe pour les onglets : "
+#~ msgstr "Utiliser une taille fixe pour les onglets :"
 
 #~ msgid "Shorten names to target _length"
-#~ msgstr "_Longueur maximale des noms des onglets : "
+#~ msgstr "_Longueur maximale des noms des onglets :"
 
 #~ msgid "Show Folder Actions"
 #~ msgstr "Actions additionnelles pour les signets"
@@ -6453,11 +6311,9 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Shows bookmarks"
 #~ msgstr "Afficher les signets"
 
-#, fuzzy
 #~ msgid "Socks v4"
 #~ msgstr "Socks v4"
 
-#, fuzzy
 #~ msgid "Socks v5"
 #~ msgstr "Socks v5"
 
@@ -6614,11 +6470,6 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "%Y-%m-%d %H:%M:%S"
 #~ msgstr "%d/%m/%Y %H:%M:%S"
 
-#, fuzzy
-#~ msgid "_New Tab"
-#~ msgstr "Nouvel on_glet"
-
-#, fuzzy
 #~ msgid ""
 #~ "There is a file bookmarks.xml but no bookmarks.xbel in your ~/%s folder.\n"
 #~ "This probably means that this is the first time that you run a post 1.0 "
@@ -6647,7 +6498,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Impossible d'enregistrer les signets."
 
 #~ msgid "Please name the folder."
-#~ msgstr "Veuillez entrer le nom du dossier."
+#~ msgstr "Veuillez saisir le nom du dossier."
 
 #~ msgid "Folder Name"
 #~ msgstr "Nom du dossier"
@@ -6690,7 +6541,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Signets automatiques"
 
 #~ msgid "Couldn't save your bookmarks to the specified file!"
-#~ msgstr "Impossible d'enregistrer vos signets dans le fichier spécifié !"
+#~ msgstr "Impossible d'enregistrer vos signets dans le fichier spécifié !"
 
 #~ msgid "Load from..."
 #~ msgstr "Charger à partir de..."
@@ -6746,7 +6597,6 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "_Unfold bookmark"
 #~ msgstr "É_tendre"
 
-#, fuzzy
 #~ msgid ""
 #~ "The version of Mozilla Galeon was compiled against (%s) does not match "
 #~ "the detected version (%s).\n"
@@ -6760,7 +6610,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "Il est possible que Galeon ne fonctionne pas correctement. Veuillez "
 #~ "essayer avec la bonne version de Mozilla avant de signaler des bogues.\n"
 #~ "\n"
-#~ "Continuer ?"
+#~ "Continuer ?"
 
 #~ msgid "Version mismatch!"
 #~ msgstr "Mauvaise version!"
@@ -6800,7 +6650,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "\n"
 #~ "Essayez de quitter les autres applications utilisant OAF\n"
 #~ "(telles que Evolution et Nautilus), et de lancer\n"
-#~ "« oaf-slay » à partir de la ligne de commande"
+#~ "« oaf-slay » à partir de la ligne de commande"
 
 #~ msgid "Galeon object already active, server registration failed\n"
 #~ msgstr ""
@@ -6843,10 +6693,10 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Défaut"
 
 #~ msgid "Go back - Right button: History"
-#~ msgstr "Retour en arrière - Bouton droit : historique"
+#~ msgstr "Retour en arrière - Bouton droit : historique"
 
 #~ msgid "Go forward - Right button: History"
-#~ msgstr "Aller en avant - Bouton droit : historique"
+#~ msgstr "Aller en avant - Bouton droit : historique"
 
 #~ msgid "Zoom control"
 #~ msgstr "Contrôle du zoom"
@@ -6864,7 +6714,6 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Imprimer la page courante"
 
 #  Vérifier le contexte
-#, fuzzy
 #~ msgid "Clear Location"
 #~ msgstr "Effacer l'adresse"
 
@@ -6894,7 +6743,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "  %s\n"
 #~ "All further errors shown only on terminal"
 #~ msgstr ""
-#~ "Erreur de GConf :\n"
+#~ "Erreur de GConf :\n"
 #~ " %s\n"
 #~ "Les autres erreurs apparaîtront uniquement dans un terminal"
 
@@ -6905,7 +6754,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "alors que Mozilla "
 
 #~ msgid "`%s' does not exist or is not a valid image file\n"
-#~ msgstr "« %s » n'existe pas ou n'est pas une image valide\n"
+#~ msgstr "« %s » n'existe pas ou n'est pas une image valide\n"
 
 #~ msgid "Jpeg Image"
 #~ msgstr "Image JPEG"
@@ -6983,13 +6832,13 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Cette URL est déjà filtrée"
 
 #~ msgid "Please enter the name of the zone"
-#~ msgstr "Veuillez entrer le nom de la zone"
+#~ msgstr "Veuillez saisir le nom de la zone"
 
 #~ msgid "New zone"
 #~ msgstr "Nouvelle zone"
 
 #~ msgid "Please enter the URL of the site"
-#~ msgstr "Veuillez entrer l'URL du site"
+#~ msgstr "Veuillez saisir l'URL du site"
 
 #~ msgid "Link URL"
 #~ msgstr "URL du lien"
@@ -7000,11 +6849,9 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "_Number to generate"
 #~ msgstr "_Nombre maximal"
 
-#, fuzzy
 #~ msgid "Aborting..."
 #~ msgstr "Abandon..."
 
-#, fuzzy
 #~ msgid "Don't recover previous session"
 #~ msgstr "Ignorer la session précédente"
 
@@ -7015,14 +6862,14 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr ""
 #~ "Vous avez demandé la suppression d'un dossier non vide. \n"
 #~ "Tous les signets qu'il contient seront supprimés.\n"
-#~ "Voulez-vous continuer ?"
+#~ "Voulez-vous continuer ?"
 
 #~ msgid ""
 #~ "Removing this category will remove all its children.\n"
 #~ "Are you sure that you want to continue?"
 #~ msgstr ""
 #~ "La suppression de cette catégorie supprimera tous ses fils.\n"
-#~ "Êtes-vous sûr de vouloir continuer ?"
+#~ "Êtes-vous sûr de vouloir continuer ?"
 
 #~ msgid "Save As..."
 #~ msgstr "Enregistrer sous..."
@@ -7054,9 +6901,8 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Export in XBEL as..."
 #~ msgstr "Exporter au format XBEL dans le fichier..."
 
-#, fuzzy
 #~ msgid "Mail the URL of the current page to someone"
-#~ msgstr "Arrête le chargement de la page courante"
+#~ msgstr "Envoyer par mail l'adresse de la page à quelqu'un"
 
 #~ msgid "Toggle offline mode"
 #~ msgstr "Passe en mode hors connexion"
@@ -7067,9 +6913,8 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgid "Toggle link toolbar visiblity"
 #~ msgstr "Affiche/cache la barre de liens"
 
-#, fuzzy
 #~ msgid "Please enter the e-mail address"
-#~ msgstr "Veuillez entrer le nom du dossier"
+#~ msgstr "Veuillez saisir l'adresse e-mail"
 
 #~ msgid "Ac_tion"
 #~ msgstr "A_ction"
@@ -7148,7 +6993,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "%s - Galeon"
 
 #~ msgid "%s = page title"
-#~ msgstr "%s : titre de la page"
+#~ msgstr "%s : titre de la page"
 
 #~ msgid "Add URLs to a bookmarks folder"
 #~ msgstr "Ajouter les adresses de l'ancienne session aux signets temporaires"
@@ -7186,7 +7031,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "personnalisée"
 
 #~ msgid "Show \"_go to\" button"
-#~ msgstr "Afficher le bouton « Aller à »"
+#~ msgstr "Afficher le bouton « Aller à »"
 
 #~ msgid "Show bookm_arks toolbars"
 #~ msgstr "Afficher la barre de s_ignets"
@@ -7320,7 +7165,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Activer le pro_xy"
 
 #~ msgid "Nick:"
-#~ msgstr "Abréviation : "
+#~ msgstr "Abréviation :"
 
 #~ msgid "_Don't allow removed cookies to be reaccepted later"
 #~ msgstr "_Ne plus jamais accepter les cookies supprimés"
@@ -7398,7 +7243,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "Error executing `%s': \n"
 #~ "%s"
 #~ msgstr ""
-#~ "Erreur lors du lancement de %s : \n"
+#~ "Erreur lors du lancement de %s : \n"
 #~ "%s"
 
 #~ msgid " not found\n"
@@ -7522,7 +7367,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "use the following title"
 #~ msgstr ""
 #~ "Lors de l'ajout d'un _signet\n"
-#~ "utiliser comme titre : "
+#~ "utiliser comme titre :"
 
 #~ msgid ""
 #~ "When opening a\n"
@@ -7610,28 +7455,28 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Télécharger avec le gestionnaire interne (Mozilla)"
 
 #~ msgid "File:"
-#~ msgstr "Fichier :"
+#~ msgstr "Fichier :"
 
 #~ msgid "GNOME's list of known Helper Applications"
 #~ msgstr "Liste des applications GNOME connues"
 
 #~ msgid "MIME Type:"
-#~ msgstr "Type MIME : "
+#~ msgstr "Type MIME :"
 
 #~ msgid "OK"
 #~ msgstr "OK"
 
 #~ msgid "Progress:"
-#~ msgstr "Progression : "
+#~ msgstr "Progression :"
 
 #~ msgid "Select File"
 #~ msgstr "Sélectionnez un fichier"
 
 #~ msgid "Select a file:"
-#~ msgstr "Sélectionnez un fichier :"
+#~ msgstr "Sélectionnez un fichier :"
 
 #~ msgid "Status:"
-#~ msgstr "Statut : "
+#~ msgstr "Statut :"
 
 #~ msgid ""
 #~ "Now galeon stores the Temporary Bookmarks\n"
@@ -7663,13 +7508,13 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Télécharger avec GTM"
 
 #~ msgid "Galeon: %s"
-#~ msgstr "Galeon : %s"
+#~ msgstr "Galeon : %s"
 
 #~ msgid "Location Bar History"
 #~ msgstr "Historique de la barre d'adresse"
 
 #~ msgid "Select \"My Portal\" Stylesheet"
-#~ msgstr "Choisissez la feuille de style pour « Mon portail »"
+#~ msgstr "Choisissez la feuille de style pour « Mon portail »"
 
 #~ msgid "_Enable Galeon MIME handling"
 #~ msgstr "_Activer la gestion des types MIME par Galeon"
@@ -7726,10 +7571,10 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Activer la _coloration syntaxique"
 
 #~ msgid "Password:"
-#~ msgstr "Mot de passe : "
+#~ msgstr "Mot de passe :"
 
 #~ msgid "Username:"
-#~ msgstr "Nom de l'utilisateur : "
+#~ msgstr "Nom de l'utilisateur :"
 
 #~ msgid "Once through"
 #~ msgstr "Une seule fois"
@@ -7771,7 +7616,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr ""
 #~ "Il semble que ce soit la première fois que vous utilisez Galeon\n"
 #~ "\n"
-#~ "Voulez-vous utiliser les mêmes préférences que pour Netscape ?"
+#~ "Voulez-vous utiliser les mêmes préférences que pour Netscape ?"
 
 #~ msgid ""
 #~ "Galeon can also import your Netscape bookmarks.\n"
@@ -7779,7 +7624,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "Would you like to do this now?"
 #~ msgstr ""
 #~ "Galeon peut aussi importer vos signets Netscape\n"
-#~ "Voulez-vous les importer maintenant ?"
+#~ "Voulez-vous les importer maintenant ?"
 
 #~ msgid "Automatically fetch bookmark icons (if available)"
 #~ msgstr "Charger automatiquement une icone pour ce site (s'il en existe une)"
@@ -7792,9 +7637,6 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 
 #~ msgid "New Category"
 #~ msgstr "Nouvelle catégorie"
-
-#~ msgid "Select Bookmark File"
-#~ msgstr "Sélectionnez un fichier de signet"
 
 #~ msgid "Title "
 #~ msgstr "Titre "
@@ -7870,14 +7712,14 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ "WARNING: Several freezes have been experienced with this option enabled. "
 #~ "You must restart galeon for any change to take effect."
 #~ msgstr ""
-#~ "ATTENTION : cette option peut rendre Galeon instable. Vous devez "
+#~ "ATTENTION : cette option peut rendre Galeon instable. Vous devez "
 #~ "redémarrer Galeon pour activer les changements"
 
 #~ msgid ""
 #~ "[*] Note: due to limitations in Mozilla, these options are not guaranteed "
 #~ "to work."
 #~ msgstr ""
-#~ "[*] Remarque : ces options peuvent ne pas fonctionner à cause des "
+#~ "[*] Remarque : ces options peuvent ne pas fonctionner à cause des "
 #~ "limitations de Mozilla"
 
 #~ msgid ""
@@ -7897,7 +7739,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Boite de dialogue"
 
 #~ msgid "External FTP program"
-#~ msgstr "Client FTP externe :"
+#~ msgstr "Client FTP externe :"
 
 #~ msgid "FTP Handler"
 #~ msgstr "Gestionnaire FTP"
@@ -7912,7 +7754,7 @@ msgstr "Un navigateur GNOME dérivé de Mozilla"
 #~ msgstr "Style de complétion"
 
 #~ msgid "Drag me!"
-#~ msgstr "Tirez-moi !"
+#~ msgstr "Tirez-moi !"
 
 #~ msgid "Open with program"
 #~ msgstr "Ouvrir avec le programme"
