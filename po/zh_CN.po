@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 2.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-22 03:42+0100\n"
-"PO-Revision-Date: 2005-01-22 17:12+0800\n"
+"POT-Creation-Date: 2005-01-26 03:45+0100\n"
+"PO-Revision-Date: 2005-01-26 13:42+0800\n"
 "Last-Translator: Liu Songhe <jackliu9999@263.net>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -455,6 +455,8 @@ msgid ""
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
 "\"text\"."
 msgstr ""
+"工具栏样式。可供选择的值包括“”(使用 GNOME 默认样式)、“both”(文字和图标)、"
+"“both-horiz”(文字在图标旁)、“icons”和“text”。"
 
 #: data/epiphany.schemas.in.h:65
 msgid "Use caret browsing mode."
@@ -979,7 +981,9 @@ msgstr "续传(_R)"
 msgid ""
 "%s\n"
 "%s of %s"
-msgstr "%s\n%s，共%s"
+msgstr ""
+"%s\n"
+"%s，共%s"
 
 #: embed/downloader-view.c:372 src/ephy-window.c:1325
 msgid "Unknown"
@@ -1003,7 +1007,7 @@ msgstr "未知"
 msgid "download status|Failed"
 msgstr "失败"
 
-#: embed/downloader-view.c:588 src/bookmarks/ephy-bookmarks-editor.c:838
+#: embed/downloader-view.c:588 src/bookmarks/ephy-bookmarks-editor.c:875
 msgid "File"
 msgstr "文件"
 
@@ -1439,8 +1443,7 @@ msgid ""
 "It's not possible to view this file type directly in the browser. You can "
 "open it with \"%s\" or save it."
 msgstr ""
-"无法在浏览器中直接查看此文件。您还可以在“%s”中打开此文件，或保存此文"
-"件。"
+"无法在浏览器中直接查看此文件。您还可以在“%s”中打开此文件，或保存此文件。"
 
 #: embed/mozilla/ContentHandler.cpp:287
 msgid "Download the file?"
@@ -1463,7 +1466,7 @@ msgid "Untitled"
 msgstr "无标题"
 
 #: embed/mozilla/FilePicker.cpp:148 embed/print-dialog.c:337
-#: lib/ephy-file-chooser.c:371 src/bookmarks/ephy-bookmarks-editor.c:680
+#: lib/ephy-file-chooser.c:371 src/bookmarks/ephy-bookmarks-editor.c:717
 msgid "All files"
 msgstr "全部文件"
 
@@ -1755,6 +1758,7 @@ msgid ""
 "You can always see the security status of a page from the padlock icon on "
 "the statusbar."
 msgstr ""
+"您总是可以通过状态栏上的锁行图标来查看页面的安全状态。"
 
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:111
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:139
@@ -1765,34 +1769,37 @@ msgstr "安全警告"
 
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:112
 msgid "This page is loaded over a low security connection"
-msgstr ""
+msgstr "此页面通过低安全连接装入"
 
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:113
 msgid ""
 "Any information you see or enter on this page could easily be intercepted by "
 "a third party."
 msgstr ""
+"您在此页面看到或输入的任何信息都可能被第三方轻易截取。"
 
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:140
 msgid "Some parts of this page are loaded over an insecure connection"
-msgstr ""
+msgstr "此页面的某些部分是通过不安全连接装入的"
 
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:141
 msgid ""
 "Some information you see or enter will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
 msgstr ""
+"您看到或输入的某些信息是通过不安全的连接传送的，可被第三方轻易截取。"
 
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:159
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:179
 msgid "Send this information over an insecure connection?"
-msgstr ""
+msgstr "通过不安全连接发送此信息吗？"
 
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:160
 msgid ""
 "The information you have entered will be sent over an insecure connection, "
 "and could easily be intercepted by a third party."
 msgstr ""
+"您输入的信息是通过不安全的连接传送的，可被第三方轻易截取。"
 
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:163
 #: embed/mozilla/GtkNSSSecurityWarningDialogs.cpp:184
@@ -1805,6 +1812,8 @@ msgid ""
 "have entered will be sent over an insecure connection, and could easily be "
 "intercepted by a third party."
 msgstr ""
+"尽管此页面是通过安全连接装入的，但您输入的信息是通过不安全的连接传送的，"
+"可被第三方轻易截取。"
 
 #: embed/mozilla/MozDownload.cpp:604
 msgid "Files"
@@ -1905,13 +1914,13 @@ msgstr "无法显示帮助：%s"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:39
 msgid "select fonts for|Arabic"
-msgstr ""
+msgstr "阿拉伯语"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:42
 msgid "select fonts for|Baltic"
-msgstr ""
+msgstr "波罗的海语"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -1923,25 +1932,25 @@ msgstr "中欧"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:48
 msgid "select fonts for|Cyrillic"
-msgstr ""
+msgstr "斯拉夫语"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:51
 msgid "select fonts for|Devanagari"
-msgstr ""
+msgstr "Devanagari"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:54
 msgid "select fonts for|Greek"
-msgstr ""
+msgstr "希腊语"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:57
 msgid "select fonts for|Hebrew"
-msgstr ""
+msgstr "希伯来语"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -2015,8 +2024,8 @@ msgstr "弹出窗口"
 msgid "History"
 msgstr "历史"
 
-#: lib/ephy-stock-icons.c:59 src/bookmarks/ephy-bookmarks-editor.c:720
-#: src/bookmarks/ephy-bookmarks-editor.c:1582
+#: lib/ephy-stock-icons.c:59 src/bookmarks/ephy-bookmarks-editor.c:757
+#: src/bookmarks/ephy-bookmarks-editor.c:1619
 #: src/bookmarks/ephy-topic-action.c:930 src/ephy-window.c:1133
 msgid "Bookmarks"
 msgstr "书签"
@@ -2076,7 +2085,7 @@ msgstr "%s："
 
 #: src/bookmarks/ephy-bookmark-action.c:552
 #: src/bookmarks/ephy-bookmarks-editor.c:181
-#: src/bookmarks/ephy-bookmarks-editor.c:1202
+#: src/bookmarks/ephy-bookmarks-editor.c:1239
 #: src/bookmarks/ephy-topic-action.c:448 src/ephy-history-window.c:174
 #: src/ephy-history-window.c:714
 msgid "Open in New _Tab"
@@ -2086,7 +2095,7 @@ msgstr[0] "在新标签中打开(_T)"
 #. File Menu
 #: src/bookmarks/ephy-bookmark-action.c:558
 #: src/bookmarks/ephy-bookmarks-editor.c:178
-#: src/bookmarks/ephy-bookmarks-editor.c:1199 src/ephy-history-window.c:171
+#: src/bookmarks/ephy-bookmarks-editor.c:1236 src/ephy-history-window.c:171
 #: src/ephy-history-window.c:711
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -2226,7 +2235,7 @@ msgid "Cut the selection"
 msgstr "剪切选中范围"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:206
-#: src/bookmarks/ephy-bookmarks-editor.c:1212 src/ephy-history-window.c:191
+#: src/bookmarks/ephy-bookmarks-editor.c:1249 src/ephy-history-window.c:191
 #: src/ephy-history-window.c:724 src/ephy-window.c:159
 msgid "_Copy"
 msgstr "复制(_C)"
@@ -2350,69 +2359,85 @@ msgstr "Galeon"
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:661
+#: src/bookmarks/ephy-bookmarks-editor.c:630
+msgid "Import failed"
+msgstr "导入失败"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:632
+msgid "Import Failed"
+msgstr "导入失败"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:635
+#, c-format
+msgid ""
+"The bookmarks from \"%s\" could not be imported because the file is "
+"corrupted or of an unsupported type."
+msgstr ""
+"来自“%s”的书签无法导入，因为文件已损坏，或者类型不支持。"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:698
 msgid "Import bookmarks from file"
 msgstr "从文件导入书签"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:668
+#: src/bookmarks/ephy-bookmarks-editor.c:705
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox/Mozilla 书签"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:672
+#: src/bookmarks/ephy-bookmarks-editor.c:709
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror 书签"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:676
+#: src/bookmarks/ephy-bookmarks-editor.c:713
 msgid "Epiphany bookmarks"
 msgstr "Epiphany 书签"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:710
+#: src/bookmarks/ephy-bookmarks-editor.c:747
 msgid "Export Bookmarks"
 msgstr "导出书签"
 
 #. Make a format selection combo & label
-#: src/bookmarks/ephy-bookmarks-editor.c:723
+#: src/bookmarks/ephy-bookmarks-editor.c:760
 msgid "File format:"
 msgstr "文件格式："
 
-#: src/bookmarks/ephy-bookmarks-editor.c:726
+#: src/bookmarks/ephy-bookmarks-editor.c:763
 msgid "Epiphany (RDF)"
 msgstr "Epiphany (RDF)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:727
+#: src/bookmarks/ephy-bookmarks-editor.c:764
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:798
+#: src/bookmarks/ephy-bookmarks-editor.c:835
 msgid "Import Bookmarks"
 msgstr "导入书签"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:804
+#: src/bookmarks/ephy-bookmarks-editor.c:841
 msgid "I_mport"
 msgstr "导入(_M)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:818
+#: src/bookmarks/ephy-bookmarks-editor.c:855
 msgid "Import bookmarks from:"
 msgstr "导入书签的来源："
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1208 src/ephy-history-window.c:720
+#: src/bookmarks/ephy-bookmarks-editor.c:1245 src/ephy-history-window.c:720
 msgid "_Copy Address"
 msgstr "复制地址(_C)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1449 src/ephy-history-window.c:1036
+#: src/bookmarks/ephy-bookmarks-editor.c:1486 src/ephy-history-window.c:1036
 msgid "_Search:"
 msgstr "搜索(_S)："
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1648
+#: src/bookmarks/ephy-bookmarks-editor.c:1685
 #: src/bookmarks/ephy-topics-selector.c:198
 msgid "Topics"
 msgstr "主题"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1718 src/ephy-history-window.c:1319
+#: src/bookmarks/ephy-bookmarks-editor.c:1755 src/ephy-history-window.c:1319
 msgid "Title"
 msgstr "标题"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1724 src/ephy-history-window.c:1325
+#: src/bookmarks/ephy-bookmarks-editor.c:1761 src/ephy-history-window.c:1325
 msgid "Address"
 msgstr "地址"
 
@@ -2688,7 +2713,19 @@ msgstr "复原(_R)"
 msgid "Crash Recovery"
 msgstr "崩溃复原"
 
-#: src/ephy-shell.c:338
+#: src/ephy-shell.c:172
+msgid "Sidebar extension required"
+msgstr "需要侧边栏扩展"
+
+#: src/ephy-shell.c:174
+msgid "Sidebar Extension Required"
+msgstr "需要侧边栏扩展"
+
+#: src/ephy-shell.c:178
+msgid "The link you clicked needs the sidebar extension to be installed."
+msgstr "您单击的链接需要安装侧边栏扩展。"
+
+#: src/ephy-shell.c:403
 msgid ""
 "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
 "use bonobo-activation-sysconf to configure the search path for bonobo server "
@@ -2697,21 +2734,21 @@ msgstr ""
 "Bonobo 无法定位 GNOME_Epiphany_Automation.server 文件。您可以使用 bonobo-"
 "activation-sysconf 配置 bonobo 服务器文件的搜索路径。"
 
-#: src/ephy-shell.c:345
+#: src/ephy-shell.c:410
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to register the automation server"
 msgstr ""
 "Epiphany 目前不可用，这是由于试图注册自动化服务器时一个 Bonobo 的意外错误。"
 
-#: src/ephy-shell.c:362
+#: src/ephy-shell.c:427
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
 msgstr ""
 "Epiphany 现在不可用，这是由于试图定位自动化对象时一个 Bonobo 的意外错误。"
 
-#: src/ephy-tab.c:457 src/ephy-tab.c:1648 src/ephy-tab.c:1865
+#: src/ephy-tab.c:457 src/ephy-tab.c:1647 src/ephy-tab.c:1864
 msgid "Blank page"
 msgstr "空白页"
 
@@ -3435,27 +3472,27 @@ msgstr "Cookie 属性"
 msgid "Content:"
 msgstr "内容："
 
-#: src/pdm-dialog.c:933
+#: src/pdm-dialog.c:934
 msgid "Path:"
 msgstr "路径："
 
-#: src/pdm-dialog.c:948
+#: src/pdm-dialog.c:950
 msgid "Send for:"
 msgstr "发送方式："
 
-#: src/pdm-dialog.c:957
+#: src/pdm-dialog.c:959
 msgid "Encrypted connections only"
 msgstr "只对加密连接"
 
-#: src/pdm-dialog.c:957
+#: src/pdm-dialog.c:959
 msgid "Any type of connection"
 msgstr "任何类型的连接"
 
-#: src/pdm-dialog.c:963
+#: src/pdm-dialog.c:965
 msgid "Expires:"
 msgstr "过期："
 
-#: src/pdm-dialog.c:974
+#: src/pdm-dialog.c:976
 msgid "End of current session"
 msgstr "当前会话结束"
 
@@ -3597,7 +3634,7 @@ msgstr "爱尔兰语"
 
 #: src/prefs-dialog.c:301
 msgid "Scots Gaelic"
-msgstr ""
+msgstr "苏格兰盖尔语"
 
 #: src/prefs-dialog.c:302
 msgid "Galician"
@@ -3799,4 +3836,3 @@ msgstr "Epiphany"
 #: src/window-commands.c:810
 msgid "translator-credits"
 msgstr "开源软件国际化简体中文组(http://i18n.linux.net.cn),Funda Wang"
-
