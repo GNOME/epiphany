@@ -102,6 +102,7 @@ struct EphyDialogPrivate
 	PropertyInfo *props;
 	gboolean modal;
 	gboolean has_default_size;
+	gboolean disposing;
 	char *name;
 
 	int spin_item_id;
@@ -142,6 +143,19 @@ ephy_dialog_get_type (void)
 }
 
 static void
+ephy_dialog_dispose (GObject *object)
+{
+	EphyDialog *dialog = EPHY_DIALOG (object);
+
+	if (dialog->priv->dialog)
+	{
+		dialog->priv->disposing = TRUE;
+		gtk_widget_destroy (dialog->priv->dialog);
+		dialog->priv->dialog = NULL;
+	}
+}
+
+static void
 ephy_dialog_class_init (EphyDialogClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -149,6 +163,7 @@ ephy_dialog_class_init (EphyDialogClass *klass)
         parent_class = g_type_class_peek_parent (klass);
 
         object_class->finalize = ephy_dialog_finalize;
+	object_class->dispose = ephy_dialog_dispose;
 	object_class->set_property = ephy_dialog_set_property;
 	object_class->get_property = ephy_dialog_get_property;
 
@@ -792,6 +807,7 @@ ephy_dialog_init (EphyDialog *dialog)
 	dialog->priv->name = NULL;
 	dialog->priv->initialized = FALSE;
 	dialog->priv->has_default_size = FALSE;
+	dialog->priv->disposing = FALSE;
 }
 
 static void
@@ -932,11 +948,6 @@ ephy_dialog_finalize (GObject *object)
 
         g_return_if_fail (dialog->priv != NULL);
 
-	if (dialog->priv->dialog)
-	{
-		gtk_widget_destroy (dialog->priv->dialog);
-	}
-
 	free_props (dialog->priv->props);
 
 	g_free (dialog->priv->name);
@@ -1062,13 +1073,15 @@ init_props (const EphyDialogProperty *properties, GladeXML *gxml)
 static void
 dialog_destroy_cb (GtkWidget *widget, EphyDialog *dialog)
 {
-	if (dialog->priv->props &&
-	    dialog->priv->dialog)
+	if (dialog->priv->props)
 	{
 		save_props (dialog->priv->props);
 	}
 
-	g_object_unref (dialog);
+	if (!dialog->priv->disposing)
+	{
+		g_object_unref (dialog);
+	}
 }
 
 static void
