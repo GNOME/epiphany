@@ -1,5 +1,13 @@
 2004-09-05  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-location-action.c: (connect_proxy):
+	* src/toolbar.c: (toolbar_setup_actions):
+
+	Use "visible-overflown" for the location entry action, instead
+	of manually setting overflow menu item to NULL.
+
+2004-09-05  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-go-action.c: (connect_proxy):
 
 	Only connect clicked signal on a button, not on a menu item

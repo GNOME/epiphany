@@ -338,6 +338,7 @@ toolbar_setup_actions (Toolbar *t)
 			       "label", _("Address Entry"),
 			       "stock_id", EPHY_STOCK_ENTRY,
 			       "tooltip", _("Enter a web address to open, or a phrase to search for on the web"),
+			       "visible-overflown", FALSE,
 			       NULL);
 	g_signal_connect (action, "go_location",
 			  G_CALLBACK (go_location_cb), t->priv->window);
