@@ -65,9 +65,7 @@
 #include "nsIDOMWindow2.h"
 #include "nsEmbedString.h"
 #include "nsMemory.h"
-#include "nsIServiceManager.h"
 #include "nsIChannel.h"
-#include "nsIInterfaceRequestor.h"
 
 #ifdef ALLOW_PRIVATE_API
 #include "nsIMarkupDocumentViewer.h"
