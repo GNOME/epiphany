@@ -212,8 +212,6 @@ static EggActionGroupEntry ephy_popups_entries [] = {
 	/* Document */
 	{ "SaveBackgroundAs", N_("_Save Background As..."), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_save_background_as), NULL },
-	{ "CopyPageLocation", N_("_Copy Page Location"), GTK_STOCK_COPY, NULL,
-	  NULL, G_CALLBACK (popup_cmd_copy_page_location), NULL },
 
 	/* Framed document */
 	{ "OpenFrame", N_("_Open Frame"), NULL, NULL,

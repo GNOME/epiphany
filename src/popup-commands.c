@@ -218,21 +218,6 @@ popup_cmd_copy_to_clipboard (EphyWindow *window, const char *text)
 }
 
 void
-popup_cmd_copy_page_location (EggAction *action,
-                              EphyWindow *window)
-{
-	char *location;
-	EphyEmbed *embed;
-
-	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
-
-	ephy_embed_get_location (embed, FALSE, &location);
-	popup_cmd_copy_to_clipboard (window, location);
-	g_free (location);
-}
-
-void
 popup_cmd_copy_email (EggAction *action,
                       EphyWindow *window)
 {
