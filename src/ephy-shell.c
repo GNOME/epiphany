@@ -484,8 +484,6 @@ ephy_shell_new_tab (EphyShell *shell,
 	if (flags & EPHY_NEW_TAB_IN_NEW_WINDOW) in_new_window = TRUE;
 	if (flags & EPHY_NEW_TAB_IN_EXISTING_WINDOW) in_new_window = FALSE;
 
-	jump_to = eel_gconf_get_boolean (CONF_TABS_TABBED_AUTOJUMP);
-
 	if (flags & EPHY_NEW_TAB_JUMP) jump_to = TRUE;
 	if (flags & EPHY_NEW_TAB_DONT_JUMP_TO) jump_to = FALSE;
 

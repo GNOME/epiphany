@@ -681,11 +681,6 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 						  EPHY_NEW_TAB_DONT_JUMP_TO);
 		}
 
-		if (num == 0 && eel_gconf_get_boolean (CONF_TABS_TABBED_AUTOJUMP))
-		{
-			ephy_window_jump_to_tab (window, tab);
-		}
-
 		g_free (url);
 		url = NULL;
 		l = l->next;

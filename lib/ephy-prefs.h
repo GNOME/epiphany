@@ -26,11 +26,9 @@ G_BEGIN_DECLS
 
 /* Interface */
 #define CONF_TABS_TABBED "/apps/epiphany/interface/open_in_tab"
-#define CONF_TABS_TABBED_AUTOJUMP "/apps/epiphany/interface/jumpto_tab"
 #define CONF_WINDOWS_SHOW_TOOLBARS "/apps/epiphany/interface/show_toolbars"
 #define CONF_WINDOWS_SHOW_BOOKMARKS_BAR "/apps/epiphany/interface/show_bookmarks_bar"
 #define CONF_WINDOWS_SHOW_STATUSBAR "/apps/epiphany/interface/show_statusbar"
-#define CONF_TOOLBAR_SPINNER_THEME "/apps/epiphany/interface/spinner_theme"
 #define CONF_BOOKMARKS_SELECTED_NODE "/apps/epiphany/interface/bookmark_keyword_selected_node"
 #define CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL "/apps/epiphany/interface/middle_click_open_url"
 
