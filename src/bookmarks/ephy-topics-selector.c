@@ -161,6 +161,7 @@ ephy_topics_selector_set_property (GObject *object,
 	case PROP_BOOKMARK:
 		ephy_topics_selector_set_bookmark
 			(selector, g_value_get_object (value));
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;

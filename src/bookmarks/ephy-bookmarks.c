@@ -832,6 +832,42 @@ ephy_bookmarks_has_keyword (EphyBookmarks *eb,
 	return ephy_node_has_child (keyword, bookmark);
 }
 
+static void
+update_topics_list (EphyBookmarks *eb, EphyNode *bookmark)
+{
+	GPtrArray *children;
+	int i;
+	GString *list;
+	GValue value = { 0, };
+
+	list = g_string_new (NULL);
+
+	children = ephy_node_get_children (eb->priv->keywords);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+
+		kid = g_ptr_array_index (children, i);
+
+		if (ephy_node_has_child (kid, bookmark))
+		{
+			const char *topic;
+			topic = ephy_node_get_property_string
+				(kid, EPHY_NODE_KEYWORD_PROP_NAME);
+			g_string_append (list, topic);
+		}
+	}
+	ephy_node_thaw (eb->priv->keywords);
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, list->str);
+	ephy_node_set_property (bookmark, EPHY_NODE_BMK_PROP_KEYWORDS,
+			        &value);
+	g_value_unset (&value);
+
+	g_string_free (list, TRUE);
+}
+
 void
 ephy_bookmarks_set_keyword (EphyBookmarks *eb,
 			    EphyNode *keyword,
@@ -840,6 +876,8 @@ ephy_bookmarks_set_keyword (EphyBookmarks *eb,
 	if (ephy_node_has_child (keyword, bookmark)) return;
 
 	ephy_node_add_child (keyword, bookmark);
+
+	update_topics_list (eb, bookmark);
 }
 
 void
@@ -850,6 +888,8 @@ ephy_bookmarks_unset_keyword (EphyBookmarks *eb,
 	if (!ephy_node_has_child (keyword, bookmark)) return;
 
 	ephy_node_remove_child (keyword, bookmark);
+
+	update_topics_list (eb, bookmark);
 }
 
 EphyNode *

@@ -1,3 +1,18 @@
+2003-03-24  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* src/bookmarks/ephy-bookmarks.c: (update_topics_list),
+	(ephy_bookmarks_set_keyword), (ephy_bookmarks_unset_keyword):
+	* src/bookmarks/ephy-topics-selector.c:
+	(ephy_topics_selector_set_property):
+	* src/window-commands.c: (bookmarks_hide_cb),
+	(shell_weak_notify_cb), (window_cmd_go_bookmarks):
+
+	Fix warning opening selector.
+	Destroy the editor on exit, ref the shell so you can have just
+	the editor open.
+	Build the key list and set is as property of the node (should solve
+	autocompletion problems).
+
 2003-03-24  David Bordoley <bordoley@msu.edu>
 
 	* data/ui/epiphany-bookmark-editor-ui.xml.in:
