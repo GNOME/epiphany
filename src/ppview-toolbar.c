@@ -24,7 +24,6 @@
 
 #include "ppview-toolbar.h"
 #include "ephy-window.h"
-#include "ephy-bonobo-extensions.h"
 #include "ephy-string.h"
 #include "ephy-gui.h"
 
