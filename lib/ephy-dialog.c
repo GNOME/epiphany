@@ -1152,6 +1152,15 @@ ephy_dialog_show (EphyDialog *dialog)
 	klass->show (dialog);
 }
 
+void
+ephy_dialog_hide (EphyDialog *dialog)
+{
+	g_return_if_fail (EPHY_IS_DIALOG (dialog));
+	g_return_if_fail (dialog->priv->dialog != NULL);
+
+	gtk_widget_hide (dialog->priv->dialog);
+}
+
 #if 0
 static void
 run_response_cb (GtkWidget *dialog,
