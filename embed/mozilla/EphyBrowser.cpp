@@ -900,7 +900,7 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 				/* Mozilla Bug 218277, 195946 and others */
 				default_text.ReplaceChar(0xa0, ' ');
 
-				if (Compare (user_text, default_text) != 0)
+				if (!user_text.Equals (default_text))
 				{
 					*aHasTextArea = PR_TRUE;
 					return NS_OK;
@@ -918,13 +918,25 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 			if (type.EqualsIgnoreCase("text"))
 			{
 				nsAutoString default_text, user_text;
+				PRInt32 max_length;
 				inputElement->GetDefaultValue (default_text);
 				inputElement->GetValue (user_text);
+				inputElement->GetMaxLength (&max_length);
+
+				/* Guard against arguably broken forms where
+				 * default_text is longer than maxlength
+				 * (user_text is cropped, default_text is not)
+				 * Mozilla bug 232057
+				 */
+				if (default_text.Length() > (PRUint32)max_length)
+				{
+					default_text.Truncate (max_length);
+				}
 
 				/* Mozilla Bug 218277, 195946 and others */
 				default_text.ReplaceChar(0xa0, ' ');
 
-				if (Compare (user_text, default_text) != 0)
+				if (!user_text.Equals (default_text))
 				{
 					(*aNumTextFields)++;
 					if (*aNumTextFields >= NUM_MODIFIED_TEXTFIELDS_REQUIRED)
