@@ -170,7 +170,7 @@ ephy_nautilus_view_instance_init (EphyNautilusView *view)
 	view->priv = p;
 	view->priv->embed = ephy_embed_new (G_OBJECT (single));
 
-	g_signal_connect (view->priv->embed, "ge_link_message",
+	g_signal_connect (view->priv->embed, "link_message",
 			  G_CALLBACK (gnv_embed_link_message_cb), 
 			  view);
 	g_signal_connect (view->priv->embed, "ge_location",
@@ -347,12 +347,17 @@ gnv_embed_context_menu_cb (EphyEmbed *embed,
 }
 
 static void
-gnv_embed_link_message_cb (EphyEmbed *embed, const char *message, EphyNautilusView *view)
+gnv_embed_link_message_cb (EphyEmbed *embed, EphyNautilusView *view)
 {
+	char *message;
+
 	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
-	g_return_if_fail (message != NULL);
+
+	message = ephy_embed_get_link_message (embed);
 
 	nautilus_view_report_status (NAUTILUS_VIEW (view), message);
+
+	g_free (message);
 }
 
 static void

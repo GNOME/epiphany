@@ -1,3 +1,19 @@
+2003-11-19  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-embed.c: (ephy_embed_base_init),
+	(ephy_embed_get_location), (ephy_embed_get_link_message),
+	(ephy_embed_get_js_status):
+	* embed/ephy-embed.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-nautilus-view.c: (ephy_nautilus_view_instance_init),
+	(gnv_embed_link_message_cb):
+	* src/ephy-nautilus-view.h:
+	* src/ephy-tab.c: (ephy_tab_set_link_message),
+	(ephy_tab_link_message_cb), (ephy_tab_init):
+
+	Re-use some more signals from GtkMozEmbed; fix getter_Copies usage in
+	mozilla-embed.cpp. Fixes bug #127335.
+
 2003-11-18  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* Makefile.am:

@@ -168,10 +168,6 @@ struct EphyEmbedClass
 				  EphyEmbedEvent *event);
 	void (* favicon)	 (EphyEmbed *embed,
 				  const char *location);
-	void (* link_message)    (EphyEmbed *embed,
-				  const char *link);
-	void (* js_status)       (EphyEmbed *embed,
-				  const char *status);
 	void (* location)        (EphyEmbed *embed,
 				  const char *location);
 	void (* net_state)       (EphyEmbed *embed,
@@ -208,6 +204,8 @@ struct EphyEmbedClass
 	char *		   (* get_title)		(EphyEmbed *embed);
 	char *		   (* get_location)		(EphyEmbed *embed,
 							 gboolean toplevel);
+	char *		   (* get_link_message)		(EphyEmbed *embed);
+	char *		   (* get_js_status)		(EphyEmbed *embed);
 	int		   (* shistory_n_items)		(EphyEmbed *embed);
 	void		   (* shistory_get_nth)		(EphyEmbed *embed,
 							 int nth,
@@ -260,6 +258,10 @@ char 		 *ephy_embed_get_title			(EphyEmbed *embed);
 
 char		 *ephy_embed_get_location		(EphyEmbed *embed,
 							 gboolean toplevel);
+
+char		 *ephy_embed_get_link_message		(EphyEmbed *embed);
+
+char		 *ephy_embed_get_js_status		(EphyEmbed *embed);
 
 /* Navigation */
 gboolean	  ephy_embed_can_go_back		(EphyEmbed *embed);

@@ -96,8 +96,6 @@ signal_connections[] =
 {
 	{ "location",        (void *) mozilla_embed_location_changed_cb  },
         { "net_state_all",   (void *) mozilla_embed_net_state_all_cb     },
-        { "link_message",    (void *) mozilla_embed_link_message_cb      },
-        { "js_status",       (void *) mozilla_embed_js_status_cb         },
         { "dom_mouse_click", (void *) mozilla_embed_dom_mouse_click_cb   },
 	{ "dom_mouse_down",  (void *) mozilla_embed_dom_mouse_down_cb    },
         { "new_window",      (void *) mozilla_embed_new_window_cb        },
@@ -480,12 +478,19 @@ impl_go_up (EphyEmbed *embed)
 static char *
 impl_get_title (EphyEmbed *embed)
 {
-	nsXPIDLString uTitle;
+	return gtk_moz_embed_get_title (GTK_MOZ_EMBED (embed));
+}
 
-	*getter_Copies(uTitle) =
-		gtk_moz_embed_get_title_unichar (GTK_MOZ_EMBED(embed));
+static char *
+impl_get_link_message (EphyEmbed *embed)
+{
+	return gtk_moz_embed_get_link_message (GTK_MOZ_EMBED (embed));
+}
 
-	return g_strdup (NS_ConvertUCS2toUTF8(uTitle).get());
+static char *
+impl_get_js_status (EphyEmbed *embed)
+{
+	return gtk_moz_embed_get_js_status (GTK_MOZ_EMBED (embed));
 }
 
 static char *
@@ -808,30 +813,6 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 	g_signal_emit_by_name (membed, "ge_net_state", aURI, estate);
 }
 
-static void
-mozilla_embed_link_message_cb (GtkMozEmbed *embed, 
-			       MozillaEmbed *membed)
-{
-	nsXPIDLString message;
-
-	*getter_Copies(message) = gtk_moz_embed_get_link_message_unichar (embed);
-	
-	g_signal_emit_by_name (membed, "ge_link_message",
-			       NS_ConvertUCS2toUTF8(message).get());
-}
-
-static void
-mozilla_embed_js_status_cb (GtkMozEmbed *embed, 
-			    MozillaEmbed *membed)
-{
-	nsXPIDLString status;
-
-	*getter_Copies(status) = gtk_moz_embed_get_js_status_unichar (embed);
-	
-	g_signal_emit_by_name (membed, "ge_js_status",
-			       NS_ConvertUCS2toUTF8(status).get());
-}
-
 static gint
 mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 		               MozillaEmbed *membed)
@@ -1100,6 +1081,8 @@ ephy_embed_init (EphyEmbedClass *embed_class)
 	embed_class->go_up = impl_go_up;
 	embed_class->get_title = impl_get_title;
 	embed_class->get_location = impl_get_location;
+	embed_class->get_link_message = impl_get_link_message;
+	embed_class->get_js_status = impl_get_js_status;
 	embed_class->reload = impl_reload;
 	embed_class->zoom_set = impl_zoom_set;
 	embed_class->zoom_get = impl_zoom_get;

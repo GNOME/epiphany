@@ -107,7 +107,7 @@ static void	ephy_tab_set_icon_address	(EphyTab *tab,
 static void	ephy_tab_set_load_status	(EphyTab *tab,
 						 gboolean status);
 static void	ephy_tab_set_link_message	(EphyTab *tab,
-						 const char *message);
+						 char *message);
 static void	ephy_tab_set_load_percent	(EphyTab *tab,
 						 int percent);
 static void	ephy_tab_update_navigation_flags(EphyTab *tab);
@@ -445,12 +445,12 @@ ephy_tab_get_load_status (EphyTab *tab)
 }
 
 static void
-ephy_tab_set_link_message (EphyTab *tab, const char *message)
+ephy_tab_set_link_message (EphyTab *tab, char *message)
 {
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	g_free (tab->priv->link_message);
-	tab->priv->link_message = g_strdup (message);
+	tab->priv->link_message = message;
 
 	g_object_notify (G_OBJECT (tab), "message");
 }
@@ -583,10 +583,9 @@ ephy_tab_favicon_cb (EphyEmbed *embed,
 
 static void
 ephy_tab_link_message_cb (EphyEmbed *embed,
-			  const char *message,
 			  EphyTab *tab)
 {
-	ephy_tab_set_link_message (tab, message);
+	ephy_tab_set_link_message (tab, ephy_embed_get_link_message (embed));
 }
 
 static void
@@ -1093,7 +1092,7 @@ ephy_tab_init (EphyTab *tab)
 	g_signal_connect (embed_widget, "destroy",
 			  G_CALLBACK (ephy_tab_embed_destroy_cb),
 			  tab);
-	g_signal_connect (embed, "ge_link_message",
+	g_signal_connect (embed, "link_message",
 			  G_CALLBACK (ephy_tab_link_message_cb),
 			  tab);
 	g_signal_connect (embed, "ge_location",

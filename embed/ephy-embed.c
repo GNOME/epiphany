@@ -95,16 +95,6 @@ ephy_embed_base_init (gpointer g_class)
 			      2,
 			      G_TYPE_POINTER,
 			      G_TYPE_INT);
-	ephy_embed_signals[LINK_MESSAGE] =
-		g_signal_new ("ge_link_message",
-			      EPHY_TYPE_EMBED,
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyEmbedClass, link_message),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__STRING,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_STRING);
 	ephy_embed_signals[CONTEXT_MENU] =
 		g_signal_new ("ge_context_menu",
 			      EPHY_TYPE_EMBED,
@@ -120,16 +110,6 @@ ephy_embed_base_init (gpointer g_class)
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (EphyEmbedClass, favicon),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__STRING,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_STRING);
-	ephy_embed_signals[JS_STATUS] =
-		g_signal_new ("ge_js_status",
-			      EPHY_TYPE_EMBED,
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyEmbedClass, js_status),
 			      NULL, NULL,
 			      g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE,
@@ -296,6 +276,20 @@ ephy_embed_get_location (EphyEmbed *embed,
 {
 	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
 	return klass->get_location (embed, toplevel);
+}
+
+char *
+ephy_embed_get_link_message (EphyEmbed *embed)
+{
+	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
+	return klass->get_link_message (embed);
+}
+
+char *
+ephy_embed_get_js_status (EphyEmbed *embed)
+{
+	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
+	return klass->get_js_status (embed);
 }
 
 void
