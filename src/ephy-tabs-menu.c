@@ -22,12 +22,13 @@
 
 #include "ephy-tabs-menu.h"
 #include "ephy-string.h"
-#include "egg-menu-merge.h"
 #include "ephy-marshal.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
-#include "egg-action.h"
 
+#include <gtk/gtkaccelmap.h>
+#include <gtk/gtkaction.h>
+#include <gtk/gtkuimanager.h>
 #include <string.h>
 #include <stdlib.h>
 #include <libxml/entities.h>
@@ -166,7 +167,7 @@ ephy_tabs_menu_clean (EphyTabsMenu *menu)
 	if (p->ui_id > 0)
 	{
 		gtk_ui_manager_remove_ui (merge, p->ui_id);
-		gtk_ui_manager_ensure_update (merge);
+/* FIXME		gtk_ui_manager_ensure_update (merge); */
 		p->ui_id = 0;
 	}
 
@@ -205,25 +206,24 @@ ephy_tabs_menu_new (EphyWindow *window)
 					     NULL));
 }
 
-/* This code is from GtkActionGroup:
- * Ideally either GtkAction should support setting an accelerator from
- * a string or GtkActionGroup would support adding single EggActionEntry's
- * to an action group.
- */
 static void
 tab_set_action_accelerator (GtkActionGroup *action_group,
 			    GtkAction *action,
 			    guint tab_number)
 {
+	const char *action_name, *action_group_name;
 	char *accel_path = NULL;
 	char accel[7];
 	gint accel_number;
 	guint accel_key;
 	GdkModifierType accel_mods;
 
+	action_name = gtk_action_get_name (action);
+	action_group_name = gtk_action_group_get_name (action_group);
+
 	/* set the accel path for the menu item */
-	accel_path = g_strconcat ("<Actions>/", action_group->name, "/",
-				  action->name, NULL);
+	accel_path = g_strconcat ("<Actions>/", action_group_name, "/",
+				  action_name, NULL);
 
 	/* Only the first ten tabs get accelerators starting from 1 through 0 */
 	if (tab_number < 10)
@@ -237,17 +237,13 @@ tab_set_action_accelerator (GtkActionGroup *action_group,
 
 		if (accel_key != 0)
 		{
-			gtk_accel_map_change_entry (accel_path, accel_key,
-						    accel_mods, TRUE);
+			gtk_action_set_accel_path (action, accel_path);
 		}
 	}
 	else
 	{
-		gtk_accel_map_change_entry (accel_path, 0, 0, TRUE);
+		gtk_action_set_accel_path (action, accel_path);
 	}
-
-	action->accel_quark = g_quark_from_string (accel_path);
-	g_free (accel_path);
 }
 
 void
@@ -288,17 +284,20 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 
 	for (l = tabs; l != NULL; l = l->next)
 	{
+		const char *action_name;
+
 		tab = (EphyTab *) l->data;
 		action = GTK_ACTION (ephy_tab_get_action (tab));
+		action_name = gtk_action_get_name (action);
 
 		tab_set_action_accelerator (p->action_group, action, i);
 
 		gtk_action_group_add_action (p->action_group, action);
 
 		g_string_append (xml, "<menuitem name=\"");
-		g_string_append (xml, action->name);
+		g_string_append (xml, action_name);
 		g_string_append (xml, "Menu\" verb=\"");
-		g_string_append (xml, action->name);
+		g_string_append (xml, action_name);
 		g_string_append (xml, "\"/>\n");
 
 		++i;

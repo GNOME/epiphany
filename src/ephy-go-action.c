@@ -22,11 +22,11 @@
 #endif
 
 #include "ephy-go-action.h"
-
-#include <gtk/gtk.h>
-#include <bonobo/bonobo-i18n.h>
-#include "eggtoolitem.h"
 #include "ephy-debug.h"
+
+#include <bonobo/bonobo-i18n.h>
+#include <gtk/gtktoolitem.h>
+#include <gtk/gtkbutton.h>
 
 #define MENU_ID "ephy-go-action-menu-id"
 
@@ -75,7 +75,7 @@ create_tool_item (GtkAction *action)
 	GtkWidget *button;
 	GtkWidget *item;
 
-	item = GTK_WIDGET (egg_tool_item_new ());
+	item = GTK_WIDGET (gtk_tool_item_new ());
 
 	button = gtk_button_new_with_label (_("Go"));
 	gtk_button_set_relief(GTK_BUTTON (button), GTK_RELIEF_NONE);
@@ -110,7 +110,7 @@ create_menu_proxy_cb (GtkToolItem *item, GtkAction *action)
 
 	GTK_ACTION_GET_CLASS (action)->connect_proxy (action, menu_item);
 
-	egg_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
+	gtk_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
 
 	return TRUE;
 }

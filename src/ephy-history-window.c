@@ -27,6 +27,9 @@
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
+#include <gtk/gtkactiongroup.h>
+#include <gtk/gtktoggleaction.h>
+#include <gtk/gtkuimanager.h>
 #include <gdk/gdkkeysyms.h>
 #include <bonobo/bonobo-i18n.h>
 #include <libgnomeui/gnome-stock-icons.h>
@@ -37,9 +40,6 @@
 #include "ephy-history-window.h"
 #include "ephy-shell.h"
 #include "ephy-dnd.h"
-#include "egg-action-group.h"
-#include "egg-toggle-action.h"
-#include "egg-menu-merge.h"
 #include "ephy-state.h"
 #include "window-commands.h"
 #include "ephy-file-helpers.h"
@@ -119,7 +119,7 @@ enum
 
 static GObjectClass *parent_class = NULL;
 
-static GtkActionGroupEntry ephy_history_ui_entries [] = {
+static GtkActionEntry ephy_history_ui_entries [] = {
 	/* Toplevel */
 	{ "File", NULL, N_("_File") },
 	{ "Edit", NULL, N_("_Edit") },
@@ -141,24 +141,24 @@ static GtkActionGroupEntry ephy_history_ui_entries [] = {
 	  G_CALLBACK (cmd_bookmark_link) },
 	{ "Close", GTK_STOCK_CLOSE, N_("_Close"), "<control>W",
 	  N_("Close the history window"),
-	  G_CALLBACK (cmd_close), NULL },
+	  G_CALLBACK (cmd_close) },
 
 	/* Edit Menu */
 	{ "Cut", GTK_STOCK_CUT, N_("Cu_t"), "<control>X",
 	  N_("Cut the selection"),
-	  G_CALLBACK (cmd_cut), NULL },
+	  G_CALLBACK (cmd_cut) },
 	{ "Copy", GTK_STOCK_COPY, N_("_Copy"), "<control>C",
 	  N_("Copy the selection"),
-	  G_CALLBACK (cmd_copy), NULL },
+	  G_CALLBACK (cmd_copy) },
 	{ "Paste", GTK_STOCK_PASTE, N_("_Paste"), "<control>V",
 	  N_("Paste the clipboard"),
-	  G_CALLBACK (cmd_paste), NULL },
+	  G_CALLBACK (cmd_paste) },
 	{ "SelectAll", NULL, N_("Select _All"), "<control>A",
 	  N_("Select all history links or text"),
-	  G_CALLBACK (cmd_select_all), NULL },
+	  G_CALLBACK (cmd_select_all) },
 	{ "Clear", GTK_STOCK_CLEAR, N_("C_lear History"), NULL,
 	  N_("Clear your browsing history"),
-	  G_CALLBACK (cmd_clear), NULL },
+	  G_CALLBACK (cmd_clear) },
 
 	/* View Menu */
 /*	{ "ViewTitle", NULL, N_("_Title"), NULL,
@@ -177,7 +177,7 @@ static GtkActionGroupEntry ephy_history_ui_entries [] = {
 	  G_CALLBACK (cmd_help_contents) },
 	{ "HelpAbout", GNOME_STOCK_ABOUT, N_("_About"), NULL,
 	  N_("Display credits for the web browser creators"),
-	  G_CALLBACK (window_cmd_help_about), NULL },
+	  G_CALLBACK (window_cmd_help_about) },
 };
 static guint ephy_history_ui_n_entries = G_N_ELEMENTS (ephy_history_ui_entries);
 
@@ -945,7 +945,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	GdkPixbuf *icon;
-	int i, col_id;
+	int col_id;
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("History"));
 
@@ -958,11 +958,6 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	g_signal_connect (editor, "delete_event",
 			  G_CALLBACK (delete_event_cb), NULL);
 
-	for (i = 0; i < ephy_history_ui_n_entries; i++)
-	{
-		ephy_history_ui_entries[i].user_data = editor;
-	}
-
 	editor->priv->menu_dock = gtk_vbox_new (FALSE, 0);
 	gtk_widget_show (editor->priv->menu_dock);
 	gtk_container_add (GTK_CONTAINER (editor), editor->priv->menu_dock);
@@ -971,20 +966,21 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	g_signal_connect (ui_merge, "add_widget", G_CALLBACK (add_widget), editor);
 	action_group = gtk_action_group_new ("PopupActions");
 	gtk_action_group_add_actions (action_group, ephy_history_ui_entries,
-				      ephy_history_ui_n_entries);
+				      ephy_history_ui_n_entries, editor);
 	gtk_ui_manager_insert_action_group (ui_merge,
 					    action_group, 0);
 	gtk_ui_manager_add_ui_from_file (ui_merge,
 				         ephy_file ("epiphany-history-window-ui.xml"),
 				         NULL);
-	gtk_window_add_accel_group (GTK_WINDOW (editor), ui_merge->accel_group);
-	gtk_ui_manager_ensure_update (ui_merge);
+	gtk_window_add_accel_group (GTK_WINDOW (editor),
+				    gtk_ui_manager_get_accel_group (ui_merge));
+	/* FIXME gtk_ui_manager_ensure_update (ui_merge);*/
 	editor->priv->ui_merge = ui_merge;
 	editor->priv->action_group = action_group;
 
 	/* Fixme: We should implement gconf prefs for monitoring this setting */
 	action = gtk_action_group_get_action (action_group, "ViewTitle");
-	egg_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
 
 	hpaned = gtk_hpaned_new ();
 	gtk_container_set_border_width (GTK_CONTAINER (hpaned), 0);

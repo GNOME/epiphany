@@ -55,11 +55,11 @@
 #include <X11/Xlib.h>
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
-#include "egg-action-group.h"
-#include "egg-menu-merge.h"
-#include "egg-toggle-action.h"
+#include <gtk/gtkactiongroup.h>
+#include <gtk/gtkuimanager.h>
+#include <gtk/gtktoggleaction.h>
 
-static GtkActionGroupEntry ephy_menu_entries [] = {
+static GtkActionEntry ephy_menu_entries [] = {
 
 	/* Toplevel */
 	{ "File", NULL, N_("_File") },
@@ -134,16 +134,16 @@ static GtkActionGroupEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_view_reload) },
 	{ "ViewToolbar", NULL, N_("_Toolbar"), "<shift><control>T",
 	  N_("Show or hide toolbar"),
-	  G_CALLBACK (window_cmd_view_toolbar), TOGGLE_ACTION },
+	  G_CALLBACK (window_cmd_view_toolbar), TRUE },
 	{ "ViewBookmarksBar", NULL, N_("_Bookmarks Bar"), NULL,
 	  N_("Show or hide bookmarks bar"),
-	  G_CALLBACK (window_cmd_view_bookmarks_bar), NULL, TOGGLE_ACTION },
+	  G_CALLBACK (window_cmd_view_bookmarks_bar), TRUE },
 	{ "ViewStatusbar", NULL, N_("St_atusbar"), NULL,
 	  N_("Show or hide statusbar"),
-	  G_CALLBACK (window_cmd_view_statusbar), TOGGLE_ACTION },
+	  G_CALLBACK (window_cmd_view_statusbar), TRUE },
 	{ "ViewFullscreen", EPHY_STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
 	  N_("Browse at full screen"),
-	  G_CALLBACK (window_cmd_view_fullscreen), TOGGLE_ACTION},
+	  G_CALLBACK (window_cmd_view_fullscreen), TRUE},
 	{ "ViewZoomIn", GTK_STOCK_ZOOM_IN, N_("Zoom _In"), "<control>plus",
 	  N_("Increase the text size"),
 	  G_CALLBACK (window_cmd_view_zoom_in) },
@@ -153,7 +153,7 @@ static GtkActionGroupEntry ephy_menu_entries [] = {
 	{ "ViewZoomNormal", GTK_STOCK_ZOOM_100, N_("_Normal Size"), NULL,
 	  N_("Use the normal text size"),
 	  G_CALLBACK (window_cmd_view_zoom_normal) },
-	{ "ViewEncoding", N_("_Encoding"), NULL, NULL, NULL, NULL, NULL },
+	{ "ViewEncoding", N_("_Encoding"), NULL, NULL, NULL, NULL },
 	{ "ViewPageSource", EPHY_STOCK_VIEWSOURCE, N_("_Page Source"), "<control>U",
 	  N_("View the source code of the page"),
 	  G_CALLBACK (window_cmd_view_page_source) },
@@ -213,7 +213,7 @@ static GtkActionGroupEntry ephy_menu_entries [] = {
 };
 static guint ephy_menu_n_entries = G_N_ELEMENTS (ephy_menu_entries);
 
-static GtkActionGroupEntry ephy_popups_entries [] = {
+static GtkActionEntry ephy_popups_entries [] = {
 	/* Document */
 	{ "SaveBackgroundAs", NULL, N_("_Save Background As..."), NULL,
 	  NULL, G_CALLBACK (popup_cmd_save_background_as) },
@@ -231,30 +231,30 @@ static GtkActionGroupEntry ephy_popups_entries [] = {
 
 	/* Links */
 	{ "OpenLink", GTK_STOCK_OPEN, N_("_Open Link"),
-	  NULL, G_CALLBACK (popup_cmd_open_link) },
+	  NULL, NULL, G_CALLBACK (popup_cmd_open_link) },
 	{ "OpenLinkInNewWindow", NULL, N_("Open Link in _New Window"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_link_in_new_window) },
 	{ "OpenLinkInNewTab", NULL, N_("Open Link in New _Tab"),
-	  NULL, G_CALLBACK (popup_cmd_link_in_new_tab) },
+	  NULL, NULL, G_CALLBACK (popup_cmd_link_in_new_tab) },
 	{ "DownloadLink", GTK_STOCK_SAVE, N_("_Download Link..."), NULL,
 	  NULL, G_CALLBACK (popup_cmd_download_link) },
-	{ "BookmarkLink", EPHY_STOCK_BOOKMARK_PAGE, N_("_Bookmark Link..."), NULL,
-	  NULL, G_CALLBACK (popup_cmd_bookmark_link), NULL },
+	{ "BookmarkLink", EPHY_STOCK_BOOKMARK_PAGE, N_("_Bookmark Link..."),
+	  NULL, NULL, G_CALLBACK (popup_cmd_bookmark_link) },
 	{ "CopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
-	  NULL, G_CALLBACK (popup_cmd_copy_link_address), NULL },
+	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
 
 	/* Images */
 	{ "OpenImage", GTK_STOCK_OPEN, N_("Open _Image"), GTK_STOCK_OPEN,
-	  NULL, G_CALLBACK (popup_cmd_open_image), NULL },
+	  NULL, G_CALLBACK (popup_cmd_open_image) },
 	{ "OpenImageInNewWindow", NULL, N_("Open Image in New _Window"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_image_in_new_window) },
 	{ "OpenImageInNewTab", NULL, N_("Open Image in New T_ab"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_image_in_new_tab) },
 	{ "SaveImageAs", GTK_STOCK_SAVE_AS, N_("_Save Image As..."), NULL,
 	  NULL, G_CALLBACK (popup_cmd_save_image_as) },
-	{ "SetImageAsBackground", N_("_Use Image As Background"), NULL,
+	{ "SetImageAsBackground", NULL, N_("_Use Image As Background"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_set_image_as_background) },
-	{ "CopyImageLocation", N_("Copy I_mage Address"), NULL,
+	{ "CopyImageLocation", NULL, N_("Copy I_mage Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_image_location) },
 };
 static guint ephy_popups_n_entries = G_N_ELEMENTS (ephy_popups_entries);
@@ -628,7 +628,7 @@ ephy_window_state_event_cb (GtkWidget *widget, GdkEventWindowState *event, EphyW
 
 		action = gtk_action_group_get_action (window->priv->action_group,
 						      "ViewFullscreen");
-		egg_toggle_action_set_active (GTK_TOGGLE_ACTION (action), fullscreen);
+		gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), fullscreen);
 	}
 
 	return FALSE;
@@ -641,7 +641,6 @@ setup_window (EphyWindow *window)
 	GtkAction *action;
 	GtkUIManager *merge;
 	GtkWidget *menu;
-	int i;
 
 	window->priv->main_vbox = gtk_vbox_new (FALSE, 0);
 	gtk_widget_show (window->priv->main_vbox);
@@ -654,21 +653,11 @@ setup_window (EphyWindow *window)
 			    GTK_WIDGET (window->priv->menu_dock),
 			    FALSE, TRUE, 0);
 
-	for (i = 0; i < ephy_menu_n_entries; i++)
-	{
-		ephy_menu_entries[i].user_data = window;
-	}
-
-	for (i = 0; i < ephy_popups_n_entries; i++)
-	{
-		ephy_popups_entries[i].user_data = window;
-	}
-
 	merge = gtk_ui_manager_new ();
 
 	action_group = gtk_action_group_new ("WindowActions");
 	gtk_action_group_add_actions (action_group, ephy_menu_entries,
-				      ephy_menu_n_entries);
+				      ephy_menu_n_entries, window);
 	gtk_ui_manager_insert_action_group (merge, action_group, 0);
 	window->priv->action_group = action_group;
 	action = gtk_action_group_get_action (action_group, "FileOpen");
@@ -693,7 +682,7 @@ setup_window (EphyWindow *window)
 
 	action_group = gtk_action_group_new ("PopupsActions");
 	gtk_action_group_add_actions (action_group, ephy_popups_entries,
-				      ephy_popups_n_entries);
+				      ephy_popups_n_entries, window);
 	gtk_ui_manager_insert_action_group (merge, action_group, 0);
 	window->priv->popups_action_group = action_group;
 
@@ -701,8 +690,9 @@ setup_window (EphyWindow *window)
 	g_signal_connect (merge, "add_widget", G_CALLBACK (add_widget), window);
 	gtk_ui_manager_add_ui_from_file
 		(merge, ephy_file ("epiphany-ui.xml"), NULL);
-	gtk_window_add_accel_group (GTK_WINDOW (window), merge->accel_group);
-	gtk_ui_manager_ensure_update (merge);
+	gtk_window_add_accel_group (GTK_WINDOW (window),
+				    gtk_ui_manager_get_accel_group (merge));
+/*FIXME	gtk_ui_manager_ensure_update (merge);*/
 
 	menu = gtk_ui_manager_get_widget (merge, "/menu/EditMenu");
 	g_signal_connect (menu, "activate", G_CALLBACK (menu_activate_cb), window);
@@ -1558,15 +1548,15 @@ update_layout_toggles (EphyWindow *window)
 	GtkAction *action;
 
 	action = gtk_action_group_get_action (action_group, "ViewToolbar");
-	egg_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
 				      mask & EMBED_CHROME_TOOLBARON);
 
 	action = gtk_action_group_get_action (action_group, "ViewBookmarksBar");
-	egg_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
 				      mask & EMBED_CHROME_BOOKMARKSBARON);
 
 	action = gtk_action_group_get_action (action_group, "ViewStatusbar");
-	egg_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
 				      mask & EMBED_CHROME_STATUSBARON);
 }
 

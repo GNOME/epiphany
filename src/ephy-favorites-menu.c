@@ -21,10 +21,11 @@
 #endif
 
 #include "ephy-favorites-menu.h"
-#include "egg-menu-merge.h"
 #include "ephy-bookmark-action.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
+
+#include <gtk/gtkuimanager.h>
 
 /**
  * Private data
@@ -88,7 +89,7 @@ ephy_favorites_menu_clean (EphyFavoritesMenu *wrhm)
 	if (p->ui_id > 0)
 	{
 		gtk_ui_manager_remove_ui (merge, p->ui_id);
-		gtk_ui_manager_ensure_update (merge);
+		/* FIXME gtk_ui_manager_ensure_update (merge); */
 		p->ui_id = 0;
 	}
 

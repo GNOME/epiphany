@@ -17,7 +17,6 @@
  */
 
 #include "ephy-favicon-action.h"
-#include "eggtoolitem.h"
 #include "ephy-window.h"
 #include "ephy-tab.h"
 #include "ephy-dnd.h"
@@ -25,6 +24,10 @@
 #include "ephy-shell.h"
 #include "ephy-event-box.h"
 #include "ephy-debug.h"
+
+#include <gtk/gtktoolitem.h>
+#include <gtk/gtkimage.h>
+#include <gtk/gtkstock.h>
 
 static GtkTargetEntry url_drag_types [] =
 {
@@ -127,7 +130,7 @@ create_tool_item (GtkAction *action)
 	GtkWidget *ebox;
 	GtkWidget *item;
 
-	item = GTK_WIDGET (egg_tool_item_new ());
+	item = GTK_WIDGET (gtk_tool_item_new ());
 
 	ebox = ephy_event_box_new ();
 	image = gtk_image_new ();

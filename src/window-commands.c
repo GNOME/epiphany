@@ -30,9 +30,6 @@
 #include "pdm-dialog.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-new-bookmark.h"
-#include "egg-toggle-action.h"
-#include "egg-editable-toolbar.h"
-#include "egg-toolbar-editor.h"
 #include "ephy-file-helpers.h"
 #include "toolbar.h"
 #include "ephy-state.h"
@@ -40,6 +37,8 @@
 #include "ephy-zoom.h"
 #include "prefs-dialog.h"
 #include "ephy-toolbars-model.h"
+#include "egg-editable-toolbar.h"
+#include "egg-toolbar-editor.h"
 
 #include <string.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
@@ -50,6 +49,7 @@
 #include <libgnomeui/gnome-icon-theme.h>
 #include <libgnome/gnome-program.h>
 #include <gtk/gtkeditable.h>
+#include <gtk/gtktoggleaction.h>
 
 enum
 {
@@ -516,7 +516,7 @@ window_cmd_view_bookmarks_bar (GtkAction *action,
 	gboolean current_state;
 
 	mask = ephy_window_get_chrome (window);
-	active = GTK_TOGGLE_ACTION (action)->active;
+	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
 	current_state = (mask & EMBED_CHROME_BOOKMARKSBARON) > 0;
 
 	if (active != current_state)
@@ -535,7 +535,7 @@ window_cmd_view_toolbar (GtkAction *action,
 	gboolean current_state;
 
 	mask = ephy_window_get_chrome (window);
-	active = GTK_TOGGLE_ACTION (action)->active;
+	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
 	current_state = (mask & EMBED_CHROME_TOOLBARON) > 0;
 
 	if (active != current_state)
@@ -554,7 +554,7 @@ window_cmd_view_statusbar (GtkAction *action,
 	gboolean current_state;
 
 	mask = ephy_window_get_chrome (window);
-	active = GTK_TOGGLE_ACTION (action)->active;
+	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
 	current_state = (mask & EMBED_CHROME_STATUSBARON) > 0;
 
 	if (active != current_state)
@@ -568,7 +568,7 @@ void
 window_cmd_view_fullscreen (GtkAction *action,
 			    EphyWindow *window)
 {
-	if (GTK_TOGGLE_ACTION (action)->active)
+	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)))
 	{
 		gtk_window_fullscreen (GTK_WINDOW (window));
 	}

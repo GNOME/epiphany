@@ -22,6 +22,9 @@
 #include "ephy-string.h"
 #include "ephy-debug.h"
 
+#include <gtk/gtkimage.h>
+#include <gtk/gtkimagemenuitem.h>
+
 static void ephy_navigation_action_init       (EphyNavigationAction *action);
 static void ephy_navigation_action_class_init (EphyNavigationActionClass *class);
 

@@ -150,7 +150,7 @@ ephy_location_action_get_widget (EphyLocationAction *action)
 {
 	GSList *slist;
 
-	slist = GTK_ACTION (action)->proxies;
+	slist = gtk_action_get_proxies (GTK_ACTION (action));
 
 	if (slist)
 	{

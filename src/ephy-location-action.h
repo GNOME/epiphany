@@ -19,8 +19,7 @@
 #ifndef EPHY_LOCATION_ACTION_H
 #define EPHY_LOCATION_ACTION_H
 
-#include <gtk/gtk.h>
-#include <egg-action.h>
+#include <gtk/gtkaction.h>
 
 #define EPHY_TYPE_LOCATION_ACTION            (ephy_location_action_get_type ())
 #define EPHY_LOCATION_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_LOCATION_ACTION, EphyLocationAction))

@@ -25,12 +25,12 @@
 #include "ephy-bonobo-extensions.h"
 #include "ephy-string.h"
 #include "ephy-gui.h"
-#include "egg-menu-merge.h"
 
 #include <string.h>
 #include <bonobo/bonobo-i18n.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkmenu.h>
+#include <gtk/gtkuimanager.h>
 
 static void ppview_toolbar_class_init (PPViewToolbarClass *klass);
 static void ppview_toolbar_init (PPViewToolbar *t);
@@ -85,27 +85,27 @@ static void
 toolbar_cmd_ppv_close (GtkUIManager *merge,
 		       PPViewToolbar *t);
 
-static GtkActionGroupEntry entries [] = {
-	{ "PPVGotoFirst", N_("First"),
-	  GTK_STOCK_GOTO_FIRST, NULL,
+static GtkActionEntry entries [] = {
+	{ "PPVGotoFirst", GTK_STOCK_GOTO_FIRST,
+	  N_("First"), NULL,
 	  N_("Go to the first page"),
-	  (GCallback)toolbar_cmd_ppv_goto_first, NULL },
-	{ "PPVGotoLast", N_("Last"),
-	  GTK_STOCK_GOTO_LAST, NULL,
+	  (GCallback)toolbar_cmd_ppv_goto_first },
+	{ "PPVGotoLast", GTK_STOCK_GOTO_LAST,
+	  N_("Last"), NULL,
 	  N_("Go to the last page"),
-	  (GCallback)toolbar_cmd_ppv_goto_last, NULL },
-	{ "PPVGoBack", N_("Previous"),
-	  GTK_STOCK_GO_BACK, NULL,
+	  (GCallback)toolbar_cmd_ppv_goto_last },
+	{ "PPVGoBack", GTK_STOCK_GO_BACK,
+	  N_("Previous"), NULL,
 	  N_("Go to the previous page"),
-	  (GCallback)toolbar_cmd_ppv_go_back, NULL },
-	{ "PPVGoForward", N_("Next"),
-	  GTK_STOCK_GO_FORWARD, NULL,
+	  (GCallback)toolbar_cmd_ppv_go_back },
+	{ "PPVGoForward", GTK_STOCK_GO_FORWARD,
+	  N_("Next"), NULL,
 	  N_("Go to next page"),
-	  (GCallback)toolbar_cmd_ppv_go_forward, NULL },
-	{ "PPVClose", N_("Close"),
-	  GTK_STOCK_CLOSE, NULL,
+	  (GCallback)toolbar_cmd_ppv_go_forward },
+	{ "PPVClose", GTK_STOCK_CLOSE,
+	  N_("Close"), NULL,
 	  N_("Close print preview"),
-	  (GCallback)toolbar_cmd_ppv_close, NULL },
+	  (GCallback)toolbar_cmd_ppv_close },
 };
 static guint n_entries = G_N_ELEMENTS (entries);
 
@@ -238,7 +238,8 @@ ppview_toolbar_set_window (PPViewToolbar *t, EphyWindow *window)
 	t->priv->original_mask = ephy_window_get_chrome (window);
 
 	t->priv->action_group = gtk_action_group_new ("PPViewActions");
-	gtk_action_group_add_actions (t->priv->action_group, entries, n_entries);
+	gtk_action_group_add_actions (t->priv->action_group, entries,	
+				      n_entries, t);
 	gtk_ui_manager_insert_action_group (t->priv->ui_merge,
 					    t->priv->action_group, 0);
 	t->priv->ui_id = gtk_ui_manager_add_ui_from_string
@@ -250,18 +251,11 @@ ppview_toolbar_set_window (PPViewToolbar *t, EphyWindow *window)
 static void
 ppview_toolbar_init (PPViewToolbar *t)
 {
-	int i;
-
         t->priv = g_new0 (PPViewToolbarPrivate, 1);
 
 	t->priv->window = NULL;
 	t->priv->ui_merge = NULL;
 	t->priv->current_page = 1;
-
-	for (i = 0; i < n_entries; i++)
-	{
-		entries[i].user_data = t;
-	}
 }
 
 static void

@@ -19,8 +19,7 @@
 #ifndef EPHY_FAVICON_ACTION_H
 #define EPHY_FAVICON_ACTION_H
 
-#include <gtk/gtk.h>
-#include <egg-action.h>
+#include <gtk/gtkaction.h>
 
 #define EPHY_TYPE_FAVICON_ACTION            (ephy_favicon_action_get_type ())
 #define EPHY_FAVICON_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_FAVICON_ACTION, EphyFaviconAction))

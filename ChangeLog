@@ -1,3 +1,35 @@
+2003-08-30  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* src/ephy-encoding-menu.c: (ephy_encoding_menu_verb_cb):
+	* src/ephy-favicon-action.c: (create_tool_item):
+	* src/ephy-favicon-action.h:
+	* src/ephy-favorites-menu.c: (ephy_favorites_menu_clean):
+	* src/ephy-go-action.c: (create_tool_item), (create_menu_proxy_cb):
+	* src/ephy-go-action.h:
+	* src/ephy-history-window.c: (ephy_history_window_construct):
+	* src/ephy-location-action.c: (ephy_location_action_get_widget):
+	* src/ephy-location-action.h:
+	* src/ephy-navigation-action.c:
+	* src/ephy-navigation-action.h:
+	* src/ephy-spinner-action.c: (create_tool_item),
+	(item_parent_set_cb):
+	* src/ephy-spinner-action.h:
+	* src/ephy-tab.c: (ephy_tab_init):
+	* src/ephy-tabs-menu.c: (ephy_tabs_menu_clean),
+	(tab_set_action_accelerator), (ephy_tabs_menu_update):
+	* src/ephy-window.c: (ephy_window_state_event_cb), (setup_window),
+	(update_layout_toggles):
+	* src/popup-commands.c:
+	* src/ppview-toolbar.c: (ppview_toolbar_set_window),
+	(ppview_toolbar_init):
+	* src/toolbar.c: (toolbar_activate_location):
+	* src/window-commands.c: (window_cmd_view_bookmarks_bar),
+	(window_cmd_view_toolbar), (window_cmd_view_statusbar),
+	(window_cmd_view_fullscreen):
+
+	Complete gtk 2.3 port. It doesnt run here but it could be
+	my env.
+
 2003-08-29  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* configure.in:

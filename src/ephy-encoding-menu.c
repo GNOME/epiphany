@@ -22,12 +22,11 @@
 
 #include "ephy-encoding-menu.h"
 #include "ephy-string.h"
-#include "egg-menu-merge.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 
 #include <bonobo/bonobo-i18n.h>
-
+#include <gtk/gtkuimanager.h>
 #include <string.h>
 
 /**
@@ -186,16 +185,19 @@ ephy_encoding_menu_verb_cb (GtkAction *action,
 {
 	EphyWindow *window;
 	EphyEmbed *embed;
-	gchar *encoding;
+	const char *encoding;
+	const char *action_name;
 
 	window = menu->priv->window;
 
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	if (strncmp (action->name, "Encoding", 8) == 0)
+	action_name = gtk_action_get_name (action);
+
+	if (strncmp (action_name, "Encoding", 8) == 0)
 	{
-		encoding = action->name + 8;
+		encoding = action_name + 8;
 
 		LOG ("Switching to encoding %s", encoding)
 

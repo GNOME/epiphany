@@ -19,7 +19,7 @@
 #ifndef EPHY_GO_ACTION_H
 #define EPHY_GO_ACTION_H
 
-#include <egg-action.h>
+#include <gtk/gtkaction.h>
 
 #define EPHY_TYPE_GO_ACTION            (ephy_go_action_get_type ())
 #define EPHY_GO_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_GO_ACTION, EphyGoAction))

@@ -28,7 +28,6 @@
 #include "ephy-prefs.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-debug.h"
-#include "egg-menu-merge.h"
 #include "ephy-string.h"
 #include "ephy-notebook.h"
 #include "ephy-file-helpers.h"
@@ -49,6 +48,7 @@
 #include <gtk/gtkselection.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmenu.h>
+#include <gtk/gtkuimanager.h>
 #include <string.h>
 
 struct EphyTabPrivate
@@ -1001,6 +1001,7 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
 
 	tab->priv->embed = ephy_embed_new (G_OBJECT(single));
+	g_assert (tab->priv->embed != NULL);
 
 	embed = G_OBJECT (tab->priv->embed);
 	embed_widget = G_OBJECT (tab->priv->embed);

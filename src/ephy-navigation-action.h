@@ -19,8 +19,7 @@
 #ifndef EPHY_NAVIGATION_ACTION_H
 #define EPHY_NAVIGATION_ACTION_H
 
-#include <gtk/gtk.h>
-#include <egg-action.h>
+#include <gtk/gtkaction.h>
 
 #define EPHY_TYPE_NAVIGATION_ACTION            (ephy_navigation_action_get_type ())
 #define EPHY_NAVIGATION_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_NAVIGATION_ACTION, EphyNavigationAction))

@@ -18,8 +18,9 @@
 
 #include "ephy-spinner-action.h"
 #include "ephy-spinner.h"
-#include "eggtoolitem.h"
-#include "eggtoolbar.h"
+
+#include <gtk/gtktoolitem.h>
+#include <gtk/gtktoolbar.h>
 
 static void ephy_spinner_action_init       (EphySpinnerAction *action);
 static void ephy_spinner_action_class_init (EphySpinnerActionClass *class);
@@ -88,13 +89,13 @@ create_tool_item (GtkAction *action)
 	GtkWidget *item;
 	GtkWidget *spinner;
 
-	item = GTK_WIDGET (egg_tool_item_new ());
+	item = GTK_WIDGET (gtk_tool_item_new ());
 
 	spinner = ephy_spinner_new ();
 	gtk_widget_show (spinner);
 	gtk_container_add (GTK_CONTAINER (item), spinner);
-	egg_tool_item_set_pack_end (GTK_TOOL_ITEM (item), TRUE);
-	egg_tool_item_set_homogeneous (GTK_TOOL_ITEM (item), FALSE);
+	gtk_tool_item_set_pack_end (GTK_TOOL_ITEM (item), TRUE);
+	gtk_tool_item_set_homogeneous (GTK_TOOL_ITEM (item), FALSE);
 	g_object_set_data (G_OBJECT (item), "spinner", spinner);
 
 	return item;
@@ -128,7 +129,7 @@ item_parent_set_cb (GtkWidget *item, GtkWidget *previous_parent)
 			         G_CALLBACK (toolbar_style_sync),
 			         item, 0);
 
-	style = egg_toolbar_get_style (toolbar);
+	style = gtk_toolbar_get_style (toolbar);
 	toolbar_style_sync (toolbar, style, item);
 }
 

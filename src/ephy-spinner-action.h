@@ -19,8 +19,7 @@
 #ifndef EPHY_SPINNER_ACTION_H
 #define EPHY_SPINNER_ACTION_H
 
-#include <gtk/gtk.h>
-#include <egg-action.h>
+#include <gtk/gtkaction.h>
 
 #define EPHY_TYPE_SPINNER_ACTION            (ephy_spinner_action_get_type ())
 #define EPHY_SPINNER_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_SPINNER_ACTION, EphySpinnerAction))

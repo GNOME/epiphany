@@ -24,7 +24,6 @@
 #endif
 
 #include "toolbar.h"
-#include "egg-menu-merge.h"
 #include "ephy-file-helpers.h"
 #include "ephy-shell.h"
 #include "ephy-location-entry.h"
@@ -43,11 +42,12 @@
 #include "ephy-debug.h"
 #include "ephy-new-bookmark.h"
 #include "ephy-stock-icons.h"
-#include "eggtoolbar.h"
 #include "ephy-toolbars-model.h"
 
 #include <string.h>
 #include <bonobo/bonobo-i18n.h>
+#include <gtk/gtkuimanager.h>
+#include <gtk/gtktoolbar.h>
 
 static void toolbar_class_init (ToolbarClass *klass);
 static void toolbar_init (Toolbar *t);
@@ -564,7 +564,7 @@ toolbar_activate_location (Toolbar *t)
 	location = get_location_entry (t);
 	g_return_if_fail (location != NULL);
 
-	location_tb = gtk_widget_get_ancestor (location, EGG_TYPE_TOOLBAR);
+	location_tb = gtk_widget_get_ancestor (location, GTK_TYPE_TOOLBAR);
 	g_return_if_fail (location_tb != NULL);
 
 	if (!GTK_WIDGET_VISIBLE (location_tb))
