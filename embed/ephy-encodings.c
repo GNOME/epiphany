@@ -315,6 +315,9 @@ ephy_encodings_get_node (EphyEncodings *encodings,
 	{
 		char *title;
 
+		/* translators: this is the title that an unknown encoding will
+		 * be displayed as.
+		 */
 		title = g_strdup_printf (_("Unknown (%s)"), code);
 		node = add_encoding (encodings, title, code, 0, FALSE);
 		g_free (title);
