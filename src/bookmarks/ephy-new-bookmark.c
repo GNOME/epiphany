@@ -258,7 +258,7 @@ ephy_new_bookmark_construct (EphyNewBookmark *editor)
 			       EPHY_STATE_WINDOW_SAVE_SIZE);
 
 	gtk_window_set_title (GTK_WINDOW (editor),
-			      _("New Bookmark"));
+			      _("Add Bookmark"));
 	icon = gtk_widget_render_icon (GTK_WIDGET (editor),
 				       EPHY_STOCK_BOOKMARK_PAGE,
 				       GTK_ICON_SIZE_MENU,
