@@ -423,13 +423,13 @@ add_widget (GtkUIManager *merge, GtkWidget *widget, EphyWindow *window)
 static void
 update_exit_fullscreen_popup_position (EphyWindow *window)
 {
+	GtkWidget *popup = window->priv->exit_fullscreen_popup;
 	GdkRectangle screen_rect;
-	int popup_height;
+	int popup_width, popup_height;
 
-	g_return_if_fail (window->priv->exit_fullscreen_popup != NULL);
+	g_return_if_fail (popup != NULL);
 
-	gtk_window_get_size (GTK_WINDOW (window->priv->exit_fullscreen_popup),
-                             NULL, &popup_height);
+	gtk_window_get_size (GTK_WINDOW (popup), &popup_width, &popup_height);
 
 	gdk_screen_get_monitor_geometry (gdk_screen_get_default (),
                         gdk_screen_get_monitor_at_window
@@ -437,8 +437,17 @@ update_exit_fullscreen_popup_position (EphyWindow *window)
                          GTK_WIDGET (window)->window),
                          &screen_rect);
 
-	gtk_window_move (GTK_WINDOW (window->priv->exit_fullscreen_popup),
-                        screen_rect.x, screen_rect.height - popup_height);
+	if (gtk_widget_get_direction (popup) == GTK_TEXT_DIR_RTL)
+	{
+		gtk_window_move (GTK_WINDOW (popup),
+				 screen_rect.x + screen_rect.width - popup_width,
+				 screen_rect.height - popup_height);
+	}
+	else
+	{
+		gtk_window_move (GTK_WINDOW (popup),
+                	        screen_rect.x, screen_rect.height - popup_height);
+	}
 }
 
 static void
