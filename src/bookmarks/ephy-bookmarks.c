@@ -28,6 +28,7 @@
 
 #include <string.h>
 #include <libgnome/gnome-i18n.h>
+#include <libgnomevfs/gnome-vfs-utils.h>
 
 #define EPHY_BOOKMARKS_XML_VERSION "0.1"
 
@@ -58,7 +59,7 @@ static const EphyBookmarksBookmarkInfo default_bookmarks [] =
 	 * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 	 */
 
-	{ N_("Search the web"), N_("http://www.google.com"), N_("http://www.google.com/search?q=%s") }
+	{ N_("Search the web"), N_("http://www.google.com"), N_("http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8") }
 };
 static int n_default_bookmarks = G_N_ELEMENTS (default_bookmarks);
 
@@ -907,6 +908,7 @@ ephy_bookmarks_solve_smart_url (EphyBookmarks *eb,
 	gchar *encoding;
 	gchar *smarturl_only;
 	gchar *arg;
+	gchar *escaped_arg;
 
 	g_return_val_if_fail (content != NULL, NULL);
 
@@ -922,17 +924,19 @@ ephy_bookmarks_solve_smart_url (EphyBookmarks *eb,
 
 	arg = g_convert (content, strlen (content),
 			 encoding, "UTF-8", NULL, NULL, NULL);
+	escaped_arg = gnome_vfs_escape_string (arg);
 
 	t1 = smarturl_only;
 	t2 = strstr (t1, "%s");
 	g_return_val_if_fail (t2 != NULL, NULL);
 	g_string_append_len (s, t1, t2 - t1);
-	g_string_append (s, arg);
+	g_string_append (s, escaped_arg);
 	t1 = t2 + 2;
 	g_string_append (s, t1);
 	ret = g_string_free (s, FALSE);
 
 	g_free (arg);
+	g_free (escaped_arg);
 	g_free (encoding);
 	g_free (smarturl_only);
 

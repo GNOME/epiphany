@@ -1,3 +1,14 @@
+2003-05-11  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/starthere/smartbookmarks.xml.in:
+
+	Fix google smart bookmarks to use utf8
+
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_solve_smart_url):
+
+	Fix google smart bookmarks to use utf8.
+	Escape the search string before merging it in the url.
+
 2003-05-11  Christian Persch  <chpe+gnomebugz@stud.uni-saarland.de>
 
 	* src/statusbar.c: (statusbar_init), (statusbar_finalize):
