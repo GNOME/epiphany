@@ -356,8 +356,10 @@ mozilla_embed_init (MozillaEmbed *embed)
 }
 
 gpointer
-mozilla_embed_get_galeon_wrapper (MozillaEmbed *embed)
+mozilla_embed_get_ephy_wrapper (MozillaEmbed *embed)
 {
+	g_return_val_if_fail (embed->priv->wrapper != NULL, NULL);
+	
 	return embed->priv->wrapper;
 }
 
@@ -420,14 +422,6 @@ mozilla_embed_finalize (GObject *object)
         G_OBJECT_CLASS (parent_class)->finalize (object);
 
 	LOG ("MozillaEmbed finalized %p", embed)
-}
-
-gpointer
-mozilla_embed_get_ephy_wrapper (MozillaEmbed *embed)
-{
-	g_return_val_if_fail (embed->priv->wrapper != NULL, NULL);
-	
-	return embed->priv->wrapper;
 }
 
 static void

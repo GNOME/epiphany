@@ -1,5 +1,25 @@
 2003-04-28  David Bordoley  <bordoley@msu.edu>
 
+	* embed/ephy-embed-types.h:
+	s/GALEON/EPIPHANY in the defines.
+
+	* embed/ephy-embed-utils.c: (ephy_embed_utils_save)
+	s/GaleonEmbedPersist/EphyEmbedPersist in the comment.
+
+	* embed/mozilla/mozilla-embed-persist.cpp: (impl_save):
+	s/mozilla_embed_get_galeon_wrapper/mozilla_embed_get_ephy_wrapper.
+
+	* embed/mozilla/mozilla-embed.cpp: (mozilla_embed_get_galeon_wrapper),
+	(mozilla_embed_get_ephy_wrapper):
+	Remove duplicate function (keep the galeon one, since it was the one
+	actually being used in the code). 
+	s/galeon/ephy.
+
+	* embed/mozilla/mozilla-embed.h:
+	s/mozilla_embed_get_galeon_wrapper/mozilla_embed_get_ephy_wrapper.
+
+2003-04-28  David Bordoley  <bordoley@msu.edu>
+
 	* data/epiphany.schemas.in:
 	* data/ui/epiphany-bookmark-editor-ui.xml.in:
 	* data/ui/epiphany-toolbar.xml.in:

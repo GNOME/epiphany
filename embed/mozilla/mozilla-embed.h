@@ -54,7 +54,7 @@ struct MozillaEmbedClass
 
 GType	 mozilla_embed_get_type           (void);
 
-gpointer mozilla_embed_get_galeon_wrapper (MozillaEmbed *embed);
+gpointer mozilla_embed_get_ephy_wrapper (MozillaEmbed *embed);
 
 G_END_DECLS
 

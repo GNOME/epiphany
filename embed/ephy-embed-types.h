@@ -16,8 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef GALEON_EMBED_TYPES_H
-#define GALEON_EMBED_TYPES_H
+#ifndef EPHY_EMBED_TYPES_H
+#define EPHY_EMBED_TYPES_H
 
 #include "ephy-types.h"
 

@@ -37,7 +37,7 @@
  * @ask_dest: ask the user the destination path
  * @ask_content: show the user an option to save the content
  * of the web page (images, javascript...)
- * @persist: the #GaleonEmbedPersist referring to the url
+ * @persist: the #EphyEmbedPersist referring to the url
  *
  * Download a save an url asking a location to the user when requested
  **/
