@@ -11,8 +11,11 @@ serverdir = $(libdir)/bonobo/servers
 DESKTOP_IN_FILES= epiphany.desktop.in bme.desktop.in
 DESKTOP_FILES= $(DESKTOP_IN_FILES:.desktop.in=.desktop)
 
-Applicationsdir = $(datadir)/applications
-Applications_DATA = $(DESKTOP_FILES)
+desktopdir = $(datadir)/applications
+desktop_DATA = $(DESKTOP_FILES)
+
+applicationsdir = $(datadir)/application-registry
+applications_DATA = epiphany.applications
 
 schemadir = $(sysconfdir)/gconf/schemas
 schema_in_files = epiphany.schemas.in
@@ -33,5 +36,6 @@ CLEANFILES = $(server_DATA) $(Applications_DATA) $(schema_DATA)
 EXTRA_DIST = $(server_in_files)     	\
 	     $(schema_in_files)         \
 	     $(DESKTOP_IN_FILES)	\
-	     $(about_DATA)
+	     $(about_DATA)		\
+	     $(applications_DATA)
 
