@@ -625,6 +625,11 @@ toolbar_drag_motion_cb (GtkWidget          *widget,
           gdk_drag_status (context, 0, time);
           return FALSE;
         }
+
+      if (gtk_widget_is_ancestor (source, widget))
+        {
+          context->suggested_action = GDK_ACTION_MOVE;
+        }
     }
 
   target = gtk_drag_dest_find_target (widget, context, NULL);
