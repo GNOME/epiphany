@@ -1888,22 +1888,21 @@ ephy_window_print (EphyWindow *window)
 	EphyDialog *dialog;
 	EphyEmbed *embed;
 
-	if (window->priv->print_dialog)
-	{
-		dialog = window->priv->print_dialog;
-	}
-	else
+	if (window->priv->print_dialog == NULL)
 	{
 		embed = ephy_window_get_active_embed (window);
-		dialog = print_dialog_new_with_parent (GTK_WIDGET(window),
-						       embed, NULL);
-		g_signal_connect (G_OBJECT(dialog),
+		dialog = print_dialog_new_with_parent
+					(GTK_WIDGET(window), embed, NULL);
+		g_signal_connect (G_OBJECT (dialog),
 				  "preview",
 				  G_CALLBACK (print_dialog_preview_cb),
 				  window);
+		window->priv->print_dialog = dialog;
+		g_object_add_weak_pointer(G_OBJECT (dialog),
+					  (gpointer *) &window->priv->print_dialog);
 	}
 
-	ephy_dialog_show (EPHY_DIALOG (dialog));
+	ephy_dialog_show (window->priv->print_dialog);
 }
 
 void
