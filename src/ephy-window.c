@@ -733,7 +733,7 @@ init_menu_updaters (EphyWindow *window)
 }
 
 static void
-setup_window (EphyWindow *window)
+setup_ui_manager (EphyWindow *window)
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
@@ -805,23 +805,6 @@ setup_window (EphyWindow *window)
 		g_warning ("Could not merge epiphany-ui.xml: %s", err->message);
 		g_clear_error (&err);
         }
-
-	gtk_ui_manager_ensure_update (GTK_UI_MANAGER (window->ui_merge));
-
-	init_menu_updaters (window);
-
-	window->priv->toolbar = toolbar_new (window);
-	gtk_widget_show (GTK_WIDGET (window->priv->toolbar));
-	gtk_box_pack_end (GTK_BOX (window->priv->menu_dock),
-			  GTK_WIDGET (window->priv->toolbar),
-			  FALSE, FALSE, 0);
-	g_signal_connect (window,
-			  "selection-received",
-			  G_CALLBACK (ephy_window_selection_received_cb),
-			  window);
-	g_signal_connect (window, "window-state-event",
-			  G_CALLBACK (ephy_window_state_event_cb),
-			  window);
 }
 
 static void
@@ -1460,8 +1443,6 @@ setup_notebook (EphyWindow *window)
 	g_signal_connect (G_OBJECT (notebook), "tabs_reordered",
 			  G_CALLBACK (tabs_reordered_cb), window);
 
-	gtk_widget_show (GTK_WIDGET (notebook));
-
 	return notebook;
 }
 
@@ -1610,24 +1591,28 @@ ephy_window_init (EphyWindow *window)
 
 	ensure_default_icon ();
 
-	/* Setup the window and connect verbs */
-	setup_window (window);
+	g_object_ref (ephy_shell);
 
-	/* Setup window contents */
+	/* Setup the UI manager and connect verbs */
+	setup_ui_manager (window);
+
+	window->priv->toolbar = toolbar_new (window);
+	gtk_box_pack_end (GTK_BOX (window->priv->menu_dock),
+			  GTK_WIDGET (window->priv->toolbar),
+			  FALSE, FALSE, 0);
+
+
 	window->priv->notebook = setup_notebook (window);
 	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
 			    GTK_WIDGET (window->priv->notebook),
 			    TRUE, TRUE, 0);
 
 	window->priv->statusbar = statusbar_new ();
-	gtk_widget_show (window->priv->statusbar);
 	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
 			    GTK_WIDGET (window->priv->statusbar),
 			    FALSE, TRUE, 0);
 	window->priv->tab_message_cid = gtk_statusbar_get_context_id
 		(GTK_STATUSBAR (window->priv->statusbar), "tab_message");
-
-	g_object_ref (ephy_shell);
 
 	/* Initialize the menus */
 	window->priv->tabs_menu = ephy_tabs_menu_new (window);
@@ -1635,6 +1620,24 @@ ephy_window_init (EphyWindow *window)
 	window->priv->enc_menu = ephy_encoding_menu_new (window);
 	window->priv->bmk_menu = ephy_bookmarks_menu_new (window);
 
+	/* Once the window is sufficiently created let the extensions attach to it */
+	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
+	ephy_extension_attach_window (manager, window);
+
+	/* show widgets */
+	gtk_widget_show (GTK_WIDGET (window->priv->toolbar));
+	gtk_widget_show (GTK_WIDGET (window->priv->notebook));
+	gtk_widget_show (window->priv->statusbar);
+
+	g_signal_connect (window,
+			  "selection-received",
+			  G_CALLBACK (ephy_window_selection_received_cb),
+			  window);
+	g_signal_connect (window, "window-state-event",
+			  G_CALLBACK (ephy_window_state_event_cb),
+			  window);
+
+	/* lockdown pref notifiers */
 	window->priv->disable_js_chrome_notifier_id = eel_gconf_notification_add
 		(CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME,
 		 (GConfClientNotifyFunc)chrome_notifier, window);
@@ -1655,9 +1658,10 @@ ephy_window_init (EphyWindow *window)
 		(CONF_LOCKDOWN_HIDE_MENUBAR,
 		 (GConfClientNotifyFunc)chrome_notifier, window);
 
-	/* Once the window is fully created let the extensions attach to it */
-	manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
-	ephy_extension_attach_window (manager, window);
+	/* ensure the UI is updated */
+	gtk_ui_manager_ensure_update (GTK_UI_MANAGER (window->ui_merge));
+
+	init_menu_updaters (window);
 }
 
 static void

@@ -1015,6 +1015,9 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	context = ephy_embed_event_get_context (event);
 	modifier = ephy_embed_event_get_modifier (event);
 
+	LOG ("ephy_tab_dom_mouse_click_cb: type %d, context %x, modifier %x",
+	     type, context, modifier)
+
 	with_control = (modifier & GDK_CONTROL_MASK) != 0;
 	with_shift = (modifier & GDK_SHIFT_MASK) != 0;
 	is_left_click = (type == EPHY_EMBED_EVENT_MOUSE_BUTTON1);
@@ -1045,8 +1048,8 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 	{
 		save_property_url (embed, event, "link", CONF_STATE_DOWNLOAD_DIR);
 	}
-	/* shift+click saves the non-link image, except when it's the submit
-	 * button for a form 
+	/* shift+click saves the non-link image
+	 * Note: pressing enter to submit a form synthesizes a mouse click event
 	 */
 	else if (is_image && is_left_click && with_shift && !is_input)
 	{
