@@ -541,7 +541,8 @@ toolbar_drag_motion_cb (GtkWidget          *widget,
 		        EggEditableToolbar *etoolbar)
 {
   GdkAtom target;
-  GtkRequisition req;
+  int index;
+  GtkToolItem *item;
 
   target = gtk_drag_dest_find_target (widget, context, NULL);
   if (target == GDK_NONE)
@@ -554,9 +555,9 @@ toolbar_drag_motion_cb (GtkWidget          *widget,
       gtk_drag_get_data (widget, context, target, time);
     }
 
-  gtk_widget_size_request (etoolbar->priv->dragged_item, &req);
-  gtk_toolbar_highlight_drop_location (GTK_TOOLBAR (widget), x, y,
-				       req.width, req.height);
+  index = gtk_toolbar_get_drop_index (GTK_TOOLBAR (widget), x, y);
+  item = GTK_TOOL_ITEM (etoolbar->priv->dragged_item);
+  gtk_toolbar_highlight_drop_location (GTK_TOOLBAR (widget), index, item);
 
   return TRUE;
 }
