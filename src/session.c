@@ -626,6 +626,12 @@ session_load (Session *session,
 	save_to = get_session_filename (filename);
 
 	doc = xmlParseFile (save_to);
+	if (doc == NULL)
+	{
+		g_warning ("Failed to load session file %s!\n", save_to);
+		g_free (save_to);
+		return;
+	}
 
 	child = xmlDocGetRootElement (doc);
 
