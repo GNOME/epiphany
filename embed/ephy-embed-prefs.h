@@ -12,7 +12,6 @@
 #define CONF_SECURITY_COOKIES_ACCEPT "/apps/epiphany/web/cookie_accept"
 #define CONF_LANGUAGE_AUTODETECT_ENCODING "/apps/epiphany/web/autodetect_encoding"
 #define CONF_LANGUAGE_DEFAULT_ENCODING "/apps/epiphany/web/default_encoding"
-#define CONF_RENDERING_DEFAULT_FONT "/apps/epiphany/web/default_font_type"
 
 /* These are defined gnome wide now */
 #define CONF_NETWORK_PROXY_MODE "/system/proxy/mode"
