@@ -381,9 +381,15 @@ AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/pipnss/nsIX509Cert.h],
 	[AC_DEFINE(HAVE_MOZILLA_PSM, 1,
 	[Define if you have the mozilla psm headers installed])])
 
-AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsIPassword.h],
-	[AC_DEFINE(HAVE_NSIPASSWORD_H, 1,
-	[Define if mozilla nsIPassword header is available])])
+if test "x$flavour" = "xmozilla"; then
+	AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsIPassword.h],
+		[AC_DEFINE(HAVE_NSIPASSWORD_H, 1,
+		[Define if mozilla nsIPassword header is available])])
+elif test "x$flavour" = "xtoolkit"; then
+	AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/passwordmgr/nsIPassword.h],
+		[AC_DEFINE(HAVE_NSIPASSWORD_H, 1,
+		[Define if mozilla nsIPassword header is available])])
+fi
 
 MOZILLA_WARN_CXXFLAGS="-Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor"
 AC_SUBST([MOZILLA_WARN_CXXFLAGS])
