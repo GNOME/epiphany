@@ -142,6 +142,8 @@ main (int argc, char *argv[])
 	/* load arguments that aren't regular options (urls to load) */
         n_urls = ephy_main_translate_url_arguments (context, &url);
 
+	g_value_unset (&context_as_value);
+
 	first_instance = ephy_main_automation_init ();
 
 	if (first_instance)
