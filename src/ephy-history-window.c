@@ -252,9 +252,7 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 6);
 	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 12);
 
-	button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-	gtk_widget_show (button);
-	gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, GTK_RESPONSE_CANCEL);
+	gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 
 	button = gtk_button_new ();
 	gtk_widget_show (button);
@@ -296,6 +294,7 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 	gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
 
 	label = gtk_label_new (NULL);
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 	str = g_strconcat ("<b><big>", _("Clear browsing history?"),
@@ -307,6 +306,7 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 
 	label = gtk_label_new (_("Clearing the browsing history will cause all"
 				 " history links to be permanently deleted."));
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
