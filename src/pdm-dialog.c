@@ -397,6 +397,7 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 		gtk_tree_model_get_value
 			(model, &iter, action->data_col, &val);
 		data = g_value_get_pointer (&val);
+		g_value_unset (&val);
 
 		gtk_list_store_remove (GTK_LIST_STORE(model),
 				       &iter);
