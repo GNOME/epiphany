@@ -403,15 +403,18 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				{
 					/* cut "mailto:" */
 					href.Cut (0, 7);
-					// FIXME: cut any chars after "?"
+
+					char *str = g_strdup (href.get());
+					g_strdelimit (str, "?", '\0');
 
 					nsEmbedCString unescapedHref;
-					rv = Unescape (href, unescapedHref);
+					rv = Unescape (nsEmbedCString(str), unescapedHref);
 					if (NS_SUCCEEDED (rv) && unescapedHref.Length())
 					{
 						SetStringProperty ("email", unescapedHref.get());
 						info->context |= EPHY_EMBED_CONTEXT_EMAIL_LINK;
 					}
+					g_free (str);
 				}
 				
 				if (anchor && tmp.Length()) 
