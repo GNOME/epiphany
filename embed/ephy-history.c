@@ -303,6 +303,7 @@ ephy_history_save (EphyHistory *eb)
 	ephy_node_thaw (eb->priv->pages);
 
 	xmlSaveFormatFile (eb->priv->xml_file, doc, 1);
+	xmlFreeDoc(doc);
 }
 
 static void
