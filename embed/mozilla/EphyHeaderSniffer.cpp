@@ -303,6 +303,15 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 	const char *key;
 	key = ephy_embed_persist_get_persist_key (EPHY_EMBED_PERSIST (mEmbedPersist));
 
+        char *filename;
+        filename = gnome_vfs_unescape_string (NS_ConvertUCS2toUTF8 (defaultFileName).get(), NULL);
+        
+        if (!g_utf8_validate (filename, -1, NULL))
+        {
+                g_free (filename);
+                filename = g_strdup (NS_ConvertUCS2toUTF8(defaultFileName).get());
+        }
+
 	if (askDownloadDest)
 	{
 		EphyFileChooser *dialog;
@@ -319,19 +328,21 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 						key ? key : CONF_STATE_SAVE_DIR);
 
 		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
-						   NS_ConvertUCS2toUTF8 (defaultFileName).get());
+                                                   filename);
 
 		g_signal_connect (dialog, "response",
 				  G_CALLBACK (filechooser_response_cb), this);
 
 		gtk_widget_show (GTK_WIDGET (dialog));
 
+                g_free (filename);
 		return NS_OK;
 	}
 	/* FIXME: how to inform user of failed save ? */
 
 	nsCOMPtr<nsILocalFile> destFile;
-	BuildDownloadPath (NS_ConvertUCS2toUTF8 (defaultFileName).get(), getter_AddRefs (destFile));
+	BuildDownloadPath (filename, getter_AddRefs (destFile));
+        g_free (filename);
 	NS_ENSURE_TRUE (destFile, NS_ERROR_FAILURE);
 
 	return InitiateDownload (destFile);

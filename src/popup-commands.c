@@ -291,7 +291,7 @@ save_property_url (GtkAction *action,
 
 	ephy_embed_persist_set_embed (persist, embed);
 	ephy_embed_persist_set_fc_title (persist, title);
-	ephy_embed_persist_set_fc_parent (persist,GTK_WINDOW (window));
+	ephy_embed_persist_set_fc_parent (persist, GTK_WINDOW (window));
 	ephy_embed_persist_set_flags
 		(persist, ask_dest ? EMBED_PERSIST_ASK_DESTINATION : 0);
 	ephy_embed_persist_set_persist_key
