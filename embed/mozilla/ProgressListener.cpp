@@ -64,7 +64,11 @@ GProgressListener::GProgressListener () : mLauncher(nsnull),
 
 GProgressListener::~GProgressListener ()
 {
-	/* destructor code */
+	if (mDownloaderView)
+	{
+		g_object_remove_weak_pointer (G_OBJECT (mDownloaderView),
+					      (void **) &mDownloaderView);
+	}
 }
 
 NS_METHOD GProgressListener::InitForPersist (nsIWebBrowserPersist *aPersist,
@@ -149,7 +153,7 @@ NS_METHOD GProgressListener::PrivateInit (void)
 
 	mElapsed             = now - mStartTime;
 
-	if (!mNoDialog)
+	if (!mNoDialog && mDownloaderView)
 	{
 		gchar *filename, *source, *dest;
 		nsAutoString uTmp;
@@ -179,6 +183,9 @@ NS_METHOD GProgressListener::PrivateInit (void)
 				  G_CALLBACK (download_resume_cb),
 				  this);
 		mDownloaderView = dv;
+
+		g_object_add_weak_pointer (G_OBJECT (mDownloaderView),
+					   (void **) &mDownloaderView);
 	}
 
 	/* done */
@@ -513,15 +520,18 @@ NS_IMETHODIMP GProgressListener::
 				/currentRate +.5);
 	}
 
-	downloader_view_set_download_progress (mDownloaderView,
-					       mElapsed,
-					       remaining,
-					       speed,
-					       totalKBytes,
-					       currentKBytes,
-					       progress,
-					       mCanPause,
-					       (gpointer)this);
+	if (mDownloaderView)
+	{
+		downloader_view_set_download_progress (mDownloaderView,
+						       mElapsed,
+						       remaining,
+						       speed,
+						       totalKBytes,
+						       currentKBytes,
+						       progress,
+						       mCanPause,
+						       (gpointer)this);
+	}
 
 	/* done */
 	return NS_OK;
