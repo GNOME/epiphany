@@ -616,12 +616,19 @@ ephy_node_view_select_node_by_key (EphyNodeView *view, GdkEventKey *event)
 	gchar outbuf[6];
 	gint length;
 
+	/* Work around bug 129411 */
+	if (!gtk_tree_model_get_iter_first (view->priv->filtermodel, &iter))
+	{
+		return FALSE;
+	}
+
 	length = g_unichar_to_utf8 (gdk_keyval_to_unicode (event->keyval), outbuf);
 	event_string = g_utf8_casefold (outbuf, length);
 
 	if (!gtk_tree_model_get_iter_first (view->priv->sortmodel, &iter))
 	{
 		g_free (event_string);
+		g_return_val_if_reached (FALSE);
 		return FALSE;
 	}
 
