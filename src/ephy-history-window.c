@@ -965,18 +965,27 @@ build_search_box (EphyHistoryWindow *editor)
 	gtk_widget_show (optionmenu);
 	menu = gtk_menu_new ();
 	gtk_widget_show (menu);
+
 	item = gtk_menu_item_new_with_mnemonic (_("Today"));
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
-	item = gtk_menu_item_new_with_mnemonic (_("Last two days"));
+	str = g_strdup_printf (ngettext ("Last %d day", "Last %d days", 2), 2);
+	item = gtk_menu_item_new_with_mnemonic (str);
+	g_free (str);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
-	item = gtk_menu_item_new_with_mnemonic (_("Last three days"));
+	str = g_strdup_printf (ngettext ("Last %d day", "Last %d days", 3), 3);
+	item = gtk_menu_item_new_with_mnemonic (str);
+	g_free (str);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
-	item = gtk_menu_item_new_with_mnemonic (_("Last ten days"));
-	gtk_widget_show (item);
+	/* keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS */
+	str = g_strdup_printf (ngettext ("Last %d day", "Last %d days", 10), 10);
+	item = gtk_menu_item_new_with_mnemonic (str);
+	g_free (str);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	gtk_widget_show (item);
+
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu), menu);
 
 	str = eel_gconf_get_string (CONF_HISTORY_DATE_FILTER);
