@@ -469,12 +469,13 @@ show_properties_dialog (EphyBookmarksEditor *editor, EphyNode *node)
 }
 
 static void
-add_bookmarks_source_menu (GtkWidget *menu,
-			   const char *desc,
-			   const char *dir,
-			   const char *filename,
-			   int max_depth)
+add_bookmarks_source (GtkListStore *store,
+		      const char *desc,
+		      const char *dir,
+		      const char *filename,
+		      int max_depth)
 {
+	GtkTreeIter iter;
 	GSList *l;
 	char *path;
 
@@ -484,13 +485,8 @@ add_bookmarks_source_menu (GtkWidget *menu,
 
 	if (l)
 	{
-		GtkWidget *item;
-
-		item = gtk_menu_item_new_with_label (desc);
-		gtk_widget_show (item);
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-		g_object_set_data_full (G_OBJECT (item), "bookmarks_file",
-					g_strdup (l->data), g_free);
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter, 0, desc, 1, l->data, -1);
 	}
 
 	g_slist_foreach (l, (GFunc) g_free, NULL);
@@ -503,13 +499,20 @@ import_dialog_response_cb (GtkDialog *dialog, gint response,
 {
 	if (response == GTK_RESPONSE_OK)
 	{
+		GtkTreeIter iter;
 		char *filename;
-		GtkWidget *item, *menu, *optionmenu;
+		GtkWidget *combo;
+		GtkTreeModel *model;
+		int active;
+		GValue value = { 0, };
 
-		optionmenu = g_object_get_data (G_OBJECT (dialog), "option_menu");
-		menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (optionmenu));
-		item = gtk_menu_get_active (GTK_MENU (menu));
-		filename = g_object_get_data (G_OBJECT (item), "bookmarks_file");
+		combo = g_object_get_data (G_OBJECT (dialog), "combo_box");
+		model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
+		active = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
+		gtk_tree_model_iter_nth_child (model, &iter, NULL, active);
+		gtk_tree_model_get_value (model, &iter, 1, &value);
+		filename = g_strdup (g_value_get_string (&value));
+		g_value_unset (&value);
 
 		if (filename == NULL)
 		{
@@ -523,11 +526,12 @@ import_dialog_response_cb (GtkDialog *dialog, gint response,
 				(single, GTK_WIDGET (editor), title, NULL,
 				 NULL, modeOpen, &filename, NULL, NULL);
 		}
-
-		if (filename != NULL)
+		else
 		{
 			ephy_bookmarks_import (editor->priv->bookmarks, filename);
 		}
+
+		g_free (filename);
 	}
 
 	gtk_widget_destroy (GTK_WIDGET (dialog));
@@ -540,8 +544,10 @@ cmd_bookmarks_import (GtkAction *action,
 	GtkWidget *dialog;
 	GtkWidget *label;
 	GtkWidget *vbox;
-	GtkWidget *menu, *item;
-	GtkWidget *option_menu;
+	GtkWidget *combo;
+	GtkCellRenderer *cell;
+	GtkListStore *store;
+	GtkTreeIter iter;
 
 	dialog = gtk_dialog_new_with_buttons (_("Import Bookmarks"),
 					     GTK_WINDOW (editor),
@@ -569,28 +575,32 @@ cmd_bookmarks_import (GtkAction *action,
 	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
 	gtk_widget_show (label);
 
-	menu = gtk_menu_new ();
-	gtk_widget_show (menu);
+        store = GTK_LIST_STORE (gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING));
+	combo = gtk_combo_box_new (GTK_TREE_MODEL (store));
+	gtk_widget_show (combo); 
+	g_object_set_data (G_OBJECT (dialog), "combo_box", combo);
 
-	add_bookmarks_source_menu (menu, _("Mozilla bookmarks"),
-				   MOZILLA_BOOKMARKS_DIR, "bookmarks.html", 4);
-	add_bookmarks_source_menu (menu, _("Firebird bookmarks"),
-				   FIREBIRD_BOOKMARKS_DIR, "bookmarks.html", 4);
-	add_bookmarks_source_menu (menu, _("Galeon bookmarks"),
-				   GALEON_BOOKMARKS_DIR, "bookmarks.xbel", 0);
-	add_bookmarks_source_menu (menu, _("Konqueror bookmarks"),
-				   KDE_BOOKMARKS_DIR, "bookmarks.xml", 0);
+	cell = gtk_cell_renderer_text_new ();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), cell, TRUE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), cell,
+                                        "text", 0,
+                                        NULL);
 
-	item = gtk_menu_item_new_with_mnemonic (_("Import from a file"));
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	gtk_widget_show (item);
+	add_bookmarks_source (store, _("Mozilla bookmarks"),
+			      MOZILLA_BOOKMARKS_DIR, "bookmarks.html", 4);
+	add_bookmarks_source (store, _("Firebird bookmarks"),
+			      FIREBIRD_BOOKMARKS_DIR, "bookmarks.html", 4);
+	add_bookmarks_source (store, _("Galeon bookmarks"),
+			      GALEON_BOOKMARKS_DIR, "bookmarks.xbel", 0);
+	add_bookmarks_source (store, _("Konqueror bookmarks"),
+			      KDE_BOOKMARKS_DIR, "bookmarks.xml", 0);
 
-	option_menu = gtk_option_menu_new ();
-	gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
-	gtk_widget_show (option_menu);
-	gtk_box_pack_start (GTK_BOX (vbox), option_menu, TRUE, TRUE, 0);
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter, 0, _("Import from a file"), 1, NULL, -1);
 
-	g_object_set_data (G_OBJECT (dialog), "option_menu", option_menu);
+	gtk_box_pack_start (GTK_BOX (vbox), combo, TRUE, TRUE, 0);
+	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+
 	g_signal_connect (dialog, "response",
 			  G_CALLBACK (import_dialog_response_cb),
 			  editor);
