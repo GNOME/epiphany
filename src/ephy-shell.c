@@ -304,7 +304,7 @@ build_homepage_url (EphyShell *gs,
 		if (previous_embed != NULL)
 		{
 			ephy_embed_get_location (previous_embed,
-						 TRUE, TRUE,
+						 TRUE,
 						 &result);
 		}
 

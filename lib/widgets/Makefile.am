@@ -12,19 +12,20 @@ INCLUDES = \
 noinst_LTLIBRARIES = libephywidgets.la
 
 libephywidgets_la_SOURCES = \
-	ephy-ellipsizing-label.c		\
-	ephy-ellipsizing-label.h		\
-	ephy-notebook.c				\
-	ephy-notebook.h				\
-	ephy-location-entry.c			\
-	ephy-location-entry.h			\
-	ephy-autocompletion-window.c		\
-	ephy-autocompletion-window.h		\
-	ephy-spinner.c				\
-	ephy-spinner.h				\
-	eggtreemultidnd.c			\
-	eggtreemultidnd.h			\
-	ephy-tree-model-sort.c			\
-	ephy-tree-model-sort.h			\
 	eggtreemodelfilter.c			\
 	eggtreemodelfilter.h
+	eggtreemultidnd.c			\
+	eggtreemultidnd.h			\
+	ephy-autocompletion-window.c		\
+	ephy-autocompletion-window.h		\
+	ephy-ellipsizing-label.c		\
+	ephy-ellipsizing-label.h		\
+	ephy-location-entry.c			\
+	ephy-location-entry.h			\
+	ephy-notebook.c				\
+	ephy-notebook.h				\
+	ephy-spinner.c				\
+	ephy-spinner.h				\
+	ephy-tree-model-sort.c			\
+	ephy-tree-model-sort.h
+

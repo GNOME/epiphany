@@ -41,49 +41,49 @@ endif
 epiphany_SOURCES = 				    	\
 	$(ephy_automation_interface_idl_sources) 	\
 	$(nautilus_view_sources)			\
-	ui-prefs.c					\
-	ui-prefs.h					\
-	prefs-dialog.c					\
-	prefs-dialog.h					\
-	toolbar.c					\
-	toolbar.h					\
-	statusbar.c					\
-	statusbar.h					\
-	ephy-main.c					\
-	ephy-automation.c				\
-	ephy-automation.h				\
-	ephy-shell.c					\
-	ephy-shell.h					\
-	ephy-tab.c					\
-	ephy-tab.h					\
-	ephy-window.c					\
-	ephy-window.h					\
-	window-commands.c				\
-	window-commands.h				\
-	popup-commands.c				\
-	popup-commands.h				\
-	history-dialog.c				\
-	history-dialog.h				\
-	ppview-toolbar.c				\
-	ppview-toolbar.h				\
-	session.c					\
-	session.h					\
-	general-prefs.c					\
-	general-prefs.h					\
-	language-editor.c				\
-	language-editor.h				\
 	appearance-prefs.c				\
 	appearance-prefs.h				\
-	pdm-dialog.c					\
-	pdm-dialog.h					\
+	ephy-automation.c				\
+	ephy-automation.h				\
 	ephy-favorites-menu.c				\
 	ephy-favorites-menu.h				\
 	ephy-history-model.c				\
 	ephy-history-model.h				\
+	ephy-main.c					\
+	ephy-navigation-button.c			\
+	ephy-navigation-button.h			\
+	ephy-shell.c					\
+	ephy-shell.h					\
+	ephy-tab.c					\
+	ephy-tab.h					\
 	ephy-tbi.c					\
 	ephy-tbi.h					\
-	ephy-navigation-button.c			\
-	ephy-navigation-button.h
+	ephy-window.c					\
+	ephy-window.h					\
+	general-prefs.c					\
+	general-prefs.h					\
+	history-dialog.c				\
+	history-dialog.h				\
+	language-editor.c				\
+	language-editor.h				\
+	pdm-dialog.c					\
+	pdm-dialog.h					\
+	popup-commands.c				\
+	popup-commands.h				\
+	prefs-dialog.c					\
+	prefs-dialog.h					\
+	ppview-toolbar.c				\
+	ppview-toolbar.h				\
+	session.c					\
+	session.h					\
+	statusbar.c					\
+	statusbar.h					\
+	toolbar.c					\
+	toolbar.h					\
+	ui-prefs.c					\
+	ui-prefs.h					\
+	window-commands.c				\
+	window-commands.h
 
 epiphany_LDADD = \
 	$(top_builddir)/embed/libephyembed.la \

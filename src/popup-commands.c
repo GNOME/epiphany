@@ -173,7 +173,7 @@ void popup_cmd_frame_in_new_tab (BonoboUIComponent *uic,
 
 	embed = ephy_window_get_active_embed (window);
 
-	ephy_embed_get_location (embed, FALSE, FALSE, &location);
+	ephy_embed_get_location (embed, FALSE, &location);
 
 	ephy_shell_new_tab (ephy_shell, window, tab,
 			    location,
@@ -198,7 +198,7 @@ void popup_cmd_frame_in_new_window (BonoboUIComponent *uic,
 
 	embed = ephy_window_get_active_embed (window);
 
-	ephy_embed_get_location (embed, FALSE, FALSE, &location);
+	ephy_embed_get_location (embed, FALSE, &location);
 
 	ephy_shell_new_tab (ephy_shell, NULL, tab,
 			    location,

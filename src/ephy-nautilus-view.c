@@ -389,8 +389,7 @@ gnv_embed_location_cb (EphyEmbed *embed, EphyNautilusView *view)
 	p = view->priv;
 	g_return_if_fail (view->priv->embed == embed);
 
-	ephy_embed_get_location (embed, TRUE, FALSE, 
-				   &new_uri);
+	ephy_embed_get_location (embed, TRUE, &new_uri);
 
  	g_return_if_fail (new_uri != NULL);
 
@@ -549,7 +548,7 @@ gnv_popup_cmd_frame_in_new_window (BonoboUIComponent *uic,
 	
 	info = ephy_embed_popup_get_event (popup);
 	
-	ephy_embed_get_location (view->priv->embed, FALSE, FALSE, &location);
+	ephy_embed_get_location (view->priv->embed, FALSE, &location);
 
 	nautilus_view_open_location_force_new_window (NAUTILUS_VIEW (view),
 						      location, NULL);

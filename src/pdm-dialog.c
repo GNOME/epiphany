@@ -397,7 +397,7 @@ pdm_dialog_cookie_add (PdmActionInfo *info,
 	gtk_list_store_append (store, &iter);
         gtk_list_store_set (store,
                             &iter,
-			    COL_COOKIES_HOST, cinfo->base.domain,
+			    COL_COOKIES_HOST, cinfo->domain,
                             COL_COOKIES_NAME, cinfo->name,
 			    COL_COOKIES_DATA, cinfo,
                             -1);

@@ -186,6 +186,7 @@ build_editing_table (EphyNewBookmark *editor)
 	gtk_label_set_markup (GTK_LABEL (label), _("<b>Title:</b>"));
 	gtk_widget_show (label);
 	entry = gtk_entry_new ();
+	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 	editor->priv->title_entry = entry;
 	gtk_widget_set_size_request (entry, 200, -1);
 	gtk_widget_show (entry);
@@ -197,6 +198,7 @@ build_editing_table (EphyNewBookmark *editor)
 	gtk_label_set_markup (GTK_LABEL (label), _("<b>Keywords:</b>"));
 	gtk_widget_show (label);
 	entry = ephy_keywords_entry_new ();
+	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 	ephy_keywords_entry_set_bookmarks (EPHY_KEYWORDS_ENTRY (entry),
 					   editor->priv->bookmarks);
 	editor->priv->keywords_entry = entry;
