@@ -414,7 +414,7 @@ nsresult EphyBrowser::GoToHistoryIndex (PRInt16 index)
 	return ContentNav->GotoIndex (index);
 }
 
-#if !MOZILLA_CHECK_VERSION4 (1, 7, MOZILLA_RELEASE, 3) && !MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
+#if (!MOZILLA_IS_BRANCH (1, 7) || !MOZILLA_CHECK_VERSION3 (1, 7, 3)) && !MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
 /* Workaround for broken reload with frames, see mozilla bug
  * http://bugzilla.mozilla.org/show_bug.cgi?id=246392
  */

@@ -45,6 +45,9 @@
 	(VERSION4(MOZILLA_MAJOR, MOZILLA_MINOR, MOZILLA_TYPE, MOZILLA_MICRO) == \
 	 VERSION4(major, minor, type, micro))
 
+#define MOZILLA_IS_BRANCH(major, minor) \
+	(MOZILLA_MAJOR == major && MOZILLA_MINOR == minor)
+
 /* Use the following:
  *
  *  1.4.1 -> MOZILLA_CHECK_VERSION3 (1,4,1)
