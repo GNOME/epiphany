@@ -458,7 +458,7 @@ NS_METHOD GContentHandler::SynchroniseMIMEInfo (void)
 	if(NS_FAILED(rv)) return NS_ERROR_FAILURE;	
 
 	nsMIMEInfoHandleAction mimeInfoAction;
-	mimeInfoAction = nsIMIMEInfo::alwaysAsk;
+	mimeInfoAction = nsIMIMEInfo::useHelperApp;
 
 	if(mHelperApp->requires_terminal) //Information passing kludge!
 	{
