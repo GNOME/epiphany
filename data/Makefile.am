@@ -31,11 +31,10 @@ install-data-local:
 	done \
         fi
 
-CLEANFILES = $(server_DATA) $(Applications_DATA) $(schema_DATA)
-
 EXTRA_DIST = $(server_in_files)     	\
 	     $(schema_in_files)         \
 	     $(DESKTOP_IN_FILES)	\
 	     $(about_DATA)		\
 	     $(applications_DATA)
 
+DISTCLEANFILES = $(server_DATA) $(Applications_DATA) $(schema_DATA) $(DESKTOP_FILES)

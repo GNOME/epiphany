@@ -11,3 +11,4 @@ EXTRA_DIST = $(xml_DATA)	    	\
 	     $(xml_in_files)		\
 	     $(page_DATA)
 
+DISTCLEANFILES = $(xml_DATA)
