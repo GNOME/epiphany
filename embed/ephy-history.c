@@ -341,7 +341,10 @@ update_hosts (EphyHistory *eh)
 		EphyNode *kid;
 
 		kid = g_ptr_array_index (children, i);
-		update_host_on_child_remove (kid);
+		if (kid != eh->priv->pages)
+		{
+			update_host_on_child_remove (kid);
+		}
 	}
 
 	eh->priv->update_hosts_idle = 0;
