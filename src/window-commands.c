@@ -48,6 +48,7 @@
 #include <libgnomeui/gnome-about.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <libgnome/gnome-help.h>
+#include <libgnome/gnome-program.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkeditable.h>
 
@@ -711,6 +712,8 @@ window_cmd_help_about (EggAction *action,
 {
 	static GtkWidget *about = NULL;
 	GdkPixbuf *icon;
+	const char *icon_path;
+	GdkPixbuf *logo;
 
 	static gchar *authors[] = {
 		"Marco Pesenti Gritti <mpeseng@tin.it>",
@@ -732,6 +735,11 @@ window_cmd_help_about (EggAction *action,
 		return;
 	}
 
+	icon_path = gnome_program_locate_file (NULL, GNOME_FILE_DOMAIN_APP_PIXMAP,
+					  "epiphany.png", TRUE, NULL);
+	logo = gdk_pixbuf_new_from_file (icon_path, NULL);
+	g_return_if_fail (logo != NULL);
+
 	about = gnome_about_new(
 		       "Epiphany", VERSION,
 		       "Copyright \xc2\xa9 2002-2003 Marco Pesenti Gritti",
@@ -739,7 +747,9 @@ window_cmd_help_about (EggAction *action,
 		       (const char **)authors,
 		       (const char **)documenters,
 		       strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,
-		       NULL);
+		       logo);
+
+	g_object_unref (logo);
 
 	gtk_window_set_transient_for (GTK_WINDOW (about),
 				      GTK_WINDOW (window));
