@@ -113,8 +113,8 @@ get_toolbar_and_item_pos (EphyBookmarksBarModel *model,
 			const char *i_name;
 			gboolean is_separator;
 
-			egg_toolbars_model_item_nth (eggmodel, t,
-						     i, &is_separator, NULL, &i_name);
+			egg_toolbars_model_item_nth (EGG_TOOLBARS_MODEL (model),
+						     t , i, &is_separator, &i_name, NULL);
 			g_return_val_if_fail (i_name != NULL, FALSE);
 
 			if (strcmp (i_name, name) == 0)
@@ -300,14 +300,14 @@ item_added_cb (EphyBookmarksBarModel *model,
 	       int position)
 {
 	EphyNode *node;
-	const char *name;
+	const char *i_name;
 	gboolean is_separator;
 
 	egg_toolbars_model_item_nth (EGG_TOOLBARS_MODEL (model), toolbar_position,
-				     position, &is_separator, NULL, &name);
-	if (!is_separator && g_str_has_prefix (name, "GoBookmark-"))
+				     position, &is_separator, &i_name, NULL);
+	if (!is_separator && g_str_has_prefix (i_name, "GoBookmark-"))
 	{
-		node = ephy_bookmarksbar_model_get_node (model, name);
+		node = ephy_bookmarksbar_model_get_node (model, i_name);
 		g_return_if_fail (node != NULL);
 
 		ephy_node_signal_connect_object (node,
@@ -319,26 +319,40 @@ item_added_cb (EphyBookmarksBarModel *model,
 	save_changes (model);
 }
 
-static gboolean
-impl_add_item (EggToolbarsModel *eggmodel,
-	       int toolbar_position,
-	       int position,
-	       const char *name,
-	       const char *type)
+static char *
+impl_get_item_name (EggToolbarsModel *eggmodel,
+		    const char *type,
+		    const char *id)
 {
 	EphyBookmarksBarModel *model = EPHY_BOOKMARKSBAR_MODEL (eggmodel);
-	gboolean is_bookmark;
+	EphyNode *node;
 
-	is_bookmark = strcmp (type, EPHY_DND_TOPIC_TYPE) == 0 ||
-		      strcmp (type, EPHY_DND_URL_TYPE) == 0;
-
-	if (!is_bookmark || !get_toolbar_and_item_pos (model, name, NULL, NULL))
+	if (strcmp (type, EPHY_DND_TOPIC_TYPE) == 0)
 	{
-		return EGG_TOOLBARS_MODEL_CLASS (parent_class)->add_item
-			(eggmodel, toolbar_position, position, name, type);
+		char *uri;
+
+		node = ephy_bookmarksbar_model_get_node (model, id);
+		g_return_val_if_fail (node != NULL, NULL);
+
+		uri = ephy_bookmarks_get_topic_uri
+			(model->priv->bookmarks, node);
+
+		return uri;
+	}
+	else if (strcmp (type, EPHY_DND_URL_TYPE) == 0)
+	{
+		const char *name;
+
+		node = ephy_bookmarksbar_model_get_node (model, id);
+		g_return_val_if_fail (node != NULL, NULL);
+
+		name = ephy_node_get_property_string
+			(node, EPHY_NODE_BMK_PROP_LOCATION);
+
+		return g_strdup (name);
 	}
 
-	return FALSE;
+	return EGG_TOOLBARS_MODEL_CLASS (parent_class)->get_item_name (eggmodel, type, id);
 }
 
 static char *
@@ -558,7 +572,7 @@ ephy_bookmarksbar_model_class_init (EphyBookmarksBarModelClass *klass)
 	object_class->set_property = ephy_bookmarksbar_model_set_property;
 	object_class->get_property = ephy_bookmarksbar_model_get_property;
 
-	eggclass->add_item = impl_add_item;
+	eggclass->get_item_name = impl_get_item_name;
 	eggclass->get_item_id = impl_get_item_id;
 	eggclass->get_item_type = impl_get_item_type;
 
