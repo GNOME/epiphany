@@ -1,5 +1,12 @@
 2004-02-12  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-dialog.c: (set_sensitivity):
+
+	Don't set entries insensitive, only set the non-editable when the
+	gconf key isn't writable.
+
+2004-02-12  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/MozDownload.cpp:
 	* src/prefs-dialog.c: (get_download_button_label):
 

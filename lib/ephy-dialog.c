@@ -157,6 +157,10 @@ set_sensitivity (PropertyInfo *info, gboolean sensitive)
 			gtk_widget_set_sensitive (GTK_WIDGET (l->data), sensitive);
 		}
 	}
+	else if (info->widget_type == PT_EDITABLE)
+	{
+		gtk_editable_set_editable (GTK_EDITABLE (info->widget), sensitive);
+	}
 	else
 	{
 		gtk_widget_set_sensitive (info->widget, sensitive);
