@@ -73,6 +73,10 @@ EggToolbarsGroup       *egg_toolbars_group_new		     (void);
 void			egg_toolbars_group_set_source        (EggToolbarsGroup                  *group,
 						              const char                        *defaults,
 							      const char                        *user);
+void			egg_toolbars_group_remove_action     (EggToolbarsGroup                  *group,
+							      const char			*action);
+
+/* These should be used only by editable toolbar */
 EggToolbarsToolbar     *egg_toolbars_group_add_toolbar       (EggToolbarsGroup                  *t);
 void			egg_toolbars_group_add_item          (EggToolbarsGroup                  *t,
 						              EggToolbarsToolbar                *parent,

@@ -183,8 +183,6 @@ ephy_new_bookmark_response_cb (GtkDialog *dialog,
 			ephy_new_bookmark_add (new_bookmark);
 			break;
 	}
-
-	gtk_widget_destroy (GTK_WIDGET (new_bookmark));
 }
 
 static GtkWidget *

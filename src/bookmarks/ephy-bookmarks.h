@@ -63,6 +63,11 @@ struct EphyBookmarks
 struct EphyBookmarksClass
 {
         GObjectClass parent_class;
+
+	void (* bookmark_remove) (EphyBookmarks *eb,
+			          long id);
+	void (* topic_remove)    (EphyBookmarks *eb,
+			          long id);
 };
 
 GType		ephy_bookmarks_get_type		(void);

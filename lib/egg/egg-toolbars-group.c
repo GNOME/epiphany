@@ -465,6 +465,31 @@ egg_toolbars_group_new (void)
   return t;
 }
 
+static void
+remove_action (EggToolbarsItem *item,
+	       gpointer	        *data)
+{
+  char *action = data[0];
+  EggToolbarsGroup *group = EGG_TOOLBARS_GROUP (data[1]);
+
+  if (strcmp (item->action, action) == 0)
+    {
+        egg_toolbars_group_remove_item (group, item);
+    }
+}
+
+void
+egg_toolbars_group_remove_action (EggToolbarsGroup *group,
+				  const char	   *action)
+{
+  gpointer data[2];
+  data[0] = (char *)action;
+  data[1] = group;
+  egg_toolbars_group_foreach_item
+    (group, (EggToolbarsGroupForeachItemFunc) remove_action, data);
+  g_signal_emit (G_OBJECT (group), egg_toolbars_group_signals[CHANGED], 0);
+}
+
 void
 egg_toolbars_group_remove_toolbar (EggToolbarsGroup   *t,
 				   EggToolbarsToolbar *toolbar)

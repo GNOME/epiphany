@@ -1,3 +1,25 @@
+2003-04-08  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/egg/egg-toolbars-group.c:
+	* lib/egg/egg-toolbars-group.h:
+
+	Update.
+
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_class_init),
+	(bookmarks_removed_cb), (topics_removed_cb), (ephy_bookmarks_init):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/bookmarks/ephy-new-bookmark.c:
+	(ephy_new_bookmark_response_cb):
+	* src/popup-commands.c: (popup_cmd_bookmark_link):
+	* src/toolbar.c: (toolbar_get_action_name), (toolbar_get_action),
+	(topic_remove_cb), (bookmark_remove_cb), (toolbar_init):
+	* src/window-commands.c: (window_cmd_file_bookmark_page):
+
+	Update toolbars when bookmarks and topics are removed.
+	Use dialog_run for new_bookmark dialog.
+	(Dave I hope this doesnt break something, but it's necessary
+	to url dnd to toolbars to work correctly)
+
 2003-04-07  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/widgets/Makefile.am:

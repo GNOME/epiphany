@@ -62,6 +62,8 @@ enum
 	PROP_EPHY_WINDOW
 };
 
+static EggToolbarsGroup *toolbars_group = NULL;
+
 static GObjectClass *parent_class = NULL;
 
 struct ToolbarPrivate
@@ -197,6 +199,8 @@ toolbar_get_action_name (EggEditableToolbar *etoolbar,
 		}
 	}
 
+	LOG ("Action name is %s", res)
+
 	return res;
 }
 
@@ -219,6 +223,7 @@ toolbar_get_action (EggEditableToolbar *etoolbar,
 	}
 	else if (g_str_has_prefix (name, "GoBookmarkId"))
 	{
+		LOG ("Create action %s", name)
 		if (!ephy_str_to_int (name + strlen ("GoBookmarkId"), &id))
 		{
 			return NULL;
@@ -228,6 +233,7 @@ toolbar_get_action (EggEditableToolbar *etoolbar,
 	}
 	else if (g_str_has_prefix (name, "GoTopicId"))
 	{
+		LOG ("Create action %s", name)
 		if (!ephy_str_to_int (name + strlen ("GoTopicId"), &id))
 		{
 			return NULL;
@@ -395,10 +401,46 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 }
 
 static void
+topic_remove_cb (EphyBookmarks *eb,
+		 long id,
+		 Toolbar *t)
+{
+	EggAction *action;
+	char *name;
+
+	name = g_strdup_printf ("GoTopicId%ld", id);
+	action = egg_action_group_get_action (t->priv->action_group, name);
+	if (action)
+	{
+		egg_toolbars_group_remove_action (toolbars_group, action->name);
+		egg_action_group_remove_action (t->priv->action_group, action);
+	}
+
+	g_free (name);
+}
+
+static void
+bookmark_remove_cb (EphyBookmarks *eb,
+		    long id,
+		    Toolbar *t)
+{
+	EggAction *action;
+	char *name;
+
+	name = g_strdup_printf ("GoBookmarkId%ld", id);
+	action = egg_action_group_get_action (t->priv->action_group, name);
+	if (action)
+	{
+		egg_toolbars_group_remove_action (toolbars_group, action->name);
+		egg_action_group_remove_action (t->priv->action_group, action);
+	}
+
+	g_free (name);
+}
+
+static void
 toolbar_init (Toolbar *t)
 {
-	static EggToolbarsGroup *group = NULL;
-
         t->priv = g_new0 (ToolbarPrivate, 1);
 
 	t->priv->window = NULL;
@@ -410,18 +452,25 @@ toolbar_init (Toolbar *t)
 	egg_editable_toolbar_add_drag_type (EGG_EDITABLE_TOOLBAR (t),
 					    EPHY_DND_URL_TYPE);
 
-	if (group == NULL)
+	if (toolbars_group == NULL)
 	{
 		char *user;
+		EphyBookmarks *bookmarks;
 
 		user = g_build_filename (ephy_dot_dir (), "toolbar.xml", NULL);
-		group = egg_toolbars_group_new ();
+		toolbars_group = egg_toolbars_group_new ();
 		egg_toolbars_group_set_source
-			(group, ephy_file ("epiphany-toolbar.xml"), user);
+			(toolbars_group, ephy_file ("epiphany-toolbar.xml"), user);
 		g_free (user);
+
+		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+		g_signal_connect (bookmarks, "bookmark_remove",
+				  G_CALLBACK (bookmark_remove_cb), t);
+		g_signal_connect (bookmarks, "topic_remove",
+				  G_CALLBACK (topic_remove_cb), t);
 	}
 
-	g_object_set (t, "ToolbarsGroup", group, NULL);
+	g_object_set (t, "ToolbarsGroup", toolbars_group, NULL);
 }
 
 static void

@@ -49,7 +49,16 @@ ephy_bookmarks_finalize (GObject *object);
 static void
 ephy_bookmarks_autocompletion_source_init (EphyAutocompletionSourceIface *iface);
 
+enum
+{
+	BOOKMARK_REMOVE,
+	TOPIC_REMOVE,
+	LAST_SIGNAL
+};
+
 static GObjectClass *parent_class = NULL;
+
+static guint ephy_bookmarks_signals[LAST_SIGNAL] = { 0 };
 
 GType
 ephy_bookmarks_get_type (void)
@@ -160,6 +169,27 @@ ephy_bookmarks_class_init (EphyBookmarksClass *klass)
         parent_class = g_type_class_peek_parent (klass);
 
         object_class->finalize = ephy_bookmarks_finalize;
+
+	ephy_bookmarks_signals[BOOKMARK_REMOVE] =
+                g_signal_new ("bookmark_remove",
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              G_SIGNAL_RUN_FIRST,
+                              G_STRUCT_OFFSET (EphyBookmarksClass, bookmark_remove),
+                              NULL, NULL,
+                              g_cclosure_marshal_VOID__INT,
+                              G_TYPE_NONE,
+                              1,
+			      G_TYPE_INT);
+	ephy_bookmarks_signals[TOPIC_REMOVE] =
+                g_signal_new ("topic_remove",
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              G_SIGNAL_RUN_FIRST,
+                              G_STRUCT_OFFSET (EphyBookmarksClass, topic_remove),
+                              NULL, NULL,
+                              g_cclosure_marshal_VOID__INT,
+                              G_TYPE_NONE,
+                              1,
+			      G_TYPE_INT);
 }
 
 static void
@@ -374,7 +404,25 @@ bookmarks_removed_cb (EphyNode *node,
 		      EphyNode *child,
 		      EphyBookmarks *eb)
 {
+	long id;
+
+	id = ephy_node_get_id (child);
+	g_signal_emit (eb, ephy_bookmarks_signals[BOOKMARK_REMOVE],
+		       0, id);
+
 	ephy_bookmarks_emit_data_changed (eb);
+}
+
+static void
+topics_removed_cb (EphyNode *node,
+		   EphyNode *child,
+		   EphyBookmarks *eb)
+{
+	long id;
+
+	id = ephy_node_get_id (child);
+	g_signal_emit (eb, ephy_bookmarks_signals[TOPIC_REMOVE],
+		       0, id);
 }
 
 static void
@@ -417,6 +465,11 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 			EPHY_NODE_KEYWORD_PROP_PRIORITY,
 			&value);
 	g_value_unset (&value);
+	g_signal_connect_object (G_OBJECT (eb->priv->keywords),
+				 "child_removed",
+				 G_CALLBACK (topics_removed_cb),
+				 G_OBJECT (eb),
+				 0);
 
 	ephy_node_add_child (eb->priv->keywords,
 			     eb->priv->bookmarks);
