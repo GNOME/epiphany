@@ -32,6 +32,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <bonobo/bonobo-i18n.h>
 #include <libgnomeui/gnome-stock-icons.h>
+#include <libgnomevfs/gnome-vfs-uri.h>
 #include <string.h>
 
 #include "ephy-bookmarks-editor.h"
@@ -60,7 +61,7 @@
 
 static GtkTargetEntry topic_drag_dest_types [] =
 {
-	{ EPHY_DND_BOOKMARK_TYPE,   0, 0 }
+	{ EPHY_DND_URI_LIST_TYPE,   0, 0 }
 };
 
 static int n_topic_drag_dest_types = G_N_ELEMENTS (topic_drag_dest_types);
@@ -69,8 +70,7 @@ static GtkTargetEntry bmk_drag_types [] =
 {
         { EPHY_DND_URI_LIST_TYPE,   0, 0 },
         { EPHY_DND_TEXT_TYPE,       0, 1 },
-        { EPHY_DND_URL_TYPE,        0, 2 },
-	{ EPHY_DND_BOOKMARK_TYPE,   0, 3 }
+        { EPHY_DND_URL_TYPE,        0, 2 }
 };
 static int n_bmk_drag_types = G_N_ELEMENTS (bmk_drag_types);
 
@@ -334,7 +334,7 @@ cmd_show_in_bookmarks_bar (EggAction *action,
 	else
 	{
 		ephy_toolbars_model_remove_bookmark
-			(editor->priv->tb_model, topic, id);
+			(editor->priv->tb_model, id);
 	}
 
 	g_list_free (selection);
@@ -827,7 +827,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 
 		id = ephy_node_get_id (node);
 		show_in_bookmarks_bar = ephy_toolbars_model_has_bookmark
-			(editor->priv->tb_model, TRUE, id);
+			(editor->priv->tb_model, id);
 
 		priority = ephy_node_get_property_int
 			(node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
@@ -847,7 +847,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 
 		id = ephy_node_get_id (node);
 		show_in_bookmarks_bar = ephy_toolbars_model_has_bookmark
-			(editor->priv->tb_model, FALSE, id);
+			(editor->priv->tb_model, id);
 
 		g_list_free (selected);
 	}
@@ -1150,9 +1150,18 @@ node_dropped_cb (EphyNodeView *view, EphyNode *node,
 
 	for (l = nodes; l != NULL; l = l->next)
 	{
-		EphyNode *bmk = l->data;
+		GnomeVFSURI *uri = l->data;
+		char *url;
+		EphyNode *bmk;
 
-		ephy_bookmarks_set_keyword (editor->priv->bookmarks, node, bmk);
+		url = gnome_vfs_uri_to_string (uri, GNOME_VFS_URI_HIDE_NONE);
+		bmk = ephy_bookmarks_find_bookmark (editor->priv->bookmarks, url);
+		g_free (url);
+
+		if (bmk)
+		{
+			ephy_bookmarks_set_keyword (editor->priv->bookmarks, node, bmk);
+		}
 	}
 }
 
@@ -1186,6 +1195,19 @@ view_selection_changed_cb (GtkWidget *view, EphyBookmarksEditor *editor)
 }
 
 static void
+provide_keyword_uri (EphyNode *node, GValue *value, gpointer data)
+{
+	EphyBookmarks *bookmarks = EPHY_BOOKMARKS_EDITOR (data)->priv->bookmarks;
+	char *uri;
+
+	uri = ephy_bookmarks_get_topic_uri (bookmarks, node);
+
+	g_value_init (value, G_TYPE_STRING);
+	g_value_set_string (value, uri);
+	g_free (uri);
+}
+
+static void
 ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 {
 	GtkTreeSelection *selection;
@@ -1197,7 +1219,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	EggActionGroup *action_group;
 	EggAction *action;
 	GdkPixbuf *icon;
-	int i;
+	int i, col_id;
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
 
@@ -1260,10 +1282,12 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	/* Keywords View */
 	key_view = ephy_node_view_new (node, NULL);
 	add_focus_monitor (editor, key_view);
+	col_id = ephy_node_view_add_data_column (EPHY_NODE_VIEW (key_view),
+					         G_TYPE_STRING, -1,
+						 provide_keyword_uri, editor);
 	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (key_view),
 					   topic_drag_types,
-				           n_topic_drag_types,
-					   -1);
+				           n_topic_drag_types, col_id);
 	ephy_node_view_enable_drag_dest (EPHY_NODE_VIEW (key_view),
 			                 topic_drag_dest_types,
 			                 n_topic_drag_dest_types);
@@ -1326,10 +1350,14 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	/* Bookmarks View */
 	bm_view = ephy_node_view_new (node, editor->priv->bookmarks_filter);
 	add_focus_monitor (editor, bm_view);
+	col_id = ephy_node_view_add_data_column (EPHY_NODE_VIEW (bm_view),
+					         G_TYPE_STRING,
+					         EPHY_NODE_BMK_PROP_LOCATION,
+						 NULL, NULL);
 	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (bm_view),
 					   bmk_drag_types,
 				           n_bmk_drag_types,
-					   EPHY_NODE_BMK_PROP_LOCATION);
+					   col_id);
 	ephy_node_view_add_column (EPHY_NODE_VIEW (bm_view), _("Title"),
 				   G_TYPE_STRING, EPHY_NODE_BMK_PROP_TITLE, -1,
 				   EPHY_NODE_VIEW_AUTO_SORT |

@@ -85,6 +85,12 @@ GtkTreeViewColumn *ephy_node_view_add_column	      (EphyNodeView *view,
 						       EphyNodeViewFlags flags,
 						       EphyTreeModelNodeValueFunc icon_func);
 
+int		   ephy_node_view_add_data_column     (EphyNodeView *view,
+			                               GType value_type,
+						       int prop_id,
+			                               EphyTreeModelNodeValueFunc func,
+						       gpointer data);
+
 void		   ephy_node_view_remove              (EphyNodeView *view);
 
 gboolean           ephy_node_view_has_selection       (EphyNodeView *view,
@@ -98,7 +104,7 @@ void	           ephy_node_view_select_node         (EphyNodeView *view,
 void	           ephy_node_view_enable_drag_source  (EphyNodeView *view,
 						       GtkTargetEntry *types,
 						       int n_types,
-						       guint prop_id);
+						       int column_id);
 
 void	           ephy_node_view_enable_drag_dest    (EphyNodeView *view,
 						       GtkTargetEntry *types,

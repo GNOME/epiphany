@@ -53,14 +53,14 @@ add_one_uri (const char *uri, int x, int y, int w, int h, gpointer data)
 }
 
 static void
-add_one_node (const char *uri, int x, int y, int w, int h, gpointer data)
+add_one_topic (const char *uri, int x, int y, int w, int h, gpointer data)
 {
         GString *result;
 
         result = (GString *) data;
 
         g_string_append (result, uri);
-        g_string_append (result, ";");
+        g_string_append (result, "\r\n");
 }
 
 gboolean
@@ -87,12 +87,11 @@ ephy_dnd_drag_data_get (GtkWidget *widget,
 		result = g_string_new (NULL);
                 (* each_selected_item_iterator) (add_one_netscape_url, container_context, result);
 	}
-	else if (target == gdk_atom_intern (EPHY_DND_TOPIC_TYPE, FALSE) ||
-	         target == gdk_atom_intern (EPHY_DND_BOOKMARK_TYPE, FALSE))
+	else if (target == gdk_atom_intern (EPHY_DND_TOPIC_TYPE, FALSE))
 	{
 		result = g_string_new (NULL);
-                (* each_selected_item_iterator) (add_one_node, container_context, result);
-		g_string_erase (result, result->len - 1, -1);
+                (* each_selected_item_iterator) (add_one_topic, container_context, result);
+		g_string_erase (result, result->len - 2, -1);
 	}
 	else
 	{
@@ -106,38 +105,4 @@ ephy_dnd_drag_data_get (GtkWidget *widget,
 	g_string_free (result, TRUE);
 
         return TRUE;
-}
-
-GList *
-ephy_dnd_node_list_extract_nodes (const char *node_list)
-{
-	GList *result = NULL;
-	char **nodes;
-	int i;
-
-	nodes = g_strsplit (node_list, ";", -1);
-
-	for (i = 0; nodes[i] != NULL && nodes[i+1] != NULL; i = i + 2)
-	{
-		gulong id;
-		EphyNodeDb *db;
-
-		db = ephy_node_db_get_by_name (nodes[i]);
-		g_return_val_if_fail (db != NULL, NULL);
-
-		if (ephy_string_to_int (nodes[i + 1], &id))
-		{
-			EphyNode *node;
-
-			node = ephy_node_db_get_node_from_id (db, id);
-			g_return_val_if_fail (node != NULL, NULL);
-			result = g_list_prepend (result, node);
-		}
-	}
-
-	result = g_list_reverse (result);
-
-	g_strfreev (nodes);
-
-	return result;
 }

@@ -30,7 +30,6 @@ G_BEGIN_DECLS
 #define EPHY_DND_TEXT_TYPE              "text/plain"
 #define EPHY_DND_URL_TYPE               "_NETSCAPE_URL"
 #define EPHY_DND_TOPIC_TYPE		"ephy_topic_node"
-#define EPHY_DND_BOOKMARK_TYPE		"ephy_bookmark_node"
 
 typedef void (* EphyDragEachSelectedItemDataGet)    (const char *url,
                                                      int x, int y, int w, int h,
@@ -46,8 +45,6 @@ gboolean ephy_dnd_drag_data_get			(GtkWidget *widget,
 						 guint32 time,
 						 gpointer container_context,
 						 EphyDragEachSelectedItemIterator each_selected_item_iterator);
-
-GList   *ephy_dnd_node_list_extract_nodes	(const char *node_list);
 
 G_END_DECLS
 

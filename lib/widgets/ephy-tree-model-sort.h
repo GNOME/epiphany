@@ -53,8 +53,8 @@ GType		ephy_tree_model_sort_get_type		(void);
 
 GtkTreeModel   *ephy_tree_model_sort_new		(GtkTreeModel *child_model);
 
-void		ephy_tree_model_sort_set_drag_property	(EphyTreeModelSort *ms,
-							 guint id);
+void		ephy_tree_model_sort_set_column_id	(EphyTreeModelSort *ms,
+							 int id);
 
 G_END_DECLS
 

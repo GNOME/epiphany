@@ -67,8 +67,7 @@ toolbar_get_property (GObject *object,
 static GtkTargetEntry drag_targets[] = {
   { EGG_TOOLBAR_ITEM_TYPE, 0, 0 },
   { EPHY_DND_TOPIC_TYPE, 0, 1 },
-  { EPHY_DND_BOOKMARK_TYPE, 0, 2 },
-  { EPHY_DND_URL_TYPE, 0, 3 },
+  { EPHY_DND_URL_TYPE, 0, 2 },
 };
 static int n_drag_targets = G_N_ELEMENTS (drag_targets);
 
@@ -134,29 +133,6 @@ zoom_to_level_cb (EggAction *action, float zoom, EphyWindow *window)
 }
 
 static void
-topic_destroy_cb (EphyNode *node,
-		  Toolbar *t)
-{
-	EggAction *action;
-	char *name;
-	EphyToolbarsModel *model;
-	long id;
-
-	model = EPHY_TOOLBARS_MODEL
-		(ephy_shell_get_toolbars_model (ephy_shell));
-
-	id = ephy_node_get_id (node);
-	name = ephy_toolbars_model_get_action_name (model, TRUE, id);
-	action = egg_action_group_get_action (t->priv->action_group, name);
-	if (action)
-	{
-		egg_action_group_remove_action (t->priv->action_group, action);
-	}
-
-	g_free (name);
-}
-
-static void
 bookmark_destroy_cb (EphyNode *node,
 		     Toolbar *t)
 {
@@ -169,7 +145,7 @@ bookmark_destroy_cb (EphyNode *node,
 		(ephy_shell_get_toolbars_model (ephy_shell));
 
 	id = ephy_node_get_id (node);
-	name = ephy_toolbars_model_get_action_name (model, FALSE, id);
+	name = ephy_toolbars_model_get_action_name (model, id);
 	action = egg_action_group_get_action (t->priv->action_group, name);
 	if (action)
 	{
@@ -184,23 +160,36 @@ toolbar_ensure_action (Toolbar *t,
 		       const char *name)
 {
 	EggAction *action = NULL;
+	EphyToolbarsModel *model;
 	EphyBookmarks *bookmarks;
+	EphyNode *bmks, *topics;
+
+	model = EPHY_TOOLBARS_MODEL
+		(ephy_shell_get_toolbars_model (ephy_shell));
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	bmks = ephy_bookmarks_get_bookmarks (bookmarks);
+	topics = ephy_bookmarks_get_keywords (bookmarks);
 
 	LOG ("Ensure action %s", name)
-
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
 	if (g_str_has_prefix (name, "GoBookmark-"))
 	{
 		EphyNode *node;
 
-		LOG ("Create action %s", name)
-
-		node = ephy_bookmarks_find_bookmark
-			(bookmarks, name + strlen ("GoBookmark-"));
+		node = ephy_toolbars_model_get_node (model,name);
 		g_return_if_fail (node != NULL);
 
-		action = ephy_bookmark_action_new (name, ephy_node_get_id (node));
+		if (ephy_node_has_child (topics, node))
+		{
+			action = ephy_topic_action_new (name, ephy_node_get_id (node));
+		}
+		else if (ephy_node_has_child (bmks, node))
+		{
+			action = ephy_bookmark_action_new (name, ephy_node_get_id (node));
+		}
+
+		g_return_if_fail (action != NULL);
+
 		g_signal_connect (action, "go_location",
 				  G_CALLBACK (go_location_cb), t->priv->window);
 		egg_action_group_add_action (t->priv->action_group, action);
@@ -209,53 +198,6 @@ toolbar_ensure_action (Toolbar *t,
 		ephy_node_signal_connect_object (node,
 					         EPHY_NODE_DESTROY,
 					         (EphyNodeCallback) bookmark_destroy_cb,
-					         G_OBJECT (t));
-	}
-	else if (g_str_has_prefix (name, "GoTopic-"))
-	{
-		EphyNode *node;
-
-		LOG ("Create action %s", name)
-
-		node = ephy_bookmarks_find_keyword
-			(bookmarks, name + strlen ("GoTopic-"), FALSE);
-		g_return_if_fail (node != NULL);
-
-		action = ephy_topic_action_new (name, ephy_node_get_id (node));
-		g_signal_connect (action, "go_location",
-				  G_CALLBACK (go_location_cb),
-				  t->priv->window);
-		egg_action_group_add_action (t->priv->action_group, action);
-		g_object_unref (action);
-
-		ephy_node_signal_connect_object (node,
-					         EPHY_NODE_DESTROY,
-					         (EphyNodeCallback) topic_destroy_cb,
-					         G_OBJECT (t));
-	}
-	else if (g_str_has_prefix (name, "GoSpecialTopic-"))
-	{
-		EphyNode *node;
-		long id;
-
-		LOG ("Create action %s", name)
-
-		if (!ephy_string_to_int (name + strlen ("GoSpecialTopic-"), &id))
-		{
-			return;
-		}
-
-		action = ephy_topic_action_new (name, id);
-		g_signal_connect (action, "go_location",
-				  G_CALLBACK (go_location_cb),
-				  t->priv->window);
-		egg_action_group_add_action (t->priv->action_group, action);
-		g_object_unref (action);
-
-		node = ephy_bookmarks_get_from_id (bookmarks, id);
-		ephy_node_signal_connect_object (node,
-					         EPHY_NODE_DESTROY,
-					         (EphyNodeCallback) topic_destroy_cb,
 					         G_OBJECT (t));
 	}
 }

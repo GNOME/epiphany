@@ -494,7 +494,6 @@ static void
 egg_toolbar_finalize (GObject *object)
 {
   EggToolbar *toolbar = EGG_TOOLBAR (object);
-  GList *list;
 
   if (toolbar->tooltips)
     g_object_unref (GTK_OBJECT (toolbar->tooltips));

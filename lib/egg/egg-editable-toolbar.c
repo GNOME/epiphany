@@ -180,11 +180,17 @@ drag_data_received_cb (GtkWidget          *widget,
   else
     {
       GdkAtom target;
+      char *type;
+      char *id;
 
       target = gtk_drag_dest_find_target (widget, context, NULL);
+      type = egg_toolbars_model_get_item_type (etoolbar->priv->model, target);
+      id = egg_toolbars_model_get_item_id (etoolbar->priv->model, type,
+					   selection_data->data);
       egg_toolbars_model_add_item (etoolbar->priv->model,
-			           toolbar_pos, pos, target,
-			           selection_data->data);
+			           toolbar_pos, pos, id, type);
+      g_free (type);
+      g_free (id);
     }
 }
 

@@ -1,3 +1,70 @@
+2003-07-27  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/ui/epiphany-toolbar.xml.in:
+	* lib/egg/egg-editable-toolbar.c: (drag_data_received_cb):
+	* lib/egg/egg-editable-toolbar.h:
+	* lib/egg/egg-toolbar-editor.c: (parse_item_list):
+	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_to_xml),
+	(safe_save_xml), (egg_toolbars_model_save), (toolbars_item_new),
+	(free_item_node), (egg_toolbars_model_add_separator),
+	(egg_toolbars_model_add_item), (parse_item_list),
+	(impl_get_item_id), (impl_get_item_name), (impl_get_item_type),
+	(egg_toolbars_model_class_init), (egg_toolbars_model_item_nth),
+	(egg_toolbars_model_toolbar_nth), (egg_toolbars_model_get_item_id),
+	(egg_toolbars_model_get_item_name),
+	(egg_toolbars_model_get_item_type):
+	* lib/egg/egg-toolbars-model.h:
+	* lib/egg/eggtoolbar.c: (egg_toolbar_finalize):
+	* lib/ephy-dnd.c: (add_one_topic), (ephy_dnd_drag_data_get):
+	* lib/ephy-dnd.h:
+	* lib/widgets/ephy-node-view.c: (drag_data_received_cb),
+	(ephy_node_view_select_node_by_key), (ephy_node_view_construct),
+	(ephy_node_view_add_data_column),
+	(ephy_node_view_enable_drag_source):
+	* lib/widgets/ephy-node-view.h:
+	* lib/widgets/ephy-tree-model-sort.c:
+	(ephy_tree_model_sort_class_init), (ephy_tree_model_sort_init),
+	(ephy_tree_model_sort_multi_row_draggable),
+	(ephy_tree_model_sort_set_column_id),
+	(each_property_get_data_binder),
+	(ephy_tree_model_sort_multi_drag_data_get):
+	* lib/widgets/ephy-tree-model-sort.h:
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(toolbar_checkbox_changed_cb), (build_ui):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(cmd_show_in_bookmarks_bar), (ephy_bookmarks_editor_update_menu),
+	(node_dropped_cb), (provide_keyword_uri),
+	(ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init_defaults),
+	(ephy_bookmarks_remove_keyword), (ephy_bookmarks_get_topic_uri),
+	(ephy_bookmarks_find_keyword):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/ephy-history-window.c: (ephy_history_window_construct):
+	* src/ephy-toolbars-model.c: (ephy_toolbars_model_get_action_name),
+	(ephy_toolbars_model_get_node), (bookmark_destroy_cb),
+	(impl_get_item_name), (impl_get_item_id), (impl_get_item_type),
+	(connect_item), (ephy_toolbars_model_set_bookmarks),
+	(ephy_toolbars_model_class_init), (save_changes), (item_added),
+	(item_removed), (toolbar_added), (toolbar_removed),
+	(ephy_toolbars_model_init), (ephy_toolbars_model_finalize),
+	(ephy_toolbars_model_remove_bookmark),
+	(ephy_toolbars_model_add_bookmark),
+	(ephy_toolbars_model_has_bookmark):
+	* src/ephy-toolbars-model.h:
+	* src/toolbar.c: (bookmark_destroy_cb), (toolbar_ensure_action):
+
+	Remove the NODE drag types. They sucks because they use internal
+	ids. I think it's better to use the topic name and the standard uri
+	types instead, we are ensuring they are unique anyway.
+	Add some apis to the toolbar model for better custom items support
+	solve also a memory leak. This change the format so toolbar
+	configuration will be lost.
+	For bookmarks/topics dnd use format that can be used also
+	externally (url list for bookmarks).
+	Cleanup toolbars model implementation using similar action
+	names for bookmarks / topics.
+	Set a version on the toolbar xml and make it low disk safe.
+
 2003-07-27  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/widgets/ephy-node-view.c: (ephy_node_view_remove):

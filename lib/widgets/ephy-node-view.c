@@ -24,6 +24,7 @@
 #include <gtk/gtkcellrendererpixbuf.h>
 #include <gtk/gtkwindow.h>
 #include <gdk/gdkkeysyms.h>
+#include <libgnomevfs/gnome-vfs-uri.h>
 
 #include "eggtreemodelfilter.h"
 #include "ephy-node-view.h"
@@ -306,18 +307,15 @@ drag_data_received_cb (GtkWidget *widget,
 					       x, y, &path, &pos))
 	{
 		EphyNode *node;
-		GList *src_nodes;
+		GList *uris;
 
 		node = get_node_from_path (view, path);
 
-		src_nodes = ephy_dnd_node_list_extract_nodes
-				(selection_data->data);
-
+		uris = gnome_vfs_uri_list_parse (selection_data->data);
 		g_signal_emit (G_OBJECT (view),
 			       ephy_node_view_signals[NODE_DROPPED], 0,
-			       node, src_nodes);
-
-		g_list_free (src_nodes);
+			       node, uris);
+		gnome_vfs_uri_list_free (uris);
 
 		gtk_tree_path_free (path);
 	}
@@ -426,7 +424,7 @@ ephy_node_view_select_node_by_key (EphyNodeView *view, GdkEventKey *event)
 	gboolean found = FALSE;
 	gchar outbuf[6];
 	gint length;
-	
+
 	length = g_unichar_to_utf8 (gdk_keyval_to_unicode (event->keyval), outbuf);
 	event_string = g_utf8_casefold (outbuf, length);
 
@@ -456,7 +454,7 @@ ephy_node_view_select_node_by_key (EphyNodeView *view, GdkEventKey *event)
 	{
 		iter = last_iter;
 	}
-	
+
 	path = gtk_tree_model_get_path (view->priv->sortmodel, &iter);
 	gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), path, NULL, FALSE);
 	gtk_tree_path_free (path);
@@ -573,22 +571,6 @@ ephy_node_view_get_property (GObject *object,
 }
 
 static void
-node_from_sort_iter_cb (EphyTreeModelSort *model,
-		        GtkTreeIter *iter,
-		        void **node,
-		        EphyNodeView *view)
-{
-	GtkTreeIter filter_iter, node_iter;
-
-	gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (model),
-							&filter_iter, iter);
-	egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER (view->priv->filtermodel),
-							  &node_iter, &filter_iter);
-	*node = ephy_tree_model_node_node_from_iter
-		(EPHY_TREE_MODEL_NODE (view->priv->nodemodel), &node_iter);
-}
-
-static void
 ephy_node_view_construct (EphyNodeView *view)
 {
 	GtkTreeSelection *selection;
@@ -600,11 +582,6 @@ ephy_node_view_construct (EphyNodeView *view)
 	egg_tree_model_filter_set_visible_column (EGG_TREE_MODEL_FILTER (view->priv->filtermodel),
 						  EPHY_TREE_MODEL_NODE_COL_VISIBLE);
 	view->priv->sortmodel = ephy_tree_model_sort_new (view->priv->filtermodel);
-	g_signal_connect_object (G_OBJECT (view->priv->sortmodel),
-				 "node_from_iter",
-				 G_CALLBACK (node_from_sort_iter_cb),
-				 view,
-				 0);
 	gtk_tree_view_set_model (GTK_TREE_VIEW (view), GTK_TREE_MODEL (view->priv->sortmodel));
 	g_signal_connect_object (G_OBJECT (view),
 			         "button_press_event",
@@ -777,6 +754,29 @@ provide_text_weight (EphyNode *node, GValue *value, EphyNodeView *view)
 	{
 		g_value_set_int (value, PANGO_WEIGHT_NORMAL);
 	}
+}
+
+int
+ephy_node_view_add_data_column (EphyNodeView *view,
+			        GType value_type,
+				int prop_id,
+			        EphyTreeModelNodeValueFunc func,
+				gpointer data)
+{
+	int column;
+
+	if (func)
+	{
+		column = ephy_tree_model_node_add_func_column
+			(view->priv->nodemodel, value_type, func, data);
+	}
+	else
+	{
+		column = ephy_tree_model_node_add_prop_column
+			(view->priv->nodemodel, value_type, prop_id);
+	}
+
+	return column;
 }
 
 GtkTreeViewColumn *
@@ -1040,7 +1040,7 @@ void
 ephy_node_view_enable_drag_source (EphyNodeView *view,
 				   GtkTargetEntry *types,
 				   int n_types,
-				   guint prop_id)
+				   int column)
 {
 	GtkWidget *treeview;
 
@@ -1055,8 +1055,8 @@ ephy_node_view_enable_drag_source (EphyNodeView *view,
 						types, n_types,
 						GDK_ACTION_COPY);
 
-	ephy_tree_model_sort_set_drag_property (EPHY_TREE_MODEL_SORT (view->priv->sortmodel),
-						prop_id);
+	ephy_tree_model_sort_set_column_id (EPHY_TREE_MODEL_SORT (view->priv->sortmodel),
+					    column);
 }
 
 void

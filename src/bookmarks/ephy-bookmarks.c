@@ -210,8 +210,7 @@ ephy_bookmarks_autocompletion_source_init (EphyAutocompletionSourceIface *iface)
 static void
 ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 {
-	int i, id;
-	EphyNode *node;
+	int i;
 
 	for (i = 0; i < n_default_topics; i++)
 	{
@@ -220,13 +219,12 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 
 	for (i = 0; i < n_default_bookmarks; i++)
 	{
-		ephy_bookmarks_add (eb, default_bookmarks[i].title,
-				    default_bookmarks[i].location);
+		EphyNode *bmk;
 
-		node = ephy_bookmarks_find_bookmark (eb, default_bookmarks[i].location);
-		if (node == NULL) break;
-		id = ephy_node_get_id (node);
-		ephy_toolbars_model_add_bookmark (eb->priv->toolbars_model, FALSE, id);
+		bmk = ephy_bookmarks_add (eb, default_bookmarks[i].title,
+				          default_bookmarks[i].location);
+		ephy_toolbars_model_add_bookmark (eb->priv->toolbars_model, FALSE,
+						  ephy_node_get_id (bmk));
 	}
 }
 
@@ -1119,11 +1117,42 @@ ephy_bookmarks_add_keyword (EphyBookmarks *eb,
 	return key;
 }
 
-void 
+void
 ephy_bookmarks_remove_keyword (EphyBookmarks *eb,
-				    EphyNode *keyword)
+			       EphyNode *keyword)
 {
 	ephy_node_remove_child (eb->priv->keywords, keyword);
+}
+
+char *
+ephy_bookmarks_get_topic_uri (EphyBookmarks *eb,
+			      EphyNode *node)
+{
+	char *uri;
+
+	if (ephy_bookmarks_get_bookmarks (eb) == node)
+	{
+		uri = g_strdup ("topic://Special/All");
+	}
+	else if (ephy_bookmarks_get_not_categorized (eb) == node)
+	{
+		uri = g_strdup ("topic://Special/NotCategorized");
+	}
+	else if (ephy_bookmarks_get_favorites (eb) == node)
+	{
+		uri = g_strdup ("topic://Special/Favorites");
+	}
+	else
+	{
+		const char *name;
+
+		name = ephy_node_get_property_string
+			(node, EPHY_NODE_KEYWORD_PROP_NAME);
+
+		uri = g_strdup_printf ("topic://%s", name);
+	}
+
+	return uri;
 }
 
 EphyNode *
@@ -1134,14 +1163,33 @@ ephy_bookmarks_find_keyword (EphyBookmarks *eb,
 	EphyNode *node;
 	GPtrArray *children;
 	int i;
+	const char *topic_name;
 
 	g_return_val_if_fail (name != NULL, NULL);
 
+	topic_name = name;
 
 	if (g_utf8_strlen (name, -1) == 0)
 	{
 		LOG ("Empty name, no keyword matches.")
 		return NULL;
+	}
+
+	if (strcmp (name, "topic://Special/All") == 0)
+	{
+		return ephy_bookmarks_get_bookmarks (eb);
+	}
+	else if (strcmp (name, "topic://Special/NotCategorized") == 0)
+	{
+		return ephy_bookmarks_get_not_categorized (eb);
+	}
+	else if (strcmp (name, "topic://Special/Favorites") == 0)
+	{
+		return ephy_bookmarks_get_favorites (eb);
+	}
+	else if (g_str_has_prefix (name, "topic://"))
+	{
+		topic_name += strlen ("topic://");
 	}
 
 	children = ephy_node_get_children (eb->priv->keywords);
@@ -1154,8 +1202,8 @@ ephy_bookmarks_find_keyword (EphyBookmarks *eb,
 		 kid = g_ptr_array_index (children, i);
 		 key = ephy_node_get_property_string (kid, EPHY_NODE_KEYWORD_PROP_NAME);
 
-		 if ((partial_match && g_str_has_prefix (key, name) > 0) ||
-		     (!partial_match && strcmp (key, name) == 0))
+		 if ((partial_match && g_str_has_prefix (key, topic_name) > 0) ||
+		     (!partial_match && strcmp (key, topic_name) == 0))
 		 {
 			 node = kid;
 		 }

@@ -52,19 +52,20 @@ GType		   ephy_toolbars_model_get_type        (void);
 EphyToolbarsModel *ephy_toolbars_model_new	       (EphyBookmarks *bookmarks);
 
 void		   ephy_toolbars_model_add_bookmark    (EphyToolbarsModel *model,
-				                        gboolean topic,
+							gboolean topic,
 				                        long id);
 
 gboolean	   ephy_toolbars_model_has_bookmark    (EphyToolbarsModel *model,
-				                        gboolean topic,
 				                        long id);
+
 void		   ephy_toolbars_model_remove_bookmark (EphyToolbarsModel *model,
-							gboolean topic,
 							long id);
 
 char              *ephy_toolbars_model_get_action_name (EphyToolbarsModel *model,
-							gboolean topic,
 							long id);
+
+EphyNode	  *ephy_toolbars_model_get_node        (EphyToolbarsModel *model,
+			                                const char *action_name);
 
 void		   ephy_toolbars_model_set_flag        (EphyToolbarsModel *model,
 							EggTbModelFlags flags);

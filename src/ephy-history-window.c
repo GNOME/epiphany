@@ -57,8 +57,7 @@ static GtkTargetEntry page_drag_types [] =
 {
         { EPHY_DND_URI_LIST_TYPE,   0, 0 },
         { EPHY_DND_TEXT_TYPE,       0, 1 },
-        { EPHY_DND_URL_TYPE,        0, 2 },
-	{ EPHY_DND_BOOKMARK_TYPE,   0, 3 }
+        { EPHY_DND_URL_TYPE,        0, 2 }
 };
 static int n_page_drag_types = G_N_ELEMENTS (page_drag_types);
 
@@ -955,7 +954,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	EggActionGroup *action_group;
 	EggAction *action;
 	GdkPixbuf *icon;
-	int i;
+	int i, col_id;
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("History"));
 
@@ -1016,12 +1015,15 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	gtk_widget_show (scrolled_window);
 	sites_view = ephy_node_view_new (node, NULL);
 	add_focus_monitor (editor, sites_view);
+	col_id = ephy_node_view_add_data_column (EPHY_NODE_VIEW (sites_view),
+					         G_TYPE_STRING,
+					         EPHY_NODE_PAGE_PROP_LOCATION,
+						 NULL, NULL);
 	ephy_node_view_select_node (EPHY_NODE_VIEW (sites_view),
 				    ephy_history_get_pages (editor->priv->history));
 	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (sites_view),
 					   page_drag_types,
-				           n_page_drag_types,
-					   EPHY_NODE_PAGE_PROP_LOCATION);
+				           n_page_drag_types, col_id);
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (sites_view));
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 	ephy_node_view_add_column (EPHY_NODE_VIEW (sites_view), _("Sites"),
@@ -1067,10 +1069,13 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	add_focus_monitor (editor, pages_view);
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pages_view));
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (pages_view), TRUE);
+	col_id = ephy_node_view_add_data_column (EPHY_NODE_VIEW (pages_view),
+					         G_TYPE_STRING,
+					         EPHY_NODE_PAGE_PROP_LOCATION,
+						 NULL, NULL);
 	ephy_node_view_enable_drag_source (EPHY_NODE_VIEW (pages_view),
 					   page_drag_types,
-				           n_page_drag_types,
-					   EPHY_NODE_PAGE_PROP_LOCATION);
+				           n_page_drag_types, col_id);
 	col = ephy_node_view_add_column (EPHY_NODE_VIEW (pages_view), _("Title"),
 				         G_TYPE_STRING, EPHY_NODE_PAGE_PROP_TITLE,
 				         -1, EPHY_NODE_VIEW_USER_SORT |
