@@ -145,10 +145,6 @@ impl_get_security_level (EphyEmbed *embed,
                          EmbedSecurityLevel *level,
                          char **description);
 static gresult
-impl_find (EphyEmbed *embed,
-           EmbedFindInfo *info);
-
-static gresult
 impl_set_encoding (EphyEmbed *embed,
                    const char *encoding);
 
@@ -295,6 +291,42 @@ mozilla_embed_get_type (void)
         return mozilla_embed_type;
 }
 
+static gresult
+impl_find_next (EphyEmbed *embed, 
+                gboolean backwards)
+{
+	nsresult result = NS_OK;
+	EphyWrapper *wrapper;
+	
+	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
+	g_return_val_if_fail (wrapper != NULL, G_FAILED);
+	
+        PRBool didFind;
+
+        result = wrapper->Find (backwards, &didFind);
+	
+	return didFind ? G_OK : G_FAILED;
+}
+
+static gresult
+impl_find_set_properties (EphyEmbed *embed, 
+                          char *search_string,
+	                  gboolean case_sensitive,
+			  gboolean wrap_around)
+{
+	nsresult result = NS_OK;
+	EphyWrapper *wrapper;
+	
+	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
+	g_return_val_if_fail (wrapper != NULL, G_FAILED);
+	
+        result = wrapper->FindSetProperties
+		((NS_ConvertUTF8toUCS2(search_string)).get(),
+		 case_sensitive, wrap_around); 
+	
+	return result ? G_OK : G_FAILED;
+}
+
 static void
 ephy_embed_init (EphyEmbedClass *embed_class)
 {
@@ -330,7 +362,8 @@ ephy_embed_init (EphyEmbedClass *embed_class)
 	embed_class->shistory_go_nth = impl_shistory_go_nth;
 	embed_class->shistory_copy = impl_shistory_copy;
 	embed_class->get_security_level = impl_get_security_level;
-	embed_class->find = impl_find;
+	embed_class->find_next = impl_find_next;
+	embed_class->find_set_properties = impl_find_set_properties;
 	embed_class->set_encoding = impl_set_encoding;
 	embed_class->select_all = impl_select_all;
 	embed_class->print = impl_print;
@@ -1137,28 +1170,6 @@ impl_print_preview_navigate (EphyEmbed *embed,
 
 	result = wrapper->PrintPreviewNavigate(navType, pageNum);
 	return NS_SUCCEEDED(result) ? G_OK : G_FAILED;
-}
-
-static gresult
-impl_find (EphyEmbed *embed, 
-           EmbedFindInfo *info)
-{
-	nsresult result = NS_OK;
-	EphyWrapper *wrapper;
-	
-	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
-	g_return_val_if_fail (wrapper != NULL, G_FAILED);
-	
-        PRBool didFind;
-
-        result = wrapper->Find ((NS_ConvertUTF8toUCS2(info->search_string)).get(),
-				info->interactive,
-				info->match_case, 
-                 	        info->backwards, info->wrap,
-                       	        info->entire_word, info->search_frames,
-                                &didFind);
-	
-	return didFind ? G_OK : G_FAILED;
 }
 
 static gresult

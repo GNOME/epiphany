@@ -529,11 +529,21 @@ ephy_embed_get_security_level (EphyEmbed *embed,
 }
 
 gresult
-ephy_embed_find (EphyEmbed *embed,
-                 EmbedFindInfo *info)
+ephy_embed_find_set_properties  (EphyEmbed *embed,
+				 char *search_string,
+				 gboolean case_sensitive,
+				 gboolean match_word)
 {
 	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
-        return klass->find (embed, info);
+        return klass->find_set_properties (embed, search_string, case_sensitive, match_word);
+}
+
+gresult
+ephy_embed_find_next (EphyEmbed *embed,
+		      gboolean backwards)
+{
+	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
+        return klass->find_next (embed, backwards);
 }
 
 gresult

@@ -68,8 +68,6 @@
 #include "nsIDeviceContext.h"
 #include "nsIPresContext.h"
 #include "ContentHandler.h"
-#include "nsITypeAheadFind.h"
-#include "nsSupportsPrimitives.h"
 #include "EphyEventListener.h"
 
 EphyWrapper::EphyWrapper ()
@@ -499,50 +497,25 @@ nsresult EphyWrapper::GetSHUrlAtIndex (PRInt32 index, nsCString &url)
 	return NS_OK;
 }
 
-nsresult EphyWrapper::Find (const PRUnichar *search_string, 
-			    PRBool interactive,
-			    PRBool matchcase, PRBool search_backwards,
-			    PRBool search_wrap_around,
-			    PRBool search_for_entire_word,
-			    PRBool search_in_frames,
-			    PRBool *didFind)
+nsresult EphyWrapper::FindSetProperties (const PRUnichar *search_string,
+			                 PRBool case_sensitive,
+					 PRBool wrap_around)
 {
-	if (!interactive)
-	{
-		nsresult rv;
-		nsCOMPtr<nsITypeAheadFind> tAFinder
-			(do_GetService(NS_TYPEAHEADFIND_CONTRACTID, &rv));
-		if (NS_SUCCEEDED(rv))
-		{
-			nsCOMPtr<nsIDOMWindow> aFocusedWindow;
-			rv = GetFocusedDOMWindow(getter_AddRefs(aFocusedWindow));
-			if (NS_SUCCEEDED(rv))
-			{
-				nsSupportsInterfacePointerImpl windowPtr;
-				windowPtr.SetData(aFocusedWindow);
-
-				tAFinder->FindNext(search_backwards, &windowPtr);
-
-				nsCOMPtr<nsISupports> retValue;
-				rv = windowPtr.GetData(getter_AddRefs(retValue));
-				if (NS_SUCCEEDED(rv) && !retValue)
-				{
-					*didFind = PR_TRUE;
-					return NS_OK;
-				}
-			}
-		}
-
-	}
-
 	nsCOMPtr<nsIWebBrowserFind> finder (do_GetInterface(mWebBrowser));
 	
 	finder->SetSearchString (search_string);
-	finder->SetFindBackwards (search_backwards);
-	finder->SetWrapFind (search_wrap_around);
-	finder->SetEntireWord (search_for_entire_word);
-	finder->SetMatchCase (matchcase);
-	finder->SetSearchFrames (search_in_frames);
+	finder->SetMatchCase (case_sensitive);
+
+	return NS_OK;
+}
+
+nsresult EphyWrapper::Find (PRBool backwards,
+			    PRBool *didFind)
+{
+	nsCOMPtr<nsIWebBrowserFind> finder (do_GetInterface(mWebBrowser));
+	
+	finder->SetFindBackwards (backwards);
+
 	return finder->FindNext(didFind);
 }
 

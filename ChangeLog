@@ -1,5 +1,40 @@
 2003-07-20  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* embed/ephy-embed.c: (ephy_embed_find_set_properties),
+	(ephy_embed_find_next):
+	* embed/ephy-embed.h:
+	* embed/find-dialog.c: (update_navigation_controls), (impl_show),
+	(find_dialog_class_init), (set_properties), (sync_page_change),
+	(sync_embed), (find_dialog_init), (find_dialog_finalize),
+	(find_dialog_go_next), (find_dialog_go_prev),
+	(find_close_button_clicked_cb), (find_next_button_clicked_cb),
+	(find_prev_button_clicked_cb), (find_entry_changed_cb),
+	(find_check_toggled_cb):
+	* embed/find-dialog.h:
+	* embed/mozilla/EphyWrapper.cpp:
+	* embed/mozilla/EphyWrapper.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/mozilla-embed.cpp:
+	* lib/ephy-dialog.h:
+	* src/ephy-window.c: (ephy_window_find):
+	* src/ephy-window.h:
+	* src/window-commands.c: (window_cmd_edit_find),
+	(window_cmd_edit_find_next), (window_cmd_edit_find_prev):
+
+	Rework find implementation to integrate better
+	with type ahead and to simplify the code.
+	Do not try to set menus sensitivity because
+	mozilla doesnt provide an api for it and it breaks
+	with type ahead.
+
+	* lib/ephy-dialog.c: (ephy_dialog_class_init),
+	(ephy_dialog_finalize), (dialog_destroy_cb), (impl_construct),
+	(ephy_dialog_construct):
+
+	Remove no more used destruct crap.
+
+2003-07-20  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* data/glade/print.glade:
 
 	Remove useless icons

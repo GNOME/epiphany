@@ -21,9 +21,6 @@
 
 #include "ephy-embed-dialog.h"
 
-#include <glib-object.h>
-#include <glib.h>
-
 G_BEGIN_DECLS
 
 typedef struct FindDialog FindDialog;
@@ -37,12 +34,6 @@ typedef struct FindDialogClass FindDialogClass;
 
 typedef struct FindDialogPrivate FindDialogPrivate;
 
-typedef enum
-{
-	FIND_CAN_GO_PREV	= 1 << 0,
-	FIND_CAN_GO_NEXT	= 1 << 1
-} FindNavigationFlags;
-
 struct FindDialog
 {
         EphyEmbedDialog parent;
@@ -52,8 +43,6 @@ struct FindDialog
 struct FindDialogClass
 {
         EphyEmbedDialogClass parent_class;
-
-	void (* search)    (FindDialog *dialog);
 };
 
 GType			find_dialog_get_type		 (void);
@@ -62,14 +51,6 @@ EphyDialog*		find_dialog_new			 (EphyEmbed *embed);
 
 EphyDialog *		find_dialog_new_with_parent	 (GtkWidget *window,
 							  EphyEmbed *embed);
-
-void			find_dialog_go_next		 (FindDialog *dialog,
-							  gboolean interactive);
-
-void			find_dialog_go_prev		 (FindDialog *dialog,
-							  gboolean interactive);
-
-FindNavigationFlags	find_dialog_get_navigation_flags (FindDialog *dialog);
 
 G_END_DECLS
 

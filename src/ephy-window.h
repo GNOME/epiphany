@@ -112,7 +112,7 @@ Toolbar		 *ephy_window_get_toolbar	  (EphyWindow *window);
 
 /* Dialogs */
 
-EphyDialog       *ephy_window_get_find_dialog	  (EphyWindow *window);
+void		  ephy_window_find		  (EphyWindow *window);
 
 void		  ephy_window_print		  (EphyWindow *window);
 

@@ -54,10 +54,10 @@ public:
 	nsresult PrintPreviewNumPages (int *numPages);
 	nsresult PrintPreviewNavigate(PRInt16 navType, PRInt32 pageNum);
 
-	nsresult Find (const PRUnichar *search_string,
-		       PRBool matchcase, PRBool interactive,
-		       PRBool search_backwards, PRBool search_wrap_around,
-		       PRBool search_for_entire_word, PRBool search_in_frames,
+	nsresult FindSetProperties (const PRUnichar *search_string,
+			            PRBool case_sensitive,
+				    PRBool wrap_around);
+	nsresult Find (PRBool bacwards,
 		       PRBool *didFind);
 
 	nsresult GetMainDocumentUrl (nsCString &url);

@@ -51,10 +51,6 @@ impl_construct (EphyDialog *dialog,
 		const EphyDialogProperty *properties,
 		const char *file,
 		const char *name);
-
-static void
-impl_destruct (EphyDialog *dialog);
-
 static GtkWidget *
 impl_get_control (EphyDialog *dialog,
                   int property_id);
@@ -161,7 +157,6 @@ ephy_dialog_class_init (EphyDialogClass *klass)
 	klass->get_value = impl_get_value;
 	klass->run = impl_run;
 	klass->show = impl_show;
-	klass->destruct = impl_destruct;
 
 	g_object_class_install_property (object_class,
                                          PROP_PARENT_WINDOW,
@@ -939,7 +934,7 @@ ephy_dialog_finalize (GObject *object)
 
 	if (dialog->priv->dialog)
 	{
-		ephy_dialog_destruct (dialog);
+		gtk_widget_destroy (dialog->priv->dialog);
 	}
 
 	free_props (dialog->priv->props);
@@ -1065,15 +1060,6 @@ init_props (const EphyDialogProperty *properties, GladeXML *gxml)
 }
 
 static void
-dialog_destruction_notify (EphyDialog *dialog,
-                           GObject *where_the_object_was)
-{
-	dialog->priv->dialog = NULL;
-	ephy_dialog_destruct (dialog);
-	g_object_unref (dialog);
-}
-
-static void
 dialog_destroy_cb (GtkWidget *widget, EphyDialog *dialog)
 {
 	if (dialog->priv->props &&
@@ -1081,6 +1067,8 @@ dialog_destroy_cb (GtkWidget *widget, EphyDialog *dialog)
 	{
 		save_props (dialog->priv->props);
 	}
+
+	g_object_unref (dialog);
 }
 
 static void
@@ -1110,23 +1098,6 @@ impl_construct (EphyDialog *dialog,
 			  dialog);
 
 	g_object_unref (gxml);
-
-	g_object_weak_ref (G_OBJECT(dialog->priv->dialog),
-			   (GWeakNotify)dialog_destruction_notify,
-			   dialog);
-}
-
-static void
-impl_destruct (EphyDialog *dialog)
-{
-	if (dialog->priv->dialog)
-	{
-		g_object_weak_unref (G_OBJECT(dialog->priv->dialog),
-				     (GWeakNotify)dialog_destruction_notify,
-				     dialog);
-		gtk_widget_destroy (dialog->priv->dialog);
-		dialog->priv->dialog = NULL;
-	}
 }
 
 static GtkWidget *
@@ -1243,13 +1214,6 @@ ephy_dialog_construct (EphyDialog *dialog,
 {
 	EphyDialogClass *klass = EPHY_DIALOG_GET_CLASS (dialog);
         return klass->construct (dialog, properties, file, name);
-}
-
-void
-ephy_dialog_destruct (EphyDialog *dialog)
-{
-	EphyDialogClass *klass = EPHY_DIALOG_GET_CLASS (dialog);
-        klass->destruct (dialog);
 }
 
 gint

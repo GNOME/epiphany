@@ -94,17 +94,6 @@ typedef enum
 
 typedef struct
 {
-        gchar *search_string;
-        gboolean backwards;
-        gboolean wrap;
-        gboolean entire_word;
-        gboolean match_case;
-        gboolean search_frames;
-	gboolean interactive;
-} EmbedFindInfo;
-
-typedef struct
-{
         gboolean print_to_file;
         gchar *printer;
         gchar *file;
@@ -263,8 +252,12 @@ struct EphyEmbedClass
 	gresult   (* get_security_level)   (EphyEmbed *embed,
 					    EmbedSecurityLevel *level,
 					    char **description);
-	gresult   (* find)                 (EphyEmbed *embed,
-				            EmbedFindInfo *find);
+	gresult   (* find_set_properties)  (EphyEmbed *embed,
+					    char *search_string,
+					    gboolean case_sensitive,
+					    gboolean wrap_around);
+	gresult	  (* find_next)	           (EphyEmbed *embed,
+					    gboolean backwards);
 	gresult   (* print)                (EphyEmbed *embed,
 				            EmbedPrintInfo *info);
 	gresult	  (* print_preview_close)  (EphyEmbed *embed);
@@ -384,8 +377,13 @@ gresult       ephy_embed_get_security_level   (EphyEmbed *embed,
 					       EmbedSecurityLevel *level,
 					       char **description);
 
-gresult       ephy_embed_find                 (EphyEmbed *embed,
-					       EmbedFindInfo *find);
+gresult       ephy_embed_find_set_properties  (EphyEmbed *embed,
+					       char *search_string,
+					       gboolean case_sensitive,
+					       gboolean wrap_around);
+
+gresult	      ephy_embed_find_next	      (EphyEmbed *embed,
+					       gboolean backwards);
 
 gresult       ephy_embed_set_encoding         (EphyEmbed *embed,
 					       const char *encoding);

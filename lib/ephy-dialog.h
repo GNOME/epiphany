@@ -71,7 +71,6 @@ struct EphyDialogClass
 					 const EphyDialogProperty *properties,
 					 const char *file,
 			                 const char *name);
-	void	    (* destruct)	(EphyDialog *dialog);
 	gint        (* run)		(EphyDialog *dialog);
 	void        (* show)		(EphyDialog *dialog);
 	GtkWidget * (* get_control)     (EphyDialog *dialog,
@@ -91,8 +90,6 @@ void	      ephy_dialog_construct		(EphyDialog *dialog,
 						 const EphyDialogProperty *properties,
 						 const char *file,
 						 const char *name);
-
-void	      ephy_dialog_destruct		(EphyDialog *dialog);
 
 void	      ephy_dialog_add_enum		(EphyDialog *dialog,
 						 int id,

@@ -22,7 +22,6 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/pref			\
 	-I$(MOZILLA_INCLUDE_ROOT)/progressDlg		\
 	-I$(MOZILLA_INCLUDE_ROOT)/shistory		\
-	-I$(MOZILLA_INCLUDE_ROOT)/typeaheadfind		\
 	-I$(MOZILLA_INCLUDE_ROOT)/unicharutil		\
 	-I$(MOZILLA_INCLUDE_ROOT)/uriloader		\
 	-I$(MOZILLA_INCLUDE_ROOT)/wallet		\

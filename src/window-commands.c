@@ -23,7 +23,6 @@
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 #include "window-commands.h"
-#include "find-dialog.h"
 #include "print-dialog.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
@@ -61,12 +60,7 @@ void
 window_cmd_edit_find (EggAction *action,
 		      EphyWindow *window)
 {
-	EphyDialog *dialog;
-	dialog = ephy_window_get_find_dialog (window);
-
-	g_object_ref (dialog);
-
-	ephy_dialog_show (dialog);
+	ephy_window_find (window);
 }
 
 void
@@ -476,22 +470,24 @@ void
 window_cmd_edit_find_next (EggAction *action,
 			   EphyWindow *window)
 {
-	EphyDialog *dialog;
+	EphyEmbed *embed;
 
-	dialog = ephy_window_get_find_dialog (window);
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (embed != NULL);
 
-	find_dialog_go_next (FIND_DIALOG(dialog), FALSE);
+	ephy_embed_find_next (embed, FALSE);
 }
 
 void
 window_cmd_edit_find_prev (EggAction *action,
 			   EphyWindow *window)
 {
-	EphyDialog *dialog;
+	EphyEmbed *embed;
 
-	dialog = ephy_window_get_find_dialog (window);
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (embed != NULL);
 
-	find_dialog_go_prev (FIND_DIALOG(dialog), FALSE);
+	ephy_embed_find_next (embed, TRUE);
 }
 
 void

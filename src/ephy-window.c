@@ -703,32 +703,6 @@ setup_window (EphyWindow *window)
 }
 
 static void
-sync_find_dialog (FindDialog *dialog, GParamSpec *spec, EphyWindow *window)
-{
-	EggActionGroup *action_group;
-	EggAction *action;
-	FindNavigationFlags flags;
-	gboolean can_go_prev = FALSE, can_go_next = FALSE;
-
-	flags = find_dialog_get_navigation_flags (dialog);
-
-	if (flags & FIND_CAN_GO_PREV)
-	{
-		can_go_prev = TRUE;
-	}
-	if (flags & FIND_CAN_GO_NEXT)
-	{
-		can_go_next = TRUE;
-	}
-
-	action_group = window->priv->action_group;
-	action = egg_action_group_get_action (action_group, "EditFindPrev");
-	g_object_set (action, "sensitive", can_go_prev, NULL);
-	action = egg_action_group_get_action (action_group, "EditFindNext");
-	g_object_set (action, "sensitive", can_go_next, NULL);
-}
-
-static void
 sync_tab_address (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	const char *address;
@@ -1855,31 +1829,26 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 	update_tabs_menu_sensitivity (window);
 }
 
-EphyDialog *
-ephy_window_get_find_dialog (EphyWindow *window)
+void
+ephy_window_find (EphyWindow *window)
 {
 	EphyDialog *dialog;
 	EphyEmbed *embed;
 
-	if (window->priv->find_dialog)
+	if (window->priv->find_dialog == NULL)
 	{
-		return window->priv->find_dialog;
+		embed = ephy_window_get_active_embed (window);
+		g_return_if_fail (GTK_IS_WINDOW(window));
+
+		dialog = find_dialog_new_with_parent (GTK_WIDGET(window),
+						      embed);
+		window->priv->find_dialog = dialog;
+
+		g_object_add_weak_pointer(G_OBJECT (dialog),
+					  (gpointer *) &window->priv->find_dialog);
 	}
 
-	embed = ephy_window_get_active_embed (window);
-	g_return_val_if_fail (GTK_IS_WINDOW(window), NULL);
-	dialog = find_dialog_new_with_parent (GTK_WIDGET(window),
-					      embed);
-
-	sync_find_dialog (FIND_DIALOG (dialog), NULL, window);
-	g_signal_connect_object (dialog, "notify::embed",
-				 G_CALLBACK (sync_find_dialog), window, 0);
-	g_signal_connect_object (dialog, "notify::navigation",
-				 G_CALLBACK (sync_find_dialog), window, 0);
-
-	window->priv->find_dialog = dialog;
-
-	return dialog;
+	ephy_dialog_show (window->priv->find_dialog);
 }
 
 static void
