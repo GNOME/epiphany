@@ -35,7 +35,6 @@
 
 #include <libxml/tree.h>
 #include <libxml/xmlreader.h>
-#include <libxml/xmlschemas.h>
 
 #include <libgnomevfs/gnome-vfs-ops.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
@@ -43,6 +42,13 @@
 #include <gmodule.h>
 #include <dirent.h>
 #include <string.h>
+
+/* define to validate the extensions files */
+/* #define ENABLE_VALIDATION */
+
+#ifdef ENABLE_VALIDATION
+#include <libxml/xmlschemas.h>
+#endif
 
 #define CONF_LOADED_EXTENSIONS	"/apps/epiphany/general/active_extensions"
 #define SCHEMA_FILE		"/epiphany-extension.xsd"
@@ -60,8 +66,10 @@ struct _EphyExtensionsManagerPrivate
 	GList *windows;
 	guint active_extensions_notifier_id;
 
+#ifdef ENABLE_VALIDATION
 	xmlSchemaPtr schema;
 	xmlSchemaValidCtxtPtr schema_ctxt;
+#endif
 };
 
 typedef struct
@@ -383,7 +391,7 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 		g_warning ("Couldn't read '%s' data\n", identifier);
 		return;
 	}
-#if 0
+#ifdef ENABLE_VALIDATION
 	/* Validate the extension description */
 	if (manager->priv->schema_ctxt)
 	{
@@ -1060,6 +1068,7 @@ active_extensions_notifier (GConfClient *client,
 	sync_loaded_extensions (manager);
 }
 
+#ifdef ENABLE_VALIDATION
 static void
 xml_error_cb (EphyExtensionsManager *manager,
 	      const char *msg,
@@ -1116,6 +1125,7 @@ init_schema_ctxt (EphyExtensionsManager *manager)
 				 (xmlSchemaValidityWarningFunc) xml_error_cb,
 				 manager);
 }
+#endif
 
 static void
 ephy_extensions_manager_init (EphyExtensionsManager *manager)
@@ -1134,7 +1144,9 @@ ephy_extensions_manager_startup (EphyExtensionsManager *manager)
 
 	LOG ("EphyExtensionsManager startup")
 
+#ifdef ENABLE_VALIDATION
 	init_schema_ctxt (manager);
+#endif
 
 	/* load the extensions descriptions */
 	path = g_build_filename (ephy_dot_dir (), "extensions", NULL);
@@ -1175,6 +1187,7 @@ ephy_extensions_manager_finalize (GObject *object)
 
 	g_list_free (priv->windows);
 
+#ifdef ENABLE_VALIDATION
 	if (priv->schema)
 	{
 		xmlSchemaFree (priv->schema);
@@ -1183,6 +1196,7 @@ ephy_extensions_manager_finalize (GObject *object)
 	{
 		xmlSchemaFreeValidCtxt (priv->schema_ctxt);
 	}
+#endif
 
 	parent_class->finalize (object);
 }
