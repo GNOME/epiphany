@@ -1183,7 +1183,7 @@ ephy_dialog_construct (EphyDialog *dialog,
 		       const char *domain)
 {
 	EphyDialogClass *klass = EPHY_DIALOG_GET_CLASS (dialog);
-	return klass->construct (dialog, properties, file, name, domain);
+	klass->construct (dialog, properties, file, name, domain);
 }
 
 void
