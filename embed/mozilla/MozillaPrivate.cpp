@@ -22,6 +22,9 @@
 #include "config.h"
 #endif
 
+#include "ephy-embed.h"
+#include "mozilla-embed.h"
+
 #include "MozillaPrivate.h"
 
 #include <nsIServiceManagerUtils.h>
@@ -29,9 +32,6 @@
 #include <nsIEmbeddingSiteWindow.h>
 #include <nsIWebBrowserChrome.h>
 #include <gtkmozembed.h>
-
-#include "ephy-embed.h"
-#include "mozilla-embed.h"
 
 GtkWidget *MozillaFindEmbed (nsIDOMWindow *aDOMWindow)
 {

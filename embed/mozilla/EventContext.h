@@ -21,23 +21,24 @@
 #ifndef EVENT_CONTEXT_H
 #define EVENT_CONTEXT_H
 
-#include "nsIDOMMouseEvent.h"
-#include "nsIDOMKeyEvent.h"
-#include "nsIDOMEvent.h"
-#include "nsIDOMNode.h"
-#include "nsString.h"
-#include "nsIDOMHTMLAnchorElement.h"
-#include "nsIDOMNSHTMLElement.h"
-#include "nsIDOMHTMLAreaElement.h"
-#include "nsIDOMHTMLBodyElement.h"
-#include "nsIDOMElementCSSInlineStyle.h"
-#include "nsIDOMCSSStyleDeclaration.h"
-#include "nsIDOMDocument.h"
-#include "nsIDocument.h"
 #include "EphyBrowser.h"
 
 #include "ephy-embed.h"
 #include "mozilla-embed-event.h"
+
+#include <nsIDOMMouseEvent.h>
+#include <nsIDOMKeyEvent.h>
+#include <nsIDOMEvent.h>
+#include <nsIDOMNode.h>
+#include <nsIDOMHTMLAnchorElement.h>
+#include <nsIDOMHTMLAreaElement.h>
+#include <nsIDOMHTMLBodyElement.h>
+#include <nsIDOMDocument.h>
+
+#ifdef ALLOW_PRIVATE_API
+#include <nsIDocument.h>
+#include <nsString.h>
+#endif
 
 class EventContext
 {

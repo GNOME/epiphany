@@ -24,28 +24,36 @@
 #endif
 
 #include "EventContext.h"
-#include "nsIDOMEventTarget.h"
-#include "nsIDocument.h"
-#include "nsIDOMHTMLInputElement.h"
-#include "nsIDOMHTMLObjectElement.h"
-#include "nsIInterfaceRequestor.h"
-#include "nsIDOMHTMLImageElement.h"
-#include "nsIDOMElement.h"
-#include "nsIDOMXULDocument.h"
-#include "nsIURI.h"
-#include "nsNetUtil.h"
-#include "nsIDOMNSDocument.h"
-#include "nsReadableUtils.h"
-#include "nsGUIEvent.h"
-#include "nsIDOMNSEvent.h"
-#include "nsIDOMCharacterData.h"
-#include "nsIDOMHTMLButtonElement.h"
-#include "nsIDOMHTMLLabelElement.h"
-#include "nsIDOMHTMLLegendElement.h"
-#include "nsIDOMHTMLTextAreaElement.h"
+
 #include <gdk/gdkkeysyms.h>
-#include "nsIPrivateDOMEvent.h"
-#include "nsIDOMNSUIEvent.h"
+
+#include <nsIInterfaceRequestor.h>
+#include <nsIDOMEventTarget.h>
+#include <nsIDOMHTMLInputElement.h>
+#include <nsIDOMHTMLObjectElement.h>
+#include <nsIDOMHTMLImageElement.h>
+#include <nsIDOMElement.h>
+#include <nsIURI.h>
+#include <nsIDOMCharacterData.h>
+#include <nsIDOMHTMLButtonElement.h>
+#include <nsIDOMHTMLLabelElement.h>
+#include <nsIDOMHTMLLegendElement.h>
+#include <nsIDOMHTMLTextAreaElement.h>
+#include <nsIDOMElementCSSInlineStyle.h>
+#include <nsIDOMCSSStyleDeclaration.h>
+
+#ifdef ALLOW_PRIVATE_API
+#include <nsIDOMXULDocument.h>
+#include <nsIDOMNSEvent.h>
+#include <nsIDOMNSHTMLElement.h>
+#endif
+
+#ifdef ALLOW_PRIVATE_STRINGS
+#include <nsIDocument.h>
+#include <nsReadableUtils.h>
+#include <nsNetUtil.h>
+#endif
+
 
 #define KEY_CODE 256
 

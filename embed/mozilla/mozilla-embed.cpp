@@ -300,7 +300,6 @@ static void
 mozilla_embed_destroy (GtkObject *object)
 {
 	MozillaEmbed *embed = MOZILLA_EMBED (object);
-	int i;
 
 	if (embed->priv->browser)
 	{
