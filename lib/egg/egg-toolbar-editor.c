@@ -649,7 +649,7 @@ model_has_action (EggToolbarsModel *model, GtkAction *action)
 	  const char *action_name;
           gboolean sep;
 
-          name = egg_toolbars_model_item_nth (model, i, l, &sep);
+          egg_toolbars_model_item_nth (model, i, l, &sep, &name, NULL);
           action_name = gtk_action_get_name (action);
           if (!sep && strcmp (name, action_name) == 0) return TRUE;
         }

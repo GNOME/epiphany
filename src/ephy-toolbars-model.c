@@ -267,9 +267,8 @@ get_toolbar_and_item_pos (EphyToolbarsModel *model,
 			const char *i_name;
 			gboolean is_separator;
 
-			i_name = egg_toolbars_model_item_nth
-					(EGG_TOOLBARS_MODEL (model), t, i,
-					 &is_separator);
+			egg_toolbars_model_item_nth (EGG_TOOLBARS_MODEL (model),
+						     t, i, &is_separator, &i_name, NULL);
 			g_return_val_if_fail (i_name != NULL, FALSE);
 
 			if (strcmp (i_name, action_name) == 0)
@@ -307,30 +306,6 @@ get_toolbar_pos (EphyToolbarsModel *model,
 	}
 
 	return -1;
-}
-
-static gboolean
-impl_add_item (EggToolbarsModel    *t,
-	       int		    toolbar_position,
-	       int		    position,
-	       const char          *id,
-	       const char          *type)
-{
-	EphyToolbarsModel *model = EPHY_TOOLBARS_MODEL (t);
-	gboolean is_bookmark;
-
-	is_bookmark = strcmp (type, EPHY_DND_TOPIC_TYPE) == 0 ||
-	              strcmp (type, EPHY_DND_URL_TYPE) == 0;
-
-	if (!is_bookmark || !get_toolbar_and_item_pos (model, id, NULL, NULL))
-	{
-		return EGG_TOOLBARS_MODEL_CLASS (parent_class)->add_item
-			(t, toolbar_position, position, id, type);
-	}
-	else
-	{
-		return FALSE;
-	}
 }
 
 static void
@@ -463,7 +438,6 @@ ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass)
 	object_class->set_property = ephy_toolbars_model_set_property;
 	object_class->get_property = ephy_toolbars_model_get_property;
 
-	etm_class->add_item = impl_add_item;
 	etm_class->get_item_id = impl_get_item_id;
 	etm_class->get_item_name = impl_get_item_name;
 	etm_class->get_item_type = impl_get_item_type;
@@ -496,9 +470,8 @@ item_added (EphyToolbarsModel *model, int toolbar_position, int position)
 	const char *i_name;
 	gboolean is_separator;
 
-	i_name = egg_toolbars_model_item_nth
-		(EGG_TOOLBARS_MODEL (model), toolbar_position,
-		 position, &is_separator);
+	egg_toolbars_model_item_nth (EGG_TOOLBARS_MODEL (model), toolbar_position,
+				     position, &is_separator, &i_name, NULL);
 	if (!is_separator)
 	{
 		connect_item (model, i_name);

@@ -632,27 +632,37 @@ egg_toolbars_model_n_items (EggToolbarsModel *t,
   return g_node_n_children (toolbar);
 }
 
-const char *
+void
 egg_toolbars_model_item_nth (EggToolbarsModel *t,
 			     int	       toolbar_position,
 			     int               position,
-			     gboolean         *is_separator)
+			     gboolean         *is_separator,
+			     const char      **id,
+			     const char      **type)
 {
   GNode *toolbar;
   GNode *item;
   EggToolbarsItem *idata;
 
   toolbar = g_node_nth_child (t->priv->toolbars, toolbar_position);
-  g_return_val_if_fail (toolbar != NULL, NULL);
+  g_return_if_fail (toolbar != NULL);
 
   item = g_node_nth_child (toolbar, position);
-  g_return_val_if_fail (item != NULL, NULL);
+  g_return_if_fail (item != NULL);
 
   idata = item->data;
 
   *is_separator = idata->separator;
 
-  return idata->id;
+  if (id)
+    {
+      *id = idata->id;
+    }
+
+  if (type)
+    {
+      *type = idata->type;
+    }
 }
 
 int
