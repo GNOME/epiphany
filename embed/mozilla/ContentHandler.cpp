@@ -195,15 +195,11 @@ class GDownloadProgressListener;
 struct MimeAskActionDialog;
 struct HelperAppChooserDialog;
 
-extern "C"
-void mime_ask_dialog_save_clicked_cb (GtkButton *button,
-				      MimeAskActionDialog *dialog);
-extern "C"
-void mime_ask_dialog_open_clicked_cb (GtkButton *button,
-				      MimeAskActionDialog *dialog);
-extern "C"
-gint mime_ask_dialog_cancel_clicked_cb (GtkButton *button,
-					MimeAskActionDialog *dialog);
+enum
+{
+	RESPONSE_SAVE = 1,
+	RESPONSE_OPEN = 2
+};
 
 /*
  * MimeAskActionDialog: the representation of dialogs used to ask
@@ -601,8 +597,8 @@ MimeAskActionDialog::~MimeAskActionDialog()
 // begin MIMEAskActionDialog callbacks.
 ////////////////////////////////////////////////////////////////////////////////
 
-extern "C" void
-mime_ask_dialog_save_clicked_cb (GtkButton *button, MimeAskActionDialog *dialog)
+static void
+mime_ask_dialog_save (MimeAskActionDialog *dialog)
 {
 	gtk_widget_hide (glade_xml_get_widget (dialog->mGXml, 
 					       "mime_ask_action_dialog"));
@@ -617,7 +613,7 @@ mime_ask_dialog_save_clicked_cb (GtkButton *button, MimeAskActionDialog *dialog)
 }
 
 static void
-mime_ask_dialog_download_cancel (MimeAskActionDialog *dialog)
+mime_ask_dialog_cancel (MimeAskActionDialog *dialog)
 {
 	nsresult rv;
 	nsCOMPtr<nsIHelperAppLauncher> launcher;
@@ -628,8 +624,8 @@ mime_ask_dialog_download_cancel (MimeAskActionDialog *dialog)
 	delete dialog;
 }
 
-extern "C" void
-mime_ask_dialog_open_clicked_cb (GtkButton *button, MimeAskActionDialog *dialog)
+static void
+mime_ask_dialog_open (MimeAskActionDialog *dialog)
 {
 	nsresult rv;
 	nsCOMPtr<nsIHelperAppLauncher> launcher;
@@ -644,15 +640,24 @@ mime_ask_dialog_open_clicked_cb (GtkButton *button, MimeAskActionDialog *dialog)
 	}
 	else
 	{	
-		mime_ask_dialog_download_cancel (dialog);
+		mime_ask_dialog_cancel (dialog);
 		ephy_embed_utils_nohandler_dialog_run (dialog->mParent);
 	}
 }
 
-extern "C" gint
-mime_ask_dialog_cancel_clicked_cb (GtkButton *button,
-				   MimeAskActionDialog *dialog)
+extern "C" void
+mime_ask_dialog_response_cb (GtkDialog *gtkdialog, int response, MimeAskActionDialog *dialog)
 {
-	mime_ask_dialog_download_cancel (dialog);
-	return 0; /* FIXME: philipl, is this the right thing to return? */
+	switch (response)
+	{
+		case RESPONSE_SAVE:
+			mime_ask_dialog_save (dialog);
+			break;
+		case RESPONSE_OPEN:
+			mime_ask_dialog_open (dialog);
+			break;
+		default:
+			mime_ask_dialog_cancel (dialog);
+			break;
+	}
 }

@@ -982,6 +982,7 @@
   <property name="resizable">False</property>
   <property name="destroy_with_parent">False</property>
   <property name="has_separator">False</property>
+  <signal name="response" handler="mime_ask_dialog_response_cb" last_modification_time="Thu, 25 Sep 2003 19:25:28 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox28">
@@ -1002,8 +1003,7 @@
 	      <property name="label">gtk-save</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
-	      <signal name="clicked" handler="mime_ask_dialog_save_clicked_cb" last_modification_time="Sun, 01 Sep 2002 13:39:41 GMT"/>
+	      <property name="response_id">1</property>
 	    </widget>
 	  </child>
 
@@ -1016,7 +1016,6 @@
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">-6</property>
-	      <signal name="clicked" handler="mime_ask_dialog_cancel_clicked_cb" last_modification_time="Sun, 01 Sep 2002 13:08:43 GMT"/>
 	    </widget>
 	  </child>
 
@@ -1029,8 +1028,7 @@
 	      <property name="label">gtk-open</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
-	      <signal name="clicked" handler="mime_ask_dialog_open_clicked_cb" last_modification_time="Sun, 01 Sep 2002 13:09:36 GMT"/>
+	      <property name="response_id">2</property>
 	    </widget>
 	  </child>
 	</widget>
