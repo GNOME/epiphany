@@ -46,6 +46,7 @@ enum {
 
 static void egg_tool_item_init       (EggToolItem *toolitem);
 static void egg_tool_item_class_init (EggToolItemClass *class);
+static void egg_tool_item_finalize (GObject *object);
 
 static void egg_tool_item_set_property (GObject         *object,
 					guint            prop_id,
@@ -118,6 +119,7 @@ egg_boolean_handled_accumulator (GSignalInvocationHint *ihint,
   
   return continue_emission;
 }
+
 static void
 egg_tool_item_class_init (EggToolItemClass *klass)
 {
@@ -130,6 +132,7 @@ egg_tool_item_class_init (EggToolItemClass *klass)
   
   object_class->set_property = egg_tool_item_set_property;
   object_class->get_property = egg_tool_item_get_property;
+  object_class->finalize = egg_tool_item_finalize;
 
   widget_class->realize       = egg_tool_item_realize;
   widget_class->unrealize     = egg_tool_item_unrealize;
@@ -197,10 +200,22 @@ egg_tool_item_init (EggToolItem *toolitem)
 }
 
 static void
-egg_tool_item_set_property (GObject         *object,
-			    guint            prop_id,
-			    const GValue    *value,
-			    GParamSpec      *pspec)
+egg_tool_item_finalize (GObject *object)
+{
+  EggToolItem *item = EGG_TOOL_ITEM (object);
+
+  if (item->menu_item)
+    g_object_unref (item->menu_item);
+  
+  if (G_OBJECT_CLASS (parent_class)->finalize)
+    G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+egg_tool_item_set_property (GObject      *object,
+			    guint         prop_id,
+			    const GValue *value,
+			    GParamSpec   *pspec)
 {
   EggToolItem *toolitem = EGG_TOOL_ITEM (object);
 
@@ -218,10 +233,10 @@ egg_tool_item_set_property (GObject         *object,
 }
 
 static void
-egg_tool_item_get_property (GObject         *object,
-			    guint            prop_id,
-			    GValue          *value,
-			    GParamSpec      *pspec)
+egg_tool_item_get_property (GObject    *object,
+			    guint       prop_id,
+			    GValue     *value,
+			    GParamSpec *pspec)
 {
   EggToolItem *toolitem = EGG_TOOL_ITEM (object);
 
@@ -476,7 +491,7 @@ egg_tool_item_set_expand (EggToolItem *tool_item,
 
 void
 egg_tool_item_set_pack_end (EggToolItem *tool_item,
-			    gboolean pack_end)
+			    gboolean     pack_end)
 {
   g_return_if_fail (EGG_IS_TOOL_ITEM (tool_item));
     
@@ -642,7 +657,7 @@ egg_tool_item_get_proxy_menu_item (EggToolItem *tool_item,
 void
 egg_tool_item_set_proxy_menu_item (EggToolItem *tool_item,
 				   const gchar *menu_item_id,
-				   GtkWidget *menu_item)
+				   GtkWidget   *menu_item)
 {
   g_return_if_fail (EGG_IS_TOOL_ITEM (tool_item));
   g_return_if_fail (menu_item == NULL || GTK_IS_MENU_ITEM (menu_item));

@@ -87,9 +87,6 @@ void                  egg_tool_button_set_label_widget (EggToolButton *button,
 							GtkWidget     *label_widget);
 GtkWidget *           egg_tool_button_get_label_widget (EggToolButton *button);
 
-/* internal function */
-gchar *              _egg_tool_button_get_label_text  (EggToolButton *button);
-
 G_END_DECLS
 
 #endif /* __EGG_TOOL_BUTTON_H__ */

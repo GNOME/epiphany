@@ -201,6 +201,32 @@ egg_tool_button_init (EggToolButton *button, EggToolButtonClass *klass)
   gtk_widget_show (button->button);
 }
 
+static gchar *
+elide_underscores (const gchar *original)
+{
+  gchar *q, *result;
+  const gchar *p;
+  gboolean last_underscore;
+
+  q = result = g_malloc (strlen (original) + 1);
+  last_underscore = FALSE;
+  
+  for (p = original; *p; p++)
+    {
+      if (!last_underscore && *p == '_')
+	last_underscore = TRUE;
+      else
+	{
+	  last_underscore = FALSE;
+	  *q++ = *p;
+	}
+    }
+  
+  *q = '\0';
+  
+  return result;
+}
+
 static void
 egg_tool_button_construct_contents (EggToolItem *tool_item)
 {
@@ -213,6 +239,14 @@ egg_tool_button_construct_contents (EggToolItem *tool_item)
   GtkIconSize icon_size;
   GtkWidget *box = NULL;
 
+  if (egg_tool_item_get_proxy_menu_item (tool_item, MENU_ID))
+    {
+      /* Remove item, so it will be recreated on the next
+       * create_proxy_menu_item()
+       */
+      egg_tool_item_set_proxy_menu_item (tool_item, MENU_ID, NULL);
+    }
+  
   if (button->icon_widget && button->icon_widget->parent)
     {
       gtk_container_remove (GTK_CONTAINER (button->icon_widget->parent),
@@ -247,10 +281,29 @@ egg_tool_button_construct_contents (EggToolItem *tool_item)
 	}
       else
 	{
-	  gchar *text = _egg_tool_button_get_label_text (button);
-	  label = gtk_label_new (text);
-	  g_free (text);
+	  GtkStockItem stock_item;
+	  gboolean elide = TRUE;
+	  gchar *label_text;
 
+	  if (button->label_text)
+	    {
+	      label_text = button->label_text;
+	      elide = button->use_underline;
+	    }
+	  else if (button->stock_id && gtk_stock_lookup (button->stock_id, &stock_item))
+	    label_text = stock_item.label;
+	  else
+	    label_text = "";
+
+	  if (elide)
+	    label_text = elide_underscores (label_text);
+	  else
+	    label_text = g_strdup (label_text);
+
+	  label = gtk_label_new (label_text);
+
+	  g_free (label_text);
+	  
 	  gtk_widget_show (label);
 	}
     }
@@ -415,11 +468,24 @@ egg_tool_button_create_menu_proxy (EggToolItem *item)
   EggToolButton *button = EGG_TOOL_BUTTON (item);
   GtkWidget *menu_item;
   GtkWidget *menu_image = NULL;
-  gchar *label;
+  GtkStockItem stock_item;
+  gboolean use_mnemonic = TRUE;
+  const char *label = "";
 
-  label = _egg_tool_button_get_label_text (button);
-  menu_item = gtk_image_menu_item_new_with_label (label);
-  g_free (label);
+  if (button->label_widget && GTK_IS_LABEL (button->label_widget))
+    label = gtk_label_get_label (GTK_LABEL (button->label_widget));
+  else if (button->label_text)
+    {
+      label = button->label_text;
+      use_mnemonic = button->use_underline;
+    }
+  else if (button->stock_id && gtk_stock_lookup (button->stock_id, &stock_item))
+    label = stock_item.label;
+  
+  if (use_mnemonic)
+    menu_item = gtk_image_menu_item_new_with_mnemonic (label);
+  else
+    menu_item = gtk_image_menu_item_new_with_label (label);
 
   g_object_ref (menu_item);
   gtk_object_sink (GTK_OBJECT (menu_item));
@@ -454,10 +520,11 @@ egg_tool_button_create_menu_proxy (EggToolItem *item)
   if (menu_image)
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), menu_image);
 
-  g_signal_connect_object (menu_item, "activate",
-			   G_CALLBACK (gtk_button_clicked),
-			   EGG_TOOL_BUTTON (button)->button,
-			   G_CONNECT_SWAPPED);
+  g_signal_connect_closure_by_id (menu_item,
+				  g_signal_lookup ("activate", G_OBJECT_TYPE (menu_item)), 0,
+				  g_cclosure_new_object_swap (G_CALLBACK (gtk_button_clicked),
+							      G_OBJECT (EGG_TOOL_BUTTON (button)->button)),
+				  FALSE);
 
   egg_tool_item_set_proxy_menu_item (EGG_TOOL_ITEM (button), MENU_ID, menu_item);
 
@@ -687,48 +754,4 @@ egg_tool_button_get_icon_set (EggToolButton *button)
   g_return_val_if_fail (EGG_IS_TOOL_BUTTON (button), NULL);
   
   return button->icon_set;
-}
-
-static gchar *
-elide_underscores (const gchar *original)
-{
-  gchar *q, *result;
-  const gchar *p;
-  gboolean last_underscore;
-
-  q = result = g_malloc (strlen (original) + 1);
-  last_underscore = FALSE;
-  
-  for (p = original; *p; p++)
-    {
-      if (!last_underscore && *p == '_')
-	last_underscore = TRUE;
-      else
-	{
-	  last_underscore = FALSE;
-	  *q++ = *p;
-	}
-    }
-  
-  *q = '\0';
-  
-  return result;
-}
-
-gchar *
-_egg_tool_button_get_label_text  (EggToolButton *button)
-{
-  GtkStockItem stock_item;
-
-  if (button->label_text)
-    {
-      if (button->use_underline)
-	return elide_underscores (button->label_text);
-      else
-	return g_strdup (button->label_text);
-    }
-  else if (button->stock_id && gtk_stock_lookup (button->stock_id, &stock_item))
-    return elide_underscores (stock_item.label);
-  else
-    return g_strdup ("");
 }

@@ -194,7 +194,6 @@ void       egg_toolbar_append_space    (EggToolbar      *toolbar);
 void       egg_toolbar_prepend_space   (EggToolbar      *toolbar);
 void       egg_toolbar_insert_space    (EggToolbar      *toolbar,
 					gint             position);
-/* FIXME: Write this function */
 void       egg_toolbar_remove_space    (EggToolbar      *toolbar,
                                         gint             position);
 /* Any element type */
