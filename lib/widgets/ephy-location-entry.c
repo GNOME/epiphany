@@ -68,7 +68,6 @@ static void		ephy_location_entry_activate_cb		(GtkEntry *entry,
 								 EphyLocationEntry *w);
 static void		ephy_location_entry_autocompletion_sources_changed_cb (EphyAutocompletion *aw,
 									       EphyLocationEntry *w);
-static gint		ephy_location_entry_autocompletion_to (EphyLocationEntry *w);
 static gint		ephy_location_entry_autocompletion_show_alternatives_to (EphyLocationEntry *w);
 static void		ephy_location_entry_autocompletion_window_url_activated_cb
 /***/								(EphyAutocompletionWindow *aw,
@@ -290,70 +289,6 @@ ephy_location_entry_autocompletion_unselect_alternatives (EphyLocationEntry *w)
 	}
 }
 
-static gint
-ephy_location_entry_autocompletion_to (EphyLocationEntry *w)
-{
-	EphyLocationEntryPrivate *p = w->priv;
-	gchar *text;
-	gchar *common_prefix;
-
-	LOG ("Autocompletion to")
-
-	ephy_location_entry_set_autocompletion_key (w);
-
-	{
-		GtkEditable *editable = GTK_EDITABLE (p->entry);
-		gint sstart, send;
-		gint pos = gtk_editable_get_position (editable);
-		const gchar *text = gtk_entry_get_text (GTK_ENTRY (p->entry));
-		gint text_len = strlen (text);
-		gtk_editable_get_selection_bounds (editable, &sstart, &send);
-
-		if (pos != text_len
-		    || send != text_len)
-		{
-			/* the user is editing the entry, don't mess it */
-			LOG ("The user seems editing the text: pos = %d, strlen (text) = %d, sstart = %d, send = %d",
-			     pos, strlen (text), sstart, send)
-			p->autocompletion_timeout = 0;
-			return FALSE;
-		}
-	}
-
-	common_prefix = ephy_autocompletion_get_common_prefix (p->autocompletion);
-
-	LOG ("common_prefix: %s", common_prefix)
-
-	if (common_prefix && (!p->before_completion || p->before_completion[0] == '\0'))
-	{
-		text = ephy_location_entry_get_location (w);
-		g_free (p->before_completion);
-		p->before_completion = text;
-	}
-
-	if (common_prefix)
-	{
-		/* check original length */
-		guint text_len = strlen (p->autocompletion_key);
-
-		p->block_set_autocompletion_key = TRUE;
-
-		/* set entry to completed text */
-		gtk_entry_set_text (GTK_ENTRY (p->entry), common_prefix);
-
-		/* move selection appropriately */
-		gtk_editable_select_region (GTK_EDITABLE (p->entry), text_len, -1);
-
-		p->block_set_autocompletion_key = FALSE;
-
-		g_free (p->last_completion);
-		p->last_completion = common_prefix;
-	}
-
-	p->autocompletion_timeout = 0;
-	return FALSE;
-}
-
 static int
 get_editable_number_of_chars (GtkEditable *editable)
 {
@@ -392,7 +327,6 @@ static gboolean
 ephy_location_entry_key_press_event_cb (GtkWidget *entry, GdkEventKey *event, EphyLocationEntry *w)
 {
 	EphyLocationEntryPrivate *p = w->priv;
-        static gboolean suggest = FALSE;
         guint keyval = event->keyval;
 
         if (p->autocompletion_timeout != 0)
@@ -405,12 +339,6 @@ ephy_location_entry_key_press_event_cb (GtkWidget *entry, GdkEventKey *event, Ep
 	{
                 g_source_remove (p->show_alternatives_timeout);
 		p->show_alternatives_timeout = 0;
-	}
-
-        /* only suggest heuristic completions if TAB is hit twice */
-        if (event->keyval != GDK_Tab)
-	{
-                suggest = FALSE;
 	}
 
         if (((event->state & GDK_Control_L || event->state & GDK_Control_R) &&
@@ -448,70 +376,13 @@ ephy_location_entry_key_press_event_cb (GtkWidget *entry, GdkEventKey *event, Ep
         {
         case GDK_Left:
         case GDK_Right:
-		ephy_location_entry_autocompletion_hide_alternatives (w);
-                return FALSE;
         case GDK_Up:
         case GDK_Down:
+	case GDK_Escape:
         case GDK_Page_Up:
         case GDK_Page_Down:
 		ephy_location_entry_autocompletion_hide_alternatives (w);
                 return FALSE;
-        case GDK_Tab:
-        {
-                gchar *common_prefix = NULL;
-                gchar *text;
-
-		ephy_location_entry_set_autocompletion_key (w);
-
-                gtk_editable_delete_selection (GTK_EDITABLE (p->entry));
-                text = ephy_location_entry_get_location (w);
-		ephy_location_entry_autocompletion_unselect_alternatives (w);
-
-		if (p->autocompletion)
-		{
-			common_prefix = ephy_autocompletion_get_common_prefix (p->autocompletion);
-		}
-                suggest = FALSE;
-                if (common_prefix)
-                {
-                        if (!p->before_completion)
-			{
-                                p->before_completion = g_strdup (text);
-			}
-
-                        p->block_set_autocompletion_key = TRUE;
-
-			gtk_entry_set_text (GTK_ENTRY (p->entry), common_prefix);
-			gtk_editable_set_position (GTK_EDITABLE (p->entry), -1);
-
-                        p->block_set_autocompletion_key = FALSE;
-
-			ephy_location_entry_autocompletion_show_alternatives (w);
-                        if (!strcmp (common_prefix, text))
-                        {
-                                /* really suggest something the next time */
-                                suggest = TRUE;
-                        }
-                        g_free (common_prefix);
-                }
-                else
-                {
-			ephy_location_entry_autocompletion_hide_alternatives (w);
-                }
-		g_free (text);
-                return TRUE;
-        }
-        case GDK_Escape:
-		ephy_location_entry_autocompletion_hide_alternatives (w);
-                if (p->before_completion)
-                {
-                        real_entry_set_location (w, p->before_completion);
-                        g_free (p->before_completion);
-                        p->before_completion = NULL;
-			gtk_editable_set_position (GTK_EDITABLE (p->entry), -1);
-                        return TRUE;
-                }
-                break;
         default:
 		w->priv->editing = TRUE;
 		ephy_location_entry_autocompletion_unselect_alternatives (w);
@@ -564,15 +435,6 @@ ephy_location_entry_autocompletion_sources_changed_cb (EphyAutocompletion *aw,
 	EphyLocationEntryPrivate *p = w->priv;
 
 	LOG ("in ephy_location_entry_autocompletion_sources_changed_cb")
-
-        if (p->autocompletion_timeout == 0
-	    && p->last_completion
-	    && !strcmp (p->last_completion, gtk_entry_get_text (GTK_ENTRY (p->entry))))
-	{
-		p->autocompletion_timeout = g_timeout_add
-			(AUTOCOMPLETION_DELAY,
-			 (GSourceFunc) ephy_location_entry_autocompletion_to, w);
-	}
 
         if (p->show_alternatives_timeout == 0
 	    && p->autocompletion_window_visible)

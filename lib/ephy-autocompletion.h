@@ -94,7 +94,6 @@ void				ephy_autocompletion_set_prefixes	(EphyAutocompletion *ac,
 									 const gchar **prefixes);
 void				ephy_autocompletion_set_key		(EphyAutocompletion *ac,
 									 const gchar *key);
-gchar *				ephy_autocompletion_get_common_prefix	(EphyAutocompletion *ac);
 const EphyAutocompletionMatch  *ephy_autocompletion_get_matches		(EphyAutocompletion *ac);
 const EphyAutocompletionMatch  *ephy_autocompletion_get_matches_sorted_by_score
 									(EphyAutocompletion *ac,

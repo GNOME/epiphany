@@ -52,7 +52,6 @@ struct _EphyAutocompletionPrivate {
 	gchar **prefixes;
 	guint *prefix_lengths;
 
-	gchar *common_prefix;
 	ACMatchArray matches;
 	EphyAutocompletionStatus status;
 	gboolean sorted;
@@ -121,7 +120,6 @@ ephy_autocompletion_init (EphyAutocompletion *ac)
 	EphyAutocompletionPrivate *p = g_new0 (EphyAutocompletionPrivate, 1);
 	ac->priv = p;
 	p->sources = NULL;
-	p->common_prefix = NULL;
 	acma_init (&p->matches);
 	p->status = GAS_NEEDS_FULL_UPDATE;
 
@@ -174,8 +172,6 @@ ephy_autocompletion_reset (EphyAutocompletion *ac)
 
 	START_PROFILER ("Resetting autocompletion")
 
-	g_free (p->common_prefix);
-	p->common_prefix = NULL;
 	p->status = GAS_NEEDS_FULL_UPDATE;
 
 	STOP_PROFILER ("Resetting autocompletion")
@@ -231,20 +227,10 @@ ephy_autocompletion_set_key (EphyAutocompletion *ac,
 		{
 			p->status = GAS_NEEDS_REFINE;
 		}
-		if (p->common_prefix)
-		{
-			if (strncmp (p->common_prefix, key, keylen))
-			{
-				g_free (p->common_prefix);
-				p->common_prefix = NULL;
-			}
-		}
 	}
 	else
 	{
 		p->status = GAS_NEEDS_FULL_UPDATE;
-		g_free (p->common_prefix);
-		p->common_prefix = NULL;
 	}
 
 	for (i = 0; p->prefixes[i]; ++i)
@@ -254,50 +240,6 @@ ephy_autocompletion_set_key (EphyAutocompletion *ac,
 		p->key_lengths[i] = keylen + p->prefix_lengths[i];
 	}
 
-}
-
-gchar *
-ephy_autocompletion_get_common_prefix (EphyAutocompletion *ac)
-{
-	EphyAutocompletionPrivate *p = ac->priv;
-	ephy_autocompletion_update_matches (ac);
-	if (!p->common_prefix)
-	{
-		guint common_length = 0;
-		guint i;
-
-		START_PROFILER ("Get Common Prefix")
-
-		for (i = 0; i < p->matches.num_matches; i++)
-		{
-			EphyAutocompletionMatch *mi = &p->matches.array[i];
-			const gchar *realmatch = mi->title + mi->offset;
-			if (!p->common_prefix)
-			{
-				p->common_prefix = g_strdup (realmatch);
-				common_length = strlen (p->common_prefix);
-				continue;
-			}
-			else if (!strncmp (realmatch, p->common_prefix, common_length))
-			{
-				continue;
-			}
-			else
-			{
-				common_length = 0;
-				while (realmatch[common_length]
-				       && realmatch[common_length] == p->common_prefix[common_length])
-				{
-					++common_length;
-				}
-				g_free (p->common_prefix);
-				p->common_prefix = g_strndup (realmatch, common_length);
-			}
-		}
-
-		STOP_PROFILER ("Get Common Prefix")
-	}
-	return g_strdup (p->common_prefix);
 }
 
 const EphyAutocompletionMatch *
@@ -387,8 +329,6 @@ ephy_autocompletion_update_matches (EphyAutocompletion *ac)
 		ephy_autocompletion_refine_matches (ac);
 	}
 
-	g_free (p->common_prefix);
-	p->common_prefix = NULL;
 	p->status = GAS_UPDATED;
 }
 

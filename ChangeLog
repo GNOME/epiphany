@@ -1,3 +1,16 @@
+2003-02-26  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/ephy-autocompletion.c: (ephy_autocompletion_init),
+	(ephy_autocompletion_reset), (ephy_autocompletion_set_key),
+	(ephy_autocompletion_update_matches):
+	* lib/ephy-autocompletion.h:
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_key_press_event_cb),
+	(ephy_location_entry_autocompletion_sources_changed_cb):
+
+	Remove Tab autocompletion. Behavior still not optimal,
+	but that code is such a pain :(
+
 2003-02-23  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/widgets/ephy-editable-toolbar.c: (drag_data_delete_cb),
