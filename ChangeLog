@@ -1,3 +1,19 @@
+2003-10-23  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* data/ui/epiphany-toolbar.xml:
+	* lib/egg/egg-editable-toolbar.c: (get_toolbar_position),
+	(get_dock_nth), (get_toolbar_nth), (create_dock), (update_fixed),
+	(toolbar_added_cb), (toolbar_removed_cb),
+	(egg_editable_toolbar_construct), (egg_editable_toolbar_init),
+	(egg_editable_toolbar_finalize), (egg_editable_toolbar_show),
+	(egg_editable_toolbar_hide), (egg_editable_toolbar_set_fixed):
+	* lib/egg/egg-editable-toolbar.h:
+	* src/Makefile.am:
+	* src/toolbar.c: (toolbar_setup_actions), (toolbar_init),
+	(toolbar_spinner_start), (toolbar_spinner_stop):
+
+	Move the spinner in his own mini toolbar.
+
 2003-10-23  Xan Lopez  <xan@masilla.org>
 
 	* embed/mozilla/EphyEventListener.cpp:

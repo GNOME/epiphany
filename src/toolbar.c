@@ -29,7 +29,6 @@
 #include "ephy-location-entry.h"
 #include "ephy-dnd.h"
 #include "ephy-spinner.h"
-#include "ephy-spinner-action.h"
 #include "ephy-location-action.h"
 #include "ephy-favicon-action.h"
 #include "ephy-topic-action.h"
@@ -326,13 +325,6 @@ toolbar_setup_actions (Toolbar *t)
 	gtk_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
 
-	action = g_object_new (EPHY_TYPE_SPINNER_ACTION,
-			       "name", "Spinner",
-			       "label", _("Spinner"),
-			       NULL);
-	gtk_action_group_add_action (t->priv->action_group, action);
-	g_object_unref (action);
-
 	/* FIXME: I'm still waiting for the exact term to 
 	 * user here from the docs team.
 	 */
@@ -539,6 +531,11 @@ toolbar_init (Toolbar *t)
 	t->priv->ui_merge = NULL;
 	t->priv->visibility = TRUE;
 	t->priv->updating_address = FALSE;
+
+	t->priv->spinner = ephy_spinner_new ();
+	gtk_widget_show (t->priv->spinner);
+	egg_editable_toolbar_set_fixed (EGG_EDITABLE_TOOLBAR (t),
+					t->priv->spinner);
 }
 
 static void
@@ -577,23 +574,11 @@ toolbar_activate_location (Toolbar *t)
 void
 toolbar_spinner_start (Toolbar *t)
 {
-	GtkActionGroup *action_group;
-	GtkAction *action;
-
-	action_group = t->priv->action_group;
-	action = gtk_action_group_get_action (action_group, "Spinner");
-	g_object_set (action, "throbbing", TRUE, NULL);
 }
 
 void
 toolbar_spinner_stop (Toolbar *t)
 {
-	GtkActionGroup *action_group;
-	GtkAction *action;
-
-	action_group = t->priv->action_group;
-	action = gtk_action_group_get_action (action_group, "Spinner");
-	g_object_set (action, "throbbing", FALSE, NULL);
 }
 
 void

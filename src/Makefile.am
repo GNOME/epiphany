@@ -59,7 +59,6 @@ NOINST_H_FILES =					\
 	ephy-location-action.h				\
 	ephy-navigation-action.h			\
 	ephy-plugin.h					\
-	ephy-spinner-action.h				\
 	ephy-tabs-menu.h				\
 	ephy-toolbars-model.h				\
 	language-editor.h				\
@@ -96,7 +95,6 @@ epiphany_bin_SOURCES = 				    	\
 	ephy-notebook.c					\
 	ephy-plugin.c					\
 	ephy-shell.c					\
-	ephy-spinner-action.c				\
 	ephy-tab.c					\
 	ephy-tab.h					\
 	ephy-tabs-menu.c				\
