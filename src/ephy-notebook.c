@@ -805,15 +805,6 @@ close_button_clicked_cb (GtkWidget *widget, GtkWidget *tab)
 
 	if (inhibited == FALSE)
 	{
-		GtkNotebook *gnotebook;
-		GtkWidget *active_tab;
-
-		gnotebook = GTK_NOTEBOOK (notebook);
-		active_tab = gtk_notebook_get_nth_page
-			(gnotebook, gtk_notebook_get_current_page (gnotebook));
-		/* focus the active tab, bug #119461 */
-		gtk_widget_grab_focus (active_tab);
-
 		ephy_notebook_remove_tab (notebook, EPHY_TAB (tab));
 	}
 }
@@ -868,8 +859,8 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	gtk_button_set_relief (GTK_BUTTON (close_button),
 			       GTK_RELIEF_NONE);
 	/* don't allow focus on the close button */
-	GTK_WIDGET_SET_FLAGS (close_button, GTK_CAN_FOCUS);
-	GTK_WIDGET_SET_FLAGS (close_button, GTK_CAN_DEFAULT);
+	gtk_button_set_focus_on_click (GTK_BUTTON (close_button), FALSE);
+
 	close_icon_size = gtk_icon_size_from_name (EPHY_ICON_SIZE_TAB_BUTTON);
 	image = gtk_image_new_from_stock (EPHY_STOCK_CLOSE_TAB, close_icon_size);
 	gtk_container_add (GTK_CONTAINER (close_button), image);
