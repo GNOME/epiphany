@@ -347,7 +347,20 @@ cmd_delete (EggAction *action,
 	}
 	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->key_view)))
 	{
-		ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->key_view));
+		EphyNodeViewPriority priority;
+		GList *selected;
+		EphyNode *node; 
+		
+		selected = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->key_view));
+		node = EPHY_NODE (selected->data);
+		priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
+
+		if (priority == -1) priority = EPHY_NODE_VIEW_NORMAL_PRIORITY;
+		
+		if (priority == EPHY_NODE_VIEW_NORMAL_PRIORITY)
+		{
+			ephy_node_view_remove (EPHY_NODE_VIEW (editor->priv->key_view));
+		}
 	}
 }
 
@@ -763,15 +776,15 @@ bookmarks_filter (EphyBookmarksEditor *editor,
 }
 
 static gboolean
-key_pressed_cb (GtkWidget *widget,
+key_pressed_cb (EphyNodeView *view,
 		GdkEventKey *event,
-		EphyNodeView *view)
+		EphyBookmarksEditor *editor)
 {
 	switch (event->keyval)
 	{
 	case GDK_Delete:
 	case GDK_KP_Delete:
-		ephy_node_view_remove (view);
+		cmd_delete (NULL, editor);
 		return TRUE;
 
 	default:
@@ -1069,7 +1082,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	g_signal_connect (G_OBJECT (key_view),
 			  "key_press_event",
 			  G_CALLBACK (key_pressed_cb),
-			  EPHY_NODE_VIEW (editor->priv->key_view));
+			  editor);
 	g_signal_connect (G_OBJECT (key_view),
 			  "node_selected",
 			  G_CALLBACK (keyword_node_selected_cb),
@@ -1123,7 +1136,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	g_signal_connect (G_OBJECT (bm_view),
 			  "key_press_event",
 			  G_CALLBACK (key_pressed_cb),
-			  EPHY_NODE_VIEW (editor->priv->bm_view));
+			  editor);
 	g_signal_connect (G_OBJECT (bm_view),
 			  "node_activated",
 			  G_CALLBACK (ephy_bookmarks_editor_node_activated_cb),

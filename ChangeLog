@@ -1,3 +1,16 @@
+2003-04-21  David Bordoley <bordoley@msu.edu>
+
+	* src/ephy-history-window.c: (key_pressed_cb),
+	(ephy_history_window_construct):
+	
+	Use delete key to remove history items.
+	
+	* src/bookmarks/ephy-bookmarks-editor: (cmd_delete), 
+	(key_pressed_cb), (ephy_bookmarks_editor_construct):
+	
+	Call cmd_delete from key_press_cb for code reuse.
+	Don't allow deletion of special topics with the keyboard delete.	
+
 2003-04-21  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* data/ui/epiphany-ui.xml.in:

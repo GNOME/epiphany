@@ -614,6 +614,25 @@ pages_filter (EphyHistoryWindow *editor,
 	ephy_node_filter_done_changing (editor->priv->pages_filter);
 }
 
+static gboolean
+key_pressed_cb (EphyNodeView *view,
+		GdkEventKey *event,
+		EphyHistoryWindow *editor)
+{
+	switch (event->keyval)
+	{
+	case GDK_Delete:
+	case GDK_KP_Delete:
+		cmd_delete (NULL, editor);
+		return TRUE;
+
+	default:
+		break;
+	}
+
+	return FALSE;
+}
+
 static void
 reset_search_entry (EphyHistoryWindow *editor)
 {
@@ -913,6 +932,10 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	g_signal_connect (G_OBJECT (pages_view),
 			  "show_popup",
 			  G_CALLBACK (ephy_history_window_show_popup_cb),
+			  editor);
+	g_signal_connect (G_OBJECT (pages_view),
+			  "key_press_event",
+			  G_CALLBACK (key_pressed_cb),
 			  editor);
 
 	ephy_state_add_window (GTK_WIDGET (editor),
