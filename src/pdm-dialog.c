@@ -236,7 +236,13 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 	selection = gtk_tree_view_get_selection
 		(GTK_TREE_VIEW(action->treeview));
 	llist = gtk_tree_selection_get_selected_rows (selection, &model);
-	
+
+	if (llist == NULL)
+	{
+		/* nothing to delete, return early */
+		return;
+	}
+
 	for (l = llist;l != NULL; l = l->next)
 	{
 		rlist = g_list_prepend (rlist, gtk_tree_row_reference_new
@@ -446,8 +452,8 @@ compare_cookies (const EphyCookie *cookie1,
 	g_return_val_if_fail (cookie1 != NULL || cookie2 != NULL, FALSE);
 
 	return (strcmp (cookie1->domain, cookie2->domain) == 0
-		&& strcmp (cookie2->path, cookie2->path) == 0
-		&& strcmp (cookie2->name, cookie2->name) == 0);
+		&& strcmp (cookie1->path, cookie2->path) == 0
+		&& strcmp (cookie1->name, cookie2->name) == 0);
 }
 
 static gboolean
