@@ -23,12 +23,13 @@ G_BEGIN_DECLS
 
 /* General */
 #define CONF_GENERAL_HOMEPAGE "/apps/epiphany/general/homepage"
-#define CONF_ASK_DOWNLOAD_DEST "/apps/epiphany/general/ask_download_dest"
 #define CONF_ALWAYS_SHOW_TABS_BAR "/apps/epiphany/general/always_show_tabs_bar"
 #define CONF_WINDOWS_SHOW_TOOLBARS "/apps/epiphany/general/show_toolbars"
 #define CONF_WINDOWS_SHOW_BOOKMARKS_BAR "/apps/epiphany/general/show_bookmarks_bar"
 #define CONF_WINDOWS_SHOW_STATUSBAR "/apps/epiphany/general/show_statusbar"
 #define CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL "/apps/epiphany/general/middle_click_open_url"
+
+#define CONF_DESKTOP_IS_HOME_DIR "/apps/nautilus/preferences/desktop_is_home_dir"
 
 /* Directories */
 #define CONF_STATE_SAVE_DIR           "/apps/epiphany/directories/save"
