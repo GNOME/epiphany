@@ -1221,8 +1221,8 @@ sync_tab_document_type (EphyTab *tab,
 	sync_tab_zoom (tab, NULL, window);
 	
 	type = ephy_tab_get_document_type (tab);
-	can_find = (type != EMBED_DOCUMENT_IMAGE);
-	enable = (type == EMBED_DOCUMENT_HTML);
+	can_find = (type != EPHY_EMBED_DOCUMENT_IMAGE);
+	enable = (type == EPHY_EMBED_DOCUMENT_HTML);
 
 	action_group = window->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "ViewEncoding");
@@ -1307,15 +1307,15 @@ sync_tab_navigation (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 
 	flags = ephy_tab_get_navigation_flags (tab);
 
-	if (flags & TAB_NAV_UP)
+	if (flags & EPHY_TAB_NAV_UP)
 	{
 		up = TRUE;
 	}
-	if (flags & TAB_NAV_BACK)
+	if (flags & EPHY_TAB_NAV_BACK)
 	{
 		back = TRUE;
 	}
-	if (flags & TAB_NAV_FORWARD)
+	if (flags & EPHY_TAB_NAV_FORWARD)
 	{
 		forward = TRUE;
 	}
@@ -1358,25 +1358,25 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 
 	switch (level)
 	{
-		case STATE_IS_UNKNOWN:
+		case EPHY_EMBED_STATE_IS_UNKNOWN:
 			state = _("Unknown");
 			break;
-		case STATE_IS_INSECURE:
+		case EPHY_EMBED_STATE_IS_INSECURE:
 			state = _("Insecure");
 			break;
-		case STATE_IS_BROKEN:
+		case EPHY_EMBED_STATE_IS_BROKEN:
 			state = _("Broken");
 			stock_id = STOCK_LOCK_BROKEN;
 			break;
-		case STATE_IS_SECURE_MED:
+		case EPHY_EMBED_STATE_IS_SECURE_MED:
 			state = _("Medium");
 			stock_id = STOCK_LOCK_SECURE;
 			break;
-		case STATE_IS_SECURE_LOW:
+		case EPHY_EMBED_STATE_IS_SECURE_LOW:
 			state = _("Low");
 			stock_id = STOCK_LOCK_SECURE;
 			break;
-		case STATE_IS_SECURE_HIGH:
+		case EPHY_EMBED_STATE_IS_SECURE_HIGH:
 			state = _("High");
 			stock_id = STOCK_LOCK_SECURE;
 			break;
@@ -1548,7 +1548,7 @@ sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 
 	zoom = ephy_tab_get_zoom (tab);
 	type = ephy_tab_get_document_type (tab);
-	can_zoom = (type != EMBED_DOCUMENT_IMAGE);
+	can_zoom = (type != EPHY_EMBED_DOCUMENT_IMAGE);
 
 	if (zoom >= ZOOM_MAXIMAL)
 	{
@@ -1657,7 +1657,7 @@ update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
 
 	context = ephy_embed_event_get_context (event);
 
-	if (context & EMBED_CONTEXT_IMAGE)
+	if (context & EPHY_EMBED_CONTEXT_IMAGE)
 	{
 		ephy_embed_event_get_property (event, "image", &value);
 		name = get_name_from_address_value (value);
@@ -1686,7 +1686,7 @@ update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
 		g_free (name);
 	}
 
-	if (context & EMBED_CONTEXT_EMAIL_LINK)
+	if (context & EPHY_EMBED_CONTEXT_EMAIL_LINK)
 	{
 		ephy_embed_event_get_property (event, "link", &value);
 
@@ -1703,7 +1703,7 @@ update_popups_tooltips (EphyWindow *window, EphyEmbedEvent *event)
 		g_free (tooltip);
 	}
 
-	if (context & EMBED_CONTEXT_LINK)
+	if (context & EPHY_EMBED_CONTEXT_LINK)
 	{
 		ephy_embed_event_get_property (event, "link", &value);
 
@@ -1756,31 +1756,31 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 
 	LOG ("show_embed_popup context %x", context)
 
-	if ((context & EMBED_CONTEXT_EMAIL_LINK) &&
-	    (context & EMBED_CONTEXT_IMAGE))
+	if ((context & EPHY_EMBED_CONTEXT_EMAIL_LINK) &&
+	    (context & EPHY_EMBED_CONTEXT_IMAGE))
 	{
 		popup = "/EphyImageEmailLinkPopup";
 	}
-	else if (context & EMBED_CONTEXT_EMAIL_LINK)
+	else if (context & EPHY_EMBED_CONTEXT_EMAIL_LINK)
 	{
 		popup = "/EphyEmailLinkPopup";
 		update_edit_actions_sensitivity (window, TRUE);
 	}
-	else if ((context & EMBED_CONTEXT_LINK) &&
-		 (context & EMBED_CONTEXT_IMAGE))
+	else if ((context & EPHY_EMBED_CONTEXT_LINK) &&
+		 (context & EPHY_EMBED_CONTEXT_IMAGE))
 	{
 		popup = "/EphyImageLinkPopup";
 	}
-	else if (context & EMBED_CONTEXT_LINK)
+	else if (context & EPHY_EMBED_CONTEXT_LINK)
 	{
 		popup = "/EphyLinkPopup";
 		update_edit_actions_sensitivity (window, TRUE);
 	}
-	else if (context & EMBED_CONTEXT_IMAGE)
+	else if (context & EPHY_EMBED_CONTEXT_IMAGE)
 	{
 		popup = "/EphyImagePopup";
 	}
-	else if (context & EMBED_CONTEXT_INPUT)
+	else if (context & EPHY_EMBED_CONTEXT_INPUT)
 	{
 		popup = "/EphyInputPopup";
 		update_edit_actions_sensitivity (window, FALSE);

@@ -243,7 +243,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 	mOriginalURI = inOriginalURI;
 
 	flags = ephy_embed_persist_get_flags (EPHY_EMBED_PERSIST (mEmbedPersist));
-	askDownloadDest = flags & EMBED_PERSIST_ASK_DESTINATION;
+	askDownloadDest = flags & EPHY_EMBED_PERSIST_ASK_DESTINATION;
 
 	nsEmbedString defaultFileName;
 

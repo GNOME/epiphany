@@ -44,16 +44,16 @@ typedef struct _EphyTabPrivate	EphyTabPrivate;
 
 typedef enum
 {
-	TAB_NAV_UP	= 1 << 0,
-	TAB_NAV_BACK	= 1 << 1,
-	TAB_NAV_FORWARD	= 1 << 2
+	EPHY_TAB_NAV_UP	= 1 << 0,
+	EPHY_TAB_NAV_BACK	= 1 << 1,
+	EPHY_TAB_NAV_FORWARD	= 1 << 2
 } EphyTabNavigationFlags;
 
 typedef enum
 {
-	TAB_ADDRESS_EXPIRE_NOW,
-	TAB_ADDRESS_EXPIRE_NEXT,
-	TAB_ADDRESS_EXPIRE_CURRENT
+	EPHY_TAB_ADDRESS_EXPIRE_NOW,
+	EPHY_TAB_ADDRESS_EXPIRE_NEXT,
+	EPHY_TAB_ADDRESS_EXPIRE_CURRENT
 } EphyTabAddressExpire;
 
 struct _EphyTab

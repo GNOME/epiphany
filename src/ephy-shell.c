@@ -665,7 +665,7 @@ ephy_shell_new_tab (EphyShell *shell,
 	if (flags & EPHY_NEW_TAB_HOME_PAGE ||
 	    flags & EPHY_NEW_TAB_NEW_PAGE)
 	{
-		ephy_tab_set_location (tab, "", TAB_ADDRESS_EXPIRE_NEXT);
+		ephy_tab_set_location (tab, "", EPHY_TAB_ADDRESS_EXPIRE_NEXT);
 		toolbar_activate_location (toolbar);
 		load_homepage (embed);
 	}

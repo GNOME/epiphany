@@ -212,7 +212,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 	mEmbedEvent = info;
 
-	info->context = EMBED_CONTEXT_DOCUMENT;
+	info->context = EPHY_EMBED_CONTEXT_DOCUMENT;
 
 	nsCOMPtr<nsIDOMNode> node = do_QueryInterface(EventTarget, &rv);
 	if (NS_FAILED(rv) || !node) return NS_ERROR_FAILURE;
@@ -232,7 +232,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 	nsCOMPtr<nsIDOMXULDocument> xul_document = do_QueryInterface(domDoc);
 	if (xul_document)
 	{
-		info->context = EMBED_CONTEXT_NONE;
+		info->context = EPHY_EMBED_CONTEXT_NONE;
 		return NS_ERROR_FAILURE;
 	}
 
@@ -257,7 +257,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 		if (g_ascii_strcasecmp (tag.get(), "img") == 0)
 		{
-			info->context |= EMBED_CONTEXT_IMAGE;
+			info->context |= EPHY_EMBED_CONTEXT_IMAGE;
 
 			nsEmbedString img;
 			nsCOMPtr <nsIDOMHTMLImageElement> image = 
@@ -274,7 +274,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 		}
 		else if (g_ascii_strcasecmp (tag.get(), "textarea") == 0)
 		{
-			info->context |= EMBED_CONTEXT_INPUT;
+			info->context |= EPHY_EMBED_CONTEXT_INPUT;
 		}
 		else if (g_ascii_strcasecmp (tag.get(), "object") == 0)
 		{
@@ -291,7 +291,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			// MIME types are always lower case
 			if (g_str_has_prefix (cValue.get(), "image/"))
 			{
-				info->context |= EMBED_CONTEXT_IMAGE;
+				info->context |= EPHY_EMBED_CONTEXT_IMAGE;
 				
 				nsEmbedString img;
 				
@@ -306,7 +306,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			}
 			else
 			{
-				info->context = EMBED_CONTEXT_NONE;
+				info->context = EPHY_EMBED_CONTEXT_NONE;
 				return NS_OK;
 			}
 		}
@@ -361,7 +361,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 
 			if (g_ascii_strcasecmp (cValue.get(), "simple") == 0)
 			{
-				info->context |= EMBED_CONTEXT_LINK;
+				info->context |= EPHY_EMBED_CONTEXT_LINK;
 				dom_elem->GetAttributeNS (nsEmbedString(xlinknsLiteral),
 							  nsEmbedString(hrefLiteral), value);
 				
@@ -410,13 +410,13 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					if (NS_SUCCEEDED (rv) && unescapedHref.Length())
 					{
 						SetStringProperty ("email", unescapedHref.get());
-						info->context |= EMBED_CONTEXT_EMAIL_LINK;
+						info->context |= EPHY_EMBED_CONTEXT_EMAIL_LINK;
 					}
 				}
 				
 				if (anchor && tmp.Length()) 
 				{
-					info->context |= EMBED_CONTEXT_LINK;
+					info->context |= EPHY_EMBED_CONTEXT_LINK;
 
 					SetStringProperty ("link", tmp);
 					CheckLinkScheme (tmp);
@@ -473,12 +473,12 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			}
 			else if (g_ascii_strcasecmp (tag.get(), "option") == 0)
 			{
-				info->context = EMBED_CONTEXT_NONE;
+				info->context = EPHY_EMBED_CONTEXT_NONE;
 				return NS_OK;
 			}
 			else if (g_ascii_strcasecmp (tag.get(), "area") == 0)
 			{
-				info->context |= EMBED_CONTEXT_LINK;
+				info->context |= EPHY_EMBED_CONTEXT_LINK;
 				nsCOMPtr <nsIDOMHTMLAreaElement> area =
 						do_QueryInterface(node, &rv);
 				if (NS_SUCCEEDED(rv) && area)
@@ -498,7 +498,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			}
 			else if (g_ascii_strcasecmp (tag.get(), "textarea") == 0)
 			{
-				info->context |= EMBED_CONTEXT_INPUT;
+				info->context |= EPHY_EMBED_CONTEXT_INPUT;
 			}
 
 			if (!has_background)
@@ -763,7 +763,7 @@ nsresult EventContext::CheckInput (nsIDOMNode *aNode)
 
 	if (g_ascii_strcasecmp (value.get(), "image") == 0)
 	{
-		mEmbedEvent->context |= EMBED_CONTEXT_IMAGE;
+		mEmbedEvent->context |= EPHY_EMBED_CONTEXT_IMAGE;
 		nsCOMPtr<nsIDOMHTMLInputElement> input;
 		input = do_QueryInterface (aNode);
 		if (!input) return NS_ERROR_FAILURE;
@@ -785,7 +785,7 @@ nsresult EventContext::CheckInput (nsIDOMNode *aNode)
 		 g_ascii_strcasecmp (value.get(), "button") != 0 &&
 		 g_ascii_strcasecmp (value.get(), "checkbox") != 0)
 	{
-		mEmbedEvent->context |= EMBED_CONTEXT_INPUT;
+		mEmbedEvent->context |= EPHY_EMBED_CONTEXT_INPUT;
 	}
 
 	return NS_OK;

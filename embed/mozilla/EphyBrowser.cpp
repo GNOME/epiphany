@@ -1136,7 +1136,7 @@ EphyBrowser::ShowCertificate ()
 EphyEmbedDocumentType
 EphyBrowser::GetDocumentType ()
 {
-  EphyEmbedDocumentType type = EMBED_DOCUMENT_OTHER;
+  EphyEmbedDocumentType type = EPHY_EMBED_DOCUMENT_OTHER;
 
   NS_ENSURE_TRUE (mDOMWindow, type);
 
@@ -1151,15 +1151,15 @@ EphyBrowser::GetDocumentType ()
 
   if (xmlDoc)
     {
-      type = EMBED_DOCUMENT_XML;
+      type = EPHY_EMBED_DOCUMENT_XML;
     }
   else if (imgDoc)
     {
-      type = EMBED_DOCUMENT_IMAGE;
+      type = EPHY_EMBED_DOCUMENT_IMAGE;
     }
   else if (htmlDoc)
     {
-      type = EMBED_DOCUMENT_HTML;
+      type = EPHY_EMBED_DOCUMENT_HTML;
     }
 
   return type;

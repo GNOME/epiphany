@@ -153,7 +153,7 @@ impl_save (EphyEmbedPersist *persist)
 		      "max_size", &max_size,
 		      NULL);
 
-	g_return_val_if_fail (!(flags & EMBED_PERSIST_COPY_PAGE)
+	g_return_val_if_fail (!(flags & EPHY_EMBED_PERSIST_COPY_PAGE)
 			      || embed != NULL, FALSE);	
 
 	EphyBrowser *browser = NULL;
@@ -218,7 +218,7 @@ impl_save (EphyEmbedPersist *persist)
 	nsCOMPtr<nsIDOMDocument> DOMDocument;
 	if (!uri)
 	{		
-		if (flags & EMBED_PERSIST_MAINDOC)
+		if (flags & EPHY_EMBED_PERSIST_MAINDOC)
 		{
                 	browser->GetDocument (getter_AddRefs(DOMDocument));
 		}
@@ -241,7 +241,7 @@ impl_save (EphyEmbedPersist *persist)
 	 * the page, which will possibly give a different page than the original which we
 	 * need for view source
 	 */
-	NS_ENSURE_TRUE (!(flags & EMBED_PERSIST_COPY_PAGE) || pageDescriptor, FALSE);
+	NS_ENSURE_TRUE (!(flags & EPHY_EMBED_PERSIST_COPY_PAGE) || pageDescriptor, FALSE);
 
 	if (filename == NULL)
 	{
@@ -300,7 +300,7 @@ impl_to_string (EphyEmbedPersist *persist)
 	browser = (EphyBrowser *) _mozilla_embed_get_ephy_browser (MOZILLA_EMBED(embed));
 	g_assert (browser != NULL);
 
-	if (flags & EMBED_PERSIST_MAINDOC)
+	if (flags & EPHY_EMBED_PERSIST_MAINDOC)
 	{
 		rv = browser->GetDocument (getter_AddRefs(DOMDocument));
 	}

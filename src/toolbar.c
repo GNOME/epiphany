@@ -302,7 +302,7 @@ sync_user_input_cb (EphyLocationAction *action, GParamSpec *pspec, Toolbar *t)
 	address = ephy_location_action_get_address (action);
 
 	t->priv->updating_address = TRUE;
-	ephy_tab_set_location (tab, address, TAB_ADDRESS_EXPIRE_CURRENT);
+	ephy_tab_set_location (tab, address, EPHY_TAB_ADDRESS_EXPIRE_CURRENT);
 	t->priv->updating_address = FALSE;
 }
 

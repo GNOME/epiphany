@@ -151,9 +151,9 @@ ephy_tab_address_expire_get_type (void)
 	{
 		static const GEnumValue values[] = 
                 {
-                   { TAB_ADDRESS_EXPIRE_NOW, "TAB_ADDRESS_EXPIRE_NOW", "expire-now" },
-                   { TAB_ADDRESS_EXPIRE_NEXT, "TAB_ADDRESS_EXPIRE_NEXT", "expire-next" },
-                   { TAB_ADDRESS_EXPIRE_CURRENT, "TAB_ADDRESS_EXPIRE_CURRENT", "expire-current" },
+                   { EPHY_TAB_ADDRESS_EXPIRE_NOW, "EPHY_TAB_ADDRESS_EXPIRE_NOW", "expire-now" },
+                   { EPHY_TAB_ADDRESS_EXPIRE_NEXT, "EPHY_TAB_ADDRESS_EXPIRE_NEXT", "expire-next" },
+                   { EPHY_TAB_ADDRESS_EXPIRE_CURRENT, "EPHY_TAB_ADDRESS_EXPIRE_CURRENT", "expire-current" },
                    { 0, NULL, NULL }
                 };
 		type = g_enum_register_static ("EphyTabAddressExpire", values);
@@ -170,9 +170,9 @@ ephy_tab_navigation_flags_get_type (void)
 	{
 		static const GFlagsValue values[] = 
                 {
-                   { TAB_NAV_UP, "TAB_NAV_UP", "up" },
-                   { TAB_NAV_BACK, "TAB_NAV_BACK", "back" },
-                   { TAB_NAV_FORWARD, "TAB_NAV_FORWARD", "forward" },
+                   { EPHY_TAB_NAV_UP, "EPHY_TAB_NAV_UP", "up" },
+                   { EPHY_TAB_NAV_BACK, "EPHY_TAB_NAV_BACK", "back" },
+                   { EPHY_TAB_NAV_FORWARD, "EPHY_TAB_NAV_FORWARD", "forward" },
                    { 0, NULL, NULL }
                 };
 		type = g_flags_register_static ("EphyTabNavigationFlags", values);
@@ -224,7 +224,7 @@ ephy_tab_set_property (GObject *object,
 	{
 		case PROP_ADDRESS:
 			ephy_tab_set_location (tab, g_value_get_string (value),
-					       TAB_ADDRESS_EXPIRE_NOW);
+					       EPHY_TAB_ADDRESS_EXPIRE_NOW);
 			break;
 		case PROP_POPUPS_ALLOWED:
 			ephy_tab_set_popups_allowed
@@ -410,7 +410,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							    "Document Type",
 							    "The tab's documen type",
 							    EPHY_TYPE_EMBED_DOCUMENT_TYPE,
-							    EMBED_DOCUMENT_HTML,
+							    EPHY_EMBED_DOCUMENT_HTML,
 							    G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
@@ -462,7 +462,7 @@ ephy_tab_class_init (EphyTabClass *class)
 							    "Security Level",
 							    "The tab's security level",
 							    EPHY_TYPE_EMBED_SECURITY_LEVEL,
-							    STATE_IS_UNKNOWN,
+							    EPHY_EMBED_STATE_IS_UNKNOWN,
 							     G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
@@ -851,7 +851,7 @@ ephy_tab_set_load_status (EphyTab *tab, gboolean status)
 EphyEmbedDocumentType
 ephy_tab_get_document_type (EphyTab *tab)
 {
-	g_return_val_if_fail (EPHY_IS_TAB (tab), EMBED_DOCUMENT_OTHER);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), EPHY_EMBED_DOCUMENT_OTHER);
 
 	return tab->priv->document_type;
 }
@@ -1078,9 +1078,9 @@ ephy_tab_address_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 		uv_address = address;
 	}
 
-	if (tab->priv->address_expire == TAB_ADDRESS_EXPIRE_NOW)
+	if (tab->priv->address_expire == EPHY_TAB_ADDRESS_EXPIRE_NOW)
 	{
-		ephy_tab_set_location (tab, uv_address, TAB_ADDRESS_EXPIRE_NOW);
+		ephy_tab_set_location (tab, uv_address, EPHY_TAB_ADDRESS_EXPIRE_NOW);
 	}
 
 	ephy_tab_set_link_message (tab, NULL);
@@ -1226,32 +1226,32 @@ update_net_state_message (EphyTab *tab, const char *uri, EphyEmbedNetState flags
 	if (host == NULL || host[0] == '\0') goto out;
 
 	/* IS_REQUEST and IS_NETWORK can be both set */
-	if (flags & EMBED_STATE_IS_REQUEST)
+	if (flags & EPHY_EMBED_STATE_IS_REQUEST)
 	{
-		if (flags & EMBED_STATE_REDIRECTING)
+		if (flags & EPHY_EMBED_STATE_REDIRECTING)
 		{
 			msg = _("Redirecting to %s...");
 		}
-		else if (flags & EMBED_STATE_TRANSFERRING)
+		else if (flags & EPHY_EMBED_STATE_TRANSFERRING)
 		{
 			msg = _("Transferring data from %s...");
 		}
-		else if (flags & EMBED_STATE_NEGOTIATING)
+		else if (flags & EPHY_EMBED_STATE_NEGOTIATING)
 		{
 			msg = _("Waiting for authorization from %s...");
 		}
 	}
 
-	if (flags & EMBED_STATE_IS_NETWORK)
+	if (flags & EPHY_EMBED_STATE_IS_NETWORK)
 	{
-		if (flags & EMBED_STATE_START)
+		if (flags & EPHY_EMBED_STATE_START)
 		{
 			msg = _("Loading %s...");
 		}
 	}
 
-	if ((flags & EMBED_STATE_IS_NETWORK) &&
-	    (flags & EMBED_STATE_STOP))
+	if ((flags & EPHY_EMBED_STATE_IS_NETWORK) &&
+	    (flags & EPHY_EMBED_STATE_STOP))
 	{
 		g_free (tab->priv->status_message);
 		tab->priv->status_message = NULL;
@@ -1277,13 +1277,13 @@ build_progress_from_requests (EphyTab *tab, EphyEmbedNetState state)
 {
 	int load_percent;
 
-	if (state & EMBED_STATE_IS_REQUEST)
+	if (state & EPHY_EMBED_STATE_IS_REQUEST)
         {
-                if (state & EMBED_STATE_START)
+                if (state & EPHY_EMBED_STATE_START)
                 {
 			tab->priv->total_requests ++;
 		}
-		else if (state & EMBED_STATE_STOP)
+		else if (state & EPHY_EMBED_STATE_STOP)
 		{
 			tab->priv->cur_requests ++;
 		}
@@ -1299,9 +1299,9 @@ static void
 ensure_page_info (EphyTab *tab, EphyEmbed *embed, const char *address)
 {
 	if ((tab->priv->address == NULL || *tab->priv->address == '\0') &&
-	    tab->priv->address_expire == TAB_ADDRESS_EXPIRE_NOW)
+	    tab->priv->address_expire == EPHY_TAB_ADDRESS_EXPIRE_NOW)
         {
-		ephy_tab_set_location (tab, address, TAB_ADDRESS_EXPIRE_NOW);
+		ephy_tab_set_location (tab, address, EPHY_TAB_ADDRESS_EXPIRE_NOW);
 	}
 
 	if (tab->priv->title == NULL)
@@ -1318,9 +1318,9 @@ ephy_tab_net_state_cb (EphyEmbed *embed,
 {
 	update_net_state_message (tab, uri, state);
 
-	if (state & EMBED_STATE_IS_NETWORK)
+	if (state & EPHY_EMBED_STATE_IS_NETWORK)
 	{
-		if (state & EMBED_STATE_START)
+		if (state & EPHY_EMBED_STATE_START)
 		{
 			tab->priv->total_requests = 0;
 			tab->priv->cur_requests = 0;
@@ -1330,12 +1330,12 @@ ephy_tab_net_state_cb (EphyEmbed *embed,
 			ephy_tab_set_load_status (tab, TRUE);
 			ephy_tab_update_navigation_flags (tab, embed);
 		}
-		else if (state & EMBED_STATE_STOP)
+		else if (state & EPHY_EMBED_STATE_STOP)
 		{
 			ephy_tab_set_load_percent (tab, 100);
 			ephy_tab_set_load_status (tab, FALSE);
 			ephy_tab_update_navigation_flags (tab, embed);
-			tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
+			tab->priv->address_expire = EPHY_TAB_ADDRESS_EXPIRE_NOW;
 		}
 	}
 
@@ -1564,12 +1564,12 @@ ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
 		eel_gconf_get_boolean (CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL) &&
 		!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL);
 
-	is_link = (context & EMBED_CONTEXT_LINK) != 0;
-	is_image = (context & EMBED_CONTEXT_IMAGE) != 0;
-	is_middle_clickable = !((context & EMBED_CONTEXT_LINK)
-				|| (context & EMBED_CONTEXT_INPUT)
-				|| (context & EMBED_CONTEXT_EMAIL_LINK));
-	is_input = (context & EMBED_CONTEXT_INPUT) != 0;
+	is_link = (context & EPHY_EMBED_CONTEXT_LINK) != 0;
+	is_image = (context & EPHY_EMBED_CONTEXT_IMAGE) != 0;
+	is_middle_clickable = !((context & EPHY_EMBED_CONTEXT_LINK)
+				|| (context & EPHY_EMBED_CONTEXT_INPUT)
+				|| (context & EPHY_EMBED_CONTEXT_EMAIL_LINK));
+	is_input = (context & EPHY_EMBED_CONTEXT_INPUT) != 0;
 
 	/* ctrl+click or middle click opens the link in new tab */
 	if (is_link && ((is_left_click && with_control) || is_middle_click))
@@ -1646,10 +1646,10 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->height = -1;
 	tab->priv->load_percent = 0;
 	tab->priv->load_status = FALSE;
-	tab->priv->security_level = STATE_IS_UNKNOWN;
-	tab->priv->document_type = EMBED_DOCUMENT_HTML;
+	tab->priv->security_level = EPHY_EMBED_STATE_IS_UNKNOWN;
+	tab->priv->document_type = EPHY_EMBED_DOCUMENT_HTML;
 	tab->priv->zoom = 1.0;
-	tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
+	tab->priv->address_expire = EPHY_TAB_ADDRESS_EXPIRE_NOW;
 
 	embed = ephy_embed_factory_new_object (EPHY_TYPE_EMBED);
 	g_assert (embed != NULL);
@@ -1765,17 +1765,17 @@ ephy_tab_update_navigation_flags (EphyTab *tab, EphyEmbed *embed)
 
 	if (ephy_embed_can_go_up (embed))
 	{
-		flags |= TAB_NAV_UP;
+		flags |= EPHY_TAB_NAV_UP;
 	}
 
 	if (ephy_embed_can_go_back (embed))
 	{
-		flags |= TAB_NAV_BACK;
+		flags |= EPHY_TAB_NAV_BACK;
 	}
 
 	if (ephy_embed_can_go_forward (embed))
 	{
-		flags |= TAB_NAV_FORWARD;
+		flags |= EPHY_TAB_NAV_FORWARD;
 	}
 
 	if (flags != tab->priv->nav_flags)
@@ -1953,10 +1953,10 @@ ephy_tab_set_location (EphyTab *tab,
 	if (tab->priv->address) g_free (tab->priv->address);
 	tab->priv->address = g_strdup (address);
 
-	if (expire == TAB_ADDRESS_EXPIRE_CURRENT &&
+	if (expire == EPHY_TAB_ADDRESS_EXPIRE_CURRENT &&
 	    !tab->priv->load_status)
 	{
-		tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
+		tab->priv->address_expire = EPHY_TAB_ADDRESS_EXPIRE_NOW;
 	}
 	else
 	{
@@ -1987,7 +1987,7 @@ ephy_tab_set_security_level (EphyTab *tab, EphyEmbedSecurityLevel level)
 EphyEmbedSecurityLevel
 ephy_tab_get_security_level (EphyTab *tab)
 {
-	g_return_val_if_fail (EPHY_IS_TAB (tab), STATE_IS_UNKNOWN);
+	g_return_val_if_fail (EPHY_IS_TAB (tab), EPHY_EMBED_STATE_IS_UNKNOWN);
 
 	return tab->priv->security_level;
 }

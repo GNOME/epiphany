@@ -104,7 +104,7 @@ MozDownload::Init(nsIURI *aSource, nsIURI *aTarget, const PRUnichar *aDisplayNam
 
 		flags = ephy_embed_persist_get_flags (EPHY_EMBED_PERSIST (mEmbedPersist));
 
-		addToView = !(flags & EMBED_PERSIST_NO_VIEW);
+		addToView = !(flags & EPHY_EMBED_PERSIST_NO_VIEW);
 	}
 
 	mSource = aSource;
@@ -312,7 +312,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 	if (NS_FAILED(aStatus) && NS_SUCCEEDED(mStatus))
         	mStatus = aStatus;
 
-	if (aStateFlags & STATE_START)
+	if (aStateFlags & EPHY_EMBED_STATE_START)
 	{
 		mDownloadState = EPHY_DOWNLOAD_DOWNLOADING;
 
@@ -323,7 +323,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 	}
 
 	/* We will get this even in the event of a cancel */
-	if (aStateFlags & STATE_STOP)
+	if (aStateFlags & EPHY_EMBED_STATE_STOP)
 	{
 		/* Keep us alive */
 		nsCOMPtr<nsIDownload> kungFuDeathGrip(this);
@@ -554,18 +554,18 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 
 	PRInt32 flags = nsIWebBrowserPersist::PERSIST_FLAGS_REPLACE_EXISTING_FILES;
 
-	if (!domDocument && !isHTML && !(ephy_flags & EMBED_PERSIST_COPY_PAGE) &&
-	    !(ephy_flags & EMBED_PERSIST_DO_CONVERSION))
+	if (!domDocument && !isHTML && !(ephy_flags & EPHY_EMBED_PERSIST_COPY_PAGE) &&
+	    !(ephy_flags & EPHY_EMBED_PERSIST_DO_CONVERSION))
 	{
 		flags |= nsIWebBrowserPersist::PERSIST_FLAGS_NO_CONVERSION;
 	}
-	if (ephy_flags & EMBED_PERSIST_COPY_PAGE)
+	if (ephy_flags & EPHY_EMBED_PERSIST_COPY_PAGE)
 	{
 		flags |= nsIWebBrowserPersist::PERSIST_FLAGS_FROM_CACHE;
 	}
 	webPersist->SetPersistFlags(flags);
 
-	if (!domDocument || !isHTML || ephy_flags & EMBED_PERSIST_COPY_PAGE)
+	if (!domDocument || !isHTML || ephy_flags & EPHY_EMBED_PERSIST_COPY_PAGE)
 	{
 		rv = webPersist->SaveURI (sourceURI, aCacheKey, nsnull,
 					  postData, nsnull, inDestFile);

@@ -280,7 +280,7 @@ toolbar_cmd_ppv_goto_first (GtkUIManager *merge,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	ephy_embed_print_preview_navigate (embed, PRINTPREVIEW_HOME, 0);
+	ephy_embed_print_preview_navigate (embed, EPHY_EMBED_PRINTPREVIEW_HOME, 0);
 
 	t->priv->current_page = 1;
 
@@ -298,7 +298,7 @@ toolbar_cmd_ppv_goto_last  (GtkUIManager *merge,
 	g_return_if_fail (embed != NULL);
 
 	ephy_embed_print_preview_navigate (embed,
-					   PRINTPREVIEW_END,
+					   EPHY_EMBED_PRINTPREVIEW_END,
 					   0);
 
 	t->priv->current_page = ephy_embed_print_preview_n_pages (embed);
@@ -334,7 +334,7 @@ toolbar_cmd_ppv_go_back  (GtkUIManager *merge,
 	t->priv->current_page = clamp_page_limits (t, t->priv->current_page - 1);
 
 	ephy_embed_print_preview_navigate (embed,
-					   PRINTPREVIEW_GOTO_PAGENUM,
+					   EPHY_EMBED_PRINTPREVIEW_GOTO_PAGENUM,
 					   t->priv->current_page);
 
 	toolbar_update_sensitivity (t);
@@ -353,7 +353,7 @@ toolbar_cmd_ppv_go_forward (GtkUIManager *merge,
 	t->priv->current_page = clamp_page_limits (t, t->priv->current_page + 1);
 
 	ephy_embed_print_preview_navigate (embed,
-					   PRINTPREVIEW_GOTO_PAGENUM,
+					   EPHY_EMBED_PRINTPREVIEW_GOTO_PAGENUM,
 					   t->priv->current_page);
 
 	toolbar_update_sensitivity (t);

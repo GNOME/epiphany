@@ -637,7 +637,7 @@ impl_get_security_level (EphyEmbed *embed,
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (embed)->priv;
 
-	if (level) *level = STATE_IS_UNKNOWN;
+	if (level) *level = EPHY_EMBED_STATE_IS_UNKNOWN;
 	if (description) *description = NULL;
 
 	nsresult rv;
@@ -836,7 +836,7 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
                                 gint state, guint status, 
 				MozillaEmbed *membed)
 {
-	EphyEmbedNetState estate = EMBED_STATE_UNKNOWN;
+	EphyEmbedNetState estate = EPHY_EMBED_STATE_UNKNOWN;
 	int i;
 
 	struct
@@ -846,15 +846,15 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 	}
 	conversion_map [] =
 	{
-		{ GTK_MOZ_EMBED_FLAG_START, EMBED_STATE_START },
-		{ GTK_MOZ_EMBED_FLAG_STOP, EMBED_STATE_STOP },
-		{ GTK_MOZ_EMBED_FLAG_REDIRECTING, EMBED_STATE_REDIRECTING },
-		{ GTK_MOZ_EMBED_FLAG_TRANSFERRING, EMBED_STATE_TRANSFERRING },
-		{ GTK_MOZ_EMBED_FLAG_NEGOTIATING, EMBED_STATE_NEGOTIATING },
-		{ GTK_MOZ_EMBED_FLAG_IS_REQUEST, EMBED_STATE_IS_REQUEST },
-		{ GTK_MOZ_EMBED_FLAG_IS_DOCUMENT, EMBED_STATE_IS_DOCUMENT },
-		{ GTK_MOZ_EMBED_FLAG_IS_NETWORK, EMBED_STATE_IS_NETWORK },
-		{ 0, EMBED_STATE_UNKNOWN }
+		{ GTK_MOZ_EMBED_FLAG_START, EPHY_EMBED_STATE_START },
+		{ GTK_MOZ_EMBED_FLAG_STOP, EPHY_EMBED_STATE_STOP },
+		{ GTK_MOZ_EMBED_FLAG_REDIRECTING, EPHY_EMBED_STATE_REDIRECTING },
+		{ GTK_MOZ_EMBED_FLAG_TRANSFERRING, EPHY_EMBED_STATE_TRANSFERRING },
+		{ GTK_MOZ_EMBED_FLAG_NEGOTIATING, EPHY_EMBED_STATE_NEGOTIATING },
+		{ GTK_MOZ_EMBED_FLAG_IS_REQUEST, EPHY_EMBED_STATE_IS_REQUEST },
+		{ GTK_MOZ_EMBED_FLAG_IS_DOCUMENT, EPHY_EMBED_STATE_IS_DOCUMENT },
+		{ GTK_MOZ_EMBED_FLAG_IS_NETWORK, EPHY_EMBED_STATE_IS_NETWORK },
+		{ 0, EPHY_EMBED_STATE_UNKNOWN }
 	};
 
 	for (i = 0; conversion_map[i].state != 0; i++)
@@ -915,7 +915,7 @@ mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 
 		if (info->modifier == GDK_CONTROL_MASK)
 		{
-			info->context = EMBED_CONTEXT_DOCUMENT;	
+			info->context = EPHY_EMBED_CONTEXT_DOCUMENT;	
 		}
 
 		nsCOMPtr<nsIDOMDocument> doc;
@@ -1105,25 +1105,25 @@ mozilla_embed_security_level (PRUint32 state)
 	switch (state)
         {
         case nsIWebProgressListener::STATE_IS_INSECURE:
-                level = STATE_IS_INSECURE;
+                level = EPHY_EMBED_STATE_IS_INSECURE;
                 break;
         case nsIWebProgressListener::STATE_IS_BROKEN:
-                level = STATE_IS_BROKEN;
+                level = EPHY_EMBED_STATE_IS_BROKEN;
                 break;
         case nsIWebProgressListener::STATE_IS_SECURE|
              nsIWebProgressListener::STATE_SECURE_HIGH:
-                level = STATE_IS_SECURE_HIGH;
+                level = EPHY_EMBED_STATE_IS_SECURE_HIGH;
                 break;
         case nsIWebProgressListener::STATE_IS_SECURE|
              nsIWebProgressListener::STATE_SECURE_MED:
-                level = STATE_IS_SECURE_MED;
+                level = EPHY_EMBED_STATE_IS_SECURE_MED;
                 break;
         case nsIWebProgressListener::STATE_IS_SECURE|
              nsIWebProgressListener::STATE_SECURE_LOW:
-                level = STATE_IS_SECURE_LOW;
+                level = EPHY_EMBED_STATE_IS_SECURE_LOW;
                 break;
         default:
-                level = STATE_IS_UNKNOWN;
+                level = EPHY_EMBED_STATE_IS_UNKNOWN;
                 break;
         }
 	return level;

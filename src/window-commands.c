@@ -402,7 +402,7 @@ window_cmd_file_save_as (GtkAction *action,
 	ephy_embed_persist_set_fc_title (persist, _("Save As"));
 	ephy_embed_persist_set_fc_parent (persist,GTK_WINDOW (window));
 	ephy_embed_persist_set_flags
-		(persist, EMBED_PERSIST_MAINDOC | EMBED_PERSIST_ASK_DESTINATION);
+		(persist, EPHY_EMBED_PERSIST_MAINDOC | EPHY_EMBED_PERSIST_ASK_DESTINATION);
 	ephy_embed_persist_set_persist_key
 		(persist, CONF_STATE_SAVE_DIR);
 
@@ -691,8 +691,8 @@ save_temp_source (EphyEmbed *embed)
 		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
 
 	ephy_embed_persist_set_embed (persist, embed);
-	ephy_embed_persist_set_flags (persist, EMBED_PERSIST_COPY_PAGE |
-				      EMBED_PERSIST_NO_VIEW);
+	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_COPY_PAGE |
+				      EPHY_EMBED_PERSIST_NO_VIEW);
 	ephy_embed_persist_set_dest (persist, tmp);
 
 	g_signal_connect (persist, "completed",

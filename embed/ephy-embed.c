@@ -38,16 +38,16 @@ ephy_embed_net_state_get_type (void)
 	{
 		static const GFlagsValue values[] =
 		{
-		{ EMBED_STATE_UNKNOWN, "EMBED_STATE_UNKNOWN", "unknown" },
-		{ EMBED_STATE_START, "EMBED_STATE_START", "start" },
-		{ EMBED_STATE_REDIRECTING, "EMBED_STATE_REDIRECTING", "redirecting" },
-		{ EMBED_STATE_TRANSFERRING, "EMBED_STATE_TRANSFERRING", "transferring" },
-		{ EMBED_STATE_NEGOTIATING, "EMBED_STATE_NEGOTIATING", "negotiating", },
-		{ EMBED_STATE_STOP, "EMBED_STATE_STOP", "stop" },
-		{ EMBED_STATE_IS_REQUEST, "EMBED_STATE_IS_REQUEST", "is-request" },
-		{ EMBED_STATE_IS_DOCUMENT, "EMBED_STATE_IS_DOCUMENT", "is-document" },
-		{ EMBED_STATE_IS_NETWORK, "EMBED_STATE_IS_NETWORK", "is-network" },
-		{ EMBED_STATE_IS_WINDOW, "EMBED_STATE_IS_WINDOW", "is-window" },
+		{ EPHY_EMBED_STATE_UNKNOWN, "EPHY_EMBED_STATE_UNKNOWN", "unknown" },
+		{ EPHY_EMBED_STATE_START, "EPHY_EMBED_STATE_START", "start" },
+		{ EPHY_EMBED_STATE_REDIRECTING, "EPHY_EMBED_STATE_REDIRECTING", "redirecting" },
+		{ EPHY_EMBED_STATE_TRANSFERRING, "EPHY_EMBED_STATE_TRANSFERRING", "transferring" },
+		{ EPHY_EMBED_STATE_NEGOTIATING, "EPHY_EMBED_STATE_NEGOTIATING", "negotiating", },
+		{ EPHY_EMBED_STATE_STOP, "EPHY_EMBED_STATE_STOP", "stop" },
+		{ EPHY_EMBED_STATE_IS_REQUEST, "EPHY_EMBED_STATE_IS_REQUEST", "is-request" },
+		{ EPHY_EMBED_STATE_IS_DOCUMENT, "EPHY_EMBED_STATE_IS_DOCUMENT", "is-document" },
+		{ EPHY_EMBED_STATE_IS_NETWORK, "EPHY_EMBED_STATE_IS_NETWORK", "is-network" },
+		{ EPHY_EMBED_STATE_IS_WINDOW, "EPHY_EMBED_STATE_IS_WINDOW", "is-window" },
 		{ 0, NULL, NULL }
 		};
 
@@ -88,11 +88,11 @@ ephy_embed_ppv_navigation_get_type (void)
 	{
 		static const GEnumValue values[] =
 		{
-		{ PRINTPREVIEW_GOTO_PAGENUM, "PRINTPREVIEW_GOTO_PAGENUM", "page-num" },
-		{ PRINTPREVIEW_PREV_PAGE, "PRINTPREVIEW_PREV_PAGE", "prev" },
-		{ PRINTPREVIEW_NEXT_PAGE, "PRINTPREVIEW_NEXT_PAGE", "next" },
-		{ PRINTPREVIEW_HOME, "PRINTPREVIEW_HOME", "home" },
-		{ PRINTPREVIEW_END, "PRINTPREVIEW_END", "end" },
+		{ EPHY_EMBED_PRINTPREVIEW_GOTO_PAGENUM, "EPHY_EMBED_PRINTPREVIEW_GOTO_PAGENUM", "page-num" },
+		{ EPHY_EMBED_PRINTPREVIEW_PREV_PAGE, "EPHY_EMBED_PRINTPREVIEW_PREV_PAGE", "prev" },
+		{ EPHY_EMBED_PRINTPREVIEW_NEXT_PAGE, "EPHY_EMBED_PRINTPREVIEW_NEXT_PAGE", "next" },
+		{ EPHY_EMBED_PRINTPREVIEW_HOME, "EPHY_EMBED_PRINTPREVIEW_HOME", "home" },
+		{ EPHY_EMBED_PRINTPREVIEW_END, "EPHY_EMBED_PRINTPREVIEW_END", "end" },
 		{ 0, NULL, NULL }
 		};
 
@@ -111,12 +111,12 @@ ephy_embed_security_level_get_type (void)
 	{
 		static const GEnumValue values[] =
 		{
-		{ STATE_IS_UNKNOWN, "STATE_IS_UNKNOWN", "unknown" },
-		{ STATE_IS_INSECURE, "STATE_IS_INSECURE", "insecure" },
-		{ STATE_IS_BROKEN, "STATE_IS_BROKEN", "broken" },
-		{ STATE_IS_SECURE_LOW, "STATE_IS_SECURE_LOW", "low" },
-		{ STATE_IS_SECURE_MED, "STATE_IS_SECURE_MED", "medium" },
-		{ STATE_IS_SECURE_HIGH, "STATE_IS_SECURE_HIGH", "high" },
+		{ EPHY_EMBED_STATE_IS_UNKNOWN, "EPHY_EMBED_STATE_IS_UNKNOWN", "unknown" },
+		{ EPHY_EMBED_STATE_IS_INSECURE, "EPHY_EMBED_STATE_IS_INSECURE", "insecure" },
+		{ EPHY_EMBED_STATE_IS_BROKEN, "EPHY_EMBED_STATE_IS_BROKEN", "broken" },
+		{ EPHY_EMBED_STATE_IS_SECURE_LOW, "EPHY_EMBED_STATE_IS_SECURE_LOW", "low" },
+		{ EPHY_EMBED_STATE_IS_SECURE_MED, "EPHY_EMBED_STATE_IS_SECURE_MED", "medium" },
+		{ EPHY_EMBED_STATE_IS_SECURE_HIGH, "EPHY_EMBED_STATE_IS_SECURE_HIGH", "high" },
 		{ 0, NULL, NULL }
 		};
 
@@ -135,10 +135,10 @@ ephy_embed_document_type_get_type (void)
 	{
 		static const GEnumValue values[] =
 		{
-		{ EMBED_DOCUMENT_HTML, "EMBED_DOCUMENT_HTML", "html" },
-		{ EMBED_DOCUMENT_XML, "EMBED_DOCUMENT_XML", "xml" },
-		{ EMBED_DOCUMENT_IMAGE, "EMBED_DOCUMENT_IMAGE", "image" },
-		{ EMBED_DOCUMENT_OTHER, "EMBED_DOCUMENT_OTHER", "other" },
+		{ EPHY_EMBED_DOCUMENT_HTML, "EPHY_EMBED_DOCUMENT_HTML", "html" },
+		{ EPHY_EMBED_DOCUMENT_XML, "EPHY_EMBED_DOCUMENT_XML", "xml" },
+		{ EPHY_EMBED_DOCUMENT_IMAGE, "EPHY_EMBED_DOCUMENT_IMAGE", "image" },
+		{ EPHY_EMBED_DOCUMENT_OTHER, "EPHY_EMBED_DOCUMENT_OTHER", "other" },
 		{ 0, NULL, NULL }
 		};
 
@@ -939,7 +939,7 @@ ephy_embed_print_preview_n_pages (EphyEmbed *embed)
  * ephy_embed_print_preview_navigate:
  * @embed: an #EphyEmbed
  * @type: an #EphyPrintPreviewNavType which determines where to navigate
- * @page: if @type is %PRINTPREVIEW_GOTO_PAGENUM, the desired page number
+ * @page: if @type is %EPHY_EMBED_PRINTPREVIEW_GOTO_PAGENUM, the desired page number
  *
  * Navigates @embed's print preview.
  **/

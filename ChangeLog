@@ -1,3 +1,46 @@
+2005-01-05  Crispin Flowerday  <gnome@flowerday.cx>
+
+	* embed/ephy-embed-event.c: (ephy_embed_event_context_get_type):
+	* embed/ephy-embed-event.h:
+	* embed/ephy-embed-persist.c: (ephy_embed_persist_flags_get_type):
+	* embed/ephy-embed-persist.h:
+	* embed/ephy-embed.c: (ephy_embed_net_state_get_type),
+	(ephy_embed_ppv_navigation_get_type),
+	(ephy_embed_security_level_get_type),
+	(ephy_embed_document_type_get_type):
+	* embed/ephy-embed.h:
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_download):
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-shell.c: (ephy_shell_new_tab):
+	* src/ephy-tab.c: (ephy_tab_address_expire_get_type),
+	(ephy_tab_navigation_flags_get_type), (ephy_tab_set_property),
+	(ephy_tab_class_init), (ephy_tab_get_document_type),
+	(ephy_tab_address_cb), (update_net_state_message),
+	(build_progress_from_requests), (ensure_page_info),
+	(ephy_tab_net_state_cb), (ephy_tab_dom_mouse_click_cb),
+	(ephy_tab_init), (ephy_tab_update_navigation_flags),
+	(ephy_tab_set_location), (ephy_tab_get_security_level):
+	* src/ephy-tab.h:
+	* src/ephy-window.c: (sync_tab_document_type),
+	(sync_tab_navigation), (sync_tab_security), (sync_tab_zoom),
+	(update_popups_tooltips), (show_embed_popup):
+	* src/popup-commands.c: (popup_cmd_copy_link_address),
+	(save_property_url), (popup_cmd_set_image_as_background),
+	(save_temp_source):
+	* src/ppview-toolbar.c: (toolbar_cmd_ppv_goto_first),
+	(toolbar_cmd_ppv_goto_last), (toolbar_cmd_ppv_go_back),
+	(toolbar_cmd_ppv_go_forward):
+	* src/toolbar.c: (sync_user_input_cb):
+	* src/window-commands.c: (window_cmd_file_save_as),
+	(save_temp_source):
+
+	Consistently start enum names with EPHY_*.
+
 2005-01-04  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/bookmarks/ephy-bookmark-action.c: (create_tool_item):

@@ -168,13 +168,13 @@ popup_cmd_copy_link_address (GtkAction *action,
 
 	context = ephy_embed_event_get_context (event);
 
-	if (context & EMBED_CONTEXT_EMAIL_LINK)
+	if (context & EPHY_EMBED_CONTEXT_EMAIL_LINK)
 	{
 		ephy_embed_event_get_property (event, "email", &value);
 		address = g_value_get_string (value);
 		popup_cmd_copy_to_clipboard (window, address);
 	}
-	else if (context & EMBED_CONTEXT_LINK)
+	else if (context & EPHY_EMBED_CONTEXT_LINK)
 	{
 		ephy_embed_event_get_property (event, "link", &value);
 		address = g_value_get_string (value);
@@ -209,7 +209,7 @@ save_property_url (GtkAction *action,
 	ephy_embed_persist_set_fc_title (persist, title);
 	ephy_embed_persist_set_fc_parent (persist, GTK_WINDOW (window));
 	ephy_embed_persist_set_flags
-		(persist, ask_dest ? EMBED_PERSIST_ASK_DESTINATION : 0);
+		(persist, ask_dest ? EPHY_EMBED_PERSIST_ASK_DESTINATION : 0);
 	ephy_embed_persist_set_persist_key
 		(persist, CONF_STATE_SAVE_DIR);
 	ephy_embed_persist_set_source (persist, location);
@@ -311,7 +311,7 @@ popup_cmd_set_image_as_background (GtkAction *action,
 
 	ephy_embed_persist_set_embed (persist, embed);
 	ephy_embed_persist_set_dest (persist, dest);
-	ephy_embed_persist_set_flags (persist, EMBED_PERSIST_NO_VIEW);
+	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_NO_VIEW);
 	ephy_embed_persist_set_source (persist, location);
 
 	g_signal_connect (persist, "completed",
@@ -450,7 +450,7 @@ save_temp_source (const char *address)
 		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
 
 	ephy_embed_persist_set_source (persist, address);
-	ephy_embed_persist_set_flags (persist, EMBED_PERSIST_NO_VIEW);
+	ephy_embed_persist_set_flags (persist, EPHY_EMBED_PERSIST_NO_VIEW);
 	ephy_embed_persist_set_dest (persist, tmp);
 
 	g_signal_connect (persist, "completed",

@@ -110,7 +110,7 @@ ephy_embed_persist_set_dest (EphyEmbedPersist *persist,
  * Sets the #EphyEmbed from which @persist will download data.
  *
  * An #EphyEmbed is absolutely required to download if @persist's
- * #EphyEmbedPersistFlags include %EMBED_PERSIST_COPY_PAGE. Regardless, an
+ * #EphyEmbedPersistFlags include %EPHY_EMBED_PERSIST_COPY_PAGE. Regardless, an
  * #EphyEmbed should be set for <emphasis>every</emphasis> #EphyEmbedPersist,
  * since it determines request information such as the referring page.
  **/
@@ -129,7 +129,7 @@ ephy_embed_persist_set_embed (EphyEmbedPersist *persist,
  * @value: the title to be displayed by the filechooser
  *
  * Sets the title of the filechooser window. The filechooser will only be
- * displayed if %EMBED_PERSIST_ASK_DESTINATION has been set with
+ * displayed if %EPHY_EMBED_PERSIST_ASK_DESTINATION has been set with
  * ephy_embed_persist_set_flags().
  **/
 void
@@ -147,7 +147,7 @@ ephy_embed_persist_set_fc_title (EphyEmbedPersist *persist,
  * @value: the #EphyWindow which should be the filechooser's parent
  *
  * Sets the #EphyWindow which should be @persist's filechooser's parent. The
- * filechooser will only be displayed if %EMBED_PERSIST_ASK_DESTINATION has been
+ * filechooser will only be displayed if %EPHY_EMBED_PERSIST_ASK_DESTINATION has been
  * set with ephy_embed_persist_set_flags().
  **/
 void
@@ -591,7 +591,7 @@ ephy_embed_persist_cancel (EphyEmbedPersist *persist)
  *
  * Begins saving the file specified in @persist.
  *
- * If @persist's #EphyEmbedPersistFlags include %EMBED_PERSIST_ASK_DESTINATION, a
+ * If @persist's #EphyEmbedPersistFlags include %EPHY_EMBED_PERSIST_ASK_DESTINATION, a
  * filechooser dialog will be shown first.
  *
  * The file will continue to download in the background until either the
@@ -615,7 +615,7 @@ ephy_embed_persist_save (EphyEmbedPersist *persist)
  *
  * The download is synchronous. An #EphyEmbed must be specified with
  * ephy_embed_persist_set_embed(). The function implicitly assumes that
- * @persist's #EphyEmbedPersistFlags include %EMBED_PERSIST_COPY_PAGE. If @persist's
+ * @persist's #EphyEmbedPersistFlags include %EPHY_EMBED_PERSIST_COPY_PAGE. If @persist's
  * #EphyEmbed has not finished downloading, this function will only return the
  * portion of data which has already been downloaded.
  *
@@ -640,11 +640,11 @@ ephy_embed_persist_flags_get_type (void)
 	{
 		static const GFlagsValue values[] =
 		{
-		{ EMBED_PERSIST_COPY_PAGE, "EMBED_PERSIST_COPY_PAGE", "copy-page" },
-		{ EMBED_PERSIST_MAINDOC, "EMBED_PERSIST_MAINDOC", "main-document" },
-		{ EMBED_PERSIST_NO_VIEW, "EMBED_PERSIST_NO_VIEW", "no-view" },
-		{ EMBED_PERSIST_ASK_DESTINATION, "EMBED_PERSIST_ASK_DESTINATION", "ask-destination" },
-		{ EMBED_PERSIST_DO_CONVERSION, "EMBED_PERSIST_DO_CONVERSION", "do-conversion" },
+		{ EPHY_EMBED_PERSIST_COPY_PAGE, "EPHY_EMBED_PERSIST_COPY_PAGE", "copy-page" },
+		{ EPHY_EMBED_PERSIST_MAINDOC, "EPHY_EMBED_PERSIST_MAINDOC", "main-document" },
+		{ EPHY_EMBED_PERSIST_NO_VIEW, "EPHY_EMBED_PERSIST_NO_VIEW", "no-view" },
+		{ EPHY_EMBED_PERSIST_ASK_DESTINATION, "EPHY_EMBED_PERSIST_ASK_DESTINATION", "ask-destination" },
+		{ EPHY_EMBED_PERSIST_DO_CONVERSION, "EPHY_EMBED_PERSIST_DO_CONVERSION", "do-conversion" },
 		{ 0, NULL, NULL }
 		};
 
