@@ -130,23 +130,48 @@
           <title>To Open the Bookmarks Window</title>
                 <para>You can open the bookmarks window in the following ways:</para>
 		<variablelist>
-    		<varlistentry>
+    		
+                <varlistentry>
     		<term><guimenu>Applications</guimenu> menu</term>
     		<listitem>
     		<para>Choose 
     		<menuchoice>
     		<guisubmenu>Internet</guisubmenu>
     		<guimenuitem>Web Bookmarks</guimenuitem>
-    		</menuchoice>. </para>
+    		</menuchoice>. 
+                </para>
     		</listitem>
     		</varlistentry>
-    		<varlistentry>
+    		
+                <varlistentry>
     		<term>Command line</term>
     		<listitem>
     		<para>Type <command>epiphany -b</command>, then press <keycap>Return</keycap>.</para>
     		</listitem>
     		</varlistentry>
-    		</variablelist>
+
+ 
+                <varlistentry>
+                <term>From the <guimenu>Bookmarks</guimenu> menu</term>
+                <listitem>
+                <para>Choose <menuchoice>
+                  <guimenu>Bookmarks</guimenu>
+                  <guimenuitem>Edit Bookmarks</guimenuitem>
+                  </menuchoice> from the &fr; main window. 
+                </para>
+                </listitem>
+                </varlistentry>
+
+                <varlistentry>
+                <term>From the &fr; toolbar</term>
+                <listitem>
+                <para>
+                Click on the Bookmarks button in the toolbar of the
+                main window. 
+                </para>
+                </listitem>
+                </varlistentry>
+                </variablelist>
         </sect2>
 
   </sect1>
@@ -408,6 +433,115 @@ you can choose items related to the display of the web page.</para>
 	<sect2 id="overview-of-bookmarks">
           <title>Overview of the Epiphany Bookmarks System</title>
           <para>
+            The &fr; bookmark system is quite different from the
+            heirarchical file folder method used by most
+            broswers. This design is in keeping with two design
+            principles: 
+            <itemizedlist>
+              <listitem>
+              Building a browser with the simplest interface possible.
+              </listitem>
+              <listitem>
+              Avoiding the need for the user to remember addresses of
+              sites that the user wants to visit. 
+              </listitem>
+            </itemizedlist>
+          </para>
+          <para>
+            The hierarchical way of organising bookmarks does not work
+            well for most people. Instead of this approach, &fr;
+            follows a database like approach. An address related to a
+            bookmark is stored with some metadata associated with
+            it. This metadata is then used to retrieve a bookmark
+            later. Future versions of &fr; will provide useful ways of
+            searching for and retrieving bookmarks using this
+            database. 
+          </para>
+          <para>
+            In the &fr; bookmark system, addresses are organised by
+            associating each address with one or more topic. For
+            example, if one were to store a bookmark for
+            <ulink type="http" url="http://developer.gnome.org">GNOME
+            Developers home page</ulink>, in any other browser, the user
+            might store it under the following hierarchy:
+            <programlisting>
+            Development -> GNOME -> GNOME developers home page
+            </programlisting>
+	  </para>
+          <para>
+            In &fr;, the same page could be associated with two
+            topics: 
+            <programlisting>
+            Development -> GNOME developers home page
+            GNOME -> GNOME developers home page
+            </programlisting>
+            Now the user can access this bookmark by typing the  
+            topic "GNOME" or "Development" in the location
+            bar. The user can also type in any of the words "GNOME",
+            "developers", "home" or "page" in the location bar. Either of these
+            methods drops a list containing the required bookmark. For
+            all ways to access bookmarks, see <xref
+            linkend="to-access-a-bookmark"/>
+          </para>
+          <para>
+            <note>
+              <title>No Subtopics</title>
+              <para>
+                &fr; allows only a single level of topics. Topics cannot
+                have sub-topics. 
+              </para>
+            </note>
+          </para>
+        </sect2>
+        <sect2 id="to-access-a-bookmark">
+          <title>To Access a bookmark</title>
+          <para>
+            The primary way to access bookmarks is the bookmarks
+            window. To open the bookmarks window, see <xref
+            linkend="ephy-to-open-bookmarks"/>. 
+            A separate window is used for organising bookmarks because
+            that makes it easier to navigate, and also allows it to
+            have search and edit 
+            functionalities in the same place. The bookmarks
+            collection can be directly edited from the desktop. In the
+            same place, it is now possible to edit the bookmark title
+            inline, add more topics, remove bookmarks, associate them
+            to more topics with drag and drop, edit properties of a
+            bookmark, etc. 
+          </para>
+          <para>
+            The bookmarks can also be
+            accessed by: 
+            <itemizedlist>
+              <listitem>
+              Typing in a topic in the location bar of the main
+              window drops down a list of bookmarks of that category.
+              </listitem>
+              <listitem>
+              A word typed into the location bar are automatically
+              searched in the bookmark database and matching bookmarks
+              are shown in a drop down list below the location bar. 
+              </listitem>
+              <listitem>
+              The menu item <guimenu>Bookmark</guimenu> gives a menu of all the
+              different topics. Bookmarks related to these topics can
+              then be accessed from submenus here. This is closest to
+              the traditional method of accessing bookmarks, and is
+              provided to keep compatibility.
+              </listitem>
+              <listitem>
+              The bookmark bar can also be used to access your 
+              bookmarks. 
+              Choose <menuchoice>
+                     <guimenu>View</guimenu>
+                     <guimenuitem>Bookmarks Bar</guimenuitem>
+                     </menuchoice>
+              to add the Bookmark bar. However, each topic and
+              bookmark needs to be configured in the Bookmarks dialog
+              to be shown on this bar. This can be used to organise
+              most frequently used bookmarks. 
+              </listitem>
+            </itemizedlist>
           </para>
         </sect2>
 	<sect2 id="to-create-new-bookmark">
