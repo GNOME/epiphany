@@ -101,7 +101,7 @@ epiphany_bin_LDADD = \
 	$(EPIPHANY_DEPENDENCY_LIBS) \
 	$(INTLLIBS)
 
-CLEAN_FILES = \
+CLEANFILES = \
 	$(ephy_automation_interface_idl_sources) \
 	ephy_automation_interface_idl_stamp
 
