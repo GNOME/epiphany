@@ -3,12 +3,13 @@
 # Commentaar:
 # Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>, 2003.
 # Reinout van Schouwen <reinout@cs.vu.nl>, 2003 (kleine aanpassingen).
+# Lode Vermeiren <lode@linu.cx>, 2004 (kleine aanpassingen).
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-13 03:13+0100\n"
+"POT-Creation-Date: 2004-01-15 03:18+0100\n"
 "PO-Revision-Date: 2003-12-20 19:11+0100\n"
 "Last-Translator: Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -131,7 +132,7 @@ msgid ""
 "and https:."
 msgstr ""
 "Schakelt het opvragen van informatie via onveilige protocollen uit. Http en "
-"https worden veilig beschouwd."
+"https worden als veilig beschouwd."
 
 # ui/preferences.glade.h:175
 #: data/epiphany-lockdown.schemas.in.h:15
@@ -178,7 +179,7 @@ msgstr "Altijd tabbladen weergeven"
 
 #: data/epiphany.schemas.in.h:5
 msgid "Auto open downloads"
-msgstr "Downloads auto-openen"
+msgstr "Downloads automatisch openen"
 
 #: data/epiphany.schemas.in.h:6
 msgid ""
@@ -296,7 +297,7 @@ msgstr ""
 
 #: data/epiphany.schemas.in.h:21
 msgid "History pages time range"
-msgstr "Tijdspan voor geschiedenis"
+msgstr "Tijdspanne voor geschiedenis"
 
 # src/menubar.c:473
 #: data/epiphany.schemas.in.h:22
@@ -339,14 +340,14 @@ msgstr ""
 
 #: data/epiphany.schemas.in.h:29
 msgid "Paper type"
-msgstr "Papiertype"
+msgstr "Papierformaat"
 
 #: data/epiphany.schemas.in.h:30
 msgid ""
 "Paper type. Supported values are \"A4\", \"Letter\", \"Legal\" and "
 "\"Executive\"."
 msgstr ""
-"Papiertype. Ondersteunde waarden zijn: \"A4\", \"Letter\", \"Legal\" en "
+"Papierformaat. Ondersteunde waarden zijn: \"A4\", \"Letter\", \"Legal\" en "
 "\"Executive\"."
 
 #: data/epiphany.schemas.in.h:31
@@ -506,7 +507,7 @@ msgstr ""
 "chinese coderingen), \"zhcn_parallel_state_machine\" (autodetectie van "
 "eenvoudige chinese coderingen), \"zhtw_parallel_state_machine"
 "\" (autodetectie van traditionele chinese coderingen) en "
-"\"universal_charset_detector\" (meeste coderingen automagisch detecteren)."
+"\"universal_charset_detector\" (meeste coderingen automatisch detecteren)."
 
 #: data/epiphany.schemas.in.h:58
 msgid "The page informations shown in the history view"
@@ -693,7 +694,7 @@ msgstr "*"
 # src/menu_callbacks.c:1286
 #: data/glade/epiphany.glade.h:3
 msgid "<b>_Automatic</b>"
-msgstr "<b>_automagisch</b>"
+msgstr "<b>_automatisch</b>"
 
 #: data/glade/epiphany.glade.h:4
 #, fuzzy
@@ -755,7 +756,7 @@ msgid "_Next"
 msgstr "_Volgende"
 
 # ui/epiphany.glade.h:93
-#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:506
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:513
 msgid "_Pause"
 msgstr "_Pauze"
 
@@ -1337,13 +1338,13 @@ msgstr "_Zoeken..."
 msgid "_Print..."
 msgstr "Af_drukken..."
 
-#: embed/downloader-view.c:221
+#: embed/downloader-view.c:228
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
 #  Minutes, Seconds
-#: embed/downloader-view.c:225
+#: embed/downloader-view.c:232
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
@@ -1352,30 +1353,30 @@ msgstr "%02u.%02u"
 # src/prefs.c:1069
 # src/prefs_callbacks.c:237
 # src/prefs_callbacks.c:407
-#: embed/downloader-view.c:296 lib/widgets/ephy-cell-renderer-progress.c:35
+#: embed/downloader-view.c:303 lib/widgets/ephy-cell-renderer-progress.c:35
 #: src/ephy-window.c:1083
 msgid "Unknown"
 msgstr "Onbekend"
 
 # ui/epiphany.glade.h:2
-#: embed/downloader-view.c:434
+#: embed/downloader-view.c:441
 msgid "%"
 msgstr "%"
 
 # src/bookmarks_editor.c:941
 # src/bookmarks_editor.c:1148
 # src/menubar.c:565
-#: embed/downloader-view.c:444
+#: embed/downloader-view.c:451
 msgid "File"
 msgstr "Bestand"
 
 # ui/epiphany.glade.h:97
-#: embed/downloader-view.c:457
+#: embed/downloader-view.c:464
 msgid "Remaining"
 msgstr "Te gaan"
 
 # ui/epiphany.glade.h:103
-#: embed/downloader-view.c:501
+#: embed/downloader-view.c:508
 msgid "_Resume"
 msgstr "_Doorgaan"
 
@@ -1876,6 +1877,13 @@ msgstr "Anderen"
 msgid "Local files"
 msgstr "Lokale bestanden"
 
+#: embed/mozilla/ContentHandler.cpp:137
+#, c-format
+msgid ""
+"An unrequested download (%s) has been started.\n"
+" Would you like to continue it and open the file?"
+msgstr ""
+
 # src/bookmarks.c:975
 # src/embed.c:263
 # src/history.c:457
@@ -2202,7 +2210,7 @@ msgstr "Kan certificaat niet verifiëren omdat de uitgever onbekend is."
 #: embed/mozilla/GtkNSSDialogs.cpp:1305
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
-msgstr "Kan certificaat niet verifiëren omdat deze ongeldig is."
+msgstr "Kan certificaat niet verifiëren omdat het ongeldig is."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1310
 msgid "Could not verify this certificate for unknown reasons."
@@ -2290,8 +2298,8 @@ msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
 msgstr ""
-"Sleep een item naar de werkbalken om deze toe te voegen en van de werkbalken "
-"naar de tabel om deze te verwijderen."
+"Sleep een item naar de werkbalken om het toe te voegen en van de werkbalken "
+"naar de tabel om het te verwijderen."
 
 #: lib/ephy-file-helpers.c:103
 #, c-format
@@ -2871,7 +2879,7 @@ msgstr "Overige coderingen"
 
 #: src/ephy-encoding-menu.c:387
 msgid "_Automatic"
-msgstr "_Automagisch"
+msgstr "_Automatisch"
 
 # src/menubar.c:570
 #: src/ephy-go-action.c:80 src/ephy-go-action.c:97 src/toolbar.c:409
@@ -4139,7 +4147,8 @@ msgid "translator_credits"
 msgstr ""
 "Vincent van Adrighem\n"
 "  <V.vanAdrighem@dirck.mine.nu>.\n"
-"Reinout van Schouwen <reinout@cs.vu.nl>"
+"Reinout van Schouwen <reinout@cs.vu.nl>\n"
+"Lode Vereiren <lode@linu.cx>"
 
 # src/menu_callbacks.c:428
 #: src/window-commands.c:969
@@ -4357,11 +4366,11 @@ msgstr "Een uitgebreide GNOME browser gebaseerd op Mozilla"
 
 # ui/epiphany.glade.h:118
 #~ msgid "<b>Time Elapsed:</b>"
-#~ msgstr "<b>Vertreken tijd:</b>"
+#~ msgstr "<b>Verstreken tijd:</b>"
 
 # ui/epiphany.glade.h:119
 #~ msgid "<b>Time Remaining:</b>"
-#~ msgstr "<b>Nog te gaan:</b>"
+#~ msgstr "<b>Resterende tijd:</b>"
 
 # ui/preferences.glade.h:157
 #~ msgid "Download _Details"
