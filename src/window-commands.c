@@ -57,8 +57,6 @@
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtktoggleaction.h>
 #include <glib/gi18n.h>
-#include <libgnomeui/gnome-icon-theme.h>
-#include <libgnome/gnome-desktop-item.h>
 
 void
 window_cmd_edit_find (GtkAction *action,
