@@ -47,8 +47,6 @@
 #include "MozDownload.h"
 #include "EphyHeaderSniffer.h"
 
-#include "ephy-embed-single.h"
-#include "ephy-embed-shell.h"
 #include "ephy-file-chooser.h"
 #include "ephy-prefs.h"
 #include "ephy-gui.h"
@@ -70,7 +68,8 @@
 #include <nsIWindowWatcher.h>
 
 EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,
-		nsIFile* aFile, nsIURI* aURL, nsIDOMDocument* aDocument, nsIInputStream* aPostData)
+		nsIFile* aFile, nsIURI* aURL, nsIDOMDocument* aDocument, nsIInputStream* aPostData,
+		EphyEmbedSingle *single)
 : mPersist(aPersist)
 , mEmbedPersist(aEmbedPersist)
 , mTmpFile(aFile)
@@ -86,11 +85,21 @@ EphyHeaderSniffer::EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmb
 	if (!watcher) return;
 
 	watcher->GetNewAuthPrompter (nsnull, getter_AddRefs (mAuthPrompt));
+
+	mSingle = single;
+	g_object_add_weak_pointer (G_OBJECT (mSingle),
+				   (gpointer *)&mSingle);
 }
 
 EphyHeaderSniffer::~EphyHeaderSniffer()
 {
 	LOG ("EphyHeaderSniffer dtor (%p)", this)
+
+	if (mSingle)
+	{
+		g_object_remove_weak_pointer (G_OBJECT (mSingle),
+					      (gpointer *)&mSingle);
+	}
 }
 
 NS_IMPL_ISUPPORTS2(EphyHeaderSniffer, nsIWebProgressListener, nsIAuthPrompt)
@@ -98,15 +107,14 @@ NS_IMPL_ISUPPORTS2(EphyHeaderSniffer, nsIWebProgressListener, nsIAuthPrompt)
 NS_IMETHODIMP
 EphyHeaderSniffer::HandleContent ()
 {
-	EphyEmbedSingle *single;
 	gboolean handled = FALSE;
 	nsEmbedCString uriSpec;
 
-	if (mPostData) return NS_ERROR_FAILURE;
+	if (mPostData || !mSingle) return NS_ERROR_FAILURE;
 
-	mURL->GetSpec (uriSpec);	
-	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
-	g_signal_emit_by_name (single, "handle_content", mContentType.get(),
+	mURL->GetSpec (uriSpec);
+	
+	g_signal_emit_by_name (mSingle, "handle_content", mContentType.get(),
 			       uriSpec.get(), &handled);
 
 	return handled ? NS_OK : NS_ERROR_FAILURE;

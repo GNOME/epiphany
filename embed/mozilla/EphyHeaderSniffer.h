@@ -40,6 +40,7 @@
  */
 
 #include "mozilla-embed-persist.h"
+#include "ephy-embed-single.h"
 
 #include <nsIWebProgressListener.h>
 #include <nsIWebBrowserPersist.h>
@@ -56,8 +57,8 @@ class EphyHeaderSniffer : public nsIWebProgressListener,
 {
 public:
 	EphyHeaderSniffer (nsIWebBrowserPersist* aPersist, MozillaEmbedPersist *aEmbedPersist,
-		           nsIFile* aFile, nsIURI* aURL,
-                           nsIDOMDocument* aDocument, nsIInputStream* aPostData);
+		           nsIFile* aFile, nsIURI* aURL, nsIDOMDocument* aDocument,
+			   nsIInputStream* aPostData, EphyEmbedSingle *single);
 	virtual ~EphyHeaderSniffer ();
 
 	NS_DECL_ISUPPORTS
@@ -73,6 +74,7 @@ protected:
 private:
 	nsIWebBrowserPersist*      mPersist; /* Weak. It owns us as a listener. */
 	MozillaEmbedPersist       *mEmbedPersist;
+	EphyEmbedSingle		  *mSingle;
 	nsCOMPtr<nsIFile>          mTmpFile;
 	nsCOMPtr<nsIURI>           mURL;
 	nsCOMPtr<nsIURI>           mOriginalURI;
