@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-24 17:19+0100\n"
-"PO-Revision-Date: 2005-01-24 17:19+0100\n"
+"POT-Creation-Date: 2005-01-25 09:31+0100\n"
+"PO-Revision-Date: 2005-01-25 09:31+0100\n"
 "Last-Translator: Hendrik Richter <hendrik@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1042,7 +1042,7 @@ msgid_plural "%d downloads"
 msgstr[0] "%d Download"
 msgstr[1] "%d Downloads"
 
-#: embed/downloader-view.c:588 src/bookmarks/ephy-bookmarks-editor.c:873
+#: embed/downloader-view.c:588 src/bookmarks/ephy-bookmarks-editor.c:875
 msgid "File"
 msgstr "Datei"
 
@@ -1506,7 +1506,7 @@ msgid "Untitled"
 msgstr "Namenlos"
 
 #: embed/mozilla/FilePicker.cpp:148 embed/print-dialog.c:337
-#: lib/ephy-file-chooser.c:371 src/bookmarks/ephy-bookmarks-editor.c:715
+#: lib/ephy-file-chooser.c:371 src/bookmarks/ephy-bookmarks-editor.c:717
 msgid "All files"
 msgstr "Alle Dateien"
 
@@ -2102,8 +2102,8 @@ msgstr "Popup-Fenster"
 msgid "History"
 msgstr "Chronik"
 
-#: lib/ephy-stock-icons.c:59 src/bookmarks/ephy-bookmarks-editor.c:755
-#: src/bookmarks/ephy-bookmarks-editor.c:1617
+#: lib/ephy-stock-icons.c:59 src/bookmarks/ephy-bookmarks-editor.c:757
+#: src/bookmarks/ephy-bookmarks-editor.c:1619
 #: src/bookmarks/ephy-topic-action.c:930 src/ephy-window.c:1133
 msgid "Bookmarks"
 msgstr "Lesezeichen"
@@ -2165,7 +2165,7 @@ msgstr "%s:"
 
 #: src/bookmarks/ephy-bookmark-action.c:552
 #: src/bookmarks/ephy-bookmarks-editor.c:181
-#: src/bookmarks/ephy-bookmarks-editor.c:1237
+#: src/bookmarks/ephy-bookmarks-editor.c:1239
 #: src/bookmarks/ephy-topic-action.c:448 src/ephy-history-window.c:174
 #: src/ephy-history-window.c:714
 msgid "Open in New _Tab"
@@ -2176,7 +2176,7 @@ msgstr[1] "In neuen _Reitern öffnen"
 #. File Menu
 #: src/bookmarks/ephy-bookmark-action.c:558
 #: src/bookmarks/ephy-bookmarks-editor.c:178
-#: src/bookmarks/ephy-bookmarks-editor.c:1234 src/ephy-history-window.c:171
+#: src/bookmarks/ephy-bookmarks-editor.c:1236 src/ephy-history-window.c:171
 #: src/ephy-history-window.c:711
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
@@ -2318,7 +2318,7 @@ msgid "Cut the selection"
 msgstr "Den markierten Text ausschneiden"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:206
-#: src/bookmarks/ephy-bookmarks-editor.c:1247 src/ephy-history-window.c:191
+#: src/bookmarks/ephy-bookmarks-editor.c:1249 src/ephy-history-window.c:191
 #: src/ephy-history-window.c:724 src/ephy-window.c:159
 msgid "_Copy"
 msgstr "_Kopieren"
@@ -2453,72 +2453,76 @@ msgstr "Importieren fehlgeschlagen"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:635
 #, c-format
-msgid "The bookmarks from \"%s\" were not imported."
-msgstr "Die Lesezeichen aus »%s« wurden nicht importiert."
+msgid ""
+"The bookmarks from \"%s\" could not be imported because the file is "
+"corrupted or of an unsupported type."
+msgstr ""
+"Die Lesezeichen von »%s« konnten nicht importiert werden, da die Datei "
+"beschädigt ist oder ihr Format nicht unterstützt wird."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:696
+#: src/bookmarks/ephy-bookmarks-editor.c:698
 msgid "Import bookmarks from file"
 msgstr "Lesezeichen aus Datei importieren"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:703
+#: src/bookmarks/ephy-bookmarks-editor.c:705
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox/Mozilla-Lesezeichen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:707
+#: src/bookmarks/ephy-bookmarks-editor.c:709
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror-Lesezeichen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:711
+#: src/bookmarks/ephy-bookmarks-editor.c:713
 msgid "Epiphany bookmarks"
 msgstr "Epiphany-Lesezeichen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:745
+#: src/bookmarks/ephy-bookmarks-editor.c:747
 msgid "Export Bookmarks"
 msgstr "Lesezeichen exportieren"
 
 #. Make a format selection combo & label
-#: src/bookmarks/ephy-bookmarks-editor.c:758
+#: src/bookmarks/ephy-bookmarks-editor.c:760
 msgid "File format:"
 msgstr "Dateiformat:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:761
+#: src/bookmarks/ephy-bookmarks-editor.c:763
 msgid "Epiphany (RDF)"
 msgstr "Epiphany (RDF)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:762
+#: src/bookmarks/ephy-bookmarks-editor.c:764
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:833
+#: src/bookmarks/ephy-bookmarks-editor.c:835
 msgid "Import Bookmarks"
 msgstr "Lesezeichen importieren"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:839
+#: src/bookmarks/ephy-bookmarks-editor.c:841
 msgid "I_mport"
 msgstr "_Importieren"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:853
+#: src/bookmarks/ephy-bookmarks-editor.c:855
 msgid "Import bookmarks from:"
 msgstr "Lesezeichen importieren von:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1243 src/ephy-history-window.c:720
+#: src/bookmarks/ephy-bookmarks-editor.c:1245 src/ephy-history-window.c:720
 msgid "_Copy Address"
 msgstr "Adresse _kopieren"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1484 src/ephy-history-window.c:1036
+#: src/bookmarks/ephy-bookmarks-editor.c:1486 src/ephy-history-window.c:1036
 msgid "_Search:"
 msgstr "_Suche:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1683
+#: src/bookmarks/ephy-bookmarks-editor.c:1685
 #: src/bookmarks/ephy-topics-selector.c:198
 msgid "Topics"
 msgstr "Themen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1753 src/ephy-history-window.c:1319
+#: src/bookmarks/ephy-bookmarks-editor.c:1755 src/ephy-history-window.c:1319
 msgid "Title"
 msgstr "Titel"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1759 src/ephy-history-window.c:1325
+#: src/bookmarks/ephy-bookmarks-editor.c:1761 src/ephy-history-window.c:1325
 msgid "Address"
 msgstr "Adresse"
 
@@ -2778,7 +2782,19 @@ msgstr "_Wiederherstellen"
 msgid "Crash Recovery"
 msgstr "Absturz-Wiederherstellung"
 
-#: src/ephy-shell.c:338
+#: src/ephy-shell.c:172
+msgid "Sidebar extension required"
+msgstr "Sidebar-Erweiterung benötigt"
+
+#: src/ephy-shell.c:174
+msgid "Sidebar Extension Required"
+msgstr "Sidebar-Erweiterung benötigt"
+
+#: src/ephy-shell.c:178
+msgid "The link you clicked needs the sidebar extension to be installed."
+msgstr "Dieser Link benötigt eine installierte Sidebar-Erweiterung."
+
+#: src/ephy-shell.c:403
 msgid ""
 "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
 "use bonobo-activation-sysconf to configure the search path for bonobo server "
@@ -2788,7 +2804,7 @@ msgstr ""
 "können bonobo-activation-sysconf verwenden, um den Suchpfad für Bonobo-"
 "Server-Dateien festzulegen."
 
-#: src/ephy-shell.c:345
+#: src/ephy-shell.c:410
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to register the automation server"
@@ -2796,7 +2812,7 @@ msgstr ""
 "Bonobo kann im Moment auf Grund eines unerwarteten Bonobo-Fehlers beim "
 "Versuch, den Automatisierungs-Server zu registrieren, nicht verwendet werden."
 
-#: src/ephy-shell.c:362
+#: src/ephy-shell.c:427
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
@@ -3877,6 +3893,9 @@ msgid "translator-credits"
 msgstr ""
 "Christian Neumair <chris@gnome-de.org>\n"
 "Hendrik Richter <hendrik@gnome-de.org>"
+
+#~ msgid "The bookmarks from \"%s\" were not imported."
+#~ msgstr "Die Lesezeichen aus »%s« wurden nicht importiert."
 
 #~ msgid "download status|Unknown"
 #~ msgstr "download status|Unbekannt"
