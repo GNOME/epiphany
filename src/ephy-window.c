@@ -367,13 +367,24 @@ ephy_window_selection_received_cb (GtkWidget *widget,
 				   guint time, EphyWindow *window)
 {
 	EphyTab *tab;
+	const char *location;
 
 	if (selection_data->length <= 0 || selection_data->data == NULL)
 		return;
 
 	tab = ephy_window_get_active_tab (window);
-	ephy_shell_new_tab (ephy_shell, window, tab,
-			      selection_data->data, 0);
+	location = ephy_tab_get_location(tab);
+
+	/* If this tab is not empty... */
+	if (location != NULL && strcmp (location, "about:blank") != 0)
+	{
+		ephy_shell_new_tab (ephy_shell, window, tab,
+					selection_data->data, 0);
+	}
+	else
+	{
+		ephy_embed_load_url (ephy_tab_get_embed (tab), selection_data->data);
+	}
 }
 
 static void
