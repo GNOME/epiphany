@@ -369,6 +369,7 @@ setup_font_combo (EphyDialog *dialog,
 {
 	GtkWidget *combo;
 	GtkListStore *store;
+	GtkTreeModel *sortmodel;
 	GtkTreeIter iter;
 	GList *fonts, *l;
 	char *name;
@@ -408,11 +409,18 @@ setup_font_combo (EphyDialog *dialog,
 	g_list_foreach (fonts, (GFunc) g_free, NULL);
 	g_list_free (fonts);
 
+	sortmodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
+	gtk_tree_sortable_set_sort_column_id
+		(GTK_TREE_SORTABLE (sortmodel), 0, GTK_SORT_ASCENDING);
+
 	ephy_dialog_set_pref (dialog, properties[prop].id, NULL);
 
-	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), GTK_TREE_MODEL (store));
+	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), sortmodel);
 
 	ephy_dialog_set_pref (dialog, properties[prop].id, key);
+
+	g_object_unref (store);
+	g_object_unref (sortmodel);
 }
 
 static void
@@ -500,6 +508,9 @@ create_fonts_language_menu (EphyDialog *dialog)
 	g_signal_connect (dialog, "changed::fonts_language_combo",
 			  G_CALLBACK (fonts_language_changed_cb),
 			  NULL);
+
+	g_object_unref (store);
+	g_object_unref (sortmodel);
 }
 
 static void
@@ -510,8 +521,8 @@ create_node_combo (EphyDialog *dialog,
 		   const char *key,
 		   const char *default_value)
 {
-	EphyTreeModelNode *node_model;
-	GtkTreeModel *sort_model;
+	EphyTreeModelNode *nodemodel;
+	GtkTreeModel *sortmodel;
 	GtkComboBox *combo;
 	GtkCellRenderer *renderer;
 	char *code;
@@ -527,19 +538,19 @@ create_node_combo (EphyDialog *dialog,
 
 	combo = GTK_COMBO_BOX (ephy_dialog_get_control (dialog, properties[prop].id));
 
-	node_model = ephy_tree_model_node_new (node, NULL);
+	nodemodel = ephy_tree_model_node_new (node, NULL);
 
 	title_col = ephy_tree_model_node_add_prop_column
-			(node_model, G_TYPE_STRING, EPHY_NODE_ENCODING_PROP_TITLE_ELIDED);
+			(nodemodel, G_TYPE_STRING, EPHY_NODE_ENCODING_PROP_TITLE_ELIDED);
 	data_col = ephy_tree_model_node_add_prop_column
-			(node_model, G_TYPE_STRING, EPHY_NODE_ENCODING_PROP_ENCODING);
+			(nodemodel, G_TYPE_STRING, EPHY_NODE_ENCODING_PROP_ENCODING);
 
-	sort_model = ephy_tree_model_sort_new (GTK_TREE_MODEL (node_model));
+	sortmodel = ephy_tree_model_sort_new (GTK_TREE_MODEL (nodemodel));
 
 	gtk_tree_sortable_set_sort_column_id
-		(GTK_TREE_SORTABLE (sort_model), title_col, GTK_SORT_ASCENDING);
+		(GTK_TREE_SORTABLE (sortmodel), title_col, GTK_SORT_ASCENDING);
 
-	gtk_combo_box_set_model (combo, GTK_TREE_MODEL (sort_model));
+	gtk_combo_box_set_model (combo, GTK_TREE_MODEL (sortmodel));
 
         renderer = gtk_cell_renderer_text_new ();
         gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
@@ -548,6 +559,9 @@ create_node_combo (EphyDialog *dialog,
                                         NULL);
 
 	ephy_dialog_set_data_column (dialog, properties[prop].id, data_col);
+
+	g_object_unref (nodemodel);
+	g_object_unref (sortmodel);
 }
 
 static void
@@ -678,6 +692,9 @@ create_language_menu (EphyDialog *dialog)
 
 	g_slist_foreach (list, (GFunc) g_free, NULL);
 	g_slist_free (list);
+
+	g_object_unref (store);
+	g_object_unref (sortmodel);
 }
 
 static char*
