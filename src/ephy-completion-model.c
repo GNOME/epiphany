@@ -289,7 +289,7 @@ init_text_col (GValue *value, EphyNode *node, int group)
 	{
 		case BOOKMARKS_GROUP:
 			text = ephy_node_get_property_string
-				(node, EPHY_NODE_BMK_PROP_LOCATION);
+				(node, EPHY_NODE_BMK_PROP_TITLE);
 			break;
 		case HISTORY_GROUP:
 			text = ephy_node_get_property_string
