@@ -57,10 +57,10 @@ static void mozilla_embed_net_state_all_cb	(GtkMozEmbed *embed,
 						 gint state,
 						 guint status,
 						 MozillaEmbed *membed);
-static gint mozilla_embed_dom_mouse_click_cb	(GtkMozEmbed *embed,
+static gboolean mozilla_embed_dom_mouse_click_cb(GtkMozEmbed *embed,
 						 gpointer dom_event,
 						 MozillaEmbed *membed);
-static gint mozilla_embed_dom_mouse_down_cb	(GtkMozEmbed *embed,
+static gboolean mozilla_embed_dom_mouse_down_cb	(GtkMozEmbed *embed,
 						 gpointer dom_event, 
 						 MozillaEmbed *membed);
 static void mozilla_embed_new_window_cb		(GtkMozEmbed *embed, 
@@ -871,21 +871,18 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 	g_signal_emit_by_name (membed, "ge_net_state", aURI, estate);
 }
 
-static gint
-mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event, 
-				  MozillaEmbed *membed)
+static gboolean
+mozilla_embed_emit_mouse_signal (MozillaEmbed *embed,
+				 gpointer dom_event, 
+				 const char *signal_name)
 {
+	MozillaEmbedPrivate *mpriv = embed->priv;
 	MozillaEmbedEvent *info;
 	EventContext event_context;
 	gint return_value = FALSE;
 	nsresult rv;
-	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
-	if (dom_event == NULL)
-	{
-		g_warning ("mozilla_embed_dom_mouse_click_cb: domevent NULL");
-		return FALSE;
-	}
+	if (dom_event == NULL) return FALSE;
 
 	nsCOMPtr<nsIDOMMouseEvent> ev = static_cast<nsIDOMMouseEvent*>(dom_event);
 	NS_ENSURE_TRUE (ev, FALSE);
@@ -896,55 +893,11 @@ mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event,
 
 	event_context.Init (mpriv->browser);
         rv = event_context.GetMouseEventInfo (ev, MOZILLA_EMBED_EVENT (info));
-
-	if (NS_SUCCEEDED (rv))
+	if (NS_FAILED (rv))
 	{
-		nsCOMPtr<nsIDOMDocument> domDoc;
-		rv = event_context.GetTargetDocument (getter_AddRefs(domDoc));
-		if (NS_SUCCEEDED (rv))
-		{
-			rv = mpriv->browser->PushTargetDocument (domDoc);
-			if (NS_SUCCEEDED (rv))
-			{
-				g_signal_emit_by_name (membed, "ge_dom_mouse_click", 
-						       info, &return_value); 
-				mpriv->browser->PopTargetDocument ();
-			}
-		}
-
-	}
-
-	g_object_unref (info);
-
-	return return_value;
-}
-
-static gint
-mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event, 
-				 MozillaEmbed *membed)
-{
-	MozillaEmbedEvent *info;
-	EventContext event_context;
-	gint return_value = FALSE;
-	nsresult rv;
-	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
-
-	if (dom_event == NULL)
-	{
-		g_warning ("mozilla_embed_dom_mouse_down_cb: domevent NULL");
+		g_object_unref (info);
 		return FALSE;
 	}
-
-	nsCOMPtr<nsIDOMMouseEvent> ev = static_cast<nsIDOMMouseEvent*>(dom_event);
-	NS_ENSURE_TRUE (ev, FALSE);
-	nsCOMPtr<nsIDOMEvent> dev = do_QueryInterface (ev);
-	NS_ENSURE_TRUE (dev, FALSE);
-
-	info = mozilla_embed_event_new (NS_STATIC_CAST (gpointer, dev));
-
-	event_context.Init (mpriv->browser);
-        rv = event_context.GetMouseEventInfo (ev, MOZILLA_EMBED_EVENT (info));
-	if (NS_FAILED (rv)) return FALSE;
 
 	nsCOMPtr<nsIDOMDocument> domDoc;
 	rv = event_context.GetTargetDocument (getter_AddRefs(domDoc));
@@ -952,15 +905,31 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 	{
 		mpriv->browser->PushTargetDocument (domDoc);
 
-		g_signal_emit_by_name (membed, "ge_dom_mouse_down", 
+		g_signal_emit_by_name (embed, signal_name, 
 				       info, &return_value); 
-
 		mpriv->browser->PopTargetDocument ();
 	}
 
 	g_object_unref (info);
 
 	return return_value;
+}
+
+static gboolean
+mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed,
+				  gpointer dom_event, 
+				  MozillaEmbed *membed)
+{
+	return mozilla_embed_emit_mouse_signal (membed, dom_event,
+						"ge_dom_mouse_click");
+}
+
+static gboolean
+mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event, 
+				 MozillaEmbed *membed)
+{
+	return mozilla_embed_emit_mouse_signal (membed, dom_event,
+						"ge_dom_mouse_down");
 }
 
 static void
