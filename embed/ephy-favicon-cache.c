@@ -31,6 +31,7 @@
 #include "ephy-node.h"
 #include "ephy-debug.h"
 
+#define EPHY_FAVICON_CACHE_XML_ROOT    "ephy_favicons_cache"
 #define EPHY_FAVICON_CACHE_XML_VERSION "1.0"
 
 #define EPHY_FAVICON_CACHE_OBSOLETE_DAYS 30
@@ -121,30 +122,6 @@ ephy_favicon_cache_new (void)
 	cache = EPHY_FAVICON_CACHE (g_object_new (EPHY_TYPE_FAVICON_CACHE, NULL));
 
 	return cache;
-}
-
-static void
-ephy_favicon_cache_load (EphyFaviconCache *eb)
-{
-	xmlDocPtr doc;
-	xmlNodePtr root, child;
-
-	if (g_file_test (eb->priv->xml_file, G_FILE_TEST_EXISTS) == FALSE)
-		return;
-
-	doc = xmlParseFile (eb->priv->xml_file);
-	g_assert (doc != NULL);
-
-	root = xmlDocGetRootElement (doc);
-
-	for (child = root->children; child != NULL; child = child->next)
-	{
-		EphyNode *node;
-
-		node = ephy_node_new_from_xml (eb->priv->db, child);
-	}
-
-	xmlFreeDoc (doc);
 }
 
 static gboolean
@@ -304,7 +281,9 @@ ephy_favicon_cache_init (EphyFaviconCache *cache)
 				         (EphyNodeCallback) icons_removed_cb,
 				         G_OBJECT (cache));
 
-	ephy_favicon_cache_load (cache);
+	ephy_node_db_load_from_file (cache->priv->db, cache->priv->xml_file,
+				     EPHY_FAVICON_CACHE_XML_ROOT,
+				     EPHY_FAVICON_CACHE_XML_VERSION);
 }
 
 static gboolean

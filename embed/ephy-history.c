@@ -34,6 +34,7 @@
 #include <bonobo/bonobo-i18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 
+#define EPHY_HISTORY_XML_ROOT	 "ephy_history"
 #define EPHY_HISTORY_XML_VERSION "1.0"
 
 /* how often to save the history, in milliseconds */
@@ -200,30 +201,6 @@ ephy_history_class_init (EphyHistoryClass *klass)
 			      G_TYPE_STRING);
 
 	g_type_class_add_private (object_class, sizeof(EphyHistoryPrivate));
-}
-
-static void
-ephy_history_load (EphyHistory *eb)
-{
-	xmlDocPtr doc;
-	xmlNodePtr root, child;
-
-	if (g_file_test (eb->priv->xml_file, G_FILE_TEST_EXISTS) == FALSE)
-		return;
-
-	doc = xmlParseFile (eb->priv->xml_file);
-	g_return_if_fail (doc != NULL);
-
-	root = xmlDocGetRootElement (doc);
-
-	for (child = root->children; child != NULL; child = child->next)
-	{
-		EphyNode *node;
-
-		node = ephy_node_new_from_xml (eb->priv->db, child);
-	}
-
-	xmlFreeDoc (doc);
 }
 
 static gboolean
@@ -478,7 +455,9 @@ ephy_history_init (EphyHistory *eb)
 
 	ephy_node_add_child (eb->priv->hosts, eb->priv->pages);
 
-	ephy_history_load (eb);
+	ephy_node_db_load_from_file (eb->priv->db, eb->priv->xml_file,
+				     EPHY_HISTORY_XML_ROOT,
+				     EPHY_HISTORY_XML_VERSION);
 	ephy_history_emit_data_changed (eb);
 
 	g_hash_table_foreach (eb->priv->hosts_hash,

@@ -1,3 +1,15 @@
+2003-09-18  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_init):
+	* embed/ephy-history.c: (ephy_history_init):
+	* lib/ephy-node-db.c: (ephy_node_db_load_from_file):
+	* lib/ephy-node-db.h:
+	* lib/ephy-state.c: (ensure_states):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init):
+
+	Refactor node db loading functions into a common one in
+	ephy-node-db. Switch to using xmlReader api.
+
 2003-09-17  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/ExternalProtocolService.cpp:

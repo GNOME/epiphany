@@ -19,6 +19,9 @@
  */
 
 #include "ephy-node-db.h"
+#include "ephy-debug.h"
+
+#include <libxml/xmlreader.h>
 
 static void ephy_node_db_class_init (EphyNodeDbClass *klass);
 static void ephy_node_db_init (EphyNodeDb *node);
@@ -290,4 +293,85 @@ _ephy_node_db_remove_id (EphyNodeDb *db,
 	db->priv->id_factory = RESERVED_IDS;
 
 	g_static_rw_lock_writer_unlock (db->priv->id_to_node_lock);
+}
+
+gboolean
+ephy_node_db_load_from_file (EphyNodeDb *db,
+			     const char *xml_file,
+			     const xmlChar *xml_root,
+			     const xmlChar *xml_version)
+{
+	xmlTextReaderPtr reader;
+	gboolean success = TRUE;
+	int ret;
+
+	LOG ("ephy_node_db_load_from_file %s", xml_file)
+
+	START_PROFILER ("loading node db")
+
+	if (g_file_test (xml_file, G_FILE_TEST_EXISTS) == FALSE)
+	{
+		return FALSE;
+	}
+
+	reader = xmlNewTextReaderFilename (xml_file);
+	if (reader == NULL)
+	{
+		return FALSE;
+	}
+
+	ret = xmlTextReaderRead (reader);
+	while (ret == 1)
+	{
+		xmlChar *name;
+		xmlReaderTypes type;
+		gboolean skip = FALSE;
+
+		name = xmlTextReaderName (reader);
+		type = xmlTextReaderNodeType (reader);
+
+		if (xmlStrEqual (name, "node")
+		    && type == XML_READER_TYPE_ELEMENT)
+		{
+			xmlNodePtr subtree;
+			EphyNode *node;
+
+			/* grow the subtree and load the node from it */
+			subtree = xmlTextReaderExpand (reader);
+
+			node = ephy_node_new_from_xml (db, subtree);
+			
+			skip = TRUE;
+		}
+		else if (xmlStrEqual (name, xml_root)
+			 && type == XML_READER_TYPE_ELEMENT)
+		{
+			xmlChar *version;
+
+			/* check version info */
+			version = xmlTextReaderGetAttribute (reader, "version");
+			if (xmlStrEqual (version, xml_version) == FALSE)
+			{
+				success = FALSE;
+				xmlFree (version);
+				xmlFree (name);
+
+				break;
+			}
+
+			xmlFree (version);
+		}
+
+		xmlFree (name);
+
+		/* next one, please */
+		ret = skip ? xmlTextReaderNext (reader)
+			   : xmlTextReaderRead (reader);
+	}
+
+	xmlFreeTextReader (reader);
+
+	STOP_PROFILER ("loading node db")
+
+	return (success && ret == 0);
 }

@@ -30,6 +30,7 @@
 #include <gtk/gtkpaned.h>
 
 #define STATES_FILE "states.xml"
+#define EPHY_STATES_XML_ROOT    "ephy_states"
 #define EPHY_STATES_XML_VERSION "1.0"
 
 enum
@@ -46,50 +47,6 @@ enum
 
 static EphyNode *states = NULL;
 static EphyNodeDb *states_db = NULL;
-
-static void
-ephy_states_load (void)
-{
-	xmlDocPtr doc;
-	xmlNodePtr root, child;
-	char *xml_file;
-	char *tmp;
-
-	xml_file = g_build_filename (ephy_dot_dir (),
-                                     STATES_FILE,
-                                     NULL);
-
-	if (g_file_test (xml_file, G_FILE_TEST_EXISTS) == FALSE)
-		return;
-
-	doc = xmlParseFile (xml_file);
-	g_assert (doc != NULL);
-
-	root = xmlDocGetRootElement (doc);
-
-	tmp = xmlGetProp (root, "version");
-	if (tmp != NULL && strcmp (tmp, EPHY_STATES_XML_VERSION) == 0)
-	{
-		child = root->children;
-	}
-	else
-	{
-		g_warning ("Old version of states.xml discarded");
-		child = NULL;
-	}
-	g_free (tmp);
-
-	for (; child != NULL; child = child->next)
-	{
-		EphyNode *node;
-
-		node = ephy_node_new_from_xml (states_db, child);
-	}
-
-	xmlFreeDoc (doc);
-
-	g_free (xml_file);
-}
 
 static void
 ephy_states_save (void)
@@ -161,9 +118,19 @@ ensure_states (void)
 {
 	if (states == NULL)
 	{
+		char *xml_file;
+
+		xml_file = g_build_filename (ephy_dot_dir (),
+					     STATES_FILE,
+					     NULL);
+
 		states_db = ephy_node_db_new (EPHY_NODE_DB_STATES);
 		states = ephy_node_new_with_id (states_db, STATES_NODE_ID);
-		ephy_states_load ();
+		ephy_node_db_load_from_file (states_db, xml_file,
+					     EPHY_STATES_XML_ROOT,
+					     EPHY_STATES_XML_VERSION);
+	
+		g_free (xml_file);
 	}
 }
 

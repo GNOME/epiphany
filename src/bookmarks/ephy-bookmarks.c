@@ -39,6 +39,7 @@
 #include <bonobo/bonobo-i18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 
+#define EPHY_BOOKMARKS_XML_ROOT    "ephy_bookmarks"
 #define EPHY_BOOKMARKS_XML_VERSION "1.0"
 #define BOOKMARKS_SAVE_DELAY (3 * 1000)
 #define MAX_FAVORITES_NUM 10
@@ -309,45 +310,6 @@ ephy_bookmarks_class_init (EphyBookmarksClass *klass)
                                                               G_PARAM_READWRITE));
 
 	g_type_class_add_private (object_class, sizeof(EphyBookmarksPrivate));
-}
-
-static gboolean
-ephy_bookmarks_load (EphyBookmarks *eb)
-{
-	xmlDocPtr doc;
-	xmlNodePtr root, child;
-	char *tmp;
-	gboolean result = TRUE;
-
-	if (g_file_test (eb->priv->xml_file, G_FILE_TEST_EXISTS) == FALSE)
-		return FALSE;
-
-	doc = xmlParseFile (eb->priv->xml_file);
-	g_return_val_if_fail (doc != NULL, FALSE);
-
-	root = xmlDocGetRootElement (doc);
-	child = root->children;
-	
-	tmp = xmlGetProp (root, "version");
-	if (tmp != NULL && strcmp (tmp, EPHY_BOOKMARKS_XML_VERSION) != 0)
-	{
-		g_warning ("Old bookmarks database format detected");
-
-		child = NULL;
-		result = FALSE;
-	}
-	g_free (tmp);
-
-	for (; child != NULL; child = child->next)
-	{
-		EphyNode *node;
-
-		node = ephy_node_new_from_xml (eb->priv->db, child);
-	}
-
-	xmlFreeDoc (doc);
-
-	return result;
 }
 
 static void
@@ -753,11 +715,13 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	g_value_unset (&value);
 	ephy_node_add_child (eb->priv->keywords, eb->priv->notcategorized);
 
-	if (!ephy_bookmarks_load (eb))
+	if (ephy_node_db_load_from_file (eb->priv->db, eb->priv->xml_file,
+					 EPHY_BOOKMARKS_XML_ROOT,
+					 EPHY_BOOKMARKS_XML_VERSION) == FALSE)
 	{
-		if (!ephy_bookmarks_import_rdf (eb, eb->priv->rdf_file))
+		if (ephy_bookmarks_import_rdf (eb, eb->priv->rdf_file) == FALSE)
 		{
-			eb->priv->init_defaults = !ephy_bookmarks_load (eb);
+			eb->priv->init_defaults = TRUE;
 		}
 	}
 
