@@ -41,6 +41,7 @@
 #include "ephy-embed-single.h"
 #include "ephy-embed-shell.h"
 #include "ephy-file-chooser.h"
+#include "ephy-gui.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtkimage.h>
@@ -134,7 +135,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 {
 	EphyFileChooser *dialog;
 	gint response;
-	char *filename;
+	char *filename = NULL;
 
 	if (mAction != CONTENT_ACTION_SAVEAS)
 	{
@@ -150,7 +151,14 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 					CONF_STATE_SAVE_DIR);
 	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
 					   NS_ConvertUCS2toUTF8 (aDefaultFile).get());
-	response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+	do
+	{
+		g_free (filename);
+		response = gtk_dialog_run (GTK_DIALOG (dialog));
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+	} while (response == GTK_RESPONSE_ACCEPT
+		 && !ephy_gui_confirm_overwrite_file (GTK_WIDGET (dialog), filename));
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
@@ -169,6 +177,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 	else
 	{
 		gtk_widget_destroy (GTK_WIDGET (dialog));
+		g_free (filename);
 
 		return NS_ERROR_FAILURE;
 	}
