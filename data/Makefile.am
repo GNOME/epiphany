@@ -23,6 +23,9 @@ schemadir = $(GCONF_SCHEMA_FILE_DIR)
 schema_in_files = epiphany.schemas.in epiphany-lockdown.schemas.in
 schema_DATA = epiphany.schemas epiphany-lockdown.schemas
 
+extensionschemadir = $(pkgdatadir)
+extensionschema_DATA = epiphany-extension.xsd
+
 aboutdir = $(pkgdatadir)
 about_DATA = epiphany.xhtml conspiracy.xhtml
 
@@ -48,6 +51,7 @@ EXTRA_DIST = \
 	     $(about_DATA)		\
 	     $(applications_DATA)	\
 	     $(mimepermission_DATA)	\
+	     $(extensionschema_DATA)	\
 	     $(pkgconfig_DATA)		\
 	     check-mime.py
 
