@@ -1,5 +1,12 @@
 2004-11-21  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-notebook.c: (ephy_notebook_add_tab):
+
+	If the signal handler for tab-added reordered the tabs,
+	emit the tabs-reordered signal.
+
+2004-11-21  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/EphyUtils.cpp:
 	* embed/mozilla/EphyUtils.h:
 	* embed/print-dialog.h:
