@@ -1,3 +1,13 @@
+2003-05-22  David Bordoley  <bordoley@msu.edu>
+
+	* embed/mozilla/mozilla-embed-single.cpp:
+	(mozilla_set_default_prefs):
+
+	Disable Blink and Marquee, cuz they are annoying and
+	non-standard. Don't fetch sidebar whats related stuff.
+	Line Wrap View->Source. CTRL-Mousewheel scrolls by one page.
+	Enable Image Auto-Resizing. Enable Browsing with the Caret.
+
 2003-05-22  Christian Persch  <chpe+gnomebugz@stud.uni-saarland.de>
  
  	* lib/widgets/ephy-zoom-control.c: (ephy_zoom_control_init):

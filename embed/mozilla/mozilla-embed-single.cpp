@@ -222,6 +222,27 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 
 	/* Smooth scrolling on */
 	pref->SetBoolPref ("general.smoothScroll", PR_TRUE);
+
+	/* Disable blinking text and marquee, its non-standard and annoying */
+	pref->SetBoolPref ("browser.blink_allowed", PR_FALSE);
+	pref->SetBoolPref ("browser.display.enable_marquee", PR_FALSE);
+
+	/* Enable Browsing with the Caret */
+	pref->SetBoolPref ("accessibility.browsewithcaret", PR_TRUE);
+
+	/* Don't Fetch the Sidebar whats related information, since we don't use it */
+	pref->SetBoolPref ("browser.related.enabled", PR_FALSE);
+
+	/* Line Wrap View->Source */
+	pref->SetBoolPref ("view_source.wrap_long_lines", PR_TRUE);
+
+	/* CTRL-Mousewheel scrolls by one page */
+	pref->SetIntPref ("mousewheel.withcontrolkey.action", 1);
+	pref->SetIntPref ("mousewheel.withcontrolkey.numlines", 1);
+	pref->SetBoolPref ("mousewheel.withcontrolkey.sysnumlines", PR_FALSE);
+
+	/* Enable Image Auto-Resizing */
+	pref->SetBoolPref ("browser.enable_automatic_image_resizing", PR_TRUE);
 }
 
 static void
