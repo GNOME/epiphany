@@ -81,8 +81,7 @@ ephy_node_db_set_name (EphyNodeDb *db, const char *name)
 
 	if (ephy_node_databases == NULL)
 	{
-		ephy_node_databases = g_hash_table_new_full
-			(g_str_hash, g_str_equal, g_free, NULL);
+		ephy_node_databases = g_hash_table_new (g_str_hash, g_str_equal);
 	}
 
 	g_hash_table_insert (ephy_node_databases, db->priv->name, db);

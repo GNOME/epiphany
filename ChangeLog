@@ -1,3 +1,13 @@
+2003-05-21  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_save):
+
+	Do not free memory is not a good idea
+
+	* lib/ephy-node-db.c: (ephy_node_db_set_name):
+
+	Free it two times is even worst
+
 2003-05-20  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/ephy-dnd.c: (ephy_dnd_drag_data_get),
