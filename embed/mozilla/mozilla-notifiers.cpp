@@ -40,18 +40,18 @@ static void
 mozilla_own_colors_notifier(GConfClient *client,
 			    guint cnxn_id,
 			    GConfEntry *entry,
-			    gpointer user_data);
+			    EphyEmbedSingle *single);
 static void
 mozilla_own_fonts_notifier(GConfClient *client,
 			   guint cnxn_id,
 			   GConfEntry *entry,
-			   gpointer user_data);
+			   EphyEmbedSingle *single);
 
 static void
 mozilla_animate_notifier(GConfClient *client,
 			 guint cnxn_id,
 			 GConfEntry *entry,
-			 gpointer user_data);
+			 EphyEmbedSingle *single);
 static void
 generic_mozilla_string_notifier(GConfClient *client,
 				guint cnxn_id,
@@ -71,13 +71,13 @@ static void
 mozilla_allow_popups_notifier(GConfClient *client,
 			      guint cnxn_id,
 			      GConfEntry *entry,
-			      gpointer user_data);
+			      EphyEmbedSingle *single);
 
 static void
 mozilla_language_notifier(GConfClient *client,
 			  guint cnxn_id,
 			  GConfEntry *entry,
-			  gpointer user_data);
+			  EphyEmbedSingle *single);
 
 static void
 mozilla_autodetect_charset_notifier(GConfClient *client,
@@ -89,24 +89,24 @@ static void
 mozilla_default_font_notifier(GConfClient *client,
 			      guint cnxn_id,
 			      GConfEntry *entry,
-			      gpointer user_data);
+			      EphyEmbedSingle *single);
 
 static void
 mozilla_proxy_mode_notifier (GConfClient *client,
 			     guint cnxn_id,
 			     GConfEntry *entry,
-			     char *pref);
+			     EphyEmbedSingle *single);
 static void
 mozilla_proxy_autoconfig_notifier (GConfClient *client,
 			           guint cnxn_id,
 			           GConfEntry *entry,
-			           char *pref);
+			           EphyEmbedSingle *single);
 
 static void
 mozilla_user_agent_notifier(GConfClient *client,
 			    guint cnxn_id,
 			    GConfEntry *entry,
-			    gpointer user_data);
+			    EphyEmbedSingle *single);
 
 static void 
 mozilla_default_charset_notifier (GConfClient *client,
@@ -117,7 +117,7 @@ static void
 mozilla_socks_version_notifier (GConfClient *client,
 				guint cnxn_id,
 				GConfEntry *entry,
-				gpointer user_data);
+				EphyEmbedSingle *single);
 
 /* Keeps the list of the notifiers we installed for mozilla prefs */
 /* to be able to remove them when exiting */
@@ -219,7 +219,7 @@ static void
 mozilla_proxy_mode_notifier (GConfClient *client,
 		             guint cnxn_id,
 		             GConfEntry *entry,
-		             char *pref)
+		             EphyEmbedSingle *single)
 {
 	const char *mode;
 	int mozilla_mode = 0;
@@ -255,10 +255,8 @@ static void
 mozilla_proxy_autoconfig_notifier (GConfClient *client,
 		       	           guint cnxn_id,
 		       		   GConfEntry *entry,
-		       		   char *pref)
+		       		   EphyEmbedSingle *single)
 {
-	EphyEmbedSingle *single;
-	single = ephy_embed_shell_get_embed_single (embed_shell);
 	ephy_embed_single_load_proxy_autoconf 
 		(single, gconf_value_get_string(entry->value));
 }
@@ -495,7 +493,7 @@ static void
 mozilla_own_colors_notifier(GConfClient *client,
 			    guint cnxn_id,
 			    GConfEntry *entry,
-			    gpointer user_data)
+			    EphyEmbedSingle *single)
 {
 	mozilla_prefs_set_boolean("browser.display.use_document_colors",
 				       !gconf_value_get_bool(entry->value));
@@ -505,7 +503,7 @@ static void
 mozilla_own_fonts_notifier(GConfClient *client,
 			   guint cnxn_id,
 			   GConfEntry *entry,
-			   gpointer user_data)
+			   EphyEmbedSingle *single)
 {
 	mozilla_prefs_set_int("browser.display.use_document_fonts",
 				   !gconf_value_get_bool(entry->value));
@@ -515,7 +513,7 @@ static void
 mozilla_animate_notifier(GConfClient *client,
 			 guint cnxn_id,
 			 GConfEntry *entry,
-			 gpointer user_data)
+			 EphyEmbedSingle *single)
 {
 	static const gchar *type[] =
 	{
@@ -532,7 +530,7 @@ static void
 mozilla_allow_popups_notifier(GConfClient *client,
 			      guint cnxn_id,
 			      GConfEntry *entry,
-			      gpointer user_data)
+			      EphyEmbedSingle *single)
 {
 	gboolean new_val = eel_gconf_get_boolean(CONF_FILTERING_ALLOW_POPUPS);
 	mozilla_prefs_set_boolean ("dom.disable_open_during_load", 
@@ -543,7 +541,7 @@ static void
 mozilla_language_notifier(GConfClient *client,
 			  guint cnxn_id,
 			  GConfEntry *entry,
-			  gpointer user_data)
+			  EphyEmbedSingle *single)
 {
 	gchar *languages;
 	GSList *language_list ,*cur_lang_list;
@@ -616,7 +614,7 @@ static void
 mozilla_default_font_notifier(GConfClient *client,
 			      guint cnxn_id,
 			      GConfEntry *entry,
-			      gpointer user_data)
+			      EphyEmbedSingle *single)
 {
 	const gchar *font_types [] = {"serif","sans-serif"};
 	int default_font;
@@ -686,7 +684,7 @@ static void
 mozilla_user_agent_notifier (GConfClient *client,
 			     guint cnxn_id,
 			     GConfEntry *entry,
-			     gpointer user_data)
+			     EphyEmbedSingle *single)
 {
 	switch (entry->value->type)
 	{
@@ -704,7 +702,7 @@ static void
 mozilla_socks_version_notifier (GConfClient *client,
 				guint cnxn_id,
 				GConfEntry *entry,
-				gpointer user_data)
+				EphyEmbedSingle *single)
 {
 	int version;
 	version = gconf_value_get_int(entry->value) + 4;

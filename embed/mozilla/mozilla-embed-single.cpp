@@ -181,72 +181,6 @@ mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 }
 
 static void
-mozilla_load_proxy_prefs (MozillaEmbedSingle *shell)
-{
-	char *tmp;
-	int i, mozilla_mode = 0;
-	
-	/* Proxy mode */
-	tmp = eel_gconf_get_string (CONF_NETWORK_PROXY_MODE);
-	g_return_if_fail (tmp != NULL);
-	
-	if (strcmp (tmp, "manual") == 0)
-	{
-		mozilla_mode = 1;
-	}
-	else if (strcmp (tmp, "auto") == 0)
-	{
-		mozilla_mode = 2;
-	}
-
-	mozilla_prefs_set_int ("network.proxy.type", mozilla_mode);
-	g_free (tmp);
-
-	/* Http proxy */
-	tmp = eel_gconf_get_string (CONF_NETWORK_HTTP_PROXY);
-	g_return_if_fail (tmp != NULL);
-	mozilla_prefs_set_string ("network.proxy.http", tmp);
-	g_free (tmp);
-
-	i = eel_gconf_get_integer (CONF_NETWORK_HTTP_PROXY_PORT);
-	mozilla_prefs_set_int ("network.proxy.http_port", i);
-	
-	/* Ftp proxy */
-	tmp = eel_gconf_get_string (CONF_NETWORK_FTP_PROXY);
-	g_return_if_fail (tmp != NULL);
-	mozilla_prefs_set_string ("network.proxy.ftp", tmp);
-	g_free (tmp);
-
-	i = eel_gconf_get_integer (CONF_NETWORK_FTP_PROXY_PORT);
-	mozilla_prefs_set_int ("network.proxy.ftp_port", i);
-
-	/* Secure proxy */
-	tmp = eel_gconf_get_string (CONF_NETWORK_SSL_PROXY);
-	g_return_if_fail (tmp != NULL);
-	mozilla_prefs_set_string ("network.proxy.ssl", tmp);
-	g_free (tmp);
-
-	i = eel_gconf_get_integer (CONF_NETWORK_SSL_PROXY_PORT);
-	mozilla_prefs_set_int ("network.proxy.ssl_port", i);
-
-	/* Socks proxy */
-	tmp = eel_gconf_get_string (CONF_NETWORK_SOCKS_PROXY);
-	g_return_if_fail (tmp != NULL);
-	mozilla_prefs_set_string ("network.proxy.socks", tmp);
-	g_free (tmp);
-
-	i = eel_gconf_get_integer (CONF_NETWORK_SOCKS_PROXY_PORT);
-	mozilla_prefs_set_int ("network.proxy.socks_port", i);
-
-	/* Autoconfiguration */
-	tmp = eel_gconf_get_string (CONF_NETWORK_PROXY_AUTO_URL);
-	g_return_if_fail (tmp != NULL);
-	ephy_embed_single_load_proxy_autoconf 
-		(EPHY_EMBED_SINGLE (shell), tmp);
-	g_free (tmp);
-}
-
-static void
 mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 {
 	mozilla_prefs_load (ephy_file ("default-prefs.js"));
@@ -353,8 +287,6 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 	gtk_moz_embed_push_startup ();
 
 	mozilla_set_default_prefs (mes);
-
-	mozilla_load_proxy_prefs (mes);
 
 	START_PROFILER ("Mozilla prefs notifiers")
 	mozilla_notifiers_init (EPHY_EMBED_SINGLE (mes));

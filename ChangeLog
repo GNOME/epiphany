@@ -1,3 +1,16 @@
+2003-05-06  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	Remove proxy prefs initialization. Now we call the gconf
+	notifier on startup for all mozilla prefs, so it should
+	be no more necessary.
+
+	* embed/mozilla/mozilla-notifiers.cpp:
+
+	Fix a nice infinite loop with EmbedSingle being shell_get from
+	his _init. General cleanup of that code. Galeon1 code is so messy :/
+
 2003-05-04 Osma Ahvenlampi <oa@iki.fi>
 
 	* src/bookmarks/ephy-bookmarks.c:
