@@ -94,7 +94,11 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 
 	/* FIXME: do we want to turn on compression here? */
 	writer = xmlNewTextWriterFilename (tmp_file, 0);
-	if (writer == NULL) return;
+	if (writer == NULL)
+	{
+		g_free (tmp_file);
+		return;
+	}
 
 	ret = xmlTextWriterStartDocument (writer, "1.0", NULL, NULL);
 	if (ret < 0) goto out;
@@ -273,6 +277,8 @@ out:
 			ret = -1;
 		}
 	}
+
+	g_free (tmp_file);
 
 	STOP_PROFILER ("Exporting as RDF")
 
