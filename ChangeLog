@@ -1,5 +1,14 @@
 2003-10-17  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_show), (ephy_bookmarks_editor_class_init),
+	(ephy_bookmarks_editor_construct):
+
+	Grab focus in the entry when showing because we dont
+	rebuild the dialog.
+
+2003-10-17  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* embed/mozilla/mozilla-embed-persist.cpp:
 
 	Fix Save As, we need ever to pass the url now.
