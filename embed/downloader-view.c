@@ -336,24 +336,45 @@ seconds_remaining_total (EphyDownload *download, gpointer data, DownloaderView *
 static void
 update_status_icon (DownloaderView *dv)
 {
-	char *tooltip, *remaining;
-	int downloads;
+	char *tooltip, *downloadstring, *remainingstring;
+	int downloads, remaining;
 
 	dv->priv->remaining_secs = 0;
 	g_hash_table_foreach (dv->priv->downloads_hash,
 			      (GHFunc) seconds_remaining_total, dv);
 	
-	remaining = format_interval (dv->priv->remaining_secs);
+	remaining = (dv->priv->remaining_secs);
+
+	if (remaining < 60)
+	{
+		remainingstring = g_strdup_printf (ngettext ("About %d second left",
+					"About %d seconds left", remaining),
+					remaining);
+	}
+	else
+	{
+		remaining /= 60;
+		
+		remainingstring = g_strdup_printf (ngettext ("About %d minute left",
+					"About %d minutes left", remaining),
+					remaining);
+	}
+
 	downloads = g_hash_table_size (dv->priv->downloads_hash);
-	tooltip = g_strdup_printf ("%d downloads, with a total of "
-				   "%s minutes remaining",
-				   downloads, remaining);
+
+	downloadstring = g_strdup_printf (ngettext ("%d download", 
+					"%d downloads", downloads), 
+					downloads);
+
+	tooltip = g_strdup_printf ("%s\n%s",
+					downloadstring, remainingstring);
 
 	egg_status_icon_set_tooltip (dv->priv->status_icon,
 				     tooltip, NULL);
 
 	g_free (tooltip);
-	g_free (remaining);
+	g_free (downloadstring);
+	g_free (remainingstring);
 }
 
 static void
@@ -568,6 +589,8 @@ downloader_view_remove_download (DownloaderView *dv, EphyDownload *download)
 		}
 		gtk_tree_row_reference_free (row_ref);
 	}
+
+	update_status_icon (dv);
 
 	/* Close the dialog if there are no more downloads */
 
