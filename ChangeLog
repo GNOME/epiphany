@@ -1,5 +1,61 @@
 2003-06-16  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* embed/Makefile.am:
+	* embed/ephy-embed-popup-control.c:
+	(ephy_embed_popup_control_get_type),
+	(ephy_embed_popup_control_set_property),
+	(ephy_embed_popup_control_get_property),
+	(ephy_embed_popup_control_class_init),
+	(ephy_embed_popup_control_init),
+	(ephy_embed_popup_control_finalize), (get_popup_path),
+	(ephy_embed_popup_control_show), (setup_element_menu),
+	(setup_document_menu), (ephy_embed_popup_control_set_event),
+	(ephy_embed_popup_control_connect_verbs),
+	(ephy_embed_popup_control_get_event),
+	(embed_popup_copy_location_cmd), (embed_popup_copy_email_cmd),
+	(embed_popup_copy_link_location_cmd), (save_property_url),
+	(embed_popup_open_link_cmd), (embed_popup_download_link_cmd),
+	(embed_popup_save_image_as_cmd), (background_download_completed),
+	(embed_popup_set_image_as_background_cmd),
+	(embed_popup_copy_image_location_cmd), (save_url),
+	(embed_popup_save_page_as_cmd),
+	(embed_popup_save_background_as_cmd), (embed_popup_open_frame_cmd),
+	(embed_popup_reload_frame_cmd), (embed_popup_open_image_cmd),
+	(embed_popup_copy_to_clipboard):
+	* embed/ephy-embed-popup-control.h:
+
+	Merge with popup control, we dont need it for bonobo
+	window anymore.
+
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	Do not override the UA but set vendor prefs so
+	that mozilla can build it correctly.
+
+	* lib/ephy-dialog.c: (get_radio_button_active_index),
+	(set_config_from_radiobuttongroup),
+	(set_radiobuttongroup_from_config), (prefs_set_group_sensitivity),
+	(impl_get_value):
+	* lib/ephy-dnd.c: (ephy_dnd_node_list_extract_nodes):
+	* lib/ephy-gui.c:
+	* lib/ephy-gui.h:
+	* lib/ephy-string.c: (ephy_string_shorten), (ephy_string_to_int),
+	(ephy_string_strip_chr), (ephy_string_elide_underscores):
+	* lib/ephy-string.h:
+	* src/ephy-nautilus-view.c: (ephy_nautilus_view_instance_init),
+	(gnv_embed_context_menu_cb), (gnv_embed_location_cb),
+	(gnv_view_from_popup), (gnv_popup_cmd_new_window),
+	(gnv_popup_cmd_image_in_new_window),
+	(gnv_popup_cmd_frame_in_new_window), (gnv_cmd_file_print),
+	(gnv_embed_zoom_change_cb):
+	* src/session.c: (session_load):
+	* src/statusbar.c: (statusbar_set_message):
+	* src/toolbar.c: (toolbar_ensure_action):
+
+	Cleanup helpers (remove unused and rename.
+
+2003-06-16  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* data/ui/nautilus-epiphany-view.xml.in:
 
 	Remove some obsolete entries.

@@ -62,70 +62,6 @@ ephy_gui_menu_position_under_widget (GtkMenu   *menu,
 	g_print ("result %d\n", *y);
 }
 
-/**
- * gul_gui_gtk_radio_button_get: get the active member of a radiobutton
- * group from one of the buttons in the group. This should be in GTK+!
- */
-gint
-ephy_gui_gtk_radio_button_get (GtkRadioButton *radio_button)
-{
-	GtkToggleButton *toggle_button;
-	gint i, length;
-        GSList *list;
-
-	/* get group list */
-        list = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_button));
-        length = g_slist_length (list);
-
-	/* iterate over list to find active button */
-	for (i = 0; list != NULL; i++, list = g_slist_next (list))
-	{
-		/* get button and text */
-		toggle_button = GTK_TOGGLE_BUTTON (list->data);
-		if (gtk_toggle_button_get_active (toggle_button))
-		{
-			break;
-		}
-	}
-
-	/* check we didn't run off end */
-	g_assert (list != NULL);
-
-	/* return index (reverse order!) */
-	return (length - 1) - i;
-}
-
-/**
- * gul_gui_gtk_radio_button_set: set the active member of a radiobutton
- * group from one of the buttons in the group. This should be in GTK+!
- */
-void
-ephy_gui_gtk_radio_button_set (GtkRadioButton *radio_button, gint index)
-{
-	GtkToggleButton *button;
-	GSList *list;
-	gint length;
-
-	/* get the list */
-        list = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_button));
-
-	/* check out the length */
-        length = g_slist_length (list);
-
-        /* new buttons are *preppended* to the list, so button added as first
-         * has last position in the list */
-        index = (length - 1) - index;
-
-	/* find the right button */
-        button = GTK_TOGGLE_BUTTON (g_slist_nth_data (list, index));
-
-	/* set it... this will de-activate the others in the group */
-	if (gtk_toggle_button_get_active (button) == FALSE)
-	{
-		gtk_toggle_button_set_active (button, TRUE);
-	}
-}
-
 gboolean
 ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 {
@@ -153,7 +89,7 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 	return res;
 }
 
-void		
+void
 ephy_gui_help (GtkWindow *parent,
 	       const char *file_name,
                const char *link_id)

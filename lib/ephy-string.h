@@ -23,45 +23,16 @@
 
 G_BEGIN_DECLS
 
-char *           ephy_string_double_underscores		(const char *string);
-
-void		 ephy_string_store_time_in_string	(GDate *t,
-							 gchar *str,
-							 const char *format);
-
-gchar		*ephy_string_time_to_string		(GDate *t,
-							 const char *format);
-
-gboolean	 ephy_str_to_int			(const char *string,
+gboolean	 ephy_string_to_int			(const char *string,
 							 gulong *integer);
 
-char		*ephy_str_strip_chr			(const char *source,
+char		*ephy_string_strip_chr			(const char *source,
 							 char remove_this);
 
-int		 ephy_strcasecmp			(const char *string_a,
-							 const char *string_b);
-
-int		 ephy_strcasecmp_compare_func		(gconstpointer string_a,
-							 gconstpointer string_b);
-
-char	       **ephy_strsplit_with_quotes		(const gchar  *string,
-							 const gchar  *delimiter,
-							 gint max_tokens,
-							 const gchar *quotes);
-
-gchar		*ephy_string_shorten			(const gchar *str,
+char		*ephy_string_shorten			(const gchar *str,
 							 gint target_length);
 
-char	       **ephy_strsplit_multiple_delimiters_with_quotes (const gchar *string,
-							        const gchar *delimiters,
-							        gint max_tokens,
-							        const gchar *quotes);
-
-char		*ephy_str_replace_substring		(const char *string,
-							 const char *substring,
-							 const char *replacement);
-
-gchar 		*ephy_str_elide_underscores		(const gchar *original);
+char		*ephy_string_elide_underscores		(const gchar *original);
 
 G_END_DECLS
 

@@ -238,13 +238,42 @@ set_config_from_optionmenu (GtkWidget *optionmenu, const char *config_name, GLis
 	}
 }
 
+static int
+get_radio_button_active_index (GtkWidget *radiobutton)
+{
+	gint index;
+	GtkToggleButton *toggle_button;
+	gint i, length;
+        GSList *list;
+
+	/* get group list */
+        list = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radiobutton));
+        length = g_slist_length (list);
+
+	/* iterate over list to find active button */
+	for (i = 0; list != NULL; i++, list = g_slist_next (list))
+	{
+		/* get button and text */
+		toggle_button = GTK_TOGGLE_BUTTON (list->data);
+		if (gtk_toggle_button_get_active (toggle_button))
+		{
+			break;
+		}
+	}
+
+	/* check we didn't run off end */
+	g_assert (list != NULL);
+
+	/* return index (reverse order!) */
+	return index = (length - 1) - i;
+}
+
 static void
 set_config_from_radiobuttongroup (GtkWidget *radiobutton, const char *config_name, GList *senum)
 {
-	gint index;
+	int index;
 
-	/* get value from radio button group */
-	index = ephy_gui_gtk_radio_button_get (GTK_RADIO_BUTTON (radiobutton));
+	index = get_radio_button_active_index (radiobutton);
 
 	if (senum)
 	{
@@ -394,9 +423,31 @@ set_optionmenu_from_config (GtkWidget *optionmenu, const char *config_name, GLis
 static void
 set_radiobuttongroup_from_config (GtkWidget *radiobutton, const char *config_name, GList *senum)
 {
-	/* set it (finds the group for us) */
-	ephy_gui_gtk_radio_button_set (GTK_RADIO_BUTTON (radiobutton),
-				       get_index (config_name, senum));
+	GtkToggleButton *button;
+	GSList *list;
+	gint length;
+	int index;
+
+	index = get_index (config_name, senum);
+
+	/* get the list */
+        list = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radiobutton));
+
+	/* check out the length */
+        length = g_slist_length (list);
+
+        /* new buttons are *preppended* to the list, so button added as first
+         * has last position in the list */
+        index = (length - 1) - index;
+
+	/* find the right button */
+        button = GTK_TOGGLE_BUTTON (g_slist_nth_data (list, index));
+
+	/* set it... this will de-activate the others in the group */
+	if (gtk_toggle_button_get_active (button) == FALSE)
+	{
+		gtk_toggle_button_set_active (button, TRUE);
+	}
 }
 
 static void
@@ -518,8 +569,7 @@ prefs_set_group_sensitivity (GtkWidget *widget,
 
 	if (GTK_IS_RADIO_BUTTON (widget))
 	{
-		group = ephy_gui_gtk_radio_button_get
-			(GTK_RADIO_BUTTON(widget));
+		group = get_radio_button_active_index (widget);
 	}
 	else if (GTK_IS_TOGGLE_BUTTON (widget))
 	{
@@ -1103,7 +1153,7 @@ impl_get_value (EphyDialog *dialog,
 	{
 		int val;
 		g_value_init (value, G_TYPE_INT);
-		val = ephy_gui_gtk_radio_button_get (GTK_RADIO_BUTTON(widget));
+		val = get_radio_button_active_index (widget);
 		g_value_set_int (value, val);
 	}
 	else if (GTK_IS_TOGGLE_BUTTON (widget))

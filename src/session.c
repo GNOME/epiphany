@@ -608,16 +608,16 @@ session_load (Session *session,
 			xmlChar *tmp;
 
 			tmp = xmlGetProp (child, "x");
-			ephy_str_to_int (tmp, &x);
+			ephy_string_to_int (tmp, &x);
 			xmlFree (tmp);
 			tmp = xmlGetProp (child, "y");
-			ephy_str_to_int (tmp, &y);
+			ephy_string_to_int (tmp, &y);
 			xmlFree (tmp);
 			tmp = xmlGetProp (child, "width");
-			ephy_str_to_int (tmp, &width);
+			ephy_string_to_int (tmp, &width);
 			xmlFree (tmp);
 			tmp = xmlGetProp (child, "height");
-			ephy_str_to_int (tmp, &height);
+			ephy_string_to_int (tmp, &height);
 			xmlFree (tmp);
 
 			window = ephy_window_new ();

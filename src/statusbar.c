@@ -203,8 +203,8 @@ statusbar_set_message (Statusbar *s,
 
 	g_return_if_fail (message != NULL);
 
-	tmp1 = ephy_str_strip_chr (message, '\r');
-	tmp2 = ephy_str_strip_chr (tmp1, '\n');
+	tmp1 = ephy_string_strip_chr (message, '\r');
+	tmp2 = ephy_string_strip_chr (tmp1, '\n');
 
 	gtk_statusbar_pop (GTK_STATUSBAR (s), 0);
 	gtk_statusbar_push (GTK_STATUSBAR (s), 0, tmp2);

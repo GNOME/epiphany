@@ -125,7 +125,7 @@ ephy_dnd_node_list_extract_nodes (const char *node_list)
 		db = ephy_node_db_get_by_name (nodes[i]);
 		g_return_val_if_fail (db != NULL, NULL);
 
-		if (ephy_str_to_int (nodes[i + 1], &id))
+		if (ephy_string_to_int (nodes[i + 1], &id))
 		{
 			EphyNode *node;
 

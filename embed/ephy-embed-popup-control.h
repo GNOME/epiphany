@@ -19,8 +19,10 @@
 #ifndef EPHY_EMBED_POPUP_CONTROL_H
 #define EPHY_EMBED_POPUP_CONTROL_H
 
-#include "ephy-embed-popup.h"
 #include <bonobo/bonobo-control.h>
+
+#include "ephy-embed.h"
+#include "ephy-embed-event.h"
 
 G_BEGIN_DECLS
 
@@ -44,17 +46,29 @@ typedef struct EphyEmbedPopupControlPrivate EphyEmbedPopupControlPrivate;
 
 struct EphyEmbedPopupControl
 {
-	EphyEmbedPopup parent;
+	GObject parent;
         EphyEmbedPopupControlPrivate *priv;
 };
 
 struct EphyEmbedPopupControlClass
 {
-        EphyEmbedPopupClass parent_class;
+        GObjectClass parent_class;
 };
 
 GType		       ephy_embed_popup_control_get_type	(void);
+
 EphyEmbedPopupControl *ephy_embed_popup_control_new		(BonoboControl *control);
+
+EphyEmbedEvent        *ephy_embed_popup_control_get_event       (EphyEmbedPopupControl *p);
+
+void		       ephy_embed_popup_control_set_event       (EphyEmbedPopupControl *p,
+								 EphyEmbedEvent *event);
+
+void		       ephy_embed_popup_control_connect_verbs   (EphyEmbedPopupControl *p,
+				                                 BonoboUIComponent *ui_component);
+
+void		       ephy_embed_popup_control_show            (EphyEmbedPopupControl *pp,
+			                                         EphyEmbed *embed);
 
 G_END_DECLS
 

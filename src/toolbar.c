@@ -195,7 +195,7 @@ toolbar_ensure_action (Toolbar *t,
 	{
 		EphyNode *node;
 
-		if (!ephy_str_to_int (name + strlen ("GoBookmarkId"), &id))
+		if (!ephy_string_to_int (name + strlen ("GoBookmarkId"), &id))
 		{
 			return;
 		}
@@ -218,7 +218,7 @@ toolbar_ensure_action (Toolbar *t,
 	{
 		EphyNode *node;
 
-		if (!ephy_str_to_int (name + strlen ("GoTopicId"), &id))
+		if (!ephy_string_to_int (name + strlen ("GoTopicId"), &id))
 		{
 			return;
 		}

@@ -37,7 +37,6 @@
 #include <time.h>
 #include <libgnome/gnome-i18n.h>
 #include <string.h>
-#include <sys/utsname.h>
 #include "nsBuildID.h"
 #include <nsICacheService.h>
 #include <nsCOMPtr.h>
@@ -318,34 +317,6 @@ mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 	shell_class->show_file_picker = impl_show_file_picker;
 }
 
-static char *
-build_user_agent ()
-{
-        static char *user_agent;
-        struct utsname name;
-        char *system;
-
-	if (uname (&name) == 0)
-	{
-		system = g_strdup_printf ("%s %s",
-					  name.sysname, 
-					  name.machine);
-	}
-	else
-	{
-		system = g_strdup ("Unknown");
-	}
-                
-	user_agent = g_strdup_printf
-                        ("Mozilla/5.0 (X11; U; %s) Gecko/%d Epiphany/" VERSION, 
-                         system,
-                         NS_BUILD_ID/100);
-
-	g_free (system);
-
-	return user_agent;
-}
-
 static void
 mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 {
@@ -418,11 +389,11 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	pref->SetBoolPref ("browser.enable_automatic_image_resizing", PR_TRUE);
 
 	/* User agent */
-	char *user_agent;
 
-	user_agent = build_user_agent ();	
-	pref->SetCharPref ("general.useragent.override", user_agent);
-	g_free (user_agent);
+	/* FIXME We need to do this because mozilla doesnt set product
+	sub for embedding apps */
+	pref->SetCharPref ("general.useragent.vendor", "Epiphany");
+	pref->SetCharPref ("general.useragent.vendorSub", VERSION);
 }
 
 static char *
@@ -750,7 +721,7 @@ impl_get_encodings (EphyEmbedSingle *shell,
 
 			info->encoding = g_strdup (encodings[i].name);
 			
-			elided = ephy_str_elide_underscores (_(encodings[i].title));
+			elided = ephy_string_elide_underscores (_(encodings[i].title));
 
 			if (elide_underscores)
 			{
@@ -800,7 +771,7 @@ impl_get_language_groups (EphyEmbedSingle *shell,
 		info->group = lang_groups[i].group;
 		
 		/* collate without underscores */
-		elided = ephy_str_elide_underscores (info->title);
+		elided = ephy_string_elide_underscores (info->title);
 		info->key = g_utf8_collate_key (elided, -1);
 		g_free (elided);
 
@@ -1069,7 +1040,10 @@ impl_show_file_picker (EphyEmbedSingle *shell,
         g_free (expanded_directory);
 
         filePicker->InitWithGtkWidget (parentWidget, title, mode);
-        filePicker->SetDefaultString (NS_ConvertUTF8toUCS2(file).get());
+	if (file)
+	{
+	        filePicker->SetDefaultString (NS_ConvertUTF8toUCS2(file).get());
+	}
         filePicker->SetDisplayDirectory (dir);
         
         PRInt16 retval;

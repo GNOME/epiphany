@@ -22,15 +22,14 @@
 #include <bonobo/bonobo-zoomable.h>
 #include <bonobo/bonobo-ui-util.h>
 #include <string.h>
+
 #include "ephy-embed-popup-control.h"
 #include "ephy-nautilus-view.h"
 #include "ephy-embed.h"
 #include "ephy-embed-utils.h"
 #include "find-dialog.h"
 #include "print-dialog.h"
-#include "ephy-prefs.h"
 #include "ephy-zoom.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
 
 static void		gnv_embed_location_cb 			(EphyEmbed *embed, 
@@ -89,16 +88,16 @@ static void 		gnv_cmd_edit_find			(BonoboUIComponent *uic,
 
 
 /* popups */
-static EphyNautilusView *gnv_view_from_popup			(EphyEmbedPopup *popup);
+static EphyNautilusView *gnv_view_from_popup			(EphyEmbedPopupControl*popup);
 
 static void 		gnv_popup_cmd_new_window		(BonoboUIComponent *uic, 
-								 EphyEmbedPopup *popup, 
+								 EphyEmbedPopupControl*popup, 
 								 const char* verbname);
 static void 		gnv_popup_cmd_image_in_new_window	(BonoboUIComponent *uic, 
-								 EphyEmbedPopup *popup, 
+								 EphyEmbedPopupControl*popup, 
 								 const char* verbname);
 static void 		gnv_popup_cmd_frame_in_new_window	(BonoboUIComponent *uic, 
-								 EphyEmbedPopup *popup, 
+								 EphyEmbedPopupControl*popup, 
 								 const char* verbname);
 
 struct EphyNautilusViewPrivate {
@@ -106,10 +105,6 @@ struct EphyNautilusViewPrivate {
 	char *title;
 	char *location;
 	int load_percent;
-
-	/*
-	  BonoboPropertyBag   *property_bag;
-	*/
 
 	EphyEmbedPopupControl *popup;
 	BonoboUIComponent *popup_ui;
@@ -159,59 +154,25 @@ ephy_nautilus_view_instance_init (EphyNautilusView *view)
 	g_object_ref (G_OBJECT (ephy_shell));
 
 	g_signal_connect (view->priv->embed, "ge_link_message",
-			  GTK_SIGNAL_FUNC (gnv_embed_link_message_cb), 
+			  G_CALLBACK (gnv_embed_link_message_cb), 
 			  view);
 	g_signal_connect (view->priv->embed, "ge_location",
-			  GTK_SIGNAL_FUNC (gnv_embed_location_cb), 
+			  G_CALLBACK (gnv_embed_location_cb), 
 			  view);
 	g_signal_connect (view->priv->embed, "ge_title",
-			  GTK_SIGNAL_FUNC (gnv_embed_title_cb), 
+			  G_CALLBACK (gnv_embed_title_cb), 
 			  view);
-/*
-	g_signal_connect (view->priv->embed, "ge_js_status",
-			  GTK_SIGNAL_FUNC (gnv_embed_js_status_cb), 
-			  view);
-	g_signal_connect (view->priv->embed, "ge_progress",
-			  GTK_SIGNAL_FUNC (gnv_embed_progress_cb), 
-			  view);
-	g_signal_connect (view->priv->embed, "ge_net_state",
-			  GTK_SIGNAL_FUNC (gnv_embed_net_state_cb), 
-			  view);
-*/
 	g_signal_connect (view->priv->embed, "ge_new_window",
-			  GTK_SIGNAL_FUNC (gnv_embed_new_window_cb), 
+			  G_CALLBACK (gnv_embed_new_window_cb), 
 			  view);
-/*
-	g_signal_connect (view->priv->embed, "ge_visibility",
-			  GTK_SIGNAL_FUNC (gnv_embed_visibility_cb), 
-			  view);
-	g_signal_connect (view->priv->embed, "ge_destroy_brsr",
-			  GTK_SIGNAL_FUNC (gnv_embed_destroy_brsr_cb), 
-			  view);
-	g_signal_connect (view->priv->embed, "ge_open_uri",
-			  GTK_SIGNAL_FUNC (gnv_embed_open_uri_cb), 
-			  view);
-	g_signal_connect (view->priv->embed, "ge_size_to",
-			  GTK_SIGNAL_FUNC (gnv_embed_size_to_cb), 
-			  view);
-	g_signal_connect (view->priv->embed, "ge_dom_mouse_click",
-			  GTK_SIGNAL_FUNC (gnv_embed_dom_mouse_click_cb), 
-			  view);
-*/
 	g_signal_connect (view->priv->embed, "ge_dom_mouse_click", 
-			  GTK_SIGNAL_FUNC (gnv_embed_dom_mouse_click_cb), 
+			  G_CALLBACK (gnv_embed_dom_mouse_click_cb), 
 			  view);
 	g_signal_connect (view->priv->embed, "ge_context_menu", 
-			  GTK_SIGNAL_FUNC (gnv_embed_context_menu_cb), 
+			  G_CALLBACK (gnv_embed_context_menu_cb), 
 			  view);
-
-/*
-	g_signal_connect (view->priv->embed, "ge_security_change",
-			  GTK_SIGNAL_FUNC (gnv_embed_security_change_cb), 
-			  view);
-*/
 	g_signal_connect (view->priv->embed, "ge_zoom_change",
-			  GTK_SIGNAL_FUNC (gnv_embed_zoom_change_cb), 
+			  G_CALLBACK (gnv_embed_zoom_change_cb), 
 			  view);
 
 	w = GTK_WIDGET (view->priv->embed);
@@ -276,7 +237,8 @@ ephy_nautilus_view_instance_init (EphyNautilusView *view)
 			       "nautilus-epiphany-view.xml",
 			       "EphyNautilusView", NULL);
 	p->popup = ephy_embed_popup_control_new (p->control);
-	ephy_embed_popup_connect_verbs (EPHY_EMBED_POPUP (p->popup), p->popup_ui);
+	ephy_embed_popup_control_connect_verbs
+		(EPHY_EMBED_POPUP_CONTROL (p->popup), p->popup_ui);
 	g_object_set_data (G_OBJECT (p->popup), "NautilisView", view);
 
 	bonobo_ui_component_add_verb_list_with_data (p->popup_ui, ephy_popup_verbs, p->popup);
@@ -358,8 +320,8 @@ gnv_embed_context_menu_cb (EphyEmbed *embed,
 	EmbedEventContext context;
 
 	ephy_embed_event_get_context (event, &context);
-	ephy_embed_popup_set_event (EPHY_EMBED_POPUP (p->popup), event);
-	ephy_embed_popup_show (EPHY_EMBED_POPUP (p->popup), embed);
+	ephy_embed_popup_control_set_event (p->popup, event);
+	ephy_embed_popup_control_show (p->popup, embed);
 }
 
 static void
@@ -406,15 +368,8 @@ gnv_embed_location_cb (EphyEmbed *embed, EphyNautilusView *view)
 
 	nautilus_view_report_location_change (NAUTILUS_VIEW (view), new_uri, NULL, new_uri);
 
- 	/* TODO, FIXME 
-	   nautilus_view_report_redirect (view, p->location, new_uri, NULL, new_uri);
- 	*/
-
-
 	g_free (p->location);
 	p->location = new_uri;
-	
-	
 }
 
 static void
@@ -490,7 +445,7 @@ gnv_bonobo_control_activate_cb (BonoboControl *control, gboolean state, EphyNaut
 }
 
 static EphyNautilusView *
-gnv_view_from_popup (EphyEmbedPopup *popup)
+gnv_view_from_popup (EphyEmbedPopupControl*popup)
 {
 	return g_object_get_data (G_OBJECT (popup), "NautilisView");
 }
@@ -498,7 +453,7 @@ gnv_view_from_popup (EphyEmbedPopup *popup)
 
 static void 
 gnv_popup_cmd_new_window (BonoboUIComponent *uic, 
-			  EphyEmbedPopup *popup, 
+			  EphyEmbedPopupControl*popup, 
 			  const char* verbname)
 {
 	EphyEmbedEvent *info;
@@ -507,7 +462,7 @@ gnv_popup_cmd_new_window (BonoboUIComponent *uic,
 
 	view = gnv_view_from_popup (popup);
 	
-	info = ephy_embed_popup_get_event (popup);
+	info = ephy_embed_popup_control_get_event (popup);
 	
 	ephy_embed_event_get_property (info, "link", &value);
 
@@ -517,7 +472,7 @@ gnv_popup_cmd_new_window (BonoboUIComponent *uic,
 
 static void 
 gnv_popup_cmd_image_in_new_window (BonoboUIComponent *uic, 
-				   EphyEmbedPopup *popup, 
+				   EphyEmbedPopupControl*popup, 
 				   const char* verbname)
 {
 	EphyEmbedEvent *info;
@@ -526,7 +481,7 @@ gnv_popup_cmd_image_in_new_window (BonoboUIComponent *uic,
 
 	view = gnv_view_from_popup (popup);
 	
-	info = ephy_embed_popup_get_event (popup);
+	info = ephy_embed_popup_control_get_event (popup);
 	
 	ephy_embed_event_get_property (info, "image", &value);
 
@@ -536,7 +491,7 @@ gnv_popup_cmd_image_in_new_window (BonoboUIComponent *uic,
 
 static void 
 gnv_popup_cmd_frame_in_new_window (BonoboUIComponent *uic, 
-				   EphyEmbedPopup *popup, 
+				   EphyEmbedPopupControl*popup, 
 				   const char* verbname)
 {
 	EphyEmbedEvent *info;
@@ -545,7 +500,7 @@ gnv_popup_cmd_frame_in_new_window (BonoboUIComponent *uic,
 
 	view = gnv_view_from_popup (popup);
 	
-	info = ephy_embed_popup_get_event (popup);
+	info = ephy_embed_popup_control_get_event (popup);
 	
 	ephy_embed_get_location (view->priv->embed, FALSE, &location);
 
@@ -582,11 +537,6 @@ gnv_cmd_file_print (BonoboUIComponent *uic,
 	EphyNautilusViewPrivate *p = view->priv;
 	
 	dialog = print_dialog_new (p->embed, NULL);
-
-	//g_signal_connect (G_OBJECT(dialog),
-	//		  "preview",
-	//		  G_CALLBACK (print_dialog_preview_cb),
-	//		  window);
 
 	ephy_dialog_set_modal (dialog, TRUE);
 	ephy_dialog_show (dialog);
@@ -677,284 +627,3 @@ gnv_embed_zoom_change_cb (EphyNautilusView *embed,
 	bonobo_zoomable_report_zoom_level_changed (view->priv->zoomable,
 						   new_zoom, NULL);
 }
-
-
-#ifdef IM_TOO_LAZY_TO_MOVE_THIS_TO_ANOTHER_FILE
-
-
-/* property bag properties */
-enum {
-	ICON_NAME,
-	COMPONENT_INFO
-};
-
-
-static void
-get_bonobo_properties (BonoboPropertyBag *bag,
-			BonoboArg *arg,
-			guint arg_id,
-			CORBA_Environment *ev,
-			gpointer callback_data)
-{
-	EphyNautilusView *content_view;
-	
-	content_view = (EphyNautilusView*) callback_data;
-
-	switch (arg_id) {
-        	case ICON_NAME:	
-			if (!strncmp (content_view->priv->uri, "man:", 4)) {
-                   		BONOBO_ARG_SET_STRING (arg, "manual");					
-			} else if (!strncmp (content_view->priv->uri, "http:", 5)) {
-                		BONOBO_ARG_SET_STRING (arg, "i-web");					
-			} else if (!strncmp (content_view->priv->uri, "https:", 6)) {
-				/* FIXME: put a nice icon for secure sites */
-                		BONOBO_ARG_SET_STRING (arg, "i-web");					
-			} else {
-                		BONOBO_ARG_SET_STRING (arg, "");					
-                	}
-                	break;
-
-        	case COMPONENT_INFO:
-               		BONOBO_ARG_SET_STRING (arg, "");					
-                 	break;
-        		
-        	default:
-                	g_warning ("Unhandled arg %d", arg_id);
-                	break;
-	}
-}
-
-/* there are no settable properties, so complain if someone tries to set one */
-static void
-set_bonobo_properties (BonoboPropertyBag *bag,
-			const BonoboArg *arg,
-			guint arg_id,
-			CORBA_Environment *ev,
-			gpointer callback_data)
-{
-                g_warning ("Bad Property set on view: property ID %d",
-			   arg_id);
-}
-
-static void
-ephy_nautilus_view_initialize (EphyNautilusView *view)
-{
-
-
-#ifdef NOT_PORTED
-	bonobo_control_set_properties (nautilus_view_get_bonobo_control (view->priv->nautilus_view),
-				       view->priv->property_bag);
-#endif
-	bonobo_property_bag_add (view->priv->property_bag, "icon_name", ICON_NAME, 
-				 BONOBO_ARG_STRING, NULL,
-				 _("name of icon for the mozilla view"), 0);
-	bonobo_property_bag_add (view->priv->property_bag, "summary_info", COMPONENT_INFO,
-				 BONOBO_ARG_STRING, NULL,
-				 _("mozilla summary info"), 0);
-}
-
-
-	/* free the property bag */
-	if (view->priv->property_bag != NULL) {
-		bonobo_object_unref (BONOBO_OBJECT (view->priv->property_bag));
-		view->priv->property_bag = NULL;
-	}
-
-}
-
-
-
-void
-ephy_nautilus_view_report_load_progress (EphyNautilusView *view,
-					   double value)
-{
-	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
-
-	if (value < 0.0) value = 0.0;
-	if (value > 1.0) value = 1.0;
-	
-	nautilus_view_report_load_progress (view->priv->nautilus_view, value);
-}
-
-/***********************************************************************************/
-
-/**
- * vfs_open_cb
- *
- * Callback for gnome_vfs_async_open. Attempt to read data from handle
- * and pass to mozilla streaming callback.
- * 
- **/
-static void
-vfs_open_cb (GnomeVFSAsyncHandle *handle, GnomeVFSResult result, gpointer data)
-{
-	EphyNautilusView *view = data;
-
-	LOG ("+%s GnomeVFSResult: %u", G_GNUC_FUNCTION, (unsigned)result)
-
-	if (result != GNOME_VFS_OK)
-	{
-		gtk_moz_embed_close_stream (GTK_MOZ_EMBED (view->priv->embed->mozembed));
-		/* NOTE: the view may go away after a call to report_load_failed */
-		LOG (">nautilus_view_report_load_failed")
-		nautilus_view_report_load_failed (view->priv->nautilus_view);
-	} else {
-		if (view->priv->vfs_read_buffer == NULL) {
-			view->priv->vfs_read_buffer = g_malloc (VFS_READ_BUFFER_SIZE);
-		}
-		gtk_moz_embed_open_stream (GTK_MOZ_EMBED (view->priv->embed->mozembed), "file:///", "text/html");
-		gnome_vfs_async_read (handle, view->priv->vfs_read_buffer, VFS_READ_BUFFER_SIZE, vfs_read_cb, view);
-	}
-	LOG ("-%s", G_GNUC_FUNCTION);
-}
-
-/**
- * vfs_read_cb:
- *
- * Read data from buffer and copy into mozilla stream.
- **/
-
-static void
-vfs_read_cb (GnomeVFSAsyncHandle *handle, GnomeVFSResult result, gpointer buffer,
-		   GnomeVFSFileSize bytes_requested,
-		   GnomeVFSFileSize bytes_read,
-		   gpointer data)
-{
-	EphyNautilusView *view = data;
-
-	LOG ("+%s %ld/%ld bytes", G_GNUC_FUNCTION, (long)bytes_requested, (long) bytes_read)
-
-	if (bytes_read != 0) {
-		gtk_moz_embed_append_data (GTK_MOZ_EMBED (view->priv->embed->mozembed), buffer, bytes_read);
-	}
-
-	if (bytes_read == 0 || result != GNOME_VFS_OK) {
-		gtk_moz_embed_close_stream (GTK_MOZ_EMBED (view->priv->embed->mozembed));
-		view->priv->vfs_handle = NULL;
-		g_free (view->priv->vfs_read_buffer);
-		view->priv->vfs_read_buffer = NULL;
-		
-		gnome_vfs_async_close (handle, (GnomeVFSAsyncCloseCallback) gtk_true, NULL);
-
-		LOG (">nautilus_view_report_load_complete")
-		nautilus_view_report_load_complete (view->priv->nautilus_view);
-
-		LOG ("=%s load complete", G_GNUC_FUNCTION)
-    	} else {
-		gnome_vfs_async_read (handle, view->priv->vfs_read_buffer, VFS_READ_BUFFER_SIZE, vfs_read_cb, view);
-	}
-
-	LOG ("-%s", G_GNUC_FUNCTION)
-}
-
-/***********************************************************************************/
-
-static void
-cancel_pending_vfs_operation (EphyNautilusView *view)
-{
-	if (view->priv->vfs_handle != NULL) {
-		gnome_vfs_async_cancel (view->priv->vfs_handle);
-		gtk_moz_embed_close_stream (GTK_MOZ_EMBED (view->priv->embed->mozembed));
-	}
-
-	view->priv->vfs_handle = NULL;
-	g_free (view->priv->vfs_read_buffer);
-	view->priv->vfs_read_buffer = NULL;
-}
-
-
-/* this takes a "nautilus" uri, not a "mozilla" uri and uses (sometimes) GnomeVFS */
-static void
-navigate_mozilla_to_nautilus_uri (EphyNautilusView *view,
-			 	  const char *uri)
-{
-	char *old_uri;
-
-	cancel_pending_vfs_operation (view);
-	
-	if (!GTK_WIDGET_REALIZED (view->priv->embed->mozembed)) {
-		
-		/* Doing certain things to gtkmozembed before
-		 * the widget has realized (specifically, opening
-		 * content streams) can cause crashes.  To avoid
-		 * this, we postpone all navigations
-		 * until the widget has realized (we believe
-		 * premature realization may cause other issues)
-		 */
-		
-		LOG ("=%s: Postponing navigation request to widget realization", G_GNUC_FUNCTION)
-		/* Note that view->priv->uri is still set below */
-	} else {
-		if (should_mozilla_load_uri_directly (uri)) {
-
-			/* See if the current URI is the same as what mozilla already
-			 * has.  If so, issue a reload rather than a load.
-			 * We ask mozilla for it's uri rather than using view->priv->uri because,
-			 * from time to time, our understanding of mozilla's URI can become inaccurate
-			 * (in particular, certain errors may cause embedded mozilla to not change
-			 * locations)
-			 */
-
-			old_uri = view->priv->embed->location;
-
-			if (old_uri != NULL && uris_identical (uri, old_uri)) {
-				LOG ("=%s uri's identical, telling ephy to reload", G_GNUC_FUNCTION)
-				embed_reload (view->priv->embed,
-					      GTK_MOZ_EMBED_FLAG_RELOADBYPASSCACHE);
-			} else {
-				embed_load_url (view->priv->embed, uri);
-			}
-
-		} else {
-			LOG ("=%s loading URI via gnome-vfs", G_GNUC_FUNCTION)
-			gnome_vfs_async_open (&(view->priv->vfs_handle), uri,
-					      GNOME_VFS_OPEN_READ, GNOME_VFS_PRIORITY_DEFAULT, 
-					      vfs_open_cb, view);
-		}
-	}
-
-	g_free (view->priv->uri);
-	view->priv->uri = g_strdup (uri);
-
-	LOG ("=%s current URI is now '%s'", G_GNUC_FUNCTION, view->priv->uri)
-}
-
-/*
- * This a list of URI schemes that mozilla should load directly, rather than load through gnome-vfs
- */
-static gboolean
-should_mozilla_load_uri_directly (const char *uri)
-{
-	static const char *handled_by_mozilla[] =
-	{
-		"http",
-		"file",
-		"toc",
-		"man",
-		"info",
-		"ghelp",
-		"gnome-help",
-		"https",
-		NULL
-	};
-	gint i;
-	gint uri_length;
-
-	if (uri == NULL) return FALSE;
-
-	uri_length = strlen (uri);
-
-	for (i = 0; handled_by_mozilla[i] != NULL; i++)
-	{
-		const gchar *current = handled_by_mozilla[i];
-		gint current_length = strlen (current);
-		if ((uri_length >= current_length) 
-		    && (!strncasecmp (uri, current, current_length))) 
-			return TRUE;
-	}
-	return FALSE;
-}
-
-
-
-#endif
