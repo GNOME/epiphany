@@ -202,7 +202,7 @@ AC_COMPILE_IFELSE(
 		  p->SetDefaultString (nsEmbedString());]]
 	)],
 	[AC_DEFINE([MOZ_NSIFILEPICKER_NSASTRING_],[1],[Define if nsIFilePicker uses nsAString&]) result=yes],
-	[AC_DEFINE([MOZ_NSIFILEPICKER_PRUNICHARP],[1],[Define if nsIFilePicker uses PRUnichar*]) result=no])
+	[result=no])
 
 AC_MSG_RESULT([$result])
 
