@@ -22,6 +22,13 @@
 #include "config.h"
 #endif
 
+#include "ephy-new-bookmark.h"
+#include "ephy-state.h"
+#include "ephy-topics-selector.h"
+#include "ephy-debug.h"
+#include "ephy-stock-icons.h"
+#include "ephy-gui.h"
+
 #include <gtk/gtktable.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkentry.h>
@@ -31,15 +38,10 @@
 #include <gtk/gtkimage.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtkeditable.h>
+#include <gtk/gtkdialog.h>
+#include <gtk/gtkmessagedialog.h>
 #include <glib/gi18n.h>
 #include <string.h>
-
-#include "ephy-new-bookmark.h"
-#include "ephy-state.h"
-#include "ephy-topics-selector.h"
-#include "ephy-debug.h"
-#include "ephy-stock-icons.h"
-#include "ephy-gui.h"
 
 static void ephy_new_bookmark_class_init (EphyNewBookmarkClass *klass);
 static void ephy_new_bookmark_init (EphyNewBookmark *editor);
@@ -304,55 +306,20 @@ duplicate_dialog_construct (GtkWindow *parent,
 			    const char *title)
 {
 	GtkWidget *dialog;
-	GtkWidget *hbox, *vbox, *label, *image;
 	char *str, *tmp_str, *tmp_title;
 
-	/* FIXME: We "should" use gtk_message dialog here
-	 * but it doesn't support markup of text yet
-	 * so we build our own. See bug 65501.
-	 */
-
-	dialog = gtk_dialog_new_with_buttons (_("Duplicated Bookmark"),
-					      GTK_WINDOW (parent),
-					      GTK_DIALOG_NO_SEPARATOR,
-					      GTK_STOCK_OK,
-					      GTK_RESPONSE_OK,
-					      NULL);
-
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
-
-	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14);
-
-	hbox = gtk_hbox_new (FALSE, 6);
-	gtk_widget_show (hbox);
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
-			    TRUE, TRUE, 0);
-
-	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO,
-					  GTK_ICON_SIZE_DIALOG);
-	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0);
-	gtk_widget_show (image);
-	gtk_box_pack_start (GTK_BOX (hbox), image, TRUE, TRUE, 0);
-
-	vbox = gtk_vbox_new (FALSE, 6);
-	gtk_widget_show (vbox);
-	gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
-
-	label = gtk_label_new (NULL);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 	tmp_title = g_markup_printf_escaped ("<b>%s</b>", title);
 	tmp_str = g_strdup_printf (_("A bookmark titled %s already exists for this page."),
-			           tmp_title);
+				   tmp_title);
 	str = g_strconcat ("<big>", tmp_str, "</big>", NULL);
-	gtk_label_set_markup (GTK_LABEL (label), str);
-	g_free (tmp_title);
-	g_free (tmp_str);
+
+	dialog = gtk_message_dialog_new (GTK_WINDOW (parent), GTK_DIALOG_MODAL,
+					 GTK_MESSAGE_INFO, GTK_BUTTONS_OK, NULL);
+	gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog), str);
 	g_free (str);
-	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
-	gtk_widget_show (label);
+
+	gtk_window_set_title (GTK_WINDOW (dialog), _("Duplicated Bookmark"));
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 	return dialog;
 }

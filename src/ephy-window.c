@@ -668,57 +668,33 @@ static gboolean
 confirm_close_with_modified_forms (EphyWindow *window)
 {
 	GtkWidget *dialog;
-	GtkWidget *hbox, *vbox, *label, *image;
-	char *text;
 	int response;
 
-	dialog = gtk_dialog_new_with_buttons ("",
-					      GTK_WINDOW (window),
-					      GTK_DIALOG_NO_SEPARATOR | GTK_DIALOG_MODAL,
-					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					      _("Close _Document"), GTK_RESPONSE_OK,
-					      NULL);
+	dialog = gtk_message_dialog_new
+		(GTK_WINDOW (window),
+		 GTK_DIALOG_MODAL,
+		 GTK_MESSAGE_WARNING,
+		 GTK_BUTTONS_CANCEL,
+		 _("There are unsubmitted changes to form elements."));
 
+	gtk_message_dialog_format_secondary_text
+		(GTK_MESSAGE_DIALOG (dialog),
+		 _("If you close the document anyway, "
+		   "you will lose that information."));
+	
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       _("Close _Document"), GTK_RESPONSE_ACCEPT);
+
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+
+	/* FIXME set title */
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
-
-	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14);
-
-	hbox = gtk_hbox_new (FALSE, 6);
-	gtk_widget_show (hbox);
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
-			    TRUE, TRUE, 0);
-
-	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
-					  GTK_ICON_SIZE_DIALOG);
-	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0);
-	gtk_widget_show (image);
-	gtk_box_pack_start (GTK_BOX (hbox), image, TRUE, TRUE, 0);
-
-	vbox = gtk_vbox_new (FALSE, 6);
-	gtk_widget_show (vbox);
-	gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
-
-	label = gtk_label_new (NULL);
-	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-
-	text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
-				_("There are unsubmitted changes to form elements."),
-				_("If you close the document anyway, you will lose that information."));
-	gtk_label_set_markup (GTK_LABEL (label), text);
-	g_free (text);
-
-	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
-	gtk_widget_show (label);
 
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 
 	gtk_widget_destroy (dialog);
 
-	return response == GTK_RESPONSE_OK;
+	return response == GTK_RESPONSE_ACCEPT;
 }
 
 static void

@@ -39,12 +39,13 @@
 
 #include <glib/gi18n.h>
 #include <string.h>
-#include <gtk/gtkdialog.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
+#include <gtk/gtkdialog.h>
+#include <gtk/gtkmessagedialog.h>
 #include <libgnomevfs/gnome-vfs-ops.h>
 #include <libxml/tree.h>
 #include <libxml/xmlwriter.h>
@@ -365,60 +366,29 @@ static gboolean
 offer_to_resume (EphySession *session)
 {
 	GtkWidget *dialog;
-	GtkWidget *label;
-	GtkWidget *vbox;
-	GtkWidget *hbox;
-	GtkWidget *image;
-	char *str;
 	int response;
 
-	dialog = gtk_dialog_new_with_buttons
-		(_("Crash Recovery"), NULL,
-		 GTK_DIALOG_NO_SEPARATOR,
-		 _("_Don't Recover"), GTK_RESPONSE_CANCEL,
-		 _("_Recover"), GTK_RESPONSE_OK,
-		 NULL);
+	dialog = gtk_message_dialog_new
+		(NULL,
+		 GTK_DIALOG_MODAL,
+		 GTK_MESSAGE_WARNING,
+		 GTK_BUTTONS_NONE,
+		 _("Epiphany appears to have crashed or been killed the last time it was run."));
+
+	gtk_message_dialog_format_secondary_text
+		(GTK_MESSAGE_DIALOG (dialog),
+		 _("You can recover the opened tabs and windows."));
+	
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       _("_Don't Recover"), GTK_RESPONSE_CANCEL);
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       _("_Recover"), GTK_RESPONSE_ACCEPT);
+
+	gtk_window_set_title (GTK_WINDOW (dialog), _("Crash Recovery"));
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+
 	session->priv->resume_dialog = dialog;
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14);
-
-	hbox = gtk_hbox_new (FALSE, 6);
-	gtk_container_set_border_width (GTK_CONTAINER (GTK_BOX (hbox)), 5);
-	gtk_widget_show (hbox);
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
-			    TRUE, TRUE, 0);
-
-	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
-					  GTK_ICON_SIZE_DIALOG);
-	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0);
-	gtk_widget_show (image);
-	gtk_box_pack_start (GTK_BOX (hbox), image,
-			    TRUE, TRUE, 0);
-
-	vbox = gtk_vbox_new (FALSE, 6);
-	gtk_widget_show (vbox);
-	gtk_box_pack_start (GTK_BOX (hbox), vbox,
-			    TRUE, TRUE, 0);
-
-	label = gtk_label_new (NULL);
-	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-	gtk_widget_show (label);
-	str = g_strconcat ("<b>", _("Epiphany appears to have crashed or been killed the last time it was run."),
-			   "</b>", NULL);
-	gtk_label_set_markup (GTK_LABEL (label), str);
-	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
-	g_free (str);
-
-	label = gtk_label_new (_("You can recover the opened tabs and windows."));
-	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_widget_show (label);
-	gtk_box_pack_start (GTK_BOX (vbox), label,
-			    TRUE, TRUE, 0);
 
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 
@@ -426,7 +396,7 @@ offer_to_resume (EphySession *session)
 
 	session->priv->resume_dialog = NULL;
 
-	return (response == GTK_RESPONSE_OK);
+	return (response == GTK_RESPONSE_ACCEPT);
 }
 
 /**

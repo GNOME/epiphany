@@ -1,5 +1,16 @@
 2004-10-26  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-gui.c: (ephy_gui_confirm_overwrite_file):
+	* src/bookmarks/ephy-new-bookmark.c: (duplicate_dialog_construct):
+	* src/ephy-history-window.c: (confirmation_dialog_response_cb),
+	(confirmation_dialog_construct), (cmd_clear):
+	* src/ephy-session.c: (offer_to_resume):
+	* src/ephy-window.c: (confirm_close_with_modified_forms):
+
+	Use new gtk+ HIG message dialogue API. Fixes bug #130232.
+
+2004-10-26  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/downloader-view.c: (downloader_view_add_download):
 
 	Use gtk_widget_get_settings on the EphyDialog's window, not on the

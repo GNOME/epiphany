@@ -41,6 +41,8 @@
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtkuimanager.h>
 #include <gdk/gdkkeysyms.h>
+#include <gtk/gtkdialog.h>
+#include <gtk/gtkmessagedialog.h>
 #include <glib/gi18n.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <string.h>
@@ -226,99 +228,42 @@ static GtkRadioActionEntry ephy_history_radio_entries [] =
 };
 static guint ephy_history_n_radio_entries = G_N_ELEMENTS (ephy_history_radio_entries);
 
-
 static void
-confirmation_dialog_response_cb (GtkDialog *dialog, gint response,
+confirmation_dialog_response_cb (GtkWidget *dialog,
+				 int response,
 				 EphyHistoryWindow *editor)
 {
-	gtk_widget_destroy (GTK_WIDGET (dialog));
+	gtk_widget_destroy (dialog);
 
-	if (response != GTK_RESPONSE_OK)
-		return;
-
-	ephy_history_clear (editor->priv->history);
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		ephy_history_clear (editor->priv->history);
+	}
 }
 
 static GtkWidget *
 confirmation_dialog_construct (EphyHistoryWindow *editor)
 {
 	GtkWidget *dialog;
-	GtkWidget *label;
-	GtkWidget *vbox;
-	GtkWidget *hbox;
-	GtkWidget *image;
-	GtkWidget *button;
-	GtkWidget *align;
-	char *str;
 
-	dialog = gtk_dialog_new_with_buttons (_("Clear History"),
-					     GTK_WINDOW (editor),
-					     GTK_DIALOG_DESTROY_WITH_PARENT |
-					     GTK_DIALOG_NO_SEPARATOR,
-					     NULL);
-	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (dialog), 6);
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 12);
+	dialog = gtk_message_dialog_new
+		(GTK_WINDOW (editor),
+		 GTK_DIALOG_DESTROY_WITH_PARENT,
+		 GTK_MESSAGE_WARNING,
+		 GTK_BUTTONS_CANCEL,
+		 _("Clear browsing history?"));
 
-	gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+	gtk_message_dialog_format_secondary_text
+		(GTK_MESSAGE_DIALOG (dialog),
+		 _("Clearing the browsing history will cause all"
+		   " history links to be permanently deleted."));
+	
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+			       _("C_lear"), GTK_RESPONSE_ACCEPT);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
-	button = gtk_button_new ();
-	gtk_widget_show (button);
-	gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, GTK_RESPONSE_OK);
-	GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-
-	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-
-	align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-	gtk_widget_show (align);
-	gtk_container_add (GTK_CONTAINER (button), align);
-
-	hbox = gtk_hbox_new (FALSE, 2);
-	gtk_widget_show (hbox);
-	gtk_container_add (GTK_CONTAINER (align), hbox);
-
-	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_BUTTON);
-	gtk_widget_show (image);
-	gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 0);
-
-	label = gtk_label_new_with_mnemonic (_("C_lear"));
-	gtk_widget_show (label);
-	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-
-	hbox = gtk_hbox_new (FALSE, 12);
-	gtk_container_set_border_width (GTK_CONTAINER (hbox), 6);
-	gtk_widget_show (hbox);
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
-			    TRUE, TRUE, 0);
-
-	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
-					  GTK_ICON_SIZE_DIALOG);
-	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0);
-	gtk_widget_show (image);
-	gtk_box_pack_start (GTK_BOX (hbox), image, TRUE, TRUE, 0);
-
-	vbox = gtk_vbox_new (FALSE, 6);
-	gtk_widget_show (vbox);
-	gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
-
-	label = gtk_label_new (NULL);
-	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-	str = g_strconcat ("<b><big>", _("Clear browsing history?"),
-			   "</big></b>", NULL);
-	gtk_label_set_markup (GTK_LABEL (label), str);
-	g_free (str);
-	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
-	gtk_widget_show (label);
-
-	label = gtk_label_new (_("Clearing the browsing history will cause all"
-				 " history links to be permanently deleted."));
-	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
-	gtk_widget_show (label);
+	gtk_window_set_title (GTK_WINDOW (dialog), _("Clear History"));
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
 	g_signal_connect (dialog, "response",
 			  G_CALLBACK (confirmation_dialog_response_cb),
@@ -334,8 +279,8 @@ cmd_clear (GtkAction *action,
 	if (editor->priv->confirmation_dialog == NULL)
 	{
 		editor->priv->confirmation_dialog = confirmation_dialog_construct (editor);
-		g_object_add_weak_pointer (G_OBJECT(editor->priv->confirmation_dialog),
-					   (gpointer *)&editor->priv->confirmation_dialog);
+		g_object_add_weak_pointer (G_OBJECT (editor->priv->confirmation_dialog),
+					   (gpointer *) &editor->priv->confirmation_dialog);
 	}
 
 	gtk_widget_show (editor->priv->confirmation_dialog);
