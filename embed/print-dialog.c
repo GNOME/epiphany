@@ -232,7 +232,7 @@ ephy_print_get_print_info (void)
 		info->file = g_filename_to_utf8 (fname, -1, NULL, NULL, NULL);
 		g_free (fname);
 	}
-g_print (info->file);
+
 	info->printer = eel_gconf_get_string (print_props[PRINTER_PROP].pref);
 
 	info->pages = eel_gconf_get_integer (print_props[ALL_PAGES_PROP].pref);
