@@ -262,6 +262,9 @@ remove_toolbar_cb (GtkWidget          *menuitem,
 
 static void
 popup_toolbar_context_menu_cb (GtkWidget          *toolbar,
+			       gint		   x,
+			       gint		   y,
+			       gint                button_number,
 			       EggEditableToolbar *t)
 {
   GtkWidget *menu;
