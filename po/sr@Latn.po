@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-10 01:17+0100\n"
-"PO-Revision-Date: 2004-01-10 01:21+0100\n"
+"POT-Creation-Date: 2004-01-12 02:02+0100\n"
+"PO-Revision-Date: 2004-01-12 02:04+0100\n"
 "Last-Translator: Danilo Segan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -64,27 +64,53 @@ msgid "Additional safe protocols"
 msgstr "Dodatni bezbedni protokoli"
 
 #: data/epiphany-lockdown.schemas.in.h:3
+msgid "Disable Arbitrary URLs"
+msgstr "Onemogući proizvoljne adrese"
+
+#: data/epiphany-lockdown.schemas.in.h:4
 msgid "Disable Bookmark Editing"
 msgstr "Onemogući uređivanje obeleživača"
 
+#: data/epiphany-lockdown.schemas.in.h:5
+msgid "Disable History"
+msgstr "Isključi istorijat"
+
 # ne valja
-#: data/epiphany-lockdown.schemas.in.h:4
+#: data/epiphany-lockdown.schemas.in.h:6
 msgid "Disable JavaScript chrome control"
 msgstr "Isključi JavaSkript kontrolu prozora"
 
-#: data/epiphany-lockdown.schemas.in.h:5
+#: data/epiphany-lockdown.schemas.in.h:7
 msgid "Disable JavaScript's control over window chrome."
 msgstr "Isključi upravljanje prozorima iz JavaSkripta."
 
-#: data/epiphany-lockdown.schemas.in.h:6
+#: data/epiphany-lockdown.schemas.in.h:8
+msgid "Disable Toolbar Editing"
+msgstr "Onemogući uređivanje alatki"
+
+#: data/epiphany-lockdown.schemas.in.h:9
+msgid ""
+"Disable all historical information by disabling the back button, not "
+"allowing the history dialog and hiding the favorite bookmarks."
+msgstr "Onemogući sve podatke istorijata isključivanjem dugmeta za nazad, ne dozvoljavanjem prozorčeta istorijata i sakrivanjem omiljenih obeleživača."
+
+#: data/epiphany-lockdown.schemas.in.h:10
 msgid "Disable unsafe protocols"
 msgstr "Isključi nebezbedne protokole"
 
-#: data/epiphany-lockdown.schemas.in.h:7
+#: data/epiphany-lockdown.schemas.in.h:11
 msgid "Disable users ability to edit their bookmarks."
 msgstr "Onemogući korisnicima da uređuju svoje obeleživače."
 
-#: data/epiphany-lockdown.schemas.in.h:8
+#: data/epiphany-lockdown.schemas.in.h:12
+msgid "Disable users ability to edit toolbars."
+msgstr "Onemogući korisnicima da uređuju trake alatki."
+
+#: data/epiphany-lockdown.schemas.in.h:13
+msgid "Disable users ability to type in a URL to epiphany."
+msgstr "Onemogući korisnicima da unose adresu u Spoznaji."
+
+#: data/epiphany-lockdown.schemas.in.h:14
 msgid ""
 "Disables loading of content from unsafe protocols. Safe protocols are http: "
 "and https:."
@@ -92,11 +118,11 @@ msgstr ""
 "Isključuje učitavanje sadržaja preko nebezbednih protokola. Bezbedni protokoli "
 "su http: i https:."
 
-#: data/epiphany-lockdown.schemas.in.h:9
+#: data/epiphany-lockdown.schemas.in.h:15
 msgid "Hide menubar by default"
 msgstr "Uobičajeno sakrij glavni meni"
 
-#: data/epiphany-lockdown.schemas.in.h:10
+#: data/epiphany-lockdown.schemas.in.h:16
 msgid "Hide the menubar by default."
 msgstr "Uobičajeno sakrij glavni meni."
 
@@ -619,7 +645,7 @@ msgid "Download Manager"
 msgstr "Preuzimanje"
 
 #: data/glade/epiphany.glade.h:8 data/ui/nautilus-epiphany-view.xml.h:11
-#: src/ephy-window.c:892
+#: src/ephy-window.c:902
 msgid "Find"
 msgstr "Pronađi"
 
@@ -902,7 +928,7 @@ msgid "Paper"
 msgstr "Papir"
 
 #: data/glade/print.glade.h:23 data/ui/nautilus-epiphany-view.xml.h:23
-#: src/ephy-window.c:888
+#: src/ephy-window.c:898
 msgid "Print"
 msgstr "Štampaj"
 
@@ -1124,7 +1150,7 @@ msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
 #: embed/downloader-view.c:296 lib/widgets/ephy-cell-renderer-progress.c:35
-#: src/ephy-window.c:1065
+#: src/ephy-window.c:1083
 msgid "Unknown"
 msgstr "Nepoznato"
 
@@ -1148,7 +1174,7 @@ msgstr "Nastavi"
 msgid "Pause"
 msgstr "Pauziraj"
 
-#: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:334
+#: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:341
 msgid "Save Image As"
 msgstr "Sačuvaj sliku kao"
 
@@ -1156,7 +1182,7 @@ msgstr "Sačuvaj sliku kao"
 msgid "Save Page As"
 msgstr "Sačuvaj stranicu kao"
 
-#: embed/ephy-embed-popup-control.c:650 src/popup-commands.c:422
+#: embed/ephy-embed-popup-control.c:650 src/popup-commands.c:429
 msgid "Save Background As"
 msgstr "Sačuvaj pozadinu kao"
 
@@ -1527,15 +1553,15 @@ msgstr "Ukrajinski"
 msgid "Unknown (%s)"
 msgstr "Nepoznato (%s)"
 
-#: embed/ephy-history.c:401 src/bookmarks/ephy-bookmarks.c:545
+#: embed/ephy-history.c:482 src/bookmarks/ephy-bookmarks.c:587
 msgid "All"
 msgstr "Sve"
 
-#: embed/ephy-history.c:566
+#: embed/ephy-history.c:655
 msgid "Others"
 msgstr "Ostali"
 
-#: embed/ephy-history.c:572
+#: embed/ephy-history.c:661
 msgid "Local files"
 msgstr "Lokalne datoteke"
 
@@ -1853,7 +1879,7 @@ msgstr ""
 "Sačekajte malo dok se obrazuje novi privatni ključ. Ovaj postupak može "
 "potrajati nekoliko minuta."
 
-#: embed/mozilla/mozilla-embed-single.cpp:508
+#: embed/mozilla/mozilla-embed-single.cpp:501
 msgid ""
 "Epiphany can't be used now. Mozilla initialization failed. Check your "
 "MOZILLA_FIVE_HOME environmental variable."
@@ -2303,7 +2329,7 @@ msgid "_Search:"
 msgstr "_Pretraga:"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:1358
-#: src/bookmarks/ephy-topic-action.c:621 src/ephy-window.c:894
+#: src/bookmarks/ephy-topic-action.c:621 src/ephy-window.c:904
 msgid "Bookmarks"
 msgstr "Obeleživači"
 
@@ -2356,11 +2382,11 @@ msgstr "Putovanja"
 msgid "Work"
 msgstr "Posao"
 
-#: src/bookmarks/ephy-bookmarks.c:580
+#: src/bookmarks/ephy-bookmarks.c:622
 msgid "Most Visited"
 msgstr "Najposećenije"
 
-#: src/bookmarks/ephy-bookmarks.c:597
+#: src/bookmarks/ephy-bookmarks.c:639
 msgid "Not Categorized"
 msgstr "Nerazvrstano"
 
@@ -2588,7 +2614,7 @@ msgstr ""
 "Spoznaju je sada nemoguće koristiti, zbog neočekivane greške u Bonobu pri "
 "pokušaju pronalaženja objekta automatizacije"
 
-#: src/ephy-tab.c:326 src/ephy-tab.c:1136 src/ephy-tab.c:1318
+#: src/ephy-tab.c:326 src/ephy-tab.c:1137 src/ephy-tab.c:1319
 msgid "Blank page"
 msgstr "Prazna stranica"
 
@@ -3003,87 +3029,91 @@ msgid "_Download Link"
 msgstr "Preuzmi _vezu"
 
 #: src/ephy-window.c:276
+msgid "_Download Link As..."
+msgstr "Preuzmi vezu _kao..."
+
+#: src/ephy-window.c:278
 msgid "_Bookmark Link..."
 msgstr "_Obeleži vezu..."
 
-#: src/ephy-window.c:278
+#: src/ephy-window.c:280
 msgid "_Copy Link Address"
 msgstr "_Umnoži adresu veze"
 
 #. Images
-#: src/ephy-window.c:282
+#: src/ephy-window.c:284
 msgid "Open _Image"
 msgstr "Otvori _sliku"
 
-#: src/ephy-window.c:284
+#: src/ephy-window.c:286
 msgid "Open Image in New _Window"
 msgstr "Otvori sliku u novom _prozoru"
 
-#: src/ephy-window.c:286
+#: src/ephy-window.c:288
 msgid "Open Image in New T_ab"
 msgstr "Otvori sliku u novom _listu"
 
-#: src/ephy-window.c:288
+#: src/ephy-window.c:290
 msgid "_Save Image As..."
 msgstr "_Sačuvaj sliku kao..."
 
-#: src/ephy-window.c:290
+#: src/ephy-window.c:292
 msgid "_Use Image As Background"
 msgstr "Upo_trebi sliku za pozadinu"
 
-#: src/ephy-window.c:292
+#: src/ephy-window.c:294
 msgid "Copy I_mage Address"
 msgstr "Umnoži adresu sli_ke"
 
-#: src/ephy-window.c:587
+#: src/ephy-window.c:597
 msgid "Exit Fullscreen"
 msgstr "Ne koristi ceo ekran"
 
-#: src/ephy-window.c:661
+#: src/ephy-window.c:671
 msgid "_Close document"
 msgstr "_Zatvori dokument"
 
-#: src/ephy-window.c:688
+#: src/ephy-window.c:698
 msgid "There are unsubmitted changes to form elements."
 msgstr "Ima neposlatih izmena u elementima obrasca."
 
-#: src/ephy-window.c:689
+#: src/ephy-window.c:699
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Ukoliko ipak zatvorite dokument, izgubićete te podatke."
 
-#: src/ephy-window.c:884 src/window-commands.c:390
+#: src/ephy-window.c:894 src/window-commands.c:390
 msgid "Open"
 msgstr "Otvori"
 
-#: src/ephy-window.c:886 src/window-commands.c:415
+#: src/ephy-window.c:896 src/window-commands.c:415
 msgid "Save As"
 msgstr "Sačuvaj kao"
 
-#: src/ephy-window.c:890
+#: src/ephy-window.c:900
 msgid "Bookmark"
 msgstr "Obeleživač"
 
-#: src/ephy-window.c:1068
+#: src/ephy-window.c:1086
 msgid "Insecure"
 msgstr "Nebezbedno"
 
-#: src/ephy-window.c:1071
+#: src/ephy-window.c:1089
 msgid "Broken"
 msgstr "Razbijen"
 
-#: src/ephy-window.c:1074
+#: src/ephy-window.c:1092
 msgid "Medium"
 msgstr "Osrednji"
 
-#: src/ephy-window.c:1078
+#: src/ephy-window.c:1096
 msgid "Low"
 msgstr "Nizak"
 
-#: src/ephy-window.c:1082
+#: src/ephy-window.c:1100
 msgid "High"
 msgstr "Visok"
 
-#: src/ephy-window.c:1092
+#: src/ephy-window.c:1110
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3092,7 +3122,7 @@ msgstr ""
 "Nivo bezbednosti: %s\n"
 "%s"
 
-#: src/ephy-window.c:1098
+#: src/ephy-window.c:1116
 #, c-format
 msgid "Security level: %s"
 msgstr "Nivo bezbednosti: %s"
@@ -3145,7 +3175,7 @@ msgstr "Ističe:"
 msgid "End of current session"
 msgstr "Kraj tekuće sesije"
 
-#: src/popup-commands.c:326
+#: src/popup-commands.c:326 src/popup-commands.c:334
 msgid "Download link"
 msgstr "Preuzmi vezu"
 
@@ -3503,9 +3533,6 @@ msgstr "Gnom veb čitač zasnovan na Mozili"
 
 #~ msgid "Size"
 #~ msgstr "Veličina"
-
-#~ msgid "_Download Link..."
-#~ msgstr "_Preuzmi vezu..."
 
 #~ msgid "Epiphany Nautilus view factory"
 #~ msgstr "Fabrika pregleda za Nautilus pomoću Spoznaje"
