@@ -226,11 +226,16 @@ impl_save (EphyEmbedPersist *persist)
 
 	/* Get the current page descriptor */
 	nsCOMPtr<nsISupports> pageDescriptor;
-	if (flags & EMBED_PERSIST_COPY_PAGE)
+	if (browser)
 	{
 	        browser->GetPageDescriptor(getter_AddRefs(pageDescriptor));
-		NS_ENSURE_TRUE (pageDescriptor, FALSE);
 	}
+
+	/* if we have COPY_PAGE, we *need* to have a page descriptor, else we'll re-fetch
+	 * the page, which will possibly give a different page than the original which we
+	 * need for view source
+	 */
+	NS_ENSURE_TRUE (!(flags & EMBED_PERSIST_COPY_PAGE) || pageDescriptor, FALSE);
 
 	if (filename == NULL)
 	{
@@ -245,7 +250,7 @@ impl_save (EphyEmbedPersist *persist)
 		if (!sniffer) return FALSE;
  
 		webPersist->SetProgressListener(sniffer);
-		rv = webPersist->SaveURI(inURI, nsnull, nsnull, nsnull, nsnull, tmpFile);
+		rv = webPersist->SaveURI(inURI, pageDescriptor, nsnull, nsnull, nsnull, tmpFile);
 		if (NS_FAILED (rv)) return FALSE;
 	}
 	else
