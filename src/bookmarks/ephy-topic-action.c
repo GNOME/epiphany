@@ -141,14 +141,30 @@ menu_activate_cb (GtkWidget *item, EggAction *action)
 static void
 ephy_topic_action_sync_label (EggAction *action, GParamSpec *pspec, GtkWidget *proxy)
 {
-	GtkLabel *label;
+	GtkWidget *label = NULL;
 
 	LOG ("Set bookmark action proxy label to %s", action->label)
 
-	label = GTK_LABEL (g_object_get_data (G_OBJECT (proxy), "label"));
+	if (EGG_IS_TOOL_ITEM (proxy))
+	{
+		label = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "label"));
+	}
+	else if (GTK_IS_MENU_ITEM (proxy))
+	{
+		label = GTK_BIN (proxy)->child;
+	}
+	else
+	{
+		g_warning ("Unknown widget");
+		return;
+	}
+
 	g_return_if_fail (label != NULL);
 
-	gtk_label_set_label (label, action->label);
+	if (action->label)
+	{
+		gtk_label_set_label (GTK_LABEL (label), action->label);
+	}
 }
 
 static int
@@ -403,10 +419,49 @@ button_pressed_cb (GtkWidget *button,
 	 gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 }
 
+static GtkWidget *
+create_menu_item (EggAction *action)
+{
+	GtkWidget *menu, *menu_item;
+
+	LOG ("create_menu_item action %p", action)
+
+	menu_item = gtk_menu_item_new_with_label (action->label);
+
+	menu = build_menu (EPHY_TOPIC_ACTION (action));
+	gtk_widget_show (menu);
+
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), menu);
+
+	return menu_item;
+}
+
+static gboolean
+create_menu_proxy (EggToolItem *item, EggAction *action)
+{
+	GtkWidget *menu_item;
+	char *menu_id;
+
+	LOG ("create_menu_proxy item %p, action %p", item, action)
+
+	menu_item = create_menu_item (action);
+
+	menu_id = g_strdup_printf ("ephy-topic-action-%d-menu-id",
+				   EPHY_TOPIC_ACTION (action)->priv->topic_id);
+
+	egg_tool_item_set_proxy_menu_item (item, menu_id, menu_item);
+
+	g_free (menu_id);
+
+	return TRUE;
+}
+
 static void
 connect_proxy (EggAction *action, GtkWidget *proxy)
 {
 	GtkWidget *button;
+
+	LOG ("connect_proxy action %p, proxy %p", action, proxy)
 
 	(* EGG_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 
@@ -414,13 +469,20 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
 	g_signal_connect_object (action, "notify::label",
 			         G_CALLBACK (ephy_topic_action_sync_label), proxy, 0);
 
-	button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
-	g_signal_connect (button, "toggled",
-			  G_CALLBACK (button_toggled_cb), action);
+	if (EGG_IS_TOOL_ITEM (proxy))
+	{
+		g_signal_connect_object (proxy, "create_menu_proxy",
+					 G_CALLBACK (create_menu_proxy),
+					 action, 0);
 
-	/* We want the menu to popup up on mouse down */
-	g_signal_connect (button, "pressed",
-			  G_CALLBACK (button_pressed_cb), action);
+		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
+		g_signal_connect (button, "toggled",
+				  G_CALLBACK (button_toggled_cb), action);
+
+		/* We want the menu to popup up on mouse down */
+		g_signal_connect (button, "pressed",
+				  G_CALLBACK (button_pressed_cb), action);
+	}
 }
 
 static void
@@ -488,6 +550,7 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
 
 	action_class->toolbar_item_type = EGG_TYPE_TOOL_ITEM;
 	action_class->create_tool_item = create_tool_item;
+	action_class->create_menu_item = create_menu_item;
 	action_class->connect_proxy = connect_proxy;
 
 	object_class->finalize = ephy_topic_action_finalize;
