@@ -801,6 +801,7 @@ mozilla_language_notifier(GConfClient *client,
 			}
 
 			g_strfreev (s);
+			g_free (sys_lang);
 		}		
 	}
 
