@@ -703,27 +703,28 @@ language_editor_update_buttons (PrefsDialog *dialog)
 	GtkTreeModel *model;
 	GtkTreePath *path;
 	GtkTreeIter iter;
+	gboolean can_remove = FALSE, can_move_up = FALSE, can_move_down = FALSE;
 	int selected;
 
 	selection = gtk_tree_view_get_selection (dialog->priv->lang_treeview);
 
-	gtk_widget_set_sensitive (dialog->priv->lang_remove_button, FALSE);
-	gtk_widget_set_sensitive (dialog->priv->lang_up_button, FALSE);
-	gtk_widget_set_sensitive (dialog->priv->lang_down_button, FALSE);
-	
 	if (gtk_tree_selection_get_selected (selection, &model, &iter))
 	{
 		path = gtk_tree_model_get_path (model, &iter);
 	
 		selected = gtk_tree_path_get_indices (path)[0];
-	
-		gtk_widget_set_sensitive (dialog->priv->lang_remove_button, TRUE);
-		gtk_widget_set_sensitive (dialog->priv->lang_up_button, selected > 0);
-		gtk_widget_set_sensitive (dialog->priv->lang_down_button,
-			selected < gtk_tree_model_iter_n_children (model, NULL) - 1);
+
+		can_remove = TRUE;
+		can_move_up = selected > 0;
+		can_move_down = 
+			selected < gtk_tree_model_iter_n_children (model, NULL) - 1;
 
 		gtk_tree_path_free (path);
 	}
+
+	gtk_widget_set_sensitive (dialog->priv->lang_remove_button, can_remove);
+	gtk_widget_set_sensitive (dialog->priv->lang_up_button, can_move_up);
+	gtk_widget_set_sensitive (dialog->priv->lang_down_button, can_move_down);
 }
 
 static void

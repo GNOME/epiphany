@@ -1,5 +1,12 @@
 2004-11-07  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/prefs-dialog.c: (language_editor_update_buttons):
+
+	Fix button sensitivity setting in language editor not to first
+	disable the buttons. Fixes moving an item more than once at a time.
+
+2004-11-07  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-gui.c: (ephy_gui_sanitise_popup_position),
 	(ephy_gui_menu_position_tree_selection),
 	(ephy_gui_menu_position_under_widget):
