@@ -21,13 +21,14 @@
 #include "ephy-shell.h"
 #include "eggtoolitem.h"
 #include "ephy-debug.h"
+#include "ephy-gui.h"
 
 static void ephy_topic_action_init       (EphyTopicAction *action);
 static void ephy_topic_action_class_init (EphyTopicActionClass *class);
 
 struct EphyTopicActionPrivate
 {
-	int bookmark_id;
+	int topic_id;
 };
 
 enum
@@ -87,7 +88,7 @@ create_tool_item (EggAction *action)
 	gtk_widget_show (hbox);
 	gtk_container_add (GTK_CONTAINER (item), hbox);
 
-	button = gtk_button_new ();
+	button = gtk_toggle_button_new ();
 	gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (hbox), button);
@@ -106,6 +107,25 @@ create_tool_item (EggAction *action)
 }
 
 static void
+menu_deactivate_cb (GtkMenuShell *ms, GtkWidget *button)
+{
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
+}
+
+static void
+menu_activate_cb (GtkWidget *item, EggAction *action)
+{
+	EphyNode *node;
+	const char *location;
+
+	node = EPHY_NODE (g_object_get_data (G_OBJECT (item), "node"));
+	location = ephy_node_get_property_string
+		(node, EPHY_NODE_BMK_PROP_LOCATION);
+	g_signal_emit (action, ephy_topic_action_signals[GO_LOCATION],
+		       0, location);
+}
+
+static void
 ephy_topic_action_sync_label (EggAction *action, GParamSpec *pspec, GtkWidget *proxy)
 {
 	GtkLabel *label;
@@ -118,21 +138,61 @@ ephy_topic_action_sync_label (EggAction *action, GParamSpec *pspec, GtkWidget *p
 	gtk_label_set_label (label, action->label);
 }
 
-static void
+static GtkWidget *
+build_topics_menu (EphyTopicAction *action, GtkWidget *button)
+{
+	GtkWidget *menu, *item;
+	GPtrArray *children;
+	int i;
+	EphyNode *node;
+
+	node = ephy_node_get_from_id (action->priv->topic_id);
+
+	menu = gtk_menu_new ();
+	g_signal_connect (menu, "deactivate",
+			  G_CALLBACK (menu_deactivate_cb), button);
+
+	children = ephy_node_get_children (node);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+		const char *title;
+
+		kid = g_ptr_array_index (children, i);
+
+		title = ephy_node_get_property_string
+			(kid, EPHY_NODE_BMK_PROP_TITLE);
+
+		item = gtk_menu_item_new_with_label (title);
+		g_object_set_data (G_OBJECT (item), "node", kid);
+		g_signal_connect (item, "activate",
+				  G_CALLBACK (menu_activate_cb), action);
+		gtk_widget_show (item);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	}
+	ephy_node_thaw (node);
+
+	return menu;
+}
+
+static gboolean
 button_press_cb (GtkWidget *button,
 		 GdkEventButton *event,
 		 EphyTopicAction *action)
 {
-/*
-	if (event->button == 3)
+	if (event->button == 1)
 	{
 		GtkWidget *menu;
 
-		menu = build_topics_menu (action);
-		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 1,
-				gtk_get_current_event_time ());
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+
+		menu = build_topics_menu (action, button);
+		gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+				ephy_gui_menu_position_under_widget,
+				button, 1, gtk_get_current_event_time ());
 	}
-*/
+
+	return FALSE;
 }
 
 static void
@@ -164,7 +224,7 @@ ephy_topic_action_set_property (GObject *object,
 	switch (prop_id)
 	{
 		case PROP_BOOKMARK_ID:
-			bmk->priv->bookmark_id = g_value_get_int (value);
+			bmk->priv->topic_id = g_value_get_int (value);
 			break;
 	}
 }
@@ -182,7 +242,7 @@ ephy_topic_action_get_property (GObject *object,
 	switch (prop_id)
 	{
 		case PROP_BOOKMARK_ID:
-			g_value_set_boolean (value, bmk->priv->bookmark_id);
+			g_value_set_boolean (value, bmk->priv->topic_id);
 			break;
 	}
 }
@@ -235,9 +295,9 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
 
 	g_object_class_install_property (object_class,
                                          PROP_BOOKMARK_ID,
-                                         g_param_spec_int ("bookmark_id",
-                                                           "bookmark_id",
-                                                           "bookmark_id",
+                                         g_param_spec_int ("topic_id",
+                                                           "topic_id",
+                                                           "topic_id",
 							   0,
 							   G_MAXINT,
                                                            0,
@@ -266,6 +326,7 @@ ephy_topic_action_new (const char *name, guint id)
 		(bmk, EPHY_NODE_KEYWORD_PROP_NAME);
 
 	return EGG_ACTION (g_object_new (EPHY_TYPE_TOPIC_ACTION,
+					 "topic_id", id,
 					 "name", name,
 					 "label", title,
 					 NULL));
