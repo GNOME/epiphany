@@ -136,6 +136,7 @@ ephy_zoom_control_init (EphyZoomControl *control)
 	}
 
 	p->combo = combo;
+	gtk_combo_box_set_focus_on_click (GTK_COMBO_BOX (p->combo), FALSE);
 	g_object_ref (combo);
 	gtk_object_sink (GTK_OBJECT (combo));
 	gtk_widget_show (GTK_WIDGET (combo));
