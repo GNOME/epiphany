@@ -43,6 +43,7 @@
 #include "ephy-debug.h"
 #include "ephy-new-bookmark.h"
 #include "ephy-stock-icons.h"
+#include "toolbar.h"
 
 static GtkTargetEntry page_drag_types [] =
 {
@@ -163,6 +164,20 @@ static void
 cmd_clear (EggAction *action,
 	   EphyHistoryWindow *editor)
 {
+	const GList *windows;
+	Session *session;
+	
+	session = ephy_shell_get_session (ephy_shell);
+	windows = session_get_windows (session);
+               
+	for (; windows != NULL; windows = windows->next)
+	{
+		Toolbar *t;
+
+		t = ephy_window_get_toolbar (EPHY_WINDOW (windows->data));
+		toolbar_clear_location_history (t);
+	}
+
 	ephy_history_clear (editor->priv->history);
 }
 
