@@ -68,8 +68,13 @@
 #undef MOZILLA_STRICT_API
 #include "nsMemory.h"
 #include "nsIChannel.h"
+#include "nsIScriptSecurityManager.h"
+#include "nsIServiceManager.h"
 
 #ifdef ALLOW_PRIVATE_API
+/* not frozen yet */
+#include "nsIContentPolicy.h"
+/* will never be frozen */
 #include "nsIDocShell.h"
 #include "nsIMarkupDocumentViewer.h"
 #ifdef HAVE_MOZILLA_PSM
@@ -111,9 +116,15 @@ EphyEventListener::Init(EphyEmbed *aOwner)
 	return NS_OK;
 }
 
-nsresult
-EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
+NS_IMETHODIMP
+EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 {
+	nsCOMPtr<nsIDOMEventTarget> eventTarget;
+	aDOMEvent->GetTarget(getter_AddRefs(eventTarget));
+
+	nsCOMPtr<nsIDOMNode> node = do_QueryInterface(eventTarget);
+	NS_ENSURE_TRUE (node, NS_ERROR_FAILURE);
+
 	nsCOMPtr<nsIDOMElement> linkElement;
 	linkElement = do_QueryInterface (node);
 	if (!linkElement) return NS_ERROR_FAILURE;
@@ -147,34 +158,70 @@ EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
 
 		nsEmbedString spec;
 		rv = doc->GetDocumentURI (spec);
-		NS_ENSURE_SUCCESS (rv, rv);
+		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-		nsCOMPtr<nsIURI> uri;
-		rv = EphyUtils::NewURI (getter_AddRefs(uri), spec);
-		NS_ENSURE_SUCCESS (rv, rv);
+		nsCOMPtr<nsIURI> docUri;
+		EphyUtils::NewURI (getter_AddRefs(docUri), spec);
+		NS_ENSURE_TRUE (docUri, NS_ERROR_FAILURE);
 
-		nsEmbedCString favicon_url;
-		rv = uri->Resolve (link, favicon_url);
-		if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
-		
-		char *url = g_strdup (favicon_url.get());
+		nsEmbedCString faviconUrl;
+		rv = docUri->Resolve (link, faviconUrl);
+		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+		nsCOMPtr<nsIURI> favUri;
+		EphyUtils::NewURI (getter_AddRefs (favUri), faviconUrl);
+		NS_ENSURE_TRUE (favUri, NS_ERROR_FAILURE);
+
+		/* check if load is allowed */
+		nsCOMPtr<nsIScriptSecurityManager> secMan
+			(do_GetService("@mozilla.org/scriptsecuritymanager;1"));
+		/* refuse if we can't check */
+		NS_ENSURE_TRUE (secMan, NS_OK);
+
+		rv = secMan->CheckLoadURI(docUri, favUri,
+					  nsIScriptSecurityManager::STANDARD);
+		/* failure means it didn't pass the security check */
+		if (NS_FAILED (rv)) return NS_OK;
+
+		/* security check passed, now check with content policy */
+		nsCOMPtr<nsIContentPolicy> policy =
+			do_GetService("@mozilla.org/layout/content-policy;1");
+		/* refuse if we can't check */
+		NS_ENSURE_TRUE (policy, NS_OK);
+
+#if MOZ_NSICONTENTPOLICY_VARIANT == 2
+		/* FIXME: mozilla tabbrowser.xml passes
+		 * safeGetProperty(event.target, "type") as mimetype guess:
+		 */
+		PRUnichar typeAttr[] = { 't', 'y', 'p', 'e', '\0' };
+		nsEmbedString typeVal;
+		linkElement->GetAttribute (nsEmbedString (typeAttr), typeVal);
+
+		nsEmbedCString cTypeVal;
+		NS_UTF16ToCString (typeVal, NS_CSTRING_ENCODING_UTF8, cTypeVal);
+
+		PRInt16 decision = 0;
+		rv = policy->ShouldLoad (nsIContentPolicy::TYPE_IMAGE,
+					 favUri, docUri, eventTarget,
+					 cTypeVal, nsnull,
+					 &decision);
+		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+		if (decision != nsIContentPolicy::ACCEPT) return NS_OK;
+#else
+		PRBool shouldLoad = PR_FALSE;
+		rv = policy->ShouldLoad (nsIContentPolicy::IMAGE,
+					 favUri, eventTarget,
+					 nsnull /* FIXME: DOM window*/,
+					 &shouldLoad);
+		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+		if (!shouldLoad) return NS_OK;
+#endif
+
+		/* ok, we accept this as a valid favicon for this site */
+		char *url = g_strdup (faviconUrl.get());
 		g_signal_emit_by_name (mOwner, "ge_favicon", url);
 		g_free (url);
 	}
-
-	return NS_OK;
-}	
-
-NS_IMETHODIMP
-EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
-{
-	nsCOMPtr<nsIDOMEventTarget> eventTarget;
-	aDOMEvent->GetTarget(getter_AddRefs(eventTarget));
-
-	nsCOMPtr<nsIDOMNode> node = do_QueryInterface(eventTarget);
-	NS_ENSURE_TRUE (node, NS_ERROR_FAILURE);
-
-	HandleFaviconLink (node);
 
 	return NS_OK;
 }
