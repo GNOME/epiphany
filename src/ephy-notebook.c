@@ -584,20 +584,13 @@ ephy_notebook_switch_page_cb (GtkNotebook *notebook,
 						 child);
 }
 
-#define INSANE_NUMBER_OF_URLS	20
-
 static void
 notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 				gint x, gint y, GtkSelectionData *selection_data,
 				guint info, guint time, EphyTab *tab)
 {
-	EphyEmbed *embed = NULL;
-	EphyWindow *window = NULL;
-	GtkWidget *toplevel;
-	GList *uris = NULL, *l;
+	GList *uri_list = NULL;
 	GnomeVFSURI *uri;
-	gchar *url = NULL;
-	guint num = 0;
 	gchar **tmp;
 
 	g_signal_stop_emission_by_name (widget, "drag_data_received");
@@ -613,62 +606,31 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 		if (tmp)
 		{
 			uri = gnome_vfs_uri_new (tmp[0]);
-			if (uri) uris = g_list_append (uris, uri);
+			if (uri)
+			{
+				uri_list = g_list_append (uri_list, uri);
+			}
 			g_strfreev (tmp);
 		}
 	}
 	else if (selection_data->target == gdk_atom_intern (EPHY_DND_URI_LIST_TYPE, FALSE))
 	{
-		uris = gnome_vfs_uri_list_parse (selection_data->data);
+		uri_list = gnome_vfs_uri_list_parse (selection_data->data);
 	}
 	else
 	{
 		g_assert_not_reached ();
 	}
 
-	if (uris == NULL) return;
-
-	toplevel = gtk_widget_get_toplevel (widget);
-	g_return_if_fail (EPHY_IS_WINDOW (toplevel));
-	window = EPHY_WINDOW (toplevel);
-
-	if (tab != NULL)
+	if (uri_list)
 	{
-		embed = ephy_tab_get_embed (tab);
-		g_return_if_fail (EPHY_IS_EMBED (embed));
+		EphyWindow *window;
+
+		window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (tab)));
+
+		ephy_window_load_in_tabs (window, tab, uri_list);
+		gnome_vfs_uri_list_free (uri_list);
 	}
-
-	l = uris;
-	while (l != NULL && num < INSANE_NUMBER_OF_URLS)
-	{
-		uri = (GnomeVFSURI*) l->data;
-		url = gnome_vfs_uri_to_string (uri, GNOME_VFS_URI_HIDE_NONE);
-
-		if (num == 0 && embed != NULL)
-		{
-			/**
-			 * The first url is special: if the drag was to an
-			 * existing tab, load it there
-			 */
-			ephy_embed_load_url (embed, url);
-		}
-		else
-		{
-			tab = ephy_shell_new_tab (ephy_shell, window,
-						  tab, url,
-						  EPHY_NEW_TAB_OPEN_PAGE |
-						  EPHY_NEW_TAB_IN_EXISTING_WINDOW |
-						  (tab ? EPHY_NEW_TAB_APPEND_AFTER :
-							 EPHY_NEW_TAB_APPEND_LAST));
-		}
-
-		g_free (url);
-		url = NULL;
-		l = l->next;
-		++num;
-	}
-
-	gnome_vfs_uri_list_free (uris);
 }
 
 /*

@@ -304,6 +304,7 @@ static guint ephy_popups_n_entries = G_N_ELEMENTS (ephy_popups_entries);
 
 #define CONF_LOCKDOWN_HIDE_MENUBAR "/apps/epiphany/lockdown/hide_menubar"
 #define CONF_DESKTOP_BG_PICTURE "/desktop/gnome/background/picture_filename"
+#define INSANE_NUMBER_OF_URLS 20
 
 #define EPHY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WINDOW, EphyWindowPrivate))
 
@@ -2617,6 +2618,52 @@ ephy_window_set_zoom (EphyWindow *window,
 	if (zoom != current_zoom)
 	{
 		ephy_embed_set_zoom (embed, zoom);
+	}
+}
+
+void
+ephy_window_load_in_tabs (EphyWindow *window, EphyTab *tab, GList *uri_list)
+{
+	EphyEmbed *embed = NULL;
+	GList *l;
+	gchar *url = NULL;
+	guint num = 0;
+	GnomeVFSURI *uri;
+
+	if (tab != NULL)
+	{
+		embed = ephy_tab_get_embed (tab);
+		g_return_if_fail (EPHY_IS_EMBED (embed));
+	}
+
+	l = uri_list;
+	while (l != NULL && num < INSANE_NUMBER_OF_URLS)
+	{
+		uri = (GnomeVFSURI*) l->data;
+		url = gnome_vfs_uri_to_string (uri, GNOME_VFS_URI_HIDE_NONE);
+
+		if (num == 0 && embed != NULL)
+		{
+			/**
+			 * The first url is special: if the drag was to an
+			 * existing tab, load it there
+			 */
+			ephy_embed_load_url (embed, url);
+		}
+		else
+		{
+			tab = ephy_shell_new_tab (ephy_shell, window,
+						  tab, url,
+						  EPHY_NEW_TAB_OPEN_PAGE |
+						  EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+						  (tab ? EPHY_NEW_TAB_APPEND_AFTER :
+							 EPHY_NEW_TAB_APPEND_LAST));
+		}
+
+		g_free (url);
+		url = NULL;
+		l = l->next;
+		++num;
 	}
 }
 
