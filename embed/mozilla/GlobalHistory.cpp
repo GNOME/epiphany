@@ -90,6 +90,13 @@ NS_IMETHODIMP MozGlobalHistory::GetLastPageVisited(char **aLastPageVisited)
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
+#if MOZILLA_SNAPSHOT > 8
+NS_IMETHODIMP MozGlobalHistory::SetLastPageVisited(const char *aLastPageVisited)
+{
+        return NS_ERROR_NOT_IMPLEMENTED;
+}
+#endif
+
 NS_IMETHODIMP MozGlobalHistory::HidePage(const char *url)
 {
 	return NS_ERROR_NOT_IMPLEMENTED;
