@@ -310,13 +310,15 @@ find_get_info (EphyDialog *dialog)
 
         /* get the search string from the entry field */
 	ephy_dialog_get_value (dialog, WORD_PROP, &word);
-        search_string = g_strdup(g_value_get_string (&word));
+        search_string = g_strdup (g_value_get_string (&word));
 	g_value_unset (&word);
 
         /* don't do null searches */
-        if (search_string && search_string[0] == '\0')
+        if (search_string == NULL || search_string[0] == '\0')
         {
 		set_navigation_flags (find_dialog, 0);
+		g_free (search_string);
+
                 return;
         }
 
@@ -382,6 +384,12 @@ find_dialog_finalize (GObject *object)
 	g_signal_handlers_disconnect_by_func (dialog, G_CALLBACK (sync_embed), NULL);
 
         g_return_if_fail (dialog->priv != NULL);
+
+	if (dialog->priv->properties != NULL)
+	{
+		g_free (dialog->priv->properties->search_string);
+		g_free (dialog->priv->properties);
+	}
 
 	unset_old_embed (dialog);
 

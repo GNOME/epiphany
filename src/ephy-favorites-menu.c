@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2002  Ricardo Fern·ndez Pascual
+ *  Copyright (C) 2002  Ricardo Fern√°ndez Pascual
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -134,9 +134,11 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 
 	for (i = 0; i < children->len; i++)
 	{
-		char *verb = g_strdup_printf ("GoFav%d", i);
+		char *verb;
 		EphyNode *node;
 		EggAction *action;
+
+		verb = g_strdup_printf ("GoFav%d", i);
 
 		node = g_ptr_array_index (children, i);
 
@@ -153,6 +155,8 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 		g_string_append (xml, "\" verb=\"");
 		g_string_append (xml, verb);
 		g_string_append (xml, "\"/>\n");
+
+		g_free (verb);
 	}
 	ephy_node_thaw (fav);
 
