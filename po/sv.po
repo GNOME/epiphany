@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"POT-Creation-Date: 2003-05-14 01:28+0200\n"
-"PO-Revision-Date: 2003-05-14 01:29+0200\n"
+"POT-Creation-Date: 2003-05-15 10:55+0200\n"
+"PO-Revision-Date: 2003-05-15 10:55+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -832,7 +832,7 @@ msgid "Western"
 msgstr "Västlig"
 
 #: data/glade/prefs-dialog.glade.h:70
-#: src/bookmarks/ephy-bookmark-properties.c:373
+#: src/bookmarks/ephy-bookmark-properties.c:374
 msgid "_Address:"
 msgstr "_Adress:"
 
@@ -1302,7 +1302,7 @@ msgid "%d KB"
 msgstr "%d kB"
 
 #: embed/downloader-view.c:497 embed/downloader-view.c:515
-#: src/ephy-window.c:1047
+#: src/ephy-window.c:1048
 msgid "Unknown"
 msgstr "Okänd"
 
@@ -1832,17 +1832,17 @@ msgstr "%s:"
 msgid "%s Properties"
 msgstr "Egenskaper för %s"
 
-#: src/bookmarks/ephy-bookmark-properties.c:354
+#: src/bookmarks/ephy-bookmark-properties.c:355
 #: src/bookmarks/ephy-new-bookmark.c:217
 msgid "_Title:"
 msgstr "_Titel:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:396
+#: src/bookmarks/ephy-bookmark-properties.c:397
 #: src/bookmarks/ephy-new-bookmark.c:240
 msgid "To_pics:"
 msgstr "_Ämnen:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:405
+#: src/bookmarks/ephy-bookmark-properties.c:406
 msgid "_Show in bookmarks bar"
 msgstr "_Visa i bokmärkesraden"
 
@@ -2093,7 +2093,7 @@ msgstr "Ämnen"
 msgid "Title"
 msgstr "Titel"
 
-#: src/bookmarks/ephy-new-bookmark.c:262
+#: src/bookmarks/ephy-new-bookmark.c:263
 msgid "New Bookmark"
 msgstr "Nytt bokmärke"
 
@@ -2101,17 +2101,14 @@ msgstr "Nytt bokmärke"
 #. * but it doesn't support markup of text yet
 #. * so we build our own. See bug 65501.
 #.
-#: src/bookmarks/ephy-new-bookmark.c:306
+#: src/bookmarks/ephy-new-bookmark.c:307
 msgid "Duplicated bookmark"
 msgstr "Duplicerat bokmärke"
 
-#: src/bookmarks/ephy-new-bookmark.c:334
-msgid "A bookmark titled "
-msgstr "Ett bokmärke med titeln "
-
-#: src/bookmarks/ephy-new-bookmark.c:335
-msgid " already exists for this address."
-msgstr " finns redan för denna adress."
+#: src/bookmarks/ephy-new-bookmark.c:336
+#, c-format
+msgid "A bookmark titled %s already exists for this address"
+msgstr "Ett bokmärke med titeln %s finns redan för denna adress"
 
 #: src/bookmarks/ephy-topic-action.c:188
 msgid "Empty"
@@ -2729,27 +2726,27 @@ msgstr "Spara som"
 msgid "Bookmark"
 msgstr "Bokmärke"
 
-#: src/ephy-window.c:1050
+#: src/ephy-window.c:1051
 msgid "Insecure"
 msgstr "Osäker"
 
-#: src/ephy-window.c:1053
+#: src/ephy-window.c:1054
 msgid "Broken"
 msgstr "Trasig"
 
-#: src/ephy-window.c:1056
+#: src/ephy-window.c:1057
 msgid "Medium"
 msgstr "Mellan"
 
-#: src/ephy-window.c:1060
+#: src/ephy-window.c:1061
 msgid "Low"
 msgstr "Låg"
 
-#: src/ephy-window.c:1064
+#: src/ephy-window.c:1065
 msgid "High"
 msgstr "Hög"
 
-#: src/ephy-window.c:1074
+#: src/ephy-window.c:1075
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2758,7 +2755,7 @@ msgstr ""
 "Säkerhetsnivå: %s\n"
 "%s"
 
-#: src/ephy-window.c:1080
+#: src/ephy-window.c:1081
 #, c-format
 msgid "Security level: %s"
 msgstr "Säkerhetsnivå: %s"
@@ -3070,19 +3067,25 @@ msgid "_Add a New Toolbar"
 msgstr "_Lägg till en ny verktygsrad"
 
 #. Translator credits
-#: src/window-commands.c:750
+#: src/window-commands.c:751
 msgid "translator_credits"
 msgstr ""
 "Christian Rose\n"
 "Dennis Persson\n"
 "Skicka synpunkter på översättningen till sv@li.org"
 
-#: src/window-commands.c:767
+#: src/window-commands.c:768
 msgid "A GNOME browser based on Mozilla"
 msgstr "En GNOME-webbläsare, baserad på Mozilla"
 
 #~ msgid "A bookmark titled %s already exists for this address."
 #~ msgstr "Ett bokmärke med titeln %s finns redan för denna adress."
+
+#~ msgid "A bookmark titled "
+#~ msgstr "Ett bokmärke med titeln "
+
+#~ msgid " already exists for this address."
+#~ msgstr " finns redan för denna adress."
 
 #~ msgid "Bookmark Link..."
 #~ msgstr "Lägg till bokmärke för länk..."
