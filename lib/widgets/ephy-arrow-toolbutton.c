@@ -257,7 +257,7 @@ ephy_arrow_toolbutton_finalize (GObject *object)
 {
 	EphyArrowToolButton *arrow_toolbutton = EPHY_ARROW_TOOLBUTTON (object);
 
-	gtk_widget_destroy (GTK_WIDGET (arrow_toolbutton->priv->menu));
+	g_object_unref (arrow_toolbutton->priv->menu);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
