@@ -585,7 +585,7 @@ egg_toolbars_model_remove_toolbar (EggToolbarsModel   *t,
 
   flags = egg_toolbars_model_get_flags (t, position);
 
-  if (!(flags && EGG_TB_MODEL_NOT_REMOVABLE))
+  if (!(flags & EGG_TB_MODEL_NOT_REMOVABLE))
     {
       node = g_node_nth_child (t->priv->toolbars, position);
       g_return_if_fail (node != NULL);
