@@ -34,6 +34,7 @@ struct _EphyLocationActionPrivate
 {
 	GList *actions;
 	char *address;
+	gboolean editable;
 	EphyNode *smart_bmks;
 	EphyBookmarks *bookmarks;
 };
@@ -50,7 +51,8 @@ static void sync_address		    (GtkAction *action,
 enum
 {
 	PROP_0,
-	PROP_ADDRESS
+	PROP_ADDRESS,
+	PROP_EDITABLE
 };
 
 enum
@@ -165,6 +167,16 @@ sync_address (GtkAction *act, GParamSpec *pspec, GtkWidget *proxy)
 }
 
 static void
+sync_editable (GtkAction *act, GParamSpec *pspec, GtkWidget *proxy)
+{
+	EphyLocationAction *action = EPHY_LOCATION_ACTION (act);
+	GtkWidget *entry;
+
+	entry = GTK_BIN (proxy)->child;
+	gtk_entry_set_editable (GTK_ENTRY (entry), action->priv->editable);
+}
+
+static void
 remove_completion_actions (GtkAction *action, GtkWidget *proxy)
 {
 	GtkWidget *entry;
@@ -234,6 +246,9 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 		sync_address (action, NULL, proxy);
 		g_signal_connect_object (action, "notify::address",
 					 G_CALLBACK (sync_address), proxy, 0);
+		sync_editable (action, NULL, proxy);
+		g_signal_connect_object (action, "notify::editable",
+					 G_CALLBACK (sync_editable), proxy, 0);
 
 		entry = GTK_BIN (proxy)->child;
 		g_signal_connect_object (entry, "activate",
@@ -279,6 +294,10 @@ ephy_location_action_set_property (GObject *object,
 		case PROP_ADDRESS:
 			ephy_location_action_set_address (action, g_value_get_string (value));
 			break;
+		case PROP_EDITABLE:
+			action->priv->editable = g_value_get_boolean (value);
+			g_object_notify (G_OBJECT (action), "editable");
+			break;
 	}
 }
 
@@ -294,6 +313,9 @@ ephy_location_action_get_property (GObject *object,
 	{
 		case PROP_ADDRESS:
 			g_value_set_string (value, ephy_location_action_get_address (action));
+			break;
+		case PROP_EDITABLE:
+			g_value_set_boolean (value, action->priv->editable);
 			break;
 	}
 }
@@ -347,6 +369,14 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 							      "The address",
 							      "",
 							      G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_EDITABLE,
+					 g_param_spec_boolean ("editable",
+							       "Editable",
+							       "Editable",
+							       TRUE,
+							       G_PARAM_READWRITE));
+
 
 	g_type_class_add_private (object_class, sizeof (EphyLocationActionPrivate));
 }
@@ -425,7 +455,7 @@ ephy_location_action_init (EphyLocationAction *action)
 
 	action->priv->address = g_strdup ("");
 	action->priv->actions = NULL;
-
+	action->priv->editable = TRUE;
 	action->priv->bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	action->priv->smart_bmks = ephy_bookmarks_get_smart_bookmarks
 		(action->priv->bookmarks);

@@ -42,6 +42,7 @@
 #include "ephy-new-bookmark.h"
 #include "ephy-stock-icons.h"
 #include "ephy-toolbars-model.h"
+#include "eel-gconf-extensions.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -78,6 +79,8 @@ enum
 
 static GObjectClass *parent_class = NULL;
 
+#define CONF_LOCKDOWN_DISABLE_ARBITRARY_URL  "/apps/epiphany/lockdown/disable_arbitrary_url"
+
 #define EPHY_TOOLBAR_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOOLBAR, ToolbarPrivate))
 
 struct ToolbarPrivate
@@ -90,6 +93,7 @@ struct ToolbarPrivate
 	GtkWidget *spinner;
 	GtkWidget *favicon;
 	GtkWidget *go;
+	guint disable_arbitrary_url_notifier_id;
 };
 
 GType
@@ -119,6 +123,41 @@ toolbar_get_type (void)
 
         return toolbar_type;
 
+}
+
+static void
+update_location_editable (Toolbar *t)
+{
+	GtkActionGroup *action_group;
+	GtkAction *action;
+	gboolean editable;
+
+	editable = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_ARBITRARY_URL);
+
+	/* Restore the real web page address when disabling entry */
+	if (!editable)
+	{
+		EphyEmbed *embed;
+		char *address;
+
+		embed = ephy_window_get_active_embed (t->priv->window);
+		address = ephy_embed_get_location (embed, TRUE);
+		toolbar_set_location (t, address);
+		g_free (address);
+	}
+
+	action_group = t->priv->action_group;
+	action = gtk_action_group_get_action (action_group, "Location");
+	g_object_set (G_OBJECT (action), "editable", editable, NULL);
+}
+
+static void
+arbitrary_url_notifier (GConfClient *client,
+		        guint cnxn_id,
+		        GConfEntry *entry,
+		        Toolbar *t)
+{
+	update_location_editable (t);
 }
 
 static void
@@ -339,6 +378,7 @@ toolbar_setup_actions (Toolbar *t)
 	g_signal_connect (action, "notify::address",
 			  G_CALLBACK (sync_user_input_cb), t);
 	gtk_action_group_add_action (t->priv->action_group, action);
+	update_location_editable (t);
 	g_object_unref (action);
 
 	action = g_object_new (EPHY_TYPE_ZOOM_ACTION,
@@ -515,6 +555,10 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 			         G_CALLBACK (window_state_event_cb),
 			         t, 0);
 
+	t->priv->disable_arbitrary_url_notifier_id = eel_gconf_notification_add
+		(CONF_LOCKDOWN_DISABLE_ARBITRARY_URL,
+		 (GConfClientNotifyFunc)arbitrary_url_notifier, t);
+
 	g_object_set (G_OBJECT (t),
 		      "MenuMerge", t->priv->ui_merge,
 		      NULL);
@@ -570,10 +614,12 @@ toolbar_finalize (GObject *object)
 {
 	Toolbar *t = EPHY_TOOLBAR (object);
 
-	/* FIXME: why not at the end? */
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	eel_gconf_notification_remove
+		(t->priv->disable_arbitrary_url_notifier_id);
 
 	g_object_unref (t->priv->action_group);
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 
 	LOG ("Toolbar finalized")
 }
