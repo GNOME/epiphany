@@ -206,7 +206,7 @@ ephy_favicon_cache_init (EphyFaviconCache *cache)
 						  NULL);
 
 	cache->priv->directory = g_build_filename (ephy_dot_dir (),
-						   "favicon_cache/",
+						   "favicon_cache",
 						   NULL);
 
 	if (g_file_test (cache->priv->directory, G_FILE_TEST_IS_DIR) == FALSE)
