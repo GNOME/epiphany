@@ -411,7 +411,8 @@ address_has_web_scheme (const char *address)
 		has_web_scheme = (strcmp (scheme, "http") == 0 ||
 				  strcmp (scheme, "https") == 0 ||
 				  strcmp (scheme, "ftp") == 0 ||
-				  strcmp (scheme, "file") == 0);
+				  strcmp (scheme, "file") == 0 ||
+				  strcmp (scheme, "gopher") == 0);
 
 		gnome_vfs_uri_unref (uri);
 	}
