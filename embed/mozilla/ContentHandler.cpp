@@ -571,8 +571,11 @@ MimeAskActionDialog::MimeAskActionDialog(GContentHandler *aContentHandler,
 	GtkWidget *aMimeIcon = glade_xml_get_widget (mGXml,
 						     "mime_ask_action_icon");
 	mime_icon = ephy_gui_get_pixbuf_from_mime_type (aMimeType, 32);
-	gtk_image_set_from_pixbuf (GTK_IMAGE(aMimeIcon), mime_icon);
-	g_object_unref (mime_icon);
+	if (mime_icon != NULL)
+	{
+		gtk_image_set_from_pixbuf (GTK_IMAGE(aMimeIcon), mime_icon);
+		g_object_unref (mime_icon);
+	}
 
 	description = gnome_vfs_mime_get_description (aMimeType);
 	if (!description) description = aMimeType;
