@@ -32,7 +32,6 @@
 #include "nsIInterfaceRequestor.h"
 #include "nsIInterfaceRequestorUtils.h"
 
-#include <gtk/gtkversion.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkstock.h>
@@ -47,14 +46,12 @@
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtkexpander.h>
-#if GTK_CHECK_VERSION (2,3,1)
 #include <gtk/gtkliststore.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtkcelllayout.h>
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkcombobox.h>
-#endif
 #include <glib/gi18n.h>
 
 #include "GtkNSSClientAuthDialogs.h"
@@ -98,8 +95,6 @@ higgy_indent_widget (GtkWidget *widget)
 	return hbox;
 }
 
-#if GTK_CHECK_VERSION(2,3,1)
-
 static void
 combo_changed_cb (GtkComboBox *combo, GtkTextView *textview)
 {
@@ -128,31 +123,6 @@ combo_changed_cb (GtkComboBox *combo, GtkTextView *textview)
 	}
 }
 
-#else
-
-static void
-option_menu_changed_cb (GtkOptionMenu *optionmenu, GtkTextView *textview)
-{
-	GtkWidget *menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (optionmenu));;
-	GtkWidget *item = gtk_menu_get_active (GTK_MENU (menu));
-	GtkTextBuffer *buffer = gtk_text_view_get_buffer (textview);
-	PRUnichar *details;
-
-	if (item == 0)
-	{
-		gtk_text_buffer_set_text (buffer, "", -1);
-		return;
-	}
-
-	details = (PRUnichar*)g_object_get_data (G_OBJECT (item), "details");
-	g_return_if_fail (details);
-
-	const nsACString &certnick = NS_ConvertUTF16toUTF8(details);
-	gtk_text_buffer_set_text (buffer, PromiseFlatCString(certnick).get(), -1);
-}
-
-#endif
-
 NS_IMETHODIMP
 GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 					    const PRUnichar *cn, 
@@ -165,14 +135,10 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 {
 	GtkWidget *dialog, *label, *vbox, *textview;
 	GtkWidget *details, *expander, *hbox, *image;
-#if GTK_CHECK_VERSION(2,3,1)
 	GtkWidget *combo;
 	GtkListStore *store;
 	GtkTreeIter iter;
 	GtkCellRenderer *renderer;
-#else
-	GtkWidget *menu, *optionmenu;
-#endif
 	char *msg, *tt_cn, *markup_text;
 	PRUint32 i;
 
@@ -233,8 +199,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	g_free (tt_cn);
 	g_free (markup_text);
 
-        /* Create and populate the option menu */
-#if GTK_CHECK_VERSION (2,3,1)
+        /* Create and populate the combo */
 	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 	for (i = 0; i < count; i++)
 	{
@@ -258,23 +223,6 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 
 	gtk_widget_show (combo);
 	gtk_box_pack_start (GTK_BOX (vbox), combo, FALSE, TRUE, 0);
-#else
-	optionmenu = gtk_option_menu_new ();
-	menu = gtk_menu_new ();
-	gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu), menu);
-	gtk_box_pack_start (GTK_BOX (vbox), optionmenu, FALSE, TRUE, 0);
-	gtk_widget_show (menu);
-	gtk_widget_show (optionmenu);
-
-	for (i = 0 ; i < count ; i++)
-	{
-		const nsACString &certnick = NS_ConvertUTF16toUTF8(certNickList[i]);
-		GtkWidget *item = gtk_menu_item_new_with_label (PromiseFlatCString(certnick).get());
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-		g_object_set_data (G_OBJECT (item), "details", (void*)certDetailsList[i]);
-		gtk_widget_show (item);
-	}
-#endif
 
 	expander = gtk_expander_new_with_mnemonic (_("Certificate _Details"));
 	ephy_state_add_expander (GTK_WIDGET (expander), "client-auth-dialog-expander", FALSE);
@@ -303,30 +251,18 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 
 	gtk_container_add (GTK_CONTAINER (expander), details);
 
-#if GTK_CHECK_VERSION(2,3,1)
 	g_signal_connect (G_OBJECT (combo), "changed",
 			  G_CALLBACK (combo_changed_cb),
 			  textview);
 
 	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
-#else
-	g_signal_connect (G_OBJECT (optionmenu), "changed",
-			  G_CALLBACK (option_menu_changed_cb),
-			  textview);
-
-	gtk_option_menu_set_history (GTK_OPTION_MENU (optionmenu), 0);
-#endif
 
 	/* run the dialog */
 	int res = gtk_dialog_run (GTK_DIALOG (dialog));
 	if (res == GTK_RESPONSE_OK)
 	{
 		*canceled = PR_FALSE;
-#if GTK_CHECK_VERSION(2,3,1)
 		*selectedIndex = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
-#else
-		*selectedIndex = gtk_option_menu_get_history (GTK_OPTION_MENU (optionmenu));
-#endif
 	} 
 	else
 	{
@@ -336,7 +272,5 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	gtk_widget_destroy (dialog);
 	return NS_OK;
 }
-
-
 
 #endif
