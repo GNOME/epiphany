@@ -19,3 +19,5 @@ DISTCLEANFILES = 			\
 	intltool-extract 		\
 	intltool-merge 			\
 	intltool-update
+
+DISTCHECK_CONFIGURE_FLAGS = --disable-nautilus-view --with-mozilla-snapshot=trunk
