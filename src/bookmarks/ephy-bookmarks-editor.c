@@ -105,13 +105,13 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 	{ "Edit", N_("_Edit"), NULL, NULL, NULL, NULL, NULL },
 	{ "FakeToplevel", (""), NULL, NULL, NULL, NULL, NULL },
 
-	{ "NewTopic", N_("_New Topic"), GTK_STOCK_NEW, NULL,
+	{ "NewTopic", N_("_New Topic"), GTK_STOCK_NEW, "<control>N",
 	  NULL, G_CALLBACK (cmd_add_topic), NULL },
 
-	{ "OpenInWindow", N_("_Open In New Window"), GTK_STOCK_OPEN, NULL,
+	{ "OpenInWindow", N_("_Open In New Window"), GTK_STOCK_OPEN, "<control>O",
 	  NULL, G_CALLBACK (cmd_open_bookmarks_in_browser), NULL },
 
-	{ "OpenInTab", N_("Open In New _Tab"), NULL, NULL,
+	{ "OpenInTab", N_("Open In New _Tab"), NULL, "<shift><control>O",
 	  NULL, G_CALLBACK (cmd_open_bookmarks_in_tabs), NULL },
 
 	{ "RenameBookmark", N_("_Rename Bookmark"), NULL, NULL,
@@ -126,10 +126,10 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 	{ "RemoveTopic", N_("D_elete Topic"), NULL, NULL,
           NULL, G_CALLBACK (cmd_remove_topic), NULL },
 
-	{ "Properties", N_("_Properties"), GTK_STOCK_PROPERTIES, NULL,
+	{ "Properties", N_("_Properties"), GTK_STOCK_PROPERTIES, "<alt>Return",
 	  NULL, G_CALLBACK (cmd_bookmark_properties), NULL },
 
-	{ "Close", N_("_Close"), GTK_STOCK_CLOSE, NULL,
+	{ "Close", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
 	  NULL, G_CALLBACK (cmd_close), NULL },
 };
 static guint ephy_bookmark_popup_n_entries = G_N_ELEMENTS (ephy_bookmark_popup_entries);
