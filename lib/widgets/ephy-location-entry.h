@@ -28,19 +28,18 @@
 #include <gtk/gtktoolitem.h>
 #include <gtk/gtktreemodel.h>
 
+G_BEGIN_DECLS
+
 #define EPHY_TYPE_LOCATION_ENTRY		(ephy_location_entry_get_type())
-#define EPHY_LOCATION_ENTRY(object)		(G_TYPE_CHECK_INSTANCE_CAST((object), EPHY_TYPE_LOCATION_ENTRY,\
-						 EphyLocationEntry))
-#define EPHY_LOCATION_ENTRY_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST((klass), EPHY_TYPE_LOCATION_ENTRY,\
-						 EphyLocationEntryClass))
+#define EPHY_LOCATION_ENTRY(object)		(G_TYPE_CHECK_INSTANCE_CAST((object), EPHY_TYPE_LOCATION_ENTRY, EphyLocationEntry))
+#define EPHY_LOCATION_ENTRY_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST((klass), EPHY_TYPE_LOCATION_ENTRY, EphyLocationEntryClass))
 #define EPHY_IS_LOCATION_ENTRY(object)		(G_TYPE_CHECK_INSTANCE_TYPE((object), EPHY_TYPE_LOCATION_ENTRY))
 #define EPHY_IS_LOCATION_ENTRY_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE((klass), EPHY_TYPE_LOCATION_ENTRY))
-#define EPHY_LOCATION_ENTRY_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_LOCATION_ENTRY,\
-						 EphyLocationEntryClass))
+#define EPHY_LOCATION_ENTRY_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_LOCATION_ENTRY, EphyLocationEntryClass))
 
-typedef struct _EphyLocationEntry EphyLocationEntry;
-typedef struct _EphyLocationEntryClass EphyLocationEntryClass;
-typedef struct _EphyLocationEntryPrivate EphyLocationEntryPrivate;
+typedef struct _EphyLocationEntry		EphyLocationEntry;
+typedef struct _EphyLocationEntryClass		EphyLocationEntryClass;
+typedef struct _EphyLocationEntryPrivate	EphyLocationEntryPrivate;
 
 struct _EphyLocationEntryClass
 {
@@ -57,22 +56,24 @@ struct _EphyLocationEntry
 	EphyLocationEntryPrivate *priv;
 };
 
-GType			ephy_location_entry_get_type		(void);
+GType		ephy_location_entry_get_type		(void);
 
-GtkWidget              *ephy_location_entry_new			(void);
+GtkWidget      *ephy_location_entry_new			(void);
 
-void			ephy_location_entry_set_completion	(EphyLocationEntry *le,
-								 GtkTreeModel *model,
-								 guint text_col,
-								 guint action_col,
-								 guint keywords_col,
-								 guint relevance_col);
+void		ephy_location_entry_set_completion	(EphyLocationEntry *le,
+							 GtkTreeModel *model,
+							 guint text_col,
+							 guint action_col,
+							 guint keywords_col,
+							 guint relevance_col);
 
-void			ephy_location_entry_set_location	(EphyLocationEntry *le,
-								 const gchar *new_location);
+void		ephy_location_entry_set_location	(EphyLocationEntry *le,
+							 const char *new_location);
 
-const char	       *ephy_location_entry_get_location	(EphyLocationEntry *le);
+const char     *ephy_location_entry_get_location	(EphyLocationEntry *le);
 
-void			ephy_location_entry_activate		(EphyLocationEntry *le);
+void		ephy_location_entry_activate		(EphyLocationEntry *le);
+
+G_END_DECLS
 
 #endif
