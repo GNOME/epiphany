@@ -65,7 +65,7 @@ struct EphyNewBookmarkPrivate
 	EphyBookmarks *bookmarks;
 	char *location;
 	char *icon;
-	gulong id;
+	guint id;
 
 	GtkWidget *title_entry;
 	GtkWidget *topics_selector;
@@ -508,7 +508,7 @@ ephy_new_bookmark_set_icon (EphyNewBookmark *bookmark,
 	bookmark->priv->icon = icon ? g_strdup (icon) : NULL;
 }
 
-gulong
+guint
 ephy_new_bookmark_get_id (EphyNewBookmark *bookmark)
 {
 	return bookmark->priv->id;

@@ -254,7 +254,7 @@ static void
 toolbar_checkbox_changed_cb (GtkWidget *checkbox, EphyBookmarkProperties *props)
 {
 	gboolean state;
-	gulong id;
+	guint id;
 
 	state = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbox));
 
@@ -314,7 +314,7 @@ build_ui (EphyBookmarkProperties *editor)
 	char *str;
 	const char *tmp;
 	gboolean state;
-	gulong id;
+	guint id;
 
 	g_signal_connect (G_OBJECT (editor),
 			  "response",

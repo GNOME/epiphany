@@ -569,7 +569,7 @@ bookmarks_child_changed_cb (EphyNode *node,
 			    guint property_id,
 			    GtkAction *action)
 {
-	gulong id;
+	guint id;
 
 	id = EPHY_BOOKMARK_ACTION (action)->priv->bookmark_id;
 

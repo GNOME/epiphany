@@ -210,7 +210,7 @@ create_menu (EphyBookmarksMenu *menu, EphyNode *node, const char *path)
 			child = l->data;
 			id = ephy_node_get_id (child);
 			g_snprintf (verb, sizeof (verb), 
-				    "OpenBmk%ld", ephy_node_get_id (child));
+				    "OpenBmk%d", ephy_node_get_id (child));
 			g_snprintf (name, sizeof (name), "%sName", verb);
 			g_snprintf (accel_path, sizeof (accel_path),
 				    "<Actions>/BookmarksActions/%s", verb);
@@ -487,7 +487,7 @@ topic_child_changed_cb (EphyNode *node,
 		return;
 	}
 
-	g_snprintf (name, sizeof (name), "OpenTopic%ld", ephy_node_get_id (child));
+	g_snprintf (name, sizeof (name), "OpenTopic%d", ephy_node_get_id (child));
 
 	action = gtk_action_group_get_action (menu->priv->action_group, name);
 

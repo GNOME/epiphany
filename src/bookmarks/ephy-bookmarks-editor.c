@@ -345,7 +345,7 @@ cmd_show_in_bookmarks_bar (GtkAction *action,
 	EphyNode *node;
 	GList *selection;
 	gboolean state, topic;
-	gulong id;
+	guint id;
 
 	if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->bm_view)))
 	{
@@ -1001,7 +1001,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	{
 		EphyNode *node = selected->data;
 		EphyNodePriority priority;
-		gulong id;
+		guint id;
 
 		id = ephy_node_get_id (node);
 		show_in_bookmarks_bar = ephy_bookmarksbar_model_has_bookmark
@@ -1019,7 +1019,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	if (bmk_focus && selected)
 	{
 		EphyNode *node = selected->data;
-		gulong id;
+		guint id;
 
 		g_return_if_fail (node != NULL);
 

@@ -1,5 +1,25 @@
 2004-06-24  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* lib/ephy-node.c: (ephy_node_new_with_id), (ephy_node_get_id),
+	(child_changed), (write_parent):
+	* lib/ephy-node.h:
+	* src/bookmarks/ephy-bookmark-action.c:
+	(bookmarks_child_changed_cb):
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(toolbar_checkbox_changed_cb), (build_ui):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(cmd_show_in_bookmarks_bar), (ephy_bookmarks_editor_update_menu):
+	* src/bookmarks/ephy-bookmarks-menu.c: (create_menu),
+	(topic_child_changed_cb):
+	* src/bookmarks/ephy-new-bookmark.c:
+	* src/bookmarks/ephy-new-bookmark.h:
+	* src/bookmarks/ephy-topic-action.c:
+	(ephy_topic_action_set_topic_id), (topic_child_changed_cb):
+
+	Use guint consistently for node ids
+
+2004-06-24  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* src/bookmarks/ephy-bookmarksbar.c: (open_in_tabs_cb),
 	(go_location_cb), (ephy_bookmarksbar_action_request):
 	* src/bookmarks/ephy-topic-action.c: (append_bookmarks_menu),

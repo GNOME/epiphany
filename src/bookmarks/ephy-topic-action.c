@@ -42,7 +42,7 @@ static void ephy_topic_action_class_init (EphyTopicActionClass *class);
 
 struct EphyTopicActionPrivate
 {
-	gulong topic_id;
+	guint topic_id;
 	EphyNode *topic_node;
 };
 
@@ -546,7 +546,7 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 }
 
 static void
-ephy_topic_action_set_topic_id (EphyTopicAction *action, gulong id)
+ephy_topic_action_set_topic_id (EphyTopicAction *action, guint id)
 {
 	EphyBookmarks *bookmarks;
 	EphyNode *node;
@@ -678,7 +678,7 @@ topic_child_changed_cb (EphyNode *node,
 			guint property_id,
 			GtkAction *action)
 {
-	gulong id;
+	guint id;
 
 	id = EPHY_TOPIC_ACTION (action)->priv->topic_id;
 

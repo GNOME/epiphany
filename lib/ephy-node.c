@@ -60,7 +60,7 @@ struct EphyNode
 {
 	int ref_count;
 
-	gulong id;
+	guint id;
 
 	GPtrArray *properties;
 
@@ -308,7 +308,7 @@ ephy_node_new (EphyNodeDb *db)
 }
 
 EphyNode *
-ephy_node_new_with_id (EphyNodeDb *db, gulong reserved_id)
+ephy_node_new_with_id (EphyNodeDb *db, guint reserved_id)
 {
 	EphyNode *node;
 
@@ -352,12 +352,12 @@ ephy_node_get_db (EphyNode *node)
 	return node->db;
 }
 
-long
+guint
 ephy_node_get_id (EphyNode *node)
 {
 	long ret;
 
-	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
+	g_return_val_if_fail (EPHY_IS_NODE (node), G_MAXUINT);
 
 	ret = node->id;
 
@@ -386,7 +386,7 @@ ephy_node_unref (EphyNode *node)
 }
 
 static void
-child_changed (gulong id,
+child_changed (guint id,
 	       EphyNodeParent *node_info,
 	       EphyNodeChange *change)
 {
@@ -642,7 +642,7 @@ typedef struct
 } ForEachData;
 
 static void
-write_parent (gulong id,
+write_parent (guint id,
 	      EphyNodeParent *node_info,
 	      ForEachData* data)
 {
