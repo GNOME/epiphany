@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([GNOME Web browser], [1.4.6.90],
+AC_INIT([GNOME Web browser], [1.4.7],
         [http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 
 GNOME_COMMON_INIT
@@ -197,7 +197,7 @@ dnl **********************************
 
 dnl FIXME find a m4/autoconf guru who can distill this into a nice macro
 
-CXXFLAGS="$_SAVE_CXXFLAGS $AM_CXXFLAGS -I$MOZILLA_INCLUDE_ROOT `pkg-config --cflags $MOZILLA-xpcom` -DMOZILLA_STRICT_API"
+CXXFLAGS="$_SAVE_CXXFLAGS $AM_CXXFLAGS -I$MOZILLA_INCLUDE_ROOT -I$MOZILLA_INCLUDE_ROOT/pipnss `pkg-config --cflags $MOZILLA-xpcom` -DMOZILLA_STRICT_API"
 
 dnl Changed from PRUnichar* to nsAString& in 1.8a1 and on aviary branch
 
@@ -363,22 +363,36 @@ AC_COMPILE_IFELSE(
 AC_MSG_RESULT([$result])
 
 dnl check for broken reload in GtkMozEmbed
-dnl FIXME: I have NO IDEA how to do this. For now, just always enable our workaround
-dnl
 dnl This is fixed since 1.7.4 on 1.7 branch, and since 1.8a3 on trunk
 
 AC_MSG_CHECKING([for broken reload])
 
-AC_DEFINE([GTKMOZEMBED_BROKEN_RELOAD],[1],[Define if GtkMozEmbed has broken reload])
+if $PKG_CONFIG --atleast-version 1.8a3 $MOZILLA-gtkmozembed; then
+	broken_reload=no
+else
+	broken_reload="couldn't autodetect, assuming yes"
+	AC_DEFINE([GTKMOZEMBED_BROKEN_RELOAD],[1],[Define if GtkMozEmbed has broken reload])
+fi
 
-AC_MSG_RESULT([couldn't autodetect, assuming yes])
+AC_MSG_RESULT([$broken_reload])
+
+AC_MSG_CHECKING([for mozilla security compoment])
+
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM(
+		[[#include <nsIX509Cert.h>]],
+		[[nsIX509Cert *c;
+		  c->GetIssuer (nsnull);]]
+	)],
+	[AC_DEFINE([HAVE_MOZILLA_PSM], [1],[Define if you have the mozilla psm headers installed]) have_psm=yes],
+	[have_psm=no])
+
+AC_MSG_RESULT([$have_psm])
+
+AM_CONDITIONAL([HAVE_MOZILLA_PSM],[test "x$have_psm" = "xyes"])
 
 CXXFLAGS=$_SAVE_CXXFLAGS
 AC_LANG_POP(C++)
-
-AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/pipnss/nsIX509Cert.h],
-	[AC_DEFINE(HAVE_MOZILLA_PSM, 1,
-		   [Define if you have the mozilla psm headers installed])])
 
 if test "$MOZILLA" = "mozilla"; then
     AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsIPassword.h],
