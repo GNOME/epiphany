@@ -272,8 +272,8 @@ window_cmd_view_reload (GtkAction *action,
 
 	ephy_embed_activate (embed);
 
-	ephy_embed_reload (embed, force ? EMBED_RELOAD_NORMAL
-					: EMBED_RELOAD_FORCE);
+	ephy_embed_reload (embed, force ? EMBED_RELOAD_FORCE
+					: EMBED_RELOAD_NORMAL);
 }
 
 void
