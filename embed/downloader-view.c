@@ -437,6 +437,8 @@ downloader_view_add_download (DownloaderView *dv,
 	GtkTreeSelection *selection;
 	GtkTreePath *path;
 
+	g_object_ref (download);
+
 	gtk_list_store_append (GTK_LIST_STORE (dv->priv->model),
 			       &iter);
 	gtk_list_store_set (GTK_LIST_STORE (dv->priv->model),
@@ -628,6 +630,7 @@ downloader_view_remove_download (DownloaderView *dv, EphyDownload *download)
 	gtk_list_store_remove (GTK_LIST_STORE (dv->priv->model), &iter2);
 	g_hash_table_remove (dv->priv->downloads_hash,
 			     download);
+	g_object_unref (download);
 
 	/* Actual selection */
 

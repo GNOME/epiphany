@@ -128,9 +128,9 @@ MozDownload::Init(nsIURI *aSource, nsILocalFile *aTarget, const PRUnichar *aDisp
 		DownloaderView *dview;
 		dview = EPHY_DOWNLOADER_VIEW
 			(ephy_embed_shell_get_downloader_view (embed_shell));
-		mEphyDownload = mozilla_download_new ();
-		MOZILLA_DOWNLOAD (mEphyDownload)->moz_download = this;
+		mEphyDownload = mozilla_download_new (this);
 		downloader_view_add_download (dview, mEphyDownload);
+		g_object_unref (mEphyDownload);
 	}
 	else
 	{
@@ -558,10 +558,14 @@ GetFilePath (const char *filename)
 
 	if (g_utf8_collate (download_dir, "Downloads") == 0)
 	{
+		const char *default_dir;
+
 		g_free (download_dir);
 
-		return g_build_filename (ephy_file_downloads_dir (),
-					 filename, NULL);
+		default_dir = ephy_file_downloads_dir ();
+		ephy_ensure_dir_exists (default_dir);
+
+		return g_build_filename (default_dir, filename, NULL);
 	}
 
 	converted_dp = g_filename_from_utf8 (download_dir, -1, NULL, NULL, NULL);
@@ -570,6 +574,7 @@ GetFilePath (const char *filename)
 	if (converted_dp)
 	{
 		expanded = gnome_vfs_expand_initial_tilde (converted_dp);
+		ephy_ensure_dir_exists (expanded);
 		path = g_build_filename (expanded, filename, NULL);
 
 		g_free (expanded);

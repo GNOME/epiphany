@@ -1,3 +1,27 @@
+2004-03-01  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/downloader-view.c: (downloader_view_add_download),
+	(downloader_view_remove_download):
+
+	Keep a ref for downloads in the view.
+
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/ContentHandler.h:
+
+	Ensure the download directory exist.
+
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/mozilla-download.cpp:
+	* embed/mozilla/mozilla-download.h:
+
+	Use a property to store MozDownload in the
+	wrapper. The wrapper now keep a reference
+	on the c++ implementation, that way references
+	will be correctly propagated (unreffing the
+	GObject will unref the c++ object).
+
+	(Bug 135755)
+
 2004-02-29  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* embed/mozilla/ContentHandler.cpp:

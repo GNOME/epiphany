@@ -249,7 +249,7 @@ NS_METHOD GContentHandler::Init (void)
 	return NS_OK;
 }
 
-NS_METHOD GContentHandler::MIMEConfirmAction (PRBool autoDownload)
+NS_METHOD GContentHandler::MIMEConfirmAction ()
 {
 	GtkWidget *dialog;
 	GtkWidget *hbox, *vbox, *label, *image;
@@ -289,7 +289,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction (PRBool autoDownload)
 					  "It's not safe to open it directly. You "
 					  "can save it instead."));
 	}
-	else if (mAction == CONTENT_ACTION_OPEN && !autoDownload)
+	else if (mAction == CONTENT_ACTION_OPEN_TMP)
 	{
 		text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
 					_("Open the file in another application?"),
@@ -370,7 +370,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 
 	if (!auto_downloads || mAction == CONTENT_ACTION_DOWNLOAD)
 	{
-		MIMEConfirmAction (auto_downloads);
+		MIMEConfirmAction ();
 	}
 
 	nsCOMPtr<nsIMIMEInfo> mimeInfo;

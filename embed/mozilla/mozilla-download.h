@@ -42,7 +42,7 @@ typedef struct MozillaDownloadPrivate MozillaDownloadPrivate;
 struct MozillaDownload
 {
 	EphyDownload parent;
-	MozDownload *moz_download;
+	MozillaDownloadPrivate *priv;
 };
 
 struct MozillaDownloadClass
@@ -52,7 +52,7 @@ struct MozillaDownloadClass
 
 GType		 mozilla_download_get_type	(void);
 
-EphyDownload	*mozilla_download_new		(void);
+EphyDownload	*mozilla_download_new		(MozDownload *download);
 
 G_END_DECLS
 

@@ -33,6 +33,19 @@ mozilla_download_init (MozillaDownload *ges);
 static void
 mozilla_download_finalize (GObject *object);
 
+enum
+{
+	PROP_0,
+	PROP_MOZDOWNLOAD
+};
+
+struct MozillaDownloadPrivate
+{
+	MozDownload *moz_download;
+};
+
+#define MOZILLA_DOWNLOAD_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_DOWNLOAD, MozillaDownloadPrivate))
+
 static GObjectClass *parent_class = NULL;
 
 GType
@@ -70,7 +83,7 @@ impl_get_target (EphyDownload *download)
 	nsCOMPtr<nsILocalFile> targetFile;
 	MozDownload *mozDownload;
 
-	mozDownload = MOZILLA_DOWNLOAD (download)->moz_download;
+	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
 
 	mozDownload->GetTarget (getter_AddRefs (targetFile));
 
@@ -87,7 +100,7 @@ impl_get_source (EphyDownload *download)
 	MozDownload *mozDownload;
 	nsCString spec;
 
-	mozDownload = MOZILLA_DOWNLOAD (download)->moz_download;
+	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
 
 	mozDownload->GetSource (getter_AddRefs (uri));
 	uri->GetSpec (spec);
@@ -101,7 +114,7 @@ impl_get_current_progress (EphyDownload *download)
 	MozDownload *mozDownload;
 	PRInt32 progress;
 
-	mozDownload = MOZILLA_DOWNLOAD (download)->moz_download;
+	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
 
 	mozDownload->GetCurrentProgress (&progress);
 
@@ -114,7 +127,7 @@ impl_get_state (EphyDownload *download)
 	MozDownload *mozDownload;
 	EphyDownloadState state;
 
-	mozDownload = MOZILLA_DOWNLOAD (download)->moz_download;
+	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
 
 	mozDownload->GetState (&state);
 
@@ -127,7 +140,7 @@ impl_get_total_progress (EphyDownload *download)
 	MozDownload *mozDownload;
 	PRInt32 progress;
 
-	mozDownload = MOZILLA_DOWNLOAD (download)->moz_download;
+	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
 
 	mozDownload->GetTotalProgress (&progress);
 
@@ -140,7 +153,7 @@ impl_get_percent (EphyDownload *download)
 	MozDownload *mozDownload;
 	PRInt32 percent;
 
-	mozDownload = MOZILLA_DOWNLOAD (download)->moz_download;
+	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
 
 	mozDownload->GetPercentComplete (&percent);
 
@@ -153,7 +166,7 @@ impl_get_elapsed_time (EphyDownload *download)
 	MozDownload *mozDownload;
 	PRInt64 elapsed;
 
-	mozDownload = MOZILLA_DOWNLOAD (download)->moz_download;
+	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
 
 	mozDownload->GetElapsedTime (&elapsed);
 
@@ -163,27 +176,78 @@ impl_get_elapsed_time (EphyDownload *download)
 static void 
 impl_cancel (EphyDownload *download)
 {
-	MOZILLA_DOWNLOAD (download)->moz_download->Cancel ();
+	MOZILLA_DOWNLOAD (download)->priv->moz_download->Cancel ();
 }
 
 static void
 impl_pause (EphyDownload *download)
 {
-	MOZILLA_DOWNLOAD (download)->moz_download->Pause ();
+	MOZILLA_DOWNLOAD (download)->priv->moz_download->Pause ();
 }
 
 static void
 impl_resume (EphyDownload *download)
 {
-	MOZILLA_DOWNLOAD (download)->moz_download->Resume ();
+	MOZILLA_DOWNLOAD (download)->priv->moz_download->Resume ();
+}
+
+static void
+mozilla_download_finalize (GObject *object)
+{
+        MozillaDownload *download = MOZILLA_DOWNLOAD (object);
+
+	NS_RELEASE (download->priv->moz_download);
+
+        G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+mozilla_download_set_property (GObject *object,
+			       guint prop_id,
+			       const GValue *value,
+			       GParamSpec *pspec)
+{
+        MozillaDownload *download = MOZILLA_DOWNLOAD (object);
+
+        switch (prop_id)
+        {
+                case PROP_MOZDOWNLOAD:
+			MozDownload *moz_download;
+
+			moz_download = (MozDownload *)g_value_get_pointer (value);
+			NS_ADDREF (moz_download);
+			download->priv->moz_download = moz_download;
+                        break;
+        }
+}
+
+static void
+mozilla_download_get_property (GObject *object,
+			       guint prop_id,
+			       GValue *value,
+			       GParamSpec *pspec)
+{
+        MozillaDownload *download = MOZILLA_DOWNLOAD (object);
+
+        switch (prop_id)
+        {
+                case PROP_MOZDOWNLOAD:
+                        g_value_set_pointer (value, download->priv->moz_download);
+                        break;
+        }
 }
 
 static void
 mozilla_download_class_init (MozillaDownloadClass *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	EphyDownloadClass *download_class = EPHY_DOWNLOAD_CLASS (klass);
 	
         parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
+
+	object_class->finalize = mozilla_download_finalize;
+	object_class->set_property = mozilla_download_set_property;
+	object_class->get_property = mozilla_download_get_property;
 
 	download_class->get_elapsed_time = impl_get_elapsed_time;
 	download_class->get_current_progress = impl_get_current_progress;
@@ -195,15 +259,27 @@ mozilla_download_class_init (MozillaDownloadClass *klass)
 	download_class->cancel = impl_cancel;
 	download_class->pause = impl_pause;
 	download_class->resume = impl_resume;
+
+	g_object_class_install_property (object_class,
+					 PROP_MOZDOWNLOAD,
+					 g_param_spec_pointer ("mozilla-download",
+							       "Mozilla Download",
+							       "Mozilla Download",
+							       (GParamFlags)
+							       (G_PARAM_READWRITE |
+							       G_PARAM_CONSTRUCT_ONLY)));
 }
 
 static void
-mozilla_download_init (MozillaDownload *view)
+mozilla_download_init (MozillaDownload *download)
 {
+	download->priv = MOZILLA_DOWNLOAD_GET_PRIVATE (download);
 }
 
 EphyDownload *
-mozilla_download_new (void)
+mozilla_download_new (MozDownload *download)
 {
-	return EPHY_DOWNLOAD (g_object_new (MOZILLA_TYPE_DOWNLOAD, NULL));
+	return EPHY_DOWNLOAD (g_object_new (MOZILLA_TYPE_DOWNLOAD,
+					    "mozilla-download", download,
+					    NULL));
 }

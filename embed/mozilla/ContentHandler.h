@@ -73,7 +73,7 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	NS_METHOD Init ();
 	NS_METHOD LaunchHelperApp ();
 
-	NS_METHOD MIMEConfirmAction (PRBool autoDownload);
+	NS_METHOD MIMEConfirmAction ();
 	NS_METHOD MIMEDoAction ();
 	NS_METHOD CheckAppSupportScheme ();
 
