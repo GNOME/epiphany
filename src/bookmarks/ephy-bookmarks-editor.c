@@ -529,6 +529,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		select_all = bmk_focus;
 		cut = FALSE;
 		copy = FALSE;
+		paste = FALSE;
 	}
 
 	bmk_selection = ephy_node_view_has_selection
