@@ -12,6 +12,11 @@
   <property name="modal">True</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="has_separator">False</property>
 
   <child internal-child="vbox">
@@ -34,7 +39,21 @@
 	      <property name="label">gtk-close</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-7</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="help_button">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-help</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">-11</property>
 	    </widget>
 	  </child>
 	</widget>
@@ -175,7 +194,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="label_size">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Common Name (CN):</property>
+			      <property name="label" translatable="yes">Common Name:</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -199,7 +218,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="label45">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Organization (O):</property>
+			      <property name="label" translatable="yes">Organization:</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -223,7 +242,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="label_size1">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Organizational Unit (OU):</property>
+			      <property name="label" translatable="yes">Organizational Unit:</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -455,7 +474,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="label41">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Common Name (CN):</property>
+			      <property name="label" translatable="yes">Common Name:</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -479,7 +498,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="label40">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Organization (O):</property>
+			      <property name="label" translatable="yes">Organization:</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -578,7 +597,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="label_size2">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Organizational Unit (OU):</property>
+			      <property name="label" translatable="yes">Organizational Unit:</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1220,6 +1239,8 @@
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="editable">False</property>
+				  <property name="overwrite">False</property>
+				  <property name="accepts_tab">True</property>
 				  <property name="justification">GTK_JUSTIFY_LEFT</property>
 				  <property name="wrap_mode">GTK_WRAP_CHAR</property>
 				  <property name="cursor_visible">False</property>

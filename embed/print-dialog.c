@@ -25,6 +25,7 @@
 #include "ephy-stock-icons.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
+#include "ephy-gui.h"
 
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkdialog.h>
@@ -131,6 +132,8 @@ void ephy_print_dialog_browse_button_cb		(GtkWidget *widget,
 						 EphyDialog *dialog);
 void ephy_print_setup_dialog_close_button_cb	(GtkWidget *widget,
 						 EphyDialog *dialog);
+void ephy_print_setup_dialog_help_button_cb	(GtkWidget *widget,
+						 EphyDialog *dialog);
 
 void
 ephy_print_info_free (EmbedPrintInfo *info)
@@ -222,16 +225,24 @@ ephy_print_dialog_response_cb (GtkWidget *widget,
 		return;
 	}
 
-	if (response == GTK_RESPONSE_OK)
+	switch (response)
 	{
-		info = ephy_print_get_print_info ();
+		case GTK_RESPONSE_OK:
+			info = ephy_print_get_print_info ();
 	
-		embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
-		g_return_if_fail (EPHY_IS_EMBED (embed));
+			embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
+			g_return_if_fail (EPHY_IS_EMBED (embed));
 	
-		ephy_embed_print (embed, info);
+			ephy_embed_print (embed, info);
 	
-		ephy_print_info_free (info);
+			ephy_print_info_free (info);
+
+			break;
+		case GTK_RESPONSE_HELP:
+			ephy_gui_help (GTK_WINDOW (dialog), "epiphany", "to-print-page");
+			return;
+		default:
+			break;
 	}
 
 	g_object_unref (dialog);
@@ -291,6 +302,13 @@ ephy_print_setup_dialog_close_button_cb (GtkWidget *widget,
 					 EphyDialog *dialog)
 {
 	g_object_unref (dialog);
+}
+
+void
+ephy_print_setup_dialog_help_button_cb (GtkWidget *widget,
+					 EphyDialog *dialog)
+{
+	ephy_gui_help (GTK_WINDOW (dialog), "epiphany", "using-print-setup");
 }
 
 EphyDialog *

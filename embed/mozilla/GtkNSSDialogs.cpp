@@ -72,6 +72,7 @@
 
 #include "GtkNSSDialogs.h"
 #include "ephy-glade.h"
+#include "ephy-gui.h"
 
 #include <time.h>
 
@@ -1390,7 +1391,19 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 	g_object_unref (gxml);
 
 	gtk_widget_show_all (dialog);
-	gtk_dialog_run (GTK_DIALOG (dialog));
+
+	int res;
+	while (1)
+	{
+		res = gtk_dialog_run (GTK_DIALOG (dialog));
+		if (res == GTK_RESPONSE_HELP)
+		{
+			ephy_gui_help (GTK_WINDOW (dialog), "epiphany", "using-certificate-viewer");
+			continue;
+		}  
+		break;
+	}
+
 	gtk_widget_destroy (dialog);
 	return NS_OK;
 }

@@ -179,12 +179,9 @@ pdm_dialog_show_help (PdmDialog *pd)
 	GtkWidget *notebook, *window;
 	int id;
 
-	/* FIXME: Once we actually have documentation we
-	 * should point these at the correct links.
-	 */
 	char *help_preferences[] = {
-		"pdm",
-		"pdm"
+		"managing-cookies",
+		"managing-passwords"
 	};
 
 	window = ephy_dialog_get_control (EPHY_DIALOG (pd), properties[PROP_WINDOW].id);

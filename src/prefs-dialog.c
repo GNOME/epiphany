@@ -407,14 +407,11 @@ prefs_dialog_show_help (EphyDialog *dialog)
 	GtkWidget *window, *notebook;
 	int id;
 
-	/* FIXME: Once we actually have documentation we
-	 * should point these at the correct links.
-	 */
 	char *help_preferences[] = {
-		"setting-preferences",
-		"setting-preferences",
-		"setting-preferences",
-		"setting-preferences"
+		"general-preferences",
+		"fonts-and-colors-preferences",
+		"privacy-preferences",
+		"language-preferences"
 	};
 
 	window = ephy_dialog_get_control (dialog, properties[WINDOW_PROP].id);
