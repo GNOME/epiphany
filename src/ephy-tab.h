@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 #define EPHY_TAB_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TAB, EphyTabClass))
 
 typedef struct EphyTabClass	EphyTabClass;
-typedef struct EphyTab		EphyTab;
+typedef struct _EphyTab		EphyTab;
 typedef struct EphyTabPrivate	EphyTabPrivate;
 
 typedef enum
@@ -53,7 +53,7 @@ typedef enum
 	TAB_ADDRESS_EXPIRE_CURRENT
 } TabAddressExpire;
 
-struct EphyTab
+struct _EphyTab
 {
 	GtkBin parent;
 
@@ -110,9 +110,6 @@ void			ephy_tab_get_size		(EphyTab *tab,
 const char             *ephy_tab_get_status_message	(EphyTab *tab);
 
 const char             *ephy_tab_get_title		(EphyTab *tab);
-
-void			ephy_tab_set_visibility		(EphyTab *tab,
-							 gboolean visible);
 
 gboolean		ephy_tab_get_visibility		(EphyTab *tab);
 

@@ -135,7 +135,6 @@ IGNORE_HFILES = \
 	ephy-navigation-action.h \
 	ephy-notebook.h \
 	ephy-statusbar.h \
-	ephy-tab.h \
 	ephy-tabs-menu.h \
 	ephy-toolbars-model.h \
 	language-editor.h \

@@ -441,6 +441,14 @@ address_has_web_scheme (const char *address)
 
 /* Public functions */
 
+/**
+ * ephy_tab_new:
+ *
+ * Equivalent to g_object_new(), but returns an #EphyTab so you don't have to
+ * cast it.
+ *
+ * Returns: a new #EphyTab
+ **/
 EphyTab *
 ephy_tab_new (void)
 {
@@ -457,6 +465,16 @@ ephy_tab_set_load_status (EphyTab *tab, gboolean status)
 	g_object_notify (G_OBJECT (tab), "load-status");
 }
 
+/**
+ * ephy_tab_get_load_status:
+ * @tab: an #EphyTab
+ *
+ * Returns whether the web page in @tab has finished loading. A web page is
+ * only finished loading after all images, styles, and other dependencies have
+ * been downloaded and rendered.
+ *
+ * Return value: %TRUE if the page is still loading, %FALSE if complete
+ **/
 gboolean
 ephy_tab_get_load_status (EphyTab *tab)
 {
@@ -476,6 +494,20 @@ ephy_tab_set_link_message (EphyTab *tab, char *message)
 	g_object_notify (G_OBJECT (tab), "message");
 }
 
+/**
+ * ephy_tab_get_link_message:
+ * @tab: an #EphyTab
+ *
+ * Returns the message displayed in @tab's #EphyWindow's #EphyStatusbar when
+ * the user hovers the mouse over a hyperlink.
+ *
+ * The message returned has a limited lifetime, and so should be copied with
+ * g_strdup() if it must be stored.
+ *
+ * Listen to "notify::message" to be notified when the message property changes.
+ *
+ * Return value: The current link statusbar message
+ **/
 const char *
 ephy_tab_get_link_message (EphyTab *tab)
 {
@@ -484,6 +516,14 @@ ephy_tab_get_link_message (EphyTab *tab)
 	return tab->priv->link_message;
 }
 
+/**
+ * ephy_tab_get_embed:
+ * @tab: an #EphyTab
+ *
+ * Returns @tab's #EphyEmbed.
+ *
+ * Return value: @tab's #EphyEmbed
+ **/
 EphyEmbed *
 ephy_tab_get_embed (EphyTab *tab)
 {
@@ -492,6 +532,14 @@ ephy_tab_get_embed (EphyTab *tab)
 	return EPHY_EMBED (gtk_bin_get_child (GTK_BIN (tab)));
 }
 
+/**
+ * ephy_tab_for_embed
+ * @embed: an #EphyEmbed
+ *
+ * Returns the #EphyTab which holds @embed.
+ *
+ * Return value: the #EphyTab which holds @embed
+ **/
 EphyTab *
 ephy_tab_for_embed (EphyEmbed *embed)
 {
@@ -505,6 +553,13 @@ ephy_tab_for_embed (EphyEmbed *embed)
 	return EPHY_TAB (parent);
 }
 
+/**
+ * ephy_tab_set_window:
+ * @tab: an #EphyTab
+ * @window: @tab's #EphyWindow
+ *
+ * FIXME: DO NOT USE
+ **/
 void
 ephy_tab_set_window (EphyTab *tab, EphyWindow *window)
 {
@@ -519,6 +574,14 @@ ephy_tab_set_window (EphyTab *tab, EphyWindow *window)
 	}
 }
 
+/**
+ * ephy_tab_get_window:
+ * @tab: an #EphyTab\
+ *
+ * Returns the #EphyWindow which holds @tab in its #GtkNotebook.
+ *
+ * Return value: @tab's #EphyWindow
+ **/
 EphyWindow *
 ephy_tab_get_window (EphyTab *tab)
 {
@@ -527,32 +590,44 @@ ephy_tab_get_window (EphyTab *tab)
 	return tab->priv->window;
 }
 
+/**
+ * ephy_tab_get_size:
+ * @tab: an #EphyTab
+ * @width: return location for width, or %NULL
+ * @height: return location for height, or %NULL
+ *
+ * Obtains the size of @tab. This is not guaranteed to be the actual number of
+ * pixels occupied by the #EphyTab.
+ **/
 void
 ephy_tab_get_size (EphyTab *tab, int *width, int *height)
 {
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
-	*width = tab->priv->width;
-	*height = tab->priv->height;
+	if (width != NULL)
+	{
+		*width = tab->priv->width;
+	}
+	if (height != NULL)
+	{
+		*height = tab->priv->height;
+	}
 }
 
+/**
+ * ephy_tab_get_visibility:
+ * @tab: an #EphyTab
+ *
+ * FIXME: Nobody really knows what this does. Someone must investigate.
+ *
+ * Return value; %TRUE if @tab's "visibility" property is set
+ **/
 gboolean
 ephy_tab_get_visibility (EphyTab *tab)
 {
 	g_return_val_if_fail (EPHY_IS_TAB (tab), FALSE);
 
 	return tab->priv->visibility;
-}
-
-void
-ephy_tab_set_visibility (EphyTab *tab,
-                         gboolean visible)
-{
-	g_return_if_fail (EPHY_IS_TAB (tab));
-
-	tab->priv->visibility = visible;
-
-	g_object_notify (G_OBJECT (tab), "visible");
 }
 
 static void
@@ -597,6 +672,14 @@ ephy_tab_set_icon_address (EphyTab *tab, const char *address)
 	g_object_notify (G_OBJECT (tab), "icon");
 }
 
+/**
+ * ephy_tab_get_icon_address:
+ * @tab: an #EphyTab
+ *
+ * Returns a URL which points to @tab's favicon.
+ *
+ * Return value: a URL to @tab's favicon
+ **/
 const char *
 ephy_tab_get_icon_address (EphyTab *tab)
 {
@@ -946,7 +1029,9 @@ ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
 		gtk_widget_hide (GTK_WIDGET (tab));
 	}
 
-	ephy_tab_set_visibility (tab, visibility);
+	tab->priv->visibility = visible;
+
+	g_object_notify (G_OBJECT (tab), "visible");
 }
 
 static void
@@ -1257,6 +1342,13 @@ ephy_tab_init (EphyTab *tab)
 				 tab,  0);
 }
 
+/**
+ * ephy_tab_set_load_percent:
+ * @tab: an #EphyTab
+ * @percent: a percentage, from 0 to 100.
+ *
+ * Sets the load percentage. This will be displayed in the progressbar.
+ **/
 void
 ephy_tab_set_load_percent (EphyTab *tab, int percent)
 {
@@ -1270,6 +1362,14 @@ ephy_tab_set_load_percent (EphyTab *tab, int percent)
 	}
 }
 
+/**
+ * ephy_tab_get_load_percent:
+ * @tab: an #EphyTab
+ *
+ * Returns the page load percentage (displayed in the progressbar).
+ *
+ * Return value: a percentage from 0 to 100
+ **/
 int
 ephy_tab_get_load_percent (EphyTab *tab)
 {
@@ -1306,6 +1406,16 @@ ephy_tab_update_navigation_flags (EphyTab *tab, EphyEmbed *embed)
 	}
 }
 
+/**
+ * ephy_tab_get_navigation_flags:
+ * @tab: an #EphyTab
+ *
+ * DO NOT USE
+ *
+ * Returns @tab's navigation flags.
+ *
+ * Return value: @tab's navigation flags
+ **/
 TabNavigationFlags
 ephy_tab_get_navigation_flags (EphyTab *tab)
 {
@@ -1314,6 +1424,22 @@ ephy_tab_get_navigation_flags (EphyTab *tab)
 	return tab->priv->nav_flags;
 }
 
+/**
+ * ephy_tab_get_status_message:
+ * @tab: an #EphyTab
+ *
+ * Returns the message displayed in @tab's #EphyWindow's #EphyStatusbar. If the
+ * user is hovering the mouse over a hyperlink, this function will return the
+ * same value as ephy_tab_get_link_message(). Otherwise, it will return a
+ * network status message, or NULL.
+ *
+ * The message returned has a limited lifetime, and so should be copied with
+ * g_strdup() if it must be stored.
+ *
+ * Listen to "notify::message" to be notified when the message property changes.
+ *
+ * Return value: The current statusbar message
+ **/
 const char *
 ephy_tab_get_status_message (EphyTab *tab)
 {
@@ -1404,6 +1530,14 @@ ephy_tab_set_title (EphyTab *tab, EphyEmbed *embed, const char *new_title)
 	g_object_notify (G_OBJECT (tab), "title");
 }
 
+/**
+ * ephy_tab_get_title:
+ * @tab: an #EphyTab
+ *
+ * Returns the title of the web page loaded in @tab.
+ *
+ * Return value: @tab's loaded web page's title
+ **/
 const char *
 ephy_tab_get_title (EphyTab *tab)
 {
@@ -1412,6 +1546,20 @@ ephy_tab_get_title (EphyTab *tab)
 	return tab->priv->title;
 }
 
+/**
+ * ephy_tab_get_location:
+ * @tab: an #EphyTab
+ *
+ * Returns the text that @tab's #EphyWindow will display in its location toolbar
+ * entry when @tab is selected.
+ *
+ * This is not guaranteed to be the same as @tab's #EphyEmbed's location,
+ * available through ephy_embed_get_location(). As the user types a new address
+ * into the location entry, ephy_tab_get_location()'s returned string will
+ * change.
+ *
+ * Return value: @tab's #EphyWindow's location entry when @tab is selected
+ **/
 const char *
 ephy_tab_get_location (EphyTab *tab)
 {
@@ -1420,6 +1568,14 @@ ephy_tab_get_location (EphyTab *tab)
 	return tab->priv->address;
 }
 
+/**
+ * ephy_tab_set_location:
+ * @tab: an #EphyTab
+ * @address: a string (ideally a URL)
+ * @expire: beats me
+ *
+ * DO NOT USE
+ */
 void
 ephy_tab_set_location (EphyTab *tab,
 		       const char *address,
@@ -1453,6 +1609,14 @@ ephy_tab_set_security_level (EphyTab *tab, EmbedSecurityLevel level)
 	g_object_notify (G_OBJECT (tab), "security-level");
 }
 
+/**
+ * ephy_tab_get_security_level:
+ * @tab: an #EphyTab
+ *
+ * Returns the security level of the webpage loaded in @tab.
+ *
+ * Return value: @tab's loaded page's security level
+ **/
 EmbedSecurityLevel
 ephy_tab_get_security_level (EphyTab *tab)
 {
@@ -1471,6 +1635,15 @@ ephy_tab_set_zoom (EphyTab *tab, float zoom)
 	g_object_notify (G_OBJECT (tab), "zoom");
 }
 
+/**
+ * ephy_tab_get_zoom:
+ * @tab: an #EphyTab
+ *
+ * Returns the zoom level of the web page loaded in @tab. A return value of
+ * 1.0 corresponds to 100% zoom (normal size).
+ *
+ * Return value: @tab's loaded page's zoom level
+ **/
 float
 ephy_tab_get_zoom (EphyTab *tab)
 {
@@ -1479,6 +1652,18 @@ ephy_tab_get_zoom (EphyTab *tab)
 	return tab->priv->zoom;
 }
 
+/**
+ * ephy_tab_get_action:
+ * @tab: an #EphyTab
+ *
+ * DO NOT USE
+ *
+ * Returns the #GtkToggleAction represented by the labelled tab displayed at the
+ * top of @tab's #EphyWindow when multiple tabs are loaded. Activating this
+ * action will switch the window to display @tab.
+ *
+ * Return value: @tab's #GtkToggleAction
+ **/
 GObject *
 ephy_tab_get_action (EphyTab *tab)
 {

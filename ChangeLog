@@ -1,5 +1,24 @@
 2004-03-23  Adam Hooper  <adamh@cvs.gnome.org>
 
+	* doc/reference/Makefile.am:
+	* doc/reference/epiphany-docs.sgml:
+	* doc/reference/epiphany-sections.txt:
+	* doc/reference/tmpl/ephy-tab.sgml:
+	* src/ephy-tab.c: (ephy_tab_get_size), (ephy_tab_visibility_cb):
+	* src/ephy-tab.h:
+
+	Added EphyTab API documentation.
+
+	Also removed ephy_tab_set_visibility
+	and moved its functionality into ephy_tab_visibility_cb (), since I
+	doubt it's got any practical use outside of there. (Though admittedly,
+	I don't know whether "visibility" has any practical use anywhere.)
+
+	Lastly, let ephy_tab_get_size () be called with NULL width or height,
+	like gtk_window_get_size ().
+
+2004-03-23  Adam Hooper  <adamh@cvs.gnome.org>
+
 	* doc/reference/epiphany-docs.sgml:
 	* doc/reference/epiphany-sections.txt:
 	* doc/reference/tmpl/epiphany-unused.sgml:
