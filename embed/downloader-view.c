@@ -77,15 +77,7 @@ struct DownloaderViewPrivate
 	GtkWidget *abort_button;
 
 	EggStatusIcon *status_icon;
-
-	long remaining_secs;
 };
-
-typedef struct
-{
-	gboolean is_paused;
-	DownloaderViewPrivate *priv;
-} ControlsInfo;
 
 enum
 {
@@ -374,43 +366,10 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 }
 
 static void
-seconds_remaining_total (EphyDownload *download, gpointer data, DownloaderView *dv)
-{
-	long secs;
-
-	secs = ephy_download_get_remaining_time (download);
-	if (secs > 0)
-	{
-		dv->priv->remaining_secs += secs;
-	}
-}
-
-static void
 update_status_icon (DownloaderView *dv)
 {
-	char *tooltip, *downloadstring, *remainingstring;
-	int downloads, remaining;
-
-	dv->priv->remaining_secs = 0;
-	g_hash_table_foreach (dv->priv->downloads_hash,
-			      (GHFunc) seconds_remaining_total, dv);
-	
-	remaining = (dv->priv->remaining_secs);
-
-	if (remaining < 60)
-	{
-		remainingstring = g_strdup_printf (ngettext ("About %d second left",
-					"About %d seconds left", remaining),
-					remaining);
-	}
-	else
-	{
-		remaining /= 60;
-		
-		remainingstring = g_strdup_printf (ngettext ("About %d minute left",
-					"About %d minutes left", remaining),
-					remaining);
-	}
+	char *downloadstring;
+	int downloads;
 
 	downloads = g_hash_table_size (dv->priv->downloads_hash);
 
@@ -418,15 +377,10 @@ update_status_icon (DownloaderView *dv)
 					"%d downloads", downloads), 
 					downloads);
 
-	tooltip = g_strdup_printf ("%s\n%s",
-					downloadstring, remainingstring);
-
 	egg_status_icon_set_tooltip (dv->priv->status_icon,
-				     tooltip, NULL);
+				     downloadstring, NULL);
 
-	g_free (tooltip);
 	g_free (downloadstring);
-	g_free (remainingstring);
 }
 
 static void
