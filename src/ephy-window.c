@@ -602,6 +602,7 @@ setup_window (EphyWindow *window)
 	merge = gtk_ui_manager_new ();
 
 	action_group = gtk_action_group_new ("WindowActions");
+	gtk_action_group_set_translation_domain (action_group, NULL);
 	gtk_action_group_add_actions (action_group, ephy_menu_entries,
 				      ephy_menu_n_entries, window);
 	gtk_ui_manager_insert_action_group (merge, action_group, 0);
@@ -627,6 +628,7 @@ setup_window (EphyWindow *window)
 	g_object_set (action, "is_important", TRUE, NULL);
 
 	action_group = gtk_action_group_new ("PopupsActions");
+	gtk_action_group_set_translation_domain (action_group, NULL);
 	gtk_action_group_add_actions (action_group, ephy_popups_entries,
 				      ephy_popups_n_entries, window);
 	gtk_ui_manager_insert_action_group (merge, action_group, 0);

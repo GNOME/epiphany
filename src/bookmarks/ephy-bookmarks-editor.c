@@ -1225,6 +1225,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	ui_merge = gtk_ui_manager_new ();
 	g_signal_connect (ui_merge, "add_widget", G_CALLBACK (add_widget), editor);
 	action_group = gtk_action_group_new ("PopupActions");
+	gtk_action_group_set_translation_domain (action_group, NULL);
 	gtk_action_group_add_actions (action_group, ephy_bookmark_popup_entries,
 				      ephy_bookmark_popup_n_entries, editor);
 	gtk_ui_manager_insert_action_group (ui_merge,

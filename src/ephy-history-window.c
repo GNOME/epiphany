@@ -963,6 +963,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	gtk_window_add_accel_group (GTK_WINDOW (editor),
 				    gtk_ui_manager_get_accel_group (ui_merge));
 	action_group = gtk_action_group_new ("PopupActions");
+	gtk_action_group_set_translation_domain (action_group, NULL);
 	gtk_action_group_add_actions (action_group, ephy_history_ui_entries,
 				      ephy_history_ui_n_entries, editor);
 	gtk_ui_manager_insert_action_group (ui_merge,

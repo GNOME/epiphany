@@ -244,6 +244,7 @@ ppview_toolbar_set_window (PPViewToolbar *t, EphyWindow *window)
 	t->priv->original_mask = ephy_window_get_chrome (window);
 
 	t->priv->action_group = gtk_action_group_new ("PPViewActions");
+	gtk_action_group_set_translation_domain (t->priv->action_group, NULL);
 	gtk_action_group_add_actions (t->priv->action_group, entries,	
 				      n_entries, t);
 	gtk_ui_manager_insert_action_group (t->priv->ui_merge,

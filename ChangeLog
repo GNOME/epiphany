@@ -1,3 +1,14 @@
+2003-09-05  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_construct):
+	* src/ephy-history-window.c: (ephy_history_window_construct):
+	* src/ephy-window.c: (setup_window):
+	* src/ppview-toolbar.c: (ppview_toolbar_set_window):
+
+	Use gtk_action_group_set_translation_domain() to restore menu and popup
+	i18n.
+
 2003-09-04  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-favorites-menu.c: (ephy_favorites_menu_rebuild):
