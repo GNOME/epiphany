@@ -23,9 +23,10 @@
 #include <nsIIOService.h>
 #include <nsIURI.h>
 #include <nsIDOMWindow.h>
-#include <nsIPrintSettings.h>
+#include <gtk/gtkwidget.h>
 
-#include "print-dialog.h"
+class nsIPrintSettings;
+struct _EmbedPrintInfo;
 
 namespace EphyUtils
 {
@@ -39,7 +40,7 @@ namespace EphyUtils
 
 	GtkWidget      *FindGtkParent		(nsIDOMWindow *aDOMWindow);
 
-	nsresult        CollatePrintSettings	(const EmbedPrintInfo *info,
+	nsresult        CollatePrintSettings	(const _EmbedPrintInfo *info,
 						 nsIPrintSettings *settings,
 						 gboolean preview);
 }

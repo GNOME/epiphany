@@ -31,7 +31,7 @@
 
 G_BEGIN_DECLS
 
-typedef struct
+typedef struct _EmbedPrintInfo
 {
 	gboolean print_to_file;
 	char *printer;

@@ -25,6 +25,7 @@
 #include "EphyUtils.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-single.h"
+#include "print-dialog.h"
 
 #include <nsIServiceManager.h>
 #define MOZILLA_STRICT_API
@@ -34,6 +35,7 @@
 #include <nsIEmbeddingSiteWindow.h>
 #include <nsIWebBrowserChrome.h>
 #include <gtkmozembed.h>
+#include <nsIPrintSettings.h>
 
 nsresult
 EphyUtils::GetIOService (nsIIOService **ioService)
