@@ -1088,7 +1088,7 @@ create_language_section (EphyDialog *dialog)
 }
 
 static char*
-get_download_button_label ()
+get_download_button_label (void)
 {
 	char *key, *label, *downloads_path, *converted_dp;
 

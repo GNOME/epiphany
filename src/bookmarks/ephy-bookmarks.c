@@ -838,7 +838,7 @@ ephy_bookmarks_finalize (GObject *object)
 }
 
 EphyBookmarks *
-ephy_bookmarks_new ()
+ephy_bookmarks_new (void)
 {
 	EphyBookmarks *eb;
 
