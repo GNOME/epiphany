@@ -2241,6 +2241,9 @@ ephy_window_init (EphyWindow *window)
 	window->priv->toolbar = toolbar_new (window);
 	window->priv->bookmarksbar = ephy_bookmarksbar_new (window);
 
+	g_signal_connect_swapped (window->priv->toolbar, "activation-finished",
+				  G_CALLBACK (sync_chromes_visibility), window);
+
 	/* forward the toolbar's action_request signal to the bookmarks toolbar,
 	 * so the user can also have bookmarks on the normal toolbar
 	 */

@@ -53,6 +53,9 @@ struct Toolbar
 struct ToolbarClass
 {
         EggEditableToolbarClass parent_class;
+
+	/* Signals */
+	void (* activation_finished)	(Toolbar *toolbar);
 };
 
 GType         toolbar_get_type			(void);

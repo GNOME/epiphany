@@ -46,7 +46,6 @@ struct _EphyLocationEntryPrivate
 	GtkWidget *entry;
 	char *before_completion;
 	gboolean user_changed;
-	GtkWidget *shown_widget;
 
 	guint text_col;
 	guint action_col;
@@ -154,24 +153,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		G_TYPE_NONE);
 
 	g_type_class_add_private (object_class, sizeof (EphyLocationEntryPrivate));
-}
-
-static void
-ephy_location_entry_activation_finished (EphyLocationEntry *entry)
-{
-	if (entry->priv->shown_widget)
-	{
-		gtk_widget_hide (entry->priv->shown_widget);
-		entry->priv->shown_widget = NULL;
-	}
-}
-
-static gboolean
-location_focus_out_cb (GtkWidget *leidget, GdkEventFocus *event, EphyLocationEntry *le)
-{
-	ephy_location_entry_activation_finished (le);
-
-	return FALSE;
 }
 
 static void
@@ -382,15 +363,10 @@ ephy_location_entry_init (EphyLocationEntry *le)
 	le->priv = p;
 
 	p->user_changed = TRUE;
-	p->shown_widget = NULL;
 
 	ephy_location_entry_construct_contents (le);
 
 	gtk_tool_item_set_expand (GTK_TOOL_ITEM (le), TRUE);
-
-	g_signal_connect (le->priv->entry,
-	       		  "focus_out_event",
-                          G_CALLBACK (location_focus_out_cb), le);
 }
 
 GtkWidget *
@@ -480,17 +456,7 @@ ephy_location_entry_get_location (EphyLocationEntry *le)
 void
 ephy_location_entry_activate (EphyLocationEntry *le)
 {
-	GtkWidget *toplevel, *widget;
-
-	for (widget = GTK_WIDGET (le); widget != NULL; widget = widget->parent)
-	{
-		if (!GTK_WIDGET_VISIBLE (widget))
-		{
-			le->priv->shown_widget = widget;
-			gtk_widget_show (le->priv->shown_widget);
-			break;
-		}
-	}
+	GtkWidget *toplevel;
 
 	toplevel = gtk_widget_get_toplevel (le->priv->entry);
 
