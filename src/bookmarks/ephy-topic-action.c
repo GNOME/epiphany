@@ -193,19 +193,19 @@ ephy_topic_action_sync_label (GtkAction *gaction,
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
 		GtkWidget *label = NULL;
-		const char *title;
+		char *title;
 		char *title_short;
 
 		label = g_object_get_data (G_OBJECT (proxy), "label");
 		g_return_if_fail (label != NULL);
 
-		title = ephy_node_get_property_string
-			(action->priv->topic_node, EPHY_NODE_KEYWORD_PROP_NAME);
+		g_object_get (G_OBJECT (action), "label", &title, NULL);
 		title_short = ephy_string_shorten (title, MAX_LABEL_LENGTH);
 
 		gtk_label_set_label (GTK_LABEL (label), title_short);
 
 		g_free (title_short);
+		g_free (title);
 	}
 }
 
@@ -859,7 +859,6 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 				  G_CALLBACK (drag_data_delete_cb), action);
 	}
 }
-
 
 static void
 topic_changed_cb (EphyNode *node,
