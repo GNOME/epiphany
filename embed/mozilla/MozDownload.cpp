@@ -568,18 +568,38 @@ GetFilePath (const char *filename)
 nsresult BuildDownloadPath (const char *defaultFileName, nsILocalFile **_retval)
 {
 	char *path;
-	int i = 0;
 
 	path = GetFilePath (defaultFileName);
 	
-	while (g_file_test (path, G_FILE_TEST_EXISTS))
+	if (g_file_test (path, G_FILE_TEST_EXISTS))
 	{
-		g_free (path);
+		int i = 1;
+		char *dot_pos, *serial = NULL;
+		GString *tmp_path;
+		gssize position;
 
-		char *tmp_path;
-		tmp_path = g_strdup_printf ("%s.%d", defaultFileName,  ++i);
-		path = GetFilePath (tmp_path);
-		g_free (tmp_path);
+		dot_pos = g_strrstr (defaultFileName, ".");
+		if (dot_pos)
+		{
+			position = dot_pos - defaultFileName;
+		}
+		else
+		{
+			position = strlen (defaultFileName);
+		}
+		tmp_path = g_string_new (NULL);
+
+		do {
+			g_free (path);
+			g_string_assign (tmp_path, defaultFileName);
+			serial = g_strdup_printf ("(%d)", i++);
+			g_string_insert (tmp_path, position, serial);
+			g_free (serial);
+			path = GetFilePath (tmp_path->str);
+			
+		} while (g_file_test (path, G_FILE_TEST_EXISTS));
+		
+		g_string_free (tmp_path, TRUE);
 	}
 
 	nsCOMPtr <nsILocalFile> destFile (do_CreateInstance(NS_LOCAL_FILE_CONTRACTID));
