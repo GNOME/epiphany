@@ -37,6 +37,12 @@ typedef struct FindDialogClass FindDialogClass;
 
 typedef struct FindDialogPrivate FindDialogPrivate;
 
+typedef enum
+{
+	FIND_CAN_GO_PREV	= 1 << 0,
+	FIND_CAN_GO_NEXT	= 1 << 1
+} FindNavigationFlags;
+
 struct FindDialog
 {
         EphyEmbedDialog parent;
@@ -50,23 +56,20 @@ struct FindDialogClass
 	void (* search)    (FindDialog *dialog);
 };
 
-GType           find_dialog_get_type           (void);
+GType			find_dialog_get_type		 (void);
 
-EphyDialog   *find_dialog_new                  (EphyEmbed *embed);
+EphyDialog*		find_dialog_new			 (EphyEmbed *embed);
 
-EphyDialog	*find_dialog_new_with_parent   (GtkWidget *window,
-						EphyEmbed *embed);
+EphyDialog *		find_dialog_new_with_parent	 (GtkWidget *window,
+							  EphyEmbed *embed);
 
+void			find_dialog_go_next		 (FindDialog *dialog,
+							  gboolean interactive);
 
-gboolean	find_dialog_can_go_next	       (FindDialog *dialog);
+void			find_dialog_go_prev		 (FindDialog *dialog,
+							  gboolean interactive);
 
-gboolean	find_dialog_can_go_prev	       (FindDialog *dialog);
-
-void		find_dialog_go_next	       (FindDialog *dialog,
-						gboolean interactive);
-
-void		find_dialog_go_prev	       (FindDialog *dialog,
-						gboolean interactive);
+FindNavigationFlags	find_dialog_get_navigation_flags (FindDialog *dialog);
 
 G_END_DECLS
 

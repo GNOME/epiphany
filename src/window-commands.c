@@ -497,8 +497,6 @@ window_cmd_edit_find_next (EggAction *action,
 	dialog = ephy_window_get_find_dialog (window);
 
 	find_dialog_go_next (FIND_DIALOG(dialog), FALSE);
-
-	ephy_window_update_control (window, FindControl);
 }
 
 void
@@ -510,8 +508,6 @@ window_cmd_edit_find_prev (EggAction *action,
 	dialog = ephy_window_get_find_dialog (window);
 
 	find_dialog_go_prev (FIND_DIALOG(dialog), FALSE);
-
-	ephy_window_update_control (window, FindControl);
 }
 
 void

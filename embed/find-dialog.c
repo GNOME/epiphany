@@ -21,6 +21,8 @@
 #include "find-dialog.h"
 #include "ephy-prefs.h"
 #include "ephy-embed.h"
+#include "ephy-debug.h"
+
 #include <gtk/gtk.h>
 
 #define CONF_FIND_MATCH_CASE "/apps/epiphany/dialogs/find_match_case"
@@ -55,15 +57,8 @@ struct FindDialogPrivate
 {
 	EmbedFindInfo *properties;
 	GtkWidget *window;
-	gboolean can_go_prev;
-	gboolean can_go_next;
 	gboolean constructed;
-};
-
-enum
-{
-	SEARCH,
-	LAST_SIGNAL
+	FindNavigationFlags nav_flags;
 };
 
 enum
@@ -88,7 +83,11 @@ EphyDialogProperty properties [] =
 	{ -1, NULL, NULL }
 };
 
-static guint find_dialog_signals[LAST_SIGNAL] = { 0 };
+enum
+{
+	PROP_0,
+	PROP_NAVIGATION
+};
 
 GType
 find_dialog_get_type (void)
@@ -120,6 +119,51 @@ find_dialog_get_type (void)
 }
 
 static void
+set_navigation_flags (FindDialog *dialog, FindNavigationFlags flags)
+{
+	GtkWidget *forward_button;
+	GtkWidget *back_button;
+	gboolean can_go_prev = FALSE, can_go_next = FALSE;
+
+	if (!dialog->priv->constructed) return;
+
+	dialog->priv->nav_flags = flags;
+
+	if (flags & FIND_CAN_GO_PREV)
+	{
+		can_go_prev = TRUE;
+	}
+	if (flags & FIND_CAN_GO_NEXT)
+	{
+		can_go_next = TRUE;
+	}
+
+	back_button = ephy_dialog_get_control (EPHY_DIALOG (dialog), BACK_BUTTON);
+	gtk_widget_set_sensitive (back_button, can_go_prev);
+
+	forward_button = ephy_dialog_get_control (EPHY_DIALOG (dialog), FORWARD_BUTTON);
+	gtk_widget_set_sensitive (forward_button, can_go_next);
+
+	g_object_notify (G_OBJECT (dialog), "navigation");
+}
+
+static void
+ephy_find_dialog_get_property (GObject *object,
+			       guint prop_id,
+			       GValue *value,
+			       GParamSpec *pspec)
+{
+	FindDialog *dialog = FIND_DIALOG (object);
+
+	switch (prop_id)
+	{
+		case PROP_NAVIGATION:
+			g_value_set_int (value, dialog->priv->nav_flags);
+			break;
+	}
+}
+
+static void
 find_dialog_class_init (FindDialogClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -129,39 +173,22 @@ find_dialog_class_init (FindDialogClass *klass)
 	ephy_dialog_class = EPHY_DIALOG_CLASS (klass);
 
         object_class->finalize = find_dialog_finalize;
+	object_class->get_property = ephy_find_dialog_get_property;
 
 	ephy_dialog_class->construct = impl_construct;
 	ephy_dialog_class->destruct = impl_destruct;
 	ephy_dialog_class->show = impl_show;
 
-	find_dialog_signals[SEARCH] =
-                g_signal_new ("search",
-                              G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_FIRST,
-                              G_STRUCT_OFFSET (FindDialogClass, search),
-                              NULL, NULL,
-                              g_cclosure_marshal_VOID__VOID,
-                              G_TYPE_NONE,
-                              0);
-}
-
-static void
-find_update_nav (EphyDialog *dialog)
-{
-	GtkWidget *forward_button;
-	GtkWidget *back_button;
-
-	g_signal_emit (G_OBJECT (dialog), find_dialog_signals[SEARCH], 0);
-
-	if (!FIND_DIALOG(dialog)->priv->constructed) return;
-
-	forward_button = ephy_dialog_get_control (dialog, FORWARD_BUTTON);
-        gtk_widget_set_sensitive (forward_button,
-				  FIND_DIALOG(dialog)->priv->can_go_next);
-
-	back_button = ephy_dialog_get_control (dialog, BACK_BUTTON);
-        gtk_widget_set_sensitive (back_button,
-				  FIND_DIALOG(dialog)->priv->can_go_prev);
+	g_object_class_install_property (object_class,
+					 PROP_NAVIGATION,
+					 g_param_spec_int ("navigation",
+							   "Navigation flags",
+							   "The find dialog's navigation flags",
+							    0,
+							    FIND_CAN_GO_PREV |
+							    FIND_CAN_GO_NEXT,
+							    0,
+							    G_PARAM_READABLE));
 }
 
 static void
@@ -177,14 +204,24 @@ ensure_constructed (FindDialog *dialog)
 }
 
 static void
+sync_embed (FindDialog *dialog, GParamSpec *pspec, gpointer data)
+{
+	LOG ("EphyEmbed changed")
+
+	set_navigation_flags (dialog, FIND_CAN_GO_PREV | FIND_CAN_GO_NEXT);
+}
+
+static void
 find_dialog_init (FindDialog *dialog)
 {
 	dialog->priv = g_new0 (FindDialogPrivate, 1);
 
 	dialog->priv->properties = NULL;
-	dialog->priv->can_go_prev = TRUE;
-	dialog->priv->can_go_next = TRUE;
+	dialog->priv->nav_flags = FIND_CAN_GO_PREV | FIND_CAN_GO_NEXT;
 	dialog->priv->constructed = FALSE;
+
+	g_signal_connect_object (dialog, "notify::embed",
+				 G_CALLBACK (sync_embed), NULL, 0);
 
 	ensure_constructed (dialog);
 }
@@ -224,10 +261,9 @@ find_get_info (EphyDialog *dialog)
 	g_value_unset (&word);
 
         /* don't do null searches */
-        if (search_string[0] == '\0')
+        if (search_string && search_string[0] == '\0')
         {
-		find_dialog->priv->can_go_prev = FALSE;
-		find_dialog->priv->can_go_next = FALSE;
+		set_navigation_flags (find_dialog, 0);
                 return;
         }
 
@@ -260,11 +296,9 @@ impl_show (EphyDialog *dialog)
 	FindDialog *find_dialog = FIND_DIALOG(dialog);
 	ensure_constructed (find_dialog);
 
-	find_dialog->priv->can_go_prev = TRUE;
-	find_dialog->priv->can_go_next = TRUE;
+	set_navigation_flags (find_dialog, FIND_CAN_GO_PREV | FIND_CAN_GO_NEXT);
 	find_dialog->priv->window = ephy_dialog_get_control (dialog, WINDOW_PROP);
 	find_get_info (dialog);
-	find_update_nav (dialog);
 
 	/* Focus the text entry.  This will correctly select or leave
 	 * unselected the existing text in the entry depending on the
@@ -272,14 +306,13 @@ impl_show (EphyDialog *dialog)
 	 */
 	gtk_widget_grab_focus (ephy_dialog_get_control (dialog, WORD_PROP));
 
-	
 	icon = gtk_widget_render_icon (find_dialog->priv->window, 
 						      GTK_STOCK_FIND,
 						      GTK_ICON_SIZE_MENU,
 						      "find_dialog");
 	gtk_window_set_icon (GTK_WINDOW(find_dialog->priv->window), icon);
 	g_object_unref (icon);
-	
+
 	EPHY_DIALOG_CLASS (parent_class)->show (dialog);
 }
 
@@ -292,6 +325,8 @@ find_dialog_finalize (GObject *object)
         g_return_if_fail (IS_FIND_DIALOG (object));
 
 	dialog = FIND_DIALOG (object);
+
+	g_signal_handlers_disconnect_by_func (dialog, G_CALLBACK (sync_embed), NULL);
 
         g_return_if_fail (dialog->priv != NULL);
 
@@ -306,7 +341,7 @@ find_dialog_new (EphyEmbed *embed)
 	FindDialog *dialog;
 
 	dialog = FIND_DIALOG (g_object_new (FIND_DIALOG_TYPE,
-				     "EphyEmbed", embed,
+				     "embed", embed,
 				     NULL));
 
 	return EPHY_DIALOG(dialog);
@@ -319,23 +354,11 @@ find_dialog_new_with_parent (GtkWidget *window,
 	FindDialog *dialog;
 
 	dialog = FIND_DIALOG (g_object_new (FIND_DIALOG_TYPE,
-				     "EphyEmbed", embed,
+				     "embed", embed,
 				     "ParentWindow", window,
 				     NULL));
 
 	return EPHY_DIALOG(dialog);
-}
-
-gboolean
-find_dialog_can_go_next (FindDialog *dialog)
-{
-	return dialog->priv->can_go_next;
-}
-
-gboolean
-find_dialog_can_go_prev (FindDialog *dialog)
-{
-	return dialog->priv->can_go_prev;
 }
 
 void
@@ -345,7 +368,8 @@ find_dialog_go_next (FindDialog *dialog,
 	gresult result;
 	EphyEmbed *embed;
 
-	if (!find_dialog_can_go_next (dialog)) return;
+	g_return_if_fail (IS_FIND_DIALOG (dialog));
+	if ((dialog->priv->nav_flags & FIND_CAN_GO_NEXT) == 0) return;
 
 	dialog->priv->properties->backwards = FALSE;
 	dialog->priv->properties->interactive = interactive;
@@ -353,16 +377,16 @@ find_dialog_go_next (FindDialog *dialog,
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG(dialog));
 	g_return_if_fail (embed != NULL);
 
-        result = ephy_embed_find (embed,
-				  dialog->priv->properties);
+        result = ephy_embed_find (embed, dialog->priv->properties);
 
-	dialog->priv->can_go_prev = TRUE;
-	if (result != G_OK)
+	if (result == G_OK)
 	{
-		dialog->priv->can_go_next = FALSE;
+		set_navigation_flags (dialog, FIND_CAN_GO_PREV | FIND_CAN_GO_NEXT);
 	}
-
-	find_update_nav (EPHY_DIALOG(dialog));
+	else
+	{
+		set_navigation_flags (dialog, FIND_CAN_GO_PREV);
+	}
 }
 
 void
@@ -372,7 +396,8 @@ find_dialog_go_prev (FindDialog *dialog,
 	gresult result;
 	EphyEmbed *embed;
 
-	if (!find_dialog_can_go_prev (dialog)) return;
+	g_return_if_fail (IS_FIND_DIALOG (dialog));
+	if ((dialog->priv->nav_flags & FIND_CAN_GO_PREV) == 0) return;
 
 	dialog->priv->properties->backwards = TRUE;
 	dialog->priv->properties->interactive = interactive;
@@ -380,16 +405,16 @@ find_dialog_go_prev (FindDialog *dialog,
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG(dialog));
 	g_return_if_fail (embed != NULL);
 
-	result = ephy_embed_find (embed,
-				  dialog->priv->properties);
+	result = ephy_embed_find (embed, dialog->priv->properties);
 
-	dialog->priv->can_go_next = TRUE;
-	if (result != G_OK)
+	if (result == G_OK)
 	{
-		dialog->priv->can_go_prev = FALSE;
+		set_navigation_flags (dialog, FIND_CAN_GO_PREV | FIND_CAN_GO_NEXT);
 	}
-
-	find_update_nav (EPHY_DIALOG(dialog));
+	else
+	{
+		set_navigation_flags (dialog, FIND_CAN_GO_NEXT);
+	}
 }
 
 void
@@ -419,12 +444,9 @@ find_entry_changed_cb  (GtkWidget *editable,
 {
 	FindDialog *find_dialog = FIND_DIALOG(dialog);
 
-	find_dialog->priv->can_go_prev = TRUE;
-	find_dialog->priv->can_go_next = TRUE;
+	set_navigation_flags (find_dialog, FIND_CAN_GO_PREV | FIND_CAN_GO_NEXT);
 
 	find_get_info (dialog);
-
-	find_update_nav (dialog);
 }
 
 void
@@ -433,10 +455,15 @@ find_check_toggled_cb (GtkWidget *toggle,
 {
 	FindDialog *find_dialog = FIND_DIALOG(dialog);
 
-	find_dialog->priv->can_go_prev = TRUE;
-	find_dialog->priv->can_go_next = TRUE;
+	set_navigation_flags (find_dialog, FIND_CAN_GO_PREV | FIND_CAN_GO_NEXT);
 
 	find_get_info (dialog);
+}
 
-        find_update_nav (dialog);
+FindNavigationFlags
+find_dialog_get_navigation_flags (FindDialog *dialog)
+{
+	g_return_val_if_fail (IS_FIND_DIALOG (dialog), 0);
+
+	return dialog->priv->nav_flags;
 }

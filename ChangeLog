@@ -1,5 +1,36 @@
 2003-06-15  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/find-dialog.h:
+	* embed/find-dialog.c: (set_navigation_flags),
+	(ephy_find_dialog_get_property), (find_dialog_class_init),
+	(sync_embed), (find_get_info), (impl_show), (find_dialog_finalize),
+	(find_dialog_go_next), (find_dialog_go_prev), (find_entry_changed_cb),
+	(find_check_toggled_cb), (find_dialog_get_navigation_flags):
+	
+	Make prev/next navigation capability an object property, and sync
+	on embed changes.
+
+	* embed/find-dialog.c: (find_dialog_new_with_parent):
+	* embed/ephy-embed-dialog.c: (ephy_embed_dialog_class_init),
+	(ephy_embed_dialog_new), (ephy_embed_dialog_new_with_parent),
+	(ephy_embed_dialog_set_embed):
+	* embed/print-dialog.c: (print_dialog_new),
+	(print_dialog_new_with_parent):
+
+	s/EphyEmbed/embed/ for the object property name.
+
+	* src/ephy-window.h:
+	* src/ephy-window.c: (sync_find_dialog), (update_find_control),
+	(ephy_window_switch_page_cb), (find_dialog_search_cb),
+	(ephy_window_get_find_dialog):
+	* src/window-commands.c: (window_cmd_edit_find_next),
+	(window_cmd_edit_find_prev):
+
+	Sync on the find dialog on nav capability and embed changes instead of
+	explicit updating.
+
+2003-06-15  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/window-commands.c: (window_cmd_tabs_next),
 	(window_cmd_tabs_previous):
 

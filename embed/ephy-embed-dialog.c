@@ -90,9 +90,9 @@ ephy_embed_dialog_class_init (EphyEmbedDialogClass *klass)
 
 	g_object_class_install_property (object_class,
 					 PROP_EPHY_EMBED,
-                                         g_param_spec_object ("EphyEmbed",
-                                                              "EphyEmbed",
-                                                              "Ephy Embed",
+                                         g_param_spec_object ("embed",
+                                                              "Embed",
+                                                              "The dialog's embed",
                                                               G_TYPE_OBJECT,
                                                               G_PARAM_READWRITE));
 }
@@ -170,7 +170,7 @@ EphyEmbedDialog *
 ephy_embed_dialog_new (EphyEmbed *embed)
 {
 	return EPHY_EMBED_DIALOG (g_object_new (EPHY_EMBED_DIALOG_TYPE,
-						"EphyEmbed", embed,
+						"embed", embed,
 						NULL));
 }
 
@@ -181,7 +181,7 @@ ephy_embed_dialog_new_with_parent (GtkWidget *parent_window,
 	return EPHY_EMBED_DIALOG (g_object_new
 				    (EPHY_EMBED_DIALOG_TYPE,
 				     "ParentWindow", parent_window,
-				     "EphyEmbed", embed,
+				     "embed", embed,
 				     NULL));
 }
 
@@ -193,6 +193,7 @@ ephy_embed_dialog_set_embed (EphyEmbedDialog *dialog,
 	dialog->priv->embed = embed;
 	g_object_add_weak_pointer (G_OBJECT (dialog->priv->embed),
 				   (gpointer *)&dialog->priv->embed);
+	g_object_notify (G_OBJECT (dialog), "embed");
 }
 
 EphyEmbed *

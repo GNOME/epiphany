@@ -514,6 +514,32 @@ setup_window (EphyWindow *window)
 }
 
 static void
+sync_find_dialog (FindDialog *dialog, GParamSpec *spec, EphyWindow *window)
+{
+	EggActionGroup *action_group;
+	EggAction *action;
+	FindNavigationFlags flags;
+	gboolean can_go_prev = FALSE, can_go_next = FALSE;
+
+	flags = find_dialog_get_navigation_flags (dialog);
+
+	if (flags & FIND_CAN_GO_PREV)
+	{
+		can_go_prev = TRUE;
+	}
+	if (flags & FIND_CAN_GO_NEXT)
+	{
+		can_go_next = TRUE;
+	}
+
+	action_group = window->priv->action_group;
+	action = egg_action_group_get_action (action_group, "EditFindPrev");
+	g_object_set (action, "sensitive", can_go_prev, NULL);
+	action = egg_action_group_get_action (action_group, "EditFindNext");
+	g_object_set (action, "sensitive", can_go_next, NULL);
+}
+
+static void
 sync_tab_address (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	const char *address;
@@ -755,8 +781,6 @@ sync_tab_visibility (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	gboolean visible = FALSE;
 
 	if (window->priv->closing) return;
-
-	LOG ("sync tab visibility window %p tab %p", window, tab)
 
 	tabs = ephy_window_get_tabs (window);
 	for (l = tabs; l != NULL; l = l->next)
@@ -1139,6 +1163,9 @@ ephy_window_finalize (GObject *object)
 
 	if (window->priv->find_dialog)
 	{
+		g_signal_handlers_disconnect_by_func (window->priv->find_dialog,
+						      G_CALLBACK (sync_find_dialog),
+						      window);
 		g_object_unref (G_OBJECT (window->priv->find_dialog));
 	}
 
@@ -1546,25 +1573,6 @@ update_favorites_control (EphyWindow *window)
 	ephy_favorites_menu_update (window->priv->fav_menu);
 }
 
-static void
-update_find_control (EphyWindow *window)
-{
-	gboolean can_go_next, can_go_prev;
-
-	if (window->priv->find_dialog)
-	{
-		can_go_next = find_dialog_can_go_next
-			(FIND_DIALOG(window->priv->find_dialog));
-		can_go_prev = find_dialog_can_go_prev
-			(FIND_DIALOG(window->priv->find_dialog));
-/*
-		ephy_bonobo_set_sensitive (BONOBO_UI_COMPONENT(window->ui_component),
-					  EDIT_FIND_NEXT_CMD_PATH, can_go_next);
-		ephy_bonobo_set_sensitive (BONOBO_UI_COMPONENT(window->ui_component),
-					  EDIT_FIND_PREV_CMD_PATH, can_go_prev);*/
-	}
-}
-
 void
 ephy_window_update_control (EphyWindow *window,
 			      ControlID control)
@@ -1573,26 +1581,12 @@ ephy_window_update_control (EphyWindow *window,
 
 	switch (control)
 	{
-	case FindControl:
-		update_find_control (window);
-		break;
 	case FavoritesControl:
 		update_favorites_control (window);
 		break;
 	default:
 		g_warning ("unknown control specified for updating");
 		break;
-	}
-}
-
-void
-ephy_window_update_all_controls (EphyWindow *window)
-{
-	g_return_if_fail (IS_EPHY_WINDOW (window));
-
-	if (ephy_window_get_active_tab (window) != NULL)
-	{
-		update_find_control (window);
 	}
 }
 
@@ -1698,14 +1692,7 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 	update_embed_dialogs (window, tab);
 
 	/* update window controls */
-	ephy_window_update_all_controls (window);
 	update_tabs_menu_sensitivity (window);
-}
-
-static void
-find_dialog_search_cb (FindDialog *dialog, EphyWindow *window)
-{
-	ephy_window_update_control (window, FindControl);
 }
 
 EphyDialog *
@@ -1724,9 +1711,11 @@ ephy_window_get_find_dialog (EphyWindow *window)
 	dialog = find_dialog_new_with_parent (GTK_WIDGET(window),
 					      embed);
 
-	g_signal_connect (dialog, "search",
-			  G_CALLBACK (find_dialog_search_cb),
-			  window);
+	sync_find_dialog (FIND_DIALOG (dialog), NULL, window);
+	g_signal_connect_object (dialog, "notify::embed",
+				 G_CALLBACK (sync_find_dialog), window, 0);
+	g_signal_connect_object (dialog, "notify::navigation",
+				 G_CALLBACK (sync_find_dialog), window, 0);
 
 	window->priv->find_dialog = dialog;
 

@@ -212,7 +212,7 @@ print_dialog_new (EphyEmbed *embed,
 	PrintDialog *dialog;
 
 	dialog = PRINT_DIALOG (g_object_new (PRINT_DIALOG_TYPE,
-				     "EphyEmbed", embed,
+				     "embed", embed,
 				     NULL));
 
 	if (!embed) dialog->only_collect_info = TRUE;
@@ -229,7 +229,7 @@ print_dialog_new_with_parent (GtkWidget *window,
 	PrintDialog *dialog;
 
 	dialog = PRINT_DIALOG (g_object_new (PRINT_DIALOG_TYPE,
-				     "EphyEmbed", embed,
+				     "embed", embed,
 				     "ParentWindow", window,
 				     NULL));
 
