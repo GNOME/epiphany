@@ -320,7 +320,7 @@ NS_METHOD GContentHandler::MIMEInitiateAction (void)
 		mAction = CONTENT_ACTION_OPEN_TMP;
 	}
 
-	if (!mHelperApp || mPermission == EPHY_MIME_PERMISSION_UNSAFE)
+	if (!mHelperApp || mPermission != EPHY_MIME_PERMISSION_SAFE)
 	{
 		mAction = CONTENT_ACTION_DOWNLOAD;
 	}
@@ -343,7 +343,8 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
 	NS_ENSURE_TRUE (mimeInfo, NS_ERROR_FAILURE);
 
-	if (mAction == CONTENT_ACTION_OPEN)
+	if (mAction == CONTENT_ACTION_OPEN ||
+	    mAction == CONTENT_ACTION_OPEN_TMP	)
 	{
 		nsEmbedString desc;
 
