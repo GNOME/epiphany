@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: epiphany VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-12 12:40+0100\n"
-"PO-Revision-Date: 2005-02-12 20:47+0100\n"
+"PO-Revision-Date: 2005-02-15 12:21+0100\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -450,16 +450,7 @@ msgid ""
 "\"zhcn_parallel_state_machine\" (autodetect simplified chinese encodings), "
 "\"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) "
 "and \"universal_charset_detector\" (autodetect most encodings)."
-msgstr ""
-"Autodetektor kódování. Platné hodnoty jsou \"\" (autodetektoři vypnuti), "
-"\"cjk_parallel_state_machine\" (autodetekovat východoasijská kódování), "
-"\"ja_parallel_state_machine\" (autodetekovat japonská kódování), "
-"\"ko_parallel_state_machine\" (autodetekovat korejská kódování), \"ruprob"
-"\" (autodetekovat ruská kódování), \"ukprob\" (autodetekovat ukrajinská "
-"kódování), \"zh_parallel_state_machine\" (autodetekovat čínská kódování), "
-"\"zhcn_parallel_state_machine\" (autodetekovat zjednodušená čínská "
-"kódování), \"zhtw_parallel_state_machine\" (autodetekovat tradiční čínská "
-"kódování) a \"universal_charset_detector\" (autodetekovat většinu kódování)."
+msgstr "Autodetektor kódování. Platné hodnoty jsou \"\" (autodetekce vypnutá), \"cjk_parallel_state_machine\" (autodetekovat východoasijská kódování), \"ja_parallel_state_machine\" (autodetekovat japonská kódování), \"ko_parallel_state_machine\" (autodetekovat korejská kódování), \"ruprob\" (autodetekovat ruská kódování), \"ukprob\" (autodetekovat ukrajinská kódování), \"zh_parallel_state_machine\" (autodetekovat čínská kódování), \"zhcn_parallel_state_machine\" (autodetekovat zjednodušená čínská kódování), \"zhtw_parallel_state_machine\" (autodetekovat tradiční čínská kódování) a \"universal_charset_detector\" (autodetekovat většinu kódování)."
 
 #: data/epiphany.schemas.in.h:60
 msgid "The page information shown in the history view"
@@ -755,7 +746,7 @@ msgstr "Vždy používat _tato písma"
 
 #: data/glade/prefs-dialog.glade.h:15
 msgid "Au_todetect:"
-msgstr "_Autodetekovat:"
+msgstr "_Autodetekce:"
 
 #: data/glade/prefs-dialog.glade.h:16
 msgid "Choose a l_anguage:"
@@ -788,7 +779,7 @@ msgstr "Písma a barvy"
 
 #: data/glade/prefs-dialog.glade.h:22
 msgid "For l_anguage:"
-msgstr "Pro _jazyk:"
+msgstr "P_ro:"
 
 #: data/glade/prefs-dialog.glade.h:24
 msgid "Language"
@@ -837,7 +828,7 @@ msgstr "Adresář _stahování:"
 
 #: data/glade/prefs-dialog.glade.h:35
 msgid "_Fixed width:"
-msgstr "_Pevná šířka:"
+msgstr "P_evná šířka:"
 
 #: data/glade/prefs-dialog.glade.h:36
 msgid "_Minimum size:"
@@ -1036,13 +1027,13 @@ msgstr[2] "%d stahování"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/downloader-view.c:521 embed/downloader-view.c:534
 msgid "download status|Unknown"
-msgstr "download status|Neznámý"
+msgstr "Neznámý"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/downloader-view.c:526
 msgid "download status|Failed"
-msgstr "download status|Selhal"
+msgstr "Selhalo"
 
 #: embed/downloader-view.c:588 src/bookmarks/ephy-bookmarks-editor.c:875
 msgid "File"
@@ -1090,7 +1081,7 @@ msgstr "_Arménské (ARMSCII-8)"
 
 #: embed/ephy-encodings.c:68
 msgid "_Georgian (GEOSTD8)"
-msgstr "_Georgian (GEOSTD8)"
+msgstr "_Gruzínské (GEOSTD8)"
 
 #: embed/ephy-encodings.c:69
 msgid "Central European (_IBM-852)"
@@ -1166,7 +1157,7 @@ msgstr "Azbuka (_Windows-1251)"
 
 #: embed/ephy-encodings.c:87
 msgid "Cyrillic/_Russian (IBM-866)"
-msgstr "Azbuka/_Ruské (IBM-866)"
+msgstr "Azbuka/_ruské (IBM-866)"
 
 #: embed/ephy-encodings.c:88
 msgid "Greek (_ISO-8859-7)"
@@ -1182,7 +1173,7 @@ msgstr "Řecké (_Windows-1253)"
 
 #: embed/ephy-encodings.c:91
 msgid "Gujarati (_MacGujarati)"
-msgstr "Gujarati (_MacGujarati)"
+msgstr "Gudžaratí (_MacGujarati)"
 
 #: embed/ephy-encodings.c:92
 msgid "Gurmukhi (Mac_Gurmukhi)"
@@ -1306,11 +1297,11 @@ msgstr "Unicode (UTF-_8)"
 
 #: embed/ephy-encodings.c:122
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
-msgstr "Azbuka/Ukrajinské (_KOI8-U)"
+msgstr "Azbuka/ukrajinské (_KOI8-U)"
 
 #: embed/ephy-encodings.c:123
 msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
-msgstr "Azbuka/Ukrajinské (Mac_Ukrainian)"
+msgstr "Azbuka/ukrajinské (Mac_Ukrainian)"
 
 #: embed/ephy-encodings.c:124
 msgid "Vietnamese (_TCVN)"
@@ -1375,61 +1366,61 @@ msgstr "Unicode (UTF-3_2 LE)"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/ephy-encodings.c:145
 msgid "autodetectors|Off"
-msgstr "autodetectors|Vypnuto"
+msgstr "Vypnutá"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/ephy-encodings.c:148
 msgid "automatically detect ... character encodings|Chinese"
-msgstr "automatically detect ... character encodings|Čínština"
+msgstr "Čínštiny"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/ephy-encodings.c:151
 msgid "automatically detect ... character encodings|Simplified Chinese"
-msgstr "automatically detect ... character encodings|Zjednodušená čínština"
+msgstr "Zjednodušené čínštiny"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/ephy-encodings.c:154
 msgid "automatically detect ... character encodings|Traditional Chinese"
-msgstr "automatically detect ... character encodings|Tradiční čínština"
+msgstr "Tradiční čínštiny"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/ephy-encodings.c:157
 msgid "automatically detect ... character encodings|East Asian"
-msgstr "automatically detect ... character encodings|Východní Asie"
+msgstr "Východoasijských jazyků"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/ephy-encodings.c:160
 msgid "automatically detect ... character encodings|Japanese"
-msgstr "automatically detect ... character encodings|Japonština"
+msgstr "Japonštiny"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/ephy-encodings.c:163
 msgid "automatically detect ... character encodings|Korean"
-msgstr "automatically detect ... character encodings|Korejština"
+msgstr "Korejštiny"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/ephy-encodings.c:166
 msgid "automatically detect ... character encodings|Russian"
-msgstr "automatically detect ... character encodings|Ruština"
+msgstr "Ruštiny"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/ephy-encodings.c:169
 msgid "automatically detect ... character encodings|Universal"
-msgstr "automatically detect ... character encodings|Univerzální"
+msgstr "Většiny jazyků"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: embed/ephy-encodings.c:172
 msgid "automatically detect ... character encodings|Ukrainian"
-msgstr "automatically detect ... character encodings|Ukrajinština"
+msgstr "Ukrajinštiny"
 
 #. translators: this is the title that an unknown encoding will
 #. * be displayed as.
@@ -1973,103 +1964,103 @@ msgstr "Nemohu zobrazit nápovědu: %s"
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:39
 msgid "select fonts for|Arabic"
-msgstr "select fonts for|Arabské"
+msgstr "Arabštinu"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:42
 msgid "select fonts for|Baltic"
-msgstr "select fonts for|Baltské"
+msgstr "Baltské jazyky"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:45
 msgid "select fonts for|Central European"
-msgstr "select fonts for|Středoevropské"
+msgstr "Středoevropské jazyky"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:48
 msgid "select fonts for|Cyrillic"
-msgstr "select fonts for|Azbuka"
+msgstr "Azbuku"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:51
 msgid "select fonts for|Devanagari"
-msgstr "select fonts for|Devanagari"
+msgstr "Dévanágarí"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:54
 msgid "select fonts for|Greek"
-msgstr "select fonts for|Řecké"
+msgstr "Řečtinu"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:57
 msgid "select fonts for|Hebrew"
-msgstr "select fonts for|Hebrejské"
+msgstr "Hebrejštinu"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:60
 msgid "select fonts for|Japanese"
-msgstr "select fonts for|Japonské"
+msgstr "Japonštinu"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:63
 msgid "select fonts for|Korean"
-msgstr "select fonts for|Korejské"
+msgstr "Korejštinu"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:66
 msgid "select fonts for|Simplified Chinese"
-msgstr "select fonts for|Zjednodušená čínština"
+msgstr "Zjednodušenou čínštinu"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:69
 msgid "select fonts for|Tamil"
-msgstr "select fonts for|Tamil"
+msgstr "Tamilštinu"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:72
 msgid "select fonts for|Thai"
-msgstr "select fonts for|Thajské"
+msgstr "Thajštinu"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:75
 msgid "select fonts for|Traditional Chinese"
-msgstr "select fonts for|Tradiční čínština"
+msgstr "Tradiční čínštinu"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:78
 msgid "select fonts for|Traditional Chinese (Hong Kong)"
-msgstr "select fonts for|Tradiční čínština (Hong Kong)"
+msgstr "Tradiční čínštinu (Hong Kong)"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:81
 msgid "select fonts for|Turkish"
-msgstr "select fonts for|Turecké"
+msgstr "Turečtinu"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:84
 msgid "select fonts for|Unicode"
-msgstr "select fonts for|Unicode"
+msgstr "Unicode"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #: lib/ephy-langs.c:87
 msgid "select fonts for|Western"
-msgstr "select fonts for|Západní"
+msgstr "Západní jazyky"
 
 #: lib/ephy-stock-icons.c:56
 msgid "Close Tab"
@@ -2571,21 +2562,21 @@ msgstr "Aktualizovat záložku?"
 #. Translators: this topic contains all bookmarks
 #: src/bookmarks/ephy-bookmarks.c:796
 msgid "bookmarks|All"
-msgstr "bookmarks|Všechny"
+msgstr "Všechny"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. Translators: this topic contains the most used bookmarks
 #: src/bookmarks/ephy-bookmarks.c:832
 msgid "bookmarks|Most Visited"
-msgstr "bookmarks|Nejčastěji navštěvované"
+msgstr "Nejčastěji navštěvované"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
 #. Translators: this topic contains the not categorized bookmarks
 #: src/bookmarks/ephy-bookmarks.c:851
 msgid "bookmarks|Not Categorized"
-msgstr "bookmarks|Nezařazené"
+msgstr "Nezařazené"
 
 #: src/bookmarks/ephy-new-bookmark.c:275
 msgid "Add Bookmark"
@@ -3865,7 +3856,7 @@ msgstr "Tradiční čínština"
 #: src/prefs-dialog.c:1016 src/prefs-dialog.c:1024
 #, c-format
 msgid "language|%s (%s)"
-msgstr "language|%s (%s)"
+msgstr "%s (%s)"
 
 #. Translators: The text before the "|" is context to help you decide on
 #. * the correct translation. You MUST OMIT it in the translated string.
@@ -3875,7 +3866,7 @@ msgstr "language|%s (%s)"
 #: src/prefs-dialog.c:1035 src/prefs-dialog.c:1393
 #, c-format
 msgid "language|User defined (%s)"
-msgstr "language|Uživatelem definovaný (%s)"
+msgstr "Uživatelem definovaný (%s)"
 
 #: src/prefs-dialog.c:1058
 #, c-format
