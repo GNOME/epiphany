@@ -105,7 +105,9 @@ ephy_spinner_get_type (void)
 GtkWidget *
 ephy_spinner_new (void)
 {
-	return GTK_WIDGET (g_object_new (EPHY_TYPE_SPINNER, NULL));
+	return GTK_WIDGET (g_object_new (EPHY_TYPE_SPINNER,
+					 "visible-window", FALSE,
+					 NULL));
 }
 
 static gboolean
@@ -163,8 +165,6 @@ static void
 ephy_spinner_init (EphySpinner *spinner)
 {
 	GtkWidget *widget = GTK_WIDGET (spinner);
-
-	GTK_WIDGET_UNSET_FLAGS (spinner, GTK_NO_WINDOW);
 
 	gtk_widget_set_events (widget,
 			       gtk_widget_get_events (widget)
@@ -261,8 +261,8 @@ ephy_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
 	x_offset = (widget->allocation.width - width) / 2;
 	y_offset = (widget->allocation.height - height) / 2;
 
-	pix_area.x = x_offset;
-	pix_area.y = y_offset;
+	pix_area.x = x_offset + widget->allocation.x;
+	pix_area.y = y_offset + widget->allocation.y;
 	pix_area.width = width;
 	pix_area.height = height;
 
@@ -274,7 +274,8 @@ ephy_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
 
 	gc = gdk_gc_new (widget->window);
 	gdk_draw_pixbuf (widget->window, gc, pixbuf,
-			 dest.x - x_offset, dest.y - y_offset,
+			 dest.x - x_offset - widget->allocation.x,
+			 dest.y - y_offset - widget->allocation.y,
 			 dest.x, dest.y,
 			 dest.width, dest.height,
 			 GDK_RGB_DITHER_MAX, 0, 0);
