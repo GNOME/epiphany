@@ -168,15 +168,15 @@ impl_save (EphyEmbedPersist *persist)
 	
 	g_return_val_if_fail (filename != NULL, G_FAILED);
 
-	EphyWrapper *wrapper;
+	EphyWrapper *wrapper = NULL;
+	if (embed)
+	{
+	        wrapper = (EphyWrapper *) mozilla_embed_get_ephy_wrapper (MOZILLA_EMBED(embed));
+		g_return_val_if_fail (wrapper != NULL, G_FAILED);
+	}
 
-	g_return_val_if_fail (embed != NULL, G_FAILED);
-        wrapper = (EphyWrapper *) mozilla_embed_get_ephy_wrapper (MOZILLA_EMBED(embed));
-	g_return_val_if_fail (wrapper != NULL, G_FAILED);
-
-	nsCOMPtr<nsIWebBrowserPersist> webPersist =
-		MOZILLA_EMBED_PERSIST (persist)->priv->mPersist;
-	if (!webPersist) return G_FAILED;
+	/* we must have one of uri or wrapper */
+	g_assert (wrapper != NULL || uri != NULL);
 
 	/* Get a temp filename to save to */
 	nsCOMPtr<nsIProperties> dirService(do_GetService(NS_DIRECTORY_SERVICE_CONTRACTID, &rv));
@@ -194,7 +194,6 @@ impl_save (EphyEmbedPersist *persist)
 	/* Get the uri to save to */
 	nsCOMPtr<nsIURI> inURI;
 	nsCAutoString sURI;
-
 	if (uri)
 	{
 		sURI.Assign (uri);
@@ -204,7 +203,6 @@ impl_save (EphyEmbedPersist *persist)
 		rv = wrapper->GetDocumentUrl (sURI);
 		if (NS_FAILED(rv)) return G_FAILED;
 	}
-
       	rv = NS_NewURI(getter_AddRefs(inURI), sURI);
 	if (NS_FAILED(rv) || !inURI) return G_FAILED;
 
@@ -212,28 +210,16 @@ impl_save (EphyEmbedPersist *persist)
 	nsAutoString inFilename;
 	inFilename.AssignWithConversion (filename);
 
-	nsCOMPtr<nsIDOMDocument> DOMDocument;
+	/* Get post data */
 	nsCOMPtr<nsIInputStream> postData;
-	if (!uri)
-	{		
-		/* Get the DOM document */
-		if (flags & EMBED_PERSIST_MAINDOC)
-		{
-                	rv = wrapper->GetMainDOMDocument (getter_AddRefs(DOMDocument));
-		}
-        	else
-		{
-                	rv = wrapper->GetDOMDocument (getter_AddRefs(DOMDocument));
-		}
-        	if (NS_FAILED(rv) || !DOMDocument) return G_FAILED;
+	if (wrapper)
+	{
+		PRInt32 sindex;
 
 		nsCOMPtr<nsIWebNavigation> webNav(do_QueryInterface(wrapper->mWebBrowser));
 		nsCOMPtr<nsISHistory> sessionHistory;
 		webNav->GetSessionHistory(getter_AddRefs(sessionHistory));
 		nsCOMPtr<nsIHistoryEntry> entry;
-
-		/* Get post data */
-		PRInt32 sindex;
 		sessionHistory->GetIndex(&sindex);
 		sessionHistory->GetEntryAtIndex(sindex, PR_FALSE, getter_AddRefs(entry));
 		nsCOMPtr<nsISHEntry> shEntry(do_QueryInterface(entry));
@@ -243,6 +229,26 @@ impl_save (EphyEmbedPersist *persist)
 		}
 	}
 
+	/* Get the DOM document if a uri is not specified */
+	nsCOMPtr<nsIDOMDocument> DOMDocument;
+	if (!uri)
+	{		
+		if (flags & EMBED_PERSIST_MAINDOC)
+		{
+                	rv = wrapper->GetMainDOMDocument (getter_AddRefs(DOMDocument));
+		}
+        	else
+		{
+                	rv = wrapper->GetDOMDocument (getter_AddRefs(DOMDocument));
+		}
+        	if (NS_FAILED(rv) || !DOMDocument) return G_FAILED;
+	}
+
+	/* Create an header sniffer and do the save */
+	nsCOMPtr<nsIWebBrowserPersist> webPersist =
+		MOZILLA_EMBED_PERSIST (persist)->priv->mPersist;
+	if (!webPersist) return G_FAILED;
+
 	EphyHeaderSniffer* sniffer = new EphyHeaderSniffer
 		(webPersist, MOZILLA_EMBED_PERSIST (persist),
 		 tmpFile, inURI, DOMDocument, postData,
@@ -250,7 +256,6 @@ impl_save (EphyEmbedPersist *persist)
 	if (!sniffer) return G_FAILED;
  
 	webPersist->SetProgressListener(sniffer);
-                                                                                                                             
 	rv = webPersist->SaveURI(inURI, nsnull, nsnull, nsnull, nsnull, tmpFile);
 	if (NS_FAILED (rv)) return G_FAILED;
 
