@@ -128,8 +128,8 @@ sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 	info = ephy_embed_get_encoding_info (embed);
 	if (info == NULL) return;
 
-	node = ephy_encodings_get_node (dialog->priv->encodings, info->encoding);
-	if (!EPHY_IS_NODE (node)) return;
+	node = ephy_encodings_get_node (dialog->priv->encodings, info->encoding, TRUE);
+	g_assert (EPHY_IS_NODE (node));
 
 	/* select the current encoding in the list view */
 	ephy_node_view_select_node (EPHY_NODE_VIEW (dialog->priv->enc_view),

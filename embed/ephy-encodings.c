@@ -137,6 +137,15 @@ encoding_entries [] =
 	{ N_("Western (_MacRoman)"),                "x-mac-roman",           LG_WESTERN,	FALSE },
 	{ N_("Western (_Windows-1252)"),            "windows-1252",          LG_WESTERN,	FALSE },
 
+	/* the following encodings are so rarely used that we don't want to pollute the "related"
+	 * part of the encodings menu with them, so we set the language group to 0 here
+	 */
+	{ N_("English (_US-ASCII)"),                "us-ascii",              0,			FALSE },
+	{ N_("Unicode (UTF-_16 BE)"),               "UTF-16BE",              0,			FALSE },
+	{ N_("Unicode (UTF-1_6 LE)"),               "UTF-16LE",              0,			FALSE},
+	{ N_("Unicode (UTF-_32 BE)"),               "UTF-32BE",              0,			FALSE },
+	{ N_("Unicode (UTF-3_2 LE)"),               "UTF-32LE",              0,			FALSE },
+
 	{ N_("Off"),		 		    "",				   LG_NONE,								TRUE },
 	{ N_("Chinese"),			    "zh_parallel_state_machine",   LG_CHINESE_TRAD | LG_CHINESE_SIMP,					TRUE },
 	{ N_("Chinese Simplified"),		    "zhcn_parallel_state_machine", LG_CHINESE_SIMP,							TRUE },
@@ -226,13 +235,92 @@ ephy_encodings_class_init (EphyEncodingsClass *klass)
 	g_type_class_add_private (object_class, sizeof (EphyEncodingsPrivate));
 }
 
+static EphyNode *
+add_encoding (EphyEncodings *encodings,
+	      const char *title,
+	      const char *code,
+	      EphyLanguageGroup groups,
+	      gboolean is_autodetector)
+{
+	EphyNode *node;
+	char *elided, *normalised;
+	GValue value = { 0, };
+
+	node = ephy_node_new (encodings->priv->db);
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, title);
+	ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_TITLE, &value);
+	g_value_unset (&value);
+
+	elided = ephy_string_elide_underscores (title);
+	normalised = g_utf8_normalize (elided, -1, G_NORMALIZE_DEFAULT);
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_take_string (&value, g_utf8_collate_key (normalised, -1));
+	ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_COLLATION_KEY, &value);
+	g_value_unset (&value);
+
+	g_free (normalised);
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_take_string (&value, elided);
+	ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_TITLE_ELIDED, &value);
+	g_value_unset (&value);
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, code);
+	ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_ENCODING, &value);
+	g_value_unset (&value);
+
+	g_value_init (&value, G_TYPE_INT);
+	g_value_set_int (&value, groups);
+	ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_LANGUAGE_GROUPS, &value);
+	g_value_unset (&value);
+
+	g_value_init (&value, G_TYPE_BOOLEAN);
+	g_value_set_boolean (&value, is_autodetector);
+	ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_IS_AUTODETECTOR, &value);
+	g_value_unset (&value);
+
+	/* now insert the node in our structure */
+	ephy_node_add_child (encodings->priv->root, node);
+	g_hash_table_insert (encodings->priv->hash, g_strdup (code), node);
+
+	if (is_autodetector)
+	{
+		ephy_node_add_child (encodings->priv->detectors, node);
+	}
+	else
+	{
+		ephy_node_add_child (encodings->priv->encodings, node);
+	}
+
+	return node;
+}
+
 EphyNode *
 ephy_encodings_get_node (EphyEncodings *encodings,
-			 const char *code)
+			 const char *code,
+			 gboolean add_if_not_found)
 {
+	EphyNode *node;
+
 	g_return_val_if_fail (EPHY_IS_ENCODINGS (encodings), NULL);
 
-	return g_hash_table_lookup (encodings->priv->hash, code);
+	node = g_hash_table_lookup (encodings->priv->hash, code);
+
+	/* if it doesn't exist, add a node for it */
+	if (!EPHY_IS_NODE (node) && add_if_not_found)
+	{
+		char *title;
+
+		title = g_strdup_printf (_("Unknown (%s)"), code);
+		node = add_encoding (encodings, title, code, 0, FALSE);
+		g_free (title);
+	}
+
+	return node;
 }
 
 GList *
@@ -287,7 +375,8 @@ ephy_encodings_add_recent (EphyEncodings *encodings,
 
 	g_return_if_fail (EPHY_IS_ENCODINGS (encodings));
 	g_return_if_fail (code != NULL);
-	g_return_if_fail (ephy_encodings_get_node (encodings, code) != NULL);
+	
+	if (ephy_encodings_get_node (encodings, code, FALSE) == NULL) return;
 
 	/* keep the list elements unique */
 	element = g_slist_find_custom (encodings->priv->recent, code,
@@ -328,7 +417,7 @@ ephy_encodings_get_recent (EphyEncodings *encodings)
 	{
 		EphyNode *node;
 
-		node = ephy_encodings_get_node (encodings, (char *) l->data);
+		node = ephy_encodings_get_node (encodings, (char *) l->data, FALSE);
 		g_return_val_if_fail (EPHY_IS_NODE (node), NULL);
 
 		list = g_list_prepend (list, node);
@@ -351,7 +440,9 @@ ephy_encodings_init (EphyEncodings *encodings)
 	db = ephy_node_db_new ("EncodingsDB");
 	encodings->priv->db = db;
 
-	encodings->priv->hash = g_hash_table_new (g_str_hash, g_str_equal);
+	encodings->priv->hash = g_hash_table_new_full (g_str_hash, g_str_equal,
+						       (GDestroyNotify) g_free,
+						       NULL);
 
 	encodings->priv->root = ephy_node_new_with_id (db, ALL_NODE_ID);
 	encodings->priv->encodings = ephy_node_new_with_id (db, ENCODINGS_NODE_ID);
@@ -364,57 +455,11 @@ ephy_encodings_init (EphyEncodings *encodings)
 	/* now fill the db */
 	for (i = 0; i < n_encoding_entries; i++)
 	{
-		EphyNode *node;
-		char *elided, *normalised;
-		GValue value = { 0, };
-
-		node = ephy_node_new (db);
-		ephy_node_add_child (encodings->priv->root, node);
-		g_hash_table_insert (encodings->priv->hash, encoding_entries[i].code, node);
-	
-		if (encoding_entries[i].is_autodetector)
-		{
-			ephy_node_add_child (encodings->priv->detectors, node);
-		}
-		else
-		{
-			ephy_node_add_child (encodings->priv->encodings, node);
-		}
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, _(encoding_entries[i].title));
-		ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_TITLE, &value);
-		g_value_unset (&value);
-
-		elided = ephy_string_elide_underscores (_(encoding_entries[i].title));
-		normalised = g_utf8_normalize (elided, -1, G_NORMALIZE_DEFAULT);
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_take_string (&value, g_utf8_collate_key (normalised, -1));
-		ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_COLLATION_KEY, &value);
-		g_value_unset (&value);
-
-		g_free (normalised);
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_take_string (&value, elided);
-		ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_TITLE_ELIDED, &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, encoding_entries[i].code);
-		ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_ENCODING, &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, encoding_entries[i].groups);
-		ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_LANGUAGE_GROUPS, &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_BOOLEAN);
-		g_value_set_boolean (&value, encoding_entries[i].is_autodetector);
-		ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_IS_AUTODETECTOR, &value);
-		g_value_unset (&value);
+		add_encoding (encodings,
+			      _(encoding_entries[i].title),
+			      encoding_entries[i].code,
+			      encoding_entries[i].groups,
+			      encoding_entries[i].is_autodetector);
 	}
 
 	/* get the list of recently used encodings */
@@ -428,7 +473,7 @@ ephy_encodings_init (EphyEncodings *encodings)
 	{
 		if (g_slist_find (encodings->priv->recent, l->data) == NULL
 		    && g_slist_length (encodings->priv->recent) < RECENT_MAX
-		    && ephy_encodings_get_node (encodings, l->data) != NULL)
+		    && ephy_encodings_get_node (encodings, l->data, FALSE) != NULL)
 		{
 			encodings->priv->recent =
 				g_slist_prepend (encodings->priv->recent,

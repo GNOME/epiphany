@@ -183,11 +183,8 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 
 	encoding = info->encoding;
 
-	enc_node = ephy_encodings_get_node (p->encodings, encoding);
-	if (!EPHY_IS_NODE (enc_node))
-	{
-		goto build_menu;
-	}
+	enc_node = ephy_encodings_get_node (p->encodings, encoding, TRUE);
+	g_assert (EPHY_IS_NODE (enc_node));
 
 	/* set the encodings group's active member */
 	g_snprintf (name, sizeof (name), "Encoding%s", encoding);
@@ -207,7 +204,7 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	if (g_list_find (related, enc_node) == NULL
 	    && g_list_find (recent, enc_node) == NULL)
 	{
-		recent = g_list_prepend (recent, enc_node);
+		related = g_list_prepend (related, enc_node);
 	}
 
 	/* make sure related and recent are disjoint so we don't display twice */
@@ -226,7 +223,6 @@ build_menu:
 					      "ViewEncodingAutomatic");
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), is_automatic);
 	g_object_set (G_OBJECT (action), "sensitive", !is_automatic, NULL);
-
 
 	/* clear the menu */
 	if (p->merge_id > 0)
@@ -313,7 +309,7 @@ encoding_activate_cb (GtkAction *action, EphyEncodingMenu *menu)
 }
 
 static void
-add_action (EphyNode *node, EphyEncodingMenu *menu)
+add_action (EphyNode *encodings, EphyNode *node, EphyEncodingMenu *menu)
 {
 	GtkAction *action;
 	char name[128];
@@ -323,6 +319,8 @@ add_action (EphyNode *node, EphyEncodingMenu *menu)
 			(node, EPHY_NODE_ENCODING_PROP_ENCODING);
 	title = ephy_node_get_property_string
 			(node, EPHY_NODE_ENCODING_PROP_TITLE);
+
+	LOG ("add_action for encoding '%s'", encoding)
 
 	g_snprintf (name, sizeof (name), "Encoding%s", encoding);
 
@@ -397,7 +395,9 @@ ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
-	GList *encodings;
+	EphyNode *encodings;
+	GPtrArray *children;
+	int i;
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
@@ -413,9 +413,25 @@ ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
 	gtk_action_group_add_toggle_actions (action_group, toggle_menu_entries,
                                     	     n_toggle_menu_entries, menu);
 
-	encodings = ephy_encodings_get_encodings (menu->priv->encodings, LG_ALL);
-	g_list_foreach (encodings, (GFunc) add_action, menu);
-	g_list_free (encodings);
+	/* add actions for the existing encodings */
+	encodings = ephy_encodings_get_all (menu->priv->encodings);
+	children = ephy_node_get_children (encodings);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *encoding;
+
+		encoding = (EphyNode *) g_ptr_array_index (children, i);
+		add_action (encodings, encoding, menu);
+	}
+
+	/* when we encounter an unknown encoding, it is added to the database,
+	 * so we need to listen to child_added on the encodings node to
+	 * add an action for it
+	 */
+	ephy_node_signal_connect_object (encodings,
+					 EPHY_NODE_CHILD_ADDED,
+					 (EphyNodeCallback) add_action,
+					 G_OBJECT (menu));
 
 	gtk_ui_manager_insert_action_group (menu->priv->manager,
 					    action_group, 0);

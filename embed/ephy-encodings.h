@@ -130,7 +130,8 @@ GType		 ephy_encodings_get_type        (void);
 EphyEncodings	*ephy_encodings_new             (void);
 
 EphyNode	*ephy_encodings_get_node	(EphyEncodings *encodings,
-						 const char *code);
+						 const char *code,
+						 gboolean add_if_not_found);
 
 GList		*ephy_encodings_get_encodings	(EphyEncodings *encodings,
 						 EphyLanguageGroup group_mask);

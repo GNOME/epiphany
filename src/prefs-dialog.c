@@ -590,7 +590,7 @@ create_node_combo (EphyDialog *dialog,
 	int title_col, data_col;
 
 	code = eel_gconf_get_string (key);
-	if (code == NULL || ephy_encodings_get_node (encodings, code) == NULL)
+	if (code == NULL || ephy_encodings_get_node (encodings, code, FALSE) == NULL)
 	{
 		/* safe default */
 		eel_gconf_set_string (key, default_value);
