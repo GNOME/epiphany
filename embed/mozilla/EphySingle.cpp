@@ -52,9 +52,8 @@ EphySingle::Init (EphyEmbedSingle *aOwner)
 
 	mOwner = aOwner;
 
-	nsresult rv;
-	mObserverService = do_GetService ("@mozilla.org/observer-service;1", &rv);
-	if (NS_FAILED (rv) || !mObserverService) return NS_ERROR_FAILURE;
+	mObserverService = do_GetService ("@mozilla.org/observer-service;1");
+	NS_ENSURE_TRUE (mObserverService, NS_ERROR_FAILURE);
 
 	mObserverService->AddObserver (this, "cookie-changed", PR_FALSE);
 	mObserverService->AddObserver (this, "cookie-rejected", PR_FALSE);
@@ -91,7 +90,7 @@ EphySingle::EmitCookieNotification (const char *name,
 	LOG ("EmitCookieNotification %s", name)
 
 	nsCOMPtr<nsICookie> cookie = do_QueryInterface (aSubject);
-	if (!cookie) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (cookie, NS_ERROR_FAILURE);
 
 	EphyCookie *info = mozilla_cookie_to_ephy_cookie (cookie);
 
@@ -109,11 +108,10 @@ EphySingle::EmitPermissionNotification (const char *name,
 	LOG ("EmitPermissionNotification %s", name)
 
 	nsCOMPtr<nsIPermission> perm = do_QueryInterface (aSubject);
-	if (!perm) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (perm, NS_ERROR_FAILURE);
 
 	EphyPermissionInfo *info =
 		mozilla_permission_to_ephy_permission (perm);
-
 
 	g_signal_emit_by_name (EPHY_PERMISSION_MANAGER (mOwner), name, info);
 
@@ -277,7 +275,7 @@ mozilla_permission_to_ephy_permission (nsIPermission *perm)
 #if MOZILLA_SNAPSHOT >= 10
 	nsCAutoString str;
 	result = perm->GetType(str);
-	if (NS_FAILED (result)) return NULL;
+	NS_ENSURE_SUCCESS (result, NULL);
 
 	if (str.Equals ("cookie"))
 	{
@@ -294,7 +292,7 @@ mozilla_permission_to_ephy_permission (nsIPermission *perm)
 #else
 	PRUint32 num;
 	result = perm->GetType(&num);
-	if (NS_FAILED (result)) return NULL;
+	NS_ENSURE_SUCCESS (result, NULL);
 
 	type = (EphyPermissionType) num;
 #endif
