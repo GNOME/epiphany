@@ -54,15 +54,13 @@ class GFilePicker : public nsIFilePicker
 		returnCancel = nsIFilePicker::returnCancel,
 		returnReplace = nsIFilePicker::returnReplace };
 
-	GFilePicker(FileFormat *aFileFormats = nsnull);
+	GFilePicker();
 	virtual ~GFilePicker();
 
 	/* additional members */
 	NS_METHOD InitWithGtkWidget(GtkWidget *aParentWidget, 
 				    const char *aTitle, PRInt16 aMode);
 	NS_METHOD SanityCheck(PRBool *retIsSane);
-
-	PRInt16 mSelectedFileFormat;
 
   private:
 	NS_METHOD HandleFilePickerResult();
@@ -81,9 +79,6 @@ class GFilePicker : public nsIFilePicker
 
 	GtkWidget *mParentWidget;	
 	GtkWidget *mFileSelector;
-	GtkWidget *mFormatChooser;
-
-	FileFormat *mFileFormats;
 };
 
 #endif

@@ -1016,7 +1016,7 @@ impl_show_file_picker (EphyEmbedSingle *shell,
 	char *expanded_directory = NULL;
 	gresult result;
 
-        GFilePicker *filePicker = new GFilePicker (file_formats);
+        GFilePicker *filePicker = new GFilePicker ();
 
 	if (directory != NULL)
 	{
@@ -1046,11 +1046,6 @@ impl_show_file_picker (EphyEmbedSingle *shell,
         
         PRInt16 retval;
         filePicker->Show (&retval);
-
-        if (ret_file_format != NULL)
-        {
-                *ret_file_format = filePicker->mSelectedFileFormat;
-        }
 
         nsCOMPtr<nsILocalFile> local_file;
 	filePicker->GetFile (getter_AddRefs(local_file));

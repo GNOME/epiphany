@@ -23,6 +23,7 @@
 #endif
 
 #include <gtk/gtktoolitem.h>
+#include <bonobo/bonobo-i18n.h>
 
 #include "ephy-topic-action.h"
 #include "ephy-node-common.h"

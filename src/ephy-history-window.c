@@ -35,6 +35,7 @@
 #include <bonobo/bonobo-i18n.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <string.h>
+#include <time.h>
 
 #include "ephy-node-view.h"
 #include "ephy-window.h"

@@ -19,10 +19,9 @@
 #ifndef EPHY_GUI_H
 #define EPHY_GUI_H
 
-/* system includes */
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <gnome.h>
+#include <gdk/gdkkeysyms.h>
 
 G_BEGIN_DECLS
 

@@ -1,3 +1,23 @@
+2003-10-10  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/FilePicker.h:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* lib/Makefile.am:
+	* lib/ephy-dialog.c: (get_pref_type_from_widget),
+	(prefs_connect_signals), (load_props), (save_props):
+	* lib/ephy-gui.h:
+	* lib/widgets/Makefile.am:
+	* src/Makefile.am:
+	* src/bookmarks/Makefile.am:
+	* src/bookmarks/ephy-topic-action.c:
+	* src/ephy-history-window.c:
+
+	Reenable deprecated api where necessary, fixup some
+	header inclusions.
+	Remove unused color picker control in ephy-dialog.
+	Remove unused file types optionmenu in Filepicker.
+
 2003-10-07  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* lib/widgets/ephy-tree-model-node.c: (root_child_removed_cb),

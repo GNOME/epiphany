@@ -24,6 +24,7 @@
 #include "ephy-gui.h"
 #include "eel-gconf-extensions.h"
 
+#include <stdlib.h>
 #include <string.h>
 #include <gtk/gtktogglebutton.h>
 
@@ -80,7 +81,6 @@ typedef enum
         PT_TOGGLEBUTTON,
         PT_RADIOBUTTON,
         PT_SPINBUTTON,
-        PT_COLOR,
         PT_OPTIONMENU,
         PT_ENTRY,
 	PT_UNKNOWN
@@ -335,23 +335,6 @@ set_config_from_togglebutton (GtkWidget *togglebutton, const char *config_name)
 }
 
 static void
-set_config_from_color (GtkWidget *colorpicker, const char *config_name)
-{
-	guint8 r, g, b, a;
-	gchar color_string[9];
-
-	/* get color values from color picker */
-	gnome_color_picker_get_i8 (GNOME_COLOR_PICKER (colorpicker),
-				   &r, &g, &b, &a);
-
-	/* write into string (bounded size) */
-	g_snprintf (color_string, 9, "#%02X%02X%02X", r, g, b);
-
-	/* set the configuration value */
-	eel_gconf_set_string (config_name, color_string);
-}
-
-static void
 set_editable_from_config (GtkWidget *editable, const char *config_name)
 {
 	GConfValue *gcvalue = eel_gconf_get_value (config_name);
@@ -502,26 +485,6 @@ set_togglebutton_from_config (GtkWidget *togglebutton, const char *config_name)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (togglebutton), value);
 }
 
-static void
-set_color_from_config (GtkWidget *colorpicker, const char *config_name)
-{
-	gchar *color_string;
-	guint r, g, b;
-
-	/* get the string from config */
-	color_string = eel_gconf_get_string (config_name);
-
-	if (color_string)
-	{
-		/* parse it and setup the color picker */
-		sscanf (color_string, "#%2X%2X%2X", &r, &g, &b);
-		gnome_color_picker_set_i8 (GNOME_COLOR_PICKER (colorpicker),
-					   r, g, b, 0);
-		/* free the string */
-		g_free (color_string);
-	}
-}
-
 static PrefType
 get_pref_type_from_widget (GtkWidget *widget)
 {
@@ -544,10 +507,6 @@ get_pref_type_from_widget (GtkWidget *widget)
 	else if (GTK_IS_ENTRY (widget))
 	{
 		return PT_ENTRY;
-	}
-	else if (GNOME_IS_COLOR_PICKER (widget))
-	{
-		return PT_COLOR;
 	}
 
 	return PT_UNKNOWN;
@@ -705,16 +664,6 @@ prefs_spinbutton_changed_cb (GtkWidget *widget, PropertyInfo *pi)
 }
 
 static void
-prefs_color_changed_cb (GtkWidget *widget, guint r, guint g,
-			guint b, guint a, const PropertyInfo *pi)
-{
-	if (pi->type == PT_AUTOAPPLY)
-	{
-		set_config_from_color (widget,  pi->pref);
-	}
-}
-
-static void
 prefs_entry_changed_cb (GtkWidget *widget, PropertyInfo *pi)
 {
 	if (pi->type == PT_AUTOAPPLY)
@@ -777,11 +726,6 @@ prefs_connect_signals (EphyDialog *dialog)
 			g_object_set_data (G_OBJECT(info->widget), "dialog", dialog);
 			g_signal_connect (G_OBJECT (info->widget), "changed",
 					  G_CALLBACK(prefs_spinbutton_changed_cb),
-					  (gpointer)info);
-			break;
-		case PT_COLOR:
-			g_signal_connect (G_OBJECT (info->widget), "color_set",
-					  G_CALLBACK(prefs_color_changed_cb),
 					  (gpointer)info);
 			break;
 		case PT_OPTIONMENU:
@@ -875,11 +819,6 @@ load_props (PropertyInfo *props)
 						    props[i].pref,
 						    props[i].string_enum);
 		}
-		else if (GNOME_IS_COLOR_PICKER(props[i].widget))
-		{
-			set_color_from_config (props[i].widget,
-					       props[i].pref);
-		}
 	}
 
 }
@@ -921,11 +860,6 @@ save_props (PropertyInfo *props)
 			set_config_from_optionmenu (props[i].widget,
 						    props[i].pref,
 						    props[i].string_enum);
-		}
-		else if (GNOME_IS_COLOR_PICKER(props[i].widget))
-		{
-			set_config_from_color (props[i].widget,
-					       props[i].pref);
 		}
 	}
 }

@@ -79,8 +79,7 @@
 /* Implementation file */
 NS_IMPL_ISUPPORTS1(GFilePicker, nsIFilePicker)
 
-GFilePicker::GFilePicker(FileFormat *aFileFormats) :
-			mFileFormats(aFileFormats)
+GFilePicker::GFilePicker()
 {
 	NS_INIT_ISUPPORTS();
 
@@ -247,33 +246,6 @@ NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 		gtk_window_set_transient_for(GTK_WINDOW(mFileSelector),
 					     GTK_WINDOW(mParentWidget));
 
-	if (mFileFormats)
-	{
-		mFormatChooser = gtk_option_menu_new();
-		GtkMenu *options = GTK_MENU(gtk_menu_new());
-
-		FileFormat *current = mFileFormats;
-		while (current->description != NULL)
-		{
-			/* FIXME: the label should include the extensions too */
-			gchar *label = current->description;
-			GtkWidget *item = gtk_menu_item_new_with_label(label);
-			gtk_widget_show(item);
-			gtk_menu_shell_append(GTK_MENU_SHELL(options), item);
-			current++;
-		}
-		gtk_option_menu_set_menu(GTK_OPTION_MENU(mFormatChooser),
-					 GTK_WIDGET(options));
-		gtk_widget_show(mFormatChooser);
-		gtk_box_pack_start(GTK_BOX(GTK_FILE_SELECTION (mFileSelector)->action_area),
-				   mFormatChooser,
-				   FALSE, TRUE, 0);
-	}
-	else
-	{
-		mFormatChooser = NULL;
-	}
-
 	if (mMode == nsIFilePicker::modeGetFolder)
 	{
 		gtk_widget_set_sensitive(GTK_FILE_SELECTION(mFileSelector)
@@ -430,24 +402,6 @@ NS_METHOD GFilePicker::HandleFilePickerResult()
 		mFile->GetParent(getter_AddRefs(directory));
 		mDisplayDirectory = do_QueryInterface(directory);
 		mFile->GetNativeLeafName(mDefaultString);
-	}
-
-	if (mFormatChooser)
-	{
-		GtkWidget *menu = gtk_option_menu_get_menu 
-			(GTK_OPTION_MENU(mFormatChooser));
-		GtkWidget *selected = gtk_menu_get_active (GTK_MENU(menu));
-
-		gint i(0);
-		for (GList *iterator = GTK_MENU_SHELL(menu)->children ;
-		     iterator ; iterator = iterator->next, i++)
-		{
-			if (iterator->data == selected) 
-			{
-				mSelectedFileFormat = i;
-				break;
-			}
-		}
 	}
 
 	return NS_OK;
