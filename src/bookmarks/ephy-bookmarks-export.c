@@ -166,7 +166,10 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 
 		if (smart_url)
 		{
-			xml_node = xmlNewChild (item_node, ephy_ns, "smartlink", url);
+			xmlChar *encoded_url;
+			encoded_url = xmlEncodeEntitiesReentrant (doc, url);
+			xml_node = xmlNewChild (item_node, ephy_ns, "smartlink", encoded_url);
+			xmlFree (encoded_url);
 		}
 
 		add_topics_list (topics, kid, item_node, dc_ns);
