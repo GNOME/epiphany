@@ -158,6 +158,9 @@ AC_SUBST(MOZILLA_INCLUDE_ROOT)
 MOZILLA_HOME="`$PKG_CONFIG --variable=libdir $MOZILLA-gtkmozembed`"
 AC_SUBST(MOZILLA_HOME)
 
+MOZILLA_PREFIX="`$PKG_CONFIG --variable=prefix $MOZILLA-gtkmozembed`"
+AC_SUBST(MOZILLA_PREFIX)
+
 dnl *************************************************************************
 dnl This is from Mozilla's configure.in. They set almost all the config stuff
 dnl they need in mozilla-config.h Except for this compiler flag, which can't
