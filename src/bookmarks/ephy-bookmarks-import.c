@@ -320,9 +320,9 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, char *parent_fold
 
 			ret = xbel_parse_bookmark (eb, reader, &node);
 
-			keyword = ephy_bookmarks_find_keyword (eb, folder, FALSE);
+			keyword = ephy_bookmarks_find_keyword (eb, folder ? folder : "", FALSE);
 			
-			if (keyword == NULL)
+			if (keyword == NULL && folder != NULL && folder[0] != '\0')
 			{
 				keyword = ephy_bookmarks_add_keyword (eb, folder);
 			}
@@ -339,7 +339,7 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, char *parent_fold
 		{
 			if (type == XML_READER_TYPE_ELEMENT)
 			{
-				ret = xbel_parse_folder (eb, reader, folder);
+				ret = xbel_parse_folder (eb, reader, folder ? folder : "");
 				
 				if (ret != 1) break;
 			}
