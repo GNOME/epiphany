@@ -458,7 +458,7 @@ clear_favorites (EphyBookmarks *bookmarks)
 
 	node = bookmarks->priv->favorites;
 	children = ephy_node_get_children (node);
-	for (i = children->len - 1; i >= 0; i--)
+	for (i = (int) children->len - 1; i >= 0; i--)
 	{
 		EphyNode *kid;
 
