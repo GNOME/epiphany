@@ -1,4 +1,182 @@
 ==============
+Epiphany 1.1.1
+==============
+
+[up to 2003/11/24]
+
+Code changes
+
+	* Adapt to mozilla API changes (Marco, Xan, Christian)
+	* Rewritten downloads backend (Marco, Xan)
+	* Sync gtk+ NSS dialogues from galeon (Marco)
+	* Commands interface for clipboard commands (Marco)
+	* Re-sync egg-editable-toolbar with gtk+ toolbar api changes (Marco)
+	* New file chooser wrapper class (Christian)
+	* Listen on icon theme changes (Marco)
+	* Re-sync nautilus view with nautilus api changes (Marco)
+	* Cleanup of EphyWrapper to use higher-level mozilla api (Marco)
+	* Initialize EphyWrapper on realize (Marco)
+	* Instantiate an about:blank automatically (Marco)
+	* Show filechooser from header sniffer (Marco, Christian)
+	* Use content document dom to determine is_framed (Marco)
+	* Sync egg-editable-toolbar api with gtk+ toolbar api (Soren Sandmann)
+	* Use gnome-vfs helpers to launch apps, drop our own helpers (Marco)
+	* Only save history db if it's changed (Christian)
+	* Implement new downloading from ContentHandler (Xan)
+	* Use stock gcclosure-marshals where they exist (Christian)
+	* Implement commands state api (Marco)
+	* Rework ContentHandler to use auto_open of downloads (Xan)
+	* Resync eel-gconf-extensions from eel (Marco)
+	* Migrate old font settings (Marco)
+	* Get rid of gresult type (Christian)
+	* Remove unused function from ephy-gui (Marco)
+	* Use glib gi18n header instead of bonobo/libgnome one (Marc, Christian)
+	* Don't cache the dom document since it changes for every load (Marco)
+	* List of safe mime types, and script to update it (Marco)
+	* Use list of safe mime types to determine if we auto-open (Marco)
+	* Use gtk icon theme instead of gnome icon theme (Marco)
+	* Better ephy completion model (Marco)
+	* Port ephy node db saving and bookmarks RDF export to new libxml
+	  xmlWriter api (Christian)
+	* Remove some unneeded prototypes (Marco)
+	* Cleanup session, also persist bme and history window (Marco)
+	* Re-use gtkmozembed signals (Marco)
+	* Hack to make tooltips on toolbar items work (Marco)
+	* New extensions API (Christian)
+	* Port session to new extensions api (Christian)
+	* Reworked automation/activation (Marco)
+	* Enable deprecations and -Werror only in maintainer mode (Marco)
+	* Move gnome session code in the shell (Marco)
+	* Port to changed gtk+ combo box api (Marco)
+	* gtk-doc support (Marco)
+	* handle_content signal on EphyEmbedSingle for external downloader
+	  support (Marco)
+	* Refactor embed single apis into new EphyCookieManager,
+	  EphyPasswordManager and EphyPermissionManager interfaces (Christian)
+	* Implement arbitrary_url lockdown pref (Marco, Christopher Lahey)
+	* Don't build external protocol handlers with mozilla 1.6, it has
+	  its own (Marco)
+	* Merge exthandler/content implementation (Marco)
+
+New features
+
+	* Improved downloader (Marco, Xan)
+	* Persist zoom setting per host (Christian)
+	* Undo/Redo in forms (Dave, Marco)
+	* Gtk+ NSS Auth Dialogues (Crispin Flowerday, from galeon)
+	* Tray icon support for downloader (Marco)
+
+Interface improvements
+
+	* Move the spinner in its own mini-toolbar (Marco)
+	* New hand cursor adapted from eog (Dave)
+	* Use hand cursor in toolbar editor (Marco)
+	* Made encodings dialogue auto-apply (Christian)
+	* Don't pollute statusbar with the "done" mesage (Dave)
+	* Remove close button and auto-close downloader when no more items
+	  left (Xan)
+	* Use new gtk+ file chooser (Christian)
+	* Better sorting of encoding autodetectors (Christian)
+	* Implement smart selection in downloader view (Xan)
+	* Smoother toolbar drag highlighting (Soren Sandmann)
+	* Update commands sensitivity in menus (Marco)
+	* Auto-open of downloads (Marco, Xan)
+	* Implement UI for download folder and auto-open (Xan)
+
+Bugfixes
+
+	* Remove invalid items from toolbars on load (Marco)
+	* Don't hide a separator item while dragging it (Marco)
+	* Fix delete event handling for downloader (Xan)
+	* Add missing default prefs for some language groups (Christian)
+	* Fix default prefs file for new mozilla parser changes (Christian)
+	* Remember upload path (Christian)
+	* Fix bookmarks import dialogue button duplication (Christian)
+	* Convert filenames to/from utf-8 before using them (Christian)
+	* Fix spinner refcounting (Christian)
+	* Fix fullscreen toolbar visibility (Marco)
+	* Force encoding on changes, so we can go back to automatic (Christian)
+	* Fix page cloning (Marco)
+	* Build nautilus server only when view is enabled (Marco)
+	* Fix leak of liststores from combo boxes (Marco)
+	* Fix dnd data provided by drag handle (Marco)
+	* Fix toolbar drag type creation (Marco)
+	* Don't require parent window for filechooser (Marco)
+	* Fix toolbar highlighting (Marco)
+	* Set sensible cursor hotspot in toolbar editor (Marco)
+	* Fix filechooser directory persistence (Christian)
+	* Unset silent mode after printing (Christian)
+	* Don't unref print dialogue twice when shown from mozila (Christian)
+	* Fix return value from print dialogue so mozilla won't show erroneous
+	  error dialogue (Christian)
+	* EphyDialog needs to be initialised when run, too (Christian)
+	* Use signal accumulators for boolean-return signals (Christian)
+	* Show only paste in context menu since it's the only one which works
+	  due to mozilla problems (Marco)
+	* Fix sensitivity of "Paste" context menu item (Marco)
+	* Removed unused includes (Marco)
+	* Only allow printing the selection if there really i8s one (Christian)
+	* Use show() when run()ning an EphyDialog (Christian)
+	* Fix completion model crash on deleting a bookmark (Marco)
+	* Fix ephy location entry finalisation (Christian)
+	* Fix bookmarks editor crash from gtk clipboard wait api (Marco)
+	* Fix history db saving not to save "All" node (Marco)
+	* Don't unref the icon theme, we don't own it (Christian)
+	* Unlink session file when all windows are closed (Marco)
+	* Fix conversion on saving, fixes view-source (Marco)
+	* Fix recovery from corrupt toolbar layout file (Christian)
+	* Fix completion model column use (Marco)
+	* Deja-vu (Xan)
+	* Import gtk NSS dialogues glade file from galeon, too (Christian)
+	* Build XUL dialogues with a gtkmozembed in a gtkwindow (Marco)
+	* Fix warning when showing the encodings dialogue (Christian)
+	* Link up toolbar editor help (Christian)
+	* Fix some typos (Marco)
+	* Unref factory (Marco)
+	* Unref on timeout when in server mode (Marco)
+	* Expand cmd line args (Marco)
+	* Nautilus view refcounting bug fix (Marco)
+	* Fix crash when starting with --bookmarks-editor, correctly instantiate
+	  a session (Marco)
+	* Don't re-fetch POST pages for show-source (Marco)
+	* Make encodings dialogue transient (Christian)
+	* Remove unused enum values (Christian)
+	* Mark EphyFooPriv structs as private for gtk-doc (Christian)
+	* Linking fixes (Marco)
+	* Don't assert, return instead in impl_go_up (Marco)
+	* Fix context menu leak (Marco)
+	* Make session saving low disk safe (Marco)
+	* Fix "Download Link" context menu item text (Marco)
+	* Use stock icons where provided (Marco)
+	* Only set autoproxy url if non-empty (Christian)
+	* User ephy filechooser in download folder picker (Xan)
+	* Fix RDF export to export 100% instead of only 50% of bookmarks
+	  (Christian)
+
+Documentation
+
+	* Documentation neatening, organisation (Piers Cornwell)
+	* Some new sections documented (Piers Cornwell)
+	* Some docs fixes (Dave)
+	* Beginnings of API documentation (Marco, Christian)
+
+Translations
+	* Christian Neumair (de)
+	* Christian Rose (sv)
+	* Danilo Segan (sr)
+	* Francisco Javier F. Serrador (es)
+	* Gustavo Noronha Silva (pt_BR)
+	* Hasbullah Bin Pit (ms)
+	* KAMAGASAKO Masatoshi (ja)
+	* Kostas Papadimas (el)
+	* Marcel Telka (sk)
+	* Mətin Əmirov(az)
+	* Ole Laursen (da)
+	* Paul Duffy (ga)
+	* Vincent van Adrighem (nl)
+
+
+==============
 Epiphany 1.1.0
 ==============
 
