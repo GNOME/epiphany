@@ -18,9 +18,7 @@
  * $Id$
  */
 
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #include <gtk/gtktable.h>
 #include <gtk/gtklabel.h>

@@ -20,9 +20,7 @@
  *  $Id$
  */
 
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #include "find-dialog.h"
 #include "ephy-file-helpers.h"

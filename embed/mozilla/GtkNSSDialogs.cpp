@@ -28,9 +28,7 @@
 
 #include "mozilla-config.h"
 
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #ifdef HAVE_MOZILLA_PSM
 

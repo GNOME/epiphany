@@ -42,9 +42,7 @@
 #ifndef MozDownload_h__
 #define MozDownload_h__
 
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #include "mozilla-embed-persist.h"
 #include "downloader-view.h"

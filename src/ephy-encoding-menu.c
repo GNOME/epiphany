@@ -20,9 +20,7 @@
  *  $Id$
  */
 
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #include "ephy-encoding-menu.h"
 #include "ephy-encoding-dialog.h"

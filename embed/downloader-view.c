@@ -19,9 +19,7 @@
  *  $Id$
  */
 
-#ifdef HAVE_CONFIG_H
 #include "config.h" 
-#endif
 
 #include "downloader-view.h"
 #include "ephy-file-helpers.h"

@@ -43,9 +43,7 @@
 
 #include "mozilla-config.h"
 
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #include "mozilla-download.h"
 #include "eel-gconf-extensions.h"

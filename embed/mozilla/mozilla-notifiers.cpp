@@ -21,9 +21,7 @@
 
 #include "mozilla-config.h"
 
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #include "ephy-embed-single.h"
 #include "ephy-embed-shell.h"
