@@ -594,7 +594,6 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 				guint info, guint time, EphyTab *tab)
 {
 	GList *uri_list = NULL;
-	GnomeVFSURI *uri;
 	gchar **tmp;
 
 	g_signal_stop_emission_by_name (widget, "drag_data_received");
