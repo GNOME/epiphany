@@ -522,6 +522,9 @@ ephy_shell_new_tab (EphyShell *shell,
 		grouped = TRUE;
 	}
 
+	if (flags & EPHY_NEW_TAB_APPEND_GROUPED) grouped = TRUE;
+	if (flags & EPHY_NEW_TAB_APPEND_LAST) grouped = FALSE;
+
 	tab = ephy_tab_new ();
 	embed = ephy_tab_get_embed (tab);
 	gtk_widget_show (GTK_WIDGET(embed));

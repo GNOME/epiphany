@@ -347,7 +347,7 @@ cmd_open_bookmarks_in_tabs (EggAction *action,
 						EPHY_NODE_BMK_PROP_LOCATION);
 
 		ephy_shell_new_tab (ephy_shell, window, NULL, location,
-			EPHY_NEW_TAB_APPEND|EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+			EPHY_NEW_TAB_APPEND_GROUPED | EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 	}
 
 	g_list_free (selection);
