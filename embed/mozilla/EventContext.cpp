@@ -594,6 +594,13 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, Mozilla
 			info->type = EPHY_EMBED_EVENT_MOUSE_BUTTON3;
 		break;
 
+		case (PRUint16) -1:
+			/* when the user submits a form with Return, mozilla synthesises
+			 * a _mouse_ click event with btn=65535 (-1).
+			 */
+			info->type = EPHY_EMBED_EVENT_KEY;
+			break;
+
 		default:
 			g_warning ("Unknown mouse button");
 	}

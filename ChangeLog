@@ -1,5 +1,12 @@
 2004-07-06  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/EventContext.cpp:
+
+	-1 is valid button number, it's used for synthesised "mouse" events
+	on form submit via Return key. Fixes bug #145420.
+
+2004-07-06  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.in:
 
 	Post-release version bump.
