@@ -717,6 +717,7 @@ build_search_box (EphyHistoryWindow *editor)
 	char *str;
 
 	box = gtk_hbox_new (FALSE, 6);
+	gtk_container_set_border_width (GTK_CONTAINER (box), 6);
 	gtk_widget_show (box);
 
 	entry = gtk_entry_new ();
@@ -846,7 +847,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action), TRUE);
 
 	hpaned = gtk_hpaned_new ();
-	gtk_container_set_border_width (GTK_CONTAINER (hpaned), 6);
+	gtk_container_set_border_width (GTK_CONTAINER (hpaned), 0);
 	gtk_container_add (GTK_CONTAINER (editor->priv->menu_dock), hpaned);
 	gtk_widget_show (hpaned);
 
@@ -886,7 +887,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 			  G_CALLBACK (site_node_selected_cb),
 			  editor);
 
-	vbox = gtk_vbox_new (FALSE, 6);
+	vbox = gtk_vbox_new (FALSE, 0);
 	gtk_paned_add2 (GTK_PANED (hpaned), vbox);
 	gtk_widget_show (vbox);
 
