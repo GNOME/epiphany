@@ -516,6 +516,9 @@ ephy_session_save (EphySession *session,
 	writer = xmlNewTextWriterFilename (tmp_file, 0);
 	if (writer == NULL)
 	{
+		g_free (save_to);
+		g_free (tmp_file);
+
 		return FALSE;
 	}
 
