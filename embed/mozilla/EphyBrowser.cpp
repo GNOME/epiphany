@@ -30,7 +30,6 @@
 #include <gtkmozembed_internal.h>
 #include <unistd.h>
 
-#include "nsIDocCharset.h"
 #include "nsICommandManager.h"
 #include "nsIContentViewer.h"
 #include "nsIGlobalHistory.h"
@@ -372,6 +371,8 @@ nsresult EphyBrowser::GetDocument (nsIDOMDocument **aDOMDocument)
 {
         NS_ENSURE_ARG_POINTER(aDOMDocument);
         NS_IF_ADDREF(*aDOMDocument = mDOMDocument);
+
+	return NS_OK;
 }
 
 nsresult EphyBrowser::GetTargetDocument (nsIDOMDocument **aDOMDocument)
@@ -574,16 +575,18 @@ nsresult EphyBrowser::ForceEncoding (const char *encoding)
 {
 	nsresult result;
 
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+	nsCOMPtr<nsIContentViewer> contentViewer;	
+	result = GetContentViewer (getter_AddRefs(contentViewer));
+	if (!NS_SUCCEEDED (result) || !contentViewer) return NS_ERROR_FAILURE;
 
-	nsCOMPtr<nsIDocShell> docShell;
-	docShell = do_GetInterface (mWebBrowser);
-	if (!docShell) return NS_ERROR_FAILURE;
+	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
+	if (!mdv) return NS_ERROR_FAILURE;
 
-	nsCOMPtr<nsIDocCharset> docCharset;
-	docCharset = do_QueryInterface (docShell);
-
-	result = docCharset->SetCharset (encoding);
+	#if MOZILLA_SNAPSHOT > 9 
+		result = mdv->SetForceCharacterSet (nsDependentCString(encoding));
+	#else
+		result = mdv->SetForceCharacterSet (NS_ConvertUTF8toUCS2(encoding).get());
+	#endif
 
 	return result;
 }
