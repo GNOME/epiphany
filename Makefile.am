@@ -12,7 +12,8 @@ EXTRA_DIST = 			\
 	intltool-extract.in	\
 	xmldocs.make		\
 	omf.make		\
-	COPYING.README
+	COPYING.README		\
+	ChangeLog-20030925
 
 DISTCLEANFILES = 		\
 	intltool-extract 	\
