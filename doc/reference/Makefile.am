@@ -69,7 +69,6 @@ IGNORE_HFILES = \
 	ephy-download.h \
 	ephy-embed-dialog.h \
 	ephy-embed-event.h \
-	ephy-embed-persist.h \
 	ephy-embed-popup-control.h \
 	ephy-embed-prefs.h \
 	ephy-embed-shell.h \

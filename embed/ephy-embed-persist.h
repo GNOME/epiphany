@@ -38,8 +38,8 @@ G_BEGIN_DECLS
 #define EPHY_IS_EMBED_PERSIST_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_PERSIST))
 #define EPHY_EMBED_PERSIST_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_PERSIST, EphyEmbedPersistClass))
 
-typedef struct EphyEmbedPersistClass EphyEmbedPersistClass;
-typedef struct EphyEmbedPersist EphyEmbedPersist;
+typedef struct _EphyEmbedPersistClass EphyEmbedPersistClass;
+typedef struct _EphyEmbedPersist EphyEmbedPersist;
 typedef struct EphyEmbedPersistPrivate EphyEmbedPersistPrivate;
 
 typedef enum
@@ -50,7 +50,7 @@ typedef enum
 	EMBED_PERSIST_ASK_DESTINATION	= 1 << 3
 } EmbedPersistFlags;
 
-struct EphyEmbedPersist
+struct _EphyEmbedPersist
 {
 	GObject parent;
 
@@ -58,7 +58,7 @@ struct EphyEmbedPersist
 	EphyEmbedPersistPrivate *priv;
 };
 
-struct EphyEmbedPersistClass
+struct _EphyEmbedPersistClass
 {
 	GObjectClass parent_class;
 
@@ -113,7 +113,7 @@ GtkWindow		*ephy_embed_persist_get_fc_parent	(EphyEmbedPersist *persist);
 
 EmbedPersistFlags	 ephy_embed_persist_get_flags		(EphyEmbedPersist *persist);
 
-int			 ephy_embed_persist_get_max_size	(EphyEmbedPersist *persist);
+long			 ephy_embed_persist_get_max_size	(EphyEmbedPersist *persist);
 
 const char 		*ephy_embed_persist_get_persist_key	(EphyEmbedPersist *persist);
 

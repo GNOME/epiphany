@@ -82,12 +82,19 @@ ephy_embed_persist_get_type (void)
 
 		type = g_type_register_static (G_TYPE_OBJECT,
 					       "EphyEmbedPersist",
-					       &our_info, 0);
+					       &our_info, G_TYPE_FLAG_ABSTRACT);
 	}
 
 	return type;
 }
 
+/**
+ * ephy_embed_persist_set_dest:
+ * @persist: an #EphyEmbedPersist
+ * @value: the path to which @persist should save data
+ *
+ * Sets the path to which @persist should save data.
+ **/
 void
 ephy_embed_persist_set_dest (EphyEmbedPersist *persist,
 			     const char *value)
@@ -97,6 +104,18 @@ ephy_embed_persist_set_dest (EphyEmbedPersist *persist,
 	persist->priv->dest = g_strdup (value);
 }
 
+/**
+ * ephy_embed_persist_set_embed:
+ * @persist: an #EphyEmbedPersist
+ * @value: a parent #EphyEmbed
+ *
+ * Sets the #EphyEmbed from which @persist will download data.
+ *
+ * An #EphyEmbed is absolutely required to download if @persist's
+ * #EmbedPersistFlags include %EMBED_PERSIST_COPY_PAGE. Regardless, an
+ * #EphyEmbed should be set for <emphasis>every</emphasis> #EphyEmbedPersist,
+ * since it determines request information such as the referring page.
+ **/
 void
 ephy_embed_persist_set_embed (EphyEmbedPersist *persist,
 			      EphyEmbed *value)
@@ -106,6 +125,15 @@ ephy_embed_persist_set_embed (EphyEmbedPersist *persist,
 	persist->priv->embed = value;
 }
 
+/**
+ * ephy_embed_persist_set_fc_title:
+ * @persist: an #EphyEmbedPersist
+ * @value: the title to be displayed by the filechooser
+ *
+ * Sets the title of the filechooser window. The filechooser will only be
+ * displayed if %EMBED_PERSIST_ASK_DESTINATION has been set with
+ * ephy_embed_persist_set_flags().
+ **/
 void
 ephy_embed_persist_set_fc_title (EphyEmbedPersist *persist,
 				 const char *value)
@@ -115,6 +143,15 @@ ephy_embed_persist_set_fc_title (EphyEmbedPersist *persist,
 	persist->priv->fc_title = g_strdup (value);
 }
 
+/**
+ * ephy_embed_persist_set_fc_parent:
+ * @persist: an #EphyEmbedPersist
+ * @value: the #EphyWindow which should be the filechooser's parent
+ *
+ * Sets the #EphyWindow which should be @persist's filechooser's parent. The
+ * filechooser will only be displayed if %EMBED_PERSIST_ASK_DESTINATION has been
+ * set with ephy_embed_persist_set_flags().
+ **/
 void
 ephy_embed_persist_set_fc_parent (EphyEmbedPersist *persist,
 				  GtkWindow *value)
@@ -124,6 +161,13 @@ ephy_embed_persist_set_fc_parent (EphyEmbedPersist *persist,
 	persist->priv->fc_parent = value;
 }
 
+/**
+ * ephy_embed_persist_set_flags:
+ * @persist: an #EphyEmbedPersist
+ * @value: the desired #EmbedPersistFlags
+ *
+ * Sets the flags to be used for @persist's download.
+ **/
 void
 ephy_embed_persist_set_flags (EphyEmbedPersist *persist,
 			      EmbedPersistFlags value)
@@ -133,6 +177,18 @@ ephy_embed_persist_set_flags (EphyEmbedPersist *persist,
 	persist->priv->flags = value;
 }
 
+/**
+ * ephy_embed_persist_set_max_size:
+ * @persist: an #EphyEmbedPersist
+ * @value: maximum size of requested download, in bytes
+ *
+ * Sets the maximum size of @persist's download.
+ *
+ * If the requested file is discovered to be larger than @value, the download
+ * will be aborted. Note that @persist will have to actually begin downloading
+ * before it can abort, since it doesn't know the filesize before the download
+ * starts.
+ **/
 void
 ephy_embed_persist_set_max_size (EphyEmbedPersist *persist,
 				 long value)
@@ -142,6 +198,14 @@ ephy_embed_persist_set_max_size (EphyEmbedPersist *persist,
 	persist->priv->max_size = value;
 }
 
+/**
+ * ephy_embed_persist_set_persist_key:
+ * @persist: an #EphyEmbedPersist
+ * @value: a GConf key
+ *
+ * Sets the GConf key from which @persist will determine the default download
+ * directory.
+ **/
 void
 ephy_embed_persist_set_persist_key (EphyEmbedPersist *persist,
 				    const char *value)
@@ -151,6 +215,14 @@ ephy_embed_persist_set_persist_key (EphyEmbedPersist *persist,
 	persist->priv->persist_key = g_strdup (value);
 }
 
+/**
+ * ephy_embed_persist_set_source:
+ * @persist: an #EphyEmbedPersist
+ * @value: the URL from which @persist should download
+ *
+ * Sets the URL from which @persist should download. This should be used in
+ * conjunction with ephy_embed_persist_set_embed().
+ **/
 void
 ephy_embed_persist_set_source (EphyEmbedPersist *persist,
 			       const char *value)
@@ -160,6 +232,14 @@ ephy_embed_persist_set_source (EphyEmbedPersist *persist,
 	persist->priv->source = g_strdup (value);
 }
 
+/**
+ * ephy_embed_persist_get_dest:
+ * @persist: an #EphyEmbedPersist
+ *
+ * Returns the destination filename to which @persist will save its download.
+ *
+ * Return value: @persist's destination filename
+ **/
 const char *
 ephy_embed_persist_get_dest (EphyEmbedPersist *persist)
 {
@@ -168,6 +248,14 @@ ephy_embed_persist_get_dest (EphyEmbedPersist *persist)
 	return persist->priv->dest;
 }
 
+/**
+ * ephy_embed_persist_get_embed:
+ * @persist: an #EphyEmbedPersist
+ *
+ * Returns the #EphyEmbed from which @persist will download.
+ *
+ * Return value: the #EphyEmbed from which @persist will download
+ **/
 EphyEmbed *
 ephy_embed_persist_get_embed (EphyEmbedPersist *persist)
 {
@@ -176,6 +264,14 @@ ephy_embed_persist_get_embed (EphyEmbedPersist *persist)
 	return persist->priv->embed;
 }
 
+/**
+ * ephy_embed_persist_get_fc_title:
+ * @persist: an #EphyEmbedPersist
+ *
+ * Returns the title to be displayed in @persist's filechooser.
+ *
+ * Return value: the title to be displayed in @persist's filechooser
+ **/
 const char *
 ephy_embed_persist_get_fc_title (EphyEmbedPersist *persist)
 {
@@ -184,6 +280,15 @@ ephy_embed_persist_get_fc_title (EphyEmbedPersist *persist)
 	return persist->priv->fc_title;
 }
 
+/**
+ * ephy_embed_persist_get_fc_parent:
+ * @persist: an #EphyEmbedPersist
+ *
+ * Returns the #EphyWindow which should serve as a parent for @persist's
+ * filechooser.
+ *
+ * Return value: the #EphyWindow parent for @persist's filechooser
+ **/
 GtkWindow *
 ephy_embed_persist_get_fc_parent (EphyEmbedPersist *persist)
 {
@@ -192,6 +297,14 @@ ephy_embed_persist_get_fc_parent (EphyEmbedPersist *persist)
 	return persist->priv->fc_parent;
 }
 
+/**
+ * ephy_embed_persist_get_flags:
+ * @persist: an #EphyEmbedPersist
+ *
+ * Returns @persist's #EmbedPersistFlags.
+ *
+ * Return value: @persist's #EmbedPersistFlags
+ **/
 EmbedPersistFlags
 ephy_embed_persist_get_flags (EphyEmbedPersist *persist)
 {
@@ -200,7 +313,15 @@ ephy_embed_persist_get_flags (EphyEmbedPersist *persist)
 	return persist->priv->flags;
 }
 
-int
+/**
+ * ephy_embed_persist_get_max_size:
+ * @persist: an #EphyEmbedPersist
+ *
+ * Returns the maximum size of @persist's requested download, in bytes.
+ *
+ * Return value: the maximum size of @persist's requested download, in bytes
+ **/
+long
 ephy_embed_persist_get_max_size (EphyEmbedPersist *persist)
 {
 	g_return_val_if_fail (EPHY_IS_EMBED_PERSIST (persist), 0);
@@ -208,6 +329,14 @@ ephy_embed_persist_get_max_size (EphyEmbedPersist *persist)
 	return persist->priv->max_size;
 }
 
+/**
+ * ephy_embed_persist_get_persist_key:
+ * @persist: an #EphyEmbedPersist
+ *
+ * Returns the GConf key which determines Epiphany's default download directory.
+ *
+ * Return value: the GConf key to the default download directory
+ **/
 const char *
 ephy_embed_persist_get_persist_key (EphyEmbedPersist *persist)
 {
@@ -216,6 +345,14 @@ ephy_embed_persist_get_persist_key (EphyEmbedPersist *persist)
 	return persist->priv->persist_key;
 }
 
+/**
+ * ephy_embed_persist_get_source:
+ * @persist: an #EphyEmbedPersist
+ *
+ * Returns the source URL of the file to download.
+ *
+ * Return value: a source URL
+ **/
 const char *
 ephy_embed_persist_get_source (EphyEmbedPersist *persist)
 {
@@ -341,6 +478,12 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 	object_class->get_property = ephy_embed_persist_get_property;
 
 	/* init signals */
+/**
+ * EphyEmbedPersist::completed:
+ *
+ * The ::completed signal is emitted when @persist has finished downloading. The
+ * download must have started with ephy_embed_persist_save().
+ **/
 	g_signal_new ("completed",
 		      G_OBJECT_CLASS_TYPE (object_class),
 		      G_SIGNAL_RUN_LAST,
@@ -349,6 +492,12 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 		      g_cclosure_marshal_VOID__VOID,
 		      G_TYPE_NONE,
 		      0);
+/**
+ * EphyEmbedPersist::cancelled:
+ *
+ * The ::cancelled signal is emitted when @persist's download has been
+ * cancelled with ephy_embed_persist_cancel().
+ **/
 	g_signal_new ("cancelled",
 		      G_OBJECT_CLASS_TYPE (object_class),
 		      G_SIGNAL_RUN_LAST,
@@ -430,6 +579,13 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 	g_type_class_add_private (object_class, sizeof(EphyEmbedPersistPrivate));
 }
 
+/**
+ * ephy_embed_persist_cancel:
+ * @persist: an #EphyEmbedPersist
+ *
+ * Cancels @persist's download. This will not delete the partially downloaded
+ * file.
+ **/
 void
 ephy_embed_persist_cancel (EphyEmbedPersist *persist)
 {
@@ -437,12 +593,45 @@ ephy_embed_persist_cancel (EphyEmbedPersist *persist)
 	klass->cancel (persist);
 }
 
+/**
+ * ephy_embed_persist_save:
+ * @persist: an #EphyEmbedPersist
+ *
+ * Begins saving the file specified in @persist.
+ *
+ * If @persist's #EmbedPersistFlags include %EMBED_PERSIST_ASK_DESTINATION, a
+ * filechooser dialog will be shown first.
+ *
+ * The file will continue to download in the background until either the
+ * ::completed or the ::cancelled signals are emitted by @persist.
+ *
+ * Return value: %TRUE if the download began successfully
+ **/
 gboolean
 ephy_embed_persist_save (EphyEmbedPersist *persist)
 {
 	EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);
 	return klass->save (persist);
 }
+
+/**
+ * ephy_embed_persist_to_string:
+ * @persist: an #EphyEmbedPersist
+ *
+ * Returns the download specified by @persist as a string instead of downloading
+ * it to a file.
+ *
+ * The download is synchronous. An #EphyEmbed must be specified with
+ * ephy_embed_persist_set_embed(). The function implicitly assumes that
+ * @persist's #EmbedPersistFlags include %EMBED_PERSIST_COPY_PAGE. If @persist's
+ * #EphyEmbed has not finished downloading, this function will only return the
+ * portion of data which has already been downloaded.
+ *
+ * The document will be modified: it will only include absolute links and it
+ * will be encoded as UTF-8.
+ *
+ * Return value: The contents of @persist's #EphyEmbed's web page
+ **/
 char *
 ephy_embed_persist_to_string (EphyEmbedPersist *persist)
 {
