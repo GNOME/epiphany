@@ -31,6 +31,10 @@ void ephy_state_add_window	(GtkWidget *window,
 				 int default_width,
 				 int default_heigth);
 
+void ephy_state_add_paned	(GtkWidget *paned,
+				 const char *name,
+				 int default_width);
+
 void ephy_state_save		(void);
 
 G_END_DECLS

@@ -1,3 +1,41 @@
+2003-04-18  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/art/Makefile.am:
+
+	Do not install two copies of epiphany.png
+
+	* embed/ephy-history.c: (ephy_history_save),
+	(ephy_history_set_page_title):
+
+	Use host name as title for sites, not the real
+	title.
+
+	* lib/ephy-state.c: (ephy_state_add_window),
+	(paned_size_allocate_cb), (ephy_state_add_paned):
+	* lib/ephy-state.h:
+
+	Add a way to persist paned.
+
+	* lib/widgets/ephy-node-view.h:
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_sort_func),
+	(provide_text_weight), (ephy_node_view_add_column),
+	(ephy_node_view_has_selection):
+
+	Improve add_column api a bit to support both auto sorting
+	and user sorting.
+
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_construct):
+
+	Updates for changed api.
+
+	* src/ephy-history-window.c: (ephy_history_window_construct):
+
+	Set a max size for title/location. Not very good, but the
+	best we can do with current treeview api prolly.
+	Persist the paned size.
+	Make columns user sortable.
+
 2003-04-17  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* data/ui/Makefile.am:

@@ -287,6 +287,7 @@ ephy_history_save (EphyHistory *eb)
 		EphyNode *kid;
 
 		kid = g_ptr_array_index (children, i);
+		if (kid == eb->priv->pages) continue;
 
 		ephy_node_save_to_xml (kid, root);
 	}
@@ -484,33 +485,6 @@ ephy_history_new ()
 	tab = EPHY_HISTORY (g_object_new (EPHY_HISTORY_TYPE, NULL));
 
 	return tab;
-}
-
-static void
-ephy_history_host_set_title (EphyHistory *eh,
-			     EphyNode *host,
-			     EphyNode *page,
-			     const char *title)
-{
-	const char *real_url;
-	const char *host_url;
-	GValue value = { 0, };
-
-	real_url = ephy_node_get_property_string
-		(page, EPHY_NODE_PAGE_PROP_LOCATION);
-	host_url = ephy_node_get_property_string
-		(host, EPHY_NODE_PAGE_PROP_LOCATION);
-
-	if (real_url && host_url &&
-	    strcmp (real_url, host_url) == 0)
-	{
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, title);
-		ephy_node_set_property (host, EPHY_NODE_PAGE_PROP_TITLE,
-					&value);
-		g_value_unset (&value);
-	}
 }
 
 static void
@@ -800,11 +774,6 @@ ephy_history_set_page_title (EphyHistory *gh,
 
 	host_id = ephy_node_get_property_int
 		(node, EPHY_NODE_PAGE_PROP_HOST_ID);
-	if (host_id >= 0)
-	{
-		ephy_history_host_set_title (gh, ephy_node_get_from_id  (host_id),
-					     node, title);
-	}
 }
 
 void

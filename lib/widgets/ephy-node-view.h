@@ -52,6 +52,13 @@ typedef enum
 	EPHY_NODE_VIEW_NORMAL_PRIORITY
 } EphyNodeViewPriority;
 
+typedef enum
+{
+	EPHY_NODE_VIEW_AUTO_SORT = 1,
+	EPHY_NODE_VIEW_USER_SORT = 2,
+	EPHY_NODE_VIEW_EDITABLE = 4
+} EphyNodeViewFlags;
+
 typedef struct
 {
 	GtkTreeViewClass parent;
@@ -74,8 +81,7 @@ GtkTreeViewColumn *ephy_node_view_add_column	      (EphyNodeView *view,
 						       GType value_type,
 						       int prop_id,
 						       int priority_prop_id,
-						       gboolean editable,
-						       gboolean sortable);
+						       EphyNodeViewFlags flags);
 
 void	           ephy_node_view_add_icon_column     (EphyNodeView *view,
 					               EphyTreeModelNodeValueFunc func);
@@ -105,11 +111,6 @@ gboolean	   ephy_node_view_is_editing	      (EphyNodeView *view,
 						       int property);
 
 gboolean	   ephy_node_view_is_target	      (EphyNodeView *view);
-
-void	           ephy_node_view_enable_sort         (EphyNodeView *view,
-						       GtkTreeIterCompareFunc sort_func,
-						       gpointer data,
-						       GtkDestroyNotify destroy);
 
 G_END_DECLS
 

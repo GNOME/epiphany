@@ -945,7 +945,8 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 				   G_TYPE_STRING,
 				   EPHY_NODE_KEYWORD_PROP_NAME,
 				   EPHY_NODE_KEYWORD_PROP_PRIORITY,
-				   TRUE, TRUE);
+				   EPHY_NODE_VIEW_AUTO_SORT |
+				   EPHY_NODE_VIEW_EDITABLE);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), key_view);
 	gtk_widget_set_size_request (key_view, 130, -1);
 	gtk_widget_show (key_view);
@@ -998,8 +999,9 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 					   EPHY_NODE_BMK_PROP_LOCATION);
 	ephy_node_view_add_icon_column (EPHY_NODE_VIEW (bm_view), provide_favicon);
 	ephy_node_view_add_column (EPHY_NODE_VIEW (bm_view), _("Title"),
-				   G_TYPE_STRING, EPHY_NODE_BMK_PROP_TITLE,
-				   -1, TRUE, TRUE);
+				   G_TYPE_STRING, EPHY_NODE_BMK_PROP_TITLE, -1,
+				   EPHY_NODE_VIEW_AUTO_SORT |
+				   EPHY_NODE_VIEW_EDITABLE);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), bm_view);
 	gtk_widget_show (bm_view);
 	editor->priv->bm_view = bm_view;

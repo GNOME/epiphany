@@ -26,6 +26,7 @@
 
 #include <string.h>
 #include <gtk/gtkwindow.h>
+#include <gtk/gtkpaned.h>
 
 #define STATES_FILE "states.xml"
 
@@ -268,6 +269,63 @@ ephy_state_add_window (GtkWidget *window,
 			         G_CALLBACK (window_configure_event_cb), node, 0);
 	g_signal_connect_object (window, "window_state_event",
 			         G_CALLBACK (window_state_event_cb), node, 0);
+}
+
+static gboolean
+paned_size_allocate_cb (GtkWidget *paned,
+			GtkAllocation *allocation,
+			EphyNode *node)
+{
+	int width;
+	GValue value = { 0, };
+
+	width = gtk_paned_get_position (GTK_PANED (paned));
+
+	g_value_init (&value, G_TYPE_INT);
+	g_value_set_int (&value, width);
+	ephy_node_set_property (node, EPHY_NODE_STATE_PROP_WIDTH,
+			        &value);
+	g_value_unset (&value);
+
+	return FALSE;
+}
+
+void
+ephy_state_add_paned (GtkWidget *paned,
+		      const char *name,
+		      int default_width)
+{
+	EphyNode *node;
+	int width;
+
+	ensure_states ();
+
+	node = find_by_name (name);
+	if (node == NULL)
+	{
+		GValue value = { 0, };
+
+		node = ephy_node_new ();
+		ephy_node_add_child (states, node);
+
+		g_value_init (&value, G_TYPE_STRING);
+		g_value_set_string (&value, name);
+		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_NAME,
+				        &value);
+		g_value_unset (&value);
+
+		g_value_init (&value, G_TYPE_INT);
+		g_value_set_int (&value, default_width);
+		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_WIDTH,
+				        &value);
+		g_value_unset (&value);
+	}
+
+	width = ephy_node_get_property_int (node, EPHY_NODE_STATE_PROP_WIDTH);
+	gtk_paned_set_position (GTK_PANED (paned), width);
+
+	g_signal_connect_object (paned, "size_allocate",
+			         G_CALLBACK (paned_size_allocate_cb), node, 0);
 }
 
 void

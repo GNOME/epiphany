@@ -64,7 +64,6 @@ struct EphyNodeViewPrivate
 
 	int default_sort_column_id;
 	int priority_prop_id;
-	int priority_column_id;
 
 	gboolean editing;
 	int editable_property;
@@ -659,7 +658,6 @@ ephy_node_view_sort_func (GtkTreeModel *model,
 		GValue a_value = {0, };
 		GValue b_value = {0, };
 		gchar *stra, *strb;
-
 		gtk_tree_model_get_value (model, a, column, &a_value);
 		gtk_tree_model_get_value (model, b, column, &b_value);
 
@@ -702,24 +700,6 @@ ephy_node_view_sort_func (GtkTreeModel *model,
 
 }
 
-static gboolean
-set_sort_column_id (EphyNodeView *view)
-{
-	GList *sort_order = NULL;
-	sort_order = g_list_append (sort_order, GINT_TO_POINTER (view->priv->priority_column_id));
-	sort_order = g_list_append (sort_order, GINT_TO_POINTER (view->priv->default_sort_column_id));
-
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (view->priv->sortmodel),
-			GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
-			GTK_SORT_ASCENDING);
-	gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (view->priv->sortmodel),
-			ephy_node_view_sort_func,
-			sort_order,
-			(GtkDestroyNotify) g_list_free);
-
-	return FALSE;
-}
-
 static void
 provide_priority (EphyNode *node, GValue *value, EphyNodeView *view)
 {
@@ -744,9 +724,13 @@ provide_text_weight (EphyNode *node, GValue *value, EphyNodeView *view)
 		(node, view->priv->priority_prop_id);
 	if (priority == EPHY_NODE_VIEW_ALL_PRIORITY ||
 	    priority == EPHY_NODE_VIEW_SPECIAL_PRIORITY)
+	{
 		g_value_set_int (value, PANGO_WEIGHT_BOLD);
+	}
 	else
+	{
 		g_value_set_int (value, PANGO_WEIGHT_NORMAL);
+	}
 }
 
 GtkTreeViewColumn *
@@ -755,14 +739,14 @@ ephy_node_view_add_column (EphyNodeView *view,
 			   GType value_type,
 			   int prop_id,
 			   int priority_prop_id,
-			   gboolean editable,
-			   gboolean sortable)
+			   EphyNodeViewFlags flags)
 {
 	GtkTreeViewColumn *gcolumn;
 	GtkCellRenderer *renderer;
 	int column;
 
-	g_return_val_if_fail (!editable || view->priv->editable_renderer == NULL, NULL);
+	g_return_val_if_fail (!(flags & EPHY_NODE_VIEW_EDITABLE) ||
+			      view->priv->editable_renderer == NULL, NULL);
 
 	column = ephy_tree_model_node_add_prop_column
 		(view->priv->nodemodel, value_type, prop_id);
@@ -770,7 +754,7 @@ ephy_node_view_add_column (EphyNodeView *view,
 	gcolumn = (GtkTreeViewColumn *) gtk_tree_view_column_new ();
 	renderer = gtk_cell_renderer_text_new ();
 
-	if (editable)
+	if (flags & EPHY_NODE_VIEW_EDITABLE)
 	{
 		view->priv->editable_renderer = renderer;
 		view->priv->editable_column = gcolumn;
@@ -782,9 +766,11 @@ ephy_node_view_add_column (EphyNodeView *view,
 	gtk_tree_view_column_set_attributes (gcolumn, renderer,
 					     "text", column,
 					     NULL);
-	if (priority_prop_id > 0)
+	if (priority_prop_id >= 0)
 	{
 		int wcol;
+
+		view->priv->priority_prop_id = priority_prop_id;
 
 		wcol = ephy_tree_model_node_add_func_column
 			(view->priv->nodemodel, G_TYPE_INT,
@@ -794,25 +780,41 @@ ephy_node_view_add_column (EphyNodeView *view,
 						    "weight", wcol);
 	}
 
-	gtk_tree_view_column_set_sizing (gcolumn,
-					 GTK_TREE_VIEW_COLUMN_AUTOSIZE);
 	gtk_tree_view_column_set_title (gcolumn, title);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (view),
 				     gcolumn);
 
-	if (sortable)
+	if (flags & EPHY_NODE_VIEW_USER_SORT)
+	{
+		GList *order = NULL;
+
+		order = g_list_append (order, GINT_TO_POINTER (column));
+		gtk_tree_sortable_set_sort_func
+			(GTK_TREE_SORTABLE (view->priv->sortmodel),
+			 column, ephy_node_view_sort_func,
+			 order, (GtkDestroyNotify)g_list_free);
+		gtk_tree_view_column_set_sort_column_id (gcolumn, column);
+	}
+	else if (flags & EPHY_NODE_VIEW_AUTO_SORT)
 	{
 		int scol;
+		GList *order = NULL;
 
 		scol = ephy_tree_model_node_add_func_column
 			(view->priv->nodemodel, G_TYPE_INT,
 			 (EphyTreeModelNodeValueFunc) provide_priority,
 			 view);
-		view->priv->priority_column_id = scol;
 
-		view->priv->priority_prop_id = priority_prop_id;
-		view->priv->default_sort_column_id = column;
-		g_idle_add ((GSourceFunc) set_sort_column_id, view);
+		order = g_list_append (order, GINT_TO_POINTER (scol));
+		order = g_list_append (order, GINT_TO_POINTER (column));
+		gtk_tree_sortable_set_default_sort_func
+			(GTK_TREE_SORTABLE (view->priv->sortmodel),
+			 ephy_node_view_sort_func,
+			 order, (GtkDestroyNotify)g_list_free);
+		gtk_tree_sortable_set_sort_column_id
+			(GTK_TREE_SORTABLE (view->priv->sortmodel),
+			 GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
+			 GTK_SORT_ASCENDING);
 	}
 
 	return gcolumn;
@@ -1083,17 +1085,4 @@ ephy_node_view_has_selection (EphyNodeView *view, gboolean *multiple)
 	}
 
 	return rows > 0;
-}
-
-void
-ephy_node_view_enable_sort (EphyNodeView *view,
-			    GtkTreeIterCompareFunc sort_func,
-			    gpointer data,
-			    GtkDestroyNotify destroy)
-{
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (view->priv->sortmodel),
-					      GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
-					      GTK_SORT_ASCENDING);
-	gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (view->priv->sortmodel),
-						 sort_func, data, destroy);
 }
