@@ -336,7 +336,7 @@ init_bookmarks_toolbar (Toolbar *t)
 			(EGG_TOOLBARS_MODEL (model), i);
 		g_return_if_fail (t_name != NULL);
 
-		if (strcmp (t_name, "BookmarksToolbar") == 0)
+		if (strcmp (t_name, "BookmarksBar") == 0)
 		{
 			egg_editable_toolbar_set_drag_dest
 				(EGG_EDITABLE_TOOLBAR (t),
@@ -656,7 +656,7 @@ toolbar_set_visibility (Toolbar *t,
 		t_name = egg_toolbars_model_toolbar_nth
 			(EGG_TOOLBARS_MODEL (model), i);
 		g_return_if_fail (t_name != NULL);
-		if (strcmp (t_name, "BookmarksToolbar") == 0)
+		if (strcmp (t_name, "BookmarksBar") == 0)
 		{
 			if (bmk_toolbars)
 			{

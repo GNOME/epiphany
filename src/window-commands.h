@@ -104,8 +104,8 @@ void window_cmd_view_statusbar	(EggAction *action,
 void window_cmd_view_toolbar	(EggAction *action,
 				 EphyWindow *window);
 
-void window_cmd_view_bookmarks_toolbar	(EggAction *action,
-				         EphyWindow *window);
+void window_cmd_view_bookmarks_bar	(EggAction *action,
+				    	 EphyWindow *window);
 
 void window_cmd_view_fullscreen	(EggAction *action,
 				 EphyWindow *window);

@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 #define CONF_WINDOWS_FS_SHOW_STATUSBAR "/apps/epiphany/interface/show_statusbar_in_fullscreen"
 #define CONF_WINDOWS_SHOW_SIDEBAR "/apps/epiphany/interface/show_sidebar"
 #define CONF_WINDOWS_SHOW_TOOLBARS "/apps/epiphany/interface/show_toolbars"
-#define CONF_WINDOWS_SHOW_PERSONAL_TOOLBAR "/apps/epiphany/interface/show_personal_toolbar"
+#define CONF_WINDOWS_SHOW_BOOKMARKS_BAR "/apps/epiphany/interface/show_bookmarks_bar"
 #define CONF_WINDOWS_SHOW_STATUSBAR "/apps/epiphany/interface/show_statusbar"
 #define CONF_TOOLBAR_SETUP "/apps/epiphany/interface/toolbar_setup"
 #define CONF_TOOLBAR_SPINNER_THEME "/apps/epiphany/interface/spinner_theme"

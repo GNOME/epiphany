@@ -236,7 +236,7 @@ ephy_toolbars_model_remove_bookmark (EphyToolbarsModel *model,
 
 	action_name = get_action_name (topic, id);
 
-	toolbar_position = get_toolbar_pos (model, "BookmarksToolbar");
+	toolbar_position = get_toolbar_pos (model, "BookmarksBar");
 	g_return_if_fail (toolbar_position != -1);
 
 	position = get_item_pos (model, toolbar_position, action_name);
@@ -257,7 +257,7 @@ ephy_toolbars_model_add_bookmark (EphyToolbarsModel *model,
 
 	action_name = get_action_name (topic, id);
 
-	toolbar_position = get_toolbar_pos (model, "BookmarksToolbar");
+	toolbar_position = get_toolbar_pos (model, "BookmarksBar");
 	g_return_if_fail (toolbar_position != -1);
 
 	egg_toolbars_model_add_item (EGG_TOOLBARS_MODEL (model),
@@ -277,7 +277,7 @@ ephy_toolbars_model_has_bookmark (EphyToolbarsModel *model,
 
 	action_name = get_action_name (topic, id);
 
-	toolbar_position = get_toolbar_pos (model, "BookmarksToolbar");
+	toolbar_position = get_toolbar_pos (model, "BookmarksBar");
 	g_return_val_if_fail (toolbar_position != -1, FALSE);
 	position = get_item_pos (model, toolbar_position, action_name);
 

@@ -485,8 +485,8 @@ window_cmd_edit_find_prev (EggAction *action,
 }
 
 void
-window_cmd_view_bookmarks_toolbar (EggAction *action,
-			           EphyWindow *window)
+window_cmd_view_bookmarks_bar (EggAction *action,
+			       EphyWindow *window)
 {
 	EmbedChromeMask mask;
 	gboolean active;
@@ -494,11 +494,11 @@ window_cmd_view_bookmarks_toolbar (EggAction *action,
 
 	mask = ephy_window_get_chrome (window);
 	active = EGG_TOGGLE_ACTION (action)->active;
-	current_state = (mask & EMBED_CHROME_PERSONALTOOLBARON) > 0;
+	current_state = (mask & EMBED_CHROME_BOOKMARKSBARON) > 0;
 
 	if (active != current_state)
 	{
-		mask ^= EMBED_CHROME_PERSONALTOOLBARON;
+		mask ^= EMBED_CHROME_BOOKMARKSBARON;
 		ephy_window_set_chrome (window, mask);
 	}
 }

@@ -1,3 +1,28 @@
+2003-04-28  David Bordoley  <bordoley@msu.edu>
+
+	* data/epiphany.schemas.in:
+	* data/ui/epiphany-bookmark-editor-ui.xml.in:
+	* data/ui/epiphany-toolbar.xml.in:
+	* data/ui/epiphany-ui.xml.in:
+	* embed/ephy-embed-types.h:
+	* embed/mozilla/mozilla-embed.cpp: (mozilla_embed_new_window_cb):
+	* lib/ephy-prefs.h:
+	* src/ephy-toolbars-model.c: (ephy_toolbars_model_remove_bookmark),
+	(ephy_toolbars_model_add_bookmark), (ephy_toolbars_model_has_bookmark):
+	* src/ephy-window.c: (save_window_chrome), (translate_default_chrome),
+	(update_layout_toggles), (ephy_window_set_chrome):
+	* src/toolbar.c: (init_bookmarks_toolbar), (toolbar_set_visibility):
+	* src/window-commands.c: (window_cmd_view_bookmarks_bar):
+	* src/window-commands.h:
+	* src/bookmarks/ephy-bookmark-properties.c: (build_ui):
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_show_in_bookmarks_bar),
+	(ephy_bookmarks_editor_update_menu):
+
+	Consistent use of the term "Bookmarks Bar" in the code, ui and schema.
+	Replaces "Bookmarks Toolbar" and "Personal Toolbar." You'll probably
+	have to delete your epiphany-toolbar.xml file to get the bm toolbar to 
+	work now.
+
 2003-04-28  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* src/ephy-automation.c:

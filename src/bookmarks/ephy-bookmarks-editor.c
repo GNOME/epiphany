@@ -89,7 +89,7 @@ static void cmd_open_bookmarks_in_tabs    (EggAction *action,
 					   EphyBookmarksEditor *editor);
 static void cmd_open_bookmarks_in_browser (EggAction *action,
 					   EphyBookmarksEditor *editor);
-static void cmd_show_in_the_toolbar       (EggAction *action,
+static void cmd_show_in_bookmarks_bar     (EggAction *action,
 					   EphyBookmarksEditor *editor);
 static void cmd_delete			  (EggAction *action,
 				           EphyBookmarksEditor *editor);
@@ -158,9 +158,9 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 	{ "Delete", N_("_Delete"), GTK_STOCK_DELETE, NULL,
 	  N_("Delete the selected bookmark or topic"), 
 	  G_CALLBACK (cmd_delete), NULL },
-	{ "ShowInToolbar", N_("_Show in the Toolbar"), NULL, NULL,
-	  N_("Show the selected bookmark or topic in the bookmarks toolbar"), 
-	  G_CALLBACK (cmd_show_in_the_toolbar), NULL, TOGGLE_ACTION },
+	{ "ShowInBookmarksBar", N_("_Show in Bookmarks Bar"), NULL, NULL,
+	  N_("Show the selected bookmark or topic in the bookmarks bar"), 
+	  G_CALLBACK (cmd_show_in_bookmarks_bar), NULL, TOGGLE_ACTION },
 	{ "Properties", N_("_Properties"), GTK_STOCK_PROPERTIES, "<alt>Return",
 	  N_("View or modify the properties of the selected bookmark"), 
 	  G_CALLBACK (cmd_bookmark_properties), NULL },
@@ -250,8 +250,8 @@ get_target_window (EphyBookmarksEditor *editor)
 }
 
 static void
-cmd_show_in_the_toolbar (EggAction *action,
-		         EphyBookmarksEditor *editor)
+cmd_show_in_bookmarks_bar (EggAction *action,
+		           EphyBookmarksEditor *editor)
 {
 	EphyNode *node;
 	GList *selection;
@@ -592,7 +592,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	gboolean key_normal = FALSE;
 	gboolean bmk_multiple_selection;
 	gboolean cut, copy, paste, select_all;
-	gboolean can_show_in_toolbar, show_in_toolbar = FALSE;
+	gboolean can_show_in_bookmarks_bar, show_in_bookmarks_bar = FALSE;
 	EggActionGroup *action_group;
 	EggAction *action;
 	GList *selected;
@@ -642,7 +642,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		gulong id;
 
 		id = ephy_node_get_id (node);
-		show_in_toolbar = ephy_toolbars_model_has_bookmark
+		show_in_bookmarks_bar = ephy_toolbars_model_has_bookmark
 			(editor->priv->tb_model, TRUE, id);
 
 		priority = ephy_node_get_property_int
@@ -660,7 +660,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		gulong id;
 
 		id = ephy_node_get_id (node);
-		show_in_toolbar = ephy_toolbars_model_has_bookmark
+		show_in_bookmarks_bar = ephy_toolbars_model_has_bookmark
 			(editor->priv->tb_model, FALSE, id);
 
 		g_list_free (selected);
@@ -693,7 +693,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	delete = (bmk_focus && bmk_selection) ||
 		 (key_selection && key_focus && key_normal);
 	properties = (bmk_focus && bmk_selection && !bmk_multiple_selection);
-	can_show_in_toolbar = (bmk_focus && bmk_selection && !bmk_multiple_selection) ||
+	can_show_in_bookmarks_bar = (bmk_focus && bmk_selection && !bmk_multiple_selection) ||
 		 (key_selection && key_focus);
 
 	action_group = editor->priv->action_group;
@@ -718,17 +718,17 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	g_object_set (action, "sensitive", paste, NULL);
 	action = egg_action_group_get_action (action_group, "SelectAll");
 	g_object_set (action, "sensitive", select_all, NULL);
-	action = egg_action_group_get_action (action_group, "ShowInToolbar");
-	g_object_set (action, "sensitive", can_show_in_toolbar, NULL);
+	action = egg_action_group_get_action (action_group, "ShowInBookmarksBar");
+	g_object_set (action, "sensitive", can_show_in_bookmarks_bar, NULL);
 
 	g_signal_handlers_block_by_func
 		(G_OBJECT (EGG_TOGGLE_ACTION (action)),
-		 G_CALLBACK (cmd_show_in_the_toolbar),
+		 G_CALLBACK (cmd_show_in_bookmarks_bar),
 		 editor);
-	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action), show_in_toolbar);
+	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action), show_in_bookmarks_bar);
 	g_signal_handlers_unblock_by_func
 		(G_OBJECT (EGG_TOGGLE_ACTION (action)),
-		 G_CALLBACK (cmd_show_in_the_toolbar),
+		 G_CALLBACK (cmd_show_in_bookmarks_bar),
 		 editor);
 }
 

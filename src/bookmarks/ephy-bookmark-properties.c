@@ -405,7 +405,7 @@ build_ui (EphyBookmarkProperties *editor)
 	gtk_table_attach (GTK_TABLE (table), scrolled_window, 1, 2, 2, 3,
 			  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
 
-	checkbox = gtk_check_button_new_with_mnemonic (_("_Show in the bookmarks toolbar"));
+	checkbox = gtk_check_button_new_with_mnemonic (_("_Show in bookmarks bar"));
 	id = ephy_node_get_id (editor->priv->bookmark);
 	state = ephy_toolbars_model_has_bookmark (editor->priv->tb_model, FALSE, id);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbox), state);

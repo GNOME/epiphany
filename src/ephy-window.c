@@ -129,9 +129,9 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "ViewToolbar", N_("_Toolbar"), NULL, "<shift><control>T",
 	  N_("Show or hide toolbar"),
 	  G_CALLBACK (window_cmd_view_toolbar), NULL, TOGGLE_ACTION },
-	{ "ViewBookmarksToolbar", N_("_Bookmarks Toolbar"), NULL, NULL,
-	  N_("Show or hide bookmarks toolbar"),
-	  G_CALLBACK (window_cmd_view_bookmarks_toolbar), NULL, TOGGLE_ACTION },
+	{ "ViewBookmarksBar", N_("_Bookmarks Bar"), NULL, NULL,
+	  N_("Show or hide bookmarks bar"),
+	  G_CALLBACK (window_cmd_view_bookmarks_bar), NULL, TOGGLE_ACTION },
 	{ "ViewStatusbar", N_("St_atusbar"), NULL, NULL,
 	  N_("Show or hide statusbar"),
 	  G_CALLBACK (window_cmd_view_statusbar), NULL, TOGGLE_ACTION },
@@ -613,8 +613,8 @@ save_window_chrome (EphyWindow *window)
 	}
 	else
 	{
-		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_PERSONAL_TOOLBAR,
-				       flags & EMBED_CHROME_PERSONALTOOLBARON);
+		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR,
+				       flags & EMBED_CHROME_BOOKMARKSBARON);
 		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_TOOLBARS,
 				       flags & EMBED_CHROME_TOOLBARON);
 		eel_gconf_set_boolean (CONF_WINDOWS_SHOW_STATUSBAR,
@@ -770,9 +770,9 @@ translate_default_chrome (EmbedChromeMask *chrome_mask)
 		{
 			*chrome_mask |= EMBED_CHROME_TOOLBARON;
 		}
-		if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_PERSONAL_TOOLBAR))
+		if (eel_gconf_get_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR))
 		{
-			*chrome_mask |= EMBED_CHROME_PERSONALTOOLBARON;
+			*chrome_mask |= EMBED_CHROME_BOOKMARKSBARON;
 		}
 
 		*chrome_mask |= EMBED_CHROME_MENUBARON;
@@ -790,9 +790,9 @@ update_layout_toggles (EphyWindow *window)
 	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action),
 				      mask & EMBED_CHROME_TOOLBARON);
 
-	action = egg_action_group_get_action (action_group, "ViewBookmarksToolbar");
+	action = egg_action_group_get_action (action_group, "ViewBookmarksBar");
 	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action),
-				      mask & EMBED_CHROME_PERSONALTOOLBARON);
+				      mask & EMBED_CHROME_BOOKMARKSBARON);
 
 	action = egg_action_group_get_action (action_group, "ViewStatusbar");
 	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action),
@@ -823,7 +823,7 @@ ephy_window_set_chrome (EphyWindow *window,
 
 	toolbar_set_visibility (window->priv->toolbar,
 				flags & EMBED_CHROME_TOOLBARON,
-				flags & EMBED_CHROME_PERSONALTOOLBARON);
+				flags & EMBED_CHROME_BOOKMARKSBARON);
 
 	if (flags & EMBED_CHROME_STATUSBARON)
 	{
