@@ -380,6 +380,8 @@ insert_text_cb (GtkWidget *editable,
 {
 	EphyLocationEntryPrivate *p = w->priv;
 
+	if (p->going_to_site) return;
+
         if (p->autocompletion_timeout != 0)
 	{
                 g_source_remove (p->autocompletion_timeout);
