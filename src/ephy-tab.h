@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2000-2003 Marco Pesenti Gritti
- *  Copyright (C) 2003 Christian Persch
+ *  Copyright (C) 2003, 2004, 2005 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -66,15 +66,9 @@ struct _EphyTabClass
 	GtkBinClass parent_class;
 };
 
-GType			ephy_tab_address_expire_get_type	(void);
-
-GType			ephy_tab_navigation_flags_get_type	(void);
-
 GType			ephy_tab_get_type		(void);
 
 EphyTab	               *ephy_tab_new			(void);
-
-GObject                *ephy_tab_get_action		(EphyTab *tab);
 
 EphyEmbed              *ephy_tab_get_embed		(EphyTab *tab);
 

@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2000-2003 Marco Pesenti Gritti
- *  Copyright (C) 2003, 2004 Christian Persch
+ *  Copyright (C) 2003, 2004, 2005 Christian Persch
  *  Copyright (C) 2004 Crispin Flowerday
  *  Copyright (C) 2004 Adam Hooper
  *
@@ -57,7 +57,6 @@
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkuimanager.h>
-#include <gtk/gtkradioaction.h>
 #include <gtk/gtkclipboard.h>
 #include <string.h>
 
@@ -80,7 +79,6 @@ struct _EphyTabPrivate
 	int total_requests;
 	int width;
 	int height;
-	GtkToggleAction *action;
 	float zoom;
 	gboolean setting_zoom;
 	EphyEmbedSecurityLevel security_level;
@@ -120,8 +118,6 @@ typedef struct
 
 static GObjectClass *parent_class = NULL;
 
-static gulong tab_id = 0;
-
 /* internal functions, accessible only from this file */
 static void	ephy_tab_set_icon_address	(EphyTab *tab,
 						 const char *location);
@@ -137,7 +133,7 @@ static void	ephy_tab_set_security_level	(EphyTab *tab,
 						 EphyEmbedSecurityLevel level);
 static void	ephy_tab_set_title		(EphyTab *tab,
 						 EphyEmbed *embed,
-						 const char *new_title);
+						 char *new_title);
 static void	ephy_tab_set_zoom		(EphyTab *tab,
 						 float zoom);
 static guint	popup_blocker_n_hidden		(EphyTab *tab);
@@ -325,23 +321,6 @@ ephy_tab_get_window (EphyTab *tab)
 	g_return_val_if_fail (toplevel != NULL, NULL);
 
 	return EPHY_WINDOW (toplevel);
-}
-
-static void
-ephy_tab_action_activate_cb (GtkAction *action, EphyTab *tab)
-{
-	EphyWindow *window;
-
-	g_return_if_fail (EPHY_IS_TAB (tab));
-
-	window = ephy_tab_get_window (tab);
-	g_return_if_fail (window != NULL);
-
-	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)) &&
-	    ephy_window_get_active_tab (window) != tab)
-	{
-		ephy_window_jump_to_tab (window, tab);
-	}
 }
 
 static void
@@ -761,11 +740,6 @@ ephy_tab_finalize (GObject *object)
 
 	g_idle_remove_by_data (tab);
 
-	if (tab->priv->action != NULL)
-	{
-		g_object_unref (tab->priv->action);
-	}
-
 	g_free (tab->priv->title);
 	g_free (tab->priv->address);
 	g_free (tab->priv->icon_address);
@@ -1167,8 +1141,6 @@ ephy_tab_title_cb (EphyEmbed *embed, EphyTab *tab)
 	title = ephy_embed_get_title (embed);
 
 	ephy_tab_set_title (tab, embed, title);
-
-	g_free (title);
 }
 
 static int
@@ -1280,13 +1252,13 @@ build_progress_from_requests (EphyTab *tab, EphyEmbedNetState state)
 static void
 ensure_page_info (EphyTab *tab, EphyEmbed *embed, const char *address)
 {
-	if ((tab->priv->address == NULL || *tab->priv->address == '\0') &&
+	if ((tab->priv->address == NULL || tab->priv->address[0] == '\0') &&
 	    tab->priv->address_expire == EPHY_TAB_ADDRESS_EXPIRE_NOW)
         {
 		ephy_tab_set_location (tab, address, EPHY_TAB_ADDRESS_EXPIRE_NOW);
 	}
 
-	if (tab->priv->title == NULL)
+	if (tab->priv->title == NULL || tab->priv->title[0] == '\0')
 	{
 		ephy_tab_set_title (tab, embed, NULL);
 	}
@@ -1600,7 +1572,6 @@ ephy_tab_init (EphyTab *tab)
 {
 	GObject *embed;
 	EphyFaviconCache *cache;
-	char *id;
 
 	LOG ("EphyTab initialising %p", tab);
 
@@ -1616,24 +1587,13 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->document_type = EPHY_EMBED_DOCUMENT_HTML;
 	tab->priv->zoom = 1.0;
 	tab->priv->address_expire = EPHY_TAB_ADDRESS_EXPIRE_NOW;
+	tab->priv->title = g_strdup ("");
 
 	embed = ephy_embed_factory_new_object (EPHY_TYPE_EMBED);
 	g_assert (embed != NULL);
 
 	gtk_container_add (GTK_CONTAINER (tab), GTK_WIDGET (embed));
 	gtk_widget_show (GTK_WIDGET (embed));
-
-	id = g_strdup_printf ("Tab%lu", tab_id++);
-
-	tab->priv->action = g_object_new (GTK_TYPE_TOGGLE_ACTION,
-					  "name", id,
-					  "label", _("Blank page"),
-					  "draw_as_radio", TRUE,
-					  NULL);
-
-	g_free (id);
-	g_signal_connect (tab->priv->action, "activate",
-			  G_CALLBACK (ephy_tab_action_activate_cb), tab);
 
 	g_signal_connect_object (embed, "link_message",
 				 G_CALLBACK (ephy_tab_link_message_cb),
@@ -1803,30 +1763,27 @@ ephy_tab_get_status_message (EphyTab *tab)
 	}
 }
 
-#define MAX_LABEL_LENGTH	32
-
 static void
-ephy_tab_set_title (EphyTab *tab, EphyEmbed *embed, const char *new_title)
+ephy_tab_set_title (EphyTab *tab,
+		    EphyEmbed *embed,
+		    char *title)
 {
-	char *title = NULL;
-
-	g_return_if_fail (EPHY_IS_TAB (tab));
-
-	g_free (tab->priv->title);
-
-	if (new_title == NULL || new_title[0] == '\0')
+ 	if (title == NULL || title[0] == '\0')
 	{
 		GnomeVFSURI *uri = NULL;
 		char *address;
 
+		g_free (title);
+		title = NULL;
+
 		address = ephy_embed_get_location (embed, TRUE);
 
-		if (address)
+		if (address != NULL)
 		{
 			uri = gnome_vfs_uri_new (address);
 		}
 
-		if (uri)
+		if (uri != NULL)
 		{
 			title = gnome_vfs_uri_to_string (uri,
 					GNOME_VFS_URI_HIDE_USER_NAME |
@@ -1835,30 +1792,28 @@ ephy_tab_set_title (EphyTab *tab, EphyEmbed *embed, const char *new_title)
 					GNOME_VFS_URI_HIDE_TOPLEVEL_METHOD |
 					GNOME_VFS_URI_HIDE_FRAGMENT_IDENTIFIER);
 			gnome_vfs_uri_unref (uri);
+			g_free (address);
 		}
-		else if (address != NULL && strncmp (address, "about:blank", 11) != 0)
+		else if (address != NULL &&
+			 strncmp (address, "about:blank", 11) != 0)
 		{
-			title = g_strdup (address);
+			title = address;
+		}
+		else
+		{
+			g_free (address);
 		}
 
+		/* Fallback */
 		if (title == NULL || title[0] == '\0')
 		{
 			g_free (title);
 			title = g_strdup (_("Blank page"));
 		}
-
-		g_free (address);
-	}
-	else
-	{
-		title = g_strdup (new_title);
 	}
 
+	g_free (tab->priv->title);
 	tab->priv->title = title;
-
-	g_object_set (G_OBJECT (tab->priv->action),
-		      "label", title,
-		      NULL);
 
 	g_object_notify (G_OBJECT (tab), "title");
 }
@@ -1874,7 +1829,7 @@ ephy_tab_set_title (EphyTab *tab, EphyEmbed *embed, const char *new_title)
 const char *
 ephy_tab_get_title (EphyTab *tab)
 {
-	g_return_val_if_fail (EPHY_IS_TAB (tab), "");
+	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
 
 	return tab->priv->title;
 }
@@ -1983,24 +1938,4 @@ ephy_tab_get_zoom (EphyTab *tab)
 	g_return_val_if_fail (EPHY_IS_TAB (tab), 1.0);
 
 	return tab->priv->zoom;
-}
-
-/**
- * ephy_tab_get_action:
- * @tab: an #EphyTab
- *
- * DO NOT USE
- *
- * Returns the #GtkToggleAction represented by the labelled tab displayed at the
- * top of @tab's #EphyWindow when multiple tabs are loaded. Activating this
- * action will switch the window to display @tab.
- *
- * Return value: @tab's #GtkToggleAction
- **/
-GObject *
-ephy_tab_get_action (EphyTab *tab)
-{
-	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
-
-	return G_OBJECT (tab->priv->action);
 }

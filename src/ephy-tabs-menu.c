@@ -27,10 +27,12 @@
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 
+#include <glib/gi18n.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkaccelmap.h>
 #include <gtk/gtkaction.h>
+#include <gtk/gtktoggleaction.h>
 #include <gtk/gtkradioaction.h>
 #include <gtk/gtkuimanager.h>
 #include <string.h>
@@ -38,6 +40,11 @@
 #include <libxml/entities.h>
 
 #define LABEL_WIDTH_CHARS 32
+#define ACTION_VERB_FORMAT		"JmpTab%x"
+#define ACTION_VERB_FORMAT_LENGTH	strlen (ACTION_VERB_FORMAT) + 14 + 1
+#define ACCEL_PATH_FORMAT		"<Actions>/TabsActions/%s"
+#define ACCEL_PATH_FORMAT_LENGTH	strlen (ACCEL_PATH_FORMAT) -2 + ACTION_VERB_FORMAT_LENGTH
+#define DATA_KEY			"EphyTabsMenu::Action"
 
 #define EPHY_TABS_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TABS_MENU, EphyTabsMenuPrivate))
 
@@ -45,11 +52,10 @@ struct _EphyTabsMenuPrivate
 {
 	EphyWindow *window;
 	GtkActionGroup *action_group;
+	GtkAction *anchor_action;
 	guint ui_id;
+	guint num;
 };
-
-static void	ephy_tabs_menu_class_init	(EphyTabsMenuClass *klass);
-static void	ephy_tabs_menu_init	  	(EphyTabsMenu *menu);
 
 enum
 {
@@ -57,69 +63,143 @@ enum
 	PROP_WINDOW
 };
 
+static void	ephy_tabs_menu_class_init	(EphyTabsMenuClass *klass);
+static void	ephy_tabs_menu_init	  	(EphyTabsMenu *menu);
+
 GType
 ephy_tabs_menu_get_type (void)
 {
-        static GType type = 0;
+	static GType type = 0;
 
-        if (G_UNLIKELY (type == 0))
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (EphyTabsMenuClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) ephy_tabs_menu_class_init,
-                        NULL,
-                        NULL, /* class_data */
-                        sizeof (EphyTab),
-                        0, /* n_preallocs */
-                        (GInstanceInitFunc) ephy_tabs_menu_init
-                };
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyTabsMenuClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			(GClassInitFunc) ephy_tabs_menu_class_init,
+			NULL,
+			NULL, /* class_data */
+			sizeof (EphyTab),
+			0, /* n_preallocs */
+			(GInstanceInitFunc) ephy_tabs_menu_init
+		};
 
-                type = g_type_register_static (G_TYPE_OBJECT,
+		type = g_type_register_static (G_TYPE_OBJECT,
 					       "EphyTabsMenu",
 					       &our_info, 0);
-        }
+	}
 
-        return type;
+	return type;
 }
 
 static void
-tab_added_cb (EphyNotebook *notebook, EphyTab *tab, EphyTabsMenu *menu)
+tab_action_activate_cb (GtkToggleAction *action,
+			EphyTabsMenu *menu)
 {
+	EphyTabsMenuPrivate *priv = menu->priv;
+	EphyTab *tab;
+
+	if (gtk_toggle_action_get_active (action) == FALSE)
+	{
+		return;
+	}
+
+	tab = g_object_get_data (G_OBJECT (action), DATA_KEY);
+	g_return_if_fail (tab != NULL);
+
+	LOG ("tab_action_activate_cb tab=%p", tab);
+
+	if (ephy_window_get_active_tab (priv->window) != tab)
+	{
+		ephy_window_jump_to_tab (priv->window, tab);
+	}
+}
+
+static void
+sync_tab_title (EphyTab *tab,
+		GParamSpec *pspec,
+		GtkAction *action)
+{
+	const char *title;
+
+	title = ephy_tab_get_title (tab);
+
+	g_object_set (action, "label", title, NULL);
+}
+
+static void
+tab_added_cb (EphyNotebook *notebook,
+	      EphyTab *tab,
+	      EphyTabsMenu *menu)
+{
+	EphyTabsMenuPrivate *priv = menu->priv;
 	GtkAction *action;
-	char accel_path[40];
+	char verb[ACTION_VERB_FORMAT_LENGTH];
+	GSList *group;
 
-        g_return_if_fail (EPHY_IS_TAB (tab));
+	LOG ("tab_added_cb tab=%p", tab);
 
-	action = GTK_ACTION (ephy_tab_get_action (tab));
+	g_snprintf (verb, sizeof (verb), ACTION_VERB_FORMAT, priv->num++);
+  
+	action = g_object_new (GTK_TYPE_RADIO_ACTION,
+			       "name", verb,
+			       "tooltip", _("Switch to this tab"),
+			       NULL);
 
-	g_snprintf (accel_path, sizeof (accel_path),
-		    "<Actions>/TabsActions/%s", gtk_action_get_name (action));
-	gtk_action_set_accel_path (action, accel_path);
+	g_signal_connect (action, "activate",
+			  G_CALLBACK (tab_action_activate_cb), menu);
 
-	gtk_action_group_add_action (menu->priv->action_group, action);
+	sync_tab_title (tab, NULL, action);
+	g_signal_connect (tab, "notify::title",
+			  G_CALLBACK (sync_tab_title), action);
+
+	gtk_action_group_add_action_with_accel (priv->action_group, action, NULL);
+
+	group = gtk_radio_action_get_group (GTK_RADIO_ACTION (priv->anchor_action));
+	gtk_radio_action_set_group (GTK_RADIO_ACTION (action), group);
+
+	g_object_set_data (G_OBJECT (tab), DATA_KEY, action);
+	g_object_set_data (G_OBJECT (action), DATA_KEY, tab);
+	g_object_unref (action);
 
 	ephy_tabs_menu_update (menu);
 }
 
 static void
-tab_removed_cb (EphyNotebook *notebook, EphyTab *tab, EphyTabsMenu *menu)
+tab_removed_cb (EphyNotebook *notebook,
+		EphyTab *tab,
+		EphyTabsMenu *menu)
 {
+	EphyTabsMenuPrivate *priv = menu->priv;
 	GtkAction *action;
-                                                                                                                             
-        g_return_if_fail (EPHY_IS_TAB (tab));
+													     
+	g_return_if_fail (EPHY_IS_TAB (tab));
 
-	action = GTK_ACTION (ephy_tab_get_action (tab));
-	gtk_action_group_remove_action (menu->priv->action_group, action);
+	LOG ("tab_removed_cb tab=%p", tab);
+
+	action = g_object_get_data (G_OBJECT (tab), DATA_KEY);
+	g_return_if_fail (action != NULL);
+
+	g_signal_handlers_disconnect_by_func
+		(tab, G_CALLBACK (sync_tab_title), action);
+
+	g_signal_handlers_disconnect_by_func
+		(action, G_CALLBACK (tab_action_activate_cb), tab);
+
+	g_object_set_data (G_OBJECT (tab), DATA_KEY, NULL);
+ 	gtk_action_group_remove_action (priv->action_group, action);
 
 	ephy_tabs_menu_update (menu);
 }
 
 static void
-tabs_reordered_cb (EphyNotebook *notebook, EphyTabsMenu *menu)
+tabs_reordered_cb (EphyNotebook *notebook,
+		   EphyTabsMenu *menu)
 {
+	LOG ("tabs_reordered_cb");
+ 
 	ephy_tabs_menu_update (menu);
 }
 
@@ -142,26 +222,59 @@ connect_proxy_cb (GtkActionGroup *action_group,
 }
 
 static void
-ephy_tabs_menu_set_window (EphyTabsMenu *menu, EphyWindow *window)
+sync_active_tab (EphyWindow *window,
+		 GParamSpec *pspec,
+		 EphyTabsMenu *menu)
 {
+	EphyTab *tab;
+	GtkAction *action;
+
+	tab = ephy_window_get_active_tab (window);
+	g_return_if_fail (tab != NULL);
+	if (tab == NULL) return;
+
+	LOG ("active tab is tab %p", tab);
+
+	action = g_object_get_data (G_OBJECT (tab), DATA_KEY);
+	/* happens initially, since the ::active-tab comes before
+	* the ::tab-added signal
+	*/
+	if (action == NULL) return;
+
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+}
+
+static void
+ephy_tabs_menu_set_window (EphyTabsMenu *menu,
+			   EphyWindow *window)
+{
+	EphyTabsMenuPrivate *priv = menu->priv;
 	GtkWidget *notebook;
 	GtkUIManager *manager;
 
-	menu->priv->window = window;
+	priv->window = window;
 
 	manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
-	menu->priv->action_group = gtk_action_group_new ("TabsActions");
-	gtk_ui_manager_insert_action_group (manager, menu->priv->action_group, -1);
-	g_object_unref (menu->priv->action_group);
+	priv->action_group = gtk_action_group_new ("TabsActions");
+	gtk_ui_manager_insert_action_group (manager, priv->action_group, -1);
+	g_object_unref (priv->action_group);
 
-	g_signal_connect (menu->priv->action_group, "connect-proxy",
+	priv->anchor_action = g_object_new (GTK_TYPE_RADIO_ACTION,
+					    "name", "TabsMenuAnchorAction",
+					    NULL);
+	gtk_action_group_add_action (priv->action_group, priv->anchor_action);
+
+	g_signal_connect (priv->action_group, "connect-proxy",
 			  G_CALLBACK (connect_proxy_cb), NULL);
+
+	g_signal_connect (window, "notify::active-tab",
+			  G_CALLBACK (sync_active_tab), menu);
 
 	notebook = ephy_window_get_notebook (window);
 	g_signal_connect_object (notebook, "tab_added",
-			         G_CALLBACK (tab_added_cb), menu, 0);
+				 G_CALLBACK (tab_added_cb), menu, 0);
 	g_signal_connect_object (notebook, "tab_removed",
-			         G_CALLBACK (tab_removed_cb), menu, 0);
+				 G_CALLBACK (tab_removed_cb), menu, 0);
 	g_signal_connect_object (notebook, "tabs_reordered",
 				 G_CALLBACK (tabs_reordered_cb), menu, 0);
 }
@@ -172,31 +285,24 @@ ephy_tabs_menu_set_property (GObject *object,
 			     const GValue *value,
 			     GParamSpec *pspec)
 {
-        EphyTabsMenu *m = EPHY_TABS_MENU (object);
+	EphyTabsMenu *menu = EPHY_TABS_MENU (object);
 
-        switch (prop_id)
-        {
-                case PROP_WINDOW:
-                        ephy_tabs_menu_set_window
-				(m, EPHY_WINDOW (g_value_get_object (value)));
-                        break;
-        }
+	switch (prop_id)
+	{
+		case PROP_WINDOW:
+			ephy_tabs_menu_set_window (menu, g_value_get_object (value));
+			break;
+	}
 }
 
 static void
 ephy_tabs_menu_get_property (GObject *object,
-                             guint prop_id,
-                             GValue *value,
-                             GParamSpec *pspec)
+			     guint prop_id,
+			     GValue *value,
+			     GParamSpec *pspec)
 {
-        EphyTabsMenu *m = EPHY_TABS_MENU (object);
-
-        switch (prop_id)
-        {
-                case PROP_WINDOW:
-                        g_value_set_object (value, m->priv->window);
-                        break;
-        }
+	/* no readable properties */
+	g_return_if_reached ();
 }
 
 static void
@@ -208,15 +314,15 @@ ephy_tabs_menu_class_init (EphyTabsMenuClass *klass)
 	object_class->get_property = ephy_tabs_menu_get_property;
 
 	g_object_class_install_property (object_class,
-                                         PROP_WINDOW,
-                                         g_param_spec_object ("window",
-                                                              "Window",
-                                                              "Parent window",
-                                                              EPHY_TYPE_WINDOW,
-                                                              G_PARAM_READWRITE |
+					 PROP_WINDOW,
+					 g_param_spec_object ("window",
+							      "Window",
+							      "Parent window",
+							      EPHY_TYPE_WINDOW,
+							      G_PARAM_READWRITE |
 							      G_PARAM_CONSTRUCT_ONLY));
 
-	g_type_class_add_private (object_class, sizeof(EphyTabsMenuPrivate));
+	g_type_class_add_private (object_class, sizeof (EphyTabsMenuPrivate));
 }
 
 static void
@@ -231,7 +337,7 @@ ephy_tabs_menu_clean (EphyTabsMenu *menu)
 	EphyTabsMenuPrivate *p = menu->priv;
 	GtkUIManager *manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (p->window));
 
-	if (p->ui_id > 0)
+	if (p->ui_id != 0)
 	{
 		gtk_ui_manager_remove_ui (manager, p->ui_id);
 		gtk_ui_manager_ensure_update (manager);
@@ -252,19 +358,18 @@ tab_set_action_accelerator (GtkActionGroup *action_group,
 			    GtkAction *action,
 			    guint tab_number)
 {
-	const char *action_name, *action_group_name;
-	char *accel_path;
+	const char *verb;
+	char accel_path[ACCEL_PATH_FORMAT_LENGTH];
 	char accel[7];
 	gint accel_number;
 	guint accel_key;
 	GdkModifierType accel_mods;
 
-	action_name = gtk_action_get_name (action);
-	action_group_name = gtk_action_group_get_name (action_group);
+	verb = gtk_action_get_name (action);
 
 	/* set the accel path for the menu item */
-	accel_path = g_strconcat ("<Actions>/", action_group_name, "/",
-				  action_name, NULL);
+	g_snprintf (accel_path, sizeof (accel_path),
+		    ACCEL_PATH_FORMAT, verb);
 	gtk_action_set_accel_path (action, accel_path);
 
 	/* Only the first ten tabs get accelerators starting from 1 through 0 */
@@ -287,19 +392,17 @@ tab_set_action_accelerator (GtkActionGroup *action_group,
 	{
 		gtk_accel_map_change_entry (accel_path, 0, 0, TRUE);
 	}
-
-	g_free (accel_path);
 }
 
 void
 ephy_tabs_menu_update (EphyTabsMenu *menu)
 {
 	EphyTabsMenuPrivate *p = menu->priv;
-	GtkUIManager *manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (p->window));
-	EphyTab *tab;
+	GtkUIManager *manager;
 	GtkAction *action;
-	guint i = 0;
 	GList *tabs = NULL, *l;
+	guint i = 0;
+	const char *verb;
 
 	LOG ("Rebuilding open tabs menu");
 
@@ -311,25 +414,22 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 
 	if (g_list_length (tabs) == 0) return;
 
+	manager =  GTK_UI_MANAGER (ephy_window_get_ui_manager (p->window));
 	p->ui_id = gtk_ui_manager_new_merge_id (manager);
 
 	for (l = tabs; l != NULL; l = l->next)
 	{
-		const char *action_name;
-		char *name;
-
-		tab = (EphyTab *) l->data;
-		action = GTK_ACTION (ephy_tab_get_action (tab));
-		action_name = gtk_action_get_name (action);
-		name = g_strdup_printf ("%sMenu", action_name);
+		action = g_object_get_data (G_OBJECT (l->data), DATA_KEY);
+		g_return_if_fail (action != NULL);
+  
+		verb = gtk_action_get_name (action);
 
 		tab_set_action_accelerator (p->action_group, action, i++);
 
 		gtk_ui_manager_add_ui (manager, p->ui_id,
 				       "/menubar/TabsMenu/TabsOpen",
-				       name, action_name,
+				       verb, verb,
 				       GTK_UI_MANAGER_MENUITEM, FALSE);
-		g_free (name);
 	}
 
 	g_list_free (tabs);

@@ -1816,7 +1816,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 {
 	EphyTab *old_tab;
 	EphyEmbed *embed;
-	GtkToggleAction *action;
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 	g_return_if_fail (gtk_widget_get_toplevel (GTK_WIDGET (new_tab)) == GTK_WIDGET (window));
@@ -1825,7 +1824,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 
 	if (old_tab == new_tab) return;
 
-	if (old_tab)
+	if (old_tab != NULL)
 	{
 		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
 						      G_CALLBACK (sync_tab_address),
@@ -1868,14 +1867,11 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_handlers_disconnect_by_func (G_OBJECT (embed),
 						      G_CALLBACK (tab_context_menu_cb),
 						      window);
-
-		action = GTK_TOGGLE_ACTION (ephy_tab_get_action (old_tab));
-		gtk_toggle_action_set_active (action, FALSE);
 	}
 
 	window->priv->active_tab = new_tab;
 
-	if (new_tab)
+	if (new_tab != NULL)
 	{
 		sync_tab_address	(new_tab, NULL, window);
 		sync_tab_document_type	(new_tab, NULL, window);
@@ -1943,9 +1939,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_connect_object (embed, "ge_context_menu",
 					 G_CALLBACK (tab_context_menu_cb),
 					 window, G_CONNECT_AFTER);
-
-		action = GTK_TOGGLE_ACTION (ephy_tab_get_action (new_tab));
-		gtk_toggle_action_set_active (action, TRUE);
 
 		g_object_notify (G_OBJECT (window), "active-tab");
 	}
@@ -3096,7 +3089,7 @@ ephy_window_get_active_embed (EphyWindow *window)
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
 	tab = ephy_window_get_active_tab (window);
-	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
+	if (tab == NULL) return NULL;
 
 	return ephy_tab_get_embed (tab);
 }
