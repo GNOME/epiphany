@@ -379,13 +379,24 @@ cmd_open_bookmarks_in_tabs (GtkAction *action,
 	for (l = selection; l; l = l->next)
 	{
 		EphyNode *node = l->data;
+		EphyTab *new_tab;
 		const char *location;
 
 		location = ephy_node_get_property_string (node,
 						EPHY_NODE_BMK_PROP_LOCATION);
 
-		ephy_shell_new_tab (ephy_shell, window, NULL, location,
-			EPHY_NEW_TAB_OPEN_PAGE | EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+		new_tab = ephy_shell_new_tab (ephy_shell, window, NULL, location,
+					      EPHY_NEW_TAB_OPEN_PAGE |
+					      EPHY_NEW_TAB_IN_EXISTING_WINDOW);
+		/* if there was no target window, a new one was opened. Get it
+		 * from the new tab so we open the remaining links in the
+		 * same window. See bug 138343.
+		 */
+		if (window == NULL)
+		{
+			window = EPHY_WINDOW
+				(gtk_widget_get_toplevel (GTK_WIDGET (new_tab)));
+		}
 	}
 
 	g_list_free (selection);
