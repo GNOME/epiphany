@@ -32,6 +32,10 @@
  * ContentHandler for a way to do this.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "ephy-string.h"
 #include "ephy-gui.h"
 
