@@ -139,21 +139,16 @@ ephy_topic_action_sync_label (EggAction *action, GParamSpec *pspec, GtkWidget *p
 }
 
 static GtkWidget *
-build_topics_menu (EphyTopicAction *action, GtkWidget *button)
+build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 {
 	GtkWidget *menu, *item;
 	GPtrArray *children;
 	int i;
-	EphyNode *node;
         EphyFaviconCache *cache;
 
-	node = ephy_node_get_from_id (action->priv->topic_id);
-
 	menu = gtk_menu_new ();
-	g_signal_connect (menu, "deactivate",
-			  G_CALLBACK (menu_deactivate_cb), button);
 
-       cache = ephy_embed_shell_get_favicon_cache
+        cache = ephy_embed_shell_get_favicon_cache
                (EPHY_EMBED_SHELL (ephy_shell));
 
 	children = ephy_node_get_children (node);
@@ -169,6 +164,8 @@ build_topics_menu (EphyTopicAction *action, GtkWidget *button)
 			(kid, EPHY_NODE_BMK_PROP_ICON);
 		title = ephy_node_get_property_string
 			(kid, EPHY_NODE_BMK_PROP_TITLE);
+		if (title == NULL) continue;
+		LOG ("Create menu for bookmark %s", title)
 
 		item = gtk_image_menu_item_new_with_label (title);
 		if (icon_location)
@@ -198,6 +195,70 @@ build_topics_menu (EphyTopicAction *action, GtkWidget *button)
 	return menu;
 }
 
+static GtkWidget *
+build_topics_menu (EphyTopicAction *action, EphyNode *node)
+{
+	GtkWidget *menu, *item;
+	GPtrArray *children;
+	int i;
+	EphyBookmarks *bookmarks;
+	EphyNode *all;
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	all = ephy_bookmarks_get_bookmarks (bookmarks);
+
+	menu = gtk_menu_new ();
+
+	children = ephy_node_get_children (node);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+		const char *title;
+		GtkWidget *bmk_menu;
+
+		kid = g_ptr_array_index (children, i);
+		if (kid == all) continue;
+
+		title = ephy_node_get_property_string
+			(kid, EPHY_NODE_KEYWORD_PROP_NAME);
+		LOG ("Create menu for topic %s", title);
+
+		item = gtk_image_menu_item_new_with_label (title);
+		gtk_widget_show (item);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+		bmk_menu = build_bookmarks_menu (action, kid);
+		gtk_widget_show (bmk_menu);
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), bmk_menu);
+	}
+	ephy_node_thaw (node);
+
+	return menu;
+}
+
+static GtkWidget *
+build_menu (EphyTopicAction *action)
+{
+	EphyNode *node;
+
+
+	if (action->priv->topic_id == BOOKMARKS_NODE_ID)
+	{
+		EphyBookmarks *bookmarks;
+
+		LOG ("Build all bookmarks crap menu")
+
+		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+		node = ephy_bookmarks_get_keywords (bookmarks);
+		return build_topics_menu (action, node);
+	}
+	else
+	{
+		node = ephy_node_get_from_id (action->priv->topic_id);
+		return build_bookmarks_menu (action, node);
+	}
+}
+
 static gboolean
 button_press_cb (GtkWidget *button,
 		 GdkEventButton *event,
@@ -209,7 +270,9 @@ button_press_cb (GtkWidget *button,
 
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 
-		menu = build_topics_menu (action, button);
+		menu = build_menu (action);
+		g_signal_connect (menu, "deactivate",
+				  G_CALLBACK (menu_deactivate_cb), button);
 		gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
 				ephy_gui_menu_position_under_widget,
 				button, 1, gtk_get_current_event_time ());

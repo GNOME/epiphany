@@ -80,6 +80,8 @@ static void ephy_bookmarks_editor_get_property (GObject *object,
 						GValue *value,
 						GParamSpec *pspec);
 
+static void search_entry_changed_cb       (GtkWidget *entry,
+					   EphyBookmarksEditor *editor);
 static void cmd_open_bookmarks_in_tabs    (EggAction *action,
 					   EphyBookmarksEditor *editor);
 static void cmd_open_bookmarks_in_browser (EggAction *action,
@@ -674,6 +676,20 @@ key_pressed_cb (GtkWidget *widget,
 }
 
 static void
+reset_search_entry (EphyBookmarksEditor *editor)
+{
+	g_signal_handlers_block_by_func
+		(G_OBJECT (editor->priv->search_entry),
+		 G_CALLBACK (search_entry_changed_cb),
+		 editor);
+	gtk_entry_set_text (GTK_ENTRY (editor->priv->search_entry), "");
+	g_signal_handlers_unblock_by_func
+		(G_OBJECT (editor->priv->search_entry),
+		 G_CALLBACK (search_entry_changed_cb),
+		 editor);
+}
+
+static void
 keyword_node_selected_cb (EphyNodeView *view,
 			  EphyNode *node,
 			  EphyBookmarksEditor *editor)
@@ -687,6 +703,7 @@ keyword_node_selected_cb (EphyNodeView *view,
 	}
 	else
 	{
+		reset_search_entry (editor);
 		bookmarks_filter (editor, node);
 	}
 
@@ -707,7 +724,20 @@ keyword_node_show_popup_cb (GtkWidget *view, EphyBookmarksEditor *editor)
 static void
 search_entry_changed_cb (GtkWidget *entry, EphyBookmarksEditor *editor)
 {
+	EphyNode *all;
 	char *search_text;
+
+	g_signal_handlers_block_by_func
+		(G_OBJECT (editor->priv->key_view),
+		 G_CALLBACK (keyword_node_selected_cb),
+		 editor);
+	all = ephy_bookmarks_get_bookmarks (editor->priv->bookmarks);
+	ephy_node_view_select_node (EPHY_NODE_VIEW (editor->priv->key_view),
+				    all);
+	g_signal_handlers_unblock_by_func
+		(G_OBJECT (editor->priv->key_view),
+		 G_CALLBACK (keyword_node_selected_cb),
+		 editor);
 
 	search_text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
 
