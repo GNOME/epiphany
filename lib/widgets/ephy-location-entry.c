@@ -208,19 +208,17 @@ keyword_match (const char *list,
 
 		for (i = 0; i < keyword_len; i++)
 		{
-			if (p[i] == ' ')
-				goto next_char;
-
 			if (p[i] != keyword[i])
+			{
 				goto next_token;
+			}
 		}
 	  
 		return TRUE;
 	  
 		next_token:
-		while (*p != ' ') p++;
 
-		next_char:
+		while (*p && *p != ' ') p++;
 		if (*p) p++;
 	}
 
