@@ -1,3 +1,11 @@
+2003-05-13  Xan Lopez  <xan@masilla.org>
+
+	* src/bookmarks/ephy-bookmarks.c: (get_topics_list):
+
+	Fix the no_topics pointer writing, fixes adding bookmarks to
+	Uncategorized when they are removed from a topic and they still are in
+	other topics (Bad Marco).
+
 2003-05-13  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/mozilla/ExternalProtocolService.cpp:

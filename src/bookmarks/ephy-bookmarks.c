@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "ephy-bookmarks.h"
@@ -505,7 +507,7 @@ get_topics_list (EphyBookmarks *eb,
 
 		kid = g_ptr_array_index (children, i);
 
-		if (kid != eb->priv->notcategorized &&
+		if (kid != eb->priv->notcategorized && 
 		    kid != eb->priv->favorites &&
 		    kid != eb->priv->bookmarks &&
 		    ephy_node_has_child (kid, bookmark))
@@ -514,7 +516,7 @@ get_topics_list (EphyBookmarks *eb,
 			topic = ephy_node_get_property_string
 				(kid, EPHY_NODE_KEYWORD_PROP_NAME);
 			g_string_append (list, topic);
-			no_topics = FALSE;
+			*no_topics = FALSE;
 		}
 	}
 	ephy_node_thaw (eb->priv->keywords);
