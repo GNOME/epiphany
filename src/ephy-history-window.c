@@ -930,6 +930,8 @@ setup_filters (EphyHistoryWindow *editor,
 {
 	GDK_THREADS_ENTER ();
 
+	LOG ("Setup filters for pages %d and sites %d", pages, sites);
+
 	if (pages)
 	{
 		ephy_node_filter_empty (editor->priv->pages_filter);
@@ -1259,6 +1261,9 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 	gtk_container_add (GTK_CONTAINER (scrolled_window), sites_view);
 	gtk_widget_show (sites_view);
 	editor->priv->sites_view = sites_view;
+	editor->priv->selected_site = ephy_history_get_pages (editor->priv->history);
+	ephy_node_view_select_node (EPHY_NODE_VIEW (sites_view),
+				    editor->priv->selected_site);
 
 	g_signal_connect (G_OBJECT (sites_view),
 			  "node_selected",
@@ -1341,9 +1346,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 		               130);
 
 	set_columns_visibility (editor, details_value);
-
-	ephy_node_view_select_node (EPHY_NODE_VIEW (sites_view),
-				    ephy_history_get_pages (editor->priv->history));
+	setup_filters (editor, TRUE, TRUE);
 }
 
 void
