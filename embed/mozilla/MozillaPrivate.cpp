@@ -17,12 +17,20 @@ GtkWidget *MozillaFindEmbed (nsIDOMWindow *aDOMWindow)
                 (do_GetService("@mozilla.org/embedcomp/window-watcher;1"));
         if (!wwatch) return nsnull;
 
- 	nsCOMPtr<nsIDOMWindow> domWindow(aDOMWindow);
-	if (!domWindow)
+ 	nsCOMPtr<nsIDOMWindow> domWindow;
+	if (aDOMWindow)
 	{
-		result = wwatch->GetActiveWindow(getter_AddRefs(domWindow));
-		if (NS_FAILED(result) || !domWindow) return nsnull;
+		/* this DOM window may belong to some inner frame, we need
+		 * to get the topmost DOM window to get the embed
+		 */
+		aDOMWindow->GetTop (getter_AddRefs (domWindow));
 	}
+	else
+	{
+		/* get the active window */
+		wwatch->GetActiveWindow (getter_AddRefs(domWindow));
+	}
+	NS_ENSURE_TRUE (domWindow, nsnull);
 	
         nsCOMPtr<nsIWebBrowserChrome> windowChrome;
         result = wwatch->GetChromeForWindow (domWindow,
