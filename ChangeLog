@@ -1,5 +1,16 @@
 2004-02-29  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-embed-persist.c: (ephy_embed_persist_class_init):
+	* embed/ephy-embed-persist.h:
+
+	Add "cancelled" signal to EphyEmbedPersist.
+
+	* embed/mozilla/mozilla-embed-persist.cpp:
+
+	Emit "cancelled" signal when the download is cancelled.
+
+2004-02-29  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/mozilla-embed-event.cpp: (mozilla_embed_event_init),
 	(mozilla_embed_event_finalize), (mozilla_embed_event_set_property):
 

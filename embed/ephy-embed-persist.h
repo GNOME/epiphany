@@ -63,6 +63,7 @@ struct EphyEmbedPersistClass
 	GObjectClass parent_class;
 
 	void	 (* completed)	(EphyEmbedPersist *persist);
+	void	 (* cancelled)	(EphyEmbedPersist *persist);
 
 	/* Methods */
 

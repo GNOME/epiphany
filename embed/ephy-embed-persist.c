@@ -63,9 +63,9 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_embed_persist_get_type (void)
 {
-       static GType ephy_embed_persist_type = 0;
+       static GType type = 0;
 
-	if (ephy_embed_persist_type == 0)
+	if (type == 0)
 	{
 		static const GTypeInfo our_info =
 		{
@@ -80,12 +80,12 @@ ephy_embed_persist_get_type (void)
 			(GInstanceInitFunc) ephy_embed_persist_init
 		};
 
-		ephy_embed_persist_type = g_type_register_static (G_TYPE_OBJECT,
-								  "EphyEmbedPersist",
-								  &our_info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT,
+					       "EphyEmbedPersist",
+					       &our_info, 0);
 	}
 
-	return ephy_embed_persist_type;
+	return type;
 }
 
 void
@@ -345,6 +345,14 @@ ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 		      G_OBJECT_CLASS_TYPE (object_class),
 		      G_SIGNAL_RUN_LAST,
 		      G_STRUCT_OFFSET (EphyEmbedPersistClass, completed),
+		      NULL, NULL,
+		      g_cclosure_marshal_VOID__VOID,
+		      G_TYPE_NONE,
+		      0);
+	g_signal_new ("cancelled",
+		      G_OBJECT_CLASS_TYPE (object_class),
+		      G_SIGNAL_RUN_LAST,
+		      G_STRUCT_OFFSET (EphyEmbedPersistClass, cancelled),
 		      NULL, NULL,
 		      g_cclosure_marshal_VOID__VOID,
 		      G_TYPE_NONE,
