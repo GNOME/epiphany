@@ -53,10 +53,10 @@ NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIW
 	nsresult rv = NS_ERROR_ABORT;
 
 	GtkWidget *gtkParent = MozillaFindGtkParent(parent);
-	if (!gtkParent) return NS_ERROR_ABORT;
+	NS_ENSURE_TRUE (gtkParent, NS_ERROR_FAILURE);
 
 	EphyEmbed *embed = EPHY_EMBED (MozillaFindEmbed (parent));
-	if (!embed) return NS_ERROR_ABORT;
+	NS_ENSURE_TRUE (embed, NS_ERROR_FAILURE);
 
 	dialog = ephy_print_dialog_new (gtkParent, embed, TRUE);
 	ephy_dialog_set_modal (dialog, TRUE);
