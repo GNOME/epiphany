@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright (C) 2002  Ricardo Fernández Pascual
  *  Copyright (C) 2003  Marco Pesenti Gritti
@@ -40,7 +41,7 @@ struct _EphyLocationEntryPrivate
 	GtkWidget *entry;
 	char *before_completion;
 	gboolean user_changed;
-	gboolean activation_mode;
+	GtkWidget *shown_widget;
 
 	guint text_col;
 	guint action_col;
@@ -153,15 +154,10 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 static void
 ephy_location_entry_activation_finished (EphyLocationEntry *entry)
 {
-	if (entry->priv->activation_mode)
+	if (entry->priv->shown_widget)
 	{
-		GtkWidget *toolbar;
-
-		entry->priv->activation_mode = FALSE;
-
-		toolbar = gtk_widget_get_ancestor (GTK_WIDGET (entry),
-						   GTK_TYPE_TOOLBAR);
-		gtk_widget_hide (toolbar);
+		gtk_widget_hide (entry->priv->shown_widget);
+		entry->priv->shown_widget = NULL;
 	}
 }
 
@@ -309,7 +305,7 @@ ephy_location_entry_init (EphyLocationEntry *le)
 	le->priv = p;
 
 	p->user_changed = TRUE;
-	p->activation_mode = FALSE;
+	p->shown_widget = NULL;
 
 	ephy_location_entry_construct_contents (le);
 
@@ -407,15 +403,16 @@ ephy_location_entry_get_location (EphyLocationEntry *le)
 void
 ephy_location_entry_activate (EphyLocationEntry *le)
 {
-	GtkWidget *toplevel, *toolbar;
+	GtkWidget *toplevel, *widget;
 
-	toolbar = gtk_widget_get_ancestor (GTK_WIDGET (le), GTK_TYPE_TOOLBAR);
-
-	if (!GTK_WIDGET_VISIBLE (toolbar))
+	for (widget = GTK_WIDGET (le); widget != NULL; widget = widget->parent)
 	{
-		le->priv->activation_mode = TRUE;
-
-		gtk_widget_show (toolbar);
+		if (!GTK_WIDGET_VISIBLE (widget))
+		{
+			le->priv->shown_widget = widget;
+			gtk_widget_show (le->priv->shown_widget);
+			break;
+		}
 	}
 
 	toplevel = gtk_widget_get_toplevel (le->priv->entry);

@@ -432,15 +432,6 @@ ephy_shell_startup (EphyShell *shell,
 }
 
 static void
-delete_files (GList *l)
-{
-	for (; l != NULL; l = l->next)
-	{
-		unlink (l->data);
-	}
-}
-
-static void
 ephy_shell_finalize (GObject *object)
 {
 	EphyShell *shell = EPHY_SHELL (object);
@@ -455,10 +446,6 @@ ephy_shell_finalize (GObject *object)
 	/* this will unload the extensions */
 	LOG ("Unref extension manager")
 	g_object_unref (shell->priv->extensions_manager);
-
-	delete_files (shell->priv->del_on_exit);
-	g_list_foreach (shell->priv->del_on_exit, (GFunc)g_free, NULL);
-	g_list_free (shell->priv->del_on_exit);
 
 	LOG ("Unref toolbars model")
 	if (shell->priv->toolbars_model)
@@ -835,11 +822,4 @@ ephy_shell_get_print_setup_dialog (EphyShell *shell)
 	}
 
 	return shell->priv->print_setup_dialog;
-}
-
-void
-ephy_shell_delete_on_exit (EphyShell *shell, const char *path)
-{
-	shell->priv->del_on_exit = g_list_append (shell->priv->del_on_exit,
-						  g_strdup (path));
 }

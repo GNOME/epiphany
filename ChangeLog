@@ -1,3 +1,19 @@
+2004-01-22  Christopher James Lahey  <clahey@ximian.com>
+
+	* lib/ephy-file-helpers.c, lib/ephy-file-helpers.h
+	(ephy_file_tmp_directory, ephy_file_delete_on_exit): New function
+	to get temp directory and moved ephy_shell_delete_on_exit to here.
+
+	* lib/widgets/ephy-location-entry.c: Changed how this goes about
+	showing itself when hidden and activated.
+
+	* src/ephy-shell.c, src/ephy-shell.h (ephy_shell_delete_on_exit):
+	Moved to ephy_file_delete_on_exit.
+
+	* src/window-commands.c: Changed ephy_shell_delete_on_exit to
+	ephy_file_delete_on_exit.  Used ephy_file_tmp_directory to save
+	source files for viewing in a directory that isn't world readable.
+
 2004-01-22  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* data/epiphany-lockdown.schemas.in:

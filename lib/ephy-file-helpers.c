@@ -35,6 +35,29 @@
 static GHashTable *files = NULL;
 
 static char *dot_dir = NULL;
+static char *tmp_dir = NULL;
+static GList *del_on_exit = NULL;
+
+char *
+ephy_file_tmp_directory (void)
+{
+	if (tmp_dir == NULL)
+	{
+		char *partial_name;
+		char *full_name;
+
+		partial_name = g_strconcat ("epiphany-", g_get_user_name (), "-XXXXXX", NULL);
+		full_name = g_build_filename (g_get_tmp_dir (), partial_name, NULL);
+		tmp_dir = mkdtemp (full_name);
+		g_free(partial_name);
+		if (tmp_dir == NULL)
+		{
+			g_free (full_name);
+		}
+	}
+
+	return tmp_dir;
+}
 
 char *
 ephy_file_tmp_filename (const char *base,
@@ -128,12 +151,32 @@ ephy_file_helpers_init (void)
 				       (GDestroyNotify) g_free);
 }
 
+static void
+delete_files (GList *l)
+{
+	for (; l != NULL; l = l->next)
+	{
+		unlink (l->data);
+	}
+}
+
 void
 ephy_file_helpers_shutdown (void)
 {
 	g_hash_table_destroy (files);
 
+	del_on_exit = g_list_reverse (del_on_exit);
+	delete_files (del_on_exit);
+	g_list_foreach (del_on_exit, (GFunc)g_free, NULL);
+	g_list_free (del_on_exit);
+	del_on_exit = NULL;
+
+	rmdir (tmp_dir);
+	g_free (tmp_dir);
+	tmp_dir = NULL;
+
 	g_free (dot_dir);
+	dot_dir = NULL;
 }
 
 void
@@ -236,4 +279,11 @@ failed:
 	g_free (old_file);
 
 	return retval;
+}
+
+void
+ephy_file_delete_on_exit (const char *path)
+{
+	del_on_exit = g_list_prepend (del_on_exit,
+				      g_strdup (path));
 }

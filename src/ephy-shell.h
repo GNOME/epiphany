@@ -136,9 +136,6 @@ GObject        *ephy_shell_get_prefs_dialog		(EphyShell *shell);
 
 GObject	       *ephy_shell_get_print_setup_dialog	(EphyShell *shell);
 
-void		ephy_shell_delete_on_exit		(EphyShell *shell,
-							 const char *path);
-
 G_END_DECLS
 
 #endif

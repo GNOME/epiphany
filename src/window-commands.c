@@ -689,7 +689,7 @@ save_source_completed_cb (EphyEmbedPersist *persist)
 	dest = ephy_embed_persist_get_dest (persist);
 	g_return_if_fail (dest != NULL);
 
-	ephy_shell_delete_on_exit (ephy_shell, dest);
+	ephy_file_delete_on_exit (dest);
 
 	editor_open_uri (dest);
 }
@@ -737,9 +737,20 @@ save_temp_source (EphyEmbed *embed)
 	char *tmp, *base;
 	EphyEmbedPersist *persist;
 
-	base = g_build_filename (g_get_tmp_dir (), "viewsourceXXXXXX", NULL);
+	char *static_temp_dir;
+
+	static_temp_dir = ephy_file_tmp_directory ();
+	if (static_temp_dir == NULL)
+	{
+		return;
+	}
+	base = g_build_filename (static_temp_dir, "viewsourceXXXXXX", NULL);
 	tmp = ephy_file_tmp_filename (base, "html");
 	g_free (base);
+	if (tmp == NULL)
+	{
+		return;
+	}
 
 	persist = EPHY_EMBED_PERSIST
 		(ephy_embed_factory_new_object ("EphyEmbedPersist"));

@@ -34,17 +34,20 @@ void        ephy_file_helpers_init       (void);
 
 void        ephy_file_helpers_shutdown   (void);
 
+char       *ephy_file_tmp_directory	 (void);
 char       *ephy_file_tmp_filename	 (const char *base,
 					  const char *extension);
 
 void	    ephy_ensure_dir_exists       (const char *dir);
 
 GSList     *ephy_file_find               (const char *path,
-	                                  const char *fname,
-	                                  gint maxdepth);
+				          const char *fname,
+				          gint maxdepth);
 
 gboolean    ephy_file_switch_temp_file   (const char *filename,
 					  const char *filename_temp);
+
+void	    ephy_file_delete_on_exit	 (const char *path);
 
 G_END_DECLS
 
