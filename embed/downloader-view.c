@@ -319,6 +319,7 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 			    -1);
 	gtk_tree_path_free (path);
 
+	g_free (cur_progress);
 	g_free (file);
 	g_free (remaining);
 }
