@@ -142,10 +142,14 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 		BuildDownloadPath (filename, _retval);
 		g_free (filename);
 
+		gtk_widget_destroy (GTK_WIDGET (dialog));
+
 		return NS_OK;
 	}
 	else
 	{
+		gtk_widget_destroy (GTK_WIDGET (dialog));
+
 		return NS_ERROR_FAILURE;
 	}
 }
