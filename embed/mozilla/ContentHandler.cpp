@@ -250,7 +250,7 @@ NS_METHOD GContentHandler::Init (void)
 	return NS_OK;
 }
 
-NS_METHOD GContentHandler::MIMEConfirmAction ()
+NS_METHOD GContentHandler::MIMEConfirmAction (PRBool autoDownload)
 {
 	GtkWidget *dialog;
 	GtkWidget *hbox, *vbox, *label, *image;
@@ -278,7 +278,9 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
 			    TRUE, TRUE, 0);
 
-	if (mPermission != EPHY_MIME_PERMISSION_SAFE)
+	g_print ("AAA %d %p", mPermission, mHelperApp);
+
+	if (mPermission == EPHY_MIME_PERMISSION_UNSAFE && mHelperApp)
 	{
 		text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
 					_("Download the unsafe file?"),
@@ -287,7 +289,7 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 					  "It's not safe to open it directly. You "
 					  "can save it instead."));
 	}
-	else if (mAction == CONTENT_ACTION_OPEN)
+	else if (mAction == CONTENT_ACTION_OPEN && !autoDownload)
 	{
 		text = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s",
 					_("Open the file in another application?"),
@@ -352,23 +354,30 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	CheckAppSupportScheme ();
 	mPermission = ephy_embed_shell_check_mime (embed_shell, mMimeType);
 
-	mAction = CONTENT_ACTION_OPEN;
+	if (auto_downloads)
+	{
+		mAction = CONTENT_ACTION_OPEN;
+	}
+	else
+	{
+		mAction = CONTENT_ACTION_OPEN_TMP;
+	}
 
-	if (mPermission != EPHY_MIME_PERMISSION_SAFE)
+	if (!mHelperApp || mPermission == EPHY_MIME_PERMISSION_UNSAFE)
 	{
 		mAction = CONTENT_ACTION_DOWNLOAD;
 	}
 
-	if (!auto_downloads)
+	if (!auto_downloads || mAction == CONTENT_ACTION_DOWNLOAD)
 	{
-		MIMEConfirmAction ();
+		MIMEConfirmAction (auto_downloads);
 	}
 
 	nsCOMPtr<nsIMIMEInfo> mimeInfo;
 	mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
 	NS_ENSURE_TRUE (mimeInfo, NS_ERROR_FAILURE);
 
-	if (mAction == CONTENT_ACTION_OPEN && auto_downloads)
+	if (mAction == CONTENT_ACTION_OPEN)
 	{
 		/* HACK we use the application description to ask
 		   MozDownload to open the file when download
@@ -387,9 +396,16 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 		{
 			LaunchHelperApp ();
 		}
-		else if (auto_downloads)
+		else
 		{
 			mLauncher->SaveToDisk (nsnull, PR_FALSE);
+		}
+	}
+	else if (mAction == CONTENT_ACTION_OPEN_TMP)
+	{
+		if (mAppSupportScheme)
+		{
+			LaunchHelperApp ();
 		}
 		else
 		{

@@ -43,6 +43,7 @@
 typedef enum
 {
 	CONTENT_ACTION_OPEN,
+	CONTENT_ACTION_OPEN_TMP,
 	CONTENT_ACTION_DOWNLOAD,
 	CONTENT_ACTION_SAVEAS,
 	CONTENT_ACTION_NONE
@@ -72,7 +73,7 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	NS_METHOD Init ();
 	NS_METHOD LaunchHelperApp ();
 
-	NS_METHOD MIMEConfirmAction ();
+	NS_METHOD MIMEConfirmAction (PRBool autoDownload);
 	NS_METHOD MIMEDoAction ();
 	NS_METHOD CheckAppSupportScheme ();
 
