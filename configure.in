@@ -163,7 +163,7 @@ AC_ARG_WITH(mozilla-snapshot,
 AC_MSG_RESULT($MOZILLA_VERSION$autodetect)
 
 dnl Test for the "trunk" version
-if test $MOZILLA_VERSION == "trunk"; then
+if test $MOZILLA_VERSION = "trunk"; then
 	MOZILLA_VERSION=99.0 # use a high number
 fi
 
@@ -227,7 +227,7 @@ AC_DEFINE_UNQUOTED(MOZILLA_MICRO, $micro, [Define to the Mozilla micro version.]
 if test "$1" -lt 1 -o \( "$1" -eq 1 -a "$2" -lt 7 \) -o \( "$1" -eq 1 -a "$2" -eq 7 -a "$type" -lt 4 \); then
     AC_ERROR([
 *****************************************************************************
-Epiphany can be built using Mozilla 1.7, 1.7 branch, 1.8a1, 1.8a2, or trunk
+Epiphany can be built using Mozilla 1.7, 1.7.x, 1.7 branch, 1.8a2, or trunk
 snapshot, but the version available is $MOZILLA_VERSION.  
 
 When using Mozilla trunk snapshot, a successful build is not guaranteed due 
