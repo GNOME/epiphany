@@ -80,7 +80,6 @@ struct _EggStatusIconPrivate
 
   guint         blinking : 1;
   guint         blink_off : 1;
-  guint         button_down : 1;
 };
 
 static void egg_status_icon_class_init (EggStatusIconClass *klass);
@@ -99,8 +98,6 @@ static void egg_status_icon_get_property (GObject      *object,
 static void     egg_status_icon_size_allocate    (EggStatusIcon  *status_icon,
 						  GtkAllocation  *allocation);
 static gboolean egg_status_icon_button_press     (EggStatusIcon  *status_icon,
-						  GdkEventButton *event);
-static gboolean egg_status_icon_button_release   (EggStatusIcon  *status_icon,
 						  GdkEventButton *event);
 static void     egg_status_icon_disable_blinking (EggStatusIcon  *status_icon);
 static void     egg_status_icon_reset_image_data (EggStatusIcon  *status_icon);
@@ -259,8 +256,6 @@ egg_status_icon_init (EggStatusIcon *status_icon)
 
   g_signal_connect_swapped (status_icon->priv->tray_icon, "button-press-event",
 			    G_CALLBACK (egg_status_icon_button_press), status_icon);
-  g_signal_connect_swapped (status_icon->priv->tray_icon, "button-release-event",
-			    G_CALLBACK (egg_status_icon_button_release), status_icon);
 
   status_icon->priv->image = gtk_image_new ();
   gtk_container_add (GTK_CONTAINER (status_icon->priv->tray_icon),
@@ -563,24 +558,8 @@ static gboolean
 egg_status_icon_button_press (EggStatusIcon  *status_icon,
 			      GdkEventButton *event)
 {
-  if (event->button == 1 &&
-      event->type == GDK_2BUTTON_PRESS &&
-      !status_icon->priv->button_down)
+  if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
     {
-      status_icon->priv->button_down = TRUE;
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
-egg_status_icon_button_release (EggStatusIcon  *status_icon,
-				GdkEventButton *event)
-{
-  if (event->button == 1 && status_icon->priv->button_down)
-    {
-      status_icon->priv->button_down = FALSE;
       emit_activate_signal (status_icon);
       return TRUE;
     }
