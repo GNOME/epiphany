@@ -517,22 +517,44 @@ ephy_shell_new_tab (EphyShell *shell,
 #ifdef ENABLE_NAUTILUS_VIEW
 
 static void
+ephy_nautilus_view_all_controls_dead (void)
+{
+        if (!bonobo_control_life_get_count ())
+	{
+		g_object_unref (G_OBJECT (ephy_shell));
+	}
+}
+
+static void
 ephy_nautilus_view_init_factory (EphyShell *gs)
 {
 	BonoboGenericFactory *ephy_nautilusview_factory;
+	
 	ephy_nautilusview_factory = bonobo_generic_factory_new
 		(EPHY_NAUTILUS_VIEW_OAFIID,
 		 (BonoboFactoryCallback) ephy_nautilus_view_new, gs);
 	if (!BONOBO_IS_GENERIC_FACTORY (ephy_nautilusview_factory))
+	{
 		g_warning ("Couldn't create the factory!");
+		return;
+	}
 
+	bonobo_control_life_set_callback (ephy_nautilus_view_all_controls_dead);
 }
 
 static BonoboObject *
 ephy_nautilus_view_new (BonoboGenericFactory *factory, const char *id,
 			  EphyShell *gs)
 {
-	return ephy_nautilus_view_new_component (gs);
+	EphyNautilusView *view;
+
+	view = EPHY_NAUTILUS_VIEW (
+		ephy_nautilus_view_new_component (gs));
+
+	bonobo_control_life_instrument (
+		nautilus_view_get_bonobo_control (NAUTILUS_VIEW (view)));
+
+	return BONOBO_OBJECT (view);
 }
 
 #endif
