@@ -105,7 +105,7 @@ NS_IMETHODIMP
 EphyContentPolicy::ShouldProcess(PRUint32 aContentType,
 			         nsIURI *aContentLocation,
 			         nsIURI *aRequestingLocation,
-#if MOZILLA_SNAPSHO >= 20
+#if MOZILLA_SNAPSHOT >= 20
 			         nsISupports *aContext,
 #else
 			         nsIDOMNode *aRequestingNode,
