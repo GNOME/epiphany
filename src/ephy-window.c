@@ -501,6 +501,8 @@ sync_chromes_visibility (EphyWindow *window)
 	GtkWidget *menubar;
 	gboolean show_statusbar, show_menubar, show_toolbar, show_bookmarksbar;
 
+	if (priv->closing) return;
+
 	get_chromes_visibility (window, &show_menubar,
 				&show_statusbar, &show_toolbar,
 				&show_bookmarksbar);
