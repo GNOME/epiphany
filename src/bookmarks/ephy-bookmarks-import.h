@@ -25,6 +25,7 @@ G_BEGIN_DECLS
 
 #define MOZILLA_BOOKMARKS_DIR	".mozilla"
 #define FIREBIRD_BOOKMARKS_DIR	".phoenix"
+#define FIREFOX_BOOKMARKS_DIR   ".firefox"
 #define GALEON_BOOKMARKS_DIR	".galeon"
 #define KDE_BOOKMARKS_DIR	".kde/share/apps/konqueror"
 
