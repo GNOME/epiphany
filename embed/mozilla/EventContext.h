@@ -59,6 +59,7 @@ private:
 				  EphyEmbedEvent *info);
 	nsresult GetCSSBackground (nsIDOMNode *node, nsAutoString& url);
 	nsresult IsPageFramed (nsIDOMNode *node, PRBool *Framed);
+	nsresult CheckLinkScheme (const nsAString &link);
 	nsresult SetIntProperty (const char *name, int value);
 	nsresult SetStringProperty (const char *name, const char *value);
 	nsresult SetStringProperty (const char *name, const nsAString &value);
