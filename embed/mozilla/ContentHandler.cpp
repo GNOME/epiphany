@@ -271,8 +271,9 @@ NS_METHOD GContentHandler::Init (void)
 	mLauncher->GetSource (getter_AddRefs(mUri));
 	NS_ENSURE_TRUE (mUri, NS_ERROR_FAILURE);
 #else
+	PRInt64 TimeDownloadStarted;
 	rv = mLauncher->GetDownloadInfo (getter_AddRefs(mUri),
-					&mTimeDownloadStarted,
+					&TimeDownloadStarted,
 					getter_AddRefs(mTempFile));
 #endif
 	
