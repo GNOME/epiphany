@@ -43,8 +43,6 @@ endif
 epiphany_bin_SOURCES = 				    	\
 	$(ephy_automation_interface_idl_sources) 	\
 	$(nautilus_view_sources)			\
-	appearance-prefs.c				\
-	appearance-prefs.h				\
 	ephy-automation.c				\
 	ephy-automation.h				\
 	ephy-encoding-menu.c				\
@@ -74,8 +72,6 @@ epiphany_bin_SOURCES = 				    	\
 	ephy-toolbars-model.h				\
 	ephy-window.c					\
 	ephy-window.h					\
-	general-prefs.c					\
-	general-prefs.h					\
 	language-editor.c				\
 	language-editor.h				\
 	pdm-dialog.c					\

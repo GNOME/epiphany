@@ -219,23 +219,11 @@ ephy_shell_new_window_cb (EphyEmbedShell *shell,
 {
 	EphyTab *new_tab;
         EphyWindow *window;
-	gboolean open_in_tab;
 
 	g_assert (new_embed != NULL);
 
-	open_in_tab = (chromemask & EMBED_CHROME_OPENASCHROME) ?
-		      FALSE :
-		      eel_gconf_get_boolean (CONF_TABS_TABBED_POPUPS);
-
-	if (open_in_tab)
-	{
-		window = ephy_shell_get_active_window (ephy_shell);
-	}
-	else
-	{
-		window = ephy_window_new ();
-		ephy_window_set_chrome (window, chromemask);
-	}
+	window = ephy_window_new ();
+	ephy_window_set_chrome (window, chromemask);
 
 	new_tab = ephy_tab_new ();
 	ephy_window_add_tab (window, new_tab, EPHY_NOTEBOOK_INSERT_GROUPED, FALSE);

@@ -19,7 +19,8 @@
 #ifndef PREFS_DIALOG_H
 #define PREFS_DIALOG_H
 
-#include <gtk/gtkdialog.h>
+#include "ephy-dialog.h"
+
 #include <glib-object.h>
 #include <glib.h>
 
@@ -34,30 +35,19 @@ typedef struct PrefsDialogClass PrefsDialogClass;
 
 typedef struct PrefsDialogPrivate PrefsDialogPrivate;
 
-typedef enum
-{
-	PREFS_PAGE_GENERAL,
-	PREFS_PAGE_APPEARANCE,
-	PREFS_PAGE_UI,
-	PREFS_PAGE_ADVANCED
-} PrefsPageID;
-
 struct PrefsDialog
 {
-        GtkDialog parent;
+        EphyDialog parent;
         PrefsDialogPrivate *priv;
 };
 
 struct PrefsDialogClass
 {
-        GtkDialogClass parent_class;
+        EphyDialogClass parent_class;
 };
 
 GType         prefs_dialog_get_type           (void);
 
-GtkDialog     *prefs_dialog_new		      (void);
-
-void          prefs_dialog_show_page          (PrefsDialog *pd,
-					       PrefsPageID id);
+EphyDialog   *prefs_dialog_new		      (GtkWidget *parent);
 
 #endif

@@ -633,14 +633,10 @@ void
 window_cmd_edit_prefs (EggAction *action,
 		       EphyWindow *window)
 {
-	GtkDialog *dialog;
+	EphyDialog *dialog;
 
-	dialog = prefs_dialog_new ();
-	prefs_dialog_show_page (PREFS_DIALOG(dialog),
-				PREFS_PAGE_GENERAL);
-	gtk_window_set_transient_for (GTK_WINDOW (dialog),
-				      GTK_WINDOW (window));
-	gtk_widget_show (GTK_WIDGET(dialog));
+	dialog = prefs_dialog_new (GTK_WIDGET (window));
+	ephy_dialog_show (dialog);
 }
 
 static void

@@ -1,5 +1,37 @@
 2003-05-10  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* data/epiphany.schemas.in:
+	* data/glade/prefs-dialog.glade:
+	* lib/ephy-prefs.h:
+	* src/Makefile.am:
+	* src/ephy-shell.c: (ephy_shell_new_window_cb):
+	* src/ephy-tab.c: (ephy_tab_new_window_cb):
+	* src/prefs-dialog.c: (prefs_dialog_get_type), (prefs_dialog_new),
+	(prefs_dialog_show_help), (setup_font_menu), (save_font_menu),
+	(font_entry_changed_cb), (attach_font_signal),
+	(attach_fonts_signals), (size_spinbutton_changed_cb),
+	(attach_size_controls_signals), (setup_size_control),
+	(setup_size_controls), (setup_fonts),
+	(default_charset_menu_changed_cb), (find_charset_in_list_cmp),
+	(create_default_charset_menu), (general_prefs_new_language_menu),
+	(language_menu_changed_cb), (create_language_menu),
+	(set_homepage_entry), (prefs_dialog_init),
+	(prefs_dialog_response_cb),
+	(prefs_clear_disk_cache_button_clicked_cb),
+	(fonts_language_optionmenu_changed_cb),
+	(prefs_homepage_current_button_clicked_cb),
+	(prefs_homepage_blank_button_clicked_cb), (fill_language_editor),
+	(language_dialog_changed_cb),
+	(prefs_language_more_button_clicked_cb):
+	* src/prefs-dialog.h:
+	* src/window-commands.c: (window_cmd_edit_prefs):
+
+	Rework prefs dialog ui a bit. Remove jumpto and tabbed_popups
+	prefs (jumpto is still in the schemas.
+	Remove the crazy page by page separation in the code.
+
+2003-05-10  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* embed/mozilla/mozilla-embed.cpp:
 
 	Share signal emission for all dom mouse events, so

@@ -27,7 +27,6 @@ G_BEGIN_DECLS
 
 /* Interface */
 #define CONF_TABS_TABBED "/apps/epiphany/interface/open_in_tab"
-#define CONF_TABS_TABBED_POPUPS "/apps/epiphany/interface/popups_in_tab"
 #define CONF_TABS_TABBED_AUTOJUMP "/apps/epiphany/interface/jumpto_tab"
 #define CONF_WINDOWS_SHOW_TOOLBARS "/apps/epiphany/interface/show_toolbars"
 #define CONF_WINDOWS_SHOW_BOOKMARKS_BAR "/apps/epiphany/interface/show_bookmarks_bar"
