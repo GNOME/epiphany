@@ -929,7 +929,6 @@ window_cmd_help_about (GtkAction *action,
 {
 	static GtkWidget *about = NULL;
 	GtkWidget** ptr;
-	const char *icon_path;
 	GdkPixbuf *icon = NULL;
 	int size = 48;
 
