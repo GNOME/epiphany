@@ -124,6 +124,7 @@ window_cmd_file_send_to	(EggAction *action,
 	EphyTab *tab;
 	EphyEmbed *embed;
 	char *url;
+	char *embed_location;
 	char *location;
 	char *title;
 
@@ -133,7 +134,10 @@ window_cmd_file_send_to	(EggAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	location = gnome_vfs_escape_string (ephy_tab_get_location (tab));
+	ephy_embed_get_location (embed, TRUE, &embed_location);
+	location = gnome_vfs_escape_string (embed_location);
+	g_free (embed_location);
+
 	if (ephy_embed_get_title (embed, &title) == G_OK)
 	{
 		char *tmp = gnome_vfs_escape_string (title);
@@ -279,13 +283,13 @@ window_cmd_go_bookmarks (EggAction *action,
 
 void
 window_cmd_file_bookmark_page (EggAction *action,
-			      EphyWindow *window)
+			       EphyWindow *window)
 {
 	EphyTab *tab;
 	EphyEmbed *embed;
 	EphyBookmarks *bookmarks;
 	GtkWidget *new_bookmark;
-	const char *location;
+	char *location;
 	const char *icon;
 	char *title = NULL;
 
@@ -295,7 +299,8 @@ window_cmd_file_bookmark_page (EggAction *action,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	location = ephy_tab_get_location (tab);
+	ephy_embed_get_location (embed, TRUE, &location);
+
 	if (ephy_embed_get_title (embed, &title) != G_OK)
 	{
 		title = g_strdup (_("Untitled"));
@@ -317,6 +322,7 @@ window_cmd_file_bookmark_page (EggAction *action,
 	}
 
 	g_free (title);
+	g_free (location);
 }
 
 void

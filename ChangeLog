@@ -1,5 +1,19 @@
 2003-06-20  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* src/ephy-tab.c: (ephy_tab_net_state_cb), (ephy_tab_set_title):
+
+	Set a title on NET_START (nicified url).
+
+	* src/prefs-dialog.c: (prefs_homepage_current_button_clicked_cb):
+	* src/session.c: (save_tab):
+	* src/window-commands.c: (window_cmd_file_send_to),
+	(window_cmd_file_bookmark_page):
+
+	Use embed_get_location when we want the real location, tab can
+	contain user changes.
+
+2003-06-20  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/ephy-favicon-action.c: (each_url_get_data_binder):
 
 	Use the embed url, the tab one can make no sense if the user

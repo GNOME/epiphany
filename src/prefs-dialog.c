@@ -1155,15 +1155,18 @@ prefs_homepage_current_button_clicked_cb (GtkWidget *button,
 					  EphyDialog *dialog)
 {
 	EphyWindow *window;
-	EphyTab *tab;
+	EphyEmbed *embed;
+	char *location;
 
 	window = ephy_shell_get_active_window (ephy_shell);
 	g_return_if_fail (window != NULL);
 
-	tab = ephy_window_get_active_tab (window);
-	g_return_if_fail (tab != NULL);
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (embed != NULL);
 
-	set_homepage_entry (dialog, ephy_tab_get_location (tab));
+	ephy_embed_get_location (embed, TRUE, &location);
+	set_homepage_entry (dialog, location);
+	g_free (location);
 }
 
 void

@@ -744,6 +744,7 @@ ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 			tab->priv->cur_requests = 0;
 			ensure_address (tab, uri);
 
+			ephy_tab_set_title (tab, NULL);
 			ephy_tab_set_load_percent (tab, 0);
 			ephy_tab_set_load_status (tab, TRUE);
 			ephy_tab_update_navigation_flags (tab);
@@ -1104,7 +1105,7 @@ ephy_tab_get_status_message (EphyTab *tab)
 }
 
 #define MAX_LABEL_LENGTH	32
-	
+
 static void
 ephy_tab_set_title (EphyTab *tab, const char *new_title)
 {
@@ -1118,7 +1119,11 @@ ephy_tab_set_title (EphyTab *tab, const char *new_title)
 
 	if (new_title == NULL || new_title[0] == '\0')
 	{
-		uri = gnome_vfs_uri_new (tab->priv->address);
+		char *address;
+
+		ephy_embed_get_location (tab->priv->embed, TRUE, &address);
+		uri = gnome_vfs_uri_new (address);
+
 		if (uri)
 		{
 			title = gnome_vfs_uri_to_string (uri,
@@ -1129,12 +1134,19 @@ ephy_tab_set_title (EphyTab *tab, const char *new_title)
 					GNOME_VFS_URI_HIDE_FRAGMENT_IDENTIFIER);
 			gnome_vfs_uri_unref (uri);
 		}
+		else if (address != NULL)
+		{
+			title = g_strdup (address);
+		}
 
 		if (title == NULL || title[0] == '\0')
 		{
 			g_free (title);
 			title = g_strdup (_("Blank page"));
 		}
+
+
+		g_free (address);
 	}
 	else
 	{

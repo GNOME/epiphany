@@ -445,9 +445,10 @@ save_tab (EphyWindow *window,
 	  xmlNodePtr window_node)
 {
 	EmbedChromeMask chrome;
-	const char *location;
+	char *location;
 	const char *title;
         xmlNodePtr embed_node;
+	EphyEmbed *embed;
 
 	chrome = ephy_window_get_chrome (window);
 
@@ -463,8 +464,10 @@ save_tab (EphyWindow *window,
 	xmlSetProp (embed_node, "title", title);
 
         /* otherwise, use the actual location. */
-	location = ephy_tab_get_location (tab);
+	embed = ephy_tab_get_embed (tab);
+	ephy_embed_get_location (embed, TRUE, &location);
         xmlSetProp (embed_node, "url", location);
+	g_free (location);
 
 	/* insert node into the tree */
 	xmlAddChild (window_node, embed_node);
