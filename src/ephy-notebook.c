@@ -823,11 +823,9 @@ tab_label_style_set_cb (GtkWidget *label,
 static GtkWidget *
 build_tab_label (EphyNotebook *nb, EphyTab *tab)
 {
-	GtkWidget *window, *hbox, *label_hbox, *label_ebox;
+	GtkWidget *hbox, *label_hbox, *label_ebox;
 	GtkWidget *label, *close_button, *image, *spinner, *icon;
 	GtkIconSize close_icon_size;
-
-	window = gtk_widget_get_toplevel (GTK_WIDGET (nb));
 
 	/* set hbox spacing and label padding (see below) so that there's an
 	 * equal amount of space around the label */
