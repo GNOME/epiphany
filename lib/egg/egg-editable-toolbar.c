@@ -1081,6 +1081,7 @@ egg_editable_toolbar_set_fixed (EggEditableToolbar *etoolbar,
   etoolbar->priv->fixed_toolbar = gtk_toolbar_new ();
   gtk_toolbar_set_show_arrow (GTK_TOOLBAR (etoolbar->priv->fixed_toolbar), FALSE);
   g_object_ref (etoolbar->priv->fixed_toolbar);
+  gtk_object_sink (GTK_OBJECT (etoolbar->priv->fixed_toolbar));
 
   fixed_item = GTK_WIDGET (gtk_tool_item_new ());
   gtk_toolbar_insert (GTK_TOOLBAR (etoolbar->priv->fixed_toolbar),
