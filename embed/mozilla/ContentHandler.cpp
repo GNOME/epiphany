@@ -324,7 +324,16 @@ NS_METHOD GContentHandler::MIMEConfirmAction ()
 	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
 	gtk_widget_show (label);
 
-	mAction = (ContentAction) gtk_dialog_run (GTK_DIALOG (dialog));
+	response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+	if (response == GTK_RESPONSE_DELETE_EVENT)
+	{
+		mAction = CONTENT_ACTION_NONE;
+	}
+	else
+	{
+		mAction = (ContentAction)response;
+	}
 
 	gtk_widget_destroy (dialog);
 
