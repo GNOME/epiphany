@@ -102,21 +102,12 @@ static GObjectClass *parent_class = NULL;
 enum signalsEnum
 {
 	USER_CHANGED,
+	LOCK_CLICKED,
 	GET_LOCATION,
 	GET_TITLE,
 	LAST_SIGNAL
 };
-static gint signals[LAST_SIGNAL];
-
-enum
-{
-	LOCATION_HISTORY_NODE_ID = 1
-};
-
-enum
-{
-	EPHY_NODE_LOC_HISTORY_PROP_TEXT = 1
-};
+static gint signals[LAST_SIGNAL] = { 0 };
 
 #define MAX_LOC_HISTORY_ITEMS 10
 #define EPHY_LOC_HISTORY_XML_ROOT "ephy_location_history"
@@ -196,6 +187,16 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		G_TYPE_NONE,
 		0,
 		G_TYPE_NONE);
+
+	signals[LOCK_CLICKED] = g_signal_new (
+		"lock-clicked",
+		EPHY_TYPE_LOCATION_ENTRY,
+		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+		G_STRUCT_OFFSET (EphyLocationEntryClass, lock_clicked),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__VOID,
+		G_TYPE_NONE,
+		0);
 
 	signals[GET_LOCATION] = g_signal_new (
 		"get-location", G_OBJECT_CLASS_TYPE (klass),
@@ -475,6 +476,21 @@ favicon_drag_data_get_cb (GtkWidget *widget,
 		time, entry, each_url_get_data_binder);
 }
 
+static gboolean
+lock_button_press_event_cb (GtkWidget *ebox,
+			    GdkEventButton *event,
+			    EphyLocationEntry *entry)
+{
+	if (event->type == GDK_BUTTON_PRESS && event->button == 1 /* left */)
+	{
+		g_signal_emit (entry, signals[LOCK_CLICKED], 0);
+
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 static void
 modify_background (EphyLocationEntry *entry)
 {
@@ -548,11 +564,9 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 
 	priv->lock_ebox = gtk_event_box_new ();
 	gtk_container_set_border_width (GTK_CONTAINER (priv->lock_ebox), 2);
+        gtk_widget_add_events (priv->lock_ebox, GDK_BUTTON_PRESS_MASK);
 	gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->lock_ebox), FALSE);
 	gtk_box_pack_end (GTK_BOX (hbox), priv->lock_ebox, FALSE, FALSE, 2);
-	gtk_drag_source_set (priv->lock_ebox, GDK_BUTTON1_MASK,
-			     url_drag_types, n_url_drag_types,
-			     GDK_ACTION_COPY);
 
 	//priv->lock = gtk_image_new ();
 	priv->lock = gtk_image_new_from_stock (GTK_STOCK_QUIT, GTK_ICON_SIZE_MENU);
@@ -578,6 +592,8 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 			  G_CALLBACK (entry_drag_motion_cb), entry);
 	g_signal_connect (priv->entry, "drag_drop",
 			  G_CALLBACK (entry_drag_drop_cb), entry);
+        g_signal_connect (priv->lock_ebox, "button-press-event",
+                          G_CALLBACK (lock_button_press_event_cb), entry);
 }
 
 static void

@@ -72,6 +72,13 @@ enum
 	PROP_WINDOW
 };
 
+enum
+{
+	LOCK_CLICKED,
+	LAST_SIGNAL
+};
+static guint signals[LAST_SIGNAL] = { 0 };
+
 static GObjectClass *parent_class = NULL;
 
 GType
@@ -159,6 +166,13 @@ user_changed_cb (GtkWidget *proxy, EphyLocationAction *action)
 	g_signal_handlers_block_by_func (action, G_CALLBACK (sync_address), proxy);
 	ephy_location_action_set_address (action, address);
 	g_signal_handlers_unblock_by_func (action, G_CALLBACK (sync_address), proxy);
+}
+
+static void
+lock_clicked_cb (GtkWidget *proxy,
+		 EphyLocationAction *action)
+{
+	g_signal_emit (action, signals[LOCK_CLICKED], 0);
 }
 
 static void
@@ -362,6 +376,8 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 					 action, 0);
 		g_signal_connect_object (proxy, "user_changed",
 					 G_CALLBACK (user_changed_cb), action, 0);
+		g_signal_connect_object (proxy, "lock-clicked",
+					 G_CALLBACK (lock_clicked_cb), action, 0);
 		g_signal_connect_object (proxy, "get-location",
 					 G_CALLBACK (get_location_cb), action, 0);
 		g_signal_connect_object (proxy, "get-title",
@@ -478,6 +494,16 @@ ephy_location_action_class_init (EphyLocationActionClass *class)
 	action_class->toolbar_item_type = EPHY_TYPE_LOCATION_ENTRY;
 	action_class->connect_proxy = connect_proxy;
 	action_class->disconnect_proxy = disconnect_proxy;
+
+	signals[LOCK_CLICKED] = g_signal_new (
+		"lock-clicked",
+		EPHY_TYPE_LOCATION_ACTION,
+		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+		G_STRUCT_OFFSET (EphyLocationActionClass, lock_clicked),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__VOID,
+		G_TYPE_NONE,
+		0);
 
 	g_object_class_install_property (object_class,
 					 PROP_ADDRESS,

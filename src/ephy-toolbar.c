@@ -253,6 +253,13 @@ sync_user_input_cb (EphyLocationAction *action,
 }
 
 static void
+lock_clicked_cb (EphyLocationAction *action,
+		 EphyToolbar *toolbar)
+{
+	g_signal_emit (toolbar, signals[LOCK_CLICKED], 0);
+}
+
+static void
 zoom_to_level_cb (GtkAction *action,
 		  float zoom,
 		  EphyToolbar *toolbar)
@@ -357,6 +364,8 @@ ephy_toolbar_set_window (EphyToolbar *toolbar,
 				  G_CALLBACK (ephy_link_open), toolbar);
 	g_signal_connect (action, "notify::address",
 			  G_CALLBACK (sync_user_input_cb), toolbar);
+	g_signal_connect (action, "lock-clicked",
+			  G_CALLBACK (lock_clicked_cb), toolbar);
 	gtk_action_group_add_action (priv->action_group, action);
 	update_location_editable (toolbar);
 	g_object_unref (action);

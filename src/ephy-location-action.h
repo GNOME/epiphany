@@ -47,6 +47,9 @@ struct _EphyLocationAction
 struct _EphyLocationActionClass
 {
 	EphyLinkActionClass parent_class;
+
+	/* Signals */
+	void (* lock_clicked)	(EphyLocationAction *action);
 };
 
 GType		ephy_location_action_get_type		(void);
