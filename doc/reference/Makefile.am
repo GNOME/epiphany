@@ -99,7 +99,6 @@ IGNORE_HFILES = \
 	mozilla-notifiers.h \
 	MozillaPrivate.h \
 	MozRegisterComponents.h \
-	nsUnicharUtils.h \
 	PrintingPromptService.h \
 	egg-editable-toolbar.h \
 	eggintl.h \
