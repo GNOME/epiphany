@@ -1,5 +1,16 @@
 2003-07-03  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmark-toolitem.h:
+	* src/bookmarks/ephy-bookmark-toolitem.c:
+	* src/bookmarks/ephy-bookmark-action.c: (create_tool_item),
+	(ephy_bookmark_action_sync_label), (activate_cb), (create_menu_proxy),
+	(connect_proxy), (ephy_bookmark_action_class_init):
+
+	Moved bookmark tool item creation back to ephy-bookmark-action.c,
+	For smart bookmarks, don't append ':' in the toolbar overflow menu.
+
+2003-07-03  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/ephy-node.c: (callback), (ephy_node_emit_signal):
 
 	Don't try to assign va_list to a gpointer var. Fixes bug #116131.

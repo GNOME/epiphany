@@ -32,8 +32,6 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-bookmarks-menu.h		\
 	ephy-bookmark-properties.c	\
 	ephy-bookmark-properties.h	\
-	ephy-bookmark-toolitem.c	\
-	ephy-bookmark-toolitem.h	\
 	ephy-new-bookmark.c		\
 	ephy-new-bookmark.h		\
 	ephy-topic-action.c		\
