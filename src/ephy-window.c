@@ -366,7 +366,7 @@ static const struct
 	const char *name;
 	guint keyval;
 	GCallback callback;
-} const multimedia_actions [] = {
+} xf_key_actions [] = {
 	{ "XFKeyHomePage", 	XF86XK_HomePage,	G_CALLBACK (window_cmd_go_home ) },
 	{ "XFKeyBack",		XF86XK_Back,		G_CALLBACK (window_cmd_go_back ) },
 	{ "XFKeyForward",	XF86XK_Forward,		G_CALLBACK (window_cmd_go_forward ) },
@@ -1110,17 +1110,17 @@ setup_multimedia_key_actions (EphyWindow *window)
 
 	agname = gtk_action_group_get_name (action_group);
 
-	for (i = 0; i < G_N_ELEMENTS (multimedia_actions); i++)
+	for (i = 0; i < G_N_ELEMENTS (xf_key_actions); i++)
 	{
-		name = multimedia_actions[i].name;
+		name = xf_key_actions[i].name;
 
 		action = g_object_new (GTK_TYPE_ACTION, "name", name, NULL);
 		g_signal_connect (action, "activate",
-				  multimedia_actions[i].callback, window);
+				  xf_key_actions[i].callback, window);
 
 		accel_path = g_strconcat ("<Actions>/", agname, "/", name, NULL);
 		gtk_action_set_accel_path (action, accel_path);
-		gtk_accel_map_add_entry (accel_path, multimedia_actions[i].keyval, 0);
+		gtk_accel_map_add_entry (accel_path, xf_key_actions[i].keyval, 0);
 		gtk_action_group_add_action (action_group, action);
 		g_free (accel_path);
 	}
