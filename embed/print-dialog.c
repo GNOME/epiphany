@@ -19,7 +19,10 @@
  */
 
 #include "print-dialog.h"
+
 #include "ephy-prefs.h"
+
+#include <gtk/gtktogglebutton.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkstock.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
@@ -83,7 +86,8 @@ enum
 	FROM_PROP,
 	COLOR_PROP,
 	ORIENTATION_PROP,
-	PREVIEW_PROP
+	PREVIEW_PROP,
+	SELECTION_PROP
 };
 
 enum
@@ -114,6 +118,7 @@ EphyDialogProperty properties [] =
 	{ COLOR_PROP, "print_color_radiobutton", CONF_PRINT_COLOR, PT_NORMAL, NULL },
 	{ ORIENTATION_PROP, "orient_p_radiobutton", CONF_PRINT_ORIENTATION, PT_NORMAL, NULL },
 	{ PREVIEW_PROP, "preview_button", NULL, PT_NORMAL, NULL },
+	{ SELECTION_PROP, "selection_radiobutton", NULL, PT_NORMAL, NULL},
 
 	{ -1, NULL, NULL }
 };
@@ -157,13 +162,54 @@ print_dialog_get_type (void)
 }
 
 static void
+impl_show (EphyDialog *dialog)
+{
+	PrintDialog *print_dialog = PRINT_DIALOG (dialog);
+	EphyEmbed *embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
+
+	EPHY_DIALOG_CLASS (parent_class)->show (dialog);
+
+	if (print_dialog->only_collect_info)
+	{
+		GtkWidget *button;
+
+		/* disappear preview button  */
+		button = ephy_dialog_get_control (EPHY_DIALOG (dialog),
+						  PREVIEW_PROP);
+		gtk_widget_hide (button);
+	}
+
+	if (ephy_embed_selection_can_copy (embed) != G_OK)
+	{
+		GtkWidget *widget;
+
+		/* Make selection button disabled */
+		widget = ephy_dialog_get_control (EPHY_DIALOG (dialog),
+						  SELECTION_PROP);
+
+		gtk_widget_set_sensitive (widget, FALSE);
+
+		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+		{
+			GtkWidget *all_pages;
+ 			all_pages = ephy_dialog_get_control (EPHY_DIALOG (dialog),
+							     ALL_PAGES_PROP);
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (all_pages), TRUE);
+		}
+	}
+}
+
+static void
 print_dialog_class_init (PrintDialogClass *klass)
 {
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	EphyDialogClass *dialog_class = EPHY_DIALOG_CLASS (klass);
 
         parent_class = g_type_class_peek_parent (klass);
 
         object_class->finalize = print_dialog_finalize;
+
+	dialog_class->show = impl_show;
 
 	print_dialog_signals[PREVIEW] =
                 g_signal_new ("preview",
@@ -232,15 +278,8 @@ print_dialog_new (EphyEmbed *embed,
 
 	if (ret_info != NULL)
 	{
-		GtkWidget *button;
-
 		dialog->only_collect_info = TRUE;
 		dialog->ret_info = ret_info;
-
-		/* disappear preview button  */
-		button = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-						  PREVIEW_PROP);
-		gtk_widget_hide (button);
 	}
 
 	return EPHY_DIALOG(dialog);
@@ -260,15 +299,8 @@ print_dialog_new_with_parent (GtkWidget *window,
 
 	if (ret_info != NULL)
 	{
-		GtkWidget *button;
-
 		dialog->only_collect_info = TRUE;
 		dialog->ret_info = ret_info;
-
-		/* disappear preview button */
-		button = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-						  PREVIEW_PROP);
-		gtk_widget_hide (button);
 	}
 
 	return EPHY_DIALOG(dialog);
@@ -414,18 +446,17 @@ print_dialog_print (EphyDialog *dialog)
 	{
 		*(PRINT_DIALOG(dialog)->ret_info) = info;
 
+		/* When in collect_info mode the caller owns the reference */
 		return;
 	}
-	else
-	{
-		embed = ephy_embed_dialog_get_embed
-			(EPHY_EMBED_DIALOG(dialog));
-		g_return_if_fail (embed != NULL);
 
-		info->preview = FALSE;
-		ephy_embed_print (embed, info);
-		print_free_info (info);
-	}
+	embed = ephy_embed_dialog_get_embed
+		(EPHY_EMBED_DIALOG(dialog));
+	g_return_if_fail (embed != NULL);
+
+	info->preview = FALSE;
+	ephy_embed_print (embed, info);
+	print_free_info (info);
 
 	g_object_unref (G_OBJECT(dialog));
 }
@@ -440,18 +471,17 @@ print_dialog_preview (EphyDialog *dialog)
 
 	if(PRINT_DIALOG(dialog)->only_collect_info && PRINT_DIALOG(dialog)->ret_info)
 	{
-		*(PRINT_DIALOG(dialog)->ret_info) = info;
+		return;
 	}
-	else
-	{
-		embed = ephy_embed_dialog_get_embed
-			(EPHY_EMBED_DIALOG(dialog));
-		g_return_if_fail (embed != NULL);
 
-		info->preview = TRUE;
-		ephy_embed_print (embed, info);
-		print_free_info (info);
-	}
+	embed = ephy_embed_dialog_get_embed
+			(EPHY_EMBED_DIALOG(dialog));
+	g_return_if_fail (embed != NULL);
+
+	info->preview = TRUE;
+	ephy_embed_print (embed, info);
+	print_free_info (info);
+
 	g_signal_emit (G_OBJECT (dialog), print_dialog_signals[PREVIEW], 0);
 
 	g_object_unref (G_OBJECT(dialog));
@@ -463,6 +493,7 @@ print_cancel_button_cb (GtkWidget *widget,
 {
 	if (PRINT_DIALOG (dialog)->only_collect_info)
 	{
+		/* When in collect_info mode the caller owns the reference */
 		return;
 	}
 
@@ -480,6 +511,5 @@ void
 print_preview_button_cb (GtkWidget *widget,
 		         EphyDialog *dialog)
 {
-	if(!(PRINT_DIALOG(dialog)->only_collect_info))
-		print_dialog_preview (dialog);
+	print_dialog_preview (dialog);
 }
