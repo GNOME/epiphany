@@ -49,6 +49,8 @@ set_folder (EphyBookmarks *bookmarks,
 	}
 
 	ephy_bookmarks_set_keyword (bookmarks, topic, bookmark);
+
+	return topic;
 }
 
 static void
