@@ -941,8 +941,6 @@ static void
 setup_filters (EphyHistoryWindow *editor,
 	       gboolean pages, gboolean sites)
 {
-	GDK_THREADS_ENTER ();
-
 	LOG ("Setup filters for pages %d and sites %d", pages, sites);
 
 	if (pages)
@@ -965,8 +963,6 @@ setup_filters (EphyHistoryWindow *editor,
 
 		ephy_node_filter_done_changing (editor->priv->sites_filter);
 	}
-
-	GDK_THREADS_LEAVE ();
 }
 
 static void

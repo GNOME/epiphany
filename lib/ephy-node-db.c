@@ -49,10 +49,8 @@ struct EphyNodeDbPrivate
 {
 	char *name;
 
-	GMutex *id_factory_lock;
 	long id_factory;
 
-	GStaticRWLock *id_to_node_lock;
 	GPtrArray *id_to_node;
 };
 
@@ -168,12 +166,8 @@ ephy_node_db_init (EphyNodeDb *db)
 	/* id to node */
 	db->priv->id_to_node = g_ptr_array_new ();
 
-	db->priv->id_to_node_lock = g_new0 (GStaticRWLock, 1);
-	g_static_rw_lock_init (db->priv->id_to_node_lock);
-
 	/* id factory */
 	db->priv->id_factory = RESERVED_IDS;
-	db->priv->id_factory_lock = g_mutex_new ();
 }
 
 static void
@@ -188,10 +182,6 @@ ephy_node_db_finalize (GObject *object)
 	}
 
 	g_ptr_array_free (db->priv->id_to_node, FALSE);
-
-	g_static_rw_lock_free (db->priv->id_to_node_lock);
-
-	g_mutex_free (db->priv->id_factory_lock);
 
 	g_free (db->priv->name);
 
@@ -244,11 +234,7 @@ ephy_node_db_get_node_from_id (EphyNodeDb *db, long id)
 {
 	EphyNode *ret = NULL;
 
-	g_static_rw_lock_reader_lock (db->priv->id_to_node_lock);
-
 	ret = node_from_id_real (db, id);
-
-	g_static_rw_lock_reader_unlock (db->priv->id_to_node_lock);
 
 	return ret;
 }
@@ -258,16 +244,12 @@ _ephy_node_db_new_id (EphyNodeDb *db)
 {
 	long ret;
 
-	g_mutex_lock (db->priv->id_factory_lock);
-
 	while (node_from_id_real (db, db->priv->id_factory) != NULL)
 	{
 		db->priv->id_factory++;
 	}
 
 	ret = db->priv->id_factory;
-
-	g_mutex_unlock (db->priv->id_factory_lock);
 
 	return ret;
 }
@@ -277,29 +259,21 @@ _ephy_node_db_add_id (EphyNodeDb *db,
 		      long id,
 		      EphyNode *node)
 {
-	g_static_rw_lock_writer_lock (db->priv->id_to_node_lock);
-
 	/* resize array if needed */
 	if (id >= db->priv->id_to_node->len)
 		g_ptr_array_set_size (db->priv->id_to_node, id + 1);
 
 	g_ptr_array_index (db->priv->id_to_node, id) = node;
-
-	g_static_rw_lock_writer_unlock (db->priv->id_to_node_lock);
 }
 
 void
 _ephy_node_db_remove_id (EphyNodeDb *db,
 			 long id)
 {
-	g_static_rw_lock_writer_lock (db->priv->id_to_node_lock);
-
 	g_ptr_array_index (db->priv->id_to_node, id) = NULL;
 
 	/* reset id factory so we use the freed node id */
 	db->priv->id_factory = RESERVED_IDS;
-
-	g_static_rw_lock_writer_unlock (db->priv->id_to_node_lock);
 }
 
 gboolean
@@ -446,7 +420,6 @@ ephy_node_db_write_to_xml_valist (EphyNodeDb *db,
 				if (ret < 0) break;
 			}
 		}
-		ephy_node_thaw (node);
 		if (ret < 0) break;
 
 		g_slist_free (exceptions);

@@ -153,7 +153,6 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *menu)
 				       name, verb,
 				       GTK_UI_MANAGER_MENUITEM, FALSE);
 	}
-	ephy_node_thaw (fav);
 
 	STOP_PROFILER ("Rebuild favorites menu")
 }

@@ -91,7 +91,6 @@ find_by_name (const char *name)
 			result = kid;
 		}
 	}
-	ephy_node_thaw (states);
 
 	return result;
 }

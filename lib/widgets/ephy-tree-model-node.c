@@ -216,8 +216,6 @@ filter_changed_cb (EphyNodeFilter *filter,
 						g_ptr_array_index (kids, i),
 						i);
 	}
-
-	ephy_node_thaw (model->priv->root);
 }
 
 static void

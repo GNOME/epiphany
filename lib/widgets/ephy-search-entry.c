@@ -100,13 +100,9 @@ ephy_search_entry_class_init (EphySearchEntryClass *klass)
 static gboolean
 ephy_search_entry_timeout_cb (EphySearchEntry *entry)
 {
-	gdk_threads_enter ();
-
 	g_signal_emit (G_OBJECT (entry), ephy_search_entry_signals[SEARCH], 0,
 		       gtk_entry_get_text (GTK_ENTRY (entry)));
 	entry->priv->timeout = 0;
-
-	gdk_threads_leave ();
 
 	return FALSE;
 }

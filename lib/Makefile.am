@@ -32,7 +32,6 @@ NOINST_H_FILES = \
 	ephy-state.h				\
 	ephy-string.h				\
 	ephy-stock-icons.h			\
-	ephy-thread-helpers.h			\
 	ephy-zoom.h
 
 INST_H_FILES = \
@@ -63,7 +62,6 @@ libephymisc_la_SOURCES = \
 	ephy-state.c				\
 	ephy-string.c				\
 	ephy-stock-icons.c			\
-	ephy-thread-helpers.c			\
 	ephy-zoom.c				\
 	$(INST_H_FILES)				\
 	$(NOINST_H_FILES)

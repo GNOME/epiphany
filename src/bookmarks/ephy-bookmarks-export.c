@@ -56,7 +56,6 @@ write_topics_list (EphyNode *topics,
 			keywords = g_list_prepend (keywords, kid);
 		}
 	}
-	ephy_node_thaw (topics);
 
 	for (l = keywords; l != NULL; l = l->next)
 	{
@@ -186,7 +185,6 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 		ret = xmlTextWriterEndElement (writer); /* rdf:li */
 		if (ret < 0) break;
 	}
-	ephy_node_thaw (bmks);
 	if (ret < 0) goto out;
 
 	ret = xmlTextWriterEndElement (writer); /* rdf:Seq */
@@ -262,7 +260,6 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 
 		g_free (link);
 	}
-	ephy_node_thaw (bmks);
 	if (ret < 0) goto out;
 
 	ret = xmlTextWriterEndElement (writer); /* rdf:RDF */

@@ -259,7 +259,6 @@ ephy_encodings_get_encodings (EphyEncodings *encodings,
 			list = g_list_prepend (list, kid);
 		}
 	}
-	ephy_node_thaw (encodings->priv->encodings);
 
 	return list;
 }

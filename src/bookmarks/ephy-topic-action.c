@@ -293,8 +293,6 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 
 		g_list_free (node_list);
 	}
-
-	ephy_node_thaw (node);
 }
 
 static GtkWidget *
@@ -400,7 +398,6 @@ build_topics_menu (EphyTopicAction *action, EphyNode *node)
 		gtk_widget_show (bmk_menu);
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), bmk_menu);
 	}
-	ephy_node_thaw (node);
 	g_list_free (node_list);
 
 	uncategorized = ephy_bookmarks_get_not_categorized (bookmarks);

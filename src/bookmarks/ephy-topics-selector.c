@@ -219,7 +219,6 @@ fill_model (EphyTopicsSelector *editor)
 					    -1);
 		}
 	}
-	ephy_node_thaw (keywords);
 }
 
 static void

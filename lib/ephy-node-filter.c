@@ -356,12 +356,10 @@ ephy_node_filter_expression_evaluate (EphyNodeFilterExpression *exp,
 		
 			if (prop == exp->args.prop_args.second_arg.node)
 			{
-				ephy_node_thaw (node);
 				return TRUE;
 			}
 		}
 		
-		ephy_node_thaw (node);
 		return FALSE;
 	}
 	case EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_CONTAINS:

@@ -22,7 +22,6 @@
 
 #include "ephy-shell.h"
 #include "ephy-file-helpers.h"
-#include "ephy-thread-helpers.h"
 #include "ephy-state.h"
 #include "ephy-debug.h"
 #include "ephy-stock-icons.h"
@@ -153,7 +152,6 @@ main (int argc, char *argv[])
 	gnome_vfs_init ();
 	glade_gnome_init ();
 	ephy_debug_init ();
-	ephy_thread_helpers_init ();
 	ephy_file_helpers_init ();
 	ephy_stock_icons_init ();
 	eel_gconf_monitor_add ("/apps/epiphany/general");
