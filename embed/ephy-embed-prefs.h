@@ -12,6 +12,7 @@
 #define CONF_SECURITY_COOKIES_ACCEPT "/apps/epiphany/web/cookie_accept"
 #define CONF_LANGUAGE_AUTODETECT_ENCODING "/apps/epiphany/web/autodetect_encoding"
 #define CONF_LANGUAGE_DEFAULT_ENCODING "/apps/epiphany/web/default_encoding"
+#define CONF_BROWSE_WITH_CARET "/apps/epiphany/web/browse_with_caret"
 
 /* These are defined gnome wide now */
 #define CONF_NETWORK_PROXY_MODE "/system/proxy/mode"

@@ -151,6 +151,7 @@ conversion_table [] =
 	{ CONF_NETWORK_SOCKS_PROXY_PORT, INT_PREF, "network.proxy.socks_port" },
 	{ CONF_LANGUAGE_DEFAULT_ENCODING, STRING_PREF, "intl.charset.default" },
 	{ CONF_LANGUAGE_AUTODETECT_ENCODING, STRING_PREF, "intl.charset.detector" },
+	{ CONF_BROWSE_WITH_CARET, BOOL_PREF, "accessibility.browsewithcaret" },
 
 	{ NULL, 0, NULL }
 };

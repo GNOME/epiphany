@@ -35,6 +35,7 @@
 #include "ephy-shell.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
+#include "ephy-embed-prefs.h"
 #include "ephy-zoom.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
@@ -240,7 +241,10 @@ static GtkToggleActionEntry ephy_menu_toggle_entries [] =
 	  G_CALLBACK (window_cmd_view_statusbar), TRUE },
 	{ "ViewFullscreen", STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
 	  N_("Browse at full screen"),
-	  G_CALLBACK (window_cmd_view_fullscreen), FALSE}
+	  G_CALLBACK (window_cmd_view_fullscreen), FALSE },
+	{ "BrowseWithCaret", NULL, N_("Selection Caret"), "F7",
+	  "",
+	  G_CALLBACK (window_cmd_browse_with_caret), FALSE }
 };
 static guint ephy_menu_n_toggle_entries = G_N_ELEMENTS (ephy_menu_toggle_entries);
 
@@ -329,6 +333,7 @@ struct EphyWindowPrivate
 	guint show_statusbar_notifier_id;
 	guint hide_menubar_notifier_id;
 	guint disable_save_to_disk_notifier_id;
+	guint browse_with_caret_notifier_id;
 };
 
 enum
@@ -1741,6 +1746,20 @@ actions_notifier (GConfClient *client,
 }
 
 static void
+browse_with_caret_notifier (GConfClient *client,
+			    guint cnxn_id,
+			    GConfEntry *entry,
+			    EphyWindow *window)
+{
+	GtkAction *action;
+
+	action = gtk_action_group_get_action (window->priv->action_group,
+					      "BrowseWithCaret");
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
+				      eel_gconf_get_boolean (CONF_BROWSE_WITH_CARET));
+}
+
+static void
 ephy_window_init (EphyWindow *window)
 {
 	EphyExtension *manager;
@@ -1836,6 +1855,12 @@ ephy_window_init (EphyWindow *window)
 		(CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK,
 		 (GConfClientNotifyFunc)actions_notifier, window);
 
+	/* other notifiers */
+	browse_with_caret_notifier (NULL, 0, NULL, window);
+	window->priv->browse_with_caret_notifier_id = eel_gconf_notification_add
+		(CONF_BROWSE_WITH_CARET,
+		 (GConfClientNotifyFunc)browse_with_caret_notifier, window);
+
 	/* ensure the UI is updated */
 	gtk_ui_manager_ensure_update (GTK_UI_MANAGER (window->ui_merge));
 
@@ -1853,6 +1878,7 @@ ephy_window_finalize (GObject *object)
 	eel_gconf_notification_remove (window->priv->show_statusbar_notifier_id);
 	eel_gconf_notification_remove (window->priv->hide_menubar_notifier_id);
 	eel_gconf_notification_remove (window->priv->disable_save_to_disk_notifier_id);
+	eel_gconf_notification_remove (window->priv->browse_with_caret_notifier_id);
 
 	if (window->priv->find_dialog)
 	{

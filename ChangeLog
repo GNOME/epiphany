@@ -1,3 +1,18 @@
+2004-01-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/epiphany.schemas.in:
+	* data/ui/epiphany-ui.xml:
+	* embed/ephy-embed-prefs.h:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* src/ephy-window.c: (ephy_window_finalize),
+	(browse_with_caret_notifier), (ephy_window_init):
+	* src/pdm-dialog.c: (show_cookies_properties):
+	* src/window-commands.c: (window_cmd_browse_with_caret):
+	* src/window-commands.h:
+
+	Add an accellerator-only action (F7) to toggle caret browsing. Hook
+	up listener to set the mozilla pref, added the gconf key to the schema.
+
 2004-01-09  Roozbeh Pournader  <roozbeh@sharif.edu>
 
 	* lib/ephy-state.c: Fixed a logic error in using & instead of &&

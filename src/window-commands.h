@@ -172,3 +172,5 @@ void window_cmd_tabs_detach     (GtkAction *action,
 void window_cmd_load_location   (GtkAction *action,
 				 EphyWindow *window);
 
+void window_cmd_browse_with_caret (GtkAction *action,
+				   EphyWindow *window);

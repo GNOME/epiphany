@@ -31,6 +31,7 @@
 #include "print-dialog.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
+#include "ephy-embed-prefs.h"
 #include "ephy-dialog.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-history-window.h"
@@ -1105,3 +1106,12 @@ window_cmd_load_location (GtkAction *action,
 	}
 }
 
+void
+window_cmd_browse_with_caret (GtkAction *action,
+			      EphyWindow *window)
+{
+	gboolean active;
+
+	active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
+	eel_gconf_set_boolean (CONF_BROWSE_WITH_CARET, active);
+}
