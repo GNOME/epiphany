@@ -1,3 +1,10 @@
+2004-08-02  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-main.c: (main):
+
+	Move g_set_application_name() call after gnome_program_init(),
+	so that i18n works correctly. Fixes bug #148948.
+
 2004-08-01  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/EphyBrowser.cpp:

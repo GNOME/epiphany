@@ -106,13 +106,14 @@ main (int argc, char *argv[])
 	 */
 	LIBXML_TEST_VERSION
 
-	g_set_application_name (_("Epiphany Web Browser"));
 	program = gnome_program_init (PACKAGE, VERSION,
                                       LIBGNOMEUI_MODULE, argc, argv,
                                       GNOME_PARAM_POPT_TABLE, popt_options,
                                       GNOME_PARAM_HUMAN_READABLE_NAME, _("Ephy"),
 				      GNOME_PARAM_APP_DATADIR, DATADIR,
                                       NULL);
+
+	g_set_application_name (_("Epiphany Web Browser"));
 
         g_object_get_property (G_OBJECT (program),
                                GNOME_PARAM_POPT_CONTEXT,
