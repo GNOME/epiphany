@@ -1146,48 +1146,48 @@ ephy_tab_init (EphyTab *tab)
 	/* set a pointer in the embed's widget back to the tab */
 	g_object_set_data (embed_widget, "ephy-tab", tab);
 
-	g_signal_connect (embed_widget, "parent_set",
-			  G_CALLBACK (ephy_tab_parent_set_cb),
-			  tab);
-	g_signal_connect (embed_widget, "destroy",
-			  G_CALLBACK (ephy_tab_embed_destroy_cb),
-			  tab);
-	g_signal_connect (embed, "link_message",
-			  G_CALLBACK (ephy_tab_link_message_cb),
-			  tab);
-	g_signal_connect (embed, "ge_location",
-			  G_CALLBACK (ephy_tab_address_cb),
-			  tab);
-	g_signal_connect (embed, "title",
-			  G_CALLBACK (ephy_tab_title_cb),
-			  tab);
-	g_signal_connect (embed, "ge_zoom_change",
-			  G_CALLBACK (ephy_tab_zoom_changed_cb),
-			  tab);
-	g_signal_connect (embed, "ge_net_state",
-			  G_CALLBACK (ephy_tab_net_state_cb),
-			  tab);
-	g_signal_connect (embed, "ge_new_window",
-			  G_CALLBACK (ephy_tab_new_window_cb),
-			  tab);
-	g_signal_connect (embed, "visibility",
-			  G_CALLBACK (ephy_tab_visibility_cb),
-			  tab);
-	g_signal_connect (embed, "destroy_browser",
-			  G_CALLBACK (ephy_tab_destroy_brsr_cb),
-			  tab);
-	g_signal_connect (embed, "size_to",
-			  G_CALLBACK (ephy_tab_size_to_cb),
-			  tab);
-	g_signal_connect (embed, "ge_dom_mouse_click",
-			  G_CALLBACK (ephy_tab_dom_mouse_click_cb),
-			  tab);
-	g_signal_connect (embed, "ge_security_change",
-			  G_CALLBACK (ephy_tab_security_change_cb),
-			  tab);
-	g_signal_connect (embed, "ge_favicon",
-			  G_CALLBACK (ephy_tab_favicon_cb),
-			  tab);
+	g_signal_connect_object (embed_widget, "parent_set",
+				 G_CALLBACK (ephy_tab_parent_set_cb),
+				 tab, 0);
+	g_signal_connect_object (embed_widget, "destroy",
+				 G_CALLBACK (ephy_tab_embed_destroy_cb),
+				 tab, 0);
+	g_signal_connect_object (embed, "link_message",
+				 G_CALLBACK (ephy_tab_link_message_cb),
+				 tab, 0);
+	g_signal_connect_object (embed, "ge_location",
+				 G_CALLBACK (ephy_tab_address_cb),
+				 tab, 0);
+	g_signal_connect_object (embed, "title",
+				 G_CALLBACK (ephy_tab_title_cb),
+				 tab, 0);
+	g_signal_connect_object (embed, "ge_zoom_change",
+				 G_CALLBACK (ephy_tab_zoom_changed_cb),
+				 tab, 0);
+	g_signal_connect_object (embed, "ge_net_state",
+				 G_CALLBACK (ephy_tab_net_state_cb),
+				 tab, 0);
+	g_signal_connect_object (embed, "ge_new_window",
+				 G_CALLBACK (ephy_tab_new_window_cb),
+				 tab, 0);
+	g_signal_connect_object (embed, "visibility",
+				 G_CALLBACK (ephy_tab_visibility_cb),
+				 tab, 0);
+	g_signal_connect_object (embed, "destroy_browser",
+				 G_CALLBACK (ephy_tab_destroy_brsr_cb),
+				 tab, 0);
+	g_signal_connect_object (embed, "size_to",
+				 G_CALLBACK (ephy_tab_size_to_cb),
+				 tab, 0);
+	g_signal_connect_object (embed, "ge_dom_mouse_click",
+				 G_CALLBACK (ephy_tab_dom_mouse_click_cb),
+				 tab, 0);
+	g_signal_connect_object (embed, "ge_security_change",
+				 G_CALLBACK (ephy_tab_security_change_cb),
+				 tab, 0);
+	g_signal_connect_object (embed, "ge_favicon",
+				 G_CALLBACK (ephy_tab_favicon_cb),
+				 tab, 0);
 
 	cache = EPHY_FAVICON_CACHE
 		(ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell)));

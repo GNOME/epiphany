@@ -46,64 +46,31 @@ static void	mozilla_embed_init		(MozillaEmbed *gs);
 static void	mozilla_embed_destroy		(GtkObject *object);
 static void	ephy_embed_iface_init		(EphyEmbedIFace *iface);
 
-static void 
-mozilla_embed_connect_signals (MozillaEmbed *membed);
-static void
-mozilla_embed_location_changed_cb (GtkMozEmbed *embed, MozillaEmbed *membed);
-static void
-mozilla_embed_title_changed_cb (GtkMozEmbed *embed, MozillaEmbed *membed);
-static void
-mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
-                                gint state, guint status, MozillaEmbed *membed);
-static void
-mozilla_embed_progress_cb (GtkMozEmbed *embed, const char *aURI,
-                           gint curprogress, gint maxprogress, MozillaEmbed *membed);
-static void
-mozilla_embed_link_message_cb (GtkMozEmbed *embed, MozillaEmbed *membed);
-static void
-mozilla_embed_js_status_cb (GtkMozEmbed *embed, MozillaEmbed *membed);
-static void
-mozilla_embed_visibility_cb (GtkMozEmbed *embed, gboolean visibility, MozillaEmbed *membed);
-static gint
-mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event, MozillaEmbed *membed);
-static gint
-mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event, 
-				 MozillaEmbed *membed);
-static void
-mozilla_embed_size_to_cb (GtkMozEmbed *embed, gint width, gint height, MozillaEmbed *membed);
-static void
-mozilla_embed_new_window_cb (GtkMozEmbed *embed, 
-			     GtkMozEmbed **newEmbed,
-                             guint chromemask, MozillaEmbed *membed);
-static void
-mozilla_embed_security_change_cb (GtkMozEmbed *embed, 
-				  gpointer request,
-                                  guint state, MozillaEmbed *membed);
-static EmbedSecurityLevel
-mozilla_embed_security_level (MozillaEmbed *membed);
-static gint
-mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
-		               MozillaEmbed *membed);
-
-/* signals to connect on each embed widget */
-static const struct
-{ 
-	char *event; 
-        void *func; /* should be a GtkSignalFunc or similar */
-}
-signal_connections[] =
-{
-	{ "location",        (void *) mozilla_embed_location_changed_cb  },
-        { "net_state_all",   (void *) mozilla_embed_net_state_all_cb     },
-        { "dom_mouse_click", (void *) mozilla_embed_dom_mouse_click_cb   },
-	{ "dom_mouse_down",  (void *) mozilla_embed_dom_mouse_down_cb    },
-        { "new_window",      (void *) mozilla_embed_new_window_cb        },
-        { "security_change", (void *) mozilla_embed_security_change_cb   },
-	{ "dom_key_down",    (void *) mozilla_embed_dom_key_down_cb      },
-
-        /* terminator -- must be last in the list! */
-        { NULL, NULL } 
-};
+static void mozilla_embed_connect_signals	(MozillaEmbed *membed);
+static void mozilla_embed_location_changed_cb	(GtkMozEmbed *embed,
+						 MozillaEmbed *membed);
+static void mozilla_embed_net_state_all_cb	(GtkMozEmbed *embed,
+						 const char *aURI,
+						 gint state,
+						 guint status,
+						 MozillaEmbed *membed);
+static gint mozilla_embed_dom_key_down_cb	(GtkMozEmbed *embed,
+						 gpointer dom_event,
+						 MozillaEmbed *membed);
+static gint mozilla_embed_dom_mouse_click_cb	(GtkMozEmbed *embed,
+						 gpointer dom_event,
+						 MozillaEmbed *membed);
+static gint mozilla_embed_dom_mouse_down_cb	(GtkMozEmbed *embed,
+						 gpointer dom_event, 
+						 MozillaEmbed *membed);
+static void mozilla_embed_new_window_cb		(GtkMozEmbed *embed, 
+						 GtkMozEmbed **newEmbed,
+						 guint chromemask,
+						 MozillaEmbed *membed);
+static void mozilla_embed_security_change_cb	(GtkMozEmbed *embed, 
+						 gpointer request,
+						 guint state, MozillaEmbed *membed);
+static EmbedSecurityLevel mozilla_embed_security_level (MozillaEmbed *membed);
 
 #define MOZILLA_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), MOZILLA_TYPE_EMBED, MozillaEmbedPrivate))
 
@@ -296,19 +263,27 @@ _mozilla_embed_get_ephy_browser (MozillaEmbed *embed)
 static void 
 mozilla_embed_connect_signals (MozillaEmbed *embed)
 {
-        gint i;
-	EphyEmbed *gembed;
-
-	gembed = EPHY_EMBED (embed);
-	       
-        /* connect signals */
-        for (i = 0; signal_connections[i].event != NULL; i++)
-        {
-                g_signal_connect (G_OBJECT (embed),
-                                  signal_connections[i].event,
-                                  G_CALLBACK (signal_connections[i].func), 
-                                  embed);
-        }
+	g_signal_connect_object (G_OBJECT (embed), "location",
+				 G_CALLBACK (mozilla_embed_location_changed_cb),
+				 embed, (GConnectFlags) 0);
+	g_signal_connect_object (G_OBJECT (embed), "net_state_all",
+				 G_CALLBACK (mozilla_embed_net_state_all_cb),
+				 embed, (GConnectFlags) 0);
+	g_signal_connect_object (G_OBJECT (embed), "dom_mouse_click",
+				 G_CALLBACK (mozilla_embed_dom_mouse_click_cb),
+				 embed, (GConnectFlags) 0);
+	g_signal_connect_object (G_OBJECT (embed), "dom_mouse_down",
+				 G_CALLBACK (mozilla_embed_dom_mouse_down_cb),
+				 embed, (GConnectFlags) 0);
+	g_signal_connect_object (G_OBJECT (embed), "new_window",
+				 G_CALLBACK (mozilla_embed_new_window_cb),
+				 embed, (GConnectFlags) 0);
+	g_signal_connect_object (G_OBJECT (embed), "security_change",
+				 G_CALLBACK (mozilla_embed_security_change_cb),
+				 embed, (GConnectFlags) 0);
+	g_signal_connect_object (G_OBJECT (embed), "dom_key_down",
+				 G_CALLBACK (mozilla_embed_dom_key_down_cb),
+				 embed, (GConnectFlags) 0);
 }
 
 static void
@@ -316,14 +291,6 @@ mozilla_embed_destroy (GtkObject *object)
 {
 	MozillaEmbed *embed = MOZILLA_EMBED (object);
 	int i;
-	
-	for (i = 0; signal_connections[i].event != NULL; i++)
-        {
-                g_signal_handlers_disconnect_by_func
-			(G_OBJECT (object),
-                         (gpointer)signal_connections[i].func,
-                         (void *)object);
-        }
 
 	if (embed->priv->browser)
 	{
@@ -1154,7 +1121,7 @@ xul_visibility_cb (GtkWidget *embed, gboolean visibility, GtkWidget *window)
 }
 
 void
-xul_size_to_cb (GtkWidget *embed, gint width, gint height)
+xul_size_to_cb (GtkWidget *embed, gint width, gint height, gpointer dummy)
 {
 	gtk_widget_set_size_request (embed, width, height);
 }
@@ -1169,12 +1136,15 @@ _mozilla_embed_new_xul_dialog (void)
 	gtk_widget_show (embed);
 	gtk_container_add (GTK_CONTAINER (window), embed);
 
-	g_signal_connect_swapped (embed, "destroy_browser",
-				  G_CALLBACK (gtk_widget_destroy), window);
-	g_signal_connect (embed, "visibility",
-			  G_CALLBACK (xul_visibility_cb), window);
-	g_signal_connect (embed, "size_to",
-			  G_CALLBACK (xul_size_to_cb), NULL);
+	g_signal_connect_object (embed, "destroy_browser",
+				 G_CALLBACK (gtk_widget_destroy),
+				 window, G_CONNECT_SWAPPED);
+	g_signal_connect_object (embed, "visibility",
+				 G_CALLBACK (xul_visibility_cb),
+				 window, (GConnectFlags) 0);
+	g_signal_connect_object (embed, "size_to",
+				 G_CALLBACK (xul_size_to_cb),
+				 NULL, (GConnectFlags) 0);
 
 	return GTK_MOZ_EMBED (embed);
 }

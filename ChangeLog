@@ -1,3 +1,12 @@
+2004-01-17  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-tab.c: (ephy_tab_init):
+
+	Use g_signal_connect_object to connect the embed signals,
+	that way they're disconnected before the tab object is
+	finalised. Should fix crasher bug #131635.
+
 2004-01-16    <clahey@ximian.com>
 
 	* data/epiphany-lockdown.schemas.in: Typo fixes.
