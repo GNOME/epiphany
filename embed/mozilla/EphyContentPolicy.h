@@ -27,7 +27,7 @@
 #include "nsISupports.h"
 #include "nsIContentPolicy.h"
 
-#define EPHY_CONTENT_POLICY_CONTRACTID	"@mozilla.org/embedding/browser/content-policy;1"
+#define EPHY_CONTENT_POLICY_CONTRACTID	"@gnome.org/projects/epiphany/epiphany-content-policy;1"
 #define EPHY_CONTENT_POLICY_CLASSNAME	"Epiphany Content Policy Class"
 
 #define EPHY_CONTENT_POLICY_CID				\
