@@ -88,46 +88,6 @@ popup_cmd_link_in_new_tab (GtkAction *action,
 }
 
 void
-popup_cmd_image_in_new_tab (GtkAction *action,
-			    EphyWindow *window)
-{
-	EphyEmbedEvent *info;
-	EphyTab *tab;
-	const GValue *value;
-
-	tab = ephy_window_get_active_tab (window);
-
-	info = get_event_info (window);
-
-	ephy_embed_event_get_property (info, "image", &value);
-
-	ephy_shell_new_tab (ephy_shell, window, tab,
-			    g_value_get_string (value),
-			    EPHY_NEW_TAB_OPEN_PAGE |
-			    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
-}
-
-void
-popup_cmd_image_in_new_window (GtkAction *action,
-			       EphyWindow *window)
-{
-	EphyEmbedEvent *info;
-	EphyTab *tab;
-	const GValue *value;
-
-	tab = ephy_window_get_active_tab (window);
-
-	info = get_event_info (window);
-
-	ephy_embed_event_get_property (info, "image", &value);
-
-	ephy_shell_new_tab (ephy_shell, NULL, tab,
-			    g_value_get_string (value),
-			    EPHY_NEW_TAB_OPEN_PAGE |
-			    EPHY_NEW_TAB_IN_NEW_WINDOW);
-}
-
-void
 popup_cmd_bookmark_link (GtkAction *action,
 			 EphyWindow *window)
 {

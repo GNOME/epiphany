@@ -291,10 +291,6 @@ static GtkActionEntry ephy_popups_entries [] = {
 	/* Images */
 	{ "OpenImage", GTK_STOCK_OPEN, N_("Open _Image"), GTK_STOCK_OPEN,
 	  NULL, G_CALLBACK (popup_cmd_open_image) },
-	{ "OpenImageInNewWindow", NULL, N_("Open Image in New _Window"), NULL,
-	  NULL, G_CALLBACK (popup_cmd_image_in_new_window) },
-	{ "OpenImageInNewTab", NULL, N_("Open Image in New T_ab"), NULL,
-	  NULL, G_CALLBACK (popup_cmd_image_in_new_tab) },
 	{ "SaveImageAs", GTK_STOCK_SAVE_AS, N_("_Save Image As..."), NULL,
 	  NULL, G_CALLBACK (popup_cmd_save_image_as) },
 	{ "SetImageAsBackground", NULL, N_("_Use Image As Background"), NULL,
