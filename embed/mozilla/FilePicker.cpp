@@ -194,8 +194,8 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 	if (filterMask & nsIFilePicker::filterImages)
 	{
 #if MOZILLA_SNAPSHOT < 16
-		AppendFilter (NS_ConvertUTF8toUTF16 (_("Image files")),
-			      NS_LITERAL_STRING ("*.png; *.gif; *.jpeg; *.jpg"));
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("Image files")).get(),
+			      NS_LITERAL_STRING ("*.png; *.gif; *.jpeg; *.jpg").get());
 #else
 		AppendFilter (NS_ConvertUTF8toUTF16 (_("Image files")),
 			      NS_LITERAL_STRING ("*.png; *.gif; *.jpeg; *.jpg"));
@@ -204,8 +204,8 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 	if (filterMask & nsIFilePicker::filterXML)
 	{
 #if MOZILLA_SNAPSHOT < 16
-		AppendFilter (NS_ConvertUTF8toUTF16 (_("XML files")),
-			      NS_LITERAL_STRING ("*.xml"));
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("XML files")).get(),
+			      NS_LITERAL_STRING ("*.xml").get());
 #else
 		AppendFilter (NS_ConvertUTF8toUTF16 (_("XML files")),
 			      NS_LITERAL_STRING ("*.xml"));
