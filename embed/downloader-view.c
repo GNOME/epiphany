@@ -321,7 +321,8 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 	GtkTreePath *path;
 	GtkTreeIter iter;
 	EphyDownloadState state;
-	long total, current, remaining_secs = 0;
+	long remaining_secs = 0;
+	gint64 total, current;
 	char *remaining, *file, *cur_progress, *name;
 	struct tm;
 	int percent = 0;

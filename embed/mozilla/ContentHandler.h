@@ -28,9 +28,9 @@
 
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
-#define MOZILLA_STRICT_API
+#undef MOZILLA_INTERNAL_API
 #include <nsEmbedString.h>
-#undef MOZILLA_STRICT_API
+#define MOZILLA_INTERNAL_API 1
 #include <nsCOMPtr.h>
 #include <nsISupports.h>
 #include <nsIURI.h>

@@ -70,9 +70,9 @@
 #include "nsIDOMWindow2.h"
 #include "nsIDOMDocumentView.h"
 #include "nsIDOMAbstractView.h"
-#define MOZILLA_STRICT_API
+#undef MOZILLA_INTERNAL_API
 #include "nsEmbedString.h"
-#undef MOZILLA_STRICT_API
+#define MOZILLA_INTERNAL_API 1
 #include "nsMemory.h"
 #include "nsIChannel.h"
 #include "nsIScriptSecurityManager.h"

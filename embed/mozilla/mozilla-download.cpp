@@ -26,9 +26,9 @@
 
 #include "ephy-debug.h"
 
-#define MOZILLA_STRICT_API
+#undef MOZILLA_INTERNAL_API
 #include <nsEmbedString.h>
-#undef MOZILLA_STRICT_API
+#define MOZILLA_INTERNAL_API 1
 #include <nsMemory.h>
 
 static void mozilla_download_class_init	(MozillaDownloadClass *klass);
@@ -109,11 +109,11 @@ impl_get_source (EphyDownload *download)
 	return g_strdup (spec.get());
 }
 
-static long
+static gint64
 impl_get_current_progress (EphyDownload *download)
 {
 	MozDownload *mozDownload;
-	PRInt32 progress;
+	PRInt64 progress;
 
 	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
 
@@ -135,11 +135,11 @@ impl_get_state (EphyDownload *download)
 	return state;
 }
 
-static long
+static gint64
 impl_get_total_progress (EphyDownload *download)
 {
 	MozDownload *mozDownload;
-	PRInt32 progress;
+	PRInt64 progress;
 
 	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
 

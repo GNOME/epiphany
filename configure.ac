@@ -260,7 +260,7 @@ dnl **********************************
 
 dnl FIXME find a m4/autoconf guru who can distill this into a nice macro
 
-CPPFLAGS="-I$MOZILLA_INCLUDE_ROOT -I$MOZILLA_INCLUDE_ROOT/pipnss `$PKG_CONFIG --cflags-only-I $MOZILLA-xpcom` -DMOZILLA_STRICT_API"
+CPPFLAGS="-I$MOZILLA_INCLUDE_ROOT -I$MOZILLA_INCLUDE_ROOT/pipnss `$PKG_CONFIG --cflags-only-I $MOZILLA-xpcom`"
 CXXFLAGS="$_SAVE_CXXFLAGS $AM_CXXFLAGS `$PKG_CONFIG --cflags-only-other $MOZILLA-xpcom`"
 
 AC_MSG_CHECKING([[whether we have a gtk 2 mozilla build]])
@@ -497,6 +497,11 @@ CPPFLAGS=$_SAVE_CPPFLAGS
 CXXFLAGS=$_SAVE_CXXFLAGS
 
 AC_LANG_POP([C++])
+
+dnl Needed since 1.8b2
+dnl Define this down here so it doesn't affect the API checks above
+
+AC_DEFINE([MOZILLA_INTERNAL_API],[1],[Define for access to internal mozilla API])
 
 dnl Not a simple file check due to the header being in the SDK since 1.8a6
 dnl https://bugzilla.mozilla.org/show_bug.cgi?id=271068
