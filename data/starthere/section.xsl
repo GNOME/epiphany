@@ -18,7 +18,7 @@
 	    background: <xsl:value-of select="@bg"/>;
 	    color:      <xsl:value-of select="@text"/>;
 	    font-family: Verdana, Helvetica, Arial, sans-serif; 
-	    font-size: 14px; 
+	    font-size: 1.0em; 
     }
 
     div.topbar {
@@ -32,14 +32,14 @@
 
     div.topbar a {
 	    margin-right: 15;
-	    font-size: 20px;
+	    font-size: 1.4em;
 	    font-weight: bold;
 	    color: <xsl:value-of select="@title"/>;
     }
 
     h2 {
 	    color: <xsl:value-of select="@headings"/>;
-	    font-size: 18px;
+	    font-size: 1.2em;
     }
 
     a {
