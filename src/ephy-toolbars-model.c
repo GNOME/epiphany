@@ -281,6 +281,30 @@ get_toolbar_and_item_pos (EphyToolbarsModel *model,
 	return FALSE;
 }
 
+static int
+get_toolbar_pos (EphyToolbarsModel *model,
+		 const char *name)
+{
+	int i, n_toolbars;
+
+	n_toolbars = egg_toolbars_model_n_toolbars
+		(EGG_TOOLBARS_MODEL (model));
+
+	for (i = 0; i < n_toolbars; i++)
+	{
+		const char *t_name;
+
+		t_name = egg_toolbars_model_toolbar_nth
+			(EGG_TOOLBARS_MODEL (model), i);
+		if (strcmp (name, t_name) == 0)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
 static gboolean
 impl_add_item (EggToolbarsModel    *t,
 	       int		    toolbar_position,
@@ -373,6 +397,13 @@ ephy_toolbars_model_set_bookmarks (EphyToolbarsModel *model, EphyBookmarks *book
 
 		default_xml = ephy_file ("epiphany-toolbar.xml");
 		egg_toolbars_model_load (egg_model, default_xml);
+	}
+
+	/* ensure that we have a BookmarksBar */
+	if (get_toolbar_pos (model, "BookmarksBar") == -1)
+	{
+		egg_toolbars_model_add_toolbar
+			(EGG_TOOLBARS_MODEL (model), -1, "BookmarksBar");
 	}
 
 	model->priv->loading = FALSE;
@@ -529,30 +560,6 @@ ephy_toolbars_model_new (EphyBookmarks *bookmarks)
 	return EPHY_TOOLBARS_MODEL (g_object_new (EPHY_TYPE_TOOLBARS_MODEL,
 						  "bookmarks", bookmarks,
 						  NULL));
-}
-
-static int
-get_toolbar_pos (EphyToolbarsModel *model,
-		 const char *name)
-{
-	int i, n_toolbars;
-
-	n_toolbars = egg_toolbars_model_n_toolbars
-		(EGG_TOOLBARS_MODEL (model));
-
-	for (i = 0; i < n_toolbars; i++)
-	{
-		const char *t_name;
-
-		t_name = egg_toolbars_model_toolbar_nth
-			(EGG_TOOLBARS_MODEL (model), i);
-		if (strcmp (name, t_name) == 0)
-		{
-			return i;
-		}
-	}
-
-	return -1;
 }
 
 void
