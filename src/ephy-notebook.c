@@ -52,6 +52,8 @@
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 
+#define TAB_WIDTH_N_CHARS 20
+
 #define AFTER_ALL_TABS -1
 #define NOT_IN_APP_WINDOWS -2
 
@@ -810,8 +812,6 @@ close_button_clicked_cb (GtkWidget *widget, GtkWidget *tab)
 	}
 }
 
-#define TAB_MIN_WIDTH_N_CHARS    8
-
 static void
 tab_label_style_set_cb (GtkWidget *label,
 			GtkStyle *previous_style,
@@ -830,12 +830,12 @@ tab_label_style_set_cb (GtkWidget *label,
 	pango_font_metrics_unref (metrics);
 
 	LOG ("tab_label_size_request_cb label %p char_width %d total %d",
-	     label, char_width, TAB_MIN_WIDTH_N_CHARS * PANGO_PIXELS (char_width))
+	     label, char_width, TAB_WIDTH_N_CHARS * PANGO_PIXELS (char_width))
 
 	gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &w, &h);
 
 	gtk_widget_set_size_request
-		(hbox, TAB_MIN_WIDTH_N_CHARS * PANGO_PIXELS(char_width) + 2 * w, -1);
+		(hbox, TAB_WIDTH_N_CHARS * PANGO_PIXELS(char_width) + 2 * w, -1);
 }
 
 static GtkWidget *
@@ -941,8 +941,6 @@ ephy_notebook_add_tab (EphyNotebook *nb,
 
 	gtk_notebook_insert_page (GTK_NOTEBOOK (nb), GTK_WIDGET (tab),
 				  label, position);
-	gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (nb), GTK_WIDGET (tab),
-					    TRUE, TRUE, GTK_PACK_START);
 
 	/* Set up drag-and-drop target */
 	g_signal_connect (G_OBJECT(label), "drag_data_received",
