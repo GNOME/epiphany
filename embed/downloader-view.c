@@ -593,7 +593,7 @@ downloader_view_add_download (DownloaderView *dv,
 	details->remaining = -1;
 	details->speed = -1;
 	details->size_total = -1;
-	details->size_done = -1;
+	details->size_done = 0;
 	details->progress = -1;
 	details->download_started = FALSE;
 	dv->priv->show_details = FALSE;
