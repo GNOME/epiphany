@@ -34,16 +34,6 @@ G_BEGIN_DECLS
 #define DISABLE_PROFILING
 #endif
 
-#ifdef G_HAVE_ISO_VARARGS
-#ifdef DISABLE_LOGGING
-#define LOG(msg, ...)
-#else
-#define LOG(msg, ...)                      \
-g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,                \
-       "[ %s ] " msg,                      \
-       __FILE__ , __VA_ARGS__);
-#endif
-#elif defined(G_HAVE_GNUC_VARARGS)
 #ifdef DISABLE_LOGGING
 #define LOG(msg, args...)
 #else
@@ -51,7 +41,6 @@ g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,                \
 g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,				\
        "[ %s ] " msg,						\
        __FILE__ , ## args);
-#endif
 #endif
 
 #ifdef DISABLE_PROFILING
