@@ -38,6 +38,7 @@
 #include <gtk/gtkmain.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkversion.h>
+#include <gtk/gtkicontheme.h>
 
 /* Styles for tab labels */
 GtkStyle *loading_text_style = NULL;
@@ -281,7 +282,7 @@ ephy_gui_set_default_window_icon (GtkWindow *window)
 		g_warning ("Web browser gnome icon not found");
 	}
 
-	gtk_window_set_icon (GTK_WINDOW (about), icon);
+	gtk_window_set_icon (GTK_WINDOW (window), icon);
 
 	if (icon != NULL)
 	{
