@@ -196,51 +196,43 @@ ephy_bookmark_action_sync_label (EggAction *action, GParamSpec *pspec, GtkWidget
 }
 
 static void
-entry_activated_cb (GtkWidget *entry, EggAction *action)
+activate_cb (GtkWidget *widget, const char *text, EggAction *action)
 {
-	char *text;
-	char *solved;
-	char *smart_url;
-	EphyBookmarks *bookmarks;
-
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-
-	text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
-	if (text == NULL) return;
-
-	smart_url = EPHY_BOOKMARK_ACTION (action)->priv->location;
-	solved = ephy_bookmarks_solve_smart_url (bookmarks,
-						 smart_url,
-						 text);
-	g_signal_emit (action,
-		       ephy_bookmark_action_signals[GO_LOCATION],
-		       0, solved);
-
-	g_free (text);
-}
-
-static void
-activate_cb (GtkWidget *widget, EggAction *action)
-{
-	EphyBookmarkAction *baction = EPHY_BOOKMARK_ACTION (action);
 	char *location = NULL;
 
-	if (baction->priv->smart_url)
+	if (text != NULL && text[0] != '\0')
 	{
-		GnomeVFSURI *uri;
+		char *smart_url;
+		EphyBookmarks *bookmarks;
 
-		uri = gnome_vfs_uri_new (baction->priv->location);
+		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
-		if (uri)
-		{
-			location = g_strdup (gnome_vfs_uri_get_host_name (uri));
-			gnome_vfs_uri_unref (uri);
-		}
+		smart_url = EPHY_BOOKMARK_ACTION (action)->priv->location;
+		location = ephy_bookmarks_solve_smart_url (bookmarks,
+							   smart_url,
+							   text);
 	}
-
-	if (location == NULL)
+	else
 	{
-		location = g_strdup (baction->priv->location);
+		EphyBookmarkAction *baction = EPHY_BOOKMARK_ACTION (action);
+
+		if (baction->priv->smart_url)
+		{
+			GnomeVFSURI *uri;
+
+			uri = gnome_vfs_uri_new (baction->priv->location);
+
+			if (uri)
+			{
+				location = g_strdup (gnome_vfs_uri_get_host_name (uri));
+				gnome_vfs_uri_unref (uri);
+			}
+		}
+
+		if (location == NULL)
+		{
+			location = g_strdup (baction->priv->location);
+		}
 	}
 
 	g_signal_emit (action,
@@ -251,10 +243,14 @@ activate_cb (GtkWidget *widget, EggAction *action)
 }
 
 static void
+menu_activate_cb (GtkWidget *widget, EggAction *action)
+{
+	activate_cb (widget, NULL, action);
+}
+
+static void
 connect_proxy (EggAction *action, GtkWidget *proxy)
 {
-	GtkWidget *button, *entry;
-
 	LOG ("Connecting action %p to proxy %p", action, proxy)
 
 	(* EGG_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
@@ -273,15 +269,11 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
 
 	if (EGG_IS_TOOL_ITEM (proxy))
 	{
-		button = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "button"));
-		g_signal_connect (button, "clicked", G_CALLBACK (activate_cb), action);
-
-		entry = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "entry"));
-		g_signal_connect (entry, "activate", G_CALLBACK (entry_activated_cb), action);
+		g_signal_connect (proxy, "activate", G_CALLBACK (activate_cb), action);
 	}
 	else if (GTK_IS_MENU_ITEM (proxy))
 	{
-		g_signal_connect (proxy, "activate", G_CALLBACK (activate_cb), action);
+		g_signal_connect (proxy, "activate", G_CALLBACK (menu_activate_cb), action);
 	}
 }
 

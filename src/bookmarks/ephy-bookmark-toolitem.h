@@ -43,6 +43,9 @@ typedef struct _EphyBookmarkToolitemPrivate EphyBookmarkToolitemPrivate;
 struct _EphyBookmarkToolitemClass
 {
 	EggToolItemClass parent_class;
+
+	void (* activated)	(EphyBookmarkToolitem *item,
+				 const char *text);
 };
 
 struct _EphyBookmarkToolitem

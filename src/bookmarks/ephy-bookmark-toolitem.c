@@ -32,6 +32,13 @@ static GObjectClass *parent_class = NULL;
 static void	ephy_bookmark_toolitem_class_init	(EphyBookmarkToolitemClass *klass);
 static void	ephy_bookmark_toolitem_init		(EphyBookmarkToolitem *item);
 
+enum
+{
+	ACTIVATE,
+	LAST_SIGNAL
+};
+static guint EphyBookmarkToolitemSignals[LAST_SIGNAL];
+
 #define MENU_ID "ephy-bookmark-toolitem-menu-id"
 
 /**
@@ -66,6 +73,21 @@ ephy_bookmark_toolitem_get_type (void)
         return ephy_bookmark_toolitem_type;
 }
 
+static void
+activated_cb (GtkWidget *widget, EggToolItem *item)
+{
+	char *text = NULL;
+
+	if (GTK_IS_EDITABLE (widget))
+	{
+		text = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
+	}
+
+	g_signal_emit (item, EphyBookmarkToolitemSignals[ACTIVATE], 0, text);
+
+	g_free (text);
+}
+
 static gboolean
 ephy_bookmark_toolitem_create_menu_proxy (EggToolItem *item)
 {
@@ -84,6 +106,8 @@ ephy_bookmark_toolitem_create_menu_proxy (EggToolItem *item)
 
 	menu_item = gtk_image_menu_item_new_with_mnemonic (text);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), image);
+
+	g_signal_connect (menu_item, "activate", G_CALLBACK (activated_cb), item);
 
 	egg_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
 
@@ -125,6 +149,9 @@ ephy_bookmark_toolitem_init (EphyBookmarkToolitem *item)
 	gtk_widget_show (label);
 	gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 	g_object_set_data (G_OBJECT (item), "label", label);
+
+	g_signal_connect (button, "clicked", G_CALLBACK (activated_cb), item);
+	g_signal_connect (entry, "activate", G_CALLBACK (activated_cb), item);
 }
 
 static void
@@ -137,4 +164,14 @@ ephy_bookmark_toolitem_class_init (EphyBookmarkToolitemClass *klass)
 	tool_item_class = (EggToolItemClass *)klass;
 
 	tool_item_class->create_menu_proxy = ephy_bookmark_toolitem_create_menu_proxy;
+
+	EphyBookmarkToolitemSignals[ACTIVATE] = g_signal_new (
+			"activate", G_OBJECT_CLASS_TYPE (klass),
+			G_SIGNAL_RUN_FIRST,
+			G_STRUCT_OFFSET (EphyBookmarkToolitemClass, activated),
+			NULL, NULL,
+			ephy_marshal_VOID__STRING,
+			G_TYPE_NONE,
+			1,
+			G_TYPE_STRING);
 }

@@ -1,3 +1,15 @@
+2003-06-26  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/bookmarks/ephy-bookmark-action.c: (connect_proxy),
+	(entry_activated_cb), (activate_cb), (menu_activate_cb):
+	* src/bookmarks/ephy-bookmark-toolitem.h:
+	* src/bookmarks/ephy-bookmark-toolitem.c: (activated_cb),
+	(ephy_bookmark_toolitem_create_menu_proxy),
+	(ephy_bookmark_toolitem_class_init):
+
+	Make the toolbar overflow item really activate the bookmark action.
+	Simplify code a little.
+
 2003-06-26  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-menu.c: (go_location_cb):
