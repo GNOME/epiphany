@@ -718,11 +718,12 @@ static const char *permission_type_string [] =
 void
 impl_permission_manager_add (EphyPermissionManager *manager,
 			     const char *host,
-			     EphyPermissionType type,
+			     const char *type,
 			     EphyPermission permission)
 {
 	/* can only set allow or deny */
 	g_return_if_fail (permission != EPHY_PERMISSION_DEFAULT);
+	g_return_if_fail (type != NULL && type[0] != '\0');
 
         nsCOMPtr<nsIPermissionManager> pm
 		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID));
@@ -734,8 +735,7 @@ impl_permission_manager_add (EphyPermissionManager *manager,
 
 	gboolean allow = (permission == EPHY_PERMISSION_ALLOWED);
 
-	pm->Add (uri,
-		 permission_type_string [type],
+	pm->Add (uri, type,
 		 allow ? (PRUint32) nsIPermissionManager::ALLOW_ACTION :
 			 (PRUint32) nsIPermissionManager::DENY_ACTION);
 }
@@ -743,13 +743,13 @@ impl_permission_manager_add (EphyPermissionManager *manager,
 void
 impl_permission_manager_remove (EphyPermissionManager *manager,
 				const char *host,
-				EphyPermissionType type)
+				const char *type)
 {
         nsCOMPtr<nsIPermissionManager> pm
 		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID));
 	if (!pm) return;
 
-	pm->Remove (nsEmbedCString (host), permission_type_string [type]);
+	pm->Remove (nsEmbedCString (host), type);
 }
 
 void
@@ -765,8 +765,10 @@ impl_permission_manager_clear (EphyPermissionManager *manager)
 EphyPermission
 impl_permission_manager_test (EphyPermissionManager *manager,
 			      const char *host,
-			      EphyPermissionType type)
+			      const char *type)
 {
+	g_return_val_if_fail (type != NULL && type[0] != '\0', EPHY_PERMISSION_DEFAULT);
+
         nsCOMPtr<nsIPermissionManager> pm
 		(do_GetService (NS_PERMISSIONMANAGER_CONTRACTID));
 	if (!pm) return EPHY_PERMISSION_DEFAULT;
@@ -777,7 +779,7 @@ impl_permission_manager_test (EphyPermissionManager *manager,
 
 	nsresult rv;
 	PRUint32 action;
-	rv = pm->TestPermission (uri, permission_type_string [type], &action);
+	rv = pm->TestPermission (uri, type, &action);
 	NS_ENSURE_SUCCESS (rv, EPHY_PERMISSION_DEFAULT);
 
 	EphyPermission permission;
@@ -801,7 +803,7 @@ impl_permission_manager_test (EphyPermissionManager *manager,
 
 GList *
 impl_permission_manager_list (EphyPermissionManager *manager,
-			      EphyPermissionType type)
+			      const char *type)
 {
 	GList *list = NULL;
 
@@ -813,11 +815,13 @@ impl_permission_manager_list (EphyPermissionManager *manager,
 	pm->GetEnumerator(getter_AddRefs(pe));
 	NS_ENSURE_TRUE (pe, NULL);
 	
-	PRBool more;
-	for (pe->HasMoreElements (&more); more == PR_TRUE; pe->HasMoreElements (&more))
+	PRBool hasMore;
+	while (NS_SUCCEEDED (pe->HasMoreElements (&hasMore)) && hasMore)
 	{
-		nsCOMPtr<nsIPermission> perm;
-		pe->GetNext(getter_AddRefs(perm));
+		nsCOMPtr<nsISupports> element;
+		pe->GetNext (getter_AddRefs (element));
+		
+		nsCOMPtr<nsIPermission> perm (do_QueryInterface (element));
 		if (!perm) continue;
 
 		nsresult rv;
@@ -825,7 +829,7 @@ impl_permission_manager_list (EphyPermissionManager *manager,
 		rv = perm->GetType(str);
 		if (NS_FAILED (rv)) continue;
 
-		if (strcmp (str.get(), permission_type_string[type]) == 0)
+		if (strcmp (str.get(), type) == 0)
 		{
 			EphyPermissionInfo *info = 
 				mozilla_permission_to_ephy_permission (perm);

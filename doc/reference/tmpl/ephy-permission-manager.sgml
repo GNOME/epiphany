@@ -28,6 +28,10 @@ network.cookie.cookieBehavior preference. For images, the default is determined
 by Mozilla's network.image.imageBehavior preference.
 </para>
 <para>
+The predefined permission types are EPT_COOKIE ("cookie"), EPT_IMAGE ("image")
+and EPT_POPUP ("popup"). You can also make up your own type string.
+</para>
+<para>
 Though the word &quot;host&quot; is used in many function descriptions, Mozilla
 does not act as one would expect. Always pass a URL to any functions which
 need have a &quot;host&quot; parameter. However, the &quot;host&quot; in an
@@ -47,18 +51,6 @@ Details a specific permission of a specific website.
 @host: The hostname of the website to which this permission applies.
 @type: An #EphyPermissionType.
 @permission: An #EphyPermission (either allow or deny).
-
-<!-- ##### ENUM EphyPermissionType ##### -->
-<para>
-Determines what permission we're dealing with.
-</para>
-
-@EPT_COOKIE: 
-	Permission for the website to store cookies on the user's computer.
-@EPT_IMAGE: 
-	Permission for the website to show images to the user.
-@EPT_POPUP: 
-	Permission for the website to open popup windows (using JavaScript).
 
 <!-- ##### ENUM EphyPermission ##### -->
 <para>

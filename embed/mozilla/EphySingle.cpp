@@ -263,25 +263,10 @@ mozilla_cookie_to_ephy_cookie (nsICookie *cookie)
 EphyPermissionInfo *
 mozilla_permission_to_ephy_permission (nsIPermission *perm)
 {
-	EphyPermissionType type = (EphyPermissionType) 0;
-
 	nsresult result;
-	nsEmbedCString str;
-	result = perm->GetType(str);
+	nsEmbedCString type;
+	result = perm->GetType(type);
 	NS_ENSURE_SUCCESS (result, NULL);
-
-	if (strcmp (str.get(), "cookie") == 0)
-	{
-		type = EPT_COOKIE;
-	}
-	else if (strcmp (str.get(), "image"))
-	{
-		type = EPT_IMAGE;
-	}
-	else if (strcmp (str.get(), "popup"))
-	{
-		type = EPT_POPUP;
-	}		
 
 	PRUint32 cap;
 	perm->GetCapability(&cap);
@@ -303,5 +288,5 @@ mozilla_permission_to_ephy_permission (nsIPermission *perm)
 	nsEmbedCString host;
 	perm->GetHost(host);
 
-	return ephy_permission_info_new (host.get(), type, permission);
+	return ephy_permission_info_new (host.get(), type.get(), permission);
 }

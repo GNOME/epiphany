@@ -36,12 +36,9 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_PERMISSION_INFO		(ephy_permission_info_get_type ())
 
-typedef enum
-{
-	EPT_COOKIE,
-	EPT_IMAGE,
-	EPT_POPUP
-} EphyPermissionType;
+#define EPT_COOKIE	"cookie"
+#define EPT_IMAGE	"image"
+#define EPT_POPUP	"popup"
 
 typedef enum
 {
@@ -58,7 +55,7 @@ typedef struct EphyPermissionManagerIface	EphyPermissionManagerIface;
 struct _EphyPermissionInfo
 {
 	char *host;
-	EphyPermissionType type;
+	GQuark qtype;
 	EphyPermission permission;
 };
 
@@ -78,17 +75,17 @@ struct EphyPermissionManagerIface
 	/* Methods */
 	void		(* add)		(EphyPermissionManager *manager,
 					 const char *host,
-					 EphyPermissionType type,
+					 const char *type,
 					 EphyPermission permission);
 	void		(* remove)	(EphyPermissionManager *manager,
 					 const char *host,
-					 EphyPermissionType type);
+					 const char *type);
 	void		(* clear)	(EphyPermissionManager *manager);
 	EphyPermission	(* test)	(EphyPermissionManager *manager,
 					 const char *host,
-					 EphyPermissionType type);
+					 const char *type);
 	GList *		(* list)	(EphyPermissionManager *manager,
-					 EphyPermissionType type);
+					 const char *type);
 };
 
 /* EphyPermissionInfo */
@@ -96,7 +93,7 @@ struct EphyPermissionManagerIface
 GType			ephy_permission_info_get_type	(void);
 
 EphyPermissionInfo     *ephy_permission_info_new	(const char *host,
-							 EphyPermissionType type,
+							 const char *type,
 							 EphyPermission permission);
 
 EphyPermissionInfo     *ephy_permission_info_copy	(const EphyPermissionInfo *info);
@@ -109,21 +106,21 @@ GType 		ephy_permission_manager_get_type	(void);
 
 void		ephy_permission_manager_add		(EphyPermissionManager *manager,
 							 const char *host,
-							 EphyPermissionType type,
+							 const char *type,
 							 EphyPermission permission);
 
 void		ephy_permission_manager_remove		(EphyPermissionManager *manager,
 							 const char *host,
-							 EphyPermissionType type);
+							 const char *type);
 
 void		ephy_permission_manager_clear		(EphyPermissionManager *manager);
 
 EphyPermission	ephy_permission_manager_test		(EphyPermissionManager *manager,
 							 const char *host,
-							 EphyPermissionType type);
+							 const char *type);
 
 GList *		ephy_permission_manager_list		(EphyPermissionManager *manager,
-							 EphyPermissionType type);
+							 const char *type);
 
 G_END_DECLS
 
