@@ -25,4 +25,4 @@
 #define CONF_NETWORK_FTP_PROXY_PORT "/system/proxy/ftp_port"
 #define CONF_NETWORK_SOCKS_PROXY_PORT "/system/proxy/socks_port"
 #define CONF_NETWORK_PROXY_AUTO_URL "/system/proxy/autoconfig_url"
-
+#define CONF_NETWORK_PROXY_IGNORE_HOSTS "/system/http_proxy/ignore_hosts"

@@ -39,6 +39,8 @@
 #include "nsIPrefService.h"
 #include "nsIServiceManager.h"
 
+#define MOZILLA_PREF_NO_PROXIES "network.proxy.no_proxies_on"
+
 static void
 mozilla_cache_size_notifier (GConfClient *client,
 		             guint cnxn_id,
@@ -102,6 +104,11 @@ mozilla_cookies_accept_notifier (GConfClient *client,
 		                 guint cnxn_id,
 		                 GConfEntry *entry,
 		                 char *pref);
+static void
+mozilla_proxy_ignore_notifier (GConfClient *client,
+		               guint cnxn_id,
+		               GConfEntry *entry,
+		               EphyEmbedSingle *single);
 
 /* Keeps the list of the notifiers we installed for mozilla prefs */
 /* to be able to remove them when exiting */
@@ -162,6 +169,8 @@ custom_notifiers [] =
           (GConfClientNotifyFunc) mozilla_cache_size_notifier },
 	{ CONF_SECURITY_COOKIES_ACCEPT,
 	  (GConfClientNotifyFunc) mozilla_cookies_accept_notifier },
+ 	{ CONF_NETWORK_PROXY_IGNORE_HOSTS,
+ 	  (GConfClientNotifyFunc) mozilla_proxy_ignore_notifier },
 
 	{ NULL, NULL }
 };
@@ -661,3 +670,39 @@ mozilla_language_notifier(GConfClient *client,
 	g_slist_foreach (languages, (GFunc) g_free, NULL);
 	g_slist_free (languages);
 }
+
+static void
+mozilla_proxy_ignore_notifier (GConfClient *client,
+		               guint cnxn_id,
+		               GConfEntry *entry,
+		               EphyEmbedSingle *single)
+{
+	GSList *hosts, *l;
+	char **strings, *mozilla_ignore_list;
+	int i = 0;
+
+	hosts = eel_gconf_get_string_list (entry->key);
+
+	strings = g_new (gchar*, g_slist_length (hosts) + 1);
+	for (l = hosts; l != NULL; l = l->next)
+	{
+		char *item = (char *) l->data;
+
+		if (item && item[0] != '\0')
+		{
+			strings[i] = item;
+			i++;
+		}
+	}
+	strings[i] = NULL;
+
+	mozilla_ignore_list = g_strjoinv (", ", strings);
+	mozilla_prefs_set_string (MOZILLA_PREF_NO_PROXIES,
+				  mozilla_ignore_list);
+
+	g_free (mozilla_ignore_list);
+	g_free (strings);
+	g_slist_foreach (hosts, (GFunc) g_free, NULL);
+	g_slist_free (hosts);
+}
+
