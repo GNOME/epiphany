@@ -47,7 +47,8 @@ ephy_stock_icons_init (void)
 		STOCK_PRINT_SETUP,
 		STOCK_LOCK_INSECURE,
 		STOCK_LOCK_SECURE,
-		STOCK_LOCK_BROKEN
+		STOCK_LOCK_BROKEN,
+		STOCK_LEAVE_FULLSCREEN
 	};
 
 	static const GtkStockItem items[] =

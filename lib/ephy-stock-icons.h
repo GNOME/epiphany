@@ -41,6 +41,7 @@ G_BEGIN_DECLS
 #define STOCK_LOCK_INSECURE	   "stock_lock-open"
 #define STOCK_LOCK_SECURE	   "stock_lock"
 #define STOCK_LOCK_BROKEN	   "stock_lock-broken"
+#define STOCK_LEAVE_FULLSCREEN	   "stock_leave-fullscreen"
 
 void ephy_stock_icons_init (void);
 

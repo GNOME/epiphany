@@ -23,6 +23,7 @@
 
 #include "ephy-fullscreen-popup.h"
 #include "ephy-spinner.h"
+#include "ephy-stock-icons.h"
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
@@ -275,7 +276,7 @@ ephy_fullscreen_popup_constructor (GType type,
 	gtk_container_add (GTK_CONTAINER (priv->button), button_hbox);
 	gtk_widget_show (button_hbox);
 
-	icon = gtk_image_new_from_stock (GTK_STOCK_QUIT, GTK_ICON_SIZE_BUTTON);
+	icon = gtk_image_new_from_stock (STOCK_LEAVE_FULLSCREEN, GTK_ICON_SIZE_BUTTON);
 	gtk_box_pack_start (GTK_BOX (button_hbox), icon, FALSE, FALSE, 0);
 	gtk_widget_show (icon);
 
