@@ -653,6 +653,14 @@ impl_get_security_level (EphyEmbed *embed,
 }
 
 static void
+impl_show_page_certificate (EphyEmbed *embed)
+{
+	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED (embed)->priv;
+
+	mpriv->browser->ShowCertificate ();
+}
+	
+static void
 impl_print (EphyEmbed *embed)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
@@ -1143,6 +1151,7 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->shistory_get_pos = impl_shistory_get_pos;
 	iface->shistory_go_nth = impl_shistory_go_nth;
 	iface->get_security_level = impl_get_security_level;
+	iface->show_page_certificate = impl_show_page_certificate;
 	iface->find_next = impl_find_next;
 	iface->activate = impl_activate;
 	iface->find_set_properties = impl_find_set_properties;

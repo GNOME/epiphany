@@ -165,6 +165,7 @@ struct _EphyEmbedIface
 	void		   (* get_security_level)	(EphyEmbed *embed,
 						  	 EmbedSecurityLevel *level,
 						  	 char **description);
+	void		   (* show_page_certificate)	(EphyEmbed *embed);
 	void		   (* set_zoom)			(EphyEmbed *embed,
 							 float zoom);
 	float		   (* get_zoom)			(EphyEmbed *embed);
@@ -242,6 +243,8 @@ void		  ephy_embed_shistory_go_nth		(EphyEmbed *embed,
 void		  ephy_embed_get_security_level		(EphyEmbed *embed,
 							 EmbedSecurityLevel *level,
 						 	 char **description);
+
+void		  ephy_embed_show_page_certificate	(EphyEmbed *embed);
 
 /* Zoom */
 void		  ephy_embed_set_zoom			(EphyEmbed *embed,
