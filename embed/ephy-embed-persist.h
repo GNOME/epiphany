@@ -69,6 +69,7 @@ struct EphyEmbedPersistClass
 	gboolean (* save)	(EphyEmbedPersist *persist);
 
 	void	 (* cancel)	(EphyEmbedPersist *persist);
+	char *	 (* to_string)	(EphyEmbedPersist *persist);
 };
 
 GType			 ephy_embed_persist_get_type	(void);
@@ -116,6 +117,8 @@ int			 ephy_embed_persist_get_max_size	(EphyEmbedPersist *persist);
 const char 		*ephy_embed_persist_get_persist_key	(EphyEmbedPersist *persist);
 
 const char 		*ephy_embed_persist_get_source		(EphyEmbedPersist *persist);
+
+char			*ephy_embed_persist_to_string		(EphyEmbedPersist *persist);
 
 G_END_DECLS
 

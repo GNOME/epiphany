@@ -36,6 +36,7 @@
 #include <nsNetUtil.h>
 #include <nsIHistoryEntry.h>
 #include <nsISHEntry.h>
+#include <nsIDocumentEncoder.h>
 
 static void
 mozilla_embed_persist_class_init (MozillaEmbedPersistClass *klass);
@@ -154,10 +155,9 @@ impl_save (EphyEmbedPersist *persist)
 	EphyBrowser *browser = NULL;
 	if (embed)
 	{
-	        browser = (EphyBrowser *) _mozilla_embed_get_ephy_browser (MOZILLA_EMBED(embed));
+		browser = (EphyBrowser *) _mozilla_embed_get_ephy_browser (MOZILLA_EMBED(embed));
 		NS_ENSURE_TRUE (browser, FALSE);
 	}
-
 	/* we must have one of uri or browser */
 	g_assert (browser != NULL || uri != NULL);
 
@@ -269,6 +269,53 @@ impl_save (EphyEmbedPersist *persist)
 	return TRUE;
 }
 
+static char *
+impl_to_string (EphyEmbedPersist *persist)
+{
+	EphyEmbed *embed;
+	nsCOMPtr<nsIDOMDocument> DOMDocument;
+	EmbedPersistFlags flags;
+	EphyBrowser *browser;
+	nsresult rv = NS_OK;
+
+	g_object_ref (persist);
+	
+	g_object_get (persist,
+	              "flags", &flags,
+	              "embed", &embed,
+	              NULL);
+	g_object_unref (persist);
+	g_assert (embed != NULL);
+
+	browser = (EphyBrowser *) _mozilla_embed_get_ephy_browser (MOZILLA_EMBED(embed));
+	g_assert (browser != NULL);
+
+	if (flags & EMBED_PERSIST_MAINDOC)
+	{
+		rv = browser->GetDocument (getter_AddRefs(DOMDocument));
+	}
+       	else
+	{
+		rv = browser->GetTargetDocument (getter_AddRefs(DOMDocument));
+	}
+	if (NS_FAILED(rv) || !DOMDocument) return NULL;
+
+	nsCOMPtr<nsIDocument> doc = do_QueryInterface(DOMDocument);
+	if(!doc) return NULL;
+
+	nsCOMPtr<nsIDocumentEncoder> encoder = do_CreateInstance(NS_DOC_ENCODER_CONTRACTID_BASE "text/html");
+	NS_ENSURE_SUCCESS(rv, NULL);
+
+	rv = encoder->Init(doc, NS_LITERAL_STRING("text/html"), nsIDocumentEncoder::OutputAbsoluteLinks);
+	NS_ENSURE_SUCCESS(rv, NULL);
+
+	nsAutoString aOutputString;
+	encoder->EncodeToString(aOutputString);
+
+	return g_strdup (NS_ConvertUCS2toUTF8(aOutputString).get());
+}
+
+
 static GObject *
 mozilla_embed_persist_constructor (GType type, guint n_construct_properties,
 			           GObjectConstructParam *construct_params)
@@ -293,6 +340,7 @@ mozilla_embed_persist_class_init (MozillaEmbedPersistClass *klass)
 
 	persist_class->save = impl_save;
 	persist_class->cancel = impl_cancel;
+	persist_class->to_string = impl_to_string;
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedPersistPrivate));
 }

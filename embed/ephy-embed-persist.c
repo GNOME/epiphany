@@ -435,3 +435,10 @@ ephy_embed_persist_save (EphyEmbedPersist *persist)
 	EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);
 	return klass->save (persist);
 }
+char *
+ephy_embed_persist_to_string (EphyEmbedPersist *persist)
+{
+       EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);
+       return klass->to_string (persist);
+}
+
