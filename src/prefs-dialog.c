@@ -1152,7 +1152,6 @@ prefs_dialog_init (PrefsDialog *pd)
 	EphyDialog *dialog = EPHY_DIALOG (pd);
 	EphyEncodings *encodings;
 	GtkWidget *window, *button, *combo;
-	GdkPixbuf *icon;
 	GtkCellRenderer *renderer;
 	gboolean sensitive;
 
@@ -1173,13 +1172,7 @@ prefs_dialog_init (PrefsDialog *pd)
 				    NULL);
 
 	window = ephy_dialog_get_control (dialog, properties[WINDOW_PROP].id);
-
-	icon = gtk_widget_render_icon (window,
-				       GTK_STOCK_PREFERENCES,
-				       GTK_ICON_SIZE_MENU,
-				       "prefs_dialog");
-	gtk_window_set_icon (GTK_WINDOW (window), icon);
-	g_object_unref(icon);
+	gtk_window_set_icon_name (GTK_WINDOW (window), GTK_STOCK_PREFERENCES);
 
 	/* set homepage button sensitivity */
 	sensitive = eel_gconf_key_is_writable (CONF_GENERAL_HOMEPAGE);
