@@ -616,7 +616,7 @@ confirm_close_with_modified_forms (EphyWindow *window)
 					      GTK_WINDOW (window),
 					      GTK_DIALOG_NO_SEPARATOR | GTK_DIALOG_MODAL,
 					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					      _("_Close document"), GTK_RESPONSE_OK,
+					      _("Close _Document"), GTK_RESPONSE_OK,
 					      NULL);
 	
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
@@ -639,6 +639,7 @@ confirm_close_with_modified_forms (EphyWindow *window)
 	gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
 
 	label = gtk_label_new (NULL);
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 
