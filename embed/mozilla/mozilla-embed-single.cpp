@@ -324,6 +324,9 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
         prefService->GetBranch ("", getter_AddRefs(pref));
 	if (pref == NULL) return FALSE;
 
+	/* Don't allow mozilla to raise window when setting focus (work around bugs) */
+	pref->SetBoolPref ("mozilla.widget.raise-on-setfocus", PR_FALSE);
+
 	/* set default search engine */
 	pref->SetCharPref ("keyword.URL", "http://www.google.com/search?q=");
 	pref->SetBoolPref ("keyword.enabled", PR_TRUE);
