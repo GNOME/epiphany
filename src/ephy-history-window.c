@@ -102,6 +102,7 @@ struct EphyHistoryWindowPrivate
 	GtkWidget *window;
 	EggMenuMerge *ui_merge;
 	EggActionGroup *action_group;
+	GtkWidget *confirmation_dialog;
 };
 
 enum
@@ -176,11 +177,16 @@ static EggActionGroupEntry ephy_history_ui_entries [] = {
 static guint ephy_history_ui_n_entries = G_N_ELEMENTS (ephy_history_ui_entries);
 
 static void
-cmd_clear (EggAction *action,
-	   EphyHistoryWindow *editor)
+confirmation_dialog_response_cb (GtkDialog *dialog, gint response,
+				 EphyHistoryWindow *editor)
 {
 	const GList *windows;
 	Session *session;
+	
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+	
+	if (response != GTK_RESPONSE_OK)
+		return;
 	
 	session = ephy_shell_get_session (ephy_shell);
 	windows = session_get_windows (session);
@@ -196,10 +202,90 @@ cmd_clear (EggAction *action,
 	ephy_history_clear (editor->priv->history);
 }
 
+static GtkWidget *
+confirmation_dialog_construct (EphyHistoryWindow *editor)
+{
+	GtkWidget *dialog;
+	GtkWidget *label;
+	GtkWidget *vbox;
+	GtkWidget *hbox;
+	GtkWidget *image;
+	char *str;
+	
+	dialog = gtk_dialog_new_with_buttons (_("Clear history"), 
+					     GTK_WINDOW (editor),
+					     GTK_DIALOG_DESTROY_WITH_PARENT |
+					     GTK_DIALOG_NO_SEPARATOR,
+					     GTK_STOCK_CANCEL,
+					     GTK_RESPONSE_CANCEL,
+					     GTK_STOCK_CLEAR,
+					     GTK_RESPONSE_OK, 
+					     NULL);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+	gtk_container_set_border_width (GTK_CONTAINER (dialog), 6);
+	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 12);
+
+	hbox = gtk_hbox_new (FALSE, 6);
+	gtk_widget_show (hbox);
+	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
+			    TRUE, TRUE, 0);
+	
+	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
+					  GTK_ICON_SIZE_DIALOG);
+	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0);
+	gtk_widget_show (image);
+	gtk_box_pack_start (GTK_BOX (hbox), image, TRUE, TRUE, 0);
+
+	vbox = gtk_vbox_new (FALSE, 6);
+	gtk_widget_show (vbox);
+	gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
+
+	label = gtk_label_new (NULL);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	str = g_strconcat ("<b><big>", _("Clear browsing history?"), 
+			   "</big></b>", NULL);
+	gtk_label_set_markup (GTK_LABEL (label), str);
+	g_free (str);
+	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+	gtk_widget_show (label);
+
+	label = gtk_label_new (_("Clearing the browsing history will cause all"
+				 " history items to be permanently deleted."));
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+	gtk_widget_show (label);
+
+	g_signal_connect (dialog, "response", 
+			  G_CALLBACK (confirmation_dialog_response_cb), 
+			  editor);
+	
+	return dialog;
+}
+
+static void
+cmd_clear (EggAction *action,
+	   EphyHistoryWindow *editor)
+{
+	if (editor->priv->confirmation_dialog == NULL)
+	{
+		editor->priv->confirmation_dialog = confirmation_dialog_construct (editor);
+		g_object_add_weak_pointer (G_OBJECT(editor->priv->confirmation_dialog),
+					   (gpointer *)&editor->priv->confirmation_dialog);
+	}
+	
+	gtk_widget_show (editor->priv->confirmation_dialog);
+}
+
 static void
 cmd_close (EggAction *action,
 	   EphyHistoryWindow *editor)
 {
+	if (editor->priv->confirmation_dialog != NULL)
+	{
+		gtk_widget_destroy (editor->priv->confirmation_dialog);
+	}
 	gtk_widget_hide (GTK_WIDGET (editor));
 }
 
