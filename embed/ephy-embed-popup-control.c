@@ -544,8 +544,7 @@ embed_popup_download_link_cmd (BonoboUIComponent *uic,
 {
 	save_property_url (popup,
 			   _("Download Link"),
-		           eel_gconf_get_boolean
-		           (CONF_ASK_DOWNLOAD_DEST),
+			   FALSE,
 		           "link");
 }
 

@@ -1,3 +1,20 @@
+2003-10-29  Xan Lopez  <xan@masilla.org>
+
+	* embed/downloader-view.c: (downloader_view_remove_download):
+
+	Implement smart selection in the downloader view.
+	
+	* data/epiphany.schemas.in:
+	* embed/ephy-embed-popup-control.c:
+	(embed_popup_download_link_cmd):
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* lib/ephy-prefs.h:
+	* src/popup-commands.c: (popup_cmd_download_link):
+
+	Make persist downloads store the files in the download dir
+	automatically without asking the user (key only accessible via
+	gconf atm). CH downloads still need fixing.
+
 2003-10-28  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/prefs-dialog.c: (sort_detectors), (create_optionmenu),

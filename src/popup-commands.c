@@ -320,10 +320,8 @@ void
 popup_cmd_download_link (GtkAction *action,
 			 EphyWindow *window)
 {
-	save_property_url (action, _("Download link"), window,
-		           eel_gconf_get_boolean
-		           (CONF_ASK_DOWNLOAD_DEST),
-		           "link");
+	save_property_url (action, _("Download link"), window, 
+			   FALSE, "link");
 }
 
 void

@@ -438,24 +438,58 @@ downloader_view_remove_download (DownloaderView *dv, EphyDownload *download)
 {
 	GtkTreeRowReference *row_ref;
 	GtkTreePath *path = NULL;
-	GtkTreeIter iter;
+	GtkTreeIter iter, iter2;
 
 	row_ref = get_row_from_download (dv, download);
 	g_return_if_fail (row_ref);
 
+	/* Get the row we'll select after removal ("smart" selection) */
+	
 	path = gtk_tree_row_reference_get_path (row_ref);
 	gtk_tree_model_get_iter (GTK_TREE_MODEL (dv->priv->model),
 				 &iter, path);
+	gtk_tree_path_free (path);
 
-	gtk_list_store_remove (GTK_LIST_STORE (dv->priv->model), &iter);
+	row_ref = NULL;
+        iter2 = iter;			 
+	if (gtk_tree_model_iter_next (GTK_TREE_MODEL (dv->priv->model), &iter))
+        {
+        	path = gtk_tree_model_get_path  (GTK_TREE_MODEL (dv->priv->model), &iter);
+        	row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (dv->priv->model), path);
+        }
+        else
+        {
+        	path = gtk_tree_model_get_path (GTK_TREE_MODEL (dv->priv->model), &iter2);
+        	if (gtk_tree_path_prev (path))
+        	{
+        		row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (dv->priv->model),
+							      path);
+		}
+	}
+	gtk_tree_path_free (path);
 
-	/* FIXME: smart selection */
-
+	/* Removal */
+	
+	gtk_list_store_remove (GTK_LIST_STORE (dv->priv->model), &iter2);
 	g_hash_table_remove (dv->priv->downloads_hash,
 			     download);
 
-	gtk_tree_path_free (path);
-	
+	/* Actual selection */
+
+	if (row_ref != NULL)
+	{
+		path = gtk_tree_row_reference_get_path (row_ref);
+		if (path != NULL)
+		{
+			gtk_tree_view_set_cursor (GTK_TREE_VIEW (dv->priv->treeview),
+					          path, NULL, FALSE);
+			gtk_tree_path_free (path);
+		}
+		gtk_tree_row_reference_free (row_ref);
+	}
+
+	/* Close the dialog if there are no more downloads */
+
 	if (!g_hash_table_size (dv->priv->downloads_hash))
 		g_object_unref (G_OBJECT (dv));
 }
