@@ -40,6 +40,7 @@
 #include <glib/gi18n.h>
 
 #define CONF_DOWNLOADING_SHOW_DETAILS "/apps/epiphany/dialogs/downloader_show_details"
+#define DIALOG_MINIMUM_DISPLAY_TIMEOUT 5000
 
 enum
 {
@@ -237,6 +238,50 @@ get_row_from_download (DownloaderView *dv, EphyDownload *download)
 }
 
 static void
+update_buttons (DownloaderView *dv)
+{
+	GtkTreeSelection *selection;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	GValue val = {0, };
+	EphyDownload *download;
+	EphyDownloadState state;
+	gboolean pause_enabled = FALSE;
+	gboolean abort_enabled = FALSE;
+	gboolean label_pause = TRUE;
+
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(dv->priv->treeview));
+
+	if (gtk_tree_selection_get_selected (selection, &model, &iter))
+	{
+		gtk_tree_model_get_value (model, &iter, COL_DOWNLOAD_OBJECT, &val);
+		download = g_value_get_object (&val);
+		g_value_unset (&val);
+
+		state = ephy_download_get_state (download);
+
+		switch (state)
+		{
+		case EPHY_DOWNLOAD_DOWNLOADING:
+			pause_enabled = TRUE;
+			abort_enabled = TRUE;
+			break;
+		case EPHY_DOWNLOAD_PAUSED:
+			pause_enabled = TRUE;
+			abort_enabled = TRUE;
+			label_pause = FALSE;
+			break;
+		default:
+			abort_enabled = TRUE;
+			break;
+		}
+	}
+	gtk_widget_set_sensitive (dv->priv->pause_button, pause_enabled);
+	gtk_widget_set_sensitive (dv->priv->abort_button, abort_enabled);
+	gtk_button_set_label (GTK_BUTTON (dv->priv->pause_button), label_pause ? _("_Pause") : _("_Resume"));
+}
+
+static void
 update_download_row (DownloaderView *dv, EphyDownload *download)
 {
 	GtkTreeRowReference *row_ref;
@@ -317,6 +362,8 @@ update_download_row (DownloaderView *dv, EphyDownload *download)
 	g_free (cur_progress);
 	g_free (file);
 	g_free (remaining);
+
+	update_buttons (dv);
 }
 
 static void
@@ -419,6 +466,18 @@ downloader_view_add_download (DownloaderView *dv,
 }
 
 static void
+selection_changed (GtkTreeSelection *selection, DownloaderView *dv)
+{
+	update_buttons (dv);
+}
+
+static gboolean unref_return_false (void *data)
+{
+	g_object_unref (data);
+	return FALSE;
+}
+
+static void
 downloader_view_build_ui (DownloaderView *dv)
 {
 	DownloaderViewPrivate *priv = dv->priv;
@@ -427,6 +486,7 @@ downloader_view_build_ui (DownloaderView *dv)
 	GtkCellRenderer *renderer;
 	GdkPixbuf *icon;
 	EphyDialog *d = EPHY_DIALOG (dv);
+	GtkTreeSelection *selection;
 
 	ephy_dialog_construct (d,
                                properties,
@@ -499,6 +559,12 @@ downloader_view_build_ui (DownloaderView *dv)
 				       GTK_ICON_SIZE_MENU,
 				       NULL);
 	gtk_window_set_icon (GTK_WINDOW(priv->window), icon);
+
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
+	g_signal_connect (selection, "changed", G_CALLBACK (selection_changed), dv);
+
+	g_object_ref (dv);
+	g_timeout_add (DIALOG_MINIMUM_DISPLAY_TIMEOUT, unref_return_false, dv);
 }
 
 void
@@ -524,13 +590,12 @@ download_dialog_pause_cb (GtkButton *button, DownloaderView *dv)
 	if (state == EPHY_DOWNLOAD_DOWNLOADING)
 	{
 		ephy_download_pause (download);
-		gtk_button_set_label (GTK_BUTTON (dv->priv->pause_button), _("_Resume"));
 	}
 	else if (state == EPHY_DOWNLOAD_PAUSED)
 	{
 		ephy_download_resume (download);
-		gtk_button_set_label (GTK_BUTTON (dv->priv->pause_button), _("_Pause"));
 	}
+	update_buttons (dv);
 }
 
 void
