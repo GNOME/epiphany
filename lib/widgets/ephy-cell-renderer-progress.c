@@ -31,7 +31,7 @@ static void ephy_cell_renderer_progress_class_init (EphyCellRendererProgressClas
 #define EPHY_CELL_RENDERER_PROGRESS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_CELL_RENDERER_PROGRESS, EphyCellRendererProgressPrivate))
 
 #define XPAD 4
-#define YPAD 2
+#define YPAD 8
 #define UNKNOWN_STRING _("Unknown")
 
 enum

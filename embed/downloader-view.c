@@ -43,8 +43,7 @@
 enum
 {
 	COL_PERCENT,
-	COL_FILENAME,
-	COL_SIZE,
+	COL_FILE,
 	COL_REMAINING,
 	COL_DOWNLOAD_OBJECT
 };
@@ -232,18 +231,16 @@ get_row_from_download (DownloaderView *dv, EphyDownload *download)
 }
 
 static void
-download_changed_cb (EphyDownload *download, DownloaderView *dv)
+update_download_row (DownloaderView *dv, EphyDownload *download)
 {
 	GtkTreeRowReference *row_ref;
 	GtkTreePath *path;
 	GtkTreeIter iter;
 	EphyDownloadState state;
-	int percent;
-	long total;
-	long remaining_secs;
-	char *remaining;
-	char *size;
+	long total, current, remaining_secs;
+	char *remaining, *file, *cur_progress;
 	struct tm;
+	int percent;
 
 	row_ref = get_row_from_download (dv, download);
 	g_return_if_fail (row_ref != NULL);
@@ -271,13 +268,25 @@ download_changed_cb (EphyDownload *download, DownloaderView *dv)
 	}
 
 	total = ephy_download_get_total_progress (download);
-	if (total == -1)
+	current = ephy_download_get_current_progress (download);
+
+	cur_progress = gnome_vfs_format_file_size_for_display (current);
+
+	if (total != -1)
 	{
-		size = g_strdup (_("Unknown"));
+		char *total_progress;
+
+		total_progress = gnome_vfs_format_file_size_for_display (total);
+		file = g_strdup_printf ("%s\n%s of %s",
+					ephy_download_get_name (download),
+					cur_progress, total_progress);
+		g_free (total_progress);
 	}
 	else
 	{
-		size = gnome_vfs_format_file_size_for_display (total);
+		file = g_strdup_printf ("%s\n%s",
+					ephy_download_get_name (download),
+					cur_progress);
 	}
 
 	if (remaining_secs < 0)
@@ -294,13 +303,19 @@ download_changed_cb (EphyDownload *download, DownloaderView *dv)
 	gtk_list_store_set (GTK_LIST_STORE (dv->priv->model),
 			    &iter,
 			    COL_PERCENT, percent,
-			    COL_SIZE, size,
+			    COL_FILE, file,
 			    COL_REMAINING, remaining,
 			    -1);
 	gtk_tree_path_free (path);
 
-	g_free (size);
+	g_free (file);
 	g_free (remaining);
+}
+
+static void
+download_changed_cb (EphyDownload *download, DownloaderView *dv)
+{
+	update_download_row (dv, download);
 }
 
 void
@@ -311,11 +326,11 @@ downloader_view_add_download (DownloaderView *dv,
 	GtkTreeIter iter;
 	GtkTreeSelection *selection;
 	GtkTreePath *path;
-	char *name;
-
 
 	gtk_list_store_append (GTK_LIST_STORE (dv->priv->model),
 			       &iter);
+	gtk_list_store_set (GTK_LIST_STORE (dv->priv->model),
+			    &iter, COL_DOWNLOAD_OBJECT, download, -1);
 
 	path =  gtk_tree_model_get_path (GTK_TREE_MODEL (dv->priv->model), &iter);
 	row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (dv->priv->model), path);
@@ -325,13 +340,7 @@ downloader_view_add_download (DownloaderView *dv,
 			     download,
 			     row_ref);
 
-	name = ephy_download_get_name (download);
-	gtk_list_store_set (GTK_LIST_STORE (dv->priv->model),
-			    &iter,
-			    COL_FILENAME, name,
-			    COL_DOWNLOAD_OBJECT, download,
-			    -1);
-	g_free (name);
+	update_download_row (dv, download);
 
 	selection = gtk_tree_view_get_selection
 		(GTK_TREE_VIEW(dv->priv->treeview));
@@ -369,9 +378,8 @@ downloader_view_build_ui (DownloaderView *dv)
 	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview)),
 				     GTK_SELECTION_SINGLE);
 
-	liststore = gtk_list_store_new (5,
+	liststore = gtk_list_store_new (4,
 					G_TYPE_INT,
-					G_TYPE_STRING,
 					G_TYPE_STRING,
 					G_TYPE_STRING,
 					G_TYPE_OBJECT);
@@ -389,33 +397,23 @@ downloader_view_build_ui (DownloaderView *dv)
 						     "value", 0,
 						     NULL);
 	column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview), 0);
-        gtk_tree_view_column_set_resizable (column, TRUE);
         gtk_tree_view_column_set_reorderable (column, TRUE);
         gtk_tree_view_column_set_sort_column_id (column, COL_PERCENT);
 
 	renderer = gtk_cell_renderer_text_new ();
 	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW(priv->treeview),
-						     COL_FILENAME, _("Filename"),
+						     COL_FILE, _("File"),
 						     renderer,
-						     "text", COL_FILENAME,
+						     "text", COL_FILE,
 						     NULL);
 	column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview),
-					   COL_FILENAME);
-        gtk_tree_view_column_set_resizable (column, TRUE);
+					   COL_FILE);
+        gtk_tree_view_column_set_expand (column, TRUE);
         gtk_tree_view_column_set_reorderable (column, TRUE);
-        gtk_tree_view_column_set_sort_column_id (column, COL_FILENAME);
+        gtk_tree_view_column_set_sort_column_id (column, COL_FILE);
 
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW(priv->treeview),
-						     COL_SIZE, _("Size"),
-						     renderer,
-						     "text", COL_SIZE,
-						     NULL);
-	column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview),
-					   COL_SIZE);
-        gtk_tree_view_column_set_resizable (column, TRUE);
-        gtk_tree_view_column_set_reorderable (column, TRUE);
-        gtk_tree_view_column_set_sort_column_id (column, COL_SIZE);
-
+	renderer = gtk_cell_renderer_text_new ();
+	g_object_set (renderer, "xalign", 0.5, NULL);
 	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW(priv->treeview),
 						     COL_REMAINING, _("Remaining"),
 						     renderer,
@@ -423,7 +421,6 @@ downloader_view_build_ui (DownloaderView *dv)
 						     NULL);
 	column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview),
 					   COL_REMAINING);
-        gtk_tree_view_column_set_resizable (column, TRUE);
         gtk_tree_view_column_set_reorderable (column, TRUE);
         gtk_tree_view_column_set_sort_column_id (column, COL_REMAINING);
 
