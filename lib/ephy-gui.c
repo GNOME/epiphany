@@ -87,7 +87,8 @@ ephy_gui_menu_position_tree_selection (GtkMenu   *menu,
 
 		gtk_tree_view_get_cell_area (tree_view, selected_rows->data,
 					     NULL, &cell_rect);
-		*y += CLAMP (cell_rect.y, 0, widget->allocation.height);
+
+		*y += CLAMP (cell_rect.y + cell_rect.height, 0, widget->allocation.height);
 
 		g_list_foreach (selected_rows, (GFunc)gtk_tree_path_free, NULL);
 		g_list_free (selected_rows);
@@ -161,6 +162,8 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 					GTK_RESPONSE_CANCEL,
 					_("_Overwrite"), GTK_RESPONSE_ACCEPT,
 					NULL);
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
 	hbox = gtk_hbox_new (FALSE, 6);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, TRUE, TRUE, 12);
 	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_DIALOG);

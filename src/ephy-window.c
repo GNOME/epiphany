@@ -678,7 +678,9 @@ confirm_close_with_modified_forms (EphyWindow *window)
 					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					      _("Close _Document"), GTK_RESPONSE_OK,
 					      NULL);
-	
+
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
+
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14);
@@ -2201,9 +2203,9 @@ ephy_window_init (EphyWindow *window)
 	gtk_widget_show (GTK_WIDGET (window->priv->notebook));
 
 	window->priv->statusbar = ephy_statusbar_new ();
-	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
-			    GTK_WIDGET (window->priv->statusbar),
-			    FALSE, TRUE, 0);
+	gtk_box_pack_end (GTK_BOX (window->priv->main_vbox),
+			  GTK_WIDGET (window->priv->statusbar),
+			  FALSE, TRUE, 0);
 	window->priv->tab_message_cid = gtk_statusbar_get_context_id
 		(GTK_STATUSBAR (window->priv->statusbar), "tab_message");
 	window->priv->help_message_cid = gtk_statusbar_get_context_id
