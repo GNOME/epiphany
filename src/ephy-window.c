@@ -78,6 +78,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "View", NULL, N_("_View") },
 	{ "Bookmarks", NULL, N_("_Bookmarks") },
 	{ "Go", NULL, N_("_Go") },
+	{ "Tools", NULL, N_("T_ools") },
 	{ "Tabs", NULL, N_("_Tabs") },
 	{ "Help", NULL, N_("_Help") },
 	{ "PopupAction", NULL, "" },
