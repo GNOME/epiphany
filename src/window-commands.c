@@ -930,7 +930,6 @@ window_cmd_help_about (GtkAction *action,
 {
 	static GtkWidget *about = NULL;
 	GtkWidget** ptr;
-	GdkPixbuf *icon;
 	const char *icon_path;
 	GdkPixbuf *logo = NULL;
 	GtkIconTheme *icon_theme;
@@ -995,13 +994,6 @@ window_cmd_help_about (GtkAction *action,
 
 	gtk_window_set_transient_for (GTK_WINDOW (about),
 				      GTK_WINDOW (window));
-
-	icon = gtk_widget_render_icon (about,
-				       GNOME_STOCK_ABOUT,
-				       GTK_ICON_SIZE_MENU,
-				       NULL);
-	gtk_window_set_icon (GTK_WINDOW (about), icon);
-	g_object_unref(icon);
 
 	ptr = &about;
 	g_object_add_weak_pointer (G_OBJECT (about), (gpointer *)ptr);
