@@ -27,43 +27,6 @@
 #include <stdlib.h>
 #include <glib.h>
 
-#define ELLIPSIS "\xe2\x80\xa6"
-
-/**
- * ephy_string_shorten: returns a newly allocated shortened version of str.
- * The input must be valid utf-8.
- * @str: the string to shorten
- * @target_length: the length of the shortened string (in characters)
- *
- * FIXME: this function is a big mess. While it is utf-8 safe now,
- * it can still split a sequence of combining characters
- */
-char *
-ephy_string_shorten (const char *str, int target_length)
-{
-	char *new_str;
-	glong actual_length;
-	gulong bytes;
-
-	if (!str) return NULL;
-
-	actual_length = g_utf8_strlen (str, -1);
-
-	/* if the string is already short enough, or if it's too short for
-	 * us to shorten it, return a new copy */
-	if (actual_length <= target_length) return g_strdup (str);
-
-	/* create string */
-	bytes = GPOINTER_TO_UINT (g_utf8_offset_to_pointer (str, target_length - 1) - str);
-
-	new_str = g_new0 (gchar, bytes + strlen(ELLIPSIS) + 1);
-
-	strncpy (new_str, str, bytes);
-	strncpy (new_str + bytes, ELLIPSIS, strlen (ELLIPSIS));
-
-	return new_str;
-}
-
 gboolean
 ephy_string_to_int (const char *string, gulong *integer)
 {

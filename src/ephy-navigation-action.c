@@ -22,12 +22,12 @@
 
 #include "ephy-navigation-action.h"
 #include "ephy-window.h"
-#include "ephy-string.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
 #include "ephy-embed-shell.h"
 #include "ephy-debug.h"
 
+#include <gtk/gtklabel.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkimagemenuitem.h>
@@ -89,7 +89,7 @@ ephy_navigation_action_get_type (void)
 	return type;
 }
 
-#define MAX_LENGTH 60
+#define MAX_LABEL_LENGTH 48
 
 static GtkWidget *
 new_history_menu_item (const char *origtext,
@@ -99,15 +99,16 @@ new_history_menu_item (const char *origtext,
 	EphyHistory *history;
 	GtkWidget *item, *image;
 	GdkPixbuf *icon = NULL;
+	GtkLabel *label;
 	const char *icon_address;
-	char *short_text;
 
-	g_return_val_if_fail (address != NULL, NULL);
+	g_return_val_if_fail (address != NULL && origtext != NULL, NULL);
 
-	/* FIXME: use ellipsisation in the menu item instead */
-	short_text = ephy_string_shorten (origtext, MAX_LENGTH);
-	item = gtk_image_menu_item_new_with_label (short_text);
-	g_free (short_text);
+	item = gtk_image_menu_item_new_with_label (origtext);
+
+	label = GTK_LABEL (GTK_BIN (item)->child);
+	gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+	gtk_label_set_max_width_chars (label, MAX_LABEL_LENGTH);
 
 	history = EPHY_HISTORY
 		(ephy_embed_shell_get_global_history (embed_shell));

@@ -4,7 +4,7 @@ SUBDIRS = lib embed idl src data po help doc
 
 distcleancheck_listfiles = find . -type f -print | grep -v 'omf\.out'
 
-distuninstallcheck_listfiles = find . -type f -print | grep -v '^\./var/scrollkeeper' | grep -v 'omf' | grep -v 'figures'
+distuninstallcheck_listfiles = find . -type f -print | grep -v '/var/scrollkeeper'
 
 EXTRA_DIST = 			\
 	intltool-merge.in	\

@@ -34,13 +34,13 @@
 #include "ephy-debug.h"
 #include "ephy-dnd.h"
 #include "ephy-gui.h"
-#include "ephy-string.h"
 #include "ephy-marshal.h"
 
 static void ephy_topic_action_init       (EphyTopicAction *action);
 static void ephy_topic_action_class_init (EphyTopicActionClass *class);
 
-#define LABEL_WIDTH_CHARS 32
+#define TOOLITEM_WIDTH_CHARS	24
+#define MENUITEM_WIDTH_CHARS	32
 
 #define EPHY_TOPIC_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOPIC_ACTION, EphyTopicActionPrivate))
 
@@ -135,6 +135,8 @@ create_tool_item (GtkAction *action)
 	gtk_container_add (GTK_CONTAINER (button), hbox);
 
 	label = gtk_label_new (NULL);
+	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+	gtk_label_set_max_width_chars (GTK_LABEL (label), TOOLITEM_WIDTH_CHARS);
 	gtk_widget_show (label);
 	gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (hbox), arrow, TRUE, TRUE, 0);
@@ -173,8 +175,6 @@ menu_activate_cb (GtkWidget *item, GtkAction *action)
 	}
 }
 
-#define MAX_LABEL_LENGTH	32
-
 static void
 ephy_topic_action_sync_label (GtkAction *gaction,
 			      GParamSpec *pspec,
@@ -192,17 +192,14 @@ ephy_topic_action_sync_label (GtkAction *gaction,
 	{
 		GtkWidget *label = NULL;
 		char *title;
-		char *title_short;
 
 		label = g_object_get_data (G_OBJECT (proxy), "label");
 		g_return_if_fail (label != NULL);
 
 		g_object_get (G_OBJECT (action), "label", &title, NULL);
-		title_short = ephy_string_shorten (title, MAX_LABEL_LENGTH);
 
-		gtk_label_set_label (GTK_LABEL (label), title_short);
+		gtk_label_set_label (GTK_LABEL (label), title);
 
-		g_free (title_short);
 		g_free (title);
 	}
 }
@@ -239,8 +236,6 @@ sort_bookmarks (gconstpointer a, gconstpointer b)
 
 	return retval;
 }
-
-#define MAX_LENGTH 32
 
 static gboolean
 can_open_in_tabs (EphyNode *node)
@@ -306,7 +301,7 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 
 			item = gtk_image_menu_item_new_with_label (title);
 			label = (GtkLabel *) ((GtkBin *) item)->child;
-			gtk_label_set_width_chars (label, LABEL_WIDTH_CHARS);
+			gtk_label_set_max_width_chars (label, MENUITEM_WIDTH_CHARS);
 			gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
 
 			if (icon_location)
@@ -565,7 +560,7 @@ build_topics_menu (EphyTopicAction *action)
 
 		item = gtk_image_menu_item_new_with_label (title);
 		label = (GtkLabel *) ((GtkBin *) item)->child;
-		gtk_label_set_width_chars (label, LABEL_WIDTH_CHARS);
+		gtk_label_set_max_width_chars (label, MENUITEM_WIDTH_CHARS);
 		gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
 
 		gtk_widget_show (item);

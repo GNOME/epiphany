@@ -30,9 +30,6 @@ gboolean	 ephy_string_to_int			(const char *string,
 
 char		*ephy_string_blank_chr			(char *source);
 
-char		*ephy_string_shorten			(const char *str,
-							 int target_length);
-
 char		*ephy_string_elide_underscores		(const char *original);
 
 char            *ephy_string_double_underscores         (const char *string);

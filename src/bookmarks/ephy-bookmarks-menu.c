@@ -129,8 +129,8 @@ connect_proxy_cb (GtkActionGroup *action_group,
 		GtkLabel *label;
 
 		label = (GtkLabel *) ((GtkBin *) proxy)->child;
-		gtk_label_set_width_chars (label, LABEL_WIDTH_CHARS);
 		gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+		gtk_label_set_max_width_chars (label, LABEL_WIDTH_CHARS);
         }
 }
 

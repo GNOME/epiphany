@@ -33,10 +33,13 @@
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
-#include "ephy-string.h"
 #include "ephy-gui.h"
 
 #include <string.h>
+
+/* FIXME tweak this, or make it configurable? (bug 148093) */
+#define ENTRY_WIDTH_CHARS	16
+#define TOOLITEM_WIDTH_CHARS	24
 
 static void ephy_bookmark_action_init       (EphyBookmarkAction *action);
 static void ephy_bookmark_action_class_init (EphyBookmarkActionClass *class);
@@ -107,9 +110,6 @@ ephy_bookmark_action_get_type (void)
 	return type;
 }
 
-/* FIXME tweak this, or make it configurable? (bug 148093) */
-#define ENTRY_WIDTH_CHARS	16
-
 static GtkWidget *
 create_tool_item (GtkAction *action)
 {
@@ -145,6 +145,8 @@ create_tool_item (GtkAction *action)
 	g_object_set_data (G_OBJECT (item), "icon", icon);
 
 	label = gtk_label_new (NULL);
+	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+	gtk_label_set_max_width_chars (GTK_LABEL (label), TOOLITEM_WIDTH_CHARS);
 	gtk_widget_show (label);
 	gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 	g_object_set_data (G_OBJECT (item), "label", label);
@@ -260,8 +262,6 @@ ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget 
 	}
 }
 
-#define MAX_LABEL_LENGTH	32
-
 static void
 ephy_bookmark_action_sync_label (GtkAction *gaction,
 				 GParamSpec *pspec,
@@ -271,36 +271,29 @@ ephy_bookmark_action_sync_label (GtkAction *gaction,
 
 	g_return_if_fail (EPHY_IS_NODE (action->priv->node));
 
-	/* note that we cannot use ellipsizing label with defined width,
-	 * since that makes the label exactly that wide, even if the
-	 * text takes less space. So we have to shorten the string.
-	 */
 	if (GTK_IS_TOOL_ITEM (proxy))
 	{
 		GtkWidget *label = NULL;
 		const char *title;
-		char *title_short, *label_text;
+		char *label_text;
 
 		label = g_object_get_data (G_OBJECT (proxy), "label");
 		g_return_if_fail (label != NULL);
 
 		title = ephy_node_get_property_string
 			(action->priv->node, EPHY_NODE_BMK_PROP_TITLE);
-		title_short = ephy_string_shorten (title, MAX_LABEL_LENGTH);
 
-		if (EPHY_BOOKMARK_ACTION (action)->priv->smart_url)
+		if (action->priv->smart_url)
 		{
-			label_text = g_strdup_printf (_("%s:"), title_short);
+			label_text = g_strdup_printf (_("%s:"), title);
 	
 			gtk_label_set_label (GTK_LABEL (label), label_text);
 			g_free (label_text);
 		}
 		else
 		{
-			gtk_label_set_label (GTK_LABEL (label), title_short);
+			gtk_label_set_label (GTK_LABEL (label), title);
 		}
-
-		g_free (title_short);
 	}
 }
 

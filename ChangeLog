@@ -1,5 +1,27 @@
 2004-12-13  Christian Persch  <chpe@cvs.gnome.org>
 
+	* Makefile.am:
+
+	Make distcheck fix.
+	
+	* lib/ephy-string.c:
+	* lib/ephy-string.h:
+
+	Finally remove ephy_string_shorten().
+
+	* src/bookmarks/ephy-bookmark-action.c: (create_tool_item),
+	(ephy_bookmark_action_sync_label):
+	* src/bookmarks/ephy-bookmarks-menu.c: (connect_proxy_cb):
+	* src/bookmarks/ephy-favorites-menu.c: (connect_proxy_cb):
+	* src/bookmarks/ephy-topic-action.c: (create_tool_item),
+	(ephy_topic_action_sync_label), (append_bookmarks_menu),
+	(build_topics_menu):
+	* src/ephy-navigation-action.c: (new_history_menu_item):
+
+	Use gtk_label_set_max_width_chars() and ellipsise the labels.
+
+2004-12-13  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.ac:
 
 	Adapt PSM configure check for new header location in SDK.
