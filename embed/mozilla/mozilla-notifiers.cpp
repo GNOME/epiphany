@@ -379,16 +379,7 @@ add_notification_and_notify (GConfClient		*client,
 	mozilla_notifiers = g_list_append (mozilla_notifiers,
 			                   GUINT_TO_POINTER (cnxn_id));
 
-	entry = gconf_client_get_entry (client, key, NULL, TRUE, &error);
-	if (eel_gconf_handle_error (&error))
-	{
-		return;
-	}
-	g_return_if_fail (entry != NULL);
-
-	func (client, cnxn_id, entry, user_data);
-
-	gconf_entry_free (entry);
+	gconf_client_notify (client, key);
 }
 
 void 
