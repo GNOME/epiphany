@@ -949,7 +949,7 @@ ephy_node_view_get_selection (EphyNodeView *view)
 void
 ephy_node_view_remove (EphyNodeView *view)
 {
-	GList *list;
+	GList *list, *l;
 	EphyNode *node;
 	GtkTreeIter iter, iter2;
 	GtkTreePath *path;
@@ -986,9 +986,9 @@ ephy_node_view_remove (EphyNodeView *view)
 	}
 	gtk_tree_path_free (path);
 
-	for (; list != NULL; list = list->next)
+	for (l = list; l != NULL; l = l->next)
 	{
-		ephy_node_unref (list->data);
+		ephy_node_unref (l->data);
 	}
 
 	g_list_free (list);
@@ -998,9 +998,14 @@ ephy_node_view_remove (EphyNodeView *view)
 	if (row_ref != NULL)
 	{
 		path = gtk_tree_row_reference_get_path (row_ref);
-		gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), path, NULL, FALSE);
+
+		if (path != NULL)
+		{
+			gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), path, NULL, FALSE);
+			gtk_tree_path_free (path);
+		}	
+
 		gtk_tree_row_reference_free (row_ref);
-		gtk_tree_path_free (path);
 	}
 }
 

@@ -1,3 +1,15 @@
+2003-07-27  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_remove):
+
+	Fix mem leak.
+
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_remove):
+	* src/pdm-dialog.c: (pdm_cmd_delete_selection):
+
+	If we've just deleted every row in the tree view, the row ref
+	contains an empty path. Check for that; possibly fixing bug #118398.
+
 2003-07-25  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/widgets/ephy-search-entry.c: (ephy_search_entry_destroy_cb),

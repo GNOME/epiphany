@@ -430,9 +430,14 @@ pdm_cmd_delete_selection (PdmActionInfo *action)
 	if (row_ref != NULL)
 	{
 		path = gtk_tree_row_reference_get_path (row_ref);
-		gtk_tree_view_set_cursor (GTK_TREE_VIEW (action->treeview), path, NULL, FALSE);
+
+		if (path != NULL)
+		{
+			gtk_tree_view_set_cursor (GTK_TREE_VIEW (action->treeview), path, NULL, FALSE);
+			gtk_tree_path_free (path);
+		}
+
 		gtk_tree_row_reference_free (row_ref);
-		gtk_tree_path_free (path);
 	}
 }
 
