@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-15 06:29+0100\n"
-"PO-Revision-Date: 2004-01-15 06:30+0100\n"
+"POT-Creation-Date: 2004-01-18 12:53+0100\n"
+"PO-Revision-Date: 2004-01-18 12:53+0100\n"
 "Last-Translator: Danilo Segan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -97,20 +97,20 @@ msgstr ""
 "дозвољавањем прозорчета историјата и сакривањем омиљених обележивача."
 
 #: data/epiphany-lockdown.schemas.in.h:10
-msgid "Disable unsafe protocols"
-msgstr "Искључи небезбедне протоколе"
-
-#: data/epiphany-lockdown.schemas.in.h:11
-msgid "Disable users ability to edit their bookmarks."
+msgid "Disable the user's ability to edit their bookmarks."
 msgstr "Онемогући корисницима да уређују своје обележиваче."
 
-#: data/epiphany-lockdown.schemas.in.h:12
-msgid "Disable users ability to edit toolbars."
+#: data/epiphany-lockdown.schemas.in.h:11
+msgid "Disable the user's ability to edit toolbars."
 msgstr "Онемогући корисницима да уређују траке алатки."
 
-#: data/epiphany-lockdown.schemas.in.h:13
-msgid "Disable users ability to type in a URL to epiphany."
+#: data/epiphany-lockdown.schemas.in.h:12
+msgid "Disable the user's ability to type in a URL to epiphany."
 msgstr "Онемогући корисницима да уносе адресу у Спознаји."
+
+#: data/epiphany-lockdown.schemas.in.h:13
+msgid "Disable unsafe protocols"
+msgstr "Искључи небезбедне протоколе"
 
 #: data/epiphany-lockdown.schemas.in.h:14
 msgid ""
@@ -647,7 +647,7 @@ msgid "Download Manager"
 msgstr "Преузимање"
 
 #: data/glade/epiphany.glade.h:8 data/ui/nautilus-epiphany-view.xml.h:11
-#: src/ephy-window.c:902
+#: src/ephy-window.c:965
 msgid "Find"
 msgstr "Пронађи"
 
@@ -930,7 +930,7 @@ msgid "Paper"
 msgstr "Папир"
 
 #: data/glade/print.glade.h:23 data/ui/nautilus-epiphany-view.xml.h:23
-#: src/ephy-window.c:898
+#: src/ephy-window.c:961
 msgid "Print"
 msgstr "Штампај"
 
@@ -1152,7 +1152,7 @@ msgid "%02u.%02u"
 msgstr "%02u:%02u"
 
 #: embed/downloader-view.c:303 lib/widgets/ephy-cell-renderer-progress.c:35
-#: src/ephy-window.c:1083
+#: src/ephy-window.c:1146
 msgid "Unknown"
 msgstr "Непознато"
 
@@ -1172,7 +1172,7 @@ msgstr "Преостало"
 msgid "_Resume"
 msgstr "Нас_тави"
 
-#: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:341
+#: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:344
 msgid "Save Image As"
 msgstr "Сачувај слику као"
 
@@ -1180,7 +1180,7 @@ msgstr "Сачувај слику као"
 msgid "Save Page As"
 msgstr "Сачувај страницу као"
 
-#: embed/ephy-embed-popup-control.c:650 src/popup-commands.c:429
+#: embed/ephy-embed-popup-control.c:650 src/popup-commands.c:432
 msgid "Save Background As"
 msgstr "Сачувај позадину као"
 
@@ -2336,7 +2336,7 @@ msgid "_Search:"
 msgstr "_Претрага:"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:1358
-#: src/bookmarks/ephy-topic-action.c:621 src/ephy-window.c:904
+#: src/bookmarks/ephy-topic-action.c:621 src/ephy-window.c:967
 msgid "Bookmarks"
 msgstr "Обележивачи"
 
@@ -3072,55 +3072,55 @@ msgstr "Упо_треби слику за позадину"
 msgid "Copy I_mage Address"
 msgstr "Умножи адресу сли_ке"
 
-#: src/ephy-window.c:597
+#: src/ephy-window.c:598
 msgid "Exit Fullscreen"
 msgstr "Не користи цео екран"
 
-#: src/ephy-window.c:671
+#: src/ephy-window.c:672
 msgid "_Close document"
 msgstr "_Затвори документ"
 
-#: src/ephy-window.c:698
+#: src/ephy-window.c:699
 msgid "There are unsubmitted changes to form elements."
 msgstr "Има непослатих измена у елементима обрасца."
 
-#: src/ephy-window.c:699
+#: src/ephy-window.c:700
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Уколико ипак затворите документ, изгубићете те податке."
 
-#: src/ephy-window.c:894 src/window-commands.c:390
+#: src/ephy-window.c:957 src/window-commands.c:390
 msgid "Open"
 msgstr "Отвори"
 
-#: src/ephy-window.c:896 src/window-commands.c:415
+#: src/ephy-window.c:959 src/window-commands.c:415
 msgid "Save As"
 msgstr "Сачувај као"
 
-#: src/ephy-window.c:900
+#: src/ephy-window.c:963
 msgid "Bookmark"
 msgstr "Обележивач"
 
-#: src/ephy-window.c:1086
+#: src/ephy-window.c:1149
 msgid "Insecure"
 msgstr "Небезбедно"
 
-#: src/ephy-window.c:1089
+#: src/ephy-window.c:1152
 msgid "Broken"
 msgstr "Разбијен"
 
-#: src/ephy-window.c:1092
+#: src/ephy-window.c:1155
 msgid "Medium"
 msgstr "Осредњи"
 
-#: src/ephy-window.c:1096
+#: src/ephy-window.c:1159
 msgid "Low"
 msgstr "Низак"
 
-#: src/ephy-window.c:1100
+#: src/ephy-window.c:1163
 msgid "High"
 msgstr "Висок"
 
-#: src/ephy-window.c:1110
+#: src/ephy-window.c:1173
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3129,7 +3129,7 @@ msgstr ""
 "Ниво безбедности: %s\n"
 "%s"
 
-#: src/ephy-window.c:1116
+#: src/ephy-window.c:1179
 #, c-format
 msgid "Security level: %s"
 msgstr "Ниво безбедности: %s"
@@ -3182,7 +3182,7 @@ msgstr "Истиче:"
 msgid "End of current session"
 msgstr "Крај текуће сесије"
 
-#: src/popup-commands.c:326 src/popup-commands.c:334
+#: src/popup-commands.c:329 src/popup-commands.c:337
 msgid "Download link"
 msgstr "Преузми везу"
 
