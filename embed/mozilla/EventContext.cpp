@@ -156,7 +156,7 @@ nsresult EventContext::ResolveBaseURL (nsIDocument *doc, const nsAString &relurl
 	if (!base) return NS_ERROR_FAILURE;
 #endif
 
-	return base->Resolve (NS_ConvertUCS2toUTF8(relurl), url);
+	return base->Resolve (NS_ConvertUTF16toUTF8(relurl), url);
 }
 
 nsresult EventContext::ResolveDocumentURL (nsIDocument *doc, const nsAString &relurl, nsACString &url)
@@ -172,7 +172,7 @@ nsresult EventContext::ResolveDocumentURL (nsIDocument *doc, const nsAString &re
 	if (!uri) return NS_ERROR_FAILURE;
 #endif
 
-	return uri->Resolve (NS_ConvertUCS2toUTF8(relurl), url);
+	return uri->Resolve (NS_ConvertUTF16toUTF8(relurl), url);
 }
 
 nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
@@ -249,7 +249,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
                                 rv = ResolveDocumentURL (doc, img, imglongdesc);
                                                                                                                 
                                 SetStringProperty ("image_long_desc",
-                                                   NS_ConvertUTF8toUCS2(imglongdesc));
+                                                   NS_ConvertUTF8toUTF16(imglongdesc));
 			}
 
 			int imgwidth, imgheight;
@@ -290,7 +290,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 				rv = ResolveDocumentURL (doc, img, cImg);
                                 if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 				SetStringProperty ("image",
-						   NS_ConvertUTF8toUCS2(cImg));
+						   NS_ConvertUTF8toUTF16(cImg));
 			}
 			else if (!value.EqualsIgnoreCase("radio")  &&
 				 !value.EqualsIgnoreCase("submit") &&
@@ -827,5 +827,5 @@ nsresult EventContext::SetStringProperty (const char *name, const char *value)
 
 nsresult EventContext::SetStringProperty (const char *name, const nsAString &value)
 {
-	return SetStringProperty (name, NS_ConvertUCS2toUTF8(value).get());
+	return SetStringProperty (name, NS_ConvertUTF16toUTF8(value).get());
 }

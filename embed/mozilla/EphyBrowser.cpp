@@ -139,7 +139,7 @@ EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
 #endif
 		if (!uri) return NS_ERROR_FAILURE;
 
-		const nsACString &link = NS_ConvertUCS2toUTF8(value);
+		const nsACString &link = NS_ConvertUTF16toUTF8(value);
 		nsCAutoString favicon_url;
 		result = uri->Resolve (link, favicon_url);
 		if (NS_FAILED (result)) return NS_ERROR_FAILURE;

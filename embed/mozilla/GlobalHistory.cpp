@@ -111,7 +111,7 @@ NS_IMETHODIMP MozGlobalHistory::IsVisited (const char *aURL, PRBool *_retval)
 NS_IMETHODIMP MozGlobalHistory::SetPageTitle (const char *aURL, 
 					      const PRUnichar *aTitle)
 {
-	const nsACString &title = NS_ConvertUCS2toUTF8 (aTitle);
+	const nsACString &title = NS_ConvertUTF16toUTF8 (aTitle);
 	
 	ephy_history_set_page_title (mGlobalHistory, aURL, PromiseFlatCString(title).get());
 

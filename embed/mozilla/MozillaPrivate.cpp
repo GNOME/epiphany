@@ -105,21 +105,21 @@ NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
 
         options->SetPrinterName(NS_LITERAL_STRING("PostScript/default").get());
 
-        options->SetHeaderStrLeft(NS_ConvertUTF8toUCS2(info->header_left_string).get());
+        options->SetHeaderStrLeft(NS_ConvertUTF8toUTF16(info->header_left_string).get());
 
-        options->SetHeaderStrCenter(NS_ConvertUTF8toUCS2(info->header_center_string).get());
+        options->SetHeaderStrCenter(NS_ConvertUTF8toUTF16(info->header_center_string).get());
 
-        options->SetHeaderStrRight(NS_ConvertUTF8toUCS2(info->header_right_string).get());
+        options->SetHeaderStrRight(NS_ConvertUTF8toUTF16(info->header_right_string).get());
 
-        options->SetFooterStrLeft(NS_ConvertUTF8toUCS2(info->footer_left_string).get());
+        options->SetFooterStrLeft(NS_ConvertUTF8toUTF16(info->footer_left_string).get());
 
-        options->SetFooterStrCenter(NS_ConvertUTF8toUCS2(info->footer_center_string).get());
+        options->SetFooterStrCenter(NS_ConvertUTF8toUTF16(info->footer_center_string).get());
 
-        options->SetFooterStrRight(NS_ConvertUTF8toUCS2(info->footer_right_string).get());
+        options->SetFooterStrRight(NS_ConvertUTF8toUTF16(info->footer_right_string).get());
 
-        options->SetToFileName (NS_ConvertUTF8toUCS2(info->file).get());
+        options->SetToFileName (NS_ConvertUTF8toUTF16(info->file).get());
 
-	options->SetPrintCommand (NS_ConvertUTF8toUCS2(info->printer).get());
+	options->SetPrintCommand (NS_ConvertUTF8toUTF16(info->printer).get());
 
 	/**
 	 * Work around a mozilla bug where paper size & orientation are ignored
@@ -138,7 +138,7 @@ NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
 
 	/* native paper size formats. Our dialog does not support custom yet */
 	options->SetPaperSize (nsIPrintSettings::kPaperSizeNativeData);
-	options->SetPaperName (NS_ConvertUTF8toUCS2(info->paper).get());
+	options->SetPaperName (NS_ConvertUTF8toUTF16(info->paper).get());
 
         options->SetPrintInColor (info->print_color);
         options->SetOrientation (info->orientation);

@@ -291,7 +291,7 @@ GtkNSSDialogs::ConfirmMismatchDomain (nsIInterfaceRequestor *ctx,
                                         PromiseFlatCString(targetURL).get());
 
 	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
-                                         NS_ConvertUCS2toUTF8(commonName).get());
+                                         NS_ConvertUTF16toUTF8(commonName).get());
 
         first = g_strdup_printf (_("The site %s returned security information for "
 				   "%s. It is possible that someone is intercepting "
@@ -333,7 +333,7 @@ GtkNSSDialogs::ConfirmUnknownIssuer (nsIInterfaceRequestor *ctx,
 	cert->GetCommonName (commonName);
 
 	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
-					NS_ConvertUCS2toUTF8(commonName).get());
+					NS_ConvertUTF16toUTF8(commonName).get());
 
 	secondary = g_strdup_printf
 		           (_("Your browser was unable to trust %s. "
@@ -437,7 +437,7 @@ GtkNSSDialogs::ConfirmCertExpired (nsIInterfaceRequestor *ctx,
 	fdate = g_locale_to_utf8 (formattedDate, -1, NULL, NULL, NULL);
 
 	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
-                                        NS_ConvertUCS2toUTF8(commonName).get());
+                                        NS_ConvertUTF16toUTF8(commonName).get());
 
 	secondary = g_strdup_printf (text, ttCommonName, fdate);
 
@@ -483,7 +483,7 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 	cert->GetCommonName (commonName);
 
 	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
-					NS_ConvertUCS2toUTF8(commonName).get());
+					NS_ConvertUTF16toUTF8(commonName).get());
 
 	ttTargetUrl = g_strdup_printf ("\"<tt>%s</tt>\"", 
 				       PromiseFlatCString(targetURL).get());
@@ -545,7 +545,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 	nsAutoString commonName;
 	cert->GetCommonName (commonName);
 	ttCommonName = g_strdup_printf ("\"<tt>%s</tt>\"", 
-					 NS_ConvertUCS2toUTF8(commonName).get());
+					 NS_ConvertUTF16toUTF8(commonName).get());
 
 	tertiary = g_strdup_printf (_("Trust %s to identify:"), ttCommonName );
 	g_free (ttCommonName);
@@ -833,7 +833,7 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	else
 	{
 		gchar * text = gtk_editable_get_chars (GTK_EDITABLE (entry1), 0, -1);
-		_password = NS_ConvertUTF8toUCS2 (text);
+		_password = NS_ConvertUTF8toUTF16 (text);
 		g_free (text);
 		*_retval = PR_TRUE;
 	}
@@ -893,7 +893,7 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	else
 	{
 		gchar * text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
-		_password = NS_ConvertUTF8toUCS2 (text);
+		_password = NS_ConvertUTF8toUTF16 (text);
 		g_free (text);
 		*_retval = PR_TRUE;
 	}
@@ -962,13 +962,13 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
 	rv = crl->GetNextUpdateLocale (nextUpdate);
 	if (NS_FAILED(rv)) return rv;
 
-	label = gtk_label_new (NS_ConvertUCS2toUTF8(org).get());
+	label = gtk_label_new (NS_ConvertUTF16toUTF8(org).get());
 	set_table_row (table, 0, _("Organization:"), label);
 
-	label = gtk_label_new (NS_ConvertUCS2toUTF8(orgUnit).get());
+	label = gtk_label_new (NS_ConvertUTF16toUTF8(orgUnit).get());
 	set_table_row (table, 1, _("Unit:"), label);
 
-	label = gtk_label_new (NS_ConvertUCS2toUTF8(nextUpdate).get());
+	label = gtk_label_new (NS_ConvertUTF16toUTF8(nextUpdate).get());
 	set_table_row (table, 2, _("Next Update:"), label);
 
 	gtk_box_pack_start (GTK_BOX (vbox), higgy_indent_widget (table), FALSE, FALSE, 0);
@@ -1004,7 +1004,7 @@ set_label_cert_attribute (GladeXML* gxml, const char* label_id, nsAutoString &va
 	{
 		gtk_label_set_use_markup (GTK_LABEL (label), FALSE);
 		gtk_label_set_text (GTK_LABEL (label),
-				    NS_ConvertUCS2toUTF8(value).get());
+				    NS_ConvertUTF16toUTF8(value).get());
 	}
 }
 
@@ -1042,7 +1042,7 @@ fill_cert_chain_tree (GtkTreeView *treeview, nsIArray *certChain)
 		if (!value.IsEmpty())
 		{
 			gtk_tree_store_set (GTK_TREE_STORE(model), &iter,
-					    0, NS_ConvertUCS2toUTF8(value).get(),
+					    0, NS_ConvertUTF16toUTF8(value).get(),
 					    1, nsCertP,
 					    -1);
 		}
@@ -1083,7 +1083,7 @@ add_asn1_object_to_tree(GtkTreeModel *model, nsIASN1Object *object, GtkTreeIter 
 	gtk_tree_store_append (GTK_TREE_STORE (model), &iter, parent);
 
 	gtk_tree_store_set (GTK_TREE_STORE(model), &iter,
-			    0, NS_ConvertUCS2toUTF8(dispNameU).get(),
+			    0, NS_ConvertUTF16toUTF8(dispNameU).get(),
 			    1, object,
 			    -1);
 
@@ -1158,7 +1158,7 @@ field_tree_view_selection_changed_cb (GtkTreeSelection *selection,
 
 		object->GetDisplayValue(dispValU);
 		gtk_text_buffer_set_text (text_buffer, 
-					  NS_ConvertUCS2toUTF8(dispValU).get(),
+					  NS_ConvertUTF16toUTF8(dispValU).get(),
 					  -1);
 	}
 	else
@@ -1324,7 +1324,7 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 		GtkWidget *indent;
 		for (PRUint32 i = 0 ; i < count ; i++)
 		{
-			const nsACString &msg = NS_ConvertUCS2toUTF8 (usage[i]);
+			const nsACString &msg = NS_ConvertUTF16toUTF8 (usage[i]);
 			GtkWidget *label = gtk_label_new(PromiseFlatCString(msg).get());
 			gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 			gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);

@@ -408,7 +408,7 @@ mozilla_init_chrome (void)
 	result = getUILang(uiLang);
 	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
 
-	return chromeRegistry->SelectLocale (NS_ConvertUCS2toUTF8(uiLang), PR_FALSE);
+	return chromeRegistry->SelectLocale (NS_ConvertUTF16toUTF8(uiLang), PR_FALSE);
 }
 
 static void
@@ -578,7 +578,7 @@ impl_get_font_list (EphyEmbedSingle *shell,
 	{
 		char *gFontString;
 
-		gFontString = g_strdup (NS_ConvertUCS2toUTF8 (fontArray[i]).get());
+		gFontString = g_strdup (NS_ConvertUTF16toUTF8 (fontArray[i]).get());
 		l = g_list_prepend (l, gFontString);
 		nsMemory::Free (fontArray[i]);
 	}
@@ -677,7 +677,7 @@ impl_list_passwords (EphyPasswordManager *manager)
 		EphyPasswordInfo *p = g_new0 (EphyPasswordInfo, 1);
 
 		p->host = g_strdup (transfer.get());
-		p->username = g_strdup(NS_ConvertUCS2toUTF8(unicodeName).get());
+		p->username = g_strdup(NS_ConvertUTF16toUTF8(unicodeName).get());
 		p->password = NULL;
 
 		passwords = g_list_prepend (passwords, p);
@@ -695,7 +695,7 @@ impl_remove_password (EphyPasswordManager *manager,
 	if (!pm) return;
 
 	pm->RemoveUser (nsDependentCString(info->host),
-			NS_ConvertUTF8toUCS2(nsDependentCString(info->username)));
+			NS_ConvertUTF8toUTF16(nsDependentCString(info->username)));
 }
 
 static const char *permission_type_string [] =

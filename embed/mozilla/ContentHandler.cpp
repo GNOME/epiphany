@@ -117,7 +117,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 
 	if (mAction != CONTENT_ACTION_SAVEAS)
 	{
-		return BuildDownloadPath (NS_ConvertUCS2toUTF8 (aDefaultFile).get(),
+		return BuildDownloadPath (NS_ConvertUTF16toUTF8 (aDefaultFile).get(),
 					  _retval);
 	}
 
@@ -128,7 +128,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 					GTK_FILE_CHOOSER_ACTION_SAVE,
 					CONF_STATE_SAVE_DIR);
 	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
-					   NS_ConvertUCS2toUTF8 (aDefaultFile).get());
+					   NS_ConvertUTF16toUTF8 (aDefaultFile).get());
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 
 	if (response == EPHY_RESPONSE_SAVE)

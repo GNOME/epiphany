@@ -285,7 +285,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 			/* FIXME: when we can depend on moz >= 1.5, use
 			 * CopyUTF8toUTF16 instead
 			 */
-			defaultFileName = NS_ConvertUTF8toUCS2(fileNameCString);
+			defaultFileName = NS_ConvertUTF8toUTF16(fileNameCString);
 		}
 	}
     
@@ -308,17 +308,17 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		/* FIXME: when we can depend on moz >= 1.5, use
 		 * CopyUTF8toUTF16 instead
 		 */
-		defaultFileName = NS_ConvertUTF8toUCS2(hostName);
+		defaultFileName = NS_ConvertUTF8toUTF16(hostName);
 	}
     
 	/* 5 One last case to handle about:blank and other untitled pages. */
 	if (defaultFileName.IsEmpty())
 	{
-		defaultFileName = NS_ConvertUTF8toUCS2 (_("Untitled"));
+		defaultFileName = NS_ConvertUTF8toUTF16 (_("Untitled"));
 	}
         
 	/* Validate the file name to ensure legality. */
-	char *default_name = g_strdup (NS_ConvertUCS2toUTF8 (defaultFileName).get());
+	char *default_name = g_strdup (NS_ConvertUTF16toUTF8 (defaultFileName).get());
 	default_name = g_strdelimit (default_name, "/", ' ');
 
 	const char *key;
