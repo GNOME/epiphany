@@ -53,15 +53,19 @@ EphyToolbarsModel *ephy_toolbars_model_new	       (EphyBookmarks *bookmarks);
 
 void		   ephy_toolbars_model_add_bookmark    (EphyToolbarsModel *model,
 				                        gboolean topic,
-				                        gulong id);
+				                        long id);
 
 gboolean	   ephy_toolbars_model_has_bookmark    (EphyToolbarsModel *model,
 				                        gboolean topic,
-				                        gulong id);
+				                        long id);
 
 void               ephy_toolbars_model_remove_bookmark (EphyToolbarsModel *model,
 				                        gboolean topic,
-				                        gulong id);
+				                        long id);
+
+char              *ephy_toolbars_model_get_action_name (EphyToolbarsModel *model,
+							gboolean topic,
+							long id);
 
 void		   ephy_toolbars_model_set_flag        (EphyToolbarsModel *model,
 							EggTbModelFlags flags);
