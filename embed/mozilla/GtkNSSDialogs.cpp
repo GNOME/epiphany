@@ -1349,11 +1349,11 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 		text = _("Could not verify this certificate for unknown reasons.");
 	}
 	
-	char *msg = g_strdup_printf ("<b>%s</b>", text);
+	char *vmsg = g_strdup_printf ("<b>%s</b>", text);
 	widget = glade_xml_get_widget (gxml, "label_verify_text");
 	g_return_val_if_fail (GTK_IS_LABEL (widget), NS_ERROR_FAILURE);
-	gtk_label_set_markup (GTK_LABEL (widget), msg);
-	g_free (msg);
+	gtk_label_set_markup (GTK_LABEL (widget), vmsg);
+	g_free (vmsg);
 
 	if (count > 0)
 	{
