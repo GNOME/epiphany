@@ -221,7 +221,6 @@ ephy_zoom_control_init (EphyZoomControl *control)
 	gtk_widget_show (box);
 
 	gtk_container_add (GTK_CONTAINER (control), box);
-	gtk_container_set_border_width (GTK_CONTAINER (control), 3);
 
 	p->handler_id = g_signal_connect (p->option_menu, "changed",
 					  G_CALLBACK (option_menu_changed_cb), control);
