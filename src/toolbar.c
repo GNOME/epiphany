@@ -35,7 +35,7 @@
 #include "ephy-string.h"
 #include "ephy-debug.h"
 #include "ephy-new-bookmark.h"
-#include "egg-toolbars-group.h"
+/*#include "egg-toolbars-group.h"*/
 #include "ephy-stock-icons.h"
 
 #include <string.h>
