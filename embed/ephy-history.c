@@ -57,6 +57,7 @@ struct EphyHistoryPrivate
 	GStaticRWLock *pages_hash_lock;
 	int autosave_timeout;
 	guint update_hosts_idle;
+	gboolean dirty;
 };
 
 enum
@@ -183,6 +184,12 @@ ephy_history_save (EphyHistory *eb)
 
 	LOG ("Saving history")
 
+	/* only save if there are changes */
+	if (eb->priv->dirty == FALSE)
+	{
+		return;
+	}
+
 	/* save nodes to xml */
 	xmlIndentTreeOutput = TRUE;
 	doc = xmlNewDoc ("1.0");
@@ -214,7 +221,12 @@ ephy_history_save (EphyHistory *eb)
 	}
 	ephy_node_thaw (eb->priv->pages);
 
-	ephy_file_save_xml (eb->priv->xml_file, doc);
+	if (ephy_file_save_xml (eb->priv->xml_file, doc))
+	{
+		/* save was successful */
+		eb->priv->dirty = FALSE;
+	}
+
 	xmlFreeDoc(doc);
 }
 
@@ -223,6 +235,8 @@ hosts_added_cb (EphyNode *node,
 	        EphyNode *child,
 	        EphyHistory *eb)
 {
+	eb->priv->dirty = TRUE;
+
 	g_static_rw_lock_writer_lock (eb->priv->hosts_hash_lock);
 
 	g_hash_table_insert (eb->priv->hosts_hash,
@@ -238,6 +252,8 @@ hosts_removed_cb (EphyNode *node,
 		  guint old_index,
 		  EphyHistory *eb)
 {
+	eb->priv->dirty = TRUE;
+
 	g_static_rw_lock_writer_lock (eb->priv->hosts_hash_lock);
 
 	g_hash_table_remove (eb->priv->hosts_hash,
@@ -247,10 +263,20 @@ hosts_removed_cb (EphyNode *node,
 }
 
 static void
+hosts_changed_cb (EphyNode *node,
+		  EphyNode *child,
+		  EphyHistory *eb)
+{
+	eb->priv->dirty = TRUE;
+}
+
+static void
 pages_added_cb (EphyNode *node,
 	        EphyNode *child,
 	        EphyHistory *eb)
 {
+	eb->priv->dirty = TRUE;
+
 	g_static_rw_lock_writer_lock (eb->priv->pages_hash_lock);
 
 	g_hash_table_insert (eb->priv->pages_hash,
@@ -266,12 +292,22 @@ pages_removed_cb (EphyNode *node,
 		  guint old_index,
 		  EphyHistory *eb)
 {
+	eb->priv->dirty = TRUE;
+
 	g_static_rw_lock_writer_lock (eb->priv->pages_hash_lock);
 
 	g_hash_table_remove (eb->priv->pages_hash,
 			     ephy_node_get_property_string (child, EPHY_NODE_PAGE_PROP_LOCATION));
 
 	g_static_rw_lock_writer_unlock (eb->priv->pages_hash_lock);
+}
+
+static void
+pages_changed_cb (EphyNode *node,
+		  EphyNode *child,
+		  EphyHistory *eb)
+{
+	eb->priv->dirty = TRUE;
 }
 
 static gboolean
@@ -436,6 +472,10 @@ ephy_history_init (EphyHistory *eb)
 					 EPHY_NODE_CHILD_REMOVED,
 				         (EphyNodeCallback) pages_removed_cb,
 					 G_OBJECT (eb));
+	ephy_node_signal_connect_object (eb->priv->pages,
+					 EPHY_NODE_CHILD_CHANGED,
+				         (EphyNodeCallback) pages_changed_cb,
+					 G_OBJECT (eb));
 
 	/* Hosts */
 	eb->priv->hosts = ephy_node_new_with_id (db, HOSTS_NODE_ID);
@@ -448,6 +488,10 @@ ephy_history_init (EphyHistory *eb)
 					 EPHY_NODE_CHILD_REMOVED,
 				         (EphyNodeCallback) hosts_removed_cb,
 					 G_OBJECT (eb));
+	ephy_node_signal_connect_object (eb->priv->hosts,
+					 EPHY_NODE_CHILD_CHANGED,
+				         (EphyNodeCallback) hosts_changed_cb,
+					 G_OBJECT (eb));
 
 	ephy_node_add_child (eb->priv->hosts, eb->priv->pages);
 
@@ -458,6 +502,9 @@ ephy_history_init (EphyHistory *eb)
 	g_hash_table_foreach (eb->priv->hosts_hash,
 			      (GHFunc) connect_page_removed_from_host,
 			      eb);
+
+	/* mark as clean */
+	eb->priv->dirty = FALSE;
 
 	/* setup the periodic history saving callback */
 	eb->priv->autosave_timeout =

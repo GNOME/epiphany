@@ -1,5 +1,13 @@
 2003-11-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-history.c: (ephy_history_save), (hosts_added_cb),
+	(hosts_removed_cb), (hosts_changed_cb), (pages_added_cb),
+	(pages_removed_cb), (pages_changed_cb), (ephy_history_init):
+
+	Only save history db if there have been changes. Fixes bug #125973.
+
+2003-11-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/FilePicker.cpp:
 	* lib/ephy-file-chooser.c: (current_folder_changed_cb),
 	(ephy_file_chooser_init), (ephy_file_chooser_set_persist_key),
