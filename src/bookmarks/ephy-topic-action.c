@@ -343,7 +343,7 @@ sort_topics (gconstpointer a, gconstpointer b)
 static GtkWidget *
 build_topics_menu (EphyTopicAction *action, EphyNode *node)
 {
-	GtkWidget *menu, *item, *label;
+	GtkWidget *menu, *item;
 	GPtrArray *children;
 	int i;
 	EphyBookmarks *bookmarks;
@@ -387,9 +387,6 @@ build_topics_menu (EphyTopicAction *action, EphyNode *node)
 		LOG ("Create menu for topic %s", title);
 
 		item = gtk_image_menu_item_new_with_label (title);
-
-		label = gtk_bin_get_child (GTK_BIN (item));
-		gtk_label_set_use_markup  (GTK_LABEL (label), TRUE);
 
 		gtk_widget_show (item);
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
