@@ -293,7 +293,8 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 
 		gtk_ui_manager_add_ui (merge, p->ui_id,
 				       "/menubar/TabsMenu/TabsOpen",
-				       name, action_name);
+				       name, action_name,
+				       GTK_UI_MANAGER_MENUITEM, FALSE);
 		g_free (name);
 	}
 
