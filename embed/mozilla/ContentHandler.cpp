@@ -343,8 +343,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
 	NS_ENSURE_TRUE (mimeInfo, NS_ERROR_FAILURE);
 
-	if (mAction == CONTENT_ACTION_OPEN ||
-	    mAction == CONTENT_ACTION_OPEN_TMP	)
+	if (mAction == CONTENT_ACTION_OPEN)
 	{
 		nsEmbedString desc;
 
