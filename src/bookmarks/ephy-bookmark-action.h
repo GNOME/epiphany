@@ -42,6 +42,8 @@ struct _EphyBookmarkAction
 struct _EphyBookmarkActionClass
 {
 	EggActionClass parent_class;
+
+	void (*go_location) (EphyBookmarkAction *action, char *location);
 };
 
 GType      ephy_bookmark_action_get_type	(void);

@@ -143,6 +143,7 @@ ephy_favicon_action_sync_icon (EggAction *action, GParamSpec *pspec,
 	if (pixbuf)
 	{
 		gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
+		g_object_unref (pixbuf);
 	}
 	else
 	{
