@@ -254,7 +254,7 @@ NS_IMETHODIMP
 MozDownload::GetMIMEInfo(nsIMIMEInfo **aMIMEInfo)
 {
         NS_ENSURE_ARG_POINTER(aMIMEInfo);
-	*aMIMEInfo = mMIMEInfo;
+	NS_IF_ADDREF(*aMIMEInfo = mMIMEInfo);
 
 	return NS_OK;
 }

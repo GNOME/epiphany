@@ -1,3 +1,12 @@
+2004-07-06  Xan Lopez  <xan@gnome.org>
+
+	* embed/mozilla/MozDownload.cpp:
+
+	<chpe> didn't I said to make that NS_IF_ADDREF () ?
+	<xan> mmm, yes
+
+	Fix the downloader crasher.
+
 2004-07-06  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/EventContext.cpp:
@@ -139,19 +148,19 @@
 	(downloader_view_add_download), (downloader_view_build_ui),
 	(downloader_view_remove_download):
 
-        Add a MIME icon in the File column. Some indent fixes.
-        
+	Add a MIME icon in the File column. Some indent fixes.
+	
 	* embed/ephy-download.c: (ephy_download_get_mime):
 	* embed/ephy-download.h:
 	* embed/mozilla/MozDownload.cpp:
 	* embed/mozilla/mozilla-download.cpp:
 
-        Implement the method to get the MIME of a download and
-        port to nsEmbedString.
+	Implement the method to get the MIME of a download and
+	port to nsEmbedString.
 
 	* embed/mozilla/PrintingPromptService.cpp:
 
-        Remove bogus nsString.h header.
+	Remove bogus nsString.h header.
 
 2004-07-03  Marco Pesenti Gritti  <marco@gnome.org>
 
@@ -363,7 +372,7 @@
 
 	* embed/mozilla/MozDownload.cpp:
 
-        Be a bit smarter about double extensions.
+	Be a bit smarter about double extensions.
 
 2004-06-30  Marco Pesenti Gritti  <marco@gnome.org>
 
@@ -954,105 +963,105 @@
 
 2004-06-08  Christian Persch  <chpe@cvs.gnome.org>
 
-        * lib/egg/egg-editable-toolbar.c: (find_action), (create_item),
-        (egg_editable_toolbar_construct), (egg_editable_toolbar_realize),
-        (egg_editable_toolbar_unrealize), (egg_editable_toolbar_set_model),
-        (egg_editable_toolbar_set_merge),
-        (egg_editable_toolbar_set_property),
-        (egg_editable_toolbar_get_property),
-        (egg_editable_toolbar_class_init), (egg_editable_toolbar_init),
-        (egg_editable_toolbar_set_edit_mode):
-        * lib/egg/egg-editable-toolbar.h:
-        * lib/egg/egg-toolbars-model.c: (egg_toolbars_model_load),
-        (egg_toolbars_model_init):
+	* lib/egg/egg-editable-toolbar.c: (find_action), (create_item),
+	(egg_editable_toolbar_construct), (egg_editable_toolbar_realize),
+	(egg_editable_toolbar_unrealize), (egg_editable_toolbar_set_model),
+	(egg_editable_toolbar_set_merge),
+	(egg_editable_toolbar_set_property),
+	(egg_editable_toolbar_get_property),
+	(egg_editable_toolbar_class_init), (egg_editable_toolbar_init),
+	(egg_editable_toolbar_set_edit_mode):
+	* lib/egg/egg-editable-toolbar.h:
+	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_load),
+	(egg_toolbars_model_init):
 
-        Only construct the toolbar on realize. When setting a different model,
-        unrealize the toolbar. Connect to model only while realized, fixes
-        crashes when setting flags on the toolbars model.
+	Only construct the toolbar on realize. When setting a different model,
+	unrealize the toolbar. Connect to model only while realized, fixes
+	crashes when setting flags on the toolbars model.
 
-        * data/ui/epiphany-bookmarksbar.xml:
-        * data/ui/epiphany-fs-toolbar.xml:
-        * data/ui/epiphany-toolbar.xml:
+	* data/ui/epiphany-bookmarksbar.xml:
+	* data/ui/epiphany-fs-toolbar.xml:
+	* data/ui/epiphany-toolbar.xml:
 
-        Separated. Fix root name to be "toolbars" which is the name we
-        save the model with.
+	Separated. Fix root name to be "toolbars" which is the name we
+	save the model with.
 
-        * src/bookmarks/ephy-bookmarksbar-model.c:
-        (ephy_bookmarksbar_model_get_type), (get_toolbar_and_item_pos),
-        (get_toolbar_pos), (ephy_bookmarksbar_model_get_action_name),
-        (ephy_bookmarksbar_model_get_node),
-        (ephy_bookmarksbar_model_add_bookmark),
-        (ephy_bookmarksbar_model_remove_bookmark),
-        (ephy_bookmarksbar_model_has_bookmark), (save_changes_idle),
-        (save_changes), (update_flags_and_save_changes),
-        (bookmark_destroy_cb), (item_added_cb), (impl_add_item),
-        (impl_get_item_id), (impl_get_item_type), (load_toolbars),
-        (ephy_bookmarksbar_model_init), (ephy_bookmarksbar_model_finalize),
-        (ephy_bookmarksbar_model_set_property),
-        (ephy_bookmarksbar_model_get_property),
-        (ephy_bookmarksbar_model_class_init),
-        (ephy_bookmarksbar_model_new):
-        * src/bookmarks/ephy-bookmarksbar-model.h:
-        * src/ephy-toolbars-model.c: (save_changes_idle), (save_changes),
-        (update_flags_and_save_changes), (get_toolbar_pos),
-        (load_toolbars), (ephy_toolbars_model_init),
-        (ephy_toolbars_model_finalize), (ephy_toolbars_model_class_init),
-        (ephy_toolbars_model_new):
-        * src/ephy-toolbars-model.h:
+	* src/bookmarks/ephy-bookmarksbar-model.c:
+	(ephy_bookmarksbar_model_get_type), (get_toolbar_and_item_pos),
+	(get_toolbar_pos), (ephy_bookmarksbar_model_get_action_name),
+	(ephy_bookmarksbar_model_get_node),
+	(ephy_bookmarksbar_model_add_bookmark),
+	(ephy_bookmarksbar_model_remove_bookmark),
+	(ephy_bookmarksbar_model_has_bookmark), (save_changes_idle),
+	(save_changes), (update_flags_and_save_changes),
+	(bookmark_destroy_cb), (item_added_cb), (impl_add_item),
+	(impl_get_item_id), (impl_get_item_type), (load_toolbars),
+	(ephy_bookmarksbar_model_init), (ephy_bookmarksbar_model_finalize),
+	(ephy_bookmarksbar_model_set_property),
+	(ephy_bookmarksbar_model_get_property),
+	(ephy_bookmarksbar_model_class_init),
+	(ephy_bookmarksbar_model_new):
+	* src/bookmarks/ephy-bookmarksbar-model.h:
+	* src/ephy-toolbars-model.c: (save_changes_idle), (save_changes),
+	(update_flags_and_save_changes), (get_toolbar_pos),
+	(load_toolbars), (ephy_toolbars_model_init),
+	(ephy_toolbars_model_finalize), (ephy_toolbars_model_class_init),
+	(ephy_toolbars_model_new):
+	* src/ephy-toolbars-model.h:
 
-        Split toolbars model in bookmarks and non-bookmarks parts.
+	Split toolbars model in bookmarks and non-bookmarks parts.
 
-        * src/bookmarks/ephy-bookmarksbar.c: (ephy_bookmarksbar_get_type),
-        (go_location_cb), (bookmark_destroy_cb),
-        (ephy_bookmarksbar_action_request), (toolbar_added_cb),
-        (ephy_bookmarksbar_set_window), (ephy_bookmarksbar_realize),
-        (ephy_bookmarksbar_unrealize), (ephy_bookmarksbar_init),
-        (ephy_bookmarksbar_finalize), (ephy_bookmarksbar_set_property),
-        (ephy_bookmarksbar_get_property), (ephy_bookmarksbar_class_init),
-        (ephy_bookmarksbar_new):
-        * src/bookmarks/ephy-bookmarksbar.h:
-        * src/toolbar.c: (go_location_cb), (toolbar_set_property),
-        (toolbar_get_property), (toolbar_class_init), (toolbar_set_window),
-        (toolbar_init), (toolbar_new), (toolbar_set_location),
-        (toolbar_update_navigation_actions):
-        * src/toolbar.h:
-        * src/ephy-window.c: (get_chromes_visibility),
-        (sync_chromes_visibility), (ephy_window_fullscreen),
-        (ephy_window_unfullscreen), (action_request_forward_cb),
-        (ephy_window_init), (ephy_window_get_toolbar),
-        (ephy_window_get_bookmarksbar):
-        * src/ephy-window.h:
-        * src/window-commands.c: (window_cmd_view_fullscreen),
-        (toolbar_editor_destroy_cb), (toolbar_editor_response_cb),
-        (window_cmd_edit_toolbar):
+	* src/bookmarks/ephy-bookmarksbar.c: (ephy_bookmarksbar_get_type),
+	(go_location_cb), (bookmark_destroy_cb),
+	(ephy_bookmarksbar_action_request), (toolbar_added_cb),
+	(ephy_bookmarksbar_set_window), (ephy_bookmarksbar_realize),
+	(ephy_bookmarksbar_unrealize), (ephy_bookmarksbar_init),
+	(ephy_bookmarksbar_finalize), (ephy_bookmarksbar_set_property),
+	(ephy_bookmarksbar_get_property), (ephy_bookmarksbar_class_init),
+	(ephy_bookmarksbar_new):
+	* src/bookmarks/ephy-bookmarksbar.h:
+	* src/toolbar.c: (go_location_cb), (toolbar_set_property),
+	(toolbar_get_property), (toolbar_class_init), (toolbar_set_window),
+	(toolbar_init), (toolbar_new), (toolbar_set_location),
+	(toolbar_update_navigation_actions):
+	* src/toolbar.h:
+	* src/ephy-window.c: (get_chromes_visibility),
+	(sync_chromes_visibility), (ephy_window_fullscreen),
+	(ephy_window_unfullscreen), (action_request_forward_cb),
+	(ephy_window_init), (ephy_window_get_toolbar),
+	(ephy_window_get_bookmarksbar):
+	* src/ephy-window.h:
+	* src/window-commands.c: (window_cmd_view_fullscreen),
+	(toolbar_editor_destroy_cb), (toolbar_editor_response_cb),
+	(window_cmd_edit_toolbar):
 
-        Split toolbars in bookmarks and non-bookmarks toolbars.
+	Split toolbars in bookmarks and non-bookmarks toolbars.
 
-        * src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init_defaults),
-        (ephy_bookmarks_get_toolbars_model), (ephy_bookmarks_set_property),
-        (ephy_bookmarks_get_property), (ephy_bookmarks_class_init),
-        (ephy_bookmarks_finalize):
-        * src/bookmarks/ephy-bookmarks.h:
-        * src/ephy-shell.c: (ephy_shell_get_toolbars_model):
-        * src/ephy-shell.h:
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init_defaults),
+	(ephy_bookmarks_get_toolbars_model), (ephy_bookmarks_set_property),
+	(ephy_bookmarks_get_property), (ephy_bookmarks_class_init),
+	(ephy_bookmarks_finalize):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/ephy-shell.c: (ephy_shell_get_toolbars_model):
+	* src/ephy-shell.h:
 
-        Made bookmarksbar toolbars model a service of EphyBookmarks.
+	Made bookmarksbar toolbars model a service of EphyBookmarks.
 
-        * src/bookmarks/ephy-bookmark-properties.c:
-        (ephy_bookmark_properties_set_property),
-        (toolbar_checkbox_changed_cb), (build_ui),
-        (ephy_bookmark_properties_init):
-        * src/bookmarks/ephy-bookmarks-editor.c:
-        (cmd_show_in_bookmarks_bar), (ephy_bookmarks_editor_update_menu),
-        (toolbar_items_changed_cb), (ephy_bookmarks_editor_init):
+	* src/bookmarks/ephy-bookmark-properties.c:
+	(ephy_bookmark_properties_set_property),
+	(toolbar_checkbox_changed_cb), (build_ui),
+	(ephy_bookmark_properties_init):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(cmd_show_in_bookmarks_bar), (ephy_bookmarks_editor_update_menu),
+	(toolbar_items_changed_cb), (ephy_bookmarks_editor_init):
 
-        Adapt to changes above.
+	Adapt to changes above.
 
-        * data/ui/Makefile.am:
-        * src/Makefile.am:
-        * src/bookmarks/Makefile.am:
+	* data/ui/Makefile.am:
+	* src/Makefile.am:
+	* src/bookmarks/Makefile.am:
 
-        Makefile changes.
+	Makefile changes.
 
 2004-06-09  Christian Persch  <chpe@cvs.gnome.org>
 
@@ -1146,7 +1155,7 @@
 
 2004-06-06  Christian Persch  <chpe@cvs.gnome.org>
 
-        * embed/mozilla/GtkNSSKeyPairDialogs.cpp:
+	* embed/mozilla/GtkNSSKeyPairDialogs.cpp:
 	* embed/mozilla/mozilla-version.h:
 
 	Simplified mozilla version checks with new MOZILLA_IS_VERSION4 macro.
@@ -1331,12 +1340,12 @@
 
 	* embed/downloader-view.c: (update_status_icon):
 
-        Remove unused field in struct
+	Remove unused field in struct
 
 	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
 	* embed/mozilla/GtkNSSDialogs.cpp:
 
-        Fix build with 1.8a2
+	Fix build with 1.8a2
 
 2004-05-23  Paisa Seeluangsawat  <paisa@users.sf.net>
 
@@ -1358,12 +1367,12 @@
 
 2004-05-22  Crispin Flowerday  <gnome@flowerday.cx>
 
-        * libegg/toolbareditor/egg-toolbar-editor.c
-        (event_box_realize_cb), (editor_create_item):
+	* libegg/toolbareditor/egg-toolbar-editor.c
+	(event_box_realize_cb), (editor_create_item):
 
-        Set the drag icon on
-        realize, otherwise the current icon theme isn't used, and it falls
-        back to the default theme.
+	Set the drag icon on
+	realize, otherwise the current icon theme isn't used, and it falls
+	back to the default theme.
 
 2004-05-22  Christian Persch  <chpe@cvs.gnome.org>
 
@@ -1381,10 +1390,10 @@
 
 2004-05-20  Christian Persch  <chpe@cvs.gnome.org>
 
-        * embed/ephy-history.c: (ephy_history_set_property),
-        (ephy_history_get_property):
+	* embed/ephy-history.c: (ephy_history_set_property),
+	(ephy_history_get_property):
 
-        Fix stupid bug.
+	Fix stupid bug.
 
 2004-05-19  Christian Persch  <chpe@cvs.gnome.org>
 
@@ -1986,7 +1995,7 @@
 
 2004-04-09  Guntupalli Karunakar  <karunakar@freedomink.org>
 
-        * configure.in: Added "gu" (Gujarati) to ALL_LINGUAS.
+	* configure.in: Added "gu" (Gujarati) to ALL_LINGUAS.
 
 2004-04-08  Piers Cornwell  <piers@gnome.org>
 
@@ -2142,7 +2151,7 @@
 
 2004-03-30  Piers Cornwell  <piers@gnome.org>
 
-        * data/glade/prefs-dialog.glade:
+	* data/glade/prefs-dialog.glade:
 
 	Use right capitalisation for label.
 
@@ -2211,9 +2220,9 @@
 
 2004-03-29  Christian Persch  <chpe@cvs.gnome.org>
 
-        * src/ephy-completion-model.h:
+	* src/ephy-completion-model.h:
 
-        Make EphyCompletionColumn a typedef enum, fixes bug #136878.
+	Make EphyCompletionColumn a typedef enum, fixes bug #136878.
 
 2004-03-29  Adam Hooper  <adamh@cvs.gnome.org>
 
@@ -2283,7 +2292,7 @@
 
 	* embed/mozilla/MozRegisterComponents.cpp:
 
-        Tiny cleanup.
+	Tiny cleanup.
 
 2004-03-27  Adam Hooper  <adamh@cvs.gnome.org>
 
@@ -2557,7 +2566,7 @@
 
 2004-03-20  Guntupalli Karunakar  <karunakar@freedomink.org>
 
-        * configure.in: Added "pa" (Punjabi) to ALL_LINGUAS.
+	* configure.in: Added "pa" (Punjabi) to ALL_LINGUAS.
 
 2004-03-19  Christian Persch  <chpe@cvs.gnome.org>
 
@@ -2612,8 +2621,8 @@
 	* lib/widgets/ephy-node-view.c:
 	(ephy_node_view_select_node_by_key):
 
-        Make select-by-key support unsorted lists. Fuzzy matching is gone
-        though. Oh well ... :) (bug #137054)
+	Make select-by-key support unsorted lists. Fuzzy matching is gone
+	though. Oh well ... :) (bug #137054)
 
 2004-03-18  Piers Cornwell  <piers@gnome.org>
 
@@ -3206,7 +3215,7 @@
 	* embed/mozilla/MozDownload.cpp: (MozDownload), (~MozDownload):
 
 	Add debug output.
-                
+		
 2004-02-29  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* embed/mozilla/MozDownload.cpp:
@@ -3277,7 +3286,7 @@
 
 	* src/bookmarks/ephy-bookmarks-import.c: (ephy_bookmarks_import):
 
-        Add missing check for Firebird bookmarks, patch by André Dahlqvist.
+	Add missing check for Firebird bookmarks, patch by André Dahlqvist.
 
 2004-02-27  Marco Pesenti Gritti  <marco@gnome.org>
 
@@ -3369,11 +3378,11 @@
 
 	* embed/mozilla/EphyHeaderSniffer.cpp:
 
-        Unescape filenames whenever possible.
-        
+	Unescape filenames whenever possible.
+	
 	* src/popup-commands.c: (save_property_url):
 
-        Nitpick.
+	Nitpick.
 
 2004-02-24  Christian Persch  <chpe@cvs.gnome.org>
 
@@ -3642,7 +3651,7 @@
 
 2004-02-15  Christian Persch  <chpe@cvs.gnome.org>
 
-        * embed/mozilla/FilePicker.cpp: (::AppendFilter):
+	* embed/mozilla/FilePicker.cpp: (::AppendFilter):
 
 	Make it work (TM).
 
@@ -4058,7 +4067,7 @@
 	Set a default height/width for the dialog.	
 
 2004-02-04  Biggest Flake Ever  <flake@whataflake.com>
-            David Bordoley      <bordoley@msu.edu>
+	    David Bordoley      <bordoley@msu.edu>
 
 	* embed/downloader-view.c: (downloader_view_new):
 	* src/prefs-dialog.c: (setup_add_language_dialog):
@@ -4995,7 +5004,7 @@
 
 	Use NS_ENSURE_SUCCESS/NS_ENSURE_TRUE at appropriate places instead of
 	silent "if (...) return ...;".
-	        
+		
 2004-01-10  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/EphyAboutRedirector.cpp:
@@ -8158,7 +8167,7 @@
 	(save_property_url), (background_download_completed),
 	(embed_popup_set_image_as_background_cmd),
 	(embed_popup_copy_image_location_cmd):
-        * src/popup-commands.c: (save_property_url),
+	* src/popup-commands.c: (save_property_url),
 	(background_download_completed),
 	(popup_cmd_set_image_as_background):
 	* src/window-commands.c: (open_response_cb),
