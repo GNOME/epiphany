@@ -27,7 +27,7 @@
 
 static void
 add_topics_list (EphyNode *topics, EphyNode *bmk,
-		 xmlNodePtr parent, xmlNsPtr dc_ns)
+		 xmlNodePtr parent, xmlNsPtr dc_ns, xmlDocPtr doc)
 {
 	GPtrArray *children;
 	int i;
@@ -57,13 +57,16 @@ add_topics_list (EphyNode *topics, EphyNode *bmk,
 	for (l = bmks; l != NULL; l = l->next)
 	{
 		const char *name;
+		xmlChar *xml;
 		EphyNode *node = l->data;
 		xmlNodePtr item_node;
 
 		name = ephy_node_get_property_string
 			(node, EPHY_NODE_KEYWORD_PROP_NAME);
+		xml = xmlEncodeEntitiesReentrant (doc, name);
 		item_node = xmlNewChild (parent, dc_ns, "subject", NULL);
-		xmlNodeSetContent (item_node, name);
+		xmlNodeSetContent (item_node, xml);
+		xmlFree (xml);
 	}
 
 	g_list_free (bmks);
@@ -117,7 +120,7 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 		EphyNode *kid;
 		const char *url, *title;
 		xmlNodePtr item_node;
-		xmlChar *encoded_link;
+		xmlChar *encoded_link, *encoded_title;
 		char *link = NULL;
 		gboolean smart_url;
 
@@ -160,7 +163,8 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 		item_node = xmlNewChild (root, NULL, "item", NULL);
 		xmlSetNsProp (item_node, rdf_ns, "about", link);
 
-		xml_node = xmlNewChild (item_node, NULL, "title", title);
+		encoded_title = xmlEncodeEntitiesReentrant (doc, title);
+		xml_node = xmlNewChild (item_node, NULL, "title", encoded_title);
 
 		xml_node = xmlNewChild (item_node, NULL, "link", encoded_link);
 
@@ -172,9 +176,10 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 			xmlFree (encoded_url);
 		}
 
-		add_topics_list (topics, kid, item_node, dc_ns);
+		add_topics_list (topics, kid, item_node, dc_ns, doc);
 
 		xmlFree (encoded_link);
+		xmlFree (encoded_title);
 		g_free (link);
 	}
 	ephy_node_thaw (bmks);
