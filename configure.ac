@@ -326,44 +326,6 @@ AC_DEFINE_UNQUOTED([MOZ_NSICONTENTPOLICY_VARIANT], [$variant], [Define the nsICo
 
 AC_MSG_RESULT([variant $variant])
 
-dnl Changed from char* to nsIURI* in 1.7.4 on 1.7 branch,
-dnl in 1.8a3 on trunk and on aviary branch
-
-AC_MSG_CHECKING([whether nsIBrowserHistory methods expect nsIURI*])
-
-AC_COMPILE_IFELSE(
-	[AC_LANG_PROGRAM(
-		[[#include <nsIURI.h>
-		  #include <nsIGlobalHistory.h>
-		  #include <docshell/nsIGlobalHistory2.h>
-		  #include <history/nsIBrowserHistory.h>]],
-		[[nsIBrowserHistory* p;
-		  nsIURI *arg1;
-		  p->RemovePage(arg1);]]
-	)],
-	[AC_DEFINE([MOZ_NSIGLOBALHISTORY_NSIURIP],[1],[Define if nsIBrowserHistory methods expect nsIURI*]) result=yes],
-	[result=no])
-
-AC_MSG_RESULT([$result])
-
-dnl This is only present in new-toolkit apps
-
-AC_MSG_CHECKING([for nsIBrowserHistory::AddPageWithDetails])
-
-AC_COMPILE_IFELSE(
-	[AC_LANG_PROGRAM(
-		[[#include <nsIURI.h>
-		  #include <nsIGlobalHistory.h>
-		  #include <docshell/nsIGlobalHistory2.h>
-		  #include <history/nsIBrowserHistory.h>]],
-		[[nsIBrowserHistory *p;
-		  p->AddPageWithDetails(nsnull,nsnull,0);]]
-	)],
-	[AC_DEFINE([MOZ_NSIBROWSERHISTORY_ADDPAGEWITHDETAILS],[1],[Define if nsIBrowserHistory::AddPageWithDetails exists]) result=yes],
-	[result=no])
-
-AC_MSG_RESULT([$result])
-
 dnl changed in 1.8a4
 
 AC_MSG_CHECKING([for whether nsIGlobalHistory2::AddURI takes a referrer])
