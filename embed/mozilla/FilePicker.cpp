@@ -98,7 +98,7 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 		gtk_window_set_transient_for (GTK_WINDOW (mDialog), GTK_WINDOW (pwin));
 	}
 
-	gtk_window_set_title (GTK_WINDOW (mDialog), NS_ConvertUCS2toUTF8 (title).get());
+	gtk_window_set_title (GTK_WINDOW (mDialog), NS_ConvertUTF16toUTF8 (title).get());
 
 	mMode = mode;
 
@@ -160,32 +160,32 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 
 	if (filterMask & nsIFilePicker::filterAll)
 	{
-		AppendFilter (NS_ConvertUTF8toUCS2 (_("All files")).get(),
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("All files")).get(),
 			      NS_LITERAL_STRING ("*").get());
 	}
 	if (filterMask & nsIFilePicker::filterHTML)
 	{
-		AppendFilter (NS_ConvertUTF8toUCS2 (_("HTML files")).get(),
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("HTML files")).get(),
 			      NS_LITERAL_STRING ("*.html; *.htm; *.shtml; *.xhtml").get());
 	}
 	if (filterMask & nsIFilePicker::filterText)
 	{
-		AppendFilter (NS_ConvertUTF8toUCS2 (_("Text files")).get(),
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("Text files")).get(),
 			      NS_LITERAL_STRING ("*.txt; *.text").get());
 	}
 	if (filterMask & nsIFilePicker::filterImages)
 	{
-		AppendFilter (NS_ConvertUTF8toUCS2 (_("Image files")).get(),
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("Image files")).get(),
 			      NS_LITERAL_STRING ("*.png; *.gif; *.jpeg; *.jpg").get());
 	}
 	if (filterMask & nsIFilePicker::filterXML)
 	{
-		AppendFilter (NS_ConvertUTF8toUCS2 (_("XML files")).get(),
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("XML files")).get(),
 			      NS_LITERAL_STRING ("*.xml").get());
 	}
 	if (filterMask & nsIFilePicker::filterXUL)
 	{
-		AppendFilter (NS_ConvertUTF8toUCS2 (_("XUL files")).get(),
+		AppendFilter (NS_ConvertUTF8toUTF16 (_("XUL files")).get(),
 			      NS_LITERAL_STRING ("*.xul").get());
 	}
 
@@ -196,11 +196,12 @@ NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar *filter)
 {
 	LOG ("GFilePicker::AppendFilter title '%s' for '%s'",
-	     NS_ConvertUCS2toUTF8 (title).get(),
-	     NS_ConvertUCS2toUTF8 (filter).get())
+	     NS_ConvertUTF16toUTF8 (title).get(),
+	     NS_ConvertUTF16toUTF8 (filter).get())
 
-	nsCAutoString pattern = NS_ConvertUCS2toUTF8 (filter);
+	NS_ConvertUTF16toUTF8 pattern(filter);
 	pattern.StripWhitespace();
+	if (pattern.IsEmpty()) return NS_ERROR_FAILURE;
 
 	char **patterns = g_strsplit (pattern.get(), ";", -1);
 
@@ -211,7 +212,7 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar 
 		gtk_file_filter_add_pattern (filth, patterns[i]);
 	}
 
-	gtk_file_filter_set_name (filth, NS_ConvertUCS2toUTF8(title).get());
+	gtk_file_filter_set_name (filth, NS_ConvertUTF16toUTF8(title).get());
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (mDialog), filth);
 
 	g_strfreev (patterns);
@@ -231,8 +232,7 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
 	{
 		converted = g_filename_to_utf8(filename, -1, NULL, NULL, NULL);
 
-		/* FIXME: when can depend on moz >= 1.6, use CopyUTF8toUCS2 here */
-		*aDefaultString = ToNewUnicode (NS_ConvertUTF8toUCS2 (converted));
+		*aDefaultString = ToNewUnicode (NS_ConvertUTF8toUTF16 (converted));
 	
 		g_free (filename);
 		g_free (converted);
@@ -244,14 +244,14 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
 NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
 {
 	LOG ("GFilePicker::SetDefaultString to %s",
-	     NS_ConvertUCS2toUTF8 (aDefaultString).get())
+	     NS_ConvertUTF16toUTF8 (aDefaultString).get())
 
 	if (aDefaultString)
 	{
 		/* set_current_name takes UTF-8, not a filename */
 		gtk_file_chooser_set_current_name
 			(GTK_FILE_CHOOSER (mDialog),
-			 NS_ConvertUCS2toUTF8 (aDefaultString).get());
+			 NS_ConvertUTF16toUTF8 (aDefaultString).get());
 	}
 
 	return NS_OK;
@@ -268,7 +268,7 @@ NS_IMETHODIMP GFilePicker::GetDefaultExtension(PRUnichar **aDefaultExtension)
 NS_IMETHODIMP GFilePicker::SetDefaultExtension(const PRUnichar *aDefaultExtension)
 {
 	LOG ("GFilePicker::SetDefaultExtension to %s",
-	     NS_ConvertUCS2toUTF8(aDefaultExtension).get())
+	     NS_ConvertUTF16toUTF8(aDefaultExtension).get())
 
 	return NS_ERROR_NOT_IMPLEMENTED;
 }

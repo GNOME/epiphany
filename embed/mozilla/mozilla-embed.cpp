@@ -197,7 +197,7 @@ impl_find_set_properties (EphyEmbed *embed,
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
 	mpriv->browser->FindSetProperties
-		((NS_ConvertUTF8toUCS2(search_string)).get(),
+		((NS_ConvertUTF8toUTF16(search_string)).get(),
 		 case_sensitive, wrap_around); 
 }
 
@@ -592,7 +592,7 @@ impl_shistory_get_nth (EphyEmbed *embed,
 
 	rv = mpriv->browser->GetSHTitleAtIndex(nth, &title);
 
-	*aTitle = g_strdup (NS_ConvertUCS2toUTF8(title).get());
+	*aTitle = g_strdup (NS_ConvertUTF16toUTF8(title).get());
 
 	nsMemory::Free (title);
 }
@@ -649,7 +649,7 @@ impl_get_security_level (EphyEmbed *embed,
 
 		if (tooltip)
 		{
-			*description = g_strdup (NS_ConvertUCS2toUTF8(tooltip).get());
+			*description = g_strdup (NS_ConvertUTF16toUTF8(tooltip).get());
 		}
 	}
 	

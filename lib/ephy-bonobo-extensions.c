@@ -26,9 +26,13 @@
 
    Authors: John Sullivan <sullivan@eazel.com>
             Darin Adler <darin@bentspoon.com>
+
+   $Id$
 */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "ephy-bonobo-extensions.h"
 #include "ephy-string.h"

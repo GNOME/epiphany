@@ -325,7 +325,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 
 			/* HACK we use the application description to decide
 			   if we have to open the saved file */
-			if ((strcmp (NS_ConvertUCS2toUTF8 (description).get(), "gnome-default") == 0) &&
+			if ((strcmp (NS_ConvertUTF16toUTF8 (description).get(), "gnome-default") == 0) &&
 			    helperApp)
 			{
 				GList *params = NULL;

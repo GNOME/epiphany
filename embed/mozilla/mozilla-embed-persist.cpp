@@ -311,9 +311,8 @@ impl_to_string (EphyEmbedPersist *persist)
 	nsAutoString aOutputString;
 	encoder->EncodeToString(aOutputString);
 
-	return g_strdup (NS_ConvertUCS2toUTF8(aOutputString).get());
+	return g_strdup (NS_ConvertUTF16toUTF8(aOutputString).get());
 }
-
 
 static GObject *
 mozilla_embed_persist_constructor (GType type, guint n_construct_properties,

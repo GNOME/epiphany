@@ -16,6 +16,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -145,7 +147,7 @@ option_menu_changed_cb (GtkOptionMenu *optionmenu, GtkTextView *textview)
 	details = (PRUnichar*)g_object_get_data (G_OBJECT (item), "details");
 	g_return_if_fail (details);
 
-	const nsACString &certnick = NS_ConvertUCS2toUTF8(details);
+	const nsACString &certnick = NS_ConvertUTF16toUTF8(details);
 	gtk_text_buffer_set_text (buffer, PromiseFlatCString(certnick).get(), -1);
 }
 
@@ -217,7 +219,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 	
 
-	const nsACString &utf8_cn = NS_ConvertUCS2toUTF8(cn);
+	const nsACString &utf8_cn = NS_ConvertUTF16toUTF8(cn);
 	tt_cn = g_strdup_printf ("\"<tt>%s</tt>\"", 
 				 PromiseFlatCString(utf8_cn).get());
 
@@ -236,8 +238,8 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 	for (i = 0; i < count; i++)
 	{
-		const nsACString &certnick = NS_ConvertUCS2toUTF8(certNickList[i]);
-		const nsACString &certdetail = NS_ConvertUCS2toUTF8(certDetailsList[i]);
+		const nsACString &certnick = NS_ConvertUTF16toUTF8(certNickList[i]);
+		const nsACString &certdetail = NS_ConvertUTF16toUTF8(certDetailsList[i]);
 
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
@@ -266,7 +268,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 
 	for (i = 0 ; i < count ; i++)
 	{
-		const nsACString &certnick = NS_ConvertUCS2toUTF8(certNickList[i]);
+		const nsACString &certnick = NS_ConvertUTF16toUTF8(certNickList[i]);
 		GtkWidget *item = gtk_menu_item_new_with_label (PromiseFlatCString(certnick).get());
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 		g_object_set_data (G_OBJECT (item), "details", (void*)certDetailsList[i]);

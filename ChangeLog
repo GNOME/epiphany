@@ -44,6 +44,196 @@
 	Don't make a proxy menu item for the location entry. Fixes crash
 	when trying to activate its proxy menu item.
 
+2004-03-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/GtkNSSDialogs.cpp:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+
+	Use CopyUTF8toUTF16 where appropriate.
+
+2004-03-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/egg/egg-toolbar-editor.c: (editor_drag_data_received_cb):
+
+	Check if the dragged item is a separator. Fixes a crash if it _is_ one.
+
+	* src/ephy-location-action.c: (create_menu_proxy_cb),
+	(connect_proxy), (ephy_location_action_activate):
+
+	Don't make the location entry have a proxy menu item. Fixes a crash when
+	trying to activate the proxy menu item.
+
+2004-03-08  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/egg/egg-toolbars-model.c:
+	(egg_toolbars_model_remove_toolbar):
+
+	Test flags with & not &&. (Thanks to Crispin for spotting this.)
+
+2004-03-08  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.in:
+
+	EPIPHANY_MAJOR=1.3
+
+2004-03-08  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/downloader-view.h:
+	* embed/ephy-embed-factory.c:
+	* embed/ephy-embed-factory.h:
+	* embed/mozilla/EphyAboutRedirector.cpp:
+	* embed/mozilla/EphyAboutRedirector.h:
+	* embed/mozilla/EphyHeaderSniffer.h:
+	* embed/mozilla/ExternalProtocolHandlers.h:
+	* embed/mozilla/mozilla-notifiers.h:
+	* lib/eel-gconf-extensions.c:
+	* lib/eel-gconf-extensions.h:
+	* lib/ephy-bonobo-extensions.c:
+	* lib/ephy-bonobo-extensions.h:
+	* lib/ephy-dnd.c:
+	* lib/ephy-state.c:
+	* lib/ephy-string.c:
+	* lib/ephy-zoom.c:
+	* lib/widgets/ephy-arrow-toolbutton.h:
+	* lib/widgets/ephy-cell-renderer-progress.c:
+	* lib/widgets/ephy-cell-renderer-progress.h:
+	* lib/widgets/ephy-ellipsizing-label.c:
+	* lib/widgets/ephy-ellipsizing-label.h:
+	* lib/widgets/ephy-spinner.c:
+	* lib/widgets/ephy-zoom-action.h:
+	* src/bookmarks/ephy-bookmark-action.h:
+	* src/bookmarks/ephy-bookmark-properties.c:
+	* src/bookmarks/ephy-bookmarks-export.h:
+	* src/bookmarks/ephy-bookmarks-import.h:
+	* src/bookmarks/ephy-bookmarks-menu.h:
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/bookmarks/ephy-new-bookmark.c:
+	* src/bookmarks/ephy-topic-action.h:
+	* src/ephy-toolbars-model.h:
+	* src/popup-commands.h:
+	* src/ppview-toolbar.h:
+	* src/prefs-dialog.h:
+	* src/toolbar.h:
+
+	CVS version markers.
+
+2004-03-08  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/downloader-view.c:
+	* embed/ephy-download.c:
+	* embed/ephy-embed-dialog.c:
+	* embed/ephy-embed-event.c:
+	* embed/ephy-embed-factory.c:
+	* embed/find-dialog.c:
+	* embed/print-dialog.c:
+	* lib/ephy-bonobo-extensions.c:
+	* lib/ephy-debug.c:
+	* lib/ephy-dnd.c:
+	* lib/ephy-glade.c:
+	* lib/ephy-node-db.c:
+	* lib/ephy-node-filter.c:
+	* lib/ephy-state.c:
+	* lib/ephy-stock-icons.c:
+	* lib/ephy-zoom.c:
+	* lib/widgets/ephy-arrow-toolbutton.c:
+	* lib/widgets/ephy-cell-renderer-progress.c:
+	* lib/widgets/ephy-ellipsizing-label.c:
+	* lib/widgets/ephy-location-entry.c:
+	* lib/widgets/ephy-node-view.c:
+	* lib/widgets/ephy-search-entry.c:
+	* lib/widgets/ephy-tree-model-node.c:
+	* lib/widgets/ephy-tree-model-sort.c:
+	* src/bookmarks/ephy-bookmark-properties.c:
+	* src/bookmarks/ephy-bookmarks-export.c:
+	* src/bookmarks/ephy-new-bookmark.c:
+	* src/bookmarks/ephy-topics-selector.c:
+	* src/ephy-automation.c:
+	* src/ephy-completion-model.c:
+	* src/ephy-extension.c:
+	* src/ephy-favicon-action.c:
+	* src/ephy-history-window.c:
+	* src/ephy-location-action.c:
+	* src/ephy-navigation-action.c:
+	* src/ephy-toolbars-model.c:
+	* src/ppview-toolbar.c:
+
+	Include "config.h" everywhere, and s/<config.h>/"config.h". Guard
+	with #if HAVE_CONFIG_H.
+
+2004-03-08  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/GlobalHistory.cpp:
+	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
+	* embed/mozilla/GtkNSSDialogs.cpp:
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/MozillaPrivate.cpp:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+
+	s/UCS2/UTF16/g now that we can depend on mozilla >= 1.6.
+
+2004-03-08  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-encodings.c:
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/EphyHeaderSniffer.h:
+	* embed/mozilla/EphySingle.cpp:
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/EventContext.h:
+	* embed/mozilla/ExternalProtocolHandlers.cpp:
+	R embed/mozilla/ExternalProtocolService.cpp:
+	R embed/mozilla/ExternalProtocolService.h:
+	* embed/mozilla/GlobalHistory.cpp:
+	* embed/mozilla/GtkNSSClientAuthDialogs.cpp:
+	* embed/mozilla/GtkNSSClientAuthDialogs.h:
+	* embed/mozilla/GtkNSSDialogs.cpp:
+	* embed/mozilla/GtkNSSDialogs.h:
+	* embed/mozilla/GtkNSSKeyPairDialogs.cpp:
+	* embed/mozilla/GtkNSSKeyPairDialogs.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozDownload.h:
+	* embed/mozilla/MozRegisterComponents.cpp:
+	* embed/mozilla/MozRegisterComponents.h:
+	* embed/mozilla/PrintingPromptService.h:
+	* embed/mozilla/mozilla-embed-event.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* lib/ephy-langs.c:
+	* src/ephy-window.c: (show_embed_popup):
+
+	Kill support for mozilla < 1.6. 
+
+2004-03-08  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-cell-renderer-progress.c:
+	(ephy_cell_renderer_progress_set_property):
+	* lib/widgets/ephy-zoom-action.c: (ephy_zoom_action_set_property):
+	* lib/widgets/ephy-zoom-control.c:
+	(ephy_zoom_control_set_property):
+	* src/bookmarks/ephy-bookmark-action.c:
+	(ephy_bookmark_action_set_property):
+	* src/ephy-favicon-action.c: (ephy_favicon_action_set_property):
+	* src/ephy-location-action.c: (ephy_location_action_set_property):
+
+	Remove unnecessary g_object_notify. RTFM chpe :P
+
+2004-03-08  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.in:
+
+	Version 1.3.0.
+	Kill support for mozilla < 1.6.
+
 2004-03-07  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* NEWS:

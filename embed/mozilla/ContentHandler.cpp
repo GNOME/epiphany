@@ -73,15 +73,10 @@ GContentHandler::~GContentHandler()
 // begin nsIHelperAppLauncher impl
 ////////////////////////////////////////////////////////////////////////////////
 
-#if MOZILLA_SNAPSHOT > 9
 /* void show (in nsIHelperAppLauncher aLauncher, in nsISupports aContext); */
 NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 				    nsISupports *aContext,
 				    PRBool aForced)
-#else
-NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
-				    nsISupports *aContext)
-#endif
 {
 	nsresult rv;
 	EphyEmbedSingle *single;
@@ -110,9 +105,7 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 
 /* nsILocalFile promptForSaveToFile (in nsISupports aWindowContext, in wstring aDefaultFile, in wstring aSuggestedFileExtension); */
 NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
-#if MOZILLA_SNAPSHOT > 10
-				    nsIHelperAppLauncher *aLauncher,
-#endif				    
+				    nsIHelperAppLauncher *aLauncher,			    
 				    nsISupports *aWindowContext,
 				    const PRUnichar *aDefaultFile,
 				    const PRUnichar *aSuggestedFileExtension,
@@ -124,7 +117,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 
 	if (mAction != CONTENT_ACTION_SAVEAS)
 	{
-		return BuildDownloadPath (NS_ConvertUCS2toUTF8 (aDefaultFile).get(),
+		return BuildDownloadPath (NS_ConvertUTF16toUTF8 (aDefaultFile).get(),
 					  _retval);
 	}
 
@@ -135,7 +128,7 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 					GTK_FILE_CHOOSER_ACTION_SAVE,
 					CONF_STATE_SAVE_DIR);
 	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),
-					   NS_ConvertUCS2toUTF8 (aDefaultFile).get());
+					   NS_ConvertUTF16toUTF8 (aDefaultFile).get());
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 
 	if (response == EPHY_RESPONSE_SAVE)
@@ -159,15 +152,6 @@ NS_IMETHODIMP GContentHandler::PromptForSaveToFile(
 		return NS_ERROR_FAILURE;
 	}
 }
-
-#if MOZILLA_SNAPSHOT < 10
-/* void showProgressDialog (in nsIHelperAppLauncher aLauncher, in nsISupports aContext); */
-NS_METHOD GContentHandler::ShowProgressDialog(nsIHelperAppLauncher *aLauncher,
-					      nsISupports *aContext)
-{
-	return NS_ERROR_NOT_IMPLEMENTED;
-}
-#endif
 
 NS_METHOD GContentHandler::LaunchHelperApp (void)
 {
@@ -231,17 +215,10 @@ NS_METHOD GContentHandler::Init (void)
 
 	rv = MIMEInfo->GetMIMEType (&mMimeType);
 
-#if MOZILLA_SNAPSHOT > 11
 	mLauncher->GetTargetFile (getter_AddRefs(mTempFile));
 
 	mLauncher->GetSource (getter_AddRefs(mUri));
 	NS_ENSURE_TRUE (mUri, NS_ERROR_FAILURE);
-#else
-	PRInt64 TimeDownloadStarted;
-	rv = mLauncher->GetDownloadInfo (getter_AddRefs(mUri),
-					&TimeDownloadStarted,
-					getter_AddRefs(mTempFile));
-#endif
 	
 	rv = mUri->GetSpec (mUrl);
 	rv = mUri->GetScheme (mScheme);

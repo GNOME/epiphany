@@ -29,7 +29,6 @@
 #include "ExternalProtocolHandlers.h"
 #include "PrintingPromptService.h"
 #include "MozDownload.h"
-#include "ExternalProtocolService.h"
 #include "EphyAboutRedirector.h"
 #include "EphyContentPolicy.h"
 
@@ -65,10 +64,6 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GNewsProtocolHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GMailtoProtocolHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(EphyContentPolicy)
 
-#if MOZILLA_SNAPSHOT < 12
-NS_GENERIC_FACTORY_CONSTRUCTOR(GExternalProtocolService)
-#endif
-
 #ifdef HAVE_MOZILLA_PSM
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSClientAuthDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSDialogs)
@@ -76,14 +71,6 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSKeyPairDialogs)
 #endif
 
 static const nsModuleComponentInfo sAppComps[] = {
-#if MOZILLA_SNAPSHOT < 12
-	{
-		G_EXTERNALPROTOCOLSERVICE_CLASSNAME,
-		G_EXTERNALPROTOCOLSERVICE_CID,
-		NS_EXTERNALPROTOCOLSERVICE_CONTRACTID,
- 		GExternalProtocolServiceConstructor
-	},
-#endif
 	{
 		MOZ_DOWNLOAD_CLASSNAME,
 		MOZ_DOWNLOAD_CID,

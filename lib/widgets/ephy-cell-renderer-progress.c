@@ -17,9 +17,14 @@
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
+ *
+ * $Id$
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdlib.h>
 #include <glib/gi18n.h>
 
@@ -145,7 +150,6 @@ ephy_cell_renderer_progress_set_property (GObject *object,
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 	}
-	g_object_notify (object, "value");
 }
 
 static void

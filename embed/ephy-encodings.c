@@ -115,10 +115,8 @@ encoding_entries [] =
 	{ N_("R_omanian (ISO-8859-16)"),            "ISO-8859-16",           LG_SE_EUROPEAN,	FALSE },
 	{ N_("South _European (ISO-8859-3)"),	    "ISO-8859-3",            LG_SE_EUROPEAN,	FALSE },
 	{ N_("Thai (TIS-_620)"),                    "TIS-620",               LG_THAI,		FALSE },
-#if MOZILLA_SNAPSHOT >= 10 
 	{ N_("Thai (IS_O-8859-11)"),                "iso-8859-11",           LG_THAI,		FALSE },
 	{ N_("_Thai (Windows-874)"),                "windows-874",           LG_THAI,		FALSE },
-#endif	
 	{ N_("Turkish (_IBM-857)"),                 "IBM857",                LG_TURKISH,	FALSE },
 	{ N_("Turkish (I_SO-8859-9)"),              "ISO-8859-9",            LG_TURKISH,	FALSE },
 	{ N_("Turkish (_MacTurkish)"),              "x-mac-turkish",         LG_TURKISH,	FALSE },

@@ -190,7 +190,6 @@ ephy_zoom_action_set_property (GObject *object,
 	{
 		case PROP_ZOOM:
 			action->priv->zoom = g_value_get_float (value);
-			g_object_notify (object, "zoom");
 			break;
 	}
 }

@@ -27,6 +27,8 @@
    Boston, MA 02111-1307, USA.
 
    Author: John Sullivan <sullivan@eazel.com>
+
+   $Id$
 */
 
 #ifndef EPHY_BONOBO_EXTENSIONS_H

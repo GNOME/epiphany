@@ -16,6 +16,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 /*
@@ -266,14 +268,6 @@ NS_IMETHODIMP KeyPairHelperWindow::GetContent(nsIDOMWindow * *aContent)
 {
     MOZ_NOT_IMPLEMENTED
 }
-
-#if MOZILLA_SNAPSHOT < 12
-/* readonly attribute nsISidebar sidebar; */
-NS_IMETHODIMP KeyPairHelperWindow::GetSidebar(nsISidebar * *aSidebar)
-{
-    MOZ_NOT_IMPLEMENTED
-}
-#endif
 
 /* [noscript] readonly attribute nsIPrompt prompter; */
 NS_IMETHODIMP KeyPairHelperWindow::GetPrompter(nsIPrompt * *aPrompter)
@@ -584,20 +578,6 @@ NS_IMETHODIMP KeyPairHelperWindow::UpdateCommands(const nsAString & action)
 {
     MOZ_NOT_IMPLEMENTED
 }
-
-#if MOZILLA_SNAPSHOT <= 12
-/* DOMString escape (in DOMString str); */
-NS_IMETHODIMP KeyPairHelperWindow::Escape(const nsAString & str, nsAString & _retval)
-{
-    MOZ_NOT_IMPLEMENTED
-}
-
-/* DOMString unescape (in DOMString str); */
-NS_IMETHODIMP KeyPairHelperWindow::Unescape(const nsAString & str, nsAString & _retval)
-{
-    MOZ_NOT_IMPLEMENTED
-}
-#endif
 
 /* [noscript] boolean find (in DOMString str, in boolean caseSensitive, in boolean backwards, in boolean wrapAround, in boolean wholeWord, in boolean searchInFrames, in boolean showDialog); */
 NS_IMETHODIMP KeyPairHelperWindow::Find(const nsAString & str, PRBool caseSensitive, PRBool backwards, PRBool wrapAround, PRBool wholeWord, PRBool searchInFrames, PRBool showDialog, PRBool *_retval)

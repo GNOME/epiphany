@@ -34,7 +34,10 @@
  * the provisions above, a recipient may use your version of this file under
  * the terms of any one of the NPL, the GPL or the LGPL.
  *
- * ***** END LICENSE BLOCK ***** */
+ * ***** END LICENSE BLOCK *****
+ *
+ * $Id$
+ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

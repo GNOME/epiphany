@@ -41,9 +41,7 @@ static const EphyFontsLanguageInfo font_languages [] =
 	{ N_("Tamil"),					"x-tamil" },
 	{ N_("Thai"),					"th" },
 	{ N_("Traditional Chinese"),			"zh-TW" },
-#if MOZILLA_SNAPSHOT >= 11
 	{ N_("Traditional Chinese (Hong Kong)"),	"zh-HK" },
-#endif
 	{ N_("Turkish"),				"tr" },
 	{ N_("Unicode"),				"x-unicode" },
 	{ N_("Western"),				"x-western" }

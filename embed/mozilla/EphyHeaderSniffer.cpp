@@ -67,9 +67,7 @@
 #include "nsIMIMEInfo.h"
 #include "nsIDOMHTMLDocument.h"
 #include "nsIDownload.h"
-#if MOZILLA_SNAPSHOT > 10
 #include  "nsIMIMEHeaderParam.h"
-#endif
 
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
@@ -245,7 +243,6 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 	if (defaultFileName.IsEmpty() && !mContentDisposition.IsEmpty())
 	{
 		/* 1 Use the HTTP header suggestion. */
-#if MOZILLA_SNAPSHOT > 10
 		nsCOMPtr<nsIMIMEHeaderParam> mimehdrpar =
 			do_GetService("@mozilla.org/network/mime-hdrparam;1");     
 		
@@ -274,17 +271,6 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 				defaultFileName = fileName;
 			}
 		}
-#else
-		PRInt32 index = mContentDisposition.Find("filename=");
-		if (index >= 0)
-		{
-			/* Take the substring following the prefix. */
-			index += strlen ("filename=");
-			nsCAutoString filename;
-			mContentDisposition.Right(filename, mContentDisposition.Length() - index);
-			defaultFileName = NS_ConvertUTF8toUCS2(filename);
-		}
-#endif
 	}
     
 	if (defaultFileName.IsEmpty())
@@ -296,10 +282,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		{
 			nsCAutoString fileNameCString;
 			url->GetFileName(fileNameCString);
-			/* FIXME: when we can depend on moz >= 1.5, use
-			 * CopyUTF8toUTF16 instead
-			 */
-			defaultFileName = NS_ConvertUTF8toUCS2(fileNameCString);
+			CopyUTF8toUTF16 (fileNameCString, defaultFileName);
 		}
 	}
     
@@ -319,25 +302,25 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		/* 4 Use the host. */
 		nsCAutoString hostName;
 		mURL->GetHost(hostName);
-		/* FIXME: when we can depend on moz >= 1.5, use
-		 * CopyUTF8toUTF16 instead
-		 */
-		defaultFileName = NS_ConvertUTF8toUCS2(hostName);
+		CopyUTF8toUTF16 (hostName, defaultFileName);
 	}
     
 	/* 5 One last case to handle about:blank and other untitled pages. */
 	if (defaultFileName.IsEmpty())
 	{
-		defaultFileName = NS_ConvertUTF8toUCS2 (_("Untitled"));
+		CopyUTF8toUTF16 (_("Untitled"), defaultFileName);
 	}
         
 	/* Validate the file name to ensure legality. */
-	char *default_name = g_strdup (NS_ConvertUCS2toUTF8 (defaultFileName).get());
+	char *default_name = g_strdup (NS_ConvertUTF16toUTF8 (defaultFileName).get());
 	default_name = g_strdelimit (default_name, "/", ' ');
 
 	const char *key;
 	key = ephy_embed_persist_get_persist_key (EPHY_EMBED_PERSIST (mEmbedPersist));
 
+	/* FIXME: do better here by using nsITextToSubURI service, like in
+	 * http://lxr.mozilla.org/seamonkey/source/xpfe/communicator/resources/content/contentAreaUtils.js#763
+	 */
         char *filename;
         filename = gnome_vfs_unescape_string (default_name, NULL);
 
