@@ -89,11 +89,12 @@ GFilePicker::~GFilePicker()
 NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *title, PRInt16 mode)
 {
 	nsCOMPtr<nsIDOMWindow> dw = do_QueryInterface (parent);
-	if (!dw) return NS_ERROR_FAILURE;
+	if (dw)
+	{
+		GtkWidget *pwin = MozillaFindGtkParent (dw);
 
-	GtkWidget *pwin = MozillaFindGtkParent (dw);
-
-	gtk_window_set_transient_for (GTK_WINDOW (mDialog), GTK_WINDOW (pwin));
+		gtk_window_set_transient_for (GTK_WINDOW (mDialog), GTK_WINDOW (pwin));
+	}
 
 	gtk_window_set_title (GTK_WINDOW (mDialog), NS_ConvertUCS2toUTF8 (title).get());
 
