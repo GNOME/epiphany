@@ -1,3 +1,16 @@
+2004-11-01  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-node.c: (callback), (remove_invalidated_signals),
+	(ephy_node_emit_signal), (signal_object_weak_notify),
+	(ephy_node_new_with_id), (ephy_node_signal_connect_object),
+	(remove_matching_signal_data), (invalidate_matching_signal_data),
+	(ephy_node_signal_disconnect_object),
+	(ephy_node_signal_disconnect):
+
+	Fix a nasty bug when removing signal handlers during a node signal
+	emission. Don't remove the handler immediately, but invalidate it,
+	and remove it after all emissions are done. Part of bug #155880.
+
 2004-10-31  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-extensions-manager.c:

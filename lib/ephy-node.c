@@ -42,6 +42,7 @@ typedef struct
 	EphyNodeCallback callback;
 	EphyNodeSignalType type;
 	gpointer data;
+	gboolean invalidated;
 } EphyNodeSignalData;
 
 typedef struct
@@ -69,6 +70,8 @@ struct EphyNode
 
 	GHashTable *signals;
 	int signal_id;
+	guint emissions;
+	guint invalidated_signals;
 
 	EphyNodeDb *db;
 };
@@ -97,6 +100,8 @@ callback (long id, EphyNodeSignalData *data, gpointer *dummy)
 {
 	ENESCData *user_data;
 	va_list valist;
+
+	if (data->invalidated) return;
 
 	user_data = (ENESCData *) dummy;
 
@@ -163,10 +168,20 @@ callback (long id, EphyNodeSignalData *data, gpointer *dummy)
         va_end(valist);
 }
 
+static gboolean
+remove_invalidated_signals (long id,
+			    EphyNodeSignalData *data,
+			    gpointer user_data)
+{
+	return data->invalidated;
+}
+
 static void
 ephy_node_emit_signal (EphyNode *node, EphyNodeSignalType type, ...)
 {
 	ENESCData data;
+
+	++node->emissions;
 
 	va_start (data.valist, type);
 
@@ -177,6 +192,19 @@ ephy_node_emit_signal (EphyNode *node, EphyNodeSignalType type, ...)
 			      &data);
 
 	va_end (data.valist);
+
+	if (G_UNLIKELY (--node->emissions == 0 && node->invalidated_signals))
+	{
+		int removed;
+
+		removed = g_hash_table_foreach_remove
+				(node->signals,
+				 (GHRFunc) remove_invalidated_signals,
+				 NULL);
+		g_assert (removed == node->invalidated_signals);
+
+		node->invalidated_signals = 0;
+	}
 }
 
 static inline void
@@ -233,7 +261,7 @@ static void
 signal_object_weak_notify (EphyNodeSignalData *signal_data,
                            GObject *where_the_object_was)
 {
-        signal_data->data = NULL;
+	signal_data->data = NULL;
 	ephy_node_signal_disconnect (signal_data->node, signal_data->id);
 }
 
@@ -338,6 +366,8 @@ ephy_node_new_with_id (EphyNodeDb *db, guint reserved_id)
            (GDestroyNotify)destroy_signal_data);
 
 	node->signal_id = 0;
+	node->emissions = 0;
+	node->invalidated_signals = 0;
 
 	_ephy_node_db_add_id (db, reserved_id, node);
 
@@ -1139,6 +1169,8 @@ ephy_node_signal_connect_object (EphyNode *node,
 	int ret;
 
 	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
+	/* FIXME: */
+	g_return_val_if_fail (node->emissions == 0, -1);
 
 	signal_data = g_new0 (EphyNodeSignalData, 1);
 	signal_data->node = node;
@@ -1164,13 +1196,28 @@ ephy_node_signal_connect_object (EphyNode *node,
 }
 
 static gboolean
-match_signal_data (gpointer key, EphyNodeSignalData *signal_data,
-                   EphyNodeSignalData *user_data)
+remove_matching_signal_data (gpointer key,
+			     EphyNodeSignalData *signal_data,
+			     EphyNodeSignalData *user_data)
 {
-        return (user_data->data == signal_data->data &&
-                user_data->type == signal_data->type &&
-                user_data->callback == signal_data->callback);
-                
+	return (user_data->data == signal_data->data &&
+		user_data->type == signal_data->type &&
+		user_data->callback == signal_data->callback);           
+}
+
+static void
+invalidate_matching_signal_data (gpointer key,
+				 EphyNodeSignalData *signal_data,
+				 EphyNodeSignalData *user_data)
+{
+	if (user_data->data == signal_data->data &&
+	    user_data->type == signal_data->type &&
+	    user_data->callback == signal_data->callback &&
+	    !signal_data->invalidated)
+	{
+		signal_data->invalidated = TRUE;
+		++signal_data->node->invalidated_signals;
+	}
 }
 
 guint
@@ -1180,16 +1227,26 @@ ephy_node_signal_disconnect_object (EphyNode *node,
                                     GObject *object)
 {
         EphyNodeSignalData user_data;
-        
-	g_return_val_if_fail (node->signals, 0);
 
-        user_data.callback = callback;
-        user_data.type = type;
-        user_data.data = object;
-        
-        return g_hash_table_foreach_remove (node->signals,
-                                            (GHRFunc)match_signal_data,
-                                            &user_data);
+	g_return_val_if_fail (EPHY_IS_NODE (node), 0);
+
+	user_data.callback = callback;
+	user_data.type = type;
+	user_data.data = object;
+
+	if (G_LIKELY (node->emissions == 0))
+	{
+		return g_hash_table_foreach_remove (node->signals,
+						    (GHRFunc) remove_matching_signal_data,
+						    &user_data);
+	}
+	else
+	{
+		g_hash_table_foreach (node->signals,
+				      (GHFunc) invalidate_matching_signal_data,
+				      &user_data);
+		return 0;
+	}
 }
 
 void
@@ -1197,8 +1254,23 @@ ephy_node_signal_disconnect (EphyNode *node,
 			     int signal_id)
 {
 	g_return_if_fail (EPHY_IS_NODE (node));
+	g_return_if_fail (signal_id != -1);
 
-	g_hash_table_remove (node->signals,
-			     GINT_TO_POINTER (signal_id));
+	if (G_LIKELY (node->emissions == 0))
+	{
+		g_hash_table_remove (node->signals,
+				     GINT_TO_POINTER (signal_id));
+	}
+	else
+	{
+		EphyNodeSignalData *data;
+
+		data = g_hash_table_lookup (node->signals,
+					    GINT_TO_POINTER (signal_id));
+		g_return_if_fail (data != NULL);
+		g_return_if_fail (!data->invalidated);
+
+		data->invalidated = TRUE;
+		node->invalidated_signals++;
+	}
 }
-
