@@ -41,7 +41,6 @@ G_BEGIN_DECLS
 typedef struct EphyWindowClass EphyWindowClass;
 typedef struct EphyWindow EphyWindow;
 typedef struct EphyWindowPrivate EphyWindowPrivate;
-typedef struct Toolbar Toolbar;
 
 struct EphyWindow
 {

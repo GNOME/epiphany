@@ -34,8 +34,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_TOOLBAR_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TOOLBAR))
 #define EPHY_TOOLBAR_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TOOLBAR, ToolbarClass))
 
-typedef struct ToolbarClass ToolbarClass;
-typedef struct ToolbarPrivate ToolbarPrivate;
+typedef struct Toolbar		Toolbar;
+typedef struct ToolbarClass	ToolbarClass;
+typedef struct ToolbarPrivate	ToolbarPrivate;
 
 struct Toolbar
 {
