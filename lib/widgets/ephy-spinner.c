@@ -175,10 +175,10 @@ ephy_spinner_init (EphySpinner *spinner)
 	spinner->details->delay = spinner_DEFAULT_TIMEOUT;
 	/* FIXME: icon theme is per-screen, not global */
 	spinner->details->icon_theme = gtk_icon_theme_get_default ();
-	g_signal_connect (spinner->details->icon_theme,
-			  "changed",
-			  G_CALLBACK (ephy_spinner_theme_changed),
-			  spinner);
+	g_signal_connect_object (spinner->details->icon_theme,
+				 "changed",
+				 G_CALLBACK (ephy_spinner_theme_changed),
+				 spinner, 0);
 
 	spinner->details->quiescent_pixbuf = NULL;
 	spinner->details->image_list = NULL;

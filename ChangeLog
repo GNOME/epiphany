@@ -1,3 +1,10 @@
+2003-12-13  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_init):
+
+	Use g_signal_connect_object so the signal isn't emitted for a dead
+	spinner.
+
 2003-12-13  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/ephy-tab.c: (update_net_state_message),
