@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
+ * $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -42,7 +43,6 @@
 #include "ephy-dnd.h"
 #include "ephy-prefs.h"
 #include "ephy-shell.h"
-#include "eel-gconf-extensions.h"
 #include "ephy-file-helpers.h"
 #include "egg-action-group.h"
 #include "egg-toggle-action.h"
@@ -964,8 +964,6 @@ static void
 ephy_bookmarks_editor_dispose (GObject *object)
 {
 	EphyBookmarksEditor *editor;
-	long selected_id;
-	char *selected_id_str;
 	GList *selection;
 
 	g_return_if_fail (object != NULL);
@@ -987,15 +985,6 @@ ephy_bookmarks_editor_dispose (GObject *object)
 			editor->priv->key_view = NULL;
 			G_OBJECT_CLASS (parent_class)->dispose (object);
 			return;
-		}
-
-		selected_id = ephy_node_get_id (selection->data);
-		if (selected_id >= 0)
-		{
-			selected_id_str = g_strdup_printf ("%ld", selected_id);
-			eel_gconf_set_string (CONF_BOOKMARKS_SELECTED_NODE,
-					      selected_id_str);
-			g_free (selected_id_str);
 		}
 
 		g_list_free (selection);
@@ -1207,9 +1196,6 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	GtkWidget *bm_view, *key_view;
 	GtkWidget *scrolled_window;
 	EphyNode *node;
-	long selected_id;
-	EphyNode *selected_node;
-	char *selected_id_str;
 	EggMenuMerge *ui_merge;
 	EggActionGroup *action_group;
 	EggAction *action;
@@ -1379,22 +1365,6 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	ephy_state_add_paned  (GTK_WIDGET (hpaned),
 			       "bookmarks_paned",
 		               130);
-
-	selected_id_str = eel_gconf_get_string (CONF_BOOKMARKS_SELECTED_NODE);
-	selected_id = g_ascii_strtoull (selected_id_str, NULL, 10);
-	if (selected_id <= 0)
-	{
-		g_free (selected_id_str);
-		return;
-	}
-
-	selected_node = ephy_bookmarks_get_from_id (editor->priv->bookmarks, selected_id);
-	if (selected_node != NULL)
-	{
-		ephy_node_view_select_node (EPHY_NODE_VIEW (key_view), selected_node);
-	}
-
-	g_free (selected_id_str);
 }
 
 void

@@ -1,3 +1,12 @@
+2003-06-12  Xan Lopez  <xan@masilla.org>
+
+	* data/epiphany.schemas.in:
+	* lib/ephy-prefs.h:
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_dispose), (ephy_bookmarks_editor_construct):
+
+	Do not persist node selection in BME between sessions.
+	
 2003-06-12  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/ephy-embed-popup.c: (embed_popup_open_frame_cmd):
@@ -61,7 +70,7 @@
 	* lib/widgets/ephy-node-view.c: (ephy_node_view_select_node):
 
 	Use gtk_tree_selection_select_iter to make selection, fixes #114965.
-<F6>
+
 2003-06-11  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/bookmarks/ephy-bookmark-toolitem.h:
