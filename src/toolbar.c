@@ -113,14 +113,12 @@ go_location_cb (EggAction *action, char *location, EphyWindow *window)
 }
 
 static EggAction *
-get_bookmark_action (Toolbar *t, EphyBookmarks *bookmarks, gulong id)
+get_bookmark_action (Toolbar *t, EphyBookmarks *bookmarks, gulong id, const char *action_name)
 {
-	char action_name[255];
 	EggAction *action;
 
 	LOG ("Creating action for bookmark id %ld", id)
 
-	snprintf (action_name, 255, "GoBookmarkId%ld", id);
 	action = ephy_bookmark_action_new (action_name, id);
 
 	g_signal_connect (action, "go_location",
@@ -140,6 +138,7 @@ toolbar_get_action (EphyEditableToolbar *etoolbar,
 	EggAction *action = NULL;
 	EphyBookmarks *bookmarks;
 	gulong id = 0;
+	char action_name[255];
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
@@ -172,31 +171,31 @@ toolbar_get_action (EphyEditableToolbar *etoolbar,
 			gtk_widget_destroy (new_bookmark);
 		}
 
-		if (id != 0)
-		{
-			action = get_bookmark_action (t, bookmarks, id);
-		}
-		else
-		{
-			action = NULL;
-		}
-
 		g_list_foreach (uris, (GFunc)g_free, NULL);
 		g_list_free (uris);
 	}
+	else if (g_str_has_prefix (name, "GoBookmarkId"))
+	{
+		if (!ephy_str_to_int (name + strlen ("GoBookmarkId"), &id))
+		{
+			id = 0;
+		}
+	}
 
-	if (action == NULL)
+	if (id != 0)
+	{
+		snprintf (action_name, 255, "GoBookmarkId%ld", id);
+		action = EPHY_EDITABLE_TOOLBAR_CLASS
+			(parent_class)->get_action (etoolbar, NULL, action_name);
+		if (action == NULL)
+		{
+			action = get_bookmark_action (t, bookmarks, id, action_name);
+		}
+	}
+	else
 	{
 		action = EPHY_EDITABLE_TOOLBAR_CLASS
 			(parent_class)->get_action (etoolbar, type, name);
-	}
-
-	if (action == NULL && g_str_has_prefix (name, "GoBookmarkId"))
-	{
-		if (ephy_str_to_int (name + strlen ("GoBookmarkId"), &id))
-		{
-			action = get_bookmark_action (t, bookmarks, id);
-		}
 	}
 
 	return action;
