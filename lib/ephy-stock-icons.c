@@ -54,6 +54,7 @@ ephy_stock_icons_init (void)
 
 	static const GtkStockItem items[] =
 	{
+		{ EPHY_STOCK_CLOSE_TAB,	N_("Close Tab"),	0, 0, NULL },
 		{ EPHY_STOCK_POPUPS,	N_("Popup Windows"),	0, 0, NULL },
 		{ EPHY_STOCK_HISTORY,	N_("History"),		0, 0, NULL },
 		{ EPHY_STOCK_BOOKMARKS, N_("Bookmarks"),	0, 0, NULL },
@@ -95,4 +96,6 @@ ephy_stock_icons_init (void)
 	}
 
 	g_object_unref (G_OBJECT (factory));
+
+	gtk_icon_size_register (EPHY_ICON_SIZE_TAB_BUTTON, 10, 10);
 }
