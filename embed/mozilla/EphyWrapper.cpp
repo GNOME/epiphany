@@ -42,7 +42,6 @@
 #include "nsIComponentManager.h"
 #include "nsIScriptGlobalObject.h"
 #include "nsIScriptContext.h"
-#include "nsToolkitCompsCID.h"
 #include "nsIDOMWindowInternal.h"
 #include "nsIInterfaceRequestor.h"
 #include "nsIFocusController.h"

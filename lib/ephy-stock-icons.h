@@ -29,6 +29,8 @@ G_BEGIN_DECLS
 #define EPHY_STOCK_BOOKMARKS       "epiphany-bookmarks"
 #define EPHY_STOCK_NEW_TAB         "epiphany-new-tab"
 #define EPHY_STOCK_FULLSCREEN      "epiphany-fullscreen"
+#define EPHY_STOCK_VIEWSOURCE      "epiphany-viewsource"
+#define EPHY_STOCK_SEND_LINK       "epiphany-send-link"
 
 void ephy_stock_icons_init (void);
 

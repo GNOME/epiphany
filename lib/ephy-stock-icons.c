@@ -39,7 +39,9 @@ ephy_stock_icons_init (void)
 		EPHY_STOCK_HISTORY,
 		EPHY_STOCK_BOOKMARKS,
 		EPHY_STOCK_FULLSCREEN,
-		EPHY_STOCK_NEW_TAB
+		EPHY_STOCK_NEW_TAB,
+		EPHY_STOCK_VIEWSOURCE,
+		EPHY_STOCK_SEND_LINK
 	};
 
 	factory = gtk_icon_factory_new ();
