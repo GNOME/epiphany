@@ -2819,13 +2819,7 @@ ephy_window_activate_location (EphyWindow *window)
 	toolbar_activate_location (window->priv->toolbar);
 }
 
-/**
- * ephy_window_show:
- * @widget: an #EphyWindow
- *
- * Shows @widget if it is hidden.
- **/
-void
+static void
 ephy_window_show (GtkWidget *widget)
 {
 	EphyWindow *window = EPHY_WINDOW(widget);
