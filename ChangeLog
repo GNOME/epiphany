@@ -1,3 +1,17 @@
+2005-02-10  Christian Persch  <chpe@cvs.gnome.org>
+
+        * src/ephy-window.c: (ephy_window_dispose),
+        (ephy_window_class_init), (ephy_window_finalize):
+		
+        Move all the stuff from finalize to dispose, so that
+        we finalise the UI manager when disposing and not only
+	when finalising. Fixes bug #165992.
+
+2005-02-10  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-window.c: (ephy_window_dispose),
+	(ephy_window_class_init), (ephy_window_finalize):
+
 2005-02-09  Christian Persch  <chpe@cvs.gnome.org>
 
         * embed/mozilla/MozDownload.cpp:

@@ -453,34 +453,6 @@ destroy_exit_fullscreen_popup (EphyWindow *window)
 }
 
 static void
-ephy_window_destroy (GtkObject *gtkobject)
-{
-	EphyWindow *window = EPHY_WINDOW (gtkobject);
-	GSList *popups;
-
-	LOG ("EphyWindow destroy %p", window)
-
-	if (window->priv->closing == FALSE)
-	{
-		EphyExtension *manager;
-
-		window->priv->closing = TRUE;
-
-		/* Let the extensions detach themselves from the window */
-		manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
-		ephy_extension_detach_window (manager, window);
-	}
-
-	destroy_exit_fullscreen_popup (window);
-
-	popups = gtk_ui_manager_get_toplevels (GTK_UI_MANAGER (window->ui_merge), GTK_UI_MANAGER_POPUP);
-	g_slist_foreach (popups, (GFunc) gtk_menu_shell_deactivate, NULL);
-	g_slist_free (popups);
-
-        GTK_OBJECT_CLASS (parent_class)->destroy (gtkobject);
-}
-
-static void
 add_widget (GtkUIManager *merge, GtkWidget *widget, EphyWindow *window)
 {
 	gtk_box_pack_start (GTK_BOX (window->priv->menu_dock),
@@ -2038,6 +2010,83 @@ ephy_window_set_chrome (EphyWindow *window, EphyEmbedChrome mask)
 }
 
 static void
+ephy_window_dispose (GObject *object)
+{
+	EphyWindow *window = EPHY_WINDOW (object);
+	EphyWindowPrivate *priv = window->priv;
+	GObject *single;
+	GSList *popups;
+
+	LOG ("EphyWindow dispose %p", window);
+
+	/* Only do these once */
+	if (window->priv->closing == FALSE)
+	{
+		EphyExtension *manager;
+
+		window->priv->closing = TRUE;
+
+		/* Let the extensions detach themselves from the window */
+		manager = EPHY_EXTENSION (ephy_shell_get_extensions_manager (ephy_shell));
+		ephy_extension_detach_window (manager, window);
+
+		/* Deactivate menus */
+		popups = gtk_ui_manager_get_toplevels (window->priv->manager, GTK_UI_MANAGER_POPUP);
+		g_slist_foreach (popups, (GFunc) gtk_menu_shell_deactivate, NULL);
+		g_slist_free (popups);
+	
+		single = ephy_embed_shell_get_embed_single (embed_shell);
+		g_signal_handlers_disconnect_by_func
+			(single, G_CALLBACK (network_status_changed), window);
+	
+		eel_gconf_notification_remove (priv->disable_arbitrary_url_notifier_id);
+		eel_gconf_notification_remove (priv->disable_bookmark_editing_notifier_id);
+		eel_gconf_notification_remove (priv->disable_toolbar_editing_notifier_id);
+		eel_gconf_notification_remove (priv->disable_history_notifier_id);
+		eel_gconf_notification_remove (priv->disable_printing_notifier_id);
+		eel_gconf_notification_remove (priv->disable_print_setup_notifier_id);
+		eel_gconf_notification_remove (priv->disable_save_to_disk_notifier_id);
+		eel_gconf_notification_remove (priv->disable_command_line_notifier_id);
+		eel_gconf_notification_remove (priv->browse_with_caret_notifier_id);
+		eel_gconf_notification_remove (priv->allow_popups_notifier_id);
+
+		if (priv->find_dialog)
+		{
+			g_object_unref (G_OBJECT (priv->find_dialog));
+			priv->find_dialog = NULL;
+		}
+	
+		g_object_unref (priv->fav_menu);
+		priv->fav_menu = NULL;
+
+		g_object_unref (priv->enc_menu);
+		priv->enc_menu = NULL;
+
+		g_object_unref (priv->tabs_menu);
+		priv->tabs_menu = NULL;
+
+		g_object_unref (priv->bmk_menu);
+		priv->bmk_menu = NULL;
+	
+		if (priv->ppview_toolbar)
+		{
+			g_object_unref (priv->ppview_toolbar);
+			priv->ppview_toolbar = NULL;
+		}
+	
+		g_object_unref (priv->action_group);
+		priv->action_group = NULL;
+
+		g_object_unref (priv->manager);
+		priv->manager = NULL;
+	}
+
+	destroy_fullscreen_popup (window);
+
+        G_OBJECT_CLASS (parent_class)->dispose (object);
+}
+
+static void
 ephy_window_set_property (GObject *object,
 			  guint prop_id,
 			  const GValue *value,
@@ -2079,16 +2128,14 @@ static void
 ephy_window_class_init (EphyWindowClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	GtkObjectClass *gtkobject_class = GTK_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
         parent_class = g_type_class_peek_parent (klass);
 
+	object_class->dispose = ephy_window_dispose;
         object_class->finalize = ephy_window_finalize;
 	object_class->get_property = ephy_window_get_property;
 	object_class->set_property = ephy_window_set_property;
-
-	gtkobject_class->destroy = ephy_window_destroy;
 
 	widget_class->show = ephy_window_show;
 	widget_class->key_press_event = ephy_window_key_press_event;
@@ -2384,45 +2431,9 @@ ephy_window_init (EphyWindow *window)
 static void
 ephy_window_finalize (GObject *object)
 {
-        EphyWindow *window = EPHY_WINDOW (object);
-	GObject *single;
-
-	single = ephy_embed_shell_get_embed_single (embed_shell);
-	g_signal_handlers_disconnect_by_func
-		(single, G_CALLBACK (network_status_changed), window);
-
-	eel_gconf_notification_remove (window->priv->disable_arbitrary_url_notifier_id);
-	eel_gconf_notification_remove (window->priv->disable_bookmark_editing_notifier_id);
-	eel_gconf_notification_remove (window->priv->disable_toolbar_editing_notifier_id);
-	eel_gconf_notification_remove (window->priv->disable_history_notifier_id);
-	eel_gconf_notification_remove (window->priv->disable_printing_notifier_id);
-	eel_gconf_notification_remove (window->priv->disable_print_setup_notifier_id);
-	eel_gconf_notification_remove (window->priv->disable_save_to_disk_notifier_id);
-	eel_gconf_notification_remove (window->priv->disable_command_line_notifier_id);
-	eel_gconf_notification_remove (window->priv->browse_with_caret_notifier_id);
-	eel_gconf_notification_remove (window->priv->allow_popups_notifier_id);
-
-	if (window->priv->find_dialog)
-	{
-		g_object_unref (G_OBJECT (window->priv->find_dialog));
-	}
-
-	g_object_unref (window->priv->fav_menu);
-	g_object_unref (window->priv->enc_menu);
-	g_object_unref (window->priv->tabs_menu);
-	g_object_unref (window->priv->bmk_menu);
-
-	if (window->priv->ppview_toolbar)
-	{
-		g_object_unref (window->priv->ppview_toolbar);
-	}
-
-	g_object_unref (window->priv->action_group);
-	g_object_unref (window->ui_merge);
-
         G_OBJECT_CLASS (parent_class)->finalize (object);
 
-	LOG ("Ephy Window finalized %p", window)
+	LOG ("Ephy Window finalized %p", object)
 
 	g_object_unref (ephy_shell);
 }
