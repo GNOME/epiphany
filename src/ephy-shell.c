@@ -587,7 +587,7 @@ ephy_shell_new_tab (EphyShell *shell,
 	embed = ephy_tab_get_embed (tab);
 
 	ephy_window_add_tab (window, tab, position, jump_to);
-	gtk_window_present (GTK_WINDOW (window));
+	gtk_widget_show (GTK_WIDGET (window));
 
 	if (flags & EPHY_NEW_TAB_HOME_PAGE ||
 	    flags & EPHY_NEW_TAB_NEW_PAGE)
