@@ -29,6 +29,8 @@
 #include <nsIEmbeddingSiteWindow.h>
 #include <nsIWebBrowserChrome.h>
 #include <gtkmozembed.h>
+#include <nsReadableUtils.h>
+#include <nsString.h>
 
 #include "ephy-embed.h"
 #include "mozilla-embed.h"

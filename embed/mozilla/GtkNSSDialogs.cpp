@@ -44,6 +44,8 @@
 #include "nsICRLInfo.h"
 #include "nsISimpleEnumerator.h"
 #include "nsIArray.h"
+#include "nsString.h"
+#include "nsReadableUtils.h"
 
 #include <gconf/gconf-client.h>
 #include <gtk/gtkdialog.h>

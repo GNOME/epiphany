@@ -350,7 +350,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 		else if (NS_SUCCEEDED (aStatus))
 		{
 			GnomeVFSMimeApplication *helperApp;
-#if MOZILLA_SNAPSHOT < 16
+#if MOZILLA_SNAPSHOT < 18
 			char *mimeType;
 			rv = mMIMEInfo->GetMIMEType (&mimeType);
 			NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);

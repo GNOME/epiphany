@@ -29,6 +29,8 @@
 #include "nsIServiceManager.h"
 #include "nsIInterfaceRequestor.h"
 #include "nsIInterfaceRequestorUtils.h"
+#include "nsString.h"
+#include "nsReadableUtils.h"
 
 #include <gtk/gtkversion.h>
 #include <gtk/gtkdialog.h>
