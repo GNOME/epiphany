@@ -252,7 +252,7 @@ save_yourself_cb (GnomeClient *client,
 		  EphyShell *shell)
 {
 	char *argv[] = { "epiphany", "--load-session", NULL };
-	char *discard_argv[] = { "rm", "-r", NULL };
+	char *discard_argv[] = { "rm", "-f", NULL };
 	EphySession *session;
 	char *tmp, *save_to;
 

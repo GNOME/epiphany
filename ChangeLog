@@ -1,5 +1,11 @@
 2004-09-07  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-shell.c: (save_yourself_cb):
+
+	Use rm -f as remove command, not rm -r. Reported by Nikolai Weibull.
+
+2004-09-07  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-navigation-action.c: (new_history_menu_item),
 	(activate_back_or_forward_menu_item_cb),
 	(activate_up_menu_item_cb), (build_back_or_forward_menu),
