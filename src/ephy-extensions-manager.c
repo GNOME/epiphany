@@ -932,6 +932,10 @@ sync_loaded_extensions (EphyExtensionsManager *manager)
 	g_slist_foreach (active_extensions, (GFunc) g_free, NULL);
 	g_slist_free (active_extensions);
 
+	if (value != NULL)
+	{
+		gconf_value_free (value);
+	}
 	g_object_unref (client);
 }
 
