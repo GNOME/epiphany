@@ -1,3 +1,13 @@
+2004-10-25  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/downloader-view.c: (downloader_view_add_download):
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_cache_get_images),
+	(ephy_spinner_size_request):
+	* src/ephy-notebook.c: (tab_label_style_set_cb):
+	* src/window-commands.c: (window_cmd_help_about):
+
+	Use gtk_icon_size_lookup_for_settings() here.
+
 2004-10-24  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-node.c: (callback), (ephy_node_set_property),

@@ -486,7 +486,8 @@ downloader_view_add_download (DownloaderView *dv,
 				       mime, GNOME_ICON_LOOKUP_FLAGS_NONE, NULL);
 	g_free (mime);
 	
-	gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height);
+	gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (GTK_WIDGET (dv)),
+					   GTK_ICON_SIZE_MENU, &width, &height);
 	width *= 2;
 
 	icon_info = gtk_icon_theme_lookup_icon (theme, icon_name, width, 0);

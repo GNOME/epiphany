@@ -38,6 +38,7 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtkiconfactory.h>
+#include <gtk/gtksettings.h>
 
 /* Spinner cache implementation */
 
@@ -350,7 +351,7 @@ ephy_spinner_cache_get_images (EphySpinnerCache *cache,
 		return ephy_spinner_images_copy ((EphySpinnerImages *) element->data);
 	}
 
-	if (!gtk_icon_size_lookup (size, &w, &h))
+	if (!gtk_icon_size_lookup_for_settings (gtk_settings_get_default (), size, &w, &h))
 	{
 		g_warning ("Failed to lookup icon size\n");
 		return NULL;
@@ -751,9 +752,10 @@ ephy_spinner_size_request (GtkWidget *widget,
 	if (!ephy_spinner_load_images (spinner))
 	{
 		requisition->width = requisition->height = 0;
-		gtk_icon_size_lookup (spinner->details->size,
-				      &requisition->width,
-				      &requisition->height);
+		gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (widget),
+						   spinner->details->size,
+						   &requisition->width,
+					           &requisition->height);
 		return;
 	}
 

@@ -954,8 +954,9 @@ window_cmd_help_about (GtkAction *action,
 		return;
 	}
 
-	gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &size, NULL);
 	/* FIXME multihead: use the icon theme for the correct screen, not for the default screen */
+	gtk_icon_size_lookup_for_settings (gtk_settings_get_default (),
+					   GTK_ICON_SIZE_DIALOG, &size, NULL);
 	icon = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
 					 "web-browser", size, 0 , NULL);
 	if (icon == NULL)
