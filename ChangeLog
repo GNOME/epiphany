@@ -2,6 +2,14 @@
 
 	* data/default-prefs.js:
 
+	Use "" instead of null, the new mozilla prefs parser doesn't
+	recognise null and aborts. Thanks to Crispin for alerting me
+	to this.
+
+2003-10-25  Christian Persch  <chpe@cvs.gnome.org>
+
+	* data/default-prefs.js:
+
 	Add missing font.size prefs for zh-HK font group.
 
 2003-10-25  Marco Pesenti Gritti  <marco@gnome.org>
