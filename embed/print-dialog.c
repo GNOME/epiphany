@@ -19,6 +19,7 @@
 #include "print-dialog.h"
 #include "ephy-prefs.h"
 #include <gtk/gtkdialog.h>
+#include <gtk/gtkstock.h>
 
 #define CONF_PRINT_BOTTOM_MARGIN "/apps/epiphany/print/bottom_margin"
 #define CONF_PRINT_TOP_MARGIN "/apps/epiphany/print/top_margin"
@@ -57,10 +58,12 @@ static GObjectClass *parent_class = NULL;
 struct PrintDialogPrivate
 {
 	gpointer dummy;
+	GtkWidget *window;
 };
 
 enum
 {
+	WINDOW_PROP,
 	PRINTON_PROP,
 	PRINTER_PROP,
 	FILE_PROP,
@@ -89,6 +92,7 @@ enum
 static const
 EphyDialogProperty properties [] =
 {
+	{ WINDOW_PROP, "print_dialog", NULL, PT_NORMAL, NULL },
 	{ PRINTON_PROP, "printer_radiobutton", CONF_PRINT_PRINTON, PT_NORMAL, NULL },
 	{ PRINTER_PROP, "printer_entry", CONF_PRINT_PRINTER, PT_NORMAL, NULL },
 	{ FILE_PROP, "file_entry", CONF_PRINT_FILE, PT_NORMAL, NULL },
@@ -164,6 +168,7 @@ print_dialog_class_init (PrintDialogClass *klass)
 static void
 print_dialog_init (PrintDialog *dialog)
 {
+	GdkPixbuf *icon;
 	dialog->priv = g_new0 (PrintDialogPrivate, 1);
 
 	dialog->only_collect_info = FALSE;
@@ -173,6 +178,15 @@ print_dialog_init (PrintDialog *dialog)
 	ephy_dialog_construct (EPHY_DIALOG(dialog),
 				 properties,
 				 "print.glade", "print_dialog");
+
+	dialog->priv->window = ephy_dialog_get_control (EPHY_DIALOG(dialog), WINDOW_PROP);
+	
+	icon = gtk_widget_render_icon (dialog->priv->window, 
+						      GTK_STOCK_PRINT,
+						      GTK_ICON_SIZE_MENU,
+						      "print_dialog");
+	gtk_window_set_icon (GTK_WINDOW(dialog->priv->window), icon);
+	g_object_unref (icon);
 }
 
 static void

@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 #define EPHY_STOCK_UNSECURE        "epiphany-unsecure"
 #define EPHY_STOCK_HISTORY         "epiphany-history"
 #define EPHY_STOCK_BOOKMARKS       "epiphany-bookmarks"
+#define EPHY_STOCK_BOOKMARK_PAGE "epiphany-bookmark-page"
 #define EPHY_STOCK_NEW_TAB         "epiphany-new-tab"
 #define EPHY_STOCK_FULLSCREEN      "epiphany-fullscreen"
 #define EPHY_STOCK_VIEWSOURCE      "epiphany-viewsource"

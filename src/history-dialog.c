@@ -19,6 +19,7 @@
 #include "history-dialog.h"
 #include "ephy-shell.h"
 #include "ephy-embed-shell.h"
+#include "ephy-file-helpers.h"
 #include "ephy-string.h"
 #include "ephy-gui.h"
 #include "ephy-dnd.h"
@@ -69,6 +70,7 @@ static GObjectClass *parent_class = NULL;
 
 struct HistoryDialogPrivate
 {
+	GtkWidget *window;
 	EphyHistory *gh;
 	EphyNode *root;
 	EphyNode *pages;
@@ -91,6 +93,7 @@ enum
 
 enum
 {
+	PROP_WINDOW,
 	PROP_TREEVIEW,
 	PROP_WORD,
 	PROP_TIME,
@@ -100,6 +103,7 @@ enum
 static const
 EphyDialogProperty properties [] =
 {
+	{ PROP_WINDOW, "history_dialog", NULL, PT_NORMAL, NULL },
 	{ PROP_TREEVIEW, "history_treeview", NULL, PT_NORMAL, NULL },
 	{ PROP_WORD, "history_entry", CONF_HISTORY_SEARCH_TEXT, PT_NORMAL, NULL },
 	{ PROP_TIME, "history_time_optionmenu", CONF_HISTORY_SEARCH_TIME, PT_NORMAL, NULL },
@@ -402,6 +406,8 @@ static void
 history_dialog_set_embedded (HistoryDialog *dialog,
 			     gboolean embedded)
 {
+	const char *icon_path;
+	
 	dialog->priv->embedded = embedded;
 
 	ephy_dialog_construct (EPHY_DIALOG (dialog),
@@ -410,11 +416,15 @@ history_dialog_set_embedded (HistoryDialog *dialog,
 			       embedded ?
 			       "history_dock_box" :
 			       "history_dialog");
+	dialog->priv->window = ephy_dialog_get_control (EPHY_DIALOG (dialog), PROP_WINDOW);
 	dialog->priv->go_button = ephy_dialog_get_control (EPHY_DIALOG (dialog), PROP_GO_BUTTON);
-
 	dialog->priv->treeview = GTK_TREE_VIEW (
 				 ephy_dialog_get_control (EPHY_DIALOG(dialog),
 							    PROP_TREEVIEW));
+	
+	icon_path =  ephy_file ("epiphany-history.png");
+	gtk_window_set_icon_from_file (GTK_WINDOW(dialog->priv->window), icon_path, NULL);
+
 	history_dialog_setup_view (dialog);
 	history_dialog_setup_filter (dialog);
 }

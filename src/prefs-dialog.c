@@ -301,6 +301,7 @@ prefs_build_notebook (PrefsDialog *pd)
 static void
 prefs_dialog_init (PrefsDialog *pd)
 {
+	GdkPixbuf *icon;
 	pd->priv = g_new0 (PrefsDialogPrivate, 1);
 
 	gtk_window_set_title (GTK_WINDOW(pd), _("Preferences"));
@@ -308,6 +309,13 @@ prefs_dialog_init (PrefsDialog *pd)
 
 	ephy_state_add_window (GTK_WIDGET(pd),
 			       "prefs_dialog", -1, -1);
+	
+	icon = gtk_widget_render_icon (GTK_WIDGET(pd),
+						      GTK_STOCK_PREFERENCES,
+						      GTK_ICON_SIZE_MENU,
+						      "prefs_dialog");
+	gtk_window_set_icon (GTK_WINDOW(pd), icon);
+	g_object_unref(icon);
 
 	prefs_build_notebook (pd);
 }

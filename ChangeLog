@@ -1,3 +1,43 @@
+2003-03-24  David Bordoley <bordoley@msu.edu>
+
+	* data/art/epiphany-bookmark-page.png: (New file):
+	* data/art/Makefile.am:
+	* lib/ephy-stock-icons.c:
+	* lib/ephy-stock-icons.h:
+	New epiphany-bookmark-page stock image. I'm not at all attached to this icon,
+	if you can make a better one, please do :)
+
+	* data/glade/epiphany.glade:
+	Change button ordering to [clear][cancel][jump to].
+	
+	* embed/find-dialog.c:
+	Use GTK_STOCK_FIND for the window border icon.
+	
+	* embed/print-dialog.c:
+	Use GTK_STOCK_PRINT for the window border icon.
+
+	* src/bookmarks/ephy-new-bookmark.c:
+	Use EPHY_STOCK_BOOKMARK_PAGE for the window icon.
+	s/add bookmark/new bookmark for the window title.
+
+	* src/bookmarks/ephy-bookmark-properties.c: (set_window_icon),
+	(update_window_title):
+	New functions. Dynamically set the property window title base on the 
+	bookmark title. Use the favicon icon if available for the window icon, otherwise use
+	GTK_STOCK_PROPERTIES.
+
+	* src/window-commands.c:
+	Use GNOME_STOCK_ABOUT for the about window icon.
+
+	* src/prefs-dialog.c:
+	USE GTK_STOCK_PREFERENCES for the window icon.
+
+	* src/history-dialog.c:
+	Use epiphany-history.png for the window border icon.
+
+	* src/ephy-window.c:
+	Use EPHY_STOCK_BOOKMARK_PAGE for the boomark page/link menu items.
+	
 2003-03-24  Xan Lopez  <xan@masilla.org>
 
 	* src/bookmarks/ephy-bookmarks-editor.c:

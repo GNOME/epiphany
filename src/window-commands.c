@@ -38,6 +38,7 @@
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <bonobo/bonobo-i18n.h>
 #include <libgnomeui/gnome-about.h>
+#include <libgnomeui/gnome-stock-icons.h>
 #include <libgnome/gnome-help.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkeditable.h>
@@ -673,6 +674,7 @@ window_cmd_help_about (EggAction *action,
 		       EphyWindow *window)
 {
 	static GtkWidget *about = NULL;
+	GdkPixbuf *icon;
 
 	static gchar *authors[] = {
 		"Marco Pesenti Gritti <mpeseng@tin.it>",
@@ -704,6 +706,14 @@ window_cmd_help_about (EggAction *action,
 
 	gtk_window_set_transient_for (GTK_WINDOW (about),
 				      GTK_WINDOW (window));
+	
+	icon = gtk_widget_render_icon (about, 
+						      GNOME_STOCK_ABOUT,
+						      GTK_ICON_SIZE_MENU,
+						      NULL);
+	gtk_window_set_icon (GTK_WINDOW (about), icon);
+	g_object_unref(icon);
+
 	g_object_add_weak_pointer (G_OBJECT (about), (gpointer *)&about);
 	gtk_widget_show (about);
 }

@@ -29,6 +29,7 @@
 #include "ephy-new-bookmark.h"
 #include "ephy-topics-selector.h"
 #include "ephy-debug.h"
+#include "ephy-stock-icons.h"
 
 static void ephy_new_bookmark_class_init (EphyNewBookmarkClass *klass);
 static void ephy_new_bookmark_init (EphyNewBookmark *editor);
@@ -228,8 +229,16 @@ build_editing_table (EphyNewBookmark *editor)
 static void
 ephy_new_bookmark_construct (EphyNewBookmark *editor)
 {
+	GdkPixbuf *icon;
+
 	gtk_window_set_title (GTK_WINDOW (editor),
-			      _("Add bookmark"));
+			      _("New Bookmark"));
+	icon = gtk_widget_render_icon (GTK_WIDGET (editor), 
+						      EPHY_STOCK_BOOKMARK_PAGE,
+						      GTK_ICON_SIZE_MENU,
+						      NULL);
+	gtk_window_set_icon (GTK_WINDOW (editor), icon);
+	g_object_unref(icon);
 
 	gtk_dialog_set_has_separator (GTK_DIALOG (editor), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (editor), 6);

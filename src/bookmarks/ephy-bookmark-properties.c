@@ -20,6 +20,7 @@
 #include "ephy-bookmark-properties.h"
 #include "ephy-topics-selector.h"
 #include "ephy-debug.h"
+#include "ephy-shell.h"
 
 #include <gtk/gtkstock.h>
 #include <gtk/gtkentry.h>
@@ -217,15 +218,60 @@ update_entry (EphyBookmarkProperties *props, GtkWidget *entry, guint prop)
 }
 
 static void
+update_window_title(EphyBookmarkProperties *editor)
+{
+	char *title;
+	const char *tmp;
+	
+	tmp = ephy_node_get_property_string (editor->priv->bookmark,
+					     EPHY_NODE_BMK_PROP_TITLE);
+	title = g_strdup_printf (_("%s Properties"), tmp);
+	gtk_window_set_title (GTK_WINDOW (editor), title);
+	g_free (title);
+}
+
+
+static void
 title_entry_changed_cb (GtkWidget *entry, EphyBookmarkProperties *props)
 {
 	update_entry (props, entry, EPHY_NODE_BMK_PROP_TITLE);
+	update_window_title(props);
 }
 
 static void
 location_entry_changed_cb (GtkWidget *entry, EphyBookmarkProperties *props)
 {
 	update_entry (props, entry, EPHY_NODE_BMK_PROP_LOCATION);
+}
+
+static void
+set_window_icon (EphyBookmarkProperties *editor)
+{
+	EphyFaviconCache *cache;
+	const char *icon_location;
+	GdkPixbuf *icon = NULL;
+
+	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
+	icon_location = ephy_node_get_property_string
+		(editor->priv->bookmark, EPHY_NODE_BMK_PROP_ICON);
+
+	LOG ("Get favicon for %s", icon_location ? icon_location : "None")
+
+	if (icon_location)
+	{
+		icon = ephy_favicon_cache_get (cache, icon_location);
+	}
+
+	else
+	{
+		icon = gtk_widget_render_icon (GTK_WIDGET (editor), 
+						      	      GTK_STOCK_PROPERTIES,
+						      	      GTK_ICON_SIZE_MENU,
+						      	      NULL);
+	}
+
+	gtk_window_set_icon (GTK_WINDOW (editor), icon);
+	g_object_unref (icon);
 }
 
 static void
@@ -239,9 +285,9 @@ build_ui (EphyBookmarkProperties *editor)
 			  "response",
 			  G_CALLBACK (bookmark_properties_response_cb),
 			  editor);
-
-	gtk_window_set_title (GTK_WINDOW (editor),
-			      _("Bookmark properties"));
+	
+	update_window_title (editor);
+	set_window_icon (editor);
 
 	gtk_dialog_set_has_separator (GTK_DIALOG (editor), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (editor), 6);

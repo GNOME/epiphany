@@ -19,6 +19,7 @@
 #include "find-dialog.h"
 #include "ephy-prefs.h"
 #include "ephy-embed.h"
+#include <gtk/gtk.h>
 
 #define CONF_FIND_MATCH_CASE "/apps/epiphany/find/match_case"
 #define CONF_FIND_AUTOWRAP "/apps/epiphany/find/autowrap"
@@ -51,6 +52,7 @@ static GObjectClass *parent_class = NULL;
 struct FindDialogPrivate
 {
 	EmbedFindInfo *properties;
+	GtkWidget *window;
 	gboolean can_go_prev;
 	gboolean can_go_next;
 	gboolean constructed;
@@ -64,6 +66,7 @@ enum
 
 enum
 {
+	WINDOW_PROP,
 	MATCH_CASE_PROP,
 	AUTOWRAP_PROP,
 	WORD_PROP,
@@ -74,6 +77,7 @@ enum
 static const
 EphyDialogProperty properties [] =
 {
+	{ WINDOW_PROP, "find_dialog", NULL, PT_NORMAL, NULL },
 	{ MATCH_CASE_PROP, "case_check", CONF_FIND_MATCH_CASE, PT_NORMAL, NULL },
 	{ AUTOWRAP_PROP, "wrap_check", CONF_FIND_AUTOWRAP, PT_NORMAL, NULL },
 	{ WORD_PROP, "find_entry", CONF_FIND_WORD, PT_NORMAL, NULL },
@@ -250,11 +254,13 @@ find_get_info (EphyDialog *dialog)
 static void
 impl_show (EphyDialog *dialog)
 {
+	GdkPixbuf *icon;
 	FindDialog *find_dialog = FIND_DIALOG(dialog);
 	ensure_constructed (find_dialog);
 
 	find_dialog->priv->can_go_prev = TRUE;
 	find_dialog->priv->can_go_next = TRUE;
+	find_dialog->priv->window = ephy_dialog_get_control (dialog, WINDOW_PROP);
 	find_get_info (dialog);
 	find_update_nav (dialog);
 
@@ -264,6 +270,13 @@ impl_show (EphyDialog *dialog)
 	 */
 	gtk_widget_grab_focus (ephy_dialog_get_control (dialog, WORD_PROP));
 
+	
+	icon = gtk_widget_render_icon (find_dialog->priv->window, 
+						      GTK_STOCK_FIND,
+						      GTK_ICON_SIZE_MENU,
+						      "find_dialog");
+	gtk_window_set_icon (GTK_WINDOW(find_dialog->priv->window), icon);
+	g_object_unref (icon);
 	EPHY_DIALOG_CLASS (parent_class)->show (dialog);
 }
 
