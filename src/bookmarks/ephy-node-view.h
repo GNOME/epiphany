@@ -94,6 +94,8 @@ void		   ephy_node_view_edit		      (EphyNodeView *view);
 
 gboolean	   ephy_node_view_is_editing	      (EphyNodeView *view);
 
+gboolean	   ephy_node_view_is_target	      (EphyNodeView *view);
+
 G_END_DECLS
 
 #endif /* EPHY_NODE_VIEW_H */

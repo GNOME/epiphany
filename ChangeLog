@@ -1,3 +1,18 @@
+2003-04-16  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_rename),
+	(cmd_delete), (cmd_select_all),
+	(ephy_bookmarks_editor_update_menu),
+	(ephy_bookmarks_editor_show_popup_cb),
+	(keyword_node_show_popup_cb), (menu_activate_cb):
+	* src/bookmarks/ephy-node-view.c: (ephy_node_view_key_press_cb),
+	(ephy_node_view_button_press_cb), (ephy_node_view_construct),
+	(ephy_node_view_is_editing), (ephy_node_view_is_target):
+	* src/bookmarks/ephy-node-view.h:
+
+	Add a way to decide if the view is target. The impl is an hack
+	but we keep ephy-bookmarks clean. The best we can do right now.
+
 2003-04-15  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* src/ephy-tab.c: (ephy_tab_set_favicon):

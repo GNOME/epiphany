@@ -22,6 +22,7 @@
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkcellrendererpixbuf.h>
 #include <gtk/gtkwindow.h>
+#include <gdk/gdkkeysyms.h>
 #include <libgnome/gnome-i18n.h>
 
 #include "eggtreemodelfilter.h"
@@ -83,6 +84,8 @@ enum
 	PROP_ROOT,
 	PROP_FILTER
 };
+
+static EphyNodeView *target_view;
 
 static GObjectClass *parent_class = NULL;
 
@@ -290,6 +293,22 @@ get_node_from_path (EphyNodeView *view, GtkTreePath *path)
 }
 
 static gboolean
+ephy_node_view_key_press_cb (GtkTreeView *treeview,
+			     GdkEventKey *event,
+			     EphyNodeView *view)
+{
+	if ((event->state & GDK_SHIFT_MASK) &&
+	    (event->keyval == GDK_F10))
+	{
+		g_signal_emit (G_OBJECT (view), ephy_node_view_signals[SHOW_POPUP], 0);
+
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static gboolean
 ephy_node_view_button_press_cb (GtkTreeView *treeview,
 			        GdkEventButton *event,
 			        EphyNodeView *view)
@@ -319,7 +338,9 @@ ephy_node_view_button_press_cb (GtkTreeView *treeview,
 				view->priv->selected_node = get_node_from_path (view, path);
 			}
 
+			target_view = view;
 			g_signal_emit (G_OBJECT (view), ephy_node_view_signals[SHOW_POPUP], 0);
+			target_view = NULL;
 		}
 	}
 
@@ -417,6 +438,11 @@ ephy_node_view_construct (EphyNodeView *view)
 	g_signal_connect_object (G_OBJECT (view),
 			         "button_press_event",
 			         G_CALLBACK (ephy_node_view_button_press_cb),
+			         view,
+				 0);
+	g_signal_connect_object (G_OBJECT (view),
+			         "key_press_event",
+			         G_CALLBACK (ephy_node_view_key_press_cb),
 			         view,
 				 0);
 	g_signal_connect_object (G_OBJECT (view),
@@ -967,6 +993,23 @@ gboolean
 ephy_node_view_is_editing (EphyNodeView *view)
 {
 	return view->priv->editing;
+}
+
+gboolean
+ephy_node_view_is_target (EphyNodeView *view)
+{
+	if (target_view == view)
+	{
+		return TRUE;
+	}
+	else if (target_view != NULL)
+	{
+		return FALSE;
+	}
+	else
+	{
+		return gtk_widget_is_focus (GTK_WIDGET (view));
+	}
 }
 
 gboolean
