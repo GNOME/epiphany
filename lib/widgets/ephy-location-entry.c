@@ -84,9 +84,17 @@ static void		ephy_location_entry_autocompletion_show_alternatives (EphyLocationE
 static void		ephy_location_entry_autocompletion_hide_alternatives (EphyLocationEntry *w);
 static void		ephy_location_entry_autocompletion_window_hidden_cb (EphyAutocompletionWindow *aw,
 									     EphyLocationEntry *w);
-
-
-
+static void
+insert_text_cb (GtkWidget *editable,
+		char *new_text,
+                int new_text_length,
+                int *position,
+		EphyLocationEntry *w);
+static void
+delete_text_cb (GtkWidget *editable,
+                int start_pos,
+                int end_pos,
+		EphyLocationEntry *w);
 
 static gpointer gtk_hbox_class;
 
@@ -219,6 +227,10 @@ ephy_location_entry_build (EphyLocationEntry *w)
 
 	g_signal_connect (p->entry, "key-press-event",
 			  G_CALLBACK (ephy_location_entry_key_press_event_cb), w);
+	g_signal_connect (p->entry, "insert-text",
+			  G_CALLBACK (insert_text_cb), w);
+	g_signal_connect (p->entry, "delete-text",
+			  G_CALLBACK (delete_text_cb), w);
 	g_signal_connect (p->entry, "button-press-event",
 			  G_CALLBACK (ephy_location_entry_button_press_event_cb), w);
 
@@ -274,8 +286,8 @@ ephy_location_entry_autocompletion_show_alternatives_to (EphyLocationEntry *w)
 {
 	EphyLocationEntryPrivate *p = w->priv;
 
-	g_free (p->before_completion),
-	p->before_completion = gtk_editable_get_chars (GTK_EDITABLE(p->entry), 0, -1);
+	g_free (p->before_completion);
+	p->before_completion = gtk_editable_get_chars (GTK_EDITABLE (p->entry), 0, -1);
 
 	if (ephy_location_ignore_prefix (w)) return FALSE;
 
@@ -349,17 +361,37 @@ real_entry_set_location (EphyLocationEntry *w,
 	EphyLocationEntryPrivate *p = w->priv;
 	int pos;
 
+	g_signal_handlers_block_by_func (G_OBJECT (p->entry),
+				         delete_text_cb, w);
 	gtk_editable_delete_text (GTK_EDITABLE (p->entry), 0, -1);
-	gtk_editable_insert_text (GTK_EDITABLE (p->entry), new_location, g_utf8_strlen (new_location, -1),
+	g_signal_handlers_unblock_by_func (G_OBJECT (p->entry),
+				           delete_text_cb, w);
+
+	g_signal_handlers_block_by_func (G_OBJECT (p->entry),
+				         insert_text_cb, w);
+	gtk_editable_insert_text (GTK_EDITABLE (p->entry), new_location, strlen(new_location),
 				  &pos);
+	g_signal_handlers_unblock_by_func (G_OBJECT (p->entry),
+				           insert_text_cb, w);
 }
 
-/* this is from the old location entry, need to do the autocompletion before implementing this */
-static gboolean
-ephy_location_entry_key_press_event_cb (GtkWidget *entry, GdkEventKey *event, EphyLocationEntry *w)
+static void
+delete_text_cb (GtkWidget *editable,
+                int start_pos,
+                int end_pos,
+		EphyLocationEntry *w)
+{
+	ephy_location_entry_autocompletion_hide_alternatives (w);
+}
+
+static void
+insert_text_cb (GtkWidget *editable,
+		char *new_text,
+                int new_text_length,
+                int *position,
+		EphyLocationEntry *w)
 {
 	EphyLocationEntryPrivate *p = w->priv;
-        guint keyval = event->keyval;
 
         if (p->autocompletion_timeout != 0)
 	{
@@ -373,45 +405,25 @@ ephy_location_entry_key_press_event_cb (GtkWidget *entry, GdkEventKey *event, Ep
 		p->show_alternatives_timeout = 0;
 	}
 
-        if (((event->state & GDK_Control_L || event->state & GDK_Control_R) &&
-             (keyval == GDK_a || keyval == GDK_b || keyval == GDK_c ||
-              keyval == GDK_d || keyval == GDK_e || keyval == GDK_f ||
-              keyval == GDK_h || keyval == GDK_k || keyval == GDK_u ||
-              keyval == GDK_v || keyval == GDK_w || keyval == GDK_x)) ||
-            (event->state == 0 && event->keyval == GDK_BackSpace))
-        {
-		ephy_location_entry_autocompletion_hide_alternatives (w);
-                return FALSE;
-        }
+	w->priv->editing = TRUE;
+	ephy_location_entry_autocompletion_unselect_alternatives (w);
+	if (position_is_at_end (GTK_EDITABLE (editable)))
+	{
+		p->show_alternatives_timeout = g_timeout_add
+			(SHOW_ALTERNATIVES_DELAY,
+			 (GSourceFunc) ephy_location_entry_autocompletion_show_alternatives_to, w);
+	}
+}
 
-        /* don't grab alt combos, thus you can still access the menus. */
-        if (event->state & GDK_MOD1_MASK)
-        {
-		ephy_location_entry_autocompletion_hide_alternatives (w);
-                return FALSE;
-        }
-
-        /* make sure the end key works at all times */
-        if ((!((event->state & GDK_SHIFT_MASK) ||
-	       (event->state & GDK_CONTROL_MASK) ||
-	       (event->state & GDK_MOD1_MASK))
-	     && (event->keyval == GDK_End)))
-        {
-		ephy_location_entry_autocompletion_hide_alternatives (w);
-                gtk_editable_select_region (GTK_EDITABLE (p->entry), 0, 0);
-                gtk_editable_set_position (GTK_EDITABLE (p->entry), -1);
-		ephy_location_entry_autocompletion_unselect_alternatives (w);
-                return TRUE;
-        }
+static gboolean
+ephy_location_entry_key_press_event_cb (GtkWidget *entry, GdkEventKey *event, EphyLocationEntry *w)
+{
+	EphyLocationEntryPrivate *p = w->priv;
 
 	switch (event->keyval)
         {
         case GDK_Left:
         case GDK_Right:
-        case GDK_Up:
-        case GDK_Down:
-        case GDK_Page_Up:
-        case GDK_Page_Down:
 		ephy_location_entry_autocompletion_hide_alternatives (w);
                 return FALSE;
 	case GDK_Escape:
@@ -420,15 +432,6 @@ ephy_location_entry_key_press_event_cb (GtkWidget *entry, GdkEventKey *event, Ep
 		ephy_location_entry_autocompletion_hide_alternatives (w);
                 return FALSE;
         default:
-		w->priv->editing = TRUE;
-		ephy_location_entry_autocompletion_unselect_alternatives (w);
-		if ((event->string[0] > 32) && (event->string[0] < 126) &&
-		    position_is_at_end (GTK_EDITABLE (entry)))
-                {
-                        p->show_alternatives_timeout = g_timeout_add
-                                (SHOW_ALTERNATIVES_DELAY,
-				 (GSourceFunc) ephy_location_entry_autocompletion_show_alternatives_to, w);
-                }
                 break;
         }
 
@@ -439,7 +442,8 @@ static gboolean
 ephy_location_entry_content_is_text (const char *content)
 {
 	return ((g_strrstr (content, ".") == NULL) &&
-		(g_strrstr (content, "/") == NULL));
+		(g_strrstr (content, "/") == NULL) &&
+		(g_strrstr (content, ":") == NULL));
 }
 
 static void
@@ -449,9 +453,17 @@ ephy_location_entry_activate_cb (GtkEntry *entry, EphyLocationEntry *w)
 	char *target = NULL;
 
 	content = gtk_editable_get_chars (GTK_EDITABLE(entry), 0, -1);
-	if (ephy_location_entry_content_is_text (content))
+	if (w->priv->last_action_target &&
+	    ephy_location_entry_content_is_text (content))
 	{
-		target = w->priv->last_action_target;
+		target = g_strdup (w->priv->last_action_target);
+	}
+	else
+	{
+		target = content;
+		content = NULL;
+		g_free ( w->priv->last_action_target);
+		w->priv->last_action_target = NULL;
 	}
 
 	ephy_location_entry_autocompletion_hide_alternatives (w);
@@ -460,10 +472,11 @@ ephy_location_entry_activate_cb (GtkEntry *entry, EphyLocationEntry *w)
 
 	w->priv->editing = FALSE;
 
-	g_signal_emit (w, EphyLocationEntrySignals[ACTIVATED], 0, target, content);
+	g_signal_emit (w, EphyLocationEntrySignals[ACTIVATED], 0, content, target);
 	g_signal_emit (w, EphyLocationEntrySignals[FINISHED], 0);
 
 	g_free (content);
+	g_free (target);
 }
 
 static void

@@ -293,8 +293,8 @@ ephy_autocompletion_refine_matches (EphyAutocompletion *ac)
 		EphyAutocompletionMatch *mi = &oldmatches.array[i];
 
 		if (mi->is_action ||
-		    (mi->substring && g_strrstr (mi->match, p->keys[0])) ||
-		    (mi->substring && g_strrstr (mi->title, p->keys[0])) ||
+		    (mi->match && mi->substring && g_strrstr (mi->match, p->keys[0])) ||
+		    (mi->title && mi->substring && g_strrstr (mi->title, p->keys[0])) ||
 		    !strncmp (key0, mi->title + mi->offset, key0l))
 		{
 			acma_append (&newmatches, mi, mi->is_action);
@@ -341,11 +341,23 @@ ephy_autocompletion_update_matches_full_item (EphyAutocompletionSource *source,
 					      guint32 score,
 					      EphyAutocompletionPrivate *p)
 {
-	g_return_if_fail ((item != NULL) || is_action);
-
-	if (is_action ||
-	    (substring && g_strrstr (item, p->keys[0])) ||
-	    (substring && g_strrstr (title, p->keys[0])))
+	if (substring)
+	{
+		if ((item && g_strrstr (item, p->keys[0])) ||
+		    (title && g_strrstr (title, p->keys[0])))
+		{
+			EphyAutocompletionMatch m;
+			m.match = item;
+			m.title = title;
+			m.target = target;
+			m.is_action = is_action;
+			m.substring = substring;
+			m.offset = 0;
+			m.score = score;
+			acma_append (&p->matches, &m, is_action);
+		}
+	}
+	else if (is_action)
 	{
 		EphyAutocompletionMatch m;
 		m.match = item;

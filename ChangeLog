@@ -1,5 +1,25 @@
 2003-06-18  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/ephy-autocompletion.c: (ephy_autocompletion_refine_matches),
+	(ephy_autocompletion_update_matches_full_item):
+	* lib/widgets/ephy-location-entry.c: (ephy_location_entry_build),
+	(ephy_location_entry_autocompletion_show_alternatives_to),
+	(real_entry_set_location), (delete_text_cb), (insert_text_cb),
+	(ephy_location_entry_key_press_event_cb),
+	(ephy_location_entry_content_is_text),
+	(ephy_location_entry_activate_cb):
+	* src/bookmarks/ephy-bookmarks.c:
+	(ephy_bookmarks_autocompletion_source_foreach):
+	* src/ephy-location-action.c: (create_tool_item),
+	(location_url_activate_cb):
+
+	Use insert_text delete_text to show/hide the autocompletion
+	window.
+	Remember last search with autocompletion smart bookmarks.
+	
+
+2003-06-18  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/ephy-history-window.c: (confirmation_dialog_construct):
 
 	Higgify clear dialog

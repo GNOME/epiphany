@@ -183,7 +183,7 @@ ephy_bookmarks_autocompletion_source_foreach (EphyAutocompletionSource *source,
 			(kid, EPHY_NODE_BMK_PROP_KEYWORDS);
 
 		func (source, keywords, title, url, smart_url,
-		      TRUE, 0, data);
+		      !smart_url, 0, data);
 	}
 	ephy_node_thaw (eb->priv->bookmarks);
 }

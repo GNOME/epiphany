@@ -70,7 +70,7 @@ create_tool_item (EggAction *action)
 
 	LOG ("Create location toolitem")
 
-	item = GTK_WIDGET (egg_tool_item_new ());//(* EGG_ACTION_CLASS (parent_class)->create_tool_item) (action);
+	item = GTK_WIDGET (egg_tool_item_new ());
 	location = ephy_location_entry_new ();
 	gtk_container_add (GTK_CONTAINER (item), location);
 	egg_tool_item_set_expand (EGG_TOOL_ITEM (item), TRUE);
@@ -88,7 +88,9 @@ location_url_activate_cb (EphyLocationEntry *entry,
 			  EphyLocationAction *action)
 {
 	EphyBookmarks *bookmarks;
-	LOG ("Location url activated")
+
+	LOG ("Location url activated, content %s target %s", content, target)
+
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 
 	if (!content)
