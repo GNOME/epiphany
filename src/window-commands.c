@@ -347,26 +347,25 @@ window_cmd_file_open (EggAction *action,
                  dir, NULL, modeOpen,
                  &file, NULL, NULL);
 
-	if (result == G_OK)
+	uri = gnome_vfs_uri_new (file);
+	if (uri)
 	{
-                uri = gnome_vfs_uri_new (file);
-                if (uri)
-                {
+		retDir = gnome_vfs_uri_extract_dirname (uri);
 
-                        ephy_window_load_url(window, file);
+		/* set default open dir */
+		eel_gconf_set_string (CONF_STATE_OPEN_DIR,
+				      retDir);
 
-                        retDir = gnome_vfs_uri_extract_dirname (uri);
+		g_free (retDir);
+		gnome_vfs_uri_unref (uri);
 
-                        /* set default open dir */
-                        eel_gconf_set_string (CONF_STATE_OPEN_DIR,
-                                              retDir);
+		if (result == G_OK)
+		{
+			ephy_window_load_url(window, file);
+	        }
+	}
 
-                        g_free (retDir);
-                        gnome_vfs_uri_unref (uri);
-                }
-	        g_free (file);
-        }
-
+	g_free (file);
         g_free (dir);
 }
 
