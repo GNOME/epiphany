@@ -293,6 +293,43 @@ find_extension_info (const ExtensionInfo *info,
 	return strcmp (info->info.identifier, identifier);
 }
 
+typedef struct
+{
+	xmlChar *string;
+	guint match;
+} LocalisedString;
+
+static const char * const *languages = NULL;
+
+static void
+assign_localised_string (xmlTextReaderPtr reader,
+			 LocalisedString *string)
+{
+	const xmlChar *value, *lang;
+	guint i;
+
+	lang = xmlTextReaderConstXmlLang (reader);
+	value = xmlTextReaderConstValue (reader);
+
+	if (G_UNLIKELY (lang == NULL))
+	{
+		/* languages always has "C" in it, so make sure we get a match */
+		lang = (const xmlChar *) "C";
+	}
+
+	for (i = 0; languages[i] != NULL && i < string->match; i++)
+	{
+		if (lang != NULL &&
+		    strcmp ((const char *) lang, languages[i]) == 0)
+		{
+			xmlFree (string->string);
+			string->string = xmlStrdup (value);
+			string->match = i;
+			break;
+		}
+	}
+}
+
 typedef enum
 {
 	STATE_START,
@@ -323,6 +360,8 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 	EphyExtensionInfo *einfo;
 	ExtensionInfo *info;
 	int ret;
+	LocalisedString description = { NULL, G_MAXUINT };
+	LocalisedString name = { NULL, G_MAXUINT };
 
 	LOG ("Loading description file for '%s'", identifier)
 
@@ -347,6 +386,7 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 		return;
 	}
 
+	/* Validate the extension description */
 	if (manager->priv->schema_ctxt)
 	{
 		if (xmlSchemaValidateDoc (manager->priv->schema_ctxt, doc))
@@ -357,7 +397,8 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 			return;
 		}
 	}
-	
+
+	/* Now parse it */
 	reader = xmlReaderWalker (doc);
 	g_return_if_fail (reader != NULL);
 
@@ -472,8 +513,7 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 		else if (state == STATE_DESCRIPTION &&
 			 type == XML_READER_TYPE_TEXT)
 		{
-			
-			einfo->description = xmlTextReaderValue (reader);
+			assign_localised_string (reader, &description);
 		}
 		else if (state == STATE_GETTEXT_DOMAIN &&
 			 type == XML_READER_TYPE_TEXT)
@@ -497,7 +537,7 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 		else if (state == STATE_NAME &&
 			 type == XML_READER_TYPE_TEXT)
 		{
-			einfo->name = xmlTextReaderValue (reader);
+			assign_localised_string (reader, &name);
 		}
 		else if (state == STATE_VERSION &&
 			 type == XML_READER_TYPE_TEXT)
@@ -592,6 +632,10 @@ ephy_extensions_manager_load_string (EphyExtensionsManager *manager,
 
 	xmlFreeTextReader (reader);
 	xmlFreeDoc (doc);
+
+	/* assign localised strings */
+	einfo->description = description.string;
+	einfo->name = name.string;
 
 	/* sanity check */
 	if (ret < 0 || state != STATE_STOP ||
@@ -1219,4 +1263,7 @@ ephy_extensions_manager_class_init (EphyExtensionsManagerClass *class)
 			      G_TYPE_POINTER);
 	
 	g_type_class_add_private (object_class, sizeof (EphyExtensionsManagerPrivate));
+
+	languages = g_get_language_names ();
+	g_assert (languages != NULL);
 }
