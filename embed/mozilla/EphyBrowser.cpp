@@ -73,11 +73,11 @@
 #include "nsIScriptSecurityManager.h"
 #include "nsIServiceManager.h"
 #include "nsIInterfaceRequestor.h"
-#include <nsIDOMHTMLDocument.h>
-#include <nsIDOMXMLDocument.h>
+#include "nsIDOMHTMLDocument.h"
+#include "nsIDOMXMLDocument.h"
 
 #ifdef ALLOW_PRIVATE_API
-#include <content/nsIImageDocument.h>
+#include "nsIImageDocument.h"
 /* not frozen yet */
 #include "nsIContentPolicy.h"
 /* will never be frozen */
