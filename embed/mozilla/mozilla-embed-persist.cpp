@@ -156,6 +156,7 @@ impl_save (EphyEmbedPersist *persist)
 	EphyEmbed *embed;
 	EmbedPersistFlags flags;
 	EphyWrapper *wrapper = NULL;
+	PRUint32 persistFlags = 0;
 
 	g_object_ref (persist);
 	
@@ -209,26 +210,26 @@ impl_save (EphyEmbedPersist *persist)
 		wrapper->GetDOMWindow (getter_AddRefs (parent));
 	}
 
+	persistFlags = nsIWebBrowserPersist::PERSIST_FLAGS_REPLACE_EXISTING_FILES;
+
 	size_t len = strlen(filename);
 	if((filename[len-1] == 'z' && filename[len-2] == 'g') ||
 	   (filename[len-1] == 'Z' && filename[len-2] == 'G'))
 	{
-                bpersist->SetPersistFlags (nsIWebBrowserPersist::PERSIST_FLAGS_NO_CONVERSION);
-	}
-        else
-	{
-        	bpersist->SetPersistFlags (nsIWebBrowserPersist::PERSIST_FLAGS_NONE);
+                persistFlags |= nsIWebBrowserPersist::PERSIST_FLAGS_NO_CONVERSION;
 	}
 
 	if (flags & EMBED_PERSIST_BYPASSCACHE)
 	{
-		bpersist->SetPersistFlags (nsIWebBrowserPersist::PERSIST_FLAGS_BYPASS_CACHE);
+		persistFlags |= nsIWebBrowserPersist::PERSIST_FLAGS_BYPASS_CACHE;
 	}
 
 	if (flags & EMBED_PERSIST_FROMCACHE)
 	{
-		bpersist->SetPersistFlags (nsIWebBrowserPersist::PERSIST_FLAGS_FROM_CACHE);
+		persistFlags |= nsIWebBrowserPersist::PERSIST_FLAGS_FROM_CACHE;
 	}
+
+	bpersist->SetPersistFlags (persistFlags);
 
 	GProgressListener *aProgress = new GProgressListener ();
 	MOZILLA_EMBED_PERSIST (persist)->priv->mProgress = aProgress;
