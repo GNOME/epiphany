@@ -1,3 +1,11 @@
+2003-06-13  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-dialog.c: (get_index), (set_optionmenu_from_config),
+	(set_radiobuttongroup_from_config):
+
+	Handle NULL return from eel_gconf_get_string.
+	Oh, and fix yet another mem leak.
+
 2003-06-13  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-import.c:

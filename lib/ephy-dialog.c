@@ -351,53 +351,52 @@ set_editable_from_config (GtkWidget *editable, const char *config_name)
 	g_free (value);
 }
 
-static void
-set_optionmenu_from_config (GtkWidget *optionmenu, const char *config_name, GList *senum)
+static int
+get_index (const char *config_name, GList *senum)
 {
-	int index;
+	int index = 0;
+	char *val;
+	GList *s = NULL;
 
 	if (senum)
 	{
-		char *val;
-		GList *s;
-
 		val = eel_gconf_get_string (config_name);
 
-		s = g_list_find_custom (senum, val, (GCompareFunc)strcmp);
+		if (val)
+		{
+			s = g_list_find_custom (senum, val, (GCompareFunc)strcmp);
+			g_free (val);
+		}
 
-		index = g_list_position (senum, s);
+		if (s)
+		{
+			index = g_list_position (senum, s);
+		}
+
 	}
 	else
 	{
 		index = eel_gconf_get_integer (config_name);
 	}
 
-	gtk_option_menu_set_history (GTK_OPTION_MENU (optionmenu), index);
+	return index;
 }
+
+
+static void
+set_optionmenu_from_config (GtkWidget *optionmenu, const char *config_name, GList *senum)
+{
+	gtk_option_menu_set_history (GTK_OPTION_MENU (optionmenu),
+				     get_index (config_name, senum));
+}
+
 
 static void
 set_radiobuttongroup_from_config (GtkWidget *radiobutton, const char *config_name, GList *senum)
 {
-	int index;
-
-	if (senum)
-	{
-		char *val;
-		GList *s;
-
-		val = eel_gconf_get_string (config_name);
-
-		s = g_list_find_custom (senum, val, (GCompareFunc)strcmp);
-
-		index = g_list_position (senum, s);
-	}
-	else
-	{
-		index = eel_gconf_get_integer (config_name);
-	}
-
 	/* set it (finds the group for us) */
-	ephy_gui_gtk_radio_button_set (GTK_RADIO_BUTTON (radiobutton), index);
+	ephy_gui_gtk_radio_button_set (GTK_RADIO_BUTTON (radiobutton),
+				       get_index (config_name, senum));
 }
 
 static void
