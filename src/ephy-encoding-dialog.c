@@ -28,7 +28,6 @@
 #include "ephy-embed.h"
 #include "ephy-embed-shell.h"
 #include "ephy-shell.h"
-#include "ephy-gui.h"
 #include "ephy-node.h"
 #include "ephy-node-view.h"
 #include "ephy-debug.h"
@@ -37,20 +36,24 @@
 #include <gtk/gtkbutton.h>
 #include <gtk/gtktreeview.h>
 #include <gtk/gtktreeselection.h>
+#include <gtk/gtktogglebutton.h>
+#include <gtk/gtkdialog.h>
 #include <bonobo/bonobo-i18n.h>
 #include <string.h>
 
 enum
 {
-	CATEGORIES_SCROLLER_PROP,
-	LIST_SCROLLER_PROP
+	SCROLLED_WINDOW_PROP,
+	AUTOMATIC_PROP,
+	MANUAL_PROP
 };
 
 static const
 EphyDialogProperty properties [] =
 {
-	{ CATEGORIES_SCROLLER_PROP,	"categories_scroller",	NULL, PT_NORMAL, NULL },
-	{ LIST_SCROLLER_PROP,		"list_scroller",	NULL, PT_NORMAL, NULL },
+	{ SCROLLED_WINDOW_PROP,	"scrolled_window",	NULL, PT_NORMAL, NULL },
+	{ AUTOMATIC_PROP,	"automatic_button",	NULL, PT_NORMAL, NULL },
+	{ AUTOMATIC_PROP,	"manual_button",	NULL, PT_NORMAL, NULL },
 
 	{ -1, NULL, NULL }
 };
@@ -62,7 +65,6 @@ struct EphyEncodingDialogPrivate
 	EphyEncodings *encodings;
 	EphyWindow *window;
 	EphyEmbed *embed;
-	GtkWidget *cat_view;
 	GtkWidget *enc_view;
 	EphyNodeFilter *filter;
 	EphyNode *selected_node;
@@ -111,17 +113,12 @@ ephy_encoding_dialog_get_type (void)
 	return ephy_type_encoding_dialog;
 }
 
-static void
-setup_filter (EphyEncodingDialog *dialog, EphyNode *category)
+static gboolean
+encoding_is_automatic (EphyEncodingInfo *info)
 {
-	ephy_node_filter_empty (dialog->priv->filter);
-
-	ephy_node_filter_add_expression (dialog->priv->filter,
-				         ephy_node_filter_expression_new (EPHY_NODE_FILTER_EXPRESSION_HAS_PARENT,
-								          category),
-				         0);
-
-	ephy_node_filter_done_changing (dialog->priv->filter);	
+	g_return_val_if_fail (info != NULL, FALSE);
+	
+	return (info->encoding_source < EMBED_ENCODING_PARENT_FORCED);
 }
 
 static void
@@ -129,13 +126,13 @@ sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 {
 	EphyEmbed *embed;
 	EphyEncodingInfo *info;
-	EphyNode *node, *categories;
+	EphyNode *node;
 	gresult result;
         GtkTreeSelection *selection;
         GtkTreeModel *model;
         GList *rows;
-	GPtrArray *children;
-	int i;
+	GtkWidget *button;
+	gboolean is_automatic;
 
 	dialog->priv->update_tag = TRUE;
 
@@ -148,25 +145,7 @@ sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 	node = ephy_encodings_get_node (dialog->priv->encodings, info->encoding);
 	g_return_if_fail (EPHY_IS_NODE (node));
 
-	/* select the correct category in the left pane ... */
-	categories = ephy_encodings_get_categories (dialog->priv->encodings);
-
-	children = ephy_node_get_children (categories);
-	for (i = 0; i < children->len; i++)
-	{
-		EphyNode *kid;
-															     
-		kid = g_ptr_array_index (children, i);
-		if (ephy_node_has_child (kid, node))
-		{
-			ephy_node_view_select_node (EPHY_NODE_VIEW (dialog->priv->cat_view),
-						    kid);
-			break;
-		}
-	}
-	ephy_node_thaw (categories);
-
-	/* ... and the active encoding in the right pane */
+	/* select the current encoding in the list view */
 	ephy_node_view_select_node (EPHY_NODE_VIEW (dialog->priv->enc_view),
 				    node);
 
@@ -177,12 +156,20 @@ sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
         rows = gtk_tree_selection_get_selected_rows (selection, &model);
         if (rows != NULL)
 	{
-		gtk_tree_view_set_cursor (GTK_TREE_VIEW (dialog->priv->enc_view),
-					  (GtkTreePath *)rows->data,
-					  NULL, FALSE);
-	        g_list_foreach (rows, (GFunc)gtk_tree_path_free, NULL);
-       		g_list_free (rows);
+		gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (dialog->priv->enc_view),
+					      (GtkTreePath *) rows->data,
+					      NULL, /* column */
+					      TRUE,
+					      0.5,
+					      0.0);
+		g_list_foreach (rows, (GFunc)gtk_tree_path_free, NULL);
+		g_list_free (rows);
 	}
+
+	is_automatic = encoding_is_automatic (info);
+
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), AUTOMATIC_PROP);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), is_automatic);
 
 	ephy_encoding_info_free (info);
 
@@ -216,6 +203,8 @@ activate_choice (EphyEncodingDialog *dialog)
 {
 	EphyEmbed *embed;
 	EphyEncodingInfo *info;
+	GtkWidget *button;
+	gboolean is_automatic;
 	gresult result;
 
 	LOG ("going manual")
@@ -226,7 +215,19 @@ activate_choice (EphyEncodingDialog *dialog)
 	result = ephy_embed_get_encoding_info (embed, &info);
 	if (result != G_OK || info == NULL) return;
 
-	if (dialog->priv->selected_node != NULL)
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), AUTOMATIC_PROP);
+	is_automatic = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+
+	if (is_automatic)
+	{
+		/* only unset if it was forced before */
+		if ((info->forced_encoding != NULL && info->forced_encoding[0] != '\0')
+		    || info->encoding_source >= EMBED_ENCODING_PARENT_FORCED)
+		{
+			ephy_embed_set_encoding (embed, "");
+		}
+	}
+	else if (dialog->priv->selected_node != NULL)
 	{
 		const char *code;
 
@@ -245,31 +246,6 @@ activate_choice (EphyEncodingDialog *dialog)
 	ephy_encoding_info_free (info);
 }
 
-static void
-activate_automatic (EphyEncodingDialog *dialog)
-{
-	EphyEmbed *embed;
-	EphyEncodingInfo *info;
-	gresult result;
-
-	LOG ("going automatic")
-
-	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
-	g_return_if_fail (EPHY_IS_EMBED (embed));
-
-	result = ephy_embed_get_encoding_info (embed, &info);
-	if (result != G_OK || info == NULL) return;
-
-	if ((info->forced_encoding != NULL && info->forced_encoding[0] != '\0')
-	    || info->encoding_source >= EMBED_ENCODING_PARENT_FORCED)
-	{
-		/* clear forced encoding */
-		ephy_embed_set_encoding (embed, "");
-	}
-
-	ephy_encoding_info_free (info);
-}
-
 void
 ephy_encoding_dialog_response_cb (GtkWidget *widget,
 				  gint response,
@@ -280,9 +256,6 @@ ephy_encoding_dialog_response_cb (GtkWidget *widget,
 		case GTK_RESPONSE_OK:
 			activate_choice (dialog);
 			break;
-		case -11: /* Automatic */
-			activate_automatic (dialog);
-			break;
 		default:
 			break;
 	}
@@ -291,19 +264,18 @@ ephy_encoding_dialog_response_cb (GtkWidget *widget,
 }
 
 static void
-category_node_selected_cb (EphyNodeView *view,
-		       EphyNode *node,
-		       EphyEncodingDialog *dialog)
-{
-	setup_filter (dialog, node);
-}
-
-static void
 view_node_selected_cb (EphyNodeView *view,
 		       EphyNode *node,
 		       EphyEncodingDialog *dialog)
 {
+	GtkWidget *button;
+
 	dialog->priv->selected_node = node;
+
+	if (dialog->priv->update_tag) return;
+
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), MANUAL_PROP);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 }
 
 static void
@@ -311,20 +283,24 @@ view_node_activated_cb (GtkWidget *view,
 			EphyNode *node,
 			EphyEncodingDialog *dialog)
 {
+	GtkWidget *button;
+
 	dialog->priv->selected_node = node;
 
-	if (dialog->priv->update_tag == FALSE)
-	{
-		activate_choice (dialog);
+	if (dialog->priv->update_tag) return;
 
-		g_object_unref (dialog);
-	}
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), MANUAL_PROP);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+
+	activate_choice (dialog);
+
+	g_object_unref (dialog);
 }
 
 static void
 ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 {
-	GtkWidget *treeview, *scroller;
+	GtkWidget *treeview, *scroller, *button;
 	GtkTreeSelection *selection;
 	EphyNode *node;
 
@@ -341,34 +317,6 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 			       properties,
 			       "epiphany.glade",
 			       "encoding_dialog");
-
-	node = ephy_encodings_get_categories (dialog->priv->encodings);
-	treeview = ephy_node_view_new (node, dialog->priv->filter);
-
-	ephy_node_view_add_column (EPHY_NODE_VIEW (treeview), _("Location"),
-				   G_TYPE_STRING,
-				   EPHY_NODE_ENCODING_PROP_TITLE,
-				   -1,
-				   EPHY_NODE_VIEW_AUTO_SORT |
-				   EPHY_NODE_VIEW_SEARCHABLE,
-				   NULL);
-
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
-	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
-
-	g_signal_connect (G_OBJECT (treeview),
-			  "node_selected",
-			  G_CALLBACK (category_node_selected_cb),
-			  dialog);
-
-	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(treeview), FALSE);
-	gtk_widget_show (treeview);
-
-	scroller = ephy_dialog_get_control
-			(EPHY_DIALOG (dialog), CATEGORIES_SCROLLER_PROP);
-	gtk_container_add (GTK_CONTAINER (scroller), treeview);
-
-	dialog->priv->cat_view = treeview;
 
 	dialog->priv->filter = ephy_node_filter_new ();
 
@@ -399,8 +347,13 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 	gtk_widget_show (treeview);
 
 	scroller = ephy_dialog_get_control
-			(EPHY_DIALOG (dialog), LIST_SCROLLER_PROP);
+			(EPHY_DIALOG (dialog), SCROLLED_WINDOW_PROP);
 	gtk_container_add (GTK_CONTAINER (scroller), treeview);
+
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), AUTOMATIC_PROP);
+	gtk_label_set_use_markup (GTK_LABEL (GTK_BIN (button)->child), TRUE);
+	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), MANUAL_PROP);
+	gtk_label_set_use_markup (GTK_LABEL (GTK_BIN (button)->child), TRUE);
 
 	dialog->priv->enc_view = treeview;
 

@@ -1,3 +1,20 @@
+2003-10-20  Christian Persch  <chpe@cvs.gnome.org>
+
+	Encoding menu improvements, Episode V:
+	MPT strikes back.
+
+	* data/glade/epiphany.glade:
+	* embed/ephy-encodings.c: (ephy_encodings_finalize),
+	(ephy_encodings_init):
+	* embed/ephy-encodings.h:
+	* src/ephy-encoding-dialog.c: (encoding_is_automatic),
+	(sync_embed_cb), (activate_choice),
+	(ephy_encoding_dialog_response_cb), (view_node_selected_cb),
+	(view_node_activated_cb), (ephy_encoding_dialog_init):
+
+	Replace the 2-pane view with a single list, and restore
+	the automatic and manual radio buttons.
+
 2003-10-20  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/ephy-history-window.c: (setup_filters),

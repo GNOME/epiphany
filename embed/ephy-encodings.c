@@ -41,7 +41,6 @@ struct EphyEncodingsPrivate
 	EphyNode *root;
 	EphyNode *encodings;
 	EphyNode *detectors;
-	EphyNode *categories;
 	GHashTable *hash;
 	GSList *recent;
 };
@@ -151,30 +150,11 @@ encoding_entries [] =
 };
 static const guint n_encoding_entries = G_N_ELEMENTS (encoding_entries);
 
-/* make sure this covers all LG_* groups ! */
-/* FIXME: those categories are pretty bad :( */
-static const struct
-{
-	char *title;
-	EphyLanguageGroup groups;
-}
-geo_entries [] =
-{
-	{ N_("Universal"),		LG_UNICODE },
-	{ N_("Eastern Asia"),		LG_CHINESE_SIMP | LG_CHINESE_TRAD | LG_JAPANESE  | LG_KOREAN | LG_VIETNAMESE | LG_THAI },
-	{ N_("Western Asia"),		LG_CAUCASIAN    | LG_TURKISH      | LG_INDIAN },
-	{ N_("Eastern European"),	LG_BALTIC       | LG_CYRILLIC     | LG_UKRAINIAN | LG_C_EUROPEAN },
-	{ N_("Western European"),	LG_WESTERN      | LG_GREEK        | LG_NORDIC    | LG_SE_EUROPEAN },
-	{ N_("Middle Eastern"),		LG_ARABIC       | LG_PERSIAN      | LG_HEBREW }
-};
-static const guint n_geo_entries = G_N_ELEMENTS (geo_entries);
-
 enum
 {
 	ALL_NODE_ID = 2,
 	ENCODINGS_NODE_ID = 3,
-	DETECTORS_NODE_ID = 5,
-	CATEGORIES_NODE_ID = 7
+	DETECTORS_NODE_ID = 5
 };
 
 #define RECENT_KEY	"/apps/epiphany/general/recent_encodings"
@@ -222,7 +202,6 @@ ephy_encodings_finalize (GObject *object)
 
 	ephy_node_unref (encodings->priv->encodings);
 	ephy_node_unref (encodings->priv->detectors);
-	ephy_node_unref (encodings->priv->categories);
 	ephy_node_unref (encodings->priv->root);
 
 	g_slist_foreach (encodings->priv->recent, (GFunc) g_free, NULL);
@@ -315,14 +294,6 @@ ephy_encodings_get_all (EphyEncodings *encodings)
 	return encodings->priv->encodings;
 }
 
-EphyNode *
-ephy_encodings_get_categories (EphyEncodings *encodings)
-{
-	g_return_val_if_fail (EPHY_IS_ENCODINGS (encodings), NULL);
-
-	return encodings->priv->categories;
-}
-
 void
 ephy_encodings_add_recent (EphyEncodings *encodings,
 			   const char *code)
@@ -399,12 +370,10 @@ ephy_encodings_init (EphyEncodings *encodings)
 	encodings->priv->root = ephy_node_new_with_id (db, ALL_NODE_ID);
 	encodings->priv->encodings = ephy_node_new_with_id (db, ENCODINGS_NODE_ID);
 	encodings->priv->detectors = ephy_node_new_with_id (db, DETECTORS_NODE_ID);
-	encodings->priv->categories = ephy_node_new_with_id (db, CATEGORIES_NODE_ID);
 
 	ephy_node_ref (encodings->priv->root);
 	ephy_node_ref (encodings->priv->encodings);
 	ephy_node_ref (encodings->priv->detectors);
-	ephy_node_ref (encodings->priv->categories);
 
 	/* now fill the db */
 	for (i = 0; i < n_encoding_entries; i++)
@@ -460,41 +429,6 @@ ephy_encodings_init (EphyEncodings *encodings)
 		g_value_set_boolean (&value, encoding_entries[i].is_autodetector);
 		ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_IS_AUTODETECTOR, &value);
 		g_value_unset (&value);
-	}
-
-	/* setup list of categories for 2-pane view in ephy-encoding-dialog */
-	for (i=0; i < n_geo_entries; i++)
-	{
-		EphyNode *node;
-		GValue value = { 0, };
-		GList *list, *l;
-
-		node = ephy_node_new (db);
-		ephy_node_add_child (encodings->priv->categories, node);
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, _(geo_entries[i].title));
-		ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_TITLE, &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_take_string (&value, g_utf8_collate_key (_(geo_entries[i].title), -1));
-		ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_COLLATION_KEY, &value);
-		g_value_unset (&value);
-
-		g_value_init (&value, G_TYPE_INT);
-		g_value_set_int (&value, encoding_entries[i].groups);
-		ephy_node_set_property (node, EPHY_NODE_ENCODING_PROP_LANGUAGE_GROUPS, &value);
-		g_value_unset (&value);
-
-		/* add the encodings to the category */
-		list = ephy_encodings_get_encodings (encodings, geo_entries[i].groups);
-		for (l = list; l != NULL; l = l->next)
-		{
-			ephy_node_add_child (node, (EphyNode *) l->data);
-		}
-		g_list_free (list);
-
 	}
 
 	/* get the list of recently used encodings */
