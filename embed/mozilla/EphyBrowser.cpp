@@ -383,7 +383,7 @@ nsresult EphyBrowser::GoToHistoryIndex (PRInt16 index)
 
 nsresult EphyBrowser::SetZoom (float aZoom, PRBool reflow)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	if (reflow)
 	{
