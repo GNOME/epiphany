@@ -45,11 +45,15 @@
 #include <nsIInterfaceRequestor.h>
 #include <nsIInterfaceRequestorUtils.h>
 #include <nsIKeygenThread.h>
-#include <nsIDOMWindow.h>
 
+#ifdef HAVE_NSIKEYGENTHREAD_NSIOBSERVER
+#include <nsIObserver.h>
+#else /* !HAVE_NSIKEYGENTHREAD_NSIOBSERVER */
+#include <nsIDOMWindow.h>
 #ifdef ALLOW_PRIVATE_API
 #include "nsIDOMWindowInternal.h"
-#endif
+#endif /* ALLOW_PRIVATE_API */
+#endif /* HAVE_NSIKEYGENTHREAD_NSIOBSERVER */
 
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkprogressbar.h>
@@ -77,6 +81,30 @@ GtkNSSKeyPairDialogs::~GtkNSSKeyPairDialogs ()
 NS_IMPL_ISUPPORTS1 (GtkNSSKeyPairDialogs, 
 		    nsIGeneratingKeypairInfoDialogs)
 
+#ifdef HAVE_NSIKEYGENTHREAD_NSIOBSERVER
+
+class KeyPairObserver : public nsIObserver
+{
+public:
+       NS_DECL_NSIOBSERVER
+       NS_DECL_ISUPPORTS
+
+       KeyPairObserver() : close_called (FALSE) {};
+       virtual ~KeyPairObserver() {};
+
+       gboolean close_called;
+};
+
+NS_IMPL_ISUPPORTS1 (KeyPairObserver, nsIObserver);
+
+NS_IMETHODIMP KeyPairObserver::Observe (nsISupports *aSubject, const char *aTopic,
+                                       const PRUnichar *aData)
+{
+       close_called = TRUE;
+       return NS_OK;
+}
+
+#else /* !HAVE_NSIKEYGENTHREAD_NSIOBSERVER */
 
 /* ------------------------------------------------------------
  * A dummy implementation of nsIDomWindowInternal so that
@@ -111,6 +139,8 @@ NS_IMETHODIMP KeyPairHelperWindow::Close()
 	return NS_OK;
 }
 
+#endif /* HAVE_NSIKEYGENTHREAD_NSIOBSERVER */
+
 /* ------------------------------------------------------------ */
 static void
 begin_busy (GtkWidget *widget)
@@ -136,7 +166,11 @@ struct KeyPairInfo
 {
 	GtkWidget *progress;
 	GtkWidget *dialog;
-	KeyPairHelperWindow *helper;
+#ifdef HAVE_NSIKEYGENTHREAD_NSIOBSERVER
+	KeyPairObserver *helper;
+#else
+ 	KeyPairHelperWindow *helper;
+#endif /* HAVE_NSIKEYGENTHREAD_NSIOBSERVER */
 };
 
 
@@ -196,7 +230,11 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 
 	/* Create a helper class that just waits for close events
 	 * from the other thread */
-	KeyPairHelperWindow *helper = new KeyPairHelperWindow;
+#ifdef HAVE_NSIKEYGENTHREAD_NSIOBSERVER
+       nsCOMPtr<KeyPairObserver> helper = new KeyPairObserver;
+#else
+	nsCOMPtr<KeyPairHelperWindow> helper = new KeyPairHelperWindow;
+#endif
 
 	KeyPairInfo callback_data = { progress, dialog, helper };
 	timeout_id = g_timeout_add (100, (GSourceFunc)generating_timeout_cb, &callback_data);
@@ -219,10 +257,10 @@ GtkNSSKeyPairDialogs::DisplayGeneratingKeypairInfo (nsIInterfaceRequestor *ctx,
 	g_source_remove (timeout_id);
 	end_busy (dialog);
 	gtk_widget_destroy (dialog);
-	delete helper;
 	return NS_OK;
 }
 
+#ifndef HAVE_NSIKEYGENTHREAD_NSIOBSERVER
 
 /*************************************************************
  * Misc functions for the nsIDomWindowInternal implementation
@@ -709,3 +747,5 @@ NS_IMETHODIMP KeyPairHelperWindow::GetWindowRoot(nsIDOMEventTarget * *aWindowRoo
 {
     MOZ_NOT_IMPLEMENTED
 }
+
+#endif /* !HAVE_NSIKEYGENTHREAD_NSIOBSERVER */
