@@ -1,5 +1,15 @@
 2004-10-02  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/MozDownload.cpp:
+	* lib/ephy-file-helpers.c: (ephy_file_downloads_dir),
+	(ephy_file_desktop_dir):
+	* lib/ephy-file-helpers.h:
+	* src/prefs-dialog.c: (get_download_button_label):
+
+	Recognise "Desktop" special downloads directory. Fixes bug #152926.
+
+2004-10-02  Christian Persch  <chpe@cvs.gnome.org>
+
 	* Makefile.am:
 
 	Add --with-mozilla to distcheck's configure arguments. 

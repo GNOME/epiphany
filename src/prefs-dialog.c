@@ -1112,6 +1112,10 @@ get_download_button_label ()
 	{
 		label = g_strdup (_("Desktop")); 
 	}
+	else if (g_utf8_collate (key, "Desktop") == 0)
+	{
+		label = g_strdup (_("Desktop")); 
+	}
 	else
 	{
 		label = g_strdup (key);
