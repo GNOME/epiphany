@@ -26,6 +26,7 @@ enum {
   PROP_STOCK_ID,
   PROP_SENSITIVE,
   PROP_VISIBLE,
+  PROP_IMPORTANT
 };
 
 static void egg_action_init       (EggAction *action);
@@ -152,6 +153,14 @@ egg_action_class_init (EggActionClass *class)
 							 G_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
+				   PROP_IMPORTANT,
+				   g_param_spec_boolean ("important",
+							 _("Important"),
+							 _("Important."),
+							 FALSE,
+							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible",
 							 _("Visible"),
@@ -182,6 +191,7 @@ egg_action_init (EggAction *action)
 
   action->sensitive = TRUE;
   action->visible = TRUE;
+  action->important = FALSE;
 
   action->label_set = FALSE;
   action->short_label_set = FALSE;
@@ -296,6 +306,10 @@ egg_action_set_property (GObject         *object,
     case PROP_VISIBLE:
       action->visible = g_value_get_boolean (value);
       break;
+    case PROP_IMPORTANT:
+      action->important = g_value_get_boolean (value);
+      g_object_notify(object, "important");
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -334,6 +348,9 @@ egg_action_get_property (GObject    *object,
       break;
     case PROP_VISIBLE:
       g_value_set_boolean (value, action->visible);
+      break;
+    case PROP_IMPORTANT:
+      g_value_set_boolean (value, action->important);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -381,6 +398,12 @@ egg_action_sync_property (EggAction *action, GParamSpec *pspec,
 
   g_object_set_property (G_OBJECT (proxy), property, &value);
   g_value_unset (&value);
+}
+
+static void
+egg_action_sync_important (EggAction *action, GParamSpec *pspec, GtkWidget *proxy)
+{
+	egg_tool_item_set_is_important (EGG_TOOL_ITEM (proxy), action->important);
 }
 
 static void
@@ -549,6 +572,10 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
       g_signal_connect_object (action, "notify::short_label",
 			       G_CALLBACK (egg_action_sync_short_label),
 			       proxy, 0);
+
+      egg_action_sync_important (action, NULL, proxy);
+      g_signal_connect_object (action, "notify::important",
+			       G_CALLBACK (egg_action_sync_important), proxy, 0);
 
       g_object_set (G_OBJECT (proxy), "stock_id", action->stock_id, NULL);
       g_signal_connect_object (action, "notify::stock_id",

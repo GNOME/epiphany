@@ -687,6 +687,13 @@ setup_window (EphyWindow *window)
 	action = egg_action_group_get_action (action_group, "GoBookmarks");
 	g_object_set (action, "short_label", _("Bookmarks"), NULL);
 
+	action = egg_action_group_get_action (action_group, "EditFind");
+	g_object_set (action, "important", TRUE, NULL);
+	action = egg_action_group_get_action (action_group, "GoHome");
+	g_object_set (action, "important", TRUE, NULL);
+	action = egg_action_group_get_action (action_group, "GoBookmarks");
+	g_object_set (action, "important", TRUE, NULL);
+
 	action_group = egg_action_group_new ("PopupsActions");
 	egg_action_group_add_actions (action_group, ephy_popups_entries,
 				      ephy_popups_n_entries);

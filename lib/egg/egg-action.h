@@ -23,6 +23,7 @@ struct _EggAction
   gchar *tooltip;
   gchar *stock_id; /* icon */
 
+  guint important : 1;
   guint sensitive : 1;
   guint visible : 1;
   guint label_set : 1;       /* these two used so we can set label */

@@ -270,6 +270,7 @@ toolbar_setup_actions (Toolbar *t)
 			       "tooltip", _("Go back"),
 			       "window", t->priv->window,
 			       "direction", EPHY_NAVIGATION_DIRECTION_BACK,
+			       "important", TRUE,
 			       NULL);
 	g_signal_connect (action, "activate",
 			  G_CALLBACK (window_cmd_go_back), t->priv->window);

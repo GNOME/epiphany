@@ -579,6 +579,25 @@ toolbar_item_visible (EggToolbar  *toolbar,
   return FALSE;
 }
 
+static gboolean
+toolbar_item_is_homogeneous (EggToolbar  *toolbar,
+                             EggToolItem *item)
+{
+  gboolean result = FALSE;
+                                                                                                                             
+  if (item->homogeneous && !EGG_IS_SEPARATOR_TOOL_ITEM (item))
+    result = TRUE;
+                                                                                                                             
+  if (item->is_important &&
+      toolbar->style == GTK_TOOLBAR_BOTH_HORIZ &&
+      toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      result = FALSE;
+    }
+                                                                                                                             
+  return result;
+}
+
 static void
 egg_toolbar_set_property (GObject     *object,
 			  guint        prop_id,
@@ -839,7 +858,7 @@ egg_toolbar_size_request (GtkWidget      *widget,
       max_child_width = MAX (max_child_width, requisition.width);
       max_child_height = MAX (max_child_height, requisition.height);
 
-      if (EGG_TOOL_ITEM (item)->homogeneous && GTK_BIN (item)->child)
+      if (toolbar_item_is_homogeneous (toolbar, item) && GTK_BIN (item)->child)
 	{
 	  max_homogeneous_child_width = MAX (max_homogeneous_child_width, requisition.width);
 	  max_homogeneous_child_height = MAX (max_homogeneous_child_height, requisition.height);
@@ -965,14 +984,14 @@ get_item_size (EggToolbar *toolbar,
   
   if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      if (item->homogeneous)
+      if (toolbar_item_is_homogeneous (toolbar, item))
 	return toolbar->button_maxw;
       else
 	return requisition.width;
     }
   else
     {
-      if (item->homogeneous)
+      if (toolbar_item_is_homogeneous (toolbar, item))
 	return toolbar->button_maxh;
       else
 	return requisition.height;

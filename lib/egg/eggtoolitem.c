@@ -42,6 +42,7 @@ enum {
   PROP_0,
   PROP_VISIBLE_HORIZONTAL,
   PROP_VISIBLE_VERTICAL,
+  PROP_IS_IMPORTANT
 };
 
 static void egg_tool_item_init       (EggToolItem *toolitem);
@@ -159,6 +160,15 @@ egg_tool_item_class_init (EggToolItemClass *klass)
 							 _("Whether the toolbar item is visible when the toolbar is in a vertical orientation."),
 							 TRUE,
 							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_IS_IMPORTANT,
+                                   g_param_spec_boolean ("is_important",
+                                                         _("Is important"),
+                                                         _("Whether the toolbar item is considered important. When TRUE, toolbar buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"),
+                                                         FALSE,
+                                                         G_PARAM_READWRITE));
+
   toolitem_signals[CREATE_MENU_PROXY] =
     g_signal_new ("create_menu_proxy",
 		  G_OBJECT_CLASS_TYPE (klass),
@@ -222,6 +232,31 @@ egg_tool_item_parent_set   (GtkWidget   *toolitem,
   egg_tool_item_toolbar_reconfigured (EGG_TOOL_ITEM (toolitem));
 }
 
+gboolean
+egg_tool_item_get_is_important (EggToolItem *tool_item)
+{
+  g_return_val_if_fail (EGG_IS_TOOL_ITEM (tool_item), FALSE);
+
+  return tool_item->is_important;
+}
+
+void
+egg_tool_item_set_is_important (EggToolItem *tool_item, gboolean is_important)
+{
+  g_return_if_fail (EGG_IS_TOOL_ITEM (tool_item));
+
+  is_important = is_important != FALSE;
+
+  if (is_important != tool_item->is_important)
+    {
+      tool_item->is_important = is_important;
+
+      gtk_widget_queue_resize (GTK_WIDGET (tool_item));
+
+      g_object_notify (G_OBJECT (tool_item), "is_important");
+    }
+}
+
 static void
 egg_tool_item_set_property (GObject      *object,
 			    guint         prop_id,
@@ -237,6 +272,9 @@ egg_tool_item_set_property (GObject      *object,
       break;
     case PROP_VISIBLE_VERTICAL:
       egg_tool_item_set_visible_horizontal (toolitem, g_value_get_boolean (value));
+      break;
+    case PROP_IS_IMPORTANT:
+      egg_tool_item_set_is_important (toolitem, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -258,6 +296,9 @@ egg_tool_item_get_property (GObject    *object,
       break;
     case PROP_VISIBLE_VERTICAL:
       g_value_set_boolean (value, toolitem->visible_vertical);
+      break;
+    case PROP_IS_IMPORTANT:
+      g_value_set_boolean (value, toolitem->is_important);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

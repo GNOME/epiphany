@@ -52,6 +52,7 @@ struct _EggToolItem
   guint pack_end : 1;
   guint use_drag_window : 1;
   guint overflow_item : 1;
+  guint is_important : 1;
 
   GtkWidget *menu_item;
   gchar *menu_item_id;
@@ -102,6 +103,9 @@ GtkWidget *     egg_tool_item_get_proxy_menu_item      (EggToolItem *tool_item,
 void            egg_tool_item_set_proxy_menu_item      (EggToolItem *tool_item,
 							const gchar *menu_item_id,
 							GtkWidget   *menu_item);
+gboolean	egg_tool_item_get_is_important 	       (EggToolItem *tool_item);
+void		egg_tool_item_set_is_important 	       (EggToolItem *tool_item,
+							gboolean is_important);
 
 
 #endif /* __EGG_TOOL_ITEM_H__ */

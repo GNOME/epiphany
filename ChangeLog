@@ -1,5 +1,31 @@
 2003-08-11  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/egg/egg-action.c: (egg_action_class_init), (egg_action_init),
+	(egg_action_set_property), (egg_action_get_property),
+	(egg_action_sync_important), (connect_proxy):
+	* lib/egg/egg-action.h:
+	* lib/egg/eggtoolbar.c: (toolbar_item_is_homogeneous),
+	(egg_toolbar_size_request), (get_item_size):
+	* lib/egg/eggtoolbutton.c: (egg_tool_button_property_notify),
+	(egg_tool_button_class_init), (egg_tool_button_construct_contents):
+	* lib/egg/eggtoolitem.c: (egg_tool_item_class_init),
+	(egg_tool_item_get_is_important), (egg_tool_item_set_is_important),
+	(egg_tool_item_set_property), (egg_tool_item_get_property):
+	* lib/egg/eggtoolitem.h:
+	* src/ephy-window.c: (setup_window):
+	* src/toolbar.c: (toolbar_setup_actions):
+
+	Respect priority text preference. Ported from gtk.
+
+2003-08-11  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* NEWS:
+	* configure.in:
+
+	0.8.4
+
+2003-08-11  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* embed/ephy-embed-prefs.h:
 	* embed/mozilla/mozilla-notifiers.cpp:
 

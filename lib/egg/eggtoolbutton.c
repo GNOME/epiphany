@@ -107,6 +107,14 @@ egg_tool_button_get_type (void)
 }
 
 static void
+egg_tool_button_property_notify (GObject          *object,
+                                 GParamSpec       *pspec)
+{
+  if (strcmp (pspec->name, "is_important"))
+    egg_tool_button_construct_contents (EGG_TOOL_ITEM (object));
+}
+
+static void
 egg_tool_button_class_init (EggToolButtonClass *klass)
 {
   GObjectClass *object_class;
@@ -122,6 +130,7 @@ egg_tool_button_class_init (EggToolButtonClass *klass)
   object_class->set_property = egg_tool_button_set_property;
   object_class->get_property = egg_tool_button_get_property;
   object_class->finalize = egg_tool_button_finalize;
+  object_class->notify = egg_tool_button_property_notify;	
 
   widget_class->size_request = egg_tool_button_size_request;
   widget_class->size_allocate = egg_tool_button_size_allocate;
@@ -324,7 +333,19 @@ egg_tool_button_construct_contents (EggToolItem *tool_item)
   if (style != GTK_TOOLBAR_TEXT)
     need_icon = TRUE;
 
-  if (style != GTK_TOOLBAR_ICONS)
+   if (style != GTK_TOOLBAR_ICONS && style != GTK_TOOLBAR_BOTH_HORIZ)
+     need_label = TRUE;
+
+   if (style == GTK_TOOLBAR_BOTH_HORIZ &&
+       (EGG_TOOL_ITEM (button)->is_important ||
+        egg_tool_item_get_orientation (EGG_TOOL_ITEM (button)) == GTK_ORIENTATION_VERTICAL))
+     {
+       need_label = TRUE;
+     }
+
+  if (style != GTK_TOOLBAR_ICONS &&
+      ((style != GTK_TOOLBAR_BOTH_HORIZ ||
+       EGG_TOOL_ITEM (button)->is_important)))
     need_label = TRUE;
 
   if (need_label)
@@ -420,8 +441,9 @@ egg_tool_button_construct_contents (EggToolItem *tool_item)
 
     case GTK_TOOLBAR_BOTH_HORIZ:
       box = gtk_hbox_new (FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (box), icon, FALSE, TRUE, 0);
-      gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (box), icon, label? FALSE : TRUE, TRUE, 0);
+      if (label)
+        gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
       gtk_container_add (GTK_CONTAINER (button->button), box);
       break;
 
