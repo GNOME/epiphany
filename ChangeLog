@@ -1,5 +1,25 @@
 2004-08-08  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-marshal.list:
+	* lib/widgets/Makefile.am:
+	R lib/widgets/ephy-ellipsizing-label.c:
+	R lib/widgets/ephy-ellipsizing-label.h:
+	A lib/widgets/ephy-label.c:
+	A lib/widgets/ephy-label.h:
+	* src/ephy-notebook.c: (sync_label), (build_tab_label):
+	* src/pdm-dialog.c: (show_cookies_properties):
+	* src/prefs-dialog.c: (create_download_path_label),
+	(download_path_response_cb):
+	
+	Kill our ellipsizing label implementation, and import GtkLabel
+	into our prefix.
+
+	* configure.in:
+
+	 Depend on pango 1.5.1 for ellipsisation support.
+
+2004-08-08  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.in:
 	* src/Makefile.am:
 	R src/epiphany.in:
