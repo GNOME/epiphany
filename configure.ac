@@ -170,11 +170,11 @@ AC_ARG_WITH([mozilla],
 
 dnl try to autodetect: if mozilla exists, use it, else try firefox, then thunderbird
 if test "x$MOZILLA" = "x"; then
-  if pkg-config --exists mozilla-gtkmozembed; then
+  if $PKG_CONFIG --exists mozilla-gtkmozembed; then
     MOZILLA=mozilla
-  elif pkg-config --exists firefox-gtkmozembed; then
+  elif $PKG_CONFIG --exists firefox-gtkmozembed; then
     MOZILLA=firefox
-  elif pkg-config --exists thunderbird-gtkmozembed; then
+  elif $PKG_CONFIG --exists thunderbird-gtkmozembed; then
     MOZILLA=thunderbird
   else
     AC_MSG_ERROR([no mozilla installation found])
