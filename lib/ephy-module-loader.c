@@ -145,6 +145,11 @@ ephy_module_loader_load (GTypeModule *module)
 		return FALSE;
 	}
 
+	/* make module resident. Avoids crashes on shutdown when mozilla holds
+	 * references to objects from extensions (e.g. Sidebar). See bug #160945
+	 */
+	g_module_make_resident (loader->library);
+
 	return TRUE;
 }
 
