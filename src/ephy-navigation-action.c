@@ -160,7 +160,7 @@ activate_up_menu_item_cb (GtkWidget *menuitem,
 	ephy_window_load_url (window, url);
 }
 
-static GtkMenuShell *
+static GtkWidget *
 build_back_or_forward_menu (EphyNavigationAction *action)
 {
 	EphyWindow *window = action->priv->window;
@@ -223,10 +223,10 @@ build_back_or_forward_menu (EphyNavigationAction *action)
 		}
 	}
 
-	return menu;
+	return GTK_WIDGET (menu);
 }
 
-static GtkMenuShell *
+static GtkWidget *
 build_up_menu (EphyNavigationAction *action)
 {
 	EphyWindow *window = action->priv->window;
@@ -263,14 +263,14 @@ build_up_menu (EphyNavigationAction *action)
 	/* the list data has been consumed */
 	g_slist_free (list);
 
-	return menu;
+	return GTK_WIDGET (menu);
 }
 
 static void
 menu_activated_cb (GtkMenuToolButton *button,
 		   EphyNavigationAction *action)
 {
-	GtkMenuShell *menu = NULL;
+	GtkWidget *menu = NULL;
 
 	LOG ("menu_activated_cb dir %d", action->priv->direction)
 
