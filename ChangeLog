@@ -1,5 +1,13 @@
 2003-11-16  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* src/ephy-shell.c: (toolwindow_show_cb), (toolwindow_hide_cb),
+	(ephy_shell_get_bookmarks_editor):
+
+	Do not access session from priv struct but use get_session,
+	so it's properly initialized-> Fix epiphany -b crash
+
+2003-11-16  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* src/ephy-session.c: (get_session_filename), (ephy_session_init),
 	(ephy_session_finalize):
 	* src/ephy-shell.c: (save_yourself_cb), (die_cb),
