@@ -82,13 +82,12 @@ static void
 try_to_expand_keyword (GtkEditable *editable)
 {
 	char *entry_text;
-	char *user_text;
+	const char *user_text;
 	const char *expand_text;
-	char *insert_text;
+	const char *insert_text;
 	int user_text_length;
-	int expand_text_length;
 	int keyword_offset = 0;
-	int tmp;
+	int position;
 	EphyKeywordsEntry *entry = EPHY_KEYWORDS_ENTRY (editable);
 	EphyNode *node;
 
@@ -121,14 +120,14 @@ try_to_expand_keyword (GtkEditable *editable)
 
 		LOG ("Expand text %s", expand_text)
 
-		expand_text_length = g_utf8_strlen (expand_text, -1);
 		user_text_length = g_utf8_strlen (user_text, -1);
 
 		insert_text = g_utf8_offset_to_pointer (expand_text, user_text_length);
+
 		gtk_editable_insert_text (editable,
 					  insert_text,
-					  g_utf8_strlen (insert_text, -1),
-					  &tmp);
+					  strlen (insert_text),
+					  &position);
 		gtk_editable_select_region (editable, user_text_length + keyword_offset, -1);
 	}
 	else
