@@ -63,8 +63,6 @@
 
 #define EPHY_TAB_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TAB, EphyTabPrivate))
 
-#define CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME  "/apps/epiphany/lockdown/disable_javascript_chrome"
-
 #define MAX_HIDDEN_POPUPS 5
 
 struct _EphyTabPrivate
@@ -1326,34 +1324,19 @@ ephy_tab_net_state_cb (EphyEmbed *embed,
 	build_progress_from_requests (tab, state);
 }
 
-static EphyEmbed *
+static void
 ephy_tab_new_window_cb (EphyEmbed *embed,
-			EphyEmbedChrome chromemask,
+			EphyEmbed *new_embed,
 			EphyTab *tab)
 {
-	EphyTab *new_tab;
 	EphyWindow *window;
 
-	LOG ("ephy_tab_new_window_cb tab %p with parent %p chrome %d",
-	     tab, ((GtkWidget *) tab)->parent, chromemask);
+	g_return_if_fail (new_embed != NULL);
 
-	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME))
-	{
-		window = ephy_window_new ();
-	}
-	else
-	{
-		window = ephy_window_new_with_chrome (chromemask);
-	}
-
-	new_tab = ephy_tab_new ();
-	gtk_widget_show (GTK_WIDGET (new_tab));
-
-        ephy_window_add_tab (window, new_tab, -1, FALSE);
+	window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (new_embed)));
+	g_return_if_fail (window != NULL);
 
 	popups_manager_add_window (tab, window);
-
-	return ephy_tab_get_embed (new_tab);
 }
 
 static void

@@ -24,7 +24,6 @@
 
 #include "ephy-embed-type-builtins.h"
 #include "ephy-marshal.h"
-#include "ephy-signal-accumulator.h"
 #include "mozilla-embed-single.h"
 #include "mozilla-embed.h"
 
@@ -62,21 +61,20 @@ ephy_embed_base_init (gpointer g_class)
 /**
  * EphyEmbed::ge-new-window:
  * @embed:
- * @mask: a #EphyChromeMask
+ * @new_embed: the newly opened #EphyEmbed
  *
- * The ::ge_new_window signal is emitted when a new window has been opened by
+ * The ::ge_new_window signal is emitted after a new window has been opened by
  * the embed. For example, when a JavaScript popup window is opened.
- * Return a new #EphyEmbed.
  **/
 		g_signal_new ("ge_new_window",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (EphyEmbedIface, new_window),
-			      ephy_signal_accumulator_object, ephy_embed_get_type,
-			      ephy_marshal_OBJECT__FLAGS,
-			      G_TYPE_OBJECT,
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__OBJECT,
+			      G_TYPE_NONE,
 			      1,
-			      EPHY_TYPE_EMBED_CHROME);
+			      GTK_TYPE_WIDGET);
 /**
  * EphyEmbed::ge-popup-blocked:
  * @embed:

@@ -1,3 +1,22 @@
+2005-01-30  Christian Persch  <chpe@cvs.gnome.org>
+
+	* doc/reference/tmpl/ephy-embed.sgml:
+	* embed/ephy-embed-single.c: (ephy_embed_single_iface_init):
+	* embed/ephy-embed-single.h:
+	* embed/ephy-embed.c: (ephy_embed_base_init):
+	* embed/ephy-embed.h:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* embed/mozilla/mozilla-embed.h:
+	* lib/ephy-marshal.list:
+	* lib/ephy-prefs.h:
+	* src/ephy-shell.c: (ephy_shell_new_window_cb),
+	(impl_get_embed_single):
+	* src/ephy-tab.c: (ephy_tab_new_window_cb):
+
+	Move new-window signal to the embed single, and new window creation
+	from EphyTab to EphyShell.
+
 2005-01-28  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/mozilla-embed.cpp:

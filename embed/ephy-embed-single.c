@@ -23,6 +23,7 @@
 #include "ephy-embed-single.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-marshal.h"
+#include "ephy-signal-accumulator.h"
 
 static void ephy_embed_single_iface_init (gpointer g_class);
 
@@ -56,6 +57,28 @@ ephy_embed_single_iface_init (gpointer g_class)
 
 	if (initialised == FALSE)
 	{
+/**
+ * EphyEmbedSingle::new-window:
+ * @single:
+ * @parent_embed: the #EphyEmbed requesting the new window, or %NULL
+ * @mask: a #EphyEmbedChrome
+ *
+ * The ::new_window signal is emitted when a new window needs to be opened.
+ * For example, when a JavaScript popup window was opened.
+ *
+ * Return a new #EphyEmbed.
+ **/
+	g_signal_new ("new-window",
+		      EPHY_TYPE_EMBED_SINGLE,
+		      G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+		      G_STRUCT_OFFSET (EphyEmbedSingleIface, new_window),
+		      ephy_signal_accumulator_object, ephy_embed_get_type,
+		      ephy_marshal_OBJECT__OBJECT_FLAGS,
+		      GTK_TYPE_WIDGET,
+		      2,
+		      GTK_TYPE_WIDGET,
+		      EPHY_TYPE_EMBED_CHROME);
+
 /**
  * EphyEmbedSingle::handle_content:
  * @single:

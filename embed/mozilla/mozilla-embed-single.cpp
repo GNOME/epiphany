@@ -312,14 +312,31 @@ mozilla_setup_colors (MozillaEmbedSingle *mes)
 }			
 
 static void 
-mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *embed,
-					   GtkMozEmbed **retval, 
+mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *moz_single,
+					   GtkMozEmbed **newEmbed,
 					   guint chrome_mask,
-					   EphyEmbedSingle *shell)
+					   EphyEmbedSingle *single)
 {
- 	g_assert (chrome_mask & GTK_MOZ_EMBED_FLAG_OPENASCHROME);
+	GtkMozEmbedChromeFlags chrome = (GtkMozEmbedChromeFlags) chrome_mask;
+	EphyEmbed *new_embed = NULL;
+	EphyEmbedChrome mask;
 
-	*retval = _mozilla_embed_new_xul_dialog ();
+	if (chrome_mask & GTK_MOZ_EMBED_FLAG_OPENASCHROME)
+	{
+		*newEmbed = _mozilla_embed_new_xul_dialog ();
+		return;
+	}
+
+	mask = _mozilla_embed_translate_chrome (chrome);
+
+	g_signal_emit_by_name (single, "new-window", NULL, mask,
+			       &new_embed);
+
+	g_assert (new_embed != NULL);
+
+	gtk_moz_embed_set_chrome_mask (GTK_MOZ_EMBED (new_embed), chrome);
+
+	*newEmbed = GTK_MOZ_EMBED (new_embed);
 }
 
 static void

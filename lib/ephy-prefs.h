@@ -56,6 +56,7 @@ G_BEGIN_DECLS
 #define CONF_LOCKDOWN_DISABLE_PRINT_SETUP	"/desktop/gnome/lockdown/disable_print_setup"
 #define CONF_LOCKDOWN_DISABLE_COMMAND_LINE	"/desktop/gnome/lockdown/disable_command_line"
 #define CONF_LOCKDOWN_DISABLE_QUIT		"/apps/epiphany/lockdown/disable_quit"
+#define CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME	"/apps/epiphany/lockdown/disable_javascript_chrome"
 
 /* System prefs */
 #define CONF_DESKTOP_FTP_HANDLER	"/desktop/gnome/url-handlers/ftp/command"

@@ -25,6 +25,7 @@
 
 #include "mozilla-embed.h"
 #include "mozilla-embed-event.h"
+#include "ephy-embed-single.h"
 #include "ephy-embed-shell.h"
 #include "ephy-command-manager.h"
 #include "ephy-string.h"
@@ -65,7 +66,7 @@ static gboolean mozilla_embed_dom_mouse_down_cb	(GtkMozEmbed *embed,
 						 MozillaEmbed *membed);
 static void mozilla_embed_new_window_cb		(GtkMozEmbed *embed, 
 						 GtkMozEmbed **newEmbed,
-						 guint chromemask,
+						 guint chrome_mask,
 						 MozillaEmbed *membed);
 static void mozilla_embed_security_change_cb	(GtkMozEmbed *embed, 
 						 gpointer request,
@@ -932,20 +933,13 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 						"ge_dom_mouse_down");
 }
 
-static void
-mozilla_embed_new_window_cb (GtkMozEmbed *embed, 
-			     GtkMozEmbed **newEmbed,
-                             guint chrome_mask, 
-			     MozillaEmbed *membed)
+EphyEmbedChrome
+_mozilla_embed_translate_chrome (GtkMozEmbedChromeFlags flags)
 {
-	guint i;
-	guint mask = 0;
-	EphyEmbed *new_embed = NULL;
-
-	struct
+	static const struct
 	{
-		guint mozilla_mask;
-		guint embed_mask;
+		guint mozilla_flag;
+		guint ephy_flag;
 	}
 	conversion_map [] =
 	{
@@ -953,28 +947,49 @@ mozilla_embed_new_window_cb (GtkMozEmbed *embed,
 		{ GTK_MOZ_EMBED_FLAG_TOOLBARON, EPHY_EMBED_CHROME_TOOLBAR },
 		{ GTK_MOZ_EMBED_FLAG_STATUSBARON, EPHY_EMBED_CHROME_STATUSBAR },
 		{ GTK_MOZ_EMBED_FLAG_PERSONALTOOLBARON, EPHY_EMBED_CHROME_BOOKMARKSBAR },
-		{ 0, 0 }
 	};
 
-	if (chrome_mask & GTK_MOZ_EMBED_FLAG_OPENASCHROME)
+	guint mask = 0, i;
+
+	for (i = 0; i < G_N_ELEMENTS (conversion_map); i++)
+	{
+		if (flags & conversion_map[i].mozilla_flag)
+		{
+			mask |= conversion_map[i].ephy_flag;
+		}
+	}
+
+	return (EphyEmbedChrome) mask;
+}
+
+static void
+mozilla_embed_new_window_cb (GtkMozEmbed *embed, 
+			     GtkMozEmbed **newEmbed,
+			     guint chrome_mask, 
+			     MozillaEmbed *membed)
+{
+	GtkMozEmbedChromeFlags chrome = (GtkMozEmbedChromeFlags) chrome_mask;
+	EphyEmbed *new_embed = NULL;
+	GObject *single;
+	EphyEmbedChrome mask;
+
+	if (chrome & GTK_MOZ_EMBED_FLAG_OPENASCHROME)
 	{
 		*newEmbed = _mozilla_embed_new_xul_dialog ();
 		return;
 	}
 
-	for (i = 0; conversion_map[i].mozilla_mask != 0; i++)
-	{
-		if (chrome_mask & conversion_map[i].mozilla_mask)
-		{
-			mask |= conversion_map[i].embed_mask;
-		}
-	}
+	mask = _mozilla_embed_translate_chrome (chrome);
 
-	g_signal_emit_by_name (membed, "ge_new_window", mask, &new_embed);
+	single = ephy_embed_shell_get_embed_single (embed_shell);
+	g_signal_emit_by_name (single, "new-window", embed, mask,
+			       &new_embed);
 
 	g_assert (new_embed != NULL);
 
-	gtk_moz_embed_set_chrome_mask (GTK_MOZ_EMBED (new_embed), chrome_mask);
+	gtk_moz_embed_set_chrome_mask (GTK_MOZ_EMBED (new_embed), chrome);
+
+	g_signal_emit_by_name (membed, "ge-new-window", new_embed);
 
 	*newEmbed = GTK_MOZ_EMBED (new_embed);
 }

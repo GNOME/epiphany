@@ -53,6 +53,10 @@ struct _EphyEmbedSingleIface
 
 	/* Signals */
 
+	EphyEmbed * (* new_window)  (EphyEmbedSingle *single,
+				     EphyEmbed *parent_embed,
+				     EphyEmbedChrome chromemask);
+
 	gboolean (* handle_content) (EphyEmbedSingle *shell,
 				     char *mime_type,
 				     char *uri);

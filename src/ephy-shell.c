@@ -45,6 +45,7 @@
 #include "ephy-toolbar.h"
 #include "ephy-automation.h"
 #include "print-dialog.h"
+#include "ephy-prefs.h"
 
 #ifdef ENABLE_DBUS
 #include "ephy-dbus.h"
@@ -150,6 +151,37 @@ ephy_shell_class_init (EphyShellClass *klass)
 	g_type_class_add_private (object_class, sizeof(EphyShellPrivate));
 }
 
+static EphyEmbed *
+ephy_shell_new_window_cb (EphyEmbedSingle *single,
+			  EphyEmbed *parent_embed,
+			  EphyEmbedChrome chromemask,
+			  EphyShell *shell)
+{
+	EphyTab *new_tab;
+	EphyWindow *window;
+
+	LOG ("ephy_shell_new_window_cb tab chrome %d", chromemask);
+
+	/* FIXME in lockdown-fullscreen mode, always add a new tab instead */
+
+	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME))
+	{
+		window = ephy_window_new ();
+	}
+	else
+	{
+		window = ephy_window_new_with_chrome (chromemask);
+	}
+
+	new_tab = ephy_tab_new ();
+	gtk_widget_show (GTK_WIDGET (new_tab));
+
+        ephy_window_add_tab (window, new_tab, -1, FALSE);
+
+	return ephy_tab_get_embed (new_tab);
+}
+
+
 static gboolean
 ephy_shell_add_sidebar_cb (EphyEmbedSingle *embed_single,
 			   const char *url,
@@ -189,18 +221,20 @@ ephy_shell_add_sidebar_cb (EphyEmbedSingle *embed_single,
 static GObject*
 impl_get_embed_single (EphyEmbedShell *embed_shell)
 {
-	EphyShell *shell;
+	EphyShell *shell = EPHY_SHELL (embed_shell);
 	GObject *embed_single;
 
 	embed_single = EPHY_EMBED_SHELL_CLASS (parent_class)->get_embed_single (embed_shell);
 
-	shell = EPHY_SHELL (embed_shell);
-
 	if (embed_single != NULL && shell->priv->embed_single_connected == FALSE)
 	{
+		g_signal_connect_object (embed_single, "new-window",
+					 G_CALLBACK (ephy_shell_new_window_cb),
+					 shell, G_CONNECT_AFTER);
+
 		g_signal_connect_object (embed_single, "add-sidebar",
 					 G_CALLBACK (ephy_shell_add_sidebar_cb),
-					 embed_shell, G_CONNECT_AFTER);
+					 shell, G_CONNECT_AFTER);
 
 		shell->priv->embed_single_connected = TRUE;
 	}

@@ -138,8 +138,8 @@ struct _EphyEmbedIface
 	void	 (* modal_alert_closed)	(EphyEmbed *embed);
 	void	 (* document_type)	(EphyEmbed *embed,
 					 EphyEmbedDocumentType type);
-	EphyEmbed * (* new_window)	(EphyEmbed *embed,
-					 EphyEmbedChrome chromemask);
+	void	 (* new_window)		(EphyEmbed *embed,
+					 EphyEmbed *new_embed);
 
 	/* Methods  */
 	void		   (* load_url)			(EphyEmbed *embed,
