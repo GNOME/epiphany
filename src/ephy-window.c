@@ -1367,14 +1367,21 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 			break;
 		case EPHY_EMBED_STATE_IS_INSECURE:
 			state = _("Insecure");
+			g_free (description);
+			description = NULL;
 			break;
 		case EPHY_EMBED_STATE_IS_BROKEN:
 			state = _("Broken");
 			stock_id = STOCK_LOCK_BROKEN;
+			g_free (description);
+			description = NULL;
 			break;
 		case EPHY_EMBED_STATE_IS_SECURE_LOW:
 		case EPHY_EMBED_STATE_IS_SECURE_MED:
 			state = _("Low");
+			/* We deliberately don't show the 'secure' icon
+			 * for low & medium secure sites; see bug #151709.
+			 */
 			stock_id = STOCK_LOCK_INSECURE;
 			break;
 		case EPHY_EMBED_STATE_IS_SECURE_HIGH:
@@ -1386,16 +1393,14 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 			break;
 	}
 
+	tooltip = g_strdup_printf (_("Security level: %s"), state);
 	if (description != NULL)
 	{
-		tooltip = g_strdup_printf (_("Security level: %s\n%s"),
-					   state, description);
-		g_free (description);
-	}
-	else
-	{
-		tooltip = g_strdup_printf (_("Security level: %s"), state);
+		char *tmp = tooltip;
 
+		tooltip = g_strconcat (tmp, "\n", description, NULL);
+		g_free (description);
+		g_free (tmp);
 	}
 
 	ephy_statusbar_set_security_state (EPHY_STATUSBAR (window->priv->statusbar),
