@@ -30,8 +30,6 @@ typedef enum
 	G_NOT_IMPLEMENTED
 } gresult;
 
-#define EPHY_NODE_RESERVED_IDS 100
-
 G_END_DECLS
 
 #endif

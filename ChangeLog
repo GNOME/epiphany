@@ -1,5 +1,17 @@
 2003-07-07  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/ephy-types.h:
+
+	Remove unused define.
+
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_save_delayed),
+	(bookmarks_changed_cb), (bookmarks_removed_cb),
+	(ephy_bookmarks_add):
+
+	Save added bookmarks on idle, otherwise importing is too slow.
+
+2003-07-07  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* lib/widgets/ephy-autocompletion-window.c:
 	(ephy_autocompletion_window_key_press_cb):
 

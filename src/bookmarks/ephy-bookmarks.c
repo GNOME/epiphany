@@ -406,15 +406,25 @@ save_bookmarks_delayed (EphyBookmarks *bookmarks)
 }
 
 static void
-ephy_bookmarks_set_dirty (EphyBookmarks *bookmarks)
+ephy_bookmarks_save_delayed (EphyBookmarks *bookmarks, int delay)
 {
 	if (!bookmarks->priv->dirty)
 	{
 		bookmarks->priv->dirty = TRUE;
-		bookmarks->priv->save_timeout_id =
-			g_timeout_add (BOOKMARKS_SAVE_DELAY,
-			               (GSourceFunc) save_bookmarks_delayed,
-				       bookmarks);
+
+		if (delay > 0)
+		{
+			bookmarks->priv->save_timeout_id =
+				g_timeout_add (BOOKMARKS_SAVE_DELAY,
+				               (GSourceFunc) save_bookmarks_delayed,
+					       bookmarks);
+		}
+		else
+		{
+			bookmarks->priv->save_timeout_id =
+				g_idle_add ((GSourceFunc) save_bookmarks_delayed,
+					    bookmarks);
+		}
 	}
 }
 
@@ -545,7 +555,7 @@ bookmarks_changed_cb (EphyNode *node,
 		      EphyBookmarks *eb)
 {
 	ephy_bookmarks_emit_data_changed (eb);
-	ephy_bookmarks_set_dirty (eb);
+	ephy_bookmarks_save_delayed (eb, BOOKMARKS_SAVE_DELAY);
 }
 
 static void
@@ -556,7 +566,7 @@ bookmarks_removed_cb (EphyNode *node,
 {
 	ephy_bookmarks_emit_data_changed (eb);
 	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
-	ephy_bookmarks_set_dirty (eb);
+	ephy_bookmarks_save_delayed (eb, BOOKMARKS_SAVE_DELAY);
 }
 
 static char *
@@ -832,7 +842,7 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 
 	ephy_bookmarks_emit_data_changed (eb);
 	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
-	ephy_bookmarks_save (eb);
+	ephy_bookmarks_save_delayed (eb, 0);
 
 	return bm;
 }
