@@ -1,3 +1,52 @@
+2003-02-05  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/Makefile.am:
+	* embed/ephy-embed-event.h:
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_init),
+	(ephy_embed_shell_finalize), (ephy_embed_shell_new),
+	(ephy_embed_shell_get_embed_single), (impl_get_downloader_view):
+	* embed/ephy-embed-shell.h:
+	* embed/ephy-embed-utils.c: (ephy_embed_utils_save),
+	(ephy_embed_utils_build_charsets_submenu):
+	* embed/ephy-embed.c: (ephy_embed_new):
+	* embed/ephy-embed.h:
+	* embed/mozilla/ContentHandler.h:
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/GlobalHistory.cpp:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozRegisterComponents.cpp:
+	* embed/mozilla/PromptService.cpp:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* embed/mozilla/mozilla-notifiers.h:
+	* embed/mozilla/mozilla-prefs.cpp:
+	* embed/mozilla/mozilla-prefs.h:
+	* src/appearance-prefs.c: (setup_font_menu):
+	* src/ephy-encoding-menu.c: (ephy_encoding_menu_rebuild):
+	* src/ephy-nautilus-view.c: (ephy_nautilus_view_instance_init):
+	* src/ephy-shell.c: (ephy_shell_get_type), (ephy_shell_init):
+	* src/ephy-tab.c: (ephy_tab_init):
+	* src/general-prefs.c: (default_charset_menu_changed_cb),
+	(create_default_charset_menu):
+	* src/pdm-dialog.c: (pdm_dialog_cookie_remove),
+	(pdm_dialog_password_remove), (pdm_dialog_cookies_free),
+	(pdm_dialog_passwords_free), (pdm_dialog_init):
+	* src/prefs-dialog.c: (prefs_clear_memory_cache_button_clicked_cb),
+	(prefs_clear_disk_cache_button_clicked_cb):
+	* src/window-commands.c: (window_cmd_file_open):
+
+	Split mozilla related calls out of EmbedShell.
+	Load default mozilla prefs from a .js file.
+	Disable stupid useless security dialogs.
+	Fix chechbox alert to have Ok as default action.
+
+2003-02-04  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/epiphany.desktop.in:
+	* src/ephy-window.c:
+
+	Fix back/forward accels.
+	Add startup feedback.
+
 2003-02-04  Xan Lopez  <xan@masilla.org>
 
 	* src/bookmarks/ephy-bookmarks-editor.c:
