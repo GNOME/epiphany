@@ -1,3 +1,15 @@
+2004-03-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/egg/egg-toolbar-editor.c: (editor_drag_data_received_cb):
+
+	Check if the dragged item is a separator. Fixes a crash if it _is_ one.
+
+	* src/ephy-location-action.c: (create_menu_proxy_cb),
+	(connect_proxy), (ephy_location_action_activate):
+
+	Don't make the location entry have a proxy menu item. Fixes a crash when
+	trying to activate the proxy menu item.
+
 2004-03-08  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/egg/egg-toolbars-model.c:

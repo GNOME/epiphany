@@ -306,11 +306,18 @@ editor_drag_data_received_cb (GtkWidget          *widget,
 			      EggToolbarEditor *editor)
 {
   GtkAction *action;
+  const char *data;
 
   g_return_if_fail (EGG_IS_TOOLBAR_EDITOR (editor));
   g_return_if_fail (selection_data != NULL);
 
-  action = find_action (editor, (const char *)selection_data->data);
+  if (selection_data->length <= 0 || selection_data->data == NULL) return;
+
+  data = (const char *) selection_data->data;
+
+  if (strcmp (data, "separator") == 0) return;
+
+  action = find_action (editor, data);
   g_return_if_fail (action != NULL);
 
   if (g_list_find (editor->priv->default_actions_list, action))
