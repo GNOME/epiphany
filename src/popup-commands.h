@@ -59,6 +59,9 @@ void popup_cmd_open_link		(GtkAction *action,
 void popup_cmd_download_link		(GtkAction *action,
 					 EphyWindow *window);
 
+void popup_cmd_download_link_as		(GtkAction *action,
+					 EphyWindow *window);
+
 void popup_cmd_set_image_as_background  (GtkAction *action,
 					 EphyWindow *window);
 
