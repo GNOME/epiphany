@@ -198,7 +198,7 @@ static GtkActionEntry ephy_history_ui_entries [] = {
 	{ "SelectAll", NULL, N_("Select _All"), "<control>A",
 	  N_("Select all history links or text"),
 	  G_CALLBACK (cmd_select_all) },
-	{ "Clear", GTK_STOCK_CLEAR, N_("C_lear History"), NULL,
+	{ "Clear", GTK_STOCK_CLEAR, N_("Cl_ear History"), NULL,
 	  N_("Clear your browsing history"),
 	  G_CALLBACK (cmd_clear) },
 
@@ -262,7 +262,7 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 		 _("Clearing the browsing history will cause all"
 		   " history links to be permanently deleted."));
 	
-	button = gtk_button_new_with_label (_("C_lear"));
+	button = gtk_button_new_with_label (_("Cl_ear"));
 	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image (GTK_BUTTON (button), image);
 	gtk_widget_show (image);
