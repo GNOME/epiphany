@@ -570,13 +570,33 @@ ephy_tab_set_title (EphyTab *tab, const char *title)
 static void
 ephy_tab_title_cb (EphyEmbed *embed, EphyTab *tab)
 {
+	GnomeVFSURI *uri;
+
 	if (tab->priv->title) g_free (tab->priv->title);
 	ephy_embed_get_title (embed, &tab->priv->title);
 
 	if (*(tab->priv->title) == '\0')
 	{
 		g_free (tab->priv->title);
-		tab->priv->title = g_strdup (_("Untitled"));
+		tab->priv->title = NULL;
+
+		uri = gnome_vfs_uri_new (tab->priv->location);
+		if (uri)
+		{
+			tab->priv->title = gnome_vfs_uri_to_string (uri,
+						GNOME_VFS_URI_HIDE_USER_NAME |
+						GNOME_VFS_URI_HIDE_PASSWORD |
+						GNOME_VFS_URI_HIDE_HOST_PORT |
+						GNOME_VFS_URI_HIDE_TOPLEVEL_METHOD |
+						GNOME_VFS_URI_HIDE_FRAGMENT_IDENTIFIER);
+			gnome_vfs_uri_unref (uri);
+		}
+
+		if (tab->priv->title == NULL || *(tab->priv->title) == '\0')
+		{
+			g_free (tab->priv->title);
+			tab->priv->title = g_strdup (_("Blank page"));
+		}
 	}
 
 	ephy_tab_set_title (tab, tab->priv->title);
