@@ -1039,17 +1039,6 @@ popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
 }
 
 static void
-popup_destroy_cb (GtkWidget *widget, EphyWindow *window)
-{
-	EphyEmbedEvent *event;
-
-	event = EPHY_EMBED_EVENT (g_object_get_data (G_OBJECT (window), "context_event"));
-	g_object_set_data (G_OBJECT (window), "context_event", NULL);
-
-	g_object_unref (event);
-}
-
-static void
 show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 {
 	GtkActionGroup *action_group;
@@ -1104,13 +1093,11 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 
 	widget = gtk_ui_manager_get_widget (GTK_UI_MANAGER (window->ui_merge),
 				            popup);
-
 	g_return_if_fail (widget != NULL);
 
-	g_object_ref (event);
-	g_object_set_data (G_OBJECT (window), "context_event", event);
-	g_signal_connect (widget, "destroy",
-			  G_CALLBACK (popup_destroy_cb), window);
+	g_object_set_data_full (G_OBJECT (window), "context_event",
+				g_object_ref (event),
+				(GDestroyNotify)g_object_unref);
 
 	type = ephy_embed_event_get_event_type (event);
 	if (type == EPHY_EMBED_EVENT_KEY)
