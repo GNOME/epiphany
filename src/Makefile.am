@@ -20,8 +20,7 @@ endif
 
 noinst_LTLIBRARIES = libephymain.la
 
-bin_PROGRAMS = epiphany-bin
-bin_SCRIPTS = epiphany
+bin_PROGRAMS = epiphany
 
 CXXLD = $(CXX)
 LINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
@@ -102,9 +101,9 @@ libephymain_la_SOURCES =				\
 	$(INST_H_FILES)					\
 	$(NOINST_H_FILES)
 
-epiphany_bin_SOURCES = ephy-main.c
+epiphany_SOURCES = ephy-main.c
 
-epiphany_bin_LDADD = \
+epiphany_LDADD = \
 	$(top_builddir)/src/libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
 	$(top_builddir)/embed/libephyembedfactory.la \
@@ -116,6 +115,8 @@ epiphany_bin_LDADD = \
 	$(MOZILLA_COMPONENT_LIBS)	\
 	$(EPIPHANY_DEPENDENCY_LIBS) \
 	$(INTLLIBS)
+
+epiphany_LDFLAGS = -R$(MOZILLA_HOME)
 
 BUILT_SOURCES = $(CORBA_SOURCE)
 
