@@ -26,6 +26,7 @@
 #include "GlobalHistory.h"
 #include "ephy-embed.h"
 #include "ephy-string.h"
+#include "ephy-debug.h"
 
 #include <gtkmozembed_internal.h>
 #include <unistd.h>
@@ -84,12 +85,14 @@
 #include "ContentHandler.h"
 
 EphyEventListener::EphyEventListener(void)
+: mOwner(nsnull)
 {
-	mOwner = nsnull;
+	LOG ("EphyEventListener ctor (%p)", this)
 }
 
 EphyEventListener::~EphyEventListener()
 {
+	LOG ("EphyEventListener dtor (%p)", this)
 }
 
 NS_IMPL_ISUPPORTS1(EphyEventListener, nsIDOMEventListener)
@@ -184,11 +187,10 @@ EphyPopupEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 }
 
 EphyBrowser::EphyBrowser ()
+: mFaviconEventListener(nsnull)
+, mPopupEventListener(nsnull)
+, mInitialized(PR_FALSE)
 {
-	mFaviconEventListener = nsnull;
-	mPopupEventListener = nsnull;
-	mEventReceiver = nsnull;
-	mInitialized = PR_FALSE;
 }
 
 EphyBrowser::~EphyBrowser ()
@@ -282,10 +284,11 @@ EphyBrowser::DetachListeners(void)
 {
 	nsresult rv;
 
-	NS_ENSURE_TRUE (mEventReceiver, NS_ERROR_FAILURE);
-	
+	if (!mEventReceiver) return NS_OK;
+
 	nsCOMPtr<nsIDOMEventTarget> target;
 	target = do_QueryInterface (mEventReceiver);
+	NS_ENSURE_TRUE (target, NS_ERROR_FAILURE);
 
 	rv = target->RemoveEventListener(NS_LITERAL_STRING("DOMLinkAdded"),
 					 mFaviconEventListener, PR_FALSE);
@@ -395,6 +398,7 @@ nsresult EphyBrowser::Destroy ()
 
       	mWebBrowser = nsnull;
 	mDOMWindow = nsnull;
+	mEventReceiver = nsnull;
 
 	mInitialized = PR_FALSE;
 
