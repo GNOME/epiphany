@@ -91,14 +91,14 @@ static GObjectClass *parent_class = NULL;
 static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 	/* Toplevel */
 	{ "FakeToplevel", (""), NULL, NULL, NULL, NULL, NULL },
-
-	{ "OpenInTab", N_("Open In New Tab..."), GTK_STOCK_JUMP_TO, NULL,
-	  NULL, G_CALLBACK (popup_cmd_open_bookmarks_in_tabs), NULL },
-
-	{ "OpenInWindow", N_("Open In New Browser..."), GTK_STOCK_JUMP_TO, NULL,
+	
+	{ "OpenInWindow", N_("Open In _New Window"), GTK_STOCK_OPEN, NULL,
 	  NULL, G_CALLBACK (popup_cmd_open_bookmarks_in_browser), NULL },
 
-	{ "Remove", N_("Remove..."), GTK_STOCK_REMOVE, NULL,
+	{ "OpenInTab", N_("Open In New _Tab"), NULL, NULL,
+	  NULL, G_CALLBACK (popup_cmd_open_bookmarks_in_tabs), NULL },
+
+	{ "Remove", N_("_Remove"), GTK_STOCK_REMOVE, NULL,
 	  NULL, G_CALLBACK (popup_cmd_remove_bookmarks), NULL },
 };
 static guint ephy_bookmark_popup_n_entries = G_N_ELEMENTS (ephy_bookmark_popup_entries);
