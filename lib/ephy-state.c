@@ -46,12 +46,15 @@ enum
 static EphyNode *states = NULL;
 static EphyNodeDb *states_db = NULL;
 
+#define EPHY_STATES_XML_VERSION "0.1"
+
 static void
 ephy_states_load (void)
 {
 	xmlDocPtr doc;
 	xmlNodePtr root, child;
 	char *xml_file;
+	char *tmp;
 
 	xml_file = g_build_filename (ephy_dot_dir (),
                                      STATES_FILE,
@@ -65,7 +68,19 @@ ephy_states_load (void)
 
 	root = xmlDocGetRootElement (doc);
 
-	for (child = root->children; child != NULL; child = child->next)
+	tmp = xmlGetProp (root, "version");
+	if (tmp != NULL && strcmp (tmp, EPHY_STATES_XML_VERSION) == 0)
+	{
+		child = root->children;
+	}
+	else
+	{
+		g_warning ("Old version of states.xml discarded");
+		child = NULL;
+	}
+	g_free (tmp);
+
+	for (; child != NULL; child = child->next)
 	{
 		EphyNode *node;
 
@@ -96,7 +111,8 @@ ephy_states_save (void)
 	xmlIndentTreeOutput = TRUE;
 	doc = xmlNewDoc ("1.0");
 
-	root = xmlNewDocNode (doc, NULL, "ephy_bookmarks", NULL);
+	root = xmlNewDocNode (doc, NULL, "ephy_states", NULL);
+	xmlSetProp (root, "version", EPHY_STATES_XML_VERSION);
 	xmlDocSetRootElement (doc, root);
 
 	children = ephy_node_get_children (states);
@@ -337,28 +353,35 @@ window_state_event_cb (GtkWidget *widget,
 	return FALSE;
 }
 
-void
-ephy_state_add_window (GtkWidget *window,
-		       const char *name,
-		       int default_width,
-		       int default_height,
-		       EphyStateWindowFlags flags)
+static EphyNode *
+create_window_node (const char *name,
+		    int default_width,
+		    int default_height,
+		    EphyStateWindowFlags flags)
 {
 	EphyNode *node;
+	GValue value = { 0, };
 
-	ensure_states ();
+	node = ephy_node_new (states_db);
+	ephy_node_add_child (states, node);
 
-	node = find_by_name (name);
-	if (node == NULL)
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, name);
+	ephy_node_set_property (node, EPHY_NODE_STATE_PROP_NAME,
+			        &value);
+	g_value_unset (&value);
+
+	g_value_init (&value, G_TYPE_BOOLEAN);
+	g_value_set_boolean (&value, FALSE);
+	ephy_node_set_property (node, EPHY_NODE_STATE_PROP_MAXIMIZE,
+			        &value);
+	g_value_unset (&value);
+
+	if (flags & EPHY_STATE_WINDOW_SAVE_SIZE)
 	{
-		GValue value = { 0, };
-
-		node = ephy_node_new (states_db);
-		ephy_node_add_child (states, node);
-
-		g_value_init (&value, G_TYPE_STRING);
-		g_value_set_string (&value, name);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_NAME,
+		g_value_init (&value, G_TYPE_BOOLEAN);
+		g_value_set_boolean (&value, TRUE);
+		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_SIZE,
 				        &value);
 		g_value_unset (&value);
 
@@ -373,12 +396,26 @@ ephy_state_add_window (GtkWidget *window,
 		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_HEIGHT,
 				        &value);
 		g_value_unset (&value);
+	}
 
-		g_value_init (&value, G_TYPE_BOOLEAN);
-		g_value_set_boolean (&value, FALSE);
-		ephy_node_set_property (node, EPHY_NODE_STATE_PROP_MAXIMIZE,
-				        &value);
-		g_value_unset (&value);
+	return node;
+}
+
+void
+ephy_state_add_window (GtkWidget *window,
+		       const char *name,
+		       int default_width,
+		       int default_height,
+		       EphyStateWindowFlags flags)
+{
+	EphyNode *node;
+
+	ensure_states ();
+
+	node = find_by_name (name);
+	if (node == NULL)
+	{
+		node = create_window_node (name, default_width, default_height, flags);
 	}
 
 	ephy_state_window_set_size (window, node);

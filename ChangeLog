@@ -1,5 +1,14 @@
 2003-06-22  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/ephy-state.c: (ephy_states_load), (ephy_states_save),
+	(create_window_node), (ephy_state_add_window):
+
+	Make sure to set size flag when setting default width height.
+	Discard old states.xml, so we dont get bug reports about small
+	dialogs.
+
+2003-06-22  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* lib/ephy-state.c: (ephy_state_window_set_size),
 	(ephy_state_window_set_position), (ephy_state_window_save_size),
 	(ephy_state_window_save_position), (ephy_state_window_save),
