@@ -892,7 +892,7 @@ ephy_node_view_get_selection (EphyNodeView *view)
 		gtk_tree_selection_selected_foreach
 			(selection,
 			 (GtkTreeSelectionForeachFunc) get_selection,
-			 (void **) &list);
+			 (gpointer) &list);
 	}
 
 	return list;
