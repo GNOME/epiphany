@@ -151,26 +151,82 @@ ephy_print_info_free (EmbedPrintInfo *info)
 	g_free (info);
 }
 
+static char *
+sanitize_filename (const char *input)
+{
+	char *dir, *filename;
+
+	if (input == NULL) return NULL;
+
+	if (g_path_is_absolute (input) == FALSE)
+	{
+		dir = eel_gconf_get_string (CONF_PRINT_DIR);
+		/* Fallback */
+		if (dir == NULL || g_path_is_absolute (dir) == FALSE)
+		{
+			g_free (dir);
+			dir = g_get_current_dir ();
+		}
+		/* Fallback */
+		if (dir == NULL)
+		{
+			dir = g_strdup (g_get_home_dir ());
+		}
+
+		filename = g_build_filename (dir, input, NULL);
+		g_free (dir);
+	}
+	else
+	{
+		filename = g_strdup (input);
+	}
+
+	dir = g_path_get_dirname (filename);
+	if (dir == NULL || g_file_test (dir, G_FILE_TEST_IS_DIR) == FALSE)
+	{
+		g_free (filename);
+		filename = NULL;
+	}
+	g_free (dir);
+
+	return filename;
+}
+
 EmbedPrintInfo *
 ephy_print_get_print_info (void)
 {
 	EmbedPrintInfo *info;
-	char *filename;
+	char *filename, *converted, *expanded, *fname = NULL;
 
 	info = g_new0 (EmbedPrintInfo, 1);
 
-	filename = eel_gconf_get_string (print_props[FILE_PROP].pref);
-	if (filename != NULL)
-	{
-		info->file = gnome_vfs_expand_initial_tilde (filename);
-	}
-	else
-	{
-		info->file = NULL;
-	}
-	g_free (filename);
-
 	info->print_to_file = eel_gconf_get_integer (print_props[PRINTON_PROP].pref) == 1;
+
+	if (info->print_to_file)
+	{
+		filename = eel_gconf_get_string (print_props[FILE_PROP].pref);
+		if (filename != NULL)
+		{
+			converted = g_filename_from_utf8 (filename, -1, NULL, NULL, NULL);
+			if (converted != NULL)
+			{
+				expanded = gnome_vfs_expand_initial_tilde (filename);
+				fname = sanitize_filename (expanded);
+				g_free (expanded);
+				g_free (converted);
+			}
+		}
+
+		/* fallback */
+		if (fname == NULL)
+		{
+			fname = sanitize_filename ("output.ps");
+		}
+
+		info->file = g_filename_to_utf8 (fname, -1, NULL, NULL, NULL);
+		g_free (fname);
+	}
+
 	info->printer = eel_gconf_get_string (print_props[PRINTER_PROP].pref);
 
 	info->pages = eel_gconf_get_integer (print_props[ALL_PAGES_PROP].pref);
