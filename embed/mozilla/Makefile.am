@@ -11,6 +11,8 @@ libephymozillaembed_la_SOURCES = 	\
 	EphyHeaderSniffer.h		\
 	EphyBrowser.cpp                 \
 	EphyBrowser.h	                \
+	EphyHistoryListener.cpp		\
+	EphyHIstoryListener.h		\
 	EphySingle.cpp			\
 	EphySingle.h			\
 	EphyUtils.cpp			\

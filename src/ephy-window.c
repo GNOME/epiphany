@@ -685,7 +685,6 @@ static gboolean
 confirm_close_with_modified_forms (EphyWindow *window)
 {
 	GtkWidget *dialog;
-	GtkWindowGroup *group;
 	int response;
 
 	dialog = gtk_message_dialog_new
@@ -708,15 +707,7 @@ confirm_close_with_modified_forms (EphyWindow *window)
 	/* FIXME set title */
 	gtk_window_set_icon_name (GTK_WINDOW (dialog), "web-browser");
 
-	group = GTK_WINDOW (window)->group;
-	if (group == NULL)
-	{
-		group = gtk_window_group_new ();
-		gtk_window_group_add_window (group, GTK_WINDOW (window));
-		g_object_unref (group);
-	}
-
-	gtk_window_group_add_window (group, GTK_WINDOW (dialog));
+	gtk_window_group_add_window (GTK_WINDOW (window)->group, GTK_WINDOW (dialog));
 
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 
@@ -2366,6 +2357,20 @@ open_bookmark_cb (EphyBookmarksMenu *menu,
 }
 
 static void
+ensure_window_group (EphyWindow *window)
+{
+	GtkWindowGroup *group;
+
+	group = GTK_WINDOW (window)->group;
+	if (group == NULL)
+	{
+		group = gtk_window_group_new ();
+		gtk_window_group_add_window (group, GTK_WINDOW (window));
+		g_object_unref (group);
+	}
+}
+
+static void
 ephy_window_init (EphyWindow *window)
 {
 	EphyExtension *manager;
@@ -2379,6 +2384,8 @@ ephy_window_init (EphyWindow *window)
 	window->priv->chrome = EPHY_EMBED_CHROME_ALL;
 
 	g_object_ref (ephy_shell);
+
+	ensure_window_group (window);
 
 	/* Setup the UI manager and connect verbs */
 	setup_ui_manager (window);

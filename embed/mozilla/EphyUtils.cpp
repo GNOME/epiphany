@@ -52,15 +52,23 @@ EphyUtils::GetIOService (nsIIOService **ioService)
 	return rv;
 }
 
-nsresult EphyUtils::NewURI (nsIURI **result, const nsAString &spec)
+nsresult
+EphyUtils::NewURI (nsIURI **result,
+		   const nsAString &spec,
+		   const char *charset,
+		   nsIURI *baseURI)
 {
 	nsEmbedCString cSpec;
 	NS_UTF16ToCString (spec, NS_CSTRING_ENCODING_UTF8, cSpec);
 
-	return NewURI (result, cSpec);
+	return NewURI (result, cSpec, charset, baseURI);
 }
 
-nsresult EphyUtils::NewURI (nsIURI **result, const nsACString &spec)
+nsresult
+EphyUtils::NewURI (nsIURI **result,
+		   const nsACString &spec,
+		   const char *charset,
+		   nsIURI *baseURI)
 {
 	nsresult rv;
 
@@ -68,7 +76,7 @@ nsresult EphyUtils::NewURI (nsIURI **result, const nsACString &spec)
 	rv = EphyUtils::GetIOService (getter_AddRefs (ioService));
 	NS_ENSURE_SUCCESS (rv, rv);
 
-	rv = ioService->NewURI (spec, nsnull, nsnull, result);
+	rv = ioService->NewURI (spec, charset, baseURI, result);
 
 	return rv;
 }

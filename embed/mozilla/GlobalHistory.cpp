@@ -37,6 +37,9 @@ NS_IMPL_ISUPPORTS2(MozGlobalHistory, nsIGlobalHistory2, nsIBrowserHistory)
 MozGlobalHistory::MozGlobalHistory ()
 {
 	mGlobalHistory = EPHY_HISTORY (ephy_embed_shell_get_global_history (embed_shell));
+
+	mHistoryListener = new EphyHistoryListener ();
+	mHistoryListener->Init (mGlobalHistory);
 }
 
 MozGlobalHistory::~MozGlobalHistory ()

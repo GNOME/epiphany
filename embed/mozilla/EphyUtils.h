@@ -33,9 +33,15 @@ namespace EphyUtils
 {
 	nsresult	GetIOService		(nsIIOService **ioService);
 
-	nsresult	NewURI			(nsIURI **result, const nsAString &spec);
+	nsresult	NewURI			(nsIURI **result,
+						 const nsAString &spec,
+						 const char *charset = nsnull,
+						 nsIURI *baseURI = nsnull);
 
-	nsresult	NewURI			(nsIURI **result, const nsACString &spec);
+	nsresult	NewURI			(nsIURI **result,
+						 const nsACString &spec,
+						 const char *charset = nsnull,
+						 nsIURI *baseURI = nsnull);
 
 	GtkWidget      *FindEmbed		(nsIDOMWindow *aDOMWindow);
 

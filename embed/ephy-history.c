@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "ephy-history.h"
+#include "ephy-marshal.h"
 #include "ephy-file-helpers.h"
 #include "ephy-debug.h"
 #include "ephy-node-db.h"
@@ -70,6 +71,7 @@ enum
 {
 	VISITED,
 	CLEARED,
+	REDIRECT,
         LAST_SIGNAL
 };
 
@@ -197,7 +199,19 @@ ephy_history_class_init (EphyHistoryClass *klass)
                               G_TYPE_NONE,
                               0);
 
-	g_type_class_add_private (object_class, sizeof(EphyHistoryPrivate));
+	signals[REDIRECT] =
+                g_signal_new ("redirect",
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              G_SIGNAL_RUN_FIRST,
+                              G_STRUCT_OFFSET (EphyHistoryClass, redirect),
+                              NULL, NULL,
+                              ephy_marshal_VOID__STRING_STRING,
+                              G_TYPE_NONE,
+                              2,
+			      G_TYPE_STRING,
+			      G_TYPE_STRING);
+
+	g_type_class_add_private (object_class, sizeof (EphyHistoryPrivate));
 }
 
 static gboolean

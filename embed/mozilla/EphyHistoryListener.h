@@ -1,5 +1,4 @@
 /*
- *  Copyright (C) 2001, 2004 Philip Langdale
  *  Copyright (C) 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -19,41 +18,34 @@
  *  $Id$
  */
 
-#ifndef EPHY_GLOBAL_HISTORY_H
-#define EPHY_GLOBAL_HISTORY_H
+#ifndef EPHY_REDIRECT_LISTENER_H
+#define EPHY_REDIRECT_LISTENER_H
 
 #include "ephy-history.h"
 
-#include <nsIBrowserHistory.h>
-#include <nsIGlobalHistory2.h>
+#include <nsIWebProgressListener.h>
+#include <nsWeakReference.h>
 
-#include <nsCOMPtr.h>
-#include <nsAutoPtr.h>
+#include <glib-object.h>
 
-#include "EphyHistoryListener.h"
+/* 6a9533c6-f068-4e63-8225-5feba0b54d6b */
+#define EPHY_REDIRECTLISTENER_CID \
+{ 0x6a9533c6, 0xf068, 0x4e63, { 0x82, 0x25, 0x5f, 0xeb, 0xa0, 0xb5, 0x4d, 0x6b } }
+#define EPHY_REDIRECTLISTENER_CLASSNAME		"Epiphany Redirect Listener Class"
 
-#define EPHY_GLOBALHISTORY_CLASSNAME	"Epiphany Global History Implementation"
-
-#define EPHY_GLOBALHISTORY_CID					\
-{	0xbe0c42c1,						\
-	0x39d4,							\
-	0x4271,							\
-	{ 0xb7, 0x9e, 0xf7, 0xaa, 0x49, 0xeb, 0x6a, 0x15}	\
-}
-
-class MozGlobalHistory: public nsIBrowserHistory
+class EphyHistoryListener : public nsIWebProgressListener,
+			     public nsSupportsWeakReference
 {
 	public:
-		MozGlobalHistory ();
-		virtual ~MozGlobalHistory();
+		EphyHistoryListener();
+		virtual ~EphyHistoryListener();
 
+		nsresult Init (EphyHistory *aHistory);
+	
 		NS_DECL_ISUPPORTS
-		NS_DECL_NSIGLOBALHISTORY2
-		NS_DECL_NSIBROWSERHISTORY
-
+		NS_DECL_NSIWEBPROGRESSLISTENER
 	private:
-		EphyHistory *mGlobalHistory;
-		nsRefPtr<EphyHistoryListener> mHistoryListener;
+		EphyHistory *mHistory;
 };
 
-#endif /* EPHY_GLOBAL_HISTORY_H */
+#endif /* EPHY_REDIRECT_LISTENER_H */

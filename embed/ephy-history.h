@@ -67,6 +67,10 @@ struct EphyHistoryClass
 	void	(* visited)	(EphyHistory *history,
 				 const char *url);
 	void	(* cleared)	(EphyHistory *history);
+
+	void	(* redirect)	(EphyHistory *history,
+				 const char *from_uri,
+				 const char *to_uri);
 };
 
 GType		ephy_history_get_type		(void);

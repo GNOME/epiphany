@@ -476,6 +476,29 @@ history_cleared_cb (EphyHistory *history, EphyBookmarks *bookmarks)
 	clear_favorites (bookmarks);
 }
 
+#include <gtk/gtkmessagedialog.h>
+#include <gtk/gtkdialog.h>
+
+static void
+redirect_cb (EphyHistory *history,
+	      const char *from_uri,
+	      const char *to_uri,
+	      EphyBookmarks *eb)
+{
+	EphyNode *bookmark;
+	GValue value = { 0, };
+
+	bookmark = ephy_bookmarks_find_bookmark (eb, from_uri);
+	if (bookmark != NULL)
+	{
+		g_value_init (&value, G_TYPE_STRING);
+		g_value_set_string (&value, to_uri);
+		ephy_node_set_property (bookmark, EPHY_NODE_BMK_PROP_LOCATION,
+					&value);
+		g_value_unset (&value);
+	}
+}
+
 static void
 ephy_setup_history_notifiers (EphyBookmarks *eb)
 {
@@ -492,6 +515,8 @@ ephy_setup_history_notifiers (EphyBookmarks *eb)
 			  G_CALLBACK (history_site_visited_cb), eb);
 	g_signal_connect (history, "cleared",
 			  G_CALLBACK (history_cleared_cb), eb);
+	g_signal_connect (history, "redirect",
+			  G_CALLBACK (redirect_cb), eb);
 }
 
 static void
