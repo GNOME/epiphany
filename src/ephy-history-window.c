@@ -879,37 +879,49 @@ add_by_site_filter (EphyHistoryWindow *editor, EphyNodeFilter *filter, int level
 }
 
 #define SEC_PER_DAY (60 * 60 * 24)
+#include "time.h"
 
 static void
-add_by_date_filter (EphyHistoryWindow *editor, EphyNodeFilter *filter, int level,
+add_by_date_filter (EphyHistoryWindow *editor,
+		    EphyNodeFilter *filter,
+		    int level,
 		    EphyNode *equals)
 {
-	GTime now, cmp_time, days;
+	time_t now, midnight, cmp_time = 0;
+	struct tm btime;
 	int time_range;
-
-	/* FIXME this is probably wrong for timezones */
 
 	time_range = gtk_combo_box_get_active
 		(GTK_COMBO_BOX (editor->priv->time_combo));
 
-	now = time (NULL);
-	days = now / SEC_PER_DAY;
+	/* no need to setup a new filter */
+	if (time_range == TIME_EVER) return;
 
+	now = time (NULL);
+	if (localtime_r (&now, &btime) == NULL) return;
+
+	/* get start of day */
+	btime.tm_sec = 0;
+	btime.tm_min = 0;
+	btime.tm_hour = 0;
+	midnight = mktime (&btime);
+
+	/* FIXME: take switches from/to DST into account! */
 	switch (time_range)
 	{
-		case TIME_EVER:
-			return;
 		case TIME_TODAY:
+			cmp_time = midnight;
 			break;
 		case TIME_LAST_TWO_DAYS:
-			days -= 1;
+			cmp_time = midnight - SEC_PER_DAY;
 			break;
 		case TIME_LAST_THREE_DAYS:
-			days -= 2;
+			cmp_time = midnight - 2 * SEC_PER_DAY;
+			break;
+		default:
+			g_return_if_reached ();
 			break;
 	}
-
-	cmp_time = days * SEC_PER_DAY;
 
 	ephy_node_filter_add_expression
 		(filter, ephy_node_filter_expression_new
