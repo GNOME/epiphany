@@ -31,6 +31,8 @@
 
 #include <bonobo/bonobo-i18n.h>
 #include <gtk/gtkaction.h>
+#include <gtk/gtktoggleaction.h>
+#include <gtk/gtkradioaction.h>
 #include <gtk/gtkuimanager.h>
 #include <string.h>
 
@@ -96,7 +98,15 @@ ephy_encoding_menu_verb_cb (GtkAction *action,
 	const char *encoding;
 	const char *action_name;
 
-	
+	/* do nothing if this action was _de_activated, or if we're updating
+	 * the menu, i.e. setting the active encoding from the document
+	 */
+	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)) == FALSE
+	    || menu->priv->update_tag)
+	{
+		return;
+	}
+
 	embed = ephy_window_get_active_embed (menu->priv->window);
 	g_return_if_fail (embed != NULL);
 
@@ -123,11 +133,52 @@ ephy_encoding_menu_init (EphyEncodingMenu *menu)
 }
 
 static void
+update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
+{
+	EphyEmbed *embed;
+	GtkAction *action = NULL;
+	char *encoding;
+
+	embed = ephy_window_get_active_embed (menu->priv->window);
+	g_return_if_fail (embed != NULL);
+
+	ephy_embed_get_encoding (embed, &encoding);
+
+	if (encoding != NULL)
+	{
+		char name[32];
+
+		g_snprintf (name, 32, "Encoding%s", encoding);
+		action = gtk_action_group_get_action (menu->priv->action_group,
+						      name);
+	}
+
+	if (action != NULL)
+	{
+		/* FIXME: block the "activate" signal instead; needs to wait
+		 * until g_signal_handlers_block_matched supports blocking
+		 * by signal id alone.
+		 */
+		menu->priv->update_tag = TRUE;
+		gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+		menu->priv->update_tag = FALSE;
+	}
+	else
+	{
+		g_warning ("Could not find action for encoding '%s'!\n", encoding);
+	}
+
+	g_free (encoding);
+}
+
+static void
 ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
 {
 	EphyEmbedSingle *single;
 	GtkActionGroup *action_group;
+	GtkAction *action;
 	GList *encodings, *groups, *l;
+	GSList *radio_group = NULL;
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
@@ -145,14 +196,16 @@ ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
 	for (l = encodings; l != NULL; l = l->next)
 	{
 		const EncodingInfo *info = (EncodingInfo *) l->data;
-		GtkAction *action;
 		char name[32];
 
 		g_snprintf (name, 32, "Encoding%s", info->encoding);
-		action = g_object_new (GTK_TYPE_ACTION,
+		action = g_object_new (GTK_TYPE_RADIO_ACTION,
 				       "name", name,
 				       "label", info->title,
 				       NULL);
+
+		gtk_radio_action_set_group (GTK_RADIO_ACTION (action), radio_group);
+		radio_group = gtk_radio_action_get_group (GTK_RADIO_ACTION (action));
 
 		g_signal_connect (action, "activate",
 				  G_CALLBACK (ephy_encoding_menu_verb_cb),
@@ -170,7 +223,6 @@ ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
 	for (l = groups; l != NULL; l = l->next)
 	{
 		const LanguageGroupInfo *info = (LanguageGroupInfo *) l->data;
-		GtkAction *action;
 		char name[32];
 
 		g_snprintf (name, 32, "EncodingGroup%d", info->group);
@@ -189,6 +241,15 @@ ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
 	gtk_ui_manager_insert_action_group (menu->priv->manager,
 					    action_group, 0);
 	g_object_unref (action_group);
+
+	action = gtk_ui_manager_get_action (menu->priv->manager,
+					    "/menubar/ViewMenu");
+	if (action != NULL)
+	{
+		g_signal_connect_object (action, "activate",
+					 G_CALLBACK (update_encoding_menu_cb),
+					 menu, 0);
+	}
 
 	ephy_encoding_menu_rebuild (menu);
 }

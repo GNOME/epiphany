@@ -1,5 +1,18 @@
 2003-10-11  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-embed.c: (ephy_embed_get_encoding):
+	* embed/ephy-embed.h:
+	* embed/mozilla/EphyWrapper.cpp:
+	* embed/mozilla/EphyWrapper.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-encoding-menu.c: (ephy_encoding_menu_verb_cb),
+	(update_encoding_menu_cb), (ephy_encoding_menu_set_window):
+
+	Encoding menu improvements, part 2: Implement ephy_embed_get_encoding,
+	and use it in the menu to indicate the encoding of the loaded page.
+
+2003-10-11  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-encoding-menu.c: (ephy_encoding_menu_get_type),
 	(ephy_encoding_menu_verb_cb), (ephy_encoding_menu_init),
 	(ephy_encoding_menu_set_window), (ephy_encoding_menu_set_property),

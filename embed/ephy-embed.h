@@ -270,6 +270,8 @@ struct EphyEmbedClass
 						 gint pageNum);
 	gresult   (* set_encoding)         (EphyEmbed *embed,
 					    const char *encoding);
+	gresult   (* get_encoding)         (EphyEmbed *embed,
+					    char **encoding);
 };
 
 GType         ephy_embed_get_type             (void);
@@ -389,6 +391,9 @@ gresult	      ephy_embed_find_next	      (EphyEmbed *embed,
 
 gresult       ephy_embed_set_encoding         (EphyEmbed *embed,
 					       const char *encoding);
+
+gresult       ephy_embed_get_encoding         (EphyEmbed *embed,
+					       char **encoding);
 
 gresult       ephy_embed_activate             (EphyEmbed *embed);
 

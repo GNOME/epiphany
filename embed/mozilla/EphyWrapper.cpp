@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "EphyWrapper.h"
@@ -748,4 +750,18 @@ nsresult EphyWrapper::PopTargetDocument ()
 	mTargetDocument = nsnull;
 
 	return NS_OK;
+}
+
+nsresult EphyWrapper::GetEncoding (nsCString &aEncoding)
+{
+	nsresult result;
+
+	nsCOMPtr<nsIDOMDocument> domDoc;
+	result = GetDOMDocument (getter_AddRefs(domDoc));
+	if (NS_FAILED (result) || !domDoc) return NS_ERROR_FAILURE;
+
+	nsCOMPtr<nsIDocument> doc = do_QueryInterface(domDoc, &result);
+	if (NS_FAILED (result) || !doc) return NS_ERROR_FAILURE;
+	
+	return doc->GetDocumentCharacterSet (aEncoding);
 }

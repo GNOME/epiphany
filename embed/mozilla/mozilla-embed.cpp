@@ -147,7 +147,9 @@ impl_get_security_level (EphyEmbed *embed,
 static gresult
 impl_set_encoding (EphyEmbed *embed,
                    const char *encoding);
-
+static gresult
+impl_get_encoding (EphyEmbed *embed,
+                   char **encoding);
 static gresult
 impl_print (EphyEmbed *embed, 
             EmbedPrintInfo *info);
@@ -378,6 +380,7 @@ ephy_embed_init (EphyEmbedClass *embed_class)
 	embed_class->activate = impl_activate;
 	embed_class->find_set_properties = impl_find_set_properties;
 	embed_class->set_encoding = impl_set_encoding;
+	embed_class->get_encoding = impl_get_encoding;
 	embed_class->select_all = impl_select_all;
 	embed_class->print = impl_print;
 	embed_class->print_preview_close = impl_print_preview_close;
@@ -1173,7 +1176,7 @@ static gresult
 impl_set_encoding (EphyEmbed *embed,
 		   const char *encoding)
 {
-	nsresult result = NS_OK;
+	nsresult result;
 	EphyWrapper *wrapper;
 	
 	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
@@ -1186,6 +1189,28 @@ impl_set_encoding (EphyEmbed *embed,
 			      GTK_MOZ_EMBED_FLAG_RELOADCHARSETCHANGE);
 	
 	return NS_SUCCEEDED(result) ? G_OK : G_FAILED;
+}
+
+static gresult
+impl_get_encoding (EphyEmbed *embed,
+		   char **encoding)
+{
+	nsresult result;
+	EphyWrapper *wrapper;
+	nsCAutoString enc;
+
+	g_return_val_if_fail (encoding != NULL, G_FAILED);
+	*encoding = NULL;
+
+	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
+	g_return_val_if_fail (wrapper != NULL, G_FAILED);
+
+	result = wrapper->GetEncoding (enc);
+	if (NS_FAILED (result)) return G_FAILED;
+
+	*encoding = g_strdup (enc.get());
+
+	return G_OK;
 }
 
 static void

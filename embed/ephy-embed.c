@@ -575,6 +575,14 @@ ephy_embed_set_encoding (EphyEmbed *embed,
 }
 
 gresult
+ephy_embed_get_encoding (EphyEmbed *embed,
+			 char **encoding)
+{
+	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
+	return klass->get_encoding (embed, encoding);
+}
+
+gresult
 ephy_embed_print (EphyEmbed *embed,
                   EmbedPrintInfo *info)
 {
