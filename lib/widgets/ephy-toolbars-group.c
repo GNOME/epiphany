@@ -79,6 +79,8 @@ ephy_toolbars_group_to_xml (EphyToolbarsGroup *t)
 	GNode *l1, *l2, *tl;
 	xmlDocPtr doc;
 
+	g_return_val_if_fail (IS_EPHY_TOOLBARS_GROUP (t), NULL);
+
 	tl = t->priv->toolbars;
 
 	xmlIndentTreeOutput = TRUE;
@@ -116,6 +118,8 @@ toolbars_group_save (EphyToolbarsGroup *t)
 {
 	xmlDocPtr doc;
 
+	g_return_if_fail (IS_EPHY_TOOLBARS_GROUP (t));
+
 	doc = ephy_toolbars_group_to_xml (t);
 	xmlSaveFormatFile (t->priv->user, doc, 1);
 	xmlFreeDoc (doc);
@@ -137,6 +141,8 @@ toolbars_item_new (const char *action, gboolean separator)
 {
 	EphyToolbarsItem *item;
 
+	g_return_val_if_fail (action != NULL, NULL);
+
 	item = g_new0 (EphyToolbarsItem, 1);
 	item->action = g_strdup (action);
 	item->separator = separator;
@@ -148,12 +154,16 @@ toolbars_item_new (const char *action, gboolean separator)
 static void
 free_toolbar_node (EphyToolbarsToolbar *toolbar)
 {
+	g_return_if_fail (toolbar != NULL);
+
 	g_free (toolbar);
 }
 
 static void
 free_item_node (EphyToolbarsItem *item)
 {
+	g_return_if_fail (item != NULL);
+
 	g_free (item->action);
 	g_free (item);
 }
@@ -187,12 +197,17 @@ ephy_toolbars_group_add_item (EphyToolbarsGroup *t,
 	GNode *parent_node;
 	GNode *sibling_node = NULL;
 
+	g_return_if_fail (IS_EPHY_TOOLBARS_GROUP (t));
+	g_return_if_fail (parent != NULL);
+	g_return_if_fail (name != NULL);
+
 	parent_node = g_node_find (t->priv->toolbars, G_IN_ORDER, G_TRAVERSE_ALL, parent);
 
 	if (sibling)
 	{
 		sibling_node = g_node_find (t->priv->toolbars, G_IN_ORDER,
 					    G_TRAVERSE_ALL, sibling);
+		g_return_if_fail (sibling_node != NULL);
 	}
 
 	add_action (t, parent_node, sibling_node, name);
@@ -245,7 +260,10 @@ ephy_toolbars_group_add_toolbar (EphyToolbarsGroup *t)
 {
 	GNode *node;
 
+	g_return_val_if_fail (IS_EPHY_TOOLBARS_GROUP (t), NULL);
+
 	node = add_toolbar (t);
+	g_return_val_if_fail (node != NULL, NULL);
 
 	toolbars_group_save (t);
 
@@ -279,6 +297,8 @@ load_defaults (EphyToolbarsGroup *t)
         xmlNodePtr child;
 	xmlNodePtr root;
 	const char *xml_filepath;
+
+	g_return_if_fail (IS_EPHY_TOOLBARS_GROUP (t));
 
 	LOG ("Load default toolbar info")
 
@@ -314,6 +334,8 @@ load_toolbar (EphyToolbarsGroup *t)
 	xmlNodePtr root;
 	const char *xml_filepath = t->priv->user;
 
+	g_return_if_fail (IS_EPHY_TOOLBARS_GROUP (t));
+
 	LOG ("Load custom toolbar")
 
 	if (!g_file_test (xml_filepath, G_FILE_TEST_EXISTS)) return;
@@ -333,7 +355,11 @@ ephy_toolbars_group_to_string (EphyToolbarsGroup *t)
 	char *result;
 	int k = 0;
 
+	g_return_val_if_fail (IS_EPHY_TOOLBARS_GROUP (t), NULL);
+
 	tl = t->priv->toolbars;
+
+	g_return_val_if_fail (tl != NULL, NULL);
 
 	s = g_string_new (NULL);
 	g_string_append (s, "<Root>");
@@ -455,7 +481,11 @@ ephy_toolbars_group_remove_toolbar (EphyToolbarsGroup *t,
 {
 	GNode *node;
 
+	g_return_if_fail (IS_EPHY_TOOLBARS_GROUP (t));
+	g_return_if_fail (toolbar != NULL);
+
 	node = g_node_find (t->priv->toolbars, G_IN_ORDER, G_TRAVERSE_ALL, toolbar);
+	g_return_if_fail (node != NULL);
 	free_toolbar_node (node->data);
 	g_node_destroy (node);
 
@@ -470,7 +500,11 @@ ephy_toolbars_group_remove_item	(EphyToolbarsGroup *t,
 {
 	GNode *node;
 
+	g_return_if_fail (IS_EPHY_TOOLBARS_GROUP (t));
+	g_return_if_fail (item != NULL);
+
 	node = g_node_find (t->priv->toolbars, G_IN_ORDER, G_TRAVERSE_ALL, item);
+	g_return_if_fail (node != NULL);
 	free_toolbar_node (node->data);
 	g_node_destroy (node);
 
@@ -484,6 +518,10 @@ ephy_toolbars_group_set_source (EphyToolbarsGroup *group,
 				const char *defaults,
 				const char *user)
 {
+	g_return_if_fail (IS_EPHY_TOOLBARS_GROUP (group));
+	g_return_if_fail (defaults != NULL);
+	g_return_if_fail (user != NULL);
+
 	group->priv->defaults = g_strdup (defaults);
 	group->priv->user = g_strdup (user);
 
@@ -495,6 +533,9 @@ static gboolean
 is_item_in_toolbars (EphyToolbarsGroup *group, const char *action)
 {
 	GNode *l1, *l2;
+
+	g_return_val_if_fail (IS_EPHY_TOOLBARS_GROUP (group), FALSE);
+	g_return_val_if_fail (action != NULL, FALSE);
 
 	for (l1 = group->priv->toolbars->children; l1 != NULL; l1 = l1->next)
 	{
@@ -517,6 +558,8 @@ ephy_toolbars_group_foreach_available (EphyToolbarsGroup *group,
 {
 	GNode *l1;
 
+	g_return_if_fail (IS_EPHY_TOOLBARS_GROUP (group));
+
 	for (l1 = group->priv->available_actions->children; l1 != NULL; l1 = l1->next)
 	{
 		EphyToolbarsItem *item;
@@ -537,6 +580,8 @@ ephy_toolbars_group_foreach_toolbar (EphyToolbarsGroup *group,
 {
 	GNode *l1;
 
+	g_return_if_fail (IS_EPHY_TOOLBARS_GROUP (group));
+
 	for (l1 = group->priv->toolbars->children; l1 != NULL; l1 = l1->next)
 	{
 		func (l1->data, data);
@@ -549,6 +594,8 @@ ephy_toolbars_group_foreach_item (EphyToolbarsGroup *group,
 				  gpointer data)
 {
 	GNode *l1, *l2;
+
+	g_return_if_fail (IS_EPHY_TOOLBARS_GROUP (group));
 
 	for (l1 = group->priv->toolbars->children; l1 != NULL; l1 = l1->next)
 	{
@@ -567,7 +614,10 @@ ephy_toolbars_group_get_path (EphyToolbarsGroup *t,
 	char *path = NULL;
 	EphyToolbarsItem *titem;
 
+	g_return_val_if_fail (IS_EPHY_TOOLBARS_GROUP (t), NULL);
+
 	node = g_node_find (t->priv->toolbars, G_IN_ORDER, G_TRAVERSE_ALL, item);
+	g_return_val_if_fail (node != NULL, NULL);
 	titem = (EphyToolbarsItem *)node->data;
 
 	switch (g_node_depth (node))
@@ -591,4 +641,3 @@ ephy_toolbars_group_get_path (EphyToolbarsGroup *t,
 
 	return path;
 }
-

@@ -122,6 +122,9 @@ find_action (EphyEditableToolbar *t, const char *name)
 	GList *l = t->priv->merge->action_groups;
 	EggAction *action = NULL;
 
+	g_return_val_if_fail (IS_EPHY_EDITABLE_TOOLBAR (t), NULL);
+	g_return_val_if_fail (name != NULL, NULL);
+
 	for (; l != NULL; l = l->next)
 	{
 		EggAction *tmp;
@@ -141,6 +144,8 @@ impl_get_action (EphyEditableToolbar *etoolbar,
 {
 	EggAction *action;
 
+	g_return_val_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar), NULL);
+
 	if (type == NULL)
 	{
 		action = find_action (etoolbar, name);
@@ -157,6 +162,8 @@ static gboolean
 ui_update (gpointer data)
 {
 	EphyEditableToolbar *etoolbar = EPHY_EDITABLE_TOOLBAR (data);
+
+	g_return_val_if_fail (etoolbar != NULL, FALSE);
 
 	if (etoolbar->priv->toolbars_dirty)
 	{
@@ -185,6 +192,8 @@ ui_update (gpointer data)
 static void
 queue_ui_update (EphyEditableToolbar *etoolbar)
 {
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+
 	g_idle_add (ui_update, etoolbar);
 }
 
@@ -205,11 +214,14 @@ drag_data_received_cb (GtkWidget *widget,
 	GdkAtom target;
 	EggAction *action;
 
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+
 	toolbar = (EphyToolbarsToolbar *)g_object_get_data (G_OBJECT (widget), "toolbar_data");
 
 	if (!toolbar)
 	{
 		sibling = (EphyToolbarsItem *)g_object_get_data (G_OBJECT (widget), "item_data");
+		g_return_if_fail (sibling != NULL);
 		parent = sibling->parent;
 	}
 	else
@@ -217,6 +229,8 @@ drag_data_received_cb (GtkWidget *widget,
 		sibling = NULL;
 		parent = toolbar;
 	}
+
+	g_return_if_fail (parent != NULL);
 
 	target = gtk_drag_dest_find_target (widget, context, NULL);
 	if (target == gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE))
@@ -229,7 +243,6 @@ drag_data_received_cb (GtkWidget *widget,
 	{
 		ephy_toolbars_group_add_item (etoolbar->priv->group, parent, sibling,
 					      action->name);
-
 		etoolbar->priv->toolbars_dirty = TRUE;
 		queue_ui_update (etoolbar);
 	}
@@ -242,7 +255,10 @@ drag_data_delete_cb (GtkWidget *widget,
 {
 	EphyToolbarsItem *node;
 
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+
 	node = (EphyToolbarsItem *)g_object_get_data (G_OBJECT (widget), "item_data");
+	g_return_if_fail (node != NULL);
 	ephy_toolbars_group_remove_item (etoolbar->priv->group, node);
 
 	etoolbar->priv->toolbars_dirty = TRUE;
@@ -260,6 +276,8 @@ drag_data_get_cb (GtkWidget *widget,
 	EggAction *action;
 	const char *target;
 
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+
 	action = EGG_ACTION (g_object_get_data (G_OBJECT (widget), "egg-action"));
 	target = action->name;
 
@@ -274,6 +292,9 @@ static void
 connect_item_drag_source (EphyToolbarsItem *item, EphyEditableToolbar *etoolbar)
 {
 	GtkWidget *toolitem;
+
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+	g_return_if_fail (item != NULL);
 
 	toolitem = item->widget;
 
@@ -295,6 +316,9 @@ static void
 disconnect_item_drag_source (EphyToolbarsItem *item, EphyEditableToolbar *etoolbar)
 {
 	GtkWidget *toolitem;
+
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+	g_return_if_fail (item != NULL);
 
 	toolitem = item->widget;
 
@@ -318,10 +342,15 @@ setup_toolbar (EphyToolbarsToolbar *toolbar, EphyEditableToolbar *etoolbar)
 	GtkWidget *widget;
 	char *path;
 
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+	g_return_if_fail (toolbar != NULL);
+
 	path = ephy_toolbars_group_get_path (etoolbar->priv->group, toolbar);
+	g_return_if_fail (path != NULL);
 
 	widget = egg_menu_merge_get_widget (etoolbar->priv->merge, path);
 	g_object_set_data (G_OBJECT (widget), "toolbar_data", toolbar);
+	g_return_if_fail (toolbar != NULL);
 	toolbar->widget = widget;
 
 	if (!g_object_get_data (G_OBJECT (widget), "drag_dest_set"))
@@ -348,9 +377,14 @@ setup_item (EphyToolbarsItem *item, EphyEditableToolbar *etoolbar)
 	GtkWidget *toolitem;
 	char *path;
 
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+	g_return_if_fail (item != NULL);
+
 	path = ephy_toolbars_group_get_path (etoolbar->priv->group, item);
+	g_return_if_fail (path != NULL);
 
 	toolitem = egg_menu_merge_get_widget (etoolbar->priv->merge, path);
+	g_return_if_fail (toolitem != NULL);
 	item->widget = toolitem;
 
 	g_object_set_data (G_OBJECT (toolitem), "item_data", item);
@@ -377,6 +411,9 @@ ensure_toolbar_min_size (EphyToolbarsToolbar *toolbar, EphyEditableToolbar *t)
 {
 	GtkWidget *widget;
 
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (t));
+	g_return_if_fail (toolbar != NULL);
+
 	widget = toolbar->widget;
 
 	if (EGG_TOOLBAR (widget)->num_children == 0)
@@ -395,9 +432,10 @@ do_merge (EphyEditableToolbar *t)
 	char *str;
 	guint ui_id;
 
-	g_return_if_fail (t != NULL);
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (t));
 
 	str = ephy_toolbars_group_to_string (t->priv->group);
+	g_return_if_fail (str != NULL);
 
 	LOG ("Merge UI\n%s", str)
 
@@ -440,12 +478,18 @@ do_merge (EphyEditableToolbar *t)
 static void
 ensure_action (EphyToolbarsItem *item, EphyEditableToolbar *t)
 {
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (t));
+	g_return_if_fail (item != NULL);
+
 	ephy_editable_toolbar_get_action (t, NULL, item->action);
 }
 
 static void
 group_changed_cb (EphyToolbarsGroup *group, EphyEditableToolbar *t)
 {
+	g_return_if_fail (IS_EPHY_TOOLBARS_GROUP (group));
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (t));
+
 	t->priv->toolbars_dirty = TRUE;
 
 	ephy_toolbars_group_foreach_item (t->priv->group,
@@ -458,6 +502,9 @@ group_changed_cb (EphyToolbarsGroup *group, EphyEditableToolbar *t)
 static void
 ephy_editable_toolbar_set_group (EphyEditableToolbar *t, EphyToolbarsGroup *group)
 {
+	g_return_if_fail (IS_EPHY_TOOLBARS_GROUP (group));
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (t));
+
 	t->priv->group = group;
 
 	g_signal_connect (group, "changed",
@@ -468,6 +515,9 @@ ephy_editable_toolbar_set_group (EphyEditableToolbar *t, EphyToolbarsGroup *grou
 static void
 ephy_editable_toolbar_set_merge (EphyEditableToolbar *t, EggMenuMerge *merge)
 {
+	g_return_if_fail (EGG_IS_MENU_MERGE (merge));
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (t));
+
 	t->priv->merge = merge;
 
 	LOG ("Got MenuMerge")
@@ -663,6 +713,8 @@ editor_get_dimensions (EphyEditableToolbar *etoolbar, GtkWidget *toolbar,
 static void
 hide_editor (EphyEditableToolbar *etoolbar)
 {
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+
 	gtk_grab_remove (GTK_WIDGET (etoolbar->priv->editor));
 	gtk_widget_hide (GTK_WIDGET (etoolbar->priv->editor));
 }
@@ -670,6 +722,8 @@ hide_editor (EphyEditableToolbar *etoolbar)
 static void
 editor_close_cb (GtkWidget *button, EphyEditableToolbar *etoolbar)
 {
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+
 	etoolbar->priv->edit_mode = FALSE;
 	ephy_toolbars_group_foreach_item (etoolbar->priv->group,
 					  (EphyToolbarsGroupForeachItemFunc)
@@ -681,6 +735,8 @@ editor_close_cb (GtkWidget *button, EphyEditableToolbar *etoolbar)
 static void
 editor_add_toolbar_cb (GtkWidget *button, EphyEditableToolbar *etoolbar)
 {
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+
 	ephy_toolbars_group_add_toolbar (etoolbar->priv->group);
 
 	etoolbar->priv->toolbars_dirty = TRUE;
@@ -698,6 +754,8 @@ editor_drag_data_received_cb (GtkWidget *widget,
 		              guint time_,
 		              EphyEditableToolbar *etoolbar)
 {
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+
 	etoolbar->priv->editor_sheet_dirty = TRUE;
 	etoolbar->priv->editor_pos_dirty = TRUE;
 	queue_ui_update (etoolbar);
@@ -708,6 +766,8 @@ editor_drag_data_delete_cb (GtkWidget *widget,
                             GdkDragContext *context,
                             EphyEditableToolbar *etoolbar)
 {
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+
 	etoolbar->priv->editor_sheet_dirty = TRUE;
 	etoolbar->priv->editor_pos_dirty = TRUE;
 	queue_ui_update (etoolbar);
@@ -725,6 +785,8 @@ setup_editor (EphyEditableToolbar *etoolbar)
 	GtkWidget *bbox;
 	GtkWidget *button;
 	GtkWidget *frame;
+
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
 
 	editor = gtk_window_new (GTK_WINDOW_POPUP);
 	etoolbar->priv->editor = editor;
@@ -783,6 +845,8 @@ setup_editor (EphyEditableToolbar *etoolbar)
 static void
 add_to_list (EphyToolbarsItem *item, GList **l)
 {
+	g_return_if_fail (item != NULL);
+
 	*l = g_list_append (*l, item);
 }
 
@@ -794,6 +858,8 @@ update_editor_sheet (EphyEditableToolbar *etoolbar)
 	int x, y, height, width;
 	GtkWidget *table;
 	GtkWidget *viewport;
+
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
 
 	viewport = GTK_BIN (etoolbar->priv->scrolled_window)->child;
 	if (viewport)
@@ -835,6 +901,7 @@ update_editor_sheet (EphyEditableToolbar *etoolbar)
 
 		action = ephy_editable_toolbar_get_action
 			(etoolbar, NULL, node->action);
+		g_return_if_fail (action != NULL);
 
 		event_box = gtk_event_box_new ();
 		gtk_widget_show (event_box);
@@ -885,6 +952,8 @@ update_editor_position (EphyEditableToolbar *etoolbar)
 	GtkWidget *editor;
 	int x, y, height, width;
 
+	g_return_val_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar), FALSE);
+
 	editor_get_dimensions (etoolbar, etoolbar->priv->last_toolbar,
 			       &x, &y, &width, &height);
 	editor = etoolbar->priv->editor;
@@ -903,6 +972,8 @@ button_press_cb (GtkWidget *w,
 {
 	GtkWidget *widget;
 	GtkWidget *toolitem;
+
+	g_return_val_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar), FALSE);
 
 	widget = gtk_get_event_widget (event);
 	toolitem = gtk_widget_get_ancestor (widget, EGG_TYPE_TOOL_ITEM);
@@ -928,6 +999,7 @@ show_editor (EphyEditableToolbar *etoolbar)
 {
 	GtkWidget *editor = etoolbar->priv->editor;
 
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
 	g_return_if_fail (editor != NULL);
 
 	gtk_widget_show (GTK_WIDGET (editor));
@@ -943,6 +1015,9 @@ set_action_sensitive (EphyToolbarsItem *item, EphyEditableToolbar *etoolbar)
 {
 	EggAction *action;
 
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+	g_return_if_fail (item != NULL);
+
 	if (!item->separator)
 	{
 		action = find_action (etoolbar, item->action);
@@ -953,6 +1028,8 @@ set_action_sensitive (EphyToolbarsItem *item, EphyEditableToolbar *etoolbar)
 void
 ephy_editable_toolbar_edit (EphyEditableToolbar *etoolbar)
 {
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+
 	etoolbar->priv->edit_mode = TRUE;
 	ephy_toolbars_group_foreach_item (etoolbar->priv->group,
 					  (EphyToolbarsGroupForeachItemFunc)

@@ -1,5 +1,40 @@
 2003-02-21  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/widgets/ephy-editable-toolbar.c: (find_action),
+	(impl_get_action), (ui_update), (queue_ui_update),
+	(drag_data_received_cb), (drag_data_delete_cb), (drag_data_get_cb),
+	(connect_item_drag_source), (disconnect_item_drag_source),
+	(setup_toolbar), (setup_item), (ensure_toolbar_min_size),
+	(do_merge), (ensure_action), (group_changed_cb),
+	(ephy_editable_toolbar_set_group),
+	(ephy_editable_toolbar_set_merge), (hide_editor),
+	(editor_close_cb), (editor_add_toolbar_cb),
+	(editor_drag_data_received_cb), (editor_drag_data_delete_cb),
+	(setup_editor), (add_to_list), (update_editor_sheet),
+	(update_editor_position), (button_press_cb), (show_editor),
+	(set_action_sensitive), (ephy_editable_toolbar_edit):
+	* lib/widgets/ephy-toolbars-group.c: (ephy_toolbars_group_to_xml),
+	(toolbars_group_save), (toolbars_item_new), (free_toolbar_node),
+	(free_item_node), (ephy_toolbars_group_add_item),
+	(ephy_toolbars_group_add_toolbar), (load_defaults), (load_toolbar),
+	(ephy_toolbars_group_to_string),
+	(ephy_toolbars_group_remove_toolbar),
+	(ephy_toolbars_group_remove_item),
+	(ephy_toolbars_group_set_source), (is_item_in_toolbars),
+	(ephy_toolbars_group_foreach_available),
+	(ephy_toolbars_group_foreach_toolbar),
+	(ephy_toolbars_group_foreach_item), (ephy_toolbars_group_get_path):
+	* src/toolbar.c: (toolbar_get_action):
+
+	Add lots of debug code to solve these damned crashes.
+	Dont create multiple actions for the same bookmark.
+	There are two crashes that I can repro now. 1 Adding bookmarks
+	with more then one toolbar opened, and then open tbe.
+	2 Add multiple "links" to the same bookmark and then close.
+	But I'm sure xan can find more ;)
+
+2003-02-21  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* lib/widgets/ephy-autocompletion-window.c:
 	(hack_tree_view_move_selection):
 

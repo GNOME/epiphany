@@ -184,18 +184,19 @@ toolbar_get_action (EphyEditableToolbar *etoolbar,
 		g_list_foreach (uris, (GFunc)g_free, NULL);
 		g_list_free (uris);
 	}
-	else if (g_str_has_prefix (name, "GoBookmarkId"))
-	{
-		if (ephy_str_to_int (name + strlen ("GoBookmarkId"), &id))
-		{
-			action = get_bookmark_action (t, bookmarks, id);
-		}
-	}
 
 	if (action == NULL)
 	{
 		action = EPHY_EDITABLE_TOOLBAR_CLASS
 			(parent_class)->get_action (etoolbar, type, name);
+	}
+
+	if (action == NULL && g_str_has_prefix (name, "GoBookmarkId"))
+	{
+		if (ephy_str_to_int (name + strlen ("GoBookmarkId"), &id))
+		{
+			action = get_bookmark_action (t, bookmarks, id);
+		}
 	}
 
 	return action;
