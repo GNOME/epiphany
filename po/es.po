@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-07 17:12+0200\n"
-"PO-Revision-Date: 2004-07-07 17:14+0200\n"
+"POT-Creation-Date: 2004-07-15 21:42+0200\n"
+"PO-Revision-Date: 2004-07-15 21:43+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -136,7 +136,8 @@ msgid "Allow popups"
 msgstr "Permitir ventanas emergentes"
 
 #: data/epiphany.schemas.in.h:3
-msgid "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
+msgid ""
+"Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Permite a los sitios abrir ventanas nuevas usando JavaScript (si JavaScript "
 "está activado)."
@@ -209,7 +210,8 @@ msgstr "Tipografía predeterminada"
 
 #: data/epiphany.schemas.in.h:12
 msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
-msgstr "Tipografía predeterminada. Los valores posibles son «serif» y «sans-serif»."
+msgstr ""
+"Tipografía predeterminada. Los valores posibles son «serif» y «sans-serif»."
 
 #: data/epiphany.schemas.in.h:13
 msgid "Enable Java"
@@ -268,7 +270,8 @@ msgid "Match case for find in page."
 msgstr "Coincidir con capitalización al buscar en la página"
 
 #: data/epiphany.schemas.in.h:26
-msgid "Middle click to open the web page pointed to by the currently selected text"
+msgid ""
+"Middle click to open the web page pointed to by the currently selected text"
 msgstr ""
 "Pulse el botón central del ratón para abrir la dirección a la que apunta en "
 "este momento el texto seleccionado"
@@ -363,7 +366,8 @@ msgstr ""
 
 #: data/epiphany.schemas.in.h:46
 msgid "Show the tab bar also when there is only one tab open."
-msgstr "Mostrar la barra de solapas también cuando sólo hay una solapa abierta."
+msgstr ""
+"Mostrar la barra de solapas también cuando sólo hay una solapa abierta."
 
 #: data/epiphany.schemas.in.h:47
 msgid "Show toolbars by default"
@@ -1043,15 +1047,15 @@ msgid_plural "%d downloads"
 msgstr[0] "%d descarga"
 msgstr[1] "%d descargas"
 
-#: embed/downloader-view.c:560 src/bookmarks/ephy-bookmarks-editor.c:691
+#: embed/downloader-view.c:561 src/bookmarks/ephy-bookmarks-editor.c:691
 msgid "File"
 msgstr "Archivo"
 
-#: embed/downloader-view.c:582
+#: embed/downloader-view.c:583
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:593
+#: embed/downloader-view.c:594
 msgid "Remaining"
 msgstr "Restantes"
 
@@ -1620,7 +1624,8 @@ msgstr "No se puede establecer una conexión con %s."
 #: embed/mozilla/GtkNSSDialogs.cpp:506
 #, c-format
 msgid "The certificate revocation list (CRL) from %s needs to be updated."
-msgstr "La lista de revocación de certificados (CRL) de %s necesita ser actualizada."
+msgstr ""
+"La lista de revocación de certificados (CRL) de %s necesita ser actualizada."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:511
 msgid "Please ask your system administrator for assistance."
@@ -1742,14 +1747,16 @@ msgstr "No se pudo verificar este certificado porque no se confía en él."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1334
 msgid "Could not verify this certificate because the issuer is not trusted."
-msgstr "No se pudo verificar este certificado porque no se confía en el emisor."
+msgstr ""
+"No se pudo verificar este certificado porque no se confía en el emisor."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1337
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "No se pudo verificar este certificado porque el emisor es desconocido."
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1340
-msgid "Could not verify this certificate because the CA certificate is invalid."
+msgid ""
+"Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 "No se pudo verificar este certificado porque el certificado de la AC es "
 "inválido."
@@ -1954,7 +1961,7 @@ msgid "History"
 msgstr "Histórico"
 
 #: lib/ephy-stock-icons.c:58 src/bookmarks/ephy-bookmarks-editor.c:1417
-#: src/bookmarks/ephy-topic-action.c:774 src/ephy-window.c:1096
+#: src/bookmarks/ephy-topic-action.c:985 src/ephy-window.c:1096
 msgid "Bookmarks"
 msgstr "Marcadores"
 
@@ -2016,22 +2023,31 @@ msgstr "Falló"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: src/bookmarks/ephy-bookmark-action.c:274
+#: src/bookmarks/ephy-bookmark-action.c:277
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
-#: src/bookmarks/ephy-bookmark-action.c:459
-msgid "_Open in New Tab"
-msgstr "_Abrir en una solapa nueva"
+#: src/bookmarks/ephy-bookmark-action.c:533
+#: src/bookmarks/ephy-bookmarks-editor.c:182
+#: src/bookmarks/ephy-bookmarks-editor.c:1041 src/ephy-history-window.c:169
+#: src/ephy-history-window.c:747
+msgid "Open in New _Tab"
+msgstr "Abrir en una _solapa nueva"
 
-#. File Menu
-#: src/bookmarks/ephy-bookmark-action.c:465
-#: src/bookmarks/ephy-bookmarks-editor.c:179
-#: src/bookmarks/ephy-bookmarks-editor.c:1040 src/ephy-history-window.c:166
-#: src/ephy-history-window.c:746
-msgid "_Open in New Window"
-msgstr "_Abrir en una ventana nueva"
+#: src/bookmarks/ephy-bookmark-action.c:539
+msgid "Open in New _Window"
+msgstr "Abrir en una _ventana nueva"
+
+#: src/bookmarks/ephy-bookmark-action.c:570
+#: src/bookmarks/ephy-topic-action.c:742
+msgid "Move _Left"
+msgstr "Mover a la _izquierda"
+
+#: src/bookmarks/ephy-bookmark-action.c:577
+#: src/bookmarks/ephy-topic-action.c:749
+msgid "Move Ri_ght"
+msgstr "Mover a la _derecha"
 
 #: src/bookmarks/ephy-bookmark-properties.c:232
 #, c-format
@@ -2083,15 +2099,16 @@ msgstr "Tema _nuevo"
 msgid "Create a new topic"
 msgstr "Crear un tema nuevo"
 
+#. File Menu
+#: src/bookmarks/ephy-bookmarks-editor.c:179
+#: src/bookmarks/ephy-bookmarks-editor.c:1040 src/ephy-history-window.c:166
+#: src/ephy-history-window.c:746
+msgid "_Open in New Window"
+msgstr "_Abrir en una ventana nueva"
+
 #: src/bookmarks/ephy-bookmarks-editor.c:180
 msgid "Open the selected bookmark in a new window"
 msgstr "Abre el marcador seleccionado en una ventana nueva"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:182
-#: src/bookmarks/ephy-bookmarks-editor.c:1041 src/ephy-history-window.c:169
-#: src/ephy-history-window.c:747
-msgid "Open in New _Tab"
-msgstr "Abrir en una _solapa nueva"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "Open the selected bookmark in a new tab"
@@ -2298,11 +2315,11 @@ msgstr "_Buscar:"
 msgid "Topics"
 msgstr "Temas"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1562 src/ephy-history-window.c:1326
+#: src/bookmarks/ephy-bookmarks-editor.c:1565 src/ephy-history-window.c:1330
 msgid "Title"
 msgstr "Título"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1569 src/ephy-history-window.c:1332
+#: src/bookmarks/ephy-bookmarks-editor.c:1571 src/ephy-history-window.c:1336
 msgid "Address"
 msgstr "Dirección"
 
@@ -2369,11 +2386,11 @@ msgid "A bookmark titled %s already exists for this page."
 msgstr "Ya existe un marcador llamado %s para esa página."
 
 #. This is the adjective, not the verb
-#: src/bookmarks/ephy-topic-action.c:258
+#: src/bookmarks/ephy-topic-action.c:273
 msgid "Empty"
 msgstr "Vacío"
 
-#: src/bookmarks/ephy-topic-action.c:377
+#: src/bookmarks/ephy-topic-action.c:444
 msgid "_Open in Tabs"
 msgstr "_Abrir en solapas nuevas"
 
@@ -2535,7 +2552,8 @@ msgid "_Recover"
 msgstr "_Recuperar"
 
 #: src/ephy-session.c:401
-msgid "Epiphany appears to have crashed or been killed the last time it was run."
+msgid ""
+"Epiphany appears to have crashed or been killed the last time it was run."
 msgstr ""
 "Epiphany parece haberse colgado o haber sido matado la última vez que se "
 "ejecutó."
@@ -3435,7 +3453,8 @@ msgstr "Ir arriba"
 
 #: src/toolbar.c:340
 msgid "Enter a web address to open, or a phrase to search for on the web"
-msgstr "Introduzca una dirección web a añadir, o una frase para buscar en la web"
+msgstr ""
+"Introduzca una dirección web a añadir, o una frase para buscar en la web"
 
 #: src/toolbar.c:352
 msgid "Zoom"
@@ -3473,6 +3492,9 @@ msgstr "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 #: src/window-commands.c:970
 msgid "A GNOME browser based on Mozilla"
 msgstr "Un navegador para Gnome basado en Mozilla"
+
+#~ msgid "_Open in New Tab"
+#~ msgstr "_Abrir en una solapa nueva"
 
 #~ msgid "All Files"
 #~ msgstr "Todos los archivos"
@@ -3539,9 +3561,6 @@ msgstr "Un navegador para Gnome basado en Mozilla"
 
 #~ msgid "Open Image in New Window"
 #~ msgstr "Abrir imagen en una ventana nueva"
-
-#~ msgid "Open in New Window"
-#~ msgstr "Abrir en una ventana nueva"
 
 #~ msgid "Paste"
 #~ msgstr "Pegar"
@@ -4648,4 +4667,3 @@ msgstr "Un navegador para Gnome basado en Mozilla"
 
 #~ msgid "Copyright (C) 2002 Marco Pesenti Gritti"
 #~ msgstr "Copyright © 2002 Marco Pesenti Gritti"
-
