@@ -230,7 +230,7 @@ ephy_bookmark_action_sync_icon (GtkAction *action, GParamSpec *pspec, GtkWidget 
 
 		if (pixbuf == NULL)
 		{
-			pixbuf = gtk_widget_render_icon (proxy, GTK_STOCK_JUMP_TO,
+			pixbuf = gtk_widget_render_icon (proxy, GTK_STOCK_NEW,
 					                 GTK_ICON_SIZE_MENU, NULL);
 		}
 

@@ -185,7 +185,7 @@ ephy_favicon_action_sync_icon (GtkAction *action, GParamSpec *pspec,
 	else
 	{
 		gtk_image_set_from_stock (GTK_IMAGE (image),
-					  GTK_STOCK_JUMP_TO,
+					  GTK_STOCK_NEW,
 					  GTK_ICON_SIZE_MENU);
 	}
 }
