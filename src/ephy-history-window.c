@@ -248,7 +248,7 @@ confirmation_dialog_response_cb (GtkWidget *dialog,
 static GtkWidget *
 confirmation_dialog_construct (EphyHistoryWindow *editor)
 {
-	GtkWidget *dialog;
+	GtkWidget *dialog, *button, *image;
 
 	dialog = gtk_message_dialog_new
 		(GTK_WINDOW (editor),
@@ -262,8 +262,13 @@ confirmation_dialog_construct (EphyHistoryWindow *editor)
 		 _("Clearing the browsing history will cause all"
 		   " history links to be permanently deleted."));
 	
-	gtk_dialog_add_button (GTK_DIALOG (dialog),
-			       _("C_lear"), GTK_RESPONSE_ACCEPT);
+	button = gtk_button_new_with_label (_("C_lear"));
+	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_BUTTON);
+	gtk_button_set_image (GTK_BUTTON (button), image);
+	gtk_widget_show (image);
+	gtk_widget_show (button);
+	gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, GTK_RESPONSE_ACCEPT);
+	
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Clear History"));
