@@ -1384,7 +1384,6 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	gboolean framed, has_background, can_open_in_new;
 	GtkWidget *widget;
 	EphyEmbedEventType type;
-	gboolean showing_edit_actions = FALSE;
 
 	/* Do not show the menu in print preview mode */
 	if (window->priv->mode == EPHY_WINDOW_MODE_PRINT_PREVIEW)
@@ -1407,8 +1406,8 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	}
 	else if (context & EMBED_CONTEXT_LINK)
 	{
-		showing_edit_actions = TRUE;
 		popup = "/EphyLinkPopup";
+		update_edit_actions_sensitivity (window, TRUE);
 	}
 	else if (context & EMBED_CONTEXT_IMAGE)
 	{
@@ -1417,15 +1416,15 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 #if MOZILLA_SNAPSHOT > 12
 	else if (context & EMBED_CONTEXT_INPUT)
 	{
-		showing_edit_actions = TRUE;
 		popup = "/EphyInputPopup";
+		update_edit_actions_sensitivity (window, FALSE);
 	}
 #endif
 	else
 	{
-		showing_edit_actions = TRUE;
 		popup = framed ? "/EphyFramedDocumentPopup" :
 				 "/EphyDocumentPopup";
+		update_edit_actions_sensitivity (window, TRUE);
 	}
 
 	widget = gtk_ui_manager_get_widget (GTK_UI_MANAGER (window->ui_merge),
@@ -1440,11 +1439,6 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	g_object_set (action, "sensitive", can_open_in_new, FALSE);
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
 	g_object_set (action, "sensitive", can_open_in_new, FALSE);
-
-	if (showing_edit_actions)
-	{
-		update_edit_actions_sensitivity (window, TRUE);
-	}
 
 	g_object_set_data_full (G_OBJECT (window), "context_event",
 				g_object_ref (event),
