@@ -591,6 +591,11 @@ backup_file (const char *original_filename, const char *extension)
 	char *template, *backup_filename;
 	int result = 0;
 
+	if (g_file_test (original_filename, G_FILE_TEST_EXISTS) == FALSE)
+	{
+		return;
+	}
+
 	template = g_strconcat (original_filename, ".backup-XXXXXX", NULL);
 	backup_filename = ephy_file_tmp_filename (template, extension);
 
@@ -706,9 +711,14 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 	eb->priv->smartbookmarks = ephy_node_new_with_id (db, SMARTBOOKMARKS_NODE_ID);
 	ephy_node_ref (eb->priv->smartbookmarks);
 
-	if (ephy_node_db_load_from_file (eb->priv->db, eb->priv->xml_file,
-					 EPHY_BOOKMARKS_XML_ROOT,
-					 EPHY_BOOKMARKS_XML_VERSION) == FALSE)
+	if (g_file_test (eb->priv->xml_file, G_FILE_TEST_EXISTS) == FALSE
+	    && g_file_test (eb->priv->rdf_file, G_FILE_TEST_EXISTS) == FALSE)
+	{
+		eb->priv->init_defaults = TRUE;
+	}
+	else if (ephy_node_db_load_from_file (eb->priv->db, eb->priv->xml_file,
+					      EPHY_BOOKMARKS_XML_ROOT,
+					      EPHY_BOOKMARKS_XML_VERSION) == FALSE)
 	{
 		/* save the corrupted files so the user can late try to
 		 * manually recover them. See bug #128308.

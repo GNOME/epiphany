@@ -1,5 +1,14 @@
 2004-03-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks.c: (backup_file),
+	(ephy_bookmarks_init):
+
+	Don't try to backup non-existing files :)
+	Also, when neither ephy-bookmarks.xml nor bookmarks.rdf exist,
+	assume we have a new profile and don't warn about missing bookmarks.
+
+2004-03-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-bookmark-action.c: (smart_child_added_cb),
 	(smart_child_removed_cb), (ephy_bookmark_action_init):
 
