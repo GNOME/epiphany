@@ -68,6 +68,11 @@ int         ephy_node_signal_connect_object (EphyNode *node,
 					     EphyNodeCallback callback,
 					     GObject *object);
 
+guint       ephy_node_signal_disconnect_object (EphyNode *node,
+					     EphyNodeSignalType type,
+					     EphyNodeCallback callback,
+					     GObject *object);
+
 void        ephy_node_signal_disconnect     (EphyNode *node,
 					     int signal_id);
 
