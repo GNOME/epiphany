@@ -690,7 +690,8 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	node = ephy_bookmarks_get_keywords (editor->priv->bookmarks);
 	
 	/* Keywords View */
-	key_view = ephy_node_view_new (node, NULL);
+	key_view = ephy_node_view_new (node, NULL); 
+	ephy_node_view_enable_drag_source (key_view);
 	ephy_node_view_set_browse_mode (key_view);
 	ephy_node_view_add_column (key_view, _("Topics"),
 			           EPHY_TREE_MODEL_NODE_COL_KEYWORD, TRUE);
@@ -717,6 +718,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 
 	/* Bookmarks View */
 	bm_view = ephy_node_view_new (node, editor->priv->bookmarks_filter);
+	ephy_node_view_set_hinted (bm_view, TRUE);
 	ephy_node_view_enable_drag_source (bm_view);
 	ephy_node_view_add_icon_column (bm_view, EPHY_TREE_MODEL_NODE_COL_ICON);
 	ephy_node_view_add_column (bm_view, _("Bookmarks"),

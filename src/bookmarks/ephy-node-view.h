@@ -80,6 +80,9 @@ void	      ephy_node_view_select_node              (EphyNodeView *view,
 
 void	      ephy_node_view_enable_drag_source       (EphyNodeView *view);
 
+void	      ephy_node_view_set_hinted		      (EphyNodeView *view,
+						       gboolean hinted);
+
 G_END_DECLS
 
 #endif /* EPHY_NODE_VIEW_H */

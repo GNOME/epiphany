@@ -258,6 +258,9 @@ ephy_node_view_button_press_cb (GtkTreeView *treeview,
 	if (event->button == 3)
 	{
 		g_signal_emit (G_OBJECT (view), ephy_node_view_signals[SHOW_POPUP], 0);
+		/* the event is handled, don't propagate it further (we avoid
+		 * changing the view with the right click this way) */
+		return TRUE;
 	}
 
 	return FALSE;
@@ -635,4 +638,12 @@ ephy_node_view_enable_drag_source (EphyNodeView *view)
 
 	egg_tree_multi_drag_add_drag_support (GTK_TREE_VIEW (view->priv->treeview));
 	ephy_dnd_enable_model_drag_source (GTK_WIDGET (view->priv->treeview));
+}
+
+void 
+ephy_node_view_set_hinted (EphyNodeView *view, gboolean hinted)
+{
+	g_return_if_fail (view != NULL);
+
+	gtk_tree_view_set_rules_hint (view->priv->treeview, hinted);
 }
