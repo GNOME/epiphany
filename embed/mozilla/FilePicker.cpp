@@ -270,24 +270,13 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
 NS_IMETHODIMP GFilePicker::GetDefaultString(nsAString& aDefaultString)
 #endif
 {
-	char *filename, *converted;
-
 	LOG ("GFilePicker::GetDefaultString")
 
-	filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (mDialog));
-	if (filename != NULL)
-	{
-		converted = g_filename_to_utf8(filename, -1, NULL, NULL, NULL);
-
 #if MOZILLA_SNAPSHOT < 18
-		*aDefaultString = ToNewUnicode (NS_ConvertUTF8toUTF16 (converted));
+	*aDefaultString = ToNewUnicode (mDefaultString);
 #else
-		CopyUTF8toUTF16 (converted, aDefaultString);
+	aDefaultString = mDefaultString;
 #endif
-	
-		g_free (filename);
-		g_free (converted);
-	}
 
 	return NS_OK;
 }
@@ -301,21 +290,19 @@ NS_IMETHODIMP GFilePicker::SetDefaultString(const nsAString& aDefaultString)
 	LOG ("GFilePicker::SetDefaultString to %s",
 	     NS_ConvertUCS2toUTF8 (aDefaultString).get())
 
-#if MOZILLA_SNAPSHOT < 18
-	if (aDefaultString)
-#else
-	if (aDefaultString.Length())
-#endif
+	mDefaultString.Assign (aDefaultString);
+
+	if (mMode == nsIFilePicker::modeSave)
 	{
 		/* set_current_name takes UTF-8, not a filename */
 #if MOZILLA_SNAPSHOT < 13
 		gtk_file_chooser_set_current_name
 			(GTK_FILE_CHOOSER (mDialog),
-			 NS_ConvertUCS2toUTF8 (aDefaultString).get());
+			 NS_ConvertUCS2toUTF8 (mDefaultString).get());
 #else
 		gtk_file_chooser_set_current_name
 			(GTK_FILE_CHOOSER (mDialog),
-			 NS_ConvertUTF16toUTF8 (aDefaultString).get());
+			 NS_ConvertUTF16toUTF8 (mDefaultString).get());
 #endif
 	}
 
@@ -389,8 +376,26 @@ NS_IMETHODIMP GFilePicker::SetDisplayDirectory(nsILocalFile *aDisplayDirectory)
 
 	LOG ("GFilePicker::SetDisplayDirectory to %s", dir.get())
 
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (mDialog),
-					     dir.get());
+	if (!mDefaultString.IsEmpty() && mMode != nsIFilePicker::modeSave)
+	{
+		char *defaultString, *filename;
+
+		defaultString = g_filename_from_utf8 (NS_ConvertUCS2toUTF8(mDefaultString).get(),
+						      -1, NULL, NULL, NULL);
+		if (defaultString)
+		{
+			filename = g_build_filename (dir.get(), defaultString, NULL);
+			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (mDialog), filename);
+			g_free (filename);
+		}
+		g_free (defaultString);
+
+	}
+	else
+	{
+		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (mDialog),
+						     dir.get());
+	}
 
 	return NS_OK;
 }
