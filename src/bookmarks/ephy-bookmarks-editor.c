@@ -502,13 +502,17 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	gboolean key_selection, bmk_selection;
 	gboolean key_normal = FALSE;
 	gboolean bmk_multiple_selection;
-	gboolean cut, copy, select_all;
+	gboolean cut, copy, paste, select_all;
 	EggActionGroup *action_group;
 	EggAction *action;
 	GList *selected;
 	GtkWidget *focus_widget;
 
+	bmk_focus = gtk_widget_is_focus (editor->priv->bm_view);
+	key_focus = gtk_widget_is_focus (editor->priv->key_view);
+	
 	focus_widget = gtk_window_get_focus (GTK_WINDOW (editor));
+	
 	if (GTK_IS_EDITABLE (focus_widget))
 	{
 		gboolean has_selection;
@@ -516,19 +520,16 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		has_selection = gtk_editable_get_selection_bounds
 			(GTK_EDITABLE (focus_widget), NULL, NULL);
 
-		select_all = TRUE;
+		select_all = paste = TRUE;
 		cut = has_selection;
 		copy = has_selection;
 	}
 	else
 	{
-		select_all = FALSE;
+		select_all = bmk_focus;
 		cut = FALSE;
 		copy = FALSE;
 	}
-
-	bmk_focus = gtk_widget_is_focus (editor->priv->bm_view);
-	key_focus = gtk_widget_is_focus (editor->priv->key_view);
 
 	bmk_selection = ephy_node_view_has_selection
 		(EPHY_NODE_VIEW (editor->priv->bm_view),
@@ -585,6 +586,8 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	g_object_set (action, "sensitive", cut, NULL);
 	action = egg_action_group_get_action (action_group, "Copy");
 	g_object_set (action, "sensitive", copy, NULL);
+	action = egg_action_group_get_action (action_group, "Paste");
+	g_object_set (action, "sensitive", paste, NULL);
 	action = egg_action_group_get_action (action_group, "SelectAll");
 	g_object_set (action, "sensitive", select_all, NULL);
 }
