@@ -1,5 +1,13 @@
 2004-01-10  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-window.c: (update_exit_fullscreen_popup_position),
+	(ephy_window_fullscreen):
+
+	Fix signal parameter, and add a NULL check. Fixes bug #131117,
+	patch by Martin Kretzschmar. (Backported from HEAD.)
+        
+2004-01-10  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-notebook.c: (ephy_notebook_finalize):
 
 	Call parent class' finalize method.
