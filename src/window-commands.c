@@ -708,6 +708,7 @@ window_cmd_help_about (EggAction *action,
 	};
 
 	gchar *documenters[] = {
+		"Patanjali Somayaji <patanjali@codito.com>",
 		NULL
 	};
 

@@ -38,6 +38,8 @@
 #include <gtk/gtkimage.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtkmessagedialog.h>
+#include <libgnome/gnome-help.h>
 
 static void
 prefs_dialog_class_init (PrefsDialogClass *klass);
@@ -236,13 +238,58 @@ prefs_dialog_show_page (PrefsDialog *pd,
 	gtk_notebook_set_current_page (GTK_NOTEBOOK (pd->priv->notebook), id);
 }
 
+static void 
+prefs_dialog_show_help (PrefsDialog *pd)
+{
+	GError *err;
+	gint id;
+	err = NULL;
+	gchar *help_preferences[] = {
+		"ephy-preferences-appearance",
+		"ephy-preferences-general",
+		"ephy-preferences-ui",
+		"ephy-preferences-advanced"
+	};
+
+	id = gtk_notebook_get_current_page (GTK_NOTEBOOK (pd->priv->notebook));
+
+	gnome_help_display ("epiphany", help_preferences [id], &err);
+	if (err != NULL) 
+	{
+		GtkWidget *err_dialog;
+		err_dialog = gtk_message_dialog_new (
+				GTK_WINDOW (pd), 
+				GTK_DIALOG_DESTROY_WITH_PARENT, 
+				GTK_MESSAGE_ERROR, 
+				GTK_BUTTONS_CLOSE,
+				_("Could not display help: %s"), 
+				  err->message);
+
+		g_signal_connect (G_OBJECT (err_dialog), "response", 
+				G_CALLBACK (gtk_widget_destroy),
+				NULL);
+		gtk_window_set_resizable (GTK_WINDOW (err_dialog), 
+				FALSE);
+		gtk_widget_show (err_dialog);
+		g_error_free (err);
+	}
+}
+
 static void
 prefs_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data)
 {
+	GError *err;
+	
 	if (response_id == GTK_RESPONSE_CLOSE)
 	{
 		gtk_widget_destroy (GTK_WIDGET(dialog));
+	} 
+	else if (response_id == GTK_RESPONSE_HELP)
+	{
+		PrefsDialog *pd = (PrefsDialog *)data;
+		prefs_dialog_show_help (pd);	
 	}
+		
 }
 
 static void
@@ -268,9 +315,10 @@ prefs_build_notebook (PrefsDialog *pd)
 
 	gtk_dialog_add_button (GTK_DIALOG (pd), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
 
+	gtk_dialog_add_button (GTK_DIALOG (pd), GTK_STOCK_HELP, GTK_RESPONSE_HELP);
 	g_signal_connect (pd, "response",
 			  G_CALLBACK (prefs_dialog_response_cb),
-			  NULL);
+			  pd);
 
 	gtk_container_set_border_width (GTK_CONTAINER (pd), 5);
 
