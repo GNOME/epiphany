@@ -1,3 +1,20 @@
+2003-11-03  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-marshal.list:
+
+	Remove unused types.
+
+	* embed/ephy-embed.c: (ephy_embed_base_init):
+	* lib/widgets/ephy-arrow-toolbutton.c:
+	(ephy_arrow_toolbutton_class_init):
+	* src/ephy-notebook.c: (ephy_notebook_class_init):
+
+	Use g_cclosure_marshal_* instead of our own ephy_marshal_*
+	where there is a one.
+
+	For signals returning a boolean, use the
+	g_signal_accumulator_true_handled accumulator.
+
 2003-11-02  Xan Lopez  <xan@masilla.org>
 
 	* data/epiphany.schemas.in:

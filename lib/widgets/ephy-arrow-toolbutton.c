@@ -114,7 +114,7 @@ ephy_arrow_toolbutton_class_init (EphyArrowToolButtonClass *klass)
 		 G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST | G_SIGNAL_RUN_CLEANUP,
                  G_STRUCT_OFFSET (EphyArrowToolButtonClass, menu_activated),
 		 NULL, NULL,
-		 ephy_marshal_VOID__VOID,
+		 g_cclosure_marshal_VOID__VOID,
 		 G_TYPE_NONE, 0);
 
 	g_type_class_add_private (object_class, sizeof (EphyArrowToolButtonPrivate));

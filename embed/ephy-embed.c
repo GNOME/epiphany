@@ -107,7 +107,7 @@ ephy_embed_base_init (gpointer g_class)
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyEmbedClass, link_message),
                               NULL, NULL,
-                              ephy_marshal_VOID__STRING,
+                              g_cclosure_marshal_VOID__STRING,
                               G_TYPE_NONE,
                               1,
 			      G_TYPE_STRING);
@@ -116,9 +116,9 @@ ephy_embed_base_init (gpointer g_class)
                               EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (EphyEmbedClass, context_menu),
-                              NULL, NULL,
-                              ephy_marshal_INT__OBJECT,
-                              G_TYPE_INT,
+                              g_signal_accumulator_true_handled, NULL,
+                              ephy_marshal_BOOLEAN__OBJECT,
+                              G_TYPE_BOOLEAN,
                               1,
 			      G_TYPE_OBJECT);
 	ephy_embed_signals[FAVICON] =
@@ -127,7 +127,7 @@ ephy_embed_base_init (gpointer g_class)
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyEmbedClass, favicon),
                               NULL, NULL,
-                              ephy_marshal_VOID__STRING,
+                              g_cclosure_marshal_VOID__STRING,
                               G_TYPE_NONE,
                               1,
 			      G_TYPE_STRING);
@@ -137,7 +137,7 @@ ephy_embed_base_init (gpointer g_class)
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyEmbedClass, js_status),
                               NULL, NULL,
-                              ephy_marshal_VOID__STRING,
+                              g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE,
                               1,
 			      G_TYPE_STRING);
@@ -147,7 +147,7 @@ ephy_embed_base_init (gpointer g_class)
                               G_SIGNAL_RUN_FIRST,
                               G_STRUCT_OFFSET (EphyEmbedClass, location),
                               NULL, NULL,
-                              ephy_marshal_VOID__STRING,
+                              g_cclosure_marshal_VOID__STRING,
                               G_TYPE_NONE,
                               1,
 			      G_TYPE_STRING);
@@ -228,9 +228,9 @@ ephy_embed_base_init (gpointer g_class)
                               EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (EphyEmbedClass, dom_mouse_click),
-                              NULL, NULL,
-                              ephy_marshal_INT__OBJECT,
-                              G_TYPE_INT,
+                              g_signal_accumulator_true_handled, NULL,
+                              ephy_marshal_BOOLEAN__OBJECT,
+                              G_TYPE_BOOLEAN,
                               1,
 			      G_TYPE_POINTER);
 	ephy_embed_signals[DOM_MOUSE_DOWN] =
@@ -238,9 +238,9 @@ ephy_embed_base_init (gpointer g_class)
                               EPHY_TYPE_EMBED,
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (EphyEmbedClass, dom_mouse_down),
-                              NULL, NULL,
-                              ephy_marshal_INT__OBJECT,
-                              G_TYPE_INT,
+                              g_signal_accumulator_true_handled, NULL,
+                              ephy_marshal_BOOLEAN__OBJECT,
+                              G_TYPE_BOOLEAN,
                               1,
 			      G_TYPE_POINTER);
 	ephy_embed_signals[SECURITY_CHANGE] =

@@ -142,7 +142,7 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (EphyNotebookClass, tab_added),
 			      NULL, NULL,
-			      ephy_marshal_VOID__OBJECT,
+			      g_cclosure_marshal_VOID__OBJECT,
 			      G_TYPE_NONE,
 			      1,
 			      GTK_TYPE_WIDGET);
@@ -152,7 +152,7 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (EphyNotebookClass, tab_removed),
 			      NULL, NULL,
-			      ephy_marshal_VOID__OBJECT,
+			      g_cclosure_marshal_VOID__OBJECT,
 			      G_TYPE_NONE,
 			      1,
 			      GTK_TYPE_WIDGET);
@@ -162,7 +162,7 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (EphyNotebookClass, tab_detached),
 			      NULL, NULL,
-			      ephy_marshal_VOID__OBJECT,
+			      g_cclosure_marshal_VOID__OBJECT,
 			      G_TYPE_NONE,
 			      1,
 			      GTK_TYPE_WIDGET);
@@ -172,7 +172,7 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (EphyNotebookClass, tabs_reordered),
 			      NULL, NULL,
-			      ephy_marshal_VOID__VOID,
+			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE,
 			      0);
 
