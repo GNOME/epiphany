@@ -54,32 +54,22 @@ INCLUDES = \
 noinst_LTLIBRARIES = libephymozillaembed.la
 
 libephymozillaembed_la_SOURCES = 	\
-	mozilla-embed.cpp	        \
-	mozilla-embed.h			\
-	mozilla-embed-shell.cpp		\
-	mozilla-embed-shell.h	        \
-	mozilla-embed-persist.cpp       \
-	mozilla-embed-persist.h		\
-	mozilla-prefs.cpp		\
-	mozilla-prefs.h		        \
-	mozilla-notifiers.cpp		\
-	mozilla-notifiers.h		\
-	mozilla-i18n.c			\
-	mozilla-i18n.h			\
 	BaseProtocolHandler.cpp         \
 	BaseProtocolHandler.h           \
 	BaseProtocolContentHandler.cpp  \
 	BaseProtocolContentHandler.h    \
 	ContentHandler.cpp		\
 	ContentHandler.h		\
+	EphyWrapper.cpp                 \
+	EphyWrapper.h	                \
 	EventContext.cpp                \
 	EventContext.h                  \
+	ExternalProtocolService.cpp     \
+	ExternalProtocolService.h	\
 	FilePicker.cpp			\
 	FilePicker.h                    \
 	FtpProtocolHandler.cpp          \
 	FtpProtocolHandler.h            \
-	EphyWrapper.cpp                 \
-	EphyWrapper.h	                \
 	GlobalHistory.cpp               \
 	GlobalHistory.h                 \
 	IRCProtocolHandler.cpp          \
@@ -98,11 +88,21 @@ libephymozillaembed_la_SOURCES = 	\
 	PromptService.h			\
 	ProgressListener.cpp		\
 	ProgressListener.h		\
-	nsUnicharUtils.cpp		\
-	nsUnicharUtils.h		\
-	ExternalProtocolService.cpp     \
-	ExternalProtocolService.h	\
 	StartHereProtocolHandler.cpp	\
 	StartHereProtocolHandler.h	\
 	EphyEventListener.cpp		\
-	EphyEventListener.h
+	EphyEventListener.h		\
+	mozilla-embed.cpp	        \
+	mozilla-embed.h			\
+	mozilla-embed-persist.cpp       \
+	mozilla-embed-persist.h		\
+	mozilla-embed-shell.cpp		\
+	mozilla-embed-shell.h	        \
+	mozilla-i18n.c			\
+	mozilla-i18n.h			\
+	mozilla-notifiers.cpp		\
+	mozilla-notifiers.h		\
+	mozilla-prefs.cpp		\
+	mozilla-prefs.h			\
+	nsUnicharUtils.cpp		\
+	nsUnicharUtils.h

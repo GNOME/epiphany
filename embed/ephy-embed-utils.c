@@ -76,7 +76,6 @@ ephy_embed_utils_save (GtkWidget *window,
 		ephy_embed_get_location (embed,
 					 flags &
 					 EMBED_PERSIST_MAINDOC,
-					 FALSE,
 					 &target);
 	}
 

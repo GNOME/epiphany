@@ -337,8 +337,7 @@ embed_popup_copy_location_cmd (BonoboUIComponent *uic,
                                const char* verbname)
 {
 	char *location;
-	ephy_embed_get_location (popup->priv->embed, FALSE,
-				   FALSE, &location);
+	ephy_embed_get_location (popup->priv->embed, FALSE, &location);
 	embed_popup_copy_to_clipboard (popup, location);
 	g_free (location);
 }
@@ -563,7 +562,7 @@ embed_popup_save_page_as_cmd (BonoboUIComponent *uic,
 	char *location;
 
 	ephy_embed_get_location (popup->priv->embed,
-				   FALSE, FALSE, &location);
+				   FALSE, &location);
 	save_url (popup, TRUE, FALSE, location);
 	g_free (location);
 }
@@ -584,7 +583,7 @@ embed_popup_open_frame_cmd (BonoboUIComponent *uic,
 	char *location;
 
 	ephy_embed_get_location (popup->priv->embed,
-				   FALSE, FALSE, &location);
+				   FALSE, &location);
 
 	ephy_embed_load_url (popup->priv->embed, location);
 }

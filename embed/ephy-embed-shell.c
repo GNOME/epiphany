@@ -318,34 +318,6 @@ ephy_embed_shell_get_font_list (EphyEmbedShell *shell,
 }
 
 gresult
-ephy_embed_shell_set_permission (EphyEmbedShell *shell,
-				 const char *url,
-				 PermissionType type,
-				 gboolean allow)
-{
-	EphyEmbedShellClass *klass = EPHY_EMBED_SHELL_GET_CLASS (shell);
-        return klass->set_permission (shell, url, type, allow);
-}
-
-gresult
-ephy_embed_shell_list_permissions (EphyEmbedShell *shell,
-				   PermissionType type,
-				   GList **permissions)
-{
-	EphyEmbedShellClass *klass = EPHY_EMBED_SHELL_GET_CLASS (shell);
-        return klass->list_permissions (shell, type, permissions);
-}
-
-gresult
-ephy_embed_shell_remove_permissions (EphyEmbedShell *shell,
-				     PermissionType type,
-				     GList *permissions)
-{
-	EphyEmbedShellClass *klass = EPHY_EMBED_SHELL_GET_CLASS (shell);
-        return klass->remove_permissions (shell, type, permissions);
-}
-
-gresult
 ephy_embed_shell_list_cookies (EphyEmbedShell *shell,
 			       GList **cookies)
 {
@@ -442,26 +414,6 @@ impl_get_downloader_view (EphyEmbedShell *shell)
 }
 
 gresult
-ephy_embed_shell_free_permissions (EphyEmbedShell *shell,
-				   GList *permissions)
-{
-	GList *l;
-
-	for (l = permissions; l != NULL; l = l->next)
-	{
-		PermissionInfo *info = (PermissionInfo *)l->data;
-
-		g_free (info->type);
-		g_free (info->domain);
-		g_free (info);
-	}
-
-	g_list_free (permissions);
-
-	return G_OK;
-}
-
-gresult
 ephy_embed_shell_free_cookies (EphyEmbedShell *shell,
 			       GList *cookies)
 {
@@ -471,8 +423,7 @@ ephy_embed_shell_free_cookies (EphyEmbedShell *shell,
 	{
 		CookieInfo *info = (CookieInfo *)l->data;
 
-		g_free (info->base.type);
-		g_free (info->base.domain);
+		g_free (info->domain);
 		g_free (info->name);
 		g_free (info->value);
 		g_free (info->path);

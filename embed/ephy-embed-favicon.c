@@ -124,7 +124,7 @@ location_changed_cb (EphyEmbed *embed,
 {
 	char *location;
 
-	ephy_embed_get_location (embed, TRUE, FALSE, &location);
+	ephy_embed_get_location (embed, TRUE, &location);
 	ephy_favicon_set_url (EPHY_FAVICON (favicon), location);
 
 	g_free (location);
@@ -141,7 +141,7 @@ favicon_cb (EphyEmbed *embed,
 	if (favicon->priv->embed == NULL)
 		return;
 
-	ephy_embed_get_location (favicon->priv->embed, TRUE, TRUE, &url);
+	ephy_embed_get_location (favicon->priv->embed, TRUE, &url);
 
 	g_object_get (G_OBJECT (favicon),
 		      "cache", &cache,

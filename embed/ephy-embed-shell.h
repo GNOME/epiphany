@@ -63,20 +63,11 @@ typedef struct
 } FileFormat;
 
 /**
- * BlockedHost: a blocked host
- */
-typedef struct
-{
-        gchar *type;
-        gchar *domain;
-} PermissionInfo;
-
-/**
  * Cookie: the type of cookies
  */
 typedef struct
 {
-        PermissionInfo base;
+	gchar *domain;
         gchar *name;
         gchar *value;
         gchar *path;
@@ -128,7 +119,6 @@ typedef enum
 	JAVA_CONSOLE_CAP = 1 << 3,
 	JS_CONSOLE_CAP = 1 << 4,
 	CHARSETS_CAP = 1 << 5,
-	PERMISSIONS_CAP = 1 << 6,
 	COOKIES_CAP = 1 << 7,
 	PASSWORDS_CAP = 1 << 8,
 	FILEPICKER_CAP = 1 << 9
@@ -172,16 +162,6 @@ struct EphyEmbedShellClass
 						 const char *fontType,
 						 GList **fontList,
 						 char **default_font);
-	gresult         (* set_permission)      (EphyEmbedShell *shell,
-						 const char *url,
-					         PermissionType type,
-					         gboolean allow);
-	gresult         (* list_permissions)    (EphyEmbedShell *shell,
-						 PermissionType type,
-						 GList **permissions);
-	gresult         (* remove_permissions)  (EphyEmbedShell *shell,
-						 PermissionType type,
-						 GList *permissions);
 	gresult         (* list_cookies)        (EphyEmbedShell *shell,
 						 GList **cokies);
 	gresult         (* remove_cookies)      (EphyEmbedShell *shell,
@@ -251,23 +231,6 @@ gresult           ephy_embed_shell_get_font_list       (EphyEmbedShell *shell,
 							const char *fontType,
 							GList **fontList,
 							char **default_font);
-
-/* Permissions */
-gresult           ephy_embed_shell_set_permission      (EphyEmbedShell *shell,
-							const char *url,
-					                PermissionType type,
-							gboolean allow);
-
-gresult           ephy_embed_shell_list_permissions    (EphyEmbedShell *shell,
-							PermissionType type,
-							GList **permissions);
-
-gresult		  ephy_embed_shell_free_permissions    (EphyEmbedShell *shell,
-							GList *permissions);
-
-gresult           ephy_embed_shell_remove_permissions  (EphyEmbedShell *shell,
-							PermissionType type,
-							GList *permissions);
 
 /* Cookies */
 gresult           ephy_embed_shell_list_cookies        (EphyEmbedShell *shell,

@@ -62,7 +62,6 @@ public:
 
 	nsresult GetMainDocumentUrl (nsCString &url);
 	nsresult GetDocumentUrl (nsCString &url);
-	nsresult GetDocumentTitle (char **title);
 
 	nsresult ReloadDocument ();
 	nsresult LoadDocument(nsISupports *aPageDescriptor, PRUint32 aDisplayType);
@@ -95,24 +94,7 @@ public:
 
 	nsresult GetMainDOMDocument (nsIDOMDocument **aDOMDocument);
 
-	nsresult GetLinkInterfaceItems (GList **list);
-
-	nsresult GetRealURL (nsCString &ret);
-
 	nsresult SelectAll (void);
-
-	nsresult ScrollUp (void);
-	nsresult ScrollDown (void);
-	nsresult ScrollLeft (void);
-	nsresult ScrollRight (void);
-
-	nsresult FineScroll (int horiz, int vert);
-
-	nsresult GetLastModified (gchar **ret);
-	nsresult GetImages (GList **ret);
-	nsresult GetForms (GList **ret);
-	nsresult GetLinks (GList **ret);
-	nsresult EvaluateJS (char *script);
 
 	nsresult PushTargetDocument (nsIDOMDocument *domDoc);
 	nsresult PopTargetDocument ();

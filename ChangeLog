@@ -1,5 +1,39 @@
 2003-01-01  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* embed/Makefile.am:
+	* embed/ephy-embed-favicon.c: (location_changed_cb), (favicon_cb):
+	* embed/ephy-embed-popup.c: (embed_popup_copy_location_cmd),
+	(embed_popup_save_page_as_cmd), (embed_popup_open_frame_cmd):
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_free_cookies):
+	* embed/ephy-embed-shell.h:
+	* embed/ephy-embed-utils.c: (ephy_embed_utils_save):
+	* embed/ephy-embed.c: (ephy_embed_get_location),
+	(ephy_embed_shistory_copy):
+	* embed/ephy-embed.h:
+	* embed/mozilla/EphyWrapper.cpp:
+	* embed/mozilla/EphyWrapper.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/mozilla-embed-shell.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* lib/Makefile.am:
+	* lib/toolbar/Makefile.am:
+	* lib/widgets/Makefile.am:
+	* src/Makefile.am:
+	* src/bookmarks/ephy-new-bookmark.c: (build_editing_table):
+	* src/ephy-nautilus-view.c: (gnv_embed_location_cb),
+	(gnv_popup_cmd_frame_in_new_window):
+	* src/ephy-shell.c: (build_homepage_url):
+	* src/ephy-tab.c: (ephy_tab_location_cb):
+	* src/pdm-dialog.c: (pdm_dialog_cookie_add):
+	* src/popup-commands.c: (popup_cmd_frame_in_new_tab),
+	(popup_cmd_frame_in_new_window):
+
+	Cleanup unused code.
+	Reorder build.
+	In new bookmark dialog enter activate ok.
+
+2003-01-01  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* embed/ephy-history.c: (ephy_history_clear),
 	(ephy_history_remove):
 	* src/bookmarks/ephy-bookmarks.c:

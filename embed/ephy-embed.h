@@ -65,8 +65,7 @@ typedef enum
 	EMBED_SCROLL_CAP = 1 << 8,
 	EMBED_SECURITY_CAP = 1 << 9,
 	EMBED_CHARSET_CAP = 1 << 10,
-	EMBED_SHISTORY_CAP = 1 << 11,
-	EMBED_FINE_SCROLL_CAP = 1 << 12
+	EMBED_SHISTORY_CAP = 1 << 11
 } EmbedCapabilities;
 
 typedef struct
@@ -153,14 +152,6 @@ typedef enum
 
 typedef enum
 {
-	EMBED_SCROLL_UP,
-	EMBED_SCROLL_DOWN,
-	EMBED_SCROLL_LEFT,
-	EMBED_SCROLL_RIGHT
-} EmbedScrollDirection;
-
-typedef enum
-{
 	STATE_IS_UNKNOWN,
 	STATE_IS_INSECURE,
 	STATE_IS_BROKEN,
@@ -237,17 +228,12 @@ struct EphyEmbedClass
 					    char **title);
 	gresult   (* get_location)         (EphyEmbed *embed,
 				            gboolean toplevel,
-				            gboolean requested,
 				            char **location);
 	gresult   (* reload)               (EphyEmbed *embed,
 					    EmbedReloadFlags flags);
 	gresult   (* copy_page)		   (EphyEmbed *dest,
 					    EphyEmbed *source,
 					    EmbedDisplayType display_type);
-	gresult   (* grab_focus)           (EphyEmbed *embed);
-	gresult   (* get_link_tags)        (EphyEmbed *embed,
-					    const char *link_type,
-					    GList **tags);
 	gresult   (* zoom_set)             (EphyEmbed *embed,
 					    int zoom,
 					    gboolean reflow);
@@ -273,10 +259,6 @@ struct EphyEmbedClass
 					    int nth);
 	gboolean  (* shistory_copy)        (EphyEmbed *source,
 				            EphyEmbed *dest);
-	gresult   (* scroll)               (EphyEmbed *embed,
-					    EmbedScrollDirection direction);
-	gresult	  (* fine_scroll)	   (EphyEmbed *embed,
-					    int horiz, int vert);
 	gresult   (* get_security_level)   (EphyEmbed *embed,
 					    EmbedSecurityLevel *level,
 					    char **description);
@@ -344,7 +326,6 @@ gresult       ephy_embed_get_title            (EphyEmbed *embed,
 
 gresult       ephy_embed_get_location         (EphyEmbed *embed,
 					       gboolean toplevel,
-					       gboolean requested,
 					       char **location);
 
 gresult       ephy_embed_reload               (EphyEmbed *embed,
@@ -353,16 +334,6 @@ gresult       ephy_embed_reload               (EphyEmbed *embed,
 gresult	      ephy_embed_copy_page	      (EphyEmbed *dest,
 					       EphyEmbed *source,
 					       EmbedDisplayType display_type);
-
-gresult       ephy_embed_grab_focus           (EphyEmbed *embed);
-
-/* Link */
-gresult       ephy_embed_get_favicon_location (EphyEmbed *embed,
-					       char **url);
-
-gresult       ephy_embed_get_link_tags        (EphyEmbed *embed,
-					       const char *link_type,
-					       GList **tags);
 
 /* Zoom */
 gresult       ephy_embed_zoom_set             (EphyEmbed *embed,
@@ -407,12 +378,6 @@ gboolean      ephy_embed_shistory_copy        (EphyEmbed *source,
 				               EphyEmbed *dest);
 
 /* Utils */
-
-gresult       ephy_embed_scroll               (EphyEmbed *embed,
-					       EmbedScrollDirection direction);
-
-gresult       ephy_embed_fine_scroll          (EphyEmbed *embed,
-					       int horiz, int vert);
 
 gresult       ephy_embed_get_security_level   (EphyEmbed *embed,
 					       EmbedSecurityLevel *level,

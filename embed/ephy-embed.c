@@ -385,11 +385,10 @@ ephy_embed_get_title (EphyEmbed *embed,
 gresult
 ephy_embed_get_location (EphyEmbed *embed,
                          gboolean toplevel,
-                         gboolean requested,
                          char **location)
 {
 	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
-        return klass->get_location (embed, toplevel, requested, location);
+        return klass->get_location (embed, toplevel, location);
 }
 
 gresult
@@ -407,22 +406,6 @@ ephy_embed_copy_page (EphyEmbed *dest,
 {
 	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (dest);
 	return klass->copy_page (dest, source, display_type);
-}
-
-gresult
-ephy_embed_grab_focus (EphyEmbed *embed)
-{
-	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
-        return klass->grab_focus (embed);
-}
-
-gresult
-ephy_embed_get_link_tags (EphyEmbed *embed,
-                            const char *link_type,
-                            GList **tags)
-{
-	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
-        return klass->get_link_tags (embed, link_type, tags);
 }
 
 gresult
@@ -532,22 +515,6 @@ ephy_embed_shistory_copy (EphyEmbed *source,
 {
 	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (source);
         return klass->shistory_copy (source, dest);
-}
-
-gresult
-ephy_embed_scroll (EphyEmbed *embed,
-                   EmbedScrollDirection direction)
-{
-	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
-        return klass->scroll (embed, direction);
-}
-
-gresult
-ephy_embed_fine_scroll (EphyEmbed *embed,
-			int horiz, int vert)
-{
-	EphyEmbedClass *klass = EPHY_EMBED_GET_CLASS (embed);
-        return klass->fine_scroll (embed, horiz, vert);
 }
 
 gresult

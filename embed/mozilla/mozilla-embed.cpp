@@ -93,7 +93,6 @@ impl_get_title (EphyEmbed *embed,
 static gresult 
 impl_get_location (EphyEmbed *embed, 
                    gboolean toplevel,
-                   gboolean requested,
                    char **location);
 static gresult 
 impl_reload (EphyEmbed *embed, 
@@ -102,12 +101,6 @@ static gresult
 impl_copy_page (EphyEmbed *dest,
 		EphyEmbed *source,
 		EmbedDisplayType display_type);
-static gresult 
-impl_grab_focus (EphyEmbed *embed);
-static gresult
-impl_get_link_tags (EphyEmbed *embed,
-                    const char *link_type,
-                    GList **tags);
 static gresult
 impl_zoom_set (EphyEmbed *embed, 
                int zoom, 
@@ -147,12 +140,6 @@ impl_shistory_go_nth (EphyEmbed *embed,
 static gboolean
 impl_shistory_copy (EphyEmbed *source,
                     EphyEmbed *dest);
-static gresult
-impl_scroll (EphyEmbed *embed, 
-             EmbedScrollDirection direction);
-static gresult
-impl_fine_scroll (EphyEmbed *embed,
-		  int horiz, int vert);
 static gresult
 impl_get_security_level (EphyEmbed *embed, 
                          EmbedSecurityLevel *level,
@@ -325,8 +312,6 @@ ephy_embed_init (EphyEmbedClass *embed_class)
 	embed_class->get_location = impl_get_location;
 	embed_class->reload = impl_reload;
 	embed_class->copy_page = impl_copy_page;
-	embed_class->grab_focus = impl_grab_focus;
-	embed_class->get_link_tags = impl_get_link_tags;
 	embed_class->zoom_set = impl_zoom_set;
 	embed_class->zoom_get = impl_zoom_get;
 	embed_class->selection_can_cut = impl_selection_can_cut;
@@ -340,8 +325,6 @@ ephy_embed_init (EphyEmbedClass *embed_class)
 	embed_class->shistory_get_pos = impl_shistory_get_pos;
 	embed_class->shistory_go_nth = impl_shistory_go_nth;
 	embed_class->shistory_copy = impl_shistory_copy;
-	embed_class->scroll = impl_scroll;
-	embed_class->fine_scroll = impl_fine_scroll;
 	embed_class->get_security_level = impl_get_security_level;
 	embed_class->find = impl_find;
 	embed_class->set_charset = impl_set_charset;
@@ -462,8 +445,6 @@ impl_get_capabilities (EphyEmbed *embed,
 	        EMBED_ZOOM_CAP |
 	        EMBED_PRINT_CAP |
 	        EMBED_FIND_CAP |
-	        EMBED_SCROLL_CAP |
-		EMBED_FINE_SCROLL_CAP |
 	        EMBED_SECURITY_CAP |
 	        EMBED_CHARSET_CAP |
 	        EMBED_SHISTORY_CAP );
@@ -523,7 +504,7 @@ impl_can_go_up (EphyEmbed *embed)
 	char *s;
 	gresult result;
 
-	if (ephy_embed_get_location (embed, TRUE, FALSE, &location) != G_OK)
+	if (ephy_embed_get_location (embed, TRUE, &location) != G_OK)
 	  return G_FAILED;
 	g_return_val_if_fail (location != NULL, G_FAILED);
 	if ((s = mozilla_embed_get_uri_parent (location)) != NULL)
@@ -547,7 +528,7 @@ impl_get_go_up_list (EphyEmbed *embed, GSList **l)
 	char *location;
 	char *s;
 	
-	if (ephy_embed_get_location (embed, TRUE, FALSE, &location) != G_OK)
+	if (ephy_embed_get_location (embed, TRUE, &location) != G_OK)
 		return G_FAILED;
 	g_return_val_if_fail (location != NULL, G_FAILED);
 	
@@ -586,7 +567,7 @@ impl_go_up (EphyEmbed *embed)
 	char *uri;
 	char *parent_uri;
 	
-	ephy_embed_get_location (embed, TRUE, FALSE, &uri);
+	ephy_embed_get_location (embed, TRUE, &uri);
 	g_return_val_if_fail (uri != NULL, G_FAILED);
 	
 	parent_uri = mozilla_embed_get_uri_parent (uri);
@@ -708,7 +689,6 @@ impl_get_title (EphyEmbed *embed,
 static gresult 
 impl_get_location (EphyEmbed *embed, 
                    gboolean toplevel,
-                   gboolean requested,
                    char **location)
 {
 	char *l;
@@ -726,22 +706,14 @@ impl_get_location (EphyEmbed *embed,
 		return G_FAILED;
 	}
 	
-	/* FIXME !toplevel requested not implemented */
-	
 	if (toplevel)
 	{
 		l = gtk_moz_embed_get_location 
 			(GTK_MOZ_EMBED(embed));
 	}
-	else if (!toplevel)
+	else
 	{
 		rv = wrapper->GetDocumentUrl (url);
-		l = (NS_SUCCEEDED (rv) && !url.IsEmpty()) ?
-		     g_strdup (url.get()) : NULL;	   	
-	}
-	else if (requested)
-	{
-		rv = wrapper->GetRealURL (url);
 		l = (NS_SUCCEEDED (rv) && !url.IsEmpty()) ?
 		     g_strdup (url.get()) : NULL;	   	
 	}
@@ -802,22 +774,6 @@ impl_copy_page (EphyEmbed *dest,
         if (NS_FAILED(rv)) return G_FAILED;
 
         return G_OK;
-}
-
-static gresult 
-impl_grab_focus (EphyEmbed *embed)
-{
-	gtk_widget_grab_focus (GTK_BIN (embed)->child);
-	
-	return G_OK;
-}
-
-static gresult
-impl_get_link_tags (EphyEmbed *embed,
-                    const char *link_type,
-                    GList **tags)
-{
-	return G_NOT_IMPLEMENTED;
 }
 
 static gresult
@@ -1076,47 +1032,6 @@ impl_shistory_copy (EphyEmbed *source,
 	rv = s_wrapper->CopyHistoryTo (d_wrapper);
 
 	return NS_SUCCEEDED(rv) ? G_OK : G_FAILED;
-}
-
-static gresult
-impl_scroll (EphyEmbed *embed, 
-             EmbedScrollDirection direction)
-{
-	EphyWrapper *wrapper;
-	
-	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
-	g_return_val_if_fail (wrapper != NULL, G_FAILED);
-
-	switch (direction)
-	{
-	case EMBED_SCROLL_UP:
-		wrapper->ScrollUp ();
-		break;
-	case EMBED_SCROLL_DOWN:
-		wrapper->ScrollDown ();
-		break;
-	case EMBED_SCROLL_LEFT:
-		wrapper->ScrollLeft ();
-		break;
-	case EMBED_SCROLL_RIGHT:
-		wrapper->ScrollRight ();
-		break;
-	}
-	
-	return G_OK;
-}
-
-static gresult
-impl_fine_scroll (EphyEmbed *embed, int horiz, int vert)
-{
-	EphyWrapper *wrapper;
-	
-	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
-	g_return_val_if_fail (wrapper != NULL, G_FAILED);
-
-	wrapper->FineScroll (horiz, vert);
-
-	return G_OK;
 }
 
 static gresult

@@ -46,9 +46,7 @@
 #include <nsIFontList.h>
 #include <nsISupportsPrimitives.h>
 #include <nsReadableUtils.h>
-#include <nsIPermissionManager.h>
 #include <nsICookieManager.h>
-#include <nsIPermission.h>
 #include <nsIPasswordManager.h>
 #include <nsIPassword.h>
 #include <nsICookie.h>
@@ -91,19 +89,6 @@ impl_get_font_list (EphyEmbedShell *shell,
 		    const char *fontType,
 		    GList **fontList,
 		    char **default_font);
-static gresult           
-impl_set_permission (EphyEmbedShell *shell,
-		     const char *url, 
-		     PermissionType type,
-		     gboolean allow);
-static gresult           
-impl_list_permissions (EphyEmbedShell *shell,
-		       PermissionType type, 
-		       GList **permissions);
-static gresult           
-impl_remove_permissions (EphyEmbedShell *shell,
-		         PermissionType type,
-		         GList *permissions);
 static gresult           
 impl_list_cookies (EphyEmbedShell *shell,
 		   GList **cookies);
@@ -191,9 +176,6 @@ mozilla_embed_shell_class_init (MozillaEmbedShellClass *klass)
 	shell_class->get_charset_titles = impl_get_charset_titles;
 	shell_class->get_charset_groups = impl_get_charset_groups;
 	shell_class->get_font_list = impl_get_font_list;
-	shell_class->set_permission = impl_set_permission;
-	shell_class->list_permissions = impl_list_permissions;
-	shell_class->remove_permissions = impl_remove_permissions;
 	shell_class->list_cookies = impl_list_cookies;
 	shell_class->remove_cookies = impl_remove_cookies;
 	shell_class->list_passwords = impl_list_passwords;
@@ -533,7 +515,6 @@ impl_get_capabilities (EphyEmbedShell *shell,
 	          JAVA_CONSOLE_CAP |
 	          JS_CONSOLE_CAP |
 	          CHARSETS_CAP |
-	          PERMISSIONS_CAP |
 	          COOKIES_CAP |
 	          PASSWORDS_CAP);
 	
@@ -777,95 +758,6 @@ impl_get_font_list (EphyEmbedShell *shell,
 }
 
 static gresult           
-impl_set_permission (EphyEmbedShell *shell,
-		     const char *url, 
-		     PermissionType type,
-		     gboolean allow)
-{
-	nsresult rv;
-	nsCOMPtr<nsIPermissionManager> permissionManager =
-                        do_CreateInstance (NS_PERMISSIONMANAGER_CONTRACTID);
-
-        rv = permissionManager->Add (nsDependentCString(url),
-        			     allow ? PR_TRUE : PR_FALSE, type);
-	if (NS_FAILED(rv)) return G_FAILED;
-
-	return G_OK;
-}
-
-static gresult           
-impl_list_permissions (EphyEmbedShell *shell,
-		       PermissionType type, 
-		       GList **permissions)
-{
-        nsresult result;
-
-	*permissions = NULL;
-	
-	nsCOMPtr<nsIPermissionManager> permissionManager = 
-                        do_CreateInstance (NS_PERMISSIONMANAGER_CONTRACTID);
-        nsCOMPtr<nsISimpleEnumerator> permissionEnumerator;
-        result = permissionManager->GetEnumerator (getter_AddRefs(permissionEnumerator));
-        if (NS_FAILED(result)) return G_FAILED;
-	
-        PRBool enumResult;
-        for (permissionEnumerator->HasMoreElements(&enumResult) ;
-             enumResult == PR_TRUE ;
-             permissionEnumerator->HasMoreElements(&enumResult))
-        {
-                nsCOMPtr<nsIPermission> nsPermission;
-                result = permissionEnumerator->GetNext (getter_AddRefs(nsPermission));
-                if (NS_FAILED(result)) return G_FAILED;
-
-                PRInt32 cType;
-                nsPermission->GetType (&cType);
-                if (cType == type)
-                {
-                        PermissionInfo *b = g_new0 (PermissionInfo, 1);
-                        gchar *tmp = NULL;
-
-                        nsPermission->GetHost (&tmp);
-                        b->domain = g_strdup (tmp);
-                        nsMemory::Free (tmp);
-
-                        PRBool cap;
-                        nsPermission->GetCapability (&cap);
-                        if (cap == PR_TRUE) 
-                                b->type = g_strdup (_("Allowed"));
-                        else 
-                                b->type = g_strdup (_("Blocked"));
-
-                        *permissions = g_list_prepend (*permissions, b);
-                }
-        }
-
-        *permissions = g_list_reverse (*permissions);
-	
-	return G_OK;
-}
-
-static gresult           
-impl_remove_permissions (EphyEmbedShell *shell,
-		         PermissionType type,
-		         GList *permissions)
-{
-	nsresult result;
-        nsCOMPtr<nsIPermissionManager> permissionManager =
-                        do_CreateInstance (NS_PERMISSIONMANAGER_CONTRACTID);
-
-        for (GList *permissions = g_list_first(permissions); permissions != NULL;
-             permissions = g_list_next(permissions))
-        {
-                PermissionInfo *b = (PermissionInfo *)permissions->data;
-                result = permissionManager->Remove (nsDependentCString(b->domain),
-                				    type);
-                if (NS_FAILED(result)) return G_FAILED;
-        };
-
-	return G_OK;
-}
-
-static gresult           
 impl_list_cookies (EphyEmbedShell *shell,
 		   GList **cookies)
 {
@@ -894,7 +786,7 @@ impl_list_cookies (EphyEmbedShell *shell,
                 nsCAutoString transfer;
 
                 nsCookie->GetHost (transfer);
-                c->base.domain = g_strdup (transfer.get());
+                c->domain = g_strdup (transfer.get());
                 nsCookie->GetName (transfer);
                 c->name = g_strdup (transfer.get());
                 nsCookie->GetValue (transfer);
@@ -938,7 +830,7 @@ impl_remove_cookies (EphyEmbedShell *shell,
         {
                 CookieInfo *c = (CookieInfo *)cl->data;
 
-                result = cookieManager->Remove (NS_LITERAL_CSTRING(c->base.domain),
+                result = cookieManager->Remove (NS_LITERAL_CSTRING(c->domain),
                                                 NS_LITERAL_CSTRING(c->name),
                                                 NS_LITERAL_CSTRING(c->path),
                                                 PR_FALSE);
