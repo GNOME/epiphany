@@ -1,15 +1,15 @@
 # epiphany korean translation
 # Young-Ho Cha <ganadist@mizi.com>, 2003.
-# Changwoo Ryu <cwryu@debian.org>, 2003.
+# Changwoo Ryu <cwryu@debian.org>, 2003-2004.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany 1.1\n"
+"Project-Id-Version: epiphany 1.1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-09 23:58+0900\n"
-"PO-Revision-Date: 2004-01-09 23:59+0900\n"
+"POT-Creation-Date: 2004-01-21 22:41+0900\n"
+"PO-Revision-Date: 2004-01-21 22:55+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
-"Language-Team: GTP Korean <gnome-kr-translation@gnome.or.kr>\n"
+"Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -60,18 +60,52 @@ msgid "Additional safe protocols"
 msgstr "기타 안전한 프로토콜"
 
 #: data/epiphany-lockdown.schemas.in.h:3
+msgid "Disable Arbitrary URLs"
+msgstr "임의의 URL 사용하지 않기"
+
+#: data/epiphany-lockdown.schemas.in.h:4
+msgid "Disable Bookmark Editing"
+msgstr "책갈피 편집하지 않기"
+
+#: data/epiphany-lockdown.schemas.in.h:5
+msgid "Disable History"
+msgstr "방문 기록 사용하지 않기"
+
+#: data/epiphany-lockdown.schemas.in.h:6
 msgid "Disable JavaScript chrome control"
 msgstr "자바스크립트 크롬 조종 사용하지 않기"
 
-#: data/epiphany-lockdown.schemas.in.h:4
+#: data/epiphany-lockdown.schemas.in.h:7
 msgid "Disable JavaScript's control over window chrome."
 msgstr "창 크롬을 자바스크립트에서 조종하지 못하게 합니다."
 
-#: data/epiphany-lockdown.schemas.in.h:5
+#: data/epiphany-lockdown.schemas.in.h:8
+msgid "Disable Toolbar Editing"
+msgstr "도구 모음 편집하지 않기"
+
+#: data/epiphany-lockdown.schemas.in.h:9
+msgid ""
+"Disable all historical information by disabling the back button, not "
+"allowing the history dialog and hiding the favorite bookmarks."
+msgstr "모든 방문 기록 정보를 사용하지 않도록 합니다. 뒤로 가기 단추를 사용하지 못하게 하고, 방문 기록 대화 상자를 보지 못하게 하고, 즐겨찾기 책갈피를 감추지 못하게 합니다."
+
+#: data/epiphany-lockdown.schemas.in.h:10
+msgid "Disable the user's ability to edit their bookmarks."
+msgstr "사용자가 책갈피를 편집하지 못하게 합니다."
+
+#: data/epiphany-lockdown.schemas.in.h:11
+msgid "Disable the user's ability to edit toolbars."
+msgstr "사용자가 도구 모음을 편집하지 못하게 합니다."
+
+#: data/epiphany-lockdown.schemas.in.h:12
+msgid "Disable the user's ability to type in a URL to epiphany."
+msgstr "사용자가 epiphany에 URL을 직접 입력하지 못하게 합니다."
+
+#: data/epiphany-lockdown.schemas.in.h:13
 msgid "Disable unsafe protocols"
 msgstr "안전하지 않은 프로토콜 사용하지 않기"
 
-#: data/epiphany-lockdown.schemas.in.h:6
+#: data/epiphany-lockdown.schemas.in.h:14
 msgid ""
 "Disables loading of content from unsafe protocols. Safe protocols are http: "
 "and https:."
@@ -79,11 +113,11 @@ msgstr ""
 "안전하지 않은 프로토콜을 통해 읽어들인 내용을 사용하지 않습니다. 안전한 프로"
 "토콜은 http: 및 https:입니다."
 
-#: data/epiphany-lockdown.schemas.in.h:7
+#: data/epiphany-lockdown.schemas.in.h:15
 msgid "Hide menubar by default"
 msgstr "기본으로 메뉴 모음 감추기"
 
-#: data/epiphany-lockdown.schemas.in.h:8
+#: data/epiphany-lockdown.schemas.in.h:16
 msgid "Hide the menubar by default."
 msgstr "기본으로 메뉴 모음을 감춥니다."
 
@@ -114,34 +148,26 @@ msgid "Always show the tab bar"
 msgstr "항상 탭 모음 표시"
 
 #: data/epiphany.schemas.in.h:5
-msgid "Auto open downloads"
-msgstr "자동으로 내려받기 열기"
+msgid "Automatic downloads"
+msgstr "자동으로 내려받기"
 
 #: data/epiphany.schemas.in.h:6
-msgid ""
-"Automatically open downloaded files which are \"safe\" to open, like videos, "
-"images, text documents, compressed files, etc."
-msgstr ""
-"\"안전한\" 파일들을 자동으로 내려 받습니다. 예를 들어 비디오, 그림, 텍스트 문"
-"서, 압축 파일 등입니다."
-
-#: data/epiphany.schemas.in.h:7
 msgid "Autowrap for find in page"
 msgstr "페이지에서 끝까지 찾으면 처음부터 다시 찾기"
 
-#: data/epiphany.schemas.in.h:8
+#: data/epiphany.schemas.in.h:7
 msgid "Browse with caret"
 msgstr "캐릿으로 브라우저 쓰기"
 
-#: data/epiphany.schemas.in.h:9
+#: data/epiphany.schemas.in.h:8
 msgid "Cookie accept"
 msgstr "쿠키 허용"
 
-#: data/epiphany.schemas.in.h:10
+#: data/epiphany.schemas.in.h:9
 msgid "Default encoding"
 msgstr "기본 인코딩"
 
-#: data/epiphany.schemas.in.h:11
+#: data/epiphany.schemas.in.h:10
 msgid ""
 "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-HKSCS"
 "\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", \"HZ-GB-"
@@ -179,75 +205,75 @@ msgstr ""
 "mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", "
 "\"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
 
-#: data/epiphany.schemas.in.h:12
+#: data/epiphany.schemas.in.h:11
 msgid "Default font type"
 msgstr "기본 글꼴 형식"
 
-#: data/epiphany.schemas.in.h:13
+#: data/epiphany.schemas.in.h:12
 msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
 msgstr "기본 글꼴 형식. 쓸 수 있는 값은 \"serif\", \"sans-serif\"입니다"
 
-#: data/epiphany.schemas.in.h:14
+#: data/epiphany.schemas.in.h:13
 msgid "Enable Java"
 msgstr "자바 쓰기"
 
-#: data/epiphany.schemas.in.h:15
+#: data/epiphany.schemas.in.h:14
 msgid "Enable Java."
 msgstr "자바 쓰기."
 
-#: data/epiphany.schemas.in.h:16
+#: data/epiphany.schemas.in.h:15
 msgid "Enable JavaScript"
 msgstr "자바스크립트 쓰기"
 
-#: data/epiphany.schemas.in.h:17
+#: data/epiphany.schemas.in.h:16
 msgid "Enable JavaScript."
 msgstr "자바스크립트 쓰기."
 
-#: data/epiphany.schemas.in.h:18
+#: data/epiphany.schemas.in.h:17
 msgid "Filename to print to"
 msgstr "인쇄될 파일이름"
 
-#: data/epiphany.schemas.in.h:19
+#: data/epiphany.schemas.in.h:18
 msgid "Filename to print to."
 msgstr "인쇄될 파일이름."
 
-#: data/epiphany.schemas.in.h:20
+#: data/epiphany.schemas.in.h:19
 msgid ""
 "For find in page, whether to start again at the beginning after reaching the "
 "end of the page."
 msgstr "쪽 끝까지 찾았으면 쪽의 처음으로 돌아가 다시 찾습니다."
 
-#: data/epiphany.schemas.in.h:21
+#: data/epiphany.schemas.in.h:20
 msgid "History pages time range"
 msgstr "기록 페이지 기간"
 
-#: data/epiphany.schemas.in.h:22
+#: data/epiphany.schemas.in.h:21
 msgid "Home page"
 msgstr "홈 페이지"
 
-#: data/epiphany.schemas.in.h:23
+#: data/epiphany.schemas.in.h:22
 msgid "ISO-8859-1"
 msgstr "ISO-8859-1"
 
-#: data/epiphany.schemas.in.h:24
+#: data/epiphany.schemas.in.h:23
 msgid "Languages"
 msgstr "언어"
 
-#: data/epiphany.schemas.in.h:25
+#: data/epiphany.schemas.in.h:24
 msgid "Match case for find in page"
 msgstr "쪽에서 찾을 때 대소문자를 가림"
 
-#: data/epiphany.schemas.in.h:26
+#: data/epiphany.schemas.in.h:25
 msgid "Match case for find in page."
 msgstr "쪽에서 찾을 때 대소문자를 가립니다."
 
-#: data/epiphany.schemas.in.h:27
+#: data/epiphany.schemas.in.h:26
 msgid ""
 "Middle click to open the web page pointed to by the currently selected text"
 msgstr ""
 "마우스 중간 단추를 누르면 현재 선택한 글자를 주소로하는 웹 페이지로 가기"
 
-#: data/epiphany.schemas.in.h:28
+#: data/epiphany.schemas.in.h:27
 msgid ""
 "Middle clicking on the main view pane will open the web page pointed to by "
 "the currently selected text."
@@ -255,11 +281,11 @@ msgstr ""
 "웹페이지에서 마우스 중간 단추를 누르면 현재 선택한 글자를 주소로하는 웹 페이"
 "지를 엽니다."
 
-#: data/epiphany.schemas.in.h:29
+#: data/epiphany.schemas.in.h:28
 msgid "Paper type"
 msgstr "종이 크기"
 
-#: data/epiphany.schemas.in.h:30
+#: data/epiphany.schemas.in.h:29
 msgid ""
 "Paper type. Supported values are \"A4\", \"Letter\", \"Legal\" and "
 "\"Executive\"."
@@ -267,67 +293,67 @@ msgstr ""
 "종이 형식. 지원하는 값은 \"A4\", \"Letter\", \"Legal\" 및 \"Executive\" 입니"
 "다."
 
-#: data/epiphany.schemas.in.h:31
+#: data/epiphany.schemas.in.h:30
 msgid "Preferred languages, two letter codes."
 msgstr "사용할 언어, 두글자 코드"
 
-#: data/epiphany.schemas.in.h:32
+#: data/epiphany.schemas.in.h:31
 msgid "Printer name"
 msgstr "프린터 이름"
 
-#: data/epiphany.schemas.in.h:33
+#: data/epiphany.schemas.in.h:32
 msgid "Printer name."
 msgstr "프린터 이름."
 
-#: data/epiphany.schemas.in.h:34
+#: data/epiphany.schemas.in.h:33
 msgid "Printing bottom margin"
 msgstr "인쇄 아래 여백"
 
-#: data/epiphany.schemas.in.h:35
+#: data/epiphany.schemas.in.h:34
 msgid "Printing bottom margin (in mm)."
 msgstr "인쇄 아래 여백(mm)"
 
-#: data/epiphany.schemas.in.h:36
+#: data/epiphany.schemas.in.h:35
 msgid "Printing left margin"
 msgstr "인쇄 왼쪽 여백"
 
-#: data/epiphany.schemas.in.h:37
+#: data/epiphany.schemas.in.h:36
 msgid "Printing left margin (in mm)."
 msgstr "인쇄 왼쪽 여백(mm)"
 
-#: data/epiphany.schemas.in.h:38
+#: data/epiphany.schemas.in.h:37
 msgid "Printing right margin"
 msgstr "인쇄 오른쪽 여백"
 
-#: data/epiphany.schemas.in.h:39
+#: data/epiphany.schemas.in.h:38
 msgid "Printing right margin (in mm)."
 msgstr "인쇄 오른쪽 여백(mm)"
 
-#: data/epiphany.schemas.in.h:40
+#: data/epiphany.schemas.in.h:39
 msgid "Printing top margin"
 msgstr "인쇄 위 여백"
 
-#: data/epiphany.schemas.in.h:41
+#: data/epiphany.schemas.in.h:40
 msgid "Printing top margin (in mm)."
 msgstr "인쇄 위 여백(mm)"
 
-#: data/epiphany.schemas.in.h:42
+#: data/epiphany.schemas.in.h:41
 msgid "Show bookmarks bar by default"
 msgstr "기본값으로 책갈피 모음 보이기"
 
-#: data/epiphany.schemas.in.h:43
+#: data/epiphany.schemas.in.h:42
 msgid "Show bookmarks bar by default."
 msgstr "기본값으로 책갈피 모음 보이기."
 
-#: data/epiphany.schemas.in.h:44
+#: data/epiphany.schemas.in.h:43
 msgid "Show statusbar by default"
 msgstr "기본으로 탭에서 열기(_O)"
 
-#: data/epiphany.schemas.in.h:45
+#: data/epiphany.schemas.in.h:44
 msgid "Show statusbar by default."
 msgstr "기본으로 상태 표시줄 보이기."
 
-#: data/epiphany.schemas.in.h:46
+#: data/epiphany.schemas.in.h:45
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
@@ -335,31 +361,31 @@ msgstr ""
 "얼마동안의 기록을 기록 페이지에 표시할 지 결정합니다. \"ever\", "
 "\"last_two_days\", \"last_three_days\", \"today\"중 하나입니다."
 
-#: data/epiphany.schemas.in.h:47
+#: data/epiphany.schemas.in.h:46
 msgid "Show the tab bar also when there is only one tab open."
 msgstr "탭이 한 개만 열려 있을 때도 탭 모음을 표시합니다."
 
-#: data/epiphany.schemas.in.h:48
+#: data/epiphany.schemas.in.h:47
 msgid "Show toolbars by default"
 msgstr "기본값으로 도구 모음 보이기"
 
-#: data/epiphany.schemas.in.h:49
+#: data/epiphany.schemas.in.h:48
 msgid "Show toolbars by default."
 msgstr "기본값으로 도구 모음 보이기."
 
-#: data/epiphany.schemas.in.h:50
+#: data/epiphany.schemas.in.h:49
 msgid "Size of disk cache"
 msgstr "디스크 캐시 크기"
 
-#: data/epiphany.schemas.in.h:51
+#: data/epiphany.schemas.in.h:50
 msgid "Size of disk cache, in MB."
 msgstr "디스크 캐시 크기, MB단위"
 
-#: data/epiphany.schemas.in.h:52
+#: data/epiphany.schemas.in.h:51
 msgid "The bookmark informations shown in the editor view"
 msgstr "편집기 뷰에 표시할 책갈피 정보"
 
-#: data/epiphany.schemas.in.h:53
+#: data/epiphany.schemas.in.h:52
 msgid ""
 "The bookmark informations shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
@@ -367,11 +393,11 @@ msgstr ""
 "편집기 뷰에 표시할 페이지 정보. 리스트에 가능한 값은 \"address\", \"title\"입"
 "니다."
 
-#: data/epiphany.schemas.in.h:54
+#: data/epiphany.schemas.in.h:53
 msgid "The currently selected fonts language"
 msgstr "현재 선택된 글꼴 언어"
 
-#: data/epiphany.schemas.in.h:55
+#: data/epiphany.schemas.in.h:54
 msgid ""
 "The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
 "baltic\" (baltic languages), \"x-central-euro\" (central european "
@@ -389,11 +415,11 @@ msgstr ""
 "체), \"tr\" (터키어), \"x-unicode\" (나머지 언어), \"x-western\" (라틴어), "
 "\"x-tamil\" (타밀어) and \"x-devanagari\" (힌디어)."
 
-#: data/epiphany.schemas.in.h:56
+#: data/epiphany.schemas.in.h:55
 msgid "The encoding autodetector. Empty string means autodetect is off"
 msgstr "글자셋 자동인식. 빈 문자열은 자동인식이 꺼진 것을 뜻합니다"
 
-#: data/epiphany.schemas.in.h:57
+#: data/epiphany.schemas.in.h:56
 msgid ""
 "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
 "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
@@ -414,11 +440,11 @@ msgstr ""
 "\"zhcn_parallel_state_machine\" (중국어 간체 인코딩 자동인식) 그리고 "
 "\"zhtw_parallel_state_machine\" (중국어 번체 인코딩 자동인식)."
 
-#: data/epiphany.schemas.in.h:58
+#: data/epiphany.schemas.in.h:57
 msgid "The page informations shown in the history view"
 msgstr "기록 뷰에 표시할 페이지 정보"
 
-#: data/epiphany.schemas.in.h:59
+#: data/epiphany.schemas.in.h:58
 msgid ""
 "The page informations shown in the history view. Valid values in the list "
 "are \"address\", \"title\"."
@@ -426,25 +452,31 @@ msgstr ""
 "기록 뷰에 표시할 페이지 정보. 리스트에 가능한 값은 \"address\", \"title\"입니"
 "다."
 
-#: data/epiphany.schemas.in.h:60
+#: data/epiphany.schemas.in.h:59
 msgid "Use caret browsing mode."
 msgstr "캐릿 브라우징 모드 사용."
 
-#: data/epiphany.schemas.in.h:61
+#: data/epiphany.schemas.in.h:60
 msgid "Use own colors"
 msgstr "정한 색 쓰기"
 
-#: data/epiphany.schemas.in.h:62
+#: data/epiphany.schemas.in.h:61
 msgid "Use own fonts"
 msgstr "정한 글꼴 쓰기"
 
-#: data/epiphany.schemas.in.h:63
+#: data/epiphany.schemas.in.h:62
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "웹 페이지에 지정된 색 대신 사용자가 지정한 색을 씁니다."
 
-#: data/epiphany.schemas.in.h:64
+#: data/epiphany.schemas.in.h:63
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "웹 페이지에 지정된 글꼴 대신 사용자가 지정한 글꼴을 씁니다."
+
+#: data/epiphany.schemas.in.h:64
+msgid ""
+"When files cannot be opened by the browser they are automatically downloaded "
+"to the download folder and opened with the appropriate application."
+msgstr "파일을 브라우저에서 열지 못하는 경우에 자동으로 내려받기 폴더에 내려받고 적절한 프로그램으로 그 파일을 엽니다."
 
 #: data/epiphany.schemas.in.h:65
 msgid ""
@@ -599,7 +631,7 @@ msgid "Download Manager"
 msgstr "내려받기 관리자"
 
 #: data/glade/epiphany.glade.h:8 data/ui/nautilus-epiphany-view.xml.h:11
-#: src/ephy-window.c:891
+#: src/ephy-window.c:965
 msgid "Find"
 msgstr "찾기"
 
@@ -627,7 +659,7 @@ msgstr "찾기(_F):"
 msgid "_Next"
 msgstr "다음(_N)"
 
-#: data/glade/epiphany.glade.h:15
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:513
 msgid "_Pause"
 msgstr "일시 중지(_P)"
 
@@ -696,8 +728,8 @@ msgid "Au_todetect:"
 msgstr "자동인식(_T):"
 
 #: data/glade/prefs-dialog.glade.h:17
-msgid "Automatically open \"safe\" downloads"
-msgstr "자동으로 \"안전한\" 내려받기 열기"
+msgid "Automatically download and open files"
+msgstr "자동으로 파일 내려받고 열기"
 
 #: data/glade/prefs-dialog.glade.h:18
 msgid "Choose a l_anguage:"
@@ -881,7 +913,7 @@ msgid "Paper"
 msgstr "종이"
 
 #: data/glade/print.glade.h:23 data/ui/nautilus-epiphany-view.xml.h:23
-#: src/ephy-window.c:887
+#: src/ephy-window.c:961
 msgid "Print"
 msgstr "인쇄"
 
@@ -1091,42 +1123,38 @@ msgstr "찾기(_F)..."
 msgid "_Print..."
 msgstr "인쇄(_P)..."
 
-#: embed/downloader-view.c:221
+#: embed/downloader-view.c:228
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: embed/downloader-view.c:225
+#: embed/downloader-view.c:232
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: embed/downloader-view.c:296 lib/widgets/ephy-cell-renderer-progress.c:35
-#: src/ephy-window.c:1064
+#: embed/downloader-view.c:303 lib/widgets/ephy-cell-renderer-progress.c:35
+#: src/ephy-window.c:1146
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: embed/downloader-view.c:434
+#: embed/downloader-view.c:441
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:444
+#: embed/downloader-view.c:451
 msgid "File"
 msgstr "파일"
 
-#: embed/downloader-view.c:457
+#: embed/downloader-view.c:464
 msgid "Remaining"
 msgstr "남은 시간"
 
-#: embed/downloader-view.c:501
-msgid "Resume"
-msgstr "계속"
+#: embed/downloader-view.c:508
+msgid "_Resume"
+msgstr "계속(_R)"
 
-#: embed/downloader-view.c:506
-msgid "Pause"
-msgstr "일시 중지"
-
-#: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:334
+#: embed/ephy-embed-popup-control.c:557 src/popup-commands.c:344
 msgid "Save Image As"
 msgstr "다른 이름으로 그림 저장"
 
@@ -1134,7 +1162,7 @@ msgstr "다른 이름으로 그림 저장"
 msgid "Save Page As"
 msgstr "다른 이름으로 페이지 저장"
 
-#: embed/ephy-embed-popup-control.c:650 src/popup-commands.c:422
+#: embed/ephy-embed-popup-control.c:650 src/popup-commands.c:432
 msgid "Save Background As"
 msgstr "다른 이름으로 바탕그림 저장"
 
@@ -1505,28 +1533,71 @@ msgstr "우크라이나어"
 msgid "Unknown (%s)"
 msgstr "알 수 없음 (%s)"
 
-#: embed/ephy-history.c:401 src/bookmarks/ephy-bookmarks.c:523
+#: embed/ephy-history.c:485 src/bookmarks/ephy-bookmarks.c:587
 msgid "All"
 msgstr "모두"
 
-#: embed/ephy-history.c:566
+#: embed/ephy-history.c:658
 msgid "Others"
 msgstr "그 외"
 
-#: embed/ephy-history.c:572
+#: embed/ephy-history.c:664
 msgid "Local files"
 msgstr "로컬 파일"
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:289
-#: src/bookmarks/ephy-bookmarks-import.c:236
-#: src/bookmarks/ephy-bookmarks-import.c:362 src/ephy-toolbars-model.c:201
-#: src/window-commands.c:340
-msgid "Untitled"
-msgstr "제목 없음"
-
+#: embed/mozilla/ContentHandler.cpp:132
 #: embed/mozilla/EphyHeaderSniffer.cpp:314
 msgid "Save"
 msgstr "저장"
+
+#: embed/mozilla/ContentHandler.cpp:251
+msgid "_Save As..."
+msgstr "다른 이름으로 저장(_S)..."
+
+#: embed/mozilla/ContentHandler.cpp:254
+msgid "_Open"
+msgstr "열기(_O)"
+
+#: embed/mozilla/ContentHandler.cpp:254
+msgid "_Download"
+msgstr "내려받기(_D)"
+
+#: embed/mozilla/ContentHandler.cpp:269
+msgid "Download the unsafe file?"
+msgstr "안전하지 않은 파일을 내려 받으시겠습니까?"
+
+#: embed/mozilla/ContentHandler.cpp:270
+msgid ""
+"This type of file could potentially damage your documents or invade your "
+"privacy. It's not safe to open it directly. You can save it instead."
+msgstr "이런 종류의 파일은 문서에 해를 입히고 개인 정보를 침해할 수도 있습니다. 이런 종류의 파일은 직접 열지 않는 편이 안전합니다. 여는 대신에 저장할 수 있습니다."
+
+#: embed/mozilla/ContentHandler.cpp:278
+msgid "Open the file in another application?"
+msgstr "다른 프로그램에서 파일을 여시겠습니까?"
+
+#: embed/mozilla/ContentHandler.cpp:279
+msgid ""
+"It's not possible to view this file type directly in the browser. You can "
+"open it with another application or save it."
+msgstr "이런 종류의 파일은 브라우저에서 직접 볼 수 없습니다. 다른 프로그램으로 열거나 저장할 수 있습니다."
+
+#: embed/mozilla/ContentHandler.cpp:286
+msgid "Download the file?"
+msgstr "파일을 내려받으시겠습니까?"
+
+#: embed/mozilla/ContentHandler.cpp:287
+msgid ""
+"It's not possible to view this file because there is no application "
+"installed that can open it.You can save it instead."
+msgstr "이 파일은 볼 수 없습니다. 이 파일을 열 수 있는 프로그램이 설치되어 있지 않습니다. 대신에 저장할 수 있습니다."
+
+#: embed/mozilla/EphyHeaderSniffer.cpp:289
+#: src/bookmarks/ephy-bookmarks-import.c:247
+#: src/bookmarks/ephy-bookmarks-import.c:373 src/ephy-toolbars-model.c:201
+#: src/window-commands.c:340
+msgid "Untitled"
+msgstr "제목 없음"
 
 #: embed/mozilla/ExternalProtocolService.cpp:121
 msgid ""
@@ -1666,7 +1737,7 @@ msgstr "%s에 대한 보안 정보가 %s까지는 유효하지 않습니다."
 #. * strftime(3)
 #: embed/mozilla/GtkNSSDialogs.cpp:433
 msgid "%a %d %b %Y"
-msgstr "%Y %b %d %a"
+msgstr "%Y년 %b %d일 %a"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:444
 msgid "You should ensure that your computer's time is correct."
@@ -1826,7 +1897,7 @@ msgid ""
 msgstr ""
 "새 개인 키를 만드는 동안 기다리십시오. 이 작업은 몇 분이 걸릴 수도 있습니다."
 
-#: embed/mozilla/mozilla-embed-single.cpp:508
+#: embed/mozilla/mozilla-embed-single.cpp:501
 msgid ""
 "Epiphany can't be used now. Mozilla initialization failed. Check your "
 "MOZILLA_FIVE_HOME environmental variable."
@@ -1877,7 +1948,7 @@ msgstr ""
 msgid "GConf Error"
 msgstr "GConf 오류"
 
-#: lib/egg/egg-editable-toolbar.c:503
+#: lib/egg/egg-editable-toolbar.c:504
 msgid "_Remove Toolbar"
 msgstr "도구 모음 지우기(_R)"
 
@@ -2176,6 +2247,7 @@ msgid "Select all bookmarks or text"
 msgstr "모든 책갈피나 글자를 선택합니다"
 
 #. Help Menu
+#. Help menu
 #: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:192
 #: src/ephy-window.c:221
 msgid "_Contents"
@@ -2274,7 +2346,7 @@ msgid "_Search:"
 msgstr "찾기(_S):"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:1358
-#: src/bookmarks/ephy-topic-action.c:621 src/ephy-window.c:893
+#: src/bookmarks/ephy-topic-action.c:621 src/ephy-window.c:967
 msgid "Bookmarks"
 msgstr "책갈피"
 
@@ -2294,44 +2366,44 @@ msgstr "주소"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: src/bookmarks/ephy-bookmarks.c:79
+#: src/bookmarks/ephy-bookmarks.c:84
 msgid "Search the web"
 msgstr "웹에서 찾습니다"
 
-#: src/bookmarks/ephy-bookmarks.c:79
+#: src/bookmarks/ephy-bookmarks.c:84
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8&hl=ko"
 
-#: src/bookmarks/ephy-bookmarks.c:85
+#: src/bookmarks/ephy-bookmarks.c:90
 msgid "Entertainment"
 msgstr "오락"
 
-#: src/bookmarks/ephy-bookmarks.c:86
+#: src/bookmarks/ephy-bookmarks.c:91
 msgid "News"
 msgstr "새소식"
 
-#: src/bookmarks/ephy-bookmarks.c:87
+#: src/bookmarks/ephy-bookmarks.c:92
 msgid "Shopping"
 msgstr "쇼핑"
 
-#: src/bookmarks/ephy-bookmarks.c:88
+#: src/bookmarks/ephy-bookmarks.c:93
 msgid "Sports"
 msgstr "운동"
 
-#: src/bookmarks/ephy-bookmarks.c:89
+#: src/bookmarks/ephy-bookmarks.c:94
 msgid "Travel"
 msgstr "여행"
 
-#: src/bookmarks/ephy-bookmarks.c:90
+#: src/bookmarks/ephy-bookmarks.c:95
 msgid "Work"
 msgstr "작업"
 
-#: src/bookmarks/ephy-bookmarks.c:558
+#: src/bookmarks/ephy-bookmarks.c:622
 msgid "Most Visited"
 msgstr "최근 둘러봤던 곳"
 
-#: src/bookmarks/ephy-bookmarks.c:575
+#: src/bookmarks/ephy-bookmarks.c:639
 msgid "Not Categorized"
 msgstr "분류되지 않음"
 
@@ -2373,7 +2445,7 @@ msgstr "그 외 인코딩"
 msgid "_Automatic"
 msgstr "자동(_A)"
 
-#: src/ephy-go-action.c:80 src/ephy-go-action.c:97 src/toolbar.c:406
+#: src/ephy-go-action.c:80 src/ephy-go-action.c:97 src/toolbar.c:409
 msgid "Go"
 msgstr "이동"
 
@@ -2435,7 +2507,7 @@ msgstr "비우기(_L)"
 
 #: src/ephy-history-window.c:301
 msgid "Clear browsing history?"
-msgstr "방문 기록을 비울까요?"
+msgstr "방문 기록을 비우시겠습니까?"
 
 #: src/ephy-history-window.c:308
 msgid ""
@@ -2507,24 +2579,24 @@ msgstr "Epiphany 웹 브라우저"
 msgid "Ephy"
 msgstr "Ephy"
 
-#: src/ephy-session.c:297
+#: src/ephy-session.c:299
 msgid "Crash Recovery"
 msgstr "파괴 복구"
 
-#: src/ephy-session.c:299
+#: src/ephy-session.c:301
 msgid "_Don't Recover"
 msgstr "복구하지 않기(_D)"
 
-#: src/ephy-session.c:300
+#: src/ephy-session.c:302
 msgid "_Recover"
 msgstr "복구하기(_R)"
 
-#: src/ephy-session.c:329
+#: src/ephy-session.c:331
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr "Epiphany가 마지막으로 작동할 때 비정상적으로 죽은 것 같습니다."
 
-#: src/ephy-session.c:335
+#: src/ephy-session.c:337
 msgid "You can recover the opened tabs and windows."
 msgstr "열었던 탭과 창을 복구할 수 있습니다."
 
@@ -2553,30 +2625,30 @@ msgstr ""
 "Epiphany를 지금 사용할 수 없습니다. 자동화 오브젝트를 찾는 데 보노보에 예상"
 "치 못한 오류가 발생했습니다."
 
-#: src/ephy-tab.c:326 src/ephy-tab.c:1136 src/ephy-tab.c:1318
+#: src/ephy-tab.c:326 src/ephy-tab.c:1138 src/ephy-tab.c:1320
 msgid "Blank page"
 msgstr "빈 페이지"
 
-#: src/ephy-tab.c:744
+#: src/ephy-tab.c:745
 msgid "site"
 msgstr "사이트"
 
-#: src/ephy-tab.c:768
+#: src/ephy-tab.c:769
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "%s(으)로 재지정 하는 중..."
 
-#: src/ephy-tab.c:772
+#: src/ephy-tab.c:773
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "%s에서 데이터 받는 중..."
 
-#: src/ephy-tab.c:776
+#: src/ephy-tab.c:777
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "%s에서 인증받기를 기다리는 중..."
 
-#: src/ephy-tab.c:784
+#: src/ephy-tab.c:785
 #, c-format
 msgid "Loading %s..."
 msgstr "%s을(를) 읽는 중..."
@@ -2968,87 +3040,91 @@ msgid "_Download Link"
 msgstr "바로가기 내려받기(_D)"
 
 #: src/ephy-window.c:276
+msgid "_Download Link As..."
+msgstr "바로가기 다른 이름으로 내려받기(_D)..."
+
+#: src/ephy-window.c:278
 msgid "_Bookmark Link..."
 msgstr "바로가기 책갈피에 넣기(_B)..."
 
-#: src/ephy-window.c:278
+#: src/ephy-window.c:280
 msgid "_Copy Link Address"
 msgstr "바로가기 주소 복사(_C)"
 
 #. Images
-#: src/ephy-window.c:282
+#: src/ephy-window.c:284
 msgid "Open _Image"
 msgstr "그림 열기(_I)"
 
-#: src/ephy-window.c:284
+#: src/ephy-window.c:286
 msgid "Open Image in New _Window"
 msgstr "새 창에서 그림 열기(_W)"
 
-#: src/ephy-window.c:286
+#: src/ephy-window.c:288
 msgid "Open Image in New T_ab"
 msgstr "새 탭에서 그림 열기(_A)"
 
-#: src/ephy-window.c:288
+#: src/ephy-window.c:290
 msgid "_Save Image As..."
 msgstr "다른 이름으로 그림 저장(_S)..."
 
-#: src/ephy-window.c:290
+#: src/ephy-window.c:292
 msgid "_Use Image As Background"
 msgstr "바탕화면 그림으로 쓰기(_U)"
 
-#: src/ephy-window.c:292
+#: src/ephy-window.c:294
 msgid "Copy I_mage Address"
 msgstr "그림 주소 복사(_M)"
 
-#: src/ephy-window.c:586
+#: src/ephy-window.c:598
 msgid "Exit Fullscreen"
 msgstr "전체 화면 나가기"
 
-#: src/ephy-window.c:660
+#: src/ephy-window.c:672
 msgid "_Close document"
 msgstr "문서 닫기(_C)"
 
-#: src/ephy-window.c:687
+#: src/ephy-window.c:699
 msgid "There are unsubmitted changes to form elements."
 msgstr "폼의 바뀐 점 중에서 제출하지 않은 부분이 있습니다"
 
-#: src/ephy-window.c:688
+#: src/ephy-window.c:700
 msgid "If you close the document anyway, you will lose that information."
 msgstr "지금 문서를 닫으면, 그 정보를 잃어버릴 것입니다."
 
-#: src/ephy-window.c:883 src/window-commands.c:390
+#: src/ephy-window.c:957 src/window-commands.c:390
 msgid "Open"
 msgstr "열기"
 
-#: src/ephy-window.c:885 src/window-commands.c:415
+#: src/ephy-window.c:959 src/window-commands.c:415
 msgid "Save As"
 msgstr "다른 이름으로 저장"
 
-#: src/ephy-window.c:889
+#: src/ephy-window.c:963
 msgid "Bookmark"
 msgstr "책갈피"
 
-#: src/ephy-window.c:1067
+#: src/ephy-window.c:1149
 msgid "Insecure"
 msgstr "안전하지 않음"
 
-#: src/ephy-window.c:1070
+#: src/ephy-window.c:1152
 msgid "Broken"
 msgstr "깨짐"
 
-#: src/ephy-window.c:1073
+#: src/ephy-window.c:1155
 msgid "Medium"
 msgstr "보통"
 
-#: src/ephy-window.c:1077
+#: src/ephy-window.c:1159
 msgid "Low"
 msgstr "낮음"
 
-#: src/ephy-window.c:1081
+#: src/ephy-window.c:1163
 msgid "High"
 msgstr "높음"
 
-#: src/ephy-window.c:1091
+#: src/ephy-window.c:1173
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3057,7 +3133,7 @@ msgstr ""
 "보안 수준: %s\n"
 "%s"
 
-#: src/ephy-window.c:1097
+#: src/ephy-window.c:1179
 #, c-format
 msgid "Security level: %s"
 msgstr "보안 수준: %s"
@@ -3110,7 +3186,7 @@ msgstr "만료 날짜:"
 msgid "End of current session"
 msgstr "현재 세션의 끝"
 
-#: src/popup-commands.c:326
+#: src/popup-commands.c:329 src/popup-commands.c:337
 msgid "Download link"
 msgstr "바로가기 내려받기"
 
@@ -3330,7 +3406,7 @@ msgstr "왈룬어"
 msgid "Custom [%s]"
 msgstr "사용자 정의 [%s]"
 
-#: src/prefs-dialog.c:1095
+#: src/prefs-dialog.c:1090
 msgid "Desktop"
 msgstr "바탕 화면"
 
@@ -3338,59 +3414,63 @@ msgstr "바탕 화면"
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1104
+#: src/prefs-dialog.c:1099
 msgid "Home"
 msgstr "홈"
 
-#: src/prefs-dialog.c:1314
+#: src/prefs-dialog.c:1104
+msgid "Downloads"
+msgstr "내려받기"
+
+#: src/prefs-dialog.c:1310
 msgid "Select a directory"
 msgstr "디렉토리를 선택하십시오"
 
-#: src/toolbar.c:329
+#: src/toolbar.c:332
 msgid "Back"
 msgstr "뒤로"
 
-#: src/toolbar.c:331
+#: src/toolbar.c:334
 msgid "Go back"
 msgstr "뒤로 가기"
 
-#: src/toolbar.c:343
+#: src/toolbar.c:346
 msgid "Forward"
 msgstr "앞으로"
 
-#: src/toolbar.c:345
+#: src/toolbar.c:348
 msgid "Go forward"
 msgstr "앞으로 가기"
 
-#: src/toolbar.c:356
+#: src/toolbar.c:359
 msgid "Up"
 msgstr "위로"
 
-#: src/toolbar.c:358
+#: src/toolbar.c:361
 msgid "Go up"
 msgstr "위로 가기"
 
-#: src/toolbar.c:372
+#: src/toolbar.c:375
 msgid "Address Entry"
 msgstr "주소 항목"
 
-#: src/toolbar.c:374
+#: src/toolbar.c:377
 msgid "Enter a web address to open, or a phrase to search for on the web"
 msgstr "열어 볼 웹 주소나 웹에서 찾을 글귀를 넣으십시오"
 
-#: src/toolbar.c:386
+#: src/toolbar.c:389
 msgid "Zoom"
 msgstr "확대"
 
-#: src/toolbar.c:388
+#: src/toolbar.c:391
 msgid "Adjust the text size"
 msgstr "글자 크기를 조절합니다"
 
-#: src/toolbar.c:398
+#: src/toolbar.c:401
 msgid "Favicon"
 msgstr "파비콘"
 
-#: src/toolbar.c:408
+#: src/toolbar.c:411
 msgid "Go to the address entered in the address entry"
 msgstr "주소 항목에 넣은 주소로 갑니다"
 
