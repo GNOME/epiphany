@@ -94,7 +94,7 @@ transform_accept_languages_list (GConfValue *gcvalue,
 		else if (lang != NULL && lang[0] != '\0')
 		{
 			char *str;
-			str = g_strdup (lang);
+			str = g_ascii_strdown (lang, -1);
 			g_array_append_val (array, str);
 		}
 	}
