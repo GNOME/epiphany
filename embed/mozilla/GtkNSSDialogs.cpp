@@ -34,7 +34,7 @@
 
 #ifdef HAVE_MOZILLA_PSM
 
-#include "MozillaPrivate.h"
+#include "EphyUtils.h"
 
 #include <nsCOMPtr.h>
 #include <nsMemory.h>
@@ -209,7 +209,7 @@ display_cert_warning_box (nsIInterfaceRequestor *ctx,
 	int res;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
-	GtkWidget *gparent = MozillaFindGtkParent (parent);
+	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
         g_return_val_if_fail (markup_text, GTK_RESPONSE_CANCEL);
         g_return_val_if_fail (!checkbox_text || checkbox_value, GTK_RESPONSE_CANCEL);
@@ -478,7 +478,7 @@ GtkNSSDialogs::NotifyCrlNextupdate (nsIInterfaceRequestor *ctx,
 	char *ttCommonName, *ttTargetUrl, *msg, *primary, *secondary;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
-	GtkWidget *gparent = MozillaFindGtkParent (parent);
+	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
 	dialog = gtk_dialog_new_with_buttons ("",
 					      GTK_WINDOW (gparent),
@@ -541,7 +541,7 @@ GtkNSSDialogs::ConfirmDownloadCACert(nsIInterfaceRequestor *ctx,
 	char *ttCommonName, *msg, *tertiary;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
-	GtkWidget *gparent = MozillaFindGtkParent (parent);
+	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
 	dialog = gtk_dialog_new_with_buttons ("",
 					      GTK_WINDOW (gparent),
@@ -638,7 +638,7 @@ GtkNSSDialogs::NotifyCACertExists (nsIInterfaceRequestor *ctx)
 	char * msg;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
-	GtkWidget *gparent = MozillaFindGtkParent (parent);
+	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
 	dialog = gtk_dialog_new_with_buttons ("",
 					      GTK_WINDOW (gparent),
@@ -758,7 +758,7 @@ GtkNSSDialogs::SetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	char *msg;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
-	GtkWidget *gparent = MozillaFindGtkParent (parent);
+	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
 
 	dialog = gtk_dialog_new_with_buttons ("",
@@ -869,7 +869,7 @@ GtkNSSDialogs::GetPKCS12FilePassword(nsIInterfaceRequestor *ctx,
 	char *msg;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
-	GtkWidget *gparent = MozillaFindGtkParent (parent);
+	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
 	dialog = gtk_dialog_new_with_buttons ("",
 					      GTK_WINDOW (gparent),
@@ -951,7 +951,7 @@ GtkNSSDialogs::CrlImportStatusDialog(nsIInterfaceRequestor *ctx, nsICRLInfo *crl
 	char *msg;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
-	GtkWidget *gparent = MozillaFindGtkParent (parent);
+	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
 	dialog = gtk_dialog_new_with_buttons ("",
 					      GTK_WINDOW (gparent),
@@ -1297,7 +1297,7 @@ GtkNSSDialogs::ViewCert(nsIInterfaceRequestor *ctx,
 				      &dialog, NULL, NULL);
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
-	GtkWidget *gparent = MozillaFindGtkParent (parent);
+	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 	gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(gparent));
 	gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 

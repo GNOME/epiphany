@@ -32,7 +32,6 @@
 #include "ephy-string.h"
 #include "ephy-debug.h"
 
-#include "MozillaPrivate.h"
 #include "EphyBrowser.h"
 #include "EventContext.h"
 #include "EphyUtils.h"

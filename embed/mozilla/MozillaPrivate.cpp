@@ -18,159 +18,56 @@
  *  $Id$
  */
 
-#include "mozilla-config.h"
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include "ephy-embed.h"
-#include "mozilla-embed.h"
-
 #include "MozillaPrivate.h"
 
-#include <nsEmbedString.h>
-#include <nsIServiceManagerUtils.h>
-#include <nsIWindowWatcher.h>
-#include <nsIEmbeddingSiteWindow.h>
-#include <nsIWebBrowserChrome.h>
-#include <gtkmozembed.h>
+#include <nsIPrintSettingsService.h>
+#include <nsIPrintOptions.h>
+#include <nsIServiceManager.h>
+#include <nsISimpleEnumerator.h>
+#include <nsISupportsPrimitives.h>
 
-GtkWidget *MozillaFindEmbed (nsIDOMWindow *aDOMWindow)
+/* IMPORTANT. Put only code that use internal mozilla strings (nsAutoString for
+ * example) in this file. Note that you cannot use embed strings here,
+ * the header inclusions will conflict.
+ */
+
+GList *
+MozillaPrivate::GetPrinterList ()
 {
-	if (!aDOMWindow) return nsnull;
+	GList *printers = NULL;
+	nsresult rv = NS_OK;
 
-        nsCOMPtr<nsIWindowWatcher> wwatch
-                (do_GetService("@mozilla.org/embedcomp/window-watcher;1"));
-        NS_ENSURE_TRUE (wwatch, nsnull);
+	nsCOMPtr<nsIPrintSettingsService> pss =
+		do_GetService("@mozilla.org/gfx/printsettings-service;1", &rv);
+	NS_ENSURE_SUCCESS(rv, nsnull);
 
-	/* this DOM window may belong to some inner frame, we need
-	 * to get the topmost DOM window to get the embed
-	 */
- 	nsCOMPtr<nsIDOMWindow> topWindow;
-	aDOMWindow->GetTop (getter_AddRefs (topWindow));
-	if (!topWindow) return nsnull;
-	
-        nsCOMPtr<nsIWebBrowserChrome> windowChrome;
-        wwatch->GetChromeForWindow (topWindow, getter_AddRefs(windowChrome));
-	NS_ENSURE_TRUE (windowChrome, nsnull);
+	nsCOMPtr<nsIPrintOptions> po = do_QueryInterface(pss, &rv);
+	NS_ENSURE_SUCCESS(rv, nsnull);
 
-        nsCOMPtr<nsIEmbeddingSiteWindow> window (do_QueryInterface(windowChrome));
-	NS_ENSURE_TRUE (window, nsnull);
+	nsCOMPtr<nsISimpleEnumerator> avPrinters;
+	rv = po->AvailablePrinters(getter_AddRefs(avPrinters));
+	NS_ENSURE_SUCCESS(rv, nsnull);
 
-        nsresult rv;
-        GtkWidget *mozembed;
-        rv = window->GetSiteWindow ((void **)&mozembed);
-	NS_ENSURE_SUCCESS (rv, nsnull);
+	PRBool more = PR_FALSE;
 
-	return mozembed;
-}
-
-GtkWidget *MozillaFindGtkParent (nsIDOMWindow *aDOMWindow)
-{
-	GtkWidget *embed = MozillaFindEmbed (aDOMWindow);
-	NS_ENSURE_TRUE (embed, nsnull);
-
-	return gtk_widget_get_toplevel (GTK_WIDGET (embed));
-}
-
-#define MM_TO_INCH(x)		(((double) x) / 25.4)
-
-NS_METHOD MozillaCollatePrintSettings (const EmbedPrintInfo *info,
-				       nsIPrintSettings *options,
-				       gboolean preview)
-{
-	const static int frame_types[] = {
-                nsIPrintSettings::kFramesAsIs,
-                nsIPrintSettings::kSelectedFrame,
-                nsIPrintSettings::kEachFrameSep
-        };
-
-
-        switch (info->pages)
-        {
-        case 0:
-		options->SetPrintRange (nsIPrintSettings::kRangeAllPages);
-                break;
-        case 1:
-                options->SetPrintRange (nsIPrintSettings::kRangeSpecifiedPageRange);
-                options->SetStartPageRange (info->from_page);
-                options->SetEndPageRange (info->to_page);
-                break;
-        case 2:
-                options->SetPrintRange (nsIPrintSettings::kRangeSelection);
-                break;
-        }
-
-        options->SetMarginTop (MM_TO_INCH (info->top_margin));
-        options->SetMarginBottom (MM_TO_INCH (info->bottom_margin));
-        options->SetMarginLeft (MM_TO_INCH (info->left_margin));
-        options->SetMarginRight (MM_TO_INCH (info->right_margin));
-
-	PRUnichar postscript[] = { 'P', 'o', 's', 't', 'S', 'c', 'r', 'i',
-				   'p', 't', '/', 'd', 'e', 'f', 'a', 'u',
-				   'l', 't', '\0' };
-        options->SetPrinterName(postscript);
-
-	nsEmbedString tmp;
-
-	NS_CStringToUTF16 (nsEmbedCString(info->header_left_string),
-			   NS_CSTRING_ENCODING_UTF8, tmp);
-        options->SetHeaderStrLeft (tmp.get());
-
-	NS_CStringToUTF16 (nsEmbedCString(info->header_center_string),
-			   NS_CSTRING_ENCODING_UTF8, tmp);
-        options->SetHeaderStrCenter (tmp.get());
-
-	NS_CStringToUTF16 (nsEmbedCString(info->header_right_string),
-			   NS_CSTRING_ENCODING_UTF8, tmp);
-        options->SetHeaderStrRight (tmp.get());
-
-	NS_CStringToUTF16 (nsEmbedCString(info->footer_left_string),
-			   NS_CSTRING_ENCODING_UTF8, tmp);
-        options->SetFooterStrLeft (tmp.get());
-
-	NS_CStringToUTF16 (nsEmbedCString(info->footer_center_string),
-			   NS_CSTRING_ENCODING_UTF8, tmp);
-        options->SetFooterStrCenter(tmp.get());
-
-	NS_CStringToUTF16 (nsEmbedCString(info->footer_right_string),
-			   NS_CSTRING_ENCODING_UTF8, tmp);
-        options->SetFooterStrRight(tmp.get());
-
-	NS_CStringToUTF16 (nsEmbedCString(info->file),
-			   NS_CSTRING_ENCODING_UTF8, tmp);
-        options->SetToFileName (tmp.get());
-
-	NS_CStringToUTF16 (nsEmbedCString(info->printer),
-			   NS_CSTRING_ENCODING_UTF8, tmp);
-	options->SetPrintCommand (tmp.get());
-
-	/**
-	 * Work around a mozilla bug where paper size & orientation are ignored
-	 * and the specified file is created (containing invalid postscript)
-	 * in print preview mode if we set "print to file" to true.
-	 * See epiphany bug #119818.
-	 */
-	if (preview)
+	for (avPrinters->HasMoreElements(&more);
+	     more == PR_TRUE;
+	     avPrinters->HasMoreElements(&more))
 	{
-		options->SetPrintToFile (PR_FALSE);
-	}
-	else
-	{
-		options->SetPrintToFile (info->print_to_file);
+		nsCOMPtr<nsISupports> i;
+		rv = avPrinters->GetNext(getter_AddRefs(i));
+		NS_ENSURE_SUCCESS(rv, nsnull);
+
+		nsCOMPtr<nsISupportsString> printer = do_QueryInterface(i, &rv);
+		NS_ENSURE_SUCCESS(rv, nsnull);
+
+		nsAutoString data;
+		rv = printer->GetData(data);
+		NS_ENSURE_SUCCESS(rv, nsnull);
+
+		const char *name = NS_ConvertUCS2toUTF8 (data).get();
+		printers = g_list_prepend (printers, g_strdup (name));
 	}
 
-	/* native paper size formats. Our dialog does not support custom yet */
-	options->SetPaperSize (nsIPrintSettings::kPaperSizeNativeData);
-
-	NS_CStringToUTF16 (nsEmbedCString(info->paper),
-			   NS_CSTRING_ENCODING_UTF8, tmp);
-	options->SetPaperName (tmp.get());
-
-        options->SetPrintInColor (info->print_color);
-        options->SetOrientation (info->orientation);
-        options->SetPrintFrameType (frame_types[info->frame_type]);
-
-	return NS_OK;
+	return g_list_reverse (printers);
 }

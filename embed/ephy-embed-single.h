@@ -50,18 +50,19 @@ struct _EphyEmbedSingleIface
 
 	/* Methods */
 
-	GtkWidget *	(* open_window)		(EphyEmbedSingle *single,
+	GtkWidget *	  (* open_window)	(EphyEmbedSingle *single,
 						 EphyEmbed *parent,
 						 const char *address,
 						 const char *name,
 						 const char *features);
-	void		(* clear_cache)		(EphyEmbedSingle *shell);
-	void		(* clear_auth_cache)	(EphyEmbedSingle *shell);
-	void		(* set_offline_mode)	(EphyEmbedSingle *shell,
+	void		  (* clear_cache)	(EphyEmbedSingle *shell);
+	void		  (* clear_auth_cache)	(EphyEmbedSingle *shell);
+	void		  (* set_offline_mode)	(EphyEmbedSingle *shell,
 						 gboolean offline);
-	gboolean	(* get_offline_mode)	(EphyEmbedSingle *single);
-	GList *		(* get_font_list)	(EphyEmbedSingle *shell,
+	gboolean	  (* get_offline_mode)	(EphyEmbedSingle *single);
+	GList *		  (* get_font_list)	(EphyEmbedSingle *shell,
 						 const char *langGroup);
+	GList *		  (* get_printer_list)	(EphyEmbedSingle *shell);
 };
 
 GType		ephy_embed_single_get_type		(void);
@@ -83,6 +84,8 @@ gboolean	ephy_embed_single_get_offline_mode	(EphyEmbedSingle *single);
 
 GList		*ephy_embed_single_get_font_list	(EphyEmbedSingle *single,
 							 const char *lang_group);
+
+GList		*ephy_embed_single_get_printer_list	(EphyEmbedSingle *single);
 
 G_END_DECLS
 

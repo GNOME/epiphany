@@ -22,14 +22,26 @@
 
 #include <nsIIOService.h>
 #include <nsIURI.h>
+#include <nsIDOMWindow.h>
+#include <nsIPrintSettings.h>
+
+#include "print-dialog.h"
 
 namespace EphyUtils
 {
-	nsresult GetIOService (nsIIOService **ioService);
+	nsresult	GetIOService		(nsIIOService **ioService);
 
-	nsresult NewURI       (nsIURI **result, const nsAString &spec);
+	nsresult	NewURI			(nsIURI **result, const nsAString &spec);
 
-	nsresult NewURI       (nsIURI **result, const nsACString &spec);
+	nsresult	NewURI			(nsIURI **result, const nsACString &spec);
+
+	GtkWidget      *FindEmbed		(nsIDOMWindow *aDOMWindow);
+
+	GtkWidget      *FindGtkParent		(nsIDOMWindow *aDOMWindow);
+
+	nsresult        CollatePrintSettings	(const EmbedPrintInfo *info,
+						 nsIPrintSettings *settings,
+						 gboolean preview);
 }
 
 #endif

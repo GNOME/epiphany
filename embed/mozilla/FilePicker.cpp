@@ -26,7 +26,7 @@
 #endif
 
 #include "FilePicker.h"
-#include "MozillaPrivate.h"
+#include "EphyUtils.h"
 
 #include <nsCOMPtr.h>
 #include <nsEmbedString.h>
@@ -82,7 +82,7 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 {
 	LOG ("GFilePicker::Init")
 
-	GtkWidget *gtkparent = MozillaFindGtkParent (parent);
+	GtkWidget *gtkparent = EphyUtils::FindGtkParent (parent);
 #if defined(MOZ_NSIFILEPICKER_NSASTRING_)
 	NS_ENSURE_TRUE (gtkparent, NS_ERROR_FAILURE);
 #endif

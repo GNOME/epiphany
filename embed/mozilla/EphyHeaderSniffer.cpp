@@ -45,7 +45,6 @@
 #include "config.h"
 #endif
 
-#include "MozillaPrivate.h"
 #include "MozDownload.h"
 #include "EphyHeaderSniffer.h"
 

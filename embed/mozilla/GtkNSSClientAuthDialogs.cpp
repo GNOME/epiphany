@@ -28,7 +28,7 @@
 
 #ifdef HAVE_MOZILLA_PSM
 
-#include "MozillaPrivate.h"
+#include "EphyUtils.h"
 
 #include <nsIServiceManager.h>
 #include <nsIInterfaceRequestor.h>
@@ -146,7 +146,7 @@ GtkNSSClientAuthDialogs::ChooseCertificate (nsIInterfaceRequestor *ctx,
 	PRUint32 i;
 
 	nsCOMPtr<nsIDOMWindow> parent = do_GetInterface (ctx);
-	GtkWidget *gparent = MozillaFindGtkParent (parent);
+	GtkWidget *gparent = EphyUtils::FindGtkParent (parent);
 
 	dialog = gtk_dialog_new_with_buttons ("",
 					      GTK_WINDOW (gparent),
