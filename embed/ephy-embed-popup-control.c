@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Ricardo Fernández Pascual
+ *  Copyright (C) 2000, 2001, 2002 Ricardo FernÃ¡ndez Pascual
+ *  Copyright (C) 2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,8 +20,8 @@
  */
 
 #include "ephy-embed-popup-control.h"
+#include "ephy-embed-persist.h"
 #include "ephy-bonobo-extensions.h"
-#include "ephy-embed-utils.h"
 #include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-file-helpers.h"
@@ -477,6 +478,31 @@ embed_popup_copy_link_location_cmd (BonoboUIComponent *uic,
 }
 
 static void
+save_url (EphyEmbedPopupControl *popup,
+	  const char *title,
+	  gboolean ask_dest,
+	  const char *location)
+{
+	GtkWidget *widget, *window;
+	EphyEmbedPersist *persist;
+
+	widget = GTK_WIDGET (popup->priv->embed);
+	window = gtk_widget_get_toplevel (widget);
+
+	persist = ephy_embed_persist_new (popup->priv->embed);
+
+	ephy_embed_persist_set_fc_title (persist, title);
+	ephy_embed_persist_set_fc_parent (persist,GTK_WINDOW (window));
+	ephy_embed_persist_set_flags
+		(persist, ask_dest ? EMBED_PERSIST_ASK_DESTINATION : 0);
+	ephy_embed_persist_set_persist_key
+		(persist, CONF_STATE_DOWNLOADING_DIR);
+	ephy_embed_persist_set_source (persist, location);
+
+	ephy_embed_persist_save (persist);
+}
+
+static void
 save_property_url (EphyEmbedPopupControl *popup,
 		   const char *title,
 		   gboolean ask_dest,
@@ -485,24 +511,12 @@ save_property_url (EphyEmbedPopupControl *popup,
 	EphyEmbedEvent *info;
 	const char *location;
 	const GValue *value;
-	GtkWidget *widget;
-	GtkWidget *window;
-	EphyEmbedPersist *persist;
 
 	info = ephy_embed_popup_control_get_event (popup);
 	ephy_embed_event_get_property (info, property, &value);
 	location = g_value_get_string (value);
 
-	widget = GTK_WIDGET (popup->priv->embed);
-	window = gtk_widget_get_toplevel (widget);
-
-	persist = ephy_embed_persist_new (popup->priv->embed);
-
-	ephy_embed_persist_set_source (persist, location);
-
-	ephy_embed_utils_save (window, title,
-			       CONF_STATE_DOWNLOADING_DIR,
-			       ask_dest, persist);
+	save_url (popup, title, ask_dest, location);
 }
 
 /* commands */
@@ -553,16 +567,14 @@ background_download_completed (EphyEmbedPersist *persist,
 	const char *bg;
 	char *type;
 
-	ephy_embed_persist_get_dest (persist, &bg);
+	bg = ephy_embed_persist_get_dest (persist);
 	eel_gconf_set_string (CONF_DESKTOP_BG_PICTURE, bg);
 
 	type = eel_gconf_get_string (CONF_DESKTOP_BG_TYPE);
-	if (type || strcmp (type, "none") == 0)
+	if (type == NULL || strcmp (type, "none") == 0)
 	{
-		eel_gconf_set_string (CONF_DESKTOP_BG_TYPE,
-				      "wallpaper");
+		eel_gconf_set_string (CONF_DESKTOP_BG_TYPE, "wallpaper");
 	}
-
 	g_free (type);
 
 	g_object_unref (persist);
@@ -586,11 +598,11 @@ embed_popup_set_image_as_background_cmd (BonoboUIComponent *uic,
 	persist = ephy_embed_persist_new (popup->priv->embed);
 
 	base = g_path_get_basename (location);
-	dest = g_build_filename (ephy_dot_dir (),
-				 base, NULL);
+	dest = g_build_filename (ephy_dot_dir (), base, NULL);
 
-	ephy_embed_persist_set_source (persist, location);
 	ephy_embed_persist_set_dest (persist, dest);
+	ephy_embed_persist_set_flags (persist, EMBED_PERSIST_NO_VIEW);
+	ephy_embed_persist_set_source (persist, location);
 
 	ephy_embed_persist_save (persist);
 
@@ -615,27 +627,6 @@ embed_popup_copy_image_location_cmd (BonoboUIComponent *uic,
 	ephy_embed_event_get_property (info, "image", &value);
 	location = g_value_get_string (value);
 	embed_popup_copy_to_clipboard (popup, location);
-}
-
-static void
-save_url (EphyEmbedPopupControl *popup,
-	  const char *title,
-	  gboolean ask_dest,
-	  const char *url)
-{
-	GtkWidget *widget;
-	GtkWidget *window;
-	EphyEmbedPersist *persist;
-
-	widget = GTK_WIDGET (popup->priv->embed);
-	window = gtk_widget_get_toplevel (widget);
-
-	persist = ephy_embed_persist_new (popup->priv->embed);
-	ephy_embed_persist_set_source (persist, url);
-
-	ephy_embed_utils_save (window, title,
-			       CONF_STATE_DOWNLOADING_DIR,
-			       ask_dest, persist);
 }
 
 static void

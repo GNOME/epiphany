@@ -19,6 +19,7 @@ NOINST_H_FILES = \
 	ephy-bonobo-extensions.h		\
 	ephy-debug.h				\
 	ephy-dnd.h				\
+	ephy-file-chooser.h			\
 	ephy-file-helpers.h			\
 	ephy-glade.h				\
 	ephy-gui.h				\
@@ -50,6 +51,7 @@ libephy_la_SOURCES = \
 	ephy-dialog.h				\
 	ephy-dnd.c				\
 	ephy-dnd.h				\
+	ephy-file-chooser.c			\
 	ephy-file-helpers.c			\
 	ephy-file-helpers.h			\
 	ephy-glade.c				\

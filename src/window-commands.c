@@ -18,19 +18,22 @@
  *  $Id$
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "ephy-shell.h"
+#include "ephy-embed-persist.h"
 #include "ephy-debug.h"
 #include "ephy-command-manager.h"
 #include "window-commands.h"
 #include "print-dialog.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
-#include "ephy-embed-utils.h"
 #include "pdm-dialog.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-new-bookmark.h"
+#include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "toolbar.h"
 #include "ephy-state.h"
@@ -41,6 +44,7 @@
 #include "egg-editable-toolbar.h"
 #include "egg-toolbar-editor.h"
 
+#include <glib.h>
 #include <string.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
@@ -318,53 +322,43 @@ window_cmd_file_bookmark_page (GtkAction *action,
 	g_free (location);
 }
 
+static void
+open_response_cb (GtkDialog *dialog, gint response, EphyWindow *window)
+{
+	if (response == EPHY_RESPONSE_OPEN)
+	{
+		char *uri, *converted;
+
+		uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+		converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
+
+		if (converted != NULL)
+		{
+			ephy_window_load_url(window, uri);
+		}
+
+		g_free (converted);
+		g_free (uri);
+        }
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
 void
 window_cmd_file_open (GtkAction *action,
 		      EphyWindow *window)
 {
-	char *dir, *ret_dir, *file;
-	EphyEmbedShell *embed_shell;
-	gresult result;
-	EphyEmbedSingle *single;
+	EphyFileChooser *dialog;
 
-	single = ephy_embed_shell_get_embed_single
-		(EPHY_EMBED_SHELL (ephy_shell));
+	dialog = ephy_file_chooser_new (_("Open"),
+					GTK_WIDGET (window),
+					GTK_FILE_CHOOSER_ACTION_OPEN,
+					CONF_STATE_OPEN_DIR);
 
-	embed_shell = EPHY_EMBED_SHELL (ephy_shell);
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (open_response_cb), window);
 
-        dir = eel_gconf_get_string (CONF_STATE_OPEN_DIR);
-
-	result = ephy_embed_single_show_file_picker
-		(single, GTK_WIDGET (window),
-		 _("Open"),
-                 dir, NULL, modeOpen,
-                 &file, NULL, NULL);
-
-	/* persist directory choice */
-	/* Fix for bug 122780:
-	 * if the user selected a directory, or aborted with no filename typed,
-	 * g_path_get_dirname and gnome_vfs_uri_extract_dirname strip the last
-	 * path component, so test if the returned file is actually a directory.
-	 */
-	if (g_file_test (file, G_FILE_TEST_IS_DIR))
-	{
-		ret_dir = g_strdup (file);
-	}
-	else
-	{
-		ret_dir = g_path_get_dirname (file);
-	}
-
-	eel_gconf_set_string (CONF_STATE_OPEN_DIR, ret_dir);
-
-	if (result == G_OK)
-	{
-		ephy_window_load_url(window, file);
-        }
-
-	g_free (ret_dir);
-	g_free (file);
-        g_free (dir);
+	gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 void
@@ -378,13 +372,15 @@ window_cmd_file_save_as (GtkAction *action,
 	g_return_if_fail (embed != NULL);
 
 	persist = ephy_embed_persist_new (embed);
-	ephy_embed_persist_set_flags (persist,
-				      EMBED_PERSIST_MAINDOC);
 
-	ephy_embed_utils_save (GTK_WIDGET(window),
-			       _("Save As"),
-			       CONF_STATE_SAVE_DIR,
-			       TRUE, persist);
+	ephy_embed_persist_set_fc_title (persist, _("Save As"));
+	ephy_embed_persist_set_fc_parent (persist,GTK_WINDOW (window));
+	ephy_embed_persist_set_flags
+		(persist, EMBED_PERSIST_MAINDOC | EMBED_PERSIST_ASK_DESTINATION);
+	ephy_embed_persist_set_persist_key
+		(persist, CONF_STATE_SAVE_DIR);
+
+	ephy_embed_persist_save (persist);
 
 	g_object_unref (G_OBJECT(persist));
 }

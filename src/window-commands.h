@@ -19,7 +19,6 @@
 #include <gtk/gtkaction.h>
 
 #include "ephy-window.h"
-#include "ephy-embed-utils.h"
 
 void window_cmd_edit_find	(GtkAction *action,
 				 EphyWindow *window);

@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,263 +19,290 @@
  *  $Id$
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "ephy-embed-persist.h"
-#include "ephy-debug.h"
-#include "mozilla-embed.h"
 #include "mozilla-embed-persist.h"
+#include "ephy-debug.h"
 
 enum
 {
-        COMPLETED,
-        LAST_SIGNAL
-};
-
-enum
-{
-  PROP_0,
-  PROP_EMBED,
-  PROP_SOURCE,
-  PROP_DEST,
-  PROP_MAX_SIZE,
-  PROP_FLAGS,
-  PROP_HANDLER
+	PROP_0,
+	PROP_DEST,
+	PROP_EMBED,
+	PROP_FILECHOOSER_TITLE,
+	PROP_FILECHOOSER_PARENT,
+	PROP_FLAGS,
+	PROP_HANDLER,
+	PROP_MAX_SIZE,
+	PROP_PERSISTKEY,
+	PROP_SOURCE,	
 };
 
 #define EPHY_EMBED_PERSIST_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_PERSIST, EphyEmbedPersistPrivate))
 
 struct EphyEmbedPersistPrivate
 {
-	char *dir;
-	char *src;
-	PersistHandlerInfo *handler;
+	char *dest;
+	char *source;
+	char *fc_title;
+	char *persist_key;
 	EphyEmbed *embed;
 	int max_size;
 	EmbedPersistFlags flags;
+	GtkWindow *fc_parent;
 };
 
-static void
-ephy_embed_persist_class_init (EphyEmbedPersistClass *klass);
-static void
-ephy_embed_persist_init (EphyEmbedPersist *ges);
-static void
-ephy_embed_persist_finalize (GObject *object);
-static void
-ephy_embed_persist_set_property (GObject *object,
-                                  guint prop_id,
-                                  const GValue *value,
-                                  GParamSpec *pspec);
-static void
-ephy_embed_persist_get_property (GObject *object,
-                                  guint prop_id,
-                                  GValue *value,
-                                  GParamSpec *pspec);
+static void	ephy_embed_persist_class_init	(EphyEmbedPersistClass *klass);
+static void	ephy_embed_persist_init		(EphyEmbedPersist *ges);
 
-static gresult
-impl_set_source (EphyEmbedPersist *persist,
-		 const char *url);
-static gresult
-impl_set_dest (EphyEmbedPersist *persist,
-	       const char *dir);
-static gresult
-impl_set_max_size (EphyEmbedPersist *persist,
-		   int kb_size);
-static gresult
-impl_set_embed (EphyEmbedPersist *persist,
-		EphyEmbed *embed);
-static gresult
-impl_set_flags (EphyEmbedPersist *persist,
-		EmbedPersistFlags flags);
-static gresult
-impl_set_handler (EphyEmbedPersist *persist,
-		  const char *command,
-		  gboolean need_terminal);
+enum
+{
+	COMPLETED,
+	LAST_SIGNAL
+};
+
+static guint ephy_embed_persist_signals[LAST_SIGNAL] = { 0 };
 
 static GObjectClass *parent_class = NULL;
-static guint ephy_embed_persist_signals[LAST_SIGNAL] = { 0 };
 
 GType
 ephy_embed_persist_get_type (void)
 {
        static GType ephy_embed_persist_type = 0;
 
-        if (ephy_embed_persist_type == 0)
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (EphyEmbedPersistClass),
-                        NULL, /* base_init */
-                        NULL, /* base_finalize */
-                        (GClassInitFunc) ephy_embed_persist_class_init,
-                        NULL, /* class_finalize */
-                        NULL, /* class_data */
-                        sizeof (EphyEmbedPersist),
-                        0,    /* n_preallocs */
-                        (GInstanceInitFunc) ephy_embed_persist_init
-                };
+	if (ephy_embed_persist_type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyEmbedPersistClass),
+			NULL, /* base_init */
+			NULL, /* base_finalize */
+			(GClassInitFunc) ephy_embed_persist_class_init,
+			NULL, /* class_finalize */
+			NULL, /* class_data */
+			sizeof (EphyEmbedPersist),
+			0,    /* n_preallocs */
+			(GInstanceInitFunc) ephy_embed_persist_init
+		};
 
-                ephy_embed_persist_type = g_type_register_static (G_TYPE_OBJECT,
-                                                                    "EphyEmbedPersist",
-                                                                    &our_info, 0);
-        }
+		ephy_embed_persist_type = g_type_register_static (G_TYPE_OBJECT,
+								  "EphyEmbedPersist",
+								  &our_info, 0);
+	}
 
-        return ephy_embed_persist_type;
+	return ephy_embed_persist_type;
 }
 
-static void
-ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
+void
+ephy_embed_persist_set_dest (EphyEmbedPersist *persist,
+			     const char *value)
 {
-        GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	g_return_if_fail (EPHY_IS_EMBED_PERSIST (persist));
 
-        parent_class = g_type_class_peek_parent (klass);
+	persist->priv->dest = g_strdup (value);
+}
 
-        object_class->finalize = ephy_embed_persist_finalize;
-        object_class->set_property = ephy_embed_persist_set_property;
-	object_class->get_property = ephy_embed_persist_get_property;
+void
+ephy_embed_persist_set_embed (EphyEmbedPersist *persist,
+			      EphyEmbed *value)
+{
+	g_return_if_fail (EPHY_IS_EMBED_PERSIST (persist));
 
-	klass->set_source = impl_set_source;
-	klass->set_dest   = impl_set_dest;
-	klass->set_embed  = impl_set_embed;
-	klass->set_max_size = impl_set_max_size;
-	klass->set_flags = impl_set_flags;
-	klass->set_handler = impl_set_handler;
+	persist->priv->embed = value;
+}
 
-	/* init signals */
-        ephy_embed_persist_signals[COMPLETED] =
-                g_signal_new ("completed",
-                              G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (EphyEmbedPersistClass, completed),
-                              NULL, NULL,
-                              g_cclosure_marshal_VOID__VOID,
-                              G_TYPE_NONE,
-                              0);
+void
+ephy_embed_persist_set_fc_title (EphyEmbedPersist *persist,
+				 const char *value)
+{
+	g_return_if_fail (EPHY_IS_EMBED_PERSIST (persist));
 
-	g_object_class_install_property (object_class,
-                                         PROP_EMBED,
-                                         g_param_spec_object ("embed",
-                                                              "Embed",
-                                                              "The embed containing the document",
-                                                              G_TYPE_OBJECT,
-                                                              G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-                                         PROP_SOURCE,
-                                         g_param_spec_string  ("source",
-                                                               "Source",
-                                                               "Url of the document to save",
-                                                               NULL,
-                                                               G_PARAM_READWRITE));
+	persist->priv->fc_title = g_strdup (value);
+}
 
-	g_object_class_install_property (object_class,
-                                         PROP_DEST,
-                                         g_param_spec_string ("dest",
-                                                              "Destination",
-                                                              "Destination directory",
-                                                              NULL,
-                                                              G_PARAM_READWRITE));
+void
+ephy_embed_persist_set_fc_parent (EphyEmbedPersist *persist,
+				  GtkWindow *value)
+{
+	g_return_if_fail (EPHY_IS_EMBED_PERSIST (persist));
 
-	g_object_class_install_property (object_class,
-                                         PROP_MAX_SIZE,
-                                         g_param_spec_int    ("max_size",
-                                                              "Maxsize",
-                                                              "Maximum size of the file",
-                                                              0,
-							      G_MAXINT,
-							      0,
-                                                              G_PARAM_READWRITE));
+	persist->priv->fc_parent = value;
+}
 
-	g_object_class_install_property (object_class,
-                                         PROP_FLAGS,
-                                         g_param_spec_int    ("flags",
-                                                              "Flags",
-                                                              "Flags",
-                                                              0,
-							      G_MAXINT,
-							      0,
-                                                              G_PARAM_READWRITE));
+void
+ephy_embed_persist_set_flags (EphyEmbedPersist *persist,
+			      EmbedPersistFlags value)
+{
+	g_return_if_fail (EPHY_IS_EMBED_PERSIST (persist));
 
-	g_object_class_install_property (object_class,
-                                         PROP_HANDLER,
-                                         g_param_spec_pointer ("handler",
-                                                              "Handler",
-                                                              "Handler",
-                                                              G_PARAM_READWRITE));
+	persist->priv->flags = value;
+}
 
-	g_type_class_add_private (object_class, sizeof(EphyEmbedPersistPrivate));
+void
+ephy_embed_persist_set_max_size (EphyEmbedPersist *persist,
+				 int value)
+{
+	g_return_if_fail (EPHY_IS_EMBED_PERSIST (persist));
+
+	persist->priv->max_size = value;
+}
+
+void
+ephy_embed_persist_set_persist_key (EphyEmbedPersist *persist,
+				    const char *value)
+{
+	g_return_if_fail (EPHY_IS_EMBED_PERSIST (persist));
+
+	persist->priv->persist_key = g_strdup (value);
+}
+
+void
+ephy_embed_persist_set_source (EphyEmbedPersist *persist,
+			       const char *value)
+{
+	g_return_if_fail (EPHY_IS_EMBED_PERSIST (persist));
+
+	persist->priv->source = g_strdup (value);
+}
+
+const char *
+ephy_embed_persist_get_dest (EphyEmbedPersist *persist)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED_PERSIST (persist), NULL);
+
+	return persist->priv->dest;
+}
+
+EphyEmbed *
+ephy_embed_persist_get_embed (EphyEmbedPersist *persist)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED_PERSIST (persist), NULL);
+
+	return persist->priv->embed;
+}
+
+const char *
+ephy_embed_persist_get_fc_title (EphyEmbedPersist *persist)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED_PERSIST (persist), NULL);
+
+	return persist->priv->fc_title;
+}
+
+GtkWindow *
+ephy_embed_persist_get_fc_parent (EphyEmbedPersist *persist)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED_PERSIST (persist), NULL);
+
+	return persist->priv->fc_parent;
+}
+
+EmbedPersistFlags
+ephy_embed_persist_get_flags (EphyEmbedPersist *persist)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED_PERSIST (persist), 0);
+
+	return persist->priv->flags;
+}
+
+int
+ephy_embed_persist_get_max_size (EphyEmbedPersist *persist)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED_PERSIST (persist), 0);
+
+	return persist->priv->max_size;
+}
+
+const char *
+ephy_embed_persist_get_persist_key (EphyEmbedPersist *persist)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED_PERSIST (persist), NULL);
+
+	return persist->priv->persist_key;
+}
+
+const char *
+ephy_embed_persist_get_source (EphyEmbedPersist *persist)
+{
+	g_return_val_if_fail (EPHY_IS_EMBED_PERSIST (persist), NULL);
+
+	return persist->priv->source;
 }
 
 static void
 ephy_embed_persist_set_property (GObject *object,
-                                   guint prop_id,
-                                   const GValue *value,
-                                   GParamSpec *pspec)
+				 guint prop_id,
+				 const GValue *value,
+				 GParamSpec *pspec)
 {
-	EphyEmbedPersist *persist;
-	PersistHandlerInfo *h;
-
-	persist = EPHY_EMBED_PERSIST (object);
+	EphyEmbedPersist *persist = EPHY_EMBED_PERSIST (object);
 
 	switch (prop_id)
 	{
-		case PROP_EMBED:
-			ephy_embed_persist_set_embed (persist,
-							g_value_get_object (value));
-			break;
-		case PROP_SOURCE:
-			ephy_embed_persist_set_source (persist,
-							 g_value_get_string (value));
-			break;
 		case PROP_DEST:
-			ephy_embed_persist_set_dest  (persist,
-							 g_value_get_string (value));
+			ephy_embed_persist_set_dest (persist, g_value_get_string (value));
 			break;
-		case PROP_MAX_SIZE:
-			ephy_embed_persist_set_max_size  (persist,
-							    g_value_get_int (value));
+		case PROP_EMBED:
+			ephy_embed_persist_set_embed (persist, g_value_get_object (value));
+			break;
+		case PROP_FILECHOOSER_TITLE:
+			ephy_embed_persist_set_fc_title (persist, g_value_get_string (value));
+			break;
+		case PROP_FILECHOOSER_PARENT:
+			ephy_embed_persist_set_fc_parent (persist, g_value_get_object (value));
 			break;
 		case PROP_FLAGS:
-			ephy_embed_persist_set_flags
-				(persist,
-				(EmbedPersistFlags)g_value_get_int (value));
+			ephy_embed_persist_set_flags (persist, g_value_get_int (value));
 			break;
-		case PROP_HANDLER:
-			h = (PersistHandlerInfo *)g_value_get_pointer (value);
-			ephy_embed_persist_set_handler
-				(persist, h->command, h->need_terminal);
+		case PROP_MAX_SIZE:
+			ephy_embed_persist_set_max_size (persist, g_value_get_int (value));
+			break;
+		case PROP_PERSISTKEY:
+			ephy_embed_persist_set_persist_key (persist, g_value_get_string (value));
+			break;
+		case PROP_SOURCE:
+			ephy_embed_persist_set_source (persist, g_value_get_string (value));
 			break;
 	}
 }
 
 static void
 ephy_embed_persist_get_property (GObject *object,
-                                   guint prop_id,
-                                   GValue *value,
-                                   GParamSpec *pspec)
+				 guint prop_id,
+				 GValue *value,
+				 GParamSpec *pspec)
 {
-	EphyEmbedPersist *persist;
-
-	persist = EPHY_EMBED_PERSIST (object);
+	EphyEmbedPersist *persist = EPHY_EMBED_PERSIST (object);
 
 	switch (prop_id)
 	{
-		case PROP_EMBED:
-			g_value_set_object (value, persist->priv->embed);
-			break;
-		case PROP_SOURCE:
-			g_value_set_string (value, persist->priv->src);
-			break;
 		case PROP_DEST:
-			g_value_set_string (value, persist->priv->dir);
+			g_value_set_string (value, ephy_embed_persist_get_dest (persist));
 			break;
-		case PROP_MAX_SIZE:
-			g_value_set_int (value, persist->priv->max_size);
+		case PROP_EMBED:
+			g_value_set_object (value, ephy_embed_persist_get_embed (persist));
+			break;
+		case PROP_FILECHOOSER_TITLE:
+			g_value_set_string (value, ephy_embed_persist_get_fc_title (persist));
+			break;
+		case PROP_FILECHOOSER_PARENT:
+			g_value_set_object (value, ephy_embed_persist_get_fc_parent (persist));
 			break;
 		case PROP_FLAGS:
-			g_value_set_int (value, (int)persist->priv->flags);
+			g_value_set_int (value, ephy_embed_persist_get_flags (persist));
 			break;
-		case PROP_HANDLER:
-			g_value_set_pointer (value, persist->priv->handler);
+		case PROP_MAX_SIZE:
+			g_value_set_int (value, ephy_embed_persist_get_max_size (persist));
+			break;
+		case PROP_PERSISTKEY:
+			g_value_set_string (value, ephy_embed_persist_get_persist_key (persist));
+			break;
+		case PROP_SOURCE:
+			g_value_set_string (value, ephy_embed_persist_get_source (persist));
+			break;
 	}
 }
 
@@ -283,77 +311,124 @@ ephy_embed_persist_init (EphyEmbedPersist *persist)
 {
 	persist->priv = EPHY_EMBED_PERSIST_GET_PRIVATE (persist);
 
-	persist->priv->src = NULL;
-	persist->priv->dir = NULL;
-	persist->priv->handler = NULL;
+	LOG ("EphyEmbedPersist initialising %p", persist)
 
-	LOG ("Embed persist init")
+	persist->priv->dest = NULL;
+	persist->priv->source = NULL;
+	persist->priv->fc_title = NULL;
+	persist->priv->fc_parent = NULL;
+	persist->priv->flags = 0;
+	persist->priv->max_size = 0;
+	persist->priv->persist_key = NULL;
 }
 
 static void
 ephy_embed_persist_finalize (GObject *object)
 {
-        EphyEmbedPersist *persist = EPHY_EMBED_PERSIST (object);
+	EphyEmbedPersist *persist = EPHY_EMBED_PERSIST (object);
 
-	g_free (persist->priv->dir);
-	g_free (persist->priv->src);
+	g_free (persist->priv->dest);
+	g_free (persist->priv->source);
+	g_free (persist->priv->fc_title);
+	g_free (persist->priv->persist_key);
 
-	if (persist->priv->handler)
-	{
-		g_free (persist->priv->handler->command);
-		g_free (persist->priv->handler);
-	}
+	LOG ("EphyEmbedPersist finalised %p", object)
 
-	LOG ("Embed persist finalize")
-
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-
-EphyEmbedPersist *
-ephy_embed_persist_new (EphyEmbed *embed)
+static void
+ephy_embed_persist_class_init (EphyEmbedPersistClass *klass)
 {
-	EphyEmbedPersist *persist;
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-        persist = EPHY_EMBED_PERSIST (g_object_new (MOZILLA_TYPE_EMBED_PERSIST,
-						    "embed", embed,
-						    NULL));
+	parent_class = g_type_class_peek_parent (klass);
 
-	return persist;
-}
+	object_class->finalize = ephy_embed_persist_finalize;
+	object_class->set_property = ephy_embed_persist_set_property;
+	object_class->get_property = ephy_embed_persist_get_property;
 
-gresult
-ephy_embed_persist_set_source (EphyEmbedPersist *persist,
-				 const char *url)
-{
-	 EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);
-	 return klass->set_source (persist, url);
-}
+	/* init signals */
+	ephy_embed_persist_signals[COMPLETED] =
+		g_signal_new ("completed",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyEmbedPersistClass, completed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
 
-gresult
-ephy_embed_persist_get_source (EphyEmbedPersist *persist,
-				 const char **url)
-{
-	*url = persist->priv->src;
+	g_object_class_install_property (object_class,
+					 PROP_DEST,
+					 g_param_spec_string ("dest",
+							      "Destination",
+							      "Destination file path",
+							      NULL,
+							      G_PARAM_READWRITE));
 
-	return G_OK;
-}
+	g_object_class_install_property (object_class,
+					 PROP_EMBED,
+					 g_param_spec_object ("embed",
+							      "Embed",
+							      "The embed containing the document",
+							      G_TYPE_OBJECT,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
 
-gresult
-ephy_embed_persist_get_dest (EphyEmbedPersist *persist,
-			       const char **dir)
-{
-	*dir = persist->priv->dir;
+	g_object_class_install_property (object_class,
+					 PROP_FILECHOOSER_TITLE,
+					 g_param_spec_string  ("filechooser-title",
+							       "Filechooser title",
+							       "Title to use if showing filechooser",
+							       NULL,
+							       G_PARAM_READWRITE));
 
-	return G_OK;
-}
+	g_object_class_install_property (object_class,
+					 PROP_FILECHOOSER_PARENT,
+					 g_param_spec_object ("filechooser-parent",
+							      "Filechooser parent",
+							      "The parent window for the filechooser",
+							      GTK_TYPE_WINDOW,
+							      G_PARAM_READWRITE));
 
-gresult
-ephy_embed_persist_set_dest (EphyEmbedPersist *persist,
-			       const char *dir)
-{
-	EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);
-	return klass->set_dest (persist, dir);
+	g_object_class_install_property (object_class,
+					 PROP_FLAGS,
+					 g_param_spec_int    ("flags",
+							      "Flags",
+							      "Flags",
+							      0,
+							      G_MAXINT,
+							      0,
+							      G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_MAX_SIZE,
+					 g_param_spec_int    ("max_size",
+							      "Maxsize",
+							      "Maximum size of the file",
+							      0,
+							      G_MAXINT,
+							      0,
+							      G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_PERSISTKEY,
+					 g_param_spec_string  ("persist-key",
+							       "persist key",
+							       "Path persistence gconf key",
+							       NULL,
+							       G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_SOURCE,
+					 g_param_spec_string  ("source",
+							       "Source",
+							       "Url of the document to save",
+							       NULL,
+							       G_PARAM_READWRITE));
+
+	g_type_class_add_private (object_class, sizeof(EphyEmbedPersistPrivate));
 }
 
 gresult
@@ -370,122 +445,10 @@ ephy_embed_persist_save (EphyEmbedPersist *persist)
 	return klass->save (persist);
 }
 
-gresult
-ephy_embed_persist_set_max_size (EphyEmbedPersist *persist,
-			           int kb_size)
+EphyEmbedPersist *
+ephy_embed_persist_new (EphyEmbed *embed)
 {
-	EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);
-	return klass->set_max_size (persist, kb_size);
-}
-
-gresult
-ephy_embed_persist_set_embed (EphyEmbedPersist *persist,
-		                EphyEmbed *embed)
-{
-	EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);
-	return klass->set_embed (persist, embed);
-}
-
-gresult
-ephy_embed_persist_get_embed (EphyEmbedPersist *persist,
-		                EphyEmbed **embed)
-{
-	*embed = persist->priv->embed;
-
-	return G_OK;
-}
-
-gresult
-ephy_embed_persist_set_flags (EphyEmbedPersist *persist,
-		                EmbedPersistFlags flags)
-{
-	EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);
-	return klass->set_flags (persist, flags);
-}
-
-gresult
-ephy_embed_persist_get_flags (EphyEmbedPersist *persist,
-		                EmbedPersistFlags *flags)
-{
-	*flags = persist->priv->flags= persist->priv->flags;
-
-	return G_OK;
-}
-
-gresult
-ephy_embed_persist_set_handler (EphyEmbedPersist *persist,
-				  const char *command,
-				  gboolean need_terminal)
-{
-	EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);
-	return klass->set_handler (persist, command, need_terminal);
-}
-
-static gresult
-impl_set_handler (EphyEmbedPersist *persist,
-		  const char *command,
-		  gboolean need_terminal)
-{
-	persist->priv->handler = g_new0 (PersistHandlerInfo, 1);
-	persist->priv->handler->command = g_strdup (command);
-	persist->priv->handler->need_terminal = need_terminal;
-
-	g_object_notify (G_OBJECT(persist), "handler");
-
-	return G_OK;
-}
-
-static gresult
-impl_set_flags (EphyEmbedPersist *persist,
-		EmbedPersistFlags flags)
-{
-	persist->priv->flags = flags;
-
-	g_object_notify (G_OBJECT(persist), "flags");
-
-	return G_OK;
-}
-
-static gresult
-impl_set_source (EphyEmbedPersist *persist,
-		 const char *url)
-{
-	persist->priv->src = g_strdup(url);
-
-	g_object_notify (G_OBJECT(persist), "source");
-
-	return G_OK;
-}
-
-static gresult
-impl_set_dest (EphyEmbedPersist *persist,
-	       const char *dir)
-{
-	persist->priv->dir = g_strdup (dir);
-
-	g_object_notify (G_OBJECT(persist), "dest");
-
-	return G_OK;
-}
-
-static gresult
-impl_set_max_size (EphyEmbedPersist *persist,
-		   int kb_size)
-{
-	persist->priv->max_size = kb_size;
-
-	g_object_notify (G_OBJECT(persist), "max_size");
-
-	return G_OK;
-}
-
-static gresult
-impl_set_embed (EphyEmbedPersist *persist,
-		EphyEmbed *embed)
-{
-	persist->priv->embed = embed;
-
-	g_object_notify (G_OBJECT(persist), "embed");
-
-	return G_OK;
+	return EPHY_EMBED_PERSIST (g_object_new (MOZILLA_TYPE_EMBED_PERSIST,
+						 "embed", embed,
+						 NULL));
 }

@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2001 Philip Langdale
+ *  Copyright (C) 2003 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,45 +15,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- */
-
-/* Things to be aware of:
  *
- * This filepicker, like the mozilla one, does not make an attempt
- * to verify the validity of the initial directory you pass it.
- * It does check that the user doesn't give it a garbage path
- * during use, but it is the caller's responsibility to give a
- * sensible initial path.
- *
- * At the current moment, we instantiate the filepicker directly
- * in our contenthandler where there is path verification code
- * and else where through our C wrapper, which also does verification.
- * If, at a future date, you need to instantiate filepicker without
- * using the C wrapper, please verify the initial path. See
- * ContentHandler for a way to do this.
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
-#include "ephy-string.h"
-#include "ephy-gui.h"
-
-#include <glib/gconvert.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkcheckbutton.h>
-#include <gtk/gtktogglebutton.h>
-#include <gtk/gtkfilesel.h>
-#include <gtk/gtkhbbox.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkmessagedialog.h>
-#include <libgnome/gnome-i18n.h>
-
-#include "nsIFilePicker.h"
+#include "FilePicker.h"
 
 #include "nsCRT.h"
 #include "nsCOMPtr.h"
@@ -70,64 +41,195 @@
 #include "nsILocalFile.h"
 #include "nsIPromptService.h"
 #include "nsReadableUtils.h"
-
-#include <libgnome/gnome-util.h>
-
-#include "FilePicker.h"
+#include "nsIDOMWindow.h"
+#include "nsIDOMWindowInternal.h"
+#include "nsCOMPtr.h"
+#include "nsString.h"
+#include "nsILocalFile.h"
 #include "MozillaPrivate.h"
 
-/* Implementation file */
+#include "ephy-string.h"
+#include "ephy-prefs.h"
+#include "ephy-gui.h"
+#include "ephy-debug.h"
+
+#include <glib/gconvert.h>
+#include <gtk/gtkfilefilter.h>
+#include <gtk/gtkstock.h>
+#include <gtk/gtkmessagedialog.h>
+#include <bonobo/bonobo-i18n.h>
+#include <libgnome/gnome-util.h>
+
 NS_IMPL_ISUPPORTS1(GFilePicker, nsIFilePicker)
 
 GFilePicker::GFilePicker()
 {
 	NS_INIT_ISUPPORTS();
 
-	/* member initializers and constructor code */
-	mFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
-	mDisplayDirectory = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
-	mDisplayDirectory->InitWithNativePath(nsDependentCString(g_get_home_dir()));
+	LOG ("GFilePicker constructor")
+
+	mDialog = EPHY_FILE_CHOOSER (g_object_new (EPHY_TYPE_FILE_CHOOSER,
+						   "persist-key", CONF_STATE_UPLOAD_DIR,
+						   NULL));
+
+	mMode = nsIFilePicker::modeOpen;
 }
 
 GFilePicker::~GFilePicker()
 {
-	/* destructor code */
+	LOG ("GFilePicker destructor")
+
+	if (mDialog)
+	{
+		gtk_widget_destroy (GTK_WIDGET (mDialog));
+	}
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// begin nsIFilePicker impl
-////////////////////////////////////////////////////////////////////////////////
-
 /* void init (in nsIDOMWindowInternal parent, in wstring title, in short mode); */
-NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *aParent, 
-				const PRUnichar *aTitle, PRInt16 aMode)
+NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *title, PRInt16 mode)
 {
-	mParent = do_QueryInterface(aParent);
-	mParentWidget = MozillaFindGtkParent(mParent);
-	mTitle = NS_ConvertUCS2toUTF8(aTitle);
-	mMode = aMode;
+	nsCOMPtr<nsIDOMWindow> dw = do_QueryInterface (parent);
+	if (!dw) return NS_ERROR_FAILURE;
+
+	GtkWidget *pwin = MozillaFindGtkParent (dw);
+
+	gtk_window_set_transient_for (GTK_WINDOW (mDialog), GTK_WINDOW (pwin));
+
+	gtk_window_set_title (GTK_WINDOW (mDialog), NS_ConvertUCS2toUTF8 (title).get());
+
+	mMode = mode;
+
+	switch (mode)
+	{
+		case nsIFilePicker::modeOpen:
+		case nsIFilePicker::modeGetFolder:
+		case nsIFilePicker::modeOpenMultiple:
+			gtk_file_chooser_set_action (GTK_FILE_CHOOSER (mDialog),
+						     GTK_FILE_CHOOSER_ACTION_OPEN);
+
+			gtk_dialog_add_buttons (GTK_DIALOG (mDialog),
+						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+						GTK_STOCK_OPEN, EPHY_RESPONSE_OPEN,
+						NULL);
+			break;
+		case nsIFilePicker::modeSave:
+			gtk_file_chooser_set_action (GTK_FILE_CHOOSER (mDialog),
+						     GTK_FILE_CHOOSER_ACTION_SAVE);
 	
+			gtk_dialog_add_buttons (GTK_DIALOG (mDialog),
+						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+						GTK_STOCK_SAVE, EPHY_RESPONSE_SAVE,
+						NULL);
+			break;
+	}
+
+	gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (mDialog),
+					      mode == nsIFilePicker::modeOpenMultiple);
+
+	gtk_file_chooser_set_folder_mode (GTK_FILE_CHOOSER (mDialog),
+					  mode == nsIFilePicker::modeGetFolder);
+
 	return NS_OK;
 }
 
 /* void appendFilters (in long filterMask); */
-NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 aFilterMask)
+NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 {
-	//This function cannot be implemented due to the crippled
-	//nature of GtkFileSelection, but NS_ERROR_NOT_IMPLEMENTED
-	//is interpreted as a terminal error by some callers.
+	// http://lxr.mozilla.org/seamonkey/source/xpfe/components/filepicker/res/locale/en-US/filepicker.properties
+	// http://lxr.mozilla.org/seamonkey/source/xpfe/components/filepicker/src/nsFilePicker.js line 131 ff
+
+	// FIXME: use filters with mimetypes instead of extensions
+
+	if (filterMask & nsIFilePicker::filterAll)
+	{
+		AppendFilter (NS_ConvertUTF8toUCS2 (_("All files")).get(),
+			      NS_LITERAL_STRING ("*").get());
+	}
+	if (filterMask & nsIFilePicker::filterHTML)
+	{
+		AppendFilter (NS_ConvertUTF8toUCS2 (_("HTML files")).get(),
+			      NS_LITERAL_STRING ("*.html; *.htm; *.shtml; *.xhtml").get());
+	}
+	if (filterMask & nsIFilePicker::filterText)
+	{
+		AppendFilter (NS_ConvertUTF8toUCS2 (_("Text files")).get(),
+			      NS_LITERAL_STRING ("*.txt; *.text").get());
+	}
+	if (filterMask & nsIFilePicker::filterImages)
+	{
+		AppendFilter (NS_ConvertUTF8toUCS2 (_("Image files")).get(),
+			      NS_LITERAL_STRING ("*.png; *.gif; *.jpeg; *.jpg").get());
+	}
+	if (filterMask & nsIFilePicker::filterXML)
+	{
+		AppendFilter (NS_ConvertUTF8toUCS2 (_("XML files")).get(),
+			      NS_LITERAL_STRING ("*.xml").get());
+	}
+	if (filterMask & nsIFilePicker::filterXUL)
+	{
+		AppendFilter (NS_ConvertUTF8toUCS2 (_("XUL files")).get(),
+			      NS_LITERAL_STRING ("*.xul").get());
+	}
+
 	return NS_OK;
 }
 
 /* void appendFilter (in wstring title, in wstring filter); */
-NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *aTitle,
-					const PRUnichar *aFilter)
+NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar *filter)
 {
-	//GtkFileSelection is crippled, so we can't provide a short-list
-	//of filters to choose from. We provide minimal functionality
-	//by using the most recent AppendFilter call as the active filter.
-	mFilter = NS_ConvertUCS2toUTF8(aFilter);
+	GtkFileFilter *filth;
+
+	filth = gtk_file_filter_new ();
+
+	gtk_file_filter_set_name (filth, NS_ConvertUCS2toUTF8(title).get());
+	gtk_file_filter_add_pattern (filth, NS_ConvertUCS2toUTF8(filter).get());
+
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (mDialog), filth);
+
 	return NS_OK;
+}
+
+/* attribute wstring defaultString; */
+NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
+{
+	char *filename, *converted;
+
+	filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (mDialog));
+	if (filename != NULL)
+	{
+		converted = g_filename_to_utf8(filename, -1, NULL, NULL, NULL);
+	
+		*aDefaultString = ToNewUnicode (NS_ConvertUTF8toUCS2 (converted));
+	
+		g_free (filename);
+		g_free (converted);
+	}
+
+	return NS_OK;
+}
+
+NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
+{
+	if (aDefaultString)
+	{
+		/* set_current_name takes UTF-8, not a filename */
+		gtk_file_chooser_set_current_name
+			(GTK_FILE_CHOOSER (mDialog),
+			 NS_ConvertUCS2toUTF8 (aDefaultString).get());
+	}
+
+	return NS_OK;
+}
+
+/* attribute wstring defaultExtension; */
+NS_IMETHODIMP GFilePicker::GetDefaultExtension(PRUnichar **aDefaultExtension)
+{
+	return NS_ERROR_NOT_IMPLEMENTED;
+}
+
+NS_IMETHODIMP GFilePicker::SetDefaultExtension(const PRUnichar *aDefaultExtension)
+{
+	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* attribute long filterIndex; */
@@ -135,299 +237,112 @@ NS_IMETHODIMP GFilePicker::GetFilterIndex(PRInt32 *aFilterIndex)
 {
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
+
 NS_IMETHODIMP GFilePicker::SetFilterIndex(PRInt32 aFilterIndex)
 {
-	return NS_OK;
-}
-
-/* attribute wstring defaultString; */
-NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar * *aDefaultString)
-{
-	gsize bytesWritten;
-	gchar *utf8DefaultString = g_filename_to_utf8(mDefaultString.get(), -1,
-						      NULL,
-						      &bytesWritten, NULL);
-
-	*aDefaultString = ToNewUnicode(NS_ConvertUTF8toUCS2(utf8DefaultString));
-	g_free(utf8DefaultString);
-
-	return NS_OK;
-}
-NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
-{
-	if (aDefaultString)
-	{
-		gsize bytesWritten;
-		gchar *localeDefaultString =
-			g_filename_from_utf8(NS_ConvertUCS2toUTF8(aDefaultString).get(),
-					     -1, NULL,
-					     &bytesWritten, NULL);
-		mDefaultString = localeDefaultString;					     
-		g_free(localeDefaultString);
-	}
-	else
-		mDefaultString = "";
-	return NS_OK;
-}
-
-/* attribute wstring defaultExtension; */
-// Again, due to the crippled file selector, we can't really
-// do anything here.
-NS_IMETHODIMP GFilePicker::GetDefaultExtension(PRUnichar * *aDefaultExtension)
-{
-    return NS_ERROR_NOT_IMPLEMENTED;
-}
-NS_IMETHODIMP GFilePicker::SetDefaultExtension(const PRUnichar *aDefaultExtension)
-{
-    return NS_OK;
+	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* attribute nsILocalFile displayDirectory; */
-NS_IMETHODIMP GFilePicker::GetDisplayDirectory(nsILocalFile * *aDisplayDirectory)
+NS_IMETHODIMP GFilePicker::GetDisplayDirectory(nsILocalFile **aDisplayDirectory)
 {
-	NS_IF_ADDREF(*aDisplayDirectory = mDisplayDirectory);
+	char *dir = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (mDialog));
+
+	if (dir != NULL)
+	{
+		nsCOMPtr<nsILocalFile> file = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
+		file->InitWithNativePath (nsDependentCString (dir));
+		NS_IF_ADDREF (*aDisplayDirectory = file);
+	
+		g_free (dir);
+	}
+
 	return NS_OK;
 }
-NS_IMETHODIMP GFilePicker::SetDisplayDirectory(nsILocalFile * aDisplayDirectory)
+
+NS_IMETHODIMP GFilePicker::SetDisplayDirectory(nsILocalFile *aDisplayDirectory)
 {
-	mDisplayDirectory = aDisplayDirectory;
+	nsCAutoString dir;
+	aDisplayDirectory->GetNativePath (dir);
+
+	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (mDialog),
+					     dir.get());
+
 	return NS_OK;
 }
 
 /* readonly attribute nsILocalFile file; */
-NS_IMETHODIMP GFilePicker::GetFile(nsILocalFile * *aFile)
+NS_IMETHODIMP GFilePicker::GetFile(nsILocalFile **aFile)
 {
-	NS_IF_ADDREF(*aFile = mFile);
+	char *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (mDialog));
+
+	if (filename != NULL)
+	{
+		nsCOMPtr<nsILocalFile> file = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
+		file->InitWithNativePath (nsDependentCString (filename));
+		NS_IF_ADDREF (*aFile = file);
+	
+		g_free (filename);
+	}
+
 	return NS_OK;
 }
 
 /* readonly attribute nsIFileURL fileURL; */
-NS_IMETHODIMP GFilePicker::GetFileURL(nsIFileURL * *aFileURL)
+NS_IMETHODIMP GFilePicker::GetFileURL(nsIFileURL **aFileURL)
 {
-	nsCOMPtr<nsIFileURL> fileURL = 
-		do_CreateInstance(NS_STANDARDURL_CONTRACTID);
-	fileURL->SetFile(mFile);
+	nsCOMPtr<nsILocalFile> file;
+	GetFile (getter_AddRefs(file));
+	
+	nsCOMPtr<nsIFileURL> fileURL = do_CreateInstance (NS_STANDARDURL_CONTRACTID);
+	fileURL->SetFile(file);
 	NS_IF_ADDREF(*aFileURL = fileURL);
+
 	return NS_OK;
 }
 
 /* readonly attribute nsISimpleEnumerator files; */
 NS_IMETHODIMP GFilePicker::GetFiles(nsISimpleEnumerator * *aFiles)
 {
-    return NS_ERROR_NOT_IMPLEMENTED;
+	// Not sure if we need to implement it at all, it's used nowhere
+	// in mozilla, but I guess a javascript might call it?
+
+	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* short show (); */
 NS_IMETHODIMP GFilePicker::Show(PRInt16 *_retval)
 {
-	mFileSelector = gtk_file_selection_new(mTitle.get());
+	gtk_window_set_modal (GTK_WINDOW (mDialog), TRUE);
 
-	nsCAutoString cFileName;
-	if(mMode == nsIFilePicker::modeGetFolder)
-		cFileName.Assign("");
-	else
-		cFileName = mDefaultString;
+	gtk_widget_show (GTK_WIDGET (mDialog));
 
-	nsCAutoString cDirName;
-	mDisplayDirectory->GetNativePath(cDirName);
+	int response = gtk_dialog_run (GTK_DIALOG (mDialog));
 
-	nsCAutoString cFullPath;
-	cFullPath.Assign(cDirName + NS_LITERAL_CSTRING("/") + cFileName);
-	gtk_file_selection_set_filename(GTK_FILE_SELECTION(mFileSelector),
-				 	cFullPath.get());
-
-	if (!mFilter.IsEmpty())
+	switch (response)
 	{
-		gtk_file_selection_complete(GTK_FILE_SELECTION(mFileSelector),
-					    mFilter.get());
+		case EPHY_RESPONSE_OPEN:
+		case EPHY_RESPONSE_SAVE:
+			*_retval = nsIFilePicker::returnOK;
+			break;
+		default:
+			*_retval = nsIFilePicker::returnCancel;
+			break;
 	}
 
-	if (mParentWidget)
-		gtk_window_set_transient_for(GTK_WINDOW(mFileSelector),
-					     GTK_WINDOW(mParentWidget));
+	char *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (mDialog));
 
-	if (mMode == nsIFilePicker::modeGetFolder)
+	if (filename == NULL)
 	{
-		gtk_widget_set_sensitive(GTK_FILE_SELECTION(mFileSelector)
-					 ->file_list, FALSE);
+		*_retval = nsIFilePicker::returnCancel;
 	}
-
-	gtk_window_set_modal(GTK_WINDOW(mFileSelector), TRUE);
-
-	gint retVal = gtk_dialog_run(GTK_DIALOG(mFileSelector));
-	
-	HandleFilePickerResult();
-
-	if (retVal != GTK_RESPONSE_OK)
+	else if (mMode == nsIFilePicker::modeSave
+		 && ephy_gui_confirm_overwrite_file (GTK_WIDGET (mDialog), filename) == FALSE)
 	{
-		*_retval = returnCancel;
-	}
-	else
-	{	
-		ValidateFilePickerResult(_retval);
+		*_retval = nsIFilePicker::returnCancel;
 	}
 
-	gtk_widget_destroy(mFileSelector);
-
-	return NS_OK;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// begin local public methods impl
-////////////////////////////////////////////////////////////////////////////////
-
-NS_METHOD GFilePicker::InitWithGtkWidget (GtkWidget *aParentWidget, 
-					  const char *aTitle, PRInt16 aMode)
-{
-	mParentWidget = aParentWidget;
-
-	mTitle = nsDependentCString(aTitle);
-
-	mMode = aMode;
-
-	mFile = do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
-
-	return NS_OK;
-}
-
-NS_METHOD GFilePicker::SanityCheck (PRBool *retIsSane)
-{
-	*retIsSane = PR_TRUE;
-	
-	nsresult rv;
-	PRBool dirExists, fileExists = PR_TRUE;
-
-	if (mDisplayDirectory)
-	{
-		rv = mDisplayDirectory->Exists (&dirExists);
-		g_return_val_if_fail (NS_SUCCEEDED(rv), rv);
-	}
-	else
-	{
-		dirExists = PR_FALSE;
-	}
-
-	if (mMode != nsIFilePicker::modeGetFolder)
-	{
-		rv = mFile->Exists (&fileExists);
-		g_return_val_if_fail (NS_SUCCEEDED(rv), rv);
-	}
-
-	if (mMode == nsIFilePicker::modeSave && !fileExists)
-	{
-		return NS_OK;
-	}
-	
-	if (!dirExists || !fileExists)
-	{
-		GtkWidget *errorDialog = gtk_message_dialog_new (
-				NULL,
-				GTK_DIALOG_MODAL,
-				GTK_MESSAGE_ERROR,
-				GTK_BUTTONS_OK,
-				_("The specified path does not exist."));
-
-		if (mParentWidget)
-			gtk_window_set_transient_for(GTK_WINDOW(errorDialog),
-						     GTK_WINDOW(mFileSelector));
-
-		gtk_window_set_modal (GTK_WINDOW(errorDialog), TRUE);
-		gtk_dialog_run (GTK_DIALOG(errorDialog));
-		gtk_widget_destroy (errorDialog);
-		*retIsSane = PR_FALSE;
-		return NS_OK;
-	}
-
-	PRBool correctType;
-	char *errorText;
-	if (mMode == nsIFilePicker::modeGetFolder)
-	{
-		rv = mDisplayDirectory->IsDirectory (&correctType);
-		g_return_val_if_fail (NS_SUCCEEDED(rv), rv);
-		errorText = g_strdup (_("A file was selected when a "
-					"folder was expected."));
-	}
-	else
-	{
-		rv = mFile->IsFile (&correctType);
-		g_return_val_if_fail (NS_SUCCEEDED(rv), rv);
-		errorText = g_strdup (_("A folder was selected when a "
-				        "file was expected."));
-	}
-	
-	if(!correctType)
-	{
-		GtkWidget *errorDialog = gtk_message_dialog_new (
-				NULL,
-				GTK_DIALOG_MODAL,
-				GTK_MESSAGE_ERROR,
-				GTK_BUTTONS_OK,
-				errorText);
-
-		if (mParentWidget)
-			gtk_window_set_transient_for(GTK_WINDOW(errorDialog),
-						     GTK_WINDOW(mFileSelector));
-
-		gtk_window_set_modal (GTK_WINDOW(errorDialog), TRUE);
-		gtk_dialog_run (GTK_DIALOG(errorDialog));
-		gtk_widget_destroy (errorDialog);
-		*retIsSane = PR_FALSE;
-	}
-	g_free (errorText);
-
-	return NS_OK;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// begin local private methods impl
-////////////////////////////////////////////////////////////////////////////////
-
-NS_METHOD GFilePicker::HandleFilePickerResult()
-{
-	const char *fileName = gtk_file_selection_get_filename(GTK_FILE_SELECTION(mFileSelector));
-
-	if (!fileName || strlen(fileName) == 0) return NS_ERROR_FAILURE;
-
-	const nsACString &cFileName = nsDependentCString(fileName);
-	mFile->InitWithNativePath(cFileName);
-
-	if (mMode == nsIFilePicker::modeGetFolder)
-	{
-		mDisplayDirectory->InitWithNativePath(cFileName);
-		mDefaultString = "";
-	}
-	else
-	{
-		nsCOMPtr<nsIFile> directory;
-		mFile->GetParent(getter_AddRefs(directory));
-		mDisplayDirectory = do_QueryInterface(directory);
-		mFile->GetNativeLeafName(mDefaultString);
-	}
-
-	return NS_OK;
-}
-
-NS_METHOD GFilePicker::ValidateFilePickerResult(PRInt16 *retval)
-{
-	nsresult rv;
-	const char *fileName = gtk_file_selection_get_filename(GTK_FILE_SELECTION(mFileSelector));
-
-	*retval = returnCancel;
-
-	PRBool passesSanityCheck;
-	rv = SanityCheck(&passesSanityCheck);
-	if (NS_SUCCEEDED(rv) && !passesSanityCheck) return NS_ERROR_FAILURE;
-
-	if (mMode == nsIFilePicker::modeSave)
-	{
-		if (!ephy_gui_confirm_overwrite_file (mFileSelector,
-					              fileName))
-		{
-			return NS_OK;
-		}
-	}
-
-	*retval = returnOK;
+	g_free (filename);
 
 	return NS_OK;
 }

@@ -49,6 +49,7 @@
 #include "ephy-prefs.h"
 #include "ephy-shell.h"
 #include "ephy-file-helpers.h"
+#include "ephy-file-chooser.h"
 #include "popup-commands.h"
 #include "ephy-state.h"
 #include "window-commands.h"
@@ -494,6 +495,27 @@ add_bookmarks_source (GtkListStore *store,
 }
 
 static void
+import_from_file_response_cb (GtkDialog *dialog, gint response,
+			      EphyBookmarksEditor *editor)
+{
+	char *filename;
+
+	if (response == EPHY_RESPONSE_OPEN)
+	{
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+
+		if (filename != NULL)
+		{
+			ephy_bookmarks_import (editor->priv->bookmarks, filename);			
+
+			g_free (filename);
+		}
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static void
 import_dialog_response_cb (GtkDialog *dialog, gint response,
 			   EphyBookmarksEditor *editor)
 {
@@ -516,15 +538,22 @@ import_dialog_response_cb (GtkDialog *dialog, gint response,
 
 		if (filename == NULL)
 		{
-			const char *title;
-			EphyEmbedSingle *single;
+			EphyFileChooser *dialog;
 
-			title = _("Import bookmarks from file");
-			single = ephy_embed_shell_get_embed_single
-				(EPHY_EMBED_SHELL (ephy_shell));
-			ephy_embed_single_show_file_picker
-				(single, GTK_WIDGET (editor), title, NULL,
-				 NULL, modeOpen, &filename, NULL, NULL);
+			dialog = ephy_file_chooser_new (_("Import bookmarks from file"),
+							GTK_WIDGET (editor),
+							GTK_FILE_CHOOSER_ACTION_OPEN,
+							NULL);
+			/* FIXME: set up some filters perhaps ? */
+			g_signal_connect (dialog, "response",
+					  G_CALLBACK (import_from_file_response_cb), editor);
+
+			gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+						GTK_STOCK_OPEN, GTK_RESPONSE_OK,
+						NULL);
+
+			gtk_widget_show (GTK_WIDGET (dialog));
 		}
 		else
 		{

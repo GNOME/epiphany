@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifndef EPHY_EMBED_SINGLE_H
@@ -132,15 +134,6 @@ struct EphyEmbedSingleClass
 	gresult         (* remove_passwords)    (EphyEmbedSingle *shell,
 						 GList *passwords,
 						 PasswordType type);
-	gresult         (* show_file_picker)    (EphyEmbedSingle *shell,
-						 GtkWidget *parentWidget,
-						 const char* title,
-						 const char* directory,
-						 const char* file,
-						 FilePickerMode mode,
-						 char **ret_fullpath,
-						 FileFormat *file_formats,
-						 gint *ret_file_format);
 };
 
 GType             ephy_embed_single_get_type            (void);
@@ -178,16 +171,6 @@ gresult		  ephy_embed_single_free_passwords      (EphyEmbedSingle *shell,
 gresult           ephy_embed_single_remove_passwords    (EphyEmbedSingle *shell,
 							 GList *passwords,
 							 PasswordType type);
-
-gresult           ephy_embed_single_show_file_picker    (EphyEmbedSingle *shell,
-							 GtkWidget *parentWidget,
-							 const char *title,
-							 const char *directory,
-							 const char *file,
-							 FilePickerMode mode,
-							 char **ret_fullpath,
-							 FileFormat *file_formats,
-							 int *ret_file_format);
 
 G_END_DECLS
 

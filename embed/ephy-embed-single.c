@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000, 2001, 2002, 2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -180,42 +180,6 @@ ephy_embed_single_remove_passwords (EphyEmbedSingle *shell,
 {
 	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
         return klass->remove_passwords (shell, passwords, type);
-}
-
-/**
- * show_file_picker: Shows a file picker. Can be configured to select a
- * file or a directory.
- * @parentWidget: Parent Widget for file picker.
- * @title: Title for file picker.
- * @directory: Initial directory to start in.
- * @file: Initial filename to show in filepicker.
- * @mode: Mode to run filepicker in (modeOpen, modeSave, modeGetFolder)
- * @ret_fullpath: On a successful return, will hold the full path to selected
- *		file or directory.
- * @file_formats: an array of FileFormat structures to fill the format chooser
- *              optionmenu. NULL if not needed. The last item must have
- *              description == NULL.
- * @ret_file_format: where to store the index of the format selected (can be
- *              NULL)
- * returns: TRUE for success, FALSE for failure.
- */
-
-gresult
-ephy_embed_single_show_file_picker (EphyEmbedSingle *shell,
-				   GtkWidget *parentWidget,
-				   const char *title,
-				   const char *directory,
-		                   const char *file,
-				   FilePickerMode mode,
-				   char **ret_fullpath,
-				   FileFormat *file_formats,
-				   int *ret_file_format)
-{
-	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
-        return klass->show_file_picker (shell, parentWidget, title,
-					directory, file, mode,
-					ret_fullpath,
-					file_formats, ret_file_format);
 }
 
 gresult

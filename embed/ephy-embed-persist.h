@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,6 +15,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifndef EPHY_EMBED_PERSIST_H
@@ -23,6 +26,8 @@
 
 #include <glib-object.h>
 #include <glib.h>
+
+#include <gtk/gtkwindow.h>
 
 G_BEGIN_DECLS
 
@@ -39,94 +44,78 @@ typedef struct EphyEmbedPersistPrivate EphyEmbedPersistPrivate;
 
 typedef enum
 {
-	EMBED_PERSIST_BYPASSCACHE = 1 << 0,
-	EMBED_PERSIST_MAINDOC = 1 << 1,
-	EMBED_PERSIST_NO_VIEW = 1 << 2,
-	EMBED_PERSIST_ASK_DESTINATION = 1 << 3
+	EMBED_PERSIST_BYPASSCACHE	= 1 << 0,
+	EMBED_PERSIST_MAINDOC		= 1 << 1,
+	EMBED_PERSIST_NO_VIEW		= 1 << 2,
+	EMBED_PERSIST_ASK_DESTINATION	= 1 << 3
 } EmbedPersistFlags;
-
-typedef struct
-{
-	char *command;
-	gboolean need_terminal;
-} PersistHandlerInfo;
 
 struct EphyEmbedPersist
 {
-        GObject parent;
-        EphyEmbedPersistPrivate *priv;
+	GObject parent;
+	EphyEmbedPersistPrivate *priv;
 };
 
 struct EphyEmbedPersistClass
 {
-        GObjectClass parent_class;
+	GObjectClass parent_class;
 
-	void (* completed) (EphyEmbedPersist *persist);
+	void (* completed)	(EphyEmbedPersist *persist);
 
 	/* Methods */
 
-	gresult (* set_source)   (EphyEmbedPersist *persist,
-				  const char *url);
+	gresult (* save)	(EphyEmbedPersist *persist);
 
-	gresult (* set_dest)     (EphyEmbedPersist *persist,
-				  const char *dir);
-
-	gresult (* save)         (EphyEmbedPersist *persist);
-
-	gresult (* cancel)       (EphyEmbedPersist *persist);
-
-	gresult (* set_max_size) (EphyEmbedPersist *persist,
-				  int max_size);
-
-	gresult (* set_embed)    (EphyEmbedPersist *persist,
-				  EphyEmbed *embed);
-
-	gresult (* set_flags)    (EphyEmbedPersist *persist,
-				  EmbedPersistFlags flags);
-
-	gresult (* set_handler)  (EphyEmbedPersist *persist,
-				  const char *command,
-				  gboolean need_terminal);
+	gresult (* cancel)	(EphyEmbedPersist *persist);
 };
 
-GType               ephy_embed_persist_get_type    (void);
+GType			 ephy_embed_persist_get_type	(void);
 
-EphyEmbedPersist   *ephy_embed_persist_new         (EphyEmbed *embed);
+EphyEmbedPersist	*ephy_embed_persist_new			(EphyEmbed *embed);
 
-gresult             ephy_embed_persist_set_source  (EphyEmbedPersist *persist,
-						    const char *url);
+gresult			 ephy_embed_persist_save		(EphyEmbedPersist *persist);
 
-gresult             ephy_embed_persist_get_source  (EphyEmbedPersist *persist,
-						    const char **url);
+gresult			 ephy_embed_persist_cancel		(EphyEmbedPersist *persist);
 
-gresult		    ephy_embed_persist_set_dest    (EphyEmbedPersist *persist,
-						    const char *dir);
+void			 ephy_embed_persist_set_dest		(EphyEmbedPersist *persist,
+								 const char *value);
 
-gresult		    ephy_embed_persist_get_dest    (EphyEmbedPersist *persist,
-						    const char **dir);
+void			 ephy_embed_persist_set_embed		(EphyEmbedPersist *persist,
+								 EphyEmbed *value);
 
-gresult		    ephy_embed_persist_set_handler (EphyEmbedPersist *persist,
-						    const char *handler,
-						    gboolean need_terminal);
+void			 ephy_embed_persist_set_fc_title	(EphyEmbedPersist *persist,
+								 const char *value);
 
-gresult		    ephy_embed_persist_set_max_size (EphyEmbedPersist *persist,
-						     int kb_size);
+void			 ephy_embed_persist_set_fc_parent	(EphyEmbedPersist *persist,
+								 GtkWindow *value);
 
-gresult             ephy_embed_persist_set_embed   (EphyEmbedPersist *persist,
-		                                    EphyEmbed *embed);
+void			 ephy_embed_persist_set_flags		(EphyEmbedPersist *persist,
+								 EmbedPersistFlags value);
 
-gresult             ephy_embed_persist_get_embed   (EphyEmbedPersist *persist,
-		                                    EphyEmbed **embed);
+void			 ephy_embed_persist_set_max_size	(EphyEmbedPersist *persist,
+								 int value);
 
-gresult		    ephy_embed_persist_set_flags   (EphyEmbedPersist *persist,
-						    EmbedPersistFlags flags);
+void			 ephy_embed_persist_set_persist_key	(EphyEmbedPersist *persist,
+								 const char *value);
 
-gresult		    ephy_embed_persist_get_flags   (EphyEmbedPersist *persist,
-						    EmbedPersistFlags *flags);
+void			 ephy_embed_persist_set_source		(EphyEmbedPersist *persist,
+								 const char *value);
 
-gresult		    ephy_embed_persist_save        (EphyEmbedPersist *persist);
+const char 		*ephy_embed_persist_get_dest		(EphyEmbedPersist *persist);
 
-gresult		    ephy_embed_persist_cancel      (EphyEmbedPersist *persist);
+EphyEmbed		*ephy_embed_persist_get_embed		(EphyEmbedPersist *persist);
+
+const char 		*ephy_embed_persist_get_fc_title	(EphyEmbedPersist *persist);
+
+GtkWindow		*ephy_embed_persist_get_fc_parent	(EphyEmbedPersist *persist);
+
+EmbedPersistFlags	 ephy_embed_persist_get_flags		(EphyEmbedPersist *persist);
+
+int			 ephy_embed_persist_get_max_size	(EphyEmbedPersist *persist);
+
+const char 		*ephy_embed_persist_get_persist_key	(EphyEmbedPersist *persist);
+
+const char 		*ephy_embed_persist_get_source		(EphyEmbedPersist *persist);
 
 G_END_DECLS
 

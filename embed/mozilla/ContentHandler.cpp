@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 /*
@@ -144,41 +146,17 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
-extern "C" {
-#include "libgnomevfs/gnome-vfs-mime-handlers.h"
-}
-
-#include "ephy-embed-shell.h"
-#include "ephy-prefs.h"
-#include "eel-gconf-extensions.h"
-#include "ephy-glade.h"
-#include "ephy-string.h"
-#include "ephy-gui.h"
-#include "ephy-embed-utils.h"
-#include "ephy-file-helpers.h"
 #include "ContentHandler.h"
-
-#include <gtk/gtkentry.h>
-#include <gtk/gtktogglebutton.h>
-#include <gtk/gtkprogress.h>
-#include <gtk/gtkoptionmenu.h>
-#include <libgnome/gnome-exec.h>
-#include <libgnome/gnome-i18n.h>
-#include <libgnome/gnome-config.h>
-#include <libgnome/gnome-util.h>
-#include <libgnomevfs/gnome-vfs-mime.h>
 
 #include "FilePicker.h"
 #include "MozillaPrivate.h"
 
-#include "nsCRT.h"
 #include "nsCOMPtr.h"
 #include "nsISupportsArray.h"
 #include "nsIServiceManager.h"
-#include "nsWeakReference.h"
 
 #include "nsString.h"
 #include "nsIURI.h"
@@ -190,8 +168,28 @@ extern "C" {
 #include "nsIDOMWindowInternal.h"
 #include "nsIMIMEInfo.h"
 
+#include "ephy-embed-shell.h"
+#include "ephy-prefs.h"
+#include "eel-gconf-extensions.h"
+#include "ephy-glade.h"
+#include "ephy-string.h"
+#include "ephy-gui.h"
+#include "ephy-file-helpers.h"
+
+#include <gtk/gtkentry.h>
+#include <gtk/gtktogglebutton.h>
+#include <gtk/gtkprogress.h>
+#include <gtk/gtkoptionmenu.h>
+#include <gtk/gtkdialog.h>
+#include <gtk/gtkmessagedialog.h>
+#include <libgnome/gnome-exec.h>
+#include <libgnome/gnome-i18n.h>
+#include <libgnome/gnome-config.h>
+#include <libgnome/gnome-util.h>
+#include <libgnomevfs/gnome-vfs-mime.h>
+#include <bonobo/bonobo-i18n.h>
+
 class GContentHandler;
-//class GDownloadProgressListener;
 struct MimeAskActionDialog;
 struct HelperAppChooserDialog;
 
@@ -562,7 +560,7 @@ MimeAskActionDialog::MimeAskActionDialog(GContentHandler *aContentHandler,
 	GtkWidget *label;
 	GtkWidget *dialogWidget;
 	const char *description;
-	char ltext[255]; //philipl: Fixed length buffer == potential security problem...
+	char *ltext;
 
 	mGXml = ephy_glade_widget_new ("epiphany.glade", "mime_ask_action_dialog", 
 				      &dialogWidget, this);
@@ -579,9 +577,10 @@ MimeAskActionDialog::MimeAskActionDialog(GContentHandler *aContentHandler,
 	description = gnome_vfs_mime_get_description (aMimeType);
 	if (!description) description = aMimeType;
 	
-	g_snprintf (ltext, 255, "<b>%s</b>", description);
+	ltext = g_strdup_printf ("<b>%s</b>", description);
 	label = glade_xml_get_widget (mGXml, "mime_ask_action_description");
 	gtk_label_set_markup (GTK_LABEL (label), ltext);
+	g_free (ltext);
 
 	gtk_window_set_transient_for (GTK_WINDOW (dialogWidget), 
 				      GTK_WINDOW (aParentWidget));
@@ -646,9 +645,24 @@ mime_ask_dialog_open (MimeAskActionDialog *dialog)
 		delete dialog;
 	}
 	else
-	{	
+	{
+		GtkWidget *message_dialog;
+		
 		mime_ask_dialog_cancel (dialog);
-		ephy_embed_utils_nohandler_dialog_run (dialog->mParent);
+
+		/* FIXME mime db shortcut */
+
+		message_dialog = gtk_message_dialog_new 
+				(GTK_WINDOW (dialog->mParent), 
+				 GTK_DIALOG_MODAL,
+				 GTK_MESSAGE_ERROR,
+				 GTK_BUTTONS_OK,
+				 _("No available applications to open "
+				   "the specified file."));
+		gtk_dialog_run (GTK_DIALOG (message_dialog));
+		gtk_widget_destroy (message_dialog);
+
+		/* FIXME where is dialog deleted ? */
 	}
 }
 

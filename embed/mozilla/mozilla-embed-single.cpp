@@ -33,7 +33,6 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-embed-prefs.h"
 #include "MozRegisterComponents.h"
-#include "FilePicker.h"
 
 #include <time.h>
 #include <libgnome/gnome-i18n.h>
@@ -55,6 +54,8 @@
 #include <nsICookie.h>
 #include <nsCCookieManager.h>
 #include <nsCPasswordManager.h>
+#include <nsString.h>
+#include <nsILocalFile.h>
 
 // FIXME: For setting the locale. hopefully gtkmozembed will do itself soon
 #include <nsIChromeRegistry.h>
@@ -98,16 +99,6 @@ static gresult
 impl_remove_passwords (EphyEmbedSingle *shell,
 		       GList *passwords,
 		       PasswordType type);
-static gresult 
-impl_show_file_picker (EphyEmbedSingle *shell,
-		       GtkWidget *parentWidget, 
-		       const char *title,
-		       const char *directory,
-		       const char *file, 
-		       FilePickerMode mode,
-                       char **ret_fullpath, 
-                       FileFormat *file_formats, 
-		       int *ret_file_format);
 
 static void mozilla_embed_single_new_window_orphan_cb (GtkMozEmbedSingle *embed,
             	           		              GtkMozEmbed **retval, 
@@ -172,7 +163,6 @@ mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 	shell_class->remove_cookies = impl_remove_cookies;
 	shell_class->list_passwords = impl_list_passwords;
 	shell_class->remove_passwords = impl_remove_passwords;
-	shell_class->show_file_picker = impl_show_file_picker;
 
 	g_type_class_add_private (object_class, sizeof(MozillaEmbedSinglePrivate));
 }
@@ -778,62 +768,4 @@ impl_remove_passwords (EphyEmbedSingle *shell,
         };
 	
         return G_OK;
-}
-
-static gresult 
-impl_show_file_picker (EphyEmbedSingle *shell,
-		       GtkWidget *parentWidget, 
-		       const char *title,
-		       const char *directory,
-		       const char *file, 
-		       FilePickerMode mode,
-                       char **ret_fullpath, 
-                       FileFormat *file_formats, 
-		       int *ret_file_format)
-{
-	char *expanded_directory = NULL;
-	gresult result;
-
-        GFilePicker *filePicker = new GFilePicker ();
-
-	if (directory != NULL)
-	{
-	        expanded_directory = gnome_vfs_expand_initial_tilde (directory);
-	}
-
-        /* make sure the directory exists, and use the home directory
-         * otherwise */
-        if (!expanded_directory ||
-            !g_file_test (expanded_directory, G_FILE_TEST_IS_DIR))
-        {
-                g_free (expanded_directory);
-                expanded_directory = g_strdup (g_get_home_dir());
-        }
-
-        nsCOMPtr<nsILocalFile> dir = 
-                                do_CreateInstance (NS_LOCAL_FILE_CONTRACTID);
-        dir->InitWithNativePath (nsDependentCString(expanded_directory));
-        g_free (expanded_directory);
-
-        filePicker->InitWithGtkWidget (parentWidget, title, mode);
-	if (file)
-	{
-	        filePicker->SetDefaultString (NS_ConvertUTF8toUCS2(file).get());
-	}
-        filePicker->SetDisplayDirectory (dir);
-        
-        PRInt16 retval;
-        filePicker->Show (&retval);
-
-        nsCOMPtr<nsILocalFile> local_file;
-	filePicker->GetFile (getter_AddRefs(local_file));
-	nsCAutoString tempFullPathStr;
-	local_file->GetNativePath (tempFullPathStr);
-	*ret_fullpath = g_strdup (tempFullPathStr.get());
-
-        result = (retval == nsIFilePicker::returnCancel) ? G_FAILED : G_OK;
-
-	delete filePicker;
-
-	return result;
 }

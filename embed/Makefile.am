@@ -23,7 +23,6 @@ NOINST_H_FILES = \
 	ephy-download.h			\
 	ephy-embed-dialog.h		\
 	ephy-embed-popup-control.h	\
-	ephy-embed-utils.h		\
 	ephy-favicon-cache.h		\
 	find-dialog.h			\
 	print-dialog.h
@@ -51,7 +50,6 @@ libephyembed_la_SOURCES = \
 	ephy-embed-popup-control.c	\
 	ephy-embed-single.c		\
 	ephy-embed-shell.c		\
-	ephy-embed-utils.c		\
 	ephy-encodings.c		\
 	ephy-favicon-cache.c		\
 	ephy-history.c			\

@@ -1,0 +1,238 @@
+/*
+ *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Christian Persch
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2, or (at your option)
+ *  any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
+ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "ephy-file-chooser.h"
+#include "eel-gconf-extensions.h"
+#include "ephy-state.h"
+#include "ephy-debug.h"
+
+#include <gtk/gtkstock.h>
+#include <libgnomevfs/gnome-vfs-utils.h>
+
+#define EPHY_FILE_CHOOSER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FILE_CHOOSER, EphyFileChooserPrivate))
+
+struct EphyFileChooserPrivate
+{
+	char *persist_key;
+};
+
+static void ephy_file_chooser_class_init	(EphyFileChooserClass *klass);
+static void ephy_file_chooser_init		(EphyFileChooser *dialog);
+
+enum
+{
+	PROP_0,
+	PROP_PERSIST_KEY
+};
+
+static GObjectClass *parent_class = NULL;
+
+GType
+ephy_file_chooser_get_type (void)
+{
+	static GType ephy_file_chooser_type = 0;
+
+	if (ephy_file_chooser_type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyFileChooserClass),
+			NULL,
+			NULL,
+			(GClassInitFunc) ephy_file_chooser_class_init,
+			NULL,
+			NULL,
+			sizeof (EphyFileChooser),
+			0,
+			(GInstanceInitFunc) ephy_file_chooser_init
+		};
+
+		ephy_file_chooser_type = g_type_register_static (GTK_TYPE_FILE_CHOOSER_DIALOG,
+								 "EphyFileChooser",
+								 &our_info, 0);
+	}
+
+	return ephy_file_chooser_type;
+}
+
+static void
+current_folder_changed_cb (GtkFileChooser *chooser, EphyFileChooser *dialog)
+{
+	if (dialog->priv->persist_key)
+	{
+		char *dir;
+
+		dir = gtk_file_chooser_get_current_folder (chooser);
+		if (dir != NULL)
+		{
+			eel_gconf_set_string (dialog->priv->persist_key, dir);
+			g_free (dir);
+		}
+	}
+}
+
+static void
+ephy_file_chooser_init (EphyFileChooser *dialog)
+{
+	dialog->priv = EPHY_FILE_CHOOSER_GET_PRIVATE (dialog);
+
+	dialog->priv->persist_key = NULL;
+
+	g_signal_connect (dialog, "current-folder-changed",
+			  G_CALLBACK (current_folder_changed_cb), dialog);
+
+	ephy_state_add_window (GTK_WIDGET (dialog), "file_chooser",
+			       400, 300,
+			       EPHY_STATE_WINDOW_SAVE_SIZE |
+			       EPHY_STATE_WINDOW_SAVE_POSITION);
+}
+
+static void
+ephy_file_chooser_finalize (GObject *object)
+{
+	EphyFileChooser *dialog = EPHY_FILE_CHOOSER (object);
+
+	g_free (dialog->priv->persist_key);
+
+	LOG ("EphyFileChooser finalised")
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+ephy_file_chooser_set_persist_key (EphyFileChooser *dialog, const char *key)
+{
+	dialog->priv->persist_key = g_strdup (key);
+
+	if (key != NULL)
+	{
+		char *uri;
+
+		uri = eel_gconf_get_string (key);
+
+		if (uri != NULL)
+		{
+			char *expanded;
+
+			expanded = gnome_vfs_expand_initial_tilde (uri);
+
+			gtk_file_chooser_set_current_folder
+				(GTK_FILE_CHOOSER (dialog), expanded);
+
+			g_free (expanded);
+			g_free (uri);
+		}
+	}
+}
+
+static void
+ephy_file_chooser_set_property (GObject *object,
+				guint prop_id,
+				const GValue *value,
+				GParamSpec *pspec)
+{
+	EphyFileChooser *dialog = EPHY_FILE_CHOOSER (object);
+	
+	switch (prop_id)
+	{
+		case PROP_PERSIST_KEY:
+			ephy_file_chooser_set_persist_key (dialog, g_value_get_string (value));
+			break;
+	}
+}
+
+static void
+ephy_file_chooser_get_property (GObject *object,
+				guint prop_id,
+				GValue *value,
+				GParamSpec *pspec)
+{
+	EphyFileChooser *dialog = EPHY_FILE_CHOOSER (object);
+
+	switch (prop_id)
+	{
+		case PROP_PERSIST_KEY:
+			g_value_set_string (value, dialog->priv->persist_key);
+			break;
+	}
+}
+
+static void
+ephy_file_chooser_class_init (EphyFileChooserClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	parent_class = g_type_class_peek_parent (klass);
+
+	object_class->finalize = ephy_file_chooser_finalize;
+	object_class->get_property = ephy_file_chooser_get_property;
+	object_class->set_property = ephy_file_chooser_set_property;
+
+	g_object_class_install_property (object_class,
+					 PROP_PERSIST_KEY,
+					 g_param_spec_string ("persist-key",
+							      "Persist Key",
+							      "The gconf key to which to persist the selected directory",
+							      NULL,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+
+	g_type_class_add_private (object_class, sizeof (EphyFileChooserPrivate));
+}
+
+EphyFileChooser	*
+ephy_file_chooser_new (const char *title,
+		       GtkWidget *parent,
+		       GtkFileChooserAction action,
+		       const char *persist_key)
+{
+	EphyFileChooser *dialog;
+
+	dialog = EPHY_FILE_CHOOSER (g_object_new (EPHY_TYPE_FILE_CHOOSER,
+				    "local-only", TRUE,
+				    "title", title,
+				    "action", action,
+				    "persist-key", persist_key,
+				    NULL));
+
+	if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
+	{
+		gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_STOCK_OPEN, EPHY_RESPONSE_OPEN,
+					NULL);
+	}
+	else if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
+	{
+		gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_STOCK_SAVE, EPHY_RESPONSE_SAVE,
+					NULL);
+	}
+
+	gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
+
+	return dialog;
+}

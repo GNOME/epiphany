@@ -18,11 +18,15 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "mozilla-embed-persist.h"
+#include "mozilla-embed.h"
 #include "EphyWrapper.h"
 #include "EphyHeaderSniffer.h"
 #include "MozDownload.h"
-#include "mozilla-embed.h"
-#include "mozilla-embed-persist.h"
 
 #include <stddef.h>
 #include <nsIWebBrowserPersist.h>
@@ -49,7 +53,6 @@ impl_cancel (EphyEmbedPersist *persist);
 struct MozillaEmbedPersistPrivate
 {
 	nsCOMPtr<nsIWebBrowserPersist> mPersist;
-//	GProgressListener *mProgress;
 };
 
 static GObjectClass *parent_class = NULL;

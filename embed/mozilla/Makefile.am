@@ -35,6 +35,7 @@ INCLUDES = \
 	-I$(MOZILLA_INCLUDE_ROOT)/webshell		\
 	-I$(MOZILLA_INCLUDE_ROOT)/widget		\
 	-I$(MOZILLA_INCLUDE_ROOT)/windowwatcher		\
+	-I$(MOZILLA_INCLUDE_ROOT)/xpcom			\
 	$(GCONF_CFLAGS)					\
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 			\
 	-DG_DISABLE_DEPRECATED          		\

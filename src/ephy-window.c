@@ -969,7 +969,6 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	GtkAction *action;
 	EmbedEventContext context;
 	const char *popup;
-	char *path;
 	const GValue *value;
 	gboolean framed, has_background;
 	GtkWidget *widget;
@@ -991,24 +990,24 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	if ((context & EMBED_CONTEXT_LINK) &&
 	    (context & EMBED_CONTEXT_IMAGE))
 	{
-		popup = "EphyImageLinkPopup";
+		popup = "/EphyImageLinkPopup";
 	}
 	else if (context & EMBED_CONTEXT_LINK)
 	{
-		popup = "EphyLinkPopup";
+		popup = "/EphyLinkPopup";
 	}
 	else if (context & EMBED_CONTEXT_IMAGE)
 	{
-		popup = "EphyImagePopup";
+		popup = "/EphyImagePopup";
 	}
-/*	else if (context & EMBED_CONTEXT_INPUT)
+	/* else if (context & EMBED_CONTEXT_INPUT)
 	{
-		popup = "EphyInputPopup";
-	}*/
+		popup = "/EphyInputPopup";
+	} */
 	else
 	{
-		popup = framed ? "EphyFramedDocumentPopup" :
-				 "EphyDocumentPopup";
+		popup = framed ? "/EphyFramedDocumentPopup" :
+				 "/EphyDocumentPopup";
 	}
 
 	action_group = window->priv->popups_action_group;
@@ -1016,10 +1015,8 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	g_object_set (action, "sensitive", has_background,
 			      "visible", has_background, NULL);
 
-	path = g_strconcat ("/", popup, NULL);
 	widget = gtk_ui_manager_get_widget (GTK_UI_MANAGER (window->ui_merge),
-				            path);
-	g_free (path);
+				            popup);
 
 	g_return_if_fail (widget != NULL);
 

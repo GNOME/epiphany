@@ -35,6 +35,7 @@ G_BEGIN_DECLS
 #define CONF_STATE_SAVE_IMAGE_DIR     "/apps/epiphany/directories/saveimage"
 #define CONF_STATE_OPEN_DIR           "/apps/epiphany/directories/open"
 #define CONF_STATE_DOWNLOADING_DIR    "/apps/epiphany/directories/download"
+#define CONF_STATE_UPLOAD_DIR	      "/apps/epiphany/directories/upload"
 
 /* System prefs */
 #define CONF_DESKTOP_FTP_HANDLER "/desktop/gnome/url-handlers/ftp/command"

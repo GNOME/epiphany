@@ -36,7 +36,10 @@
  * the provisions above, a recipient may use your version of this file under
  * the terms of any one of the MPL, the GPL or the LGPL.
  *
- * ***** END LICENSE BLOCK ***** */
+ * ***** END LICENSE BLOCK *****
+ *
+ * $Id$
+ */
 
 #include "MozDownload.h"
 #include "mozilla-download.h"
@@ -85,7 +88,7 @@ MozDownload::Init(nsIURI *aSource, nsILocalFile *aTarget, const PRUnichar *aDisp
 	{
 		EmbedPersistFlags flags;
 
-		ephy_embed_persist_get_flags (EPHY_EMBED_PERSIST (mEmbedPersist), &flags);
+		flags = ephy_embed_persist_get_flags (EPHY_EMBED_PERSIST (mEmbedPersist));
 
 		addToView = !(flags & EMBED_PERSIST_NO_VIEW);
 	}

@@ -1,3 +1,92 @@
+2003-10-26  Christian Persch  <chpe@cvs.gnome.org>
+
+	Port to new gtk+ file chooser.
+
+	* data/epiphany.schemas.in:
+	* lib/ephy-prefs.h:
+
+	Add key for remembering upload path.
+
+	* embed	/Makefile.am:
+	* embed/downloader-view.c:
+	* embed/ephy-embed-persist.c: (ephy_embed_persist_get_type),
+	(ephy_embed_persist_set_dest), (ephy_embed_persist_set_embed),
+	(ephy_embed_persist_set_fc_title),
+	(ephy_embed_persist_set_fc_parent), (ephy_embed_persist_set_flags),
+	(ephy_embed_persist_set_max_size),
+	(ephy_embed_persist_set_persist_key),
+	(ephy_embed_persist_set_source), (ephy_embed_persist_get_dest),
+	(ephy_embed_persist_get_embed), (ephy_embed_persist_get_fc_title),
+	(ephy_embed_persist_get_fc_parent), (ephy_embed_persist_get_flags),
+	(ephy_embed_persist_get_max_size),
+	(ephy_embed_persist_get_persist_key),
+	(ephy_embed_persist_get_source), (ephy_embed_persist_set_property),
+	(ephy_embed_persist_get_property), (ephy_embed_persist_init),
+	(ephy_embed_persist_finalize), (ephy_embed_persist_class_init),
+	(ephy_embed_persist_cancel), (ephy_embed_persist_save),
+	(ephy_embed_persist_new):
+	* embed/ephy-embed-persist.h:
+	* embed/ephy-embed-popup-control.c: (save_url),
+	(save_property_url), (background_download_completed),
+	(embed_popup_set_image_as_background_cmd),
+	(embed_popup_copy_image_location_cmd):
+        * src/popup-commands.c: (save_property_url),
+	(background_download_completed),
+	(popup_cmd_set_image_as_background):
+	* src/window-commands.c: (open_response_cb),
+	(window_cmd_file_open), (window_cmd_file_save_as):
+	* src/window-commands.h:
+	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_get_type),
+	(ephy_favicon_cache_new), (icon_is_obsolete), (icons_added_cb),
+	(remove_obsolete_icons), (ephy_favicon_cache_init),
+	(favicon_download_completed_cb), (ephy_favicon_cache_download),
+	(ephy_favicon_cache_get):
+	* embed/mozilla/MozDownload.cpp:
+	* embed/mozilla/EphyHeaderSniffer.cpp:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* src/popup-commands.c: (save_property_url),
+	(background_download_completed),
+	(popup_cmd_set_image_as_background):
+	* src/window-commands.c: (open_response_cb),
+	(window_cmd_file_open), (window_cmd_file_save_as):
+	* src/window-commands.h:
+
+	Simplify EphyEmbedPersist implementation. Augment it with properties
+	for showing a file chooser to select persist destination. Port all
+	callers to new interfaces.
+
+	* embed/ephy-embed-single.c: (ephy_embed_single_remove_passwords):
+	* embed/ephy-embed-single.h:
+
+	* embed/ephy-embed-utils.c:
+	* embed/ephy-embed-utils.h:
+
+	Obsolete and removed.
+
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/ContentHandler.h:
+
+	Misc cleanups.
+
+	* embed/mozilla/FilePicker.cpp:
+	* embed/mozilla/FilePicker.h:
+
+	Port to new file chooser class.
+
+	* embed/mozilla/Makefile.am:
+	* lib/Makefile.am:
+	* lib/ephy-file-chooser.c: (ephy_file_chooser_get_type),
+	(current_folder_changed_cb), (ephy_file_chooser_init),
+	(ephy_file_chooser_finalize), (ephy_file_chooser_set_persist_key),
+	(ephy_file_chooser_set_property), (ephy_file_chooser_get_property),
+	(ephy_file_chooser_class_init), (ephy_file_chooser_new):
+	* lib/ephy-file-chooser.h:
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(import_from_file_response_cb), (import_dialog_response_cb):
+
+	New file chooser wrapper class; ported file chooser callers to it.
+
 2003-10-26  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* lib/egg/egg-editable-toolbar.c: (toolbar_drag_motion_cb):

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000-2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,14 +14,19 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "popup-commands.h"
 #include "ephy-shell.h"
 #include "ephy-new-bookmark.h"
 #include "ephy-embed-persist.h"
 #include "ephy-prefs.h"
-#include "ephy-embed-utils.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-file-helpers.h"
 
@@ -267,7 +272,6 @@ save_property_url (GtkAction *action,
 	EphyEmbedEvent *info;
 	const char *location;
 	const GValue *value;
-	GtkWidget *widget;
 	EphyEmbedPersist *persist;
 	EphyEmbed *embed;
 
@@ -278,15 +282,17 @@ save_property_url (GtkAction *action,
 	ephy_embed_event_get_property (info, property, &value);
 	location = g_value_get_string (value);
 
-	widget = GTK_WIDGET (embed);
-
 	persist = ephy_embed_persist_new (embed);
 
+	ephy_embed_persist_set_fc_title (persist, title);
+	ephy_embed_persist_set_fc_parent (persist,GTK_WINDOW (window));
+	ephy_embed_persist_set_flags
+		(persist, ask_dest ? EMBED_PERSIST_ASK_DESTINATION : 0);
+	ephy_embed_persist_set_persist_key
+		(persist, CONF_STATE_DOWNLOADING_DIR);
 	ephy_embed_persist_set_source (persist, location);
 
-	ephy_embed_utils_save (GTK_WIDGET (window), title,
-			       CONF_STATE_DOWNLOADING_DIR,
-			       ask_dest, persist);
+	ephy_embed_persist_save (persist);
 
 	g_object_unref (G_OBJECT(persist));
 }
@@ -338,16 +344,14 @@ background_download_completed (EphyEmbedPersist *persist,
 	const char *bg;
 	char *type;
 
-	ephy_embed_persist_get_dest (persist, &bg);
+	bg = ephy_embed_persist_get_dest (persist);
 	eel_gconf_set_string (CONF_DESKTOP_BG_PICTURE, bg);
 
 	type = eel_gconf_get_string (CONF_DESKTOP_BG_TYPE);
-	if (type || strcmp (type, "none") == 0)
+	if (type == NULL || strcmp (type, "none") == 0)
 	{
-		eel_gconf_set_string (CONF_DESKTOP_BG_TYPE,
-				      "wallpaper");
+		eel_gconf_set_string (CONF_DESKTOP_BG_TYPE, "wallpaper");
 	}
-
 	g_free (type);
 
 	g_object_unref (persist);
@@ -374,17 +378,17 @@ popup_cmd_set_image_as_background (GtkAction *action,
 	persist = ephy_embed_persist_new (embed);
 
 	base = g_path_get_basename (location);
-	dest = g_build_filename (ephy_dot_dir (),
-				 base, NULL);
+	dest = g_build_filename (ephy_dot_dir (), base, NULL);
 
-	ephy_embed_persist_set_source (persist, location);
 	ephy_embed_persist_set_dest (persist, dest);
-
-	ephy_embed_persist_save (persist);
+	ephy_embed_persist_set_flags (persist, EMBED_PERSIST_NO_VIEW);
+	ephy_embed_persist_set_source (persist, location);
 
 	g_signal_connect (persist, "completed",
 			  G_CALLBACK (background_download_completed),
 			  NULL);
+
+	ephy_embed_persist_save (persist);
 
 	g_free (dest);
 	g_free (base);

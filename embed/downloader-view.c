@@ -26,7 +26,6 @@
 #include "ephy-gui.h"
 #include "ephy-prefs.h"
 #include "ephy-ellipsizing-label.h"
-#include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-embed-shell.h"
 #include "ephy-cell-renderer-progress.h"

@@ -34,7 +34,10 @@
  * the provisions above, a recipient may use your version of this file under
  * the terms of any one of the MPL, the GPL or the LGPL.
  *
- * ***** END LICENSE BLOCK ***** */
+ * ***** END LICENSE BLOCK *****
+ *
+ * $Id$
+ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,6 +48,9 @@
 #include "MozDownload.h"
 #include "EphyHeaderSniffer.h"
 #include "netCore.h"
+
+#include "ephy-file-chooser.h"
+#include "ephy-prefs.h"
 
 #include "nsReadableUtils.h"
 #include "nsIChannel.h"
@@ -164,7 +170,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 	EmbedPersistFlags flags;
 	PRBool askDownloadDest;
 
-	ephy_embed_persist_get_flags (EPHY_EMBED_PERSIST (mEmbedPersist), &flags);
+	flags = ephy_embed_persist_get_flags (EPHY_EMBED_PERSIST (mEmbedPersist));
 	askDownloadDest = flags & EMBED_PERSIST_ASK_DESTINATION;
  
 	nsAutoString defaultFileName;
@@ -176,7 +182,7 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 		if (index >= 0)
 		{
 			/* Take the substring following the prefix. */
-			index += 9;
+			index += strlen ("filename=");
 			nsCAutoString filename;
 			mContentDisposition.Right(filename, mContentDisposition.Length() - index);
 			defaultFileName = NS_ConvertUTF8toUCS2(filename);
@@ -232,16 +238,24 @@ nsresult EphyHeaderSniffer::PerformSave (nsIURI* inOriginalURI)
 
 	if (askDownloadDest)
 	{
-		/* FIXME show the file selector here */
+		/* FIXME */
 	}
 	else
 	{
 		/* FIXME build path from download dir */
 	}
-             
+           
+	if (defaultFileName.IsEmpty())
+	{
+		defaultFileName.AssignWithConversion(_("Untitled"));
+	}
+        
+	/* FIXME ask user if overwriting ? */
+
+	/* FIXME: how to inform user of failed save ? */
         nsCOMPtr<nsILocalFile> destFile;
        	rv = NS_NewLocalFile(defaultFileName, PR_TRUE, getter_AddRefs(destFile)); 
-        if (NS_FAILED(rv) || !destFile) return G_FAILED;
+        if (NS_FAILED(rv) || !destFile) return NS_ERROR_FAILURE;
 
 	return InitiateMozillaDownload (mDocument, mURL, destFile,
 					mContentType.get(), inOriginalURI, mEmbedPersist,
