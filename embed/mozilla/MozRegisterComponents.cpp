@@ -182,7 +182,7 @@ mozilla_register_components (void)
 	NS_GetComponentManager (getter_AddRefs (cm));
 	NS_ENSURE_TRUE (cm, FALSE);
 
-	for (int i = 0; i < G_N_ELEMENTS (sAppComps); i++)
+	for (guint i = 0; i < G_N_ELEMENTS (sAppComps); i++)
 	{
 		nsCOMPtr<nsIGenericFactory> componentFactory;
 		rv = NS_NewGenericFactory(getter_AddRefs(componentFactory),

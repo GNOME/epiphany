@@ -147,8 +147,6 @@ GList		*ephy_encodings_get_recent	(EphyEncodings *encodings);
 
 void		 ephy_encoding_info_free	(EphyEncodingInfo *info);
 
-gboolean	 ephy_encoding_info_is_automatic (EphyEncodingInfo *info);
-
 G_END_DECLS
 
 #endif

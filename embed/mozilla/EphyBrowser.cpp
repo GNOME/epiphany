@@ -638,6 +638,8 @@ nsresult EphyBrowser::GetTargetDocumentUrl (nsCString &url)
 
 nsresult EphyBrowser::ForceEncoding (const char *encoding) 
 {
+	NS_ENSURE_TRUE (mInitialized, NS_ERROR_FAILURE);
+
 	nsCOMPtr<nsIContentViewer> contentViewer;	
 	GetContentViewer (getter_AddRefs(contentViewer));
 	NS_ENSURE_TRUE (contentViewer, NS_ERROR_FAILURE);
@@ -645,10 +647,41 @@ nsresult EphyBrowser::ForceEncoding (const char *encoding)
 	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
 	NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
 
-	nsresult result;
-	result = mdv->SetForceCharacterSet (nsDependentCString(encoding));
+	return mdv->SetForceCharacterSet (nsDependentCString(encoding));
+}
 
-	return result;
+nsresult EphyBrowser::GetEncoding (nsACString &encoding)
+{
+	NS_ENSURE_TRUE (mInitialized, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsIDOMDocument> domDoc;
+	GetTargetDocument (getter_AddRefs(domDoc));
+	NS_ENSURE_TRUE (domDoc, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsIDocument> doc = do_QueryInterface(domDoc);
+	NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
+
+	encoding = doc->GetDocumentCharacterSet ();
+	NS_ENSURE_TRUE (!encoding.IsEmpty(), NS_ERROR_FAILURE);
+
+	return NS_OK;
+}
+
+nsresult EphyBrowser::GetForcedEncoding (nsACString &encoding)
+{
+	NS_ENSURE_TRUE (mInitialized, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsIContentViewer> contentViewer;	
+	GetContentViewer (getter_AddRefs(contentViewer));
+	NS_ENSURE_TRUE (contentViewer, NS_ERROR_FAILURE);
+
+	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
+	NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
+
+	nsresult result = mdv->GetForceCharacterSet (encoding);
+	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
+
+	return NS_OK;
 }
 
 nsresult EphyBrowser::PushTargetDocument (nsIDOMDocument *domDoc)
@@ -661,91 +694,6 @@ nsresult EphyBrowser::PushTargetDocument (nsIDOMDocument *domDoc)
 nsresult EphyBrowser::PopTargetDocument ()
 {
 	mTargetDocument = nsnull;
-
-	return NS_OK;
-}
-
-nsresult EphyBrowser::GetEncodingInfo (EphyEncodingInfo **infoptr)
-{
-	nsresult result;
-	EphyEncodingInfo *info;
-
-	nsCOMPtr<nsIDOMDocument> domDoc;
-	GetTargetDocument (getter_AddRefs(domDoc));
-	NS_ENSURE_TRUE (domDoc, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIDocument> doc = do_QueryInterface(domDoc, &result);
-	NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
-
-	info = g_new0 (EphyEncodingInfo, 1);
-	*infoptr = info;
-
-	PRInt32 source;
-	source = doc->GetDocumentCharacterSetSource ();
-	info->encoding_source = (EphyEncodingSource) source;
-
-	nsCOMPtr<nsIDocShell> ds;
-	ds = do_GetInterface (mWebBrowser);
-	NS_ENSURE_TRUE (ds, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIDocumentCharsetInfo> ci;
-	result = ds->GetDocumentCharsetInfo (getter_AddRefs (ci));
-	NS_ENSURE_TRUE (ci, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIAtom> atom;
-	ci->GetForcedCharset (getter_AddRefs (atom));
-	if (atom)
-	{
-		nsCAutoString atomstr;
-		atom->ToUTF8String (atomstr);
-		info->forced_encoding = g_strdup (atomstr.get());
-	}
-
-	ci->GetParentCharset (getter_AddRefs (atom));
-	if (atom)
-	{
-		nsCAutoString atomstr;
-		atom->ToUTF8String (atomstr);
-		info->parent_encoding = g_strdup (atomstr.get());
-	}
-
-	result = ci->GetParentCharsetSource (&source);
-	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
-	info->parent_encoding_source = (EphyEncodingSource) source;
-
-	nsCOMPtr<nsIContentViewer> contentViewer;	
-	ds->GetContentViewer (getter_AddRefs(contentViewer));
-	NS_ENSURE_TRUE (contentViewer, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
-	NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
-
-	const nsACString& charsetEnc = doc->GetDocumentCharacterSet ();
-	NS_ENSURE_TRUE (!charsetEnc.IsEmpty(), NS_ERROR_FAILURE);
-
-	info->encoding = g_strdup (PromiseFlatCString(charsetEnc).get());
-
-	nsCAutoString enc;
-	
-	result = mdv->GetDefaultCharacterSet (enc);
-	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
-	info->default_encoding = g_strdup (enc.get());
-
-	result = mdv->GetForceCharacterSet (enc);
-	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
-	info->forced_encoding = g_strdup (enc.get());
-
-	result = mdv->GetHintCharacterSet (enc);
-	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
-	info->hint_encoding = g_strdup (enc.get());
-
-	result = mdv->GetPrevDocCharacterSet (enc);
-	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
-	info->prev_doc_encoding = g_strdup (enc.get());
-
-	mdv->GetHintCharacterSetSource (&source);
-	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
-	info->hint_encoding_source = (EphyEncodingSource) source;
 
 	return NS_OK;
 }

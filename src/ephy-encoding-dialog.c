@@ -113,12 +113,12 @@ static void
 sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 {
 	EphyEmbed *embed;
-	EphyEncodingInfo *info;
 	EphyNode *node;
         GtkTreeSelection *selection;
         GtkTreeModel *model;
         GList *rows;
 	GtkWidget *button;
+	char *encoding;
 	gboolean is_automatic;
 
 	dialog->priv->update_tag = TRUE;
@@ -126,10 +126,10 @@ sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	info = ephy_embed_get_encoding_info (embed);
-	if (info == NULL) return;
+	encoding = ephy_embed_get_encoding (embed);
+	if (encoding == NULL) return;
 
-	node = ephy_encodings_get_node (dialog->priv->encodings, info->encoding, TRUE);
+	node = ephy_encodings_get_node (dialog->priv->encodings, encoding, TRUE);
 	g_assert (EPHY_IS_NODE (node));
 
 	/* select the current encoding in the list view */
@@ -153,12 +153,12 @@ sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
 		g_list_free (rows);
 	}
 
-	is_automatic = ephy_encoding_info_is_automatic (info);
+	is_automatic = ephy_embed_has_automatic_encoding (embed);
 
 	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[AUTOMATIC_PROP].id);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), is_automatic);
 
-	ephy_encoding_info_free (info);
+	g_free (encoding);
 
 	dialog->priv->update_tag = FALSE;
 }
@@ -199,27 +199,18 @@ static void
 activate_choice (EphyEncodingDialog *dialog)
 {
 	EphyEmbed *embed;
-	EphyEncodingInfo *info;
 	GtkWidget *button;
 	gboolean is_automatic;
 
 	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	info = ephy_embed_get_encoding_info (embed);
-	if (info == NULL) return;
-
 	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), properties[AUTOMATIC_PROP].id);
 	is_automatic = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
 	if (is_automatic)
 	{
-		/* only unset if it was forced before */
-		if ((info->forced_encoding != NULL && info->forced_encoding[0] != '\0')
-		    || info->encoding_source >= EMBED_ENCODING_PARENT_FORCED)
-		{
-			ephy_embed_set_encoding (embed, "");
-		}
+		ephy_embed_set_encoding (embed, "");
 	}
 	else if (dialog->priv->selected_node != NULL)
 	{
@@ -228,16 +219,10 @@ activate_choice (EphyEncodingDialog *dialog)
 		code = ephy_node_get_property_string (dialog->priv->selected_node,
 						      EPHY_NODE_ENCODING_PROP_ENCODING);
 
-		/* only force it if it's different from active */
-		if (info->encoding && strcmp (info->encoding, code) != 0)
-		{
-			ephy_embed_set_encoding (embed, code);
+		ephy_embed_set_encoding (embed, code);
 
-			ephy_encodings_add_recent (dialog->priv->encodings, code);
-		}
+		ephy_encodings_add_recent (dialog->priv->encodings, code);
 	}
-
-	ephy_encoding_info_free (info);
 }
 
 void

@@ -213,9 +213,10 @@ struct _EphyEmbedIface
 							 gboolean wrap_around);
 	gboolean	   (* find_next)		(EphyEmbed *embed,
 							 gboolean backwards);
+	char *		   (* get_encoding)		(EphyEmbed *embed);
+	gboolean	   (* has_automatic_encoding)	(EphyEmbed *embed);
 	void		   (* set_encoding)		(EphyEmbed *embed,
 							 const char *encoding);
-	EphyEncodingInfo * (* get_encoding_info)	(EphyEmbed *embed);
 	void		   (* print)			(EphyEmbed *embed,
 							 EmbedPrintInfo *info);
 	void		   (* print_preview_close)	(EphyEmbed *embed);
@@ -298,10 +299,12 @@ gboolean	  ephy_embed_find_next			(EphyEmbed *embed,
 							 gboolean backwards);
 
 /* Encoding */
+char		 *ephy_embed_get_encoding		(EphyEmbed *embed);
+
+gboolean	  ephy_embed_has_automatic_encoding	(EphyEmbed *embed);
+
 void		  ephy_embed_set_encoding		(EphyEmbed *embed,
 							 const char *encoding);
-
-EphyEncodingInfo *ephy_embed_get_encoding_info		(EphyEmbed *embed);
 
 /* Print */
 void		  ephy_embed_print			(EphyEmbed *embed,

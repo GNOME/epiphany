@@ -101,8 +101,8 @@ public:
 	nsresult GoToHistoryIndex (PRInt16 index);
 
 	nsresult ForceEncoding (const char *encoding);
-
-	nsresult GetEncodingInfo (EphyEncodingInfo **infoptr);
+	nsresult GetEncoding (nsACString &encoding);
+	nsresult GetForcedEncoding (nsACString &encoding);
 
 	nsresult PushTargetDocument (nsIDOMDocument *domDoc);
 	nsresult PopTargetDocument ();

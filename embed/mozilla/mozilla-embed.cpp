@@ -724,31 +724,56 @@ impl_set_encoding (EphyEmbed *embed,
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	nsresult result;
+	nsCAutoString currEnc;
 
-	result = mpriv->browser->ForceEncoding (encoding);
+	g_return_if_fail (encoding != NULL);
+
+	result = mpriv->browser->GetEncoding (currEnc);
 	if (NS_FAILED (result)) return;
+
+	if (!currEnc.Equals(encoding) ||
+	    encoding[0] == '\0' && !ephy_embed_has_automatic_encoding (embed))
+	{
+		result = mpriv->browser->ForceEncoding (encoding);
+		if (NS_FAILED (result)) return;
+	}
 
 	gtk_moz_embed_reload (GTK_MOZ_EMBED (embed),
 			      GTK_MOZ_EMBED_FLAG_RELOADCHARSETCHANGE);
 }
 
-static EphyEncodingInfo *
-impl_get_encoding_info (EphyEmbed *embed)
+static char *
+impl_get_encoding (EphyEmbed *embed)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	nsresult result;
-	EphyEncodingInfo *info = NULL;
+	nsCAutoString encoding;
 
-	result = mpriv->browser->GetEncodingInfo (&info);
+	result = mpriv->browser->GetEncoding (encoding);
 
-	if (NS_FAILED (result))
+	if (NS_FAILED (result) || encoding.IsEmpty())
 	{
-		ephy_encoding_info_free (info);
-
 		return NULL;
 	}
 
-	return info;
+	return g_strdup (encoding.get());
+}
+
+static gboolean
+impl_has_automatic_encoding (EphyEmbed *embed)
+{
+	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
+	nsresult result;
+	nsCAutoString encoding;
+
+	result = mpriv->browser->GetForcedEncoding (encoding);
+
+	if (NS_FAILED (result) || encoding.IsEmpty())
+	{
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 static gboolean
@@ -1103,7 +1128,8 @@ ephy_embed_iface_init (EphyEmbedIface *iface)
 	iface->activate = impl_activate;
 	iface->find_set_properties = impl_find_set_properties;
 	iface->set_encoding = impl_set_encoding;
-	iface->get_encoding_info = impl_get_encoding_info;
+	iface->get_encoding = impl_get_encoding;
+	iface->has_automatic_encoding = impl_has_automatic_encoding;
 	iface->print = impl_print;
 	iface->print_preview_close = impl_print_preview_close;
 	iface->print_preview_n_pages = impl_print_preview_n_pages;

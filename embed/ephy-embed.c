@@ -672,16 +672,29 @@ ephy_embed_set_encoding (EphyEmbed *embed,
 }
 
 /**
- * ephy_embed_get_encoding_info:
+ * ephy_embed_get_encoding:
  * @embed: an #EphyEmbed
  *
- * Returns @embed's #EphyEncodingInfo.
+ * Returns the @embed's document's encoding
  **/
-EphyEncodingInfo *
-ephy_embed_get_encoding_info (EphyEmbed *embed)
+char *
+ephy_embed_get_encoding (EphyEmbed *embed)
 {
 	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
-	return iface->get_encoding_info (embed);
+	return iface->get_encoding (embed);
+}
+
+/**
+ * ephy_embed_has_automatic_encoding:
+ * @embed: an #EphyEmbed
+ *
+ * Returns whether the @embed's document's was determined by the document itself
+ **/
+gboolean
+ephy_embed_has_automatic_encoding (EphyEmbed *embed)
+{
+	EphyEmbedIface *iface = EPHY_EMBED_GET_IFACE (embed);
+	return iface->has_automatic_encoding (embed);
 }
 
 /**

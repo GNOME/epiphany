@@ -150,9 +150,8 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	EphyEncodingMenuPrivate *p = menu->priv;
 	EphyEmbed *embed;
 	GtkAction *action;
-	EphyEncodingInfo *info;
 	char name[128];
-	const char *encoding;
+	char *encoding;
 	EphyNode *enc_node;
 	GList *recent, *related = NULL, *l;
 	EphyLanguageGroup groups;
@@ -170,24 +169,14 @@ update_encoding_menu_cb (GtkAction *dummy, EphyEncodingMenu *menu)
 	recent = ephy_encodings_get_recent (p->encodings);
 
 	embed = ephy_window_get_active_embed (p->window);
-	info = ephy_embed_get_encoding_info (embed);
-	if (info == NULL) goto build_menu;
-
-	LOG ("encoding information\n enc='%s' default='%s' hint='%s' "
-	     "prev_doc='%s' forced='%s' parent='%s' source=%d "
-	     "hint_source=%d parent_source=%d", info->encoding,
-		info->default_encoding, info->hint_encoding,
-		info->prev_doc_encoding, info->forced_encoding,
-		info->parent_encoding, info->encoding_source,
-		info->hint_encoding_source, info->parent_encoding_source)
-
-	encoding = info->encoding;
+	encoding = ephy_embed_get_encoding (embed);
+	if (encoding == NULL) goto build_menu;
 
 	enc_node = ephy_encodings_get_node (p->encodings, encoding, TRUE);
 	g_assert (EPHY_IS_NODE (enc_node));
 
 	/* check if encoding was overridden */
-	is_automatic = ephy_encoding_info_is_automatic (info);
+	is_automatic = ephy_embed_has_automatic_encoding (embed);
 
 	action = gtk_action_group_get_action (p->action_group,
 					      "ViewEncodingAutomatic");
@@ -269,7 +258,7 @@ build_menu:
 	g_list_free (related);
 	g_list_free (recent);
 
-	ephy_encoding_info_free (info);
+	g_free (encoding);
 
 	menu->priv->update_tag = FALSE;
 
@@ -280,7 +269,6 @@ static void
 encoding_activate_cb (GtkAction *action, EphyEncodingMenu *menu)
 {
 	EphyEmbed *embed;
-	EphyEncodingInfo *info;
 	const char *name, *encoding;
 
 	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)) == FALSE
@@ -294,16 +282,7 @@ encoding_activate_cb (GtkAction *action, EphyEncodingMenu *menu)
 
 	embed = ephy_window_get_active_embed (menu->priv->window);
 
-	info = ephy_embed_get_encoding_info (embed);
-	if (info == NULL) return;
-
-	/* Force only when different from current encoding */
-	if (info->encoding && strcmp (info->encoding, encoding) != 0)
-	{
-		ephy_embed_set_encoding (embed, encoding);
-	}
-
-	ephy_encoding_info_free (info);
+	ephy_embed_set_encoding (embed, encoding);
 
 	ephy_encodings_add_recent (menu->priv->encodings, encoding);
 }
