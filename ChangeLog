@@ -1,6 +1,19 @@
+2004-01-03  Michael Terry <mterry@fastmail.fm> 
+
+	* data/ui/epiphany-ui.xml:
+
+	Show copy text menu item also for links
+
+	* src/ephy-window.c: (update_edit_actions_sensitivity),
+	(enable_edit_actions_sensitivity), (edit_menu_show_cb),
+	(edit_menu_hide_cb), (hide_embed_popup_cb), (show_embed_popup):
+
+	Show copy text menu item only when there is actually selected
+	text.
+
 2004-01-03  Robert Sedak  <robert.sedak@sk.htnet.hr>
 
-        * configure.in: Added "hr" in ALL_LINGUAS.
+	* configure.in: Added "hr" in ALL_LINGUAS.
 
 2004-01-02  Taneem Ahmed  <taneem@bengalinux.org>
 

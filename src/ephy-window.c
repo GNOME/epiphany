@@ -638,7 +638,7 @@ ephy_window_state_event_cb (GtkWidget *widget, GdkEventWindowState *event, EphyW
 
 
 static void
-update_edit_actions_sensitivity (EphyWindow *window)
+update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 {
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
 	GtkActionGroup *action_group;
@@ -680,27 +680,19 @@ update_edit_actions_sensitivity (EphyWindow *window)
 	action_group = window->priv->action_group;
 
 	action = gtk_action_group_get_action (action_group, "EditCopy");
-	g_object_set (action, "sensitive", can_copy, NULL);
+	g_object_set (action, "sensitive", can_copy, "visible", !hide || can_copy, NULL);
 	action = gtk_action_group_get_action (action_group, "EditCut");
-	g_object_set (action, "sensitive", can_cut, NULL);
+	g_object_set (action, "sensitive", can_cut, "visible", !hide || can_cut, NULL);
 	action = gtk_action_group_get_action (action_group, "EditPaste");
-	g_object_set (action, "sensitive", can_paste, NULL);
+	g_object_set (action, "sensitive", can_paste, "visible", !hide || can_paste, NULL);
 	action = gtk_action_group_get_action (action_group, "EditUndo");
-	g_object_set (action, "sensitive", can_undo, NULL);
+	g_object_set (action, "sensitive", can_undo, "visible", !hide || can_undo, NULL);
 	action = gtk_action_group_get_action (action_group, "EditRedo");
-	g_object_set (action, "sensitive", can_redo, NULL);
+	g_object_set (action, "sensitive", can_redo, "visible", !hide || can_redo, NULL);
 }
 
 static void
-edit_menu_show_cb (GtkWidget *menu,
-		   EphyWindow *window)
-{
-	update_edit_actions_sensitivity (window);
-}
-
-static void
-edit_menu_hide_cb (GtkWidget *menu,
-		   EphyWindow *window)
+enable_edit_actions_sensitivity (EphyWindow *window)
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
@@ -708,13 +700,29 @@ edit_menu_hide_cb (GtkWidget *menu,
 	action_group = window->priv->action_group;
 
 	action = gtk_action_group_get_action (action_group, "EditCopy");
-	g_object_set (action, "sensitive", TRUE, NULL);
+	g_object_set (action, "sensitive", TRUE, "visible", TRUE, NULL);
 	action = gtk_action_group_get_action (action_group, "EditCut");
-	g_object_set (action, "sensitive", TRUE, NULL);
+	g_object_set (action, "sensitive", TRUE, "visible", TRUE, NULL);
+	action = gtk_action_group_get_action (action_group, "EditPaste");
+	g_object_set (action, "sensitive", TRUE, "visible", TRUE, NULL);
 	action = gtk_action_group_get_action (action_group, "EditUndo");
-	g_object_set (action, "sensitive", TRUE, NULL);
+	g_object_set (action, "sensitive", TRUE, "visible", TRUE, NULL);
 	action = gtk_action_group_get_action (action_group, "EditRedo");
-	g_object_set (action, "sensitive", TRUE, NULL);
+	g_object_set (action, "sensitive", TRUE, "visible", TRUE, NULL);
+}
+
+static void
+edit_menu_show_cb (GtkWidget *menu,
+		   EphyWindow *window)
+{
+	update_edit_actions_sensitivity (window, FALSE);
+}
+
+static void
+edit_menu_hide_cb (GtkWidget *menu,
+		   EphyWindow *window)
+{
+	enable_edit_actions_sensitivity (window);
 }
 
 static void
@@ -1107,6 +1115,13 @@ popup_menu_at_coords (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
 }
 
 static void
+hide_embed_popup_cb (GtkWidget *popup,
+			EphyWindow *window)
+{
+	enable_edit_actions_sensitivity (window);
+}
+
+static void
 show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 {
 	GtkActionGroup *action_group;
@@ -1117,6 +1132,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	gboolean framed, has_background;
 	GtkWidget *widget;
 	EphyEmbedEventType type;
+	gboolean showing_edit_actions = FALSE;
 
 	/* Do not show the menu in print preview mode */
 	if (window->priv->is_ppview)
@@ -1138,6 +1154,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	}
 	else if (context & EMBED_CONTEXT_LINK)
 	{
+		showing_edit_actions = TRUE;
 		popup = "/EphyLinkPopup";
 	}
 	else if (context & EMBED_CONTEXT_IMAGE)
@@ -1147,28 +1164,37 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 #if MOZILLA_SNAPSHOT > 12
 	else if (context & EMBED_CONTEXT_INPUT)
 	{
-		update_edit_actions_sensitivity (window);
+		showing_edit_actions = TRUE;
 		popup = "/EphyInputPopup";
 	}
 #endif
 	else
 	{
+		showing_edit_actions = TRUE;
 		popup = framed ? "/EphyFramedDocumentPopup" :
 				 "/EphyDocumentPopup";
 	}
+
+	widget = gtk_ui_manager_get_widget (GTK_UI_MANAGER (window->ui_merge),
+				            popup);
+	g_return_if_fail (widget != NULL);
 
 	action_group = window->priv->popups_action_group;
 	action = gtk_action_group_get_action (action_group, "SaveBackgroundAs");
 	g_object_set (action, "sensitive", has_background,
 			      "visible", has_background, NULL);
 
-	widget = gtk_ui_manager_get_widget (GTK_UI_MANAGER (window->ui_merge),
-				            popup);
-	g_return_if_fail (widget != NULL);
+	if (showing_edit_actions)
+	{
+		update_edit_actions_sensitivity (window, TRUE);
+	}
 
 	g_object_set_data_full (G_OBJECT (window), "context_event",
 				g_object_ref (event),
 				(GDestroyNotify)g_object_unref);
+
+	g_signal_connect (widget, "hide",
+			  G_CALLBACK (hide_embed_popup_cb), window);
 
 	type = ephy_embed_event_get_event_type (event);
 	if (type == EPHY_EMBED_EVENT_KEY)
