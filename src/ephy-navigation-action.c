@@ -284,8 +284,11 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	LOG ("Connect navigation action proxy")
 
-	g_signal_connect (proxy, "menu-activated",
-			  G_CALLBACK (menu_activated_cb), action);
+	if (EPHY_IS_ARROW_TOOLBUTTON (proxy))
+	{
+		g_signal_connect (proxy, "menu-activated",
+				  G_CALLBACK (menu_activated_cb), action);
+	}
 
 	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 }
