@@ -239,9 +239,6 @@ ephy_favorites_menu_finalize (GObject *o)
 
 	if (p->action_group != NULL)
 	{
-		gtk_ui_manager_remove_action_group
-			(GTK_UI_MANAGER (p->window->ui_merge),
-			 p->action_group);
 		g_object_unref (p->action_group);
 	}
 

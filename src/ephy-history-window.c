@@ -577,8 +577,6 @@ ephy_history_window_finalize (GObject *object)
 	g_object_unref (G_OBJECT (editor->priv->pages_filter));
 
 	g_object_unref (editor->priv->action_group);
-	gtk_ui_manager_remove_action_group (editor->priv->ui_merge,
-					    editor->priv->action_group);
 	g_object_unref (editor->priv->ui_merge);
 
 	if (editor->priv->window)

@@ -523,7 +523,6 @@ toolbar_finalize (GObject *object)
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 
 	g_object_unref (t->priv->action_group);
-	gtk_ui_manager_remove_action_group (merge, t->priv->action_group);
 
 	LOG ("Toolbar finalized")
 }

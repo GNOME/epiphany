@@ -1399,8 +1399,6 @@ ephy_window_finalize (GObject *object)
 	}
 
 	g_object_unref (window->priv->action_group);
-	gtk_ui_manager_remove_action_group (GTK_UI_MANAGER (window->ui_merge),
-					    window->priv->action_group);
 	g_object_unref (window->ui_merge);
 
         G_OBJECT_CLASS (parent_class)->finalize (object);

@@ -1,5 +1,21 @@
 2003-09-11  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_finalize):
+	* src/bookmarks/ephy-bookmarks-menu.c:
+	(ephy_bookmarks_menu_finalize):
+	* src/ephy-encoding-menu.c: (ephy_encoding_menu_finalize_impl):
+	* src/ephy-favorites-menu.c: (ephy_favorites_menu_finalize):
+	* src/ephy-history-window.c: (ephy_history_window_finalize):
+	* src/ephy-tabs-menu.c: (ephy_tabs_menu_finalize_impl):
+	* src/ephy-window.c: (ephy_window_finalize):
+	* src/toolbar.c: (toolbar_finalize):
+
+	Remove not needed removal of groups of actions from ui
+	merge (gtk fix).
+
+2003-09-11  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* lib/widgets/ephy-location-entry.c:
 	(ephy_location_entry_autocompletion_hide_alternatives),
 	(insert_text_cb),
