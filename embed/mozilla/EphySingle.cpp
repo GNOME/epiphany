@@ -85,7 +85,8 @@ EphySingle::~EphySingle()
 }
 
 nsresult
-EphySingle::EmitCookieNotification (const char *name, nsISupports *aSubject)
+EphySingle::EmitCookieNotification (const char *name,
+				    nsISupports *aSubject)
 {
 	LOG ("EmitCookieNotification %s", name)
 
@@ -102,7 +103,8 @@ EphySingle::EmitCookieNotification (const char *name, nsISupports *aSubject)
 }
 
 nsresult
-EphySingle::EmitPermissionNotification (const char *name, nsISupports *aSubject)
+EphySingle::EmitPermissionNotification (const char *name,
+					nsISupports *aSubject)
 {
 	LOG ("EmitPermissionNotification %s", name)
 
@@ -122,8 +124,8 @@ EphySingle::EmitPermissionNotification (const char *name, nsISupports *aSubject)
 
 /* void observe (in nsISupports aSubject, in string aTopic, in wstring aData); */
 NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
-					  const char *aTopic,
-					  const PRUnichar *aData)
+				  const char *aTopic,
+				  const PRUnichar *aData)
 {
 	nsresult rv = NS_OK;
 
@@ -132,24 +134,24 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 		/* "added" */
 		if (aData[0] == 'a')
 		{
-			rv = EmitCookieNotification ("added", aSubject);
+			rv = EmitCookieNotification ("cookie-added", aSubject);
 		}
 		/* "deleted" */
 		else if (aData[0] == 'd')
 		{
-			rv = EmitCookieNotification ("deleted", aSubject);
+			rv = EmitCookieNotification ("cookie-deleted", aSubject);
 		}
 		/* "changed" */
 		else if (aData[0] == 'c' && aData[1] == 'h')
 		{
-			rv = EmitCookieNotification ("changed", aSubject);
+			rv = EmitCookieNotification ("cookie-changed", aSubject);
 		}
 		/* "cleared" */
 		else if (aData[0] == 'c' && aData[2] == 'l')
 		{
 			LOG ("EphySingle::cookie-changed::cleared")
 
-			g_signal_emit_by_name (EPHY_COOKIE_MANAGER (mOwner), "cleared");
+			g_signal_emit_by_name (EPHY_COOKIE_MANAGER (mOwner), "cookies-cleared");
 		}
 		else
 		{
@@ -167,7 +169,7 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 			nsCAutoString spec;
 			uri->GetSpec (spec);
 
-			g_signal_emit_by_name (EPHY_COOKIE_MANAGER (mOwner), "rejected", spec.get());
+			g_signal_emit_by_name (EPHY_COOKIE_MANAGER (mOwner), "cookie-rejected", spec.get());
 		}
 		else
 		{
@@ -179,24 +181,24 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 		/* "added" */
 		if (aData[0] == 'a')
 		{
-			rv = EmitPermissionNotification ("added", aSubject);
+			rv = EmitPermissionNotification ("permission-added", aSubject);
 		}
 		/* "deleted" */
 		else if (aData[0] == 'd')
 		{
-			rv = EmitPermissionNotification ("deleted", aSubject);
+			rv = EmitPermissionNotification ("permission-deleted", aSubject);
 		}
 		/* "changed" */
 		else if (aData[0] == 'c' && aData[1] == 'h')
 		{
-			rv = EmitPermissionNotification ("changed", aSubject);
+			rv = EmitPermissionNotification ("permission-changed", aSubject);
 		}
 		/* "cleared" */
 		else if (aData[0] == 'c' && aData[1] == 'l')
 		{
 			LOG ("EphySingle::perm-changed::cleared")
 
-			g_signal_emit_by_name (EPHY_PERMISSION_MANAGER (mOwner), "cleared");
+			g_signal_emit_by_name (EPHY_PERMISSION_MANAGER (mOwner), "permissions-cleared");
 		}
 		else
 		{

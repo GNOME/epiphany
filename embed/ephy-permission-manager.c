@@ -135,13 +135,14 @@ ephy_permission_manager_base_init (gpointer g_class)
 	if (initialised == FALSE)
 	{
 	/**
-	 * EphyPermissionManager::added
+	 * EphyPermissionManager::permission-added
 	 * @manager: the #EphyPermissionManager
 	 * @info: a #EphyPermissionInfo
 	 *
-	 * The added signal is emitted when a permission entry has been added.
+	 * The permission-added signal is emitted when a permission entry has
+	 * been added.
 	 */
-	g_signal_new ("added",
+	g_signal_new ("permission-added",
 		      EPHY_TYPE_PERMISSION_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
 		      G_STRUCT_OFFSET (EphyPermissionManagerIFace, added),
@@ -152,14 +153,14 @@ ephy_permission_manager_base_init (gpointer g_class)
 		      EPHY_TYPE_PERMISSION_INFO);
 
 	/**
-	 * EphyPermissionManager::changed
+	 * EphyPermissionManager::permission-changed
 	 * @manager: the #EphyPermissionManager
 	 * @info: a #EphyPermissionInfo
 	 *
-	 * The changed signal is emitted when a permission entry has been
-	 * changed.
+	 * The permission-changed signal is emitted when a permission entry has
+	 * been changed.
 	 */
-	g_signal_new ("changed",
+	g_signal_new ("permission-changed",
 		      EPHY_TYPE_PERMISSION_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
 		      G_STRUCT_OFFSET (EphyPermissionManagerIFace, changed),
@@ -170,14 +171,14 @@ ephy_permission_manager_base_init (gpointer g_class)
 		      EPHY_TYPE_PERMISSION_INFO);
 
 	/**
-	 * EphyPermissionManager::deleted
+	 * EphyPermissionManager::permission-deleted
 	 * @manager: the #EphyPermissionManager
 	 * @info: a #EphyPermissionInfo
 	 *
-	 * The deleted signal is emitted when a permission entry has been
-	 * deleted.
+	 * The permission-deleted signal is emitted when a permission entry has
+	 * been deleted.
 	 */
-	g_signal_new ("deleted",
+	g_signal_new ("permission-deleted",
 		      EPHY_TYPE_PERMISSION_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
 		      G_STRUCT_OFFSET (EphyPermissionManagerIFace, deleted),
@@ -188,13 +189,13 @@ ephy_permission_manager_base_init (gpointer g_class)
 		      EPHY_TYPE_PERMISSION_INFO);
 
 	/**
-	 * EphyPermissionManager::cleared
+	 * EphyPermissionManager::permissions-cleared
 	 * @manager: the #EphyPermissionManager
 	 *
-	 * The cleared signal is emitted when the permissions database has
-	 * been cleared.
+	 * The permissions-cleared signal is emitted when the permissions
+	 * database has been cleared.
 	 */
-	g_signal_new ("cleared",
+	g_signal_new ("permissions-cleared",
 		      EPHY_TYPE_PERMISSION_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
 		      G_STRUCT_OFFSET (EphyPermissionManagerIFace, cleared),

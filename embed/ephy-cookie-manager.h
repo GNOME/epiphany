@@ -108,8 +108,6 @@ void		ephy_cookie_free	(EphyCookie *cookie);
 
 GType 		ephy_cookie_manager_get_type		(void);
 
-void		ephy_cookie_free			(EphyCookie *cookie);
-
 GList *		ephy_cookie_manager_list_cookies	(EphyCookieManager *manager);
 
 void		ephy_cookie_manager_remove_cookie	(EphyCookieManager *manager,

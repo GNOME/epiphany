@@ -131,13 +131,13 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 	if (initialised == FALSE)
 	{
 	/**
-	 * EphyCookieManager::added
+	 * EphyCookieManager::cookie-added
 	 * @manager: the #EphyCookieManager
 	 * @cookie: the added #EphyCookie
 	 *
-	 * The added signal is emitted when a cookie has been added.
+	 * The cookie-added signal is emitted when a cookie has been added.
 	 **/
-	g_signal_new ("added",
+	g_signal_new ("cookie-added",
 		      EPHY_TYPE_COOKIE_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
 		      G_STRUCT_OFFSET (EphyCookieManagerIFace, added),
@@ -148,13 +148,13 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 		      EPHY_TYPE_COOKIE);
 
 	/**
-	 * EphyCookieManager::changed
+	 * EphyCookieManager::cookie-changed
 	 * @manager: the #EphyCookieManager
 	 * @cookie: the changed #EphyCookie
 	 *
-	 * The changed signal is emitted when a cookie has been changed.
+	 * The cookie-changed signal is emitted when a cookie has been changed.
 	 **/
-	g_signal_new ("changed",
+	g_signal_new ("cookie-changed",
 		      EPHY_TYPE_COOKIE_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
 		      G_STRUCT_OFFSET (EphyCookieManagerIFace, changed),
@@ -165,13 +165,13 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 		      EPHY_TYPE_COOKIE);
 
 	/**
-	 * EphyCookieManager::deleted
+	 * EphyCookieManager::cookie-deleted
 	 * @manager: the #EphyCookieManager
 	 * @cookie: the deleted #EphyCookie
 	 *
-	 * The deleted signal is emitted when a cookie has been deleted.
+	 * The cookie-deleted signal is emitted when a cookie has been deleted.
 	 **/
-	g_signal_new ("deleted",
+	g_signal_new ("cookie-deleted",
 		      EPHY_TYPE_COOKIE_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
 		      G_STRUCT_OFFSET (EphyCookieManagerIFace, deleted),
@@ -182,13 +182,13 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 		      EPHY_TYPE_COOKIE);
 
 	/**
-	 * EphyCookieManager::rejected
+	 * EphyCookieManager::cookie-rejected
 	 * @manager: the #EphyCookieManager
 	 * @address: the address of the page that wanted to set the cookie
 	 *
-	 * The rejected signal is emitted when a cookie has been rejected.
+	 * The cookie-rejected signal is emitted when a cookie has been rejected.
 	 **/
-	g_signal_new ("rejected",
+	g_signal_new ("cookie-rejected",
 		      EPHY_TYPE_COOKIE_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
 		      G_STRUCT_OFFSET (EphyCookieManagerIFace, rejected),
@@ -199,13 +199,13 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 		      G_TYPE_STRING);
 
 	/**
-	 * EphyCookieManager::cleared
+	 * EphyCookieManager::cookies-cleared
 	 * @manager: the #EphyCookieManager
 	 *
-	 * The cleared signal is emitted when the cookie database has been
-	 * cleared.
+	 * The cookies-cleared signal is emitted when the cookie database has
+	 * been cleared.
 	 **/
-	g_signal_new ("cleared",
+	g_signal_new ("cookies-cleared",
 		      EPHY_TYPE_COOKIE_MANAGER,
 		      G_SIGNAL_RUN_FIRST,
 		      G_STRUCT_OFFSET (EphyCookieManagerIFace, cleared),
