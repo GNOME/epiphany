@@ -1,4 +1,66 @@
 ==============
+Epiphany 1.1.0
+==============
+
+Code changes
+
+	* Remove most egg code and port to the gtk 2.3 api for toolbars and
+	  menus (Marco, Christian)
+	* Cleanup gobjects using the new add_private api (Christian)
+	* Rewrote xbel bookmarks importer using xmlreader api (Christian)
+	* Use new dynamic api to create dynamic menus (Marco, Christian)
+	* Load default mozilla prefs from a javascript file,
+          this is way is possible to override defaults in about:config (Marco)
+	* Use gtk invisible event boxes (Christian)
+	* Remove deprecated g_value_set_object_take_ownership() (Christian)
+	* Use new gnome vfs show_url api (Christian)
+	* Refactor node db loading functions into a common one in
+          ephy-node-db. Switch to using xmlReader api. (Christian)
+	* Use gconf_client_notify to initialize prefs (Christian)
+	* Refactor initialization/automation code to ensure we dont
+	  use dying shell (Marco)
+	* Use GtkIconTheme (Marco)
+	* Use ngettext where useful (Christian)
+
+New features
+	
+	* Added migration from galeon settings (Christopher James Lahey)
+	* Add an --import-bookmarks command line option, and really implement
+          the --add-bookmark one. (Christian)
+	* Ability to choose visible columns in bookmarks and history (Marco)
+	* History time filter (Marco)
+	* Import bookmarks from Firebird (Christian)
+	* Ability to import bookmarks from a custom file (Marco)
+
+Interface improvements
+
+	* Simplify font selection and make it use points instead
+	  of pixels like everything in Gnome (Marco)
+	* Use a line to make more clear Language/Fonts relation (Marco)
+	* Sync spinner with the current active tab (Marco)
+	* HIGgify new bookmark dialogue title (Christian)
+	* Special, more compact, toolbar layout for fullscreen (Marco)
+	* Gtk versions of the mozilla certificate prompts (from galeon)
+	* Use Bookmarks instead of All as label in toolbars (Marco)
+	* Use radio buttons for tabs menu (Marco)
+	* Fix spacing in a few dialogs (Marco)
+	* Better icons on mime dialog (Marco)
+
+Bugfixes
+
+	* Enable dragging the tab from a single-tab window too (Christian)
+	* Do not fail if prefs.js is corrupted (Marco)
+	* Fix location entry losing content when editing toolbar (Christian)
+	* Fix directory selection persistence (Christian)
+	* Fix a bug that could have caused bookmarks loss with low disk (Christian)
+	* Save session also when closing windows (Marco)
+	* Make mime dialogs interrupt download on Esc, simplify the code
+	  using response signal (Marco)
+	* Fix compilation on Solaris (Marco)
+	* Set a MOZ_PLUGIN_PATH default. (Christopher James Lahey)
+	* Fix a warning when printing to a file (Christian)
+
+==============
 Epiphany 0.9.2
 ==============
 
