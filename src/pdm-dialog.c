@@ -312,22 +312,21 @@ static void
 pdm_dialog_remove_button_clicked_cb (GtkWidget *button,
 				     PdmActionInfo *action)
 {
-	GList *l, *r = NULL;
+	GList *llist, *rlist = NULL, *l, *r;
 	GList *remove_list = NULL;
 	GtkTreeModel *model;
 	GtkTreeSelection *selection;
 
 	selection = gtk_tree_view_get_selection
 		(GTK_TREE_VIEW(action->treeview));
-	l = gtk_tree_selection_get_selected_rows
-		(selection, &model);
-	for (;l != NULL; l = l->next)
+	llist = gtk_tree_selection_get_selected_rows (selection, &model);
+	for (l = llist;l != NULL; l = l->next)
 	{
-		r = g_list_append (r, gtk_tree_row_reference_new
-				   (model, (GtkTreePath *)l->data));
+		rlist = g_list_prepend (rlist, gtk_tree_row_reference_new
+					(model, (GtkTreePath *)l->data));
 	}
 
-	for (; r != NULL; r = r->next)
+	for (r = rlist; r != NULL; r = r->next)
 	{
 		GtkTreeIter iter;
 		gpointer data;
@@ -358,10 +357,9 @@ pdm_dialog_remove_button_clicked_cb (GtkWidget *button,
 		action->free (action, remove_list);
 	}
 
-	l = g_list_first (l);
-	g_list_foreach (l, (GFunc)gtk_tree_path_free, NULL);
-	g_list_free (l);
-	g_list_free (r);
+	g_list_foreach (llist, (GFunc)gtk_tree_path_free, NULL);
+	g_list_free (llist);
+	g_list_free (rlist);
 }
 
 static void

@@ -853,19 +853,19 @@ download_dialog_pause_cb (GtkButton *button, DownloaderView *dv)
 void
 download_dialog_abort_cb (GtkButton *button, DownloaderView *dv)
 {
-	GList *l, *r = NULL;
+	GList *llist, *rlist = NULL, *l, *r;
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(dv->priv->treeview));
-	l = gtk_tree_selection_get_selected_rows (selection, &model);
-	for (;l != NULL; l = l->next)
+	llist = gtk_tree_selection_get_selected_rows (selection, &model);
+	for (l = llist;l != NULL; l = l->next)
 	{
-		r = g_list_append (r, gtk_tree_row_reference_new
-				   (model, (GtkTreePath *)l->data));
+		rlist = g_list_prepend (rlist, gtk_tree_row_reference_new
+					(model, (GtkTreePath *)l->data));
 	}
 
-        for (; r != NULL; r = g_list_next (r))
+        for (r = rlist; r != NULL; r = r->next)
         {
                 GtkTreeRowReference *node = r->data;
 		GValue val = {0, };
@@ -891,10 +891,9 @@ download_dialog_abort_cb (GtkButton *button, DownloaderView *dv)
                 gtk_tree_row_reference_free (node);
         }
 
-	l = g_list_first (l);
-	g_list_foreach (l, (GFunc)gtk_tree_path_free, NULL);
-        g_list_free (l);
-	g_list_free (r);
+	g_list_foreach (llist, (GFunc)gtk_tree_path_free, NULL);
+	g_list_free (llist);
+	g_list_free (rlist);
 }
 
 static void

@@ -197,20 +197,20 @@ static void
 language_editor_remove_button_clicked_cb (GtkButton *button,
 					  LanguageEditor *editor)
 {
-	GList *l, *r = NULL;
+	GList *llist, *rlist = NULL, *l, *r;
 	GtkTreeIter iter;
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(editor->priv->treeview));
-	l = gtk_tree_selection_get_selected_rows (selection, &model);
-	for (;l != NULL; l = l->next)
+	llist = gtk_tree_selection_get_selected_rows (selection, &model);
+	for (l = llist;l != NULL; l = l->next)
 	{
-		r = g_list_append (r, gtk_tree_row_reference_new
-				   (model, (GtkTreePath *)l->data));
+		rlist = g_list_prepend (rlist, gtk_tree_row_reference_new
+					(model, (GtkTreePath *)l->data));
 	}
 
-	for (; r != NULL; r = r->next)
+	for (r = rlist; r != NULL; r = r->next)
 	{
 		GtkTreePath *node;
 
@@ -224,10 +224,9 @@ language_editor_remove_button_clicked_cb (GtkButton *button,
 		gtk_tree_row_reference_free ((GtkTreeRowReference *)r->data);
 	}
 
-	l = g_list_first (l);
-	g_list_foreach (l, (GFunc)gtk_tree_path_free, NULL);
-	g_list_free (l);
-	g_list_free (r);
+	g_list_foreach (llist, (GFunc)gtk_tree_path_free, NULL);
+	g_list_free (llist);
+	g_list_free (rlist);
 
 	language_editor_update_pref (editor);
 }

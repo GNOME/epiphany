@@ -199,11 +199,11 @@ build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 		
 		for (i = 0; i < children->len; ++i)
 		{
-			node_list = g_list_append (node_list,
+			node_list = g_list_prepend (node_list,
 						   g_ptr_array_index (children, i));
 		}
 		
-		g_list_sort (node_list, (GCompareFunc)sort_bookmarks);
+		node_list = g_list_sort (node_list, (GCompareFunc)sort_bookmarks);
 	
 		for (l = g_list_first (node_list); l != NULL; l = g_list_next (l))
 		{
@@ -308,11 +308,11 @@ build_topics_menu (EphyTopicAction *action, EphyNode *node)
 	
 	for (i = 0; i < children->len; ++i)
 	{
-		node_list = g_list_append (node_list,
+		node_list = g_list_prepend (node_list,
 					   g_ptr_array_index (children, i));
 	}
 	
-	g_list_sort (node_list, (GCompareFunc)sort_topics);
+	node_list = g_list_sort (node_list, (GCompareFunc)sort_topics);
 	
 	for (l = g_list_first (node_list); l != NULL; l = g_list_next (l))
 	{
