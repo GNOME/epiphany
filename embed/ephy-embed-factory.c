@@ -32,9 +32,9 @@
 
 /**
  * ephy_embed_factory_new_object:
- * @object_id: identifier of the object to create
+ * @type: a #GType specifying which object to create
  * 
- * Create an instance of the object identified by @object_id.
+ * Create an instance of an object implementing the @type interface.
  *
  * Return value: the object instance
  **/
