@@ -368,7 +368,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
 	NS_ENSURE_TRUE (mimeInfo, NS_ERROR_FAILURE);
 
-	if (mAction == CONTENT_ACTION_OPEN)
+	if (mAction == CONTENT_ACTION_OPEN && auto_downloads)
 	{
 		/* HACK we use the application description to ask
 		   MozDownload to open the file when download
@@ -381,9 +381,20 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 		mimeInfo->SetApplicationDescription (nsnull);
 	}
 
-	if (mAction == CONTENT_ACTION_OPEN && mAppSupportScheme)
+	if (mAction == CONTENT_ACTION_OPEN)
 	{
-		LaunchHelperApp ();
+		if (mAppSupportScheme)
+		{
+			LaunchHelperApp ();
+		}
+		else if (auto_downloads)
+		{
+			mLauncher->SaveToDisk (nsnull, PR_FALSE);
+		}
+		else
+		{
+			mLauncher->LaunchWithApplication (nsnull, PR_FALSE);
+		}
 	}
 	else if (mAction == CONTENT_ACTION_NONE)
 	{
@@ -391,7 +402,7 @@ NS_METHOD GContentHandler::MIMEDoAction (void)
 	}
 	else
 	{
-		mLauncher->SaveToDisk (nsnull,PR_FALSE);
+		mLauncher->SaveToDisk (nsnull, PR_FALSE);
 	}
 
 	return NS_OK;
