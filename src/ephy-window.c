@@ -2627,7 +2627,6 @@ ephy_window_load_in_tabs (EphyWindow *window, EphyTab *tab, GList *uri_list)
 {
 	EphyEmbed *embed = NULL;
 	GList *l;
-	gchar *url = NULL;
 	guint num = 0;
 	GnomeVFSURI *uri;
 
@@ -2640,6 +2639,8 @@ ephy_window_load_in_tabs (EphyWindow *window, EphyTab *tab, GList *uri_list)
 	l = uri_list;
 	while (l != NULL && num < INSANE_NUMBER_OF_URLS)
 	{
+		gchar *url = NULL;
+
 		uri = (GnomeVFSURI*) l->data;
 		url = gnome_vfs_uri_to_string (uri, GNOME_VFS_URI_HIDE_NONE);
 

@@ -24,6 +24,7 @@
 
 #include <gtk/gtktoolitem.h>
 #include <glib/gi18n.h>
+#include <libgnomevfs/gnome-vfs-uri.h>
 
 #include "ephy-topic-action.h"
 #include "ephy-node-common.h"
@@ -41,7 +42,8 @@ static void ephy_topic_action_class_init (EphyTopicActionClass *class);
 
 struct EphyTopicActionPrivate
 {
-	int topic_id;
+	gulong topic_id;
+	EphyNode *topic_node;
 };
 
 enum
@@ -53,6 +55,7 @@ enum
 enum
 {
 	GO_LOCATION,
+	OPEN_IN_TABS,
 	LAST_SIGNAL
 };
 
@@ -215,7 +218,7 @@ sort_bookmarks (gconstpointer a, gconstpointer b)
 
 #define MAX_LENGTH 32
 
-static void
+static gboolean
 append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node, gboolean show_empty)
 {
         EphyFaviconCache *cache;
@@ -234,6 +237,8 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 		gtk_widget_set_sensitive (item, FALSE);
 		gtk_widget_show (item);
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+		return FALSE;
 	}
 	else
 	{
@@ -293,16 +298,61 @@ append_bookmarks_menu (EphyTopicAction *action, GtkWidget *menu, EphyNode *node,
 
 		g_list_free (node_list);
 	}
+
+	return TRUE;
+}
+
+static void
+open_in_tabs_activate_cb (GtkWidget *menu, EphyTopicAction *action)
+{
+	GList *uri_list = NULL;
+	GPtrArray *children;
+	int i;
+
+	children = ephy_node_get_children (action->priv->topic_node);
+	for (i = 0; i < children->len; i++)
+	{
+		GnomeVFSURI *uri;
+		const char *address;
+		EphyNode *child;
+
+		child = g_ptr_array_index (children, i);
+		address = ephy_node_get_property_string
+			(child, EPHY_NODE_BMK_PROP_LOCATION);
+		uri = gnome_vfs_uri_new (address);
+		uri_list = g_list_append (uri_list, uri);
+	}
+
+	g_signal_emit (action, ephy_topic_action_signals[OPEN_IN_TABS],
+		       0, uri_list);
+	gnome_vfs_uri_list_free (uri_list);
 }
 
 static GtkWidget *
 build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 {
 	GtkWidget *menu;
+	gboolean empty;
 
 	menu = gtk_menu_new ();
 
-	append_bookmarks_menu (action, menu, node, TRUE);
+	empty = append_bookmarks_menu (action, menu, node, TRUE);
+
+	if (empty)
+	{
+		GtkWidget *item;
+
+		item = gtk_separator_menu_item_new ();
+		gtk_widget_show (item);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+		item = gtk_menu_item_new_with_mnemonic (_("_Open in Tabs"));
+		gtk_widget_show (item);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+		g_signal_connect (item, "activate",
+				  G_CALLBACK (open_in_tabs_activate_cb), action);
+	}
 
 	return menu;
 }
@@ -341,18 +391,19 @@ sort_topics (gconstpointer a, gconstpointer b)
 }
 
 static GtkWidget *
-build_topics_menu (EphyTopicAction *action, EphyNode *node)
+build_topics_menu (EphyTopicAction *action)
 {
 	GtkWidget *menu, *item;
 	GPtrArray *children;
 	int i;
 	EphyBookmarks *bookmarks;
-	EphyNode *all, *uncategorized;
+	EphyNode *all, *uncategorized, *node;
 	EphyNodePriority priority;
 	GList *node_list = NULL, *l = NULL;
 
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 	all = ephy_bookmarks_get_bookmarks (bookmarks);
+	node = ephy_bookmarks_get_keywords (bookmarks);
 
 	menu = gtk_menu_new ();
 
@@ -406,22 +457,13 @@ build_topics_menu (EphyTopicAction *action, EphyNode *node)
 static GtkWidget *
 build_menu (EphyTopicAction *action)
 {
-	EphyNode *node;
-	EphyBookmarks *bookmarks;
-
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-
 	if (action->priv->topic_id == BOOKMARKS_NODE_ID)
 	{
-		LOG ("Build all bookmarks crap menu")
-
-		node = ephy_bookmarks_get_keywords (bookmarks);
-		return build_topics_menu (action, node);
+		return build_topics_menu (action);
 	}
 	else
 	{
-		node = ephy_bookmarks_get_from_id (bookmarks, action->priv->topic_id);
-		return build_bookmarks_menu (action, node);
+		return build_bookmarks_menu (action, action->priv->topic_node);
 	}
 }
 
@@ -504,19 +546,32 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 }
 
 static void
+ephy_topic_action_set_topic_id (EphyTopicAction *action, gulong id)
+{
+	EphyBookmarks *bookmarks;
+	EphyNode *node;
+
+	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+	node = ephy_bookmarks_get_from_id (bookmarks, id);
+
+	action->priv->topic_node = node;
+	action->priv->topic_id = id;
+}
+
+static void
 ephy_topic_action_set_property (GObject *object,
                                 guint prop_id,
                                 const GValue *value,
                                 GParamSpec *pspec)
 {
-	EphyTopicAction *bmk;
+	EphyTopicAction *topic;
 
-	bmk = EPHY_TOPIC_ACTION (object);
+	topic = EPHY_TOPIC_ACTION (object);
 
 	switch (prop_id)
 	{
 		case PROP_TOPIC_ID:
-			bmk->priv->topic_id = g_value_get_int (value);
+			ephy_topic_action_set_topic_id (topic, g_value_get_int (value));
 			break;
 	}
 }
@@ -565,6 +620,17 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
                               G_TYPE_NONE,
                               1,
 			      G_TYPE_STRING);
+
+	ephy_topic_action_signals[OPEN_IN_TABS] =
+                g_signal_new ("open_in_tabs",
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              G_SIGNAL_RUN_FIRST,
+                              G_STRUCT_OFFSET (EphyTopicActionClass, go_location),
+                              NULL, NULL,
+                              g_cclosure_marshal_VOID__POINTER,
+                              G_TYPE_NONE,
+                              1,
+			      G_TYPE_POINTER);
 
 	g_object_class_install_property (object_class,
                                          PROP_TOPIC_ID,

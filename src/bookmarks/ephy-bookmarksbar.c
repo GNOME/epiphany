@@ -98,9 +98,19 @@ ephy_bookmarksbar_get_type (void)
 }
 
 static void
-go_location_cb (GtkAction *action,
-		char *location,
-		EphyBookmarksBar *toolbar)
+open_in_tabs_cb (GtkAction *action, GList *uri_list, EphyBookmarksBar *toolbar)
+{
+	EphyWindow *window = toolbar->priv->window;
+	EphyTab *tab;
+
+	g_return_if_fail (EPHY_IS_WINDOW (window));
+
+	tab = ephy_window_get_active_tab (window);
+	ephy_window_load_in_tabs (window, tab, uri_list);
+}
+
+static void
+go_location_cb (GtkAction *action, char *location, EphyBookmarksBar *toolbar)
 {
 	EphyWindow *window = toolbar->priv->window;
 	GdkEvent *event;
@@ -233,6 +243,9 @@ ephy_bookmarksbar_action_request (EggEditableToolbar *eggtoolbar,
 		if (ephy_node_has_child (topics, node))
 		{
 			action = ephy_topic_action_new (name, ephy_node_get_id (node));
+
+			g_signal_connect (action, "open_in_tabs",
+					  G_CALLBACK (open_in_tabs_cb), toolbar);
 		}
 		else if (ephy_node_has_child (bmks, node))
 		{
@@ -243,6 +256,7 @@ ephy_bookmarksbar_action_request (EggEditableToolbar *eggtoolbar,
 
 		g_signal_connect (action, "go_location",
 				  G_CALLBACK (go_location_cb), toolbar);
+
 		gtk_action_group_add_action (toolbar->priv->action_group, action);
 		g_object_unref (action);
 

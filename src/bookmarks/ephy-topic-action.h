@@ -47,7 +47,8 @@ struct _EphyTopicActionClass
 {
 	GtkActionClass parent_class;
 
-	void (*go_location) (EphyTopicAction *action, char *location);
+	void (*go_location)  (EphyTopicAction *action, char *location);
+	void (*open_in_tabs) (EphyTopicAction *action, GList *uri_list);
 };
 
 GType      ephy_topic_action_get_type	(void);
