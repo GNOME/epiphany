@@ -28,6 +28,7 @@
 #include "ephy-string.h"
 
 #include <string.h>
+#include <bonobo/bonobo-i18n.h>
 
 static void ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass);
 static void ephy_toolbars_model_init       (EphyToolbarsModel *t);
@@ -188,8 +189,15 @@ impl_get_item_id (EggToolbarsModel *t,
 			/* Create the bookmark, it does not exist */
 			EphyHistory *gh;
 			const char *icon;
+			const char *title;
 
-			node = ephy_bookmarks_add (bookmarks, netscape_url[NAME], netscape_url[URL]);
+			title = netscape_url[NAME];
+			if (title == NULL || *title == '\0')
+			{
+				title = _("Untitled");
+			}
+
+			node = ephy_bookmarks_add (bookmarks, title, netscape_url[URL]);
 			g_return_val_if_fail (node != NULL, NULL);
 
 			gh = ephy_embed_shell_get_global_history (EPHY_EMBED_SHELL (ephy_shell));

@@ -174,17 +174,30 @@ sort_bookmarks (gconstpointer a, gconstpointer b)
 {
 	EphyNode *node_a = (EphyNode *)a;
 	EphyNode *node_b = (EphyNode *)b;
-	char *str_a = NULL;
-	char *str_b = NULL;
+	const char *title1, *title2;
 	int retval;
 
-	str_a = g_utf8_casefold (ephy_node_get_property_string (node_a, EPHY_NODE_BMK_PROP_TITLE),
-				 -1);
-	str_b = g_utf8_casefold (ephy_node_get_property_string (node_b, EPHY_NODE_BMK_PROP_TITLE),
-			         -1);
-	retval = g_utf8_collate (str_a, str_b);
-	g_free (str_a);
-	g_free (str_b);
+	title1 = ephy_node_get_property_string (node_a, EPHY_NODE_BMK_PROP_TITLE);
+	title2 = ephy_node_get_property_string (node_b, EPHY_NODE_BMK_PROP_TITLE);
+                                                                                                                      
+	if (title1 == NULL)
+	{
+		retval = -1;
+	}
+	else if (title2 == NULL)
+	{
+		retval = 1;
+	}
+	else
+	{
+		char *str_a, *str_b;
+
+		str_a = g_utf8_casefold (title1, -1);
+		str_b = g_utf8_casefold (title2, -1);
+		retval = g_utf8_collate (str_a, str_b);
+		g_free (str_a);
+		g_free (str_b);
+	}
 
 	return retval;
 }
@@ -290,20 +303,30 @@ sort_topics (gconstpointer a, gconstpointer b)
 {
 	EphyNode *node_a = (EphyNode *)a;
 	EphyNode *node_b = (EphyNode *)b;
-	EphyNodePriority priority_a, priority_b;
-	char *str_a = NULL;
-	char *str_b = NULL;
+	const char *title1, *title2;
 	int retval;
 
-	priority_a = ephy_node_get_property_int (node_a, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-	priority_b = ephy_node_get_property_int (node_b, EPHY_NODE_KEYWORD_PROP_PRIORITY);
-	str_a = g_utf8_casefold (ephy_node_get_property_string (node_a, EPHY_NODE_KEYWORD_PROP_NAME),
-				 -1);
-	str_b = g_utf8_casefold (ephy_node_get_property_string (node_b, EPHY_NODE_KEYWORD_PROP_NAME),
-				 -1);
-	retval = g_utf8_collate (str_a, str_b);
-	g_free (str_a);
-	g_free (str_b);
+	title1 = ephy_node_get_property_string (node_a, EPHY_NODE_KEYWORD_PROP_NAME);
+	title2 = ephy_node_get_property_string (node_b, EPHY_NODE_KEYWORD_PROP_NAME);
+                                                                                                                      
+	if (title1 == NULL)
+	{
+		retval = -1;
+	}
+	else if (title2 == NULL)
+	{
+		retval = 1;
+	}
+	else
+	{
+		char *str_a, *str_b;
+
+		str_a = g_utf8_casefold (title1, -1);
+		str_b = g_utf8_casefold (title2, -1);
+		retval = g_utf8_collate (str_a, str_b);
+		g_free (str_a);
+		g_free (str_b);
+	}
 
 	return retval;
 }

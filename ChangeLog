@@ -1,3 +1,18 @@
+2003-08-22  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/widgets/ephy-node-view.c: (compare_string_values),
+	(ephy_node_view_sort_func):
+	* src/bookmarks/ephy-bookmarks-menu.c: (sort_topics),
+	(sort_bookmarks):
+	* src/bookmarks/ephy-topic-action.c: (sort_bookmarks),
+	(sort_topics):
+
+	Make it NULL safe
+
+	* src/ephy-toolbars-model.c: (impl_get_item_id):
+
+	When creating bookmark, if the title is unknown, use untitled.
+
 2003-08-21  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/widgets/ephy-node-view.c: (drag_data_received_cb):

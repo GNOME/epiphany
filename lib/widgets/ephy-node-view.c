@@ -1041,6 +1041,38 @@ cell_renderer_edited (GtkCellRendererText *cell,
 }
 
 static int
+compare_string_values (const GValue *a_value, const GValue *b_value)
+{
+        const char *str1, *str2;
+        int retval;
+                                                                                                                              
+        str1 = g_value_get_string (a_value);
+        str2 = g_value_get_string (b_value);
+                                                                                                                              
+        if (str1 == NULL)
+        {
+                retval = -1;
+        }
+        else if (str2 == NULL)
+        {
+                retval = 1;
+        }
+        else
+        {
+	        char *str_a;
+	        char *str_b;
+
+                str_a = g_utf8_casefold (str1, -1);
+                str_b = g_utf8_casefold (str2, -1);
+                retval = g_utf8_collate (str_a, str_b);
+                g_free (str_a);
+                g_free (str_b);
+        }
+                                                                                                                              
+        return retval;
+}
+
+static int
 ephy_node_view_sort_func (GtkTreeModel *model,
 			  GtkTreeIter *a,
 			  GtkTreeIter *b,
@@ -1061,20 +1093,14 @@ ephy_node_view_sort_func (GtkTreeModel *model,
 		GType type = gtk_tree_model_get_column_type (model, column);
 		GValue a_value = {0, };
 		GValue b_value = {0, };
-		gchar *stra, *strb;
+
 		gtk_tree_model_get_value (model, a, column, &a_value);
 		gtk_tree_model_get_value (model, b, column, &b_value);
 
 		switch (G_TYPE_FUNDAMENTAL (type))
 		{
 		case G_TYPE_STRING:
-			/* FIXME: this is horribly inefficient */
-			stra = g_utf8_casefold (g_value_get_string (&a_value), -1);
-			strb = g_utf8_casefold (g_value_get_string (&b_value), -1);
-			g_return_val_if_fail (stra != NULL && strb != NULL, 0);
-			retval = g_utf8_collate (stra, strb);
-			g_free (stra);
-			g_free (strb);
+			retval = compare_string_values (&a_value, &b_value);
 			break;
 		case G_TYPE_INT:
 			if (g_value_get_int (&a_value) < g_value_get_int (&b_value))
