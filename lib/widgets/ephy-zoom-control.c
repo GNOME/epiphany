@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2003  Christian Persch
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -60,8 +60,6 @@ static void	ephy_zoom_control_class_init	(EphyZoomControlClass *klass);
 static void	ephy_zoom_control_init		(EphyZoomControl *control);
 static void	ephy_zoom_control_finalize	(GObject *o);
 
-#define MENU_ID "ephy-zoom-control-menu-id"
-
 GType
 ephy_zoom_control_get_type (void)
 {
@@ -88,65 +86,6 @@ ephy_zoom_control_get_type (void)
 	}
 
 	return type;
-}
-
-static void
-proxy_menu_activate_cb (GtkMenuItem *menu_item, EphyZoomControl *control)
-{
-	gint index;
-	float zoom;
-
-	/* menu item was toggled OFF */
-	if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menu_item))) return;
-
-	index = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menu_item), "zoom-level"));
-	zoom = zoom_levels[index].level;
-
-	if (zoom != control->priv->zoom)
-	{
-		g_signal_emit (control, signals[ZOOM_TO_LEVEL_SIGNAL], 0, zoom);
-	}
-}
-
-static gboolean
-ephy_zoom_control_create_menu_proxy (GtkToolItem *item)
-{
-	EphyZoomControl *control = EPHY_ZOOM_CONTROL (item);
-	EphyZoomControlPrivate *p = control->priv;
-	GtkWidget *menu, *menu_item;
-	GSList *group = NULL;
-	gint i;
-
-	menu = gtk_menu_new ();
-
-	for (i = 0; i < n_zoom_levels; i++)
-	{
-		menu_item = gtk_radio_menu_item_new_with_label (group, _(zoom_levels[i].name));
-		group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menu_item));
-
-		gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
-						p->zoom == zoom_levels[i].level);
-
-		gtk_widget_show (menu_item);
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-
-		g_object_set_data (G_OBJECT (menu_item), "zoom-level", GINT_TO_POINTER (i));
-		g_signal_connect_object (G_OBJECT (menu_item), "activate",
-					 G_CALLBACK (proxy_menu_activate_cb), control, 0);
-	}
-
-	menu_item = gtk_menu_item_new_with_mnemonic (_("_Zoom"));
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), menu);
-
-	gtk_widget_show (menu);
-	gtk_widget_show (menu_item);
-
-	g_object_ref (menu_item);
-	gtk_object_sink (GTK_OBJECT (menu_item));
-	gtk_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
-	g_object_unref (menu_item);
-
-	return TRUE;
 }
 
 static void
@@ -288,7 +227,6 @@ ephy_zoom_control_class_init (EphyZoomControlClass *klass)
 	object_class->get_property = ephy_zoom_control_get_property;
 	object_class->finalize = ephy_zoom_control_finalize;
 
-	tool_item_class->create_menu_proxy = ephy_zoom_control_create_menu_proxy;
 	tool_item_class->set_tooltip = ephy_zoom_control_set_tooltip;
 
 	g_object_class_install_property (object_class,
