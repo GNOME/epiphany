@@ -351,26 +351,35 @@ entry_populate_popup_cb (GtkEntry *entry,
 {
 	GtkWidget *image;
 	GtkWidget *menuitem;
-
-	menuitem = gtk_separator_menu_item_new ();
-	gtk_widget_show (menuitem);
-	gtk_menu_shell_prepend (GTK_MENU_SHELL(menu), menuitem);
+	GList *children, *item;
+	int pos = 0, sep = 0;
 
 	/* Clear and Copy mnemonics conflict, make custom menuitem */
 	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_MENU);
 	gtk_widget_show (image);
 
-	/* To translators: the mnemonic shouldn't conflict with any of the
-	 * stock items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
-	 * and Insert Unicode control character.) */
+	/* Translators: the mnemonic shouldn't conflict with any of the
+	 * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
+	 * Select All, Input Methods and Insert Unicode control character.)
+	 */
 	menuitem = gtk_image_menu_item_new_with_mnemonic (_("Cl_ear"));
-	gtk_widget_show (menuitem);
-
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM(menuitem), image);
-	gtk_menu_shell_prepend (GTK_MENU_SHELL(menu), menuitem);
-
 	g_signal_connect (menuitem , "activate",
 			  G_CALLBACK (entry_clear_activate_cb), lentry);
+	gtk_widget_show (menuitem);
+
+	/* search for the 2nd separator (the one after Select All) in the context
+	 * menu, and insert this menu item before it.
+	 * It's a bit of a hack, but there seems to be no better way to do it :/
+	 */
+	children = gtk_container_get_children (GTK_CONTAINER (menu));
+	for (item = children; item != NULL && sep < 2; item = item->next, pos++)
+	{
+		if (GTK_IS_SEPARATOR_MENU_ITEM (item->data)) sep++;
+	}
+	g_list_free (children);
+
+	gtk_menu_shell_insert (GTK_MENU_SHELL (menu), menuitem, pos - 1);
 }
 
 static void
