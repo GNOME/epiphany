@@ -449,7 +449,7 @@ ephy_session_autoresume (EphySession *session)
 
 	LOG ("ephy_session_autoresume")
 
-	if (session->priv->windows != NULL) return FALSE;
+	if (session->priv->windows != NULL || session->priv->tool_windows != NULL) return FALSE;
 
 	if (session->priv->resume_dialog)
 	{
