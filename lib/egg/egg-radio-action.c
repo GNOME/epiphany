@@ -6,7 +6,7 @@ static void egg_radio_action_class_init (EggRadioActionClass *class);
 GType
 egg_radio_action_get_type (void)
 {
-  static GtkType type = 0;
+  static GType type = 0;
 
   if (!type)
     {

@@ -52,7 +52,7 @@ static GObjectClass *parent_class = NULL;
 GType
 egg_menu_merge_get_type (void)
 {
-  static GtkType type = 0;
+  static GType type = 0;
 
   if (!type)
     {

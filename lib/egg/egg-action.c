@@ -38,7 +38,7 @@ static const gchar *accel_path_key = "EggAction::accel_path";
 GType
 egg_action_get_type (void)
 {
-  static GtkType type = 0;
+  static GType type = 0;
 
   if (!type)
     {

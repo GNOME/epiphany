@@ -55,7 +55,7 @@ static guint ephy_bookmark_action_signals[LAST_SIGNAL] = { 0 };
 GType
 ephy_bookmark_action_get_type (void)
 {
-	static GtkType type = 0;
+	static GType type = 0;
 
 	if (!type)
 	{

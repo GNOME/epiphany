@@ -42,7 +42,7 @@ enum
 GType
 ephy_navigation_action_get_type (void)
 {
-	static GtkType type = 0;
+	static GType type = 0;
 
 	if (!type)
 	{

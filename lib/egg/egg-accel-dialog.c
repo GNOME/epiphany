@@ -6,7 +6,7 @@ static void egg_accel_dialog_class_init (EggAccelDialogClass *class);
 GType
 egg_accel_dialog_get_type (void)
 {
-  static GtkType type = 0;
+  static GType type = 0;
 
   if (!type)
     {

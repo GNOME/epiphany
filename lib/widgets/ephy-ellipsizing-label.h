@@ -53,7 +53,7 @@ typedef struct
 	GtkLabelClass parent_class;
 } EphyEllipsizingLabelClass;
 
-GtkType    ephy_ellipsizing_label_get_type	(void);
+GType      ephy_ellipsizing_label_get_type	(void);
 
 GtkWidget *ephy_ellipsizing_label_new		(const char *string);
 

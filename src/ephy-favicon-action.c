@@ -48,7 +48,7 @@ static GObjectClass *parent_class = NULL;
 GType
 ephy_favicon_action_get_type (void)
 {
-	static GtkType type = 0;
+	static GType type = 0;
 
 	if (!type)
 	{

@@ -61,7 +61,7 @@ struct EphySpinnerClass {
 	GtkEventBoxClass parent_class;
 };
 
-GtkType       ephy_spinner_get_type       (void);
+GType         ephy_spinner_get_type       (void);
 GtkWidget    *ephy_spinner_new            (void);
 void          ephy_spinner_start          (EphySpinner *throbber);
 void          ephy_spinner_stop           (EphySpinner *throbber);
