@@ -185,10 +185,12 @@ response_cb (EphyNewBookmark *new_bookmark,
 		       		       "epiphany",
 		       		       "to-create-new-bookmark");
 			break;
-		case GTK_RESPONSE_CANCEL:
-			break;
+		/* For both OK and Cancel we want to destroy the dialog */
 		case GTK_RESPONSE_OK:
 			ephy_new_bookmark_add (new_bookmark);
+		case GTK_RESPONSE_CANCEL:
+		default:
+			gtk_widget_destroy (GTK_WIDGET (new_bookmark));
 			break;
 	}
 }
@@ -464,20 +466,4 @@ gulong
 ephy_new_bookmark_get_id (EphyNewBookmark *bookmark)
 {
 	return bookmark->priv->id;
-}
-
-/* Convenience function for callers */
-
-void
-ephy_new_bookmark_response_cb (EphyNewBookmark *bookmark,
-			       int response_id,
-			       gpointer user_data)
-{
-	switch (response_id)
-	{
-		case GTK_RESPONSE_CANCEL:
-		case GTK_RESPONSE_OK:
-			gtk_widget_destroy (GTK_WIDGET (bookmark));
-			break;
-	}
 }

@@ -469,9 +469,6 @@ cmd_bookmark_page (EggAction *action,
 				(bookmarks, window, location);
 			ephy_new_bookmark_set_title
 				(EPHY_NEW_BOOKMARK (new_bookmark), title);
-			g_signal_connect (G_OBJECT (new_bookmark), "response",
-					  G_CALLBACK (ephy_new_bookmark_response_cb),
-					  NULL);
 			gtk_widget_show (new_bookmark);
 		}
 	}

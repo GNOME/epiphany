@@ -1,3 +1,15 @@
+2003-05-13  David Bordoley <bordoley@msu.edu>
+
+	* src/ephy-history-window.c: (cmd_bookmark_page):
+	* src/popup-commands.c: (popup_cmd_bookmark_link):
+	* src/window-commands.c: (window_cmd_file_bookmark_page):
+	* src/bookmarks/ephy-new-bookmark.c: (response_cb),
+	(ephy_new_bookmark_response_cb):
+	* src/bookmarks/ephy-new-bookmark.h:
+
+	Get rid of the unneeded convenience callback since no
+	one is try to make the new bookmark dialog modal anymore.
+
 2003-05-12  Xan Lopez  <xan@masilla.org>
 
 	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init_defaults),
