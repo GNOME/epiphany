@@ -171,10 +171,14 @@ encodings[] =
 	{ N_("_Georgian (GEOSTD8)"),                "geostd8",               LG_OTHER },
 	{ N_("_Icelandic (MacIcelandic)"),          "x-mac-icelandic",       LG_OTHER },
 	{ N_("_Nordic (ISO-8859-10)"),              "ISO-8859-10",           LG_OTHER },
-	{ N_("Romanian (_MacRomanian)"),            "x-mac-romanian",        LG_OTHER },
+	{ N_("_Romanian (MacRomanian)"),            "x-mac-romanian",        LG_OTHER },
 	{ N_("R_omanian (ISO-8859-16)"),            "ISO-8859-16",           LG_OTHER },
-	{ N_("South European (_ISO-8859-3)"),       "ISO-8859-3",            LG_OTHER },
-	{ N_("_Thai (TIS-620)"),                    "TIS-620",               LG_OTHER },
+	{ N_("South _European (ISO-8859-3)"),       "ISO-8859-3",            LG_OTHER },
+	{ N_("Thai (TIS-_620)"),                    "TIS-620",               LG_OTHER },
+#if MOZILLA_SNAPSHOT >= 9
+	{ N_("Thai (IS_O-8859-11)"),                "iso-8859-11",           LG_OTHER },
+	{ N_("_Thai (Windows-874)"),                "windows-874",           LG_OTHER },
+#endif	
 	{ N_("_User Defined"),                      "x-user-defined",        LG_OTHER },
 };
 static const guint n_encodings = G_N_ELEMENTS (encodings);
