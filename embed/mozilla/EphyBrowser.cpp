@@ -116,7 +116,7 @@ EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
 	NS_NAMED_LITERAL_STRING(attr_rel, "rel");
 	nsAutoString value;
 	result = linkElement->GetAttribute (attr_rel, value);
-	if (NS_FAILED(result)) return NS_ERROR_FAILURE;
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
 
 	if (value.Equals(NS_LITERAL_STRING("SHORTCUT ICON"),
 			 nsCaseInsensitiveStringComparator()) ||
@@ -126,25 +126,23 @@ EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
 		NS_NAMED_LITERAL_STRING(attr_href, "href");
 		nsAutoString value;
 		result = linkElement->GetAttribute (attr_href, value);
-		if (NS_FAILED (result) || value.IsEmpty())
-			return NS_ERROR_FAILURE;
+		if (NS_FAILED (result) || value.IsEmpty()) return NS_ERROR_FAILURE;
 
 		nsCOMPtr<nsIDOMDocument> domDoc;
-		result = node->GetOwnerDocument(getter_AddRefs(domDoc));
-		if (NS_FAILED(result) || !domDoc) return NS_ERROR_FAILURE;
+		node->GetOwnerDocument(getter_AddRefs(domDoc));
+		NS_ENSURE_TRUE (domDoc, NS_ERROR_FAILURE);
 
 		nsCOMPtr<nsIDocument> doc = do_QueryInterface (domDoc);
-		if(!doc) return NS_ERROR_FAILURE;
+		NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
 
 #if MOZILLA_SNAPSHOT > 11
 		nsIURI *uri;
 		uri = doc->GetDocumentURL ();
-		if (uri == NULL) return NS_ERROR_FAILURE;
 #else
 		nsCOMPtr<nsIURI> uri;
-		result = doc->GetDocumentURL(getter_AddRefs(uri));
-		if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+		doc->GetDocumentURL(getter_AddRefs(uri));
 #endif
+		if (!uri) return NS_ERROR_FAILURE;
 
 		const nsACString &link = NS_ConvertUCS2toUTF8(value);
 		nsCAutoString favicon_url;
@@ -166,9 +164,8 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 
 	aDOMEvent->GetTarget(getter_AddRefs(eventTarget));
 
-	nsresult result;
-	nsCOMPtr<nsIDOMNode> node = do_QueryInterface(eventTarget, &result);
-	if (NS_FAILED(result) || !node) return NS_ERROR_FAILURE;
+	nsCOMPtr<nsIDOMNode> node = do_QueryInterface(eventTarget);
+	NS_ENSURE_TRUE (node, NS_ERROR_FAILURE);
 
 	HandleFaviconLink (node);
 
@@ -178,13 +175,8 @@ EphyFaviconEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 NS_IMETHODIMP
 EphyPopupEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 {
-	nsresult rv;
-
 	nsCOMPtr<nsIDOMPopupBlockedEvent> popupEvent =
-		do_QueryInterface(aDOMEvent, &rv);
-
-	if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
-
+		do_QueryInterface(aDOMEvent);
 	if (popupEvent)
 	{
 		g_signal_emit_by_name (mOwner, "ge_popup_blocked");
@@ -192,7 +184,6 @@ EphyPopupEventListener::HandleEvent(nsIDOMEvent* aDOMEvent)
 
 	return NS_OK;
 }
-
 
 EphyBrowser::EphyBrowser ()
 {
@@ -211,26 +202,30 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 
 	gtk_moz_embed_get_nsIWebBrowser (mozembed,
 					 getter_AddRefs(mWebBrowser));
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	mWebBrowser->GetContentDOMWindow (getter_AddRefs (mDOMWindow));
+	NS_ENSURE_TRUE (mDOMWindow, NS_ERROR_FAILURE);
 
 	/* This will instantiate an about:blank doc if necessary */
 	nsCOMPtr<nsIDOMDocument> domDocument;
 	rv = mDOMWindow->GetDocument (getter_AddRefs (domDocument));
-	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	mFaviconEventListener = new EphyFaviconEventListener();
+	if (!mFaviconEventListener) return NS_ERROR_OUT_OF_MEMORY;
+
 	mPopupEventListener = new EphyPopupEventListener();
+	if (!mPopupEventListener) return NS_ERROR_OUT_OF_MEMORY;
 
 	rv = mFaviconEventListener->Init (EPHY_EMBED (mozembed));
-	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	rv = mPopupEventListener->Init (EPHY_EMBED (mozembed));
-	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
  	rv = GetListener();
-	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	return AttachListeners();
 }
@@ -247,13 +242,13 @@ EphyBrowser::GetListener (void)
         domWindow = do_QueryInterface(domWindowExternal);
 	
 	nsCOMPtr<nsPIDOMWindow> piWin(do_QueryInterface(domWindow));
-  	if (!piWin) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (piWin, NS_ERROR_FAILURE);
 
   	nsCOMPtr<nsIChromeEventHandler> chromeHandler;
   	piWin->GetChromeEventHandler(getter_AddRefs(chromeHandler));
 
   	mEventReceiver = do_QueryInterface(chromeHandler);
-	if (!mEventReceiver) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mEventReceiver, NS_ERROR_FAILURE);
 
 	return NS_OK;
 }
@@ -263,17 +258,20 @@ EphyBrowser::AttachListeners(void)
 {
 	nsresult rv;
 
-  	if (!mEventReceiver) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mEventReceiver, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDOMEventTarget> target;
 	target = do_QueryInterface (mEventReceiver);
 
 	rv = target->AddEventListener(NS_LITERAL_STRING("DOMLinkAdded"),
 				      mFaviconEventListener, PR_FALSE);
-	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-	return target->AddEventListener(NS_LITERAL_STRING("DOMPopupBlocked"),
-					mPopupEventListener, PR_FALSE);
+	rv = target->AddEventListener(NS_LITERAL_STRING("DOMPopupBlocked"),
+				      mPopupEventListener, PR_FALSE);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+	return NS_OK;
 }
 
 nsresult
@@ -281,27 +279,30 @@ EphyBrowser::DetachListeners(void)
 {
 	nsresult rv;
 
-	if (!mEventReceiver) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mEventReceiver, NS_ERROR_FAILURE);
 	
 	nsCOMPtr<nsIDOMEventTarget> target;
 	target = do_QueryInterface (mEventReceiver);
 
 	rv = target->RemoveEventListener(NS_LITERAL_STRING("DOMLinkAdded"),
 					 mFaviconEventListener, PR_FALSE);
-	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-	return target->RemoveEventListener(NS_LITERAL_STRING("DOMPopupBlocked"),
-					   mPopupEventListener, PR_FALSE);
+	rv = target->RemoveEventListener(NS_LITERAL_STRING("DOMPopupBlocked"),
+					 mPopupEventListener, PR_FALSE);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+	return NS_OK;
 }
 
 nsresult EphyBrowser::Print (nsIPrintSettings *options, PRBool preview)
 {
 	nsresult result;
 
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser, &result));
-	if (NS_FAILED(result) || !print) return NS_ERROR_FAILURE;
+	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
+	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
 
 	if (!preview)
 	{
@@ -320,13 +321,15 @@ nsresult EphyBrowser::PrintPreviewClose (void)
 	nsresult rv;
 	PRBool isPreview = PR_FALSE;
 
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser, &rv));
-	if (NS_FAILED(rv) || !print) return NS_ERROR_FAILURE;
+	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
+	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
 
 	rv = print->GetDoingPrintPreview(&isPreview);
-	if (NS_SUCCEEDED (rv) && isPreview == PR_TRUE)
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+	if (isPreview == PR_TRUE)
 	{
 		rv = print->ExitPrintPreview();
 	}
@@ -336,38 +339,30 @@ nsresult EphyBrowser::PrintPreviewClose (void)
 
 nsresult EphyBrowser::PrintPreviewNumPages (int *numPages)
 {
-	nsresult rv;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
+	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser, &rv));
-	if (NS_FAILED(rv) || !print) return NS_ERROR_FAILURE;
-
-	rv = print->GetPrintPreviewNumPages(numPages);
-	return rv;
+	return print->GetPrintPreviewNumPages(numPages);
 }
 
 nsresult EphyBrowser::PrintPreviewNavigate(PRInt16 navType, PRInt32 pageNum)
 {
-	nsresult rv;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
+	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser, &rv));
-	if (NS_FAILED(rv) || !print) return NS_ERROR_FAILURE;
-
-	rv = print->PrintPreviewNavigate(navType, pageNum);
-	return rv;
+	return print->PrintPreviewNavigate(navType, pageNum);
 }
 
 nsresult EphyBrowser::GetPrintSettings (nsIPrintSettings **options)
 {
-	nsresult result;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser, &result));
-	if (NS_FAILED(result) || !print) return NS_ERROR_FAILURE;
+	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
+	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
 
 	return print->GetGlobalPrintSettings(options);
 }
@@ -376,14 +371,14 @@ nsresult EphyBrowser::GetSHistory (nsISHistory **aSHistory)
 {
 	nsresult result;
 
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebNavigation> ContentNav = do_QueryInterface (mWebBrowser);
-	if (!ContentNav) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (ContentNav, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsISHistory> SessionHistory;
 	result = ContentNav->GetSessionHistory (getter_AddRefs (SessionHistory));
-	if (!SessionHistory) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (SessionHistory, NS_ERROR_FAILURE);
 
 	*aSHistory = SessionHistory.get();
 	NS_IF_ADDREF (*aSHistory);
@@ -404,29 +399,26 @@ nsresult EphyBrowser::GoToHistoryIndex (PRInt16 index)
 {
 	nsresult result;
 
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebNavigation> ContentNav = do_QueryInterface (mWebBrowser);
-	if (!ContentNav) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (ContentNav, NS_ERROR_FAILURE);
 
-	return  ContentNav->GotoIndex (index);
+	return ContentNav->GotoIndex (index);
 }
 
 nsresult EphyBrowser::SetZoom (float aZoom, PRBool reflow)
 {
-	nsresult result;
-
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	if (reflow)
 	{
 		nsCOMPtr<nsIContentViewer> contentViewer;	
-		result = GetContentViewer (getter_AddRefs(contentViewer));
-		if (!NS_SUCCEEDED (result) || !contentViewer) return NS_ERROR_FAILURE;
+		GetContentViewer (getter_AddRefs(contentViewer));
+		NS_ENSURE_TRUE (contentViewer, NS_ERROR_FAILURE);
 
-		nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer,
-								  &result);
-		if (NS_FAILED(result) || !mdv) return NS_ERROR_FAILURE;
+		nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
+		NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
 
 		return mdv->SetTextZoom (aZoom);
 	}
@@ -434,7 +426,7 @@ nsresult EphyBrowser::SetZoom (float aZoom, PRBool reflow)
 	{
 		nsCOMPtr<nsIDocShell> DocShell;
 		DocShell = do_GetInterface (mWebBrowser);
-		if (!DocShell) return NS_ERROR_FAILURE;
+		NS_ENSURE_TRUE (DocShell, NS_ERROR_FAILURE);
 
 		SetZoomOnDocshell (aZoom, DocShell);
 
@@ -462,39 +454,35 @@ nsresult EphyBrowser::SetZoom (float aZoom, PRBool reflow)
 
 nsresult EphyBrowser::SetZoomOnDocshell (float aZoom, nsIDocShell *DocShell)
 {
-	nsresult result;
-
 	nsCOMPtr<nsIPresContext> PresContext;
-	result = DocShell->GetPresContext (getter_AddRefs(PresContext));
-	if (NS_FAILED(result) || !PresContext) return NS_ERROR_FAILURE;
+	DocShell->GetPresContext (getter_AddRefs(PresContext));
+	NS_ENSURE_TRUE (PresContext, NS_ERROR_FAILURE);
 					
 	nsCOMPtr<nsIDeviceContext> DeviceContext;
-	result = PresContext->GetDeviceContext (getter_AddRefs(DeviceContext));
-	if (NS_FAILED(result) || !DeviceContext) return NS_ERROR_FAILURE;
+	PresContext->GetDeviceContext (getter_AddRefs(DeviceContext));
+	NS_ENSURE_TRUE (DeviceContext, NS_ERROR_FAILURE);
 
 	return DeviceContext->SetTextZoom (aZoom);
 }
 
 nsresult EphyBrowser::GetContentViewer (nsIContentViewer **aViewer)
 {
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDocShell> ourDocShell(do_GetInterface(mWebBrowser));
-	NS_ENSURE_TRUE(ourDocShell, NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (ourDocShell, NS_ERROR_FAILURE);
+
 	return ourDocShell->GetContentViewer(aViewer);
 }
 
 nsresult EphyBrowser::GetZoom (float *aZoom)
 {
-	nsresult result;
-
 	nsCOMPtr<nsIContentViewer> contentViewer;	
-	result = GetContentViewer (getter_AddRefs(contentViewer));
-	if (!NS_SUCCEEDED (result) || !contentViewer) return NS_ERROR_FAILURE;
+	GetContentViewer (getter_AddRefs(contentViewer));
+	NS_ENSURE_TRUE (contentViewer, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer,
-								  &result);
-	if (NS_FAILED(result) || !mdv) return NS_ERROR_FAILURE;
+	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
+	NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
 
 	return mdv->GetTextZoom (aZoom);
 }
@@ -508,7 +496,7 @@ nsresult EphyBrowser::GetTargetDocument (nsIDOMDocument **aDOMDocument)
 {
 	nsresult result;
 
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	/* Use the current target document */
 	if (mTargetDocument)
@@ -523,7 +511,7 @@ nsresult EphyBrowser::GetTargetDocument (nsIDOMDocument **aDOMDocument)
 	/* Use the focused document */
 	nsCOMPtr<nsIWebBrowserFocus> webBrowserFocus;
 	webBrowserFocus = do_QueryInterface (mWebBrowser);
-	if (!webBrowserFocus) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (webBrowserFocus, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDOMWindow> DOMWindow;
 	result = webBrowserFocus->GetFocusedWindow (getter_AddRefs(DOMWindow));
@@ -538,11 +526,9 @@ nsresult EphyBrowser::GetTargetDocument (nsIDOMDocument **aDOMDocument)
 
 nsresult EphyBrowser::GetSHInfo (PRInt32 *count, PRInt32 *index)
 {
-	nsresult result;
-
 	nsCOMPtr<nsISHistory> SessionHistory;
-	result = GetSHistory (getter_AddRefs(SessionHistory));
-	if (NS_FAILED(result) || ! SessionHistory) return NS_ERROR_FAILURE;
+	GetSHistory (getter_AddRefs(SessionHistory));
+	NS_ENSURE_TRUE (SessionHistory, NS_ERROR_FAILURE);
 
 	SessionHistory->GetCount (count);
 	SessionHistory->GetIndex (index);	
@@ -552,42 +538,40 @@ nsresult EphyBrowser::GetSHInfo (PRInt32 *count, PRInt32 *index)
 
 nsresult EphyBrowser::GetSHTitleAtIndex (PRInt32 index, PRUnichar **title)
 {
-	nsresult result;
-
 	nsCOMPtr<nsISHistory> SessionHistory;
-	result = GetSHistory (getter_AddRefs(SessionHistory));
-	if (NS_FAILED(result) || ! SessionHistory) return NS_ERROR_FAILURE;
+	GetSHistory (getter_AddRefs(SessionHistory));
+	NS_ENSURE_TRUE (SessionHistory, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIHistoryEntry> he;
-	result = SessionHistory->GetEntryAtIndex (index, PR_FALSE,
-						  getter_AddRefs (he));
-	if (!NS_SUCCEEDED(result) || (!he)) return NS_ERROR_FAILURE;
+	SessionHistory->GetEntryAtIndex (index, PR_FALSE,
+					 getter_AddRefs (he));
+	NS_ENSURE_TRUE (he, NS_ERROR_FAILURE);
 
+	nsresult result;
 	result = he->GetTitle (title);
-	if (!NS_SUCCEEDED(result) || (!title)) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (NS_SUCCEEDED (result) && title, NS_ERROR_FAILURE);
 
 	return NS_OK;
 }
 
 nsresult EphyBrowser::GetSHUrlAtIndex (PRInt32 index, nsCString &url)
 {
-	nsresult result;
-
 	nsCOMPtr<nsISHistory> SessionHistory;
-	result = GetSHistory (getter_AddRefs(SessionHistory));
-	if (NS_FAILED(result) || ! SessionHistory) return NS_ERROR_FAILURE;
+	GetSHistory (getter_AddRefs(SessionHistory));
+	NS_ENSURE_TRUE (SessionHistory, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIHistoryEntry> he;
-	result = SessionHistory->GetEntryAtIndex (index, PR_FALSE,
-						  getter_AddRefs (he));
-	if (NS_FAILED(result) || (!he)) return NS_ERROR_FAILURE;
+	SessionHistory->GetEntryAtIndex (index, PR_FALSE,
+					 getter_AddRefs (he));
+	NS_ENSURE_TRUE (he, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIURI> uri;
-	result = he->GetURI (getter_AddRefs(uri));
-	if (NS_FAILED(result) || (!uri)) return NS_ERROR_FAILURE;
+	he->GetURI (getter_AddRefs(uri));
+	NS_ENSURE_TRUE (uri, NS_ERROR_FAILURE);
 
+	nsresult result;
 	result = uri->GetSpec(url);
-	if (NS_FAILED(result) || url.IsEmpty()) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (NS_SUCCEEDED (result) && !url.IsEmpty(), NS_ERROR_FAILURE);
 
 	return NS_OK;
 }
@@ -596,10 +580,11 @@ nsresult EphyBrowser::FindSetProperties (const PRUnichar *search_string,
 			                 PRBool case_sensitive,
 					 PRBool wrap_around)
 {
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebBrowserFind> finder (do_GetInterface(mWebBrowser));
-	
+	NS_ENSURE_TRUE (finder, NS_ERROR_FAILURE);
+
 	finder->SetSearchString (search_string);
 	finder->SetMatchCase (case_sensitive);
 	finder->SetWrapFind (wrap_around);
@@ -610,10 +595,11 @@ nsresult EphyBrowser::FindSetProperties (const PRUnichar *search_string,
 nsresult EphyBrowser::Find (PRBool backwards,
 			    PRBool *didFind)
 {
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebBrowserFind> finder (do_GetInterface(mWebBrowser));
-	
+	NS_ENSURE_TRUE (finder, NS_ERROR_FAILURE);
+
 	finder->SetFindBackwards (backwards);
 
 	return finder->FindNext(didFind);
@@ -623,13 +609,12 @@ nsresult EphyBrowser::GetPageDescriptor(nsISupports **aPageDescriptor)
 {
 	nsresult rv;
 
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIDocShell> ds;
-	ds = do_GetInterface (mWebBrowser);
+	nsCOMPtr<nsIDocShell> ds = do_GetInterface (mWebBrowser);
 
 	nsCOMPtr<nsIWebPageDescriptor> wpd = do_QueryInterface (ds);
-	if (!wpd) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (wpd, NS_ERROR_FAILURE);
 
 	*aPageDescriptor = wpd.get();
 	NS_IF_ADDREF (*aPageDescriptor);
@@ -639,15 +624,12 @@ nsresult EphyBrowser::GetPageDescriptor(nsISupports **aPageDescriptor)
 
 nsresult EphyBrowser::GetDocumentUrl (nsCString &url)
 {
-	nsresult result;
-
 	nsCOMPtr<nsIDOMDocument> DOMDocument;
-
-	result = mDOMWindow->GetDocument (getter_AddRefs(DOMDocument));
-	if (NS_FAILED(result) || !DOMDocument) return NS_ERROR_FAILURE;
+	mDOMWindow->GetDocument (getter_AddRefs(DOMDocument));
+	NS_ENSURE_TRUE (DOMDocument, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDocument> doc = do_QueryInterface(DOMDocument);
-	if(!doc) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
 
 #if MOZILLA_SNAPSHOT > 11
 	nsIURI *uri;
@@ -656,22 +638,19 @@ nsresult EphyBrowser::GetDocumentUrl (nsCString &url)
 	nsCOMPtr<nsIURI> uri;
 	doc->GetDocumentURL(getter_AddRefs(uri));
 #endif
-	if (!uri) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (uri, NS_ERROR_FAILURE);
 
 	return uri->GetSpec (url);
 }
 
 nsresult EphyBrowser::GetTargetDocumentUrl (nsCString &url)
 {
-        nsresult result;
-
         nsCOMPtr<nsIDOMDocument> DOMDocument;
-
-        result = GetTargetDocument (getter_AddRefs(DOMDocument));
-        if (NS_FAILED(result) || !DOMDocument) return NS_ERROR_FAILURE;
+	GetTargetDocument (getter_AddRefs(DOMDocument));
+	NS_ENSURE_TRUE (DOMDocument, NS_ERROR_FAILURE);
 
         nsCOMPtr<nsIDocument> doc = do_QueryInterface(DOMDocument);
-        if(!doc) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
 
 #if MOZILLA_SNAPSHOT > 11
 	nsIURI *uri;
@@ -680,27 +659,26 @@ nsresult EphyBrowser::GetTargetDocumentUrl (nsCString &url)
         nsCOMPtr<nsIURI> uri;
         doc->GetDocumentURL(getter_AddRefs(uri));
 #endif
-	if (!uri) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (uri, NS_ERROR_FAILURE);
 
 	return uri->GetSpec (url);
 }
 
 nsresult EphyBrowser::ForceEncoding (const char *encoding) 
 {
-	nsresult result;
-
 	nsCOMPtr<nsIContentViewer> contentViewer;	
-	result = GetContentViewer (getter_AddRefs(contentViewer));
-	if (!NS_SUCCEEDED (result) || !contentViewer) return NS_ERROR_FAILURE;
+	GetContentViewer (getter_AddRefs(contentViewer));
+	NS_ENSURE_TRUE (contentViewer, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
-	if (!mdv) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
 
-	#if MOZILLA_SNAPSHOT > 9 
-		result = mdv->SetForceCharacterSet (nsDependentCString(encoding));
-	#else
-		result = mdv->SetForceCharacterSet (NS_ConvertUTF8toUCS2(encoding).get());
-	#endif
+	nsresult result;
+#if MOZILLA_SNAPSHOT > 9 
+	result = mdv->SetForceCharacterSet (nsDependentCString(encoding));
+#else
+	result = mdv->SetForceCharacterSet (NS_ConvertUTF8toUCS2(encoding).get());
+#endif
 
 	return result;
 }
@@ -725,11 +703,11 @@ nsresult EphyBrowser::GetEncodingInfo (EphyEncodingInfo **infoptr)
 	EphyEncodingInfo *info;
 
 	nsCOMPtr<nsIDOMDocument> domDoc;
-	result = GetTargetDocument (getter_AddRefs(domDoc));
-	if (NS_FAILED (result) || !domDoc) return NS_ERROR_FAILURE;
+	GetTargetDocument (getter_AddRefs(domDoc));
+	NS_ENSURE_TRUE (domDoc, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDocument> doc = do_QueryInterface(domDoc, &result);
-	if (NS_FAILED (result) || !doc) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
 
 	info = g_new0 (EphyEncodingInfo, 1);
 	*infoptr = info;
@@ -745,15 +723,14 @@ nsresult EphyBrowser::GetEncodingInfo (EphyEncodingInfo **infoptr)
 
 	nsCOMPtr<nsIDocShell> ds;
 	ds = do_GetInterface (mWebBrowser);
-	if (!ds) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (ds, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDocumentCharsetInfo> ci;
 	result = ds->GetDocumentCharsetInfo (getter_AddRefs (ci));
-	if (NS_FAILED(result) || !ci) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (ci, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIAtom> atom;
-	result = ci->GetForcedCharset (getter_AddRefs (atom));
-	if (NS_FAILED(result)) return NS_ERROR_FAILURE;
+	ci->GetForcedCharset (getter_AddRefs (atom));
 	if (atom)
 	{
 		nsCAutoString atomstr;
@@ -761,8 +738,7 @@ nsresult EphyBrowser::GetEncodingInfo (EphyEncodingInfo **infoptr)
 		info->forced_encoding = g_strdup (atomstr.get());
 	}
 
-	result = ci->GetParentCharset (getter_AddRefs (atom));
-	if (NS_FAILED(result)) return NS_ERROR_FAILURE;
+	ci->GetParentCharset (getter_AddRefs (atom));
 	if (atom)
 	{
 		nsCAutoString atomstr;
@@ -771,20 +747,19 @@ nsresult EphyBrowser::GetEncodingInfo (EphyEncodingInfo **infoptr)
 	}
 
 	result = ci->GetParentCharsetSource (&source);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
 	info->parent_encoding_source = (EphyEncodingSource) source;
 
 	nsCOMPtr<nsIContentViewer> contentViewer;	
-	result = ds->GetContentViewer (getter_AddRefs(contentViewer));
-	if (!NS_SUCCEEDED (result) || !contentViewer) return NS_ERROR_FAILURE;
+	ds->GetContentViewer (getter_AddRefs(contentViewer));
+	NS_ENSURE_TRUE (contentViewer, NS_ERROR_FAILURE);
 
-	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer,
-								  &result);
-	if (NS_FAILED(result) || !mdv) return NS_ERROR_FAILURE;
+	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
+	NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
 
 #if MOZILLA_SNAPSHOT > 11
 	const nsACString& charsetEnc = doc->GetDocumentCharacterSet ();
-	if (charsetEnc.IsEmpty()) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (!charsetEnc.IsEmpty(), NS_ERROR_FAILURE);
 
 	info->encoding = g_strdup (PromiseFlatCString(charsetEnc).get());
 #elif MOZILLA_SNAPSHOT >= 10
@@ -805,19 +780,19 @@ nsresult EphyBrowser::GetEncodingInfo (EphyEncodingInfo **infoptr)
 	nsCAutoString enc;
 	
 	result = mdv->GetDefaultCharacterSet (enc);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
 	info->default_encoding = g_strdup (enc.get());
 
 	result = mdv->GetForceCharacterSet (enc);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
 	info->forced_encoding = g_strdup (enc.get());
 
 	result = mdv->GetHintCharacterSet (enc);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
 	info->hint_encoding = g_strdup (enc.get());
 
 	result = mdv->GetPrevDocCharacterSet (enc);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
 	info->prev_doc_encoding = g_strdup (enc.get());
 #else
 	PRUnichar *str;
@@ -840,7 +815,7 @@ nsresult EphyBrowser::GetEncodingInfo (EphyEncodingInfo **infoptr)
 #endif
 
 	mdv->GetHintCharacterSetSource (&source);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
 	info->hint_encoding_source = (EphyEncodingSource) source;
 
 	return NS_OK;
@@ -850,10 +825,10 @@ nsresult EphyBrowser::DoCommand (const char *command)
 {
 	nsCOMPtr<nsICommandManager> cmdManager;
 
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	cmdManager = do_GetInterface (mWebBrowser);
-	if (!cmdManager) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (cmdManager, NS_ERROR_FAILURE);
 
 	return cmdManager->DoCommand (command, nsnull, nsnull);
 }
@@ -862,10 +837,10 @@ nsresult EphyBrowser::GetCommandState (const char *command, PRBool *enabled)
 {
 	nsCOMPtr<nsICommandManager> cmdManager;
 
-	g_return_val_if_fail (mWebBrowser, NS_ERROR_FAILURE);
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	cmdManager = do_GetInterface (mWebBrowser);
-	if (!cmdManager) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (cmdManager, NS_ERROR_FAILURE);
 
 	return cmdManager->IsCommandEnabled (command, nsnull, enabled);
 }
