@@ -733,6 +733,12 @@ ephy_bookmarks_add_keyword (EphyBookmarks *eb,
 			        &value);
 	g_value_unset (&value);
 
+	g_value_init (&value, G_TYPE_INT);
+	g_value_set_int (&value, EPHY_BOOKMARKS_KEYWORD_NORMAL_PRIORITY);
+	ephy_node_set_property (key, EPHY_NODE_KEYWORD_PROP_PRIORITY,
+			        &value);
+	g_value_unset (&value);
+
 	ephy_node_add_child (eb->priv->keywords, key);
 
 	return key;

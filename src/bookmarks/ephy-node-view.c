@@ -918,3 +918,21 @@ ephy_node_view_edit (EphyNodeView *view)
         g_list_free (rows);
 }
 
+gboolean
+ephy_node_view_has_selection (EphyNodeView *view, gboolean *multiple)
+{
+	GtkTreeSelection *selection;
+	int rows;
+
+	selection = gtk_tree_view_get_selection
+		(GTK_TREE_VIEW (view));
+
+	rows = gtk_tree_selection_count_selected_rows (selection);
+
+	if (multiple)
+	{
+		*multiple = rows > 1;
+	}
+
+	return rows > 0;
+}

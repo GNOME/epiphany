@@ -1,5 +1,22 @@
 2003-04-05  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_update_menu),
+	(ephy_bookmarks_editor_node_selected_cb), (view_focus_cb),
+	(keyword_node_selected_cb), (build_search_box),
+	(ephy_bookmarks_editor_construct), (ephy_bookmarks_editor_init):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_add_keyword):
+	* src/bookmarks/ephy-node-view.c: (ephy_node_view_has_selection):
+	* src/bookmarks/ephy-node-view.h:
+
+	Rewrite sensitivity code. Should take in account focus now.
+
+	* src/ephy-window.c: (ephy_window_show):
+
+	Remove some unused code.
+
+2003-04-05  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/bookmarks/ephy-bookmarks.h:
 	* src/bookmarks/ephy-node-view.c: (drag_motion_cb), (drag_drop_cb),
 	(drag_data_received_cb):

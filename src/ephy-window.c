@@ -923,16 +923,11 @@ void
 ephy_window_show (GtkWidget *widget)
 {
 	EphyWindow *window = EPHY_WINDOW(widget);
-	EphyTab *tab;
-	int w = -1, h = -1;
 
 	if (!window->priv->chrome_mask)
 	{
 		ephy_window_set_chrome (window, EMBED_CHROME_DEFAULT);
 	}
-
-	tab = ephy_window_get_active_tab (window);
-	if (tab) ephy_tab_get_size (tab, &w, &h);
 
 	if (!(window->priv->chrome_mask & EMBED_CHROME_OPENASPOPUP) &&
 	    !(window->priv->chrome_mask & EMBED_CHROME_OPENASFULLSCREEN) &&
