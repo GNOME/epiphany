@@ -1119,85 +1119,70 @@ build_load_percent (int requests_done, int requests_total)
 	return percent;
 }
 
-static char *
-get_host_name_from_uri (const char *uri)
+static void
+update_net_state_message (EphyTab *tab, const char *uri, EmbedState flags)
 {
 	GnomeVFSURI *vfs_uri = NULL;
+	const char *msg = NULL;
 	const char *host = NULL;
-	char *result;
 
-	if (uri)
+	if (uri != NULL)
 	{
 		vfs_uri = gnome_vfs_uri_new (uri);
 	}
 
-	if (vfs_uri)
+	if (vfs_uri != NULL)
 	{
 		host = gnome_vfs_uri_get_host_name (vfs_uri);
 	}
 
-	if (!host)
-	{
-		host = _("site");
-	}
-
-	result = g_strdup (host);
-
-	if (vfs_uri) gnome_vfs_uri_unref (vfs_uri);
-
-	return result;
-}
-
-static void
-update_net_state_message (EphyTab *tab, const char *uri, EmbedState flags)
-{
-	const char *msg = NULL;
-	char *host;
-
-	host = get_host_name_from_uri (uri);
+	if (host == NULL || host[0] == '\0') goto out;
 
 	/* IS_REQUEST and IS_NETWORK can be both set */
-
 	if (flags & EMBED_STATE_IS_REQUEST)
-        {
-                if (flags & EMBED_STATE_REDIRECTING)
-                {
+	{
+		if (flags & EMBED_STATE_REDIRECTING)
+		{
 			msg = _("Redirecting to %s...");
-                }
-                else if (flags & EMBED_STATE_TRANSFERRING)
-                {
+		}
+		else if (flags & EMBED_STATE_TRANSFERRING)
+		{
 			msg = _("Transferring data from %s...");
-                }
-                else if (flags & EMBED_STATE_NEGOTIATING)
-                {
+		}
+		else if (flags & EMBED_STATE_NEGOTIATING)
+		{
 			msg = _("Waiting for authorization from %s...");
-                }
-        }
+		}
+	}
 
 	if (flags & EMBED_STATE_IS_NETWORK)
-        {
-                if (flags & EMBED_STATE_START)
-                {
-                        msg = _("Loading %s...");
-                }
-        }
+	{
+		if (flags & EMBED_STATE_START)
+		{
+			msg = _("Loading %s...");
+		}
+	}
 
 	if ((flags & EMBED_STATE_IS_NETWORK) &&
 	    (flags & EMBED_STATE_STOP))
-        {
+	{
 		g_free (tab->priv->status_message);
 		tab->priv->status_message = NULL;
 		g_object_notify (G_OBJECT (tab), "message");
 
 	}
-	else if (msg)
+	else if (msg != NULL)
 	{
 		g_free (tab->priv->status_message);
 		tab->priv->status_message = g_strdup_printf (msg, host);
 		g_object_notify (G_OBJECT (tab), "message");
 	}
 
-	g_free (host);
+out:
+	if (vfs_uri != NULL)
+	{
+		gnome_vfs_uri_unref (vfs_uri);
+	}
 }
 
 static void
