@@ -807,7 +807,7 @@ impl_get_font_list (EphyEmbedSingle *shell,
 					        &fontCount, &fontArray);
 	if (NS_FAILED (rv)) return G_FAILED;
 
-	for (int i = 0; i < fontCount; i++)
+	for (PRUint32 i = 0; i < fontCount; i++)
 	{
 		char *gFontString;
 
