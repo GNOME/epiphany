@@ -64,6 +64,7 @@
 #define MOZILLA_PROFILE_DIR  "/mozilla"
 #define MOZILLA_PROFILE_NAME "epiphany"
 #define MOZILLA_PROFILE_FILE "prefs.js"
+#define DEFAULT_PROFILE_FILE SHARE_DIR"/default-prefs.js"
 
 /* language groups names */
 static const
@@ -325,62 +326,34 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
         prefService = do_GetService (NS_PREFSERVICE_CONTRACTID);
 	if (prefService == NULL) return FALSE;
 
+        /* read our predefined default prefs */
+        nsresult rv;
+        nsCOMPtr<nsILocalFile> file;
+        rv = NS_NewNativeLocalFile(
+                NS_LITERAL_CSTRING(DEFAULT_PROFILE_FILE),
+                PR_TRUE, getter_AddRefs(file));
+        if (NS_FAILED (rv)) return FALSE;
+
+        rv = prefService->ReadUserPrefs (file);                                                                              
+        if (NS_FAILED(rv))
+        {
+                g_warning ("failed to read default preferences, error: %x", rv);
+		return FALSE;
+        }
+                                                                                                                             
+        /* Load the default user preferences as well.  This also makes the
+           prefs to be saved in the user's prefs.js file, instead of messing up
+           our global defaults file. */
+        rv = prefService->ReadUserPrefs (nsnull);
+        if (NS_FAILED(rv))
+        {
+                g_warning ("failed to read user preferences, error: %x", rv);
+		return FALSE;
+        }
+
         nsCOMPtr<nsIPrefBranch> pref;
         prefService->GetBranch ("", getter_AddRefs(pref));
 	if (pref == NULL) return FALSE;
-
-	/* Don't allow mozilla to raise window when setting focus (work around bugs) */
-	pref->SetBoolPref ("mozilla.widget.raise-on-setfocus", PR_FALSE);
-
-	/* set default search engine */
-	pref->SetCharPref ("keyword.URL", "http://www.google.com/search?q=");
-	pref->SetBoolPref ("keyword.enabled", PR_TRUE);
-	pref->SetBoolPref ("security.checkloaduri", PR_FALSE);
-
-	/* dont allow xpi installs from epiphany, there are crashes */
-	pref->SetBoolPref ("xpinstall.enabled", PR_FALSE);
-
-	/* deactivate mailcap and mime.types support */
-	pref->SetCharPref ("helpers.global_mailcap_file", "");
-	pref->SetCharPref ("helpers.global_mime_types_file", "");
-	pref->SetCharPref ("helpers.private_mailcap_file", "");
-	pref->SetCharPref ("helpers.private_mime_types_file", "");
-
-	/* disable sucky XUL ftp view, have nice ns4-like html page instead */
-	pref->SetBoolPref ("network.dir.generate_html", PR_TRUE);
-
-	/* disable usless security warnings */
-	pref->SetBoolPref ("security.warn_entering_secure", PR_FALSE);
-	pref->SetBoolPref ("security.warn_leaving_secure", PR_FALSE);
-	pref->SetBoolPref ("security.warn_submit_insecure", PR_FALSE);
-
-	/* FIXME: We should change this back to true when mozilla bugs
-         * 207000 and 207001 are fixed.
-	 */
-	/* Make sure this is off, we monitor for theme changes and set colors. */
-	pref->SetBoolPref ("browser.display.use_system_colors", PR_FALSE);
-
-	/* Disable blinking text and marquee, its non-standard and annoying */
-	pref->SetBoolPref ("browser.blink_allowed", PR_FALSE);
-	pref->SetBoolPref ("browser.display.enable_marquee", PR_FALSE);
-
-	/* FIXME: We disable this for now, because enough people complained
-	 * and there are some moz bugs. We either need a user visible pref
-	 * or need to revert to enabling by default for a11y
-         */
-	/* Enable Browsing with the Caret */
-	/*pref->SetBoolPref ("accessibility.browsewithcaret", PR_TRUE);*/
-
-	/* Don't Fetch the Sidebar whats related information, since we don't use it */
-	pref->SetBoolPref ("browser.related.enabled", PR_FALSE);
-
-	/* Line Wrap View->Source */
-	pref->SetBoolPref ("view_source.wrap_long_lines", PR_TRUE);
-
-	/* CTRL-Mousewheel scrolls by one page */
-	pref->SetIntPref ("mousewheel.withcontrolkey.action", 1);
-	pref->SetIntPref ("mousewheel.withcontrolkey.numlines", 1);
-	pref->SetBoolPref ("mousewheel.withcontrolkey.sysnumlines", PR_FALSE);
 
 	/* FIXME We need to do this because mozilla doesnt set product
 	sub for embedding apps */
