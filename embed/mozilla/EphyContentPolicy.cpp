@@ -64,7 +64,11 @@ NS_IMETHODIMP
 EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 			      nsIURI *aContentLocation,
 			      nsIURI *aRequestingLocation,
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
+			      nsISupports *aContext,
+#else
 			      nsIDOMNode *aRequestingNode,
+#endif
 			      const nsACString &aMimeTypeGuess,
 			      nsISupports *aExtra,
 			      PRInt16 *aDecision)
@@ -103,7 +107,11 @@ NS_IMETHODIMP
 EphyContentPolicy::ShouldProcess(PRUint32 aContentType,
 			         nsIURI *aContentLocation,
 			         nsIURI *aRequestingLocation,
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
+				 nsISupports *aContext,
+#else
 			         nsIDOMNode *aRequestingNode,
+#endif
 			         const nsACString &aMimeType,
 			         nsISupports *aExtra,
 			         PRInt16 *aDecision)
