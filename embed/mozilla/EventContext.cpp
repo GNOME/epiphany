@@ -142,7 +142,6 @@ nsresult EventContext::GatherTextUnder (nsIDOMNode* aNode, nsAString& aResult)
 				}
 				else
 				{
-					nsCOMPtr<nsIDOMNode> nextSibling;
 					parentNode->GetNextSibling(getter_AddRefs(nextSibling));
 					node = nextSibling;
 					depth--;
@@ -371,7 +370,6 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 			}
 		}
 
-		PRUint16 type;
 		rv = node->GetNodeType(&type);
 		if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
 

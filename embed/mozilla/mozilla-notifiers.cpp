@@ -757,7 +757,7 @@ get_system_language ()
 
 	if (sys_langs)
 	{
-		char *lang = (char *)sys_langs->data;
+		lang = (char *)sys_langs->data;
 
 		/* FIXME this probably need to be smarter */
 		/* FIXME this can be up to 8 chars, not just 2 */

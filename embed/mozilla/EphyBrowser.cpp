@@ -124,12 +124,12 @@ EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
 	    g_ascii_strcasecmp (rel.get(), "ICON") == 0)
 	{
 		PRUnichar hrefAttr[] = { 'h', 'r', 'e', 'f', '\0' };
-		nsEmbedString value;
-		rv = linkElement->GetAttribute (nsEmbedString (hrefAttr), value);
-		if (NS_FAILED (rv) || !value.Length()) return NS_ERROR_FAILURE;
+		nsEmbedString hrefValue;
+		rv = linkElement->GetAttribute (nsEmbedString (hrefAttr), hrefValue);
+		if (NS_FAILED (rv) || !hrefValue.Length()) return NS_ERROR_FAILURE;
 
 		nsEmbedCString link;
-		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, link);
+		NS_UTF16ToCString (hrefValue, NS_CSTRING_ENCODING_UTF8, link);
 
 		nsCOMPtr<nsIDOMDocument> domDoc;
 		node->GetOwnerDocument(getter_AddRefs(domDoc));

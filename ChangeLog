@@ -1,5 +1,19 @@
 2004-09-26  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/GtkNSSDialogs.cpp:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* lib/egg/eggtrayicon.h:
+
+	Fix compiler warnings.
+
+	* src/ephy-window.c: (hide_embed_popup_cb), (show_embed_popup):
+
+	Fix a signal leak.
+
+2004-09-26  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/popup-commands.c: (popup_cmd_bookmark_link),
 	(popup_cmd_copy_image_location):
 
