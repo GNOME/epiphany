@@ -454,13 +454,12 @@ drag_data_received_cb (GtkWidget *widget,
 		EphyNode *node;
 		GList *uris;
 		gboolean success = FALSE;
-		gboolean on_row;
 		GtkTreePath *path;
 
-		on_row = gtk_tree_view_get_dest_row_at_pos
+		gtk_tree_view_get_dest_row_at_pos
 			(GTK_TREE_VIEW (widget), x, y, &path, &pos);
 
-		g_return_if_fail (on_row && path != NULL);
+		g_return_if_fail (path != NULL);
 
 		node = get_node_from_path (view, path);
 
