@@ -958,6 +958,8 @@ update_actions_sensitivity (EphyWindow *window)
 	save_to_disk = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK);
 	action = gtk_action_group_get_action (action_group, "FileSaveAs");
 	g_object_set (action, "sensitive", save_to_disk, NULL);
+	action = gtk_action_group_get_action (action_group, "FileSave");
+	g_object_set (action, "sensitive", save_to_disk, NULL);
 	action = gtk_action_group_get_action (popups_action_group, "DownloadLink");
 	g_object_set (action, "sensitive", save_to_disk, NULL);
 	action = gtk_action_group_get_action (popups_action_group, "SaveBackgroundAs");
