@@ -1,12 +1,20 @@
+#!/usr/bin/env python
+
 from xml.dom.minidom import parse, Node, Document, parseString
 import xml.parsers.expat
 
 import os
 import sys
 
-base = sys.argv[0]
+try:
+	base = sys.argv[1]
+except IndexError:
+	print "\nYou shoud give the full path to freedesktop.org.xml file"
+	print "e.g /usr/share/mime/packages/freedesktop.org.xml\n"
+	sys.exit (1)
+
 dbfile = os.path.join(os.path.dirname(base), "freedesktop.org.xml")
-permissionfile = os.path.join(os.path.dirname(base), "mime-types-permissions.xml")
+permissionfile = "mime-types-permissions.xml"
 
 def PrintIfAbsent(elements, elem):
     for elem2 in elements:
