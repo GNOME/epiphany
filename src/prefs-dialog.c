@@ -478,6 +478,7 @@ setup_font_combo (EphyDialog *dialog,
 	ephy_dialog_set_pref (dialog, properties[prop].id, NULL);
 
 	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), sortmodel);
+	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), -1);
 
 	ephy_dialog_set_pref (dialog, properties[prop].id, key);
 

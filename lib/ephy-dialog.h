@@ -121,7 +121,7 @@ void		ephy_dialog_set_modal		(EphyDialog *dialog,
 GtkWidget      *ephy_dialog_get_control		(EphyDialog *dialog,
 						 const char *property_id);
 
-void		ephy_dialog_get_value		(EphyDialog *dialog,
+gboolean	ephy_dialog_get_value		(EphyDialog *dialog,
 						 const char *property_id,
 						 GValue *value);
 
