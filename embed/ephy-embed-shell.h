@@ -55,10 +55,6 @@ struct EphyEmbedShellClass
 {
         GObjectClass parent_class;
 
-	void		(* new_window)          (EphyEmbedShell *shell,
-					         EphyEmbed **new_embed,
-						 EmbedChromeMask chromemask);
-
 	void		(* command)             (EphyEmbedShell *shell,
 						 char *command,
 						 char *param);

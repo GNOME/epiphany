@@ -275,7 +275,7 @@ ephy_shell_init (EphyShell *gs)
 	/* This ensures mozilla is fired up */
 	single = ephy_embed_shell_get_embed_single (EPHY_EMBED_SHELL (gs));
 
-	g_signal_connect (G_OBJECT (gs),
+	g_signal_connect (G_OBJECT (single),
 			  "new_window_orphan",
 			  G_CALLBACK(ephy_shell_new_window_cb),
 			  NULL);

@@ -28,7 +28,6 @@
 
 enum
 {
-	NEW_WINDOW,
 	COMMAND,
 	LAST_SIGNAL
 };
@@ -98,17 +97,6 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
 	klass->get_downloader_view = impl_get_downloader_view;
 	klass->get_global_history = impl_get_global_history;
 
-	ephy_embed_shell_signals[NEW_WINDOW] =
-                g_signal_new ("new_window_orphan",
-                              G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (EphyEmbedShellClass, new_window),
-                              NULL, NULL,
-                              ephy_marshal_VOID__POINTER_INT,
-                              G_TYPE_NONE,
-                              2,
-                              G_TYPE_POINTER,
-			      G_TYPE_INT);
 	ephy_embed_shell_signals[COMMAND] =
                 g_signal_new ("command",
                               G_OBJECT_CLASS_TYPE (object_class),

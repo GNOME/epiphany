@@ -119,6 +119,11 @@ struct EphyEmbedSingleClass
 {
         GObjectClass parent_class;
 
+	/* Signals */
+	void		(* new_window)          (EphyEmbedSingle *shell,
+					         EphyEmbed **new_embed,
+						 EmbedChromeMask chromemask);
+
 	/* Methods */
 
 	gresult         (* clear_cache)         (EphyEmbedSingle *shell,
