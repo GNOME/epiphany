@@ -46,6 +46,7 @@
 #include "ephy-automation.h"
 #include "print-dialog.h"
 #include "ephy-prefs.h"
+#include "ephy-gui.h"
 
 #ifdef ENABLE_DBUS
 #include "ephy-dbus.h"
@@ -308,8 +309,11 @@ path_from_command_line_arg (const char *arg)
 
 static void
 open_urls (GNOME_EphyAutomation automation,
-	   const char **args, CORBA_Environment *ev,
-	   gboolean new_tab, gboolean existing_window,
+	   guint32 user_time,
+	   const char **args,
+	   CORBA_Environment *ev,
+	   gboolean new_tab,
+	   gboolean existing_window,
 	   gboolean fullscreen)
 {
 	int i;
@@ -317,9 +321,9 @@ open_urls (GNOME_EphyAutomation automation,
 	if (args == NULL)
 	{
 		/* Homepage or resume */
-		GNOME_EphyAutomation_loadurl
+		GNOME_EphyAutomation_loadUrlWithStartupId
 			(automation, "", fullscreen,
-			 existing_window, new_tab, ev);
+			 existing_window, new_tab, user_time, ev);
 	}
 	else
 	{
@@ -329,9 +333,9 @@ open_urls (GNOME_EphyAutomation automation,
 
 			path = path_from_command_line_arg (args[i]);
 
-			GNOME_EphyAutomation_loadurl
+			GNOME_EphyAutomation_loadUrlWithStartupId
 				(automation, path, fullscreen,
-				 existing_window, new_tab, ev);
+				 existing_window, new_tab, user_time, ev);
 
 			g_free (path);
 		}
@@ -410,6 +414,7 @@ gnome_session_init (EphyShell *shell)
 gboolean
 ephy_shell_startup (EphyShell *shell,
 		    EphyShellStartupFlags flags,
+		    guint32 user_time,
 		    const char **args,
 		    const char *string_arg,
 		    GError **error)
@@ -465,13 +470,13 @@ ephy_shell_startup (EphyShell *shell,
 		}
 		else if (flags & EPHY_SHELL_STARTUP_BOOKMARKS_EDITOR)
 		{
-			GNOME_EphyAutomation_openBookmarksEditor
-				(automation, &ev);
+			GNOME_EphyAutomation_openBookmarksEditorWithStartupId
+				(automation, user_time, &ev);
 		}
 		else if (flags & EPHY_SHELL_STARTUP_SESSION)
 		{
-			GNOME_EphyAutomation_loadSession
-				(automation, string_arg, &ev);
+			GNOME_EphyAutomation_loadSessionWithStartupId
+				(automation, string_arg, user_time, &ev);
 		}
 		else if (flags & EPHY_SHELL_STARTUP_IMPORT_BOOKMARKS)
 		{
@@ -485,7 +490,7 @@ ephy_shell_startup (EphyShell *shell,
 		}
 		else
 		{
-			open_urls (automation, args, &ev,
+			open_urls (automation, user_time, args, &ev,
 				   flags & EPHY_SHELL_STARTUP_TABS,
 				   flags & EPHY_SHELL_STARTUP_EXISTING_WINDOW,
 				   flags & EPHY_SHELL_STARTUP_FULLSCREEN);
@@ -639,11 +644,12 @@ load_homepage (EphyEmbed *embed)
 }
 
 /**
- * ephy_shell_new_tab:
+ * ephy_shell_new_tab_full:
  * @shell: a #EphyShell
  * @parent_window: the target #EphyWindow or %NULL
  * @previous_tab: the referrer tab or %NULL
  * @url: an url to load or %NULL
+ * @user_time: a timestamp, or 0
  *
  * Create a new tab and the parent window when necessary.
  * Use this function to open urls in new window/tabs.
@@ -651,11 +657,12 @@ load_homepage (EphyEmbed *embed)
  * ReturnValue: the created #EphyTab
  **/
 EphyTab *
-ephy_shell_new_tab (EphyShell *shell,
-		    EphyWindow *parent_window,
-		    EphyTab *previous_tab,
-		    const char *url,
-		    EphyNewTabFlags flags)
+ephy_shell_new_tab_full (EphyShell *shell,
+			 EphyWindow *parent_window,
+			 EphyTab *previous_tab,
+			 const char *url,
+			 EphyNewTabFlags flags,
+			 guint32 user_time)
 {
 	EphyWindow *window;
 	EphyTab *tab;
@@ -705,6 +712,9 @@ ephy_shell_new_tab (EphyShell *shell,
 	embed = ephy_tab_get_embed (tab);
 
 	ephy_window_add_tab (window, tab, position, jump_to);
+
+	ephy_gui_window_update_user_time (GTK_WIDGET (window), user_time);
+
 	gtk_widget_show (GTK_WIDGET (window));
 
 	if (flags & EPHY_NEW_TAB_HOME_PAGE ||
@@ -726,6 +736,29 @@ ephy_shell_new_tab (EphyShell *shell,
 	}
 
 	return tab;
+}
+
+/**
+ * ephy_shell_new_tab:
+ * @shell: a #EphyShell
+ * @parent_window: the target #EphyWindow or %NULL
+ * @previous_tab: the referrer tab or %NULL
+ * @url: an url to load or %NULL
+ *
+ * Create a new tab and the parent window when necessary.
+ * Use this function to open urls in new window/tabs.
+ *
+ * ReturnValue: the created #EphyTab
+ **/
+EphyTab *
+ephy_shell_new_tab (EphyShell *shell,
+		    EphyWindow *parent_window,
+		    EphyTab *previous_tab,
+		    const char *url,
+		    EphyNewTabFlags flags)
+{
+	return ephy_shell_new_tab_full (shell, parent_window,
+					previous_tab, url, flags, 0);
 }
 
 /**

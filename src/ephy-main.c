@@ -38,6 +38,7 @@
 #include <libgnomevfs/gnome-vfs-init.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <libxml/xmlversion.h>
+#include <errno.h>
 
 static gboolean open_in_existing = FALSE;
 static gboolean open_in_new_tab = FALSE;
@@ -70,6 +71,39 @@ static struct poptOption popt_options[] =
 	  NULL },
 	{ NULL, 0, 0, NULL, 0, NULL, NULL }
 };
+
+/* adapted from gtk+/gdk/x11/gdkdisplay-x11.c */
+static guint32
+get_startup_id (void)
+{
+	const char *startup_id, *time_str;
+	guint32 retval = 0;
+
+	startup_id = g_getenv ("DESKTOP_STARTUP_ID");
+	if (startup_id == NULL) return 0;
+
+	/* Find the launch time from the startup_id, if it's there.  Newer spec
+	* states that the startup_id is of the form <unique>_TIME<timestamp>
+	*/
+	time_str = g_strrstr (startup_id, "_TIME");
+	if (time_str != NULL)
+	{
+		gulong value;
+		gchar *end;
+		errno = 0;
+	
+		/* Skip past the "_TIME" part */
+		time_str += 5;
+	
+		value = strtoul (time_str, &end, 0);
+		if (end != time_str && errno == 0)
+		{
+			retval = (guint32) value;
+		}
+	}
+
+	return retval;
+}
 
 static void
 handle_url (GtkAboutDialog *about,
@@ -114,6 +148,7 @@ main (int argc, char *argv[])
 	GnomeProgram *program;
 	EphyShellStartupFlags startup_flags;
 	const char **args, *string_arg;
+	guint32 user_time;
 	gboolean new_instance;
 	GError *err = NULL;
 
@@ -128,6 +163,9 @@ main (int argc, char *argv[])
 	 * version we're running with.
 	 */
 	LIBXML_TEST_VERSION
+
+	/* get this early, since gdk will unset the env var */
+	user_time = get_startup_id ();
 
 	program = gnome_program_init (PACKAGE, VERSION,
                                       LIBGNOMEUI_MODULE, argc, argv,
@@ -198,6 +236,7 @@ main (int argc, char *argv[])
 	ephy_shell_new ();
 	g_assert (ephy_shell != NULL);
 	new_instance = ephy_shell_startup (ephy_shell, startup_flags,
+					   user_time,
 					   args, string_arg, &err);
 
 	if (err != NULL)

@@ -112,6 +112,7 @@ EphyShell      *ephy_shell_new				(void);
 
 gboolean	ephy_shell_startup			(EphyShell *shell,
 							 EphyShellStartupFlags flags,
+							 guint32 user_time,
 							 const char **args,
 							 const char *string_arg,
 							 GError **error);
@@ -121,6 +122,13 @@ EphyTab	       *ephy_shell_new_tab			(EphyShell *shell,
 							 EphyTab *previous_tab,
 							 const char *url,
 							 EphyNewTabFlags flags);
+
+EphyTab	       *ephy_shell_new_tab_full			(EphyShell *shell,
+							 EphyWindow *parent_window,
+							 EphyTab *previous_tab,
+							 const char *url,
+							 EphyNewTabFlags flags,
+							 guint32 user_time);
 
 GObject	       *ephy_shell_get_session			(EphyShell *shell);
 

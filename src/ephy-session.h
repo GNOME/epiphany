@@ -63,9 +63,11 @@ gboolean	 ephy_session_save		(EphySession *session,
 						 const char *filename);
 
 gboolean	 ephy_session_load		(EphySession *session,
-						 const char *filename);
+						 const char *filename,
+						 guint32 user_time);
 
-gboolean	 ephy_session_autoresume	(EphySession *session);
+gboolean	 ephy_session_autoresume	(EphySession *session,
+						 guint32 user_time);
 
 void		 ephy_session_close		(EphySession *session);
 

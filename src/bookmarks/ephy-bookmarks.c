@@ -564,6 +564,9 @@ redirect_cb (EphyHistory *history,
 					 (EphyNodeCallback) update_bookmark_destroy_cb,
 					 G_OBJECT (dialog));
 
+	/* this dialogue is unexpected */
+	gtk_window_set_focus_on_map (GTK_WINDOW (dialog), FALSE);
+
 	gtk_window_present (GTK_WINDOW (dialog));
 }
 

@@ -26,6 +26,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <glib/gi18n.h>
+#include <gdk/gdkx.h>
 #include <libgnome/gnome-help.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtkmessagedialog.h>
@@ -342,4 +343,17 @@ ephy_gui_is_middle_click (void)
 	}
 
 	return new_tab;
+}
+
+void
+ephy_gui_window_update_user_time (GtkWidget *window,
+				  guint32 user_time)
+{
+	if (user_time != 0)
+	{
+		gtk_widget_realize (window);
+		gdk_x11_window_set_user_time (window->window,
+					      user_time);
+	}
+
 }

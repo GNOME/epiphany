@@ -32,6 +32,7 @@
 #include "ephy-file-helpers.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
+#include "ephy-gui.h"
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
@@ -357,7 +358,8 @@ ephy_session_class_init (EphySessionClass *class)
 }
 
 static gboolean
-offer_to_resume (EphySession *session)
+offer_to_resume (EphySession *session,
+		 guint32 user_time)
 {
 	GtkWidget *dialog;
 	int response;
@@ -385,6 +387,9 @@ offer_to_resume (EphySession *session)
 
 	session->priv->resume_dialog = dialog;
 
+	ephy_gui_window_update_user_time (session->priv->resume_dialog,
+					  user_time);
+
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 
 	gtk_widget_destroy (dialog);
@@ -397,6 +402,7 @@ offer_to_resume (EphySession *session)
 /**
  * ephy_session_autoresume:
  * @session: a #EphySession
+ * @user_time: a timestamp, or 0
  *
  * Resume a crashed session when necessary (interactive)
  *
@@ -405,28 +411,33 @@ offer_to_resume (EphySession *session)
  * has been re-presented to the user.
  **/
 gboolean
-ephy_session_autoresume (EphySession *session)
+ephy_session_autoresume (EphySession *session,
+			 guint32 user_time)
 {
+	EphySessionPrivate *priv = session->priv;
 	char *saved_session;
 	gboolean retval = FALSE;
 
 	LOG ("ephy_session_autoresume");
 
-	if (session->priv->windows != NULL || session->priv->tool_windows != NULL) return FALSE;
+	if (priv->windows != NULL || priv->tool_windows != NULL) return FALSE;
 
-	if (session->priv->resume_dialog)
+	if (priv->resume_dialog)
 	{
-		gtk_window_present (GTK_WINDOW (session->priv->resume_dialog));
+		ephy_gui_window_update_user_time (session->priv->resume_dialog,
+						  user_time);
+		gtk_window_present (GTK_WINDOW (priv->resume_dialog));
 		return TRUE;
 	}
 
 	saved_session = get_session_filename (SESSION_CRASHED);
 
 	if (g_file_test (saved_session, G_FILE_TEST_EXISTS)
-	    && offer_to_resume (session))
+	    && offer_to_resume (session, user_time))
 	{
 		session->priv->dont_save = TRUE;
-		retval = ephy_session_load (session, saved_session);
+		retval = ephy_session_load (session, saved_session,
+					    user_time);
 		session->priv->dont_save = FALSE;
 		ephy_session_save (session, SESSION_CRASHED);
 	}
@@ -738,6 +749,7 @@ restore_geometry (GtkWindow *window,
  * ephy_session_load:
  * @session: a #EphySession
  * @filename: the path of the source file
+ * @user_time: a timestamp, or 0
  *
  * Load a session from disk, restoring the windows and their state
  *
@@ -745,7 +757,8 @@ restore_geometry (GtkWindow *window,
  **/
 gboolean
 ephy_session_load (EphySession *session,
-		   const char *filename)
+		   const char *filename,
+		   guint32 user_time)
 {
 	xmlDocPtr doc;
         xmlNodePtr child;
@@ -776,6 +789,9 @@ ephy_session_load (EphySession *session,
 			widget = GTK_WIDGET (ephy_window_new ());
 			restore_geometry (GTK_WINDOW (widget), child);
 			parse_embed (child->children, EPHY_WINDOW (widget));
+
+			ephy_gui_window_update_user_time (widget, user_time);
+
 			gtk_window_present (GTK_WINDOW (widget));
 		}
 		else if (xmlStrEqual (child->name, (const xmlChar *) "toolwindow"))
@@ -800,6 +816,9 @@ ephy_session_load (EphySession *session,
 			}
 
 			restore_geometry (GTK_WINDOW (widget), child);
+
+			ephy_gui_window_update_user_time (widget, user_time);
+
 			gtk_window_present (GTK_WINDOW (widget));
 		}
 

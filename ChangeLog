@@ -1,3 +1,32 @@
+2005-02-02  Christian Persch  <chpe@cvs.gnome.org>
+
+	* idl/EphyAutomation.idl:
+
+	Define variants with startup ID.
+
+	* lib/ephy-gui.c: (ephy_gui_window_update_user_time):
+	* lib/ephy-gui.h:
+	* src/bookmarks/ephy-bookmarks.c: (redirect_cb):
+	* src/ephy-automation.c:
+	(impl_ephy_automation_loadUrlWithStartupId),
+	(impl_ephy_automation_loadurl), (impl_ephy_automation_addBookmark),
+	(impl_ephy_automation_importBookmarks),
+	(impl_ephy_automation_loadSessionWithStartupId),
+	(impl_ephy_automation_loadSession),
+	(impl_ephy_automation_openBookmarksEditorWithStartupId),
+	(impl_ephy_automation_openBookmarksEditor),
+	(ephy_automation_class_init):
+	* src/ephy-main.c: (get_startup_id), (main):
+	* src/ephy-session.c: (offer_to_resume), (ephy_session_autoresume),
+	(ephy_session_load):
+	* src/ephy-session.h:
+	* src/ephy-shell.c: (open_urls), (ephy_shell_startup),
+	(ephy_shell_new_tab_full), (ephy_shell_new_tab):
+	* src/ephy-shell.h:
+
+	Implement startup ID forwarding to the already-running ephy instance.
+	Part of bug #150085.
+
 2005-02-01  Christian Persch  <chpe@cvs.gnome.org>
 
 	* data/epiphany-lockdown.schemas.in:

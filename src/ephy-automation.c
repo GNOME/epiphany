@@ -32,6 +32,7 @@
 #include "ephy-bookmarks-import.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
+#include "ephy-gui.h"
 
 #include <string.h>
 #include <bonobo/bonobo-main.h>
@@ -42,16 +43,18 @@ static void ephy_automation_class_init (EphyAutomationClass *klass);
 static GObjectClass *parent_class = NULL;
 
 static void
-impl_ephy_automation_loadurl (PortableServer_Servant _servant,
-			      const CORBA_char *url,
-			      const CORBA_boolean fullscreen,
-			      const CORBA_boolean open_in_existing_tab,
-			      const CORBA_boolean open_in_new_tab,
-                              CORBA_Environment *ev)
+impl_ephy_automation_loadUrlWithStartupId (PortableServer_Servant _servant,
+					   const CORBA_char *url,
+					   const CORBA_boolean fullscreen,
+					   const CORBA_boolean open_in_existing_tab,
+					   const CORBA_boolean open_in_new_tab,
+					   const CORBA_unsigned_long startup_id,
+					   CORBA_Environment *ev)
 {
 	EphyNewTabFlags flags = 0;
 	EphyWindow *window;
 	EphySession *session;
+	guint32 user_time = (guint32) startup_id;
 
 	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
 	g_return_if_fail (session != NULL);
@@ -61,7 +64,7 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 		url = "";
 	}
 
-	if (ephy_session_autoresume (session) && *url == '\0')
+	if (ephy_session_autoresume (session, user_time) && *url == '\0')
 	{
 		/* no need to open the homepage,
 		* we did already open session windows */
@@ -72,6 +75,8 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 
 	if (open_in_existing_tab && window != NULL)
 	{
+		ephy_gui_window_update_user_time (GTK_WIDGET (window),
+						  user_time);
 		ephy_window_load_url (window, url);
 		return;
 	}
@@ -100,48 +105,93 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 		flags |= EPHY_NEW_TAB_FULLSCREEN_MODE;
 	}
 
-	ephy_shell_new_tab (ephy_shell, window, NULL, url, flags);
+	ephy_shell_new_tab_full (ephy_shell, window, NULL, url, flags,
+				 user_time);
 }
 
 static void
-impl_ephy_automation_add_bookmark (PortableServer_Servant _servant,
-				   const CORBA_char * url,
-				   CORBA_Environment * ev)
+impl_ephy_automation_loadurl (PortableServer_Servant _servant,
+			      const CORBA_char *url,
+			      const CORBA_boolean fullscreen,
+			      const CORBA_boolean open_in_existing_tab,
+			      const CORBA_boolean open_in_new_tab,
+                              CORBA_Environment *ev)
+{
+	impl_ephy_automation_loadUrlWithStartupId (_servant,
+						   url,
+						   fullscreen,
+						   open_in_existing_tab,
+						   open_in_new_tab,
+						   0, /* no startup ID */
+						   ev);
+}
+
+static void
+impl_ephy_automation_addBookmark (PortableServer_Servant _servant,
+				  const CORBA_char * url,
+				  CORBA_Environment * ev)
 {
 	ephy_bookmarks_add (ephy_shell_get_bookmarks (ephy_shell),
 			    url /* title */, url);
 }
 
 static void
-impl_ephy_automation_import_bookmarks (PortableServer_Servant _servant,
-				       const CORBA_char * filename,
-				       CORBA_Environment * ev)
+impl_ephy_automation_importBookmarks (PortableServer_Servant _servant,
+				      const CORBA_char *filename,
+				      CORBA_Environment *ev)
 {
 	ephy_bookmarks_import (ephy_shell_get_bookmarks (ephy_shell),
 			       filename);
 }
 
 static void
-impl_ephy_automation_load_session (PortableServer_Servant _servant,
-				   const CORBA_char * filename,
-				   CORBA_Environment * ev)
+impl_ephy_automation_loadSessionWithStartupId (PortableServer_Servant _servant,
+					       const CORBA_char *filename,
+					       const CORBA_unsigned_long startup_id,
+					       CORBA_Environment *ev)
 {
 	EphySession *session;
+	guint32 user_time = (guint32) startup_id;
 
 	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
-	ephy_session_load (session, filename);
+	ephy_session_load (session, filename, user_time);
 }
 
 static void
-impl_ephy_automation_open_bookmarks_editor (PortableServer_Servant _servant,
-					    CORBA_Environment * ev)
+impl_ephy_automation_loadSession (PortableServer_Servant _servant,
+				   const CORBA_char *filename,
+				   CORBA_Environment *ev)
+{
+	impl_ephy_automation_loadSessionWithStartupId (_servant,
+						       filename,
+						       0, /* no startup ID */
+						       ev);
+}
+
+static void
+impl_ephy_automation_openBookmarksEditorWithStartupId (PortableServer_Servant _servant,
+						       const CORBA_unsigned_long startup_id,
+						       CORBA_Environment *ev)
 {
 	GtkWidget *editor;
+	guint32 user_time = (guint32) startup_id;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return;
+
 	editor = ephy_shell_get_bookmarks_editor (ephy_shell);
 
+	ephy_gui_window_update_user_time (editor, user_time);
+
 	gtk_window_present (GTK_WINDOW (editor));
+}
+
+static void
+impl_ephy_automation_openBookmarksEditor (PortableServer_Servant _servant,
+					  CORBA_Environment *ev)
+{
+	impl_ephy_automation_openBookmarksEditorWithStartupId (_servant,
+							       0, /* no startup ID */
+							       ev);
 }
 
 static void
@@ -158,10 +208,13 @@ ephy_automation_class_init (EphyAutomationClass *klass)
 
 	/* connect implementation callbacks */
 	epv->loadurl = impl_ephy_automation_loadurl;
-	epv->addBookmark = impl_ephy_automation_add_bookmark;
-	epv->importBookmarks = impl_ephy_automation_import_bookmarks;
-	epv->loadSession = impl_ephy_automation_load_session;
-	epv->openBookmarksEditor = impl_ephy_automation_open_bookmarks_editor;
+	epv->addBookmark = impl_ephy_automation_addBookmark;
+	epv->importBookmarks = impl_ephy_automation_importBookmarks;
+	epv->loadSession = impl_ephy_automation_loadSession;
+	epv->openBookmarksEditor = impl_ephy_automation_openBookmarksEditor;
+	epv->loadUrlWithStartupId = impl_ephy_automation_loadUrlWithStartupId;
+	epv->loadSessionWithStartupId = impl_ephy_automation_loadSessionWithStartupId;
+	epv->openBookmarksEditorWithStartupId = impl_ephy_automation_openBookmarksEditorWithStartupId;
 }
 
 BONOBO_TYPE_FUNC_FULL (

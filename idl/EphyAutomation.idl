@@ -15,6 +15,17 @@ module GNOME {
 		void loadSession (in string filename);
 
 		void openBookmarksEditor ();
+
+		void loadUrlWithStartupId (in string  url, 
+					   in boolean fullscreen,
+					   in boolean open_in_existing_tab,
+					   in boolean open_in_new_tab,
+					   in unsigned long startup_id);
+		
+		void loadSessionWithStartupId (in string filename,
+					       in unsigned long startup_id);
+		
+		void openBookmarksEditorWithStartupId (in unsigned long startup_id);
 	};
 };
 
