@@ -1702,7 +1702,10 @@ ephy_label_size_allocate (GtkWidget     *widget,
   (* GTK_WIDGET_CLASS (parent_class)->size_allocate) (widget, allocation);
 
   if (label->ellipsize)
-    pango_layout_set_width (label->layout, allocation->width * PANGO_SCALE);
+    {
+      ephy_label_ensure_layout (label);
+      pango_layout_set_width (label->layout, allocation->width * PANGO_SCALE);
+    }
 
   if (label->select_info && label->select_info->window)
     {
