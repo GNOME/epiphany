@@ -366,6 +366,7 @@ pdm_dialog_remove_button_clicked_cb (GtkWidget *button,
 		remove_list = g_list_append (remove_list, data);
 
 		gtk_tree_row_reference_free ((GtkTreeRowReference *)r->data);
+		gtk_tree_path_free (path);
 	}
 
 	if (remove_list)
@@ -584,7 +585,11 @@ pdm_dialog_finalize (GObject *object)
 	pdm_dialog_passwords_free (dialog->priv->passwords, NULL);
 	pdm_dialog_cookies_free (dialog->priv->cookies, NULL);
 
+	g_free (dialog->priv->passwords);
+	g_free (dialog->priv->cookies);
+
         g_free (dialog->priv);
+	dialog->priv = NULL;
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
