@@ -61,7 +61,6 @@ ephy_embed_utils_save (GtkWidget *window,
         char *retPath = NULL;
         char *fileName = NULL;
         char *dirName = NULL;
-        char *retDir;
 	char *target;
 	const char *source;
         gresult ret;
@@ -136,18 +135,27 @@ ephy_embed_utils_save (GtkWidget *window,
 
 	if (ask_dest)
 	{
+		char *ret_dir;
+
 		/* show the file picker */
 		ret = ephy_embed_single_show_file_picker
 					(single, window, title,
                                          dirName, fileName, modeSave, &retPath,
                                          NULL, NULL);
+
+		if (g_file_test (retPath, G_FILE_TEST_IS_DIR))
+		{
+			ret_dir = g_strdup (retPath);
+		}
+		else
+		{
+			ret_dir = g_path_get_dirname (retPath);
+		}
+	
+		/* set default save dir */
+		eel_gconf_set_string (default_dir_pref, ret_dir);
+		g_free (ret_dir);
 	}
-
-
-	uri = gnome_vfs_uri_new (retPath);
-	g_return_if_fail (uri != NULL);
-
-        retDir = gnome_vfs_uri_extract_dirname (uri);
 
         if (ret == G_OK)
         {
@@ -173,12 +181,6 @@ ephy_embed_utils_save (GtkWidget *window,
 
 	}
 
-	/* set default save dir */
-	eel_gconf_set_string (default_dir_pref,
-                              retDir);
-
-	g_free (retDir);
-	gnome_vfs_uri_unref (uri);
 	g_free (retPath);
 
 	g_object_unref (G_OBJECT(persist));
