@@ -525,8 +525,9 @@ ephy_location_entry_autocompletion_window_url_selected_cb (EphyAutocompletionWin
 	else
 	{
 		ephy_location_entry_set_location (w, w->priv->before_completion);
-		gtk_editable_set_position (GTK_EDITABLE (w->priv->entry), -1);
 	}
+
+	gtk_editable_set_position (GTK_EDITABLE (w->priv->entry), -1);
 }
 
 void

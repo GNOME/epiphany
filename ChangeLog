@@ -1,5 +1,18 @@
 2003-06-20  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_autocompletion_window_url_selected_cb):
+
+	Ever put cursor at the end of the text when selecting autocompletion
+	items.
+
+	* src/pdm-dialog.c: (cookies_treeview_selection_changed_cb),
+	(action_treeview_selection_changed_cb):
+
+	Do not allow to open properties of multiple cookies. (insensitive)
+
+2003-06-20  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* embed/mozilla/EphyWrapper.cpp:
 	* lib/widgets/ephy-location-entry.c:
 	(ephy_location_entry_class_init), (location_focus_out_cb),

@@ -191,21 +191,13 @@ cookies_treeview_selection_changed_cb (GtkTreeSelection *selection,
                                        PdmDialog *dialog)
 {
 	GtkWidget *widget;
-	GList *l;
 	EphyDialog *d = EPHY_DIALOG(dialog);
 	gboolean has_selection;
-	GtkTreeModel *model;
 
-	l = gtk_tree_selection_get_selected_rows
-		(selection, &model);
-
-	has_selection = l != NULL;
+	has_selection = gtk_tree_selection_count_selected_rows (selection) == 1;
 
 	widget = ephy_dialog_get_control (d, PROP_COOKIES_PROPERTIES);
 	gtk_widget_set_sensitive (widget, has_selection);
-
-	g_list_foreach (l, (GFunc)gtk_tree_path_free, NULL);
-	g_list_free (l);
 }
 
 static void
@@ -213,21 +205,13 @@ action_treeview_selection_changed_cb (GtkTreeSelection *selection,
                                       PdmActionInfo *action)
 {
 	GtkWidget *widget;
-	GList *l;
 	EphyDialog *d = EPHY_DIALOG(action->dialog);
 	gboolean has_selection;
-	GtkTreeModel *model;
 
-	l = gtk_tree_selection_get_selected_rows
-		(selection, &model);
-
-	has_selection = l != NULL;
+	has_selection = gtk_tree_selection_count_selected_rows (selection) > 0;
 
 	widget = ephy_dialog_get_control (d, action->remove_id);
 	gtk_widget_set_sensitive (widget, has_selection);
-
-	g_list_foreach (l, (GFunc)gtk_tree_path_free, NULL);
-	g_list_free (l);
 }
 
 static GtkWidget *
