@@ -902,9 +902,9 @@ impl_remove_cookies (EphyEmbedSingle *shell,
         {
                 CookieInfo *c = (CookieInfo *)cl->data;
 
-                result = cookieManager->Remove (NS_LITERAL_CSTRING(c->domain),
-                                                NS_LITERAL_CSTRING(c->name),
-                                                NS_LITERAL_CSTRING(c->path),
+                result = cookieManager->Remove (nsDependentCString(c->domain),
+                                                nsDependentCString(c->name),
+                                                nsDependentCString(c->path),
                                                 PR_FALSE);
                 if (NS_FAILED(result)) return G_FAILED;
         };

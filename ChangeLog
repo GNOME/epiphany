@@ -1,3 +1,9 @@
+2003-06-22  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/mozilla-embed-single.cpp: (impl_remove_cookies):
+
+	Use nsDependentCString instead of NS_LITERAL_CSTRING. Fixes bug 115739.
+
 2003-06-22  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* src/popup-commands.c: (popup_cmd_bookmark_link):
