@@ -57,6 +57,7 @@ private:
 				     MozillaEmbedEvent *info);
 	nsresult GetCSSBackground   (nsIDOMNode *node, nsAString& url);
 	nsresult IsPageFramed       (nsIDOMNode *node, PRBool *Framed);
+	nsresult CheckInput	    (nsIDOMNode *node);
 	nsresult CheckLinkScheme    (const nsAString &link);
 	nsresult SetIntProperty     (const char *name, int value);
 	nsresult SetStringProperty  (const char *name, const char *value);

@@ -245,41 +245,7 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 		}
 		else if (g_ascii_strcasecmp (tag.get(), "input") == 0)
 		{
-			nsCOMPtr<nsIDOMElement> element;
-			element = do_QueryInterface (node);
-			if (!element) return NS_ERROR_FAILURE;
-
-			nsEmbedString uValue;
-			element->GetAttribute (nsEmbedString(typeLiteral), uValue);
-
-			nsEmbedCString value;
-			NS_UTF16ToCString (uValue, NS_CSTRING_ENCODING_UTF8, value);
-
-			if (g_ascii_strcasecmp (value.get(), "image") == 0)
-			{
-				info->context |= EMBED_CONTEXT_IMAGE;
-				nsCOMPtr<nsIDOMHTMLInputElement> input;
-				input = do_QueryInterface (node);
-				if (!input) return NS_ERROR_FAILURE;
-
-				nsEmbedString img;
-				rv = input->GetSrc (img);
-				if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
-
-				nsEmbedCString cImg;
-				rv = ResolveBaseURL (img, cImg);
-                                if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
-				SetStringProperty ("image", cImg.get());
-			}
-			else if (g_ascii_strcasecmp (value.get(), "radio") != 0 &&
-				 g_ascii_strcasecmp (value.get(), "submit") != 0 &&
-				 g_ascii_strcasecmp (value.get(), "reset") != 0 &&
-				 g_ascii_strcasecmp (value.get(), "hidden") != 0 &&
-				 g_ascii_strcasecmp (value.get(), "button") != 0 &&
-				 g_ascii_strcasecmp (value.get(), "checkbox") != 0)
-			{
-				info->context |= EMBED_CONTEXT_INPUT;
-			}
+			CheckInput (node);
 		}
 		else if (g_ascii_strcasecmp (tag.get(), "textarea") == 0)
 		{
@@ -494,8 +460,11 @@ nsresult EventContext::GetEventContext (nsIDOMEventTarget *EventTarget,
 					CheckLinkScheme (href);
 				}
 			}
-			else if (g_ascii_strcasecmp (tag.get(), "textarea") == 0 ||
-				 g_ascii_strcasecmp (tag.get(), "input") == 0)
+			else if (g_ascii_strcasecmp (tag.get(), "input") == 0)
+			{
+				CheckInput (node);
+			}
+			else if (g_ascii_strcasecmp (tag.get(), "textarea") == 0)
 			{
 				info->context |= EMBED_CONTEXT_INPUT;
 			}
@@ -737,6 +706,50 @@ nsresult EventContext::GetTargetDocument (nsIDOMDocument **domDoc)
 	*domDoc = mDOMDocument.get();
 
 	NS_IF_ADDREF(*domDoc);
+
+	return NS_OK;
+}
+
+nsresult EventContext::CheckInput (nsIDOMNode *aNode)
+{
+	const PRUnichar typeLiteral[] = { 't', 'y', 'p', 'e', '\0' };
+
+	nsCOMPtr<nsIDOMElement> element;
+	element = do_QueryInterface (aNode);
+	if (!element) return NS_ERROR_FAILURE;
+
+	nsEmbedString uValue;
+	element->GetAttribute (nsEmbedString(typeLiteral), uValue);
+
+	nsEmbedCString value;
+	NS_UTF16ToCString (uValue, NS_CSTRING_ENCODING_UTF8, value);
+
+	if (g_ascii_strcasecmp (value.get(), "image") == 0)
+	{
+		mEmbedEvent->context |= EMBED_CONTEXT_IMAGE;
+		nsCOMPtr<nsIDOMHTMLInputElement> input;
+		input = do_QueryInterface (aNode);
+		if (!input) return NS_ERROR_FAILURE;
+
+		nsresult rv;
+		nsEmbedString img;
+		rv = input->GetSrc (img);
+		if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
+
+		nsEmbedCString cImg;
+		rv = ResolveBaseURL (img, cImg);
+		if (NS_FAILED(rv)) return NS_ERROR_FAILURE;
+		SetStringProperty ("image", cImg.get());
+	}
+	else if (g_ascii_strcasecmp (value.get(), "radio") != 0 &&
+		 g_ascii_strcasecmp (value.get(), "submit") != 0 &&
+		 g_ascii_strcasecmp (value.get(), "reset") != 0 &&
+		 g_ascii_strcasecmp (value.get(), "hidden") != 0 &&
+		 g_ascii_strcasecmp (value.get(), "button") != 0 &&
+		 g_ascii_strcasecmp (value.get(), "checkbox") != 0)
+	{
+		mEmbedEvent->context |= EMBED_CONTEXT_INPUT;
+	}
 
 	return NS_OK;
 }
