@@ -351,9 +351,6 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	/* Make sure this is off, we monitor for theme changes and set colors. */
 	pref->SetBoolPref ("browser.display.use_system_colors", PR_FALSE);
 
-	/* Smooth scrolling on */
-	pref->SetBoolPref ("general.smoothScroll", PR_TRUE);
-
 	/* Disable blinking text and marquee, its non-standard and annoying */
 	pref->SetBoolPref ("browser.blink_allowed", PR_FALSE);
 	pref->SetBoolPref ("browser.display.enable_marquee", PR_FALSE);
@@ -375,11 +372,6 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	pref->SetIntPref ("mousewheel.withcontrolkey.action", 1);
 	pref->SetIntPref ("mousewheel.withcontrolkey.numlines", 1);
 	pref->SetBoolPref ("mousewheel.withcontrolkey.sysnumlines", PR_FALSE);
-
-	/* Enable Image Auto-Resizing */
-	pref->SetBoolPref ("browser.enable_automatic_image_resizing", PR_TRUE);
-
-	/* User agent */
 
 	/* FIXME We need to do this because mozilla doesnt set product
 	sub for embedding apps */
