@@ -493,7 +493,6 @@ dnl ****
 
 AC_MSG_CHECKING([whether DBUS support is requested])
 
-enable_dbus=no
 AC_ARG_ENABLE([dbus],
 	AS_HELP_STRING([--enable-dbus],[Enable DBUS (default=no)]),
 	[enable_dbus=$enableval],
