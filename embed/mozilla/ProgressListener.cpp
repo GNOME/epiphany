@@ -320,6 +320,14 @@ NS_IMETHODIMP GProgressListener::OnStateChange (nsIWebProgress *aWebProgress,
 
 	if (aStateFlags & nsIWebProgressListener::STATE_STOP)
 	{
+
+		if (!mNoDialog)
+		{
+			downloader_view_set_download_status (mDownloaderView, 
+							     DOWNLOAD_STATUS_COMPLETED, 
+							     (gpointer)this);
+		}
+
 		switch (mAction)
                 {
 		case ACTION_SAVEFORHELPER:
@@ -350,16 +358,7 @@ NS_IMETHODIMP GProgressListener::OnStateChange (nsIWebProgress *aWebProgress,
 		
 			mozilla_embed_persist_completed
 				(MOZILLA_EMBED_PERSIST (mEphyPersist));
-
-			return NS_OK;	
-		}
-		
-		if (!mNoDialog)
-		{
-			downloader_view_set_download_status (mDownloaderView, 
-							     DOWNLOAD_STATUS_COMPLETED, 
-							     (gpointer)this);
-		}
+		}		
 	}
 
 	/* done */
