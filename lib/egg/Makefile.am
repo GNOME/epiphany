@@ -62,7 +62,7 @@ eggtypebuiltins.c: $(EGGHEADERS)
 		--vtail "  if (G_UNLIKELY (type == 0))\n" \
 		--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n\n" \
 		--vtail "  return type;\n}\n\n" \
-		$(EGGHEADERS) ) > xgen-$(@F) \
+		$(^F) ) > xgen-$(@F) \
 	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
 	&& rm -f xgen-$(@F)
 
@@ -77,7 +77,7 @@ eggtypebuiltins.h: $(EGGHEADERS)
 		--fprod "\n/* --- @filename@ --- */" \
 		--eprod "#define EGG_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
 		--eprod "GType @enum_name@_get_type (void);\n" \
-		$(EGGHEADERS) ) > xgen-$(@F) \
+		$(^F) ) > xgen-$(@F) \
 	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
 	&& rm -f xgen-$(@F)
 

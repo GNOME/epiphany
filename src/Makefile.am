@@ -165,7 +165,7 @@ ephy-type-builtins.c: $(INST_H_FILES) $(NOINST_H_FILES)
 		--vtail "  if (G_UNLIKELY (type == 0))\n" \
 		--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n\n" \
 		--vtail "  return type;\n}\n\n" \
-		$(INST_H_FILES) $(NOINST_H_FILES) ) > xgen-$(@F) \
+		$(^F) ) > xgen-$(@F) \
 	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
 	&& rm -f xgen-$(@F)
 
@@ -180,7 +180,7 @@ ephy-type-builtins.h: $(INST_H_FILES) $(NOINST_H_FILES)
 		--fprod "\n/* --- @filename@ --- */" \
 		--eprod "#define EPHY_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
 		--eprod "GType @enum_name@_get_type (void);\n" \
-		$(INST_H_FILES) $(NOINST_H_FILES) ) > xgen-$(@F) \
+		$(^F) ) > xgen-$(@F) \
 	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
 	&& rm -f xgen-$(@F)
 
