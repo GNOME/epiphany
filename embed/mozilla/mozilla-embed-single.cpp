@@ -55,9 +55,11 @@
 #include <nsISupportsPrimitives.h>
 #include <nsReadableUtils.h>
 #include <nsICookieManager.h>
+#ifdef HAVE_NSIPASSWORD_H
 #include <nsIPassword.h>
 #include <nsIPasswordManager.h>
 #include <nsIPassword.h>
+#endif
 #if MOZILLA_SNAPSHOT > 9
 #include <nsICookie2.h>
 #else
@@ -693,6 +695,7 @@ static GList *
 impl_list_passwords (EphyPasswordManager *manager)
 {
 	GList *passwords = NULL;
+#ifdef HAVE_NSIPASSWORD_H
 	nsresult rv;
 
 	nsCOMPtr<nsIPasswordManager> passwordManager =
@@ -728,7 +731,7 @@ impl_list_passwords (EphyPasswordManager *manager)
 
 		passwords = g_list_prepend (passwords, p);
 	}
-
+#endif
 	return passwords;
 }
 
