@@ -563,7 +563,9 @@ static gboolean
 egg_status_icon_button_press (EggStatusIcon  *status_icon,
 			      GdkEventButton *event)
 {
-  if (event->button == 1 && !status_icon->priv->button_down)
+  if (event->button == 1 &&
+      event->type == GDK_2BUTTON_PRESS &&
+      !status_icon->priv->button_down)
     {
       status_icon->priv->button_down = TRUE;
       return TRUE;
