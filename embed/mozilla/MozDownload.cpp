@@ -349,8 +349,8 @@ MozDownload::OnProgressChange(nsIWebProgress *aWebProgress, nsIRequest *aRequest
 			      PRInt32 aCurTotalProgress, PRInt32 aMaxTotalProgress)
 {
 	if (mMaxSize >= 0 &&
-	    ((aMaxTotalProgress > 0 && mMaxSize > aMaxTotalProgress) ||
-	     mMaxSize > aCurTotalProgress))
+	    ((aMaxTotalProgress > 0 && mMaxSize < aMaxTotalProgress) ||
+	     mMaxSize < aCurTotalProgress))
 	{
 		Cancel ();
 	}
