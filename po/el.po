@@ -7,11 +7,12 @@
 # Nikos,  29jul2003, fixes and update translation,425 messages
 # Nikos,  31jul2003, fixes access keys and update,461 messages
 # Nikos,   1aug2003, fixes and update, 490 messages
+# Nikosw  11aug2003, fixes and update, 509 messages
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"POT-Creation-Date: 2003-08-01 15:58+0300\n"
-"PO-Revision-Date: 2003-08-01 16:16-0200\n"
+"POT-Creation-Date: 2003-08-12 02:31+0300\n"
+"PO-Revision-Date: 2003-08-12 03:02-0200\n"
 "Last-Translator: Nikos Charonitakis <charosn@her.fothnet.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
 "MIME-Version: 1.0\n"
@@ -69,9 +70,8 @@ msgid "Web Browser"
 msgstr "Περιηγητής Ιστοσελίδων"
 
 #: data/epiphany.schemas.in.h:1
-#, fuzzy
 msgid "Address of the user's home page."
-msgstr "Μετάβαση στην αρχική τοποθεσία"
+msgstr "Διεύθυνση αρχικής σελίδας χρήστη."
 
 #: data/epiphany.schemas.in.h:2
 msgid "Allow popups"
@@ -244,9 +244,8 @@ msgid "Show download details"
 msgstr "Προβολή λεπτομερειών μεταφόρτωσης"
 
 #: data/epiphany.schemas.in.h:43
-#, fuzzy
 msgid "Show download details."
-msgstr "Προβολή λεπτομερειών μεταφόρτωσης"
+msgstr "Εμφάνιση λεπτομερειών μεταφόρτωσης."
 
 #: data/epiphany.schemas.in.h:44
 msgid "Show statusbar by default"
@@ -386,7 +385,7 @@ msgid ""
 "</span>\n"
 "It's not possible to view this file type directly in the browser:"
 msgstr ""
-"<span weight=\"bold\" size=\"larger\">Τι θέλετε να κάνετε με αυτό τοαρχείο?\n"
+"<span weight=\"bold\" size=\"larger\">Τι θέλετε να κάνετε με αυτό το αρχείο?\n"
 "</span>\n"
 "Δεν είναι δυνατή η προβολή του απ' ευθείας στον φυλλομετρητή:"
 
@@ -412,13 +411,12 @@ msgid "Download Manager"
 msgstr "Μεταφόρτωση"
 
 #: data/glade/epiphany.glade.h:15
-#, fuzzy
 msgid "Download _Details"
-msgstr "Λε_πτομέρειες μεταφόρτωσης..."
+msgstr "_Λεπτομέρειες Μεταφόρτωσης"
 
 #: data/glade/epiphany.glade.h:16
 #: data/ui/nautilus-epiphany-view.xml.in.h:11
-#: src/ephy-window.c:670
+#: src/ephy-window.c:686
 msgid "Find"
 msgstr "Εύρεση"
 
@@ -432,7 +430,7 @@ msgstr "Διαχειριστής Προσωπικών Δεδομένων"
 
 #: data/glade/epiphany.glade.h:19
 msgid "You can open it with another application or save it on disk."
-msgstr "Μπορείτε να το ανοίξετε με μια άλλη εφαρμογή ή να το αποθηκεύσετε στον δίσκο."
+msgstr "Μπορείτε να το ανοίξετε με μια άλλη εφαρμογή ή να το αποθηκεύσετε στο δίσκο."
 
 #: data/glade/epiphany.glade.h:20
 msgid "_Find:"
@@ -567,7 +565,7 @@ msgstr ""
 #: data/glade/prefs-dialog.glade.h:27
 #, fuzzy
 msgid "Open in _tabs by default"
-msgstr "Εξ ορισμού άνοιγμα στηλών."
+msgstr "Εξ ορισμού άνοιγμα σε _στήλες"
 
 #: data/glade/prefs-dialog.glade.h:28
 msgid "Preferences"
@@ -575,7 +573,7 @@ msgstr "Προτιμήσεις"
 
 #: data/glade/prefs-dialog.glade.h:29
 msgid "Privacy"
-msgstr ""
+msgstr "Απόρρητο"
 
 #: data/glade/prefs-dialog.glade.h:30
 msgid "S_ans serif:"
@@ -611,7 +609,6 @@ msgid "_Address:"
 msgstr "_Διεύθυνση:"
 
 #: data/glade/prefs-dialog.glade.h:38
-#, fuzzy
 msgid "_Always accept"
 msgstr "_Πάντα αποδοχή"
 
@@ -633,9 +630,8 @@ msgid "_Monospace:"
 msgstr "_Monospace:"
 
 #: data/glade/prefs-dialog.glade.h:43
-#, fuzzy
 msgid "_Never accept"
-msgstr "Πο_τέ"
+msgstr "Π_οτέ αποδοχή"
 
 #: data/glade/prefs-dialog.glade.h:44
 msgid "_Proportional:"
@@ -732,7 +728,7 @@ msgstr "Χαρτί"
 
 #: data/glade/print.glade.h:26
 #: data/ui/nautilus-epiphany-view.xml.in.h:23
-#: src/ephy-window.c:666
+#: src/ephy-window.c:682
 msgid "Print"
 msgstr "Εκτύπωση"
 
@@ -958,22 +954,22 @@ msgstr "%.1f από  %.1f MB"
 
 #: embed/downloader-view.c:397
 #, c-format
-msgid "%d of %d KB"
+msgid "%d of %d kB"
 msgstr "%d από %d KB"
 
 #: embed/downloader-view.c:403
 #, c-format
-msgid "%d KB"
-msgstr "%d KB"
+msgid "%d kB"
+msgstr "%d kB"
 
 #: embed/downloader-view.c:409
 #, c-format
-msgid "%s at %.1f KB/s"
-msgstr ""
+msgid "%s at %.1f kB/s"
+msgstr "%s στα %.1f kB/s"
 
 #: embed/downloader-view.c:524
 #: embed/downloader-view.c:542
-#: src/ephy-window.c:870
+#: src/ephy-window.c:893
 msgid "Unknown"
 msgstr "Άγνωστο"
 
@@ -981,28 +977,28 @@ msgstr "Άγνωστο"
 msgid "00.00"
 msgstr "00.00"
 
-#: embed/downloader-view.c:779
+#: embed/downloader-view.c:780
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:789
+#: embed/downloader-view.c:790
 msgid "Filename"
 msgstr "Όνομα αρχείου"
 
-#: embed/downloader-view.c:800
+#: embed/downloader-view.c:801
 msgid "Size"
 msgstr "Μέγεθος"
 
-#: embed/downloader-view.c:811
+#: embed/downloader-view.c:812
 msgid "Remaining"
 msgstr "Απομένοντα"
 
-#: embed/downloader-view.c:1015
+#: embed/downloader-view.c:1016
 msgid "Cancel all pending downloads?"
 msgstr "Ακύρωση όλων των εκκρεμών μεταφορτώσεων;"
 
 #: embed/ephy-embed-popup-control.c:554
-#: src/popup-commands.c:325
+#: src/popup-commands.c:333
 msgid "Save Image As"
 msgstr "Αποθήκευση Εικόνας Ως"
 
@@ -1011,7 +1007,7 @@ msgid "Save Page As"
 msgstr "Αποθήκευση Σελίδας Ως"
 
 #: embed/ephy-embed-popup-control.c:677
-#: src/popup-commands.c:413
+#: src/popup-commands.c:421
 msgid "Save Background As"
 msgstr "Αποθήκευση Παρασκηνίου Ως"
 
@@ -1023,20 +1019,20 @@ msgstr ""
 msgid "No available applications to open the specified file."
 msgstr "Δεν υπάρχουν διαθέσιμες επιλογές για το άνοιγμα του αρχείου."
 
-#: embed/ephy-history.c:438
+#: embed/ephy-history.c:441
 #: src/bookmarks/ephy-bookmarks.c:689
 msgid "All"
 msgstr "Όλα"
 
-#: embed/ephy-history.c:587
+#: embed/ephy-history.c:590
 msgid "Others"
 msgstr "Άλλοι"
 
-#: embed/ephy-history.c:593
+#: embed/ephy-history.c:596
 msgid "Local files"
 msgstr "Τοπικά Αρχεία"
 
-#: embed/mozilla/ContentHandler.cpp:308
+#: embed/mozilla/ContentHandler.cpp:311
 msgid "Select the destination filename"
 msgstr "Επιλογή του ονόματος αρχείου προορισμού"
 
@@ -1095,9 +1091,8 @@ msgid "_Greek"
 msgstr "_Ελληνική"
 
 #: embed/mozilla/mozilla-embed-single.cpp:81
-#, fuzzy
 msgid "_Hebrew"
-msgstr "Εβραϊκά"
+msgstr "Εβρα_ϊκά"
 
 #: embed/mozilla/mozilla-embed-single.cpp:82
 msgid "_Indian"
@@ -1525,7 +1520,7 @@ msgstr "Τέλος της τρέχουσας συνεδρίας"
 #. * "zh_CN" translation: "zh-cn,zh"
 #. * "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
 #.
-#: embed/mozilla/mozilla-notifiers.cpp:598
+#: embed/mozilla/mozilla-notifiers.cpp:605
 msgid "system-language"
 msgstr "el"
 
@@ -1723,7 +1718,7 @@ msgstr "Θέ_ματα:"
 
 #: src/bookmarks/ephy-bookmark-properties.c:419
 msgid "_Show in bookmarks bar"
-msgstr ""
+msgstr "_Εμφάνιση στη γραμμή σελιδοδεικτών"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:154
 #: src/ephy-history-window.c:126
@@ -1751,9 +1746,8 @@ msgstr "Δημιουργία νέου θέματος"
 #: src/bookmarks/ephy-bookmarks-editor.c:853
 #: src/ephy-history-window.c:131
 #: src/ephy-history-window.c:666
-#, fuzzy
 msgid "_Open in New Window"
-msgstr "Άνοιγμα σε νέο παράθυρο"
+msgstr "_Άνοιγμα σε Νέο Παράθυρο"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:163
 msgid "Open the selected bookmark in a new window"
@@ -1763,9 +1757,8 @@ msgstr ""
 #: src/bookmarks/ephy-bookmarks-editor.c:854
 #: src/ephy-history-window.c:134
 #: src/ephy-history-window.c:667
-#, fuzzy
 msgid "Open in New _Tab"
-msgstr "Άνοιγμα σε νέα σ_τήλη"
+msgstr "Άνοιγμα σε Νέα _Στήλη"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:166
 msgid "Open the selected bookmark in a new tab"
@@ -1790,7 +1783,7 @@ msgstr ""
 
 #: src/bookmarks/ephy-bookmarks-editor.c:173
 msgid "_Show in Bookmarks Bar"
-msgstr ""
+msgstr "_Εμφάνιση στη Γραμμή Σελιδοδεικτών"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:174
 msgid "Show the selected bookmark or topic in the bookmarks bar"
@@ -1805,9 +1798,8 @@ msgid "View or modify the properties of the selected bookmark"
 msgstr ""
 
 #: src/bookmarks/ephy-bookmarks-editor.c:179
-#, fuzzy
 msgid "_Import Bookmarks..."
-msgstr "Έξυπνοι  σελιδοδείκτες"
+msgstr "_Εισαγωγή Σελιδοδεικτών..."
 
 #: src/bookmarks/ephy-bookmarks-editor.c:180
 msgid "Import bookmarks from another browser or a bookmarks file"
@@ -1822,14 +1814,14 @@ msgstr "_Κλείσιμο"
 #: src/bookmarks/ephy-bookmarks-editor.c:183
 #, fuzzy
 msgid "Close the bookmarks window"
-msgstr "Κλείσιμο αυτού του παραθύρου"
+msgstr "Κλείσιμο παράθυρου σελιδοδεικτών"
 
 #. Edit Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:187
 #: src/ephy-history-window.c:148
 #: src/ephy-window.c:97
 msgid "Cu_t"
-msgstr "Αποκο_πή"
+msgstr "_Αποκοπή"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:188
 #: src/ephy-history-window.c:149
@@ -1954,15 +1946,13 @@ msgstr "Σελιδοδείκτες Konqueror"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:848
 #: src/ephy-history-window.c:661
-#, fuzzy
 msgid "_Open in New Windows"
-msgstr "Άνοιγμα σε νέο παράθυρο"
+msgstr "_Άνοιγμα σε Νέα Παράθυρα"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:849
 #: src/ephy-history-window.c:662
-#, fuzzy
 msgid "Open in New _Tabs"
-msgstr "Άνοιγμα σε νέα σ_τήλη"
+msgstr "Άνοιγμα σε Νέες _Στήλες"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:859
 #: src/ephy-history-window.c:672
@@ -1975,7 +1965,7 @@ msgid "_Search:"
 msgstr "_Αναζήτηση:"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:1215
-#: src/ephy-window.c:672
+#: src/ephy-window.c:688
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
 
@@ -1988,8 +1978,9 @@ msgstr "Θέματα"
 msgid "Title"
 msgstr "Τίτλος"
 
-#: src/bookmarks/ephy-bookmarks-menu.c:268
-#: src/bookmarks/ephy-topic-action.c:208
+#. This is the adjective, not the verb
+#: src/bookmarks/ephy-bookmarks-menu.c:269
+#: src/bookmarks/ephy-topic-action.c:209
 msgid "Empty"
 msgstr "Άδειο"
 
@@ -2061,7 +2052,7 @@ msgstr ""
 
 #: src/ephy-go-action.c:80
 #: src/ephy-go-action.c:97
-#: src/toolbar.c:347
+#: src/toolbar.c:348
 msgid "Go"
 msgstr "Μετάβαση"
 
@@ -2090,7 +2081,7 @@ msgstr ""
 #: src/ephy-history-window.c:144
 #, fuzzy
 msgid "Close the history window"
-msgstr "Κλείσιμο αυτού του παραθύρου"
+msgstr "Κλείσιμο παραθύρου ιστορικού"
 
 #: src/ephy-history-window.c:158
 msgid "Select all history links or text"
@@ -2205,48 +2196,48 @@ msgstr "Περιηγητής Δικτ. Ιστού Epiphany "
 msgid "Ephy"
 msgstr "Ephy"
 
-#: src/ephy-main.c:201
+#: src/ephy-main.c:203
 msgid ""
 "Epiphany can't be used now. Running the command \"bonobo-slay\" from the console may fix the problem. If not, you can try rebooting the computer or installing Epiphany again.\n"
 "\n"
 "Bonobo couldn't locate the GNOME_Epiphany_Automation.server."
 msgstr ""
 
-#: src/ephy-shell.c:232
+#: src/ephy-shell.c:234
 msgid "Epiphany can't be used now. Mozilla initialization failed. Check your MOZILLA_FIVE_HOME environmental variable."
 msgstr ""
 
 #: src/ephy-tab.c:314
-#: src/ephy-tab.c:1004
-#: src/ephy-tab.c:1187
+#: src/ephy-tab.c:1012
+#: src/ephy-tab.c:1195
 msgid "Blank page"
 msgstr "Κενή σελίδα"
 
-#: src/ephy-tab.c:631
+#: src/ephy-tab.c:639
 msgid "site"
 msgstr "ιστοσελίδα"
 
-#: src/ephy-tab.c:655
+#: src/ephy-tab.c:663
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Ανακατεύθυνση σε %s..."
 
-#: src/ephy-tab.c:659
+#: src/ephy-tab.c:667
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Μεταφορά δεδομένων από %s... "
 
-#: src/ephy-tab.c:663
+#: src/ephy-tab.c:671
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Αναμονή για πιστοποίηση από %s..."
 
-#: src/ephy-tab.c:671
+#: src/ephy-tab.c:679
 #, c-format
 msgid "Loading %s..."
 msgstr "Φόρτωση %s..."
 
-#: src/ephy-tab.c:675
+#: src/ephy-tab.c:683
 msgid "Done."
 msgstr "Ολοκληρώθηκε."
 
@@ -2277,9 +2268,8 @@ msgid "New _Tab"
 msgstr "Νέα _Στήλη"
 
 #: src/ephy-window.c:78
-#, fuzzy
 msgid "Open a new tab"
-msgstr "Άνοιγμα σε νέα σ_τήλη"
+msgstr "Άνοιγμα νέας στήλης"
 
 #: src/ephy-window.c:80
 msgid "_Open..."
@@ -2601,18 +2591,16 @@ msgid "Open Link in New _Tab"
 msgstr "Άνοιγμα δεσμού σε νέα σ_τήλη"
 
 #: src/ephy-window.c:242
-#, fuzzy
 msgid "_Download Link..."
-msgstr "Μετα_φόρτωση δεσμού"
+msgstr "_Μεταφόρτωση Δεσμού..."
 
 #: src/ephy-window.c:244
 msgid "_Bookmark Link..."
 msgstr "Δεσμός ως σελιδοδείκτης..."
 
 #: src/ephy-window.c:246
-#, fuzzy
 msgid "_Copy Link Address"
-msgstr "Αντιγραφή Διεύθυνσης Email"
+msgstr "Αν_τιγραφή Διεύθυνσης Δεσμού"
 
 #. Images
 #: src/ephy-window.c:250
@@ -2639,45 +2627,45 @@ msgstr "_Χρήση Εικόνας Ως Παρασκήνιο"
 msgid "Copy I_mage Address"
 msgstr "Αντιγραφή Διεύθυνσης E_ικόνας"
 
-#: src/ephy-window.c:561
+#: src/ephy-window.c:577
 msgid "Exit Fullscreen"
 msgstr "Έξοδος από Πλήρη Οθόνη"
 
-#: src/ephy-window.c:662
-#: src/window-commands.c:324
+#: src/ephy-window.c:678
+#: src/window-commands.c:331
 msgid "Open"
 msgstr "Άνοιγμα"
 
-#: src/ephy-window.c:664
-#: src/window-commands.c:365
+#: src/ephy-window.c:680
+#: src/window-commands.c:372
 msgid "Save As"
 msgstr "Αποθήκευση Ως"
 
-#: src/ephy-window.c:668
+#: src/ephy-window.c:684
 msgid "Bookmark"
 msgstr "Σελιδοδείκτης"
 
-#: src/ephy-window.c:873
+#: src/ephy-window.c:896
 msgid "Insecure"
 msgstr "Μή ασφαλής"
 
-#: src/ephy-window.c:876
+#: src/ephy-window.c:899
 msgid "Broken"
 msgstr "Broken"
 
-#: src/ephy-window.c:879
+#: src/ephy-window.c:902
 msgid "Medium"
 msgstr "Μέτρια"
 
-#: src/ephy-window.c:883
+#: src/ephy-window.c:906
 msgid "Low"
 msgstr "Χαμηλή"
 
-#: src/ephy-window.c:887
+#: src/ephy-window.c:910
 msgid "High"
 msgstr "Υψηλή"
 
-#: src/ephy-window.c:897
+#: src/ephy-window.c:920
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2686,7 +2674,7 @@ msgstr ""
 "Επίπεδο ασφάλειας: %s\n"
 "%s"
 
-#: src/ephy-window.c:903
+#: src/ephy-window.c:926
 #, c-format
 msgid "Security level: %s"
 msgstr "Επίπεδο ασφάλειας: %s"
@@ -2722,14 +2710,14 @@ msgstr "Διαδρομή:"
 #: src/pdm-dialog.c:746
 #, fuzzy
 msgid "Secure:"
-msgstr "Ασφαλές"
+msgstr "Ασφαλές:"
 
 #: src/pdm-dialog.c:760
 #, fuzzy
 msgid "Expire:"
-msgstr "Λήγει"
+msgstr "Λήγει:"
 
-#: src/popup-commands.c:315
+#: src/popup-commands.c:323
 msgid "Download link"
 msgstr "Μεταφόρτωση δεσμού"
 
@@ -2979,23 +2967,23 @@ msgstr "Γενικά"
 msgid "Custom [%s]"
 msgstr "Προσαρμογή [%s]"
 
-#: src/session.c:194
+#: src/session.c:195
 msgid "Crash Recovery"
 msgstr "Ανάκτηση από κόλλημα"
 
-#: src/session.c:196
+#: src/session.c:197
 msgid "_Don't Recover"
 msgstr "Να μην γίνει ανάκτηση"
 
-#: src/session.c:197
+#: src/session.c:198
 msgid "_Recover"
 msgstr "Ανά_κτηση"
 
-#: src/session.c:226
+#: src/session.c:227
 msgid "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr "Η Epiphany φαίνεται να είχε κολλήσει ή τερματιστεί πρόωρα την τελευταία φορά που έτρεξε."
 
-#: src/session.c:232
+#: src/session.c:233
 msgid "You can recover the opened tabs and windows."
 msgstr "Μπορείτε να ανακτήσετε τα ανοικτά παράθυρα και στήλες."
 
@@ -3007,48 +2995,48 @@ msgstr "Πίσω"
 msgid "Go back"
 msgstr "Μετάβαση πίσω"
 
-#: src/toolbar.c:281
+#: src/toolbar.c:282
 msgid "Forward"
 msgstr "Μπροστά"
 
-#: src/toolbar.c:283
+#: src/toolbar.c:284
 msgid "Go forward"
-msgstr "Μετάβαση Μπροστά"
+msgstr "Μετάβαση μπροστά"
 
-#: src/toolbar.c:294
+#: src/toolbar.c:295
 msgid "Up"
 msgstr "Επάνω"
 
-#: src/toolbar.c:296
+#: src/toolbar.c:297
 msgid "Go up"
 msgstr "Μετάβαση επάνω"
 
-#: src/toolbar.c:307
+#: src/toolbar.c:308
 #, fuzzy
 msgid "Spinner"
 msgstr "<b>Spinner</b>"
 
-#: src/toolbar.c:317
+#: src/toolbar.c:318
 msgid "Address Entry"
 msgstr ""
 
-#: src/toolbar.c:319
+#: src/toolbar.c:320
 msgid "Enter a web address to open, or a phrase to search for on the web"
 msgstr ""
 
-#: src/toolbar.c:328
+#: src/toolbar.c:329
 msgid "Zoom"
 msgstr "Μεγένθυση "
 
-#: src/toolbar.c:329
+#: src/toolbar.c:330
 msgid "Adjust the text size"
-msgstr ""
+msgstr "Προσαρμογή μεγέθους κειμένου"
 
-#: src/toolbar.c:339
+#: src/toolbar.c:340
 msgid "Favicon"
 msgstr ""
 
-#: src/toolbar.c:349
+#: src/toolbar.c:350
 msgid "Go to the address entered in the address entry"
 msgstr ""
 
@@ -3056,24 +3044,24 @@ msgstr ""
 msgid "Check this out!"
 msgstr "Ελέγξτε αυτό!"
 
-#: src/window-commands.c:278
+#: src/window-commands.c:285
 msgid "Untitled"
 msgstr "Ανώνυμο"
 
-#: src/window-commands.c:675
+#: src/window-commands.c:682
 msgid "Toolbar Editor"
 msgstr "Επεξεργαστής Εργαλειοθήκης"
 
-#: src/window-commands.c:697
+#: src/window-commands.c:704
 msgid "_Add a New Toolbar"
 msgstr "_Προσθήκη Νέας Εργαλειoθήκης"
 
 #. Translator credits
-#: src/window-commands.c:747
+#: src/window-commands.c:754
 msgid "translator_credits"
 msgstr "Κώστας Παπαδήμας <pkst@gmx.net>"
 
-#: src/window-commands.c:775
+#: src/window-commands.c:782
 msgid "A GNOME browser based on Mozilla"
 msgstr "Ένας φυλλομετρητής του GNOME  βασισμένος στον Mozilla"
 
