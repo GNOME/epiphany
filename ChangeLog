@@ -1,5 +1,13 @@
 2004-06-22  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-import.c:
+	(folders_list_to_topic_name), (ephy_bookmarks_import_mozilla):
+
+	Keep the whole hierarchy of folders in the topic name, separated
+	by |. Mozilla importer only for now.
+
+2004-06-22  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* src/bookmarks/ephy-bookmarks-import.c: (bookmark_add),
 	(xbel_parse_bookmark), (ephy_bookmarks_import_mozilla),
 	(parse_rdf_item):

@@ -670,15 +670,34 @@ ns_parse_bookmark_item (GString *string)
 	return temp;
 }
 
+static char *
+folders_list_to_topic_name (GList *folders)
+{
+	GString *topic;
+	GList *l;
+
+	g_return_val_if_fail (folders != NULL, NULL);
+
+	topic = g_string_new (folders->data);
+
+	for (l = folders->next; l != NULL; l = l->next)
+	{
+		g_string_append (topic, "|");
+		g_string_append (topic, l->data);
+	}
+
+	return g_string_free (topic, FALSE);
+}
+
 gboolean
 ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 			       const char *filename)
 {
 	FILE *bf;  /* bookmark file */
-	GString *name;
-	char *parsedname;
-	GString *url;
-	GList *folders = NULL, *l;
+	GString *name, *url;
+	char *parsedname, *topic;
+	EphyNode *keyword;
+	GList *folders = NULL;
 
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING)) return FALSE;
 
@@ -698,14 +717,16 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 		switch (t)
 		{
 		case NS_FOLDER:
-			folders = g_list_prepend (folders, ns_parse_bookmark_item (name));
+			folders = g_list_append (folders, ns_parse_bookmark_item (name));
 			break;
 		case NS_FOLDER_END:
 			if (folders)
 			{
-				/* remove first entry */
-				g_free (folders->data);
-				folders = g_list_delete_link (folders, folders); 
+				GList *last = g_list_last (folders);
+
+				/* remove last entry */
+				g_free (last->data);
+				folders = g_list_delete_link (folders, last); 
 			}
 			break;
 		case NS_SITE:
@@ -718,24 +739,20 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 				node = ephy_bookmarks_find_bookmark (bookmarks, url->str);
 			}
 
-			for (l = folders; l != NULL; l = l->next)
-			{
-				char *topic = (char *) l->data;
-				EphyNode *keyword;
-
-				keyword = ephy_bookmarks_find_keyword (bookmarks, topic, FALSE);
+			topic = folders_list_to_topic_name (folders);
+			keyword = ephy_bookmarks_find_keyword (bookmarks, topic, FALSE);
 			
-				if (keyword == NULL)
-				{
-					keyword = ephy_bookmarks_add_keyword (bookmarks, topic);
-				}
-
-				if (node != NULL && keyword != NULL)
-				{
-					ephy_bookmarks_set_keyword (bookmarks, keyword, node);
-				}
+			if (keyword == NULL)
+			{
+				keyword = ephy_bookmarks_add_keyword (bookmarks, topic);
 			}
 
+			if (node != NULL && keyword != NULL)
+			{
+				ephy_bookmarks_set_keyword (bookmarks, keyword, node);
+			}
+
+			g_free (topic);
 			g_free (parsedname);
 
 			break;
