@@ -307,10 +307,11 @@ ephy_bookmarks_save (EphyBookmarks *eb)
 	LOG ("Saving bookmarks")
 
 	ephy_node_db_write_to_xml_safe
-		(eb->priv->db, eb->priv->xml_file,
-		 EPHY_BOOKMARKS_XML_ROOT,
-		 EPHY_BOOKMARKS_XML_VERSION,
-		 "Do not rely on this file, it's only for internal use. Use bookmarks.rdf instead.",
+		(eb->priv->db,
+		 (xmlChar *) eb->priv->xml_file,
+		 (xmlChar *) EPHY_BOOKMARKS_XML_ROOT,
+		 (xmlChar *) EPHY_BOOKMARKS_XML_VERSION,
+		 (xmlChar *) "Do not rely on this file, it's only for internal use. Use bookmarks.rdf instead.",
 		 eb->priv->keywords,
 		 3, eb->priv->bookmarks, eb->priv->favorites, eb->priv->notcategorized,
 		 eb->priv->bookmarks,
@@ -765,8 +766,8 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 		eb->priv->init_defaults = TRUE;
 	}
 	else if (ephy_node_db_load_from_file (eb->priv->db, eb->priv->xml_file,
-					      EPHY_BOOKMARKS_XML_ROOT,
-					      EPHY_BOOKMARKS_XML_VERSION) == FALSE)
+					      (xmlChar *) EPHY_BOOKMARKS_XML_ROOT,
+					      (xmlChar *) EPHY_BOOKMARKS_XML_VERSION) == FALSE)
 	{
 		/* save the corrupted files so the user can late try to
 		 * manually recover them. See bug #128308.

@@ -70,7 +70,11 @@ write_topics_list (EphyNode *topics,
 			(node, EPHY_NODE_KEYWORD_PROP_NAME);
 
 		ret = xmlTextWriterWriteElementNS
-			(writer, "dc", "subject", NULL, name);
+			(writer, 
+			 (xmlChar *) "dc",
+			 (xmlChar *) "subject",
+			 NULL,
+			 (xmlChar *) name);
 		if (ret < 0) break;
 	}
 
@@ -107,47 +111,75 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 	ret = xmlTextWriterSetIndent (writer, 1);
 	if (ret < 0) goto out;
 
-	ret = xmlTextWriterSetIndentString (writer, "  ");
+	ret = xmlTextWriterSetIndentString (writer, (xmlChar *) "  ");
 	if (ret < 0) goto out;
 	
 	ret = xmlTextWriterStartDocument (writer, "1.0", NULL, NULL);
 	if (ret < 0) goto out;
 
 	ret = xmlTextWriterStartElementNS
-		(writer, "rdf", "RDF", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+		(writer,
+		 (xmlChar *) "rdf",
+		 (xmlChar *) "RDF",
+		 (xmlChar *) "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 	if (ret < 0) goto out;
 
-	ret = xmlTextWriterWriteAttribute (writer, "xmlns", "http://purl.org/rss/1.0/");
+	ret = xmlTextWriterWriteAttribute
+		(writer,
+		 (xmlChar *) "xmlns",
+		 (xmlChar *) "http://purl.org/rss/1.0/");
 	if (ret < 0) goto out;
 
 	ret = xmlTextWriterWriteAttributeNS
-		(writer, "xmlns", "dc", NULL, "http://purl.org/dc/elements/1.1/");
+		(writer, 
+		 (xmlChar *) "xmlns",
+		 (xmlChar *) "dc",
+		 NULL,
+		 (xmlChar *) "http://purl.org/dc/elements/1.1/");
 	if (ret < 0) goto out;
 
 	ret = xmlTextWriterWriteAttributeNS
-		(writer, "xmlns", "ephy", NULL, "http://gnome.org/ns/epiphany#");
+		(writer,
+		 (xmlChar *) "xmlns",
+		 (xmlChar *) "ephy",
+		 NULL,
+		 (xmlChar *) "http://gnome.org/ns/epiphany#");
 	if (ret < 0) goto out;
 
-	ret = xmlTextWriterStartElement (writer, "channel");
+	ret = xmlTextWriterStartElement (writer, (xmlChar *) "channel");
 	if (ret < 0) goto out;
 
 	/* FIXME is this UTF-8 ? */
 	file_uri = gnome_vfs_get_uri_from_local_path (filename);
-	ret = xmlTextWriterWriteAttributeNS (writer, "rdf", "about", NULL, file_uri);
+	ret = xmlTextWriterWriteAttributeNS
+		(writer,
+		 (xmlChar *) "rdf",
+		 (xmlChar *) "about",
+		 NULL,
+		 (xmlChar *) file_uri);
 	g_free (file_uri);
 	if (ret < 0) goto out;
 
-	ret = xmlTextWriterWriteElement (writer, "title", "Epiphany bookmarks");
+	ret = xmlTextWriterWriteElement 
+		(writer,
+		 (xmlChar *) "title",
+		 (xmlChar *) "Epiphany bookmarks");
 	if (ret < 0) goto out;
 
 	ret = xmlTextWriterWriteElement
-		(writer, "link", "http://www.gnome.org/projects/epiphany/");
+		(writer,
+		 (xmlChar *) "link",
+		 (xmlChar *) "http://www.gnome.org/projects/epiphany/");
 	if (ret < 0) goto out;
 
-	ret = xmlTextWriterStartElement (writer, "items");
+	ret = xmlTextWriterStartElement	(writer, (xmlChar *) "items");
 	if (ret < 0) goto out;
 
-	ret = xmlTextWriterStartElementNS (writer, "rdf", "Seq", NULL);
+	ret = xmlTextWriterStartElementNS
+		(writer,
+		 (xmlChar *) "rdf", 
+		 (xmlChar *) "Seq",
+		 NULL);
 	if (ret < 0) goto out;
 
 	bmks = ephy_bookmarks_get_bookmarks (bookmarks);
@@ -164,7 +196,11 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 
 		kid = g_ptr_array_index (children, i);
 
-		ret = xmlTextWriterStartElementNS (writer, "rdf", "li", NULL);
+		ret = xmlTextWriterStartElementNS
+			(writer,
+			 (xmlChar *) "rdf",
+			 (xmlChar *) "li",
+			 NULL);
 		if (ret < 0) break;
 
 		smart_url = ephy_node_has_child (smart_bmks, kid);
@@ -188,7 +224,11 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 		}
 
 		ret = xmlTextWriterWriteAttributeNS
-			(writer, "rdf", "resource", NULL, link ? link : url);
+			(writer,
+			 (xmlChar *) "rdf",
+			 (xmlChar *) "resource",
+			 NULL,
+			 (xmlChar *) (link ? link : url));
 		g_free (link);
 		if (ret < 0) break;
 
@@ -244,22 +284,37 @@ ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
 			link = g_strdup (url);
 		}
 
-		ret = xmlTextWriterStartElement (writer, "item");
+		ret = xmlTextWriterStartElement (writer, (xmlChar *) "item");
 		if (ret < 0) break;
 
 		ret = xmlTextWriterWriteAttributeNS
-			(writer, "rdf", "about", NULL, link);
+			(writer,
+			 (xmlChar *) "rdf",
+			 (xmlChar *) "about",
+			 NULL,
+			 (xmlChar *) link);
 		if (ret < 0) break;
 
-		ret = xmlTextWriterWriteElement (writer, "title", title);
+		ret = xmlTextWriterWriteElement
+			(writer,
+			 (xmlChar *) "title",
+			 (xmlChar *) title);
 		if (ret < 0) break;
 
-		ret = xmlTextWriterWriteElement (writer, "link", link);
+		ret = xmlTextWriterWriteElement
+			(writer,
+			 (xmlChar *) "link",
+			 (xmlChar *) link);
 		if (ret < 0) break;
 
 		if (smart_url)
 		{
-			ret = xmlTextWriterWriteElementNS (writer, "ephy", "smartlink", NULL, url);
+			ret = xmlTextWriterWriteElementNS
+				(writer,
+				 (xmlChar *) "ephy",
+				 (xmlChar *) "smartlink",
+				 NULL,
+				 (xmlChar *) url);
 			if (ret < 0) break;
 		}
 

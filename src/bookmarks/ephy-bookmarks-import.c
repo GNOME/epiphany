@@ -145,7 +145,7 @@ xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader, EphyNode **ret_
 
 		type = xmlTextReaderNodeType (reader);
 
-		if (xmlStrEqual (tag, "#text"))
+		if (xmlStrEqual (tag, (xmlChar *) "#text"))
 		{
 			if (state == STATE_TITLE && title == NULL)
 			{
@@ -161,11 +161,11 @@ xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader, EphyNode **ret_
 				/* eat it */
 			}
 		}
-		else if (xmlStrEqual (tag, "bookmark"))
+		else if (xmlStrEqual (tag, (xmlChar *) "bookmark"))
 		{
 			if (type == XML_READER_TYPE_ELEMENT && state == STATE_BOOKMARK && address == NULL)
 			{
-				address = xmlTextReaderGetAttribute (reader, "href");
+				address = xmlTextReaderGetAttribute (reader, (xmlChar *) "href");
 			}
 			else if (type == XML_READER_TYPE_END_ELEMENT && state == STATE_BOOKMARK)
 			{
@@ -174,7 +174,7 @@ xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader, EphyNode **ret_
 				break;
 			}
 		}
-		else if (xmlStrEqual (tag, "title"))
+		else if (xmlStrEqual (tag, (xmlChar *) "title"))
 		{
 			if (type == XML_READER_TYPE_ELEMENT && state == STATE_BOOKMARK && title == NULL)
 			{
@@ -185,7 +185,7 @@ xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader, EphyNode **ret_
 				state = STATE_BOOKMARK;
 			}
 		}
-		else if (xmlStrEqual (tag, "desc"))
+		else if (xmlStrEqual (tag, (xmlChar *) "desc"))
 		{
 			if (type == XML_READER_TYPE_ELEMENT && state == STATE_BOOKMARK)
 			{
@@ -196,7 +196,7 @@ xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader, EphyNode **ret_
 				state = STATE_BOOKMARK;
 			}
 		}
-		else if (xmlStrEqual (tag, "info"))
+		else if (xmlStrEqual (tag, (xmlChar *) "info"))
 		{
 			if (type == XML_READER_TYPE_ELEMENT && state == STATE_BOOKMARK)
 			{
@@ -207,7 +207,7 @@ xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader, EphyNode **ret_
 				state = STATE_BOOKMARK;
 			}
 		}
-		else if (xmlStrEqual (tag, "metadata"))
+		else if (xmlStrEqual (tag, (xmlChar *) "metadata"))
 		{
 			if (type == XML_READER_TYPE_ELEMENT && state == STATE_INFO)
 			{
@@ -218,7 +218,7 @@ xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader, EphyNode **ret_
 				state = STATE_INFO;
 			}
 		}
-		else if (xmlStrEqual (tag, "smarturl"))
+		else if (xmlStrEqual (tag, (xmlChar *) "smarturl"))
 		{
 			if (type == XML_READER_TYPE_ELEMENT && state == STATE_METADATA)
 			{
@@ -241,14 +241,14 @@ xbel_parse_bookmark (EphyBookmarks *eb, xmlTextReaderPtr reader, EphyNode **ret_
 
 	if (title == NULL)
 	{
-		title = xmlStrdup (_("Untitled"));
+		title = xmlStrdup ((xmlChar *) _("Untitled"));
 	}
 
-	node = bookmark_add (eb, title, address);
+	node = bookmark_add (eb, (const char *) title, (const char *) address);
 	if (node == NULL)
 	{
 		/* probably a duplicate */
-		node = ephy_bookmarks_find_bookmark (eb, address);		
+		node = ephy_bookmarks_find_bookmark (eb, (const char *) address);
 	}
 
 	xmlFree (title);
@@ -280,13 +280,13 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, char *parent_fold
 		{
 			/* shouldn't happen but does anyway :) */
 		}
-		else if (xmlStrEqual (tag, "#text"))
+		else if (xmlStrEqual (tag, (xmlChar *) "#text"))
 		{
 			if (state == STATE_TITLE && folder == NULL)
 			{
 				char *title;
 
-				title = xmlTextReaderValue (reader);
+				title = (char *) xmlTextReaderValue (reader);
 
 				if (!parent_folder)
 				{
@@ -305,7 +305,7 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, char *parent_fold
 				/* eat it */
 			}
 		}
-		else if (xmlStrEqual (tag, "bookmark") && type == 1 && state == STATE_FOLDER)
+		else if (xmlStrEqual (tag, (xmlChar *) "bookmark") && type == 1 && state == STATE_FOLDER)
 		{
 			EphyNode *node = NULL, *keyword;
 
@@ -325,7 +325,7 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, char *parent_fold
 
 			if (ret != 1) break;
 		}
-		else if ((xmlStrEqual (tag, "folder"))
+		else if ((xmlStrEqual (tag, (xmlChar *) "folder"))
 			&& state == STATE_FOLDER)
 		{
 			if (type == XML_READER_TYPE_ELEMENT)
@@ -341,7 +341,7 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, char *parent_fold
 				break;
 			}
 		}
-		else if (xmlStrEqual (tag, "title"))
+		else if (xmlStrEqual (tag, (xmlChar *) "title"))
 		{
 			if (type == XML_READER_TYPE_ELEMENT && state == STATE_FOLDER)
 			{
@@ -352,7 +352,7 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, char *parent_fold
 				state = STATE_FOLDER;
 			}
 		}
-		else if (xmlStrEqual (tag, "info"))
+		else if (xmlStrEqual (tag, (xmlChar *) "info"))
 		{
 			if (type == XML_READER_TYPE_ELEMENT && state == STATE_FOLDER)
 			{
@@ -363,7 +363,7 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, char *parent_fold
 				state = STATE_FOLDER;
 			}
 		}
-		else if (xmlStrEqual (tag, "desc"))
+		else if (xmlStrEqual (tag, (xmlChar *) "desc"))
 		{
 			if (type == XML_READER_TYPE_ELEMENT && state == STATE_FOLDER)
 			{
@@ -408,7 +408,7 @@ xbel_parse_xbel (EphyBookmarks *eb, xmlTextReaderPtr reader)
 		{
 			/* shouldn't happen but does anyway :( */
 		}
-		else if (xmlStrEqual (tag, "bookmark") && type == XML_READER_TYPE_ELEMENT
+		else if (xmlStrEqual (tag, (xmlChar *) "bookmark") && type == XML_READER_TYPE_ELEMENT
 			 && state == STATE_FOLDER)
 		{
 			EphyNode *node = NULL;
@@ -418,7 +418,7 @@ xbel_parse_xbel (EphyBookmarks *eb, xmlTextReaderPtr reader)
 
 			if (ret != 1) break;
 		}
-		else if (xmlStrEqual (tag, "folder") && type == XML_READER_TYPE_ELEMENT
+		else if (xmlStrEqual (tag, (xmlChar *) "folder") && type == XML_READER_TYPE_ELEMENT
 			 && state == STATE_XBEL)
 		{
 			/* this will eat the </folder> too */
@@ -426,17 +426,17 @@ xbel_parse_xbel (EphyBookmarks *eb, xmlTextReaderPtr reader)
 
 			if (ret != 1) break;
 		}
-		else if ((xmlStrEqual (tag, "xbel")) && type == XML_READER_TYPE_ELEMENT
+		else if ((xmlStrEqual (tag, (xmlChar *) "xbel")) && type == XML_READER_TYPE_ELEMENT
 			 && state == STATE_START)
 		{
 			state = STATE_XBEL;
 		}
-		else if ((xmlStrEqual (tag, "xbel")) && type == XML_READER_TYPE_END_ELEMENT
+		else if ((xmlStrEqual (tag, (xmlChar *) "xbel")) && type == XML_READER_TYPE_END_ELEMENT
 			 && state == STATE_XBEL)
 		{
 			state = STATE_STOP;
 		}
-		else if (xmlStrEqual (tag, "title"))
+		else if (xmlStrEqual (tag, (xmlChar *) "title"))
 		{
 			if (type == XML_READER_TYPE_ELEMENT && state == STATE_XBEL)
 			{
@@ -447,7 +447,7 @@ xbel_parse_xbel (EphyBookmarks *eb, xmlTextReaderPtr reader)
 				state = STATE_XBEL;
 			}
 		}
-		else if (xmlStrEqual (tag, "info"))
+		else if (xmlStrEqual (tag, (xmlChar *) "info"))
 		{
 			if (type == XML_READER_TYPE_ELEMENT && state == STATE_XBEL)
 			{
@@ -458,7 +458,7 @@ xbel_parse_xbel (EphyBookmarks *eb, xmlTextReaderPtr reader)
 				state = STATE_XBEL;
 			}
 		}
-		else if (xmlStrEqual (tag, "desc"))
+		else if (xmlStrEqual (tag, (xmlChar *) "desc"))
 		{
 			if (type == XML_READER_TYPE_ELEMENT && state == STATE_XBEL)
 			{
@@ -799,13 +799,13 @@ parse_rdf_subjects (xmlNodePtr node,
 
 	while (child != NULL)
 	{
-		if (xmlStrEqual (child->name, "Bag"))
+		if (xmlStrEqual (child->name, (xmlChar *) "Bag"))
 		{
 			child = child->children;
 
 			while (child != NULL)
 			{
-				if (xmlStrEqual (child->name, "li"))
+				if (xmlStrEqual (child->name, (xmlChar *) "li"))
 				{
 					subject = xmlNodeGetContent (child);
 					*subjects = g_list_append (*subjects, subject);
@@ -842,26 +842,26 @@ parse_rdf_item (EphyBookmarks *bookmarks,
 	child = node->children;
 
 #ifdef OLD_RDF_TEMPORARY_HACK
-	link = xmlGetProp (node, "about");
+	link = xmlGetProp (node, (xmlChar *) "about");
 #endif
 
 	while (child != NULL)
 	{
-		if (xmlStrEqual (child->name, "title"))
+		if (xmlStrEqual (child->name, (xmlChar *) "title"))
 		{
 			title = xmlNodeGetContent (child);
 		}
 #ifndef OLD_RDF_TEMPORARY_HACK
-		else if (xmlStrEqual (child->name, "link"))
+		else if (xmlStrEqual (child->name, (xmlChar *) "link"))
 		{
 			link = xmlNodeGetContent (child);
 		}
 #endif
-		else if (xmlStrEqual (child->name, "subject"))
+		else if (xmlStrEqual (child->name, (xmlChar *) "subject"))
 		{
 			parse_rdf_subjects (child, &subjects);
 		}
-		else if (xmlStrEqual (child->name, "smartlink"))
+		else if (xmlStrEqual (child->name, (xmlChar *) "smartlink"))
 		{
 			if (link) xmlFree (link);
 			link = xmlNodeGetContent (child);
@@ -870,7 +870,7 @@ parse_rdf_item (EphyBookmarks *bookmarks,
 		child = child->next;
 	}
 
-	bmk = bookmark_add (bookmarks, title, link);
+	bmk = bookmark_add (bookmarks, (char *) title, (char *) link);
 	if (bmk)
 	{
 		l = subjects;
@@ -930,7 +930,7 @@ ephy_bookmarks_import_rdf (EphyBookmarks *bookmarks,
 
 	while (child != NULL)
 	{
-		if (xmlStrEqual (child->name, "item"))
+		if (xmlStrEqual (child->name, (xmlChar *) "item"))
 		{
 			parse_rdf_item (bookmarks, child);
 		}

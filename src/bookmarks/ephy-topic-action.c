@@ -599,7 +599,7 @@ drag_data_get_cb (GtkWidget *widget, GdkDragContext *context,
 	g_return_if_fail (uri != NULL);
 
 	gtk_selection_data_set (selection_data, selection_data->target, 8,
-				uri, strlen (uri));
+				(unsigned char *) uri, strlen (uri));
 
 	g_free (uri);
 }

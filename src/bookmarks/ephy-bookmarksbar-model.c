@@ -165,7 +165,7 @@ ephy_bookmarksbar_model_get_node (EphyBookmarksBarModel *model,
 				  const char *action_name)
 {
 	EphyBookmarks *bookmarks = EPHY_BOOKMARKSBAR_MODEL (model)->priv->bookmarks;
-	long node_id;
+	unsigned long node_id;
 
 	if (!ephy_string_to_int (action_name + strlen ("GoBookmark-"), &node_id))
 	{

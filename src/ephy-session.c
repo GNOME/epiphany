@@ -482,12 +482,12 @@ write_tab (xmlTextWriterPtr writer,
 	char *location;
 	int ret;
 
-	ret = xmlTextWriterStartElement (writer, "embed");
+	ret = xmlTextWriterStartElement (writer, (xmlChar *) "embed");
 	if (ret < 0) return ret;
 
 	embed = ephy_tab_get_embed (tab);
 	location = ephy_embed_get_location (embed, TRUE);
-	ret = xmlTextWriterWriteAttribute (writer, "url", location);
+	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "url", (xmlChar *) location);
 	g_free (location);
 	if (ret < 0) return ret;
 
@@ -507,16 +507,16 @@ write_window_geometry (xmlTextWriterPtr writer,
 	gtk_window_get_position (window, &x, &y);
 
 	/* set window properties */
-	ret = xmlTextWriterWriteFormatAttribute (writer, "x", "%d", x);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (xmlChar *) "x", "%d", x);
 	if (ret < 0) return ret;
 
-	ret = xmlTextWriterWriteFormatAttribute (writer, "y", "%d", y);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (xmlChar *) "y", "%d", y);
 	if (ret < 0) return ret;
 
-	ret = xmlTextWriterWriteFormatAttribute (writer, "width", "%d", width);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (xmlChar *) "width", "%d", width);
 	if (ret < 0) return ret;
 
-	ret = xmlTextWriterWriteFormatAttribute (writer, "height", "%d", height);
+	ret = xmlTextWriterWriteFormatAttribute (writer, (xmlChar *) "height", "%d", height);
 	return ret;
 }
 
@@ -527,10 +527,10 @@ write_tool_window (xmlTextWriterPtr writer,
 {
 	int ret;
 
-	ret = xmlTextWriterStartElement (writer, "toolwindow");
+	ret = xmlTextWriterStartElement (writer, (xmlChar *) "toolwindow");
 	if (ret < 0) return ret;
 
-	ret = xmlTextWriterWriteAttribute (writer, "id", id);
+	ret = xmlTextWriterWriteAttribute (writer, (xmlChar *) "id", id);
 	if (ret < 0) return ret;
 
 	ret = write_window_geometry (writer, window);
@@ -554,7 +554,7 @@ write_ephy_window (xmlTextWriterPtr writer,
 	 */
 	if (tabs == NULL) return 0;
 
-	ret = xmlTextWriterStartElement (writer, "window");
+	ret = xmlTextWriterStartElement (writer, (xmlChar *) "window");
 	if (ret < 0) return ret;
 
 	ret = write_window_geometry (writer, GTK_WINDOW (window));
@@ -606,7 +606,7 @@ ephy_session_save (EphySession *session,
 	ret = xmlTextWriterSetIndent (writer, 1);
 	if (ret < 0) goto out;
 
-	ret = xmlTextWriterSetIndentString (writer, "  ");
+	ret = xmlTextWriterSetIndentString (writer, (xmlChar *) "  ");
 	if (ret < 0) goto out;
 
 	START_PROFILER ("Saving session")
@@ -615,7 +615,7 @@ ephy_session_save (EphySession *session,
 	if (ret < 0) goto out;
 
 	/* create and set the root node for the session */
-	ret = xmlTextWriterStartElement (writer, "session");
+	ret = xmlTextWriterStartElement (writer, (xmlChar *) "session");
 	if (ret < 0) goto out;
 
 	/* iterate through all the windows */
@@ -629,11 +629,11 @@ ephy_session_save (EphySession *session,
 		}
 		else if (EPHY_IS_BOOKMARKS_EDITOR (window))
 		{
-			ret = write_tool_window (writer, window, BOOKMARKS_EDITOR_ID);
+			ret = write_tool_window (writer, window, (xmlChar *) BOOKMARKS_EDITOR_ID);
 		}
 		else if (EPHY_IS_HISTORY_WINDOW (window))
 		{
-			ret = write_tool_window (writer, window, HISTORY_WINDOW_ID);
+			ret = write_tool_window (writer, window, (xmlChar *) HISTORY_WINDOW_ID);
 		}
 		if (ret < 0) break;
 	}
@@ -668,15 +668,15 @@ parse_embed (xmlNodePtr child, EphyWindow *window)
 {
 	while (child != NULL)
 	{
-		if (strcmp (child->name, "embed") == 0)
+		if (strcmp ((char *) child->name, "embed") == 0)
 		{
 			xmlChar *url;
 
 			g_return_if_fail (window != NULL);
 
-			url = xmlGetProp (child, "url");
+			url = xmlGetProp (child, (xmlChar *) "url");
 
-			ephy_shell_new_tab (ephy_shell, window, NULL, url,
+			ephy_shell_new_tab (ephy_shell, window, NULL, (char *) url,
 					    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
 					    EPHY_NEW_TAB_OPEN_PAGE |
 					    EPHY_NEW_TAB_APPEND_LAST);
@@ -725,25 +725,25 @@ ephy_session_load (EphySession *session,
 
 	while (child != NULL)
 	{
-		if (xmlStrEqual (child->name, "window"))
+		if (xmlStrEqual (child->name, (xmlChar *) "window"))
 		{
 			widget = GTK_WIDGET (ephy_window_new ());
 			parse_embed (child->children, EPHY_WINDOW (widget));
 		}
-		else if (xmlStrEqual (child->name, "toolwindow"))
+		else if (xmlStrEqual (child->name, (xmlChar *) "toolwindow"))
 		{
 			xmlChar *id;
 
-			id = xmlGetProp (child, "id");
+			id = xmlGetProp (child, (xmlChar *) "id");
 
-			if (id && xmlStrEqual (BOOKMARKS_EDITOR_ID, id))
+			if (id && xmlStrEqual ((xmlChar *) BOOKMARKS_EDITOR_ID, id))
 			{
 				if (!eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_BOOKMARK_EDITING))
 				{
 					widget = ephy_shell_get_bookmarks_editor (ephy_shell);
 				}
 			}
-			else if (id && xmlStrEqual (HISTORY_WINDOW_ID, id))
+			else if (id && xmlStrEqual ((xmlChar *) HISTORY_WINDOW_ID, id))
 			{
 				if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_HISTORY))
 				{
@@ -757,17 +757,17 @@ ephy_session_load (EphySession *session,
 			xmlChar *tmp;
 			gulong x = 0, y = 0, width = 0, height = 0;
 
-			tmp = xmlGetProp (child, "x");
-			ephy_string_to_int (tmp, &x);
+			tmp = xmlGetProp (child, (xmlChar *) "x");
+			ephy_string_to_int ((char *) tmp, &x);
 			xmlFree (tmp);
-			tmp = xmlGetProp (child, "y");
-			ephy_string_to_int (tmp, &y);
+			tmp = xmlGetProp (child, (xmlChar *) "y");
+			ephy_string_to_int ((char *) tmp, &y);
 			xmlFree (tmp);
-			tmp = xmlGetProp (child, "width");
-			ephy_string_to_int (tmp, &width);
+			tmp = xmlGetProp (child, (xmlChar *) "width");
+			ephy_string_to_int ((char *) tmp, &width);
 			xmlFree (tmp);
-			tmp = xmlGetProp (child, "height");
-			ephy_string_to_int (tmp, &height);
+			tmp = xmlGetProp (child, (xmlChar *) "height");
+			ephy_string_to_int ((char *) tmp, &height);
 			xmlFree (tmp);
 			gtk_window_move (GTK_WINDOW (widget), x, y);
 			gtk_window_set_default_size (GTK_WINDOW (widget),

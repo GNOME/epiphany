@@ -395,7 +395,7 @@ drag_data_get_cb (GtkWidget *widget, GdkDragContext *context,
 	g_return_if_fail (address != NULL);
 
 	gtk_selection_data_set (selection_data, selection_data->target, 8,
-				address, strlen (address));
+				(unsigned char *) address, strlen (address));
 }
 
 static int

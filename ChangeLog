@@ -1,5 +1,24 @@
 2004-07-31  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmark-action.c: (drag_data_get_cb):
+	* src/bookmarks/ephy-bookmarks-export.c: (write_topics_list),
+	(ephy_bookmarks_export_rdf):
+	* src/bookmarks/ephy-bookmarks-import.c: (xbel_parse_bookmark),
+	(xbel_parse_folder), (xbel_parse_xbel), (parse_rdf_subjects),
+	(parse_rdf_item), (ephy_bookmarks_import_rdf):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_save),
+	(ephy_bookmarks_init):
+	* src/bookmarks/ephy-bookmarksbar-model.c:
+	(ephy_bookmarksbar_model_get_node):
+	* src/bookmarks/ephy-topic-action.c: (drag_data_get_cb):
+	* src/ephy-session.c: (write_tab), (write_window_geometry),
+	(write_tool_window), (write_ephy_window), (ephy_session_save),
+	(parse_embed), (ephy_session_load):
+
+	Fix signedness difference warnings with gcc 3.5. Patch by Jon Oberheide.
+
+2004-07-31  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/egg/egg-toolbars-model.c: (egg_toolbars_model_get_type),
 	(toolbars_toolbar_new), (toolbars_item_new),
 	(egg_toolbars_model_set_flags), (egg_toolbars_model_add_separator),
