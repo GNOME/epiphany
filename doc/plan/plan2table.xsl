@@ -10,6 +10,7 @@
             .blank { padding: 0.5em 0; }
             .title { background-color: #669; color: #FFF; font-size: 1.2em; font-weight: bold; padding: 0 0.25em; text-align: left; }
             .description {background-color: #CAA; padding: 0.25em 0.5em; text-align: left; }
+            .bugzilla a { color: #FFF; text-decoration: underline; }
             .responsible { white-space: nowrap; }
             .status { padding: 0.25em 1em; text-align: center; }
             .completed { background-color: #0F0; color: #FFF; }
@@ -33,7 +34,14 @@
 
 <xsl:template match="item">
     <tr>
-        <td class="title" colspan="2"><xsl:value-of select="title" /></td>
+        <td class="title" colspan="2">
+            <xsl:value-of select="title" />
+            <span class="bugzilla">
+                <xsl:if test="normalize-space(bugzilla/@id)">
+                    (<a href="http://bugzilla.gnome.org/show_bug.cgi?id={bugzilla/@id}">#<xsl:value-of select="bugzilla/@id" /></a>)
+                </xsl:if>
+            </span>
+        </td>
     </tr>
     <tr>
         <td class="description"><xsl:value-of select="description" />
