@@ -75,8 +75,6 @@ eel_gconf_client_get_global (void)
 gboolean
 eel_gconf_handle_error (GError **error)
 {
-	char *message;
-	
 	g_return_val_if_fail (error != NULL, FALSE);
 
 	if (*error != NULL) {
