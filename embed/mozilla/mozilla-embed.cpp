@@ -513,6 +513,8 @@ impl_get_location (EphyEmbed *embed,
 	char *l;
 	nsresult rv;
 	nsCAutoString url;
+
+	if (mpriv->browser == NULL) return NULL;
 	
 	if (toplevel)
 	{
