@@ -16,6 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "ExternalProtocolHandlers.h"
 #include "nsCOMPtr.h"
 #include "nsIComponentManager.h"
@@ -129,26 +133,30 @@ GBaseProtocolContentHandler::~GBaseProtocolContentHandler()
 NS_IMETHODIMP GBaseProtocolContentHandler::NewChannel(nsIURI *aURI,
 						      nsIChannel **_retval)
 {
+	nsresult rv;
 	nsCOMPtr<nsIStorageStream> sStream;
-	nsresult rv = NS_NewStorageStream(1, 16, getter_AddRefs(sStream));
-	if (NS_FAILED(rv)) return rv;
+	rv = NS_NewStorageStream(1, 16, getter_AddRefs(sStream));
+	NS_ENSURE_SUCCESS (rv, rv);
 
 	nsCOMPtr<nsIOutputStream> oStream;
 	rv = sStream->GetOutputStream(0, getter_AddRefs(oStream));
+	NS_ENSURE_SUCCESS (rv, rv);
 
 	PRUint32 bytes;
-	oStream->Write("Dummy stream\0", 13, &bytes);
+	rv = oStream->Write("Dummy stream\0", 13, &bytes);
+	NS_ENSURE_SUCCESS (rv, rv);
 
 	nsCOMPtr<nsIInputStream> iStream;
 	rv = sStream->NewInputStream(0, getter_AddRefs(iStream));
-	if (NS_FAILED(rv)) return rv;
+	NS_ENSURE_SUCCESS (rv, rv);
 
 	nsCOMPtr<nsIChannel> channel;
 	rv = NS_NewInputStreamChannel(getter_AddRefs(channel), aURI,
 				      iStream, mMimeType, NS_LITERAL_CSTRING(""));
-	if (NS_FAILED(rv)) return rv;
+	NS_ENSURE_SUCCESS (rv, rv);
 
 	NS_IF_ADDREF (*_retval = channel);
+
 	return rv;
 }
 
@@ -158,28 +166,30 @@ NS_IMETHODIMP GBaseProtocolContentHandler::HandleContent (
 					nsISupports * aWindowContext,
 					nsIRequest *aRequest)
 {
+	NS_ENSURE_ARG (aRequest);
+
 	nsresult rv = NS_OK;
-	if (!aRequest)
-		return NS_ERROR_NULL_POINTER;
+
   	// First of all, get the content type and make sure it is a 
   	// content type we know how to handle!
 	if (mMimeType.Equals(aContentType))
 	{
 		nsCOMPtr<nsIChannel> channel = do_QueryInterface(aRequest);
-		if(!channel) return NS_ERROR_FAILURE;
+		NS_ENSURE_TRUE (channel, NS_ERROR_FAILURE);
 
 		nsCOMPtr<nsIURI> uri;
-		rv = channel->GetURI(getter_AddRefs(uri));
-		if (NS_FAILED(rv)) return rv;
+		channel->GetURI(getter_AddRefs(uri));
+		NS_ENSURE_TRUE (uri, NS_ERROR_FAILURE);
 
-		aRequest->Cancel(NS_BINDING_ABORTED);
-		if (uri)
-		{
-			nsCOMPtr<nsIExternalProtocolService> ps = 
-				do_GetService (NS_EXTERNALPROTOCOLSERVICE_CONTRACTID, &rv);
-			if (NS_FAILED(rv) || !ps) return NS_ERROR_FAILURE;
-			ps->LoadUrl (uri);
-		}
+		rv = aRequest->Cancel(NS_BINDING_ABORTED);
+		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+		nsCOMPtr<nsIExternalProtocolService> ps = 
+			do_GetService (NS_EXTERNALPROTOCOLSERVICE_CONTRACTID);
+		NS_ENSURE_TRUE (ps, NS_ERROR_FAILURE);
+
+		rv = ps->LoadUrl (uri);
 	}
+
 	return rv;
 }
