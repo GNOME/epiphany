@@ -1318,8 +1318,9 @@ mozilla_embed_destroy_brsr_cb (GtkMozEmbed *embed,
 }
 
 static gint
-mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event, 
-				  MozillaEmbed *membed)
+mozilla_embed_emit_mouse_signal (MozillaEmbed *membed,
+				 gpointer dom_event,
+				 const char *signal_name)
 {
 	EphyEmbedEvent *info;
 	EventContext event_context;
@@ -1327,40 +1328,6 @@ mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event,
 	EphyWrapper *wrapper;
 	nsresult result;
 
-	info = ephy_embed_event_new ();
-	
-	wrapper = MOZILLA_EMBED(membed)->priv->wrapper;
-	g_return_val_if_fail (wrapper != NULL, G_FAILED);
-	
-	event_context.Init ((nsIDOMEvent*)dom_event, wrapper);
-        result = event_context.GetMouseEventInfo (info);
-
-        nsCOMPtr<nsIDOMDocument> domDoc;
-        result = event_context.GetTargetDocument (getter_AddRefs(domDoc));
-        if (NS_SUCCEEDED(result))
-        {
-                result = wrapper->PushTargetDocument (domDoc);
-        }
-
-	g_signal_emit_by_name (membed, "ge_dom_mouse_click", info, &return_value); 
-	
-	wrapper->PopTargetDocument ();
-	
-	g_object_unref (info);
-	
-	return return_value;
-}
-
-static gint
-mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event, 
-				 MozillaEmbed *membed)
-{
-	EphyEmbedEvent *info;
-	EventContext event_context;
-	gint return_value = 0;
-	EphyWrapper *wrapper;
-	nsresult result;
-	
 	info = ephy_embed_event_new ();
 	
 	wrapper = MOZILLA_EMBED(membed)->priv->wrapper;
@@ -1377,17 +1344,33 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 			result = wrapper->PushTargetDocument (domDoc);
 			if (NS_SUCCEEDED(result))
 			{
-				g_signal_emit_by_name (membed, "ge_dom_mouse_down", 
+				g_signal_emit_by_name (membed, signal_name, 
 						       info, &return_value); 
 				wrapper->PopTargetDocument ();
 			}
 		}
 
 	}
-	
+
 	g_object_unref (info);
 	
 	return return_value;
+}
+
+static gint
+mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event, 
+				  MozillaEmbed *membed)
+{
+	return mozilla_embed_emit_mouse_signal
+		(membed, dom_event, "ge_dom_mouse_click");
+}
+
+static gint
+mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event, 
+				 MozillaEmbed *membed)
+{
+	return mozilla_embed_emit_mouse_signal
+		(membed, dom_event, "ge_dom_mouse_down");
 }
 
 static void

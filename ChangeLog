@@ -1,3 +1,17 @@
+2003-05-10  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Share signal emission for all dom mouse events, so
+	they dont go out of sync.
+
+	* src/ephy-tab.c: (ephy_tab_dom_mouse_click_cb),
+	(ephy_tab_dom_mouse_down_cb), (ephy_tab_security_change_cb),
+	(ephy_tab_init):
+
+	Take middle click actions on click instead of on mouse down.
+	Cleanups.
+
 2003-05-09  Christopher Blizzard  <blizzard@redhat.com>
 	 
        * src/ephy-navigation-action.c (activate_up_menu_item_cb):

@@ -63,65 +63,15 @@ struct EphyTabPrivate
 	int height;
 };
 
-static void
-ephy_tab_class_init (EphyTabClass *klass);
-static void
-ephy_tab_init (EphyTab *tab);
-static void
-ephy_tab_finalize (GObject *object);
+static void ephy_tab_class_init (EphyTabClass *klass);
+static void ephy_tab_init (EphyTab *tab);
+static void ephy_tab_finalize (GObject *object);
 
 enum
 {
 	PROP_0,
 	PROP_EPHY_SHELL
 };
-
-static void
-ephy_tab_set_favicon (EphyTab *tab,
-		      GdkPixbuf *favicon);
-static void
-ephy_tab_favicon_cb (EphyEmbed *embed,
-		     const char *url,
-		     EphyTab *tab);
-static void
-ephy_tab_favicon_cache_changed_cb (EphyFaviconCache *cache, 
-				   char *url, 
-				   EphyTab *tab);
-static void
-ephy_tab_link_message_cb (EphyEmbed *embed,
-			  const char *message,
-			  EphyTab *tab);
-static void
-ephy_tab_location_cb (EphyEmbed *embed, EphyTab *tab);
-static void
-ephy_tab_title_cb (EphyEmbed *embed, EphyTab *tab);
-static void
-ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
-		       EmbedState state, EphyTab *tab);
-static void
-ephy_tab_new_window_cb (EphyEmbed *embed, EphyEmbed **new_embed,
-			EmbedChromeMask chromemask, EphyTab *tab);
-static void
-ephy_tab_visibility_cb (EphyEmbed *embed, gboolean visibility,
-			EphyTab *tab);
-static void
-ephy_tab_destroy_brsr_cb (EphyEmbed *embed, EphyTab *tab);
-static gint
-ephy_tab_open_uri_cb (EphyEmbed *embed, const char *uri,
-		      EphyTab *tab);
-static void
-ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
-		     EphyTab *tab);
-static gint
-ephy_tab_dom_mouse_down_cb (EphyEmbed *embed,
-			    EphyEmbedEvent *event,
-			    EphyTab *tab);
-static void
-ephy_tab_security_change_cb (EphyEmbed *embed, EmbedSecurityLevel level,
-			     EphyTab *tab);
-static void
-ephy_tab_zoom_changed_cb (EphyEmbed *embed, gint zoom,
-			  EphyTab *tab);
 
 static GObjectClass *parent_class = NULL;
 
@@ -184,97 +134,6 @@ ephy_tab_embed_destroy_cb (GtkWidget *widget, EphyTab *tab)
 	LOG ("GtkMozEmbed destroy signal on EphyTab")
 	g_object_unref (tab);
 }
-
-static void
-ephy_tab_init (EphyTab *tab)
-{
-	GObject *embed, *embed_widget;
-	EphyEmbedSingle *single;
-	EphyFaviconCache *cache;
-
-	single = ephy_embed_shell_get_embed_single
-		(EPHY_EMBED_SHELL (ephy_shell));
-
-        tab->priv = g_new0 (EphyTabPrivate, 1);
-
-	tab->priv->window = NULL;
-	tab->priv->event = NULL;
-	tab->priv->is_active = FALSE;
-	*tab->priv->status_message = '\0';
-	tab->priv->link_message = NULL;
-	*tab->priv->favicon_url = '\0';
-	tab->priv->load_status = TAB_LOAD_NONE;
-	tab->priv->load_percent = 0;
-	tab->priv->title = NULL;
-	tab->priv->location = NULL;
-	tab->priv->total_requests = 0;
-	tab->priv->cur_requests = 0;
-	tab->priv->width = -1;
-	tab->priv->height = -1;
-
-	tab->priv->embed = ephy_embed_new (G_OBJECT(single));
-	ephy_embed_shell_add_embed (EPHY_EMBED_SHELL (ephy_shell),
-				    tab->priv->embed);
-
-	embed = G_OBJECT (tab->priv->embed);
-	embed_widget = G_OBJECT (tab->priv->embed);
-
-	/* set a pointer in the embed's widget back to the tab */
-	g_object_set_data (embed_widget, "EphyTab", tab);
-
-	g_signal_connect (embed_widget, "parent_set",
-			  G_CALLBACK (ephy_tab_parent_set_cb),
-			  tab);
-	g_signal_connect (embed_widget, "destroy",
-			  GTK_SIGNAL_FUNC (ephy_tab_embed_destroy_cb),
-			  tab);
-	g_signal_connect (embed, "ge_link_message",
-			  GTK_SIGNAL_FUNC (ephy_tab_link_message_cb),
-			  tab);
-	g_signal_connect (embed, "ge_location",
-			  GTK_SIGNAL_FUNC (ephy_tab_location_cb),
-			  tab);
-	g_signal_connect (embed, "ge_title",
-			  GTK_SIGNAL_FUNC (ephy_tab_title_cb),
-			  tab);
-	g_signal_connect (embed, "ge_zoom_change",
-			  GTK_SIGNAL_FUNC (ephy_tab_zoom_changed_cb),
-			  tab);
-	g_signal_connect (embed, "ge_net_state",
-			  GTK_SIGNAL_FUNC (ephy_tab_net_state_cb),
-			  tab);
-	g_signal_connect (embed, "ge_new_window",
-			  GTK_SIGNAL_FUNC (ephy_tab_new_window_cb),
-			  tab);
-	g_signal_connect (embed, "ge_visibility",
-			  GTK_SIGNAL_FUNC (ephy_tab_visibility_cb),
-			  tab);
-	g_signal_connect (embed, "ge_destroy_brsr",
-			  GTK_SIGNAL_FUNC (ephy_tab_destroy_brsr_cb),
-			  tab);
-	g_signal_connect (embed, "ge_open_uri",
-			  GTK_SIGNAL_FUNC (ephy_tab_open_uri_cb),
-			  tab);
-	g_signal_connect (embed, "ge_size_to",
-			  GTK_SIGNAL_FUNC (ephy_tab_size_to_cb),
-			  tab);
-	g_signal_connect (embed, "ge_dom_mouse_down",
-			  GTK_SIGNAL_FUNC (ephy_tab_dom_mouse_down_cb),
-			  tab);
-	g_signal_connect (embed, "ge_security_change",
-			  GTK_SIGNAL_FUNC (ephy_tab_security_change_cb),
-			  tab);
-	g_signal_connect (embed, "ge_favicon",
-			  GTK_SIGNAL_FUNC (ephy_tab_favicon_cb),
-			  tab);
-
-	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
-	g_signal_connect_object (G_OBJECT (cache), "changed",
-				 G_CALLBACK (ephy_tab_favicon_cache_changed_cb),
-				 tab,  0);
-}
-
-/* Destructor */
 
 static void
 ephy_tab_finalize (GObject *object)
@@ -963,9 +822,9 @@ ephy_tab_show_embed_popup (EphyTab *tab, EphyEmbedEvent *event)
 }
 
 static gint
-ephy_tab_dom_mouse_down_cb  (EphyEmbed *embed,
-			     EphyEmbedEvent *event,
-			     EphyTab *tab)
+ephy_tab_dom_mouse_click_cb  (EphyEmbed *embed,
+			      EphyEmbedEvent *event,
+			      EphyTab *tab)
 {
 	EphyWindow *window;
 	int button;
@@ -979,12 +838,8 @@ ephy_tab_dom_mouse_down_cb  (EphyEmbed *embed,
 	ephy_embed_event_get_mouse_button (event, &button);
 	ephy_embed_event_get_context (event, &context);
 
-	if (button == 2)
-	{
-		ephy_tab_show_embed_popup (tab, event);
-	}
-	else if (button == 1
-		 && (context & EMBED_CONTEXT_LINK))
+	if (button == 1
+	    && (context & EMBED_CONTEXT_LINK))
 	{
 		const GValue *value;
 
@@ -1008,6 +863,29 @@ ephy_tab_dom_mouse_down_cb  (EphyEmbed *embed,
 	return FALSE;
 }
 
+static gint
+ephy_tab_dom_mouse_down_cb  (EphyEmbed *embed,
+			     EphyEmbedEvent *event,
+			     EphyTab *tab)
+{
+	EphyWindow *window;
+	int button;
+
+	g_assert (IS_EPHY_EMBED_EVENT(event));
+
+	window = ephy_tab_get_window (tab);
+	g_return_val_if_fail (window != NULL, FALSE);
+
+	ephy_embed_event_get_mouse_button (event, &button);
+
+	if (button == 2)
+	{
+		ephy_tab_show_embed_popup (tab, event);
+	}
+
+	return FALSE;
+}
+
 static void
 ephy_tab_security_change_cb (EphyEmbed *embed, EmbedSecurityLevel level,
 			       EphyTab *tab)
@@ -1016,6 +894,98 @@ ephy_tab_security_change_cb (EphyEmbed *embed, EmbedSecurityLevel level,
 
 	ephy_window_update_control (tab->priv->window,
 				      StatusbarSecurityControl);
+}
+
+static void
+ephy_tab_init (EphyTab *tab)
+{
+	GObject *embed, *embed_widget;
+	EphyEmbedSingle *single;
+	EphyFaviconCache *cache;
+
+	single = ephy_embed_shell_get_embed_single
+		(EPHY_EMBED_SHELL (ephy_shell));
+
+        tab->priv = g_new0 (EphyTabPrivate, 1);
+
+	tab->priv->window = NULL;
+	tab->priv->event = NULL;
+	tab->priv->is_active = FALSE;
+	*tab->priv->status_message = '\0';
+	tab->priv->link_message = NULL;
+	*tab->priv->favicon_url = '\0';
+	tab->priv->load_status = TAB_LOAD_NONE;
+	tab->priv->load_percent = 0;
+	tab->priv->title = NULL;
+	tab->priv->location = NULL;
+	tab->priv->total_requests = 0;
+	tab->priv->cur_requests = 0;
+	tab->priv->width = -1;
+	tab->priv->height = -1;
+
+	tab->priv->embed = ephy_embed_new (G_OBJECT(single));
+	ephy_embed_shell_add_embed (EPHY_EMBED_SHELL (ephy_shell),
+				    tab->priv->embed);
+
+	embed = G_OBJECT (tab->priv->embed);
+	embed_widget = G_OBJECT (tab->priv->embed);
+
+	/* set a pointer in the embed's widget back to the tab */
+	g_object_set_data (embed_widget, "EphyTab", tab);
+
+	g_signal_connect (embed_widget, "parent_set",
+			  G_CALLBACK (ephy_tab_parent_set_cb),
+			  tab);
+	g_signal_connect (embed_widget, "destroy",
+			  G_CALLBACK (ephy_tab_embed_destroy_cb),
+			  tab);
+	g_signal_connect (embed, "ge_link_message",
+			  G_CALLBACK (ephy_tab_link_message_cb),
+			  tab);
+	g_signal_connect (embed, "ge_location",
+			  G_CALLBACK (ephy_tab_location_cb),
+			  tab);
+	g_signal_connect (embed, "ge_title",
+			  G_CALLBACK (ephy_tab_title_cb),
+			  tab);
+	g_signal_connect (embed, "ge_zoom_change",
+			  G_CALLBACK (ephy_tab_zoom_changed_cb),
+			  tab);
+	g_signal_connect (embed, "ge_net_state",
+			  G_CALLBACK (ephy_tab_net_state_cb),
+			  tab);
+	g_signal_connect (embed, "ge_new_window",
+			  G_CALLBACK (ephy_tab_new_window_cb),
+			  tab);
+	g_signal_connect (embed, "ge_visibility",
+			  G_CALLBACK (ephy_tab_visibility_cb),
+			  tab);
+	g_signal_connect (embed, "ge_destroy_brsr",
+			  G_CALLBACK (ephy_tab_destroy_brsr_cb),
+			  tab);
+	g_signal_connect (embed, "ge_open_uri",
+			  G_CALLBACK (ephy_tab_open_uri_cb),
+			  tab);
+	g_signal_connect (embed, "ge_size_to",
+			  G_CALLBACK (ephy_tab_size_to_cb),
+			  tab);
+	g_signal_connect (embed, "ge_dom_mouse_down",
+			  G_CALLBACK (ephy_tab_dom_mouse_down_cb),
+			  tab);
+	g_signal_connect (embed, "ge_dom_mouse_click",
+			  G_CALLBACK (ephy_tab_dom_mouse_click_cb),
+			  tab);
+	g_signal_connect (embed, "ge_security_change",
+			  G_CALLBACK (ephy_tab_security_change_cb),
+			  tab);
+	g_signal_connect (embed, "ge_favicon",
+			  G_CALLBACK (ephy_tab_favicon_cb),
+			  tab);
+
+	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
+	g_signal_connect_object (G_OBJECT (cache), "changed",
+				 G_CALLBACK (ephy_tab_favicon_cache_changed_cb),
+				 tab,  0);
 }
 
 TabLoadStatus
