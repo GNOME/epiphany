@@ -2658,6 +2658,7 @@ ephy_window_show (GtkWidget *widget)
 
 	if (!window->priv->has_size)
 	{
+g_print ("initial show!\n");
 		EphyTab *tab;
 		int width, height;
 

@@ -38,7 +38,9 @@
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
+#include <errno.h>
 #include <string.h>
+#include <stdlib.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtklabel.h>
@@ -512,7 +514,7 @@ static int
 write_window_geometry (xmlTextWriterPtr writer,
 		       GtkWindow *window)
 {
-	int x = 0, y = 0, width = 0, height = 0;
+	int x = 0, y = 0, width = -1, height = -1;
 	int ret;
 
 	/* get window geometry */
@@ -711,6 +713,55 @@ parse_embed (xmlNodePtr child, EphyWindow *window)
 	}
 }
 
+static gboolean
+int_from_string (const char *string,
+		 int *retval)
+{
+	char *tail = NULL;
+	long int val;
+	gboolean success = FALSE;
+
+	errno = 0;
+	val = strtol (string, &tail, 0);
+
+	if (errno == 0 && tail != NULL && tail[0] == '\0')
+	{
+		*retval = (int) val;
+		success = TRUE;
+	}
+
+	return success;
+}
+
+static void
+restore_geometry (GtkWindow *window,
+		  xmlNodePtr node)
+{
+	xmlChar *tmp;
+	int x = 0, y = 0, width = -1, height = -1;
+	gboolean success = TRUE;
+g_print ("restore geometry!\n");
+	g_return_if_fail (window != NULL);
+
+	tmp = xmlGetProp (node, (xmlChar *) "x");
+	success &= int_from_string ((char *) tmp, &x);
+	xmlFree (tmp);
+	tmp = xmlGetProp (node, (xmlChar *) "y");
+	success &= int_from_string ((char *) tmp, &y);
+	xmlFree (tmp);
+	tmp = xmlGetProp (node, (xmlChar *) "width");
+	success &= int_from_string ((char *) tmp, &width);
+	xmlFree (tmp);
+	tmp = xmlGetProp (node, (xmlChar *) "height");
+	success &= int_from_string ((char *) tmp, &height);
+	xmlFree (tmp);
+
+	if (success)
+	{
+		gtk_window_move (window, x, y);
+		gtk_window_set_default_size (window, width, height);
+	}
+}
 /*
  * ephy_session_load:
  * @session: a #EphySession
@@ -751,7 +802,9 @@ ephy_session_load (EphySession *session,
 		if (xmlStrEqual (child->name, (const xmlChar *) "window"))
 		{
 			widget = GTK_WIDGET (ephy_window_new ());
+			restore_geometry (GTK_WINDOW (widget), child);
 			parse_embed (child->children, EPHY_WINDOW (widget));
+			gtk_window_present (GTK_WINDOW (widget));
 		}
 		else if (xmlStrEqual (child->name, (const xmlChar *) "toolwindow"))
 		{
@@ -773,29 +826,9 @@ ephy_session_load (EphySession *session,
 					widget = ephy_shell_get_history_window (ephy_shell);
 				}
 			}
-		}
 
-		if (widget)
-		{
-			xmlChar *tmp;
-			gulong x = 0, y = 0, width = 0, height = 0;
-
-			tmp = xmlGetProp (child, (xmlChar *) "x");
-			ephy_string_to_int ((char *) tmp, &x);
-			xmlFree (tmp);
-			tmp = xmlGetProp (child, (xmlChar *) "y");
-			ephy_string_to_int ((char *) tmp, &y);
-			xmlFree (tmp);
-			tmp = xmlGetProp (child, (xmlChar *) "width");
-			ephy_string_to_int ((char *) tmp, &width);
-			xmlFree (tmp);
-			tmp = xmlGetProp (child, (xmlChar *) "height");
-			ephy_string_to_int ((char *) tmp, &height);
-			xmlFree (tmp);
-			gtk_window_move (GTK_WINDOW (widget), x, y);
-			gtk_window_set_default_size (GTK_WINDOW (widget),
-				                     width, height);
-			gtk_widget_show (widget);
+			restore_geometry (GTK_WINDOW (widget), child);
+			gtk_window_present (GTK_WINDOW (widget));
 		}
 
 		child = child->next;
