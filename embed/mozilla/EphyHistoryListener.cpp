@@ -89,7 +89,6 @@ EphyHistoryListener::OnStateChange (nsIWebProgress *aWebProgress,
 		return rv;
 	}
 
-	/* FIXME can I QI directly to nsIHttpChannel? */
 	nsCOMPtr<nsIChannel> channel (do_QueryInterface (aRequest));
 	nsCOMPtr<nsIHttpChannel> httpChannel (do_QueryInterface (channel));
 	if (!httpChannel) return rv;
