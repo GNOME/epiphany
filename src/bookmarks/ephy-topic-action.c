@@ -585,28 +585,6 @@ build_menu (EphyTopicAction *action)
 }
 
 static void
-drag_begin_cb (GtkWidget *widget, GdkDragContext *context, EphyTopicAction *action)
-{
-	GtkWidget *tool_item;
-
-	tool_item = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM);
-	g_return_if_fail (tool_item != NULL);
-
-	gtk_widget_hide (widget);
-}
-
-static void
-drag_end_cb (GtkWidget *widget, GdkDragContext *context, EphyTopicAction *action)
-{
-	GtkWidget *tool_item;
-
-	tool_item = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM);
-	g_return_if_fail (tool_item != NULL);
-
-	gtk_widget_show (widget);
-}
-
-static void
 drag_data_get_cb (GtkWidget *widget, GdkDragContext *context,
 		  GtkSelectionData *selection_data, guint info,
 		  guint32 time, EphyTopicAction *action)
@@ -877,10 +855,6 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 				  G_CALLBACK (drag_data_get_cb), action);
 		g_signal_connect (button, "drag_data_delete",
 				  G_CALLBACK (drag_data_delete_cb), action);
-		g_signal_connect (button, "drag_begin",
-				  G_CALLBACK (drag_begin_cb), action);
-		g_signal_connect (button, "drag_end",
-				  G_CALLBACK (drag_end_cb), action);
 	}
 }
 

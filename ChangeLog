@@ -1,5 +1,14 @@
 2004-07-11  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* lib/egg/egg-editable-toolbar.c: (toolbar_drag_motion_cb):
+	* src/bookmarks/ephy-bookmark-action.c: (connect_proxy):
+	* src/bookmarks/ephy-topic-action.c: (connect_proxy):
+
+	Disable sliding when not in toolbar editing mode.
+	We cant assume GDK_ACTION_MOVE there.
+
+2004-07-11  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* src/bookmarks/ephy-topic-action.c: (stop_drag_check),
 	(button_release_cb), (button_press_cb):
 
