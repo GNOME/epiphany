@@ -474,7 +474,8 @@ egg_toolbar_init (EggToolbar *toolbar)
   g_object_set_data (G_OBJECT (toolbar), PRIVATE_KEY, priv);
   
   toolbar->orientation = GTK_ORIENTATION_HORIZONTAL;
-  toolbar->style = GTK_TOOLBAR_ICONS;
+  toolbar->style = DEFAULT_TOOLBAR_STYLE;
+  toolbar->icon_size = DEFAULT_ICON_SIZE;
   toolbar->tooltips = gtk_tooltips_new ();
   g_object_ref (toolbar->tooltips);
   gtk_object_sink (GTK_OBJECT (toolbar->tooltips));
@@ -1696,26 +1697,30 @@ egg_toolbar_child_type (GtkContainer *container)
 }
 
 static void
+egg_toolbar_reconfigured (EggToolbar *toolbar)
+{
+  EggToolbarPrivate *priv = EGG_TOOLBAR_GET_PRIVATE (toolbar);
+  GList *items;
+
+  items = priv->items;
+  while (items)
+  {
+    EggToolItem *item = EGG_TOOL_ITEM (items->data);
+    
+    egg_tool_item_toolbar_reconfigured (item);
+    
+    items = items->next;
+  }
+}
+
+static void
 egg_toolbar_real_orientation_changed (EggToolbar    *toolbar,
 				      GtkOrientation orientation)
 {
   EggToolbarPrivate *priv = EGG_TOOLBAR_GET_PRIVATE (toolbar);
-  
-  GList *items;
-  
   if (toolbar->orientation != orientation)
     {
       toolbar->orientation = orientation;
-
-      items = priv->items;
-      while (items)
-	{
-	  EggToolItem *item = EGG_TOOL_ITEM (items->data);
-
-	  egg_tool_item_set_orientation (item, orientation);
-
-	  items = items->next;
-	}
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	gtk_arrow_set (GTK_ARROW (priv->arrow), GTK_ARROW_DOWN, GTK_SHADOW_NONE);
@@ -1723,7 +1728,9 @@ egg_toolbar_real_orientation_changed (EggToolbar    *toolbar,
 	gtk_arrow_set (GTK_ARROW (priv->arrow), GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
       else 
 	gtk_arrow_set (GTK_ARROW (priv->arrow), GTK_ARROW_LEFT, GTK_SHADOW_NONE);
-      
+
+      egg_toolbar_reconfigured (toolbar);
+
       gtk_widget_queue_resize (GTK_WIDGET (toolbar));
       g_object_notify (G_OBJECT (toolbar), "orientation");
     }
@@ -1733,26 +1740,12 @@ static void
 egg_toolbar_real_style_changed (EggToolbar     *toolbar,
 				GtkToolbarStyle style)
 {
-  EggToolbarPrivate *priv;
-  GList *items;
-
-  priv = EGG_TOOLBAR_GET_PRIVATE (toolbar);
-  
   if (toolbar->style != style)
     {
       toolbar->style = style;
 
-      items = priv->items;
-      
-      while (items)
-	{
-	  EggToolItem *item = EGG_TOOL_ITEM (items->data);
-	  
-	  egg_tool_item_set_toolbar_style (item, style);
-	  
-	  items = items->next;
-	}
-      
+      egg_toolbar_reconfigured (toolbar);
+
       gtk_widget_queue_resize (GTK_WIDGET (toolbar));
       g_object_notify (G_OBJECT (toolbar), "toolbar_style");
     }
@@ -1883,22 +1876,10 @@ static void
 egg_toolbar_update_button_relief (EggToolbar *toolbar)
 {
   EggToolbarPrivate *priv = EGG_TOOLBAR_GET_PRIVATE (toolbar);
-  GtkReliefStyle relief;
-  GList *items;
-  
-  relief = get_button_relief (toolbar);
 
-  items = priv->items;
-  while (items)
-    {
-      EggToolItem *item = EGG_TOOL_ITEM (items->data);
+  egg_toolbar_reconfigured (toolbar);
 
-      egg_tool_item_set_relief_style (item, relief);
-      
-      items = items->next;
-    }
-
-  gtk_button_set_relief (GTK_BUTTON (priv->arrow_button), relief);
+  gtk_button_set_relief (GTK_BUTTON (priv->arrow_button), get_button_relief (toolbar));
 }
 
 static GtkReliefStyle
@@ -2027,10 +2008,6 @@ egg_toolbar_insert (EggToolbar  *toolbar,
   priv->items = g_list_insert (priv->items, item, pos);
   toolbar->num_children++;
 
-  egg_tool_item_set_orientation (item, toolbar->orientation);
-  egg_tool_item_set_toolbar_style (item, toolbar->style);
-  egg_tool_item_set_relief_style (item, get_button_relief (toolbar));
-  
   gtk_widget_set_parent (GTK_WIDGET (item), GTK_WIDGET (toolbar));
 }
 
@@ -2157,9 +2134,6 @@ void
 egg_toolbar_set_icon_size (EggToolbar  *toolbar,
 			   GtkIconSize  icon_size)
 {
-  GList *items;
-  EggToolbarPrivate *priv = EGG_TOOLBAR_GET_PRIVATE (toolbar);
-  
   g_return_if_fail (EGG_IS_TOOLBAR (toolbar));
 
   toolbar->icon_size_set = TRUE;
@@ -2169,16 +2143,7 @@ egg_toolbar_set_icon_size (EggToolbar  *toolbar,
 
   toolbar->icon_size = icon_size;
 
-  items = priv->items;
-
-  while (items)
-    {
-      EggToolItem *item = EGG_TOOL_ITEM (items->data);
-	  
-      egg_tool_item_set_icon_size (item, icon_size);
-      
-      items = items->next;
-    }
+  egg_toolbar_reconfigured (toolbar);
 
   gtk_widget_queue_resize (GTK_WIDGET (toolbar));
 }
@@ -2189,6 +2154,14 @@ egg_toolbar_get_icon_size (EggToolbar *toolbar)
   g_return_val_if_fail (EGG_IS_TOOLBAR (toolbar), DEFAULT_ICON_SIZE);
 
   return toolbar->icon_size;
+}
+
+GtkReliefStyle
+egg_toolbar_get_relief_style (EggToolbar      *toolbar)
+{
+  g_return_val_if_fail (EGG_IS_TOOLBAR (toolbar), GTK_RELIEF_NONE);
+
+  return get_button_relief (toolbar);
 }
 
 void

@@ -153,7 +153,7 @@ GtkOrientation  egg_toolbar_get_orientation  (EggToolbar      *toolbar);
 GtkToolbarStyle egg_toolbar_get_style        (EggToolbar      *toolbar);
 GtkIconSize     egg_toolbar_get_icon_size    (EggToolbar      *toolbar);
 gboolean        egg_toolbar_get_tooltips     (EggToolbar      *toolbar);
-
+GtkReliefStyle  egg_toolbar_get_relief_style (EggToolbar      *toolbar);
 
 #ifndef EGG_DISABLE_DEPRECATED
 /* Simple button items */

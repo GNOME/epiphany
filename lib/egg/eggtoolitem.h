@@ -39,10 +39,6 @@ struct _EggToolItem
 {
   GtkBin parent;
 
-  GtkOrientation orientation;
-  GtkIconSize icon_size;
-  GtkToolbarStyle style;
-
   gchar *tip_text;
   gchar *tip_private;
 
@@ -62,14 +58,7 @@ struct _EggToolItemClass
   GtkBinClass parent_class;
 
   GtkWidget *(* create_menu_proxy)   (EggToolItem    *tool_item);
-  void       (* set_orientation)     (EggToolItem    *tool_item,
-				      GtkOrientation  orientation);
-  void       (* set_icon_size)       (EggToolItem    *tool_item,
-				      GtkIconSize     icon_size);
-  void       (* set_toolbar_style)   (EggToolItem    *tool_item,
-				      GtkToolbarStyle style);
-  void       (* set_relief_style)    (EggToolItem    *tool_item,
-				      GtkReliefStyle  relief_style);
+  void       (* toolbar_reconfigured) (EggToolItem   *tool_item);
   void	     (* set_tooltip)	     (EggToolItem    *tool_item,
 				      GtkTooltips    *tooltips,
 				      const gchar    *tip_text,
@@ -79,31 +68,29 @@ struct _EggToolItemClass
 GType        egg_tool_item_get_type (void);
 EggToolItem *egg_tool_item_new      (void);
 
-void     egg_tool_item_set_orientation        (EggToolItem     *tool_item,
-					       GtkOrientation   orientation);
-void     egg_tool_item_set_icon_size          (EggToolItem     *tool_item,
-					       GtkIconSize      icon_size);
-void     egg_tool_item_set_toolbar_style      (EggToolItem     *tool_item,
-					       GtkToolbarStyle  style);
-void     egg_tool_item_set_relief_style       (EggToolItem     *tool_item,
-					       GtkReliefStyle   style);
-void     egg_tool_item_set_homogeneous        (EggToolItem     *tool_item,
-					       gboolean         homogeneous);
-void     egg_tool_item_set_expand             (EggToolItem     *tool_item,
-					       gboolean         expand);
-void     egg_tool_item_set_pack_end           (EggToolItem     *tool_item,
-					       gboolean         pack_end);
-void     egg_tool_item_set_tooltip            (EggToolItem     *tool_item,
-					       GtkTooltips     *tooltips,
-					       const gchar     *tip_text,
-					       const gchar     *tip_private);
-void     egg_tool_item_set_use_drag_window    (EggToolItem     *toolitem,
-					       gboolean         use_drag_window);
-void     egg_tool_item_set_visible_horizontal (EggToolItem     *toolitem,
-					       gboolean         visible_horizontal);
-gboolean egg_tool_item_get_visible_horizontal (EggToolItem     *toolitem);
-void     egg_tool_item_set_visible_vertical   (EggToolItem     *toolitem,
-					       gboolean         visible_horizontal);
-gboolean egg_tool_item_get_visible_vertical   (EggToolItem     *toolitem);
+void            egg_tool_item_toolbar_reconfigured   (EggToolItem     *tool_item);
+void            egg_tool_item_set_homogeneous        (EggToolItem     *tool_item,
+						      gboolean         homogeneous);
+void            egg_tool_item_set_expand             (EggToolItem     *tool_item,
+						      gboolean         expand);
+void            egg_tool_item_set_pack_end           (EggToolItem     *tool_item,
+						      gboolean         pack_end);
+void            egg_tool_item_set_tooltip            (EggToolItem     *tool_item,
+						      GtkTooltips     *tooltips,
+						      const gchar     *tip_text,
+						      const gchar     *tip_private);
+void            egg_tool_item_set_use_drag_window    (EggToolItem     *toolitem,
+						      gboolean         use_drag_window);
+void            egg_tool_item_set_visible_horizontal (EggToolItem     *toolitem,
+						      gboolean         visible_horizontal);
+gboolean        egg_tool_item_get_visible_horizontal (EggToolItem     *toolitem);
+void            egg_tool_item_set_visible_vertical   (EggToolItem     *toolitem,
+						      gboolean         visible_horizontal);
+gboolean        egg_tool_item_get_visible_vertical   (EggToolItem     *toolitem);
+GtkIconSize     egg_tool_item_get_icon_size          (EggToolItem     *tool_item);
+GtkOrientation  egg_tool_item_get_orientation        (EggToolItem     *tool_item);
+GtkToolbarStyle egg_tool_item_get_toolbar_style      (EggToolItem     *tool_item);
+GtkReliefStyle  egg_tool_item_get_relief_style       (EggToolItem     *tool_item);
+
 
 #endif /* __EGG_TOOL_ITEM_H__ */

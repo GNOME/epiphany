@@ -63,18 +63,12 @@ static void egg_tool_button_get_property (GObject      *object,
 					  GValue       *value,
 					  GParamSpec   *pspec);
 static void egg_tool_button_finalize     (GObject      *object);
+static void egg_tool_button_toolbar_reconfigured (EggToolItem *tool_item);
+static void egg_tool_button_parent_set (GtkWidget *widget, GtkWidget *parent);
 
 static void egg_tool_button_show_all (GtkWidget *widget);
 
 static GtkWidget *egg_tool_button_create_menu_proxy (EggToolItem     *item);
-static void       egg_tool_button_set_orientation   (EggToolItem     *tool_item,
-						     GtkOrientation   orientation);
-static void       egg_tool_button_set_icon_size     (EggToolItem     *tool_item,
-						     GtkIconSize      icon_size);
-static void       egg_tool_button_set_toolbar_style (EggToolItem     *tool_item,
-						     GtkToolbarStyle  style);
-static void       egg_tool_button_set_relief_style  (EggToolItem     *tool_item,
-						     GtkReliefStyle   style);
 static void       button_clicked                    (GtkWidget       *widget,
 						     EggToolButton   *button);
 
@@ -126,12 +120,10 @@ egg_tool_button_class_init (EggToolButtonClass *klass)
   object_class->finalize = egg_tool_button_finalize;
 
   widget_class->show_all = egg_tool_button_show_all;
+  widget_class->parent_set = egg_tool_button_parent_set;
 
   tool_item_class->create_menu_proxy = egg_tool_button_create_menu_proxy;
-  tool_item_class->set_orientation = egg_tool_button_set_orientation;
-  tool_item_class->set_icon_size = egg_tool_button_set_icon_size;
-  tool_item_class->set_toolbar_style = egg_tool_button_set_toolbar_style;
-  tool_item_class->set_relief_style = egg_tool_button_set_relief_style;
+  tool_item_class->toolbar_reconfigured = egg_tool_button_toolbar_reconfigured;
   
   klass->button_type = GTK_TYPE_BUTTON;
 
@@ -319,8 +311,9 @@ static void
 egg_tool_button_show_all (GtkWidget *widget)
 {
   EggToolButton *button = EGG_TOOL_BUTTON (widget);
+  GtkToolbarStyle style = egg_tool_item_get_toolbar_style (EGG_TOOL_ITEM (button));
 
-  switch (EGG_TOOL_ITEM (widget)->style)
+  switch (style)
     {
     case GTK_TOOLBAR_ICONS:
       if (button->icon) gtk_widget_show_all (button->icon);
@@ -391,149 +384,122 @@ egg_tool_button_create_menu_proxy (EggToolItem *item)
 }
 
 static void
-egg_tool_button_set_orientation (EggToolItem   *tool_item,
-				 GtkOrientation orientation)
+use_new_box (EggToolButton *tool_button, GtkWidget *new_box)
 {
-  if (tool_item->orientation != orientation)
-    {
-      tool_item->orientation = orientation;
-    }
-}
-
-static void
-egg_tool_button_set_icon_size (EggToolItem  *tool_item,
-			       GtkIconSize   icon_size)
-{
-  if (tool_item->icon_size != icon_size)
-    {
-      EggToolButton *button = EGG_TOOL_BUTTON (tool_item);
-      char *stock_id;
-
-      if (button->icon && GTK_IS_IMAGE (button->icon) &&
-	  gtk_image_get_storage_type (GTK_IMAGE (button->icon)) == GTK_IMAGE_STOCK)
-	{
-	  gtk_image_get_stock (GTK_IMAGE (button->icon), &stock_id, NULL);
-	  stock_id = g_strdup (stock_id);
-	  gtk_image_set_from_stock (GTK_IMAGE (button->icon),
-				    stock_id,
-				    icon_size);
-	  g_free (stock_id);
-	}
-      tool_item->icon_size = icon_size;
-    }
-}
-
-static void
-egg_tool_button_set_toolbar_style (EggToolItem    *tool_item,
-				   GtkToolbarStyle style)
-{
-  EggToolButton *button = EGG_TOOL_BUTTON (tool_item);
+  if (tool_button->icon)
+    gtk_widget_reparent (tool_button->icon, new_box);
   
-  if (tool_item->style != style)
-    {
-      tool_item->style = style;
-
-      switch (tool_item->style)
-	{
-	case GTK_TOOLBAR_ICONS:
-	  gtk_widget_hide (button->label);
-	  if (button->icon)
-	    {
-	      gtk_box_set_child_packing (GTK_BOX (button->box), button->icon,
-					 TRUE, TRUE, 0, GTK_PACK_START);
-	      gtk_widget_show (button->icon);
-	    }
-	  break;
-	case GTK_TOOLBAR_TEXT:
-	  gtk_box_set_child_packing (GTK_BOX (button->box), button->label,
-				     TRUE, TRUE, 0, GTK_PACK_START);
-	  gtk_widget_show (button->label);
-	  if (button->icon)
-	    gtk_widget_hide (button->icon);
-	  break;
-	case GTK_TOOLBAR_BOTH:
-	  if (GTK_IS_HBOX (button->box))
-	    {
-	      GtkWidget *vbox;
-	      
-              vbox = gtk_vbox_new (FALSE, 0);
-	      gtk_widget_show (vbox);
-
-	      if (button->icon)
-		{
-		  g_object_ref (button->icon);
-		  gtk_container_remove (GTK_CONTAINER (button->box), button->icon);
-		  gtk_box_pack_start (GTK_BOX (vbox), button->icon,
-				      TRUE, TRUE, 0);
-		  g_object_unref (button->icon);
-		}
-	      
-	      g_object_ref (button->label);
-	      gtk_container_remove (GTK_CONTAINER (button->box), button->label);
-	      gtk_box_pack_start (GTK_BOX (vbox), button->label, FALSE, TRUE, 0);
-	      g_object_unref (button->label);
-	      
-	      gtk_container_remove (GTK_CONTAINER (button->button), button->box);
-	      button->box = vbox;
-	      gtk_container_add (GTK_CONTAINER (button->button), button->box);
-	    }
-	  
-	  gtk_box_set_child_packing (GTK_BOX (button->box), button->label,
-				     FALSE, TRUE, 0, GTK_PACK_START);
-	  gtk_widget_show (button->label);
-	  if (button->icon)
-	    {
-	      gtk_box_set_child_packing (GTK_BOX (button->box), button->icon,
-					 TRUE, TRUE, 0, GTK_PACK_START);
-	      gtk_widget_show (button->icon);
-	    }
-	  break;
-	case GTK_TOOLBAR_BOTH_HORIZ:
-	  if (GTK_IS_VBOX (button->box))
-	    {
-	      GtkWidget *hbox;
-	      
-              hbox = gtk_hbox_new (FALSE, 0);
-	      gtk_widget_show (hbox);
-
-	      if (button->icon)
-		{
-		  g_object_ref (button->icon);
-		  gtk_container_remove (GTK_CONTAINER (button->box), button->icon);
-		  gtk_box_pack_start (GTK_BOX (hbox), button->icon,
-				      TRUE, TRUE, 0);
-		  g_object_unref (button->icon);
-		}
-	      
-	      g_object_ref (button->label);
-	      gtk_container_remove (GTK_CONTAINER (button->box), button->label);
-	      gtk_box_pack_start (GTK_BOX (hbox), button->label, FALSE, TRUE, 0);
-	      g_object_unref (button->label);
-	      
-	      gtk_container_remove (GTK_CONTAINER (button->button), button->box);
-	      button->box = hbox;
-	      gtk_container_add (GTK_CONTAINER (button->button), button->box);
-	    }
-	  
-	  gtk_box_set_child_packing (GTK_BOX (button->box), button->label,
-				     TRUE, TRUE, 0, GTK_PACK_START);
-	  gtk_widget_show (button->label);
-	  if (button->icon)
-	    {
-	      gtk_box_set_child_packing (GTK_BOX (button->box), button->icon,
-					 FALSE, TRUE, 0, GTK_PACK_START);
-	      gtk_widget_show (button->icon);
-	    }
-	  break;
-	}
-    }
+  gtk_widget_reparent (tool_button->label, new_box);
+  
+  gtk_container_remove (GTK_CONTAINER (tool_button->button), tool_button->box);
+  tool_button->box = new_box;
+  gtk_container_add (GTK_CONTAINER (tool_button->button), new_box);
 }
 
 static void
-egg_tool_button_set_relief_style (EggToolItem   *tool_item,
-				  GtkReliefStyle style)
+show_both (EggToolButton *tool_button)
 {
-  gtk_button_set_relief (GTK_BUTTON (EGG_TOOL_BUTTON (tool_item)->button), style);
+  gtk_widget_show (tool_button->label);
+  if (tool_button->icon)
+    gtk_widget_show (tool_button->icon);
+}
+
+static void
+egg_tool_button_toolbar_reconfigured (EggToolItem *tool_item)
+{
+  EggToolButton *tool_button = EGG_TOOL_BUTTON (tool_item);
+  
+  /* icon size */
+  if (tool_button->icon && GTK_IS_IMAGE (tool_button->icon))
+    {
+      GtkImage *image = GTK_IMAGE (tool_button->icon);
+      GtkImageType storage = gtk_image_get_storage_type (image);
+      GtkIconSize new_icon_size = egg_tool_item_get_icon_size (EGG_TOOL_ITEM (tool_button));
+
+      if (storage == GTK_IMAGE_STOCK)
+	{
+	  gchar *stock_id;
+	  gtk_image_get_stock (image, &stock_id, NULL);
+	  gtk_image_set_from_stock (image, stock_id, new_icon_size);
+	}
+      else if (storage == GTK_IMAGE_ICON_SET)
+	{
+	  GtkIconSet *icon_set;
+	  gtk_image_get_icon_set (image, &icon_set, NULL);
+	  gtk_image_set_from_icon_set (image, icon_set, new_icon_size);
+	}
+    }
+
+  /* toolbar style */
+  switch (egg_tool_item_get_toolbar_style (EGG_TOOL_ITEM (tool_button)))
+    {
+    case GTK_TOOLBAR_ICONS:
+      gtk_widget_hide (tool_button->label);
+      if (tool_button->icon)
+	{
+	  gtk_box_set_child_packing (GTK_BOX (tool_button->box), tool_button->icon,
+				     TRUE, TRUE, 0, GTK_PACK_START);
+	  gtk_widget_show (tool_button->icon);
+	}
+      break;
+
+    case GTK_TOOLBAR_TEXT:
+      gtk_box_set_child_packing (GTK_BOX (tool_button->box), tool_button->label,
+				 TRUE, TRUE, 0, GTK_PACK_START);
+      gtk_widget_show (tool_button->label);
+      if (tool_button->icon)
+	gtk_widget_hide (tool_button->icon);
+      break;
+
+    case GTK_TOOLBAR_BOTH:
+      if (GTK_IS_HBOX (tool_button->box))
+	{
+	  GtkWidget *vbox = gtk_vbox_new (FALSE, 0);
+	  gtk_widget_show (vbox);
+
+	  use_new_box (tool_button, vbox);
+	}
+      show_both (tool_button);
+      
+      gtk_box_set_child_packing (GTK_BOX (tool_button->box), tool_button->label,
+				 FALSE, TRUE, 0, GTK_PACK_START);
+      if (tool_button->icon)
+	gtk_box_set_child_packing (GTK_BOX (tool_button->box), tool_button->icon,
+				   TRUE, TRUE, 0, GTK_PACK_START);
+      break;
+
+    case GTK_TOOLBAR_BOTH_HORIZ:
+      if (GTK_IS_VBOX (tool_button->box))
+	{
+	  GtkWidget *hbox = gtk_hbox_new (FALSE, 0);
+	  gtk_widget_show (hbox);
+
+	  use_new_box (tool_button, hbox);
+	}
+      
+      show_both (tool_button);
+
+      gtk_box_set_child_packing (GTK_BOX (tool_button->box), tool_button->label,
+				 TRUE, TRUE, 0, GTK_PACK_START);
+      if (tool_button->icon)
+	gtk_box_set_child_packing (GTK_BOX (tool_button->box), tool_button->icon,
+				   FALSE, TRUE, 0, GTK_PACK_START);
+
+      break;
+    }
+
+  /* relief style */
+  gtk_button_set_relief (GTK_BUTTON (tool_button->button),
+			 egg_tool_item_get_relief_style (EGG_TOOL_ITEM (tool_button)));
+
+  
+  gtk_widget_queue_resize (GTK_WIDGET (tool_button));
+}
+
+static void
+egg_tool_button_parent_set (GtkWidget *widget, GtkWidget *parent)
+{
+  egg_tool_button_toolbar_reconfigured (EGG_TOOL_ITEM (widget));
 }
 
 static void
@@ -598,7 +564,7 @@ egg_tool_button_set_icon_widget (EggToolButton *button,
   else if (button->stock_id)
     {
       button->icon = gtk_image_new_from_stock (button->stock_id,
-					     EGG_TOOL_ITEM (button)->icon_size);
+					       egg_tool_item_get_icon_size (EGG_TOOL_ITEM (button)));
       gtk_box_pack_start (GTK_BOX (button->box), button->icon,
 			  TRUE, TRUE, 0);
     }
@@ -658,6 +624,7 @@ egg_tool_button_set_stock_id (EggToolButton *button,
 			      const gchar   *stock_id)
 {
   g_return_if_fail (EGG_IS_TOOL_BUTTON (button));
+  g_return_if_fail (stock_id != NULL);
 
   g_free (button->stock_id);
   button->stock_id = g_strdup (stock_id);
@@ -688,8 +655,8 @@ egg_tool_button_set_stock_id (EggToolButton *button,
 	  gtk_box_reorder_child (GTK_BOX (button->box), button->icon, 0);
 	}
       gtk_image_set_from_stock (GTK_IMAGE (button->icon), button->stock_id,
-				EGG_TOOL_ITEM (button)->icon_size);
-      if (EGG_TOOL_ITEM (button)->style != GTK_TOOLBAR_TEXT)
+				egg_tool_item_get_icon_size (EGG_TOOL_ITEM (button)));
+      if (egg_tool_item_get_toolbar_style (EGG_TOOL_ITEM (button)) != GTK_TOOLBAR_TEXT)
 	gtk_widget_show (button->icon);
     }
 }
@@ -737,8 +704,8 @@ egg_tool_button_set_icon_set (EggToolButton *button,
   button->icon_set = (icon_set != NULL);
   if (!button->icon_set && button->stock_id)
     gtk_image_set_from_stock (GTK_IMAGE (button->icon), button->stock_id,
-			      EGG_TOOL_ITEM (button)->icon_size);
+			      egg_tool_item_get_icon_size (EGG_TOOL_ITEM (button)));
   else
     gtk_image_set_from_icon_set (GTK_IMAGE (button->icon), icon_set,
-				 EGG_TOOL_ITEM (button)->icon_size);
+				 egg_tool_item_get_icon_size (EGG_TOOL_ITEM (button)));
 }

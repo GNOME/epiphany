@@ -21,6 +21,7 @@
 
 #include "eggtoolitem.h"
 #include "eggmarshalers.h"
+#include "eggtoolbar.h"
 #include <gtk/gtkseparatormenuitem.h>
 
 #ifndef _
@@ -29,10 +30,7 @@
 
 enum {
   CREATE_MENU_PROXY,
-  SET_ORIENTATION,
-  SET_ICON_SIZE,
-  SET_TOOLBAR_STYLE,
-  SET_RELIEF_STYLE,
+  TOOLBAR_RECONFIGURED,
   SET_TOOLTIP,
   LAST_SIGNAL
 };
@@ -164,42 +162,14 @@ egg_tool_item_class_init (EggToolItemClass *klass)
 		  create_proxy_accumulator, NULL,
 		  _egg_marshal_OBJECT__VOID,
 		  GTK_TYPE_WIDGET, 0);
-  toolitem_signals[SET_ORIENTATION] =
-    g_signal_new ("set_orientation",
+  toolitem_signals[TOOLBAR_RECONFIGURED] =
+    g_signal_new ("toolbar_reconfigured",
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (EggToolItemClass, set_orientation),
+		  G_STRUCT_OFFSET (EggToolItemClass, toolbar_reconfigured),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__ENUM,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_ORIENTATION);
-  toolitem_signals[SET_ICON_SIZE] =
-    g_signal_new ("set_icon_size",
-		  G_OBJECT_CLASS_TYPE (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (EggToolItemClass, set_icon_size),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__ENUM,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_ICON_SIZE);
-  toolitem_signals[SET_TOOLBAR_STYLE] =
-    g_signal_new ("set_toolbar_style",
-		  G_OBJECT_CLASS_TYPE (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (EggToolItemClass, set_toolbar_style),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__ENUM,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_TOOLBAR_STYLE);
-  toolitem_signals[SET_RELIEF_STYLE] =
-    g_signal_new ("set_relief_style",
-		  G_OBJECT_CLASS_TYPE (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (EggToolItemClass, set_relief_style),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__ENUM,
-		  G_TYPE_NONE, 1, 
-		  GTK_TYPE_RELIEF_STYLE);
+		  _egg_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   toolitem_signals[SET_TOOLTIP] =
     g_signal_new ("set_tooltip",
 		  G_OBJECT_CLASS_TYPE (klass),
@@ -221,10 +191,6 @@ egg_tool_item_init (EggToolItem *toolitem)
   toolitem->visible_horizontal = TRUE;
   toolitem->visible_vertical = TRUE;
   toolitem->homogeneous = FALSE;
-
-  toolitem->orientation = GTK_ORIENTATION_HORIZONTAL;
-  toolitem->icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
-  toolitem->style = GTK_TOOLBAR_BOTH;
 }
 
 static void
@@ -415,40 +381,68 @@ egg_tool_item_new (void)
   return item;
 }
 
-void
-egg_tool_item_set_orientation (EggToolItem *tool_item,
-			       GtkOrientation orientation)
+GtkIconSize
+egg_tool_item_get_icon_size (EggToolItem *tool_item)
 {
-  g_return_if_fail (EGG_IS_TOOL_ITEM (tool_item));
+  GtkWidget *parent;
+
+  g_return_val_if_fail (EGG_IS_TOOL_ITEM (tool_item), GTK_ICON_SIZE_LARGE_TOOLBAR);
+
+  parent = GTK_WIDGET (tool_item)->parent;
+  if (!parent || !EGG_IS_TOOLBAR (parent))
+    return GTK_ICON_SIZE_LARGE_TOOLBAR;
+
+  return egg_toolbar_get_icon_size (EGG_TOOLBAR (parent));
+}
+
+GtkOrientation
+egg_tool_item_get_orientation (EggToolItem *tool_item)
+{
+  GtkWidget *parent;
   
-  g_signal_emit (tool_item, toolitem_signals[SET_ORIENTATION], 0, orientation);
+  g_return_val_if_fail (EGG_IS_TOOL_ITEM (tool_item), GTK_ORIENTATION_HORIZONTAL);
+
+  parent = GTK_WIDGET (tool_item)->parent;
+  if (!parent || !EGG_IS_TOOLBAR (parent))
+    return GTK_ORIENTATION_HORIZONTAL;
+
+  return egg_toolbar_get_orientation (EGG_TOOLBAR (parent));
+}
+
+GtkToolbarStyle
+egg_tool_item_get_toolbar_style (EggToolItem *tool_item)
+{
+  GtkWidget *parent;
+  
+  g_return_val_if_fail (EGG_IS_TOOL_ITEM (tool_item), GTK_TOOLBAR_ICONS);
+
+  parent = GTK_WIDGET (tool_item)->parent;
+  if (!parent || !EGG_IS_TOOLBAR (parent))
+    return GTK_TOOLBAR_ICONS;
+
+  return egg_toolbar_get_style (EGG_TOOLBAR (parent));
+}
+
+GtkReliefStyle 
+egg_tool_item_get_relief_style (EggToolItem *tool_item)
+{
+  GtkWidget *parent;
+  
+  g_return_val_if_fail (EGG_IS_TOOL_ITEM (tool_item), GTK_RELIEF_NONE);
+
+  parent = GTK_WIDGET (tool_item)->parent;
+  if (!parent || !EGG_IS_TOOLBAR (parent))
+    return GTK_RELIEF_NONE;
+
+  return egg_toolbar_get_relief_style (EGG_TOOLBAR (parent));
 }
 
 void
-egg_tool_item_set_icon_size (EggToolItem *tool_item,
-			     GtkIconSize icon_size)
+egg_tool_item_toolbar_reconfigured (EggToolItem *tool_item)
 {
   g_return_if_fail (EGG_IS_TOOL_ITEM (tool_item));
-    
-  g_signal_emit (tool_item, toolitem_signals[SET_ICON_SIZE], 0, icon_size);
-}
 
-void
-egg_tool_item_set_toolbar_style (EggToolItem    *tool_item,
-				 GtkToolbarStyle style)
-{
-  g_return_if_fail (EGG_IS_TOOL_ITEM (tool_item));
-    
-  g_signal_emit (tool_item, toolitem_signals[SET_TOOLBAR_STYLE], 0, style);
-}
-
-void
-egg_tool_item_set_relief_style (EggToolItem   *tool_item,
-				GtkReliefStyle style)
-{
-  g_return_if_fail (EGG_IS_TOOL_ITEM (tool_item));
-    
-  g_signal_emit (tool_item, toolitem_signals[SET_RELIEF_STYLE], 0, style);
+  g_signal_emit (tool_item, toolitem_signals[TOOLBAR_RECONFIGURED], 0);
 }
 
 void

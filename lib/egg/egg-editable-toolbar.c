@@ -628,6 +628,7 @@ egg_editable_toolbar_set_drag_dest (EggEditableToolbar   *etoolbar,
       if (strcmp (toolbar_name, name) == 0)
       {
         GtkWidget *widget = get_toolbar_nth (etoolbar, i);
+
         gtk_drag_dest_unset (widget);
         gtk_drag_dest_set (widget, GTK_DEST_DEFAULT_DROP,
                            targets, n_targets,
