@@ -681,7 +681,7 @@ build_net_state_message (const char *uri, EmbedState flags)
                 }
                 else if (flags & EMBED_STATE_STOP)
                 {
-			msg = _("Done.");
+			msg = ("");
                 }
         }
 
