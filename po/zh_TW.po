@@ -1,19 +1,21 @@
 # traditional Chinese translation of epiphany.
-# Copyright (C) 2003 Free Software Foundation, Inc.
+# Copyright (C) 2003, 04 Free Software Foundation, Inc.
 # (Based on galeon translation from Joe Man <trmetal@yahoo.com.hk>, 2001)
 # Abel Cheung <maddog@linux.org.hk>, 2003.
+# Ching-Hung Lin <billlin@wshlab2.ee.kuas.edu.tw>, 2004
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany 0.9.2\n"
+"Project-Id-Version: epiphany 1.3.8.90\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-05-31 12:02+0200\n"
-"PO-Revision-Date: 2003-08-29 12:06+0800\n"
-"Last-Translator: Abel Cheung <maddog@linux.org.hk>\n"
+"POT-Creation-Date: 2004-09-12 03:10+0200\n"
+"PO-Revision-Date: 2004-09-13 07:01+0800\n"
+"Last-Translator: Ching-Hung Lin <billlin@wshlab2.ee.kuas.edu.tw>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: data/GNOME_Epiphany_Automation.server.in.h:1
 msgid "Epiphany automation"
@@ -24,6 +26,10 @@ msgid "Browse and organize your bookmarks"
 msgstr "瀏覽及管理書籤"
 
 #: data/bme.desktop.in.h:2
+msgid "Epiphany Web Bookmarks"
+msgstr "Epiphany 網頁書籤"
+
+#: data/bme.desktop.in.h:3
 msgid "Web Bookmarks"
 msgstr "網頁書籤"
 
@@ -31,93 +37,94 @@ msgstr "網頁書籤"
 msgid ""
 "A list of protocols to be considered safe in addition to the default, when "
 "disable_unsafe_protocols is enabled."
-msgstr ""
+msgstr "當 disable_unsafe_protocols 啟用時，除了預設值外所加入認為是"
+"安全協定的列表。"
 
 #: data/epiphany-lockdown.schemas.in.h:2
 msgid "Additional safe protocols"
-msgstr ""
+msgstr "額外的安全協定"
 
 #: data/epiphany-lockdown.schemas.in.h:3
 msgid "Disable Arbitrary URLs"
-msgstr ""
+msgstr "不允許任意的URLs"
 
 #: data/epiphany-lockdown.schemas.in.h:4
-#, fuzzy
 msgid "Disable Bookmark Editing"
-msgstr "重複的書籤"
+msgstr "取消編輯書籤的功能"
 
 #: data/epiphany-lockdown.schemas.in.h:5
-#, fuzzy
 msgid "Disable History"
-msgstr "清除紀錄(_L)"
+msgstr "取消瀏覽紀錄功能"
 
 #: data/epiphany-lockdown.schemas.in.h:6
-#, fuzzy
 msgid "Disable JavaScript chrome control"
-msgstr "可使用 JavaScript"
+msgstr "取消 JavaScript chrome control 功能"
 
 #: data/epiphany-lockdown.schemas.in.h:7
 msgid "Disable JavaScript's control over window chrome."
-msgstr ""
+msgstr "取消 JavaScript 對視窗的 chrome 控制功能"
 
 #: data/epiphany-lockdown.schemas.in.h:8
-#, fuzzy
 msgid "Disable Toolbar Editing"
-msgstr "工具列編輯器"
+msgstr "取消編輯工具列功能"
 
 #: data/epiphany-lockdown.schemas.in.h:9
 msgid ""
 "Disable all historical information by disabling the back button, not "
 "allowing the history dialog and hiding the most used bookmarks list."
-msgstr ""
+msgstr "藉由取消回到上一頁的功能來取消所有的瀏覽紀錄資訊，"
+"不允許瀏覽紀錄對話框與隱藏最常用的書籤列表。"
 
 #: data/epiphany-lockdown.schemas.in.h:10
 msgid "Disable the user's ability to edit their bookmarks."
-msgstr ""
+msgstr "禁止使用者編輯個人書籤。"
 
 #: data/epiphany-lockdown.schemas.in.h:11
 msgid "Disable the user's ability to edit toolbars."
-msgstr ""
+msgstr "禁止使用者編輯工具列。"
 
 #: data/epiphany-lockdown.schemas.in.h:12
 msgid "Disable the user's ability to type in a URL to epiphany."
-msgstr ""
+msgstr "禁止使用者在 epiphany 中輸入 URL 。"
 
 #: data/epiphany-lockdown.schemas.in.h:13
 msgid "Disable unsafe protocols"
-msgstr ""
+msgstr "禁止不安全的協定"
 
 #: data/epiphany-lockdown.schemas.in.h:14
 msgid ""
 "Disables loading of content from unsafe protocols. Safe protocols are http: "
 "and https:."
-msgstr ""
+msgstr "禁止從不安全的協定載入內容。"
+"安全的協定為 http: 與 https: 。"
 
 #: data/epiphany-lockdown.schemas.in.h:15
-#, fuzzy
 msgid "Hide menubar by default"
-msgstr "預設情況下顯示側列窗格"
+msgstr "預設情況下隱藏選單列"
 
 #: data/epiphany-lockdown.schemas.in.h:16
-#, fuzzy
 msgid "Hide the menubar by default."
-msgstr "預設情況下顯示側列窗格。"
+msgstr "預設情況下隱藏選單列。"
 
 #: data/epiphany.desktop.in.h:1
 msgid "Browse the web"
 msgstr "瀏覽網頁"
 
-#: data/epiphany.desktop.in.h:2
+#: data/epiphany.desktop.in.h:2 src/ephy-main.c:116
+msgid "Epiphany Web Browser"
+msgstr "Epiphany 網頁瀏覽器"
+
+#: data/epiphany.desktop.in.h:3
 msgid "Web Browser"
 msgstr "網頁瀏覽器"
 
 #: data/epiphany.schemas.in.h:1
 msgid "Address of the user's home page."
-msgstr "用戶指定的首頁網址。"
+msgstr "使用者指定的首頁網址。"
 
 #: data/epiphany.schemas.in.h:2
 msgid "Allow popups"
-msgstr "允許 JavaScript 開啟新的視窗"
+msgstr "允許彈出式新視窗"
 
 #: data/epiphany.schemas.in.h:3
 msgid ""
@@ -125,23 +132,20 @@ msgid ""
 msgstr "允許站台透過 JavaScript 開啟新的視窗 (如果啟用了 JavaScript)。"
 
 #: data/epiphany.schemas.in.h:4
-#, fuzzy
 msgid "Always show the tab bar"
-msgstr "一定使用指定的字型(_T)"
+msgstr "總是顯示標籤列"
 
 #: data/epiphany.schemas.in.h:5
-#, fuzzy
 msgid "Automatic downloads"
-msgstr "自動(_A)"
+msgstr "自動下載"
 
 #: data/epiphany.schemas.in.h:6
 msgid "Autowrap for find in page"
 msgstr "搜尋至頁尾後自動回到頁首繼續"
 
 #: data/epiphany.schemas.in.h:7
-#, fuzzy
 msgid "Browse with caret"
-msgstr "瀏覽網頁"
+msgstr "以鍵盤瀏覽網頁"
 
 #: data/epiphany.schemas.in.h:8
 msgid "Cookie accept"
@@ -149,7 +153,7 @@ msgstr "接受 Cookie"
 
 #: data/epiphany.schemas.in.h:9
 msgid "Default encoding"
-msgstr "預設編碼"
+msgstr "預設字元編碼"
 
 #: data/epiphany.schemas.in.h:10
 msgid ""
@@ -171,7 +175,7 @@ msgid ""
 "\"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712"
 "\", \"x-viet-vps\" and \"x-windows-949\"."
 msgstr ""
-"預設編碼。可接受的值為：\n"
+"預設字元編碼。可接受的值為：\n"
 "\"armscii-8\", \"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030"
 "\", \"GB2312\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855"
 "\", \"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-"
@@ -228,7 +232,6 @@ msgid ""
 msgstr "在搜尋頁面時，當到達頁尾後會否自動回到頁首繼續搜尋。"
 
 #: data/epiphany.schemas.in.h:20
-#, fuzzy
 msgid "History pages time range"
 msgstr "搜尋指定時間內的瀏覽紀錄"
 
@@ -256,13 +259,13 @@ msgstr "搜尋時區分大小寫。"
 #: data/epiphany.schemas.in.h:26
 msgid ""
 "Middle click to open the web page pointed to by the currently selected text"
-msgstr "選取文字後，按滑鼠中央按鈕可開啟選定的文字所表示的網頁"
+msgstr "選取文字後，按滑鼠中鍵可開啟選定的文字所指的網頁"
 
 #: data/epiphany.schemas.in.h:27
 msgid ""
 "Middle clicking on the main view pane will open the web page pointed to by "
 "the currently selected text."
-msgstr "在主視窗中選取文字後按滑鼠中央按鈕，會開啟該文字所表示的網頁。"
+msgstr "在主視窗中選取文字後按滑鼠中鍵，會開啟該文字所指3的網頁。"
 
 #: data/epiphany.schemas.in.h:28
 msgid "Paper type"
@@ -276,7 +279,7 @@ msgstr "紙張類型。目前支援的有“A4”、“Letter”、“Legal”�
 
 #: data/epiphany.schemas.in.h:30
 msgid "Preferred languages, two letter codes."
-msgstr "優先使用的語言的清單。"
+msgstr "優先使用的語言的清單，以兩個字母來做代碼。"
 
 #: data/epiphany.schemas.in.h:31
 msgid "Printer name"
@@ -288,35 +291,35 @@ msgstr "印表機名稱。"
 
 #: data/epiphany.schemas.in.h:33
 msgid "Printing bottom margin"
-msgstr "列印底部邊緣"
+msgstr "列印時與底部的空白邊緣距離"
 
 #: data/epiphany.schemas.in.h:34
 msgid "Printing bottom margin (in mm)."
-msgstr "列印時底部的邊緣寬度 (以毫米表示)。"
+msgstr "列印時與底部的空白邊緣距離 (以公釐為單位)。"
 
 #: data/epiphany.schemas.in.h:35
 msgid "Printing left margin"
-msgstr "列印左邊邊緣"
+msgstr "列印時與左邊的空白邊緣距離"
 
 #: data/epiphany.schemas.in.h:36
 msgid "Printing left margin (in mm)."
-msgstr "列印時左邊的邊緣寬度 (以毫米表示)。"
+msgstr "列印時與左邊的空白邊緣距離 (以公釐為單位)。"
 
 #: data/epiphany.schemas.in.h:37
 msgid "Printing right margin"
-msgstr "列印右邊邊緣"
+msgstr "列印時與右邊的空白邊緣距離"
 
 #: data/epiphany.schemas.in.h:38
 msgid "Printing right margin (in mm)."
-msgstr "列印時右邊的邊緣寬度 (以毫米表示)。"
+msgstr "列印時與右邊的空白邊緣距離 (以公釐為單位)。"
 
 #: data/epiphany.schemas.in.h:39
 msgid "Printing top margin"
-msgstr "列印頂端邊緣"
+msgstr "列印時與頂端的空白邊緣距離"
 
 #: data/epiphany.schemas.in.h:40
 msgid "Printing top margin (in mm)."
-msgstr "列印時頂端的邊緣寬度 (以毫米表示)。"
+msgstr "列印時與頂端的空白邊緣距離 (以公釐為單位)。"
 
 #: data/epiphany.schemas.in.h:41
 msgid "Show bookmarks bar by default"
@@ -338,11 +341,12 @@ msgstr "預設情況下顯示狀態列"
 msgid ""
 "Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
 "\", \"today\"."
-msgstr ""
+msgstr "顯示“曾經”，“最近兩天”，“最近三天”，“今天”"
+"的瀏覽紀錄頁面。"
 
 #: data/epiphany.schemas.in.h:46
 msgid "Show the tab bar also when there is only one tab open."
-msgstr ""
+msgstr "即使只打開了一個標籤頁仍顯示標籤頁工具列。"
 
 #: data/epiphany.schemas.in.h:47
 msgid "Show toolbars by default"
@@ -362,17 +366,18 @@ msgstr "磁碟快取空間大小，以 MB 表示。"
 
 #: data/epiphany.schemas.in.h:51
 msgid "The bookmark informations shown in the editor view"
-msgstr ""
+msgstr "從編輯器中所顯示的書籤資訊"
 
 #: data/epiphany.schemas.in.h:52
 msgid ""
 "The bookmark informations shown in the editor view. Valid values in the list "
 "are \"address\" and \"title\"."
-msgstr ""
+msgstr "從編輯器中所顯示的書籤資訊。"
+"這個列表中有效的值為“位址”、“標題”。"
 
 #: data/epiphany.schemas.in.h:53
 msgid "The currently selected fonts language"
-msgstr "更改字型設定時預設顯示的語言"
+msgstr "目前所選擇字型的語言"
 
 #: data/epiphany.schemas.in.h:54
 msgid ""
@@ -385,7 +390,7 @@ msgid ""
 "written in latin script), \"x-tamil\" (tamil) and \"x-devanagari"
 "\" (devanagari)."
 msgstr ""
-"更改字型設定時預設顯示的語言。合法的值為：\n"
+"目前所選擇字型的語言。有效的值為：\n"
 "\"ar\" (阿拉伯文), \"x-baltic\" (波羅的海語系), \"x-central-euro\" (中歐語"
 "系), \"x-cyrillic\" (任何使用西里爾字母的語言), \"el\" (希臘文), \"he\" (希伯"
 "來文), \"ja\" (日文), \"ko\" (韓文), \"zh-CN\" (簡體中文), \"th\" (泰文), "
@@ -394,13 +399,12 @@ msgstr ""
 "\" (梵文)。"
 
 #: data/epiphany.schemas.in.h:55
-#, fuzzy
 msgid "The downloads folder"
-msgstr "顯示下載檔案詳細資料"
+msgstr "下載資料夾"
 
 #: data/epiphany.schemas.in.h:56
 msgid "The encoding autodetector. Empty string means autodetect is off"
-msgstr "字元集自動偵測程序。設定值留空表示不會自動偵測"
+msgstr "字元編碼自動偵測功能。空白表示關閉自動偵測功能"
 
 #: data/epiphany.schemas.in.h:57
 msgid ""
@@ -414,7 +418,7 @@ msgid ""
 "\"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) "
 "and \"universal_charset_detector\" (autodetect most encodings)."
 msgstr ""
-"字元集自動偵測程序。可接受的值為\n"
+"編碼自動偵測功能。可接受的值為\n"
 "\"\"(空白字串，關閉自動偵測功能)\n"
 "cjk_parallel_state_machine (自動偵測東亞地區編碼)\n"
 "ja_parallel_state_machine (自動偵測日文編碼)\n"
@@ -428,37 +432,38 @@ msgstr ""
 
 #: data/epiphany.schemas.in.h:58
 msgid "The page informations shown in the history view"
-msgstr ""
+msgstr "顯示在瀏覽紀錄中的頁面資訊"
 
 #: data/epiphany.schemas.in.h:59
 msgid ""
 "The page informations shown in the history view. Valid values in the list "
 "are \"address\", \"title\"."
-msgstr ""
+msgstr "從編輯器中所顯示的書籤資訊。"
+"這個列表中有效的值為“位址”、“標題”。"
 
 #: data/epiphany.schemas.in.h:60
 msgid "The path of the folder where downloads are saved."
-msgstr ""
+msgstr "儲存下載時的資料夾路徑。"
 
 #: data/epiphany.schemas.in.h:61
 msgid "Use caret browsing mode."
-msgstr ""
+msgstr "使用鍵盤瀏覽模式。"
 
 #: data/epiphany.schemas.in.h:62
 msgid "Use own colors"
-msgstr "使用自選色彩"
+msgstr "使用自行指定的色彩"
 
 #: data/epiphany.schemas.in.h:63
 msgid "Use own fonts"
-msgstr "使用自選字型"
+msgstr "使用自行指定的字型"
 
 #: data/epiphany.schemas.in.h:64
 msgid "Use your own colors instead of the colors the page requests."
-msgstr "使用自選的色彩代替頁面要求的色彩。"
+msgstr "使用自行指定的色彩代替頁面要求的色彩。"
 
 #: data/epiphany.schemas.in.h:65
 msgid "Use your own fonts instead of the fonts the page requests."
-msgstr "使用自選的字型代替頁面要求的字型。"
+msgstr "使用自行指定的字型代替頁面要求的字型。"
 
 #: data/epiphany.schemas.in.h:66
 msgid ""
@@ -519,24 +524,20 @@ msgid "    "
 msgstr "    "
 
 #: data/glade/certificate-dialogs.glade.h:2
-#, fuzzy
 msgid "<b>Fingerprints</b>"
-msgstr "<b>字型</b>"
+msgstr "<b>數位簽章</b>"
 
 #: data/glade/certificate-dialogs.glade.h:3
-#, fuzzy
 msgid "<b>Issued By</b>"
-msgstr "<b>頁首</b>"
+msgstr "<b>發行者</b>"
 
 #: data/glade/certificate-dialogs.glade.h:4
-#, fuzzy
 msgid "<b>Issued To</b>"
-msgstr "<b>列印至</b>"
+msgstr "<b>發行給</b>"
 
 #: data/glade/certificate-dialogs.glade.h:5
-#, fuzzy
 msgid "<b>Validity</b>"
-msgstr "<b>狀態：</b>"
+msgstr "<b>有效性</b>"
 
 #: data/glade/certificate-dialogs.glade.h:6
 msgid "Certificate _Fields"
@@ -544,23 +545,21 @@ msgstr ""
 
 #: data/glade/certificate-dialogs.glade.h:7
 msgid "Certificate _Hierarchy"
-msgstr ""
+msgstr "憑證階層(_H)"
 
 #: data/glade/certificate-dialogs.glade.h:8
 msgid "Common Name:"
-msgstr ""
+msgstr "憑證名稱"
 
 #: data/glade/certificate-dialogs.glade.h:9
 msgid "DYNAMIC"
 msgstr "DYNAMIC"
 
 #: data/glade/certificate-dialogs.glade.h:10
-#, fuzzy
 msgid "Details"
-msgstr "紙張詳細資料"
+msgstr "詳細資料"
 
 #: data/glade/certificate-dialogs.glade.h:11
-#, fuzzy
 msgid "Expires On:"
 msgstr "時限："
 
@@ -575,33 +574,32 @@ msgstr "一般"
 
 #: data/glade/certificate-dialogs.glade.h:14
 msgid "Issued On:"
-msgstr ""
+msgstr "發行於："
 
 #: data/glade/certificate-dialogs.glade.h:15
 msgid "MD5 Fingerprint:"
-msgstr ""
+msgstr "MD5 數位簽章："
 
 #: data/glade/certificate-dialogs.glade.h:16
-#: embed/mozilla/GtkNSSDialogs.cpp:969
+#: embed/mozilla/GtkNSSDialogs.cpp:988
 msgid "Organization:"
-msgstr ""
+msgstr "組織："
 
 #: data/glade/certificate-dialogs.glade.h:17
 msgid "Organizational Unit:"
-msgstr ""
+msgstr "組織單位："
 
 #: data/glade/certificate-dialogs.glade.h:18
 msgid "SHA1 Fingerprint:"
-msgstr ""
+msgstr "SHA1 數位簽章："
 
 #: data/glade/certificate-dialogs.glade.h:19
 msgid "Serial Number:"
-msgstr ""
+msgstr "序號："
 
 #: data/glade/epiphany.glade.h:1
-#, fuzzy
 msgid "      "
-msgstr "    "
+msgstr "      "
 
 #: data/glade/epiphany.glade.h:2 data/glade/prefs-dialog.glade.h:2
 #: data/glade/print.glade.h:2
@@ -609,13 +607,12 @@ msgid "*"
 msgstr "*"
 
 #: data/glade/epiphany.glade.h:3
-#, fuzzy
 msgid "<b>_Automatic</b>"
-msgstr "<b>位置：</b>"
+msgstr "<b>自動(_A)：</b>"
 
 #: data/glade/epiphany.glade.h:4
 msgid "<b>_Use a different encoding:</b>"
-msgstr ""
+msgstr "使用不同的編碼(_U)："
 
 #: data/glade/epiphany.glade.h:5
 msgid "C_ase sensitive"
@@ -623,13 +620,13 @@ msgstr "區分大小寫(_A)"
 
 #: data/glade/epiphany.glade.h:6
 msgid "Cookies"
-msgstr "Cookie"
+msgstr "Cookies"
 
 #: data/glade/epiphany.glade.h:7
 msgid "Download Manager"
 msgstr "下載總管"
 
-#: data/glade/epiphany.glade.h:8 src/ephy-window.c:1023
+#: data/glade/epiphany.glade.h:8 src/ephy-window.c:1121
 msgid "Find"
 msgstr "搜尋"
 
@@ -642,13 +639,12 @@ msgid "Personal Data Manager"
 msgstr "個人資料總管"
 
 #: data/glade/epiphany.glade.h:11
-#, fuzzy
 msgid "Text Encoding"
-msgstr "編碼(_E)"
+msgstr "字元編碼"
 
 #: data/glade/epiphany.glade.h:12 src/ephy-encoding-menu.c:368
 msgid "Use the encoding specified by the document"
-msgstr ""
+msgstr "使用此文件所指定的編碼方式"
 
 #: data/glade/epiphany.glade.h:13
 msgid "_Find:"
@@ -658,7 +654,7 @@ msgstr "搜尋(_F)："
 msgid "_Next"
 msgstr "下一個(_N)"
 
-#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:279
+#: data/glade/epiphany.glade.h:15 embed/downloader-view.c:292
 msgid "_Pause"
 msgstr "暫停(_P)"
 
@@ -676,12 +672,11 @@ msgstr "<b>色彩</b>"
 
 #: data/glade/prefs-dialog.glade.h:4
 msgid "<b>Cookies</b>"
-msgstr "<b>Cookie</b>"
+msgstr "<b>Cookies</b>"
 
 #: data/glade/prefs-dialog.glade.h:5
-#, fuzzy
 msgid "<b>Downloads</b>"
-msgstr "<b>色彩</b>"
+msgstr "<b>下載</b>"
 
 #: data/glade/prefs-dialog.glade.h:6
 msgid "<b>Encodings</b>"
@@ -708,46 +703,40 @@ msgid "<b>Web Content</b>"
 msgstr "<b>網頁內容</b>"
 
 #: data/glade/prefs-dialog.glade.h:12
-#, fuzzy
 msgid "A_utomatically download and open files"
-msgstr "自動從頭開始搜尋(_W)"
+msgstr "自動下載並開啟檔案(_U)"
 
 #: data/glade/prefs-dialog.glade.h:13
-#, fuzzy
 msgid "Add Language"
-msgstr "語言"
+msgstr "增加語言"
 
 #: data/glade/prefs-dialog.glade.h:14
 msgid "Al_ways use the desktop theme colors"
-msgstr "一定使用桌面佈景主題色彩(_W)"
+msgstr "使用桌面佈景主題色彩(_W)"
 
 #: data/glade/prefs-dialog.glade.h:15
-#, fuzzy
 msgid "Allow popup _windows"
-msgstr "允許開啟彈出式視窗(_P)"
+msgstr "允許開啟彈出式視窗(_W)"
 
 #: data/glade/prefs-dialog.glade.h:16
 msgid "Always use _these fonts"
-msgstr "一定使用指定的字型(_T)"
+msgstr "使用指定的字型(_T)"
 
 #: data/glade/prefs-dialog.glade.h:17
-#, fuzzy
 msgid "Au_todetect:"
 msgstr "自動偵測(_T)："
 
 #: data/glade/prefs-dialog.glade.h:18
-#, fuzzy
 msgid "Choose a l_anguage:"
-msgstr "系統語言設定"
+msgstr "選擇語言(_A)："
 
 #: data/glade/prefs-dialog.glade.h:19
 msgid "Cl_ear"
 msgstr "清除(_E)"
 
 #: data/glade/prefs-dialog.glade.h:20
-#, fuzzy
 msgid "De_fault:"
-msgstr "預設(_D)："
+msgstr "預設(_F)："
 
 #: data/glade/prefs-dialog.glade.h:21
 msgid "Enable Java_Script"
@@ -762,9 +751,8 @@ msgid "Fonts and Colors"
 msgstr "字型及色彩"
 
 #: data/glade/prefs-dialog.glade.h:24
-#, fuzzy
 msgid "For l_anguage:"
-msgstr "語言(_L)："
+msgstr "針對語言(_L)："
 
 #: data/glade/prefs-dialog.glade.h:26
 msgid "Language"
@@ -776,7 +764,7 @@ msgstr "MB"
 
 #: data/glade/prefs-dialog.glade.h:28
 msgid "Only _from sites you visit"
-msgstr "只從您瀏覽的網站發出(_F)"
+msgstr "只來自您瀏覽的網站(_F)"
 
 #: data/glade/prefs-dialog.glade.h:29
 msgid "Preferences"
@@ -795,58 +783,53 @@ msgid "Set to _Blank Page"
 msgstr "使用空白頁面(_B)"
 
 #: data/glade/prefs-dialog.glade.h:33
-#, fuzzy
 msgid "_Add..."
-msgstr "搜尋(_F)..."
+msgstr "增加(_A)..."
 
 #: data/glade/prefs-dialog.glade.h:34
-#: src/bookmarks/ephy-bookmark-properties.c:371
+#: src/bookmarks/ephy-bookmark-properties.c:373
 msgid "_Address:"
 msgstr "網址(_A)："
 
 #: data/glade/prefs-dialog.glade.h:35
 msgid "_Always accept"
-msgstr "一定接受(_A)"
+msgstr "接受(_A)"
 
 #: data/glade/prefs-dialog.glade.h:36
 msgid "_Disk space:"
 msgstr "磁碟空間(_D)："
 
 #: data/glade/prefs-dialog.glade.h:37
-#, fuzzy
 msgid "_Down"
-msgstr "完成。"
+msgstr "完成(_D)。"
 
 #: data/glade/prefs-dialog.glade.h:38
-#, fuzzy
 msgid "_Download folder:"
-msgstr "下載鏈結"
+msgstr "下載資料夾(_D)"
 
 #: data/glade/prefs-dialog.glade.h:39
 msgid "_Fixed width:"
-msgstr ""
+msgstr "固定寬度(_F)："
 
 #: data/glade/prefs-dialog.glade.h:40
-#, fuzzy
 msgid "_Minimum size:"
-msgstr "字型尺寸下限(_I)："
+msgstr "字型尺寸下限(_M)："
 
 #: data/glade/prefs-dialog.glade.h:41
 msgid "_Never accept"
-msgstr "一定拒絕(_N)"
+msgstr "拒絕(_N)"
 
 #: data/glade/prefs-dialog.glade.h:42
-#, fuzzy
 msgid "_Remove"
-msgstr "恢復狀態(_R)"
+msgstr "移除(_R)"
 
-#: data/glade/prefs-dialog.glade.h:43 src/ephy-window.c:201
+#: data/glade/prefs-dialog.glade.h:43 src/ephy-window.c:208
 msgid "_Up"
 msgstr "上一層(_U)"
 
 #: data/glade/prefs-dialog.glade.h:44
 msgid "_Variable width:"
-msgstr ""
+msgstr "可變寬度(_V)："
 
 #: data/glade/print.glade.h:4
 msgid "<b>Footers</b>"
@@ -858,7 +841,7 @@ msgstr "<b>頁首</b>"
 
 #: data/glade/print.glade.h:6
 msgid "<b>Margins (in mm)</b>"
-msgstr "<b>邊緣(亳米)</b>"
+msgstr "<b>空白邊緣距離 (公釐)</b>"
 
 #: data/glade/print.glade.h:7
 msgid "<b>Orientation</b>"
@@ -878,7 +861,7 @@ msgstr "<b>尺寸</b>"
 
 #: data/glade/print.glade.h:11
 msgid "A_4"
-msgstr "A_4"
+msgstr "A4(_4)"
 
 #: data/glade/print.glade.h:12
 msgid "Appearance"
@@ -890,11 +873,11 @@ msgstr "色彩(_O)"
 
 #: data/glade/print.glade.h:14
 msgid "E_xecutive"
-msgstr "E_xecutive"
+msgstr "Executive(_X)"
 
 #: data/glade/print.glade.h:15
 msgid "L_egal"
-msgstr "L_egal"
+msgstr "Legal(_E)"
 
 #: data/glade/print.glade.h:16
 msgid "Lan_dscape"
@@ -924,14 +907,13 @@ msgstr "頁數(_N)"
 msgid "Paper"
 msgstr "紙張"
 
-#: data/glade/print.glade.h:23 src/ephy-window.c:1019
+#: data/glade/print.glade.h:23 src/ephy-window.c:1117
 msgid "Print"
 msgstr "列印"
 
 #: data/glade/print.glade.h:24
-#, fuzzy
 msgid "Print Setup"
-msgstr "列印範圍"
+msgstr "列印設定"
 
 #: data/glade/print.glade.h:25
 msgid "_All pages"
@@ -942,9 +924,8 @@ msgid "_Bottom:"
 msgstr "下(_B)："
 
 #: data/glade/print.glade.h:27
-#, fuzzy
 msgid "_Browse..."
-msgstr "其它(_R)..."
+msgstr "瀏覽(_B)..."
 
 #: data/glade/print.glade.h:28
 msgid "_Date"
@@ -967,9 +948,8 @@ msgid "_Letter"
 msgstr "_Letter"
 
 #: data/glade/print.glade.h:33
-#, fuzzy
 msgid "_Page address"
-msgstr "網址(_D)"
+msgstr "網頁位址(_P)"
 
 #: data/glade/print.glade.h:34
 msgid "_Right:"
@@ -995,58 +975,54 @@ msgstr "從(_O)："
 msgid "lpr"
 msgstr "lpr"
 
-#: embed/downloader-view.c:224
+#: embed/downloader-view.c:237
 #, c-format
 msgid "%u:%02u.%02u"
 msgstr "%u:%02u.%02u"
 
-#: embed/downloader-view.c:228
+#: embed/downloader-view.c:241
 #, c-format
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
-#: embed/downloader-view.c:279
+#: embed/downloader-view.c:292
 msgid "_Resume"
 msgstr "續傳(_R)"
 
 #. Translator hint: this is a label on progress bars inside a tree view.
 #.
-#: embed/downloader-view.c:342 lib/widgets/ephy-cell-renderer-progress.c:246
-#: lib/widgets/ephy-cell-renderer-progress.c:306 src/ephy-window.c:1204
+#: embed/downloader-view.c:355 lib/widgets/ephy-cell-renderer-progress.c:246
+#: lib/widgets/ephy-cell-renderer-progress.c:306 src/ephy-window.c:1302
 msgid "Unknown"
 msgstr "不明"
 
-#: embed/downloader-view.c:393
+#: embed/downloader-view.c:406
 #, c-format
 msgid "About %d second left"
 msgid_plural "About %d seconds left"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "大約還剩 %d 秒"
 
-#: embed/downloader-view.c:401
+#: embed/downloader-view.c:414
 #, c-format
 msgid "About %d minute left"
 msgid_plural "About %d minutes left"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "大約還剩 %d 分鐘"
 
-#: embed/downloader-view.c:408
+#: embed/downloader-view.c:421
 #, c-format
 msgid "%d download"
 msgid_plural "%d downloads"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d 個下載"
 
-#: embed/downloader-view.c:514
+#: embed/downloader-view.c:561 src/bookmarks/ephy-bookmarks-editor.c:675
+msgid "File"
+msgstr "檔案"
+
+#: embed/downloader-view.c:583
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:525 src/bookmarks/ephy-bookmarks-editor.c:668
-#, fuzzy
-msgid "File"
-msgstr "檔案(_F)"
-
-#: embed/downloader-view.c:539
+#: embed/downloader-view.c:594
 msgid "Remaining"
 msgstr "剩餘"
 
@@ -1159,9 +1135,8 @@ msgid "Cyrillic (_Windows-1251)"
 msgstr "西里爾文字 (_Windows-1251)"
 
 #: embed/ephy-encodings.c:90
-#, fuzzy
 msgid "Cyrillic/_Russian (IBM-866)"
-msgstr "西里爾/俄文 (_CP-866)"
+msgstr "西里爾文字 /俄文 (I_BM-866)"
 
 #: embed/ephy-encodings.c:91
 msgid "Greek (_ISO-8859-7)"
@@ -1248,7 +1223,6 @@ msgid "_Nordic (ISO-8859-10)"
 msgstr "北歐語系 (_ISO-8859-10)"
 
 #: embed/ephy-encodings.c:112
-#, fuzzy
 msgid "_Persian (MacFarsi)"
 msgstr "波斯文 (Mac_Farsi)"
 
@@ -1266,7 +1240,7 @@ msgstr "羅馬尼亞文 (IS_O-8859-16)"
 
 #: embed/ephy-encodings.c:116
 msgid "South _European (ISO-8859-3)"
-msgstr "南歐語系 (_ISO-8859-3)"
+msgstr "南歐語系 (ISO-8859-_3)"
 
 #: embed/ephy-encodings.c:117
 msgid "Thai (TIS-_620)"
@@ -1329,7 +1303,6 @@ msgid "Western (_IBM-850)"
 msgstr "西歐語系 (_IBM-850)"
 
 #: embed/ephy-encodings.c:132
-#, fuzzy
 msgid "Western (_ISO-8859-1)"
 msgstr "西歐語系 (I_SO-8859-1)"
 
@@ -1353,56 +1326,50 @@ msgid "English (_US-ASCII)"
 msgstr "英文 (_US-ASCII)"
 
 #: embed/ephy-encodings.c:141
-#, fuzzy
 msgid "Unicode (UTF-_16 BE)"
-msgstr "統一碼 (UTF-1_6BE)"
+msgstr "Unicode (UTF-1_6BE)"
 
 #: embed/ephy-encodings.c:142
-#, fuzzy
 msgid "Unicode (UTF-1_6 LE)"
-msgstr "統一碼 (UTF-1_6BE)"
+msgstr "Unicode (UTF-1_6BE)"
 
 #: embed/ephy-encodings.c:143
-#, fuzzy
 msgid "Unicode (UTF-_32 BE)"
-msgstr "統一碼 (UTF-3_2BE)"
+msgstr "Unicode (UTF-3_2BE)"
 
 #: embed/ephy-encodings.c:144
-#, fuzzy
 msgid "Unicode (UTF-3_2 LE)"
-msgstr "統一碼 (UTF-3_2BE)"
+msgstr "Unicode (UTF-3_2BE)"
 
 #: embed/ephy-encodings.c:146
 msgid "Off"
 msgstr "關閉"
 
-#: embed/ephy-encodings.c:147 src/prefs-dialog.c:117
+#: embed/ephy-encodings.c:147 src/prefs-dialog.c:119
 msgid "Chinese"
-msgstr "中國"
+msgstr "中文"
 
 #: embed/ephy-encodings.c:148
-#, fuzzy
 msgid "Chinese Simplified"
-msgstr "簡體中文 (_HZ)"
+msgstr "簡體中文"
 
 #: embed/ephy-encodings.c:149
-#, fuzzy
 msgid "Chinese Traditional"
-msgstr "繁體中文 (Big_5)"
+msgstr "繁體中文"
 
 #: embed/ephy-encodings.c:150
 msgid "East Asian"
 msgstr "東亞"
 
-#: embed/ephy-encodings.c:151 lib/ephy-langs.c:38 src/prefs-dialog.c:137
+#: embed/ephy-encodings.c:151 lib/ephy-langs.c:38 src/prefs-dialog.c:139
 msgid "Japanese"
 msgstr "日本"
 
-#: embed/ephy-encodings.c:152 lib/ephy-langs.c:39 src/prefs-dialog.c:138
+#: embed/ephy-encodings.c:152 lib/ephy-langs.c:39 src/prefs-dialog.c:140
 msgid "Korean"
 msgstr "韓國"
 
-#: embed/ephy-encodings.c:153 src/prefs-dialog.c:150
+#: embed/ephy-encodings.c:153 src/prefs-dialog.c:152
 msgid "Russian"
 msgstr "俄文"
 
@@ -1410,7 +1377,7 @@ msgstr "俄文"
 msgid "Universal"
 msgstr "通用"
 
-#: embed/ephy-encodings.c:155 src/prefs-dialog.c:159
+#: embed/ephy-encodings.c:155 src/prefs-dialog.c:161
 msgid "Ukrainian"
 msgstr "烏黑蘭語"
 
@@ -1418,11 +1385,11 @@ msgstr "烏黑蘭語"
 #. * be displayed as.
 #.
 #: embed/ephy-encodings.c:318
-#, fuzzy, c-format
+# c-format
 msgid "Unknown (%s)"
-msgstr "不明"
+msgstr "不明 (%s)"
 
-#: embed/ephy-history.c:486 src/bookmarks/ephy-bookmarks.c:644
+#: embed/ephy-history.c:486 src/bookmarks/ephy-bookmarks.c:697
 msgid "All"
 msgstr "全部"
 
@@ -1434,353 +1401,356 @@ msgstr "其它"
 msgid "Local files"
 msgstr "本機檔案"
 
-#: embed/mozilla/ContentHandler.cpp:141
-#: embed/mozilla/EphyHeaderSniffer.cpp:348
-#, fuzzy
+#: embed/mozilla/ContentHandler.cpp:148
+#: embed/mozilla/EphyHeaderSniffer.cpp:360
 msgid "Save"
-msgstr "另存新檔"
+msgstr "儲存"
 
-#: embed/mozilla/ContentHandler.cpp:264
-#, fuzzy
+#: embed/mozilla/ContentHandler.cpp:278
 msgid "_Save As..."
-msgstr "另存新檔(_A)..."
+msgstr "另存新檔(_S)..."
 
-#: embed/mozilla/ContentHandler.cpp:281
-#, fuzzy
+#: embed/mozilla/ContentHandler.cpp:295
 msgid "Download the unsafe file?"
-msgstr "下載的詳細情況(_D)"
+msgstr "確定下載這不安全的檔案？"
 
-#: embed/mozilla/ContentHandler.cpp:282
+#: embed/mozilla/ContentHandler.cpp:296
 msgid ""
 "This type of file could potentially damage your documents or invade your "
 "privacy. It's not safe to open it directly. You can save it instead."
-msgstr ""
+msgstr "這種類型的檔案有可能破壞您的文件或侵犯您的隱私權。"
+"直接打開它是不安全的。取而代之地，您可以儲存它。"
 
-#: embed/mozilla/ContentHandler.cpp:290
-#, fuzzy
+#: embed/mozilla/ContentHandler.cpp:304
 msgid "Open the file in another application?"
-msgstr "請選取檔案處理方式"
+msgstr "以另外一個應用程式來開啟這個檔案？"
 
-#: embed/mozilla/ContentHandler.cpp:291
+#: embed/mozilla/ContentHandler.cpp:305
 msgid ""
 "It's not possible to view this file type directly in the browser. You can "
 "open it with another application or save it."
-msgstr ""
+msgstr "無法在瀏覽器中直接顯示此檔案的類型。"
+"您可以用另一個應用程式來開啟它或儲存。"
 
-#: embed/mozilla/ContentHandler.cpp:298
-#, fuzzy
+#: embed/mozilla/ContentHandler.cpp:312
 msgid "Download the file?"
-msgstr "下載的詳細情況(_D)"
+msgstr "下載此檔案？"
 
-#: embed/mozilla/ContentHandler.cpp:299
+#: embed/mozilla/ContentHandler.cpp:313
 msgid ""
 "It's not possible to view this file because there is no application "
 "installed that can open it. You can save it instead."
-msgstr ""
+msgstr "無法直接檢視此檔案因為沒有安裝可開啟此檔的應用程式。"
+"您可以直接儲存此檔案。"
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:315
-#: src/bookmarks/ephy-bookmarks-import.c:253 src/ephy-toolbars-model.c:205
-#: src/window-commands.c:343
+#: embed/mozilla/EphyHeaderSniffer.cpp:323
+#: src/bookmarks/ephy-bookmarks-import.c:252
+#: src/bookmarks/ephy-bookmarksbar-model.c:349 src/window-commands.c:344
 msgid "Untitled"
 msgstr "未命名"
 
-#: embed/mozilla/FilePicker.cpp:164 embed/print-dialog.c:302
-#: lib/ephy-file-chooser.c:376 src/bookmarks/ephy-bookmarks-editor.c:578
-#, fuzzy
+#: embed/mozilla/FilePicker.cpp:145 embed/print-dialog.c:328
+#: lib/ephy-file-chooser.c:376 src/bookmarks/ephy-bookmarks-editor.c:600
 msgid "All files"
-msgstr "本機檔案"
+msgstr "所有檔案"
 
-#: embed/mozilla/FilePicker.cpp:169 lib/ephy-file-chooser.c:360
-#, fuzzy
+#: embed/mozilla/FilePicker.cpp:150 lib/ephy-file-chooser.c:360
 msgid "Web pages"
 msgstr "網頁"
 
-#: embed/mozilla/FilePicker.cpp:177
+#: embed/mozilla/FilePicker.cpp:158
 msgid "Text files"
-msgstr ""
+msgstr "文字檔"
 
-#: embed/mozilla/FilePicker.cpp:182 lib/ephy-file-chooser.c:368
-#, fuzzy
+#: embed/mozilla/FilePicker.cpp:163 lib/ephy-file-chooser.c:368
 msgid "Images"
-msgstr "指定頁數(_G)"
+msgstr "影像檔案"
 
-#: embed/mozilla/FilePicker.cpp:190
-#, fuzzy
+#: embed/mozilla/FilePicker.cpp:171
 msgid "XML files"
-msgstr "本機檔案"
+msgstr "XML 檔案"
 
-#: embed/mozilla/FilePicker.cpp:195
-#, fuzzy
+#: embed/mozilla/FilePicker.cpp:176
 msgid "XUL files"
-msgstr "本機檔案"
+msgstr "XUL 檔案"
 
 #: embed/mozilla/GtkNSSClientAuthDialogs.cpp:156
 msgid "_Select Certificate"
-msgstr ""
+msgstr "選擇憑證(_S)"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:195
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:196
 #, c-format
 msgid "Choose a certificate to present as identification to %s."
-msgstr ""
+msgstr "選擇一個做為 %s 識別的憑證。"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:198
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:199
 msgid "Select a certificate to identify yourself."
-msgstr ""
+msgstr "選擇一個憑證來辨識您自己。"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:230
-#, fuzzy
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:237
 msgid "Certificate _Details"
-msgstr "紙張詳細資料"
+msgstr "憑證詳細資料(_D)"
 
 #. Add the buttons
-#: embed/mozilla/GtkNSSDialogs.cpp:227 embed/mozilla/GtkNSSDialogs.cpp:538
+#: embed/mozilla/GtkNSSDialogs.cpp:226 embed/mozilla/GtkNSSDialogs.cpp:549
 msgid "_View Certificate"
-msgstr ""
+msgstr "檢視憑證(_V)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:235
-#, fuzzy
+#: embed/mozilla/GtkNSSDialogs.cpp:234
 msgid "_Accept"
-msgstr "一定接受(_A)"
+msgstr "接受(_A)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:299
+#: embed/mozilla/GtkNSSDialogs.cpp:301
 #, c-format
 msgid ""
 "The site %s returned security information for %s. It is possible that "
 "someone is intercepting your communication to obtain your confidential "
 "information."
-msgstr ""
+msgstr "%s 這個站台所回傳對於 %s 的安全資訊。"
+"可能有人正在竊聽您的連線以獲得您的機密資料。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:305
+#: embed/mozilla/GtkNSSDialogs.cpp:307
 #, c-format
 msgid "You should only accept the security information if you trust %s and %s."
-msgstr ""
+msgstr "您應當只接受該安全資訊，如果您相信 %s 與 %s 。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:310
+#: embed/mozilla/GtkNSSDialogs.cpp:312
 msgid "Accept incorrect security information?"
-msgstr ""
+msgstr "接受不正確的安全資訊？"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:342
+#: embed/mozilla/GtkNSSDialogs.cpp:347
 #, c-format
 msgid ""
 "Your browser was unable to trust %s. It is possible that someone is "
 "intercepting your communication to obtain your confidential information."
-msgstr ""
+msgstr "您的瀏覽器不信任 %s 。"
+"可能有人正在竊聽您的連線以獲得您的機密資料。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:348
+#: embed/mozilla/GtkNSSDialogs.cpp:353
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to %"
 "s."
-msgstr ""
-
-#: embed/mozilla/GtkNSSDialogs.cpp:353
-msgid "Connect to untrusted site?"
-msgstr ""
-
-#: embed/mozilla/GtkNSSDialogs.cpp:357
-msgid "_Don't show this message again for this site"
-msgstr ""
+msgstr "您應當只連接該站台如果您確認您所要連接的站台是 %s 。"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:358
+msgid "Connect to untrusted site?"
+msgstr "連接到不信任的站台？"
+
+#: embed/mozilla/GtkNSSDialogs.cpp:362
+msgid "_Don't show this message again for this site"
+msgstr "對此站台不再顯示此訊息(_D)"
+
+#: embed/mozilla/GtkNSSDialogs.cpp:363
 msgid "Co_nnect"
-msgstr ""
+msgstr "連接(_N)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:419
+#: embed/mozilla/GtkNSSDialogs.cpp:423
 msgid "Accept expired security information?"
-msgstr ""
+msgstr "接受過期的安全資訊？"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:420
+#: embed/mozilla/GtkNSSDialogs.cpp:424
 #, c-format
 msgid "The security information for %s expired on %s."
-msgstr ""
+msgstr "這 %s 的安全資訊已在 %s 過期。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:426
+#: embed/mozilla/GtkNSSDialogs.cpp:430
 msgid "Accept not yet valid security information?"
-msgstr ""
+msgstr "接受還不是有效的安全資訊？"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:427
+#: embed/mozilla/GtkNSSDialogs.cpp:431
 #, c-format
 msgid "The security information for %s isn't valid until %s."
-msgstr ""
+msgstr "%s 的安全資訊尚未有效直到 %s 。"
 
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: embed/mozilla/GtkNSSDialogs.cpp:438
+#: embed/mozilla/GtkNSSDialogs.cpp:447
 msgid "%a %d %b %Y"
-msgstr ""
+msgstr "%a %d %b %Y"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:449
+#: embed/mozilla/GtkNSSDialogs.cpp:457
 msgid "You should ensure that your computer's time is correct."
-msgstr ""
+msgstr "您應該確定您電腦的時間為正確值。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:494
+#: embed/mozilla/GtkNSSDialogs.cpp:505
 #, c-format
 msgid "Cannot establish connection to %s."
-msgstr ""
+msgstr "無法建立連線到 %s"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:497
+#: embed/mozilla/GtkNSSDialogs.cpp:508
 #, c-format
 msgid "The certificate revocation list (CRL) from %s needs to be updated."
-msgstr ""
+msgstr "%s 的憑證廢止清冊需要更新"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:502
+#: embed/mozilla/GtkNSSDialogs.cpp:513
 msgid "Please ask your system administrator for assistance."
-msgstr ""
+msgstr "請詢問您的系統管理員以獲得協助。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:541
+#: embed/mozilla/GtkNSSDialogs.cpp:552
 msgid "_Trust CA"
-msgstr ""
+msgstr "信任的憑證管理中心(_T)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:553
+#: embed/mozilla/GtkNSSDialogs.cpp:568
 #, c-format
 msgid "Trust %s to identify:"
-msgstr ""
+msgstr "信任由 %s 來識別:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:557
+#: embed/mozilla/GtkNSSDialogs.cpp:572
 msgid "Trust new Certificate Authority?"
-msgstr ""
+msgstr "信任新的憑證管理中心？"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:558
+#: embed/mozilla/GtkNSSDialogs.cpp:573
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
-msgstr ""
+msgstr "在信任一個憑證管理中心前，"
+"您應該驗證該憑證是可信的。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:568
-#, fuzzy
+#: embed/mozilla/GtkNSSDialogs.cpp:583
 msgid "_Web sites"
-msgstr "西歐語系(_W)"
+msgstr "網頁站台(_W)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:573
+#: embed/mozilla/GtkNSSDialogs.cpp:588
 msgid "_Software developers"
-msgstr ""
+msgstr "軟體開發者(_S)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:639
+#: embed/mozilla/GtkNSSDialogs.cpp:654
 msgid "Certificate already exists."
-msgstr ""
+msgstr "憑證已經存在。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:640
-#, fuzzy
+#: embed/mozilla/GtkNSSDialogs.cpp:655
 msgid "The certificate has already been imported."
-msgstr "沒有儲存檔案。"
+msgstr "憑證已經匯入。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:759
+#: embed/mozilla/GtkNSSDialogs.cpp:774
 msgid "_Backup Certificate"
-msgstr ""
+msgstr "備份憑證(_B)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:766
-#, fuzzy
+#: embed/mozilla/GtkNSSDialogs.cpp:781
 msgid "Select password."
-msgstr "儲存密碼。"
+msgstr "選擇密碼。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:767
+#: embed/mozilla/GtkNSSDialogs.cpp:782
 msgid "Select a password to protect this certificate."
-msgstr ""
+msgstr "選擇一個密碼來保護此憑證。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:779 embed/mozilla/GtkNSSDialogs.cpp:881
-#, fuzzy
+#: embed/mozilla/GtkNSSDialogs.cpp:794 embed/mozilla/GtkNSSDialogs.cpp:897
 msgid "_Password:"
-msgstr "密碼"
+msgstr "密碼(_P):"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:793
+#: embed/mozilla/GtkNSSDialogs.cpp:808
 msgid "Con_firm password:"
-msgstr ""
+msgstr "確認密碼(_F):"
 
 #. TODO: We need a better password quality meter
-#: embed/mozilla/GtkNSSDialogs.cpp:805
-#, fuzzy
+#: embed/mozilla/GtkNSSDialogs.cpp:820
 msgid "Password quality:"
-msgstr "密碼"
+msgstr "密碼品質:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:862
+#: embed/mozilla/GtkNSSDialogs.cpp:878
 msgid "I_mport Certificate"
-msgstr ""
+msgstr "匯入憑證(_M)"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:870
-#, fuzzy
+#: embed/mozilla/GtkNSSDialogs.cpp:886
 msgid "Password required."
-msgstr "密碼"
+msgstr "需要密碼。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:871
+#: embed/mozilla/GtkNSSDialogs.cpp:887
 msgid "Enter the password for this certificate."
-msgstr ""
+msgstr "輸入此憑證的密碼。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:949
+#: embed/mozilla/GtkNSSDialogs.cpp:966
 msgid "Certificate Revocation list successfully imported."
-msgstr ""
+msgstr "憑證廢止清冊匯入成功。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:950
+#: embed/mozilla/GtkNSSDialogs.cpp:967
 msgid "Certificate Revocation list (CRL) imported:"
-msgstr ""
+msgstr "匯入憑證廢止清冊:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:972
-#, fuzzy
+#: embed/mozilla/GtkNSSDialogs.cpp:993
 msgid "Unit:"
-msgstr "未命名"
+msgstr "單位:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:975
+#: embed/mozilla/GtkNSSDialogs.cpp:998
 msgid "Next Update:"
-msgstr ""
+msgstr "更新下一個:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1002
+#: embed/mozilla/GtkNSSDialogs.cpp:1025
 msgid "Not part of certificate"
-msgstr ""
-
-#: embed/mozilla/GtkNSSDialogs.cpp:1270
-#, fuzzy
-msgid "Certificate Properties"
-msgstr "Cookie 屬性"
-
-#: embed/mozilla/GtkNSSDialogs.cpp:1292
-msgid "This certificate has been verified for the following uses:"
-msgstr ""
-
-#: embed/mozilla/GtkNSSDialogs.cpp:1295
-msgid "Could not verify this certificate because it has been revoked."
-msgstr ""
-
-#: embed/mozilla/GtkNSSDialogs.cpp:1298
-msgid "Could not verify this certificate because it has expired."
-msgstr ""
-
-#: embed/mozilla/GtkNSSDialogs.cpp:1301
-msgid "Could not verify this certificate because it is not trusted."
-msgstr ""
+msgstr "非憑證的一部份"
 
 #: embed/mozilla/GtkNSSDialogs.cpp:1304
+msgid "Certificate Properties"
+msgstr "憑證屬性"
+
+#: embed/mozilla/GtkNSSDialogs.cpp:1326
+msgid "This certificate has been verified for the following uses:"
+msgstr "此憑證已經以下列使用目地被驗證："
+
+#: embed/mozilla/GtkNSSDialogs.cpp:1329
+msgid "Could not verify this certificate because it has been revoked."
+msgstr "因為此憑證已經被廢止所以無法驗證。"
+
+#: embed/mozilla/GtkNSSDialogs.cpp:1332
+msgid "Could not verify this certificate because it has expired."
+msgstr "因為此憑證過期所以無法驗證。"
+
+#: embed/mozilla/GtkNSSDialogs.cpp:1335
+msgid "Could not verify this certificate because it is not trusted."
+msgstr "因為此憑證為不可信任的所以無法驗證。"
+
+#: embed/mozilla/GtkNSSDialogs.cpp:1338
 msgid "Could not verify this certificate because the issuer is not trusted."
-msgstr ""
+msgstr "因為發行者為不可信任的所以無法驗證此憑證。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1307
+#: embed/mozilla/GtkNSSDialogs.cpp:1341
 msgid "Could not verify this certificate because the issuer is unknown."
-msgstr ""
+msgstr "因為發行者為未知所以無法驗證此憑證。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1310
+#: embed/mozilla/GtkNSSDialogs.cpp:1344
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
-msgstr ""
+msgstr "無法驗證此憑證，因為 CA 憑證無效。"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1315
+#: embed/mozilla/GtkNSSDialogs.cpp:1349
 msgid "Could not verify this certificate for unknown reasons."
-msgstr ""
+msgstr "因為不明原因無法驗證此憑證。"
 
-#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:195
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:199
 msgid "Generating Private Key."
-msgstr ""
+msgstr "產生私鑰中。"
 
-#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:196
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:200
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
-msgstr ""
+msgstr "當私鑰產生時請稍待片刻。"
+"此程序可能要花費幾分鐘。"
 
-#: embed/mozilla/MozDownload.cpp:591
-#, fuzzy
+#: embed/mozilla/MozDownload.cpp:568
 msgid "Files"
-msgstr "檔案(_F)"
+msgstr "檔案"
 
-#: embed/mozilla/mozilla-embed-single.cpp:491
+#. We do this before reading the user pref file so that the user
+#. * still can overwrite this pref.
+#. * We don't use the default-prefs.js file since that cannot be
+#. * localised (see bug #144909).
+#.
+#. translators: this is the URL that searches from the location
+#. * entry get directed to. The search terms will be _appended_ to it,
+#. * in url-escaped UTF-8; that means that if you're choosing google,
+#. * the 'q=' part needs to come last.
+#.
+#: embed/mozilla/mozilla-embed-single.cpp:222
+#, fuzzy
+msgid "http://www.google.com/search?ie=UTF-8&oe=UTF-8&q="
+msgstr ""
+"http://www.google.com.hk/search?ie=UTF-8&oe=UTF-8&hl=zh-TW&lr=lang_zh-TW%%"
+"7Clang_zh-CN&q=%s"
+
+#: embed/mozilla/mozilla-embed-single.cpp:512
 msgid ""
 "Epiphany can't be used now. Mozilla initialization failed. Check your "
 "MOZILLA_FIVE_HOME environmental variable."
@@ -1799,18 +1769,17 @@ msgstr ""
 #. * "zh_CN" translation: "zh-cn,zh"
 #. * "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
 #.
-#: embed/mozilla/mozilla-notifiers.cpp:736
+#: embed/mozilla/mozilla-notifiers.cpp:750
 msgid "system-language"
 msgstr "zh-hk,zh-tw"
 
-#: embed/print-dialog.c:294
-#, fuzzy
+#: embed/print-dialog.c:320
 msgid "Print to"
-msgstr "列印"
+msgstr "列印到"
 
-#: embed/print-dialog.c:299
+#: embed/print-dialog.c:325
 msgid "Postscript files"
-msgstr ""
+msgstr "Postscript 檔案"
 
 #: lib/eel-gconf-extensions.c:81
 #, c-format
@@ -1821,15 +1790,15 @@ msgstr ""
 "GConf 錯誤：\n"
 "  %s"
 
-#: lib/egg/egg-editable-toolbar.c:512
+#: lib/egg/egg-editable-toolbar.c:536
 msgid "_Remove Toolbar"
 msgstr "移除工具列(_R)"
 
-#: lib/egg/egg-toolbar-editor.c:563
+#: lib/egg/egg-toolbar-editor.c:554
 msgid "Separator"
 msgstr "分隔線"
 
-#: lib/egg/egg-toolbar-editor.c:593
+#: lib/egg/egg-toolbar-editor.c:584
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
@@ -1839,52 +1808,51 @@ msgstr ""
 
 #: lib/ephy-file-chooser.c:349
 msgid "All supported types"
-msgstr ""
+msgstr "所有支援的類型"
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:79 src/prefs-dialog.c:1108
-#, fuzzy
+#: lib/ephy-file-helpers.c:79 src/prefs-dialog.c:1110
 msgid "Downloads"
-msgstr "下載鏈結"
+msgstr "下載"
 
 #: lib/ephy-file-helpers.c:168
 #, c-format
 msgid "Failed to find %s"
 msgstr "找不到 %s"
 
-#: lib/ephy-file-helpers.c:233
+#: lib/ephy-file-helpers.c:234
 #, c-format
 msgid "%s exists, please move it out of the way."
 msgstr "%s 已經存在，請先將它移至其它位置。"
 
-#: lib/ephy-file-helpers.c:236
+#: lib/ephy-file-helpers.c:240
 #, c-format
 msgid "Failed to create directory %s."
 msgstr "無法新增 %s 目錄。"
 
-#: lib/ephy-gui.c:96
+#: lib/ephy-gui.c:101
 #, fuzzy, c-format
 msgid "A file %s already exists."
-msgstr "該網址已經有一個書籤，它的標題為 %s。"
+msgstr "檔案 %s 已經存在。"
 
-#: lib/ephy-gui.c:100
+#: lib/ephy-gui.c:105
 msgid "If you choose to overwrite this file, the contents will be lost."
-msgstr ""
-
-#: lib/ephy-gui.c:103
-msgid "Overwrite File"
-msgstr ""
+msgstr "如果您選擇覆寫此檔案，該檔案的原有內容將會消失。"
 
 #: lib/ephy-gui.c:108
-msgid "_Overwrite"
-msgstr ""
+msgid "Overwrite File"
+msgstr "覆寫檔案"
 
-#: lib/ephy-gui.c:153
+#: lib/ephy-gui.c:113
+msgid "_Overwrite"
+msgstr "(_O)覆寫"
+
+#: lib/ephy-gui.c:158
 #, c-format
 msgid "Could not display help: %s"
 msgstr "無法顯示說明文件：%s"
 
-#: lib/ephy-langs.c:31 src/prefs-dialog.c:108
+#: lib/ephy-langs.c:31 src/prefs-dialog.c:110
 msgid "Arabic"
 msgstr "阿拉伯"
 
@@ -1904,19 +1872,19 @@ msgstr "西里爾文字"
 msgid "Devanagari"
 msgstr "梵文"
 
-#: lib/ephy-langs.c:36 src/prefs-dialog.c:130
+#: lib/ephy-langs.c:36 src/prefs-dialog.c:132
 msgid "Greek"
 msgstr "希臘"
 
-#: lib/ephy-langs.c:37 src/prefs-dialog.c:131
+#: lib/ephy-langs.c:37 src/prefs-dialog.c:133
 msgid "Hebrew"
 msgstr "希伯來"
 
-#: lib/ephy-langs.c:40 src/prefs-dialog.c:115
+#: lib/ephy-langs.c:40 src/prefs-dialog.c:117
 msgid "Simplified Chinese"
 msgstr "簡體中文"
 
-#: lib/ephy-langs.c:41 src/prefs-dialog.c:157
+#: lib/ephy-langs.c:41 src/prefs-dialog.c:159
 msgid "Tamil"
 msgstr "坦米爾語"
 
@@ -1924,16 +1892,15 @@ msgstr "坦米爾語"
 msgid "Thai"
 msgstr "泰文"
 
-#: lib/ephy-langs.c:43 src/prefs-dialog.c:116
+#: lib/ephy-langs.c:43 src/prefs-dialog.c:118
 msgid "Traditional Chinese"
 msgstr "繁體中文"
 
 #: lib/ephy-langs.c:44
-#, fuzzy
 msgid "Traditional Chinese (Hong Kong)"
-msgstr "繁體中文"
+msgstr "繁體中文(香港)"
 
-#: lib/ephy-langs.c:45 src/prefs-dialog.c:158
+#: lib/ephy-langs.c:45 src/prefs-dialog.c:160
 msgid "Turkish"
 msgstr "土耳其"
 
@@ -1946,31 +1913,33 @@ msgid "Western"
 msgstr "西歐語系"
 
 #: lib/ephy-stock-icons.c:54
-#, fuzzy
 msgid "Secure"
-msgstr "安全："
+msgstr "安全"
 
-#: lib/ephy-stock-icons.c:55 src/ephy-window.c:1207
+#: lib/ephy-stock-icons.c:55 src/ephy-window.c:1305
 msgid "Insecure"
 msgstr "不安全"
 
-#: lib/ephy-stock-icons.c:56 src/ephy-history-window.c:1192
+#: lib/ephy-stock-icons.c:56
+msgid "Popup Windows"
+msgstr "彈出式視窗"
+
+#: lib/ephy-stock-icons.c:57 src/ephy-history-window.c:1202
 msgid "History"
 msgstr "瀏覽紀錄"
 
-#: lib/ephy-stock-icons.c:57 src/bookmarks/ephy-bookmarks-editor.c:1394
-#: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:1025
+#: lib/ephy-stock-icons.c:58 src/bookmarks/ephy-bookmarks-editor.c:1423
+#: src/bookmarks/ephy-topic-action.c:988 src/ephy-window.c:1123
 msgid "Bookmarks"
 msgstr "書籤"
 
-#: lib/ephy-stock-icons.c:58 src/toolbar.c:411
+#: lib/ephy-stock-icons.c:59 src/toolbar.c:338
 msgid "Address Entry"
 msgstr "網址輸入欄"
 
-#: lib/ephy-stock-icons.c:59
-#, fuzzy
+#: lib/ephy-stock-icons.c:60
 msgid "_Download"
-msgstr "下載鏈結"
+msgstr "下載(_D)"
 
 #: lib/ephy-zoom.h:41
 msgid "50%"
@@ -2011,303 +1980,323 @@ msgstr "400%"
 #. Translator hint: this is a label on progress bars inside a tree view.
 #.
 #: lib/widgets/ephy-cell-renderer-progress.c:242
-#, fuzzy
 msgid "Failed"
-msgstr "檔案(_F)"
+msgstr "失敗"
 
 #. Translator hint: this is the default label on progress bars
 #. * inside a tree view. %d will be replaced by the percentage
 #.
 #: lib/widgets/ephy-cell-renderer-progress.c:251
-#, fuzzy, c-format
+#, c-format
 msgid "%d %%"
-msgstr "%d kB"
+msgstr "%d %%"
 
-#: src/bookmarks/ephy-bookmark-action.c:248
+#: lib/widgets/ephy-label.c:3432
+msgid "Select All"
+msgstr "全部選取"
+
+#: lib/widgets/ephy-label.c:3442
+msgid "Input Methods"
+msgstr "輸入方式"
+
+#: src/bookmarks/ephy-bookmark-action.c:277
 #, c-format
 msgid "%s:"
 msgstr "%s："
 
-#: src/bookmarks/ephy-bookmark-properties.c:230
+#: src/bookmarks/ephy-bookmark-action.c:533
+#: src/bookmarks/ephy-bookmarks-editor.c:181
+#: src/bookmarks/ephy-bookmarks-editor.c:1043 src/ephy-history-window.c:169
+#: src/ephy-history-window.c:747
+msgid "Open in New _Tab"
+msgstr "在新的分頁開啟(_T)"
+
+#: src/bookmarks/ephy-bookmark-action.c:539
+msgid "Open in New _Window"
+msgstr "在新的視窗開啟(_W)"
+
+#: src/bookmarks/ephy-bookmark-action.c:570
+#: src/bookmarks/ephy-topic-action.c:742
+msgid "Move _Left"
+msgstr "左移(_L)"
+
+#: src/bookmarks/ephy-bookmark-action.c:577
+#: src/bookmarks/ephy-topic-action.c:749
+msgid "Move Ri_ght"
+msgstr "右移(_G)"
+
+#: src/bookmarks/ephy-bookmark-properties.c:232
 #, c-format
 msgid "%s Properties"
 msgstr "%s 屬性"
 
-#: src/bookmarks/ephy-bookmark-properties.c:352
-#: src/bookmarks/ephy-new-bookmark.c:216
+#: src/bookmarks/ephy-bookmark-properties.c:354
+#: src/bookmarks/ephy-new-bookmark.c:228
 msgid "_Title:"
 msgstr "標題(_T)："
 
-#: src/bookmarks/ephy-bookmark-properties.c:394
-#: src/bookmarks/ephy-new-bookmark.c:239
+#: src/bookmarks/ephy-bookmark-properties.c:396
+#: src/bookmarks/ephy-new-bookmark.c:251
 msgid "To_pics:"
 msgstr "主題(_P)："
 
-#: src/bookmarks/ephy-bookmark-properties.c:403
+#: src/bookmarks/ephy-bookmark-properties.c:405
 msgid "_Show in bookmarks bar"
 msgstr "在書籤工具列中顯示(_S)"
 
 #. Toplevel
-#: src/bookmarks/ephy-bookmarks-editor.c:161 src/ephy-history-window.c:151
-#: src/ephy-window.c:83
+#: src/bookmarks/ephy-bookmarks-editor.c:168 src/ephy-history-window.c:159
+#: src/ephy-window.c:90
 msgid "_File"
 msgstr "檔案(_F)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:162 src/ephy-history-window.c:152
-#: src/ephy-window.c:84
+#: src/bookmarks/ephy-bookmarks-editor.c:169 src/ephy-history-window.c:160
+#: src/ephy-window.c:91
 msgid "_Edit"
 msgstr "編輯(_E)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:163 src/ephy-history-window.c:153
-#: src/ephy-window.c:85
+#: src/bookmarks/ephy-bookmarks-editor.c:170 src/ephy-history-window.c:161
+#: src/ephy-window.c:92
 msgid "_View"
 msgstr "顯示(_V)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:164 src/ephy-history-window.c:154
-#: src/ephy-window.c:90
+#: src/bookmarks/ephy-bookmarks-editor.c:171 src/ephy-history-window.c:162
+#: src/ephy-window.c:97
 msgid "_Help"
 msgstr "求助(_H)"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:168
+#: src/bookmarks/ephy-bookmarks-editor.c:175
+#: src/bookmarks/ephy-new-bookmark.c:298
 msgid "_New Topic"
 msgstr "新增主題(_N)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:169
+#: src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Create a new topic"
 msgstr "加入新的主題"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:171
-#: src/bookmarks/ephy-bookmarks-editor.c:1017 src/ephy-history-window.c:158
-#: src/ephy-history-window.c:738
+#: src/bookmarks/ephy-bookmarks-editor.c:178
+#: src/bookmarks/ephy-bookmarks-editor.c:1042 src/ephy-history-window.c:166
+#: src/ephy-history-window.c:746
 msgid "_Open in New Window"
 msgstr "在新的視窗開啟(_O)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:172
+#: src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Open the selected bookmark in a new window"
 msgstr "在新的視窗開啟指定的書籤"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:174
-#: src/bookmarks/ephy-bookmarks-editor.c:1018 src/ephy-history-window.c:161
-#: src/ephy-history-window.c:739
-msgid "Open in New _Tab"
-msgstr "在新的分頁開啟(_T)"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:175
+#: src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "Open the selected bookmark in a new tab"
 msgstr "在新的分頁開啟指定的書籤"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:177
+#: src/bookmarks/ephy-bookmarks-editor.c:184
 msgid "_Rename..."
-msgstr "更改名稱(_R)..."
+msgstr "重新命名(_R)..."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:178
+#: src/bookmarks/ephy-bookmarks-editor.c:185
 msgid "Rename the selected bookmark or topic"
 msgstr "將指定的書籤或主題重新命名"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:179 src/ephy-history-window.c:164
+#: src/bookmarks/ephy-bookmarks-editor.c:186 src/ephy-history-window.c:172
 msgid "_Delete"
 msgstr "刪除(_D)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:180
+#: src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "Delete the selected bookmark or topic"
 msgstr "刪除指定的書籤或主題"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:182
+#: src/bookmarks/ephy-bookmarks-editor.c:189
 msgid "_Properties"
 msgstr "屬性(_P)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:183
+#: src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "View or modify the properties of the selected bookmark"
 msgstr "顯示或修改指定的書籤的屬性"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:185
+#: src/bookmarks/ephy-bookmarks-editor.c:192
 msgid "_Import Bookmarks..."
 msgstr "匯入書籤(_I)..."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:186
+#: src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "從其它瀏覽器或者書籤檔匯入書籤"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:188 src/ephy-history-window.c:170
-#: src/ephy-window.c:121
+#: src/bookmarks/ephy-bookmarks-editor.c:195 src/ephy-history-window.c:178
+#: src/ephy-window.c:128
 msgid "_Close"
 msgstr "關閉(_C)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:189
+#: src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "Close the bookmarks window"
 msgstr "關閉書籤視窗"
 
 #. Edit Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:193 src/ephy-history-window.c:175
-#: src/ephy-window.c:132
+#: src/bookmarks/ephy-bookmarks-editor.c:200 src/ephy-history-window.c:183
+#: src/ephy-window.c:139
 msgid "Cu_t"
 msgstr "剪下(_T)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:194 src/ephy-history-window.c:176
-#: src/ephy-window.c:133
+#: src/bookmarks/ephy-bookmarks-editor.c:201 src/ephy-history-window.c:184
+#: src/ephy-window.c:140
 msgid "Cut the selection"
 msgstr "剪下選定的內容"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:196
-#: src/bookmarks/ephy-bookmarks-editor.c:1027 src/ephy-history-window.c:178
-#: src/ephy-history-window.c:748 src/ephy-window.c:135
+#: src/bookmarks/ephy-bookmarks-editor.c:203
+#: src/bookmarks/ephy-bookmarks-editor.c:1052 src/ephy-history-window.c:186
+#: src/ephy-history-window.c:756 src/ephy-window.c:142
 msgid "_Copy"
 msgstr "複製(_C)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:197 src/ephy-history-window.c:179
-#: src/ephy-window.c:136
+#: src/bookmarks/ephy-bookmarks-editor.c:204 src/ephy-history-window.c:187
+#: src/ephy-window.c:143
 msgid "Copy the selection"
 msgstr "複製選定的內容"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:199 src/ephy-history-window.c:181
-#: src/ephy-window.c:138
+#: src/bookmarks/ephy-bookmarks-editor.c:206 src/ephy-history-window.c:189
+#: src/ephy-window.c:145
 msgid "_Paste"
 msgstr "貼上(_P)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:200 src/ephy-history-window.c:182
+#: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:190
 msgid "Paste the clipboard"
 msgstr "貼上剪貼簿中的內容"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:202 src/ephy-history-window.c:184
-#: src/ephy-window.c:141
+#: src/bookmarks/ephy-bookmarks-editor.c:209 src/ephy-history-window.c:192
+#: src/ephy-window.c:148
 msgid "Select _All"
 msgstr "全部選取(_A)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:203
+#: src/bookmarks/ephy-bookmarks-editor.c:210
 msgid "Select all bookmarks or text"
 msgstr "選取所有書籤或文字"
 
 #. Help Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:192
-#: src/ephy-window.c:232
+#. Help menu
+#: src/bookmarks/ephy-bookmarks-editor.c:214 src/ephy-history-window.c:200
+#: src/ephy-window.c:239
 msgid "_Contents"
 msgstr "內容(_C)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:208
+#: src/bookmarks/ephy-bookmarks-editor.c:215
 msgid "Display bookmarks help"
 msgstr "顯示書籤說明文件"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:210 src/ephy-history-window.c:195
-#: src/ephy-window.c:235
+#: src/bookmarks/ephy-bookmarks-editor.c:217 src/ephy-history-window.c:203
+#: src/ephy-window.c:242
 msgid "_About"
 msgstr "關於(_A)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:211 src/ephy-history-window.c:196
-#: src/ephy-window.c:236
+#: src/bookmarks/ephy-bookmarks-editor.c:218 src/ephy-history-window.c:204
+#: src/ephy-window.c:243
 msgid "Display credits for the web browser creators"
 msgstr "鳴謝所有這個網頁瀏覽器的創作者"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:219
+#: src/bookmarks/ephy-bookmarks-editor.c:226
 msgid "_Show in Bookmarks Bar"
 msgstr "在書籤工具列中顯示(_S)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:220
+#: src/bookmarks/ephy-bookmarks-editor.c:227
 msgid "Show the selected bookmark or topic in the bookmarks bar"
 msgstr "在書籤工具列中顯示指定的書籤或主題"
 
 #. View Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:234 src/ephy-history-window.c:211
+#: src/bookmarks/ephy-bookmarks-editor.c:241 src/ephy-history-window.c:219
 msgid "_Title"
 msgstr "標題(_T)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:235 src/ephy-history-window.c:212
+#: src/bookmarks/ephy-bookmarks-editor.c:242 src/ephy-history-window.c:220
 msgid "Show only the title column"
 msgstr "只顯示標題欄位"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:236 src/ephy-history-window.c:215
+#: src/bookmarks/ephy-bookmarks-editor.c:243 src/ephy-history-window.c:223
 msgid "T_itle and Address"
 msgstr "標題及網址(_I)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:237 src/ephy-history-window.c:216
+#: src/bookmarks/ephy-bookmarks-editor.c:244 src/ephy-history-window.c:224
 msgid "Show both the title and address columns"
 msgstr "同時顯示標題及網址欄位"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:279
+#: src/bookmarks/ephy-bookmarks-editor.c:286
+#: src/bookmarks/ephy-topics-selector.c:311
 msgid "Type a topic"
 msgstr "請輸入主題名稱"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:559
-#, fuzzy
+#: src/bookmarks/ephy-bookmarks-editor.c:581
 msgid "Import bookmarks from file"
-msgstr "匯入書籤"
+msgstr "從檔案匯入書籤"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:566
-#, fuzzy
+#: src/bookmarks/ephy-bookmarks-editor.c:588
 msgid "Firefox/Firebird/Mozilla bookmarks"
-msgstr "Mozilla 書籤"
+msgstr "Firefox/Firebird/Mozilla 書籤"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:570
-#, fuzzy
+#: src/bookmarks/ephy-bookmarks-editor.c:592
 msgid "Galeon/Konqueror bookmarks"
-msgstr "Konqueror 書籤"
+msgstr "Galeon/Konqueror 書籤"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:574
-#, fuzzy
+#: src/bookmarks/ephy-bookmarks-editor.c:596
 msgid "Epiphany bookmarks"
-msgstr "Galeon 書籤"
+msgstr "Epiphany 書籤"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:613
+#: src/bookmarks/ephy-bookmarks-editor.c:635
 msgid "Import Bookmarks"
 msgstr "匯入書籤"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:619
-#, fuzzy
+#: src/bookmarks/ephy-bookmarks-editor.c:641
 msgid "I_mport"
-msgstr "運動"
+msgstr "匯入(_M)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:633
-#, fuzzy
+#: src/bookmarks/ephy-bookmarks-editor.c:655
 msgid "Import bookmarks from:"
-msgstr "匯入書籤"
+msgstr "匯入書籤的來源"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:656
+#: src/bookmarks/ephy-bookmarks-editor.c:663
 msgid "Firebird"
-msgstr ""
+msgstr "Firebird"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:658
+#: src/bookmarks/ephy-bookmarks-editor.c:665
 msgid "Firefox"
-msgstr ""
+msgstr "Firefox"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:660
+#: src/bookmarks/ephy-bookmarks-editor.c:667
 msgid "Galeon"
 msgstr "Galeon"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:662
+#: src/bookmarks/ephy-bookmarks-editor.c:669
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:664
+#: src/bookmarks/ephy-bookmarks-editor.c:671
 msgid "Mozilla"
-msgstr ""
+msgstr "Mozilla"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1012 src/ephy-history-window.c:733
+#: src/bookmarks/ephy-bookmarks-editor.c:1037 src/ephy-history-window.c:741
 msgid "_Open in New Windows"
-msgstr "在新的視窗開啟(_O)"
+msgstr "以新視窗開啟(_O)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1013 src/ephy-history-window.c:734
+#: src/bookmarks/ephy-bookmarks-editor.c:1038 src/ephy-history-window.c:742
 msgid "Open in New _Tabs"
-msgstr "在新的分頁開啟(_T)"
+msgstr "以新分頁開啟(_T)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1023 src/ephy-history-window.c:744
+#: src/bookmarks/ephy-bookmarks-editor.c:1048 src/ephy-history-window.c:752
 msgid "_Copy Address"
 msgstr "複製網址(_C)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1264 src/ephy-history-window.c:1038
+#: src/bookmarks/ephy-bookmarks-editor.c:1293 src/ephy-history-window.c:1048
 msgid "_Search:"
 msgstr "搜尋(_S)："
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1477
+#: src/bookmarks/ephy-bookmarks-editor.c:1506
+#: src/bookmarks/ephy-topics-selector.c:197
 msgid "Topics"
 msgstr "主題"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1539 src/ephy-history-window.c:1318
+#: src/bookmarks/ephy-bookmarks-editor.c:1571 src/ephy-history-window.c:1332
 msgid "Title"
 msgstr "標題"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1546 src/ephy-history-window.c:1324
+#: src/bookmarks/ephy-bookmarks-editor.c:1577 src/ephy-history-window.c:1338
 msgid "Address"
 msgstr "網址"
 
@@ -2315,177 +2304,174 @@ msgstr "網址"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: src/bookmarks/ephy-bookmarks.c:83
+#: src/bookmarks/ephy-bookmarks.c:84
 msgid "Search the web"
 msgstr "搜尋網頁"
 
-#: src/bookmarks/ephy-bookmarks.c:83
+#: src/bookmarks/ephy-bookmarks.c:84
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr ""
 "http://www.google.com.hk/search?ie=UTF-8&oe=UTF-8&hl=zh-TW&lr=lang_zh-TW%%"
 "7Clang_zh-CN&q=%s"
 
-#: src/bookmarks/ephy-bookmarks.c:89
+#: src/bookmarks/ephy-bookmarks.c:90
 msgid "Entertainment"
 msgstr "娛樂"
 
-#: src/bookmarks/ephy-bookmarks.c:90
+#: src/bookmarks/ephy-bookmarks.c:91
 msgid "News"
 msgstr "新聞"
 
-#: src/bookmarks/ephy-bookmarks.c:91
+#: src/bookmarks/ephy-bookmarks.c:92
 msgid "Shopping"
 msgstr "購物"
 
-#: src/bookmarks/ephy-bookmarks.c:92
+#: src/bookmarks/ephy-bookmarks.c:93
 msgid "Sports"
 msgstr "運動"
 
-#: src/bookmarks/ephy-bookmarks.c:93
+#: src/bookmarks/ephy-bookmarks.c:94
 msgid "Travel"
 msgstr "旅遊"
 
-#: src/bookmarks/ephy-bookmarks.c:94
+#: src/bookmarks/ephy-bookmarks.c:95
 msgid "Work"
 msgstr "工作"
 
-#: src/bookmarks/ephy-bookmarks.c:677
+#: src/bookmarks/ephy-bookmarks.c:730
 msgid "Most Visited"
-msgstr "經常到訪"
+msgstr "最常瀏覽"
 
-#: src/bookmarks/ephy-bookmarks.c:693
+#: src/bookmarks/ephy-bookmarks.c:746
 msgid "Not Categorized"
 msgstr "未分類"
 
-#: src/bookmarks/ephy-new-bookmark.c:262
-#, fuzzy
+#: src/bookmarks/ephy-new-bookmark.c:274
 msgid "Add Bookmark"
-msgstr "加入書籤(_K)..."
+msgstr "加入書籤"
 
 #. FIXME: We "should" use gtk_message dialog here
 #. * but it doesn't support markup of text yet
 #. * so we build our own. See bug 65501.
 #.
-#: src/bookmarks/ephy-new-bookmark.c:307
+#: src/bookmarks/ephy-new-bookmark.c:322
 msgid "Duplicated Bookmark"
 msgstr "重複的書籤"
 
-#: src/bookmarks/ephy-new-bookmark.c:337
+#: src/bookmarks/ephy-new-bookmark.c:352
 #, c-format
 msgid "A bookmark titled %s already exists for this page."
 msgstr "該網址已經有一個書籤，它的標題為 %s。"
 
 #. This is the adjective, not the verb
-#: src/bookmarks/ephy-topic-action.c:233
+#: src/bookmarks/ephy-topic-action.c:273
 msgid "Empty"
 msgstr "空白"
 
+#: src/bookmarks/ephy-topic-action.c:444
+msgid "_Open in Tabs"
+msgstr "在新的分頁開啟(_T)"
+
 #: src/ephy-encoding-dialog.c:315
-#, fuzzy
 msgid "Encodings"
 msgstr "編碼(_E)"
 
 #: src/ephy-encoding-menu.c:359
-#, fuzzy
 msgid "_Other..."
-msgstr "其它(_O)"
+msgstr "其它(_O)..."
 
 #: src/ephy-encoding-menu.c:360
-#, fuzzy
 msgid "Other encodings"
-msgstr "預設編碼"
+msgstr "其他字元編碼方式"
 
 #: src/ephy-encoding-menu.c:367
-#, fuzzy
 msgid "_Automatic"
 msgstr "自動(_A)"
 
-#: src/ephy-go-action.c:73 src/toolbar.c:445
+#: src/ephy-go-action.c:73 src/toolbar.c:372
 msgid "Go"
 msgstr "前往"
 
-#: src/ephy-history-window.c:159
+#: src/ephy-history-window.c:167
 msgid "Open the selected history link in a new window"
 msgstr "在新的視窗中開啟選定的瀏覽紀錄鏈結"
 
-#: src/ephy-history-window.c:162
+#: src/ephy-history-window.c:170
 msgid "Open the selected history link in a new tab"
 msgstr "在新的分頁中開啟選定的瀏覽紀錄鏈結"
 
-#: src/ephy-history-window.c:165
+#: src/ephy-history-window.c:173
 msgid "Delete the selected history link"
 msgstr "刪除選定的瀏覽紀錄鏈結"
 
-#: src/ephy-history-window.c:167
+#: src/ephy-history-window.c:175
 msgid "Boo_kmark Link..."
 msgstr "將鏈結加入書籤(_K)..."
 
-#: src/ephy-history-window.c:168
+#: src/ephy-history-window.c:176
 msgid "Bookmark the selected history link"
 msgstr "將選定的瀏覽紀錄鏈結加入至書籤"
 
-#: src/ephy-history-window.c:171
+#: src/ephy-history-window.c:179
 msgid "Close the history window"
 msgstr "關閉瀏覽紀錄視窗"
 
-#: src/ephy-history-window.c:185
+#: src/ephy-history-window.c:193
 msgid "Select all history links or text"
 msgstr "選取所有瀏覽紀錄鏈結或文字"
 
-#: src/ephy-history-window.c:187
+#: src/ephy-history-window.c:195
 msgid "C_lear History"
 msgstr "清除紀錄(_L)"
 
-#: src/ephy-history-window.c:188
+#: src/ephy-history-window.c:196
 msgid "Clear your browsing history"
 msgstr "清除瀏覽紀錄"
 
-#: src/ephy-history-window.c:193
+#: src/ephy-history-window.c:201
 msgid "Display history help"
 msgstr "顯示瀏覽紀錄說明文件"
 
-#: src/ephy-history-window.c:213
+#: src/ephy-history-window.c:221
 msgid "_Address"
 msgstr "網址(_A)"
 
-#: src/ephy-history-window.c:214
+#: src/ephy-history-window.c:222
 msgid "Show only the address column"
 msgstr "只顯示網址欄位"
 
-#: src/ephy-history-window.c:246
-#, fuzzy
+#: src/ephy-history-window.c:254
 msgid "Clear History"
-msgstr "清除紀錄(_L)"
+msgstr "清除瀏覽紀錄"
 
-#: src/ephy-history-window.c:276
+#: src/ephy-history-window.c:284
 msgid "C_lear"
 msgstr "清除(_L)"
 
-#: src/ephy-history-window.c:300
+#: src/ephy-history-window.c:308
 msgid "Clear browsing history?"
 msgstr "是否清除瀏覽紀錄？"
 
-#: src/ephy-history-window.c:307
+#: src/ephy-history-window.c:315
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
-msgstr "將所有瀏覽紀錄永遠清除。"
+msgstr "清除瀏覽紀錄將會使所有瀏覽紀錄永遠被刪除。"
 
-#: src/ephy-history-window.c:1047
+#: src/ephy-history-window.c:1057
 msgid "Today"
 msgstr "今日"
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: src/ephy-history-window.c:1048 src/ephy-history-window.c:1051
-#: src/ephy-history-window.c:1055
+#: src/ephy-history-window.c:1058 src/ephy-history-window.c:1061
+#: src/ephy-history-window.c:1065
 #, fuzzy, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
-msgstr[0] "最近兩日"
-msgstr[1] "最近兩日"
+msgstr[0] "最近 %d 日"
 
-#: src/ephy-history-window.c:1264
+#: src/ephy-history-window.c:1274
 msgid "Sites"
 msgstr "網站"
 
@@ -2514,570 +2500,573 @@ msgid "URL"
 msgstr "網址"
 
 #: src/ephy-main.c:68
-#, fuzzy
 msgid "Import bookmarks from the given file"
-msgstr "從其它瀏覽器或者書籤檔匯入書籤"
+msgstr "從所指定的檔案匯入書籤"
 
 #: src/ephy-main.c:71
 msgid "Launch the bookmarks editor"
 msgstr "啟動書籤編輯器"
 
 #: src/ephy-main.c:74
-#, fuzzy
 msgid "Used internally by the bonobo interface"
-msgstr "供 nautilus 顯示模式內部使用"
+msgstr "供 bonobo 介面內部使用"
 
-#: src/ephy-main.c:109
-msgid "Epiphany Web Browser"
-msgstr "Epiphany 網頁瀏覽器"
-
-#: src/ephy-main.c:113
+#: src/ephy-main.c:112
 msgid "Ephy"
 msgstr "Ephy"
 
-#: src/ephy-session.c:367
+#: src/ephy-session.c:374
 msgid "Crash Recovery"
 msgstr "恢復瀏覽器視窗狀態"
 
-#: src/ephy-session.c:369
+#: src/ephy-session.c:376
 msgid "_Don't Recover"
 msgstr "不恢復狀態(_D)"
 
-#: src/ephy-session.c:370
+#: src/ephy-session.c:377
 msgid "_Recover"
 msgstr "恢復狀態(_R)"
 
-#: src/ephy-session.c:401
+#: src/ephy-session.c:408
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr "Epiphany 在上次執行時似乎是因某些漏洞而結束，或是被強行中止。"
 
-#: src/ephy-session.c:407
+#: src/ephy-session.c:414
 msgid "You can recover the opened tabs and windows."
 msgstr "您可以恢復曾經開啟的分頁及視窗。"
 
-#: src/ephy-shell.c:345
+#: src/ephy-shell.c:347
 msgid ""
 "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
 "use bonobo-activation-sysconf to configure the search path for bonobo server "
 "files."
-msgstr ""
+msgstr "Bonobo 無法定位 GNOME_Epiphany_Automation.server 這個檔案。"
+"您可以使用 bonobo-activation-sysconf 來設定 bonobo 伺服器檔案的搜尋路徑。"
 
-#: src/ephy-shell.c:352
+#: src/ephy-shell.c:354
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to register the automation server"
-msgstr ""
+msgstr "Epiphany 現在無法使用，因為 Bonobo 試圖"
+"註冊自動化伺服器時發生意外的錯誤。"
 
-#: src/ephy-shell.c:375
+#: src/ephy-shell.c:377
 msgid ""
 "Epiphany can't be used now, due to an unexpected error from Bonobo when "
 "attempting to locate the automation object."
-msgstr ""
+msgstr "Epiphany 現在無法使用，因為 Bonobo 試圖"
+"定位自動化物件時發生意外的錯誤。"
 
-#: src/ephy-tab.c:358 src/ephy-tab.c:1243 src/ephy-tab.c:1452
+#: src/ephy-tab.c:405 src/ephy-tab.c:1569 src/ephy-tab.c:1784
 msgid "Blank page"
 msgstr "空白頁面"
 
-#: src/ephy-tab.c:798
+#: src/ephy-tab.c:1113
 msgid "site"
 msgstr "站台"
 
-#: src/ephy-tab.c:822
+#: src/ephy-tab.c:1137
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "重新導向至 %s..."
 
-#: src/ephy-tab.c:826
+#: src/ephy-tab.c:1141
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "正在從 %s 傳送資料..."
 
-#: src/ephy-tab.c:830
+#: src/ephy-tab.c:1145
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "正在等待 %s 發出授權..."
 
-#: src/ephy-tab.c:838
+#: src/ephy-tab.c:1153
 #, c-format
 msgid "Loading %s..."
 msgstr "正在載入 %s..."
 
-#: src/ephy-window.c:86
+#: src/ephy-window.c:93
 msgid "_Bookmarks"
 msgstr "書籤(_B)"
 
-#: src/ephy-window.c:87
+#: src/ephy-window.c:94
 msgid "_Go"
 msgstr "前往(_G)"
 
-#: src/ephy-window.c:88
-#, fuzzy
+#: src/ephy-window.c:95
 msgid "T_ools"
 msgstr "工具列(_O)"
 
-#: src/ephy-window.c:89
+#: src/ephy-window.c:96
 msgid "_Tabs"
 msgstr "分頁(_T)"
 
 #. File menu
-#: src/ephy-window.c:94
+#: src/ephy-window.c:101
 msgid "_New Window"
 msgstr "新增視窗(_N)"
 
-#: src/ephy-window.c:95
+#: src/ephy-window.c:102
 msgid "Open a new window"
 msgstr "開啟新的視窗"
 
-#: src/ephy-window.c:97
+#: src/ephy-window.c:104
 msgid "New _Tab"
 msgstr "新增分頁(_T)"
 
-#: src/ephy-window.c:98
+#: src/ephy-window.c:105
 msgid "Open a new tab"
 msgstr "開啟新的分頁"
 
-#: src/ephy-window.c:100
+#: src/ephy-window.c:107
 msgid "_Open..."
 msgstr "開啟(_O)..."
 
-#: src/ephy-window.c:101
+#: src/ephy-window.c:108
 msgid "Open a file"
 msgstr "開啟檔案"
 
-#: src/ephy-window.c:103 src/ephy-window.c:106
+#: src/ephy-window.c:110 src/ephy-window.c:113
 msgid "Save _As..."
 msgstr "另存新檔(_A)..."
 
-#: src/ephy-window.c:104 src/ephy-window.c:107
+#: src/ephy-window.c:111 src/ephy-window.c:114
 msgid "Save the current page"
 msgstr "儲存目前的頁面內容"
 
-#: src/ephy-window.c:109
-#, fuzzy
+#: src/ephy-window.c:116
 msgid "Print Set_up..."
-msgstr "列印(_P)..."
+msgstr "列印設定(_)..."
 
-#: src/ephy-window.c:110
+#: src/ephy-window.c:117
 msgid "Setup the page settings for printing"
-msgstr ""
+msgstr "設定列印時的頁面設定"
 
-#: src/ephy-window.c:112
-#, fuzzy
+#: src/ephy-window.c:119
 msgid "Print Pre_view"
-msgstr "關閉列印預覽視窗"
+msgstr "列印預覽(_V)"
 
-#: src/ephy-window.c:113
-#, fuzzy
+#: src/ephy-window.c:120
 msgid "Print preview"
-msgstr "關閉列印預覽視窗"
+msgstr "列印預覽"
 
-#: src/ephy-window.c:115
+#: src/ephy-window.c:122
 msgid "_Print..."
 msgstr "列印(_P)..."
 
-#: src/ephy-window.c:116
+#: src/ephy-window.c:123
 msgid "Print the current page"
 msgstr "列印目前的頁面內容"
 
-#: src/ephy-window.c:118
+#: src/ephy-window.c:125
 msgid "S_end To..."
 msgstr "傳送網址(_E)..."
 
-#: src/ephy-window.c:119
+#: src/ephy-window.c:126
 msgid "Send a link of the current page"
 msgstr "傳送本頁面的網址"
 
-#: src/ephy-window.c:122
+#: src/ephy-window.c:129
 msgid "Close this window"
 msgstr "關閉本視窗"
 
 #. Edit menu
-#: src/ephy-window.c:126
-#, fuzzy
+#: src/ephy-window.c:133
 msgid "_Undo"
-msgstr "統一碼(_U)"
+msgstr "復原(_U)"
 
-#: src/ephy-window.c:127
-#, fuzzy
+#: src/ephy-window.c:134
 msgid "Undo the last action"
-msgstr "請選取檔案處理方式"
+msgstr "復原上一個動作"
 
-#: src/ephy-window.c:129
+#: src/ephy-window.c:136
 msgid "Re_do"
-msgstr ""
+msgstr "重做(_D)"
 
-#: src/ephy-window.c:130
+#: src/ephy-window.c:137
 msgid "Redo the last undone action"
-msgstr ""
+msgstr "重做上次取消的動作"
 
-#: src/ephy-window.c:139
+#: src/ephy-window.c:146
 msgid "Paste clipboard"
 msgstr "貼上剪貼簿的內容"
 
-#: src/ephy-window.c:142
+#: src/ephy-window.c:149
 msgid "Select the entire page"
 msgstr "選取整個頁面的內容"
 
-#: src/ephy-window.c:144
+#: src/ephy-window.c:151
 msgid "_Find..."
 msgstr "搜尋(_F)..."
 
-#: src/ephy-window.c:145
+#: src/ephy-window.c:152
 msgid "Find a word or phrase in the page"
 msgstr "在頁面中搜尋一個字或字串"
 
-#: src/ephy-window.c:147
+#: src/ephy-window.c:154
 msgid "Find Ne_xt"
 msgstr "找下一個(_X)"
 
-#: src/ephy-window.c:148
+#: src/ephy-window.c:155
 msgid "Find next occurrence of the word or phrase"
 msgstr "搜尋下一次出現指定字串的地方"
 
-#: src/ephy-window.c:150
+#: src/ephy-window.c:157
 msgid "Find Pre_vious"
 msgstr "找上一個(_V)"
 
-#: src/ephy-window.c:151
+#: src/ephy-window.c:158
 msgid "Find previous occurrence of the word or phrase"
 msgstr "搜尋上一次出現指定字串的地方"
 
-#: src/ephy-window.c:153
+#: src/ephy-window.c:160
 msgid "P_ersonal Data"
 msgstr "個人資料(_E)"
 
-#: src/ephy-window.c:154
+#: src/ephy-window.c:161
 msgid "View and remove cookies and passwords"
 msgstr "顯示及移除所有 cookie 及密碼"
 
-#: src/ephy-window.c:156
+#: src/ephy-window.c:163
 msgid "T_oolbars"
 msgstr "工具列(_O)"
 
-#: src/ephy-window.c:157
+#: src/ephy-window.c:164
 msgid "Customize toolbars"
-msgstr "自行修改工具列"
+msgstr "客製化工具列"
 
-#: src/ephy-window.c:159
+#: src/ephy-window.c:166
 msgid "P_references"
 msgstr "偏好設定(_R)"
 
-#: src/ephy-window.c:160
+#: src/ephy-window.c:167
 msgid "Configure the web browser"
 msgstr "修改網頁瀏覽器的設定"
 
 #. View menu
-#: src/ephy-window.c:164
+#: src/ephy-window.c:171
 msgid "_Stop"
 msgstr "停止(_S)"
 
-#: src/ephy-window.c:165
+#: src/ephy-window.c:172
 msgid "Stop current data transfer"
 msgstr "停止傳送目前的資料"
 
-#: src/ephy-window.c:167
+#: src/ephy-window.c:174
 msgid "_Reload"
 msgstr "重新載入(_R)"
 
-#: src/ephy-window.c:168
+#: src/ephy-window.c:175
 msgid "Display the latest content of the current page"
 msgstr "顯示本頁的最新內容"
 
-#: src/ephy-window.c:170
+#: src/ephy-window.c:177
 msgid "Zoom _In"
 msgstr "放大(_I)"
 
-#: src/ephy-window.c:171
+#: src/ephy-window.c:178
 msgid "Increase the text size"
 msgstr "將文字放大"
 
-#: src/ephy-window.c:173
+#: src/ephy-window.c:180
 msgid "Zoom _Out"
 msgstr "縮小(_O)"
 
-#: src/ephy-window.c:174
+#: src/ephy-window.c:181
 msgid "Decrease the text size"
 msgstr "將文字縮小"
 
-#: src/ephy-window.c:176
+#: src/ephy-window.c:183
 msgid "_Normal Size"
 msgstr "正常大小(_N)"
 
-#: src/ephy-window.c:177
+#: src/ephy-window.c:184
 msgid "Use the normal text size"
 msgstr "將文字還原為原來大小"
 
-#: src/ephy-window.c:179
-#, fuzzy
+#: src/ephy-window.c:186
 msgid "Text _Encoding"
-msgstr "編碼(_E)"
+msgstr "字元編碼(_E)"
 
-#: src/ephy-window.c:180
-#, fuzzy
+#: src/ephy-window.c:187
 msgid "Change the text encoding"
-msgstr "語言編碼(_L)："
+msgstr "改變字元編碼方式"
 
-#: src/ephy-window.c:182
+#: src/ephy-window.c:189
 msgid "_Page Source"
 msgstr "網頁原始內容(_P)"
 
-#: src/ephy-window.c:183
+#: src/ephy-window.c:190
 msgid "View the source code of the page"
 msgstr "顯示該頁面的原始內容"
 
 #. Bookmarks menu
-#: src/ephy-window.c:187
+#: src/ephy-window.c:194
 msgid "_Add Bookmark..."
 msgstr "加入書籤(_A)..."
 
-#: src/ephy-window.c:188 src/ephy-window.c:267
+#: src/ephy-window.c:195 src/ephy-window.c:282
 msgid "Add a bookmark for the current page"
 msgstr "新增有關本頁面的書籤"
 
-#: src/ephy-window.c:190
+#: src/ephy-window.c:197
 msgid "_Edit Bookmarks"
 msgstr "修改書籤(_E)"
 
-#: src/ephy-window.c:191
+#: src/ephy-window.c:198
 msgid "Open the bookmarks window"
 msgstr "開啟書籤視窗"
 
 #. Go menu
-#: src/ephy-window.c:195
+#: src/ephy-window.c:202
 msgid "_Back"
 msgstr "上一頁(_B)"
 
-#: src/ephy-window.c:196
+#: src/ephy-window.c:203
 msgid "Go to the previous visited page"
 msgstr "前往上一個瀏覽的頁面"
 
-#: src/ephy-window.c:198
+#: src/ephy-window.c:205
 msgid "_Forward"
 msgstr "下一頁(_F)"
 
-#: src/ephy-window.c:199
+#: src/ephy-window.c:206
 msgid "Go to the next visited page"
 msgstr "前往下一個瀏覽的頁面"
 
-#: src/ephy-window.c:202
+#: src/ephy-window.c:209
 msgid "Go up one level"
 msgstr "前往上一層的頁面"
 
-#: src/ephy-window.c:204
+#: src/ephy-window.c:211
 msgid "_Home"
 msgstr "首頁(_H)"
 
-#: src/ephy-window.c:205
+#: src/ephy-window.c:212
 msgid "Go to the home page"
 msgstr "前往首頁"
 
-#: src/ephy-window.c:207
+#: src/ephy-window.c:214
 msgid "_Location..."
 msgstr "位置(_L)..."
 
-#: src/ephy-window.c:208
+#: src/ephy-window.c:215
 msgid "Go to a specified location"
 msgstr "前往指定的位置"
 
-#: src/ephy-window.c:210
+#: src/ephy-window.c:217
 msgid "H_istory"
 msgstr "瀏覽紀錄(_I)"
 
-#: src/ephy-window.c:211
+#: src/ephy-window.c:218
 msgid "Open the history window"
 msgstr "開啟瀏覽紀錄視窗"
 
 #. Tabs menu
-#: src/ephy-window.c:215
+#: src/ephy-window.c:222
 msgid "_Previous Tab"
 msgstr "上一個分頁(_P)"
 
-#: src/ephy-window.c:216
+#: src/ephy-window.c:223
 msgid "Activate previous tab"
 msgstr "啟用上一個分頁"
 
-#: src/ephy-window.c:218
+#: src/ephy-window.c:225
 msgid "_Next Tab"
 msgstr "下一個分頁(_N)"
 
-#: src/ephy-window.c:219
+#: src/ephy-window.c:226
 msgid "Activate next tab"
 msgstr "啟用下一個分頁"
 
-#: src/ephy-window.c:221
+#: src/ephy-window.c:228
 msgid "Move Tab _Left"
 msgstr "將分頁左移(_L)"
 
-#: src/ephy-window.c:222
+#: src/ephy-window.c:229
 msgid "Move current tab to left"
 msgstr "將目前的分頁向左移動"
 
-#: src/ephy-window.c:224
+#: src/ephy-window.c:231
 msgid "Move Tab _Right"
 msgstr "將分頁右移(_R)"
 
-#: src/ephy-window.c:225
+#: src/ephy-window.c:232
 msgid "Move current tab to right"
 msgstr "將目前的分頁向右移動"
 
-#: src/ephy-window.c:227
+#: src/ephy-window.c:234
 msgid "_Detach Tab"
 msgstr "轉為獨立視窗(_D)"
 
-#: src/ephy-window.c:228
+#: src/ephy-window.c:235
 msgid "Detach current tab"
 msgstr "將目前的分頁轉為獨立視窗"
 
-#: src/ephy-window.c:233
+#: src/ephy-window.c:240
 msgid "Display web browser help"
 msgstr "顯示網頁瀏覽器的說明文件"
 
+#. File Menu
+#: src/ephy-window.c:251
+msgid "_Work Offline"
+msgstr "離線瀏覽(_W)"
+
+#: src/ephy-window.c:252
+msgid "Toggle network status"
+msgstr "切換網路狀態"
+
 #. View Menu
-#: src/ephy-window.c:244
+#: src/ephy-window.c:256
 msgid "_Toolbar"
 msgstr "工具列(_T)"
 
-#: src/ephy-window.c:245
+#: src/ephy-window.c:257
 msgid "Show or hide toolbar"
 msgstr "顯示或隱藏工具列"
 
-#: src/ephy-window.c:247
+#: src/ephy-window.c:259
 msgid "_Bookmarks Bar"
 msgstr "書籤工具列(_B)"
 
-#: src/ephy-window.c:248
+#: src/ephy-window.c:260
 msgid "Show or hide bookmarks bar"
 msgstr "顯示或隱藏書籤工具列"
 
-#: src/ephy-window.c:250
+#: src/ephy-window.c:262
 msgid "St_atusbar"
 msgstr "狀態列(_A)"
 
-#: src/ephy-window.c:251
+#: src/ephy-window.c:263
 msgid "Show or hide statusbar"
 msgstr "顯示或隱藏狀態列"
 
-#: src/ephy-window.c:253
+#: src/ephy-window.c:265
 msgid "_Fullscreen"
 msgstr "全螢幕(_F)"
 
-#: src/ephy-window.c:254
+#: src/ephy-window.c:266
 msgid "Browse at full screen"
 msgstr "以全螢幕模式瀏覽網頁"
 
-#: src/ephy-window.c:256
-#, fuzzy
+#: src/ephy-window.c:268
+msgid "Popup _Windows"
+msgstr "彈出式視窗(_W)"
+
+#: src/ephy-window.c:269
+msgid "Show or hide unrequested popup windows from this site"
+msgstr "顯示或隱藏這個站台未要求的彈出式視窗"
+
+#: src/ephy-window.c:271
 msgid "Selection Caret"
-msgstr "選擇範圍(_S)"
+msgstr "選擇游標"
 
 #. Document
-#: src/ephy-window.c:264
+#: src/ephy-window.c:279
 msgid "_Save Background As..."
 msgstr "另存背景圖片(_S)..."
 
-#: src/ephy-window.c:266
+#: src/ephy-window.c:281
 msgid "Add Boo_kmark..."
 msgstr "加入書籤(_K)..."
 
 #. Framed document
-#: src/ephy-window.c:271
+#: src/ephy-window.c:286
 msgid "_Open Frame"
 msgstr "開啟頁框(_O)"
 
 #. Links
-#: src/ephy-window.c:275
+#: src/ephy-window.c:290
 msgid "_Open Link"
 msgstr "開啟鏈結(_O)"
 
-#: src/ephy-window.c:277
+#: src/ephy-window.c:292
 msgid "Open Link in _New Window"
 msgstr "在新的視窗開啟鏈結(_N)"
 
-#: src/ephy-window.c:279
+#: src/ephy-window.c:294
 msgid "Open Link in New _Tab"
 msgstr "在新的分頁開啟鏈結(_T)"
 
-#: src/ephy-window.c:281
-#, fuzzy
+#: src/ephy-window.c:296
 msgid "_Download Link"
-msgstr "下載鏈結"
+msgstr "下載鏈結(_D)"
 
-#: src/ephy-window.c:283
-#, fuzzy
+#: src/ephy-window.c:298
 msgid "_Save Link As..."
 msgstr "另存新檔(_A)..."
 
-#: src/ephy-window.c:285
+#: src/ephy-window.c:300
 msgid "_Bookmark Link..."
 msgstr "將鏈結加入書籤(_B)..."
 
-#: src/ephy-window.c:287
+#: src/ephy-window.c:302
 msgid "_Copy Link Address"
 msgstr "複製鏈結位址(_C)"
 
 #. Images
-#: src/ephy-window.c:291
+#: src/ephy-window.c:306
 msgid "Open _Image"
 msgstr "開啟圖片(_I)"
 
-#: src/ephy-window.c:293
+#: src/ephy-window.c:308
 msgid "_Save Image As..."
 msgstr "另存圖片(_S)..."
 
-#: src/ephy-window.c:295
+#: src/ephy-window.c:310
 msgid "_Use Image As Background"
 msgstr "使用圖片作為桌面背景(_U)"
 
-#: src/ephy-window.c:297
+#: src/ephy-window.c:312
 msgid "Copy I_mage Address"
 msgstr "複製圖片位址(_M)"
 
-#: src/ephy-window.c:542
+#: src/ephy-window.c:579
 msgid "Exit Fullscreen"
 msgstr "離開全螢幕模式"
 
-#: src/ephy-window.c:616
+#: src/ephy-window.c:662
 msgid "Close _Document"
-msgstr ""
+msgstr "關閉文件(_D)"
 
-#: src/ephy-window.c:644
+#: src/ephy-window.c:690
 msgid "There are unsubmitted changes to form elements."
-msgstr ""
+msgstr "對表單的元素而言沒有經確認的改變。"
 
-#: src/ephy-window.c:645
+#: src/ephy-window.c:691
 msgid "If you close the document anyway, you will lose that information."
-msgstr ""
+msgstr "如果您無論無何要關閉此文件，您將會失去未儲存的資訊。"
 
-#: src/ephy-window.c:1015 src/window-commands.c:396
+#: src/ephy-window.c:1113 src/window-commands.c:397
 msgid "Open"
 msgstr "開啟"
 
-#: src/ephy-window.c:1017 src/window-commands.c:422
+#: src/ephy-window.c:1115 src/window-commands.c:423
 msgid "Save As"
 msgstr "另存新檔"
 
-#: src/ephy-window.c:1021
+#: src/ephy-window.c:1119
 msgid "Bookmark"
 msgstr "加入書籤"
 
-#: src/ephy-window.c:1210
+#: src/ephy-window.c:1308
 msgid "Broken"
 msgstr "中斷"
 
-#: src/ephy-window.c:1213
+#: src/ephy-window.c:1311
 msgid "Medium"
 msgstr "中"
 
-#: src/ephy-window.c:1217
+#: src/ephy-window.c:1315
 msgid "Low"
 msgstr "低"
 
-#: src/ephy-window.c:1221
+#: src/ephy-window.c:1319
 msgid "High"
 msgstr "高"
 
-#: src/ephy-window.c:1231
+#: src/ephy-window.c:1329
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3086,65 +3075,72 @@ msgstr ""
 "安全等級：%s\n"
 "%s"
 
-#: src/ephy-window.c:1237
+#: src/ephy-window.c:1335
 #, c-format
 msgid "Security level: %s"
 msgstr "安全等級：%s"
 
-#: src/pdm-dialog.c:411
+#: src/ephy-window.c:1359
+#, fuzzy, c-format
+msgid "%d hidden popup window"
+msgid_plural "%d hidden popup windows"
+msgstr[0] "%d 個隱藏彈出式視窗"
+
+#: src/pdm-dialog.c:417
 msgid "Domain"
 msgstr "網域"
 
-#: src/pdm-dialog.c:423
+#: src/pdm-dialog.c:429
 msgid "Name"
 msgstr "名稱"
 
-#: src/pdm-dialog.c:664
+#: src/pdm-dialog.c:661
 msgid "Host"
 msgstr "主機"
 
-#: src/pdm-dialog.c:676
+#: src/pdm-dialog.c:673
 msgid "User Name"
 msgstr "用戶名稱"
 
-#: src/pdm-dialog.c:869
+#: src/pdm-dialog.c:902
 msgid "Cookie Properties"
 msgstr "Cookie 屬性"
 
-#: src/pdm-dialog.c:884
-#, fuzzy
+#: src/pdm-dialog.c:917
 msgid "Content:"
-msgstr "內容(_C)"
+msgstr "內容"
 
-#: src/pdm-dialog.c:899
+#: src/pdm-dialog.c:932
 msgid "Path:"
 msgstr "路徑："
 
-#: src/pdm-dialog.c:914
-#, fuzzy
+#: src/pdm-dialog.c:947
 msgid "Send for:"
-msgstr "傳送網址(_E)..."
+msgstr "傳送給:"
 
-#: src/pdm-dialog.c:923
+#: src/pdm-dialog.c:956
 msgid "Encrypted connections only"
-msgstr ""
+msgstr "只限定於加密後的連線"
 
-#: src/pdm-dialog.c:923
+#: src/pdm-dialog.c:956
 msgid "Any type of connection"
-msgstr ""
+msgstr "任何類型的連線"
 
-#: src/pdm-dialog.c:929
-#, fuzzy
+#: src/pdm-dialog.c:962
 msgid "Expires:"
 msgstr "時限："
 
-#: src/pdm-dialog.c:940
+#: src/pdm-dialog.c:973
 msgid "End of current session"
-msgstr "本程式結束為止"
+msgstr "本連線結束"
 
-#: src/popup-commands.c:245 src/popup-commands.c:253
-msgid "Download link"
+#: src/popup-commands.c:245
+msgid "Download Link"
 msgstr "下載鏈結"
+
+#: src/popup-commands.c:253
+msgid "Save Link As"
+msgstr "鍊結另存新檔(_A)..."
 
 #: src/popup-commands.c:260
 msgid "Save Image As"
@@ -3201,187 +3197,187 @@ msgstr "關閉列印預覽視窗"
 #. * "en_AU" translation: "English, Australia (System setting)" or
 #. *                      "Australian English (System setting)"
 #.
-#: src/prefs-dialog.c:105
+#: src/prefs-dialog.c:107
 msgid "System language"
 msgstr "系統語言設定"
 
-#: src/prefs-dialog.c:106
+#: src/prefs-dialog.c:108
 msgid "Afrikaans"
 msgstr "南非荷蘭語"
 
-#: src/prefs-dialog.c:107
+#: src/prefs-dialog.c:109
 msgid "Albanian"
 msgstr "阿爾巴尼亞語"
 
-#: src/prefs-dialog.c:109
+#: src/prefs-dialog.c:111
 msgid "Azerbaijani"
 msgstr "亞塞拜然語"
 
-#: src/prefs-dialog.c:110
+#: src/prefs-dialog.c:112
 msgid "Basque"
 msgstr "巴斯克語(西班牙)"
 
-#: src/prefs-dialog.c:111
+#: src/prefs-dialog.c:113
 msgid "Breton"
 msgstr "不列塔尼語"
 
-#: src/prefs-dialog.c:112
+#: src/prefs-dialog.c:114
 msgid "Bulgarian"
 msgstr "保加利亞語"
 
-#: src/prefs-dialog.c:113
+#: src/prefs-dialog.c:115
 msgid "Byelorussian"
 msgstr "白俄羅斯語"
 
-#: src/prefs-dialog.c:114
+#: src/prefs-dialog.c:116
 msgid "Catalan"
 msgstr "加泰隆語"
 
-#: src/prefs-dialog.c:118
+#: src/prefs-dialog.c:120
 msgid "Croatian"
 msgstr "克羅地亞語"
 
-#: src/prefs-dialog.c:119
+#: src/prefs-dialog.c:121
 msgid "Czech"
 msgstr "捷克語"
 
-#: src/prefs-dialog.c:120
+#: src/prefs-dialog.c:122
 msgid "Danish"
 msgstr "丹麥語"
 
-#: src/prefs-dialog.c:121
+#: src/prefs-dialog.c:123
 msgid "Dutch"
 msgstr "荷蘭語"
 
-#: src/prefs-dialog.c:122
+#: src/prefs-dialog.c:124
 msgid "English"
 msgstr "英文"
 
-#: src/prefs-dialog.c:123
+#: src/prefs-dialog.c:125
 msgid "Esperanto"
 msgstr "世界語"
 
-#: src/prefs-dialog.c:124
+#: src/prefs-dialog.c:126
 msgid "Estonian"
 msgstr "愛沙尼亞語"
 
-#: src/prefs-dialog.c:125
+#: src/prefs-dialog.c:127
 msgid "Faeroese"
 msgstr "法羅語"
 
-#: src/prefs-dialog.c:126
+#: src/prefs-dialog.c:128
 msgid "Finnish"
 msgstr "芬蘭語"
 
-#: src/prefs-dialog.c:127
+#: src/prefs-dialog.c:129
 msgid "French"
 msgstr "法文"
 
-#: src/prefs-dialog.c:128
+#: src/prefs-dialog.c:130
 msgid "Galician"
 msgstr "加利西亞文(西班牙)"
 
-#: src/prefs-dialog.c:129
+#: src/prefs-dialog.c:131
 msgid "German"
 msgstr "德文"
 
-#: src/prefs-dialog.c:132
+#: src/prefs-dialog.c:134
 msgid "Hungarian"
 msgstr "匈牙利語"
 
-#: src/prefs-dialog.c:133
+#: src/prefs-dialog.c:135
 msgid "Icelandic"
 msgstr "冰島語"
 
-#: src/prefs-dialog.c:134
+#: src/prefs-dialog.c:136
 msgid "Indonesian"
 msgstr "印尼語"
 
-#: src/prefs-dialog.c:135
+#: src/prefs-dialog.c:137
 msgid "Irish"
 msgstr "愛爾蘭語"
 
-#: src/prefs-dialog.c:136
+#: src/prefs-dialog.c:138
 msgid "Italian"
 msgstr "意大利文"
 
-#: src/prefs-dialog.c:139
+#: src/prefs-dialog.c:141
 msgid "Latvian"
 msgstr "拉脫維亞語"
 
-#: src/prefs-dialog.c:140
+#: src/prefs-dialog.c:142
 msgid "Lithuanian"
 msgstr "立陶宛文"
 
-#: src/prefs-dialog.c:141
+#: src/prefs-dialog.c:143
 msgid "Macedonian"
 msgstr "馬其頓語"
 
-#: src/prefs-dialog.c:142
+#: src/prefs-dialog.c:144
 msgid "Malay"
 msgstr "馬來語(馬來西亞)"
 
-#: src/prefs-dialog.c:143
+#: src/prefs-dialog.c:145
 msgid "Norwegian/Nynorsk"
 msgstr "挪威語/Nynorsk"
 
-#: src/prefs-dialog.c:144
+#: src/prefs-dialog.c:146
 msgid "Norwegian/Bokmal"
 msgstr "挪威語/Bokmal"
 
-#: src/prefs-dialog.c:145
+#: src/prefs-dialog.c:147
 msgid "Norwegian"
 msgstr "挪威語"
 
-#: src/prefs-dialog.c:146
+#: src/prefs-dialog.c:148
 msgid "Polish"
 msgstr "波蘭語"
 
-#: src/prefs-dialog.c:147
+#: src/prefs-dialog.c:149
 msgid "Portuguese"
 msgstr "葡萄牙文"
 
-#: src/prefs-dialog.c:148
+#: src/prefs-dialog.c:150
 msgid "Portuguese of Brazil"
 msgstr "葡萄牙文/巴西"
 
-#: src/prefs-dialog.c:149
+#: src/prefs-dialog.c:151
 msgid "Romanian"
 msgstr "羅馬尼亞語"
 
-#: src/prefs-dialog.c:151
+#: src/prefs-dialog.c:153
 msgid "Scottish"
 msgstr "蘇格蘭語"
 
-#: src/prefs-dialog.c:152
+#: src/prefs-dialog.c:154
 msgid "Serbian"
 msgstr "塞爾維亞語"
 
-#: src/prefs-dialog.c:153
+#: src/prefs-dialog.c:155
 msgid "Slovak"
 msgstr "斯洛伐克語"
 
-#: src/prefs-dialog.c:154
+#: src/prefs-dialog.c:156
 msgid "Slovenian"
 msgstr "斯洛文尼亞語"
 
-#: src/prefs-dialog.c:155
+#: src/prefs-dialog.c:157
 msgid "Spanish"
 msgstr "西班牙文"
 
-#: src/prefs-dialog.c:156
+#: src/prefs-dialog.c:158
 msgid "Swedish"
 msgstr "瑞典語"
 
-#: src/prefs-dialog.c:160
+#: src/prefs-dialog.c:162
 msgid "Vietnamese"
 msgstr "越南文"
 
-#: src/prefs-dialog.c:161
+#: src/prefs-dialog.c:163
 msgid "Walloon"
 msgstr "華隆語(比利時)"
 
-#: src/prefs-dialog.c:1058
+#: src/prefs-dialog.c:1060
 #, c-format
 msgid "Custom [%s]"
 msgstr "自選 [%s]"
@@ -3390,91 +3386,94 @@ msgstr "自選 [%s]"
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1103
+#: src/prefs-dialog.c:1105
 msgid "Home"
-msgstr "首頁"
+msgstr "家目錄"
 
-#: src/prefs-dialog.c:1112
+#: src/prefs-dialog.c:1114
 msgid "Desktop"
-msgstr ""
+msgstr "桌面"
 
 #: src/prefs-dialog.c:1321
-#, fuzzy
 msgid "Select a directory"
-msgstr "無法新增 %s 目錄。"
+msgstr "選擇一個資料夾"
 
-#: src/toolbar.c:368
+#: src/toolbar.c:295
 msgid "Back"
 msgstr "上頁"
 
-#: src/toolbar.c:370
+#: src/toolbar.c:297
 msgid "Go back"
 msgstr "前往上一頁"
 
-#: src/toolbar.c:382
+#: src/toolbar.c:309
 msgid "Forward"
 msgstr "下頁"
 
-#: src/toolbar.c:384
+#: src/toolbar.c:311
 msgid "Go forward"
 msgstr "前往下一頁"
 
-#: src/toolbar.c:395
+#: src/toolbar.c:322
 msgid "Up"
 msgstr "上層"
 
-#: src/toolbar.c:397
+#: src/toolbar.c:324
 msgid "Go up"
 msgstr "前往上層"
 
-#: src/toolbar.c:413
+#: src/toolbar.c:340
 msgid "Enter a web address to open, or a phrase to search for on the web"
 msgstr "輸入您想開啟的網址，或者輸入想在搜尋器中搜尋的字串"
 
-#: src/toolbar.c:425
+#: src/toolbar.c:352
 msgid "Zoom"
 msgstr "縮放"
 
-#: src/toolbar.c:427
+#: src/toolbar.c:354
 msgid "Adjust the text size"
 msgstr "調整文字尺寸"
 
-#: src/toolbar.c:437
+#: src/toolbar.c:364
 msgid "Favicon"
 msgstr "網站圖示"
 
-#: src/toolbar.c:447
+#: src/toolbar.c:374
 msgid "Go to the address entered in the address entry"
 msgstr "前往網址輸入欄位中指定的網址"
 
-#: src/window-commands.c:169
+#: src/window-commands.c:171
 msgid "Check this out!"
 msgstr "請看看！"
 
-#: src/window-commands.c:855
+#: src/window-commands.c:881
 msgid "Toolbar Editor"
 msgstr "工具列編輯器"
 
-#: src/window-commands.c:877
+#: src/window-commands.c:900
 msgid "_Add a New Toolbar"
 msgstr "新增工具列(_A)"
 
 #. Translator credits
-#: src/window-commands.c:928
-#, fuzzy
+#: src/window-commands.c:953
 msgid "translator-credits"
 msgstr ""
 "i18n 程式中文化計劃\n"
 "http://i18n.linux.org.tw/\n"
+"\n"
+"Ching-Hung Lin <billlin@wshlab2.ee.kuas.edu.tw>, 2004\n"
 "\n"
 "Abel Cheung <maddog@linux.org.hk>, 2003\n"
 "\n"
 "以 Galeon 的翻譯為基礎：\n"
 "Joe Man <trmetal@yahoo.com.hk>, 2001"
 
-#: src/window-commands.c:958
+#: src/window-commands.c:983
 msgid "A GNOME browser based on Mozilla"
 msgstr "以 Mozilla 為基礎的 GNOME 網頁瀏覽器"
+
+#~ msgid "Download link"
+#~ msgstr "下載鏈結"
 
 #~ msgid "Epiphany Nautilus view"
 #~ msgstr "Epiphany Nautilus 顯示模式"
@@ -3608,9 +3607,6 @@ msgstr "以 Mozilla 為基礎的 GNOME 網頁瀏覽器"
 #~ msgid "Open Image in New Window"
 #~ msgstr "在新的視窗閞啟圖片"
 
-#~ msgid "Open in New Window"
-#~ msgstr "在新的視窗開啟"
-
 #~ msgid "Paste"
 #~ msgstr "貼上"
 
@@ -3631,9 +3627,6 @@ msgstr "以 Mozilla 為基礎的 GNOME 網頁瀏覽器"
 
 #~ msgid "Search for a String"
 #~ msgstr "搜尋字串"
-
-#~ msgid "Select All"
-#~ msgstr "全部選取"
 
 #~ msgid "Select the Entire Document"
 #~ msgstr "選取整個頁面的內容"
