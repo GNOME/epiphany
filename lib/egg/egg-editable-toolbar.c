@@ -653,7 +653,8 @@ toolbar_drag_motion_cb (GtkWidget          *widget,
       gtk_drag_get_data (widget, context, target, time);
     }
 
-  if (etoolbar->priv->dragged_item != NULL)
+  if (etoolbar->priv->dragged_item != NULL &&
+      etoolbar->priv->edit_mode)
     {
       item = GTK_TOOL_ITEM (etoolbar->priv->dragged_item);
 
