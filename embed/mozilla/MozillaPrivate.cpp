@@ -6,7 +6,10 @@
 #include <nsIWebBrowserChrome.h>
 #include <gtkmozembed.h>
 
-GtkWidget *MozillaFindGtkParent (nsIDOMWindow *aDOMWindow)
+#include "ephy-embed.h"
+#include "mozilla-embed.h"
+
+GtkWidget *MozillaFindEmbed (nsIDOMWindow *aDOMWindow)
 {
         nsresult result;
 
@@ -34,7 +37,15 @@ GtkWidget *MozillaFindGtkParent (nsIDOMWindow *aDOMWindow)
         result = window->GetSiteWindow ((void **)&mozembed);
         if (NS_FAILED(result)) return nsnull;
 
-	return gtk_widget_get_toplevel (GTK_WIDGET(mozembed));
+	return mozembed;
+}
+
+GtkWidget *MozillaFindGtkParent (nsIDOMWindow *aDOMWindow)
+{
+	GtkWidget *embed = MozillaFindEmbed (aDOMWindow);
+	if (!embed) return nsnull;
+
+	return gtk_widget_get_toplevel (GTK_WIDGET (embed));
 }
 
 #define MM_TO_INCH(x)		(((double) x) / 25.4)

@@ -53,8 +53,9 @@ NS_IMETHODIMP GPrintingPromptService::ShowPrintDialog(nsIDOMWindow *parent, nsIW
 	EmbedPrintInfo *info;
 
 	GtkWidget *gtkParent = MozillaFindGtkParent(parent);
+	EphyEmbed *embed = EPHY_EMBED (MozillaFindEmbed (parent));
 
-	dialog = print_dialog_new_with_parent (gtkParent, NULL, &info);
+	dialog = print_dialog_new_with_parent (gtkParent, embed, &info);
 	ephy_dialog_set_modal (dialog, TRUE);
 
 	gint ret = ephy_dialog_run (dialog);
