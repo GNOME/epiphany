@@ -1,5 +1,17 @@
 2003-03-15  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* data/glade/Makefile.am:
+	* data/glade/prompts.glade:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozRegisterComponents.cpp:
+	* embed/mozilla/PromptService.cpp:
+	* embed/mozilla/PromptService.h:
+
+	Remove our custom prompt implementation.
+	Gtkmozembed provides and HIG compliant one now.
+
+2003-03-15  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* embed/mozilla/EphyWrapper.cpp:
 	* embed/mozilla/EphyWrapper.h:
 	* embed/mozilla/mozilla-embed.cpp:

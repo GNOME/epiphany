@@ -28,7 +28,6 @@
 #include "FtpProtocolHandler.h"
 #include "IRCProtocolHandler.h"
 #include "MailtoProtocolHandler.h"
-#include "PromptService.h"
 #include "PrintingPromptService.h"
 #include "ProgressListener.h"
 
@@ -47,7 +46,6 @@ static NS_DEFINE_CID(knsFtpProtocolHandlerCID, NS_FTPPROTOCOLHANDLER_CID);
 static NS_DEFINE_CID(kFtpHandlerCID, G_FTP_PROTOCOL_CID);
 static NS_DEFINE_CID(kIRCHandlerCID, G_IRC_PROTOCOL_CID);
 static NS_DEFINE_CID(kMailtoHandlerCID, G_MAILTO_PROTOCOL_CID);
-static NS_DEFINE_CID(kPromptServiceCID, G_PROMPTSERVICE_CID);
 static NS_DEFINE_CID(kPrintingPromptServiceCID, G_PRINTINGPROMPTSERVICE_CID);
 static NS_DEFINE_CID(kProgressDialogCID, G_PROGRESSDIALOG_CID);
 
@@ -141,11 +139,6 @@ mozilla_register_components (void)
 			      G_IRC_CONTENT_CONTRACTID, PR_TRUE);        
         if (NS_FAILED(rv)) ret = FALSE;
 
-        rv = RegisterFactory (NS_NewPromptServiceFactory, kPromptServiceCID,
-			      G_PROMPTSERVICE_CLASSNAME,   
-			      G_PROMPTSERVICE_CONTRACTID, PR_TRUE);        
-        if (NS_FAILED(rv)) ret = FALSE;
-	
 	rv = RegisterFactory (NS_NewPrintingPromptServiceFactory,
 			      kPrintingPromptServiceCID,
 			      G_PRINTINGPROMPTSERVICE_CLASSNAME, 

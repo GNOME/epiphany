@@ -88,8 +88,6 @@ libephymozillaembed_la_SOURCES = 	\
 	PrintingPromptService.h		\
 	PrintProgressListener.cpp       \
 	PrintProgressListener.h         \
-	PromptService.cpp               \
-	PromptService.h			\
 	ProgressListener.cpp		\
 	ProgressListener.h		\
 	StartHereProtocolHandler.cpp	\
