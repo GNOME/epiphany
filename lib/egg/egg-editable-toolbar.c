@@ -355,24 +355,26 @@ set_item_drag_source (GtkWidget *item,
     }
 }
 
-static gboolean
-enter_notify_cb (GtkWidget *widget, GdkEventCrossing *event)
+static void
+set_drag_cursor (GtkWidget *widget)
 {
-	GdkCursor *cursor;
+  if (widget->window)
+    {
+      GdkCursor *cursor;
 
-	cursor = gdk_cursor_new (GDK_FLEUR);
-	gdk_window_set_cursor (widget->window, cursor);
-	gdk_cursor_unref (cursor);
-
-	return TRUE;
+      cursor = gdk_cursor_new (GDK_FLEUR);
+      gdk_window_set_cursor (widget->window, cursor);
+      gdk_cursor_unref (cursor);
+    }
 }
 
-static gboolean
-leave_notify_cb (GtkWidget *widget, GdkEventCrossing *event)
+static void
+unset_drag_cursor (GtkWidget *widget)
 {
-	gdk_window_set_cursor (widget->window, NULL);
-
-	return TRUE;
+  if (widget->window)
+    {
+      gdk_window_set_cursor (widget->window, NULL);
+    }
 }
 
 static GtkWidget *
@@ -404,10 +406,7 @@ create_item (EggEditableToolbar *t,
     }
 
   gtk_widget_show (item);
-  g_signal_connect (item, "enter_notify_event",
-		    G_CALLBACK (enter_notify_cb), t);
-  g_signal_connect (item, "leave_notify_event",
-		    G_CALLBACK (leave_notify_cb), t);
+
   g_signal_connect (item, "drag_data_get",
 		    G_CALLBACK (drag_data_get_cb), t);
   g_signal_connect (item, "drag_data_delete",
@@ -415,6 +414,7 @@ create_item (EggEditableToolbar *t,
 
   if (t->priv->edit_mode)
     {
+      set_drag_cursor (item);
       gtk_widget_set_sensitive (item, TRUE);
       set_item_drag_source (item, action, is_separator);
       gtk_tool_item_set_use_drag_window (GTK_TOOL_ITEM (item), TRUE);
@@ -748,11 +748,13 @@ egg_editable_toolbar_set_edit_mode (EggEditableToolbar *etoolbar,
 
           if (mode)
 	    {
+              set_drag_cursor (GTK_WIDGET (item));
 	      gtk_widget_set_sensitive (GTK_WIDGET (item), TRUE);
               set_item_drag_source (GTK_WIDGET (item), action, is_separator);
             }
 	  else
             {
+              unset_drag_cursor (GTK_WIDGET (item));
               gtk_drag_source_unset (GTK_WIDGET (item));
 
               if (!is_separator)
