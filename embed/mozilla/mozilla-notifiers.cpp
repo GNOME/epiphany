@@ -372,7 +372,6 @@ add_notification_and_notify (GConfClient		*client,
 			     GConfClientNotifyFunc	 func,
 			     gpointer			 user_data)
 {
-	GConfEntry *entry;
 	GError *error = NULL;
 	guint cnxn_id;
 
