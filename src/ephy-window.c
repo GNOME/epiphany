@@ -328,6 +328,7 @@ struct EphyWindowPrivate
 	gboolean has_size;
 	guint num_tabs;
 	guint tab_message_cid;
+	guint help_message_cid;
 
 	guint disable_js_chrome_notifier_id;
 	guint show_toolbars_notifier_id;
@@ -860,6 +861,63 @@ init_menu_updaters (EphyWindow *window)
 }
 
 static void
+menu_item_select_cb (GtkMenuItem *proxy,
+		     EphyWindow *window)
+{
+	GtkAction *action;
+	char *message;
+
+	action = g_object_get_data (G_OBJECT (proxy),  "gtk-action");
+	g_return_if_fail (action != NULL);
+	
+	g_object_get (G_OBJECT (action), "tooltip", &message, NULL);
+	if (message)
+	{
+		gtk_statusbar_push (GTK_STATUSBAR (window->priv->statusbar),
+				    window->priv->help_message_cid, message);
+		g_free (message);
+	}
+}
+
+static void
+menu_item_deselect_cb (GtkMenuItem *proxy,
+		       EphyWindow *window)
+{
+	gtk_statusbar_pop (GTK_STATUSBAR (window->priv->statusbar),
+			   window->priv->help_message_cid);
+}
+
+static void
+disconnect_proxy_cb (GtkUIManager *manager,
+		     GtkAction *action,
+		     GtkWidget *proxy,
+		     EphyWindow *window)
+{
+	if (GTK_IS_MENU_ITEM (proxy))
+	{
+		g_signal_handlers_disconnect_by_func
+			(proxy, G_CALLBACK (menu_item_select_cb), window);
+		g_signal_handlers_disconnect_by_func
+			(proxy, G_CALLBACK (menu_item_deselect_cb), window);
+	}
+}
+
+static void
+connect_proxy_cb (GtkUIManager *manager,
+		  GtkAction *action,
+		  GtkWidget *proxy,
+		  EphyWindow *window)
+{
+	if (GTK_IS_MENU_ITEM (proxy))
+	{
+		g_signal_connect (proxy, "select",
+				  G_CALLBACK (menu_item_select_cb), window);
+		g_signal_connect (proxy, "deselect",
+				  G_CALLBACK (menu_item_deselect_cb), window);
+	}
+}
+
+static void
 setup_ui_manager (EphyWindow *window)
 {
 	GtkActionGroup *action_group;
@@ -879,6 +937,11 @@ setup_ui_manager (EphyWindow *window)
 			    FALSE, TRUE, 0);
 
 	merge = gtk_ui_manager_new ();
+
+	g_signal_connect (merge, "connect_proxy",
+			  G_CALLBACK (connect_proxy_cb), window);
+	g_signal_connect (merge, "disconnect_proxy",
+			  G_CALLBACK (disconnect_proxy_cb), window);
 
 	action_group = gtk_action_group_new ("WindowActions");
 	gtk_action_group_set_translation_domain (action_group, NULL);
@@ -1876,6 +1939,9 @@ ephy_window_init (EphyWindow *window)
 			    FALSE, TRUE, 0);
 	window->priv->tab_message_cid = gtk_statusbar_get_context_id
 		(GTK_STATUSBAR (window->priv->statusbar), "tab_message");
+
+	window->priv->help_message_cid = gtk_statusbar_get_context_id
+		(GTK_STATUSBAR (window->priv->statusbar), "help_message");
 
 	/* Initialize the menus */
 	window->priv->tabs_menu = ephy_tabs_menu_new (window);
