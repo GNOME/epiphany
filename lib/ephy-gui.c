@@ -39,10 +39,66 @@
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkversion.h>
 #include <gtk/gtkicontheme.h>
+#include <gtk/gtktreeselection.h>
 
 /* Styles for tab labels */
 GtkStyle *loading_text_style = NULL;
 GtkStyle *new_text_style = NULL;
+
+static void
+sanitize_popup_position (GtkWidget *widget, GtkMenu *menu, gint *x, gint *y)
+{
+	GdkScreen *screen = gtk_widget_get_screen (widget);
+	gint monitor_num;
+	GdkRectangle monitor;
+	GtkRequisition req;
+
+	gtk_widget_size_request (GTK_WIDGET (menu), &req);
+
+	monitor_num = gdk_screen_get_monitor_at_point (screen, *x, *y);
+	gtk_menu_set_monitor (menu, monitor_num);
+	gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+
+	*x = CLAMP (*x, monitor.x, monitor.x + MAX (0, monitor.width - req.width));
+	*y = CLAMP (*y, monitor.y, monitor.y + MAX (0, monitor.height - req.height));
+}
+
+void
+ephy_gui_menu_position_tree_selection (GtkMenu   *menu,
+				       gint      *x,
+				       gint      *y,
+				       gboolean  *push_in,
+				       gpointer  user_data)
+{
+	GtkTreeSelection *selection;
+	GList *selected_rows;
+	GtkTreeModel *model;
+	GtkTreeView *tree_view = GTK_TREE_VIEW (user_data);
+	GtkWidget *widget = GTK_WIDGET (user_data);
+	GtkRequisition req;
+
+	gtk_widget_size_request (GTK_WIDGET (menu), &req);
+	gdk_window_get_origin (widget->window, x, y);
+
+	*x += (widget->allocation.width - req.width) / 2;
+
+	selection = gtk_tree_view_get_selection (tree_view);
+	selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
+	if (selected_rows)
+	{
+		GdkRectangle cell_rect;
+
+		gtk_tree_view_get_cell_area (tree_view, selected_rows->data,
+					     NULL, &cell_rect);
+
+		*y += CLAMP (cell_rect.y + cell_rect.height, 0, widget->allocation.height);
+
+		g_list_foreach (selected_rows, (GFunc)gtk_tree_path_free, NULL);
+		g_list_free (selected_rows);
+	}
+
+	sanitize_popup_position (widget, menu, x, y);
+}
 
 /**
  * gul_gui_menu_position_under_widget:
@@ -55,7 +111,6 @@ ephy_gui_menu_position_under_widget (GtkMenu   *menu,
 				     gpointer	user_data)
 {
 	GtkWidget *w = GTK_WIDGET (user_data);
-	gint screen_width, screen_height;
 	GtkRequisition requisition;
 	gboolean rtl;
 
@@ -63,10 +118,6 @@ ephy_gui_menu_position_under_widget (GtkMenu   *menu,
 
 	gdk_window_get_origin (w->window, x, y);
 	gtk_widget_size_request (GTK_WIDGET (menu), &requisition);
-
-	/* FIXME multihead */
-	screen_width = gdk_screen_width ();
-	screen_height = gdk_screen_height ();
 
 	if (rtl)
 	{
@@ -79,8 +130,7 @@ ephy_gui_menu_position_under_widget (GtkMenu   *menu,
 
 	*y += w->allocation.y + w->allocation.height;
 
-	*x = CLAMP (*x, 0, MAX (0, screen_width - requisition.width));
-	*y = CLAMP (*y, 0, MAX (0, screen_height - requisition.height));
+	sanitize_popup_position (w, menu, x, y);
 }
 
 gboolean

@@ -29,6 +29,7 @@
 #include <gtk/gtkcellrenderertoggle.h>
 #include <gtk/gtktreemodelfilter.h>
 #include <gtk/gtkwindow.h>
+#include <gtk/gtkmain.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "ephy-node-view.h"
@@ -1575,6 +1576,35 @@ ephy_node_view_add_toggle (EphyNodeView *view, EphyTreeModelNodeValueFunc value_
 	col = gtk_tree_view_column_new_with_attributes
 		("", renderer, "active", column, NULL);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (view), col);
+}
+
+void
+ephy_node_view_popup (EphyNodeView *view, GtkWidget *menu)
+{
+	GdkEvent *event;
+
+	event = gtk_get_current_event ();
+	if (event)
+	{
+		if (event->type == GDK_KEY_PRESS)
+		{
+			GdkEventKey *key = (GdkEventKey *) event;
+
+			gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+					ephy_gui_menu_position_tree_selection,
+					view, 0, key->time);
+			gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
+		}
+		else if (event->type == GDK_BUTTON_PRESS)
+		{
+			GdkEventButton *button = (GdkEventButton *) event;
+
+			gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL,
+					NULL, button->button, button->time);
+		}
+
+		gdk_event_free (event);
+	}
 }
 
 static void

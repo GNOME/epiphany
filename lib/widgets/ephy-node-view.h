@@ -69,7 +69,6 @@ typedef struct
 	void (*node_activated)      (EphyNodeView *view, EphyNode *node);
 	void (*node_selected)       (EphyNodeView *view, EphyNode *node);
 	void (*node_dropped)        (EphyNodeView *view, EphyNode *node, GList *uris);
-	void (*show_popup)          (EphyNodeView *view);
 } EphyNodeViewClass;
 
 GType              ephy_node_view_get_type	      (void);
@@ -127,6 +126,9 @@ void		   ephy_node_view_edit		      (EphyNodeView *view,
 						       gboolean remove_if_cancelled);
 
 gboolean	   ephy_node_view_is_target	      (EphyNodeView *view);
+
+void		   ephy_node_view_popup		      (EphyNodeView *view,
+						       GtkWidget *menu);
 
 G_END_DECLS
 

@@ -1,5 +1,27 @@
 2004-11-07  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-gui.c: (sanitize_popup_position),
+	(ephy_gui_menu_position_tree_selection),
+	(ephy_gui_menu_position_under_widget):
+	* lib/ephy-gui.h:
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_add_toggle),
+	(ephy_node_view_popup):
+	* lib/widgets/ephy-node-view.h:
+	* src/bookmarks/ephy-bookmark-action.c: (show_context_menu),
+	(popup_menu_cb), (button_press_cb):
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_show_popup_cb),
+	(keyword_node_show_popup_cb):
+	* src/bookmarks/ephy-topic-action.c: (button_toggled_cb),
+	(show_context_menu), (popup_menu_cb), (button_press_cb):
+	* src/ephy-history-window.c: (ephy_history_window_show_popup_cb):
+	* src/ephy-window.c: (show_embed_popup):
+
+	When popping up the context menu with keyboard, select the first
+        menu item. Fixes bug #154907 (ported from HEAD).
+
+2004-11-07  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/ephy-zoom-control.c: (ephy_zoom_control_init),
 	(set_combo_tooltip), (combo_realized),
 	(ephy_zoom_control_set_tooltip):

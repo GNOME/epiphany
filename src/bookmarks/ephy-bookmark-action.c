@@ -512,7 +512,9 @@ properties_activate_cb (GtkWidget *menu, EphyBookmarkAction *action)
 }
 
 static void
-show_context_menu (EphyBookmarkAction *action, GtkWidget *proxy,
+show_context_menu (EphyBookmarkAction *action,
+		   GtkWidget *proxy,
+		   GdkEventButton *event,
 		   GtkMenuPositionFunc func)
 {
 	GtkWidget *menu, *item;
@@ -572,8 +574,17 @@ show_context_menu (EphyBookmarkAction *action, GtkWidget *proxy,
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (move_right_activate_cb), proxy);
 
-	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, func, proxy, 3,
-			gtk_get_current_event_time ());
+	if (event != NULL)
+	{
+		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, func, proxy,
+				event->button, event->time);
+	}
+	else
+	{
+		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, func, proxy, 0,
+				gtk_get_current_event_time ());
+		gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
+	}
 }
 
 static gboolean
@@ -581,7 +592,7 @@ popup_menu_cb (GtkWidget *widget, EphyBookmarkAction *action)
 {
 	if (gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))
         {
-                show_context_menu (action, widget,
+                show_context_menu (action, widget, NULL,
 				   ephy_gui_menu_position_under_widget);
 		return TRUE;
         }
@@ -597,7 +608,7 @@ button_press_cb (GtkWidget *widget,
 	if (event->button == 3 &&
 	    gtk_widget_get_ancestor (widget, EPHY_TYPE_BOOKMARKSBAR))	
 	{
-		show_context_menu (action, widget, NULL);
+		show_context_menu (action, widget, event, NULL);
 		return TRUE;
 	}
 	else if (event->button == 2)	

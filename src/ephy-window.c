@@ -1623,8 +1623,9 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	if (type == EPHY_EMBED_EVENT_KEY)
 	{
 		gtk_menu_popup (GTK_MENU (widget), NULL, NULL,
-				popup_menu_at_coords, event, 2,
+				popup_menu_at_coords, event, 0,
 				gtk_get_current_event_time ());
+		gtk_menu_shell_select_first (GTK_MENU_SHELL (widget), FALSE);
 	}
 	else
 	{
