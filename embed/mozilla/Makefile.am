@@ -3,8 +3,6 @@ noinst_LTLIBRARIES = libephymozillaembed.la
 libephymozillaembed_la_SOURCES = 	\
 	ContentHandler.cpp		\
 	ContentHandler.h		\
-	EphyAboutRedirector.cpp		\
-	EphyAboutRedirector.h		\
 	EphyContentPolicy.cpp		\
 	EphyContentPolicy.h		\
 	EphyHeaderSniffer.cpp		\

@@ -27,7 +27,6 @@
 #include "GlobalHistory.h"
 #include "PrintingPromptService.h"
 #include "MozDownload.h"
-#include "EphyAboutRedirector.h"
 #include "EphyContentPolicy.h"
 
 #ifdef ENABLE_FILEPICKER
@@ -51,7 +50,6 @@
 
 #include <glib/gmessages.h>
 
-NS_GENERIC_FACTORY_CONSTRUCTOR(EphyAboutRedirector)
 NS_GENERIC_FACTORY_CONSTRUCTOR(MozDownload)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GContentHandler)
 NS_GENERIC_FACTORY_CONSTRUCTOR(MozGlobalHistory)
@@ -146,24 +144,6 @@ static const nsModuleComponentInfo sAppComps[] = {
 		G_PRINTINGPROMPTSERVICE_CID,
 		G_PRINTINGPROMPTSERVICE_CONTRACTID,
 		GPrintingPromptServiceConstructor
-	},
-	{
-		EPHY_ABOUT_REDIRECTOR_CLASSNAME,
-		EPHY_ABOUT_REDIRECTOR_CID,
-		EPHY_ABOUT_REDIRECTOR_EPIPHANY_CONTRACTID,
-		EphyAboutRedirectorConstructor
-	},
-	{
-		EPHY_ABOUT_REDIRECTOR_CLASSNAME,
-		EPHY_ABOUT_REDIRECTOR_CID,
-		EPHY_ABOUT_REDIRECTOR_CONSPIRACY_CONTRACTID,
-		EphyAboutRedirectorConstructor
-	},
-	{
-		EPHY_ABOUT_REDIRECTOR_CLASSNAME,
-		EPHY_ABOUT_REDIRECTOR_CID,
-		EPHY_ABOUT_REDIRECTOR_MARCO_CONTRACTID,
-		EphyAboutRedirectorConstructor
 	},
 	{
 		EPHY_CONTENT_POLICY_CLASSNAME,

@@ -37,7 +37,7 @@ extensionschemadir = $(pkgdatadir)
 extensionschema_DATA = epiphany-extension.xsd
 
 aboutdir = $(pkgdatadir)
-about_DATA = epiphany.xhtml conspiracy.xhtml
+about_DATA = epiphany.xhtml
 
 mimepermissiondir = $(pkgdatadir)
 mimepermission_DATA = mime-types-permissions.xml
