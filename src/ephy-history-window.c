@@ -168,7 +168,7 @@ static GtkActionEntry ephy_history_ui_entries [] = {
 	{ "PopupAction", NULL, "" },
 
 	/* File Menu */
-	{ "OpenInWindow", GTK_STOCK_OPEN, N_("_Open in New Window"), "<control>O",
+	{ "OpenInWindow", GTK_STOCK_OPEN, N_("Open in New _Window"), "<control>O",
 	  N_("Open the selected history link in a new window"),
 	  G_CALLBACK (cmd_open_bookmarks_in_browser) },
 	{ "OpenInTab", STOCK_NEW_TAB, N_("Open in New _Tab"), "<shift><control>O",
@@ -708,8 +708,8 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 		select_all = pages_focus;
 	}
 
-	open_in_window_label = ngettext ("_Open in New Window",
-					 "_Open in New Windows",
+	open_in_window_label = ngettext ("Open in New _Window",
+					 "Open in New _Windows",
 					 num_pages_selected);
 	open_in_tab_label = ngettext ("Open in New _Tab",
 				      "Open in New _Tabs",

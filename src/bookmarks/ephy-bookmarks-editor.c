@@ -175,7 +175,7 @@ static GtkActionEntry ephy_bookmark_popup_entries [] = {
 	{ "NewTopic", GTK_STOCK_NEW, N_("_New Topic"), "<control>N",
 	  N_("Create a new topic"), 
 	  G_CALLBACK (cmd_add_topic) },
-	{ "OpenInWindow", GTK_STOCK_OPEN, N_("_Open in New Window"), "<control>O",
+	{ "OpenInWindow", GTK_STOCK_OPEN, N_("Open in New _Window"), "<control>O",
 	  N_("Open the selected bookmark in a new window"), 
 	  G_CALLBACK (cmd_open_bookmarks_in_browser) },
 	{ "OpenInTab", STOCK_NEW_TAB, N_("Open in New _Tab"), "<shift><control>O",
@@ -1149,8 +1149,8 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 		g_list_free (selected);
 	}
 
-	open_in_window_label = ngettext ("_Open in New Window",
-					 "_Open in New Windows",
+	open_in_window_label = ngettext ("Open in New _Window",
+					 "Open in New _Windows",
 					 num_bmk_selected);
 	open_in_tab_label = ngettext ("Open in New _Tab",
 				      "Open in New _Tabs",

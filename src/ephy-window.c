@@ -315,7 +315,7 @@ static GtkActionEntry ephy_popups_entries [] = {
 	{ "OpenLink", GTK_STOCK_OPEN, N_("_Open Link"), NULL,
 	  N_("Open link in this window"),
 	  G_CALLBACK (popup_cmd_open_link) },
-	{ "OpenLinkInNewWindow", NULL, N_("Open Link in _New Window"), NULL,
+	{ "OpenLinkInNewWindow", NULL, N_("Open Link in New _Window"), NULL,
 	  N_("Open link in a new window"),
 	  G_CALLBACK (popup_cmd_link_in_new_window) },
 	{ "OpenLinkInNewTab", NULL, N_("Open Link in New _Tab"), NULL,
