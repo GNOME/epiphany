@@ -69,7 +69,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "Go", NULL, N_("_Go") },
 	{ "Tabs", NULL, N_("_Tabs") },
 	{ "Help", NULL, N_("_Help") },
-	{ "PopupMenu", NULL, "" },
+	{ "PopupAction", NULL, "" },
 
 	/* File menu */
 	{ "FileNewWindow", GTK_STOCK_NEW, N_("_New Window"), "<control>N",
@@ -154,7 +154,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "ViewZoomNormal", GTK_STOCK_ZOOM_100, N_("_Normal Size"), NULL,
 	  N_("Use the normal text size"),
 	  G_CALLBACK (window_cmd_view_zoom_normal) },
-	{ "ViewEncoding", N_("_Encoding"), NULL, NULL, NULL, NULL },
+	{ "ViewEncoding", NULL, N_("_Encoding") },
 	{ "ViewPageSource", EPHY_STOCK_VIEWSOURCE, N_("_Page Source"), "<control>U",
 	  N_("View the source code of the page"),
 	  G_CALLBACK (window_cmd_view_page_source) },
@@ -642,6 +642,10 @@ setup_window (EphyWindow *window)
 		g_warning ("Could not merge epiphany-ui.xml: %s", err->message);
 		g_clear_error (&err);
         }
+
+	/* FIXME trick to force update */
+	gtk_ui_manager_get_widget (GTK_UI_MANAGER (window->ui_merge),
+				   "/menubar");
 
 	window->priv->toolbar = toolbar_new (window);
 	gtk_widget_show (GTK_WIDGET (window->priv->toolbar));
@@ -1368,7 +1372,7 @@ ephy_window_init (EphyWindow *window)
 
 	g_object_ref (ephy_shell);
 
-	/* Initializ the menus */
+	/* Initialize the menus */
 	window->priv->tabs_menu = ephy_tabs_menu_new (window);
 	window->priv->fav_menu = ephy_favorites_menu_new (window);
 	window->priv->enc_menu = ephy_encoding_menu_new (window);
