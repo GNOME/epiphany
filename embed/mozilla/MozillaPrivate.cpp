@@ -25,6 +25,7 @@
 #include <nsIServiceManager.h>
 #include <nsISimpleEnumerator.h>
 #include <nsISupportsPrimitives.h>
+#include <nsPromiseFlatString.h>
 
 /* IMPORTANT. Put only code that use internal mozilla strings (nsAutoString for
  * example) in this file. Note that you cannot use embed strings here,
@@ -65,8 +66,8 @@ MozillaPrivate::GetPrinterList ()
 		rv = printer->GetData(data);
 		NS_ENSURE_SUCCESS(rv, nsnull);
 
-		const char *name = NS_ConvertUCS2toUTF8 (data).get();
-		printers = g_list_prepend (printers, g_strdup (name));
+		const nsACString& cData = NS_ConvertUCS2toUTF8 (data);
+		printers = g_list_prepend (printers, g_strdup (PromiseFlatCString (cData).get()));
 	}
 
 	return g_list_reverse (printers);
