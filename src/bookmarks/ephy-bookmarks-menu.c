@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2002  Ricardo Fernández Pascual
+ *  Copyright (C) 2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -193,8 +193,8 @@ add_bookmarks_menu (EphyBookmarksMenu *menu, EphyNode *node, GString *xml)
 
 		for (i = 0; i < children->len; ++i)
 		{
-			node_list = g_list_append (node_list,
-						   g_ptr_array_index (children, i));
+			node_list = g_list_prepend (node_list,
+						    g_ptr_array_index (children, i));
 		}
 
 		node_list = g_list_sort (node_list, (GCompareFunc)sort_bookmarks);
@@ -283,7 +283,7 @@ ephy_bookmarks_menu_rebuild (EphyBookmarksMenu *menu)
 
 		if (priority == EPHY_NODE_NORMAL_PRIORITY)
 		{
-			node_list = g_list_append (node_list, kid);
+			node_list = g_list_prepend (node_list, kid);
 		}
 	}
 	ephy_node_thaw (topics);
@@ -394,7 +394,8 @@ ephy_bookmarks_menu_class_init (EphyBookmarksMenuClass *klass)
                                                               "EphyWindow",
                                                               "Parent window",
                                                               EPHY_WINDOW_TYPE,
-                                                              G_PARAM_READWRITE));
+                                                              G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
 }
 
 static gboolean
