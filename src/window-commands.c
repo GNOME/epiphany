@@ -750,7 +750,7 @@ window_cmd_help_about (EggAction *action,
 
 	static gchar *authors[] = {
 		"Marco Pesenti Gritti <marco@gnome.org>",
-		"Xan Lopez <xan@masilla.org>",
+		"Xan Lopez <xan@gnome.org>",
 		"David Bordoley <bordoley@msu.edu>",
 		"Christian Persch <chpe@gnome.org>",
 		NULL
