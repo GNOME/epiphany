@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2003  David Bordoley
+ *  Copyright (C) 2003-2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +29,8 @@
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 
+#include <gtk/gtklabel.h>
+#include <gtk/gtkmenuitem.h>
 #include <gtk/gtkaccelmap.h>
 #include <gtk/gtkaction.h>
 #include <gtk/gtkradioaction.h>
@@ -123,6 +126,19 @@ tabs_reordered_cb (EphyNotebook *notebook, EphyTabsMenu *menu)
 }
 
 static void
+connect_proxy_cb (GtkActionGroup *action_group,
+		  GtkAction *action,
+		  GtkWidget *proxy,
+		  gpointer dummy)
+{
+	if (GTK_IS_MENU_ITEM (proxy))
+	{
+		gtk_label_set_ellipsize (GTK_LABEL (GTK_BIN (proxy)->child),
+					 PANGO_ELLIPSIZE_END);
+	}
+}
+
+static void
 ephy_tabs_menu_set_window (EphyTabsMenu *menu, EphyWindow *window)
 {
 	GtkWidget *notebook;
@@ -132,8 +148,11 @@ ephy_tabs_menu_set_window (EphyTabsMenu *menu, EphyWindow *window)
 
 	merge = GTK_UI_MANAGER (window->ui_merge);
 	menu->priv->action_group = gtk_action_group_new ("TabsActions");
-	gtk_ui_manager_insert_action_group (merge, menu->priv->action_group, 0);
+	gtk_ui_manager_insert_action_group (merge, menu->priv->action_group, -1);
 	g_object_unref (menu->priv->action_group);
+
+	g_signal_connect (menu->priv->action_group, "connect-proxy",
+			  G_CALLBACK (connect_proxy_cb), NULL);
 
 	notebook = ephy_window_get_notebook (window);
 	g_signal_connect_object (notebook, "tab_added",
@@ -187,8 +206,8 @@ ephy_tabs_menu_class_init (EphyTabsMenuClass *klass)
 
 	g_object_class_install_property (object_class,
                                          PROP_WINDOW,
-                                         g_param_spec_object ("EphyWindow",
-                                                              "EphyWindow",
+                                         g_param_spec_object ("window",
+                                                              "Window",
                                                               "Parent window",
                                                               EPHY_TYPE_WINDOW,
                                                               G_PARAM_READWRITE |
@@ -224,7 +243,7 @@ EphyTabsMenu *
 ephy_tabs_menu_new (EphyWindow *window)
 {
 	return EPHY_TABS_MENU (g_object_new (EPHY_TYPE_TABS_MENU,
-					     "EphyWindow", window,
+					     "window", window,
 					     NULL));
 }
 
