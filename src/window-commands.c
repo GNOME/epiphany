@@ -72,7 +72,6 @@ window_cmd_file_print_setup (GtkAction *action,
 	EphyDialog *dialog;
 
 	dialog = EPHY_DIALOG (ephy_shell_get_print_setup_dialog (ephy_shell));
-	ephy_dialog_set_parent (dialog, GTK_WIDGET (window));
 
 	ephy_dialog_show (dialog);
 }
@@ -721,7 +720,6 @@ window_cmd_edit_personal_data (GtkAction *action,
 	EphyDialog *dialog;
 
 	dialog = EPHY_DIALOG (ephy_shell_get_pdm_dialog (ephy_shell));
-	ephy_dialog_set_parent (dialog, GTK_WIDGET (window));
 
 	ephy_dialog_show (dialog);
 }
@@ -733,7 +731,6 @@ window_cmd_edit_prefs (GtkAction *action,
 	EphyDialog *dialog;
 
 	dialog = EPHY_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell));
-	ephy_dialog_set_parent (dialog, GTK_WIDGET (window));
 
 	ephy_dialog_show (dialog);
 }
