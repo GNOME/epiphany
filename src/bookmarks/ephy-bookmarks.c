@@ -870,6 +870,8 @@ ephy_bookmarks_find_bookmark (EphyBookmarks *eb,
 	GPtrArray *children;
 	int i;
 
+	g_return_val_if_fail (url != NULL, NULL);
+
 	children = ephy_node_get_children (eb->priv->bookmarks);
 	for (i = 0; i < children->len; i++)
 	{
@@ -879,7 +881,7 @@ ephy_bookmarks_find_bookmark (EphyBookmarks *eb,
 		kid = g_ptr_array_index (children, i);
 		location = ephy_node_get_property_string
 			(kid, EPHY_NODE_BMK_PROP_LOCATION);
-		if (strcmp (url, location) == 0)
+		if (location != NULL && strcmp (url, location) == 0)
 		{
 			ephy_node_thaw (eb->priv->bookmarks);
 			return kid;
