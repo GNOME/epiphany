@@ -24,6 +24,8 @@
 #include "config.h"
 
 #include "ephy-tab.h"
+#include "ephy-type-builtins.h"
+#include "ephy-embed-type-builtins.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-embed-factory.h"
@@ -142,44 +144,6 @@ static guint	popup_blocker_n_hidden		(EphyTab *tab);
 static gboolean	ephy_tab_get_popups_allowed	(EphyTab *tab);
 static void	ephy_tab_set_popups_allowed	(EphyTab *tab,
 						 gboolean allowed);
-GType
-ephy_tab_address_expire_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		static const GEnumValue values[] = 
-                {
-                   { EPHY_TAB_ADDRESS_EXPIRE_NOW, "EPHY_TAB_ADDRESS_EXPIRE_NOW", "expire-now" },
-                   { EPHY_TAB_ADDRESS_EXPIRE_NEXT, "EPHY_TAB_ADDRESS_EXPIRE_NEXT", "expire-next" },
-                   { EPHY_TAB_ADDRESS_EXPIRE_CURRENT, "EPHY_TAB_ADDRESS_EXPIRE_CURRENT", "expire-current" },
-                   { 0, NULL, NULL }
-                };
-		type = g_enum_register_static ("EphyTabAddressExpire", values);
-	}
-	return type;
-}
-
-GType
-ephy_tab_navigation_flags_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		static const GFlagsValue values[] = 
-                {
-                   { EPHY_TAB_NAV_UP, "EPHY_TAB_NAV_UP", "up" },
-                   { EPHY_TAB_NAV_BACK, "EPHY_TAB_NAV_BACK", "back" },
-                   { EPHY_TAB_NAV_FORWARD, "EPHY_TAB_NAV_FORWARD", "forward" },
-                   { 0, NULL, NULL }
-                };
-		type = g_flags_register_static ("EphyTabNavigationFlags", values);
-	}
-	return type;
-}
-
 
 /* Class functions */
 

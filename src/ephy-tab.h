@@ -35,9 +35,6 @@ G_BEGIN_DECLS
 #define EPHY_IS_TAB_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TAB))
 #define EPHY_TAB_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TAB, EphyTabClass))
 
-#define EPHY_TYPE_TAB_NAVIGATION_FLAGS (ephy_tab_navigation_flags_get_type())
-#define EPHY_TYPE_TAB_ADDRESS_EXPIRE   (ephy_tab_address_expire_get_type())
-
 typedef struct _EphyTabClass	EphyTabClass;
 typedef struct _EphyTab		EphyTab;
 typedef struct _EphyTabPrivate	EphyTabPrivate;

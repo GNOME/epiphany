@@ -630,26 +630,3 @@ ephy_embed_persist_to_string (EphyEmbedPersist *persist)
        EphyEmbedPersistClass *klass = EPHY_EMBED_PERSIST_GET_CLASS (persist);
        return klass->to_string (persist);
 }
-
-GType
-ephy_embed_persist_flags_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		static const GFlagsValue values[] =
-		{
-		{ EPHY_EMBED_PERSIST_COPY_PAGE, "EPHY_EMBED_PERSIST_COPY_PAGE", "copy-page" },
-		{ EPHY_EMBED_PERSIST_MAINDOC, "EPHY_EMBED_PERSIST_MAINDOC", "main-document" },
-		{ EPHY_EMBED_PERSIST_NO_VIEW, "EPHY_EMBED_PERSIST_NO_VIEW", "no-view" },
-		{ EPHY_EMBED_PERSIST_ASK_DESTINATION, "EPHY_EMBED_PERSIST_ASK_DESTINATION", "ask-destination" },
-		{ EPHY_EMBED_PERSIST_DO_CONVERSION, "EPHY_EMBED_PERSIST_DO_CONVERSION", "do-conversion" },
-		{ 0, NULL, NULL }
-		};
-
-		type = g_flags_register_static ("EphyEmbedPersistFlags", values);
-	}
-
-	return type;
-}

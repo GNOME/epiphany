@@ -22,30 +22,10 @@
 
 #include "ephy-link.h"
 
+#include "ephy-type-builtins.h"
 #include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
 #include "ephy-debug.h"
-
-GType
-ephy_link_flags_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		static const GFlagsValue values[] =
-		{
-		{ EPHY_LINK_NEW_WINDOW, "EPHY_LINK_NEW_WINDOW", "new-window" },
-		{ EPHY_LINK_NEW_TAB, "EPHY_LINK_NEW_TAB", "new-tab" },
-		{ EPHY_LINK_JUMP_TO, "EPHY_LINK_JUMP_TO", "jump-to" },
-		{ 0, NULL, NULL }
-		};
-
-		type = g_flags_register_static ("EphyLinkFlags", values);
-	}
-
-	return type;
-}
 
 enum
 {

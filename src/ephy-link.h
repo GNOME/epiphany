@@ -34,8 +34,6 @@ G_BEGIN_DECLS
 #define EPHY_IS_LINK_IFACE(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_LINK))
 #define EPHY_LINK_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_LINK, EphyLinkIface))
 
-#define EPHY_TYPE_LINK_FLAGS		(ephy_link_flags_get_type ())
-
 typedef struct _EphyLink	EphyLink;
 typedef struct _EphyLinkIface	EphyLinkIface;
 

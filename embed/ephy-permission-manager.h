@@ -35,7 +35,6 @@ G_BEGIN_DECLS
 #define EPHY_PERMISSION_MANAGER_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_PERMISSION_MANAGER, EphyPermissionManagerIface))
 
 #define EPHY_TYPE_PERMISSION_INFO		(ephy_permission_info_get_type ())
-#define EPHY_TYPE_PERMISSION			(ephy_permission_get_type ())
 
 #define EPT_COOKIE	"cookie"
 #define EPT_IMAGE	"image"

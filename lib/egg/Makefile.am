@@ -25,7 +25,8 @@ noinst_LTLIBRARIES = libegg.la
 
 libegg_la_SOURCES = \
 	$(EGGSOURCES) \
-	eggmarshalers.c
+	$(EGGHEADERS) \
+	$(BUILT_SOURCES)
 
 libegg_la_CPPFLAGS = \
 	-I$(top_builddir)/lib/egg		\
@@ -36,13 +37,49 @@ libegg_la_CFLAGS = \
 	$(EPIPHANY_DEPENDENCY_CFLAGS)		\
 	$(AM_CFLAGS)
 
-BUILT_SOURCES = eggmarshalers.h eggmarshalers.c
+BUILT_SOURCES = \
+	eggmarshalers.c \
+	eggmarshalers.h \
+	eggtypebuiltins.c \
+	eggtypebuiltins.h
 
 eggmarshalers.h: eggmarshalers.list
 	$(GLIB_GENMARSHAL) --prefix=_egg_marshal $(srcdir)/eggmarshalers.list --header > eggmarshalers.h
 
 eggmarshalers.c: eggmarshalers.list
 	$(GLIB_GENMARSHAL) --prefix=_egg_marshal $(srcdir)/eggmarshalers.list --header --body > eggmarshalers.c
+
+eggtypebuiltins.c: $(EGGHEADERS)
+	( cd $(srcdir) && $(GLIB_MKENUMS) \
+		--fhead "#include \"eggtypebuiltins.h\"\n\n" \
+		--fprod "\n/* enumerations from \"@filename@\" */" \
+		--fprod "\n#include \"@filename@\"" \
+		--vhead "static const G@Type@Value _@enum_name@_values[] = {" \
+		--vprod "  { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+		--vtail "  { 0, NULL, NULL }\n};\n\n" \
+		--vtail "GType\n@enum_name@_get_type (void)\n{\n" \
+		--vtail "  static GType type = 0;\n\n" \
+		--vtail "  if (G_UNLIKELY (type == 0))\n" \
+		--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n\n" \
+		--vtail "  return type;\n}\n\n" \
+		$(EGGHEADERS) ) > xgen-$(@F) \
+	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
+	&& rm -f xgen-$(@F)
+
+eggtypebuiltins.h: $(EGGHEADERS)
+	( cd $(srcdir) && $(GLIB_MKENUMS) \
+		--fhead "#ifndef __EGGTYPEBUILTINS_H__\n" \
+		--fhead "#define __EGGTYPEBUILTINS_H__ 1\n\n" \
+		--fhead "#include <glib-object.h>\n\n" \
+		--fhead "G_BEGIN_DECLS\n\n" \
+		--ftail "G_END_DECLS\n\n" \
+		--ftail "#endif /* __EGGTYPEBUILTINS_H__ */\n" \
+		--fprod "\n/* --- @filename@ --- */" \
+		--eprod "#define EGG_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
+		--eprod "GType @enum_name@_get_type (void);\n" \
+		$(EGGHEADERS) ) > xgen-$(@F) \
+	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
+	&& rm -f xgen-$(@F)
 
 EXTRA_DIST=			\
 	eggmarshalers.list

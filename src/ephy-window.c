@@ -23,6 +23,8 @@
 #include "config.h"
 
 #include "ephy-window.h"
+#include "ephy-type-builtins.h"
+#include "ephy-embed-type-builtins.h"
 #include "ephy-command-manager.h"
 #include "ephy-bookmarks-menu.h"
 #include "ephy-favorites-menu.h"

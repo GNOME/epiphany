@@ -3,7 +3,9 @@ SUBDIRS = mozilla
 noinst_LTLIBRARIES = libephyembed.la libephyembedfactory.la
 
 headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
-header_DATA = $(INST_H_FILES)
+header_DATA = \
+	ephy-embed-type-builtins.h	\
+	$(INST_H_FILES)
 
 NOINST_H_FILES = \
 	downloader-view.h		\
@@ -13,6 +15,12 @@ NOINST_H_FILES = \
 	ephy-favicon-cache.h		\
 	find-dialog.h			\
 	print-dialog.h
+
+TYPES_H_FILES = \
+	ephy-embed.h			\
+	ephy-embed-event.h		\
+	ephy-embed-persist.h		\
+	ephy-permission-manager.h
 
 INST_H_FILES = \
 	ephy-command-manager.h		\
@@ -47,7 +55,8 @@ libephyembed_la_SOURCES = \
 	find-dialog.c			\
 	print-dialog.c			\
 	$(INST_H_FILES)			\
-	$(NOINST_H_FILES)
+	$(NOINST_H_FILES)		\
+	$(BUILT_SOURCES)
 
 libephyembed_la_CPPFLAGS = \
 	-I$(top_builddir)/lib       	\
@@ -75,3 +84,43 @@ libephyembedfactory_la_CPPFLAGS = \
 libephyembedfactory_la_CFLAGS = \
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
 	$(AM_CFLAGS)
+
+
+BUILT_SOURCES = \
+	ephy-embed-type-builtins.c	\
+	ephy-embed-type-builtins.h
+
+CLEAN_FILES = $(BUILT_SOURCES)
+DISTCLEAN_FILES = $(BUILT_SOURCES)
+
+ephy-embed-type-builtins.c: $(TYPES_H_FILES)
+	( cd $(srcdir) && $(GLIB_MKENUMS) \
+		--fhead "#include \"ephy-embed-type-builtins.h\"\n\n" \
+		--fprod "\n/* enumerations from \"@filename@\" */" \
+		--fprod "\n#include \"@filename@\"" \
+		--vhead "static const G@Type@Value _@enum_name@_values[] = {" \
+		--vprod "  { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+		--vtail "  { 0, NULL, NULL }\n};\n\n" \
+		--vtail "GType\n@enum_name@_get_type (void)\n{\n" \
+		--vtail "  static GType type = 0;\n\n" \
+		--vtail "  if (G_UNLIKELY (type == 0))\n" \
+		--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n\n" \
+		--vtail "  return type;\n}\n\n" \
+		$(TYPES_H_FILES) ) > xgen-$(@F) \
+	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
+	&& rm -f xgen-$(@F)
+
+ephy-embed-type-builtins.h: $(TYPES_H_FILES)
+	( cd $(srcdir) && $(GLIB_MKENUMS) \
+		--fhead "#ifndef EPHY_EMBED_TYPE_BUILTINS_H\n" \
+		--fhead "#define EPHY_EMBED_TYPE_BUILTINS_H 1\n\n" \
+		--fhead "#include <glib-object.h>\n\n" \
+		--fhead "G_BEGIN_DECLS\n\n" \
+		--ftail "G_END_DECLS\n\n" \
+		--ftail "#endif /* EPHY_EMBED_TYPE_BUILTINS_H */\n" \
+		--fprod "\n/* --- @filename@ --- */" \
+		--eprod "#define EPHY_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
+		--eprod "GType @enum_name@_get_type (void);\n" \
+		$(TYPES_H_FILES) ) > xgen-$(@F) \
+	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
+	&& rm -f xgen-$(@F)

@@ -22,131 +22,13 @@
 
 #include "ephy-embed.h"
 
+#include "ephy-embed-type-builtins.h"
 #include "ephy-marshal.h"
 #include "ephy-signal-accumulator.h"
 #include "mozilla-embed-single.h"
 #include "mozilla-embed.h"
 
 static void ephy_embed_base_init (gpointer g_class);
-
-GType
-ephy_embed_net_state_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		static const GFlagsValue values[] =
-		{
-		{ EPHY_EMBED_STATE_UNKNOWN, "EPHY_EMBED_STATE_UNKNOWN", "unknown" },
-		{ EPHY_EMBED_STATE_START, "EPHY_EMBED_STATE_START", "start" },
-		{ EPHY_EMBED_STATE_REDIRECTING, "EPHY_EMBED_STATE_REDIRECTING", "redirecting" },
-		{ EPHY_EMBED_STATE_TRANSFERRING, "EPHY_EMBED_STATE_TRANSFERRING", "transferring" },
-		{ EPHY_EMBED_STATE_NEGOTIATING, "EPHY_EMBED_STATE_NEGOTIATING", "negotiating", },
-		{ EPHY_EMBED_STATE_STOP, "EPHY_EMBED_STATE_STOP", "stop" },
-		{ EPHY_EMBED_STATE_IS_REQUEST, "EPHY_EMBED_STATE_IS_REQUEST", "is-request" },
-		{ EPHY_EMBED_STATE_IS_DOCUMENT, "EPHY_EMBED_STATE_IS_DOCUMENT", "is-document" },
-		{ EPHY_EMBED_STATE_IS_NETWORK, "EPHY_EMBED_STATE_IS_NETWORK", "is-network" },
-		{ EPHY_EMBED_STATE_IS_WINDOW, "EPHY_EMBED_STATE_IS_WINDOW", "is-window" },
-		{ 0, NULL, NULL }
-		};
-
-		type = g_flags_register_static ("EphyEmbedNetState", values);
-	}
-
-	return type;
-}
-
-GType
-ephy_embed_chrome_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		static const GFlagsValue values[] =
-		{
-		{ EPHY_EMBED_CHROME_MENUBAR, "EPHY_EMBED_CHROME_MENUBAR", "menubar" },
-		{ EPHY_EMBED_CHROME_TOOLBAR, "EPHY_EMBED_CHROME_TOOLBAR", "toolbar" },
-		{ EPHY_EMBED_CHROME_STATUSBAR, "EPHY_EMBED_CHROME_STATUSBAR", "statusbar" },
-		{ EPHY_EMBED_CHROME_BOOKMARKSBAR, "EPHY_EMBED_CHROME_BOOKMARKSBAR", "bookmarksbar" },
-		{ 0, NULL, NULL }
-		};
-
-		type = g_flags_register_static ("EphyEmbedChrome", values);
-	}
-
-	return type;
-}
-
-GType
-ephy_embed_ppv_navigation_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		static const GEnumValue values[] =
-		{
-		{ EPHY_EMBED_PRINTPREVIEW_GOTO_PAGENUM, "EPHY_EMBED_PRINTPREVIEW_GOTO_PAGENUM", "page-num" },
-		{ EPHY_EMBED_PRINTPREVIEW_PREV_PAGE, "EPHY_EMBED_PRINTPREVIEW_PREV_PAGE", "prev" },
-		{ EPHY_EMBED_PRINTPREVIEW_NEXT_PAGE, "EPHY_EMBED_PRINTPREVIEW_NEXT_PAGE", "next" },
-		{ EPHY_EMBED_PRINTPREVIEW_HOME, "EPHY_EMBED_PRINTPREVIEW_HOME", "home" },
-		{ EPHY_EMBED_PRINTPREVIEW_END, "EPHY_EMBED_PRINTPREVIEW_END", "end" },
-		{ 0, NULL, NULL }
-		};
-
-		type = g_enum_register_static ("EphyEmbedPPVNavigation", values);
-	}
-
-	return type;
-}
-
-GType
-ephy_embed_security_level_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		static const GEnumValue values[] =
-		{
-		{ EPHY_EMBED_STATE_IS_UNKNOWN, "EPHY_EMBED_STATE_IS_UNKNOWN", "unknown" },
-		{ EPHY_EMBED_STATE_IS_INSECURE, "EPHY_EMBED_STATE_IS_INSECURE", "insecure" },
-		{ EPHY_EMBED_STATE_IS_BROKEN, "EPHY_EMBED_STATE_IS_BROKEN", "broken" },
-		{ EPHY_EMBED_STATE_IS_SECURE_LOW, "EPHY_EMBED_STATE_IS_SECURE_LOW", "low" },
-		{ EPHY_EMBED_STATE_IS_SECURE_MED, "EPHY_EMBED_STATE_IS_SECURE_MED", "medium" },
-		{ EPHY_EMBED_STATE_IS_SECURE_HIGH, "EPHY_EMBED_STATE_IS_SECURE_HIGH", "high" },
-		{ 0, NULL, NULL }
-		};
-
-		type = g_enum_register_static ("EphyEmbedSecurityLevel", values);
-	}
-
-	return type;
-}
-
-GType
-ephy_embed_document_type_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		static const GEnumValue values[] =
-		{
-		{ EPHY_EMBED_DOCUMENT_HTML, "EPHY_EMBED_DOCUMENT_HTML", "html" },
-		{ EPHY_EMBED_DOCUMENT_XML, "EPHY_EMBED_DOCUMENT_XML", "xml" },
-		{ EPHY_EMBED_DOCUMENT_IMAGE, "EPHY_EMBED_DOCUMENT_IMAGE", "image" },
-		{ EPHY_EMBED_DOCUMENT_OTHER, "EPHY_EMBED_DOCUMENT_OTHER", "other" },
-		{ 0, NULL, NULL }
-		};
-
-		type = g_enum_register_static ("EphyEmbedDocumentType", values);
-	}
-
-	return type;
-}
 
 GType
 ephy_embed_get_type (void)

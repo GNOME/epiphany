@@ -21,7 +21,9 @@ $(CORBA_SOURCE): $(idls) $(ORBIT_IDL)
 	$(ORBIT_IDL) $(idl_flags) $(idls)
 
 headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
-header_DATA = $(INST_H_FILES)
+header_DATA = \
+	ephy-type-builtins.h	\
+	$(INST_H_FILES)
 
 NOINST_H_FILES = \
 	ephy-automation.h		\
@@ -55,7 +57,7 @@ INST_H_FILES = \
 	ephy-window.h
 
 libephymain_la_SOURCES = \
-	$(CORBA_SOURCE)			\
+	$(BUILT_SOURCES)		\
 	ephy-automation.c		\
 	ephy-completion-model.c		\
 	ephy-completion-model.h		\
@@ -91,6 +93,7 @@ libephymain_la_SOURCES = \
 
 libephymain_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
+	-I$(top_builddir)/embed		\
 	-I$(top_srcdir)/embed 		\
 	-I$(top_srcdir)/lib   		\
 	-I$(top_srcdir)/lib/egg		\
@@ -141,7 +144,45 @@ epiphany_LDADD = \
 	$(EPIPHANY_DEPENDENCY_LIBS) \
 	$(INTLLIBS)
 
-BUILT_SOURCES = $(CORBA_SOURCE)
+BUILT_SOURCES =	\
+	$(CORBA_SOURCE)	\
+	$(TYPES_SOURCE)
+
+TYPES_SOURCE = \
+	ephy-type-builtins.c	\
+	ephy-type-builtins.h
+
+ephy-type-builtins.c: $(INST_H_FILES) $(NOINST_H_FILES)
+	( cd $(srcdir) && $(GLIB_MKENUMS) \
+		--fhead "#include \"ephy-type-builtins.h\"\n\n" \
+		--fprod "\n/* enumerations from \"@filename@\" */" \
+		--fprod "\n#include \"@filename@\"" \
+		--vhead "static const G@Type@Value _@enum_name@_values[] = {" \
+		--vprod "  { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+		--vtail "  { 0, NULL, NULL }\n};\n\n" \
+		--vtail "GType\n@enum_name@_get_type (void)\n{\n" \
+		--vtail "  static GType type = 0;\n\n" \
+		--vtail "  if (G_UNLIKELY (type == 0))\n" \
+		--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n\n" \
+		--vtail "  return type;\n}\n\n" \
+		$(INST_H_FILES) $(NOINST_H_FILES) ) > xgen-$(@F) \
+	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
+	&& rm -f xgen-$(@F)
+
+ephy-type-builtins.h: $(INST_H_FILES) $(NOINST_H_FILES)
+	( cd $(srcdir) && $(GLIB_MKENUMS) \
+		--fhead "#ifndef EPHY_TYPE_BUILTINS_H\n" \
+		--fhead "#define EPHY_TYPE_BUILTINS_H 1\n\n" \
+		--fhead "#include <glib-object.h>\n\n" \
+		--fhead "G_BEGIN_DECLS\n\n" \
+		--ftail "G_END_DECLS\n\n" \
+		--ftail "#endif /* EPHY_TYPE_BUILTINS_H */\n" \
+		--fprod "\n/* --- @filename@ --- */" \
+		--eprod "#define EPHY_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
+		--eprod "GType @enum_name@_get_type (void);\n" \
+		$(INST_H_FILES) $(NOINST_H_FILES) ) > xgen-$(@F) \
+	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
+	&& rm -f xgen-$(@F)
 
 CLEANFILES = $(BUILT_SOURCES)
 DISTCLEANFILES = $(BUILT_SOURCES)

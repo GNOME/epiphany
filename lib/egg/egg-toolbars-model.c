@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "egg-toolbars-model.h"
+#include "eggtypebuiltins.h"
 #include "eggmarshalers.h"
 
 #include <unistd.h>
@@ -69,30 +70,6 @@ struct EggToolbarsModelPrivate
 {
   GNode *toolbars;
 };
-
-GType
-egg_toolbars_model_flags_get_type (void)
-{
-  static GType type = 0;
-
-  if (G_UNLIKELY (type == 0))
-    {
-      static const GFlagsValue values[] =
-      {
-	{ EGG_TB_MODEL_NOT_REMOVABLE, "EGG_TB_MODEL_NOT_REMOVABLE", "not-removable" },
-	{ EGG_TB_MODEL_ICONS_ONLY, "EGG_TB_MODEL_ICONS_ONLY", "icons-only" },
-	{ EGG_TB_MODEL_TEXT_ONLY, "EGG_TB_MODEL_TEXT_ONLY", "text-only" },
-	{ EGG_TB_MODEL_ICONS_TEXT, "EGG_TB_MODEL_ICONS_TEXT", "text" },
-	{ EGG_TB_MODEL_ICONS_TEXT_HORIZ, "EGG_TB_MODEL_ICONS_TEXT_HORIZ", "text-horiz" },
-	{ EGG_TB_MODEL_ACCEPT_ITEMS_ONLY, "EGG_TB_MODEL_ACCEPT_ITEMS_ONLY", "accept-items-only" },
-	{ 0, NULL, NULL }
-	};
-
-      type = g_flags_register_static ("EggToolbarsModelFlags", values);
-    }
-
-return type;
-}
 
 GType
 egg_toolbars_model_get_type (void)

@@ -34,8 +34,6 @@ G_BEGIN_DECLS
 #define EGG_IS_TOOLBARS_MODEL_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), EGG_TYPE_TOOLBARS_MODEL))
 #define EGG_TOOLBARS_MODEL_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EGG_TYPE_TOOLBARS_MODEL, EggToolbarsModelClass))
 
-#define EGG_TYPE_TOOLBARS_MODEL_FLAGS	    (egg_toolbars_model_flags_get_type ())
-
 typedef struct EggToolbarsModel		EggToolbarsModel;
 typedef struct EggToolbarsModelPrivate	EggToolbarsModelPrivate;
 typedef struct EggToolbarsModelClass	EggToolbarsModelClass;

@@ -73,6 +73,7 @@ AC_PROG_CXX
 AM_PROG_CC_STDC
 AC_HEADER_STDC
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
+AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
 
 GNOME_DEBUG_CHECK
 GNOME_COMPILE_WARNINGS([error])
@@ -480,6 +481,12 @@ AM_CONDITIONAL([ENABLE_FILEPICKER],[test "x$filepicker" = "xyes"])
 if test "x$filepicker" = "xyes"; then
 	AC_DEFINE([ENABLE_FILEPICKER],[1],[Define to enable the native filepicker])
 fi
+
+dnl ***************
+dnl Multimedia keys
+dnl ***************
+
+AC_CHECK_HEADERS([X11/XF86keysym.h])
 
 dnl *******************************
 dnl Add warning flags

@@ -38,14 +38,10 @@ G_BEGIN_DECLS
 #define EPHY_IS_SHELL(o)	(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_SHELL))
 #define EPHY_IS_SHELL_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_SHELL))
 #define EPHY_SHELL_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SHELL, EphyShellClass))
-#define EPHY_TYPE_SHELL_ERROR         (ephy_shell_error_get_type())
-#define EPHY_TYPE_SHELL_STARTUP_FLAGS (ephy_shell_startup_flags_get_type())
-#define EPHY_TYPE_NEW_TAB_FLAGS       (ephy_new_tab_flags_get_type())
 
-
-typedef struct EphyShell EphyShell;
-typedef struct EphyShellClass EphyShellClass;
-typedef struct EphyShellPrivate EphyShellPrivate;
+typedef struct _EphyShell		EphyShell;
+typedef struct _EphyShellClass		EphyShellClass;
+typedef struct _EphyShellPrivate	EphyShellPrivate;
 
 extern EphyShell *ephy_shell;
 
@@ -87,7 +83,7 @@ typedef enum
 	EPHY_NEW_TAB_IN_EXISTING_WINDOW	= 1 << 11
 } EphyNewTabFlags;
 
-struct EphyShell
+struct _EphyShell
 {
 	EphyEmbedShell parent;
 
@@ -95,7 +91,7 @@ struct EphyShell
 	EphyShellPrivate *priv;
 };
 
-struct EphyShellClass
+struct _EphyShellClass
 {
 	EphyEmbedShellClass parent_class;
 };

@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "ephy-navigation-action.h"
+#include "ephy-type-builtins.h"
 #include "ephy-window.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
