@@ -669,7 +669,7 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 	g_return_if_fail (EPHY_IS_WINDOW (toplevel));
 	window = EPHY_WINDOW (toplevel);
 
-	if (tab != NULL);
+	if (tab != NULL)
 	{
 		embed = ephy_tab_get_embed (tab);
 		g_return_if_fail (EPHY_IS_EMBED (embed));
