@@ -616,7 +616,7 @@ ephy_history_finalize (GObject *object)
 }
 
 EphyHistory *
-ephy_history_new ()
+ephy_history_new (void)
 {
 	return EPHY_HISTORY (g_object_new (EPHY_TYPE_HISTORY, NULL));
 }

@@ -394,11 +394,11 @@ struct _EphyWindowPrivate
 	guint browse_with_caret_notifier_id;
 	guint allow_popups_notifier_id;
 
-	gboolean closing : 1;
-	gboolean has_size : 1;
-	gboolean fullscreen_mode : 1;
-	gboolean ppv_mode : 1;
-	gboolean should_save_chrome : 1;
+	guint closing : 1;
+	guint has_size : 1;
+	guint fullscreen_mode : 1;
+	guint ppv_mode : 1;
+	guint should_save_chrome : 1;
 };
 
 enum

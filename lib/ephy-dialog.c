@@ -82,11 +82,11 @@ struct _EphyDialogPrivate
 	GtkWidget *parent;
 	GtkWidget *dialog;
 
-	gboolean modal : 1;
-	gboolean has_default_size : 1;
-	gboolean disposing : 1;
-	gboolean initialized : 1;
-	gboolean persist_position : 1;
+	guint modal : 1;
+	guint has_default_size : 1;
+	guint disposing : 1;
+	guint initialized : 1;
+	guint persist_position : 1;
 	int default_width;
 	int default_height;
 };

@@ -107,7 +107,7 @@ create_statusbar_security_icon (EphyStatusbar *s)
 	gtk_container_add (GTK_CONTAINER (s->priv->security_evbox),
 			   GTK_WIDGET (s->priv->security_icon));
 
-	ephy_statusbar_set_security_state (s, FALSE, NULL);
+	ephy_statusbar_set_security_state (s, NULL, NULL);
 
 	gtk_widget_show_all (s->security_frame);
 
