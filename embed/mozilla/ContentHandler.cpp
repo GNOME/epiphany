@@ -1,6 +1,8 @@
 /*
  *  Copyright (C) 2001 Philip Langdale
- *  		  2003 Marco Pesenti Gritti, Xan Lopez
+ *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Xan Lopez
+ *  Copyright (C) 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,6 +39,7 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-embed-single.h"
 #include "ephy-embed-shell.h"
+#include "ephy-debug.h"
 
 #include <libgnomevfs/gnome-vfs-mime.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
@@ -44,23 +47,21 @@
 
 class GContentHandler;
 
-/* Implementation file */
 NS_IMPL_ISUPPORTS1(GContentHandler, nsIHelperAppLauncherDialog)
 
-GContentHandler::GContentHandler() : mUri(nsnull),
-				     mMimeType(nsnull)
+GContentHandler::GContentHandler() : mMimeType(nsnull),
+				     mUrlHelper(PR_FALSE)
 {
+	LOG ("GContentHandler ctor")
 }
 
 GContentHandler::~GContentHandler()
 {
+	LOG ("GContentHandler dtor")
+
 	g_free (mUri);
 	g_free (mMimeType);
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// begin nsIHelperAppLauncher impl
-////////////////////////////////////////////////////////////////////////////////
 
 #if MOZILLA_SNAPSHOT > 9
 /* void show (in nsIHelperAppLauncher aLauncher, in nsISupports aContext); */
@@ -78,7 +79,7 @@ NS_IMETHODIMP GContentHandler::Show(nsIHelperAppLauncher *aLauncher,
 
 	mLauncher = aLauncher;
 	rv = Init ();
-	if (NS_FAILED (rv)) return rv;
+	NS_ENSURE_SUCCESS (rv, rv);
 
 	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
 	g_signal_emit_by_name (single, "handle_content", mMimeType,
@@ -119,27 +120,18 @@ NS_METHOD GContentHandler::ShowProgressDialog(nsIHelperAppLauncher *aLauncher,
 }
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-// begin local public methods impl
-////////////////////////////////////////////////////////////////////////////////
-
 NS_METHOD GContentHandler::FindHelperApp (void)
 {
 	if (mUrlHelper)
 	{
 		return LaunchHelperApp ();
 	}
-	else
-	{
-		if (NS_SUCCEEDED (SynchroniseMIMEInfo()))
-		{
-			return mLauncher->LaunchWithApplication (nsnull, PR_FALSE);
-		}
-		else
-		{
-			return NS_ERROR_FAILURE;
-		}
-	}
+
+	nsresult rv;
+	rv = SynchroniseMIMEInfo();
+	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
+
+	return mLauncher->LaunchWithApplication (nsnull, PR_FALSE);
 }
 
 NS_METHOD GContentHandler::LaunchHelperApp (void)
@@ -149,10 +141,11 @@ NS_METHOD GContentHandler::LaunchHelperApp (void)
 		nsresult rv;
 		nsCOMPtr<nsIExternalHelperAppService> helperService =
 			do_GetService (NS_EXTERNALHELPERAPPSERVICE_CONTRACTID);
+		NS_ENSURE_TRUE (helperService, NS_ERROR_FAILURE);
 
 		nsCOMPtr<nsPIExternalAppLauncher> appLauncher =
-			do_QueryInterface (helperService, &rv);
-		if (NS_SUCCEEDED (rv))
+			do_QueryInterface (helperService);
+		if (appLauncher)
 		{
 			appLauncher->DeleteTemporaryFileOnExit(mTempFile);
 		}
@@ -170,7 +163,10 @@ NS_METHOD GContentHandler::LaunchHelperApp (void)
 		g_free (param);
 		g_list_free (params);
 
-		if(mUrlHelper) mLauncher->Cancel();
+		if (mUrlHelper)
+		{
+			mLauncher->Cancel();
+		}
 	}
 	else
 	{
@@ -221,21 +217,25 @@ NS_METHOD GContentHandler::SynchroniseMIMEInfo (void)
 	nsresult rv;
 	char *command_with_path;
 
+	NS_ENSURE_TRUE (mLauncher, NS_ERROR_FAILURE);
+
 	nsCOMPtr<nsIMIMEInfo> mimeInfo;
-	rv = mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
-	if(NS_FAILED (rv)) return NS_ERROR_FAILURE;
+	mLauncher->GetMIMEInfo(getter_AddRefs(mimeInfo));
+	NS_ENSURE_TRUE (mimeInfo, NS_ERROR_FAILURE);
 
 	command_with_path = g_find_program_in_path (mHelperApp->command);
 	if (command_with_path == NULL) return NS_ERROR_FAILURE;
+
 	nsCOMPtr<nsILocalFile> helperFile;
-	rv = NS_NewNativeLocalFile (nsDependentCString(command_with_path),
-				   PR_TRUE,
-				   getter_AddRefs(helperFile));
-	if(NS_FAILED (rv)) return NS_ERROR_FAILURE;
+	NS_NewNativeLocalFile (nsDependentCString(command_with_path),
+			       PR_TRUE,
+			       getter_AddRefs(helperFile));
+	NS_ENSURE_TRUE (helperFile, NS_ERROR_FAILURE);
+
 	g_free (command_with_path);
 
 	rv = mimeInfo->SetPreferredApplicationHandler(helperFile);
-	if(NS_FAILED (rv)) return NS_ERROR_FAILURE;	
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	nsMIMEInfoHandleAction mimeInfoAction;
 	mimeInfoAction = nsIMIMEInfo::useHelperApp;
@@ -244,11 +244,11 @@ NS_METHOD GContentHandler::SynchroniseMIMEInfo (void)
 	{
 		rv = mimeInfo->SetApplicationDescription
 				(NS_LITERAL_STRING("runInTerminal").get());
-		if(NS_FAILED (rv)) return NS_ERROR_FAILURE;
+		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 	}
 
 	rv = mimeInfo->SetPreferredAction(mimeInfoAction);
-	if(NS_FAILED (rv)) return NS_ERROR_FAILURE;
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	return NS_OK;
 }
@@ -257,13 +257,19 @@ NS_METHOD GContentHandler::Init (void)
 {
 	nsresult rv;
 
+	NS_ENSURE_TRUE (mLauncher, NS_ERROR_FAILURE);
+
 	nsCOMPtr<nsIMIMEInfo> MIMEInfo;
-	rv = mLauncher->GetMIMEInfo (getter_AddRefs(MIMEInfo));
+	mLauncher->GetMIMEInfo (getter_AddRefs(MIMEInfo));
+	NS_ENSURE_TRUE (MIMEInfo, NS_ERROR_FAILURE);
+
 	rv = MIMEInfo->GetMIMEType (&mMimeType);
 
 #if MOZILLA_SNAPSHOT > 11
-	rv = mLauncher->GetSource (getter_AddRefs(mUri));
-	rv = mLauncher->GetTargetFile (getter_AddRefs(mTempFile));
+	mLauncher->GetTargetFile (getter_AddRefs(mTempFile));
+
+	mLauncher->GetSource (getter_AddRefs(mUri));
+	NS_ENSURE_TRUE (mUri, NS_ERROR_FAILURE);
 #else
 	rv = mLauncher->GetDownloadInfo (getter_AddRefs(mUri),
 					&mTimeDownloadStarted,
@@ -283,6 +289,8 @@ NS_METHOD GContentHandler::ProcessMimeInfo (void)
 	if (mMimeType == NULL ||
 	    !nsCRT::strcmp(mMimeType, "application/octet-stream"))
 	{
+		/* FIXME: we leak the old value of mMimeType */
+		
 		nsresult rv;
 		nsCOMPtr<nsIURL> url = do_QueryInterface(mUri, &rv);
 		if (NS_SUCCEEDED(rv) && url)
@@ -308,7 +316,6 @@ NS_METHOD GContentHandler::MIMEAskAction (void)
 	gboolean auto_open;
 
 	auto_open = eel_gconf_get_boolean (CONF_AUTO_OPEN_DOWNLOADS);
-	GContentHandler *mContentHandler = this;
 	GnomeVFSMimeApplication *DefaultApp = gnome_vfs_mime_get_default_application(mMimeType);
 
 	EphyMimePermission permission;
@@ -317,18 +324,20 @@ NS_METHOD GContentHandler::MIMEAskAction (void)
 	if (!auto_open || !DefaultApp || permission != EPHY_MIME_PERMISSION_SAFE)
 	{
 		if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK)) return NS_OK;
-		nsCOMPtr<nsIHelperAppLauncher> launcher;
 
-		rv = mContentHandler->GetLauncher (getter_AddRefs(launcher));
-		if (NS_FAILED (rv)) return rv;
+		nsCOMPtr<nsIHelperAppLauncher> launcher;
+		GetLauncher (getter_AddRefs(launcher));
+		NS_ENSURE_TRUE (launcher, NS_ERROR_FAILURE);
+
 		launcher->SaveToDisk (nsnull,PR_FALSE);
 	}
 	else
 	{
-		rv = mContentHandler->SetHelperApp (DefaultApp, FALSE);
-		if (NS_FAILED (rv)) return rv;
-		rv = mContentHandler->FindHelperApp ();
-		if (NS_FAILED (rv)) return rv;
+		rv = SetHelperApp (DefaultApp, FALSE);
+		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
+
+		rv = FindHelperApp ();
+		NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 	}
 
 	return NS_OK;

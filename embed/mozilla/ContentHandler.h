@@ -76,7 +76,6 @@ class GContentHandler : public nsIHelperAppLauncherDialog
 	nsCOMPtr<nsIHelperAppLauncher> mLauncher;
 
 	nsCOMPtr<nsIURI> mUri;
-	PRInt64 mTimeDownloadStarted;
 	nsCOMPtr<nsIFile> mTempFile;
 
 	char *mMimeType;	
