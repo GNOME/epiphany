@@ -1,5 +1,12 @@
 2004-01-16  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/prefs-dialog.c: (download_path_response_cb):
+
+	Use gtk_file_chooser_get_filename() instead of
+	gtk_file_chooser_get_current_folder(). Fixes bug #131646.
+
+2004-01-16  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-window.c: (menu_item_select_cb),
 	(menu_item_deselect_cb), (disconnect_proxy_cb), (connect_proxy_cb),
 	(setup_ui_manager), (ephy_window_init):

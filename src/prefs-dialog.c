@@ -1276,7 +1276,7 @@ download_path_response_cb (GtkDialog *fc, gint response, EphyDialog *dialog)
 	{
 		char *dir;
 
-		dir = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (fc));
+		dir = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fc));
 		if (dir != NULL)
 		{
 			GtkWidget *button;
