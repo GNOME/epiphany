@@ -655,7 +655,7 @@ mozilla_prefs_set_user_agent ()
                 }
                 
                 default_user_agent = g_strdup_printf
-                        ("Mozilla/5.0 Ephy/" VERSION " (X11; %s; U;) Gecko/%d", 
+                        ("Mozilla/5.0 (X11; U; %s) Gecko/%d Epiphany/" VERSION, 
                          system,
                          NS_BUILD_ID/100);
 
