@@ -32,19 +32,15 @@
 #include "ephy-encodings.h"
 #include "ephy-debug.h"
 
-#include <libxml/xmlreader.h>
-#include <string.h>
-
 #define EPHY_EMBED_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellPrivate))
 
-struct EphyEmbedShellPrivate
+struct _EphyEmbedShellPrivate
 {
 	EphyHistory *global_history;
 	DownloaderView *downloader_view;
 	EphyFaviconCache *favicon_cache;
 	EphyEmbedSingle *embed_single;
 	EphyEncodings *encodings;
-	GHashTable *mime_table;
 };
 
 static void ephy_embed_shell_class_init	(EphyEmbedShellClass *klass);
@@ -118,12 +114,6 @@ ephy_embed_shell_finalize (GObject *object)
 	if (shell->priv->embed_single)
 	{
 		g_object_unref (G_OBJECT (shell->priv->embed_single));
-	}
-
-	LOG ("Destroying mime type hashtable")
-	if (shell->priv->mime_table)
-	{
-		g_hash_table_destroy (shell->priv->mime_table);
 	}
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -204,88 +194,6 @@ ephy_embed_shell_get_encodings (EphyEmbedShell *shell)
 	}
 
 	return G_OBJECT (shell->priv->encodings);
-}
-
-static void
-load_mime_from_xml (EphyEmbedShell *shell)
-{
-	xmlTextReaderPtr reader;
-	const char *xml_file;
-	int ret;
-	EphyMimePermission permission = EPHY_MIME_PERMISSION_UNKNOWN;
-
-	xml_file = ephy_file ("mime-types-permissions.xml");
-	if (xml_file == NULL)
-	{
-		g_warning ("MIME types permissions file not found!\n");
-		return;
-	}
-
-	reader = xmlNewTextReaderFilename (xml_file);
-	if (reader == NULL)
-	{
-		g_warning ("Could not load MIME types permissions file!\n");
-		return;
-	}
-
-	ret = xmlTextReaderRead (reader);
-	while (ret == 1)
-	{
-		const xmlChar *tag;
-		xmlReaderTypes type;
-
-		tag = xmlTextReaderConstName (reader);
-		type = xmlTextReaderNodeType (reader);
-
-		if (xmlStrEqual (tag, "safe") && type == XML_READER_TYPE_ELEMENT)
-		{
-			permission = EPHY_MIME_PERMISSION_SAFE;
-		}
-		else if (xmlStrEqual (tag, "unsafe") && type == XML_READER_TYPE_ELEMENT)
-		{
-			permission = EPHY_MIME_PERMISSION_UNSAFE;
-		}
-		else if (xmlStrEqual (tag, "mime-type"))
-		{
-			xmlChar *type;
-
-			type = xmlTextReaderGetAttribute (reader, "type");
-			g_hash_table_insert (shell->priv->mime_table,
-					     type, GINT_TO_POINTER (permission));
-		}
-
-		ret = xmlTextReaderRead (reader);
-	}
-
-	xmlFreeTextReader (reader);
-}
-
-EphyMimePermission
-ephy_embed_shell_check_mime (EphyEmbedShell *shell, const char *mime_type)
-{
-	EphyMimePermission permission;
-	gpointer tmp;
-
-	g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), EPHY_MIME_PERMISSION_UNKNOWN);
-
-	if (shell->priv->mime_table == NULL)
-	{
-		shell->priv->mime_table = g_hash_table_new_full
-			(g_str_hash, g_str_equal, xmlFree, NULL);
-		load_mime_from_xml (shell);
-	}
-
-	tmp = g_hash_table_lookup (shell->priv->mime_table, mime_type);
-	if (tmp == NULL)
-	{
-		permission = EPHY_MIME_PERMISSION_UNKNOWN;
-	}
-	else
-	{
-		permission = GPOINTER_TO_INT (tmp);
-	}
-
-	return permission;
 }
 
 static void

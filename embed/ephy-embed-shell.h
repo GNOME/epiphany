@@ -33,20 +33,13 @@ G_BEGIN_DECLS
 #define EPHY_IS_EMBED_SHELL_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_SHELL))
 #define EPHY_EMBED_SHELL_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellClass))
 
-typedef struct EphyEmbedShellClass	EphyEmbedShellClass;
-typedef struct EphyEmbedShell		EphyEmbedShell;
-typedef struct EphyEmbedShellPrivate	EphyEmbedShellPrivate;
+typedef struct _EphyEmbedShellClass	EphyEmbedShellClass;
+typedef struct _EphyEmbedShell		EphyEmbedShell;
+typedef struct _EphyEmbedShellPrivate	EphyEmbedShellPrivate;
 
 extern EphyEmbedShell *embed_shell;
 
-typedef enum
-{
-	EPHY_MIME_PERMISSION_SAFE	= 1,
-	EPHY_MIME_PERMISSION_UNSAFE	= 2,
-	EPHY_MIME_PERMISSION_UNKNOWN	= 3
-} EphyMimePermission;
-
-struct EphyEmbedShell
+struct _EphyEmbedShell
 {
 	GObject parent;
 
@@ -54,7 +47,7 @@ struct EphyEmbedShell
 	EphyEmbedShellPrivate *priv;
 };
 
-struct EphyEmbedShellClass
+struct _EphyEmbedShellClass
 {
 	GObjectClass parent_class;
 };
@@ -71,9 +64,6 @@ GObject		  *ephy_embed_shell_get_encodings	(EphyEmbedShell *shell);
 
 GObject		  *ephy_embed_shell_get_embed_single	(EphyEmbedShell *shell);
 
-EphyMimePermission ephy_embed_shell_check_mime		(EphyEmbedShell *shell,
-							 const char *mime_type);
-
 G_END_DECLS
 
-#endif
+#endif /* !EPHY_EMBED_SHELL_H */

@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#include "ephy-embed-shell.h"
+#include "ephy-file-helpers.h"
 
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 

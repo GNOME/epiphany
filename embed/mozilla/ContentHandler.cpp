@@ -49,6 +49,7 @@
 #include "ephy-embed-single.h"
 #include "ephy-embed-shell.h"
 #include "ephy-file-chooser.h"
+#include "ephy-file-helpers.h"
 #include "ephy-stock-icons.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
@@ -326,10 +327,10 @@ NS_METHOD GContentHandler::MIMEInitiateAction (void)
 
 #ifdef MOZ_NSIMIMEINFO_NSACSTRING_
 	mHelperApp = gnome_vfs_mime_get_default_application (mMimeType.get());
-	mPermission = ephy_embed_shell_check_mime (embed_shell, mMimeType.get());
+	mPermission = ephy_file_check_mime (mMimeType.get());
 #else
 	mHelperApp = gnome_vfs_mime_get_default_application (mMimeType);
-	mPermission = ephy_embed_shell_check_mime (embed_shell, mMimeType);
+	mPermission = ephy_file_check_mime (mMimeType);
 #endif
 
 	if (auto_downloads)

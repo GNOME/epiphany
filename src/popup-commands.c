@@ -365,7 +365,8 @@ popup_cmd_open_frame (GtkAction *action,
 }
 
 static void
-image_open_uri (const char *address)
+image_open_uri (const char *address,
+		gboolean delete)
 {
 	GList *uris = NULL;
 	char *canonical;
@@ -380,7 +381,8 @@ image_open_uri (const char *address)
 				     GNOME_VFS_FILE_INFO_FORCE_SLOW_MIME_TYPE) == GNOME_VFS_OK &&
 	    (info->valid_fields & GNOME_VFS_FILE_INFO_FIELDS_MIME_TYPE) &&
 	    info->mime_type != NULL &&
-	    info->mime_type[0] != '\0')
+	    info->mime_type[0] != '\0' &&
+	    ephy_file_check_mime (info->mime_type) == EPHY_MIME_PERMISSION_SAFE)
 	{
 		app = gnome_vfs_mime_get_default_application (info->mime_type);
 	}
@@ -392,12 +394,20 @@ image_open_uri (const char *address)
 		gnome_vfs_mime_application_launch (app, uris);
 		gnome_vfs_mime_application_free (app);
 		g_list_free (uris);
+		if (delete)
+		{
+			ephy_file_delete_on_exit (address);
+		}
 	}
 	else
 	{
 		/* FIXME We should really warn the user here */
 
 		g_warning ("Cannot find an application to open %s with.", address);
+		if (delete)
+		{
+			gnome_vfs_unlink (address);
+		}
 	}
 
 	g_free (canonical);
@@ -412,9 +422,7 @@ save_source_completed_cb (EphyEmbedPersist *persist)
 	dest = ephy_embed_persist_get_dest (persist);
 	g_return_if_fail (dest != NULL);
 
-	ephy_file_delete_on_exit (dest);
-
-	image_open_uri (dest);
+	image_open_uri (dest, TRUE);
 }
 
 static void
@@ -475,7 +483,7 @@ popup_cmd_open_image (GtkAction *action,
 
 	if (strcmp (scheme, "file") == 0)
 	{
-		image_open_uri (address);
+		image_open_uri (address, FALSE);
 	}
 	else
 	{

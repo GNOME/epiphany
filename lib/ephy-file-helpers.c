@@ -1,5 +1,7 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen
+ *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
+ *  Copyright (C) 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,12 +29,15 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <libgnome/gnome-init.h>
+#include <libxml/xmlreader.h>
 
 #include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
 #include "eel-gconf-extensions.h"
+#include "ephy-debug.h"
 
 static GHashTable *files = NULL;
+static GHashTable *mime_table = NULL;
 
 static char *dot_dir = NULL;
 static char *tmp_dir = NULL;
@@ -222,6 +227,13 @@ ephy_file_helpers_shutdown (void)
 	g_list_free (del_on_exit);
 	del_on_exit = NULL;
 
+	if (mime_table != NULL)
+	{
+		LOG ("Destroying mime type hashtable")
+		g_hash_table_destroy (mime_table);
+		mime_table = NULL;
+	}
+
 	if (tmp_dir != NULL)
 	{
 		rmdir (tmp_dir);
@@ -348,4 +360,89 @@ ephy_file_delete_on_exit (const char *path)
 {
 	del_on_exit = g_list_prepend (del_on_exit,
 				      g_strdup (path));
+}
+
+static void
+load_mime_from_xml (void)
+{
+	xmlTextReaderPtr reader;
+	const char *xml_file;
+	int ret;
+	EphyMimePermission permission = EPHY_MIME_PERMISSION_UNKNOWN;
+
+	g_return_if_fail (mime_table == NULL);
+
+	mime_table = g_hash_table_new_full (g_str_hash, g_str_equal,
+					    xmlFree, NULL);
+
+	xml_file = ephy_file ("mime-types-permissions.xml");
+	if (xml_file == NULL)
+	{
+		g_warning ("MIME types permissions file not found!\n");
+		return;
+	}
+
+	reader = xmlNewTextReaderFilename (xml_file);
+	if (reader == NULL)
+	{
+		g_warning ("Could not load MIME types permissions file!\n");
+		return;
+	}
+
+	ret = xmlTextReaderRead (reader);
+	while (ret == 1)
+	{
+		const xmlChar *tag;
+		xmlReaderTypes type;
+
+		tag = xmlTextReaderConstName (reader);
+		type = xmlTextReaderNodeType (reader);
+
+		if (xmlStrEqual (tag, "safe") && type == XML_READER_TYPE_ELEMENT)
+		{
+			permission = EPHY_MIME_PERMISSION_SAFE;
+		}
+		else if (xmlStrEqual (tag, "unsafe") && type == XML_READER_TYPE_ELEMENT)
+		{
+			permission = EPHY_MIME_PERMISSION_UNSAFE;
+		}
+		else if (xmlStrEqual (tag, "mime-type"))
+		{
+			xmlChar *type;
+
+			type = xmlTextReaderGetAttribute (reader, "type");
+			g_hash_table_insert (mime_table, type,
+					     GINT_TO_POINTER (permission));
+		}
+
+		ret = xmlTextReaderRead (reader);
+	}
+
+	xmlFreeTextReader (reader);
+}
+
+EphyMimePermission
+ephy_file_check_mime (const char *mime_type)
+{
+	EphyMimePermission permission;
+	gpointer tmp;
+
+	g_return_val_if_fail (mime_type != NULL, EPHY_MIME_PERMISSION_UNKNOWN);
+
+	if (mime_table == NULL)
+	{
+		load_mime_from_xml ();
+	}
+
+	tmp = g_hash_table_lookup (mime_table, mime_type);
+	if (tmp == NULL)
+	{
+		permission = EPHY_MIME_PERMISSION_UNKNOWN;
+	}
+	else
+	{
+		permission = GPOINTER_TO_INT (tmp);
+	}
+
+	return permission;
 }

@@ -1,5 +1,24 @@
 2004-12-31  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_finalize),
+	(ephy_embed_shell_get_encodings):
+	* embed/ephy-embed-shell.h:
+	* embed/mozilla/ContentHandler.cpp:
+	* embed/mozilla/ContentHandler.h:
+	* lib/ephy-file-helpers.c: (ephy_file_helpers_shutdown),
+	(ephy_file_delete_on_exit), (load_mime_from_xml),
+	(ephy_file_check_mime):
+	* lib/ephy-file-helpers.h:
+
+	Move mime permission checks to ephy-file-helpers.
+
+	* src/popup-commands.c: (image_open_uri),
+	(save_source_completed_cb), (popup_cmd_open_image):
+
+	Only open the image if its mime type is 'safe'.
+
+2004-12-31  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/popup-commands.c: (image_open_uri),
 	(save_source_completed_cb), (save_temp_source),
 	(popup_cmd_open_image):

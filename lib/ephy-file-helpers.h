@@ -1,5 +1,7 @@
 /*
  *  Copyright (C) 2002 Jorn Baayen
+ *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
+ *  Copyright (C) 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +26,13 @@
 #include <glib.h>
 
 G_BEGIN_DECLS
+
+typedef enum
+{
+	EPHY_MIME_PERMISSION_SAFE	= 1,
+	EPHY_MIME_PERMISSION_UNSAFE	= 2,
+	EPHY_MIME_PERMISSION_UNKNOWN	= 3
+} EphyMimePermission;
 
 const char *ephy_file                    (const char *filename);
 
@@ -52,6 +61,8 @@ gboolean    ephy_file_switch_temp_file   (const char *filename,
 					  const char *filename_temp);
 
 void	    ephy_file_delete_on_exit	 (const char *path);
+
+EphyMimePermission ephy_file_check_mime	 (const char *mime_type);
 
 G_END_DECLS
 
