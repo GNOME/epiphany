@@ -30,6 +30,7 @@
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtkeditable.h>
 #include <bonobo/bonobo-i18n.h>
+#include <string.h>
 
 #include "ephy-new-bookmark.h"
 #include "ephy-state.h"
@@ -471,9 +472,21 @@ void
 ephy_new_bookmark_set_title (EphyNewBookmark *bookmark,
 			     const char *title)
 {
+	const char *real_title;
+
 	LOG ("Setting new bookmark title to: \"%s\"", title)
+
+	if (title == NULL || strlen (title) == 0)
+	{
+		real_title = bookmark->priv->location;
+	}
+	else
+	{
+		real_title = title;
+	}
+
 	gtk_entry_set_text (GTK_ENTRY (bookmark->priv->title_entry),
-			    g_strdup (title));
+			    real_title);
 }
 
 void
