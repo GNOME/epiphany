@@ -408,6 +408,7 @@ static void
 setup_window (EphyWindow *window)
 {
 	EggActionGroup *action_group;
+	EggAction *action;
 	EggMenuMerge *merge;
 	int i;
 
@@ -439,7 +440,15 @@ setup_window (EphyWindow *window)
 				      ephy_menu_n_entries);
 	egg_menu_merge_insert_action_group (merge, action_group, 0);
 	window->priv->action_group = action_group;
-
+	action = egg_action_group_get_action (action_group, "FileOpen");
+	g_object_set (action, "short_label", N_("Open"), NULL);
+	action = egg_action_group_get_action (action_group, "FileSaveAs");
+	g_object_set (action, "short_label", N_("Save As"), NULL);
+	action = egg_action_group_get_action (action_group, "FilePrint");
+	g_object_set (action, "short_label", N_("Print"), NULL);
+	action = egg_action_group_get_action (action_group, "FileBookmarkPage");
+	g_object_set (action, "short_label", N_("Bookmark"), NULL);
+	
 	action_group = egg_action_group_new ("PopupsActions");
 	egg_action_group_add_actions (action_group, ephy_popups_entries,
 				      ephy_popups_n_entries);

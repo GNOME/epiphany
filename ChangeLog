@@ -1,3 +1,31 @@
+2003-04-14  David Bordoley <bordoley@msu.edu>
+
+	* data/ui/epiphany-bookmark-editor-ui.xml.in:	
+	* src/bookmarks/ephy-bookmarks-editor.c: (cmd_help_contents),
+	(ephy_bookmarks_editor_update_menu), (ephy_bookmarks_editor_dispose),
+	(ephy_bookmarks_editor_node_selected_cb), (keyword_node_selected_cb),
+	(build_search_box):
+	
+	Add a help menu and associated "Contents" and "About" menu entries.
+	Add a focus_monitor to the search entry. Only pass an editor
+	to update_menu. Update the sensitivity and label of 
+	"Open in New Window/Tab(s)" based on focus and selection. Translators,
+	if this causes problems with mneumonics, please give suggestions for
+	other letters to use.
+	
+	* src/window-commands.c: (window_cmd_help_about):
+	* src/window-commands.h: 
+	
+	Take a GtkWidget instead of an EphyWindow as the 
+	callback data so that the about function can be used
+	in the bme.	
+
+	* src/ephy-window.c: (setup_window):
+	
+	Setup short toolbar labels for "Bookmark Page...",
+	"Save As...", "Print...", and "Open..." so that these
+	items don't have elipses on the toolbar.	
+	
 2003-04-14  Frank Belew  <frb@ximian.com>
 
 	* lib/widgets/ephy-notebook.c (update_tabs_visibility): 

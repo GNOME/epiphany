@@ -135,7 +135,7 @@ void window_cmd_help_contents (EggAction *action,
 				 EphyWindow *window);
 
 void window_cmd_help_about      (EggAction *action,
-				 EphyWindow *window);
+				 GtkWidget *window);
 
 void window_cmd_tabs_next       (EggAction *action,
 				 EphyWindow *window);

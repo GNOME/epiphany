@@ -26,6 +26,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <libgnome/gnome-i18n.h>
 #include <libgnome/gnome-program.h>
+#include <libgnomeui/gnome-stock-icons.h>
 #include <string.h>
 
 #include "ephy-bookmarks-editor.h"
@@ -42,6 +43,7 @@
 #include "egg-menu-merge.h"
 #include "popup-commands.h"
 #include "ephy-state.h"
+#include "window-commands.h"
 
 static GtkTargetEntry topic_drag_dest_types [] =
 {
@@ -100,6 +102,8 @@ static void cmd_paste			  (EggAction *action,
 					   EphyBookmarksEditor *editor);
 static void cmd_select_all		  (EggAction *action,
 					   EphyBookmarksEditor *editor);
+static void cmd_help_contents		  (EggAction *action,
+					   EphyBookmarksEditor *editor);
 
 struct EphyBookmarksEditorPrivate
 {
@@ -126,6 +130,7 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 	/* Toplevel */
 	{ "File", N_("_File"), NULL, NULL, NULL, NULL, NULL },
 	{ "Edit", N_("_Edit"), NULL, NULL, NULL, NULL, NULL },
+	{ "Help", N_("_Help"), NULL, NULL, NULL, NULL, NULL },
 	{ "FakeToplevel", (""), NULL, NULL, NULL, NULL, NULL },
 
 	{ "NewTopic", N_("_New Topic"), GTK_STOCK_NEW, "<control>N",
@@ -160,6 +165,13 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 
 	{ "Close", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
 	  NULL, G_CALLBACK (cmd_close), NULL },
+
+	{ "HelpContents", N_("_Contents"), GTK_STOCK_HELP, "F1",
+	  NULL, G_CALLBACK (cmd_help_contents), NULL },
+
+	{ "HelpAbout", N_("_About"), GNOME_STOCK_ABOUT, NULL,
+	  NULL, G_CALLBACK (window_cmd_help_about), NULL },
+
 };
 static guint ephy_bookmark_popup_n_entries = G_N_ELEMENTS (ephy_bookmark_popup_entries);
 
@@ -347,6 +359,12 @@ cmd_select_all (EggAction *action,
 	}
 }
 
+static void
+cmd_help_contents (EggAction *action,
+		   EphyBookmarksEditor *editor)
+{
+	/*FIXME: Implement help.*/
+}
 
 GType
 ephy_bookmarks_editor_get_type (void)
@@ -469,10 +487,11 @@ ephy_bookmarks_editor_node_activated_cb (GtkWidget *view,
 }
 
 static void
-ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor,
-				   EphyNodeView *view)
+ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 {
-	gboolean rename, delete, properties;
+	gboolean open_in_window, open_in_tab,
+		 rename, delete, properties;
+	const gchar *open_in_window_label, *open_in_tab_label;
 	gboolean bmk_focus, key_focus;
 	gboolean key_selection, bmk_selection;
 	gboolean key_normal = FALSE;
@@ -503,6 +522,19 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor,
 		g_list_free (selected);
 	}
 
+	if (bmk_multiple_selection)
+	{
+		open_in_window_label = N_("_Open in New Windows");
+		open_in_tab_label = N_("Open in New _Tabs");
+	}
+	else
+	{
+		open_in_window_label = _("_Open in New Window");
+		open_in_tab_label = _("Open in New _Tab");
+	}
+
+	open_in_window = (bmk_focus && bmk_selection);
+	open_in_tab = (bmk_focus && bmk_selection);
 	rename = (bmk_focus && bmk_selection && !bmk_multiple_selection) ||
 		 (key_selection && key_focus && key_normal);
 	delete = (bmk_focus && bmk_selection) ||
@@ -510,6 +542,12 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor,
 	properties = (bmk_focus && bmk_selection && !bmk_multiple_selection);
 
 	action_group = editor->priv->action_group;
+	action = egg_action_group_get_action (action_group, "OpenInWindow");
+	g_object_set (action, "sensitive", open_in_window, NULL);
+	g_object_set (action, "label", open_in_window_label, NULL);
+	action = egg_action_group_get_action (action_group, "OpenInTab");
+	g_object_set (action, "sensitive", open_in_tab, NULL);
+	g_object_set (action, "label", open_in_tab_label, NULL);
 	action = egg_action_group_get_action (action_group, "Rename");
 	g_object_set (action, "sensitive", rename, NULL);
 	action = egg_action_group_get_action (action_group, "Delete");
@@ -523,7 +561,7 @@ view_focus_cb (EphyNodeView *view,
 	       GdkEventFocus *event,
 	       EphyBookmarksEditor *editor)
 {
-	ephy_bookmarks_editor_update_menu (editor, view);
+	ephy_bookmarks_editor_update_menu (editor);
 
 	return FALSE;
 }
@@ -568,6 +606,7 @@ ephy_bookmarks_editor_dispose (GObject *object)
 	{
 		remove_focus_monitor (editor, editor->priv->key_view);
 		remove_focus_monitor (editor, editor->priv->bm_view);
+		remove_focus_monitor (editor, editor->priv->search_entry);
 
 		selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->key_view));
 		if (selection == NULL || selection->data == NULL)
@@ -600,7 +639,7 @@ ephy_bookmarks_editor_node_selected_cb (EphyNodeView *view,
 				        EphyNode *node,
 					EphyBookmarksEditor *editor)
 {
-	ephy_bookmarks_editor_update_menu (editor, view);
+	ephy_bookmarks_editor_update_menu (editor);
 }
 
 static void
@@ -651,7 +690,7 @@ keyword_node_selected_cb (EphyNodeView *view,
 		bookmarks_filter (editor, node);
 	}
 
-	ephy_bookmarks_editor_update_menu (editor, view);
+	ephy_bookmarks_editor_update_menu (editor);
 }
 
 static void
@@ -706,10 +745,11 @@ build_search_box (EphyBookmarksEditor *editor)
 	entry = gtk_entry_new ();
 	editor->priv->search_entry = entry;
 	gtk_widget_show (entry);
+	add_focus_monitor (editor, entry);
 	g_signal_connect (G_OBJECT (entry), "changed",
 			  G_CALLBACK (search_entry_changed_cb),
 			  editor);
-
+	
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	str = g_strconcat ("<b>", _("_Search:"), "</b>", NULL);

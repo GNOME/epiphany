@@ -661,7 +661,7 @@ window_cmd_help_contents (EggAction *action,
 
 void
 window_cmd_help_about (EggAction *action,
-		       EphyWindow *window)
+		       GtkWidget *window)
 {
 	static GtkWidget *about = NULL;
 	GdkPixbuf *icon;
