@@ -23,6 +23,7 @@
 #endif
 
 #include "ephy-embed-shell.h"
+#include "ephy-embed-single.h"
 #include "ephy-embed-factory.h"
 #include "ephy-marshal.h"
 #include "ephy-file-helpers.h"

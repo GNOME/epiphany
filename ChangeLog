@@ -1,5 +1,52 @@
 2004-01-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-command-manager.c: (ephy_command_manager_get_type),
+	(ephy_command_manager_base_init),
+	(ephy_command_manager_do_command),
+	(ephy_command_manager_can_do_command):
+	* embed/ephy-command-manager.h:
+	* embed/ephy-cookie-manager.c: (ephy_cookie_manager_list_cookies),
+	(ephy_cookie_manager_remove_cookie), (ephy_cookie_manager_clear):
+	* embed/ephy-cookie-manager.h:
+	* embed/ephy-embed-dialog.h:
+	* embed/ephy-embed-shell.c:
+	* embed/ephy-embed-single.c: (ephy_embed_single_get_type),
+	(ephy_embed_single_iface_init), (ephy_embed_single_clear_cache),
+	(ephy_embed_single_clear_auth_cache),
+	(ephy_embed_single_set_offline_mode),
+	(ephy_embed_single_load_proxy_autoconf),
+	(ephy_embed_single_get_font_list):
+	* embed/ephy-embed-single.h:
+	* embed/ephy-embed.c: (ephy_embed_get_type),
+	(ephy_embed_base_init), (ephy_embed_load_url),
+	(ephy_embed_stop_load), (ephy_embed_can_go_back),
+	(ephy_embed_can_go_forward), (ephy_embed_can_go_up),
+	(ephy_embed_get_go_up_list), (ephy_embed_go_back),
+	(ephy_embed_go_forward), (ephy_embed_go_up),
+	(ephy_embed_get_title), (ephy_embed_get_location),
+	(ephy_embed_get_link_message), (ephy_embed_get_js_status),
+	(ephy_embed_reload), (ephy_embed_zoom_set), (ephy_embed_zoom_get),
+	(ephy_embed_shistory_n_items), (ephy_embed_shistory_get_nth),
+	(ephy_embed_shistory_get_pos), (ephy_embed_shistory_go_nth),
+	(ephy_embed_get_security_level), (ephy_embed_find_set_properties),
+	(ephy_embed_find_next), (ephy_embed_activate),
+	(ephy_embed_set_encoding), (ephy_embed_get_encoding_info),
+	(ephy_embed_print), (ephy_embed_print_preview_close),
+	(ephy_embed_print_preview_n_pages),
+	(ephy_embed_print_preview_navigate):
+	* embed/ephy-embed.h:
+	* embed/ephy-password-manager.h:
+	* embed/ephy-permission-manager.h:
+	* embed/mozilla/PrintingPromptService.cpp:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-embed-single.h:
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Unify interface struct and type macro naming to be EphyFooIFace,
+	EPHY_FOO_IFACE, EPHY_IS_FOO_IFACE, EPHY_FOO_GET_IFACE.
+
+2004-01-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-embed-prefs.h:
 	* embed/mozilla/mozilla-notifiers.cpp:
 

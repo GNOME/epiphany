@@ -99,7 +99,7 @@ struct MozillaEmbedSinglePrivate
 };
 
 static void mozilla_embed_single_class_init	(MozillaEmbedSingleClass *klass);
-static void ephy_embed_single_iface_init	(EphyEmbedSingleClass *iface);
+static void ephy_embed_single_iface_init	(EphyEmbedSingleIFace *iface);
 static void ephy_cookie_manager_iface_init	(EphyCookieManagerIFace *iface);
 static void ephy_password_manager_iface_init	(EphyPasswordManagerIFace *iface);
 static void ephy_permission_manager_iface_init	(EphyPermissionManagerIFace *iface);
@@ -897,11 +897,11 @@ mozilla_embed_single_class_init (MozillaEmbedSingleClass *klass)
 
 	object_class->finalize = mozilla_embed_single_finalize;
 
-	g_type_class_add_private (object_class, sizeof(MozillaEmbedSinglePrivate));
+	g_type_class_add_private (object_class, sizeof (MozillaEmbedSinglePrivate));
 }
 
 static void
-ephy_embed_single_iface_init (EphyEmbedSingleClass *iface)
+ephy_embed_single_iface_init (EphyEmbedSingleIFace *iface)
 {
 	iface->clear_cache = impl_clear_cache;
 	iface->clear_auth_cache = impl_clear_auth_cache;

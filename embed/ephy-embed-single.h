@@ -28,15 +28,15 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_EMBED_SINGLE		(ephy_embed_single_get_type ())
 #define EPHY_EMBED_SINGLE(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingle))
-#define EPHY_EMBED_SINGLE_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingleClass))
+#define EPHY_EMBED_SINGLE_IFACE(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingleIFace))
 #define EPHY_IS_EMBED_SINGLE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_SINGLE))
-#define EPHY_IS_EMBED_SINGLE_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_SINGLE))
-#define EPHY_EMBED_SINGLE_GET_CLASS(i)	(G_TYPE_INSTANCE_GET_INTERFACE ((i), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingleClass))
+#define EPHY_IS_EMBED_SINGLE_IFACE(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_SINGLE))
+#define EPHY_EMBED_SINGLE_GET_IFACE(i)	(G_TYPE_INSTANCE_GET_INTERFACE ((i), EPHY_TYPE_EMBED_SINGLE, EphyEmbedSingleIFace))
 
-typedef struct EphyEmbedSingleClass	EphyEmbedSingleClass;
 typedef struct EphyEmbedSingle		EphyEmbedSingle;
+typedef struct EphyEmbedSingleIFace	EphyEmbedSingleIFace;
 
-struct EphyEmbedSingleClass
+struct EphyEmbedSingleIFace
 {
 	GTypeInterface base_iface;
 

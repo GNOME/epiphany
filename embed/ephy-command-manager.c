@@ -25,29 +25,29 @@
 #include "ephy-command-manager.h"
 
 static void
-ephy_command_manager_base_init (gpointer base_class);
+ephy_command_manager_base_init (gpointer g_class);
 
 GType
 ephy_command_manager_get_type (void)
 {
-        static GType ephy_command_manager_type = 0;
+	static GType type = 0;
 
-        if (ephy_command_manager_type == 0)
-        {
-                static const GTypeInfo our_info =
-                {
-                        sizeof (EphyCommandManagerClass),
-                        ephy_command_manager_base_init,
-                        NULL,
-                };
+	if (type == 0)
+	{
+		static const GTypeInfo our_info =
+		{
+			sizeof (EphyCommandManagerIFace),
+			ephy_command_manager_base_init,
+			NULL,
+		};
 
-                ephy_command_manager_type = g_type_register_static (G_TYPE_INTERFACE,
-							  "EphyCommandManager",
-							  &our_info,
-							  (GTypeFlags)0);
-        }
+		type = g_type_register_static (G_TYPE_INTERFACE,
+					       "EphyCommandManager",
+					       &our_info,
+					       (GTypeFlags)0);
+	}
 
-        return ephy_command_manager_type;
+	return type;
 }
 
 static void
@@ -57,15 +57,16 @@ ephy_command_manager_base_init (gpointer g_class)
 
 	if (!initialized)
 	{
-                g_signal_new ("command_changed",
-                              EPHY_TYPE_COMMAND_MANAGER,
-                              G_SIGNAL_RUN_FIRST,
-                              G_STRUCT_OFFSET (EphyCommandManagerClass, command_changed),
-                              NULL, NULL,
-                              g_cclosure_marshal_VOID__STRING,
+		g_signal_new ("command_changed",
+			      EPHY_TYPE_COMMAND_MANAGER,
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (EphyCommandManagerIFace, command_changed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE,
-                              1,
-                              G_TYPE_STRING);
+			      1,
+			      G_TYPE_STRING);
+
 		initialized = TRUE;
 	}
 }
@@ -74,14 +75,14 @@ void
 ephy_command_manager_do_command (EphyCommandManager *manager,
 				 const char *command)
 {
-	EphyCommandManagerClass *klass = EPHY_COMMAND_MANAGER_GET_CLASS (manager);
-        klass->do_command (manager, command);
+	EphyCommandManagerIFace *iface = EPHY_COMMAND_MANAGER_GET_IFACE (manager);
+	iface->do_command (manager, command);
 }
 
 gboolean
 ephy_command_manager_can_do_command (EphyCommandManager *manager,
-				        const char *command)
+					const char *command)
 {
-	EphyCommandManagerClass *klass = EPHY_COMMAND_MANAGER_GET_CLASS (manager);
-        return klass->can_do_command (manager, command);
+	EphyCommandManagerIFace *iface = EPHY_COMMAND_MANAGER_GET_IFACE (manager);
+	return iface->can_do_command (manager, command);
 }

@@ -97,7 +97,21 @@ NS_IMETHODIMP GPrintingPromptService::ShowProgress(nsIDOMWindow *parent, nsIWebB
 NS_IMETHODIMP GPrintingPromptService::ShowPageSetup(nsIDOMWindow *parent, nsIPrintSettings *printSettings, 
 						    nsIObserver *printObserver)
 {
-    return NS_ERROR_NOT_IMPLEMENTED;
+	EphyDialog *dialog;
+	nsresult rv = NS_ERROR_ABORT;
+
+	dialog = ephy_print_setup_dialog_new ();
+	ephy_dialog_set_modal (dialog, TRUE);
+
+	int ret = ephy_dialog_run (dialog);
+	if (ret == GTK_RESPONSE_OK)
+	{
+		rv = NS_OK;
+	}
+
+	g_object_unref (dialog);
+
+	return rv;
 }
 
 /* void showPrinterProperties (in nsIDOMWindow parent, in wstring printerName, in nsIPrintSettings printSettings); */

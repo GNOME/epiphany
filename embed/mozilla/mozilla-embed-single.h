@@ -22,8 +22,6 @@
 #ifndef MOZILLA_EMBED_SINGLE_H
 #define MOZILLA_EMBED_SINGLE_H
 
-#include "ephy-embed-single.h"
-
 #include <glib-object.h>
 
 G_BEGIN_DECLS
@@ -52,7 +50,7 @@ struct MozillaEmbedSingleClass
 	GObjectClass parent_class;
 };
 
-GType             mozilla_embed_single_get_type	     (void);
+GType	mozilla_embed_single_get_type	(void);
 
 G_END_DECLS
 

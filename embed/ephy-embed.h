@@ -32,13 +32,13 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_EMBED			(ephy_embed_get_type ())
 #define EPHY_EMBED(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED, EphyEmbed))
-#define EPHY_EMBED_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED, EphyEmbedClass))
+#define EPHY_EMBED_IFACE(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED, EphyEmbedIFace))
 #define EPHY_IS_EMBED(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED))
-#define EPHY_IS_EMBED_CLASS(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED))
-#define EPHY_EMBED_GET_CLASS(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EMBED, EphyEmbedClass))
+#define EPHY_IS_EMBED_IFACE(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED))
+#define EPHY_EMBED_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EMBED, EphyEmbedIFace))
 
-typedef struct EphyEmbedClass	EphyEmbedClass;
-typedef struct _EphyEmbed	EphyEmbed;
+typedef struct EphyEmbed	EphyEmbed;
+typedef struct EphyEmbedIFace	EphyEmbedIFace;
 
 typedef enum
 {
@@ -136,7 +136,7 @@ typedef enum
 	STATE_IS_SECURE_HIGH
 } EmbedSecurityLevel;
 
-struct EphyEmbedClass
+struct EphyEmbedIFace
 {
 	GTypeInterface base_iface;
 

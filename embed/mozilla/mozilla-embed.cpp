@@ -44,7 +44,7 @@
 static void	mozilla_embed_class_init	(MozillaEmbedClass *klass);
 static void	mozilla_embed_init		(MozillaEmbed *gs);
 static void	mozilla_embed_destroy		(GtkObject *object);
-static void	ephy_embed_init			(EphyEmbedClass *embed_class);
+static void	ephy_embed_iface_init		(EphyEmbedIFace *iface);
 
 static void 
 mozilla_embed_connect_signals (MozillaEmbed *membed);
@@ -143,10 +143,10 @@ impl_manager_can_do_command (EphyCommandManager *manager,
 }
 
 static void
-ephy_command_manager_init (EphyCommandManagerClass *manager_class)
+ephy_command_manager_iface_init (EphyCommandManagerIFace *iface)
 {
-	manager_class->do_command = impl_manager_do_command;
-	manager_class->can_do_command = impl_manager_can_do_command;
+	iface->do_command = impl_manager_do_command;
+	iface->can_do_command = impl_manager_can_do_command;
 }
 	
 GType 
@@ -171,14 +171,14 @@ mozilla_embed_get_type (void)
 
 		static const GInterfaceInfo embed_info =
 		{
-			(GInterfaceInitFunc) ephy_embed_init,
+			(GInterfaceInitFunc) ephy_embed_iface_init,
         		NULL,
         		NULL
      		};
 
 		static const GInterfaceInfo ephy_command_manager_info =
 		{
-			(GInterfaceInitFunc) ephy_command_manager_init,
+			(GInterfaceInitFunc) ephy_command_manager_iface_init,
         		NULL,
         		NULL
      		 };
@@ -1089,38 +1089,38 @@ mozilla_embed_security_level (MozillaEmbed *membed)
 }
 
 static void
-ephy_embed_init (EphyEmbedClass *embed_class)
+ephy_embed_iface_init (EphyEmbedIFace *iface)
 {
-	embed_class->load_url = impl_load_url; 
-	embed_class->stop_load = impl_stop_load;
-	embed_class->can_go_back = impl_can_go_back;
-	embed_class->can_go_forward =impl_can_go_forward;
-	embed_class->can_go_up = impl_can_go_up;
-	embed_class->get_go_up_list = impl_get_go_up_list;
-	embed_class->go_back = impl_go_back;
-	embed_class->go_forward = impl_go_forward;
-	embed_class->go_up = impl_go_up;
-	embed_class->get_title = impl_get_title;
-	embed_class->get_location = impl_get_location;
-	embed_class->get_link_message = impl_get_link_message;
-	embed_class->get_js_status = impl_get_js_status;
-	embed_class->reload = impl_reload;
-	embed_class->zoom_set = impl_zoom_set;
-	embed_class->zoom_get = impl_zoom_get;
-	embed_class->shistory_n_items = impl_shistory_n_items;
-	embed_class->shistory_get_nth = impl_shistory_get_nth;
-	embed_class->shistory_get_pos = impl_shistory_get_pos;
-	embed_class->shistory_go_nth = impl_shistory_go_nth;
-	embed_class->get_security_level = impl_get_security_level;
-	embed_class->find_next = impl_find_next;
-	embed_class->activate = impl_activate;
-	embed_class->find_set_properties = impl_find_set_properties;
-	embed_class->set_encoding = impl_set_encoding;
-	embed_class->get_encoding_info = impl_get_encoding_info;
-	embed_class->print = impl_print;
-	embed_class->print_preview_close = impl_print_preview_close;
-	embed_class->print_preview_n_pages = impl_print_preview_n_pages;
-	embed_class->print_preview_navigate = impl_print_preview_navigate;
+	iface->load_url = impl_load_url; 
+	iface->stop_load = impl_stop_load;
+	iface->can_go_back = impl_can_go_back;
+	iface->can_go_forward =impl_can_go_forward;
+	iface->can_go_up = impl_can_go_up;
+	iface->get_go_up_list = impl_get_go_up_list;
+	iface->go_back = impl_go_back;
+	iface->go_forward = impl_go_forward;
+	iface->go_up = impl_go_up;
+	iface->get_title = impl_get_title;
+	iface->get_location = impl_get_location;
+	iface->get_link_message = impl_get_link_message;
+	iface->get_js_status = impl_get_js_status;
+	iface->reload = impl_reload;
+	iface->zoom_set = impl_zoom_set;
+	iface->zoom_get = impl_zoom_get;
+	iface->shistory_n_items = impl_shistory_n_items;
+	iface->shistory_get_nth = impl_shistory_get_nth;
+	iface->shistory_get_pos = impl_shistory_get_pos;
+	iface->shistory_go_nth = impl_shistory_go_nth;
+	iface->get_security_level = impl_get_security_level;
+	iface->find_next = impl_find_next;
+	iface->activate = impl_activate;
+	iface->find_set_properties = impl_find_set_properties;
+	iface->set_encoding = impl_set_encoding;
+	iface->get_encoding_info = impl_get_encoding_info;
+	iface->print = impl_print;
+	iface->print_preview_close = impl_print_preview_close;
+	iface->print_preview_n_pages = impl_print_preview_n_pages;
+	iface->print_preview_navigate = impl_print_preview_navigate;
 }
 
 void

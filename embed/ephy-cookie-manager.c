@@ -229,7 +229,7 @@ ephy_cookie_manager_base_init (gpointer base_iface)
 GList *
 ephy_cookie_manager_list_cookies (EphyCookieManager *manager)
 {
-	EphyCookieManagerIFace *iface = EPHY_COOKIE_MANAGER_GET_CLASS (manager);
+	EphyCookieManagerIFace *iface = EPHY_COOKIE_MANAGER_GET_IFACE (manager);
 	return iface->list (manager);
 }
 
@@ -244,7 +244,7 @@ void
 ephy_cookie_manager_remove_cookie (EphyCookieManager *manager,
 				   const EphyCookie *cookie)
 {
-	EphyCookieManagerIFace *iface = EPHY_COOKIE_MANAGER_GET_CLASS (manager);
+	EphyCookieManagerIFace *iface = EPHY_COOKIE_MANAGER_GET_IFACE (manager);
 	iface->remove (manager, cookie);
 }
 
@@ -257,6 +257,6 @@ ephy_cookie_manager_remove_cookie (EphyCookieManager *manager,
 void
 ephy_cookie_manager_clear (EphyCookieManager *manager)
 {
-	EphyCookieManagerIFace *iface = EPHY_COOKIE_MANAGER_GET_CLASS (manager);
+	EphyCookieManagerIFace *iface = EPHY_COOKIE_MANAGER_GET_IFACE (manager);
 	iface->clear (manager);
 }

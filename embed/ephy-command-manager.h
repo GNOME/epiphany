@@ -28,15 +28,15 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_COMMAND_MANAGER		(ephy_command_manager_get_type ())
 #define EPHY_COMMAND_MANAGER(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_COMMAND_MANAGER, EphyCommandManager))
-#define EPHY_COMMAND_MANAGER_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_COMMAND_MANAGER, EphyCommandManagerClass))
+#define EPHY_COMMAND_MANAGER_IFACE(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_COMMAND_MANAGER, EphyCommandManagerIFace))
 #define EPHY_IS_COMMAND_MANAGER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_COMMAND_MANAGER))
-#define EPHY_IS_COMMAND_MANAGER_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_COMMAND_MANAGER))
-#define EPHY_COMMAND_MANAGER_GET_CLASS(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_COMMAND_MANAGER, EphyCommandManagerClass))
+#define EPHY_IS_COMMAND_MANAGER_IFACE(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_COMMAND_MANAGER))
+#define EPHY_COMMAND_MANAGER_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_COMMAND_MANAGER, EphyCommandManagerIFace))
 
-typedef struct EphyCommandManagerClass EphyCommandManagerClass;
-typedef struct _EphyCommandManager EphyCommandManager;
+typedef struct EphyCommandManager	EphyCommandManager;
+typedef struct EphyCommandManagerIFace	EphyCommandManagerIFace;
 
-struct EphyCommandManagerClass
+struct EphyCommandManagerIFace
 {
 	GTypeInterface base_iface;
 
@@ -47,8 +47,8 @@ struct EphyCommandManagerClass
 
 	/* Signals */
 
-	void	(* command_changed) (EphyCommandManager *manager,
-				     char *command);
+	void		(* command_changed)	(EphyCommandManager *manager,
+						 char *command);
 };
 
 GType		ephy_command_manager_get_type		(void);

@@ -37,9 +37,9 @@ G_BEGIN_DECLS
 #define EPHY_IS_EMBED_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_DIALOG))
 #define EPHY_EMBED_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_DIALOG, EphyEmbedDialogClass))
 
-typedef struct EphyEmbedDialogClass EphyEmbedDialogClass;
-typedef struct EphyEmbedDialog EphyEmbedDialog;
-typedef struct EphyEmbedDialogPrivate EphyEmbedDialogPrivate;
+typedef struct EphyEmbedDialogClass	EphyEmbedDialogClass;
+typedef struct EphyEmbedDialog		EphyEmbedDialog;
+typedef struct EphyEmbedDialogPrivate	EphyEmbedDialogPrivate;
 
 struct EphyEmbedDialog
 {
@@ -69,4 +69,3 @@ EphyEmbed *		ephy_embed_dialog_get_embed		(EphyEmbedDialog *dialog);
 G_END_DECLS
 
 #endif
-
