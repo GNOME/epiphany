@@ -21,6 +21,12 @@
 #ifndef EPHY_BROWSER_H
 #define EPHY_BROWSER_H
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "mozilla-version.h"
+
 #include "ephy-encodings.h"
 #include "ephy-embed.h"
 
@@ -106,11 +112,13 @@ public:
 	nsresult GetSHUrlAtIndex (PRInt32 index, nsACString &url);
 	nsresult GoToHistoryIndex (PRInt16 index);
 
+#if !MOZILLA_CHECK_VERSION4 (1, 7, MOZILLA_RELEASE, 3) && !MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
 	enum { RELOAD_NORMAL = 0 };
 	enum { RELOAD_FORCE = 1 };
 	enum { RELOAD_ENCODING_CHANGE = 2 };
 
 	nsresult Reload (PRUint32 flags);
+#endif
 
 	nsresult ForceEncoding (const char *encoding);
 	nsresult GetEncoding (nsACString &encoding);

@@ -1,5 +1,14 @@
 2004-08-06  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Now that mozilla bug #246392 is fixed, only enable our work-around
+	for old mozilla versions.
+
+2004-08-06  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_solve_smart_url):
 
 	Use s/""/NULL/ in g_string_new().

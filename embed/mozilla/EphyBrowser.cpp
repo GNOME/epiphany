@@ -414,6 +414,7 @@ nsresult EphyBrowser::GoToHistoryIndex (PRInt16 index)
 	return ContentNav->GotoIndex (index);
 }
 
+#if !MOZILLA_CHECK_VERSION4 (1, 7, MOZILLA_RELEASE, 3) && !MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
 /* Workaround for broken reload with frames, see mozilla bug
  * http://bugzilla.mozilla.org/show_bug.cgi?id=246392
  */
@@ -451,6 +452,7 @@ nsresult EphyBrowser::Reload (PRUint32 flags)
 
 	return webNavigation->Reload (reloadFlags);
 }
+#endif
 
 nsresult EphyBrowser::SetZoom (float aZoom)
 {
