@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-30 03:11+0200\n"
-"PO-Revision-Date: 2004-04-30 17:01+0200\n"
+"POT-Creation-Date: 2004-05-11 03:14+0200\n"
+"PO-Revision-Date: 2004-05-11 12:53+0200\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -648,7 +648,7 @@ msgstr "Správce osobních dat"
 msgid "Text Encoding"
 msgstr "Kódování textu"
 
-#: data/glade/epiphany.glade.h:12 src/ephy-encoding-menu.c:389
+#: data/glade/epiphany.glade.h:12 src/ephy-encoding-menu.c:368
 msgid "Use the encoding specified by the document"
 msgstr "Používat kódování určené dokumentem"
 
@@ -1028,7 +1028,7 @@ msgstr[2] "%d stahování"
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:526 src/bookmarks/ephy-bookmarks-editor.c:647
+#: embed/downloader-view.c:526 src/bookmarks/ephy-bookmarks-editor.c:668
 msgid "File"
 msgstr "Soubor"
 
@@ -1412,19 +1412,19 @@ msgid "Local files"
 msgstr "Místní soubory"
 
 #: embed/mozilla/ContentHandler.cpp:141
-#: embed/mozilla/EphyHeaderSniffer.cpp:343
+#: embed/mozilla/EphyHeaderSniffer.cpp:348
 msgid "Save"
 msgstr "Uložit"
 
-#: embed/mozilla/ContentHandler.cpp:263
+#: embed/mozilla/ContentHandler.cpp:264
 msgid "_Save As..."
 msgstr "Uložit _jako..."
 
-#: embed/mozilla/ContentHandler.cpp:280
+#: embed/mozilla/ContentHandler.cpp:281
 msgid "Download the unsafe file?"
 msgstr "Stáhnout nebezpečný soubor?"
 
-#: embed/mozilla/ContentHandler.cpp:281
+#: embed/mozilla/ContentHandler.cpp:282
 msgid ""
 "This type of file could potentially damage your documents or invade your "
 "privacy. It's not safe to open it directly. You can save it instead."
@@ -1432,11 +1432,11 @@ msgstr ""
 "Tento typ souboru by mohl poškodit vaše dokumenty nebo narušit vaše "
 "soukromí. Není bezpečné jej otevřít přímo. Místo toho jej můžete uložit."
 
-#: embed/mozilla/ContentHandler.cpp:289
+#: embed/mozilla/ContentHandler.cpp:290
 msgid "Open the file in another application?"
 msgstr "Otevřít soubor v jiné aplikaci?"
 
-#: embed/mozilla/ContentHandler.cpp:290
+#: embed/mozilla/ContentHandler.cpp:291
 msgid ""
 "It's not possible to view this file type directly in the browser. You can "
 "open it with another application or save it."
@@ -1444,11 +1444,11 @@ msgstr ""
 "Tento soubor není možné zobrazit přímo v prohlížeči. Můžete jej otevřít "
 "jinou aplikací nebo jej uložit."
 
-#: embed/mozilla/ContentHandler.cpp:297
+#: embed/mozilla/ContentHandler.cpp:298
 msgid "Download the file?"
 msgstr "Stáhnout soubor?"
 
-#: embed/mozilla/ContentHandler.cpp:298
+#: embed/mozilla/ContentHandler.cpp:299
 msgid ""
 "It's not possible to view this file because there is no application "
 "installed that can open it. You can save it instead."
@@ -1456,33 +1456,33 @@ msgstr ""
 "Není možné zobrazit tento soubor, protože není nainstalována aplikace, která "
 "by jej mohla otevřít. Místo toho jej můžete uložit."
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:310
+#: embed/mozilla/EphyHeaderSniffer.cpp:315
 #: src/bookmarks/ephy-bookmarks-import.c:253 src/ephy-toolbars-model.c:205
 #: src/window-commands.c:343
 msgid "Untitled"
 msgstr "Nepojmenovaný"
 
-#: embed/mozilla/FilePicker.cpp:167 embed/mozilla/FilePicker.cpp:170
+#: embed/mozilla/FilePicker.cpp:164 lib/ephy-file-chooser.c:376
 msgid "All files"
 msgstr "Všechny soubory"
 
-#: embed/mozilla/FilePicker.cpp:177 embed/mozilla/FilePicker.cpp:180
-msgid "HTML files"
-msgstr "Soubory HTML"
+#: embed/mozilla/FilePicker.cpp:169 lib/ephy-file-chooser.c:360
+msgid "Web pages"
+msgstr "WWW stránky"
 
-#: embed/mozilla/FilePicker.cpp:187 embed/mozilla/FilePicker.cpp:190
+#: embed/mozilla/FilePicker.cpp:177
 msgid "Text files"
 msgstr "Textové soubory"
 
-#: embed/mozilla/FilePicker.cpp:197 embed/mozilla/FilePicker.cpp:200
-msgid "Image files"
-msgstr "Soubory obrázků"
+#: embed/mozilla/FilePicker.cpp:182 lib/ephy-file-chooser.c:368
+msgid "Images"
+msgstr "Obrázky"
 
-#: embed/mozilla/FilePicker.cpp:207 embed/mozilla/FilePicker.cpp:210
+#: embed/mozilla/FilePicker.cpp:190
 msgid "XML files"
 msgstr "Soubory XML"
 
-#: embed/mozilla/FilePicker.cpp:217 embed/mozilla/FilePicker.cpp:220
+#: embed/mozilla/FilePicker.cpp:195
 msgid "XUL files"
 msgstr "Soubory XUL"
 
@@ -1752,7 +1752,7 @@ msgstr ""
 msgid "Files"
 msgstr "Soubory"
 
-#: embed/mozilla/mozilla-embed-single.cpp:489
+#: embed/mozilla/mozilla-embed-single.cpp:491
 msgid ""
 "Epiphany can't be used now. Mozilla initialization failed. Check your "
 "MOZILLA_FIVE_HOME environmental variable."
@@ -1771,13 +1771,21 @@ msgstr ""
 #. * "zh_CN" translation: "zh-cn,zh"
 #. * "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
 #.
-#: embed/mozilla/mozilla-notifiers.cpp:737
+#: embed/mozilla/mozilla-notifiers.cpp:736
 msgid "system-language"
 msgstr "cs"
 
-#: embed/print-dialog.c:293
+#: embed/print-dialog.c:294
 msgid "Print to"
 msgstr "Tisknout na"
+
+#: embed/print-dialog.c:299
+msgid "Postscript files"
+msgstr "Postscriptové soubory"
+
+#: embed/print-dialog.c:302 src/bookmarks/ephy-bookmarks-editor.c:578
+msgid "All Files"
+msgstr "Všechny soubory"
 
 #: lib/eel-gconf-extensions.c:81
 #, c-format
@@ -1803,6 +1811,10 @@ msgid ""
 msgstr ""
 "Přetáhněte položku na lišty nástrojů pro její přidání, z lišt nástrojů do "
 "tabulky položek pro její odebrání."
+
+#: lib/ephy-file-chooser.c:349
+msgid "All supported types"
+msgstr "Všechny podporované typy"
 
 #. The name of the default downloads folder
 #: lib/ephy-file-helpers.c:75 src/prefs-dialog.c:1108
@@ -1837,11 +1849,11 @@ msgstr "Pokud se rozhodnete přepsat tento soubor, jeho obsah bude ztracen."
 msgid "Overwrite File"
 msgstr "Přepsat soubor"
 
-#: lib/ephy-gui.c:127
+#: lib/ephy-gui.c:108
 msgid "_Overwrite"
 msgstr "_Přepsat"
 
-#: lib/ephy-gui.c:156
+#: lib/ephy-gui.c:153
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Nemohu zobrazit nápovědu: %s"
@@ -1918,7 +1930,7 @@ msgstr "Nezabezpečeno"
 msgid "History"
 msgstr "Historie"
 
-#: lib/ephy-stock-icons.c:57 src/bookmarks/ephy-bookmarks-editor.c:1373
+#: lib/ephy-stock-icons.c:57 src/bookmarks/ephy-bookmarks-editor.c:1394
 #: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:1029
 msgid "Bookmarks"
 msgstr "Záložky"
@@ -2027,7 +2039,7 @@ msgstr "Vytvořit nové téma"
 
 #. File Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:171
-#: src/bookmarks/ephy-bookmarks-editor.c:996 src/ephy-history-window.c:158
+#: src/bookmarks/ephy-bookmarks-editor.c:1017 src/ephy-history-window.c:158
 #: src/ephy-history-window.c:738
 msgid "_Open in New Window"
 msgstr "_Otevřít v novém okně"
@@ -2037,7 +2049,7 @@ msgid "Open the selected bookmark in a new window"
 msgstr "Otevřít vybranou záložku v novém okně"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:174
-#: src/bookmarks/ephy-bookmarks-editor.c:997 src/ephy-history-window.c:161
+#: src/bookmarks/ephy-bookmarks-editor.c:1018 src/ephy-history-window.c:161
 #: src/ephy-history-window.c:739
 msgid "Open in New _Tab"
 msgstr "Otevřít v nové _kartě"
@@ -2099,7 +2111,7 @@ msgid "Cut the selection"
 msgstr "Vyjmout výběr"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:196
-#: src/bookmarks/ephy-bookmarks-editor.c:1006 src/ephy-history-window.c:178
+#: src/bookmarks/ephy-bookmarks-editor.c:1027 src/ephy-history-window.c:178
 #: src/ephy-history-window.c:748 src/ephy-window.c:135
 msgid "_Copy"
 msgstr "_Kopírovat"
@@ -2178,67 +2190,79 @@ msgstr "Zobrazovat sloupec nadpisu i adresy"
 msgid "Type a topic"
 msgstr "Napište téma"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:558
+#: src/bookmarks/ephy-bookmarks-editor.c:559
 msgid "Import bookmarks from file"
 msgstr "Importovat záložky ze souboru"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:592
+#: src/bookmarks/ephy-bookmarks-editor.c:566
+msgid "Firefox/Firebird/Mozilla bookmarks"
+msgstr "Záložky Firefoxu/Firebirdu/Mozilly"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:570
+msgid "Galeon/Konqueror bookmarks"
+msgstr "Záložky Galeonu/Konqueroru"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:574
+msgid "Epiphany bookmarks"
+msgstr "Záložky Epiphany"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:613
 msgid "Import Bookmarks"
 msgstr "Importovat záložky"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:598
+#: src/bookmarks/ephy-bookmarks-editor.c:619
 msgid "I_mport"
 msgstr "_Importovat"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:612
+#: src/bookmarks/ephy-bookmarks-editor.c:633
 msgid "Import bookmarks from:"
 msgstr "Importovat záložky z:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:635
+#: src/bookmarks/ephy-bookmarks-editor.c:656
 msgid "Firebird"
 msgstr "Firebird"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:637
+#: src/bookmarks/ephy-bookmarks-editor.c:658
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:639
+#: src/bookmarks/ephy-bookmarks-editor.c:660
 msgid "Galeon"
 msgstr "Galeon"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:641
+#: src/bookmarks/ephy-bookmarks-editor.c:662
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:643
+#: src/bookmarks/ephy-bookmarks-editor.c:664
 msgid "Mozilla"
 msgstr "Mozilla"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:991 src/ephy-history-window.c:733
+#: src/bookmarks/ephy-bookmarks-editor.c:1012 src/ephy-history-window.c:733
 msgid "_Open in New Windows"
 msgstr "_Otevřít v nových oknech"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:992 src/ephy-history-window.c:734
+#: src/bookmarks/ephy-bookmarks-editor.c:1013 src/ephy-history-window.c:734
 msgid "Open in New _Tabs"
 msgstr "Otevřít v nových _kartách"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1002 src/ephy-history-window.c:744
+#: src/bookmarks/ephy-bookmarks-editor.c:1023 src/ephy-history-window.c:744
 msgid "_Copy Address"
 msgstr "_Zkopírovat adresu"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1243 src/ephy-history-window.c:1038
+#: src/bookmarks/ephy-bookmarks-editor.c:1264 src/ephy-history-window.c:1038
 msgid "_Search:"
 msgstr "_Hledat:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1456
+#: src/bookmarks/ephy-bookmarks-editor.c:1477
 msgid "Topics"
 msgstr "Témata"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1518 src/ephy-history-window.c:1318
+#: src/bookmarks/ephy-bookmarks-editor.c:1539 src/ephy-history-window.c:1318
 msgid "Title"
 msgstr "Nadpis"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1525 src/ephy-history-window.c:1324
+#: src/bookmarks/ephy-bookmarks-editor.c:1546 src/ephy-history-window.c:1324
 msgid "Address"
 msgstr "Adresa"
 
@@ -2309,19 +2333,19 @@ msgstr "Pro tuto adresu již existuje záložka pojmenovaná %s."
 msgid "Empty"
 msgstr "Prázdné"
 
-#: src/ephy-encoding-dialog.c:330
+#: src/ephy-encoding-dialog.c:315
 msgid "Encodings"
 msgstr "Kódování"
 
-#: src/ephy-encoding-menu.c:380
+#: src/ephy-encoding-menu.c:359
 msgid "_Other..."
 msgstr "_Jiné..."
 
-#: src/ephy-encoding-menu.c:381
+#: src/ephy-encoding-menu.c:360
 msgid "Other encodings"
 msgstr "Jiná kódování"
 
-#: src/ephy-encoding-menu.c:388
+#: src/ephy-encoding-menu.c:367
 msgid "_Automatic"
 msgstr "_Automatické"
 
@@ -2979,7 +3003,7 @@ msgstr "Pokud přesto dokument zavřete, ztratíte tyto informace."
 msgid "Open"
 msgstr "Otevřít"
 
-#: src/ephy-window.c:1021 src/window-commands.c:421
+#: src/ephy-window.c:1021 src/window-commands.c:422
 msgid "Save As"
 msgstr "Uložit jako"
 
@@ -3373,20 +3397,20 @@ msgstr "Jít na adresu vloženou v poli adresy"
 msgid "Check this out!"
 msgstr "Zkuste tohle!"
 
-#: src/window-commands.c:854
+#: src/window-commands.c:855
 msgid "Toolbar Editor"
 msgstr "Editor lišty nástrojů"
 
-#: src/window-commands.c:876
+#: src/window-commands.c:877
 msgid "_Add a New Toolbar"
 msgstr "_Přidat novou lištu nástrojů"
 
 #. Translator credits
-#: src/window-commands.c:927
+#: src/window-commands.c:928
 msgid "translator-credits"
 msgstr "Miloslav Trmač <mitr@volny.cz>"
 
-#: src/window-commands.c:957
+#: src/window-commands.c:958
 msgid "A GNOME browser based on Mozilla"
 msgstr "GNOME prohlížeč založený na Mozille"
 
@@ -3398,9 +3422,6 @@ msgstr "GNOME prohlížeč založený na Mozille"
 
 #~ msgid "View as Web Page"
 #~ msgstr "Zobrazit jako WWW stránku"
-
-#~ msgid "Web Page"
-#~ msgstr "WWW stránka"
 
 #~ msgid "Web Page Viewer"
 #~ msgstr "Prohlížeč WWW stránek"
@@ -3519,12 +3540,6 @@ msgstr "GNOME prohlížeč založený na Mozille"
 
 #~ msgid "Choose the bookmarks source:"
 #~ msgstr "Vyberte zdroj záložek:"
-
-#~ msgid "Mozilla bookmarks"
-#~ msgstr "Záložky Mozilly"
-
-#~ msgid "Galeon bookmarks"
-#~ msgstr "Záložky Galeonu"
 
 #~ msgid "Import from a file"
 #~ msgstr "Importovat ze souboru"
