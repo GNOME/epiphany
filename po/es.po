@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-21 17:20+0100\n"
-"PO-Revision-Date: 2003-12-21 17:21+0100\n"
+"POT-Creation-Date: 2004-01-06 01:53+0100\n"
+"PO-Revision-Date: 2004-01-06 01:56+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <franciscojavier.fernandez."
 "serrador@hispalinux.es>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -534,8 +534,8 @@ msgid "Certificate _Hierarchy"
 msgstr "_Jerarquía de certificados"
 
 #: data/glade/certificate-dialogs.glade.h:8
-msgid "Common Name (CN):"
-msgstr "Nombre común (CN):"
+msgid "Common Name:"
+msgstr "Nombre común:"
 
 #: data/glade/certificate-dialogs.glade.h:9
 msgid "DYNAMIC"
@@ -567,12 +567,13 @@ msgid "MD5 Fingerprint:"
 msgstr "Huella MD5:"
 
 #: data/glade/certificate-dialogs.glade.h:16
-msgid "Organization (O):"
-msgstr "Organización (O):"
+#: embed/mozilla/GtkNSSDialogs.cpp:964
+msgid "Organization:"
+msgstr "Organización:"
 
 #: data/glade/certificate-dialogs.glade.h:17
-msgid "Organizational Unit (OU):"
-msgstr "Unidad organizativa (OU):"
+msgid "Organizational Unit:"
+msgstr "Unidad organizativa:"
 
 #: data/glade/certificate-dialogs.glade.h:18
 msgid "SHA1 Fingerprint:"
@@ -612,7 +613,7 @@ msgid "Download Manager"
 msgstr "Administrador de descargas"
 
 #: data/glade/epiphany.glade.h:8 data/ui/nautilus-epiphany-view.xml.h:11
-#: src/ephy-window.c:775
+#: src/ephy-window.c:884
 msgid "Find"
 msgstr "Buscar"
 
@@ -809,7 +810,7 @@ msgstr "_Nunca aceptar"
 msgid "_Remove"
 msgstr "_Eliminar"
 
-#: data/glade/prefs-dialog.glade.h:43 src/ephy-window.c:187
+#: data/glade/prefs-dialog.glade.h:43 src/ephy-window.c:189
 msgid "_Up"
 msgstr "_Arriba"
 
@@ -890,53 +891,53 @@ msgid "Page _numbers"
 msgstr "Nú_meros de página"
 
 #: data/glade/print.glade.h:22
-msgid "Page a_ddress"
-msgstr "Dirección de la _página"
-
-#: data/glade/print.glade.h:23
 msgid "Paper"
 msgstr "Papel"
 
-#: data/glade/print.glade.h:24 data/ui/nautilus-epiphany-view.xml.h:23
-#: src/ephy-window.c:771
+#: data/glade/print.glade.h:23 data/ui/nautilus-epiphany-view.xml.h:23
+#: src/ephy-window.c:880
 msgid "Print"
 msgstr "Imprimir"
 
-#: data/glade/print.glade.h:25
+#: data/glade/print.glade.h:24
 msgid "Print Setup"
 msgstr "Configuración de impresión"
 
-#: data/glade/print.glade.h:26
+#: data/glade/print.glade.h:25
 msgid "_All pages"
 msgstr "_Todas las páginas"
 
-#: data/glade/print.glade.h:27
+#: data/glade/print.glade.h:26
 msgid "_Bottom:"
 msgstr "_Pie de página:"
 
-#: data/glade/print.glade.h:28
+#: data/glade/print.glade.h:27
 msgid "_Browse..."
 msgstr "_Examinar..."
 
-#: data/glade/print.glade.h:29
+#: data/glade/print.glade.h:28
 msgid "_Date"
 msgstr "_Fecha"
 
-#: data/glade/print.glade.h:30
+#: data/glade/print.glade.h:29
 msgid "_File:"
 msgstr "_Archivo:"
 
-#: data/glade/print.glade.h:31
+#: data/glade/print.glade.h:30
 msgid "_Grayscale"
 msgstr "Escala de _grises"
 
-#: data/glade/print.glade.h:32
+#: data/glade/print.glade.h:31
 msgid "_Left:"
 msgstr "_Izquierda:"
 
-#: data/glade/print.glade.h:33
+#: data/glade/print.glade.h:32
 msgid "_Letter"
 msgstr "_Letter"
+
+#: data/glade/print.glade.h:33
+msgid "_Page address"
+msgstr "Dirección de la _página"
 
 #: data/glade/print.glade.h:34
 msgid "_Right:"
@@ -1085,22 +1086,22 @@ msgstr "Utilizar esta imagen como tapiz"
 
 #: data/ui/nautilus-epiphany-view.xml.h:33
 #: src/bookmarks/ephy-bookmarks-editor.c:162 src/ephy-history-window.c:152
-#: src/ephy-window.c:74
+#: src/ephy-window.c:76
 msgid "_Edit"
 msgstr "_Editar"
 
 #. Toplevel
 #: data/ui/nautilus-epiphany-view.xml.h:34
 #: src/bookmarks/ephy-bookmarks-editor.c:161 src/ephy-history-window.c:151
-#: src/ephy-window.c:73
+#: src/ephy-window.c:75
 msgid "_File"
 msgstr "_Archivo"
 
-#: data/ui/nautilus-epiphany-view.xml.h:35 src/ephy-window.c:130
+#: data/ui/nautilus-epiphany-view.xml.h:35 src/ephy-window.c:132
 msgid "_Find..."
 msgstr "_Buscar..."
 
-#: data/ui/nautilus-epiphany-view.xml.h:36 src/ephy-window.c:101
+#: data/ui/nautilus-epiphany-view.xml.h:36 src/ephy-window.c:103
 msgid "_Print..."
 msgstr "_Imprimir..."
 
@@ -1115,7 +1116,7 @@ msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
 #: embed/downloader-view.c:296 lib/widgets/ephy-cell-renderer-progress.c:35
-#: src/ephy-window.c:948
+#: src/ephy-window.c:1057
 msgid "Unknown"
 msgstr "Desconocido"
 
@@ -1487,7 +1488,7 @@ msgstr "Universal"
 msgid "Ukrainian"
 msgstr "Ucraniano"
 
-#: embed/ephy-history.c:401 src/bookmarks/ephy-bookmarks.c:526
+#: embed/ephy-history.c:401 src/bookmarks/ephy-bookmarks.c:523
 msgid "All"
 msgstr "Todo"
 
@@ -1499,14 +1500,14 @@ msgstr "Otros"
 msgid "Local files"
 msgstr "Archivos locales"
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:287
+#: embed/mozilla/EphyHeaderSniffer.cpp:289
 #: src/bookmarks/ephy-bookmarks-import.c:236
-#: src/bookmarks/ephy-bookmarks-import.c:362 src/ephy-toolbars-model.c:199
+#: src/bookmarks/ephy-bookmarks-import.c:362 src/ephy-toolbars-model.c:201
 #: src/window-commands.c:339
 msgid "Untitled"
 msgstr "Sin título"
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:312
+#: embed/mozilla/EphyHeaderSniffer.cpp:314
 msgid "Save"
 msgstr "Guardar"
 
@@ -1571,15 +1572,15 @@ msgid "Certificate _Details"
 msgstr "Detalles del _certificado"
 
 #. Add the buttons
-#: embed/mozilla/GtkNSSDialogs.cpp:221 embed/mozilla/GtkNSSDialogs.cpp:532
+#: embed/mozilla/GtkNSSDialogs.cpp:222 embed/mozilla/GtkNSSDialogs.cpp:533
 msgid "_View Certificate"
 msgstr "_Ver certificado"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:229
+#: embed/mozilla/GtkNSSDialogs.cpp:230
 msgid "_Accept"
 msgstr "_Aceptar"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:293
+#: embed/mozilla/GtkNSSDialogs.cpp:294
 #, c-format
 msgid ""
 "The site %s returned security information for %s. It is possible that "
@@ -1590,16 +1591,16 @@ msgstr ""
 "alguien esté interceptando su comunicación para obtener su información\n"
 "confidencial."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:299
+#: embed/mozilla/GtkNSSDialogs.cpp:300
 #, c-format
 msgid "You should only accept the security information if you trust %s and %s."
 msgstr "Debería aceptar la información de seguridad sólo si confía en %s y %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:304
+#: embed/mozilla/GtkNSSDialogs.cpp:305
 msgid "Accept incorrect security information?"
 msgstr "¿Desea aceptar la información de seguridad incorrecta?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:336
+#: embed/mozilla/GtkNSSDialogs.cpp:337
 #, c-format
 msgid ""
 "Your browser was unable to trust %s. It is possible that someone is "
@@ -1609,7 +1610,7 @@ msgstr ""
 "intentando interceptar su comunicación para obtener su información "
 "confidencial."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:342
+#: embed/mozilla/GtkNSSDialogs.cpp:343
 #, c-format
 msgid ""
 "You should only connect to the site if you are certain you are connected to %"
@@ -1618,32 +1619,32 @@ msgstr ""
 "Debería conectar con el sitio sólo si tiene la certeza de que está conectado "
 "a %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:347
+#: embed/mozilla/GtkNSSDialogs.cpp:348
 msgid "Connect to untrusted site?"
 msgstr "¿Quiere conectar con el sitio no confiado?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:351
+#: embed/mozilla/GtkNSSDialogs.cpp:352
 msgid "_Don't show this message again for this site"
 msgstr "_No meostrar este mensaje de nuevo para el sitio"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:352
+#: embed/mozilla/GtkNSSDialogs.cpp:353
 msgid "Co_nnect"
 msgstr "Co_nectar"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:413
+#: embed/mozilla/GtkNSSDialogs.cpp:414
 msgid "Accept expired security information?"
 msgstr "¿Desea aceptar la información de seguridad caducada?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:414
+#: embed/mozilla/GtkNSSDialogs.cpp:415
 #, c-format
 msgid "The security information for %s expired on %s."
 msgstr "La información de seguridad para %s caducó el %s"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:420
+#: embed/mozilla/GtkNSSDialogs.cpp:421
 msgid "Accept not yet valid security information?"
 msgstr "¿Desea aceptar la información de seguridad aún no válida?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:421
+#: embed/mozilla/GtkNSSDialogs.cpp:422
 #, c-format
 msgid "The security information for %s isn't valid until %s."
 msgstr "La información de seguridad para %s no es válida hasta %s."
@@ -1651,43 +1652,43 @@ msgstr "La información de seguridad para %s no es válida hasta %s."
 #. To translators: this a time format that is used while displaying the
 #. * expiry or start date of an SSL certificate, for the format see
 #. * strftime(3)
-#: embed/mozilla/GtkNSSDialogs.cpp:432
+#: embed/mozilla/GtkNSSDialogs.cpp:433
 msgid "%a %d %b %Y"
 msgstr "%a, %d de %b de %Y"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:443
+#: embed/mozilla/GtkNSSDialogs.cpp:444
 msgid "You should ensure that your computer's time is correct."
 msgstr "Debería asegurarse de que la hora de su equipo es correcta."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:488
+#: embed/mozilla/GtkNSSDialogs.cpp:489
 #, c-format
 msgid "Cannot establish connection to %s."
 msgstr "No se puede establecer una conexión con %s."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:491
+#: embed/mozilla/GtkNSSDialogs.cpp:492
 #, c-format
 msgid "The certificate revocation list (CRL) from %s needs to be updated."
 msgstr ""
 "La lista de revocación de certificados (CRL) de %s necesita ser actualizada."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:496
+#: embed/mozilla/GtkNSSDialogs.cpp:497
 msgid "Please ask your system administrator for assistance."
 msgstr "Pida ayuda a su administrador de sistemas."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:535
+#: embed/mozilla/GtkNSSDialogs.cpp:536
 msgid "_Trust CA"
 msgstr "_Confiar en la AC"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:547
+#: embed/mozilla/GtkNSSDialogs.cpp:548
 #, c-format
 msgid "Trust %s to identify:"
 msgstr "Confiar en %s para identificar:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:551
+#: embed/mozilla/GtkNSSDialogs.cpp:552
 msgid "Trust new Certificate Authority?"
 msgstr "¿Confiar en la Autoridad de Certificación nueva?"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:552
+#: embed/mozilla/GtkNSSDialogs.cpp:553
 msgid ""
 "Before trusting a Certificate Authority (CA) you should verify the "
 "certificate is authentic."
@@ -1695,120 +1696,116 @@ msgstr ""
 "Antes de confiar en una Autoridad de Certificación (AC) debería verificar "
 "que el certificado es auténtico."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:562
+#: embed/mozilla/GtkNSSDialogs.cpp:563
 msgid "_Web sites"
 msgstr "Sitios _web"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:567
+#: embed/mozilla/GtkNSSDialogs.cpp:568
 msgid "_Software developers"
 msgstr "Desarrolladores de _software"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:633
+#: embed/mozilla/GtkNSSDialogs.cpp:634
 msgid "Certificate already exists."
 msgstr "El certificado ya existe."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:634
+#: embed/mozilla/GtkNSSDialogs.cpp:635
 msgid "The certificate has already been imported."
 msgstr "El certificado ya ha sido importado."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:753
+#: embed/mozilla/GtkNSSDialogs.cpp:754
 msgid "_Backup Certificate"
 msgstr "_Copia de respaldo del certificado"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:760
+#: embed/mozilla/GtkNSSDialogs.cpp:761
 msgid "Select password."
 msgstr "Seleccionar contraseña."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:761
+#: embed/mozilla/GtkNSSDialogs.cpp:762
 msgid "Select a password to protect this certificate."
 msgstr "Seleccione una contraseña para proteger este certificado."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:773 embed/mozilla/GtkNSSDialogs.cpp:875
+#: embed/mozilla/GtkNSSDialogs.cpp:774 embed/mozilla/GtkNSSDialogs.cpp:876
 msgid "_Password:"
 msgstr "_Contraseña:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:787
+#: embed/mozilla/GtkNSSDialogs.cpp:788
 msgid "Con_firm password:"
 msgstr "Con_firmar contraseña:"
 
 #. TODO: We need a better password quality meter
-#: embed/mozilla/GtkNSSDialogs.cpp:799
+#: embed/mozilla/GtkNSSDialogs.cpp:800
 msgid "Password quality:"
 msgstr "Calidad de la contraseña:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:856
+#: embed/mozilla/GtkNSSDialogs.cpp:857
 msgid "I_mport Certificate"
 msgstr "I_mportar certificado"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:864
+#: embed/mozilla/GtkNSSDialogs.cpp:865
 msgid "Password required."
 msgstr "Contraseña requerida."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:865
+#: embed/mozilla/GtkNSSDialogs.cpp:866
 msgid "Enter the password for this certificate."
 msgstr "Introduzca la contraseña para este certificado."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:943
+#: embed/mozilla/GtkNSSDialogs.cpp:944
 msgid "Certificate Revocation list successfully imported."
 msgstr "Lista de revocación de certificados importada exitosamente."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:944
+#: embed/mozilla/GtkNSSDialogs.cpp:945
 msgid "Certificate Revocation list (CRL) imported:"
 msgstr "Lista de revocación de certificadados (CRL) importada:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:963
-msgid "Organization:"
-msgstr "Organización:"
-
-#: embed/mozilla/GtkNSSDialogs.cpp:966
+#: embed/mozilla/GtkNSSDialogs.cpp:967
 msgid "Unit:"
 msgstr "Unidad:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:969
+#: embed/mozilla/GtkNSSDialogs.cpp:970
 msgid "Next Update:"
 msgstr "Siguiente actualización:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:996
+#: embed/mozilla/GtkNSSDialogs.cpp:997
 msgid "Not part of certificate"
 msgstr "No es parte del certificado"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1264
+#: embed/mozilla/GtkNSSDialogs.cpp:1265
 msgid "Certificate Properties"
 msgstr "Propiedades de certificados"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1286
+#: embed/mozilla/GtkNSSDialogs.cpp:1287
 msgid "This certificate has been verified for the following uses:"
 msgstr "Este certificado ha sido verificado para los usos siguientes:"
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1289
+#: embed/mozilla/GtkNSSDialogs.cpp:1290
 msgid "Could not verify this certificate because it has been revoked."
 msgstr "No se pudo verificar este certificado porque ha sido revocado."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1292
+#: embed/mozilla/GtkNSSDialogs.cpp:1293
 msgid "Could not verify this certificate because it has expired."
 msgstr "No se pudo verificar este certificado porque ha caducado."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1295
+#: embed/mozilla/GtkNSSDialogs.cpp:1296
 msgid "Could not verify this certificate because it is not trusted."
 msgstr "No se pudo verificar este certificado porque no se confía en él."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1298
+#: embed/mozilla/GtkNSSDialogs.cpp:1299
 msgid "Could not verify this certificate because the issuer is not trusted."
 msgstr ""
 "No se pudo verificar este certificado porque no se confía en el emisor."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1301
+#: embed/mozilla/GtkNSSDialogs.cpp:1302
 msgid "Could not verify this certificate because the issuer is unknown."
 msgstr "No se pudo verificar este certificado porque el emisor es desconocido."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1304
+#: embed/mozilla/GtkNSSDialogs.cpp:1305
 msgid ""
 "Could not verify this certificate because the CA certificate is invalid."
 msgstr ""
 "No se pudo verificar este certificado porque el certificado de la AC es "
 "inválido."
 
-#: embed/mozilla/GtkNSSDialogs.cpp:1309
+#: embed/mozilla/GtkNSSDialogs.cpp:1310
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "No se pudo verificar este certificado por razones desconocidas."
 
@@ -1825,7 +1822,7 @@ msgstr ""
 "podría prolongarse\n"
 "durante algunos minutos."
 
-#: embed/mozilla/mozilla-embed-single.cpp:507
+#: embed/mozilla/mozilla-embed-single.cpp:508
 msgid ""
 "Epiphany can't be used now. Mozilla initialization failed. Check your "
 "MOZILLA_FIVE_HOME environmental variable."
@@ -1844,11 +1841,11 @@ msgstr ""
 #. * "zh_CN" translation: "zh-cn,zh"
 #. * "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
 #.
-#: embed/mozilla/mozilla-notifiers.cpp:730
+#: embed/mozilla/mozilla-notifiers.cpp:736
 msgid "system-language"
 msgstr "es"
 
-#: embed/print-dialog.c:276
+#: embed/print-dialog.c:288
 msgid "Print to"
 msgstr "Imprimir en"
 
@@ -1876,15 +1873,15 @@ msgstr ""
 msgid "GConf Error"
 msgstr "Error de GConf"
 
-#: lib/egg/egg-editable-toolbar.c:501
+#: lib/egg/egg-editable-toolbar.c:503
 msgid "_Remove Toolbar"
 msgstr "_Quitar barra de herramientas"
 
-#: lib/egg/egg-toolbar-editor.c:532
+#: lib/egg/egg-toolbar-editor.c:535
 msgid "Separator"
 msgstr "Separador"
 
-#: lib/egg/egg-toolbar-editor.c:562
+#: lib/egg/egg-toolbar-editor.c:565
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
@@ -2054,12 +2051,12 @@ msgid "_Show in bookmarks bar"
 msgstr "_Mostrar en la barra de marcadores"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:163 src/ephy-history-window.c:153
-#: src/ephy-window.c:75
+#: src/ephy-window.c:77
 msgid "_View"
 msgstr "_Ver"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:164 src/ephy-history-window.c:154
-#: src/ephy-window.c:79
+#: src/ephy-window.c:81
 msgid "_Help"
 msgstr "A_yuda"
 
@@ -2126,7 +2123,7 @@ msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Importar marcadores desde otro navegador o un archivo de marcadores"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:188 src/ephy-history-window.c:170
-#: src/ephy-window.c:107
+#: src/ephy-window.c:109
 msgid "_Close"
 msgstr "_Cerrar"
 
@@ -2136,28 +2133,28 @@ msgstr "Cerrar la ventana de marcadores"
 
 #. Edit Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:193 src/ephy-history-window.c:175
-#: src/ephy-window.c:118
+#: src/ephy-window.c:120
 msgid "Cu_t"
 msgstr "Cor_tar"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:194 src/ephy-history-window.c:176
-#: src/ephy-window.c:119
+#: src/ephy-window.c:121
 msgid "Cut the selection"
 msgstr "Corta la selección"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:196
 #: src/bookmarks/ephy-bookmarks-editor.c:987 src/ephy-history-window.c:178
-#: src/ephy-history-window.c:748 src/ephy-window.c:121
+#: src/ephy-history-window.c:748 src/ephy-window.c:123
 msgid "_Copy"
 msgstr "_Copiar"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:197 src/ephy-history-window.c:179
-#: src/ephy-window.c:122
+#: src/ephy-window.c:124
 msgid "Copy the selection"
 msgstr "Copiar la selección"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:199 src/ephy-history-window.c:181
-#: src/ephy-window.c:124
+#: src/ephy-window.c:126
 msgid "_Paste"
 msgstr "_Pegar"
 
@@ -2166,7 +2163,7 @@ msgid "Paste the clipboard"
 msgstr "Pegar del portapapeles"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:202 src/ephy-history-window.c:184
-#: src/ephy-window.c:127
+#: src/ephy-window.c:129
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -2176,7 +2173,7 @@ msgstr "Seleccionar todos los marcadores o texto"
 
 #. Help Menu
 #: src/bookmarks/ephy-bookmarks-editor.c:207 src/ephy-history-window.c:192
-#: src/ephy-window.c:218
+#: src/ephy-window.c:220
 msgid "_Contents"
 msgstr "_Índice"
 
@@ -2185,12 +2182,12 @@ msgid "Display bookmarks help"
 msgstr "Mostrar ayuda de los marcadores"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:210 src/ephy-history-window.c:195
-#: src/ephy-window.c:221
+#: src/ephy-window.c:223
 msgid "_About"
 msgstr "_Acerca de"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:211 src/ephy-history-window.c:196
-#: src/ephy-window.c:222
+#: src/ephy-window.c:224
 msgid "Display credits for the web browser creators"
 msgstr "Mostrar créditos de los creadores del navegador web"
 
@@ -2273,7 +2270,7 @@ msgid "_Search:"
 msgstr "_Buscar:"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:1358
-#: src/bookmarks/ephy-topic-action.c:621 src/ephy-window.c:777
+#: src/bookmarks/ephy-topic-action.c:621 src/ephy-window.c:886
 msgid "Bookmarks"
 msgstr "Marcadores"
 
@@ -2293,44 +2290,44 @@ msgstr "Dirección"
 #. * For instance in .nl these should be
 #. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
 #.
-#: src/bookmarks/ephy-bookmarks.c:78
+#: src/bookmarks/ephy-bookmarks.c:79
 msgid "Search the web"
 msgstr "Buscar por la web"
 
-#: src/bookmarks/ephy-bookmarks.c:78
+#: src/bookmarks/ephy-bookmarks.c:79
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr "http://www.google.es/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: src/bookmarks/ephy-bookmarks.c:84
+#: src/bookmarks/ephy-bookmarks.c:85
 msgid "Entertainment"
 msgstr "Entretenimiento"
 
-#: src/bookmarks/ephy-bookmarks.c:85
+#: src/bookmarks/ephy-bookmarks.c:86
 msgid "News"
 msgstr "Noticias"
 
-#: src/bookmarks/ephy-bookmarks.c:86
+#: src/bookmarks/ephy-bookmarks.c:87
 msgid "Shopping"
 msgstr "Compras"
 
-#: src/bookmarks/ephy-bookmarks.c:87
+#: src/bookmarks/ephy-bookmarks.c:88
 msgid "Sports"
 msgstr "Deportes"
 
-#: src/bookmarks/ephy-bookmarks.c:88
+#: src/bookmarks/ephy-bookmarks.c:89
 msgid "Travel"
 msgstr "Viajes"
 
-#: src/bookmarks/ephy-bookmarks.c:89
+#: src/bookmarks/ephy-bookmarks.c:90
 msgid "Work"
 msgstr "Trabajo"
 
-#: src/bookmarks/ephy-bookmarks.c:561
+#: src/bookmarks/ephy-bookmarks.c:558
 msgid "Most Visited"
 msgstr "Más visitados"
 
-#: src/bookmarks/ephy-bookmarks.c:578
+#: src/bookmarks/ephy-bookmarks.c:575
 msgid "Not Categorized"
 msgstr "Sin categorizar"
 
@@ -2356,7 +2353,7 @@ msgstr "Ya existe un marcador llamado %s para esa página."
 msgid "Empty"
 msgstr "Vacío"
 
-#: src/ephy-encoding-dialog.c:321
+#: src/ephy-encoding-dialog.c:328
 msgid "Encodings"
 msgstr "Codificaciones"
 
@@ -2558,487 +2555,499 @@ msgstr ""
 "Epiphany no puede ser usado ahora, debido a un error inesperado desde Bonobo "
 "al intentar ubicar el objeto de automatización."
 
-#: src/ephy-tab.c:324 src/ephy-tab.c:1122 src/ephy-tab.c:1304
+#: src/ephy-tab.c:326 src/ephy-tab.c:1136 src/ephy-tab.c:1318
 msgid "Blank page"
 msgstr "Página en blanco"
 
-#: src/ephy-tab.c:730
+#: src/ephy-tab.c:744
 msgid "site"
 msgstr "sitio"
 
-#: src/ephy-tab.c:754
+#: src/ephy-tab.c:768
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Redirigiendo a %s"
 
-#: src/ephy-tab.c:758
+#: src/ephy-tab.c:772
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Transfiriendo datos desde %s"
 
-#: src/ephy-tab.c:762
+#: src/ephy-tab.c:776
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Esperando la autorización de %s..."
 
-#: src/ephy-tab.c:770
+#: src/ephy-tab.c:784
 #, c-format
 msgid "Loading %s..."
 msgstr "Cargando %s..."
 
-#: src/ephy-window.c:76
+#: src/ephy-window.c:78
 msgid "_Bookmarks"
 msgstr "_Marcadores"
 
-#: src/ephy-window.c:77
+#: src/ephy-window.c:79
 msgid "_Go"
 msgstr "_Ir"
 
-#: src/ephy-window.c:78
+#: src/ephy-window.c:80
 msgid "_Tabs"
 msgstr "_Solapas"
 
 #. File menu
-#: src/ephy-window.c:83
+#: src/ephy-window.c:85
 msgid "_New Window"
 msgstr "_Ventana nueva"
 
-#: src/ephy-window.c:84
+#: src/ephy-window.c:86
 msgid "Open a new window"
 msgstr "Abrir una ventana nueva"
 
-#: src/ephy-window.c:86
+#: src/ephy-window.c:88
 msgid "New _Tab"
 msgstr "_Solapa nueva"
 
-#: src/ephy-window.c:87
+#: src/ephy-window.c:89
 msgid "Open a new tab"
 msgstr "Abrir una solapa nueva"
 
-#: src/ephy-window.c:89
+#: src/ephy-window.c:91
 msgid "_Open..."
 msgstr "_Abrir"
 
-#: src/ephy-window.c:90
+#: src/ephy-window.c:92
 msgid "Open a file"
 msgstr "Abrir un archivo"
 
-#: src/ephy-window.c:92
+#: src/ephy-window.c:94
 msgid "Save _As..."
 msgstr "Guardar c_omo..."
 
-#: src/ephy-window.c:93
+#: src/ephy-window.c:95
 msgid "Save the current page"
 msgstr "Guarda la página actual"
 
-#: src/ephy-window.c:95
+#: src/ephy-window.c:97
 msgid "Print Set_up..."
 msgstr "Configuración de _impresión..."
 
-#: src/ephy-window.c:96
+#: src/ephy-window.c:98
 msgid "Setup the page settings for printing"
 msgstr "Configurar las opciones de impresión"
 
-#: src/ephy-window.c:98
+#: src/ephy-window.c:100
 msgid "Print Pre_view"
 msgstr "Pre_visualización de impresión"
 
-#: src/ephy-window.c:99
+#: src/ephy-window.c:101
 msgid "Print preview"
 msgstr "Previsualización de impresión"
 
-#: src/ephy-window.c:102
+#: src/ephy-window.c:104
 msgid "Print the current page"
 msgstr "Imprime la página actual"
 
 # Añadimos enlace para mantener el léxico igual a Galeon y Mozilla
-#: src/ephy-window.c:104
+#: src/ephy-window.c:106
 msgid "S_end To..."
 msgstr "_Enviar enlace a..."
 
-#: src/ephy-window.c:105
+#: src/ephy-window.c:107
 msgid "Send a link of the current page"
 msgstr "Envía un enlace apuntando a la página actual"
 
-#: src/ephy-window.c:108
+#: src/ephy-window.c:110
 msgid "Close this window"
 msgstr "Cerrar esta ventana"
 
 #. Edit menu
-#: src/ephy-window.c:112
+#: src/ephy-window.c:114
 msgid "_Undo"
 msgstr "_Deshacer"
 
-#: src/ephy-window.c:113
+#: src/ephy-window.c:115
 msgid "Undo the last action"
 msgstr "Deshace la última acción"
 
-#: src/ephy-window.c:115
+#: src/ephy-window.c:117
 msgid "Re_do"
 msgstr "Re_hacer"
 
-#: src/ephy-window.c:116
+#: src/ephy-window.c:118
 msgid "Redo the last undone action"
 msgstr "Rehace la última acción deshecha"
 
-#: src/ephy-window.c:125
+#: src/ephy-window.c:127
 msgid "Paste clipboard"
 msgstr "Pegar del portapapeles"
 
-#: src/ephy-window.c:128
+#: src/ephy-window.c:130
 msgid "Select the entire page"
 msgstr "Selecciona la página completa"
 
-#: src/ephy-window.c:131
+#: src/ephy-window.c:133
 msgid "Find a word or phrase in the page"
 msgstr "Buscar una palabra o frase en la página"
 
-#: src/ephy-window.c:133
+#: src/ephy-window.c:135
 msgid "Find Ne_xt"
 msgstr "Buscar _siguiente"
 
-#: src/ephy-window.c:134
+#: src/ephy-window.c:136
 msgid "Find next occurrence of the word or phrase"
 msgstr "Busca la siguiente aparición de la palabra o frase"
 
-#: src/ephy-window.c:136
+#: src/ephy-window.c:138
 msgid "Find Pre_vious"
 msgstr "Buscar _anterior"
 
-#: src/ephy-window.c:137
+#: src/ephy-window.c:139
 msgid "Find previous occurrence of the word or phrase"
 msgstr "Busca la aparición anterior de la palabra o frase"
 
-#: src/ephy-window.c:139
+#: src/ephy-window.c:141
 msgid "P_ersonal Data"
 msgstr "Datos _personales"
 
-#: src/ephy-window.c:140
+#: src/ephy-window.c:142
 msgid "View and remove cookies and passwords"
 msgstr "Ver y eliminar cookies y contraseñas"
 
-#: src/ephy-window.c:142
+#: src/ephy-window.c:144
 msgid "T_oolbars"
 msgstr "Barras de _herramienta"
 
-#: src/ephy-window.c:143
+#: src/ephy-window.c:145
 msgid "Customize toolbars"
 msgstr "Personalizar barras de herramientas"
 
-#: src/ephy-window.c:145
+#: src/ephy-window.c:147
 msgid "P_references"
 msgstr "P_referencias"
 
-#: src/ephy-window.c:146
+#: src/ephy-window.c:148
 msgid "Configure the web browser"
 msgstr "Configurar el navegador de web"
 
 #. View menu
-#: src/ephy-window.c:150
+#: src/ephy-window.c:152
 msgid "_Stop"
 msgstr "_Detener"
 
-#: src/ephy-window.c:151
+#: src/ephy-window.c:153
 msgid "Stop current data transfer"
 msgstr "Detener la transferencia de datos actual"
 
-#: src/ephy-window.c:153
+#: src/ephy-window.c:155
 msgid "_Reload"
 msgstr "_Recargar"
 
-#: src/ephy-window.c:154
+#: src/ephy-window.c:156
 msgid "Display the latest content of the current page"
 msgstr "Mostrar el último contenido de la página actual"
 
-#: src/ephy-window.c:156
+#: src/ephy-window.c:158
 msgid "Zoom _In"
 msgstr "_Ampliar"
 
-#: src/ephy-window.c:157
+#: src/ephy-window.c:159
 msgid "Increase the text size"
 msgstr "Aumentar el tamaño del texto"
 
-#: src/ephy-window.c:159
+#: src/ephy-window.c:161
 msgid "Zoom _Out"
 msgstr "R_educir"
 
-#: src/ephy-window.c:160
+#: src/ephy-window.c:162
 msgid "Decrease the text size"
 msgstr "Disminuir el tamaño del texto"
 
-#: src/ephy-window.c:162
+#: src/ephy-window.c:164
 msgid "_Normal Size"
 msgstr "Tamaño _normal"
 
-#: src/ephy-window.c:163
+#: src/ephy-window.c:165
 msgid "Use the normal text size"
 msgstr "Usar el tamaño de texto normal"
 
-#: src/ephy-window.c:165
+#: src/ephy-window.c:167
 msgid "Text _Encoding"
 msgstr "_Codificación del texto"
 
-#: src/ephy-window.c:166
+#: src/ephy-window.c:168
 msgid "Change the text encoding"
 msgstr "Cambiar la codificación del texto"
 
-#: src/ephy-window.c:168
+#: src/ephy-window.c:170
 msgid "_Page Source"
 msgstr "Código _fuente"
 
-#: src/ephy-window.c:169
+#: src/ephy-window.c:171
 msgid "View the source code of the page"
 msgstr "Ver el código fuente de la página"
 
 #. Bookmarks menu
-#: src/ephy-window.c:173
+#: src/ephy-window.c:175
 msgid "_Add Bookmark..."
 msgstr "_Añadir marcador..."
 
-#: src/ephy-window.c:174 src/ephy-window.c:250
+#: src/ephy-window.c:176 src/ephy-window.c:252
 msgid "Add a bookmark for the current page"
 msgstr "Añadir un marcador para la página actual"
 
-#: src/ephy-window.c:176
+#: src/ephy-window.c:178
 msgid "_Edit Bookmarks"
 msgstr "_Editar marcadores"
 
-#: src/ephy-window.c:177
+#: src/ephy-window.c:179
 msgid "Open the bookmarks window"
 msgstr "Abrir la ventana de marcadores"
 
 #. Go menu
-#: src/ephy-window.c:181
+#: src/ephy-window.c:183
 msgid "_Back"
 msgstr "A_trás"
 
-#: src/ephy-window.c:182
+#: src/ephy-window.c:184
 msgid "Go to the previous visited page"
 msgstr "Ir a la página visitada anterior"
 
-#: src/ephy-window.c:184
+#: src/ephy-window.c:186
 msgid "_Forward"
 msgstr "A_delante"
 
-#: src/ephy-window.c:185
+#: src/ephy-window.c:187
 msgid "Go to the next visited page"
 msgstr "Ir a la siguiente página visitada"
 
-#: src/ephy-window.c:188
+#: src/ephy-window.c:190
 msgid "Go up one level"
 msgstr "Subir un nivel"
 
-#: src/ephy-window.c:190
+#: src/ephy-window.c:192
 msgid "_Home"
 msgstr "_Inicio"
 
-#: src/ephy-window.c:191
+#: src/ephy-window.c:193
 msgid "Go to the home page"
 msgstr "Ir página inicial"
 
-#: src/ephy-window.c:193
+#: src/ephy-window.c:195
 msgid "_Location..."
 msgstr "_Dirección..."
 
-#: src/ephy-window.c:194
+#: src/ephy-window.c:196
 msgid "Go to a specified location"
 msgstr "Ir a una dirección especificada"
 
-#: src/ephy-window.c:196
+#: src/ephy-window.c:198
 msgid "H_istory"
 msgstr "_Histórico"
 
-#: src/ephy-window.c:197
+#: src/ephy-window.c:199
 msgid "Open the history window"
 msgstr "Abrir la ventana del histórico"
 
 #. Tabs menu
-#: src/ephy-window.c:201
+#: src/ephy-window.c:203
 msgid "_Previous Tab"
 msgstr "Solapa _anterior"
 
-#: src/ephy-window.c:202
+#: src/ephy-window.c:204
 msgid "Activate previous tab"
 msgstr "Activar solapa anterior"
 
-#: src/ephy-window.c:204
+#: src/ephy-window.c:206
 msgid "_Next Tab"
 msgstr "_Solapa siguiente"
 
-#: src/ephy-window.c:205
+#: src/ephy-window.c:207
 msgid "Activate next tab"
 msgstr "Activar siguiente solapa"
 
-#: src/ephy-window.c:207
+#: src/ephy-window.c:209
 msgid "Move Tab _Left"
 msgstr "Mover la solapa a la _izquierda"
 
-#: src/ephy-window.c:208
+#: src/ephy-window.c:210
 msgid "Move current tab to left"
 msgstr "Mover la solapa actual a la izquierda"
 
-#: src/ephy-window.c:210
+#: src/ephy-window.c:212
 msgid "Move Tab _Right"
 msgstr "Mover la solapa a la de_recha"
 
-#: src/ephy-window.c:211
+#: src/ephy-window.c:213
 msgid "Move current tab to right"
 msgstr "Mover la solapa actual a la derecha"
 
-#: src/ephy-window.c:213
+#: src/ephy-window.c:215
 msgid "_Detach Tab"
 msgstr "_Desacoplar solapa"
 
-#: src/ephy-window.c:214
+#: src/ephy-window.c:216
 msgid "Detach current tab"
 msgstr "Desacoplar la solapa actual"
 
-#: src/ephy-window.c:219
+#: src/ephy-window.c:221
 msgid "Display web browser help"
 msgstr "Mostrar ayuda del navegador"
 
 #. View Menu
-#: src/ephy-window.c:230
+#: src/ephy-window.c:232
 msgid "_Toolbar"
 msgstr "Barra de _herramientas"
 
-#: src/ephy-window.c:231
+#: src/ephy-window.c:233
 msgid "Show or hide toolbar"
 msgstr "Muestra u oculta la barra de herramientas"
 
-#: src/ephy-window.c:233
+#: src/ephy-window.c:235
 msgid "_Bookmarks Bar"
 msgstr "Barra de _marcadores"
 
-#: src/ephy-window.c:234
+#: src/ephy-window.c:236
 msgid "Show or hide bookmarks bar"
 msgstr "Muestra u oculta la barra de marcadores"
 
-#: src/ephy-window.c:236
+#: src/ephy-window.c:238
 msgid "St_atusbar"
 msgstr "Barra de es_tado"
 
-#: src/ephy-window.c:237
+#: src/ephy-window.c:239
 msgid "Show or hide statusbar"
 msgstr "Muestra u oculta la barra de estado"
 
-#: src/ephy-window.c:239
+#: src/ephy-window.c:241
 msgid "_Fullscreen"
 msgstr "_Pantalla completa"
 
-#: src/ephy-window.c:240
+#: src/ephy-window.c:242
 msgid "Browse at full screen"
 msgstr "Navegar a pantalla completa"
 
 #. Document
-#: src/ephy-window.c:247
+#: src/ephy-window.c:249
 msgid "_Save Background As..."
 msgstr "_Guardar fondo como..."
 
-#: src/ephy-window.c:249
+#: src/ephy-window.c:251
 msgid "Add Boo_kmark..."
 msgstr "Añadir mar_cador..."
 
 #. Framed document
-#: src/ephy-window.c:254
+#: src/ephy-window.c:256
 msgid "_Open Frame"
 msgstr "_Abrir marco"
 
-#: src/ephy-window.c:256
+#: src/ephy-window.c:258
 msgid "Open Frame in _New Window"
 msgstr "Abre el marco en una _ventana nueva"
 
-#: src/ephy-window.c:258
+#: src/ephy-window.c:260
 msgid "Open Frame in New _Tab"
 msgstr "Abrir marco en una _solapa nueva"
 
 #. Links
-#: src/ephy-window.c:262
+#: src/ephy-window.c:264
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
-#: src/ephy-window.c:264
+#: src/ephy-window.c:266
 msgid "Open Link in _New Window"
 msgstr "Abrir enlace en una _ventana nueva"
 
-#: src/ephy-window.c:266
+#: src/ephy-window.c:268
 msgid "Open Link in New _Tab"
 msgstr "Abrir enlace en una _solapa nueva"
 
-#: src/ephy-window.c:268
+#: src/ephy-window.c:270
 msgid "_Download Link"
 msgstr "_Descargar enlace"
 
-#: src/ephy-window.c:270
+#: src/ephy-window.c:272
 msgid "_Bookmark Link..."
 msgstr "Añadir _marcador..."
 
-#: src/ephy-window.c:272
+#: src/ephy-window.c:274
 msgid "_Copy Link Address"
 msgstr "_Copiar dirección del enlace"
 
 #. Images
-#: src/ephy-window.c:276
+#: src/ephy-window.c:278
 msgid "Open _Image"
 msgstr "Abrir _imagen"
 
-#: src/ephy-window.c:278
+#: src/ephy-window.c:280
 msgid "Open Image in New _Window"
 msgstr "Abrir imagen en una _ventana nueva"
 
-#: src/ephy-window.c:280
+#: src/ephy-window.c:282
 msgid "Open Image in New T_ab"
 msgstr "Abrir imagen en una _solapa nueva"
 
-#: src/ephy-window.c:282
+#: src/ephy-window.c:284
 msgid "_Save Image As..."
 msgstr "_Guardar imagen como..."
 
-#: src/ephy-window.c:284
+#: src/ephy-window.c:286
 msgid "_Use Image As Background"
 msgstr "_Utilizar esta imagen como tapiz"
 
-#: src/ephy-window.c:286
+#: src/ephy-window.c:288
 msgid "Copy I_mage Address"
 msgstr "Copiar dirección de la i_magen"
 
-#: src/ephy-window.c:577
+#: src/ephy-window.c:579
 msgid "Exit Fullscreen"
 msgstr "Salir de pantalla completa"
 
-#: src/ephy-window.c:767 src/window-commands.c:389
+#: src/ephy-window.c:653
+msgid "_Close document"
+msgstr "_Cerrar documento"
+
+#: src/ephy-window.c:680
+msgid "There are unsubmitted changes to form elements."
+msgstr "Hay cambios no enviados en los elementos del formulario."
+
+#: src/ephy-window.c:681
+msgid "If you close the document anyway, you will lose that information."
+msgstr "Si cierra el documento, perderá esa información."
+
+#: src/ephy-window.c:876 src/window-commands.c:389
 msgid "Open"
 msgstr "Abrir"
 
-#: src/ephy-window.c:769 src/window-commands.c:414
+#: src/ephy-window.c:878 src/window-commands.c:414
 msgid "Save As"
 msgstr "Guardar como"
 
-#: src/ephy-window.c:773
+#: src/ephy-window.c:882
 msgid "Bookmark"
 msgstr "Marcador"
 
-#: src/ephy-window.c:951
+#: src/ephy-window.c:1060
 msgid "Insecure"
 msgstr "Inseguro"
 
-#: src/ephy-window.c:954
+#: src/ephy-window.c:1063
 msgid "Broken"
 msgstr "Roto"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:1066
 msgid "Medium"
 msgstr "Medio"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:1070
 msgid "Low"
 msgstr "Bajo"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:1074
 msgid "High"
 msgstr "Alto"
 
-#: src/ephy-window.c:975
+#: src/ephy-window.c:1084
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -3047,56 +3056,56 @@ msgstr ""
 "Nivel de seguridad %s\n"
 "%s"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:1090
 #, c-format
 msgid "Security level: %s"
 msgstr "Nivel de seguridad %s"
 
-#: src/pdm-dialog.c:412
+#: src/pdm-dialog.c:409
 msgid "Domain"
 msgstr "Dominio"
 
-#: src/pdm-dialog.c:424
+#: src/pdm-dialog.c:421
 msgid "Name"
 msgstr "Nombre"
 
-#: src/pdm-dialog.c:665
+#: src/pdm-dialog.c:662
 msgid "Host"
 msgstr "Host"
 
-#: src/pdm-dialog.c:677
+#: src/pdm-dialog.c:674
 msgid "User Name"
 msgstr "Nombre de usuario"
 
-#: src/pdm-dialog.c:869
+#: src/pdm-dialog.c:866
 msgid "Cookie Properties"
 msgstr "Propiedades de cookies"
 
-#: src/pdm-dialog.c:884
+#: src/pdm-dialog.c:881
 msgid "Content:"
 msgstr "Contenido:"
 
-#: src/pdm-dialog.c:899
+#: src/pdm-dialog.c:896
 msgid "Path:"
 msgstr "Ruta:"
 
-#: src/pdm-dialog.c:914
+#: src/pdm-dialog.c:911
 msgid "Secure:"
 msgstr "Seguro:"
 
-#: src/pdm-dialog.c:923
+#: src/pdm-dialog.c:920
 msgid "Yes"
 msgstr "Sí"
 
-#: src/pdm-dialog.c:923
+#: src/pdm-dialog.c:920
 msgid "No"
 msgstr "No"
 
-#: src/pdm-dialog.c:929
+#: src/pdm-dialog.c:926
 msgid "Expires:"
 msgstr "Expira:"
 
-#: src/pdm-dialog.c:940
+#: src/pdm-dialog.c:937
 msgid "End of current session"
 msgstr "Finalizar la sesión actual"
 
@@ -3315,12 +3324,12 @@ msgstr "Vietnamita"
 msgid "Walloon"
 msgstr "Valón"
 
-#: src/prefs-dialog.c:1047
+#: src/prefs-dialog.c:1051
 #, c-format
 msgid "Custom [%s]"
 msgstr "Personalizado [%s]"
 
-#: src/prefs-dialog.c:1091
+#: src/prefs-dialog.c:1095
 msgid "Desktop"
 msgstr "Escritorio"
 
@@ -3328,11 +3337,11 @@ msgstr "Escritorio"
 #. * user's home folder. It should be translated by the same
 #. * term as GTK+'s "Home" string to be consistent with the
 #. * filechooser
-#: src/prefs-dialog.c:1100
+#: src/prefs-dialog.c:1104
 msgid "Home"
 msgstr "Inicio"
 
-#: src/prefs-dialog.c:1309
+#: src/prefs-dialog.c:1314
 msgid "Select a directory"
 msgstr "Seleccione un directorio"
 
@@ -3398,13 +3407,16 @@ msgid "_Add a New Toolbar"
 msgstr "_Añadir una barra de herramientas"
 
 #. Translator credits
-#: src/window-commands.c:937
+#: src/window-commands.c:938
 msgid "translator_credits"
 msgstr "Francisco Javier Fernández  <serrador@arrakis.es>"
 
-#: src/window-commands.c:967
+#: src/window-commands.c:968
 msgid "A GNOME browser based on Mozilla"
 msgstr "Un navegador para GNOME basado en Mozilla"
+
+#~ msgid "Organization (O):"
+#~ msgstr "Organización (O):"
 
 #~ msgid "Language Editor"
 #~ msgstr "Editor de idiomas"
