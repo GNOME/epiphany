@@ -185,7 +185,7 @@ impl_attach_window (EphyExtension *extension,
 
 	LOG ("impl_attach_window")
 
-	session->priv->windows = g_list_prepend (session->priv->windows, window);
+	session->priv->windows = g_list_append (session->priv->windows, window);
 	ephy_session_save (session, SESSION_CRASHED);
 
 	notebook = ephy_window_get_notebook (window);
@@ -726,7 +726,7 @@ ephy_session_add_window (EphySession *session,
 {
 	LOG ("ephy_session_add_window")
 
-	session->priv->windows = g_list_prepend (session->priv->windows, window);
+	session->priv->windows = g_list_append (session->priv->windows, window);
 
 	ephy_session_save (session, SESSION_CRASHED);
 }
