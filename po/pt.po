@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.2\n"
-"POT-Creation-Date: 2003-03-23 17:08+0000\n"
-"PO-Revision-Date: 2003-03-23 17:10+0000\n"
+"POT-Creation-Date: 2003-03-30 21:10+0100\n"
+"PO-Revision-Date: 2003-03-30 21:15+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -1057,7 +1057,7 @@ msgstr "_Data"
 
 #. Toplevel
 #: data/glade/print.glade.h:31 data/ui/nautilus-epiphany-view.xml.in.h:35
-#: src/bookmarks/ephy-bookmarks-editor.c:104 src/ephy-window.c:58
+#: src/bookmarks/ephy-bookmarks-editor.c:128 src/ephy-window.c:58
 msgid "_File"
 msgstr "_Ficheiro"
 
@@ -1289,7 +1289,7 @@ msgid "Use Image As Background"
 msgstr "Utilizar Imagem Como Fundo"
 
 #: data/ui/nautilus-epiphany-view.xml.in.h:34
-#: src/bookmarks/ephy-bookmarks-editor.c:105 src/ephy-window.c:59
+#: src/bookmarks/ephy-bookmarks-editor.c:129 src/ephy-window.c:59
 msgid "_Edit"
 msgstr "_Editar"
 
@@ -1301,47 +1301,47 @@ msgstr "_Procurar..."
 msgid "_Print..."
 msgstr "Im_primir..."
 
-#: embed/downloader-view.c:383
+#: embed/downloader-view.c:386
 #, c-format
 msgid "%.1f of %.1f MB"
 msgstr "%.1f de %.1f MB"
 
-#: embed/downloader-view.c:389
+#: embed/downloader-view.c:392
 #, c-format
 msgid "%d of %d KB"
 msgstr "%d de %d KB"
 
-#: embed/downloader-view.c:395
+#: embed/downloader-view.c:398
 #, c-format
 msgid "%d KB"
 msgstr "%d KB"
 
-#: embed/downloader-view.c:499 embed/downloader-view.c:517
-#: src/ephy-window.c:1006
+#: embed/downloader-view.c:502 embed/downloader-view.c:520
+#: src/ephy-window.c:1017
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: embed/downloader-view.c:516
+#: embed/downloader-view.c:519
 msgid "00.00"
 msgstr "00,00"
 
-#: embed/downloader-view.c:759
+#: embed/downloader-view.c:764
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:769
+#: embed/downloader-view.c:774
 msgid "Filename"
 msgstr "Nome ficheiro"
 
-#: embed/downloader-view.c:780
+#: embed/downloader-view.c:785
 msgid "Size"
 msgstr "Tamanho"
 
-#: embed/downloader-view.c:791
+#: embed/downloader-view.c:796
 msgid "Remaining"
 msgstr "Restante"
 
-#: embed/downloader-view.c:1011
+#: embed/downloader-view.c:1019
 msgid "Cancel all pending downloads?"
 msgstr "Cancelar todos os downloads em curso?"
 
@@ -1821,15 +1821,15 @@ msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
 #. Popups
-#: lib/widgets/ephy-editable-toolbar.c:72
+#: lib/widgets/ephy-editable-toolbar.c:66
 msgid "_Remove Toolbar"
 msgstr "_Remover Barra Ferramentas"
 
-#: lib/widgets/ephy-editable-toolbar.c:74
+#: lib/widgets/ephy-editable-toolbar.c:68
 msgid "_Edit Toolbars..."
 msgstr "_Editar Barra Ferramentas..."
 
-#: lib/widgets/ephy-editable-toolbar.c:984
+#: lib/widgets/ephy-editable-toolbar.c:1001
 msgid ""
 "Drag an item onto the toolbars above to add it, from the toolbars in the "
 "items table to remove it."
@@ -1837,84 +1837,100 @@ msgstr ""
 "Arraste um item sobre a barra de ferramentas para o adicionar, da barra para "
 "a tabela de itens para o remover."
 
-#: lib/widgets/ephy-editable-toolbar.c:991
+#: lib/widgets/ephy-editable-toolbar.c:1008
 msgid "Add Toolbar"
 msgstr "Adicionar Barra Ferramentas"
 
 #. setup label
 #: lib/widgets/ephy-notebook.c:714 src/ephy-tab.c:521 src/ephy-tab.c:985
-#: src/window-commands.c:275
+#: src/window-commands.c:306
 msgid "Untitled"
 msgstr "Sem título"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:108
+#: src/bookmarks/ephy-bookmarks-editor.c:132
 msgid "_New Topic"
 msgstr "_Novo Tópico"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:111
+#: src/bookmarks/ephy-bookmarks-editor.c:135
 msgid "_Open In New Window"
 msgstr "Abrir Em Nova _Janela"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:114
+#: src/bookmarks/ephy-bookmarks-editor.c:138
 msgid "Open In New _Tab"
 msgstr "Abrir em Nova _Aba"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:117
-msgid "_Rename Bookmark"
-msgstr "_Renomear Marcador"
+#. Edit menu
+#: src/bookmarks/ephy-bookmarks-editor.c:141 src/ephy-window.c:92
+msgid "Cu_t"
+msgstr "Cor_tar"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:120
-msgid "R_ename Topic"
-msgstr "R_enomear Tópico"
+#: src/bookmarks/ephy-bookmarks-editor.c:144 src/ephy-window.c:95
+msgid "_Copy"
+msgstr "_Copiar"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:123
-msgid "_Delete Bookmark"
-msgstr "_Apagar Marcador"
+#: src/bookmarks/ephy-bookmarks-editor.c:147 src/ephy-window.c:98
+msgid "_Paste"
+msgstr "Co_lar"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:126
-msgid "D_elete Topic"
-msgstr "Apa_gar Tópico"
+#: src/bookmarks/ephy-bookmarks-editor.c:150 src/ephy-window.c:101
+msgid "Select _All"
+msgstr "Seleccionar T_udo"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:129
+#: src/bookmarks/ephy-bookmarks-editor.c:153
+msgid "_Rename"
+msgstr "_Renomear"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:156
+msgid "_Delete"
+msgstr "_Apagar"
+
+#: src/bookmarks/ephy-bookmarks-editor.c:159
 msgid "_Properties"
 msgstr "_Propriedades"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:132 src/ephy-window.c:87
+#: src/bookmarks/ephy-bookmarks-editor.c:162 src/ephy-window.c:87
 msgid "_Close"
 msgstr "_Fechar"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:144
+#: src/bookmarks/ephy-bookmarks-editor.c:174
 msgid "Type a topic"
 msgstr "Insira um tópico"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:525
-msgid "Search:"
-msgstr "Procurar:"
+#: src/bookmarks/ephy-bookmarks-editor.c:623
+msgid "_Search:"
+msgstr "_Procurar:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:598
-#: src/bookmarks/ephy-bookmarks-editor.c:642
+#: src/bookmarks/ephy-bookmarks-editor.c:688
 msgid "Bookmarks"
 msgstr "Marcadores"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:614
+#: src/bookmarks/ephy-bookmarks-editor.c:739
 msgid "Topics"
 msgstr "Tópicos"
 
-#: src/bookmarks/ephy-bookmarks.c:428
+#: src/bookmarks/ephy-bookmarks-editor.c:782 src/history-dialog.c:306
+msgid "Title"
+msgstr "Título"
+
+#: src/bookmarks/ephy-bookmarks.c:395
 msgid "All"
 msgstr "Tudo"
 
-#: src/bookmarks/ephy-new-bookmark.c:198
-msgid "Title:"
-msgstr "Título:"
+#: src/bookmarks/ephy-bookmarks.c:428
+msgid "Most Visited"
+msgstr "Mais Visitado"
 
-#: src/bookmarks/ephy-new-bookmark.c:212
-msgid "Topics:"
-msgstr "Tópicos:"
+#: src/bookmarks/ephy-new-bookmark.c:206
+msgid "_Title:"
+msgstr "_Título:"
 
-#: src/bookmarks/ephy-new-bookmark.c:232
-msgid "Add bookmark"
-msgstr "Adicionar marcador"
+#: src/bookmarks/ephy-new-bookmark.c:220
+msgid "To_pics:"
+msgstr "Tó_picos:"
+
+#: src/bookmarks/ephy-new-bookmark.c:242
+msgid "New Bookmark"
+msgstr "Novo Marcador"
 
 #: src/ephy-go-action.c:74
 msgid "Go"
@@ -2137,34 +2153,17 @@ msgstr "Adicionar um marcador para a página actual"
 msgid "Close this window"
 msgstr "Fechar esta janela"
 
-#. Edit menu
-#: src/ephy-window.c:92
-msgid "Cu_t"
-msgstr "Cor_tar"
-
 #: src/ephy-window.c:93
 msgid "Cut the selection"
 msgstr "Cortar a selecção"
-
-#: src/ephy-window.c:95
-msgid "_Copy"
-msgstr "_Copiar"
 
 #: src/ephy-window.c:96
 msgid "Copy the selection"
 msgstr "Copiar a selecção"
 
-#: src/ephy-window.c:98
-msgid "_Paste"
-msgstr "Co_lar"
-
 #: src/ephy-window.c:99
 msgid "Paste clipboard"
 msgstr "Colar da área de transferência"
-
-#: src/ephy-window.c:101
-msgid "Select _All"
-msgstr "Seleccionar T_udo"
 
 #: src/ephy-window.c:102
 msgid "Select the entire page"
@@ -2482,27 +2481,27 @@ msgstr "utilizar Imagem Como _Fundo"
 msgid "_Copy Image Location"
 msgstr "_Copiar Localização Imagem"
 
-#: src/ephy-window.c:1009
+#: src/ephy-window.c:1020
 msgid "Insecure"
 msgstr "Inseguro"
 
-#: src/ephy-window.c:1012
+#: src/ephy-window.c:1023
 msgid "Broken"
 msgstr "Quebrado"
 
-#: src/ephy-window.c:1015
+#: src/ephy-window.c:1026
 msgid "Medium"
 msgstr "Média"
 
-#: src/ephy-window.c:1019
+#: src/ephy-window.c:1030
 msgid "Low"
 msgstr "Baixa"
 
-#: src/ephy-window.c:1023
+#: src/ephy-window.c:1034
 msgid "High"
 msgstr "Alta"
 
-#: src/ephy-window.c:1033
+#: src/ephy-window.c:1044
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2511,7 +2510,7 @@ msgstr ""
 "Nível segurança: %s\n"
 "%s"
 
-#: src/ephy-window.c:1039
+#: src/ephy-window.c:1050
 #, c-format
 msgid "Security level: %s"
 msgstr "Nível segurança: %s"
@@ -2696,15 +2695,11 @@ msgstr "Vietnamita"
 msgid "Walloon"
 msgstr "Wallon"
 
-#: src/history-dialog.c:288
-msgid "Title"
-msgstr "Título"
-
-#: src/history-dialog.c:289
+#: src/history-dialog.c:307
 msgid "Location"
 msgstr "Localização"
 
-#: src/history-dialog.c:290
+#: src/history-dialog.c:308
 msgid "Last Visit"
 msgstr "Última Visita"
 
@@ -2776,7 +2771,7 @@ msgstr "Interface Utilizador"
 msgid "Advanced"
 msgstr "Avançado"
 
-#: src/prefs-dialog.c:306
+#: src/prefs-dialog.c:307
 msgid "Preferences"
 msgstr "Preferências"
 
@@ -2802,34 +2797,54 @@ msgstr ""
 msgid "You can recover the opened tabs and windows."
 msgstr "Pode recuperar as abas e janelas abertas."
 
-#: src/toolbar.c:272
+#: src/toolbar.c:313
 msgid "Back"
 msgstr "Atrás"
 
-#: src/toolbar.c:284
+#: src/toolbar.c:325
 msgid "Forward"
 msgstr "Frente"
 
-#: src/toolbar.c:296
+#: src/toolbar.c:337
 msgid "Up"
 msgstr "Acima"
 
-#: src/window-commands.c:132
+#: src/window-commands.c:139
 msgid "Check this out!"
 msgstr "Verifique isto!"
 
-#: src/window-commands.c:315
+#: src/window-commands.c:346
 msgid "Select the file to open"
 msgstr "Seleccione o ficheiro a abrir"
 
+#: src/window-commands.c:686
+#, c-format
+msgid "Could not display help: %s"
+msgstr "Incapaz de mostrar ajuda: %s"
+
 #. Translator credits
-#: src/window-commands.c:662
+#: src/window-commands.c:715
 msgid "translator_credits"
 msgstr "Duarte Loreto <happyguy_pt@hotmail.com>"
 
-#: src/window-commands.c:674
+#: src/window-commands.c:727
 msgid "A GNOME browser based on Mozilla"
 msgstr "Um browser GNOME baseado no Mozilla"
+
+#~ msgid "_Rename Bookmark"
+#~ msgstr "_Renomear Marcador"
+
+#~ msgid "R_ename Topic"
+#~ msgstr "R_enomear Tópico"
+
+#~ msgid "_Delete Bookmark"
+#~ msgstr "_Apagar Marcador"
+
+#~ msgid "D_elete Topic"
+#~ msgstr "Apa_gar Tópico"
+
+#~ msgid "Add bookmark"
+#~ msgstr "Adicionar marcador"
 
 #~ msgid "_Remove"
 #~ msgstr "_Remover"
