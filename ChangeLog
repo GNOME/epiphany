@@ -1,5 +1,22 @@
 2003-01-20  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* embed/ephy-embed-event.c: (ephy_embed_event_finalize):
+
+	Fix a stupid mistake porting galeon changes, no more
+	freeze.
+
+	* src/ephy-favicon-action.c: (ephy_favicon_action_sync_icon),
+	(ephy_favicon_action_class_init), (ephy_favicon_action_init),
+	(ephy_favicon_action_finalize):
+
+	Ref favicon cache.
+
+	* src/ephy-window.c: (ephy_window_init):
+
+	Initialize ppview pointer.
+
+2003-01-20  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* Merge eog-menu-api branch
 
 2003-01-20  Marco Pesenti Gritti  <marco@it.gnome.org>

@@ -28,6 +28,7 @@ struct EphyFaviconActionPrivate
 {
 	EphyWindow *window;
 	char *icon;
+	EphyFaviconCache *cache;
 };
 
 enum
@@ -39,6 +40,7 @@ enum
 
 static void ephy_favicon_action_init       (EphyFaviconAction *action);
 static void ephy_favicon_action_class_init (EphyFaviconActionClass *class);
+static void ephy_favicon_action_finalize   (GObject *object);
 
 static GObjectClass *parent_class = NULL;
 
@@ -128,16 +130,13 @@ ephy_favicon_action_sync_icon (EggAction *action, GParamSpec *pspec,
 	char *url;
 	GtkWidget *image;
 	GdkPixbuf *pixbuf = NULL;
-	EphyFaviconCache *cache;
-
-	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
 
 	url = fav_action->priv->icon;
 	image = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "image"));
 
 	if (url)
 	{
-		pixbuf = ephy_favicon_cache_get (cache, url);
+		pixbuf = ephy_favicon_cache_get (fav_action->priv->cache, url);
 	}
 
 	if (pixbuf)
@@ -220,6 +219,7 @@ ephy_favicon_action_class_init (EphyFaviconActionClass *class)
 
 	object_class->set_property = ephy_favicon_action_set_property;
 	object_class->get_property = ephy_favicon_action_get_property;
+        object_class->finalize = ephy_favicon_action_finalize;
 
 	parent_class = g_type_class_peek_parent (class);
 	action_class = EGG_ACTION_CLASS (class);
@@ -249,4 +249,26 @@ ephy_favicon_action_init (EphyFaviconAction *action)
 {
 	action->priv = g_new0 (EphyFaviconActionPrivate, 1);
 	action->priv->icon = NULL;
+
+	action->priv->cache = ephy_embed_shell_get_favicon_cache
+		(EPHY_EMBED_SHELL (ephy_shell));
+	g_object_ref (action->priv->cache);
+}
+
+static void
+ephy_favicon_action_finalize (GObject *object)
+{
+        EphyFaviconAction *action;
+
+        g_return_if_fail (EPHY_IS_FAVICON_ACTION (object));
+
+	action = EPHY_FAVICON_ACTION (object);
+
+        g_return_if_fail (action->priv != NULL);
+
+	g_object_unref (action->priv->cache);
+
+	g_free (action->priv);
+
+        G_OBJECT_CLASS (parent_class)->finalize (object);
 }

@@ -102,9 +102,6 @@ ephy_embed_event_finalize (GObject *object)
 
         g_return_if_fail (event->priv != NULL);
 
-	g_hash_table_foreach_remove (event->priv->props,
-                                     (GHRFunc)g_free,
-                                     NULL);
 	g_hash_table_destroy (event->priv->props);
 
 	g_free (event->priv);

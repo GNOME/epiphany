@@ -526,6 +526,7 @@ ephy_window_init (EphyWindow *window)
 	window->priv->ignore_layout_toggles = FALSE;
 	window->priv->closing = FALSE;
 	window->priv->has_default_size = FALSE;
+	window->priv->ppview_toolbar = NULL;
 
 	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
 	g_signal_connect_object (G_OBJECT (cache),
