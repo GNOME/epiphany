@@ -313,12 +313,12 @@ egg_toolbars_model_add_separator (EggToolbarsModel *t,
 		 toolbar_position, real_position);
 }
 
-void
-egg_toolbars_model_add_item (EggToolbarsModel    *t,
-			     int		  toolbar_position,
-			     int		  position,
-			     const char          *id,
-			     const char          *type)
+gboolean
+impl_add_item (EggToolbarsModel    *t,
+	       int		    toolbar_position,
+	       int		    position,
+	       const char          *id,
+	       const char          *type)
 {
   GNode *parent_node;
   GNode *node;
@@ -338,6 +338,8 @@ egg_toolbars_model_add_item (EggToolbarsModel    *t,
 
   g_signal_emit (G_OBJECT (t), egg_toolbars_model_signals[ITEM_ADDED], 0,
 		 toolbar_position, real_position);
+
+  return TRUE;
 }
 
 static void
@@ -485,6 +487,7 @@ egg_toolbars_model_class_init (EggToolbarsModelClass *klass)
 
   object_class->finalize = egg_toolbars_model_finalize;
 
+  klass->add_item = impl_add_item;
   klass->get_item_id = impl_get_item_id;
   klass->get_item_name = impl_get_item_name;
   klass->get_item_type = impl_get_item_type;
@@ -662,6 +665,17 @@ egg_toolbars_model_toolbar_nth (EggToolbarsModel *t,
   tdata = toolbar->data;
 
   return tdata->name;
+}
+
+gboolean
+egg_toolbars_model_add_item (EggToolbarsModel *t,
+			     int	       toolbar_position,
+			     int               position,
+			     const char       *id,
+			     const char       *type)
+{
+  EggToolbarsModelClass *klass = EGG_TOOLBARS_MODEL_GET_CLASS (t);
+  return klass->add_item (t, toolbar_position, position, id, type);
 }
 
 char *

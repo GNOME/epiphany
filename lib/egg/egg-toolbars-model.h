@@ -70,6 +70,11 @@ struct EggToolbarsModelClass
 			    int position);
 
   /* Virtual Table */
+  gboolean (* add_item)    (EggToolbarsModel *t,
+			    int	              toolbar_position,
+			    int               position,
+			    const char       *id,
+			    const char       *type);
   char * (* get_item_type) (EggToolbarsModel *t,
 			    GdkAtom           dnd_type);
   char * (* get_item_id)   (EggToolbarsModel *t,
@@ -106,7 +111,7 @@ char             *egg_toolbars_model_get_item_id    (EggToolbarsModel *t,
 char             *egg_toolbars_model_get_item_name  (EggToolbarsModel *t,
 						     const char       *type,
 			                             const char       *id);
-void		  egg_toolbars_model_add_item       (EggToolbarsModel *t,
+gboolean	  egg_toolbars_model_add_item       (EggToolbarsModel *t,
 						     int	       toolbar_position,
 				                     int               position,
 						     const char       *id,

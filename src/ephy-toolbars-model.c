@@ -228,6 +228,69 @@ impl_get_item_type (EggToolbarsModel *t,
 	return EGG_TOOLBARS_MODEL_CLASS (parent_class)->get_item_type (t, type);
 }
 
+static gboolean
+get_toolbar_and_item_pos (EphyToolbarsModel *model,
+			  const char *action_name,
+			  int *toolbar,
+			  int *position)
+{
+	int n_toolbars, n_items;
+	int t,i;
+
+	n_toolbars = egg_toolbars_model_n_toolbars (EGG_TOOLBARS_MODEL (model));
+
+	for (t = 0; t < n_toolbars; t++)
+	{
+		n_items = egg_toolbars_model_n_items
+				(EGG_TOOLBARS_MODEL (model), t);
+
+		for (i = 0; i < n_items; i++)
+		{
+			const char *i_name;
+			gboolean is_separator;
+
+			i_name = egg_toolbars_model_item_nth
+					(EGG_TOOLBARS_MODEL (model), t, i,
+					 &is_separator);
+			g_return_val_if_fail (i_name != NULL, FALSE);
+
+			if (strcmp (i_name, action_name) == 0)
+			{
+				if (toolbar) *toolbar = t;
+				if (position) *position = i;
+
+				return TRUE;
+			}
+		}
+	}
+
+	return FALSE;
+}
+
+static gboolean
+impl_add_item (EggToolbarsModel    *t,
+	       int		    toolbar_position,
+	       int		    position,
+	       const char          *id,
+	       const char          *type)
+{
+	EphyToolbarsModel *model = EPHY_TOOLBARS_MODEL (t);
+	gboolean is_bookmark;
+
+	is_bookmark = strcmp (type, EPHY_DND_TOPIC_TYPE) == 0 ||
+	              strcmp (type, EPHY_DND_URL_TYPE) == 0;
+
+	if (!is_bookmark || !get_toolbar_and_item_pos (model, id, NULL, NULL))
+	{
+		return EGG_TOOLBARS_MODEL_CLASS (parent_class)->add_item
+			(t, toolbar_position, position, id, type);
+	}
+	else
+	{
+		return FALSE;
+	}
+}
+
 static void
 connect_item (EphyToolbarsModel *model,
 	      const char *name)
@@ -322,6 +385,7 @@ ephy_toolbars_model_class_init (EphyToolbarsModelClass *klass)
 	object_class->set_property = ephy_toolbars_model_set_property;
 	object_class->get_property = ephy_toolbars_model_get_property;
 
+	etm_class->add_item = impl_add_item;
 	etm_class->get_item_id = impl_get_item_id;
 	etm_class->get_item_name = impl_get_item_name;
 	etm_class->get_item_type = impl_get_item_type;
@@ -452,45 +516,6 @@ get_toolbar_pos (EphyToolbarsModel *model,
 	}
 
 	return -1;
-}
-
-static gboolean
-get_toolbar_and_item_pos (EphyToolbarsModel *model,
-			  const char *action_name,
-			  int *toolbar,
-			  int *position)
-{
-	int n_toolbars, n_items;
-	int t,i;
-
-	n_toolbars = egg_toolbars_model_n_toolbars (EGG_TOOLBARS_MODEL (model));
-
-	for (t = 0; t < n_toolbars; t++)
-	{
-		n_items = egg_toolbars_model_n_items
-				(EGG_TOOLBARS_MODEL (model), t);
-
-		for (i = 0; i < n_items; i++)
-		{
-			const char *i_name;
-			gboolean is_separator;
-
-			i_name = egg_toolbars_model_item_nth
-					(EGG_TOOLBARS_MODEL (model), t, i,
-					 &is_separator);
-			g_return_val_if_fail (i_name != NULL, FALSE);
-
-			if (strcmp (i_name, action_name) == 0)
-			{
-				*toolbar = t;
-				*position = i;
-
-				return TRUE;
-			}
-		}
-	}
-
-	return FALSE;
 }
 
 void
