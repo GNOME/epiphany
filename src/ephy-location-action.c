@@ -442,6 +442,7 @@ actions_child_added_cb (EphyNode *node,
 static void
 actions_child_changed_cb (EphyNode *node,
 		          EphyNode *child,
+			  guint property_id,
 		          EphyLocationAction *action)
 {
 	update_actions_list (action);

@@ -610,7 +610,10 @@ sync_topic_properties (GtkAction *action, EphyNode *bmk)
 }
 
 static void
-topic_child_changed_cb (EphyNode *node, EphyNode *child, GtkAction *action)
+topic_child_changed_cb (EphyNode *node,
+			EphyNode *child,
+			guint property_id,
+			GtkAction *action)
 {
 	gulong id;
 

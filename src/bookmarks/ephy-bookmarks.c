@@ -440,34 +440,16 @@ ephy_setup_history_notifiers (EphyBookmarks *eb)
 }
 
 static void
-bookmarks_changed_cb (EphyNode *node,
-		      EphyNode *child,
-		      EphyBookmarks *eb)
+update_bookmark_keywords (EphyBookmarks *eb, EphyNode *bookmark)
 {
-	ephy_bookmarks_save_delayed (eb, BOOKMARKS_SAVE_DELAY);
-}
-
-static void
-bookmarks_removed_cb (EphyNode *node,
-		      EphyNode *child,
-		      guint old_index,
-		      EphyBookmarks *eb)
-{
-	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
-	ephy_bookmarks_save_delayed (eb, BOOKMARKS_SAVE_DELAY);
-}
-
-static char *
-get_topics_list (EphyBookmarks *eb,
-		 EphyNode *bookmark,
-		 gboolean *no_topics)
-{
+	GValue value = { 0, };
 	GPtrArray *children;
 	int i;
 	GString *list;
+	const char *title;
+	char *normalized_keywords, *case_normalized_keywords;
 
 	list = g_string_new (NULL);
-	*no_topics = TRUE;
 
 	children = ephy_node_get_children (eb->priv->keywords);
 	for (i = 0; i < children->len; i++)
@@ -485,25 +467,77 @@ get_topics_list (EphyBookmarks *eb,
 			topic = ephy_node_get_property_string
 				(kid, EPHY_NODE_KEYWORD_PROP_NAME);
 			g_string_append (list, topic);
-			*no_topics = FALSE;
+			g_string_append (list, " ");
 		}
 	}
 
-	return g_string_free (list, FALSE);
-}
+	title = ephy_node_get_property_string
+		(bookmark, EPHY_NODE_BMK_PROP_TITLE);
+	g_string_append (list, " ");
+	g_string_append (list, title);
 
-static void
-update_topics_list (EphyNode *bookmark, const char *list)
-{
-	GValue value = { 0, };
+	normalized_keywords = g_utf8_normalize (list->str, -1, G_NORMALIZE_ALL);
+	case_normalized_keywords = g_utf8_casefold (normalized_keywords, -1);
 
 	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, list);
+	g_value_set_string (&value, case_normalized_keywords);
 	ephy_node_set_property (bookmark, EPHY_NODE_BMK_PROP_KEYWORDS,
 			        &value);
 	g_value_unset (&value);
+
+	g_string_free (list, TRUE);
+	g_free (normalized_keywords);
+	g_free (case_normalized_keywords);
 }
 
+static void
+bookmarks_changed_cb (EphyNode *node,
+		      EphyNode *child,
+		      guint property_id,
+		      EphyBookmarks *eb)
+{
+	if (property_id == EPHY_NODE_BMK_PROP_TITLE)
+	{
+		update_bookmark_keywords (eb, child);
+	}
+
+	ephy_bookmarks_save_delayed (eb, BOOKMARKS_SAVE_DELAY);
+}
+
+static void
+bookmarks_removed_cb (EphyNode *node,
+		      EphyNode *child,
+		      guint old_index,
+		      EphyBookmarks *eb)
+{
+	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
+	ephy_bookmarks_save_delayed (eb, BOOKMARKS_SAVE_DELAY);
+}
+
+static gboolean
+bookmark_is_categorized (EphyBookmarks *eb, EphyNode *bookmark)
+{
+	GPtrArray *children;
+	int i;
+
+	children = ephy_node_get_children (eb->priv->keywords);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+
+		kid = g_ptr_array_index (children, i);
+
+		if (kid != eb->priv->notcategorized && 
+		    kid != eb->priv->favorites &&
+		    kid != eb->priv->bookmarks &&
+		    ephy_node_has_child (kid, bookmark))
+		{
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
 
 static void
 topics_removed_cb (EphyNode *node,
@@ -518,22 +552,17 @@ topics_removed_cb (EphyNode *node,
 	for (i = 0; i < children->len; i++)
 	{
 		EphyNode *kid;
-		gboolean no_topics;
-		char *list;
 
 		kid = g_ptr_array_index (children, i);
-		list = get_topics_list (eb, kid, &no_topics);
 
-		if (no_topics &&
+		if (bookmark_is_categorized (eb, kid) &&
 		    !ephy_node_has_child (eb->priv->notcategorized, kid))
 		{
 			ephy_node_add_child
 				(eb->priv->notcategorized, kid);
 		}
 
-		update_topics_list (kid, list);
-
-		g_free (list);
+		update_bookmark_keywords (eb, kid);
 	}
 
 	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
@@ -1146,14 +1175,9 @@ ephy_bookmarks_set_keyword (EphyBookmarks *eb,
 			    EphyNode *keyword,
 			    EphyNode *bookmark)
 {
-	gboolean no_topics;
-	char *list;
-
 	if (ephy_node_has_child (keyword, bookmark)) return;
 
 	ephy_node_add_child (keyword, bookmark);
-
-	list = get_topics_list (eb, bookmark, &no_topics);
 
 	if (ephy_node_has_child (eb->priv->notcategorized, bookmark))
 	{
@@ -1162,8 +1186,7 @@ ephy_bookmarks_set_keyword (EphyBookmarks *eb,
 			(eb->priv->notcategorized, bookmark);
 	}
 
-	update_topics_list (bookmark, list);
-	g_free (list);
+	update_bookmark_keywords (eb, bookmark);
 
 	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
 }
@@ -1173,16 +1196,11 @@ ephy_bookmarks_unset_keyword (EphyBookmarks *eb,
 			      EphyNode *keyword,
 			      EphyNode *bookmark)
 {
-	gboolean no_topics;
-	char *list;
-
 	if (!ephy_node_has_child (keyword, bookmark)) return;
 
 	ephy_node_remove_child (keyword, bookmark);
 
-	list = get_topics_list (eb, bookmark, &no_topics);
-
-	if (no_topics &&
+	if (!bookmark_is_categorized (eb, bookmark) &&
 	    !ephy_node_has_child (eb->priv->notcategorized, bookmark))
 	{
 		LOG ("Add to not categorized bookmarks")
@@ -1190,8 +1208,7 @@ ephy_bookmarks_unset_keyword (EphyBookmarks *eb,
 			(eb->priv->notcategorized, bookmark);
 	}
 
-	update_topics_list (bookmark, list);
-	g_free (list);
+	update_bookmark_keywords (eb, bookmark);
 
 	g_signal_emit (G_OBJECT (eb), ephy_bookmarks_signals[TREE_CHANGED], 0);
 }

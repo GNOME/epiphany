@@ -414,7 +414,10 @@ sync_topic_properties (GtkAction *action, EphyNode *bmk)
 }
 
 static void
-topic_child_changed_cb (EphyNode *node, EphyNode *child, EphyBookmarksMenu *menu)
+topic_child_changed_cb (EphyNode *node,
+			EphyNode *child,
+			guint property_id,
+			EphyBookmarksMenu *menu)
 {
 	GtkAction *action;
 	char name[64];

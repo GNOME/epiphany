@@ -193,6 +193,7 @@ root_child_added_cb (EphyNode *node,
 static void
 root_child_changed_cb (EphyNode *node,
 		       EphyNode *child,
+		       guint property_id,
 		       EphyCompletionModel *model)
 {
 	GtkTreePath *path;
