@@ -10,7 +10,8 @@ art_DATA = \
 	epiphany-viewsource.png \
 	epiphany-send-link.png	\
 	epiphany-bookmarks.png \
-	epiphany-tab-loading.gif
+	epiphany-tab-loading.gif \
+	hand-open.png
 
 appicon_DATA = epiphany-bookmarks.png
 appicondir = $(datadir)/pixmaps

@@ -361,10 +361,14 @@ set_drag_cursor (GtkWidget *widget)
   if (widget->window)
     {
       GdkCursor *cursor;
+      GdkPixbuf *pixbuf;
 
-      cursor = gdk_cursor_new (GDK_FLEUR);
+      pixbuf = gdk_pixbuf_new_from_file (CURSOR_DIR "/art/hand-open.png", NULL);
+      cursor = gdk_cursor_new_from_pixbuf (gdk_display_get_default (),
+					   pixbuf, 0, 0);
       gdk_window_set_cursor (widget->window, cursor);
       gdk_cursor_unref (cursor);
+      g_object_unref (pixbuf);
     }
 }
 
