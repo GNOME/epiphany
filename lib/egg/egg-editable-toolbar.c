@@ -298,13 +298,26 @@ set_item_drag_source (GtkWidget *item,
     {
       const char *stock_id;
       GValue value = { 0, };
-                                                                                                                             
+      GdkPixbuf *pixbuf;
+
       g_value_init (&value, G_TYPE_STRING);
       g_object_get_property (G_OBJECT (action), "stock_id", &value);
-                                                                                                                             
       stock_id = g_value_get_string (&value);
-      gtk_drag_source_set_icon_stock
-	(item, stock_id ? stock_id : GTK_STOCK_DND);
+
+      if (stock_id != NULL)
+        {
+          pixbuf = gtk_widget_render_icon (item, stock_id,
+				           GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
+        }
+      else
+        {
+          pixbuf = gtk_widget_render_icon (item, GTK_STOCK_DND,
+					   GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
+        }
+
+      gtk_drag_source_set_icon_pixbuf (item, pixbuf);
+      g_object_unref (pixbuf);
+
       g_value_unset (&value);
     }
 }

@@ -384,6 +384,7 @@ toolbar_setup_actions (Toolbar *t)
 	action = g_object_new (EPHY_TYPE_ZOOM_ACTION,
 			       "name", "Zoom",
 			       "label", _("Zoom"),
+			       "stock_id", GTK_STOCK_ZOOM_IN,
 			       "tooltip", _("Adjust the text size"),
 			       "zoom", 1.0,
 			       NULL);

@@ -1,3 +1,16 @@
+2003-12-09  Jorn Baayen  <jorn@nl.linux.org>
+
+	* lib/egg/egg-editable-toolbar.c: (set_item_drag_source):
+	* lib/egg/egg-toolbar-editor.c: (compare_func), (sort_list),
+	(editor_drag_data_received_cb), (editor_drag_data_delete_cb),
+	(editor_create_item), (update_editor_sheet),
+	(egg_toolbar_editor_add_action), (egg_toolbar_editor_load_actions):
+	* src/toolbar.c: (toolbar_setup_actions):
+
+	Make toolbar editing drag icons use the same icon size as the
+	actual toolbar icons; sort actions in the toolbar editor; give
+	the zoom action a zoom icon.
+
 2003-12-09  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* autogen.sh:
