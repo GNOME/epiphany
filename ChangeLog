@@ -1,5 +1,14 @@
 2004-12-31  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/popup-commands.c: (image_open_uri),
+	(save_source_completed_cb), (save_temp_source),
+	(popup_cmd_open_image):
+
+	Make "Open Image" open the image in the default application.
+	Fixes bug #138396.
+
+2004-12-31  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/downloader-view.c: (progress_cell_data_func):
 	* embed/ephy-encodings.c:
 	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init):

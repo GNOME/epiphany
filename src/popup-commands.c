@@ -32,6 +32,10 @@
 #include <string.h>
 #include <glib/gi18n.h>
 #include <gtk/gtkclipboard.h>
+#include <libgnomevfs/gnome-vfs-utils.h>
+#include <libgnomevfs/gnome-vfs-file-info.h>
+#include <libgnomevfs/gnome-vfs-ops.h>
+#include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
 static EphyEmbedEvent *
 get_event_info (EphyWindow *window)
@@ -360,12 +364,103 @@ popup_cmd_open_frame (GtkAction *action,
 	g_free (location);
 }
 
+static void
+image_open_uri (const char *address)
+{
+	GList *uris = NULL;
+	char *canonical;
+	GnomeVFSMimeApplication *app = NULL;
+	GnomeVFSFileInfo *info;
+
+	canonical = gnome_vfs_make_uri_canonical (address);
+
+	info = gnome_vfs_file_info_new ();
+	if (gnome_vfs_get_file_info (canonical, info,
+				     GNOME_VFS_FILE_INFO_GET_MIME_TYPE |
+				     GNOME_VFS_FILE_INFO_FORCE_SLOW_MIME_TYPE) == GNOME_VFS_OK &&
+	    (info->valid_fields & GNOME_VFS_FILE_INFO_FIELDS_MIME_TYPE) &&
+	    info->mime_type != NULL &&
+	    info->mime_type[0] != '\0')
+	{
+		app = gnome_vfs_mime_get_default_application (info->mime_type);
+	}
+
+	if (app != NULL)
+	{
+		/* FIXME rename tmp file to right extension ? */
+		uris = g_list_append (uris, canonical);
+		gnome_vfs_mime_application_launch (app, uris);
+		gnome_vfs_mime_application_free (app);
+		g_list_free (uris);
+	}
+	else
+	{
+		/* FIXME We should really warn the user here */
+
+		g_warning ("Cannot find an application to open %s with.", address);
+	}
+
+	g_free (canonical);
+	gnome_vfs_file_info_unref (info);
+}
+
+static void
+save_source_completed_cb (EphyEmbedPersist *persist)
+{
+	const char *dest;
+
+	dest = ephy_embed_persist_get_dest (persist);
+	g_return_if_fail (dest != NULL);
+
+	ephy_file_delete_on_exit (dest);
+
+	image_open_uri (dest);
+}
+
+static void
+save_temp_source (const char *address)
+{
+	char *tmp, *base;
+	EphyEmbedPersist *persist;
+	const char *static_temp_dir;
+
+	static_temp_dir = ephy_file_tmp_dir ();
+	if (static_temp_dir == NULL)
+	{
+		return;
+	}
+
+	base = g_build_filename (static_temp_dir, "viewimageXXXXXX", NULL);
+	tmp = ephy_file_tmp_filename (base, "tmp"); /* FIXME */
+	g_free (base);
+	if (tmp == NULL)
+	{
+		return;
+	}
+
+	persist = EPHY_EMBED_PERSIST
+		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
+
+	ephy_embed_persist_set_source (persist, address);
+	ephy_embed_persist_set_flags (persist, EMBED_PERSIST_NO_VIEW);
+	ephy_embed_persist_set_dest (persist, tmp);
+
+	g_signal_connect (persist, "completed",
+			  G_CALLBACK (save_source_completed_cb), NULL);
+
+	ephy_embed_persist_save (persist);
+	g_object_unref (persist);
+
+	g_free (tmp);
+}
+
 void
 popup_cmd_open_image (GtkAction *action,
 		      EphyWindow *window)
 {
 	EphyEmbedEvent *info;
-	const char *location;
+	const char *address;
+	char *scheme;
 	const GValue *value;
 	EphyEmbed *embed;
 
@@ -374,7 +469,18 @@ popup_cmd_open_image (GtkAction *action,
 
 	info = get_event_info (window);
 	ephy_embed_event_get_property (info, "image", &value);
-	location = g_value_get_string (value);
+	address = g_value_get_string (value);
 
-	ephy_embed_load_url (embed, location);
+	scheme = gnome_vfs_get_uri_scheme (address);
+
+	if (strcmp (scheme, "file") == 0)
+	{
+		image_open_uri (address);
+	}
+	else
+	{
+		save_temp_source (address);
+	}
+
+	g_free (scheme);
 }
