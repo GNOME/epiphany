@@ -23,10 +23,12 @@
 #endif
 
 #include "mozilla-download.h"
+#include "mozilla-version.h"
 
 #include "ephy-debug.h"
 
 #include <nsEmbedString.h>
+#include <nsMemory.h>
 
 static void
 mozilla_download_class_init (MozillaDownloadClass *klass);
@@ -180,13 +182,24 @@ impl_get_mime (EphyDownload *download)
 {
 	MozDownload *mozDownload;
 	nsCOMPtr<nsIMIMEInfo> mime;
-        nsEmbedCString mimeType;
+	nsEmbedCString mimeType;
 
 	mozDownload = MOZILLA_DOWNLOAD (download)->priv->moz_download;
 
 	mozDownload->GetMIMEInfo (getter_AddRefs(mime));
-        if (mime == nsnull) return NULL;
+        if (!mime) return NULL;
+
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
         mime->GetMIMEType(mimeType);
+#else
+	char *tmp = nsnull;
+	mime->GetMIMEType(&tmp);
+	mimeType.Assign(tmp);
+	if (tmp)
+	{
+		nsMemory::Free (tmp);
+	}
+#endif
 
 	return g_strdup (mimeType.get());
 }
