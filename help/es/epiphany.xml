@@ -1,0 +1,2621 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+  <!ENTITY legal SYSTEM "legal.xml">
+  <!ENTITY appversion "1.4">
+  <!ENTITY manrevision "1.4">
+  <!ENTITY date "May 2004">
+  <!ENTITY fr "<application>Epiphany</application>">
+  <!-- Information about the entities
+       The legal.xml file contains legal information, there is no need to edit the file. 
+       Use the appversion entity to specify the version of the application.
+       Use the manrevision entity to specify the revision number of this manual.
+       Use the date entity to specify the release date of this manual.
+       Use the fr entity to specify the name of the application. -->
+]>
+<!-- 
+      (Do not remove this comment block.)
+  Maintained by the GNOME Documentation Project
+  http://developer.GNOME.org/projects/gdp
+  Template version: 2.0 beta
+  Template last modified Jan 30, 2002
+-->
+<!-- =============Document Header ============================= -->
+<article id="index" lang="es">
+<!-- please do not change the id; for translations, change lang to -->
+<!-- appropriate code -->
+  <articleinfo> 
+    <title>Manual de Epiphany &manrevision;</title>       
+
+    <copyright>
+      <year>2003</year>
+      <holder>Patanjali Somayaji</holder>
+    </copyright>
+    <copyright>
+      <year>2003</year>
+      <holder>David Bordoley</holder>
+    </copyright>
+    <copyright>
+      <year>2004</year>
+      <holder>Piers Cornwell</holder>
+    </copyright>
+
+<!-- translators: uncomment this:-->
+
+  <copyright>
+   <year>2004</year>
+   <holder>Francisco F. Serrador (Traducción al español)</holder>
+  </copyright>
+
+  
+<!-- An address can be added to the publisher information.  If a role is 
+     not specified, the publisher/author is the same for all versions of the 
+     document.  -->
+    <publisher> 
+      <publishername> GNOME Documentation Project </publishername> 
+    </publisher> 
+
+   &legal; <!-- This file contains link to license for the
+   documentation (GNU FDL), and other legal stuff such as "NO
+   WARRANTY" statement. Please do not change any of this. -->
+
+    <authorgroup> 
+      <author> 
+	<firstname>Patanjali</firstname> 
+	<surname>Somayaji</surname> 
+	<affiliation> 
+	  <orgname>GNOME Documentation Project</orgname> 
+	  <address><email>patanjali@codito.com</email></address> 
+	</affiliation> 
+      </author> 
+      <author> 
+	<firstname>David</firstname> 
+	<surname>Bordoley</surname> 
+	<affiliation> 
+	  <orgname>Epiphany Development Team</orgname> 
+	  <address><email>bordoley@msu.edu</email></address> 
+	</affiliation> 
+      </author> 
+      <author> 
+	<firstname>Piers</firstname> 
+	<surname>Cornwell</surname> 
+	<affiliation> 
+	  <orgname>Epiphany Development Team</orgname> 
+	  <address><email>piers@gnome.org</email></address> 
+	</affiliation> 
+      </author>
+    </authorgroup>
+
+
+    <releaseinfo>
+      Este manual describe la versión &appversion; de &fr;.
+    </releaseinfo>
+  </articleinfo>
+
+  <indexterm zone="index"> 
+    <primary>Epiphany</primary> 
+  </indexterm> 
+  <indexterm zone="index"> 
+    <primary>epiphany</primary> 
+  </indexterm>
+  <indexterm zone="index"> 
+    <primary>Navegar</primary> 
+  </indexterm>
+
+<!-- ============= Document Body ================================== -->
+<!-- ============= Introduction =================================== -->
+<!-- Use the Introduction section to give a brief overview of what
+     the application is and what it does. -->
+  <sect1 id="fr-introduction"> 
+    <title>Introducción</title> 
+    <para>
+      &fr; es el navegador web de GNOME. &fr; intente ser simple de usar 
+      y cumplir con los estándares.
+   </para>
+  </sect1>
+
+<!-- ============= Getting Started ================================ -->
+  <sect1 id="ephy-getting-started">
+    <title>Iniciando</title>
+
+      <sect2 id="ephy-to-open-browser-window">
+        <title>Para abrir una ventana del navegador</title>
+        <para>
+          Puede abrir una ventana del navegador de las siguientes maneras:
+        </para>
+        <variablelist>
+          <varlistentry>
+            <term><guimenu>Aplicaciones</guimenu> menu</term>
+            <listitem>
+              <para>
+                Elija <menuchoice> <guisubmenu>Internet</guisubmenu>
+                <guimenuitem>Navegador web</guimenuitem> </menuchoice>.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>Línea de órdenes</term>
+            <listitem>
+              <para>
+                Teclee <command>epiphany</command>, y pulse 
+                <keycap>Retorno</keycap>.
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </sect2>
+      <sect2 id="ephy-to-open-bookmarks">
+        <title>Para abrir una ventana de marcadores</title>
+        <para>
+          Puede abrir una ventana de marcadores de las siguientes maneras:
+        </para>
+        <variablelist>
+          <varlistentry>
+            <term>
+              Menú <guimenu>Aplicaciones</guimenu>
+            </term>
+            <listitem>
+   	      <para>
+                Elija <menuchoice> <guisubmenu>Internet</guisubmenu>
+                <guimenuitem>Marcadores web</guimenuitem> </menuchoice>. 
+              </para>
+            </listitem>
+          </varlistentry>
+	
+          <varlistentry>
+            <term>
+              Línea de órdenes
+            </term>
+            <listitem>
+              <para>
+               Teclee <command>epiphany -b</command>, y después pulse <keycap>Retorno</keycap>.
+              </para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>
+              Desde el menú <guimenu>Marcadores</guimenu> 
+            </term>
+            <listitem>
+              <para>
+                Elija <menuchoice> <guimenu>Marcadores</guimenu>
+                <guimenuitem>Editar marcadores</guimenuitem>
+                </menuchoice> desde la ventana principal de &fr;. 
+              </para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>
+              Desde la barra de herramientas de &fr;
+            </term>
+            <listitem>
+              <para>
+                Pulse en el botón de Marcadores en la barra de herramientas de la ventana principal.
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </sect2>
+  </sect1>
+
+<!-- ============= Browser Windows ============================ -->
+  <sect1 id="ephy-browser-windows">
+    <title>Ventanas de navegación</title>
+    <para>
+      Las ventanas de navegación le permiten navegar entre las páginas web. 
+      <xref linkend="ephy-screenshot"/> muestra una ventana de navegación mostrando 
+ 	la página inicial.
+    </para>
+    <figure id="ephy-screenshot">
+      <title>Ventana de navegación mostrando la página inicial</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/ephy-screenshot.png" format="PNG"/>
+          </imageobject>
+          <textobject>
+            <phrase>Una página que se está mostrando en una ventana de navegación. Con: Barra de menú, barra de herramientas, entrada de dirección, barra de marcadores, ver panel</phrase>
+          </textobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+    <para>
+      <xref linkend="epiphany-TBL-1"/> describe los componentes de una ventana de navegación.
+    </para>
+    <table frame="topbot" id="epiphany-TBL-1">
+      <title>Componentes de la ventana de navegación</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>
+                Componente
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Descripción
+              </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry valign="top">
+              <para>
+                Barra de menú
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Contiene menús que puede usar para realizar tareas en una ventana de navegación.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                Barra de herramientas
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Contienen botones que puedes usar para efectuar tareas en una ventana de navegación.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                Entrada de direcciones
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Caja desplegable que puede usar para introducir direcciones web o términos de búsqueda. 
+              </para>
+            </entry>
+          </row>
+	  <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                Barra de marcadores
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Contiene menús, botones y campos de texto que puede usar para acceder rápidamente a los marcadores y a las búsquedas en la web.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                Panel de visualización
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Muestra los contenidos de la página vista.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                Barra de estado
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Muestra la información del estado.
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <para>
+      También puede abrir un menú emergente desde las ventanas de 
+      navegación. Para abrir este menú emergente, pulse con el botón  
+      derecho en una ventana de navegación. Los elementos en este menú
+      dependen de dónde pulse con el botón derecho. Por ejemplo, cuando
+      cuando pulse con el botón derecho sobre un enlace, puede elegir 
+      elementos relacionados con el enlace. Cuando pulse con el botón 
+      derecho en la propia página web, podrá elegir elementos relacionados
+      con la visualización de la página web.
+    </para>
+  </sect1>
+
+<!-- ============= Browsing the Web =========================== -->
+  <sect1 id="ephy-browsing-web">
+      <title>Navegar por la web</title>
+      <para>
+      </para>
+        <sect2 id="using-address-entry">
+          <title>Usar la entrada de dirección</title>
+          <para>
+            La entrada de dirección se usa para introducir direcciones 
+ 	    web o buscar términos. Cualquier palabra introducida en la
+	    entrada de dirección se busca en la base de datos de 
+	    marcadores y en la base de datos del histórico. Si algo 
+	    coincide, se muestran en una lista desplegable y puede 
+	    seleccionarlo entonces. La página web seleccionada será cargada
+            en una ventana de navegación o solapa.
+          </para>
+          <para>
+            Puede teclear un marcador o un término que sea parte de la 
+            dirección o título de cualquier página almacenada en sus 
+            marcadores. Estos términos se buscarán en la base de datos de 
+            marcadores para ver si coinciden con algo. Para más información,
+            vea <xref linkend="overview-of-bookmarks"/>.
+          </para>
+        </sect2>
+	<sect2 id="using-toolbar">
+          <title>Uso de la barra de herramientas</title>
+          <para>
+            La barra de herramientas contiene un número de atajos a funciones
+	    usadas comúnmente. Puede usar la barra de tareas para navegar 
+            a través del histórico web pulsando los botones atrás y adelante. 
+            Finalmente las páginas pueden ser recargadas pulsando el botón
+            de recarga.
+          </para>
+          <para>
+            Puede personalizar los botones que aparecen en su barra de tareas 
+            usando el Editor de barras de tareas: para más detalles, vea 
+            <xref linkend="to-edit-toolbars"/>.
+          </para>
+        </sect2>
+	<sect2 id="using-bookmarks-bar">
+          <title>Uso de la barra de marcadores</title>
+          <para>
+            La barra de marcadores permite tener enlaces a sus sitios web favoritos
+	    en una barra de tareas para acceso fácil. Para más detalles acerca de 
+            añadir marcadores a la barra de marcadores, vea el <xref 
+            linkend="to-add-bookmark-or-topic-to-bookmarks-bar"/>.
+          </para>
+        </sect2>
+	<sect2 id="using-fullscreen-mode">
+          <title>Uo del modo a pantalla completa</title>
+          <para>
+            El modo a pantalla completa permite al navegador usar toda la pantalla para
+	    el área visible. Para entrar en el modo «Pantalla completa», seleccione  
+            <menuchoice> <guimenu>Ver</guimenu> <guimenuitem>Pantalla completa
+            </guimenuitem> </menuchoice>.
+          </para>
+          <para>
+            Puede salir del modo a pantalla completa pulsando el botón <guibutton>Salir 
+            de pantalla completa</guibutton>.
+          </para>
+        </sect2>
+	<sect2 id="to-open-new-window">
+          <title>Para abrir una ventana nueva</title>
+          <para>
+            Para abrir una ventana nueva, elija <menuchoice> <guimenu>
+            Archivo</guimenu> <guimenuitem>Ventana nueva</guimenuitem>
+	    </menuchoice>.
+	  </para>
+        </sect2>
+	<sect2 id="to-open-new-tab">
+          <title>Para abrir una solapa nueva</title>
+          <para>
+            Para abrir una solapa nueva, elija <menuchoice> <guimenu>
+            Archivo</guimenu> <guimenuitem>Solapa nueva</guimenuitem>
+            </menuchoice>. La solapa nueva se colocará a la derecha de cualquier 
+            solapa ya existente.
+	  </para>
+	</sect2>
+	<sect2 id="ephy-to-open-file">
+          <title>Para abrir un archivo</title>
+          <para>
+            Para abrirun archivo, elija <menuchoice> <guimenu>Archivo
+            </guimenu> <guimenuitem>Abrir...</guimenuitem>
+            </menuchoice> para mostrar el diálogo <guilabel>Abrir archivo</guilabel>. 
+            Seleccione el archivo que quiera abrir, después pulse  
+            <guibutton>Aceptar</guibutton>. El archivo se muestra en la 
+            ventana del navegador.
+          </para>
+        </sect2>
+	<sect2 id="to-save-page-to-file">
+          <title>Para guardar una página en un archivo</title>
+          <para>
+             Para guardar una página en un archivo. elija <menuchoice> <guimenu>
+             Archivo</guimenu> <guimenuitem>Guardar como</guimenuitem> 
+             </menuchoice>. Introduzca un nombre para el archivo en la caja de diálogo<guilabel>
+             Guardar como</guilabel>, después pulse en el botón <guibutton>Aceptar
+             </guibutton>.
+          </para>
+        </sect2>
+        <sect2 id="using-print-setup">
+          <title>Usar la configuración de impresión</title>
+          <para>
+            La configuración de impresión le permite a usted configurar cómo se imprimen las páginas web.
+          </para>
+          <variablelist>
+            <varlistentry>
+              <term>Márgenes</term>
+              <listitem>
+                <para>
+                  La distancia desde el borde de la hoja al contenido.
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>Colores</term>
+              <listitem>
+                <para>
+                  Imprimir en color o en escala de grises.
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>Pie de página</term>
+              <listitem>
+                <para>
+                  Elija si quiere mostrar números de página y la fecha actual 
+                  en la parte inferior de cada página.
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>Cabeceras</term>
+              <listitem>
+                <para>
+                  Elija si quiere mostrar el título de la página web y la dirección 
+                  en la parte superior de cada página.
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>Tamaño</term>
+              <listitem>
+                <para>
+                  El tamaño de la hoja de papel.
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>Orientación</term>
+              <listitem>
+                <para>
+                  Define si la parte superior de la página es el borde corto (vertical) o 
+                  el largo (apaisado) del papel.
+                </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        </sect2>
+        <sect2 id="using-print-preview">
+          <title>Uo de la vista preliminar</title>
+          <para>
+            Con la vista preliminar de impresión, puede ver cómo será la apariencia de una página 
+            una vez sea impresa. Para ver una vista preliminar de impresión de la página actual,
+            elija <menuchoice> <guimenu>Archivo</guimenu> <guimenuitem>Impresión preliminar</guimenuitem> 
+            </menuchoice>. 
+          </para>
+        </sect2>
+	<sect2 id="to-print-page">
+          <title>Para imprimir una página</title>
+          <para>
+            Para imprimir una página, elija <menuchoice> <guimenu>Archivo</guimenu>
+            <guimenuitem>Imprimir</guimenuitem> </menuchoice>. Introduzca el  
+            nombre de la impresora en el campo <guilabel>Impresora</guilabel> 
+            o introduzca un nombre en el campo <guilabel>Archivo</guilabel>  
+            para imprimir en un archivo.
+          </para>
+          <para>
+            En la sección <guilabel>Rango de páginas</guilabel>, elija <guilabel>
+            Todas las páginas</guilabel> para imprimir la página web entera, <guilabel>Selección
+            </guilabel> para imprimir la parte de la página web seleccionada actualmente o
+            <guilabel>Páginas</guilabel> para imprimir el rango de páginas que usted especifique.
+          </para>
+        </sect2>
+	<sect2 id="to-find-text-in-page">
+          <title>Para buscar texto en una página</title>
+	  <para>
+            Para buscar una cadena de texto en una página, realice los siguientes pasos:
+            </para>
+            <orderedlist> 
+              <listitem>
+                <para>
+                  Elija <menuchoice> <guimenu>Editar</guimenu> 
+                  <guimenuitem>Buscar</guimenuitem> </menuchoice> para 
+                  mostrar el diálogo <guilabel>Buscar</guilabel>.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Teclee la cadena que quiera encontrar, en el
+                  campo <guilabel>Buscar</guilabel>.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Seleccione la opción <guilabel>Sensible a capitalización</guilabel> 
+                  para buscar las apariciones de la cadena que coincidan con la  
+                  capitalización del texto que teclee.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Seleccione la opción <guilabel>Volver al principio</guilabel> para 
+                  buscar hasta el final de la página y luego continuar la búsqueda
+		  desde el principio de la página.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Pulse <guibutton>Siguiente</guibutton> para buscar la página
+                  con la primera aparición de la cadena. Si se encuentra la cadena, el 
+		  cursor se mueve hasta la cadena, y la cadena se selecciona.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Para encontrar la siguiente aparición de la cadena, pulse el botón
+                  <guibutton>Siguiente</guibutton>.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Para buscar la aparición anterior de la cadena, pulse el botón
+                  <guibutton>Anterior</guibutton>.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Para finalizar la búsqueda, pulse <guibutton>Cerrar
+                  </guibutton>.
+                </para>
+              </listitem>
+            </orderedlist>
+        </sect2>	
+	<sect2 id="to-change-zoom">
+	  <title>Para cambiar el factor de ampliación</title>
+	  <para>
+            Puede usar los siguientes métodos para redimensionar la vista de una
+	    página
+          </para>
+	  <itemizedlist>
+            <listitem>
+              <para>Para ampliar la vista de una página, elija <menuchoice>
+                <guimenu>Ver</guimenu><guimenuitem>Ampliar</guimenuitem>
+                </menuchoice>.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Para reducir la vista de una página, elija <menuchoice>
+                <guimenu>Ver</guimenu><guimenuitem>Reducir</guimenuitem>
+                </menuchoice>.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Para ver la página y su estado actual, elija <menuchoice>
+                <guimenu>Ver</guimenu><guimenuitem>Tamaño normal</guimenuitem>
+                </menuchoice>.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </sect2>
+	<sect2 id="to-view-page-source">
+          <title>Para ver el código fuente de una página</title>
+          <para>
+            Para ver el código fuente de una página, elija <menuchoice> 
+            <guimenu>Ver</guimenu> <guimenuitem>Código fuente</guimenuitem> 
+            </menuchoice>. El código fuente se mostrará en su editor de texto 
+	    predeterminado.
+          </para>
+        </sect2>
+	<sect2 id="to-open-link">
+          <title>Para abrir enlaces</title>
+          <para>
+            Las páginas web contienen enlaces a otras páginas web, a menudo (pero no siempre)
+            indicados por un subrayado. Para seguir un enlace, púlselo con el botón izquierdo.
+          </para>
+          <variablelist>
+            <varlistentry>
+              <term>Para abrir un enlace como la página lo especifica</term>
+              <listitem>
+                <para>
+                  Pulse con el botón izquierdo sobre un enlace. El enlace quizá se abra en la ventana principal o
+                  en una ventana nueva de acuerdo con lo que el autor de la página especificó.
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>Para abrir un enlace en una solapa nueva</term>
+              <listitem>
+                <para>
+                  Pulse con el botón derecho del ratón y seleccione <guimenuitem>Abrir enlace en una solapa nueva 
+                  </guimenuitem>, pulse con el botón medio del ratón.
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>Para abrir un enlace en una ventana nueva</term>
+              <listitem>
+                <para>
+                  Pulse con el botón derecho del ratón y seleccione <guimenuitem>Abrir enlace en ventana nueva 
+                  </guimenuitem>.
+                </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        </sect2>
+	<sect2 id="to-download-link">
+          <title>Para descargar un enlace</title>
+          <para>
+            Para guardar el destino de un enlace, pulse con el botón derecho y
+  	    seleccione <guimenuitem>Descarar enlace</guimenuitem>. El archivo
+	    enlazado o el documento será guardado a su carpeta de descarga que 
+	    podrá establecer en <xref linkend="general-preferences"/>.
+          </para>
+        </sect2>
+	<sect2 id="to-switch-between-tabs">
+          <title>Para cambiar entre solapas</title>
+          <para>
+            Pulse la cabecera de una solapa para cambiar a ella.
+          </para>
+        </sect2>
+	<sect2 id="to-move-tabs">
+          <title>Para mover solapas</title>
+          <para>
+            Para recolocar las solapas en la ventana actual, seleccione
+           <menuchoice>
+            <guimenu>Solapas</guimenu> <guimenuitem>Mover solapa a la izquierda
+            </guimenuitem>
+            </menuchoice> o <menuchoice> <guimenu>Solapas</guimenu> 
+            <guimenuitem>Mover solapa a la derecha</guimenuitem></menuchoice>
+ 	    para mover la solapa actual. Puede arrastrar también las solapas para reordenarlas.
+          </para>
+          <para>
+            Para mover la solapa actual a una ventana nueva elija <menuchoice> 
+            <guimenu>Solapas</guimenu> <guimenuitem>Desacoplar solapa</guimenuitem>
+            </menuchoice>.
+          </para>
+        </sect2>
+  </sect1>
+
+<!-- ============= Managing Your Bookmarks ================ -->
+  <sect1 id="ephy-managing-bookmarks">
+      <title>Gestión de marcadores</title>
+      <para>
+      </para>
+	<sect2 id="overview-of-bookmarks">
+          <title>Una vista por encima del sistema de marcadores de Epiphany</title>
+          <para>
+            El sistema de marcadores es muy diferente del método jerárquico
+            de carpetas usado por la mayoría de los navegadores. Este diseño
+            es conforme a dos principios:
+            <itemizedlist>
+              <listitem>
+                <para>
+                  Construir un navegador con el interfaz más simple posible.
+	        </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Evitar la necesidad de que el usuario recuerde
+                  direcciones de sitios que quiera visitar.
+		</para>
+              </listitem>
+            </itemizedlist>
+          </para>
+          <para>
+            La forma jerárquica de organizar marcadores no funciona
+            bien para la mayoría de la gente. En vez de esta
+            aproximación, &fr; sigue una aproximación parecida a una
+            base de datos . Una dirección referente a un marcador se
+            almacena con algunos metadatos asociados con ella. Estos
+            metadatos se usan entonces para encontrar el marcador
+            después. Las versiones futuras de &fr; proporcionarán
+            formas útiles de buscar y extraer marcadores usando esta
+            base de datos.
+          </para>
+          <para>
+            En el sistema de marcadores de &fr;, las direcciones se
+            organizan asociando cada dirección con uno o más
+            temas. Por ejemplo, si uno fuera a almacenar un marcador para
+            <ulink type="http" url="http://developer.gnome.org">La
+            página de desarrolladores de GNOME</ulink>, en cualquier
+            otro navegador, el usuario quizá lo almacenaría bajo la
+            siguiente jerarquía:
+            <programlisting>
+            Development -> GNOME -> Página de desarrolladores de GNOME
+            </programlisting>
+	  </para>
+          <para>
+            En &fr;, la misma página podría asociarse con dos temas:
+            <programlisting>
+            Desarrollo -> Página de desarrolladores de GNOME
+            GNOME -> Página de desarroladores de GNOME
+            </programlisting>
+            Ahora el usuario puede acceder a su marcador tecleando el
+            tema «GNOME» o «Desarrollo» en la barra de direcciones. El
+            usuario puede también teclear cualquiera de las palabras
+            «Gnome», «desarrolladores», «página» o «inicial» en la
+            barra de dirección. Cualquiera de esos métodos despliega
+            una lista conteniendo el marcador requerido. Para todas
+            las formas de acceder a los marcadores, vea el <xref
+            linkend="to-access-a-bookmark"/>
+          </para>
+          <para>
+            <note>
+              <title>No hay subtemas</title>
+              <para>
+                &fr; sólo permite un único nivel de temas. Los temas
+                no pueden tener sub-temas.
+              </para>
+            </note>
+          </para>
+        </sect2>
+        <sect2 id="to-access-a-bookmark">
+          <title>Para acceder a un marcador</title>
+          <para>
+            La forma principal de acceder a marcadores es en la
+            ventana de marcadores. Para abrir la ventana de
+            marcadores, vea el <xref linkend="ephy-to-open-bookmarks"/>. 
+            Se usa una ventana a parte para organizar los marcadores
+            porque eso hace más fácil navegar, y también permite tener
+            funcionalidades de búsqueda y edición en el mismo
+            lugar. La colección de marcadores puede ser editada
+            directamente desde el escritorio. En el mismo lugar, es
+            posible ahora editar el título del marcador en línea,
+            añadir más temas, eliminar marcadores, asociarlos a mas
+            temas mediante arrastrar y soltar, editar las propiedades
+            de un marcador, etc.
+          </para>
+          <para>
+            Los marcadores también pueden accederse mediante:       
+            <itemizedlist>
+              <listitem>
+               <para>
+                 Tecleo en un tema en la barra de direcciones en la
+                 ventana principal, hace que se despliegue una lista
+                 de marcadores de esa categoría.
+		</para>
+              </listitem>
+              <listitem>
+               <para>
+                 Cada palabra tecleada en la barra de direcciones es
+                 buscada automáticamente en la base de datos de
+                 marcadores y los marcadores coincidentes se muestran
+                 en una lista desplegable debajo de la barra de dirección.
+		</para>
+              </listitem>
+              <listitem>
+               <para>
+                 El elemento de menú <guimenu>Marcador</guimenu> da un
+		 menú de todos los temas diferentes. Los marcadores
+		 relacionados con esos temas pueden entonces ser
+		 accedidos desde los submenús aquí. Esto es más
+		 cercano al método tradicional de acceso a los
+		 marcadores y se proporciona para mantener compatibilidad.
+		</para>
+              </listitem>
+              <listitem>
+               <para>
+                 La barra de marcadores puede usarse también para
+                 acceder a sus marcadores. Elija
+                 <menuchoice><guimenu>Ver</guimenu><guimenuitem>Barra
+                 de marcadores</guimenuitem></menuchoice> para añadir
+                 la barra de marcadores.
+                 Sin embargo, cada tema y marcador necesita ser
+                 configurado en el diálogo de marcadores para ser
+                 mostrado en esta barra. Esto puede usarse para
+                 organizar los marcadores usados con más frecuencia.
+	        </para>
+              </listitem>
+            </itemizedlist>
+          </para>
+        </sect2>
+	<sect2 id="to-create-new-bookmark">
+	  <title>Para crear un marcador nuevo</title>
+          <para>
+            Puede crear marcadores nuevos de varios formas.
+          </para>
+          <variablelist>
+            <varlistentry>
+              <term>
+                Ventana del navegador
+              </term>
+              <listitem>
+                <itemizedlist>
+                  <listitem>
+                    <para>
+                      Para marcar la página que está viendo
+                      actualmente, elija 
+                      <menuchoice><guimenu>Marcadores</guimenu>
+                      <guimenuitem>Añadir marcador...</guimenuitem>
+                      </menuchoice>.
+                    </para>
+                  </listitem>
+                  <listitem>
+                    <para>
+                      Para añadir un marcador de un enlace en la
+                      página que está viendo actualmente, pulse con el
+                      botón derecho en el enlace y elija <menuchoice>
+                      <guimenuitem>Añadir marcador...</guimenuitem>
+                      </menuchoice>.
+                    </para>
+                  </listitem>
+                </itemizedlist>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>
+                Ventana de histórico
+              </term>
+              <listitem>
+                <para>
+                  Para añadir un marcador del enlace seleccionado
+                  actualmente en ele histórico, elija
+                  <menuchoice><guimenu>Archivo</guimenu>
+                  <guimenuitem>Añadir marcador...</guimenuitem>
+                  </menuchoice>. Alternativamente, pulse el botón
+                  derecho en el enlace del histórico en la ventana del
+                  histórico, y después elija 
+                  <guimenuitem>Marcar enlace...</guimenuitem>.
+                </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        </sect2>
+	<sect2 id="to-select-bookmarks">
+          <title>Para seleccionar marcadores y temas</title>
+          <para>
+            Puede seleccionar marcadores y temas de varias formas. 
+            El <xref linkend="epiphany-TBL-2"/> describe cómo seleccionar
+            elementos en la ventana de marcadores.
+          </para>
+          <table frame="topbot" id="epiphany-TBL-2">
+            <title>Selección de elementos en la ventana de marcadores</title>
+            <tgroup cols="2" colsep="0" rowsep="0">
+              <colspec colname="colspec0" colwidth="36.36*"/>
+              <colspec colname="colspec2" colwidth="63.64*"/>
+              <thead>
+                <row rowsep="1">
+                  <entry valign="top">
+                    <para>
+                      Tarea
+                    </para>
+                  </entry>
+              	  <entry colname="colspec2" valign="top">
+                    <para>
+                      Acción
+                    </para>
+                  </entry>
+            	</row>
+              </thead>
+              <tbody>
+                <row>
+                  <entry colname="colspec0" valign="top">
+                    <para>
+                      Seleccione un marcador o tema
+                    </para>
+              	  </entry>
+              	  <entry colname="colspec2" valign="top">
+                    <para>
+                      Pulse en el marcador o tema.
+                    </para>
+              	  </entry>
+            	</row>
+            	<row>
+              	  <entry colname="colspec0" valign="top">
+                    <para>
+                      Selección de un grupo de marcadores contiguos.
+                    </para>
+              	  </entry>
+              	  <entry colname="colspec2" valign="top">
+                    <para>
+                      Pulse y mantenga pulsado
+                      <keycap>Mayúsculas</keycap>. Pulse en el primer
+                      marcador en el grupo, después pulse en el último
+                      marcador en el grupo.
+                    </para>
+                  </entry>
+            	</row>
+            	<row>
+              	  <entry colname="colspec0" valign="top">
+                    <para>
+                      Selección de varios marcadores
+                    </para>
+              	  </entry>
+              	  <entry colname="colspec2" valign="top">
+                    <para>
+                      Pulse y mantenga pulsado
+                      <keycap>Ctrl</keycap>. Pulse en el marcador que
+                      quiere seleccionar.
+                    </para>
+              	  </entry>
+            	</row>
+            	<row>
+              	  <entry colname="colspec0" valign="top">
+                    <para>
+                      Selección de todos los marcadores en un tema
+                    </para>
+              	  </entry>
+              	  <entry colname="colspec2" valign="top">
+                    <para>
+                      Elija <menuchoice><guimenu>Editar</guimenu><guimenuitem>
+                      Seleccionar todo</guimenuitem></menuchoice>.
+                    </para>
+              	  </entry>
+            	</row>
+              </tbody>
+            </tgroup>
+          </table>
+        </sect2>
+	<sect2 id="to-open-bookmark">
+          <title>Para abrir un marcador en una ventana o solapa nueva</title>
+          <variablelist>
+            <varlistentry>
+              <term>Para abrir un marcador en una ventana nueva
+              realice los pasos siguientes:</term>
+              <listitem>
+                <orderedlist>
+                  <listitem>
+                    <para>
+                       Seleccione el marcador que quiere abrir.
+                    </para>
+                  </listitem>
+                 <listitem>
+                   <para>
+                      Elija
+                      <menuchoice><guimenu>Archivo</guimenu><guimenuitem>Abrir
+                      en ventana
+                      nueva</guimenuitem></menuchoice>.
+                      Alternativamente, pulse en el marcador, después elija
+                      <menuchoice><guimenuitem>Abrir en ventana nueva</guimenuitem></menuchoice>.
+                   </para>
+                 </listitem>
+               </orderedlist>
+             </listitem>
+           </varlistentry>
+           <varlistentry>
+             <term>
+               Para abrir un marcador en una solapa nueva efectúe los
+               siguientes pasos:
+             </term>
+             <listitem>
+               <orderedlist>
+                 <listitem>
+                   <para>
+                     Seleccione el marcador que quiere abrir.
+                   </para>
+                 </listitem>
+                 <listitem>
+                   <para>
+                     Elija
+                     <menuchoice><guimenu>Archivo</guimenu><guimenuitem>Abrir
+                     en ventana nueva</guimenuitem></menuchoice>. Alternativamente, 
+                     pulse el botón derecho en el marcador, después
+                     elija <menuchoice><guimenuitem>Abrir en una
+                     solapa nueva</guimenuitem></menuchoice>.
+                   </para>
+                 </listitem>
+               </orderedlist>
+             </listitem>
+            </varlistentry>
+	  </variablelist>
+        </sect2>
+	<sect2 id="to-create-new-topic">
+          <title>Para crear una tema nuevo</title>
+          <para>
+            Para crear un tema nuevo, elija <menuchoice> <guimenu>Archivo</guimenu>
+            <guimenuitem>Tema nuevo</guimenuitem></menuchoice> en la
+            ventana de marcadores. Se crea un tema nuevo, puede
+            introducir el nombre del tema, Los temas aparecerán como
+            submenús en el menú <guimenu>Marcadores</guimenu>.
+          </para>
+        </sect2>
+	<sect2 id="to-add-bookmark-to-topic">
+          <title>Para añadir un marcador a un tema</title>
+          <para>
+            Para añadir un marcador a u tema, pulse el botón derecho
+            del ratón sobre su entrada en la ventana de marcadores y
+            elija <guimenuitem>Propiedades</guimenuitem>. Desde la
+            lista de <guilabel>Temas</guilabel>, seleccione cada tema
+            en el que desee añadir este marcador, y pulse
+            <guibutton>Cerrar</guibutton>.
+          </para>
+        </sect2>
+	<sect2 id="to-remove-bookmark-from-topic">
+          <title>Para eliminar un marcador de un tema</title>
+          <para>
+            Para eliminar un marcador de un tema, pulse con el botón
+            derecho del ratón sobre su entrada en la ventana de
+            marcadores y elija
+            <guimenuitem>Propiedades</guimenuitem>. De ka lista  
+            <guilabel>Temas</guilabel>, deseleccione cada tema de los
+            que quiera eliminar este marcador, después pulse <guibutton>Cerrar</guibutton>.
+          </para>
+        </sect2>
+	<sect2 id="to-rename-bookmark-or-topic">
+          <title>Para renombrar un marcador o tema</title>
+          <para>
+            Para renombrar un marcador o tema efectúe los siguientes pasos:
+          </para>
+          <orderedlist>
+            <listitem>
+              <para>
+                Seleccione el marcador o el tema que quiere renombrar
+                en la ventana de marcadores.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Elija <menuchoice><guimenu>Archivo</guimenu><guimenuitem>Renombrar...</guimenuitem>
+		</menuchoice>. Alternativamente, pulse el botón
+		derecho del ratón sobre el marcador o tema en el panel
+		de vista, después elija <guimenuitem>Renombrar...</guimenuitem>.
+          	El nombre del marcador o tema se selecciona.</para>
+              </listitem>
+              <listitem>
+                <para>
+                  Teclee un nombre nuevo para el tema o el marcador,
+                  después pulse <keycap>Retorno</keycap>.
+                </para>
+              </listitem>
+           </orderedlist>
+        </sect2>
+	<sect2 id="to-delete-bookmark-or-topic">
+          <title>Para borrar un marcador o tema</title>
+          <para>
+            Para borrar marcadores o temas realiza los pasos siguientes:
+          </para>
+          <orderedlist>
+            <listitem>
+              <para>
+                Seleccione el marcador o tema que quiera borrar de la
+                ventana de marcadores.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Elija <menuchoice><guimenu>Archivo</guimenu><guimenuitem>
+                Borrar</guimenuitem></menuchoice>. Alternativamente, 
+                pulse con el botón derecho del ratón sobre los
+                marcadores o temas en la ventana de marcadores, y
+                después elija <guimenuitem>Borrar</guimenuitem>.
+              </para>
+            </listitem>
+      	  </orderedlist>
+        </sect2>
+	<sect2 id="to-edit-bookmark-properties">
+	  <title>Para editar las propiedades de un marcador</title>
+          <para>
+            Para editar las propiedades de un marcador como su título
+            y dirección, pulse con el botón derecho en su entrada en
+            la ventana de marcadores y seleccione
+            <guimenuitem>Propiedades</guimenuitem>.
+          </para>
+        </sect2>
+	<sect2 id="to-search-bookmarks">
+          <title>Para buscar en tus marcadores</title>
+          <para>
+            Para buscar en tus marcadores, introduzca su término de
+            búsqueda en el campo <guilabel>Buscar</guilabel>. &fr;
+            buscará a través de todos sus marcadores sin importar qué
+            tema esté seleccionado.
+          </para>
+        </sect2>
+	<sect2 id="to-copy-bookmark-address">
+          <title>Para copiar la dirección de un marcador</title>
+          <para>
+            Para copiar la dirección de un marcador realice los
+            siguientes pasos:
+          </para>
+          <orderedlist>
+            <listitem>
+              <para>
+                Seleccione el marcador.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Elija <menuchoice><guimenu>Editar</guimenu><guimenuitem>
+                Copiar dirección</guimenuitem></menuchoice>. Alternativamente, 
+                pulse con el botón derecho en el marcador, después
+                seleccione <guimenuitem>Copiar dirección</guimenuitem>.
+              </para>
+            </listitem>
+          </orderedlist>
+        </sect2>
+	<sect2 id="to-add-bookmark-or-topic-to-bookmarks-bar">
+          <title>Para añadir un marcador o tema en la barra de marcadores</title>
+          <para>
+            Puedes añadir un marcador o tema a la barra de marcadores
+            de las siguientes maneras:
+          </para>
+          <variablelist>
+            <varlistentry>
+              <term>
+                Menú <guimenu>Archivo</guimenu>
+              </term>
+              <listitem>
+                <para>
+                  Seleccione el marcador o tema que desee añadir, y
+                  elija <menuchoice><guisubmenu>Archivo</guisubmenu><guimenuitem>
+                  Mostrar en la barra de marcadores</guimenuitem></menuchoice>.
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+             <term>
+               Arrastrar y soltar
+             </term>
+             <listitem>
+               <para>
+                 Puede arrastrar y soltar marcadores y temas desde la
+                 ventana de marcadores a la barra de marcadores.
+               </para>
+             </listitem>
+           </varlistentry>
+         </variablelist>
+        </sect2>
+	<sect2 id="to-remove-bookmark-or-topic-from-bookmarks-bar">
+          <title>Para eliminar un marcador o tema de la barra de marcadores</title>
+          <para>
+            Puedes eliminar un marcador o tema de la barra de
+            marcadores de las siguientes formas:
+          </para>
+          <variablelist>
+            <varlistentry>
+              <term>
+                Menú <guimenu>Archivo</guimenu> menu
+              </term>
+              <listitem>
+                <para>
+                  Seleccione el marcador o tema que quiera eliminar, y
+                  elija <menuchoice><guisubmenu>Archivo</guisubmenu><guimenuitem>Mostrar 
+                  en la barra de marcadores</guimenuitem></menuchoice>.
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>
+                Editor de la barra de herramientas
+              </term>
+              <listitem>
+                <para>
+                  Puede eliminar marcadores y temas desde la barra
+		  de marcadores usando el editor de barra de
+		  marcadores tal como se describe en la sección
+		  <xref linkend="to-edit-toolbars"/>.
+                </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        </sect2>
+	<sect2 id="smart-bookmarks">
+	  <title>Marcadores inteligentes</title>
+          <para>
+          </para>
+          <sect3 id="smart-bookmarks-introduction">
+            <title>Introducción</title>
+            <para>
+              Los marcadores inteligentes son una clase especial de
+              marcador que puede tomar uno o más argumentos. Usando
+              marcadores inteligentes, las búsquedas web y las
+              consultas pueden efectuarse sin necesidad de cargar una
+              página con un formulario de consulta antes.
+            </para>
+            <para>
+              Todos sus marcadores inteligentes aparecerán en un menú
+              desplegable si introduce algo de texto en la barra de
+              direcciones, tal como se muestra en la
+              <xref
+              linkend="ephy-addressbar-smartbookmark-screenshot"/>. Al
+              seleccionar el marcador inteligente, se efectuará una
+              consulta usando el texto dado.
+            </para>
+            <figure id="ephy-addressbar-smartbookmark-screenshot">
+              <title>Marcadores inteligentes en el menú desplegable de
+              la barra de direcciones</title>
+              <screenshot>
+                <mediaobject>
+                  <imageobject>
+                    <imagedata
+                    fileref="figures/ephy-addressbar-smartbookmark-screenshot.png"
+                    format="PNG"/> 
+                  </imageobject>
+                </mediaobject>
+              </screenshot>
+            </figure>
+            <para>
+              También es posible añadir un marcador inteligente a la
+              barra de tareas seleccionando <guimenuitem>Mostrar en la
+              barra de tareas</guimenuitem> en el diálogo de
+              propiedades del marcador. Si hace eso, verá su nombre y
+              una caja de texto, tal como se muestra en <xref linkend="ephy-bookmarkbar-smartbookmark-screenshot"/>. 
+              Puede introducir texto en la caja y pulsar Intro para
+              efectuar la función del Marcador Inteligente.
+            </para>
+            <figure id="ephy-bookmarkbar-smartbookmark-screenshot">
+              <title>Marcador inteligente en la barra de marcadores</title>
+              <screenshot>
+                <mediaobject>
+                  <imageobject>
+                    <imagedata
+                    fileref="figures/ephy-bookmarkbar-smartbookmark-screenshot.png"
+                    format="PNG"/> 
+                  </imageobject>
+                </mediaobject>
+              </screenshot>
+            </figure>
+          </sect3>
+          <sect3 id="smart-bookmarks-create-a-smartbookmark">
+            <title>¿Cómo creo un marcador inteligente?</title>
+            <para>
+              Los marcadores inteligentes pueden crearse buscando qué
+              dirección usa un sitio para buscar, por ejemplo
+              <command>http://www.google.com/search?q=SEARCHPHRASE</command> iniciará
+              una consulta en Google para la frase <command>SEARCHPHRASE</command>.
+            </para>
+            <para>
+              Para convertir esta dirección en un marcador
+              inteligente, efectúe los pasos siguientes:
+            </para>
+            <orderedlist>
+              <listitem>
+                <para>
+                  Añada un marcador para 
+                  <command>http://www.google.com/search?q=SEARCHPHRASE</command>
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Abra la ventana de marcadores.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  En el campo <guimenuitem>Dirección</guimenuitem> de
+                  del diálogo de
+                  <guimenuitem>Propiedades</guimenuitem> del marcador,
+                  sustituya <command>SEARCHPHRASE</command> por %s.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  (Opcional) Si quiere que el Marcador Inteligente
+                  aparezca en la barra de marcadores, tal como se ve en
+                 <xref linkend="ephy-bookmarkbar-smartbookmark-screenshot"/>, seleccione
+                  <guimenuitem>Mostrar en la barra de
+                  marcadores</guimenuitem> en el diálogo de
+                 <guimenuitem>Propiedades</guimenuitem>.
+                </para>
+              </listitem>
+            </orderedlist>
+          </sect3>
+          <sect3 id="smart-bookmarks-archive">
+            <title>Archivo de marcadores inteligentes</title>
+            <para>
+              Hay un archivo que contiene muchos Marcadores
+              Inteligentes disponible en el sitio web de 
+              <ulink url="http://galeon.sourceforge.net/bookmarks/">Galeon</ulink>.
+            </para>
+          </sect3>
+        </sect2>
+  </sect1>
+
+<!-- ============= Managing Your History Links ==================== -->
+  <sect1 id="ephy-managing-history">
+      <title>Gestion de sus enlaces históricos</title>
+      <para>
+      </para>
+	<sect2 id="overview-of-history">
+          <title>Vista somera del sistema histórico de Epiphany</title>
+          <para>
+            Epiphany recolecta información histórica acerca de las
+            direcciones que usted visita. Esta información se almacena
+            en una base de datos que puede accederse más tarde.
+          </para>
+          <para>
+            Al mismo tiempo que teclea en la barra de direcciones de
+            la ventan principal, &fr; busca coincidencias en el título
+            o en la dirección de las ubicaciones almacenadas en las
+            bases de datos del histórico y de marcadores. Las
+            coincidencias se listan bajo la barra de direcciones.
+          </para>
+          <para>
+            Puede gestionar el histórico abriendo la ventana del
+histórico. Esta ventana le permite buscar en el histórico, y borrar
+direcciones que no quiere revisitar más tarde.
+          </para>
+          <para>
+            La <xref linkend="ephy-history-window-screenshot"/>
+            muestra la ventana del histórico.
+          </para>
+          <figure id="ephy-history-window-screenshot">
+            <title>Ventana del histórico</title>
+            <screenshot>
+              <mediaobject>
+                <imageobject>
+                  <imagedata
+                  fileref="figures/ephy-history-window-screenshot.png"
+                  format="PNG"/> 
+                </imageobject>
+              </mediaobject>
+            </screenshot>
+          </figure>
+        </sect2>
+	<sect2 id="to-select-history">
+          <title>Para seleccionar los enlaces del histórico</title>
+          <para>
+            Seleccione <menuchoice>
+            <guimenu>Ir</guimenu>
+            <guimenuitem>Histórico</guimenuitem>
+            </menuchoice>
+            para abrir la ventan del histórico. Puede buscar enlaces
+            en el histórico, abrir enlaces en una ventana nueva o en
+            una solapa, o borrar el histórico de la base de datos.
+          </para>
+        </sect2>
+	<sect2 id="to-open-history-link">
+          <title>Para abrir un enlace del histórico en una ventana o solapa
+          nueva</title>
+          <variablelist>
+            <varlistentry>
+              <term>
+                Para abrir un enlace del histórico en una ventana
+                nueva realice los pasos siguientes:
+              </term>
+    	      <listitem>
+                <orderedlist>
+                  <listitem>
+                    <para>
+                      Seleccione el enlace histórico que quiere abrir.
+                    </para>
+                  </listitem>
+                  <listitem>
+                    <para>
+                      Elija <menuchoice><guimenu>Archivo</guimenu><guimenuitem>Abrir
+                      en ventana nueva</guimenuitem></menuchoice>. Alternativamente,
+                      puede pulsar con el botón derecho del ratón en
+                      el enlace del histórico, y después elegir <menuchoice>
+                      <guimenuitem>Abrir en ventana nueva</guimenuitem></menuchoice>.
+                    </para>
+                  </listitem>
+                 </orderedlist>
+               </listitem>
+             </varlistentry>
+             <varlistentry>
+               <term>
+                 Para abrir un enlace del histórico en una solapa
+                 nueva realice los pasos siguientes:
+               </term>
+               <listitem>
+                 <orderedlist>
+                   <listitem>
+                     <para>
+                       Seleccione el enlace histórico que quiere abrir.
+                     </para>
+                   </listitem>
+                   <listitem>
+                     <para>
+                       Elija <menuchoice><guimenu>Archivo</guimenu><guimenuitem>Abrir
+                       en solapa nueva</guimenuitem></menuchoice>. Alternativamente,
+                       pulse con el botón derecho en el enlace
+                       histórico, después elija <menuchoice>
+                       <guimenuitem>Abrir en solapa nueva</guimenuitem></menuchoice>.
+                     </para>
+                   </listitem>
+                 </orderedlist>
+               </listitem>
+             </varlistentry>
+	  </variablelist>
+        </sect2>
+	<sect2 id="to-delete-history-link">
+          <title>Para borrar un enlace histórico</title>
+          <para>
+            Para borrar un enlace histórico efectúe los siguientes
+            pasos:
+          </para>
+          <orderedlist>
+            <listitem>
+              <para>
+                Seleccione el enlace histórico que quiere borrar.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Elija <menuchoice><guimenu>Archivo</guimenu><guimenuitem>Borrar</guimenuitem>
+                </menuchoice>. Alternativamente, pulse con el botón
+                derecho del ratón en el enlace histórico, después
+                elija <guimenuitem>Borrar</guimenuitem>.
+              </para>
+            </listitem>
+          </orderedlist>
+        </sect2>
+	<sect2 id="to-search-history">
+          <title>Para buscar en sus enlaces históricos</title>
+          <para>
+            Puede teclear en la entrada de búsqueda en la ventana del histórico.
+            En caso de que se encuentre cualquier coincidencia en la
+            base de datos del histórico, se muestran en una lista
+            abajo. Estas coincidencias pueden entonces ser abiertas en
+            una ventana nueva, una solapa nueva o la dirección del
+            enlace puede ser copiada para pegar en cualquier otra aplicación.
+          </para>
+          <para>
+            Alternativamente, cualquier cosa que introduzca en la
+            entrada de direcciones de la ventana de  &fr; se compara
+            con la base de datos del histórico, y se muestra en una 
+            lista desplegable junto con otras coincidencias de la base
+            de datos de marcadores.
+          </para>
+        </sect2>
+	<sect2 id="to-copy-history-link-address">
+          <title>Para copiar una dirección de un enlace histórico</title>
+          <para>
+            Para copiar la dirección de un enlace histórico efectúe
+            los pasos siguientes:
+          </para>
+          <orderedlist>
+            <listitem>
+              <para>
+                Seleccione el enlace histórico.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Elija <menuchoice><guimenu>Editar</guimenu><guimenuitem>Copiar 
+                dirección</guimenuitem></menuchoice>.
+                Alternativamente, pulse el botón derecho del ratón en
+                el enlace histórico, después elija 
+                <guimenuitem>Copiar dirección</guimenuitem>.
+              </para>
+            </listitem>
+          </orderedlist>
+        </sect2>
+  </sect1>
+
+<!-- ============= Managing Your Passwords and Cookies ============ -->
+  <sect1 id="ephy-managing-passwords-cookies">
+    <title>Gestión de contraseñas y cookies</title>
+    <para>
+      &fr; almacena sus cookies y contraseñas en el Gestor de Datos
+      Personales al que puede accederse pulsando <menuchoice> <guimenu>Editar</guimenu> 
+      <guisubmenu>Datos personales</guisubmenu> </menuchoice>.
+    </para>
+    <sect2 id="managing-cookies">
+      <title>Gestión de cookies</title>
+      <para>
+        Las cookies permiten a las páginas web almacenar fragmentos de
+        información que pueden accederse por el sitio cuando lo visite
+        otra vez.
+      </para>
+      <para>
+        En el Gestor de Datos Personales, puedes ver las cookies
+        almacenadas en su computadora y los detalles contenidos en
+        ellas. Puede borrar también las cookies.
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Para ver el contenido de una cookie, seleccione su entrada
+            en la lista y pulse <guibutton>Propiedades</guibutton>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Para borrar cookies, seleccione todas las cookies que
+            quiere borrar, y pulse el botón <guibutton>Borrar</guibutton>.
+          </para>
+        </listitem>
+      </itemizedlist>
+      <para>
+        Las propiedades de la ventana de cookies muestra  los
+        siguientes detalles:
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>Contenido</term>
+          <listitem>
+            <para>
+              El contenido de la cookie.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Ruta</term>
+          <listitem>
+            <para>
+              La ruta dentro del dominio para le que la cookie es válida.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Enviar para</term>
+          <listitem>
+            <para>
+              Cuando <guilabel>Cualquier tipo de conexión</guilabel>,
+              la cookie puede enviarse a cualquier servidor. Cuando
+              sea <guilabel>Sólo conexiones encriptadas</guilabel>, la
+              cookie sólo puede ser enviada a servidores seguros.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Caducidad</term>
+          <listitem>
+            <para>
+              La fecha y hora en la que la cookie ya no es válida por
+              más tiempo.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>          
+    </sect2>
+    <sect2 id="managing-passwords">
+      <title>Gestión de contraseñas</title>
+      <para>
+        Muchos sitios web requieren que inicie sesión usando un
+        usuario y una contraseña para obtener acceso a alguna parte o
+        a todo el sitio. &fr; puede recordar las contraseñas por
+        usted, para que pueda iniciar sesión rápidamente en el futuro.
+      </para>
+      <para>
+        En el Gestor de datos Personales, puede ver los sitios para
+        los que se ha almacenado una contraseña, y borrarlos.
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Para borrar contraseñas, seleccione todas las entradas que
+            quiera borrar, y pulse el botón <guibutton>Borrar</guibutton>.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+  </sect1>
+
+<!-- ============= Using the Download Manager ===================== -->
+  <sect1 id="ephy-download-manager">
+      <title>Uso del Gestor de Descargas</title>
+      <para>
+        Cuando descargue archivos, el gestor de descargas le
+        proporciona  detalles acerca de sus descargas actuales:
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            La columna <guilabel>%</guilabel> muestra el progreso de
+            cada descarga.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            El <guilabel>Nombre de archivo</guilabel> es el nombre del
+            archivo que se está descargando. La carpeta a la que el
+            archivo se está descargando puede especificarse en <xref linkend="general-preferences"/>.
+            Esta columna también muestra la cantidad de archivos
+            descargados y su tamaño total.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <guilabel>Restante</guilabel> da una estimación de la
+            cantidad de tiempo que falta hasta terminar. Esto es una
+            aproximación, dependiendo de la confiabilidad de su
+            conexión, este valor puede variar en precisión.
+          </para>
+        </listitem>
+      </itemizedlist>
+      <para>
+        Para cancelar una descarga, seleccione su entrada en el gestor
+        de descargas y pulse <guibutton>Detener</guibutton>. 
+      </para>
+      <note>
+        <para>
+          Una vez que todas las descargas has finalizados, o han sido
+          canceladas, el gestor de descargas se cerrará.
+        </para>
+      </note>
+  </sect1>
+
+<!-- ============= Certificates and Online Security =============== -->
+
+  <sect1 id="ephy-certificates">
+    <title>Certificados y seguridad «online» </title>
+    <para>
+      Al usar sitioque que requieren que inicie sesión, o cuando usa
+      compras «online», es importante saber que la información que
+      envía es segura. &fr; ofrece varias características para
+      ayudarle en esto.
+    </para>
+    <sect2 id="identifying-secure-sites">
+      <title>Identificar sitios seguros</title>
+      <para>
+        Al ver páginas web, &fr; muestra un icono de un cerrojo en la
+        barra de estado que muestra su el sitio actual es seguro.
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>Un cerrojo abierto</term>
+          <listitem>
+            <para>
+              Indica que este sitio es inseguro.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Un cerrojo cerrado</term>
+          <listitem>
+            <para>
+              Indica que este sitio es seguro.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Un cerrojo roto</term>
+          <listitem>
+            <para>
+              Indica que algunas partes de esta página son seguras, y
+              otras no lo son.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </sect2>
+    <sect2 id="using-certificate-viewer">
+      <title>Uso del visor de certificados</title>
+      <para>
+        El visor de certificados presenta los detallas que tienen los certificados.
+        La solapa <guilabel>General</guilabel> proporciona los
+        siguientes detalles:
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>Nombre común</term>
+          <listitem>
+            <para>
+              Muestra o quién emitió el certificado o el dominio para
+              el cual se emitió.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Organización</term>
+          <listitem>
+            <para>
+              Muestra el nombre de la compañia emisora, o el nombre de
+              la compañía para la que fue emitido.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Unidad organizativa</term>
+          <listitem>
+            <para>
+              Muestra la división de la compañía que emitió o recibió
+              el certificado.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Número de serie</term>
+          <listitem>
+            <para>
+              Un identificador único para este certificado.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Emitido el</term>
+          <listitem>
+            <para>
+              La fecha en que el certificado fue emitido.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Caduca el</term>
+          <listitem>
+            <para>
+              La fecha en que el certificado caduca.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Huella SHA1</term>
+          <listitem>
+            <para>
+              Una cadena identificativa para este certificado. Puede
+              comprobar con la compañia emisora que esta cadena
+              coincide con el certificado en sus registros.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Huella MD5</term>
+          <listitem>
+            <para>
+              Una cadena identificativa para este certificado. Puede
+              comprobar con la compañia emisora que esta cadena
+              coincide con el certificado en sus registros.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      <para>
+        La solapa <guilabel>Detalles</guilabel> muestra la siguiente información:
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>Jerarquía del certificado</term>
+          <listitem>
+            <para>
+              Algunos certificados son firmados por autoridades
+              intermediarias que son a su vez firmadas por una
+              autoridad de un nivel más alto. Esta lista muestra la
+              cadena completa del certificado.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Campos del certificado</term>
+          <listitem>
+            <para>
+              Muestra los campos tal como aparecen en el certificado
+              para el certificado seleccionado en la jerarquía.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Valor del campo</term>
+          <listitem>
+            <para>
+              Muestra el valor del campo del certificado seleccionado.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </sect2>
+  </sect1>
+
+<!-- ============= Customizing Epiphany =========================== -->
+  <sect1 id="ephy-customize">
+      <title>Personalizar &fr;</title>
+      <para>
+      </para>
+	<sect2 id="setting-preferences">
+          <title>Establecer sus preferencias</title>
+          <para>
+            Puede personalizar &fr; para que se ajuste a sus
+            necesidades personales usando el diálogo Preferencias al
+            cual puede acceder a través del menú <menuchoice> <guimenu>Editar</guimenu> 
+            <guimenuitem>Preferencias</guimenuitem> </menuchoice>.
+          </para>
+          <sect3 id="general-preferences">
+            <title>Preferencias generales</title>
+            <para>
+            </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  Elija la página mostrada cuando se pulsa el botón
+                  <guibutton>Página inicial</guibutton> en la barra de
+                  tareas, y también cuando se lanza &fr;,
+                  introduciendo una dirección en la sección
+                  <guilabel>Página inicial</guilabel>.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Elija la carpeta en la que descargar archivos
+                  pulsando en el botón <guilabel>Carpeta de
+                  descargas</guilabel> y seleccionando una carpeta. Si
+                  selecciona <guilabel>Descargar automáticamente y
+                  abrir archivos</guilabel> no se le preguntará antes
+                  de que los archivos se descarguen o abran.
+                </para>
+              </listitem>
+            </itemizedlist>
+          </sect3>
+          <sect3 id="fonts-and-colors-preferences">
+            <title>Tipografías, colores y preferencias</title>
+            <para>
+              Esta sección le permite configurar el estilo del texto y
+              los colores usados en las páginas web.
+            </para>
+            <para>
+              Puede elegir estilos y tamaños de tipografía
+              diferentes y dependiendo del idioma en que la página está
+              escrito. Primero seleccione el idioma que quiere
+              configurar desde la etiqueta de la lista desplegable
+              <guilabel>Para el idioma</guilabel>. Para establecer la
+              tipografía para el texto estándar, donde la anchura de
+              caracteres varía, use la lista desplegable
+              <guilabel>Anchura variable</guilabel> y el marcador
+              incrementable. Para establecer la tipografía para el
+              texto de anchura fija, donde el ancho de los caracteres
+              es siempre el mismo, use la lista desplegable
+              <guilabel>Anchura fija</guilabel> y el marcador incrementable.
+            </para>
+            <para>
+              Puede establecer también el tamaño mínimo para las
+              tipografías de las páginas web usando el marcador
+              incrementable <guilabel>Tamaño mínimo</guilabel>. Las
+              tipografías más pequeñas que este valor serán aumentadas
+              a este tamaño.
+            </para>
+            <para>
+              Las páginas web a menudo especifican sus propios estilos
+              de tipografía y tamaños. Puede hacer que &fr; sólo use las
+              tipografías que usted haya elegido seleccionando la
+              opción <guilabel>Usar siempre esta tipografía</guilabel>.
+            </para>
+            <para>
+              Las páginas web quizá especifiquen también sus propios
+              colores para el fondo y para las tipografías. Puede
+              hacer que &fr; siempre use los colores especificados por
+              su tema de escritorio actual seleccionando la opción
+              <guilabel>Usar siempre los colores del tema del escritorio
+              </guilabel>.
+            </para>
+          </sect3>
+          <sect3 id="privacy-preferences">
+            <title>Preferencias de privacidad</title>
+            <para>
+              &fr; le permite configurar varias características que
+              permiten restringir lo que pueden hacer las páginas web.
+            </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  Seleccione <guilabel>Permitir ventanas
+                  emergentes</guilabel> si quiere que las páginas web
+                  sean capaces de lanzar contenido en ventanas nuevas automáticamente.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Seleccione <guilabel>Activar Java</guilabel> para
+                  permitir a las páginas cargar applets de Java -
+                  programas que se ejecutan dentro de las páginas web.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Seleccione <guilabel>Activar JavaScript</guilabel>
+                  para dar a las páginas web la capacidad de usar las
+                  técnicas de programación más avanzadas del lenguaje JavaScript.
+                </para>
+              </listitem>
+            </itemizedlist>
+            <note>
+              <para>
+                Desactivar estas características puede hacer que
+                algunas páginas web se muestran incorrectamente o
+                causar algún tipo de pérdida de funcionalidad. Para
+                que funcione Java, necesita instalar el complemento de Java.
+              </para>
+            </note>
+            <para>
+              Puede configurar también cómo se manejan las cookies:
+            </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  Seleccione <guilabel>Aceptar siempre</guilabel> para
+                  permitir que cualquier sitio web establezca cookies.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Seleccione <guilabel>Sólo desde los sitios que
+                  visite</guilabel> para permitir establecer cookies
+                  para los sitios por los que ha navegado.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Seleccione <guilabel>Nunca aceptar</guilabel> para
+                  evitar que cualquier sito web establezca cookies.
+                </para>
+              </listitem>
+            </itemizedlist>
+            <note>
+              <para>
+                Desactivar o restringir cookies puede desactivar el
+                acceso a partes de algunos sitios o desactivar algunas
+                de sus características.
+              </para>
+            </note>
+            <para>
+              &fr; almacena algo del contenido de las páginas web
+              en archivos temporales para permitir es una carga más
+              rápida del contenido la siguiente vez que los vea. El
+              marcador incrementable <guilabel>Espacio de
+              disco</guilabel> permite especificar la cantidad máxima
+              de espacio de disco que &fr; puede usar para estos
+              archivos. Establecer este valor a cero causará que &fr;
+              nunca almacena archivos temporales. Estos archivos
+              temporales pueden eliminarse pulsando el botón <guibutton>Limpiar</guibutton>.
+            </para>
+          </sect3>
+          <sect3 id="language-preferences">
+            <title>Preferencias de idiomas</title>
+            <para>
+              La codificación de una página especifica el conjunto de
+              caracteres que se ha usado en ella. La sección
+              <guilabel>Codificación</guilabel> configura cómo &fr; identifica
+              este conjunto. La lista desplegable
+              <guilabel>Predeterminado</guilabel> permite establecer
+              una codificación de resguardo en caso de que la página
+              no especifique una.
+            </para>
+            <para>
+              La lista desplegable <guilabel>Autodetectar</guilabel>
+              le permite seleccionar un grupo de codificaciones de las
+              cuales &fr; intentará seleccionar la codificación
+              correcta para la página si no se especifica una. Por
+              ejemplo, si usted normalmente visita páginas chinas,
+              para las que hay varias codificaciones diferentes, quizá
+              quiera establecer esto a
+              <guilabel>Chino</guilabel>. Para hacer que &fr; pare de
+              intentar adivinar una codificación, seleccione <guilabel>Desactivar</guilabel>.
+            </para>
+            <para>
+              Algunos sitios web tienen páginas que están disponibles
+              en varios idiomas diferentes. Puede seleccionar su
+              idioma preferido seleccionando una entrada desde la
+              lista desplegable de <guilabel>Idiomas</guilabel>. Si le
+              gustaría establecer uno o más idiomas de resguardo, en
+              caso de que su idioma no esté disponible, pulse en el
+              botón <guibutton>Más</guibutton> y añada sus idiomas de
+              respaldo a la lista. Las entradas se listan en el orden
+              en que serán comprobadas, con su idioma preferido en la
+              cima. Puede reordenar las entradas arrastrándolas.
+            </para>
+          </sect3>
+        </sect2>
+	<sect2 id="to-show-hide-window-components">
+          <title>Para mostrar y ocultar los componentes de la ventana
+          de navegación</title>
+            <para>
+              Puede mostrar y ocultar los componentes de la ventana de
+              navegación como se indica a continuación:
+            </para>
+      	    <itemizedlist>
+              <listitem>
+                <para>
+                  Para ocultar las barras de tareas, elija <menuchoice>
+                  <guimenu>Ver</guimenu><guimenuitem>Barras de herramientas
+                  </guimenuitem></menuchoice>. Para mostrar la barra
+                  de herramientas de nuevo, elija <menuchoice><guimenu>
+                  Ver</guimenu><guimenuitem>Barras de herramientas</guimenuitem>
+                  </menuchoice> otra vez.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Para ocultar la barra de marcadores, elija <menuchoice>
+                  <guimenu>Ver</guimenu><guimenuitem>Barra de marcadores
+                  </guimenuitem></menuchoice>. Para mostrar la barra
+                  de marcadores de nuevo, elija <menuchoice><guimenu>Ver</guimenu>
+                  <guimenuitem>Barra de marcadores</guimenuitem></menuchoice> 
+                  otra vez.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Para ocultar la barra de estado, elija <menuchoice><guimenu>
+                  Ver</guimenu><guimenuitem>Barra de estado</guimenuitem>
+                  </menuchoice>. Para mostrar la barra de estado de
+                  nuevo, elija <menuchoice><guimenu>Ver</guimenu><guimenuitem>
+                  Barra de estado</guimenuitem></menuchoice> de nuevo.
+                </para>
+              </listitem> 
+           </itemizedlist>
+           <tip>
+             <para>
+               Puede usar el modo a pantalla completa para hacer que
+               &fr; oculte la mayoría de los componentes de la
+               ventana. Para más detalles, vea <xref linkend="using-fullscreen-mode"/>.
+             </para>
+           </tip>
+        </sect2>
+	<sect2 id="to-edit-toolbars">
+          <title>Para editar sus barras de herramientas</title>
+          <para>
+            Puede personalizar los elementos que aparecen en sus
+            barras de herramientas:
+          </para>
+          <itemizedlist>
+            <listitem>
+              <para>
+                Para añadir o quitar botones de su barra de
+                herramientas, seleccione <menuchoice><guimenu>Editar</guimenu><guimenuitem> 
+                Barras de
+                herramientas</guimenuitem></menuchoice>. Arrastre los
+                iconos a y desde el editor para añadirlos o quitarlos
+                de su barra de herramientas.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Para añadir una barra nueva, pulse en
+                <guibutton>Añadir barra nueva
+                </guibutton> en el editor de barras de herramientas.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Para quitar una barra de herramientas, quite todos
+                los elementos de ella. La barra se eliminará automáticamente.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Arrastre botones, incluyendo marcadores, para
+                reordenarlos tanto en la misma barra de herramientas
+                como entre barras de herramientas diferentes.
+              </para>
+             </listitem>
+           </itemizedlist>
+        </sect2>
+  </sect1>
+
+<!-- ============= Shortcuts ===================================== -->
+
+  <sect1 id="shortcuts">
+    <title>Teclas rápidas</title>
+    <para>
+    </para>
+    <sect2 id="keyboard-shortcuts">
+      <title>Combinaciones de teclas</title>
+      <para>
+      </para>
+    <table frame="topbot" id="epiphany-TBL-3">
+      <title>Combinaciones de teclas generales</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>
+                Atajo
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Descripción
+              </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-O</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Abrir un archivo desde una carpeta local.
+              </para>
+            </entry>
+          </row>
+	  <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Shift-Ctrl-S</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Guardar el documento actual a una carpeta local.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-P</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Imprimir el documento actual.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-W</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Cerrar la ventana o solapa actual.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>F1</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Mostrar la ayuda.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>F7</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Cambiar al modo de navegación por cursor.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-D</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Añadir un marcador con la página actual.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-B</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Mostrar el gestor de marcadores.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-H</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Mostrar el gestor del histórico.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Shift-Ctrl-T</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Mostrar/ocultar la barra de herramientas.
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>   
+   <para>
+   </para>
+   <table frame="topbot" id="epiphany-TBL-4">
+      <title>Combinaciones de teclas para navegación</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>
+                Combinación de teclas
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Descripción
+              </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-N</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Abrir una ventana nueva.
+              </para>
+            </entry>
+          </row>
+	  <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-T</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Abrir una solapa nueva.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry colname="colspec0" valign="top">
+              <para>
+                <keycap>Ctrl-L</keycap>
+              </para>
+            </entry>
+            <entry colname="colspec1" valign="top">
+              <para>
+                Enfocar la barra de direcciones.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Alt-Flecha izquierda</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Atrás.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Alt-Flecha derecha</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Adelante.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Alt-Flecha arriba</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Subir un nivel.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Alt-Inicio</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Ir a la página inicial.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Esc</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Detener la carga de la página.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>F6</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Cambiar al marco siguiente.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Shift-F6</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Cambiar al marco anterior.
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table> 
+   <para>
+   </para>
+   <table frame="topbot" id="epiphany-TBL-5">
+      <title>Combinaciones de teclas para solapas</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>
+                Combinación de teclas
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Descripción
+              </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody> 
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-Page Up</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Enfocar la solapa siguiente.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-Page Down</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Enfocar la solapa anterior.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Shift-Ctrl-Page Up</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Mover la solapa a la izquierda.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Shift-Ctrl-Page Down</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Mover la solapa a la derecha.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Shift-Ctrl-M</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Desacoplar solapa.
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table> 
+  <para>
+  </para>
+  <table frame="topbot" id="epiphany-TBL-6">
+      <title>Combinaciones de teclas de visión de páginas</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>
+                Combinación de teclas
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Descripción
+              </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody> 
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>F11</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Cambiar a modo a pantalla completa.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-+</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Ampliar el texto
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl--</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Reducir el texto.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-U</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Ver el código fuente de la página.
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table> 
+    </sect2>
+    <sect2 id="mouse-shortcuts">
+      <title>Atajos del ratón</title>
+      <para>
+      </para>
+      <table frame="topbot" id="epiphany-TBL-7">
+      <title>Atajos del ratón</title>
+      <tgroup cols="2" colsep="0" rowsep="0">
+        <colspec colname="colspec0" colwidth="29.39*"/>
+        <colspec colname="colspec1" colwidth="70.61*"/>
+        <thead>
+          <row rowsep="1">
+            <entry valign="top">
+              <para>
+                Combinación de teclas
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Descripción
+              </para>
+            </entry>
+          </row>
+        </thead>
+        <tbody> 
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Pulsación del botón medio (En un enlace)</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Abrir el enlace en una solapa nueva.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Ctrl-Pulsación (En un enlace)</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Abrir el enlace en una solapa nueva.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry valign="top">
+              <para>
+                <keycap>Mayúsculas-Pulsación (En un enlace)</keycap>
+              </para>
+            </entry>
+            <entry valign="top">
+              <para>
+                Descargar enlace.
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table> 
+    </sect2>
+  </sect1>
+
+<!-- ============= About ========================================== -->
+  <sect1 id="fr-about">
+    <title>Acerca de &fr;</title>
+
+    <para>
+      &fr; fue escrito por by Marco Presenti Gritti 
+      (<email>marco@gnome.org</email>). Para encontrar más información
+      acerca de &fr;, por favor, visite la <ulink
+      url="http://www.gnome.org/projects/epiphany/" type="http">página
+      Web de Epiphany</ulink>. 
+    </para>
+
+    <para>
+      Este manual fue escrito por David Bordoley 
+      (<email>bordoley@msu.edu</email>), Piers Cornwell 
+      (<email>piers@gnome.org</email>) y Patanjali Somayaji 
+      (<email>patanjali@codito.com</email>). 
+    </para>
+
+    <para>
+      Este programa se distribuye bajo los términos de la Licencia
+      Pública General GNU tal como la publica la Free Software
+      Foundation; tanto en la versión 2 de la Licencia , o (a su opción)
+      cualquier otra versión posterior. Puede encontrarse una copia de
+      esta licencia en este 
+      <ulink url="ghelp:gpl" type="help">enlace</ulink>, o en el archivo
+      COPYING incluido con el código fuente de este programa.
+    </para>
+  </sect1> 
+</article>
