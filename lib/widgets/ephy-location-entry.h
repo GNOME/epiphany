@@ -23,19 +23,10 @@
 #ifndef EPHY_LOCATION_ENTRY_H
 #define EPHY_LOCATION_ENTRY_H
 
+#include "ephy-node.h"
+
 #include <gtk/gtktoolitem.h>
-
-#include "ephy-autocompletion.h"
-
-/* object forward declarations */
-
-typedef struct _EphyLocationEntry EphyLocationEntry;
-typedef struct _EphyLocationEntryClass EphyLocationEntryClass;
-typedef struct _EphyLocationEntryPrivate EphyLocationEntryPrivate;
-
-/**
- * EphyLocationEntry object
- */
+#include <gtk/gtktreemodel.h>
 
 #define EPHY_TYPE_LOCATION_ENTRY		(ephy_location_entry_get_type())
 #define EPHY_LOCATION_ENTRY(object)		(G_TYPE_CHECK_INSTANCE_CAST((object), EPHY_TYPE_LOCATION_ENTRY,\
@@ -47,19 +38,17 @@ typedef struct _EphyLocationEntryPrivate EphyLocationEntryPrivate;
 #define EPHY_LOCATION_ENTRY_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_LOCATION_ENTRY,\
 						 EphyLocationEntryClass))
 
+typedef struct _EphyLocationEntry EphyLocationEntry;
+typedef struct _EphyLocationEntryClass EphyLocationEntryClass;
+typedef struct _EphyLocationEntryPrivate EphyLocationEntryPrivate;
+
 struct _EphyLocationEntryClass
 {
 	GtkToolItemClass parent_class;
 
-	/* signals */
-	void		(*activated)	(EphyLocationEntry *w,
-					 const char *content,
-					 const char *target);
-
-	void		(*user_changed)	(EphyLocationEntry *w);
+	void		(*user_changed)	(EphyLocationEntry *le);
 };
 
-/* Remember: fields are public read-only */
 struct _EphyLocationEntry
 {
 	GtkToolItem parent_object;
@@ -68,13 +57,25 @@ struct _EphyLocationEntry
 };
 
 GType			ephy_location_entry_get_type		(void);
+
 GtkWidget              *ephy_location_entry_new			(void);
-void			ephy_location_entry_set_location	(EphyLocationEntry *w,
+
+GtkWidget	       *ephy_location_entry_get_entry		(EphyLocationEntry *le);
+
+void			ephy_location_entry_set_completion	(EphyLocationEntry *le,
+								 GtkTreeModel *model,
+								 guint text_col,
+								 guint action_col,
+								 guint keywords_col,
+								 guint relevance_col);
+
+void			ephy_location_entry_set_location	(EphyLocationEntry *le,
 								 const gchar *new_location);
-const char	       *ephy_location_entry_get_location	(EphyLocationEntry *w);
-void			ephy_location_entry_set_autocompletion  (EphyLocationEntry *w,
-								 EphyAutocompletion *ac);
-void			ephy_location_entry_activate		(EphyLocationEntry *w);
-void			ephy_location_entry_clear_history	(EphyLocationEntry *w);
+
+const char	       *ephy_location_entry_get_location	(EphyLocationEntry *le);
+
+void			ephy_location_entry_activate		(EphyLocationEntry *le);
+
+void			ephy_location_entry_clear_history	(EphyLocationEntry *le);
 
 #endif
