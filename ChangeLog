@@ -1,5 +1,18 @@
 2003-11-20  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* data/glade/prefs-dialog.glade:
+
+	Hide Open downloads pref. Since both behaviors are available
+	maybe it's not necessary at all. Also I feel it confusing to
+	have only one of the cases respecting it. I guess better
+	to wait feedback on releases before making a call on this.
+
+	* src/ephy-window.c:
+
+	No more need of ... on dowload context menu
+
+2003-11-20  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* embed/ephy-embed-single.c: (ephy_embed_single_class_init):
 	* embed/ephy-embed-single.h:
 	* embed/mozilla/ContentHandler.cpp:
