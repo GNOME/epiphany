@@ -90,8 +90,7 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 			      const CORBA_boolean raise,
                               CORBA_Environment * ev)
 {
-	EphyNewTabFlags flags;
-	const char *load_page = NULL;
+	EphyNewTabFlags flags = 0;
 	EphyWindow *window;
 	Session *session;
 
@@ -115,33 +114,30 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 		return;
 	}
 
-	flags = EPHY_NEW_TAB_RAISE_WINDOW;
-
 	if (*url == '\0')
 	{
-		flags |= EPHY_NEW_TAB_HOMEPAGE;
+		flags |= EPHY_NEW_TAB_HOME_PAGE;
 	}
 	else
 	{
-		load_page = url;
-	}
-
-	if (open_in_new_window)
-	{
-		flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
+		flags |= EPHY_NEW_TAB_NEW_PAGE;
 	}
 
 	if (open_in_new_tab)
 	{
 		flags |= EPHY_NEW_TAB_IN_EXISTING_WINDOW;
 	}
+	else
+	{
+		flags |= EPHY_NEW_TAB_IN_NEW_WINDOW;
+	}
 
 	if (fullscreen)
 	{
-		flags |= EPHY_NEW_TAB_FULLSCREEN;
+		flags |= EPHY_NEW_TAB_FULLSCREEN_MODE;
 	}
 
-	ephy_shell_new_tab (ephy_shell, window, NULL, load_page,
+	ephy_shell_new_tab (ephy_shell, window, NULL, url,
 			    flags);
 }
 

@@ -224,9 +224,8 @@ window_cmd_file_new_window (EggAction *action,
 	tab = ephy_window_get_active_tab (window);
 
 	ephy_shell_new_tab (ephy_shell, NULL, tab, NULL,
-			    EPHY_NEW_TAB_HOMEPAGE |
-			    EPHY_NEW_TAB_IN_NEW_WINDOW |
-			    EPHY_NEW_TAB_JUMP);
+			    EPHY_NEW_TAB_NEW_PAGE |
+			    EPHY_NEW_TAB_IN_NEW_WINDOW);
 }
 
 void
@@ -238,7 +237,7 @@ window_cmd_file_new_tab (EggAction *action,
 	tab = ephy_window_get_active_tab (window);
 
 	ephy_shell_new_tab (ephy_shell, window, tab, NULL,
-			      EPHY_NEW_TAB_HOMEPAGE |
+			      EPHY_NEW_TAB_NEW_PAGE |
 			      EPHY_NEW_TAB_IN_EXISTING_WINDOW |
 			      EPHY_NEW_TAB_JUMP);
 }
@@ -593,7 +592,8 @@ window_cmd_view_page_source (EggAction *action,
 	g_return_if_fail (tab != NULL);
 
 	ephy_shell_new_tab (ephy_shell, window, tab, NULL,
-			      EPHY_NEW_TAB_VIEW_SOURCE);
+			    EPHY_NEW_TAB_CLONE_PAGE |
+			    EPHY_NEW_TAB_SOURCE_MODE);
 }
 
 void

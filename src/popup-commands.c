@@ -58,6 +58,7 @@ popup_cmd_link_in_new_window (EggAction *action,
 
 	ephy_shell_new_tab (ephy_shell, NULL, tab,
 			    g_value_get_string (value),
+			    EPHY_NEW_TAB_OPEN_PAGE |
 			    EPHY_NEW_TAB_IN_NEW_WINDOW);
 }
 
@@ -77,6 +78,7 @@ popup_cmd_link_in_new_tab (EggAction *action,
 
 	ephy_shell_new_tab (ephy_shell, window, tab,
 			    g_value_get_string (value),
+			    EPHY_NEW_TAB_OPEN_PAGE |
 			    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 }
 
@@ -96,6 +98,7 @@ popup_cmd_image_in_new_tab (EggAction *action,
 
 	ephy_shell_new_tab (ephy_shell, window, tab,
 			    g_value_get_string (value),
+			    EPHY_NEW_TAB_OPEN_PAGE |
 			    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 }
 
@@ -115,6 +118,7 @@ popup_cmd_image_in_new_window (EggAction *action,
 
 	ephy_shell_new_tab (ephy_shell, NULL, tab,
 			    g_value_get_string (value),
+			    EPHY_NEW_TAB_OPEN_PAGE |
 			    EPHY_NEW_TAB_IN_NEW_WINDOW);
 }
 
@@ -185,6 +189,7 @@ popup_cmd_frame_in_new_tab (EggAction *action,
 
 	ephy_shell_new_tab (ephy_shell, window, tab,
 			    location,
+			    EPHY_NEW_TAB_OPEN_PAGE |
 			    EPHY_NEW_TAB_IN_EXISTING_WINDOW);
 
 	g_free (location);
@@ -206,6 +211,7 @@ popup_cmd_frame_in_new_window (EggAction *action,
 
 	ephy_shell_new_tab (ephy_shell, NULL, tab,
 			    location,
+			    EPHY_NEW_TAB_OPEN_PAGE |
 			    EPHY_NEW_TAB_IN_NEW_WINDOW);
 
 	g_free (location);

@@ -473,7 +473,7 @@ ephy_shell_new_tab (EphyShell *shell,
 	EphyTab *tab;
 	EphyEmbed *embed;
 	gboolean in_new_window;
-	gboolean grouped = FALSE;
+	gboolean grouped;
 	gboolean jump_to;
 	EphyEmbed *previous_embed = NULL;
 	GtkWidget *nb;
@@ -503,25 +503,19 @@ ephy_shell_new_tab (EphyShell *shell,
 		previous_embed = ephy_tab_get_embed (previous_tab);
 	}
 
-	if (url != NULL || flags & EPHY_NEW_TAB_IS_A_COPY ||
-	    flags & EPHY_NEW_TAB_VIEW_SOURCE)
-	{
-		grouped = TRUE;
-	}
+	grouped = (flags & EPHY_NEW_TAB_OPEN_PAGE ||
+	           flags & EPHY_NEW_TAB_APPEND_GROUPED ||
+		   flags & EPHY_NEW_TAB_CLONE_PAGE);
 
-	if (flags & EPHY_NEW_TAB_APPEND_GROUPED) grouped = TRUE;
-	if (flags & EPHY_NEW_TAB_APPEND_LAST) grouped = FALSE;
-
-	if ((flags & EPHY_NEW_TAB_APPEND_AFTER) && previous_embed != NULL)
+	if (flags & EPHY_NEW_TAB_APPEND_AFTER)
 	{
+		g_assert (previous_embed != NULL);
 		nb = ephy_window_get_notebook (window);
-		position = gtk_notebook_page_num (GTK_NOTEBOOK (nb), 
+		position = gtk_notebook_page_num (GTK_NOTEBOOK (nb),
 						  GTK_WIDGET (previous_embed)) + 1;
 	}
-	else
-	{	
-		position = grouped ? EPHY_NOTEBOOK_INSERT_GROUPED : EPHY_NOTEBOOK_INSERT_LAST;
-	}
+
+	position = grouped ? EPHY_NOTEBOOK_INSERT_GROUPED : EPHY_NOTEBOOK_INSERT_LAST;
 
 	tab = ephy_tab_new ();
 	embed = ephy_tab_get_embed (tab);
@@ -529,46 +523,50 @@ ephy_shell_new_tab (EphyShell *shell,
 	ephy_window_add_tab (window, tab,
 			     position,
 			     jump_to);
+	gtk_widget_show (GTK_WIDGET(window));
 
-	if (flags & EPHY_NEW_TAB_RAISE_WINDOW)
-	{
-		gtk_window_present (GTK_WINDOW(window));
-	}
-	else
-	{
-		gtk_widget_show (GTK_WIDGET(window));
-	}
-
-	if (flags & EPHY_NEW_TAB_HOMEPAGE)
+	if (flags & EPHY_NEW_TAB_HOME_PAGE ||
+	    flags & EPHY_NEW_TAB_NEW_PAGE)
 	{
 		Toolbar *toolbar;
+
+		toolbar = ephy_window_get_toolbar (window);
+		toolbar_edit_location (toolbar);
+	}
+
+	if (flags & EPHY_NEW_TAB_HOME_PAGE)
+	{
 		char *homepage;
 
 		homepage = build_homepage_url (shell, previous_embed);
 		g_assert (homepage != NULL);
 
-		toolbar = ephy_window_get_toolbar (window);
-		toolbar_edit_location (toolbar);
-
 		ephy_embed_load_url (embed, homepage);
 
 		g_free (homepage);
 	}
-	else if ((flags & EPHY_NEW_TAB_IS_A_COPY) ||
-		 (flags & EPHY_NEW_TAB_VIEW_SOURCE))
+	else if (flags & EPHY_NEW_TAB_NEW_PAGE)
 	{
-		EmbedDisplayType display_type =
-			(flags & EPHY_NEW_TAB_VIEW_SOURCE) ?
-			 DISPLAY_AS_SOURCE : DISPLAY_NORMAL;
+		ephy_embed_load_url (embed, "about:blank");
+		ephy_embed_copy_page (embed, previous_embed, DISPLAY_NORMAL);
+	}
+	else if (flags & EPHY_NEW_TAB_OPEN_PAGE)
+	{
+		g_assert (url != NULL);
+		ephy_embed_load_url (embed, url);
+	}
+	else if (flags & EPHY_NEW_TAB_CLONE_PAGE)
+	{
+		EmbedDisplayType display_type;
+
+                display_type = (flags & EPHY_NEW_TAB_SOURCE_MODE) ?
+                                DISPLAY_AS_SOURCE : DISPLAY_NORMAL;
+
 		ephy_embed_load_url (embed, "about:blank");
 		ephy_embed_copy_page (embed, previous_embed, display_type);
 	}
-	else if (url)
-	{
-		ephy_embed_load_url (embed, url);
-	}
 
-	if (flags & EPHY_NEW_TAB_FULLSCREEN)
+	if (flags & EPHY_NEW_TAB_FULLSCREEN_MODE)
 	{
 		ephy_window_set_chrome (window, EMBED_CHROME_OPENASFULLSCREEN |
 				        EMBED_CHROME_DEFAULT);

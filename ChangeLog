@@ -1,5 +1,25 @@
 2003-05-21  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(cmd_open_bookmarks_in_tabs),
+	(ephy_bookmarks_editor_node_activated_cb):
+	* src/ephy-automation.c: (impl_ephy_automation_loadurl):
+	* src/ephy-history-window.c: (cmd_open_bookmarks_in_tabs),
+	(cmd_open_bookmarks_in_browser):
+	* src/ephy-notebook.c: (notebook_drag_data_received_cb):
+	* src/ephy-shell.c: (ephy_shell_new_tab):
+	* src/ephy-shell.h:
+	* src/popup-commands.c: (popup_cmd_link_in_new_window),
+	(popup_cmd_link_in_new_tab), (popup_cmd_image_in_new_tab),
+	(popup_cmd_image_in_new_window), (popup_cmd_frame_in_new_tab),
+	(popup_cmd_frame_in_new_window):
+	* src/window-commands.c: (window_cmd_file_new_window),
+	(window_cmd_file_new_tab), (window_cmd_view_page_source):
+
+	Cleanup new tab logic, and ever use window for new instances.
+
+2003-05-21  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_save):
 
 	Do not free memory is not a good idea
