@@ -195,7 +195,8 @@ main (int argc, char *argv[])
 
 	bonobo_activate ();
 
-	ephy_shell = ephy_shell_new ();
+	ephy_shell_new ();
+	g_assert (ephy_shell != NULL);
 	new_instance = ephy_shell_startup (ephy_shell, startup_flags,
 					   args, string_arg, &err);
 

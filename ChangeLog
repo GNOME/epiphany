@@ -1,5 +1,12 @@
 2005-02-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-main.c: (main):
+
+	Don't assign to ephy_shell global variable, that's already done
+	in its constructor.
+
+2005-02-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-window.c: (update_print_actions):
 
 	Don't disable print preview if print setup is locked down.
