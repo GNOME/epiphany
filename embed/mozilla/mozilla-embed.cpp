@@ -973,6 +973,9 @@ impl_print (EphyEmbed *embed,
 
 	result = mpriv->browser->Print(options, info->preview);
 
+	/* Workaround for bug 125984 */
+        options->SetPrintSilent (PR_FALSE);
+
 	return NS_SUCCEEDED (result) ? G_OK : G_FAILED;
 }
 
