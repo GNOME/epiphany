@@ -248,7 +248,7 @@ static guint ephy_menu_n_entries = G_N_ELEMENTS (ephy_menu_entries);
 static GtkToggleActionEntry ephy_menu_toggle_entries [] =
 {
 	/* File Menu */
-	{ "FileWorkOffline", NULL, N_("_Work Off-Line"), NULL,
+	{ "FileWorkOffline", NULL, N_("_Work Offline"), NULL,
 	  N_("Toggle network status"),
 	  G_CALLBACK (window_cmd_file_work_offline), FALSE },
 
