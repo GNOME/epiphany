@@ -143,6 +143,22 @@ ephy_editable_toolbar_get_type (void)
         return ephy_editable_toolbar_type;
 }
 
+static void
+update_popup_menu (EphyEditableToolbar *t)
+{
+	EggAction *action;
+
+	action = egg_action_group_get_action (t->priv->popup_action_group,
+					      "EditToolbarPopup");
+	g_object_set (G_OBJECT (action), "visible",
+		      !t->priv->edit_mode, NULL);
+
+	action = egg_action_group_get_action (t->priv->popup_action_group,
+					      "RemoveToolbarPopup");
+	g_object_set (G_OBJECT (action), "visible",
+		      t->priv->edit_mode, NULL);
+}
+
 static EggAction *
 find_action (EphyEditableToolbar *t, const char *name)
 {
@@ -309,6 +325,49 @@ drag_data_get_cb (GtkWidget *widget,
 }
 
 static void
+toolbar_drag_data_delete_cb (GtkWidget *widget,
+			     GdkDragContext *context,
+			     EphyEditableToolbar *etoolbar)
+{
+	EphyToolbarsToolbar *t;
+
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+
+	t = (EphyToolbarsToolbar *)g_object_get_data (G_OBJECT (widget),
+						      "toolbar_drag_data");
+	g_return_if_fail (t != NULL);
+
+	ephy_toolbars_group_remove_toolbar (etoolbar->priv->group, t);
+
+	etoolbar->priv->toolbars_dirty = TRUE;
+	queue_ui_update (etoolbar);
+}
+
+static void
+toolbar_drag_data_get_cb (GtkWidget *widget,
+			  GdkDragContext *context,
+			  GtkSelectionData *selection_data,
+			  guint info,
+			  guint32 time,
+			  EphyEditableToolbar *etoolbar)
+{
+	EphyToolbarsToolbar *t;
+	char *target;
+
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+
+	t = (EphyToolbarsToolbar *)g_object_get_data (G_OBJECT (widget),
+						      "toolbar_drag_data");
+
+	target = t->id;
+	LOG ("Drag data get %s", t->id);
+
+	gtk_selection_data_set (selection_data,
+				selection_data->target,
+				8, target, strlen (target));
+}
+
+static void
 ephy_editable_toolbar_remove_cb  (EggAction *action,
 				  EphyEditableToolbar *etoolbar)
 {
@@ -385,6 +444,62 @@ disconnect_item_drag_source (EphyToolbarsItem *item, EphyEditableToolbar *etoolb
 						      etoolbar);
 		g_signal_handlers_disconnect_by_func (toolitem,
 						      G_CALLBACK (drag_data_delete_cb),
+						      etoolbar);
+	}
+}
+
+static void
+connect_toolbar_drag_source (EphyToolbarsToolbar *t,
+			     EphyEditableToolbar *etoolbar)
+{
+	GtkWidget *tb;
+
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+	g_return_if_fail (t != NULL);
+
+	tb = get_item_widget (etoolbar, t);
+
+	g_return_if_fail (tb != NULL);
+
+	if (!g_object_get_data (G_OBJECT (tb), "drag_source_set"))
+	{
+		g_object_set_data (G_OBJECT (tb), "drag_source_set",
+				   GINT_TO_POINTER (TRUE));
+
+		g_object_set_data (G_OBJECT (tb), "toolbar_drag_data", t);
+
+		g_signal_connect (tb, "drag_data_get",
+				  G_CALLBACK (toolbar_drag_data_get_cb),
+				  etoolbar);
+		g_signal_connect (tb, "drag_data_delete",
+				  G_CALLBACK (toolbar_drag_data_delete_cb),
+				  etoolbar);
+	}
+}
+
+static void
+disconnect_toolbar_drag_source (EphyToolbarsToolbar *t,
+				EphyEditableToolbar *etoolbar)
+{
+	GtkWidget *tb;
+
+	g_return_if_fail (IS_EPHY_EDITABLE_TOOLBAR (etoolbar));
+	g_return_if_fail (t != NULL);
+
+	tb = get_item_widget (etoolbar, t);
+
+	g_return_if_fail (tb != NULL);
+
+	if (g_object_get_data (G_OBJECT (tb), "drag_source_set"))
+	{
+		g_object_set_data (G_OBJECT (tb), "drag_source_set",
+				   GINT_TO_POINTER (FALSE));
+
+		g_signal_handlers_disconnect_by_func (tb,
+						      G_CALLBACK (toolbar_drag_data_get_cb),
+						      etoolbar);
+		g_signal_handlers_disconnect_by_func (tb,
+						      G_CALLBACK (toolbar_drag_data_delete_cb),
 						      etoolbar);
 	}
 }
@@ -542,6 +657,10 @@ do_merge (EphyEditableToolbar *t)
 		ephy_toolbars_group_foreach_item (t->priv->group,
 						  (EphyToolbarsGroupForeachItemFunc)
 					          connect_item_drag_source, t);
+
+		ephy_toolbars_group_foreach_toolbar (t->priv->group,
+						     (EphyToolbarsGroupForeachToolbarFunc)
+						     connect_toolbar_drag_source, t);
 	}
 
 	ephy_toolbars_group_foreach_toolbar (t->priv->group,
@@ -703,6 +822,8 @@ ephy_editable_toolbar_init (EphyEditableToolbar *t)
 	egg_menu_merge_add_ui_from_file (t->priv->popup_merge,
 				ephy_file ("epiphany-toolbar-popup-ui.xml"),
 				NULL);
+
+	update_popup_menu (t);
 }
 
 static void
@@ -790,6 +911,12 @@ editor_close (EphyEditableToolbar *etoolbar)
 					  (EphyToolbarsGroupForeachItemFunc)
 				          disconnect_item_drag_source,
 					  etoolbar);
+	ephy_toolbars_group_foreach_toolbar (etoolbar->priv->group,
+					     (EphyToolbarsGroupForeachToolbarFunc)
+					     disconnect_toolbar_drag_source,
+					     etoolbar);
+
+	update_popup_menu (etoolbar);
 	hide_editor (etoolbar);
 }
 
@@ -993,8 +1120,18 @@ button_press_cb (GtkWidget *w,
 	    event->type == GDK_BUTTON_PRESS &&
 	    EGG_IS_TOOLBAR (widget))
 	{
-		gtk_widget_event (widget, event);
-		return FALSE;
+		if (event->button.button == 3)
+		{
+			gtk_widget_event (widget, event);
+			return FALSE;
+		}
+		else
+		{
+			gtk_drag_begin (widget,
+					gtk_target_list_new (source_drag_types, 1),
+					GDK_ACTION_MOVE, 1, event);
+			return TRUE;
+		}
 	}
 	else if (toolitem == NULL) return FALSE;
 
@@ -1055,6 +1192,12 @@ ephy_editable_toolbar_edit (EphyEditableToolbar *etoolbar, GtkWidget *window)
 	ephy_toolbars_group_foreach_item (etoolbar->priv->group,
 					  (EphyToolbarsGroupForeachItemFunc)
 				          set_action_sensitive, etoolbar);
+	ephy_toolbars_group_foreach_toolbar (etoolbar->priv->group,
+					  (EphyToolbarsGroupForeachToolbarFunc)
+				          connect_toolbar_drag_source, etoolbar);
+
+	update_popup_menu (etoolbar);
+
 	setup_editor (etoolbar, window);
 	show_editor (etoolbar);
 }
