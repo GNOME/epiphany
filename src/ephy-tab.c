@@ -443,6 +443,7 @@ ephy_tab_location_cb (EphyEmbed *embed, EphyTab *tab)
 	if (tab->priv->location) g_free (tab->priv->location);
 	ephy_embed_get_location (embed, TRUE,
 				 &tab->priv->location);
+	tab->priv->link_message[0] = '\0';
 
 	if (tab->priv->is_active)
 	{
