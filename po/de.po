@@ -8,13 +8,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany HEAD\n"
-"POT-Creation-Date: 2003-01-07 21:57+0100\n"
-"PO-Revision-Date: 2003-01-07 21:57+0100\n"
+"POT-Creation-Date: 2003-01-19 20:45+0100\n"
+"PO-Revision-Date: 2003-01-19 20:45+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: lib/ephy-start-here.c:235
+msgid "Import mozilla bookmarks"
+msgstr "Lesezeichen aus Mozilla importieren"
+
+#: src/ephy-shell.c:146
+msgid "Bookmarks imported successfully."
+msgstr "Lesezeichen erfolgreich importiert."
 
 #: data/GNOME_Epiphany_Automation.server.in.h:1
 msgid "Epiphany automation"
@@ -30,23 +38,23 @@ msgstr "Fabrik für Epiphany-Nautilus-Ansicht"
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:3
 msgid "Epiphany content view component"
-msgstr "Epiphany-Komponente zum Betrachten von Inhalten"
+msgstr "Epiphany-Komponente zur Anzeigen von Inhalten"
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:4
 msgid "Epiphany content view component's factory"
-msgstr "Fabrik für die Epiphany-Komponente zum Betrachten von Inhalten"
+msgstr "Fabrik für die Epiphany-Komponente zur Anzeige von Inhalten"
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:5
 msgid "View as Web Page (Epiphany)"
-msgstr "Als Webseite betrachten (Epiphany)"
+msgstr "Web-Ansicht (Epiphany)"
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:6
 msgid "Web Page (Epiphany)"
-msgstr "Webseite (Epiphany)"
+msgstr "Web-Ansicht (Epiphany)"
 
 #: data/GNOME_Epiphany_NautilusView.server.in.h:7
 msgid "Web Page Viewer (Epiphany)"
-msgstr "Webseiten-Betrachter (Epiphany)"
+msgstr "Web-Ansicht (Epiphany)"
 
 # weiß jemand was besseres?
 #: data/epiphany.desktop.in.h:1
@@ -62,18 +70,68 @@ msgid "Getting started"
 msgstr "Einführung"
 
 #: data/starthere/index.xml.in.h:2
-msgid "How I begin ? Import bookmarks, proxy settings"
+msgid ""
+"If your internet connection requires it, make sure to setup your proxy in "
+"the desktop wide <action id=\"configure-network\" param=\"\">configuration "
+"dialog</action>."
 msgstr ""
-"Womit soll ich anfangen? Lesezeichen importieren, Proxy-Einstellungen "
-"vornehmen"
+"Falls Ihre Internet-Verbindung einen Proxy erfordert, müssen Sie die nötigen "
+"Einstellungen mit Hilfe des Desktop-weiten <action id=\"configure-network\" "
+"param=\"\">Konfigurationsdialogs</action> vornehmen."
 
 #: data/starthere/index.xml.in.h:3
 msgid "The web browser"
 msgstr "Der Webbrowser"
 
 #: data/starthere/index.xml.in.h:4
-msgid "What you use it for ?"
-msgstr "Wofür verwenden Sie das?"
+msgid ""
+"To import bookmarks from another browser installed on your system just click "
+"on one of the links below: <content id=\"bookmarks-import\"/>"
+msgstr ""
+"Sie müssen lediglich einen der folgenden Links anklicken, um die Lesezeichen "
+"aus einem anderen, auf Ihrem System befindlichen Browser zu importieren: "
+"<contend id=\"bookmarks-import\"/>"
+
+#: data/starthere/index.xml.in.h:5
+msgid ""
+"You can start browsing web pages either by typing a location (example: www."
+"google.com) or a keyword (example: best computer shop) in the toolbar text "
+"entry and then pressing the Enter key. You can remember important visited "
+"pages using bookmarks or browse all of them with the history dialog."
+msgstr ""
+"Sie können mit dem Browsen im Netz entweder beginnen, indem Sie eine Adresse "
+"(z.B. www.google.de) oder ein Stichwort (z.B. GNOME Deutschland) im "
+"Adressfeld in der Werkzeugleiste eingeben und danach die Eingabetaste "
+"drücken. Sie können besuchte Webseiten als Lesezeichen ablegen oder im "
+"Chronik-Dialog die Reihenfolge der Website-Besuche nachvollziehen."
+
+# CHECK
+#: data/starthere/smartbookmarks.xml.in.h:1
+msgid ""
+"Right click the icon and choose \"Add Bookmark\" from the menu list. When "
+"you will type a word in the toolbar entry, a list of your smart bookmarks "
+"will be displayed. Just choose one of them to perform the search. The next "
+"time you type a word, just pressing the Enter key will be enough to perform "
+"the same action."
+msgstr ""
+"Führen Sie einen Rechtsklick auf das Symbol aus und wählen Sie »Lesezeichen "
+"hinzufügen« aus dem Menü. Wenn Sie ein Wort im Eingabefeld »Werkzeugleiste« "
+"eingeben, wird eine Liste der von Ihnen angelegten intelligenten Lesezeichen "
+"angezeigt. Wählen Sie einen von diesen aus um die Suche durchzuführen. Das "
+"nächste Mal, wenn Sie ein Wort eingeben, ist es lediglich erforderlich, die "
+"Eingabetaste zu drücken, um dieselbe Aktion durchzuführen"
+
+#: data/starthere/smartbookmarks.xml.in.h:2
+msgid "Smart Bookmarks"
+msgstr "Intelligente Lesezeichen"
+
+#: data/starthere/smartbookmarks.xml.in.h:3
+msgid ""
+"Smart bookmarks allows to perform searches and similar actions directly from "
+"the location entry."
+msgstr ""
+"Intelligente Lesezeichen erlauben es Ihnen, Suchen und ähnliches Aktionen "
+"direkt aus dem Ort-Eingabefeld heraus durchzuführen."
 
 #: data/epiphany.schemas.in.h:1
 msgid "Allow Java"
@@ -578,7 +636,7 @@ msgstr "_Leeren"
 
 #: data/glade/epiphany.glade.h:14
 msgid "Choose the file type action"
-msgstr "Die Aktion für den Dateityp wählen"
+msgstr "Wählen Sie eine Aktion für diesen Dateityp"
 
 #: data/glade/epiphany.glade.h:15
 msgid "Cookies"
@@ -1179,7 +1237,7 @@ msgstr "Ein Lesezeichen für die aktuelle Seite zum Vorgabeordner hinzufügen"
 msgid "Add a bookmark to the default folder"
 msgstr "Ein Lesezeichen zum Vorgebeordner hinzufügen"
 
-#: data/ui/epiphany-ui.xml.in.h:7 src/bookmarks/ephy-new-bookmark.c:223
+#: data/ui/epiphany-ui.xml.in.h:7 src/bookmarks/ephy-new-bookmark.c:230
 msgid "Add bookmark"
 msgstr "Lesezeichen hinzufügen"
 
@@ -1381,7 +1439,7 @@ msgstr "Einstellungen"
 
 #: data/ui/epiphany-ui.xml.in.h:57 data/ui/nautilus-epiphany-view.xml.in.h:24
 msgid "Previous"
-msgstr "Voriger"
+msgstr "Vorheriger"
 
 #: data/ui/epiphany-ui.xml.in.h:59
 msgid "Print the current file"
@@ -1393,7 +1451,7 @@ msgstr "Frame aktualisieren"
 
 #: data/ui/epiphany-ui.xml.in.h:61
 msgid "S_end To..."
-msgstr "V_erschicken an..."
+msgstr "_Verschicken an..."
 
 #: data/ui/epiphany-ui.xml.in.h:62
 msgid "Save As"
@@ -1581,7 +1639,7 @@ msgstr "E_infügen"
 
 #: data/ui/epiphany-ui.xml.in.h:109
 msgid "_Previous Tab"
-msgstr "_Voriger Reiter"
+msgstr "_Vorheriger Reiter"
 
 #: data/ui/epiphany-ui.xml.in.h:110 data/ui/nautilus-epiphany-view.xml.in.h:37
 msgid "_Print..."
@@ -1662,55 +1720,59 @@ msgstr "%d von %d KB"
 msgid "%d KB"
 msgstr "%d KB"
 
-#: embed/downloader-view.c:499 embed/downloader-view.c:514
-#: src/ephy-window.c:947
+#: embed/downloader-view.c:499 embed/downloader-view.c:517
+#: src/ephy-window.c:946
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: embed/downloader-view.c:756
+#: embed/downloader-view.c:516
+msgid "00.00"
+msgstr "00:00"
+
+#: embed/downloader-view.c:759
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:766
+#: embed/downloader-view.c:769
 msgid "Filename"
 msgstr "Dateiname"
 
-#: embed/downloader-view.c:777
+#: embed/downloader-view.c:780
 msgid "Size"
 msgstr "Größe"
 
-#: embed/downloader-view.c:788
+#: embed/downloader-view.c:791
 msgid "Remaining"
 msgstr "Verbleibend"
 
-#: embed/downloader-view.c:1008
+#: embed/downloader-view.c:1011
 msgid "Cancel all pending downloads?"
 msgstr "Alle ausstehenden Downloads abbrechen?"
 
-#: embed/ephy-embed-utils.c:127 embed/mozilla/ContentHandler.cpp:302
+#: embed/ephy-embed-utils.c:128 embed/mozilla/ContentHandler.cpp:302
 msgid "Select the destination filename"
 msgstr "Bitte den Zielordner auswählen"
 
-#: embed/ephy-embed-utils.c:317
+#: embed/ephy-embed-utils.c:308
 msgid "No available applications to open the specified file."
 msgstr ""
 "Es konnten keine Anwendungen zum Öffnen der angegebenen Datei gefunden "
 "werden."
 
-#: embed/ephy-history.c:483
+#: embed/ephy-history.c:549
+msgid "Others"
+msgstr "Sonstige"
+
+#: embed/ephy-history.c:555
 msgid "Local files"
 msgstr "Lokale Dateien"
 
-#: embed/ephy-history.c:498 embed/mozilla/mozilla-i18n.c:38
-msgid "Other"
-msgstr "Sonstiges"
-
 #: embed/mozilla/ExternalProtocolService.cpp:121
 msgid ""
-"Galeon cannot handle this protocol,\n"
+"Epiphany cannot handle this protocol,\n"
 "and no GNOME default handler is set"
 msgstr ""
-"Galeon kann mit diesem Protokoll nicht umgehen,\n"
+"Epiphany kann mit diesem Protokoll nicht umgehen,\n"
 "und es wurde kein Handler in GNOME vorgegeben"
 
 #: embed/mozilla/ExternalProtocolService.cpp:135
@@ -1731,11 +1793,11 @@ msgstr "Mit Inhalt speichern"
 msgid "The specified path does not exist."
 msgstr "Der angegebene Pfad existiert nicht."
 
-#: embed/mozilla/FilePicker.cpp:383
+#: embed/mozilla/FilePicker.cpp:384
 msgid "A file was selected when a folder was expected."
 msgstr "Eine Datei wurde ausgewählt, obwohl ein Ordner erwartet wurde."
 
-#: embed/mozilla/FilePicker.cpp:389
+#: embed/mozilla/FilePicker.cpp:390
 msgid "A folder was selected when a file was expected."
 msgstr "Ein Ordner wurde ausgewählt, obwohl eine Datei erwartet wurde."
 
@@ -1752,7 +1814,7 @@ msgid "Don't save"
 msgstr "Nicht speichern"
 
 #: embed/mozilla/PromptService.cpp:655
-msgid "Galeon"
+msgid "Epiphany"
 msgstr "Epiphany"
 
 #. set default search engine
@@ -1760,15 +1822,15 @@ msgstr "Epiphany"
 msgid "http://www.google.com/search?q="
 msgstr "http://www.google.de/search?q="
 
-#: embed/mozilla/mozilla-embed-shell.cpp:800
+#: embed/mozilla/mozilla-embed-shell.cpp:802
 msgid "Yes"
 msgstr "Ja"
 
-#: embed/mozilla/mozilla-embed-shell.cpp:802
+#: embed/mozilla/mozilla-embed-shell.cpp:804
 msgid "No"
 msgstr "Nein"
 
-#: embed/mozilla/mozilla-embed-shell.cpp:807
+#: embed/mozilla/mozilla-embed-shell.cpp:809
 msgid "End of current session"
 msgstr "Aktuelle Sitzung beenden"
 
@@ -1779,6 +1841,10 @@ msgstr "Indisch"
 #: embed/mozilla/mozilla-i18n.c:36
 msgid "Vietnamese"
 msgstr "Vietnamesisch"
+
+#: embed/mozilla/mozilla-i18n.c:38
+msgid "Other"
+msgstr "Sonstiges"
 
 #: embed/mozilla/mozilla-i18n.c:43
 msgid "Arabic (IBM-864)"
@@ -2121,17 +2187,17 @@ msgstr ""
 "GConf-Fehler:\n"
 "  %s"
 
-#: lib/ephy-file-helpers.c:103
+#: lib/ephy-file-helpers.c:104
 #, c-format
 msgid "Failed to find %s"
 msgstr "%s konnte nicht gefunden werden"
 
-#: lib/ephy-file-helpers.c:321
+#: lib/ephy-file-helpers.c:322
 #, c-format
 msgid "%s exists, please move it out of the way."
 msgstr "%s existiert, bitte entfernen Sie es von dort."
 
-#: lib/ephy-file-helpers.c:324
+#: lib/ephy-file-helpers.c:325
 #, c-format
 msgid "Failed to create directory %s."
 msgstr "Verzeichnis %s konnte nicht angelegt werden."
@@ -2149,19 +2215,19 @@ msgstr ""
 "\n"
 "Wollen Sie fortfahren?"
 
-#: lib/ephy-node.c:803 lib/ephy-node.c:809 lib/ephy-node.c:840
+#: lib/ephy-node.c:821 lib/ephy-node.c:827 lib/ephy-node.c:858
 msgid "Never"
 msgstr "Nie"
 
-#: lib/ephy-node.c:831
+#: lib/ephy-node.c:849
 msgid "Today at %-H:%M"
 msgstr "Heute, %H:%M"
 
-#: lib/ephy-node.c:833
+#: lib/ephy-node.c:851
 msgid "Yesterday at %-H:%M"
 msgstr "Gestern, %H:%M"
 
-#: lib/ephy-node.c:835
+#: lib/ephy-node.c:853
 msgid "%A, %B %-d %Y at %-H:%M"
 msgstr "%A, %d.%B.%Y, %H:%M"
 
@@ -2223,43 +2289,43 @@ msgid "New"
 msgstr "Neu"
 
 #: lib/toolbar/ephy-tbi-zoom.c:179 lib/toolbar/ephy-tbi-zoom.c:218
-#: src/toolbar.c:304
+#: src/toolbar.c:299
 msgid "Zoom"
 msgstr "Vergrößerung"
 
 #. setup label
-#: lib/widgets/ephy-notebook.c:671 src/ephy-tab.c:484 src/ephy-tab.c:898
-#: src/window-commands.c:344
+#: lib/widgets/ephy-notebook.c:671 src/ephy-tab.c:506 src/ephy-tab.c:920
+#: src/window-commands.c:345
 msgid "Untitled"
 msgstr "Unbenannt"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:275
-#: src/bookmarks/ephy-new-bookmark.c:187
+#: src/bookmarks/ephy-bookmarks-editor.c:272
+#: src/bookmarks/ephy-new-bookmark.c:194
 msgid "Title:"
 msgstr "Titel:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:291
-#: src/bookmarks/ephy-new-bookmark.c:201
+#: src/bookmarks/ephy-bookmarks-editor.c:288
+#: src/bookmarks/ephy-new-bookmark.c:208
 msgid "Keywords:"
 msgstr "Stichwörter:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:380
+#: src/bookmarks/ephy-bookmarks-editor.c:377
 msgid "Search:"
 msgstr "Suche:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:424
+#: src/bookmarks/ephy-bookmarks-editor.c:421
 msgid "Keywords"
 msgstr "Stichwörter"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:448 src/history-dialog.c:271
+#: src/bookmarks/ephy-bookmarks-editor.c:446 src/history-dialog.c:271
 msgid "Title"
 msgstr "Titel"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:450 src/history-dialog.c:272
+#: src/bookmarks/ephy-bookmarks-editor.c:448 src/history-dialog.c:272
 msgid "Location"
 msgstr "Ort"
 
-#: src/bookmarks/ephy-bookmarks.c:523
+#: src/bookmarks/ephy-bookmarks.c:522
 msgid "All"
 msgstr "Alle"
 
@@ -2335,108 +2401,108 @@ msgstr "Wie --close, beendet aber auch den Server-Modus"
 msgid "Used internally by the nautilus view"
 msgstr "Intern von der Nautilus-Ansicht verwendet"
 
-#: src/ephy-main.c:130
+#: src/ephy-main.c:131
 msgid "Ephy"
 msgstr "Epiphany"
 
-#: src/ephy-main.c:285
+#: src/ephy-main.c:289
 msgid "Ephy already running, using existing process"
 msgstr "Epiphany läuft bereits, bestehender Prozess wird verwendet"
 
-#: src/ephy-nautilus-view.c:743
+#: src/ephy-nautilus-view.c:740
 msgid "name of icon for the mozilla view"
 msgstr "Name des Icons für die Mozilla-Ansicht"
 
 # CHECK
-#: src/ephy-nautilus-view.c:746
+#: src/ephy-nautilus-view.c:743
 msgid "mozilla summary info"
 msgstr "Mozilla-Zusammenfassung"
 
-#: src/ephy-navigation-button.c:150
+#: src/ephy-navigation-button.c:148
 msgid "Go up"
 msgstr "Rauf gehen"
 
-#: src/ephy-navigation-button.c:155
+#: src/ephy-navigation-button.c:153
 msgid "Go back"
 msgstr "Zurück gehen"
 
-#: src/ephy-navigation-button.c:160
+#: src/ephy-navigation-button.c:158
 msgid "Go forward"
 msgstr "Vor gehen"
 
-#: src/ephy-navigation-button.c:259
+#: src/ephy-navigation-button.c:257
 msgid "Back (with menu)"
 msgstr "Zurück (mit Menü)"
 
-#: src/ephy-navigation-button.c:260
+#: src/ephy-navigation-button.c:258
 msgid "Back"
 msgstr "Zurück"
 
-#: src/ephy-navigation-button.c:264
+#: src/ephy-navigation-button.c:262
 msgid "Forward (with menu)"
 msgstr "Vor (mit Menü)"
 
-#: src/ephy-navigation-button.c:265
+#: src/ephy-navigation-button.c:263
 msgid "Forward"
 msgstr "Vor"
 
-#: src/ephy-navigation-button.c:269
+#: src/ephy-navigation-button.c:267
 msgid "Up (with menu)"
 msgstr "Rauf (mit Menü)"
 
-#: src/ephy-navigation-button.c:270
+#: src/ephy-navigation-button.c:268
 msgid "Up"
 msgstr "Rauf"
 
-#: src/ephy-tab.c:528
+#: src/ephy-tab.c:550
 msgid "site"
 msgstr "Seite"
 
-#: src/ephy-tab.c:554
+#: src/ephy-tab.c:576
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Umleitung zur Seite %s..."
 
-#: src/ephy-tab.c:558
+#: src/ephy-tab.c:580
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Datenübertragung von %s..."
 
-#: src/ephy-tab.c:562
+#: src/ephy-tab.c:584
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Warten auf Legitimation von %s..."
 
-#: src/ephy-tab.c:570
+#: src/ephy-tab.c:592
 #, c-format
 msgid "Loading %s..."
 msgstr "%s wird geladen..."
 
-#: src/ephy-tab.c:574
+#: src/ephy-tab.c:596
 msgid "Done."
 msgstr "Fertig."
 
-#: src/ephy-window.c:950
+#: src/ephy-window.c:949
 msgid "Insecure"
 msgstr "Ungeschützt"
 
-#: src/ephy-window.c:953
+#: src/ephy-window.c:952
 msgid "Broken"
 msgstr "Defekt"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:955
 msgid "Medium"
 msgstr "Mittel"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:959
 msgid "Low"
 msgstr "Niedrig"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:963
 msgid "High"
 msgstr "Hoch"
 
-#: src/ephy-window.c:974
+#: src/ephy-window.c:973
 #, c-format
 msgid ""
 "Security level: %s\n"
@@ -2445,7 +2511,7 @@ msgstr ""
 "Sicherheitsstufe: %s\n"
 "%s"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:979
 #, c-format
 msgid "Security level: %s"
 msgstr "Sicherheitsstufe: %s"
@@ -2701,12 +2767,12 @@ msgstr "Sie können die geöffneten Reiter und Fenster wiederherstellen."
 msgid "Check this out!"
 msgstr "Schauen Sie sich das an!"
 
-#: src/window-commands.c:376
+#: src/window-commands.c:381
 msgid "Select the file to open"
 msgstr "Bitte wählen Sie die zu öffnende Datei"
 
 #. Translator credits
-#: src/window-commands.c:761
+#: src/window-commands.c:766
 msgid "translator_credits"
 msgstr ""
 "Walter Muellner <walter.muellner@telering.at>\n"
@@ -2714,11 +2780,11 @@ msgstr ""
 "Christian Neumair <chris@gnome-de.org>\n"
 "Benjamin Greiner <nadaschauher@gmx.de>"
 
-#: src/window-commands.c:773
+#: src/window-commands.c:778
 msgid "A GNOME browser based on Mozilla"
 msgstr "Ein auf Mozilla basierender GNOME-Browser"
 
-#: src/window-commands.c:899
+#: src/window-commands.c:903
 #, c-format
 msgid ""
 "There was an error displaying help: \n"
@@ -2726,6 +2792,17 @@ msgid ""
 msgstr ""
 "Beim Anzeigen der Hilfe ist ein Fehler aufgetreten: \n"
 "%s"
+
+#~ msgid "Galeon"
+#~ msgstr "Epiphany"
+
+#~ msgid "How I begin ? Import bookmarks, proxy settings"
+#~ msgstr ""
+#~ "Womit soll ich anfangen? Lesezeichen importieren, Proxy-Einstellungen "
+#~ "vornehmen"
+
+#~ msgid "What you use it for ?"
+#~ msgstr "Wofür verwenden Sie das?"
 
 #~ msgid "Allow prompts"
 #~ msgstr "Eingabeaufforderungen erlauben?"
@@ -3387,9 +3464,6 @@ msgstr ""
 #~ msgid "<b>Secure</b>"
 #~ msgstr "<b>Sicherheit</b>"
 
-#~ msgid "Epiphany"
-#~ msgstr "Epiphany"
-
 #, fuzzy
 #~ msgid "Copyright (C) 2002 Marco Pesenti Gritti"
 #~ msgstr "Copyright © 2000-2002 Marco Pesenti Gritti"
@@ -3564,9 +3638,6 @@ msgstr ""
 #~ msgid "This is the resulting bookmark set after merging."
 #~ msgstr "Dies ist die neu zusammengestellte Lesezeichen-Sammlung."
 
-#~ msgid "Bookmarks Imported"
-#~ msgstr "Lesezeichen wurden importiert"
-
 #~ msgid "Choose a file to import"
 #~ msgstr "Bitte wählen Sie die zu importierende Datei"
 
@@ -3585,9 +3656,6 @@ msgstr ""
 
 #~ msgid "Mozilla bookmarks format"
 #~ msgstr "Lesezeichenformat in Mozilla"
-
-#~ msgid "Mozilla bookmarks"
-#~ msgstr "Lesezeichen aus Mozilla"
 
 #~ msgid "Personal Toolbar Folder"
 #~ msgstr "Ordner für persönliche Werkzeugleiste"
@@ -3661,9 +3729,6 @@ msgstr ""
 
 #~ msgid "URL Clicked"
 #~ msgstr "Adresse angeklickt"
-
-#~ msgid "Bookmarks"
-#~ msgstr "Lesezeichen"
 
 #~ msgid ""
 #~ "A bookmark file that was probably saved by Galeon 1 has been found. "
