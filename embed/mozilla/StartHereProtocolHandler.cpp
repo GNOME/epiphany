@@ -149,6 +149,7 @@ NS_IMETHODIMP GStartHereProtocolHandler::NewChannel(nsIURI *aURI,
 	sh = ephy_start_here_new ();
 	buf = ephy_start_here_get_page
 		(sh, path.IsEmpty() ? "index" : path.get ());
+	if (buf == NULL) return NS_ERROR_FAILURE;
 	aBaseURI = ephy_start_here_get_base_uri (sh);	
 	
 	rv = stream->Write (buf, strlen (buf), &bytesWritten);

@@ -274,6 +274,7 @@ ephy_start_here_get_page (EphyStartHere *sh, const char *id)
 
 	xml_filename = g_strconcat ("starthere/", id, ".xml", NULL);
 	xml_filepath = ephy_file (xml_filename);
+	if (!xml_filepath) return NULL;
 	g_free (xml_filename);
 
 	sh->priv->doc = xmlParseFile (xml_filepath);
