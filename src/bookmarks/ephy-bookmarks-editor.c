@@ -189,11 +189,11 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 	{ "ViewTitle", N_("_Title"), NULL, NULL,
 	  N_("Show only the title column"), 
 	  NULL, NULL, RADIO_ACTION, NULL },
-	{ "ViewLocation", N_("_Location"), NULL, NULL,
-	  N_("Show only the location column"), 
+	{ "ViewLocation", N_("_Address"), NULL, NULL,
+	  N_("Show only the address column"), 
 	  NULL, NULL, RADIO_ACTION, "ViewTitle" },
-	{ "ViewTitleLocation", N_("T_itle and Location"), NULL, NULL,
-	  N_("Show both the title and location columns"), 
+	{ "ViewTitleLocation", N_("T_itle and Address"), NULL, NULL,
+	  N_("Show both the title and address columns"), 
 	  NULL, NULL, RADIO_ACTION, "ViewTitle" },	
 
 	/* Help Menu */	
@@ -744,7 +744,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 
 	if (bmk_focus)
 	{
-		copy_label = _("_Copy Location");
+		copy_label = _("_Copy Address");
 	}
 	else
 	{

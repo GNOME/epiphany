@@ -125,16 +125,16 @@ static EggActionGroupEntry ephy_history_ui_entries [] = {
 
 	/* File Menu */
 	{ "OpenInWindow", N_("_Open in New Window"), GTK_STOCK_OPEN, "<control>O",
-	  N_("Open the selected history item in a new window"),
+	  N_("Open the selected history link in a new window"),
 	  G_CALLBACK (cmd_open_bookmarks_in_browser), NULL },
 	{ "OpenInTab", N_("Open in New _Tab"), NULL, "<shift><control>O",
-	  N_("Open the selected history item in a new tab"),
+	  N_("Open the selected history link in a new tab"),
 	  G_CALLBACK (cmd_open_bookmarks_in_tabs), NULL },
 	{ "Delete", N_("_Delete"), GTK_STOCK_DELETE, NULL,
-	  N_("Delete the selected history item"),
+	  N_("Delete the selected history link"),
 	  G_CALLBACK (cmd_delete), NULL },
 	{ "BookmarkPage", N_("Boo_kmark Page..."), EPHY_STOCK_BOOKMARK_PAGE, "<control>D",
-	  N_("Bookmark the selected history item"),
+	  N_("Bookmark the selected history link"),
 	  G_CALLBACK (cmd_bookmark_page), NULL },
 	{ "Close", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
 	  N_("Close the history window"),
@@ -151,7 +151,7 @@ static EggActionGroupEntry ephy_history_ui_entries [] = {
 	  N_("Paste the clipboard"),
 	  G_CALLBACK (cmd_paste), NULL },
 	{ "SelectAll", N_("Select _All"), NULL, "<control>A",
-	  N_("Select all history items or text"),
+	  N_("Select all history links or text"),
 	  G_CALLBACK (cmd_select_all), NULL },
 	{ "Clear", N_("C_lear History"), GTK_STOCK_CLEAR, NULL,
 	  N_("Clear your browsing history"),
@@ -161,11 +161,11 @@ static EggActionGroupEntry ephy_history_ui_entries [] = {
 	{ "ViewTitle", N_("_Title"), NULL, NULL,
 	  N_("Show only the title column"),
 	  NULL, NULL, RADIO_ACTION, NULL },
-	{ "ViewLocation", N_("_Location"), NULL, NULL,
-	  N_("Show only the location column"),
+	{ "ViewLocation", N_("_Address"), NULL, NULL,
+	  N_("Show only the address column"),
 	  NULL, NULL, RADIO_ACTION, "ViewTitle" },
-	{ "ViewTitleLocation", N_("T_itle and Location"), NULL, NULL,
-	  N_("Show both the title and location columns"),
+	{ "ViewTitleLocation", N_("T_itle and Address"), NULL, NULL,
+	  N_("Show both the title and address columns"),
 	  NULL, NULL, RADIO_ACTION, "ViewTitle" },
 
 	/* Help Menu */
@@ -647,7 +647,7 @@ ephy_history_window_update_menu (EphyHistoryWindow *editor)
 
 	if (pages_focus)
 	{
-		copy_label = _("_Copy Location");
+		copy_label = _("_Copy Address");
 	}
 	else
 	{
@@ -1058,7 +1058,7 @@ ephy_history_window_construct (EphyHistoryWindow *editor)
 				         G_TYPE_STRING, EPHY_NODE_PAGE_PROP_TITLE,
 				         -1, EPHY_NODE_VIEW_USER_SORT, NULL);
 	gtk_tree_view_column_set_max_width (col, 250);
-	col = ephy_node_view_add_column (EPHY_NODE_VIEW (pages_view), _("Location"),
+	col = ephy_node_view_add_column (EPHY_NODE_VIEW (pages_view), _("Address"),
 				         G_TYPE_STRING, EPHY_NODE_PAGE_PROP_LOCATION,
 				         -1, EPHY_NODE_VIEW_USER_SORT, NULL);
 	gtk_tree_view_column_set_max_width (col, 200);

@@ -279,14 +279,17 @@ toolbar_setup_actions (Toolbar *t)
 
 	action = g_object_new (EPHY_TYPE_SPINNER_ACTION,
 			       "name", "Spinner",
-			       "label", "Spinner",
+			       "label", _("Spinner"),
 			       NULL);
 	egg_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
 
+	/* FIXME: I'm still waiting for the exact term to 
+	 * user here from the docs team.
+	 */
 	action = g_object_new (EPHY_TYPE_LOCATION_ACTION,
 			       "name", "Location",
-			       "label", "Location",
+			       "label", _("Address Entry"),
 			       "stock_id", EPHY_STOCK_ENTRY,
 			       NULL);
 	g_signal_connect (action, "go_location",
@@ -296,7 +299,7 @@ toolbar_setup_actions (Toolbar *t)
 
 	action = g_object_new (EPHY_TYPE_FAVICON_ACTION,
 			       "name", "Favicon",
-			       "label", "Favicon",
+			       "label", _("Favicon"),
 			       "window", t->priv->window,
 			       NULL);
 	egg_action_group_add_action (t->priv->action_group, action);
@@ -304,7 +307,7 @@ toolbar_setup_actions (Toolbar *t)
 
 	action = g_object_new (EPHY_TYPE_GO_ACTION,
 			       "name", "ToolbarGo",
-			       "label", "Go",
+			       "label", _("Go"),
 			       "stock_id", GTK_STOCK_JUMP_TO,
 			       NULL);
 	g_signal_connect (action, "activate",

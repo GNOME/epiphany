@@ -370,7 +370,7 @@ build_ui (EphyBookmarkProperties *editor)
 	gtk_widget_show (entry);
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	str = g_strconcat ("<b>", _("_Location:"), "</b>", NULL);
+	str = g_strconcat ("<b>", _("_Address:"), "</b>", NULL);
 	gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), str);
 	g_free (str);
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);

@@ -1,5 +1,29 @@
 2003-05-08  David Adam Bordoley <bordoley@msu.edu>
 
+	* TODO:
+	* data/glade/epiphany.glade:
+	* data/glade/prefs-dialog.glade:
+	* data/glade/print.glade:
+	* src/ephy-history-window.c: (ephy_history_ui_entries [])
+	(ephy_history_window_update_menu), 
+	(ephy_history_window_construct):
+	* src/ephy-window.c: (ephy_popups_entries []),
+	* src/toolbar.c: (toolbar_setup_actions):
+	* src/bookmarks/ephy-bookmark-properties.c: (build_ui):
+	* src/bookmarks/ephy-bookmarks-editor.c: 
+	(ephy_bookmark_popup_entries []),
+	(ephy_bookmarks_editor_update_menu):
+
+	s/location/address. Fix up mnemonic collisions
+	in the print dialog. Mark toolbar action names
+	for translation. s/location/"address entry" for
+	the entry bar name (this may change depending
+	on what the docs team says). Add a todo
+	about changing code to use address where 
+	appropriate.
+
+2003-05-08  David Adam Bordoley <bordoley@msu.edu>
+
 	* data/glade/epiphany.glade:
 
 	Add a label to the find field.

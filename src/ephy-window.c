@@ -229,7 +229,7 @@ static EggActionGroupEntry ephy_popups_entries [] = {
 	  NULL, G_CALLBACK (popup_cmd_download_link), NULL },
 	{ "BookmarkLink", N_("_Bookmark Link..."), EPHY_STOCK_BOOKMARK_PAGE, NULL,
 	  NULL, G_CALLBACK (popup_cmd_bookmark_link), NULL },
-	{ "CopyLinkLocation", N_("_Copy Link Location"), NULL, NULL,
+	{ "CopyLinkLocation", N_("_Copy Link Address"), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_link_location), NULL },
 	{ "CopyEmail", N_("Copy _Email"), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_email), NULL },
@@ -245,7 +245,7 @@ static EggActionGroupEntry ephy_popups_entries [] = {
 	  NULL, G_CALLBACK (popup_cmd_save_image_as), NULL },
 	{ "SetImageAsBackground", N_("Use Image As _Background"), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_set_image_as_background), NULL },
-	{ "CopyImageLocation", N_("_Copy Image Location"), GTK_STOCK_COPY, NULL,
+	{ "CopyImageLocation", N_("_Copy Image Address"), GTK_STOCK_COPY, NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_image_location), NULL },
 };
 static guint ephy_popups_n_entries = G_N_ELEMENTS (ephy_popups_entries);
