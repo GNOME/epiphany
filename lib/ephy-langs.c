@@ -23,11 +23,10 @@
 #endif
 
 #include "ephy-langs.h"
-#include "ephy-string.h"
-#include <bonobo/bonobo-i18n.h>
-#include <string.h>
 
-static const FontsLanguageInfo font_languages[] =
+#include <bonobo/bonobo-i18n.h>
+
+static const EphyFontsLanguageInfo font_languages [] =
 {
 	{ N_("Arabic"),					"ar" },
 	{ N_("Baltic"),					"x-baltic" },
@@ -51,112 +50,14 @@ static const FontsLanguageInfo font_languages[] =
 };
 static const guint n_font_languages = G_N_ELEMENTS (font_languages);
 
-static const
-struct
+const EphyFontsLanguageInfo *
+ephy_font_languages (void)
 {
-	EphyLanguageGroup group;
-	char *title;
-}
-lang_group_names[] =
-{
-        { LG_ARABIC,		N_("_Arabic")		},
-        { LG_BALTIC,		N_("_Baltic")		},
-        { LG_CENTRAL_EUROPEAN,	N_("Central _European") },
-        { LG_CHINESE,		N_("Chi_nese")		},
-        { LG_CYRILLIC,		N_("_Cyrillic")		},
-        { LG_GREEK,		N_("_Greek")		},
-        { LG_HEBREW,		N_("_Hebrew")		},
-        { LG_INDIAN,		N_("_Indian")		},
-        { LG_JAPANESE,		N_("_Japanese")		},
-        { LG_KOREAN,		N_("_Korean")		},
-        { LG_TURKISH,		N_("_Turkish")		},
-        { LG_UNICODE,		N_("_Unicode")		},
-        { LG_VIETNAMESE,	N_("_Vietnamese")	},
-        { LG_WESTERN,		N_("_Western")		},
-        { LG_OTHER,		N_("_Other")		}
-};
-static const guint n_lang_group_names = G_N_ELEMENTS (lang_group_names);
-
-void
-ephy_lang_group_info_free (EphyLanguageGroupInfo *info)
-{
-	g_return_if_fail (info != NULL);
-
-	g_free (info->title);
-	g_free (info->key);
-
-	g_free (info);
+	return font_languages;
 }
 
-static gint
-lang_group_info_cmp (const EphyLanguageGroupInfo *i1, const EphyLanguageGroupInfo *i2)
+guint			 
+ephy_font_n_languages (void)
 {
-	return strcmp (i1->key, i2->key);
-}
-
-GList *
-ephy_lang_get_group_list (void)
-{
-	GList *list = NULL;
-	guint i;
-
-	for (i = 0; i < n_lang_group_names; i++)
-	{
-		EphyLanguageGroupInfo *info;
-		char *elided = NULL;
-
-		info = g_new0 (EphyLanguageGroupInfo, 1);
-
-		info->title = g_strdup (_(lang_group_names[i].title));
-		info->group = lang_group_names[i].group;
-
-		/* collate without underscores */
-		elided = ephy_string_elide_underscores (info->title);
-		info->key = g_utf8_collate_key (elided, -1);
-		g_free (elided);
-
-		list = g_list_prepend (list, info);
-	}
-
-	return g_list_sort (list, (GCompareFunc) lang_group_info_cmp);
-}
-
-static int
-fonts_language_info_cmp (const FontsLanguageInfo *i1, const FontsLanguageInfo *i2)
-{
-	return g_utf8_collate (i1->title, i2->title);
-}
-
-GList *
-ephy_font_langs_get_codes_list (void)
-{
-	guint i;
-	GList *list = NULL;
-
-	for (i=0; i < n_font_languages; i++)
-	{
-		list = g_list_prepend (list, font_languages[i].code);
-	}
-
-	return list;
-}
-
-GList *
-ephy_font_langs_get_list (void)
-{
-	GList *list = NULL;
-	guint i;
-
-	for (i = 0; i < n_font_languages; i++)
-	{
-		FontsLanguageInfo *info;
-
-		info = g_new0 (FontsLanguageInfo, 1);
-		info->title = _(font_languages[i].title);
-		info->code = font_languages[i].code;
-
-		list = g_list_prepend (list, info);
-	}
-
-	return g_list_sort (list, (GCompareFunc) fonts_language_info_cmp);
+	return n_font_languages;
 }

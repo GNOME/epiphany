@@ -387,7 +387,8 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 {
 	GConfClient *client = eel_gconf_client_get_global ();
 	guint i;
-	GList *codes, *l;
+	const EphyFontsLanguageInfo *font_languages;
+	guint n_font_languages;
 
 	for (i = 0; conversion_table[i].gconf_key != NULL; i++)
 	{
@@ -425,10 +426,12 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 	}
 
 	/* fonts notifiers */
-	codes = ephy_font_langs_get_codes_list ();
-	for (l = codes; l != NULL; l = l->next)
+	font_languages = ephy_font_languages ();
+	n_font_languages = ephy_font_n_languages ();
+
+	for (i=0; i < n_font_languages; i++)
 	{
-		const char *code = (char*) l->data;
+		const char *code = font_languages[i].code;
 		guint k;
 		char *types [] = { "variable", "monospace" };
 		char key[255];
@@ -467,7 +470,6 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 					     info);
 		font_infos = g_list_prepend (font_infos, info);		
 	}
-	g_list_free (codes);
 }
 
 void 

@@ -1,5 +1,7 @@
 /*
  *  Copyright (C) 2001, 2002 Ricardo Fernández Pascual
+ *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +33,7 @@
 #include "ephy-embed-utils.h"
 #include "find-dialog.h"
 #include "print-dialog.h"
+#include "ephy-encoding-dialog.h"
 #include "ephy-zoom.h"
 #include "ephy-debug.h"
 
@@ -79,16 +82,15 @@ static void		gnv_zoomable_zoom_to_fit_cb		(BonoboZoomable *zoomable,
 static void		gnv_zoomable_zoom_to_default_cb		(BonoboZoomable *zoomable,
 								 EphyNautilusView *view);
 /* commands */
-static void		gnv_cmd_set_encoding			(BonoboUIComponent *uic, 
-								 EphyNautilusView *view,
-								 const char* verbname);
 static void 		gnv_cmd_file_print			(BonoboUIComponent *uic, 
 								 EphyNautilusView *view, 
 								 const char* verbname);
 static void 		gnv_cmd_edit_find			(BonoboUIComponent *uic, 
 								 EphyNautilusView *view, 
 								 const char* verbname);
-
+static void 		gnv_cmd_select_encoding			(BonoboUIComponent *uic, 
+								 EphyNautilusView *view, 
+								 const char* verbname);
 
 /* popups */
 static EphyNautilusView *gnv_view_from_popup			(EphyEmbedPopupControl*popup);
@@ -131,11 +133,9 @@ static BonoboUIVerb ephy_popup_verbs [] = {
 BonoboUIVerb ephy_verbs [] = {
         BONOBO_UI_VERB ("FilePrint", (BonoboUIVerbFn) gnv_cmd_file_print),
         BONOBO_UI_VERB ("EditFind", (BonoboUIVerbFn) gnv_cmd_edit_find),
+	BONOBO_UI_VERB ("ViewEncoding", (BonoboUIVerbFn) gnv_cmd_select_encoding),
         BONOBO_UI_VERB_END
 };
-
-#define ENCODING_MENU_PATH "/menu/View/Encoding"
-
 
 BONOBO_CLASS_BOILERPLATE (EphyNautilusView, ephy_nautilus_view,
 			  NautilusView, NAUTILUS_TYPE_VIEW)
@@ -434,11 +434,6 @@ gnv_bonobo_control_activate_cb (BonoboControl *control, gboolean state, EphyNaut
 		p->ui = nautilus_view_set_up_ui (NAUTILUS_VIEW (view), SHARE_DIR,
 						 "nautilus-epiphany-view.xml", "EphyNautilusView");
 		g_return_if_fail (BONOBO_IS_UI_COMPONENT (p->ui));
-		
-		ephy_embed_utils_build_encodings_submenu (p->ui,
-							   ENCODING_MENU_PATH,
-							   (BonoboUIVerbFn) gnv_cmd_set_encoding,
-							   view);
 
 		bonobo_ui_component_add_verb_list_with_data (p->ui, ephy_verbs, view);
 	}
@@ -509,23 +504,19 @@ gnv_popup_cmd_frame_in_new_window (BonoboUIComponent *uic,
 	g_free (location);
 }
 
-void 
-gnv_cmd_set_encoding (BonoboUIComponent *uic, 
-		      EphyNautilusView *view,
-		      const char* verbname)
+static void
+gnv_cmd_select_encoding (BonoboUIComponent *uic, 
+			 EphyNautilusView *view, 
+			 const char* verbname)
 {
-	const char *encoding;
+	EphyDialog *dialog;
+	
+	dialog = EPHY_DIALOG (g_object_new (EPHY_TYPE_ENCODING_DIALOG,
+					    "embed", view->priv->embed,
+					    NULL));
 
-	g_return_if_fail (EPHY_IS_NAUTILUS_VIEW (view));
-
-	if (strncmp (verbname, "Encoding", 8) == 0)
-	{
-		encoding = verbname + 8;
-		
-		LOG ("Set encoding %s", encoding)
-
-		ephy_embed_set_encoding (view->priv->embed, encoding);
-	}
+	ephy_dialog_set_modal (dialog, TRUE);
+	ephy_dialog_show (dialog);
 }
 
 static void
@@ -557,7 +548,6 @@ gnv_cmd_edit_find (BonoboUIComponent *uic,
 
 	ephy_dialog_show (p->find_dialog);
 }
-
 
 /* zoomable */
 static void

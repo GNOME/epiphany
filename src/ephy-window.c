@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2000, 2001, 2002 Marco Pesenti Gritti
+ *  Copyright (C) 2000, 2001, 2002, 2003 Marco Pesenti Gritti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "ephy-window.h"
@@ -139,7 +139,9 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "ViewZoomNormal", GTK_STOCK_ZOOM_100, N_("_Normal Size"), NULL,
 	  N_("Use the normal text size"),
 	  G_CALLBACK (window_cmd_view_zoom_normal) },
-	{ "ViewEncoding", NULL, N_("_Encoding") },
+	{ "ViewEncoding", NULL, N_("Text _Encoding"), NULL,
+	  N_("Change the text encoding"),
+	  NULL },
 	{ "ViewPageSource", EPHY_STOCK_VIEWSOURCE, N_("_Page Source"), "<control>U",
 	  N_("View the source code of the page"),
 	  G_CALLBACK (window_cmd_view_page_source) },
@@ -304,6 +306,12 @@ ephy_window_notebook_switch_page_cb (GtkNotebook *notebook,
 				     guint page_num,
 				     EphyWindow *window);
 
+enum
+{
+	PROP_0,
+	PROP_ACTIVE_TAB
+};
+
 static GObjectClass *parent_class = NULL;
 
 GType
@@ -365,24 +373,6 @@ ephy_window_destroy (GtkObject *gtkobject)
 	}
 
         GTK_OBJECT_CLASS (parent_class)->destroy (gtkobject);
-}
-
-static void
-ephy_window_class_init (EphyWindowClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-	GtkObjectClass *gtkobject_class = GTK_OBJECT_CLASS (klass);
-
-        parent_class = g_type_class_peek_parent (klass);
-
-        object_class->finalize = ephy_window_finalize;
-
-	widget_class->show = ephy_window_show;
-
-	gtkobject_class->destroy = ephy_window_destroy;
-
-	g_type_class_add_private (object_class, sizeof(EphyWindowPrivate));
 }
 
 static void
@@ -1184,6 +1174,8 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 
 		action = GTK_TOGGLE_ACTION (ephy_tab_get_action (new_tab));
 		gtk_toggle_action_set_active (action, TRUE);
+
+		g_object_notify (G_OBJECT (window), "active-tab");
 	}
 }
 
@@ -1309,6 +1301,66 @@ setup_notebook (EphyWindow *window)
 	gtk_widget_show (GTK_WIDGET (notebook));
 
 	return notebook;
+}
+
+static void
+ephy_window_set_property (GObject *object,
+			  guint prop_id,
+			  const GValue *value,
+			  GParamSpec *pspec)
+{
+	EphyWindow *window = EPHY_WINDOW (object);
+
+	switch (prop_id)
+	{
+		case PROP_ACTIVE_TAB:
+			ephy_window_set_active_tab (window, g_value_get_object (value));
+			break;
+	}
+}
+
+static void
+ephy_window_get_property (GObject *object,
+			  guint prop_id,
+			  GValue *value,
+			  GParamSpec *pspec)
+{
+	EphyWindow *window = EPHY_WINDOW (object);
+
+	switch (prop_id)
+	{
+		case PROP_ACTIVE_TAB:
+			g_value_set_object (value, window->priv->active_tab);
+			break;
+	}
+}
+
+static void
+ephy_window_class_init (EphyWindowClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GtkObjectClass *gtkobject_class = GTK_OBJECT_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+        parent_class = g_type_class_peek_parent (klass);
+
+        object_class->finalize = ephy_window_finalize;
+	object_class->get_property = ephy_window_get_property;
+	object_class->set_property = ephy_window_set_property;
+
+	gtkobject_class->destroy = ephy_window_destroy;
+
+	widget_class->show = ephy_window_show;
+
+	g_object_class_install_property (object_class,
+					 PROP_ACTIVE_TAB,
+					 g_param_spec_object ("active-tab",
+							      "active-tab",
+							      "Active tab",
+							      EPHY_TYPE_TAB,
+							      G_PARAM_READWRITE));
+
+	g_type_class_add_private (object_class, sizeof(EphyWindowPrivate));
 }
 
 static void

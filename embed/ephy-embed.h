@@ -21,6 +21,7 @@
 
 #include "ephy-embed-types.h"
 #include "ephy-embed-event.h"
+#include "ephy-encodings.h"
 
 #include <glib-object.h>
 #include <glib.h>
@@ -270,8 +271,8 @@ struct EphyEmbedClass
 						 gint pageNum);
 	gresult   (* set_encoding)         (EphyEmbed *embed,
 					    const char *encoding);
-	gresult   (* get_encoding)         (EphyEmbed *embed,
-					    char **encoding);
+	gresult   (* get_encoding_info)    (EphyEmbed *embed,
+					    EphyEncodingInfo **info);
 };
 
 GType         ephy_embed_get_type             (void);
@@ -392,8 +393,8 @@ gresult	      ephy_embed_find_next	      (EphyEmbed *embed,
 gresult       ephy_embed_set_encoding         (EphyEmbed *embed,
 					       const char *encoding);
 
-gresult       ephy_embed_get_encoding         (EphyEmbed *embed,
-					       char **encoding);
+gresult       ephy_embed_get_encoding_info    (EphyEmbed *embed,
+					       EphyEncodingInfo **info);
 
 gresult       ephy_embed_activate             (EphyEmbed *embed);
 

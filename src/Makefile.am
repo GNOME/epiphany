@@ -50,6 +50,7 @@ header_DATA = $(INST_H_FILES)
 
 NOINST_H_FILES =					\
 	ephy-automation.h				\
+	ephy-encoding-dialog.h				\
 	ephy-encoding-menu.h				\
 	ephy-favicon-action.h				\
 	ephy-favorites-menu.h				\
@@ -83,6 +84,7 @@ epiphany_bin_SOURCES = 				    	\
 	ephy-automation.c				\
 	ephy-completion-model.c				\
 	ephy-completion-model.h				\
+	ephy-encoding-dialog.c				\
 	ephy-encoding-menu.c				\
 	ephy-favicon-action.c				\
 	ephy-favorites-menu.c				\

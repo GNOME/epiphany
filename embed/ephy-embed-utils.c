@@ -29,7 +29,6 @@
 #include "ephy-gui.h"
 #include "ephy-debug.h"
 #include "ephy-langs.h"
-#include "ephy-encodings.h"
 
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkmessagedialog.h>
@@ -186,86 +185,6 @@ ephy_embed_utils_save (GtkWidget *window,
         g_free (dirName);
         g_free (fileName);
 	g_free (target);
-}
-
-/**
- * ephy_embed_utils_build_encodings_submenu:
- * @ui_component: the parent #BonoboUIComponent
- * @path: the bonoboui path where to create the submenu.
- * It's recommended to use a <placeholder/>
- * @fn: callback to report the selected encodings
- * @data: the data passed to the callback
- *
- * Create a encoding submenu using bonobo ui.
- **/
-void
-ephy_embed_utils_build_encodings_submenu (BonoboUIComponent *ui_component,
-					  const char *path,
-					  BonoboUIVerbFn fn,
-					  gpointer view)
-{
-	gchar *tmp, *verb;
-	GString *xml_string;
-	GList *groups, *gl, *encodings, *l;
-	GList *verbs = NULL;
-
-	START_PROFILER ("Encodings menu")
-
-	xml_string = g_string_new (NULL);
-	g_string_append (xml_string, "<submenu name=\"Encoding\" _label=\"_Encoding\">");
-
-	groups = ephy_lang_get_group_list ();
-	for (gl = groups; gl != NULL; gl = gl->next)
-        {
-		const EphyLanguageGroupInfo *lang_info = (EphyLanguageGroupInfo *) gl->data;
-
-		tmp = g_strdup_printf ("<submenu label=\"%s\" name=\"EncodingGroup%d\">\n", 
-					lang_info->title, lang_info->group);
-		xml_string = g_string_append (xml_string, tmp);
-		g_free (tmp);
-
-		encodings = ephy_encodings_get_list (lang_info->group, FALSE);
-		for (l = encodings; l != NULL; l = l->next)
-                {
-			const EphyEncodingInfo *info = (EphyEncodingInfo *) l->data;
-
-			verb = g_strdup_printf ("Encoding%s", info->encoding);
-			tmp = g_strdup_printf ("<menuitem label=\"%s\" name=\"%s\" verb=\"%s\"/>\n",
-						info->title, verb, verb);
-			xml_string = g_string_append (xml_string, tmp);
-
-			verbs = g_list_prepend (verbs, verb);
-
-			g_free (tmp);
-		}
-
-		g_list_foreach (encodings, (GFunc) ephy_encoding_info_free, NULL);
-		g_list_free (encodings);
-
-		g_string_append (xml_string, "</submenu>");
-	}
-
-	g_list_foreach (groups, (GFunc) ephy_lang_group_info_free, NULL);
-	g_list_free (groups);
-
-	g_string_append (xml_string, "</submenu>");
-
-	bonobo_ui_component_set_translate (ui_component, path,
-					   xml_string->str, NULL);
-
-	for (l = verbs; l != NULL; l = l->next)
-	{
-		bonobo_ui_component_add_verb (ui_component,
-					      (const char *) l->data,
-					      fn, view);
-	}
-
-	g_list_foreach (verbs, (GFunc) g_free, NULL);
-	g_list_free (verbs);
-
-	g_string_free (xml_string, TRUE);
-
-	STOP_PROFILER ("Encodings menu")
 }
 
 /**

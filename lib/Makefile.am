@@ -35,7 +35,6 @@ NOINST_H_FILES = \
 INST_H_FILES = \
 	ephy-dialog.h				\
 	ephy-langs.h				\
-	ephy-encodings.h			\
 	ephy-node.h				\
 	ephy-node-db.h				\
 	ephy-types.h
@@ -51,7 +50,6 @@ libephy_la_SOURCES = \
 	ephy-dialog.h				\
 	ephy-dnd.c				\
 	ephy-dnd.h				\
-	ephy-encodings.c			\
 	ephy-file-helpers.c			\
 	ephy-file-helpers.h			\
 	ephy-glade.c				\

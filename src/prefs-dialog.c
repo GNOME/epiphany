@@ -25,6 +25,8 @@
 #include "prefs-dialog.h"
 #include "ephy-dialog.h"
 #include "ephy-prefs.h"
+#include "ephy-embed-shell.h"
+#include "ephy-shell.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-single.h"
 #include "ephy-shell.h"
@@ -33,6 +35,7 @@
 #include "language-editor.h"
 #include "ephy-langs.h"
 #include "ephy-encodings.h"
+#include "ephy-debug.h"
 
 #include <bonobo/bonobo-i18n.h>
 #include <gtk/gtkframe.h>
@@ -148,27 +151,6 @@ languages [] =
 };
 static guint n_languages = G_N_ELEMENTS (languages);
 
-typedef struct
-{
-	gchar *title;
-	gchar *name;
-} EncodingAutodetectorInfo;
-
-static EncodingAutodetectorInfo encoding_autodetector[] =
-{
-	{ N_("Off"),			"" },
-	{ N_("Chinese"),		"zh_parallel_state_machine" },
-	{ N_("East Asian"),		"cjk_parallel_state_machine" },
-	{ N_("Japanese"),		"ja_parallel_state_machine" },
-	{ N_("Korean"),			"ko_parallel_state_machine" },
-	{ N_("Russian"),		"ruprob" },
-	{ N_("Simplified Chinese"),	"zhcn_parallel_state_machine" },
-	{ N_("Traditional Chinese"),	"zhtw_parallel_state_machine" },
-	{ N_("Universal"),		"universal_charset_detector" },
-	{ N_("Ukrainian"),		"ukprob" }
-};
-static guint n_encoding_autodetectors = G_N_ELEMENTS (encoding_autodetector);
-
 static const
 char *cookies_accept_enum [] =
 {
@@ -267,8 +249,8 @@ EphyDialogProperty properties [] =
 	{ DISK_CACHE_PROP, "disk_cache_spin", CONF_NETWORK_CACHE_SIZE, PT_AUTOAPPLY, NULL },
 
 	/* Languages */
-	{ AUTO_ENCODING_PROP, "auto_encoding_optionmenu", NULL, PT_NORMAL, NULL },
-	{ DEFAULT_ENCODING_PROP, "default_encoding_optionmenu", NULL, PT_NORMAL, NULL },
+	{ AUTO_ENCODING_PROP, "auto_encoding_optionmenu", CONF_LANGUAGE_AUTODETECT_ENCODING, PT_AUTOAPPLY, NULL },
+	{ DEFAULT_ENCODING_PROP, "default_encoding_optionmenu", CONF_LANGUAGE_DEFAULT_ENCODING, PT_AUTOAPPLY, NULL },
 	{ LANGUAGE_PROP, "language_optionmenu", NULL, PT_NORMAL, NULL },
 	{ LANGUAGE_LABEL_PROP, "language_label", NULL, PT_NORMAL, NULL },
 	{ DEFAULT_ENCODING_LABEL_PROP, "default_encoding_label", NULL, PT_NORMAL, NULL },
@@ -301,8 +283,6 @@ struct PrefsDialogPrivate
 	GtkWidget *window;
 
 	GList *langs;
-	GList *encodings;
-	GList *autodetectors;
 	GList *fonts_languages;
 
 	guint language;
@@ -383,12 +363,6 @@ prefs_dialog_finalize (GObject *object)
 	g_list_foreach (pd->priv->langs, (GFunc) free_lang_item, NULL);
 	g_list_free (pd->priv->langs);
 
-	g_list_foreach (pd->priv->encodings, (GFunc) ephy_encoding_info_free, NULL);
-	g_list_free (pd->priv->encodings);
-
-	g_list_foreach (pd->priv->autodetectors, (GFunc) g_free, NULL);
-	g_list_free (pd->priv->autodetectors);
-
 	g_list_foreach (pd->priv->fonts_languages, (GFunc) g_free, NULL);
 	g_list_free (pd->priv->fonts_languages);
 
@@ -415,15 +389,15 @@ prefs_dialog_show_help (PrefsDialog *pd)
 	ephy_gui_help (GTK_WINDOW (pd->priv->window), "epiphany", help_preferences[id]);
 }
 
-static const gchar *
+static const char *
 get_current_language_code (PrefsDialog *dialog)
 {
 	GList *lang;
-	const FontsLanguageInfo *info;
+	const EphyFontsLanguageInfo *info;
 
 	lang = g_list_nth (dialog->priv->fonts_languages, dialog->priv->language);
 	g_assert (lang != NULL);
-	info = (FontsLanguageInfo *) lang->data;
+	info = (EphyFontsLanguageInfo *) lang->data;
 
 	return info->code;
 }
@@ -648,24 +622,47 @@ setup_fonts (PrefsDialog *dialog)
 	dialog->priv->switching = FALSE;
 }
 
+static int
+fonts_language_info_cmp (const EphyFontsLanguageInfo *i1,
+			 const EphyFontsLanguageInfo *i2)
+{
+	return g_utf8_collate (i1->title, i2->title);
+}
+
 static void
 create_fonts_language_menu (PrefsDialog *dialog)
 {
 	GtkWidget *optionmenu, *menu;
-	GList *l = NULL;
-	guint n_fonts_languages, i = 0;
+	GList *list = NULL, *l;
+	guint n_fonts_languages, i;
 	char **lang_codes;
+	const EphyFontsLanguageInfo *fonts_languages;
 
 	optionmenu = ephy_dialog_get_control (EPHY_DIALOG (dialog),
 					      FONTS_LANGUAGE_PROP);
 
 	menu = gtk_menu_new ();
 
-	dialog->priv->fonts_languages = ephy_font_langs_get_list ();
-	n_fonts_languages = g_list_length (dialog->priv->fonts_languages);
+	fonts_languages = ephy_font_languages ();
+	n_fonts_languages = ephy_font_n_languages ();
+	
+	for (i = 0; i < n_fonts_languages; i++)
+	{
+		EphyFontsLanguageInfo *info;
+
+		info = g_new0 (EphyFontsLanguageInfo, 1);
+		info->title = _(fonts_languages[i].title);
+		info->code = fonts_languages[i].code;
+
+		list = g_list_prepend (list, info);
+	}
+
+	dialog->priv->fonts_languages =
+		g_list_sort (list, (GCompareFunc) fonts_language_info_cmp);
+
 	for (l = dialog->priv->fonts_languages; l != NULL; l = l->next)
 	{
-		FontsLanguageInfo *info = (FontsLanguageInfo *) l->data;
+		EphyFontsLanguageInfo *info = (EphyFontsLanguageInfo *) l->data;
 		GtkWidget *item;
 
 		item = gtk_menu_item_new_with_label (info->title);
@@ -676,12 +673,12 @@ create_fonts_language_menu (PrefsDialog *dialog)
 	gtk_option_menu_set_menu (GTK_OPTION_MENU(optionmenu), menu);
 
 	lang_codes = g_new0 (char *, n_fonts_languages);
-	for (l = dialog->priv->fonts_languages; l != NULL; l = l->next)
+	for (l = dialog->priv->fonts_languages, i=0; l != NULL; l = l->next)
 	{
-		FontsLanguageInfo *info = (FontsLanguageInfo *) l->data;
+		EphyFontsLanguageInfo *info = (EphyFontsLanguageInfo *) l->data;
 
 		lang_codes[i] = info->code;
-		
+
 		i++;
 	}
 	ephy_dialog_add_enum (EPHY_DIALOG (dialog), FONTS_LANGUAGE_PROP,
@@ -697,160 +694,97 @@ create_fonts_language_menu (PrefsDialog *dialog)
 			  dialog);
 }
 
-static void
-default_encoding_menu_changed_cb (GtkOptionMenu *option_menu,
-				  PrefsDialog *dialog)
+static int
+find_encoding_in_list_cmp (gconstpointer info, const char *encoding)
 {
-	GList *encoding;
-	gint i;
-	const EphyEncodingInfo *info;
+	EphyNode *node = (EphyNode *) info;
+	const char *code;
 
-	i = gtk_option_menu_get_history (option_menu);
-	encoding = g_list_nth (dialog->priv->encodings, i);
-	g_assert (encoding != NULL);
+	code = ephy_node_get_property_string
+			(node, EPHY_NODE_ENCODING_PROP_ENCODING);
 
-	info = (EphyEncodingInfo *) encoding->data;
-	eel_gconf_set_string (CONF_LANGUAGE_DEFAULT_ENCODING, info->encoding);
+	return strcmp (code, encoding);
 }
 
-static gint
-find_encoding_in_list_cmp (const EphyEncodingInfo *info, const char *encoding)
+static int
+sort_encodings (gconstpointer a, gconstpointer b)
 {
-	return strcmp (info->encoding, encoding);
+	EphyNode *node1 = (EphyNode *) a;
+	EphyNode *node2 = (EphyNode *) b;
+	const char *key1, *key2;
+
+	key1 = ephy_node_get_property_string
+			(node1, EPHY_NODE_ENCODING_PROP_COLLATION_KEY);
+	key2 = ephy_node_get_property_string
+			(node2, EPHY_NODE_ENCODING_PROP_COLLATION_KEY);
+
+	return strcmp (key1, key2);
 }
 
 static void
-create_default_encoding_menu (PrefsDialog *dialog)
+create_optionmenu (PrefsDialog *dialog,
+		   int property,
+		   GList *list,
+		   const char *key,
+		   const char *default_value)
 {
-	GList *l;
+	GList *element, *l;
 	GtkWidget *menu, *optionmenu;
-	gchar *encoding;
+	char *value;
+	char **codes;
+	guint pos, i, num;
 
 	menu = gtk_menu_new ();
 
 	optionmenu = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-					      DEFAULT_ENCODING_PROP);
+					      property);
 
-	dialog->priv->encodings = ephy_encodings_get_list (LG_ALL, TRUE);
-	for (l = dialog->priv->encodings; l != NULL; l = l->next)
+	list = g_list_sort (list, (GCompareFunc) sort_encodings);
+
+	num = g_list_length (list);
+	codes = g_new0 (char *, num);
+
+	for (l = list, i=0; l != NULL; l = l->next, i++)
 	{
-		const EphyEncodingInfo *info = (EphyEncodingInfo *) l->data;
+		EphyNode *node = (EphyNode *) l->data;
+		const char *title, *code;
 		GtkWidget *item;
 
-		item = gtk_menu_item_new_with_label (info->title);
+		title = ephy_node_get_property_string
+				(node, EPHY_NODE_ENCODING_PROP_TITLE_ELIDED);
+
+		item = gtk_menu_item_new_with_label (title);
 		gtk_menu_shell_append (GTK_MENU_SHELL(menu), item);
 		gtk_widget_show (item);
-	}
 
-	gtk_option_menu_set_menu (GTK_OPTION_MENU(optionmenu), menu);
-
-	/* init value */
-	encoding = eel_gconf_get_string (CONF_LANGUAGE_DEFAULT_ENCODING);
-	/* fallback */
-	if (encoding == NULL) encoding = g_strdup ("ISO-8859-1");
-
-	l = g_list_find_custom (dialog->priv->encodings, encoding,
-				(GCompareFunc) find_encoding_in_list_cmp);
-	gtk_option_menu_set_history (GTK_OPTION_MENU(optionmenu),
-				     g_list_position (dialog->priv->encodings, l));
-	g_free (encoding);
-
-	g_signal_connect (optionmenu, "changed",
-			  G_CALLBACK (default_encoding_menu_changed_cb),
-			  dialog);
-}
-
-static void
-autodetect_encoding_menu_changed_cb (GtkOptionMenu *option_menu, gpointer data)
-{
-	GList *l;
-	guint i;
-	EncodingAutodetectorInfo *info;
-
-	g_return_if_fail (EPHY_IS_PREFS_DIALOG (data));
-
-	i = gtk_option_menu_get_history (option_menu);
-
-	l = g_list_nth (EPHY_PREFS_DIALOG (data)->priv->autodetectors, i);
-
-	if (l)
-	{
-		info = (EncodingAutodetectorInfo *) l->data;
-
-		eel_gconf_set_string (CONF_LANGUAGE_AUTODETECT_ENCODING, info->name);
-	}
-}
-
-static gint
-autodetector_info_cmp (const EncodingAutodetectorInfo *i1, const EncodingAutodetectorInfo *i2)
-{
-	return g_utf8_collate (i1->title, i2->title);
-}
-
-static gint
-find_autodetector_info (const EncodingAutodetectorInfo *info, const gchar *name)
-{
-	return strcmp (info->name, name);
-}
-
-static void
-create_encoding_autodetectors_menu (PrefsDialog *dialog)
-{
-	GtkWidget *optionmenu, *menu, *item;
-	gint i, position = 0;
-	GList *l, *list = NULL;
-	gchar *detector = NULL;
-	EncodingAutodetectorInfo *info;
-
-	optionmenu = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-					      AUTO_ENCODING_PROP);
-
-	for (i = 0; i < n_encoding_autodetectors; i++)
-	{
-		info = g_new0 (EncodingAutodetectorInfo, 1);
-
-		info->title = _(encoding_autodetector[i].title);
-		info->name = encoding_autodetector[i].name;
-
-		list = g_list_prepend (list, info);
-	}
-
-	list = g_list_sort (list, (GCompareFunc) autodetector_info_cmp);
-	dialog->priv->autodetectors = list;
-
-	menu = gtk_menu_new ();
-
-	for (l = list; l != NULL; l = l->next)
-	{
-		info = (EncodingAutodetectorInfo *) l->data;
-
-		item = gtk_menu_item_new_with_label (info->title);
-		gtk_menu_shell_append (GTK_MENU_SHELL(menu), item);
-		gtk_widget_show (item);
-		g_object_set_data (G_OBJECT (item), "desc", info->title);
+		code = ephy_node_get_property_string
+				(node, EPHY_NODE_ENCODING_PROP_ENCODING);
+		codes[i] = (char *) code;
 	}
 
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu), menu);
 
 	/* init value */
-	detector = eel_gconf_get_string (CONF_LANGUAGE_AUTODETECT_ENCODING);
-	if (detector == NULL) detector = g_strdup ("");
-
-	l = g_list_find_custom (list, detector,
-				(GCompareFunc) find_autodetector_info);
-
-	g_free (detector);
-
-	if (l)
+	value = eel_gconf_get_string (key);
+	/* fallback */
+	if (value == NULL || value[0] == '\0')
 	{
-		position = g_list_position (list, l);
+		g_free (value);
+		value = g_strdup (default_value);
 	}
 
-	gtk_option_menu_set_history (GTK_OPTION_MENU(optionmenu), position);
+	element = g_list_find_custom (list, value,
+				(GCompareFunc) find_encoding_in_list_cmp);
+	g_free (value);
+	pos = g_list_position (list, element);
 
-	g_signal_connect (optionmenu, "changed",
-			  G_CALLBACK (autodetect_encoding_menu_changed_cb),
-			  dialog);
+	ephy_dialog_add_enum (EPHY_DIALOG (dialog), property,
+			      num, (const char **) codes);
+
+	gtk_option_menu_set_history (GTK_OPTION_MENU(optionmenu), pos);
+
+	/* the entries themselves are const, so we don't use g_strfreev here */
+	g_free (codes);
 }
 
 static gint
@@ -1033,7 +967,9 @@ static void
 prefs_dialog_init (PrefsDialog *pd)
 {
 	EphyDialog *dialog = EPHY_DIALOG (pd);
+	EphyEncodings *encodings;
 	GdkPixbuf *icon;
+	GList *list;
 
 	pd->priv = EPHY_PREFS_DIALOG_GET_PRIVATE (pd);
 
@@ -1051,8 +987,6 @@ prefs_dialog_init (PrefsDialog *pd)
 	pd->priv->window = ephy_dialog_get_control (dialog, WINDOW_PROP);
 	pd->priv->notebook = ephy_dialog_get_control (dialog, NOTEBOOK_PROP);
 	pd->priv->langs = NULL;
-	pd->priv->encodings = NULL;
-	pd->priv->autodetectors = NULL;
 	pd->priv->fonts_languages = NULL;
 
 	icon = gtk_widget_render_icon (pd->priv->window,
@@ -1067,8 +1001,20 @@ prefs_dialog_init (PrefsDialog *pd)
 	attach_fonts_signals (pd);
 	attach_size_controls_signals (pd);
 	create_languages_list (pd);
-	create_default_encoding_menu (pd);
-	create_encoding_autodetectors_menu (pd);
+
+	encodings = EPHY_ENCODINGS (ephy_embed_shell_get_encodings
+					(EPHY_EMBED_SHELL (ephy_shell)));
+
+	list = ephy_encodings_get_encodings (encodings, LG_ALL);
+	create_optionmenu (pd, DEFAULT_ENCODING_PROP, list,
+			   CONF_LANGUAGE_DEFAULT_ENCODING, "ISO-8859-1");
+	g_list_free (list);
+
+	list = ephy_encodings_get_detectors (encodings);
+	create_optionmenu (pd, AUTO_ENCODING_PROP, list,
+			   CONF_LANGUAGE_AUTODETECT_ENCODING, "");
+	g_list_free (list);
+
 	create_language_menu (pd);
 }
 

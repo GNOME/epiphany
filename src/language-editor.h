@@ -20,7 +20,6 @@
 #define LANGUAGE_EDITOR_H
 
 #include "ephy-dialog.h"
-#include "language-editor.h"
 
 #include <gtk/gtkwidget.h>
 #include <glib-object.h>

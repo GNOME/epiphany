@@ -32,11 +32,6 @@ void ephy_embed_utils_save			(GtkWidget *window,
 						 gboolean ask_dest,
 						 EphyEmbedPersist *persist);
 
-void ephy_embed_utils_build_encodings_submenu   (BonoboUIComponent *ui_component,
-						 const char *path,
-						 BonoboUIVerbFn fn,
-						 gpointer view);
-
 void ephy_embed_utils_nohandler_dialog_run      (GtkWidget *parent);
 
 G_END_DECLS

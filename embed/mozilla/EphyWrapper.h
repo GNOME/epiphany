@@ -21,6 +21,8 @@
 #ifndef EPHY_WRAPPER_H
 #define EPHY_WRAPPER_H
 
+#include "ephy-encodings.h"
+
 #include "nsIDocShell.h"
 //#include "ProgressListener.h"
 #include "nsIWebNavigation.h"
@@ -78,7 +80,7 @@ public:
 
 	nsresult ForceEncoding (const char *encoding);
 
-	nsresult GetEncoding (char **aEncoding);
+	nsresult GetEncodingInfo (EphyEncodingInfo **infoptr);
 
 	nsresult CanCutSelection(PRBool *result);
 

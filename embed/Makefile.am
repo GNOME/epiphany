@@ -36,6 +36,7 @@ INST_H_FILES = \
 	ephy-embed-single.h		\
 	ephy-embed-shell.h		\
 	ephy-embed-types.h		\
+	ephy-encodings.h		\
 	ephy-history.h
 
 libephyembed_la_SOURCES = \
@@ -49,6 +50,7 @@ libephyembed_la_SOURCES = \
 	ephy-embed-single.c		\
 	ephy-embed-shell.c		\
 	ephy-embed-utils.c		\
+	ephy-encodings.c		\
 	ephy-favicon-cache.c		\
 	ephy-history.c			\
 	find-dialog.c			\

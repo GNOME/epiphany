@@ -25,6 +25,7 @@
 #include "ephy-favicon-cache.h"
 #include "mozilla-embed-single.h"
 #include "downloader-view.h"
+#include "ephy-encodings.h"
 #include "ephy-debug.h"
 
 #include <string.h>
@@ -37,6 +38,7 @@ struct EphyEmbedShellPrivate
 	DownloaderView *downloader_view;
 	EphyFaviconCache *favicon_cache;
 	EphyEmbedSingle *embed_single;
+	EphyEncodings *encodings;
 };
 
 static void
@@ -109,6 +111,7 @@ ephy_embed_shell_init (EphyEmbedShell *ges)
 	ges->priv->global_history = NULL;
 	ges->priv->downloader_view = NULL;
 	ges->priv->favicon_cache = NULL;
+	ges->priv->encodings = NULL;
 }
 
 static void
@@ -137,6 +140,12 @@ ephy_embed_shell_finalize (GObject *object)
 		g_object_unref (G_OBJECT (ges->priv->favicon_cache));
 	}
 
+	LOG ("Unref encodings")
+	if (ges->priv->encodings)
+	{
+		g_object_unref (G_OBJECT (ges->priv->encodings));
+	}
+
 	LOG ("Unref embed single")
 	if (ges->priv->embed_single)
 	{
@@ -149,14 +158,7 @@ ephy_embed_shell_finalize (GObject *object)
 EphyEmbedShell *
 ephy_embed_shell_new (const char *type)
 {
-	if (strcmp (type, "mozilla") == 0)
-	{
-		return EPHY_EMBED_SHELL (g_object_new
-			(EPHY_TYPE_EMBED_SHELL, NULL));
-	}
-
-	g_assert_not_reached ();
-	return NULL;
+	return g_object_new (EPHY_TYPE_EMBED_SHELL, NULL);
 }
 
 /**
@@ -243,3 +245,13 @@ impl_get_downloader_view (EphyEmbedShell *shell)
 	return G_OBJECT (shell->priv->downloader_view);
 }
 
+GObject *
+ephy_embed_shell_get_encodings (EphyEmbedShell *shell)
+{
+	if (shell->priv->encodings == NULL)
+	{
+		shell->priv->encodings = ephy_encodings_new ();
+	}
+
+	return G_OBJECT (shell->priv->encodings);
+}

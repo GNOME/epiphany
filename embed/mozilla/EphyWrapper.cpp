@@ -72,6 +72,8 @@
 #include "nsIDOMHTMLElement.h"
 #include "nsIDeviceContext.h"
 #include "nsIPresContext.h"
+#include "nsIAtom.h"
+#include "nsIDocumentCharsetInfo.h"
 #include "ContentHandler.h"
 #include "EphyEventListener.h"
 
@@ -756,9 +758,10 @@ nsresult EphyWrapper::PopTargetDocument ()
 	return NS_OK;
 }
 
-nsresult EphyWrapper::GetEncoding (char **aEncoding)
+nsresult EphyWrapper::GetEncodingInfo (EphyEncodingInfo **infoptr)
 {
 	nsresult result;
+	EphyEncodingInfo *info;
 
 	nsCOMPtr<nsIDOMDocument> domDoc;
 	result = GetDOMDocument (getter_AddRefs(domDoc));
@@ -767,19 +770,104 @@ nsresult EphyWrapper::GetEncoding (char **aEncoding)
 	nsCOMPtr<nsIDocument> doc = do_QueryInterface(domDoc, &result);
 	if (NS_FAILED (result) || !doc) return NS_ERROR_FAILURE;
 
+	info = g_new0 (EphyEncodingInfo, 1);
+	*infoptr = info;
+
 #if MOZILLA_SNAPSHOT >= 10
 	nsCAutoString enc;	
 	result = doc->GetDocumentCharacterSet (enc);
 	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
 
-	*aEncoding = g_strdup (enc.get());
+	info->encoding = g_strdup (enc.get());
 #else
 	nsAutoString enc;
 	result = doc->GetDocumentCharacterSet (enc);
 	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
 
-	*aEncoding = g_strdup (NS_ConvertUCS2toUTF8(enc).get());
+	info->encoding = g_strdup (NS_ConvertUCS2toUTF8(enc).get());
 #endif
+
+	PRInt32 source;
+	result = doc->GetDocumentCharacterSetSource (&source);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	info->encoding_source = (EphyEncodingSource) source;
+
+	nsCOMPtr<nsIDocShell> ds;
+	result = GetDocShell (getter_AddRefs(ds));
+	if (NS_FAILED(result) || !ds) return NS_ERROR_FAILURE;
+
+	nsCOMPtr<nsIDocumentCharsetInfo> ci;
+	result = ds->GetDocumentCharsetInfo (getter_AddRefs (ci));
+	if (NS_FAILED(result) || !ci) return NS_ERROR_FAILURE;
+
+	nsCOMPtr<nsIAtom> atom;
+	result = ci->GetForcedCharset (getter_AddRefs (atom));
+	if (NS_FAILED(result)) return NS_ERROR_FAILURE;
+	if (atom)
+	{
+		nsCAutoString atomstr;
+		atom->ToUTF8String (atomstr);
+		info->forced_encoding = g_strdup (atomstr.get());
+	}
+
+	result = ci->GetParentCharset (getter_AddRefs (atom));
+	if (NS_FAILED(result)) return NS_ERROR_FAILURE;
+	if (atom)
+	{
+		nsCAutoString atomstr;
+		atom->ToUTF8String (atomstr);
+		info->parent_encoding = g_strdup (atomstr.get());
+	}
+
+	result = ci->GetParentCharsetSource (&source);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	info->parent_encoding_source = (EphyEncodingSource) source;
+
+	nsCOMPtr<nsIContentViewer> contentViewer;	
+	result = ds->GetContentViewer (getter_AddRefs(contentViewer));
+	if (!NS_SUCCEEDED (result) || !contentViewer) return NS_ERROR_FAILURE;
+
+	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer,
+								  &result);
+	if (NS_FAILED(result) || !mdv) return NS_ERROR_FAILURE;
+
+#if MOZILLA_SNAPSHOT >= 10
+	result = mdv->GetDefaultCharacterSet (enc);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	info->default_encoding = g_strdup (enc.get());
+
+	result = mdv->GetForceCharacterSet (enc);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	info->forced_encoding = g_strdup (enc.get());
+
+	result = mdv->GetHintCharacterSet (enc);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	info->hint_encoding = g_strdup (enc.get());
+
+	result = mdv->GetPrevDocCharacterSet (enc);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	info->prev_doc_encoding = g_strdup (enc.get());
+#else
+	result = mdv->GetDefaultCharacterSet (enc);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	info->default_encoding = g_strdup (NS_ConvertUCS2toUTF8(enc).get());
+
+	result = mdv->GetForceCharacterSet (enc);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	info->forced_encoding = g_strdup (NS_ConvertUCS2toUTF8(enc).get());
+
+	result = mdv->GetHintCharacterSet (enc);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	info->hint_encoding = g_strdup (NS_ConvertUCS2toUTF8(enc).get());
+
+	result = mdv->GetPrevDocCharacterSet (enc);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	info->prev_doc__encoding = g_strdup (NS_ConvertUCS2toUTF8(enc).get());
+#endif
+
+	mdv->GetHintCharacterSetSource (&source);
+	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	info->hint_encoding_source = (EphyEncodingSource) source;
 
 	return NS_OK;
 }

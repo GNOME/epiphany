@@ -69,6 +69,8 @@ EphyHistory      *ephy_embed_shell_get_global_history  (EphyEmbedShell *shell);
 
 GObject          *ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell);
 
+GObject		 *ephy_embed_shell_get_encodings       (EphyEmbedShell *shell);
+
 EphyEmbedSingle  *ephy_embed_shell_get_embed_single    (EphyEmbedShell *shell);
 
 G_END_DECLS

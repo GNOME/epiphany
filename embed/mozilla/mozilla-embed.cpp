@@ -148,8 +148,8 @@ static gresult
 impl_set_encoding (EphyEmbed *embed,
                    const char *encoding);
 static gresult
-impl_get_encoding (EphyEmbed *embed,
-                   char **encoding);
+impl_get_encoding_info (EphyEmbed *embed,
+			EphyEncodingInfo **info);
 static gresult
 impl_print (EphyEmbed *embed, 
             EmbedPrintInfo *info);
@@ -380,7 +380,7 @@ ephy_embed_init (EphyEmbedClass *embed_class)
 	embed_class->activate = impl_activate;
 	embed_class->find_set_properties = impl_find_set_properties;
 	embed_class->set_encoding = impl_set_encoding;
-	embed_class->get_encoding = impl_get_encoding;
+	embed_class->get_encoding_info = impl_get_encoding_info;
 	embed_class->select_all = impl_select_all;
 	embed_class->print = impl_print;
 	embed_class->print_preview_close = impl_print_preview_close;
@@ -1192,19 +1192,21 @@ impl_set_encoding (EphyEmbed *embed,
 }
 
 static gresult
-impl_get_encoding (EphyEmbed *embed,
-		   char **encoding)
+impl_get_encoding_info (EphyEmbed *embed,
+			EphyEncodingInfo **info)
 {
 	nsresult result;
 	EphyWrapper *wrapper;
 
-	g_return_val_if_fail (encoding != NULL, G_FAILED);
-	*encoding = NULL;
+	g_return_val_if_fail (info != NULL, G_FAILED);
+	*info = NULL;
 
 	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
-	g_return_val_if_fail (wrapper != NULL, G_FAILED);
+	// we want to use get_encoding_info on newly opened tabs too :/
+	//g_return_val_if_fail (wrapper != NULL, G_FAILED);
+	if (wrapper == NULL) return G_FAILED;
 
-	result = wrapper->GetEncoding (encoding);
+	result = wrapper->GetEncodingInfo (info);
 
 	return NS_SUCCEEDED(result) ? G_OK : G_FAILED;
 }
