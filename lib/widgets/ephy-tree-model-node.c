@@ -336,6 +336,7 @@ ephy_tree_model_node_finalize (GObject *object)
 {
 	EphyTreeModelNode *model = EPHY_TREE_MODEL_NODE (object);
 
+	g_ptr_array_foreach (model->priv->columns, (GFunc) g_free, NULL);
 	g_ptr_array_free (model->priv->columns, TRUE);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
