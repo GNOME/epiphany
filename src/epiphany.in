@@ -11,6 +11,11 @@ else
 	exit
 fi
 
+if [ -z "$MOZ_PLUGIN_PATH" ]; then
+    MOZ_PLUGIN_PATH=/usr/lib/mozilla/plugins:/usr/libexec/plugins/mozilla
+    export MOZ_PLUGIN_PATH
+fi
+
 LD_LIBRARY_PATH=$MOZILLA_HOME:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
 
