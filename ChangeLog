@@ -1,3 +1,10 @@
+2004-01-30  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/ContentHandler.cpp:
+
+	Don't try to g_free a nsCOMPtr<>, and use nsMemory::Free for the
+	mMimeType string.
+
 2004-01-29  Christian Persch  <chpe@cvs.gnome.org>
 
 	* embed/mozilla/EphyHeaderSniffer.cpp:

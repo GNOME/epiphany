@@ -67,8 +67,7 @@ GContentHandler::~GContentHandler()
 {
 	LOG ("GContentHandler dtor")
 
-	g_free (mUri);
-	g_free (mMimeType);
+	nsMemory::Free (mMimeType);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
