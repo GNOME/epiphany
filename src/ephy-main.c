@@ -48,7 +48,6 @@ static gboolean open_fullscreen       = FALSE;  /* open ephy in full screen ? */
 static gchar   *session_filename      = NULL;   /* the session filename         */
 static gchar   *bookmark_url          = NULL;   /* the temp bookmark to add     */
 static gchar   *bookmarks_file        = NULL;   /* the bookmarks file to import */
-static gboolean close_option          = FALSE;  /* --close                      */
 static gboolean open_as_bookmarks_editor = FALSE; /* --bookmarks-editor	*/
 static gboolean open_as_nautilus_view = FALSE;
 
@@ -85,9 +84,6 @@ static struct poptOption popt_options[] =
 	{ "import-bookmarks", '\0', POPT_ARG_STRING, &bookmarks_file,
 	  0, N_("Import bookmarks from the given file"),
 	  N_("FILE") },
-	{ "close", 'c', POPT_ARG_NONE, &close_option, 0,
-	  N_("Close all Epiphany windows"),
-	  NULL },
 	{ "nautilus-view", 'v', POPT_ARG_NONE, &open_as_nautilus_view, 0,
 	  N_("Used internally by the nautilus view"),
 	  NULL },
@@ -208,11 +204,6 @@ ephy_main_start (gpointer data)
 	{
 		GNOME_EphyAutomation_addBookmark
 			(gaserver, bookmark_url, &corba_env);
-	}
-	else if (close_option)
-	{
-		GNOME_EphyAutomation_quit
-			(gaserver, &corba_env);
 	}
 	/* provided with urls? */
 	else if (!open_as_nautilus_view)

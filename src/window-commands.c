@@ -32,6 +32,7 @@
 #include "ephy-prefs.h"
 #include "pdm-dialog.h"
 #include "ephy-bookmarks-editor.h"
+#include "ephy-history-window.h"
 #include "ephy-new-bookmark.h"
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
@@ -275,7 +276,12 @@ void
 window_cmd_go_bookmarks (GtkAction *action,
 			 EphyWindow *window)
 {
-	ephy_shell_show_bookmarks_editor (ephy_shell, GTK_WIDGET (window));
+	GtkWidget *bwindow;
+
+	bwindow = ephy_shell_get_bookmarks_editor (ephy_shell);
+	ephy_bookmarks_editor_set_parent (EPHY_BOOKMARKS_EDITOR (bwindow),
+			                  GTK_WIDGET (window));
+	gtk_window_present (GTK_WINDOW (bwindow));
 }
 
 void
@@ -770,7 +776,12 @@ void
 window_cmd_go_history (GtkAction *action,
 		       EphyWindow *window)
 {
-	ephy_shell_show_history_window (ephy_shell, GTK_WIDGET (window));
+	GtkWidget *hwindow;
+
+	hwindow = ephy_shell_get_history_window (ephy_shell);
+	ephy_history_window_set_parent (EPHY_HISTORY_WINDOW (hwindow),
+					GTK_WIDGET (window));
+	gtk_window_present (GTK_WINDOW (hwindow));
 }
 
 void

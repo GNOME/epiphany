@@ -412,14 +412,25 @@ EphyWindow *
 ephy_shell_get_active_window (EphyShell *gs)
 {
 	Session *session;
-	const GList *windows;
+	GList *windows, *l;
+	EphyWindow *window = NULL;
 
 	session = EPHY_SESSION (ephy_shell_get_session (gs));
+
 	windows = session_get_windows (session);
 
-	if (windows == NULL) return NULL;
+	for (l = windows; l != NULL; l = l->next)
+	{
+		if (EPHY_IS_WINDOW (l->data))
+		{
+			window = EPHY_WINDOW (l->data);
+			break;
+		}
+	}
 
-	return EPHY_WINDOW(windows->data);
+	g_list_free (windows);
+
+	return window;
 }
 
 /**
@@ -628,15 +639,23 @@ ephy_shell_get_toolbars_model (EphyShell *gs, gboolean fullscreen)
 }
 
 static void
-bookmarks_hide_cb (GtkWidget *widget, gpointer data)
+toolwindow_show_cb (GtkWidget *widget)
 {
-	LOG ("Unref shell for bookmarks editor")
+	LOG ("Ref shell for %s", G_OBJECT_TYPE_NAME (widget))
+	session_add_window (ephy_shell->priv->session, GTK_WINDOW (widget));
+	g_object_ref (ephy_shell);
+}
+
+static void
+toolwindow_hide_cb (GtkWidget *widget)
+{
+	LOG ("Unref shell for %s", G_OBJECT_TYPE_NAME (widget))
+	session_remove_window (ephy_shell->priv->session, GTK_WINDOW (widget));
 	g_object_unref (ephy_shell);
 }
 
-void
-ephy_shell_show_bookmarks_editor (EphyShell *gs,
-				  GtkWidget *parent)
+GtkWidget *
+ephy_shell_get_bookmarks_editor (EphyShell *gs)
 {
 	EphyBookmarks *bookmarks;
 
@@ -645,35 +664,18 @@ ephy_shell_show_bookmarks_editor (EphyShell *gs,
 		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
 		g_assert (bookmarks != NULL);
 		gs->priv->bme = ephy_bookmarks_editor_new (bookmarks);
+
+		g_signal_connect (gs->priv->bme, "show", 
+				  G_CALLBACK (toolwindow_show_cb), NULL);
 		g_signal_connect (gs->priv->bme, "hide", 
-				  G_CALLBACK (bookmarks_hide_cb), NULL);
+				  G_CALLBACK (toolwindow_hide_cb), NULL);
 	}
 
-	if (!GTK_WIDGET_VISIBLE (gs->priv->bme))
-	{
-		LOG ("Ref shell for bookmarks editor")
-		g_object_ref (ephy_shell);
-	}
-
-	if (parent)
-	{
-		ephy_bookmarks_editor_set_parent
-			(EPHY_BOOKMARKS_EDITOR (gs->priv->bme), parent);
-	}
-
-	gtk_window_present (GTK_WINDOW (gs->priv->bme));
+	return gs->priv->bme;
 }
 
-static void
-history_window_hide_cb (GtkWidget *widget, gpointer data)
-{
-	LOG ("Unref shell for history window")
-	g_object_unref (ephy_shell);
-}
-
-void
-ephy_shell_show_history_window (EphyShell *gs,
-				GtkWidget *parent)
+GtkWidget *
+ephy_shell_get_history_window (EphyShell *gs)
 {
 	EphyHistory *history;
 
@@ -683,23 +685,14 @@ ephy_shell_show_history_window (EphyShell *gs,
 			(EPHY_EMBED_SHELL (ephy_shell));
 		g_assert (history != NULL);
 		gs->priv->history_window = ephy_history_window_new (history);
+
+		g_signal_connect (gs->priv->history_window, "show",
+				  G_CALLBACK (toolwindow_show_cb), NULL);
 		g_signal_connect (gs->priv->history_window, "hide",
-				  G_CALLBACK (history_window_hide_cb), NULL);
+				  G_CALLBACK (toolwindow_hide_cb), NULL);
 	}
 
-	if (!GTK_WIDGET_VISIBLE (gs->priv->history_window))
-	{
-		LOG ("Ref shell for history window")
-		g_object_ref (ephy_shell);
-	}
-
-	if (parent)
-	{
-		ephy_history_window_set_parent
-			(EPHY_HISTORY_WINDOW (gs->priv->history_window), parent);
-	}
-
-	gtk_window_present (GTK_WINDOW (gs->priv->history_window));
+	return gs->priv->history_window;
 }
 
 void

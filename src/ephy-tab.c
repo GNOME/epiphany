@@ -32,7 +32,6 @@
 #include "ephy-notebook.h"
 #include "ephy-file-helpers.h"
 #include "ephy-zoom.h"
-#include "session.h"
 #include "ephy-favicon-cache.h"
 
 #include <glib/gi18n.h>
@@ -853,12 +852,6 @@ ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 		}
 		else if (state & EMBED_STATE_STOP)
 		{
-			/* tab load completed, save in session */
-			Session *s;
-
-			s = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
-			session_save (s, SESSION_CRASHED);
-
 			ephy_tab_set_load_percent (tab, 0);
 			ephy_tab_set_load_status (tab, FALSE);
 			ephy_tab_update_navigation_flags (tab);
@@ -932,7 +925,7 @@ static void
 ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 		     EphyTab *tab)
 {
-	GList *tabs = NULL;
+	GtkWidget *notebook;
 	EphyWindow *window;
 	GtkWidget *widget;
 	EmbedChromeMask chromemask;
@@ -941,7 +934,7 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 	tab->priv->height = height;
 
 	window = tab->priv->window;
-	tabs = ephy_window_get_tabs (window);
+	notebook = ephy_window_get_notebook (window);
 	widget = GTK_WIDGET (embed);
 	chromemask = ephy_window_get_chrome (window);
 
@@ -949,7 +942,8 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 	 * Do not resize window already showed because
 	 * it's not possible to calculate a sensible window
 	 * size based on the embed size */
-	if (g_list_length (tabs) == 1 && !tab->priv->visibility)
+	if (gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) == 1 &&
+	    !tab->priv->visibility)
 	{
 		gtk_widget_set_size_request
 			(widget, width, height);
@@ -966,8 +960,6 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 			g_idle_add (let_me_resize_hack, embed);
 		}
 	}
-
-	g_list_free (tabs);
 }
 
 static void

@@ -19,10 +19,7 @@
 #ifndef SESSION_H
 #define SESSION_H
 
-#include "ephy-window.h"
-
-#include <glib-object.h>
-#include <glib.h>
+#include <gtk/gtkwindow.h>
 
 G_BEGIN_DECLS
 
@@ -51,34 +48,27 @@ struct SessionClass
         GObjectClass parent_class;
 
 	void ( *new_window)         (Session *session,
-				     EphyWindow *window);
+				     GtkWindow *window);
 	void ( *close_window)       (Session *session,
-				     EphyWindow *window);
+				     GtkWindow *window);
 };
 
 GType         session_get_type		(void);
 
 Session      *session_new		(void);
 
-void	      session_close		(Session *session);
-
 void	      session_load		(Session *session,
-					 const char *filename);
-
-void	      session_save		(Session *session,
 					 const char *filename);
 
 gboolean      session_autoresume	(Session *session);
 
-const GList  *session_get_windows	(Session *session);
+GList        *session_get_windows	(Session *session);
 
 void          session_add_window	(Session *session,
-					 EphyWindow *window);
+					 GtkWindow *window);
 
 void          session_remove_window     (Session *session,
-					 EphyWindow *window);
-
-EphyWindow   *session_get_active_window (Session *session);
+					 GtkWindow *window);
 
 G_END_DECLS
 

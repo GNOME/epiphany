@@ -152,6 +152,11 @@ struct EphyEmbedClass
 {
 	GTypeInterface base_iface;
 
+	/* Signals that we inherit from gtkmozembed
+	 *
+	 * void (* net_stop) (GtkMozEmbed *embed);
+	 */	
+
 	gint (* context_menu)	 (EphyEmbed *embed,
 				  EphyEmbedEvent *event);
 	void (* favicon)	 (EphyEmbed *embed,

@@ -1,3 +1,32 @@
+2003-11-09  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/ephy-embed.h:
+	* idl/EphyAutomation.idl:
+	* src/ephy-automation.c: (impl_ephy_automation_loadurl),
+	(impl_ephy_automation_open_bookmarks_editor),
+	(ephy_automation_init), (ephy_automation_object_finalize),
+	(ephy_automation_class_init):
+	* src/ephy-completion-model.c: (root_child_removed_cb):
+	* src/ephy-main.c: (ephy_main_start):
+	* src/ephy-shell.c: (ephy_shell_get_active_window),
+	(toolwindow_show_cb), (toolwindow_hide_cb),
+	(ephy_shell_get_bookmarks_editor), (ephy_shell_get_history_window):
+	* src/ephy-shell.h:
+	* src/ephy-tab.c: (ephy_tab_net_state_cb), (ephy_tab_size_to_cb):
+	* src/ephy-window.c: (remove_from_session), (ephy_window_init):
+	* src/session.c: (session_autoresume), (session_close),
+	(session_dispose), (save_window_geometry), (save_tool_window),
+	(save_ephy_window), (session_save), (session_load),
+	(session_get_windows), (net_stop_cb), (tab_added_cb),
+	(tab_removed_cb), (tabs_reordered_cb), (session_add_window),
+	(session_remove_window), (save_yourself_cb), (session_die_cb),
+	(gnome_session_init), (session_init):
+	* src/session.h:
+	* src/window-commands.c: (window_cmd_go_bookmarks),
+	(window_cmd_go_history):
+
+	Cleanup session. Persist also history and bookmarks.
+
 2003-11-09  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/window-commands.c: (window_cmd_help_about):

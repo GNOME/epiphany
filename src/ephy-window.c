@@ -356,7 +356,7 @@ remove_from_session (EphyWindow *window)
 	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
 	g_return_if_fail (session != NULL);
 
-	session_remove_window (session, window);
+	session_remove_window (session, GTK_WINDOW (window));
 }
 
 static void
@@ -1501,7 +1501,7 @@ ephy_window_init (EphyWindow *window)
 	window->priv->bmk_menu = ephy_bookmarks_menu_new (window);
 
 	/* Once window is fully created, add it to the session list*/
-	session_add_window (session, window);
+	session_add_window (session, GTK_WINDOW (window));
 }
 
 static void

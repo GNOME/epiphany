@@ -164,12 +164,10 @@ root_child_removed_cb (EphyNode *node,
 	path = gtk_tree_path_new ();
 
 	index = old_index;
-	g_print ("Node index %d\n", index);
 	if (node == model->priv->bookmarks)
 	{
 		index += ephy_node_get_n_children (model->priv->history);
 	}
-	g_print ("List index %d\n", index);
 	gtk_tree_path_append_index (path, index);
 
 	gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);

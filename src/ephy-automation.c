@@ -32,30 +32,7 @@
 #include <bonobo/bonobo-context.h>
 
 static void
-impl_ephy_automation_add_bookmark (PortableServer_Servant _servant,
-				   const CORBA_char * url,
-				   CORBA_Environment * ev);
-static void
-impl_ephy_automation_import_bookmarks (PortableServer_Servant _servant,
-				       const CORBA_char * filename,
-				       CORBA_Environment * ev);
-static void
-impl_ephy_automation_quit (PortableServer_Servant _servant,
-                           CORBA_Environment * ev);
-static void
-impl_ephy_automation_load_session (PortableServer_Servant _servant,
-				   const CORBA_char * filename,
-				   CORBA_Environment * ev);
-static void
 ephy_automation_class_init (EphyAutomationClass *klass);
-static void
-ephy_automation_init (EphyAutomation *a);
-static void
-ephy_automation_object_finalize (GObject *object);
-static BonoboObject *
-ephy_automation_factory (BonoboGenericFactory *this_factory,
-			 const char *iid,
-			 gpointer user_data);
 
 static GObjectClass *ephy_automation_parent_class;
 
@@ -105,14 +82,11 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 
 	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
 
-	/* no window open, let's try to autoresume */
-	if (session_get_windows (session) == NULL)
+	if (session_autoresume (session) && *url == '\0')
 	{
-		gboolean res;
-		res = session_autoresume (session);
 		/* no need to open the homepage,
 		 * we did already open session windows */
-		if (res && *url == '\0') return;
+		return;
 	}
 
 	window = ephy_shell_get_active_window (ephy_shell);
@@ -169,17 +143,6 @@ impl_ephy_automation_import_bookmarks (PortableServer_Servant _servant,
 }
 
 static void
-impl_ephy_automation_quit (PortableServer_Servant _servant,
-                           CORBA_Environment * ev)
-{
-	Session *session;
-
-	session = EPHY_SESSION (ephy_shell_get_session (ephy_shell));
-
-	session_close (session);
-}
-
-static void
 impl_ephy_automation_load_session (PortableServer_Servant _servant,
 				   const CORBA_char * filename,
 				   CORBA_Environment * ev)
@@ -194,7 +157,24 @@ static void
 impl_ephy_automation_open_bookmarks_editor (PortableServer_Servant _servant,
 					    CORBA_Environment * ev)
 {
-	ephy_shell_show_bookmarks_editor (ephy_shell, NULL);
+	GtkWidget *editor;
+
+	editor = ephy_shell_get_bookmarks_editor (ephy_shell);
+
+	gtk_window_present (GTK_WINDOW (editor));
+}
+
+static void
+ephy_automation_init (EphyAutomation *c)
+{
+}
+
+static void
+ephy_automation_object_finalize (GObject *object)
+{
+        EphyAutomation *a = EPHY_AUTOMATION (object);
+
+        ephy_automation_parent_class->finalize (G_OBJECT (a));
 }
 
 static void
@@ -211,22 +191,8 @@ ephy_automation_class_init (EphyAutomationClass *klass)
         epv->loadurl = impl_ephy_automation_loadurl;
 	epv->addBookmark = impl_ephy_automation_add_bookmark;
 	epv->importBookmarks = impl_ephy_automation_import_bookmarks;
-	epv->quit = impl_ephy_automation_quit;
 	epv->loadSession = impl_ephy_automation_load_session;
 	epv->openBookmarksEditor = impl_ephy_automation_open_bookmarks_editor;
-}
-
-static void
-ephy_automation_init (EphyAutomation *c)
-{
-}
-
-static void
-ephy_automation_object_finalize (GObject *object)
-{
-        EphyAutomation *a = EPHY_AUTOMATION (object);
-
-        ephy_automation_parent_class->finalize (G_OBJECT (a));
 }
 
 BONOBO_TYPE_FUNC_FULL (

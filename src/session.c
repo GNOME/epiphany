@@ -26,6 +26,8 @@
 #include "ephy-shell.h"
 #include "ephy-tab.h"
 #include "ephy-window.h"
+#include "ephy-history-window.h"
+#include "ephy-bookmarks-editor.h"
 #include "ephy-string.h"
 #include "ephy-file-helpers.h"
 #include "eel-gconf-extensions.h"
@@ -44,18 +46,6 @@
 #include <libgnomevfs/gnome-vfs-ops.h>
 #include <libgnomeui/gnome-client.h>
 
-enum
-{
-	RESTORE_TYPE_PROP
-};
-
-enum
-{
-	RESTORE_SESSION,
-	RESTORE_AS_BOOKMARKS,
-	DISCARD_SESSION
-};
-
 static void session_class_init (SessionClass *klass);
 static void session_init (Session *t);
 static void session_finalize (GObject *object);
@@ -63,12 +53,14 @@ static void session_dispose (GObject *object);
 
 static GObjectClass *parent_class = NULL;
 
+#define BOOKMARKS_EDITOR_ID "BookmarksEditor"
+#define HISTORY_WINDOW_ID "HistoryWindow"
+
 #define EPHY_SESSION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SESSION, SessionPrivate))
 
 struct SessionPrivate
 {
 	GList *windows;
-	gboolean dont_remove_crashed;
 };
 
 enum
@@ -255,25 +247,24 @@ crashed_resume_dialog (Session *session)
  *
  * Resume a crashed session when necessary (interactive)
  *
- * Return value: return false if no window  has been opened
+ * Return value: TRUE if at least a window has been opened
  **/
 gboolean
 session_autoresume (Session *session)
 {
 	char *saved_session;
-	gboolean loaded = FALSE;
+
+	if (session->priv->windows != NULL) return FALSE;
 
 	saved_session = get_session_filename (SESSION_CRASHED);
 
 	if (g_file_test (saved_session, G_FILE_TEST_EXISTS))
 	{
 		crashed_resume_dialog (session);
-		loaded = TRUE;
 	}
 
 	g_free (saved_session);
 
-	/* return false if no window has been opened */
 	return (session->priv->windows != NULL);
 }
 
@@ -297,89 +288,14 @@ create_session_directory (void)
 	g_free (dir);
 }
 
-static gboolean
-save_yourself_cb  (GnomeClient *client,
-                   gint phase,
-                   GnomeSaveStyle save_style,
-                   gboolean shutdown,
-                   GnomeInteractStyle interact_style,
-                   gboolean fast,
-		   Session *session)
-{
-	char *argv[] = { "epiphany", "--load-session", NULL };
-	char *discard_argv[] = { "rm", "-r", NULL };
-
-	argv[2] = get_session_filename (SESSION_GNOME);
-	gnome_client_set_restart_command
-		(client, 3, argv);
-
-	discard_argv[2] = argv[2];
-	gnome_client_set_discard_command (client, 3,
-					  discard_argv);
-
-	session_save (session, argv[2]);
-
-	g_free (argv[2]);
-
-	return TRUE;
-}
-
 static void
-session_die_cb (GnomeClient* client,
-		Session *session)
-{
-	session_close (session);
-}
-
-static void
-gnome_session_init (Session *session)
-{
-	GnomeClient *client;
-
-	client = gnome_master_client ();
-
-	g_signal_connect (G_OBJECT (client),
-			  "save_yourself",
-			  G_CALLBACK (save_yourself_cb),
-			  session);
-
-	g_signal_connect (G_OBJECT (client),
-			  "die",
-			  G_CALLBACK (session_die_cb),
-			  session);
-}
-
-static void
-session_init (Session *session)
-{
-	session->priv = EPHY_SESSION_GET_PRIVATE (session);
-
-	session->priv->windows = NULL;
-	session->priv->dont_remove_crashed = FALSE;
-
-	create_session_directory ();
-
-	gnome_session_init (session);
-}
-
-/*
- * session_close:
- * @session: a #Session
- *
- * Close the session and all the owned windows
- **/
-void
 session_close (Session *session)
 {
-	GList *l, *windows;
+	GList *windows;
 
 	/* close all windows */
 	windows	= g_list_copy (session->priv->windows);
-	for (l = windows; l != NULL; l = l->next)
-	{
-		EphyWindow *window = EPHY_WINDOW(l->data);
-		gtk_widget_destroy (GTK_WIDGET(window));
-	}
+	g_list_foreach (windows, (GFunc)gtk_widget_destroy, NULL);
 	g_list_free (windows);
 }
 
@@ -401,10 +317,7 @@ session_dispose (GObject *object)
 {
 	Session *session = EPHY_SESSION(object);
 
-	if (!session->priv->dont_remove_crashed)
-	{
-		session_delete (session, SESSION_CRASHED);
-	}
+	session_delete (session, SESSION_CRASHED);
 }
 
 static void
@@ -459,23 +372,76 @@ save_tab (EphyWindow *window,
 	xmlAddChild (window_node, embed_node);
 }
 
-/*
- * session_save:
- * @session: a #Session
- * @filename: path of the xml file where the session is saved.
- *
- * Save the session on disk. Keep information about window size,
- * opened urls ...
- **/
-void
+static void
+save_window_geometry (GtkWindow *window, xmlNodePtr window_node)
+{
+	int x = 0, y = 0, width = 0, height = 0;
+        gchar buffer[32];
+
+	/* get window geometry */
+	gtk_window_get_size (window, &width, &height);
+	gtk_window_get_position (window, &x, &y);
+
+	/* set window properties */
+	g_snprintf(buffer, 32, "%d", x);
+	xmlSetProp (window_node, "x", buffer);
+	g_snprintf(buffer, 32, "%d", y);
+
+	xmlSetProp (window_node, "y", buffer);
+	g_snprintf(buffer, 32, "%d", width);
+	xmlSetProp (window_node, "width", buffer);
+	g_snprintf(buffer, 32, "%d", height);
+	xmlSetProp (window_node, "height", buffer);
+}
+
+static void
+save_tool_window (GtkWindow *window,
+	          xmlDocPtr doc,
+	          xmlNodePtr root_node,
+		  const char *id)
+{
+	xmlNodePtr window_node;
+
+	window_node = xmlNewDocNode (doc, NULL, "toolwindow", NULL);
+	xmlSetProp (window_node, "id", id);
+	save_window_geometry (window, window_node);
+
+	xmlAddChild (root_node, window_node);
+}
+
+static void
+save_ephy_window (EphyWindow *window,
+	          xmlDocPtr doc,
+	          xmlNodePtr root_node)
+{
+	GList *tabs, *l;
+	xmlNodePtr window_node;
+
+	tabs = ephy_window_get_tabs (window);
+
+	/* Do not save empty EphyWindow */
+	if (tabs == NULL) return;
+
+	window_node = xmlNewDocNode (doc, NULL, "window", NULL);
+	save_window_geometry (GTK_WINDOW (window), window_node);
+
+	for (l = tabs; l != NULL; l = l->next)
+	{
+		EphyTab *tab = EPHY_TAB(l->data);
+		save_tab (window, tab, doc, window_node);
+	}
+	g_list_free (tabs);
+
+	xmlAddChild (root_node, window_node);
+}
+
+static void
 session_save (Session *session,
 	      const char *filename)
 {
-	const GList *w;
+	GList *w;
         xmlNodePtr root_node;
-        xmlNodePtr window_node;
         xmlDocPtr doc;
-        gchar buffer[32];
 	char *save_to;
 
 	save_to = get_session_filename (filename);
@@ -486,46 +452,26 @@ session_save (Session *session,
         root_node = xmlNewDocNode (doc, NULL, "session", NULL);
         xmlDocSetRootElement (doc, root_node);
 
-	w = session_get_windows (session);
-
         /* iterate through all the windows */
-        for (; w != NULL; w = w->next)
+        for (w = session->priv->windows; w != NULL; w = w->next)
         {
-		GList *tabs, *l;
-		int x = 0, y = 0, width = 0, height = 0;
-		EphyWindow *window = EPHY_WINDOW(w->data);
-		GtkWidget *wmain;
-
-		tabs = ephy_window_get_tabs (window);
-		g_return_if_fail (tabs != NULL);
-
-                /* make a new XML node */
-                window_node = xmlNewDocNode (doc, NULL, "window", NULL);
-
-                /* get window geometry */
-		wmain = GTK_WIDGET (window);
-                gtk_window_get_size (GTK_WINDOW(wmain), &width, &height);
-                gtk_window_get_position (GTK_WINDOW(wmain), &x, &y);
-
-                /* set window properties */
-                g_snprintf(buffer, 32, "%d", x);
-                xmlSetProp (window_node, "x", buffer);
-                g_snprintf(buffer, 32, "%d", y);
-
-		xmlSetProp (window_node, "y", buffer);
-                g_snprintf(buffer, 32, "%d", width);
-                xmlSetProp (window_node, "width", buffer);
-                g_snprintf(buffer, 32, "%d", height);
-                xmlSetProp (window_node, "height", buffer);
-
-		for (l = tabs; l != NULL; l = l->next)
-	        {
-			EphyTab *tab = EPHY_TAB(l->data);
-			save_tab (window, tab, doc, window_node);
+		GtkWindow *window = w->data;
+	
+		if (EPHY_IS_WINDOW (window))
+		{
+			save_ephy_window (EPHY_WINDOW (window),
+					  doc, root_node);
 		}
-		g_list_free (tabs);
-
-		xmlAddChild (root_node, window_node);
+		else if (EPHY_IS_BOOKMARKS_EDITOR (window))
+		{
+			save_tool_window (window, doc, root_node,
+					  BOOKMARKS_EDITOR_ID);
+		}
+		else if (EPHY_IS_HISTORY_WINDOW (window))
+		{
+			save_tool_window (window, doc, root_node,
+					  HISTORY_WINDOW_ID);
+		}
         }
 
         /* save it all out to disk */
@@ -573,13 +519,15 @@ session_load (Session *session,
 {
 	xmlDocPtr doc;
         xmlNodePtr child;
-	GtkWidget *wmain;
-	EphyWindow *window;
-	char *save_to;
+	GtkWidget *widget = NULL;
+	char *path;
 
-	save_to = get_session_filename (filename);
+	path = get_session_filename (filename);
 
-	doc = xmlParseFile (save_to);
+	doc = xmlParseFile (filename);
+	g_free (path);
+
+	if (doc == NULL) return;
 
 	child = xmlDocGetRootElement (doc);
 
@@ -588,10 +536,31 @@ session_load (Session *session,
 
 	while (child != NULL)
 	{
-		if (strcmp (child->name, "window") == 0)
+		if (xmlStrEqual (child->name, "window"))
 		{
-			gulong x = 0, y = 0, width = 0, height = 0;
+			widget = GTK_WIDGET (ephy_window_new ());
+			parse_embed (child->children, EPHY_WINDOW (widget));
+		}
+		else if (xmlStrEqual (child->name, "toolwindow"))
+		{
+			xmlChar *id;
+
+			id = xmlGetProp (child, "id");
+
+			if (id && xmlStrEqual (BOOKMARKS_EDITOR_ID, id))
+			{
+				widget = ephy_shell_get_bookmarks_editor (ephy_shell);
+			}
+			else if (id && xmlStrEqual (HISTORY_WINDOW_ID, id))
+			{
+				widget = ephy_shell_get_history_window (ephy_shell);
+			}
+		}
+
+		if (widget)
+		{
 			xmlChar *tmp;
+			gulong x = 0, y = 0, width = 0, height = 0;
 
 			tmp = xmlGetProp (child, "x");
 			ephy_string_to_int (tmp, &x);
@@ -605,32 +574,52 @@ session_load (Session *session,
 			tmp = xmlGetProp (child, "height");
 			ephy_string_to_int (tmp, &height);
 			xmlFree (tmp);
-
-			window = ephy_window_new ();
-			wmain = GTK_WIDGET (window);
-			gtk_widget_show (GTK_WIDGET(window));
-
-			gtk_window_move (GTK_WINDOW(wmain), x, y);
-			gtk_window_set_default_size (GTK_WINDOW (wmain),
+			gtk_window_move (GTK_WINDOW (widget), x, y);
+			gtk_window_set_default_size (GTK_WINDOW (widget),
 				                     width, height);
-
-			parse_embed (child->children, window);
+			gtk_widget_show (widget);
 		}
 
 		child = child->next;
 	}
 
 	xmlFreeDoc (doc);
-
-	g_free (save_to);
 }
 
-const GList *
+GList *
 session_get_windows (Session *session)
 {
 	g_return_val_if_fail (EPHY_IS_SESSION (session), NULL);
 
-	return session->priv->windows;
+	return g_list_copy (session->priv->windows);
+}
+
+static void
+net_stop_cb (EphyEmbed *embed, Session *session)
+{
+	session_save (session, SESSION_CRASHED);
+}
+
+static void
+tab_added_cb (GtkWidget *nb, GtkWidget *child, Session *session)
+{
+	g_signal_connect (child, "net_stop",
+			  G_CALLBACK (net_stop_cb), session);
+}
+
+static void
+tab_removed_cb (GtkWidget *nb, GtkWidget *child, Session *session)
+{
+	session_save (session, SESSION_CRASHED);
+
+	g_signal_handlers_disconnect_by_func
+		(child, G_CALLBACK (net_stop_cb), session);
+}
+
+static void
+tabs_reordered_cb (GtkWidget *nb, Session *session)
+{
+	session_save (session, SESSION_CRASHED);
 }
 
 /**
@@ -643,13 +632,29 @@ session_get_windows (Session *session)
  **/
 void
 session_add_window (Session *session,
-		    EphyWindow *window)
+		    GtkWindow *window)
 {
 	session->priv->windows = g_list_append (session->priv->windows, window);
 
-	g_signal_emit (G_OBJECT (session),
-		       session_signals[NEW_WINDOW],
-		       0, window);
+	if (EPHY_IS_WINDOW (window))
+	{
+		GtkWidget *nb;
+
+		nb = ephy_window_get_notebook (EPHY_WINDOW (window));
+		g_signal_connect (nb, "tab_added",
+				  G_CALLBACK (tab_added_cb), session);
+		g_signal_connect (nb, "tab_removed",
+				  G_CALLBACK (tab_removed_cb), session);
+		g_signal_connect (nb, "tabs_reordered",
+				  G_CALLBACK (tabs_reordered_cb), session);
+
+		/* FIXME do not break the extensions until we figure out better api */
+		g_signal_emit (G_OBJECT (session),
+			       session_signals[NEW_WINDOW],
+			       0, window);
+	}
+
+	session_save (session, SESSION_CRASHED);
 }
 
 /**
@@ -662,18 +667,84 @@ session_add_window (Session *session,
  **/
 void
 session_remove_window (Session *session,
-		       EphyWindow *window)
+		       GtkWindow *window)
 {
-	g_object_ref (window);
-
 	session->priv->windows = g_list_remove (session->priv->windows, window);
 
-	g_signal_emit (G_OBJECT (session),
-		       session_signals[CLOSE_WINDOW],
-		       0, window);
+	if (EPHY_IS_WINDOW (window))
+	{
+		g_object_ref (window);
 
-	g_object_unref (window);
+		/* FIXME do not break the extensions until we figure out better api */
+		g_signal_emit (G_OBJECT (session),
+			       session_signals[CLOSE_WINDOW],
+			       0, window);
+
+		g_object_unref (window);
+	}
 
 	session_save (session, SESSION_CRASHED);
 }
 
+static gboolean
+save_yourself_cb  (GnomeClient *client,
+                   gint phase,
+                   GnomeSaveStyle save_style,
+                   gboolean shutdown,
+                   GnomeInteractStyle interact_style,
+                   gboolean fast,
+		   Session *session)
+{
+	char *argv[] = { "epiphany", "--load-session", NULL };
+	char *discard_argv[] = { "rm", "-r", NULL };
+
+	argv[2] = get_session_filename (SESSION_GNOME);
+	gnome_client_set_restart_command
+		(client, 3, argv);
+
+	discard_argv[2] = argv[2];
+	gnome_client_set_discard_command (client, 3,
+					  discard_argv);
+
+	session_save (session, argv[2]);
+
+	g_free (argv[2]);
+
+	return TRUE;
+}
+
+static void
+session_die_cb (GnomeClient* client,
+		Session *session)
+{
+	session_close (session);
+}
+
+static void
+gnome_session_init (Session *session)
+{
+	GnomeClient *client;
+
+	client = gnome_master_client ();
+
+	g_signal_connect (G_OBJECT (client),
+			  "save_yourself",
+			  G_CALLBACK (save_yourself_cb),
+			  session);
+	g_signal_connect (G_OBJECT (client),
+			  "die",
+			  G_CALLBACK (session_die_cb),
+			  session);
+}
+
+static void
+session_init (Session *session)
+{
+	session->priv = EPHY_SESSION_GET_PRIVATE (session);
+
+	session->priv->windows = NULL;
+
+	create_session_directory ();
+
+	gnome_session_init (session);
+}
