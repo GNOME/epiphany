@@ -1,20 +1,5 @@
 SUBDIRS = mozilla 
 
-INCLUDES = \
-	-I$(top_srcdir)/embed/mozilla     	\
-	-I$(top_builddir)/lib       		\
-	-I$(top_srcdir)/lib       		\
-	-I$(top_srcdir)/lib/egg       		\
-	-I$(top_srcdir)/lib/widgets      	\
-	-I$(MOZILLA_INCLUDE_ROOT)/gtkembedmoz 	\
-	$(EPIPHANY_DEPENDENCY_CFLAGS) 		\
-	-DSHARE_DIR=\"$(pkgdatadir)\"
-
-if MAINTAINER_MODE
-INCLUDES += -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED \
-	-DGNOME_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED $(WARN_CFLAGS)
-endif
-
 noinst_LTLIBRARIES = libephyembed.la libephyembedfactory.la
 
 headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
@@ -64,6 +49,29 @@ libephyembed_la_SOURCES = \
 	$(INST_H_FILES)			\
 	$(NOINST_H_FILES)
 
+libephyembed_la_CPPFLAGS = \
+	-I$(top_builddir)/lib       	\
+	-I$(top_srcdir)/embed/mozilla   \
+	-I$(top_srcdir)/lib       	\
+	-I$(top_srcdir)/lib/egg       	\
+	-I$(top_srcdir)/lib/widgets     \
+	$(AM_CPPFLAGS)
+
+libephyembed_la_CFLAGS = \
+	-I$(MOZILLA_INCLUDE_ROOT)/gtkembedmoz	\
+	-DSHARE_DIR=\"$(pkgdatadir)\"	\
+	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
+	$(AM_CFLAGS)
+
 libephyembedfactory_la_SOURCES =	\
 	ephy-embed-factory.c		\
 	ephy-embed-factory.h
+
+libephyembedfactory_la_CPPFLAGS = \
+	-I$(top_srcdir)/embed/mozilla		\
+	-I$(MOZILLA_INCLUDE_ROOT)/gtkembedmoz	\
+	$(AM_CPPFLAGS)
+
+libephyembedfactory_la_CFLAGS = \
+	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
+	$(AM_CFLAGS)

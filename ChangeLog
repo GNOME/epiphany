@@ -1,3 +1,29 @@
+2004-12-01  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.ac:
+
+	Add deprecated defines to AM_CPPFLAGS in maintainer-mode.
+	
+	* doc/reference/Makefile.am:
+	* embed/Makefile.am:
+	* embed/mozilla/Makefile.am:
+	* lib/Makefile.am:
+	* lib/egg/Makefile.am:
+	* lib/egg/eggintl.h:
+	* lib/widgets/Makefile.am:
+	* src/Makefile.am:
+	* src/bookmarks/Makefile.am:
+
+	INCLUDES is deprecated, use AM_CPPFLAGS and AM_CFLAGS instead.
+
+	* lib/eel-gconf-extensions.c: (eel_gconf_client_get_global):
+
+	Removed usage of deprecated gconf API.
+
+	* src/ephy-main.c: (main):
+
+	Removed usage of deprecated glade API.
+
 2004-11-29  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-window.c:

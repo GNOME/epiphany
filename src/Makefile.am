@@ -1,23 +1,5 @@
 SUBDIRS = bookmarks
 
-INCLUDES = \
-	-I$(top_builddir)/lib		\
-	-I$(top_srcdir)/embed 		\
-	-I$(top_srcdir)/lib   		\
-	-I$(top_srcdir)/lib/egg		\
-	-I$(top_srcdir)/lib/widgets   	\
-	-I$(top_srcdir)/src/bookmarks   \
-	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
-	-DSHARE_DIR=\"$(pkgdatadir)\" 	\
-	-DEXTENSIONS_DIR=\""$(libdir)/epiphany-$(EPIPHANY_MAJOR)/extensions"\" 	\
-	-DDATADIR=\""$(datadir)"\" 	\
-	-DPIXMAP_DIR=\""$(datadir)/pixmaps"\" 
-
-if MAINTAINER_MODE
-INCLUDES += -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED \
-	-DGNOME_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED $(WARN_CFLAGS)
-endif
-
 noinst_LTLIBRARIES = libephymain.la
 
 bin_PROGRAMS = epiphany
@@ -101,7 +83,43 @@ libephymain_la_SOURCES =				\
 	$(INST_H_FILES)					\
 	$(NOINST_H_FILES)
 
+libephymain_la_CPPFLAGS = \
+	-I$(top_builddir)/lib		\
+	-I$(top_srcdir)/embed 		\
+	-I$(top_srcdir)/lib   		\
+	-I$(top_srcdir)/lib/egg		\
+	-I$(top_srcdir)/lib/widgets   	\
+	-I$(top_srcdir)/src/bookmarks   \
+	-DSHARE_DIR=\"$(pkgdatadir)\" 	\
+	-DEXTENSIONS_DIR=\""$(libdir)/epiphany-$(EPIPHANY_MAJOR)/extensions"\" 	\
+	-DDATADIR=\""$(datadir)"\" 	\
+	-DPIXMAP_DIR=\""$(datadir)/pixmaps"\"	\
+	$(AM_CPPFLAGS)
+
+libephymain_la_CFLAGS = \
+	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
+	$(AM_CFLAGS)
+
 epiphany_SOURCES = ephy-main.c
+
+epiphany_CPPFLAGS = \
+	-I$(top_builddir)/lib		\
+	-I$(top_srcdir)/embed 		\
+	-I$(top_srcdir)/lib   		\
+	-I$(top_srcdir)/lib/egg		\
+	-I$(top_srcdir)/lib/widgets   	\
+	-I$(top_srcdir)/src/bookmarks   \
+	-DSHARE_DIR=\"$(pkgdatadir)\" 	\
+	-DEXTENSIONS_DIR=\""$(libdir)/epiphany-$(EPIPHANY_MAJOR)/extensions"\" 	\
+	-DDATADIR=\""$(datadir)"\" 	\
+	-DPIXMAP_DIR=\""$(datadir)/pixmaps"\"	\
+	$(AM_CPPFLAGS)
+
+epiphany_CFLAGS = \
+	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
+	$(AM_CFLAGS)
+
+epiphany_LDFLAGS = -R$(MOZILLA_HOME) -dlopen self
 
 epiphany_LDADD = \
 	$(top_builddir)/src/libephymain.la \
@@ -115,8 +133,6 @@ epiphany_LDADD = \
 	$(MOZILLA_COMPONENT_LIBS)	\
 	$(EPIPHANY_DEPENDENCY_LIBS) \
 	$(INTLLIBS)
-
-epiphany_LDFLAGS = -R$(MOZILLA_HOME) -dlopen self
 
 BUILT_SOURCES = $(CORBA_SOURCE)
 

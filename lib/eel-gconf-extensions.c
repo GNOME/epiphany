@@ -29,6 +29,7 @@
 #include "eel-gconf-extensions.h"
 
 #include <glib/gi18n.h>
+
 #include <gconf/gconf-client.h>
 #include <gconf/gconf.h>
 #include <string.h>
@@ -50,18 +51,6 @@ global_client_free (void)
 GConfClient *
 eel_gconf_client_get_global (void)
 {
-	/* Initialize gconf if needed */
-	if (!gconf_is_initialized ()) {
-		char *argv[] = { "eel-preferences", NULL };
-		GError *error = NULL;
-		
-		if (!gconf_init (1, argv, &error)) {
-			if (eel_gconf_handle_error (&error)) {
-				return NULL;
-			}
-		}
-	}
-	
 	if (global_gconf_client == NULL) {
 		global_gconf_client = gconf_client_get_default ();
 		g_atexit (global_client_free);

@@ -1,15 +1,5 @@
 SUBDIRS = widgets egg
 
-INCLUDES = \
-	-I$(top_builddir)/lib \
-        $(EPIPHANY_DEPENDENCY_CFLAGS)	\
-	-DSHARE_DIR=\"$(pkgdatadir)\"
-
-if MAINTAINER_MODE
-INCLUDES += -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED \
-	-DGNOME_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED $(WARN_CFLAGS)
-endif
-
 noinst_LTLIBRARIES = libephymisc.la
 
 headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
@@ -67,6 +57,15 @@ libephymisc_la_SOURCES = \
 	ephy-zoom.c				\
 	$(INST_H_FILES)				\
 	$(NOINST_H_FILES)
+
+libephymisc_la_CPPFLAGS = \
+	-I$(top_builddir)/lib			\
+	-DSHARE_DIR=\"$(pkgdatadir)\" 		\
+	$(AM_CPPFLAGS)
+
+libephymisc_la_CFLAGS = \
+        $(EPIPHANY_DEPENDENCY_CFLAGS)	\
+	$(AM_CFLAGS)
 
 BUILT_SOURCES=ephy-marshal.c ephy-marshal.h
 

@@ -1,15 +1,3 @@
-INCLUDES = \
-	-I$(top_builddir)/lib		\
-	-I$(top_srcdir)/lib		\
-	-I$(top_srcdir)/lib/egg		\
-	$(EPIPHANY_DEPENDENCY_CFLAGS)	\
-	-DSHARE_DIR=\"$(pkgdatadir)\"
-
-if MAINTAINER_MODE
-INCLUDES += -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED \
-	-DGNOME_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED $(WARN_CFLAGS)
-endif
-
 noinst_LTLIBRARIES = libephywidgets.la
 
 libephywidgets_la_SOURCES = \
@@ -29,3 +17,14 @@ libephywidgets_la_SOURCES = \
 	ephy-zoom-action.c			\
 	ephy-zoom-control.c			\
 	ephy-zoom-control.h
+
+libephywidgets_la_CPPFLAGS = \
+	-I$(top_builddir)/lib		\
+	-I$(top_srcdir)/lib		\
+	-I$(top_srcdir)/lib/egg		\
+	-DSHARE_DIR=\"$(pkgdatadir)\"	\
+	$(AM_CPPFLAGS)
+
+libephywidgets_la_CFLAGS = \
+	$(EPIPHANY_DEPENDENCY_CFLAGS)	\
+	$(AM_CFLAGS)

@@ -1,27 +1,9 @@
-INCLUDES = \
-	-I$(top_srcdir)/lib		\
-	-I$(top_builddir)/lib		\
-	-I$(top_srcdir)/src		\
-	-I$(top_srcdir)/embed		\
-	-I$(top_srcdir)/lib/widgets	\
-	-I$(top_srcdir)/lib/egg		\
-	$(WARN_CFLAGS)			\
-	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
-	-DSHARE_DIR=\"$(pkgdatadir)\" 	\
-	-DDATADIR=\""$(datadir)"\" 	\
-	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"
-
-if MAINTAINER_MODE
-INCLUDES += -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED \
-	-DGNOME_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED $(WARN_CFLAGS)
-endif
-
 noinst_LTLIBRARIES = libephybookmarks.la
 
 headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
 header_DATA = $(INST_H_FILES)
 
-INST_H_FILES =		 	\
+INST_H_FILES = \
 	ephy-bookmarks.h
 
 NOINST_H_FILES =		 	\
@@ -54,3 +36,16 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-topics-selector.c  	\
 	$(NOINST_H_FILES)		\
 	$(INST_H_FILES)
+
+libephybookmarks_la_CPPFLAGS = \
+	-I$(top_builddir)/lib		\
+	-I$(top_srcdir)/lib		\
+	-I$(top_srcdir)/src		\
+	-I$(top_srcdir)/embed		\
+	-I$(top_srcdir)/lib/widgets	\
+	-I$(top_srcdir)/lib/egg		\
+	$(AM_CPPFLAGS)
+
+libephybookmarks_la_CFLAGS = \
+	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
+	$(AM_CFLAGS)

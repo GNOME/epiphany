@@ -27,12 +27,18 @@ AC_CONFIG_SRCDIR([configure.ac])
 EPIPHANY_MAJOR=1.5
 AC_SUBST([EPIPHANY_MAJOR])
 
-AM_INIT_AUTOMAKE([dist-bzip2 check-news])
+AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip check-news])
 
 dnl AC_SUBST([ACLOCAL_AMFLAGS], ["-I $ac_macro_dir \${ACLOCAL_FLAGS}"])
 AC_SUBST([ACLOCAL_AMFLAGS], ["\${ACLOCAL_FLAGS}"])
 
 AM_MAINTAINER_MODE
+if test "x$enable_maintainer_mode" = "xyes"; then
+	AC_DEFINE([MAINTAINER_MODE],[1],[Define to enable 'maintainer-only' behaviour])
+	enable_debug=yes
+	AM_CPPFLAGS="$AM_CPPFLAGS -DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGCONF_DISABLE_DEPRECATED -DGNOME_VFS_DISABLE_DEPRECATED -DBONOBO_UI_DISABLE_DEPRECATED -DBONOBO_DISABLE_DEPRECATED -DLIBGLADE_DISABLE_DEPRECATED -DPANGO_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGNOME_DISABLE_DEPRECATED"
+	AM_CXXFLAGS="$AM_CXXFLAGS -Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor"
+fi
 
 AC_PROG_INTLTOOL([0.29])
 
@@ -65,12 +71,17 @@ AM_PROG_CC_STDC
 AC_HEADER_STDC
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 
+AC_SUBST([AM_CPPFLAGS])
+AC_SUBST([AM_CFLAGS])
 AC_SUBST([AM_CXXFLAGS])
 
 GNOME_DEBUG_CHECK
 GNOME_COMPILE_WARNINGS([error])
+dnl GNOME_CXX_WARNINGS
+AM_CFLAGS="$AM_CFLAGS $WARN_CFLAGS"
+AM_CXXFLAGS="$AM_CXXFLAGS $WARN_CXXFLAGS"
 
-PKG_CHECK_MODULES([EPIPHANY_DEPENDENCY], \
+PKG_CHECK_MODULES([EPIPHANY_DEPENDENCY], [\
 		  glib-2.0 >= $GLIB_REQUIRED \
 		  pango >= $PANGO_REQUIRED \
 		  gtk+-2.0 >= $GTK_REQUIRED \
@@ -83,7 +94,7 @@ PKG_CHECK_MODULES([EPIPHANY_DEPENDENCY], \
 		  gnome-vfs-2.0 >= $LIBGNOMEVFS_REQUIRED \
 		  gnome-vfs-module-2.0 \
 		  gconf-2.0 \
-		 )
+		  ])
 AC_SUBST([EPIPHANY_DEPENDENCY_CFLAGS])
 AC_SUBST([EPIPHANY_DEPENDENCY_LIBS])
 
@@ -410,9 +421,6 @@ elif test "x$flavour" = "xtoolkit"; then
 		[AC_DEFINE(HAVE_NSIPASSWORD_H, 1,
 		[Define if mozilla nsIPassword header is available])])
 fi
-
-MOZILLA_WARN_CXXFLAGS="-Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor"
-AC_SUBST([MOZILLA_WARN_CXXFLAGS])
 
 AC_MSG_CHECKING([whether to enable native gtk+ filepicker])
 AC_ARG_ENABLE([filepicker],

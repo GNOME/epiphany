@@ -34,7 +34,6 @@
 #include <libgnome/gnome-program.h>
 #include <bonobo/bonobo-main.h>
 #include <glib/gi18n.h>
-#include <glade/glade-init.h>
 #include <libgnomevfs/gnome-vfs-init.h>
 #include <libxml/xmlversion.h>
 
@@ -160,7 +159,6 @@ main (int argc, char *argv[])
 	}
 
 	gnome_vfs_init ();
-	glade_gnome_init ();
 	ephy_debug_init ();
 	ephy_file_helpers_init ();
 	ephy_stock_icons_init ();
