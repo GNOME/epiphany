@@ -1271,3 +1271,18 @@ ephy_node_signal_disconnect (EphyNode *node,
 		node->invalidated_signals++;
 	}
 }
+
+GType
+ephy_node_get_type (void)
+{
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		type = g_boxed_type_register_static ("EphyNode",
+						     (GBoxedCopyFunc) ephy_node_ref,
+						     (GBoxedFreeFunc) ephy_node_unref);
+	}
+
+	return type;
+}

@@ -28,8 +28,7 @@
 
 G_BEGIN_DECLS
 
-/* convenience macro to check node validity */
-
+#define EPHY_TYPE_NODE	(ephy_node_get_type ())
 #define EPHY_IS_NODE(o)	(o != NULL)
 
 typedef struct _EphyNode EphyNode;
@@ -48,6 +47,8 @@ typedef enum
 #include "ephy-node-db.h"
 
 typedef void (*EphyNodeCallback) (EphyNode *node, ...);
+
+GType	    ephy_node_get_type		    (void) G_GNUC_CONST;
 
 EphyNode   *ephy_node_new                   (EphyNodeDb *db);
 
