@@ -1,3 +1,11 @@
+2003-02-12  James Willcox  <jwillcox@gnome.org>
+
+	* src/bookmarks/ephy-bookmark-action.c: (entry_activated_cb):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_solve_smart_url):
+
+	Fix a heap corruption bug that was causing bad stuff when smart
+	bookmarks were used from the toolbar.  Fixes #105180
+
 2003-02-12  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/widgets/ephy-ellipsizing-label.c: (ellipsize_string):

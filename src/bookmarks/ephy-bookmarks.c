@@ -781,8 +781,7 @@ ephy_bookmarks_solve_smart_url (EphyBookmarks *eb,
 	g_string_append (s, arg);
 	t1 = t2 + 2;
 	g_string_append (s, t1);
-	ret = s->str;
-	g_string_free (s, FALSE);
+	ret = g_string_free (s, FALSE);
 
 	g_free (arg);
 	g_free (encoding);

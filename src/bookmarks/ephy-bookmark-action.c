@@ -196,7 +196,6 @@ entry_activated_cb (GtkWidget *entry, EggAction *action)
 		       0, solved);
 
 	g_free (text);
-	g_free (smart_url);
 }
 
 static void
