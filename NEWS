@@ -1,4 +1,72 @@
 ==============
+Epiphany 1.5.3
+==============
+
+New features
+
+	* Update bookmarks from HTTP 301 [#126312]
+	* Add bookmarks export to bookmarks editor
+	  (patch by John Spray, XSL stylesheet by Stefan Rotsch) [#157745]
+
+
+Interface improvements
+
+	* Fix "Open Frame" menu item name [#153816]
+	* Use stock icon for "Open In New Tab" in History Window and Bookmarks Editor
+	* Use ellipsised labels everywhere instead of shortening strings
+	* Tell the user with which application we're going to open the content [#141327]
+	* Add stock icon to "Save As..." button in content handler
+	* Add "Clear" to entry context menu [#118395]
+	* Add app name to content handler dialogue [#141327]
+	* Implement context menu on tray icon, as per HIG [#152903]
+	* Add "View Properties" to duplicated bookmarks dialogue [#117643, #138300]
+	* Remove inline help in toolbar editor [#137603]
+
+Code changes
+
+	* Removed usage of deprecated gconf API
+	* Removed usage of deprecated glade API
+	* Makefile.am modernisations
+	* Ensure the extensions manager UI is loaded
+	* Use alignments instead of empty labels for alignment in glade files
+	* Disable search in downloader window [#157157]
+	* Check the encodings before we set the mozilla pref [#150266]
+	* Add attach_tab and detach_tab functions to extension interface
+	  (Crispin Flowerday, Adam Hooper) [#153732]
+	* Use gtk_show_about_dialog(), and handle urls and mailto (Adam Hooper)
+	* Disable Zoom items for images, and disable zoom, encoding and view source
+	  for images and xml (xul) documents [#132240]
+	* Make sure we don't have any app-modal dialogues [#110479]
+	* Adapt to mozilla API changes
+
+Bug fixes
+
+	* Don't offer to resume if there are open windows [#160345]
+	* Deactivate the context menu on window close [#156812]
+	* Fix double-opening of content [backed out patch from #158466]
+	* Fix name for "gd" language (Scots Gaelic) [#161509]
+	* Disable Print and Print Preview while still loading the page [#116344]
+	* Don't show multiple toolbar editors for the same window [#111114]
+	* Correct language code for Afrikaans
+
+Translation updates
+
+	* Vladimir Petkov (bg)
+	* Miloslav Trmac (cs)
+	* Martin Willemoes Hansen (da)
+	* Adam Weinberger (en_CA)
+	* David Lodge (en_GB)
+	* Francisco Javier F. Serrador (es)
+	* Takeshi AIHANA (ja)
+	* Žygimantas Beručka (lt)
+	* Reinout van Schouwen (nl)
+	* Marcel Telka (sk)
+	* Laurent Dhima (sq)
+	* Ercin Eker (tr)
+	* Liu Songhe (zh_CN)
+
+
+==============
 Epiphany 1.5.2
 ==============
 
