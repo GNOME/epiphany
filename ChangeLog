@@ -1,3 +1,19 @@
+2003-03-23  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* src/bookmarks/ephy-bookmarks-editor.c: (get_target_window),
+	(cmd_open_bookmarks_in_tabs), (cmd_open_bookmarks_in_browser),
+	(ephy_bookmarks_editor_finalize),
+	(ephy_bookmarks_editor_node_activated_cb), (delete_event_cb),
+	(ephy_bookmarks_editor_construct),
+	(ephy_bookmarks_editor_set_parent), (ephy_bookmarks_editor_new):
+	* src/bookmarks/ephy-bookmarks-editor.h:
+	* src/window-commands.c: (window_cmd_go_bookmarks):
+
+	Never destroy but hide the bme.
+	Present the window on activate.
+	Allow to put the editor in the background.
+	Smarter way to choose the window where to load the bookmark.
+
 2003-03-22  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* data/ui/epiphany-bookmark-editor-ui.xml.in:

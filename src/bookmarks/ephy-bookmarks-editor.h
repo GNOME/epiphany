@@ -51,8 +51,10 @@ typedef struct
 
 GType		     ephy_bookmarks_editor_get_type (void);
 
-GtkWidget	    *ephy_bookmarks_editor_new      (EphyBookmarks *bookmarks,
-						     GtkWindow *parent);
+GtkWidget	    *ephy_bookmarks_editor_new        (EphyBookmarks *bookmarks);
+
+void		     ephy_bookmarks_editor_set_parent (EphyBookmarksEditor *ebe,
+						       GtkWidget *window);
 
 G_END_DECLS
 

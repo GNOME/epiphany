@@ -236,13 +236,19 @@ void
 window_cmd_go_bookmarks (EggAction *action,
 			 EphyWindow *window)
 {
-	GtkWidget *dialog;
+	static GtkWidget *dialog = NULL;
 	EphyBookmarks *bookmarks;
 
-	bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-	g_assert (bookmarks != NULL);
-	dialog = ephy_bookmarks_editor_new (bookmarks, GTK_WINDOW (window));
-	gtk_widget_show (dialog);
+	if (dialog == NULL)
+	{
+		bookmarks = ephy_shell_get_bookmarks (ephy_shell);
+		g_assert (bookmarks != NULL);
+		dialog = ephy_bookmarks_editor_new (bookmarks);
+	}
+
+	ephy_bookmarks_editor_set_parent (EPHY_BOOKMARKS_EDITOR (dialog),
+					  GTK_WIDGET (window));
+	gtk_window_present (GTK_WINDOW (dialog));
 }
 
 void
