@@ -710,8 +710,12 @@ ephy_shell_get_extensions_manager (EphyShell *es)
 
 	if (es->priv->extensions_manager == NULL)
 	{
-		/* Instantiate extensions manager; this will load the extensions */
+		/* Instantiate extensions manager */
 		es->priv->extensions_manager = ephy_extensions_manager_new ();
+
+		/* load the extensions */
+		ephy_extensions_manager_load_dir (es->priv->extensions_manager,
+						  EXTENSIONS_DIR);
 	}
 
 	return G_OBJECT (es->priv->extensions_manager);

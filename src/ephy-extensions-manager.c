@@ -130,7 +130,7 @@ ephy_extensions_manager_load (EphyExtensionsManager *manager,
 	return extension;
 }
 
-static void
+void
 ephy_extensions_manager_load_dir (EphyExtensionsManager *manager,
 				  const char *path)
 {
@@ -187,8 +187,6 @@ ephy_extensions_manager_init (EphyExtensionsManager *manager)
 
 	manager->priv->loaders = NULL;
 	manager->priv->extensions = NULL;
-
-	ephy_extensions_manager_load_dir (manager, EXTENSIONS_DIR);
 }
 
 static void

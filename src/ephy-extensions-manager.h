@@ -60,6 +60,9 @@ EphyExtensionsManager	*ephy_extensions_manager_new 		(void);
 EphyExtension		*ephy_extensions_manager_load		(EphyExtensionsManager *manager,
 								 const char *filename);
 
+void			 ephy_extensions_manager_load_dir	(EphyExtensionsManager *manager,
+								 const char *path);
+
 EphyExtension		*ephy_extensions_manager_add		(EphyExtensionsManager *manager,
 								 GType type);
 

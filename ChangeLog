@@ -1,3 +1,13 @@
+2004-02-01  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-extensions-manager.c: (ephy_extensions_manager_init):
+	* src/ephy-extensions-manager.h:
+	* src/ephy-shell.c: (ephy_shell_get_extensions_manager):
+
+	Decouple extensions manager initialisation and extensions loading.
+	Fixes a crash when an extensions tried to get the session,
+	causing us to load extensions more than once.
+
 2004-02-01  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* lib/ephy-stock-icons.h:
