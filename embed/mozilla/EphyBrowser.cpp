@@ -769,10 +769,9 @@ nsresult EphyBrowser::GetDocumentHasModifiedForms (nsIDOMDocument *aDomDoc, PRUi
 				inputElement->GetValue (userText);
 				inputElement->GetMaxLength (&max_length);
 
-				/* Guard against arguably broken forms where
-				 * defaultText is longer than maxlength
-				 * (userText is cropped, defaultText is not)
-				 * Mozilla bug 232057
+				/* There are forms for which defaultValue is longer than
+				 * userValue. Mozilla consider this not a bug [see WONTFIXed
+				 * bug 232057], but we need to check for this here.
 				 */
 				if (defaultText.Length() > (PRUint32)max_length)
 				{
