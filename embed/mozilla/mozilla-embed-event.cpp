@@ -21,6 +21,8 @@
 
 #include "mozilla-embed-event.h"
 
+#include "ephy-debug.h"
+
 #include <nsCOMPtr.h>
 #include <nsIDOMEvent.h>
 
@@ -97,6 +99,10 @@ mozilla_embed_event_set_property (MozillaEmbedEvent *event,
 				  const char *name,
 				  GValue *value)
 {
+	char *value_content = g_strdup_value_contents (value);
+	LOG ("embed event %p set property \"%s\" to %s", event, name, value_content);
+	g_free (value_content);
+
 	g_hash_table_insert (event->priv->props,
 			     g_strdup (name),
 			     value);
@@ -166,6 +172,8 @@ mozilla_embed_event_init (MozillaEmbedEvent *event)
 {
 	event->priv = MOZILLA_EMBED_EVENT_GET_PRIVATE (event);
 
+	LOG ("MozillaEmbedEvent %p initialising", event)
+
 	event->priv->dom_event = nsnull;
 	event->priv->props = g_hash_table_new_full (g_str_hash, g_str_equal,
 						    g_free, free_g_value);
@@ -179,6 +187,8 @@ mozilla_embed_event_finalize (GObject *object)
 	g_hash_table_destroy (event->priv->props);
 
 	event->priv->dom_event = nsnull;
+
+	LOG ("MozillaEmbedEvent %p finalised", object)
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
