@@ -174,9 +174,12 @@ EphyUtils::CollatePrintSettings (const EmbedPrintInfo *info,
 			   NS_CSTRING_ENCODING_UTF8, tmp);
 	options->SetToFileName (tmp.get());
 
-	NS_CStringToUTF16 (nsEmbedCString(info->printer),
-			   NS_CSTRING_ENCODING_UTF8, tmp);
-	options->SetPrinterName (tmp.get());
+	if (info->printer != NULL)
+	{
+		NS_CStringToUTF16 (nsEmbedCString(info->printer),
+				   NS_CSTRING_ENCODING_UTF8, tmp);
+		options->SetPrinterName (tmp.get());
+	}
 
 	/**
 	 * Work around a mozilla bug where paper size & orientation are ignored

@@ -590,7 +590,7 @@ set_combo_box_from_value (PropertyInfo *info, const  GValue *value)
 			gtk_combo_box_set_active (GTK_COMBO_BOX (info->widget), 0);
 		}
 
-		info->sane_state = found;
+		info->sane_state = TRUE;
 	}
 	else if (info->data_type == G_TYPE_INT)
 	{

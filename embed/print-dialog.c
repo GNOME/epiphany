@@ -43,6 +43,7 @@
 #include <gtk/gtkcelllayout.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <glib/gi18n.h>
+#include <string.h>
 
 #define CONF_PRINT_PRINTER	"/apps/epiphany/dialogs/print_printer_name"
 #define CONF_PRINT_FILE		"/apps/epiphany/dialogs/print_file"
@@ -209,6 +210,34 @@ sanitize_filename (const char *input)
 	return filename;
 }
 
+static char *
+get_printer_name (void)
+{
+	EphyEmbedSingle *single;
+	GList *printers;
+	char *printer;
+
+	single = EPHY_EMBED_SINGLE (ephy_embed_shell_get_embed_single (embed_shell));
+	printers = ephy_embed_single_get_printer_list (single);
+	if (printers == NULL)
+	{
+		return NULL;
+	}
+
+	printer = eel_gconf_get_string (print_props[PRINTER_PROP].pref);
+	if (printer == NULL ||
+	    !g_list_find_custom (printers, printer, (GCompareFunc)strcmp))
+	{
+		g_free (printer);
+		printer = g_strdup (printers->data);
+	}
+
+	g_list_foreach (printers, (GFunc)g_free, NULL);
+	g_list_free (printers);
+
+	return printer;
+}
+
 EmbedPrintInfo *
 ephy_print_get_print_info (void)
 {
@@ -244,7 +273,7 @@ ephy_print_get_print_info (void)
 		g_free (fname);
 	}
 
-	info->printer = eel_gconf_get_string (print_props[PRINTER_PROP].pref);
+	info->printer = get_printer_name ();
 
 	info->pages = eel_gconf_get_integer (print_props[ALL_PAGES_PROP].pref);
 	info->from_page = eel_gconf_get_integer (print_props[FROM_PROP].pref);

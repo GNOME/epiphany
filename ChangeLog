@@ -1,3 +1,25 @@
+2004-10-11  Marco Pesenti Gritti  <marco@gnome.org>
+
+	reviewed by: Christian Persch  <chpe@cvs.gnome.org>
+
+	 === Release 1.4.4 ===
+
+	* NEWS:
+	* configure.in:
+
+	Update for the release.
+
+	* embed/print-dialog.c: (get_printer_name),
+	(ephy_print_get_print_info):
+
+	Ensure the printer name is sane.
+
+	* lib/ephy-dialog.c: (set_combo_box_from_value):
+
+	Mark the value sane also when we fallback to
+	the first item in the list because there is not
+	matching item in the model.
+
 2004-10-10  Marco Pesenti Gritti  <marco@gnome.org>
 
 	reviewed by: Christian Persch  <chpe@cvs.gnome.org>
