@@ -911,7 +911,7 @@ show_cookies_properties (PdmDialog *dialog,
 	gtk_widget_show (label);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 1, 2);
 
-	str = g_strconcat ("<b>", _("Secure:"), "</b>", NULL);
+	str = g_strconcat ("<b>", _("Send for:"), "</b>", NULL);
 	label = gtk_label_new (str);
 	g_free (str);
 	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
@@ -920,7 +920,7 @@ show_cookies_properties (PdmDialog *dialog,
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
 			  GTK_FILL, GTK_FILL, 0, 0);
 
-	label = gtk_label_new (info->is_secure ? _("Yes") : _("No") );
+	label = gtk_label_new (info->is_secure ? _("Encrypted connections only") : _("Any type of connection") );
 	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 	gtk_widget_show (label);
