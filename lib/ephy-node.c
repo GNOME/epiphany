@@ -115,10 +115,12 @@ int_hash (gconstpointer a)
 static void
 callback (long id, EphyNodeSignalData *data, gpointer *user_data)
 {
-	va_list valist = (va_list) user_data[0];
+        va_list valist;
 	EphyNodeSignalType type = GPOINTER_TO_INT (user_data[1]);
 
 	if (data->type != type) return;
+
+        va_copy(valist, user_data[0]);
 
 	switch (data->type)
 	{

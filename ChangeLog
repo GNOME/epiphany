@@ -1,3 +1,9 @@
+2003-06-09  Jeremy Katz  <katzj@redhat.com>
+
+	* lib/ephy-node.c (callback): Use va_copy for the valist instead of
+	directly accessing it.  va_list is implemented as an array on some
+	platforms (eg, AMD64).
+
 2003-06-08  Jeremy Katz  <katzj@redhat.com>
  
 	* lib/egg/egg-menu-merge.h (egg_menu_merge_add_ui_from_string):
