@@ -133,7 +133,7 @@ NS_IMETHODIMP MozGlobalHistory::HidePage(nsIURI *aURI)
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
+#if (MOZILLA_IS_BRANCH (1, 7) && MOZILLA_CHECK_VERSION3 (1, 7, 3)) || MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
 /* void removePage (in nsIURI aURI); */
 NS_IMETHODIMP MozGlobalHistory::RemovePage(nsIURI *aURI)
 {
@@ -179,7 +179,7 @@ NS_IMETHODIMP MozGlobalHistory::GetCount(PRUint32 *aCount)
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
+#if (MOZILLA_IS_BRANCH (1, 7) && MOZILLA_CHECK_VERSION3 (1, 7, 3)) || MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
 /* void markPageAsTyped (in AUTF8String aURI) */
 NS_IMETHODIMP MozGlobalHistory::MarkPageAsTyped(nsIURI *aURI)
 {
