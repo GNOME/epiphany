@@ -220,6 +220,7 @@ EphyModalAlertEventListener::HandleEvent (nsIDOMEvent * aDOMEvent)
 
 	/* make sure the event is trusted */
 	nsCOMPtr<nsIDOMNSEvent> nsEvent (do_QueryInterface (aDOMEvent));
+	NS_ENSURE_TRUE (nsEvent, NS_ERROR_FAILURE);
 	PRBool isTrusted = PR_FALSE;
 	nsEvent->GetIsTrusted (&isTrusted);
 	if (!isTrusted) return NS_OK;
