@@ -18,6 +18,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "mozilla-embed.h"
 #include "mozilla-embed-event.h"
 #include "ephy-embed-shell.h"
@@ -832,9 +836,14 @@ mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 	rv = ctx.GetKeyEventInfo (ev, info);
 	if (NS_FAILED (rv)) return ret;
 
-	if (info->keycode == nsIDOMKeyEvent::DOM_VK_F10 &&
+	if ((info->keycode == nsIDOMKeyEvent::DOM_VK_F10 &&
 	    (info->modifier == GDK_SHIFT_MASK ||
 	     info->modifier == GDK_CONTROL_MASK))
+#if MOZILLA_SNAPSHOT > 14
+	    || (info->keycode == nsIDOMKeyEvent::DOM_VK_CONTEXT_MENU &&
+		!info->modifier)
+#endif
+	   )
 	{
 		/* Translate relative coordinates to absolute values, and try
 		   to avoid covering links by adding a little offset. */
