@@ -10,6 +10,7 @@ EXTRA_DIST = 			\
 	intltool-merge.in	\
 	intltool-update.in	\
 	intltool-extract.in	\
+	intltool-modules/XML/Parser/Style/OrigTree.pm	\
 	xmldocs.make		\
 	omf.make		\
 	COPYING.README
