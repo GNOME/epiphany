@@ -868,6 +868,9 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	gtk_container_add (GTK_CONTAINER (close_button), image);
 	gtk_box_pack_start (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
 
+	gtk_tooltips_set_tip (nb->priv->title_tips, close_button,
+			      _("Close tab"), NULL);
+
 	g_signal_connect (G_OBJECT (close_button), "clicked",
                           G_CALLBACK (close_button_clicked_cb),
                           tab);
