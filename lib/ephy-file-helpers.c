@@ -50,10 +50,7 @@ ephy_file_tmp_dir (void)
 		full_name = g_build_filename (g_get_tmp_dir (), partial_name, NULL);
 		tmp_dir = mkdtemp (full_name);
 		g_free(partial_name);
-		if (tmp_dir == NULL)
-		{
-			g_free (full_name);
-		}
+		g_free (full_name);
 	}
 
 	return tmp_dir;
@@ -87,6 +84,8 @@ ephy_file_tmp_filename (const char *base,
 	}
 	else
 	{
+		g_free (name);
+
 		return NULL;
 	}
 
