@@ -62,7 +62,7 @@ GType         ephy_statusbar_get_type			(void);
 GtkWidget    *ephy_statusbar_new			(void);
 
 void          ephy_statusbar_set_security_state		(EphyStatusbar *statusbar,
-							 gboolean secure,
+							 const char *stock_id,
 							 const char *tooltip);
 
 void          ephy_statusbar_set_popups_state		(EphyStatusbar *statusbar,

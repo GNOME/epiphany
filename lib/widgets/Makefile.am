@@ -12,12 +12,6 @@ endif
 noinst_LTLIBRARIES = libephywidgets.la
 
 libephywidgets_la_SOURCES = \
-	ephy-arrow-toolbutton.c			\
-	ephy-arrow-toolbutton.h			\
-	ephy-label.c				\
-	ephy-label.h				\
-	ephy-cell-renderer-progress.h		\
-	ephy-cell-renderer-progress.c		\
 	ephy-location-entry.c			\
 	ephy-location-entry.h			\
 	ephy-node-view.c			\

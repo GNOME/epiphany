@@ -1,0 +1,308 @@
+dnl Copyright (C) 2000-2004 Marco Pesenti Gritti
+dnl Copyright (C) 2003, 2004 Christian Persch
+dnl
+dnl This program is free software; you can redistribute it and/or modify it
+dnl under the terms of the GNU General Public License as published by the
+dnl Free Software Foundation; either version 2 of the License, or (at your
+dnl option) any later version.
+dnl
+dnl This program is distributed in the hope that it will be useful, but
+dnl WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+dnl General Public License for more details.
+dnl
+dnl You should have received a copy of the GNU General Public License along
+dnl with this program; if not, write to the Free Software Foundation, Inc.,
+dnl 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+
+AC_INIT([GNOME Web browser], [1.5.0],
+        [http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+
+GNOME_COMMON_INIT
+
+AC_PREREQ([2.57])
+
+AM_CONFIG_HEADER([config.h])
+AC_CONFIG_SRCDIR([configure.ac])
+
+EPIPHANY_MAJOR=1.5
+AC_SUBST([EPIPHANY_MAJOR])
+
+AM_INIT_AUTOMAKE([dist-bzip2 check-news])
+
+AM_MAINTAINER_MODE
+
+AC_PROG_INTLTOOL([0.29])
+
+GLIB_REQUIRED=2.5.3
+PANGO_REQUIRED=1.5.1
+GTK_REQUIRED=2.5.3
+LIBXML_REQUIRED=2.6.6
+LIBGNOMEVFS_REQUIRED=2.3.1
+LIBGLADE_REQUIRED=2.3.1
+LIBGNOMEUI_REQUIRED=2.6.0
+
+AC_SUBST([GLIB_REQUIRED])
+AC_SUBST([PANGO_REQUIRED])
+AC_SUBST([GTK_REQUIRED])
+AC_SUBST([LIBXML_REQUIRED])
+AC_SUBST([LIBGNOMEVFS_REQUIRED])
+AC_SUBST([LIBGLADE_REQUIRED])
+AC_SUBST([LIBGNOMEUI_REQUIRED])
+
+AC_ENABLE_SHARED([yes])
+AC_ENABLE_STATIC([no])
+
+AC_LIBTOOL_DLOPEN
+AM_PROG_LIBTOOL
+
+AC_ISC_POSIX
+AC_PROG_CC
+AC_PROG_CXX
+AM_PROG_CC_STDC
+AC_HEADER_STDC
+AC_PROG_INTLTOOL
+AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
+
+AC_SUBST([AM_CXXFLAGS])
+
+GNOME_DEBUG_CHECK
+GNOME_COMPILE_WARNINGS([error])
+
+PKG_CHECK_MODULES([EPIPHANY_DEPENDENCY], \
+		  glib-2.0 >= $GLIB_REQUIRED \
+		  pango >= $PANGO_REQUIRED \
+		  gtk+-2.0 >= $GTK_REQUIRED \
+		  libxml-2.0 >= $LIBXML_REQUIRED \
+		  libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED \
+		  libglade-2.0 >= $LIBGLADE_REQUIRED \
+		  bonobo-activation-2.0 \
+		  ORBit-2.0 \
+		  libglade-2.0 >= $LIBGLADE_REQUIRED \
+		  gnome-vfs-2.0 >= $LIBGNOMEVFS_REQUIRED \
+		  gnome-vfs-module-2.0 \
+		  gconf-2.0 \
+		 )
+AC_SUBST([EPIPHANY_DEPENDENCY_CFLAGS])
+AC_SUBST([EPIPHANY_DEPENDENCY_LIBS])
+
+ORBIT_IDL="`$PKG_CONFIG --variable=orbit_idl ORBit-2.0`"
+AC_SUBST([ORBIT_IDL])
+
+LIBBONOBO_IDL="`$PKG_CONFIG --variable=idldir libbonobo-2.0`"
+AC_SUBST([LIBBONOBO_IDL])
+
+BONOBO_ACTIVATION_IDL="`$PKG_CONFIG --variable=idldir bonobo-activation-2.0`"
+AC_SUBST([BONOBO_ACTIVATION_IDL])
+
+PKG_CHECK_MODULES(MOZILLA_COMPONENT, mozilla-gtkmozembed mozilla-xpcom)
+AC_SUBST([MOZILLA_COMPONENT_CFLAGS])
+AC_SUBST([MOZILLA_COMPONENT_LIBS])
+
+MOZILLA_INCLUDE_ROOT="`$PKG_CONFIG --variable=includedir mozilla-gtkmozembed`"
+AC_SUBST([MOZILLA_INCLUDE_ROOT])
+
+MOZILLA_HOME="`$PKG_CONFIG --variable=libdir mozilla-gtkmozembed`"
+AC_SUBST([MOZILLA_HOME])
+
+dnl whether to build with DEBUG defined
+AC_ARG_WITH([mozilla-debug],
+	    AC_HELP_STRING([--mozilla-debug],[Whether mozilla is a debug build]),
+	    [AM_CXXFLAGS="-DDEBUG $AM_CXXFLAGS"])
+
+AC_ARG_ENABLE([cpp-rtti],
+	      AC_HELP_STRING([--enable-cpp-rtti],[Enable C++ RTTI]),[],
+	      [enable_cpp_rtti=no])
+
+if test "x$enable_cpp_rtti" = "xno"; then
+  AM_CXXFLAGS="-fno-rtti $AM_CXXFLAGS"
+fi
+
+dnl Specify the gconf configuration source, 
+dnl default to xml::$(sysconfdir)/gconf/gconf.xml.defaults
+
+AC_PATH_PROG([GCONFTOOL], [gconftool-2], [no])
+
+if test x"$GCONFTOOL" = xno; then
+  AC_MSG_ERROR([gconftool-2 executable not found in your path - should be installed with GConf])
+fi
+
+AM_GCONF_SOURCE_2
+
+dnl ******************
+dnl Portability checks
+dnl ******************
+
+AC_CHECK_FUNCS([mkdtemp])
+
+dnl *************************************************************************
+dnl This is from Mozilla's configure.in. They set almost all the config stuff
+dnl they need in mozilla-config.h Except for this compiler flag, which can't
+dnl go in mozilla-config.h So we check the flag too and now we can include
+dnl mozilla-config.h without breaking epiphany.
+dnl This is really gcc-only
+dnl Do this test using CXX only since some versions of gcc
+dnl 2.95-2.97 have a signed wchar_t in c++ only and some versions
+dnl only have short-wchar support for c++.
+AC_LANG_PUSH([C++])
+_SAVE_CXXFLAGS=$CXXFLAGS
+_SAVE_AM_CXXFLAGS=$AM_CXXFLAGS
+AM_CXXFLAGS="$AM_CXXFLAGS -fshort-wchar"
+CXXFLAGS="$CXXFLAGS $AM_CXXFLAGS"
+
+AC_CACHE_CHECK([for compiler -fshort-wchar option],
+    ac_cv_have_usable_wchar_option,
+    [AC_TRY_RUN([#include <stddef.h>
+                 int main () {
+                   return (sizeof(wchar_t) != 2) ||
+                          (wchar_t)-1 < (wchar_t) 0 ; } ],
+                ac_cv_have_usable_wchar_option="yes",
+                ac_cv_have_usable_wchar_option="no",
+                ac_cv_have_usable_wchar_option="maybe")])
+
+if test "$ac_cv_have_usable_wchar_option" != "yes"; then
+    AM_CXXFLAGS=$_SAVE_AM_CXXFLAGS
+fi
+CXXFLAGS=$_SAVE_CXXFLAGS
+AC_LANG_POP([C++])
+
+dnl *********************
+dnl Mozilla version check
+dnl *********************
+
+AC_MSG_CHECKING([for mozilla version])
+MOZILLA_VERSION="`$PKG_CONFIG --modversion mozilla-gtkmozembed`"
+
+AC_ARG_WITH([mozilla-snapshot],
+  AC_HELP_STRING([--with-mozilla-snapshot@<:@=1.7|1.8a1|1.8a2|trunk@:>@],
+		 [Which mozilla version to build against, guessed: @<:@guessed@:>@]),
+  [autodetect=" (guessed: $MOZILLA_VERSION)"; MOZILLA_VERSION="$withval"])
+
+AC_MSG_RESULT([$MOZILLA_VERSION$autodetect])
+
+dnl Test for the "trunk" version
+if test $MOZILLA_VERSION = "trunk"; then
+	MOZILLA_VERSION=9.0 # use a high number
+fi
+
+dnl Split up the version string ( 1.7rc1 -> 1 7 rc 1 )
+version=$(echo $MOZILLA_VERSION | sed -e 's/\(@<:@0-9@:>@\+\|@<:@a-z@:>@\+\)/\1 /g' -e 's/\.//g')
+
+set -- $version;
+
+case $1 in 
+    @<:@0-9@:>@)
+        AC_DEFINE_UNQUOTED([MOZILLA_MAJOR], [$1], [Define to the Mozilla major version.])
+	;;
+    *)		
+	AC_ERROR([Invalid mozilla major version component: $1])
+	;;
+esac
+
+case $2 in 
+    @<:@0-9@:>@)
+        AC_DEFINE_UNQUOTED([MOZILLA_MINOR], [$2], [Define to the Mozilla minor version.])
+	;;
+    *)		
+	AC_ERROR([Invalid mozilla minor version component: $2])
+	;;
+esac
+
+micro=$3
+type=4
+case $3 in
+    @<:@0-9@:>@) # e.g. 1.4.1
+	;;
+    "")	# e.g. 1.7
+	micro=0	
+	;;
+    a)	type=1
+	micro=$4
+	;;
+
+    b)	type=2
+	micro=$4
+	;;
+
+    rc) type=3
+	micro=$4
+	;;
+    *)
+	AC_ERROR([Invalid mozilla version component: $3])
+esac
+
+if test "$micro" = "" ; then
+  micro=0
+fi
+
+if test "$5" != "" ; then
+  AC_ERROR([Unexpected mozilla version component: $5])
+fi
+
+AC_DEFINE_UNQUOTED([MOZILLA_TYPE], [$type], [Define to the Mozilla release type.])
+AC_DEFINE_UNQUOTED([MOZILLA_MICRO], [$micro], [Define to the Mozilla micro version.])
+
+if test "$1" -lt 1 -o \( "$1" -eq 1 -a "$2" -lt 7 \) -o \( "$1" -eq 1 -a "$2" -eq 7 -a "$type" -lt 4 \); then
+    AC_ERROR([
+*****************************************************************************
+Epiphany can be built using Mozilla 1.7, 1.7.x, 1.7 branch, 1.8a2, or trunk
+snapshot, but the version available is $MOZILLA_VERSION.  
+
+When using Mozilla trunk snapshot, a successful build is not guaranteed due 
+to the frequently changing state of the Mozilla interfaces and the limited
+resources of the Epiphany team to support non-release Mozilla snapshots.
+*****************************************************************************])
+fi
+
+AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/pipnss/nsIX509Cert.h],
+	[AC_DEFINE(HAVE_MOZILLA_PSM, 1,
+	[Define if you have the mozilla psm headers installed])])
+
+AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsIPassword.h],
+	[AC_DEFINE(HAVE_NSIPASSWORD_H, 1,
+	[Define if mozilla nsIPassword header is available])])
+
+MOZILLA_WARN_CXXFLAGS="-Wall -Wconversion -Wpointer-arith -Wcast-align -Woverloaded-virtual -Wsynth -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor"
+AC_SUBST([MOZILLA_WARN_CXXFLAGS])
+
+dnl *******************************
+dnl Internationalization
+dnl ******************************* 
+dnl Add the languages which your application supports here.
+
+ALL_LINGUAS="am ar az be bg bn bs ca cs cy da de el en_CA en_GB es et eu fa fi fr ga gu he hi hr hu id is it ja ko li lt mi mk ml mn ms nb ne nl nn no pa pl pt pt_BR ro ru sk sl sq sr sr@Latn sv ta th tk tr uk vi wa zh_CN zh_TW"
+GETTEXT_PACKAGE=epiphany
+AC_SUBST([GETTEXT_PACKAGE])
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [Gettext package])
+AM_GLIB_GNU_GETTEXT
+
+dnl uninstalled share dir to search data
+AC_DEFINE_UNQUOTED([SHARE_UNINSTALLED_DIR], ["`pwd`/data"], [path to source data dir])
+
+GTK_DOC_CHECK([1.0])
+
+AC_CONFIG_FILES([
+Makefile
+data/Makefile
+data/epiphany-1.6.pc
+data/glade/Makefile
+data/art/Makefile
+data/ui/Makefile
+doc/Makefile
+doc/reference/Makefile
+lib/Makefile
+lib/egg/Makefile
+lib/widgets/Makefile
+embed/Makefile
+embed/mozilla/Makefile
+src/Makefile
+src/bookmarks/Makefile
+help/Makefile
+help/C/Makefile
+help/es/Makefile
+help/eu/Makefile
+help/ja/Makefile
+po/Makefile.in
+])
+
+AC_OUTPUT

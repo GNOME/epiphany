@@ -376,7 +376,7 @@ ephy_favicon_cache_download (EphyFaviconCache *cache,
 	dest = g_build_filename (cache->priv->directory, filename, NULL);
 
 	persist = EPHY_EMBED_PERSIST
-		(ephy_embed_factory_new_object ("EphyEmbedPersist"));
+		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
 
 	ephy_embed_persist_set_dest (persist, dest);
 	ephy_embed_persist_set_flags (persist, EMBED_PERSIST_NO_VIEW);

@@ -44,7 +44,6 @@ static gboolean open_in_existing = FALSE;
 static gboolean open_in_new_tab = FALSE;
 static gboolean open_fullscreen = FALSE;
 static gboolean open_as_bookmarks_editor = FALSE;
-static gboolean server_mode = FALSE;
 
 static const char *session_filename = NULL;
 static const char *bookmark_url = NULL;
@@ -69,9 +68,6 @@ static struct poptOption popt_options[] =
 	  N_("FILE") },
 	{ "bookmarks-editor", 'b', POPT_ARG_NONE, &open_as_bookmarks_editor, 0,
 	  N_("Launch the bookmarks editor"),
-	  NULL },
-	{ "server", 's', POPT_ARG_NONE, &server_mode, 0,
-	  N_("Used internally by the bonobo interface"),
 	  NULL },
 	{ NULL, 0, 0, NULL, 0, NULL, NULL }
 };
@@ -153,10 +149,6 @@ main (int argc, char *argv[])
 	{
 		startup_flags |= EPHY_SHELL_STARTUP_ADD_BOOKMARK;
 		string_arg = bookmark_url;
-	}
-	else if (server_mode)
-	{
-		startup_flags |= EPHY_SHELL_STARTUP_SERVER;
 	}
 
 	gnome_vfs_init ();

@@ -51,9 +51,9 @@ static void toolbar_set_window (Toolbar *t, EphyWindow *window);
 
 static GtkTargetEntry drag_targets[] =
 {
-	{ EGG_TOOLBAR_ITEM_TYPE,	0,	0 },
-	{ EPHY_DND_TOPIC_TYPE,		0,	1 },
-	{ EPHY_DND_URL_TYPE,		0,	2 }
+	{ EGG_TOOLBAR_ITEM_TYPE, GTK_TARGET_SAME_APP, 0 },
+	{ EPHY_DND_TOPIC_TYPE,   0,                   1 },
+	{ EPHY_DND_URL_TYPE,	 0,	              2 }
 };
 static int n_drag_targets = G_N_ELEMENTS (drag_targets);
 
@@ -338,6 +338,7 @@ toolbar_setup_actions (Toolbar *t)
 			       "label", _("Address Entry"),
 			       "stock_id", EPHY_STOCK_ENTRY,
 			       "tooltip", _("Enter a web address to open, or a phrase to search for on the web"),
+			       "visible-overflown", FALSE,
 			       NULL);
 	g_signal_connect (action, "go_location",
 			  G_CALLBACK (go_location_cb), t->priv->window);
@@ -363,6 +364,7 @@ toolbar_setup_actions (Toolbar *t)
 			       "name", "Favicon",
 			       "label", _("Favicon"),
 			       "window", t->priv->window,
+			       "visible-overflown", FALSE,
 			       NULL);
 	gtk_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);

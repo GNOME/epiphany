@@ -1397,7 +1397,7 @@ save_property_url (EphyEmbed *embed,
 	location = g_value_get_string (value);
 
 	persist = EPHY_EMBED_PERSIST
-		(ephy_embed_factory_new_object ("EphyEmbedPersist"));
+		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
 
 	ephy_embed_persist_set_embed (persist, embed);
 	ephy_embed_persist_set_flags (persist, 0);
@@ -1556,7 +1556,7 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->setting_zoom = FALSE;
 	tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
 
-	embed = ephy_embed_factory_new_object ("EphyEmbed");
+	embed = ephy_embed_factory_new_object (EPHY_TYPE_EMBED);
 	g_assert (embed != NULL);
 
 	gtk_container_add (GTK_CONTAINER (tab), GTK_WIDGET (embed));
@@ -1744,8 +1744,7 @@ ephy_tab_get_status_message (EphyTab *tab)
 static void
 ephy_tab_set_title (EphyTab *tab, EphyEmbed *embed, const char *new_title)
 {
-	char *title_short, *title_tmp;
-	char *title = NULL;
+	char *title_tmp, *title = NULL;
 
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
@@ -1793,18 +1792,12 @@ ephy_tab_set_title (EphyTab *tab, EphyEmbed *embed, const char *new_title)
 
 	tab->priv->title = title;
 
-	title_short = ephy_string_shorten (title, MAX_LABEL_LENGTH);
-	title_tmp = ephy_string_double_underscores (title_short);
+	title_tmp = ephy_string_double_underscores (title);
 
-	/*
-	 * FIXME: instead of shortening the title here, use an egg action
-	 * which creates menu items with ellipsizing labels
-	 */
 	g_object_set (G_OBJECT (tab->priv->action),
 		      "label", title_tmp,
 		      NULL);
 
-	g_free (title_short);
 	g_free (title_tmp);
 
 	g_object_notify (G_OBJECT (tab), "title");

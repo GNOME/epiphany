@@ -69,7 +69,7 @@ MozDownload::MozDownload() :
 	mMaxSize(-1),
 	mStatus(NS_OK),
 	mEmbedPersist(nsnull),
-	mDownloadState(EPHY_DOWNLOAD_DOWNLOADING)
+	mDownloadState(EPHY_DOWNLOAD_INITIALISING)
 {
 	LOG ("MozDownload ctor (%p)", (void *) this)
 }

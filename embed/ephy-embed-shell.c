@@ -189,7 +189,7 @@ ephy_embed_shell_get_embed_single (EphyEmbedShell *shell)
 	if (shell->priv->embed_single == NULL)
 	{
 		shell->priv->embed_single = EPHY_EMBED_SINGLE
-			(ephy_embed_factory_new_object ("EphyEmbedSingle"));
+			(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_SINGLE));
 	}
 
 	return G_OBJECT (shell->priv->embed_single);

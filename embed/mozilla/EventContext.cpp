@@ -653,8 +653,9 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, Mozilla
 	aMouseEvent->GetShiftKey(&mod_key);
 	if (mod_key) info->modifier |= GDK_SHIFT_MASK;
 
-	aMouseEvent->GetMetaKey(&mod_key);
-	if (mod_key) info->modifier |= GDK_MOD2_MASK;
+	/* no need to check GetMetaKey, it's always PR_FALSE,
+	 * see widget/src/gtk2/nsWindow.cpp:InitMouseEvent
+	 */
 	
 	aMouseEvent->GetCtrlKey(&mod_key);
 	if (mod_key) info->modifier |= GDK_CONTROL_MASK;

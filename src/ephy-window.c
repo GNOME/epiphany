@@ -302,6 +302,12 @@ static GtkActionEntry ephy_popups_entries [] = {
 	{ "CopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
 
+	/* Email links */
+	{ "SendEmail", GTK_STOCK_OPEN, N_("_Send Email..."),
+	  NULL, NULL, G_CALLBACK (popup_cmd_open_link) },
+	{ "CopyEmailAddress", NULL, N_("_Copy Email Address"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
+
 	/* Images */
 	{ "OpenImage", GTK_STOCK_OPEN, N_("Open _Image"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_open_image) },
@@ -720,10 +726,24 @@ ephy_window_key_press_event (GtkWidget *widget,
 {
 	EphyWindow *window = EPHY_WINDOW (widget);
 	GtkWidget *menubar;
-	guint modifiers = gtk_accelerator_get_default_mod_mask ();
+	guint keyval = GDK_F10;
+	guint modifier = 0;
+	guint mask = gtk_accelerator_get_default_mod_mask ();
+	char *accel = NULL;
 
-	/* Show and activate the menubar on F10, if it isn't visible */
-        if (event->keyval == GDK_F10 && (event->state & modifiers) == 0)
+	g_object_get (gtk_widget_get_settings (widget),
+		      "gtk-menu-bar-accel", &accel,
+		      NULL);
+
+	if (accel != NULL)
+	{
+		gtk_accelerator_parse (accel, &keyval, &modifier);
+
+		g_free (accel);
+	}
+
+	/* Show and activate the menubar, if it isn't visible */
+        if (event->keyval == keyval && (event->state & mask) == (modifier & mask))
 	{
 		menubar = gtk_ui_manager_get_widget
 			(GTK_UI_MANAGER (window->ui_merge), "/menubar");
@@ -1279,8 +1299,8 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	EmbedSecurityLevel level;
 	char *description = NULL;
 	char *state = NULL;
-	gboolean secure;
 	char *tooltip;
+	const char *stock_id = STOCK_LOCK_INSECURE;
 
 	if (window->priv->closing) return;
 
@@ -1288,14 +1308,6 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 
 	ephy_embed_get_security_level (embed, &level, &description);
 
-	if (level != ephy_tab_get_security_level (tab))
-	{
-		/* something is VERY wrong here! */
-		level = STATE_IS_UNKNOWN;
-		description = NULL;
-	}
-
-	secure = FALSE;
 	switch (level)
 	{
 		case STATE_IS_UNKNOWN:
@@ -1306,18 +1318,19 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 			break;
 		case STATE_IS_BROKEN:
 			state = _("Broken");
+			stock_id = STOCK_LOCK_BROKEN;
 			break;
 		case STATE_IS_SECURE_MED:
 			state = _("Medium");
-			secure = TRUE;
+			stock_id = STOCK_LOCK_SECURE;
 			break;
 		case STATE_IS_SECURE_LOW:
 			state = _("Low");
-			secure = TRUE;
+			stock_id = STOCK_LOCK_SECURE;
 			break;
 		case STATE_IS_SECURE_HIGH:
 			state = _("High");
-			secure = TRUE;
+			stock_id = STOCK_LOCK_SECURE;
 			break;
 		default:
 			g_assert_not_reached ();
@@ -1337,7 +1350,7 @@ sync_tab_security (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 	}
 
 	ephy_statusbar_set_security_state (EPHY_STATUSBAR (window->priv->statusbar),
-					   secure, tooltip);
+					   stock_id, tooltip);
 	g_free (tooltip);
 
 }
@@ -1569,8 +1582,18 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 
 	LOG ("show_embed_popup context %x", context)
 
-	if ((context & EMBED_CONTEXT_LINK) &&
+	if ((context & EMBED_CONTEXT_EMAIL_LINK) &&
 	    (context & EMBED_CONTEXT_IMAGE))
+	{
+		popup = "/EphyImageEmailLinkPopup";
+	}
+	else if (context & EMBED_CONTEXT_EMAIL_LINK)
+	{
+		popup = "/EphyEmailLinkPopup";
+		update_edit_actions_sensitivity (window, TRUE);
+	}
+	else if ((context & EMBED_CONTEXT_LINK) &&
+		 (context & EMBED_CONTEXT_IMAGE))
 	{
 		popup = "/EphyImageLinkPopup";
 	}

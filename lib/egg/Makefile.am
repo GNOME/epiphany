@@ -8,6 +8,7 @@ INCLUDES = \
 noinst_LTLIBRARIES = libegg.la
 
 EGGSOURCES = \
+  eggdropdowntoolbutton.c \
   eggtreemultidnd.c \
   egg-editable-toolbar.c \
   egg-toolbars-model.c \
@@ -21,6 +22,7 @@ libegg_la_SOURCES = \
   eggmarshalers.c
 
 EGGHEADERS = \
+  eggdropdowntoolbutton.h \
   eggtreemultidnd.h \
   egg-editable-toolbar.h \
   egg-toolbars-model.h \
@@ -33,6 +35,8 @@ noinst_HEADERS = \
   $(EGGHEADERS) \
   eggmarshalers.h \
   eggintl.h
+
+BUILT_SOURCES = eggmarshalers.h eggmarshalers.c
 
 eggmarshalers.h: eggmarshalers.list
 	cd $(srcdir) \

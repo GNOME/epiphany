@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2003 Christian Persch
+ *  Copyright (C) 2003, 2004 Christian Persch
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -88,20 +88,6 @@ typedef enum
 }
 EphyEncodingSource;
 
-typedef struct
-{
-	char *encoding;
-	char *default_encoding;
-	char *hint_encoding;
-	char *prev_doc_encoding;
-	char *forced_encoding;
-	char *parent_encoding;
-	EphyEncodingSource encoding_source;
-	EphyEncodingSource hint_encoding_source;
-	EphyEncodingSource parent_encoding_source;
-}
-EphyEncodingInfo;
-
 enum
 {
 	EPHY_NODE_ENCODING_PROP_TITLE = 1,
@@ -144,8 +130,6 @@ void		 ephy_encodings_add_recent	(EphyEncodings *encodings,
 						 const char *code);
 
 GList		*ephy_encodings_get_recent	(EphyEncodings *encodings);
-
-void		 ephy_encoding_info_free	(EphyEncodingInfo *info);
 
 G_END_DECLS
 

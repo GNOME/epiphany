@@ -417,7 +417,7 @@ window_cmd_file_save_as (GtkAction *action,
 	g_return_if_fail (embed != NULL);
 
 	persist = EPHY_EMBED_PERSIST
-		(ephy_embed_factory_new_object ("EphyEmbedPersist"));
+		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
 
 	ephy_embed_persist_set_embed (persist, embed);
 	ephy_embed_persist_set_fc_title (persist, _("Save As"));
@@ -758,7 +758,7 @@ save_temp_source (EphyEmbed *embed)
 	}
 
 	persist = EPHY_EMBED_PERSIST
-		(ephy_embed_factory_new_object ("EphyEmbedPersist"));
+		(ephy_embed_factory_new_object (EPHY_TYPE_EMBED_PERSIST));
 
 	ephy_embed_persist_set_embed (persist, embed);
 	ephy_embed_persist_set_flags (persist, EMBED_PERSIST_COPY_PAGE |

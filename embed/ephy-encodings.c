@@ -484,21 +484,6 @@ ephy_encodings_init (EphyEncodings *encodings)
 	g_slist_free (list);
 }
 
-void
-ephy_encoding_info_free (EphyEncodingInfo *info)
-{
-	if (info)
-	{
-		g_free (info->encoding);
-		g_free (info->hint_encoding);
-		g_free (info->parent_encoding);
-		g_free (info->prev_doc_encoding);
-		g_free (info->forced_encoding);
-		g_free (info->default_encoding);
-		g_free (info);
-	}
-}
-
 EphyEncodings *
 ephy_encodings_new (void)
 {

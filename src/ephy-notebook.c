@@ -25,6 +25,7 @@
 #endif
 
 #include "ephy-notebook.h"
+#include "ephy-stock-icons.h"
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include "ephy-marshal.h"
@@ -35,7 +36,6 @@
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 #include "ephy-favicon-cache.h"
-#include "ephy-label.h"
 #include "ephy-spinner.h"
 #include "ephy-string.h"
 
@@ -793,7 +793,7 @@ sync_label (EphyTab *tab, GParamSpec *pspec, GtkWidget *proxy)
 
 	if (title)
 	{
-		ephy_label_set_text (EPHY_LABEL (label), title);
+		gtk_label_set_text (GTK_LABEL (label), title);
 		gtk_tooltips_set_tip (tips, ebox, title, NULL);
 	}
 }
@@ -844,11 +844,9 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 {
 	GtkWidget *window, *hbox, *label_hbox, *label_ebox;
 	GtkWidget *label, *close_button, *image, *spinner, *icon;
-	int h = -1, w = -1;
+	GtkIconSize close_icon_size;
 
 	window = gtk_widget_get_toplevel (GTK_WIDGET (nb));
-
-	gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &w, &h);
 
 	/* set hbox spacing and label padding (see below) so that there's an
 	 * equal amount of space around the label */
@@ -865,9 +863,8 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	close_button = gtk_button_new ();
 	gtk_button_set_relief (GTK_BUTTON (close_button),
 			       GTK_RELIEF_NONE);
-	image = gtk_image_new_from_stock (GTK_STOCK_CLOSE,
-					  GTK_ICON_SIZE_MENU);
-	gtk_widget_set_size_request (close_button, w, h);
+	close_icon_size = gtk_icon_size_from_name (EPHY_ICON_SIZE_TAB_BUTTON);
+	image = gtk_image_new_from_stock (EPHY_STOCK_CLOSE_TAB, close_icon_size);
 	gtk_container_add (GTK_CONTAINER (close_button), image);
 	gtk_box_pack_start (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
 
@@ -885,8 +882,8 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	gtk_box_pack_start (GTK_BOX (label_hbox), icon, FALSE, FALSE, 0);
 
 	/* setup label */
-        label = ephy_label_new ("");
-	ephy_label_set_ellipsize (EPHY_LABEL (label), PANGO_ELLIPSIZE_END);
+        label = gtk_label_new ("");
+	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
         gtk_misc_set_padding (GTK_MISC (label), 0, 0);
 	gtk_box_pack_start (GTK_BOX (label_hbox), label, TRUE, TRUE, 0);

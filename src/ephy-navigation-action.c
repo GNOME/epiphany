@@ -23,21 +23,22 @@
 #endif
 
 #include "ephy-navigation-action.h"
-#include "ephy-arrow-toolbutton.h"
 #include "ephy-window.h"
 #include "ephy-string.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-history.h"
 #include "ephy-embed-shell.h"
+#include "eggdropdowntoolbutton.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtkimage.h>
+#include <gtk/gtkmenuitem.h>
 #include <gtk/gtkimagemenuitem.h>
+#include <gtk/gtkmenushell.h>
+#include <gtk/gtkmenu.h>
 
-static void ephy_navigation_action_init       (EphyNavigationAction *action);
-static void ephy_navigation_action_class_init (EphyNavigationActionClass *class);
-
-static GObjectClass *parent_class = NULL;
+#define NTH_DATA_KEY	"GoNTh"
+#define URL_DATA_KEY	"GoURL"
 
 #define EPHY_NAVIGATION_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NAVIGATION_ACTION, EphyNavigationActionPrivate))
 
@@ -53,6 +54,11 @@ enum
 	PROP_DIRECTION,
 	PROP_WINDOW
 };
+
+static void ephy_navigation_action_init       (EphyNavigationAction *action);
+static void ephy_navigation_action_class_init (EphyNavigationActionClass *class);
+
+static GObjectClass *parent_class = NULL;
 
 GType
 ephy_navigation_action_get_type (void)
@@ -88,44 +94,44 @@ static GtkWidget *
 new_history_menu_item (const char *origtext,
 		       const char *address)
 {
+	EphyFaviconCache *cache;
+	EphyHistory *history;
 	GtkWidget *item, *image;
 	GdkPixbuf *icon = NULL;
+	const char *icon_address;
 	char *short_text;
 
-	if (address != NULL)
-	{
-		EphyFaviconCache *cache;
-		EphyHistory *history;
-		const char *icon_address;
+	g_return_val_if_fail (address != NULL, NULL);
 
-		history = EPHY_HISTORY
-			(ephy_embed_shell_get_global_history (embed_shell));
-		icon_address = ephy_history_get_icon (history, address);
-
-		cache = EPHY_FAVICON_CACHE
-			(ephy_embed_shell_get_favicon_cache (embed_shell));
-		icon = ephy_favicon_cache_get (cache, icon_address);
-	}
-
+	/* FIXME: use ellipsisation in the menu item instead */
 	short_text = ephy_string_shorten (origtext, MAX_LENGTH);
 	item = gtk_image_menu_item_new_with_label (short_text);
 	g_free (short_text);
 
-	image = gtk_image_new_from_pixbuf (icon);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-	gtk_widget_show (image);
-	gtk_widget_show (item);
+	history = EPHY_HISTORY
+		(ephy_embed_shell_get_global_history (embed_shell));
+	icon_address = ephy_history_get_icon (history, address);
+
+	cache = EPHY_FAVICON_CACHE
+		(ephy_embed_shell_get_favicon_cache (embed_shell));
+	icon = ephy_favicon_cache_get (cache, icon_address);
 
 	if (icon != NULL)
 	{
+		image = gtk_image_new_from_pixbuf (icon);
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+		gtk_widget_show (image);
 		g_object_unref (icon);
 	}
+
+	gtk_widget_show (item);
 
 	return item;
 }
 
 static void
-activate_back_or_forward_menu_item_cb (GtkWidget *menu, EphyWindow *window)
+activate_back_or_forward_menu_item_cb (GtkWidget *menuitem,
+				       EphyWindow *window)
 {
 	EphyEmbed *embed;
 	int go_nth;
@@ -133,52 +139,45 @@ activate_back_or_forward_menu_item_cb (GtkWidget *menu, EphyWindow *window)
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	go_nth = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(menu), "go_nth"));
+	go_nth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menuitem), NTH_DATA_KEY));
 
 	ephy_embed_shistory_go_nth (embed, go_nth);
 }
 
 static void
-activate_up_menu_item_cb (GtkWidget *menu, EphyWindow *window)
+activate_up_menu_item_cb (GtkWidget *menuitem,
+			  EphyWindow *window)
 {
 	EphyEmbed *embed;
-	int go_nth;
-	GSList *l;
-	gchar *url;
+	char *url;
 
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	go_nth = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(menu), "go_nth"));
+	url = g_object_get_data (G_OBJECT (menuitem), URL_DATA_KEY);
+	g_return_if_fail (url != NULL);
 
-	l = ephy_embed_get_go_up_list (embed);
-
-	url = g_slist_nth_data (l, go_nth);
-	if (url)
-	{
-		ephy_window_load_url (window, url);
-	}
-
-	g_slist_foreach (l, (GFunc) g_free, NULL);
-	g_slist_free (l);
+	ephy_window_load_url (window, url);
 }
 
-static void
-setup_back_or_forward_menu (EphyWindow *window, GtkMenuShell *ms, EphyNavigationDirection dir)
+static GtkMenuShell *
+build_back_or_forward_menu (EphyNavigationAction *action)
 {
-	int pos, count;
+	EphyWindow *window = action->priv->window;
+	GtkMenuShell *menu;
 	EphyEmbed *embed;
+	int pos, count;
 	int start, end;
 
 	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
+	g_return_val_if_fail (embed != NULL, NULL);
 
 	pos = ephy_embed_shistory_get_pos (embed);
 	count = ephy_embed_shistory_n_items (embed);
 
-	if (count == 0) return;
+	if (count == 0) return NULL;
 
-	if (dir == EPHY_NAVIGATION_DIRECTION_BACK)
+	if (action->priv->direction == EPHY_NAVIGATION_DIRECTION_BACK)
 	{
 		start = pos - 1;
 		end = -1;
@@ -189,16 +188,26 @@ setup_back_or_forward_menu (EphyWindow *window, GtkMenuShell *ms, EphyNavigation
 		end = count;
 	}
 
+	menu = GTK_MENU_SHELL (gtk_menu_new ());
+
 	while (start != end)
 	{
-		char *title, *url;
 		GtkWidget *item;
+		char *title = NULL, *url = NULL;
+
 		ephy_embed_shistory_get_nth (embed, start, FALSE, &url, &title);
+
+		if (url == NULL) continue;
+
 		item = new_history_menu_item (title ? title : url, url);
-		gtk_menu_shell_append (ms, item);
-		g_object_set_data (G_OBJECT (item), "go_nth", GINT_TO_POINTER (start));
+
+		g_object_set_data (G_OBJECT (item), NTH_DATA_KEY,
+				   GINT_TO_POINTER (start));
 		g_signal_connect (item, "activate",
-                                  G_CALLBACK (activate_back_or_forward_menu_item_cb), window);
+				  G_CALLBACK (activate_back_or_forward_menu_item_cb),
+				  window);
+
+		gtk_menu_shell_append (menu, item);
 		gtk_widget_show_all (item);
 
 		g_free (url);
@@ -213,70 +222,73 @@ setup_back_or_forward_menu (EphyWindow *window, GtkMenuShell *ms, EphyNavigation
 			start--;
 		}
 	}
+
+	return menu;
 }
 
-static void
-setup_up_menu (EphyWindow *window, GtkMenuShell *ms)
+static GtkMenuShell *
+build_up_menu (EphyNavigationAction *action)
 {
+	EphyWindow *window = action->priv->window;
 	EphyEmbed *embed;
-	GSList *l;
-	GSList *li;
-	int count = 0;
+	GtkMenuShell *menu;
+	GtkWidget *item;
+	GSList *list, *l;
+	char *url;
 
 	embed = ephy_window_get_active_embed (window);
-	g_return_if_fail (embed != NULL);
+	g_return_val_if_fail (embed != NULL, NULL);
 
-	l = ephy_embed_get_go_up_list (embed);
+	menu = GTK_MENU_SHELL (gtk_menu_new ());
 
-	for (li = l; li; li = li->next)
+	list = ephy_embed_get_go_up_list (embed);
+
+	for (l = list; l != NULL; l = l->next)
 	{
-		char *url = li->data;
-		GtkWidget *item;
+		url = l->data;
+
+		if (url == NULL) continue;
 
 		item = new_history_menu_item (url, url);
-		gtk_menu_shell_append (ms, item);
-		g_object_set_data (G_OBJECT(item), "go_nth", GINT_TO_POINTER (count));
+
+		g_object_set_data_full (G_OBJECT (item), URL_DATA_KEY, url,
+					(GDestroyNotify) g_free);
 		g_signal_connect (item, "activate",
-                                  G_CALLBACK (activate_up_menu_item_cb), window);
-		gtk_widget_show_all (item);
-		count ++;
+				  G_CALLBACK (activate_up_menu_item_cb), window);
+
+		gtk_menu_shell_append (menu, item);
+		gtk_widget_show (item);
 	}
 
-	g_slist_foreach (l, (GFunc) g_free, NULL);
-	g_slist_free (l);
+	/* the list data has been consumed */
+	g_slist_free (list);
+
+	return menu;
 }
 
 static void
-menu_activated_cb (EphyArrowToolButton *w, EphyNavigationAction *b)
+menu_activated_cb (EggDropdownToolButton *button,
+		   EphyNavigationAction *action)
 {
-	EphyNavigationActionPrivate *p = b->priv;
-	GtkMenuShell *ms = ephy_arrow_toolbutton_get_menu (w);
-	EphyWindow *win = b->priv->window;
-	GList *children;
-	GList *li;
+	GtkMenuShell *menu = NULL;
 
-	LOG ("Show navigation menu")
+	LOG ("menu_activated_cb dir %d", action->priv->direction)
 
-	children = gtk_container_get_children (GTK_CONTAINER (ms));
-	for (li = children; li; li = li->next)
+	switch (action->priv->direction)
 	{
-		gtk_container_remove (GTK_CONTAINER (ms), li->data);
+		case EPHY_NAVIGATION_DIRECTION_UP:
+			menu = build_up_menu (action);
+			break;
+		case EPHY_NAVIGATION_DIRECTION_FORWARD:
+		case EPHY_NAVIGATION_DIRECTION_BACK:
+			menu = build_back_or_forward_menu (action);
+			break;
+		default:
+			g_assert_not_reached ();
+			break;
 	}
-	g_list_free (children);
 
-	switch (p->direction)
-	{
-	case EPHY_NAVIGATION_DIRECTION_UP:
-		setup_up_menu (win, ms);
-		break;
-	case EPHY_NAVIGATION_DIRECTION_FORWARD:
-	case EPHY_NAVIGATION_DIRECTION_BACK:
-		setup_back_or_forward_menu (win, ms, p->direction);
-		break;
-	default:
-		g_assert_not_reached ();
-		break;
-	}
+	egg_dropdown_tool_button_set_menu (button, menu);
 }
 
 static void
@@ -284,17 +296,26 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 {
 	LOG ("Connect navigation action proxy")
 
-	g_signal_connect (proxy, "menu-activated",
-			  G_CALLBACK (menu_activated_cb), action);
+	if (EGG_IS_DROPDOWN_TOOL_BUTTON (proxy))
+	{
+		g_signal_connect (proxy, "menu-activated",
+				  G_CALLBACK (menu_activated_cb), action);
+	}
 
-	(* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
+	GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
+}
+
+static void
+ephy_navigation_action_init (EphyNavigationAction *action)
+{
+	action->priv = EPHY_NAVIGATION_ACTION_GET_PRIVATE (action);
 }
 
 static void
 ephy_navigation_action_set_property (GObject *object,
-                                     guint prop_id,
-                                     const GValue *value,
-                                     GParamSpec *pspec)
+				     guint prop_id,
+				     const GValue *value,
+				     GParamSpec *pspec)
 {
 	EphyNavigationAction *nav;
 
@@ -313,9 +334,9 @@ ephy_navigation_action_set_property (GObject *object,
 
 static void
 ephy_navigation_action_get_property (GObject *object,
-                                     guint prop_id,
-                                     GValue *value,
-                                     GParamSpec *pspec)
+				     guint prop_id,
+				     GValue *value,
+				     GParamSpec *pspec)
 {
 	EphyNavigationAction *nav;
 
@@ -343,33 +364,25 @@ ephy_navigation_action_class_init (EphyNavigationActionClass *class)
 
 	parent_class = g_type_class_peek_parent (class);
 
-	action_class->toolbar_item_type = EPHY_TYPE_ARROW_TOOLBUTTON;
+	action_class->toolbar_item_type = EGG_TYPE_DROPDOWN_TOOL_BUTTON;
 	action_class->connect_proxy = connect_proxy;
 
 	g_object_class_install_property (object_class,
-                                         PROP_DIRECTION,
-                                         g_param_spec_int ("direction",
-                                                           "Direction",
-                                                           "Direction",
-                                                           0,
+					 PROP_DIRECTION,
+					 g_param_spec_int ("direction",
+							   "Direction",
+							   "Direction",
+							   0,
 							   G_MAXINT,
 							   0,
-                                                           G_PARAM_READWRITE));
+							   G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
-                                         PROP_WINDOW,
-                                         g_param_spec_object ("window",
-                                                              "Window",
-                                                              "The navigation window",
-                                                              G_TYPE_OBJECT,
-                                                              G_PARAM_READWRITE));
+					 PROP_WINDOW,
+					 g_param_spec_object ("window",
+							      "Window",
+							      "The navigation window",
+							      G_TYPE_OBJECT,
+							      G_PARAM_READWRITE));
 
-	g_type_class_add_private (object_class, sizeof(EphyNavigationActionPrivate));
+	g_type_class_add_private (object_class, sizeof (EphyNavigationActionPrivate));
 }
-
-static void
-ephy_navigation_action_init (EphyNavigationAction *action)
-{
-        action->priv = EPHY_NAVIGATION_ACTION_GET_PRIVATE (action);
-}
-
-

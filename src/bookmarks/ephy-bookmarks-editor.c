@@ -594,7 +594,7 @@ import_dialog_response_cb (GtkDialog *dialog, gint response,
 
 			ephy_file_chooser_add_mime_filter
 				(dialog, _("Epiphany bookmarks"),
-				 "text/rdf", NULL);
+				 "text/rdf", "application/rdf+xml", NULL);
 
 			filter = ephy_file_chooser_add_pattern_filter (dialog,
 							      _("All files"),
@@ -1153,8 +1153,6 @@ ephy_bookmarks_editor_dispose (GObject *object)
 	g_return_if_fail (EPHY_IS_BOOKMARKS_EDITOR (object));
 
 	editor = EPHY_BOOKMARKS_EDITOR (object);
-
-	g_return_if_fail (editor->priv != NULL);
 
 	if (editor->priv->key_view != NULL)
 	{

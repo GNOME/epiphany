@@ -37,7 +37,6 @@
 #include "ephy-langs.h"
 #include "ephy-encodings.h"
 #include "ephy-debug.h"
-#include "ephy-label.h"
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "ephy-tree-model-node.h"
@@ -1134,8 +1133,8 @@ create_download_path_label (EphyDialog *dialog)
 	button = ephy_dialog_get_control (dialog, properties[DOWNLOAD_PATH_BUTTON_PROP].id);
 	
 	dir = get_download_button_label ();
-	label = ephy_label_new (dir);
-	ephy_label_set_ellipsize (EPHY_LABEL (label), PANGO_ELLIPSIZE_START);
+	label = gtk_label_new (dir);
+	gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_START);
 	gtk_container_add (GTK_CONTAINER (button), label);
 	g_free (dir);
 	gtk_widget_show (label);
@@ -1296,7 +1295,7 @@ download_path_response_cb (GtkDialog *fc, gint response, EphyDialog *dialog)
 
 			button = ephy_dialog_get_control (dialog, properties[DOWNLOAD_PATH_BUTTON_PROP].id);
 			label = get_download_button_label ();
-			ephy_label_set_text (EPHY_LABEL (GTK_BIN (button)->child), label);
+			gtk_label_set_text (GTK_LABEL (GTK_BIN (button)->child), label);
 
 			g_free (dir);
 			g_free (label);
