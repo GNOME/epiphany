@@ -56,6 +56,7 @@ struct EphySessionPrivate
 	GList *windows;
 	GList *tool_windows;
 	GtkWidget *resume_dialog;
+	gboolean resuming;
 };
 
 #define BOOKMARKS_EDITOR_ID	"BookmarksEditor"
@@ -270,6 +271,7 @@ ephy_session_init (EphySession *session)
 	session->priv->windows = NULL;
 	session->priv->tool_windows = NULL;
 	session->priv->resume_dialog = NULL;
+	session->priv->resuming = FALSE;
 
 	ensure_session_directory ();
 }
@@ -456,7 +458,10 @@ ephy_session_autoresume (EphySession *session)
 	if (g_file_test (saved_session, G_FILE_TEST_EXISTS)
 	    && offer_to_resume (session))
 	{
+		session->priv->resuming = TRUE;
 		retval = ephy_session_load (session, saved_session);
+		session->priv->resuming = FALSE;
+		ephy_session_save (session, SESSION_CRASHED);
 	}
 
 	g_free (saved_session);
@@ -601,9 +606,14 @@ ephy_session_save (EphySession *session,
 	char *save_to, *tmp_file;
 	int ret;
 
+	if (session->priv->resuming)
+	{
+		return TRUE;
+	}
+
 	LOG ("ephy_sesion_save %s", filename)
 
-	if (session->priv->windows == NULL)
+	if (session->priv->windows == NULL && session->priv->tool_windows == NULL)
 	{
 		session_delete (session, filename);
 		return TRUE;
@@ -646,7 +656,7 @@ ephy_session_save (EphySession *session,
 
 	for (w = session->priv->tool_windows; w != NULL && ret >= 0; w = w->next)
 	{
-		ret = write_tool_window (writer, GTK_WIDGET (w->data));
+		ret = write_tool_window (writer, GTK_WINDOW (w->data));
 	}
 	if (ret < 0) goto out;
 
@@ -861,7 +871,15 @@ ephy_session_remove_window (EphySession *session,
 EphyWindow *
 ephy_session_get_active_window (EphySession *session)
 {
+	GList *first;
+
 	g_return_val_if_fail (EPHY_IS_SESSION (session), NULL);
 
-	return g_list_first (session->priv->windows);
+	first = session->priv->windows;
+	if (first != NULL)
+	{
+		return EPHY_WINDOW (first->data);
+	}
+
+	return NULL;
 }

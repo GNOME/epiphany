@@ -1,5 +1,14 @@
 2004-08-06  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-session.c: (ephy_session_init),
+	(ephy_session_autoresume), (ephy_session_save),
+	(ephy_session_get_active_window):
+
+	Avoid overwriting the session file while resuming; preserves
+	the crashed session when crashing while resuming.
+
+2004-08-06  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/EphyBrowser.cpp:
 	* embed/mozilla/EphyBrowser.h:
 	* embed/mozilla/mozilla-embed.cpp:
