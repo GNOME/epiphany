@@ -154,9 +154,17 @@ void
 ephy_embed_persist_set_fc_parent (EphyEmbedPersist *persist,
 				  GtkWindow *value)
 {
+	EphyEmbedPersistPrivate *priv;
+	GtkWindow **wptr;
+
 	g_return_if_fail (EPHY_IS_EMBED_PERSIST (persist));
 
-	persist->priv->fc_parent = value;
+	priv = persist->priv;
+
+	priv->fc_parent = value;
+	wptr = &priv->fc_parent;
+	g_object_add_weak_pointer (G_OBJECT (priv->fc_parent),
+				   (gpointer *) wptr);
 }
 
 /**
@@ -447,11 +455,20 @@ static void
 ephy_embed_persist_finalize (GObject *object)
 {
 	EphyEmbedPersist *persist = EPHY_EMBED_PERSIST (object);
+	EphyEmbedPersistPrivate *priv = persist->priv;
+	GtkWindow **wptr;
 
-	g_free (persist->priv->dest);
-	g_free (persist->priv->source);
-	g_free (persist->priv->fc_title);
-	g_free (persist->priv->persist_key);
+	g_free (priv->dest);
+	g_free (priv->source);
+	g_free (priv->fc_title);
+	g_free (priv->persist_key);
+
+	if (priv->fc_parent != NULL)
+	{
+		wptr = &priv->fc_parent;
+		g_object_remove_weak_pointer (G_OBJECT (priv->fc_parent),
+					      (gpointer *) wptr);
+	}
 
 	LOG ("EphyEmbedPersist finalised %p", object);
 
