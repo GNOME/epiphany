@@ -814,21 +814,18 @@ void
 window_cmd_tabs_next (EggAction *action,
 		      EphyWindow *window)
 {
-	GList *tabs;
-	EphyTab *tab;
+	GtkNotebook *nb;
+	gint page;
 
-	tab = ephy_window_get_active_tab (window);
-	tabs = ephy_window_get_tabs (window);
-	g_return_if_fail (tab != NULL);
+	nb = GTK_NOTEBOOK (ephy_window_get_notebook (window));
+	g_return_if_fail (nb != NULL);
 
-	tabs = g_list_find (tabs, (gpointer)tab);
-	tabs = tabs->next;
+	page = gtk_notebook_get_current_page (nb);
+	g_return_if_fail (page != -1);
 
-	if (tabs)
+	if (page < gtk_notebook_get_n_pages (nb) - 1)
 	{
-		tab = EPHY_TAB (tabs->data);
-		ephy_window_jump_to_tab (window, tab);
-		g_list_free (tabs);
+		gtk_notebook_set_current_page (nb, page + 1);
 	}
 }
 
@@ -836,21 +833,18 @@ void
 window_cmd_tabs_previous (EggAction *action,
 			  EphyWindow *window)
 {
-	GList *tabs;
-	EphyTab *tab;
+	GtkNotebook *nb;
+	gint page;
 
-	tab = ephy_window_get_active_tab (window);
-	tabs = ephy_window_get_tabs (window);
-	g_return_if_fail (tab != NULL);
+	nb = GTK_NOTEBOOK (ephy_window_get_notebook (window));
+	g_return_if_fail (nb != NULL);
 
-	tabs = g_list_find (tabs, (gpointer)tab);
-	tabs = tabs->prev;
+	page = gtk_notebook_get_current_page (nb);
+	g_return_if_fail (page != -1);
 
-	if (tabs)
+	if (page > 0)
 	{
-		tab = EPHY_TAB (tabs->data);
-		ephy_window_jump_to_tab (window, tab);
-		g_list_free (tabs);
+		gtk_notebook_set_current_page (nb, page - 1);
 	}
 }
 
