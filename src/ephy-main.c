@@ -265,6 +265,8 @@ ephy_main_start (gpointer data)
 
 	CORBA_exception_free (&corba_env);
 
+	gdk_notify_startup_complete ();
+
 	return FALSE;
 }
 

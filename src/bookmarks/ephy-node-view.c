@@ -520,6 +520,7 @@ ephy_node_view_select_node (EphyNodeView *view,
 	GValue val = { 0, };
 	gboolean visible;
 	GtkTreeSelection *selection;
+	GtkTreePath *path;
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view->priv->treeview));
 
@@ -538,7 +539,10 @@ ephy_node_view_select_node (EphyNodeView *view,
 	gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT (view->priv->sortmodel),
 							&iter, &iter2);
 
-	gtk_tree_selection_select_iter (selection, &iter);
+	path = gtk_tree_model_get_path (GTK_TREE_MODEL (view->priv->sortmodel), &iter);
+	gtk_tree_view_set_cursor (GTK_TREE_VIEW (view->priv->treeview),
+				  path, NULL, FALSE);
+	gtk_tree_path_free (path);
 }
 
 void

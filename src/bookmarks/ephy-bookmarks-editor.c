@@ -31,10 +31,13 @@
 #include "ephy-window.h"
 #include "ephy-keywords-entry.h"
 #include "ephy-dnd.h"
+#include "ephy-prefs.h"
+#include "eel-gconf-extensions.h"
 
 static void ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass);
 static void ephy_bookmarks_editor_init (EphyBookmarksEditor *editor);
 static void ephy_bookmarks_editor_finalize (GObject *object);
+static void ephy_bookmarks_editor_dispose  (GObject *object);
 static void ephy_bookmarks_editor_set_property (GObject *object,
 		                                guint prop_id,
 		                                const GValue *value,
@@ -104,6 +107,7 @@ ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass)
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_bookmarks_editor_finalize;
+	object_class->dispose  = ephy_bookmarks_editor_dispose;
 
 	object_class->set_property = ephy_bookmarks_editor_set_property;
 	object_class->get_property = ephy_bookmarks_editor_get_property;
@@ -115,6 +119,41 @@ ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass)
 							      "Bookmarks set",
 							      EPHY_BOOKMARKS_TYPE,
 							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+}
+
+static void
+ephy_bookmarks_editor_dispose (GObject *object)
+{
+	EphyBookmarksEditor *editor;
+	long selected_id;
+	char *selected_id_str;
+	GList *selection;
+
+	g_return_if_fail (object != NULL);
+	g_return_if_fail (EPHY_IS_BOOKMARKS_EDITOR (object));
+
+	editor = EPHY_BOOKMARKS_EDITOR (object);
+
+	g_return_if_fail (editor->priv != NULL);
+
+	if (editor->priv->key_view != NULL)
+	{
+		selection = ephy_node_view_get_selection (editor->priv->key_view);
+		selected_id = ephy_node_get_id (EPHY_NODE (selection->data));
+		if (selected_id > 0)
+		{
+			selected_id_str = g_strdup_printf ("%ld", selected_id);
+			eel_gconf_set_string (CONF_BOOKMARKS_SELECTED_NODE,
+					      selected_id_str);
+			g_free (selected_id_str);
+		}
+		
+		g_list_free (selection);
+
+		editor->priv->key_view = NULL;
+	}
+
+	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 static void
@@ -398,6 +437,9 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	GtkWidget *hbox, *vbox;
 	EphyNodeView *bm_view, *key_view;
 	EphyNode *node;
+	long selected_id;
+	EphyNode *selected_node;
+	char *selected_id_str;
 
 	gtk_dialog_set_has_separator (GTK_DIALOG (editor), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (editor), 6);
@@ -472,6 +514,22 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	gtk_dialog_set_default_response (GTK_DIALOG (editor), GTK_RESPONSE_CLOSE);
 
 	gtk_window_set_title (GTK_WINDOW (editor), _("Bookmarks"));
+
+	selected_id_str = eel_gconf_get_string (CONF_BOOKMARKS_SELECTED_NODE);
+	selected_id = g_ascii_strtoull (selected_id_str, NULL, 10);
+	if (selected_id <= 0)
+	{
+		g_free (selected_id_str);
+		return;
+	}
+
+	selected_node = ephy_node_get_from_id (selected_id);
+	if (selected_node != NULL)
+	{
+		ephy_node_view_select_node (key_view, selected_node);
+	}
+
+	g_free (selected_id_str);
 }
 
 GtkWidget *

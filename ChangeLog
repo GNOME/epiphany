@@ -1,3 +1,16 @@
+2003-02-06  James Willcox  <jwillcox@gnome.org>
+
+	* data/epiphany.schemas.in:
+	* lib/ephy-prefs.h:
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_class_init),
+	(ephy_bookmarks_editor_dispose), (ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-node-view.c: (ephy_node_view_select_node):
+	* src/ephy-main.c: (ephy_main_start):
+
+	Make the bookmarks editor remember the last selected keyword, and
+	make startup-notification not hang when using the existing instance.
+
 2003-02-06  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/widgets/ephy-spinner.c: (ephy_spinner_expose),

@@ -39,6 +39,7 @@ G_BEGIN_DECLS
 #define CONF_WINDOWS_SHOW_STATUSBAR "/apps/epiphany/interface/show_statusbar"
 #define CONF_TOOLBAR_SETUP "/apps/epiphany/interface/toolbar_setup"
 #define CONF_TOOLBAR_SPINNER_THEME "/apps/epiphany/interface/spinner_theme"
+#define CONF_BOOKMARKS_SELECTED_NODE "/apps/epiphany/interface/bookmark_keyword_selected_node"
 
 /* Downloader */
 #define CONF_DOWNLOADING_SHOW_DETAILS "/apps/epiphany/downloader/show_details"
