@@ -1,0 +1,29 @@
+If you want to document one of the epiphany files you can do it
+by the following steps:
+
+- Add documentation headers to the .c file public functions
+
+For example:
+
+/**
+ * ephy_session_autoresume:
+ * @session: a #EphySession
+ *
+ * Resume a crashed session when necessary (interactive)
+ *
+ * Return value: TRUE if at least a window has been opened
+ **/
+gboolean
+ephy_session_autoresume (EphySession *session)
+
+I dont think gtk-doc has a syntax document, though gtk is
+a good example to look at.
+
+- If it's a GObject add the get_type function and include
+the .h in doc/reference/epiphany.types.
+
+- Remove the .h from the IGNORE_HFILES section of
+doc/reference/Makefile.am
+
+- Build and commit both the modified .c and the sgml generated
+in doc/reference/tmpl
