@@ -24,8 +24,6 @@
 #endif
 
 #include "downloader-view.h"
-#include "ephy-gui.h"
-#include "ephy-ellipsizing-label.h"
 #include "ephy-file-helpers.h"
 #include "ephy-embed-shell.h"
 #include "ephy-cell-renderer-progress.h"
@@ -36,6 +34,9 @@
 #include <eggtraymanager.h>
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkliststore.h>
+#include <gtk/gtkbutton.h>
+#include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtktreeselection.h>
 #include <gtk/gtktreeviewcolumn.h>
 #include <glib/gi18n.h>
 

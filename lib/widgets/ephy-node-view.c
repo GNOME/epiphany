@@ -35,6 +35,7 @@
 #include "ephy-tree-model-sort.h"
 #include "eggtreemultidnd.h"
 #include "ephy-dnd.h"
+#include "ephy-gui.h"
 #include "ephy-marshal.h"
 #include "string.h"
 
@@ -661,62 +662,15 @@ ephy_node_view_row_activated_cb (GtkTreeView *treeview,
 	g_signal_emit (G_OBJECT (view), ephy_node_view_signals[NODE_ACTIVATED], 0, node);
 }
 
-
-static gboolean
-ephy_node_view_select_node_by_key (EphyNodeView *view, GdkEventKey *event)
-{
-	GtkTreeIter iter, last_iter;
-	GtkTreePath *path;
-	GValue value = {0, };
-	gchar *string;
-	gchar *event_string;
-	gboolean found = FALSE;
-	gchar outbuf[6];
-	gint length;
-
-	length = g_unichar_to_utf8 (gdk_keyval_to_unicode (event->keyval), outbuf);
-	event_string = g_utf8_casefold (outbuf, length);
-
-	if (!gtk_tree_model_get_iter_first (view->priv->sortmodel, &iter))
-	{
-		g_free (event_string);
-		return FALSE;
-	}
-
-	do
-	{
-		last_iter = iter;
-		gtk_tree_model_get_value (view->priv->sortmodel, &iter,
-					  view->priv->searchable_data_column,
-					  &value);
-
-		string = g_utf8_casefold (g_value_get_string (&value), -1);
-		g_utf8_strncpy (string, string, 1);
-		found = (g_utf8_collate (string, event_string) == 0);
-
-		g_free (string);
-		g_value_unset (&value);
-	}
-	while (!found && gtk_tree_model_iter_next (view->priv->sortmodel, &iter));
-
-	if (!found)
-	{
-		iter = last_iter;
-	}
-
-	path = gtk_tree_model_get_path (view->priv->sortmodel, &iter);
-	gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), path, NULL, FALSE);
-	gtk_tree_path_free (path);
-	g_free (event_string);
-
-	return TRUE;
-}
-
 static gboolean
 ephy_node_view_key_press_cb (GtkTreeView *treeview,
 			     GdkEventKey *event,
 			     EphyNodeView *view)
 {
+	guint32 unicode;
+
+	unicode = gdk_keyval_to_unicode (event->keyval);
+
 	if ((event->state & GDK_SHIFT_MASK) &&
 	    (event->keyval == GDK_F10))
 	{
@@ -724,10 +678,10 @@ ephy_node_view_key_press_cb (GtkTreeView *treeview,
 
 		return TRUE;
 	}
-	else if (view->priv->searchable_data_column != -1 &&
-		 gdk_keyval_to_unicode (event->keyval))
+	else if (view->priv->searchable_data_column != -1 && unicode)
 	{
-		return ephy_node_view_select_node_by_key (view, event);
+		return ephy_gui_select_row_by_key
+			(treeview, view->priv->searchable_data_column, unicode);
 	}
 
 	return FALSE;

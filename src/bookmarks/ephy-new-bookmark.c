@@ -28,6 +28,7 @@
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtkimage.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtkeditable.h>
 #include <glib/gi18n.h>

@@ -34,6 +34,11 @@
 #include "ephy-debug.h"
 #include "ephy-state.h"
 
+#include <gtk/gtkbox.h>
+#include <gtk/gtkstock.h>
+#include <gtk/gtktable.h>
+#include <gtk/gtktreeselection.h>
+#include <gtk/gtkdialog.h>
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkliststore.h>
 #include <gtk/gtkcellrenderertext.h>

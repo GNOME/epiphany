@@ -44,6 +44,9 @@
 #include "ephy-tree-model-sort.h"
 
 #include <glib/gi18n.h>
+#include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtkcelllayout.h>
+#include <gtk/gtktreeselection.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>

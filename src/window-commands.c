@@ -53,6 +53,8 @@
 #include <libgnomeui/gnome-stock-icons.h>
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 #include <gtk/gtkeditable.h>
+#include <gtk/gtkmain.h>
+#include <gtk/gtkicontheme.h>
 #include <gtk/gtktoggleaction.h>
 #include <libgnomeui/gnome-about.h>
 #include <glib/gi18n.h>

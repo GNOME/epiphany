@@ -24,6 +24,14 @@
 
 #include <gtk/gtktable.h>
 #include <gtk/gtklabel.h>
+#include <gtk/gtkradioaction.h>
+#include <gtk/gtkmain.h>
+#include <gtk/gtkalignment.h>
+#include <gtk/gtktreeselection.h>
+#include <gtk/gtkhpaned.h>
+#include <gtk/gtkbutton.h>
+#include <gtk/gtkimage.h>
+#include <gtk/gtkclipboard.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtkhbox.h>

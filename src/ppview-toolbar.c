@@ -25,12 +25,12 @@
 #include "ppview-toolbar.h"
 #include "ephy-window.h"
 #include "ephy-string.h"
-#include "ephy-gui.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkmenu.h>
+#include <gtk/gtkstock.h>
 #include <gtk/gtkuimanager.h>
 
 static void ppview_toolbar_class_init (PPViewToolbarClass *klass);

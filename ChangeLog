@@ -1,5 +1,27 @@
 2004-06-21  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* lib/ephy-gui.c: (ephy_gui_help), (ephy_gui_select_row_by_key):
+	* lib/widgets/ephy-node-view.c: (ephy_node_view_key_press_cb):
+	* src/bookmarks/ephy-topics-selector.c: (topic_key_pressed):
+
+	Factor out the helper to select a treeview row by column and
+	use it also in the topic selector.
+
+	* lib/ephy-gui.h:
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	* src/bookmarks/ephy-new-bookmark.c:
+	* src/ephy-history-window.c:
+	* src/pdm-dialog.c:
+	* src/ppview-toolbar.c:
+	* src/prefs-dialog.c:
+	* src/window-commands.c:
+	* embed/downloader-view.c:
+
+	Remove braindead gtk.h inclusion and deal with
+	fallout headers.
+
+2004-06-21  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* src/bookmarks/ephy-new-bookmark.c: (response_cb),
 	(ephy_new_bookmark_construct):
 	* src/bookmarks/ephy-topics-selector.c: (renderer_edited_cb),

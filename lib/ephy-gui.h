@@ -21,7 +21,10 @@
 #ifndef EPHY_GUI_H
 #define EPHY_GUI_H
 
-#include <gtk/gtk.h>
+#include <gtk/gtkmenu.h>
+#include <gtk/gtktreeview.h>
+#include <gtk/gtktreeviewcolumn.h>
+#include <gtk/gtkwindow.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -32,6 +35,10 @@ void		ephy_gui_menu_position_under_widget	 (GtkMenu   *menu,
 							  gint      *y,
 							  gboolean  *push_in,
 							  gpointer  user_data);
+
+gboolean	ephy_gui_select_row_by_key		 (GtkTreeView *treeview,
+							  gint column,
+							  guint32 unicode);
 
 gboolean	ephy_gui_confirm_overwrite_file	         (GtkWidget *parent,
 							  const char *filename);

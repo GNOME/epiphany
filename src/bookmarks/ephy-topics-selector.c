@@ -25,6 +25,7 @@
 #include "ephy-topics-selector.h"
 #include "ephy-debug.h"
 #include "ephy-node-view.h"
+#include "ephy-gui.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtkliststore.h>
@@ -325,6 +326,7 @@ topic_key_pressed (GtkTreeView *tree_view,
 	GtkTreeSelection *sel = NULL;
 	GtkTreeIter iter;
 	GtkTreePath *path;
+	guint32 unicode;
 
 	switch (event->keyval)
 	{
@@ -345,6 +347,12 @@ topic_key_pressed (GtkTreeView *tree_view,
 
 	default:
 		break;
+	}
+
+	unicode = gdk_keyval_to_unicode (event->keyval);
+	if (unicode)
+	{
+		return ephy_gui_select_row_by_key (tree_view, COL_TOPIC, unicode);
 	}
 
 	return FALSE;
