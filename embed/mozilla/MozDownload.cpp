@@ -342,6 +342,7 @@ MozDownload::OnStateChange (nsIWebProgress *aWebProgress, nsIRequest *aRequest,
 			}
 
 			nsMemory::Free (mimeType);
+			nsMemory::Free (description);
 			gnome_vfs_mime_application_free (helperApp);
 		}
 	}
