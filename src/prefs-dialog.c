@@ -76,7 +76,7 @@ void prefs_homepage_blank_button_clicked_cb	(GtkWidget *button,
 void prefs_language_more_button_clicked_cb	(GtkWidget *button,
 						 EphyDialog *dialog);
 void prefs_download_path_button_clicked_cb	(GtkWidget *button,
-						 EphyDialog *dialog);
+						 PrefsDialog *dialog);
 void language_editor_add_button_clicked_cb	(GtkWidget *button,
 						 PrefsDialog *pd);
 void language_editor_remove_button_clicked_cb	(GtkWidget *button,
@@ -326,6 +326,7 @@ enum
 
 struct PrefsDialogPrivate
 {
+	GtkWidget *download_dir_chooser;
 	GtkTreeView *lang_treeview;
 	GtkTreeModel *lang_model;
 	EphyDialog *add_lang_dialog;
@@ -376,6 +377,13 @@ prefs_dialog_finalize (GObject *object)
 			(G_OBJECT (dialog->priv->add_lang_dialog),
 			(gpointer *) &dialog->priv->add_lang_dialog);
 		g_object_unref (dialog->priv->add_lang_dialog);
+	}
+
+	if (dialog->priv->download_dir_chooser != NULL)
+	{
+		g_object_remove_weak_pointer
+			(G_OBJECT (dialog->priv->download_dir_chooser),
+			 (gpointer *) &dialog->priv->download_dir_chooser);
 	}
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -1299,22 +1307,29 @@ download_path_response_cb (GtkDialog *fc, gint response, EphyDialog *dialog)
 
 void
 prefs_download_path_button_clicked_cb (GtkWidget *button,
-				       EphyDialog *dialog)
+				       PrefsDialog *dialog)
 {
-	GtkWidget *parent;
-	EphyFileChooser *fc;
+	if (dialog->priv->download_dir_chooser == NULL)
+	{
+		GtkWidget *parent;
+		EphyFileChooser *fc;
 
-	parent = ephy_dialog_get_control (dialog, properties[WINDOW_PROP].id);
+		parent = ephy_dialog_get_control
+			(EPHY_DIALOG (dialog), properties[WINDOW_PROP].id);
+	
+		fc = ephy_file_chooser_new (_("Select a directory"),
+					    GTK_WIDGET (parent),
+					    GTK_FILE_CHOOSER_ACTION_OPEN,
+					    NULL);
+		gtk_file_chooser_set_folder_mode (GTK_FILE_CHOOSER (fc), TRUE);
+	
+		g_signal_connect (GTK_DIALOG (fc), "response",
+				    G_CALLBACK (download_path_response_cb),
+				    dialog);
+		dialog->priv->download_dir_chooser = GTK_WIDGET (fc);
+		g_object_add_weak_pointer
+			(G_OBJECT (fc), (gpointer *) &dialog->priv->download_dir_chooser);
+	}
 
-	fc = ephy_file_chooser_new (_("Select a directory"),
-				    GTK_WIDGET (parent),
-				    GTK_FILE_CHOOSER_ACTION_OPEN,
-				    NULL);
-	gtk_file_chooser_set_folder_mode (GTK_FILE_CHOOSER (fc), TRUE);
-
-	g_signal_connect (GTK_DIALOG (fc), "response",
-			    G_CALLBACK (download_path_response_cb),
-			    dialog);
-
-	gtk_widget_show (GTK_WIDGET (fc));
+	gtk_widget_show (dialog->priv->download_dir_chooser);
 }
