@@ -53,8 +53,7 @@ typedef struct
 
 	void (*child_added)     (EphyNode *node, EphyNode *child);
 	void (*child_changed)   (EphyNode *node, EphyNode *child);
-	void (*child_reordered) (EphyNode *node, EphyNode *child,
-			         int old_index, int new_index);
+	void (*children_reordered) (EphyNode *node, int *new_order);
 	void (*child_removed)   (EphyNode *node, EphyNode *child);
 } EphyNodeClass;
 
@@ -121,6 +120,9 @@ void        ephy_node_remove_child          (EphyNode *node,
 					     EphyNode *child);
 gboolean    ephy_node_has_child             (EphyNode *node,
 					     EphyNode *child);
+
+void	    ephy_node_reorder_children	    (EphyNode *node,
+					     int *new_order);
 
 /* Note that ephy_node_get_children freezes the node; you'll have to thaw it when done.
  * This is to prevent the data getting changed from another thread. */

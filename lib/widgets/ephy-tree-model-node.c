@@ -74,6 +74,9 @@ static void root_child_added_cb (EphyNode *node,
 static void root_child_changed_cb (EphyNode *node,
 				   EphyNode *child,
 		                   EphyTreeModelNode *model);
+static void root_children_reordered_cb (EphyNode *node,
+				     int *new_order,
+				     EphyTreeModelNode *model);
 static inline void ephy_tree_model_node_update_node (EphyTreeModelNode *model,
 				                     EphyNode *node,
 					             int idx);
@@ -262,6 +265,11 @@ ephy_tree_model_node_set_property (GObject *object,
 				         "child_changed",
 				         G_CALLBACK (root_child_changed_cb),
 				         G_OBJECT (model),
+					 0);
+		g_signal_connect_object (G_OBJECT (model->priv->root),
+					 "children_reordered",
+					 G_CALLBACK (root_children_reordered_cb),
+					 G_OBJECT (model),
 					 0);
 		g_signal_connect_object (G_OBJECT (model->priv->root),
 				         "destroyed",
@@ -712,6 +720,14 @@ root_child_changed_cb (EphyNode *node,
 		       EphyTreeModelNode *model)
 {
 	ephy_tree_model_node_update_node (model, child, -1);
+}
+
+static void
+root_children_reordered_cb (EphyNode *node,
+			    int *new_order,
+			    EphyTreeModelNode *model)
+{
+	gtk_tree_model_rows_reordered (GTK_TREE_MODEL (model), NULL, NULL, new_order);
 }
 
 static void
