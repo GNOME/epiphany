@@ -192,7 +192,8 @@ ephy_history_save (EphyHistory *eb)
 		 EPHY_HISTORY_XML_ROOT,
 		 EPHY_HISTORY_XML_VERSION,
 		 NULL, /* comment */
-		 eb->priv->hosts, 0,
+		 eb->priv->hosts,
+		 1, eb->priv->pages,
 		 eb->priv->pages, 0,
 		 NULL);
 
