@@ -2,9 +2,9 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
   <!ENTITY legal SYSTEM "legal.xml">
-  <!ENTITY appversion "1.2">
-  <!ENTITY manrevision "1.2">
-  <!ENTITY date "November 2003">
+  <!ENTITY appversion "1.4">
+  <!ENTITY manrevision "1.4">
+  <!ENTITY date "May 2004">
   <!ENTITY fr "<application>Epiphany</application>">
   <!-- Information about the entities
        The legal.xml file contains legal information, there is no need to edit the file. 
@@ -798,16 +798,12 @@
               </listitem>
               <listitem>
                <para>
-                 The bookmark bar can also be used to access your 
-                 bookmarks. 
-                 Choose <menuchoice>
-                        <guimenu>View</guimenu>
-                        <guimenuitem>Bookmarks Bar</guimenuitem>
-                        </menuchoice>
-                 to add the Bookmark bar. However, each topic and
-                 bookmark needs to be configured in the Bookmarks dialog
-                 to be shown on this bar. This can be used to organise
-                 most frequently used bookmarks. 
+                 The bookmark bar can also be used to access your bookmarks. 
+                 Choose <menuchoice><guimenu>View</guimenu><guimenuitem>Bookmarks 
+                 Bar</guimenuitem></menuchoice> to add the Bookmark bar. 
+                 However, each topic and bookmark needs to be configured in 
+                 the Bookmarks dialog to be shown on this bar. This can be 
+                 used to organise most frequently used bookmarks. 
 	        </para>
               </listitem>
             </itemizedlist>
@@ -815,40 +811,51 @@
         </sect2>
 	<sect2 id="to-create-new-bookmark">
 	  <title>To Create a New Bookmark</title>
-          <para>You can create new bookmarks in several ways.</para>
-		<variablelist>
-    		<varlistentry>
-    		<term>Browser Window</term>
-    		<listitem>
-			<itemizedlist>
-	  		<listitem><para>To bookmark the currently viewed page, choose 
-	  		<menuchoice>
-			<guimenu>Bookmarks</guimenu>
-			<guimenuitem>Add Bookmark...</guimenuitem>
-	  		</menuchoice>.</para>
-			</listitem>
-			<listitem><para>To bookmark a link in the currently viewed page, 
-					right click on the link and choose 
-	  		<menuchoice>
-			<guimenuitem>Bookmark Link...</guimenuitem>
-	  		</menuchoice>.</para>
-			</listitem>
-			</itemizedlist>
-    		</listitem>
-    		</varlistentry>
-		<varlistentry>
-		<term>History Window</term>
-    		<listitem>
-		<para>To bookmark the currently selected history link, choose 
-	  	<menuchoice>
-		<guimenu>File</guimenu>
-		<guimenuitem>Bookmark Link...</guimenuitem>
-	  	</menuchoice>. Alternatively, right-click on the
-history link in the history window, then choose <guimenuitem>Bookmark Link..</guimenuitem>.</para>
-		</listitem>
-    		</varlistentry>
-    		</variablelist>
-	
+          <para>
+            You can create new bookmarks in several ways.
+          </para>
+          <variablelist>
+            <varlistentry>
+              <term>
+                Browser Window
+              </term>
+              <listitem>
+                <itemizedlist>
+                  <listitem>
+                    <para>
+                      To bookmark the currently viewed page, choose 
+                      <menuchoice><guimenu>Bookmarks</guimenu>
+                      <guimenuitem>Add Bookmark...</guimenuitem>
+                      </menuchoice>.
+                    </para>
+                  </listitem>
+                  <listitem>
+                    <para>
+                      To bookmark a link in the currently viewed page, 
+                      right click on the link and choose <menuchoice>
+                      <guimenuitem>Bookmark Link...</guimenuitem>
+                      </menuchoice>.
+                    </para>
+                  </listitem>
+                </itemizedlist>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>
+                History Window
+              </term>
+              <listitem>
+                <para>
+                  To bookmark the currently selected history link, 
+                  choose <menuchoice><guimenu>File</guimenu>
+                  <guimenuitem>Bookmark Link...</guimenuitem>
+                  </menuchoice>. Alternatively, right-click on the
+                  history link in the history window, then choose 
+                  <guimenuitem>Bookmark Link..</guimenuitem>.
+                </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
         </sect2>
 	<sect2 id="to-select-bookmarks">
           <title>To Select Bookmarks and Topics</title>
@@ -1475,11 +1482,13 @@ history link in the history window, then choose <guimenuitem>Bookmark Link..</gu
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term>Secure</term>
+          <term>Send for</term>
           <listitem>
             <para>
-              When <guilabel>Yes</guilabel>, the cookie will only be 
-              sent if the connection is encrypted.
+              When <guilabel>Any type of connection</guilabel>, the 
+              cookie can be sent to any server. When <guilabel>Encrypted 
+              connections only</guilabel>, the cookie will only be
+              sent to secure servers.
             </para>
           </listitem>
         </varlistentry>
@@ -1532,8 +1541,7 @@ history link in the history window, then choose <guimenuitem>Bookmark Link..</gu
           <para>
             The <guilabel>Filename</guilabel> is the name of the downloading file. The folder 
             which the file is downloaded to can be specified in <xref linkend="general-preferences"/>.
-            This column also shows the amount of the file downloaded and its total size. 1MB is 
-            equivilent to 1024kB.
+            This column also shows the amount of the file downloaded and its total size.
           </para>
         </listitem>
         <listitem>
@@ -1736,7 +1744,9 @@ history link in the history window, then choose <guimenuitem>Bookmark Link..</gu
               <listitem>
                 <para>
                   Choose the folder for downloaded files by clicking the <guilabel>
-                  Download folder</guilabel> button and selecting a folder.
+                  Download folder</guilabel> button and selecting a folder. If you
+                  select <guilabel>Automatically download and open files</guilabel>
+                  you will not be prompted before files are download or opened.
                 </para>
               </listitem>
             </itemizedlist>
