@@ -237,6 +237,7 @@ ephy_location_entry_init (EphyLocationEntry *w)
 	p->user_changed = TRUE;
 	p->activation_mode = FALSE;
 	p->autocompletion_key = NULL;
+	p->autocompletion_window_visible = FALSE;
 
 	ephy_location_entry_construct_contents (w);
 
