@@ -685,7 +685,7 @@ nsresult EphyWrapper::ForceEncoding (const char *encoding)
 								  &result);
 	if (NS_FAILED(result) || !mdv) return NS_ERROR_FAILURE;
 
-#if MOZILLA_SNAPSHOT > 8
+#if MOZILLA_SNAPSHOT > 9
 	result = mdv->SetForceCharacterSet (nsDependentCString(encoding));
 #else
 	result = mdv->SetForceCharacterSet (NS_ConvertUTF8toUCS2(encoding).get());
