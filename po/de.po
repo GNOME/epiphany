@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany HEAD\n"
-"POT-Creation-Date: 2003-02-06 15:00+0100\n"
-"PO-Revision-Date: 2003-02-06 15:00+0100\n"
+"POT-Creation-Date: 2003-02-08 10:44+0100\n"
+"PO-Revision-Date: 2003-02-08 10:44+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1144,12 +1144,16 @@ msgstr "Einführung"
 # "Falls Ihre Internet-Verbindung einen Proxy erfordert, müssen Sie die nötigen "
 # "Einstellungen mit Hilfe des Desktop-weiten <action id=\"configure-network\" "
 # "param=\"\">Konfigurationsdialogs</action> vornehmen."
-# ^^ LATER
+# ^^ IDEAL
+# NOTLSG - CHECK - BITTE VORERST NICHT AENDERN
 #: data/starthere/index.xml.in.h:2
+#, fuzzy
 msgid ""
 "If your internet connection requires it, make sure to setup your proxy in "
 "the desktop wide"
 msgstr ""
+"Falls Ihre Internet-Verbindung einen Proxy erfordert, müssen Sie die nötigen "
+"vornehmen, und zwar mit Hilfe des Desktop-weiten"
 
 #: data/starthere/index.xml.in.h:3
 msgid "The web browser"
@@ -1270,7 +1274,7 @@ msgstr "Nächster"
 msgid "Open Frame"
 msgstr "Frame öffnen"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:16 src/ephy-window.c:216
+#: data/ui/nautilus-epiphany-view.xml.in.h:16
 msgid "Open Frame in New Window"
 msgstr "Frame in neuem Fenster öffnen"
 
@@ -1279,7 +1283,7 @@ msgstr "Frame in neuem Fenster öffnen"
 msgid "Open Image"
 msgstr "Grafik öffnen"
 
-#: data/ui/nautilus-epiphany-view.xml.in.h:18 src/ephy-window.c:240
+#: data/ui/nautilus-epiphany-view.xml.in.h:18
 msgid "Open Image in New Window"
 msgstr "Grafik in neuem Fenster öffnen"
 
@@ -1907,33 +1911,33 @@ msgstr "Werkzeugleiste hinzufügen"
 msgid "Untitled"
 msgstr "Unbenannt"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:272
+#: src/bookmarks/ephy-bookmarks-editor.c:318
 #: src/bookmarks/ephy-new-bookmark.c:195
 msgid "Title:"
 msgstr "Titel:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:288
+#: src/bookmarks/ephy-bookmarks-editor.c:334
 #: src/bookmarks/ephy-new-bookmark.c:209
 msgid "Keywords:"
 msgstr "Stichwörter:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:377
+#: src/bookmarks/ephy-bookmarks-editor.c:423
 msgid "Search:"
 msgstr "Suche:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:421
+#: src/bookmarks/ephy-bookmarks-editor.c:470
 msgid "Keywords"
 msgstr "Stichwörter"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:446 src/history-dialog.c:272
+#: src/bookmarks/ephy-bookmarks-editor.c:495 src/history-dialog.c:272
 msgid "Title"
 msgstr "Titel"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:448 src/history-dialog.c:273
+#: src/bookmarks/ephy-bookmarks-editor.c:497 src/history-dialog.c:273
 msgid "Location"
 msgstr "Ort"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:474
+#: src/bookmarks/ephy-bookmarks-editor.c:523
 msgid "Bookmarks"
 msgstr "Lesezeichen"
 
@@ -2021,7 +2025,7 @@ msgstr "Intern von der Nautilus-Ansicht verwendet"
 msgid "Ephy"
 msgstr "Epiphany"
 
-#: src/ephy-main.c:289
+#: src/ephy-main.c:291
 msgid "Ephy already running, using existing process"
 msgstr "Epiphany läuft bereits, bestehender Prozess wird verwendet"
 
@@ -2108,12 +2112,12 @@ msgstr "_Hilfe"
 
 #. File menu
 #: src/ephy-window.c:66
-msgid "_New Window"
-msgstr "_Neues Fenster"
+msgid "_New Browser"
+msgstr "_Neuer Browser"
 
 #: src/ephy-window.c:67
-msgid "Create a new window"
-msgstr "Ein neues Fenster öffnen"
+msgid "Create a new browser"
+msgstr "Einen neuen Browser öffnen"
 
 #: src/ephy-window.c:69
 msgid "New _Tab"
@@ -2147,7 +2151,7 @@ msgstr "Die aktuelle Seite drucken"
 msgid "S_end To..."
 msgstr "_Verschicken an..."
 
-#: src/ephy-window.c:82 src/ephy-window.c:88 src/ephy-window.c:91
+#: src/ephy-window.c:82
 msgid "Send a link of the current page"
 msgstr "Einen Link auf die aktuelle Seite verschicken"
 
@@ -2160,12 +2164,20 @@ msgid "Add a bookmark for the current page"
 msgstr "Ein Lesezeichen für die aktuelle Seite hinzufügen"
 
 #: src/ephy-window.c:87
-msgid "_Close Tab"
-msgstr "Reiter s_chließen"
+msgid "C_lose Tab"
+msgstr "Reiter sch_ließen"
+
+#: src/ephy-window.c:88
+msgid "Close the selected tab"
+msgstr "Den gewählten Reiter schließen"
 
 #: src/ephy-window.c:90
-msgid "Close _Window"
-msgstr "_Fenster schließen"
+msgid "_Close"
+msgstr "S_chließen"
+
+#: src/ephy-window.c:91
+msgid "Close this browser"
+msgstr "Diesen Browser schließen"
 
 #. Edit menu
 #: src/ephy-window.c:95
@@ -2432,6 +2444,10 @@ msgstr "_Info"
 msgid "Display credits for the web browser creators"
 msgstr "Die am Webbrowser Mitwirkenden anzeigen"
 
+#: src/ephy-window.c:216
+msgid "Open Frame in New Browser"
+msgstr "Frame in neuem Browser öffnen"
+
 #: src/ephy-window.c:218
 msgid "Open Frame in New Tab"
 msgstr "Frame in neuem Reiter öffnen"
@@ -2442,8 +2458,8 @@ msgid "Open Link"
 msgstr "Link öffnen"
 
 #: src/ephy-window.c:224
-msgid "Open Link in New Window"
-msgstr "Link in neuem Fenster öffnen"
+msgid "Open Link in New Browser"
+msgstr "Link in neuem Browser öffnen"
 
 #: src/ephy-window.c:226
 msgid "Open Link in New Tab"
@@ -2456,6 +2472,10 @@ msgstr "Lesezeichen hinzufügen"
 #: src/ephy-window.c:234
 msgid "Copy Email"
 msgstr "E-Mail-Adresse kopieren"
+
+#: src/ephy-window.c:240
+msgid "Open Image in New Browser"
+msgstr "Grafik in neuem Browser öffnen"
 
 #: src/ephy-window.c:242
 msgid "Open Image in New Tab"
@@ -2755,17 +2775,21 @@ msgstr "Einstellungen"
 msgid "Crash Recovery"
 msgstr "Absturz-Wiederherstellung"
 
+#: src/session.c:191
+msgid "_Don't Recover"
+msgstr "_Nicht wiederherstellen"
+
 #: src/session.c:192
 msgid "_Recover"
 msgstr "_Wiederherstellen"
 
-#: src/session.c:219
+#: src/session.c:220
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr ""
 "Epiphany scheint beim letzten Mal abgestürzt oder abgewürgt worden zu sein."
 
-#: src/session.c:225
+#: src/session.c:226
 msgid "You can recover the opened tabs and windows."
 msgstr "Sie können die geöffneten Reiter und Fenster wiederherstellen."
 
@@ -2802,6 +2826,15 @@ msgstr ""
 #: src/window-commands.c:683
 msgid "A GNOME browser based on Mozilla"
 msgstr "Ein auf Mozilla basierender GNOME-Browser"
+
+#~ msgid "_New Window"
+#~ msgstr "_Neues Fenster"
+
+#~ msgid "Create a new window"
+#~ msgstr "Ein neues Fenster öffnen"
+
+#~ msgid "Close _Window"
+#~ msgstr "_Fenster schließen"
 
 #, fuzzy
 #~ msgid "A unique name for the action."
@@ -4183,9 +4216,6 @@ msgstr "Ein auf Mozilla basierender GNOME-Browser"
 #~ msgid "Create a new bookmark"
 #~ msgstr "Ein neues Lesezeichen erstellen"
 
-#~ msgid "Create a new folder"
-#~ msgstr "Einen neuen Ordner erstellen"
-
 #~ msgid "Create a new separator"
 #~ msgstr "Eine neue Trennlinie erstellen"
 
@@ -4494,9 +4524,6 @@ msgstr "Ein auf Mozilla basierender GNOME-Browser"
 
 #~ msgid "_Bookmark"
 #~ msgstr "_Lesezeichen"
-
-#~ msgid "_Close"
-#~ msgstr "S_chließen"
 
 #~ msgid "_Delete"
 #~ msgstr "_Löschen"
