@@ -272,7 +272,7 @@ nsresult EphyBrowser::Print (nsIPrintSettings *options, PRBool preview)
 {
 	nsresult result;
 
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
 	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
@@ -294,7 +294,7 @@ nsresult EphyBrowser::PrintPreviewClose (void)
 	nsresult rv;
 	PRBool isPreview = PR_FALSE;
 
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
 	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
@@ -312,7 +312,7 @@ nsresult EphyBrowser::PrintPreviewClose (void)
 
 nsresult EphyBrowser::PrintPreviewNumPages (int *numPages)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
 	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
@@ -322,7 +322,7 @@ nsresult EphyBrowser::PrintPreviewNumPages (int *numPages)
 
 nsresult EphyBrowser::PrintPreviewNavigate(PRInt16 navType, PRInt32 pageNum)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
 	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
@@ -332,7 +332,7 @@ nsresult EphyBrowser::PrintPreviewNavigate(PRInt16 navType, PRInt32 pageNum)
 
 nsresult EphyBrowser::GetPrintSettings (nsIPrintSettings **options)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebBrowserPrint> print(do_GetInterface(mWebBrowser));
 	NS_ENSURE_TRUE (print, NS_ERROR_FAILURE);
@@ -344,7 +344,7 @@ nsresult EphyBrowser::GetSHistory (nsISHistory **aSHistory)
 {
 	nsresult result;
 
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebNavigation> ContentNav = do_QueryInterface (mWebBrowser);
 	NS_ENSURE_TRUE (ContentNav, NS_ERROR_FAILURE);
@@ -373,7 +373,7 @@ nsresult EphyBrowser::Destroy ()
 
 nsresult EphyBrowser::GoToHistoryIndex (PRInt16 index)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebNavigation> ContentNav = do_QueryInterface (mWebBrowser);
 	NS_ENSURE_TRUE (ContentNav, NS_ERROR_FAILURE);
@@ -457,7 +457,7 @@ nsresult EphyBrowser::GetContentViewer (nsIContentViewer **aViewer)
 
 nsresult EphyBrowser::GetZoom (float *aZoom)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIContentViewer> contentViewer;	
 	GetContentViewer (getter_AddRefs(contentViewer));
@@ -478,7 +478,7 @@ nsresult EphyBrowser::GetTargetDocument (nsIDOMDocument **aDOMDocument)
 {
 	nsresult result;
 
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	/* Use the current target document */
 	if (mTargetDocument)
@@ -508,7 +508,7 @@ nsresult EphyBrowser::GetTargetDocument (nsIDOMDocument **aDOMDocument)
 
 nsresult EphyBrowser::GetSHInfo (PRInt32 *count, PRInt32 *index)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsISHistory> SessionHistory;
 	GetSHistory (getter_AddRefs(SessionHistory));
@@ -522,7 +522,7 @@ nsresult EphyBrowser::GetSHInfo (PRInt32 *count, PRInt32 *index)
 
 nsresult EphyBrowser::GetSHTitleAtIndex (PRInt32 index, PRUnichar **title)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsISHistory> SessionHistory;
 	GetSHistory (getter_AddRefs(SessionHistory));
@@ -542,7 +542,7 @@ nsresult EphyBrowser::GetSHTitleAtIndex (PRInt32 index, PRUnichar **title)
 
 nsresult EphyBrowser::GetSHUrlAtIndex (PRInt32 index, nsCString &url)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsISHistory> SessionHistory;
 	GetSHistory (getter_AddRefs(SessionHistory));
@@ -568,7 +568,7 @@ nsresult EphyBrowser::FindSetProperties (const PRUnichar *search_string,
 			                 PRBool case_sensitive,
 					 PRBool wrap_around)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebBrowserFind> finder (do_GetInterface(mWebBrowser));
 	NS_ENSURE_TRUE (finder, NS_ERROR_FAILURE);
@@ -583,7 +583,7 @@ nsresult EphyBrowser::FindSetProperties (const PRUnichar *search_string,
 nsresult EphyBrowser::Find (PRBool backwards,
 			    PRBool *didFind)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebBrowserFind> finder (do_GetInterface(mWebBrowser));
 	NS_ENSURE_TRUE (finder, NS_ERROR_FAILURE);
@@ -595,7 +595,7 @@ nsresult EphyBrowser::Find (PRBool backwards,
 
 nsresult EphyBrowser::GetPageDescriptor(nsISupports **aPageDescriptor)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDocShell> ds = do_GetInterface (mWebBrowser);
 
@@ -610,7 +610,7 @@ nsresult EphyBrowser::GetPageDescriptor(nsISupports **aPageDescriptor)
 
 nsresult EphyBrowser::GetDocumentUrl (nsCString &url)
 {
-	if (!mDOMWindow) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mDOMWindow, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDOMDocument> DOMDocument;
 	mDOMWindow->GetDocument (getter_AddRefs(DOMDocument));
@@ -633,7 +633,7 @@ nsresult EphyBrowser::GetDocumentUrl (nsCString &url)
 
 nsresult EphyBrowser::GetTargetDocumentUrl (nsCString &url)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
         nsCOMPtr<nsIDOMDocument> DOMDocument;
 	GetTargetDocument (getter_AddRefs(DOMDocument));
@@ -656,7 +656,7 @@ nsresult EphyBrowser::GetTargetDocumentUrl (nsCString &url)
 
 nsresult EphyBrowser::ForceEncoding (const char *encoding) 
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIContentViewer> contentViewer;	
 	GetContentViewer (getter_AddRefs(contentViewer));
@@ -670,7 +670,7 @@ nsresult EphyBrowser::ForceEncoding (const char *encoding)
 
 nsresult EphyBrowser::GetEncoding (nsACString &encoding)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDOMDocument> domDoc;
 	GetTargetDocument (getter_AddRefs(domDoc));
@@ -687,7 +687,7 @@ nsresult EphyBrowser::GetEncoding (nsACString &encoding)
 
 nsresult EphyBrowser::GetForcedEncoding (nsACString &encoding)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIContentViewer> contentViewer;	
 	GetContentViewer (getter_AddRefs(contentViewer));
@@ -718,7 +718,7 @@ nsresult EphyBrowser::PopTargetDocument ()
 
 nsresult EphyBrowser::DoCommand (const char *command)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsICommandManager> cmdManager;
 	cmdManager = do_GetInterface (mWebBrowser);
@@ -729,7 +729,7 @@ nsresult EphyBrowser::DoCommand (const char *command)
 
 nsresult EphyBrowser::GetCommandState (const char *command, PRBool *enabled)
 {
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsICommandManager> cmdManager;
 	cmdManager = do_GetInterface (mWebBrowser);
@@ -842,7 +842,7 @@ nsresult EphyBrowser::GetHasModifiedForms (PRBool *modified)
 {
 	*modified = PR_FALSE;
 
-	if (!mWebBrowser) return NS_ERROR_FAILURE;
+	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIDocShell> rootDocShell = do_GetInterface (mWebBrowser);
 	NS_ENSURE_TRUE (rootDocShell, NS_ERROR_FAILURE);
