@@ -1196,7 +1196,7 @@ tab_context_menu_cb (EphyEmbed *embed,
 	g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
 	g_return_val_if_fail (EPHY_IS_EMBED_EVENT(event), FALSE);
 
-	tab = EPHY_TAB (g_object_get_data (G_OBJECT (embed), "EphyTab"));
+	tab = ephy_tab_for_embed (embed);
 	g_return_val_if_fail (EPHY_IS_TAB (tab), FALSE);
 	g_return_val_if_fail (window->priv->active_tab == tab, FALSE);
 
@@ -1356,12 +1356,12 @@ update_tabs_menu_sensitivity (EphyWindow *window)
 }
 
 static void
-tab_added_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
+tab_added_cb (EphyNotebook *notebook, EphyEmbed *embed, EphyWindow *window)
 {
 	EphyTab *tab;
 
-	g_return_if_fail (EPHY_IS_EMBED (child));
-	tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
+        g_return_if_fail (EPHY_IS_EMBED (embed));
+	tab = ephy_tab_for_embed (embed);
 
 	window->priv->num_tabs++;
 
@@ -1372,12 +1372,12 @@ tab_added_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
 }
 
 static void
-tab_removed_cb (EphyNotebook *notebook, GtkWidget *child, EphyWindow *window)
+tab_removed_cb (EphyNotebook *notebook, EphyEmbed *embed, EphyWindow *window)
 {
 	EphyTab *tab;
 
-	g_return_if_fail (EPHY_IS_EMBED (child));
-	tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
+        g_return_if_fail (EPHY_IS_EMBED (embed));
+	tab = ephy_tab_for_embed (embed);
 
 	g_signal_handlers_disconnect_by_func (G_OBJECT (tab),
 					      G_CALLBACK (sync_tab_visibility),
@@ -1798,7 +1798,7 @@ real_get_active_tab (EphyWindow *window, int page_num)
 						  page_num);
 
 	g_return_val_if_fail (GTK_IS_WIDGET (embed_widget), NULL);
-	tab = g_object_get_data (G_OBJECT (embed_widget), "EphyTab");
+	tab = ephy_tab_for_embed (EPHY_EMBED (embed_widget));
 	g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
 
 	return tab;
@@ -1925,8 +1925,9 @@ ephy_window_get_tabs (EphyWindow *window)
 	{
 		EphyTab *tab;
 
-		tab = g_object_get_data (G_OBJECT (w), "EphyTab");
-		g_return_val_if_fail (EPHY_IS_TAB (G_OBJECT (tab)), NULL);
+		g_return_val_if_fail (EPHY_IS_EMBED (w), NULL);
+		tab = ephy_tab_for_embed (EPHY_EMBED (w));
+		g_return_val_if_fail (EPHY_IS_TAB (tab), NULL);
 
 		tabs = g_list_prepend (tabs, tab);
 		i++;

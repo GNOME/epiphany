@@ -654,7 +654,7 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 	if (child)
 	{
 		embed = EPHY_EMBED (child);
-		tab = EPHY_TAB (g_object_get_data (G_OBJECT (embed), "EphyTab"));
+		tab = ephy_tab_for_embed (embed);
 	}
 
 	l = uris;
@@ -958,7 +958,7 @@ ephy_notebook_insert_page (EphyNotebook *nb,
 	GtkWidget *label;
 
 	g_return_if_fail (EPHY_IS_EMBED (child));
-	tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
+	tab = ephy_tab_for_embed (EPHY_EMBED (child));
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	label = build_tab_label (nb, child);
@@ -1051,7 +1051,7 @@ smart_tab_switching_on_closure (EphyNotebook *nb,
 
 void
 ephy_notebook_remove_page (EphyNotebook *nb,
-			  GtkWidget *child)
+			   GtkWidget *child)
 {
 	int num, position, curr;
 	EphyTab *tab;
@@ -1060,7 +1060,7 @@ ephy_notebook_remove_page (EphyNotebook *nb,
 	g_return_if_fail (EPHY_IS_NOTEBOOK (nb));
 	g_return_if_fail (EPHY_IS_EMBED (child));
 
-	tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
+	tab = ephy_tab_for_embed (EPHY_EMBED (child));
 	g_return_if_fail (EPHY_IS_TAB (tab));
 
 	num = gtk_notebook_get_n_pages (GTK_NOTEBOOK (nb));

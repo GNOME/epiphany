@@ -96,13 +96,13 @@ ephy_tabs_menu_get_type (void)
 }
 
 static void
-tab_added_cb (EphyNotebook *notebook, GtkWidget *child, EphyTabsMenu *menu)
+tab_added_cb (EphyNotebook *notebook, EphyEmbed *embed, EphyTabsMenu *menu)
 {
 	EphyTab *tab;
 	GtkAction *action;
-                                                                                                                             
-        g_return_if_fail (EPHY_IS_EMBED (child));
-        tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
+
+        g_return_if_fail (EPHY_IS_EMBED (embed));
+	tab = ephy_tab_for_embed (embed);
 
 	action = GTK_ACTION (ephy_tab_get_action (tab));
 	gtk_action_group_add_action (menu->priv->action_group, action);
@@ -111,13 +111,13 @@ tab_added_cb (EphyNotebook *notebook, GtkWidget *child, EphyTabsMenu *menu)
 }
 
 static void
-tab_removed_cb (EphyNotebook *notebook, GtkWidget *child, EphyTabsMenu *menu)
+tab_removed_cb (EphyNotebook *notebook, EphyEmbed *embed, EphyTabsMenu *menu)
 {
 	EphyTab *tab;
 	GtkAction *action;
                                                                                                                              
-	g_return_if_fail (EPHY_IS_EMBED (child));
-	tab = EPHY_TAB (g_object_get_data (G_OBJECT (child), "EphyTab"));
+        g_return_if_fail (EPHY_IS_EMBED (embed));
+	tab = ephy_tab_for_embed (embed);
 
 	action = GTK_ACTION (ephy_tab_get_action (tab));
 	gtk_action_group_remove_action (menu->priv->action_group, action);

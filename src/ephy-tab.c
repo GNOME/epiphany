@@ -476,6 +476,18 @@ ephy_tab_get_embed (EphyTab *tab)
 	return tab->priv->embed;
 }
 
+EphyTab *
+ephy_tab_for_embed (EphyEmbed *embed)
+{
+	EphyTab *tab;
+
+	g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
+
+	tab = EPHY_TAB (g_object_get_data (G_OBJECT (embed), "ephy-tab"));
+
+	return tab;
+}
+
 void
 ephy_tab_set_window (EphyTab *tab, EphyWindow *window)
 {
@@ -1130,7 +1142,7 @@ ephy_tab_init (EphyTab *tab)
 			  G_CALLBACK (ephy_tab_action_activate_cb), tab);
 
 	/* set a pointer in the embed's widget back to the tab */
-	g_object_set_data (embed_widget, "EphyTab", tab);
+	g_object_set_data (embed_widget, "ephy-tab", tab);
 
 	g_signal_connect (embed_widget, "parent_set",
 			  G_CALLBACK (ephy_tab_parent_set_cb),

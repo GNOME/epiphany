@@ -1,5 +1,17 @@
 2004-01-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-notebook.c: (notebook_drag_data_received_cb),
+	(ephy_notebook_insert_page), (ephy_notebook_remove_page):
+	* src/ephy-tab.c: (ephy_tab_for_embed), (ephy_tab_init):
+	* src/ephy-tab.h:
+	* src/ephy-tabs-menu.c: (tab_added_cb), (tab_removed_cb):
+	* src/ephy-window.c: (tab_context_menu_cb), (tab_added_cb),
+	(tab_removed_cb), (real_get_active_tab), (ephy_window_get_tabs):
+
+	New API to get the EphyTab from an EphyEmbed. Port all users.
+
+2004-01-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-command-manager.c: (ephy_command_manager_get_type),
 	(ephy_command_manager_base_init),
 	(ephy_command_manager_do_command),
