@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-20 13:20+0100\n"
+"POT-Creation-Date: 2004-03-08 20:19+0100\n"
 "PO-Revision-Date: 2003-07-28 01:29+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -557,7 +557,7 @@ msgstr "Określa czy należy drukować tytuł strony w nagłówku."
 
 #: data/epiphany.schemas.in.h:76
 msgid "x-western"
-msgstr "x-western"
+msgstr "x-central-euro"
 
 #: data/glade/certificate-dialogs.glade.h:1 data/glade/prefs-dialog.glade.h:1
 #: data/glade/print.glade.h:1
@@ -829,7 +829,7 @@ msgid "_Add..."
 msgstr "D_odaj..."
 
 #: data/glade/prefs-dialog.glade.h:34
-#: src/bookmarks/ephy-bookmark-properties.c:371
+#: src/bookmarks/ephy-bookmark-properties.c:367
 msgid "_Address:"
 msgstr "_Adres:"
 
@@ -1203,15 +1203,15 @@ msgstr[0] "%d pobranie"
 msgstr[1] "%d pobrania"
 msgstr[2] "%d pobrań"
 
-#: embed/downloader-view.c:513
+#: embed/downloader-view.c:515
 msgid "%"
 msgstr "%"
 
-#: embed/downloader-view.c:524
+#: embed/downloader-view.c:526
 msgid "File"
 msgstr "Plik"
 
-#: embed/downloader-view.c:538
+#: embed/downloader-view.c:540
 msgid "Remaining"
 msgstr "Pozostało"
 
@@ -1590,7 +1590,7 @@ msgstr "Ukraiński"
 msgid "Unknown (%s)"
 msgstr "Nieznane (%s)"
 
-#: embed/ephy-history.c:487 src/bookmarks/ephy-bookmarks.c:612
+#: embed/ephy-history.c:487 src/bookmarks/ephy-bookmarks.c:645
 msgid "All"
 msgstr "Wszystko"
 
@@ -1602,22 +1602,22 @@ msgstr "Inne"
 msgid "Local files"
 msgstr "Pliki lokalne"
 
-#: embed/mozilla/ContentHandler.cpp:135
-#: embed/mozilla/EphyHeaderSniffer.cpp:316
+#: embed/mozilla/ContentHandler.cpp:134
+#: embed/mozilla/EphyHeaderSniffer.cpp:362
 msgid "Save"
 msgstr "Zapisz"
 
 #: embed/mozilla/ContentHandler.cpp:265
-msgid "_Save As..."
-msgstr "Z_apisz jako..."
-
-#: embed/mozilla/ContentHandler.cpp:268
 msgid "_Open"
 msgstr "_Otwórz"
 
-#: embed/mozilla/ContentHandler.cpp:268
+#: embed/mozilla/ContentHandler.cpp:265
 msgid "_Download"
 msgstr "_Pobierz"
+
+#: embed/mozilla/ContentHandler.cpp:269
+msgid "_Save As..."
+msgstr "Z_apisz jako..."
 
 #: embed/mozilla/ContentHandler.cpp:286
 msgid "Download the unsafe file?"
@@ -1656,9 +1656,8 @@ msgstr ""
 "Nie można wyświetlić tego pliku z powodu braku zainstalowanej aplikacji "
 "która by to potrafiła. Zamiast tego można go zapisać."
 
-#: embed/mozilla/EphyHeaderSniffer.cpp:291
-#: src/bookmarks/ephy-bookmarks-import.c:247
-#: src/bookmarks/ephy-bookmarks-import.c:373 src/ephy-toolbars-model.c:201
+#: embed/mozilla/EphyHeaderSniffer.cpp:331
+#: src/bookmarks/ephy-bookmarks-import.c:252 src/ephy-toolbars-model.c:201
 #: src/window-commands.c:342
 msgid "Untitled"
 msgstr "BezNazwy"
@@ -1681,45 +1680,45 @@ msgstr ""
 "\n"
 "Wypróbować domyślną akcję GNOME?"
 
-#: embed/mozilla/FilePicker.cpp:156
+#: embed/mozilla/FilePicker.cpp:163
 msgid "All files"
 msgstr "Wszytkie pliki"
 
-#: embed/mozilla/FilePicker.cpp:161
+#: embed/mozilla/FilePicker.cpp:168
 msgid "HTML files"
 msgstr "Pliki HTML"
 
-#: embed/mozilla/FilePicker.cpp:166
+#: embed/mozilla/FilePicker.cpp:173
 msgid "Text files"
 msgstr "Pliki tekstowe"
 
-#: embed/mozilla/FilePicker.cpp:171
+#: embed/mozilla/FilePicker.cpp:178
 msgid "Image files"
 msgstr "Pliki obrazów"
 
-#: embed/mozilla/FilePicker.cpp:176
+#: embed/mozilla/FilePicker.cpp:183
 msgid "XML files"
 msgstr "Pliki XML"
 
-#: embed/mozilla/FilePicker.cpp:181
+#: embed/mozilla/FilePicker.cpp:188
 msgid "XUL files"
 msgstr "Pliki XUL"
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:182
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:185
 msgid "_Select Certificate"
 msgstr "Wy_bierz certyfikat"
 
 # FIXME - może wymagać korekty stylistycznej/merytorycznej
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:221
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:224
 #, c-format
 msgid "Choose a certificate to present as identification to %s."
 msgstr "Wybierz certyfikat identyfikujący do %s."
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:224
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:227
 msgid "Select a certificate to identify yourself."
 msgstr "Wybierz certyfikat do swojej identyfikacji."
 
-#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:274
+#: embed/mozilla/GtkNSSClientAuthDialogs.cpp:277
 msgid "Certificate _Details"
 msgstr "Szcz_egóły certyfikatów"
 
@@ -1964,11 +1963,11 @@ msgstr ""
 msgid "Could not verify this certificate for unknown reasons."
 msgstr "Nie można zweryfikować tego certyfikatu z nieznanego powodu."
 
-#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:181
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:183
 msgid "Generating Private Key."
 msgstr "Generowanie klucza prywatnego."
 
-#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:182
+#: embed/mozilla/GtkNSSKeyPairDialogs.cpp:184
 msgid ""
 "Please wait while a new private key is generated. This process could take a "
 "few minutes."
@@ -2044,26 +2043,26 @@ msgstr ""
 "na paletę, aby go usunąć."
 
 #. The name of the default downloads folder
-#: lib/ephy-file-helpers.c:72 src/prefs-dialog.c:1107
+#: lib/ephy-file-helpers.c:75 src/prefs-dialog.c:1107
 msgid "Downloads"
 msgstr "Pobrania"
 
-#: lib/ephy-file-helpers.c:149
+#: lib/ephy-file-helpers.c:164
 #, c-format
 msgid "Failed to find %s"
 msgstr "Nie można odnaleźć %s"
 
-#: lib/ephy-file-helpers.c:214
+#: lib/ephy-file-helpers.c:229
 #, c-format
 msgid "%s exists, please move it out of the way."
 msgstr "%s istnieje, przenieś go gdzie indziej."
 
-#: lib/ephy-file-helpers.c:217
+#: lib/ephy-file-helpers.c:232
 #, c-format
 msgid "Failed to create directory %s."
 msgstr "Utworzenie katalogu %s nie powiodło się."
 
-#: lib/ephy-gui.c:88
+#: lib/ephy-gui.c:90
 #, c-format
 msgid ""
 "File %s will be overwritten.\n"
@@ -2076,7 +2075,7 @@ msgstr ""
 "\n"
 "Czy chcesz kontynuować?"
 
-#: lib/ephy-gui.c:119
+#: lib/ephy-gui.c:121
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Nie można wyświetlić pomocy: %s"
@@ -2181,7 +2180,7 @@ msgstr "400%"
 msgid "Failed"
 msgstr "Niepowodzenie"
 
-#: src/bookmarks/ephy-bookmark-action.c:221
+#: src/bookmarks/ephy-bookmark-action.c:248
 #, c-format
 msgid "%s:"
 msgstr "%s:"
@@ -2191,17 +2190,17 @@ msgstr "%s:"
 msgid "%s Properties"
 msgstr "Właściwości %s"
 
-#: src/bookmarks/ephy-bookmark-properties.c:352
+#: src/bookmarks/ephy-bookmark-properties.c:348
 #: src/bookmarks/ephy-new-bookmark.c:215
 msgid "_Title:"
 msgstr "Tyt_uł:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:394
+#: src/bookmarks/ephy-bookmark-properties.c:390
 #: src/bookmarks/ephy-new-bookmark.c:238
 msgid "To_pics:"
 msgstr "T_ematy:"
 
-#: src/bookmarks/ephy-bookmark-properties.c:403
+#: src/bookmarks/ephy-bookmark-properties.c:399
 msgid "_Show in bookmarks bar"
 msgstr "_Wyświetlanie na pasku Ulubionych"
 
@@ -2425,20 +2424,20 @@ msgstr "_Skopiuj adres"
 msgid "_Search:"
 msgstr "Z_najdź:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1357
+#: src/bookmarks/ephy-bookmarks-editor.c:1354
 #: src/bookmarks/ephy-topic-action.c:597 src/ephy-window.c:953
 msgid "Bookmarks"
 msgstr "Ulubione"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1440
+#: src/bookmarks/ephy-bookmarks-editor.c:1437
 msgid "Topics"
 msgstr "Tematy"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1502 src/ephy-history-window.c:1318
+#: src/bookmarks/ephy-bookmarks-editor.c:1499 src/ephy-history-window.c:1318
 msgid "Title"
 msgstr "Tytuł"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1509 src/ephy-history-window.c:1324
+#: src/bookmarks/ephy-bookmarks-editor.c:1506 src/ephy-history-window.c:1324
 msgid "Address"
 msgstr "Adres"
 
@@ -2453,7 +2452,7 @@ msgstr "Przeszukiwanie sieci WWW"
 #: src/bookmarks/ephy-bookmarks.c:83
 #, c-format
 msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr "http://www.google.pl/search?q=%s&ie=ISO-8859-2&oe=ISO-8859-2"
+msgstr "http://www.google.pl/search?q=%s&ie=UTF-8&oe=UTF-8"
 
 #: src/bookmarks/ephy-bookmarks.c:89
 msgid "Entertainment"
@@ -2479,11 +2478,11 @@ msgstr "Podróże"
 msgid "Work"
 msgstr "Praca"
 
-#: src/bookmarks/ephy-bookmarks.c:647
+#: src/bookmarks/ephy-bookmarks.c:680
 msgid "Most Visited"
 msgstr "Najczęściej odwiedzane"
 
-#: src/bookmarks/ephy-bookmarks.c:664
+#: src/bookmarks/ephy-bookmarks.c:697
 msgid "Not Categorized"
 msgstr "Nie sklasyfikowane"
 
@@ -2619,70 +2618,70 @@ msgstr "Historia"
 msgid "Sites"
 msgstr "Witryny"
 
-#: src/ephy-main.c:55
+#: src/ephy-main.c:56
 msgid "Open a new tab in an existing Epiphany window"
 msgstr "Otwiera nową zakładkę w istniejącym oknie Epiphany"
 
-#: src/ephy-main.c:58
+#: src/ephy-main.c:59
 msgid "Run Epiphany in full screen mode"
 msgstr "Uruchamia Epiphany w trybie pełnoekranowym"
 
-#: src/ephy-main.c:61
+#: src/ephy-main.c:62
 msgid "Load the given session file"
 msgstr "Wczytuje podany plik sesji"
 
-#: src/ephy-main.c:62 src/ephy-main.c:68
+#: src/ephy-main.c:63 src/ephy-main.c:69
 msgid "FILE"
 msgstr "PLIK"
 
-#: src/ephy-main.c:64
+#: src/ephy-main.c:65
 msgid "Add a bookmark (don't open any window)"
 msgstr "Dodaje witrynę do Ulubionych (bez otwierania żadnych okien)"
 
-#: src/ephy-main.c:65
+#: src/ephy-main.c:66
 msgid "URL"
 msgstr "Adres URL"
 
-#: src/ephy-main.c:67
+#: src/ephy-main.c:68
 msgid "Import bookmarks from the given file"
 msgstr "Zaimportowanie Ulubionych z podanego pliku"
 
-#: src/ephy-main.c:70
+#: src/ephy-main.c:71
 msgid "Launch the bookmarks editor"
 msgstr "Uruchamia edytor pozycji Ulubionych"
 
-#: src/ephy-main.c:73
+#: src/ephy-main.c:74
 msgid "Used internally by the bonobo interface"
 msgstr "Funkcja używana wewnętrznie przez bonobo"
 
-#: src/ephy-main.c:108
+#: src/ephy-main.c:109
 msgid "Epiphany Web Browser"
 msgstr "Przeglądarka WWW Epiphany"
 
-#: src/ephy-main.c:112
+#: src/ephy-main.c:113
 msgid "Ephy"
 msgstr "Ephy"
 
-#: src/ephy-session.c:299
+#: src/ephy-session.c:301
 msgid "Crash Recovery"
 msgstr "Odzyskiwanie po błędzie programu"
 
-#: src/ephy-session.c:301
+#: src/ephy-session.c:303
 msgid "_Don't Recover"
 msgstr "_Nie przywracaj"
 
-#: src/ephy-session.c:302
+#: src/ephy-session.c:304
 msgid "_Recover"
 msgstr "_Przywróć"
 
-#: src/ephy-session.c:332
+#: src/ephy-session.c:335
 msgid ""
 "Epiphany appears to have crashed or been killed the last time it was run."
 msgstr ""
 "Podczas ostatniego uruchomienia Epiphany zakończył się błędem lub jego "
 "proces został przerwany."
 
-#: src/ephy-session.c:338
+#: src/ephy-session.c:341
 msgid "You can recover the opened tabs and windows."
 msgstr "Można przywrócić otwarte zakładki i okna."
 
@@ -2712,30 +2711,30 @@ msgstr ""
 "Nie można teraz użyć programu Epiphany, ze względu na niespodziewany błąd "
 "programu Bonobo podczas próby rejestracji obiektu automatyzacji."
 
-#: src/ephy-tab.c:327 src/ephy-tab.c:1172 src/ephy-tab.c:1354
+#: src/ephy-tab.c:367 src/ephy-tab.c:1200 src/ephy-tab.c:1370
 msgid "Blank page"
 msgstr "Pusta strona"
 
-#: src/ephy-tab.c:748
+#: src/ephy-tab.c:772
 msgid "site"
 msgstr "witryny"
 
-#: src/ephy-tab.c:772
+#: src/ephy-tab.c:796
 #, c-format
 msgid "Redirecting to %s..."
 msgstr "Przekierowanie do %s..."
 
-#: src/ephy-tab.c:776
+#: src/ephy-tab.c:800
 #, c-format
 msgid "Transferring data from %s..."
 msgstr "Pobieranie danych z %s..."
 
-#: src/ephy-tab.c:780
+#: src/ephy-tab.c:804
 #, c-format
 msgid "Waiting for authorization from %s..."
 msgstr "Oczekiwanie na autoryzację od %s..."
 
-#: src/ephy-tab.c:788
+#: src/ephy-tab.c:812
 #, c-format
 msgid "Loading %s..."
 msgstr "Wczytywanie %s..."
@@ -3184,11 +3183,11 @@ msgstr "Pozostały niewysłane zmiany elementów formularza."
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Jeżeli zamkniesz dokument, stracisz tą informację."
 
-#: src/ephy-window.c:943 src/window-commands.c:392
+#: src/ephy-window.c:943 src/window-commands.c:395
 msgid "Open"
 msgstr "Otwórz"
 
-#: src/ephy-window.c:945 src/window-commands.c:417
+#: src/ephy-window.c:945 src/window-commands.c:420
 msgid "Save As"
 msgstr "Zapisz jako"
 
@@ -3566,20 +3565,20 @@ msgstr "Przechodzi do adresu wpisanego w polu adresu"
 msgid "Check this out!"
 msgstr "Sprawdź to!"
 
-#: src/window-commands.c:879
+#: src/window-commands.c:881
 msgid "Toolbar Editor"
 msgstr "Edytor paska narzędziowego"
 
-#: src/window-commands.c:901
+#: src/window-commands.c:903
 msgid "_Add a New Toolbar"
 msgstr "Dodaj nowy pasek narzędzio_wy"
 
 #. Translator credits
-#: src/window-commands.c:953
+#: src/window-commands.c:954
 msgid "translator-credits"
 msgstr "GNOME PL Team <translators@gnome.pl>"
 
-#: src/window-commands.c:983
+#: src/window-commands.c:984
 msgid "A GNOME browser based on Mozilla"
 msgstr "Przeglądarka WWW GNOME oparta na projekcie Mozilla"
 
