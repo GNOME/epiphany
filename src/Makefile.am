@@ -72,10 +72,8 @@ INST_H_FILES = 				    		\
 	ephy-window.h					\
 	session.h
 
-nodist_epiphany_bin_SOURCES = 				\
-	$(ephy_automation_interface_idl_sources)
-
 epiphany_bin_SOURCES = 				    	\
+	$(ephy_automation_interface_idl_sources) 	\
 	$(nautilus_view_sources)			\
 	ephy-automation.c				\
 	ephy-encoding-menu.c				\

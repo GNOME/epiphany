@@ -1,6 +1,6 @@
 figdir = figures
 docname = epiphany
-lang = C
+lang = nl
 omffile = epiphany-nl.omf
 entities = legal.xml
 include $(top_srcdir)/xmldocs.make
