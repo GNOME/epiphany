@@ -1,5 +1,13 @@
 2004-10-25  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-notebook.c: (ephy_notebook_remove_tab):
+	* src/ephy-window.c: (ephy_window_get_active_tab):
+
+	Move window destruction after tab-removed signal emission.
+	Fixes bug #151607.
+
+2004-10-25  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-notebook.h:
 
 	Fix return type of tab_delete slot.

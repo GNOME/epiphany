@@ -2827,7 +2827,6 @@ EphyTab *
 ephy_window_get_active_tab (EphyWindow *window)
 {
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
-	g_return_val_if_fail (EPHY_IS_TAB (window->priv->active_tab), NULL);
 
 	return window->priv->active_tab;
 }
