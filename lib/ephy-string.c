@@ -24,6 +24,7 @@
 
 #include <errno.h>
 #include <string.h>
+#include <stdlib.h>
 #include <glib.h>
 
 #define ELLIPSIS "\xe2\x80\xa6"
