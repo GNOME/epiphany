@@ -389,7 +389,7 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 	g_return_if_fail (t->priv->window == NULL);
 
 	t->priv->window = window;
-	manager = GTK_UI_MANAGER (window->ui_merge);
+	manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
 
 	toolbar_setup_actions (t);
 	gtk_ui_manager_insert_action_group (manager,
@@ -472,7 +472,7 @@ toolbar_new (EphyWindow *window)
 {
 	return EPHY_TOOLBAR (g_object_new (EPHY_TYPE_TOOLBAR,
 					   "window", window,
-					   "ui-manager", window->ui_merge,
+					   "ui-manager", ephy_window_get_ui_manager (window),
 					   NULL));
 }
 

@@ -237,7 +237,7 @@ ppview_toolbar_set_window (PPViewToolbar *t, EphyWindow *window)
 	g_return_if_fail (t->priv->window == NULL);
 
 	t->priv->window = window;
-	t->priv->ui_merge = GTK_UI_MANAGER (t->priv->window->ui_merge);
+	t->priv->ui_merge = GTK_UI_MANAGER (ephy_window_get_ui_manager (t->priv->window));
 
 	t->priv->action_group = gtk_action_group_new ("PPViewActions");
 	gtk_action_group_set_translation_domain (t->priv->action_group, NULL);

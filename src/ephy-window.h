@@ -45,11 +45,9 @@ typedef struct EphyWindowPrivate EphyWindowPrivate;
 struct _EphyWindow
 {
         GtkWindow parent;
+
 	/*< private >*/
         EphyWindowPrivate *priv;
-
-	/*< public >*/
-	GObject *ui_merge;
 };
 
 struct EphyWindowClass
@@ -68,6 +66,8 @@ EphyWindow	 *ephy_window_new_with_chrome	  (EphyEmbedChrome chrome);
 
 void		  ephy_window_set_print_preview	  (EphyWindow *window,
 						   gboolean enabled);
+
+GObject		 *ephy_window_get_ui_manager	  (EphyWindow *window);
 
 GtkWidget	 *ephy_window_get_toolbar	  (EphyWindow *window);
 

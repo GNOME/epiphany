@@ -142,13 +142,13 @@ static void
 ephy_tabs_menu_set_window (EphyTabsMenu *menu, EphyWindow *window)
 {
 	GtkWidget *notebook;
-	GtkUIManager *merge;
+	GtkUIManager *manager;
 
 	menu->priv->window = window;
 
-	merge = GTK_UI_MANAGER (window->ui_merge);
+	manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
 	menu->priv->action_group = gtk_action_group_new ("TabsActions");
-	gtk_ui_manager_insert_action_group (merge, menu->priv->action_group, -1);
+	gtk_ui_manager_insert_action_group (manager, menu->priv->action_group, -1);
 	g_object_unref (menu->priv->action_group);
 
 	g_signal_connect (menu->priv->action_group, "connect-proxy",
@@ -229,12 +229,12 @@ static void
 ephy_tabs_menu_clean (EphyTabsMenu *menu)
 {
 	EphyTabsMenuPrivate *p = menu->priv;
-	GtkUIManager *merge = GTK_UI_MANAGER (p->window->ui_merge);
+	GtkUIManager *manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (p->window));
 
 	if (p->ui_id > 0)
 	{
-		gtk_ui_manager_remove_ui (merge, p->ui_id);
-		gtk_ui_manager_ensure_update (merge);
+		gtk_ui_manager_remove_ui (manager, p->ui_id);
+		gtk_ui_manager_ensure_update (manager);
 		p->ui_id = 0;
 	}
 }
@@ -294,17 +294,13 @@ tab_set_action_accelerator (GtkActionGroup *action_group,
 void
 ephy_tabs_menu_update (EphyTabsMenu *menu)
 {
-	EphyTabsMenuPrivate *p;
-	GtkUIManager *merge;
+	EphyTabsMenuPrivate *p = menu->priv;
+	GtkUIManager *manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (p->window));
 	EphyTab *tab;
 	GtkAction *action;
 	guint i = 0;
 	GList *tabs = NULL, *l;
 
-	g_return_if_fail (EPHY_IS_TABS_MENU (menu));
-	p = menu->priv;
-	merge = GTK_UI_MANAGER (p->window->ui_merge);
-	
 	LOG ("Rebuilding open tabs menu")
 
 	START_PROFILER ("Rebuilding tabs menu")
@@ -315,7 +311,7 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 
 	if (g_list_length (tabs) == 0) return;
 
-	p->ui_id = gtk_ui_manager_new_merge_id (merge);
+	p->ui_id = gtk_ui_manager_new_merge_id (manager);
 
 	for (l = tabs; l != NULL; l = l->next)
 	{
@@ -329,7 +325,7 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 
 		tab_set_action_accelerator (p->action_group, action, i++);
 
-		gtk_ui_manager_add_ui (merge, p->ui_id,
+		gtk_ui_manager_add_ui (manager, p->ui_id,
 				       "/menubar/TabsMenu/TabsOpen",
 				       name, action_name,
 				       GTK_UI_MANAGER_MENUITEM, FALSE);

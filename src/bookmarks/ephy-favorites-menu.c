@@ -85,7 +85,7 @@ static void
 ephy_favorites_menu_clean (EphyFavoritesMenu *menu)
 {
 	EphyFavoritesMenuPrivate *p = menu->priv;
-	GtkUIManager *merge = GTK_UI_MANAGER (p->window->ui_merge);
+	GtkUIManager *merge = GTK_UI_MANAGER (ephy_window_get_ui_manager (p->window));
 
 	if (p->ui_id > 0)
 	{
@@ -114,7 +114,7 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *menu)
 	gint i;
 	EphyNode *fav;
 	GPtrArray *children;
-	GtkUIManager *merge = GTK_UI_MANAGER (p->window->ui_merge);
+	GtkUIManager *merge = GTK_UI_MANAGER (ephy_window_get_ui_manager (p->window));
 
 	LOG ("Rebuilding favorites menu")
 

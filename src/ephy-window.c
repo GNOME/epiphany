@@ -342,6 +342,7 @@ struct EphyWindowPrivate
 	Toolbar *toolbar;
 	GtkWidget *bookmarksbar;
 	GtkWidget *statusbar;
+	GtkUIManager *manager;
 	GtkActionGroup *action_group;
 	GtkActionGroup *popups_action_group;
 	EphyFavoritesMenu *fav_menu;
@@ -487,7 +488,9 @@ ephy_window_destroy (GtkObject *gtkobject)
 }
 
 static void
-add_widget (GtkUIManager *merge, GtkWidget *widget, EphyWindow *window)
+add_widget (GtkUIManager *manager,
+	    GtkWidget *widget,
+	    EphyWindow *window)
 {
 	gtk_box_pack_start (GTK_BOX (window->priv->menu_dock),
 			    widget, FALSE, FALSE, 0);
@@ -539,8 +542,7 @@ sync_chromes_visibility (EphyWindow *window)
 				&show_statusbar, &show_toolbar,
 				&show_bookmarksbar);
 
-	menubar = gtk_ui_manager_get_widget
-		(GTK_UI_MANAGER (window->ui_merge), "/menubar");
+	menubar = gtk_ui_manager_get_widget (window->priv->manager, "/menubar");
 	g_assert (menubar != NULL);
 
 	g_object_set (G_OBJECT (menubar), "visible", show_menubar, NULL);
@@ -745,8 +747,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 	/* Show and activate the menubar, if it isn't visible */
         if (event->keyval == keyval && (event->state & mask) == (modifier & mask))
 	{
-		menubar = gtk_ui_manager_get_widget
-			(GTK_UI_MANAGER (window->ui_merge), "/menubar");
+		menubar = gtk_ui_manager_get_widget (window->priv->manager, "/menubar");
 		g_return_val_if_fail (menubar != NULL , FALSE);
 	
 		if (!GTK_WIDGET_VISIBLE (menubar))
@@ -917,7 +918,7 @@ init_menu_updaters (EphyWindow *window)
 	GtkWidget *edit_menu_item, *edit_menu;
 
 	edit_menu_item = gtk_ui_manager_get_widget
-		(GTK_UI_MANAGER (window->ui_merge), "/menubar/EditMenu");
+		(window->priv->manager, "/menubar/EditMenu");
 	edit_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (edit_menu_item));
 
 	g_signal_connect (edit_menu, "show",
@@ -1098,7 +1099,7 @@ setup_ui_manager (EphyWindow *window)
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
-	GtkUIManager *merge;
+	GtkUIManager *manager;
 	GError *err = NULL;
 
 	window->priv->main_vbox = gtk_vbox_new (FALSE, 0);
@@ -1112,11 +1113,11 @@ setup_ui_manager (EphyWindow *window)
 			    GTK_WIDGET (window->priv->menu_dock),
 			    FALSE, TRUE, 0);
 
-	merge = gtk_ui_manager_new ();
+	manager = gtk_ui_manager_new ();
 
-	g_signal_connect (merge, "connect_proxy",
+	g_signal_connect (manager, "connect_proxy",
 			  G_CALLBACK (connect_proxy_cb), window);
-	g_signal_connect (merge, "disconnect_proxy",
+	g_signal_connect (manager, "disconnect_proxy",
 			  G_CALLBACK (disconnect_proxy_cb), window);
 
 	action_group = gtk_action_group_new ("WindowActions");
@@ -1127,7 +1128,7 @@ setup_ui_manager (EphyWindow *window)
 					     ephy_menu_toggle_entries,
 					     ephy_menu_n_toggle_entries,
 					     window);
-	gtk_ui_manager_insert_action_group (merge, action_group, 0);
+	gtk_ui_manager_insert_action_group (manager, action_group, 0);
 	window->priv->action_group = action_group;
 	action = gtk_action_group_get_action (action_group, "FileOpen");
 	g_object_set (action, "short_label", _("Open"), NULL);
@@ -1156,16 +1157,16 @@ setup_ui_manager (EphyWindow *window)
 	gtk_action_group_set_translation_domain (action_group, NULL);
 	gtk_action_group_add_actions (action_group, ephy_popups_entries,
 				      ephy_popups_n_entries, window);
-	gtk_ui_manager_insert_action_group (merge, action_group, 0);
+	gtk_ui_manager_insert_action_group (manager, action_group, 0);
 	window->priv->popups_action_group = action_group;
 
-	window->ui_merge = G_OBJECT (merge);
-	g_signal_connect (merge, "add_widget", G_CALLBACK (add_widget), window);
+	window->priv->manager = manager;
+	g_signal_connect (manager, "add_widget", G_CALLBACK (add_widget), window);
 	gtk_window_add_accel_group (GTK_WINDOW (window),
-				    gtk_ui_manager_get_accel_group (merge));
+				    gtk_ui_manager_get_accel_group (manager));
 
 	gtk_ui_manager_add_ui_from_file
-		(merge, ephy_file ("epiphany-ui.xml"), &err);
+		(manager, ephy_file ("epiphany-ui.xml"), &err);
 	if (err != NULL)
 	{
 		g_warning ("Could not merge epiphany-ui.xml: %s", err->message);
@@ -1618,8 +1619,7 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 		update_edit_actions_sensitivity (window, TRUE);
 	}
 
-	widget = gtk_ui_manager_get_widget (GTK_UI_MANAGER (window->ui_merge),
-				            popup);
+	widget = gtk_ui_manager_get_widget (window->priv->manager, popup);
 	g_return_if_fail (widget != NULL);
 
 	action_group = window->priv->popups_action_group;
@@ -2314,7 +2314,7 @@ ephy_window_init (EphyWindow *window)
 			  G_CALLBACK (network_status_changed), window);
 
 	/* ensure the UI is updated */
-	gtk_ui_manager_ensure_update (GTK_UI_MANAGER (window->ui_merge));
+	gtk_ui_manager_ensure_update (window->priv->manager);
 
 	init_menu_updaters (window);
 }
@@ -2356,7 +2356,7 @@ ephy_window_finalize (GObject *object)
 	}
 
 	g_object_unref (window->priv->action_group);
-	g_object_unref (window->ui_merge);
+	g_object_unref (window->priv->manager);
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 
@@ -2408,7 +2408,7 @@ ephy_window_set_print_preview (EphyWindow *window, gboolean enabled)
 	GtkAccelGroup *accel_group;
 	EphyWindowMode mode;
 
-	accel_group = gtk_ui_manager_get_accel_group (GTK_UI_MANAGER (window->ui_merge));
+	accel_group = gtk_ui_manager_get_accel_group (window->priv->manager);
 
 	mode = enabled ? EPHY_WINDOW_MODE_PRINT_PREVIEW :
 			 EPHY_WINDOW_MODE_NORMAL;
@@ -2435,6 +2435,22 @@ ephy_window_set_print_preview (EphyWindow *window, gboolean enabled)
 		window->priv->ppview_toolbar = NULL;
 		gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 	}
+}
+
+/**
+ * ephy_window_get_ui_manager:
+ * @window: an #EphyWindow
+ *
+ * Returns this window's UI manager.
+ *
+ * Return value: an #GtkUIManager
+ **/
+GObject *
+ephy_window_get_ui_manager (EphyWindow *window)
+{
+	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+
+	return G_OBJECT (window->priv->manager);
 }
 
 /**

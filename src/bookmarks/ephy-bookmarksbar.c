@@ -284,7 +284,7 @@ ephy_bookmarksbar_set_window (EphyBookmarksBar *toolbar,
 {
 	EggEditableToolbar *eggtoolbar = EGG_EDITABLE_TOOLBAR (toolbar);
 	EggToolbarsModel *model = toolbar->priv->toolbars_model;
-	GtkUIManager *manager = GTK_UI_MANAGER (window->ui_merge);
+	GtkUIManager *manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
 	int i, n_toolbars;
 
 	g_return_if_fail (toolbar->priv->window == NULL);

@@ -382,7 +382,7 @@ ephy_encoding_menu_set_window (EphyEncodingMenu *menu, EphyWindow *window)
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
 	menu->priv->window = window;
-	menu->priv->manager = GTK_UI_MANAGER (window->ui_merge);
+	menu->priv->manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
 
 	action_group = gtk_action_group_new ("EncodingActions");
 	gtk_action_group_set_translation_domain (action_group, NULL);

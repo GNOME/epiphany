@@ -523,7 +523,7 @@ ephy_bookmarks_menu_set_window (EphyBookmarksMenu *menu,
 				EphyWindow *window)
 {
 	menu->priv->window = window;
-	menu->priv->manager = GTK_UI_MANAGER (window->ui_merge);
+	menu->priv->manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (window));
 }
 
 static void
