@@ -39,6 +39,7 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-embed-prefs.h"
 #include "MozRegisterComponents.h"
+#include "EphySingle.h"
 
 #include <glib/gi18n.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
@@ -92,6 +93,8 @@ struct MozillaEmbedSinglePrivate
 	
 	/* monitor this widget for theme changes*/
 	GtkWidget *theme_window;
+
+	EphySingle *mSingleObserver;
 };
 
 static void mozilla_embed_single_class_init	(MozillaEmbedSingleClass *klass);
@@ -428,6 +431,17 @@ mozilla_init_chrome (void)
 	return NS_OK;
 }
 
+static void
+mozilla_init_observer (MozillaEmbedSingle *single)
+{
+	single->priv->mSingleObserver = new EphySingle ();
+
+	if (single->priv->mSingleObserver)
+	{
+		single->priv->mSingleObserver->Init (EPHY_EMBED_SINGLE (single));
+	}
+}
+
 static gboolean
 init_services (MozillaEmbedSingle *single)
 {
@@ -461,6 +475,8 @@ init_services (MozillaEmbedSingle *single)
 
 	mozilla_register_external_protocols ();
 
+	mozilla_init_observer (single);
+
 	return TRUE;
 }
 
@@ -476,6 +492,8 @@ mozilla_embed_single_init (MozillaEmbedSingle *mes)
 				  MOZILLA_PROFILE_NAME,
 				  MOZILLA_PROFILE_FILE,
 				  NULL);
+
+	mes->priv->mSingleObserver = nsnull;
 
 	if (!init_services (mes))
 	{
@@ -587,61 +605,6 @@ impl_get_font_list (EphyEmbedSingle *shell,
 	nsMemory::Free (fontArray);
 
 	return g_list_reverse (l);
-}
-
-static EphyCookie *
-mozilla_cookie_to_ephy_cookie (nsICookie *keks)
-{
-	EphyCookie *cookie;
-
-	cookie = ephy_cookie_new ();
-
-	nsCAutoString transfer;
-
-	keks->GetHost (transfer);
-	cookie->domain = g_strdup (transfer.get());
-	keks->GetName (transfer);
-	cookie->name = g_strdup (transfer.get());
-	keks->GetValue (transfer);
-	cookie->value = g_strdup (transfer.get());
-	keks->GetPath (transfer);
-	cookie->path = g_strdup (transfer.get());
-
-	PRBool isSecure;
-	keks->GetIsSecure (&isSecure);
-	cookie->is_secure = isSecure != PR_FALSE;
-
-	nsCookieStatus status;
-	keks->GetStatus (&status);
-	cookie->p3p_state = status;
-
-	nsCookiePolicy policy;
-	keks->GetPolicy (&policy);
-	cookie->p3p_policy = policy;
-
-	PRUint64 dateTime;
-	keks->GetExpires (&dateTime);
-	cookie->expires = dateTime;
-
-#if MOZILLA_SNAPSHOT > 9
-	nsCOMPtr<nsICookie2> keks2 = do_QueryInterface (keks);
-	if (keks2)
-	{
-		
-		PRBool isSession;
-		keks2->GetIsSession (&isSession);
-		cookie->is_session = isSession != PR_FALSE;
-		
-		if (!isSession)
-		{
-			PRInt64 expiry;
-			keks2->GetExpiry (&expiry);
-			cookie->real_expires = expiry;
-		}
-	}
-#endif
-
-	return cookie;
 }
 
 static GList *
@@ -892,29 +855,13 @@ impl_permission_manager_list (EphyPermissionManager *manager,
 		if ((PRUint32) num == (PRUint32) type)
 #endif
 		{
-			EphyPermissionInfo *info = g_new0 (EphyPermissionInfo, 1);
+			EphyPermissionInfo *info = 
+				mozilla_permission_to_ephy_permission (perm);
 
-			info->type = type;
-
-			nsCString host;
-			perm->GetHost(host);
-			info->host = g_strdup (host.get());
-
-			PRUint32 cap;
-			perm->GetCapability(&cap);
-			switch (cap)
+			if (info != NULL)
 			{
-				case nsIPermissionManager::ALLOW_ACTION :
-					info->allowed = TRUE;
-					break;
-				case nsIPermissionManager::DENY_ACTION :
-					/* fallthrough */
-				default :
-					info->allowed = FALSE;
-					break;
+				list = g_list_prepend (list, info);
 			}
-
-			list = g_list_prepend (list, info);
 		}
 	}
 

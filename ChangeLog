@@ -1,5 +1,20 @@
 2003-11-24  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/ephy-permission-manager.h:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphySingle.cpp:
+	* embed/mozilla/EphySingle.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* src/ephy-encoding-dialog.c: (sync_embed_encoding),
+	(automatic_toggled_cb), (ephy_encoding_dialog_init):
+
+	Implemented cookie and permissions observer used to actually
+	send notifications on EphyCookieManager and EphyPermissionManager
+	signals.
+
+2003-11-24  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/mozilla/nsUnicharUtils.cpp:
 	* embed/mozilla/nsUnicharUtils.h:
 

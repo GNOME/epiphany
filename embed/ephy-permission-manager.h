@@ -43,7 +43,7 @@ typedef enum
 {
 	EPT_COOKIE,
 	EPT_IMAGE,
-	EPT_PASSWORD
+	EPT_POPUP
 } EphyPermissionType;
 
 typedef struct

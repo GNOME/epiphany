@@ -64,7 +64,6 @@
 #include "nsIDocumentObserver.h"
 #include "nsCWebBrowser.h"
 #include "nsReadableUtils.h"
-#include "nsUnicharUtils.h"
 #include "nsIDOMNSHTMLDocument.h"
 #include "nsIDOMHTMLDocument.h"
 #include "nsIDOMHTMLCollection.h"
