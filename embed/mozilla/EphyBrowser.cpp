@@ -107,16 +107,15 @@ EphyEventListener::Init(EphyEmbed *aOwner)
 nsresult
 EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
 {
-	nsresult result;
-
 	nsCOMPtr<nsIDOMElement> linkElement;
 	linkElement = do_QueryInterface (node);
 	if (!linkElement) return NS_ERROR_FAILURE;
 
 	PRUnichar relAttr[] = { 'r', 'e', 'l', '\0' };
+	nsresult rv;
 	nsEmbedString value;
-	result = linkElement->GetAttribute (nsEmbedString(relAttr), value);
-	if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+	rv = linkElement->GetAttribute (nsEmbedString(relAttr), value);
+	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
 	nsEmbedCString rel;
 	NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, rel);	
@@ -126,8 +125,8 @@ EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
 	{
 		PRUnichar hrefAttr[] = { 'h', 'r', 'e', 'f', '\0' };
 		nsEmbedString value;
-		result = linkElement->GetAttribute (nsEmbedString (hrefAttr), value);
-		if (NS_FAILED (result) || !value.Length()) return NS_ERROR_FAILURE;
+		rv = linkElement->GetAttribute (nsEmbedString (hrefAttr), value);
+		if (NS_FAILED (rv) || !value.Length()) return NS_ERROR_FAILURE;
 
 		nsEmbedCString link;
 		NS_UTF16ToCString (value, NS_CSTRING_ENCODING_UTF8, link);
@@ -140,16 +139,16 @@ EphyFaviconEventListener::HandleFaviconLink (nsIDOMNode *node)
 		NS_ENSURE_TRUE (doc, NS_ERROR_FAILURE);
 
 		nsEmbedString spec;
-		result = doc->GetDocumentURI (spec);
-		NS_ENSURE_SUCCESS (result, result);
+		rv = doc->GetDocumentURI (spec);
+		NS_ENSURE_SUCCESS (rv, rv);
 
 		nsCOMPtr<nsIURI> uri;
-		result = EphyUtils::NewURI (getter_AddRefs(uri), spec);
-		NS_ENSURE_SUCCESS (result, result);
+		rv = EphyUtils::NewURI (getter_AddRefs(uri), spec);
+		NS_ENSURE_SUCCESS (rv, rv);
 
 		nsEmbedCString favicon_url;
-		result = uri->Resolve (link, favicon_url);
-		if (NS_FAILED (result)) return NS_ERROR_FAILURE;
+		rv = uri->Resolve (link, favicon_url);
+		if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 		
 		char *url = g_strdup (favicon_url.get());
 		g_signal_emit_by_name (mOwner, "ge_favicon", url);
@@ -374,15 +373,13 @@ nsresult EphyBrowser::PrintPreviewNavigate(PRInt16 navType, PRInt32 pageNum)
 
 nsresult EphyBrowser::GetSHistory (nsISHistory **aSHistory)
 {
-	nsresult result;
-
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsIWebNavigation> ContentNav = do_QueryInterface (mWebBrowser);
 	NS_ENSURE_TRUE (ContentNav, NS_ERROR_FAILURE);
 
 	nsCOMPtr<nsISHistory> SessionHistory;
-	result = ContentNav->GetSessionHistory (getter_AddRefs (SessionHistory));
+	ContentNav->GetSessionHistory (getter_AddRefs (SessionHistory));
 	NS_ENSURE_TRUE (SessionHistory, NS_ERROR_FAILURE);
 
 	*aSHistory = SessionHistory.get();
@@ -499,8 +496,6 @@ nsresult EphyBrowser::GetDocument (nsIDOMDocument **aDOMDocument)
 
 nsresult EphyBrowser::GetTargetDocument (nsIDOMDocument **aDOMDocument)
 {
-	nsresult result;
-
 	NS_ENSURE_TRUE (mWebBrowser, NS_ERROR_FAILURE);
 
 	/* Use the current target document */
@@ -518,9 +513,10 @@ nsresult EphyBrowser::GetTargetDocument (nsIDOMDocument **aDOMDocument)
 	webBrowserFocus = do_QueryInterface (mWebBrowser);
 	NS_ENSURE_TRUE (webBrowserFocus, NS_ERROR_FAILURE);
 
+	nsresult rv;
 	nsCOMPtr<nsIDOMWindow> DOMWindow;
-	result = webBrowserFocus->GetFocusedWindow (getter_AddRefs(DOMWindow));
-	if (NS_SUCCEEDED(result) && DOMWindow)
+	rv = webBrowserFocus->GetFocusedWindow (getter_AddRefs(DOMWindow));
+	if (NS_SUCCEEDED (rv) && DOMWindow)
 	{
 		return DOMWindow->GetDocument (aDOMDocument);
 	}
@@ -556,9 +552,9 @@ nsresult EphyBrowser::GetSHTitleAtIndex (PRInt32 index, PRUnichar **title)
 					 getter_AddRefs (he));
 	NS_ENSURE_TRUE (he, NS_ERROR_FAILURE);
 
-	nsresult result;
-	result = he->GetTitle (title);
-	NS_ENSURE_TRUE (NS_SUCCEEDED (result) && title, NS_ERROR_FAILURE);
+	nsresult rv;
+	rv = he->GetTitle (title);
+	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && title, NS_ERROR_FAILURE);
 
 	return NS_OK;
 }
@@ -580,9 +576,9 @@ nsresult EphyBrowser::GetSHUrlAtIndex (PRInt32 index, nsACString &url)
 	he->GetURI (getter_AddRefs(uri));
 	NS_ENSURE_TRUE (uri, NS_ERROR_FAILURE);
 
-	nsresult result;
-	result = uri->GetSpec(url);
-	NS_ENSURE_TRUE (NS_SUCCEEDED (result) && url.Length(), NS_ERROR_FAILURE);
+	nsresult rv;
+	rv = uri->GetSpec(url);
+	NS_ENSURE_TRUE (NS_SUCCEEDED (rv) && url.Length(), NS_ERROR_FAILURE);
 
 	return NS_OK;
 }
@@ -724,8 +720,9 @@ nsresult EphyBrowser::GetForcedEncoding (nsACString &encoding)
 	nsCOMPtr<nsIMarkupDocumentViewer> mdv = do_QueryInterface(contentViewer);
 	NS_ENSURE_TRUE (mdv, NS_ERROR_FAILURE);
 
-	nsresult result = mdv->GetForceCharacterSet (encoding);
-	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
+	nsresult rv;
+	rv = mdv->GetForceCharacterSet (encoding);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	return NS_OK;
 }
@@ -919,9 +916,9 @@ nsresult EphyBrowser::GetHasModifiedForms (PRBool *modified)
 		nsCOMPtr<nsIDOMDocument> domDoc;
 		contentViewer->GetDOMDocument (getter_AddRefs (domDoc));
 
-		nsresult result;
-		result = GetDocumentHasModifiedForms (domDoc, &numTextFields, &hasTextArea);
-		if (NS_SUCCEEDED (result) &&
+		nsresult rv;
+		rv = GetDocumentHasModifiedForms (domDoc, &numTextFields, &hasTextArea);
+		if (NS_SUCCEEDED (rv) &&
 		    (numTextFields >= NUM_MODIFIED_TEXTFIELDS_REQUIRED || hasTextArea))
 		{
 			*modified = PR_TRUE;

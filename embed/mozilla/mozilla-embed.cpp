@@ -110,12 +110,12 @@ impl_manager_can_do_command (EphyCommandManager *manager,
 			     const char *command) 
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(manager)->priv;
-	nsresult result;
+	nsresult rv;
 	PRBool enabled;
 
-        result = mpriv->browser->GetCommandState (command, &enabled);
+        rv = mpriv->browser->GetCommandState (command, &enabled);
 
-	return NS_SUCCEEDED (result) ? enabled : FALSE;
+	return NS_SUCCEEDED (rv) ? enabled : FALSE;
 }
 
 static void
@@ -179,12 +179,12 @@ impl_find_next (EphyEmbed *embed,
                 gboolean backwards)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
-	nsresult result;
+	nsresult rv;
         PRBool didFind;
 
-        result = mpriv->browser->Find (backwards, &didFind);
+        rv = mpriv->browser->Find (backwards, &didFind);
 	
-	return NS_SUCCEEDED (result) ? didFind : FALSE;
+	return NS_SUCCEEDED (rv) ? didFind : FALSE;
 }
 
 static void
@@ -216,10 +216,10 @@ mozilla_embed_realize (GtkWidget *widget)
 
 	(* GTK_WIDGET_CLASS(parent_class)->realize) (widget);
 
-	nsresult result;
-	result = mpriv->browser->Init (GTK_MOZ_EMBED (widget));
+	nsresult rv;
+	rv = mpriv->browser->Init (GTK_MOZ_EMBED (widget));
 
-	if (NS_FAILED(result))
+	if (NS_FAILED (rv))
 	{
                	g_warning ("EphyBrowser initialization failed for %p\n", widget);
 	}
@@ -529,16 +529,16 @@ impl_set_zoom (EphyEmbed *embed,
                float zoom) 
 {
 	EphyBrowser *browser;
-	nsresult result;
+	nsresult rv;
 
 	g_return_if_fail (zoom > 0.0);
 
 	browser = MOZILLA_EMBED(embed)->priv->browser;
 	g_return_if_fail (browser != NULL);
 
-	result = browser->SetZoom (zoom);
+	rv = browser->SetZoom (zoom);
 
-	if (NS_SUCCEEDED (result))
+	if (NS_SUCCEEDED (rv))
 	{
 		g_signal_emit_by_name (embed, "ge_zoom_change", zoom);
 	}
@@ -549,10 +549,11 @@ impl_get_zoom (EphyEmbed *embed)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	float f;
+
+	nsresult rv;	
+	rv = mpriv->browser->GetZoom (&f);
 	
-	nsresult result = mpriv->browser->GetZoom (&f);
-	
-	if (NS_SUCCEEDED (result))
+	if (NS_SUCCEEDED (rv))
 	{
 		return f;
 	}
@@ -671,12 +672,12 @@ static int
 impl_print_preview_n_pages (EphyEmbed *embed)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
-	nsresult result;
+	nsresult rv;
 	int num;
 
-	result = mpriv->browser->PrintPreviewNumPages(&num);
+	rv = mpriv->browser->PrintPreviewNumPages(&num);
 
-	return NS_SUCCEEDED(result) ? num : 0;
+	return NS_SUCCEEDED (rv) ? num : 0;
 }
 
 static void
@@ -685,9 +686,8 @@ impl_print_preview_navigate (EphyEmbed *embed,
 			     int page)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
-	nsresult result;
 
-	result = mpriv->browser->PrintPreviewNavigate(type, page);
+	mpriv->browser->PrintPreviewNavigate(type, page);
 }
 
 static void
@@ -695,19 +695,19 @@ impl_set_encoding (EphyEmbed *embed,
 		   const char *encoding)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
-	nsresult result;
+	nsresult rv;
 	nsEmbedCString currEnc;
 
 	g_return_if_fail (encoding != NULL);
 
-	result = mpriv->browser->GetEncoding (currEnc);
-	if (NS_FAILED (result)) return;
+	rv = mpriv->browser->GetEncoding (currEnc);
+	if (NS_FAILED (rv)) return;
 
 	if (strcmp (currEnc.get(), encoding) != 0 ||
 	    encoding[0] == '\0' && !ephy_embed_has_automatic_encoding (embed))
 	{
-		result = mpriv->browser->ForceEncoding (encoding);
-		if (NS_FAILED (result)) return;
+		rv = mpriv->browser->ForceEncoding (encoding);
+		if (NS_FAILED (rv)) return;
 	}
 
 #if (MOZILLA_IS_BRANCH (1,7) && MOZILLA_CHECK_VERSION3 (1, 7, 3)) || MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 3)
@@ -727,12 +727,12 @@ static char *
 impl_get_encoding (EphyEmbed *embed)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
-	nsresult result;
+	nsresult rv;
 	nsEmbedCString encoding;
 
-	result = mpriv->browser->GetEncoding (encoding);
+	rv = mpriv->browser->GetEncoding (encoding);
 
-	if (NS_FAILED (result) || !encoding.Length())
+	if (NS_FAILED (rv) || !encoding.Length())
 	{
 		return NULL;
 	}
@@ -744,12 +744,12 @@ static gboolean
 impl_has_automatic_encoding (EphyEmbed *embed)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
-	nsresult result;
+	nsresult rv;
 	nsEmbedCString encoding;
 
-	result = mpriv->browser->GetForcedEncoding (encoding);
+	rv = mpriv->browser->GetForcedEncoding (encoding);
 
-	if (NS_FAILED (result) || !encoding.Length())
+	if (NS_FAILED (rv) || !encoding.Length())
 	{
 		return TRUE;
 	}
@@ -761,12 +761,12 @@ static gboolean
 impl_has_modified_forms (EphyEmbed *embed)
 {
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
-	nsresult result;
+	nsresult rv;
 
 	PRBool modified;
-	result = mpriv->browser->GetHasModifiedForms (&modified);
+	rv = mpriv->browser->GetHasModifiedForms (&modified);
 
-	return modified == PR_TRUE ? TRUE : FALSE;
+	return NS_SUCCEEDED (rv) ? modified : FALSE;
 }
 
 static void
@@ -931,7 +931,7 @@ mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event,
 	MozillaEmbedEvent *info;
 	EventContext event_context;
 	gint return_value = FALSE;
-	nsresult result;
+	nsresult rv;
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
 	if (dom_event == NULL)
@@ -948,16 +948,16 @@ mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event,
 	info = mozilla_embed_event_new (NS_STATIC_CAST (gpointer, dev));
 
 	event_context.Init (mpriv->browser);
-        result = event_context.GetMouseEventInfo (ev, MOZILLA_EMBED_EVENT (info));
+        rv = event_context.GetMouseEventInfo (ev, MOZILLA_EMBED_EVENT (info));
 
-	if (NS_SUCCEEDED(result))
+	if (NS_SUCCEEDED (rv))
 	{
 		nsCOMPtr<nsIDOMDocument> domDoc;
-		result = event_context.GetTargetDocument (getter_AddRefs(domDoc));
-		if (NS_SUCCEEDED(result))
+		rv = event_context.GetTargetDocument (getter_AddRefs(domDoc));
+		if (NS_SUCCEEDED (rv))
 		{
-			result = mpriv->browser->PushTargetDocument (domDoc);
-			if (NS_SUCCEEDED(result))
+			rv = mpriv->browser->PushTargetDocument (domDoc);
+			if (NS_SUCCEEDED (rv))
 			{
 				g_signal_emit_by_name (membed, "ge_dom_mouse_click", 
 						       info, &return_value); 
@@ -979,7 +979,7 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 	MozillaEmbedEvent *info;
 	EventContext event_context;
 	gint return_value = FALSE;
-	nsresult result;
+	nsresult rv;
 	EphyEmbedEventType type;
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
@@ -997,18 +997,18 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 	info = mozilla_embed_event_new (NS_STATIC_CAST (gpointer, dev));
 
 	event_context.Init (mpriv->browser);
-        result = event_context.GetMouseEventInfo (ev, MOZILLA_EMBED_EVENT (info));
-	if (NS_FAILED (result)) return FALSE;
+        rv = event_context.GetMouseEventInfo (ev, MOZILLA_EMBED_EVENT (info));
+	if (NS_FAILED (rv)) return FALSE;
 
 	type = ephy_embed_event_get_event_type ((EphyEmbedEvent *) info);
 		
 	nsCOMPtr<nsIDOMDocument> domDoc;
-	result = event_context.GetTargetDocument (getter_AddRefs(domDoc));
-	if (NS_SUCCEEDED(result))
+	rv = event_context.GetTargetDocument (getter_AddRefs(domDoc));
+	if (NS_SUCCEEDED (rv))
 	{
-		result = mpriv->browser->PushTargetDocument (domDoc);
+		rv = mpriv->browser->PushTargetDocument (domDoc);
 
-		if (NS_SUCCEEDED(result))
+		if (NS_SUCCEEDED (rv))
 		{
 			g_signal_emit_by_name (membed, "ge_dom_mouse_down", 
 					       info, &return_value); 

@@ -298,10 +298,10 @@ mozilla_cookie_to_ephy_cookie (nsICookie *cookie)
 EphyPermissionInfo *
 mozilla_permission_to_ephy_permission (nsIPermission *perm)
 {
-	nsresult result;
+	nsresult rv;
 	nsEmbedCString type;
-	result = perm->GetType(type);
-	NS_ENSURE_SUCCESS (result, NULL);
+	rv = perm->GetType(type);
+	NS_ENSURE_SUCCESS (rv, NULL);
 
 	PRUint32 cap;
 	perm->GetCapability(&cap);

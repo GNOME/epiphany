@@ -58,10 +58,10 @@ GtkWidget *MozillaFindEmbed (nsIDOMWindow *aDOMWindow)
         nsCOMPtr<nsIEmbeddingSiteWindow> window (do_QueryInterface(windowChrome));
 	NS_ENSURE_TRUE (window, nsnull);
 
-        nsresult result;
+        nsresult rv;
         GtkWidget *mozembed;
-        result = window->GetSiteWindow ((void **)&mozembed);
-	NS_ENSURE_SUCCESS (result, nsnull);
+        rv = window->GetSiteWindow ((void **)&mozembed);
+	NS_ENSURE_SUCCESS (rv, nsnull);
 
 	return mozembed;
 }

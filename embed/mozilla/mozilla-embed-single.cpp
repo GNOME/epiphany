@@ -381,18 +381,18 @@ have_gnome_url_handler (const gchar *protocol)
 static nsresult
 getUILang (nsAString& aUILang)
 {
-	nsresult result;
+	nsresult rv;
 
-	nsCOMPtr<nsILocaleService> localeService = do_GetService (NS_LOCALESERVICE_CONTRACTID, &result);
-	if (NS_FAILED (result) || !localeService)
+	nsCOMPtr<nsILocaleService> localeService = do_GetService (NS_LOCALESERVICE_CONTRACTID);
+	if (!localeService)
 	{
 		g_warning ("Could not get locale service!\n");
 		return NS_ERROR_FAILURE;
 	}
 
-	result = localeService->GetLocaleComponentForUserAgent (aUILang);
+	rv = localeService->GetLocaleComponentForUserAgent (aUILang);
 
-	if (NS_FAILED (result))
+	if (NS_FAILED (rv))
 	{
 		g_warning ("Could not determine locale!\n");
 		return NS_ERROR_FAILURE;
@@ -404,22 +404,22 @@ getUILang (nsAString& aUILang)
 static nsresult
 mozilla_init_chrome (void)
 {
-	nsresult result;
+	nsresult rv;
 	nsEmbedString uiLang;
 
 	nsCOMPtr<nsIXULChromeRegistry> chromeRegistry = do_GetService (NS_CHROMEREGISTRY_CONTRACTID);
 	NS_ENSURE_TRUE (chromeRegistry, NS_ERROR_FAILURE);
 
 	// Set skin to 'classic' so we get native scrollbars.
-	result = chromeRegistry->SelectSkin (nsEmbedCString("classic/1.0"), PR_FALSE);
-	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
+	rv = chromeRegistry->SelectSkin (nsEmbedCString("classic/1.0"), PR_FALSE);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	// set locale
-	result = chromeRegistry->SetRuntimeProvider(PR_TRUE);
-	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
+	rv = chromeRegistry->SetRuntimeProvider(PR_TRUE);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
-	result = getUILang(uiLang);
-	NS_ENSURE_SUCCESS (result, NS_ERROR_FAILURE);
+	rv = getUILang(uiLang);
+	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	nsEmbedCString cUILang;
 	NS_UTF16ToCString (uiLang, NS_CSTRING_ENCODING_UTF8, cUILang);
@@ -628,7 +628,7 @@ impl_get_font_list (EphyEmbedSingle *shell,
 static GList *
 impl_list_cookies (EphyCookieManager *manager)
 {
-	nsresult result;
+	nsresult rv;
 	GList *cookies = NULL;
 	
 	nsCOMPtr<nsICookieManager> cookieManager = 
@@ -645,8 +645,8 @@ impl_list_cookies (EphyCookieManager *manager)
 	     cookieEnumerator->HasMoreElements(&enumResult))
 	{
 		nsCOMPtr<nsICookie> keks;
-		result = cookieEnumerator->GetNext (getter_AddRefs(keks));
-		if (NS_FAILED (result) || !keks) continue;
+		rv = cookieEnumerator->GetNext (getter_AddRefs(keks));
+		if (NS_FAILED (rv) || !keks) continue;
 
 		EphyCookie *cookie = mozilla_cookie_to_ephy_cookie (keks);
 		if (!cookie) continue;

@@ -578,9 +578,7 @@ nsresult EventContext::GetCSSBackground (nsIDOMNode *node, nsAString& url)
 
 nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, MozillaEmbedEvent *info)
 {
-	nsresult result;
-
-	/* casting 32-bit guint* to PRUint16* below will break on big-endian */
+	/* FIXME: casting 32-bit guint* to PRUint16* below will break on big-endian */
 	PRUint16 btn;
 	aMouseEvent->GetButton (&btn);
 
@@ -613,12 +611,13 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, Mozilla
 
 	/* be sure we are not clicking on the scroolbars */
 
-	nsCOMPtr<nsIDOMNSEvent> nsEvent = do_QueryInterface(aMouseEvent, &result);
-	if (NS_FAILED(result) || !nsEvent) return NS_ERROR_FAILURE;
+	nsCOMPtr<nsIDOMNSEvent> nsEvent = do_QueryInterface(aMouseEvent);
+	if (!nsEvent) return NS_ERROR_FAILURE;
 
+	nsresult rv;
 	nsCOMPtr<nsIDOMEventTarget> OriginalTarget;
-	result = nsEvent->GetOriginalTarget(getter_AddRefs(OriginalTarget));
-	if (NS_FAILED(result) || !OriginalTarget) return NS_ERROR_FAILURE;
+	rv = nsEvent->GetOriginalTarget(getter_AddRefs(OriginalTarget));
+	if (NS_FAILED (rv) || !OriginalTarget) return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIDOMNode> OriginalNode = do_QueryInterface(OriginalTarget);
 	if (!OriginalNode) return NS_ERROR_FAILURE;
@@ -636,11 +635,11 @@ nsresult EventContext::GetMouseEventInfo (nsIDOMMouseEvent *aMouseEvent, Mozilla
 		return NS_ERROR_FAILURE;
 
 	nsCOMPtr<nsIDOMEventTarget> EventTarget;
-	result = aMouseEvent->GetTarget(getter_AddRefs(EventTarget));
-	if (NS_FAILED(result) || !EventTarget) return NS_ERROR_FAILURE;
+	rv = aMouseEvent->GetTarget(getter_AddRefs(EventTarget));
+	if (NS_FAILED (rv) || !EventTarget) return NS_ERROR_FAILURE;
 
-	result = GetEventContext (EventTarget, info);
-	if (NS_FAILED(result)) return result;
+	rv = GetEventContext (EventTarget, info);
+	if (NS_FAILED (rv)) return rv;
 
 	/* Get the modifier */
 
@@ -725,15 +724,15 @@ nsresult EventContext::GetKeyEventInfo (nsIDOMKeyEvent *aKeyEvent, MozillaEmbedE
 
 nsresult EventContext::IsPageFramed (nsIDOMNode *node, PRBool *Framed)
 {
-	nsresult result;
+	nsresult rv;
 
 	nsCOMPtr<nsIDOMDocument> mainDocument;
-	result = mBrowser->GetDocument (getter_AddRefs(mainDocument));
-	if (NS_FAILED(result) || !mainDocument) return NS_ERROR_FAILURE;
+	rv = mBrowser->GetDocument (getter_AddRefs(mainDocument));
+	if (NS_FAILED (rv) || !mainDocument) return NS_ERROR_FAILURE;
 	
 	nsCOMPtr<nsIDOMDocument> nodeDocument;
-	result = node->GetOwnerDocument (getter_AddRefs(nodeDocument));
-	if (NS_FAILED(result) || !nodeDocument) return NS_ERROR_FAILURE;
+	rv = node->GetOwnerDocument (getter_AddRefs(nodeDocument));
+	if (NS_FAILED (rv) || !nodeDocument) return NS_ERROR_FAILURE;
  
 	*Framed = (mainDocument != nodeDocument);
 
