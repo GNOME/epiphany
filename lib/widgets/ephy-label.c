@@ -23,6 +23,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/* Synch'd with gtklabel.c 1.152 */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif

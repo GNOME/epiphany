@@ -23,6 +23,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/* Synch'd with gtklabel.h 1.39 */
+
 #ifndef __EPHY_LABEL_H__
 #define __EPHY_LABEL_H__
 
