@@ -133,18 +133,6 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "ViewReload", GTK_STOCK_REFRESH, N_("_Reload"), "<control>R",
 	  N_("Display the latest content of the current page"),
 	  G_CALLBACK (window_cmd_view_reload) },
-	{ "ViewToolbar", NULL, N_("_Toolbar"), "<shift><control>T",
-	  N_("Show or hide toolbar"),
-	  G_CALLBACK (window_cmd_view_toolbar), TRUE },
-	{ "ViewBookmarksBar", NULL, N_("_Bookmarks Bar"), NULL,
-	  N_("Show or hide bookmarks bar"),
-	  G_CALLBACK (window_cmd_view_bookmarks_bar), TRUE },
-	{ "ViewStatusbar", NULL, N_("St_atusbar"), NULL,
-	  N_("Show or hide statusbar"),
-	  G_CALLBACK (window_cmd_view_statusbar), TRUE },
-	{ "ViewFullscreen", EPHY_STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
-	  N_("Browse at full screen"),
-	  G_CALLBACK (window_cmd_view_fullscreen), TRUE},
 	{ "ViewZoomIn", GTK_STOCK_ZOOM_IN, N_("Zoom _In"), "<control>plus",
 	  N_("Increase the text size"),
 	  G_CALLBACK (window_cmd_view_zoom_in) },
@@ -213,6 +201,24 @@ static GtkActionEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_help_about) },
 };
 static guint ephy_menu_n_entries = G_N_ELEMENTS (ephy_menu_entries);
+
+static GtkToggleActionEntry ephy_menu_toggle_entries [] =
+{
+	/* View Menu */
+	{ "ViewToolbar", NULL, N_("_Toolbar"), "<shift><control>T",
+	  N_("Show or hide toolbar"),
+	  G_CALLBACK (window_cmd_view_toolbar), TRUE },
+	{ "ViewBookmarksBar", NULL, N_("_Bookmarks Bar"), NULL,
+	  N_("Show or hide bookmarks bar"),
+	  G_CALLBACK (window_cmd_view_bookmarks_bar), TRUE },
+	{ "ViewStatusbar", NULL, N_("St_atusbar"), NULL,
+	  N_("Show or hide statusbar"),
+	  G_CALLBACK (window_cmd_view_statusbar), TRUE },
+	{ "ViewFullscreen", EPHY_STOCK_FULLSCREEN, N_("_Fullscreen"), "F11",
+	  N_("Browse at full screen"),
+	  G_CALLBACK (window_cmd_view_fullscreen), FALSE}
+};
+static guint ephy_menu_n_toggle_entries = G_N_ELEMENTS (ephy_menu_toggle_entries);
 
 static GtkActionEntry ephy_popups_entries [] = {
 	/* Document */
@@ -605,6 +611,10 @@ setup_window (EphyWindow *window)
 	gtk_action_group_set_translation_domain (action_group, NULL);
 	gtk_action_group_add_actions (action_group, ephy_menu_entries,
 				      ephy_menu_n_entries, window);
+	gtk_action_group_add_toggle_actions (action_group,
+					     ephy_menu_toggle_entries,
+					     ephy_menu_n_toggle_entries,
+					     window);
 	gtk_ui_manager_insert_action_group (merge, action_group, 0);
 	window->priv->action_group = action_group;
 	action = gtk_action_group_get_action (action_group, "FileOpen");

@@ -172,9 +172,6 @@ static GtkActionEntry ephy_bookmark_popup_entries [] = {
 	{ "Delete", GTK_STOCK_DELETE, N_("_Delete"), NULL,
 	  N_("Delete the selected bookmark or topic"), 
 	  G_CALLBACK (cmd_delete) },
-	{ "ShowInBookmarksBar", NULL, N_("_Show in Bookmarks Bar"), NULL,
-	  N_("Show the selected bookmark or topic in the bookmarks bar"), 
-	  G_CALLBACK (cmd_show_in_bookmarks_bar), TRUE },
 	{ "Properties", GTK_STOCK_PROPERTIES, N_("_Properties"), "<alt>Return",
 	  N_("View or modify the properties of the selected bookmark"), 
 	  G_CALLBACK (cmd_bookmark_properties) },
@@ -219,6 +216,16 @@ static GtkActionEntry ephy_bookmark_popup_entries [] = {
 	  G_CALLBACK (window_cmd_help_about) },
 };
 static guint ephy_bookmark_popup_n_entries = G_N_ELEMENTS (ephy_bookmark_popup_entries);
+
+static GtkToggleActionEntry ephy_bookmark_popup_toggle_entries [] =
+{
+	/* File Menu */
+	{ "ShowInBookmarksBar", NULL, N_("_Show in Bookmarks Bar"), NULL,
+	  N_("Show the selected bookmark or topic in the bookmarks bar"), 
+	  G_CALLBACK (cmd_show_in_bookmarks_bar), FALSE }
+};
+
+static guint ephy_bookmark_popup_n_toggle_entries = G_N_ELEMENTS (ephy_bookmark_popup_toggle_entries);
 
 static void
 entry_selection_changed_cb (GtkWidget *widget, GParamSpec *pspec, EphyBookmarksEditor *editor)
@@ -1226,6 +1233,10 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	gtk_action_group_set_translation_domain (action_group, NULL);
 	gtk_action_group_add_actions (action_group, ephy_bookmark_popup_entries,
 				      ephy_bookmark_popup_n_entries, editor);
+	gtk_action_group_add_toggle_actions (action_group,
+					     ephy_bookmark_popup_toggle_entries,
+					     ephy_bookmark_popup_n_toggle_entries,
+					     editor);
 	gtk_ui_manager_insert_action_group (ui_merge,
 					    action_group, 0);
 	gtk_ui_manager_add_ui_from_file (ui_merge,
