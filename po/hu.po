@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany CVS\n"
-"POT-Creation-Date: 2003-10-03 23:02+0200\n"
-"PO-Revision-Date: 2003-10-03 22:59+0200\n"
+"POT-Creation-Date: 2003-10-07 17:29+0200\n"
+"PO-Revision-Date: 2003-10-07 17:28+0200\n"
 "Last-Translator: Andras Timar <timar@gnome.hu>\n"
 "Language-Team: Hungarian <hu@gnome.hu>\n"
 "MIME-Version: 1.0\n"
@@ -201,11 +201,11 @@ msgstr "Nyelvek"
 
 #: data/epiphany.schemas.in.h:24
 msgid "Match case for find in page"
-msgstr ""
+msgstr "Kis- és nagybetűk megkülönböztetése a kereséskor"
 
 #: data/epiphany.schemas.in.h:25
 msgid "Match case for find in page."
-msgstr ""
+msgstr "Kis- és nagybetűk megkülönböztetése a kereséskor."
 
 #: data/epiphany.schemas.in.h:26
 msgid ""
@@ -1131,16 +1131,16 @@ msgstr "A fájl nem lett mentve."
 msgid "No available applications to open the specified file."
 msgstr "Nincs olyan alkalmazás, amellyel meg lehetne nyitni ezt a fájlt."
 
-#: embed/ephy-history.c:422 src/bookmarks/ephy-bookmarks.c:653
+#: embed/ephy-history.c:483 src/bookmarks/ephy-bookmarks.c:653
 msgid "All"
 msgstr "Minden"
 
-#: embed/ephy-history.c:565
+#: embed/ephy-history.c:631
 msgid "Others"
 msgstr "Egyéb"
 
 # src/trans.h:94
-#: embed/ephy-history.c:571
+#: embed/ephy-history.c:637
 msgid "Local files"
 msgstr "Helyi fájlok"
 
@@ -2081,9 +2081,8 @@ msgstr "_Tartalom"
 # src/bookmarks.c:142 src/bookmarks.c:447 src/prefs.c:388 src/trans.h:76
 # src/trans.h:81
 #: src/bookmarks/ephy-bookmarks-editor.c:207
-#, fuzzy
 msgid "Display bookmarks help"
-msgstr "Könyvjelzőszerkesztő megnyitása"
+msgstr "Súgó a könyvjelzőkhöz"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:209 src/ephy-history-window.c:193
 #: src/ephy-window.c:196
@@ -2093,7 +2092,7 @@ msgstr "_Névjegy"
 #: src/bookmarks/ephy-bookmarks-editor.c:210 src/ephy-history-window.c:194
 #: src/ephy-window.c:197
 msgid "Display credits for the web browser creators"
-msgstr ""
+msgstr "A webböngésző alkotóinak felsorolása"
 
 # src/bookmarks.c:142 src/bookmarks.c:447 src/prefs.c:388 src/trans.h:76
 # src/trans.h:81
@@ -2126,7 +2125,7 @@ msgstr ""
 
 #: src/bookmarks/ephy-bookmarks-editor.c:278
 msgid "Type a topic"
-msgstr ""
+msgstr "Add meg a témát"
 
 # src/trans.h:383
 #: src/bookmarks/ephy-bookmarks-editor.c:519
@@ -2141,7 +2140,7 @@ msgstr "Könyvjelzők importálása"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:566
 msgid "Choose the bookmarks source:"
-msgstr ""
+msgstr "Könyvjelzők forrása:"
 
 # src/trans.h:21
 #: src/bookmarks/ephy-bookmarks-editor.c:575
@@ -2183,7 +2182,7 @@ msgstr "Megnyitás új _lapokon"
 msgid "_Copy Address"
 msgstr "_Cím másolása"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1181 src/ephy-history-window.c:1029
+#: src/bookmarks/ephy-bookmarks-editor.c:1181 src/ephy-history-window.c:1039
 msgid "_Search:"
 msgstr "_Keresés:"
 
@@ -2199,11 +2198,11 @@ msgid "Topics"
 msgstr "Témakörök"
 
 # src/trans.h:325
-#: src/bookmarks/ephy-bookmarks-editor.c:1458 src/ephy-history-window.c:1317
+#: src/bookmarks/ephy-bookmarks-editor.c:1458 src/ephy-history-window.c:1327
 msgid "Title"
 msgstr "Cím"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1465 src/ephy-history-window.c:1323
+#: src/bookmarks/ephy-bookmarks-editor.c:1465 src/ephy-history-window.c:1333
 msgid "Address"
 msgstr "Cím"
 
@@ -2330,7 +2329,7 @@ msgstr "A böngészés előzményeinek törlése"
 
 #: src/ephy-history-window.c:191
 msgid "Display history help"
-msgstr ""
+msgstr "Súgó az előzményekhez"
 
 #: src/ephy-history-window.c:211
 msgid "_Address"
@@ -2362,13 +2361,13 @@ msgstr ""
 "Az előzmények törlése azt jelenti, hogy az összes előzményelem "
 "visszavonhatatlanuk eltűnik."
 
-#: src/ephy-history-window.c:1040
+#: src/ephy-history-window.c:1050
 msgid "Today"
 msgstr ""
 
 #. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: src/ephy-history-window.c:1043 src/ephy-history-window.c:1048
-#: src/ephy-history-window.c:1054
+#: src/ephy-history-window.c:1053 src/ephy-history-window.c:1058
+#: src/ephy-history-window.c:1064
 #, c-format
 msgid "Last %d day"
 msgid_plural "Last %d days"
@@ -2376,12 +2375,12 @@ msgstr[0] ""
 msgstr[1] ""
 
 # src/prefs.c:389 src/trans.h:82 src/trans.h:84 src/trans.h:324
-#: src/ephy-history-window.c:1194
+#: src/ephy-history-window.c:1204
 msgid "History"
 msgstr "Előzmények"
 
 # src/trans.h:194
-#: src/ephy-history-window.c:1266
+#: src/ephy-history-window.c:1276
 msgid "Sites"
 msgstr "Webhelyek"
 
@@ -2441,7 +2440,7 @@ msgstr "Minden Ephiphany-ablak bezárása"
 
 #: src/ephy-main.c:92
 msgid "Used internally by the nautilus view"
-msgstr ""
+msgstr "A Nautilus-nézet használja"
 
 # src/bookmarks.c:142 src/bookmarks.c:447 src/prefs.c:388 src/trans.h:76
 # src/trans.h:81
@@ -2465,6 +2464,11 @@ msgid ""
 "\n"
 "Bonobo couldn't locate the GNOME_Epiphany_Automation.server."
 msgstr ""
+"Az Epiphany program most nem használható. Talán segít a gondon, ha kiadod a "
+"\"bonobo-slay\" parancsot a konzolon. Ha nem javul a helyzet, indítsd újra a "
+"számítógépet, vagy telepítsd újra az Epiphany programot.\n"
+"\n"
+"A Bonono nem találja a GNOME_Epiphany_Automation.server-t."
 
 #: src/ephy-shell.c:251
 msgid ""
@@ -2590,7 +2594,7 @@ msgstr "Az egész oldal kijelölése"
 
 #: src/ephy-window.c:108
 msgid "Find a word or phrase in the page"
-msgstr ""
+msgstr "Szó vagy kifejezés keresése az oldalon"
 
 # src/trans.h:339
 #: src/ephy-window.c:110
@@ -2599,7 +2603,7 @@ msgstr "Kö_vetkező találat"
 
 #: src/ephy-window.c:111
 msgid "Find next occurrence of the word or phrase"
-msgstr ""
+msgstr "A szó vagy kifejezés következő előfordulása az oldalon"
 
 # src/trans.h:27
 #: src/ephy-window.c:113
@@ -2608,7 +2612,7 @@ msgstr "Elő_ző találat"
 
 #: src/ephy-window.c:114
 msgid "Find previous occurrence of the word or phrase"
-msgstr ""
+msgstr "A szó vagy kifejezés előző előfordulása az oldalon"
 
 #: src/ephy-window.c:116
 msgid "P_ersonal Data"
@@ -2616,7 +2620,7 @@ msgstr "_Személyes adatok"
 
 #: src/ephy-window.c:117
 msgid "View and remove cookies and passwords"
-msgstr ""
+msgstr "Sütik és jelszavak megtekintése, illetve eltávolítása"
 
 # src/trans.h:14
 #: src/ephy-window.c:119
