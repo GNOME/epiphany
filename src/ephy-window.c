@@ -738,6 +738,12 @@ ephy_window_key_press_event (GtkWidget *widget,
 	guint mask = gtk_accelerator_get_default_mod_mask ();
 	char *accel = NULL;
 
+	/* Don't activate menubar in ppv mode */
+	if (window->priv->ppv_mode)
+	{
+		return FALSE;
+	}
+
 	g_object_get (gtk_widget_get_settings (widget),
 		      "gtk-menu-bar-accel", &accel,
 		      NULL);
