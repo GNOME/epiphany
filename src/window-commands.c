@@ -59,6 +59,7 @@
 #include <gtk/gtktoggleaction.h>
 #include <glib/gi18n.h>
 
+#define TOOLBAR_EDITOR_KEY	"EphyToolbarEditor"
 enum
 {
 	RESPONSE_ADD_TOOLBAR
@@ -794,6 +795,8 @@ toolbar_editor_destroy_cb (GtkWidget *tbe,
 		(ephy_window_get_toolbar (window)), FALSE);
 	egg_editable_toolbar_set_edit_mode (EGG_EDITABLE_TOOLBAR
 		(ephy_window_get_bookmarksbar (window)), FALSE);
+
+	g_object_set_data (G_OBJECT (window), TOOLBAR_EDITOR_KEY, NULL);
 }
 
 static void
@@ -819,14 +822,19 @@ void
 window_cmd_edit_toolbar (GtkAction *action,
 			 EphyWindow *window)
 {
-	GtkWidget *editor;
+	GtkWidget *editor, *dialog, *toolbar;
 	EggToolbarsModel *model;
-	GtkWidget *t;
-	GtkWidget *dialog;
+
+	dialog = GTK_WIDGET (g_object_get_data (G_OBJECT (window), TOOLBAR_EDITOR_KEY));
+	if (dialog != NULL)
+	{
+		gtk_window_present (GTK_WINDOW (dialog));
+		return;
+	}
 
 	model = EGG_TOOLBARS_MODEL
 		(ephy_shell_get_toolbars_model (ephy_shell, FALSE));
-	t = ephy_window_get_toolbar (window);
+	toolbar = ephy_window_get_toolbar (window);
 
 	dialog = gtk_dialog_new ();
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
@@ -863,9 +871,11 @@ window_cmd_edit_toolbar (GtkAction *action,
 			       EPHY_STATE_WINDOW_SAVE_SIZE);
 	gtk_widget_show (dialog);
 
-	egg_editable_toolbar_set_edit_mode (EGG_EDITABLE_TOOLBAR (t), TRUE);
+	egg_editable_toolbar_set_edit_mode (EGG_EDITABLE_TOOLBAR (toolbar), TRUE);
 	egg_editable_toolbar_set_edit_mode
 		(EGG_EDITABLE_TOOLBAR (ephy_window_get_bookmarksbar (window)), TRUE);
+
+	g_object_set_data (G_OBJECT (window), TOOLBAR_EDITOR_KEY, dialog);
 }
 
 void
