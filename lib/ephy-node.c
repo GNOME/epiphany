@@ -1155,14 +1155,6 @@ real_remove_child (EphyNode *node,
 {
 	EphyNodeParent *node_info;
 	
-	write_lock_to_read_lock (node);
-	write_lock_to_read_lock (child);
-
-	g_signal_emit (G_OBJECT (node), ephy_node_signals[CHILD_REMOVED], 0, child);
-
-	read_lock_to_write_lock (node);
-	read_lock_to_write_lock (child);
-
 	node_info = g_hash_table_lookup (child->priv->parents,
 			                 GINT_TO_POINTER (node->priv->id));
 
@@ -1193,6 +1185,15 @@ real_remove_child (EphyNode *node,
 		g_hash_table_remove (child->priv->parents,
 				     GINT_TO_POINTER (node->priv->id));
 	}
+
+	write_lock_to_read_lock (node);
+	write_lock_to_read_lock (child);
+
+	g_signal_emit (G_OBJECT (node), ephy_node_signals[CHILD_REMOVED], 0, child);
+
+	read_lock_to_write_lock (node);
+	read_lock_to_write_lock (child);
+
 }
 
 void

@@ -460,12 +460,85 @@ bookmarks_removed_cb (EphyNode *node,
 	ephy_bookmarks_emit_data_changed (eb);
 }
 
+static char *
+get_topics_list (EphyBookmarks *eb,
+		 EphyNode *bookmark,
+		 gboolean *no_topics)
+{
+	GPtrArray *children;
+	int i;
+	GString *list;
+
+	list = g_string_new (NULL);
+	*no_topics = TRUE;
+
+	children = ephy_node_get_children (eb->priv->keywords);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+
+		kid = g_ptr_array_index (children, i);
+
+		if (kid != eb->priv->notcategorized &&
+		    kid != eb->priv->favorites &&
+		    kid != eb->priv->bookmarks &&
+		    ephy_node_has_child (kid, bookmark))
+		{
+			const char *topic;
+			topic = ephy_node_get_property_string
+				(kid, EPHY_NODE_KEYWORD_PROP_NAME);
+			g_string_append (list, topic);
+			no_topics = FALSE;
+		}
+	}
+	ephy_node_thaw (eb->priv->keywords);
+
+	return g_string_free (list, FALSE);
+}
+
+static void
+update_topics_list (EphyNode *bookmark, const char *list)
+{
+	GValue value = { 0, };
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, list);
+	ephy_node_set_property (bookmark, EPHY_NODE_BMK_PROP_KEYWORDS,
+			        &value);
+	g_value_unset (&value);
+}
+
+
 static void
 topics_removed_cb (EphyNode *node,
 		   EphyNode *child,
 		   EphyBookmarks *eb)
 {
 	long id;
+	GPtrArray *children;
+	int i;
+
+	children = ephy_node_get_children (child);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+		gboolean no_topics;
+		char *list;
+
+		kid = g_ptr_array_index (children, i);
+		list = get_topics_list (eb, kid, &no_topics);
+
+		if (no_topics &&
+		    !ephy_node_has_child (eb->priv->notcategorized, kid))
+		{
+			ephy_node_add_child
+				(eb->priv->notcategorized, kid);
+		}
+
+		update_topics_list (kid, list);
+
+		g_free (list);
+	}
+	ephy_node_thaw (child);
 
 	id = ephy_node_get_id (child);
 	g_signal_emit (eb, ephy_bookmarks_signals[TOPIC_REMOVE],
@@ -918,53 +991,6 @@ ephy_bookmarks_has_keyword (EphyBookmarks *eb,
 			    EphyNode *bookmark)
 {
 	return ephy_node_has_child (keyword, bookmark);
-}
-
-static char *
-get_topics_list (EphyBookmarks *eb,
-		 EphyNode *bookmark,
-		 gboolean *no_topics)
-{
-	GPtrArray *children;
-	int i;
-	GString *list;
-
-	list = g_string_new (NULL);
-	*no_topics = TRUE;
-
-	children = ephy_node_get_children (eb->priv->keywords);
-	for (i = 0; i < children->len; i++)
-	{
-		EphyNode *kid;
-
-		kid = g_ptr_array_index (children, i);
-
-		if (kid != eb->priv->notcategorized &&
-		    kid != eb->priv->favorites &&
-		    kid != eb->priv->bookmarks &&
-		    ephy_node_has_child (kid, bookmark))
-		{
-			const char *topic;
-			topic = ephy_node_get_property_string
-				(kid, EPHY_NODE_KEYWORD_PROP_NAME);
-			g_string_append (list, topic);
-			no_topics = FALSE;
-		}
-	}
-	ephy_node_thaw (eb->priv->keywords);
-
-	return g_string_free (list, FALSE);
-}
-
-static void
-update_topics_list (EphyNode *bookmark, const char *list)
-{
-	GValue value = { 0, };
-	g_value_init (&value, G_TYPE_STRING);
-	g_value_set_string (&value, list);
-	ephy_node_set_property (bookmark, EPHY_NODE_BMK_PROP_KEYWORDS,
-			        &value);
-	g_value_unset (&value);
 }
 
 void

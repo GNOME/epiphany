@@ -1,5 +1,17 @@
 2003-04-27  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/ephy-node.c: (real_remove_child):
+	
+	Emit removed signal after the node is actually removed.
+	This could cause bugs, test test test ;)
+
+	* src/bookmarks/ephy-bookmarks.c: (topics_removed_cb):
+
+	Update topics list and uncategorized folder on topics
+	removal.
+
+2003-04-27  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/bookmarks/ephy-bookmarks-editor.c:
 	(ephy_bookmarks_editor_update_menu), (view_selection_changed_cb),
 	(ephy_bookmarks_editor_construct):
