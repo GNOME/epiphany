@@ -124,6 +124,7 @@ main (int argc, char *argv[])
 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 	textdomain(GETTEXT_PACKAGE);
 #endif
+	g_set_application_name (_("Epiphany Web Browser"));
 
 	program = gnome_program_init (PACKAGE, VERSION,
                                       LIBGNOMEUI_MODULE, argc, argv,
