@@ -1,5 +1,17 @@
 2004-12-13  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmarks.c: (update_bookmark_response_cb),
+	(update_bookmark_destroy_cb), (redirect_cb):
+
+	Prompt for bookmark update.
+
+	* src/prefs-dialog.c: (get_download_button_label):
+
+	Use gtk domain for Home and Desktop strings to get the same
+	as the filechooser.
+
+2004-12-13  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-encodings.c: (elide_underscores), (add_encoding):
 	* embed/mozilla/FilePicker.cpp:
 	* lib/ephy-dnd.c:
