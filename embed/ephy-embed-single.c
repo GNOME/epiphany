@@ -143,11 +143,10 @@ ephy_embed_single_new (const char *type)
 }
 
 gresult
-ephy_embed_single_clear_cache (EphyEmbedSingle *shell,
-			      CacheType type)
+ephy_embed_single_clear_cache (EphyEmbedSingle *shell)
 {
 	EphyEmbedSingleClass *klass = EPHY_EMBED_SINGLE_GET_CLASS (shell);
-        return klass->clear_cache (shell, type);
+        return klass->clear_cache (shell);
 }
 
 gresult

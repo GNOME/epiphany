@@ -1,7 +1,4 @@
-#define CONF_NETWORK_SOCKS_PROXY_VERSION "/apps/epiphany/network/socks_proxy_version"
-#define CONF_NETWORK_NO_PROXIES_FOR "/apps/epiphany/network/no_proxies_for"
-#define CONF_NETWORK_DISK_CACHE "/apps/epiphany/network/disk_cache_size"
-#define CONF_NETWORK_MEMORY_CACHE "/apps/epiphany/network/mem_cache_size"
+#define CONF_NETWORK_CACHE_SIZE "/apps/epiphany/network/cache_size"
 #define CONF_NETWORK_CACHE_COMPARE "/apps/epiphany/network/cache_compare"
 #define CONF_NETWORK_USER_AGENT "/apps/epiphany/network/user_agent"
 #define CONF_RENDERING_FONT "/apps/epiphany/rendering/font"

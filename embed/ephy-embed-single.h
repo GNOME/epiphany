@@ -98,12 +98,6 @@ typedef enum
 	IMAGES_PERMISSION
 } PermissionType;
 
-typedef enum
-{
-	DISK_CACHE = 2,
-	MEMORY_CACHE = 1
-} CacheType;
-
 struct EphyEmbedSingle
 {
 	GObject parent;
@@ -121,8 +115,7 @@ struct EphyEmbedSingleClass
 
 	/* Methods */
 
-	gresult         (* clear_cache)         (EphyEmbedSingle *shell,
-						 CacheType type);
+	gresult         (* clear_cache)         (EphyEmbedSingle *shell);
 	gresult         (* set_offline_mode)    (EphyEmbedSingle *shell,
 						 gboolean offline);
 	gresult         (* load_proxy_autoconf) (EphyEmbedSingle *shell,
@@ -165,8 +158,7 @@ GType             ephy_embed_single_get_type            (void);
 
 EphyEmbedSingle  *ephy_embed_single_new                 (const char *type);
 
-gresult           ephy_embed_single_clear_cache         (EphyEmbedSingle *shell,
-							 CacheType type);
+gresult           ephy_embed_single_clear_cache         (EphyEmbedSingle *shell);
 
 gresult           ephy_embed_single_set_offline_mode    (EphyEmbedSingle *shell,
 							 gboolean offline);

@@ -1,3 +1,21 @@
+2003-06-07  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/epiphany.schemas.in:
+	* data/glade/prefs-dialog.glade:
+	* embed/ephy-embed-prefs.h:
+	* embed/ephy-embed-single.c: (ephy_embed_single_clear_cache):
+	* embed/ephy-embed-single.h:
+	* embed/mozilla/mozilla-embed-single.cpp:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* src/bookmarks/ephy-bookmarks-import.c: (mozilla_parse_bookmarks),
+	(xbel_parse_folder):
+	* src/prefs-dialog.c: (prefs_clear_cache_button_clicked_cb):
+
+	Remove memory cache prefs/ui, now mozilla can deal with it
+	automagically.
+	Rename Appeareance tab to be less generic.
+	Do not convert spaces to _ on bookmarks importing.
+
 2003-06-07  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-tab.c: (ephy_tab_set_property),

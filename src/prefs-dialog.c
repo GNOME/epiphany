@@ -54,11 +54,8 @@ void
 prefs_proxy_auto_url_reload_cb (GtkWidget *button,
 			        EphyDialog *dialog);
 void
-prefs_clear_memory_cache_button_clicked_cb (GtkWidget *button,
-					    gpointer data);
-void
-prefs_clear_disk_cache_button_clicked_cb (GtkWidget *button,
-					  gpointer data);
+prefs_clear_cache_button_clicked_cb (GtkWidget *button,
+				     gpointer data);
 void
 prefs_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data);
 void
@@ -258,8 +255,7 @@ EphyDialogProperty properties [] =
 
 	/* Advanced */
 	{ CACHE_COMPARE_PROP, "cache_compare_radiobutton", CONF_NETWORK_CACHE_COMPARE, PT_AUTOAPPLY, NULL },
-	{ DISK_CACHE_PROP, "disk_cache_spin", CONF_NETWORK_DISK_CACHE, PT_AUTOAPPLY, NULL },
-	{ MEMORY_CACHE_PROP, "memory_cache_spin", CONF_NETWORK_MEMORY_CACHE, PT_AUTOAPPLY, NULL },
+	{ DISK_CACHE_PROP, "disk_cache_spin", CONF_NETWORK_CACHE_SIZE, PT_AUTOAPPLY, NULL },
 
 	{ -1, NULL, NULL }
 };
@@ -1076,27 +1072,15 @@ prefs_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data)
 }
 
 void
-prefs_clear_memory_cache_button_clicked_cb (GtkWidget *button,
-					    gpointer data)
+prefs_clear_cache_button_clicked_cb (GtkWidget *button,
+				     gpointer data)
 {
 	EphyEmbedSingle *single;
 
 	single = ephy_embed_shell_get_embed_single
 		(EPHY_EMBED_SHELL (ephy_shell));
 
-	ephy_embed_single_clear_cache (single, MEMORY_CACHE);
-}
-
-void
-prefs_clear_disk_cache_button_clicked_cb (GtkWidget *button,
-					  gpointer data)
-{
-	EphyEmbedSingle *single;
-
-	single = ephy_embed_shell_get_embed_single
-		(EPHY_EMBED_SHELL (ephy_shell));
-
-	ephy_embed_single_clear_cache (single, DISK_CACHE);
+	ephy_embed_single_clear_cache (single);
 }
 
 void

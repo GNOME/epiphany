@@ -203,8 +203,7 @@ static void
 mozilla_embed_single_finalize (GObject *object);
 
 static gresult      
-impl_clear_cache (EphyEmbedSingle *shell,
-		  CacheType type);
+impl_clear_cache (EphyEmbedSingle *shell);
 static gresult          
 impl_set_offline_mode (EphyEmbedSingle *shell,
 		       gboolean offline);
@@ -651,8 +650,7 @@ mozilla_embed_single_finalize (GObject *object)
 }
 
 static gresult      
-impl_clear_cache (EphyEmbedSingle *shell,
-		  CacheType type)
+impl_clear_cache (EphyEmbedSingle *shell)
 {
 	nsresult rv;
 	
@@ -660,7 +658,7 @@ impl_clear_cache (EphyEmbedSingle *shell,
                         do_GetService (NS_CACHESERVICE_CONTRACTID, &rv);
 	if (NS_FAILED(rv)) return G_FAILED;
 
-	CacheService->EvictEntries((guint)type);
+	CacheService->EvictEntries (nsICache::STORE_ANYWHERE);
 
 	return G_OK;
 }

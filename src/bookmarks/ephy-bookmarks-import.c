@@ -29,12 +29,6 @@ typedef struct _XbelInfo
 	char *smarturl;
 } XbelInfo;
 
-static char *
-build_keyword (const char *folder)
-{
-	return ephy_str_replace_substring (folder, " ", "_");
-}
-
 static EphyNode *
 set_folder (EphyBookmarks *bookmarks,
 	    EphyNode *bookmark,
@@ -64,12 +58,7 @@ mozilla_parse_bookmarks (EphyBookmarks *bookmarks,
 	{
 		if (xmlStrEqual (child->name, "h3"))
 		{
-			xmlChar *tmp;
-
-			tmp = xmlNodeGetContent (child);
-			g_free (*keyword);
-			*keyword = build_keyword (tmp);
-			xmlFree (tmp);
+			*keyword = xmlNodeGetContent (child);
 		}
 		else if (xmlStrEqual (child->name, "a"))
 		{
@@ -140,13 +129,7 @@ xbel_parse_folder (EphyBookmarks *bookmarks,
 	{
 		if (xmlStrEqual (child->name, "title"))
 		{
-			xmlChar *tmp;
-
-			tmp = xmlNodeGetContent (child);
-
-			g_free (keyword);
-			keyword = build_keyword (tmp);
-			xmlFree (tmp);
+			keyword = xmlNodeGetContent (child);
 		}
 		else if (xmlStrEqual (child->name, "bookmark"))
 		{
@@ -191,7 +174,7 @@ xbel_parse_folder (EphyBookmarks *bookmarks,
 			g_free (keyword);
 			keyword = g_strdup (default_keyword);
 		}
-		
+
 		child = child->next;
 	}
 

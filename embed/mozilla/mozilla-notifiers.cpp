@@ -42,6 +42,11 @@
 #include "nsIServiceManager.h"
 
 static void
+mozilla_cache_size_notifier (GConfClient *client,
+		             guint cnxn_id,
+		             GConfEntry *entry,
+		             char *pref);
+static void
 mozilla_own_colors_notifier(GConfClient *client,
 			    guint cnxn_id,
 			    GConfEntry *entry,
@@ -135,14 +140,9 @@ conversion_table [] =
 	{ CONF_NETWORK_HTTP_PROXY, STRING_PREF, "network.proxy.http"},
 	{ CONF_NETWORK_FTP_PROXY, STRING_PREF, "network.proxy.ftp"},
 	{ CONF_NETWORK_SSL_PROXY, STRING_PREF, "network.proxy.ssl"},
-	{ CONF_NETWORK_SOCKS_PROXY, STRING_PREF, "network.proxy.socks"},
 	{ CONF_NETWORK_HTTP_PROXY_PORT, INT_PREF, "network.proxy.http_port"},
 	{ CONF_NETWORK_FTP_PROXY_PORT, INT_PREF, "network.proxy.ftp_port"},
 	{ CONF_NETWORK_SSL_PROXY_PORT, INT_PREF, "network.proxy.ssl_port"},
-	{ CONF_NETWORK_SOCKS_PROXY_PORT, INT_PREF, "network.proxy.socks_port"},
-	{ CONF_NETWORK_NO_PROXIES_FOR, STRING_PREF, "network.proxy.no_proxies_on"},
-	{ CONF_NETWORK_MEMORY_CACHE, INT_PREF, "browser.cache.memory.capacity"},
-	{ CONF_NETWORK_DISK_CACHE, INT_PREF, "browser.cache.disk.capacity"},
 	{ CONF_NETWORK_CACHE_COMPARE, INT_PREF, "browser.cache.check_doc_frequency"},
 	{ CONF_SECURITY_COOKIES_ACCEPT, BOOL_PREF, "network.cookie.warnAboutCookies"},
 	{ CONF_LANGUAGE_DEFAULT_ENCODING, STRING_PREF, "intl.charset.default" },
@@ -169,12 +169,12 @@ custom_notifiers [] =
 	  (GConfClientNotifyFunc) mozilla_language_notifier },
 	{ CONF_RENDERING_DEFAULT_FONT, 
 	  (GConfClientNotifyFunc) mozilla_default_font_notifier },
-	{ CONF_NETWORK_SOCKS_PROXY_VERSION, 
-	  (GConfClientNotifyFunc) mozilla_socks_version_notifier },
 	{ CONF_NETWORK_PROXY_MODE,
 	  (GConfClientNotifyFunc) mozilla_proxy_mode_notifier },
 	{ CONF_NETWORK_PROXY_AUTO_URL,
 	  (GConfClientNotifyFunc) mozilla_proxy_autoconfig_notifier },
+	{ CONF_NETWORK_CACHE_SIZE,
+          (GConfClientNotifyFunc) mozilla_cache_size_notifier },
 	{NULL, NULL}
 };
 
@@ -234,6 +234,19 @@ mozilla_prefs_set_int (const char *preference_name, int new_int_value)
         }
 
         return FALSE;
+}
+
+static void
+mozilla_cache_size_notifier (GConfClient *client,
+		             guint cnxn_id,
+		             GConfEntry *entry,
+		             char *pref)
+{
+	int cache_size;
+
+	cache_size = gconf_value_get_int(entry->value) * 1024;
+
+	mozilla_prefs_set_int ("browser.cache.disk.capacity", cache_size);
 }
 
 static void
