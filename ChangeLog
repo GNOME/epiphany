@@ -1,3 +1,14 @@
+2003-06-13  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/mozilla/ProgressListener.cpp:
+
+	Dont try to use class members after the class
+	has been deleted.
+
+	* embed/mozilla/mozilla-embed-persist.cpp:
+
+	Fix use of uninitialized var.
+
 2003-06-12  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/mozilla/mozilla-embed.cpp:

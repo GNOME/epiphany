@@ -183,7 +183,7 @@ impl_save (EphyEmbedPersist *persist)
 	}
 
         nsCOMPtr<nsILocalFile> file;
-       	NS_NewLocalFile(NS_ConvertUTF8toUCS2(filename), PR_TRUE, getter_AddRefs(file)); 
+       	rv = NS_NewLocalFile(NS_ConvertUTF8toUCS2(filename), PR_TRUE, getter_AddRefs(file)); 
         if (NS_FAILED(rv) || !file) return G_FAILED;
 
 	nsCOMPtr<nsILocalFile> path;

@@ -353,7 +353,9 @@ NS_IMETHODIMP GProgressListener::OnStateChange (nsIWebProgress *aWebProgress,
 			}
 		
 			mozilla_embed_persist_completed
-				(MOZILLA_EMBED_PERSIST (mEphyPersist));	
+				(MOZILLA_EMBED_PERSIST (mEphyPersist));
+
+			return NS_OK;	
 		}
 		
 		if (!mNoDialog)
