@@ -180,6 +180,10 @@ GTKDOC_LIBS = \
 	$(EPIPHANY_DEPENDENCY_LIBS) \
 	$(INTLLIBS)
 
+if ENABLE_NAUTILUS_VIEW
+GTKDOC_LIBS += $(NAUTILUS_DEPENDENCY_LIBS)
+endif
+
 # If you need to override some of the declarations, place them in the
 # $(DOC_MODULE)-overrides.txt file and uncomment the second line here.
 DOC_OVERRIDES =
