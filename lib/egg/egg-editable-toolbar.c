@@ -745,19 +745,19 @@ toolbar_changed_cb (EggToolbarsModel   *model,
   flags = egg_toolbars_model_get_flags (model, position);
   toolbar = get_toolbar_nth (t, position);
 
-  if (flags & EGG_TB_MODEL_ICONS_ONLY)
+  if (flags & EGG_TB_MODEL_ICONS)
   {
     style = GTK_TOOLBAR_ICONS;
   }
-  else if (flags & EGG_TB_MODEL_TEXT_ONLY)
+  else if (flags & EGG_TB_MODEL_TEXT)
   {
     style = GTK_TOOLBAR_TEXT;
   }
-  else if (flags & EGG_TB_MODEL_ICONS_TEXT)
+  else if (flags & EGG_TB_MODEL_BOTH)
   {
     style = GTK_TOOLBAR_BOTH;
   }
-  else if (flags & EGG_TB_MODEL_ICONS_TEXT_HORIZ)
+  else if (flags & EGG_TB_MODEL_BOTH_HORIZ)
   {
     style = GTK_TOOLBAR_BOTH_HORIZ;
   }
@@ -905,21 +905,10 @@ egg_editable_toolbar_construct (EggEditableToolbar *t)
   for (i = 0; i < n_toolbars; i++)
     {
       GtkWidget *toolbar, *dock;
-      EggTbModelFlags flags;
 
       dock = create_dock (t);
       gtk_box_pack_start (GTK_BOX (t), dock, TRUE, TRUE, 0);
       toolbar = get_toolbar_nth (t, i);
-
-      flags = egg_toolbars_model_get_flags (model, i);
-      if (flags & EGG_TB_MODEL_ICONS_ONLY)
-        {
-          gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_ICONS);
-          if (i == 0 && t->priv->fixed_toolbar)
-            {
-	      set_fixed_style (t, GTK_TOOLBAR_ICONS);
-            }
-        }
 
       n_items = egg_toolbars_model_n_items (model, i);
       for (l = 0; l < n_items; l++)
@@ -953,6 +942,12 @@ egg_editable_toolbar_construct (EggEditableToolbar *t)
     }
 
   update_fixed (t);
+
+  /* apply styles */
+  for (i = 0; i < n_toolbars; i ++)
+    {
+      toolbar_changed_cb (model, i, t);
+    }
 }
 
 static void

@@ -442,7 +442,7 @@ parse_toolbars (EggToolbarsModel *t,
 	  if (style && xmlStrEqual (style, "icons-only"))
 	    {
 	      /* FIXME: use toolbar position instead of 0 */
-	      egg_toolbars_model_set_flags (t, 0, EGG_TB_MODEL_ICONS_ONLY);
+	      egg_toolbars_model_set_flags (t, 0, EGG_TB_MODEL_ICONS);
 	    }
 	  xmlFree (style);
 
