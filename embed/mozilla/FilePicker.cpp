@@ -34,7 +34,6 @@
 
 #include "ephy-string.h"
 #include "ephy-gui.h"
-#include "eel-gconf-extensions.h"
 
 #include <glib/gconvert.h>
 #include <gtk/gtkmain.h>

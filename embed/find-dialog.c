@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #include "find-dialog.h"
@@ -162,7 +164,7 @@ find_update_nav (EphyDialog *dialog)
 				  FIND_DIALOG(dialog)->priv->can_go_prev);
 }
 
-void static
+static void
 ensure_constructed (FindDialog *dialog)
 {
 	if (!dialog->priv->constructed)
@@ -252,6 +254,20 @@ find_get_info (EphyDialog *dialog)
 }
 
 static void
+dialog_constrain_height (FindDialog *dialog)
+{
+	GdkGeometry geometry;
+	GtkWindow *window = GTK_WINDOW (dialog->priv->window);
+	
+	/* Do not allow to resize the widget vertically */
+	geometry.max_height  = 0; 
+	geometry.max_width = gdk_screen_get_width (gtk_widget_get_screen (window));;
+	gtk_window_set_geometry_hints (window, GTK_WIDGET (window),
+				       &geometry,
+				       GDK_HINT_MAX_SIZE);
+}
+
+static void
 impl_show (EphyDialog *dialog)
 {
 	GdkPixbuf *icon;
@@ -277,6 +293,9 @@ impl_show (EphyDialog *dialog)
 						      "find_dialog");
 	gtk_window_set_icon (GTK_WINDOW(find_dialog->priv->window), icon);
 	g_object_unref (icon);
+	
+	dialog_constrain_height (find_dialog);
+	
 	EPHY_DIALOG_CLASS (parent_class)->show (dialog);
 }
 
