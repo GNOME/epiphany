@@ -174,7 +174,7 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 	{ "Properties", N_("_Properties"), GTK_STOCK_PROPERTIES, "<alt>Return",
 	  N_("View or modify the properties of the selected bookmark"), 
 	  G_CALLBACK (cmd_bookmark_properties), NULL },
-	{ "Import", N_("_Import bookmarks..."), NULL, NULL,
+	{ "Import", N_("_Import Bookmarks..."), NULL, NULL,
 	  N_("Import bookmarks from another browser or a bookmarks file"), 
 	  G_CALLBACK (cmd_bookmarks_import), NULL },
 	{ "Close", N_("_Close"), GTK_STOCK_CLOSE, "<control>W",
