@@ -156,9 +156,26 @@ impl_ephy_automation_quit (PortableServer_Servant _servant,
 {
 	Session *session;
 
+	g_object_ref (ephy_shell);
+
 	session = SESSION (ephy_shell_get_session (ephy_shell));
 
 	session_close (session);
+
+	if (disableServer)
+	{
+		ephy_shell_set_server_mode (ephy_shell, FALSE);
+	}
+
+	g_object_unref (ephy_shell);
+}
+
+static void
+impl_ephy_automation_set_server_mode (PortableServer_Servant _servant,
+				      const CORBA_boolean mode,
+				      CORBA_Environment * ev)
+{
+	ephy_shell_set_server_mode (ephy_shell, mode ? TRUE : FALSE);
 }
 
 static void
@@ -195,6 +212,7 @@ ephy_automation_class_init (EphyAutomationClass *klass)
 	epv->quit = impl_ephy_automation_quit;
 	epv->loadSession = impl_ephy_automation_load_session;
 	epv->openBookmarksEditor = impl_ephy_automation_open_bookmarks_editor;
+	epv->setServerMode = impl_ephy_automation_set_server_mode;
 }
 
 static void

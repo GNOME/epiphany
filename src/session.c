@@ -323,7 +323,13 @@ static void
 session_die_cb (GnomeClient* client,
 		Session *session)
 {
+	g_object_ref (ephy_shell);
+
 	session_close (session);
+
+	ephy_shell_set_server_mode (ephy_shell, FALSE);
+
+	g_object_unref (ephy_shell);
 }
 
 static void
@@ -405,6 +411,7 @@ static void
 session_finalize (GObject *object)
 {
 	Session *t;
+	GnomeClient *client;
 
         g_return_if_fail (object != NULL);
         g_return_if_fail (IS_SESSION (object));
@@ -414,6 +421,16 @@ session_finalize (GObject *object)
         g_return_if_fail (t->priv != NULL);
 
 	g_list_free (t->priv->windows);
+
+	client = gnome_master_client ();
+
+	g_signal_handlers_disconnect_by_func (G_OBJECT (client),
+					      G_CALLBACK (save_yourself_cb),
+					      t);
+
+	g_signal_handlers_disconnect_by_func (G_OBJECT (client),
+					      G_CALLBACK (session_die_cb),
+					      t);
 
         g_free (t->priv);
 
@@ -692,11 +709,6 @@ session_remove_window (Session *session,
 
 	g_object_unref (window);
 
-	/* autodestroy of the session, necessay to avoid
-	 * conflicts with the nautilus view */
-	if (session->priv->windows == NULL)
-	{
-		g_object_unref (session);
-	}
+	session_save (session, SESSION_CRASHED);
 }
 

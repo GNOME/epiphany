@@ -1,5 +1,22 @@
 2003-09-24  Christian Persch  <chpe@cvs.gnome.org>
 
+	* idl/EphyAutomation.idl:
+	* src/ephy-automation.c: (impl_ephy_automation_quit),
+	(impl_ephy_automation_set_server_mode),
+	(ephy_automation_class_init):
+	* src/ephy-main.c: (ephy_main_start):
+	* src/ephy-shell.c: (ephy_shell_init),
+	(ephy_shell_show_history_window), (ephy_shell_get_server_mode),
+	(ephy_shell_set_server_mode):
+	* src/ephy-shell.h:
+	* src/session.c: (session_die_cb), (session_finalize),
+	(session_remove_window):
+
+	Fix --server mode session saving on "die" signal from gnome session.
+	Fixes bug #123047. Ported from Crispin's galeon patch for same problem.
+
+2003-09-24  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-main.c: (ephy_main_start):
 
 	Print a warning when starting ephy in --server mode;

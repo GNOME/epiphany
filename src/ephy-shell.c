@@ -70,6 +70,7 @@ struct EphyShellPrivate
 	GtkWidget *bme;
 	GtkWidget *history_window;
 	GList *plugins;
+	gboolean server_mode;
 };
 
 static void
@@ -200,6 +201,7 @@ ephy_shell_init (EphyShell *gs)
 	gs->priv->history_window = NULL;
 	gs->priv->toolbars_model = NULL;
 	gs->priv->plugins = NULL;
+	gs->priv->server_mode = FALSE;
 
 	ephy_shell = gs;
 	g_object_add_weak_pointer (G_OBJECT(ephy_shell),
@@ -659,4 +661,29 @@ ephy_shell_show_history_window (EphyShell *gs,
 	}
 
 	gtk_window_present (GTK_WINDOW (gs->priv->history_window));
+}
+
+gboolean
+ephy_shell_get_server_mode (EphyShell *es)
+{
+	g_return_val_if_fail (IS_EPHY_SHELL (es), FALSE);
+
+	return es->priv->server_mode;
+}
+
+void
+ephy_shell_set_server_mode (EphyShell *es, gboolean as_server)
+{
+	g_return_if_fail (IS_EPHY_SHELL (es));
+
+	if (es->priv->server_mode == FALSE && as_server == TRUE)
+	{
+		g_object_ref (G_OBJECT (es));
+	}
+	else if (es->priv->server_mode == TRUE && as_server == FALSE)
+	{
+		g_object_unref (G_OBJECT (es));
+	}
+
+	es->priv->server_mode = as_server;
 }

@@ -104,6 +104,11 @@ void		    ephy_shell_show_bookmarks_editor (EphyShell *gs,
 void		    ephy_shell_show_history_window   (EphyShell *gs,
 						      GtkWidget *parent);
 
+gboolean	    ephy_shell_get_server_mode	     (EphyShell *es);
+
+void		    ephy_shell_set_server_mode	     (EphyShell *es,
+						      gboolean as_server);
+
 G_END_DECLS
 
 #endif

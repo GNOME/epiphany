@@ -209,12 +209,10 @@ ephy_main_start (gpointer data)
 		gtk_dialog_run (GTK_DIALOG (dialog));
 
 	}
-	/* FIXME ephy --server doesnt work when not first istance */
 	/* Server mode */
 	else if (ephy_server_mode)
 	{
-		g_warning ("Server mode is deprecated and known to crash when logging out. Use at your own risk!\n");
-		g_object_ref (G_OBJECT(ephy_shell));
+		GNOME_EphyAutomation_setServerMode (gaserver, TRUE, &corba_env);
 	}
 	/* Launch the bookmarks editor */
 	else if (open_as_bookmarks_editor)
