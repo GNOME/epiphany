@@ -27,7 +27,6 @@ G_BEGIN_DECLS
 #define EPHY_STOCK_UNSECURE        "epiphany-unsecure"
 #define EPHY_STOCK_HISTORY         "epiphany-history"
 #define EPHY_STOCK_BOOKMARKS       "epiphany-bookmarks"
-#define EPHY_STOCK_BOOKMARK_PAGE   "epiphany-bookmark-page"
 #define EPHY_STOCK_ENTRY	   "epiphany-entry"
 #define EPHY_STOCK_DOWNLOAD	   "epiphany-download"
 
@@ -35,6 +34,7 @@ G_BEGIN_DECLS
 #define STOCK_FULLSCREEN	   "stock_fullscreen"
 #define STOCK_VIEW_SOURCE	   "stock_view-html-source"
 #define STOCK_SEND_MAIL		   "stock_mail_send"
+#define STOCK_ADD_BOOKMARK	   "stock_add-bookmark"
 
 void ephy_stock_icons_init (void);
 

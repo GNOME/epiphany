@@ -39,7 +39,8 @@ ephy_stock_icons_init (void)
 		STOCK_NEW_TAB,
 		STOCK_FULLSCREEN,
 		STOCK_VIEW_SOURCE,
-		STOCK_SEND_MAIL
+		STOCK_SEND_MAIL,
+		STOCK_ADD_BOOKMARK
 	};
 
 	static const char *items[] =
@@ -48,7 +49,6 @@ ephy_stock_icons_init (void)
 		EPHY_STOCK_UNSECURE,
 		EPHY_STOCK_HISTORY,
 		EPHY_STOCK_BOOKMARKS,
-		EPHY_STOCK_BOOKMARK_PAGE,
 		EPHY_STOCK_ENTRY,
 		EPHY_STOCK_DOWNLOAD
 	};

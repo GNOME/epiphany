@@ -168,7 +168,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_view_page_source) },
 
 	/* Bookmarks menu */
-	{ "FileBookmarkPage", EPHY_STOCK_BOOKMARK_PAGE, N_("_Add Bookmark..."), "<control>D",
+	{ "FileBookmarkPage", STOCK_ADD_BOOKMARK, N_("_Add Bookmark..."), "<control>D",
 	  N_("Add a bookmark for the current page"),
 	  G_CALLBACK (window_cmd_file_bookmark_page) },
 	{ "GoBookmarks", EPHY_STOCK_BOOKMARKS, N_("_Edit Bookmarks"), "<control>B",
@@ -244,7 +244,7 @@ static GtkActionEntry ephy_popups_entries [] = {
 	/* Document */
 	{ "SaveBackgroundAs", NULL, N_("_Save Background As..."), NULL,
 	  NULL, G_CALLBACK (popup_cmd_save_background_as) },
-	{ "ContextBookmarkPage", EPHY_STOCK_BOOKMARK_PAGE, N_("Add Boo_kmark..."), "<control>D",
+	{ "ContextBookmarkPage", STOCK_ADD_BOOKMARK, N_("Add Boo_kmark..."), "<control>D",
 	  N_("Add a bookmark for the current page"),
 	  G_CALLBACK (window_cmd_file_bookmark_page) },
 
@@ -265,7 +265,7 @@ static GtkActionEntry ephy_popups_entries [] = {
 	  NULL, NULL, G_CALLBACK (popup_cmd_link_in_new_tab) },
 	{ "DownloadLink", GTK_STOCK_SAVE, N_("_Download Link"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_download_link) },
-	{ "BookmarkLink", EPHY_STOCK_BOOKMARK_PAGE, N_("_Bookmark Link..."),
+	{ "BookmarkLink", STOCK_ADD_BOOKMARK, N_("_Bookmark Link..."),
 	  NULL, NULL, G_CALLBACK (popup_cmd_bookmark_link) },
 	{ "CopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
