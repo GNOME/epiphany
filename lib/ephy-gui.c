@@ -78,8 +78,9 @@ ephy_gui_menu_position_under_widget (GtkMenu   *menu,
 gboolean
 ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 {
-	char *question, *converted;
-	GtkWidget *dialog;
+	char *primary_text, *question, *converted;
+	GtkWidget *dialog, *button, *hbox, *label;
+	GtkWidget *image;
 	gboolean res;
 
 	if (filename == NULL) return FALSE;
@@ -92,16 +93,42 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 	converted = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
 	if (converted == NULL) return FALSE;
 
-	question = g_strdup_printf (_("File %s will be overwritten.\n"
-				    "If you choose yes, the contents will be lost.\n\n"
-				    "Do you want to continue?"), converted);
-	dialog = gtk_message_dialog_new (parent ? GTK_WINDOW(parent) : NULL,
-			                 GTK_DIALOG_MODAL,
-				         GTK_MESSAGE_QUESTION,
-				         GTK_BUTTONS_YES_NO,
-				         question);
-	res = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_YES);
+	primary_text = g_strdup_printf (_("A file %s already exists."), 
+	                                converted);
+	question = g_strdup_printf ("<b>%s</b>\n\n%s", primary_text,
+	                            _("If you choose to overwrite this file, "
+				      "the contents will be lost."));
+	
+	dialog = gtk_dialog_new_with_buttons (_("Overwrite File"),
+                                        parent ? GTK_WINDOW (parent) : NULL,
+                                        GTK_DIALOG_MODAL, 
+                                        NULL);
+	hbox = gtk_hbox_new (FALSE, 6);
+	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), 
+	                    hbox, TRUE, TRUE, 12);
+	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION,
+	                                  GTK_ICON_SIZE_DIALOG);
+	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0); 
+	gtk_box_pack_start (GTK_BOX (hbox), image, TRUE, TRUE, 0);
+	label = gtk_label_new (NULL);
+	gtk_label_set_markup (GTK_LABEL (label), question);
+	gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+	gtk_widget_show_all (hbox);
+	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+	gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (dialog)), 6);
+	button = gtk_dialog_add_button (GTK_DIALOG (dialog), 
+	                                GTK_STOCK_CANCEL, 
+	                                GTK_RESPONSE_REJECT);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), 
+	                                 GTK_RESPONSE_REJECT);
+	gtk_dialog_add_button (GTK_DIALOG (dialog),
+	                       _("_Overwrite"),
+	                       GTK_RESPONSE_ACCEPT);
+        res = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) ? TRUE : FALSE;
+        
 	gtk_widget_destroy (dialog);
+                                
+	g_free (primary_text);	
 	g_free (question);
 	g_free (converted);
 
