@@ -10,7 +10,7 @@
 # Nikos,  18aug2003, one more update, 592 messages
 # Nikos,  02sep2003, one more update, 629 messages
 # kostas: 29Oct2003, 722 messages updated translation
-# Kostas Ppadimas <pkst@gmx.net>, 2003.
+# kostas: 12Nov2003, fixes
 # Nikos Charonitakis <frolix68@yahoo.gr>, 2003.
 # Kostas Papadimas <pkst@gnome.org>, 2003
 msgid ""
@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-10-30 00:10+0200\n"
-"PO-Revision-Date: 2003-10-30 00:12+0200\n"
+"PO-Revision-Date: 2003-11-12 09:31+0200\n"
 "Last-Translator: Kostas Papadimas <pkst@gnome.org>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
 "MIME-Version: 1.0\n"
@@ -102,7 +102,7 @@ msgstr "Αποδοχή cookie"
 
 #: data/epiphany.schemas.in.h:7
 msgid "Default encoding"
-msgstr "Εξ ορισμού κωδικοποίηση"
+msgstr "Προεπιλεγμένη κωδικοποίηση"
 
 #: data/epiphany.schemas.in.h:8
 msgid ""
@@ -124,7 +124,7 @@ msgid ""
 "\"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712"
 "\", \"x-viet-vps\" and \"x-windows-949\"."
 msgstr ""
-"Εξ ορισμού κωδικοποίηση. Αποδεκτές τιμές είναι: \"armscii-8\", \"Big5\", "
+"Προεπιλεγμένη κωδικοποίηση. Αποδεκτές τιμές είναι: \"armscii-8\", \"Big5\", "
 "\"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8"
 "\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862"
 "\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR"
@@ -144,12 +144,12 @@ msgstr ""
 
 #: data/epiphany.schemas.in.h:9
 msgid "Default font type"
-msgstr "Εξ ορισμού τύπος γραμματοσειράς"
+msgstr "Προεπιλεγμένος τύπος γραμματοσειράς"
 
 #: data/epiphany.schemas.in.h:10
 msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
 msgstr ""
-"Εξ ορισμού τύπος γραμματοσειράς. Οι πιθανές τιμές είναι \"serif\"  και  "
+"Προεπιλεγμένος τύπος γραμματοσειράς. Οι πιθανές τιμές είναι \"serif\"  και  "
 "\"sans-serif\""
 
 #: data/epiphany.schemas.in.h:11
@@ -280,11 +280,11 @@ msgstr "Επάνω περιθώριο εκτύπωσης (σε χιλιοστά)
 
 #: data/epiphany.schemas.in.h:39
 msgid "Show bookmarks bar by default"
-msgstr "Εξ ορισμού εμφάνιση γραμμής σελιδοδεικτών"
+msgstr "Προεπιλεγμένη εμφάνιση γραμμής σελιδοδεικτών"
 
 #: data/epiphany.schemas.in.h:40
 msgid "Show bookmarks bar by default."
-msgstr "Εξ ορισμού εμφάνιση γραμμής σελιδοδεικτών."
+msgstr "Προεπιλεγμένη εμφάνιση γραμμής σελιδοδεικτών."
 
 #: data/epiphany.schemas.in.h:41
 msgid "Show download details"
@@ -296,11 +296,11 @@ msgstr "Εμφάνιση λεπτομερειών μεταφόρτωσης."
 
 #: data/epiphany.schemas.in.h:43
 msgid "Show statusbar by default"
-msgstr "Εξ ορισμού εμφάνιση της γραμμής κατάστασης"
+msgstr "Προεπιλεγμένη εμφάνιση της γραμμής κατάστασης"
 
 #: data/epiphany.schemas.in.h:44
 msgid "Show statusbar by default."
-msgstr "Εξ ορισμού εμφάνιση της γραμμής κατάστασης."
+msgstr "Προεπιλεγμένη εμφάνιση της γραμμής κατάστασης."
 
 #: data/epiphany.schemas.in.h:45
 msgid ""
@@ -318,11 +318,11 @@ msgstr ""
 
 #: data/epiphany.schemas.in.h:47
 msgid "Show toolbars by default"
-msgstr "Εξ ορισμού εμφάνιση εργαλειοθηκών"
+msgstr "Προεπιλεγμένη εμφάνιση εργαλειοθηκών"
 
 #: data/epiphany.schemas.in.h:48
 msgid "Show toolbars by default."
-msgstr "Εξ ορισμού εμφάνιση εργαλειοθηκών."
+msgstr "Προεπιλεγμένη εμφάνιση εργαλειοθηκών."
 
 #: data/epiphany.schemas.in.h:49
 msgid "Size of disk cache"
@@ -695,7 +695,7 @@ msgstr "_Πάντα αποδοχή"
 
 #: data/glade/prefs-dialog.glade.h:33
 msgid "_Default:"
-msgstr "_Εξ ορισμού:"
+msgstr "_Προεπιλογή:"
 
 #: data/glade/prefs-dialog.glade.h:34
 msgid "_Disk space:"
@@ -1411,7 +1411,7 @@ msgid ""
 "and no GNOME default handler is set"
 msgstr ""
 "Η Epiphany δεν μπορεί να χειριστεί αυτό το πρωτόκολλο,\n"
-"και δεν έχει ορισθεί εξ ορισμού χειριστής του GNOME"
+"και δεν έχει ορισθεί προεπιλεγμένος χειριστής από το GNOME"
 
 #: embed/mozilla/ExternalProtocolService.cpp:138
 msgid ""
@@ -1421,7 +1421,7 @@ msgid ""
 msgstr ""
 "Το καθορισμένο πρωτόκολλο δεν αναγνωρίσθηκε.\n"
 "\n"
-"Θέλετε να δοκιμάσετε το εξ ορισμού από το GNOME?"
+"Θέλετε να δοκιμάσετε το προεπιλεγμένο από το GNOME?"
 
 #: embed/mozilla/FilePicker.cpp:145
 msgid "All files"
