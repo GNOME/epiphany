@@ -58,6 +58,7 @@ enum
 	PRINTON_PROP,
 	PRINTER_PROP,
 	FILE_PROP,
+	BROWSE_PROP,
 	ALL_PAGES_PROP,
 	SELECTION_PROP,
 	TO_PROP,
@@ -71,6 +72,7 @@ EphyDialogProperty print_props [] =
 	{ "printer_radiobutton",		CONF_PRINT_PRINTON,	  PT_AUTOAPPLY, 0 },
 	{ "printer_entry",			CONF_PRINT_PRINTER,	  PT_AUTOAPPLY, 0 },
 	{ "file_entry",				CONF_PRINT_FILE,	  PT_AUTOAPPLY, 0 },
+	{ "browse_button",			NULL,			  PT_NORMAL,	0 },
 	{ "all_pages_radiobutton",		CONF_PRINT_ALL_PAGES,	  PT_AUTOAPPLY, 0 },
 	{ "selection_radiobutton",		NULL,			  PT_NORMAL,    0 },
 	{ "to_spinbutton",			CONF_PRINT_FROM_PAGE,	  PT_AUTOAPPLY, G_TYPE_INT },
@@ -297,7 +299,7 @@ ephy_print_dialog_new (GtkWidget *parent,
 		       gboolean only_collect_info)
 {
 	EphyDialog *dialog;
-	GtkWidget *window;
+	GtkWidget *window, *button;
 	GdkPixbuf *icon;
 
 	dialog =  EPHY_DIALOG (g_object_new (EPHY_TYPE_EMBED_DIALOG,
@@ -319,6 +321,9 @@ ephy_print_dialog_new (GtkWidget *parent,
 				       "print_dialog");
 	gtk_window_set_icon (GTK_WINDOW (window), icon);
 	g_object_unref (icon);
+
+	button = ephy_dialog_get_control (dialog, print_props[BROWSE_PROP].id);
+	gtk_widget_set_sensitive (button, eel_gconf_key_is_writable (CONF_PRINT_FILE));
 
 	g_object_set_data (G_OBJECT (dialog), "only-collect-info",
 			   GINT_TO_POINTER (only_collect_info));

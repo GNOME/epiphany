@@ -204,6 +204,8 @@ enum
 
 	/* General */
 	HOMEPAGE_ENTRY_PROP,
+	HOMEPAGE_CURRENT_PROP,
+	HOMEPAGE_BLANK_PROP,
 	AUTO_OPEN_PROP,
 	DOWNLOAD_PATH_BUTTON_PROP,
 
@@ -230,7 +232,8 @@ enum
 	LANGUAGE_PROP,
 	LANGUAGE_LABEL_PROP,
 	DEFAULT_ENCODING_LABEL_PROP,
-	AUTO_ENCODING_LABEL_PROP
+	AUTO_ENCODING_LABEL_PROP,
+	LANGUAGE_MORE_PROP
 };
 
 static const
@@ -241,6 +244,8 @@ EphyDialogProperty properties [] =
 
 	/* General */
 	{ "homepage_entry",			CONF_GENERAL_HOMEPAGE,	  PT_AUTOAPPLY,	G_TYPE_STRING },
+	{ "homepage_current_button",		NULL,			  PT_NORMAL,	0 },
+	{ "homepage_blank_button",		NULL,			  PT_NORMAL,	0 },
 	{ "auto_open_downloads_checkbutton",	CONF_AUTO_OPEN_DOWNLOADS, PT_AUTOAPPLY,	0 },
 	{ "download_path_button",		NULL,			  PT_NORMAL,	0 },
 
@@ -268,6 +273,7 @@ EphyDialogProperty properties [] =
 	{ "language_label",		NULL,					PT_NORMAL,	0 },
 	{ "default_encoding_label",	NULL,					PT_NORMAL,	0 },
 	{ "auto_encoding_label",	NULL,					PT_NORMAL,	0 },
+	{ "language_more_button", 	NULL,					PT_NORMAL,	0 },
 
 	{ NULL }
 };
@@ -590,16 +596,18 @@ language_combo_changed_cb (GtkComboBox *combo,
 static void
 create_language_menu (EphyDialog *dialog)
 {
-	GtkComboBox *combo;
+	GtkWidget *combo, *button;
 	GtkListStore *store;
 	GtkTreeModel *sortmodel;
 	GtkTreeIter iter;
 	GtkCellRenderer *renderer;
 	int i;
 	GSList *list, *l, *ulist = NULL;
+	gboolean sensitive;
 
 	/* init value from first element of the list */
 	list = eel_gconf_get_string_list (CONF_RENDERING_LANGUAGE);
+	sensitive = eel_gconf_key_is_writable (CONF_RENDERING_LANGUAGE);
 
 	/* uniquify list */
 	for (l = list; l != NULL; l = l->next)
@@ -617,8 +625,10 @@ create_language_menu (EphyDialog *dialog)
 	list = g_slist_reverse (ulist);
 	eel_gconf_set_string_list (CONF_RENDERING_LANGUAGE, list);
 
-	combo = GTK_COMBO_BOX (ephy_dialog_get_control
-			(dialog, properties[LANGUAGE_PROP].id));
+	button = ephy_dialog_get_control (dialog, properties[LANGUAGE_MORE_PROP].id);
+	gtk_widget_set_sensitive (button, sensitive);
+	combo = ephy_dialog_get_control (dialog, properties[LANGUAGE_PROP].id);
+	gtk_widget_set_sensitive (combo, sensitive);
 
 	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
@@ -664,7 +674,7 @@ create_language_menu (EphyDialog *dialog)
 	gtk_tree_sortable_set_sort_column_id
 		(GTK_TREE_SORTABLE (sortmodel), COL_LANG_NAME, GTK_SORT_ASCENDING);
 
-	gtk_combo_box_set_model (combo, sortmodel);
+	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), sortmodel);
 
 	ephy_dialog_set_data_column
 		(dialog, properties[LANGUAGE_PROP].id, COL_LANG_CODE);
@@ -735,6 +745,8 @@ create_download_path_label (EphyDialog *dialog)
 	gtk_container_add (GTK_CONTAINER (button), label);
 	g_free (dir);
 	gtk_widget_show (label);
+
+	gtk_widget_set_sensitive (button, eel_gconf_key_is_writable (CONF_STATE_DOWNLOAD_DIR));
 }
 	
 static void
@@ -742,10 +754,10 @@ prefs_dialog_init (PrefsDialog *pd)
 {
 	EphyDialog *dialog = EPHY_DIALOG (pd);
 	EphyEncodings *encodings;
-	GtkWidget *window;
+	GtkWidget *window, *button, *combo;
 	GdkPixbuf *icon;
 	GtkCellRenderer *renderer;
-	GtkWidget *combo;
+	gboolean sensitive;
 
 	pd->priv = EPHY_PREFS_DIALOG_GET_PRIVATE (pd);
 
@@ -771,6 +783,13 @@ prefs_dialog_init (PrefsDialog *pd)
 				       "prefs_dialog");
 	gtk_window_set_icon (GTK_WINDOW (window), icon);
 	g_object_unref(icon);
+
+	/* set homepage button sensitivity */
+	sensitive = eel_gconf_key_is_writable (CONF_GENERAL_HOMEPAGE);
+	button = ephy_dialog_get_control (dialog, properties[HOMEPAGE_CURRENT_PROP].id);
+	gtk_widget_set_sensitive (button, sensitive);
+	button = ephy_dialog_get_control (dialog, properties[HOMEPAGE_BLANK_PROP].id);
+	gtk_widget_set_sensitive (button, sensitive);
 
 	combo = ephy_dialog_get_control (dialog, properties[VARIABLE_PROP].id);
         renderer = gtk_cell_renderer_text_new ();
@@ -955,14 +974,17 @@ download_path_response_cb (GtkDialog *fc, gint response, EphyDialog *dialog)
 		if (dir != NULL)
 		{
 			GtkWidget *button;
-			char *label;
+			char *label, *converted;
 
-			eel_gconf_set_string (CONF_STATE_DOWNLOAD_DIR, dir);
+			converted = g_filename_to_utf8 (dir, -1, NULL, NULL, NULL);
+			eel_gconf_set_string (CONF_STATE_DOWNLOAD_DIR, converted);
 			
 			button = ephy_dialog_get_control (dialog, properties[DOWNLOAD_PATH_BUTTON_PROP].id);
 			label = get_download_button_label ();
 			ephy_ellipsizing_label_set_text ((EphyEllipsizingLabel*) GTK_BIN (button)->child,
 							  label);
+
+			g_free (converted);
 			g_free (dir);
 			g_free (label);
 		}

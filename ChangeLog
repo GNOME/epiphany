@@ -1,5 +1,19 @@
 2003-12-09  Christian Persch  <chpe@cvs.gnome.org>
 
+	* data/glade/prefs-dialog.glade:
+	* embed/print-dialog.c: (ephy_print_dialog_new):
+	* src/prefs-dialog.c: (create_language_menu),
+	(create_download_path_label), (prefs_dialog_init):
+
+	Lockdown: set some buttons insensitive when their
+	pref key is not writable.
+
+	* src/prefs-dialog.c: (download_path_response_cb):
+
+	Convert filename to utf8 first.
+
+2003-12-09  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.in:
 
 	Bump gtk+ and glib dependencies to 2.3.1.
