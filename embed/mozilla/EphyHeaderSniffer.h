@@ -50,7 +50,9 @@
 #include <nsIDOMDocument.h>
 #include <nsIAuthPrompt.h>
 #include <nsIPromptService.h>
+#define MOZILLA_STRICT_API
 #include <nsEmbedString.h>
+#undef MOZILLA_STRICT_API
 
 class EphyHeaderSniffer : public nsIWebProgressListener,
 			  public nsIAuthPrompt

@@ -27,7 +27,9 @@
 
 #include "ephy-debug.h"
 
+#define MOZILLA_STRICT_API
 #include <nsEmbedString.h>
+#undef MOZILLA_STRICT_API
 #include <nsIURI.h>
 #include <nsIPermissionManager.h>
 #include <nsICookieManager.h>

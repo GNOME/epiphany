@@ -63,7 +63,9 @@
 #include "nsIDOMNode.h"
 #include "nsIDOMElement.h"
 #include "nsIDOMWindow2.h"
+#define MOZILLA_STRICT_API
 #include "nsEmbedString.h"
+#undef MOZILLA_STRICT_API
 #include "nsMemory.h"
 #include "nsIChannel.h"
 

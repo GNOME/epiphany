@@ -57,7 +57,9 @@
 #include <glib/gi18n.h>
 
 #include <nsIFileURL.h>
+#define MOZILLA_STRICT_API
 #include <nsEmbedString.h>
+#undef MOZILLA_STRICT_API
 
 const char* const persistContractID = "@mozilla.org/embedding/browser/nsWebBrowserPersist;1";
 
