@@ -56,16 +56,10 @@
 NS_IMPL_ISUPPORTS1(GFilePicker, nsIFilePicker)
 
 GFilePicker::GFilePicker()
+: mDialog(nsnull)
+, mMode(nsIFilePicker::modeOpen)
 {
 	LOG ("GFilePicker ctor (%p)", this)
-
-	mDialog = EPHY_FILE_CHOOSER (g_object_new (EPHY_TYPE_FILE_CHOOSER, NULL));
-
-	g_object_add_weak_pointer (G_OBJECT (mDialog), (gpointer *) &mDialog);
-
-	ephy_file_chooser_set_persist_key (mDialog, CONF_STATE_UPLOAD_DIR);
-
-	mMode = nsIFilePicker::modeOpen;
 }
 
 GFilePicker::~GFilePicker()
@@ -88,12 +82,10 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 {
 	LOG ("GFilePicker::Init")
 
-	if (parent)
-	{
-		GtkWidget *pwin = MozillaFindGtkParent (parent);
-
-		gtk_window_set_transient_for (GTK_WINDOW (mDialog), GTK_WINDOW (pwin));
-	}
+	GtkWidget *gtkparent = MozillaFindGtkParent (parent);
+#if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
+	NS_ENSURE_TRUE (gtkparent, NS_ERROR_FAILURE);
+#endif
 
 	nsEmbedCString cTitle;
 #if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
@@ -101,52 +93,37 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 #else
 	NS_UTF16ToCString (nsEmbedString(title), NS_CSTRING_ENCODING_UTF8, cTitle);
 #endif
-	gtk_window_set_title (GTK_WINDOW (mDialog), cTitle.get());
 
 	mMode = mode;
 
+	GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
 	switch (mode)
 	{
 		case nsIFilePicker::modeGetFolder:
-			gtk_file_chooser_set_action (GTK_FILE_CHOOSER (mDialog),
-						     GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-			
-			gtk_dialog_add_buttons (GTK_DIALOG (mDialog),
-						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-						GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-						NULL);
-			gtk_dialog_set_default_response (GTK_DIALOG (mDialog), GTK_RESPONSE_ACCEPT);
+			action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
 			break;
-
 		case nsIFilePicker::modeOpenMultiple:
-			gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (mDialog), TRUE);
-			/* fallthrough */			
 		case nsIFilePicker::modeOpen:
-			gtk_file_chooser_set_action (GTK_FILE_CHOOSER (mDialog),
-						     GTK_FILE_CHOOSER_ACTION_OPEN);
-
-			gtk_dialog_add_buttons (GTK_DIALOG (mDialog),
-						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-						GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-						NULL);
-			gtk_dialog_set_default_response (GTK_DIALOG (mDialog), GTK_RESPONSE_ACCEPT);
-
+			action = GTK_FILE_CHOOSER_ACTION_OPEN;
 			break;
-
 		case nsIFilePicker::modeSave:
-			gtk_file_chooser_set_action (GTK_FILE_CHOOSER (mDialog),
-						     GTK_FILE_CHOOSER_ACTION_SAVE);
-	
-			gtk_dialog_add_buttons (GTK_DIALOG (mDialog),
-						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-						GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-						NULL);
-			gtk_dialog_set_default_response (GTK_DIALOG (mDialog), GTK_RESPONSE_ACCEPT);
+			action = GTK_FILE_CHOOSER_ACTION_SAVE;
 			break;
 		default:
 			g_assert_not_reached ();
 			break;
 	}
+
+	mDialog = ephy_file_chooser_new (cTitle.get(), gtkparent, action,
+					 CONF_STATE_UPLOAD_DIR,
+					 EPHY_FILE_FILTER_NONE);
+
+	if (mode == nsIFilePicker::modeOpenMultiple)
+	{
+		gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (mDialog), TRUE);
+	}
+
+	g_object_add_weak_pointer (G_OBJECT (mDialog), (gpointer *) &mDialog);
 
 	return NS_OK;
 }
@@ -154,10 +131,12 @@ NS_IMETHODIMP GFilePicker::Init(nsIDOMWindowInternal *parent, const PRUnichar *t
 /* void appendFilters (in long filterMask); */
 NS_IMETHODIMP GFilePicker::AppendFilters(PRInt32 filterMask)
 {
-	// http://lxr.mozilla.org/seamonkey/source/xpfe/components/filepicker/res/locale/en-US/filepicker.properties
-	// http://lxr.mozilla.org/seamonkey/source/xpfe/components/filepicker/src/nsFilePicker.js line 131 ff
+	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
 
 	LOG ("GFilePicker::AppendFilters mask=%d", filterMask)
+
+	// http://lxr.mozilla.org/seamonkey/source/xpfe/components/filepicker/res/locale/en-US/filepicker.properties
+	// http://lxr.mozilla.org/seamonkey/source/xpfe/components/filepicker/src/nsFilePicker.js line 131 ff
 
 	if (filterMask & nsIFilePicker::filterAll)
 	{
@@ -206,6 +185,10 @@ NS_IMETHODIMP GFilePicker::AppendFilter(const nsAString& title, const nsAString&
 NS_IMETHODIMP GFilePicker::AppendFilter(const PRUnichar *title, const PRUnichar *filter)
 #endif
 {
+	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
+
+	LOG ("GFilePicker::AppendFilter")
+
 #if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 	if (!filter.Length()) return NS_ERROR_FAILURE;
 #else
@@ -254,10 +237,11 @@ NS_IMETHODIMP GFilePicker::GetDefaultString(nsAString& aDefaultString)
 NS_IMETHODIMP GFilePicker::GetDefaultString(PRUnichar **aDefaultString)
 #endif
 {
-	char *filename, *converted;
+	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
 
 	LOG ("GFilePicker::GetDefaultString")
 
+	char *filename, *converted;
 	filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (mDialog));
 	if (filename != NULL)
 	{
@@ -286,6 +270,10 @@ NS_IMETHODIMP GFilePicker::SetDefaultString(const nsAString& aDefaultString)
 NS_IMETHODIMP GFilePicker::SetDefaultString(const PRUnichar *aDefaultString)
 #endif
 {
+	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
+
+	if (!mMode == nsIFilePicker::modeSave) return NS_ERROR_FAILURE;
+
 #if MOZILLA_CHECK_VERSION4 (1, 8, MOZILLA_ALPHA, 1)
 	if (aDefaultString.Length())
 #else
@@ -326,6 +314,8 @@ NS_IMETHODIMP GFilePicker::SetDefaultExtension(const nsAString& aDefaultExtensio
 NS_IMETHODIMP GFilePicker::SetDefaultExtension(const PRUnichar *aDefaultExtension)
 #endif
 {
+	LOG ("GFilePicker::SetDefaultExtension")
+
 	return NS_ERROR_NOT_IMPLEMENTED;
 }
 
@@ -347,11 +337,11 @@ NS_IMETHODIMP GFilePicker::SetFilterIndex(PRInt32 aFilterIndex)
 /* attribute nsILocalFile displayDirectory; */
 NS_IMETHODIMP GFilePicker::GetDisplayDirectory(nsILocalFile **aDisplayDirectory)
 {
-	char *dir;
+	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
 
 	LOG ("GFilePicker::GetDisplayDirectory")
 
-	dir = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (mDialog));
+	char *dir = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (mDialog));
 
 	if (dir != NULL)
 	{
@@ -367,6 +357,8 @@ NS_IMETHODIMP GFilePicker::GetDisplayDirectory(nsILocalFile **aDisplayDirectory)
 
 NS_IMETHODIMP GFilePicker::SetDisplayDirectory(nsILocalFile *aDisplayDirectory)
 {
+	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
+
 	nsEmbedCString dir;
 	aDisplayDirectory->GetNativePath (dir);
 
@@ -381,6 +373,8 @@ NS_IMETHODIMP GFilePicker::SetDisplayDirectory(nsILocalFile *aDisplayDirectory)
 /* readonly attribute nsILocalFile file; */
 NS_IMETHODIMP GFilePicker::GetFile(nsILocalFile **aFile)
 {
+	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
+
 	char *filename;
 
 	LOG ("GFilePicker::GetFile")
@@ -402,6 +396,8 @@ NS_IMETHODIMP GFilePicker::GetFile(nsILocalFile **aFile)
 /* readonly attribute nsIFileURL fileURL; */
 NS_IMETHODIMP GFilePicker::GetFileURL(nsIFileURL **aFileURL)
 {
+	NS_ENSURE_TRUE (mDialog, NS_ERROR_FAILURE);
+
 	LOG ("GFilePicker::GetFileURL")
 
 	nsCOMPtr<nsILocalFile> file;
