@@ -1,5 +1,4 @@
 #define CONF_NETWORK_CACHE_SIZE "/apps/epiphany/web/cache_size"
-#define CONF_NETWORK_CACHE_COMPARE "/apps/epiphany/web/cache_compare"
 #define CONF_RENDERING_FONT "/apps/epiphany/web/font"
 #define CONF_RENDERING_FONT_VAR_SIZE "/apps/epiphany/web/font_var_size"
 #define CONF_RENDERING_FONT_FIXED_SIZE "/apps/epiphany/web/font_fixed_size"
