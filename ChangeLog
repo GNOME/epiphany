@@ -1,5 +1,12 @@
 2003-07-20  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/ephy-dialog.c: (impl_construct):
+
+	Use connect_object for the dialog destroy signal, so
+	we dont unref the EphyDialog object two times.
+
+2003-07-20  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* embed/mozilla/mozilla-embed-single.cpp:
 
 	Do not emit warning when language pack is not installed.

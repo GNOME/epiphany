@@ -1092,10 +1092,10 @@ impl_construct (EphyDialog *dialog,
 		dialog->priv->props = init_props (properties, gxml);
 	}
 
-	g_signal_connect (dialog->priv->dialog,
-			  "destroy",
-			  G_CALLBACK(dialog_destroy_cb),
-			  dialog);
+	g_signal_connect_object (dialog->priv->dialog,
+			         "destroy",
+			         G_CALLBACK(dialog_destroy_cb),
+			         dialog, 0);
 
 	g_object_unref (gxml);
 }
