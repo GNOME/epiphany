@@ -62,7 +62,11 @@ NS_IMETHODIMP
 EphyContentPolicy::ShouldLoad(PRUint32 aContentType,
 			      nsIURI *aContentLocation,
 			      nsIURI *aRequestingLocation,
+#if MOZILLA_SNAPSHOT >= 20
+			      nsISupports *aContext,
+#else
 			      nsIDOMNode *aRequestingNode,
+#endif
 			      const nsACString &aMimeTypeGuess,
 			      nsISupports *aExtra,
 			      PRInt16 *aDecision)
@@ -101,7 +105,11 @@ NS_IMETHODIMP
 EphyContentPolicy::ShouldProcess(PRUint32 aContentType,
 			         nsIURI *aContentLocation,
 			         nsIURI *aRequestingLocation,
+#if MOZILLA_SNAPSHO >= 20
+			         nsISupports *aContext,
+#else
 			         nsIDOMNode *aRequestingNode,
+#endif
 			         const nsACString &aMimeType,
 			         nsISupports *aExtra,
 			         PRInt16 *aDecision)
