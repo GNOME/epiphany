@@ -256,6 +256,7 @@ ppview_toolbar_init (PPViewToolbar *t)
 
 	t->priv->window = NULL;
 	t->priv->ui_merge = NULL;
+	t->priv->current_page = 1;
 
 	for (i = 0; i < n_entries; i++)
 	{
@@ -336,6 +337,21 @@ toolbar_cmd_ppv_goto_last  (EggMenuMerge *merge,
 	toolbar_update_sensitivity (t);
 }
 
+static int
+clamp_page_limits (PPViewToolbar *t, int page)
+{
+	EphyWindow *window = t->priv->window;
+	EphyEmbed *embed;
+	int pages;
+
+	embed = ephy_window_get_active_embed (window);
+	g_return_val_if_fail (embed != NULL, -1);
+
+	ephy_embed_print_preview_num_pages (embed, &pages);
+
+	return CLAMP (page, 1, pages);
+}
+
 static void
 toolbar_cmd_ppv_go_back  (EggMenuMerge *merge,
 			  PPViewToolbar *t)
@@ -346,11 +362,11 @@ toolbar_cmd_ppv_go_back  (EggMenuMerge *merge,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_print_preview_navigate (embed,
-					   PRINTPREVIEW_PREV_PAGE,
-					   0);
+	t->priv->current_page = clamp_page_limits (t, t->priv->current_page - 1);
 
-	t->priv->current_page --;
+	ephy_embed_print_preview_navigate (embed,
+					   PRINTPREVIEW_GOTO_PAGENUM,
+					   t->priv->current_page);
 
 	toolbar_update_sensitivity (t);
 }
@@ -365,11 +381,11 @@ toolbar_cmd_ppv_go_forward (EggMenuMerge *merge,
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_print_preview_navigate (embed,
-					   PRINTPREVIEW_NEXT_PAGE,
-					   0);
+	t->priv->current_page = clamp_page_limits (t, t->priv->current_page + 1);
 
-	t->priv->current_page ++;
+	ephy_embed_print_preview_navigate (embed,
+					   PRINTPREVIEW_GOTO_PAGENUM,
+					   t->priv->current_page);
 
 	toolbar_update_sensitivity (t);
 }

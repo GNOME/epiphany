@@ -1064,6 +1064,12 @@ show_embed_popup (EphyWindow *window, EphyTab *tab, EphyEmbedEvent *event)
 	GtkWidget *widget;
 	EphyEmbedEventType type;
 
+	/* Do not show the menu in print preview mode */
+	if (window->priv->chrome_mask & EMBED_CHROME_PPVIEWTOOLBARON)
+	{
+		return;
+	}
+
 	ephy_embed_event_get_property (event, "framed_page", &value);
 	framed = g_value_get_int (value);
 

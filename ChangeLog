@@ -1,5 +1,18 @@
 2003-08-13  Marco Pesenti Gritti  <marco@.gnome.org>
 
+	* src/ephy-window.c: (show_embed_popup):
+
+	Do not show popups on print preview.
+
+	* src/ppview-toolbar.c: (ppview_toolbar_set_window),
+	(ppview_toolbar_init), (toolbar_cmd_ppv_goto_first),
+	(toolbar_cmd_ppv_goto_last), (clamp_page_limits),
+	(toolbar_cmd_ppv_go_back), (toolbar_cmd_ppv_go_forward):
+
+	Use only known to work api to navigate.
+
+2003-08-13  Marco Pesenti Gritti  <marco@.gnome.org>
+
 	* AUTHORS:
 	* HACKING:
 	* src/window-commands.c: (window_cmd_help_about):
