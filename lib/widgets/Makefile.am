@@ -1,4 +1,5 @@
 INCLUDES = \
+	-I$(top_builddir)/lib		\
 	-I$(top_srcdir)/lib		\
 	-I$(top_srcdir)/lib/egg		\
 	$(EPIPHANY_DEPENDENCY_CFLAGS)	\
