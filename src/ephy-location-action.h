@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifndef EPHY_LOCATION_ACTION_H
@@ -30,12 +32,15 @@ G_BEGIN_DECLS
 #define EPHY_IS_LOCATION_ACTION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), EPHY_TYPE_LOCATION_ACTION))
 #define EPHY_LOCATION_ACTION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_LOCATION_ACTION, EphyLocationActionClass))
 
-typedef struct _EphyLocationAction      EphyLocationAction;
-typedef struct _EphyLocationActionClass EphyLocationActionClass;
-
+typedef struct _EphyLocationAction		EphyLocationAction;
+typedef struct _EphyLocationActionClass		EphyLocationActionClass;
+typedef struct _EphyLocationActionPrivate	EphyLocationActionPrivate;
+	
 struct _EphyLocationAction
 {
 	GtkAction parent;
+
+	EphyLocationActionPrivate *priv;
 };
 
 struct _EphyLocationActionClass
@@ -45,9 +50,14 @@ struct _EphyLocationActionClass
 	void (*go_location) (EphyLocationAction *action, char *location);
 };
 
-GType      ephy_location_action_get_type   (void);
+GType		ephy_location_action_get_type		(void);
 
-GtkWidget *ephy_location_action_get_widget (EphyLocationAction *action);
+const char     *ephy_location_action_get_address	(EphyLocationAction *action);
+
+void		ephy_location_action_set_address	(EphyLocationAction *action,
+							 const char *address);
+
+void		ephy_location_action_clear_history	(EphyLocationAction *action);
 
 G_END_DECLS
 

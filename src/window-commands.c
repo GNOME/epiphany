@@ -915,7 +915,7 @@ window_cmd_load_location (GtkAction *action,
 			  EphyWindow *window)
 {
 	Toolbar *toolbar;
-	char *location;
+	const char *location;
 
 	toolbar = ephy_window_get_toolbar (window);
 	location = toolbar_get_location (toolbar);
@@ -923,7 +923,6 @@ window_cmd_load_location (GtkAction *action,
 	if (location)
 	{
 		ephy_window_load_url (window, location);
-		g_free (location);
 	}
 }
 

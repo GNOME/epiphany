@@ -1,5 +1,40 @@
 2003-09-20  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/widgets/ephy-location-entry.c:
+	(ephy_location_entry_class_init),
+	(ephy_location_entry_activation_finished), (location_focus_out_cb),
+	(ephy_location_entry_init), (ephy_location_ignore_prefix),
+	(ephy_location_entry_activate_cb),
+	(ephy_location_entry_set_location),
+	(ephy_location_entry_get_location), (ephy_location_entry_activate),
+	(ephy_location_entry_editable_changed_cb),
+	(ephy_location_entry_clear_history):
+	* lib/widgets/ephy-location-entry.h:
+	* src/ephy-location-action.c: (location_url_activate_cb),
+	(user_changed_cb), (sync_address), (connect_proxy),
+	(disconnect_proxy), (ephy_location_action_set_property),
+	(ephy_location_action_get_property),
+	(ephy_location_action_activate), (ephy_location_action_class_init),
+	(ephy_location_action_init), (ephy_location_action_finalize),
+	(ephy_location_action_get_address),
+	(ephy_location_action_set_address), (clear_history),
+	(ephy_location_action_clear_history):
+	* src/ephy-location-action.h:
+	* src/toolbar.c: (toolbar_class_init), (toolbar_set_property),
+	(sync_user_input_cb), (toolbar_setup_actions),
+	(toolbar_set_window), (toolbar_init), (toolbar_finalize),
+	(toolbar_new), (toolbar_activate_location), (toolbar_set_location),
+	(toolbar_get_location), (toolbar_clear_location_history):
+	* src/toolbar.h:
+	* src/window-commands.c: (window_cmd_load_location):
+
+	Remember the address in the location action, so we can restore it when we
+	get a new proxy widget.
+	Do some misc cleanups on location entry, removing finished signal; move
+	activation from toolbar into location entry.
+
+2003-09-20  Christian Persch  <chpe@cvs.gnome.org>
+
 	* lib/widgets/ephy-tree-model-node.c:
 	(ephy_tree_model_node_init):
 

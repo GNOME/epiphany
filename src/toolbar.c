@@ -87,7 +87,7 @@ struct ToolbarPrivate
 	GtkUIManager *ui_merge;
 	GtkActionGroup *action_group;
 	gboolean visibility;
-	gboolean can_set_location;
+	gboolean updating_address;
 	GtkWidget *spinner;
 	GtkWidget *favicon;
 	GtkWidget *go;
@@ -217,8 +217,8 @@ toolbar_class_init (ToolbarClass *klass)
 
 	g_object_class_install_property (object_class,
                                          PROP_EPHY_WINDOW,
-                                         g_param_spec_object ("EphyWindow",
-                                                              "EphyWindow",
+                                         g_param_spec_object ("window",
+                                                              "Window",
                                                               "Parent window",
 							      EPHY_TYPE_WINDOW,
 							      G_PARAM_READWRITE |
@@ -238,8 +238,8 @@ toolbar_set_property (GObject *object,
         switch (prop_id)
         {
 		case PROP_EPHY_WINDOW:
-		toolbar_set_window (t, g_value_get_object (value));
-		break;
+			toolbar_set_window (t, g_value_get_object (value));
+			break;
         }
 }
 
@@ -257,6 +257,26 @@ toolbar_get_property (GObject *object,
                         g_value_set_object (value, t->priv->window);
                         break;
         }
+}
+
+static void
+sync_user_input_cb (EphyLocationAction *action, GParamSpec *pspec, Toolbar *t)
+{
+	EphyTab *tab;
+	const char *address;
+
+	LOG ("sync_user_input_cb")
+
+	if (t->priv->updating_address) return;
+
+	tab = ephy_window_get_active_tab (t->priv->window);
+	g_return_if_fail (EPHY_IS_TAB (tab));
+
+	address = ephy_location_action_get_address (action);
+
+	t->priv->updating_address = TRUE;
+	ephy_tab_set_location (tab, address, TAB_ADDRESS_EXPIRE_CURRENT);
+	t->priv->updating_address = FALSE;
 }
 
 static void
@@ -324,6 +344,8 @@ toolbar_setup_actions (Toolbar *t)
 			       NULL);
 	g_signal_connect (action, "go_location",
 			  G_CALLBACK (go_location_cb), t->priv->window);
+	g_signal_connect (action, "notify::address",
+			  G_CALLBACK (sync_user_input_cb), t);
 	gtk_action_group_add_action (t->priv->action_group, action);
 	g_object_unref (action);
 
@@ -430,36 +452,6 @@ update_toolbar_remove_flag (EphyToolbarsModel *model, gpointer data)
 	}
 }
 
-static GtkWidget *
-get_location_entry (Toolbar *t)
-{
-	GtkAction *action;
-	GtkWidget *location;
-
-	action = gtk_action_group_get_action
-		(t->priv->action_group, "Location");
-	location = ephy_location_action_get_widget
-		(EPHY_LOCATION_ACTION (action));
-
-	return location;
-}
-
-static void
-location_user_changed_cb (GtkWidget *entry, Toolbar *t)
-{
-	EphyTab *tab;
-	char *address;
-
-	tab = ephy_window_get_active_tab (t->priv->window);
-	g_return_if_fail (EPHY_IS_TAB (tab));
-
-	t->priv->can_set_location = FALSE;
-	address = ephy_location_entry_get_location (EPHY_LOCATION_ENTRY (entry));
-	ephy_tab_set_location (tab, address, TAB_ADDRESS_EXPIRE_CURRENT);
-	g_free (address);
-	t->priv->can_set_location = TRUE;
-}
-
 static void
 init_normal_mode (Toolbar *t)
 {
@@ -536,10 +528,6 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 		      NULL);
 
 	init_normal_mode (t);
-
-	g_signal_connect_object (get_location_entry (t), "user_changed",
-			         G_CALLBACK (location_user_changed_cb),
-			         t, 0);
 }
 
 static void
@@ -550,19 +538,13 @@ toolbar_init (Toolbar *t)
 	t->priv->window = NULL;
 	t->priv->ui_merge = NULL;
 	t->priv->visibility = TRUE;
-	t->priv->can_set_location = TRUE;
+	t->priv->updating_address = FALSE;
 }
 
 static void
 toolbar_finalize (GObject *object)
 {
-	Toolbar *t;
-	ToolbarPrivate *p;
-	GtkUIManager *merge;
-
-	t = EPHY_TOOLBAR (object);
-	p = t->priv;
-	merge = GTK_UI_MANAGER (t->priv->window->ui_merge);
+	Toolbar *t = EPHY_TOOLBAR (object);
 
 	/* FIXME: why not at the end? */
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -575,46 +557,21 @@ toolbar_finalize (GObject *object)
 Toolbar *
 toolbar_new (EphyWindow *window)
 {
-	Toolbar *t;
-
-	t = EPHY_TOOLBAR (g_object_new (EPHY_TYPE_TOOLBAR,
-					"EphyWindow", window,
-					NULL));
-
-	return t;
-}
-
-static void
-location_finished_cb (GtkWidget *location, GtkWidget *toolbar)
-{
-	gtk_widget_hide (toolbar);
-
-	g_signal_handlers_disconnect_by_func (G_OBJECT (location),
-                                              G_CALLBACK (location_finished_cb),
-                                              toolbar);
+	return EPHY_TOOLBAR (g_object_new (EPHY_TYPE_TOOLBAR,
+					   "window", window,
+					   NULL));
 }
 
 void
 toolbar_activate_location (Toolbar *t)
 {
-	GtkWidget *location;
-	GtkWidget *location_tb;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 
-	location = get_location_entry (t);
-	g_return_if_fail (location != NULL);
+	action_group = t->priv->action_group;
+	action = gtk_action_group_get_action (action_group, "Location");
 
-	location_tb = gtk_widget_get_ancestor (location, GTK_TYPE_TOOLBAR);
-	g_return_if_fail (location_tb != NULL);
-
-	if (!GTK_WIDGET_VISIBLE (location_tb))
-	{
-		g_signal_connect (location, "finished",
-				  G_CALLBACK (location_finished_cb), location_tb);
-		gtk_widget_show (location_tb);
-	}
-
-	ephy_location_entry_activate
-		(EPHY_LOCATION_ENTRY(location));
+	gtk_action_activate (action);
 }
 
 void
@@ -641,19 +598,22 @@ toolbar_spinner_stop (Toolbar *t)
 
 void
 toolbar_set_location (Toolbar *t,
-		      const char *alocation)
+		      const char *address)
 {
-	GtkWidget *location;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 
-	if (t->priv->can_set_location)
-	{
-		location = get_location_entry (t);
-		g_return_if_fail (location != NULL);
+	LOG ("toolbar set location %s", address)
+	LOG ("updating is %d", t->priv->updating_address)
 
-		ephy_location_entry_set_location
-			(EPHY_LOCATION_ENTRY (location),
-			 alocation ? alocation : "");
-	}
+	if (t->priv->updating_address) return;
+
+	action_group = t->priv->action_group;
+	action = gtk_action_group_get_action (action_group, "Location");
+
+	t->priv->updating_address = TRUE;
+	ephy_location_action_set_address (EPHY_LOCATION_ACTION (action), address);
+	t->priv->updating_address = FALSE;
 }
 
 void
@@ -671,27 +631,28 @@ toolbar_update_favicon (Toolbar *t)
 	g_object_set (action, "icon", url, NULL);
 }
 
-char *
+const char *
 toolbar_get_location (Toolbar *t)
 {
-	GtkWidget *location;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 
-	location = get_location_entry (t);
-	g_return_val_if_fail (location != NULL, NULL);
+	action_group = t->priv->action_group;
+	action = gtk_action_group_get_action (action_group, "Location");
 
-	return ephy_location_entry_get_location
-		(EPHY_LOCATION_ENTRY (location));
+	return ephy_location_action_get_address (EPHY_LOCATION_ACTION (action));
 }
 
 void
 toolbar_clear_location_history (Toolbar *t)
 {
-	GtkWidget *location;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 
-	location = get_location_entry (t),
-	g_return_if_fail (location != NULL);
+	action_group = t->priv->action_group;
+	action = gtk_action_group_get_action (action_group, "Location");
 
-	ephy_location_entry_clear_history (EPHY_LOCATION_ENTRY (location));
+	ephy_location_action_clear_history (EPHY_LOCATION_ACTION (action));
 }
 
 void

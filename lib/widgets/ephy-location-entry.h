@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2002  Ricardo Fernández Pascual
+ *  Copyright (C) 2003  Marco Pesenti Gritti
  *  Copyright (C) 2003  Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -15,6 +16,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  $Id$
  */
 
 #ifndef EPHY_LOCATION_ENTRY_H
@@ -53,8 +56,6 @@ struct _EphyLocationEntryClass
 					 const char *content,
 					 const char *target);
 
-	void		(*finished)	(EphyLocationEntry *w);
-
 	void		(*user_changed)	(EphyLocationEntry *w);
 };
 
@@ -70,7 +71,7 @@ GType			ephy_location_entry_get_type		(void);
 GtkWidget              *ephy_location_entry_new			(void);
 void			ephy_location_entry_set_location	(EphyLocationEntry *w,
 								 const gchar *new_location);
-gchar		       *ephy_location_entry_get_location	(EphyLocationEntry *w);
+const char	       *ephy_location_entry_get_location	(EphyLocationEntry *w);
 void			ephy_location_entry_set_autocompletion  (EphyLocationEntry *w,
 								 EphyAutocompletion *ac);
 void			ephy_location_entry_activate		(EphyLocationEntry *w);

@@ -56,7 +56,7 @@ void          toolbar_spinner_start		(Toolbar *t);
 
 void          toolbar_spinner_stop		(Toolbar *t);
 
-char         *toolbar_get_location              (Toolbar *t);
+const char   *toolbar_get_location              (Toolbar *t);
 
 void          toolbar_set_location              (Toolbar *t,
 						 const char *location);

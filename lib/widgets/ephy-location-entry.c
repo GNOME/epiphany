@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2002  Ricardo Fernández Pascual
+ *  Copyright (C) 2003  Marco Pesenti Gritti
  *  Copyright (C) 2003  Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -32,6 +33,7 @@
 #include <gtk/gtkwindow.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtkmain.h>
+#include <gtk/gtktoolbar.h>
 #include <gtk/gtktooltips.h>
 #include <libgnomeui/gnome-entry.h>
 #include <string.h>
@@ -53,6 +55,7 @@ struct _EphyLocationEntryPrivate {
 	gboolean block_set_autocompletion_key;
 	gboolean going_to_site;
 	gboolean user_changed;
+	gboolean activation_mode;
 
 	char *autocompletion_key;
 	char *last_action_target;
@@ -111,7 +114,6 @@ static GObjectClass *parent_class = NULL;
  */
 enum EphyLocationEntrySignalsEnum {
 	ACTIVATED,
-	FINISHED,
 	USER_CHANGED,
 	LAST_SIGNAL
 };
@@ -184,15 +186,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		2,
 		G_TYPE_STRING,
 		G_TYPE_STRING);
-	EphyLocationEntrySignals[FINISHED] = g_signal_new (
-		"finished", G_OBJECT_CLASS_TYPE (klass),
-		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST | G_SIGNAL_RUN_CLEANUP,
-                G_STRUCT_OFFSET (EphyLocationEntryClass, finished),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__VOID,
-		G_TYPE_NONE,
-		0,
-		G_TYPE_NONE);
 	EphyLocationEntrySignals[USER_CHANGED] = g_signal_new (
 		"user_changed", G_OBJECT_CLASS_TYPE (klass),
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST | G_SIGNAL_RUN_CLEANUP,
@@ -206,10 +199,25 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 	g_type_class_add_private (object_class, sizeof (EphyLocationEntryPrivate));
 }
 
+static void
+ephy_location_entry_activation_finished (EphyLocationEntry *entry)
+{
+	if (entry->priv->activation_mode)
+	{
+		GtkWidget *toolbar;
+
+		entry->priv->activation_mode = FALSE;
+
+		toolbar = gtk_widget_get_ancestor (GTK_WIDGET (entry),
+						   GTK_TYPE_TOOLBAR);
+		gtk_widget_hide (toolbar);
+	}
+}
+
 static gboolean
 location_focus_out_cb (GtkWidget *widget, GdkEventFocus *event, EphyLocationEntry *w)
 {
-	g_signal_emit (w, EphyLocationEntrySignals[FINISHED], 0);
+	ephy_location_entry_activation_finished (w);
 
 	return FALSE;
 }
@@ -227,6 +235,7 @@ ephy_location_entry_init (EphyLocationEntry *w)
 	p->last_action_target = NULL;
 	p->before_completion = NULL;
 	p->user_changed = TRUE;
+	p->activation_mode = FALSE;
 	p->autocompletion_key = NULL;
 
 	ephy_location_entry_construct_contents (w);
@@ -325,7 +334,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *w)
 static gboolean
 ephy_location_ignore_prefix (EphyLocationEntry *w)
 {
-	char *text;
+	const char *text;
 	int text_len;
 	int i, k;
 	gboolean result = FALSE;
@@ -335,6 +344,8 @@ ephy_location_ignore_prefix (EphyLocationEntry *w)
 	};
 
 	text = ephy_location_entry_get_location (w);
+	g_return_val_if_fail (text != NULL, FALSE);
+
 	text_len = g_utf8_strlen (text, -1);
 
 	for (i = 0; prefixes[i] != NULL; i++)
@@ -350,8 +361,6 @@ ephy_location_ignore_prefix (EphyLocationEntry *w)
 			}
 		}
 	}
-
-	g_free (text);
 
 	return result;
 }
@@ -550,7 +559,7 @@ ephy_location_entry_activate_cb (GtkEntry *entry, EphyLocationEntry *w)
 	LOG ("In ephy_location_entry_activate_cb, activating %s", content)
 
 	g_signal_emit (w, EphyLocationEntrySignals[ACTIVATED], 0, content, target);
-	g_signal_emit (w, EphyLocationEntrySignals[FINISHED], 0);
+	ephy_location_entry_activation_finished (w);
 
 	g_free (content);
 	g_free (target);
@@ -580,6 +589,8 @@ ephy_location_entry_set_location (EphyLocationEntry *w,
 	EphyLocationEntryPrivate *p = w->priv;
 	int pos;
 
+	g_return_if_fail (new_location != NULL);
+
 	p->user_changed = FALSE;
 
 	g_signal_handlers_block_by_func (G_OBJECT (p->entry),
@@ -598,11 +609,10 @@ ephy_location_entry_set_location (EphyLocationEntry *w,
 	p->user_changed = TRUE;
 }
 
-gchar *
+const char *
 ephy_location_entry_get_location (EphyLocationEntry *w)
 {
-	char *location = gtk_editable_get_chars (GTK_EDITABLE (w->priv->entry), 0, -1);
-	return location;
+	return gtk_entry_get_text (GTK_ENTRY (w->priv->entry));
 }
 
 static void
@@ -717,7 +727,16 @@ ephy_location_entry_autocompletion_window_hidden_cb (EphyAutocompletionWindow *a
 void
 ephy_location_entry_activate (EphyLocationEntry *w)
 {
-	GtkWidget *toplevel;
+	GtkWidget *toplevel, *toolbar;
+
+	toolbar = gtk_widget_get_ancestor (GTK_WIDGET (w), GTK_TYPE_TOOLBAR);
+
+	if (!GTK_WIDGET_VISIBLE (toolbar))
+	{
+		w->priv->activation_mode = TRUE;
+
+		gtk_widget_show (toolbar);
+	}
 
 	toplevel = gtk_widget_get_toplevel (w->priv->entry);
 
@@ -726,7 +745,6 @@ ephy_location_entry_activate (EphyLocationEntry *w)
         gtk_window_set_focus (GTK_WINDOW(toplevel),
                               w->priv->entry);
 }
-
 
 static void
 ephy_location_entry_list_event_after_cb (GtkWidget *list,
@@ -749,13 +767,12 @@ ephy_location_entry_editable_changed_cb (GtkEditable *editable, EphyLocationEntr
 
 	if (p->going_to_site)
 	{
-		char *url = ephy_location_entry_get_location (e);
+		const char *url = ephy_location_entry_get_location (e);
 		if (url && url[0] != '\0')
 		{
 			p->going_to_site = FALSE;
 			g_signal_emit (e, EphyLocationEntrySignals[ACTIVATED], 0, NULL, url);
 		}
-		g_free (url);
 	}
 
 	if (p->user_changed)
@@ -786,4 +803,3 @@ ephy_location_entry_clear_history (EphyLocationEntry *w)
 {
 	gnome_entry_clear_history (GNOME_ENTRY (w->priv->combo));
 }
-
