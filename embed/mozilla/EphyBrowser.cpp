@@ -70,6 +70,7 @@
 #include "nsIChannel.h"
 
 #ifdef ALLOW_PRIVATE_API
+#include "nsIDocShell.h"
 #include "nsIMarkupDocumentViewer.h"
 #ifdef HAVE_MOZILLA_PSM
 /* not sure about this one: */
@@ -261,7 +262,7 @@ nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 nsresult
 EphyBrowser::GetListener (void)
 {
-  	if (mEventReceiver) return NS_ERROR_FAILURE;
+  	if (mEventTarget) return NS_ERROR_FAILURE;
 
   	nsCOMPtr<nsIDOMWindow> domWindowExternal;
   	mWebBrowser->GetContentDOMWindow (getter_AddRefs(domWindowExternal));
@@ -269,11 +270,8 @@ EphyBrowser::GetListener (void)
   	nsCOMPtr<nsIDOMWindow2> domWindow (do_QueryInterface (domWindowExternal));
 	NS_ENSURE_TRUE (domWindow, NS_ERROR_FAILURE);
 	
-  	nsCOMPtr<nsIDOMEventTarget> rootWindow;
-  	domWindow->GetWindowRoot (getter_AddRefs(rootWindow));
-
-  	mEventReceiver = do_QueryInterface (rootWindow);
-	NS_ENSURE_TRUE (mEventReceiver, NS_ERROR_FAILURE);
+  	domWindow->GetWindowRoot (getter_AddRefs(mEventTarget));
+	NS_ENSURE_TRUE (mEventTarget, NS_ERROR_FAILURE);
 
 	return NS_OK;
 }
@@ -281,19 +279,13 @@ EphyBrowser::GetListener (void)
 nsresult
 EphyBrowser::AttachListeners(void)
 {
+	NS_ENSURE_TRUE (mEventTarget, NS_ERROR_FAILURE);
+
 	nsresult rv;
-
-	NS_ENSURE_TRUE (mEventReceiver, NS_ERROR_FAILURE);
-
-	nsCOMPtr<nsIDOMEventTarget> target;
-	target = do_QueryInterface (mEventReceiver);
-
-	rv = target->AddEventListener(nsEmbedString(DOMLinkAdded),
-				      mFaviconEventListener, PR_FALSE);
-	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
-	rv = target->AddEventListener(nsEmbedString(DOMPopupBlocked),
-				      mPopupBlockEventListener, PR_FALSE);
+	rv = mEventTarget->AddEventListener(nsEmbedString(DOMLinkAdded),
+					    mFaviconEventListener, PR_FALSE);
+	rv |= mEventTarget->AddEventListener(nsEmbedString(DOMPopupBlocked),
+					     mPopupBlockEventListener, PR_FALSE);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
 
 	return NS_OK;
@@ -302,20 +294,14 @@ EphyBrowser::AttachListeners(void)
 nsresult
 EphyBrowser::DetachListeners(void)
 {
+	if (!mEventTarget) return NS_OK;
+
 	nsresult rv;
-
-	if (!mEventReceiver) return NS_OK;
-
-	nsCOMPtr<nsIDOMEventTarget> target;
-	target = do_QueryInterface (mEventReceiver);
-	NS_ENSURE_TRUE (target, NS_ERROR_FAILURE);
-
-	rv = target->RemoveEventListener(nsEmbedString(DOMLinkAdded),
-					 mFaviconEventListener, PR_FALSE);
+	rv = mEventTarget->RemoveEventListener(nsEmbedString(DOMLinkAdded),
+					       mFaviconEventListener, PR_FALSE);
+	rv |= mEventTarget->RemoveEventListener(nsEmbedString(DOMPopupBlocked),
+					        mPopupBlockEventListener, PR_FALSE);
 	NS_ENSURE_SUCCESS (rv, NS_ERROR_FAILURE);
-
-	rv = target->RemoveEventListener(nsEmbedString(DOMPopupBlocked),
-					 mPopupBlockEventListener, PR_FALSE);
 
 	return NS_OK;
 }
@@ -413,7 +399,7 @@ nsresult EphyBrowser::Destroy ()
 
       	mWebBrowser = nsnull;
 	mDOMWindow = nsnull;
-	mEventReceiver = nsnull;
+	mEventTarget = nsnull;
 
 	mInitialized = PR_FALSE;
 

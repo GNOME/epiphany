@@ -27,6 +27,7 @@
 #include <gtkmozembed.h>
 #include <nsCOMPtr.h>
 #include <nsIDOMEventListener.h>
+#include <nsIDOMEventTarget.h>
 #include <nsIWebNavigation.h>
 #include <nsISHistory.h>
 #include <nsIWebBrowser.h>
@@ -36,8 +37,7 @@
 #include <nsIRequest.h>
 
 #ifdef ALLOW_PRIVATE_API
-#include <nsIDocShell.h>
-#include <nsIDOMEventReceiver.h>
+#include "nsIContentViewer.h"
 #endif
 
 class EphyEventListener : public nsIDOMEventListener
@@ -134,7 +134,7 @@ public:
 
 private:
 	nsCOMPtr<nsIDOMDocument> mTargetDocument;
-	nsCOMPtr<nsIDOMEventReceiver> mEventReceiver;
+	nsCOMPtr<nsIDOMEventTarget> mEventTarget;
 	nsCOMPtr<nsIDOMWindow> mDOMWindow;
 	nsCOMPtr<nsISupports> mSecurityInfo;
 	EphyFaviconEventListener *mFaviconEventListener;

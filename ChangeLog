@@ -1,5 +1,14 @@
 2004-08-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+
+	Don't QI the event target to nsIDOMEventReceiver and back
+	to nsIDOMEventTarget when using it, just store it as-is.
+	Thanks to Crispin for noticing this.
+
+2004-08-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.in:
 
 	Post-release version bump.
