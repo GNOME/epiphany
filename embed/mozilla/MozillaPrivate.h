@@ -20,11 +20,7 @@
 
 #include <glib.h>
 
-class nsIPrefBranch;
-
 namespace MozillaPrivate
 {
 	GList   *GetPrinterList ();
-
-	void	 SecureWallet (nsIPrefBranch *pref);
 }
