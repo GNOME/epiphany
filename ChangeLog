@@ -1,5 +1,15 @@
 2003-04-13  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-tab.c: (ephy_tab_init), (ephy_tab_finalize),
+	(ephy_tab_set_favicon), (ephy_tab_favicon_cache_changed_cb),
+	(ephy_tab_link_message_cb), (ephy_tab_location_cb),
+	(ephy_tab_get_status_message):
+
+	Fix leaks. Dont truncate utf8 strings.
+
+2003-04-13  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* data/starthere/smartbookmarks.xml.in:
 
 	Fix the text to make sense.

@@ -1064,13 +1064,7 @@ impl_get_security_level (EphyEmbed *embed,
 
 		if (tooltip)
 		{
-			const nsString &string = nsString(tooltip);
-			char *tmp;
-			tmp = ToNewCString (string);
-			
-			*description = g_strdup (tmp);
-
-			nsMemory::Free (tmp);
+			*description = g_strdup (NS_ConvertUCS2toUTF8(tooltip).get());
 		}
 	}
 	
@@ -1284,7 +1278,7 @@ mozilla_embed_link_message_cb (GtkMozEmbed *embed,
 	*getter_Copies(message) = gtk_moz_embed_get_link_message_unichar (embed);
 	
 	g_signal_emit_by_name (membed, "ge_link_message",
-			       g_strdup(NS_ConvertUCS2toUTF8(message).get()));
+			       NS_ConvertUCS2toUTF8(message).get());
 }
 
 static void
@@ -1296,7 +1290,7 @@ mozilla_embed_js_status_cb (GtkMozEmbed *embed,
 	*getter_Copies(status) = gtk_moz_embed_get_js_status_unichar (embed);
 	
 	g_signal_emit_by_name (membed, "ge_js_status",
-			       g_strdup(NS_ConvertUCS2toUTF8(status).get()));
+			       NS_ConvertUCS2toUTF8(status).get());
 }
 
 static void

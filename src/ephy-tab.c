@@ -51,7 +51,7 @@ struct EphyTabPrivate
 	gboolean is_active;
 	TabLoadStatus load_status;
 	char status_message[255];
-	char link_message[255];
+	char *link_message;
 	char favicon_url[255];
 	char *title;
 	char *location;
@@ -201,15 +201,11 @@ ephy_tab_init (EphyTab *tab)
 
         tab->priv = g_new0 (EphyTabPrivate, 1);
 
-	tab->priv->embed = ephy_embed_new (G_OBJECT(single));
-	ephy_embed_shell_add_embed (EPHY_EMBED_SHELL (ephy_shell),
-				    tab->priv->embed);
-
 	tab->priv->window = NULL;
 	tab->priv->event = NULL;
 	tab->priv->is_active = FALSE;
 	*tab->priv->status_message = '\0';
-	*tab->priv->link_message = '\0';
+	tab->priv->link_message = NULL;
 	*tab->priv->favicon_url = '\0';
 	tab->priv->load_status = TAB_LOAD_NONE;
 	tab->priv->load_percent = 0;
@@ -220,6 +216,9 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->width = -1;
 	tab->priv->height = -1;
 
+	tab->priv->embed = ephy_embed_new (G_OBJECT(single));
+	ephy_embed_shell_add_embed (EPHY_EMBED_SHELL (ephy_shell),
+				    tab->priv->embed);
 
 	embed = G_OBJECT (tab->priv->embed);
 	embed_widget = G_OBJECT (tab->priv->embed);
@@ -303,6 +302,7 @@ ephy_tab_finalize (GObject *object)
 	}
 
 	g_free (tab->priv->location);
+	g_free (tab->priv->link_message);
 
         g_free (tab->priv);
 
@@ -451,7 +451,7 @@ ephy_tab_set_visibility (EphyTab *tab,
 }
 
 static void
-ephy_tab_set_favicon (EphyTab *tab, 
+ephy_tab_set_favicon (EphyTab *tab,
 		      GdkPixbuf *favicon)
 {
 	GtkWidget *nb;
@@ -474,8 +474,8 @@ ephy_tab_set_favicon (EphyTab *tab,
 /* Private callbacks for embed signals */
 
 static void
-ephy_tab_favicon_cache_changed_cb (EphyFaviconCache *cache, 
-				   char *url, 
+ephy_tab_favicon_cache_changed_cb (EphyFaviconCache *cache,
+				   char *url,
 				   EphyTab *tab)
 {
 	GdkPixbuf *pixbuf = NULL;
@@ -486,7 +486,7 @@ ephy_tab_favicon_cache_changed_cb (EphyFaviconCache *cache,
 	/* set favicon */
 	pixbuf = ephy_favicon_cache_get (cache, tab->priv->favicon_url);
 	ephy_tab_set_favicon (tab, pixbuf);
-	
+
 	if (pixbuf) g_object_unref (pixbuf);
 }
 
@@ -523,8 +523,8 @@ ephy_tab_link_message_cb (EphyEmbed *embed,
 {
 	if (!tab->priv->is_active) return;
 
-	g_strlcpy (tab->priv->link_message,
-		   message, 255);
+	g_free (tab->priv->link_message);
+	tab->priv->link_message = g_strdup (message);
 
 	ephy_window_update_control (tab->priv->window,
 				    StatusbarMessageControl);
@@ -536,8 +536,7 @@ ephy_tab_location_cb (EphyEmbed *embed, EphyTab *tab)
 	if (tab->priv->location) g_free (tab->priv->location);
 	ephy_embed_get_location (embed, TRUE,
 				 &tab->priv->location);
-	tab->priv->link_message[0] = '\0';
-
+	tab->priv->link_message = NULL;
 	tab->priv->favicon_url[0] = '\0';
 	ephy_tab_set_favicon (tab, NULL);
 
@@ -1022,7 +1021,7 @@ ephy_tab_get_load_percent (EphyTab *tab)
 const char *
 ephy_tab_get_status_message (EphyTab *tab)
 {
-	if (*tab->priv->link_message)
+	if (tab->priv->link_message)
 	{
 		return tab->priv->link_message;
 	}
