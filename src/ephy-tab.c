@@ -289,6 +289,8 @@ ephy_tab_finalize (GObject *object)
 		g_object_unref (tab->priv->event);
 	}
 
+	g_free (tab->priv->location);
+
         g_free (tab->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -1001,10 +1003,10 @@ ephy_tab_get_favicon_url (EphyTab *tab)
 
 void
 ephy_tab_set_location (EphyTab *tab,
-			 char *location)
+		       char *location)
 {
 	if (tab->priv->location) g_free (tab->priv->location);
-	tab->priv->location = location;
+	tab->priv->location = g_strdup (location);
 }
 
 void

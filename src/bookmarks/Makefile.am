@@ -3,6 +3,7 @@ INCLUDES = \
 	-I$(top_srcdir)/src		\
 	-I$(top_srcdir)/embed		\
 	-I$(top_srcdir)/lib/widgets	\
+	-I$(top_srcdir)/lib/egg		\
 	$(WARN_CFLAGS)			\
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
 	-DSHARE_DIR=\"$(pkgdatadir)\" 	\
@@ -17,6 +18,8 @@ INCLUDES = \
 noinst_LTLIBRARIES = libephybookmarks.la
 
 libephybookmarks_la_SOURCES = \
+	ephy-bookmark-action.c	\
+	ephy-bookmark-action.h	\
 	ephy-bookmarks.c	\
 	ephy-bookmarks.h	\
 	ephy-bookmarks-editor.c	\
@@ -31,5 +34,3 @@ libephybookmarks_la_SOURCES = \
 	ephy-node-view.h	\
 	ephy-tree-model-node.c	\
 	ephy-tree-model-node.h
-
-

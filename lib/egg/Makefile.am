@@ -36,7 +36,8 @@ noinst_HEADERS = \
   eggtoolitem.h	\
   eggseparatortoolitem.h \
   eggtoolbar.h \
-  eggtoolbutton.h
+  eggtoolbutton.h \
+  eggmarshalers.h
 
 eggmarshalers.h:
 	cd $(srcdir) \
@@ -51,9 +52,6 @@ eggmarshalers.c:
 	&& rm -f xgen-emc xgen-emc~
 
 egg-marshal.c: eggmarshalers.h eggmarshalers.c
-
-noinst_HEADERS = \
-	eggmarshalers.h
 
 EXTRA_DIST=			\
 	eggmarshalers.list

@@ -58,6 +58,7 @@ epiphany_SOURCES = 				    	\
 	ephy-location-action.h				\
 	ephy-main.c					\
 	ephy-navigation-action.c			\
+	ephy-navigation-action.h			\
 	ephy-shell.c					\
 	ephy-shell.h					\
 	ephy-spinner-action.c				\

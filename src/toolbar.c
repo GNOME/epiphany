@@ -28,8 +28,12 @@
 #include "ephy-location-action.h"
 #include "ephy-favicon-action.h"
 #include "ephy-navigation-action.h"
+#include "ephy-bookmark-action.h"
 #include "window-commands.h"
+#include "ephy-string.h"
 #include "ephy-debug.h"
+
+#include <string.h>
 
 static void toolbar_class_init (ToolbarClass *klass);
 static void toolbar_init (Toolbar *t);
@@ -86,7 +90,7 @@ toolbar_get_type (void)
                         (GInstanceInitFunc) toolbar_init
                 };
 
-                toolbar_type = g_type_register_static (G_TYPE_OBJECT,
+                toolbar_type = g_type_register_static (EPHY_EDITABLE_TOOLBAR_TYPE,
 						       "Toolbar",
 						       &our_info, 0);
         }
@@ -146,14 +150,6 @@ toolbar_get_property (GObject *object,
                         g_value_set_object (value, t->priv->window);
                         break;
         }
-}
-
-static void
-toolbar_setup_widgets (Toolbar *t)
-{
-	egg_menu_merge_add_ui_from_file
-		(t->priv->ui_merge, ephy_file ("epiphany-toolbar.xml"), NULL);
-	egg_menu_merge_ensure_update (t->priv->ui_merge);
 }
 
 static void
@@ -243,7 +239,29 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 	toolbar_setup_actions (t);
 	egg_menu_merge_insert_action_group (t->priv->ui_merge,
 					    t->priv->action_group, 1);
-	toolbar_setup_widgets (t);
+	g_object_set (t, "MenuMerge", t->priv->ui_merge, NULL);
+}
+
+static void
+editable_toolbar_request_action (Toolbar *t,
+				 const char *name,
+				 EphyEditableToolbar *etoolbar)
+{
+	guint id;
+
+	if (g_str_has_prefix (name, "GoBookmark") &&
+	    ephy_str_to_int (name + strlen ("GoBookmark"), &id))
+	{
+		EggAction *action;
+
+		LOG ("Create an action for bookmark %d", id)
+
+		action = ephy_bookmark_action_new (name, id);
+		g_signal_connect (action, "go_location",
+				  G_CALLBACK (go_location_cb), t->priv->window);
+		egg_action_group_add_action (t->priv->action_group, action);
+		g_object_unref (action);
+	}
 }
 
 static void
@@ -254,6 +272,10 @@ toolbar_init (Toolbar *t)
 	t->priv->window = NULL;
 	t->priv->ui_merge = NULL;
 	t->priv->visibility = TRUE;
+
+	g_signal_connect (t, "request_action",
+			  G_CALLBACK (editable_toolbar_request_action),
+			  EPHY_EDITABLE_TOOLBAR (t));
 }
 
 static void
@@ -272,14 +294,14 @@ toolbar_finalize (GObject *object)
 
         g_return_if_fail (p != NULL);
 
+	G_OBJECT_CLASS (parent_class)->finalize (object);
+
 	g_object_unref (t->priv->action_group);
 	egg_menu_merge_remove_action_group (merge, t->priv->action_group);
 
         g_free (t->priv);
 
 	LOG ("Toolbar finalized")
-
-        G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 Toolbar *
