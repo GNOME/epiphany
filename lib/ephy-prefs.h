@@ -40,6 +40,7 @@ G_BEGIN_DECLS
 #define CONF_TOOLBAR_SETUP "/apps/epiphany/interface/toolbar_setup"
 #define CONF_TOOLBAR_SPINNER_THEME "/apps/epiphany/interface/spinner_theme"
 #define CONF_BOOKMARKS_SELECTED_NODE "/apps/epiphany/interface/bookmark_keyword_selected_node"
+#define CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL "/apps/epiphany/interface/middle_click_open_url"
 
 /* Downloader */
 #define CONF_DOWNLOADING_SHOW_DETAILS "/apps/epiphany/downloader/show_details"

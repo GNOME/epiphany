@@ -1,3 +1,23 @@
+2003-04-15  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/epiphany.schemas.in:
+	* lib/ephy-prefs.h:
+	* src/ephy-tab.c: (ephy_tab_init), (ephy_tab_dom_mouse_down_cb):
+
+	Hidden pref for middle click open url. Default off.
+
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_update_menu),
+	(ephy_bookmarks_editor_dispose), (keyword_node_selected_cb),
+	(keyword_node_show_popup_cb), (build_search_box),
+	(menu_activate_cb), (ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-node-view.c: (cell_renderer_edited),
+	(ephy_node_view_init), (ephy_node_view_edit),
+	(ephy_node_view_is_editing):
+	* src/bookmarks/ephy-node-view.h:
+
+	Rework sensitivity updates and complete them with cut/copy/select all
+	
 2003-04-15  David Bordoley <bordoley@msu.edu>
 
 	* src/history-dialog.c: (history_clear_button_clicked_cb),

@@ -62,6 +62,8 @@ struct EphyNodeViewPrivate
 	EphyTreeModelNodeColumn default_sort_column_id;
 
 	GtkTargetList *drag_targets;
+
+	gboolean editing;
 };
 
 enum
@@ -522,6 +524,8 @@ cell_renderer_edited (GtkCellRendererText *cell,
 	GtkTreeIter iter, iter2;
 	EphyNode *node;
 
+	view->priv->editing = FALSE;
+
 	g_object_set (G_OBJECT (view->priv->editable_renderer),
                       "editable", FALSE,
                       NULL);
@@ -622,6 +626,7 @@ ephy_node_view_init (EphyNodeView *view)
 {
 	view->priv = g_new0 (EphyNodeViewPrivate, 1);
 	view->priv->editable_renderer = NULL;
+	view->priv->editing = TRUE;
 }
 
 static void
@@ -900,8 +905,16 @@ ephy_node_view_edit (EphyNodeView *view)
                                   view->priv->editable_column,
                                   TRUE);
 
+	view->priv->editing = TRUE;
+
 	g_list_foreach (rows, (GFunc)gtk_tree_path_free, NULL);
         g_list_free (rows);
+}
+
+gboolean
+ephy_node_view_is_editing (EphyNodeView *view)
+{
+	return view->priv->editing;
 }
 
 gboolean

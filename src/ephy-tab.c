@@ -113,10 +113,6 @@ static void
 ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 		     EphyTab *tab);
 static gint
-ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
-			     EphyEmbedEvent *event,
-			     EphyTab *tab);
-static gint
 ephy_tab_dom_mouse_down_cb (EphyEmbed *embed,
 			    EphyEmbedEvent *event,
 			    EphyTab *tab);
@@ -261,9 +257,6 @@ ephy_tab_init (EphyTab *tab)
 			  tab);
 	g_signal_connect (embed, "ge_size_to",
 			  GTK_SIGNAL_FUNC (ephy_tab_size_to_cb),
-			  tab);
-	g_signal_connect (embed, "ge_dom_mouse_click",
-			  GTK_SIGNAL_FUNC (ephy_tab_dom_mouse_click_cb),
 			  tab);
 	g_signal_connect (embed, "ge_dom_mouse_down",
 			  GTK_SIGNAL_FUNC (ephy_tab_dom_mouse_down_cb),
@@ -881,14 +874,6 @@ ephy_tab_size_to_cb (EphyEmbed *embed, gint width, gint height,
 	}
 }
 
-static gint
-ephy_tab_dom_mouse_click_cb (EphyEmbed *embed,
-			       EphyEmbedEvent *event,
-			       EphyTab *tab)
-{
-	return FALSE;
-}
-
 static void
 ephy_tab_set_event (EphyTab *tab,
 		    EphyEmbedEvent *event)
@@ -981,10 +966,11 @@ ephy_tab_dom_mouse_down_cb  (EphyEmbed *embed,
 		ephy_shell_new_tab (ephy_shell, window, tab,
 				      g_value_get_string (value), 0);
 	}
-	else if (button == 1
-		&& !(context & EMBED_CONTEXT_LINK
-		     || context & EMBED_CONTEXT_EMAIL_LINK
-		     || context & EMBED_CONTEXT_INPUT))
+	else if (button == 1 &&
+		 eel_gconf_get_boolean (CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL) &&
+		 !(context & EMBED_CONTEXT_LINK
+		   || context & EMBED_CONTEXT_EMAIL_LINK
+		   || context & EMBED_CONTEXT_INPUT))
 	{
 		/* paste url */
 		gtk_selection_convert (GTK_WIDGET (window),

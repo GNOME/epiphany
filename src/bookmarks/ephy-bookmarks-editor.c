@@ -502,9 +502,30 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	gboolean key_selection, bmk_selection;
 	gboolean key_normal = FALSE;
 	gboolean bmk_multiple_selection;
+	gboolean cut, copy, select_all;
 	EggActionGroup *action_group;
 	EggAction *action;
 	GList *selected;
+	GtkWidget *focus_widget;
+
+	focus_widget = gtk_window_get_focus (GTK_WINDOW (editor));
+	if (GTK_IS_EDITABLE (focus_widget))
+	{
+		gboolean has_selection;
+
+		has_selection = gtk_editable_get_selection_bounds
+			(GTK_EDITABLE (focus_widget), NULL, NULL);
+
+		select_all = TRUE;
+		cut = has_selection;
+		copy = has_selection;
+	}
+	else
+	{
+		select_all = FALSE;
+		cut = FALSE;
+		copy = FALSE;
+	}
 
 	bmk_focus = gtk_widget_is_focus (editor->priv->bm_view);
 	key_focus = gtk_widget_is_focus (editor->priv->key_view);
@@ -560,37 +581,12 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	g_object_set (action, "sensitive", delete, NULL);
 	action = egg_action_group_get_action (action_group, "Properties");
 	g_object_set (action, "sensitive", properties, NULL);
-}
-
-static gboolean
-view_focus_cb (EphyNodeView *view,
-	       GdkEventFocus *event,
-	       EphyBookmarksEditor *editor)
-{
-	ephy_bookmarks_editor_update_menu (editor);
-
-	return FALSE;
-}
-
-static void
-add_focus_monitor (EphyBookmarksEditor *editor, GtkWidget *widget)
-{
-	g_signal_connect (G_OBJECT (widget),
-			  "focus_in_event",
-			  G_CALLBACK (view_focus_cb),
-			  editor);
-	g_signal_connect (G_OBJECT (widget),
-			  "focus_out_event",
-			  G_CALLBACK (view_focus_cb),
-			  editor);
-}
-
-static void
-remove_focus_monitor (EphyBookmarksEditor *editor, GtkWidget *widget)
-{
-	g_signal_handlers_disconnect_by_func (G_OBJECT (widget),
-			                      G_CALLBACK (view_focus_cb),
-			                      editor);
+	action = egg_action_group_get_action (action_group, "Cut");
+	g_object_set (action, "sensitive", cut, NULL);
+	action = egg_action_group_get_action (action_group, "Copy");
+	g_object_set (action, "sensitive", copy, NULL);
+	action = egg_action_group_get_action (action_group, "SelectAll");
+	g_object_set (action, "sensitive", select_all, NULL);
 }
 
 static void
@@ -610,10 +606,6 @@ ephy_bookmarks_editor_dispose (GObject *object)
 
 	if (editor->priv->key_view != NULL)
 	{
-		remove_focus_monitor (editor, editor->priv->key_view);
-		remove_focus_monitor (editor, editor->priv->bm_view);
-		remove_focus_monitor (editor, editor->priv->search_entry);
-
 		selection = ephy_node_view_get_selection (EPHY_NODE_VIEW (editor->priv->key_view));
 		if (selection == NULL || selection->data == NULL)
 		{
@@ -637,15 +629,6 @@ ephy_bookmarks_editor_dispose (GObject *object)
 	}
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);
-}
-
-
-static void
-ephy_bookmarks_editor_node_selected_cb (EphyNodeView *view,
-				        EphyNode *node,
-					EphyBookmarksEditor *editor)
-{
-	ephy_bookmarks_editor_update_menu (editor);
 }
 
 static void
@@ -710,8 +693,6 @@ keyword_node_selected_cb (EphyNodeView *view,
 		reset_search_entry (editor);
 		bookmarks_filter (editor, node);
 	}
-
-	ephy_bookmarks_editor_update_menu (editor);
 }
 
 static void
@@ -721,6 +702,7 @@ keyword_node_show_popup_cb (GtkWidget *view, EphyBookmarksEditor *editor)
 
 	widget = egg_menu_merge_get_widget (editor->priv->ui_merge,
 					   "/popups/EphyBookmarkKeywordPopup");
+	ephy_bookmarks_editor_update_menu (editor);
 	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
 			gtk_get_current_event_time ());
 }
@@ -779,11 +761,10 @@ build_search_box (EphyBookmarksEditor *editor)
 	entry = gtk_entry_new ();
 	editor->priv->search_entry = entry;
 	gtk_widget_show (entry);
-	add_focus_monitor (editor, entry);
 	g_signal_connect (G_OBJECT (entry), "changed",
 			  G_CALLBACK (search_entry_changed_cb),
 			  editor);
-	
+
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	str = g_strconcat ("<b>", _("_Search:"), "</b>", NULL);
@@ -833,12 +814,20 @@ node_dropped_cb (EphyNodeView *view, EphyNode *node,
 }
 
 static void
+menu_activate_cb (EphyNodeView *view,
+	          EphyBookmarksEditor *editor)
+{
+	ephy_bookmarks_editor_update_menu (editor);
+}
+
+static void
 ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 {
 	GtkTreeSelection *selection;
 	GtkWidget *hbox, *vbox;
 	GtkWidget *bm_view, *key_view;
 	GtkWidget *scrolled_window;
+	GtkWidget *menu;
 	EphyNode *node;
 	long selected_id;
 	EphyNode *selected_node;
@@ -885,6 +874,12 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	editor->priv->ui_merge = ui_merge;
 	editor->priv->action_group = action_group;
 
+	/* Update menu sensitivity before showing them */
+	menu = egg_menu_merge_get_widget (ui_merge, "/menu/FileMenu");
+	g_signal_connect (menu, "activate", G_CALLBACK (menu_activate_cb), editor);
+	menu = egg_menu_merge_get_widget (ui_merge, "/menu/EditMenu");
+	g_signal_connect (menu, "activate", G_CALLBACK (menu_activate_cb), editor);
+
 	hbox = gtk_hbox_new (FALSE, 6);
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 6);
 	gtk_container_add (GTK_CONTAINER (editor->priv->menu_dock), hbox);
@@ -921,7 +916,6 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	gtk_widget_set_size_request (key_view, 130, -1);
 	gtk_widget_show (key_view);
 	editor->priv->key_view = key_view;
-	add_focus_monitor (editor, key_view);
 	g_signal_connect (G_OBJECT (key_view),
 			  "key_press_event",
 			  G_CALLBACK (key_pressed_cb),
@@ -974,7 +968,6 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	gtk_container_add (GTK_CONTAINER (scrolled_window), bm_view);
 	gtk_widget_show (bm_view);
 	editor->priv->bm_view = bm_view;
-	add_focus_monitor (editor, bm_view);
 	g_signal_connect (G_OBJECT (bm_view),
 			  "key_press_event",
 			  G_CALLBACK (key_pressed_cb),
@@ -982,10 +975,6 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	g_signal_connect (G_OBJECT (bm_view),
 			  "node_activated",
 			  G_CALLBACK (ephy_bookmarks_editor_node_activated_cb),
-			  editor);
-	g_signal_connect (G_OBJECT (bm_view),
-			  "node_selected",
-			  G_CALLBACK (ephy_bookmarks_editor_node_selected_cb),
 			  editor);
 	g_signal_connect (G_OBJECT (bm_view),
 			  "show_popup",
