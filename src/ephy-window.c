@@ -581,7 +581,7 @@ edit_menu_show_cb (GtkWidget *menu,
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
 	GtkActionGroup *action_group;
 	GtkAction *action;
-	gboolean can_copy, can_cut, can_undo, can_redo;
+	gboolean can_copy, can_cut, can_undo, can_redo, can_paste;
 
 	if (GTK_IS_EDITABLE (widget))
 	{
@@ -592,6 +592,7 @@ edit_menu_show_cb (GtkWidget *menu,
 
 		can_copy = has_selection;
 		can_cut = has_selection;
+		can_paste = TRUE;
 		can_undo = FALSE;
 		can_redo = FALSE;
 	}
@@ -607,6 +608,8 @@ edit_menu_show_cb (GtkWidget *menu,
 		ephy_command_manager_get_command_state
 			(EPHY_COMMAND_MANAGER (embed), "cmd_cut", &can_cut);
 		ephy_command_manager_get_command_state
+			(EPHY_COMMAND_MANAGER (embed), "cmd_paste", &can_paste);
+		ephy_command_manager_get_command_state
 			(EPHY_COMMAND_MANAGER (embed), "cmd_undo", &can_undo);
 		ephy_command_manager_get_command_state
 			(EPHY_COMMAND_MANAGER (embed), "cmd_redo", &can_redo);
@@ -618,6 +621,8 @@ edit_menu_show_cb (GtkWidget *menu,
 	g_object_set (action, "sensitive", can_copy, NULL);
 	action = gtk_action_group_get_action (action_group, "EditCut");
 	g_object_set (action, "sensitive", can_cut, NULL);
+	action = gtk_action_group_get_action (action_group, "EditPaste");
+	g_object_set (action, "sensitive", can_paste, NULL);
 	action = gtk_action_group_get_action (action_group, "EditUndo");
 	g_object_set (action, "sensitive", can_undo, NULL);
 	action = gtk_action_group_get_action (action_group, "EditRedo");
