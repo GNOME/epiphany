@@ -77,12 +77,14 @@ RegisterContentPolicy(nsIComponentManager *aCompMgr, nsIFile *aPath,
 		do_GetService(NS_CATEGORYMANAGER_CONTRACTID);
 	NS_ENSURE_TRUE (cm, NS_ERROR_FAILURE);
 
+	nsresult rv;
 	char *oldval;
-	return cm->AddCategoryEntry("content-policy",
-				    EPHY_CONTENT_POLICY_CONTRACTID,
-				    EPHY_CONTENT_POLICY_CONTRACTID,
-				    PR_TRUE, PR_TRUE, &oldval);
+	rv = cm->AddCategoryEntry ("content-policy",
+				   EPHY_CONTENT_POLICY_CONTRACTID,
+				   EPHY_CONTENT_POLICY_CONTRACTID,
+				   PR_TRUE, PR_TRUE, &oldval);
 	nsMemory::Free (oldval);
+	return rv;
 }
 
 static const nsModuleComponentInfo sAppComps[] = {
