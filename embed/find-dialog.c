@@ -249,7 +249,6 @@ sync_embed (FindDialog *dialog, GParamSpec *pspec, gpointer data)
 static void
 find_dialog_init (FindDialog *dialog)
 {
-	GdkPixbuf *icon;
 	GtkWidget *window;
 
 	dialog->priv = EPHY_FIND_DIALOG_GET_PRIVATE (dialog);
@@ -267,12 +266,7 @@ find_dialog_init (FindDialog *dialog)
 
 	window = ephy_dialog_get_control (EPHY_DIALOG (dialog),
 					  properties[WINDOW_PROP].id);
-	icon = gtk_widget_render_icon (window,
-				       GTK_STOCK_FIND,
-				       GTK_ICON_SIZE_MENU,
-				       "find_dialog");
-	gtk_window_set_icon (GTK_WINDOW(window), icon);
-	g_object_unref (icon);
+	gtk_window_set_icon_name (GTK_WINDOW (window), GTK_STOCK_FIND);
 
 	g_signal_connect_object (dialog, "notify::embed",
 				 G_CALLBACK (sync_embed), NULL, 0);
