@@ -78,12 +78,13 @@ RegisterContentPolicy(nsIComponentManager *aCompMgr, nsIFile *aPath,
 	NS_ENSURE_TRUE (cm, NS_ERROR_FAILURE);
 
 	nsresult rv;
-	char *oldval;
+	char *oldval = nsnull;
 	rv = cm->AddCategoryEntry ("content-policy",
 				   EPHY_CONTENT_POLICY_CONTRACTID,
 				   EPHY_CONTENT_POLICY_CONTRACTID,
 				   PR_TRUE, PR_TRUE, &oldval);
-	nsMemory::Free (oldval);
+	if (oldval)
+		nsMemory::Free (oldval);
 	return rv;
 }
 
