@@ -1,3 +1,18 @@
+2003-07-14  Xan Lopez  <xan@masilla.org>
+
+	* lib/widgets/ephy-node-view.c:
+	(ephy_node_view_select_node_by_key), (ephy_node_view_remove):
+
+	Don't use event->string, is deprecated (#117346).
+	Also improve intelligent selection.
+	
+	* src/pdm-dialog.c: (pdm_dialog_remove_button_clicked_cb),
+	(pdm_cmd_delete_selection), (pdm_key_pressed_cb), (setup_action):
+
+	Connect del keys to delete action, also implement intelligent selection
+	after deletion (I want to be known as Mr. Intelligent Selection from now,
+	spread the word).
+
 2003-07-14  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/pdm-dialog.c: (pdm_dialog_remove_button_clicked_cb),

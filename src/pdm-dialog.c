@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -41,6 +43,8 @@ typedef void (* PDM_free) (PdmActionInfo *info, GList *data);
 static void pdm_dialog_class_init (PdmDialogClass *klass);
 static void pdm_dialog_init (PdmDialog *dialog);
 static void pdm_dialog_finalize (GObject *object);
+
+static void pdm_cmd_delete_selection (PdmActionInfo *action);
 
 /* Glade callbacks */
 void
@@ -329,25 +333,60 @@ static void
 pdm_dialog_remove_button_clicked_cb (GtkWidget *button,
 				     PdmActionInfo *action)
 {
+	pdm_cmd_delete_selection (action);
+}
+
+static void
+pdm_cmd_delete_selection (PdmActionInfo *action)
+{
+
 	GList *llist, *rlist = NULL, *l, *r;
 	GList *remove_list = NULL;
 	GtkTreeModel *model;
 	GtkTreeSelection *selection;
+	GtkTreePath *path;
+	GtkTreeIter iter, iter2;
+	GtkTreeRowReference *row_ref = NULL;
 
 	selection = gtk_tree_view_get_selection
 		(GTK_TREE_VIEW(action->treeview));
 	llist = gtk_tree_selection_get_selected_rows (selection, &model);
+	
 	for (l = llist;l != NULL; l = l->next)
 	{
 		rlist = g_list_prepend (rlist, gtk_tree_row_reference_new
 					(model, (GtkTreePath *)l->data));
 	}
 
+	/* Intelligent selection logic, no actual selection yet */
+	
+	path = gtk_tree_row_reference_get_path 
+		((GtkTreeRowReference *) g_list_last (rlist)->data);
+	
+	gtk_tree_model_get_iter (model, &iter, path);
+	gtk_tree_path_free (path);
+	iter2 = iter;
+	
+	if (gtk_tree_model_iter_next (GTK_TREE_MODEL (model), &iter))
+	{
+		path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &iter);
+		row_ref = gtk_tree_row_reference_new (model, path);
+	}
+	else
+	{
+		path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &iter2);
+		if (gtk_tree_path_prev (path))
+		{
+			row_ref = gtk_tree_row_reference_new (model, path);
+		}
+	}
+	gtk_tree_path_free (path);
+	
+	/* Removal */
+	
 	for (r = rlist; r != NULL; r = r->next)
 	{
-		GtkTreeIter iter;
 		gpointer data;
-		GtkTreePath *path;
 		GValue val = {0, };
 
 		path = gtk_tree_row_reference_get_path
@@ -378,6 +417,30 @@ pdm_dialog_remove_button_clicked_cb (GtkWidget *button,
 	g_list_foreach (llist, (GFunc)gtk_tree_path_free, NULL);
 	g_list_free (llist);
 	g_list_free (rlist);
+
+	/* Selection */
+	
+	if (row_ref != NULL)
+	{
+		path = gtk_tree_row_reference_get_path (row_ref);
+		gtk_tree_view_set_cursor (GTK_TREE_VIEW (action->treeview), path, NULL, FALSE);
+		gtk_tree_row_reference_free (row_ref);
+		gtk_tree_path_free (path);
+	}
+}
+
+static gboolean
+pdm_key_pressed_cb (GtkTreeView *treeview,
+		    GdkEventKey *event,
+		    PdmActionInfo *action)
+{
+	if (event->keyval == GDK_Delete || event->keyval == GDK_KP_Delete)
+	{
+		pdm_cmd_delete_selection (action);
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 static void
@@ -402,6 +465,12 @@ setup_action (PdmActionInfo *action)
 	g_signal_connect (selection, "changed",
 			  G_CALLBACK(action_treeview_selection_changed_cb),
 			  action);
+
+	g_signal_connect (G_OBJECT (action->treeview),
+			  "key_press_event",
+			  G_CALLBACK (pdm_key_pressed_cb),
+			  action);
+
 }
 
 static void

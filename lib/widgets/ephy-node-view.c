@@ -430,8 +430,11 @@ ephy_node_view_select_node_by_key (EphyNodeView *view, GdkEventKey *event)
 	gchar *string;
 	gchar *event_string;
 	gboolean found = FALSE;
+	gchar outbuf[6];
+	gint length;
 	
-	event_string = g_utf8_casefold (event->string, -1);
+	length = g_unichar_to_utf8 (gdk_keyval_to_unicode (event->keyval), outbuf);
+	event_string = g_utf8_casefold (outbuf, length);
 
 	if (!gtk_tree_model_get_iter_first (view->priv->sortmodel, &iter))
 	{
@@ -973,10 +976,11 @@ ephy_node_view_remove (EphyNodeView *view)
 	EphyNode *node;
 	GtkTreeIter iter, iter2;
 	GtkTreePath *path;
+	GtkTreeRowReference *row_ref = NULL;
 
-	/* Before removing we try to select the next node in the view. If that is
+	/* Before removing we try to get a reference to the next node in the view. If that is
 	 * not available we try with the previous one, and if that is absent too,
-	 * we do not select anything (which equals to select the topic "All")
+	 * we will not select anything (which equals to select the topic "All")
 	 */
 
 	list = ephy_node_view_get_selection (view);
@@ -993,18 +997,17 @@ ephy_node_view_remove (EphyNodeView *view)
 	if (gtk_tree_model_iter_next (GTK_TREE_MODEL (view->priv->sortmodel), &iter))
 	{
 		path = gtk_tree_model_get_path (GTK_TREE_MODEL (view->priv->sortmodel), &iter);
-		gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), path, NULL, FALSE);
-		gtk_tree_path_free (path);
+		row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (view->priv->sortmodel), path);
 	}
 	else
 	{
 		path = gtk_tree_model_get_path (GTK_TREE_MODEL (view->priv->sortmodel), &iter2);
 		if (gtk_tree_path_prev (path))
 		{
-			gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), path, NULL, FALSE);
+			row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (view->priv->sortmodel), path);
 		}
-		gtk_tree_path_free (path);
 	}
+	gtk_tree_path_free (path);
 
 	for (; list != NULL; list = list->next)
 	{
@@ -1012,6 +1015,16 @@ ephy_node_view_remove (EphyNodeView *view)
 	}
 
 	g_list_free (list);
+
+	/* Select the "next" node */
+
+	if (row_ref != NULL)
+	{
+		path = gtk_tree_row_reference_get_path (row_ref);
+		gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), path, NULL, FALSE);
+		gtk_tree_row_reference_free (row_ref);
+		gtk_tree_path_free (path);
+	}
 }
 
 void
