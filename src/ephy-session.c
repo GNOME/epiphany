@@ -371,7 +371,7 @@ offer_to_resume (EphySession *session)
 	dialog = gtk_message_dialog_new
 		(NULL,
 		 GTK_DIALOG_MODAL,
-		 GTK_MESSAGE_QUESTION,
+		 GTK_MESSAGE_WARNING,
 		 GTK_BUTTONS_NONE,
 		 _("Epiphany appears to have crashed or been killed the last time it was run."));
 
