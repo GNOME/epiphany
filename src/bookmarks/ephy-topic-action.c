@@ -690,21 +690,16 @@ create_menu_item (GtkAction *action)
 {
 	GtkWidget *menu, *menu_item;
 	GValue value = { 0, };
-	const char *tmp;
-	char *label_text;
+	const char *title;
 
 	g_value_init (&value, G_TYPE_STRING);
 	g_object_get_property (G_OBJECT (action), "label", &value);
 
-	tmp = g_value_get_string (&value);
-	label_text = ephy_string_double_underscores (tmp);
+	title = g_value_get_string (&value);
 
-	LOG ("create_menu_item action %p", action)
-
-	menu_item = gtk_menu_item_new_with_label (label_text);
+	menu_item = gtk_menu_item_new_with_label (title);
 
 	g_value_unset (&value);
-	g_free (label_text);
 
 	menu = build_menu (EPHY_TOPIC_ACTION (action));
 	gtk_widget_show (menu);
@@ -871,8 +866,7 @@ topic_changed_cb (EphyNode *node,
 	if (property_id == EPHY_NODE_KEYWORD_PROP_NAME)
 	{
 		GValue value = { 0, };
-		const char *tmp;
-		char *title;
+		const char *title;
 		int priority;
 
 		priority = ephy_node_get_property_int 
@@ -880,18 +874,16 @@ topic_changed_cb (EphyNode *node,
 
 		if (priority == EPHY_NODE_ALL_PRIORITY)
 		{
-			tmp = _("Bookmarks");
+			title = _("Bookmarks");
 		}
 		else
 		{
-			tmp = ephy_node_get_property_string
+			title = ephy_node_get_property_string
 				(node, EPHY_NODE_KEYWORD_PROP_NAME);
 		}
 
-		title = ephy_string_double_underscores (tmp);
-
 		g_value_init(&value, G_TYPE_STRING);
-		g_value_take_string (&value, title);
+		g_value_set_string (&value, title);
 		g_object_set_property (G_OBJECT (action), "label", &value);
 		g_value_unset (&value);
 	}

@@ -703,6 +703,10 @@ connect_proxy (GtkAction *action, GtkWidget *proxy)
 	}
 	else if (GTK_IS_MENU_ITEM (proxy))
 	{
+		GtkLabel *label;
+
+		label = (GtkLabel *) ((GtkBin *) proxy)->child;
+		gtk_label_set_use_underline (label, FALSE);
 		g_signal_connect (proxy, "activate", G_CALLBACK (activate_cb), action);
 	}
 }
@@ -715,14 +719,12 @@ bookmark_changed_cb (EphyNode *node,
 	if (property_id == EPHY_NODE_BMK_PROP_TITLE)
 	{
 		GValue value = { 0, };
-		const char *tmp;
-		char *title, *short_title;
+		const char *title;
+		char *short_title;
 
-		tmp = ephy_node_get_property_string
+		title = ephy_node_get_property_string
 			(action->priv->node, EPHY_NODE_BMK_PROP_TITLE);
-		title = ephy_string_double_underscores (tmp);
 		short_title = ephy_string_shorten (title, MAX_LABEL_LENGTH);
-		g_free (title);
 
 		g_value_init (&value, G_TYPE_STRING);
 		g_value_take_string (&value, short_title);

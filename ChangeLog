@@ -1,5 +1,15 @@
 2004-10-25  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/bookmarks/ephy-bookmark-action.c: (connect_proxy),
+	(bookmark_changed_cb):
+	* src/bookmarks/ephy-topic-action.c: (create_menu_item),
+	(topic_changed_cb):
+
+	Unset the use-underline label property instead of doubling the
+	underscores. Saves tons of strdups.
+
+2004-10-25  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/downloader-view.c: (downloader_view_add_download):
 	* lib/widgets/ephy-spinner.c: (ephy_spinner_cache_get_images),
 	(ephy_spinner_size_request):
