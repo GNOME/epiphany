@@ -43,6 +43,8 @@ AC_HEADER_STDC
 AC_PROG_INTLTOOL
 AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
 
+AC_SUBST(AM_CXXFLAGS)
+
 ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
 GNOME_DEBUG_CHECK
@@ -121,14 +123,14 @@ AC_SUBST(MOZILLA_HOME)
 dnl whether to build with DEBUG defined
 AC_ARG_WITH(mozilla-debug,
 	[  --with-mozilla-debug        Use a debug mozilla build],
-	CXXFLAGS="-DDEBUG $CXXFLAGS",)
+	AM_CXXFLAGS="-DDEBUG $AM_CXXFLAGS",)
 
 AC_ARG_ENABLE(cpp-rtti,
         [  --enable-cpp-rtti       Enable C++ RTTI (for cvs gcc)],,
         enable_cpp_rtti=no)
 
 if test "x$enable_cpp_rtti" = "xno"; then
-  CXXFLAGS="-fno-rtti $CXXFLAGS"
+  AM_CXXFLAGS="-fno-rtti $AM_CXXFLAGS"
 fi
 
 dnl Specify the gconf configuration source, 
@@ -152,7 +154,9 @@ dnl 2.95-2.97 have a signed wchar_t in c++ only and some versions
 dnl only have short-wchar support for c++.
 AC_LANG_PUSH(C++)
 _SAVE_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS -fshort-wchar"
+_SAVE_AM_CXXFLAGS=$AM_CXXFLAGS
+AM_CXXFLAGS="$AM_CXXFLAGS -fshort-wchar"
+CXXFLAGS="$CXXFLAGS $AM_CXXFLAGS"
 
 AC_CACHE_CHECK(for compiler -fshort-wchar option,
     ac_cv_have_usable_wchar_option,
@@ -165,8 +169,9 @@ AC_CACHE_CHECK(for compiler -fshort-wchar option,
                 ac_cv_have_usable_wchar_option="maybe")])
 
 if test "$ac_cv_have_usable_wchar_option" != "yes"; then
-    CXXFLAGS=$_SAVE_CXXFLAGS
+    AM_CXXFLAGS=$_SAVE_AM_CXXFLAGS
 fi
+CXXFLAGS=$_SAVE_CXXFLAGS
 AC_LANG_POP(C++)
 
 AC_MSG_CHECKING(for mozilla version)
