@@ -90,18 +90,20 @@ EphyBrowser::~EphyBrowser ()
 
 nsresult EphyBrowser::Init (GtkMozEmbed *mozembed)
 {
+	nsresult rv;
+
 	mGtkMozEmbed = mozembed;
 
 	gtk_moz_embed_get_nsIWebBrowser (mozembed,
 					 getter_AddRefs(mWebBrowser));
 	if (!mWebBrowser) return NS_ERROR_FAILURE;
 
-	return mWebBrowser->GetContentDOMWindow (getter_AddRefs (mDOMWindow));
-}
+	mWebBrowser->GetContentDOMWindow (getter_AddRefs (mDOMWindow));
 
-nsresult EphyBrowser::InitDocument ()
-{
-	nsresult rv;
+	/* This will instantiate an about:blank doc if necessary */
+	nsCOMPtr<nsIDOMDocument> domDocument;
+	rv = mDOMWindow->GetDocument (getter_AddRefs (mDOMDocument));
+	if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 
 	mEventListener = new EphyEventListener();
 
@@ -368,7 +370,8 @@ nsresult EphyBrowser::GetZoom (float *aZoom)
 
 nsresult EphyBrowser::GetDocument (nsIDOMDocument **aDOMDocument)
 {
-	return mDOMWindow->GetDocument (aDOMDocument);
+        NS_ENSURE_ARG_POINTER(aDOMDocument);
+        NS_IF_ADDREF(*aDOMDocument = mDOMDocument);
 }
 
 nsresult EphyBrowser::GetTargetDocument (nsIDOMDocument **aDOMDocument)

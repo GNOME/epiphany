@@ -2,6 +2,18 @@
 
 	* embed/mozilla/EphyBrowser.cpp:
 	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/mozilla-embed.cpp:
+
+	Solving the wrapper mess THE END
+
+	An about:blank document is created syncronously
+	on _init, which means there are no more race conditions !
+	Mozilla api is CRACK.
+
+2003-10-27  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
 	* embed/mozilla/EphyWrapper.cpp:
 	* embed/mozilla/EphyWrapper.h:
 	* embed/mozilla/EventContext.cpp:

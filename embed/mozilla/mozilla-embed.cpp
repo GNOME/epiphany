@@ -223,17 +223,9 @@ signal_connections[] =
 
 struct MozillaEmbedPrivate
 {
-	MozillaEmbedPrivate() : browser(NULL), security_state(-1), no_page(1)
-	{ /* nothing */ }
-
 	EphyBrowser *browser;
 	nsCOMPtr<nsIRequest> request;
 	gint security_state;
-
-	/* HACK 1: No page loaded, 0: Loading an empty page, -1: Page loaded */ 
-	gint no_page;
-
-	gboolean browser_document_initialized;
 };
 
 #define WINDOWWATCHER_CONTRACTID "@mozilla.org/embedcomp/window-watcher;1"
@@ -440,9 +432,8 @@ mozilla_embed_init (MozillaEmbed *embed)
 {
         embed->priv = MOZILLA_EMBED_GET_PRIVATE (embed);
 
-	embed->priv->no_page = 1;
-	embed->priv->browser_document_initialized = FALSE;
 	embed->priv->browser = new EphyBrowser ();
+	embed->priv->security_state = -1;
 
 	mozilla_embed_connect_signals (embed);
 }
@@ -1081,19 +1072,11 @@ static void
 mozilla_embed_location_changed_cb (GtkMozEmbed *embed, 
 				   MozillaEmbed *membed)
 {
-	/* Do not emit signal if we are loading the
-	 * fallback about:blank. We dont want the user
-	 * to know about it. */
-	if (membed->priv->no_page != 0)
-	{
-		char *location;
+	char *location;
 
-		location = gtk_moz_embed_get_location (embed);
-		g_signal_emit_by_name (membed, "ge_location", location);
-		g_free (location);
-	}
-
-	membed->priv->no_page = -1;
+	location = gtk_moz_embed_get_location (embed);
+	g_signal_emit_by_name (membed, "ge_location", location);
+	g_free (location);
 }
 
 static void
@@ -1130,30 +1113,6 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 		{ GTK_MOZ_EMBED_FLAG_IS_NETWORK, EMBED_STATE_IS_NETWORK },
 		{ 0, EMBED_STATE_UNKNOWN }
 	};
-
-	/* No page loaded, default to about:blank */
-	if (membed->priv->no_page > 0 && 
-	    (state &  GTK_MOZ_EMBED_FLAG_STOP) &&
-	    (state &  GTK_MOZ_EMBED_FLAG_IS_DOCUMENT))
-	{
-		ephy_embed_load_url (EPHY_EMBED(membed), "about:blank");
-		membed->priv->no_page = 0;
-	}
-	
-	if (!membed->priv->browser_document_initialized)
-	{
-		nsresult rv;
-
-		rv = membed->priv->browser->InitDocument ();
-		if (NS_FAILED (rv))
-		{
-			g_warning ("Browser document initialization failed");
-		}
-		else
-		{
-			membed->priv->browser_document_initialized = TRUE;
-		}
-	}
 
 	for (i = 0; conversion_map[i].state != 0; i++)
 	{
