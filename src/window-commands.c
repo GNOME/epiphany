@@ -737,7 +737,7 @@ window_cmd_help_about (EggAction *action,
 	GnomeIconTheme *icon_theme;
 
 	static gchar *authors[] = {
-		"Marco Pesenti Gritti <mpeseng@tin.it>",
+		"Marco Pesenti Gritti <marco@gnome.org>",
 		"Xan Lopez <xan@masilla.org>",
 		"David Bordoley <bordoley@msu.edu>",
 		"Christian Persch <chpe+epiphany@stud.uni-saarland.de>",
