@@ -272,7 +272,7 @@ cmd_copy (EggAction *action,
 			gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), tmp, -1);
 		}
 
-		g_free (selection);
+		g_list_free (selection);
 	}
 }
 
