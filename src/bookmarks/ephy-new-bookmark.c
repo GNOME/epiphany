@@ -144,6 +144,12 @@ ephy_new_bookmark_finalize (GObject *object)
 }
 
 static void
+ephy_new_bookmark_help ()
+{
+	/* FIXME: Hook up Help */
+}
+
+static void
 ephy_new_bookmark_add (EphyNewBookmark *new_bookmark)
 {
 	char *title;
@@ -177,6 +183,9 @@ ephy_new_bookmark_response_cb (GtkDialog *dialog,
 {
 	switch (response_id)
 	{
+		case GTK_RESPONSE_HELP:
+			ephy_new_bookmark_help ();
+			break;
 		case GTK_RESPONSE_CANCEL:
 			break;
 		case GTK_RESPONSE_OK:
@@ -268,7 +277,9 @@ ephy_new_bookmark_construct (EphyNewBookmark *editor)
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (editor)->vbox),
 			    build_editing_table (editor),
 			    TRUE, TRUE, 0);
-
+	gtk_dialog_add_button (GTK_DIALOG (editor),
+			       GTK_STOCK_HELP,
+			       GTK_RESPONSE_HELP);
 	gtk_dialog_add_button (GTK_DIALOG (editor),
 			       GTK_STOCK_CANCEL,
 			       GTK_RESPONSE_CANCEL);

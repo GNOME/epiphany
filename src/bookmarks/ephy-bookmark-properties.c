@@ -191,12 +191,21 @@ ephy_bookmark_properties_get_property (GObject *object,
 }
 
 static void
+ephy_bookmark_properties_help ()
+{
+	/* FIXME: Implement Help */
+}
+
+static void
 bookmark_properties_response_cb (GtkDialog *dialog,
 		                 int response_id,
 			         gpointer data)
 {
 	switch (response_id)
 	{
+		case GTK_RESPONSE_HELP:
+			ephy_bookmark_properties_help ();
+			break;
 		case GTK_RESPONSE_CLOSE:
 			gtk_widget_destroy (GTK_WIDGET (dialog));
 			break;
@@ -369,7 +378,9 @@ build_ui (EphyBookmarkProperties *editor)
 
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (editor)->vbox),
 			    table, TRUE, TRUE, 0);
-
+	gtk_dialog_add_button (GTK_DIALOG (editor),
+			       GTK_STOCK_HELP,
+			       GTK_RESPONSE_HELP);
 	gtk_dialog_add_button (GTK_DIALOG (editor),
 			       GTK_STOCK_CLOSE,
 			       GTK_RESPONSE_CLOSE);
