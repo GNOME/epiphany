@@ -22,6 +22,7 @@
 
 #include "ephy-shell.h"
 #include "ephy-debug.h"
+#include "ephy-command-manager.h"
 #include "window-commands.h"
 #include "print-dialog.h"
 #include "eel-gconf-extensions.h"
@@ -416,7 +417,8 @@ window_cmd_edit_cut (GtkAction *action,
 		embed = ephy_window_get_active_embed (window);
 		g_return_if_fail (embed != NULL);
 
-		ephy_embed_selection_cut (embed);
+		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
+						 "cmd_cut");
 	}
 }
 
@@ -437,7 +439,8 @@ window_cmd_edit_copy (GtkAction *action,
 		embed = ephy_window_get_active_embed (window);
 		g_return_if_fail (embed != NULL);
 
-		ephy_embed_selection_copy (embed);
+		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
+						 "cmd_copy");
 	}
 }
 
@@ -458,7 +461,8 @@ window_cmd_edit_paste (GtkAction *action,
 		embed = ephy_window_get_active_embed (window);
 		g_return_if_fail (embed != NULL);
 
-		ephy_embed_paste (embed);
+		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
+						 "cmd_paste");
 	}
 }
 
@@ -479,7 +483,8 @@ window_cmd_edit_select_all (GtkAction *action,
 		embed = ephy_window_get_active_embed (window);
 		g_return_if_fail (embed != NULL);
 
-		ephy_embed_select_all (embed);
+		ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
+						 "cmd_selectAll");
 	}
 }
 
