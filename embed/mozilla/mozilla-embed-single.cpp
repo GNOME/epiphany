@@ -236,7 +236,7 @@ have_gnome_url_handler (const gchar *protocol)
 	cmd = eel_gconf_get_string (key);
 	g_free (key);
 
-	rv = (cmd != NULL);
+	rv = (cmd != NULL && strstr (cmd, "epiphany") == NULL);
 	g_free (cmd);
 
 	if (!rv) return rv;

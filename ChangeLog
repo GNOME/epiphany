@@ -1,3 +1,18 @@
+2003-05-12  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* embed/mozilla/ExternalProtocolService.cpp:
+
+	Use new gnome vfs show_url api.
+
+	* embed/mozilla/MozRegisterComponents.cpp:
+
+	Register external protocols !
+
+	* embed/mozilla/mozilla-embed-single.cpp:
+
+	Check that the ftp handler is not epiphany, to
+	avoid infinite loop.
+
 2003-05-11  Xan Lopez  <xan@masilla.org>
 
 	* lib/Makefile.am:
