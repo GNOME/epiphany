@@ -288,6 +288,39 @@ ephy_embed_base_init (gpointer g_class)
 			      1,
 			      G_TYPE_STRING);
 
+/**
+ * EphyEmbed::ge-modal-alert:
+ * @embed:
+ *
+ * The ::ge-modal-alert signal is emitted when a DOM event will open a
+ * modal alert.
+ *
+ * Return %TRUE to prevent the dialog from being opened.
+ **/
+		g_signal_new ("ge_modal_alert",
+			      EPHY_TYPE_EMBED,
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyEmbedIface, modal_alert),
+			      g_signal_accumulator_true_handled, NULL,
+			      ephy_marshal_BOOLEAN__VOID,
+			      G_TYPE_BOOLEAN,
+			      0);
+/**
+ * EphyEmbed::ge-modal-alert-closed:
+ * @embed:
+ *
+ * The ::ge-modal-alert-closed signal is emitted when a modal alert put up by a
+ * DOM event was closed.
+ **/
+		g_signal_new ("ge_modal_alert_closed",
+			      EPHY_TYPE_EMBED,
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyEmbedIface, modal_alert_closed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
+
 		initialized = TRUE;
 	}
 }

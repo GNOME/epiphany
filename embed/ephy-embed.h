@@ -131,6 +131,8 @@ struct _EphyEmbedIface
 					 float new_zoom);
 	void	 (* content_change)	(EphyEmbed *embed,
 					 const char *uri);
+	gboolean (* modal_alert)	(EphyEmbed *embed);
+	void	 (* modal_alert_closed)	(EphyEmbed *embed);
 
 	/* Methods  */
 	void		   (* load_url)			(EphyEmbed *embed,

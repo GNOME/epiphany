@@ -1,3 +1,16 @@
+2004-10-30  Christian Persch  <chpe@cvs.gnome.org>
+
+	* doc/reference/tmpl/ephy-embed.sgml:
+	* embed/ephy-embed.c: (ephy_embed_base_init):
+	* embed/ephy-embed.h:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* src/ephy-window.c: (modal_alert_cb), (tab_added_cb),
+	(tab_removed_cb):
+
+	When showing a modal alert put up by a web page, switch the window
+	to that tab.
+
 2004-10-29  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/bookmarks/ephy-topic-action.c: (can_open_in_tabs),

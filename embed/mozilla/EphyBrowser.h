@@ -77,6 +77,12 @@ public:
 	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
 };
 
+class EphyModalAlertEventListener : public EphyEventListener
+{
+public:
+	NS_IMETHOD HandleEvent(nsIDOMEvent* aEvent);
+};
+
 class EphyBrowser
 {
 public:
@@ -145,6 +151,7 @@ private:
 	nsCOMPtr<nsISupports> mSecurityInfo;
 	EphyFaviconEventListener *mFaviconEventListener;
 	EphyPopupBlockEventListener *mPopupBlockEventListener;
+	EphyModalAlertEventListener *mModalAlertListener;
 	PRBool mInitialized;
 
 	nsresult GetListener (void);
