@@ -352,16 +352,16 @@ ephy_toolbars_group_to_string (EphyToolbarsGroup *t)
 			{
 				g_string_append_printf
 					(s, "<placeholder name=\"PlaceHolder%d-%d\">"
-					 "<separator name=\"ToolSeparator\"/>"
+					 "<separator name=\"TS\"/>"
 					 "</placeholder>\n", i, k);
 			}
 			else
 			{
 				g_string_append_printf
 					(s, "<placeholder name=\"PlaceHolder%d-%d\">"
-					 "<toolitem name=\"ToolItem\" verb=\"%s\"/>"
+					 "<toolitem name=\"TI%s\" verb=\"%s\"/>"
 					 "</placeholder>\n",
-					 i, k, item->action);
+					 i, k, item->action, item->action);
 			}
 			i++;
 		}
@@ -459,6 +459,8 @@ ephy_toolbars_group_remove_toolbar (EphyToolbarsGroup *t,
 	free_toolbar_node (node->data);
 	g_node_destroy (node);
 
+	toolbars_group_save (t);
+
 	g_signal_emit (G_OBJECT (t), ephy_toolbars_group_signals[CHANGED], 0);
 }
 
@@ -471,6 +473,8 @@ ephy_toolbars_group_remove_item	(EphyToolbarsGroup *t,
 	node = g_node_find (t->priv->toolbars, G_IN_ORDER, G_TRAVERSE_ALL, item);
 	free_toolbar_node (node->data);
 	g_node_destroy (node);
+
+	toolbars_group_save (t);
 
 	g_signal_emit (G_OBJECT (t), ephy_toolbars_group_signals[CHANGED], 0);
 }
@@ -561,8 +565,10 @@ ephy_toolbars_group_get_path (EphyToolbarsGroup *t,
 {
 	GNode *node;
 	char *path = NULL;
+	EphyToolbarsItem *titem;
 
 	node = g_node_find (t->priv->toolbars, G_IN_ORDER, G_TRAVERSE_ALL, item);
+	titem = (EphyToolbarsItem *)node->data;
 
 	switch (g_node_depth (node))
 	{
@@ -572,12 +578,12 @@ ephy_toolbars_group_get_path (EphyToolbarsGroup *t,
 			break;
 		case 3:
 			path = g_strdup_printf
-				("/Toolbar%d/PlaceHolder%d-%d/%s",
+				("/Toolbar%d/PlaceHolder%d-%d/%s%s",
 				 g_node_child_position (node->parent->parent, node->parent),
 				 g_node_child_position (node->parent, node),
 				 g_node_child_position (node->parent->parent, node->parent),
-				 ((EphyToolbarsItem *)node->data)->separator ?
-				 "ToolSeparator" : "ToolItem");
+				 titem->separator ? "TS" : "TI",
+				 titem->separator ? "" : titem->action);
 			break;
 		default:
 			g_assert_not_reached ();

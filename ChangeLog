@@ -1,5 +1,16 @@
 2003-02-20  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/widgets/ephy-toolbars-group.c:
+	(ephy_toolbars_group_to_string),
+	(ephy_toolbars_group_remove_toolbar),
+	(ephy_toolbars_group_remove_item), (ephy_toolbars_group_get_path):
+
+	Fix this crazy bug with toolbar buttons doing two actions after
+	having edited them.
+	Save toolbar editor also after removing items.
+
+2003-02-20  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* lib/widgets/ephy-location-entry.c:
 	(ephy_location_entry_list_event_after_cb),
 	(ephy_location_entry_editable_changed_cb):
