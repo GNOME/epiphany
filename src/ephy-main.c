@@ -29,6 +29,7 @@
 #include <libbonoboui.h>
 #include <libgnome/gnome-program.h>
 #include <libgnomeui/gnome-ui-init.h>
+#include <libgnomeui/gnome-icon-theme.h>
 #include <gtk/gtkwindow.h>
 #include <libgnomevfs/gnome-vfs-init.h>
 #include <glade/glade-init.h>
@@ -145,17 +146,28 @@ main (int argc, char *argv[])
 
 	if (first_instance)
 	{
+		GnomeIconTheme *icon_theme;
+
 		gnome_vfs_init ();
 
 		glade_gnome_init ();
 
 		ephy_shell_new ();
 
-		file = gnome_program_locate_file
-			(NULL, GNOME_FILE_DOMAIN_APP_PIXMAP,
-			 "epiphany.png", TRUE, NULL);
-		gtk_window_set_default_icon_from_file (file, NULL);
-		g_free (file);
+		icon_theme = gnome_icon_theme_new ();
+		file = gnome_icon_theme_lookup_icon (icon_theme, "web-browser",
+						     -1, NULL, NULL);
+		g_object_unref (icon_theme);
+
+		if (file)
+		{
+			gtk_window_set_default_icon_from_file (file, NULL);
+			g_free (file);
+		}
+		else
+		{
+			g_warning ("Web browser gnome icon not found");
+		}
 
 		g_idle_add ((GSourceFunc) ephy_main_start, NULL);
 

@@ -46,6 +46,7 @@
 #include <bonobo/bonobo-i18n.h>
 #include <libgnomeui/gnome-about.h>
 #include <libgnomeui/gnome-stock-icons.h>
+#include <libgnomeui/gnome-icon-theme.h>
 #include <libgnome/gnome-program.h>
 #include <gtk/gtkeditable.h>
 
@@ -723,8 +724,9 @@ window_cmd_help_about (EggAction *action,
 	static GtkWidget *about = NULL;
 	GtkWidget** ptr;
 	GdkPixbuf *icon;
-	const char *icon_path;
+	char *icon_path;
 	GdkPixbuf *logo;
+	GnomeIconTheme *icon_theme;
 
 	static gchar *authors[] = {
 		"Marco Pesenti Gritti <mpeseng@tin.it>",
@@ -750,10 +752,21 @@ window_cmd_help_about (EggAction *action,
 		return;
 	}
 
-	icon_path = gnome_program_locate_file (NULL, GNOME_FILE_DOMAIN_APP_PIXMAP,
-					  "epiphany.png", TRUE, NULL);
-	logo = gdk_pixbuf_new_from_file (icon_path, NULL);
-	g_return_if_fail (logo != NULL);
+	icon_theme = gnome_icon_theme_new ();
+	icon_path = gnome_icon_theme_lookup_icon (icon_theme, "web-browser",
+						  -1, NULL, NULL);
+	g_object_unref (icon_theme);
+
+	if (icon_path)
+	{
+		logo = gdk_pixbuf_new_from_file (icon_path, NULL);
+		g_free (icon_path);
+	}
+	else
+	{
+		logo = NULL;
+		g_warning ("Web browser gnome icon not found");
+	}
 
 	about = gnome_about_new(
 		       "Epiphany", VERSION,
@@ -768,11 +781,11 @@ window_cmd_help_about (EggAction *action,
 
 	gtk_window_set_transient_for (GTK_WINDOW (about),
 				      GTK_WINDOW (window));
-	
-	icon = gtk_widget_render_icon (about, 
-						      GNOME_STOCK_ABOUT,
-						      GTK_ICON_SIZE_MENU,
-						      NULL);
+
+	icon = gtk_widget_render_icon (about,
+				       GNOME_STOCK_ABOUT,
+				       GTK_ICON_SIZE_MENU,
+				       NULL);
 	gtk_window_set_icon (GTK_WINDOW (about), icon);
 	g_object_unref(icon);
 

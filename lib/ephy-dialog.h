@@ -99,6 +99,10 @@ void	      ephy_dialog_add_enum		(EphyDialog *dialog,
 						 guint n_items,
 						 const char **items);
 
+void	      ephy_dialog_set_size_group	(EphyDialog *dialog,
+						 int *controls_id,
+						 guint n_controls);
+
 gint          ephy_dialog_run			(EphyDialog *dialog);
 
 void          ephy_dialog_show			(EphyDialog *dialog);

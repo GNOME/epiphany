@@ -12,7 +12,7 @@ art_DATA = \
 	epiphany-bookmarks.png \
 	epiphany-tab-loading.gif
 
-appicon_DATA = epiphany.png epiphany-bookmarks.png
+appicon_DATA = epiphany-bookmarks.png
 appicondir = $(datadir)/pixmaps
 
 artdir = $(pkgdatadir)/art

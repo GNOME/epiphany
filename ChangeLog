@@ -1,3 +1,22 @@
+2003-07-02  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* data/art/Makefile.am:
+	* data/art/epiphany.png:
+	* data/epiphany.desktop.in:
+	* data/epiphany.schemas.in:
+	* data/glade/prefs-dialog.glade:
+	* embed/mozilla/mozilla-notifiers.cpp:
+	* lib/ephy-dialog.c: (ephy_dialog_set_size_group):
+	* lib/ephy-dialog.h:
+	* src/ephy-main.c: (main):
+	* src/prefs-dialog.c: (prefs_dialog_init),
+	(prefs_homepage_blank_button_clicked_cb), (fill_language_editor):
+	* src/window-commands.c: (window_cmd_help_about):
+
+	Use the browser icon from gnome icon theme.
+	Get rid of cache comparing prefs and rehash prefs pages to
+	make them more specific.
+
 2003-07-02  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/bookmarks/ephy-topic-action.c: (ephy_topic_action_sync_label),

@@ -1283,3 +1283,25 @@ ephy_dialog_get_value (EphyDialog *dialog,
         return klass->get_value (dialog, property_id, value);
 }
 
+void
+ephy_dialog_set_size_group (EphyDialog *dialog,
+			    int *controls_id,
+			    guint n_controls)
+{
+	GtkSizeGroup *size_group;
+	int i;
+
+	size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+
+	for (i = 0; i < n_controls; i++)
+	{
+		GtkWidget *widget;
+		guint id;
+
+		id = controls_id[i];
+		widget = dialog->priv->props[id].widget;
+		g_return_if_fail (GTK_IS_WIDGET (widget));
+
+                gtk_size_group_add_widget (size_group, widget);
+        }
+}

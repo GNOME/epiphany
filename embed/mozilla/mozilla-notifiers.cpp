@@ -102,11 +102,6 @@ mozilla_cookies_accept_notifier (GConfClient *client,
 		                 guint cnxn_id,
 		                 GConfEntry *entry,
 		                 char *pref);
-static void
-mozilla_cache_compare_notifier (GConfClient *client,
-		                guint cnxn_id,
-		                GConfEntry *entry,
-		                char *pref);
 
 /* Keeps the list of the notifiers we installed for mozilla prefs */
 /* to be able to remove them when exiting */
@@ -165,8 +160,6 @@ custom_notifiers [] =
 	  (GConfClientNotifyFunc) mozilla_proxy_autoconfig_notifier },
 	{ CONF_NETWORK_CACHE_SIZE,
           (GConfClientNotifyFunc) mozilla_cache_size_notifier },
-	{ CONF_NETWORK_CACHE_COMPARE,
-	  (GConfClientNotifyFunc) mozilla_cache_compare_notifier },
 	{ CONF_SECURITY_COOKIES_ACCEPT,
 	  (GConfClientNotifyFunc) mozilla_cookies_accept_notifier },
 
@@ -305,37 +298,6 @@ mozilla_cookies_accept_notifier (GConfClient *client,
 	}
 
 	mozilla_prefs_set_int ("network.cookie.cookieBehavior", mozilla_mode);
-}
-
-static void
-mozilla_cache_compare_notifier (GConfClient *client,
-		                guint cnxn_id,
-		                GConfEntry *entry,
-		                char *pref)
-{
-	const char *mode;
-	int mozilla_mode = 0;
-	
-	mode = gconf_value_get_string(entry->value);
-	
-	if (strcmp (mode, "once per session") == 0)
-	{
-		mozilla_mode = 0;
-	}
-	else if (strcmp (mode, "every time") == 0)
-	{
-		mozilla_mode = 1;
-	}
-	else if (strcmp (mode, "never") == 0)
-	{
-		mozilla_mode = 2;
-	}
-	else if (strcmp (mode, "automatic") == 0)
-	{
-		mozilla_mode = 3;
-	}
-
-	mozilla_prefs_set_int ("browser.cache.check_doc_frequency", mozilla_mode);
 }
 
 static void

@@ -167,13 +167,6 @@ char *cookies_accept_enum [] =
 static guint n_cookies_accept_enum = G_N_ELEMENTS (cookies_accept_enum);
 
 static const
-char *cache_compare_enum [] =
-{
-	"once per session", "every time", "never", "automatic"
-};
-static guint n_cache_compare_enum = G_N_ELEMENTS (cache_compare_enum);
-
-static const
 char *proportional_enum [] =
 {
 	"serif", "sans-serif"
@@ -231,18 +224,20 @@ enum
 	USE_COLORS_PROP,
 	USE_FONTS_PROP,
 
-	/* Security */
+	/* Privacy */
 	ALLOW_POPUPS_PROP,
 	ALLOW_JAVA_PROP,
 	ALLOW_JS_PROP,
 	ACCEPT_COOKIES_PROP,
-
-	/* Advanced */
-	CACHE_COMPARE_PROP,
 	DISK_CACHE_PROP,
+
+	/* Language */
 	AUTO_ENCODING_PROP,
 	DEFAULT_ENCODING_PROP,
 	LANGUAGE_PROP,
+	LANGUAGE_LABEL_PROP,
+	DEFAULT_ENCODING_LABEL_PROP,
+	AUTO_ENCODING_LABEL_PROP
 };
 
 #define CONF_FONTS_FOR_LANGUAGE	"/apps/epiphany/dialogs/preferences_font_language"
@@ -269,21 +264,32 @@ EphyDialogProperty properties [] =
 	{ USE_COLORS_PROP, "use_colors_checkbutton", CONF_RENDERING_USE_OWN_COLORS, PT_AUTOAPPLY, NULL },
 	{ USE_FONTS_PROP, "use_fonts_checkbutton", CONF_RENDERING_USE_OWN_FONTS, PT_AUTOAPPLY, NULL },
 
-	/* Security */
+	/* Privacy */
 	{ ALLOW_POPUPS_PROP, "popups_allow_checkbutton", CONF_SECURITY_ALLOW_POPUPS, PT_AUTOAPPLY, NULL },
 	{ ALLOW_JAVA_PROP, "enable_java_checkbutton", CONF_SECURITY_JAVA_ENABLED, PT_AUTOAPPLY, NULL },
 	{ ALLOW_JS_PROP, "enable_javascript_checkbutton", CONF_SECURITY_JAVASCRIPT_ENABLED, PT_AUTOAPPLY, NULL },
 	{ ACCEPT_COOKIES_PROP, "cookies_radiobutton", CONF_SECURITY_COOKIES_ACCEPT, PT_AUTOAPPLY, NULL },
-
-	/* Advanced */
-	{ CACHE_COMPARE_PROP, "cache_compare_radiobutton", CONF_NETWORK_CACHE_COMPARE, PT_AUTOAPPLY, NULL },
 	{ DISK_CACHE_PROP, "disk_cache_spin", CONF_NETWORK_CACHE_SIZE, PT_AUTOAPPLY, NULL },
+
+	/* Languages */
 	{ AUTO_ENCODING_PROP, "auto_encoding_optionmenu", NULL, PT_NORMAL, NULL },
 	{ DEFAULT_ENCODING_PROP, "default_encoding_optionmenu", NULL, PT_NORMAL, NULL },
 	{ LANGUAGE_PROP, "language_optionmenu", NULL, PT_NORMAL, NULL },
+	{ LANGUAGE_LABEL_PROP, "language_label", NULL, PT_NORMAL, NULL },
+	{ DEFAULT_ENCODING_LABEL_PROP, "default_encoding_label", NULL, PT_NORMAL, NULL },
+	{ AUTO_ENCODING_LABEL_PROP, "auto_encoding_label", NULL, PT_NORMAL, NULL },
 
 	{ -1, NULL, NULL }
 };
+
+static
+int lang_size_group [] =
+{
+	LANGUAGE_LABEL_PROP,
+	DEFAULT_ENCODING_LABEL_PROP,
+	AUTO_ENCODING_LABEL_PROP
+};
+static guint n_lang_size_group = G_N_ELEMENTS (lang_size_group);
 
 typedef struct
 {
@@ -1075,12 +1081,13 @@ prefs_dialog_init (PrefsDialog *pd)
 			       "prefs-dialog.glade",
 			       "prefs_dialog");
 
-	ephy_dialog_add_enum (EPHY_DIALOG (pd), CACHE_COMPARE_PROP,
-			      n_cache_compare_enum, cache_compare_enum);
 	ephy_dialog_add_enum (EPHY_DIALOG (pd), ACCEPT_COOKIES_PROP,
 			      n_cookies_accept_enum, cookies_accept_enum);
 	ephy_dialog_add_enum (EPHY_DIALOG (pd), PROPORTIONAL_PROP,
 			      n_proportional_enum, proportional_enum);
+
+	ephy_dialog_set_size_group (EPHY_DIALOG (pd), lang_size_group,
+				    n_lang_size_group);
 
 	pd->priv->window = ephy_dialog_get_control (dialog, WINDOW_PROP);
 	pd->priv->notebook = ephy_dialog_get_control (dialog, NOTEBOOK_PROP);
@@ -1107,8 +1114,6 @@ prefs_dialog_init (PrefsDialog *pd)
 	create_encoding_autodetectors_menu (pd);
 	create_language_menu (pd);
 }
-
-/* Network page callbacks */
 
 void
 prefs_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data)
@@ -1175,7 +1180,7 @@ void
 prefs_homepage_blank_button_clicked_cb (GtkWidget *button,
 					EphyDialog *dialog)
 {
-	set_homepage_entry (dialog, "about:blank");
+	set_homepage_entry (dialog, "");
 }
 
 static void
@@ -1202,11 +1207,11 @@ fill_language_editor (LanguageEditor *le, PrefsDialog *dialog)
 		{
 			i = g_list_position (dialog->priv->langs, lang);
 			li = (EphyLangItem *) lang->data;
-			
+
 			language_editor_add (le, li->name, i);
 		}
 	}
-	
+
 	g_slist_foreach (strings, (GFunc) g_free, NULL);
 	g_slist_free (strings);
 }
