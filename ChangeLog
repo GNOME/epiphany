@@ -1,5 +1,16 @@
 2005-01-06  Christian Persch  <chpe@cvs.gnome.org>
 
+	* data/ui/epiphany-ui.xml:
+
+	Add placeholder group for tabs move actions.
+
+	* src/ephy-window.c: (show_notebook_popup_menu):
+
+	Activate the action before showing the context menu, so 
+	extensions can sync their UI.
+
+2005-01-06  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-go-action.c: (create_tool_item):
 
 	Don't focus the button on click.

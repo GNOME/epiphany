@@ -100,6 +100,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "Tabs", NULL, N_("_Tabs") },
 	{ "Help", NULL, N_("_Help") },
 	{ "PopupAction", NULL, "" },
+	{ "NotebookPopupAction", NULL, "" },
 
 	/* File menu */
 
@@ -2049,9 +2050,16 @@ show_notebook_popup_menu (GtkNotebook *notebook,
 			  GdkEventButton *event)
 {
 	GtkWidget *menu, *tab, *tab_label;
+	GtkAction *action;
 
 	menu = gtk_ui_manager_get_widget (window->priv->manager, "/EphyNotebookPopup");
 	g_return_val_if_fail (menu != NULL, FALSE);
+
+	/* allow extensions to sync when showing the popup */
+	action = gtk_action_group_get_action (window->priv->action_group,
+					      "NotebookPopupAction");
+	g_return_val_if_fail (action != NULL, FALSE);
+	gtk_action_activate (action);
 
 	if (event != NULL)
 	{
