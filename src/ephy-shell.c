@@ -413,18 +413,27 @@ ephy_shell_finalize (GObject *object)
 
 	/* this will unload the extensions */
 	LOG ("Unref extension manager")
-	g_object_unref (shell->priv->extensions_manager);
+	if (shell->priv->extensions_manager)
+	{
+		g_object_unref (shell->priv->extensions_manager);
+	}
+
+	LOG ("Unref session manager")
+	if (shell->priv->session)
+	{
+		g_object_unref (shell->priv->session);
+	}
 
 	LOG ("Unref toolbars model")
 	if (shell->priv->toolbars_model)
 	{
-		g_object_unref (G_OBJECT (shell->priv->toolbars_model));
+		g_object_unref (shell->priv->toolbars_model);
 	}
 
 	LOG ("Unref fullscreen toolbars model")
 	if (shell->priv->fs_toolbars_model)
 	{
-		g_object_unref (G_OBJECT (shell->priv->fs_toolbars_model));
+		g_object_unref (shell->priv->fs_toolbars_model);
 	}
 
 	LOG ("Unref Bookmarks Editor");
@@ -605,13 +614,12 @@ ephy_shell_get_session (EphyShell *shell)
 	{
 		EphyExtensionsManager *manager;
 
+		shell->priv->session = g_object_new (EPHY_TYPE_SESSION, NULL);
+
 		manager = EPHY_EXTENSIONS_MANAGER
 			(ephy_shell_get_extensions_manager (shell));
-
-		/* Instantiate internal extensions */
-		shell->priv->session =
-			EPHY_SESSION (ephy_extensions_manager_add
-				(manager, EPHY_TYPE_SESSION));
+		ephy_extensions_manager_register (manager,
+						  G_OBJECT (shell->priv->session));
 	}
 
 	return G_OBJECT (shell->priv->session);
@@ -683,19 +691,9 @@ ephy_shell_get_extensions_manager (EphyShell *es)
 
 	if (es->priv->extensions_manager == NULL)
 	{
-		char *path;
-
 		/* Instantiate extensions manager */
-		es->priv->extensions_manager = ephy_extensions_manager_new ();
-
-		/* load the extensions */
-		path = g_build_filename (ephy_dot_dir (), "extensions", NULL);
-		ephy_extensions_manager_load_dir (es->priv->extensions_manager,
-						  path);
-		g_free (path);
-
-		ephy_extensions_manager_load_dir (es->priv->extensions_manager,
-						  EXTENSIONS_DIR);
+		es->priv->extensions_manager =
+			g_object_new (EPHY_TYPE_EXTENSIONS_MANAGER, NULL);
 	}
 
 	return G_OBJECT (es->priv->extensions_manager);

@@ -23,6 +23,7 @@
 #define EPHY_EXTENSIONS_MANAGER_H
 
 #include "ephy-extension.h"
+#include "ephy-node.h"
 
 #include <glib.h>
 #include <glib-object.h>
@@ -36,16 +37,30 @@ G_BEGIN_DECLS
 #define EPHY_IS_EXTENSIONS_MANAGER_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EXTENSIONS_MANAGER))
 #define EPHY_EXTENSIONS_MANAGER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EXTENSIONS_MANAGER, EphyExtensionsManagerClass))
 
-typedef struct EphyExtensionsManager		EphyExtensionsManager;
-typedef struct EphyExtensionsManagerClass	EphyExtensionsManagerClass;
-typedef struct EphyExtensionsManagerPrivate	EphyExtensionsManagerPrivate;
+typedef struct _EphyExtensionsManager		EphyExtensionsManager;
+typedef struct _EphyExtensionsManagerClass	EphyExtensionsManagerClass;
+typedef struct _EphyExtensionsManagerPrivate	EphyExtensionsManagerPrivate;
 
-struct EphyExtensionsManagerClass
+typedef struct
+{
+	char *identifier;
+	char *name;
+	char *description;
+	GList *authors;
+	char *url;
+	gboolean active;
+} EphyExtensionInfo;
+	
+struct _EphyExtensionsManagerClass
 {
 	GObjectClass parent_class;
+
+	/* Signals */
+	void	(* changed)	(EphyExtensionsManager *manager,
+				 EphyExtensionInfo *info);
 };
 
-struct EphyExtensionsManager
+struct _EphyExtensionsManager
 {
 	GObject parent_instance;
 
@@ -53,21 +68,18 @@ struct EphyExtensionsManager
 	EphyExtensionsManagerPrivate *priv;
 };
 
-GType			 ephy_extensions_manager_get_type	(void);
+GType	  ephy_extensions_manager_get_type	 (void);
 
-EphyExtensionsManager	*ephy_extensions_manager_new 		(void);
+void	  ephy_extensions_manager_load		 (EphyExtensionsManager *manager,
+						  const char *identifier);
 
-void			 ephy_extensions_manager_load		(EphyExtensionsManager *manager,
-								 const char *filename);
+void	  ephy_extensions_manager_unload	 (EphyExtensionsManager *manager,
+						  const char *identifier);
 
-void			 ephy_extensions_manager_unload		(EphyExtensionsManager *manager,
-								 const char *filename);
+void	  ephy_extensions_manager_register	 (EphyExtensionsManager *manager,
+						  GObject *object);
 
-void			 ephy_extensions_manager_load_dir	(EphyExtensionsManager *manager,
-								 const char *path);
-
-EphyExtension		*ephy_extensions_manager_add		(EphyExtensionsManager *manager,
-								 GType type);
+GList	 *ephy_extensions_manager_get_extensions (EphyExtensionsManager *manager);
 
 G_END_DECLS
 

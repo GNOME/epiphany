@@ -44,7 +44,6 @@ NOINST_H_FILES =					\
 	ephy-automation.h				\
 	ephy-encoding-dialog.h				\
 	ephy-encoding-menu.h				\
-	ephy-extensions-manager.h			\
 	ephy-favicon-action.h				\
 	ephy-go-action.h				\
 	ephy-history-window.h				\
@@ -61,6 +60,7 @@ NOINST_H_FILES =					\
 
 INST_H_FILES = 				    		\
 	ephy-extension.h				\
+	ephy-extensions-manager.h			\
 	ephy-notebook.h					\
 	ephy-session.h					\
 	ephy-shell.h					\

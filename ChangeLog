@@ -1,3 +1,60 @@
+2004-10-17  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/Makefile.am:
+	R lib/ephy-module-loader.c:
+	R lib/ephy-module-loader.h:
+	A lib/ephy-module.c: (ephy_module_get_type), (ephy_module_load),
+	(ephy_module_unload), (ephy_module_get_path),
+	(ephy_module_new_object), (ephy_module_init),
+	(ephy_module_finalize), (ephy_module_class_init),
+	(ephy_module_new):
+	A lib/ephy-module.h:
+
+	s/EphyModuleLoader/EphyModule/g since "loader" now means something
+	different.
+
+	A lib/ephy-loader.c: (ephy_loader_get_type), (ephy_loader_type),
+	(ephy_loader_get_object), (ephy_loader_release_object):
+	A lib/ephy-loader.h:
+
+	Generic object loader.
+
+	A lib/ephy-shlib-loader.c: (ephy_shlib_loader_get_type),
+	(free_loader_data), (ephy_shlib_loader_init),
+	(ephy_shlib_loader_finalize), (find_library), (find_object),
+	(idle_unref), (impl_get_object), (impl_release_object),
+	(ephy_shlib_loader_iface_init), (ephy_shlib_loader_class_init):
+	A lib/ephy-shlib-loader.h:
+
+	A .so loader.
+
+	* src/Makefile.am:
+	* src/ephy-extensions-manager.c: (ephy_extensions_manager_load),
+	(ephy_extensions_manager_unload),
+	(ephy_extensions_manager_register),
+	(ephy_extensions_manager_get_extensions), (free_extension_info),
+	(free_loader_info), (find_extension_info),
+	(ephy_extensions_manager_load_file), (find_loader),
+	(get_loader_for_type), (attach_window), (load_extension),
+	(detach_window), (unload_extension),
+	(ephy_extensions_manager_load_dir), (active_extensions_notifier),
+	(ephy_extensions_manager_init), (ephy_extensions_manager_finalize),
+	(impl_attach_window), (impl_detach_window),
+	(ephy_extensions_manager_class_init):
+	* src/ephy-extensions-manager.h:
+
+	Read extension descriptions from .xml, load them with the specified
+	loader (for now, just only .so is supported).
+
+	* src/ephy-shell.c: (ephy_shell_finalize),
+	(ephy_shell_get_session), (ephy_shell_get_extensions_manager):
+
+	Minor API change in extensions manager.
+
+	* data/epiphany.schemas.in:
+
+	Add extensions-manager-ui as default active extension.
+
 2004-10-10  Marco Pesenti Gritti  <marco@gnome.org>
 
 	reviewed by: Christian Persch  <chpe@cvs.gnome.org>
@@ -636,4 +693,3 @@
 	Merging pre-gnome-2-10 branch to HEAD.
 
 	Splitting ChangeLog.
-

@@ -24,16 +24,18 @@ NOINST_H_FILES = \
 	ephy-gui.h				\
 	ephy-langs.h				\
 	ephy-marshal.h				\
-	ephy-module-loader.h			\
+	ephy-module.h				\
 	ephy-node-filter.h			\
 	ephy-node-common.h			\
 	ephy-prefs.h				\
+	ephy-shlib-loader.h			\
 	ephy-string.h				\
 	ephy-stock-icons.h			\
 	ephy-zoom.h
 
 INST_H_FILES = \
 	ephy-dialog.h				\
+	ephy-loader.h				\
 	ephy-node.h				\
 	ephy-node-db.h				\
 	ephy-state.h
@@ -48,7 +50,8 @@ libephymisc_la_SOURCES = \
 	ephy-glade.c				\
 	ephy-gui.c				\
 	ephy-langs.c				\
-	ephy-module-loader.c			\
+	ephy-loader.c				\
+	ephy-module.c				\
 	ephy-marshal.c				\
 	ephy-node.c				\
 	ephy-node.h				\
@@ -56,6 +59,7 @@ libephymisc_la_SOURCES = \
 	ephy-node-common.h			\
 	ephy-node-db.c				\
 	ephy-prefs.h				\
+	ephy-shlib-loader.c			\
 	ephy-state.c				\
 	ephy-string.c				\
 	ephy-stock-icons.c			\
@@ -75,4 +79,3 @@ ephy-marshal.h: ephy-marshal.list
 
 EXTRA_DIST = 			\
 	ephy-marshal.list
-
