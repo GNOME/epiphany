@@ -302,6 +302,14 @@ ephy_tab_map (GtkWidget *widget)
 	GTK_WIDGET_CLASS (parent_class)->map (widget);	
 }
 
+static void
+ephy_tab_grab_focus (GtkWidget *widget)
+{
+	EphyTab *tab = EPHY_TAB (widget);
+
+	ephy_embed_activate (ephy_tab_get_embed (tab));
+}
+
 static EphyWindow *
 ephy_tab_get_window (EphyTab *tab)
 {
@@ -344,6 +352,7 @@ ephy_tab_class_init (EphyTabClass *class)
 
 	widget_class->size_allocate = ephy_tab_size_allocate;
 	widget_class->map = ephy_tab_map;
+	widget_class->grab_focus = ephy_tab_grab_focus;
 
 	g_object_class_install_property (object_class,
 					 PROP_ADDRESS,

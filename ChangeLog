@@ -1,3 +1,12 @@
+2005-01-01  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.in:
+	* src/ephy-notebook.c: (close_button_clicked_cb),
+	(build_tab_label):
+	* src/ephy-tab.c: (ephy_tab_grab_focus), (ephy_tab_class_init):
+
+	Grab focus on the active tab before removing a tab. Fixes bug #119461.
+
 2004-12-31  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/bookmarks/ephy-topics-selector.c: (ephy_topics_selector_constructor):
