@@ -86,6 +86,7 @@ static void ephy_window_view_popup_windows_cb	(GtkAction *action,
 static GtkActionEntry ephy_menu_entries [] = {
 
 	/* Toplevel */
+
 	{ "File", NULL, N_("_File") },
 	{ "Edit", NULL, N_("_Edit") },
 	{ "View", NULL, N_("_View") },
@@ -97,6 +98,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	{ "PopupAction", NULL, "" },
 
 	/* File menu */
+
 	{ "FileNewWindow", GTK_STOCK_NEW, N_("_New Window"), "<control>N",
 	  N_("Open a new window"),
 	  G_CALLBACK (window_cmd_file_new_window) },
@@ -129,6 +131,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_file_close_window) },
 
 	/* Edit menu */
+
 	{ "EditUndo", GTK_STOCK_UNDO, N_("_Undo"), "<control>Z",
 	  N_("Undo the last action"),
 	  G_CALLBACK (window_cmd_edit_undo) },
@@ -167,6 +170,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_edit_prefs) },
 
 	/* View menu */
+
 	{ "ViewStop", GTK_STOCK_STOP, N_("_Stop"), "Escape",
 	  N_("Stop current data transfer"),
 	  G_CALLBACK (window_cmd_view_stop) },
@@ -190,6 +194,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_view_page_source) },
 
 	/* Bookmarks menu */
+
 	{ "FileBookmarkPage", STOCK_ADD_BOOKMARK, N_("_Add Bookmark..."), "<control>D",
 	  N_("Add a bookmark for the current page"),
 	  G_CALLBACK (window_cmd_file_bookmark_page) },
@@ -198,6 +203,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_go_bookmarks) },
 
 	/* Go menu */
+
 	{ "GoBack", GTK_STOCK_GO_BACK, N_("_Back"), "<alt>Left",
 	  N_("Go to the previous visited page"),
 	  G_CALLBACK (window_cmd_go_back) },
@@ -218,6 +224,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_go_history) },
 
 	/* Tabs menu */
+
 	{ "TabsPrevious", NULL, N_("_Previous Tab"), "<control>Page_Up",
 	  N_("Activate previous tab"),
 	  G_CALLBACK (window_cmd_tabs_previous) },
@@ -235,6 +242,7 @@ static GtkActionEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_tabs_detach) },
 
 	/* Help menu */
+
 	{"HelpContents", GTK_STOCK_HELP, N_("_Contents"), "F1",
 	 N_("Display web browser help"),
 	 G_CALLBACK (window_cmd_help_contents) },
@@ -247,11 +255,13 @@ static guint ephy_menu_n_entries = G_N_ELEMENTS (ephy_menu_entries);
 static GtkToggleActionEntry ephy_menu_toggle_entries [] =
 {
 	/* File Menu */
+
 	{ "FileWorkOffline", NULL, N_("_Work Offline"), NULL,
 	  N_("Toggle network status"),
 	  G_CALLBACK (window_cmd_file_work_offline), FALSE },
 
 	/* View Menu */
+
 	{ "ViewToolbar", NULL, N_("_Toolbar"), "<shift><control>T",
 	  N_("Show or hide toolbar"),
 	  G_CALLBACK (ephy_window_view_toolbar_cb), TRUE },
@@ -275,6 +285,7 @@ static guint ephy_menu_n_toggle_entries = G_N_ELEMENTS (ephy_menu_toggle_entries
 
 static GtkActionEntry ephy_popups_entries [] = {
 	/* Document */
+
 	{ "SaveBackgroundAs", NULL, N_("_Save Background As..."), NULL,
 	  NULL, G_CALLBACK (popup_cmd_save_background_as) },
 	{ "ContextBookmarkPage", STOCK_ADD_BOOKMARK, N_("Add Boo_kmark..."), "<control>D",
@@ -282,11 +293,13 @@ static GtkActionEntry ephy_popups_entries [] = {
 	  G_CALLBACK (window_cmd_file_bookmark_page) },
 
 	/* Framed document */
+
 	{ "OpenFrame", NULL, N_("_Open Frame"), NULL,
 	  N_("Open frame in this window"),
 	  G_CALLBACK (popup_cmd_open_frame) },
 
 	/* Links */
+
 	{ "OpenLink", GTK_STOCK_OPEN, N_("_Open Link"), NULL,
 	  N_("Open link in this window"),
 	  G_CALLBACK (popup_cmd_open_link) },
@@ -307,12 +320,15 @@ static GtkActionEntry ephy_popups_entries [] = {
 	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
 
 	/* Email links */
+
+	/* This is on the context menu on a mailto: link and opens the mail program */
 	{ "SendEmail", GTK_STOCK_OPEN, N_("_Send Email..."),
 	  NULL, NULL, G_CALLBACK (popup_cmd_open_link) },
 	{ "CopyEmailAddress", NULL, N_("_Copy Email Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_link_address) },
 
 	/* Images */
+
 	{ "OpenImage", GTK_STOCK_OPEN, N_("Open _Image"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_open_image) },
 	{ "SaveImageAs", GTK_STOCK_SAVE_AS, N_("_Save Image As..."), NULL,
