@@ -28,7 +28,6 @@ NOINST_H_FILES = \
 	ephy-node-filter.h			\
 	ephy-node-common.h			\
 	ephy-prefs.h				\
-	ephy-state.h				\
 	ephy-string.h				\
 	ephy-stock-icons.h			\
 	ephy-zoom.h
@@ -36,7 +35,8 @@ NOINST_H_FILES = \
 INST_H_FILES = \
 	ephy-dialog.h				\
 	ephy-node.h				\
-	ephy-node-db.h
+	ephy-node-db.h				\
+	ephy-state.h
 
 libephymisc_la_SOURCES = \
 	eel-gconf-extensions.c			\
