@@ -30,6 +30,7 @@
 #include <gtk/gtkpaned.h>
 
 #define STATES_FILE "states.xml"
+#define EPHY_STATES_XML_VERSION "1.0"
 
 enum
 {
@@ -45,8 +46,6 @@ enum
 
 static EphyNode *states = NULL;
 static EphyNodeDb *states_db = NULL;
-
-#define EPHY_STATES_XML_VERSION "0.1"
 
 static void
 ephy_states_load (void)
@@ -162,7 +161,7 @@ ensure_states (void)
 {
 	if (states == NULL)
 	{
-		states_db = ephy_node_db_new ("EphyStates");
+		states_db = ephy_node_db_new (EPHY_NODE_DB_STATES);
 		states = ephy_node_new_with_id (states_db, STATES_NODE_ID);
 		ephy_states_load ();
 	}
