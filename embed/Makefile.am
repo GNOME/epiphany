@@ -1,4 +1,4 @@
-SUBDIRS = mozilla
+SUBDIRS = mozilla 
 
 INCLUDES = \
 	-I$(top_srcdir)/embed/mozilla     	\
@@ -10,7 +10,6 @@ INCLUDES = \
 	-DSHARE_DIR=\"$(pkgdatadir)\" 		\
 	-DG_DISABLE_DEPRECATED			\
 	-DGDK_DISABLE_DEPRECATED		\
-	-DGTK_DISABLE_DEPRECATED		\
 	-DGDK_PIXBUF_DISABLE_DEPRECATED		\
 	-DGNOME_DISABLE_DEPRECATED
 
@@ -21,6 +20,7 @@ header_DATA = $(INST_H_FILES)
 
 NOINST_H_FILES = \
 	downloader-view.h		\
+	ephy-download.h			\
 	ephy-embed-dialog.h		\
 	ephy-embed-popup-control.h	\
 	ephy-embed-utils.h		\
@@ -40,6 +40,7 @@ INST_H_FILES = \
 
 libephyembed_la_SOURCES = \
 	downloader-view.c		\
+	ephy-download.c			\
 	ephy-embed.c			\
 	ephy-embed-dialog.c		\
 	ephy-embed-event.c		\
