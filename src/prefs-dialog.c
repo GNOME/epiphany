@@ -88,6 +88,8 @@ languages [] =
 	{ N_("Bulgarian"), "bg" },
 	{ N_("Byelorussian"), "be" },
 	{ N_("Catalan"), "ca" },
+	{ N_("Chinese Simplified"), "zh-cn" },
+	{ N_("Chinese Traditional"), "zh-tw" },
 	{ N_("Chinese"), "zh" },
 	{ N_("Croatian"), "hr" },
 	{ N_("Czech"), "cs" },
@@ -119,7 +121,7 @@ languages [] =
 	{ N_("Norwegian"), "no" },
 	{ N_("Polish"), "pl" },
 	{ N_("Portuguese"), "pt" },
-	{ N_("Portuguese of Brazil"), "pt-BR" },
+	{ N_("Portuguese of Brazil"), "pt-br" },
 	{ N_("Romanian"), "ro" },
 	{ N_("Russian"), "ru" },
 	{ N_("Scottish"), "gd" },
@@ -152,6 +154,7 @@ static EncodingAutodetectorInfo encoding_autodetector[] =
 	{ N_("Russian"),		"ruprob" },
 	{ N_("Simplified Chinese"),	"zhcn_parallel_state_machine" },
 	{ N_("Traditional Chinese"),	"zhtw_parallel_state_machine" },
+	{ N_("Universal"),		"universal_charset_detector" },
 	{ N_("Ukrainian"),		"ukprob" }
 };
 static guint n_encoding_autodetectors = G_N_ELEMENTS (encoding_autodetector);

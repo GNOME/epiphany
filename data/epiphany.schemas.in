@@ -147,8 +147,8 @@
         <applyto>/apps/epiphany/web/default_encoding</applyto>
         <owner>epiphany</owner>
         <type>string</type>
-        <default>ISO-8859-1</default>
         <locale name="C">
+        <default>ISO-8859-1</default>
         <short>Default encoding</short>
         <long>Default encoding. Accepted values are: armscii-8, Big5,
 	Big5-HKSCS, EUC-JP, EUC-KR, gb18030, GB2312, geostd8, HZ-GB-2312,
@@ -388,18 +388,19 @@
         <applyto>/apps/epiphany/web/autodetect_encoding</applyto>
         <owner>epiphany</owner>
         <type>string</type>
-        <default></default>
         <locale name="C">
+        <default></default>
 	<short>The encoding autodetector. Empty string means autodetect is off</short>
 	<long>
-	The encoding autodetector. Valid entries are "" (empty string, autodetectors
-	off), cjk_parallel_state_machine (autodetect east asian encodings),
-	ja_parallel_state_machine (autodetect japanese encodings),
-	ko_parallel_state_machine (autodetect korean encodings), ruprob
-	(autodetect russian encodings), ukprob (autodetect ukrainian encodings),
-	zh_parallel_state_machine (autodetect chinese encodings),
-	zhcn_parallel_state_machine (autodetect simplified chinese encodings) and
-	zhtw_parallel_state_machine (autodetect traditional chinese encodings).
+	The encoding autodetector. Valid entries are "" (autodetectors
+	off), "cjk_parallel_state_machine" (autodetect east asian encodings),
+	"ja_parallel_state_machine" (autodetect japanese encodings),
+	"ko_parallel_state_machine" (autodetect korean encodings), "ruprob"
+	(autodetect russian encodings), "ukprob" (autodetect ukrainian encodings),
+	"zh_parallel_state_machine" (autodetect chinese encodings),
+	"zhcn_parallel_state_machine" (autodetect simplified chinese encodings),
+	"zhtw_parallel_state_machine" (autodetect traditional chinese encodings)
+	and "universal_charset_detector" (autodetect all encodings).
 	</long>
         </locale>
       </schema>

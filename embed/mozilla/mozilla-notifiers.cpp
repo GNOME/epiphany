@@ -620,7 +620,21 @@ static char *
 get_system_language ()
 {
 	const GList *sys_langs;
+	const char *lang;
 
+	/**
+	 * translate this as the comma separated list of language ranges
+	 * for your locale, as specified by RFC 2616, 14.4. 
+	 * for example for en_NZ locale this could be "en-nz,en-au,en-gb,en"
+	 */
+	lang = _("system-language");
+	
+	if (strncmp (lang, "system-language", 15) != 0)
+	{
+		/* the l10n has it */
+		return g_strdup (lang);
+	}
+	
 	sys_langs = gnome_i18n_get_language_list ("LC_MESSAGES");
 
 	if (sys_langs)
