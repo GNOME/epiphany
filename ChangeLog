@@ -1,5 +1,16 @@
 2005-02-02  Christian Persch  <chpe@cvs.gnome.org>
 
+	* src/ephy-automation.c:
+	(impl_ephy_automation_loadUrlWithStartupId):
+	* src/ephy-shell.c: (ephy_shell_new_window_cb),
+	(ephy_shell_new_tab_full), (ephy_shell_new_tab):
+	* src/ephy-shell.h:
+
+	Add chrome param to ephy_shell_new_tab_full, and use it
+	in ephy_shell_new_window_cb(). Fixes bug #165566.
+
+2005-02-02  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-embed-persist.c: (ephy_embed_persist_set_fc_parent),
 	(ephy_embed_persist_finalize):
 

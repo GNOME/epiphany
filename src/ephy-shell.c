@@ -158,26 +158,33 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
 			  EphyEmbedChrome chromemask,
 			  EphyShell *shell)
 {
+	GtkWidget *parent = NULL;
 	EphyTab *new_tab;
-	EphyWindow *window;
+	EphyNewTabFlags flags = EPHY_NEW_TAB_DONT_SHOW_WINDOW |
+				EPHY_NEW_TAB_APPEND_LAST |
+				EPHY_NEW_TAB_IN_NEW_WINDOW |
+				EPHY_NEW_TAB_JUMP;
 
 	LOG ("ephy_shell_new_window_cb tab chrome %d", chromemask);
 
-	/* FIXME in lockdown-fullscreen mode, always add a new tab instead */
-
 	if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_JAVASCRIPT_CHROME))
 	{
-		window = ephy_window_new ();
+		chromemask = EPHY_EMBED_CHROME_ALL;
 	}
-	else
+
+	if (parent_embed != NULL)
 	{
-		window = ephy_window_new_with_chrome (chromemask);
+		/* this will either be a EphyWindow, or the embed itself
+		 * (in case it's about to be destroyed, which means it's already
+		 * removed from its tab)
+		 */
+		parent = gtk_widget_get_toplevel (GTK_WIDGET (parent_embed));
 	}
 
-	new_tab = ephy_tab_new ();
-	gtk_widget_show (GTK_WIDGET (new_tab));
-
-        ephy_window_add_tab (window, new_tab, -1, FALSE);
+	new_tab = ephy_shell_new_tab_full
+		(shell,
+		 EPHY_IS_WINDOW (parent) ? EPHY_WINDOW (parent) : NULL,
+		 NULL, NULL, flags, chromemask, 0);
 
 	return ephy_tab_get_embed (new_tab);
 }
@@ -649,6 +656,7 @@ load_homepage (EphyEmbed *embed)
  * @parent_window: the target #EphyWindow or %NULL
  * @previous_tab: the referrer tab or %NULL
  * @url: an url to load or %NULL
+ * @chrome: a #EphyEmbedChrome mask to use if creating a new window
  * @user_time: a timestamp, or 0
  *
  * Create a new tab and the parent window when necessary.
@@ -662,6 +670,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 			 EphyTab *previous_tab,
 			 const char *url,
 			 EphyNewTabFlags flags,
+			 EphyEmbedChrome chrome,
 			 guint32 user_time)
 {
 	EphyWindow *window;
@@ -690,7 +699,7 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	}
 	else
 	{
-		window = ephy_window_new ();
+		window = ephy_window_new_with_chrome (chrome);
 	}
 
 	toolbar = EPHY_TOOLBAR (ephy_window_get_toolbar (window));
@@ -715,8 +724,6 @@ ephy_shell_new_tab_full (EphyShell *shell,
 
 	ephy_gui_window_update_user_time (GTK_WIDGET (window), user_time);
 
-	gtk_widget_show (GTK_WIDGET (window));
-
 	if (flags & EPHY_NEW_TAB_HOME_PAGE ||
 	    flags & EPHY_NEW_TAB_NEW_PAGE)
 	{
@@ -728,6 +735,11 @@ ephy_shell_new_tab_full (EphyShell *shell,
 	{
 		g_assert (url != NULL);
 		ephy_embed_load_url (embed, url);
+	}
+
+	if ((flags & EPHY_NEW_TAB_DONT_SHOW_WINDOW) == 0)
+	{
+		gtk_widget_show (GTK_WIDGET (window));
 	}
 
 	if (flags & EPHY_NEW_TAB_FULLSCREEN_MODE)
@@ -758,7 +770,8 @@ ephy_shell_new_tab (EphyShell *shell,
 		    EphyNewTabFlags flags)
 {
 	return ephy_shell_new_tab_full (shell, parent_window,
-					previous_tab, url, flags, 0);
+					previous_tab, url, flags,
+					EPHY_EMBED_CHROME_ALL, 0);
 }
 
 /**

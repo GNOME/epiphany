@@ -74,13 +74,14 @@ typedef enum
 
 	/* Page mode */
 	EPHY_NEW_TAB_FULLSCREEN_MODE	= 1 << 4,
+	EPHY_NEW_TAB_DONT_SHOW_WINDOW	= 1 << 5,
 
 	/* Tabs */
 	EPHY_NEW_TAB_APPEND_LAST	= 1 << 7,
 	EPHY_NEW_TAB_APPEND_AFTER	= 1 << 8,
 	EPHY_NEW_TAB_JUMP		= 1 << 9,
 	EPHY_NEW_TAB_IN_NEW_WINDOW	= 1 << 10,
-	EPHY_NEW_TAB_IN_EXISTING_WINDOW	= 1 << 11
+	EPHY_NEW_TAB_IN_EXISTING_WINDOW	= 1 << 11,
 } EphyNewTabFlags;
 
 struct _EphyShell
@@ -128,6 +129,7 @@ EphyTab	       *ephy_shell_new_tab_full			(EphyShell *shell,
 							 EphyTab *previous_tab,
 							 const char *url,
 							 EphyNewTabFlags flags,
+							 EphyEmbedChrome chrome,
 							 guint32 user_time);
 
 GObject	       *ephy_shell_get_session			(EphyShell *shell);
