@@ -1,3 +1,10 @@
+2004-04-16  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/mozilla/MozDownload.cpp: (InitiateMozillaDownload):
+
+	Fix saving of linked content. Don't create the directory; mozilla
+	will do it for us if necessary. Make the "Files" suffix translatable.
+
 2004-04-14  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-file-chooser.c: (ephy_file_chooser_constructor),

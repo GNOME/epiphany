@@ -503,10 +503,12 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 		PRInt32 encodingFlags = 0;
 		nsCOMPtr<nsILocalFile> filesFolder;
 
-    		if (contentType && strcmp (contentType, "text/plain") == 0)
+    		if (!contentType || strcmp (contentType, "text/plain") != 0)
 		{
-			/* Create a local directory in the same dir as our file.  It
-			   will hold our associated files. */
+			/**
+			 * Construct a directory path to hold the associated files; mozilla
+			 * will create the directory as needed.
+			 */
 
 			filesFolder = do_CreateInstance("@mozilla.org/file/local;1");
 			nsAutoString unicodePath;
@@ -522,15 +524,10 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 				nameMinusExt.Left(nameMinusExt, index);
 			}
 
-			nameMinusExt += NS_LITERAL_STRING(" Files");
+			nameMinusExt += NS_LITERAL_STRING (" ");
+			nameMinusExt += NS_ConvertUTF8toUTF16 (_("Files"));
+ 
 			filesFolder->SetLeafName(nameMinusExt);
-			PRBool exists = PR_FALSE;
-			filesFolder->Exists(&exists);
-			if (!exists)
-			{
-				rv = filesFolder->Create(nsILocalFile::DIRECTORY_TYPE, 0755);
-				if (NS_FAILED(rv)) return rv;
-			}
 		}
 		else
 		{
