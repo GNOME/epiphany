@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2002 Christophe Fergeau
- *  Copyright (C) 2003 Marco Pesenti Gritti
+ *  Copyright (C) 2003, 2004 Marco Pesenti Gritti
  *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -35,6 +35,7 @@
 #include "ephy-shell.h"
 #include "ephy-debug.h"
 #include "ephy-favicon-cache.h"
+#include "ephy-ellipsizing-label.h"
 
 #include <glib-object.h>
 #include <gtk/gtkeventbox.h>
@@ -53,8 +54,6 @@
 
 #define AFTER_ALL_TABS -1
 #define NOT_IN_APP_WINDOWS -2
-#define TAB_MIN_SIZE 60
-#define TAB_NB_MAX    8
 
 #define EPHY_NOTEBOOK_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NOTEBOOK, EphyNotebookPrivate))
 
@@ -327,33 +326,6 @@ static gint find_notebook_and_tab_at_pos (gint abs_x, gint abs_y,
 	{
 		return 0;
 	}
-}
-
-static void
-tab_label_set_size (GtkWidget *window, GtkWidget *label)
-{
-	int label_width;
-
-	label_width = window->allocation.width/TAB_NB_MAX;
-
-	if (label_width < TAB_MIN_SIZE) label_width = TAB_MIN_SIZE;
-
-	gtk_widget_set_size_request (label, label_width, -1);
-}
-
-static void
-tab_label_size_request_cb (GtkWidget *window,
-			   GtkRequisition *requisition,
-			   GtkWidget *tab)
-{
-	GtkWidget *hbox;
-	GtkWidget *nb;
-
-	nb = tab->parent;
-
-	hbox = gtk_notebook_get_tab_label (GTK_NOTEBOOK (nb),
-					   tab);
-	tab_label_set_size (window, hbox);
 }
 
 void
@@ -856,7 +828,7 @@ sync_label (EphyTab *tab, GParamSpec *pspec, GtkWidget *proxy)
 
 	if (title)
 	{
-		gtk_label_set_label (GTK_LABEL (label), title);
+		ephy_ellipsizing_label_set_text (EPHY_ELLIPSIZING_LABEL (label), title);
 		gtk_tooltips_set_tip (tips, ebox, title, NULL);
 	}
 }
@@ -876,12 +848,39 @@ close_button_clicked_cb (GtkWidget *widget, GtkWidget *tab)
 	}
 }
 
+#define TAB_MIN_WIDTH_N_CHARS    8
+
+static void
+tab_label_style_set_cb (GtkWidget *label,
+			GtkStyle *previous_style,
+			GtkWidget *hbox)
+{
+	PangoFontMetrics *metrics;
+	PangoContext *context;
+	int char_width, h, w;
+
+	context = gtk_widget_get_pango_context (label);
+	metrics = pango_context_get_metrics (context,
+			                     label->style->font_desc,
+					     pango_context_get_language (context));
+
+	char_width = pango_font_metrics_get_approximate_char_width (metrics);
+	pango_font_metrics_unref (metrics);
+
+	LOG ("tab_label_size_request_cb label %p char_width %d total %d",
+	     label, char_width, TAB_MIN_WIDTH_N_CHARS * PANGO_PIXELS (char_width))
+
+	gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &w, &h);
+
+	gtk_widget_set_size_request
+		(hbox, TAB_MIN_WIDTH_N_CHARS * PANGO_PIXELS(char_width) + 2 * w, -1);
+}
+
 static GtkWidget *
 build_tab_label (EphyNotebook *nb, EphyTab *tab)
 {
-	GtkWidget *label, *hbox, *close_button, *image;
+	GtkWidget *label, *hbox, *label_hbox, *close_button, *image;
 	int h, w;
-	GClosure *closure;
 	GtkWidget *window;
 	GtkWidget *loading_image, *icon;
 	GtkWidget *label_ebox;
@@ -895,6 +894,13 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	 * equal amount of space around the label */
 	hbox = gtk_hbox_new (FALSE, 4);
 
+	label_ebox = gtk_event_box_new ();
+	gtk_event_box_set_visible_window (GTK_EVENT_BOX (label_ebox), FALSE);
+	gtk_box_pack_start (GTK_BOX (hbox), label_ebox, TRUE, TRUE, 0);
+
+	label_hbox = gtk_hbox_new (FALSE, 4);
+	gtk_container_add (GTK_CONTAINER (label_ebox), label_hbox);
+
 	/* setup close button */
 	close_button = gtk_button_new ();
 	gtk_button_set_relief (GTK_BUTTON (close_button),
@@ -902,54 +908,43 @@ build_tab_label (EphyNotebook *nb, EphyTab *tab)
 	image = gtk_image_new_from_stock (GTK_STOCK_CLOSE,
 					  GTK_ICON_SIZE_MENU);
 	gtk_widget_set_size_request (close_button, w, h);
-	gtk_container_add (GTK_CONTAINER (close_button),
-			   image);
+	gtk_container_add (GTK_CONTAINER (close_button), image);
+	gtk_box_pack_start (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
+
+	g_signal_connect (G_OBJECT (close_button), "clicked",
+                          G_CALLBACK (close_button_clicked_cb),
+                          tab);
 
 	/* setup load feedback image */
 	/* FIXME: make the animation themeable */
 	loading_pixbuf = gdk_pixbuf_animation_new_from_file (ephy_file ("epiphany-tab-loading.gif"), NULL);
 	loading_image = gtk_image_new_from_animation (loading_pixbuf);
 	g_object_unref (loading_pixbuf);
-	gtk_box_pack_start (GTK_BOX (hbox), loading_image, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (label_hbox), loading_image, FALSE, FALSE, 0);
 
 	/* setup site icon, empty by default */
 	icon = gtk_image_new ();
-	gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (label_hbox), icon, FALSE, FALSE, 0);
 
 	/* setup label */
-	label_ebox = gtk_event_box_new ();
-	gtk_event_box_set_visible_window (GTK_EVENT_BOX (label_ebox), FALSE);
-        label = gtk_label_new ("");
-	gtk_misc_set_alignment (GTK_MISC (label), 0.00, 0.5);
-        gtk_misc_set_padding (GTK_MISC (label), 4, 0);
-	gtk_box_pack_start (GTK_BOX (hbox), label_ebox, TRUE, TRUE, 0);
-	gtk_container_add (GTK_CONTAINER (label_ebox), label);
+        label = ephy_ellipsizing_label_new ("");
+	ephy_ellipsizing_label_set_mode (EPHY_ELLIPSIZING_LABEL (label),
+					 EPHY_ELLIPSIZE_START);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+        gtk_misc_set_padding (GTK_MISC (label), 0, 0);
+	gtk_box_pack_start (GTK_BOX (label_hbox), label, TRUE, TRUE, 0);
 
-	tab_label_set_size (GTK_WIDGET (window), hbox);
-
-	closure = g_cclosure_new (G_CALLBACK (tab_label_size_request_cb),
-				  tab, NULL);
-	g_object_watch_closure (G_OBJECT (label), closure);
-	g_signal_connect_closure_by_id (G_OBJECT (window),
-		g_signal_lookup ("size_request",
-				 G_OBJECT_TYPE (G_OBJECT (window))), 0,
-                                 closure,
-                                 FALSE);
-
-	/* setup button */
-	gtk_box_pack_start (GTK_BOX (hbox), close_button,
-                            FALSE, FALSE, 0);
-
-	g_signal_connect (G_OBJECT (close_button), "clicked",
-                          G_CALLBACK (close_button_clicked_cb),
-                          tab);
+	/* Set minimal size */
+	g_signal_connect (label, "style-set",
+			  G_CALLBACK (tab_label_style_set_cb), hbox);
 
 	gtk_widget_show (hbox);
 	gtk_widget_show (label_ebox);
+	gtk_widget_show (label_hbox);
 	gtk_widget_show (label);
 	gtk_widget_show (image);
 	gtk_widget_show (close_button);
-
+	
 	g_object_set_data (G_OBJECT (hbox), "label", label);
 	g_object_set_data (G_OBJECT (hbox), "label-ebox", label_ebox);
 	g_object_set_data (G_OBJECT (hbox), "loading-image", loading_image);
@@ -984,6 +979,8 @@ ephy_notebook_add_tab (EphyNotebook *nb,
 
 	gtk_notebook_insert_page (GTK_NOTEBOOK (nb), GTK_WIDGET (tab),
 				  label, position);
+	gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (nb), GTK_WIDGET (tab),
+					    TRUE, TRUE, GTK_PACK_START);
 
 	/* Set up drag-and-drop target */
 	g_signal_connect (G_OBJECT(label), "drag_data_received",

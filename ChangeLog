@@ -1,3 +1,13 @@
+2004-06-20  Christian Persch  <chpe@cvs.gnome.org>
+
+	* src/ephy-notebook.c: (sync_label), (tab_label_style_set_cb),
+	(build_tab_label), (ephy_notebook_add_tab):
+	* src/ephy-window.c: (ephy_window_get_tabs):
+
+	Make tab labels 1/n-th of the window width (n = number of tabs),
+	with a minimum size so they don't get too tiny.
+	Make the tooltip cover the label + favicon, not just the label.
+
 2004-06-19  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/ephy-notebook.c: (ephy_notebook_move_tab), (move_tab),
