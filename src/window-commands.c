@@ -960,7 +960,7 @@ window_cmd_help_about (GtkAction *action,
 	icon_theme = gtk_icon_theme_get_default ();
 	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "web-browser", -1, 0);
 
-	if (icon_info)
+	if (icon_info != NULL)
 	{
 		icon_path = gtk_icon_info_get_filename (icon_info);
 
@@ -968,6 +968,8 @@ window_cmd_help_about (GtkAction *action,
 		{
 			icon = gdk_pixbuf_new_from_file (icon_path, NULL);
 		}
+
+		gtk_icon_info_free (icon_info);
 	}
 	else
 	{
