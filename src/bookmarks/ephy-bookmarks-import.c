@@ -568,7 +568,7 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 	GString *name = g_string_new (NULL);
 	gchar *parsedname;
 	GString *url = g_string_new (NULL);
-	char *current_folder = NULL;
+	GList *folders = NULL, *l;
 
 	if (!(bf = fopen (filename, "r"))) {
 		g_warning ("Failed to open file: %s\n", filename);
@@ -576,19 +576,49 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 	}
 
 	while (!feof (bf)) {
+		EphyNode *node;
 		NSItemType t;
 		t = ns_get_bookmark_item (bf, name, url);
 		switch (t)
 		{
 		case NS_FOLDER:
-			g_free (current_folder);
-			current_folder = g_strdup (name->str);
+			folders = g_list_prepend (folders, g_strdup (name->str));
+			break;
+		case NS_FOLDER_END:
+			if (folders)
+			{
+				/* remove first entry */
+				g_free (folders->data);
+				folders = g_list_delete_link (folders, folders); 
+			}
 			break;
 		case NS_SITE:
 			parsedname = ns_parse_bookmark_item (name);
 
-			bookmark_add (bookmarks, parsedname,
-				      url->str, current_folder);
+			node = bookmark_add (bookmarks, parsedname, url->str, NULL);
+
+			if (node == NULL)
+			{
+				node = ephy_bookmarks_find_bookmark (bookmarks, url->str);
+			}
+
+			for (l = folders; l != NULL; l = l->next)
+			{
+				char *topic = (char *) l->data;
+				EphyNode *keyword;
+
+				keyword = ephy_bookmarks_find_keyword (bookmarks, topic, FALSE);
+			
+				if (keyword == NULL)
+				{
+					keyword = ephy_bookmarks_add_keyword (bookmarks, topic);
+				}
+
+				if (node != NULL && keyword != NULL)
+				{
+					ephy_bookmarks_set_keyword (bookmarks, keyword, node);
+				}
+			}
 			break;
 		default:
 			break;
