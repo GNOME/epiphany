@@ -25,12 +25,18 @@ bin_SCRIPTS = epiphany
 CXXLD = $(CXX)
 LINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
 
-
-ephy_automation_interface_idl_sources = \
+CORBA_SOURCE = \
 	EphyAutomation-common.c	  \
 	EphyAutomation-stubs.c	  \
 	EphyAutomation-skels.c	  \
-	EphyAutomation.h		
+	EphyAutomation.h
+
+idls = $(top_srcdir)/idl/EphyAutomation.idl
+
+idl_flags = -I$(LIBBONOBO_IDL) -I$(BONOBO_ACTIVATION_IDL) 
+
+$(CORBA_SOURCE): $(idls) $(ORBIT_IDL)
+	$(ORBIT_IDL) $(idl_flags) $(idls)
 
 if ENABLE_NAUTILUS_VIEW
 nautilus_view_sources = \
@@ -73,7 +79,7 @@ INST_H_FILES = 				    		\
 	session.h
 
 epiphany_bin_SOURCES = 				    	\
-	$(ephy_automation_interface_idl_sources) 	\
+	$(CORBA_SOURCE)				 	\
 	$(nautilus_view_sources)			\
 	ephy-automation.c				\
 	ephy-encoding-menu.c				\
@@ -114,14 +120,11 @@ epiphany_bin_LDADD = \
 	$(EPIPHANY_DEPENDENCY_LIBS) \
 	$(INTLLIBS)
 
-CLEANFILES = \
-	$(ephy_automation_interface_idl_sources) \
-	ephy_automation_interface_idl_stamp
+BUILT_SOURCES = $(CORBA_SOURCE)
 
-$(ephy_automation_interface_idl_sources): ephy_automation_interface_idl_stamp
-
-ephy_automation_interface_idl_stamp: $(top_srcdir)/idl/EphyAutomation.idl $(ORBIT_IDL)
-	$(ORBIT_IDL) -I $(LIBBONOBO_IDL) -I $(BONOBO_ACTIVATION_IDL) -I$(top_srcdir) $<
-	touch $@
+CLEANFILES = $(CORBA_SOURCE)
 
 EXTRA_DIST = $(top_srcdir)/idl/EphyAutomation.idl
+
+dist-hook:
+	cd $(distdir); rm -f $(BUILT_SOURCES)
