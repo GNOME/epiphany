@@ -833,7 +833,8 @@ ephy_tab_dom_mouse_click_cb  (EphyEmbed *embed,
 
 		ephy_embed_event_get_property (event, "link", &value);
 		ephy_shell_new_tab (ephy_shell, window, tab,
-				      g_value_get_string (value), 0);
+				      g_value_get_string (value),
+				      EPHY_NEW_TAB_OPEN_PAGE);
 	}
 	else if (button == 1 &&
 		 eel_gconf_get_boolean (CONF_INTERFACE_MIDDLE_CLICK_OPEN_URL) &&

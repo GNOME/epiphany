@@ -562,6 +562,7 @@ parse_embed (xmlNodePtr child, EphyWindow *window)
 
 			ephy_shell_new_tab (ephy_shell, window, NULL, url,
 					    EPHY_NEW_TAB_IN_EXISTING_WINDOW |
+					    EPHY_NEW_TAB_OPEN_PAGE |
 					    EPHY_NEW_TAB_DONT_JUMP_TO |
 					    EPHY_NEW_TAB_APPEND_LAST);
 
