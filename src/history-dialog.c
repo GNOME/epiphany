@@ -55,6 +55,9 @@ void
 history_entry_changed_cb (GtkWidget *widget,
 			  HistoryDialog *dialog);
 void
+history_go_button_clicked_cb (GtkWidget *button,
+			      HistoryDialog *dialog);
+void
 history_ok_button_clicked_cb (GtkWidget *button,
 			      HistoryDialog *dialog);
 void
@@ -75,6 +78,7 @@ struct HistoryDialogPrivate
 	EphyHistoryModel *nodemodel;
 	GtkTreeModel *filtermodel;
 	EphyTreeModelSort *sortmodel;
+	GtkWidget *go_button;
 	gboolean group;
 	gboolean embedded;
 };
@@ -89,7 +93,8 @@ enum
 {
 	PROP_TREEVIEW,
 	PROP_WORD,
-	PROP_TIME
+	PROP_TIME,
+	PROP_GO_BUTTON	
 };
 
 static const
@@ -98,6 +103,7 @@ EphyDialogProperty properties [] =
 	{ PROP_TREEVIEW, "history_treeview", NULL, PT_NORMAL, NULL },
 	{ PROP_WORD, "history_entry", CONF_HISTORY_SEARCH_TEXT, PT_NORMAL, NULL },
 	{ PROP_TIME, "history_time_optionmenu", CONF_HISTORY_SEARCH_TIME, PT_NORMAL, NULL },
+	{ PROP_GO_BUTTON, "history_go_button", NULL, PT_NORMAL, NULL },
 	{ -1, NULL, NULL }
 };
 
@@ -207,6 +213,16 @@ add_column (HistoryDialog *dialog,
 }
 
 static void
+history_view_selection_changed_cb (GtkTreeSelection *selection,
+		HistoryDialog *dialog)
+{
+	if (gtk_tree_selection_count_selected_rows (selection))
+		gtk_widget_set_sensitive (GTK_WIDGET (dialog->priv->go_button), TRUE);
+	else
+		gtk_widget_set_sensitive (GTK_WIDGET (dialog->priv->go_button), FALSE);
+}
+
+static void
 history_view_row_activated_cb (GtkTreeView *treeview,
 			       GtkTreePath *path,
 			       GtkTreeViewColumn *column,
@@ -226,7 +242,7 @@ history_view_row_activated_cb (GtkTreeView *treeview,
 	node = ephy_history_model_node_from_iter (dialog->priv->nodemodel, &iter);
 	location = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_LOCATION);
 	g_return_if_fail (location != NULL);
-	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG(dialog));
+	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
 	ephy_embed_load_url (embed, location);
 }
 
@@ -277,6 +293,11 @@ history_dialog_setup_view (HistoryDialog *dialog)
 			  "row_activated",
 			  G_CALLBACK (history_view_row_activated_cb),
 			  dialog);
+	
+	g_signal_connect (gtk_tree_view_get_selection (dialog->priv->treeview),
+			"changed",
+			G_CALLBACK (history_view_selection_changed_cb),
+			dialog);
 }
 
 static GTime
@@ -383,12 +404,13 @@ history_dialog_set_embedded (HistoryDialog *dialog,
 {
 	dialog->priv->embedded = embedded;
 
-	ephy_dialog_construct (EPHY_DIALOG(dialog),
+	ephy_dialog_construct (EPHY_DIALOG (dialog),
 			       properties,
 			       "epiphany.glade",
 			       embedded ?
 			       "history_dock_box" :
 			       "history_dialog");
+	dialog->priv->go_button = ephy_dialog_get_control (EPHY_DIALOG (dialog), PROP_GO_BUTTON);
 
 	dialog->priv->treeview = GTK_TREE_VIEW (
 				 ephy_dialog_get_control (EPHY_DIALOG(dialog),
@@ -462,6 +484,31 @@ history_time_optionmenu_changed_cb (GtkWidget *widget,
 {
 	if (dialog->priv->treeview == NULL) return;
 	history_dialog_setup_filter (dialog);
+}
+
+void
+history_go_button_clicked_cb (GtkWidget *button,
+		HistoryDialog *dialog)
+{
+	GtkTreeSelection *selection;
+	GtkTreeIter iter, iter2;
+	EphyNode *node;
+	EphyEmbed *embed;
+	const char *location;
+
+	selection = gtk_tree_view_get_selection (dialog->priv->treeview);
+	g_return_if_fail (selection != NULL);
+	gtk_tree_selection_get_selected (selection, NULL, &iter);
+	gtk_tree_model_sort_convert_iter_to_child_iter
+		(GTK_TREE_MODEL_SORT (dialog->priv->sortmodel), &iter2, &iter);
+	egg_tree_model_filter_convert_iter_to_child_iter
+		(EGG_TREE_MODEL_FILTER (dialog->priv->filtermodel), &iter, &iter2);
+
+	node = ephy_history_model_node_from_iter (dialog->priv->nodemodel, &iter);
+	location = ephy_node_get_property_string (node, EPHY_NODE_PAGE_PROP_LOCATION);
+	g_return_if_fail (location != NULL);
+	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
+	ephy_embed_load_url (embed, location);
 }
 
 void
