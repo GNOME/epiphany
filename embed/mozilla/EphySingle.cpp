@@ -145,7 +145,7 @@ NS_IMETHODIMP EphySingle::Observe(nsISupports *aSubject,
 			rv = EmitCookieNotification ("cookie-changed", aSubject);
 		}
 		/* "cleared" */
-		else if (aData[0] == 'c' && aData[2] == 'l')
+		else if (aData[0] == 'c' && aData[1] == 'l')
 		{
 			LOG ("EphySingle::cookie-changed::cleared")
 
