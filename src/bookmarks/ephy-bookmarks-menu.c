@@ -97,6 +97,7 @@ ephy_bookmarks_menu_clean (EphyBookmarksMenu *menu)
 	if (p->ui_id > 0)
 	{
 		gtk_ui_manager_remove_ui (merge, p->ui_id);
+		gtk_ui_manager_ensure_update (merge);
 		p->ui_id = 0;
 	}
 
