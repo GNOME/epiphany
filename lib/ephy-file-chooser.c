@@ -99,11 +99,6 @@ ephy_file_chooser_init (EphyFileChooser *dialog)
 	dialog->priv = EPHY_FILE_CHOOSER_GET_PRIVATE (dialog);
 
 	dialog->priv->persist_key = NULL;
-
-	ephy_state_add_window (GTK_WIDGET (dialog), "file_chooser",
-			       -1,-1,
-			       EPHY_STATE_WINDOW_SAVE_SIZE |
-			       EPHY_STATE_WINDOW_SAVE_POSITION);
 }
 
 static void

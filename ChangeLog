@@ -1,3 +1,11 @@
+2004-03-02  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-file-chooser.c: (ephy_file_chooser_init):
+
+	Don't remember the size of the filechoose dialogue, because it doesn't
+	play nicely with the new save mode when toggling the expander.
+	Fixes bug #135947.
+
 2004-03-02  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* src/ephy-session.c: (ephy_session_init), (offer_to_resume),
