@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2003 Marco Pesenti Gritti <mpeseng@tin.it>
+ *  Copyright (C) 2003, 2004 Marco Pesenti Gritti <mpeseng@tin.it>
+ *  Copyright (C) 2003, 2004 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -141,12 +142,14 @@ enum
 
 enum
 {
+	TIME_LAST_HALF_HOUR,
 	TIME_TODAY,
 	TIME_LAST_TWO_DAYS,
 	TIME_LAST_THREE_DAYS,
 	TIME_EVER
 };
 
+#define TIME_LAST_HALF_HOUR_STRING "last_half_hour"
 #define TIME_EVER_STRING "ever"
 #define TIME_TODAY_STRING "today"
 #define TIME_LAST_TWO_DAYS_STRING "last_two_days"
@@ -822,37 +825,52 @@ add_by_site_filter (EphyHistoryWindow *editor, EphyNodeFilter *filter, int level
 }
 
 #define SEC_PER_DAY (60 * 60 * 24)
+#include "time.h"
 
 static void
-add_by_date_filter (EphyHistoryWindow *editor, EphyNodeFilter *filter, int level,
+add_by_date_filter (EphyHistoryWindow *editor,
+		    EphyNodeFilter *filter,
+		    int level,
 		    EphyNode *equals)
 {
-	GTime now, cmp_time, days;
+	time_t now, midnight, cmp_time = 0;
+	struct tm btime;
 	int time_range;
-
-	/* FIXME this is probably wrong for timezones */
 
 	time_range = gtk_combo_box_get_active
 		(GTK_COMBO_BOX (editor->priv->time_combo));
 
-	now = time (NULL);
-	days = now / SEC_PER_DAY;
+	/* no need to setup a new filter */
+	if (time_range == TIME_EVER) return;
 
+	now = time (NULL);
+	if (localtime_r (&now, &btime) == NULL) return;
+
+	/* get start of day */
+	btime.tm_sec = 0;
+	btime.tm_min = 0;
+	btime.tm_hour = 0;
+	midnight = mktime (&btime);
+
+	/* FIXME: take switches from/to DST into account! */
 	switch (time_range)
 	{
-		case TIME_EVER:
-			return;
+		case TIME_LAST_HALF_HOUR:
+			cmp_time = now - 30 * 60;
+			break;
 		case TIME_TODAY:
+			cmp_time = midnight;
 			break;
 		case TIME_LAST_TWO_DAYS:
-			days -= 1;
+			cmp_time = midnight - SEC_PER_DAY;
 			break;
 		case TIME_LAST_THREE_DAYS:
-			days -= 2;
+			cmp_time = midnight - 2 * SEC_PER_DAY;
+			break;
+		default:
+			g_return_if_reached ();
 			break;
 	}
-
-	cmp_time = days * SEC_PER_DAY;
 
 	ephy_node_filter_add_expression
 		(filter, ephy_node_filter_expression_new
@@ -996,6 +1014,7 @@ build_search_box (EphyHistoryWindow *editor)
 	combo = gtk_combo_box_new_text ();
 	gtk_widget_show (combo);
 
+	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Last 30 Minutes"));
 	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Today"));
 	str = g_strdup_printf (ngettext ("Last %d day", "Last %d days", 2), 2);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), str);
@@ -1009,6 +1028,10 @@ build_search_box (EphyHistoryWindow *editor)
 	g_free (str);
 
 	str = eel_gconf_get_string (CONF_HISTORY_DATE_FILTER);
+	if (str && strcmp (TIME_LAST_HALF_HOUR_STRING, str) == 0)
+	{
+		time_range = TIME_LAST_HALF_HOUR;
+	}
 	if (str && strcmp (TIME_TODAY_STRING, str) == 0)
 	{
 		time_range = TIME_TODAY;
@@ -1403,6 +1426,9 @@ save_date_filter (EphyHistoryWindow *editor)
 
 	switch (time_range)
 	{
+		case TIME_LAST_HALF_HOUR:
+			time_string = TIME_LAST_HALF_HOUR_STRING;
+			break;
 		case TIME_EVER:
 			time_string = TIME_EVER_STRING;
 			break;
