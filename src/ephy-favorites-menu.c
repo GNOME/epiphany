@@ -154,7 +154,7 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 				  G_CALLBACK (go_location_cb), p->window);
 
 		gtk_ui_manager_add_ui (merge, p->ui_id,
-				       "/menubar/GoMenu/GoFavorites",
+				       "/menubar/GoMenu",
 				       name, verb,
 				       GTK_UI_MANAGER_MENUITEM, FALSE);
 	}
