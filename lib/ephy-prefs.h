@@ -43,6 +43,9 @@ G_BEGIN_DECLS
 #define CONF_STATE_DOWNLOAD_DIR    "/apps/epiphany/directories/download"
 #define CONF_STATE_UPLOAD_DIR	      "/apps/epiphany/directories/upload"
 
+/* Lockdown */
+#define CONF_DISABLE_SAVE_TO_DISK	"/desktop/gnome/lockdown/disable_save_to_disk"
+
 /* System prefs */
 #define CONF_DESKTOP_FTP_HANDLER "/desktop/gnome/url-handlers/ftp/command"
 #define CONF_DESKTOP_TOOLBAR_STYLE "/desktop/gnome/interface/toolbar_style"

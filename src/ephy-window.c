@@ -327,6 +327,7 @@ struct EphyWindowPrivate
 	guint show_bookmarks_bar_notifier_id;
 	guint show_statusbar_notifier_id;
 	guint hide_menubar_notifier_id;
+	guint disable_save_to_disk_notifier_id;
 };
 
 enum
@@ -1683,22 +1684,40 @@ ensure_default_icon (void)
 }
 
 static void
-update_layout_toggles (EphyWindow *window)
+update_actions (EphyWindow *window)
 {
 	GtkActionGroup *action_group = GTK_ACTION_GROUP (window->priv->action_group);
+	GtkActionGroup *popups_action_group = GTK_ACTION_GROUP (window->priv->popups_action_group);
 	GtkAction *action;
+	gboolean save_to_disk;
 
 	action = gtk_action_group_get_action (action_group, "ViewToolbar");
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
 				      eel_gconf_get_boolean (CONF_WINDOWS_SHOW_TOOLBARS));
+	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_TOOLBARS), NULL);
 
 	action = gtk_action_group_get_action (action_group, "ViewBookmarksBar");
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
 				      eel_gconf_get_boolean (CONF_WINDOWS_SHOW_BOOKMARKS_BAR));
+	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_BOOKMARKS_BAR), NULL);
 
 	action = gtk_action_group_get_action (action_group, "ViewStatusbar");
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
 				      eel_gconf_get_boolean (CONF_WINDOWS_SHOW_STATUSBAR));
+	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_WINDOWS_SHOW_STATUSBAR), NULL);
+
+	save_to_disk = !eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK);
+	action = gtk_action_group_get_action (action_group, "FileSaveAs");
+	g_object_set (action, "sensitive", save_to_disk, NULL);
+	action = gtk_action_group_get_action (popups_action_group, "DownloadLink");
+	g_object_set (action, "sensitive", save_to_disk, NULL);
+	action = gtk_action_group_get_action (popups_action_group, "SaveBackgroundAs");
+	g_object_set (action, "sensitive", save_to_disk, NULL);
+	action = gtk_action_group_get_action (popups_action_group, "SaveImageAs");
+	g_object_set (action, "sensitive", save_to_disk, NULL);
+
+	action = gtk_action_group_get_action (popups_action_group, "SetImageAsBackground");
+	g_object_set (action, "sensitive", eel_gconf_key_is_writable (CONF_DESKTOP_BG_PICTURE), NULL);
 }
 
 static void
@@ -1708,7 +1727,16 @@ chrome_notifier (GConfClient *client,
 		 EphyWindow *window)
 {
 	update_chrome (window);
-	update_layout_toggles(window);
+	update_actions(window);
+}
+
+static void
+actions_notifier (GConfClient *client,
+		 guint cnxn_id,
+		 GConfEntry *entry,
+		 EphyWindow *window)
+{
+	update_actions(window);
 }
 
 static void
@@ -1803,6 +1831,10 @@ ephy_window_init (EphyWindow *window)
 		(CONF_LOCKDOWN_HIDE_MENUBAR,
 		 (GConfClientNotifyFunc)chrome_notifier, window);
 
+	window->priv->disable_save_to_disk_notifier_id = eel_gconf_notification_add
+		(CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK,
+		 (GConfClientNotifyFunc)actions_notifier, window);
+
 	/* ensure the UI is updated */
 	gtk_ui_manager_ensure_update (GTK_UI_MANAGER (window->ui_merge));
 
@@ -1819,6 +1851,7 @@ ephy_window_finalize (GObject *object)
 	eel_gconf_notification_remove (window->priv->show_bookmarks_bar_notifier_id);
 	eel_gconf_notification_remove (window->priv->show_statusbar_notifier_id);
 	eel_gconf_notification_remove (window->priv->hide_menubar_notifier_id);
+	eel_gconf_notification_remove (window->priv->disable_save_to_disk_notifier_id);
 
 	if (window->priv->find_dialog)
 	{
@@ -2010,7 +2043,7 @@ ephy_window_show (GtkWidget *widget)
 	EphyWindow *window = EPHY_WINDOW(widget);
 
 	update_chrome (window);
-	update_layout_toggles(window);
+	update_actions(window);
 
 	if (!window->priv->has_size)
 	{

@@ -316,8 +316,9 @@ NS_METHOD GContentHandler::MIMEAskAction (void)
 	
 	if (!auto_open || !DefaultApp || permission != EPHY_MIME_PERMISSION_SAFE)
 	{
+		if (eel_gconf_get_boolean (CONF_LOCKDOWN_DISABLE_SAVE_TO_DISK)) return NS_OK;
 		nsCOMPtr<nsIHelperAppLauncher> launcher;
-		
+
 		rv = mContentHandler->GetLauncher (getter_AddRefs(launcher));
 		if (NS_FAILED (rv)) return rv;
 		launcher->SaveToDisk (nsnull,PR_FALSE);
