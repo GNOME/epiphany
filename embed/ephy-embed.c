@@ -86,7 +86,7 @@ ephy_embed_base_init (gpointer g_class)
  * EphyEmbed::ge-new-window:
  * @embed:
  * @new_embed: a newly-generated child #EphyEmbed
- * @mark: @new_embed's #EphyChromeMask
+ * @mask: @new_embed's #EphyChromeMask
  *
  * The ::ge_new_window signal is emitted when a new window has been opened by
  * the embed. For example, when a JavaScript popup window is opened.
