@@ -23,7 +23,6 @@ G_BEGIN_DECLS
 
 /* General */
 #define CONF_GENERAL_HOMEPAGE "/apps/epiphany/general/start_page"
-#define CONF_GENERAL_NEWPAGE_TYPE "/apps/epiphany/general/newpage_type"
 
 /* Interface */
 #define CONF_TABS_TABBED "/apps/epiphany/interface/open_in_tab"

@@ -66,8 +66,7 @@ struct EphyShellPrivate
 enum
 {
         STARTPAGE_HOME,
-        STARTPAGE_LAST,
-        STARTPAGE_BLANK,
+        STARTPAGE_LAST
 };
 
 static void
@@ -388,7 +387,7 @@ build_homepage_url (EphyShell *gs,
         }
         else
         {
-                page_type = eel_gconf_get_integer (CONF_GENERAL_NEWPAGE_TYPE);
+                page_type = STARTPAGE_LAST;
         }
 
         /* return the appropriate page */

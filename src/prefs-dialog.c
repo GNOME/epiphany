@@ -195,7 +195,6 @@ enum
 	/* General */
 	OPEN_IN_TABS_PROP,
 	HOMEPAGE_ENTRY_PROP,
-	NEW_PAGE_PROP,
 	AUTOCHARSET_PROP,
 	DEFAULT_CHARSET_PROP,
 	LANGUAGE_PROP,
@@ -232,7 +231,6 @@ EphyDialogProperty properties [] =
 	/* General */
 	{ OPEN_IN_TABS_PROP, "open_in_tabs_checkbutton", CONF_TABS_TABBED, PT_AUTOAPPLY, NULL },
 	{ HOMEPAGE_ENTRY_PROP, "homepage_entry", CONF_GENERAL_HOMEPAGE, PT_AUTOAPPLY, NULL },
-	{ NEW_PAGE_PROP, "new_page_show_homepage", CONF_GENERAL_NEWPAGE_TYPE, PT_AUTOAPPLY, NULL },
 	{ AUTOCHARSET_PROP, "autocharset_optionmenu", CONF_LANGUAGE_AUTODETECT_CHARSET, PT_AUTOAPPLY, NULL },
 	{ DEFAULT_CHARSET_PROP, "default_charset_optionmenu", NULL, PT_NORMAL, NULL },
 	{ LANGUAGE_PROP, "language_optionmenu", NULL, PT_NORMAL, NULL },
