@@ -22,6 +22,9 @@
 #include "ephy-arrow-toolbutton.h"
 #include "ephy-window.h"
 #include "ephy-string.h"
+#include "ephy-favicon-cache.h"
+#include "ephy-history.h"
+#include "ephy-embed-shell.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtkimage.h>
@@ -52,7 +55,7 @@ ephy_navigation_action_get_type (void)
 {
 	static GType type = 0;
 
-	if (!type)
+	if (type == 0)
 	{
 		static const GTypeInfo type_info =
 		{
@@ -71,17 +74,34 @@ ephy_navigation_action_get_type (void)
 					       "EphyNavigationAction",
 					       &type_info, 0);
 	}
+
 	return type;
 }
 
 #define MAX_LENGTH 60
 
 static GtkWidget *
-new_history_menu_item (char *origtext,
-                       GdkPixbuf *icon)
+new_history_menu_item (const char *origtext,
+		       const char *address)
 {
 	GtkWidget *item, *image;
+	GdkPixbuf *icon = NULL;
 	char *short_text;
+
+	if (address != NULL)
+	{
+		EphyFaviconCache *cache;
+		EphyHistory *history;
+		const char *icon_address;
+
+		history = EPHY_HISTORY
+			(ephy_embed_shell_get_global_history (embed_shell));
+		icon_address = ephy_history_get_icon (history, address);
+
+		cache = EPHY_FAVICON_CACHE
+			(ephy_embed_shell_get_favicon_cache (embed_shell));
+		icon = ephy_favicon_cache_get (cache, icon_address);
+	}
 
 	short_text = ephy_string_shorten (origtext, MAX_LENGTH);
 	item = gtk_image_menu_item_new_with_label (short_text);
@@ -89,7 +109,13 @@ new_history_menu_item (char *origtext,
 
 	image = gtk_image_new_from_pixbuf (icon);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	gtk_widget_show (image);
 	gtk_widget_show (item);
+
+	if (icon != NULL)
+	{
+		g_object_unref (icon);
+	}
 
 	return item;
 }
@@ -164,7 +190,7 @@ setup_back_or_forward_menu (EphyWindow *window, GtkMenuShell *ms, EphyNavigation
 		char *title, *url;
 		GtkWidget *item;
 		ephy_embed_shistory_get_nth (embed, start, FALSE, &url, &title);
-		item = new_history_menu_item (title ? title : url, NULL);
+		item = new_history_menu_item (title ? title : url, url);
 		gtk_menu_shell_append (ms, item);
 		g_object_set_data (G_OBJECT (item), "go_nth", GINT_TO_POINTER (start));
 		g_signal_connect (item, "activate",
@@ -203,7 +229,7 @@ setup_up_menu (EphyWindow *window, GtkMenuShell *ms)
 		char *url = li->data;
 		GtkWidget *item;
 
-		item = new_history_menu_item (url, NULL);
+		item = new_history_menu_item (url, url);
 		gtk_menu_shell_append (ms, item);
 		g_object_set_data (G_OBJECT(item), "go_nth", GINT_TO_POINTER (count));
 		g_signal_connect (item, "activate",
