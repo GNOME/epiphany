@@ -42,6 +42,7 @@
 #include "ephy-new-bookmark.h"
 #include "ephy-stock-icons.h"
 #include "eggtoolbar.h"
+#include "ephy-toolbars-model.h"
 
 #include <string.h>
 #include <bonobo/bonobo-i18n.h>
@@ -138,7 +139,8 @@ topic_destroy_cb (EphyNode *node,
 	EphyToolbarsModel *model;
 	long id;
 
-	model = ephy_shell_get_toolbars_model (ephy_shell);
+	model = EPHY_TOOLBARS_MODEL
+		(ephy_shell_get_toolbars_model (ephy_shell));
 
 	id = ephy_node_get_id (node);
 	name = ephy_toolbars_model_get_action_name (model, TRUE, id);
@@ -161,7 +163,8 @@ bookmark_destroy_cb (EphyNode *node,
 	EphyToolbarsModel *model;
 	long id;
 
-	model = ephy_shell_get_toolbars_model (ephy_shell);
+	model = EPHY_TOOLBARS_MODEL
+		(ephy_shell_get_toolbars_model (ephy_shell));
 
 	id = ephy_node_get_id (node);
 	name = ephy_toolbars_model_get_action_name (model, FALSE, id);
@@ -422,7 +425,8 @@ init_bookmarks_toolbar (Toolbar *t)
 	EphyToolbarsModel *model;
 	int i, n_toolbars;
 
-	model = ephy_shell_get_toolbars_model (ephy_shell);
+	model = EPHY_TOOLBARS_MODEL
+		(ephy_shell_get_toolbars_model (ephy_shell));
 	n_toolbars = egg_toolbars_model_n_toolbars
 		(EGG_TOOLBARS_MODEL (model));
 
@@ -527,7 +531,8 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 			  G_CALLBACK (action_request_cb),
 			  NULL);
 
-	model = ephy_shell_get_toolbars_model (ephy_shell);
+	model = EPHY_TOOLBARS_MODEL
+		(ephy_shell_get_toolbars_model (ephy_shell));
 	g_signal_connect (EGG_TOOLBARS_MODEL (model), "toolbar_added",
 			  G_CALLBACK (update_toolbar_remove_flag),
 			  NULL);
@@ -729,7 +734,8 @@ toolbar_set_visibility (Toolbar *t,
 	EphyToolbarsModel *model;
 	int i, n_toolbars;
 
-	model = ephy_shell_get_toolbars_model (ephy_shell);
+	model = EPHY_TOOLBARS_MODEL
+		(ephy_shell_get_toolbars_model (ephy_shell));
 	n_toolbars = egg_toolbars_model_n_toolbars
 		(EGG_TOOLBARS_MODEL (model));
 

@@ -50,6 +50,8 @@
 #include "toolbar.h"
 #include "ephy-stock-icons.h"
 #include "ephy-search-entry.h"
+#include "session.h"
+#include "ephy-favicon-cache.h"
 
 static GtkTargetEntry page_drag_types [] =
 {
@@ -193,7 +195,7 @@ confirmation_dialog_response_cb (GtkDialog *dialog, gint response,
 	if (response != GTK_RESPONSE_OK)
 		return;
 
-	session = ephy_shell_get_session (ephy_shell);
+	session = SESSION (ephy_shell_get_session (ephy_shell));
 	windows = session_get_windows (session);
 
 	for (; windows != NULL; windows = windows->next)
@@ -918,7 +920,8 @@ provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 	const char *icon_location;
 	GdkPixbuf *pixbuf = NULL;
 
-	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
+	cache = EPHY_FAVICON_CACHE
+		(ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell)));
 	icon_location = ephy_node_get_property_string
 		(node, EPHY_NODE_PAGE_PROP_ICON);
 

@@ -16,35 +16,44 @@ INCLUDES = \
 
 noinst_LTLIBRARIES = libephyembed.la
 
-libephyembed_la_SOURCES = \
-	downloader-view.c		\
+headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
+header_DATA = $(INST_H_FILES)
+
+NOINST_H_FILES = \
 	downloader-view.h		\
-	ephy-embed.c			\
-	ephy-embed.h			\
-	ephy-embed-dialog.c		\
 	ephy-embed-dialog.h		\
-	ephy-embed-event.c		\
-	ephy-embed-event.h		\
-	ephy-embed-persist.c		\
-	ephy-embed-persist.h		\
-	ephy-embed-popup-control.c	\
 	ephy-embed-popup-control.h	\
+	ephy-embed-utils.h		\
+	ephy-favicon-cache.h		\
+	find-dialog.h			\
+	print-dialog.h
+
+INST_H_FILES = \
+	ephy-embed.h			\
+	ephy-embed-event.h		\
+	ephy-embed-persist.h		\
 	ephy-embed-prefs.h		\
-	ephy-embed-single.c		\
 	ephy-embed-single.h		\
-	ephy-embed-shell.c		\
 	ephy-embed-shell.h		\
 	ephy-embed-types.h		\
+	ephy-history.h
+
+libephyembed_la_SOURCES = \
+	downloader-view.c		\
+	ephy-embed.c			\
+	ephy-embed-dialog.c		\
+	ephy-embed-event.c		\
+	ephy-embed-persist.c		\
+	ephy-embed-popup-control.c	\
+	ephy-embed-single.c		\
+	ephy-embed-shell.c		\
 	ephy-embed-utils.c		\
-	ephy-embed-utils.h		\
 	ephy-favicon-cache.c		\
-	ephy-favicon-cache.h		\
 	ephy-history.c			\
-	ephy-history.h			\
 	find-dialog.c			\
-	find-dialog.h			\
 	print-dialog.c			\
-	print-dialog.h
+	$(INST_H_FILES)			\
+	$(NO_INST_H_FILES)
 
 libephyembed_la_LIBADD = \
 	$(top_builddir)/embed/mozilla/libephymozillaembed.la

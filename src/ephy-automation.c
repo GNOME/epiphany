@@ -21,6 +21,7 @@
 #include "EphyAutomation.h"
 #include "ephy-embed.h"
 #include "ephy-window.h"
+#include "session.h"
 
 #include <string.h>
 #include <bonobo/bonobo-generic-factory.h>
@@ -94,7 +95,7 @@ impl_ephy_automation_loadurl (PortableServer_Servant _servant,
 	EphyWindow *window;
 	Session *session;
 
-	session = ephy_shell_get_session (ephy_shell);
+	session = SESSION (ephy_shell_get_session (ephy_shell));
 
 	/* no window open, let's try to autoresume */
 	if (session_get_windows (session) == NULL)
@@ -155,7 +156,7 @@ impl_ephy_automation_quit (PortableServer_Servant _servant,
 {
 	Session *session;
 
-	session = ephy_shell_get_session (ephy_shell);
+	session = SESSION (ephy_shell_get_session (ephy_shell));
 
 	session_close (session);
 }
@@ -167,7 +168,7 @@ impl_ephy_automation_load_session (PortableServer_Servant _servant,
 {
 	Session *session;
 
-	session = ephy_shell_get_session (ephy_shell);
+	session = SESSION (ephy_shell_get_session (ephy_shell));
 	session_load (session, filename);
 }
 

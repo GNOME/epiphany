@@ -42,6 +42,9 @@
 #include "ephy-encoding-menu.h"
 #include "ephy-tabs-menu.h"
 #include "ephy-stock-icons.h"
+#include "ephy-toolbars-model.h"
+#include "session.h"
+#include "ephy-favicon-cache.h"
 
 #include <string.h>
 #include <bonobo/bonobo-i18n.h>
@@ -533,7 +536,8 @@ ephy_window_fullscreen (EphyWindow *window)
 
 	window->priv->is_fullscreen = TRUE;
 
-	tmodel = ephy_shell_get_toolbars_model (ephy_shell);
+	tmodel = EPHY_TOOLBARS_MODEL
+		(ephy_shell_get_toolbars_model (ephy_shell));
 	ephy_toolbars_model_set_flag (tmodel, EGG_TB_MODEL_ICONS_ONLY);
 
 	popup = gtk_window_new (GTK_WINDOW_POPUP);
@@ -576,7 +580,8 @@ ephy_window_unfullscreen (EphyWindow *window)
 
 	window->priv->is_fullscreen = FALSE;
 
-	tmodel = ephy_shell_get_toolbars_model (ephy_shell);
+	tmodel = EPHY_TOOLBARS_MODEL
+		(ephy_shell_get_toolbars_model (ephy_shell));
 	ephy_toolbars_model_unset_flag (tmodel, EGG_TB_MODEL_ICONS_ONLY);
 
 	g_signal_handlers_disconnect_by_func (G_OBJECT (gdk_screen_get_default ()),
@@ -749,8 +754,9 @@ sync_tab_icon (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 
 	if (window->priv->closing) return;
 
-	cache = ephy_embed_shell_get_favicon_cache
-			(EPHY_EMBED_SHELL (ephy_shell));
+	cache = EPHY_FAVICON_CACHE
+		(ephy_embed_shell_get_favicon_cache
+			(EPHY_EMBED_SHELL (ephy_shell)));
 
 	address = ephy_tab_get_icon_address (tab);
 
@@ -1398,7 +1404,7 @@ ephy_window_init (EphyWindow *window)
 
 	LOG ("EphyWindow initialising %p", window)
 
-	session = ephy_shell_get_session (ephy_shell);
+	session = SESSION (ephy_shell_get_session (ephy_shell));
 
         window->priv = g_new0 (EphyWindowPrivate, 1);
 	window->priv->active_tab = NULL;
@@ -1459,7 +1465,7 @@ remove_from_session (EphyWindow *window)
 {
 	Session *session;
 
-	session = ephy_shell_get_session (ephy_shell);
+	session = SESSION (ephy_shell_get_session (ephy_shell));
 	g_return_if_fail (session != NULL);
 
 	session_remove_window (session, window);
@@ -1759,7 +1765,6 @@ EphyTab *
 ephy_window_get_active_tab (EphyWindow *window)
 {
 	g_return_val_if_fail (IS_EPHY_WINDOW (window), NULL);
-	g_return_val_if_fail (window->priv->active_tab != NULL, NULL);
 
 	return window->priv->active_tab;
 }

@@ -17,24 +17,33 @@ INCLUDES = \
 
 noinst_LTLIBRARIES = libephybookmarks.la
 
+headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
+header_DATA = $(INST_H_FILES)
+
+INST_H_FILES =		 	\
+	ephy-bookmarks.h
+
+NOINST_H_FILES =		 	\
+	ephy-bookmark-action.h		\
+	ephy-bookmarks-editor.h		\
+	ephy-bookmarks-export.h		\
+	ephy-bookmarks-import.h		\
+	ephy-bookmarks-menu.h		\
+	ephy-bookmark-properties.h	\
+	ephy-new-bookmark.h		\
+	ephy-topic-action.h		\
+	ephy-topics-selector.h
+
 libephybookmarks_la_SOURCES = 		\
 	ephy-bookmarks.c		\
-	ephy-bookmarks.h		\
 	ephy-bookmark-action.c		\
-	ephy-bookmark-action.h		\
 	ephy-bookmarks-editor.c		\
-	ephy-bookmarks-editor.h		\
 	ephy-bookmarks-export.c		\
-	ephy-bookmarks-export.h		\
 	ephy-bookmarks-import.c 	\
-	ephy-bookmarks-import.h		\
 	ephy-bookmarks-menu.c		\
-	ephy-bookmarks-menu.h		\
 	ephy-bookmark-properties.c	\
-	ephy-bookmark-properties.h	\
 	ephy-new-bookmark.c		\
-	ephy-new-bookmark.h		\
 	ephy-topic-action.c		\
-	ephy-topic-action.h		\
 	ephy-topics-selector.c  	\
-	ephy-topics-selector.h
+	$(NOINST_H_FILES)		\
+	$(INST_H_FILES)

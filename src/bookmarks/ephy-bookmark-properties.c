@@ -21,12 +21,14 @@
 #include <config.h>
 #endif
 
+#include "ephy-toolbars-model.h"
 #include "ephy-bookmark-properties.h"
 #include "ephy-topics-selector.h"
 #include "ephy-debug.h"
 #include "ephy-shell.h"
 #include "ephy-state.h"
 #include "ephy-gui.h"
+#include "ephy-favicon-cache.h"
 
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtktogglebutton.h>
@@ -294,7 +296,8 @@ set_window_icon (EphyBookmarkProperties *editor)
 	const char *icon_location;
 	GdkPixbuf *icon = NULL;
 
-	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
+	cache = EPHY_FAVICON_CACHE
+		(ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell)));
 	icon_location = ephy_node_get_property_string
 		(editor->priv->bookmark, EPHY_NODE_BMK_PROP_ICON);
 
@@ -440,7 +443,8 @@ ephy_bookmark_properties_init (EphyBookmarkProperties *editor)
 	editor->priv = g_new0 (EphyBookmarkPropertiesPrivate, 1);
 
 	editor->priv->bookmark = NULL;
-	editor->priv->tb_model = ephy_shell_get_toolbars_model (ephy_shell);
+	editor->priv->tb_model = EPHY_TOOLBARS_MODEL
+		(ephy_shell_get_toolbars_model (ephy_shell));
 }
 
 GtkWidget *

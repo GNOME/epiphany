@@ -24,6 +24,7 @@
 
 #include "ProgressListener.h"
 #include "ephy-file-helpers.h"
+#include "downloader-view.h"
 #include "mozilla-embed-persist.h"
 #include "nsXPIDLString.h"
 #include "nsCOMPtr.h"
@@ -117,7 +118,8 @@ NS_METHOD GProgressListener::PrivateInit (void)
 		if (NS_FAILED (rv)) return NS_ERROR_FAILURE;
 		source = g_strdup (cTmp.get());
 
-		mDownloaderView = ephy_embed_shell_get_downloader_view (embed_shell);
+		mDownloaderView = DOWNLOADER_VIEW
+			(ephy_embed_shell_get_downloader_view (embed_shell));
 		downloader_view_add_download (mDownloaderView, filename, source,
 					      dest, (gpointer)this);
 		g_free (source);

@@ -39,6 +39,8 @@
 #include "ephy-state.h"
 #include "ephy-gui.h"
 #include "ephy-zoom.h"
+#include "prefs-dialog.h"
+#include "ephy-toolbars-model.h"
 
 #include <string.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
@@ -646,7 +648,8 @@ toolbar_editor_response_cb (GtkDialog  *dialog,
 		gtk_widget_destroy (GTK_WIDGET (dialog));
 		break;
 	case RESPONSE_ADD_TOOLBAR:
-		model = ephy_shell_get_toolbars_model (ephy_shell);
+		model = EPHY_TOOLBARS_MODEL
+			(ephy_shell_get_toolbars_model (ephy_shell));
 		n = egg_toolbars_model_n_toolbars (EGG_TOOLBARS_MODEL (model));
 		egg_toolbars_model_add_toolbar (EGG_TOOLBARS_MODEL (model),
 						n - 1, "UserCreated");
@@ -666,7 +669,8 @@ window_cmd_edit_toolbar (EggAction *action,
 	Toolbar *t;
 	GtkWidget *dialog;
 
-	model = ephy_shell_get_toolbars_model (ephy_shell);
+	model = EPHY_TOOLBARS_MODEL
+		(ephy_shell_get_toolbars_model (ephy_shell));
 	t = ephy_window_get_toolbar (window);
 
 	dialog = gtk_dialog_new ();

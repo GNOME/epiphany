@@ -20,7 +20,6 @@
 #define EPHY_TAB_H
 
 #include "ephy-embed.h"
-#include "egg-action.h"
 
 #include <glib-object.h>
 #include <gtk/gtkwidget.h>
@@ -69,22 +68,22 @@ struct EphyTabClass
 
 GType			ephy_tab_get_type		(void);
 
-EphyTab	*		ephy_tab_new			(void);
+EphyTab	               *ephy_tab_new			(void);
 
-EggAction *		ephy_tab_get_action		(EphyTab *tab);
+GObject                *ephy_tab_get_action		(EphyTab *tab);
 
-EphyEmbed *		ephy_tab_get_embed		(EphyTab *tab);
+EphyEmbed              *ephy_tab_get_embed		(EphyTab *tab);
 
 void			ephy_tab_set_window		(EphyTab *tab,
 							 EphyWindow *window);
 
-EphyWindow *		ephy_tab_get_window		(EphyTab *tab);
+EphyWindow             *ephy_tab_get_window		(EphyTab *tab);
 
-const char *		ephy_tab_get_icon_address	(EphyTab *tab);
+const char             *ephy_tab_get_icon_address	(EphyTab *tab);
 
 gboolean		ephy_tab_get_load_status	(EphyTab *tab);
 
-const char *		ephy_tab_get_link_message	(EphyTab *tab);
+const char             *ephy_tab_get_link_message	(EphyTab *tab);
 
 
 int			ephy_tab_get_load_percent	(EphyTab *tab);
@@ -93,7 +92,7 @@ void			ephy_tab_set_location		(EphyTab *tab,
 							 const char *location,
 							 TabAddressExpire expire);
 
-const char *		ephy_tab_get_location		(EphyTab *tab);
+const char             *ephy_tab_get_location		(EphyTab *tab);
 
 TabNavigationFlags	ephy_tab_get_navigation_flags	(EphyTab *tab);
 
@@ -103,9 +102,9 @@ void			ephy_tab_get_size		(EphyTab *tab,
 							 int *width,
 							 int *height);
 
-const char *		ephy_tab_get_status_message	(EphyTab *tab);
+const char             *ephy_tab_get_status_message	(EphyTab *tab);
 
-const char *		ephy_tab_get_title		(EphyTab *tab);
+const char             *ephy_tab_get_title		(EphyTab *tab);
 
 void			ephy_tab_set_visibility		(EphyTab *tab,
 							 gboolean visible);

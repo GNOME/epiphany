@@ -98,8 +98,10 @@ location_url_activate_cb (EphyLocationEntry *entry,
 static void
 connect_proxy (EggAction *action, GtkWidget *proxy)
 {
-	EphyAutocompletion *ac = ephy_shell_get_autocompletion (ephy_shell);
+	EphyAutocompletion *ac;
 	EphyLocationEntry *e = EPHY_LOCATION_ENTRY (proxy);
+
+	ac = EPHY_AUTOCOMPLETION (ephy_shell_get_autocompletion (ephy_shell));
 
 	LOG ("Connect location proxy")
 

@@ -55,6 +55,8 @@
 #include "ephy-gui.h"
 #include "ephy-stock-icons.h"
 #include "ephy-search-entry.h"
+#include "ephy-toolbars-model.h"
+#include "ephy-favicon-cache.h"
 
 static GtkTargetEntry topic_drag_dest_types [] =
 {
@@ -1161,7 +1163,8 @@ provide_favicon (EphyNode *node, GValue *value, gpointer user_data)
 	const char *icon_location;
 	GdkPixbuf *pixbuf = NULL;
 
-	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
+	cache = EPHY_FAVICON_CACHE
+		(ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell)));
 	icon_location = ephy_node_get_property_string
 		(node, EPHY_NODE_BMK_PROP_ICON);
 
@@ -1453,7 +1456,8 @@ ephy_bookmarks_editor_init (EphyBookmarksEditor *editor)
 
 	editor->priv->props_dialogs = g_hash_table_new (g_direct_hash,
                                                         g_direct_equal);
-	editor->priv->tb_model = ephy_shell_get_toolbars_model (ephy_shell);
+	editor->priv->tb_model = EPHY_TOOLBARS_MODEL
+		(ephy_shell_get_toolbars_model (ephy_shell));
 
 	g_signal_connect (editor->priv->tb_model, "item_added",
 			  G_CALLBACK (toolbar_items_changed_cb), editor);

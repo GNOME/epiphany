@@ -1,3 +1,63 @@
+2003-07-13  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* Makefile.am:
+	* configure.in:
+	* embed/Makefile.am:
+	* embed/ephy-embed-shell.c: (ephy_embed_shell_get_favicon_cache),
+	(impl_get_downloader_view):
+	* embed/ephy-embed-shell.h:
+	* embed/ephy-embed-single.c:
+	* embed/ephy-embed-single.h:
+	* embed/mozilla/ProgressListener.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* lib/Makefile.am:
+	* lib/ephy-langs.h:
+	* lib/ephy-node.c: (unref_signal_objects),
+	(ephy_node_signal_connect_object):
+	* plugins/Makefile.am:
+	* plugins/sample/Makefile.am:
+	* plugins/sample/sample.c: (bmk_added), (bmk_removed),
+	(bmk_changed), (switch_page_cb), (window_focus_in_cb),
+	(location_changed_cb), (tab_added_cb), (new_window_cb),
+	(plugin_init):
+	* src/Makefile.am:
+	* src/bookmarks/Makefile.am:
+	* src/bookmarks/ephy-bookmark-action.c:
+	(ephy_bookmark_action_sync_icon):
+	* src/bookmarks/ephy-bookmark-properties.c: (set_window_icon),
+	(ephy_bookmark_properties_init):
+	* src/bookmarks/ephy-bookmarks-editor.c: (provide_favicon),
+	(ephy_bookmarks_editor_init):
+	* src/bookmarks/ephy-bookmarks.c: (update_favorites_menus):
+	* src/bookmarks/ephy-topic-action.c: (build_bookmarks_menu):
+	* src/ephy-automation.c: (impl_ephy_automation_loadurl),
+	(impl_ephy_automation_quit), (impl_ephy_automation_load_session):
+	* src/ephy-favicon-action.c: (ephy_favicon_action_init):
+	* src/ephy-history-window.c: (confirmation_dialog_response_cb),
+	(provide_favicon):
+	* src/ephy-location-action.c: (connect_proxy):
+	* src/ephy-notebook.c: (sync_icon):
+	* src/ephy-shell.c: (ephy_shell_get_active_window),
+	(ephy_shell_get_session), (ephy_shell_get_autocompletion),
+	(ephy_shell_get_toolbars_model):
+	* src/ephy-shell.h:
+	* src/ephy-tab.c: (ephy_tab_net_state_cb), (ephy_tab_init),
+	(ephy_tab_get_action):
+	* src/ephy-tab.h:
+	* src/ephy-tabs-menu.c: (ephy_tabs_menu_update):
+	* src/ephy-window.c: (ephy_window_fullscreen),
+	(ephy_window_unfullscreen), (sync_tab_icon), (ephy_window_init),
+	(remove_from_session), (ephy_window_get_active_tab):
+	* src/toolbar.c: (topic_destroy_cb), (bookmark_destroy_cb),
+	(init_bookmarks_toolbar), (toolbar_set_window),
+	(toolbar_set_visibility):
+	* src/window-commands.c: (toolbar_editor_response_cb),
+	(window_cmd_edit_toolbar):
+
+	Cleanup header dependencies.
+	Install headers useful for plugins.
+	Actually load about:blank when necessary (first page failed to load).
+
 2003-07-12  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-gui.c: (ephy_gui_menu_position_under_widget):

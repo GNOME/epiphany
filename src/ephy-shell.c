@@ -36,6 +36,10 @@
 #include "ephy-debug.h"
 #include "ephy-plugin.h"
 #include "toolbar.h"
+#include "session.h"
+#include "downloader-view.h"
+#include "ephy-toolbars-model.h"
+#include "ephy-autocompletion.h"
 
 #include <string.h>
 #include <libgnomeui/gnome-client.h>
@@ -363,7 +367,7 @@ ephy_shell_get_active_window (EphyShell *gs)
 	Session *session;
 	const GList *windows;
 
-	session = ephy_shell_get_session (gs);
+	session = SESSION (ephy_shell_get_session (gs));
 	windows = session_get_windows (session);
 
 	if (windows == NULL) return NULL;
@@ -508,7 +512,7 @@ ephy_nautilus_view_new (BonoboGenericFactory *factory, const char *id,
  *
  * Return value: the current session.
  **/
-Session *
+GObject *
 ephy_shell_get_session (EphyShell *gs)
 {
 	if (!gs->priv->session)
@@ -519,10 +523,10 @@ ephy_shell_get_session (EphyShell *gs)
                          (gpointer *)&gs->priv->session);
 	}
 
-	return gs->priv->session;
+	return G_OBJECT (gs->priv->session);
 }
 
-EphyAutocompletion *
+GObject *
 ephy_shell_get_autocompletion (EphyShell *gs)
 {
 	EphyShellPrivate *p = gs->priv;
@@ -544,7 +548,7 @@ ephy_shell_get_autocompletion (EphyShell *gs)
 		ephy_autocompletion_add_source (p->autocompletion,
 						EPHY_AUTOCOMPLETION_SOURCE (bmk));
 	}
-	return p->autocompletion;
+	return G_OBJECT (p->autocompletion);
 }
 
 EphyBookmarks *
@@ -558,7 +562,7 @@ ephy_shell_get_bookmarks (EphyShell *gs)
 	return gs->priv->bookmarks;
 }
 
-EphyToolbarsModel *
+GObject *
 ephy_shell_get_toolbars_model (EphyShell *gs)
 {
 	if (gs->priv->toolbars_model == NULL)
@@ -573,7 +577,7 @@ ephy_shell_get_toolbars_model (EphyShell *gs)
 			      gs->priv->toolbars_model, NULL);
 	}
 
-	return gs->priv->toolbars_model;
+	return G_OBJECT (gs->priv->toolbars_model);
 }
 
 static void

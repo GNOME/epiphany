@@ -38,7 +38,7 @@ typedef enum
 	LG_GREEK,
 	LG_HEBREW,
 	LG_INDIAN,
-	LG_JAPANESE, 
+	LG_JAPANESE,
 	LG_KOREAN,
 	LG_TURKISH,
 	LG_UNICODE,
@@ -70,13 +70,14 @@ typedef struct
 	gchar* code;
 } FontsLanguageInfo;
 
-void	language_group_info_free	(LanguageGroupInfo *info);
+guint			 ephy_langs_get_n_font_languages (void);
 
-void	encoding_info_free		(EncodingInfo *info);
+const FontsLanguageInfo *ephy_langs_get_font_languages   (void);
 
-guint				ephy_langs_get_n_font_languages	(void);
+void			 language_group_info_free	 (LanguageGroupInfo *info);
 
-const FontsLanguageInfo *	ephy_langs_get_font_languages	(void);
+void			 encoding_info_free		 (EncodingInfo *info);
+
 
 G_END_DECLS
 

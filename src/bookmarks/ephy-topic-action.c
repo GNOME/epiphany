@@ -25,6 +25,7 @@
 #include "ephy-node-common.h"
 #include "ephy-topic-action.h"
 #include "ephy-bookmarks.h"
+#include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
 #include "eggtoolitem.h"
 #include "ephy-debug.h"
@@ -199,8 +200,8 @@ build_bookmarks_menu (EphyTopicAction *action, EphyNode *node)
 
 	menu = gtk_menu_new ();
 
-        cache = ephy_embed_shell_get_favicon_cache
-               (EPHY_EMBED_SHELL (ephy_shell));
+        cache = EPHY_FAVICON_CACHE
+		(ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell)));
 
 	children = ephy_node_get_children (node);
 

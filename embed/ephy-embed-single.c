@@ -23,6 +23,7 @@
 #include "ephy-favicon-cache.h"
 #include "mozilla-embed-single.h"
 #include "ephy-debug.h"
+#include "downloader-view.h"
 
 #include <string.h>
 

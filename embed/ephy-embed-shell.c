@@ -23,6 +23,7 @@
 #include "ephy-favicon-cache.h"
 #include "mozilla-embed-single.h"
 #include "ephy-debug.h"
+#include "downloader-view.h"
 
 #include <string.h>
 
@@ -43,7 +44,7 @@ ephy_embed_shell_finalize (GObject *object);
 
 static EphyHistory *
 impl_get_global_history (EphyEmbedShell *shell);
-static DownloaderView *
+static GObject *
 impl_get_downloader_view (EphyEmbedShell *shell);
 
 static GObjectClass *parent_class = NULL;
@@ -168,7 +169,7 @@ ephy_embed_shell_new (const char *type)
  *
  * Return value: the favicons cache
  **/
-EphyFaviconCache *
+GObject *
 ephy_embed_shell_get_favicon_cache (EphyEmbedShell *ees)
 {
 	if (ees->priv->favicon_cache == NULL)
@@ -176,7 +177,7 @@ ephy_embed_shell_get_favicon_cache (EphyEmbedShell *ees)
 		ees->priv->favicon_cache = ephy_favicon_cache_new ();
 	}
 
-	return ees->priv->favicon_cache;
+	return G_OBJECT (ees->priv->favicon_cache);
 }
 
 EphyHistory *
@@ -186,7 +187,7 @@ ephy_embed_shell_get_global_history (EphyEmbedShell *shell)
         return klass->get_global_history (shell);
 }
 
-DownloaderView *
+GObject *
 ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell)
 {
 	EphyEmbedShellClass *klass = EPHY_EMBED_SHELL_GET_CLASS (shell);
@@ -230,7 +231,7 @@ impl_get_global_history (EphyEmbedShell *shell)
 	return shell->priv->global_history;
 }
 
-static DownloaderView *
+static GObject *
 impl_get_downloader_view (EphyEmbedShell *shell)
 {
 	if (!shell->priv->downloader_view)
@@ -241,6 +242,6 @@ impl_get_downloader_view (EphyEmbedShell *shell)
 			 (gpointer *)&shell->priv->downloader_view);
 	}
 
-	return shell->priv->downloader_view;
+	return G_OBJECT (shell->priv->downloader_view);
 }
 

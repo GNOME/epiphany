@@ -287,9 +287,12 @@ unref_signal_objects (long id,
 	              EphyNodeSignalData *signal_data,
 	              EphyNode *node)
 {
-	g_object_weak_unref (G_OBJECT (signal_data->data),
-			     (GWeakNotify)signal_object_weak_notify,
-			     signal_data);
+	if (signal_data->data)
+	{
+		g_object_weak_unref (G_OBJECT (signal_data->data),
+				     (GWeakNotify)signal_object_weak_notify,
+				     signal_data);
+	}
 }
 
 static void
@@ -1325,7 +1328,7 @@ ephy_node_signal_connect_object (EphyNode *node,
 	int ret;
 
 	g_return_val_if_fail (EPHY_IS_NODE (node), -1);
-	
+
 	signal_data = g_new0 (EphyNodeSignalData, 1);
 	signal_data->node = node;
 	signal_data->id = node->signal_id;
@@ -1336,8 +1339,13 @@ ephy_node_signal_connect_object (EphyNode *node,
 	g_hash_table_insert (node->signals,
 			     GINT_TO_POINTER (node->signal_id),
 			     signal_data);
-	g_object_weak_ref (object, (GWeakNotify)signal_object_weak_notify,
-			   signal_data);
+	if (object)
+	{
+		g_object_weak_ref (object,
+				   (GWeakNotify)signal_object_weak_notify,
+				   signal_data);
+	}
+
 	ret = node->signal_id;
 	node->signal_id++;
 

@@ -354,6 +354,7 @@ static void
 mozilla_embed_init (MozillaEmbed *embed)
 {
         embed->priv = g_new0 (MozillaEmbedPrivate, 1);
+	embed->priv->no_page = 1;
 
 	mozilla_embed_connect_signals (embed);
 }

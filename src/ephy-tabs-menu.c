@@ -26,6 +26,7 @@
 #include "ephy-marshal.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
+#include "egg-action.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -288,7 +289,7 @@ ephy_tabs_menu_update (EphyTabsMenu *menu)
 	for (l = tabs; l != NULL; l = l->next)
 	{
 		tab = (EphyTab *) l->data;
-		action = ephy_tab_get_action (tab);
+		action = EGG_ACTION (ephy_tab_get_action (tab));
 
 		tab_set_action_accelerator (p->action_group, action, i);
 

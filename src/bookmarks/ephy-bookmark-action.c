@@ -25,6 +25,7 @@
 
 #include "ephy-bookmark-action.h"
 #include "ephy-bookmarks.h"
+#include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
 #include "eggtoolitem.h"
@@ -161,8 +162,8 @@ ephy_bookmark_action_sync_icon (EggAction *action, GParamSpec *pspec, GtkWidget 
 
 	icon_location = EPHY_BOOKMARK_ACTION (action)->priv->icon;
 
-	cache = ephy_embed_shell_get_favicon_cache
-		(EPHY_EMBED_SHELL (ephy_shell));
+	cache = EPHY_FAVICON_CACHE (ephy_embed_shell_get_favicon_cache
+		(EPHY_EMBED_SHELL (ephy_shell)));
 
 	if (icon_location)
 	{

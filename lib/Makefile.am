@@ -12,6 +12,36 @@ INCLUDES = \
 
 noinst_LTLIBRARIES = libephy.la
 
+headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
+header_DATA = $(INST_H_FILES)
+
+NOINST_H_FILES = \
+	eel-gconf-extensions.h			\
+	ephy-autocompletion.h			\
+	ephy-autocompletion-source.h		\
+	ephy-bonobo-extensions.h		\
+	ephy-debug.h				\
+	ephy-dnd.h				\
+	ephy-file-helpers.h			\
+	ephy-glade.h				\
+	ephy-gui.h				\
+	ephy-marshal.h				\
+	ephy-node-filter.h			\
+	ephy-node-common.h			\
+	ephy-prefs.h				\
+	ephy-state.h				\
+	ephy-string.h				\
+	ephy-stock-icons.h			\
+	ephy-thread-helpers.h			\
+	ephy-zoom.h
+
+INST_H_FILES = \
+	ephy-dialog.h				\
+	ephy-langs.h				\
+	ephy-node.h				\
+	ephy-node-db.h				\
+	ephy-types.h
+
 libephy_la_SOURCES = \
 	eel-gconf-extensions.c			\
 	eel-gconf-extensions.h			\

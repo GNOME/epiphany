@@ -19,13 +19,10 @@
 #ifndef EPHY_SHELL_H
 #define EPHY_SHELL_H
 
-#include "ephy-autocompletion.h"
-#include "prefs-dialog.h"
-#include "downloader-view.h"
 #include "ephy-embed-shell.h"
-#include "session.h"
 #include "ephy-bookmarks.h"
-#include "ephy-toolbars-model.h"
+#include "ephy-window.h"
+#include "ephy-tab.h"
 
 #include <glib-object.h>
 #include <glib.h>
@@ -93,13 +90,13 @@ EphyTab            *ephy_shell_new_tab	             (EphyShell *shell,
 						      const char *url,
 						      EphyNewTabFlags flags);
 
-Session		   *ephy_shell_get_session	     (EphyShell *gs);
+GObject		   *ephy_shell_get_session	     (EphyShell *gs);
 
-EphyAutocompletion *ephy_shell_get_autocompletion    (EphyShell *gs);
+GObject            *ephy_shell_get_autocompletion    (EphyShell *gs);
 
 EphyBookmarks      *ephy_shell_get_bookmarks         (EphyShell *gs);
 
-EphyToolbarsModel  *ephy_shell_get_toolbars_model    (EphyShell *gs);
+GObject		   *ephy_shell_get_toolbars_model    (EphyShell *gs);
 
 void		    ephy_shell_show_bookmarks_editor (EphyShell *gs,
 						      GtkWidget *parent);

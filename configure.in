@@ -3,6 +3,9 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT(epiphany, 0.7.3,
        [http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany])
 
+EPIPHANY_MAJOR=1.0
+AC_SUBST(EPIPHANY_MAJOR)
+
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_SRCDIR(configure.in)
 
@@ -171,6 +174,15 @@ resources of the Epiphany team to support non-release Mozilla snapshots.
 esac
 
 AC_DEFINE_UNQUOTED(MOZILLA_SNAPSHOT, $MOZILLA_SNAPSHOT, [Define mozilla snapshot])
+
+dnl *******************************
+dnl Plugins
+dnl *******************************
+
+AC_ARG_ENABLE(sample-plugin, [  --enable-sample-plugin  (yes,no)
+	      	Enable sample plugin])
+AM_CONDITIONAL(ENABLE_SAMPLE_PLUGIN, test "x$enable_sample_plugin" = "xyes")
+
 
 dnl *******************************
 dnl Internationalization

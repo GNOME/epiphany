@@ -31,6 +31,8 @@
 #include "ephy-notebook.h"
 #include "ephy-file-helpers.h"
 #include "ephy-zoom.h"
+#include "session.h"
+#include "ephy-favicon-cache.h"
 
 #include <bonobo/bonobo-i18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
@@ -753,7 +755,8 @@ ephy_tab_net_state_cb (EphyEmbed *embed, const char *uri,
 		{
 			/* tab load completed, save in session */
 			Session *s;
-			s = ephy_shell_get_session (ephy_shell);
+
+			s = SESSION (ephy_shell_get_session (ephy_shell));
 			session_save (s, SESSION_CRASHED);
 
 			ephy_tab_set_load_percent (tab, 0);
@@ -1014,7 +1017,8 @@ ephy_tab_init (EphyTab *tab)
 			  G_CALLBACK (ephy_tab_favicon_cb),
 			  tab);
 
-	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
+	cache = EPHY_FAVICON_CACHE
+		(ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell)));
 	g_signal_connect_object (G_OBJECT (cache), "changed",
 				 G_CALLBACK (ephy_tab_icon_cache_changed_cb),
 				 tab,  0);
@@ -1244,10 +1248,10 @@ ephy_tab_get_zoom (EphyTab *tab)
 	return tab->priv->zoom;
 }
 
-EggAction *
+GObject *
 ephy_tab_get_action (EphyTab *tab)
 {
 	g_return_val_if_fail (IS_EPHY_TAB (tab), NULL);
 
-	return tab->priv->action;
+	return G_OBJECT (tab->priv->action);
 }

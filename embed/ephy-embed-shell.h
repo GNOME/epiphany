@@ -21,9 +21,7 @@
 
 #include "ephy-embed.h"
 #include "ephy-embed-single.h"
-#include "ephy-favicon-cache.h"
 #include "ephy-history.h"
-#include "downloader-view.h"
 
 #include <glib-object.h>
 #include <glib.h>
@@ -56,8 +54,8 @@ struct EphyEmbedShellClass
         GObjectClass parent_class;
 
 	/* Methods */
-	EphyHistory    * (* get_global_history)  (EphyEmbedShell *shell);
-	DownloaderView * (* get_downloader_view) (EphyEmbedShell *shell);
+	EphyHistory * (* get_global_history)  (EphyEmbedShell *shell);
+	GObject     * (* get_downloader_view) (EphyEmbedShell *shell);
 };
 
 GType             ephy_embed_shell_get_type            (void);
@@ -66,11 +64,11 @@ GType             ephy_embed_shell_get_impl            (void);
 
 EphyEmbedShell   *ephy_embed_shell_new                 (const char *type);
 
-EphyFaviconCache *ephy_embed_shell_get_favicon_cache   (EphyEmbedShell *ges);
+GObject          *ephy_embed_shell_get_favicon_cache   (EphyEmbedShell *ges);
 
 EphyHistory      *ephy_embed_shell_get_global_history  (EphyEmbedShell *shell);
 
-DownloaderView   *ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell);
+GObject          *ephy_embed_shell_get_downloader_view (EphyEmbedShell *shell);
 
 EphyEmbedSingle  *ephy_embed_shell_get_embed_single    (EphyEmbedShell *shell);
 

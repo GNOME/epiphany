@@ -30,6 +30,7 @@
 #include "ephy-window.h"
 #include "ephy-shell.h"
 #include "ephy-debug.h"
+#include "ephy-favicon-cache.h"
 
 #include <gtk/gtk.h>
 #include <glib-object.h>
@@ -801,7 +802,8 @@ sync_icon (EphyTab *tab, GParamSpec *pspec, GtkWidget *proxy)
 	GtkImage *icon = NULL;
 	const char *address;
 
-	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
+	cache = EPHY_FAVICON_CACHE
+		(ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell)));
 	address = ephy_tab_get_icon_address (tab);
 
 	if (address)

@@ -32,6 +32,8 @@
 #include "ephy-toolbars-model.h"
 #include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
+#include "ephy-autocompletion.h"
+#include "session.h"
 
 #include <string.h>
 #include <bonobo/bonobo-i18n.h>
@@ -518,7 +520,7 @@ update_favorites_menus ()
 	Session *session;
 	const GList *l;
 
-	session = ephy_shell_get_session (ephy_shell);
+	session = SESSION (ephy_shell_get_session (ephy_shell));
 	l = session_get_windows (session);
 
 	for (; l != NULL; l = l->next)

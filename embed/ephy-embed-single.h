@@ -20,9 +20,7 @@
 #define EPHY_EMBED_SINGLE_H
 
 #include "ephy-embed.h"
-#include "ephy-favicon-cache.h"
 #include "ephy-history.h"
-#include "downloader-view.h"
 #include "ephy-langs.h"
 
 #include <glib-object.h>

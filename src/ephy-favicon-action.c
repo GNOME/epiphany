@@ -269,8 +269,9 @@ ephy_favicon_action_init (EphyFaviconAction *action)
 	action->priv = g_new0 (EphyFaviconActionPrivate, 1);
 	action->priv->icon = NULL;
 
-	action->priv->cache = ephy_embed_shell_get_favicon_cache
-		(EPHY_EMBED_SHELL (ephy_shell));
+	action->priv->cache = EPHY_FAVICON_CACHE
+		(ephy_embed_shell_get_favicon_cache
+		(EPHY_EMBED_SHELL (ephy_shell)));
 	g_object_ref (action->priv->cache);
 }
 

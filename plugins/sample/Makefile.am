@@ -1,11 +1,7 @@
 plugindir = $(libdir)/epiphany/plugins
 
 INCLUDES = \
-	-I$(top_srcdir)/src		\
-	-I$(top_srcdir)/src/bookmarks	\
-	-I$(top_srcdir)/lib		\
-	-I$(top_srcdir)/lib/egg		\
-	-I$(top_srcdir)/embed		\
+	-I/opt/gnome/include/epiphany-1.0 \
 	$(EPIPHANY_DEPENDENCY_CFLAGS)	\
 	-DSHARE_DIR=\"$(pkgdatadir)\"	\
 	-DG_DISABLE_DEPRECATED		\
@@ -14,7 +10,7 @@ INCLUDES = \
 	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
 	-DGNOME_DISABLE_DEPRECATED
 
-plugin_LTLIBRARIES = libephy.la
+plugin_LTLIBRARIES = libsample.la
 
-libephy_la_SOURCES = \
+libsample_la_SOURCES = \
 	sample.c
