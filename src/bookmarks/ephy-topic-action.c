@@ -445,8 +445,8 @@ add_open_in_tabs_menu (EphyTopicAction *action,
 	GtkWidget *item;
 	const char *label;
 
-	label = ngettext ("_Open in New Tab",
-			  "_Open in New Tabs",
+	label = ngettext ("Open in New _Tab",
+			  "Open in New _Tabs",
 			  ephy_node_get_n_children (node));
 
 	item = gtk_menu_item_new_with_mnemonic (label);
