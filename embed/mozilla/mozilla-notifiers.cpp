@@ -44,6 +44,7 @@
 #include <gtk/gtksettings.h>
 
 #include <nsCOMPtr.h>
+#include <nsEmbedString.h>
 #include <nsIPrefService.h>
 #include <nsIServiceManager.h>
 #include <libgnome/gnome-i18n.h>
