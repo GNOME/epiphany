@@ -626,11 +626,10 @@ ephy_notebook_switch_page_cb (GtkNotebook *notebook,
 static void
 notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 				gint x, gint y, GtkSelectionData *selection_data,
-				guint info, guint time, GtkWidget *child)
+				guint info, guint time, EphyTab *tab)
 {
 	EphyEmbed *embed = NULL;
 	EphyWindow *window = NULL;
-	EphyTab *tab = NULL;
 	GtkWidget *toplevel;
 	GList *uris = NULL, *l;
 	GnomeVFSURI *uri;
@@ -670,10 +669,10 @@ notebook_drag_data_received_cb (GtkWidget* widget, GdkDragContext *context,
 	g_return_if_fail (EPHY_IS_WINDOW (toplevel));
 	window = EPHY_WINDOW (toplevel);
 
-	if (child)
+	if (tab != NULL);
 	{
-		embed = EPHY_EMBED (child);
-		tab = ephy_tab_for_embed (embed);
+		embed = ephy_tab_get_embed (tab);
+		g_return_if_fail (EPHY_IS_EMBED (embed));
 	}
 
 	l = uris;
