@@ -27,8 +27,6 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_STATE_WINDOW_FLAGS	(ephy_state_window_flags_get_type ())
-
 typedef enum
 {
 	EPHY_STATE_WINDOW_SAVE_NONE = 0,

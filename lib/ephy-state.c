@@ -513,25 +513,3 @@ ephy_state_save (void)
 		states_db = NULL;
 	}
 }
-
-GType
-ephy_state_window_flags_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		static const GFlagsValue values[] =
-		{
-		{ EPHY_STATE_WINDOW_SAVE_NONE, "EPHY_STATE_WINDOW_SAVE_NONE", "none" },
-		{ EPHY_STATE_WINDOW_SAVE_SIZE, "EPHY_STATE_WINDOW_SAVE_SIZE", "size" },
-		{ EPHY_STATE_WINDOW_SAVE_POSITION, "EPHY_STATE_WINDOW_SAVE_POSITION", "position" },
-
-		{ 0, NULL, NULL }
-		};
-
-		type = g_flags_register_static ("EphyStateWindowFlags", values);
-	}
-
-	return type;
-}

@@ -3,7 +3,9 @@ SUBDIRS = widgets egg
 noinst_LTLIBRARIES = libephymisc.la
 
 headerdir = $(prefix)/include/epiphany-@EPIPHANY_MAJOR@/epiphany
-header_DATA = $(INST_H_FILES)
+header_DATA = \
+	ephy-lib-type-builtins.h	\
+	$(INST_H_FILES)
 
 NOINST_H_FILES = \
 	eel-gconf-extensions.h			\
@@ -14,7 +16,6 @@ NOINST_H_FILES = \
 	ephy-glade.h				\
 	ephy-gui.h				\
 	ephy-langs.h				\
-	ephy-marshal.h				\
 	ephy-module.h				\
 	ephy-node-filter.h			\
 	ephy-node-common.h			\
@@ -24,6 +25,9 @@ NOINST_H_FILES = \
 	ephy-string.h				\
 	ephy-stock-icons.h			\
 	ephy-zoom.h
+
+TYPES_H_FILES = \
+	ephy-state.h
 
 INST_H_FILES = \
 	ephy-dialog.h				\
@@ -44,7 +48,6 @@ libephymisc_la_SOURCES = \
 	ephy-langs.c				\
 	ephy-loader.c				\
 	ephy-module.c				\
-	ephy-marshal.c				\
 	ephy-node.c				\
 	ephy-node.h				\
 	ephy-node-filter.c			\
@@ -58,7 +61,8 @@ libephymisc_la_SOURCES = \
 	ephy-stock-icons.c			\
 	ephy-zoom.c				\
 	$(INST_H_FILES)				\
-	$(NOINST_H_FILES)
+	$(NOINST_H_FILES)			\
+	$(BUILT_SOURCES)
 
 libephymisc_la_CPPFLAGS = \
 	-I$(top_builddir)/lib			\
@@ -69,7 +73,11 @@ libephymisc_la_CFLAGS = \
         $(EPIPHANY_DEPENDENCY_CFLAGS)	\
 	$(AM_CFLAGS)
 
-BUILT_SOURCES=ephy-marshal.c ephy-marshal.h
+BUILT_SOURCES = \
+	ephy-lib-type-builtins.c	\
+	ephy-lib-type-builtins.h	\
+	ephy-marshal.c			\
+	ephy-marshal.h
 
 CLEAN_FILES = $(BUILT_SOURCES)
 DISTCLEAN_FILES = $(BUILT_SOURCES)
@@ -79,6 +87,38 @@ ephy-marshal.c: ephy-marshal.list
 
 ephy-marshal.h: ephy-marshal.list
 	$(GLIB_GENMARSHAL) --prefix=ephy_marshal $(srcdir)/ephy-marshal.list --header > ephy-marshal.h
+
+ephy-lib-type-builtins.c: $(TYPES_H_FILES)
+	( cd $(srcdir) && $(GLIB_MKENUMS) \
+		--fhead "#include \"ephy-lib-type-builtins.h\"\n\n" \
+		--fprod "\n/* enumerations from \"@filename@\" */" \
+		--fprod "\n#include \"@filename@\"" \
+		--vhead "static const G@Type@Value _@enum_name@_values[] = {" \
+		--vprod "  { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+		--vtail "  { 0, NULL, NULL }\n};\n\n" \
+		--vtail "GType\n@enum_name@_get_type (void)\n{\n" \
+		--vtail "  static GType type = 0;\n\n" \
+		--vtail "  if (G_UNLIKELY (type == 0))\n" \
+		--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n\n" \
+		--vtail "  return type;\n}\n\n" \
+		$(^F) ) > xgen-$(@F) \
+	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
+	&& rm -f xgen-$(@F)
+
+ephy-lib-type-builtins.h: $(TYPES_H_FILES)
+	( cd $(srcdir) && $(GLIB_MKENUMS) \
+		--fhead "#ifndef EPHY_LIB_TYPE_BUILTINS_H\n" \
+		--fhead "#define EPHY_LIB_TYPE_BUILTINS_H 1\n\n" \
+		--fhead "#include <glib-object.h>\n\n" \
+		--fhead "G_BEGIN_DECLS\n\n" \
+		--ftail "G_END_DECLS\n\n" \
+		--ftail "#endif /* EPHY_LIB_TYPE_BUILTINS_H */\n" \
+		--fprod "\n/* --- @filename@ --- */" \
+		--eprod "#define EPHY_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
+		--eprod "GType @enum_name@_get_type (void);\n" \
+		$(^F) ) > xgen-$(@F) \
+	&& ( cmp -s xgen-$(@F) $(@F) || cp xgen-$(@F) $(@F) ) \
+	&& rm -f xgen-$(@F)
 
 EXTRA_DIST = 			\
 	ephy-marshal.list
