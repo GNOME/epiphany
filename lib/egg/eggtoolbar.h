@@ -71,6 +71,13 @@ struct _EggToolbarChild
   GtkWidget *icon;
   GtkWidget *label;
 };
+
+typedef enum
+{
+  EGG_TOOLBAR_SPACE_EMPTY,
+  EGG_TOOLBAR_SPACE_LINE
+} EggToolbarSpaceStyle;
+
 #endif /* EGG_DISABLE_DEPRECATED */
 
 typedef struct _EggToolbar           EggToolbar;
@@ -140,13 +147,15 @@ void            egg_toolbar_set_show_arrow   (EggToolbar      *toolbar,
 					      gboolean         show_arrow);
 void            egg_toolbar_set_orientation  (EggToolbar      *toolbar,
 					      GtkOrientation   orientation);
+/* FIXME: shouldn't these be deprecated? */
 void            egg_toolbar_set_style        (EggToolbar      *toolbar,
 					      GtkToolbarStyle  style);
 void            egg_toolbar_set_icon_size    (EggToolbar      *toolbar,
 					      GtkIconSize      icon_size);
+void            egg_toolbar_unset_style      (EggToolbar      *toolbar);
+/* -------- */
 void            egg_toolbar_set_tooltips     (EggToolbar      *toolbar,
 					      gboolean         enable);
-void            egg_toolbar_unset_style      (EggToolbar      *toolbar);
 void            egg_toolbar_unset_icon_size  (EggToolbar      *toolbar);
 gboolean        egg_toolbar_get_show_arrow   (EggToolbar      *toolbar);
 GtkOrientation  egg_toolbar_get_orientation  (EggToolbar      *toolbar);

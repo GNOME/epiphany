@@ -77,7 +77,7 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	{ "FileOpen", N_("_Open..."), GTK_STOCK_OPEN, "<control>O",
 	  N_("Open a file"),
 	  G_CALLBACK (window_cmd_file_open), NULL },
-	{ "FileSaveAs", N_("Save _As..."), GTK_STOCK_SAVE, "<shift><control>S",
+	{ "FileSaveAs", N_("Save _As..."), GTK_STOCK_SAVE_AS, "<shift><control>S",
 	  N_("Save the current page"),
 	  G_CALLBACK (window_cmd_file_save_as), NULL },
 	{ "FilePrint", N_("_Print..."), GTK_STOCK_PRINT, "<control>P",
@@ -217,6 +217,9 @@ static EggActionGroupEntry ephy_popups_entries [] = {
 	/* Document */
 	{ "SaveBackgroundAs", N_("_Save Background As..."), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_save_background_as), NULL },
+	{ "ContextBookmarkPage", N_("Add Boo_kmark"), EPHY_STOCK_BOOKMARK_PAGE, "<control>D",
+	  N_("Add a bookmark for the current page"),
+	  G_CALLBACK (window_cmd_file_bookmark_page), NULL },
 
 	/* Framed document */
 	{ "OpenFrame", N_("_Open Frame"), NULL, NULL,
@@ -243,17 +246,17 @@ static EggActionGroupEntry ephy_popups_entries [] = {
 	  NULL, G_CALLBACK (popup_cmd_copy_email), NULL },
 
 	/* Images */
-	{ "OpenImage", N_("_Open Image"), GTK_STOCK_OPEN, NULL,
+	{ "OpenImage", N_("Open _Image"), GTK_STOCK_OPEN, NULL,
 	  NULL, G_CALLBACK (popup_cmd_open_image), NULL },
-	{ "OpenImageInNewWindow", N_("Open Image in _New Window"), NULL, NULL,
+	{ "OpenImageInNewWindow", N_("Open Image in New _Window"), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_image_in_new_window), NULL },
-	{ "OpenImageInNewTab", N_("Open Image in New _Tab"), NULL, NULL,
+	{ "OpenImageInNewTab", N_("Open Image in New T_ab"), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_image_in_new_tab), NULL },
 	{ "SaveImageAs", N_("_Save Image As..."), GTK_STOCK_SAVE_AS, NULL,
 	  NULL, G_CALLBACK (popup_cmd_save_image_as), NULL },
-	{ "SetImageAsBackground", N_("Use Image As _Background"), NULL, NULL,
+	{ "SetImageAsBackground", N_("_Use Image As Background"), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_set_image_as_background), NULL },
-	{ "CopyImageLocation", N_("_Copy Image Address"), GTK_STOCK_COPY, NULL,
+	{ "CopyImageLocation", N_("Copy I_mage Address"), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_image_location), NULL },
 };
 static guint ephy_popups_n_entries = G_N_ELEMENTS (ephy_popups_entries);

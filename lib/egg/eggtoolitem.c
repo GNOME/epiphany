@@ -341,12 +341,14 @@ egg_tool_item_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
 {
   GtkBin *bin = GTK_BIN (widget);
+  gint xthickness = widget->style->xthickness;
+  gint ythickness = widget->style->ythickness;
 
   if (bin->child)
     gtk_widget_size_request (bin->child, requisition);
   
-  requisition->width += GTK_CONTAINER (widget)->border_width * 2;
-  requisition->height += GTK_CONTAINER (widget)->border_width * 2;  
+  requisition->width += (xthickness + GTK_CONTAINER (widget)->border_width) * 2;
+  requisition->height += (ythickness + GTK_CONTAINER (widget)->border_width) * 2;  
 }
 
 static void
@@ -371,10 +373,13 @@ egg_tool_item_size_allocate (GtkWidget     *widget,
   child = GTK_BIN (toolitem)->child;
   if (child && GTK_WIDGET_VISIBLE (child))
     {
-      child_allocation.x = allocation->x + border_width;
-      child_allocation.y = allocation->y + border_width;
-      child_allocation.width = allocation->width - border_width * 2;
-      child_allocation.height = allocation->height - border_width * 2;
+      gint xthickness = widget->style->xthickness;
+      gint ythickness = widget->style->ythickness;
+      
+      child_allocation.x = allocation->x + border_width + xthickness;
+      child_allocation.y = allocation->y + border_width + ythickness;
+      child_allocation.width = allocation->width - 2 * (xthickness + border_width);
+      child_allocation.height = allocation->height - 2 * (ythickness + border_width);
       
       gtk_widget_size_allocate (child, &child_allocation);
     }
