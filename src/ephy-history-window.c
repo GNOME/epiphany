@@ -842,7 +842,8 @@ ephy_history_window_show_popup_cb (GtkWidget *view,
 
 	widget = gtk_ui_manager_get_widget (editor->priv->ui_merge,
 					    "/EphyHistoryWindowPopup");
-	gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 2,
+	gtk_menu_popup (GTK_MENU (widget), NULL, NULL,
+			ephy_gui_menu_position_tree_selection, view, 2,
 			gtk_get_current_event_time ());
 
 	return TRUE;

@@ -30,6 +30,12 @@
 
 G_BEGIN_DECLS
 
+void		ephy_gui_menu_position_tree_selection    (GtkMenu   *menu,
+							  gint      *x,
+							  gint      *y,
+							  gboolean  *push_in,
+							  gpointer  user_data);
+
 void		ephy_gui_menu_position_under_widget	 (GtkMenu   *menu,
 							  gint      *x,
 							  gint      *y,
