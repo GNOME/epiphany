@@ -1,3 +1,9 @@
+2003-07-03  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-node.c: (callback), (ephy_node_emit_signal):
+
+	Don't try to assign va_list to a gpointer var. Fixes bug #116131.
+
 2003-07-02  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/widgets/ephy-zoom-control.c: (ephy_zoom_control_set_tooltip),
