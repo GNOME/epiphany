@@ -1,3 +1,10 @@
+2003-03-09  Xan Lopez  <xan@masilla.org>
+
+	* src/bookmarks/ephy-keywords-entry.c: (try_to_expand_keyword):
+
+	Pass -1 instead of strlen to automatic calculation of length (this
+	seems to be undocumented, but it's done in the code)
+
 2003-03-09  Dan Damian  <dandamian@gmx.net>
 
 	* lib/widgets/ephy-autocompletion-window.c:

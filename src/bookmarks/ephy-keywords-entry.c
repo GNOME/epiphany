@@ -126,7 +126,7 @@ try_to_expand_keyword (GtkEditable *editable)
 
 		gtk_editable_insert_text (editable,
 					  insert_text,
-					  strlen (insert_text),
+					  -1,
 					  &position);
 		gtk_editable_select_region (editable, user_text_length + keyword_offset, -1);
 	}
