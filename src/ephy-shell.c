@@ -135,14 +135,24 @@ ephy_shell_command_cb (EphyEmbedShell *shell,
 
 	if (strcmp (command, "import-mozilla-bookmarks") == 0)
 	{
-		ephy_bookmarks_import_mozilla (bookmarks, param);
-
-		dialog = gtk_message_dialog_new
-			(NULL,
-                         GTK_DIALOG_MODAL,
-                         GTK_MESSAGE_ERROR,
-                         GTK_BUTTONS_OK,
-                         _("Bookmarks imported successfully."));
+		if (ephy_bookmarks_import_mozilla (bookmarks, param))
+		{
+			dialog = gtk_message_dialog_new
+				(NULL,
+				 GTK_DIALOG_MODAL,
+				 GTK_MESSAGE_ERROR,
+				 GTK_BUTTONS_OK,
+				 _("Mozilla bookmarks imported successfully."));
+		}
+		else
+		{
+			dialog = gtk_message_dialog_new
+				(NULL,
+				 GTK_DIALOG_MODAL,
+				 GTK_MESSAGE_ERROR,
+				 GTK_BUTTONS_OK,
+				 _("Importing Mozilla bookmarks failed."));
+		}
 		gtk_dialog_run (GTK_DIALOG (dialog));
 		gtk_widget_destroy (dialog);
 	}
