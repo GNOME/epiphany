@@ -95,22 +95,24 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 
 	primary_text = g_strdup_printf (_("A file %s already exists."), 
 	                                converted);
-	question = g_strdup_printf ("<b>%s</b>\n\n%s", primary_text,
+
+	question = g_strdup_printf ("<b><big>%s</big></b>\n\n%s", primary_text,
 	                            _("If you choose to overwrite this file, "
 				      "the contents will be lost."));
 	
 	dialog = gtk_dialog_new_with_buttons (_("Overwrite File"),
                                         parent ? GTK_WINDOW (parent) : NULL,
-                                        GTK_DIALOG_MODAL, 
+                                        GTK_DIALOG_MODAL | GTK_DIALOG_NO_SEPARATOR, 
                                         NULL);
 	hbox = gtk_hbox_new (FALSE, 6);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), 
 	                    hbox, TRUE, TRUE, 12);
-	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION,
+	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
 	                                  GTK_ICON_SIZE_DIALOG);
 	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0); 
 	gtk_box_pack_start (GTK_BOX (hbox), image, TRUE, TRUE, 0);
 	label = gtk_label_new (NULL);
+	gtk_label_set_selectable (GTK_LABEL (label), TRUE);
 	gtk_label_set_markup (GTK_LABEL (label), question);
 	gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 	gtk_widget_show_all (hbox);
