@@ -548,6 +548,8 @@ sync_chromes_visibility (EphyWindow *window)
 {
 	EphyWindowPrivate *priv = window->priv;
 	GtkWidget *menubar;
+	GtkAccelGroup *accel_group;
+	GSList *groups;
 	gboolean show_statusbar, show_menubar, show_toolbar, show_bookmarksbar;
 
 	get_chromes_visibility (window, &show_menubar,
@@ -567,6 +569,23 @@ sync_chromes_visibility (EphyWindow *window)
 	if (priv->fullscreen_popup != NULL)
 	{
 		g_object_set (priv->fullscreen_popup, "visible", !show_toolbar, NULL);
+	}
+
+	/* en/disable accel group */
+	accel_group = gtk_ui_manager_get_accel_group (window->priv->manager);
+	groups = gtk_accel_groups_from_object (G_OBJECT (window));
+
+	if (priv->chrome & EPHY_EMBED_CHROME_MENUBAR &&
+	    priv->ppv_mode == FALSE)
+	{
+		if (g_slist_find (groups, accel_group) == NULL)
+		{
+			gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+		}
+	}
+	else if (g_slist_find (groups, accel_group) != NULL)
+	{
+		gtk_window_remove_accel_group (GTK_WINDOW (window), accel_group);
 	}
 }
 
@@ -1160,8 +1179,6 @@ setup_ui_manager (EphyWindow *window)
 
 	window->priv->manager = manager;
 	g_signal_connect (manager, "add_widget", G_CALLBACK (add_widget), window);
-	gtk_window_add_accel_group (GTK_WINDOW (window),
-				    gtk_ui_manager_get_accel_group (manager));
 }
 
 static void
@@ -2786,33 +2803,30 @@ ephy_window_new_with_chrome (EphyEmbedChrome chrome)
  * Sets whether the window is in print preview mode.
  **/
 void
-ephy_window_set_print_preview (EphyWindow *window, gboolean enabled)
+ephy_window_set_print_preview (EphyWindow *window,
+			       gboolean enabled)
 {
-	GtkAccelGroup *accel_group;
+	EphyWindowPrivate *priv = window->priv;
 
-	accel_group = gtk_ui_manager_get_accel_group (window->priv->manager);
+	if (priv->ppv_mode == enabled) return;
 
-	if (window->priv->ppv_mode == enabled) return;
-
-	window->priv->ppv_mode = enabled;
+	priv->ppv_mode = enabled;
 
 	sync_chromes_visibility (window);
-	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (window->priv->notebook), !enabled);
+	ephy_notebook_set_show_tabs (EPHY_NOTEBOOK (priv->notebook), !enabled);
 
 	if (enabled)
 	{
-		g_return_if_fail (window->priv->ppview_toolbar == NULL);
+		g_return_if_fail (priv->ppview_toolbar == NULL);
 
-		window->priv->ppview_toolbar = ppview_toolbar_new (window);
-		gtk_window_remove_accel_group (GTK_WINDOW (window), accel_group);
+		priv->ppview_toolbar = ppview_toolbar_new (window);
 	}
 	else
 	{
-		g_return_if_fail (window->priv->ppview_toolbar != NULL);
+		g_return_if_fail (priv->ppview_toolbar != NULL);
 
-		g_object_unref (window->priv->ppview_toolbar);
-		window->priv->ppview_toolbar = NULL;
-		gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+		g_object_unref (priv->ppview_toolbar);
+		priv->ppview_toolbar = NULL;
 	}
 
 	g_object_notify (G_OBJECT (window), "print-preview-mode");

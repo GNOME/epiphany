@@ -1,5 +1,14 @@
 2005-02-01  Christian Persch  <chpe@cvs.gnome.org>
 
+	* data/epiphany-lockdown.schemas.in:
+	* src/ephy-window.c: (sync_chromes_visibility), (setup_ui_manager),
+	(ephy_window_set_print_preview):
+
+	Remove the accel group from the window when hiding the menubar
+	in lockdown mode. From bug #165550.
+
+2005-02-01  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/ephy-shell.c: (toolbar_style_notifier):
 
 	Plug a mem leak.
