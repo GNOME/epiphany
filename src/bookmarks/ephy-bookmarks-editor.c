@@ -157,7 +157,7 @@ static EggActionGroupEntry ephy_bookmark_popup_entries [] = {
 	{ "OpenInTab", N_("Open in New _Tab"), NULL, "<shift><control>O",
 	  N_("Open the selected bookmark in a new tab"), 
 	  G_CALLBACK (cmd_open_bookmarks_in_tabs), NULL },
-	{ "Rename", N_("_Rename"), NULL, "F2",
+	{ "Rename", N_("_Rename..."), NULL, "F2",
 	  N_("Rename the selected bookmark or topic"), G_CALLBACK (cmd_rename), NULL },
 	{ "Delete", N_("_Delete"), GTK_STOCK_DELETE, NULL,
 	  N_("Delete the selected bookmark or topic"), 
