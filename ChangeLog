@@ -1,3 +1,19 @@
+2003-10-27  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/egg/egg-editable-toolbar.c: (create_dock), (set_fixed_style),
+	(unset_fixed_style), (toolbar_changed_cb), (unparent_fixed),
+	(update_fixed), (toolbar_removed_cb), (toolbars_clean),
+	(egg_editable_toolbar_construct), (egg_editable_toolbar_init),
+	(egg_editable_toolbar_finalize), (egg_editable_toolbar_set_fixed):
+	* lib/egg/egg-editable-toolbar.h:
+	* src/toolbar.c: (toolbar_style_sync), (create_spinner),
+	(toolbar_init):
+
+	Fixup spinner when resetting the toolbar model.
+	Update spinner on toolbar style change.
+	Fix a typo in toolbars creation that wa causing fs toolbar
+	to be hidden.
+
 2003-10-26  Christian Persch  <chpe@cvs.gnome.org>
 
 	* lib/ephy-file-chooser.c: (current_folder_changed_cb),

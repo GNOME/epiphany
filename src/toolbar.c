@@ -523,6 +523,36 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 }
 
 static void
+toolbar_style_sync (GtkToolbar *toolbar,
+		    GtkToolbarStyle style,
+		    GtkWidget *spinner)
+{
+	gboolean small;
+
+	small = (style != GTK_TOOLBAR_BOTH);
+
+	ephy_spinner_set_small_mode (EPHY_SPINNER (spinner), small);
+}
+
+static void
+create_spinner (Toolbar *t)
+{
+	GtkWidget *spinner;
+	GtkToolbar *toolbar;
+
+	spinner = ephy_spinner_new ();
+	gtk_widget_show (spinner);
+	t->priv->spinner = spinner;
+
+	toolbar = egg_editable_toolbar_set_fixed
+		(EGG_EDITABLE_TOOLBAR (t), spinner);
+
+	g_signal_connect (toolbar, "style_changed",
+			  G_CALLBACK (toolbar_style_sync),
+			  spinner);
+}
+
+static void
 toolbar_init (Toolbar *t)
 {
 	t->priv = EPHY_TOOLBAR_GET_PRIVATE (t);
@@ -532,10 +562,7 @@ toolbar_init (Toolbar *t)
 	t->priv->visibility = TRUE;
 	t->priv->updating_address = FALSE;
 
-	t->priv->spinner = ephy_spinner_new ();
-	gtk_widget_show (t->priv->spinner);
-	egg_editable_toolbar_set_fixed (EGG_EDITABLE_TOOLBAR (t),
-					t->priv->spinner);
+	create_spinner (t);
 }
 
 static void

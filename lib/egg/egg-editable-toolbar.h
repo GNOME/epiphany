@@ -24,6 +24,7 @@
 #include <gtk/gtkuimanager.h>
 #include <gtk/gtkselection.h>
 #include <gtk/gtkvbox.h>
+#include <gtk/gtktoolbar.h>
 
 G_BEGIN_DECLS
 
@@ -67,7 +68,7 @@ void		    egg_editable_toolbar_set_drag_dest   (EggEditableToolbar   *etoolbar,
 							  const GtkTargetEntry *targets,
 							  gint                  n_targets,
 							  const char           *toolbar_name);
-void		    egg_editable_toolbar_set_fixed       (EggEditableToolbar   *etoolbar,
+GtkToolbar	   *egg_editable_toolbar_set_fixed       (EggEditableToolbar   *etoolbar,
 							  GtkWidget            *fixed);
 
 

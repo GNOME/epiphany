@@ -75,7 +75,7 @@ struct EggEditableToolbarPrivate
   gboolean edit_mode;
   GtkWidget *selected_toolbar;
   GtkWidget *dragged_item;
-  GtkWidget *fixed;
+  GtkWidget *fixed_toolbar;
 };
 
 GType
@@ -578,14 +578,13 @@ create_dock (EggEditableToolbar *t)
   GtkWidget *toolbar, *hbox;
 
   hbox = gtk_hbox_new (0, FALSE);
+  gtk_widget_show (hbox);
 
   toolbar = gtk_toolbar_new ();
   gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), TRUE);
   gtk_widget_show (toolbar);
-
   gtk_box_pack_start (GTK_BOX (hbox), toolbar, TRUE, TRUE, 0);
 
-  gtk_widget_show (toolbar);
   gtk_drag_dest_set (toolbar, 0,
 		     dest_drag_types, n_dest_drag_types,
 		     GDK_ACTION_MOVE | GDK_ACTION_COPY);
@@ -606,6 +605,18 @@ create_dock (EggEditableToolbar *t)
 }
 
 static void
+set_fixed_style (EggEditableToolbar *t, GtkToolbarStyle style)
+{
+  gtk_toolbar_set_style (GTK_TOOLBAR (t->priv->fixed_toolbar), style);
+}
+
+static void
+unset_fixed_style (EggEditableToolbar *t)
+{
+  gtk_toolbar_unset_style (GTK_TOOLBAR (t->priv->fixed_toolbar));
+}
+
+static void
 toolbar_changed_cb (EggToolbarsModel   *model,
 	            int                 position,
 	            EggEditableToolbar *t)
@@ -619,26 +630,48 @@ toolbar_changed_cb (EggToolbarsModel   *model,
   if (flags & EGG_TB_MODEL_ICONS_ONLY)
   {
     gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_ICONS);
+    if (position == 0)
+      {
+        set_fixed_style (t, GTK_TOOLBAR_ICONS);
+      }
   }
   else
   {
     gtk_toolbar_unset_style (GTK_TOOLBAR (toolbar));
+    if (position == 0)
+      {
+        unset_fixed_style (t);
+      }
   }
+}
+
+static void
+unparent_fixed (EggEditableToolbar *t)
+{
+  GtkWidget *toolbar, *dock;
+
+  toolbar = t->priv->fixed_toolbar;
+  dock = get_dock_nth (t, 0);
+
+  if (dock && toolbar->parent != NULL)
+    {
+      gtk_container_remove (GTK_CONTAINER (dock), toolbar);
+    }
 }
 
 static void
 update_fixed (EggEditableToolbar *t)
 {
-  GtkWidget *fixed, *dock;
+  GtkWidget *toolbar, *dock;
 
-  g_return_if_fail (IS_EGG_EDITABLE_TOOLBAR (t));
-
-  fixed = t->priv->fixed;
+  toolbar = t->priv->fixed_toolbar;
   dock = get_dock_nth (t, 0);
 
-  if (dock && fixed && fixed->parent == NULL)
+  if (dock && toolbar && toolbar->parent == NULL)
     {
-      gtk_box_pack_end (GTK_BOX (dock), fixed, FALSE, TRUE, 0);
+      gtk_box_pack_end (GTK_BOX (dock), toolbar, FALSE, TRUE, 0);
+
+      gtk_widget_show_all (toolbar);
     }
 }
 
@@ -667,8 +700,8 @@ toolbar_removed_cb (EggToolbarsModel   *model,
 {
   GtkWidget *toolbar;
 
-  toolbar = get_toolbar_nth (t, position);
-  gtk_widget_destroy (toolbar->parent);
+  toolbar = get_dock_nth (t, position);
+  gtk_widget_destroy (toolbar);
 
   update_fixed (t);
 }
@@ -716,6 +749,9 @@ toolbars_clean (EggEditableToolbar *t)
 {
   GList *children, *l;
 
+  unset_fixed_style (t);
+  unparent_fixed (t);
+
   children = gtk_container_get_children (GTK_CONTAINER (t));
 
   for (l = children; l != NULL; l = l->next)
@@ -749,6 +785,10 @@ egg_editable_toolbar_construct (EggEditableToolbar *t)
       if (flags & EGG_TB_MODEL_ICONS_ONLY)
         {
           gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_ICONS);
+          if (i == 0)
+            {
+	      set_fixed_style (t, GTK_TOOLBAR_ICONS);
+            }
         }
 
       n_items = egg_toolbars_model_n_items (model, i);
@@ -776,7 +816,7 @@ egg_editable_toolbar_construct (EggEditableToolbar *t)
         }
     }
 
-  update_fixed (t);
+    update_fixed (t);
 }
 
 static void
@@ -903,7 +943,6 @@ egg_editable_toolbar_init (EggEditableToolbar *t)
 
   t->priv->merge = NULL;
   t->priv->edit_mode = FALSE;
-  t->priv->fixed = NULL;
 }
 
 static void
@@ -914,9 +953,9 @@ egg_editable_toolbar_finalize (GObject *object)
   g_return_if_fail (object != NULL);
   g_return_if_fail (IS_EGG_EDITABLE_TOOLBAR (object));
 
-  if (t->priv->fixed)
+  if (t->priv->fixed_toolbar)
     {
-      g_object_unref (t->priv->fixed);
+      g_object_unref (t->priv->fixed_toolbar);
     }
 
   g_free (t->priv);
@@ -1033,25 +1072,25 @@ egg_editable_toolbar_hide (EggEditableToolbar *etoolbar,
     }
 }
 
-void
+GtkToolbar *
 egg_editable_toolbar_set_fixed (EggEditableToolbar *etoolbar,
 				GtkWidget          *fixed)
 {
-  GtkWidget *toolbar;
-  GtkToolItem *item;
+  GtkWidget *fixed_item;
 
-  toolbar = gtk_toolbar_new ();
-  gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), FALSE);
-  gtk_widget_show (toolbar);
+  etoolbar->priv->fixed_toolbar = gtk_toolbar_new ();
+  gtk_toolbar_set_show_arrow (GTK_TOOLBAR (etoolbar->priv->fixed_toolbar), FALSE);
+  g_object_ref (etoolbar->priv->fixed_toolbar);
 
-  item = gtk_tool_item_new ();
-  gtk_widget_show (GTK_WIDGET (item));
-  gtk_container_add (GTK_CONTAINER (item), fixed);
+  fixed_item = GTK_WIDGET (gtk_tool_item_new ());
+  gtk_toolbar_insert (GTK_TOOLBAR (etoolbar->priv->fixed_toolbar),
+                      GTK_TOOL_ITEM (fixed_item), 0);
 
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, 0);
-  etoolbar->priv->fixed = g_object_ref (toolbar);
+  gtk_container_add (GTK_CONTAINER (fixed_item), fixed);
 
   update_fixed (etoolbar);
+
+  return GTK_TOOLBAR (etoolbar->priv->fixed_toolbar);
 }
 
 void
