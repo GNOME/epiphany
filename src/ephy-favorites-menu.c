@@ -138,8 +138,6 @@ ephy_favorites_menu_finalize_impl (GObject *o)
 	EphyFavoritesMenu *wrhm = EPHY_FAVORITES_MENU (o);
 	EphyFavoritesMenuPrivate *p = wrhm->priv;
 
-	ephy_favorites_menu_clean (wrhm);
-
 	g_free (p);
 
 	G_OBJECT_CLASS (g_object_class)->finalize (o);
@@ -206,6 +204,8 @@ ephy_favorites_menu_rebuild (EphyFavoritesMenu *wrhm)
 	EggMenuMerge *merge = EGG_MENU_MERGE (p->window->ui_merge);
 
 	LOG ("Rebuilding recent history menu")
+
+	ephy_favorites_menu_clean (wrhm);
 
 	fav = ephy_bookmarks_get_favorites (p->bookmarks);
 	children = ephy_node_get_children (fav);

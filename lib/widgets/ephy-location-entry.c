@@ -338,6 +338,27 @@ ephy_location_entry_autocompletion_to (EphyLocationEntry *w)
 	return FALSE;
 }
 
+static int
+get_editable_number_of_chars (GtkEditable *editable)
+{
+	char *text;
+	int length;
+
+	text = gtk_editable_get_chars (editable, 0, -1);
+	length = g_utf8_strlen (text, -1);
+	g_free (text);
+	return length;
+}
+
+static gboolean
+position_is_at_end (GtkEditable *editable)
+{
+	int end;
+
+	end = get_editable_number_of_chars (editable);
+	return gtk_editable_get_position (editable) == end;
+}
+
 /* this is from the old location entry, need to do the autocompletion before implementing this */
 static gboolean
 ephy_location_entry_key_press_event_cb (GtkWidget *entry, GdkEventKey *event, EphyLocationEntry *w)
@@ -466,7 +487,8 @@ ephy_location_entry_key_press_event_cb (GtkWidget *entry, GdkEventKey *event, Ep
                 break;
         default:
 		ephy_location_entry_autocompletion_unselect_alternatives (w);
-		if ((event->string[0] > 32) && (event->string[0] < 126))
+		if ((event->string[0] > 32) && (event->string[0] < 126) &&
+		    position_is_at_end (GTK_EDITABLE (entry)))
                 {
                         p->show_alternatives_timeout = g_timeout_add
                                 (SHOW_ALTERNATIVES_DELAY,

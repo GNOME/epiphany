@@ -42,6 +42,7 @@
 #include <string.h>
 #include <libgnome/gnome-i18n.h>
 #include <libgnomevfs/gnome-vfs-uri.h>
+#include <libgnomeui/gnome-stock-icons.h>
 #include <gtk/gtk.h>
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -203,7 +204,7 @@ static EggActionGroupEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_tabs_detach), NULL },
 
 	/* Help menu */
-	{ "HelpAbout", N_("_About"), NULL, NULL,
+	{ "HelpAbout", N_("_About"), GNOME_STOCK_ABOUT, NULL,
 	  N_("Display credits for the web browser creators"),
 	  G_CALLBACK (window_cmd_help_about), NULL },
 };
@@ -262,6 +263,7 @@ static guint ephy_popups_n_entries = G_N_ELEMENTS (ephy_popups_entries);
 struct EphyWindowPrivate
 {
 	GtkWidget *main_vbox;
+	GtkWidget *menu_dock;
 	GtkWidget *menubar;
 	Toolbar *toolbar;
 	GList *toolbars;
@@ -429,7 +431,7 @@ add_widget (EggMenuMerge *merge, GtkWidget *widget, EphyWindow *window)
 			(window->priv->toolbars, widget);
 	}
 
-	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
+	gtk_box_pack_start (GTK_BOX (window->priv->menu_dock),
 			    widget, FALSE, FALSE, 0);
 }
 
@@ -444,6 +446,12 @@ setup_window (EphyWindow *window)
 	gtk_widget_show (window->priv->main_vbox);
 	gtk_container_add (GTK_CONTAINER (window),
 			   window->priv->main_vbox);
+
+	window->priv->menu_dock = gtk_vbox_new (FALSE, 0);
+	gtk_widget_show (window->priv->menu_dock);
+	gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
+			    GTK_WIDGET (window->priv->menu_dock),
+			    FALSE, TRUE, 0);
 
 	for (i = 0; i < ephy_menu_n_entries; i++)
 	{
@@ -471,7 +479,8 @@ setup_window (EphyWindow *window)
 
 	window->ui_merge = G_OBJECT (merge);
 	g_signal_connect (merge, "add_widget", G_CALLBACK (add_widget), window);
-	egg_menu_merge_add_ui_from_file (merge, ephy_file ("epiphany-ui.xml"), NULL);
+	egg_menu_merge_add_ui_from_file
+		(merge, ephy_file ("epiphany-ui.xml"), NULL);
 	gtk_window_add_accel_group (GTK_WINDOW (window), merge->accel_group);
 
 	window->priv->toolbar = toolbar_new (window);
@@ -631,6 +640,11 @@ ephy_window_finalize (GObject *object)
 
 	g_object_unref (window->priv->fav_menu);
 
+	if (window->priv->toolbar)
+	{
+		g_object_unref (window->priv->toolbar);
+	}
+
 	if (window->priv->ppview_toolbar)
 	{
 		g_object_unref (window->priv->ppview_toolbar);
@@ -640,6 +654,11 @@ ephy_window_finalize (GObject *object)
 	{
 		g_list_free (window->priv->toolbars);
 	}
+
+	g_object_unref (window->priv->action_group);
+	egg_menu_merge_remove_action_group (EGG_MENU_MERGE (window->ui_merge),
+					    window->priv->action_group);
+	g_object_unref (window->ui_merge);
 
 	g_free (window->priv);
 
@@ -823,6 +842,7 @@ ephy_window_set_chrome (EphyWindow *window,
 		if (window->priv->ppview_toolbar)
 		{
 			g_object_unref (window->priv->ppview_toolbar);
+			window->priv->ppview_toolbar = NULL;
 		}
 	}
 

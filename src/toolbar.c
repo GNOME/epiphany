@@ -29,6 +29,7 @@
 #include "ephy-favicon-action.h"
 #include "ephy-navigation-action.h"
 #include "window-commands.h"
+#include "ephy-debug.h"
 
 static void toolbar_class_init (ToolbarClass *klass);
 static void toolbar_init (Toolbar *t);
@@ -150,8 +151,8 @@ toolbar_get_property (GObject *object,
 static void
 toolbar_setup_widgets (Toolbar *t)
 {
-	egg_menu_merge_add_ui_from_file (t->priv->ui_merge,
-					 ephy_file ("epiphany-toolbar.xml"), NULL);
+	egg_menu_merge_add_ui_from_file
+		(t->priv->ui_merge, ephy_file ("epiphany-toolbar.xml"), NULL);
 	egg_menu_merge_ensure_update (t->priv->ui_merge);
 }
 
@@ -260,18 +261,23 @@ toolbar_finalize (GObject *object)
 {
 	Toolbar *t;
 	ToolbarPrivate *p;
+	EggMenuMerge *merge;
 
         g_return_if_fail (object != NULL);
         g_return_if_fail (IS_TOOLBAR (object));
 
 	t = TOOLBAR (object);
 	p = t->priv;
+	merge = EGG_MENU_MERGE (t->priv->window->ui_merge);
 
         g_return_if_fail (p != NULL);
 
 	g_object_unref (t->priv->action_group);
+	egg_menu_merge_remove_action_group (merge, t->priv->action_group);
 
         g_free (t->priv);
+
+	LOG ("Toolbar finalized")
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }

@@ -23,6 +23,7 @@
 #include "ephy-dnd.h"
 #include "ephy-favicon-cache.h"
 #include "ephy-shell.h"
+#include "ephy-debug.h"
 
 struct EphyFaviconActionPrivate
 {
@@ -269,6 +270,8 @@ ephy_favicon_action_finalize (GObject *object)
 	g_object_unref (action->priv->cache);
 
 	g_free (action->priv);
+
+	LOG ("Favicon action finalized")
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }

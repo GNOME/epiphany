@@ -1,3 +1,25 @@
+2003-01-23  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* TODO:
+	* lib/ephy-autocompletion.c: (ephy_autocompletion_reset),
+	(ephy_autocompletion_set_key),
+	(ephy_autocompletion_update_matches_full):
+	* lib/widgets/ephy-location-entry.c:
+	(get_editable_number_of_chars), (position_is_at_end),
+	(ephy_location_entry_key_press_event_cb):
+	* src/ephy-favicon-action.c: (ephy_favicon_action_finalize):
+	* src/ephy-favorites-menu.c: (ephy_favorites_menu_finalize_impl),
+	(ephy_favorites_menu_rebuild):
+	* src/ephy-window.c: (add_widget), (setup_window),
+	(ephy_window_finalize), (ephy_window_set_chrome):
+	* src/ppview-toolbar.c: (toolbar_update_sensitivity),
+	(ppview_toolbar_set_window), (toolbar_cmd_ppv_close):
+	* src/toolbar.c: (toolbar_setup_widgets), (toolbar_finalize):
+
+	Fix autocompletion to not show duped entries.
+	Complete print preview impl.
+	Fix actions referencing, a bug in egg still blocking it though.
+
 2003-01-21  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* embed/ephy-history.c: (ephy_history_host_set_title):

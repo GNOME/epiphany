@@ -174,7 +174,6 @@ ephy_autocompletion_reset (EphyAutocompletion *ac)
 
 	START_PROFILER ("Resetting autocompletion")
 
-	acma_destroy (&p->matches);
 	g_free (p->common_prefix);
 	p->common_prefix = NULL;
 	p->status = GAS_NEEDS_FULL_UPDATE;
@@ -218,6 +217,8 @@ ephy_autocompletion_set_key (EphyAutocompletion *ac,
 				(EPHY_AUTOCOMPLETION_SOURCE (li->data), key);
 		}
 	}
+
+	LOG ("Set key %s, old key %s", key, p->keys[0])
 
 	if (keylen >= p->key_lengths[0]
 	    && !strncmp (p->keys[0], key, p->key_lengths[0]))
@@ -443,6 +444,8 @@ ephy_autocompletion_update_matches_full (EphyAutocompletion *ac)
 	GSList *li;
 
 	START_PROFILER ("Update full")
+
+	acma_destroy (&p->matches);
 
 	for (li = p->sources; li; li = li->next)
 	{
