@@ -2,6 +2,30 @@
 
 	* doc/reference/Makefile.am:
 
+	Removed references to removed files.
+
+2004-12-02  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-history.c: (ephy_history_class_init):
+	* embed/ephy-history.h:
+	* embed/mozilla/EphyHistoryListener.cpp:
+	* embed/mozilla/EphyHistoryListener.h:
+	* embed/mozilla/EphyUtils.cpp:
+	* embed/mozilla/EphyUtils.h:
+	* embed/mozilla/GlobalHistory.cpp:
+	* embed/mozilla/GlobalHistory.h:
+	* embed/mozilla/Makefile.am:
+	* src/bookmarks/ephy-bookmarks.c: (redirect_cb),
+	(ephy_setup_history_notifiers):
+	* src/ephy-window.c: (confirm_close_with_modified_forms),
+	(ensure_window_group), (ephy_window_init):
+
+	Update bookmarks from HTTP 301. Fixes bug #126312.
+
+2004-12-02  Christian Persch  <chpe@cvs.gnome.org>
+
+	* doc/reference/Makefile.am:
+
 	Downgrade automake requirement to 1.8.
 
 2004-12-01  Christian Persch  <chpe@cvs.gnome.org>

@@ -32,7 +32,6 @@ CFILE_GLOB=$(top_srcdir)/lib/*.c
 IGNORE_HFILES = \
 	config.h \
 	eel-gconf-extensions.h \
-	ephy-bonobo-extensions.h \
 	ephy-debug.h \
 	ephy-dialog.h \
 	ephy-dnd.h \
@@ -48,10 +47,7 @@ IGNORE_HFILES = \
 	ephy-state.h \
 	ephy-stock-icons.h \
 	ephy-string.h \
-	ephy-thread-helpers.h \
 	ephy-zoom.h \
-	ephy-arrow-toolbutton.h \
-	ephy-label.h \
 	ephy-location-entry.h \
 	ephy-node-view.h \
 	ephy-search-entry.h \
@@ -72,16 +68,11 @@ IGNORE_HFILES = \
 	ephy-history.h \
 	find-dialog.h \
 	print-dialog.h \
-	BaseProtocolContentHandler.h \
-	BaseProtocolHandler.h \
 	ContentHandler.h \
 	EphyAboutRedirector.h \
 	EphyBrowser.h \
-	EphyEventListener.h \
 	EphyHeaderSniffer.h \
 	EventContext.h \
-	ExternalProtocolHandlers.h \
-	ExternalProtocolService.h \
 	FilePicker.h \
 	GlobalHistory.h \
 	GtkNSSClientAuthDialogs.h \
@@ -131,7 +122,6 @@ IGNORE_HFILES = \
 	ephy-statusbar.h \
 	ephy-tabs-menu.h \
 	ephy-toolbars-model.h \
-	language-editor.h \
 	pdm-dialog.h \
 	popup-commands.h \
 	ppview-toolbar.h \
