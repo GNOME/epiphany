@@ -1,3 +1,25 @@
+2003-11-24  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* embed/mozilla/BaseProtocolContentHandler.cpp:
+	* embed/mozilla/BaseProtocolContentHandler.h:
+	* embed/mozilla/BaseProtocolHandler.cpp:
+	* embed/mozilla/BaseProtocolHandler.h:
+
+	Remove.
+
+	* embed/mozilla/ExternalProtocolHandlers.cpp:
+	* embed/mozilla/ExternalProtocolHandlers.h:
+
+	Merge base implementations here. No need
+	of using 200 files for a work around of
+	mozilla problems ;)
+
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/MozRegisterComponents.cpp:
+
+	Use ftp CID directly from mozilla headers
+	instead of doing a copy of it in ours.
+
 2003-11-23  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-export.c:

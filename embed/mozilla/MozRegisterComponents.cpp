@@ -39,6 +39,7 @@
 #include <nsIComponentRegistrar.h>
 #include <nsCOMPtr.h>
 #include <nsILocalFile.h>
+#include <nsNetCID.h>
 
 #include <glib.h>
 

@@ -16,13 +16,54 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+/* We are registering protocol handlers for news, mailto and irc
+   because mozilla load all modules on startup, so if you have these
+   components installed it will try to use them as protocol handlers.
+   Our implementation just forward to external protocol service.
+   Ftp is a special case, it can be handled by mozilla but we
+   want to use an external client when one is configured in GNOME
+   handlers.
+   IMPORTANT: there is no need to register handlers for other protocols
+   here. Once they are configured in GNOME, they will just work.
+*/
+
 #ifndef EXTERNAL_PROTOCOL_HANDLERS
 #define EXTERNAL_PROTOCOL_HANDLERS
 
 #include "nsError.h"
-#include "BaseProtocolContentHandler.h"
+#include "nsIContentHandler.h"
 #include "nsIProtocolHandler.h"
 #include "nsCURILoader.h"
+#include "nsString.h"
+
+class GBaseProtocolHandler : public nsIProtocolHandler
+{
+  public:
+	NS_DECL_ISUPPORTS
+	NS_DECL_NSIPROTOCOLHANDLER
+
+	GBaseProtocolHandler (const char *aScheme);
+	virtual ~GBaseProtocolHandler();
+	/* additional members */
+  protected:
+	nsCString mScheme;
+};
+
+class GBaseProtocolContentHandler : public GBaseProtocolHandler,
+				    public nsIContentHandler
+{
+  public:
+	NS_DECL_ISUPPORTS
+	NS_DECL_NSICONTENTHANDLER
+
+	NS_IMETHODIMP NewChannel(nsIURI *aURI, nsIChannel **_retval);
+
+	GBaseProtocolContentHandler (const char *aScheme);
+	virtual ~GBaseProtocolContentHandler();
+	/* additional members */
+  protected:
+	nsCString mMimeType;
+};
 
 #define G_IRC_PROTOCOL_CID			     \
 { /* aabe33d3-7455-4d8f-87e7-43e4541ace4e */         \
@@ -58,15 +99,6 @@ class GIRCProtocolHandler : public GBaseProtocolContentHandler
 #define G_FTP_CONTENT_CONTRACTID NS_CONTENT_HANDLER_CONTRACTID_PREFIX \
 				 "application-x-gnome-ftp"
 #define G_FTP_CONTENT_CLASSNAME "Epiphany's FTP Content Handler"
-
-#define NS_FTPPROTOCOLHANDLER_CID \
-{							\
-    0x25029490,						\
-    0xf132,						\
-    0x11d2,						\
-    {0x95, 0x88, 0x0, 0x80, 0x5f, 0x36, 0x9f, 0x95}	\
-}
-#define NS_FTPPROTOCOLHANDLER_CLASSNAME "The FTP Protocol Handler"
 
 class GFtpProtocolHandler : public GBaseProtocolContentHandler
 {

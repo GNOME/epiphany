@@ -47,10 +47,6 @@ endif
 noinst_LTLIBRARIES = libephymozillaembed.la
 
 libephymozillaembed_la_SOURCES = 	\
-	BaseProtocolHandler.cpp         \
-	BaseProtocolHandler.h           \
-	BaseProtocolContentHandler.cpp  \
-	BaseProtocolContentHandler.h    \
 	ContentHandler.cpp		\
 	ContentHandler.h		\
 	EphyAboutRedirector.cpp		\
