@@ -29,8 +29,6 @@ libephy_la_SOURCES = \
 	ephy-dnd.h				\
 	ephy-file-helpers.c			\
 	ephy-file-helpers.h			\
-	ephy-filesystem-autocompletion.c	\
-	ephy-filesystem-autocompletion.h	\
 	ephy-glade.c				\
 	ephy-glade.h				\
 	ephy-gobject-misc.h			\
