@@ -1418,7 +1418,10 @@ ephy_node_new_id (void)
 static void
 id_factory_set_to (gulong new_factory_pos)
 {
-	id_factory = new_factory_pos + 1;
+	if (new_factory_pos > id_factory)
+	{
+		id_factory = new_factory_pos + 1;
+	}
 }
 
 /* evillish hacks to temporarily readlock->writelock and v.v. */
