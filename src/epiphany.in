@@ -11,6 +11,24 @@ else
 	exit
 fi
 
+if [ -z "$MOZ_PLUGIN_PATH" ]; then
+    MOZ_PLUGIN_PATH=/usr/lib/mozilla/plugins:/usr/libexec/plugins/mozilla
+    export MOZ_PLUGIN_PATH
+fi
+
+#Migration
+if [ ! -e $HOME/.gnome2/epiphany/mozilla/epiphany -a -d $HOME/.galeon/mozilla/galeon ]; then
+    mkdir -p $HOME/.gnome2/epiphany/mozilla/epiphany && \
+	cp $HOME/.galeon/mozilla/galeon/*.s \
+	$HOME/.galeon/mozilla/galeon/*.w \
+	$HOME/.galeon/mozilla/galeon/cookies.text \
+	$HOME/.galeon/mozilla/galeon/cookperm.txt \
+	$HOME/.galeon/mozilla/galeon/prefs.js \
+	$HOME/.gnome2/epiphany/mozilla/epiphany/ \
+	> /dev/null 2>&1 \
+	|| :
+fi
+
 LD_LIBRARY_PATH=$MOZILLA_HOME:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
 
