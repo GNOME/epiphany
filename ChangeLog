@@ -1,5 +1,13 @@
 2003-06-10  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* src/bookmarks/ephy-topics-selector.c:
+	(ephy_topics_selector_apply), (topic_clicked), (topic_key_pressed),
+	(ephy_topics_build_ui), (ephy_topics_selector_new):
+
+	Small cleanups. Dont crash when adding a bookmark without topics.
+
+2003-06-10  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* src/bookmarks/ephy-topics-selector.c: (ephy_topics_build_ui):
 
 	Dont set sort function on idle. The sort is visible and we can

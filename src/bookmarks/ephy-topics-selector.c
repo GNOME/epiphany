@@ -60,7 +60,7 @@ enum
 	COL_HAS_TOPIC,
 	COL_TOPIC,
 	COL_NODE
-};;
+};
 
 static GObjectClass *parent_class = NULL;
 
@@ -267,7 +267,11 @@ ephy_topics_selector_apply (EphyTopicsSelector *editor)
 
 	if (editor->priv->bookmark == NULL) return;
 
-	gtk_tree_model_get_iter_first (model, &iter);
+	if (!gtk_tree_model_get_iter_first (model, &iter))
+	{
+		return;
+	}
+
 	do
 	{
 		GValue value = { 0, };
@@ -299,15 +303,15 @@ ephy_topics_selector_apply (EphyTopicsSelector *editor)
 }
 
 static gboolean
-topic_clicked (GtkTreeView *tree_view, 
-		GdkEventButton *event,
-		EphyTopicsSelector *selector)
+topic_clicked (GtkTreeView *tree_view,
+	       GdkEventButton *event,
+	       EphyTopicsSelector *selector)
 {
 	GtkTreePath *path;
 
 	if (event->window != gtk_tree_view_get_bin_window (tree_view))
 		return FALSE;
-	
+
 	if (gtk_tree_view_get_path_at_pos (tree_view,
 					   (gint) event->x,
 					   (gint) event->y,
@@ -318,12 +322,12 @@ topic_clicked (GtkTreeView *tree_view,
 		topic_toggled (NULL, path_str, selector);
 		g_free(path_str);
 	}
-	
+
 	return FALSE;
 }
 
 static gboolean
-topic_key_pressed (GtkTreeView *tree_view, 
+topic_key_pressed (GtkTreeView *tree_view,
 		   GdkEventKey *event,
 		   EphyTopicsSelector *selector)
 {
@@ -332,13 +336,13 @@ topic_key_pressed (GtkTreeView *tree_view,
 	GtkTreePath *path = NULL;
 	gchar *path_str;
 
-	switch (event->keyval) 
+	switch (event->keyval)
 	{
 	case GDK_space:
 	case GDK_Return:
 	case GDK_KP_Enter:
 		sel = gtk_tree_view_get_selection (tree_view);
-		
+
 		if (gtk_tree_selection_get_selected (sel, NULL, &iter))
 		{
 			path = gtk_tree_model_get_path (selector->priv->model, &iter);
@@ -351,8 +355,8 @@ topic_key_pressed (GtkTreeView *tree_view,
 	default:
 		break;
 	}
-	
-	return FALSE;	
+
+	return FALSE;
 }
 
 static void
@@ -382,7 +386,7 @@ ephy_topics_build_ui (EphyTopicsSelector *editor)
 	column = gtk_tree_view_column_new_with_attributes
 		("Description", renderer, "text", COL_TOPIC, NULL);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (editor), column);
-	
+
 	g_signal_connect (G_OBJECT (editor), "key_press_event",
 			  G_CALLBACK (topic_key_pressed), editor);
 	g_signal_connect (G_OBJECT (editor), "button_press_event",
@@ -413,6 +417,6 @@ ephy_topics_selector_new (EphyBookmarks *bookmarks,
 			 NULL));
 
 	ephy_topics_build_ui (editor);
-	
+
 	return GTK_WIDGET (editor);
 }
