@@ -116,10 +116,6 @@ trap_handler (const char *log_domain,
 
 			raise (SIGSTOP);
 		}
-		else if (strcmp (ephy_debug_break, "abort") == 0)
-		{
-			raise (SIGABRT);
-		}
 	}
 }
 
