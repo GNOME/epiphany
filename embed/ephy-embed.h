@@ -37,6 +37,7 @@ G_BEGIN_DECLS
 #define EPHY_EMBED_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EMBED, EphyEmbedIface))
 
 #define EPHY_TYPE_EMBED_CHROME_MASK     (ephy_embed_chrome_get_type ())
+#define EPHY_TYPE_EMBED_DOCUMENT_TYPE	(ephy_embed_document_type_get_type ())
 
 typedef struct _EphyEmbed	EphyEmbed;
 typedef struct _EphyEmbedIface	EphyEmbedIface;
@@ -88,6 +89,14 @@ typedef enum
 	STATE_IS_SECURE_HIGH
 } EmbedSecurityLevel;
 
+typedef enum
+{
+	EMBED_DOCUMENT_HTML,
+	EMBED_DOCUMENT_XML,
+	EMBED_DOCUMENT_IMAGE,
+	EMBED_DOCUMENT_OTHER
+} EmbedDocumentType;
+
 struct _EphyEmbedIface
 {
 	GTypeInterface base_iface;
@@ -133,6 +142,8 @@ struct _EphyEmbedIface
 					 const char *uri);
 	gboolean (* modal_alert)	(EphyEmbed *embed);
 	void	 (* modal_alert_closed)	(EphyEmbed *embed);
+	void	 (* document_type)	(EphyEmbed *embed,
+					 EmbedDocumentType type);
 
 	/* Methods  */
 	void		   (* load_url)			(EphyEmbed *embed,
@@ -191,6 +202,8 @@ struct _EphyEmbedIface
 };
 
 GType		  ephy_embed_chrome_get_type		(void);
+
+GType		  ephy_embed_document_type_get_type	(void);
 
 GType		  ephy_embed_get_type			(void);
 

@@ -789,6 +789,13 @@ update_load_state (MozillaEmbed *membed, gint state)
 {
 	MozillaEmbedPrivate *priv = membed->priv;
 
+	if (state & GTK_MOZ_EMBED_FLAG_IS_DOCUMENT &&
+	    state & (GTK_MOZ_EMBED_FLAG_START | GTK_MOZ_EMBED_FLAG_STOP))
+	{
+		g_signal_emit_by_name (membed, "ge-document-type",
+				       priv->browser->GetDocumentType ());
+	}
+
 	if (state & GTK_MOZ_EMBED_FLAG_IS_NETWORK)
 	{
 		if (state & GTK_MOZ_EMBED_FLAG_START)

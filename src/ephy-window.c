@@ -82,6 +82,9 @@ static void ephy_window_view_bookmarksbar_cb    (GtkAction *action,
 			                         EphyWindow *window);
 static void ephy_window_view_popup_windows_cb	(GtkAction *action,
 						 EphyWindow *window);
+static void sync_tab_zoom			(EphyTab *tab,
+						 GParamSpec *pspec,
+						 EphyWindow *window);
 
 static GtkActionEntry ephy_menu_entries [] = {
 
@@ -1208,6 +1211,36 @@ sync_tab_address (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 }
 
 static void
+sync_tab_document_type (EphyTab *tab,
+			GParamSpec *pspec,
+			EphyWindow *window)
+{
+	GtkActionGroup *action_group;
+	GtkAction *action;
+	EmbedDocumentType type;
+	gboolean can_find, enable;
+
+	/* update zoom actions */
+	sync_tab_zoom (tab, NULL, window);
+	
+	type = ephy_tab_get_document_type (tab);
+	can_find = (type != EMBED_DOCUMENT_IMAGE);
+	enable = (type == EMBED_DOCUMENT_HTML);
+
+	action_group = window->priv->action_group;
+	action = gtk_action_group_get_action (action_group, "ViewEncoding");
+	g_object_set (action, "sensitive", enable, NULL);
+	action = gtk_action_group_get_action (action_group, "ViewPageSource");
+	g_object_set (action, "sensitive", enable, NULL);
+	action = gtk_action_group_get_action (action_group, "EditFind");
+	g_object_set (action, "sensitive", can_find, NULL);
+	action = gtk_action_group_get_action (action_group, "EditFindNext");
+	g_object_set (action, "sensitive", can_find, NULL);
+	action = gtk_action_group_get_action (action_group, "EditFindPrev");
+	g_object_set (action, "sensitive", can_find, NULL);
+}
+
+static void
 sync_tab_icon (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	const char *address;
@@ -1507,12 +1540,15 @@ sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
-	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
+	EmbedDocumentType type;
+	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE, can_zoom;
 	float zoom;
 
 	if (window->priv->closing) return;
 
 	zoom = ephy_tab_get_zoom (tab);
+	type = ephy_tab_get_document_type (tab);
+	can_zoom = (type != EMBED_DOCUMENT_IMAGE);
 
 	if (zoom >= ZOOM_MAXIMAL)
 	{
@@ -1527,15 +1563,15 @@ sync_tab_zoom (EphyTab *tab, GParamSpec *pspec, EphyWindow *window)
 		can_zoom_normal = TRUE;
 	}
 
-	toolbar_update_zoom (window->priv->toolbar, zoom);
+	toolbar_update_zoom (window->priv->toolbar, can_zoom, zoom);
 
 	action_group = window->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "ViewZoomIn");
-	g_object_set (action, "sensitive", can_zoom_in, NULL);
+	g_object_set (action, "sensitive", can_zoom_in && can_zoom, NULL);
 	action = gtk_action_group_get_action (action_group, "ViewZoomOut");
-	g_object_set (action, "sensitive", can_zoom_out, NULL);
+	g_object_set (action, "sensitive", can_zoom_out && can_zoom, NULL);
 	action = gtk_action_group_get_action (action_group, "ViewZoomNormal");
-	g_object_set (action, "sensitive", can_zoom_normal, NULL);
+	g_object_set (action, "sensitive", can_zoom_normal && can_zoom, NULL);
 }
 
 static void
@@ -1833,6 +1869,9 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 						      G_CALLBACK (sync_tab_address),
 						      window);
 		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
+						      G_CALLBACK (sync_tab_document_type),
+						      window);
+		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
 						      G_CALLBACK (sync_tab_icon),
 						      window);
 		g_signal_handlers_disconnect_by_func (G_OBJECT (old_tab),
@@ -1877,6 +1916,7 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 	if (new_tab)
 	{
 		sync_tab_address	(new_tab, NULL, window);
+		sync_tab_document_type	(new_tab, NULL, window);
 		sync_tab_icon		(new_tab, NULL, window);
 		sync_tab_load_progress	(new_tab, NULL, window);
 		sync_tab_load_status	(new_tab, NULL, window);
@@ -1891,6 +1931,10 @@ ephy_window_set_active_tab (EphyWindow *window, EphyTab *new_tab)
 		g_signal_connect_object (G_OBJECT (new_tab),
 					 "notify::address",
 					 G_CALLBACK (sync_tab_address),
+					 window, 0);
+		g_signal_connect_object (G_OBJECT (new_tab),
+					 "notify::document-type",
+					 G_CALLBACK (sync_tab_document_type),
 					 window, 0);
 		g_signal_connect_object (G_OBJECT (new_tab),
 					 "notify::icon",

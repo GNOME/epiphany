@@ -85,6 +85,7 @@ struct _EphyTabPrivate
 	GSList *hidden_popups;
 	GSList *shown_popups;
 	TabNavigationFlags nav_flags;
+	EmbedDocumentType document_type;
 };
 
 static void ephy_tab_class_init		(EphyTabClass *klass);
@@ -95,6 +96,7 @@ enum
 {
 	PROP_0,
 	PROP_ADDRESS,
+	PROP_DOCUMENT_TYPE,
 	PROP_ICON,
 	PROP_LOAD_PROGRESS,
 	PROP_LOAD_STATUS,
@@ -190,6 +192,7 @@ ephy_tab_set_property (GObject *object,
 			ephy_tab_set_popups_allowed
 				(tab, g_value_get_boolean (value));
 			break;
+		case PROP_DOCUMENT_TYPE:
 		case PROP_ICON:
 		case PROP_LOAD_PROGRESS:
 		case PROP_LOAD_STATUS:
@@ -217,6 +220,9 @@ ephy_tab_get_property (GObject *object,
 	{
 		case PROP_ADDRESS:
 			g_value_set_string (value, tab->priv->address);
+			break;
+		case PROP_DOCUMENT_TYPE:
+			g_value_set_enum (value, tab->priv->document_type);
 			break;
 		case PROP_ICON:
 			g_value_set_string (value, tab->priv->icon_address);
@@ -350,6 +356,15 @@ ephy_tab_class_init (EphyTabClass *class)
 							      "The tab's address",
 							      "",
 							      G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_DOCUMENT_TYPE,
+					 g_param_spec_enum ("document-type",
+							    "Document Type",
+							    "The tab's documen type",
+							    EPHY_TYPE_EMBED_DOCUMENT_TYPE,
+							    EMBED_DOCUMENT_HTML,
+							    G_PARAM_READABLE));
 
 	g_object_class_install_property (object_class,
 					 PROP_ICON,
@@ -783,6 +798,22 @@ ephy_tab_set_load_status (EphyTab *tab, gboolean status)
 }
 
 /**
+ * ephy_tab_get_document_type:
+ * @tab: an #EphyTab
+ *
+ * Returns the type of the document loaded in @tab.
+ *
+ * Return value: the #EmbedDocumentType
+ **/
+EmbedDocumentType
+ephy_tab_get_document_type (EphyTab *tab)
+{
+	g_return_val_if_fail (EPHY_IS_TAB (tab), EMBED_DOCUMENT_OTHER);
+
+	return tab->priv->document_type;
+}
+
+/**
  * ephy_tab_get_load_status:
  * @tab: an #EphyTab
  *
@@ -1047,6 +1078,19 @@ ephy_tab_content_change_cb (EphyEmbed *embed, const char *address, EphyTab *tab)
 
 	popups_manager_reset (tab);
 	g_object_notify (G_OBJECT (tab), "popups-allowed");
+}
+
+static void
+ephy_tab_document_type_cb (EphyEmbed *embed,
+			   EmbedDocumentType type,
+			   EphyTab *tab)
+{
+	if (tab->priv->document_type != type)
+	{
+		tab->priv->document_type = type;
+g_print ("new doc type %d\n", type);
+		g_object_notify (G_OBJECT (tab), "document-type");
+	}
 }
 
 static void
@@ -1557,6 +1601,7 @@ ephy_tab_init (EphyTab *tab)
 	tab->priv->load_percent = 0;
 	tab->priv->load_status = FALSE;
 	tab->priv->security_level = STATE_IS_UNKNOWN;
+	tab->priv->document_type = EMBED_DOCUMENT_HTML;
 	tab->priv->zoom = 1.0;
 	tab->priv->address_expire = TAB_ADDRESS_EXPIRE_NOW;
 
@@ -1580,6 +1625,9 @@ ephy_tab_init (EphyTab *tab)
 
 	g_signal_connect_object (embed, "link_message",
 				 G_CALLBACK (ephy_tab_link_message_cb),
+				 tab, 0);
+	g_signal_connect_object (embed, "ge_document_type",
+				 G_CALLBACK (ephy_tab_document_type_cb),
 				 tab, 0);
 	g_signal_connect_object (embed, "ge_location",
 				 G_CALLBACK (ephy_tab_address_cb),

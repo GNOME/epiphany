@@ -81,6 +81,7 @@ void	      toolbar_update_navigation_actions (Toolbar *t,
 						 gboolean up);
 
 void	      toolbar_update_zoom		(Toolbar *t,
+						 gboolean can_zoom,
 						 float zoom);
 
 G_END_DECLS

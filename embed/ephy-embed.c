@@ -31,9 +31,9 @@ static void ephy_embed_base_init (gpointer g_class);
 GType
 ephy_embed_chrome_get_type (void)
 {
-	static GType etype = 0;
+	static GType type = 0;
 
-	if (etype == 0)
+	if (G_UNLIKELY (type == 0))
 	{
 		static const GFlagsValue values[] =
 		{
@@ -44,10 +44,32 @@ ephy_embed_chrome_get_type (void)
 		{ 0, NULL, NULL }
 		};
 
-		etype = g_flags_register_static ("EphyEmbedChrome", values);
+		type = g_flags_register_static ("EphyEmbedChrome", values);
 	}
 
-	return etype;
+	return type;
+}
+
+GType
+ephy_embed_document_type_get_type (void)
+{
+	static GType type = 0;
+
+	if (G_UNLIKELY (type == 0))
+	{
+		static const GEnumValue values[] =
+		{
+		{ EMBED_DOCUMENT_HTML, "EMBED_DOCUMENT_HTML", "html" },
+		{ EMBED_DOCUMENT_XML, "EMBED_DOCUMENT_XML", "xml" },
+		{ EMBED_DOCUMENT_IMAGE, "EMBED_DOCUMENT_IMAGE", "image" },
+		{ EMBED_DOCUMENT_OTHER, "EMBED_DOCUMENT_OTHER", "other" },
+		{ 0, NULL, NULL }
+		};
+
+		type = g_enum_register_static ("EphyEmbedDocumentType", values);
+	}
+
+	return type;
 }
 
 GType
@@ -129,7 +151,7 @@ ephy_embed_base_init (gpointer g_class)
 		g_signal_new ("ge_context_menu",
 			      EPHY_TYPE_EMBED,
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyEmbedIface, context_menu),
+			      G_STRUCT_OFFSET (EphyEmbedIface, dom_context_menu),
 			      g_signal_accumulator_true_handled, NULL,
 			      ephy_marshal_BOOLEAN__OBJECT,
 			      G_TYPE_BOOLEAN,
@@ -317,6 +339,23 @@ ephy_embed_base_init (gpointer g_class)
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE,
 			      0);
+
+/**
+ * EphyEmbed::ge-document-type:
+ * @embed:
+ * @type: the new document type
+ *
+ * The ::ge-document-type signal is emitted when @embed determines the type of its document.
+ **/
+		g_signal_new ("ge_document_type",
+			      EPHY_TYPE_EMBED,
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (EphyEmbedIface, document_type),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__ENUM,
+			      G_TYPE_NONE,
+			      1,
+			      EPHY_TYPE_EMBED_DOCUMENT_TYPE);
 
 		initialized = TRUE;
 	}

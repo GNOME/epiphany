@@ -1,3 +1,23 @@
+2004-12-18  Christian Persch  <chpe@cvs.gnome.org>
+
+	* embed/ephy-embed.c: (ephy_embed_chrome_get_type),
+	(ephy_embed_document_type_get_type), (ephy_embed_base_init):
+	* embed/ephy-embed.h:
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/mozilla-embed.cpp:
+	* src/ephy-tab.c: (ephy_tab_set_property), (ephy_tab_get_property),
+	(ephy_tab_class_init), (ephy_tab_get_document_type),
+	(ephy_tab_document_type_cb), (ephy_tab_init):
+	* src/ephy-tab.h:
+	* src/ephy-window.c: (sync_tab_document_type), (sync_tab_zoom),
+	(ephy_window_set_active_tab):
+	* src/toolbar.c: (toolbar_update_zoom):
+	* src/toolbar.h:
+
+	Disable Zoom items for images, and disable zoom, encoding and view source
+	for images and xml (xul) documents. Fixes bug #132240.
+
 2004-12-17  Christian Persch  <chpe@cvs.gnome.org>
 
 	* src/ephy-main.c: (handle_email):

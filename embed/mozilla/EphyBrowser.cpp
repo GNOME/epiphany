@@ -73,8 +73,11 @@
 #include "nsIScriptSecurityManager.h"
 #include "nsIServiceManager.h"
 #include "nsIInterfaceRequestor.h"
+#include <nsIDOMHTMLDocument.h>
+#include <nsIDOMXMLDocument.h>
 
 #ifdef ALLOW_PRIVATE_API
+#include <content/nsIImageDocument.h>
 /* not frozen yet */
 #include "nsIContentPolicy.h"
 /* will never be frozen */
@@ -1128,4 +1131,34 @@ EphyBrowser::ShowCertificate ()
 #else
 	return NS_OK;
 #endif
+}
+
+EmbedDocumentType
+EphyBrowser::GetDocumentType ()
+{
+  EmbedDocumentType type = EMBED_DOCUMENT_OTHER;
+
+  nsresult rv;
+  nsCOMPtr<nsIDOMDocument> domDoc;
+  rv = GetDocument (getter_AddRefs (domDoc));
+  NS_ENSURE_SUCCESS (rv, type);
+
+  nsCOMPtr<nsIDOMHTMLDocument> htmlDoc (do_QueryInterface (domDoc));
+  nsCOMPtr<nsIDOMXMLDocument> xmlDoc (do_QueryInterface (domDoc));
+  nsCOMPtr<nsIImageDocument> imgDoc (do_QueryInterface (domDoc));
+
+  if (xmlDoc)
+    {
+      type = EMBED_DOCUMENT_XML;
+    }
+  else if (imgDoc)
+    {
+      type = EMBED_DOCUMENT_IMAGE;
+    }
+  else if (htmlDoc)
+    {
+      type = EMBED_DOCUMENT_HTML;
+    }
+
+  return type;
 }

@@ -639,14 +639,18 @@ toolbar_update_navigation_actions (Toolbar *t, gboolean back, gboolean forward, 
 }
 
 void
-toolbar_update_zoom (Toolbar *t, float zoom)
+toolbar_update_zoom (Toolbar *t,
+		     gboolean can_zoom,
+		     float zoom)
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
 
 	action_group = t->priv->action_group;
 	action = gtk_action_group_get_action (action_group, "Zoom");
-	g_object_set (action, "zoom", zoom, NULL);
+	g_object_set (action, "zoom", can_zoom ? zoom : 1.0,
+			      "sensitive", can_zoom,
+			      NULL);
 }
 
 Toolbar *

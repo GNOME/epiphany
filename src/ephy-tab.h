@@ -76,6 +76,8 @@ EphyEmbed              *ephy_tab_get_embed		(EphyTab *tab);
 
 EphyTab		       *ephy_tab_for_embed		(EphyEmbed *embed);
 
+EmbedDocumentType	ephy_tab_get_document_type	(EphyTab *tab);
+
 const char             *ephy_tab_get_icon_address	(EphyTab *tab);
 
 gboolean		ephy_tab_get_load_status	(EphyTab *tab);

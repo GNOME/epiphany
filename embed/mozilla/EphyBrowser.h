@@ -147,6 +147,8 @@ public:
 	nsresult GetSecurityInfo (PRUint32 *aState, nsACString &aDescription);
 	nsresult ShowCertificate ();
 
+        EmbedDocumentType GetDocumentType ();
+
 	nsCOMPtr<nsIWebBrowser> mWebBrowser;
 private:
 	GtkWidget *mEmbed;
