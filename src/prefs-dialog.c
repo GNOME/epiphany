@@ -1084,9 +1084,11 @@ create_language_section (EphyDialog *dialog)
 static char*
 get_download_button_label ()
 {
-	char *key, *label;
+	char *key, *label, *downloads_path;
 
 	key = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
+	downloads_path = g_build_path (g_get_home_dir (), "Desktop",
+				       _("Downloads"), NULL);
 
 	if (g_utf8_collate (key, "~/Desktop") == 0)
 	{
@@ -1102,7 +1104,7 @@ get_download_button_label ()
 		 * filechooser */
 		label = g_strdup (_("Home"));
 	}
-	else if (g_utf8_collate (key, "~/Downloads") == 0)
+	else if (g_utf8_collate (key, downloads_path) == 0)
 	{
 		g_free (key);
 		label = g_strdup (_("Downloads"));
@@ -1111,6 +1113,8 @@ get_download_button_label ()
 	{
 		label = key;
 	}
+
+	g_free (downloads_path);
 
 	return label;
 }

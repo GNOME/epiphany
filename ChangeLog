@@ -1,3 +1,21 @@
+2004-01-24  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* lib/ephy-dialog.c: (setup_default_size), (ephy_dialog_init),
+	(ephy_dialog_set_property), (ephy_dialog_get_property),
+	(ephy_dialog_class_init):
+
+	Add a persist-position property.
+
+	* embed/downloader-view.c: (downloader_view_new):
+
+	Persist downloader position.
+
+	* src/prefs-dialog.c: (get_download_button_label):
+	* embed/mozilla/MozDownload.cpp:
+	* data/epiphany.schemas.in:
+
+	Default to ~/Desktop/Downloads.
+
 2004-01-23  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* data/epiphany.schemas.in:

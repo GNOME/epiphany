@@ -50,6 +50,7 @@
 #include "eel-gconf-extensions.h"
 #include "ephy-prefs.h"
 #include <libgnomevfs/gnome-vfs-utils.h>
+#include <glib/gi18n.h>
 
 #include "nsIExternalHelperAppService.h"
 #include "nsDirectoryServiceDefs.h"
@@ -537,13 +538,21 @@ nsresult InitiateMozillaDownload (nsIDOMDocument *domDocument, nsIURI *sourceURI
 static char*
 GetFilePath (const char *filename)
 {
-	char *path, *download_dir, *expanded;
+	char *path, *download_dir, *expanded, *tmp;
 
 	download_dir = eel_gconf_get_string (CONF_STATE_DOWNLOAD_DIR);
+
 	if (!download_dir)
 	{
 		/* Emergency download destination */
 		download_dir = g_strdup (g_get_home_dir ());
+	}
+	else if (g_utf8_collate (download_dir, "Downloads") == 0)
+	{
+		tmp = g_build_filename (g_get_home_dir (), "Desktop",
+				        _("Downloads"), NULL);
+		g_free (download_dir);
+		download_dir = tmp;
 	}
 
 	expanded = gnome_vfs_expand_initial_tilde (download_dir);

@@ -210,8 +210,9 @@ downloader_view_finalize (GObject *object)
 DownloaderView *
 downloader_view_new (void)
 {
-	return EPHY_DOWNLOADER_VIEW (g_object_new
-			(EPHY_TYPE_DOWNLOADER_VIEW, NULL));
+	return EPHY_DOWNLOADER_VIEW (g_object_new (EPHY_TYPE_DOWNLOADER_VIEW,
+			 			   "persist-position", TRUE,
+			 			   NULL));
 }
 
 static char *

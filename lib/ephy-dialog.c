@@ -43,7 +43,8 @@ enum
 {
 	PROP_0,
 	PROP_PARENT_WINDOW,
-	PROP_MODAL
+	PROP_MODAL,
+	PROP_PERSIST_POSITION
 };
 
 typedef enum
@@ -84,6 +85,7 @@ struct EphyDialogPrivate
 	gboolean has_default_size;
 	gboolean disposing;
 	gboolean initialized;
+	gboolean persist_position;
 };
 
 #define SPIN_DELAY 0.20
@@ -968,6 +970,8 @@ setup_default_size (EphyDialog *dialog)
 	{
 		ephy_state_add_window (dialog->priv->dialog,
 				       dialog->priv->name, -1, -1,
+				       dialog->priv->persist_position ?
+				       EPHY_STATE_WINDOW_SAVE_POSITION :
 				       EPHY_STATE_WINDOW_SAVE_SIZE);
 
 		dialog->priv->has_default_size = TRUE;
@@ -1274,6 +1278,7 @@ ephy_dialog_init (EphyDialog *dialog)
 	dialog->priv->initialized = FALSE;
 	dialog->priv->has_default_size = FALSE;
 	dialog->priv->disposing = FALSE;
+	dialog->priv->persist_position = FALSE;
 
 	dialog->priv->props = g_hash_table_new_full 
 		(g_str_hash, g_str_equal, NULL, (GDestroyNotify) free_prop_info);
@@ -1329,6 +1334,9 @@ ephy_dialog_set_property (GObject *object,
 		case PROP_MODAL:
 			ephy_dialog_set_modal (dialog, g_value_get_boolean (value));
 			break;
+		case PROP_PERSIST_POSITION:
+			dialog->priv->persist_position = g_value_get_boolean (value);
+			break;
 	}
 }
 
@@ -1347,6 +1355,10 @@ ephy_dialog_get_property (GObject *object,
 			break;
 		case PROP_MODAL:
 			g_value_set_boolean (value, dialog->priv->modal);
+			break;
+		case PROP_PERSIST_POSITION:
+			g_value_set_boolean (value, dialog->priv->persist_position);
+			break;
 	}
 }
 
@@ -1389,6 +1401,14 @@ ephy_dialog_class_init (EphyDialogClass *klass)
 					 g_param_spec_boolean ("Modal",
 							       "Modal",
 							       "Modal dialog",
+							       FALSE,
+							       G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_PERSIST_POSITION,
+					 g_param_spec_boolean ("persist-position",
+							       "Persist position",
+							       "Persist dialog position",
 							       FALSE,
 							       G_PARAM_READWRITE));
 
