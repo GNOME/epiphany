@@ -22,6 +22,7 @@
 #include <config.h>
 #endif
 
+#include <glib.h>
 #include <bonobo/bonobo-i18n.h>
 #include <stdlib.h>
 #include <string.h>
@@ -206,6 +207,7 @@ ephy_node_finalize (EphyNode *node)
 	g_ptr_array_free (node->children, FALSE);
 
 	g_static_rw_lock_free (node->lock);
+	g_free (node->lock);
 
 	g_free (node);
 }
@@ -781,6 +783,7 @@ ephy_node_save_to_xml (EphyNode *node,
 {
 	xmlNodePtr xml_node;
 	char *xml;
+	char xml_buf [G_ASCII_DTOSTR_BUF_SIZE];
 	guint i;
 
 	g_return_if_fail (EPHY_IS_NODE (node));
@@ -834,14 +837,14 @@ ephy_node_save_to_xml (EphyNode *node,
 			g_free (xml);
 			break;
 		case G_TYPE_FLOAT:
-			xml = g_strdup_printf ("%f", g_value_get_float (value));
-			xmlNodeSetContent (value_xml_node, xml);
-			g_free (xml);
+			g_ascii_dtostr (xml_buf, sizeof (xml_buf), 
+					g_value_get_float (value));
+			xmlNodeSetContent (value_xml_node, xml_buf);
 			break;
 		case G_TYPE_DOUBLE:
-			xml = g_strdup_printf ("%f", g_value_get_double (value));
-			xmlNodeSetContent (value_xml_node, xml);
-			g_free (xml);
+			g_ascii_dtostr (xml_buf, sizeof (xml_buf),
+					g_value_get_double (value));
+			xmlNodeSetContent (value_xml_node, xml_buf);
 			break;
 		case G_TYPE_POINTER:
 		{
@@ -967,10 +970,10 @@ ephy_node_new_from_xml (EphyNodeDb *db, xmlNodePtr xml_node)
 				g_value_set_long (value, atol (xml));
 				break;
 			case G_TYPE_FLOAT:
-				g_value_set_float (value, atof (xml));
+				g_value_set_float (value, g_ascii_strtod (xml, NULL));
 				break;
 			case G_TYPE_DOUBLE:
-				g_value_set_double (value, atof (xml));
+				g_value_set_double (value, g_ascii_strtod (xml, NULL));
 				break;
 			case G_TYPE_POINTER:
 			{

@@ -1,5 +1,16 @@
 2003-07-06  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/ephy-node.c: (ephy_node_finalize):
+
+	Fix mem leak.
+
+	* lib/ephy-node.c: (ephy_node_save_to_xml), (ephy_node_new_from_xml):
+
+	Use locale-independent functions g_ascii_strtod and g_ascii_dtostr
+	when reading/writing float and double values.
+
+2003-07-06  Christian Persch  <chpe@cvs.gnome.org>
+
 	* embed/ephy-favicon-cache.c: (ephy_favicon_cache_finalize):
 
 	Fix mem leak.
