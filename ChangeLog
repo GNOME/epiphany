@@ -1,5 +1,13 @@
 2004-03-21  Christian Persch  <chpe@cvs.gnome.org>
 
+	* embed/mozilla/EphyContentPolicy.h:
+	* embed/mozilla/MozRegisterComponents.cpp:
+
+	Don't override nsWebBrowserContentPolicy contract ID, just register our own
+	content policy with the category manager.
+
+2004-03-21  Christian Persch  <chpe@cvs.gnome.org>
+
 	* configure.in:
 	* data/Makefile.am:
 	R data/epiphany-1.2.pc.in:

@@ -43,6 +43,7 @@
 #endif
 #include <nsIGenericFactory.h>
 #include <nsIComponentRegistrar.h>
+#include <nsICategoryManager.h>
 #include <nsCOMPtr.h>
 #include <nsILocalFile.h>
 #include <nsNetCID.h>
@@ -69,6 +70,22 @@ NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSClientAuthDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSDialogs)
 NS_GENERIC_FACTORY_CONSTRUCTOR(GtkNSSKeyPairDialogs)
 #endif
+ 
+static NS_METHOD
+RegisterContentPolicy(nsIComponentManager *aCompMgr, nsIFile *aPath,
+		      const char *registryLocation, const char *componentType,
+		      const nsModuleComponentInfo *info)
+{
+	nsCOMPtr<nsICategoryManager> cm =
+		do_GetService(NS_CATEGORYMANAGER_CONTRACTID);
+	NS_ENSURE_TRUE (cm, NS_ERROR_FAILURE);
+
+	nsXPIDLCString oldval;
+	return cm->AddCategoryEntry("content-policy",
+				    EPHY_CONTENT_POLICY_CONTRACTID,
+				    EPHY_CONTENT_POLICY_CONTRACTID,
+				    PR_TRUE, PR_TRUE, getter_Copies (oldval));
+}
 
 static const nsModuleComponentInfo sAppComps[] = {
 	{
@@ -195,11 +212,10 @@ static const nsModuleComponentInfo sAppComps[] = {
 		EPHY_CONTENT_POLICY_CLASSNAME,
 		EPHY_CONTENT_POLICY_CID,
 		EPHY_CONTENT_POLICY_CONTRACTID,
-		EphyContentPolicyConstructor
-	}
+		EphyContentPolicyConstructor,
+		RegisterContentPolicy
+	},
 };
-
-static const int sNumAppComps = sizeof(sAppComps) / sizeof(nsModuleComponentInfo);
 
 static const nsModuleComponentInfo sFtpComps = {
 	G_FTP_PROTOCOL_CLASSNAME,
@@ -224,7 +240,11 @@ mozilla_register_components (void)
 	NS_GetComponentRegistrar(getter_AddRefs(cr));
 	NS_ENSURE_TRUE (cr, FALSE);
 
-	for (int i = 0; i < sNumAppComps; i++)
+	nsCOMPtr<nsIComponentManager> cm;
+	NS_GetComponentManager (getter_AddRefs (cm));
+	NS_ENSURE_TRUE (cm, FALSE);
+
+	for (int i = 0; i < G_N_ELEMENTS (sAppComps); i++)
 	{
 		nsCOMPtr<nsIGenericFactory> componentFactory;
 		rv = NS_NewGenericFactory(getter_AddRefs(componentFactory),
@@ -246,6 +266,17 @@ mozilla_register_components (void)
 			g_warning ("Failed to register %s\n", sAppComps[i].mDescription);
 
 			ret = FALSE;
+		}
+
+		if (sAppComps[i].mRegisterSelfProc)
+		{
+			rv = sAppComps[i].mRegisterSelfProc (cm, nsnull, nsnull, nsnull, &sAppComps[i]);
+
+			if (NS_FAILED (rv))
+			{
+				g_warning ("Failed to register-self for %s\n", sAppComps[i].mDescription);
+				ret = FALSE;
+			}
 		}
 	}
 

@@ -26,6 +26,7 @@
 #include "GlobalHistory.h"
 #include "ephy-embed.h"
 #include "ephy-string.h"
+#include "ephy-debug.h"
 
 #include <gtkmozembed_internal.h>
 #include <unistd.h>
@@ -85,11 +86,13 @@
 
 EphyEventListener::EphyEventListener(void)
 {
+	LOG ("EphyEventListener ctor (%p)", this)
 	mOwner = nsnull;
 }
 
 EphyEventListener::~EphyEventListener()
 {
+	LOG ("EphyEventListener dtor (%p)", this)
 }
 
 NS_IMPL_ISUPPORTS1(EphyEventListener, nsIDOMEventListener)
