@@ -24,7 +24,7 @@
 #include "ephy-debug.h"
 #include "mozilla-embed.h"
 #include "MozillaPrivate.h"
-#include "EphyWrapper.h"
+#include "EphyBrowser.h"
 #include "EventContext.h"
 #include "ephy-debug.h"
 
@@ -223,10 +223,10 @@ signal_connections[] =
 
 struct MozillaEmbedPrivate
 {
-	MozillaEmbedPrivate() : wrapper(NULL), security_state(-1), no_page(1)
+	MozillaEmbedPrivate() : browser(NULL), security_state(-1), no_page(1)
 	{ /* nothing */ }
 
-	EphyWrapper *wrapper;
+	EphyBrowser *browser;
 	nsCOMPtr<nsIRequest> request;
 	gint security_state;
 
@@ -249,7 +249,7 @@ impl_manager_do_command (EphyCommandManager *manager,
 	nsresult result = NS_OK;
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(manager)->priv;
 
-        result = mpriv->wrapper->DoCommand (command);
+        result = mpriv->browser->DoCommand (command);
 	
 	return result ? G_OK : G_FAILED;
 }
@@ -334,7 +334,7 @@ impl_find_next (EphyEmbed *embed,
 
         PRBool didFind;
 
-        result = mpriv->wrapper->Find (backwards, &didFind);
+        result = mpriv->browser->Find (backwards, &didFind);
 	
 	return didFind ? G_OK : G_FAILED;
 }
@@ -358,7 +358,7 @@ impl_find_set_properties (EphyEmbed *embed,
 	nsresult result = NS_OK;
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
-        result = mpriv->wrapper->FindSetProperties
+        result = mpriv->browser->FindSetProperties
 		((NS_ConvertUTF8toUCS2(search_string)).get(),
 		 case_sensitive, wrap_around); 
 	
@@ -412,11 +412,11 @@ mozilla_embed_realize (GtkWidget *widget)
 	(* GTK_WIDGET_CLASS(parent_class)->realize) (widget);
 
 	nsresult result;
-	result = mpriv->wrapper->Init (GTK_MOZ_EMBED (widget));
+	result = mpriv->browser->Init (GTK_MOZ_EMBED (widget));
 
 	if (NS_FAILED(result))
 	{
-               	g_warning ("Wrapper initialization failed");
+               	g_warning ("Browser initialization failed");
 	}
 }
 
@@ -442,17 +442,17 @@ mozilla_embed_init (MozillaEmbed *embed)
 
 	embed->priv->no_page = 1;
 	embed->priv->browser_document_initialized = FALSE;
-	embed->priv->wrapper = new EphyWrapper ();
+	embed->priv->browser = new EphyBrowser ();
 
 	mozilla_embed_connect_signals (embed);
 }
 
 gpointer
-mozilla_embed_get_ephy_wrapper (MozillaEmbed *embed)
+mozilla_embed_get_ephy_browser (MozillaEmbed *embed)
 {
-	g_return_val_if_fail (embed->priv->wrapper != NULL, NULL);
+	g_return_val_if_fail (embed->priv->browser != NULL, NULL);
 	
-	return embed->priv->wrapper;
+	return embed->priv->browser;
 }
 
 static void 
@@ -487,11 +487,11 @@ mozilla_embed_destroy (GtkObject *object)
                          (void *)object);
         }
 
-	if (embed->priv->wrapper)
+	if (embed->priv->browser)
 	{
-		embed->priv->wrapper->Destroy();
-        	delete embed->priv->wrapper;
-        	embed->priv->wrapper = NULL;
+		embed->priv->browser->Destroy();
+        	delete embed->priv->browser;
+        	embed->priv->browser = NULL;
 	}
 	
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
@@ -764,13 +764,13 @@ impl_get_location (EphyEmbed *embed,
 	
 	if (toplevel)
 	{
-		rv = mpriv->wrapper->GetDocumentUrl (url);
+		rv = mpriv->browser->GetDocumentUrl (url);
 		l = (NS_SUCCEEDED (rv) && !url.IsEmpty()) ?
 		     g_strdup (url.get()) : NULL;	   	
 	}
 	else
 	{
-		rv = mpriv->wrapper->GetTargetDocumentUrl (url);
+		rv = mpriv->browser->GetTargetDocumentUrl (url);
 		l = (NS_SUCCEEDED (rv) && !url.IsEmpty()) ?
 		     g_strdup (url.get()) : NULL;	   	
 	}
@@ -821,10 +821,10 @@ impl_copy_page (EphyEmbed *dest,
         nsresult rv;
 
         nsCOMPtr<nsISupports> pageDescriptor;
-        rv = mpriv_source->wrapper->GetPageDescriptor(getter_AddRefs(pageDescriptor));
+        rv = mpriv_source->browser->GetPageDescriptor(getter_AddRefs(pageDescriptor));
         if (!pageDescriptor || NS_FAILED(rv)) return G_FAILED;
 
-        rv = mpriv_dest->wrapper->LoadDocument(pageDescriptor, static_cast<PRUint32>(display_type));
+        rv = mpriv_dest->browser->LoadDocument(pageDescriptor, static_cast<PRUint32>(display_type));
         if (NS_FAILED(rv)) return G_FAILED;
 
         return G_OK;
@@ -835,13 +835,13 @@ impl_zoom_set (EphyEmbed *embed,
                float zoom, 
                gboolean reflow)
 {
-	EphyWrapper *wrapper;
+	EphyBrowser *browser;
 	nsresult result;
 
-	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
-	g_return_val_if_fail (wrapper != NULL, G_FAILED);
+	browser = MOZILLA_EMBED(embed)->priv->browser;
+	g_return_val_if_fail (browser != NULL, G_FAILED);
 
-	result = wrapper->SetZoom (zoom, reflow);
+	result = browser->SetZoom (zoom, reflow);
 
 	if (NS_SUCCEEDED (result))
 	{
@@ -858,7 +858,7 @@ impl_zoom_get (EphyEmbed *embed,
 	float f;
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	
-	nsresult result = mpriv->wrapper->GetZoom (&f);
+	nsresult result = mpriv->browser->GetZoom (&f);
 	
 	if (NS_SUCCEEDED (result))
 	{
@@ -880,7 +880,7 @@ impl_shistory_count  (EphyEmbed *embed,
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	int c, index;
 	
-	rv = mpriv->wrapper->GetSHInfo (&c, &index);
+	rv = mpriv->browser->GetSHInfo (&c, &index);
 
 	*count = c;
 	
@@ -914,11 +914,11 @@ impl_shistory_get_nth (EphyEmbed *embed,
 		}
 	}
 	
-        rv = mpriv->wrapper->GetSHUrlAtIndex(nth, url);
+        rv = mpriv->browser->GetSHUrlAtIndex(nth, url);
 
         *aUrl = (NS_SUCCEEDED (rv) && !url.IsEmpty()) ? g_strdup(url.get()) : NULL;
 
-	rv = mpriv->wrapper->GetSHTitleAtIndex(nth, &title);
+	rv = mpriv->browser->GetSHTitleAtIndex(nth, &title);
 
 	*aTitle = g_strdup (NS_ConvertUCS2toUTF8(title).get());
 
@@ -935,7 +935,7 @@ impl_shistory_get_pos (EphyEmbed *embed,
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	int count, index;
 	
-	rv = mpriv->wrapper->GetSHInfo (&count, &index);
+	rv = mpriv->browser->GetSHInfo (&count, &index);
 
 	*pos = index;
 	
@@ -949,7 +949,7 @@ impl_shistory_go_nth (EphyEmbed *embed,
 	nsresult rv;
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
-	rv = mpriv->wrapper->GoToHistoryIndex (nth);
+	rv = mpriv->browser->GoToHistoryIndex (nth);
 
 	return NS_SUCCEEDED(rv) ? G_OK : G_FAILED;
 }
@@ -998,14 +998,14 @@ impl_print (EphyEmbed *embed,
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
         nsCOMPtr<nsIPrintSettings> options;
-        result = mpriv->wrapper->GetPrintSettings(getter_AddRefs(options));
+        result = mpriv->browser->GetPrintSettings(getter_AddRefs(options));
         if (!NS_SUCCEEDED (result)) return G_FAILED;
 
 	MozillaCollatePrintSettings(info, options);
 
         options->SetPrintSilent (PR_TRUE);
 
-	result = mpriv->wrapper->Print(options, info->preview);
+	result = mpriv->browser->Print(options, info->preview);
 
 	return NS_SUCCEEDED (result) ? G_OK : G_FAILED;
 }
@@ -1014,12 +1014,12 @@ static gresult
 impl_print_preview_close (EphyEmbed *embed)
 {
 	nsresult result = NS_OK;
-	EphyWrapper *wrapper;
+	EphyBrowser *browser;
 	
-	wrapper = MOZILLA_EMBED(embed)->priv->wrapper;
-	g_return_val_if_fail (wrapper != NULL, G_FAILED);
+	browser = MOZILLA_EMBED(embed)->priv->browser;
+	g_return_val_if_fail (browser != NULL, G_FAILED);
 
-	result = wrapper->PrintPreviewClose();
+	result = browser->PrintPreviewClose();
 	return NS_SUCCEEDED(result) ? G_OK : G_FAILED;
 }
 
@@ -1030,7 +1030,7 @@ impl_print_preview_num_pages (EphyEmbed *embed,
 	nsresult result = NS_OK;
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 	
-	result = mpriv->wrapper->PrintPreviewNumPages(retNum);
+	result = mpriv->browser->PrintPreviewNumPages(retNum);
 	return NS_SUCCEEDED(result) ? G_OK : G_FAILED;
 }
 
@@ -1042,7 +1042,7 @@ impl_print_preview_navigate (EphyEmbed *embed,
 	nsresult result = NS_OK;
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
-	result = mpriv->wrapper->PrintPreviewNavigate(navType, pageNum);
+	result = mpriv->browser->PrintPreviewNavigate(navType, pageNum);
 	return NS_SUCCEEDED(result) ? G_OK : G_FAILED;
 }
 
@@ -1053,7 +1053,7 @@ impl_set_encoding (EphyEmbed *embed,
 	nsresult result;
 	MozillaEmbedPrivate *mpriv = MOZILLA_EMBED(embed)->priv;
 
-	result = mpriv->wrapper->ForceEncoding (encoding);
+	result = mpriv->browser->ForceEncoding (encoding);
 	if (NS_FAILED (result)) return G_FAILED;
 	
 	gtk_moz_embed_reload (GTK_MOZ_EMBED (embed),
@@ -1072,7 +1072,7 @@ impl_get_encoding_info (EphyEmbed *embed,
 	g_return_val_if_fail (info != NULL, G_FAILED);
 	*info = NULL;
 
-	result = mpriv->wrapper->GetEncodingInfo (info);
+	result = mpriv->browser->GetEncodingInfo (info);
 
 	return NS_SUCCEEDED(result) ? G_OK : G_FAILED;
 }
@@ -1144,7 +1144,7 @@ mozilla_embed_net_state_all_cb (GtkMozEmbed *embed, const char *aURI,
 	{
 		nsresult rv;
 
-		rv = membed->priv->wrapper->InitDocument ();
+		rv = membed->priv->browser->InitDocument ();
 		if (NS_FAILED (rv))
 		{
 			g_warning ("Browser document initialization failed");
@@ -1231,7 +1231,7 @@ mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 
 	nsresult rv;
 	EventContext ctx;
-	ctx.Init (mpriv->wrapper);
+	ctx.Init (mpriv->browser);
 	rv = ctx.GetKeyEventInfo (ev, info);
 	if (NS_FAILED (rv)) return G_FAILED;
 
@@ -1256,11 +1256,11 @@ mozilla_embed_dom_key_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 		rv = ctx.GetTargetDocument (getter_AddRefs(doc));
 		if (NS_SUCCEEDED(rv))
 		{
-			rv = mpriv->wrapper->PushTargetDocument (doc);
+			rv = mpriv->browser->PushTargetDocument (doc);
 			if (NS_SUCCEEDED(rv))
 			{
 				g_signal_emit_by_name (membed, "ge_context_menu", info, &ret);
-				mpriv->wrapper->PopTargetDocument ();
+				mpriv->browser->PopTargetDocument ();
 			}
 		}
 	}
@@ -1294,7 +1294,7 @@ mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event,
 
 	info = ephy_embed_event_new ();
 	
-	event_context.Init (mpriv->wrapper);
+	event_context.Init (mpriv->browser);
         result = event_context.GetMouseEventInfo (static_cast<nsIDOMMouseEvent*>(dom_event), info);
 
 	if (NS_SUCCEEDED(result))
@@ -1303,12 +1303,12 @@ mozilla_embed_dom_mouse_click_cb (GtkMozEmbed *embed, gpointer dom_event,
 		result = event_context.GetTargetDocument (getter_AddRefs(domDoc));
 		if (NS_SUCCEEDED(result))
 		{
-			result = mpriv->wrapper->PushTargetDocument (domDoc);
+			result = mpriv->browser->PushTargetDocument (domDoc);
 			if (NS_SUCCEEDED(result))
 			{
 				g_signal_emit_by_name (membed, "ge_dom_mouse_click", 
 						       info, &return_value); 
-				mpriv->wrapper->PopTargetDocument ();
+				mpriv->browser->PopTargetDocument ();
 			}
 		}
 
@@ -1338,7 +1338,7 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 
 	info = ephy_embed_event_new ();
 	
-	event_context.Init (mpriv->wrapper);
+	event_context.Init (mpriv->browser);
         result = event_context.GetMouseEventInfo (static_cast<nsIDOMMouseEvent*>(dom_event), info);
 	if (NS_FAILED (result)) return FALSE;
 
@@ -1348,7 +1348,7 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 	result = event_context.GetTargetDocument (getter_AddRefs(domDoc));
 	if (NS_SUCCEEDED(result))
 	{
-		result = mpriv->wrapper->PushTargetDocument (domDoc);
+		result = mpriv->browser->PushTargetDocument (domDoc);
 
 		if (NS_SUCCEEDED(result))
 		{
@@ -1362,7 +1362,7 @@ mozilla_embed_dom_mouse_down_cb (GtkMozEmbed *embed, gpointer dom_event,
 						       info, &return_value);
 			}
 
-			mpriv->wrapper->PopTargetDocument ();
+			mpriv->browser->PopTargetDocument ();
 		}
 	}
 

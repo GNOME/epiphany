@@ -60,8 +60,8 @@ libephymozillaembed_la_SOURCES = 	\
 	EphyEventListener.h		\
 	EphyHeaderSniffer.cpp		\
 	EphyHeaderSniffer.h		\
-	EphyWrapper.cpp                 \
-	EphyWrapper.h	                \
+	EphyBrowser.cpp                 \
+	EphyBrowser.h	                \
 	EventContext.cpp                \
 	EventContext.h                  \
 	ExternalProtocolHandlers.cpp	\

@@ -1,5 +1,27 @@
 2003-10-27  Marco Pesenti Gritti  <marco@gnome.org>
 
+	* embed/mozilla/EphyBrowser.cpp:
+	* embed/mozilla/EphyBrowser.h:
+	* embed/mozilla/EphyWrapper.cpp:
+	* embed/mozilla/EphyWrapper.h:
+	* embed/mozilla/EventContext.cpp:
+	* embed/mozilla/EventContext.h:
+	* embed/mozilla/Makefile.am:
+	* embed/mozilla/mozilla-embed-persist.cpp:
+	* embed/mozilla/mozilla-embed.cpp:
+	* embed/mozilla/mozilla-embed.h:
+
+	Solving the wrapper mess Episode 3.
+	Rename to EphyBrowser and add sanity checks.
+	GtkMozEmbed initialize the browser on realize, that
+	means until that we shouldnt use most of the EphyBrowser
+	methods. I'm quite sure there are not such cases in
+	current implementation, otherwise we would have had
+	problems also before. Though better avoid problems
+	in the future.
+
+2003-10-27  Marco Pesenti Gritti  <marco@gnome.org>
+
 	* embed/mozilla/EphyWrapper.cpp:
 	* embed/mozilla/EphyWrapper.h:
 	* embed/mozilla/mozilla-embed.cpp:

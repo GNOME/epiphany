@@ -39,11 +39,11 @@
 
 class EphyEventListener;
 
-class EphyWrapper
+class EphyBrowser
 {
 public:
-	EphyWrapper();
-	~EphyWrapper();
+	EphyBrowser();
+	~EphyBrowser();
 
 	nsresult Init (GtkMozEmbed *mozembed);
 	nsresult InitDocument ();

@@ -24,7 +24,7 @@
 
 #include "mozilla-embed-persist.h"
 #include "mozilla-embed.h"
-#include "EphyWrapper.h"
+#include "EphyBrowser.h"
 #include "EphyHeaderSniffer.h"
 #include "MozDownload.h"
 
@@ -172,15 +172,15 @@ impl_save (EphyEmbedPersist *persist)
 	
 	g_return_val_if_fail (filename != NULL, G_FAILED);
 
-	EphyWrapper *wrapper = NULL;
+	EphyBrowser *browser = NULL;
 	if (embed)
 	{
-	        wrapper = (EphyWrapper *) mozilla_embed_get_ephy_wrapper (MOZILLA_EMBED(embed));
-		g_return_val_if_fail (wrapper != NULL, G_FAILED);
+	        browser = (EphyBrowser *) mozilla_embed_get_ephy_browser (MOZILLA_EMBED(embed));
+		g_return_val_if_fail (browser != NULL, G_FAILED);
 	}
 
-	/* we must have one of uri or wrapper */
-	g_assert (wrapper != NULL || uri != NULL);
+	/* we must have one of uri or browser */
+	g_assert (browser != NULL || uri != NULL);
 
 	/* Get a temp filename to save to */
 	nsCOMPtr<nsIProperties> dirService(do_GetService(NS_DIRECTORY_SERVICE_CONTRACTID, &rv));
@@ -204,7 +204,7 @@ impl_save (EphyEmbedPersist *persist)
 	}
 	else
 	{
-		rv = wrapper->GetDocumentUrl (sURI);
+		rv = browser->GetDocumentUrl (sURI);
 		if (NS_FAILED(rv)) return G_FAILED;
 	}
       	rv = NS_NewURI(getter_AddRefs(inURI), sURI);
@@ -212,11 +212,11 @@ impl_save (EphyEmbedPersist *persist)
 
 	/* Get post data */
 	nsCOMPtr<nsIInputStream> postData;
-	if (wrapper)
+	if (browser)
 	{
 		PRInt32 sindex;
 
-		nsCOMPtr<nsIWebNavigation> webNav(do_QueryInterface(wrapper->mWebBrowser));
+		nsCOMPtr<nsIWebNavigation> webNav(do_QueryInterface(browser->mWebBrowser));
 		nsCOMPtr<nsISHistory> sessionHistory;
 		webNav->GetSessionHistory(getter_AddRefs(sessionHistory));
 		nsCOMPtr<nsIHistoryEntry> entry;
@@ -235,11 +235,11 @@ impl_save (EphyEmbedPersist *persist)
 	{		
 		if (flags & EMBED_PERSIST_MAINDOC)
 		{
-                	rv = wrapper->GetDocument (getter_AddRefs(DOMDocument));
+                	rv = browser->GetDocument (getter_AddRefs(DOMDocument));
 		}
         	else
 		{
-                	rv = wrapper->GetTargetDocument (getter_AddRefs(DOMDocument));
+                	rv = browser->GetTargetDocument (getter_AddRefs(DOMDocument));
 		}
         	if (NS_FAILED(rv) || !DOMDocument) return G_FAILED;
 	}

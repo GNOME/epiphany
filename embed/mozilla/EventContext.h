@@ -31,7 +31,7 @@
 #include "nsIDOMElementCSSInlineStyle.h"
 #include "nsIDOMCSSStyleDeclaration.h"
 #include "nsIDOMDocument.h"
-#include "EphyWrapper.h"
+#include "EphyBrowser.h"
 
 #include "ephy-embed.h"
 #include "ephy-embed-event.h"
@@ -42,14 +42,14 @@ public:
 	EventContext();
 	~EventContext();
 
-	nsresult Init (EphyWrapper *wrapper);
+	nsresult Init (EphyBrowser *wrapper);
 
 	nsresult GetMouseEventInfo (nsIDOMMouseEvent *event, EphyEmbedEvent *info);
 	nsresult GetKeyEventInfo (nsIDOMKeyEvent *event, EphyEmbedEvent *info);
 	nsresult GetTargetDocument (nsIDOMDocument **domDoc);
 
 private:
-	EphyWrapper *mWrapper;
+	EphyBrowser *mBrowser;
 	nsCOMPtr<nsIDOMDocument> mDOMDocument;
 
 	nsresult GatherTextUnder (nsIDOMNode* aNode, nsString& aResult);

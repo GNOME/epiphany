@@ -51,9 +51,9 @@ struct MozillaEmbedClass
         GtkMozEmbedClass parent_class;
 };
 
-GType	 mozilla_embed_get_type           (void);
+GType	 mozilla_embed_get_type         (void);
 
-gpointer mozilla_embed_get_ephy_wrapper (MozillaEmbed *embed);
+gpointer mozilla_embed_get_ephy_browser (MozillaEmbed *embed);
 
 G_END_DECLS
 

@@ -56,9 +56,9 @@ EventContext::~EventContext ()
 {
 }
 
-nsresult EventContext::Init (EphyWrapper *wrapper)
+nsresult EventContext::Init (EphyBrowser *browser)
 {
-	mWrapper = wrapper;
+	mBrowser = browser;
 	mDOMDocument = nsnull;
 
 	return NS_OK;
@@ -771,7 +771,7 @@ nsresult EventContext::IsPageFramed (nsIDOMNode *node, PRBool *Framed)
 	nsresult result;
 	
 	nsCOMPtr<nsIDOMDocument> mainDocument;
-	result = mWrapper->GetDocument (getter_AddRefs(mainDocument));
+	result = mBrowser->GetDocument (getter_AddRefs(mainDocument));
 	if (NS_FAILED(result) || !mainDocument) return NS_ERROR_FAILURE;
 	
 	nsCOMPtr<nsIDOMDocument> nodeDocument;
