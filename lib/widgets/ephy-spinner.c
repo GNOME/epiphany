@@ -57,9 +57,6 @@ struct EphySpinnerDetails {
 	gboolean ready;
 	gboolean small_mode;
 
-	gboolean button_in;
-	gboolean button_down;
-
 	gint theme_notif;
 };
 
@@ -238,133 +235,13 @@ select_spinner_image (EphySpinner *spinner)
 	return g_object_ref (element->data);
 }
 
-static guchar
-lighten_component (guchar cur_value)
-{
-        int new_value = cur_value;
-        new_value += 24 + (new_value >> 3);
-        if (new_value > 255) {
-                new_value = 255;
-        }
-        return (guchar) new_value;
-}
-
-static GdkPixbuf *
-create_new_pixbuf (GdkPixbuf *src)
-{
-        g_return_val_if_fail (gdk_pixbuf_get_colorspace (src) == GDK_COLORSPACE_RGB, NULL);
-        g_return_val_if_fail ((!gdk_pixbuf_get_has_alpha (src)
-                               && gdk_pixbuf_get_n_channels (src) == 3)
-                              || (gdk_pixbuf_get_has_alpha (src)
-                                  && gdk_pixbuf_get_n_channels (src) == 4), NULL);
-
-        return gdk_pixbuf_new (gdk_pixbuf_get_colorspace (src),
-                               gdk_pixbuf_get_has_alpha (src),
-                               gdk_pixbuf_get_bits_per_sample (src),
-                               gdk_pixbuf_get_width (src),
-                               gdk_pixbuf_get_height (src));
-}
-
-static GdkPixbuf *
-eel_create_darkened_pixbuf (GdkPixbuf *src, int saturation, int darken)
-{
-        gint i, j;
-        gint width, height, src_row_stride, dest_row_stride;
-        gboolean has_alpha;
-        guchar *target_pixels, *original_pixels;
-        guchar *pixsrc, *pixdest;
-        guchar intensity;
-        guchar alpha;
-        guchar negalpha;
-        guchar r, g, b;
-        GdkPixbuf *dest;
-
-        g_return_val_if_fail (gdk_pixbuf_get_colorspace (src) == GDK_COLORSPACE_RGB, NULL);
-        g_return_val_if_fail ((!gdk_pixbuf_get_has_alpha (src)
-                               && gdk_pixbuf_get_n_channels (src) == 3)
-                              || (gdk_pixbuf_get_has_alpha (src)
-                                  && gdk_pixbuf_get_n_channels (src) == 4), NULL);
-        g_return_val_if_fail (gdk_pixbuf_get_bits_per_sample (src) == 8, NULL);
-
-        dest = create_new_pixbuf (src);
-
-        has_alpha = gdk_pixbuf_get_has_alpha (src);
-        width = gdk_pixbuf_get_width (src);
-        height = gdk_pixbuf_get_height (src);
-        dest_row_stride = gdk_pixbuf_get_rowstride (dest);
-        src_row_stride = gdk_pixbuf_get_rowstride (src);
-        target_pixels = gdk_pixbuf_get_pixels (dest);
-        original_pixels = gdk_pixbuf_get_pixels (src);
-
-        for (i = 0; i < height; i++) {
-                pixdest = target_pixels + i * dest_row_stride;
-                pixsrc = original_pixels + i * src_row_stride;
-                for (j = 0; j < width; j++) {
-                        r = *pixsrc++;
-                        g = *pixsrc++;
-                        b = *pixsrc++;
-                        intensity = (r * 77 + g * 150 + b * 28) >> 8;
-                        negalpha = ((255 - saturation) * darken) >> 8;
-                        alpha = (saturation * darken) >> 8;
-                        *pixdest++ = (negalpha * intensity + alpha * r) >> 8;
-                        *pixdest++ = (negalpha * intensity + alpha * g) >> 8;
-                        *pixdest++ = (negalpha * intensity + alpha * b) >> 8;
-                        if (has_alpha) {
-                                *pixdest++ = *pixsrc++;
-                        }
-                }
-        }
-        return dest;
-}
-
-static GdkPixbuf *
-eel_create_spotlight_pixbuf (GdkPixbuf* src)
-{
-        GdkPixbuf *dest;
-        int i, j;
-        int width, height, has_alpha, src_row_stride, dst_row_stride;
-        guchar *target_pixels, *original_pixels;
-        guchar *pixsrc, *pixdest;
-
-        g_return_val_if_fail (gdk_pixbuf_get_colorspace (src) == GDK_COLORSPACE_RGB, NULL);
-        g_return_val_if_fail ((!gdk_pixbuf_get_has_alpha (src)
-                               && gdk_pixbuf_get_n_channels (src) == 3)
-                              || (gdk_pixbuf_get_has_alpha (src)
-                                  && gdk_pixbuf_get_n_channels (src) == 4), NULL);
-        g_return_val_if_fail (gdk_pixbuf_get_bits_per_sample (src) == 8, NULL);
-
-        dest = create_new_pixbuf (src);
-
-        has_alpha = gdk_pixbuf_get_has_alpha (src);
-        width = gdk_pixbuf_get_width (src);
-        height = gdk_pixbuf_get_height (src);
-        dst_row_stride = gdk_pixbuf_get_rowstride (dest);
-        src_row_stride = gdk_pixbuf_get_rowstride (src);
-        target_pixels = gdk_pixbuf_get_pixels (dest);
-        original_pixels = gdk_pixbuf_get_pixels (src);
-
-        for (i = 0; i < height; i++) {
-                pixdest = target_pixels + i * dst_row_stride;
-                pixsrc = original_pixels + i * src_row_stride;
-                for (j = 0; j < width; j++) {
-                        *pixdest++ = lighten_component (*pixsrc++);
-                        *pixdest++ = lighten_component (*pixsrc++);
-                        *pixdest++ = lighten_component (*pixsrc++);
-                        if (has_alpha) {
-                                *pixdest++ = *pixsrc++;
-                        }
-                }
-        }
-        return dest;
-}
-
 /* handle expose events */
 
 static int
 ephy_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	EphySpinner *spinner;
-	GdkPixbuf *pixbuf, *massaged_pixbuf;
+	GdkPixbuf *pixbuf;
 	int x_offset, y_offset, width, height;
 	GdkRectangle pix_area, dest;
 
@@ -380,18 +257,6 @@ ephy_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
 	pixbuf = select_spinner_image (spinner);
 	if (pixbuf == NULL) {
 		return FALSE;
-	}
-
-	/* Get the right tint on the image */
-
-	if (spinner->details->button_in) {
-		if (spinner->details->button_down) {
-			massaged_pixbuf = eel_create_darkened_pixbuf (pixbuf, 0.8 * 255, 0.8 * 255);
-		} else {
-			massaged_pixbuf = eel_create_spotlight_pixbuf (pixbuf);
-		}
-		g_object_unref (pixbuf);
-		pixbuf = massaged_pixbuf;
 	}
 
 	width = gdk_pixbuf_get_width (pixbuf);
@@ -620,79 +485,6 @@ ephy_spinner_load_images (EphySpinner *spinner)
 	g_free (image_theme);
 }
 
-static gboolean
-ephy_spinner_enter_notify_event (GtkWidget *widget, GdkEventCrossing *event)
-{
-	EphySpinner *spinner;
-
-	spinner = EPHY_SPINNER (widget);
-
-	if (!spinner->details->button_in) {
-		spinner->details->button_in = TRUE;
-		gtk_widget_queue_draw (widget);
-	}
-
-	return FALSE;
-}
-
-static gboolean
-ephy_spinner_leave_notify_event (GtkWidget *widget, GdkEventCrossing *event)
-{
-	EphySpinner *spinner;
-
-	spinner = EPHY_SPINNER (widget);
-
-	if (spinner->details->button_in) {
-		spinner->details->button_in = FALSE;
-		gtk_widget_queue_draw (widget);
-	}
-
-	return FALSE;
-}
-
-/* handle button presses by posting a change on the "location" property */
-
-static gboolean
-ephy_spinner_button_press_event (GtkWidget *widget, GdkEventButton *event)
-{
-	EphySpinner *spinner;
-
-	spinner = EPHY_SPINNER (widget);
-
-	if (event->button == 1) {
-		spinner->details->button_down = TRUE;
-		spinner->details->button_in = TRUE;
-		gtk_widget_queue_draw (widget);
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-static void
-ephy_spinner_set_location (EphySpinner *spinner)
-{
-}
-
-static gboolean
-ephy_spinner_button_release_event (GtkWidget *widget, GdkEventButton *event)
-{
-	EphySpinner *spinner;
-
-	spinner = EPHY_SPINNER (widget);
-
-	if (event->button == 1) {
-		if (spinner->details->button_in) {
-			ephy_spinner_set_location (spinner);
-		}
-		spinner->details->button_down = FALSE;
-		gtk_widget_queue_draw (widget);
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
 /*
  * ephy_spinner_set_small_mode:
  * @spinner: a #EphySpinner
@@ -755,10 +547,6 @@ ephy_spinner_class_init (EphySpinnerClass *class)
 	G_OBJECT_CLASS (class)->finalize = ephy_spinner_finalize;
 
 	widget_class->expose_event = ephy_spinner_expose;
-	widget_class->button_press_event = ephy_spinner_button_press_event;
-	widget_class->button_release_event = ephy_spinner_button_release_event;
-	widget_class->enter_notify_event = ephy_spinner_enter_notify_event;
-	widget_class->leave_notify_event = ephy_spinner_leave_notify_event;
 	widget_class->size_request = ephy_spinner_size_request;
 	widget_class->map = ephy_spinner_map;
 }

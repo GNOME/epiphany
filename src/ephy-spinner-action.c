@@ -19,6 +19,7 @@
 #include "ephy-spinner-action.h"
 #include "ephy-spinner.h"
 #include "eggtoolitem.h"
+#include "eggtoolbar.h"
 
 static void ephy_spinner_action_init       (EphySpinnerAction *action);
 static void ephy_spinner_action_class_init (EphySpinnerActionClass *class);
@@ -86,23 +87,49 @@ create_tool_item (EggAction *action)
 {
 	GtkWidget *item;
 	GtkWidget *spinner;
-	GtkWidget *button;
 
 	item = GTK_WIDGET (egg_tool_item_new ());
 
-	button = gtk_button_new ();
-	gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-	gtk_widget_show (button);
-	gtk_container_add (GTK_CONTAINER (item), button);
 	spinner = ephy_spinner_new ();
-	ephy_spinner_set_small_mode (EPHY_SPINNER (spinner), TRUE);
-	gtk_container_add (GTK_CONTAINER (button), spinner);
+	gtk_widget_show (spinner);
+	gtk_container_add (GTK_CONTAINER (item), spinner);
 	egg_tool_item_set_pack_end (EGG_TOOL_ITEM (item), TRUE);
 	egg_tool_item_set_homogeneous (EGG_TOOL_ITEM (item), FALSE);
-	gtk_widget_show (spinner);
 	g_object_set_data (G_OBJECT (item), "spinner", spinner);
 
 	return item;
+}
+
+static void
+toolbar_style_sync (EggToolbar *toolbar,
+		    GtkToolbarStyle style,
+		    GtkWidget *proxy)
+{
+	gboolean small;
+	EphySpinner *spinner;
+
+	spinner = EPHY_SPINNER (g_object_get_data (G_OBJECT (proxy), "spinner"));
+
+	small = (style == GTK_TOOLBAR_ICONS || style == GTK_TOOLBAR_TEXT);
+	ephy_spinner_set_small_mode (EPHY_SPINNER (spinner), small);
+}
+
+static void
+item_parent_set_cb (GtkWidget *item, GtkWidget *previous_parent)
+{
+	EggToolbar *toolbar;
+	GtkToolbarStyle style;
+
+	if (item->parent == NULL) return;
+
+	toolbar = EGG_TOOLBAR (item->parent);
+
+	g_signal_connect (toolbar, "style_changed",
+			  G_CALLBACK (toolbar_style_sync),
+			  item);
+
+	style = egg_toolbar_get_style (toolbar);
+	toolbar_style_sync (toolbar, style, item);
 }
 
 static void
@@ -111,9 +138,13 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
 	g_signal_connect_object (action, "notify::throbbing",
 				 G_CALLBACK (ephy_spinner_action_sync_throbbing),
 				 proxy, 0);
+	g_signal_connect (proxy, "parent_set",
+			  G_CALLBACK (item_parent_set_cb),
+			  NULL);
 
 	(* EGG_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 }
+
 static void
 ephy_spinner_action_set_property (GObject *object,
                                   guint prop_id,

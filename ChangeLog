@@ -1,5 +1,15 @@
 2003-02-06  Marco Pesenti Gritti  <marco@it.gnome.org>
 
+	* lib/widgets/ephy-spinner.c: (ephy_spinner_expose),
+	(ephy_spinner_class_init):
+	* src/ephy-spinner-action.c: (create_tool_item),
+	(toolbar_style_sync), (item_parent_set_cb), (connect_proxy):
+
+	Do not use a button for spinner.
+	Correctly update spinner size for toolbar style.
+
+2003-02-06  Marco Pesenti Gritti  <marco@it.gnome.org>
+
 	* lib/widgets/ephy-location-entry.c:
 	(ephy_location_entry_clear_history):
 	* lib/widgets/ephy-location-entry.h:
