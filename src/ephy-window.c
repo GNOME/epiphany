@@ -1965,7 +1965,12 @@ modal_alert_cb (EphyEmbed *embed,
 	tab = ephy_tab_for_embed (embed);
 	g_return_val_if_fail (tab != NULL, FALSE);
 
+	/* switch the window to the tab, and bring the window to the foreground
+	 * (since the alert is modal, the user won't be able to do anything
+	 * with his current window anyway :|)
+	 */
 	ephy_window_jump_to_tab (window, tab);
+	gtk_window_present (GTK_WINDOW (window));
 
 	/* make sure the location entry shows the real URL of the tab's page */
 	address = ephy_embed_get_location (embed, TRUE);
