@@ -670,7 +670,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 	key_view = ephy_node_view_new (node, NULL);
 	ephy_node_view_set_browse_mode (key_view);
 	ephy_node_view_add_column (key_view, _("Keywords"),
-			           EPHY_TREE_MODEL_NODE_COL_KEYWORD, FALSE);
+			           EPHY_TREE_MODEL_NODE_COL_KEYWORD, TRUE);
 	gtk_box_pack_start (GTK_BOX (hbox), GTK_WIDGET (key_view), FALSE, TRUE, 0);
 	gtk_widget_set_size_request (GTK_WIDGET (key_view), 130, -1);
 	gtk_widget_show (GTK_WIDGET (key_view));

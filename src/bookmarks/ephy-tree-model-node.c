@@ -360,7 +360,10 @@ ephy_tree_model_node_get_column_type (GtkTreeModel *tree_model,
 		case EPHY_TREE_MODEL_NODE_COL_BOOKMARK:
 		case EPHY_TREE_MODEL_NODE_COL_KEYWORD:
 			return G_TYPE_STRING;
+		case EPHY_TREE_MODEL_NODE_COL_TITLE_WEIGHT:
+			return G_TYPE_INT;
 		case EPHY_TREE_MODEL_NODE_COL_VISIBLE:
+		case EPHY_TREE_MODEL_NODE_COL_PRIORITY:	
 			return G_TYPE_BOOLEAN;
 		case EPHY_TREE_MODEL_NODE_COL_ICON:
 			return GDK_TYPE_PIXBUF;
@@ -503,6 +506,18 @@ ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 		{
 			g_value_set_boolean (value, TRUE);
 		}
+		break;
+	case EPHY_TREE_MODEL_NODE_COL_TITLE_WEIGHT:
+		g_value_init (value, G_TYPE_INT);
+		if (!ephy_node_get_property_boolean (node, EPHY_NODE_KEYWORD_PROP_ALL_PRIORITY))
+			g_value_set_int (value, PANGO_WEIGHT_NORMAL);
+		else
+			g_value_set_int (value, PANGO_WEIGHT_BOLD);
+		break;
+	case EPHY_TREE_MODEL_NODE_COL_PRIORITY:
+		g_value_init (value, G_TYPE_BOOLEAN);
+		g_value_set_boolean (value, !ephy_node_get_property_boolean (node,
+					EPHY_NODE_KEYWORD_PROP_ALL_PRIORITY));
 		break;
 	default:
 		g_assert_not_reached ();
@@ -714,6 +729,8 @@ ephy_tree_model_node_column_get_type (void)
 			{ EPHY_TREE_MODEL_NODE_COL_KEYWORD,  "EPHY_TREE_MODEL_NODE_COL_KEYWORD", "keyword" },
 			{ EPHY_TREE_MODEL_NODE_COL_ICON,     "EPHY_TREE_MODEL_NODE_COL_ICON", "icon" },
 			{ EPHY_TREE_MODEL_NODE_COL_VISIBLE,  "EPHY_TREE_MODEL_NODE_COL_VISIBLE", "visible" },
+			{ EPHY_TREE_MODEL_NODE_COL_TITLE_WEIGHT, "EPHY_TREE_MODEL_NODE_COL_TITLE_WEIGHT", "title weight" },
+			{ EPHY_TREE_MODEL_NODE_COL_PRIORITY, "EPHY_TREE_MODEL_NODE_COL_PRIORITY", "priority" },
 
 			{ 0, 0, 0 }
 		};

@@ -1,3 +1,21 @@
+2003-02-26  Xan Lopez  <xan@masilla.org>
+
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-bookmarks.c: (ephy_bookmarks_init):
+	* src/bookmarks/ephy-bookmarks.h:
+	* src/bookmarks/ephy-node-view.c: (ephy_node_view_sort_func),
+	(set_sort_column_id), (ephy_node_view_add_column):
+	* src/bookmarks/ephy-tree-model-node.c:
+	(ephy_tree_model_node_get_column_type),
+	(ephy_tree_model_node_get_value),
+	(ephy_tree_model_node_column_get_type):
+	* src/bookmarks/ephy-tree-model-node.h:
+
+	Default (alphabetical) sort of keywords and bookmarks in the BE, with
+	"All" remaining always on top. Disabled user-sort option of the
+	columns, it's a bit silly now.
+
 2003-02-26  Marco Pesenti Gritti  <marco@it.gnome.org>
 
 	* lib/widgets/ephy-toolbars-group.c:
