@@ -195,6 +195,22 @@ MozDownload::GetPercentComplete(PRInt32 *aPercentComplete)
  	return NS_OK;
 }
 
+#ifdef MOZ_NSIDOWNLOAD_GETSIZE
+/* readonly attribute PRUint64 amountTransferred; */
+NS_IMETHODIMP
+MozDownload::GetAmountTransferred(PRUint64 *aAmountTransferred)
+{
+    return NS_ERROR_NOT_IMPLEMENTED;
+}
+
+/* readonly attribute PRUint64 size; */
+NS_IMETHODIMP
+MozDownload::GetSize(PRUint64 *aSize)
+{
+    return NS_ERROR_NOT_IMPLEMENTED;
+}
+#endif /* MOZ_NSIDOWNLOAD_GETSIZE */
+
 NS_IMETHODIMP
 MozDownload::GetTotalProgress(PRInt32 *aTotalProgress)
 {
