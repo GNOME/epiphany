@@ -142,9 +142,6 @@ impl_save (EphyEmbedPersist *persist)
 	long max_size;
 	EphyEmbed *embed;
 	EmbedPersistFlags flags;
-	PRUint32 persistFlags = 0;
-
-	/* FIXME implement max size */
 
 	g_object_ref (persist);
 	
