@@ -335,21 +335,21 @@ ephy_spinner_start (EphySpinner *spinner)
 	}
 
 	if (spinner->details->timer_task != 0) {
-		gtk_timeout_remove (spinner->details->timer_task);
+		g_source_remove (spinner->details->timer_task);
 	}
 
 	/* reset the frame count */
 	spinner->details->current_frame = 0;
-	spinner->details->timer_task = gtk_timeout_add (spinner->details->delay,
-							 bump_spinner_frame,
-							 spinner);
+	spinner->details->timer_task = g_timeout_add (spinner->details->delay,
+						      bump_spinner_frame,
+						      spinner);
 }
 
 static void
 ephy_spinner_remove_update_callback (EphySpinner *spinner)
 {
 	if (spinner->details->timer_task != 0) {
-		gtk_timeout_remove (spinner->details->timer_task);
+		g_source_remove (spinner->details->timer_task);
 	}
 
 	spinner->details->timer_task = 0;

@@ -369,13 +369,13 @@ ephy_location_entry_key_press_event_cb (GtkWidget *entry, GdkEventKey *event, Ep
 
         if (p->autocompletion_timeout != 0)
 	{
-                gtk_timeout_remove (p->autocompletion_timeout);
+                g_source_remove (p->autocompletion_timeout);
 		p->autocompletion_timeout = 0;
 	}
 
         if (p->show_alternatives_timeout != 0)
 	{
-                gtk_timeout_remove (p->show_alternatives_timeout);
+                g_source_remove (p->show_alternatives_timeout);
 		p->show_alternatives_timeout = 0;
 	}
 
