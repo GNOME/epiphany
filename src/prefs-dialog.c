@@ -139,6 +139,26 @@ languages [] =
 };
 static guint n_languages = G_N_ELEMENTS (languages);
 
+typedef struct
+{
+	gchar *title;
+	gchar *name;
+} EncodingAutodetectorInfo;
+
+static EncodingAutodetectorInfo encoding_autodetector[] =
+{
+	{ N_("Off"),			"" },
+	{ N_("Chinese"),		"zh_parallel_state_machine" },
+	{ N_("East asian"),		"cjk_parallel_state_machine" },
+	{ N_("Japanese"),		"ja_parallel_state_machine" },
+	{ N_("Korean"),			"ko_parallel_state_machine" },
+	{ N_("Russian"),		"ruprob" },
+	{ N_("Simplified Chinese"),	"zhcn_parallel_state_machine" },
+	{ N_("Traditional Chinese"),	"zhtw_parallel_state_machine" },
+	{ N_("Ukrainian"),		"ukprob" }
+};
+static guint n_encoding_autodetectors = G_N_ELEMENTS (encoding_autodetector);
+
 enum
 {
 	FONT_TYPE_SERIF,
@@ -182,6 +202,7 @@ enum
 	LANGUAGE_PROP,
 
 	/* Appeareance */
+	FONTS_LANGUAGE_PROP,
 	SERIF_PROP,
 	SANSSERIF_PROP,
 	MONOSPACE_PROP,
@@ -213,11 +234,12 @@ EphyDialogProperty properties [] =
 	/* General */
 	{ OPEN_IN_TABS_PROP, "open_in_tabs_checkbutton", CONF_TABS_TABBED, PT_AUTOAPPLY, NULL },
 	{ HOMEPAGE_ENTRY_PROP, "homepage_entry", CONF_GENERAL_HOMEPAGE, PT_AUTOAPPLY, NULL },
-	{ AUTO_ENCODING_PROP, "auto_encoding_optionmenu", CONF_LANGUAGE_AUTODETECT_ENCODING, PT_AUTOAPPLY, NULL },
+	{ AUTO_ENCODING_PROP, "auto_encoding_optionmenu", NULL, PT_NORMAL, NULL },
 	{ DEFAULT_ENCODING_PROP, "default_encoding_optionmenu", NULL, PT_NORMAL, NULL },
 	{ LANGUAGE_PROP, "language_optionmenu", NULL, PT_NORMAL, NULL },
 
 	/* Appeareance */
+	{ FONTS_LANGUAGE_PROP, "fonts_language_optionmenu", NULL, PT_NORMAL, NULL },
 	{ SERIF_PROP, "serif_combo", NULL, PT_NORMAL, NULL },
 	{ SANSSERIF_PROP, "sansserif_combo", NULL, PT_NORMAL, NULL },
 	{ MONOSPACE_PROP, "monospace_combo", NULL, PT_NORMAL, NULL },
@@ -256,8 +278,10 @@ struct PrefsDialogPrivate
 
 	GList *langs;
 	GList *encodings;
+	GList *autodetectors;
+	GList *fonts_languages;
 
-	int language;
+	guint language;
 	gboolean switching;
 };
 
@@ -343,6 +367,12 @@ prefs_dialog_finalize (GObject *object)
 	g_list_foreach (pd->priv->encodings, (GFunc) encoding_info_free, NULL);
 	g_list_free (pd->priv->encodings);
 
+	g_list_foreach (pd->priv->autodetectors, (GFunc) g_free, NULL);
+	g_list_free (pd->priv->autodetectors);
+
+	g_list_foreach (pd->priv->fonts_languages, (GFunc) g_free, NULL);
+	g_list_free (pd->priv->fonts_languages);
+
         g_free (pd->priv);
 
         G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -368,6 +398,19 @@ prefs_dialog_show_help (PrefsDialog *pd)
 	ephy_gui_help (GTK_WINDOW (pd), "epiphany", help_preferences[id]);
 }
 
+static const gchar *
+get_current_language_code (PrefsDialog *dialog)
+{
+	GList *lang;
+	FontsLanguageInfo *info;
+
+	lang = g_list_nth (dialog->priv->fonts_languages, dialog->priv->language);
+	g_assert (lang != NULL);
+	info = (FontsLanguageInfo *) lang->data;
+
+	return info->code;
+}
+
 static void
 setup_font_menu (PrefsDialog *dialog,
 		 const char *type,
@@ -375,7 +418,7 @@ setup_font_menu (PrefsDialog *dialog,
 {
 	char *default_font;
 	GList *fonts;
-	const char *name;
+	gchar *name;
 	char key[255];
 	int pos;
 	GtkWidget *entry = GTK_COMBO(combo)->entry;
@@ -385,16 +428,16 @@ setup_font_menu (PrefsDialog *dialog,
 		(EPHY_EMBED_SHELL (ephy_shell));
 
 	ephy_embed_single_get_font_list (single,
-					 lang_encode_item[dialog->priv->language],
+					 get_current_language_code (dialog),
 					 type, &fonts, &default_font);
 
 	/* Get the default font */
-	sprintf (key, "%s_%s_%s", CONF_RENDERING_FONT, type,
-		 lang_encode_item[dialog->priv->language]);
+	snprintf (key, 255, "%s_%s_%s", CONF_RENDERING_FONT, type,
+		  get_current_language_code (dialog));
 	name = eel_gconf_get_string (key);
 	if (name == NULL)
 	{
-		name = default_font;
+		name = g_strdup (default_font);
 	}
 
 	/* set popdown doesnt like NULL */
@@ -415,6 +458,7 @@ setup_font_menu (PrefsDialog *dialog,
 	}
 
 	g_free (default_font);
+	g_free (name);
 
 	g_list_foreach (fonts, (GFunc)g_free, NULL);
 	g_list_free (fonts);
@@ -428,8 +472,7 @@ save_font_menu (PrefsDialog *dialog,
 	char *name;
 	char key[255];
 
-	name = gtk_editable_get_chars
-		(GTK_EDITABLE(entry), 0, -1);
+	name = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
 
 	/* do not save empty fonts */
 	if (!name || *name == '\0')
@@ -438,9 +481,9 @@ save_font_menu (PrefsDialog *dialog,
 		return;
 	}
 
-	sprintf (key, "%s_%s_%s", CONF_RENDERING_FONT,
-		 fonts_types[type],
-		 lang_encode_item[dialog->priv->language]);
+	snprintf (key, 255, "%s_%s_%s", CONF_RENDERING_FONT,
+		  fonts_types[type],
+		  get_current_language_code (dialog));
 	eel_gconf_set_string (key, name);
 	g_free (name);
 }
@@ -494,9 +537,9 @@ size_spinbutton_changed_cb (GtkWidget *spin, PrefsDialog *dialog)
 
 	type = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(spin), "type"));
 
-	sprintf (key, "%s_%s",
-		 size_prefs[type],
-		 lang_encode_item[dialog->priv->language]);
+	snprintf (key, 255, "%s_%s",
+		  size_prefs[type],
+		  get_current_language_code (dialog));
 	eel_gconf_set_integer (key, gtk_spin_button_get_value (GTK_SPIN_BUTTON (spin)));
 }
 
@@ -539,8 +582,8 @@ setup_size_control (PrefsDialog *dialog,
 	char key[255];
 	int size;
 
-	sprintf (key, "%s_%s", pref,
-		 lang_encode_item[dialog->priv->language]);
+	snprintf (key, 255, "%s_%s", pref,
+		  get_current_language_code (dialog));
 	size = eel_gconf_get_integer (key);
 
 	if (size == 0) size = default_size;
@@ -566,6 +609,12 @@ setup_size_controls (PrefsDialog *dialog)
 	setup_size_control (dialog, CONF_RENDERING_FONT_MIN_SIZE, 0, spin);
 }
 
+static gint
+fonts_language_info_cmp (const FontsLanguageInfo *i1, const FontsLanguageInfo *i2)
+{
+	return g_utf8_collate (i1->title, i2->title);
+}
+
 static void
 setup_fonts (PrefsDialog *dialog)
 {
@@ -586,6 +635,52 @@ setup_fonts (PrefsDialog *dialog)
 	setup_font_menu (dialog, "monospace", combo);
 
 	dialog->priv->switching = FALSE;
+}
+
+static void
+create_fonts_language_menu (PrefsDialog *dialog)
+{
+	GtkWidget *optionmenu, *menu;
+	GList *l = NULL;
+	guint i;
+
+	for (i = 0; i < n_fonts_languages; i++)
+	{
+		FontsLanguageInfo *info;
+
+		info = g_new0 (FontsLanguageInfo, 1);
+		info->title = _(fonts_language[i].title);
+		info->code = fonts_language[i].code;
+
+		l = g_list_prepend (l, info);
+	}
+
+	l = g_list_sort (l, (GCompareFunc) fonts_language_info_cmp);
+	dialog->priv->fonts_languages = l;
+
+	optionmenu = ephy_dialog_get_control (EPHY_DIALOG (dialog),
+					      FONTS_LANGUAGE_PROP);
+
+	menu = gtk_menu_new ();
+
+	for (l = dialog->priv->fonts_languages; l != NULL; l = l->next)
+	{
+		FontsLanguageInfo *info = (FontsLanguageInfo *) l->data;
+		GtkWidget *item;
+
+		item = gtk_menu_item_new_with_label (info->title);
+		gtk_menu_shell_append (GTK_MENU_SHELL(menu), item);
+		gtk_widget_show (item);
+	}
+
+	gtk_option_menu_set_menu (GTK_OPTION_MENU(optionmenu), menu);
+
+	/* FIXME: find a way to set this to the user's current locale's lang */
+	gtk_option_menu_set_history (GTK_OPTION_MENU (optionmenu),
+				     dialog->priv->language);
+	g_signal_connect (optionmenu, "changed",
+			  G_CALLBACK (fonts_language_optionmenu_changed_cb),
+			  dialog);
 }
 
 static void
@@ -654,6 +749,99 @@ create_default_encoding_menu (PrefsDialog *dialog)
 
 	g_signal_connect (optionmenu, "changed",
 			  G_CALLBACK (default_encoding_menu_changed_cb),
+			  dialog);
+}
+
+static void
+autodetect_encoding_menu_changed_cb (GtkOptionMenu *option_menu, gpointer data)
+{
+	GList *l;
+	guint i;
+	EncodingAutodetectorInfo *info;
+
+	g_return_if_fail (IS_PREFS_DIALOG (data));
+
+	i = gtk_option_menu_get_history (option_menu);
+
+	l = g_list_nth (PREFS_DIALOG (data)->priv->autodetectors, i);
+
+	if (l)
+	{
+		info = (EncodingAutodetectorInfo *) l->data;
+
+		eel_gconf_set_string (CONF_LANGUAGE_AUTODETECT_ENCODING, info->name);
+	}
+}
+
+static gint
+autodetector_info_cmp (const EncodingAutodetectorInfo *i1, const EncodingAutodetectorInfo *i2)
+{
+	return g_utf8_collate (i1->title, i2->title);
+}
+
+static gint
+find_autodetector_info (const EncodingAutodetectorInfo *info, const gchar *name)
+{
+	return strcmp (info->name, name);
+}
+
+static void
+create_encoding_autodetectors_menu (PrefsDialog *dialog)
+{
+	GtkWidget *optionmenu, *menu, *item;
+	gint i, position = 0;
+	GList *l, *list = NULL;
+	gchar *detector = NULL;
+	EncodingAutodetectorInfo *info;
+
+	optionmenu = ephy_dialog_get_control (EPHY_DIALOG (dialog),
+					      AUTO_ENCODING_PROP);
+
+	for (i = 0; i < n_encoding_autodetectors; i++)
+	{
+		info = g_new0 (EncodingAutodetectorInfo, 1);
+
+		info->title = _(encoding_autodetector[i].title);
+		info->name = encoding_autodetector[i].name;
+
+		list = g_list_prepend (list, info);
+	}
+
+	list = g_list_sort (list, (GCompareFunc) autodetector_info_cmp);
+	dialog->priv->autodetectors = list;
+
+	menu = gtk_menu_new ();
+
+	for (l = list; l != NULL; l = l->next)
+	{
+		info = (EncodingAutodetectorInfo *) l->data;
+
+		item = gtk_menu_item_new_with_label (info->title);
+		gtk_menu_shell_append (GTK_MENU_SHELL(menu), item);
+		gtk_widget_show (item);
+		g_object_set_data (G_OBJECT (item), "desc", info->title);
+	}
+
+	gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu), menu);
+
+	/* init value */
+	detector = eel_gconf_get_string (CONF_LANGUAGE_AUTODETECT_ENCODING);
+	if (detector == NULL) detector = g_strdup ("");
+
+	l = g_list_find_custom (list, detector,
+				(GCompareFunc) find_autodetector_info);
+
+	g_free (detector);
+
+	if (l)
+	{
+		position = g_list_position (list, l);
+	}
+
+	gtk_option_menu_set_history (GTK_OPTION_MENU(optionmenu), position);
+
+	g_signal_connect (optionmenu, "changed",
+			  G_CALLBACK (autodetect_encoding_menu_changed_cb),
 			  dialog);
 }
 
@@ -849,6 +1037,8 @@ prefs_dialog_init (PrefsDialog *pd)
 	pd->priv->notebook = ephy_dialog_get_control (dialog, NOTEBOOK_PROP);
 	pd->priv->langs = NULL;
 	pd->priv->encodings = NULL;
+	pd->priv->autodetectors = NULL;
+	pd->priv->fonts_languages = NULL;
 
 	icon = gtk_widget_render_icon (pd->priv->window,
 				       GTK_STOCK_PREFERENCES,
@@ -858,12 +1048,14 @@ prefs_dialog_init (PrefsDialog *pd)
 	g_object_unref(icon);
 
 	pd->priv->switching = FALSE;
+	create_fonts_language_menu (pd);
 	setup_fonts (pd);
 	setup_size_controls (pd);
 	attach_fonts_signals (pd);
 	attach_size_controls_signals (pd);
 	create_languages_list (pd);
 	create_default_encoding_menu (pd);
+	create_encoding_autodetectors_menu (pd);
 	create_language_menu (pd);
 }
 
@@ -911,7 +1103,7 @@ void
 fonts_language_optionmenu_changed_cb (GtkWidget *optionmenu,
 				      EphyDialog *dialog)
 {
-	int i;
+	guint i;
 	PrefsDialog *pd = PREFS_DIALOG (dialog);
 
 	i = gtk_option_menu_get_history

@@ -387,7 +387,7 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 	}
 
 	/* fonts notifiers */
-	for (i = 0; i < n_lang_encode_items; i++)
+	for (i = 0; i < n_fonts_languages; i++)
 	{
 		guint k;
 		char *types [] = { "serif", "sans-serif", "cursive", "fantasy", "monospace" };
@@ -396,33 +396,33 @@ mozilla_notifiers_init(EphyEmbedSingle *single)
 		
 		for (k = 0; k < G_N_ELEMENTS (types); k++)
 		{
-			info = g_strconcat (types[k], ".", lang_encode_item[i], NULL);
+			info = g_strconcat (types[k], ".", fonts_language[i].code, NULL);
 			
-			sprintf (key, "%s_%s_%s", CONF_RENDERING_FONT, 
+			snprintf (key, 255, "%s_%s_%s", CONF_RENDERING_FONT, 
 			 	 types[k], 
-                 	 	 lang_encode_item[i]);
+                 	 	 fonts_language[i].code);
 			add_notification_and_notify (client, key,
 						     (GConfClientNotifyFunc)mozilla_font_notifier,
 						     info);
 			font_infos = g_list_append (font_infos, info);
 		}
 
-		sprintf (key, "%s_%s", CONF_RENDERING_FONT_MIN_SIZE, lang_encode_item[i]);
-		info = g_strconcat ("minimum-size", ".", lang_encode_item[i], NULL);
+		snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_MIN_SIZE, fonts_language[i].code);
+		info = g_strconcat ("minimum-size", ".", fonts_language[i].code, NULL);
 		add_notification_and_notify (client, key,
 					     (GConfClientNotifyFunc)mozilla_font_size_notifier,
 					     info);
 		font_infos = g_list_append (font_infos, info);
 
-		sprintf (key, "%s_%s", CONF_RENDERING_FONT_FIXED_SIZE, lang_encode_item[i]);
-		info = g_strconcat ("size.fixed", ".", lang_encode_item[i], NULL);
+		snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_FIXED_SIZE, fonts_language[i].code);
+		info = g_strconcat ("size.fixed", ".", fonts_language[i].code, NULL);
 		add_notification_and_notify (client, key,
 					     (GConfClientNotifyFunc)mozilla_font_size_notifier,
 					     info);
 		font_infos = g_list_append (font_infos, info);
 
-		sprintf (key, "%s_%s", CONF_RENDERING_FONT_VAR_SIZE, lang_encode_item[i]);
-		info = g_strconcat ("size.variable", ".", lang_encode_item[i], NULL);
+		snprintf (key, 255, "%s_%s", CONF_RENDERING_FONT_VAR_SIZE, fonts_language[i].code);
+		info = g_strconcat ("size.variable", ".", fonts_language[i].code, NULL);
 		add_notification_and_notify (client, key,
 					     (GConfClientNotifyFunc)mozilla_font_size_notifier,
 					     info);
@@ -532,7 +532,14 @@ mozilla_default_encoding_notifier(GConfClient *client,
 				  GConfEntry *entry,
 				  EphyEmbedSingle *single)
 {
-	/* FIXME */
+	gchar *encoding;
+
+	encoding = eel_gconf_get_string (CONF_LANGUAGE_DEFAULT_ENCODING);
+	if (encoding == NULL) encoding = g_strdup ("ISO-8859-1");
+
+	mozilla_prefs_set_string ("intl.charset.default", encoding);
+
+	g_free (encoding);
 }
 
 
@@ -633,36 +640,20 @@ mozilla_language_notifier(GConfClient *client,
 	g_slist_free (languages);
 }
 
-static char *autodetect_encoding_prefs[] =
-{
-        "",
-        "zh_parallel_state_machine",
-        "cjk_parallel_state_machine",
-        "ja_parallel_state_machine",
-        "ko_parallel_state_machine",
-        "ruprob",
-        "zhcn_parallel_state_machine",
-        "zhtw_parallel_state_machine",
-        "ukprob"
-};
-
 static void
 mozilla_autodetect_encoding_notifier(GConfClient *client,
 				    guint cnxn_id,
 				    GConfEntry *entry,
 				    EphyEmbedSingle *single)
 {
-	int encoding = eel_gconf_get_integer (CONF_LANGUAGE_AUTODETECT_ENCODING);
-	if (encoding < 0 || 
-	    encoding >= (int)(sizeof(autodetect_encoding_prefs)
-		             / sizeof(autodetect_encoding_prefs[0])))
-	{
-		g_warning ("mozilla_autodetect_encoding_notifier: "
-			   "unsupported value: %d", encoding);
-		return;
-	}
-	mozilla_prefs_set_string ("intl.charset.detector", 
-				  autodetect_encoding_prefs[encoding]);
+	gchar *detector;
+
+	detector = eel_gconf_get_string (CONF_LANGUAGE_AUTODETECT_ENCODING);
+	if (detector == NULL) detector = g_strdup (""); // Off
+
+	mozilla_prefs_set_string ("intl.charset.detector",  detector);
+
+	g_free (detector);
 }
 
 static void

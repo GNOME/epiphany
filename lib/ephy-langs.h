@@ -24,6 +24,7 @@
 #endif
 
 #include <glib.h>
+#include <bonobo/bonobo-i18n.h>
 
 G_BEGIN_DECLS
 
@@ -64,24 +65,30 @@ typedef struct
 } EncodingInfo;
 
 /* language encoding groups */
-static const gchar *lang_encode_item[] =
+typedef struct
 {
-	"x-western",
-	"x-central-euro",
-	"ja",
-	"zh-TW",
-	"zh-CN",
-	"ko",
-	"x-cyrillic",
-	"x-baltic",
-	"el",
-	"tr",
-	"x-unicode",
-	"th",
-	"he",
-	"ar"
+	gchar *title;
+	gchar* code;
+} FontsLanguageInfo;
+
+static const FontsLanguageInfo fonts_language[] =
+{
+	{ N_("Arabic"),			"ar" },
+	{ N_("Baltic"),			"x-baltic" },
+	{ N_("Central European"),	"x-central-euro" },
+	{ N_("Cyrillic"),		"x-cyrillic" },
+	{ N_("Greek"),			"el" },
+	{ N_("Hebrew"),			"he" },
+	{ N_("Japanese"),		"ja" },
+	{ N_("Korean"),			"ko" },
+	{ N_("Simplified Chinese"),	"zh-CN" },
+	{ N_("Thai"),			"th" },
+	{ N_("Traditional Chinese"),	"zh-TW" },
+	{ N_("Turkish"),		"tr" },
+	{ N_("Unicode"),		"x-unicode" },
+	{ N_("Western"),		"x-western" },
 };
-static const guint n_lang_encode_items = G_N_ELEMENTS (lang_encode_item);
+static const guint n_fonts_languages = G_N_ELEMENTS (fonts_language);
 
 void	language_group_info_free	(LanguageGroupInfo *info);
 

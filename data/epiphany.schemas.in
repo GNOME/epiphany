@@ -417,9 +417,20 @@
         <key>/schemas/apps/epiphany/rendering/autodetect_encoding</key>
         <applyto>/apps/epiphany/rendering/autodetect_encoding</applyto>
         <owner>epiphany</owner>
-        <type>int</type>
-        <default>0</default>
+        <type>string</type>
+        <default></default>
         <locale name="C">
+	<short>The charset autodetector. Empty string means autodetect is off</short>
+	<long>
+	The charset autodetector. Valid entries are <empty string> (autodetectors
+	off), cjk_parallel_state_machine (autodetect east asian encodings),
+	ja_parallel_state_machine (autodetect japanese encodings),
+	ko_parallel_state_machine (autodetect korean encodings), ruprob
+	(autodetect russian encodings), ukprob (autodetect ukrainian encodings),
+	zh_parallel_state_machine (autodetect chinese encodings),
+	zhcn_parallel_state_machine (autodetect simplified chinese encodings) and
+	zhtw_parallel_state_machine (autodetect traditional chinese encodings).
+	</long>
         </locale>
       </schema>
       <schema>

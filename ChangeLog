@@ -1,3 +1,27 @@
+2003-05-29  Christian Persch  <chpe@cvs.gnome.org>
+
+	* lib/ephy-langs.h:
+	* data/glade/prefs-dialog.glade:
+	* src/prefs-dialog.c: (autodetector_info_free), (prefs_dialog_finalize),
+	(get_current_language_code), (setup_font_menu), (setup_size_control),
+	(fonts_language_info_cmp), (create_fonts_language_menu),
+	(autodetect_encoding_menu_changed_cb), (autodetector_info_cmp),
+	(find_autodetector_info), (create_encoding_autodetectors_menu),
+	(prefs_dialog_init):
+	
+	Sort the lists of encoding autodetectors and of fonts languages.
+	
+	* data/epiphany.schemas.in:
+	
+	Document the possible values for the encoding autodetectors.
+	
+	* embed/mozilla/mozilla-notifiers.cpp: (mozilla_notifiers_init),
+	(mozilla_default_encoding_notifier),
+	(mozilla_autodetect_encoding_notifier):
+
+	Adapted for the changes in the prefs dialog.
+	The default encoding notifier now propagates the setting to mozilla :)
+
 2003-05-28  Christian Persch  <chpe@cvs.gnome.org>
 
 	The "s/charset/encoding/" mega patch :)

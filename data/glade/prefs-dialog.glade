@@ -710,7 +710,6 @@
 			      <property name="yalign">0.5</property>
 			      <property name="xpad">0</property>
 			      <property name="ypad">0</property>
-			      <property name="mnemonic_widget">optionmenu2</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">0</property>
@@ -723,127 +722,14 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkOptionMenu" id="optionmenu2">
+			    <widget class="GtkOptionMenu" id="fonts_language_optionmenu">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="history">0</property>
-			      <signal name="changed" handler="fonts_language_optionmenu_changed_cb" last_modification_time="Fri, 17 May 2002 10:44:00 GMT"/>
+			      <property name="history">-1</property>
 
 			      <child internal-child="menu">
 				<widget class="GtkMenu" id="menu2">
 				  <property name="visible">True</property>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem18">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Western</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem19">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Central European</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem20">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Japanese</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem21">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Traditional Chinese</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem22">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Simplified Chinese</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem23">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Korean</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem24">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Cyrillic</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem25">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Baltic</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem26">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Greek</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem27">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Turkish</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem28">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Unicode</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem29">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Thai</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem30">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Hebrew</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem31">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Arabic</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
 				</widget>
 			      </child>
 			    </widget>
@@ -2137,83 +2023,11 @@
 			    <widget class="GtkOptionMenu" id="auto_encoding_optionmenu">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="history">0</property>
+			      <property name="history">-1</property>
 
 			      <child internal-child="menu">
 				<widget class="GtkMenu" id="menu6">
 				  <property name="visible">True</property>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem39">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Off</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem40">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Chinese</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem41">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">East asian</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem42">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Japanese</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem43">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Korean</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem44">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Russian</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem45">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Simplified Chinese</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem46">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Traditional Chinese</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkMenuItem" id="menuitem47">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Ukrainian</property>
-				      <property name="use_underline">True</property>
-				    </widget>
-				  </child>
 				</widget>
 			      </child>
 			    </widget>
