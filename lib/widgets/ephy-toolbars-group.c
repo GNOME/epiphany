@@ -17,7 +17,6 @@
  */
 
 #include "ephy-toolbars-group.h"
-#include "ephy-file-helpers.h"
 #include "ephy-debug.h"
 
 #include <libgnome/gnome-i18n.h>
@@ -27,13 +26,22 @@ static void	ephy_toolbars_group_class_init   (EphyToolbarsGroupClass *klass);
 static void	ephy_toolbars_group_init	 (EphyToolbarsGroup *t);
 static void	ephy_toolbars_group_finalize	 (GObject *object);
 
+enum
+{
+	CHANGED,
+	LAST_SIGNAL
+};
+
+static guint ephy_toolbars_group_signals[LAST_SIGNAL] = { 0 };
+
 static GObjectClass *parent_class = NULL;
 
 struct EphyToolbarsGroupPrivate
 {
 	GNode *available_actions;
 	GNode *toolbars;
-	char *filename;
+	char *defaults;
+	char *user;
 };
 
 GType
@@ -109,7 +117,7 @@ toolbars_group_save (EphyToolbarsGroup *t)
 	xmlDocPtr doc;
 
 	doc = ephy_toolbars_group_to_xml (t);
-	xmlSaveFormatFile (t->priv->filename, doc, 1);
+	xmlSaveFormatFile (t->priv->user, doc, 1);
 	xmlFreeDoc (doc);
 }
 
@@ -154,17 +162,17 @@ static void
 add_action (EphyToolbarsGroup *t,
 	    GNode *parent,
 	    GNode *sibling,
-	    const char *type,
 	    const char *name)
 {
 	EphyToolbarsItem *item;
 	GNode *node;
 	gboolean separator;
 
-	LOG ("Add action, type %s, name %s", type, name)
+	LOG ("Add action, name %s", name)
 
 	separator = (strcmp (name, "separator") == 0);
 	item = toolbars_item_new (name, separator);
+	item->parent = parent->data;
 	node = g_node_new (item);
 
 	g_node_insert_before (parent, sibling, node);
@@ -174,18 +182,24 @@ void
 ephy_toolbars_group_add_item (EphyToolbarsGroup *t,
 			      EphyToolbarsToolbar *parent,
 			      EphyToolbarsItem *sibling,
-			      const char *type,
 			      const char *name)
 {
 	GNode *parent_node;
-	GNode *sibling_node;
+	GNode *sibling_node = NULL;
 
 	parent_node = g_node_find (t->priv->toolbars, G_IN_ORDER, G_TRAVERSE_ALL, parent);
-	sibling_node = g_node_find (t->priv->toolbars, G_IN_ORDER, G_TRAVERSE_ALL, sibling);
 
-	add_action (t, parent_node, sibling_node, type, name);
+	if (sibling)
+	{
+		sibling_node = g_node_find (t->priv->toolbars, G_IN_ORDER,
+					    G_TRAVERSE_ALL, sibling);
+	}
+
+	add_action (t, parent_node, sibling_node, name);
 
 	toolbars_group_save (t);
+
+	g_signal_emit (G_OBJECT (t), ephy_toolbars_group_signals[CHANGED], 0);
 }
 
 static void
@@ -200,13 +214,13 @@ parse_item_list (EphyToolbarsGroup *t,
 			xmlChar *verb;
 
 			verb = xmlGetProp (child, "verb");
-			add_action (t, parent, NULL, NULL, verb);
+			add_action (t, parent, NULL, verb);
 
 			xmlFree (verb);
 		}
 		else if (xmlStrEqual (child->name, "separator"))
 		{
-			add_action (t, parent, NULL, NULL, "separator");
+			add_action (t, parent, NULL, "separator");
 		}
 
 		child = child->next;
@@ -234,6 +248,8 @@ ephy_toolbars_group_add_toolbar (EphyToolbarsGroup *t)
 	node = add_toolbar (t);
 
 	toolbars_group_save (t);
+
+	g_signal_emit (G_OBJECT (t), ephy_toolbars_group_signals[CHANGED], 0);
 
 	return node->data;
 }
@@ -266,7 +282,7 @@ load_defaults (EphyToolbarsGroup *t)
 
 	LOG ("Load default toolbar info")
 
-	xml_filepath = ephy_file ("epiphany-toolbar.xml");
+	xml_filepath = t->priv->defaults;
 
 	doc = xmlParseFile (xml_filepath);
 	root = xmlDocGetRootElement (doc);
@@ -296,7 +312,7 @@ load_toolbar (EphyToolbarsGroup *t)
 {
 	xmlDocPtr doc;
 	xmlNodePtr root;
-	const char *xml_filepath = t->priv->filename;
+	const char *xml_filepath = t->priv->user;
 
 	LOG ("Load custom toolbar")
 
@@ -335,17 +351,17 @@ ephy_toolbars_group_to_string (EphyToolbarsGroup *t)
 			if (item->separator)
 			{
 				g_string_append_printf
-					(s, "<placeholder name=\"PlaceHolder%d\">"
+					(s, "<placeholder name=\"PlaceHolder%d-%d\">"
 					 "<separator name=\"ToolSeparator\"/>"
-					 "</placeholder>\n", i);
+					 "</placeholder>\n", i, k);
 			}
 			else
 			{
 				g_string_append_printf
-					(s, "<placeholder name=\"PlaceHolder%d\">"
+					(s, "<placeholder name=\"PlaceHolder%d-%d\">"
 					 "<toolitem name=\"ToolItem\" verb=\"%s\"/>"
 					 "</placeholder>\n",
-					 i, item->action);
+					 i, k, item->action);
 			}
 			i++;
 		}
@@ -371,6 +387,17 @@ ephy_toolbars_group_class_init (EphyToolbarsGroupClass *klass)
         parent_class = g_type_class_peek_parent (klass);
 
         object_class->finalize = ephy_toolbars_group_finalize;
+
+	ephy_toolbars_group_signals[CHANGED] =
+		g_signal_new ("changed",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (EphyToolbarsGroupClass, changed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
+
 }
 
 static void
@@ -380,7 +407,8 @@ ephy_toolbars_group_init (EphyToolbarsGroup *t)
 
 	t->priv->available_actions = NULL;
 	t->priv->toolbars = NULL;
-	t->priv->filename = NULL;
+	t->priv->user = NULL;
+	t->priv->defaults = NULL;
 }
 
 static void
@@ -393,12 +421,15 @@ ephy_toolbars_group_finalize (GObject *object)
 
 	g_node_children_foreach (t->priv->available_actions, G_IN_ORDER,
 				 (GNodeForeachFunc)free_item_node, NULL);
-	ephy_toolbars_group_foreach_toolbar (t, free_toolbar_node);
-	ephy_toolbars_group_foreach_item (t, free_item_node);
+	ephy_toolbars_group_foreach_toolbar
+		(t, (EphyToolbarsGroupForeachToolbarFunc)free_toolbar_node, NULL);
+	ephy_toolbars_group_foreach_item
+		(t, (EphyToolbarsGroupForeachItemFunc)free_item_node, NULL);
 	g_node_destroy (t->priv->available_actions);
 	g_node_destroy (t->priv->toolbars);
 
-	g_free (t->priv->filename);
+	g_free (t->priv->user);
+	g_free (t->priv->defaults);
 
         g_free (t->priv);
 
@@ -421,41 +452,45 @@ ephy_toolbars_group_new (void)
 }
 
 void
-ephy_toolbars_group_set_source (EphyToolbarsGroup *group, const char *filename)
+ephy_toolbars_group_remove_toolbar (EphyToolbarsGroup *t,
+				    EphyToolbarsToolbar *toolbar)
 {
-	group->priv->filename = g_strdup (filename);
+	GNode *node;
+
+	node = g_node_find (t->priv->toolbars, G_IN_ORDER, G_TRAVERSE_ALL, toolbar);
+	free_toolbar_node (node->data);
+	g_node_destroy (node);
+
+	g_signal_emit (G_OBJECT (t), ephy_toolbars_group_signals[CHANGED], 0);
+}
+
+void
+ephy_toolbars_group_remove_item	(EphyToolbarsGroup *t,
+				 EphyToolbarsItem *item)
+{
+	GNode *node;
+
+	node = g_node_find (t->priv->toolbars, G_IN_ORDER, G_TRAVERSE_ALL, item);
+	free_toolbar_node (node->data);
+	g_node_destroy (node);
+
+	g_signal_emit (G_OBJECT (t), ephy_toolbars_group_signals[CHANGED], 0);
+}
+
+void
+ephy_toolbars_group_set_source (EphyToolbarsGroup *group,
+				const char *defaults,
+				const char *user)
+{
+	group->priv->defaults = g_strdup (defaults);
+	group->priv->user = g_strdup (user);
 
 	load_toolbar (group);
 	load_defaults (group);
 }
 
-void
-ephy_toolbars_group_foreach_available (EphyToolbarsGroup *group,
-				       EphyToolbarsGroupForeachToolbarFunc func)
-{
-	GNode *l1;
-
-	for (l1 = group->priv->available_actions; l1 != NULL; l1 = l1->next)
-	{
-		func (l1->data);
-	}
-}
-
-void
-ephy_toolbars_group_foreach_toolbar (EphyToolbarsGroup *group,
-				     EphyToolbarsGroupForeachToolbarFunc func)
-{
-	GNode *l1;
-
-	for (l1 = group->priv->toolbars->children; l1 != NULL; l1 = l1->next)
-	{
-		func (l1->data);
-	}
-}
-
-void
-ephy_toolbars_group_foreach_item (EphyToolbarsGroup *group,
-				  EphyToolbarsGroupForeachItemFunc func)
+static gboolean
+is_item_in_toolbars (EphyToolbarsGroup *group, const char *action)
 {
 	GNode *l1, *l2;
 
@@ -463,8 +498,93 @@ ephy_toolbars_group_foreach_item (EphyToolbarsGroup *group,
 	{
 		for (l2 = l1->children; l2 != NULL; l2 = l2->next)
 		{
-			func (l2->data);
+			EphyToolbarsItem *item;
+
+			item = (EphyToolbarsItem *) l2->data;
+			if (strcmp (action, item->action) == 0) return TRUE;
 		}
 	}
+
+	return FALSE;
+}
+
+void
+ephy_toolbars_group_foreach_available (EphyToolbarsGroup *group,
+				       EphyToolbarsGroupForeachItemFunc func,
+				       gpointer data)
+{
+	GNode *l1;
+
+	for (l1 = group->priv->available_actions->children; l1 != NULL; l1 = l1->next)
+	{
+		EphyToolbarsItem *item;
+
+		item = (EphyToolbarsItem *)l1->data;
+
+		if (!is_item_in_toolbars (group, item->action))
+		{
+			func (item, data);
+		}
+	}
+}
+
+void
+ephy_toolbars_group_foreach_toolbar (EphyToolbarsGroup *group,
+				     EphyToolbarsGroupForeachToolbarFunc func,
+				     gpointer data)
+{
+	GNode *l1;
+
+	for (l1 = group->priv->toolbars->children; l1 != NULL; l1 = l1->next)
+	{
+		func (l1->data, data);
+	}
+}
+
+void
+ephy_toolbars_group_foreach_item (EphyToolbarsGroup *group,
+				  EphyToolbarsGroupForeachItemFunc func,
+				  gpointer data)
+{
+	GNode *l1, *l2;
+
+	for (l1 = group->priv->toolbars->children; l1 != NULL; l1 = l1->next)
+	{
+		for (l2 = l1->children; l2 != NULL; l2 = l2->next)
+		{
+			func (l2->data, data);
+		}
+	}
+}
+
+char *
+ephy_toolbars_group_get_path (EphyToolbarsGroup *t,
+			      gpointer item)
+{
+	GNode *node;
+	char *path = NULL;
+
+	node = g_node_find (t->priv->toolbars, G_IN_ORDER, G_TRAVERSE_ALL, item);
+
+	switch (g_node_depth (node))
+	{
+		case 2:
+			path = g_strdup_printf ("/Toolbar%d",
+				                g_node_child_position (node->parent, node));
+			break;
+		case 3:
+			path = g_strdup_printf
+				("/Toolbar%d/PlaceHolder%d-%d/%s",
+				 g_node_child_position (node->parent->parent, node->parent),
+				 g_node_child_position (node->parent, node),
+				 g_node_child_position (node->parent->parent, node->parent),
+				 ((EphyToolbarsItem *)node->data)->separator ?
+				 "ToolSeparator" : "ToolItem");
+			break;
+		default:
+			g_assert_not_reached ();
+	}
+
+	return path;
 }
 

@@ -245,7 +245,7 @@ static EggActionGroupEntry ephy_popups_entries [] = {
 	  NULL, G_CALLBACK (popup_cmd_image_in_new_tab), NULL },
 	{ "SaveImageAs", N_("Save Image As..."), GTK_STOCK_SAVE_AS, NULL,
 	  NULL, G_CALLBACK (popup_cmd_save_image_as), NULL },
-	{ "SetImageAsBackground", N_("Use Image as Background"), NULL, NULL,
+	{ "SetImageAsBackground", N_("Use Image As Background"), NULL, NULL,
 	  NULL, G_CALLBACK (popup_cmd_set_image_as_background), NULL },
 	{ "CopyImageLocation", N_("Copy Image Location"), GTK_STOCK_COPY, NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_image_location), NULL },

@@ -33,6 +33,7 @@
 #include "ephy-string.h"
 #include "ephy-debug.h"
 #include "ephy-new-bookmark.h"
+#include "ephy-toolbars-group.h"
 
 #include <string.h>
 
@@ -157,6 +158,7 @@ toolbar_get_action (EphyEditableToolbar *etoolbar,
 			title = (const char *)uris->next->data;
 		}
 
+		LOG ("Action for bookmark -%s-. EphyBookmarks %p", url, bookmarks)
 		id = ephy_bookmarks_get_bookmark_id (bookmarks, url);
 
 		if (id == 0)
@@ -335,11 +337,26 @@ toolbar_set_window (Toolbar *t, EphyWindow *window)
 static void
 toolbar_init (Toolbar *t)
 {
+	static EphyToolbarsGroup *group = NULL;
+
         t->priv = g_new0 (ToolbarPrivate, 1);
 
 	t->priv->window = NULL;
 	t->priv->ui_merge = NULL;
 	t->priv->visibility = TRUE;
+
+	if (group == NULL)
+	{
+		char *user;
+
+		user = g_build_filename (ephy_dot_dir (), "toolbar.xml", NULL);
+		group = ephy_toolbars_group_new ();
+		ephy_toolbars_group_set_source
+			(group, ephy_file ("epiphany-toolbar.xml"), user);
+		g_free (user);
+	}
+
+	g_object_set (t, "ToolbarsGroup", group, NULL);
 }
 
 static void

@@ -1,3 +1,47 @@
+2003-02-12  Marco Pesenti Gritti  <marco@it.gnome.org>
+
+	* lib/widgets/Makefile.am:
+	* lib/widgets/ephy-editable-toolbar.c:
+	(ephy_editable_toolbar_get_type), (drag_data_received_cb),
+	(drag_data_delete_cb), (connect_item_drag_source),
+	(disconnect_item_drag_source), (setup_toolbar), (setup_item),
+	(ensure_toolbar_min_size), (do_merge), (group_changed_cb),
+	(ensure_action), (ephy_editable_toolbar_set_group),
+	(ephy_editable_toolbar_set_merge),
+	(ephy_editable_toolbar_set_property),
+	(ephy_editable_toolbar_get_property),
+	(ephy_editable_toolbar_class_init), (ephy_editable_toolbar_init),
+	(ephy_editable_toolbar_finalize), (editor_close_cb),
+	(editor_add_toolbar_cb), (add_to_list), (update_editor_sheet),
+	(update_editor_position), (set_action_sensitive),
+	(ephy_editable_toolbar_edit):
+	* lib/widgets/ephy-toolbars-group.c: (toolbars_group_save),
+	(add_action), (ephy_toolbars_group_add_item), (parse_item_list),
+	(ephy_toolbars_group_add_toolbar), (load_defaults), (load_toolbar),
+	(ephy_toolbars_group_to_string), (ephy_toolbars_group_class_init),
+	(ephy_toolbars_group_init), (ephy_toolbars_group_finalize),
+	(ephy_toolbars_group_remove_toolbar),
+	(ephy_toolbars_group_remove_item),
+	(ephy_toolbars_group_set_source), (is_item_in_toolbars),
+	(ephy_toolbars_group_foreach_available),
+	(ephy_toolbars_group_foreach_toolbar),
+	(ephy_toolbars_group_foreach_item), (ephy_toolbars_group_get_path):
+	* lib/widgets/ephy-toolbars-group.h:
+	* src/bookmarks/ephy-bookmarks-editor.c:
+	(ephy_bookmarks_editor_node_selected_cb),
+	(ephy_bookmarks_editor_construct):
+	* src/bookmarks/ephy-bookmarks.c: (add_to_favorites),
+	(history_site_visited_cb), (bookmarks_changed_cb),
+	(bookmarks_removed_cb), (ephy_bookmarks_init),
+	(ephy_bookmarks_finalize), (ephy_bookmarks_get_bookmark_id),
+	(ephy_bookmarks_set_icon):
+	* src/ephy-window.c:
+	* src/toolbar.c: (toolbar_get_action), (toolbar_init):
+
+	Make EditToolbar use the new data stuff, still need love.
+	Fix bookmarks to never use location as an id, because now
+	it's editable.
+
 2003-02-10  James Willcox  <jwillcox@gnome.org>
 
 	* src/bookmarks/ephy-bookmarks-editor.c:

@@ -37,10 +37,6 @@ struct EphyBookmarksPrivate
 	EphyNode *favorites;
 	EphyNode *lower_fav;
 	double lower_score;
-	GHashTable *bookmarks_hash;
-	GStaticRWLock *bookmarks_hash_lock;
-	GHashTable *favorites_hash;
-	GStaticRWLock *favorites_hash_lock;
 	GHashTable *keywords_hash;
 	GStaticRWLock *keywords_hash_lock;
 };
@@ -332,16 +328,12 @@ static gboolean
 add_to_favorites (EphyBookmarks *eb, EphyNode *node, EphyHistory *eh)
 {
 	const char *url;
-	EphyNode *fav_node;
 	gboolean full_menu;
 	double score;
 
-	url = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
-	g_static_rw_lock_reader_lock (eb->priv->favorites_hash_lock);
-	fav_node = g_hash_table_lookup (eb->priv->favorites_hash, url);
-	g_static_rw_lock_reader_unlock (eb->priv->favorites_hash_lock);
-	if (fav_node) return FALSE;
+	if (ephy_node_has_child (eb->priv->favorites, node)) return FALSE;
 
+	url = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_LOCATION);
 	score = get_history_item_score (eh, url);
 	full_menu = ephy_node_get_n_children (eb->priv->favorites)
 		    > MAX_FAVORITES_NUM;
@@ -380,11 +372,12 @@ static void
 history_site_visited_cb (EphyHistory *gh, const char *url, EphyBookmarks *eb)
 {
 	EphyNode *node;
+	guint id;
 
-	g_static_rw_lock_reader_lock (eb->priv->bookmarks_hash_lock);
-	node = g_hash_table_lookup (eb->priv->bookmarks_hash, url);
-	g_static_rw_lock_reader_unlock (eb->priv->bookmarks_hash_lock);
-	if (!node) return;
+	id = ephy_bookmarks_get_bookmark_id (eb, url);
+	if (id == 0) return;
+
+	node = ephy_node_get_from_id (id);
 
 	if (add_to_favorites (eb, node, gh))
 	{
@@ -433,44 +426,11 @@ keywords_removed_cb (EphyNode *node,
 }
 
 static void
-favorites_added_cb (EphyNode *node,
-	            EphyNode *child,
-	            EphyBookmarks *eb)
-{
-	g_static_rw_lock_writer_lock (eb->priv->favorites_hash_lock);
-
-	g_hash_table_insert (eb->priv->favorites_hash,
-			     (char *) ephy_node_get_property_string (child, EPHY_NODE_BMK_PROP_LOCATION),
-			     child);
-
-	g_static_rw_lock_writer_unlock (eb->priv->favorites_hash_lock);
-}
-
-static void
-favorites_removed_cb (EphyNode *node,
+bookmarks_changed_cb (EphyNode *node,
 		      EphyNode *child,
 		      EphyBookmarks *eb)
 {
-	g_static_rw_lock_writer_lock (eb->priv->favorites_hash_lock);
-
-	g_hash_table_remove (eb->priv->favorites_hash,
-			     ephy_node_get_property_string (child, EPHY_NODE_BMK_PROP_LOCATION));
-
-	g_static_rw_lock_writer_unlock (eb->priv->favorites_hash_lock);
-}
-
-static void
-bookmarks_added_cb (EphyNode *node,
-	            EphyNode *child,
-	            EphyBookmarks *eb)
-{
-	g_static_rw_lock_writer_lock (eb->priv->bookmarks_hash_lock);
-
-	g_hash_table_insert (eb->priv->bookmarks_hash,
-			     (char *) ephy_node_get_property_string (child, EPHY_NODE_BMK_PROP_LOCATION),
-			     child);
-
-	g_static_rw_lock_writer_unlock (eb->priv->bookmarks_hash_lock);
+	ephy_bookmarks_emit_data_changed (eb);
 }
 
 static void
@@ -480,13 +440,6 @@ bookmarks_removed_cb (EphyNode *node,
 {
 	ephy_bookmarks_emit_data_changed (eb);
 	g_idle_add ((GSourceFunc)ephy_bookmarks_clean_empty_keywords, eb);
-
-	g_static_rw_lock_writer_lock (eb->priv->bookmarks_hash_lock);
-
-	g_hash_table_remove (eb->priv->bookmarks_hash,
-			     ephy_node_get_property_string (child, EPHY_NODE_BMK_PROP_LOCATION));
-
-	g_static_rw_lock_writer_unlock (eb->priv->bookmarks_hash_lock);
 }
 
 static void
@@ -500,20 +453,10 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 					       "bookmarks.xml",
 					       NULL);
 
-	eb->priv->bookmarks_hash = g_hash_table_new (g_str_hash,
-			                             g_str_equal);
-	eb->priv->bookmarks_hash_lock = g_new0 (GStaticRWLock, 1);
-	g_static_rw_lock_init (eb->priv->bookmarks_hash_lock);
-
 	eb->priv->keywords_hash = g_hash_table_new (g_str_hash,
 			                            g_str_equal);
 	eb->priv->keywords_hash_lock = g_new0 (GStaticRWLock, 1);
 	g_static_rw_lock_init (eb->priv->keywords_hash_lock);
-
-	eb->priv->favorites_hash = g_hash_table_new (g_str_hash,
-			                             g_str_equal);
-	eb->priv->favorites_hash_lock = g_new0 (GStaticRWLock, 1);
-	g_static_rw_lock_init (eb->priv->favorites_hash_lock);
 
 	/* Bookmarks */
 	eb->priv->bookmarks = ephy_node_new_with_id (BOOKMARKS_NODE_ID);
@@ -525,13 +468,13 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 			        &value);
 	g_value_unset (&value);
 	g_signal_connect_object (G_OBJECT (eb->priv->bookmarks),
-				 "child_added",
-				 G_CALLBACK (bookmarks_added_cb),
+				 "child_removed",
+				 G_CALLBACK (bookmarks_removed_cb),
 				 G_OBJECT (eb),
 				 0);
 	g_signal_connect_object (G_OBJECT (eb->priv->bookmarks),
-				 "child_removed",
-				 G_CALLBACK (bookmarks_removed_cb),
+				 "child_changed",
+				 G_CALLBACK (bookmarks_changed_cb),
 				 G_OBJECT (eb),
 				 0);
 
@@ -554,16 +497,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
 
 	eb->priv->favorites = ephy_node_new_with_id (FAVORITES_NODE_ID);
 	ephy_node_ref (eb->priv->favorites);
-	g_signal_connect_object (G_OBJECT (eb->priv->favorites),
-				 "child_added",
-				 G_CALLBACK (favorites_added_cb),
-				 G_OBJECT (eb),
-				 0);
-	g_signal_connect_object (G_OBJECT (eb->priv->favorites),
-				 "child_removed",
-				 G_CALLBACK (favorites_removed_cb),
-				 G_OBJECT (eb),
-				 0);
 
 	ephy_bookmarks_load (eb);
 	ephy_bookmarks_emit_data_changed (eb);
@@ -589,10 +522,6 @@ ephy_bookmarks_finalize (GObject *object)
 	ephy_node_unref (eb->priv->keywords);
 	ephy_node_unref (eb->priv->favorites);
 
-	g_hash_table_destroy (eb->priv->bookmarks_hash);
-	g_static_rw_lock_free (eb->priv->bookmarks_hash_lock);
-	g_hash_table_destroy (eb->priv->favorites_hash);
-	g_static_rw_lock_free (eb->priv->favorites_hash_lock);
 	g_hash_table_destroy (eb->priv->keywords_hash);
 	g_static_rw_lock_free (eb->priv->keywords_hash_lock);
 
@@ -663,20 +592,27 @@ guint
 ephy_bookmarks_get_bookmark_id (EphyBookmarks *eb,
 				const char *url)
 {
-	EphyNode *node;
+	GPtrArray *children;
+	int i;
 
-	g_static_rw_lock_reader_lock (eb->priv->bookmarks_hash_lock);
-	node = g_hash_table_lookup (eb->priv->bookmarks_hash, url);
-	g_static_rw_lock_reader_unlock (eb->priv->bookmarks_hash_lock);
+	children = ephy_node_get_children (eb->priv->bookmarks);
+	for (i = 0; i < children->len; i++)
+	{
+		EphyNode *kid;
+		const char *location;
 
-	if (node)
-	{
-		return ephy_node_get_id (node);
+		kid = g_ptr_array_index (children, i);
+		location = ephy_node_get_property_string
+			(kid, EPHY_NODE_BMK_PROP_LOCATION);
+		if (strcmp (url, location) == 0)
+		{
+			ephy_node_thaw (eb->priv->bookmarks);
+			return ephy_node_get_id (kid);
+		}
 	}
-	else
-	{
-		return 0;
-	}
+	ephy_node_thaw (eb->priv->bookmarks);
+
+	return 0;
 }
 
 void
@@ -686,14 +622,14 @@ ephy_bookmarks_set_icon	(EphyBookmarks *eb,
 {
 	EphyNode *node;
 	GValue value = { 0, };
+	guint id;
 
 	g_return_if_fail (icon != NULL);
 
-	g_static_rw_lock_reader_lock (eb->priv->bookmarks_hash_lock);
-	node = g_hash_table_lookup (eb->priv->bookmarks_hash, url);
-	g_static_rw_lock_reader_unlock (eb->priv->bookmarks_hash_lock);
+	id = ephy_bookmarks_get_bookmark_id (eb, url);
+	if (id == 0) return;
 
-	if (node == NULL) return;
+	node = ephy_node_get_from_id (id);
 
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, icon);

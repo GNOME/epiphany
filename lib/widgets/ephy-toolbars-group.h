@@ -47,10 +47,13 @@ typedef struct
 	gboolean separator;
 	char *action;
 	GtkWidget *widget;
+	EphyToolbarsToolbar *parent;
 } EphyToolbarsItem;
 
-typedef void (*EphyToolbarsGroupForeachToolbarFunc)     (EphyToolbarsToolbar *toolbar);
-typedef void (*EphyToolbarsGroupForeachItemFunc)        (EphyToolbarsItem *item);
+typedef void (* EphyToolbarsGroupForeachToolbarFunc)     (EphyToolbarsToolbar *toolbar,
+							  gpointer data);
+typedef void (* EphyToolbarsGroupForeachItemFunc)        (EphyToolbarsItem *item,
+							  gpointer data);
 
 struct EphyToolbarsGroup
 {
@@ -70,26 +73,38 @@ GType			ephy_toolbars_group_get_type		(void);
 EphyToolbarsGroup      *ephy_toolbars_group_new			(void);
 
 void			ephy_toolbars_group_set_source		(EphyToolbarsGroup *group,
-								 const char *filename);
+								 const char *defaults,
+								 const char *user);
 
 EphyToolbarsToolbar    *ephy_toolbars_group_add_toolbar		(EphyToolbarsGroup *t);
 
 void			ephy_toolbars_group_add_item		(EphyToolbarsGroup *t,
 								 EphyToolbarsToolbar *parent,
 								 EphyToolbarsItem *sibling,
-								 const char *type,
 								 const char *name);
 
+void			ephy_toolbars_group_remove_toolbar	(EphyToolbarsGroup *t,
+								 EphyToolbarsToolbar *toolbar);
+
+void			ephy_toolbars_group_remove_item		(EphyToolbarsGroup *t,
+								 EphyToolbarsItem *item);
+
 void			ephy_toolbars_group_foreach_available	(EphyToolbarsGroup *group,
-								 EphyToolbarsGroupForeachToolbarFunc func);
+								 EphyToolbarsGroupForeachItemFunc func,
+								 gpointer data);
 
 void			ephy_toolbars_group_foreach_toolbar	(EphyToolbarsGroup *group,
-								 EphyToolbarsGroupForeachToolbarFunc func);
+								 EphyToolbarsGroupForeachToolbarFunc func,
+								 gpointer data);
 
 void			ephy_toolbars_group_foreach_item	(EphyToolbarsGroup *group,
-								 EphyToolbarsGroupForeachItemFunc func);
+								 EphyToolbarsGroupForeachItemFunc func,
+								 gpointer data);
 
 char		       *ephy_toolbars_group_to_string		(EphyToolbarsGroup *t);
+
+char		       *ephy_toolbars_group_get_path		(EphyToolbarsGroup *t,
+								 gpointer item);
 
 G_END_DECLS
 

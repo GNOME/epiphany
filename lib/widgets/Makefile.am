@@ -13,6 +13,8 @@ INCLUDES = \
 noinst_LTLIBRARIES = libephywidgets.la
 
 libephywidgets_la_SOURCES = \
+	ephy-toolbars-group.c			\
+	ephy-toolbars-group.h			\
 	eggtreemodelfilter.c			\
 	eggtreemodelfilter.h			\
 	eggtreemultidnd.c			\
