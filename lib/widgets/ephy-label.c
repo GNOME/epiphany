@@ -23,13 +23,18 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <gtk/gtkversion.h>
+
+#if !GTK_CHECK_VERSION (2, 5, 1)
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
+#include "ephy-label.h"
+
 #include <math.h>
 #include <string.h>
-#include "ephy-label.h"
 #include <gtk/gtkmain.h>
 #include <gtk/gtkwindow.h>
 #include <gdk/gdkkeysyms.h>
@@ -3446,3 +3451,5 @@ ephy_label_do_popup (EphyLabel       *label,
                     popup_position_func, label,
                     0, gtk_get_current_event_time ());
 }
+
+#endif /* !GTK_CHECK_VERSION (2, 5, 1) */

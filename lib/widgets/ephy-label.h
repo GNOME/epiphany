@@ -26,6 +26,20 @@
 #ifndef __EPHY_LABEL_H__
 #define __EPHY_LABEL_H__
 
+#include <gtk/gtkversion.h>
+
+#if GTK_CHECK_VERSION (2, 5, 1)
+
+#include <gtk/gtklabel.h>
+
+#define ephy_label_new			gtk_label_new
+#define ephy_label_set_ellipsize	gtk_label_set_ellipsize
+#define ephy_label_set_text		gtk_label_set_text
+#define ephy_label_set_selectable	gtk_label_set_selectable
+#define ephy_label_set_use_markup	gtk_label_set_use_markup
+#define EPHY_LABEL			GTK_LABEL
+
+#else
 
 #include <gdk/gdk.h>
 #include <gtk/gtkmisc.h>
@@ -168,5 +182,6 @@ guint ephy_label_parse_uline            (EphyLabel    *label,
 }
 #endif /* __cplusplus */
 
+#endif /* GTK_CHECK_VERSION (2, 5, 1) */
 
 #endif /* __EPHY_LABEL_H__ */

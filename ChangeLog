@@ -1,5 +1,13 @@
 2004-08-09  Christian Persch  <chpe@cvs.gnome.org>
 
+	* lib/widgets/ephy-label.c:
+	* lib/widgets/ephy-label.h:
+
+	Only use this for gtk < 2.5.1, and just add a few
+	#defines otherwise.
+
+2004-08-09  Christian Persch  <chpe@cvs.gnome.org>
+
 	* src/bookmarks/ephy-topics-selector.c:
 	(ephy_topics_selector_get_type), (ephy_topics_selector_apply),
 	(provide_toggle), (ephy_topics_selector_constructor),
