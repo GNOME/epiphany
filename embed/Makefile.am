@@ -16,12 +16,6 @@ NOINST_H_FILES = \
 	find-dialog.h			\
 	print-dialog.h
 
-TYPES_H_FILES = \
-	ephy-embed.h			\
-	ephy-embed-event.h		\
-	ephy-embed-persist.h		\
-	ephy-permission-manager.h
-
 INST_H_FILES = \
 	ephy-command-manager.h		\
 	ephy-cookie-manager.h		\
@@ -100,7 +94,7 @@ stamp_files = \
 
 ephy-embed-type-builtins.c: stamp-ephy-embed-type-builtins.c
 	@true
-stamp-ephy-embed-type-builtins.c: $(TYPES_H_FILES)
+stamp-ephy-embed-type-builtins.c: $(INST_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
 		--fhead "#include \"ephy-embed-type-builtins.h\"\n\n" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
@@ -120,7 +114,7 @@ stamp-ephy-embed-type-builtins.c: $(TYPES_H_FILES)
 
 ephy-embed-type-builtins.h: stamp-ephy-embed-type-builtins.h
 	@true
-stamp-ephy-embed-type-builtins.h: $(TYPES_H_FILES)
+stamp-ephy-embed-type-builtins.h: $(INST_H_FILES)
 	( cd $(srcdir) && $(GLIB_MKENUMS) \
 		--fhead "#ifndef EPHY_EMBED_TYPE_BUILTINS_H\n" \
 		--fhead "#define EPHY_EMBED_TYPE_BUILTINS_H 1\n\n" \
