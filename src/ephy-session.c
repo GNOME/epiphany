@@ -54,6 +54,7 @@
 struct EphySessionPrivate
 {
 	GList *windows;
+	GtkWidget *resume_dialog;
 };
 
 #define BOOKMARKS_EDITOR_ID	"BookmarksEditor"
@@ -238,6 +239,7 @@ ephy_session_init (EphySession *session)
 	LOG ("EphySession initialising")
 
 	session->priv->windows = NULL;
+	session->priv->resume_dialog = NULL;
 
 	ensure_session_directory ();
 }
@@ -301,6 +303,7 @@ offer_to_resume (EphySession *session)
 		 _("_Don't Recover"), GTK_RESPONSE_CANCEL,
 		 _("_Recover"), GTK_RESPONSE_OK,
 		 NULL);
+	session->priv->resume_dialog = dialog;
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
@@ -346,6 +349,8 @@ offer_to_resume (EphySession *session)
 
 	gtk_widget_destroy (dialog);
 
+	session->priv->resume_dialog = NULL;
+
 	return (response == GTK_RESPONSE_OK);
 }
 
@@ -355,7 +360,9 @@ offer_to_resume (EphySession *session)
  *
  * Resume a crashed session when necessary (interactive)
  *
- * Return value: TRUE if at least a window has been opened
+ * Return value: TRUE if handled; windows have actually
+ * been opened or the dialog from a previous instance
+ * has been re-presented to the user.
  **/
 gboolean
 ephy_session_autoresume (EphySession *session)
@@ -363,9 +370,15 @@ ephy_session_autoresume (EphySession *session)
 	char *saved_session;
 	gboolean retval = FALSE;
 
+	LOG ("ephy_session_autoresume")
+
 	if (session->priv->windows != NULL) return FALSE;
 
-	LOG ("ephy_session_autoresume")
+	if (session->priv->resume_dialog)
+	{
+		gtk_window_present (GTK_WINDOW (session->priv->resume_dialog));
+		return TRUE;
+	}
 
 	saved_session = get_session_filename (SESSION_CRASHED);
 
