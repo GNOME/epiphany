@@ -95,6 +95,9 @@ const char   *ephy_tab_get_favicon_url          (EphyTab *tab);
 void	      ephy_tab_set_location             (EphyTab *tab,
 						 char *location);
 
+void	      ephy_tab_set_favicon		(EphyTab *tab,
+						 GdkPixbuf *favicon);
+
 void	      ephy_tab_get_size			(EphyTab *tab,
 						 int *width,
 						 int *height);

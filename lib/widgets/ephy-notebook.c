@@ -634,7 +634,7 @@ ephy_notebook_set_page_status (EphyNotebook *nb,
 			       GtkWidget *child,
 			       EphyNotebookPageLoadStatus status)
 {
-	GtkWidget *tab, *image;
+	GtkWidget *tab, *image, *icon;
 
 	g_return_if_fail (nb != NULL);
 
@@ -650,20 +650,46 @@ ephy_notebook_set_page_status (EphyNotebook *nb,
 	image  = g_object_get_data (G_OBJECT (tab), "loading-image");
 
 	g_return_if_fail (image != NULL);
+	
+	icon = g_object_get_data (G_OBJECT (tab), "icon");
+
+	g_return_if_fail (icon != NULL);
 
 	switch (status)
 	{
 		case EPHY_NOTEBOOK_TAB_LOAD_LOADING:
+			gtk_widget_hide (icon);
 			gtk_widget_show (image);
 			break;
 
 		case EPHY_NOTEBOOK_TAB_LOAD_COMPLETED:
 		case EPHY_NOTEBOOK_TAB_LOAD_NORMAL:
 			gtk_widget_hide (image);
+			gtk_widget_show (icon);
 			break;
 	}
 
 	nb->priv->current_status = status;
+}
+
+void
+ephy_notebook_set_page_icon (EphyNotebook *nb,
+			     GtkWidget *child,
+			     GdkPixbuf *icon)
+{
+	GtkWidget *tab, *image;
+
+	g_return_if_fail (nb != NULL);
+
+	tab = gtk_notebook_get_tab_label (GTK_NOTEBOOK (nb), child);
+
+	g_return_if_fail (tab != NULL);
+
+	image  = g_object_get_data (G_OBJECT (tab), "icon");
+
+	g_return_if_fail (image != NULL);
+
+	gtk_image_set_from_pixbuf (GTK_IMAGE (image), icon);
 }
 
 static void
@@ -683,7 +709,7 @@ tab_build_label (EphyNotebook *nb, GtkWidget *child)
 	int h, w;
 	GClosure *closure;
 	GtkWidget *window;
-	GtkWidget *loading_image;
+	GtkWidget *loading_image, *icon;
 	GdkPixbufAnimation *loading_pixbuf;
 
 	window = gtk_widget_get_toplevel (GTK_WIDGET (nb));
@@ -709,6 +735,10 @@ tab_build_label (EphyNotebook *nb, GtkWidget *child)
 	loading_image = gtk_image_new_from_animation (loading_pixbuf);
 	g_object_unref (loading_pixbuf);
 	gtk_box_pack_start (GTK_BOX (hbox), loading_image, FALSE, FALSE, 0);
+
+	/* setup site icon, empty by default */
+	icon = gtk_image_new ();
+	gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, FALSE, 0);
 
 	/* setup label */
         label = gtk_label_new (_("Untitled"));
@@ -742,6 +772,7 @@ tab_build_label (EphyNotebook *nb, GtkWidget *child)
 
 	g_object_set_data (G_OBJECT (hbox), "label", label);
 	g_object_set_data (G_OBJECT (hbox), "loading-image", loading_image);
+	g_object_set_data (G_OBJECT (hbox), "icon", icon);
 
 	return hbox;
 }

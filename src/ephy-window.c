@@ -489,16 +489,9 @@ setup_notebook (EphyWindow *window)
 }
 
 static void
-favicon_cache_changed_cb (EphyFaviconCache *cache, char *url, EphyWindow *window)
-{
-	ephy_window_update_control (window, FaviconControl);
-}
-
-static void
 ephy_window_init (EphyWindow *window)
 {
 	Session *session;
-	EphyFaviconCache *cache;
 
 	session = ephy_shell_get_session (ephy_shell);
 
@@ -508,13 +501,6 @@ ephy_window_init (EphyWindow *window)
 	window->priv->closing = FALSE;
 	window->priv->ppview_toolbar = NULL;
 	window->priv->toolbars = NULL;
-
-	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
-	g_signal_connect_object (G_OBJECT (cache),
-				 "changed",
-				 G_CALLBACK (favicon_cache_changed_cb),
-				 window,
-				 0);
 
 	/* Setup the window and connect verbs */
 	setup_window (window);

@@ -94,6 +94,10 @@ void		ephy_notebook_set_page_title	(EphyNotebook *nb,
 						 GtkWidget *child,
 						 const char *title);
 
+void		ephy_notebook_set_page_icon	(EphyNotebook *nb,
+						 GtkWidget *child,
+						 GdkPixbuf *icon);
+
 G_END_DECLS;
 
 #endif /* EPHY_NOTEBOOK_H */

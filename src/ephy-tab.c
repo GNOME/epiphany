@@ -81,6 +81,10 @@ ephy_tab_favicon_cb (EphyEmbed *embed,
 		     const char *url,
 		     EphyTab *tab);
 static void
+ephy_tab_favicon_cache_changed_cb (EphyFaviconCache *cache, 
+				   char *url, 
+				   EphyTab *tab);
+static void
 ephy_tab_link_message_cb (EphyEmbed *embed,
 			  const char *message,
 			  EphyTab *tab);
@@ -187,6 +191,7 @@ ephy_tab_init (EphyTab *tab)
 {
 	GObject *embed, *embed_widget;
 	EphyEmbedSingle *single;
+	EphyFaviconCache *cache;
 
 	single = ephy_embed_shell_get_embed_single
 		(EPHY_EMBED_SHELL (ephy_shell));
@@ -267,6 +272,11 @@ ephy_tab_init (EphyTab *tab)
 	g_signal_connect (embed, "ge_favicon",
 			  GTK_SIGNAL_FUNC (ephy_tab_favicon_cb),
 			  tab);
+
+	cache = ephy_embed_shell_get_favicon_cache (EPHY_EMBED_SHELL (ephy_shell));
+	g_signal_connect_object (G_OBJECT (cache), "changed",
+				 G_CALLBACK (ephy_tab_favicon_cache_changed_cb),
+				 tab,  0);
 }
 
 /* Destructor */
@@ -437,17 +447,17 @@ ephy_tab_set_visibility (EphyTab *tab,
 	tab->priv->visibility = visible;
 }
 
-/* Private callbacks for embed signals */
-
-static void
-ephy_tab_favicon_cb (EphyEmbed *embed,
-		     const char *url,
-		     EphyTab *tab)
+void
+ephy_tab_set_favicon (EphyTab *tab, 
+		      GdkPixbuf *favicon)
 {
+	GtkWidget *nb;
 	EphyBookmarks *eb;
 
-	g_strlcpy (tab->priv->favicon_url,
-		   url, 255);
+	nb = ephy_window_get_notebook (tab->priv->window);
+	ephy_notebook_set_page_icon (EPHY_NOTEBOOK (nb),
+				     GTK_WIDGET (tab->priv->embed),
+				     favicon);
 
 	if (!tab->priv->is_active) return;
 
@@ -456,6 +466,51 @@ ephy_tab_favicon_cb (EphyEmbed *embed,
 			         tab->priv->favicon_url);
 	ephy_window_update_control (tab->priv->window,
 				    FaviconControl);
+}
+
+/* Private callbacks for embed signals */
+
+static void
+ephy_tab_favicon_cache_changed_cb (EphyFaviconCache *cache, 
+				   char *url, 
+				   EphyTab *tab)
+{
+	GdkPixbuf *pixbuf = NULL;
+
+	/* is this for us? */
+	if (strncmp (tab->priv->favicon_url, url, 255) != 0) return;
+
+	/* set favicon */
+	pixbuf = ephy_favicon_cache_get (cache, tab->priv->favicon_url);
+	ephy_tab_set_favicon (tab, pixbuf);
+	
+	if (pixbuf) g_object_unref (pixbuf);
+}
+
+static void
+ephy_tab_favicon_cb (EphyEmbed *embed,
+		     const char *url,
+		     EphyTab *tab)
+{
+	EphyFaviconCache *cache;
+	GdkPixbuf *pixbuf = NULL;
+
+	g_strlcpy (tab->priv->favicon_url,
+		   url, 255);
+
+	cache = ephy_embed_shell_get_favicon_cache
+		(EPHY_EMBED_SHELL (ephy_shell));
+
+	if (url && url[0] != '\0')
+	{
+		pixbuf = ephy_favicon_cache_get (cache, tab->priv->favicon_url);
+		ephy_tab_set_favicon (tab, pixbuf);
+		if (pixbuf) g_object_unref (pixbuf);
+	}
+	else
+	{
+		ephy_tab_set_favicon (tab, NULL);
+	}
 }
 
 static void
@@ -479,7 +534,9 @@ ephy_tab_location_cb (EphyEmbed *embed, EphyTab *tab)
 	ephy_embed_get_location (embed, TRUE,
 				 &tab->priv->location);
 	tab->priv->link_message[0] = '\0';
+
 	tab->priv->favicon_url[0] = '\0';
+	ephy_tab_set_favicon (tab, NULL);
 
 	if (tab->priv->is_active)
 	{
