@@ -22,7 +22,7 @@
 
 #include <gtk/gtk.h>
 #include <libxml/tree.h>
-#include <bonobo/bonobo-i18n.h>
+#include <libgnome/gnome-i18n.h>
 #include <string.h>
 
 #include "ephy-start-here.h"

@@ -258,10 +258,11 @@ dialog_constrain_height (FindDialog *dialog)
 {
 	GdkGeometry geometry;
 	GtkWindow *window = GTK_WINDOW (dialog->priv->window);
-	
+
 	/* Do not allow to resize the widget vertically */
-	geometry.max_height  = 0; 
-	geometry.max_width = gdk_screen_get_width (gtk_widget_get_screen (window));;
+	geometry.max_height  = 0;
+	geometry.max_width = gdk_screen_get_width
+			(gtk_widget_get_screen (GTK_WIDGET (window)));
 	gtk_window_set_geometry_hints (window, GTK_WIDGET (window),
 				       &geometry,
 				       GDK_HINT_MAX_SIZE);
