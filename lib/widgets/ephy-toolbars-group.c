@@ -511,14 +511,22 @@ ephy_toolbars_group_remove_item	(EphyToolbarsGroup *t,
 				 EphyToolbarsItem *item)
 {
 	GNode *node;
+	GNode *toolbar;
 
 	g_return_if_fail (IS_EPHY_TOOLBARS_GROUP (t));
 	g_return_if_fail (item != NULL);
 
 	node = g_node_find (t->priv->toolbars, G_IN_ORDER, G_TRAVERSE_ALL, item);
 	g_return_if_fail (node != NULL);
+	toolbar = node->parent;
 	free_toolbar_node (node->data);
 	g_node_destroy (node);
+
+	if (g_node_n_children (toolbar) == 0)
+	{
+		free_toolbar_node (toolbar->data);
+		g_node_destroy (toolbar);
+	}
 
 	toolbars_group_save (t);
 
