@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 0.5.0\n"
-"POT-Creation-Date: 2003-07-22 13:10+0200\n"
-"PO-Revision-Date: 2003-07-22 13:13+0200\n"
+"POT-Creation-Date: 2003-07-26 16:19+0200\n"
+"PO-Revision-Date: 2003-07-26 16:18+0200\n"
 "Last-Translator: Danilo Segan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -529,37 +529,37 @@ msgstr "Иди у _круг"
 msgid "    "
 msgstr "    "
 
-#: data/glade/prefs-dialog.glade.h:3
-msgid "<b>Cache</b>"
-msgstr "<b>Привремени смештај</b>"
-
-#: data/glade/prefs-dialog.glade.h:4 data/glade/print.glade.h:3
+#: data/glade/prefs-dialog.glade.h:3 data/glade/print.glade.h:3
 msgid "<b>Colors</b>"
 msgstr "<b>Боје</b>"
 
-#: data/glade/prefs-dialog.glade.h:5
+#: data/glade/prefs-dialog.glade.h:4
 msgid "<b>Cookies</b>"
 msgstr "<b>Колачићи</b>"
 
-#: data/glade/prefs-dialog.glade.h:6
+#: data/glade/prefs-dialog.glade.h:5
 msgid "<b>Encodings</b>"
 msgstr "<b>Кодирања</b>"
 
-#: data/glade/prefs-dialog.glade.h:7
+#: data/glade/prefs-dialog.glade.h:6
 msgid "<b>Fonts</b>"
 msgstr "<b>Фонтови</b>"
 
-#: data/glade/prefs-dialog.glade.h:8
+#: data/glade/prefs-dialog.glade.h:7
 msgid "<b>Home page</b>"
 msgstr "<b>Почетна страница</b>"
 
-#: data/glade/prefs-dialog.glade.h:9
+#: data/glade/prefs-dialog.glade.h:8
 msgid "<b>Languages</b>"
 msgstr "<b>Језици</b>"
 
-#: data/glade/prefs-dialog.glade.h:10
+#: data/glade/prefs-dialog.glade.h:9
 msgid "<b>Tabs</b>"
 msgstr "<b>Листови</b>"
+
+#: data/glade/prefs-dialog.glade.h:10
+msgid "<b>Temporary Files</b>"
+msgstr "<b>Привремене датотеке</b>"
 
 #: data/glade/prefs-dialog.glade.h:11
 msgid "<b>Web Content</b>"
@@ -582,8 +582,8 @@ msgid "Autodetec_t:"
 msgstr "Сам _препознај:"
 
 #: data/glade/prefs-dialog.glade.h:16
-msgid "Cl_ear Cache"
-msgstr "Очисти одвојени простор на _диску"
+msgid "Cl_ear"
+msgstr "О_чисти"
 
 #: data/glade/prefs-dialog.glade.h:17
 msgid "Enable Java_Script"
@@ -679,8 +679,8 @@ msgid "_Default:"
 msgstr "_Уобичајено:"
 
 #: data/glade/prefs-dialog.glade.h:40
-msgid "_Language encoding:"
-msgstr "_Запис језика:"
+msgid "_Disk space:"
+msgstr "Простор на _диску:"
 
 #: data/glade/prefs-dialog.glade.h:41
 msgid "_Language:"
@@ -1490,11 +1490,17 @@ msgid "End of current session"
 msgstr "Крај текуће сесије"
 
 #. *
-#. * translate this as the comma separated list of language ranges
-#. * for your locale, as specified by RFC 2616, 14.4.
-#. * for example for en_NZ locale this could be "en-nz,en-au,en-gb,en"
+#. * This is a comma separated list of language ranges, as specified
+#. * by RFC 2616, 14.4.
+#. * Always include the basic language code last.
+#. *
+#. * Examples:
+#. * "pt"    translation: "pt"
+#. * "pt_BR" translation: "pt-br,pt"
+#. * "zh_CN" translation: "zh-cn,zh"
+#. * "zh_HK" translation: "zh-hk,zh" or maybe "zh-hk,zh-tw,zh"
 #.
-#: embed/mozilla/mozilla-notifiers.cpp:592
+#: embed/mozilla/mozilla-notifiers.cpp:598
 msgid "system-language"
 msgstr "sr-yu,sr"
 
@@ -1555,7 +1561,7 @@ msgstr ""
 msgid "Could not display help: %s"
 msgstr "Не може да прикаже помоћ: %s"
 
-#: lib/ephy-langs.c:28 src/prefs-dialog.c:84
+#: lib/ephy-langs.c:28 src/prefs-dialog.c:91
 msgid "Arabic"
 msgstr "Арапски"
 
@@ -1575,28 +1581,28 @@ msgstr "Ћирилица"
 msgid "Devanagari"
 msgstr "Деванагари"
 
-#: lib/ephy-langs.c:33 src/prefs-dialog.c:106
+#: lib/ephy-langs.c:33 src/prefs-dialog.c:113
 msgid "Greek"
 msgstr "Грчки"
 
 # ili je "Hebrejski"?
-#: lib/ephy-langs.c:34 src/prefs-dialog.c:107
+#: lib/ephy-langs.c:34 src/prefs-dialog.c:114
 msgid "Hebrew"
 msgstr "Јеврејски"
 
-#: lib/ephy-langs.c:35 src/prefs-dialog.c:113 src/prefs-dialog.c:152
+#: lib/ephy-langs.c:35 src/prefs-dialog.c:120 src/prefs-dialog.c:159
 msgid "Japanese"
 msgstr "Јапански"
 
-#: lib/ephy-langs.c:36 src/prefs-dialog.c:114 src/prefs-dialog.c:153
+#: lib/ephy-langs.c:36 src/prefs-dialog.c:121 src/prefs-dialog.c:160
 msgid "Korean"
 msgstr "Корејски"
 
-#: lib/ephy-langs.c:37 src/prefs-dialog.c:91 src/prefs-dialog.c:155
+#: lib/ephy-langs.c:37 src/prefs-dialog.c:98 src/prefs-dialog.c:162
 msgid "Simplified Chinese"
 msgstr "Поједностаљени кинески"
 
-#: lib/ephy-langs.c:38 src/prefs-dialog.c:133
+#: lib/ephy-langs.c:38 src/prefs-dialog.c:140
 msgid "Tamil"
 msgstr "Тамил"
 
@@ -1604,11 +1610,11 @@ msgstr "Тамил"
 msgid "Thai"
 msgstr "Тајландски"
 
-#: lib/ephy-langs.c:40 src/prefs-dialog.c:92 src/prefs-dialog.c:156
+#: lib/ephy-langs.c:40 src/prefs-dialog.c:99 src/prefs-dialog.c:163
 msgid "Traditional Chinese"
 msgstr "Традиционални кинески"
 
-#: lib/ephy-langs.c:41 src/prefs-dialog.c:134
+#: lib/ephy-langs.c:41 src/prefs-dialog.c:141
 msgid "Turkish"
 msgstr "Турски"
 
@@ -2155,7 +2161,7 @@ msgstr ""
 "Спознаја се сада не може користити. Неуспешно покретање Мозиле. Проверите "
 "променљиву MOYILLA_FIVE_HOME у вашем окружењу."
 
-#: src/ephy-tab.c:314 src/ephy-tab.c:967 src/ephy-tab.c:1150
+#: src/ephy-tab.c:314 src/ephy-tab.c:1004 src/ephy-tab.c:1187
 msgid "Blank page"
 msgstr "Празна страница"
 
@@ -2618,39 +2624,39 @@ msgstr ""
 msgid "Security level: %s"
 msgstr "Ниво безбедности: %s"
 
-#: src/pdm-dialog.c:250
+#: src/pdm-dialog.c:253
 msgid "Host"
 msgstr "Сервер"
 
-#: src/pdm-dialog.c:262
+#: src/pdm-dialog.c:265
 msgid "User Name"
 msgstr "Корисничко име"
 
-#: src/pdm-dialog.c:307
+#: src/pdm-dialog.c:313
 msgid "Domain"
 msgstr "Домен"
 
-#: src/pdm-dialog.c:319
+#: src/pdm-dialog.c:325
 msgid "Name"
 msgstr "Име"
 
-#: src/pdm-dialog.c:694
+#: src/pdm-dialog.c:700
 msgid "Cookie Properties"
 msgstr "Особине колачића"
 
-#: src/pdm-dialog.c:707
+#: src/pdm-dialog.c:713
 msgid "Value:"
 msgstr "Вредност:"
 
-#: src/pdm-dialog.c:721
+#: src/pdm-dialog.c:727
 msgid "Path:"
 msgstr "Путања:"
 
-#: src/pdm-dialog.c:735
+#: src/pdm-dialog.c:741
 msgid "Secure:"
 msgstr "Безбедан:"
 
-#: src/pdm-dialog.c:749
+#: src/pdm-dialog.c:755
 msgid "Expire:"
 msgstr "Истиче:"
 
@@ -2682,211 +2688,218 @@ msgstr "Затвори"
 msgid "Close print preview"
 msgstr "Затвори преглед пред штампу"
 
-#: src/prefs-dialog.c:81
+#. *
+#. * please translate like this: "<your language> (System setting)"
+#. * Examples:
+#. * "de"    translation: "Deutsch (Systemeinstellung)"
+#. * "en_AU" translation: "English, Australia (System setting)" or
+#. *                      "Australian English (System setting)"
+#.
+#: src/prefs-dialog.c:88
 msgid "System language"
 msgstr "Језик на систему"
 
-#: src/prefs-dialog.c:82
+#: src/prefs-dialog.c:89
 msgid "Afrikaans"
 msgstr "Афрички"
 
-#: src/prefs-dialog.c:83
+#: src/prefs-dialog.c:90
 msgid "Albanian"
 msgstr "Албански"
 
-#: src/prefs-dialog.c:85
+#: src/prefs-dialog.c:92
 msgid "Azerbaijani"
 msgstr "Азербејџански"
 
-#: src/prefs-dialog.c:86
+#: src/prefs-dialog.c:93
 msgid "Basque"
 msgstr "Баскијски"
 
-#: src/prefs-dialog.c:87
+#: src/prefs-dialog.c:94
 msgid "Breton"
 msgstr "Бретонски"
 
-#: src/prefs-dialog.c:88
+#: src/prefs-dialog.c:95
 msgid "Bulgarian"
 msgstr "Бугарски"
 
-#: src/prefs-dialog.c:89
+#: src/prefs-dialog.c:96
 msgid "Byelorussian"
 msgstr "Белоруски"
 
-#: src/prefs-dialog.c:90
+#: src/prefs-dialog.c:97
 msgid "Catalan"
 msgstr "Каталонски"
 
-#: src/prefs-dialog.c:93 src/prefs-dialog.c:150
+#: src/prefs-dialog.c:100 src/prefs-dialog.c:157
 msgid "Chinese"
 msgstr "Кинески"
 
-#: src/prefs-dialog.c:94
+#: src/prefs-dialog.c:101
 msgid "Croatian"
 msgstr "Хрватски"
 
-#: src/prefs-dialog.c:95
+#: src/prefs-dialog.c:102
 msgid "Czech"
 msgstr "Чешки"
 
-#: src/prefs-dialog.c:96
+#: src/prefs-dialog.c:103
 msgid "Danish"
 msgstr "Дански"
 
-#: src/prefs-dialog.c:97
+#: src/prefs-dialog.c:104
 msgid "Dutch"
 msgstr "Холандски"
 
-#: src/prefs-dialog.c:98
+#: src/prefs-dialog.c:105
 msgid "English"
 msgstr "Енглески"
 
-#: src/prefs-dialog.c:99
+#: src/prefs-dialog.c:106
 msgid "Esperanto"
 msgstr "Есперанто"
 
-#: src/prefs-dialog.c:100
+#: src/prefs-dialog.c:107
 msgid "Estonian"
 msgstr "Естонски"
 
-#: src/prefs-dialog.c:101
+#: src/prefs-dialog.c:108
 msgid "Faeroese"
 msgstr "Фарски"
 
-#: src/prefs-dialog.c:102
+#: src/prefs-dialog.c:109
 msgid "Finnish"
 msgstr "Фински"
 
-#: src/prefs-dialog.c:103
+#: src/prefs-dialog.c:110
 msgid "French"
 msgstr "Француски"
 
-#: src/prefs-dialog.c:104
+#: src/prefs-dialog.c:111
 msgid "Galician"
 msgstr "Галски"
 
-#: src/prefs-dialog.c:105
+#: src/prefs-dialog.c:112
 msgid "German"
 msgstr "Немачки"
 
-#: src/prefs-dialog.c:108
+#: src/prefs-dialog.c:115
 msgid "Hungarian"
 msgstr "Мађарски"
 
-#: src/prefs-dialog.c:109
+#: src/prefs-dialog.c:116
 msgid "Icelandic"
 msgstr "Исландски"
 
-#: src/prefs-dialog.c:110
+#: src/prefs-dialog.c:117
 msgid "Indonesian"
 msgstr "Индонежански"
 
-#: src/prefs-dialog.c:111
+#: src/prefs-dialog.c:118
 msgid "Irish"
 msgstr "Ирски"
 
-#: src/prefs-dialog.c:112
+#: src/prefs-dialog.c:119
 msgid "Italian"
 msgstr "Италијански"
 
-#: src/prefs-dialog.c:115
+#: src/prefs-dialog.c:122
 msgid "Latvian"
 msgstr "Летонски"
 
-#: src/prefs-dialog.c:116
+#: src/prefs-dialog.c:123
 msgid "Lithuanian"
 msgstr "Литвански"
 
-#: src/prefs-dialog.c:117
+#: src/prefs-dialog.c:124
 msgid "Macedonian"
 msgstr "Македонски"
 
-#: src/prefs-dialog.c:118
+#: src/prefs-dialog.c:125
 msgid "Malay"
 msgstr "Малајски"
 
-#: src/prefs-dialog.c:119
+#: src/prefs-dialog.c:126
 msgid "Norwegian/Nynorsk"
 msgstr "Норвешки/Нинорск"
 
-#: src/prefs-dialog.c:120
+#: src/prefs-dialog.c:127
 msgid "Norwegian/Bokmal"
 msgstr "Норвешки/Бокмал"
 
-#: src/prefs-dialog.c:121
+#: src/prefs-dialog.c:128
 msgid "Norwegian"
 msgstr "Норвешки"
 
-#: src/prefs-dialog.c:122
+#: src/prefs-dialog.c:129
 msgid "Polish"
 msgstr "Пољски"
 
-#: src/prefs-dialog.c:123
+#: src/prefs-dialog.c:130
 msgid "Portuguese"
 msgstr "Португалски"
 
-#: src/prefs-dialog.c:124
+#: src/prefs-dialog.c:131
 msgid "Portuguese of Brazil"
 msgstr "Португалски у Бразилу"
 
-#: src/prefs-dialog.c:125
+#: src/prefs-dialog.c:132
 msgid "Romanian"
 msgstr "Румунски"
 
-#: src/prefs-dialog.c:126 src/prefs-dialog.c:154
+#: src/prefs-dialog.c:133 src/prefs-dialog.c:161
 msgid "Russian"
 msgstr "Руски"
 
-#: src/prefs-dialog.c:127
+#: src/prefs-dialog.c:134
 msgid "Scottish"
 msgstr "Шкотски"
 
-#: src/prefs-dialog.c:128
+#: src/prefs-dialog.c:135
 msgid "Serbian"
 msgstr "Српски"
 
-#: src/prefs-dialog.c:129
+#: src/prefs-dialog.c:136
 msgid "Slovak"
 msgstr "Словачки"
 
-#: src/prefs-dialog.c:130
+#: src/prefs-dialog.c:137
 msgid "Slovenian"
 msgstr "Словенски"
 
-#: src/prefs-dialog.c:131
+#: src/prefs-dialog.c:138
 msgid "Spanish"
 msgstr "Шпански"
 
-#: src/prefs-dialog.c:132
+#: src/prefs-dialog.c:139
 msgid "Swedish"
 msgstr "Шведски"
 
-#: src/prefs-dialog.c:135 src/prefs-dialog.c:158
+#: src/prefs-dialog.c:142 src/prefs-dialog.c:165
 msgid "Ukrainian"
 msgstr "Украјински"
 
-#: src/prefs-dialog.c:136
+#: src/prefs-dialog.c:143
 msgid "Vietnamese"
 msgstr "Вијетнамски"
 
-#: src/prefs-dialog.c:137
+#: src/prefs-dialog.c:144
 msgid "Walloon"
 msgstr "Валун"
 
-#: src/prefs-dialog.c:149
+#: src/prefs-dialog.c:156
 msgid "Off"
 msgstr "Искључено"
 
-#: src/prefs-dialog.c:151
+#: src/prefs-dialog.c:158
 msgid "East Asian"
 msgstr "Источноазијски"
 
-#: src/prefs-dialog.c:157
+#: src/prefs-dialog.c:164
 msgid "Universal"
 msgstr "Опште"
 
-#: src/prefs-dialog.c:943
+#: src/prefs-dialog.c:950
 #, c-format
 msgid "Custom [%s]"
 msgstr "По избору [%s]"
@@ -2947,7 +2960,9 @@ msgstr "Поље за адресу"
 
 #: src/toolbar.c:377
 msgid "Enter a web address to open, or a phrase to search for on the web"
-msgstr "Унесите веб адресу коју желите да отворите, или израз који желите да пронађете на вебу"
+msgstr ""
+"Унесите веб адресу коју желите да отворите, или израз који желите да "
+"пронађете на вебу"
 
 #: src/toolbar.c:386
 msgid "Zoom"
@@ -2992,3 +3007,12 @@ msgstr ""
 #: src/window-commands.c:775
 msgid "A GNOME browser based on Mozilla"
 msgstr "Гном веб читач заснован на Мозили"
+
+#~ msgid "<b>Cache</b>"
+#~ msgstr "<b>Привремени смештај</b>"
+
+#~ msgid "Cl_ear Cache"
+#~ msgstr "Очисти одвојени простор на _диску"
+
+#~ msgid "_Language encoding:"
+#~ msgstr "_Запис језика:"
