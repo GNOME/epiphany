@@ -444,3 +444,58 @@ ephy_strsplit_multiple_delimiters_with_quotes (const gchar *string,
 
 	return str_array;
 }
+
+char *
+ephy_str_replace_substring (const char *string,
+			    const char *substring,
+			    const char *replacement)
+{
+	int substring_length, replacement_length, result_length, remaining_length;
+	const char *p, *substring_position;
+	char *result, *result_position;
+
+	g_return_val_if_fail (substring != NULL, g_strdup (string));
+	g_return_val_if_fail (substring[0] != '\0', g_strdup (string));
+
+	if (string == NULL)
+	{
+		return NULL;
+	}
+
+	substring_length = strlen (substring);
+	replacement_length = replacement == NULL ? 0 : strlen (replacement);
+
+	result_length = strlen (string);
+	for (p = string; ; p = substring_position + substring_length)
+	{
+		substring_position = strstr (p, substring);
+		if (substring_position == NULL)
+		{
+			break;
+		}
+		result_length += replacement_length - substring_length;
+	}
+
+	result = g_malloc (result_length + 1);
+
+	result_position = result;
+	for (p = string; ; p = substring_position + substring_length)
+	{
+		substring_position = strstr (p, substring);
+		if (substring_position == NULL)
+		{
+			remaining_length = strlen (p);
+			memcpy (result_position, p, remaining_length);
+			result_position += remaining_length;
+			break;
+		}
+		memcpy (result_position, p, substring_position - p);
+		result_position += substring_position - p;
+		memcpy (result_position, replacement, replacement_length);
+		result_position += replacement_length;
+	}
+	g_assert (result_position - result == result_length);
+	result_position[0] = '\0';
+
+	return result;
+}

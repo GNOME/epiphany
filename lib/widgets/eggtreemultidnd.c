@@ -22,6 +22,7 @@
 #include <gtk/gtksignal.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkmain.h>
+#include <gtk/gtkstock.h>
 #include "eggtreemultidnd.h"
 
 #define EGG_TREE_MULTI_DND_STRING "EggTreeMultiDndString"
@@ -325,6 +326,15 @@ egg_tree_multi_drag_motion_event (GtkWidget      *widget,
 				    priv_data->pressed_button,
 				    (GdkEvent*)event);
 	  set_context_data (context, path_list);
+
+	  if (g_list_length (path_list) > 1)
+	  {
+	    gtk_drag_set_icon_stock (context, GTK_STOCK_DND_MULTIPLE, -2, -2);
+	  }
+	  else
+	  {
+	    gtk_drag_set_icon_stock (context, GTK_STOCK_DND, -2, -2);
+	  }
 	}
       else
 	{

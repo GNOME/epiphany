@@ -57,6 +57,11 @@ char	       **ephy_strsplit_multiple_delimiters_with_quotes (const gchar *string
 							        gint max_tokens,
 							        const gchar *quotes);
 
+char		*ephy_str_replace_substring		(const char *string,
+							 const char *substring,
+							 const char *replacement);
+
+
 
 G_END_DECLS
 

@@ -19,13 +19,17 @@ noinst_LTLIBRARIES = libephybookmarks.la
 libephybookmarks_la_SOURCES = \
 	ephy-bookmarks.c	\
 	ephy-bookmarks.h	\
-	ephy-tree-model-node.c	\
-	ephy-tree-model-node.h	\
-	ephy-node-view.c	\
-	ephy-node-view.h	\
 	ephy-bookmarks-editor.c	\
 	ephy-bookmarks-editor.h	\
+	ephy-bookmarks-import.c \
+	ephy-bookmarks-import.h	\
 	ephy-keywords-entry.c	\
 	ephy-keywords-entry.h	\
 	ephy-new-bookmark.c	\
-	ephy-new-bookmark.h
+	ephy-new-bookmark.h	\
+	ephy-node-view.c	\
+	ephy-node-view.h	\
+	ephy-tree-model-node.c	\
+	ephy-tree-model-node.h
+
+
