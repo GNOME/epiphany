@@ -132,7 +132,7 @@ gboolean
 ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 {
 	GtkWidget *dialog;
-	char  *converted;
+	char *display_name;
 	gboolean retval;
 
 	if (filename == NULL) return FALSE;
@@ -142,15 +142,14 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 		return TRUE;
 	}
 
-	converted = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
-	if (converted == NULL) return FALSE;
+	display_name = g_filename_display_name (filename);
 
 	dialog = gtk_message_dialog_new
 		(parent ? GTK_WINDOW (parent) : NULL,
 		 GTK_DIALOG_MODAL,
 		 GTK_MESSAGE_WARNING,
 		 GTK_BUTTONS_CANCEL,
-		 _("A file %s already exists."), converted);
+		 _("A file %s already exists."), display_name);
 
 	gtk_message_dialog_format_secondary_text
 		(GTK_MESSAGE_DIALOG (dialog),
@@ -169,7 +168,7 @@ ephy_gui_confirm_overwrite_file (GtkWidget *parent, const char *filename)
 
 	gtk_widget_destroy (dialog);
 
-	g_free (converted);
+	g_free (display_name);
 
 	return retval;
 }

@@ -18,6 +18,8 @@
  *  $Id$
  */
 
+#include "config.h"
+
 #include "egg-toolbar-editor.h"
 #include "egg-editable-toolbar.h"
 #include "eggintl.h"
