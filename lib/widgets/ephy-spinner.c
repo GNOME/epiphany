@@ -41,13 +41,14 @@
 #include <libgnome/gnome-util.h>
 #include <math.h>
 #include <libgnomevfs/gnome-vfs.h>
+#include <libgnomeui/gnome-icon-theme.h>
 
 #define spinner_DEFAULT_TIMEOUT 100	/* Milliseconds Per Frame */
 
 struct EphySpinnerDetails {
 	GList	*image_list;
-
 	GdkPixbuf *quiescent_pixbuf;
+	GnomeIconTheme *icon_theme;
 
 	int	max_frame;
 	int	delay;
@@ -56,8 +57,6 @@ struct EphySpinnerDetails {
 
 	gboolean ready;
 	gboolean small_mode;
-
-	gint theme_notif;
 };
 
 static void ephy_spinner_class_init (EphySpinnerClass *class);
@@ -65,7 +64,8 @@ static void ephy_spinner_init (EphySpinner *spinner);
 static void ephy_spinner_load_images            (EphySpinner *spinner);
 static void ephy_spinner_unload_images          (EphySpinner *spinner);
 static void ephy_spinner_remove_update_callback (EphySpinner *spinner);
-
+static void ephy_spinner_theme_changed     (GnomeIconTheme *icon_theme,
+                                                 EphySpinner *spinner);
 
 static GList *spinner_directories = NULL;
 
@@ -147,17 +147,23 @@ get_spinner_dimensions (EphySpinner *spinner, int *spinner_width, int* spinner_h
 {
 	int current_width, current_height;
 	int pixbuf_width, pixbuf_height;
-	GList *current_entry;
+	GList *image_list;
 	GdkPixbuf *pixbuf;
 
-	/* start with the quiescent image */
-	current_width = gdk_pixbuf_get_width (spinner->details->quiescent_pixbuf);
-	current_height = gdk_pixbuf_get_height (spinner->details->quiescent_pixbuf);
+	current_width = 0;
+	current_height = 0;
+
+	if (spinner->details->quiescent_pixbuf != NULL)
+	{
+		/* start with the quiescent image */
+		current_width = gdk_pixbuf_get_width (spinner->details->quiescent_pixbuf);
+		current_height = gdk_pixbuf_get_height (spinner->details->quiescent_pixbuf);
+	}
 
 	/* loop through all the installed images, taking the union */
-	current_entry = spinner->details->image_list;
-	while (current_entry != NULL) {
-		pixbuf = GDK_PIXBUF (current_entry->data);
+	image_list = spinner->details->image_list;
+	while (image_list != NULL) {
+		pixbuf = GDK_PIXBUF (image_list->data);
 		pixbuf_width = gdk_pixbuf_get_width (pixbuf);
 		pixbuf_height = gdk_pixbuf_get_height (pixbuf);
 
@@ -169,28 +175,12 @@ get_spinner_dimensions (EphySpinner *spinner, int *spinner_width, int* spinner_h
 			current_height = pixbuf_height;
 		}
 
-		current_entry = current_entry->next;
+		image_list = image_list->next;
 	}
 
 	/* return the result */
 	*spinner_width = current_width;
 	*spinner_height = current_height;
-}
-
-/* handler for handling theme changes */
-static void
-ephy_spinner_theme_changed (GConfClient *client,
-                              guint cnxn_id,
-                              GConfEntry *entry,
-			      gpointer user_data)
-{
-	EphySpinner *spinner;
-
-	spinner = EPHY_SPINNER (user_data);
-	gtk_widget_hide (GTK_WIDGET (spinner));
-	ephy_spinner_load_images (spinner);
-	gtk_widget_show (GTK_WIDGET (spinner));
-	gtk_widget_queue_resize ( GTK_WIDGET (spinner));
 }
 
 static void
@@ -208,15 +198,24 @@ ephy_spinner_init (EphySpinner *spinner)
 	spinner->details = g_new0 (EphySpinnerDetails, 1);
 
 	spinner->details->delay = spinner_DEFAULT_TIMEOUT;
+	spinner->details->icon_theme = gnome_icon_theme_new ();
+	g_signal_connect (spinner->details->icon_theme,
+			  "changed",
+			  G_CALLBACK (ephy_spinner_theme_changed),
+			  spinner);
 
 	ephy_spinner_load_images (spinner);
 	gtk_widget_show (widget);
+}
 
-	spinner->details->theme_notif =
-		eel_gconf_notification_add (CONF_TOOLBAR_SPINNER_THEME,
-					    (GConfClientNotifyFunc)
-					     ephy_spinner_theme_changed,
-					     spinner);
+/* handler for handling theme changes */
+static void
+ephy_spinner_theme_changed (GnomeIconTheme *icon_theme, EphySpinner *spinner)
+{
+	gtk_widget_hide (GTK_WIDGET (spinner));
+	ephy_spinner_load_images (spinner);
+	gtk_widget_show (GTK_WIDGET (spinner));
+	gtk_widget_queue_resize ( GTK_WIDGET (spinner));
 }
 
 /* here's the routine that selects the image to draw, based on the spinner's state */
@@ -388,90 +387,104 @@ ephy_spinner_unload_images (EphySpinner *spinner)
 	spinner->details->image_list = NULL;
 }
 
-static GdkPixbuf*
-load_themed_image (const char *path, const char *file_name,
-		   gboolean small_mode)
+static GdkPixbuf *
+scale_to_real_size (EphySpinner *spinner, GdkPixbuf *pixbuf)
 {
-	GdkPixbuf *pixbuf, *temp_pixbuf;
-	char *image_path;
+	GdkPixbuf *result;
+	int size;
 
-	image_path = g_build_filename (path, file_name, NULL);
+	size = gdk_pixbuf_get_height (pixbuf);
 
-	if (!g_file_test(image_path, G_FILE_TEST_EXISTS))
-        {
-		g_free (image_path);
+	if (spinner->details->small_mode) {
+		result = gdk_pixbuf_scale_simple (pixbuf,
+						  size * 2 / 3,
+						  size * 2 / 3,
+						  GDK_INTERP_BILINEAR);
+	} else {
+		result = g_object_ref (pixbuf);
+	}
+
+	return result;
+}
+
+static GdkPixbuf *
+extract_frame (EphySpinner *spinner, GdkPixbuf *grid_pixbuf, int x, int y, int size)
+{
+	GdkPixbuf *pixbuf, *result;
+
+	if (x + size > gdk_pixbuf_get_width (grid_pixbuf) ||
+	    y + size > gdk_pixbuf_get_height (grid_pixbuf)) {
 		return NULL;
 	}
 
-	if (image_path) {
-		pixbuf = gdk_pixbuf_new_from_file (image_path, NULL);
+	pixbuf = gdk_pixbuf_new_subpixbuf (grid_pixbuf,
+					   x, y,
+					   size, size);
+	g_return_val_if_fail (pixbuf != NULL, NULL);
 
-		if (small_mode && pixbuf) {
-			temp_pixbuf = gdk_pixbuf_scale_simple (pixbuf,
-							       gdk_pixbuf_get_width (pixbuf) * 2 / 3,
-							       gdk_pixbuf_get_height (pixbuf) * 2 / 3,
-							       GDK_INTERP_BILINEAR);
-			g_object_unref (pixbuf);
-			pixbuf = temp_pixbuf;
-		}
+	result = scale_to_real_size (spinner, pixbuf);
+	g_object_unref (pixbuf);
 
-		g_free (image_path);
-
-		return pixbuf;
-	}
-	return NULL;
-}
-
-/* utility to make the spinner frame name from the index */
-
-static char *
-make_spinner_frame_name (int index)
-{
-	return g_strdup_printf ("%03d.png", index);
+	return result;
 }
 
 /* load all of the images of the spinner sequentially */
 static void
 ephy_spinner_load_images (EphySpinner *spinner)
 {
-	int index;
-	char *spinner_frame_name;
-	GdkPixbuf *pixbuf, *qpixbuf;
+	int grid_width, grid_height, x, y, size;
+	char *icon;
+	GdkPixbuf *icon_pixbuf, *pixbuf;
 	GList *image_list;
-	char *image_theme;
-	char *path;
 
 	ephy_spinner_unload_images (spinner);
 
-	image_theme = eel_gconf_get_string (CONF_TOOLBAR_SPINNER_THEME);
+	/* Load the animation */
+	icon = gnome_icon_theme_lookup_icon (spinner->details->icon_theme,
+					     "gnome-spinner", -1, NULL, &size);
+	if (icon == NULL) {
+		g_warning ("Throbber animation not found");
+		return;
+	}
 
-	path = ephy_spinner_get_theme_path (image_theme);
-	g_return_if_fail (path != NULL);
-
-	qpixbuf = load_themed_image (path, "rest.png",
-			spinner->details->small_mode);
-
-	g_return_if_fail (qpixbuf != NULL);
-	spinner->details->quiescent_pixbuf = qpixbuf;
-
-	spinner->details->max_frame = 50;
+	icon_pixbuf = gdk_pixbuf_new_from_file (icon, NULL);
+	grid_width = gdk_pixbuf_get_width (icon_pixbuf);
+	grid_height = gdk_pixbuf_get_height (icon_pixbuf);
 
 	image_list = NULL;
-	for (index = 1; index <= spinner->details->max_frame; index++) {
-		spinner_frame_name = make_spinner_frame_name (index);
-		pixbuf = load_themed_image (path, spinner_frame_name,
-					    spinner->details->small_mode);
-		g_free (spinner_frame_name);
-		if (pixbuf == NULL) {
-			spinner->details->max_frame = index - 1;
-			break;
+	for (y = 0; y < grid_height; y += size) {
+		for (x = 0; x < grid_width ; x += size) {
+			pixbuf = extract_frame (spinner, icon_pixbuf, x, y, size);
+
+			if (pixbuf)
+			{
+				image_list = g_list_prepend (image_list, pixbuf);
+			}
+			else
+			{
+				g_warning ("Cannot extract frame from the grid");
+			}
 		}
-		image_list = g_list_prepend (image_list, pixbuf);
 	}
 	spinner->details->image_list = g_list_reverse (image_list);
+	spinner->details->max_frame = g_list_length (spinner->details->image_list);
 
-	g_free (image_theme);
-	g_free (path);
+	g_free (icon);
+	g_object_unref (icon_pixbuf);
+
+	/* Load the rest icon */
+	icon = gnome_icon_theme_lookup_icon (spinner->details->icon_theme,
+					     "gnome-spinner-rest", -1, NULL, &size);
+	if (icon == NULL) {
+		g_warning ("Throbber rest icon not found");
+		return;
+	}
+
+	icon_pixbuf = gdk_pixbuf_new_from_file (icon, NULL);
+	spinner->details->quiescent_pixbuf = scale_to_real_size (spinner, icon_pixbuf);
+
+	g_object_unref (icon_pixbuf);
+	g_free (icon);
 }
 
 /*
@@ -518,7 +531,7 @@ ephy_spinner_finalize (GObject *object)
 	ephy_spinner_remove_update_callback (spinner);
 	ephy_spinner_unload_images (spinner);
 
-	eel_gconf_notification_remove (spinner->details->theme_notif);
+	g_object_unref (spinner->details->icon_theme);
 
 	g_free (spinner->details);
 
@@ -546,7 +559,7 @@ ephy_spinner_get_theme_info (const gchar *base, const gchar *theme_name)
 	gchar *path;
 	gchar *icon;
 
-	path = g_build_filename (base, theme_name, "throbber", NULL);
+	path = g_build_filename (base, theme_name, "spinner", NULL);
 	icon = g_build_filename (path, "rest.png", NULL);
 
 	if (!g_file_test (icon, G_FILE_TEST_EXISTS))
