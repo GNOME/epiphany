@@ -485,9 +485,6 @@ if test "x$flavour" = "xmozilla"; then
 	AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/nsIPassword.h],
 		[AC_DEFINE([HAVE_NSIPASSWORD_H],[1],
 		[Define if mozilla nsIPassword header is available])])
-	AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/wallet/nsIWalletService.h],
-		[AC_DEFINE([HAVE_NSIWALLETSERVICE_H],[1],
-		[Define if nsIWalletService.h is available])])
 elif test "x$flavour" = "xtoolkit"; then
 	AC_CHECK_FILE([$MOZILLA_INCLUDE_ROOT/passwordmgr/nsIPassword.h],
 		[AC_DEFINE([HAVE_NSIPASSWORD_H],[1],

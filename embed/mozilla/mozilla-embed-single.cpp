@@ -245,8 +245,6 @@ mozilla_set_default_prefs (MozillaEmbedSingle *mes)
 	pref->SetBoolPref("network.protocol-handler.external.ftp",
 			  have_gnome_url_handler ("ftp"));
 
-	MozillaPrivate::SecureWallet (pref);
-
 	return TRUE;
 }
 
